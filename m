@@ -1,270 +1,204 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 673A531B828
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 02:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08D00489863;
+	Mon,  3 Aug 2026 02:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785724558; cv=none; b=KkZpUIrOn0Dl1448Zpx9E1m23pJfgU16P9XMyVBPlRSvjvgy5PTsMj+S6XMfA1vfLQNhwRQ951O1maegjCq7oJQybzKiQnufrcsQfw7+TAUgBdBKChs0v0OwaPoI1x/aTNm8ds4axI+Ouby4szw9nfonCGwtwUgBvvknigBMYRA=
+	t=1785725028; cv=none; b=oFXVFkAL6Xom5BrLzI3+CN5M3hFJcTRVGq7iAQa0cWzkCVwxua+soySRtMJeXuG6HoRmf3sWbZz8A2s4gl5srIXltPSFRNSHJdi6FsS/cFcCeOQTGSIIS8qSCKe3CkIrf65VtkdZhHTsMbDRun1omeDdBOC6igtWOtuZCeWbzFc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785724558; c=relaxed/simple;
-	bh=uqZKiZHMVjZPw+CxjElRiNNT+EUo0jNZI/pPcTeYGgI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=sXiNi30dWZFMf7G2EoYcpzIr6oAYQBHXwqoeXm2DKrNgDMo3na5fL0JjtZ5QJre/yh9GS4TdoJZfgXDbJoEd5kLJO3gcFyLE4ygCMMba71yymcqJ8l/kRfYkrfBgBT/NZ+Lk68RqHsu+YPbI/nscFXjLmkhUw9S5ta6tSOTN4H4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxAho6zT; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785725028; c=relaxed/simple;
+	bh=CFNSytE+2tg0bkqq7UMDHzkgq4F5EqtfTyEFf8TpgrM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sprt2HZY7CZF4+dHM+cusvgTi/fXUfUaLlkQr/wT/Mnt3K5DAfdufJU2XywUqd7YjuCmdjH7K+ppOjUCtqEy8wqI4557pkbKb4ajtEKOlf2SPzI4ip2A4Ad7PLag/BHWsWJRutyWldNXCVZMlZKucuzBPO69lJQINdThWhA9ZLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kFu8fuyU; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxAho6zT"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so6640825e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 19:35:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785724555; x=1786329355; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=7ZUigbRxdElS5a4dCO5FnmZeNlzmT6argLucumOenwc=;
-        b=AxAho6zT/KUTvRdIH5z69ZsnnRMS7x9vpaaK0DU4W+KCua551nIOfuGo7mJoIMNli3
-         IxnKVPms95R6UKq7ybWF27v9FKYmDjXRD3GqrcisqmQiWR89v1DUzzso4/gJxei0rG74
-         R1b1burennZu65j7abE1cHe0Dsmyk1UlVMpuiI7fBL/2pQSxx8iDPz153AAEmCQbSNqL
-         cerPjStQWUEOn2q1LCVV4wcIo7Ch2ZgnXkcUaEdb/bncxRLBwUTkdqBnkZ6PVIPKHcQ3
-         9aybBqVG4TO7QIaSbuOa48ga3MJyb83Rd1gZv3HM2rPYQ9YvJ78hr3joMFo5bk7TQL9f
-         MKcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785724555; x=1786329355;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7ZUigbRxdElS5a4dCO5FnmZeNlzmT6argLucumOenwc=;
-        b=UUq8YlJB6CVJFBb7I8FOJ1RZSSX+z59e9z8YC2IptLHOLev0v15nAKLWUc2wUw4A63
-         cHRxsMTRCn4ZrzIK+mxY+IdzVofa6KWlaSTC9G2OLP6Nnmh/gV4gPrdoYxTFjRUr5Xo7
-         Cox6cflull4l6QtVTOCVQ4TxXhdcWNKu+737UAsHad4AyyK+WnZLywdM9uYwLw3oby/e
-         D/quQHUmGg8wzp+obtX2Zzt3xKggsyzkWUPj8OSPwYZRdOqHSZBbmUc0iOUZkQ32jqCI
-         SEwERZqY3mMHv3v+9LyINLL9TUUigC8r2nTGM1Ct7qn2c0AdOcH18Zb/YUPMzeh36JVR
-         StPQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrMzhdq4924p32hfRiSv4N2iRdc1MKYhsPj3nNS8sGk03C+EdXI+2uz8cut7SXKFemz1wcBWMMH08002z/UHWA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyXdEjwaC9Rk1G5KbV9lD6kKgoKo1jvCGWQZ+uu6Hx9qKrbNt10
-	HjSsVaRDu/WsxGM+hFkCgMNnogDhzM4Csi8h6KLNonhw9qg5a7YI120i
-X-Gm-Gg: AR+sD10KVHdvo5h2CNfWCvin4V8YpPtnwM0IUd2S/XARBpKDX8PgL8c4Ex2tVveTuR+
-	kjEfWXibjdIMFEwQVfl7a8W7zbED2vaTREYgUy4QxXyBKa2HxN+HZjLOmFyoAdVlP5vdHGBoPpv
-	Kk9xwPcRRE6uNP62hyWsArVoEk2UGrZwK80tGCREocFm6059vfz29fwI6E8pfDZzOWVTqdXjC4y
-	UrC8FrN+xNv5bP49Iz0G9q5jsYiIHFqb6Q3HOqI+L+e8d2nJJC672JyOUZYG7YCE2ybYvqVhRph
-	jnaVKqo5Fgiw75J8VsrugzpV0hV+tuiKKFmyaMQV3KcbLRvrdHhIB08HVvUIYTIacgUq5nCav2q
-	dkAqqClL5SOqc+xFaXG1JkVEXabA6lOmzjHb6bB2seUxvNIXUjuGi3znhNLf/2CyrjLPUKAIttT
-	Yy7rrcBdAkA5dQlKeSIu9a4HV+beKvvJpsuKSC+6HQpxc8UwGKD3ACUz6GX81XNE65fwgPbHTFZ
-	xpyWg33yuTkN3KyOAtwlzBh4DkeMrMB11d5dGjVIZ6C9o2uUcAgQHuFlmPpef0zrw3Uhxl495/s
-	sD0V6S9lupIny+5LxdQ3DDNTGvU0/wkzwFnBYg==
-X-Received: by 2002:a05:600c:1f92:b0:495:7293:4fe2 with SMTP id 5b1f17b1804b1-4980c67af48mr128987865e9.17.1785724554503;
-        Sun, 02 Aug 2026 19:35:54 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b85be7sm229421335e9.2.2026.08.02.19.35.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 19:35:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kFu8fuyU"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785725025; x=1817261025;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=CFNSytE+2tg0bkqq7UMDHzkgq4F5EqtfTyEFf8TpgrM=;
+  b=kFu8fuyUivNfuv1b20Z/BgKD5WD0q3KZabkjyh8d8j7+1k2kH34NjNGr
+   EQ7z4a3PmfHJvUUes4Nhwqy9ZxeMaKHiHG8pUhx12luooITjLr2XZETEW
+   X8lg9UpVfwv0WyZmba8bv0MQ8SErvfAUAtLo9wZmDO/XjlP/afTYSpMhw
+   vOdTQ5THt8yq12nd6xz5ZmJ0pg/R6cGdhr7Exu09/Je0SlywJrt+BAr9s
+   mCCDsqLmDda5uOtPmtD+74ttxeVAEfSwSigijoou7ZdvzozvfOaepWH2i
+   jqnL8+YY5sYr8yvvEqFhWar1Yy/LJ24tfHOl4l1KT1fY5vEWNz2iRP9Kw
+   Q==;
+X-CSE-ConnectionGUID: qlLuhEv4Sbqog1+RZIQvTg==
+X-CSE-MsgGUID: c9q+uS57TbC3XHJLE4GpRQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11863"; a="90143910"
+X-IronPort-AV: E=Sophos;i="6.25,201,1779174000"; 
+   d="scan'208";a="90143910"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2026 19:43:44 -0700
+X-CSE-ConnectionGUID: BEG4ZP1DRymmaTKVaWpetA==
+X-CSE-MsgGUID: B7M1+kP7TIiUCgGwEr8Lcw==
+X-ExtLoop1: 1
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.248]) ([10.124.240.248])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Aug 2026 19:43:30 -0700
+Message-ID: <25ab36cf-888a-4547-b3f7-5bd4e057c1d0@intel.com>
+Date: Mon, 3 Aug 2026 10:43:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 04:35:52 +0200
-Message-Id: <DKEYIUKP4IPQ.M7KVG0KIIU1E@gmail.com>
-Cc: <bpf@vger.kernel.org>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <john.fastabend@gmail.com>, <andrii@kernel.org>, <eddyz87@gmail.com>,
- <martin.lau@linux.dev>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <emil@etsalapatis.com>, <shuah@kernel.org>,
- <danieltimlee@gmail.com>, <linux-kernel@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf] bpf: Reject writes through untrusted allocated
- pointers
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Ning Ding" <dingning04@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260726021304.97ED91F000E9@smtp.kernel.org>
- <20260728033837.1466123-1-dingning04@gmail.com>
- <DKEUME1DRKOR.2R2XVNQDZKVSR@gmail.com>
- <CAJP4iuumoLdD62rXf=3HexiKVoKbXHJka7tm9+Cw-LaKmuvC+A@mail.gmail.com>
-In-Reply-To: <CAJP4iuumoLdD62rXf=3HexiKVoKbXHJka7tm9+Cw-LaKmuvC+A@mail.gmail.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 07/41] KVM: guest_memfd: Wire up core private/shared
+ attribute interfaces
+To: Sean Christopherson <seanjc@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-7-35f9aec2aed2@google.com>
+ <60d19013-d6d7-4eec-827a-2622e22cec98@intel.com>
+ <CAEvNRgF0SxmoMtqq69tUih54A9K7j_wcMFRrq=r9w6TnAGAUQQ@mail.gmail.com>
+ <dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com>
+ <amzMtg4K6qEEsudx@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <amzMtg4K6qEEsudx@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Mon Aug 3, 2026 at 4:29 AM CEST, Ning Ding wrote:
-> The existing PTR_UNTRUSTED branch is after the access-permission
-> check. It only handles the case where we propagate the PTR_UNTRUSTED
-> flag to a field pointer loaded through a BPF_READ. For a direct write
-> such as res->key =3D 42, no pointer is loaded and that branch has no
-> effect:
->
-> my_child =3D res->child; // in that case, my_child will be marked with
-> PTR_UNTRUSTED, that is what the existing PTR_UNTRUSTED do.
-> res->key =3D 42; // The existing check doesn't handle this.
->
+On 8/1/2026 12:26 AM, Sean Christopherson wrote:
+> On Fri, Jul 31, 2026, Xiaoyao Li wrote:
+>> On 7/31/2026 4:42 AM, Ackerley Tng wrote:
+>>> Xiaoyao Li <xiaoyao.li@intel.com> writes:
+>>>
+>>>> On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
+>>>>> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+>>>>> index 33c9830190e2e..89cf922232920 100644
+>>>>> --- a/virt/kvm/guest_memfd.c
+>>>>> +++ b/virt/kvm/guest_memfd.c
+>>>>> @@ -893,6 +893,27 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>>>     EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_gmem_get_pfn);
+>>>>>
+>>>>>     #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+>>>>> +static bool kvm_range_is_private(struct file *file, pgoff_t index,
+>>>>> +				 size_t nr_pages, struct kvm *kvm, gfn_t gfn)
+>>>>> +{
+>>>>> +	struct inode *inode = file_inode(file);
+>>>>> +	pgoff_t last = index + nr_pages - 1;
+>>>>> +	struct maple_tree *mt;
+>>>>> +	void *entry;
+>>>>> +
+>>>>> +	if (!gmem_in_place_conversion)
+>>>>> +		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
+>>>>> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>>>>> +							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
+>>>>> +
+>>>>> +	mt = &GMEM_I(inode)->attributes;
+>>>>> +	mt_for_each(mt, entry, index, last) {
+>>>>> +		if (kvm_gmem_interpret_entry(inode, entry) !=
+>>>>> +		    KVM_MEMORY_ATTRIBUTE_PRIVATE)
+>>>>> +			return false;
+>>>>> +	}
+>>>>> +	return true;
+>>>>> +}
+>>>>>
+>>>>>     static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>>>     				struct file *file, gfn_t gfn, struct page *src_page,
+>>>>> @@ -913,9 +934,7 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+>>>>>
+>>>>>     	folio_unlock(folio);
+>>>>>
+>>>>> -	if (!kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + 1,
+>>>>> -						KVM_MEMORY_ATTRIBUTE_PRIVATE,
+>>>>> -						KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
+>>>>> +	if (!kvm_range_is_private(file, index, 1, kvm, gfn)) {
+>>>>
+>>>> It's checking if a single gfn is private.
+>>>>
+>>>
+>>> But with huge page support we'd need to check a range of gfns... I guess
+>>> there's the argument of not keeping complexity for the future, but in
+>>> this case it's undoing functionality for this series and probably adding
+>>> it back later.
+>>
+>> let's leave the work for huge page support in the future.
+> 
+> It's not just for hugepage support, the core functionality is used in this series
+> by __kvm_gmem_set_attributes() in:
+> 
+>    KVM: guest_memfd: Return early if range already has requested attributes
+> 
+>>>> We can just use kvm_mem_is_private()? And it seems can be a separate patch.
+>>>>
+>>>
+>>> Do you mean that this refactoring could be a separate patch? I could
+>>> refactor out kvm_range_is_private() in a separate patch, then put in the
+>>> mt_for_each() check in this patch together as part of all the rest of
+>>> the "wiring".
+>>>
+>>> I considered that but it seemed like the refactoring was too small to
+>>> separate out into another patch when the mt_for_each() part is going to
+>>> be in this patch anyway.
+>>>
+>>> Or, I could add an earlier patch to first replace the call to
+>>> kvm_range_has_vm_memory_attributes() with a call to check just 1 gfn,
+>>> then this wiring patch would be simpler.
+>>>
+>>
+>> This is what I meant. An earlier patch to just replace
+>> kvm_range_has_vm_memory_attributes() with kvm_mem_is_private(). Then we can
+>> drop this 'big' diff in this patch.
+>>
+>> If kvm_range_is_private() is useful/required by huge page support, then let
+>> the huge page series to introduce it. It has nothing to do with the in-place
+>> conversion series.
+> 
+> If it weren't for the fact that the range-based search is used later in this
+> series, I would 100% agree with Xiaoyao.  
+ > But since the core logic is used and needed elsewhere,
 
-First, please don't top post.
+I don't see it a problem. Without introducing kvm_range_is_private() in 
+this patch, the core logic of range-based search on gmem can still be 
+introduced as kvm_gmem_range_has_attributes() directly in patch 10 or in 
+a separate patch.
 
-Second, I don't understand your explanation. WDYM by "after the access
-permission check"? It gets invoked for BPF_WRITE, so should be rejecting
-res->key =3D 42 if 'res' is a pointer with PTR_UNTRUSTED flag set. What am =
-I
-missing?
+ > and because kvm_range_has_vm_memory_attributes() takes a range,> my 
+vote is to provide the plumbing now, even though a small portion of it isn't
+> strictly necessary.
 
-> On Sun, Aug 2, 2026 at 4:32=E2=80=AFPM Kumar Kartikeya Dwivedi <memxor@gm=
-ail.com> wrote:
->>
->> On Tue Jul 28, 2026 at 5:38 AM CEST, Ning Ding wrote:
->> > A kptr loaded under an RCU read lock has MEM_ALLOC set. After
->> > bpf_rcu_read_unlock(), the verifier marks it PTR_UNTRUSTED, but
->> > check_ptr_to_btf_access() still allows writes because
->> > type_is_ptr_alloc_obj() ignores that flag.
->> >
->> > Reject writes through MEM_ALLOC pointers that are PTR_UNTRUSTED. Reads
->> > remain allowed and are converted to probe-memory accesses.
->> >
->> > Also skip the owning-reference check for these pointers, since they no
->> > longer have a live reference after leaving the RCU critical section.
->> >
->> > Add verifier tests for the rejected write and permitted read cases.
->> >
->> > Fixes: 503e4def5414 ("bpf: Replace open code with for allocated object=
- check")
->> > Closes: https://lore.kernel.org/all/20260726021304.97ED91F000E9@smtp.k=
-ernel.org/
->> > Assisted-by: Codex:gpt-5.6-sol
->> > Signed-off-by: Ning Ding <dingning04@gmail.com>
->> > ---
->>
->> Same comment for this one, split kernel and selftests into separate patc=
-hes.
->>
->> >  kernel/bpf/verifier.c                         |  6 +-
->> >  .../bpf/progs/local_kptr_stash_fail.c         | 58 ++++++++++++++++++=
-+
->> >  2 files changed, 62 insertions(+), 2 deletions(-)
->> >
->> > diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> > index 7aa47342dc65..24c151ad2e62 100644
->> > --- a/kernel/bpf/verifier.c
->> > +++ b/kernel/bpf/verifier.c
->> > @@ -5804,13 +5804,15 @@ static int check_ptr_to_btf_access(struct bpf_=
-verifier_env *env,
->> >                * program allocated objects (which always have id > 0),
->> >                * but not for untrusted PTR_TO_BTF_ID | MEM_ALLOC.
->> >                */
->> > -             if (atype !=3D BPF_READ && !type_is_ptr_alloc_obj(reg->t=
-ype)) {
->> > +             if (atype !=3D BPF_READ &&
->> > +                 (!type_is_ptr_alloc_obj(reg->type) || reg->type & PT=
-R_UNTRUSTED)) {
->> >                       verbose(env, "only read is supported\n");
->> >                       return -EACCES;
->> >               }
->>
->> There is a PTR_UNTRUSTED check already earlier in this function, why is =
-that not
->> working or not enough?
->>
->> pw-bot: cr
->>
->> >
->> >               if (type_is_alloc(reg->type) && !type_is_non_owning_ref(=
-reg->type) &&
->> > -                 !(reg->type & MEM_RCU) && !reg_is_referenced(env, re=
-g)) {
->> > +                 !(reg->type & (MEM_RCU | PTR_UNTRUSTED)) &&
->> > +                 !reg_is_referenced(env, reg)) {
->> >                       verifier_bug(env, "allocated object must have a =
-referenced id");
->> >                       return -EFAULT;
->> >               }
->> > diff --git a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c=
- b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
->> > index fcf7a7567da2..d7b8cd6458bb 100644
->> > --- a/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
->> > +++ b/tools/testing/selftests/bpf/progs/local_kptr_stash_fail.c
->> > @@ -8,14 +8,22 @@
->> >  #include "../bpf_experimental.h"
->> >  #include "bpf_misc.h"
->> >
->> > +extern void bpf_rcu_read_lock(void) __ksym;
->> > +extern void bpf_rcu_read_unlock(void) __ksym;
->> > +
->> >  struct node_data {
->> >       long key;
->> >       long data;
->> >       struct bpf_rb_node node;
->> >  };
->> >
->> > +struct plain_data {
->> > +     long key;
->> > +};
->> > +
->> >  struct map_value {
->> >       struct node_data __kptr *node;
->> > +     struct plain_data __kptr *plain;
->> >  };
->> >
->> >  struct node_data2 {
->> > @@ -31,6 +39,7 @@ struct node_data2 {
->> >   * [35] TYPE_TAG 'kptr_ref' type_id=3D34
->> >   */
->> >  struct node_data *just_here_because_btf_bug;
->> > +struct plain_data *just_here_because_btf_bug2;
->> >
->> >  struct {
->> >       __uint(type, BPF_MAP_TYPE_ARRAY);
->> > @@ -82,4 +91,53 @@ long drop_rb_node_off(void *ctx)
->> >       return 0;
->> >  }
->> >
->> > +SEC("?tc")
->> > +__failure __msg("only read is supported")
->> > +long write_untrusted_alloc_obj(void *ctx)
->> > +{
->> > +     struct map_value *mapval;
->> > +     struct node_data *res;
->> > +     int idx =3D 0;
->> > +
->> > +     mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
->> > +     if (!mapval)
->> > +             return 1;
->> > +
->> > +     bpf_rcu_read_lock();
->> > +     res =3D mapval->node;
->> > +     if (!res) {
->> > +             bpf_rcu_read_unlock();
->> > +             return 2;
->> > +     }
->> > +     barrier_var(res);
->> > +     bpf_rcu_read_unlock();
->> > +
->> > +     res->key =3D 42;
->> > +     return 0;
->> > +}
->> > +
->> > +SEC("?tc")
->> > +__success
->> > +long read_untrusted_alloc_obj(void *ctx)
->> > +{
->> > +     struct map_value *mapval;
->> > +     struct plain_data *res;
->> > +     int idx =3D 0;
->> > +
->> > +     mapval =3D bpf_map_lookup_elem(&some_nodes, &idx);
->> > +     if (!mapval)
->> > +             return 1;
->> > +
->> > +     bpf_rcu_read_lock();
->> > +     res =3D mapval->plain;
->> > +     if (!res) {
->> > +             bpf_rcu_read_unlock();
->> > +             return 2;
->> > +     }
->> > +     barrier_var(res);
->> > +     bpf_rcu_read_unlock();
->> > +
->> > +     return res->key;
->> > +}
->> > +
->> >  char _license[] SEC("license") =3D "GPL";
->>
+So my initial feedback was "we can just use kvm_mem_is_private(kvm, 
+gfn)". It makes code simpler. And as a bonus, the logic to choose 
+between gmem-based attribute query and vm-based attribute query is 
+hidden from the static call.
 
+The second bonus of dropping kvm_range_is_private() is that we can 
+eliminate one more chunk in patch 20.
