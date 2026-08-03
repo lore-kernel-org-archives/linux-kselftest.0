@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5623BB699;
-	Mon,  3 Aug 2026 09:00:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2FD3BBA0B;
+	Mon,  3 Aug 2026 09:00:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785747643; cv=none; b=rwPGF+b8whIHgBnXPls/pSLuKe1k9F/MDAy0OIH3iQNTeS8YVO9KWujSKrBgcJH7ejmucmrDzL8LpZtBM3VH+bDxztnT5POMvkuV7egK6IWpxPd08JIn1s4WF4LnaijdrvlAk0yGGaGCd+vk2wClH3SkHgR2IwR5ImZ02oqopNc=
+	t=1785747646; cv=none; b=rhvyimQcPWzIsrCmlDp7Z/V/CwBNHL5L9fj5kLZOUtv3xYY7iLtqHPb2oxdM7431dUXwjjKY9DIfQ50icSNywDHBGwc2JXwKmYRSewNgW/XnuDU2PgMeyw+YESWdFKjBXdR4DV2QN72EjbDH5idkwlgugYu/TqplE/x+y2emKJs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785747643; c=relaxed/simple;
-	bh=cmXpGBg5MrFSFt4N4oCPKRPodRtinzdyqodofhKq3+k=;
+	s=arc-20240116; t=1785747646; c=relaxed/simple;
+	bh=5RY6inpK5pbQP7yziJkMzJezARgyqke4cov9xaIXkM0=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=CJ4/w57J6fefn9Wr3E7ohuDuxYUHIWtEjDwARBaY9buYaIPy0lOF/2nl2a1Huujsgn1U4VgiQG0w/b7RXCsY2tTFUIhLivlO5MAH5rNgkP7s+URy3TS1sXdyl8byV4pWF88DBJa8Fla+/7/YJwN4gchVB2gCnI7OwS5LKJcXO+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g1C6H9lY; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=W6hyKVdX7do0b5sxdkXp9VG8Q+jOspmRNHcw8Hvh02N9eukNceFq9EfHjOo89xGkAFZe1K6AWzueHAaQrk77pNASjs3/YtAHf0PksixbHaOMmCcMbVS3L9D6esaIH/lJ7W1EiaPmqBvQLlBCSnFp66EOl2mnDU+i96hJjtTACOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CMWhxAW+; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g1C6H9lY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E83E1F00A3D;
-	Mon,  3 Aug 2026 09:00:31 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CMWhxAW+"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A11A41F000E9;
+	Mon,  3 Aug 2026 09:00:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785747638;
-	bh=ZH1yyH6OQfp+HeumAa7QMNRKJ6QwYZoAjIJS12vbQQc=;
+	s=k20260515; t=1785747644;
+	bh=S1fW7CNa0Rta/NRgITqdOPZuNkGF26w1VzOGgOD6xvg=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=g1C6H9lY9ewm2jizolbdQB1Yjerow0BfWYnaHZ7AKif87hHGr2V5ySS1fHPjS9Lx3
-	 O15XqRNV+SuDtlJWoz25FsRxHl0hIAwf0wSAvzTQpMfEWmo/Fo25C5DivZWJejuuNP
-	 Y1Df9EWMNeuPJ/zKxd3yCFwd5xk9HHIYE00yCoTd0iuWArbaiZaRneIW6hT3s9G7ig
-	 ig3obMPlfx1Dhq5RKxRV62mpz9cJ4m+JyBL/M/wUgdN+NviA2Wv88zsOEV2OLKmx8M
-	 XCrbr6aGjo+/MpDAWROF+Gh6fD/PuwSNC0ImgiuT+wvJn0rHYsjbm0adHN/GXSF9ZQ
-	 miwcHh71NAy9g==
+	b=CMWhxAW+ua9CuWQbkSA2KkHuDlUsptPy/9hThctxswMbNkp4WkJ3SgzGMluxhWuuz
+	 gvqw9uqlqwoDocMV9/ZhLhhjaTDwSW/2ThQuH+xdUHZZtlzHNtDjRDg4SccCXq9cx0
+	 rG0otOr6yxz/vpI4hPcpW9SfKJOnF43QQCi1DQ0ITJz2FK5n24KdalAEUaiA4K0FFr
+	 uW+A4x9QpLlykXKz9VhfNlFJtxfuBqT25+GjZXSefWpEm6Oufga3zuURWhneY+lPuT
+	 SHl3H/k8dqBX6Ld7IG/i2sQlK7eBrOfD10EySgTjWMD9TsL4FSNtVHVQVlwf2m1OSz
+	 bpFmPnvKT0ypQ==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,7 +34,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v6 5/6] tools/mm: make gup_bench a benchmark only tool
+Subject: Re: [PATCH v6 6/6] selftests/mm: add a GUP selftest
 From: Mike Rapoport <rppt@kernel.org>
 To: Sarthak Sharma <sarthak.sharma@arm.com>
 Cc: Andrew Morton <akpm@linux-foundation.org>, 
@@ -52,266 +52,168 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
  Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org, 
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kernel@vger.kernel.org
-In-Reply-To: <20260730140825.238130-6-sarthak.sharma@arm.com>
+In-Reply-To: <20260730140825.238130-7-sarthak.sharma@arm.com>
 References: <20260730140825.238130-1-sarthak.sharma@arm.com>
- <20260730140825.238130-6-sarthak.sharma@arm.com>
+ <20260730140825.238130-7-sarthak.sharma@arm.com>
 Date: Mon, 03 Aug 2026 12:00:01 +0300
-Message-Id: <178574760162.1561566.7432721858074092727.b4-review@b4>
+Message-Id: <178574760162.1561566.17560239060453947110.b4-review@b4>
 X-Mailer: b4 0.16-dev
 
-> Remove the functional modes (GUP_BASIC_TEST, PIN_BASIC_TEST and
-> DUMP_USER_PAGES_TEST) from gup_bench. Drop kselftest dependency
-> and use normal diagnostics and exit statuses.
+> Add a new GUP selftest which uses kselftest_harness.h. Cover
+> 12 mapping configurations: THP enabled, THP disabled and
+> HugeTLB, each across private/shared mappings and with/without
+> FOLL_WRITE. Run 7 testcases for every variant: get_user_pages,
+> get_user_pages_fast, pin_user_pages, pin_user_pages_fast,
+> pin_user_pages_longterm, and DUMP_USER_PAGES_TEST using both
+> get and pin.
 > 
-> When no arguments are supplied, run a single GUP_FAST_BENCHMARK
-> with existing default values. Let users select other configs
-> through command line options. Also validate numeric arguments
-> and reject positional arguments.
+> Sweep four nr_pages_per_call values for each test: 1, 512, 123 and
+> all pages. This preserves the coverage previously provided by
+> run_gup_matrix(): 12 mapping combinations x 5 GUP/PUP operations x 4
+> batch sizes, for 240 ioctl calls. The two dump modes add another 96
+> calls.
 > 
-> Restore hugeTLB settings on failure and after every run. Also
-> handle failures without relying on assert() calls.
+> Preserve the previous sparse dump coverage with a standalone test for
+> pages 0, 19 and 0x1000. In total the selftest reports 85 TAP
+> cases and issues 337 ioctls.
+> 
+> Add the new gup binary to the selftests/mm build, .gitignore,
+> run_vmtests.sh and MAINTAINERS. Update
+> Documentation/core-api/pin_user_pages.rst for the new test.
 > 
 > Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-
-...
-
->  int main(int argc, char **argv)
->  {
->  	struct gup_test gup = { 0 };
-> -	int filed, i, opt, nr_pages = 1, thp = -1, write = 1, nthreads = 1, ret;
-> +	int filed, i, opt, nr_pages = 1, thp = -1, write = 1;
-> +	int nthreads = 1, ret, started_threads = 0;
->  	int flags = MAP_PRIVATE;
-> -	char *file = "/dev/zero";
-> -	bool hugetlb = false;
-> +	const char *file = "/dev/zero";
-> +	bool hugetlb = false, restore_hugetlb = false;
-> +	unsigned long nr_pages_per_call;
->  	pthread_t *tid;
->  	char *p;
->  
-> -	while ((opt = getopt(argc, argv, "m:r:n:F:f:abcj:tTLUuwWSHpz")) != -1) {
-> +	while ((opt = getopt(argc, argv, "m:r:n:F:f:aj:tTLuwWSH")) != -1) {
->  		switch (opt) {
->  		case 'a':
->  			cmd = PIN_FAST_BENCHMARK;
->  			break;
-> -		case 'b':
-> -			cmd = PIN_BASIC_TEST;
-> -			break;
->  		case 'L':
->  			cmd = PIN_LONGTERM_BENCHMARK;
->  			break;
-> -		case 'c':
-> -			cmd = DUMP_USER_PAGES_TEST;
-> -			/*
-> -			 * Dump page 0 (index 1). May be overridden later, by
-> -			 * user's non-option arguments.
-> -			 *
-> -			 * .which_pages is zero-based, so that zero can mean "do
-> -			 * nothing".
-> -			 */
-> -			gup.which_pages[0] = 1;
-> -			break;
-> -		case 'p':
-> -			/* works only with DUMP_USER_PAGES_TEST */
-> -			gup.test_flags |= GUP_TEST_FLAG_DUMP_PAGES_USE_PIN;
-> -			break;
-> -		case 'F':
-> -			/* strtol, so you can pass flags in hex form */
-> -			gup.gup_flags = strtol(optarg, 0, 0);
-> +		case 'F': {
-> +			long val;
+>
 > +
-> +			val = parse_long_arg_base(optarg, "GUP flags", 0);
-> +			if (val < 0 || val > UINT_MAX) {
-> +				fprintf(stderr, "Invalid GUP flags '%s'\n", optarg);
-> +				exit(1);
-> +			}
+> +FIXTURE_SETUP(gup_test)
+> +{
+> +	int mmap_flags = MAP_PRIVATE;
+> +	int zero_fd;
+> +	char *p;
 > +
-> +			gup.gup_flags = val;
->  			break;
-> -		case 'j':
-> -			nthreads = atoi(optarg);
-> +		}
-> +		case 'j': {
-> +			long val;
+> +	/* zero_fd has to be >= 0. Already checked in main() */
+> +	zero_fd = open("/dev/zero", O_RDWR);
+> +	ASSERT_GE(zero_fd, 0);
 > +
-> +			val = parse_positive_long_arg(optarg, "thread count");
-> +			if (val > INT_MAX ||
-> +			    (size_t)val > SIZE_MAX / sizeof(pthread_t)) {
-> +				fprintf(stderr, "Invalid thread count '%s'\n", optarg);
-> +				exit(1);
-> +			}
-> +			nthreads = val;
->  			break;
-> +		}
->  		case 'm':
-> -			size = atoi(optarg) * MB;
-> +			size = parse_positive_long_arg(optarg, "size");
-> +			if (size > ULONG_MAX / MB) {
-> +				fprintf(stderr, "Invalid size '%s'\n", optarg);
-> +				exit(1);
-> +			}
-> +			size *= MB;
->  			break;
-> -		case 'r':
-> -			repeats = atoi(optarg);
-> +		case 'r': {
-> +			long val;
+> +	/* gup_fd has to be >= 0. Already checked in main() */
+> +	self->gup_fd = open(GUP_TEST_FILE, O_RDWR);
+> +	ASSERT_GE(self->gup_fd, 0);
 > +
-> +			val = parse_positive_long_arg(optarg, "repeat count");
-> +			if (val > INT_MAX) {
-> +				fprintf(stderr, "Invalid repeat count '%s'\n", optarg);
-> +				exit(1);
-> +			}
-> +			repeats = val;
->  			break;
-> -		case 'n':
-> -			nr_pages = atoi(optarg);
-> -			if (nr_pages < 0)
-> -				nr_pages = size / getpagesize();
-> +		}
-> +		case 'n': {
-> +			long val;
+> +	self->size = variant->hugetlb ? 256 * MB : 128 * MB;
+
+I'd derive the hugetbl variant size from the size of a huge page and
+predefined number of huge pages.
+
 > +
-> +			val = parse_long_arg(optarg, "page count");
-
-It's better to name the numbers parsing after what they do:
-parse_flags() and parse_num().
-
-> +			if (val != -1 && (val < 1 || val > INT_MAX)) {
- 
-And the limit checks seem wierd all over the place, like if we can loop
-infinitely, why do we care about INT_MAX?
-
-And what exact limit ULONG_MAX / MB or SIZE_MAX / sizeof(ptread_t) are
-supposed to express?
-
-> +				fprintf(stderr, "Invalid page count '%s'\n", optarg);
-> +				exit(1);
-> +			}
-> +			nr_pages = val;
->  			break;
-
-...
-
->  	if (hugetlb) {
->  		unsigned long hp_size = default_huge_page_size();
->  
-> -		if (!hp_size)
-> -			ksft_exit_skip("HugeTLB is unavailable\n");
+> +	if (variant->hugetlb) {
+> +		unsigned long hp_size = default_huge_page_size();
+> +
 > +		if (!hp_size) {
-> +			fprintf(stderr, "Could not determine huge page size\n");
-> +			return 1;
+> +			close(zero_fd);
+> +			close(self->gup_fd);
+
+You can move hugetlb setup after opening those and save the headache of
+closing them.
+
+And in any rate prefer 
+
+	goto err_do_cleanup
+
+to
+	if (something_failed) {
+		cleanup1();
+		cleanup2();
+	}
+
+	if (something_else_failed) {
+		cleanup1();
+		cleanup2();
+		cleanup3();
+	}
+
+> +			SKIP(return, "HugeTLB not available\n");
 > +		}
 > +
-> +		if (size > ULONG_MAX - (hp_size - 1)) {
-> +			fprintf(stderr, "HugeTLB mapping size is too large\n");
-> +			return 1;
-> +		}
->  
->  		size = (size + hp_size - 1) & ~(hp_size - 1);
-> -		if (!hugetlb_setup_default(size / hp_size))
-> -			ksft_exit_skip("Not enough huge pages\n");
-> +		if (!hugetlb_setup_default(size / hp_size)) {
-> +			fprintf(stderr, "Not enough huge pages\n");
+> +		self->size = (self->size + hp_size - 1) & ~(hp_size - 1);
+> +		if (!hugetlb_setup_default(self->size / hp_size)) {
 > +			hugetlb_restore_settings();
 
-you don't need to explicitly call hugetlb_restore_settings(),
-_setup_defaults() sets up automatic restore on exit.
+No need to call restore() here.
 
-> +			return 1;
+Also, if you use a constant number of huge pages you can just add
+HUGETLB_SETUP_DEFAULT_PAGES(NR_HUGE_PAGES) somewhere in the begining and
+you won't need to setup and teardown hugetlb explicitly for every
+hugetlb test.
+
+
+> +			close(zero_fd);
+> +			close(self->gup_fd);
+> +			SKIP(return, "Not enough huge pages\n");
 > +		}
-> +		restore_hugetlb = true;
->  	}
-
-...
-
->  	gup_fd = open(GUP_TEST_FILE, O_RDWR);
->  	if (gup_fd == -1) {
-> -		switch (errno) {
-> -		case EACCES:
-> -			if (getuid())
-> -				ksft_print_msg("Please run this test as root\n");
-> -			break;
-> -		case ENOENT:
-> -			if (opendir("/sys/kernel/debug") == NULL)
-> -				ksft_print_msg("mount debugfs at /sys/kernel/debug\n");
-> -			ksft_print_msg("check if CONFIG_GUP_TEST is enabled in kernel config\n");
-> -			break;
-> -		default:
-> -			ksft_print_msg("failed to open %s: %s\n", GUP_TEST_FILE, strerror(errno));
-> -			break;
-> -		}
-> -		ksft_test_result_skip("Please run this test as root\n");
-> -		ksft_exit_pass();
+> +
+> +		mmap_flags |= (MAP_HUGETLB | MAP_ANONYMOUS);
+> +	}
+> +
+> +	if (variant->shared)
+> +		mmap_flags = (mmap_flags & ~MAP_PRIVATE) | MAP_SHARED;
+> +
+> +	self->addr = mmap(NULL, self->size, PROT_READ | PROT_WRITE,
+> +			  mmap_flags, zero_fd, 0);
+> +
+> +	ASSERT_NE(self->addr, MAP_FAILED) {
 > +		int err = errno;
 > +
-> +		close(filed);
-> +		if (err == EACCES)
-
-What was wrong with switch (errno) ?
-
-> +			fprintf(stderr, "Please run as root\n");
-
-Please add root check upfront and skip EACCES here
-
-> +		else if (err == ENOENT) {
-> +			DIR *debugfs = opendir("/sys/kernel/debug");
-> +
-> +			if (!debugfs)
-> +				fprintf(stderr, "Mount debugfs at /sys/kernel/debug\n");
-
-Just replace the prints, no need to refactor the logic there.
-
-> +			else {
-> +				closedir(debugfs);
-> +				fprintf(stderr, "Check CONFIG_GUP_TEST in kernel config\n");
-> +			}
-> +		} else
-> +			fprintf(stderr, "Failed to open %s: %s\n", GUP_TEST_FILE,
-> +				strerror(err));
-> +		if (restore_hugetlb)
+> +		close(zero_fd);
+> +		close(self->gup_fd);
+> +		if (variant->hugetlb)
 > +			hugetlb_restore_settings();
-> +		return 1;
->  	}
->  
->  	p = mmap(NULL, size, PROT_READ | PROT_WRITE, flags, filed, 0);
-> -	if (p == MAP_FAILED)
-> -		ksft_exit_fail_msg("mmap: %s\n", strerror(errno));
-> +	if (p == MAP_FAILED) {
-> +		fprintf(stderr, "mmap: %s\n", strerror(errno));
-> +		close(filed);
-> +		close(gup_fd);
-> +
-> +		if (restore_hugetlb)
-> +			hugetlb_restore_settings();
-
-Use goto err_do_cleanup here and everywhere else. Piling cleanups in 
-if (something_failed) is error prone and unmaintainable.
-
-> +		return 1;
+> +		TH_LOG("mmap failed: %s", strerror(err));
 > +	}
-> +	close(filed);
->  	gup.addr = (unsigned long)p;
->  
->  	if (thp == 1)
-  
-...
-
->  	free(tid);
-> +	munmap((void *)gup.addr, size);
-> +	close(gup_fd);
-> +	if (restore_hugetlb)
+> +	close(zero_fd);
+> +
+> +	if (variant->thp)
+> +		madvise(self->addr, self->size, MADV_HUGEPAGE);
+> +	else if (!variant->hugetlb)
+> +		madvise(self->addr, self->size, MADV_NOHUGEPAGE);
+> +
+> +	for (p = self->addr; (unsigned long)p < (unsigned long)self->addr
+> +			+ self->size; p += psize())
+> +		p[0] = 0;
+> +}
+> +
+> +FIXTURE_TEARDOWN(gup_test)
+> +{
+> +	munmap(self->addr, self->size);
+> +	close(self->gup_fd);
+> +
+> +	if (variant->hugetlb)
 > +		hugetlb_restore_settings();
->  
-> -	ksft_exit_pass();
-> +	return bench_error ? 1 : 0;
+> +}
+> +
+> +static void run_gup_cmd(struct __test_metadata *_metadata,
+> +			 FIXTURE_DATA(gup_test) *self,
+> +			 const FIXTURE_VARIANT(gup_test) *variant,
+> +			 unsigned long command,
+> +			 unsigned int test_flags,
+> +			 unsigned int which_page)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < (int)ARRAY_SIZE(nr_pages_list); i++) {
+> +		struct gup_test gup = {
+> +			.addr = (unsigned long)self->addr,
+> +			.size = self->size,
+> +			.nr_pages_per_call = nr_pages_list[i] < 0 ?
+> +				self->size / psize() : nr_pages_list[i],
+> +			.test_flags = test_flags,
+> +		};
+> +
+> +		if (variant->write)
+> +			gup.gup_flags |= FOLL_WRITE;
+> +
+> +		gup.which_pages[0] = which_page;
 
-Using goto for cleanup gives you clean return 1 on error and return 0 on
-success.
+Can't these to go to the static initialization?
 
 -- 
 Sincerely yours,
