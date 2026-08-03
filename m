@@ -1,406 +1,459 @@
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+Received: from mail-ot1-f47.google.com (mail-ot1-f47.google.com [209.85.210.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A835346E67
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 18:54:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785783291; cv=pass; b=XuRqa0gsAsKtZJgV2aIUMyTQu8hJVkG3J3T7Hca0FAyzAZj/p0QSqvsVXkTWcfZ3ICYGS3anKT0DbHJLMtTtv7b5LvD/3ybompdDNOv0LaBOSZPumAOXxCcMSTEvc9E5l4iCasgm2bOlSY2uAa8wvZet45gVpFqTUkMKvWqAKhY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785783291; c=relaxed/simple;
-	bh=nslW9JE0t9+4wF3BOQF76vvMcWmxIHMVVjC8H216PkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=llJ8KkP0i0GnqLd9o8IDUewzc5S3SozZ8+9DW+zjF2aJeprf1cga44e4+eyoYXZcXg1G25UP0IPZHsnO712xkbi39UPzsAg8lYvJDlRmm00Rq7BOdqLdICHQFYYFacay+RiP3enTTiqyL1QKCIy1mQ5pVUExsAHlTihfmtlpw+U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G2hEq1FF; arc=pass smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EC2E31E851
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 18:57:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.47
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785783472; cv=none; b=Dl3wewom80+ZLLyx8fbGYvVYZ7vdYJIR1LWIyz3jNpUDAqKxgeZgeok3jQYVzC7RsrY8z3aFLEsJABMBfb+TsGi3U8dCbIMm8unSPl9V3m7tn1gSMGb5dzdazqd34bVgIZ45acO5v+kcQCNfC1JMwBpcBbQ/7gZ/FBhr1Bh0Ny8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785783472; c=relaxed/simple;
+	bh=EAnLkUzD/jak0hj55ek8FaJpcs1PSsPCAlouMNxHBzM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ixMg71K1b6l3gtyClP0LIu3aZmv+RvjDSfYPVWsfP3EVlRPX6li2oawFvxWVLedPiLKAtavj0D+B8v/8XudfCorYZYJHRLrptdaGWDJWNi70pDwylgHAJfSXJ4E94508xssTOSApjuDiZHWW+Y5pgCF3poStS+h/djxqUGqK6tU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=iT0mmCuX; arc=none smtp.client-ip=209.85.210.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G2hEq1FF"
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-c1c4db7ca93so500237966b.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 11:54:49 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785783288; cv=none;
-        d=google.com; s=arc-20260327;
-        b=De05RG0iuB9lfDZlZogMjM6f7y7sCZh1+QJVq+m1Tc84dySGoTuAQ11OfW1xzvS5vs
-         MPato8SSJX1DO6Q/x4LK7jJDlCNviehSSzVB63/0eSDAODYs+VErg0d0MY1r3ZAvc5qz
-         GsPhwOaOsZNJUWPgPvKgaheFdhOlxB4XYQsqiwqlIMVBGXoL/nMRqhKjQlQkjMw+xid8
-         43x91qdlhC2tu9hOVzyGB5S8uB7Cc/C/qwNnWhDvRerqpYwj+XcUDCSvnNUvAFiOTWBD
-         0Mbx6k/G/GAE/D0erDOs45s8HEROymAd1RQ/7TUQDJoJdkP6oqqokm/4Q3vK/ChS1TAc
-         N2cQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
-        fh=3XDUAawFKJXji3GLgiRQnm0i3NYNIIXHz922X/VQG4U=;
-        b=RdAJVylekDeCug9KFrLU/yyzxLNeCBBaIuVxy/hVJ0fndq0ZnpPt3UGs6Su3bK0gQt
-         ca98ql+D8px6oNtn9lqoh1AqQ9uqiHvJY/mUSjQoxA2bV7LneJc0qvEZWL6canBMF/vc
-         XviS3j/4YKv0pX9mMuHxJoCkNBCfBhYPn/+YWKoMLA9hwPWl5avlBfIf3JhBBdXdzOhj
-         hK8N3hWpAjyrJVAkfORvQptx2ET5Q+zsbg7xR49ROGBFzHyS/0LoAFExeHiZp+u2khoE
-         0R+M7R8Z4OLjv2kkzAGo8F2/fZiuuRpUrXSDjCo6auYpYyXzuP2ifMZBB8RG49aSUj2X
-         OD7w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785783288; x=1786388088; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
-        b=G2hEq1FFiuJWtjyABgEJdUg8ZOnS9h7SkPiCd0yODXQ9FG6TKjZ9lSq3tl1707dRVf
-         sAqhA7UIFlICSOXMyTH836OGIljd5bGBVwGEmWZHyxmdgKbEuafeDcxRlO3vDkWdEMsq
-         +9HJRBoQB/NOMlUxpBt5+av/2xTf+rmxrFTPIXDq/uwXobvwSRLHXhUQGQ0lQW8tYHAa
-         skCOMqM3jS95s8N49EcOJ4AUKihOF1WrjJKioXJJgI17FDyLKvX7rko8KtNm8evrw/El
-         0PmYQOTbtunNDng/yjjPagmKKxbGU3Ecwj8+zE+Y3GJKbFBDfIwu7hz/9s6fWmy5s0ml
-         Oa5A==
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="iT0mmCuX"
+Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-7eb5bdb50fcso2452750a34.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 11:57:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785783288; x=1786388088;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785783468; x=1786388268;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=x1AIPF5SDT4J7PNUPtkxqesvFiiIPup4Fza0Vbizlw8=;
-        b=pND+eAwfZ5sKleeN/brraKOTh2HZCt6DQWVi1z8aYnBFQXeEhwX4kFtSs2bBiBNipg
-         /fIAs8jzaX1FjCOQ0iY/SYsKYSmMv0jbc9TrTRjHXdheBipr1KMaWm2X3f/ZiWszbIOX
-         0/PBC8aAZTleNMeYa5znHAEo4yHu5hY/KvZ9VTSbyk1Tg3tu9Uhamja0CbuSb1S3bYQn
-         psX9353Ubi3zUtPR3L75ZCv8OORqrAyjaTb7Pw0HWP059Bc5ttNmGqusAl+LeFJzJff4
-         qUH7z/BIpSCmdYi4UhUUaBlNJ/qVKlFBk+N5XcaIDLfEEefKEO90AbZ9LXZ0JjewPDY0
-         we5Q==
-X-Forwarded-Encrypted: i=1; AHgh+Rr/MieN0qJ1khu7JI0etN29pdjBsmbW530+5VlkfqRaGORXaPIE5E0ReEgA3YBVQ6K9sv2KLSpPJKFuxgWDZ0w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzwpS1gtZ97vPoDxJw3s8Aw6rmwFSB8cI7uRygCrg8o01Msz2eH
-	f0ZT3YoOgToK2m3cl9d0eshfa0stLLbo/NEUTujIox5qImV09n5s1qz0wYoLvEfK9LlefKPw2Mz
-	laubWDhg27a4aoTuk9m7VHPAhi59GeRk=
-X-Gm-Gg: AR+sD10LANeFQ7+C51xuCaDdhxjMe593jUN95UR2dbifMSOZkFW5a88+Qke0tFBjNkD
-	pWBzcu33sVihQviK2IJTw3WIHhyjSIMcDNKo88JG1oxTyzCFXeBpcMNOcne/vvWwYcP+7MUyojh
-	gB10wpjPda8goZlsIHMj1lVyC/Z2leBRpdqbw/tUcNmgZDuCGis9eH5w1EcL142/TFqzZ7K8nX2
-	Ni3d8EykIRIxBRy2FN4+sAsk4gydY8EW8jes5BtNCHCxhxRFYmgr8yEc4tD+czQxtH69LdbLZKf
-	cbQbaalnGK7iJ8IAR3lZ9Q0Zx63fRkCXOqo8cDBJtZPD4PSub4D8PakYokuE
-X-Received: by 2002:a17:907:1c22:b0:c15:d4f8:dade with SMTP id
- a640c23a62f3a-c1fe7eebb0amr1012287766b.2.1785783287476; Mon, 03 Aug 2026
- 11:54:47 -0700 (PDT)
+        bh=lcHoPJWnPgEgMutYYZSf0CmDCVCUMwS4dztIBV+3zoI=;
+        b=hLbPdt8v9Qj2zfHxfwwSybNxzVP6GdThuZieSlvVNku48yc7sp8D5XHCCQJ1gWdGb6
+         aoOynJwQ7S1DpMBB/47GXrRHWO18M5gs9YiYfLV4Y4G82nhoiJjjfGpcIZVq5m6X3ne9
+         WVQ6OJmaIr44izqY6RJPPP4GNyMa2Dwf2oqli+mFMkxEQFN4pfCWn5OL0RljK+TtapcH
+         3/4u8w2JpzbznPw863zUcMAt0SJDCUmz31z272Jssxfi/b3/0j/3OLviXHa/NZUsDLh6
+         KzygSgz27DXkWUkEaXiQiSHS7FwHwb035aVGjEEViFxMWgLjknzZT1PeDJf0gw32Th1G
+         L/ww==
+X-Forwarded-Encrypted: i=1; AHgh+Rqj262PSvchQRuP3bM4nPfDWrQVecuga/x4HOlhywMlO/nMDYExVJDkX1rDLKEzezPKuGhcUK3opoAb7OcvVIw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwvLthy1XkT7uIIm6/edH+SMGlfGQPf8c/jVi7+RTYJzMk0PSD1
+	cQBfYjh7UftKXqhFvb/iLxq2oHQkn1wy7kuBTP0Gw0OotkhZAOnPjEe9
+X-Gm-Gg: AR+sD13O1r5cfxSGfgCsk71FB6oRj4yIhZV8v0XtV7WUOheTiwRTs66TtIJvBUK6HXo
+	u58WaJhKJjNHVorH7sMeuetSaw7i1zz7PhvA3lRVklTTI8CrShX7sU9VKgc0pgl0RNw5pEvWmGw
+	BBF/tHoN3ApwcH1vjf3c1O6p/4Vp9YFANc0sJpRy2LNPrwHYF5fh3kdDOzQiUxk6GnOiD7RX0jD
+	axNhIMkWSOj01xtxPx3Aok9eWK8Rfj9rF9AsuNVzeUwM8jifkeny6MltOFTfaCmAQNYgQbGI5qU
+	vPCgOGzYeZusQv+Gawfwo9BlF3pDbRgKSttgg3i4EfQhlKD/rpKacqcRqwNrTpNQ8ni6kgMnpzS
+	u4I497C9gwFg6X8qhxU5DaEuHX+6uZiU6/NORO1fHA/DQJnrG3FprfnKwUFhv7ouyplGLbiAo/D
+	8I8aPr0g5LpFW6cDIolsa5Dfmcy0U4vqqIgIVeZYLob1WP3YNFTRGOROjDgdUmnfj9Ni4mK+o4G
+	4TSiuC6jM/j8J+igei4XVUtWusjYBj8Wz6tmH/5l6b4wus2rUZe8nULTlrHF9bo9Q==
+X-Received: by 2002:a05:6830:700c:b0:7df:5fc:3fd5 with SMTP id 46e09a7af769-7f196b97f19mr19782181a34.1.1785783468210;
+        Mon, 03 Aug 2026 11:57:48 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f18f0da951sm7885452a34.24.2026.08.03.11.57.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 11:57:47 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7274160CD1;
+	Mon,  3 Aug 2026 18:57:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1785783465;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=lcHoPJWnPgEgMutYYZSf0CmDCVCUMwS4dztIBV+3zoI=;
+	b=iT0mmCuXCnmL8iTlj47goISnaeeghCP8cxhqJnfAmdE2z/81u6/B/W4GIS9qaJvYZexYV0
+	XkE4UDmFyG4FMtiAIJCGQtfE3pVjhuLUrFEexs2vZIkGGGrUZBQoRrRkPk1pPRxadY1+C8
+	UxLmEcK0AUdPxiP8byNydgI8u6QWtn7qPB/MOA8jIrewb1Tm/xLz0AUIsUUXedTfZxZnMO
+	Tb8EXT/2Qn88VPWOXmKh9PIrb3Tcs5EYncztyLRG6DdBRdXuBk9S5TjE/aqhAsk05UiZpr
+	nzwixPqTLsZiA22GHvZEdjNaRBjl47mieFibuuIWWQK0jd0lC9CHz8s1TyfbEQ==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Mon, 03 Aug 2026 15:57:32 -0300
+Subject: [PATCH 7.1.y] selftests/bpf: Add tests for sleepable tracepoint
+ programs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260616155716.2631508-1-puranjay@kernel.org> <20260616155716.2631508-4-puranjay@kernel.org>
- <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
-In-Reply-To: <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
-From: Puranjay Mohan <puranjay12@gmail.com>
-Date: Mon, 3 Aug 2026 19:54:33 +0100
-X-Gm-Features: AUfX_mwx8Ydt3A9LE8X-Qfww0uHrsaIvN1PiEerTcOucV_-waglDDq-7iwaK1XQ
-Message-ID: <CANk7y0inRXCUKtuio3Cb03DvuNPq6yp1o+tsE8PZitrY0LaOPQ@mail.gmail.com>
-Subject: Re: [PATCH v5 3/4] perf/arm64: Add BRBE support for bpf_get_branch_snapshot()
-To: James Clark <james.clark@linaro.org>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Will Deacon <will@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Leo Yan <leo.yan@arm.com>, Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	Shuah Khan <shuah@kernel.org>, Breno Leitao <leitao@debian.org>, 
-	Ravi Bangoria <ravi.bangoria@amd.com>, Stephane Eranian <eranian@google.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif <usama.arif@linux.dev>, 
-	linux-arm-kernel@lists.infradead.org, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260803-selftests-bpf-sleepable-v1-1-dc4cb88374e9@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAJvkcGoC/yWMWw7CIBREt9Lcb2kAk/rYivED6GAxBAkXjabp3
+ gX9PCczZyVGCWA6DysVvAKHR2qgdgO5xaQbRJgbk5Z6kke5F4zoK7iysNkLjkA2NkIA1uv5NGk
+ tFbV3LvDh/Stf6DCq8UPXv+anvcPVXu1DaxjCFpPc0hXXnqNt+wKn6H/JmwAAAA==
+X-Change-ID: 20260803-selftests-bpf-sleepable-eebf2d962201
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Mykyta Yatsenko <yatsenko@meta.com>, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1785783453; l=10993;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=nYxKjXWof+q7Tycv1IRGu/Vn8ITWdIxa0qhQDccaG+w=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QPvYdeSRW8R5oNioGDKpEYp67s5aOfQ3kh85ecMqEKbN9smSR/O+KIzIda/xGvSYkM9C3OGT1de
+ wUD1YcI/Esgc=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Aug 3, 2026 at 12:07=E2=80=AFPM James Clark <james.clark@linaro.org=
-> wrote:
->
->
->
-> On 16/06/2026 16:57, Puranjay Mohan wrote:
-> > Enable bpf_get_branch_snapshot() on ARM64 by implementing the
-> > perf_snapshot_branch_stack static call for BRBE.
-> >
-> > BRBE is paused before masking exceptions to avoid branch buffer
-> > pollution from trace_hardirqs_off(). Exceptions are then masked with
-> > local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
-> > If an overflow between pause and DAIF save re-enables BRBE, the snapsho=
-t
-> > detects this via BRBFCR_EL1.PAUSED and bails out.
-> >
-> > Branch records are read using perf_entry_from_brbe_regset() with a NULL
-> > event pointer to bypass event-specific filtering. The buffer is
-> > invalidated after reading.
-> >
-> > Introduce a for_each_brbe_entry() iterator to deduplicate bank
-> > iteration between brbe_read_filtered_entries() and the snapshot.
-> >
-> > Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
-> > Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
-> > ---
-> >   drivers/perf/arm_brbe.c  | 128 ++++++++++++++++++++++++++++++++------=
--
-> >   drivers/perf/arm_brbe.h  |   9 +++
-> >   drivers/perf/arm_pmuv3.c |   5 +-
-> >   3 files changed, 120 insertions(+), 22 deletions(-)
-> >
-> > diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
-> > index effbdeacfcbb..a141ad7abcf2 100644
-> > --- a/drivers/perf/arm_brbe.c
-> > +++ b/drivers/perf/arm_brbe.c
-> > @@ -9,6 +9,7 @@
-> >   #include <linux/types.h>
-> >   #include <linux/bitmap.h>
-> >   #include <linux/perf/arm_pmu.h>
-> > +#include <asm/daifflags.h>
-> >   #include "arm_brbe.h"
-> >
-> >   #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
-> > @@ -256,6 +257,14 @@ static bool valid_brbe_version(int brbe_version)
-> >              brbe_version =3D=3D ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
-> >   }
-> >
-> > +static __always_inline bool cpu_has_brbe(void)
->
-> This should be more like cpu_valid_brbe_version(). has_brbe() only
-> implies that the CPU has BRBE, not that it's a version that the driver
-> supports. And it's actually just a wrapper around valid_brbe_version()
-> that accesses the ID reg on that CPU, not a functionally different check.
->
-> But it also looks like valid_brbe_version() isn't called from anywhere
-> else, so why not delete that function and use its name for the new one?
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
-I will do that in next version
+From: Mykyta Yatsenko <yatsenko@meta.com>
 
->
-> > +{
-> > +     u64 aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
-> > +     int brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA=
-64DFR0_EL1_BRBE_SHIFT);
-> > +
-> > +     return valid_brbe_version(brbe);
-> > +}
-> > +
-> >   static void select_brbe_bank(int bank)
-> >   {
-> >       u64 brbfcr;
-> > @@ -271,6 +280,20 @@ static void select_brbe_bank(int bank)
-> >       isb();
-> >   }
-> >
-> > +static inline void __brbe_advance(int *bank, int *idx, int nr_hw)
-> > +{
-> > +     if (++(*idx) >=3D BRBE_BANK_MAX_ENTRIES &&
-> > +         *bank * BRBE_BANK_MAX_ENTRIES + *idx < nr_hw) {
-> > +             *idx =3D 0;
-> > +             select_brbe_bank(++(*bank));
-> > +     }
-> > +}
-> > +
-> > +#define for_each_brbe_entry(idx, nr_hw)                               =
-       \
-> > +     for (int __bank =3D (select_brbe_bank(0), 0), idx =3D 0;         =
-   \
-> > +          __bank * BRBE_BANK_MAX_ENTRIES + idx < (nr_hw);            \
-> > +          __brbe_advance(&__bank, &idx, (nr_hw)))
-> > +
-> >   static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
-> >   {
-> >       entry->brbinf =3D get_brbinf_reg(idx);
-> > @@ -474,11 +497,9 @@ unsigned int brbe_num_branch_records(const struct =
-arm_pmu *armpmu)
-> >
-> >   void brbe_probe(struct arm_pmu *armpmu)
-> >   {
-> > -     u64 brbidr, aa64dfr0 =3D read_sysreg_s(SYS_ID_AA64DFR0_EL1);
-> > -     u32 brbe;
-> > +     u64 brbidr;
-> >
-> > -     brbe =3D cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DF=
-R0_EL1_BRBE_SHIFT);
-> > -     if (!valid_brbe_version(brbe))
-> > +     if (!cpu_has_brbe())
-> >               return;
-> >
-> >       brbidr =3D read_sysreg_s(SYS_BRBIDR0_EL1);
-> > @@ -618,10 +639,10 @@ static bool perf_entry_from_brbe_regset(int index=
-, struct perf_branch_entry *ent
-> >
-> >       brbe_set_perf_entry_type(entry, brbinf);
-> >
-> > -     if (!branch_sample_no_cycles(event))
-> > +     if (!event || !branch_sample_no_cycles(event))
-> >               entry->cycles =3D brbinf_get_cycles(brbinf);
-> >
-> > -     if (!branch_sample_no_flags(event)) {
-> > +     if (!event || !branch_sample_no_flags(event)) {
-> >               /* Mispredict info is available for source only and compl=
-ete branch records. */
-> >               if (!brbe_record_is_target_only(brbinf)) {
-> >                       entry->mispred =3D brbinf_get_mispredict(brbinf);
-> > @@ -774,32 +795,97 @@ void brbe_read_filtered_entries(struct perf_branc=
-h_stack *branch_stack,
-> >   {
-> >       struct arm_pmu *cpu_pmu =3D to_arm_pmu(event->pmu);
-> >       int nr_hw =3D brbe_num_branch_records(cpu_pmu);
-> > -     int nr_banks =3D DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
-> >       int nr_filtered =3D 0;
-> >       u64 branch_sample_type =3D event->attr.branch_sample_type;
-> >       DECLARE_BITMAP(event_type_mask, PERF_BR_ARM64_MAX);
-> >
-> >       prepare_event_branch_type_mask(branch_sample_type, event_type_mas=
-k);
-> >
-> > -     for (int bank =3D 0; bank < nr_banks; bank++) {
-> > -             int nr_remaining =3D nr_hw - (bank * BRBE_BANK_MAX_ENTRIE=
-S);
-> > -             int nr_this_bank =3D min(nr_remaining, BRBE_BANK_MAX_ENTR=
-IES);
-> > +     for_each_brbe_entry(i, nr_hw) {
-> > +             struct perf_branch_entry *pbe =3D &branch_stack->entries[=
-nr_filtered];
-> >
-> > -             select_brbe_bank(bank);
-> > +             if (!perf_entry_from_brbe_regset(i, pbe, event))
-> > +                     break;
-> >
-> > -             for (int i =3D 0; i < nr_this_bank; i++) {
-> > -                     struct perf_branch_entry *pbe =3D &branch_stack->=
-entries[nr_filtered];
-> > +             if (!filter_branch_record(pbe, branch_sample_type, event_=
-type_mask))
-> > +                     continue;
-> >
-> > -                     if (!perf_entry_from_brbe_regset(i, pbe, event))
-> > -                             goto done;
-> > +             nr_filtered++;
-> > +     }
-> >
-> > -                     if (!filter_branch_record(pbe, branch_sample_type=
-, event_type_mask))
-> > -                             continue;
-> > +     branch_stack->nr =3D nr_filtered;
-> > +}
-> >
-> > -                     nr_filtered++;
-> > -             }
-> > +/*
-> > + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
-> > + * self-recording and return 0 if the snapshot state appears disturbed=
-.
-> > + */
-> > +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, =
-unsigned int cnt)
-> > +{
-> > +     unsigned long flags;
-> > +     int nr_hw, nr_copied =3D 0;
-> > +     u64 brbfcr, brbcr;
-> > +
-> > +     if (!cnt)
-> > +             return 0;
->
-> If you're trying to avoid branches before pausing BRBE, can't you check
-> this after the pause?
+[ Upstream commit 8a20655749c625dcc4debdfdeeaa0cf8bb85c203 ]
 
-will drop this in the next version and this is just an optimization.
+Cover all three sleepable tracepoint types (tp_btf.s, raw_tp.s, tp.s)
+and sys_exit (via bpf_task_pt_regs) with functional tests using
+bpf_copy_from_user() on getcwd. Verify alias and bare SEC variants,
+bpf_prog_test_run_raw_tp() with BPF_F_TEST_RUN_ON_CPU rejection,
+attach-time rejection on non-faultable tracepoints, and load-time
+rejection for sleepable tp_btf on non-faultable tracepoints.
 
->
-> > +
-> > +     /* Guard against running on a CPU without BRBE (e.g. big.LITTLE).=
- */
-> > +     if (!cpu_has_brbe())
-> > +             return 0;
-> > +
-> > +     /*
-> > +      * Pause BRBE first to avoid recording our own branches. The
-> > +      * sysreg read/write and ISB are branchless, so pausing before
-> > +      * checking BRBCR avoids polluting the buffer with our own
-> > +      * conditional branches.
-> > +      */
-> > +     brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-> > +     brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-> > +     write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
->
-> Can this work without first disabling interrupts? Sashiko pointed it
-> out, but I think it's correct. If you read an active state into brbfcr,
-> then the PMU event fires and disables BRBE, then you disable interrupts,
-> then you would restore an active state when it should be inactive.
-> Surely the only way to do it properly is to disable interrupts before
-> touching anything at all, if the PMU handler is also touching the same
-> registers?
->
-> If you want to avoid trace_hardirqs_off() can you make a new
-> raw_local_daif_save() that disables interrupts and then call
-> trace_hardirqs_off() yourself after pausing BRBE? Or not call
-> trace_hardirqs_off() at all? There is a comment mentioning something
-> like that in arch/arm64/kernel/suspend.c.
+Signed-off-by: Mykyta Yatsenko <yatsenko@meta.com>
+Acked-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Link: https://lore.kernel.org/bpf/20260422-sleepable_tracepoints-v13-6-99005dff21ef@meta.com
+Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+---
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+ .../bpf/prog_tests/sleepable_tracepoints.c         | 142 +++++++++++++++++++++
+ .../bpf/progs/test_sleepable_tracepoints.c         | 112 ++++++++++++++++
+ .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
+ tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
+ 4 files changed, 287 insertions(+), 2 deletions(-)
 
-Yes. I'll add raw_local_daif_save()/raw_local_daif_restore() and mask befor=
-e
-touching any BRBE register, which fixes the stale restore. trace_hardirqs_o=
-ff()
-then moves below the pause so lockdep still sees a balanced off/on pair whi=
-le
-its branches land in an already paused buffer.
+diff --git a/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+new file mode 100644
+index 000000000000..19500b785ee3
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
+@@ -0,0 +1,142 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <test_progs.h>
++#include <unistd.h>
++#include "test_sleepable_tracepoints.skel.h"
++#include "test_sleepable_tracepoints_fail.skel.h"
++
++static void run_test(struct test_sleepable_tracepoints *skel)
++{
++	char buf[PATH_MAX] = "/";
++
++	skel->bss->target_pid = getpid();
++	skel->bss->prog_triggered = 0;
++	skel->bss->err = 0;
++	skel->bss->copied_byte = 0;
++
++	syscall(__NR_getcwd, buf, sizeof(buf));
++
++	ASSERT_EQ(skel->bss->prog_triggered, 1, "prog_triggered");
++	ASSERT_EQ(skel->bss->err, 0, "err");
++	ASSERT_EQ(skel->bss->copied_byte, '/', "copied_byte");
++}
++
++static void run_auto_attach_test(struct bpf_program *prog,
++				 struct test_sleepable_tracepoints *skel)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_OK_PTR(link, "prog_attach"))
++		return;
++
++	run_test(skel);
++	bpf_link__destroy(link);
++}
++
++static void test_attach_only(struct bpf_program *prog)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(prog);
++	if (ASSERT_OK_PTR(link, "attach"))
++		bpf_link__destroy(link);
++}
++
++static void test_attach_reject(struct bpf_program *prog)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach(prog);
++	if (!ASSERT_ERR_PTR(link, "attach_should_fail"))
++		bpf_link__destroy(link);
++}
++
++static void test_raw_tp_bare(struct test_sleepable_tracepoints *skel)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach_raw_tracepoint(skel->progs.handle_raw_tp_bare,
++						  "sys_enter");
++	if (ASSERT_OK_PTR(link, "attach"))
++		bpf_link__destroy(link);
++}
++
++static void test_tp_bare(struct test_sleepable_tracepoints *skel)
++{
++	struct bpf_link *link;
++
++	link = bpf_program__attach_tracepoint(skel->progs.handle_tp_bare,
++					      "syscalls", "sys_enter_getcwd");
++	if (ASSERT_OK_PTR(link, "attach"))
++		bpf_link__destroy(link);
++}
++
++static void test_test_run(struct test_sleepable_tracepoints *skel)
++{
++	__u64 args[2] = {0x1234ULL, 0x5678ULL};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.ctx_in = args,
++		.ctx_size_in = sizeof(args),
++	);
++	int fd, err;
++
++	fd = bpf_program__fd(skel->progs.handle_test_run);
++	err = bpf_prog_test_run_opts(fd, &topts);
++	ASSERT_OK(err, "test_run");
++	ASSERT_EQ(topts.retval, args[0] + args[1], "test_run_retval");
++}
++
++static void test_test_run_on_cpu_reject(struct test_sleepable_tracepoints *skel)
++{
++	__u64 args[2] = {};
++	LIBBPF_OPTS(bpf_test_run_opts, topts,
++		.ctx_in = args,
++		.ctx_size_in = sizeof(args),
++		.flags = BPF_F_TEST_RUN_ON_CPU,
++	);
++	int fd, err;
++
++	fd = bpf_program__fd(skel->progs.handle_test_run);
++	err = bpf_prog_test_run_opts(fd, &topts);
++	ASSERT_ERR(err, "test_run_on_cpu_reject");
++}
++
++void test_sleepable_tracepoints(void)
++{
++	struct test_sleepable_tracepoints *skel;
++
++	skel = test_sleepable_tracepoints__open_and_load();
++	if (!ASSERT_OK_PTR(skel, "open_and_load"))
++		return;
++
++	if (test__start_subtest("tp_btf"))
++		run_auto_attach_test(skel->progs.handle_sys_enter_tp_btf, skel);
++	if (test__start_subtest("raw_tp"))
++		run_auto_attach_test(skel->progs.handle_sys_enter_raw_tp, skel);
++	if (test__start_subtest("tracepoint"))
++		run_auto_attach_test(skel->progs.handle_sys_enter_tp, skel);
++	if (test__start_subtest("sys_exit"))
++		run_auto_attach_test(skel->progs.handle_sys_exit_tp, skel);
++	if (test__start_subtest("tracepoint_alias"))
++		test_attach_only(skel->progs.handle_sys_enter_tp_alias);
++	if (test__start_subtest("raw_tracepoint_alias"))
++		test_attach_only(skel->progs.handle_sys_enter_raw_tp_alias);
++	if (test__start_subtest("raw_tp_bare"))
++		test_raw_tp_bare(skel);
++	if (test__start_subtest("tp_bare"))
++		test_tp_bare(skel);
++	if (test__start_subtest("test_run"))
++		test_test_run(skel);
++	if (test__start_subtest("test_run_on_cpu_reject"))
++		test_test_run_on_cpu_reject(skel);
++	if (test__start_subtest("raw_tp_non_faultable"))
++		test_attach_reject(skel->progs.handle_raw_tp_non_faultable);
++	if (test__start_subtest("tp_non_syscall"))
++		test_attach_reject(skel->progs.handle_tp_non_syscall);
++	if (test__start_subtest("tp_btf_non_faultable_reject"))
++		RUN_TESTS(test_sleepable_tracepoints_fail);
++
++	test_sleepable_tracepoints__destroy(skel);
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+new file mode 100644
+index 000000000000..254f7fd895d9
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
+@@ -0,0 +1,112 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <asm/unistd.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_core_read.h>
++#include <bpf/bpf_helpers.h>
++
++char _license[] SEC("license") = "GPL";
++
++int target_pid;
++int prog_triggered;
++long err;
++char copied_byte;
++
++static int copy_getcwd_arg(char *ubuf)
++{
++	err = bpf_copy_from_user(&copied_byte, sizeof(copied_byte), ubuf);
++	if (err)
++		return err;
++
++	prog_triggered = 1;
++	return 0;
++}
++
++SEC("tp_btf.s/sys_enter")
++int BPF_PROG(handle_sys_enter_tp_btf, struct pt_regs *regs, long id)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != target_pid ||
++	    id != __NR_getcwd)
++		return 0;
++
++	return copy_getcwd_arg((void *)PT_REGS_PARM1_SYSCALL(regs));
++}
++
++SEC("raw_tp.s/sys_enter")
++int BPF_PROG(handle_sys_enter_raw_tp, struct pt_regs *regs, long id)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != target_pid ||
++	    id != __NR_getcwd)
++		return 0;
++
++	return copy_getcwd_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs));
++}
++
++SEC("tp.s/syscalls/sys_enter_getcwd")
++int handle_sys_enter_tp(struct syscall_trace_enter *args)
++{
++	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
++		return 0;
++
++	return copy_getcwd_arg((void *)args->args[0]);
++}
++
++SEC("tp.s/syscalls/sys_exit_getcwd")
++int handle_sys_exit_tp(struct syscall_trace_exit *args)
++{
++	struct pt_regs *regs;
++
++	if ((bpf_get_current_pid_tgid() >> 32) != target_pid)
++		return 0;
++
++	regs = (struct pt_regs *)bpf_task_pt_regs(bpf_get_current_task_btf());
++	return copy_getcwd_arg((void *)PT_REGS_PARM1_CORE_SYSCALL(regs));
++}
++
++SEC("raw_tp.s")
++int BPF_PROG(handle_raw_tp_bare, struct pt_regs *regs, long id)
++{
++	return 0;
++}
++
++SEC("tp.s")
++int handle_tp_bare(void *ctx)
++{
++	return 0;
++}
++
++SEC("tracepoint.s/syscalls/sys_enter_getcwd")
++int handle_sys_enter_tp_alias(struct syscall_trace_enter *args)
++{
++	return 0;
++}
++
++SEC("raw_tracepoint.s/sys_enter")
++int BPF_PROG(handle_sys_enter_raw_tp_alias, struct pt_regs *regs, long id)
++{
++	return 0;
++}
++
++SEC("raw_tp.s/sys_enter")
++int BPF_PROG(handle_test_run, struct pt_regs *regs, long id)
++{
++	if ((__u64)regs == 0x1234ULL && (__u64)id == 0x5678ULL)
++		return (__u64)regs + (__u64)id;
++
++	return 0;
++}
++
++SEC("raw_tp.s/sched_switch")
++int BPF_PROG(handle_raw_tp_non_faultable, bool preempt,
++	     struct task_struct *prev, struct task_struct *next)
++{
++	return 0;
++}
++
++SEC("tp.s/sched/sched_switch")
++int handle_tp_non_syscall(void *ctx)
++{
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
+new file mode 100644
+index 000000000000..1a0748a9520b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
+@@ -0,0 +1,18 @@
++// SPDX-License-Identifier: GPL-2.0
++/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
++
++#include <vmlinux.h>
++#include <bpf/bpf_tracing.h>
++#include <bpf/bpf_helpers.h>
++#include "bpf_misc.h"
++
++char _license[] SEC("license") = "GPL";
++
++/* Sleepable program on a non-faultable tracepoint should fail to load */
++SEC("tp_btf.s/sched_switch")
++__failure __msg("Sleepable program cannot attach to non-faultable tracepoint")
++int BPF_PROG(handle_sched_switch, bool preempt,
++	     struct task_struct *prev, struct task_struct *next)
++{
++	return 0;
++}
+diff --git a/tools/testing/selftests/bpf/verifier/sleepable.c b/tools/testing/selftests/bpf/verifier/sleepable.c
+index c2b7f5ebf168..6dabc5522945 100644
+--- a/tools/testing/selftests/bpf/verifier/sleepable.c
++++ b/tools/testing/selftests/bpf/verifier/sleepable.c
+@@ -76,7 +76,20 @@
+ 	.runs = -1,
+ },
+ {
+-	"sleepable raw tracepoint reject",
++	"sleepable raw tracepoint accept",
++	.insns = {
++	BPF_MOV64_IMM(BPF_REG_0, 0),
++	BPF_EXIT_INSN(),
++	},
++	.prog_type = BPF_PROG_TYPE_TRACING,
++	.expected_attach_type = BPF_TRACE_RAW_TP,
++	.kfunc = "sys_enter",
++	.result = ACCEPT,
++	.flags = BPF_F_SLEEPABLE,
++	.runs = -1,
++},
++{
++	"sleepable raw tracepoint reject non-faultable",
+ 	.insns = {
+ 	BPF_MOV64_IMM(BPF_REG_0, 0),
+ 	BPF_EXIT_INSN(),
+@@ -85,7 +98,7 @@
+ 	.expected_attach_type = BPF_TRACE_RAW_TP,
+ 	.kfunc = "sched_switch",
+ 	.result = REJECT,
+-	.errstr = "Only fentry/fexit/fsession/fmod_ret, lsm, iter, uprobe, and struct_ops programs can be sleepable",
++	.errstr = "Sleepable program cannot attach to non-faultable tracepoint",
+ 	.flags = BPF_F_SLEEPABLE,
+ 	.runs = -1,
+ },
 
->
-> Also, disabling interrupts doesn't stop the PMU event from overflowing
-> and changing the state of PAUSED either. I think this is another path
-> that leads to you restoring the wrong state, so don't you also need to
-> disable the PMU?
+---
+base-commit: c7d419828268d5f3e52b74506d074955ad8c01d1
+change-id: 20260803-selftests-bpf-sleepable-eebf2d962201
 
-Hardware only sets PAUSED on a BRBE freeze event (RBHYTD), and a freeze nee=
-ds
-BRBE to not already be paused (RNXCWF). So once we have paused, nothing cha=
-nges
-underneath us and the PMU does not need disabling. It would not help anyway=
-:
-armv8pmu_stop() calls brbe_disable(), which zeroes BRBCR_EL1 and discards t=
-he
-records we came to read.
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
-You are right that a freeze can still land in the window between reading BR=
-BFCR
-and setting PAUSED, and restoring the value we read would then clear a PAUS=
-ED
-bit the hardware set. So v6 checks PMOVSCLR_EL0 and leaves BRBE paused if a
-counter has overflowed. Reads of PMOVSCLR are non-destructive and it stays =
-set
-until the overflow handler clears it, so it is still visible after we have =
-set
-PAUSED ourselves:
-
-        if (!valid_brbe_version())
-                return 0;
-
-        flags =3D raw_local_daif_save();
-
-        brbfcr =3D read_sysreg_s(SYS_BRBFCR_EL1);
-        brbcr =3D read_sysreg_s(SYS_BRBCR_EL1);
-
-        write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
-        isb();
-
-        trace_hardirqs_off();
-
-        /* BRBCR_EL1 is zero while the driver has BRBE disabled. */
-        if (!brbcr)
-                goto restore;
-
-        ... read the records ...
-
-        if ((brbfcr & BRBFCR_EL1_PAUSED) || read_pmovsclr())
-                brbfcr |=3D BRBFCR_EL1_PAUSED;
-        else
-                brbe_invalidate();
-restore:
-        write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
-        isb();
-        local_daif_restore(flags);
-
-If BRBE stays paused the records are left alone, they belong to the pending
-overflow handler. Otherwise recording resumes and the records either side o=
-f
-the pause are not contiguous (RPKZCF), so they are discarded.
-
-What do you think about this?
-
-Thanks,
-Puranjay
