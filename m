@@ -1,143 +1,162 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFC41FBE90;
-	Mon,  3 Aug 2026 00:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651672D9780;
+	Mon,  3 Aug 2026 01:21:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785716314; cv=none; b=ptPPmVjPB6v+LbSYy/hSsMNXI+F7jLDhELxmm2b2TYclwbcgfnhqZ8LsVm7Jtv4vup2UM2pai4viBG2Gj80y7Ji6JbJQtqzApfmQK+5HRBK4qqz6NgbPa+6YmGcF3PY1WYT05cVv3hzD5KrvTQzbku8zfw6Tr6JGjMbwoNr8W4Q=
+	t=1785720083; cv=none; b=lnZnGLSL5hNBKMkFM1lsyS6BZ6yno5/IjKwTIzFgLab3aGf/as7PzmWdtisQYW3ziifue9fidXPp6p/b+D9DGgbbVuKDVBm/jvtoB1+rTQoCXrImDb9qmLfttyJtcEptzMQ95imuCnXpsqWQVCG65sVNs1sPdrw9KyKIyssBXg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785716314; c=relaxed/simple;
-	bh=4G4qkqcfZJqsxDoMwOpwGSK3L4CO0VbzmkKKK274Dko=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wd/77fKCMzSgHRFGwHnmGTT7vKxfL7Mv0nvQaZrhIkSPX+Tnr58ubA2kddUb3LOrR61bFvb5D1wt36Uw+/MME39gN+YMzpImZdD0+6RfnewK5c4aO2H5hhCbR3wYKKHDMPsrJUXCLzP9VVPob/7hJm2hGI/opEvLMyT+mtU6f28=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=rBhbQh9U; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1785720083; c=relaxed/simple;
+	bh=sZzecVOQkjCVnu+hLzIf9KwEe3NedOfLz9Tt02jQRiY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aHC4UrihWvCVsIG4F5XXJ8ZM8QcuSFknOr5dCwXT2wL7EoqkhAyb9qBgSMXOXWy1wqVAxb9yIFg4CTXpcvACj0sAxbd0jIRKjNvDUBnfb5/BD2ho8ARyVTm5U1JiZ2n6+JOCa1sOC5MNJ6LohtON5Q/OKU3cwDVj1FP8nLoREKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=QEISm6gV; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="rBhbQh9U"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=NtvZNxuGXBE6cCwIJ9jXeZKQzir6kUFrZef6tlTlq3Y=; b=
-	rBhbQh9UcM8s+a3xoAtdYgcjrFfPejWVAP02zixW4ane1I+KWzZ1dc6wyz/G8RWUE0AkJpiQxcttp
-	+qjuf6fQLE5qz93AHAGPb/3DVUnA72hPqGazbnRNA0tcGhZnswBLyMqTDVXivYmkanJxr9lVFFmaQ
-	YaZ7DrTe27LEs6LFzHb1HwHkpX3f69xyAx+JFQBO8UBT4M6CxgDq8NR5wlp8vY0IF00OQV05Ri3Mq
-	9Vifvi/Q3EK1xsLGeRkWE6AicAK0F3F5sdKNhgtsvUS56OqnyB5jiWisS3eUdA+8P1bL0n249FM5z
-	v6Sb/9xeHYE3OreRvZ3aHw6nJcbC39itfw==;
-Received: from [58.29.145.179] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wqgNj-00CkKO-F9; Mon, 03 Aug 2026 02:18:16 +0200
-From: Changwoo Min <changwoo@igalia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	changwoo@igalia.com,
-	kernel-dev@igalia.com
-Subject: [PATCH] selftests/bpf: Remove duplicate copies of the arena spinlock qnodes
-Date: Mon,  3 Aug 2026 09:18:07 +0900
-Message-ID: <20260803001807.646357-1-changwoo@igalia.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="QEISm6gV"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1785720072; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=42NsJQFvkSGCAxhpN3JTXKrMrElWaI1s02NNzRaLxS0=;
+	b=QEISm6gVTo32Ga+cDIWZ8shxdgRPC9jmN1zUk+DA4RI+Rd6RnXLZqiAbLyxuCZsPnktdzV0izZOtOhh5c1RoFkO0zn9B+UehAZ1kbOZAgDIzo7ZKV7FzjdJYSWmqe5vFb4KcASMtruHhpwKfi0Mouroj2BeKBcqPNjyHmh/jYYE=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R121e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0X8D0ULo_1785720070;
+Received: from 30.74.144.148(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8D0ULo_1785720070 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 03 Aug 2026 09:21:10 +0800
+Message-ID: <f9f01bc0-490b-4d06-85a0-e4693b80696c@linux.alibaba.com>
+Date: Mon, 3 Aug 2026 09:21:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/16] selftests/mm: improve khugepaged coverage
+To: Kiryl Shutsemau <kirill@shutemov.name>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Nico Pache <nico.pache@linux.dev>
+Cc: Barry Song <baohua@kernel.org>, Dev Jain <dev.jain@arm.com>,
+ Hugh Dickins <hughd@google.com>, Lance Yang <lance.yang@linux.dev>,
+ "Liam R. Howlett" <liam@infradead.org>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+References: <20260802195254.1937477-1-kirill@shutemov.name>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260802195254.1937477-1-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
-every translation unit including it emits a copy. __weak makes them all
-resolve to one instance, but bpftool gen object merges only the symbols
-and concatenates each input's .addr_space.1 bytes, leaving the surplus
-copies unreferenced in the linked object.
 
-libarena links ten such units, so nine copies were dead weight (bytes):
 
-  object                             before       after
-  -----------------------------------------------------
-  .addr_space.1 in libarena.bpf.o    676200       86376
-  libarena.skel.h                   2100123      892371
-  libarena_asan.skel.h              2641124     1466477
+On 8/3/26 3:52 AM, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> mTHP collapse went in for 7.2 with no functional selftest coverage. Every
+> khugepaged collapse case is PMD-shaped, down to the detection: it reads
+> smaps AnonHugePages, which cannot see anything below the PMD order.
 
-Declare qnodes in the header and let each program define it once:
-libarena in src/common.bpf.c, and the arena_spin_lock test beside the
-lock it guards.
+Yes, I’ve already sent out several versions of mTHP collapse test 
+cases[1]. Not sure if you’ve seen my patchset, and it looks like some of 
+our work overlaps :(
 
-Tested with test_progs -t arena_spin_lock and -t libarena.
+[1] 
+https://lore.kernel.org/all/cover.1785564857.git.baolin.wang@linux.alibaba.com/
 
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
----
- .../selftests/bpf/libarena/include/bpf_arena_spin_lock.h   | 7 +------
- tools/testing/selftests/bpf/libarena/src/common.bpf.c      | 7 +++++++
- tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 7 +++++++
- 3 files changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-index ae6b72d15bb6..71d9db610263 100644
---- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-@@ -103,12 +103,7 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
- 
--/*
-- * The qnodes are marked __weak so we can define them in the header
-- * while still ensuring all compilation units use the same struct
-- * instance.
-- */
--struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+extern struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- 
- static inline u32 encode_tail(int cpu, int idx)
- {
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index 50be57213dfb..06481f2a2892 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -8,6 +8,13 @@ const volatile u32 zero = 0;
- 
- struct buddy __arena buddy;
- 
-+/*
-+ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
-+ * linking the arena spinlock provides exactly one definition, so that the array
-+ * is emitted once rather than once per translation unit.
-+ */
-+struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+
- int arena_fls(__u64 word)
- {
- 	if (!word)
-diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-index cf7cda79c16c..92e75ec3844c 100644
---- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-@@ -23,6 +23,13 @@ int cs_count;
- #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- arena_spinlock_t __arena lock;
- int test_skip = 1;
-+
-+/*
-+ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
-+ * linking the arena spinlock provides exactly one definition; libarena's lives
-+ * in libarena/src/common.bpf.c.
-+ */
-+struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- #else
- int test_skip = 2;
- #endif
--- 
-2.55.0
+> I am also reworking khugepaged's collapse mechanism, and that wants a suite
+> worth trusting before the mechanism changes underneath it. Nothing here
+> depends on the rework -- everything passes on an unmodified kernel and
+> documents what khugepaged already does.
+> 
+>   - vm_util grows folio-order helpers: is_backed_by_folio() moves out of
+>     split_huge_page_test.c, and a range-level form asks whether every
+>     order-aligned window of a range is backed by one folio of exactly that
+>     order, mapped head to tail.
+> 
+>   - folio_order_check validates those helpers against the kernel for every
+>     anon THP order it supports, before any collapse test trusts them.
+> 
+>   - khugepaged_full_pass() drives exactly one scan pass through the sysfs
+>     wake path, so a barrier completes on the daemon's own cadence instead of
+>     needing a short scan_sleep_millisecs.
+> 
+>   - khugepaged -o <order> runs order-parameterized anon collapse cases: a
+>     full table, only the populated window, default max_ptes_none and
+>     max_ptes_none=0, and collapse upward from smaller large folios. Any
+>     order up to the PMD order, where the same cases baseline the PMD path.
+> 
+>   - khugepaged_race races two faulters, MADV_DONTNEED, transient FOLL_PIN,
+>     fork and mremap against one of three collapse drivers: khugepaged a pass
+>     at a time, khugepaged free-running, or a MADV_COLLAPSE loop. Every
+>     racing page must read as its pattern or as zero. -z collapses
+>     hole-bearing windows; -p adds pageout and compaction, the only threads
+>     that elevate a source folio's refcount from the reclaim side. DEBUG_VM,
+>     page_table_check, KASAN and lockdep are the other half of the oracle.
+> 
+>   - A shared-source write race pins the CoW isolation contract: a co-sharer
+>     writing throughout a collapse must not see the collapsing side's pages.
+> 
+>   - Four tests fail on the environment rather than on the kernel: the
+>     collapse wait is a fixed three seconds whatever a huge page costs to
+>     build, collapse_compound_extreme wants a 512M page from the fault path,
+>     the shmem cases want a PMD-order page cache folio the page cache caps
+>     below, and the swap cases fail instead of skipping without swap. Scale
+>     the wait (a 2M PMD is unchanged) and skip the other three. This is why
+>     the suite now runs on arm64 with 64K pages.
+> 
+> Tested on mm-new (1dbd7c34bb92):
+> 
+>    x86-64 4K    105 pass, 3 skip, 0 fail
+>    arm64 64K     87 pass, 7 skip, 0 fail
+> 
+> The skips are structural: sub-PMD cases decline at the PMD order and the
+> mixed-source case at the smallest order, and on 64K pages
+> collapse_compound_extreme and the shmem cases skip for the reasons above.
+> 
+> Kiryl Shutsemau (Meta) (16):
+>    selftests/mm: move is_backed_by_folio() into vm_util
+>    selftests/mm: add folio-order check for VA ranges
+>    selftests/mm: add folio-order detection self-check
+>    selftests/mm: add order-parameterized khugepaged collapse cases
+>    selftests/mm: add khugepaged completion barrier helper
+>    selftests/mm: add khugepaged race harness
+>    selftests/mm: cover a shared-source collapse write race
+>    selftests/mm: skip collapse_compound_extreme where the PMD is too
+>      large
+>    selftests/mm: skip khugepaged swap tests when no swap is configured
+>    selftests/mm: verify synchronous khugepaged driving is attributable
+>    selftests/mm: race-harness variant for permissive hole occupancy
+>    selftests/mm: add memory-pressure threads to the khugepaged race
+>      harness
+>    selftests/mm: parameterize the mixed-source collapse case by source
+>      order
+>    selftests/mm: zap whole PTE tables in the khugepaged race harness
+>    selftests/mm: scale khugepaged's collapse wait with the PMD size
+>    selftests/mm: skip khugepaged shmem cases without a PMD page cache
+>      folio
+> 
+>   tools/testing/selftests/mm/.gitignore         |   3 +
+>   tools/testing/selftests/mm/Makefile           |   3 +
+>   .../testing/selftests/mm/folio_order_check.c  | 138 +++++
+>   .../testing/selftests/mm/hugepage_settings.c  |  66 ++-
+>   .../testing/selftests/mm/hugepage_settings.h  |   2 +
+>   tools/testing/selftests/mm/khugepaged.c       | 430 +++++++++++++++-
+>   tools/testing/selftests/mm/khugepaged_race.c  | 483 ++++++++++++++++++
+>   .../selftests/mm/khugepaged_sync_check.c      | 198 +++++++
+>   tools/testing/selftests/mm/run_vmtests.sh     |  17 +
+>   .../selftests/mm/split_huge_page_test.c       |  62 ---
+>   tools/testing/selftests/mm/vm_util.c          | 157 ++++++
+>   tools/testing/selftests/mm/vm_util.h          |   7 +
+>   12 files changed, 1490 insertions(+), 76 deletions(-)
+>   create mode 100644 tools/testing/selftests/mm/folio_order_check.c
+>   create mode 100644 tools/testing/selftests/mm/khugepaged_race.c
+>   create mode 100644 tools/testing/selftests/mm/khugepaged_sync_check.c
+> 
 
