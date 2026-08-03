@@ -1,91 +1,195 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A844C3845D5;
-	Mon,  3 Aug 2026 07:02:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D26BD324B22;
+	Mon,  3 Aug 2026 07:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785740555; cv=none; b=nlhpv6PgTpGbnMD3hVIuGsm72MQNIyOUdmhwstEAkMsC8+oMlsgOA5vnL9tylSuRE1buRYzj/LGk9bODdqSGjAAvc/8rYxQxNEOMuDGlXO8wXtBCnJhpPk7e2okHPuuro5PtCU5kcAxzDghQPzAp86OjIT3EuozKkLguWIAQpUo=
+	t=1785742625; cv=none; b=YXMLALOjoUMkN6bHYCPVArLXxnhVvAejU1vp9k4+IJsjT76yC/XuJt51LLhHwaguaHGWrCFfeTfgeM/z1AxnEVyV34+sL8FZzcBIuDjxDcyr/LQrl3a9NBryruj9N5k7jnVfZkNbQ2FBeQ9PwXrpOkU4Fj17C4jVHwYV3Nu5Bh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785740555; c=relaxed/simple;
-	bh=1sGqIeUdLNB6Z0TxyJDlAQW+ghtffIRB2kSmRpmeeag=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cvJIFFZwJJfSv6P6ASbMgyBARUUiVLmc//3NIujWF4Y807RPSLyMTI5+wVc5qJcvfDuomG2FqhkGwVY8TpvOLcI3J9LSq4Y+LzWGdDdv9tT1XWZwUx5N9DgqJCnimNIFGatAouXVFHe4LcmVptn1PPm6V1Uz27VsP5YxhqhGSCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xf7ughVj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Uo9OZSJj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1785742625; c=relaxed/simple;
+	bh=svFEdn1B76UVGgM0+/7O5PR2QIi5iS6gHxasHzfBjTw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qshH3bxg4snDeQC9tYjy8zuEc0+SUktkc4SJlyjwXxI6gTQeSnI/5kXpWLohDe61VJcDtLuBd9ncXtoz9l8bwZsHZQ99RoJWbasE7cI/mqGgm9uHPUuQzi3XXPDQdFT6Hkiltc2EXrzDUpjeD5kiJyp/0/XZatAYzWTngDKeQfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=PRcX2S7B; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xf7ughVj";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Uo9OZSJj"
-Date: Mon, 3 Aug 2026 09:02:31 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1785740551;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+ERQCbuoXqcwzy8iz0hTOM0sCx4O1nBpdgE4jvn+rKs=;
-	b=Xf7ughVjrcE5Gwj5zdyxXbLOe14JFBhd5xqMZUUBgtCwyhke4urYfo+JwJensRqDw7S+kH
-	bC4KkgbJWypcGeehQ9Ls9wvc6wL0OB1nzre0X6LQMnHxGbjJs1A+37KLomVg9MdxSkQbhR
-	eRbqXfZzGWglor4/Up16g4VsCklqikRx9QgNBfpqPLrHpkvH0Zwrp5Y/yMjXNzVBMVFGr3
-	FeneridBHdSFQBnAv+5hDf40CMkZnXG6/Zo1e82ej3ap7e+O095QAnL5MZlNyfGhY4JeGH
-	mTN8BB3psu5iOWo4SagcFzu58LZM8oc/C7xOkcgyqlFxuDqQ5i4HrtDnLShB9w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1785740551;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+ERQCbuoXqcwzy8iz0hTOM0sCx4O1nBpdgE4jvn+rKs=;
-	b=Uo9OZSJj52Y4uHQly/waPKeSpovDY+EfG3yJOlfF3QVy9Y9JcOpoeImKueD2ipjYVz2vpt
-	vdDvkQQ5dpH3SdBw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh_=28Schneider_Electric=29?= <thomas.weissschuh@linutronix.de>
-To: John Stultz <jstultz@google.com>
-Cc: Thomas Gleixner <tglx@kernel.org>, Stephen Boyd <sboyd@kernel.org>, 
-	Miroslav Lichvar <mlichvar@redhat.com>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 09/16] selftests: timers: nanosleep: Explicitly list the
- tested clocks
-Message-ID: <20260803085954-74a99bd6-1241-4479-bd93-b8c1c82f2378@linutronix.de>
-References: <20260730-auxclock-nanosleep-prep-v1-0-cd8b61229a7c@linutronix.de>
- <20260730-auxclock-nanosleep-prep-v1-9-cd8b61229a7c@linutronix.de>
- <CANDhNCp=aOtw2e3i-XeMbHy8oGfnZ9Waw_n=0Q1Kc_9CbQAF0Q@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="PRcX2S7B"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id ECA021A13C2;
+	Mon,  3 Aug 2026 07:36:59 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BE5106029B;
+	Mon,  3 Aug 2026 07:36:59 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DA24F11C17BB2;
+	Mon,  3 Aug 2026 09:36:51 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1785742614; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=CUFS73zm8U9YFY30SMbmycdE+qYaXmwAHw50Ul5dEqU=;
+	b=PRcX2S7BWu+HDzk6PjRWKRuXvoTTMg1Oa22H4QoKbJzUw/c1dxqtn/k0tSigZZc6RwccCb
+	mHRGvRTqbgJt7SmiRFLFYy0OwRPy9+zkcYQZif1iliOI+7YNc3YOaekVlDmH3JUQh67mzg
+	HQw/PD0wz1sAcXl9pTPPPnWQkaAqt12sUtAU4IIENt6afBNJKkskg+0PVgewzvLhJfjI6d
+	QoK7F2lRYYif34nUSqQ6iEAwDsXg4GWdMAgcRVs/EKcr7EeVwZ76yVfHLoezrGA5e2iUN6
+	jGtBRJvd7xlf3aNznE7ejVimHTWkxSIrIh0qlUm032f8vNal8hJDVhwa8dzTvA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Mon, 03 Aug 2026 09:36:45 +0200
+Subject: [PATCH bpf v2] selftests/bpf: keep polling connection that is
+ still in progress
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CANDhNCp=aOtw2e3i-XeMbHy8oGfnZ9Waw_n=0Q1Kc_9CbQAF0Q@mail.gmail.com>
+Message-Id: <20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3WNQQ6CMBREr0L+2pq2oKSuvIchpC0f+YotaQuRE
+ O4u4trlTN68WSBiIIxwyRYIOFEk77YgDxnYTrs7Mmq2DJLLMy8FZ8nWaXQO+7rt9XNmskSlhRK
+ m4TlsqyFgS+/deAMztFD9yjiaB9r0dX2xjmLyYd5/J7HDfy8mwQQrpNbmlCulC3U13qee3NH6F
+ 1Trun4ARCawcMcAAAA=
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, Jul 30, 2026 at 12:20:31PM -0700, John Stultz wrote:
-> On Wed, Jul 29, 2026 at 11:47 PM Thomas Weißschuh (Schneider Electric)
-> <thomas.weissschuh@linutronix.de> wrote:
-> >
-> > The test relies on the numeric values of the clockids.
-> > As not all clocks are meant to be tested, this requires skipping some
-> > clocks unconditionally, cluttering the result.
-> 
-> My only nit here is that there are some clocks the previous code
-> explicitly skips (_CPUTIME_IDs), and others that are skipped as they
-> just don't support nanosleep (the _RAW and _COARSE ids) and return the
-> proper error.
-> 
-> It might be helpful to clarify in the commit message this distinction
-> so its clear this commit isn't just forgetting the _RAW and _COARSE
-> ids.
+Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+following logs:
 
-I'll update the commit message to mention this.
+  (network_helpers.c:309: errno: Operation now in progress) \
+    Failed to connect to server
+  send_and_test_data:FAIL:connect to server unexpected error: -115
 
-> > Use an equivalent, explicit list instead.
-> >
-> > Signed-off-by: Thomas Weißschuh (Schneider Electric) <thomas.weissschuh@linutronix.de>
-> 
-> Otherwise,
-> Acked-by: John Stultz <jstultz@google.com>
+This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+socket (see settimeo() in client_socket()), allowing connect() to return
+an error and to set errno to EINPROGRESS instead of blocking until
+connection result is known. Increasing the timeout value for those tests
+is likely not a good solution (and it has already been done by commit
+2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
+they involve subtests that expect the connection to fail, and so
+increasing the timeout value would increase overall test execution
+duration again (not only the connection, but any socket operation).
 
-Thanks!
+Another solution, as documented in man 2 connect, is to poll the socket
+for POLLOUT once connect has returned EINPROGRESS, and to get the actual
+connection result through getsockopt: this allows to keep the overall
+timeout values low for the general traffic, while letting a chance to
+the connection to succeed even if CI runners are loaded.
+
+When connect() returns EINPROGRESS, poll the socket for POLLOUT and
+check the connection result via getsockopt(SO_ERROR).
+
+Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v2:
+- drop unneeded initialization
+- add back error message for immediate connection failure, and slightly
+  reword the async connection failure error message
+- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
+---
+I manage to reproduce the issue locally by running `./test_progs -a
+tc_tunnel` in a qemu machine, while making all my CPUs busy with
+stress-ng on host side; the issue happens pretty quickly. I have not
+been able to reproduce the issue anymore with this fix.
+---
+ tools/testing/selftests/bpf/network_helpers.c | 41 ++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index db935a9d9fc1..52e7b72f8a77 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -14,6 +14,7 @@
+ #include <sys/types.h>
+ #include <sys/un.h>
+ #include <sys/eventfd.h>
++#include <sys/poll.h>
+ 
+ #include <linux/err.h>
+ #include <linux/in.h>
+@@ -40,6 +41,8 @@
+ #define IPPROTO_MPTCP 262
+ #endif
+ 
++#define CONNECTION_IN_PROGRESS_TIMEOUT_MS	3000
++
+ #define clean_errno() (errno == 0 ? "None" : strerror(errno))
+ #define log_err(MSG, ...) ({						\
+ 			int __save = errno;				\
+@@ -294,7 +297,8 @@ int client_socket(int family, int type,
+ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+ 		    const struct network_helper_opts *opts)
+ {
+-	int fd;
++	socklen_t errlen;
++	int fd, err;
+ 
+ 	if (!opts)
+ 		opts = &default_opts;
+@@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+ 		return -1;
+ 	}
+ 
+-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
++	err = connect(fd, (const struct sockaddr *)addr, addrlen);
++	if (err && errno == EINPROGRESS) {
++		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
++
++		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
++
++		if (err <= 0) {
++			if (err == 0) {
++				log_err("Connection timeout");
++				errno = ETIMEDOUT;
++			} else {
++				log_err("Failed to poll connection status");
++			}
++			goto close;
++		}
++
++		errlen = sizeof(err);
++		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
++			log_err("Failed to getsockopt");
++			goto close;
++		}
++
++		if (err) {
++			log_err("Eventually failed to connect to server");
++			errno = err;
++			goto close;
++		}
++	} else if (err) {
+ 		log_err("Failed to connect to server");
+-		save_errno_close(fd);
+-		return -1;
++		goto close;
+ 	}
+ 
+ 	return fd;
++close:
++	save_errno_close(fd);
++	return -1;
+ }
+ 
+ int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
+
+---
+base-commit: 2efc18d4bb9ad28d240b69bd324937f1ec12e93d
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
