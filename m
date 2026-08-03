@@ -1,69 +1,69 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E009D3AAF52
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 08:54:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B76C3B71AE
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 08:59:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785747260; cv=none; b=d/Ok9r9pFJbpY6ZIbTpT5NQSnM6FQu30LJMvzJ+VOB68k1Js1xmsmcICpWKtwSnop560SBLdwuIu5uBdC3X6utzd5J8bMDObRrn48PuG4oPjmVAjo5RSmSvdUuBqG4dsay57uObbu5gVYBbq/yRkjWbKsZ6CJFpO6QuyJVJCEz8=
+	t=1785747545; cv=none; b=F9QTg4ssDgLhw/YndxSXqQerI0QPx94JwqeA77W0pkB0SOo5yfpSkbeLfl6PB6wSOzK+p8GRnO8PXFhXhyFcTFDQGU7LZtt4webcr7WC9yzYqjAdvGE0nZOKo2AaSLexOS3ETotjMzqbAVDx8Mur9d2YkTC2FUhd+lNpMt8gzfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785747260; c=relaxed/simple;
-	bh=HDh0tHN7Imku5gQvjhAPRn/aa/QQQichvxD3Lw2UsfM=;
+	s=arc-20240116; t=1785747545; c=relaxed/simple;
+	bh=6babBLJJnk44pSuUgPZ7M52xT9Y4gRfipkcunk7h2/8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=H4/vxIVqU4808qJ0ygfCkQTTpgg9ziQGKUNItBuIbzx5elSLoUQ8FeERLU6lXS7iWoJgPnLc9wH9Y6e1Fi6/jyrQNfB3ljlzveTq5B1/mqPM7Q0ZJ3oPaKpx/q7ibA8zvAdsI3XlBkAk09xAvhjxbhvd/mGepVFk40iWTdTbgfk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BsOisRd5; arc=none smtp.client-ip=209.85.128.43
+	 In-Reply-To:Content-Type; b=YbBBvMbRg2jmumjHhsoaiEu03UlfbPYgO74eZLxitzx9X3LrA5xadS02jzvhOOXzdW/t7mlaGM/Z9JSVChGdltTwMoj7jxRUChabjtObUXZiOJQsmYyM49p55FoBx6UNJQZzrrt2N5IB8Oeg+WWJ02iqxyk/mMgkndSPmgOTkJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bTq4Wmf2; arc=none smtp.client-ip=209.85.128.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BsOisRd5"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4954a2e73a9so10883135e9.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 01:54:17 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bTq4Wmf2"
+Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-493f6de72faso12641355e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 01:59:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1785747256; x=1786352056; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1785747541; x=1786352341; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EPO+ED0ot3Taa08GbV6IzKrIjqgkBaW3P1eEmTzgiUE=;
-        b=BsOisRd58kAESsSRFp3xd0/AlYeUGZGNyJ3QDgmNGW/quyXl3TtqKyTrMQoBd1Hpzv
-         tPV2ujGuk0h3bcLDx04/5Nn7aV3coBIlHhyCy+DmYl+ruPQ208TL+mZOgj4WLZnJh4+Z
-         RY4Hxve8o8UNrjlEJcAc4h+DUkUboDw9XZyjbw3jQecr/tR1VezNXDoeXyWA2HV5tgXv
-         HtiAzDmiIBBLuRo79OVFnPHgWp1st9nQIwr5HiI3P6hRm6kV0r566ZAWVVrSHPNkuQsG
-         it1PH/AZQfdjg+5R8zgtA3coeCAJ+MeXTVYFTxPZEa5TmeFu9JUmWTxqedk0Fn+LMfzr
-         7NTg==
+        bh=FoBzZM7GJglwWICyRFF3DCdpcPLhF81fWV7+YYFxaBI=;
+        b=bTq4Wmf2OPxmqi2Io+UvJqvRz1BoxyfNwdR3w3wV2uNUZ1IOPrSskGtfURiWG+5SGK
+         JdrA6iuBjfBFlA+Frkxo6zOIpbL467qnRPSjijurAy2ov4GCh5nK50RgQNm4ETD/nl4f
+         r4u3N1af4J1lw725GwMlk03gU2kQ8odwL4CEh8wolqkcBR3K3Lf36HAk8PZggHMWYtdg
+         2h7J/KXJcPrvVlDnLFCXZ5OwwVz7OZaWJ9IANxRLySXrC85pEu4viZeJZihOs2NTp540
+         v4uXjZT2uQzhIiUHmKlJE62SD0bnhELC110xU6oiWZPvHGzKlMtUVdATeenQQGWyFwyD
+         FK3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785747256; x=1786352056;
+        d=1e100.net; s=20251104; t=1785747541; x=1786352341;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=EPO+ED0ot3Taa08GbV6IzKrIjqgkBaW3P1eEmTzgiUE=;
-        b=jL+6EhlubvwWvWNs0yeYAJ+owMn4LCOhXpuQmfwkzU1BCHUStT99rmtdwq/CLaNC2d
-         anLDAQwoK6Hnh2mLh0uzmdJGOGgKDXoL+W5OfnxyhhfhXqhDbiA2aa0kh11WhG39HJMn
-         qsUTXr45X1c6eG8ZOKNbKFXXWcPyo0ZscqvGS4iFCTUPeYpcdav2yNCZCXog19PfOeAM
-         4gplgstfdwHIiJ6VGj2HR8Vzm1nabbwCcFxn6DZgC05XFQzbspGkGI5fUaFSvZYmpjoc
-         iqxW3yMHKyuln9DFMTv5Qmq24CWMgOQbGGGfc5MlhLtdhZHOwi0OH2GcX0nQleWo4SKQ
-         g7Sw==
-X-Forwarded-Encrypted: i=1; AHgh+RqfGf68KxcDZ9DGms7N6gzBq23Wvk6vUemW4YAV85T0UkhXrymZ22SRTmD3bhi3JYBr/F00djAZVPDiVaf9G4Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxw+DAluqBC6DEbeVEU63S39P+ZH6ehk/VB4SWUgXWMfy4Skkhr
-	c718q09IP/a7SGEwxG8E/EIs68OCVg3ljRp0lJhBfmod6lRqnWQ0sh2R4hojTCFulgI=
-X-Gm-Gg: AR+sD13yDRPBgX6CGHACVOYKowpl7ydAAY3wSW7CsR8wVS68VRNZ8+49GIVuT0seqZ7
-	vAl+lwV2HiQ+/dkStkYnCEPY6GqshnfjaO4IobqH/PermG1YjX8BBc/SEGHNol1ljrWBjoe6cyP
-	X1bZ5+Ig5i+DAR4wf01J1WFA/QnaLDq6E6paeTJz7sFTtF1vw03uapn/HtwO5EZWnTGXlNfel5J
-	Mv4hnsy6GnddigzsZK+ZDM3py+ytoHYmwzLbt1E3aW+me68IfN7HcmQCR7rPpwHYhHtzJzm5TEh
-	X4+K2JHR01KZbu+nX799tZIGXt/gOySn97hsNJHuJF5haOXbYPLNMdiXhRFidCk0+c11LlEpAJq
-	1Acnl18ICAO4Tg/PASGSF5Op3HjOlENMTvSwUk876DvuvWFYJpdkC5mk/cKGO5jK6l52RDQ1/CU
-	Op1vtczIwsqZlVUfOBoxJJSyaQw9gpUWXrLEGcY1KgR6WepbbQCBYhSUyCIwpAnzdECw8J2deE/
-	tJOmARC+W2TUR0wAbcdfoYBAnxSsFJ+s/ekin0r8yHbeB8Gh71CpAzbLWuIMO3G948p4Q6gEmkv
-	R2U3x6h7r44yC6zm9rWPChL6uSXWpsmsCOMvJRL16Q==
-X-Received: by 2002:a05:600c:5914:b0:495:5cda:52ec with SMTP id 5b1f17b1804b1-4980c662d03mr170527905e9.16.1785747255995;
-        Mon, 03 Aug 2026 01:54:15 -0700 (PDT)
+        bh=FoBzZM7GJglwWICyRFF3DCdpcPLhF81fWV7+YYFxaBI=;
+        b=KHnsiyzyYpcprUNqvosYaal5cmfdObOJHB6vBA9Scs2e1WINr8RaTsAVnn3CB44vQW
+         gWCQQFZhJu3bQmT1uZUgfC5TOrlisNoMy3L/hsn/HoTFW30cKNYCgbiKeqogB9jDwwDv
+         p+llGE1JPAQGqvp5lH4pi9IPFO+BQgrDNehqt46VIAdZwQpqTmYZZqR81GOLz0OY2l5v
+         ATIrQXczrn+fw4sTw2qRzihWZU8KpN5SjhPZTX26hAbup3H59AdRNXtHDKbT5L/TQd3M
+         +UVZ/ptetaQLGs5w6Q4ol50FktNZ/R1xCa+Cuz5j83ZHweTHZc1jgtIDGWVuuDRPCDSz
+         FoOA==
+X-Forwarded-Encrypted: i=1; AHgh+RpJZP2ns8XRAWnHi6TvYyy3e+WzPGRdjL0ok++04/TCyEUxB63jvri4YIOcZ4WlaUoMGeiaN2jskwRNF98VVjA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy7dH7MnnA5m9Ebeq2gI/N9bpUZsW8sPqh26yHImCHER7CXcCfu
+	TnGKqk7Tp4sz6aXHdse3KouiZ5lCtopAEJsGOl+/6SjXOlHxBFw2QczRUnU4zau9wpo=
+X-Gm-Gg: AR+sD13mJOLXB1UymbRYC9qI0Vbbblw9xw3v+I9wO5Cf4z55fptvneLry4/r+IVjvTy
+	JtgrCeJCNLyv1ajuDB4Nbdqc3cE7zl/0rMxauvJlAM03osJ4Aua41tr/d1Bg1J4nkmd9n9gINnv
+	7/tb6/OeciBKywIJx3x/G35ZeSJx7KWRbL1CmmTRli1WBFGdT9CgpWIIO4Yckbi2nNWcXjad7rk
+	h3XNM681CelH/pbCPPIQnbWY98WZoCjQPiYra5c2y/bNxwdVgvTTVh6ef3BvBPi7iZf9hkBnwig
+	pHd0GAYqKwa+RkVaLQFJrNQEZpKKOQYT14j9c9IKPXB4uydPIX/1LSJyRjADVddRC2VjZ0q/Gls
+	JjDS4veFQrP/U248y6SyTeZGdZrNlVt0B6EaHDcgW4GWXUnCd/KfqazUwnWJkw0M3wIHI7byUqb
+	ww1U12xLVsQJWUl7n6KxL3Z+oBqiH4+fWL7ARfZlqBfeu/0h24oA4vhy6faMwCE36a8er0ayfZd
+	0zl5TbPllK/hJlqOb6A1SGqFSUv48yENXIdPq/thuxgW5VXbaA3IGgrvrbSR3UrAY5kNM8FtEu4
+	1GeLtN2W4DytmZdXoub78inP1Gg9KjA=
+X-Received: by 2002:a05:600c:4708:b0:495:5d6d:9cc1 with SMTP id 5b1f17b1804b1-4980eb4e95dmr147582935e9.0.1785747541250;
+        Mon, 03 Aug 2026 01:59:01 -0700 (PDT)
 Received: from ?IPV6:2a00:1028:838d:271e:8e3b:4aff:fe4c:a100? (dynamic-2a00-1028-838d-271e-8e3b-4aff-fe4c-a100.ipv6.o2.cz. [2a00:1028:838d:271e:8e3b:4aff:fe4c:a100])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b7afe6sm200011075e9.0.2026.08.03.01.54.14
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-498081a12a3sm315335175e9.8.2026.08.03.01.58.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Aug 2026 01:54:15 -0700 (PDT)
-Message-ID: <a6a83aae-2f51-428e-8e38-e6a36f095f13@suse.com>
-Date: Mon, 3 Aug 2026 10:54:13 +0200
+        Mon, 03 Aug 2026 01:59:00 -0700 (PDT)
+Message-ID: <30a7f47e-1937-44a0-b8cb-434e8b07ac2b@suse.com>
+Date: Mon, 3 Aug 2026 10:58:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,8 +71,7 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 10/10] rust: module: update MAINTAINERS to cover
- module.rs
+Subject: Re: [PATCH v9 01/10] rust: module: move module types into `module.rs`
 To: Alvin Sun <alvin.sun@linux.dev>
 Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
  Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
@@ -102,43 +101,301 @@ Cc: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
  linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
  netdev@vger.kernel.org, linux-pci@vger.kernel.org
 References: <20260723-fix-fops-owner-v9-0-c1c3af7f7bcb@linux.dev>
- <20260723-fix-fops-owner-v9-10-c1c3af7f7bcb@linux.dev>
+ <20260723-fix-fops-owner-v9-1-c1c3af7f7bcb@linux.dev>
 Content-Language: en-US
 From: Petr Pavlu <petr.pavlu@suse.com>
-In-Reply-To: <20260723-fix-fops-owner-v9-10-c1c3af7f7bcb@linux.dev>
+In-Reply-To: <20260723-fix-fops-owner-v9-1-c1c3af7f7bcb@linux.dev>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 7/23/26 4:10 AM, Alvin Sun wrote:
-> Module types now live in `rust/kernel/module.rs` alongside
-> `rust/kernel/module_param.rs`. Update the MODULE SUPPORT file pattern
-> from `rust/kernel/module_param.rs` to `rust/kernel/module*.rs` so both
-> files are covered.
+> Move `Module`, `InPlaceModule`, `ModuleMetadata` and `ThisModule` from
+> `lib.rs` into a new `rust/kernel/module.rs`. Re-export them from `lib.rs`
+> to avoid tree-wide changes.
 > 
-> Cc: Petr Pavlu <petr.pavlu@suse.com>
+> Switch six bus driver registrations from `module.0` to the public
+> `ThisModule::as_ptr()` accessor, since the field is no longer visible
+> outside the new `module` submodule.
+> 
+> No functional change.
+> 
 > Assisted-by: opencode:glm-5.2
-> Link: https://lore.kernel.org/rust-for-linux/8ea21b29-9baf-4926-a16f-7d21c5a1a1b8@suse.com
-> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+> Suggested-by: Gary Guo <gary@garyguo.net>
+> Link: https://lore.kernel.org/all/DJFIQPLOVO4T.1K8T0VZM30LDA@garyguo.net/
+> Reviewed-by: Gary Guo <gary@garyguo.net>
 > Acked-by: Danilo Krummrich <dakr@kernel.org>
+> Reviewed-by: Alice Ryhl <aliceryhl@google.com>
 > Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
 
 Acked-by: Petr Pavlu <petr.pavlu@suse.com>
 
 > ---
->  MAINTAINERS | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  rust/kernel/auxiliary.rs |  2 +-
+>  rust/kernel/i2c.rs       |  2 +-
+>  rust/kernel/lib.rs       | 75 +++++-------------------------------------------
+>  rust/kernel/module.rs    | 71 +++++++++++++++++++++++++++++++++++++++++++++
+>  rust/kernel/net/phy.rs   |  6 +++-
+>  rust/kernel/pci.rs       |  2 +-
+>  rust/kernel/platform.rs  |  2 +-
+>  rust/kernel/usb.rs       |  2 +-
+>  8 files changed, 88 insertions(+), 74 deletions(-)
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index e035a3be797c4..74733de3e41ee 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17984,7 +17984,7 @@ F:	include/linux/module*.h
->  F:	kernel/module/
->  F:	lib/test_kmod.c
->  F:	lib/tests/module/
-> -F:	rust/kernel/module_param.rs
-> +F:	rust/kernel/module*.rs
->  F:	rust/macros/module.rs
->  F:	scripts/module*
->  F:	tools/testing/selftests/kmod/
+> diff --git a/rust/kernel/auxiliary.rs b/rust/kernel/auxiliary.rs
+> index 93c0db1f66555..4a02f83240be3 100644
+> --- a/rust/kernel/auxiliary.rs
+> +++ b/rust/kernel/auxiliary.rs
+> @@ -63,7 +63,7 @@ unsafe fn register(
+>  
+>          // SAFETY: `adrv` is guaranteed to be a valid `DriverType`.
+>          to_result(unsafe {
+> -            bindings::__auxiliary_driver_register(adrv.get(), module.0, name.as_char_ptr())
+> +            bindings::__auxiliary_driver_register(adrv.get(), module.as_ptr(), name.as_char_ptr())
+>          })
+>      }
+>  
+> diff --git a/rust/kernel/i2c.rs b/rust/kernel/i2c.rs
+> index 7b908f0c5a58d..24eff08f47123 100644
+> --- a/rust/kernel/i2c.rs
+> +++ b/rust/kernel/i2c.rs
+> @@ -142,7 +142,7 @@ unsafe fn register(
+>          }
+>  
+>          // SAFETY: `idrv` is guaranteed to be a valid `DriverType`.
+> -        to_result(unsafe { bindings::i2c_register_driver(module.0, idrv.get()) })
+> +        to_result(unsafe { bindings::i2c_register_driver(module.as_ptr(), idrv.get()) })
+>      }
+>  
+>      unsafe fn unregister(idrv: &Opaque<Self::DriverType>) {
+> diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+> index b72b2fbe046d6..040ae85056509 100644
+> --- a/rust/kernel/lib.rs
+> +++ b/rust/kernel/lib.rs
+> @@ -93,6 +93,7 @@
+>  pub mod maple_tree;
+>  pub mod miscdevice;
+>  pub mod mm;
+> +pub mod module;
+>  pub mod module_param;
+>  #[cfg(CONFIG_NET)]
+>  pub mod net;
+> @@ -139,79 +140,17 @@
+>  #[doc(hidden)]
+>  pub use bindings;
+>  pub use macros;
+> +pub use module::{
+> +    InPlaceModule,
+> +    Module,
+> +    ModuleMetadata,
+> +    ThisModule, //
+> +};
+>  pub use uapi;
+>  
+>  /// Prefix to appear before log messages printed from within the `kernel` crate.
+>  const __LOG_PREFIX: &[u8] = b"rust_kernel\0";
+>  
+> -/// The top level entrypoint to implementing a kernel module.
+> -///
+> -/// For any teardown or cleanup operations, your type may implement [`Drop`].
+> -pub trait Module: Sized + Sync + Send {
+> -    /// Called at module initialization time.
+> -    ///
+> -    /// Use this method to perform whatever setup or registration your module
+> -    /// should do.
+> -    ///
+> -    /// Equivalent to the `module_init` macro in the C API.
+> -    fn init(module: &'static ThisModule) -> error::Result<Self>;
+> -}
+> -
+> -/// A module that is pinned and initialised in-place.
+> -pub trait InPlaceModule: Sync + Send {
+> -    /// Creates an initialiser for the module.
+> -    ///
+> -    /// It is called when the module is loaded.
+> -    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Error>;
+> -}
+> -
+> -impl<T: Module> InPlaceModule for T {
+> -    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, error::Error> {
+> -        let initer = move |slot: *mut Self| {
+> -            let m = <Self as Module>::init(module)?;
+> -
+> -            // SAFETY: `slot` is valid for write per the contract with `pin_init_from_closure`.
+> -            unsafe { slot.write(m) };
+> -            Ok(())
+> -        };
+> -
+> -        // SAFETY: On success, `initer` always fully initialises an instance of `Self`.
+> -        unsafe { pin_init::pin_init_from_closure(initer) }
+> -    }
+> -}
+> -
+> -/// Metadata attached to a [`Module`] or [`InPlaceModule`].
+> -pub trait ModuleMetadata {
+> -    /// The name of the module as specified in the `module!` macro.
+> -    const NAME: &'static crate::str::CStr;
+> -}
+> -
+> -/// Equivalent to `THIS_MODULE` in the C API.
+> -///
+> -/// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
+> -pub struct ThisModule(*mut bindings::module);
+> -
+> -// SAFETY: `THIS_MODULE` may be used from all threads within a module.
+> -unsafe impl Sync for ThisModule {}
+> -
+> -impl ThisModule {
+> -    /// Creates a [`ThisModule`] given the `THIS_MODULE` pointer.
+> -    ///
+> -    /// # Safety
+> -    ///
+> -    /// The pointer must be equal to the right `THIS_MODULE`.
+> -    pub const unsafe fn from_ptr(ptr: *mut bindings::module) -> ThisModule {
+> -        ThisModule(ptr)
+> -    }
+> -
+> -    /// Access the raw pointer for this module.
+> -    ///
+> -    /// It is up to the user to use it correctly.
+> -    pub const fn as_ptr(&self) -> *mut bindings::module {
+> -        self.0
+> -    }
+> -}
+> -
+>  #[cfg(not(testlib))]
+>  #[panic_handler]
+>  fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
+> diff --git a/rust/kernel/module.rs b/rust/kernel/module.rs
+> new file mode 100644
+> index 0000000000000..be242a82e86d2
+> --- /dev/null
+> +++ b/rust/kernel/module.rs
+> @@ -0,0 +1,71 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +//! Module-related types and helpers.
+> +
+> +/// The entrypoint to implementing a kernel module.
+> +///
+> +/// For any teardown or cleanup operations, your type may implement [`Drop`].
+> +pub trait Module: Sized + Sync + Send {
+> +    /// Called at module initialization time.
+> +    ///
+> +    /// Use this method to perform whatever setup or registration your module
+> +    /// should do.
+> +    ///
+> +    /// Equivalent to the `module_init` macro in the C API.
+> +    fn init(module: &'static ThisModule) -> crate::error::Result<Self>;
+> +}
+> +
+> +/// A module that is pinned and initialised in-place.
+> +pub trait InPlaceModule: Sync + Send {
+> +    /// Creates an initialiser for the module.
+> +    ///
+> +    /// It is called when the module is loaded.
+> +    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::error::Error>;
+> +}
+> +
+> +impl<T: Module> InPlaceModule for T {
+> +    fn init(module: &'static ThisModule) -> impl pin_init::PinInit<Self, crate::error::Error> {
+> +        let initer = move |slot: *mut Self| {
+> +            let m = <Self as Module>::init(module)?;
+> +
+> +            // SAFETY: `slot` is valid for write per the contract with `pin_init_from_closure`.
+> +            unsafe { slot.write(m) };
+> +            Ok(())
+> +        };
+> +
+> +        // SAFETY: On success, `initer` always fully initialises an instance of `Self`.
+> +        unsafe { pin_init::pin_init_from_closure(initer) }
+> +    }
+> +}
+> +
+> +/// Metadata attached to a [`Module`] or [`InPlaceModule`].
+> +pub trait ModuleMetadata {
+> +    /// The name of the module as specified in the `module!` macro.
+> +    const NAME: &'static crate::str::CStr;
+> +}
+> +
+> +/// Equivalent to `THIS_MODULE` in the C API.
+> +///
+> +/// C header: [`include/linux/init.h`](srctree/include/linux/init.h)
+> +pub struct ThisModule(*mut crate::bindings::module);
+> +
+> +// SAFETY: `THIS_MODULE` may be used from all threads within a module.
+> +unsafe impl Sync for ThisModule {}
+> +
+> +impl ThisModule {
+> +    /// Creates a [`ThisModule`] given the `THIS_MODULE` pointer.
+> +    ///
+> +    /// # Safety
+> +    ///
+> +    /// The pointer must be equal to the right `THIS_MODULE`.
+> +    pub const unsafe fn from_ptr(ptr: *mut crate::bindings::module) -> ThisModule {
+> +        ThisModule(ptr)
+> +    }
+> +
+> +    /// Access the raw pointer for this module.
+> +    ///
+> +    /// It is up to the user to use it correctly.
+> +    pub const fn as_ptr(&self) -> *mut crate::bindings::module {
+> +        self.0
+> +    }
+> +}
+> diff --git a/rust/kernel/net/phy.rs b/rust/kernel/net/phy.rs
+> index 3ca99db5cccf2..8b7036b8fe480 100644
+> --- a/rust/kernel/net/phy.rs
+> +++ b/rust/kernel/net/phy.rs
+> @@ -659,7 +659,11 @@ pub fn register(
+>          // the `drivers` slice are initialized properly. `drivers` will not be moved.
+>          // So it's just an FFI call.
+>          to_result(unsafe {
+> -            bindings::phy_drivers_register(drivers[0].0.get(), drivers.len().try_into()?, module.0)
+> +            bindings::phy_drivers_register(
+> +                drivers[0].0.get(),
+> +                drivers.len().try_into()?,
+> +                module.as_ptr(),
+> +            )
+>          })?;
+>          // INVARIANT: The `drivers` slice is successfully registered to the kernel via `phy_drivers_register`.
+>          Ok(Registration { drivers })
+> diff --git a/rust/kernel/pci.rs b/rust/kernel/pci.rs
+> index af74ddff6114d..916ed2cb6b70b 100644
+> --- a/rust/kernel/pci.rs
+> +++ b/rust/kernel/pci.rs
+> @@ -86,7 +86,7 @@ unsafe fn register(
+>  
+>          // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+>          to_result(unsafe {
+> -            bindings::__pci_register_driver(pdrv.get(), module.0, name.as_char_ptr())
+> +            bindings::__pci_register_driver(pdrv.get(), module.as_ptr(), name.as_char_ptr())
+>          })
+>      }
+>  
+> diff --git a/rust/kernel/platform.rs b/rust/kernel/platform.rs
+> index 8917d4ee499fb..9fdbafd53bc21 100644
+> --- a/rust/kernel/platform.rs
+> +++ b/rust/kernel/platform.rs
+> @@ -82,7 +82,7 @@ unsafe fn register(
+>          }
+>  
+>          // SAFETY: `pdrv` is guaranteed to be a valid `DriverType`.
+> -        to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.0) })
+> +        to_result(unsafe { bindings::__platform_driver_register(pdrv.get(), module.as_ptr()) })
+>      }
+>  
+>      unsafe fn unregister(pdrv: &Opaque<Self::DriverType>) {
+> diff --git a/rust/kernel/usb.rs b/rust/kernel/usb.rs
+> index 9c17a672cd275..213db32727c17 100644
+> --- a/rust/kernel/usb.rs
+> +++ b/rust/kernel/usb.rs
+> @@ -63,7 +63,7 @@ unsafe fn register(
+>  
+>          // SAFETY: `udrv` is guaranteed to be a valid `DriverType`.
+>          to_result(unsafe {
+> -            bindings::usb_register_driver(udrv.get(), module.0, name.as_char_ptr())
+> +            bindings::usb_register_driver(udrv.get(), module.as_ptr(), name.as_char_ptr())
+>          })
+>      }
+>  
 > 
+
