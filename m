@@ -1,71 +1,134 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f226.google.com (mail-pl1-f226.google.com [209.85.214.226])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 509A23B4EA4;
-	Mon,  3 Aug 2026 21:09:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE1D3B635A
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 21:14:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.226
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785791366; cv=none; b=NqN9JfSajHENDVuIN6C4k8q1Na+GuCFy3iHzb2rNPQ89lrRwcV1RENfWgo/aHdha1yh6gamZa4f1CO3qenWyvpVX60CUnA/A/mMFukSXcCeJlqogIekxm8fc8MPGORTcOdBE2eFyVcfJgp7rrx8WIKvUE4raQ2WMue0O3BqHpR8=
+	t=1785791689; cv=none; b=dJzESAALBogcZhcSNxFU3eYMA74N9qVHdb37srlwT9gHwwkBtE6cPhh9QRMAEyLgAq3kVBvgO0jobbb4NKJjSILDwe6qegZwKsEXf1g5Q9eDEwgr1ju3F6F14Mi9Tl2autxKbZrZGHqFUDdkdzULRtiUB8F6316St5YJUXzJIeI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785791366; c=relaxed/simple;
-	bh=pQj3XhRbGQlE6oYhFYSAWtd+u2u4afuthWdC5XMgUXI=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=jAHdV9zPJGbUL+Cs6KFvzyQ1zfZf12fn0tV9BVZI5p7l6/0JHW2O6oIBIWzUW6nL1cm9SBEgETYjs80ff5aedlArl7KFNEXftJb6OwNLincJIsr7xlMvgTisrX5WYw/W8TPWc4+n4Eyfie9D8RKernH23thvY/MuZtbwGuffHd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=rsG0RJWz; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785791689; c=relaxed/simple;
+	bh=Ay8po0D/dJHtAAlv8sLttVFqYoCzGVXCHK3T6K0atNQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JxUpOj9mOWG9hyahRWlw2SB5ot/jMo8Bm0DGogWk0XLZrqaIHt5LJNO6aHFUbmC5c+kmUbIv+5Op+RRmhdDDN+qyxFkzH2Pg3C9YY//z7dvldvzeSndktGaNku97sft3GItdnCiryPuPGEj23Ij7kYzr6dgshF/vD881mrTz9oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com; spf=pass smtp.mailfrom=purestorage.com; dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b=Jiwybz+F; arc=none smtp.client-ip=209.85.214.226
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=purestorage.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=purestorage.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="rsG0RJWz"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8811E1F00A3A;
-	Mon,  3 Aug 2026 21:09:24 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=purestorage.com header.i=@purestorage.com header.b="Jiwybz+F"
+Received: by mail-pl1-f226.google.com with SMTP id d9443c01a7336-2cf420670bbso3337565ad.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 14:14:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1785791364;
-	bh=E3d4/jTY8p0Y3bMO1IERG+admOXATFRUOPIYJ+olYXA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=rsG0RJWzLYU81HQfd3xnSHSI9xefv4MJ9QELZYw9E7IOp9dg0fkS5Iy05vuboBQp8
-	 P/aPm+mUUq2KRsKRv5BrPdTFyFiW6nVi/E9mhva1LQTmL/rms5acPPB2bsCMsFUdtL
-	 OGJHH1VbjzUkoB52v7FOeQ1VzhPbFi0RN7q+P4ZU=
-Date: Mon, 3 Aug 2026 14:09:24 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Hongfu Li <hongfu.li@linux.dev>
-Cc: shuah@kernel.org, richard.weiyang@gmail.com,
- reddybalavignesh9979@gmail.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
-Subject: Re: [PATCH] selftests/prctl: Fix non-anonymous VMA mapping in
- set-anon-vma-name test
-Message-Id: <20260803140924.31bf563743a73653f65e2258@linux-foundation.org>
-In-Reply-To: <20260803103046.14324-1-hongfu.li@linux.dev>
-References: <20260803103046.14324-1-hongfu.li@linux.dev>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=purestorage.com; s=google2022; t=1785791685; x=1786396485; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Z5Tn8GDAuHvEBSiHkYSZKLLT9+XXk8tB1iGEjxC739I=;
+        b=Jiwybz+FSeaIf2bntyTV8xi7prosYp13/nYqEYW0eZJtyiDkyN8xnEZt0ApjWdqutQ
+         RrcNc8cRdDWEgOh/yX4FjS3xq+8MSBo7JWiYj8cNglat3GyiQX2pbIVgJcUKt7hKLB4w
+         KL+TDMCvm/K8hW2KFOJyMUiTZD39oRhmIy4Lr3eg6tz5emshanD3iAH4Fo0Zo4k01PKT
+         rMwWLny5pU9ZIDv8ion+ApvCKssogSvfEb2D7jW0T03sW1qgu31oNU03rxM/jBNXPhZt
+         wkS2iPnyxOGs5zo0NAgcgima2qz0sJjBVgsZcBWbrXMAfqim0+FiOh5jf56CQ884KaIQ
+         AJcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785791685; x=1786396485;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Z5Tn8GDAuHvEBSiHkYSZKLLT9+XXk8tB1iGEjxC739I=;
+        b=Ps59yYyFn9azBrqREvqIBMF8fGtvy6KjVCgh1Z46XGzd9z375iuFvO3MAhlZjHtHQP
+         mKnK4Ex93WSOKQU73S7GSrH047gvB104I7XWBPZ7KYGxvrvwtjrIWdYAiOORs0tAUPUx
+         XHATVtURjLv/1miLHNdr3IqDzJbcltnNVB/2W4gG0M/zwXtu5qF5q3bW08NzxJlr3Wo7
+         XGpi4BVmVTgKRFGf7QhyE9qHEj8huvVSlDgGWnJtGPjORJ33e/8fuEiKuaFX/dpVQwOB
+         a6RvW8Yy5U+ifMXyV9EWSFgOBJwKXVOLnLss5AIX9XSlufHMUrSHAPSih7FanwYYF95z
+         ey0g==
+X-Forwarded-Encrypted: i=1; AHgh+Rqj6Wu52KgS1viJTs6KUjwIwa1mYOTbIKVXYnU794zLkokt8bbKgYAlwOnswiu2YnE4mIEjcvqIHL84AoJp9Zs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSReZeNgQeuIW1sxX/8Va99VEaYSQ4WwPU18bntLlJf9AaELDx
+	YLrEKjs5JV87LrAVCAFslTMohxewpJ74ZBbpydL+y2GOvSAc+tsNmhQMj6k3q/Nilyehc0cos3p
+	z49WekSRuQvNgciIWmVDRAZxfPN9n1EMuDItZuZNN0i/BEjlRj22L
+X-Gm-Gg: AR+sD131x4A0FKXpAHexke/a9uO98j1pQg69AY6tCy3ffjfc/E1DIFqYmgTJw74RHCP
+	XZX4+w4q2o5Cu4CbGaKrWCYYTi9QqwJKtgO4438EG48J1THCE3a9WfAIgpjJOlQSl6b3FJ2ekej
+	g76ipxtLIM4YqbEu0BcKF1D+Q92MpV/v4G2+JOxuCIpN5aWj68LF5nX/DT0diGhHJEO1fKfBYz8
+	nI72XnpHOAg+W8m5Tato2M7QYBQKx2H88b3TtDaf3+o3sZFUXjmtv6f6zD/Sa+XgwSaeZZfFau7
+	ja/ecGl0cFKYZZen2WtP7G+ROXu+WK82q5d82vSNRZgrM8BJ4qJjY3oD0aezv2GsGBI0qlPcg/Z
+	IlxkXTtfiCCGgyJsHPA==
+X-Received: by 2002:a17:903:2443:b0:2cf:9e90:8be with SMTP id d9443c01a7336-2d0524799d8mr154463345ad.4.1785791685120;
+        Mon, 03 Aug 2026 14:14:45 -0700 (PDT)
+Received: from c7-smtp-2026.dev.purestorage.com ([2620:125:9017:12:36:3:6:0])
+        by smtp-relay.gmail.com with ESMTPS id d9443c01a7336-2d04b136acfsm10910745ad.39.2026.08.03.14.14.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 14:14:45 -0700 (PDT)
+X-Relaying-Domain: purestorage.com
+Received: from dev-csander.dev.purestorage.com (dev-csander.dev.purestorage.com [10.112.12.104])
+	by c7-smtp-2026.dev.purestorage.com (Postfix) with ESMTP id 62F3C402A0;
+	Mon,  3 Aug 2026 15:14:44 -0600 (MDT)
+Received: by dev-csander.dev.purestorage.com (Postfix, from userid 1557716354)
+	id 52883E4041D; Mon,  3 Aug 2026 15:14:44 -0600 (MDT)
+From: Caleb Sander Mateos <csander@purestorage.com>
+To: Ming Lei <tom.leiming@gmail.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-block@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Caleb Sander Mateos <csander@purestorage.com>
+Subject: [PATCH v2 0/8] ublk: io_desc optimizations
+Date: Mon,  3 Aug 2026 15:14:32 -0600
+Message-ID: <20260803211441.2538144-1-csander@purestorage.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon,  3 Aug 2026 18:30:46 +0800 Hongfu Li <hongfu.li@linux.dev> wrote:
+This series is based on the "ublk: harden user buffer handling" series.
 
-> The test creates a non-anonymous VMA (ptr_not_anon) via mmap() with
-> MAP_PRIVATE but without MAP_ANONYMOUS, using fd=0 (stdin) as the file
-> descriptor.  This always fails because fd=0 is not a regular file,
-> and the failure was hidden because ASSERT_NE() incorrectly checked
-> for NULL instead of MAP_FAILED.
+ublk passes the parameters of incoming I/O in memory shared between the
+kernel ublk driver and userspace ublk server in struct ublksrv_io_desc.
 
-It's remarkable how often code assumes that mmap(...)==NULL is the
-error return.
+The thread submitting the ublk I/O writes to the io_desc, while the ublk
+server thread handling the I/O reads the io_desc. This basically
+guarantees a cache miss on both threads for each ublk I/O. Avoid the
+cache misses by writing the io_desc on the server thread in the kernel
+before dispatching the I/O to userspace.
 
-> Fix by using mkstemp() + ftruncate() to create a real temporary file,
-> then mapping it with MAP_PRIVATE to obtain a genuine file-backed VMA.
-> Also fix the mmap() error checks to use MAP_FAILED instead of NULL,
-> and pass fd=-1 for the anonymous mapping for clarity.  The temp file
-> is unlinked immediately so it does not persist on disk.
+The size of each io_desc is currently fixed to 24 bytes, which has been
+an obstacle to extending it with additional fields [1]. Additionally,
+with multiple ublk server threads handling I/Os from the same ublk queue
+(possible with UBLK_F_PER_IO_DAEMON or UBLK_F_BATCH_IO), false sharing
+results from adjacent io_descs sharing the same cache line. Add a
+UBLK_F_IO_DESC_SIZE feature allowing the ublk server to increase the
+size of the io_descs for its ublk devices.
 
-Thanks.
+[1]: https://lore.kernel.org/linux-block/aV8QfvaNO5P6vOs6@fedora/
 
-AI review found one glitch which I don't think we need to care about:
-	https://sashiko.dev/#/patchset/20260803103046.14324-1-hongfu.li@linux.dev
+v2:
+- Cap io_desc_size arbitrarily at 256 (Ming)
+- Add kublk list support, selftest (Ming)
+- Add Reviewed-by tags, Suggested-by tag (Ming)
 
-and one possible pre-existing issue which is kinda related and which
-you may choose to address.  Please take a look and let us know?
+v1: https://lore.kernel.org/linux-block/20260729012951.3744582-1-csander@purestorage.com/
+
+Caleb Sander Mateos (8):
+  ublk: consistently use u16 for queue and tag numbers
+  ublk: remove struct ublk_zoned_report_desc's operation field
+  ublk: split request validation from io_desc init
+  ublk: initialize io_desc on daemon task
+  ublk: add UBLK_F_IO_DESC_SIZE
+  selftests: ublk: add support for --io_desc_size
+  selftests: ublk: add UBLK_F_IO_DESC_SIZE test
+  ublk: lift checks out of ublk_{,un}map_io()
+
+ drivers/block/ublk_drv.c                     | 261 ++++++++++---------
+ include/uapi/linux/ublk_cmd.h                |   5 +-
+ tools/testing/selftests/ublk/Makefile        |   1 +
+ tools/testing/selftests/ublk/kublk.c         |  30 ++-
+ tools/testing/selftests/ublk/kublk.h         |   6 +-
+ tools/testing/selftests/ublk/test_loop_08.sh |  25 ++
+ 6 files changed, 188 insertions(+), 140 deletions(-)
+ create mode 100755 tools/testing/selftests/ublk/test_loop_08.sh
+
+-- 
+2.54.0
 
