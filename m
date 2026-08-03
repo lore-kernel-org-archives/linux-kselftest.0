@@ -1,79 +1,97 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 739AC3B1014;
-	Mon,  3 Aug 2026 20:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D91A3A8739;
+	Mon,  3 Aug 2026 20:31:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785789045; cv=none; b=gxYgu4o4hHG6puX7ZN8WE4qGUGo3jXgL26H1NTYIzCZifL2JQPOoye032dChv5Q0JEY+6gclOIR1GfXAlos2XAGvKNyVOcHjRpLZIVfJaLd25sYBDDX0dlhSa1PbiWKuoQfR00o+2j4iOqdAJSHE0ZtH9kz5qhnZiFCv4WVTrXQ=
+	t=1785789084; cv=none; b=NUNR6OaXSy0PDwAsLNEGQQOkL3d4f84OWT+exT30g0gl8AGDbe+yq+LxWrHYQmyna9s4kxslHLLcpVUEjOpcvy6Qvadf/4+oViZmEXuPyxlhe7Tz/i1O4Rp1XpKZb0vK1RbBD4JuVReEIIp7iLxtiVjSLjJ3TuDXnt38hQwM+q8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785789045; c=relaxed/simple;
-	bh=6VsWk7uOMLEOEtohHHLSZnaD7P1uY+fD73NkRS10a3Y=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=M7y5Y+mI5WKPD9go5tiyJZl2k9JqPMCZJ7GI3SR2sY7M+zIciTeURQkyZKft59rhb/Bdahhxte1AWjG2RZRtxX9QER1PoIvYNvrt/ccx6Aj8dstDE9hHPgoHnfkQnolEyRQbt5IEGh5vg6i5TvURbroaAVIqgdAECYvzfuR3VqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JC+szgQ9; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785789084; c=relaxed/simple;
+	bh=qe9HqxSH8weKOsQz7xdpPCbb8t8nXaijblupLCe0aIE=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=R0qwD9Pquh6toepgq9NbC6x0MTAkJ6iB6V63HxejON9croqGRiCAHUor9ppf3xIii1jFIonLqxZBiI2IDDfCksXIW3ig1UZE5IEWpWRCewPR6F0DzLfrSqjDlgw6dMDXqOQ9LBJI1MEH4tGHcXVjLMSa/vtfWVvp6XUweN2Qr5w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=XHj12WSK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JC+szgQ9"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19C5F1F000E9;
-	Mon,  3 Aug 2026 20:30:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785789044;
-	bh=y4L/+0E4iNnbYSWeBPnvD5y2pFB18GcS1dqID77LUTU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=JC+szgQ9Lgdl37mUG1CukgKUIWU67fu4tlj3aDBxspu3C1Gl8dv3TxVi+rp0lF0ag
-	 8Fa16cNt0X3LaBCtJD+ay2ruYM4PTqr1WpQDctqd8oRTlTrGNyFPXLzRDWUTpBOekl
-	 8EUe+Mqn0WpnUZAs3E35ku161a6TRgEX+ozypkcNEUnBfWubbRbsrVT8J5l0vM3wXn
-	 Qt3mNgu8aJHlJqtpscOhyeCXe/UEME4TQek51gI7S/xHk8GDNeSwmm8CAfAQqeUtfz
-	 3NiK2BKp1yZEn5qPkqErAzj1Yln27/8z9U5hPUfWyNTWLyk+Il0Nw3Wr3eioyeRINn
-	 KgrwgpVY0VwPg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568D1392445D;
-	Mon,  3 Aug 2026 20:30:06 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="XHj12WSK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BA1C1F000E9;
+	Mon,  3 Aug 2026 20:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1785789082;
+	bh=iMh3w0+qZ5zyF1rAJ4Uge+BoFOIwwL+v8MTv/OMlkA4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=XHj12WSKB/2ACWP0tk8hdfYluL7pzrlMl1+c5eZWsNFvwzOhC4Ey9eUW4vEiIrrCa
+	 lrJ2kPQ2j0ifrG6yc8cTlSkCT7F4BSxnJjY+wYLXNSsB0a4aTSN4WBaESJxy/DvDZ7
+	 zthdev34WOQMu5UKKXJqRCqdgm6bDWvOSgSyDiv8=
+Date: Mon, 3 Aug 2026 13:31:21 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Chris Gellermann <christian.gellermann@codasip.com>
+Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/membarrier: Skip unpermitted membarrier
+ command test if preregistered by libc
+Message-Id: <20260803133121.04903cdd40ce25e17f786385@linux-foundation.org>
+In-Reply-To: <20260803124900.3328789-3-christian.gellermann@codasip.com>
+References: <20260803124900.3328789-1-christian.gellermann@codasip.com>
+	<20260803124900.3328789-3-christian.gellermann@codasip.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next] selftests: drv-net: enable devmem TCP in the
- test
- config
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178578900514.2821811.1990216783569793637.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Aug 2026 20:30:05 +0000
-References: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
-In-Reply-To: <20260731-selftests-devmem-config-v1-1-098014348d9d@meta.com>
-To: Bobby Eshleman <bobbyeshleman@gmail.com>
-Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, bobbyeshleman@meta.com
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hello:
+On Mon,  3 Aug 2026 14:49:00 +0200 Chris Gellermann <christian.gellermann@codasip.com> wrote:
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Fri, 31 Jul 2026 16:36:23 -0700 you wrote:
-> From: Bobby Eshleman <bobbyeshleman@meta.com>
+> On thread creation, Musl registers the private expedited memory barrier,
+> see pthread_create [1]. Thus, invoking the barrier command will no
+> longer be rejected by the kernel with EPERM. The test checking this will
+> fail. Check if the memory barrier command has been registered and skip
+> the test in this case.
 > 
-> The config fragment already sets CONFIG_UDMABUF=y, but kconfig silently
-> drops it. UDMABUF/NET_DEVMEM both depend on DMA_SHARED_BUFFER, which we
-> can't enable directly, so we need to enable a config that selects it. We
-> use SYNC_FILE for that purpose here.
-> 
-> [...]
 
-Here is the summary with links:
-  - [net-next] selftests: drv-net: enable devmem TCP in the test config
-    https://git.kernel.org/netdev/net-next/c/8c7badd19e13
+Who the heck maintains sched/membarrier?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Short answer: everybody I've ever met.  All are cheerfully cc'ed.
+
+Perhaps finer-tuned answer: Peter.
+
+> --- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
+> +++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+> @@ -113,6 +113,16 @@ static int test_membarrier_private_expedited_fail(void)
+>  	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
+>  	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not registered failure";
+>  
+> +	/*
+> +	 * Some C libraries, like Musl, register the private expedited barrier
+> +	 * command when creating a thread. Expecting an EPERM on an unregistered
+> +	 * command will therefore no longer work. Skip the test in this case.
+> +	 */
+> +	if (MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED & membarrier_get_registrations()) {
+> +		ksft_test_result_skip("%s test: Command already registered\n", test_name);
+> +		return 0;
+> +	}
+
+AI review
+(https://sashiko.dev/#/patchset/20260803124900.3328789-1-christian.gellermann@codasip.com)
+thinks that membarrier_get_registrations() can return -1 on old
+kernels, so we should check for that before testing for
+MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED.
+
+Seems nonsensical to me - membarrier_get_registrations() doesn't do that.
+
+And policy (my policy, at least) is that selftests test the kernel
+they're shipped with and anyone who tries to run them against any older
+or newer kernel is all out of luck.
+
+
+That being said, and stepping back a bit, is this test testing
+something which we would test?  If pass/fail depends upon deepest
+details of the chosen libc flavour then perhaps the whole test was
+ill-conceived.  wdyt?
 
 
