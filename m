@@ -1,181 +1,143 @@
-Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7681C2AD16
-	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 00:11:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EFC41FBE90;
+	Mon,  3 Aug 2026 00:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785715890; cv=none; b=EDbyk3WVOHj0VKtceRCaxuAMNhPl1FAlk4nOfObRoy2eSIQo0+ZbWH5+692SB6BkMza74waI6JIoo6i05z3WgXrP30MJyRDgnX3RxyVLXfAgQ4OLDkj613fZuyEizK7JNwIp4tN1pFD2MZcU6YFtiK80yFE8zAkDp+KUF6ttcYY=
+	t=1785716314; cv=none; b=ptPPmVjPB6v+LbSYy/hSsMNXI+F7jLDhELxmm2b2TYclwbcgfnhqZ8LsVm7Jtv4vup2UM2pai4viBG2Gj80y7Ji6JbJQtqzApfmQK+5HRBK4qqz6NgbPa+6YmGcF3PY1WYT05cVv3hzD5KrvTQzbku8zfw6Tr6JGjMbwoNr8W4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785715890; c=relaxed/simple;
-	bh=xcUY+DKs3+Y9ZAYeOnWRihdxrBbcA1wZogaWMdKPBCc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=Mr81bZnDtMfGsZ1LikBv6O+FpBFcLbLrTh2kQhGBRqfeWTYIWApJvpy/fMYXWxUjaL9g+t72KHBQCNSHU+MX3dE3s5AH3YB/2rbi5f0pMKVSAFwROEV5bCuZNe0yJBEAivrlJjiZLoQok5YudH83C+RIB5HkpbIE8EtqKwaHyuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6yga2LS; arc=none smtp.client-ip=74.125.225.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1785716314; c=relaxed/simple;
+	bh=4G4qkqcfZJqsxDoMwOpwGSK3L4CO0VbzmkKKK274Dko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Wd/77fKCMzSgHRFGwHnmGTT7vKxfL7Mv0nvQaZrhIkSPX+Tnr58ubA2kddUb3LOrR61bFvb5D1wt36Uw+/MME39gN+YMzpImZdD0+6RfnewK5c4aO2H5hhCbR3wYKKHDMPsrJUXCLzP9VVPob/7hJm2hGI/opEvLMyT+mtU6f28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=rBhbQh9U; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6yga2LS"
-Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so5490515e9.0
-        for <linux-kselftest@vger.kernel.org>; Sun, 02 Aug 2026 17:11:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785715887; x=1786320687; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5VBkp/M/Sk63PysxIV8aeQsYqqYmeyIXI2LyKXT+PEs=;
-        b=T6yga2LSGOZNG0MN+R5eghd0n39Sl/HAmLATrllGbbg5mMWMsbUx9uwV7Wgmhhk5be
-         hvFPZxjouM6Om1olmWAESiS+wUyvGTbmCzwE3kM6Qkl3qaUh244IDfEnJJxDT34HeSvU
-         S5d5X+eW27sM2tI+Mu8IMdY6SBV4VFwIxRehupfqACDNcCoN94mHASQUixtIAEijPgDz
-         Fh7JbJHzeSp6Ug/IBnkN0XCH2k8nWhVhUMcFjDRM6QbN2mDUwUg9zCKzxnBqQnGcC5mt
-         IqmBZghoCjIrA/wKroQSmxsOXmN3hx6ofU9woctQ965Fc/vA5SuEg3I8y7UOfe63oio+
-         t4kA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785715887; x=1786320687;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5VBkp/M/Sk63PysxIV8aeQsYqqYmeyIXI2LyKXT+PEs=;
-        b=OexK70pAcGBvdeZfLgaGtuHJmVozimoIbRtLXlJMXvhaLPOF8g6Y9nbshhYxdLCmCq
-         NyUYAWb6Jx5bMrHClMsamEUytDq/Oy9LA84MeoTFJsShQj7oYNacrA9NO7ynyUowGP2k
-         3q6qyuj+2+8qBSbmvFKIicpDVJb5VZjfKvCY3EfNcdk2ukxdDSzQELNgTIEIqHDKj4+N
-         X0IpQ1ruKyf5HLjQbGsT3bDeHkGktdIoO8Q+AJMP1n3zm7t2HKwGbFQYSHluAFoCdXAo
-         5pFzYYYxUOZNwoGPYScrgdbFGLvV1pX+5bfcWu3v8WT407v8KhjTyznhrMQ/PjMi8FGz
-         4JeA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp+Cqo/nEfzXyp0SJj9LG4nO9d5SC4ae3vpgDW9ZtWZM9UiIoY9lTVxO98Gm9lfLMM2hoIJy7neJ8QvdQPq1pE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqHNHC8Ew7do/r4Lw5Bmsb6Q9/ePfcpfaxttPJsCsZXPZOHXOF
-	RCtvJyRQMr24asKNw4r+8T9052qsXp0rAfBzWU+wSQTzO8FADcUIrpP8
-X-Gm-Gg: AR+sD11sQ5vxYPK6R6DNqigh9iLHrSp5Zx0Yk0Jx7qAaqBSc/bfSiS3fcFJDhvnKRx5
-	SiT3gZNKffs5wDCvBley78GxrzVIgHhbDFJTzxRMCQbmB61TcjteLEYfAtWytRNQYoA2jimipG9
-	q6rAbdixXGMbdrrY92jPgfHnmikPRMXOaFX/l7IrtHJ4hh5KJSnYgvFn4jBMP2gYZeLDB6C+UB+
-	p1JI3pjuNjhuFxkWJqm8wEoKBq2ONSahUmHX5Qe76+RsWt+IZDFHRfN77+YNF9an/iS8YzwVure
-	wkymZDdT6xWBF0wmV2nbjxZl7UNxHvKYdu7cctxwvRq4Q5+I97LGe4LexMYlj1KZxwmB5UL1Kwf
-	8Ex8nzcD3MOEmMaa9Z7Gr7o/IdeR9yPd1pe3r32mz2tLvtQnKImfBYiU0tjr4sczM1ux2KphRxA
-	VZPKzJVOVMpHufnYq1p8McsaVhf69AdcBtuFMViLeGZFpeK0/EHny2EpKJNBZeefzkp+o/8GO0B
-	YlmhxwyAjDIfZGk+nt+n8gB6AVB0X04Y9g8Qm05cV0ilEio+E3sAC8ZJkG2+simkcdCQ+okQiYD
-	0h/yrtwoerLvh/QW2xUHmOglbb0Ix5n1uIEFow==
-X-Received: by 2002:a05:600c:8b17:b0:495:4491:b8c2 with SMTP id 5b1f17b1804b1-4980c66c926mr166756395e9.3.1785715886664;
-        Sun, 02 Aug 2026 17:11:26 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49807b6093fsm103199905e9.1.2026.08.02.17.11.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 02 Aug 2026 17:11:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="rBhbQh9U"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
+	Cc:To:From:From:Reply-To; bh=NtvZNxuGXBE6cCwIJ9jXeZKQzir6kUFrZef6tlTlq3Y=; b=
+	rBhbQh9UcM8s+a3xoAtdYgcjrFfPejWVAP02zixW4ane1I+KWzZ1dc6wyz/G8RWUE0AkJpiQxcttp
+	+qjuf6fQLE5qz93AHAGPb/3DVUnA72hPqGazbnRNA0tcGhZnswBLyMqTDVXivYmkanJxr9lVFFmaQ
+	YaZ7DrTe27LEs6LFzHb1HwHkpX3f69xyAx+JFQBO8UBT4M6CxgDq8NR5wlp8vY0IF00OQV05Ri3Mq
+	9Vifvi/Q3EK1xsLGeRkWE6AicAK0F3F5sdKNhgtsvUS56OqnyB5jiWisS3eUdA+8P1bL0n249FM5z
+	v6Sb/9xeHYE3OreRvZ3aHw6nJcbC39itfw==;
+Received: from [58.29.145.179] (helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wqgNj-00CkKO-F9; Mon, 03 Aug 2026 02:18:16 +0200
+From: Changwoo Min <changwoo@igalia.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	bpf@vger.kernel.org,
+	sched-ext@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	changwoo@igalia.com,
+	kernel-dev@igalia.com
+Subject: [PATCH] selftests/bpf: Remove duplicate copies of the arena spinlock qnodes
+Date: Mon,  3 Aug 2026 09:18:07 +0900
+Message-ID: <20260803001807.646357-1-changwoo@igalia.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 03 Aug 2026 02:11:25 +0200
-Message-Id: <DKEVG8ZVJDDQ.2G40FTOIZKU57@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Shuah
- Khan" <shuah@kernel.org>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH bpf-next 1/2] bpf: Cancel RHash special fields on value
- recycle
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Nuoqi Gui" <gnq25@mails.tsinghua.edu.cn>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>
-X-Mailer: aerc 0.21.0
-References: <20260726-f01-23-rhash-cancel-bpf-next-v1-0-6e5e1131d885@mails.tsinghua.edu.cn> <20260726-f01-23-rhash-cancel-bpf-next-v1-1-6e5e1131d885@mails.tsinghua.edu.cn>
-In-Reply-To: <20260726-f01-23-rhash-cancel-bpf-next-v1-1-6e5e1131d885@mails.tsinghua.edu.cn>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Sun Jul 26, 2026 at 5:51 PM CEST, Nuoqi Gui wrote:
-> Commit 6905f8601298 ("bpf: Allow special fields in resizable hashtab") sa=
-ys
-> that "kptr semantics under in-place updates are identical to array map."
-> However, after copy_map_value() preserves special fields,
-> rhtab_map_update_existing() calls bpf_obj_free_fields() and drops retaine=
-d
-> kptrs. BPF_EXIST can therefore unexpectedly clear a kptr.
->
-> Use bpf_obj_cancel_fields() in the update and deferred deletion paths, as
-> hash and array maps do. It cancels timer, workqueue, and task-work state
-> while the allocator destructor releases kptrs at final reclamation.
->
-> Fixes: 6905f8601298 ("bpf: Allow special fields in resizable hashtab")
-> Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> ---
+bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+every translation unit including it emits a copy. __weak makes them all
+resolve to one instance, but bpftool gen object merges only the symbols
+and concatenates each input's .addr_space.1 bytes, leaving the surplus
+copies unreferenced in the linked object.
 
-I don't think this is enough. Upon reading the code, I am suspicious about =
-the
-check_and_init_map_value() in rhtab_map_update_elem() (post this change). I=
-t
-will likely end up zeroing non-zero kptrs and leaking them, since recycled
-elements will retain the value. Dtor path is fine but that only covers the =
-case
-where freed element is never reused and only freed on map destruction.
+libarena links ten such units, so nine copies were dead weight (bytes):
 
-It might amount to simply remove that function call from the function. The =
-other
-user in delete path looks fine since it operates on output buffer.
+  object                             before       after
+  -----------------------------------------------------
+  .addr_space.1 in libarena.bpf.o    676200       86376
+  libarena.skel.h                   2100123      892371
+  libarena_asan.skel.h              2641124     1466477
 
-Please make sure to also add tests for such behavior, having a map of at mo=
-st
-one element should allow for its reuse, you might have to reinvoke the prog=
-ram,
-once doing update, then another doing delete, then another doing update to =
-be
-able to rellocate the same element. I am sure it can be figured out (with A=
-I's
-help), but please validate it using tests.
+Declare qnodes in the header and let each program define it once:
+libarena in src/common.bpf.c, and the arena_spin_lock test beside the
+lock it guards.
 
-pw-bot: cr
+Tested with test_progs -t arena_spin_lock and -t libarena.
 
->  kernel/bpf/hashtab.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-> index 9f394e1aa2e8..54ea111daa8b 100644
-> --- a/kernel/bpf/hashtab.c
-> +++ b/kernel/bpf/hashtab.c
-> @@ -2865,14 +2865,14 @@ static int rhtab_map_alloc_check(union bpf_attr *=
-attr)
->  	return htab_map_alloc_check(attr);
->  }
->
-> -static void rhtab_check_and_free_fields(struct bpf_rhtab *rhtab,
-> -					struct rhtab_elem *elem)
-> +static void rhtab_check_and_cancel_fields(struct bpf_rhtab *rhtab,
-> +					  struct rhtab_elem *elem)
->  {
->  	if (IS_ERR_OR_NULL(rhtab->map.record))
->  		return;
->
-> -	bpf_obj_free_fields(rhtab->map.record,
-> -			    rhtab_elem_value(elem, rhtab->map.key_size));
-> +	bpf_obj_cancel_fields(&rhtab->map,
-> +			      rhtab_elem_value(elem, rhtab->map.key_size));
->  }
->
->  static void rhtab_mem_dtor(void *obj, void *ctx)
-> @@ -2964,8 +2964,8 @@ static int rhtab_delete_elem(struct bpf_rhtab *rhta=
-b, struct rhtab_elem *elem, v
->  		rhtab_read_elem_value(&rhtab->map, copy, elem, flags);
->  		check_and_init_map_value(&rhtab->map, copy);
->  	}
-> -	/* Release internal structs: kptr, bpf_timer, task_work, wq */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	/* Cancel reusable internal structs: bpf_timer, task_work, wq */
-> +	rhtab_check_and_cancel_fields(rhtab, elem);
->  	bpf_mem_cache_free_rcu(&rhtab->ma, elem);
->  	return 0;
->  }
-> @@ -3027,7 +3027,7 @@ static long rhtab_map_update_existing(struct bpf_ma=
-p *map, struct rhtab_elem *el
->  	 * kptrs/etc. still sit in the slot. Cancel them after the copy
->  	 * to match arraymap's update semantics.
->  	 */
-> -	rhtab_check_and_free_fields(rhtab, elem);
-> +	rhtab_check_and_cancel_fields(rhtab, elem);
->  	return 0;
->  }
->
+Signed-off-by: Changwoo Min <changwoo@igalia.com>
+---
+ .../selftests/bpf/libarena/include/bpf_arena_spin_lock.h   | 7 +------
+ tools/testing/selftests/bpf/libarena/src/common.bpf.c      | 7 +++++++
+ tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 7 +++++++
+ 3 files changed, 15 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
+index ae6b72d15bb6..71d9db610263 100644
+--- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
++++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
+@@ -103,12 +103,7 @@ struct arena_qnode {
+ #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
+ #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
+ 
+-/*
+- * The qnodes are marked __weak so we can define them in the header
+- * while still ensuring all compilation units use the same struct
+- * instance.
+- */
+-struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
++extern struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+ 
+ static inline u32 encode_tail(int cpu, int idx)
+ {
+diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+index 50be57213dfb..06481f2a2892 100644
+--- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
++++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
+@@ -8,6 +8,13 @@ const volatile u32 zero = 0;
+ 
+ struct buddy __arena buddy;
+ 
++/*
++ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
++ * linking the arena spinlock provides exactly one definition, so that the array
++ * is emitted once rather than once per translation unit.
++ */
++struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
++
+ int arena_fls(__u64 word)
+ {
+ 	if (!word)
+diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+index cf7cda79c16c..92e75ec3844c 100644
+--- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
++++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
+@@ -23,6 +23,13 @@ int cs_count;
+ #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
+ arena_spinlock_t __arena lock;
+ int test_skip = 1;
++
++/*
++ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
++ * linking the arena spinlock provides exactly one definition; libarena's lives
++ * in libarena/src/common.bpf.c.
++ */
++struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
+ #else
+ int test_skip = 2;
+ #endif
+-- 
+2.55.0
 
