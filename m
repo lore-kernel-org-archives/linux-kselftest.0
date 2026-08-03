@@ -1,157 +1,145 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32B0A36215F;
-	Mon,  3 Aug 2026 10:57:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9906D3CDBD7;
+	Mon,  3 Aug 2026 11:04:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785754677; cv=none; b=pn/kK8PXhF/eY/I1CCmzqgBlCVOZBymhxgSKfsw9bMwEVmuJUfT8wyKNIUpOYoQVI2EOcnV/BhQHNGql8CRfiN4ibPJDNcwphOGy/jraVRLyIuv93gYV5XyiBECOXuy11ZF3g/ow6yzy+AaOTqlidBLzqvAUwbmG10HwQXloHyY=
+	t=1785755081; cv=none; b=MoAiA9n/L6BWgVGJqVcXQcgQoDz2Xfd7w6+eq7VqmrZxltOaTHLhSZhWKu/wEjogauAlldnYUVZjD/ITMT8HupElyBRj7VNSJT3AmF1e5nDvwCTihdsYxX+0q1JfwRGjpYXhXVbkuBW3rTp050U0E3/YFQb15SSUOpWWRZa2nyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785754677; c=relaxed/simple;
-	bh=EQdX6+zQBS5X8lUyYX48GGs/jvjnswfW0vTDcFnx1Qk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AjiH2AleDgutt/CvxlFFAXyD6WWDzglqIJfuSMx0n+6bOSqPi15R4z+lvJNmHaeESP5t6MrJ2r+Hyzma1UTWIXD2GquWr1duDlmuKELrIAdX+52UL0FonzU73Z+rtAe5hit4X3glPhDviR4vmRDH5J0n7yZJZ6aAd1ZPza9ZdOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=keGSn+No; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785755081; c=relaxed/simple;
+	bh=JI7GyjjSMFA79ghaTfx/7iWy+BtYjircZY9O//20rsM=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=NCYuEaDCbaAVQAEQyC34KmJjCnGCqkgHoOUIDaSZF60Cf1jpBmeVNRHE0n51k9soW3Zs8IvjjexjNC1qeNDpOOElZmj8kXdxt5BBOuaSkq+2tjqqNeKtQ/TSmdAV1NxOSN7aj+ePbifvGwYOZ63Qt7SQoODlRYM8UhdH0qezGvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PMmVCiB5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="keGSn+No"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 443621F000E9;
-	Mon,  3 Aug 2026 10:57:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PMmVCiB5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9924C1F000E9;
+	Mon,  3 Aug 2026 11:04:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785754676;
-	bh=ZHWedN9HTiKNPKM2UeIn5hc0h14AOA6NJD1WFD6iHwU=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=keGSn+NocOSPaRF0FVAdR3BQyhO2iffHD6rtxrlDVMdlUtRFcGBkOFho19tBDB+FW
-	 R5dx6Ra5WZQV+RDiW/Aj+ygex6v8mnmevdMI+QmJ6dSh4YgpttnDWEzkH1PVECHzf8
-	 4zKv+sdm/MDPMaY8QmSet4+S+C4XVhtFOslg1qjvZ865TZHjK7QaTUU0Sjat7ejHXI
-	 8oj1l+WiAiEqD7MoOWw7VcT1OZ00u1FsMHaJCQfe4o46EuVeon0aTs7KUcYLbQdL8X
-	 0JUTEgFTgOcmOVt5/m6rc+lBfIQ3qL2eBxNM0D1b24A4v3Zse2s2fagfnSQ1MKKJwu
-	 6vmEPJM+Ot1VA==
-Message-ID: <1b48cf7d-8906-43d4-a85d-5cfad10a12ac@kernel.org>
-Date: Mon, 3 Aug 2026 12:57:44 +0200
+	s=k20260515; t=1785755076;
+	bh=hp7zTybQm+mhJAOmq6bcq40GTnQfmEk+v4OwIE/uVhQ=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=PMmVCiB5ZCcTFUg9590+cZFq0NC623ucq0Yv3SR5aFPDWWOoWLQK1SQ5auxZcBrsE
+	 iI/cYCUI6qWJoBbo9we88l2JCOmGLNsveFXqQVwDAKA0uEE/OkyoUOzLA1F2jZhyIU
+	 fENuy/PG0sfJvOdzQ/RVrc96m9MPLUh0uVIva682LQsMcrWo6nJQpjKh1ZgYIPuVpr
+	 QXKb5gCr0Dkj/qvRuRtejUbJJHG6IdtBsyj6WfuBgmekGLigeCr6+B/1jD/nLFP4TE
+	 gUFVwTqsiYCha8/1n97UtkllzZt7WUYhF9kmM1O4/o7ARat6qVawKabzlGaZxAYnwy
+	 5gwXhHkV1jaUA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 07/15] mm/rmap: track whether the page VMA mapped pgoff
- is anonymous
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-7-e8ecfefea812@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260729-b4-scalable-cow-virt-pgoff-v3-7-e8ecfefea812@kernel.org>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 00/16] selftests/mm: improve khugepaged coverage
+From: Mike Rapoport <rppt@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Nico Pache <nico.pache@linux.dev>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Barry Song <baohua@kernel.org>, 
+ Dev Jain <dev.jain@arm.com>, Hugh Dickins <hughd@google.com>, 
+ Lance Yang <lance.yang@linux.dev>, "Liam R. Howlett" <liam@infradead.org>, 
+ Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Shuah Khan <shuah@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Usama Arif <usama.arif@linux.dev>, 
+ Vlastimil Babka <vbabka@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+In-Reply-To: <20260802195254.1937477-1-kirill@shutemov.name>
+References: <20260802195254.1937477-1-kirill@shutemov.name>
+Date: Mon, 03 Aug 2026 14:04:23 +0300
+Message-Id: <178575506321.1561566.145327646496245621.b4-review@b4>
+X-Mailer: b4 0.16-dev
 
->  /*
-> - * Then at what user virtual address will none of the range be found in vma?
-> + * At what user virtual address will none of the range be found in vma?
->   * Assumes that vma_address() already returned a good starting address.
->   */
->  static inline unsigned long vma_address_end(struct page_vma_mapped_walk *pvmw)
->  {
-> -	struct vm_area_struct *vma = pvmw->vma;
-> -	pgoff_t pgoff;
-> +	const struct vm_area_struct *vma = pvmw->vma;
-> +	const pgoff_t pgoff = pvmw->pgoff;
-> +	pgoff_t pgoff_vma_start;
->  	unsigned long address;
-> +	pgoff_t pgoff_end;
->  
->  	/* Common case, plus ->pgoff is invalid for KSM */
->  	if (pvmw->nr_pages == 1)
->  		return pvmw->address + PAGE_SIZE;
->  
-> -	pgoff = pvmw->pgoff + pvmw->nr_pages;
-> +	pgoff_vma_start = vma_start_pgoff(vma);
-> +	pgoff_end = pgoff + pvmw->nr_pages;
->  	address = vma->vm_start +
-> -		((pgoff - vma_start_pgoff(vma)) << PAGE_SHIFT);
-> +		((pgoff_end - pgoff_vma_start) << PAGE_SHIFT);
->  	/* Check for address beyond vma (or wrapped through 0?) */
->  	if (address < vma->vm_start || address > vma->vm_end)
->  		address = vma->vm_end;
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> mTHP collapse went in for 7.2 with no functional selftest coverage. Every
+> khugepaged collapse case is PMD-shaped, down to the detection: it reads
+> smaps AnonHugePages, which cannot see anything below the PMD order.
+> 
+> I am also reworking khugepaged's collapse mechanism, and that wants a suite
+> worth trusting before the mechanism changes underneath it. Nothing here
+> depends on the rework -- everything passes on an unmodified kernel and
+> documents what khugepaged already does.
 
-Am I wrong or are all all changes here completely irrelevant for this patch?
+My overall feeling is that changelogs need more human touch to be
+parseable.
 
-You mention
+>  - vm_util grows folio-order helpers: is_backed_by_folio() moves out of
+>    split_huge_page_test.c, and a range-level form asks whether every
+>    order-aligned window of a range is backed by one folio of exactly that
+>    order, mapped head to tail.
+> 
+>  - folio_order_check validates those helpers against the kernel for every
+>    anon THP order it supports, before any collapse test trusts them.
+> 
+>  - khugepaged_full_pass() drives exactly one scan pass through the sysfs
+>    wake path, so a barrier completes on the daemon's own cadence instead of
+>    needing a short scan_sleep_millisecs.
+> 
+>  - khugepaged -o <order> runs order-parameterized anon collapse cases: a
+>    full table, only the populated window, default max_ptes_none and
+>    max_ptes_none=0, and collapse upward from smaller large folios. Any
+>    order up to the PMD order, where the same cases baseline the PMD path.
+> 
+>  - khugepaged_race races two faulters, MADV_DONTNEED, transient FOLL_PIN,
+>    fork and mremap against one of three collapse drivers: khugepaged a pass
+>    at a time, khugepaged free-running, or a MADV_COLLAPSE loop. Every
+>    racing page must read as its pattern or as zero. -z collapses
+>    hole-bearing windows; -p adds pageout and compaction, the only threads
+>    that elevate a source folio's refcount from the reclaim side. DEBUG_VM,
+>    page_table_check, KASAN and lockdep are the other half of the oracle.
+> 
+>  - A shared-source write race pins the CoW isolation contract: a co-sharer
+>    writing throughout a collapse must not see the collapsing side's pages.
+> 
+>  - Four tests fail on the environment rather than on the kernel: the
+>    collapse wait is a fixed three seconds whatever a huge page costs to
+>    build, collapse_compound_extreme wants a 512M page from the fault path,
+>    the shmem cases want a PMD-order page cache folio the page cache caps
+>    below, and the swap cases fail instead of skipping without swap. Scale
+>    the wait (a 2M PMD is unchanged) and skip the other three. This is why
+>    the suite now runs on arm64 with 64K pages.
+> 
+> Tested on mm-new (1dbd7c34bb92):
+> 
+>   x86-64 4K    105 pass, 3 skip, 0 fail
+>   arm64 64K     87 pass, 7 skip, 0 fail
+> 
+> The skips are structural: sub-PMD cases decline at the PMD order and the
+> mixed-source case at the smallest order, and on 64K pages
+> collapse_compound_extreme and the shmem cases skip for the reasons above.
+> 
+> Kiryl Shutsemau (Meta) (16):
+>   selftests/mm: move is_backed_by_folio() into vm_util
+>   selftests/mm: add folio-order check for VA ranges
+>   selftests/mm: add folio-order detection self-check
+>   selftests/mm: add order-parameterized khugepaged collapse cases
+>   selftests/mm: add khugepaged completion barrier helper
+>   selftests/mm: add khugepaged race harness
+>   selftests/mm: cover a shared-source collapse write race
+>   selftests/mm: skip collapse_compound_extreme where the PMD is too
+>     large
+>   selftests/mm: skip khugepaged swap tests when no swap is configured
+>   selftests/mm: verify synchronous khugepaged driving is attributable
+>   selftests/mm: race-harness variant for permissive hole occupancy
+>   selftests/mm: add memory-pressure threads to the khugepaged race
+>     harness
+>   selftests/mm: parameterize the mixed-source collapse case by source
+>     order
+>   selftests/mm: zap whole PTE tables in the khugepaged race harness
+>   selftests/mm: scale khugepaged's collapse wait with the PMD size
+>   selftests/mm: skip khugepaged shmem cases without a PMD page cache
+>     folio
 
-"This is necessary in order to determine the correct VMA page
-offset in vma_address_end() when pvmw->nr_pages > 1."
-
-But I don't spot an effective change here.
+I'd put the commits that update the existing tests at the top of the
+series and than add the new tests and infrastrucure.
 
 -- 
-Cheers,
+Sincerely yours,
+Mike.
 
-David
