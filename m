@@ -1,46 +1,47 @@
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11022077.outbound.protection.outlook.com [52.101.66.77])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11021139.outbound.protection.outlook.com [40.107.130.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A3040F8D8;
-	Mon,  3 Aug 2026 12:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.77
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8336E41167E;
+	Mon,  3 Aug 2026 12:49:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.139
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785761351; cv=fail; b=ihl31w7wA/VD80PHsgTPdZB7Cz7TWuQIzSz4uQi4TdVR23ZawrFGAvNpyqTdwcZMkewR4Ye6U8CiofEGQijmfJGaj8+IcDf/d0Nz3yjmeV41Lk2nrbU6A7RI56MNGB/Ti4x4/uV+6jexVUwiOf9vpYWvSJ5w7lous9IO5sZx9KM=
+	t=1785761355; cv=fail; b=a6fkUFiYa+dEUjox+R0/fkVOHS2IByWmAFoeGRhwE6xEoVXpztAoBBBYqy5keG1k9+mdDjUWoQc7SkQtd0mS4/H+edRGZDV3ae7e+VdI9FPgf0M5+mio4J+3Qv4Qcls8Q1r4++Zu+dZcR7f8o0QTigKy+s6sd7JgOyRwRNpSRWE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785761351; c=relaxed/simple;
-	bh=Qv+kWYFF5Htrh/exnjJxAslj5SD4MtMnk3LlKVdnSeg=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=ZsOXZh/1J06Hy/nlI6+PjchbvT9KQZjGcXKC4IreVgxwQYjgsIvT1ghJRUkizUV6YGf4zf2t+9gRZTpF1uawzFJOdMs4dGJs0c5qbo423SGsS0cYSWVqbPz77rPUSgJBKgYvmLhp/nCbXZ5e9GszVaTCaGtWCO4jtOulsirOBfo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com; spf=pass smtp.mailfrom=codasip.com; dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b=DgsqlxPs; arc=fail smtp.client-ip=52.101.66.77
+	s=arc-20240116; t=1785761355; c=relaxed/simple;
+	bh=DRbFckd6LotWiwMexA2tBubwt7BoCE7VfG4WLQ+AIZk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XU+e3NFuRAtciyb2Bm9buLMTm1/Q3MINQdBCbQRoOVWK4fWJTNyFycsUGQSd5OevgSQj6Y+eNyDJWNf3ES3r5QKQuV/r8/lIKq+EBAUUPDiOqe5AWZlDQnJcFIfGnsC70gkdtx2M9Vl/88qDrYU16NchSNrsDfTnBnH+uVBe4qo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com; spf=pass smtp.mailfrom=codasip.com; dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b=XI/iGd5k; arc=fail smtp.client-ip=40.107.130.139
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codasip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b="DgsqlxPs"
+	dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b="XI/iGd5k"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=F3qIc20yRDYLG8unm2ZlXQiZ53Ni/kH7SrbALVDFValeuCbi8mQesSMr/8QKoT2EW7XdoeWGen6z+sI8LVQkOkR2kdZF54GhiFw11a5zDE1XBg1YN44APJ5mEvrS1OxY5Tk37QcDDcT+5jMl7NDWebPtAIBtwUFLvFsDRyHpdhiei+Gfutaj5eeKAXTV0QkrT2SNNEamqeUF4zYmklOgHrmYKSfuneei/9Tty+LToO9dBFw+DWJki8qY2EPUAi6hteks/hq5Ncq/XfB3X3s4M/konlKZyr2YmC/x7WT1gS6OgIoTcdO7aXhjerxEucQq0BgV3mDbATsSRlzGTjWnXg==
+ b=QSspY3KZ1r4h8BPF6JR6NRa1ZpVPbUNJoh9BuBH0e4L8vKL8iywy3+Aw3aE9QXfMd7B3DqG1x5eo+/JQ4lY3wFJmu/lj40Cro0G03DqBPGOvKvadDyFSBsyQVHYv+vU473AQ/Lvc2Xcgz+ULm2m+ONBDniJUMGj1b6L7c6B3nhF6/3ahy7mEfVDTtUkGwYBhWmVM7NDJpP9r90dQdnBa5smVEYWw4xEbBrXYanjVlBisCtKmuQqw7iR5xXaQluPFlqVYNxNWyop45DB4f4NfZc61Ml6w2Wwm+BtycsHbagnX0/llPXkzO1mOtj46sHuvwfoJ2R+QldUqYt/h/dxLqQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/wgQs1aZgZyTGQsI2FG7ZrtmQXeCo2dysOuvAlupWXY=;
- b=gJPwRn/B4HHo9cR3D3/6XXEylnUOFh399YMCg1U27DMrxVb+ZlADn3RUz+22gG7gQ98a8tWy6vwuJh+gh6paxgYq5RCzGlNH85R4q3y+kkjbiFlEyKDD6zGDqPjWObelTwRQXgfgX5ivfB0kql8v6X20fd75ofZXTn/W6FtoWiIk2mfgEpO98NLER8ejyNG6QG076Y7zXzuxS2qBgD8Lk7UL9WJ+ikLI05MZgF98sMO3Gu8XGOqo7xy5nOZuvKFtBPQ4ZAgqaVRSTLq34qU+l7UCNOaHTXLVG0sECYpVKdwbl0D6x7xr/gB610k6Ta+whF5qfUqPbzrEkblIduzAqQ==
+ bh=yaD4LW58bX4jwxTE3GfsEMxAcaLhvS7uY8Azc8OYDC4=;
+ b=lLIOUiylDymOBC5dKMhpcfugaaZjvQv4TFJYwDGHxeCkWqHG5ME+AOLTjvrt4o9w0iodHqOdxF0qob1Yvox8K7QdI0N4iHIospPZxcKLPa6CvDG5Q0xGPPHRetGWTcdqp+GYj0ofH+T3wQZNNLkR8v7WsTp7JhGRhqmfirgfPABHioQjXQmc5Vk2wyiJA+Xygi9nCbry1WKbxbFHkS55ulbeUzDSsEpAjaIJ+7K7lGC0sj5RhAJDQ8bmR5lFFVdyOAKnzVk4u8mnmnuQD8k/VKw3h8DDYl9C7cR1tKDxTVttj02BiEALisK+XZjVdgk/kAz0ngUvtDgsIOllWJyOZg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=codasip.com; dmarc=pass action=none header.from=codasip.com;
  dkim=pass header.d=codasip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codasip.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/wgQs1aZgZyTGQsI2FG7ZrtmQXeCo2dysOuvAlupWXY=;
- b=DgsqlxPsmYadcjqUDIkJdEQx/ElCTrgEt+mAQorODIeuYQjUtjvg6JZXN9SIwLF1F4Eus3eigc4F65VP64yRMFNybdHLf9X26JrZ4E422vWXJIN+6uvLh+kqtqzMSGwLO3bwYKwiGfX1mdE1/kb7mZMduwoCiaD4cPocNuqUJQ5T5ieI0ktUjupxH6XMeiQv5Ss7skTvZq3ldQQOTBdb49YKReV6vFJgkvUYYxTve0DsJEa/X0Rp+PBxFR1H5qlz6iZSVj46O/tV5MJtVEpmeGdHVbEyXyXWpllz1qV1cUaHSma+k8OnsU1GAAfaM6/yPqbkaca1YNxBLzC4Z6pZ/Q==
+ bh=yaD4LW58bX4jwxTE3GfsEMxAcaLhvS7uY8Azc8OYDC4=;
+ b=XI/iGd5k8KWSdVo2NtIEZaU+DJYR8m5J7WtEndVYeMvuDVGmeT++zMZxIjvXqB5PGvLW+y5ZFeOY+7bjleE6hcNrNKQvkZx/DlvTeH9fJhedCz/PMIt8DX86x85Bc3kIPcIE0ADz29f5t+0fAx+ckSNF1Ywe/OW+SAVRAUrJf8SdZJyB86b7QXrCs8InnfqABHF+KeyjOmyFvfScA1pY5fZ6YFSvWCocPhUrc+Uvj5Hvjv4tIWK66LgnrpV/c532FldaRJ0QzDv98uBxmm8sB7MA5gnzYakquMH2Ez9LbiSvx+sHZ3IpgZGxLiXRgP2wn+uCJRE3Jy2f6m/sfPDICA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=codasip.com;
 Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:17c::14)
- by PA1P192MB3115.EURP192.PROD.OUTLOOK.COM (2603:10a6:102:502::19) with
+ by GV1P192MB2681.EURP192.PROD.OUTLOOK.COM (2603:10a6:150:25e::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.270.17; Mon, 3 Aug
- 2026 12:49:06 +0000
+ 2026 12:49:09 +0000
 Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
  ([fe80::c1d1:f20d:9fb5:72d3]) by AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
  ([fe80::c1d1:f20d:9fb5:72d3%6]) with mapi id 15.21.0270.016; Mon, 3 Aug 2026
- 12:49:06 +0000
+ 12:49:08 +0000
 From: Chris Gellermann <christian.gellermann@codasip.com>
 To: shuah@kernel.org,
 	linux-kselftest@vger.kernel.org
@@ -49,14 +50,16 @@ Cc: richard.weiyang@gmail.com,
 	reddybalavignesh9979@gmail.com,
 	linux-kernel@vger.kernel.org,
 	Chris Gellermann <christian.gellermann@codasip.com>
-Subject: [PATCH 0/2] selftests/membarrier: Skip an unregistered memory barrier test on Musl
-Date: Mon,  3 Aug 2026 14:48:58 +0200
-Message-ID: <20260803124900.3328789-1-christian.gellermann@codasip.com>
+Subject: [PATCH 1/2] selftests/membarrier: Introduce helper to get membarrier command registrations
+Date: Mon,  3 Aug 2026 14:48:59 +0200
+Message-ID: <20260803124900.3328789-2-christian.gellermann@codasip.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260803124900.3328789-1-christian.gellermann@codasip.com>
+References: <20260803124900.3328789-1-christian.gellermann@codasip.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: FR4P281CA0448.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:c6::15) To AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
+X-ClientProxiedBy: FR2P281CA0088.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:9b::13) To AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
  (2603:10a6:20b:17c::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -65,74 +68,93 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7P192MB0787:EE_|PA1P192MB3115:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c3d47ce-a539-4287-73e4-08def15d9af5
+X-MS-TrafficTypeDiagnostic: AM7P192MB0787:EE_|GV1P192MB2681:EE_
+X-MS-Office365-Filtering-Correlation-Id: 70d68d37-9cd1-487c-2c21-08def15d9c1a
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|10070799003|23010399003|366016|18002099003|56012099006|10067099003;
+	BCL:0;ARA:13230040|10070799003|366016|23010399003|376014|1800799024|6133799003|56012099006|10067099003|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	3ctALraGhhp5vN5MF0o9ro2VoFpxeWyQgi+hiNvAmUSqeHTqZsNXe7oRroALgGj/boCVu4QdEEDBrPwmerJGqJFin7dMh/qsujFNZ6VWHV/xl3R9CQIf09XpESesDVTY1kcD/yRmq0PEWkZsR4TUOOtymneB9t78yDCAVdU+2Qg6m3XjYhIPH5T11WmWCFW3yBMRm1zw4m7CfSPKj+yCr83wighCVMihazTk95pImOs5drDXiaQ3UFo/Z3Q8xBW4UCNYLh+5iPQLzPvr0TIoryNB67fbCU9UkVa63o/Y9Yzjh3RHUjTvBEEKAeLniQzvP0ziNX/3PxXQ8eaq2/l5OpgYNWa2WiQtLiFc/tcdb7CaQhcnKAwQyJVIvY8IeJGHaPq5uk3J6D/SAprs+WCAiSIMRg4/vLh45xrK0xUoPfLaykoU0Ic6zn+ISVZKHCCHyv4QQt6nXtbfQUMPhBx+fYhigtTri6kBAQPl9DWdgLKt8i2VNXHzb88Gt+iIWHHcFsYhJjGJO88CcOHFCMqasNQwqQYMJ0mdNLEqLlX7A6BdsXpeRW2KnBHWrRTEfr8GJR5k2qFRTCZoe3WgCFtKLIUo4QFtiCiJQOP3O6W6O//HJcUGQGT6olywUGlihyhI5tC8eqHgx20ZNKDU3nB1YJG/PIM1Loa8XNjF1/81YqY=
+	wN/es8jmvK9v/xWVkCKhJ2RNjnhhG2KFN11LJZQ6GPLoxcKmTgQU7oTx+lu4MsUMWrxNrVdIvbMAC89L+2p918cG+v3j6UOGFFGH29z6sqLyxXTv0kVXHKfmjwY4Km8x5lSV4MmVgcEbK0QJJuoBZAiOweAx+VrhSHxubehYcwGl3rtMHU4e6ycquMOGArSldf5HD5JogsWTDsTNm4cjh9uZHasuECarjZCHWOE54xwywN3VglTkTZ6pZbr2FfpxWgOb/33f4CDLYplVPixuZcNAHZ3r0EHy0OOYyaqVqCgz0Mo7korxZ9jGLpCLteZy/8fvxW4l/TT4Q/8itCvZIPrKxvm6O5iY+cVLMguJGqjj5wZH2CVF67/gbyg3UzgM3mm855mw+0s7w5+cVB77XDG5jjIetbK4JVy6I6J8kq5Z/UuvgIyi3MfdRo2ke0ydqYvaXT8fv+ELqsK7vhD5RmsTzIl7bJ+ooyy7YfEZTWXFuPdFI26f7xtkAjsBCJJJoyqpqok0DbkCc3RZOumyzq9JcZHR3juCK01sK2IA5RCZNLeVvKFHDY4J1GF8OUEOB8Ct6oLN1SuRmKZ7cJihtnwrwucgAz9Swc19ddYKezLj3YSBZLgaQuk8idOZC7vuRY4bToJumOPZDNTs1do3NjWeisDdE41H/F3reSbpQo4=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P192MB0787.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(10070799003)(23010399003)(366016)(18002099003)(56012099006)(10067099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P192MB0787.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(366016)(23010399003)(376014)(1800799024)(6133799003)(56012099006)(10067099003)(22082099003)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?UlGSvXgRWfpz9NXSXxh7fDOjoHgseVQGQHNEa7nOeNhqCWLUVd8a9gOa6/WZ?=
- =?us-ascii?Q?/S79KLxf5tX2VRTsydwidBE32zZGu44G3Hx7AObeS19Aa+XY5I7+k8DVgcJS?=
- =?us-ascii?Q?NIYntWy8vUeYmve25k4Q8aHldaKDMnrwmRGB1vyBR3HtXjE/wGna+WMK850U?=
- =?us-ascii?Q?5cqWw01wQRhe4LKxuYbKP1b8NkWylkTl1DivUMhy+bBKOWtrjSyquWZ0r+L7?=
- =?us-ascii?Q?tHvWsAUvucbDSNcRChSUeSLx843YG5s82MIcXaxH8enK/TdUKqXqL9Wa05iV?=
- =?us-ascii?Q?Fwk627488oy1esPZK6+aWL3Zt/Q62fgYwrx/WocDWwyNslPmMM69pA3jaPcQ?=
- =?us-ascii?Q?4lDXCCmZx5UzdT4n8GQoG7xCLniwkg/5gKDHVdjAXtcpGVqtdO7JHWNShixU?=
- =?us-ascii?Q?iFex6lXv3T2ZZgktmTJF0c86nx+Fk+ULXtrgaFbrMKFULL22xnKXL7iGMHPl?=
- =?us-ascii?Q?p5JALavH0KhigtV3SCvJigFhyppg8TtGlJNHc+rDoABCANxv1ze4SORmoGec?=
- =?us-ascii?Q?wme4fBppVHO2CPsvTsoH4zPaQh7sC/nZ8E8LTgLfHoP/EwaNNtb3g90lxT4d?=
- =?us-ascii?Q?Jmvb4PQkVOvhzhtcPIb4S1hxaXPYMaVl7wW1MvVupDc1j2FqEe2ZP6sCZHC6?=
- =?us-ascii?Q?eNIsGesXxk68iTyiQwfpHq39S+P2/L9BMwkWuyCr7kXWOB7l48nb/g8p1sj+?=
- =?us-ascii?Q?irfy3NC5Qz3AZZj6+3ZVyOQa3T23btbZChh4p7gV8ptSgWV3/7p7XZaCc97z?=
- =?us-ascii?Q?v8qR5LsX0JCvpH0HGJOrOZJYau4BzJx8Yh//V9/Od3CVtXmzJrJuvXAdAGwt?=
- =?us-ascii?Q?3OQESGnrZHxvvhoi0CcPpaOesirvpW+xnLHt3isANOVBHgjZ/Tm61FQlS/bn?=
- =?us-ascii?Q?jSTOrkF23b9hNl+2PecERU/n54Ih/Pdlml032dWT9es+y02QHDvNnZ3m/f8p?=
- =?us-ascii?Q?2kzahJmssukKmWq0OzizX5CEvYM3DIH0rthP2Byf4cULgk8YRWDPk8NEP2de?=
- =?us-ascii?Q?Yy0LuyPipOs+ZKoEpKGp/Gy4i7v8QV1OPof9C2P/Ne2ylvHWGwL2a1Qv9tl7?=
- =?us-ascii?Q?BYvWdrFaIxsLJ5xttEI1pZY5qWLkxD8Fz+IDvEHjH0F67ktG33ImjYYyBEVE?=
- =?us-ascii?Q?WRYDwLwGjCxU/84VhQ1H9frEebYp2xWOODJzg9x2aiIOmIWQbFSjY8N58UwY?=
- =?us-ascii?Q?zehuuA3HZ0uujaRVww94siw7Cq+XcWhNM10i2N9xjkY6kJYidNRelo98nyZ4?=
- =?us-ascii?Q?jRYJXxnM5rU0+s9fM4JS/aA3DwDoOS4mVH7Ooy40aMyK0ljFGo6wsjuEkWMg?=
- =?us-ascii?Q?68/OWFoFWI8y25/7C4aMjtjWPCgJoH/j9j9Ot0BQjCfRX3i0buKuOUF3RroT?=
- =?us-ascii?Q?PfN7hWaJufzCBT63j+MCinIEx4vH/cQ8fk1cuXF2SIKiwPGjdzSqicnS9uhM?=
- =?us-ascii?Q?H6R7+hYVLXPPVYnAU9IMXMnNCJXCzATfnwc0r0cMAJ2g3bBkyKP4q/lTUZk/?=
- =?us-ascii?Q?cJqIhrKQcqhK/QNbeRT9+J4I/NyE5wU2H+NMNFJ+HAd6TCSOZhQhvNamHewp?=
- =?us-ascii?Q?qKLuYg+205L55UFJYAVU+07RPc+w1ggJOuaWyxZm5N7mwmI0IjgCBukoeFuU?=
- =?us-ascii?Q?I1AUiMrJZjQN8DMNKowKQZjR3jPNY0KUFBSXqtIQl/yW2Z3yjj9KoT1xwG8+?=
- =?us-ascii?Q?+pL2zn/YL7iPBx/9mIO42Xg+yuTS1irClY03Nms6s+UjhuMxdoVc+mAMn+2F?=
- =?us-ascii?Q?uljUJn1Yjp43NngsmS9QX6SzYzjBQtg+9KbBaVxkm+8PeMoSUdCVPdtoAZo4?=
-X-MS-Exchange-AntiSpam-MessageData-1: Eymrpe2zD2yWq8wWZ3Gryc7ALvoqeEj7xt8=
+	=?us-ascii?Q?fkFNE9ULnKK4Hfcr00ABgb30kMaZ9mZ0PCk1SSd38M+WuE5Ygdda+bresJ6e?=
+ =?us-ascii?Q?ngt3bNGcmFOH3KngBulyeEnZo76KuY1mhUbaLZHJKCr/DFAKpf/xGCBip/HS?=
+ =?us-ascii?Q?nTKKyEHAY0Ba1a90IxbnI8QOKpKsWABgUbx8fSp9odQ1OzYBqQUMszWyBaba?=
+ =?us-ascii?Q?UKN0lwybDKNj7JSGtjZ41wDUtr7p2UO2MJSy/DUSjnJxB+Qhu4PHhZ/ArCM4?=
+ =?us-ascii?Q?P6i21IgME76db/62VcwIytXjBBoubnrhVpyxQNI64XYR2BecGTleTdHwkRpJ?=
+ =?us-ascii?Q?+ji8NkF/R7EDw01VLSMXGaEdtiyQBFLVJBzTn7CRCV5HInKnZLcCJexHWp0v?=
+ =?us-ascii?Q?H1LFNFo4YL0SZ3nVp8wsAn9ORZZXYKQVxGc8rMQnA/hGe+bqEfIWmBrYgLZV?=
+ =?us-ascii?Q?VmDhqJCrLjCq5Q0g76uW+h0uzLBwb//feYDiuKlQfghDBJVNrMokzzg5BSso?=
+ =?us-ascii?Q?tntWSeFMIJoD3C0tEwo23uBeDK572rxvgTBd5YbkZk38/z1AjQiNeESX3qN+?=
+ =?us-ascii?Q?X2bRH85NkVLeN7fTTDehiYLxINcILyzFwRSYvbF6vWWM68mObXs8Y0mPUwy5?=
+ =?us-ascii?Q?bPTGKRTJHzNGFWgP9nokTkKuF5GDNebQDCKs+g2oPTMICJOn1F21s9nZrnKe?=
+ =?us-ascii?Q?BvJDxwvIvaqh7WByLftQguJsn5OnODRf58xJ5PvhdtjAcRb2MXLsj4IC578i?=
+ =?us-ascii?Q?4LRcgTjTNGBB+ddTBbnZfdxMt8g4hWX0cIKWY2ujdKvShDQjvb2TDrubuPX1?=
+ =?us-ascii?Q?ljuMdfPy0JaNbl/MsM/hM1GghXHFWRuEPuI2vLgeLBmSh6PhPPaktywT3P87?=
+ =?us-ascii?Q?h5DBt96ZQQ+eu4mjPjVZ5PEmLfIFbLQhhzz2hmhbmGuICXrQ8+zfVPEZP4iH?=
+ =?us-ascii?Q?tDzOLFJ/kCVvDyW74w1FI5t7WqX2Kgs43c9hrc9N1wnMc1flsBJKWbwzXspy?=
+ =?us-ascii?Q?G0u0l0GK/dgCOEGjsWd2yfFCSG1UaRxqlIPzEKAL5KJYmWxsEC7dNogomhQ6?=
+ =?us-ascii?Q?KqXiatkVWzm+Mh+gaVhm5F4vuZeAbp1MAY/kR1a2pXzmp5nQfQR27h/8TML5?=
+ =?us-ascii?Q?OXvSYOhZiq5MBdNdNtdPy8ADjevdCKN+C+uHnuLDYlWq4PgA/s8ySkyg5LAD?=
+ =?us-ascii?Q?oc60amKmEvIPOH2dXKwy4ZZ7nVmqbBwVQr+uh9+27iJMm+oc7TF5ZnpYQEZl?=
+ =?us-ascii?Q?dKmzXWB2/WY2vT5PDvJGMKH/S7z51xgcsxKBPDCAw+BCqpXqYAC4QyhnXcGd?=
+ =?us-ascii?Q?np0lmpGq8eiOMEpCtKJOb6j1Fs3onYTrUBVLDlietoX+BFGHUjjKlmRcHXqw?=
+ =?us-ascii?Q?h2LmUewyxNJK/waxVxmJVdmHpaYPRLSyvHqjMQ9WUKD1ObOyMEpMw0ZNzX9J?=
+ =?us-ascii?Q?o7GzRrIW+wG3j7tgTo5Z5ihFW0zTfHEFBE6qS0hbCHOro32+vseeyrfjymbW?=
+ =?us-ascii?Q?cvuIhKaX+xn21cGVkmchFVsvgGiZYwDB659Kc201yvwjeahMRuSnFhaS4UYb?=
+ =?us-ascii?Q?d0QWkXrZd9fiu7ELgyDAR3Q3C7JtSx6ZSc+1yz1QjzsS1d3uiTBg/FSDP5gC?=
+ =?us-ascii?Q?mPJHAzmNbwhLDwYEgzBxNvqJj+myOXBnRplSHAptjWgpKl25ySJihClShl6I?=
+ =?us-ascii?Q?lQpVZiZjR735XF8djP86phOJovPS52BXV9EidCUOUqoB+1hyU12glJsaFi3u?=
+ =?us-ascii?Q?WKCAT4wRfopxcIY4uYX3bz9Jfr4U97dXeg5uRrgx167hG77F7qFqgzNRP5fH?=
+ =?us-ascii?Q?YDaB9Z1asRrkoNC/VU67M+Dni2EQUqepYPlSeBrotcw/C8BkAx0MuOvoe6w5?=
+X-MS-Exchange-AntiSpam-MessageData-1: 8VRacmEiOSBCY3XpNZqFZS1mAg+g2Tyv26k=
 X-OriginatorOrg: codasip.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c3d47ce-a539-4287-73e4-08def15d9af5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 70d68d37-9cd1-487c-2c21-08def15d9c1a
 X-MS-Exchange-CrossTenant-AuthSource: AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2026 12:49:06.7883
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Aug 2026 12:49:08.7031
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 0d91ffef-bb81-4cbd-b9b8-552583685f20
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 64inYt3exVJX2sBLq3VMOqMw+zZbO2JjLXw6qHDK1RYmyHKm4idxY/ieOC9lMXZ3x/o+KhZgG9mBRqIdSgf/VSW/SoWgfTnhExQ4sZZ5QtxVE4Pza1X4bvLafhADbLQE
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA1P192MB3115
+X-MS-Exchange-CrossTenant-UserPrincipalName: 5YudJ9+mb4N/H3g9obuyqWZqRxUJvS2/qmMytO3bkFVfCvAqr2jcdA0MClMzsmh4KYw9b2fu/8nrwejoO1rDXIE8X/6yEHiwUnq4IqeT6OOT1bb50T6dfCMxPwiGKn9T
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1P192MB2681
 
-The membarrier test "membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not
-registered failure" fails in the multithreaded test scenario when using
-Musl libc as the command gets preregistered implicitly during thread
-creation. Skip the test if command registration is detected.
+This allows reusage.
 
-Chris Gellermann (2):
-  selftests/membarrier: Introduce helper to get membarrier command
-    registrations
-  selftests/membarrier: Skip unpermitted membarrier command test if
-    preregistered by libc
+Signed-off-by: Chris Gellermann <christian.gellermann@codasip.com>
+---
+ tools/testing/selftests/membarrier/membarrier_test_impl.h | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
- .../selftests/membarrier/membarrier_test_impl.h | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
-
---
+diff --git a/tools/testing/selftests/membarrier/membarrier_test_impl.h b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+index f6d7c44b2288..29aac3bc4988 100644
+--- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
++++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
+@@ -16,6 +16,11 @@ static int sys_membarrier(int cmd, int flags)
+ 	return syscall(__NR_membarrier, cmd, flags);
+ }
+ 
++static int membarrier_get_registrations(void)
++{
++	return sys_membarrier(MEMBARRIER_CMD_GET_REGISTRATIONS, 0);
++}
++
+ static int test_membarrier_get_registrations(int cmd)
+ {
+ 	int ret, flags = 0;
+@@ -24,7 +29,7 @@ static int test_membarrier_get_registrations(int cmd)
+ 
+ 	registrations |= cmd;
+ 
+-	ret = sys_membarrier(MEMBARRIER_CMD_GET_REGISTRATIONS, 0);
++	ret = membarrier_get_registrations();
+ 	if (ret < 0) {
+ 		ksft_exit_fail_msg(
+ 			"%s test: flags = %d, errno = %d\n",
+-- 
 2.47.3
+
