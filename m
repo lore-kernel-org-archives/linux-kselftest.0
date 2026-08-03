@@ -1,32 +1,32 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0278B346E74;
-	Mon,  3 Aug 2026 22:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F83D30AAD8;
+	Mon,  3 Aug 2026 22:59:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785797888; cv=none; b=iAmknt2DNKctos36cyzZQSJlpmUXOq3AD2BEp+owYY2ZK25GnOlMq0QcdIUac8U2bj89kOF1jv2XuYKUIczLXIBGZ5CKmA78LkjTRN6BiX0LYyx975Buqw/pT/+uKd12ri0m0rKW/3xDM/o1yQaVtq7EE7RvyKLWMLAmG5+3S2Q=
+	t=1785797977; cv=none; b=P1+gUwHjSll9cDAn51DOezWbpBlNqTJFd+0TbzQP3vE5GWygip10VC5UwOlck9vxzPSqnQHpeYagZjInsfk1RAByLlNrp+DTuP/jRnbhmHU7UnyVJOnl3d1a7RNqj13bg2VVj6LgiLhR6brsw5+ptaaVxu97RmhnVteUP5QJhEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785797888; c=relaxed/simple;
-	bh=RP5WQHhYDCyWUa9VYOEa8iHCOuAhPZJOG8nmx1/4z2Q=;
+	s=arc-20240116; t=1785797977; c=relaxed/simple;
+	bh=BT6L0YM+7XRWWJH4N63NgGpTtrUVEd3FatngU+jwBrQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nCm5eEoskbXHhf2xaw3VQtieh22lqoFYzlQXITG5Izo7HJEDrXTpLvGhSzFpC4ExCvyBh+3zz4fHbSQWDwrCgC9aqhUVi4xRY5gsgzPYP+BKE9oU+9CKjckJOe3AHIooe1RcF3SPVf5BnYu4H+lPRrRe3ztt7a7hGhJ2b7bgmp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ai5Kn19W; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=A9s6ryxyLSYSAHN0shZZcGB8LoG2DwpLncsNa1rgkC/kS6EKAKf2KRdQ6G3LZ8b4inwH1y30khcc5tMuketNVYgiyTNQf+YV3oinkRy2W4M4A/qIxOYEs9Ct7xKYH7c01d3kjOtZfQm1oouhGOdbDM1kBxSdrFzyWEoVKrMA5Pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Duw8EgtQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ai5Kn19W"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 169451F000E9;
-	Mon,  3 Aug 2026 22:58:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Duw8EgtQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E9AD1F000E9;
+	Mon,  3 Aug 2026 22:59:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785797886;
-	bh=Vj2Hn3T+uJ4uveUVWkfGc+T7+e+aekwW/0wRv+NzPT4=;
+	s=k20260515; t=1785797976;
+	bh=8CkxO/DTgGFaa2J/7qzYtaC2jJ/ZmsNmDU8sPOU7JCw=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Ai5Kn19W5C6iEJK7eV6IaYaMGRWMMUrkDphANE5ibnVoxcXjQNCYN7403Z7fXCfOR
-	 Ouh3SRsuwZxPhiBnd4qcyr51YKPETimPV+j+gim6AJBi7+KcwsFGgbq8UT7xZt5Jh/
-	 9WkcPuuPzMNBOz6TLTIaH6bVIl04IZDe2HCza3QpQg010swBHwBu+DUzXV42UCfacW
-	 NVSQzwGuWR4rH+RH4JkM2Cr20le8KUPf0V819mUUrKQ9dvl3Qme3nhlEMBnr03qkID
-	 jO6M5GYjNbJKMYnNUZFdWfLB1ajD6mjGXggS42i9K8GPOis/Jjer4+tCjnFdTzkhup
-	 w8KoGz0xqanrw==
-Date: Mon, 3 Aug 2026 15:58:05 -0700
+	b=Duw8EgtQblVNXNeSfqUAmph7eg47+UAAEoMgZNZkQsGLHhKwGY321V246j0+rgSg2
+	 BRgN9/fUOqJsw33lQzaD4gXpTt22tLNagfS/xVvxoNzKBjiHxbRJFg7oO4qCX9jtmt
+	 HqaFajLN14Pke0PG18QcWninRuLfGLoY+Q7Iu8/jR+bc4XLB+lAu5ImrBgHXpUsa0N
+	 rg1LBaTe5l3yXlqy4TTs/nseDybPwsZqIQ+x9XLuQ5T4hlxP9YNJ6pnWC2SrW1E4hm
+	 HKuc3rShGGY1MHeqMzMpOsIR+fd+nqdBG0oL8PpKM0VMHDAk/LLH1OvQ8rqrLeLQ/p
+	 S+McJ9MjjhNyw==
+Date: Mon, 3 Aug 2026 15:59:35 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Chuck Lever <cel@kernel.org>
 Cc: John Fastabend <john.fastabend@gmail.com>, Sabrina Dubroca
@@ -34,11 +34,12 @@ Cc: John Fastabend <john.fastabend@gmail.com>, Sabrina Dubroca
  <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
  <horms@kernel.org>, Dave Watson <davejwatson@fb.com>, Shuah Khan
  <shuah@kernel.org>, netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 0/9] net/tls: Receive-path fixes for zero-length
- data records
-Message-ID: <20260803155805.2441c4d5@kernel.org>
-In-Reply-To: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
+Subject: Re: [PATCH net 3/9] net/tls: Fail tls_sw_splice_read() after a
+ failed async decrypt
+Message-ID: <20260803155935.0f023e4f@kernel.org>
+In-Reply-To: <20260726-tls-follow-on-v1-3-99bf4cc1c729@kernel.org>
 References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
+	<20260726-tls-follow-on-v1-3-99bf4cc1c729@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,17 +49,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Sun, 26 Jul 2026 20:33:28 -0400 Chuck Lever wrote:
->       net/tls: Bound time spent on no-data records in tls_sw_read_sock()
->       net/tls: Consume empty data records in tls_sw_splice_read()
->       net/tls: Fail tls_sw_splice_read() after a failed async decrypt
->       net/tls: Honor O_NONBLOCK in tls_sw_splice_read()
->       net/tls: Consume empty data records in tls_sw_recvmsg()
->       selftests: tls: add peek and splice coverage for zero-length records
->       selftests: tls: skip the zero_len tests when TLS is unavailable
->       selftests: tls: cover splice on a nonblocking socket
->       selftests: tls: cover splice after a failed decrypt
+On Sun, 26 Jul 2026 20:33:31 -0400 Chuck Lever wrote:
+> When an async decrypt fails, tls_decrypt_done() records the error in
+> ctx->async_wait.err and calls tls_err_abort(), which stores it in
+> sk_err. tls_sw_recvmsg() and tls_sw_read_sock() each read
+> async_wait.err once they hold the reader lock and fail the call: a
+> record that did not authenticate breaks the connection.
+> 
+> tls_sw_splice_read() has no such check, and sk_err does not stand in
+> for one. tls_rx_rec_wait() tests sk_err only inside the loop it
+> skips whenever a record is already parsed, and the first reader to
+> reach sock_error() clears it, while async_wait.err persists. A
+> splice therefore keeps delivering records on a connection that
+> recvmsg() and read_sock() refuse to read.
+> 
+> Read async_wait.err in tls_sw_splice_read() as the other two readers
+> do.
 
-Could we get patches 3 and 9 out as a separate series? 
-These look uncontroversial. The zero-length record handling looks
-awkward TBH.
+Reviewed-by: Jakub Kicinski <kuba@kernel.org>
