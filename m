@@ -1,208 +1,134 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25C9F305680;
-	Mon,  3 Aug 2026 14:58:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1D341167C
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 15:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785769141; cv=none; b=CLLXxNYUQXDYNLbRs0GboTCfPOINVXrenuVoqv70KavJvU687YPAQ7FV/5lkkMmKCN/o829HXWp/juLsrFimJ2011eOfp8oWPmgAnGUwJ3H0wOVK14IB2MZ9nXioPJbGkGGsnX20Fo007nkGwhdQwnVGTgPwl8XpitCrhROTbpw=
+	t=1785769424; cv=none; b=D1/HAwYMi+S5mjP6vlX4Kb81ydps1Fd/YpclfDR9p9TqBASul2sDsakiCq28+UmGQ99bwt967BcolVYBG6nVPxVykvBTebIRTZ5/P0tqDzppZoJ8nndJEC0O8mGge9ew27vNa5Erp38hSfZY+5glmw9OCQGCNJ2tWdSN05uX1m8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785769141; c=relaxed/simple;
-	bh=n+kuhyjpsg5KsYLUmE3+s4GQPEHv6EIKxA0ELjZSEpw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0CasaDSbYCf/UiZ2HZ3qYbe3nhnG3u/DfXkDs58ubdTKAfPrt2/h7sm7qzEq5K/snYy9ykDzhWbyya4uN89TwpuoL/X58edz8YeJ0ZgGejTDjSHcxc9YqPO8XaL4gYWdVxLtjkGxo1pbzM/0BcgEzgh36ZRFaKD2IEb92QGpJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=ZBK2M/U0; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1785769424; c=relaxed/simple;
+	bh=xpuun2FpwKl9xPy2b0ojl3YaE6k3z96AypSR1+LJ1mM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=e5w3PursMrkp31KTM/Nks0VCX0VRG7ir7kklUDaAt9EtFGfpdqNoDixmtN0brbpAtUcOwOOdMk/tfWsQwiFKMhnSGeoyM4JRMihjVKq9uNHxDTlVtJDmTKyWMoFwXBc//QmuYAGDhepbaF9H6SSROOvdTgsQnHVCFhfPOp0tV6c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NwgDxCAO; arc=none smtp.client-ip=209.85.210.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="ZBK2M/U0"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 673EHXch413660;
-	Mon, 3 Aug 2026 14:58:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=Q1c+3zs/Iw/boPCdlQp4D+7ndLMI+0SjWCyDtVZhp
-	bw=; b=ZBK2M/U0Hyik2MpEbOGXWJcoVYGCbTA2rh/A1Hf2ocYuF3rZ5XrnMPGb4
-	/B/puKZ0jZ0R0ydaHBu3aOYmkxHMRCxsypcKTWVNenlOKqQN9HbIRBIqPowoKCPQ
-	QmGmSb5HLbgkIlEV0NtS+8LXpf7RUdTvAo8jLKkGVlbNy0Y1EFnCixhigWYBkcqv
-	gsILtta114iEVzBC508rtS70p69fGJjaKWIknei4GqPZARr7WzaWXBZy26g2JWyN
-	je/YTWxBKj9VmROI2W3VyA1JGdT8hYSzO1MuewQkGMxbL/vXITrITnsta3KPFE6K
-	Fe1dKTWGdx4GshakrVIsIE2k6koog==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs8fqhca5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 14:58:37 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 673EuFPQ014633;
-	Mon, 3 Aug 2026 14:58:36 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fswbg5p45-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Aug 2026 14:58:36 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 673EwW9B30933306
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 3 Aug 2026 14:58:32 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B3AC920043;
-	Mon,  3 Aug 2026 14:58:32 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B9ED120040;
-	Mon,  3 Aug 2026 14:58:28 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.39.27.127])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon,  3 Aug 2026 14:58:28 +0000 (GMT)
-From: Disha Goel <disgoel@linux.ibm.com>
-To: shuah@kernel.org
-Cc: brauner@kernel.org, cyphar@cyphar.com, amir73il@gmail.com, jack@suse.cz,
-        ojaswin@linux.ibm.com, yeswanth@linux.ibm.com,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        maddy@linux.ibm.com, ritesh.list@gmail.com,
-        Disha Goel <disgoel@linux.ibm.com>
-Subject: [PATCH v3 1/2] selftests/filesystems: Move file_stressor to dedicated subdirectory
-Date: Mon,  3 Aug 2026 20:27:19 +0530
-Message-ID: <20260803145720.87583-1-disgoel@linux.ibm.com>
-X-Mailer: git-send-email 2.45.1
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NwgDxCAO"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-84e048a801dso5245947b3a.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 08:03:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785769422; x=1786374222; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kpmlhPaZ29dFNT38yqO3kihwGUlr59oo46zK4tKVuxM=;
+        b=NwgDxCAOP/Xtj8kYIjHtm6DbddQCtB92rxY3XZFV546upM9mp6NbsBf/OhR0+ElIny
+         F+2Zt9cfHVO5hVNYxXdXfA53A3ZkIr+BBjkSbBSt1dfLuLhXm9JsOiOpGGhbypYcS1nU
+         gxf6DtDemW0fLSSRPCtYHtFRbViRbT/DJ/tWusGe1eeILGOqWrmbe3aGO4Ri+pnd7O/N
+         TiNu3TUQZP78ygRPv3CkdOYfJ4URivnbfsPBpsUHbYoquTwi6AyQV13iBlUcFnCqykcN
+         6m5IfnXtHqnJgo9UZnFH3MFMAavHS+RUUeCzSCjV7fY/qurLk3V/Vo+L4UE2gOTGBfqu
+         5FHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785769422; x=1786374222;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=kpmlhPaZ29dFNT38yqO3kihwGUlr59oo46zK4tKVuxM=;
+        b=oGR/3RgjrICMOKstNVQQ0Ll926bZRqCkBMFAhFYreYR4uQbgJGNyfbgY51VOjXI5Ev
+         2g+sSbuhjl3B82TPOLEB03wo/8cm0bN/SnlziV3Em2Lv00b0S0pbFeashOn68J/6MuRi
+         B1ZH3ILCRtrWPvPwlaYKStaS+xtuxdH1MIS2+n7Q68f2+EC1ZT/fAP2rVVAK0BoKcM+Y
+         oydPv0jnhh7y6j7h/LmZPnV3iUqHrb5yhYM0z75wVKF3c6kh05Yk3WTUFtOi+4IiBuR6
+         1J0lCp44DDvHJNH4ZUBA4QmrXw5m6qsxpxJEybuOtOENaN1ahDiI7766izBJK0lr2kLe
+         Ujhw==
+X-Forwarded-Encrypted: i=1; AHgh+RoVDLOZPy7uyoJ0aGLmaB4PcWln06XAMX9Jjgafz4drkBKOk0Ucv3Z2Pqw9rdyJiEVKg+IbhgUk/7S9wP6yMEM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw59VgWo/qbY5HmCxQAp/IuOGnexXj0JqVlRiYVO7iLgtX3tm+y
+	KyLoH9iGG3xwSlw/pdZ0hjfQrCWmMqzF+EIyVKYRK5tNcDBNp3UpnnH5HmUS40esL4g0iS/IhD4
+	uI2IwEg==
+X-Received: from pfbki10.prod.google.com ([2002:a05:6a00:948a:b0:847:7765:a4c3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1f08:b0:84e:d51d:86c9
+ with SMTP id d2e1a72fcca58-84ee490ac84mr9200662b3a.44.1785769421725; Mon, 03
+ Aug 2026 08:03:41 -0700 (PDT)
+Date: Mon, 3 Aug 2026 08:03:41 -0700
+In-Reply-To: <be77c2cb-6e41-4382-9d2f-cd299f634196@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Reinject: loops=2 maxloops=12
-X-Proofpoint-GUID: Pn7hLBCZ_LX9tXLG50AoQiXF_WCM2E4y
-X-Proofpoint-ORIG-GUID: LFna_2RtBq339IlNS296aGjPJr3_HtTB
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODAzMDEzMyBTYWx0ZWRfX/NXRfiaSNSov
- XNcG+DljyVAwIrxXzEe3p5Ty7tUm9L+t80KgGtlreWEu1im4x44spwLsJRjuwAP1AZnHIN3Muf3
- VWmoho++eZaGzd62qmZx2ruyQTU4FLc=
-X-Authority-Analysis: v=2.4 cv=K8cS2SWI c=1 sm=1 tr=0 ts=6a70ac9e cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=Nd5QJyihG-i5uVEzlt0A:9
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODAzMDEzMyBTYWx0ZWRfX+o0RTZae3TG2
- aoe7OWJwiHxbfPAR9qGyXvpeQBL2l6m7o/9Gq2Od7sY8zyxs2hRAwde9UM1PWt7YXKghyTKco3w
- w1p/P137auDN6nbTkF3NSxOmQU+OIoawtaL3CliiCTaJUKGRTu0yIVaMGmrEksEQZVOGNVSXj0c
- g4JNRgCPiOMDt5LQNVVY1uVoJ9ZKmiCvWPnEB49o18gxmmke2reNy3Teib4nKfTsnFXRmugN3Rl
- +olDrFyPqOqvmMaDJqM863C3G8V/9FicNhadZbAM7sib5HGfog52DOtNzOqAfmAU7WhVmJ2wO1i
- J69mWa+n7LbJNXaIGutoASK+qnbxqEzgyH6Y5PfUTvgZnWY202IPHIRNotIkhhK6Tc7JGilHpCv
- B9HEC/47cJ55yi5c6Aq8fHzM+yA9NCyZjGJVOgDLPGw5Uxoe39ZTDrCQPMJrRSNCyjEXbccsYTq
- iEPtO0wx6m0rAq0lBQw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-03_03,2026-08-03_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 spamscore=0 impostorscore=0 bulkscore=0 priorityscore=1501
- lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608030133
+Mime-Version: 1.0
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-14-35f9aec2aed2@google.com>
+ <4460e252-b6de-4df3-bea8-0368a9d0f4ff@kernel.org> <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
+ <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org> <edc3566b-370c-41a0-a71d-2e4a0e1a94f7@kernel.org>
+ <CAEvNRgEas_9BEV-cNxXu4_wQx8sR2M4_OaW6DEd4=fszALMV0w@mail.gmail.com>
+ <60552bee-3326-4917-b00f-5fb7ba3b8adb@kernel.org> <be77c2cb-6e41-4382-9d2f-cd299f634196@kernel.org>
+Message-ID: <anCtzQrUkFSSq8De@google.com>
+Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
+From: Sean Christopherson <seanjc@google.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "hughd@google.com" <hughd@google.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-The file_stressor test requires a 30-minute timeout (1800 seconds) due to
-its 15-minute runtime plus setup/teardown overhead. This is significantly
-longer than the default 45-second timeout used by other filesystem tests.
+On Fri, Jul 31, 2026, David Hildenbrand (Arm) wrote:
+> I sent a fix for the GUP code that always makes us drain right now:
+> 
+> https://lore.kernel.org/r/20260731-check_and_migrate_movable_folios-v1-1-e0002d7b791e@kernel.org
+> 
+> Would the following (agains mm-unstable + fix) work for you?
+> 
+> 
+> I assume that you'd have to call it as
+> 
+> 	lru_cache_drain_for_folio(folio, 0, NULL);
+> 
+> But maybe there are indeed extra references that are not reflected in
+> folio_expected_ref_count() that you would have to consider? I doubt it, but please check if
+> there would be a problem.
+> 
+> There is a small problem for merging:
+> 
+> (1) The patch depends on the fix.
+> 
+> (2) mm/swap.c was moved to mm/folio.c in the mm tree.
+> 
+> We could write what I have below against Linus' tree and have the conflict be
+> resolved when merging. Topic branches are unfortunately not yet a thing in MM
+> land.
 
-Move file_stressor into its own subdirectory (filesystems/file_stressor/)
-with a dedicated settings file to isolate its timeout configuration. This
-prevents the long timeout from affecting other fast-running tests in the
-filesystems/ directory.
+Are you expecting the aforementioned fix to land in 7.2, 7.3, or 7.4?  If it's
+7.2 or 7.3, then I would strongly prefer to base v10 on linux-next (where the fix
+will presumably land soonish), and target 7.4 for in-place conversion.  Then v10
+can be applied against an early 7.3-rcN and we don't need to juggle branches
+(assuming Andrew is ok taking the proposed patch through the KVM tree).
 
-This restructuring follows the pattern used by other selftests with special
-requirements and ensures proper timeout handling in CI/CD environments
-while maintaining the default 45-second timeout for other filesystem tests.
-
-Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Tested-by: Yeswanth Krishna <yeswanth@linux.ibm.com>
-Signed-off-by: Disha Goel <disgoel@linux.ibm.com>
----
-v2 -> v3
-- Add Reviewed-by and Tested-by tags.
-- Drop erroneously added Reported-by and Closes tags from v2.
-
-Link to v2: https://lore.kernel.org/all/20260521101758.14639-1-disgoel@linux.ibm.com/
-
- tools/testing/selftests/Makefile                            | 1 +
- tools/testing/selftests/filesystems/.gitignore              | 1 -
- tools/testing/selftests/filesystems/Makefile                | 2 +-
- .../testing/selftests/filesystems/file_stressor/.gitignore  | 2 ++
- tools/testing/selftests/filesystems/file_stressor/Makefile  | 6 ++++++
- .../filesystems/{ => file_stressor}/file_stressor.c         | 0
- tools/testing/selftests/filesystems/file_stressor/settings  | 3 +++
- 7 files changed, 13 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/filesystems/file_stressor/.gitignore
- create mode 100644 tools/testing/selftests/filesystems/file_stressor/Makefile
- rename tools/testing/selftests/filesystems/{ => file_stressor}/file_stressor.c (100%)
- create mode 100644 tools/testing/selftests/filesystems/file_stressor/settings
-
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 6e59b8f63e41..d87fafc6aef6 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -34,6 +34,7 @@ TARGETS += filesystems
- TARGETS += filesystems/binderfs
- TARGETS += filesystems/epoll
- TARGETS += filesystems/fat
-+TARGETS += filesystems/file_stressor
- TARGETS += filesystems/overlayfs
- TARGETS += filesystems/statmount
- TARGETS += filesystems/mount-notify
-diff --git a/tools/testing/selftests/filesystems/.gitignore b/tools/testing/selftests/filesystems/.gitignore
-index 64ac0dfa46b7..3c44753914a6 100644
---- a/tools/testing/selftests/filesystems/.gitignore
-+++ b/tools/testing/selftests/filesystems/.gitignore
-@@ -2,6 +2,5 @@
- dnotify_test
- devpts_pts
- fclog
--file_stressor
- anon_inode_test
- kernfs_test
-diff --git a/tools/testing/selftests/filesystems/Makefile b/tools/testing/selftests/filesystems/Makefile
-index 85427d7f19b9..7d342755aa3f 100644
---- a/tools/testing/selftests/filesystems/Makefile
-+++ b/tools/testing/selftests/filesystems/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- CFLAGS += $(KHDR_INCLUDES)
--TEST_GEN_PROGS := devpts_pts file_stressor anon_inode_test kernfs_test fclog
-+TEST_GEN_PROGS := devpts_pts anon_inode_test kernfs_test fclog
- TEST_GEN_PROGS_EXTENDED := dnotify_test
- 
- include ../lib.mk
-diff --git a/tools/testing/selftests/filesystems/file_stressor/.gitignore b/tools/testing/selftests/filesystems/file_stressor/.gitignore
-new file mode 100644
-index 000000000000..1eb3f40077d3
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/file_stressor/.gitignore
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+file_stressor
-diff --git a/tools/testing/selftests/filesystems/file_stressor/Makefile b/tools/testing/selftests/filesystems/file_stressor/Makefile
-new file mode 100644
-index 000000000000..88c8231ac144
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/file_stressor/Makefile
-@@ -0,0 +1,6 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+CFLAGS += $(KHDR_INCLUDES)
-+TEST_GEN_PROGS := file_stressor
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/filesystems/file_stressor.c b/tools/testing/selftests/filesystems/file_stressor/file_stressor.c
-similarity index 100%
-rename from tools/testing/selftests/filesystems/file_stressor.c
-rename to tools/testing/selftests/filesystems/file_stressor/file_stressor.c
-diff --git a/tools/testing/selftests/filesystems/file_stressor/settings b/tools/testing/selftests/filesystems/file_stressor/settings
-new file mode 100644
-index 000000000000..b675ca93f936
---- /dev/null
-+++ b/tools/testing/selftests/filesystems/file_stressor/settings
-@@ -0,0 +1,3 @@
-+# Timeout for file_stressor test
-+# The test runs for 900 seconds (15 minutes) plus setup/teardown time
-+timeout=1800
--- 
-2.45.1
-
+Irrespective of this small mm issue, it's getting a bit too late in the 7.3 cycle
+to land the in-place series, and we need to address Xiaoyao's comments, i.e. v10
+is going to be necessary no matter what.
