@@ -1,33 +1,64 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAF333C183;
-	Mon,  3 Aug 2026 15:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D94A033C183
+	for <linux-kselftest@vger.kernel.org>; Mon,  3 Aug 2026 15:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785772434; cv=none; b=GDfSq/Mi6PeqO58ioZ5rWaIDL/Ex8zoa1eMMiyGLzdhr0mMgohD7Jgb5Y6cClhK23BFOc7o5dF1816tRA2uz1zj9TxDPQztRA97bB63yZnnwe8u2c4jcSlRXC0n4Fmw+4P5PwMa1088Af/3M8+4iAlD7++1qki3b67o5oGNO93I=
+	t=1785772573; cv=none; b=o0wwrT67VdTqhZnPrwxS0dC1AJB8JBhuK9lKAODwK337qJItd1GncRxRv+V8DLFz/rrgZEe0ZzA3EptUgMZTOVqjEf6FH/W0Io5Q0FkgwreLWfOKEQ1RugYn9Y7cmttPZisQ8cZ4UTyMFlIi0iULlGkD4l/iTLirth9euscwZKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785772434; c=relaxed/simple;
-	bh=bipZvbkqUPc5n72uKORzyVnSydHD9nn566F6fsSOJZk=;
+	s=arc-20240116; t=1785772573; c=relaxed/simple;
+	bh=GWcILHSPgl33zJRFqewc4R17VJZqifG3UyuvPdkNFBM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IRI+KpDcU0rLiF9CekrzoS04B+tO8SS/4jflRAtXSRyxMDTKUDNX2n2Bjq1KeLDOCnx4qpqddnlQfNGXpMwZEEtTEiqRPQacEwjtDzz940SFYIZzk/j9LrHm9r3C4k73K9i6InzeB9pboTpXQZNFRF23q2u1PLVrVdocwlBOhIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=FV1tr54R; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 In-Reply-To:Content-Type; b=KuGTpt+GFNhf0rI0sThirArXSrj/vUXcugic5izrpkr46Z02DTFQqICCoZ4FEaP3xB4mJqyhThXmnEeNP9EHiQsvswFfSfn5wzwwzBl2vMznptrAggs34PtE2kPd7HsVy6NwZAZCOxKSsOWaRN1x56BBJMxRUUJFA+Gg+p6LTLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RPAp+1Ra; arc=none smtp.client-ip=209.85.167.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="FV1tr54R"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 08DE61476;
-	Mon,  3 Aug 2026 08:53:48 -0700 (PDT)
-Received: from [10.2.197.99] (ewhatever.cambridge.arm.com [10.2.197.99])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5A7CA3F66F;
-	Mon,  3 Aug 2026 08:53:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1785772432; bh=bipZvbkqUPc5n72uKORzyVnSydHD9nn566F6fsSOJZk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=FV1tr54R+0e6tXlM27sqOKgR2cBmb4FKaia/3O3OP4s3hKmWPkEG7IS8+OLthX9KX
-	 GrYX0Lf2cSfDp5MfswPlbM3sUOONHqIqdrKUH+g+vk3O9IYEduMfGaEbAWs9TEbxZI
-	 EQn85U0teStXlYCFKD+VYERDRlEcXckmGvAmfDr0=
-Message-ID: <e14e022d-3fec-4edb-9458-47b31b26e0f5@arm.com>
-Date: Mon, 3 Aug 2026 16:53:41 +0100
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RPAp+1Ra"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-4a451915d8aso2012963b6e.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 08:56:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1785772570; x=1786377370; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=gwHf3j2tYQaR0XA7BZUjP/88HA14cOPU3+rnZKOaXIc=;
+        b=RPAp+1RaRJLThboFzwPBLJ2WgLbBsjNyaJtXQ0sAJN5PF5tZSrooOqstqRwgDCa0KS
+         o8us6GcFQysiLp+rJV44SfL0FxWgDZq7es1VXpl504fMLqO6TdtDh/VzpMwd9cZ4GYlL
+         FXDBGOrE2pYWe3WdKFT5D8Btjso9HJ2TDtdPM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785772570; x=1786377370;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=gwHf3j2tYQaR0XA7BZUjP/88HA14cOPU3+rnZKOaXIc=;
+        b=AN/UgaQhzGPTz+N3qLYrdjY3MIjvfo+ujmitYSLTPIBS9FJFz99km4TtnYHcIB1L2+
+         yDVW30aDM13F8o+OD/LJjN5fMv7y3N3ZR+Shb3F9+FMveXqzRSh0YmW9dlT+xdEbFxKR
+         Vlu8SYUxV0S7wtKI0iEQ+Le2Ik9DtmA6hJSvSDD1yhYw8TvEoC+vX6qSS9TTh7aU2Dqq
+         plQk7alqVudVW8DKWtm1oTHZTGzuYSf2pziIfr2ydkTG3LALwRl9poc5jcsxoIQr/Nlm
+         OYFaqsqyqzXaP4A/E/KAhKmdd/ROO9fFrNqdLFALbmeYoELvbw3ucnvRahxnxkOeI6b5
+         DIjQ==
+X-Forwarded-Encrypted: i=1; AHgh+RojaSpPD2LqDvcjRj9AFHU5XfS6AjPvLGgQEsvKhZN/5PKrea2MvV2CrfxE7eQesPESPXucJ24Pvw2qvueel2s=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxuF1BxSIM9RTM9hWfWA1XEXvy3CihmTELMX0eIm45J8RVqiPzE
+	LW+uW8EVUWhOqNyOE5XWOmozqqcfMJ94pzjnc/hHoThZ2tcnyjQrilEWfstaqI3yS/M=
+X-Gm-Gg: AR+sD13sCaY8bgq77wp4xVm28FnRgz3UrzfNwgnb9AKpdkYvfWi2+gvsF6YmjQEjHGf
+	m15EFdc86ymzkXqZIuZKT5vo1n3U5gsford0PL9FuJvgH4wDk6cc/ZA6wSWK/7jvPJyY+LizBao
+	9xBxpAVU6Luh84VxkTnYGfyB18ZR8HRPf9GDRuz6nWGRpbWe8FVdDA1SGbvEVudl5V6g5pjpRat
+	sSMq5p8UYLP+giNdvIZZzE6YX1jxZMbj95EqRaFSGaFp3ZrR4M1h2HMsGdzEaPvSyaeQgbOVgtK
+	1kkotT5Tl55uIKXLCQhdApHSkRJIAE2KB3rSPk8y7r5SB2J3y8saFBBUPuNylyDSlxUI7fK3W7H
+	k22R91Kyc1/+fNfcrsIspWdtUE58T0/an/e0Taw8ggZbEmgVLUgTeJ9eZOo+rXZD/cI1SuGlxB2
+	dMCiGxwROrpcDg0btZBZsAbInLZtYYcXdlfJRLEYvwL0Cq7Ei3ATNSSF6FrdbOz84n9+978g==
+X-Received: by 2002:a05:6808:67c3:b0:495:eb9f:53c4 with SMTP id 5614622812f47-4af5e1f32aamr16411131b6e.9.1785772570647;
+        Mon, 03 Aug 2026 08:56:10 -0700 (PDT)
+Received: from [192.168.1.128] ([38.15.57.99])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4af58d1112csm6979286b6e.5.2026.08.03.08.56.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Aug 2026 08:56:09 -0700 (PDT)
+Message-ID: <b8f72a24-c280-4a67-90c0-4194a81a724b@linuxfoundation.org>
+Date: Mon, 3 Aug 2026 09:56:06 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,98 +66,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 10/41] KVM: guest_memfd: Add base support for
- KVM_SET_MEMORY_ATTRIBUTES2
-To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
- liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
- Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-10-35f9aec2aed2@google.com>
+Subject: Re: [PATCH] kunit: tool: fix _list_tests filtering wrong variable
+ when list has TAP prefix
+To: David Gow <david@davidgow.net>, mohammad.abukhader@hotmail.com,
+ brendan.higgins@linux.dev
+Cc: raemoar63@gmail.com, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <DB7PR10MB2249CF29AB83F5BFBEC0801988CA2@DB7PR10MB2249.EURPRD10.PROD.OUTLOOK.COM>
+ <e1229319-0e28-4955-9adc-41a56f29c895@davidgow.net>
 Content-Language: en-US
-From: Suzuki K Poulose <suzuki.poulose@arm.com>
-In-Reply-To: <20260728-gmem-inplace-conversion-v9-10-35f9aec2aed2@google.com>
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <e1229319-0e28-4955-9adc-41a56f29c895@davidgow.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/07/2026 01:35, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Add a new ioctl (and matching struct), KVM_SET_MEMORY_ATTRIBUTES2, using
-> the same base ioctl number (0xd2), but with R/W semantics for the kernel
-> instead of just read semantics.  "Officially" documenting that KVM writes
-> to the payload will allow KVM to support partial/incremental conversions,
-> instead of all-or-nothing updates (which requires complex unwinding), by
-> recording the failing offset if an error occurs.
-> 
-> Opportunistically add a new struct as well, even though KVM could squeeze
-> the error offset into "struct kvm_memory_attributes", as there's no cost to
-> doing so in practice.  Pad the struct with a pile of extra space to try and
-> avoid ending up with "struct kvm_memory_attributes3" in the future.  Use
-> the same layout for the fields that common to version 1 of the struct,
-> e.g. to ease upgrading userspace, and to provide flexibility if KVM ever
-> adds support for KVM_SET_MEMORY_ATTRIBUTES2 at VM scope.
-> 
-> Introduce KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES to advertise the
-> availability of the KVM_SET_MEMORY_ATTRIBUTES2 ioctl.
-> 
-> Update the KVM API documentation to define the new ioctl and its behavior,
-> and add the necessary UAPI definitions and capability checks.
-> 
-> The process of setting memory attributes has a clear point of no return
-> because, for CoCo VMs, zapping stage 2 page tables is a destructive
-> operation. Unlike regular VMs, where re-faulting pages into the stage 2
-> page tables merely incurs a performance penalty, CoCo guests must
-> (re-):accept pages after every fault. To preserve CoCo security guarantees,
-> guests will not accept pages they did not explicitly request faults
-> for. Consequently, during memory conversions, any operation that could
-> cause the process to abort must be completed before the stage 2 page tables
-> are zapped.
-> 
-> Zap only the ranges that are not already in the requested state to avoid
-> inadvertently destroying (CoCo) data. ARM CCA guests will try to mark the
-> entire DRAM as private at boot. If there are no shared pages at all, the
-> to-private conversion can be skipped, but the existence of a single shared
-> page would require the conversion process to proceed, and if it proceeds,
-> zapping both shared and private pages would destroy data and break the
-> guest.
-> 
-> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Suggested-by: Michael Roth <michael.roth@amd.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+On 7/30/26 06:12, David Gow wrote:
+> Le 30/07/2026 à 12:19 AM, mohammad.abukhader@hotmail.com a écrit :
+>> From: Mohammad Abu-Khader <mohammad.abukhader@hotmail.com>
+>>
+>> `_list_tests()` runs the kernel to list tests, strips printk timestamp
+>> lines via `extract_tap_lines()`, then drops the dummy TAP header from
+>> the cleaned `lines`.  However the subsequent regex filter mistakenly
+>> operates on the original `output` instead of the cleaned `lines`.  When
+>> the kernel output includes timestamp prefixes (common with UML or slower
+>> setups), e.g.:
+>>
+>>    [    0.100000] suite.test1
+>>    [    0.100000] suite.test2
+>>
+>> the anchored regex `^[^\s.]+\.[^\s.]+$` rejects them and `--list_tests`
+>> returns an empty list.
+>>
+>> Filter `lines` instead of `output`, matching the behavior of the
+>> adjacent `_list_tests_attr()` which already returns the cleaned list.
+>>
+>> Add a regression test with timestamp-prefixed input to verify the fix.
+>>
+>> Fixes: 723c8258c8fe ("kunit: tool: Add command line interface to filter and report attributes")
 
+Missing Signed-off-by
 
-Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
+Unfortunately I can't apply this patch. Please fix it and resend.
+I will try my best to get this into Linux 7.2
 
+thanks,
+-- Shuah
