@@ -1,1258 +1,319 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from sender4-of-o52.zoho.com (sender4-of-o52.zoho.com [136.143.188.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9674A3C4B63;
-	Tue,  4 Aug 2026 17:46:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785865587; cv=none; b=CCh6NKbf0I3u5pXPepc3LcLzOgSKFwe/xFYbvl1RfIpO6NBOv6IFbviMS2CrkkRM1qUt0MSr4sfC/53wkcPOFgjDWCIv0Tdxrs76H1R3UMw9whcElS24s8lnzHWFz8eDIURx7orUBJUW0+IER4L63T8uIgyhkw3rZnVw++XRjlI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785865587; c=relaxed/simple;
-	bh=tKrR07DFjkTJNq5C55Yn5w1A1/4FA1deRwFEAGmmbPU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Bp/UIJa8GP7hTpCTAgV5n90scDZvCHV4PUo5/5Bgd/b330rSmVbL9RKPI8flQE21lRfh43oLWc8ZB4CncDekRusF+NVQNBcc0SCQliRqPEujk8QZk5VoNFdf7zht/LiTq7x5DCueqWYjs2P7W9WO9lJFgU2MF+tL63Qn1VgdNgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OEcQUcok; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8B649552D;
+	Tue,  4 Aug 2026 18:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785866434; cv=pass; b=LLrVBV8tiX8zNkKtZecgunwGK09FbAF6O3AOHrm8CjSuNLTUmUFe7rhhDl2kFDmKA1g3FErl2nSoCTS29j68YsvskseVdmuWBcxwy1j8x3ZAiIJ0D24P0VW6Rfs8i/l3H9ad/NkBdQUKatdBvdA5TJUCA/oZDUIRgr31b/cWEgQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785866434; c=relaxed/simple;
+	bh=SwJCU6dzIpARsSxB4INX7Wbgfj/GVUgzjebrU0XPmg8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=F1vi2KS/X02LLayWad+10DLzx8KWpkMg1ILQjrU5FM1PpwdgatkEuQmIL6BscISSbxW3cMzFsznZjQQHXDDF+AZqof2/izrVZM8JDZiZgu+tjPdnLmKe1WY3ozyy7Jllj1K06CmJ2OCfDSnCRT8pPZEkggsrP5hxq/NJebkRHME=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=machnikowski.net; spf=pass smtp.mailfrom=machnikowski.net; dkim=pass (2048-bit key) header.d=machnikowski.net header.i=maciek@machnikowski.net header.b=PiSNxoTV; arc=pass smtp.client-ip=136.143.188.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=machnikowski.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=machnikowski.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OEcQUcok"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 14E254E410EC;
-	Tue,  4 Aug 2026 17:46:20 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D23A76029E;
-	Tue,  4 Aug 2026 17:46:19 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6647A11C33456;
-	Tue,  4 Aug 2026 19:46:16 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1785865578; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=rJT73SjkQnZUCGmO3NO9ZS1+D3c4KH8+aTOnei77ueQ=;
-	b=OEcQUcok/imvPGJGy3zDjlssIvO4IuNgvLOiR8/svoRZjRES2dAWszv42piQb2kqhAv5BF
-	/0VIiJuu48HsIyK0pyr3FENFsOiBOyhWZPdUWiGjwodLYQRRTqoPMNkSbiYuTaJUYedcgV
-	vihs+bjOh8YRK2/3suavBD1K8YmGn5iqWjhvRW6NdFXhr/TcK9y75EDCU87TOG4J/c8YJ5
-	Z3j/Q68Z/Dr4M5lYWEDOjcRNBke9xjBSR2gkTpKWkeCupn92rtbyV4B4XkGFWnh7Tkzexc
-	K8C9FNGz0LMML4xP5ovEi5M2kJu1vv4f7BoYLpzC6wbhYLISo5zEHQC+ot+FUw==
-From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-Date: Tue, 04 Aug 2026 19:45:40 +0200
-Subject: [PATCH bpf-next v6 9/9] selftests/bpf: add tests to validate KASAN
- on JIT programs
+	dkim=pass (2048-bit key) header.d=machnikowski.net header.i=maciek@machnikowski.net header.b="PiSNxoTV"
+ARC-Seal: i=1; a=rsa-sha256; t=1785866366; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=OnC5K4A/dzXaV6HATJklnN+Hw+yBdk3rqZmBuHrYk7jSO/sScIaX68QnXW1tR8mmQ6t0BsXU1L/dVki81tCF7WwcBFuOba042vQ37JeuooxED+/ZQpoDQnex8stB3eGwmRypaIEprc3K4q5DKM5MZduwDtgbKhuaKxqBOwVq3So=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1785866366; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=4Hx63wYyhpUz8/M2kRLyuJ7fuvr6MmVRCdKtXgYif5s=; 
+	b=bpul9Si9UyKF/yNA59FdLe63GAZ5nc1+ysxs6HNOcl6rVyFF+yodf7ZzdohdEzvSGNGT7TSxn4Qh045mKuk0jcZd5Q/24Xp+A/FBYNOdxUg3bgwMbQJ0C3Nb7wHvjai3v50PRAGhWwAPcRiGgU0gyovntZg2qfkuOiTLtWpusb8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=machnikowski.net;
+	spf=pass  smtp.mailfrom=maciek@machnikowski.net;
+	dmarc=pass header.from=<maciek@machnikowski.net>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785866365;
+	s=zoho; d=machnikowski.net; i=maciek@machnikowski.net;
+	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=4Hx63wYyhpUz8/M2kRLyuJ7fuvr6MmVRCdKtXgYif5s=;
+	b=PiSNxoTVfKmD8NiFTgrFFqTOG7ZUeM3fwcE7ZgNbNMELHo0fICOyPRC9ZipP2vxM
+	mOMpcgqfVbHjrZ5c+SAts5+QhfXSAMctQZRT8E0jWE6yTY1TSZuSG2/Oe0ma4lPS+cz
+	aKtvi9GElocGs5IKV/QzglCjkBwaG7NHpgB7M4hohpL9K/Ht8RcnSxTYA7LRzKWI9iz
+	hC0e49KPLO+AcJuc1jTThwcfvarpmT/7WBwAk5q8hGm73QWS+20YQ+wY5DMdZhssqN8
+	X/SAm9RCSOR8iJ2WMZ2uQ8FRHCLpRj1hvzkyyT5D2azJUI3+vM/p0S5hXbicDiXNl4Z
+	0+ey0GsWvQ==
+Received: by mx.zohomail.com with SMTPS id 1785866362148587.1866007291997;
+	Tue, 4 Aug 2026 10:59:22 -0700 (PDT)
+Message-ID: <d43d255a-4a67-44c7-ab1e-5e08ac01a9c6@machnikowski.net>
+Date: Tue, 4 Aug 2026 19:59:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260804-kasan-v6-9-549ef845f491@bootlin.com>
-References: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
-In-Reply-To: <20260804-kasan-v6-0-549ef845f491@bootlin.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
- "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
- Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>
-Cc: ebpf@linuxfoundation.org, 
- Bastien Curutchet <bastien.curutchet@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
-X-Mailer: b4 0.15.2
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v6 net-next 1/7] ptp: Add ioctls for PHC timestamps with
+ quality attributes
+To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
+ <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org
+Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+ David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Andrew Lunn <andrew@lunn.ch>, Carolina Jubran <cjubran@nvidia.com>,
+ Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+ David Woodhouse <dwmw@amazon.com>, Yonatan Sarna <ysarna@amazon.com>,
+ Zorik Machulsky <zorik@amazon.com>, Alexander Matushevsky
+ <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>,
+ Matt Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>,
+ Nafea Bshara <nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>,
+ Netanel Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>,
+ Benjamin Herrenschmidt <benh@amazon.com>, Noam Dagan <ndagan@amazon.com>,
+ David Arinzon <darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>,
+ Ofir Tabachnik <ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>,
+ Bjorn Helgaas <bhelgaas@google.com>, vadim.fedorenko@linux.dev
+References: <20260729233740.16516-1-akiyano@amazon.com>
+ <20260729233740.16516-2-akiyano@amazon.com>
+Content-Language: en-US
+From: Maciek Machnikowski <maciek@machnikowski.net>
+In-Reply-To: <20260729233740.16516-2-akiyano@amazon.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
 
-Add a basic KASAN test runner that loads and test-run programs that can
-trigger memory management bugs. The test captures kernel logs and ensure
-that the expected KASAN splat is emitted by searching for the
-corresponding first lines in the report, hence validated that the needed
-instrumentation has been inserted by the JIT compiler before the
-relevant memory accesses. To allow each test to trigger the expected
-report, the kernel must run with the kasan_multi_shot configuration.
 
-The runner covers different cases and settings: in the nominal case, it
-validates kasan reports on basic instructions (on all supported accesses
-sizes) but also when report _should not_ be emitted (eg: for accesses on
-program stack). The runner also comes with a few specialized tests that
-are then not executed for all sizes/locations:
-- specific atomic ops
-- test for instructions involving different verifier states, with some
-  states flagging memory as stack, and other states as non-stack memory
-- tests that validate the stack marking shifting when a patch is emitted
-  by the verifier (zext/rnd_hi32, constant blindind).
-Most of those tests are able to trigger kasan reports by altering the
-shadow memory (triggering faulty accesses is otherwise complex, because
-of the verifier). A few tests trigger actual faulty accesses (eg
-out-of-bound accesses)
 
-A few of those tests depends on cpuv4 (load_acquire and store_release).
+On 30/07/2026 01:37, Arthur Kiyanovski wrote:
+> Introduce two new ioctls that extend existing PTP timestamp interfaces
+> with clock quality information:
+> 
 
-  # ./test_progs -a kasan
-  #171/1   kasan/st_1_not_on_stack:OK
-  #171/2   kasan/st_1_on_stack:OK
-  #171/3   kasan/st_2_not_on_stack:OK
-  #171/4   kasan/st_2_on_stack:OK
-  #171/5   kasan/st_4_not_on_stack:OK
-  #171/6   kasan/st_4_on_stack:OK
-  #171/7   kasan/st_8_not_on_stack:OK
-  #171/8   kasan/st_8_on_stack:OK
-  #171/9   kasan/stx_1_not_on_stack:OK
-  #171/10  kasan/stx_1_on_stack:OK
-  #171/11  kasan/stx_2_not_on_stack:OK
-  #171/12  kasan/stx_2_on_stack:OK
-  #171/13  kasan/stx_4_not_on_stack:OK
-  #171/14  kasan/stx_4_on_stack:OK
-  #171/15  kasan/stx_8_not_on_stack:OK
-  #171/16  kasan/stx_8_on_stack:OK
-  #171/17  kasan/ldx_1_not_on_stack:OK
-  #171/18  kasan/ldx_1_on_stack:OK
-  #171/19  kasan/ldx_2_not_on_stack:OK
-  #171/20  kasan/ldx_2_on_stack:OK
-  #171/21  kasan/ldx_4_not_on_stack:OK
-  #171/22  kasan/ldx_4_on_stack:OK
-  #171/23  kasan/ldx_8_not_on_stack:OK
-  #171/24  kasan/ldx_8_on_stack:OK
-  #171/25  kasan/simple_atomic_4_not_on_stack:OK
-  #171/26  kasan/simple_atomic_4_on_stack:OK
-  #171/27  kasan/simple_atomic_8_not_on_stack:OK
-  #171/28  kasan/simple_atomic_8_on_stack:OK
-  #171/29  kasan/simple_atomic_fetch:OK
-  #171/30  kasan/simple_atomic_fetch:OK
-  #171/31  kasan/load_acquire_1_not_on_stack:SKIP
-  #171/32  kasan/load_acquire_1_on_stack:SKIP
-  #171/33  kasan/load_acquire_2_not_on_stack:SKIP
-  #171/34  kasan/load_acquire_2_on_stack:SKIP
-  #171/35  kasan/load_acquire_4_not_on_stack:SKIP
-  #171/36  kasan/load_acquire_4_on_stack:SKIP
-  #171/37  kasan/load_acquire_8_not_on_stack:SKIP
-  #171/38  kasan/load_acquire_8_on_stack:SKIP
-  #171/39  kasan/store_release_1_not_on_stack:SKIP
-  #171/40  kasan/store_release_1_on_stack:SKIP
-  #171/41  kasan/store_release_2_not_on_stack:SKIP
-  #171/42  kasan/store_release_2_on_stack:SKIP
-  #171/43  kasan/store_release_4_not_on_stack:SKIP
-  #171/44  kasan/store_release_4_on_stack:SKIP
-  #171/45  kasan/store_release_8_not_on_stack:SKIP
-  #171/46  kasan/store_release_8_on_stack:SKIP
-  #171/47  kasan/ldx_patched:OK
-  #171/48  kasan/ldx_patched:OK
-  #171/49  kasan/verifier_paths_stack_and_non_stack:OK
-  #171/50  kasan/ldx_oob_1_not_on_stack:OK
-  #171/51  kasan/ldx_oob_2_not_on_stack:OK
-  #171/52  kasan/ldx_oob_4_not_on_stack:OK
-  #171/53  kasan/ldx_oob_8_not_on_stack:OK
-  #171/54  kasan/st_blinded:OK
-  #171     kasan:OK (SKIP: 16/54)
-  Summary: 1/38 PASSED, 16 SKIPPED, 0 FAILED
+>  
+> +/*
+> + * Clock status values for struct ptp_clock_attrs.status
+> + */
+> +enum ptp_clock_status {
+> +	/* Clock synchronization status cannot be reliably determined */
+> +	PTP_CLOCK_STATUS_UNKNOWN      = 0,
+> +
+> +	/* Clock is acquiring synchronization */
+> +	PTP_CLOCK_STATUS_INITIALIZING = 1,
+> +
+> +	/* Clock is synchronized and maintained accurately by the device */
+> +	PTP_CLOCK_STATUS_SYNCED       = 2,
+> +
+> +	/*
+> +	 * Clock is drifting but remains within acceptable error bounds;
+> +	 * error_bound is valid and can be trusted.
+> +	 */
+> +	PTP_CLOCK_STATUS_HOLDOVER     = 3,
+> +
+> +	/*
+> +	 * Clock is free-running: not currently disciplined toward a reference
+> +	 * (unlike HOLDOVER), but coasting on a known oscillator. error_bound
+> +	 * remains valid and can be trusted, and typically grows over time.
+> +	 */
+> +	PTP_CLOCK_STATUS_FREE_RUNNING = 4,
+> +
+> +	/*
+> +	 * Clock is considered broken (e.g. the oscillator is faulty or
+> +	 * abnormally unstable): error_bound cannot be trusted. A clock that is
+> +	 * merely unsynchronized or resynchronizing should report
+> +	 * PTP_CLOCK_STATUS_UNKNOWN or PTP_CLOCK_STATUS_INITIALIZING instead.
+> +	 */
+> +	PTP_CLOCK_STATUS_UNRELIABLE   = 5
+What is the practical use of UNRELIABLE vs UNKNOWN.
+I think it can be simplified to UNRELIABLE, SYNCED and HOLDOVER. All
+clocks will start in UNRELIABLE, switch to SYNCED whenever the clock
+gets synchronized correctly and enter HOLDOVER if it was at the SYNCED
+state and report the last synced for that state. Status INITIALIZING has
+no practical meaning and requires more work from the APIs, and
+HOLDOVER->FREE_RUNNING state transition is undefined (what is
+"acceptable" for one application won't be acceptable for another)
 
-Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
----
-Changes in v6:
-- rename test struct in kasan program
-- add oob testing
-- add atomic fetch tests
-- refactor a bit the test runner so that ldx_patched tests are not
-  treated as special cases
-- break kernel log reading loop immediately if no bytes are read
+> +};
+> +
+> +/*
+> + * Clock timescale values for struct ptp_clock_attrs.timescale.
+> + *
+> + * These definitions describe the mathematical properties and reference
+> + * epochs of the timescale provided by the PHC.
+> + *
+> + * Discipline: Describes the frequency/phase steering behavior.
+> + * Continuity: Describes whether the timeline is uninterrupted.
+> + */
+> +enum ptp_clock_timescale {
+> +	/* Unknown or unspecified timescale */
+> +	PTP_TIMESCALE_UNKNOWN = 0,
+> +
+> +	/********************* Absolute Atomic Timescales *********************
+> +	 * These timescales are continuous, monotonic standards based on atomic
+> +	 * physics. They do not experience phase jumps.
+> +	 **********************************************************************/
+> +
+> +	/**
+> +	 * International Atomic Time (TAI)
+> +	 * Epoch: 1958-01-01 00:00:00.
+> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> +	 * Discipline: Primary atomic reference; no phase jumps.
+> +	 */
+> +	PTP_TIMESCALE_TAI = 1,
+> +
+> +	/**
+> +	 * Terrestrial Time (TT)
+> +	 * Epoch: 1958-01-01 00:00:00.
+> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> +	 * Discipline: Defined as TAI + 32.184s constant offset.
+> +	 */
+> +	PTP_TIMESCALE_TT = 2,
+> +
+> +	/**
+> +	 * Global Positioning System (GPS) Time
+> +	 * Epoch: 1980-01-06 00:00:00.
+> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> +	 * Discipline: Defined by the GPS constellation; fixed offset from TAI.
+> +	 */
+> +	PTP_TIMESCALE_GPS = 3,
+> +
+> +	/****************** UTC-Based Timescales (Civil Time) *****************
+> +	 * These timescales are derived from TAI but adjusted to align with
+> +	 * the Earth's rotation, primarily through leap seconds.
+> +	 **********************************************************************/
+> +
+> +	/**
+> +	 * Coordinated Universal Time (UTC) - Wall-clock (CLOCK_REALTIME)
+> +	 * Epoch: 1970-01-01 00:00:00 (Unix epoch).
+> +	 * Continuity: Discontinuous; subject to 1-second leap second
+> +	 *             phase jumps.
+> +	 * Discipline: Frequency steered; incorporates leap second corrections.
+> +	 *
+> +	 * Note: Leap-smeared UTC MUST NOT be advertised as PTP_TIMESCALE_UTC.
+> +	 * Smear algorithms are not standardized and the resulting timescale
+> +	 * is ambiguous. Implementations using smeared UTC MUST advertise
+> +	 * PTP_TIMESCALE_UNKNOWN or PTP_TIMESCALE_PROPRIETARY instead.
+> +	 */
+> +	PTP_TIMESCALE_UTC = 4,
+> +
+> +	/**
+> +	 * POSIX Time (Unix Time)
+> +	 * Epoch: 1970-01-01 00:00:00.
+> +	 * Continuity: Discontinuous; leap seconds handled by
+> +	 *             repeating/skipping values.
+> +	 * Discipline: Follows UTC frequency steering and phase jumps.
+> +	 */
+> +	PTP_TIMESCALE_POSIX = 5,
+> +
+> +	/****************** System-Relative Monotonic Clocks ******************
+> +	 * These timescales are relative to a system event (like boot)
+> +	 * and are not synchronized to an external atomic standard.
+> +	 **********************************************************************/
+> +
+> +	/**
+> +	 * Monotonic System Clock (CLOCK_MONOTONIC)
+> +	 * Epoch: Arbitrary (System boot time).
+> +	 * Continuity: Strictly monotonic; no leap seconds.
+> +	 * Discipline: Frequency steered to match system reference;
+> +	 *             does not advance during suspend.
+> +	 */
+> +	PTP_TIMESCALE_MONOTONIC = 6,
+> +
+> +	/**
+> +	 * Raw Monotonic System Clock (CLOCK_MONOTONIC_RAW)
+> +	 * Epoch: Arbitrary (System boot time).
+> +	 * Continuity: Strictly monotonic; no leap seconds.
+> +	 * Discipline: Raw hardware oscillator; no frequency steering
+> +	 *             or discipline.
+> +	 */
+> +	PTP_TIMESCALE_MONOTONIC_RAW = 7,
+> +
+> +	/**
+> +	 * Boot Time System Clock (CLOCK_BOOTTIME)
+> +	 * Epoch: Arbitrary (System boot time).
+> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
+> +	 * Discipline: Frequency steered to match system reference;
+> +	 *             advances during suspend.
+> +	 */
+> +	PTP_TIMESCALE_BOOTTIME = 8,
+> +
+> +	/********************** Vendor-Specific Timescale *********************/
+> +
+> +	/* A proprietary or vendor-specific timescale with custom rules. */
+> +	PTP_TIMESCALE_PROPRIETARY = 9,
+> +};
+Do we need this many timescales defined here? Can't we just use the
+notion of TIMESCALE_ARBITRARY and TIMESCALE_ABSOLUTE with the UTC
+offset? CLOCK_MONOTONIC / MONOTONIC_RAW are really ARBITRARY, is there
+any value of differentating between those two?
+ > +
+>  /*
+>   * struct ptp_clock_time - represents a time value
+>   *
+> @@ -94,6 +237,136 @@ struct ptp_clock_time {
+>  	__u32 reserved;
+>  };
+>  
+> +/*
+> + * Hardware counter identifiers for struct ptp_sys_time.sys_counter_id
+> + */
+> +enum ptp_counter_id {
+> +	/* Counter value not available or type not specified */
+> +	PTP_COUNTER_UNKNOWN = 0,
+> +
+> +	/* x86 Time Stamp Counter (TSC) */
+> +	PTP_COUNTER_X86_TSC = 1,
+> +
+> +	/* ARM Generic Timer virtual counter */
+> +	PTP_COUNTER_ARM_ARCH = 2,
+> +};
+> +
+> +/* Valid flags for struct ptp_clock_attrs.valid */
+> +#define PTP_ATTRS_VALID_ERROR_BOUND	(1 << 0)
+> +#define PTP_ATTRS_VALID_TIMESCALE	(1 << 1)
+> +#define PTP_ATTRS_VALID_STATUS		(1 << 2)
+> +
+> +/**
+> + * struct ptp_clock_attrs - quality attributes for a PHC timestamp
+> + *
+> + * @valid:       Bitmask of PTP_ATTRS_VALID_* indicating which fields
+> + *               are populated. Zero means no attributes available.
+> + * @error_bound: Maximum error (an upper bound, in nanoseconds) between the
+> + *               returned device_time and true time on the advertised
+> + *               @timescale; a worst-case bound, not a statistical estimate.
+> + *               Valid only when PTP_ATTRS_VALID_ERROR_BOUND is set, and must
+> + *               not be trusted when @status is PTP_CLOCK_STATUS_UNKNOWN or
+> + *               PTP_CLOCK_STATUS_UNRELIABLE.
+> + * @timescale:   Clock timescale (enum ptp_clock_timescale). Valid only
+> + *               when PTP_ATTRS_VALID_TIMESCALE is set.
+> + * @status:      Synchronization status (enum ptp_clock_status). Valid
+> + *               only when PTP_ATTRS_VALID_STATUS is set. Transitions between
+> + *               states are device-specific; there are no kernel-defined
+> + *               thresholds relating @status to @error_bound.
+> + * @rsv:         Reserved for future use, must be zero.
+> + */
+> +struct ptp_clock_attrs {
+> +	__u32 valid;
+> +	__u32 error_bound;
+> +	__u32 timescale;
+> +	__u32 status;
+> +	__u32 rsv[4];
+> +};
+This does not look like a practical model. Error bounds changes over
+time and will get stale by the time you transfer them over IOCTL.
 
-Changes in v5:
-- check snprintf return codes when checking kernel logs
-- skip tests in kasan_multi_shot is not enabled
-- update simple atomic test expected access type (read -> write)
+I think a more practical approach would be to return error_bound
+alongside the anchor_timestamp at which it was measured. For example you
+can define master_offset for the RX timestamp of the Sync packet, or the
+offset for the last 1PPS signal you received. This should be
+complemented by some drift_factor that would define how fast it grows.
 
-Changes in v4:
-- prevent interleaved kernel logs from breaking kasan report search
-- make new kfuncs in bpf_testmod depend on BPF_JIT_KASAN rather than
-  KASAN_GENERIC
-- initialize buffer passed to bpf_prog_test_run_opts
+If you capture the time from the PHC you can use the formula of
+error_bound+(phc_time - anchor_timestamp)*drift_factor to interpolate
+the boundaries.
 
-Changes in v3:
-- increase kernel log buffer size
-- fix comment style
-- check bpf_program__fd return code
-- document kasan_multi_shot
-- fix copy-paste mistakes on poisoning/unpoisoning sequences
-- add test for patch due to constant blinding
+Do we want to squash all errors into a single error_bound - it may make
+sense to add the hw_error and sync_error - hw_error would squash
+hw-based error bounds (such as clock resolution, GNSS precision) and
+sync_error (which would hold the dynamic part derived from the sync
+protocol)
 
-Changes in v2:
-- simplify tests by just manually poisoning test areas with a dedicated
-  kfunc
-- introduce one prog per covered instruction family
-- make sure that tests do not consume kernel logs (use /dev/kmgs rather
-  than klogctl)
-- add tests for stack accesses:
-  - marking correctly set when there are diverging verifier states
-    leading to different memory types
-  - marking kept in sync with prog when it is patched
----
- tools/testing/selftests/bpf/prog_tests/kasan.c     | 454 ++++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan.c          | 462 +++++++++++++++++++++
- tools/testing/selftests/bpf/progs/kasan_harden.c   |  41 ++
- .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  55 +++
- 4 files changed, 1012 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kasan.c b/tools/testing/selftests/bpf/prog_tests/kasan.c
-new file mode 100644
-index 000000000000..2b424767a0f3
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kasan.c
-@@ -0,0 +1,454 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+/*
-+ * Tests validating that KASAN reports are properly instrumented and
-+ * generated on a wide variety of instructions. The running kernel needs
-+ * kasan_multi_shot to run multiple kasan-generating subtests at once
-+ */
-+#include <bpf/bpf.h>
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <linux/if_ether.h>
-+#include <unistd.h>
-+#include <test_progs.h>
-+#include <unpriv_helpers.h>
-+#include "kasan.skel.h"
-+#include "kasan_harden.skel.h"
-+
-+#define SUBTEST_NAME_MAX_LEN	128
-+#define PROG_NAME_MAX_LEN	128
-+
-+#define MAX_LOG_SIZE		(8 * 1024)
-+#define READ_CHUNK_SIZE		256
-+
-+#define KASAN_PATTERN_SLAB_UAF "BUG: KASAN: slab-use-after-free " \
-+	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
-+#define KASAN_PATTERN_SLAB_OOB "BUG: KASAN: slab-out-of-bounds " \
-+	"in bpf_prog_%02x%02x%02x%02x%02x%02x%02x%02x_%s"
-+#define KASAN_PATTERN_REPORT "%s of size %d at addr"
-+
-+static char klog_buffer[MAX_LOG_SIZE];
-+static char record[MAX_LOG_SIZE];
-+
-+struct test_spec {
-+	char *prog_type;
-+	bool is_write;
-+	bool only_32_or_64;
-+	bool needs_load_acq_store_rel;
-+	bool skip_multi_size_testing;
-+	bool skip_on_stack_testing;
-+	int run_size;
-+	bool expect_no_report;
-+	bool rnd_hi32;
-+	bool is_oob;
-+};
-+
-+struct kasan_write_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct test_ctx {
-+	__u8  prog_tag[BPF_TAG_SIZE];
-+	struct bpf_object *obj;
-+	int *access_size;
-+	bool skip_load_acq_store_rel;
-+	struct bpf_program *prog;
-+	char prog_name[SUBTEST_NAME_MAX_LEN];
-+	int klog_fd;
-+};
-+
-+static int open_kernel_logs(void)
-+{
-+	int fd;
-+
-+	fd = open("/dev/kmsg", O_RDONLY | O_NONBLOCK);
-+
-+	return fd;
-+}
-+
-+static void skip_kernel_logs(int fd)
-+{
-+	lseek(fd, 0, SEEK_END);
-+}
-+
-+static int read_kernel_logs(int fd, char *buf, size_t max_len)
-+{
-+	size_t total = 0;
-+	ssize_t n;
-+
-+	buf[0] = '\0';
-+	while (1) {
-+		char *msg, *eol;
-+		size_t len;
-+
-+		n = read(fd, record, sizeof(record) - 1);
-+		if (n == 0)
-+			break;
-+
-+		if (n < 0) {
-+			if (errno == EAGAIN)
-+				break;
-+			return n;
-+		}
-+		record[n] = '\0';
-+
-+		/*
-+		 * Each kmsg record starts with some metadata, separated
-+		 * from the actual content by a semi-colon
-+		 */
-+		msg = strchr(record, ';');
-+		if (!msg)
-+			continue;
-+		msg++;
-+		eol = strchr(msg, '\n');
-+		if (eol)
-+			*eol = '\0';
-+
-+		len = strlen(msg);
-+		if (total + len + 2 > max_len)
-+			break;
-+		memcpy(buf + total, msg, len);
-+		total += len;
-+		buf[total++] = '\n';
-+		buf[total] = '\0';
-+	}
-+
-+	return total;
-+}
-+
-+static int check_kasan_report_in_kernel_logs(char *buf, struct test_ctx *ctx,
-+					     bool is_write, int size,
-+					     bool is_oob)
-+{
-+	char access_log[READ_CHUNK_SIZE];
-+	const char *pattern;
-+	char *kasan_report_start;
-+	int nsize;
-+
-+	pattern = is_oob ? KASAN_PATTERN_SLAB_OOB : KASAN_PATTERN_SLAB_UAF;
-+	nsize = snprintf(access_log, READ_CHUNK_SIZE, pattern,
-+			 ctx->prog_tag[0], ctx->prog_tag[1], ctx->prog_tag[2],
-+			 ctx->prog_tag[3], ctx->prog_tag[4], ctx->prog_tag[5],
-+			 ctx->prog_tag[6], ctx->prog_tag[7], ctx->prog_name);
-+	if (!ASSERT_GE(nsize, 0, "format kasan access header line"))
-+		return nsize;
-+	/*
-+	 * Searched kasan report is valid if
-+	 * - it contains the expected kasan pattern
-+	 * - the description of the faulty access is found somewhere
-+	 *   after the header (not necessarily on the very next line,
-+	 *   because other kernel messages may interleave)
-+	 * - faulty access properties match the tested type and size
-+	 */
-+	kasan_report_start = strstr(buf, access_log);
-+
-+	if (!kasan_report_start)
-+		return 1;
-+
-+	nsize = snprintf(access_log, READ_CHUNK_SIZE, KASAN_PATTERN_REPORT,
-+			 is_write ? "Write" : "Read", size);
-+	if (!ASSERT_GE(nsize, 0, "format kasan access report line"))
-+		return nsize;
-+
-+	if (!strstr(kasan_report_start, access_log))
-+		return 1;
-+
-+	return 0;
-+}
-+
-+static void exec_subtest(struct test_ctx *ctx, struct test_spec *test,
-+			 int access_size, bool on_stack)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, topts);
-+	struct bpf_prog_info info;
-+	uint8_t buf[ETH_HLEN] = {0};
-+	int ret, prog_fd;
-+	__u32 info_len;
-+
-+	ctx->prog = bpf_object__find_program_by_name(ctx->obj,
-+						     ctx->prog_name);
-+	if (!ASSERT_OK_PTR(ctx->prog, "find test prog"))
-+		return;
-+
-+	info_len = sizeof(info);
-+	memset(&info, 0, info_len);
-+	prog_fd = bpf_program__fd(ctx->prog);
-+	if (!ASSERT_OK_FD(prog_fd, "get prog fd"))
-+		return;
-+	ret = bpf_prog_get_info_by_fd(prog_fd, &info, &info_len);
-+	if (!ASSERT_OK(ret, "fetch loaded program info"))
-+		return;
-+	memcpy(ctx->prog_tag, info.tag, BPF_TAG_SIZE);
-+
-+	skip_kernel_logs(ctx->klog_fd);
-+
-+	topts.sz = sizeof(struct bpf_test_run_opts);
-+	topts.data_size_in = ETH_HLEN;
-+	topts.data_in = buf;
-+	if (ctx->access_size)
-+		*ctx->access_size = access_size;
-+	ret = bpf_prog_test_run_opts(bpf_program__fd(ctx->prog),
-+				     &topts);
-+	if (!ASSERT_OK(ret, "run prog"))
-+		return;
-+
-+	ret = read_kernel_logs(ctx->klog_fd, klog_buffer, MAX_LOG_SIZE);
-+	if (!ASSERT_GE(ret, 0, "read kernel logs"))
-+		return;
-+
-+	ret = check_kasan_report_in_kernel_logs(klog_buffer, ctx,
-+						test->is_write, access_size,
-+						test->is_oob);
-+	if (on_stack || test->expect_no_report)
-+		ASSERT_NEQ(ret, 0, "no report should be generated");
-+	else
-+		ASSERT_OK(ret, "report should be generated");
-+}
-+
-+static void run_subtest_with_size_and_location(struct test_ctx *ctx,
-+					       struct test_spec *test,
-+					       int access_size,
-+					       bool on_stack)
-+{
-+	char subtest_name[SUBTEST_NAME_MAX_LEN];
-+
-+	if (test->skip_multi_size_testing) {
-+		snprintf(subtest_name, SUBTEST_NAME_MAX_LEN, "%s%s",
-+			 test->prog_type,
-+			 test->skip_on_stack_testing ? "" :
-+			 on_stack		     ? "_on_stack" :
-+						       "_not_on_stack");
-+	} else {
-+		snprintf(subtest_name, SUBTEST_NAME_MAX_LEN, "%s_%d_%s",
-+			 test->prog_type, access_size,
-+			 on_stack ? "on_stack" : "not_on_stack");
-+	}
-+
-+	snprintf(ctx->prog_name, PROG_NAME_MAX_LEN, "%s%s", test->prog_type,
-+		 test->skip_on_stack_testing ? "" :
-+		 on_stack		     ? "_on_stack" :
-+					       "_not_on_stack");
-+
-+	if (!test__start_subtest(subtest_name))
-+		return;
-+
-+	if (test->needs_load_acq_store_rel && ctx->skip_load_acq_store_rel) {
-+		test__skip();
-+		return;
-+	}
-+
-+	exec_subtest(ctx, test, access_size, on_stack);
-+}
-+
-+static void run_subtest_with_size(struct test_ctx *ctx, struct test_spec *test,
-+				  int size)
-+{
-+	run_subtest_with_size_and_location(ctx, test, size, false);
-+	if (!test->skip_on_stack_testing)
-+		run_subtest_with_size_and_location(ctx, test, size, true);
-+}
-+
-+static void run_subtest(struct test_ctx *ctx, struct test_spec *test)
-+{
-+	if (test->skip_multi_size_testing) {
-+		run_subtest_with_size(ctx, test, test->run_size);
-+		return;
-+	}
-+
-+	if (!test->only_32_or_64) {
-+		run_subtest_with_size(ctx, test, 1);
-+		run_subtest_with_size(ctx, test, 2);
-+	}
-+	run_subtest_with_size(ctx, test, 4);
-+	run_subtest_with_size(ctx, test, 8);
-+}
-+
-+static void run_blinding_subtest(void)
-+{
-+	struct test_spec blinding_spec = {
-+		.prog_type = "st_blinded",
-+		.is_write = true,
-+	};
-+	char bpf_jit_harden = '2';
-+	struct kasan_harden *skel;
-+	struct test_ctx *ctx;
-+
-+	if (!test__start_subtest("st_blinded"))
-+		return;
-+
-+	ctx = calloc(1, sizeof(*ctx));
-+	if (!ASSERT_OK_PTR(ctx, "alloc blinding ctx"))
-+		return;
-+	ctx->klog_fd = -1;
-+
-+	if (set_bpf_jit_harden(&bpf_jit_harden))
-+		goto free_ctx;
-+
-+	skel = kasan_harden__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "open and load blinded prog"))
-+		goto restore;
-+
-+	ctx->klog_fd = open_kernel_logs();
-+	if (!ASSERT_OK_FD(ctx->klog_fd, "open kernel logs"))
-+		goto destroy;
-+
-+	ctx->obj = skel->obj;
-+	strncpy(ctx->prog_name, "st_blinded", PROG_NAME_MAX_LEN);
-+
-+	exec_subtest(ctx, &blinding_spec, 1, false);
-+
-+destroy:
-+	close(ctx->klog_fd);
-+	kasan_harden__destroy(skel);
-+restore:
-+	set_bpf_jit_harden(&bpf_jit_harden);
-+free_ctx:
-+	free(ctx);
-+}
-+
-+static struct test_spec tests[] = {
-+	{
-+		.prog_type = "st",
-+		.is_write = true
-+	},
-+	{
-+		.prog_type = "stx",
-+		.is_write = true
-+	},
-+	{
-+		.prog_type = "ldx",
-+		.is_write = false
-+	},
-+	{
-+		.prog_type = "simple_atomic",
-+		.is_write = true,
-+		.only_32_or_64 = true
-+	},
-+	{
-+		.prog_type = "simple_atomic_fetch",
-+		.is_write = true,
-+		.skip_multi_size_testing = true,
-+		.run_size = 8,
-+	},
-+	{
-+		.prog_type = "load_acquire",
-+		.is_write = false,
-+		.needs_load_acq_store_rel = true
-+	},
-+	{
-+		.prog_type = "store_release",
-+		.is_write = true,
-+		.needs_load_acq_store_rel = true
-+	},
-+	{
-+		.prog_type = "ldx_patched",
-+		.is_write = false,
-+		.skip_multi_size_testing = true,
-+		.run_size = 4,
-+		.rnd_hi32 = true
-+	},
-+	{
-+		.prog_type = "verifier_paths_stack_and_non_stack",
-+		.is_write = true,
-+		.skip_multi_size_testing = true,
-+		.skip_on_stack_testing = true,
-+		.run_size = 1
-+	},
-+	{
-+		.prog_type = "ldx_oob",
-+		.is_write = false,
-+		.skip_on_stack_testing = true,
-+		.is_oob = true
-+	},
-+};
-+
-+void test_kasan(void)
-+{
-+	struct kasan_write_val val;
-+	struct test_spec *test;
-+	struct test_ctx *ctx;
-+	struct kasan *skel;
-+	__u32 key = 0;
-+	int i, ret;
-+
-+	ctx = calloc(1, sizeof(struct test_ctx));
-+	if (!ASSERT_OK_PTR(ctx, "alloc test ctx"))
-+		return;
-+
-+	if (!is_jit_enabled() || !get_kasan_jit_enabled() ||
-+	    !get_kasan_multi_shot_enabled()) {
-+		test__skip();
-+		goto end;
-+	}
-+
-+	skel = kasan__open();
-+	if (!ASSERT_OK_PTR(skel, "open prog"))
-+		goto end;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		char prog_name[SUBTEST_NAME_MAX_LEN];
-+		struct bpf_program *prog;
-+
-+		if (!tests[i].rnd_hi32)
-+			continue;
-+
-+		snprintf(prog_name, SUBTEST_NAME_MAX_LEN, "%s_%s",
-+			 tests[i].prog_type, "on_stack");
-+		prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+		if (!ASSERT_OK_PTR(prog, "find rnd_hi32 on_stack prog"))
-+			goto destroy;
-+		bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32);
-+		snprintf(prog_name, SUBTEST_NAME_MAX_LEN, "%s_%s",
-+			 tests[i].prog_type, "not_on_stack");
-+		prog = bpf_object__find_program_by_name(skel->obj, prog_name);
-+		if (!ASSERT_OK_PTR(prog, "find rnd_hi32 not_on_stack prog"))
-+			goto destroy;
-+		bpf_program__set_flags(prog, BPF_F_TEST_RND_HI32);
-+	}
-+
-+	if (!ASSERT_OK(kasan__load(skel), "load prog"))
-+		goto destroy;
-+
-+	ctx->obj = skel->obj;
-+	ctx->access_size = &skel->bss->access_size;
-+	ctx->skip_load_acq_store_rel = skel->data->skip_load_acq_store_rel_tests;
-+
-+	ctx->klog_fd = open_kernel_logs();
-+	if (!ASSERT_OK_FD(ctx->klog_fd, "open kernel logs"))
-+		goto destroy;
-+
-+	/* Fill map with recognizable values */
-+	ret = bpf_map__lookup_elem(skel->maps.test_map, &key, sizeof(key),
-+				   &val, sizeof(val), 0);
-+	if (!ASSERT_OK(ret, "get map"))
-+		goto close;
-+	val.data_1 = 0xAA;
-+	val.data_2 = 0xBBBB;
-+	val.data_4 = 0xCCCCCCCC;
-+	val.data_8 = 0xDDDDDDDDDDDDDDDD;
-+	ret = bpf_map__update_elem(skel->maps.test_map, &key, sizeof(key),
-+				   &val, sizeof(val), 0);
-+	if (!ASSERT_OK(ret, "set map"))
-+		goto close;
-+
-+	for (i = 0; i < ARRAY_SIZE(tests); i++) {
-+		test = &tests[i];
-+		run_subtest(ctx, test);
-+	}
-+
-+	/*
-+	 * Blinding subtest is handled differently as it needs the
-+	 * corresponding program to be loaded with bpf_jit_harden raised
-+	 */
-+	run_blinding_subtest();
-+
-+close:
-+	close(ctx->klog_fd);
-+destroy:
-+	kasan__destroy(skel);
-+end:
-+	free(ctx);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/selftests/bpf/progs/kasan.c
-new file mode 100644
-index 000000000000..ea29197646b0
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kasan.c
-@@ -0,0 +1,462 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <stdbool.h>
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+#include "bpf_misc.h"
-+
-+extern void bpf_kfunc_kasan_poison(void *mem, __u32 mem__sz) __ksym;
-+extern void bpf_kfunc_kasan_unpoison(void *mem, __u32 mem__sz) __ksym;
-+
-+struct bpf_testmod_oob {
-+	__u8 data;
-+	union {
-+		__u8 redzone_1;
-+		__u16 redzone_2;
-+		__u32 redzone_4;
-+		__u64 redzone_8;
-+	};
-+};
-+
-+extern struct bpf_testmod_oob *bpf_testmod_oob_alloc(void) __ksym;
-+extern void bpf_testmod_oob_free(struct bpf_testmod_oob *oob) __ksym;
-+
-+int access_size;
-+
-+struct kasan_test_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct kasan_test_val);
-+} test_map SEC(".maps");
-+
-+SEC("tcx/ingress")
-+int st_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		val.data_1 = 0xAA;
-+		break;
-+	case 2:
-+		val.data_2 = 0xAA;
-+		break;
-+	case 4:
-+		val.data_4 = 0xAA;
-+		break;
-+	case 8:
-+		val.data_8 = 0xAA;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int st_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		val->data_1 = 0xAA;
-+		break;
-+	case 2:
-+		val->data_2 = 0xAA;
-+		break;
-+	case 4:
-+		val->data_4 = 0xAA;
-+		break;
-+	case 8:
-+		val->data_8 = 0xAA;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int stx_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		val.data_1 = access_size;
-+		break;
-+	case 2:
-+		val.data_2 = access_size;
-+		break;
-+	case 4:
-+		val.data_4 = access_size;
-+		break;
-+	case 8:
-+		val.data_8 = access_size;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int stx_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		val->data_1 = access_size;
-+		break;
-+	case 2:
-+		val->data_2 = access_size;
-+		break;
-+	case 4:
-+		val->data_4 = access_size;
-+		break;
-+	case 8:
-+		val->data_8 = access_size;
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__sink(val.data_1);
-+		break;
-+	case 2:
-+		__sink(val.data_2);
-+		break;
-+	case 4:
-+		__sink(val.data_4);
-+		break;
-+	case 8:
-+		__sink(val.data_8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__sink(val->data_1);
-+		break;
-+	case 2:
-+		__sink(val->data_2);
-+		break;
-+	case 4:
-+		__sink(val->data_4);
-+		break;
-+	case 8:
-+		__sink(val->data_8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_patched_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	__sink(val->data_4);
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_patched_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	__sink(val.data_4);
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 4:
-+		__sync_fetch_and_add(&val.data_4, 4);
-+		break;
-+	case 8:
-+		__sync_fetch_and_add(&val.data_8, 8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 4:
-+		__sync_fetch_and_add(&val->data_4, 4);
-+		break;
-+	case 8:
-+		__sync_fetch_and_add(&val->data_8, 8);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_fetch_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	__sync_fetch_and_or(&val.data_8, 8);
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int simple_atomic_fetch_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	__sync_fetch_and_or(&val->data_8, 8);
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+#ifdef __BPF_FEATURE_LOAD_ACQ_STORE_REL
-+bool skip_load_acq_store_rel_tests SEC(".data") = 0;
-+
-+SEC("tcx/ingress")
-+int load_acquire_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_load_n(&val.data_1, __ATOMIC_ACQUIRE);
-+		break;
-+	case 2:
-+		__atomic_load_n(&val.data_2, __ATOMIC_ACQUIRE);
-+		break;
-+	case 4:
-+		__atomic_load_n(&val.data_4, __ATOMIC_ACQUIRE);
-+		break;
-+	case 8:
-+		__atomic_load_n(&val.data_8, __ATOMIC_ACQUIRE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int load_acquire_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_load_n(&val->data_1, __ATOMIC_ACQUIRE);
-+		break;
-+	case 2:
-+		__atomic_load_n(&val->data_2, __ATOMIC_ACQUIRE);
-+		break;
-+	case 4:
-+		__atomic_load_n(&val->data_4, __ATOMIC_ACQUIRE);
-+		break;
-+	case 8:
-+		__atomic_load_n(&val->data_8, __ATOMIC_ACQUIRE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int store_release_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val val;
-+
-+	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_store_n(&val.data_1, 0xAA, __ATOMIC_RELEASE);
-+		break;
-+	case 2:
-+		__atomic_store_n(&val.data_2, 0xBBBB, __ATOMIC_RELEASE);
-+		break;
-+	case 4:
-+		__atomic_store_n(&val.data_4, 0xCCCCCCCC, __ATOMIC_RELEASE);
-+		break;
-+	case 8:
-+		__atomic_store_n(&val.data_8, 0xDDDDDDDDDDDDDDDD,
-+				 __ATOMIC_RELEASE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int store_release_not_on_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	switch (access_size) {
-+	case 1:
-+		__atomic_store_n(&val->data_1, 0xAA, __ATOMIC_RELEASE);
-+		break;
-+	case 2:
-+		__atomic_store_n(&val->data_2, 0xBBBB, __ATOMIC_RELEASE);
-+		break;
-+	case 4:
-+		__atomic_store_n(&val->data_4, 0xCCCCCCCC, __ATOMIC_RELEASE);
-+		break;
-+	case 8:
-+		__atomic_store_n(&val->data_8, 0xDDDDDDDDDDDDDDDD,
-+				 __ATOMIC_RELEASE);
-+		break;
-+	}
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+	return 0;
-+}
-+#else
-+bool skip_load_acq_store_rel_tests SEC(".data") = 1;
-+#endif
-+
-+SEC("tcx/ingress")
-+int verifier_paths_stack_and_non_stack(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val stack_val = {};
-+	struct kasan_test_val *val;
-+	void *ptr;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	if (access_size)
-+		ptr = val;
-+	else
-+		ptr = &stack_val;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(*val));
-+	*(__u8 *)ptr = 0xAA;
-+	bpf_kfunc_kasan_unpoison(val, sizeof(*val));
-+	return 0;
-+}
-+
-+SEC("tcx/ingress")
-+int ldx_oob(struct __sk_buff *skb)
-+{
-+	struct bpf_testmod_oob *val;
-+	struct kasan_test_val volatile tmp;
-+
-+	val = bpf_testmod_oob_alloc();
-+	if (!val)
-+		return 0;
-+
-+	switch (access_size) {
-+	case 1:
-+		tmp.data_1 = (__u8)val->redzone_1;
-+		break;
-+	case 2:
-+		tmp.data_2 = (__u16)val->redzone_2;
-+		break;
-+	case 4:
-+		tmp.data_4 = (__u32)val->redzone_4;
-+		break;
-+	case 8:
-+		tmp.data_8 = (__u64)val->redzone_8;
-+		break;
-+	}
-+	bpf_testmod_oob_free(val);
-+	return tmp.data_1;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kasan_harden.c b/tools/testing/selftests/bpf/progs/kasan_harden.c
-new file mode 100644
-index 000000000000..a2756bbfd529
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kasan_harden.c
-@@ -0,0 +1,41 @@
-+// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-+
-+#include <linux/bpf.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+extern void bpf_kfunc_kasan_poison(void *mem, __u32 mem__sz) __ksym;
-+extern void bpf_kfunc_kasan_unpoison(void *mem, __u32 mem__sz) __ksym;
-+
-+struct kasan_test_val {
-+	__u8 data_1;
-+	__u16 data_2;
-+	__u32 data_4;
-+	__u64 data_8;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct kasan_test_val);
-+} test_map SEC(".maps");
-+
-+SEC("tcx/ingress")
-+int st_blinded(struct __sk_buff *skb)
-+{
-+	struct kasan_test_val *val;
-+	__u32 key = 0;
-+
-+	val = bpf_map_lookup_elem(&test_map, &key);
-+	if (!val)
-+		return 0;
-+
-+	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
-+	val->data_1 = 0xAA;
-+	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
-+
-+	return 0;
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-index eb0f9b5e18d8..b59f176228bb 100644
---- a/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-+++ b/tools/testing/selftests/bpf/test_kmods/bpf_testmod.c
-@@ -75,6 +75,16 @@ union bpf_testmod_union_arg_2 {
- 	struct bpf_testmod_struct_arg_2 arg;
- };
- 
-+struct bpf_testmod_oob {
-+	__u8 data;
-+	union {
-+		__u8 redzone_1;
-+		__u16 redzone_2;
-+		__u32 redzone_4;
-+		__u64 redzone_8;
-+	};
-+};
-+
- __bpf_hook_start();
- 
- noinline int
-@@ -298,6 +308,47 @@ __bpf_kfunc void bpf_kfunc_put_default_trusted_ptr_test(struct prog_test_member
- 	 */
- }
- 
-+#ifdef CONFIG_BPF_JIT_KASAN
-+
-+extern void kasan_poison(const void *addr, size_t size, u8 value, bool init);
-+
-+#define KASAN_SLAB_FREE 0xFB
-+
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz)
-+{
-+	kasan_poison(mem, mem__sz, KASAN_SLAB_FREE, false);
-+}
-+
-+__bpf_kfunc void bpf_kfunc_kasan_unpoison(void *mem, u32 mem__sz)
-+{
-+	kasan_poison(mem, mem__sz, 0x00, false);
-+}
-+#else
-+__bpf_kfunc void bpf_kfunc_kasan_poison(void *mem, u32 mem__sz) { }
-+__bpf_kfunc void bpf_kfunc_kasan_unpoison(void *mem, u32 mem__sz) { }
-+#endif
-+
-+__bpf_kfunc struct bpf_testmod_oob *bpf_testmod_oob_alloc(void)
-+{
-+	struct bpf_testmod_oob *p;
-+
-+	/*
-+	 * Only allocate size of data (and so, voluntarily use kmalloc
-+	 * instead of kmalloc_obj), not the rest of the structure, so
-+	 * that programs under test trying to access the rest of the
-+	 * structure trigger OoB accesses
-+	 */
-+	p = kmalloc(sizeof(p->data), GFP_ATOMIC);
-+	if (!p)
-+		return NULL;
-+	return p;
-+}
-+
-+__bpf_kfunc void bpf_testmod_oob_free(struct bpf_testmod_oob *oob)
-+{
-+	kfree(oob);
-+}
-+
- __bpf_kfunc struct bpf_testmod_ctx *
- bpf_testmod_ctx_create(int *err)
- {
-@@ -772,6 +823,10 @@ BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_1)
- BTF_ID_FLAGS(func, bpf_testmod_ops3_call_test_2)
- BTF_ID_FLAGS(func, bpf_kfunc_get_default_trusted_ptr_test);
- BTF_ID_FLAGS(func, bpf_kfunc_put_default_trusted_ptr_test);
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_poison)
-+BTF_ID_FLAGS(func, bpf_kfunc_kasan_unpoison)
-+BTF_ID_FLAGS(func, bpf_testmod_oob_alloc, KF_ACQUIRE | KF_RET_NULL)
-+BTF_ID_FLAGS(func, bpf_testmod_oob_free, KF_RELEASE)
- BTF_KFUNCS_END(bpf_testmod_common_kfunc_ids)
- 
- BTF_ID_LIST(bpf_testmod_dtor_ids)
-
--- 
-2.55.0
-
+Thanks,
+Maciek
