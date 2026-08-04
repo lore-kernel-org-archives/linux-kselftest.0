@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304332BDC0F;
-	Tue,  4 Aug 2026 00:01:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9784537F75E;
+	Tue,  4 Aug 2026 00:02:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785801675; cv=none; b=fVZuXzSvxVIJSEP352TYBKX6Xe2rTso6R8oO37aV1vzGvYKFS8RIMlwAV5wHm6JSGV7+iCePCshSsseC2NeHpjAcAsMvGO4olVby81gI341VZg32sKRRrwWWKWcgcFW/tHYWHQYugxBhnDWy/x8sGCjIdwB8aIoJ81ZnNUnff/4=
+	t=1785801746; cv=none; b=kjWAwSqa1emLlZyMuQKzkqUTx2WEtYHqbOOy+98SAE+hefVSvM+tCpTSHVEsu3wcZLlVE16ki3Jh1MTPZXHMlEmv8YsFVUaa7tiUP2KWCpTpA0oZ8tC8NJy71OvGeZJi/Qn88Zv+dhnpKBCqPq3ofytgSo5OG1eV9/h2UGsHJQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785801675; c=relaxed/simple;
-	bh=nMYK6k+wFeqrg0JetasvD3tO3vUkpRQ72piDvrTYtik=;
+	s=arc-20240116; t=1785801746; c=relaxed/simple;
+	bh=H4bfq9s1yX+PdfLRVKVy64vafK6Z7Son85+ayDp2HnU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fzS6orIC0WXlGprP7LTSmb49Of7IAiniR78JMIZmwfkDTj5E4xxGnbaFXVw2Y/0KaX6fML/dAP29ceimF3uGBA2RuuBiZ+zdfPKeSQWW6LZSZHjoPynjNBJXY2goNmmYujb34h9p7DC57VL8X857vbLJ5EsomtXIUSxiTu1xYns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IlBFQwNa; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=cED2o1KyVyBv8QCspjCFZTuDxjIVm8JfjyJGGnU8yjti1/M/ez9DEu95QYLnfujU6GKgdmmNqlr045wLYg89oJawFyQUHZbOXlJJB1fMB/WEbM50SGP3DIo1CN4F0ZIL1KkAk9J/1I4R06omtG2HxwIXglw27VJ7iI8Iy6CJ8co=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mwYM55Vh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IlBFQwNa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7141F000E9;
-	Tue,  4 Aug 2026 00:01:12 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mwYM55Vh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9584B1F000E9;
+	Tue,  4 Aug 2026 00:02:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785801673;
-	bh=SrYwbPOy2yIk5FHEvKwglgY2XVDGPUlhU0jiXIg5xrg=;
+	s=k20260515; t=1785801745;
+	bh=UrwJW94kDrg4+m+jnC59gn9JDVrDxdlujcdhUvF1Qqo=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=IlBFQwNaqpm7L669/HlLVm5IY7RK+ZyhVhr2wlWZcfE2ruqfov3HOSfpBdMGygSEL
-	 Mz5IxyTYcIE6mmym7kFHlk78ECyss49H3UmlJs47PvjVEABPcuZonRYiaIXkz7wSgY
-	 vNxxceaNwYYZHRCewK1dgDKvO8eKikO4KniSDCr08v6CMzfHQgqbUCR55bMew/oOj7
-	 LlZqfTJusXGFaiqbWnp7uKq9ObcF8BDR1KyyztH83FOQCxN/dblA4HlOG9qbFGUo1z
-	 nN4wttmEw/3SMvdeYuH/JFNGblzW7mLMi5693/7fHWMEvYKgw1a5DTC2kJPAMpHDnR
-	 Q6JoNH1Nk2H/Q==
+	b=mwYM55VhfbMkU/n3grzHTwZ6ADhGXEl3Cs9odiqF3bcMRAq8LFNe93Ru/RNNE30zf
+	 DHIS1P9kFCDUmgM36OKE8VtU9hpUTtefPlpuwLihxx0vr0YffDftcdyhl5/nLTyiSJ
+	 qbtgdfliPAL+JkMtGLC4Fa348VMWjN4GDxZ8sgJ3gfhRXeLBW6y3Pz7S7Gvuw2H397
+	 xiiHRSkLlL0951SW4fsucIOkoAqxnfOFncLL7nScLUS02URdlf1qTbxPggR+gekPFb
+	 yWZpSH7w/B7EjOGpTp71A0fjmdOJK7Gi9jMIMjos2lxUahQVXna6SB1bADCk5pqkFu
+	 0VNCswPiCNEWA==
 From: SJ Park <sj@kernel.org>
-To: pratmal@google.com
-Cc: SJ Park <sj@kernel.org>,
+To: SJ Park <sj@kernel.org>
+Cc: pratmal@google.com,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
 	Sarthak Sharma <sarthak.sharma@arm.com>,
@@ -47,11 +47,11 @@ Cc: SJ Park <sj@kernel.org>,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Liam R. Howlett" <liam@infradead.org>
-Subject: Re: [PATCH v4 2/2] selftests/mm: use pattern matching in .gitignore
-Date: Mon,  3 Aug 2026 17:01:03 -0700
-Message-ID: <20260804000104.88098-1-sj@kernel.org>
+Subject: Re: [PATCH v4 1/2] selftests/mm: rename local_config.h to local_config.h_gen
+Date: Mon,  3 Aug 2026 17:02:22 -0700
+Message-ID: <20260804000222.88232-1-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260803221732.3651981-3-pratmal@google.com>
+In-Reply-To: <20260803235743.87939-1-sj@kernel.org>
 References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -61,38 +61,15 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Cc-ed Liam's up-to-date email address.
+On Mon, 03 Aug 2026 16:57:51 -0700 SJ Park <sj@kernel.org> wrote:
 
-On Mon,  3 Aug 2026 22:17:32 +0000 pratmal@google.com wrote:
+[...]
+> I found this patch cannot cleanly 'git am'-ed on mm-new, mm-unstable and even
+> mm-stable.  Maybe rebasing will be nice?
 
-> From: Pratyush Mallick <pratmal@google.com>
-> 
-> The current .gitignore hardcodes each generated test binary by name,
-> requiring updates every time a new test is added.
-> 
-> Switch to the pattern-matching approach similar to KVM:selftests.
-> Ignore everything by default and then allow source extensions (.c, .h, .sh)
-> and tracked non-source files.
-> 
-> Note that local_config.h was renamed to local_config.h_gen in a previous
-> patch so that un-ignoring *.h files does not cause generated build
-> artifacts to become untracked.
+Never mind, I just found Andrew already added this to mm-new.
 
-Looks nice and smart to me!
-
-> 
-> Reviewed-by: Lorenzo Stoakes <ljs@kernel.org>
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Suggested-by: Yosry Ahmed <yosry@kernel.org>
-> Signed-off-by: Pratyush Mallick <pratmal@google.com>
-
-Reviewed-by: SJ Park <sj@kernel.org>
-
-> ---
->  tools/testing/selftests/mm/.gitignore | 71 ++++-----------------------
->  1 file changed, 9 insertions(+), 62 deletions(-)
-
-What a lovely diffstat. :)
+[1] https://lore.kernel.org/20260803230818.437641F000E9@smtp.kernel.org
 
 
 Thanks,
