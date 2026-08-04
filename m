@@ -1,32 +1,30 @@
-Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
+Received: from out-165.mta1.migadu.com (out-165.mta1.migadu.com [95.215.58.165])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFBC46D556
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 14:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E978A46D551
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 14:58:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.165
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785855485; cv=none; b=pyONz/LVBzKm3PvJOMW63nFcluMa+QTeKPFbvISiR1t8Z7CMS/xV9bJ2/ReXO/OF+2iZ9sX0twaudrTPQglBxPC540OJXW0QrnaWnlBxumsMcXyIo+LpcvhVut9iXyEfFns38pUd8am+OEIoXE6m19Qwvv+PFzCa3rEOHS8rHKM=
+	t=1785855488; cv=none; b=h5gOTs0qcvt5mx4BKV/XuWrypDrjC5PUHGYS+jaHbkjb3vR+6pC6B6VPRAa4SivrMo0mykHi548CXZSXt2SVKJBlQR7cYXe2AnYL/taNbKZzAko7dOSKRQ2sW8JQCAaKXIUCeS34Br+rN5eHGpvwDTtacNqr5B5qjoPCsl/VrVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785855485; c=relaxed/simple;
-	bh=tSl4ZcCJaQO2QgJCGFOfH8vTqTaFfBerbXP1wW2S840=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=alddSAsbsDgXqzZhxS0y3rAHloQn+te91mzMmSSFNZcNINZfz9/YnM6kddeuhZJiccBkJgXfNgelZAHsYPSR3IG2c8j7k/L8RLd1JkJuEXdZAkDLYTNw9Xqv8Nw0d68YM0wm5nic1FfmWrprPJT7jSWAb+v5oK6zXlEcNEpsChI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d/JkbBsk; arc=none smtp.client-ip=95.215.58.180
+	s=arc-20240116; t=1785855488; c=relaxed/simple;
+	bh=ArRkU7RXkXJPQgDlD1hkgxUxaScBlomq6HnbZq6kUJE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QHsX0CNFdRJ7ZwU8d82xJhMM2xHPbJj829Ex2gN5ErujDVDvYRdLF5sDR7nVs1ES61LRCKksiHVLXpy8+jDTrBmn5bXgPvrPnOhh9yo7SawOQFOEbQaJUGFi9fB504dwZcP2jaRjX25gUFvgOS3mWqfejdAdvdTX7nVYEb+lR3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MALbJcyJ; arc=none smtp.client-ip=95.215.58.165
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d/JkbBsk"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MALbJcyJ"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785855475;
+	t=1785855469;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fs8nqwBOqL0v9GMZ6ryb7yeRi28md6/j0HbpFYrWssU=;
-	b=d/JkbBskzHaxRY1pAK9nOsQARI89mnPc4Tqf9I+hcF3fTlCO+57lZEhBMkdZgPYnPY8ZHl
-	0pDnWcF8xms4emKnsbmQAp/9+OhQjmKpITMTEYRRTistf2sXPDkqdNcaikUy/aBosoBES1
-	2buQuvn/7DPVcr/OtymG+45/NknUurA=
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RghPM1u2T+6y3vNEtKyQ684wTecvoQm8vEjYVhkxYx0=;
+	b=MALbJcyJV+IPMrqXFzmiM/S4agQ7rl9PEKMgcXKFdOUVK2vUqvCm2qGRivM1i//We4H48l
+	JveISNTEeo3TVGti2klIdS/kbc+sXddZEOyGl2kpNELh8IVpUXGm9Q9sYwRI5glDGBs/mM
+	YaYU2A7Q+CPsCiW2cFTjrXf6/fDH6fo=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -49,11 +47,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v3 1/2] bpf: Fix sleepable check for tracing prog
-Date: Tue,  4 Aug 2026 22:57:09 +0800
-Message-ID: <20260804145710.43062-2-leon.hwang@linux.dev>
-In-Reply-To: <20260804145710.43062-1-leon.hwang@linux.dev>
-References: <20260804145710.43062-1-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next v3 0/2] bpf: Fix sleepable check for tracing prog
+Date: Tue,  4 Aug 2026 22:57:08 +0800
+Message-ID: <20260804145710.43062-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,27 +76,26 @@ could be triggered by 'ping -c 1 -W 1 127.0.0.1':
 Fix it by disallowing sleepable tracing prog always when its target btf
 is not kernel's btf.
 
-Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
-Acked-by: Viktor Malik <vmalik@redhat.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- kernel/bpf/verifier.c | 3 +++
- 1 file changed, 3 insertions(+)
+Changes:
+v2 -> v3:
+* Use btf_is_kernel() instead of passing 'tgt_prog'. (per Andrii)
+* v2: https://lore.kernel.org/bpf/20260725132624.78373-1-leon.hwang@linux.dev/
 
-diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index b274004fccfd..7bb541e343b2 100644
---- a/kernel/bpf/verifier.c
-+++ b/kernel/bpf/verifier.c
-@@ -19019,6 +19019,9 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
- 
- 	switch (prog->type) {
- 	case BPF_PROG_TYPE_TRACING:
-+		if (!btf_is_kernel(btf))
-+			return -EINVAL;
-+
- 		t = btf_type_by_id(btf, btf_id);
- 		if (!t)
- 			return -EINVAL;
--- 
+v1 -> v2:
+* Drop redundant 'prog->sleepable' check. (per Viktor)
+* Collect Acked-by from Viktor, Thanks.
+* v1: https://lore.kernel.org/bpf/20260724141422.10463-1-leon.hwang@linux.dev/
+
+Leon Hwang (2):
+  bpf: Fix sleepable check for tracing prog
+  selftests/bpf: Verify rejection of sleepable tracing prog
+
+ kernel/bpf/verifier.c                         |  3 +
+ .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
+ .../selftests/bpf/progs/fentry_sleepable.c    | 18 ++++++
+ tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
+ 4 files changed, 84 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+
+--
 2.55.0
-
