@@ -1,227 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011041.outbound.protection.outlook.com [52.101.65.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA783644C4;
-	Tue,  4 Aug 2026 12:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785847070; cv=none; b=CSgTGt532FVLUw8gLW95XtCVYd9MipN1irUOwIfI5kXjH10H2mbZKu6/gKWFJGoZ2B+Sb9LxI6iB2IVdy91q9PKVIOdY5AaFFc/3GmucQfqPwUM0o/KyRijnTOJwCJLdBKn/jfZNf0bQgxleag6wNNPpSDcXQM/9Ol/DdTSdB90=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785847070; c=relaxed/simple;
-	bh=EieNp/YNEWfCJ/nS9mOvHuM0BYSEdAllos6iAzdLNxI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cOygRy3sus92aps2y6YC7dYFIyUonPky+38p2jpXx3bmHHGXa0ebW9kgA/m40L5oclvgTifT1kHRHkNSEcquyJ0FCvTqtmCzWo8B87+YVE9kgKO/UWdKfn828Ux18zoHpI3gcKbOqt5sLp+6Qa/tdMoBXm2g7BVmuGKtJgH/tGU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gqk79v1g; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E75835C1A1;
+	Tue,  4 Aug 2026 12:38:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.41
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785847097; cv=fail; b=CnL5K9Kft2fGRIKDBvdm4GJ48YtziaDXK6woo7VtqJx9GNL41CObLgr4Khgf+SHHrZBBirUPL1T2PZ3nxQOfQdiiGOKQ89ZuMtlSclhQLhklS8zyp5AasR310KaJcMehGj5y7v2RRJAaeB5kgH59QF8f1wTIB9fnBDkMe0FTUiI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785847097; c=relaxed/simple;
+	bh=vgAq+KJgLccFNcJBy6CDHgu8lc7fgjgoI0iRn5SzaDQ=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=VCP08dGfGdsFPmVfakL9YgsAyUYBNCnfhx/S3C1gFBRETLHZN1eZvtmYheiJl207smMO+DyRZ42H08odBfBaS2E7AeBD5p3PTYi7/yRx3gbYyVva505IybLzDp/oSBaGICA637aulifcCnH526N86oKwtkpkJhbpZtjKcOq8iKY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=phE3H37k; arc=fail smtp.client-ip=52.101.65.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gqk79v1g"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CC941F000E9;
-	Tue,  4 Aug 2026 12:37:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785847067;
-	bh=o0hDzMUzXTXLcZbR/cMAIrPS2jl1EtG0west4JLjGUg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Gqk79v1gcOp8xbuKiIPDbTI4LgdH3blYiwu7nhreDXF0H8ZSNJkeJoMi/9Ry/3VA4
-	 PuZYGGcggHZvvJVB6+nqdRuO8tcrOodP3AerJXQVHQR1lFtS0/xeNXWmpFcssOT+Pi
-	 /yMJgw7hUZijhtR+E6BzomuWrLvxLBSlOPSYRo6oNLIOAQKx1D6Rf1JhHIV1/mNid2
-	 8afNRqikGU2LlclzszGEdB5hwPlxJZ2h8iPTwTuMCeKmSJGXe4gRIwSuftDzeYLak3
-	 7lDXsTAblvq6HHySpG7JaJrciL8x08PsZ8BB0Lt67uuYLzFxVxI4RyaHIj0sevTUSr
-	 NP686j9xrM9vA==
-Date: Tue, 4 Aug 2026 13:37:39 +0100
-From: Simon Horman <horms@kernel.org>
-To: Arthur Kiyanovski <akiyano@amazon.com>
-Cc: David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Miroslav Lichvar <mlichvar@redhat.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Andrew Lunn <andrew@lunn.ch>,
-	Carolina Jubran <cjubran@nvidia.com>,
-	Wen Gu <guwen@linux.alibaba.com>,
-	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-	David Woodhouse <dwmw@amazon.com>,
-	Yonatan Sarna <ysarna@amazon.com>,
-	Zorik Machulsky <zorik@amazon.com>,
-	Alexander Matushevsky <matua@amazon.com>,
-	Saeed Bshara <saeedb@amazon.com>, Matt Wilson <msw@amazon.com>,
-	Anthony Liguori <aliguori@amazon.com>,
-	Nafea Bshara <nafea@amazon.com>,
-	Evgeny Schmeilin <evgenys@amazon.com>,
-	Netanel Belgazal <netanel@amazon.com>,
-	Ali Saidi <alisaidi@amazon.com>,
-	Benjamin Herrenschmidt <benh@amazon.com>,
-	Noam Dagan <ndagan@amazon.com>, David Arinzon <darinzon@amazon.com>,
-	Evgeny Ostrovsky <evostrov@amazon.com>,
-	Ofir Tabachnik <ofirt@amazon.com>,
-	Amit Bernstein <amitbern@amazon.com>,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Bjorn Helgaas <bhelgaas@google.com>, vadim.fedorenko@linux.dev,
-	David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: [PATCH v6 net-next 4/7] ptp: ptp_vmclock: Implement attributes
- ioctls
-Message-ID: <20260804123739.GM51943@horms.kernel.org>
-References: <20260729233740.16516-1-akiyano@amazon.com>
- <20260729233740.16516-5-akiyano@amazon.com>
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="phE3H37k"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=W6uviyp5YfWQ0da2NWkAfK65Wqf+kEx+/304KncI2J6nMlduU+9df/KYZppkzfsdjKxLBZ8aNPvnEK3ELUlnzXGEtxxEBPyBqttmXpdqgdoD+t6qlld4XmagQDxIjYgx0P9LiZitbwuP7036LJIxD6kqJfv7ZpiznsyrXPDm0vF/EApuL4Kl54CbAdCejlXtG9+CcruU0NLQ/yuZZJC+GYFpJfy7nw/e9sB1Q4FZ8SM8R/o39+4vFc4BoqhBnNsI2WV27+HBcrpI3MY+xLXn6UUI2mITmfiyQv9/h2Wy+LgLPw07YChYEAKWKlAY6IYkIdhDLaqhNstM4E9Qlpvr2g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vgAq+KJgLccFNcJBy6CDHgu8lc7fgjgoI0iRn5SzaDQ=;
+ b=V4xrFPGKzb14n9t+7IEQlsOeambuTfMCIMG+LAJ76pFSCtw18cOyw/+h6G3cSz5+5m/db378/6OjRW35isjTSGHmr29y8rQRZmbh9IPixfgzLBxOOl7ndWLak9Wj+GsRKs1ALcezlR/+Eg9YXDAvY8z0cjjLjbYm1YEnIZd0drVqxTFiYF6+PiSz1mpC1EPZG3swnq9z9mIcww1MX3/rvNp5lBsF4IwxjJQKS/ntu6WrqMA4lDbAQM9ADFA/N4rT7/kPkhu6cRX44IdGqo/jZ3DKnYzdQHR7UEOdp6ADIPeCrwk/5k/CulZr7FWst/84D9A1MXE3Y0BGgyy/WwzdSg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vgAq+KJgLccFNcJBy6CDHgu8lc7fgjgoI0iRn5SzaDQ=;
+ b=phE3H37kCyV/HKR7+EPBA6pGX7G/pdfrOqPW1+tA6Id5yIafme+5UNAjogb7JkEByUW9CCVYEkUqnLm/h0/1t8ZSlViFke9gnCDdvlg8emWWTFb+9Zd9GnfVZHIK6Vg2+zZGecbcqys230p7RchoSXKVbx1CNIHESYBDn+5vKTteu/UIeNCsrETCls41vif2UWxeoAyNSC9gMuxWUb1hZ9BcCrteEk6YpZzMtPdt197ea4Nm+6slnfNmnhouJZFYYSTrUf7BZPHBcuvxW6Dz8Y8rLQgv01+V8s7vEzwyg61y8o5FZ959dLnxIeNDr6yhikRiVmUS7AUKNIDt5liDqQ==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by PA4PR07MB7695.eurprd07.prod.outlook.com (2603:10a6:102:fb::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.15; Tue, 4 Aug
+ 2026 12:38:10 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5%2]) with mapi id 15.21.0292.013; Tue, 4 Aug 2026
+ 12:38:10 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Jakub Kicinski <kuba@kernel.org>
+CC: "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"eperezma@redhat.com" <eperezma@redhat.com>, "jasowang@redhat.com"
+	<jasowang@redhat.com>, "virtualization@lists.linux.dev"
+	<virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>,
+	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "stephen@networkplumber.org"
+	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
+	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
+	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
+	<andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+	"ast@fiberby.net" <ast@fiberby.net>, "liuhangbin@gmail.com"
+	<liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+	<ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
+	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
+	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
+	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
+	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>,
+	Parav Pandit <parav@nvidia.com>
+Subject: RE: [PATCH v4 net-next 1/1] net: update comments for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Thread-Topic: [PATCH v4 net-next 1/1] net: update comments for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Thread-Index: AQHdHquky4Lusn6ys0yW+D1m17BB47aNGEwAgADE2PA=
+Date: Tue, 4 Aug 2026 12:38:10 +0000
+Message-ID:
+ <PAXPR07MB798489DFC97547F586618BEEA3D42@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260728161007.650717-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260803174726.585aed45@kernel.org>
+In-Reply-To: <20260803174726.585aed45@kernel.org>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|PA4PR07MB7695:EE_
+x-ms-office365-filtering-correlation-id: d269d89d-c1f4-4e4e-0782-08def2253e62
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|366016|23010399003|1800799024|7416014|376014|10067099003|11063799006|4143699003|56012099006|22082099003|18002099003|38070700021;
+x-microsoft-antispam-message-info:
+ rElUnhzrUO8uQs5GmMKhg6Byq6dcmp88z0oiwFP8c3sCekNIrsrrwnn7BPP647GtzMFADM8ZJwQ/UctEttxNH4yK+EEkx2HLvWONEXU8BrXhpTg9s80ICfFlGmSE7MB7TUcTKEpANys2oH+7J8mWvewrp9qdUv8d59KgL8OZzcycp161aivPSiWNT1UvXrkfxw2DRZxTRodBFlhEJNIFWlpO1d8faqiMofwX44IeUhNoTYmEbg1vz7+//roiXo0Qu62Q+7Dtqz24cAZ8B1S0P0CKjlgYnKFNPRChsCfAB+BhO4uosvyrOsqCzT1vibMwB7D7N6eGbCZp9QiotSs4hbaDSkZxvEfPmbyrLnp/21VjTZlkD9SXj++7m4aG2oxW2WiW/kz24fP3XD7zBXyAX6KUSSS+QLS4VfRt5/L/w97WFd1diBtsNLW2VrYQWIShQqLszm/1juiiUO8MJovmOwC1VeN8SKB9j1SKb1OSH3/kJFBH253pyNh0pn6IMe4uTc3CCU66Wfa2cReq5HcMJZ2ahLENCBlBppc/SfP8nVItGh5cCa0ee0UYV+w1NG34oYCH9LVTcJ6+0rMNwWfwsNPh89jkT5BHD8kTcQOD/sPgxoarskOqs86kn5ELy5d3z5WYuhMBKHDJlLJgWHgIDg5/hxCABU6nZFa/2mOFG04=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(23010399003)(1800799024)(7416014)(376014)(10067099003)(11063799006)(4143699003)(56012099006)(22082099003)(18002099003)(38070700021);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?us-ascii?Q?z+NRBkvEbfb2Jzv1B7xaIXNdqZfD4q3hE3wY4X6c4Gv+seoiXcR8vNL7vTal?=
+ =?us-ascii?Q?kKREFCafuIZbnR6v05hV0MpwirT9jbqi9ZcNLw8BsBghABYvYd1W3MRzIr4c?=
+ =?us-ascii?Q?Q99LGL7Vap5aWjI/LUXEra4RnPEQP4xxrD2YchcATEoBKGnUjLvu+SdlZebs?=
+ =?us-ascii?Q?zMjLJJhAWPOqBdsq9Tdizy4R76+7XolnZIeEw/ExPuISWDU6JsJ5+BkuIv5i?=
+ =?us-ascii?Q?vuhX2tXEEp3G/SPYe6XEUTlgtJzi7rsnYm80WbvrUELlOLKa9vBOleip60xN?=
+ =?us-ascii?Q?eOnIE0QwB2oPUVgyA8IohTYeTI1YzwyP7lnn40SSXDbXzNeJ8j1MqfiK6oLO?=
+ =?us-ascii?Q?R//In4Sw2lVdtk+Z2mIRlxT+HU2sj3ccelkmhG4WYMqMQCTM2frI0OeomTuS?=
+ =?us-ascii?Q?Wv7AU1z6f1ISSM9HYb9gYetFpHtV2nUvfQesH/B38ASKfGpN5vuDlYQa5cn1?=
+ =?us-ascii?Q?aTAdgU6UUEYmex9NCdmCuOBEZMzIKQWcCSU7Xwu26j9MOTuVHGm3OpzaxYXR?=
+ =?us-ascii?Q?CWCdbfbhl5Z+TMtkv61mC+pWBFXrBisxGbhr/Ra8ckLA8Aa3130WvCfDY4Gs?=
+ =?us-ascii?Q?MN3POvC7lssF0sNuaCtd9RPwyR8dThEjbUUGRT2JQLzHGmp9/uTOprgepJCF?=
+ =?us-ascii?Q?mEcgSgat5Mk4yPdcMlRACh22hnjjHDANDvc0hI/BBw0P+g/KAAGFPSbvWTVZ?=
+ =?us-ascii?Q?WG8KtJDZREz1xWdlGqVmMo/9azek6rrYjGFdCe9HtvQgR87vzcDpyhRXytD0?=
+ =?us-ascii?Q?S4brBuQZVqALrsWJaafevELL5jHqAzPfQBA0uVZN1aMdLiNM/T4HJ2bXuSNW?=
+ =?us-ascii?Q?Bnz1HU3BK1KEkO0728m4QsyS2scW2PBqpR+lG/emOQKRHEIjvVY/SNdjSIRJ?=
+ =?us-ascii?Q?ccPNdkj1dCAAEjWvlPxkralHthqk0bEW6nPZzHmPUbYOFXDwoFuX5rwFGZ+g?=
+ =?us-ascii?Q?lOHAU1P4kgVQj8m4v3GQB0+FyzqM0jgzeeRMx16XBRhfckfPzMTT8TKOoie+?=
+ =?us-ascii?Q?FigAEjmvqbkCQqYAW8r/Rk9i14yZJowIyboXlTnlHgDZy3xk/CD0oFdmuBf1?=
+ =?us-ascii?Q?FuJGdE4cRAojdneEk7VayqNuDWplUv9JJ178vgWsJ1PViSOeLFrgAbgT8ak2?=
+ =?us-ascii?Q?jNdf+5aTniXC65fR7P3CfY1oNoUR+2WeGLAqoh00ok/EeMFr1aAm/Km+2JA7?=
+ =?us-ascii?Q?DRLFKk7Yx6wEbVrIbIKqd9Zot6yBiHcKAsVP7c0zcmpSY0/t02C88W2g8qVN?=
+ =?us-ascii?Q?PhX98NnV0gxjjlC3nmKnafC7HFsfUzXDHyRhfwgJNbK0U3vAcifnEqTVaucd?=
+ =?us-ascii?Q?XYDzrO8t44TusxZwkb2Mt2h8cd7QXQKrnReKcCCSdaB4PrrWjhwXzz/cvmkh?=
+ =?us-ascii?Q?yASJeHhP3Wjd74BIxoFVtQYOSUfPaefSgvvXNxbHsOIeLQLuugwXRNl5av4J?=
+ =?us-ascii?Q?yBVE90FNCngnu9zVNHNxyQVlzCQ/tNoqsBwCbxwy5GRWXHMtYD99O8XAuSDR?=
+ =?us-ascii?Q?zzF1kuNYhAGmk07Af2cdjWIDrVxJCtKrD75OFxMgDJcFY5F+4E5kH62enfY4?=
+ =?us-ascii?Q?GHHUj7+/LFgHJ3OUhkP96UIjyicVcBhFp25VqorXVYDMOJku15/6bMCXOF1h?=
+ =?us-ascii?Q?i3NkS1M2x+TYWR8QT72pD5mkAlzbHyek7zkyYyJLlb9Bs69//V9IKtU6CVUK?=
+ =?us-ascii?Q?QqZ+cy/hQEsaOM1qOk1zNbE01V3uGo2EzhGxzsLckwdfSkxHX8uVojo1gY5P?=
+ =?us-ascii?Q?KWnm/Uzb62TtajA2JwZZTgat4Y5OY3U=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260729233740.16516-5-akiyano@amazon.com>
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d269d89d-c1f4-4e4e-0782-08def2253e62
+X-MS-Exchange-CrossTenant-originalarrivaltime: 04 Aug 2026 12:38:10.6901
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: PBzitiicG6ke6GSN4r7chRk8ZsDshbX7rTKjNVZBV160XTlEDGVIjrRJa+wd0Sueqw6NdpNoPNfNh+GxqVdE3st+lyBAhpJkeAou4feZGbT0GXXx/UcDaW3iNsQ9vqL3
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR07MB7695
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://sashiko.dev/#/patchset/20260729233740.16516-2-akiyano@amazon.com?part=4
----
---- Patch [4]: [PATCH v6 net-next 4/7] ptp: ptp_vmclock: Implement attributes ioctls ---
-commit 9ab73b649349967c6e3befcbed4c125d48bd8c43
-Author: Arthur Kiyanovski <akiyano@amazon.com>
+> -----Original Message-----
+> From: Jakub Kicinski <kuba@kernel.org>=20
+> Sent: Tuesday, August 4, 2026 2:47 AM
+> To: Chia-Yu Chang (Nokia) <chia-yu.chang@nokia-bell-labs.com>
+> Cc: linux-rdma@vger.kernel.org; eperezma@redhat.com; jasowang@redhat.com;=
+ virtualization@lists.linux.dev; mst@redhat.com; xuanzhuo@linux.alibaba.com=
+; pabeni@redhat.com; edumazet@google.com; linux-doc@vger.kernel.org; corbet=
+@lwn.net; horms@kernel.org; dsahern@kernel.org; kuniyu@google.com; bpf@vger=
+.kernel.org; netdev@vger.kernel.org; dave.taht@gmail.com; jhs@mojatatu.com;=
+ stephen@networkplumber.org; xiyou.wangcong@gmail.com; jiri@resnulli.us; da=
+vem@davemloft.net; andrew+netdev@lunn.ch; donald.hunter@gmail.com; ast@fibe=
+rby.net; liuhangbin@gmail.com; shuah@kernel.org; linux-kselftest@vger.kerne=
+l.org; ij@kernel.org; ncardwell@google.com; Koen De Schepper (Nokia) <koen.=
+de_schepper@nokia-bell-labs.com>; g.white@cablelabs.com; ingemar.s.johansso=
+n@ericsson.com; mirja.kuehlewind@ericsson.com; cheshire@apple.com; rs.ietf@=
+gmx.at; Jason_Livingood@comcast.com; vidhi_goel@apple.com; Parav Pandit <pa=
+rav@nvidia.com>
+> Subject: Re: [PATCH v4 net-next 1/1] net: update comments for SKB_GSO_TCP=
+_ECN and SKB_GSO_TCP_ACCECN
+>=20
+>=20
+> CAUTION: This is an external email. Please be very careful when clicking =
+links or opening attachments. See the URL nok.it/ext for additional informa=
+tion.
+>=20
+>=20
+>=20
+> On Tue, 28 Jul 2026 18:10:07 +0200 chia-yu.chang@nokia-bell-labs.com
+> wrote:
+> > For RX, SKB_GSO_TCP_ECN shall NOT be used
+>=20
+> but it _is_ still used in hns3, what's your plan there?
+> Documenting something we adhere to at the outset seems like a red flag.
+>=20
+Hello,
 
-ptp: ptp_vmclock: Implement attributes ioctls
+I would think to remove the SKB_GSO_TCP_ECN in hns3.
+Because hns3 will break the whole TOS byte based on Jijie's email: https://=
+lore.kernel.org/all/47530dd8-cba6-4282-ae80-4cabd52b08bc@huawei.com/#t
 
-Implement the gettimexattrs64 and getcrosststampattrs callbacks in the
-ptp_vmclock driver to provide clock quality attributes through the new
-PTP_SYS_OFFSET_EXTENDED_ATTRS and PTP_SYS_OFFSET_PRECISE_ATTRS ioctls.
+Also, the virtio related changes will be submitted only after the approval =
+from virtio-spec.
 
-> diff --git a/drivers/ptp/ptp_vmclock.c b/drivers/ptp/ptp_vmclock.c
-> index eebdcd5ebc080..fe26123ad940d 100644
-> --- a/drivers/ptp/ptp_vmclock.c
-> +++ b/drivers/ptp/ptp_vmclock.c
-> @@ -95,13 +106,111 @@ static bool tai_adjust(struct vmclock_abi *clk, uint64_t *sec)
-
-[ ... ]
-
-> +static void vmclock_populate_ptp_attributes(struct vmclock_state *st,
-> +					    struct ptp_clock_attrs *att,
-> +					    uint64_t delta)
-> +{
-> +	uint64_t maxerror_ns = UINT_MAX;
-> +
-> +	if (!att)
-> +		return;
-> +
-> +	/* Only calculate if the base error is flagged as valid
-> +	 * by the hypervisor.
-> +	 */
-> +	if (VMCLOCK_FIELD_PRESENT(st->clk, time_maxerror_nanosec) &&
-> +	    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_TIME_MAXERROR_VALID)) {
-> +		maxerror_ns = le64_to_cpu(st->clk->time_maxerror_nanosec);
-> +
-> +		/* If frequency error is also valid, accumulate it
-> +		 * over the delta.
-> +		 */
-> +		if (VMCLOCK_FIELD_PRESENT(st->clk, counter_period_maxerror_rate_frac_sec) &&
-> +		    (le64_to_cpu(st->clk->flags) & VMCLOCK_FLAG_PERIOD_MAXERROR_VALID)) {
-> +			uint64_t maxerror_rate, err_hi, err_frac, growth_ns;
-> +
-> +			if (st->clk->counter_period_shift >= 128) {
-> +				maxerror_ns = U64_MAX;
-> +				goto saturate;
-> +			}
-> +
-> +			maxerror_rate = le64_to_cpu(st->clk->counter_period_maxerror_rate_frac_sec);
-> +			err_frac = mul_u64_u64_shr_add_u64(&err_hi, delta,
-> +							   maxerror_rate,
-> +							   st->clk->counter_period_shift,
-> +							   0);
-
-[Severity: High]
-Could a malicious hypervisor modify counter_period_shift concurrently?
-
-The counter_period_shift field is read directly from shared memory twice,
-first for the bounds check and then as an argument to
-mul_u64_u64_shr_add_u64(). If the value changes between these reads, it
-could bypass the bounds check and cause an out-of-bounds shift.
-
-Would it be better to read it once using READ_ONCE() to ensure the bounds
-check operates on the exact value passed to the math helper?
-
-> +
-> +			if (err_hi >= U64_MAX / NSEC_PER_SEC) {
-> +				maxerror_ns = U64_MAX;
-> +				goto saturate;
-> +			}
-> +
-> +			growth_ns = (err_hi * NSEC_PER_SEC) +
-> +				    mul_u64_u64_shr(err_frac, NSEC_PER_SEC, 64);
-> +
-> +			/* Guard against overflow */
-> +			if (U64_MAX - growth_ns < maxerror_ns)
-> +				maxerror_ns = U64_MAX;
-> +			else
-> +				maxerror_ns += growth_ns;
-> +		}
-> +	}
-> +
-> +saturate:
-> +	/* PTP UAPI error_bound is 32-bit nanoseconds */
-> +	att->error_bound = (maxerror_ns > UINT_MAX) ?
-> +		UINT_MAX : (uint32_t)maxerror_ns;
-> +	att->valid |= PTP_ATTRS_VALID_ERROR_BOUND;
-
-[Severity: Medium]
-Does this unconditionally tell userspace that the error bound is valid, even
-if the hypervisor flagged time_maxerror_nanosec as invalid?
-
-If VMCLOCK_FLAG_TIME_MAXERROR_VALID is clear, maxerror_ns remains UINT_MAX
-and PTP_ATTRS_VALID_ERROR_BOUND is still set. Userspace might interpret the
-resulting UINT_MAX as a legitimate worst-case error bound rather than an
-unsupported attribute.
-
-> +	att->timescale = vmclock_get_ptp_timescale(st->clk->time_type);
-> +	/* tai_adjust() already converted UTC to TAI before we're called */
-> +	if (st->clk->time_type == VMCLOCK_TIME_UTC)
-> +		att->timescale = PTP_TIMESCALE_TAI;
-> +	att->valid |= PTP_ATTRS_VALID_TIMESCALE;
-> +	att->status = vmclock_get_ptp_status(st->clk->clock_status);
-> +	att->valid |= PTP_ATTRS_VALID_STATUS;
-> +}
-> +
->  static int vmclock_get_crosststamp(struct vmclock_state *st,
->  				   struct ptp_system_timestamp *sts,
->  				   struct system_counterval_t *system_counter,
-
-[ ... ]
-
->  		delta = cycle - le64_to_cpu(st->clk->counter_value);
->  
->  		frac_sec = mul_u64_u64_shr_add_u64(&tspec->tv_sec, delta,
->  						   le64_to_cpu(st->clk->counter_period_frac_sec),
->  						   st->clk->counter_period_shift,
->  						   le64_to_cpu(st->clk->time_frac_sec));
-
-[Severity: High]
-This is a pre-existing issue, but can counter_period_shift be greater than
-or equal to 128 here?
-
-Since counter_period_shift is controlled by the hypervisor and passed directly
-to mul_u64_u64_shr_add_u64() without bounds checking, an invalid value could
-cause an out-of-bounds bitwise shift and undefined behavior:
-
-mul_u64_u64_shr_add_u64() {
-    ...
-    res >>= shift;
-    ...
-}
-
-Given that vmclock_populate_ptp_attributes() actively defends against
-invalid shift values, should we add a similar bounds check here to prevent
-a potential kernel panic?
-
->  		tspec->tv_nsec = mul_u64_u64_shr(frac_sec, NSEC_PER_SEC, 64);
->  		tspec->tv_sec += le64_to_cpu(st->clk->time_sec);
->  
->  		if (!tai_adjust(st->clk, &tspec->tv_sec))
->  			return -EINVAL;
->  
-> +		/*
-> +		 * Capture clock state inside the seq_count loop for a
-> +		 * consistent snapshot with the timestamp. The attrs path
-> +		 * reports it to userspace via the status field; the legacy
-> +		 * path saves it for the UNRELIABLE check after the loop.
-> +		 */
+Thanks.
+Chia-Yu
