@@ -1,140 +1,166 @@
-Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+Received: from mail-wm2-f10.google.com (mail-wm2-f10.google.com [74.125.225.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E6646D09C
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 18:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FA623815E2
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 18:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785866762; cv=none; b=t6/e/PlNsLXiDMCDSjW2kwjAxJObklCrKkbqaVxw1ip6Hn3wARY7zo5JI6cSbmOBJssQGaITziaQ98vsPGbJkKC8JAb4wQX3Mkx4NCcLOplYeita8O5hwqMIO2F7gkwH0eq1ti81UF1pRHCyYQVWoI7M+z3SEEMjgCwugjuKtAI=
+	t=1785867666; cv=none; b=UEibp4R9wdSo/M4DFSnw98tTCyzKdOIEwpI8ZxT7MUqALG2Sxh7ljSm8780wWhT2fwrU6uPtFhfB7TxD+XZBDV84XAGKhyOb7k8WZdWIxyTj2Kp1ZY7UUG7SBFvUOzdOmfOp/WvunG0sdjpSQ8tnOQJMy84Nh4Ry+AeRQa8nSnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785866762; c=relaxed/simple;
-	bh=mukZbijvR09Qyb8O6a5zSs66Nc1Ea8eJ76KYS4fy0x0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y8HDwk1BIEed3MX2FrJVtXlbfZiPnsOBdtvOy0vTjy/Ko+CX9FmKp2cKQZUh84DgNSsxGSJh5uWEPql4QuqI1FY8NvuOnuCOsW3WkhQ4V+/JoRKoTSZyof7PRFaP/czuCxmeaNqeBGoRXx9UDj3VcXKDJMc09OxNNyvjN9qpbCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/XJod1g; arc=none smtp.client-ip=209.85.222.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1785867666; c=relaxed/simple;
+	bh=WWIR30hIWW19T7qrJDosGEVYAkY+1cLTLiDnzS/wuQ8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=olSjJGyfnwDvlOtzb0QDECeK/Q7+gWkbYTTWM8YwU8gTyZb4YhX3wWQFwYoygQfDXuky9zQloRDznRj8+KyE9OYa4vaertd5ar9I17R2a1tNcVjj0q/iSG9gi5IkdWdKrHzyrSurZ9STIxghqDwU2g5SznSMsMMSlmOA+KXb5YI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/XJod1g"
-Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-92e7632b193so10466685a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 11:06:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785866760; x=1786471560; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=PvFOPFIKv7IZLYV82VSUnHCVCbk2jO9N6jmpfHOfts8=;
-        b=T/XJod1gvh20p2DW/AdAWJ74EQT6tre1gp5whPlqrYD3PiIEjglyZGXneLDTjxaYuh
-         kfyggTEifzO1Epx13eyNGjHVTWHDsKXWH7X9Y+bE4JG1zVMdZF8EVdvRuvTtLKvJr/lH
-         vHnivznxdcM2TXrBNQelgkRj6iZv+L/BfB7E+UKM+PUMTCoD/TufPWpJcgiqmfMKmx1G
-         8e0ifEX+lXUADOzM/zVGLipW0fDsyVn6tBoIW6LSJ/DOtun8ixat62anId6TbOJgiOcb
-         Wjbp+/SJtDyBdSa6rc2sdF6mJczvVYUkvL7CDlABZczuhp2VQ/yI1YNlDT/+i6Y1gt72
-         EUUw==
+Received: by mail-wm2-f10.google.com with SMTP id 5b1f17b1804b1-495482c36b8so336655e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 11:21:04 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785866760; x=1786471560;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1785867663; x=1786472463;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=PvFOPFIKv7IZLYV82VSUnHCVCbk2jO9N6jmpfHOfts8=;
-        b=JgNGCZXTpsn7MNZxx9jNt0sEM2Wq8/SkgghO2oTBVZOLM9H7F0C/SIm+W7+rJFfN5L
-         h3EE+pmfvaZsNR5hAiwL1PEuVHycQdN2vjhTR7pSuPZRIIsn8o69JfnrFdEE4aW14sTz
-         6LLsiGyH1uXAeIwZ16OxD7dMudGI/jjJ/jM0S7lVCCsPKDvSZvy+TJNUL4WbeiKOIER1
-         b74FZOARJ5s8Ukn9iaYgNfS0QyIuFTvfOcADH8rFHRcJvwMbxUgFM4UPhaaj7i92aqc5
-         MXTrhLHstTHQPUzxPQ2DByxsKK6jhw0tySfjM2iPgLf3jtWPYmSmojb1ea3NgyPc81ka
-         HPSg==
-X-Forwarded-Encrypted: i=1; AHgh+RrwQGZS3EZg5Aorw4gJ/TAb2a7BA+ui4pCylwFk0VystdH7drPPmIDzfjlvdhfCQt7pgybpuvVFN3ckoqkeqOQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzdFpVm+mzpbmn8SMVCzbDUj4Ld1x6Zrwemow4YONwpqZrgCSUt
-	A+1qx995MyXfjTl2F8R5Gl8iglY7CZ9PaYs8Ag4REkCAUJGW160iKd3n
-X-Gm-Gg: AR+sD11upxBNYGHKoA828Je5yFadTYswsQpJw8q1bxqBfVFXtsWph87EclLQsArdLFi
-	mLzHji3agEy9KuMhsLIDn1zhgmBhc+7bQXjQ8UIrhrRIw65vxg58KbxqNCJlRKjETvxtbknMkPS
-	p7zzmBOoHY5JC43Zobg+7o6Sa9fV6otW2iZLXe/+YHawahZJGPOOewLiZgp0bN82wnhDz4zTrd4
-	D5PftV+1irX7nbTb+xRcVJ+Ad/+INK2riGnDj4U2f2gm0ce3bYajNzUPpTdeAQ+e3VCDPPCc2kh
-	6AldQxcu9+sE6Y8TKhv5sHRky/y77UPsJdb622JU+EOHy0v8Srl/JPbrZ0l9ceKzAhsaUt7b/Kx
-	nwHO91hdwxsvAm4a65fg7Z/qJ6Wdcox07N6zEdsb6k+ZcLtX/mzn2RwbruMjzTnp1662/UyJ8se
-	z4JtE3W3LRrDQRzY5QvWaVq0xNEUYzOTK0jOC1Ji2RChQd5nxyRj5asSv1nvz4kQPDnYsZcy3Li
-	00cwS2gfSKpaUH79GclJnfq6KkaOuC2Gt7U3uYSio0=
-X-Received: by 2002:a05:620a:40c2:b0:934:aa05:f549 with SMTP id af79cd13be357-936491d3c8fmr16849585a.25.1785866759759;
-        Tue, 04 Aug 2026 11:05:59 -0700 (PDT)
-Received: from ?IPV6:2600:4040:9399:4000:e553:72e5:7d37:c7ef? ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93641592964sm148846885a.0.2026.08.04.11.05.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 11:05:59 -0700 (PDT)
-Message-ID: <9460e089-ed71-4f3c-986c-5d29b87b3500@gmail.com>
-Date: Tue, 4 Aug 2026 14:05:58 -0400
+        bh=qF/Zz53HizOpq6EgmE0sqdHtrYs1Go4WfBnkRhlxiAo=;
+        b=drqWdcIX22wnVH5Gwl3R+7fDSn0j6X0O25rIPvIFDF1qKP+NIKdXeeul0j+TBI9Qmb
+         L6Mec2JEosPczdgpxzOBKbDKCYl8iRswx8n/UJPpHGgx2SiX9fetS/96vPkjXOqXHkZc
+         +2l3weNgmcQErUodp7f5WNMdzLpZh5z/2hZS96TCXQwTsKojTqgylcMlfgGgtRGnNZ+F
+         F4KP7pOnXvR6pg5fNePqvOBiO/wthVyxeZg1Nm60U6X9XaZdzDKpoNPU6MMc41H/VzmE
+         fFCQtwOvLn20qOmtzc5cxEgD6KbrtpxknZmlVZctAQjzDjrbb+ITcCn7iwAgYou+DwiG
+         U4VA==
+X-Forwarded-Encrypted: i=1; AHgh+RruqNhKN+0BjMKitvPhJwrPY5kFZ4LKX/fXNr23DVy2CJ2ROw7Y6TRtGst7dKkLr7t5KqZ8mrW1ZSXwxqdII/A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtDvb2Zqg8jkFXxcYVIWt51kJ6iNMrIDA5UXXvmu8lbQ22bk4W
+	YWjrpGhOIus8BBicDI9emfaNdGSNoj9HiA1aJJPIm/utfAKrz+codngX
+X-Gm-Gg: AR+sD12H7GHjnzDzbQN+fYgAJUD2T9+xlX15/p3l7BD1k/79o6CGd5glGg6d3d1d7db
+	n/ykm0HGLA4zf7BHf2W0LObihZ9j+AEXUMUNts210sWk8A1/d3m+MXfT91Zy33vKfeStfdW1Mib
+	WhVotNwo5NrRJjspBOFFdar6kzYZkY8acqv81e4ErPuj2O9S4DGpx7sBxPnDpYUFEZUK+IVRa3j
+	D36Ns9V4Z6pUl8ZN+BsW/88DsBIE1lT14fTGjUwYbKBKdhgBiSVtTpfxcZDGQ623jczb0iVjspR
+	iH0pFFrF37xak/Pi2ZFpRv3ZjBtHNjATweNyKFU+5K8Qod09zSiG7D8jzpkGChAf8FmD96MYu/5
+	VQ9urxuUeEU/8Kd/QytmSHjcZ8bV9ESTZf4xnoCSmd1CGcMR7wNEhANASjevEAd8PDbJRt8OzEq
+	JGGevEs2RZWASkeNhm6kVMyv/a+D1VSkJ5fzphkoG6P0PbeYcSHWy/SI+RLF8hLPD7Y/9BNax6d
+	4YtAPMXTi5YV0qbbjjGbakj6DznKQVor/AJDUmd
+X-Received: by 2002:a05:600c:1d0a:b0:495:78af:78e5 with SMTP id 5b1f17b1804b1-4994e70de03mr3821405e9.1.1785867662779;
+        Tue, 04 Aug 2026 11:21:02 -0700 (PDT)
+Received: from im-t490s.redhat.com (78-80-108-129.customers.tmcz.cz. [78.80.108.129])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e4bf5c1sm4946925e9.2.2026.08.04.11.21.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Aug 2026 11:21:02 -0700 (PDT)
+From: Ilya Maximets <i.maximets@ovn.org>
+To: netdev@vger.kernel.org
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Aaron Conole <aconole@redhat.com>,
+	Eelco Chaudron <echaudro@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Ido Schimmel <idosch@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Nikolay Aleksandrov <razor@blackwall.org>,
+	Fernando Fernandez Mancera <fmancera@suse.de>,
+	Antoine Tenart <atenart@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	dev@openvswitch.org,
+	linux-kselftest@vger.kernel.org,
+	Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net-next 0/6] openvswitch: remove support for legacy tunnel ports
+Date: Tue,  4 Aug 2026 20:20:34 +0200
+Message-ID: <20260804182049.2289754-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next V2 13/13] selftests: drv-net: psp: Add a test for
- PSP with HW-GRO
-To: Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
- Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca <sd@queasysnail.net>
-Cc: Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
- Alexei Lazar <alazar@nvidia.com>, Boris Pismenny <borisp@nvidia.com>,
- Carolina Jubran <cjubran@nvidia.com>, Chris Mi <cmi@nvidia.com>,
- Cosmin Ratiu <cratiu@nvidia.com>, Doruk Tan Ozturk <doruk@0sec.ai>,
- Dragos Tatulea <dtatulea@nvidia.com>, Gal Pressman <gal@nvidia.com>,
- Jacob Keller <Jacob.e.keller@intel.com>, Jianbo Liu <jianbol@nvidia.com>,
- Kees Cook <kees@kernel.org>, Lama Kayal <lkayal@nvidia.com>,
- Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
- Mark Bloch <mbloch@nvidia.com>, Patrisious Haddad <phaddad@nvidia.com>,
- Raed Salem <raeds@nvidia.com>, Rahul Rameshbabu <rrameshbabu@nvidia.com>,
- Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
- Shuah Khan <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>,
- Stanislav Fomichev <sdf.kernel@gmail.com>
-References: <20260804083535.2946459-1-tariqt@nvidia.com>
- <20260804083535.2946459-14-tariqt@nvidia.com>
-Content-Language: en-US
-From: Daniel Zahka <daniel.zahka@gmail.com>
-In-Reply-To: <20260804083535.2946459-14-tariqt@nvidia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+
+ovs-vswitchd doesn't use OVS_VPORT_TYPE_GRE/VXLAN/GENEVE with the
+Linux kernel module since adding support for standard tunnel devices
+with COLLECT_METADATA back in 2017.  The code to use them was only
+activated as a fallback for old kernels, so not used in practice.  And
+it is now fully removed in the upcoming OVS 4.0 release.
+
+Modern way to use tunnels with OVS is to create standard tunnel ports
+with RTM_NEWLINK + COLLECT_METADATA and add them as OVS_VPORT_TYPE_NETDEV.
+
+Device reference management and the netlink options parsing for these
+legacy port types is complicated and was a CVE magnet in the previous
+release cycles.  Existence of these modules also makes locking analysis
+for geneve module and other core tunnel devices unnecessarily more
+complicated, especially in light of migration to per-netns locking:
+  https://lore.kernel.org/r/CAAVpQUDmZEaQNDSySLayqexgTrUbhBaL7XPCt9XNQzh+NGQ=UQ@mail.gmail.com
+
+Since there are no actual users for these port types for a very long
+time, let's just remove the support entirely.  There is no practical
+reason to run OVS from 2017 on a recent kernel.
+
+While it's technically a uAPI change in some sense, from the user's
+perspective this removal looks indistinguishable from the kernel built
+with CONFIG_OPENVSWITCH_GENEVE/VXLAN/GRE disabled.  And it seems like
+removal of unused drivers/modules is not a rare event these days.
 
 
+There are 3 parts to this set:
 
-On 8/4/26 4:35 AM, Tariq Toukan wrote:
-> From: Cosmin Ratiu <cratiu@nvidia.com>
-> 
-> Add a test case which attempts to send several 64K chunks over PSP,
-> which is more than MTU, and thus trigger GSO on the TX side and HW GRO
-> on the RX side. Verify HW GRO counters increase.
-> 
-> This required the addition of a new command in the psp responder, so it
-> sends the data in order to get it reassembled on the local (DUT) side.
-> 
-> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
-> Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
-> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
-> ---
->   tools/testing/selftests/drivers/net/psp.py    | 131 ++++++++++++++++--
->   .../selftests/drivers/net/psp_responder.c     |  49 +++++++
->   2 files changed, 171 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
-> index 315648a770d0..9b899723a635 100755
-> --- a/tools/testing/selftests/drivers/net/psp.py
-> +++ b/tools/testing/selftests/drivers/net/psp.py
-> @@ -16,11 +16,12 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
->   from lib.py import ksft_true, ksft_eq, ksft_ne, ksft_gt, ksft_raises
->   from lib.py import ksft_not_none
->   from lib.py import ksft_variants, KsftNamedVariant
-> -from lib.py import KsftSkipEx, KsftFailEx
-> +from lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
->   from lib.py import NetDrvEpEnv, NetDrvContEnv
-> -from lib.py import Netlink, NlError, PSPFamily, RtnlFamily
-> +from lib.py import Netlink, NlError, NetdevFamily, PSPFamily, RtnlFamily
->   from lib.py import NetNSEnter
->   from lib.py import bkg, rand_port, wait_port_listen
-> +from lib.py import bkg, ethtool, rand_port, wait_port_listen, CmdExitFailure
+1. The first patch does the tunnel port removal, which is the primary
+   goal here.
 
-nit: agent has pointed out that this new line is reimporting bkg, 
-rand_port, and wait_port_listen from the line above it.
+2. Patches 2 and 3 remove extra infrastructure that is no longer in
+   use by anything inside the openvswitch module.
+
+3. Patches 4-6 remove functions from gre/vxlan/geneve modules that
+   were added for openvswitch in the past to support the tunnel types.
+   openvswitch is the only in-tree consumer of these functions.
+
+
+Version 1:
+ - Rebased.
+ - Removed the tunnel modules from the new OVS selftest config.
+ - Addressed RFC review from Sashiko:
+   * Made ovs_netdev_link() static.
+   * Restored -EOPNOTSUPP if OVS_VPORT_ATTR_OPTIONS was provided.
+   * Removed retry in ovs_vport_cmd_new() as not needed anymore.
+
+RFC:
+ - https://lore.kernel.org/r/20260513183559.2141010-1-i.maximets@ovn.org
+
+Ilya Maximets (6):
+  openvswitch: remove support for legacy tunnel types
+  openvswitch: vport: remove infrastructure for vport options
+  openvswitch: vport: remove infrastructure for separate modules
+  net: geneve: remove unused geneve_dev_create_fb
+  net: gre: remove unused gretap_fb_dev_create
+  net: vxlan: remove unused vxlan_dev_create
+
+ drivers/net/geneve.c                          |  49 -----
+ drivers/net/vxlan/vxlan_core.c                |  42 +----
+ include/net/geneve.h                          |   5 -
+ include/net/gre.h                             |   2 -
+ include/net/vxlan.h                           |   3 -
+ include/uapi/linux/openvswitch.h              |  31 +++-
+ net/ipv4/ip_gre.c                             |  47 -----
+ net/openvswitch/Kconfig                       |  35 ----
+ net/openvswitch/Makefile                      |   4 -
+ net/openvswitch/datapath.c                    |  28 +--
+ net/openvswitch/vport-geneve.c                | 143 ---------------
+ net/openvswitch/vport-gre.c                   | 106 -----------
+ net/openvswitch/vport-netdev.c                |  29 +--
+ net/openvswitch/vport-netdev.h                |   2 -
+ net/openvswitch/vport-vxlan.c                 | 172 ------------------
+ net/openvswitch/vport.c                       |  79 +-------
+ net/openvswitch/vport.h                       |  23 +--
+ tools/testing/selftests/net/config            |   3 -
+ .../testing/selftests/net/openvswitch/config  |   3 -
+ .../selftests/net/openvswitch/openvswitch.sh  |  38 ----
+ .../selftests/net/openvswitch/ovs-dpctl.py    |  93 +++-------
+ 21 files changed, 63 insertions(+), 874 deletions(-)
+ delete mode 100644 net/openvswitch/vport-geneve.c
+ delete mode 100644 net/openvswitch/vport-gre.c
+ delete mode 100644 net/openvswitch/vport-vxlan.c
+
+-- 
+2.55.0
+
