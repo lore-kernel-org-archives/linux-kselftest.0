@@ -1,149 +1,163 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011028.outbound.protection.outlook.com [40.107.130.28])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1759F305691
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 21:26:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785878765; cv=none; b=qbcIRJYmW8afRhZhlic9Qc+ybtsvcWOUXNPYLGTpgEEkTgxQctLhT7Tx9PFMfCzPX6Z2diMnRPNr6THsWox+E4ePKBaIhdAzU+lozaej5AVQT+ib3AiPOx51fiGfuPBcKvG4f5K49C7DjbXW6mT1rNhkADkhP9faEMISG3zoo5Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785878765; c=relaxed/simple;
-	bh=BCQAfpaUqnDRdhFBqf5W6hE9jelLT+UwP2GtKgTlhtw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XIsR4SQ+LIgw7ZUk2bYmkJ8V24zfpY+IE5IlZMZVxAB6RTzQYI+iwFhShxyeo+cTiV9VCuHKtL6vRpexgvU7v7nQwicJwFaGgQr8DcYaGDMPId8n3Mmn02BpD6v1i5zmU72NHoCzbix42IsRKJwLW9bQFx/67jejFEUFzwtDZsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OGntIopd; arc=none smtp.client-ip=209.85.215.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 401C438550C;
+	Tue,  4 Aug 2026 21:35:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.28
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785879321; cv=fail; b=MCjiUgIKgjn+08IczzdYuF1MwavslFP3lLhAQmXTtf8IjHg4SiHTB2xjGrCxpIWp5da9xs0QeuXbjD/hnRFOoCid74R6atFH3yxyuG/YoLDLW+s9Mao7PFsTN6Kt0OxAuFps6Tf+WcTEcR6BRgC8zJy5xJisJymTQbqXLYbvgGw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785879321; c=relaxed/simple;
+	bh=N69ZPGO8zfvE9pD44jQpo6I38dfiiN6xFro/S7q04l8=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=mP/jMmOHoIND/7hSSU90oNWq0wH8fKttx7RZSDtTIocvqoe+RDj4y/X7G0hty+QL71/5DtvEX2uoILIJvyG/FQ5vTBETElpNRvlfzl7hROCi6adVbj17FvD6ScPUe9OD1EiR3lyBv50X8iMzGLOxp4dgfWmr+FuTQOJUjBJX2iI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=CnZVLKq8; arc=fail smtp.client-ip=40.107.130.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OGntIopd"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cb4bd11ddf8so240034a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 14:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785878763; x=1786483563; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=D1m+pWGOS10uU1f2bsRnNlJub5JOhExh9V1AKmoVmG8=;
-        b=OGntIopdxeQgPpCguxXN77FhflQfdmSlk+3k2USXLV2CXYHffSVoYsWDw1d44U+bVR
-         6XQNlDBwgUEqMZ7i24XGlYm4fJZ5Bxe0DG5N388S07HMBNAasDLKhN4CSuRIN0ASLQ1x
-         IVryFuwDs1FXdXVLBx7vjdg3LSm3KazG4Ed6MDLNYCvduMBZTqhictb0PpyNak59T8t/
-         mdEHAp6XBvznUgVlxqviBcAHarDJi347E/vFv6t2LorVainUaaa3m3ZLXvY6sg/AYCNt
-         +3j+y+5aTmA6DpTH0e/cjTU6t3Oee8tv5+bQ7DzDNENgFdGNZfJc4hYAXRspQtFQejci
-         fijA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785878763; x=1786483563;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=D1m+pWGOS10uU1f2bsRnNlJub5JOhExh9V1AKmoVmG8=;
-        b=Oy3xAwor7I4yMr1fKqJtzX3qXkRWht0EcQG7BI46B2akMssjLANQm5+kgSaAqcZwe3
-         NByfUuJT7Q6HC3ZxsRs+d1052cGekfrVeyQffBBhQMLexkXDUX8WcAYTr0KXk9ZVHVLz
-         CZLOg9aXuRvw54q1CHqjL2WnxlJg4inXDs2VackUCk5SWGOruJNuMlQ9p93aZaGkY7Qk
-         NhdEq5kwrWeGsj2yF4UGCg1gNiu73N3NzsQQgueedDkWwujKGpYC4EYEEI/Gq74uO+F8
-         EnL0r96dnbYWDN+uEzIueOMUwM6+ki0wLtFc6OxUGUlO2ZDkbmABhZpS/ooukBYJ0PS0
-         /j+w==
-X-Forwarded-Encrypted: i=1; AHgh+RquRqYMMaSyZl3I1Uqb3bhQBPl0gvh4R9f48q1cloL5xB9kiKg3BMQf57MRCEIkYW8SITn+drbX6e2vTK9QTyg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEOc3CvkvEUqHsQLF+xLQ9ZjKx751nhIbhmmaI2DwIl4izMXgq
-	UufD2l6tllwihaoQA0g9EpSKNf7SDyrGlIUJF5AK4ON6J9XjbqMQ+xjhOBzq00RLjNAAyyx1Wnu
-	k/TJbRg==
-X-Received: from pgip24.prod.google.com ([2002:a63:c158:0:b0:c82:7761:9936])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a103:b0:3bf:6237:4d3f
- with SMTP id adf61e73a8af0-3cb85e4dc7fmr1611110637.18.1785878762819; Tue, 04
- Aug 2026 14:26:02 -0700 (PDT)
-Date: Tue, 4 Aug 2026 14:26:02 -0700
-In-Reply-To: <CAEvNRgErZqaLPpBveBd2VxdrS_8mjMbArL_=AhzMdikXmUU5VA@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="CnZVLKq8"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=iM4KuodSS+LVOe24CxBO2RpdDFcwdHCy1NhwIjgW1GSmVMCQ2dVQwbYQDxZ29493sslcnQ+cxUVFI4HZ4+F0igPwH6m17EgsTOFqnPMLSMLjQDKPFtHHpSLNev/R9jtfxtGmKP0AOLRLl1G6tSIE8al5D1tgJgNilHQHFF4sqBOEcXd9a5A+YXsNHCiRYayaexKOMyFwYxvzJW78/UEAc2X3fvMpD/1NA4U/w0jcniUN/Ji+ol72qktzfshlpUmxe69dLYKn3s4KDHnB6X1iRMkWrloMVjkQi8mlEW7vh1V5YFM+O6rYoVVu6A+DU9BpNzMnJmVMcA/Hz70l7X07ew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n8YH4t+4AfXFrSNsVMG+mlZy6fyuz8X+z0QqWnS76xM=;
+ b=AqJu2BKEwp72z5g4KgWLLXYy5DUeDncrhTbiVevO5AZKKTQWdT2pd4eT7OFGUazkA1TDf1FSS9vqc6NFRnNHR+ZzQCJv2xgO6TRruox80YzhRklI6qq/WFySEo9nshjY8OFyLmg0dU015jbk2r0tvRc37BDuE6pKlR9SDoiZHNWaMooWYK36imZPapqEwXEdLuZAft/wo1zbc/AujzuAAT9zLtUpTQqbRKQJt+jTCRriWhoFFJtcspq0DFDmaRYMyMTyXd+XCuPj1fLb6LJE+LOReLqIGb0wxwcLqsen+rrd/M4fNUhBcXdz5Pdq83ZPXroudFNLifyGvshLw2ERLA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n8YH4t+4AfXFrSNsVMG+mlZy6fyuz8X+z0QqWnS76xM=;
+ b=CnZVLKq82K4jtpt0w63A6WcYX2JxbI5J8l2zFkgLnCXS2WqaypN+XRdkPXqdQlp+LO6D+NgHwKJCUe80PPdyqpvZJnUlBzUOeUpQgDa9Vvn1wQXn83VBOWUrwSPUy7L46GZ0NDKCgtxQ6FoREutWhDfCwzjQYVVjxc6r6js7TfoQE1PYJKArUU3OYg4wRrDr/rSyYH6hgyV1GrH1W9VPs2Xf86xNzGqaD6C78HiaaooO7Wb1o0oduGwQvmbDwu0IGiuUj9Mb6W0tEUb/DzzczvMlPFP5vt0pbyRzhoHhsHUfKiCwBjwRQQafTpOZCK6jltAKJPHDnxwFmoN3xYxm6A==
+Received: from PAZP264CA0138.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1f8::11)
+ by AS8PR07MB9330.eurprd07.prod.outlook.com (2603:10a6:20b:61a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.15; Tue, 4 Aug
+ 2026 21:35:14 +0000
+Received: from AM4PEPF00025F96.EURPRD83.prod.outlook.com
+ (2603:10a6:102:1f8:cafe::92) by PAZP264CA0138.outlook.office365.com
+ (2603:10a6:102:1f8::11) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.17 via Frontend Transport; Tue, 4
+ Aug 2026 21:35:14 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.6.101 as permitted sender)
+ receiver=protection.outlook.com; client-ip=131.228.6.101;
+ helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
+Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
+ AM4PEPF00025F96.mail.protection.outlook.com (10.167.16.5) with Microsoft SMTP
+ Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.1 via
+ Frontend Transport; Tue, 4 Aug 2026 21:35:14 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 617711C0033;
+	Wed,  5 Aug 2026 00:35:12 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: shaojijie@huawei.com,
+	shenjian15@huawei.com,
+	linux-rdma@vger.kernel.org,
+	eperezma@redhat.com,
+	jasowang@redhat.com,
+	virtualization@lists.linux.dev,
+	mst@redhat.com,
+	xuanzhuo@linux.alibaba.com,
+	pabeni@redhat.com,
+	edumazet@google.com,
+	linux-doc@vger.kernel.org,
+	corbet@lwn.net,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	kuniyu@google.com,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	dave.taht@gmail.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	xiyou.wangcong@gmail.com,
+	jiri@resnulli.us,
+	davem@davemloft.net,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	ast@fiberby.net,
+	liuhangbin@gmail.com,
+	shuah@kernel.org,
+	linux-kselftest@vger.kernel.org,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v5 net-next 0/2] ECN offload handling series
+Date: Tue,  4 Aug 2026 23:35:08 +0200
+Message-Id: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-20-35f9aec2aed2@google.com>
- <7f23d149-b7f0-465a-a9c0-5c7484e289d2@intel.com> <CAEvNRgErZqaLPpBveBd2VxdrS_8mjMbArL_=AhzMdikXmUU5VA@mail.gmail.com>
-Message-ID: <anJY6opttIJ4OQHP@google.com>
-Subject: Re: [PATCH v9 20/41] KVM: Let userspace disable per-VM mem
- attributes, enable per-gmem attributes
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Xiaoyao Li <xiaoyao.li@intel.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM4PEPF00025F96:EE_|AS8PR07MB9330:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7676262c-6796-4b52-d8a8-08def2704518
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700016|23010399003|1800799024|10067099003|11063799006|56012099006|18002099003|921020;
+X-Microsoft-Antispam-Message-Info:
+	V29OPR7S5XJ4Ne667ynXzjj7eUgpx2Is/YnRDif6kEI2moAY9TFH/Dq7+MTKDKBorPbdma9apYLqU5lgDrBVVBTpwdeRfjvRGLjia2hAU4H1LL9rsUSuMyCVRDkbuVe1rsrFxo9GxUZpL/FdG2dXhMFxyrlF2EJ/ikp9x5FV8smWU0RjXqfTdFUKxKl0MWbz9mxXx++svhDZ4wgeT+jCVsEIx84muBcF+zmCJqtUvj3Gxwu/fi3+uRARQ4skhbTRu3KLVhQHQw0wcO5/GGgBnX2rGbKfUrrd2ZeISEUv/8GeJ72mHzaflWyiauWDz1LyEU+AALpqfebKpfefeF/I5EmcoMsw7yWnhGlsXMpDmSrBOq/FJ58/VwmU/w5O4j1e5jFi/mQAExVcQfYNMgJMvjF6fJrVe5uYGcZRJjfIaxhL8irrJqjyxu1zglaDXWrZvTypYdnsUBowKeuXiu31QtP3jezPt1bJoO1nNcIR5o2XevrsRqDQNkC7WIWU7eMDAuaD1ZsUCE2LDDdcN2ygKCQd/gU6oVlAwD2Jmx2wRpY4u6k43bn6Lzakg/eB84GJE2eZV0Cs2q126av0gix116itDM+hKDyPjRo/X+Gc1W4uIdWI8CRhWXvj2ISV74Z1RvVeGJlOM4g80tQD99vKOxYNC2glEbZ3R4k//oUanrHpnB0qRAaN0xGsQETed0adFycpdPm74PqG3pcCcOcEP8iC3RpcsZ9PtFqjuTat+cjYfGHIZ5Dsg+2c7Y200gUS
+X-Forefront-Antispam-Report:
+	CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(23010399003)(1800799024)(10067099003)(11063799006)(56012099006)(18002099003)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Yw+nJKSTOms+wJ6nzYhjC5rPwNJ3HozVgJXLpzuwP7qB6+qWJY9ddqX3JjA4kGBuP+/mP4k8nFkoogk+TiH8UvfMQcxUpwaFiuWoQXPmKMXZaze08yXBxQ95DHfPwv6y4bn9omJN4QHAR+P3UgzGxw0N1dTrEGIVKpg7ynPmRU4oYPlbhwqhuNvOAI8aQt7ZaHh1C4NVgZ/hM8eCWcZYUnQKyoila6al0+amFNrlqZPtXKdfNFtkTebPI5wvMvd2MGUMmcyDl9jKyJhQLhK0gNgHLOlMh6FIUiFaxB91Sw3LZ2MIEmwLmfgOUWUqrzb0wpBvOrVRyF7F55U3BIKj3sGrKUMQSJF580FfFy/iOxSi5J3pevJbc9QzDO7+4Mtg1UaLJcPF0w6o1kv61wwUs88v1P9qDpcPJW0W7pM5/F9zPSUX7bxF9uhJ4CBw6yvL
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2026 21:35:14.2019
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7676262c-6796-4b52-d8a8-08def2704518
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM4PEPF00025F96.EURPRD83.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR07MB9330
 
-On Tue, Aug 04, 2026, Ackerley Tng wrote:
-> Xiaoyao Li <xiaoyao.li@intel.com> writes:
-> 
-> >
-> > [...snip...]
-> >
-> >> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> >> index ea2752989f8bd..df67a6188aa99 100644
-> >> --- a/virt/kvm/guest_memfd.c
-> >> +++ b/virt/kvm/guest_memfd.c
-> >> @@ -1137,10 +1137,12 @@ static bool kvm_range_is_private(struct file *file, pgoff_t index,
-> >>   {
-> >>   	struct inode *inode = file_inode(file);
-> >>
-> >> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-> >>   	if (!gmem_in_place_conversion)
-> >>   		return kvm_range_has_vm_memory_attributes(kvm, gfn, gfn + nr_pages,
-> >>   							  KVM_MEMORY_ATTRIBUTE_PRIVATE,
-> >>   							  KVM_MEMORY_ATTRIBUTE_PRIVATE);
-> >> +#endif
-> >>
-> >>   	return kvm_gmem_range_has_attributes(inode, index, nr_pages,
-> >>   					     KVM_MEMORY_ATTRIBUTE_PRIVATE);
-> >
-> > With my suggestion[1] on patch 7, this diff block can be dropped.
-> >
-> > [1]
-> > https://lore.kernel.org/all/dd4201f2-3660-46ad-958f-c70feb1ab1c3@intel.com/
-> >
-> > The code looks good to me,
-> >
-> > Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> >
-> 
-> I think your earlier suggestion on only defining the module_param when
-> CONFIG_KVM_VM_MEMORY_ATTRIBUTES is selected still applies, since it
-> removes an avenue for a user to turn off gmem_in_place_conversion if
-> the other option (VM memory attributes) isn't available.
-> 
->   +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
->   +module_param(gmem_in_place_conversion, bool, 0444);
->   +#endif
-> 
-> Given that we're now dropping the diff block as you suggested, do you
-> agree that we should keep this #ifdef?
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-Yes, the param needs to remain hidden if CONFIG_KVM_VM_MEMORY_ATTRIBUTES=n, so
-that userspace attempts to disable gmem_in_place_conversion are ignored (and
-logged as such).
+Hello,
 
-The obvious downside is that the param won't exist when in-place conversion is
-forced on, which is kinda weird, but I think it's the lesser evil?
+Please find the v5 ECN offload handling series.
+It clarifies the flags of SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN and fixs
+the usage of SKB_GSO_TCP_ECN of hns3 in the RX path.
+
+This corresponds to discussions in virtio mailing list:
+https://lore.kernel.org/all/20250814120118.81787-1-chia-yu.chang@nokia-bell-labs.com/
+
+Best regards,
+Chia-Yu
+
+---
+Chia-Yu Chang (2):
+  net: update comments for SKB_GSO_TCP_ECN and SKB_GSO_TCP_ACCECN
+  net: hns3: fix GSO_ECN flag setting in the RX path
+
+ drivers/net/ethernet/hisilicon/hns3/hns3_enet.c |  2 --
+ include/linux/skbuff.h                          | 15 ++++++++++++++-
+ 2 files changed, 14 insertions(+), 3 deletions(-)
+
+-- 
+2.34.1
+
