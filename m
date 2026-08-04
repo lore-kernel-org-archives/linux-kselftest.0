@@ -1,157 +1,128 @@
 Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBAAA41E6A7
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 21:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDB28391507
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 21:25:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785877589; cv=none; b=g18/QV/Np2uPPjWVl4JVfv4gdf8YbY6+/wBN00u3kq0SYy/IiyhfG6nwD8lJdi1ICrDXx7FfsqE+ARb5ileMVrxvDidtaHS1u3HmQs/OQIoaoyq2SkhQ71c8zcn/IvqRiqnd6oJ2T5gSFYD08UexIGbIhf6mkXke1JtFvw4UPi8=
+	t=1785878730; cv=none; b=WosCGJgdsOYtnjAmJj9XIVXZ36o14+VSgId1lTX8e2xO5NZVyGPL9E96r79j1OtIMm03t9iQpW/6bsd1ZkJUB4Wbw3tCh/hEPF2Zto0CmKJV/qQnKxLUrMCUz1LddMM4cb+86J/uhgnVD54dtZ/Ahnmo1rgYTANX3c9QyREzjiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785877589; c=relaxed/simple;
-	bh=pfxpbIeNFSc0ZoYnjnPfD4XHfZ+dclFczBOLL7vzNQ4=;
+	s=arc-20240116; t=1785878730; c=relaxed/simple;
+	bh=huPoN5bucRUnQLu5sCfSPLzeR3X2OREye170NNUzpZQ=;
 	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=dqDWUvb8lNMNe7uvvF7eGuAru3eoRLrwjXYsmgvP8R1At0ZQ9zynxNBqPZaXa28CbKlnHih9U0BxIKr03Gk1RFbhLq8LfI/0Wci+MZ3PBUQstdohY6wPgXeOzbjHZxvSf3SqrEbhMMjuuLNQo3WPZVe4eymvdxfW6c5/teBqNMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VAxrX+kA; arc=none smtp.client-ip=209.85.167.197
+	 Content-Type; b=o1aBbrvNBvV9nbFkzF/3VU2nMdji6NqJT4FLpylkj0vV0IyTUFMCBdIhU4kISGBUS5J5HeuSlccyLQYhRLxY6O5vDo00C0fbw6Zro+5WFf+YnLjNldLfuFW+ScRrbCw/jhWU0nt8lmI4P6wqwh1WFtWFJRiBY2RCdcF92+Dr3zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=j6TrE47T; arc=none smtp.client-ip=209.85.167.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VAxrX+kA"
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4ad778bacbeso361160b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 14:06:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="j6TrE47T"
+Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-495f637105eso389919b6e.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 14:25:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785877587; x=1786482387; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785878728; x=1786483528; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=i5gQ2rzJspE7/RJU8+W1PyPQZBbheaHsGbRmii6HKrA=;
-        b=VAxrX+kA5FQwKeL5zZ9VscSZ9ZYnlN6k0HLBpqDAV1U028F5dQuAUi3W6WCaWpSzD7
-         oktkwBhVvrbJ9Nenh67kHwEZW+eMlofty50B3CQk/m/J5u+INJkq6RmjzAXOomgY7ROg
-         KHby4ZSeCHgVS4P7phUdcXmWnJN3ySMnXkRRgcL0OBdoeqbCUDHH9et3n+YMVcoiBMPJ
-         nUCL8Pgl/8UirWZYl7x2Av2mh3G70Anvdz3+RQTag9dxzHiGDl/pm+WR4jSbd3n6n3vX
-         Y8ET3vSwLdfYpjQu0Mg5wLZk8yEKcfiCNr9Tto/QD8hievdduOqqMWC8685g8+TmMA74
-         K/uA==
+        bh=OoNJERa7N+ihiUvZZhE29iP6C+dCF84EVkVoe6Oj4kU=;
+        b=j6TrE47TkiIUjqnqlxoibCfkMDopXAbDeHw3P8PWSxhionCIkjmotZAneHaM2R5Arl
+         zq6WLxtaMGNVcFJGkYUjv+nZTiUNqA+kgflFavBQPIDM6/GaOt6TU4EvfqAjCe8Bmmll
+         3l32UBCHa40KWBQBXv7DRIErZJ28LY2IZa6ckXrOZOpZQ6u4ANf2xllwhXuYYth5u9md
+         2S90slRmai/s2f6MTNtUxESnZ+WBdxCaN3++F0VcX/V5O0JDn3qvwiPLE6M09bNr+mM1
+         WLgdQvSoD3rtPeUNYsyIdwM9TQiCe5ch6vrCTM/f9ZQ30SkZturjP8JclHfckIJqP0Lv
+         DDwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785877587; x=1786482387;
+        d=1e100.net; s=20251104; t=1785878728; x=1786483528;
         h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=i5gQ2rzJspE7/RJU8+W1PyPQZBbheaHsGbRmii6HKrA=;
-        b=Bx3U6SqY3EiKIWmVGDqGcTKYj1IalRETpApqqijllbAftRrFDhqMuUnYJYcemuH4ZO
-         R7G5AKPVvu1/AWNItzGMQd+z6pOwBgSA9ebC+yNd/v4FKVCSRORHLDcapNEBikXbM8G7
-         +H4V14CMrBfFXuFIv9Izlze7S0cbZh7PaLDWXwbtNbiTc2o/UE+fT9LCNY9a7CqCsftY
-         g2FH9Ugzz3uG2ooVjSWbFaktHzJbiJQlobKmqDc+mzcct2wVDBiKJxB2TyO63PwxW4Un
-         JqenwkKR65ZjqUkRNlxp8bIci6kS6VWp/QJngOhrrDm//XQl+mZQtZ8HM7F5xzGiNAmU
-         6aOw==
-X-Forwarded-Encrypted: i=1; AHgh+RqL2hqgnHLg8IbKO24GxnVrHuCqW5BrRXsuodDAXdKq8aZhcYrLd7c7IbFzHs2Eeg6po/RiG1J8MxEA0GfLebY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxt3vpDAkELn3v8Tp5TzOXghaWCmyROS6eOCgc8DcjIUrftxkFc
-	cKEsw8cDQoXJJ8TCPyEvL1Zl1/CPeiX+yCJbBbi0GqgMr/wWK0uMBSqvQjA/RdaCOgN7Zx2HeZ9
-	i2ogLsevNAZbP2zinF6+hklzURg==
-X-Received: from ilhw4.prod.google.com ([2002:a92:ad04:0:b0:507:c444:90fb])
+        bh=OoNJERa7N+ihiUvZZhE29iP6C+dCF84EVkVoe6Oj4kU=;
+        b=mr6DH5LCwxr8CLOdF4OJ7i5XTktgh2QbCmunbkJNi9+XIBGJ0hUe18AMCX0M5Su7/f
+         nz79CmNJMaDNkSCJj6ixbDpySRJSHSlecI206prvDDi8KIyJbXEq5q2UklyUNj72I0aH
+         bbun+2CZYnqy/tRO0iltDhjX867dcx6rwGnALxFEq5o5dhJPU6X35q34B4ZIA8W6kxCU
+         lLOniiMpcExOGUhWxjJhlGnEGjXmzBNMzkYo0dZjkdFAmkEAyxlMUAidjzUkOhJDhH0a
+         J/fWFTdnjSR0SeLLCDlUPU3KInBINqBUFZn3hdCePcyjSfoFZuC1viwWc3+ng1Ay2DfM
+         Y0yg==
+X-Forwarded-Encrypted: i=1; AHgh+Rr46MyjmSkBpb6NaItXTU/CT6ls8m08bYZ1vq0nE4AzSPs4WddOyGe/vfYA4tE5h1PW2OovM1vuo5YzDcpaWBQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yysp4TzaOA3QSYpWTrKu6z1kTmch/K00WtVPISQj6ngaJEqTQU/
+	oJ7/Ddl96q/Vl1simuefR6gFnugQlNiAzjzWGUTrFKsZBbEbCwyIapJD4W5XCTzg5LKl2RTXkDi
+	dhEEeDR9TBxc2Wo/OKgaEqAZOPQ==
+X-Received: from iobmp17-n2.prod.google.com ([2002:a05:6602:a2d1:20b0:9ab:7c1:c30a])
  (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:1587:b0:487:61da:70fb with SMTP id 5614622812f47-4afae0c7caamr886481b6e.10.1785877586456;
- Tue, 04 Aug 2026 14:06:26 -0700 (PDT)
-Date: Tue, 04 Aug 2026 21:06:25 +0000
-In-Reply-To: <2941da1a-b0b4-47a6-b57c-b28703dc0454@linaro.org> (message from
- James Clark on Mon, 27 Jul 2026 12:04:17 +0100)
+ 2002:a05:6808:3986:b0:495:f85b:d08f with SMTP id 5614622812f47-4afadfd7dc5mr1041308b6e.18.1785878727621;
+ Tue, 04 Aug 2026 14:25:27 -0700 (PDT)
+Date: Tue, 04 Aug 2026 21:25:27 +0000
+In-Reply-To: <b8b1fbe4-fb73-418a-b43d-086894d31ce8@arm.com> (message from
+ Robin Murphy on Tue, 28 Jul 2026 16:07:44 +0100)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Message-ID: <gsntse4tvbn2.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH v8 00/21] ARM64 PMU Partitioning
+Message-ID: <gsntpkzxvarc.fsf@coltonlewis-kvm.c.googlers.com>
+Subject: Re: [PATCH 05/21] perf: arm_pmuv3: Check cntr_mask before using pmccntr
 From: Colton Lewis <coltonlewis@google.com>
-To: James Clark <james.clark@linaro.org>
+To: Robin Murphy <robin.murphy@arm.com>
 Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
 	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
 	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
 	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
 	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org
+	james.clark@linaro.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
 
-James Clark <james.clark@linaro.org> writes:
+Hi Robin, thanks for the review
 
-> On 23/07/2026 9:57 pm, Colton Lewis wrote:
->> James Clark <james.clark@linaro.org> writes:
->>>>> When running the guest on a single CPU I get different counts for the
->>>>> same event for a single process, although this never happens on a  
->>>>> host.
->>>>> I think there might even be some Perf tests which expect them to be  
->>>>> the
->>>>> same, and this doesn't depend on whether any events are running on the
->>>>> host or not. Not sure if you ran all the Perf selftests in a guest or
->>>>> not?
+Robin Murphy <robin.murphy@arm.com> writes:
 
->>>> I'll investigate but I'm not sure perf is intended to guarantee
->>>> that. perf stat just runs the event counters but may not write or read
->>>> them at exactly the same time.
+> On 12/06/2026 8:28 pm, Colton Lewis wrote:
+>> Check cntr_mask before using pmccntr to ensure it's available. With a
+>> partitioned PMU, there may be instances where pmccntr is being used by
+>> the guest and will be absent from cntr_mask.
 
+>> Signed-off-by: Colton Lewis <coltonlewis@google.com>
+>> ---
+>>    drivers/perf/arm_pmuv3.c | 3 ++-
+>>    1 file changed, 2 insertions(+), 1 deletion(-)
 
->>> Is that true? The perf core calls perf_pmu_disable() when a process is
->>> scheduled out before reading the count of each event of that process in
->>> an inner loop. The perf_pmu_disable() clears PMCR_EL0.E which freezes
->>> all of the counters so they can be read out in a consistent state.
+>> diff --git a/drivers/perf/arm_pmuv3.c b/drivers/perf/arm_pmuv3.c
+>> index 1cceb1f614515..17bb1cfdc271c 100644
+>> --- a/drivers/perf/arm_pmuv3.c
+>> +++ b/drivers/perf/arm_pmuv3.c
+>> @@ -1028,7 +1028,8 @@ static int armv8pmu_get_event_idx(struct  
+>> pmu_hw_events *cpuc,
 
->>> It's important that they're all stopped at the same time because
->>> counters might be used in metrics as ratios of each other. So I think
->>> it's deliberately designed that way and appears to not be working in a
->>> guest now.
+>>    	/* Always prefer to place a cycle counter into the cycle counter. */
+>>    	if (armv8pmu_can_use_pmccntr(cpuc, event)) {
 
->> By default I think perf assumes events can be measured independently, If
->> you want to guarantee events are scheduled together to avoid measurement
->> skew you need to make sure the events are grouped.
+> Something smells wrong here - we can use PMCCNTR but we can't?
 
->> The common way to do that is with {} around the event list:
+>> -		if (!test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
+>> +		if (test_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->cntr_mask) &&
 
->> perf stat -e {branches,branches}
+> ...i.e. this test would seem to belong in the helper function.
+>> +		    !test_and_set_bit(ARMV8_PMU_CYCLE_IDX, cpuc->used_mask))
+>>    			return ARMV8_PMU_CYCLE_IDX;
+>>    		else if (armv8pmu_event_is_64bit(event) &&
+>>    			   armv8pmu_event_want_user_access(event) &&
 
->> Please see if that resolves the issue.
+> Plus it also doesn't make much sense to fall through to the "we _could_
+> accommodate this event if only PMCCNTR was free" case here if we know
+> PMCCNTR can never be free because it's not even available.
 
+I agree it would be a good idea to refactor these if statements.
 
-> Groups only change how the events are scheduled, not how the driver
-> starts or stops multiple events running on the same PMU (grouped or
-> ungrouped). In my repro I had less events than counters in HW, so they
-> will always be scheduled at the same time regardless of grouping.
+Probably something like:
 
-> I did notice something extra though, you have to first open some amount
-> of counters, and then open more than that. Then the second time the ones
-> with different counts will be however many were opened first time, as if
-> some state has stuck.
+/* tests moved to `armv8pmu_can_use_pmccntr` */
+if (armv8pmu_can_use_pmccntr()) {
+	set_bit(ARMV8_PMU_CYCLE_IDX, cpu_pmu->used_mask);
+         return ARMV8_PMU_CYCLE_IDX;
+}
 
-> For example if I open two counters then 6, the first two always have
-> different counts the second time:
-
->     $ perf stat -e branches,branches true
-
->     Performance counter stats for 'true':
-
->               106129      branches
-
->               106129      branches
-
-
-
->     $ perf stat -e
-> '{branches,branches,branches,branches,branches,branches}' true
-
->     Performance counter stats for 'true':
-
->               117013      branches
-
->               117013      branches
-
->               110364      branches
-
->               110364      branches
-
->               110364      branches
-
->               110364      branches
-
-
-> After opening 6 again a third time they'll all have the same counts.
-
-Interesting. Thanks. To clarify, is this happening in the host or VM?
+if (armv8pmu_event_is_64bit(event) &&
+     armv8pmu_event_want_user_access(event) &&
+     !armv8pmu_has_long_event(cpu_pmu))
+	return -EAGAIN;
