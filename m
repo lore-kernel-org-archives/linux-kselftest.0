@@ -1,187 +1,122 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oo1-f53.google.com (mail-oo1-f53.google.com [209.85.161.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADE8735E94F;
-	Tue,  4 Aug 2026 02:21:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24C8740B6F9
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 02:32:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785810078; cv=none; b=tVkcjfwdUyEzZ0ZnG11tzf66Rq4iWHufRO0VdlDJovkoAt5zn/mtPtf+28VTxyAG6FtiRaQW9KSEUjGzo2QjgI9dzs1Rnhszg3vvyX+ag/Jallk/Rg1dkDoXUseqLuRJA6cO/9ShoBCTYztyVwcPdrl/svlHZPYEGye6Pltv73Y=
+	t=1785810761; cv=none; b=LlYefk/V5/G3ZF6nkebZJd/ItDb3x/w6NLqACCYMs16tbupPx6QlGSuMFMHFgM6pSvUDsOr8xyxt+xyO6KWmRdHxabFpg1sPN/mC7V0tuhmvv4Xa7QKTo4i4oP1N/c8bSyeaLEk05H7LZvG+ASAXX7DO22308JtlppRos5F+fNs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785810078; c=relaxed/simple;
-	bh=+ungbiIvue01mlh3xVvXxn27VLIAH9BlA+zmntBJ5rM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CU9oTbksZieUH8R2wvBL6J+lNDdxqzdeyLfeuFf1tqjFw0SGZ3vNJt3NprB4choa28DsjG59XOYWSma4crWjr6ShwsDYNnVZVuYYVPHq/pq9eUKIxxufrYKjAzSXHb2+dv70VYa7aD0T3ZdNnF1HvjgONwpGDYOERLBhsswU3Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=csFzeZMQ; arc=none smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1785810761; c=relaxed/simple;
+	bh=fBeh1O4v9avKYsqlzpe0SpoW9v0F8R6Nqhz52syL9gU=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=D48BKEQdwhi9T5Y1FtxP+sriW0dJFc2E6qQsPINt5WGRjlW/8tIPDwL8/iKbiHSuxAsPRa3OX5+4FUvPY7U3p74dvLMDAhHuTPwx93h5xLRx00S7kWMGEQcfFJyeAyCUjtIG2H5ey3tAquK8CE7wz/GgJnp6PNoWR6A2psdGnl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b=QJOaIHGl; arc=none smtp.client-ip=209.85.161.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="csFzeZMQ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785810077; x=1817346077;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+ungbiIvue01mlh3xVvXxn27VLIAH9BlA+zmntBJ5rM=;
-  b=csFzeZMQQkwiMu7Vlm5Sp/ekudmhx28JVy5zVVCmQr58QiHbJiO3Nzyn
-   KPBzimZhmz6CApZZqBJADE/cR3NTdjQWdmf76ccrEqE4eUPcxqSHlBaOj
-   eEH/hjqCmy8ExDUyhIZZxFQ5U/aJjOAU9Xp6KrNrINVPPrkV6zDD8eER3
-   m+d+Gj2LHNQbOeH5iPpOkJKIRmdnwt66nV7tFe62SWiVPYYGLS2mi8MoT
-   hPhJqs1KeAz4GaiFEhyyySN2z9uNqX3yprxIPL6Sy8mzBfPw55gJpK/rl
-   /Xc3YRWOkRagEU6z9+3KeVqEYsYQrELmufF6CooxPZiw0z1cL9Nu+SOvN
-   w==;
-X-CSE-ConnectionGUID: kxSHBAp9T/WPilBLbXpu8Q==
-X-CSE-MsgGUID: z0pHC6gPTP+cBmwHVBcr6w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11864"; a="86122340"
-X-IronPort-AV: E=Sophos;i="6.25,203,1779174000"; 
-   d="scan'208";a="86122340"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2026 19:21:16 -0700
-X-CSE-ConnectionGUID: wexSi1NfRrucV12fpDeh0Q==
-X-CSE-MsgGUID: Ov1ycEjhQ0S6ouDKkZLVyw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,203,1779174000"; 
-   d="scan'208";a="266496543"
-Received: from fuxiaogu-mobl1.ccr.corp.intel.com (HELO [10.238.208.47]) ([10.238.208.47])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Aug 2026 19:21:03 -0700
-Message-ID: <8baf2065-b07f-4555-9c16-1330ecec4903@intel.com>
-Date: Tue, 4 Aug 2026 10:21:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel-dk.20251104.gappssmtp.com header.i=@kernel-dk.20251104.gappssmtp.com header.b="QJOaIHGl"
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-6ae45c58003so1813576eaf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 19:32:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20251104.gappssmtp.com; s=20251104; t=1785810758; x=1786415558; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LJctEvW30tSWQkftroA0CEnZmB/pHZEQAoCkYmBNvzw=;
+        b=QJOaIHGlzHI/889d8JR9a16k4arVZUxQuBN7QdATFPopsrN76bYezrD8zJy6OpZyHC
+         pgUAYExDEJqfoKfPwc2axpsh7lPHaeBHIohpBZngZqeEhBCX7eywXMrlhwhztWTtFg22
+         uxMR4pNznfjcKoMCLY9srjdcrLBSOfzmZqLHaQR9FxUYfeNiw25Og9/00SoEcx195Sj5
+         JchthVB9XdQ09RqviN7t8x18Y9JtcSoQr4gaRzGcqS8gaOgZbHHO43/TRElHE+sxW0cI
+         jzuo/wqW9nHy5t9qRo4csKDi/lBS8mwuJm1cZ/HzI9JB0aBgUMSLXMXnPqwdgTmsNu7V
+         sUrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785810758; x=1786415558;
+        h=content-transfer-encoding:content-type:mime-version:date:message-id
+         :subject:references:in-reply-to:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LJctEvW30tSWQkftroA0CEnZmB/pHZEQAoCkYmBNvzw=;
+        b=QJ4UaeibQngRi+gHoItN6oZ8GJvQUCb2KbdNaC56CTj8XYkrdfu1HAloNOlXFTxqER
+         mwypuQXLJfjPe3kGn/iZvaKv/jkRefuWnzbYkbbSfBX0Fm+n2mEmdMo6zUojYlxcniir
+         fLAAZW49WvMML/0UkrDAxvqPhIVG2DxdGllUqUzIkMEB0qkzrHIAlH1rXSWcIdcsXadi
+         hwYTDXTPusR+CRnwBjd/+qviIPvvAqXEZQF2m7PNkimuDAgetAI6ffPFe5nA7aZ1rhoB
+         Pb7rzhMdOXledJeJIstGq+DzwHfhqLCIHnocX8Yt+JoEVz0U04XVNcW5s+vsCoC1vEMv
+         bVTw==
+X-Forwarded-Encrypted: i=1; AHgh+RqoM9t0juv6CtnH7EWN2/T1TfdVZLK4x9mx6SjJCPT5MGX5nXciUGrSC2kV1t+U7a/d+CbNOdbevrul3DclAMg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwbWjUKJf69l+wltJfqNFRO9asi72RsFK/ZkmAoMGYQxL/3+x/f
+	GeugsR6foYdxYvVpXq+Do1g0dEngBUeWJpB6RE7AfGGJVaozlkbCKnk103qr602NzAA=
+X-Gm-Gg: AR+sD12HKfn2RdQ1A+0t0IFfYJYApvfpT5i0eSNMBnwN3NiQL5Kij8g0LvWFe7HxCWE
+	XD+MHsUJr0UY1rLXfO/oUEVmvNp9dx75RmX344wvWJhe22Qjisw2vmEpGw8yrnIzfVBhFsZLccL
+	I+qMYNfkUWQklvI/nNtO3NFwnwVBJLt9rDMcIND/vacY+1P3O4GDguJ2igqhbFh4N79ka61r8u4
+	uD8ccyBS+09He4FHiPolqKWJkT/3JPccXOXVShf464CHnOe2BYJsjFuGh5HGgBhmItAN0SCB5W3
+	Z/eHf+5t/kLf3ncJ8HtG2qtV0l3TEgmQSkhSSS1NbcRe4deC7FEA095Z7w76eJphuFgNMQoiOXa
+	NCg39xZ0AyI1nT97yEVFeml7sQaPPai8djINGHIGKCNznXBY0gptEyZYrup0HOfKPFBp0FYmUJl
+	BQwej6+UFXnlmit4qWRh6HpQ7SnG+ouOxCpoupVQ50gbHb982ptOgi5M/2LU35idH1AVfBXP9GG
+	zEukX1PnyhCHmsaHRWNoiNgbvIyfNjWEosJX41ATA==
+X-Received: by 2002:a05:6820:83c2:10b0:6aa:fe65:4cd1 with SMTP id 006d021491bc7-6ae434add96mr13794024eaf.36.1785810757940;
+        Mon, 03 Aug 2026 19:32:37 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-458f66c1fe3sm10700195fac.14.2026.08.03.19.32.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 19:32:33 -0700 (PDT)
+From: Jens Axboe <axboe@kernel.dk>
+To: Ming Lei <tom.leiming@gmail.com>, Shuah Khan <shuah@kernel.org>, 
+ Caleb Sander Mateos <csander@purestorage.com>
+Cc: linux-block@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <20260803211441.2538144-1-csander@purestorage.com>
+References: <20260803211441.2538144-1-csander@purestorage.com>
+Subject: Re: [PATCH v2 0/8] ublk: io_desc optimizations
+Message-Id: <178581075261.549250.11096322353386419848.b4-ty@b4>
+Date: Mon, 03 Aug 2026 20:32:32 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 18/41] KVM: TDX: Make source page optional for
- KVM_TDX_INIT_MEM_REGION
-To: Sean Christopherson <seanjc@google.com>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
- binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
- david@kernel.org, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>,
- kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
- linux-coco@lists.linux.dev
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-18-35f9aec2aed2@google.com>
- <d3fef015-0546-4993-b354-a8464d79e48c@intel.com>
- <amzJQ8u8I18B4Gdm@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <amzJQ8u8I18B4Gdm@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15.2
 
-On 8/1/2026 12:11 AM, Sean Christopherson wrote:
-> On Fri, Jul 31, 2026, Xiaoyao Li wrote:
->> On 7/29/2026 8:35 AM, Ackerley Tng via B4 Relay wrote:
->>> From: Ackerley Tng <ackerleytng@google.com>
->>>
->>> Update tdx_gmem_post_populate() to handle cases where userspace requests
->>> "no source page". To handle "no source page", populate (perform
->>> TDH.MEM.PAGE.ADD) using memory in-place at the target PFN.
->>>
->>> Signed-off-by: Sean Christopherson <seanjc@google.com>
->>> Tested-by: Shivank Garg <shivankg@amd.com>
->>> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
->>> ---
->>>    Documentation/virt/kvm/x86/intel-tdx.rst | 4 ++++
->>>    arch/x86/kvm/vmx/tdx.c                   | 8 +++++---
->>>    2 files changed, 9 insertions(+), 3 deletions(-)
->>>
->>> diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
->>> index 6a222e9d09541..d8d9409120e61 100644
->>> --- a/Documentation/virt/kvm/x86/intel-tdx.rst
->>> +++ b/Documentation/virt/kvm/x86/intel-tdx.rst
->>> @@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
->>>    Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
->>>    provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
->>> +If guest_memfd in-place conversion is enabled, pass 0 for @source_addr
->>> +to represent "no source page". A source page is required if in-place
->>> +conversion is not enabled or not supported.
->>> +
->>>    Note, before calling this sub command, memory attribute of the range
->>>    [gpa, gpa + nr_pages] needs to be private.  Userspace can use
->>>    KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
->>> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
->>> index d1af0a752e97e..e890da5f18aed 100644
->>> --- a/arch/x86/kvm/vmx/tdx.c
->>> +++ b/arch/x86/kvm/vmx/tdx.c
->>> @@ -3192,7 +3192,7 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->>>    	if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
->>>    		return -EIO;
->>> -	kvm_tdx->page_add_src = src_page;
->>> +	kvm_tdx->page_add_src = src_page ?: pfn_to_page(pfn);
->>>    	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
->>>    	kvm_tdx->page_add_src = NULL;
->>> @@ -3238,7 +3238,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
->>>    	if (copy_from_user(&region, u64_to_user_ptr(cmd->data), sizeof(region)))
->>>    		return -EFAULT;
->>> -	if (!PAGE_ALIGNED(region.source_addr) || !region.source_addr ||
->>> +	if (!PAGE_ALIGNED(region.source_addr) ||
->>> +	    (!gmem_in_place_conversion && !region.source_addr) ||
->>
->> Sorry, I still want to discuss why we only allow in-place PAGE.ADD for
->> gmem_in_place_conversion only. Though Yan raised this opinion[1] in previous
->> v8, I'm not quite following her argument. So let me try again.
->>
->> I think in-place PAGE.ADD of TDX doesn't need to depend on
->> gmem_in_place_conversion. There are two use cases actually.
->>
->> 1). Userspace sets the gmem page as private, and invokes the in-place
->> PAGE.ADD by passing a 0 source_addr. Due to patch 16, the target PFN will be
->> ADD'ed to TD as a all-0 page.
->>
->> 2). Userspace sets the gmem page as shared, and writes the desired content
->> to it. Then converts the page to private, and invokes the in-place PAGE.ADD
->> by passing a 0 source_addr. The target PFN will be ADD'ed to TD with desired
->> content.
->>
->> For gmem_in_place_conversion == false, only case 1) is possible.
->> For gmem_in_place_conversion == true, both case 1) and 2) are possible.
->>
->> Basically, this patch is changing the behavior of KVM_TDX_INIT_MEM_REGION.
->> Before, it returns -EINVAL when region.source_addr == 0. Now it wants to
->> allow the "region.source_addr == 0" case. If we can allow it
->> unconditionally, why bother adding the restriction to allow it only when
->> gmem_in_place_conversion == true?
+
+On Mon, 03 Aug 2026 15:14:32 -0600, Caleb Sander Mateos wrote:
+> This series is based on the "ublk: harden user buffer handling" series.
 > 
-> As I said[*] in that thread:
+> ublk passes the parameters of incoming I/O in memory shared between the
+> kernel ublk driver and userspace ublk server in struct ublksrv_io_desc.
 > 
->   : Because retroactively adding support for out-of-place conversion is pointless
->   : (requires a userspace update for a feature that's being deprecated), KVM can't
->   : generally support using the source for out-of-place conversion (it's effectively
->   : an obscure zero-page optimization), and IMO rejecting the out-of-place conversion
->   : scenario is valuable for KVM developers, e.g. to help newcomers understand what
->   : exactly is and isn't possible.
+> The thread submitting the ublk I/O writes to the io_desc, while the ublk
+> server thread handling the I/O reads the io_desc. This basically
+> guarantees a cache miss on both threads for each ublk I/O. Avoid the
+> cache misses by writing the io_desc on the server thread in the kernel
+> before dispatching the I/O to userspace.
+> 
+> [...]
 
-Fair enough.
+Applied, thanks!
 
-Ackerley, please update the changelog to add the reason why we decided 
-to only support in-place PAGE.ADD for TDX for in-place gmem only.
+[1/8] ublk: consistently use u16 for queue and tag numbers
+      commit: f510198855b6ddac0ffe62684dc407c56d3e0f24
+[2/8] ublk: remove struct ublk_zoned_report_desc's operation field
+      commit: 3a00b782a7b63b1876261ab883e1d8e1aa0e09fb
+[3/8] ublk: split request validation from io_desc init
+      commit: 8c76625ff9360cbe9ce0c47a624877aea14b3499
+[4/8] ublk: initialize io_desc on daemon task
+      commit: 735409f58b3da45094f2dfd7c18fb9e1937431f1
+[5/8] ublk: add UBLK_F_IO_DESC_SIZE
+      commit: 5c0958d80190822c4614ca00478d9acd9671bba6
+[6/8] selftests: ublk: add support for --io_desc_size
+      commit: fc01b96d74b3a9eec2b558d49ec9f5176473766a
+[7/8] selftests: ublk: add UBLK_F_IO_DESC_SIZE test
+      commit: d61d0f95e686be015cfaf193c0ae15156d1a0cc4
+[8/8] ublk: lift checks out of ublk_{,un}map_io()
+      commit: a8a79eba22dc4c11f2877bcf9e8557f6d95541ac
 
-> [*] https://lore.kernel.org/all/akMPZePBdwQlD74H@google.com
+Best regards,
+-- 
+Jens Axboe
+
+
 
