@@ -1,50 +1,50 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
+Received: from mail-wr2-f2.google.com (mail-wr2-f2.google.com [74.125.225.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EA803EC83D
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 18:21:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828853F328C
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 18:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785867672; cv=none; b=cKFNvvS/NUnn5DwH3jZiKJ3kU3eWflqqmY54y1QT+OcG4PBNLOJBL5P1M382a/3NUPSkYlsV8tSrrJkiln0zdSbU/lznIzq23XWXyReYxOArEcph+JWANHxgZHshRXXtpd+hCv4EUNfNKkFJMy+C0+FGHQ08NdqXORHxiiKXAbI=
+	t=1785867674; cv=none; b=UpWIUxw/E1Hic6oJMepItMew0hgbo8qigJAH0nnFS+SFmp9DwIViemXY35rLCXBGgYWtrTKG0IQnZBujtKNp2/ZsM7B/nvdDmWxj8xhyO1Gn7Np4KFOgXLd+OnsIMUwaDZ65FJ68QoYxY19cadCsTs3wbmoBLZjcYqaoqQ7+ia8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785867672; c=relaxed/simple;
-	bh=5fnwPaRZNRAG+dEMmLkeDMW+CjWAlvKtHDCOdXrbKF4=;
+	s=arc-20240116; t=1785867674; c=relaxed/simple;
+	bh=f1XPrI9/fXjR2+vnqTH7WyEcTyCk6frVOut6+wmX0i8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s5DXyXIVxeSA+ThrzO9ysDzxwDv0KS2uG4vLF5GR3vDjiE2hrTRsmfdPbY+GMV1HF0FUL2mxTqprK4xXd2DskQX6GCWBHuiLW4VRGluo7Pgh/PWryb9p5UDAD2vNWSUSOxeJohQ3T61R2vE4sl+yvhk6Qh/Rz25nkZZTp15gGco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.137
+	 MIME-Version; b=WNzWCnOyFbWVcbnD4OQcFfukAyGFFLL/LS/ZdZNa07wNIjvc4xQs/PRKC84RB1VlsYVmwlBR6nqVuUgN6BXj9Qaa8W2tg5pJI39ZmuFcpqodKTf/o+X+G9cC1aQ9b8Uo3dH1nhAvYcuLLollau7nFRnulRW1ZE37Qb5feVjagGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.225.66
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ovn.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so431545e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 11:21:09 -0700 (PDT)
+Received: by mail-wr2-f2.google.com with SMTP id ffacd0b85a97d-4730b8edae6so26350f8f.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 11:21:12 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785867667; x=1786472467;
+        d=1e100.net; s=20251104; t=1785867671; x=1786472471;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ovUjMxPHn1ZagaNePibiZB1eYthLNlDyjhKBZFOh1PY=;
-        b=oG2WrzbHwAfYuGxaJ19JmyMY167L9guOGUFakwDnwKOa7KvT67WldiNP1eZ760NK4q
-         wtslyp3RfiwC0j4xpo7tmXp0KEL92kMRJuGOCfshufe7aXlbPBUwPlQCr92QsnMSNNdX
-         HdMH+Mv82N6VYOH8KHyXeHKoGiiaEM+piMF32FKcCIg99MFTmWZsj+9WrXmT7nkcIDxP
-         3xnepXzpuC907jeGeeTZrGkJfyg5iGSZogVPHFmr7igth4WRWwmRJi5TRE+mWT3gCYCH
-         lQjyYXQIu9VBSKsrXyor6cV4ZYsHw0KiRGMp2bg2N5MnWTwOIiYYnusdkDwxrnaolMLQ
-         O6Sg==
-X-Forwarded-Encrypted: i=1; AHgh+Ron2w4C7tA3oT5TICONp+G+sT3vq8CPgSGVHur/f3vunQAi3fYnqRdi+nSOtirtmB13oc5yk57pIIDjFpxzYSY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxDlvKh8hr+pgWkUWjawj4y24npMJaJOVsvyMAg39Kwz55ZHsbk
-	zb1e312VWLbWwisZMOJ6dAIalfPgU+Z9+68Nwq0k1/bRNyEeqXJYq95p
-X-Gm-Gg: AR+sD13+P4YSwvRoh//u97Rtv8aRRyJ64WQFAN76g6DumK4dZoPvtEeso0Rbsq1muDb
-	KCtDsvUg0Kw56ub8lClMttfWwe7EzYV7ZbHqxsYY4WFLUrBd1CFZNCS+CJq4VZNZQ+iliVri7vY
-	GsyFgbF155+vNA3DGt3qv3FdR9J4I3wi3d5vXlpvN2oR8qGkhUb70Bprumycy9ceooUWHvKXSXl
-	rxQrnTxUWwXlHpwYnG/+J/NIClU3QOkW06WKZ7aI8KOcDHMIFU8PXsk7/V5ItrwVd6bqmLsmR4u
-	nOtziJX0LCNPSO76ySXWHXiFMKRzJzDxSsKBwF4MSDXeTrcme02b+cbs6n2wG4gq+Nz4oL54OJR
-	dMBAaWIaGj1G2VyUcjhENeLu2K3XH2LP1Gm6+KE9I42xXGJBDgaGtBdMoPrQh3rO/eS42KCeYeL
-	bNKpwnefa3dYV346tI6Be/KL0a0H7+n9spRqz0fg4SzfVEKMhlcIQ4lofMnWuF3Fuvd56fZ6bVP
-	W7mWgxM2EoJ2Nq32jGON8V5/h1HHQ==
-X-Received: by 2002:a05:600c:4ec8:b0:496:cb48:5eb8 with SMTP id 5b1f17b1804b1-4994e7d9f1cmr1373825e9.15.1785867667133;
-        Tue, 04 Aug 2026 11:21:07 -0700 (PDT)
+        bh=8KvsUiPTndJmllsvv4uNOZF87lttgUNZFsNjtKN/s+A=;
+        b=R/kuMq7zDoPnCR55Q6BduPyyOIsTlBwxMsN84aFvYyiz8O2HxXpEEVsUhgm69BCdzM
+         CVlY+RCwwvrtXJjma4NeKjMWl9YLCbuytjGLL0a6czfciAOcZySR90Zjj842TAe4uAHd
+         Bjf840LWr1qgvf5dnjTgiVM5Li5adkOktwBMrU/ws6FCsc3J3OgbxeT5GI9zBJgHiDQn
+         TwhgPPZgsyGsWpzaiQA7AF5rwzyPJvuFXYoyvIONJigwkgLEduDSt45s0qndxMqpKgOG
+         FqYP0poaO/pFZWHV1uCdzy9CBe59qq3GSLSLGmUweX0VmTYGA5uyiQTIR813ljcy2/fX
+         CiQQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/v0tjOnbK9tF3+jO2vKVI6VDzNHmp2eNSxFbHwH1Izp68GffCQQIo0Ai3N/+TcdGOW58V84E3Q6/ORH5Au/4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZX9/p25Kxm5/P3EnTH8TawoxqFt0HqU16eNRyR4FtNyNtnC3n
+	yJHqkJfdih9/h3MCyLR6v4kl8OMLzGr7Aizhwoc+e6kW8CD8xm/CLXef
+X-Gm-Gg: AR+sD101ELmjPjyU2zI/2SD54L+4gmXYjFKahI7wEyHtq07PWCLkyViCX0uue8vagAX
+	jbnSQayxelsqEjDH9EQg5y2vCjeJdUIaQbtHvD2+MDZjUScNntDwZz4ame3nD+6Hfhsxfe74TvV
+	TJQgsOLiGsTk0LTk5f0+h6UuUK59SG+fjrzLW4yhM3GgZBwpGTPzas5KiuAgi//r/61THB+MqsK
+	/bGoUtuXCK7ycq3e17Vc+UY8/cuAwYN6SQ3HTOwE3msrGCSBm3q3+MzkFeqQ9SDpghBGaHz20at
+	mLwRIVaieYg1ueMT9uiGZ+zSPcN3BtBHXVfGMbBzxf/CaLhgFiSkJcBIaZLWWKT9ixN68nzIA0c
+	MRt1p9YKMNWEC2xM3fQ0FohVf7KzKDi2vqKi6ctKvZF7kphuXQ05m/Sw8shZ+hYzdMBpCPuhwyQ
+	WcBKcGgE5fLmZm7d+DgvRKDCGQOro2kQKQnACQGdAE7AG4tgLkdeKueUHZRhNGxL0FAi1BLxnz6
+	tOdBM2BY6l60de7Y6fDsh8nw7D19w==
+X-Received: by 2002:a05:600c:19cd:b0:498:28b:1045 with SMTP id 5b1f17b1804b1-4994e793f63mr1648365e9.3.1785867670502;
+        Tue, 04 Aug 2026 11:21:10 -0700 (PDT)
 Received: from im-t490s.redhat.com (78-80-108-129.customers.tmcz.cz. [78.80.108.129])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e4bf5c1sm4946925e9.2.2026.08.04.11.21.05
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4994e4bf5c1sm4946925e9.2.2026.08.04.11.21.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 11:21:06 -0700 (PDT)
+        Tue, 04 Aug 2026 11:21:10 -0700 (PDT)
 From: Ilya Maximets <i.maximets@ovn.org>
 To: netdev@vger.kernel.org
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
@@ -66,9 +66,9 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	dev@openvswitch.org,
 	linux-kselftest@vger.kernel.org,
 	Ilya Maximets <i.maximets@ovn.org>
-Subject: [PATCH net-next 1/6] openvswitch: remove support for legacy tunnel types
-Date: Tue,  4 Aug 2026 20:20:35 +0200
-Message-ID: <20260804182049.2289754-2-i.maximets@ovn.org>
+Subject: [PATCH net-next 2/6] openvswitch: vport: remove infrastructure for vport options
+Date: Tue,  4 Aug 2026 20:20:36 +0200
+Message-ID: <20260804182049.2289754-3-i.maximets@ovn.org>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260804182049.2289754-1-i.maximets@ovn.org>
 References: <20260804182049.2289754-1-i.maximets@ovn.org>
@@ -80,977 +80,236 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-ovs-vswitchd doesn't use OVS_VPORT_TYPE_GRE/VXLAN/GENEVE with the
-Linux kernel module since adding support for standard tunnel devices
-with COLLECT_METADATA back in 2017.  The code to use them was only
-activated as a fallback for old kernels, so not used in practice.  And
-it is now fully removed in the upcoming OVS 4.0 release.
+Since removal of tunnel vport types, there aren't any vports that
+support options.  Let's remove the options-related infrastructure.
 
-Modern way to use tunnels with OVS is to create standard tunnel ports
-with RTM_NEWLINK + COLLECT_METADATA and add them as OVS_VPORT_TYPE_NETDEV.
+Can be reinstated if we ever need a new vport type or if we need extra
+options for the existing ones.  The uAPI attribute remains.
 
-Device reference management and the netlink options parsing for these
-legacy port types is complicated and was a CVE magnet in the previous
-release cycles.  Existence of these modules also makes locking analysis
-for geneve module and other core tunnel devices unnecessarily more
-complicated, especially in light of migration to per-netns locking.
+Clarification comment is added to highlight that none of the supported
+vports support options at the moment.
 
-Since there are no actual users for these port types for a very long
-time, let's just remove the support entirely.  There is no practical
-reason to run OVS from 2017 on a recent kernel.
+If the options are provided, the code now directly replies with
+-EOPNOTSUPP to keep the behavior the same for remaining vport types.
 
-While it's technically a uAPI change in some sense, from the user's
-perspective this removal looks indistinguishable from the kernel built
-with CONFIG_OPENVSWITCH_GENEVE/VXLAN/GRE disabled.  And it seems like
-removal of unused drivers/modules is not a rare event these days.
-
-A comment is added to the uAPI header noting that standard RTM_NEWLINK
-with COLLECT_METADATA followed by OVS_VPORT_CMD_NEW with the simple
-OVS_VPORT_TYPE_NETDEV should be used instead.
-
-Modules responsible for these tunnel ports are removed as well as
-selftests covering this functionality.  Further cleanups will follow.
+Note: It is technically possible that someone has an out-of-tree module
+named vport-type-N that implements a different vport type and they have
+options for this vport type.  However, our message size calculations do
+not account for whatever options such a port would have and so it is
+dangerous to load such a module without modifying the code in the main
+datapath.c, unless the options are smaller than the ones we had for
+vxlan.  A more robust solution would be to have a different version of
+the entire openvswitch module instead, so the use case of a separate
+vport-type-N loaded with the upstream openvswitch module is unlikely.
+At this time we're not aware of anyone doing that.
 
 Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
- include/uapi/linux/openvswitch.h              |  31 +++-
- net/openvswitch/Kconfig                       |  35 ----
- net/openvswitch/Makefile                      |   4 -
- net/openvswitch/datapath.c                    |   6 +-
- net/openvswitch/vport-geneve.c                | 143 ---------------
- net/openvswitch/vport-gre.c                   | 106 -----------
- net/openvswitch/vport-netdev.c                |  29 +--
- net/openvswitch/vport-netdev.h                |   2 -
- net/openvswitch/vport-vxlan.c                 | 172 ------------------
- tools/testing/selftests/net/config            |   3 -
- .../testing/selftests/net/openvswitch/config  |   3 -
- .../selftests/net/openvswitch/openvswitch.sh  |  38 ----
- .../selftests/net/openvswitch/ovs-dpctl.py    |  93 +++-------
- 13 files changed, 52 insertions(+), 613 deletions(-)
- delete mode 100644 net/openvswitch/vport-geneve.c
- delete mode 100644 net/openvswitch/vport-gre.c
- delete mode 100644 net/openvswitch/vport-vxlan.c
+ net/openvswitch/datapath.c | 20 +++-----------
+ net/openvswitch/vport.c    | 54 --------------------------------------
+ net/openvswitch/vport.h    | 14 ----------
+ 3 files changed, 4 insertions(+), 84 deletions(-)
 
-diff --git a/include/uapi/linux/openvswitch.h b/include/uapi/linux/openvswitch.h
-index aa2acdbda8f8..440825e65837 100644
---- a/include/uapi/linux/openvswitch.h
-+++ b/include/uapi/linux/openvswitch.h
-@@ -244,13 +244,33 @@ enum ovs_vport_cmd {
- 	OVS_VPORT_CMD_SET
- };
- 
-+/**
-+ * enum ovs_vport_type - OVS vport types for %OVS_VPORT_ATTR_TYPE.
-+ * @OVS_VPORT_TYPE_NETDEV: Existing network device attached as a vport.
-+ * @OVS_VPORT_TYPE_INTERNAL: Network device implemented by the OVS datapath.
-+ * @OVS_VPORT_TYPE_GRE: Legacy GRE tunnel.  Not supported, see below.
-+ * @OVS_VPORT_TYPE_VXLAN: Legacy VXLAN tunnel.  Not supported, see below.
-+ * @OVS_VPORT_TYPE_GENEVE: Legacy Geneve tunnel.  Not supported, see below.
-+ *
-+ * The tunnel vport types are not supported.  Instead, create the tunnel device
-+ * using %RTM_NEWLINK with the appropriate %IFLA_INFO_KIND (e.g. ``gre``,
-+ * ``gretap``, ``vxlan``, ``geneve``, or other tunnel types) and add it as
-+ * %OVS_VPORT_TYPE_NETDEV.  To match and set tunnel parameters on a per-flow
-+ * basis, the tunnel device should collect metadata.  To do that, some tunnel
-+ * types require an explicit flag such as %IFLA_VXLAN_COLLECT_METADATA for
-+ * ``vxlan``, while others such as ``bareudp`` collect metadata
-+ * unconditionally.
-+ */
- enum ovs_vport_type {
-+	/* private: */
- 	OVS_VPORT_TYPE_UNSPEC,
-+	/* public: */
- 	OVS_VPORT_TYPE_NETDEV,   /* network device */
- 	OVS_VPORT_TYPE_INTERNAL, /* network device implemented by datapath */
--	OVS_VPORT_TYPE_GRE,      /* GRE tunnel. */
--	OVS_VPORT_TYPE_VXLAN,	 /* VXLAN tunnel. */
--	OVS_VPORT_TYPE_GENEVE,	 /* Geneve tunnel. */
-+	OVS_VPORT_TYPE_GRE,      /* GRE tunnel (legacy, not supported). */
-+	OVS_VPORT_TYPE_VXLAN,	 /* VXLAN tunnel (legacy, not supported). */
-+	OVS_VPORT_TYPE_GENEVE,	 /* Geneve tunnel (legacy, not supported). */
-+	/* private: */
- 	__OVS_VPORT_TYPE_MAX
- };
- 
-@@ -284,7 +304,7 @@ enum ovs_vport_type {
-  * %OVS_VPORT_ATTR_NAME attributes are required.  %OVS_VPORT_ATTR_PORT_NO is
-  * optional; if not specified a free port number is automatically selected.
-  * Whether %OVS_VPORT_ATTR_OPTIONS is required or optional depends on the type
-- * of vport.
-+ * of vport.  None of currently supported vport types support options.
-  *
-  * For other requests, if %OVS_VPORT_ATTR_NAME is specified then it is used to
-  * look up the vport to operate on; otherwise dp_idx from the &struct
-@@ -336,7 +356,8 @@ enum {
- #define OVS_VXLAN_EXT_MAX (__OVS_VXLAN_EXT_MAX - 1)
- 
- 
--/* OVS_VPORT_ATTR_OPTIONS attributes for tunnels.
-+/* OVS_VPORT_ATTR_OPTIONS attributes for legacy tunnel vports.
-+ * Not supported, see the note for enum ovs_vport_type.
-  */
- enum {
- 	OVS_TUNNEL_ATTR_UNSPEC,
-diff --git a/net/openvswitch/Kconfig b/net/openvswitch/Kconfig
-index e6aaee92dba4..19ac9ae18f1e 100644
---- a/net/openvswitch/Kconfig
-+++ b/net/openvswitch/Kconfig
-@@ -40,38 +40,3 @@ config OPENVSWITCH
- 	  called openvswitch.
- 
- 	  If unsure, say N.
--
--config OPENVSWITCH_GRE
--	tristate "Open vSwitch GRE tunneling support"
--	depends on OPENVSWITCH
--	depends on NET_IPGRE
--	default OPENVSWITCH
--	help
--	  If you say Y here, then the Open vSwitch will be able create GRE
--	  vport.
--
--	  Say N to exclude this support and reduce the binary size.
--
--	  If unsure, say Y.
--
--config OPENVSWITCH_VXLAN
--	tristate "Open vSwitch VXLAN tunneling support"
--	depends on OPENVSWITCH
--	depends on VXLAN
--	default OPENVSWITCH
--	help
--	  If you say Y here, then the Open vSwitch will be able create vxlan vport.
--
--	  Say N to exclude this support and reduce the binary size.
--
--	  If unsure, say Y.
--
--config OPENVSWITCH_GENEVE
--	tristate "Open vSwitch Geneve tunneling support"
--	depends on OPENVSWITCH
--	depends on GENEVE
--	default OPENVSWITCH
--	help
--	  If you say Y here, then the Open vSwitch will be able create geneve vport.
--
--	  Say N to exclude this support and reduce the binary size.
-diff --git a/net/openvswitch/Makefile b/net/openvswitch/Makefile
-index 28982630bef3..46a27ab369f9 100644
---- a/net/openvswitch/Makefile
-+++ b/net/openvswitch/Makefile
-@@ -22,8 +22,4 @@ ifneq ($(CONFIG_NF_CONNTRACK),)
- openvswitch-y += conntrack.o
- endif
- 
--obj-$(CONFIG_OPENVSWITCH_VXLAN)+= vport-vxlan.o
--obj-$(CONFIG_OPENVSWITCH_GENEVE)+= vport-geneve.o
--obj-$(CONFIG_OPENVSWITCH_GRE)	+= vport-gre.o
--
- CFLAGS_openvswitch_trace.o = -I$(src)
 diff --git a/net/openvswitch/datapath.c b/net/openvswitch/datapath.c
-index eaf332b156d7..0506770341af 100644
+index 0506770341af..57c83f05fead 100644
 --- a/net/openvswitch/datapath.c
 +++ b/net/openvswitch/datapath.c
-@@ -2210,11 +2210,9 @@ static size_t ovs_vport_cmd_msg_size(void)
+@@ -1856,7 +1856,6 @@ static int ovs_dp_cmd_new(struct sk_buff *skb, struct genl_info *info)
+ 	/* Set up our datapath device. */
+ 	parms.name = nla_data(a[OVS_DP_ATTR_NAME]);
+ 	parms.type = OVS_VPORT_TYPE_INTERNAL;
+-	parms.options = NULL;
+ 	parms.dp = dp;
+ 	parms.port_no = OVSP_LOCAL;
+ 	parms.upcall_portids = a[OVS_DP_ATTR_UPCALL_PID];
+@@ -2172,10 +2171,6 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+ 	if (ovs_vport_get_upcall_portids(vport, skb))
+ 		goto nla_put_failure;
+ 
+-	err = ovs_vport_get_options(vport, skb);
+-	if (err == -EMSGSIZE)
+-		goto error;
+-
+ 	genlmsg_end(skb, ovs_header);
+ 	return 0;
+ 
+@@ -2183,7 +2178,6 @@ static int ovs_vport_cmd_fill_info(struct vport *vport, struct sk_buff *skb,
+ 	rcu_read_unlock();
+ nla_put_failure:
+ 	err = -EMSGSIZE;
+-error:
+ 	genlmsg_cancel(skb, ovs_header);
+ 	return err;
+ }
+@@ -2210,10 +2204,6 @@ static size_t ovs_vport_cmd_msg_size(void)
  	/* OVS_VPORT_ATTR_UPCALL_PID */
  	msgsize += nla_total_size(nr_cpu_ids * sizeof(u32));
  
--	/* OVS_VPORT_ATTR_OPTIONS(OVS_TUNNEL_ATTR_DST_PORT +
--	 *                        OVS_TUNNEL_ATTR_EXTENSION(OVS_VXLAN_EXT_GBP))
-+	/* There are no vports supporting OVS_VPORT_ATTR_OPTIONS, so it is
-+	 * not included in the message size calculation.
- 	 */
--	msgsize += nla_total_size(nla_total_size(sizeof(u16)) +
--				  nla_total_size(nla_total_size(0)));
- 
+-	/* There are no vports supporting OVS_VPORT_ATTR_OPTIONS, so it is
+-	 * not included in the message size calculation.
+-	 */
+-
  	return msgsize;
  }
-diff --git a/net/openvswitch/vport-geneve.c b/net/openvswitch/vport-geneve.c
-deleted file mode 100644
-index cb5ea4424ffc..000000000000
---- a/net/openvswitch/vport-geneve.c
-+++ /dev/null
-@@ -1,143 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (c) 2014 Nicira, Inc.
-- */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/in.h>
--#include <linux/ip.h>
--#include <linux/net.h>
--#include <linux/rculist.h>
--#include <linux/udp.h>
--#include <linux/if_vlan.h>
--#include <linux/module.h>
--
--#include <net/geneve.h>
--#include <net/icmp.h>
--#include <net/ip.h>
--#include <net/route.h>
--#include <net/udp.h>
--#include <net/xfrm.h>
--
--#include "datapath.h"
--#include "vport.h"
--#include "vport-netdev.h"
--
--static struct vport_ops ovs_geneve_vport_ops;
--/**
-- * struct geneve_port - Keeps track of open UDP ports
-- * @dst_port: destination port.
-- */
--struct geneve_port {
--	u16 dst_port;
--};
--
--static inline struct geneve_port *geneve_vport(const struct vport *vport)
--{
--	return vport_priv(vport);
--}
--
--static int geneve_get_options(const struct vport *vport,
--			      struct sk_buff *skb)
--{
--	struct geneve_port *geneve_port = geneve_vport(vport);
--
--	if (nla_put_u16(skb, OVS_TUNNEL_ATTR_DST_PORT, geneve_port->dst_port))
--		return -EMSGSIZE;
--	return 0;
--}
--
--static struct vport *geneve_tnl_create(const struct vport_parms *parms)
--{
--	struct net *net = ovs_dp_get_net(parms->dp);
--	struct nlattr *options = parms->options;
--	struct geneve_port *geneve_port;
--	struct net_device *dev;
--	struct vport *vport;
--	struct nlattr *a;
--	u16 dst_port;
--	int err;
--
--	if (!options) {
--		err = -EINVAL;
--		goto error;
--	}
--
--	a = nla_find_nested(options, OVS_TUNNEL_ATTR_DST_PORT);
--	if (a && nla_len(a) == sizeof(u16)) {
--		dst_port = nla_get_u16(a);
--	} else {
--		/* Require destination port from userspace. */
--		err = -EINVAL;
--		goto error;
--	}
--
--	vport = ovs_vport_alloc(sizeof(struct geneve_port),
--				&ovs_geneve_vport_ops, parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	geneve_port = geneve_vport(vport);
--	geneve_port->dst_port = dst_port;
--
--	rtnl_lock();
--	dev = geneve_dev_create_fb(net, parms->name, NET_NAME_USER, dst_port);
--	if (IS_ERR(dev)) {
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		return ERR_CAST(dev);
--	}
--
--	err = dev_change_flags(dev, dev->flags | IFF_UP, NULL);
--	if (err < 0) {
--		rtnl_delete_link(dev, 0, NULL);
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		goto error;
--	}
--
--	vport->dev = dev;
--	netdev_hold(vport->dev, &vport->dev_tracker, GFP_KERNEL);
--
--	rtnl_unlock();
--	return vport;
--error:
--	return ERR_PTR(err);
--}
--
--static struct vport *geneve_create(const struct vport_parms *parms)
--{
--	struct vport *vport;
--
--	vport = geneve_tnl_create(parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	return ovs_netdev_link(vport, true);
--}
--
--static struct vport_ops ovs_geneve_vport_ops = {
--	.type		= OVS_VPORT_TYPE_GENEVE,
--	.create		= geneve_create,
--	.destroy	= ovs_netdev_tunnel_destroy,
--	.get_options	= geneve_get_options,
--	.send		= dev_queue_xmit,
--};
--
--static int __init ovs_geneve_tnl_init(void)
--{
--	return ovs_vport_ops_register(&ovs_geneve_vport_ops);
--}
--
--static void __exit ovs_geneve_tnl_exit(void)
--{
--	ovs_vport_ops_unregister(&ovs_geneve_vport_ops);
--}
--
--module_init(ovs_geneve_tnl_init);
--module_exit(ovs_geneve_tnl_exit);
--
--MODULE_DESCRIPTION("OVS: Geneve switching port");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("vport-type-5");
-diff --git a/net/openvswitch/vport-gre.c b/net/openvswitch/vport-gre.c
-deleted file mode 100644
-index 6cb5a697b396..000000000000
---- a/net/openvswitch/vport-gre.c
-+++ /dev/null
-@@ -1,106 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (c) 2007-2014 Nicira, Inc.
-- */
--
--#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
--
--#include <linux/if.h>
--#include <linux/skbuff.h>
--#include <linux/ip.h>
--#include <linux/if_tunnel.h>
--#include <linux/if_vlan.h>
--#include <linux/in.h>
--#include <linux/in_route.h>
--#include <linux/inetdevice.h>
--#include <linux/jhash.h>
--#include <linux/list.h>
--#include <linux/kernel.h>
--#include <linux/module.h>
--#include <linux/workqueue.h>
--#include <linux/rculist.h>
--#include <net/route.h>
--#include <net/xfrm.h>
--
--#include <net/icmp.h>
--#include <net/ip.h>
--#include <net/ip_tunnels.h>
--#include <net/gre.h>
--#include <net/net_namespace.h>
--#include <net/netns/generic.h>
--#include <net/protocol.h>
--
--#include "datapath.h"
--#include "vport.h"
--#include "vport-netdev.h"
--
--static struct vport_ops ovs_gre_vport_ops;
--
--static struct vport *gre_tnl_create(const struct vport_parms *parms)
--{
--	struct net *net = ovs_dp_get_net(parms->dp);
--	struct net_device *dev;
--	struct vport *vport;
--	int err;
--
--	vport = ovs_vport_alloc(0, &ovs_gre_vport_ops, parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	rtnl_lock();
--	dev = gretap_fb_dev_create(net, parms->name, NET_NAME_USER);
--	if (IS_ERR(dev)) {
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		return ERR_CAST(dev);
--	}
--
--	err = dev_change_flags(dev, dev->flags | IFF_UP, NULL);
--	if (err < 0) {
--		rtnl_delete_link(dev, 0, NULL);
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		return ERR_PTR(err);
--	}
--
--	vport->dev = dev;
--	netdev_hold(vport->dev, &vport->dev_tracker, GFP_KERNEL);
--
--	rtnl_unlock();
--	return vport;
--}
--
--static struct vport *gre_create(const struct vport_parms *parms)
--{
--	struct vport *vport;
--
--	vport = gre_tnl_create(parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	return ovs_netdev_link(vport, true);
--}
--
--static struct vport_ops ovs_gre_vport_ops = {
--	.type		= OVS_VPORT_TYPE_GRE,
--	.create		= gre_create,
--	.send		= dev_queue_xmit,
--	.destroy	= ovs_netdev_tunnel_destroy,
--};
--
--static int __init ovs_gre_tnl_init(void)
--{
--	return ovs_vport_ops_register(&ovs_gre_vport_ops);
--}
--
--static void __exit ovs_gre_tnl_exit(void)
--{
--	ovs_vport_ops_unregister(&ovs_gre_vport_ops);
--}
--
--module_init(ovs_gre_tnl_init);
--module_exit(ovs_gre_tnl_exit);
--
--MODULE_DESCRIPTION("OVS: GRE switching port");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("vport-type-3");
-diff --git a/net/openvswitch/vport-netdev.c b/net/openvswitch/vport-netdev.c
-index e7e8490a53d8..44808cd0fcff 100644
---- a/net/openvswitch/vport-netdev.c
-+++ b/net/openvswitch/vport-netdev.c
-@@ -73,7 +73,7 @@ static struct net_device *get_dpdev(const struct datapath *dp)
- 	return local->dev;
- }
  
--struct vport *ovs_netdev_link(struct vport *vport, bool tunnel)
-+static struct vport *ovs_netdev_link(struct vport *vport)
- {
- 	int err;
- 
-@@ -112,15 +112,12 @@ struct vport *ovs_netdev_link(struct vport *vport, bool tunnel)
- error_master_upper_dev_unlink:
- 	netdev_upper_dev_unlink(vport->dev, get_dpdev(vport->dp));
- error_put_unlock:
--	if (tunnel && vport->dev->reg_state == NETREG_REGISTERED)
--		rtnl_delete_link(vport->dev, 0, NULL);
- 	netdev_put(vport->dev, &vport->dev_tracker);
- 	rtnl_unlock();
- error_free_vport:
- 	ovs_vport_free(vport);
- 	return ERR_PTR(err);
- }
--EXPORT_SYMBOL_GPL(ovs_netdev_link);
- 
- static struct vport *netdev_create(const struct vport_parms *parms)
- {
-@@ -152,7 +149,7 @@ static struct vport *netdev_create(const struct vport_parms *parms)
- 		goto error_put;
+@@ -2365,7 +2355,6 @@ static int ovs_vport_cmd_new(struct sk_buff *skb, struct genl_info *info)
  	}
  
--	return ovs_netdev_link(vport, false);
-+	return ovs_netdev_link(vport);
- error_put:
- 	netdev_put(vport->dev, &vport->dev_tracker);
- error_free_vport:
-@@ -204,28 +201,6 @@ static void netdev_destroy(struct vport *vport)
- 	call_rcu(&vport->rcu, vport_netdev_free);
+ 	parms.name = nla_data(a[OVS_VPORT_ATTR_NAME]);
+-	parms.options = a[OVS_VPORT_ATTR_OPTIONS];
+ 	parms.dp = dp;
+ 	parms.port_no = port_no;
+ 	parms.upcall_portids = a[OVS_VPORT_ATTR_UPCALL_PID];
+@@ -2427,12 +2416,11 @@ static int ovs_vport_cmd_set(struct sk_buff *skb, struct genl_info *info)
+ 	}
+ 
+ 	if (a[OVS_VPORT_ATTR_OPTIONS]) {
+-		err = ovs_vport_set_options(vport, a[OVS_VPORT_ATTR_OPTIONS]);
+-		if (err)
+-			goto exit_unlock_free;
++		/* There are no vport types that support legacy options. */
++		err = -EOPNOTSUPP;
++		goto exit_unlock_free;
+ 	}
+ 
+-
+ 	if (a[OVS_VPORT_ATTR_UPCALL_PID]) {
+ 		struct nlattr *ids = a[OVS_VPORT_ATTR_UPCALL_PID];
+ 
+@@ -2606,7 +2594,7 @@ static const struct nla_policy vport_policy[OVS_VPORT_ATTR_MAX + 1] = {
+ 	[OVS_VPORT_ATTR_PORT_NO] = { .type = NLA_U32 },
+ 	[OVS_VPORT_ATTR_TYPE] = { .type = NLA_U32 },
+ 	[OVS_VPORT_ATTR_UPCALL_PID] = { .type = NLA_UNSPEC },
+-	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED },
++	[OVS_VPORT_ATTR_OPTIONS] = { .type = NLA_NESTED }, /* Unused. */
+ 	[OVS_VPORT_ATTR_IFINDEX] = NLA_POLICY_MIN(NLA_S32, 0),
+ 	[OVS_VPORT_ATTR_NETNSID] = { .type = NLA_S32 },
+ 	[OVS_VPORT_ATTR_UPCALL_STATS] = { .type = NLA_NESTED },
+diff --git a/net/openvswitch/vport.c b/net/openvswitch/vport.c
+index 12741485c939..ada316a61726 100644
+--- a/net/openvswitch/vport.c
++++ b/net/openvswitch/vport.c
+@@ -239,22 +239,6 @@ struct vport *ovs_vport_add(const struct vport_parms *parms)
+ 		return ERR_PTR(-EAGAIN);
  }
  
--void ovs_netdev_tunnel_destroy(struct vport *vport)
--{
--	rtnl_lock();
--	if (netif_is_ovs_port(vport->dev))
--		ovs_netdev_detach_dev(vport);
--
--	/* We can be invoked by both explicit vport deletion and
--	 * underlying netdev deregistration; delete the link only
--	 * if it's not already shutting down.
--	 */
--	if (vport->dev->reg_state == NETREG_REGISTERED)
--		rtnl_delete_link(vport->dev, 0, NULL);
--
--	/* We can't put the device reference yet, since it can still be in
--	 * use, but rtnl_unlock()->netdev_run_todo() will block until all
--	 * the references are released, so the RCU call must be before it.
--	 */
--	call_rcu(&vport->rcu, vport_netdev_free);
--	rtnl_unlock();
--}
--EXPORT_SYMBOL_GPL(ovs_netdev_tunnel_destroy);
--
- /* Returns null if this device is not attached to a datapath. */
- struct vport *ovs_netdev_get_vport(struct net_device *dev)
- {
-diff --git a/net/openvswitch/vport-netdev.h b/net/openvswitch/vport-netdev.h
-index 6c0d7366f986..880506f8317e 100644
---- a/net/openvswitch/vport-netdev.h
-+++ b/net/openvswitch/vport-netdev.h
-@@ -13,11 +13,9 @@
- 
- struct vport *ovs_netdev_get_vport(struct net_device *dev);
- 
--struct vport *ovs_netdev_link(struct vport *vport, bool tunnel);
- void ovs_netdev_detach_dev(struct vport *);
- 
- int __init ovs_netdev_init(void);
- void ovs_netdev_exit(void);
- 
--void ovs_netdev_tunnel_destroy(struct vport *vport);
- #endif /* vport_netdev.h */
-diff --git a/net/openvswitch/vport-vxlan.c b/net/openvswitch/vport-vxlan.c
-deleted file mode 100644
-index c1b37b50d29e..000000000000
---- a/net/openvswitch/vport-vxlan.c
-+++ /dev/null
-@@ -1,172 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- * Copyright (c) 2014 Nicira, Inc.
-- * Copyright (c) 2013 Cisco Systems, Inc.
+-/**
+- *	ovs_vport_set_options - modify existing vport device (for kernel callers)
+- *
+- * @vport: vport to modify.
+- * @options: New configuration.
+- *
+- * Modifies an existing device with the specified configuration (which is
+- * dependent on device type).  ovs_mutex must be held.
 - */
--
--#include <linux/kernel.h>
--#include <linux/skbuff.h>
--#include <linux/openvswitch.h>
--#include <linux/module.h>
--#include <net/udp.h>
--#include <net/ip_tunnels.h>
--#include <net/rtnetlink.h>
--#include <net/vxlan.h>
--
--#include "datapath.h"
--#include "vport.h"
--#include "vport-netdev.h"
--
--static struct vport_ops ovs_vxlan_netdev_vport_ops;
--
--static int vxlan_get_options(const struct vport *vport, struct sk_buff *skb)
+-int ovs_vport_set_options(struct vport *vport, struct nlattr *options)
 -{
--	struct vxlan_dev *vxlan = netdev_priv(vport->dev);
--	__be16 dst_port = vxlan->cfg.dst_port;
+-	if (!vport->ops->set_options)
+-		return -EOPNOTSUPP;
+-	return vport->ops->set_options(vport, options);
+-}
 -
--	if (nla_put_u16(skb, OVS_TUNNEL_ATTR_DST_PORT, ntohs(dst_port)))
+ /**
+  *	ovs_vport_del - delete existing vport device
+  *
+@@ -348,44 +332,6 @@ int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb)
+ 	return 0;
+ }
+ 
+-/**
+- *	ovs_vport_get_options - retrieve device options
+- *
+- * @vport: vport from which to retrieve the options.
+- * @skb: sk_buff where options should be appended.
+- *
+- * Retrieves the configuration of the given device, appending an
+- * %OVS_VPORT_ATTR_OPTIONS attribute that in turn contains nested
+- * vport-specific attributes to @skb.
+- *
+- * Returns 0 if successful, -EMSGSIZE if @skb has insufficient room, or another
+- * negative error code if a real error occurred.  If an error occurs, @skb is
+- * left unmodified.
+- *
+- * Must be called with ovs_mutex or rcu_read_lock.
+- */
+-int ovs_vport_get_options(const struct vport *vport, struct sk_buff *skb)
+-{
+-	struct nlattr *nla;
+-	int err;
+-
+-	if (!vport->ops->get_options)
+-		return 0;
+-
+-	nla = nla_nest_start_noflag(skb, OVS_VPORT_ATTR_OPTIONS);
+-	if (!nla)
 -		return -EMSGSIZE;
 -
--	if (vxlan->cfg.flags & VXLAN_F_GBP) {
--		struct nlattr *exts;
--
--		exts = nla_nest_start_noflag(skb, OVS_TUNNEL_ATTR_EXTENSION);
--		if (!exts)
--			return -EMSGSIZE;
--
--		if (vxlan->cfg.flags & VXLAN_F_GBP &&
--		    nla_put_flag(skb, OVS_VXLAN_EXT_GBP))
--			return -EMSGSIZE;
--
--		nla_nest_end(skb, exts);
--	}
--
--	return 0;
--}
--
--static const struct nla_policy exts_policy[OVS_VXLAN_EXT_MAX + 1] = {
--	[OVS_VXLAN_EXT_GBP]	= { .type = NLA_FLAG, },
--};
--
--static int vxlan_configure_exts(struct vport *vport, struct nlattr *attr,
--				struct vxlan_config *conf)
--{
--	struct nlattr *exts[OVS_VXLAN_EXT_MAX + 1];
--	int err;
--
--	if (nla_len(attr) < sizeof(struct nlattr))
--		return -EINVAL;
--
--	err = nla_parse_nested_deprecated(exts, OVS_VXLAN_EXT_MAX, attr,
--					  exts_policy, NULL);
--	if (err < 0)
+-	err = vport->ops->get_options(vport, skb);
+-	if (err) {
+-		nla_nest_cancel(skb, nla);
 -		return err;
+-	}
 -
--	if (exts[OVS_VXLAN_EXT_GBP])
--		conf->flags |= VXLAN_F_GBP;
--
+-	nla_nest_end(skb, nla);
 -	return 0;
 -}
 -
--static struct vport *vxlan_tnl_create(const struct vport_parms *parms)
--{
--	struct net *net = ovs_dp_get_net(parms->dp);
--	struct nlattr *options = parms->options;
--	struct net_device *dev;
--	struct vport *vport;
--	struct nlattr *a;
--	int err;
--	struct vxlan_config conf = {
--		.no_share = true,
--		.flags = VXLAN_F_COLLECT_METADATA | VXLAN_F_UDP_ZERO_CSUM6_RX,
--		/* Don't restrict the packets that can be sent by MTU */
--		.mtu = IP_MAX_MTU,
--	};
--
--	if (!options) {
--		err = -EINVAL;
--		goto error;
--	}
--
--	a = nla_find_nested(options, OVS_TUNNEL_ATTR_DST_PORT);
--	if (a && nla_len(a) == sizeof(u16)) {
--		conf.dst_port = htons(nla_get_u16(a));
--	} else {
--		/* Require destination port from userspace. */
--		err = -EINVAL;
--		goto error;
--	}
--
--	vport = ovs_vport_alloc(0, &ovs_vxlan_netdev_vport_ops, parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	a = nla_find_nested(options, OVS_TUNNEL_ATTR_EXTENSION);
--	if (a) {
--		err = vxlan_configure_exts(vport, a, &conf);
--		if (err) {
--			ovs_vport_free(vport);
--			goto error;
--		}
--	}
--
--	rtnl_lock();
--	dev = vxlan_dev_create(net, parms->name, NET_NAME_USER, &conf);
--	if (IS_ERR(dev)) {
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		return ERR_CAST(dev);
--	}
--
--	err = dev_change_flags(dev, dev->flags | IFF_UP, NULL);
--	if (err < 0) {
--		rtnl_delete_link(dev, 0, NULL);
--		rtnl_unlock();
--		ovs_vport_free(vport);
--		goto error;
--	}
--
--	vport->dev = dev;
--	netdev_hold(vport->dev, &vport->dev_tracker, GFP_KERNEL);
--
--	rtnl_unlock();
--	return vport;
--error:
--	return ERR_PTR(err);
--}
--
--static struct vport *vxlan_create(const struct vport_parms *parms)
--{
--	struct vport *vport;
--
--	vport = vxlan_tnl_create(parms);
--	if (IS_ERR(vport))
--		return vport;
--
--	return ovs_netdev_link(vport, true);
--}
--
--static struct vport_ops ovs_vxlan_netdev_vport_ops = {
--	.type			= OVS_VPORT_TYPE_VXLAN,
--	.create			= vxlan_create,
--	.destroy		= ovs_netdev_tunnel_destroy,
--	.get_options		= vxlan_get_options,
--	.send			= dev_queue_xmit,
--};
--
--static int __init ovs_vxlan_tnl_init(void)
--{
--	return ovs_vport_ops_register(&ovs_vxlan_netdev_vport_ops);
--}
--
--static void __exit ovs_vxlan_tnl_exit(void)
--{
--	ovs_vport_ops_unregister(&ovs_vxlan_netdev_vport_ops);
--}
--
--module_init(ovs_vxlan_tnl_init);
--module_exit(ovs_vxlan_tnl_exit);
--
--MODULE_DESCRIPTION("OVS: VXLAN switching port");
--MODULE_LICENSE("GPL");
--MODULE_ALIAS("vport-type-4");
-diff --git a/tools/testing/selftests/net/config b/tools/testing/selftests/net/config
-index a2d14ec9df1a..d83e11298b01 100644
---- a/tools/testing/selftests/net/config
-+++ b/tools/testing/selftests/net/config
-@@ -117,9 +117,6 @@ CONFIG_NFT_COMPAT=m
- CONFIG_NFT_NAT=m
- CONFIG_NUMA=y
- CONFIG_OPENVSWITCH=m
--CONFIG_OPENVSWITCH_GENEVE=m
--CONFIG_OPENVSWITCH_GRE=m
--CONFIG_OPENVSWITCH_VXLAN=m
- CONFIG_PAGE_POOL_STATS=y
- CONFIG_PROC_SYSCTL=y
- CONFIG_PSAMPLE=m
-diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
-index c659749cd086..05ca6affb510 100644
---- a/tools/testing/selftests/net/openvswitch/config
-+++ b/tools/testing/selftests/net/openvswitch/config
-@@ -7,9 +7,6 @@ CONFIG_NET_IPGRE_DEMUX=m
- CONFIG_NF_CONNTRACK=m
- CONFIG_NF_CONNTRACK_OVS=y
- CONFIG_OPENVSWITCH=m
--CONFIG_OPENVSWITCH_GENEVE=m
--CONFIG_OPENVSWITCH_GRE=m
--CONFIG_OPENVSWITCH_VXLAN=m
- CONFIG_PSAMPLE=m
- CONFIG_VETH=y
- CONFIG_VLAN_8021Q=y
-diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index 853dbc1b00d7..f63001dc2510 100755
---- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
-+++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -26,7 +26,6 @@ tests="
- 	netlink_checks				ovsnl: validate netlink attrs and settings
- 	upcall_interfaces			ovs: test the upcall interfaces
- 	tunnel_metadata				ovs: test extraction of tunnel metadata
--	tunnel_refcount				ovs: test tunnel vport reference cleanup
- 	drop_reason				drop: test drop reasons are emitted
- 	pop_vlan				vlan: POP_VLAN action strips tag
- 	dec_ttl					ttl: dec_ttl decrements IP TTL
-@@ -1210,43 +1209,6 @@ test_tunnel_metadata() {
- 	return 0
- }
+ /**
+  *	ovs_vport_set_upcall_portids - set upcall portids of @vport.
+  *
+diff --git a/net/openvswitch/vport.h b/net/openvswitch/vport.h
+index 9f67b9dd49f9..636788b59907 100644
+--- a/net/openvswitch/vport.h
++++ b/net/openvswitch/vport.h
+@@ -34,9 +34,6 @@ void ovs_vport_get_stats(struct vport *, struct ovs_vport_stats *);
  
--test_tunnel_refcount() {
--	sbxname="test_tunnel_refcount"
--	sbx_add "${sbxname}" || return 1
--
--	ovs_sbx "${sbxname}" ip netns add trefns || return 1
--	on_exit "ovs_sbx ${sbxname} ip netns del trefns"
--
--	for tun_type in gre vxlan geneve; do
--		info "testing ${tun_type} tunnel vport refcount"
--
--		ovs_sbx "${sbxname}" ip netns exec trefns \
--			python3 $ovs_base/ovs-dpctl.py \
--			add-dp dp-${tun_type} || return 1
--
--		ovs_sbx "${sbxname}" ip netns exec trefns \
--			python3 $ovs_base/ovs-dpctl.py \
--			add-if --no-lwt -t ${tun_type} \
--			dp-${tun_type} ovs-${tun_type}0 || return 1
--
--		ovs_wait ip -netns trefns link show \
--			ovs-${tun_type}0 >/dev/null 2>&1 || return 1
--
--		info "deleting dp - may hang if reference counting is broken"
--		ovs_sbx "${sbxname}" ip netns exec trefns \
--			python3 $ovs_base/ovs-dpctl.py \
--			del-dp dp-${tun_type} &
--
--		dev_removed() {
--			! ip -netns trefns link show "$1" >/dev/null 2>&1
--		}
--		ovs_wait dev_removed dp-${tun_type} || return 1
--		ovs_wait dev_removed ovs-${tun_type}0 || return 1
--	done
--
--	return 0
--}
--
- test_pop_vlan() {
- 	local sbx="test_pop_vlan"
- 	sbx_add "$sbx" || return $?
-diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-index f3edd198223f..3ece07d47281 100644
---- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-+++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
-@@ -2364,9 +2364,6 @@ class OvsDatapath(GenericNetlinkSocket):
- class OvsVport(GenericNetlinkSocket):
-     OVS_VPORT_TYPE_NETDEV = 1
-     OVS_VPORT_TYPE_INTERNAL = 2
--    OVS_VPORT_TYPE_GRE = 3
--    OVS_VPORT_TYPE_VXLAN = 4
--    OVS_VPORT_TYPE_GENEVE = 5
+ int ovs_vport_get_upcall_stats(struct vport *vport, struct sk_buff *skb);
  
-     class ovs_vport_msg(ovs_dp_msg):
-         nla_map = (
-@@ -2374,7 +2371,7 @@ class OvsVport(GenericNetlinkSocket):
-             ("OVS_VPORT_ATTR_PORT_NO", "uint32"),
-             ("OVS_VPORT_ATTR_TYPE", "uint32"),
-             ("OVS_VPORT_ATTR_NAME", "asciiz"),
--            ("OVS_VPORT_ATTR_OPTIONS", "vportopts"),
-+            ("OVS_VPORT_ATTR_OPTIONS", "none"),
-             ("OVS_VPORT_ATTR_UPCALL_PID", "array(uint32)"),
-             ("OVS_VPORT_ATTR_STATS", "vportstats"),
-             ("OVS_VPORT_ATTR_PAD", "none"),
-@@ -2382,13 +2379,6 @@ class OvsVport(GenericNetlinkSocket):
-             ("OVS_VPORT_ATTR_NETNSID", "uint32"),
-         )
- 
--        class vportopts(nla):
--            nla_map = (
--                ("OVS_TUNNEL_ATTR_UNSPEC", "none"),
--                ("OVS_TUNNEL_ATTR_DST_PORT", "uint16"),
--                ("OVS_TUNNEL_ATTR_EXTENSION", "none"),
--            )
+-int ovs_vport_set_options(struct vport *, struct nlattr *options);
+-int ovs_vport_get_options(const struct vport *, struct sk_buff *);
 -
-         class vportstats(nla):
-             fields = (
-                 ("rx_packets", "=Q"),
-@@ -2406,25 +2396,13 @@ class OvsVport(GenericNetlinkSocket):
-             return "netdev"
-         elif vport_type == OvsVport.OVS_VPORT_TYPE_INTERNAL:
-             return "internal"
--        elif vport_type == OvsVport.OVS_VPORT_TYPE_GRE:
--            return "gre"
--        elif vport_type == OvsVport.OVS_VPORT_TYPE_VXLAN:
--            return "vxlan"
--        elif vport_type == OvsVport.OVS_VPORT_TYPE_GENEVE:
--            return "geneve"
-         raise ValueError("Unknown vport type:%d" % vport_type)
+ int ovs_vport_set_upcall_portids(struct vport *, const struct nlattr *pids);
+ int ovs_vport_get_upcall_portids(const struct vport *, struct sk_buff *);
+ u32 ovs_vport_find_upcall_portid(const struct vport *, struct sk_buff *);
+@@ -92,8 +89,6 @@ struct vport {
+  *
+  * @name: New vport's name.
+  * @type: New vport's type.
+- * @options: %OVS_VPORT_ATTR_OPTIONS attribute from Netlink message, %NULL if
+- * none was supplied.
+  * @desired_ifindex: New vport's ifindex.
+  * @dp: New vport's datapath.
+  * @port_no: New vport's port number.
+@@ -104,7 +99,6 @@ struct vport_parms {
+ 	const char *name;
+ 	enum ovs_vport_type type;
+ 	int desired_ifindex;
+-	struct nlattr *options;
  
-     def str_to_type(vport_type):
--        if vport_type == "netdev":
-+        if vport_type in ["netdev", "gre", "vxlan", "geneve"]:
-             return OvsVport.OVS_VPORT_TYPE_NETDEV
-         elif vport_type == "internal":
-             return OvsVport.OVS_VPORT_TYPE_INTERNAL
--        elif vport_type == "gre":
--            return OvsVport.OVS_VPORT_TYPE_GRE
--        elif vport_type == "vxlan":
--            return OvsVport.OVS_VPORT_TYPE_VXLAN
--        elif vport_type == "geneve":
--            return OvsVport.OVS_VPORT_TYPE_GENEVE
-         raise ValueError("Unknown vport type: '%s'" % vport_type)
+ 	/* For ovs_vport_alloc(). */
+ 	struct datapath *dp;
+@@ -120,11 +114,6 @@ struct vport_parms {
+  * a new vport allocated with ovs_vport_alloc(), otherwise an ERR_PTR() value.
+  * @destroy: Destroys a vport.  Must call vport_free() on the vport but not
+  * before an RCU grace period has elapsed.
+- * @set_options: Modify the configuration of an existing vport.  May be %NULL
+- * if modification is not supported.
+- * @get_options: Appends vport-specific attributes for the configuration of an
+- * existing vport to a &struct sk_buff.  May be %NULL for a vport that does not
+- * have any configuration.
+  * @send: Send a packet on the device.
+  * zero for dropped packets or negative for error.
+  * @owner: Module that implements this vport type.
+@@ -137,9 +126,6 @@ struct vport_ops {
+ 	struct vport *(*create)(const struct vport_parms *);
+ 	void (*destroy)(struct vport *);
  
-     def __init__(self, packet=OvsPacket()):
-@@ -2457,16 +2435,18 @@ class OvsVport(GenericNetlinkSocket):
-                 raise ne
-         return reply
- 
--    def attach(self, dpindex, vport_ifname, ptype, dport, lwt):
-+    def attach(self, dpindex, vport_ifname, ptype, dport):
-         msg = OvsVport.ovs_vport_msg()
- 
-         msg["cmd"] = OVS_VPORT_CMD_NEW
-         msg["version"] = OVS_DATAPATH_VERSION
-         msg["reserved"] = 0
-         msg["dpifindex"] = dpindex
--        port_type = OvsVport.str_to_type(ptype)
- 
-         msg["attrs"].append(["OVS_VPORT_ATTR_NAME", vport_ifname])
-+        msg["attrs"].append(
-+            ["OVS_VPORT_ATTR_TYPE", OvsVport.str_to_type(ptype)]
-+        )
-         msg["attrs"].append(
-             ["OVS_VPORT_ATTR_UPCALL_PID", [self.upcall_packet.epid]]
-         )
-@@ -2480,36 +2460,21 @@ class OvsVport(GenericNetlinkSocket):
-                 if not dport:
-                     dport = tnl[1]
- 
--                if not lwt:
--                    if tnl[0] == "gre":
--                        # GRE tunnels have no options.
--                        break
+-	int (*set_options)(struct vport *, struct nlattr *);
+-	int (*get_options)(const struct vport *, struct sk_buff *);
 -
--                    vportopt = OvsVport.ovs_vport_msg.vportopts()
--                    vportopt["attrs"].append(
--                        ["OVS_TUNNEL_ATTR_DST_PORT", dport]
--                    )
--                    msg["attrs"].append(
--                        ["OVS_VPORT_ATTR_OPTIONS", vportopt]
--                    )
--                else:
--                    port_type = OvsVport.OVS_VPORT_TYPE_NETDEV
--                    ipr = pyroute2.iproute.IPRoute()
--
--                    if tnl[0] == "geneve":
--                        ipr.link("add", ifname=vport_ifname, kind=tnl[0],
--                                 geneve_port=dport,
--                                 geneve_collect_metadata=True,
--                                 geneve_udp_zero_csum6_rx=1)
--                    elif tnl[0] == "gre":
--                        ipr.link("add", ifname=vport_ifname, kind="gretap",
--                                 gre_collect_metadata=True)
--                    elif tnl[0] == "vxlan":
--                        ipr.link("add", ifname=vport_ifname, kind=tnl[0],
--                                 vxlan_learning=0, vxlan_collect_metadata=1,
--                                 vxlan_udp_zero_csum6_rx=1, vxlan_port=dport)
-+                ipr = pyroute2.iproute.IPRoute()
-+
-+                if tnl[0] == "geneve":
-+                    ipr.link("add", ifname=vport_ifname, kind=tnl[0],
-+                             geneve_port=dport,
-+                             geneve_collect_metadata=True,
-+                             geneve_udp_zero_csum6_rx=1)
-+                elif tnl[0] == "gre":
-+                    ipr.link("add", ifname=vport_ifname, kind="gretap",
-+                             gre_collect_metadata=True)
-+                elif tnl[0] == "vxlan":
-+                    ipr.link("add", ifname=vport_ifname, kind=tnl[0],
-+                             vxlan_learning=0, vxlan_collect_metadata=1,
-+                             vxlan_udp_zero_csum6_rx=1, vxlan_port=dport)
-                 break
--        msg["attrs"].append(["OVS_VPORT_ATTR_TYPE", port_type])
- 
-         try:
-             reply = self.nlm_request(
-@@ -2937,19 +2902,12 @@ def print_ovsdp_full(dp_lookup_rep, ifindex, ndb=NDB(), vpl=OvsVport()):
-     for iface in ndb.interfaces:
-         rep = vpl.info(iface.ifname, ifindex)
-         if rep is not None:
--            opts = ""
--            vpo = rep.get_attr("OVS_VPORT_ATTR_OPTIONS")
--            if vpo:
--                dpo = vpo.get_attr("OVS_TUNNEL_ATTR_DST_PORT")
--                if dpo:
--                    opts += " tnl-dport:%s" % dpo
-             print(
--                "  port %d: %s (%s%s)"
-+                "  port %d: %s (%s)"
-                 % (
-                     rep.get_attr("OVS_VPORT_ATTR_PORT_NO"),
-                     rep.get_attr("OVS_VPORT_ATTR_NAME"),
-                     OvsVport.type_to_str(rep.get_attr("OVS_VPORT_ATTR_TYPE")),
--                    opts,
-                 )
-             )
- 
-@@ -3022,13 +2980,6 @@ def main(argv):
-         default=0,
-         help="Destination port (0 for default)"
-     )
--    addifcmd.add_argument(
--        "-l",
--        "--lwt",
--        action=argparse.BooleanOptionalAction,
--        default=True,
--        help="Use LWT infrastructure instead of vport (default true)."
--    )
-     delifcmd = subparsers.add_parser("del-if")
-     delifcmd.add_argument("dpname", help="Datapath Name")
-     delifcmd.add_argument("delif", help="Interface name for adding")
-@@ -3108,7 +3059,7 @@ def main(argv):
-             return 1
-         dpindex = rep["dpifindex"]
-         rep = ovsvp.attach(rep["dpifindex"], args.addif, args.ptype,
--                           args.dport, args.lwt)
-+                           args.dport)
-         msg = "vport '%s'" % args.addif
-         if rep and rep["header"]["error"] is None:
-             msg += " added."
+ 	int (*send)(struct sk_buff *skb);
+ 	struct module *owner;
+ 	struct list_head list;
 -- 
 2.55.0
 
