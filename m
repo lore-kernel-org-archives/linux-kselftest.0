@@ -1,109 +1,106 @@
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213723D349A
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 23:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACFD439DBC0
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 23:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785885353; cv=none; b=A6lFHO0Ex+XKiqhBJLu8pgp9SSGbdhAEh5Q7Wu1exbzsJRscArdLUfgPKr0ZUF84kZcV+5SU285Vo5Y9ffXxjHOFk3Trs7VdjQisaJxfTVZ9fiRTTsxh8+oF2hefVTvNVx4nRAoqCb+eyBB0ZqgfAUwb+YoGO7/kK7uSsaVhx58=
+	t=1785886700; cv=none; b=tCt+iUKyhY89FhsckW5m7vINqIbWZZE8NVEiiCHKrlJUQJItIBY4XHNPKaYauSxnpk+TFGmzBuP0udSIzbv4iXHXv615PIPrx5uyDQCjSjX/GIBxPf+9u1m+ygECtTKXoix5LYpU0hLnSqEvztpIq2P9aRM/ws0GR7WbJZNsN6E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785885353; c=relaxed/simple;
-	bh=CQxbt8HUW9NzD6kY4dP+QdWUZhtRuWP0yx/1re3yKbQ=;
+	s=arc-20240116; t=1785886700; c=relaxed/simple;
+	bh=7nykWB6HWQWBtzXDzLlBfOGF8GccFcz3uG03qRHgn6o=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=isW4E0nZ4moqeI+q0Cqs0eXyZthWF7n57aSKcPj411A9xlbcUouC4E/eHxanEr4plt+/56+A+Zy3yPXkzODcFfef2hoexRUXKFLbxwx+JfMzC9C8Ibzp7sLl0eRbv75VJh4ndDbJ1jPYLHWdgmOvs84/dA3zTM3u7MsIzVlm8Qo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JIIG5LpR; arc=none smtp.client-ip=209.85.210.200
+	 To:Cc:Content-Type; b=NvJU2osb9CJ5kmDS8jDYoJrM6BKRmnKgRUEVl3FKxgOA3xP5YTK8pyHXJI7WXhFLvBnnHQn2VI2X4f+k6FEj8RbyIy8v6qVlMq8/o1pVEZU/mC++K/mx8ybHMT4RaDM9wJzYW2mqMA+WxHeHfuH+3LFTAYNdkm8uKEKAVcXVCnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tWRJ/czV; arc=none smtp.client-ip=209.85.210.199
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JIIG5LpR"
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-84f0d3ab2f4so261473b3a.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 16:15:50 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tWRJ/czV"
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-8486c3411c8so432404b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 16:38:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785885349; x=1786490149; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=lz3QUw22bh8QYe/ZiAsreDFp91isZAPnzZuU7CX+ujA=;
-        b=JIIG5LpRyZ9YSrGomghxnXaaw9n5pFKARoczMsPVr2lBqhJntkncP0TIeobp8PVg+V
-         pBOsecuTT0XITt1zu8vjNN1ip6inffWZzyUAc+XWaLfA6xXGm3bq/O6CsyQbMP9wKfE5
-         xy3KUxvnv3dRWSWiiXqIW6Ox5zv/UADVE1wUTKoW2SCYebdZcQo7LnR452xudYG7DNgL
-         TSPKcMzBGg56wYkhlZ+dfL0Tu2YyvGOfxnpMnM0qzQ+FiwRVuZVH7ZWDTB1qGpByorKb
-         Qm3UTPgRC1x2tlSn4mZhIji+pjVL6BFEQ28q1nUPQXA+xSvpF9t2hzw0vl1n4wzqoBpC
-         QfQw==
+        d=google.com; s=20251104; t=1785886698; x=1786491498; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=MCQeULnuxyizouUVujp9ZRZMwHTWkFpcMFYeBXRE7J4=;
+        b=tWRJ/czVIciPcCnKqFPzTC2zDIy7WTK03oJtlTjFhoiOqM5WI30VD/kecpcTM8u4f8
+         V8ACH55V+Ou+T7MzlXw9ZJ9zbdZbLzhlo4XRs0EOIgzsKnAIK4gFsPVHMwY5RLR4kDM4
+         vr2/rg9NtBqTTCByHQUAY3qWiwop5cjT12oKQVAsvql11/kQp0lRFmZfxLOPG7sdFpSB
+         o7JNa5ADEq7AoiSp5k50CUD/GcE3aG1CsALrXs9mc5uoRX9R2g1JtLOQqHGhTvQwVeL/
+         SCmtUIq5hqLGzO9y5nk4n3C3/xXPkX5l2r5GWdqRAANnCXUHTk4GftatoOGU8+AJltHK
+         EbWQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785885349; x=1786490149;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=lz3QUw22bh8QYe/ZiAsreDFp91isZAPnzZuU7CX+ujA=;
-        b=rjwoqhelTqezEGrc+XYyd81zsQMeqxorRPZ6WEED8Pee7NYwHb4fym5cjSH5J2KNtA
-         eL7MGRo3FlWZ/xxEqIFrJswnT1qoRTXpAFLaOLhCWCSTePOrdZcq312v1vlTptWObz+R
-         vt5OSuklPLGw5VrzIvQDEKkGsop7Cbfms2hX/zybGjT24Zzfo604K1H48kIpDUE5tK4J
-         pk7CKJf2Q2qOWLcSRfwx2ISmZnsDqCSrj3nocOMycj0Pe2latq29OiCcW+0CxahSrEKX
-         Tejhl7lNqAUV0leYN0LX9XAZLbOnOf0hND3sug7UOP8T1ykozq8rtyaztOBhN53KOT7+
-         jjyQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoQxYRuLB8A8ePSpcY9jFvOnF++yStFl3LU5GrvkXeCkh6S9wVOqTvn9Gjeo9IPMFLSUo3GNO1JhCaPQfVe7AE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwubuRK6/2223r2cibQnx2CYFFOJHnXX4+quJUpQDiEtJhFLGIe
-	5ZAQupZMkQiLFu6khBofJVdHUhrktyRSUTJnksiRnA6fA7O/70fyhY73dStLza/SX06YK26H8NE
-	TqcfZPA==
-X-Received: from pfbbq18.prod.google.com ([2002:a05:6a00:e12:b0:848:5740:db83])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:9517:b0:84e:e809:dd49
- with SMTP id d2e1a72fcca58-84f2e12d02bmr2017520b3a.36.1785885348892; Tue, 04
- Aug 2026 16:15:48 -0700 (PDT)
-Date: Tue, 4 Aug 2026 16:15:48 -0700
-In-Reply-To: <CAEvNRgEOE5oeFVRYYucsCGJaFAQYS1oNRXAwGKzRAyqmoHT9OQ@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1785886698; x=1786491498;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=MCQeULnuxyizouUVujp9ZRZMwHTWkFpcMFYeBXRE7J4=;
+        b=NS0E3EukfvEW1Zdwdy3R++z4MKpUgAEvnCJrPn4IxPaK78XsrXTPj55B3gOAZ9ty8I
+         P0DT3tfIKND8I1A+nF3J0IEU3y1Hej9UP6S+c//QYj9HX25L2UuAzCs03Y1j9dPi8sny
+         RZ2aq7tt4BNxK/CHwshcajWFcMNWiGLQP2KnuNMJjS4q+5W/qqUvfVYRInABC8e6eWCz
+         ax2r8VeGK+kl2VsfhsqUFHF08lhIjrzVlFWO3dVnz76gNfexr1a0T39oazVYFfgQnmqS
+         BhY4XZ8uCl7HcRNWs6mdGtjOZocrX391trhQHcSya2eT9JSR0abwZF0RhV/YhEHJatFE
+         VYDw==
+X-Forwarded-Encrypted: i=1; AHgh+RqEhvf3ycjelG5hbjSC8mv9FlRYNPIEV67oBY9CtDPFF33NdhrIfSHWuRyw3kWaN3x5LzWdVHhgQFSTcc9ZR6Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqJeGYFUiuSJw3g2EI3yP7sC3V9cDqeDR4n8yo6HLwmeRhglFi
+	lNDgNsictVkLYq0oapiUw+3BbPDDgRPKWp5m8n2RaCdYD6YR6WRlDukL651n9tISVZURbGWDZZ6
+	Xuf4y8w==
+X-Received: from pgig16.prod.google.com ([2002:a63:f410:0:b0:c92:11a5:bbce])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3a15:b0:84a:60a4:2651
+ with SMTP id d2e1a72fcca58-84f2dfc53efmr1961102b3a.6.1785886697620; Tue, 04
+ Aug 2026 16:38:17 -0700 (PDT)
+Date: Tue, 4 Aug 2026 16:38:17 -0700
+In-Reply-To: <d2d98dd31718eb925ae44b0eceb325538a8174ae.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <edc3566b-370c-41a0-a71d-2e4a0e1a94f7@kernel.org>
- <CAEvNRgEas_9BEV-cNxXu4_wQx8sR2M4_OaW6DEd4=fszALMV0w@mail.gmail.com>
- <60552bee-3326-4917-b00f-5fb7ba3b8adb@kernel.org> <be77c2cb-6e41-4382-9d2f-cd299f634196@kernel.org>
- <anCtzQrUkFSSq8De@google.com> <99037993-ee13-4160-8c87-b6642faea554@kernel.org>
- <CAEvNRgHYhKACDfx9ZZy4a-TTS4yWzEJt=Jc92=eXxS15LPnTYg@mail.gmail.com>
- <anJbMf5GBe0Pxh_x@google.com> <de780cc3-8c43-46f8-b8e6-3ddfe93d753d@arm.com> <CAEvNRgEOE5oeFVRYYucsCGJaFAQYS1oNRXAwGKzRAyqmoHT9OQ@mail.gmail.com>
-Message-ID: <anJypPblO8ww0IHY@google.com>
-Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
+References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-32-dwmw2@infradead.org>
+ <am0upFND1r93HPxq@google.com> <d2d98dd31718eb925ae44b0eceb325538a8174ae.camel@infradead.org>
+Message-ID: <anJ36SBzN7HL4A2D@google.com>
+Subject: Re: [PATCH v7 31/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
 From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>, "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "hughd@google.com" <hughd@google.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 04, 2026, Ackerley Tng wrote:
-> Suzuki K Poulose <suzuki.poulose@arm.com> writes:
-> Sean, for the two attachments you left, did you intend 0001 to be the
-> first patch in the conversions series, or separately handled? 
+On Sat, Aug 01, 2026, David Woodhouse wrote:
+> On Fri, 2026-07-31 at 16:24 -0700, Sean Christopherson wrote:
+> >=20
+> > > +	/*
+> > > +	 * Allow for a discrepancy of 1 kHz either way between the TSC
+> > > +	 * frequency used to generate the user's pvclock and the current
+> > > +	 * host's measured frequency, since they may not precisely match.
+> > > +	 */
+> > > +	if (user_tsc_hz < curr_tsc_hz - 1000 ||
+> > > +	=C2=A0=C2=A0=C2=A0 user_tsc_hz > curr_tsc_hz + 1000) {
+> >=20
+> > I don't follow, why is KVM restricting what frequency userspace can set=
+?
+>=20
+> Userspace actually sets the frequency with KVM_SET_TSC_KHZ. What KVM is
+> insisting upon here is that the input to KVM_SET_CLOCK_GUEST is
+> *consistent* with the guest's TSC frequency (within a little slop
+> caused by different host TSCs).
 
-Please include it in this series.  FWIW, it doesn't have to be the very first
-patch, though that probably does make the most sense.
-
-> and 0002 will replace these 2 patches (in-place, in terms of order), right?
-
-Yep, thanks!
+Why does KVM care though?  I know some people hate that KVM's uAPI is permi=
+ssive
+to a fault, but trying to "help" userspace often ends badly for everyone.  =
+E.g.
+what happens if userspace does KVM_SET_TSC_KHZ after KVM_SET_CLOCK_GUEST?
