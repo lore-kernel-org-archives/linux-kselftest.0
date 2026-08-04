@@ -1,63 +1,63 @@
-Received: from mail-pf1-f179.google.com (mail-pf1-f179.google.com [209.85.210.179])
+Received: from mail-pf1-f174.google.com (mail-pf1-f174.google.com [209.85.210.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4420030D3F0
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 02:59:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F01F3F4DD6
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 02:59:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785812378; cv=none; b=CEGst4tlhRzvTwtplROWCtiV8YeH+a59atuLKDtQiN0AYCaIfCDTJpUiGtqaXOKVsgdOVb3jiLcV9d4Ii0w+34IgGRWUN6/l/TMHxZX3all8vw0tmJ/usfD8CeQHZULTx1kM/KBOW7l8xhcURYUMEcblEVVGeLX27arvBHYkheE=
+	t=1785812382; cv=none; b=BhMGQPv30Z8IpHzWS8a7nHJmD0SDDQUM+A0LIdxyqXjwJ0I1FmF0BiozbqlT7mvPBMyhgrWBaTqvDBRIO/CRJv/0NuIm7aewKQx3BQ1GY7EB2W+6p0WP+CFtJuFU+FZArM+Kmk7uQ8nLRRr6BjuzppyI+3Zqmt62W3BD51BH+6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785812378; c=relaxed/simple;
-	bh=kGHg5dJxMvflgLmIQwKaqqixfYXyjBoPcjsJhN7I9ys=;
+	s=arc-20240116; t=1785812382; c=relaxed/simple;
+	bh=H0UkMIe4CsIcpxmyZN1Ww99+u120SPTOqvKQ5GFRMAc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=uK7ZP4pJKHbXipL2gihQzx3dL3tkeqGPKWlm/WpdAy+AsCBBPJz0FTBwA5TD8H8eu7gymjoiJQeaUKQtO9ibWHC45dthCcSXfZi7bftpqA312lLQEgFQgffHdqnkppGcbTJ5EQzumx896ENvnmLAuHosxiJ57b1PpwUnjEARUnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DyXTQkr/; arc=none smtp.client-ip=209.85.210.179
+	 MIME-Version; b=G48MY2bhDu0V4rd3O9kBbrQ+cNepKhxra9dSTkyFMy8W10PE6pPjldbPp8ZMT3jZ5kyx6Mm/sPprKC0dxON+/SvkkmFz4EZLGqDV8jdaGkzG5kfD4Pz6BNniPqf2uLUOABfoiU4/v5dAdjDIbAS206TNGlVdTqRRRA4KIyxu7ZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SLVNK0jc; arc=none smtp.client-ip=209.85.210.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DyXTQkr/"
-Received: by mail-pf1-f179.google.com with SMTP id d2e1a72fcca58-848761b5897so2750361b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 19:59:37 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SLVNK0jc"
+Received: by mail-pf1-f174.google.com with SMTP id d2e1a72fcca58-8486ac3f347so511777b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 19:59:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785812376; x=1786417176; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785812381; x=1786417181; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=QkQ333WBrChtciSILIhBH7Fyg9DmGWGZdjGTMAJJv4M=;
-        b=DyXTQkr/8xC0usDA55oPDLTk+SbM0KXdIyo0Eh10qwsLOBND6x5lWiY9cxhgdMKVw7
-         bkLsjl5QlK/xDVaBUKqiwU2u9d/dhK7mmpmtrIc7UGSsr1IuCsg0N/5T+ama6OOPMXkZ
-         Xjy8UI2YHKQZ6iRqE1imkBnk38aHKV7c5kskoTVyUleAgBy67WNw8TX4ZON4Gv6OiXkd
-         xWL7di0sFDMRJYNaNOxRJc5rQCWRr+rapGONzwxvMOWv0nzUd25TcV6wRbYe0qzmdBVs
-         aKE4VxrcKq7f250754maIlAgtHvpo1J7v20Z13DRA9we1YoTo1tuCM91r+cA4iZda7V1
-         w+0Q==
+        bh=jmT/3flv0l5fERcYAXy6zGT7XeDtm3nxWHOeoNo8+6g=;
+        b=SLVNK0jcCd9rz4z1O9bVlrwxWuIGHtT7Ov3Wia8WcOx7cah/lrc1t9r+jplPbJ5x91
+         mp3DQW4EKBiWZX9ZUVw3DVnr/Pkvaw+wU2syXou1ul2+5qY/b6fj9hVAHWJD4VYYr9hx
+         n8WVjRiask9+XzHyE4d9stsKEwbJ7Ye8jI+xEsE1fTWfxbCuDxyvNEswriY4n0WU3yLN
+         gXUFF/JwWIklI1NqQHo8pszitiX5cC5KfnEaRZJ2+1QSOd1Cod3maTW7KG3yZrEaAX/k
+         r5DDD0iBZiOJvrvH7+vxIMC0vEV9xGRwOfh1TBdHCgcKKU/A90Oo1uKMuLIJz9s0FCuz
+         pS6w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785812376; x=1786417176;
+        d=1e100.net; s=20251104; t=1785812381; x=1786417181;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QkQ333WBrChtciSILIhBH7Fyg9DmGWGZdjGTMAJJv4M=;
-        b=MDRHIdCD3tDuytEgyElPjjMRg+bnG1F6aJJV5YMYtqnlYeC2IzJSqvMll2/qZACwxF
-         8qIpzei7FXLZGGY/9Ax82tfG5Wf8SZzN29kEQZVKEMvQtuORnvrG+NLj0Fdoun/rY7h/
-         xt4me1cCtvv9L5zIbakZ7uk7ZY26HM57MMKJGH6Nl5ZIlHxWA6nR7uYnatWcZsKfE71/
-         a4VFJQ0JpGwqux2TrYoIzERuv4YV6KcJkCqYiDeBw8JU2yrpJg5D5EI/yNnnPLKgL5Ql
-         H1G3B6IJ5kdnkCjWghwV/vCwLv3rKdfZc6f7RRHcXKBtRZ9fcpqUQhRfQxZMK+RFiVyZ
-         3rng==
-X-Forwarded-Encrypted: i=1; AHgh+RqlrlDspRJX0X2l/VuQxrdd8xXOIKO0kzJEtn/dx5E2hE/uCQw/HL7bRP/G0BMW6C1IfRfxPV9cOsFJrt+Nvm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy6LLmHR3UoeUiM+b8RXWnZIU29Ky+VvdZS2wE884MR533q6cW+
-	SJR3t/LD8RHE0a3m5jVmpioh+tM4v/RqrFWYSv2v+OdeP3A/soVzXKPj
-X-Gm-Gg: AR+sD13Er7x1yxz+KzxyD8OCHW2iZWPLISVCR5lqlRj62oKFn/UDQ+frTGRZjFIP/mK
-	+EaHWbrKWJ8Szntb1CNFvpuiG7K6C1nD66NsF8fZfTKVp+heCIJwpd9dDKyNTCW88DyaHE953pi
-	Vlz/Z3tQfePyLHcqqlBVxbmHwsQR+lr05llUBj+66n9ptLfO73GJBXNz2MMbOnZ2D6inqxtiGwE
-	JWjOThXnQIa/eRM7v8p+W9VI8m+emCruvITlyikmaPSHxPGWk97E3WWwaFA307edoQ4/k9AmDy7
-	dG1qLZxhzNC0QbzI2w44BKPsUh/6FefQlKWvHRhiHtpLutiiTHp9BG0bKZvtWeN/0lp1bOOYkkL
-	j1dhawkGE9xs38QdZYmgoSfysPAJ1dEWtUfPLJOWM8jVmPjidmwe4X1PZXyJ8q0ls8iZ6KaPSr5
-	TS7xsPX8TsmpmQa7olaViZzgJ3N259l50LbBHyp3Ug0Sx/VUhBOZsg52WWx7vigGbzPQ==
-X-Received: by 2002:a05:6a21:9206:b0:3c0:9c18:d5a6 with SMTP id adf61e73a8af0-3c92a8cc15bmr12885686637.67.1785812376564;
-        Mon, 03 Aug 2026 19:59:36 -0700 (PDT)
+        bh=jmT/3flv0l5fERcYAXy6zGT7XeDtm3nxWHOeoNo8+6g=;
+        b=rYwXXdJluCFNEMZ5VVDv5K1S38PU6wM6UPe1X9HJu8JbXxNUlT/4wMXtsOm+3FYMQk
+         Dhqhqf7FtILOmQzGdQwxhUA4kvfbkQ6L6bo3GtdaVHSIjgPJ+MI+0lS6eKx84icil71n
+         O1O9h7BXBKPTdDBjMvEsQ3WG0t29zDFYUWY2bZgx2lbJ9i2nYCoty8oM1XiTWK48Kv5i
+         5RCy2gZlqSo2eJ60RbgtgFB+TKuXXH7A8lQbWqFA+OMDF7vgQeHG337gyRuAnrFEGElr
+         cIF+qvQ2URXsOALn6QHm6dbZGdEfbW2QV5RuRnthPzAC2cfCOBwWN+GIvcuWVxy2MPQk
+         AL8g==
+X-Forwarded-Encrypted: i=1; AHgh+RqNUIy8fRvbGSGjncOEoEwQlBWCyNsQB+WwKyL3QNsVkgKTwU37I/QHYl2GxyTPEU+aW16XU4qROdNX4M9CihY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHknH8QaXrAzKxEdF8i1xhkXY5VcrCIFkLOtz5409o+W8G3jPu
+	nPlMmCWmJ/6AmCAd+aIU0l4QIfA1JET3+pCa8sks+cIVWmZCZVTCKzab
+X-Gm-Gg: AR+sD11irsWcNDZl8s8xgGgo4b1/KiN9Xkj6wVOHpa+xbxSbnXyvdfcfy1qf4ACBzOG
+	JHptAQyCJ0Lzt+J0q0BOrcbw99l4fB/7flryRH8hPuxmknB9hJnfW+12zIvJ7LGgLJLmw5Fe6Y7
+	mOrMgA3yAUGH9yqz5rCyq5Vh8vvKDE06B6aUxPtL8pSLS1WGr98rdMkkUkmkwelZo/7/VUWZwJn
+	sKxz9gLcrvjzrLX7VmRcix2lS1k30cNq9qAUK4Ay/4UpIRyBzJw/rFi2vw1meALPgPfZKAGfJ4M
+	aplhAxMcnDYFduUVIgfdoNrqc6XU+hKwwTT5d4jE/Aarkrw2Y1/jle/vQqC4jbOzB6jon+wP646
+	2ugY8+zvQ8lVtZgvxHmeTOEnIEwqoNDmfKlY/kgIV/XE8mVUdbJkgx1ewRveT+/DVZDa2AvEaIt
+	nGGEp+D3Z+1uldmzDWPfJ79ez/pPsr1vMWEQdsEFOhRzcvp0xdYgeT88dp1qHD/rbeiQ==
+X-Received: by 2002:a05:6a20:9e47:b0:3c0:b598:4983 with SMTP id adf61e73a8af0-3cb6ca54d23mr2124033637.30.1785812380841;
+        Mon, 03 Aug 2026 19:59:40 -0700 (PDT)
 Received: from fedora ([2804:1b3:a8c3:8ee5:1c39:64d9:e257:73dc])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab2530c0sm35974758c88.8.2026.08.03.19.59.33
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-13fab2530c0sm35974758c88.8.2026.08.03.19.59.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Aug 2026 19:59:36 -0700 (PDT)
+        Mon, 03 Aug 2026 19:59:40 -0700 (PDT)
 From: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 To: netdev@vger.kernel.org
 Cc: davem@davemloft.net,
@@ -69,9 +69,9 @@ Cc: davem@davemloft.net,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
-Subject: [PATCH net-next v2 1/4] selftests: net: test IPV6_FL_A_RENEW
-Date: Mon,  3 Aug 2026 23:59:07 -0300
-Message-ID: <20260804025910.50145-2-marcelomspessoto@gmail.com>
+Subject: [PATCH net-next v2 2/4] selftests: net: test IPV6_FL_F_REMOTE
+Date: Mon,  3 Aug 2026 23:59:08 -0300
+Message-ID: <20260804025910.50145-3-marcelomspessoto@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260804025910.50145-1-marcelomspessoto@gmail.com>
 References: <20260804025910.50145-1-marcelomspessoto@gmail.com>
@@ -83,99 +83,126 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-RENEW was the only flow label action without selftests coverage.
+This flag retrieves the flow label seen by the socket at connection
+setup via a getsockopt query. Therefore, the validation of this flag
+requires a brief connection setup (source code for flow label shows
+it must be TCP).
 
-Assert renew returns no error on correct usage and fails for labels
-that do not exist.
-
-Based on the previously implemented EXCL share test, that demonstrates
-that a new flow label with same label can be created after the linger
-period, use renew to show that the flow label can last longer and
-block a new flow label creation after the previous linger time. This
-test, however, demands sleep during execution, and should be placed as
-a conditional test under the -l option.
-
-The addition of expect_fail_errno helper is necessary to assert the
-corresponding error when a function can fail on multiple ways.
+The simple TCP connection logic was wrapped inside two simple helpers,
+because there are other uncovered features of flow label mgr that
+could benefit from it (such as IPV6_FL_F_REFLECT).
 
 Signed-off-by: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 ---
- .../selftests/net/ipv6_flowlabel_mgr.c        | 44 +++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ .../selftests/net/ipv6_flowlabel_mgr.c        | 84 +++++++++++++++++++
+ 1 file changed, 84 insertions(+)
 
 diff --git a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
-index af95b48acea9..01fab414895c 100644
+index 01fab414895c..d482be2e9f9f 100644
 --- a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
 +++ b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
-@@ -27,6 +27,7 @@
+@@ -24,6 +24,9 @@
+ #ifndef IPV6_FLOWLABEL_MGR
+ #define IPV6_FLOWLABEL_MGR	32
+ #endif
++#ifndef IPV6_FLOWINFO_SEND
++#define IPV6_FLOWINFO_SEND	33
++#endif
  
  /* from net/ipv6/ip6_flowlabel.c */
  #define FL_MIN_LINGER		6
-+#define FL_MAX_LINGER	150
- 
- #define explain(x)							\
- 	do { if (cfg_verbose) fprintf(stderr, "       " x "\n"); } while (0)
-@@ -42,6 +43,18 @@
- #define expect_pass(x)	__expect(x)
- #define expect_fail(x)	__expect(!(x))
- 
-+#define expect_fail_errno(x, e)						\
-+	do {								\
-+		int __exp = (e);					\
-+		int __ret = (x);					\
-+		int __err = errno;					\
-+		if (__ret && __err == __exp)				\
-+			fprintf(stderr, "[OK]   " #x "\n");		\
-+		else							\
-+			error(1, 0, "[ERR]  " #x " (line %d): expected errno %d, got %d", \
-+			      __LINE__, __exp, __err);			\
-+	} while (0)
-+
- static bool cfg_long_running;
- static bool cfg_verbose;
- 
-@@ -71,6 +84,17 @@ static int flowlabel_put(int fd, uint32_t label)
+@@ -95,6 +98,66 @@ static int flowlabel_renew(int fd, uint32_t label, uint16_t linger)
  	return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
  }
  
-+static int flowlabel_renew(int fd, uint32_t label, uint16_t linger)
++static struct sockaddr_in6 loopback_addr(void)
 +{
-+	struct in6_flowlabel_req req = {
-+		.flr_action = IPV6_FL_A_RENEW,
-+		.flr_label = htonl(label),
-+		.flr_linger = linger,
++	struct sockaddr_in6 addr = {
++		.sin6_family	= AF_INET6,
++		.sin6_addr	= IN6ADDR_LOOPBACK_INIT,
++		.sin6_port	= htons(8888),
 +	};
 +
-+	return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
++	return addr;
++}
++
++static int tcp_listen(void)
++{
++	struct sockaddr_in6 addr = loopback_addr();
++	const int one = 1;
++	int fd;
++
++	fd = socket(PF_INET6, SOCK_STREAM, 0);
++	if (fd == -1)
++		error(1, errno, "socket listener");
++	if (setsockopt(fd, SOL_SOCKET, SO_REUSEADDR, &one, sizeof(one)))
++		error(1, errno, "setsockopt SO_REUSEADDR");
++	if (bind(fd, (void *)&addr, sizeof(addr)))
++		error(1, errno, "bind");
++	if (listen(fd, 1))
++		error(1, errno, "listen");
++
++	return fd;
++}
++
++static void tcp_connect(int listener, uint32_t flowlabel, int *client, int *accepted)
++{
++	struct sockaddr_in6 addr = loopback_addr();
++	const int one = 1;
++	int cfd, afd;
++
++	cfd = socket(PF_INET6, SOCK_STREAM, 0);
++	if (cfd == -1)
++		error(1, errno, "socket client");
++
++	if (flowlabel_get(cfd, flowlabel, IPV6_FL_S_EXCL, IPV6_FL_F_CREATE))
++		error(1, errno, "flowlabel_get");
++	if (setsockopt(cfd, SOL_IPV6, IPV6_FLOWINFO_SEND, &one, sizeof(one)))
++		error(1, errno, "setsockopt flowinfo_send");
++	addr.sin6_flowinfo = htonl(flowlabel);
++
++	if (connect(cfd, (void *)&addr, sizeof(addr)))
++		error(1, errno, "connect");
++
++	afd = accept(listener, NULL, NULL);
++	if (afd == -1)
++		error(1, errno, "accept");
++
++	if (flowlabel_put(cfd, flowlabel))
++		error(1, errno, "flowlabel_put");
++
++	*client = cfd;
++	*accepted = afd;
 +}
 +
  static void run_tests(int fd)
  {
  	int wstatus;
-@@ -160,6 +184,26 @@ static void run_tests(int fd)
- 		error(1, errno, "wait");
- 	if (!WIFEXITED(wstatus) || WEXITSTATUS(wstatus) != 0)
- 		error(1, errno, "wait: unexpected child result");
+@@ -204,6 +267,27 @@ static void run_tests(int fd)
+ 		expect_fail_errno(flowlabel_get(fd, 6, IPV6_FL_S_ANY, IPV6_FL_F_CREATE), EPERM);
+ 	}
+ 
++	{
++		struct in6_flowlabel_req freq = {
++			.flr_action = IPV6_FL_A_GET,
++			.flr_flags = IPV6_FL_F_REMOTE,
++		};
++		socklen_t freq_len = sizeof(freq);
++		int remote_listener = tcp_listen();
++		int remote_cfd, remote_afd;
 +
-+	explain("It is not possible to renew a label that does not exist");
-+	expect_fail_errno(flowlabel_renew(fd, 5, 2 * (FL_MIN_LINGER * 2 + 1)), ESRCH);
++		explain("Prepare TCP SYN for REMOTE flag validation");
++		tcp_connect(remote_listener, 7, &remote_cfd, &remote_afd);
 +
-+	explain("Create a label for basic renew validation");
-+	expect_pass(flowlabel_get(fd, 5, IPV6_FL_S_EXCL, IPV6_FL_F_CREATE));
-+	explain("Check if renew does not return errors for existing and valid label");
-+	expect_pass(flowlabel_renew(fd, 5, 2 * (FL_MIN_LINGER * 2 + 1)));
++		explain("Query for label sent by client with IPV6_FL_F_REMOTE");
++		expect_pass(getsockopt(remote_afd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &freq, &freq_len));
++		if (ntohl(freq.flr_label) != 7)
++			error(1, 0, "unexpected remote flowlabel %u", ntohl(freq.flr_label));
 +
-+	if (cfg_long_running) {
-+		explain("create a new label with FL_MIN_LINGER linger time");
-+		expect_pass(flowlabel_get(fd, 6, IPV6_FL_S_EXCL, IPV6_FL_F_CREATE));
-+		explain("renew the label to increase its linger time and put it");
-+		expect_pass(flowlabel_renew(fd, 6, 2 * (FL_MIN_LINGER * 2 + 1)));
-+		expect_pass(flowlabel_put(fd, 6));
-+		sleep(FL_MIN_LINGER * 2 + 1);
-+		explain("The label cannot be created because the new linger time is not over yet");
-+		expect_fail_errno(flowlabel_get(fd, 6, IPV6_FL_S_ANY, IPV6_FL_F_CREATE), EPERM);
++		close(remote_afd);
++		close(remote_cfd);
++		close(remote_listener);
 +	}
-+
  }
  
  static void parse_opts(int argc, char **argv)
