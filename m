@@ -1,126 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta1.migadu.com (out-180.mta1.migadu.com [95.215.58.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291F63ED3C9;
-	Tue,  4 Aug 2026 14:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFBC46D556
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 14:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785854681; cv=none; b=c/Q+ZXqIvT7VH0nh7syfs2FRTLOvc2bhqkJ+S1JespEuMxXP3rwyuWRnDDHy1sb9tROWs8zvLyW4e3i08NDeSszN8pwE0fQdYQVm5q40DTYRwMayiY3Km796bFIw25jkXoz91/Rl6J5jpIf4GIIAvPD3L6K1LEo8aqqpKuiLv/4=
+	t=1785855485; cv=none; b=pyONz/LVBzKm3PvJOMW63nFcluMa+QTeKPFbvISiR1t8Z7CMS/xV9bJ2/ReXO/OF+2iZ9sX0twaudrTPQglBxPC540OJXW0QrnaWnlBxumsMcXyIo+LpcvhVut9iXyEfFns38pUd8am+OEIoXE6m19Qwvv+PFzCa3rEOHS8rHKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785854681; c=relaxed/simple;
-	bh=FCEaBQlDRUm6dYO31Sm2WtF5WhrmLg76I6xWT8Sy9u8=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=BJs6Nm1ovbixAzb61dUe09z+m5lOv3ulINDX+vEK37l67CDT0S7BX8Qyf7RSCaaMw581Kr2DmBNS5YQ7VxH2cMqHPHJIWNw8pbLXTU0VqO51EnoKSqjaWj13g2t9IK9Bwk/G0xX8b6TKGGGIRKirzXcW5gELadI0gK1iUvNjIp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aByPNJbb; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785855485; c=relaxed/simple;
+	bh=tSl4ZcCJaQO2QgJCGFOfH8vTqTaFfBerbXP1wW2S840=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=alddSAsbsDgXqzZhxS0y3rAHloQn+te91mzMmSSFNZcNINZfz9/YnM6kddeuhZJiccBkJgXfNgelZAHsYPSR3IG2c8j7k/L8RLd1JkJuEXdZAkDLYTNw9Xqv8Nw0d68YM0wm5nic1FfmWrprPJT7jSWAb+v5oK6zXlEcNEpsChI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=d/JkbBsk; arc=none smtp.client-ip=95.215.58.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aByPNJbb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE5D41F000E9;
-	Tue,  4 Aug 2026 14:44:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785854679;
-	bh=aZ8CvjTsE8imig+joKU5SQ3EWoaGRndjO4SfRE71EXM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=aByPNJbbjlQ57OPBmEl8tJNjWE3LtGyGGF4aZBkdplun7csv9BKs4dRrYmdhKBYSe
-	 TggmkPB8+7WHmXzFr7Bg+vxLadqT/keWhiSLB72UTErsJe1SQzaS8OFc/40nSt+RJq
-	 7GO7Tdw7BEpH0cIdWugqErMXWn5aE2wtRr7ogLFkjq0wjY1qbCzwP45hf4GFE9SVri
-	 HNBz420P0E0eo7+v3hTrjywcmA3Mt88KUROBncPZiL2gGwznHgBpYpuqyryB16DFQh
-	 JkbkOoJByf+quO6BbHh196/3uAcjVbuKwQ8oGH7w+EBrZdkPUYPHPcm8BrWtU5EY3k
-	 JTIB9tLgGObFg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wrGNh-0000000CFYa-0bPg;
-	Tue, 04 Aug 2026 14:44:37 +0000
-Date: Tue, 04 Aug 2026 15:44:36 +0100
-Message-ID: <86ldamaqsr.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <tabba@google.com>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="d/JkbBsk"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785855475;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=fs8nqwBOqL0v9GMZ6ryb7yeRi28md6/j0HbpFYrWssU=;
+	b=d/JkbBskzHaxRY1pAK9nOsQARI89mnPc4Tqf9I+hcF3fTlCO+57lZEhBMkdZgPYnPY8ZHl
+	0pDnWcF8xms4emKnsbmQAp/9+OhQjmKpITMTEYRRTistf2sXPDkqdNcaikUy/aBosoBES1
+	2buQuvn/7DPVcr/OtymG+45/NknUurA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
 	Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Viktor Malik <vmalik@redhat.com>,
 	linux-kernel@vger.kernel.org,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 2/2] KVM: arm64: selftests: Add a nested S2 MMU realloc test
-In-Reply-To: <20260803224405.41468-2-kmehltretter@gmail.com>
-References: <20260803224405.41468-1-kmehltretter@gmail.com>
-	<20260803224405.41468-2-kmehltretter@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v3 1/2] bpf: Fix sleepable check for tracing prog
+Date: Tue,  4 Aug 2026 22:57:09 +0800
+Message-ID: <20260804145710.43062-2-leon.hwang@linux.dev>
+In-Reply-To: <20260804145710.43062-1-leon.hwang@linux.dev>
+References: <20260804145710.43062-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kmehltretter@gmail.com, oupton@kernel.org, tabba@google.com, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon, 03 Aug 2026 23:44:05 +0100,
-Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> 
-> Add a regression test for a stale vcpu->arch.hw_mmu reference when
-> initialising a vCPU grows the nested S2 MMU table.
-> 
-> The test drives vCPU0 into L2 through a minimal L1 stage-2 identity map,
-> pins it to a second pCPU where it spins in L2, and then initialises
-> vCPU1.  That initialisation grows the nested MMU table while vCPU0 still
-> holds one of its entries; keeping vCPU0 on a pCPU of its own means the
-> reference stays live without relying on hw_mmu being retained across a
-> schedule-out.  vCPU0 is then released and has to run to completion.
-> 
-> Creating vCPU1 up front is what allows the in-kernel VGIC to be used:
-> kvm_arch_vcpu_precreate() refuses KVM_CREATE_VCPU once the VGIC has been
-> initialised, which the test does before its first KVM_RUN.  Creation on
-> its own increments online_vcpus, so deferring vCPU1's KVM_ARM_VCPU_INIT
-> until vCPU0 is in L2 still grows the table.
-> 
-> With KASAN enabled, an unfixed kernel reports a slab-use-after-free in
-> kvm_handle_guest_abort(); with the fix it completes cleanly.
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+is allowed to attach to '__x64_'-alike prefix symbols.
 
-The problem is that we can't mandate selftests to rely on KASAN on the
-host. Selftests are there to verify that we match the architecture
-requirements.
+It is because the verifier does not verify whether the symbol is a kernel
+function or a bpf prog. That said, a sleepable tracing prog is allowed to
+attach to a bpf prog target whose name has '__x64_'-alike prefix.
 
-If anything, this is a nice hack to demonstrate the problem (and yes,
-it fires here).
+For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+prog, and copies buffer from a user pointer with bpf_copy_from_user()
+helper. After attaching the XDP prog to lo interface, the kernel BUG
+could be triggered by 'ping -c 1 -W 1 127.0.0.1':
 
-> 
-> Assisted-by: Claude:claude-fable-5
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
-> ---
-> 
-> The test requires nested virtualization and two pCPUs.  Under QEMU TCG
-> it takes ~233s, exceeding the 120s timeout in
-> tools/testing/selftests/kvm/settings; psci_test takes ~167s in the same
-> boot, so emulating the second vCPU is the dominant cost.
+[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
 
-# time /host/home/maz/nested_mmu_realloc_test 
-Random seed: 0x6b8b4567
-Running control thread on pCPU 0, vCPU thread on pCPU 1
-vCPU0 is running in L2; initializing vCPU1 to grow the table
-vCPU1 initialized; releasing vCPU0
-vCPU0 resumed after nested MMU resize
+Fix it by disallowing sleepable tracing prog always when its target btf
+is not kernel's btf.
 
-real	0m0.161s
-user	0m0.007s
-sys	0m0.109s
+Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
+Acked-by: Viktor Malik <vmalik@redhat.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-This is with KVM running as an L1 already...
-
-	M.
-
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b274004fccfd..7bb541e343b2 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19019,6 +19019,9 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
+ 
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_TRACING:
++		if (!btf_is_kernel(btf))
++			return -EINVAL;
++
+ 		t = btf_type_by_id(btf, btf_id);
+ 		if (!t)
+ 			return -EINVAL;
 -- 
-Without deviation from the norm, progress is not possible.
+2.55.0
+
