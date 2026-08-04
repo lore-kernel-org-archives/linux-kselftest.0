@@ -1,139 +1,126 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D882B46D0A4
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 14:08:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 291F63ED3C9;
+	Tue,  4 Aug 2026 14:44:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785852537; cv=none; b=pFxh/grjrCxIcZms0H6PwdjqhSB2W0xDMXEUA9ajcpmwRwf5qUPCkBiwvYge1i3UPcSkdnvfUZq0nfUYZ4DwpmBSd5/MK8jlkiwkWoLTuQZjNmNKOEhdvjMaMVOMgBaQZKe+DQfAZf+GXH2aAwnUqAAjh/5I31X9nWIZNwQBumY=
+	t=1785854681; cv=none; b=c/Q+ZXqIvT7VH0nh7syfs2FRTLOvc2bhqkJ+S1JespEuMxXP3rwyuWRnDDHy1sb9tROWs8zvLyW4e3i08NDeSszN8pwE0fQdYQVm5q40DTYRwMayiY3Km796bFIw25jkXoz91/Rl6J5jpIf4GIIAvPD3L6K1LEo8aqqpKuiLv/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785852537; c=relaxed/simple;
-	bh=cgYDEwDnXNfrwdk9tVNIwmHDQi12TweMs/BHwBg9tBk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oBJo+RCWhYaqfTQ4cxdpwJprn02YN+EBYnK47fBiLdJjlPcBQuH0sd7yuNNwFqGWyShGAnjeo5/FuDC1J3/fM072Rh9CofZIBCDKGRwOf2ilAaVAuv6+UHHauDQ2UtDk9JS9T+JXUxaUX6hTg0UEbFo4LPNpjQb7xIXSLuETaN4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U+0OoOLq; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=H1ZCJj+9; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1785854681; c=relaxed/simple;
+	bh=FCEaBQlDRUm6dYO31Sm2WtF5WhrmLg76I6xWT8Sy9u8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BJs6Nm1ovbixAzb61dUe09z+m5lOv3ulINDX+vEK37l67CDT0S7BX8Qyf7RSCaaMw581Kr2DmBNS5YQ7VxH2cMqHPHJIWNw8pbLXTU0VqO51EnoKSqjaWj13g2t9IK9Bwk/G0xX8b6TKGGGIRKirzXcW5gELadI0gK1iUvNjIp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aByPNJbb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U+0OoOLq";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="H1ZCJj+9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1785852534;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+LsPDhvpVxFRqbtHPix39kF9hXTlQ+yjqttW+ufqj24=;
-	b=U+0OoOLqOG/PPJQHnVPnubMyVhy2iZllukG6WDCacQY7814H6C3K6fkxg3GYVgAVs3Cx6q
-	MkAWMre0rDQrLxVe2ESO5+3OVnXcAlzCYf2lSrEvGuQn4+yZnNBc7lKxdCK9reGWvw6zrO
-	fwZgT140roaTs+nh5KN2VpQuICr5rM8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-413-f3pHBp7LOeSI6Tw8Ja0Ftg-1; Tue, 04 Aug 2026 10:08:43 -0400
-X-MC-Unique: f3pHBp7LOeSI6Tw8Ja0Ftg-1
-X-Mimecast-MFC-AGG-ID: f3pHBp7LOeSI6Tw8Ja0Ftg_1785852522
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-47162f83c75so608194f8f.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 07:08:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1785852522; x=1786457322; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=+LsPDhvpVxFRqbtHPix39kF9hXTlQ+yjqttW+ufqj24=;
-        b=H1ZCJj+9eEdt4Ke3XwFvc43boHUk+mwdavvplDRItJLJSkv2u3oQFKCobwQ+9fkyWF
-         5pTv/f6gCiUmihyLcvoh9EaHzA8aC4TjiftB6dcQAs9P4XhmjPUCOZKvzDxjHr6TJDWZ
-         BHItE3OtP7Uq2n4TIeSSpqRCmSL4UM8dKb0v4T0YIjJxZ4rq+/ECG815U1OjUOwc2id6
-         pmCPIlTb5xfI93+fVtBr9YGRhyQRQ063ANk2aHZMNX8WziTbATF3M6NMbDY8MDNm78Q5
-         jk/jzPwS9VowkwLqqH1uvEhd02px/SkdISVwarj6T/c4p3Zflm9NVgTp7E0GdLWD6ThJ
-         l9KA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785852522; x=1786457322;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=+LsPDhvpVxFRqbtHPix39kF9hXTlQ+yjqttW+ufqj24=;
-        b=LCDKLh+pDV1FEtL2Ry6QfnshXJEPbvCHA+0KW3xA6/PQ+obseM6kPy97b+PzoecVyo
-         gTkj+jqaqLS+ioBLepVG1ayaDBycwdOqaJnInlr4AkhKJRbVB3ZGZ8kZ4SL+ZluxORPU
-         NLp43hi76ovx2ijAmL/na0L3GmFItJYFfmd8o6Ndl0IdAQhzAh8eDGI40rennw18KaNN
-         YnlU+szQPKjqVrlcFN5+EvUhK7Oa7kNd+vwSJxeT740vpI7EH/HzGn9PSnNVrXT/ANKI
-         hIXn41lKAMf20cwkB21AFXuMN9ON2J6jfWiJr45oC8M+bMzXGfIRBoh74YOEjhzV7mYx
-         LuZw==
-X-Forwarded-Encrypted: i=1; AHgh+RrD8g4HvHWZSobp7Rlq0gl0JYEmSGYUMpGvhP2SxfcrlWv7HBfVBOBAHecnvZaw3T1i4woV7hr6LqNEE75Mvug=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynaqvFEkk5X0juWMj+jEnS6DK/x4hRSBvSEgGzPC7aoau6rf6w
-	zcSEc5N1hfJ63dnLBlrBo348kwOBToJo+ant1fReFaawp4XQwnHLirNXj8LdrAHAnfxPdno7ca+
-	X8yhQ6J4h1Ubh05uBqjW2/jBEaG5dmORlwWMg/l0O8GXdT7kNkmS4ywp3nlKWAZYWvtfA4Q==
-X-Gm-Gg: AR+sD13r9Hh6sMNFTmKZdTqef11bhY79YECSgMTgrx9IQmWewxkXxcs3pQFKI7yYqMH
-	xMWN1tVFhYaFSC8vUPROP61PSAk4r6BSuhNTufIQnNyQg7OIKoKNHyR8lVktciAGZeeUBiCTrXQ
-	WidGeGBxuwpv50GBJw5SviOT8HcSq503QnjguvJJRiMm0jWyGOZG+NhJ3jsuSI6CCQ46SyiM7/z
-	S4vwH3tt4zGeQ0sHFrXqCehyqewK2eiLSZGm+kgDWjC+e13/wIVscHahSEoHr8h0X+yIJGowzEe
-	bl7KNSovpmq9kcnOq40nbexoXEmidM3VLnFJ3dN9nIiZULAt3/0+AMAcnJOLQ07i44XZx5HSQ+8
-	9QBZ1n/WYjG08flgncljt9ADDMohid56gpGv8/1gC0ZykmwThQw0k3iPJ4dG87iHhYRYQFTRKOm
-	8=
-X-Received: by 2002:a05:6000:1842:b0:47f:6e8b:699c with SMTP id ffacd0b85a97d-47fe81c299dmr11454159f8f.14.1785852522268;
-        Tue, 04 Aug 2026 07:08:42 -0700 (PDT)
-X-Received: by 2002:a05:6000:1842:b0:47f:6e8b:699c with SMTP id ffacd0b85a97d-47fe81c299dmr11454036f8f.14.1785852521894;
-        Tue, 04 Aug 2026 07:08:41 -0700 (PDT)
-Received: from [192.168.188.103] (ip239-44-231-195.pool-bba.aruba.it. [195.231.44.239])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47fd456a6d7sm45228918f8f.19.2026.08.04.07.08.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 04 Aug 2026 07:08:41 -0700 (PDT)
-Message-ID: <3ad893be-c46a-44ba-bcb4-8665eeb41fc2@redhat.com>
-Date: Tue, 4 Aug 2026 16:08:39 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aByPNJbb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE5D41F000E9;
+	Tue,  4 Aug 2026 14:44:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785854679;
+	bh=aZ8CvjTsE8imig+joKU5SQ3EWoaGRndjO4SfRE71EXM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=aByPNJbbjlQ57OPBmEl8tJNjWE3LtGyGGF4aZBkdplun7csv9BKs4dRrYmdhKBYSe
+	 TggmkPB8+7WHmXzFr7Bg+vxLadqT/keWhiSLB72UTErsJe1SQzaS8OFc/40nSt+RJq
+	 7GO7Tdw7BEpH0cIdWugqErMXWn5aE2wtRr7ogLFkjq0wjY1qbCzwP45hf4GFE9SVri
+	 HNBz420P0E0eo7+v3hTrjywcmA3Mt88KUROBncPZiL2gGwznHgBpYpuqyryB16DFQh
+	 JkbkOoJByf+quO6BbHh196/3uAcjVbuKwQ8oGH7w+EBrZdkPUYPHPcm8BrWtU5EY3k
+	 JTIB9tLgGObFg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wrGNh-0000000CFYa-0bPg;
+	Tue, 04 Aug 2026 14:44:37 +0000
+Date: Tue, 04 Aug 2026 15:44:36 +0100
+Message-ID: <86ldamaqsr.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Karl Mehltretter <kmehltretter@gmail.com>
+Cc: Oliver Upton <oupton@kernel.org>,
+	Fuad Tabba <tabba@google.com>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Steffen Eiden <seiden@linux.ibm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Zenghui Yu <yuzenghui@huawei.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] KVM: arm64: selftests: Add a nested S2 MMU realloc test
+In-Reply-To: <20260803224405.41468-2-kmehltretter@gmail.com>
+References: <20260803224405.41468-1-kmehltretter@gmail.com>
+	<20260803224405.41468-2-kmehltretter@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 net-next 1/1] tcp: Replace min_tso_segs() with
- tso_segs() CC callback
-To: chia-yu.chang@nokia-bell-labs.com, emil@etsalapatis.com,
- jolsa@kernel.org, yonghong.song@linux.dev, song@kernel.org,
- linux-kselftest@vger.kernel.org, memxor@gmail.com, shuah@kernel.org,
- martin.lau@linux.dev, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, horms@kernel.org, dsahern@kernel.org,
- bpf@vger.kernel.org, netdev@vger.kernel.org, jhs@mojatatu.com,
- kuba@kernel.org, stephen@networkplumber.org, davem@davemloft.net,
- edumazet@google.com, andrew+netdev@lunn.ch, donald.hunter@gmail.com,
- kuniyu@google.com, ij@kernel.org, ncardwell@google.com,
- koen.de_schepper@nokia-bell-labs.com, g.white@cablelabs.com,
- ingemar.s.johansson@ericsson.com, mirja.kuehlewind@ericsson.com,
- cheshire@apple.com, rs.ietf@gmx.at, Jason_Livingood@comcast.com,
- vidhi_goel@apple.com
-References: <20260730114919.658373-1-chia-yu.chang@nokia-bell-labs.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260730114919.658373-1-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: kmehltretter@gmail.com, oupton@kernel.org, tabba@google.com, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On 7/30/26 1:49 PM, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Mon, 03 Aug 2026 23:44:05 +0100,
+Karl Mehltretter <kmehltretter@gmail.com> wrote:
 > 
-> This patch replaces existing min_tso_segs() with tso_segs() CC callback
-> for CC algorithm to provide explicit tso segment number of each data
-> burst and overrides tcp_tso_autosize().
+> Add a regression test for a stale vcpu->arch.hw_mmu reference when
+> initialising a vCPU grows the nested S2 MMU table.
 > 
-> This change provides below impacts on BPF struct_ops users:
-> - The callback is renamed from min_tso_segs() to tso_segs()
-> - The signature gains an extra u32 mss_now argument
-> - The return value semantics is changed from "floor value passed into
->   tcp_tso_autosize()" to "final tso_segs value", bypassing autosizing
+> The test drives vCPU0 into L2 through a minimal L1 stage-2 identity map,
+> pins it to a second pCPU where it spins in L2, and then initialises
+> vCPU1.  That initialisation grows the nested MMU table while vCPU0 still
+> holds one of its entries; keeping vCPU0 on a pCPU of its own means the
+> reference stays live without relying on hw_mmu being retained across a
+> schedule-out.  vCPU0 is then released and has to run to completion.
 > 
-> As a result, BPF programs shall be updated, because returning a small
-> constant will now directly limit the final tso_segs value instead of
-> specifying the minimum value passed to tcp_tso_autosize().
+> Creating vCPU1 up front is what allows the in-kernel VGIC to be used:
+> kvm_arch_vcpu_precreate() refuses KVM_CREATE_VCPU once the VGIC has been
+> initialised, which the test does before its first KVM_RUN.  Creation on
+> its own increments online_vcpus, so deferring vCPU1's KVM_ARM_VCPU_INIT
+> until vCPU0 is in L2 still grows the table.
 > 
-> Signed-off-by: Ilpo Järvinen <ij@kernel.org>
-> Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Sashiko nipa has more feedback, that looks relevant to me even if it's
-tagged not hi prio:
+> With KASAN enabled, an unfixed kernel reports a slab-use-after-free in
+> kvm_handle_guest_abort(); with the fix it completes cleanly.
 
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260730114919.658373-1-chia-yu.chang%40nokia-bell-labs.com
+The problem is that we can't mandate selftests to rely on KASAN on the
+host. Selftests are there to verify that we match the architecture
+requirements.
 
-/P
+If anything, this is a nice hack to demonstrate the problem (and yes,
+it fires here).
 
+> 
+> Assisted-by: Claude:claude-fable-5
+> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> ---
+> 
+> The test requires nested virtualization and two pCPUs.  Under QEMU TCG
+> it takes ~233s, exceeding the 120s timeout in
+> tools/testing/selftests/kvm/settings; psci_test takes ~167s in the same
+> boot, so emulating the second vCPU is the dominant cost.
+
+# time /host/home/maz/nested_mmu_realloc_test 
+Random seed: 0x6b8b4567
+Running control thread on pCPU 0, vCPU thread on pCPU 1
+vCPU0 is running in L2; initializing vCPU1 to grow the table
+vCPU1 initialized; releasing vCPU0
+vCPU0 resumed after nested MMU resize
+
+real	0m0.161s
+user	0m0.007s
+sys	0m0.109s
+
+This is with KVM running as an L1 already...
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
