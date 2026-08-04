@@ -1,31 +1,31 @@
 Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A98F314D0D;
-	Tue,  4 Aug 2026 05:32:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FA3933F5A5;
+	Tue,  4 Aug 2026 05:32:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785821565; cv=none; b=fUe1CJigvBs1nPThb3hf9qgktxkrmfeZNzeY9v3ClUs5fQhCmx12Dp5ejTYYUo35oSVTd1ipuljJ242UXsMoOxOG+lvDb+NwSklq/AVfe9a0B1OeXRstIBxTc8bqynFrvdt428/gZ+MIjar1RSXKtgQzGGweGPuIZiz4tfH20GY=
+	t=1785821565; cv=none; b=k2hs0GQsNS3XbgSxloj6vNrVB5RDjeziN2mjbLPp9it+QIxQ2Vr/CHa8QLdZxW0ShLGedwiPZbA90U3gTX3o5G3vUd1MY58k/T7GWGxhFWfzKjl5zfu0/LChzWfti99THa2gY2zfiXyc4WDam/9l/CUyKwEJTHMvr9UTCIhal4Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785821565; c=relaxed/simple;
-	bh=WfarSD1C8rtafu5OZM72A/HXtK5ytMBNpjsQ/N/4UEk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=X7giRAejoF4FyC+C+y4l/wlvbH5BN0+EFzSoC3Gj9zmVSO39Q64zxZkV95nMwNU2dOnCTJX7WY9ZWUmeEEMupb8uCEnBPql1dsbasly+60+p+ZGoAOa1DqcMpdbzc86q/4adl5xH8aYcFqTYdsduCOWoe+IzmsVHY710KHeK3Ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=TA9SuBQL; arc=none smtp.client-ip=159.69.126.157
+	bh=NdFfg3SF/iaHfGjuGYNhsRQIGr8ZwCnOpggOOjBqlBc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=UAMKD9rxIAuhfNKmEebPEIsz7/u3U3xpdH99fhV0agNVjCiv1H59qCHuochOqlfPdMjKqY372u4pAQoqRO57FcEK20T7KBMFDSUa9oVpcVbOvYceEVNyvqDVpcVCwauXwYFzmLLC8rwGn+xgp5JHvwPYouTfBimt9Z9Wn4+dsGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=iSBj8uNg; arc=none smtp.client-ip=159.69.126.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="TA9SuBQL"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="iSBj8uNg"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
 	s=mail; t=1785821555;
-	bh=WfarSD1C8rtafu5OZM72A/HXtK5ytMBNpjsQ/N/4UEk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=TA9SuBQLUFM7Wp4xxXxOV3HewevRcl8FhwAT8C4J7eKsq4Vp8RC1aypquVuIEgxlg
-	 /zho+tFXJ2JY95/AKnGmkXVfrK9ZURN2EGyITtAydzw9I1LP/T7NOJJxcq4RXT8r1I
-	 yw68bd8IgNkR2nMWvtvcCxruaa16htzZeyTtsS7Y=
+	bh=NdFfg3SF/iaHfGjuGYNhsRQIGr8ZwCnOpggOOjBqlBc=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=iSBj8uNgCNa2Sj6NGynV5ijFO62T+LE2JLXEpswtiE+QYyVTbuvWihXZsGKbtaUmd
+	 udBRxRFkgPpX6qbgF67fs1rDdp0QLWFoBFRgzPU2SqLfjJaIZkLC9hvKygXqfr5AvM
+	 9qN5jrW2u3VJPWhHnHPFtA792iPKI0pGzMu6Icrw=
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Subject: [PATCH 0/4] microblaze: KUnit support
-Date: Tue, 04 Aug 2026 07:32:32 +0200
-Message-Id: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
+Date: Tue, 04 Aug 2026 07:32:36 +0200
+Subject: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,10 +34,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yXMTQ7CIBBA4as0sy4JokHiVZou+Bl0bEsbKMZIu
- LtYl9/ivQIJI2GCW1cg4osSraHh1HdgHzrckZFrBsGF5IoLNuVAO1vIxtXM+oPsqs9eaquUuTh
- o2RbR0/tYDuPfKZsn2v33gVq/cbKSl3QAAAA=
-X-Change-ID: 20260802-kunit-microblaze-7a3f6ac88b4d
+Message-Id: <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
+In-Reply-To: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
 To: Michal Simek <monstr@monstr.eu>, 
  Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
  Rae Moar <raemoar63@gmail.com>
@@ -45,39 +44,45 @@ Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
  kunit-dev@googlegroups.com, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785821555; l=1093;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785821555; l=1045;
  i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=WfarSD1C8rtafu5OZM72A/HXtK5ytMBNpjsQ/N/4UEk=;
- b=E3EBmv4mJ5ygACrq2tmLDue2afKpWEUf1yN40Q8VmM/gryKHM82ez2/vXuajjlGR80NovyQAw
- eez8VSx7WJ7DyQnUn1wcBZ0JqoR3pWiYEW26ZH7DQnDPwjrXJ1Ot57z
+ bh=NdFfg3SF/iaHfGjuGYNhsRQIGr8ZwCnOpggOOjBqlBc=;
+ b=yVZZAlDFhXqE8bqSO5CLDtTUIeD+W3pIOhm9bCyhiKW6UIumgfjd6e6bc2fTby+M4LCeokESl
+ I6ZSgtcKM9DCg4cHT6bjXIyz7g9lnuanKPHi2O/jD1JP5AdMi0+h4wH
 X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
  pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Add the necessary prerequisites and configuration to run KUnit on
-microblaze.
-
-Please note that various KUnit tests will fail with the default
-configuration as the memmove() implementation from
-arch/microblaze/lib/memmove.c seems to be broken.
+Add a basic configuration to run kunit tests on microblaze.
 
 Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 ---
-Thomas Weißschuh (4):
-      microblaze: uaccess: Zero out destination on failed get_user()
-      microblaze: reset: Call POWER_OFF handlers
-      microblaze: reset: Provide a power off handler through an unaligned PC
-      kunit: qemu_configs: Add microblaze configuration
-
- arch/microblaze/Kconfig                        |  9 +++++++++
- arch/microblaze/include/asm/uaccess.h          |  3 ++-
- arch/microblaze/kernel/reset.c                 | 22 ++++++++++++++++++++++
  tools/testing/kunit/qemu_configs/microblaze.py | 17 +++++++++++++++++
- 4 files changed, 50 insertions(+), 1 deletion(-)
----
-base-commit: dc59e4fea9d83f03bad6bddf3fa2e52491777482
-change-id: 20260802-kunit-microblaze-7a3f6ac88b4d
+ 1 file changed, 17 insertions(+)
 
-Best regards,
---  
-Thomas Weißschuh <linux@weissschuh.net>
+diff --git a/tools/testing/kunit/qemu_configs/microblaze.py b/tools/testing/kunit/qemu_configs/microblaze.py
+new file mode 100644
+index 000000000000..ff012095e77d
+--- /dev/null
++++ b/tools/testing/kunit/qemu_configs/microblaze.py
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0-only
++from ..qemu_config import QemuArchParams
++
++QEMU_ARCH = QemuArchParams(linux_arch='microblaze',
++						   kconfig='''
++CONFIG_CPU_BIG_ENDIAN=y
++CONFIG_SERIAL_UARTLITE=y
++CONFIG_SERIAL_UARTLITE_CONSOLE=y
++CONFIG_MB_POWER_OFF_THROUGH_UNALIGNED_PC=y
++''',
++						   qemu_arch='microblaze',
++						   kernel_path='arch/microblaze/boot/linux.bin',
++						   kernel_command_line='kunit_shutdown=poweroff',
++						   extra_qemu_params=[
++							'-M', 'petalogix-s3adsp1800',
++						   ],
++)
+
+-- 
+2.55.0
 
