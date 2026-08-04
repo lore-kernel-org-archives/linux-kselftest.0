@@ -1,178 +1,160 @@
-Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+Received: from smtpbgeu2.qq.com (smtpbgeu2.qq.com [18.194.254.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F083B4E88;
-	Tue,  4 Aug 2026 12:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149CC340281;
+	Tue,  4 Aug 2026 12:17:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.194.254.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785845288; cv=none; b=gzprJRG6QYETJLufx6OrjXKTeCO8iKRYA0YqSeuwxkq81VAUUZ9AhQsgrz2TfGEtPJJWEPbvAvOuH5s6HvEODwMoOkPCUiHc6gGb6Wq4+vS/gbDBQTgDN+lERVooTRfPyIDcYHPvoDgjYBIirQNp9/WELuHTpuRHAgIBFP94sX4=
+	t=1785845868; cv=none; b=Q7UGmb0oQax2dWrntC5AAiZ7ipojpFOZAJVRkSK2TgOeOxnuDQPZlQ8gPOnFAqYjadmmiQIgoL441GlkhPT96ug27akMt6cTPf9qfOTcrprWagC5j/sGass9KSgEIfgPGK6n/XYwVLf8+BaMpuQdfqUZYps3+6hQiMUMhodVPOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785845288; c=relaxed/simple;
-	bh=WVzOVGhL3ScBIKzHNaZR3JJAAN7d83JLK3IRC0LY71k=;
-	h=Date:From:To:Cc:Subject:References:Mime-Version:Message-ID:
-	 Content-Type; b=ZxHlpZyJXIDiRTi5QbU84unpp6Sq1Drj0CyUj8yGuLi0SWIkSTADNJ7/VhobdqsuOOpVKvdtalTrwD7zlMj3VjQLtP7hy8ZX2ndS3wQRhf/mt5KZwNDb2SJdZWrl9jE/uuTkbxxXiVSNLzS9lwuiwBIUEMltztuZODTBcZK+dGY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ugreen.com; spf=pass smtp.mailfrom=ugreen.com; dkim=pass (1024-bit key) header.d=ugreen.com header.i=@ugreen.com header.b=sw9c/DFY; arc=none smtp.client-ip=54.243.244.52
+	s=arc-20240116; t=1785845868; c=relaxed/simple;
+	bh=VvE2LKjM5ZWS66GpviKnuoAH7c7zBqweiRyeAjYwDR4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=ZOS5nljsckw4KvXOXrvFZCZ+PC2a+ZbXTgkzNPWlqWRDuur5UA5Z/07NzZteCcrO2oZT/ffvPy21molhTxMV1fifgMxuGzuMOrHqngfS8Xp2McnU3vGCDY3u7cwXJz6DbAYR9hDd59PvUzawpMYX9QVysNaD4PVbtxFTrhUIsdY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ugreen.com; spf=pass smtp.mailfrom=ugreen.com; dkim=pass (1024-bit key) header.d=ugreen.com header.i=@ugreen.com header.b=NzxVH9S3; arc=none smtp.client-ip=18.194.254.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ugreen.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ugreen.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ugreen.com header.i=@ugreen.com header.b="sw9c/DFY"
+	dkim=pass (1024-bit key) header.d=ugreen.com header.i=@ugreen.com header.b="NzxVH9S3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ugreen.com;
-	s=pkvm2402; t=1785845272;
-	bh=WVzOVGhL3ScBIKzHNaZR3JJAAN7d83JLK3IRC0LY71k=;
-	h=Date:From:To:Subject:Mime-Version:Message-ID;
-	b=sw9c/DFYPWYv/bJ4HpYuy8tW7qlTLMrpJwKyD1vw2i5X0Gi6jUfd71QdRSF/VUWg4
-	 GB4w1ZRrnNP1/pytURKW8yf8jjiLOZTH78+hUAE/zVKxP/4iH8WkXF4ICaO0Fq67Vx
-	 tcKRVSFPyljAcXwbQMAQ5SClndyZsrRhnNBxEzYQ=
-X-QQ-mid: zesmtpsz6t1785845268ta4df477e
-X-QQ-Originating-IP: SbpYCiuIeh2i49dOMexVIMA2BdCLnWLr8WrNZip5xzc=
-Received: from DESKTOP-0F77FNS ( [113.90.157.158])
+	s=pkvm2402; t=1785845858;
+	bh=N+5x2O0AaXVTBFLcJOSpjdOEEsG7GciUWuhMJqvwAwI=;
+	h=From:To:Subject:Date:Message-Id;
+	b=NzxVH9S3wQDVYtY3Jnrmjfr9fG0k8MJNbYX8bhD/OAKcAqHZe9JyPHrfA1eAO+QLU
+	 lT4dOh9mR61sd7Vz3WHoxE+ZV3TAdsy6vqpTQSrIV1FktdVGEztXp6aNwamcWurEnq
+	 TiTZ0noSfUeqLCT+MFl1f9mXGdRDWYvnbDKSOh2E=
+X-QQ-mid: esmtpsz20t1785845853t7f5c10f7
+X-QQ-Originating-IP: P3vIaFGclNI048NjNJM92lV3lMKWV/wY7CS5UTrKovc=
+Received: from localhost.localdomain ( [113.98.201.214])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 04 Aug 2026 20:07:46 +0800 (CST)
+	id ; Tue, 04 Aug 2026 20:17:22 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 0
-X-BIZMAIL-ID: 12050393277505098255
-Date: Tue, 4 Aug 2026 20:07:47 +0800
-From: warren.xiong <warren.xiong@ugreen.com>
-To: david <david@kernel.org>, 
-	akpm <akpm@linux-foundation.org>, 
-	shuah <shuah@kernel.org>
-Cc: ljs <ljs@kernel.org>, 
-	liam <liam@infradead.org>, 
-	vbabka <vbabka@kernel.org>, 
-	rppt <rppt@kernel.org>, 
-	surenb <surenb@google.com>, 
-	mhocko <mhocko@suse.com>, 
-	linux-mm <linux-mm@kvack.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] selftests/mm: read memory information without popen
-References: <1785720615-5826-1-git-send-email-warren.xiong@ugreen.com>, 
-	<9dc3b457-65aa-40ba-99a1-7c703facbd32@kernel.org>
-X-Priority: 3
-X-GUID: DDF96A50-4917-49E7-9481-06C0E69467A1
-X-Has-Attach: no
-X-Mailer: Foxmail 7.2.25.492[cn]
+X-BIZMAIL-ID: 15148486447510069967
+EX-QQ-RecipientCnt: 13
+From: Warren Xiong <warren.xiong@ugreen.com>
+To: akpm@linux-foundation.org,
+	shuah@kernel.org
+Cc: david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Warren Xiong <warren.xiong@ugreen.com>
+Subject: [PATCH v2] selftests/mm: read memory information without popen
+Date: Tue,  4 Aug 2026 20:16:58 +0800
+Message-Id: <1785845818-3131-1-git-send-email-warren.xiong@ugreen.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1785720615-5826-1-git-send-email-warren.xiong@ugreen.com>
+References: <1785720615-5826-1-git-send-email-warren.xiong@ugreen.com>
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpsz:ugreen.com:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MwoN/pFApqr2FftfL4rngzLi7NfCCi+g/ijWzRHFyxo/UhKzPJfLT5RY
+	0md+lOJHOS/XJkQfQF34zXumNXc40iCjIo8W2Q2HQJ+z30ZBETvSJjhfxZhWJKDIWyNb1V3
+	B0YMqtYCufmNTbrftpoFRGsPZFwKhVwyWBMRiXe1z8tsWnVcHltebFW7gVIQFkxafUw81jF
+	T8wKtpf7jGbRKdnIxNXzOwYcJQOyjVPVh/IexlswzbVqE+/W/H5X1132Vo4L3/KJYrmNWbf
+	O4wqiMUA9Gjn3QImZy3J3d8jr6R3KcLm7bVQadwBooNYBRn9FXYdIwAk+bk35Q0O0aAzxtm
+	5FNokmQ4b4F8Pfwb6KNMPuYXkLdmXvQrEB/JYhOrTFLlaJt9p1DsOo1PhHTNcQip6U0GykS
+	LEVoMgtlKyiUne92gk222lACtcL5UpHFZxovGu2FcTrAMkiCZcFHZjtB/CkUdmaKtaGX+Bq
+	HrafPrznjnBkS5RxiuzkWVOFdM9Zl96L4xAk8IS1D3d3Z9bg2gbaEfIuINEXeQ0z9SsIIKD
+	TNPd82YQ3SLDV8ZDtQokIIabO8+S9gp1EPg603r+veMw1ibW4kyhZZWzhh37z4NtJiRc+H8
+	m6+GeF7ywoVa3/tjZOml/ty2Dd8QsZqTO7INZev6y7ERzLIs2NDiiRwvHXLaSwPWUCCoSKO
+	FZfytbAUaVD3WQpMTj1lOEzuYl9VPyXmjQCmeW66g5JSN4eqA8lznMhfQ6cyUK49Mlw514H
+	yPlEzAEm5vf7us/aTn1qn4zO16X9H5KzgRlgwzToQ8dTx/5/5UnwWaZwsA5WD7fksPXzoA4
+	InUH6U7aYrS+y8/qyxGu96ln9O6ZOmjEAR0WWBK5+sf5TSpXOEkseTIKTLs2s/oUqwo22wo
+	sRC1etsaQgkQyibgw5wCYCV7ZY8WFJhhS8VfZWDmh9S6XVeWVeJJQvzjLRFzAY2AvqxwEgt
+	+bRm1AcMxJVYrE4Htusxc9hYEjXdBc4TqGHp5PIozuVV4pGSk/lKia3/dGZXo5oec4zhfOD
+	hNgHAwzRI641lUX5Xhz2jGvG5ZoOSHIO9VYVJw4fNRPQq1jFwf/0WD8h3kwygeRvjmoqp+U
+	S6qmcGfXRKF7xv1OroSMv+rXb6pcJYfIw==
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <F297CB3DADE37E96+202608042007461850804@ugreen.com>
-Content-Type: text/plain;
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
-X-QQ-SENDSIZE: 520
-Feedback-ID: zesmtpsz:ugreen.com:qybglogicsvrgz:qybglogicsvrgz6b-0
-X-QQ-XMAILINFO: OU1KiBGGGpgtw7K3RtFuJpU7bwUf8IM4Xn2gBDndAaHJUQkj/tbuICVe
-	JX0KEkR+Vctl1Or7EgIy58ISlqmKufjTHanFBTcjtOklkgDxIZgByMJKrFt6QDsflMp1JeP
-	uTDrBj9JysfkyANHIVDK969qhBBxE5No1TCT2+QEbydthsWn3/QA/w+CNPgD6HLaFOa91pu
-	SL080VuRZpuS154Z5eewtOJdrMxo+S6oyU+U1HgWr/v0HIyK+gdZm/iVtqd6axTPWkPPjYW
-	NrQT0z1Uy/3EQ/+N4wRmZ1kvvebVdFCf0X7d2lWbcJfjGZl72QzQd4LwyFV1OFDIQZrvEwR
-	1fFEJ4drQEdLyxCHwToWwBS3ltBx2FQZ+F53NtUpqhG/rcudQPTqv1xT1qjuizNI01Kboms
-	g8ZgOZesUMW71xK0eQ/gdQuqjIsQb7yfFe+pItJTbTHipNndtIzL5gNuwJxur+QGbv2Ven+
-	qpQ//Ah/INJMpUBD/jy0xu2vvTX916H4J7gfkkBmAVZMoNymcHTSlvq1Zyo5f0eoJrbFreH
-	4FoVYJEchWIM2gZCOuYomOyPdDtlHCgCoFn3d7eoKxNqJ9EdJdDpG6pJ/eUaThp5dLk6u+4
-	Fl8uO6QENtG1hy6wvA/F7nOjnmkd17Nl+CKlDo/yyC0dUlz2TDaS6SKvlrf5ZPNKsH3QDNX
-	9SknXc5t1mpcVx+m5B8xFBJ75VNBuaSPN5V1MYlybWuoI3p02hrPnsqsHiR0fZNQEsVeeU4
-	HGtod+/KF90oq9A+Fcf7Mf9KBshDQ2VZJwD0SmpXyxnL7eEXt77c5Qv+T110DwPdtAwrVr2
-	ynvNIhvJVNsojrl5PLe4REkq6WKmlFZyUqAKFc77sZmPL7BHSVzhkwHx4cCCp4IuAKxacDi
-	tNiXx+0zzEUegJ3kzDP675pkQ0ZHh/IowurB+muhmif6bmzW9MpOdmNGqVxLNXhtUn66SSx
-	G0SKaD57gelvBD8UElZwO7eTNAqPhsJcWLk3HwXgZEbD5eu6HUaFkTlMe9wkRtw+qvNf4yZ
-	OX7guZM62xarhDKksH
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-X-QQ-RECHKSPAM: 0
 
-CgoKLS0tLS0tLS0tLS0tLS0KCgoKd2FycmVuLnhpb25nCgoKCj5PbiA4LzMvMjYgMDM6MzAsIFdh
-cnJlbiBYaW9uZyB3cm90ZToKCgoKPj4gcmVhZF9tZW1vcnlfaW5mbygpIGludm9rZXMgdHdvIHNo
-ZWxsIHBpcGVsaW5lcyB0byBvYnRhaW4gTWVtRnJlZSBhbmQKCgoKPj4gSHVnZXBhZ2VzaXplIGZy
-b20gL3Byb2MvbWVtaW5mby4gSXQgZG9lcyBub3QgY2hlY2sgd2hldGhlciBwb3BlbigpCgoKCj4+
-IHJldHVybnMgTlVMTCBiZWZvcmUgcGFzc2luZyB0aGUgcmVzdWx0IHRvIGZnZXRzKCksIGFuZCBp
-dCBkb2VzIG5vdCBjYWxsCgoKCj4+IHBjbG9zZSgpIHdoZW4gZmdldHMoKSBmYWlscy4KCgoKPj4g
-CgoKCj4+IE9wZW4gL3Byb2MvbWVtaW5mbyBkaXJlY3RseSBhbmQgb2J0YWluIGJvdGggdmFsdWVz
-IGluIGEgc2luZ2xlIHBhc3MuCgoKCj4+IFRoaXMgcmVtb3ZlcyB0aGUgdW5jaGVja2VkIE5VTEwg
-cGF0aCwgY2xvc2VzIHRoZSBmaWxlIG9uIGFsbCBwYXRocywgYW5kCgoKCj4+IGF2b2lkcyBkZXBl
-bmRlbmNpZXMgb24gZXh0ZXJuYWwgY29tbWFuZHMuCgoKCj4+IAoKCgo+PiBUaGUgY29tcGFjdGlv
-biB0ZXN0IGNvbnRpbnVlcyB0byBwYXNzIGFmdGVyIHRoaXMgY2hhbmdlLgoKCgo+PiAKCgoKPj4g
-U2lnbmVkLW9mZi1ieTogV2FycmVuIFhpb25nIDx3YXJyZW4ueGlvbmdAdWdyZWVuLmNvbT4KCgoK
-Pj4gLS0tCgoKCj4+wqAgdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMvbW0vY29tcGFjdGlvbl90ZXN0
-LmMgfCA0MyArKysrKysrKysrKysrKysrKy0tLS0tLS0tLS0tCgoKCj4+wqAgMSBmaWxlIGNoYW5n
-ZWQsIDI3IGluc2VydGlvbnMoKyksIDE2IGRlbGV0aW9ucygtKQoKCgo+PiAKCgoKPj4gZGlmZiAt
-LWdpdCBhL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21tL2NvbXBhY3Rpb25fdGVzdC5jIGIvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvbW0vY29tcGFjdGlvbl90ZXN0LmMKCgoKPj4gaW5kZXggNWI1
-ODI1OC4uMGRmMjAwMCAxMDA2NDQKCgoKPj4gLS0tIGEvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-bW0vY29tcGFjdGlvbl90ZXN0LmMKCgoKPj4gKysrIGIvdG9vbHMvdGVzdGluZy9zZWxmdGVzdHMv
-bW0vY29tcGFjdGlvbl90ZXN0LmMKCgoKPj4gQEAgLTcsNiArNyw3IEBACgoKCj4+wqDCoCAqIGFs
-bG9jYXRlZC4KCgoKPj7CoMKgICovCgoKCj4+wqAgCgoKCj4+ICsjaW5jbHVkZSA8c3RkYm9vbC5o
-PgoKCgo+PsKgICNpbmNsdWRlIDxzdGRpby5oPgoKCgo+PsKgICNpbmNsdWRlIDxzdGRsaWIuaD4K
-CgoKPj7CoCAjaW5jbHVkZSA8c3lzL21tYW4uaD4KCgoKPj4gQEAgLTI5LDMwICszMCw0MCBAQCBz
-dHJ1Y3QgbWFwX2xpc3QgewoKCgo+PsKgIAoKCgo+PsKgIGludCByZWFkX21lbW9yeV9pbmZvKHVu
-c2lnbmVkIGxvbmcgKm1lbWZyZWUsIHVuc2lnbmVkIGxvbmcgKmh1Z2VwYWdlc2l6ZSkKCgoKPj7C
-oCB7CgoKCj4KCgoKPkxvb2tzIG11Y2ggYmV0dGVyIGluZGVlZC4KCgoKPgoKCgo+PiAtCWNoYXLC
-oCBidWZmZXJbMjU2XSA9IHswfTsKCgoKPj4gLQljaGFyICpjbWQgPSAiY2F0IC9wcm9jL21lbWlu
-Zm8gfCBncmVwIC1pIG1lbWZyZWUgfCBncmVwIC1vICdbMC05XSonIjsKCgoKPj4gLQlGSUxFICpj
-bWRmaWxlID0gcG9wZW4oY21kLCAiciIpOwoKCgo+PiArCWNoYXIgYnVmZmVyWzI1Nl07CgoKCj4+
-ICsJYm9vbCBtZW1mcmVlX2ZvdW5kID0gZmFsc2U7CgoKCj4+ICsJYm9vbCBodWdlcGFnZXNpemVf
-Zm91bmQgPSBmYWxzZTsKCgoKPj4gKwlGSUxFICpmaWxlOwoKCgo+PiArCWludCByZXQgPSAtMTsK
-CgoKPj7CoCAKCgoKPj4gLQlpZiAoIShmZ2V0cyhidWZmZXIsIHNpemVvZihidWZmZXIpLCBjbWRm
-aWxlKSkpIHsKCgoKPj4gLQkJa3NmdF9wcmludF9tc2coIkZhaWxlZCB0byByZWFkIG1lbWluZm86
-ICVzXG4iLCBzdHJlcnJvcihlcnJubykpOwoKCgo+PiArCWZpbGUgPSBmb3BlbigiL3Byb2MvbWVt
-aW5mbyIsICJyIik7CgoKCj4+ICsJaWYgKCFmaWxlKSB7CgoKCj4+ICsJCWtzZnRfcHJpbnRfbXNn
-KCJGYWlsZWQgdG8gb3BlbiAvcHJvYy9tZW1pbmZvOiAlc1xuIiwKCgoKPj4gKwkJCcKgwqDCoMKg
-wqDCoCBzdHJlcnJvcihlcnJubykpOwoKCgo+PsKgIAkJcmV0dXJuIC0xOwoKCgo+PsKgIAl9CgoK
-Cj4+wqAgCgoKCj4+IC0JcGNsb3NlKGNtZGZpbGUpOwoKCgo+PiArCXdoaWxlIChmZ2V0cyhidWZm
-ZXIsIHNpemVvZihidWZmZXIpLCBmaWxlKSkgewoKCgo+PiArCQlpZiAoc3NjYW5mKGJ1ZmZlciwg
-Ik1lbUZyZWU6ICVsdSBrQiIsIG1lbWZyZWUpID09IDEpCgoKCj4+ICsJCQltZW1mcmVlX2ZvdW5k
-ID0gdHJ1ZTsKCgoKPj4gKwkJZWxzZSBpZiAoc3NjYW5mKGJ1ZmZlciwgIkh1Z2VwYWdlc2l6ZTog
-JWx1IGtCIiwKCgoKPj4gKwkJCQlodWdlcGFnZXNpemUpID09IDEpCgoKCj4+ICsJCQlodWdlcGFn
-ZXNpemVfZm91bmQgPSB0cnVlOwoKCgo+SW5zdGVhZCBvZiB0aGVzZSBib29scyB5b3UgY291bGQg
-anVzdCBoYXZlIGEgaGl0LWNvdW50LgoKVGhhbmtzIGZvciB0aGUgcmV2aWV3LgoKQWdyZWVkLCBh
-IGhpdCBjb3VudCBpcyBzdWZmaWNpZW50IGhlcmUgYW5kIG1ha2VzIHRoZSBjb2RlIHNpbXBsZXIu
-ICBJCmhhdmUgaW5jb3Jwb3JhdGVkIHRoaXMgY2hhbmdlIGFuZCB3aWxsIHNlbmQgdjIgc2hvcnRs
-eS4KClRoYW5rcywKV2FycmVuCgoKCj4KCgoKPkxpa2UgdGhlIGZvbGxvd2luZyBvbiB0b3A6CgoK
-Cj4KCgoKPmRpZmYgLS1naXQgYS90b29scy90ZXN0aW5nL3NlbGZ0ZXN0cy9tbS9jb21wYWN0aW9u
-X3Rlc3QuYyBiL3Rvb2xzL3Rlc3Rpbmcvc2VsZnRlc3RzL21tL2NvbXBhY3Rpb25fdGVzdC5jCgoK
-Cj5pbmRleCAwZGYyMDAwZjRhMmIxLi4zMGQ0YWNlNzE1NWFlIDEwMDY0NAoKCgo+LS0tIGEvdG9v
-bHMvdGVzdGluZy9zZWxmdGVzdHMvbW0vY29tcGFjdGlvbl90ZXN0LmMKCgoKPisrKyBiL3Rvb2xz
-L3Rlc3Rpbmcvc2VsZnRlc3RzL21tL2NvbXBhY3Rpb25fdGVzdC5jCgoKCj5AQCAtNyw3ICs3LDYg
-QEAKCgoKPsKgICogYWxsb2NhdGVkLgoKCgo+wqAgKi8KCgoKPgoKCgo+LSNpbmNsdWRlIDxzdGRi
-b29sLmg+CgoKCj4gI2luY2x1ZGUgPHN0ZGlvLmg+CgoKCj4gI2luY2x1ZGUgPHN0ZGxpYi5oPgoK
-Cgo+ICNpbmNsdWRlIDxzeXMvbW1hbi5oPgoKCgo+QEAgLTMxLDggKzMwLDcgQEAgc3RydWN0IG1h
-cF9saXN0IHsKCgoKPiBpbnQgcmVhZF9tZW1vcnlfaW5mbyh1bnNpZ25lZCBsb25nICptZW1mcmVl
-LCB1bnNpZ25lZCBsb25nICpodWdlcGFnZXNpemUpCgoKCj4gewoKCgo+wqDCoMKgwqDCoMKgwqAg
-Y2hhciBidWZmZXJbMjU2XTsKCgoKPi3CoMKgwqDCoMKgwqAgYm9vbCBtZW1mcmVlX2ZvdW5kID0g
-ZmFsc2U7CgoKCj4twqDCoMKgwqDCoMKgIGJvb2wgaHVnZXBhZ2VzaXplX2ZvdW5kID0gZmFsc2U7
-CgoKCj4rwqDCoMKgwqDCoMKgIGludCBmb3VuZCA9IDA7CgoKCj7CoMKgwqDCoMKgwqDCoCBGSUxF
-ICpmaWxlOwoKCgo+wqDCoMKgwqDCoMKgwqAgaW50IHJldCA9IC0xOwoKCgo+CgoKCj5AQCAtNDMs
-MjQgKzQxLDE5IEBAIGludCByZWFkX21lbW9yeV9pbmZvKHVuc2lnbmVkIGxvbmcgKm1lbWZyZWUs
-IHVuc2lnbmVkIGxvbmcgKmh1Z2VwYWdlc2l6ZSkKCgoKPsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCByZXR1cm4gLTE7CgoKCj7CoMKgwqDCoMKgwqDCoCB9CgoKCj4KCgoKPi3CoMKgwqDC
-oMKgwqAgd2hpbGUgKGZnZXRzKGJ1ZmZlciwgc2l6ZW9mKGJ1ZmZlciksIGZpbGUpKSB7CgoKCj4t
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoc3NjYW5mKGJ1ZmZlciwgIk1lbUZyZWU6
-ICVsdSBrQiIsIG1lbWZyZWUpID09IDEpCgoKCj4twqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqAgbWVtZnJlZV9mb3VuZCA9IHRydWU7CgoKCj4twqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBlbHNlIGlmIChzc2NhbmYoYnVmZmVyLCAiSHVnZXBhZ2VzaXplOiAl
-bHUga0IiLAoKCgo+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoCBodWdlcGFnZXNpemUpID09IDEpCgoKCj4twqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgaHVnZXBhZ2VzaXplX2ZvdW5kID0gdHJ1ZTsK
-CgoKPi0KCgoKPi3CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGlmIChtZW1mcmVlX2ZvdW5k
-ICYmIGh1Z2VwYWdlc2l6ZV9mb3VuZCkgewoKCgo+LcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIHJldCA9IDA7CgoKCj4twqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7CgoKCj4twqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCB9CgoKCj4rwqDCoMKgwqDCoMKgIHdoaWxlIChmZ2V0cyhidWZmZXIsIHNpemVvZihidWZm
-ZXIpLCBmaWxlKSAmJiBmb3VuZCAhPSAyKSB7CgoKCj4rwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoCBpZiAoc3NjYW5mKGJ1ZmZlciwgIk1lbUZyZWU6ICVsdSBrQiIsIG1lbWZyZWUpID09IDEg
-fHwKCgoKPivCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgc3NjYW5mKGJ1ZmZl
-ciwgIkh1Z2VwYWdlc2l6ZTogJWx1IGtCIiwgaHVnZXBhZ2VzaXplKSA9PSAxKQoKCgo+K8KgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZvdW5kKys7CgoKCj7CoMKg
-wqDCoMKgwqDCoCB9CgoKCj4KCgoKPsKgwqDCoMKgwqDCoMKgIGlmIChmZXJyb3IoZmlsZSkpCgoK
-Cj7CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAga3NmdF9wcmludF9tc2coIkZhaWxlZCB0
-byByZWFkIC9wcm9jL21lbWluZm86ICVzXG4iLAoKCgo+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHN0cmVycm9yKGVycm5vKSk7CgoK
-Cj4twqDCoMKgwqDCoMKgIGVsc2UgaWYgKHJldCkKCgoKPivCoMKgwqDCoMKgwqAgZWxzZSBpZiAo
-Zm91bmQgIT0gMikKCgoKPsKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBrc2Z0X3ByaW50
-X21zZygiRmFpbGVkIHRvIHBhcnNlIC9wcm9jL21lbWluZm9cbiIpOwoKCgo+K8KgwqDCoMKgwqDC
-oCBlbHNlCgoKCj4rwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZXQgPSAwOwoKCgo+CgoK
-Cj7CoMKgwqDCoMKgwqDCoCBmY2xvc2UoZmlsZSk7CgoKCj7CoMKgwqDCoMKgwqDCoCByZXR1cm4g
-cmV0OwoKCgo+CgoKCj4KCgoKPi0tIAoKCgo+Q2hlZXJzLAoKCgo+CgoKCj5EYXZpZAoKCgo+CgoK
+read_memory_info() invokes two shell pipelines to obtain MemFree and
+Hugepagesize from /proc/meminfo. It does not check whether popen()
+returns NULL before passing the result to fgets(), and it does not call
+pclose() when fgets() fails.
 
+Open /proc/meminfo directly and obtain both values in a single pass.
+This removes the unchecked NULL path, closes the file on all paths, and
+avoids dependencies on external commands.
+
+The compaction test continues to pass after this change.
+
+Signed-off-by: Warren Xiong <warren.xiong@ugreen.com>
+---
+Changes in v2:
+- Replace the two boolean flags with a hit counter, as suggested by
+  David Hildenbrand.
+
+v1: https://lore.kernel.org/1785720615-5826-1-git-send-email-warren.xiong@ugreen.com/
+
+ tools/testing/selftests/mm/compaction_test.c | 38 +++++++++++++++-------------
+ 1 file changed, 21 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 5b58258..30d4ace 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -29,30 +29,34 @@ struct map_list {
+ 
+ int read_memory_info(unsigned long *memfree, unsigned long *hugepagesize)
+ {
+-	char  buffer[256] = {0};
+-	char *cmd = "cat /proc/meminfo | grep -i memfree | grep -o '[0-9]*'";
+-	FILE *cmdfile = popen(cmd, "r");
++	char buffer[256];
++	int found = 0;
++	FILE *file;
++	int ret = -1;
+ 
+-	if (!(fgets(buffer, sizeof(buffer), cmdfile))) {
+-		ksft_print_msg("Failed to read meminfo: %s\n", strerror(errno));
++	file = fopen("/proc/meminfo", "r");
++	if (!file) {
++		ksft_print_msg("Failed to open /proc/meminfo: %s\n",
++			       strerror(errno));
+ 		return -1;
+ 	}
+ 
+-	pclose(cmdfile);
+-
+-	*memfree = atoll(buffer);
+-	cmd = "cat /proc/meminfo | grep -i hugepagesize | grep -o '[0-9]*'";
+-	cmdfile = popen(cmd, "r");
+-
+-	if (!(fgets(buffer, sizeof(buffer), cmdfile))) {
+-		ksft_print_msg("Failed to read meminfo: %s\n", strerror(errno));
+-		return -1;
++	while (fgets(buffer, sizeof(buffer), file) && found != 2) {
++		if (sscanf(buffer, "MemFree: %lu kB", memfree) == 1 ||
++		    sscanf(buffer, "Hugepagesize: %lu kB", hugepagesize) == 1)
++			found++;
+ 	}
+ 
+-	pclose(cmdfile);
+-	*hugepagesize = atoll(buffer);
++	if (ferror(file))
++		ksft_print_msg("Failed to read /proc/meminfo: %s\n",
++			       strerror(errno));
++	else if (found != 2)
++		ksft_print_msg("Failed to parse /proc/meminfo\n");
++	else
++		ret = 0;
+ 
+-	return 0;
++	fclose(file);
++	return ret;
+ }
+ 
+ int prereq(void)
+-- 
+2.7.4
