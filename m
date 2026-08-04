@@ -1,46 +1,68 @@
-Received: from sender4-of-o52.zoho.com (sender4-of-o52.zoho.com [136.143.188.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f180.google.com (mail-qk1-f180.google.com [209.85.222.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD8B649552D;
-	Tue,  4 Aug 2026 18:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785866434; cv=pass; b=LLrVBV8tiX8zNkKtZecgunwGK09FbAF6O3AOHrm8CjSuNLTUmUFe7rhhDl2kFDmKA1g3FErl2nSoCTS29j68YsvskseVdmuWBcxwy1j8x3ZAiIJ0D24P0VW6Rfs8i/l3H9ad/NkBdQUKatdBvdA5TJUCA/oZDUIRgr31b/cWEgQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785866434; c=relaxed/simple;
-	bh=SwJCU6dzIpARsSxB4INX7Wbgfj/GVUgzjebrU0XPmg8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00E6646D09C
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 18:06:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785866762; cv=none; b=t6/e/PlNsLXiDMCDSjW2kwjAxJObklCrKkbqaVxw1ip6Hn3wARY7zo5JI6cSbmOBJssQGaITziaQ98vsPGbJkKC8JAb4wQX3Mkx4NCcLOplYeita8O5hwqMIO2F7gkwH0eq1ti81UF1pRHCyYQVWoI7M+z3SEEMjgCwugjuKtAI=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785866762; c=relaxed/simple;
+	bh=mukZbijvR09Qyb8O6a5zSs66Nc1Ea8eJ76KYS4fy0x0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F1vi2KS/X02LLayWad+10DLzx8KWpkMg1ILQjrU5FM1PpwdgatkEuQmIL6BscISSbxW3cMzFsznZjQQHXDDF+AZqof2/izrVZM8JDZiZgu+tjPdnLmKe1WY3ozyy7Jllj1K06CmJ2OCfDSnCRT8pPZEkggsrP5hxq/NJebkRHME=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=machnikowski.net; spf=pass smtp.mailfrom=machnikowski.net; dkim=pass (2048-bit key) header.d=machnikowski.net header.i=maciek@machnikowski.net header.b=PiSNxoTV; arc=pass smtp.client-ip=136.143.188.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=machnikowski.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=machnikowski.net
+	 In-Reply-To:Content-Type; b=Y8HDwk1BIEed3MX2FrJVtXlbfZiPnsOBdtvOy0vTjy/Ko+CX9FmKp2cKQZUh84DgNSsxGSJh5uWEPql4QuqI1FY8NvuOnuCOsW3WkhQ4V+/JoRKoTSZyof7PRFaP/czuCxmeaNqeBGoRXx9UDj3VcXKDJMc09OxNNyvjN9qpbCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T/XJod1g; arc=none smtp.client-ip=209.85.222.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=machnikowski.net header.i=maciek@machnikowski.net header.b="PiSNxoTV"
-ARC-Seal: i=1; a=rsa-sha256; t=1785866366; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=OnC5K4A/dzXaV6HATJklnN+Hw+yBdk3rqZmBuHrYk7jSO/sScIaX68QnXW1tR8mmQ6t0BsXU1L/dVki81tCF7WwcBFuOba042vQ37JeuooxED+/ZQpoDQnex8stB3eGwmRypaIEprc3K4q5DKM5MZduwDtgbKhuaKxqBOwVq3So=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1785866366; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=4Hx63wYyhpUz8/M2kRLyuJ7fuvr6MmVRCdKtXgYif5s=; 
-	b=bpul9Si9UyKF/yNA59FdLe63GAZ5nc1+ysxs6HNOcl6rVyFF+yodf7ZzdohdEzvSGNGT7TSxn4Qh045mKuk0jcZd5Q/24Xp+A/FBYNOdxUg3bgwMbQJ0C3Nb7wHvjai3v50PRAGhWwAPcRiGgU0gyovntZg2qfkuOiTLtWpusb8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=machnikowski.net;
-	spf=pass  smtp.mailfrom=maciek@machnikowski.net;
-	dmarc=pass header.from=<maciek@machnikowski.net>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1785866365;
-	s=zoho; d=machnikowski.net; i=maciek@machnikowski.net;
-	h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=4Hx63wYyhpUz8/M2kRLyuJ7fuvr6MmVRCdKtXgYif5s=;
-	b=PiSNxoTVfKmD8NiFTgrFFqTOG7ZUeM3fwcE7ZgNbNMELHo0fICOyPRC9ZipP2vxM
-	mOMpcgqfVbHjrZ5c+SAts5+QhfXSAMctQZRT8E0jWE6yTY1TSZuSG2/Oe0ma4lPS+cz
-	aKtvi9GElocGs5IKV/QzglCjkBwaG7NHpgB7M4hohpL9K/Ht8RcnSxTYA7LRzKWI9iz
-	hC0e49KPLO+AcJuc1jTThwcfvarpmT/7WBwAk5q8hGm73QWS+20YQ+wY5DMdZhssqN8
-	X/SAm9RCSOR8iJ2WMZ2uQ8FRHCLpRj1hvzkyyT5D2azJUI3+vM/p0S5hXbicDiXNl4Z
-	0+ey0GsWvQ==
-Received: by mx.zohomail.com with SMTPS id 1785866362148587.1866007291997;
-	Tue, 4 Aug 2026 10:59:22 -0700 (PDT)
-Message-ID: <d43d255a-4a67-44c7-ab1e-5e08ac01a9c6@machnikowski.net>
-Date: Tue, 4 Aug 2026 19:59:14 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T/XJod1g"
+Received: by mail-qk1-f180.google.com with SMTP id af79cd13be357-92e7632b193so10466685a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 11:06:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1785866760; x=1786471560; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=PvFOPFIKv7IZLYV82VSUnHCVCbk2jO9N6jmpfHOfts8=;
+        b=T/XJod1gvh20p2DW/AdAWJ74EQT6tre1gp5whPlqrYD3PiIEjglyZGXneLDTjxaYuh
+         kfyggTEifzO1Epx13eyNGjHVTWHDsKXWH7X9Y+bE4JG1zVMdZF8EVdvRuvTtLKvJr/lH
+         vHnivznxdcM2TXrBNQelgkRj6iZv+L/BfB7E+UKM+PUMTCoD/TufPWpJcgiqmfMKmx1G
+         8e0ifEX+lXUADOzM/zVGLipW0fDsyVn6tBoIW6LSJ/DOtun8ixat62anId6TbOJgiOcb
+         Wjbp+/SJtDyBdSa6rc2sdF6mJczvVYUkvL7CDlABZczuhp2VQ/yI1YNlDT/+i6Y1gt72
+         EUUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785866760; x=1786471560;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PvFOPFIKv7IZLYV82VSUnHCVCbk2jO9N6jmpfHOfts8=;
+        b=JgNGCZXTpsn7MNZxx9jNt0sEM2Wq8/SkgghO2oTBVZOLM9H7F0C/SIm+W7+rJFfN5L
+         h3EE+pmfvaZsNR5hAiwL1PEuVHycQdN2vjhTR7pSuPZRIIsn8o69JfnrFdEE4aW14sTz
+         6LLsiGyH1uXAeIwZ16OxD7dMudGI/jjJ/jM0S7lVCCsPKDvSZvy+TJNUL4WbeiKOIER1
+         b74FZOARJ5s8Ukn9iaYgNfS0QyIuFTvfOcADH8rFHRcJvwMbxUgFM4UPhaaj7i92aqc5
+         MXTrhLHstTHQPUzxPQ2DByxsKK6jhw0tySfjM2iPgLf3jtWPYmSmojb1ea3NgyPc81ka
+         HPSg==
+X-Forwarded-Encrypted: i=1; AHgh+RrwQGZS3EZg5Aorw4gJ/TAb2a7BA+ui4pCylwFk0VystdH7drPPmIDzfjlvdhfCQt7pgybpuvVFN3ckoqkeqOQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzdFpVm+mzpbmn8SMVCzbDUj4Ld1x6Zrwemow4YONwpqZrgCSUt
+	A+1qx995MyXfjTl2F8R5Gl8iglY7CZ9PaYs8Ag4REkCAUJGW160iKd3n
+X-Gm-Gg: AR+sD11upxBNYGHKoA828Je5yFadTYswsQpJw8q1bxqBfVFXtsWph87EclLQsArdLFi
+	mLzHji3agEy9KuMhsLIDn1zhgmBhc+7bQXjQ8UIrhrRIw65vxg58KbxqNCJlRKjETvxtbknMkPS
+	p7zzmBOoHY5JC43Zobg+7o6Sa9fV6otW2iZLXe/+YHawahZJGPOOewLiZgp0bN82wnhDz4zTrd4
+	D5PftV+1irX7nbTb+xRcVJ+Ad/+INK2riGnDj4U2f2gm0ce3bYajNzUPpTdeAQ+e3VCDPPCc2kh
+	6AldQxcu9+sE6Y8TKhv5sHRky/y77UPsJdb622JU+EOHy0v8Srl/JPbrZ0l9ceKzAhsaUt7b/Kx
+	nwHO91hdwxsvAm4a65fg7Z/qJ6Wdcox07N6zEdsb6k+ZcLtX/mzn2RwbruMjzTnp1662/UyJ8se
+	z4JtE3W3LRrDQRzY5QvWaVq0xNEUYzOTK0jOC1Ji2RChQd5nxyRj5asSv1nvz4kQPDnYsZcy3Li
+	00cwS2gfSKpaUH79GclJnfq6KkaOuC2Gt7U3uYSio0=
+X-Received: by 2002:a05:620a:40c2:b0:934:aa05:f549 with SMTP id af79cd13be357-936491d3c8fmr16849585a.25.1785866759759;
+        Tue, 04 Aug 2026 11:05:59 -0700 (PDT)
+Received: from ?IPV6:2600:4040:9399:4000:e553:72e5:7d37:c7ef? ([2600:4040:9399:4000:e553:72e5:7d37:c7ef])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93641592964sm148846885a.0.2026.08.04.11.05.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Aug 2026 11:05:59 -0700 (PDT)
+Message-ID: <9460e089-ed71-4f3c-986c-5d29b87b3500@gmail.com>
+Date: Tue, 4 Aug 2026 14:05:58 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,272 +70,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v6 net-next 1/7] ptp: Add ioctls for PHC timestamps with
- quality attributes
-To: Arthur Kiyanovski <akiyano@amazon.com>, David Miller
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org
-Cc: Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
- David Woodhouse <dwmw2@infradead.org>, Thomas Gleixner <tglx@linutronix.de>,
- Miroslav Lichvar <mlichvar@redhat.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Andrew Lunn <andrew@lunn.ch>, Carolina Jubran <cjubran@nvidia.com>,
- Wen Gu <guwen@linux.alibaba.com>, Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
- David Woodhouse <dwmw@amazon.com>, Yonatan Sarna <ysarna@amazon.com>,
- Zorik Machulsky <zorik@amazon.com>, Alexander Matushevsky
- <matua@amazon.com>, Saeed Bshara <saeedb@amazon.com>,
- Matt Wilson <msw@amazon.com>, Anthony Liguori <aliguori@amazon.com>,
- Nafea Bshara <nafea@amazon.com>, Evgeny Schmeilin <evgenys@amazon.com>,
- Netanel Belgazal <netanel@amazon.com>, Ali Saidi <alisaidi@amazon.com>,
- Benjamin Herrenschmidt <benh@amazon.com>, Noam Dagan <ndagan@amazon.com>,
- David Arinzon <darinzon@amazon.com>, Evgeny Ostrovsky <evostrov@amazon.com>,
- Ofir Tabachnik <ofirt@amazon.com>, Amit Bernstein <amitbern@amazon.com>,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- shuah@kernel.org, Jonathan Corbet <corbet@lwn.net>,
+Subject: Re: [PATCH net-next V2 13/13] selftests: drv-net: psp: Add a test for
+ PSP with HW-GRO
+To: Tariq Toukan <tariqt@nvidia.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+ Paolo Abeni <pabeni@redhat.com>, Sabrina Dubroca <sd@queasysnail.net>
+Cc: Aleksandr Loktionov <aleksandr.loktionov@intel.com>,
+ Alexei Lazar <alazar@nvidia.com>, Boris Pismenny <borisp@nvidia.com>,
+ Carolina Jubran <cjubran@nvidia.com>, Chris Mi <cmi@nvidia.com>,
+ Cosmin Ratiu <cratiu@nvidia.com>, Doruk Tan Ozturk <doruk@0sec.ai>,
+ Dragos Tatulea <dtatulea@nvidia.com>, Gal Pressman <gal@nvidia.com>,
+ Jacob Keller <Jacob.e.keller@intel.com>, Jianbo Liu <jianbol@nvidia.com>,
+ Kees Cook <kees@kernel.org>, Lama Kayal <lkayal@nvidia.com>,
+ Leon Romanovsky <leon@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+ Mark Bloch <mbloch@nvidia.com>, Patrisious Haddad <phaddad@nvidia.com>,
+ Raed Salem <raeds@nvidia.com>, Rahul Rameshbabu <rrameshbabu@nvidia.com>,
+ Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
  Shuah Khan <skhan@linuxfoundation.org>, Simon Horman <horms@kernel.org>,
- Bjorn Helgaas <bhelgaas@google.com>, vadim.fedorenko@linux.dev
-References: <20260729233740.16516-1-akiyano@amazon.com>
- <20260729233740.16516-2-akiyano@amazon.com>
+ Stanislav Fomichev <sdf@fomichev.me>,
+ Stanislav Fomichev <sdf.kernel@gmail.com>
+References: <20260804083535.2946459-1-tariqt@nvidia.com>
+ <20260804083535.2946459-14-tariqt@nvidia.com>
 Content-Language: en-US
-From: Maciek Machnikowski <maciek@machnikowski.net>
-In-Reply-To: <20260729233740.16516-2-akiyano@amazon.com>
-Content-Type: text/plain; charset=UTF-8
+From: Daniel Zahka <daniel.zahka@gmail.com>
+In-Reply-To: <20260804083535.2946459-14-tariqt@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ZohoMailClient: External
 
 
 
-On 30/07/2026 01:37, Arthur Kiyanovski wrote:
-> Introduce two new ioctls that extend existing PTP timestamp interfaces
-> with clock quality information:
+On 8/4/26 4:35 AM, Tariq Toukan wrote:
+> From: Cosmin Ratiu <cratiu@nvidia.com>
 > 
+> Add a test case which attempts to send several 64K chunks over PSP,
+> which is more than MTU, and thus trigger GSO on the TX side and HW GRO
+> on the RX side. Verify HW GRO counters increase.
+> 
+> This required the addition of a new command in the psp responder, so it
+> sends the data in order to get it reassembled on the local (DUT) side.
+> 
+> Signed-off-by: Cosmin Ratiu <cratiu@nvidia.com>
+> Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+> Signed-off-by: Tariq Toukan <tariqt@nvidia.com>
+> ---
+>   tools/testing/selftests/drivers/net/psp.py    | 131 ++++++++++++++++--
+>   .../selftests/drivers/net/psp_responder.c     |  49 +++++++
+>   2 files changed, 171 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/drivers/net/psp.py b/tools/testing/selftests/drivers/net/psp.py
+> index 315648a770d0..9b899723a635 100755
+> --- a/tools/testing/selftests/drivers/net/psp.py
+> +++ b/tools/testing/selftests/drivers/net/psp.py
+> @@ -16,11 +16,12 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
+>   from lib.py import ksft_true, ksft_eq, ksft_ne, ksft_gt, ksft_raises
+>   from lib.py import ksft_not_none
+>   from lib.py import ksft_variants, KsftNamedVariant
+> -from lib.py import KsftSkipEx, KsftFailEx
+> +from lib.py import KsftSkipEx, KsftFailEx, KsftXfailEx
+>   from lib.py import NetDrvEpEnv, NetDrvContEnv
+> -from lib.py import Netlink, NlError, PSPFamily, RtnlFamily
+> +from lib.py import Netlink, NlError, NetdevFamily, PSPFamily, RtnlFamily
+>   from lib.py import NetNSEnter
+>   from lib.py import bkg, rand_port, wait_port_listen
+> +from lib.py import bkg, ethtool, rand_port, wait_port_listen, CmdExitFailure
 
->  
-> +/*
-> + * Clock status values for struct ptp_clock_attrs.status
-> + */
-> +enum ptp_clock_status {
-> +	/* Clock synchronization status cannot be reliably determined */
-> +	PTP_CLOCK_STATUS_UNKNOWN      = 0,
-> +
-> +	/* Clock is acquiring synchronization */
-> +	PTP_CLOCK_STATUS_INITIALIZING = 1,
-> +
-> +	/* Clock is synchronized and maintained accurately by the device */
-> +	PTP_CLOCK_STATUS_SYNCED       = 2,
-> +
-> +	/*
-> +	 * Clock is drifting but remains within acceptable error bounds;
-> +	 * error_bound is valid and can be trusted.
-> +	 */
-> +	PTP_CLOCK_STATUS_HOLDOVER     = 3,
-> +
-> +	/*
-> +	 * Clock is free-running: not currently disciplined toward a reference
-> +	 * (unlike HOLDOVER), but coasting on a known oscillator. error_bound
-> +	 * remains valid and can be trusted, and typically grows over time.
-> +	 */
-> +	PTP_CLOCK_STATUS_FREE_RUNNING = 4,
-> +
-> +	/*
-> +	 * Clock is considered broken (e.g. the oscillator is faulty or
-> +	 * abnormally unstable): error_bound cannot be trusted. A clock that is
-> +	 * merely unsynchronized or resynchronizing should report
-> +	 * PTP_CLOCK_STATUS_UNKNOWN or PTP_CLOCK_STATUS_INITIALIZING instead.
-> +	 */
-> +	PTP_CLOCK_STATUS_UNRELIABLE   = 5
-What is the practical use of UNRELIABLE vs UNKNOWN.
-I think it can be simplified to UNRELIABLE, SYNCED and HOLDOVER. All
-clocks will start in UNRELIABLE, switch to SYNCED whenever the clock
-gets synchronized correctly and enter HOLDOVER if it was at the SYNCED
-state and report the last synced for that state. Status INITIALIZING has
-no practical meaning and requires more work from the APIs, and
-HOLDOVER->FREE_RUNNING state transition is undefined (what is
-"acceptable" for one application won't be acceptable for another)
-
-> +};
-> +
-> +/*
-> + * Clock timescale values for struct ptp_clock_attrs.timescale.
-> + *
-> + * These definitions describe the mathematical properties and reference
-> + * epochs of the timescale provided by the PHC.
-> + *
-> + * Discipline: Describes the frequency/phase steering behavior.
-> + * Continuity: Describes whether the timeline is uninterrupted.
-> + */
-> +enum ptp_clock_timescale {
-> +	/* Unknown or unspecified timescale */
-> +	PTP_TIMESCALE_UNKNOWN = 0,
-> +
-> +	/********************* Absolute Atomic Timescales *********************
-> +	 * These timescales are continuous, monotonic standards based on atomic
-> +	 * physics. They do not experience phase jumps.
-> +	 **********************************************************************/
-> +
-> +	/**
-> +	 * International Atomic Time (TAI)
-> +	 * Epoch: 1958-01-01 00:00:00.
-> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
-> +	 * Discipline: Primary atomic reference; no phase jumps.
-> +	 */
-> +	PTP_TIMESCALE_TAI = 1,
-> +
-> +	/**
-> +	 * Terrestrial Time (TT)
-> +	 * Epoch: 1958-01-01 00:00:00.
-> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
-> +	 * Discipline: Defined as TAI + 32.184s constant offset.
-> +	 */
-> +	PTP_TIMESCALE_TT = 2,
-> +
-> +	/**
-> +	 * Global Positioning System (GPS) Time
-> +	 * Epoch: 1980-01-06 00:00:00.
-> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
-> +	 * Discipline: Defined by the GPS constellation; fixed offset from TAI.
-> +	 */
-> +	PTP_TIMESCALE_GPS = 3,
-> +
-> +	/****************** UTC-Based Timescales (Civil Time) *****************
-> +	 * These timescales are derived from TAI but adjusted to align with
-> +	 * the Earth's rotation, primarily through leap seconds.
-> +	 **********************************************************************/
-> +
-> +	/**
-> +	 * Coordinated Universal Time (UTC) - Wall-clock (CLOCK_REALTIME)
-> +	 * Epoch: 1970-01-01 00:00:00 (Unix epoch).
-> +	 * Continuity: Discontinuous; subject to 1-second leap second
-> +	 *             phase jumps.
-> +	 * Discipline: Frequency steered; incorporates leap second corrections.
-> +	 *
-> +	 * Note: Leap-smeared UTC MUST NOT be advertised as PTP_TIMESCALE_UTC.
-> +	 * Smear algorithms are not standardized and the resulting timescale
-> +	 * is ambiguous. Implementations using smeared UTC MUST advertise
-> +	 * PTP_TIMESCALE_UNKNOWN or PTP_TIMESCALE_PROPRIETARY instead.
-> +	 */
-> +	PTP_TIMESCALE_UTC = 4,
-> +
-> +	/**
-> +	 * POSIX Time (Unix Time)
-> +	 * Epoch: 1970-01-01 00:00:00.
-> +	 * Continuity: Discontinuous; leap seconds handled by
-> +	 *             repeating/skipping values.
-> +	 * Discipline: Follows UTC frequency steering and phase jumps.
-> +	 */
-> +	PTP_TIMESCALE_POSIX = 5,
-> +
-> +	/****************** System-Relative Monotonic Clocks ******************
-> +	 * These timescales are relative to a system event (like boot)
-> +	 * and are not synchronized to an external atomic standard.
-> +	 **********************************************************************/
-> +
-> +	/**
-> +	 * Monotonic System Clock (CLOCK_MONOTONIC)
-> +	 * Epoch: Arbitrary (System boot time).
-> +	 * Continuity: Strictly monotonic; no leap seconds.
-> +	 * Discipline: Frequency steered to match system reference;
-> +	 *             does not advance during suspend.
-> +	 */
-> +	PTP_TIMESCALE_MONOTONIC = 6,
-> +
-> +	/**
-> +	 * Raw Monotonic System Clock (CLOCK_MONOTONIC_RAW)
-> +	 * Epoch: Arbitrary (System boot time).
-> +	 * Continuity: Strictly monotonic; no leap seconds.
-> +	 * Discipline: Raw hardware oscillator; no frequency steering
-> +	 *             or discipline.
-> +	 */
-> +	PTP_TIMESCALE_MONOTONIC_RAW = 7,
-> +
-> +	/**
-> +	 * Boot Time System Clock (CLOCK_BOOTTIME)
-> +	 * Epoch: Arbitrary (System boot time).
-> +	 * Continuity: Strictly monotonic and continuous; no leap seconds.
-> +	 * Discipline: Frequency steered to match system reference;
-> +	 *             advances during suspend.
-> +	 */
-> +	PTP_TIMESCALE_BOOTTIME = 8,
-> +
-> +	/********************** Vendor-Specific Timescale *********************/
-> +
-> +	/* A proprietary or vendor-specific timescale with custom rules. */
-> +	PTP_TIMESCALE_PROPRIETARY = 9,
-> +};
-Do we need this many timescales defined here? Can't we just use the
-notion of TIMESCALE_ARBITRARY and TIMESCALE_ABSOLUTE with the UTC
-offset? CLOCK_MONOTONIC / MONOTONIC_RAW are really ARBITRARY, is there
-any value of differentating between those two?
- > +
->  /*
->   * struct ptp_clock_time - represents a time value
->   *
-> @@ -94,6 +237,136 @@ struct ptp_clock_time {
->  	__u32 reserved;
->  };
->  
-> +/*
-> + * Hardware counter identifiers for struct ptp_sys_time.sys_counter_id
-> + */
-> +enum ptp_counter_id {
-> +	/* Counter value not available or type not specified */
-> +	PTP_COUNTER_UNKNOWN = 0,
-> +
-> +	/* x86 Time Stamp Counter (TSC) */
-> +	PTP_COUNTER_X86_TSC = 1,
-> +
-> +	/* ARM Generic Timer virtual counter */
-> +	PTP_COUNTER_ARM_ARCH = 2,
-> +};
-> +
-> +/* Valid flags for struct ptp_clock_attrs.valid */
-> +#define PTP_ATTRS_VALID_ERROR_BOUND	(1 << 0)
-> +#define PTP_ATTRS_VALID_TIMESCALE	(1 << 1)
-> +#define PTP_ATTRS_VALID_STATUS		(1 << 2)
-> +
-> +/**
-> + * struct ptp_clock_attrs - quality attributes for a PHC timestamp
-> + *
-> + * @valid:       Bitmask of PTP_ATTRS_VALID_* indicating which fields
-> + *               are populated. Zero means no attributes available.
-> + * @error_bound: Maximum error (an upper bound, in nanoseconds) between the
-> + *               returned device_time and true time on the advertised
-> + *               @timescale; a worst-case bound, not a statistical estimate.
-> + *               Valid only when PTP_ATTRS_VALID_ERROR_BOUND is set, and must
-> + *               not be trusted when @status is PTP_CLOCK_STATUS_UNKNOWN or
-> + *               PTP_CLOCK_STATUS_UNRELIABLE.
-> + * @timescale:   Clock timescale (enum ptp_clock_timescale). Valid only
-> + *               when PTP_ATTRS_VALID_TIMESCALE is set.
-> + * @status:      Synchronization status (enum ptp_clock_status). Valid
-> + *               only when PTP_ATTRS_VALID_STATUS is set. Transitions between
-> + *               states are device-specific; there are no kernel-defined
-> + *               thresholds relating @status to @error_bound.
-> + * @rsv:         Reserved for future use, must be zero.
-> + */
-> +struct ptp_clock_attrs {
-> +	__u32 valid;
-> +	__u32 error_bound;
-> +	__u32 timescale;
-> +	__u32 status;
-> +	__u32 rsv[4];
-> +};
-This does not look like a practical model. Error bounds changes over
-time and will get stale by the time you transfer them over IOCTL.
-
-I think a more practical approach would be to return error_bound
-alongside the anchor_timestamp at which it was measured. For example you
-can define master_offset for the RX timestamp of the Sync packet, or the
-offset for the last 1PPS signal you received. This should be
-complemented by some drift_factor that would define how fast it grows.
-
-If you capture the time from the PHC you can use the formula of
-error_bound+(phc_time - anchor_timestamp)*drift_factor to interpolate
-the boundaries.
-
-Do we want to squash all errors into a single error_bound - it may make
-sense to add the hw_error and sync_error - hw_error would squash
-hw-based error bounds (such as clock resolution, GNSS precision) and
-sync_error (which would hold the dynamic part derived from the sync
-protocol)
-
-Thanks,
-Maciek
+nit: agent has pointed out that this new line is reimporting bkg, 
+rand_port, and wait_port_listen from the line above it.
