@@ -1,71 +1,46 @@
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA0F448D06;
-	Tue,  4 Aug 2026 10:37:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2407329E5D
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 11:12:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785839830; cv=none; b=HK64Z2XZx7J+ZKkmW8QBuklvpWh+rwVWGLqZPQwp9AmuN6o65uLo44znauhLBO+fL7+55xHId4kjEI6y5zqCeW4usDAq4J+BlfBc4qNJqX68sNLlBrB1CblWkCMelyd/JE3aT2xqV/EbgNRV3wTZkZIssgEG75xpuaZmpPr4Ftg=
+	t=1785841954; cv=none; b=lIAHbpXKd44RMS330F2NxD4swxNza+sUbVRFnNGzKJYTNMPtU+lo9amb6ulLgnOVtr34TmBZfPMVk1mOSI+OYPRC9qD2NYdQLCCenKy3RapRXIUrDGaJVZ+k+B3yg7KzRu6KLvVIFGV1YSpF8M8WGTgBdKT6xE8hgFBqdzqi9Ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785839830; c=relaxed/simple;
-	bh=V+TiK7MuCofMdG9dgvWdWCKyJPDTBZL1tm27s0teJgY=;
+	s=arc-20240116; t=1785841954; c=relaxed/simple;
+	bh=NeJqP5JnpNbdpvBJGleWJbGFU6ewLq0/vwbPQDIm6WI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=k+lZJ/KxU8M9tfLQ6uwQeNJNaGL3lQMgPEJdqTme11K9VCJ8J5iVwh1CFXaObPs/RWj8nIONIRCuqpxr1O85scFfa/s9xrKP68+4lhtfi4uWQpzUt05gtpc83HR3oDXJGnGLrWBxwIzKjTUCkNsyhpgFSgLgtV5MvItwYM03/nw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=bhwn4Hxq; arc=none smtp.client-ip=115.124.30.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 MIME-Version; b=sckml2Ir0ZjpkSjxb0vXNP1vbZQJUo984MFh8cfq6e7+gHZPTL6C5J2euT8zn1D0ibchpsJq+XliVev9v+G5OQFyzwSfydTaIRxV0/Omj6aR/3y6QHZrr3vEi+dUJJXolvUvHHgBryb3uTXtCUHnqtIxPLHqTDUbxZqFZ5ZFNCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AdUJba4L; arc=none smtp.client-ip=91.218.175.189
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="bhwn4Hxq"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785839824; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=osYv4PyMOH+hGuFQLUeP+UmPCqW/DzeJKVWPMYqOR5E=;
-	b=bhwn4Hxqf2PXWP0BZTehIUi7eMtBkTqzkeUWvqErsp+ltB7WUBs3ENqGhhlqDn+MoGW2mHUUUCn1x7i3yR1hkXh/vDAlDv9eWX2jFw3+UXkuFfPTuk+x3IxDD9BbC6F3I+qvsM31rqyAw+8GQ3pg6JDU2sEfEUkgPOm/06aqn/s=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R211e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=wanghan@linux.alibaba.com;NM=1;PH=DS;RN=34;SR=0;TI=SMTPD_---0X8Nlqdc_1785839818;
-Received: from wanghan-Workstation..(mailfrom:wanghan@linux.alibaba.com fp:SMTPD_---0X8Nlqdc_1785839818 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 04 Aug 2026 18:37:01 +0800
-From: Wang Han <wanghan@linux.alibaba.com>
-To: Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>,
-	linux-riscv@lists.infradead.org,
-	Oleg Nesterov <oleg@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Miroslav Benes <mbenes@suse.cz>,
-	Petr Mladek <pmladek@suse.com>,
-	Joe Lawrence <joe.lawrence@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	oliver.yang@linux.alibaba.com,
-	xueshuai@linux.alibaba.com,
-	zhuo.song@linux.alibaba.com,
-	jkchen@linux.alibaba.com,
-	Marcos Paulo de Souza <mpdesouza@suse.com>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AdUJba4L"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785841950;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3uiARcbRk6MclQK5E7+O3uI9pt+i74lOJpNKbmvLF88=;
+	b=AdUJba4LXK2UBjpfnKdE2wAg7zw4Cq5VS2dRcP9zFCTD6c7mGt1Da3vGBsyCf6gH34vKHJ
+	b94Tfp/sb5XesLIViduzEYuG2KKSY6G5rVg1dm2gWaF/obKemqTjM/q6T99v1wrQRFSsEd
+	Em6+TNzR5etVmrtGOrC4WDQ2rArp3GM=
+From: Hongfu Li <hongfu.li@linux.dev>
+To: akpm@linux-foundation.org
+Cc: hongfu.li@linux.dev,
+	lihongfu@kylinos.cn,
 	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	live-patching@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v5 7/7] selftests/livepatch: Add RISC-V syscall wrapper prefix
-Date: Tue,  4 Aug 2026 18:36:26 +0800
-Message-ID: <20260804103626.2803112-8-wanghan@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260804103626.2803112-1-wanghan@linux.alibaba.com>
-References: <20260804103626.2803112-1-wanghan@linux.alibaba.com>
+	linux-kselftest@vger.kernel.org,
+	reddybalavignesh9979@gmail.com,
+	richard.weiyang@gmail.com,
+	shuah@kernel.org
+Subject: Re: [PATCH] selftests/prctl: Fix non-anonymous VMA mapping in set-anon-vma-name test
+Date: Tue,  4 Aug 2026 19:12:18 +0800
+Message-ID: <20260804111218.82537-1-hongfu.li@linux.dev>
+In-Reply-To: <20260803140924.31bf563743a73653f65e2258@linux-foundation.org>
+References: <20260803140924.31bf563743a73653f65e2258@linux-foundation.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -73,35 +48,25 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-The syscall livepatch selftest resolves and patches a syscall wrapper
-symbol. To use that test for RISC-V livepatch validation, add the
-RISC-V FN_PREFIX definition for ARCH_HAS_SYSCALL_WRAPPER.
+> AI review found one glitch which I don't think we need to care about:
+> 	https://sashiko.dev/#/patchset/20260803103046.14324-1-hongfu.li@linux.dev
+> 
+> and one possible pre-existing issue which is kinda related and which
+> you may choose to address.  Please take a look and let us know?
 
-Without this macro, the syscall livepatch selftest cannot resolve the
-RISC-V target symbol, and the syscall-related livepatch test fails on
-RISC-V.
+Thanks for the review. I've carefully considered the AI review's findings.
 
-Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-Reviewed-by: Shuai Xue <xueshuai@linux.alibaba.com>
-Signed-off-by: Wang Han <wanghan@linux.alibaba.com>
----
- .../testing/selftests/livepatch/test_modules/test_klp_syscall.c | 2 ++
- 1 file changed, 2 insertions(+)
+The /dev/zero case raised by the AI reviewer may be addressed by commit
+cc3b846182db ("mm/vma: make MAP_PRIVATE-mapped /dev/zero mappings truly
+anonymous"), which makes these mappings truly anonymous (no vm_file, no
+vm_ops). So the vma->vm_file checks in madvise.c should not wrongly
+reject them.
 
-diff --git a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-index 08aacc0e14de..9baa2a5f84c9 100644
---- a/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-+++ b/tools/testing/selftests/livepatch/test_modules/test_klp_syscall.c
-@@ -24,6 +24,8 @@
-     #define FN_PREFIX __s390x_
-   #elif defined(__aarch64__)
-     #define FN_PREFIX __arm64_
-+  #elif defined(__riscv)
-+    #define FN_PREFIX __riscv_
-   #elif defined(__powerpc__)
-     #define FN_PREFIX
-   #else
--- 
-2.43.0
+That said, I agree that vma_is_anonymous(vma) better expresses the intent
+than vma->vm_file in these sites. I'm happy to send a separate patch for
+that if needed.
 
+Best regards,
+Hongfu
