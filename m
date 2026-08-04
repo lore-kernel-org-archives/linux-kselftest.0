@@ -1,206 +1,353 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F903B3BFC
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 22:20:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85A6239099A
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 22:39:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.177
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785882045; cv=pass; b=UyvVpyyQWfo/QUwc1fykiuH9kZpGUOyTzJBpXUmmU1qmnac/q7BfRLPcoei/dySPn90t6Hrh8BnleTIZ/4bOmcO2XuBd68t2hecj1rhSAIphCFgT/i+SBCi5jeYFduJjraU7QYnLzZJUFlOoHCgRG1990XksD/ObaGp0mzu3QQE=
+	t=1785883154; cv=pass; b=Reqry2rT1s5PY0DeccHx9RQ77IS3vxuDCK57FBmkyRJTY1a80yEqGM+DO+j0vXjRQkNtSmK1pnL4GtO+fS4mA0/P15OD5gXoX/+Be5P7Zbd3P07u2H9ksVZQDNK+BO0eV2eumLe/eYqxRbucKlk2rS3eANKS+gui+daXsKWFbqw=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785882045; c=relaxed/simple;
-	bh=p7KpLXDbYWu/mxWpOCbWD2NL3j0JpP9nFMeNwakGxKM=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rnMalbasbkR+WJCwmtAZ+g34wEs0lB6hrWG2lvVnJCvW5GvWf1Fk9TLm0dCFu6pMPX0ifWMtZGm5Vr8+kySygzHnL2LefyLxdxUbW1B7OsaNmPf/ECjOdJFHI38uj1aCFCpdczFGqLTnKeXwri/lhj1LtSIDHseuf30qKPlybro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=T0w7KDnZ; arc=pass smtp.client-ip=209.85.216.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1785883154; c=relaxed/simple;
+	bh=JlZEjqsfLVq1gnw4VpMnsuKskwu6dlc+rhxlhpUB8ug=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=lydUMdV7/5XosB1QNb9EhGUSaNKfatv366aDgcWbHl97NXvScLFDBRinqrrfGvq3xfOsfLPTbAsilu1l6dvEX1/hHizYylzXPm3fjcNnY67ayG2w/sUpiQAh+mZyqvvG+AXEyl6sBIeAsv4aayjym54UdLkkE7h1rOT3DuNlZPE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AHDqvn/T; arc=pass smtp.client-ip=209.85.210.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="T0w7KDnZ"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3810c5d691bso249541a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 15:20:44 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785882044; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AHDqvn/T"
+Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8486672f03cso414888b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 15:39:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785883152; cv=none;
         d=google.com; s=arc-20260327;
-        b=hALWsN2hXcyIPM4suQrBMZboPwDCT1akUXjEyP4jQvWV//lkLAq7REjXR3KzdH7MIN
-         LLcPrIj52oDUy6Q924h8kXJYWtkN+Apj0GdiwkjlbEYN7+KX2uzNqssFKtAL1LPuh7eQ
-         Civp843is8ik0WYJZs4DLSPoUPI5VdaccyswhDr9yTiZi6ZMJUPA2f9m/6caZbjXm2Rw
-         DsTFCz6iT8oxKvPvFXxxszxVmMQdLtN+M8nsX6/Nm2DgNF2pF/6AcvVshNE2mqqMb5kD
-         NtfBDlr8VMND2cf6BJ+dekII7RZZyiJEa0utI2JJHJQhxUzCIf1wAzar/O9aUiH/GyES
-         NkgQ==
+        b=aFr7G/LyqQ4nxeKcbFR4lKqWokol45j3CWWgclv64MaoqqnrAxnB5r6/bZzS3pAyQk
+         AcFqxMBg4OphZFt6/poQzYKZ45PzOICKVeG79rBQLvkloyrU/uFn2kPoGRG+5pTSIUy3
+         PLkp4pyGIPcVsjwfGegIXsghUuBiHBqgiyeYs7rO4iDiVVr+05iIxqVilNcO1akJnfHr
+         Zw3oH5DikSfGLBqZ89zImIR1r6koTbr7DTPP52re4fvzOoCwYVSEy5Ywm11TXIpj+KZ0
+         RfvUIXhP3WtLNiCOG2gZdWN2RDLB6HsDz04gNElDB6vrZVRPnICS88Gl7NhmnEIA7OQS
+         HLLA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=voJFtdOcDQ3cvv3g0Px6B4YkGP5JAhQ6QCPfp6/emQc=;
-        fh=re7QQx7nHgWcDGBczh223DxjV3sQeY2funoq/uLdCpk=;
-        b=MdZgJ6r8d9QULx30UNSzg97VAopAeYFmtR2FIdbbCy1m4lRLCvd16z0UGLP9IGAMf5
-         rFXzyFC0VXLZZeFRuQ2dfhFGQZEjT6LptBv4NYuPyHX8BAJDkMy8BGBnDfBPqWV6S+Bv
-         VHUZypofk1mIST8EUhdiM5auRC3CYvROsAYchSEyLTn4DJjeCAMqa2h7U3jybt7Xe3mP
-         GvfAl/yQLNNrsyvwg1irvFT7FRegCzL2o42su2I8jJkU+Xd6k8U/7SVYhsyC2D8LDLw1
-         88tGH53OahXYxM8MRiLxNh/Mxoypg5M6xhEJGILSlSjdfYjH91kenX7lt11290vf9i/8
-         ZaGw==;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
+        fh=ae/8N6l8GG0zWGZMg7FBvb+7Xv1zOLP50zPHpFILXQ4=;
+        b=gMlfYUVCMK6PkRGFbWIjOfmL/cyJKja5MtKn23apjX97Jxm3blpyDFT+DxepX1ORxo
+         JuXP1vZT2LeTDuUk+nX1a8CJQMWun8JTvomdNdIugqqlfo+Ex48uLB6rSocJKFZppBOk
+         twK355jVJ43aOn0OBzdpCjksebMmT9P+EH4nsFRKzE1GA7Kt4yjIQIAsy1IXoBGTxev+
+         6hHrqzwE6YjZXEDP3hH4Vdf4ztpfaNXJl7y7LF3iL1PaMmWjKXy5+ye1tVjFYGWl6M0I
+         7pj5MgTHfkOWiFqrD+uavFPJbEG4c9nN6fHDwNbnz8GdtVIaELMxYO9k+xl8xZYwO28b
+         Njew==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785882044; x=1786486844; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=voJFtdOcDQ3cvv3g0Px6B4YkGP5JAhQ6QCPfp6/emQc=;
-        b=T0w7KDnZr3jDS7HeDOIQ5foupHOVXSXTAbw+qAcmdFnD7uhWOR01G5pZ2TwfG02OR3
-         GoCokpW/JmEvbbp+dh5ZQCJH4MXtA0H2Vv3j9sltRAxZQFk5qayZKtUVUqO+eBv1P5Pb
-         Ya3sTRX+5ZrDXdtx3Z9jyWNq0DNk/bjVz1LaghtuPH+1dQanY6ZCDSVLl4wsviU2oeEe
-         KN3Td1pPk/Zw9ArFGFbgbYPFB1Mikp1LQN/U3qoVsnz8x3/rXJOp62ZcMOLbAb7Hn6//
-         q6lNvxPchY4EdvWRcTtON+8IRphlZHj43TZ7bADEKrF4RqlddHJxwclXT4FNGrogCWud
-         n4vg==
+        d=gmail.com; s=20251104; t=1785883152; x=1786487952; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
+        b=AHDqvn/Tdazy2DR3RpUJFudyjapWH+wXRxWH6Ft7J6UXCr4R95IKiSLJ70dl+Lnd5A
+         ExbSDznt/tj7jcrk4QZ0eNiaJLV1wC9N7C/tANHoTKDonpbsC1emehO0qLQvf3Q7dWcR
+         EVUoKWJEhiZG8msQ6uhdrQeEvM9NW03q4o7P7+SUDusWiZ7DV+ELRKQ8Gk6mz/mYv4H4
+         BTdHia7fhzCThE8awTL77ng3RuxpThLSHdOxP0wSPH7FLPX252+6jRr3JuBRg06cdvDy
+         0KbxW6AI9dKXwUVHkX+zfv78IibRZozMtqxdBLCW+4J+I6fGxz6y2aWHZ/JgATnn3V0C
+         c2rQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785882044; x=1786486844;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=voJFtdOcDQ3cvv3g0Px6B4YkGP5JAhQ6QCPfp6/emQc=;
-        b=L1ucU9Ro3inG+El2d5a5UqhlaWPekWEZfm+G/he3OzTkyDXpf+ClSOccmhkicz1FPi
-         umJcb0ZJxOXJ80aMGG4qfN/2ZYeGDaeyAKcbToMgxBTYr/kCwuo53mdBVjYw3kzFgu+A
-         7efv2y283yHqQTp30izsFUeV/7RWZxi+IDXLna2NHBBcB/7wZmxnsEt88C7sg9H9/+Np
-         Wii09eYlsfK1SkqguQpN3xQ8rsePw0W4Mgdjo7Y9JnEef9taGVVRzV3s1at9jC1Mbeza
-         MZW3x0jbW4QpvHP1PWVsdE3xZdSsbo00CWhCbe5gDLFGjsMI3Nj1zwG0VxLoeauxeKi+
-         HT4Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoPsYgemtARhp6W6cPkOPt36X7EYdsCQWz08AA8BvrK2qU8bDR3FwFhZYbI6PiEVfyiZIqBivRPkHAdAwnUJkk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YytZUFqbnYs1YIbuA50ZiDZdS0ajYT0hf85b8uLTcTtA+U+I8Nr
-	8dMHaGXvVTQwggeadH31KP096DR9a1sFRCwSoylwQQa6cuNsGAiuU9MwfNzOsswAXmr0O8ZkOLB
-	V/iw+g1j9+IbBXiixMph3E5urXT4LapGPhMP0fArw
-X-Gm-Gg: AR+sD12HsytUNmvr//J1AKKivjVvEqtcOPvv2S5ZDrNGCOrk79MPU7rfZGCYv3wbnvz
-	hlzte/l3HqqyOuyZlCFeK+YqVMENfJPMSTwivUSPpzy7Cz5+zP4vgMoa+8a/Ix4eXQwFJkH08mw
-	BstfkrMHzH63IYnuC30Vn+C/fYmu1m4BjaDGCecp0v2QLuGMovA4Soq+CTBAWzagNQIoB7aAs2h
-	V19IICO+cTGQYHS/neAqe8S3YtpEU+Pu5PlbMkXQeKSg5L1p8d1KDzG8kkdT6LGeve99Y6EVmxU
-	MzsO/yUEuTpjEu3IrxOU7dGDVT04F3AVVk7KFgq4F4AW1c8Jz87NHcqrtWGpthBtGHd0EJAEIOR
-	AfJslwrxbRFlA1Hrd+wKyKjByXxzMHIsINngISsSVmZ+B
-X-Received: by 2002:a17:90b:270e:b0:366:3517:1aa2 with SMTP id
- 98e67ed59e1d1-3903bb0cf61mr2065807a91.0.1785882042841; Tue, 04 Aug 2026
- 15:20:42 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 4 Aug 2026 15:20:41 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 4 Aug 2026 15:20:41 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <de780cc3-8c43-46f8-b8e6-3ddfe93d753d@arm.com>
-References: <4460e252-b6de-4df3-bea8-0368a9d0f4ff@kernel.org>
- <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
- <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org> <edc3566b-370c-41a0-a71d-2e4a0e1a94f7@kernel.org>
- <CAEvNRgEas_9BEV-cNxXu4_wQx8sR2M4_OaW6DEd4=fszALMV0w@mail.gmail.com>
- <60552bee-3326-4917-b00f-5fb7ba3b8adb@kernel.org> <be77c2cb-6e41-4382-9d2f-cd299f634196@kernel.org>
- <anCtzQrUkFSSq8De@google.com> <99037993-ee13-4160-8c87-b6642faea554@kernel.org>
- <CAEvNRgHYhKACDfx9ZZy4a-TTS4yWzEJt=Jc92=eXxS15LPnTYg@mail.gmail.com>
- <anJbMf5GBe0Pxh_x@google.com> <de780cc3-8c43-46f8-b8e6-3ddfe93d753d@arm.com>
+        d=1e100.net; s=20251104; t=1785883152; x=1786487952;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LUdbwLBXMVcF6uR607tn8gFkqF+y7kOdZBcVEgFeZ1g=;
+        b=HC6CLHr+Y17zF2EFUKTwVq1DcvKWnhvAARV4I8E0uJgF4RAUdX8YTsJrP0Wc5lLx5w
+         Bq2PkMerZzF7RexbBQX6EKA7waOmHYJ8fXsBykqbRi8ehaddABWXAYp/V0RgTKeuVYjx
+         owc+7QDHoUAdoGoN3gGfiVzTUZalTjmOBS15vnhW+V9Pavjy2FS2mCA377tlBbRs7YcS
+         9SMHuDr6dEgcF9AVjw7+eXiHXvWf1YbwUx7b6Op6PSqWOQvJ/RIzvjdnZ1Kc+bhtr22W
+         SRVrgUUqWoc7DjFO3j1yMrsDKYFoxcV0wHqyrhMOKwgVTR5pwSNmUJ4jkWrrPlOKgsV4
+         sMrg==
+X-Forwarded-Encrypted: i=1; AHgh+RoMatc0owrX6MeWd9M689XgUt9tshDHd8m6r4YMp/DTce5pE4EGcBTB3tfe4Ng6TKgU/8wvcGVjB7OA3Jjr0G0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2TkcjnnOJIKxsaTJ4DhR3m/tSqisiTRWk6G62u7tFd4nWakcM
+	s2e+l+cmHpDdUXYezi7xEwgFH4ijs3iSzYonGEyUJTaElOvpJAkBoWRtmwM8y2Oo/bQmddon8ug
+	lUHByPCqqqLeCScKR5k+rRihwdDia8l4=
+X-Gm-Gg: AR+sD10/OQEZfCOYJEt0mdZtjuVC1E7ZmdJqaIyXgYN7nRy5Q6pV5RSeVO6pMb5dPUc
+	6oufseIA4dS/ZNz9fUaZ1DoYqDliaTaI1LsqAGKdSOzIHH03aMwJUP6RYLvVSDv0tz/NxqYomq7
+	e3e2+bLiJsM8ilvjj9jmsquSMLTccVsA0s+cZFLjRcPoj0HPUDowWqhKCkE87QZr0mhFU/Vyuv5
+	nrQ3FD/SI84YhygYbuUlpg3USomm3pXvin6iWJzzPZnecBS25oH0FPX//fIQ5HN8vDJSGAaqe3j
+	uun3JJf+ZcSK0DVdZyB9gdQ2WpLLQxuzWF/p4EykpJnM35p88CI8/6v88w6gi3KGk/YdMnNxrVP
+	OhLU/cMXUjhVPR6TBCAk54OT4uy72ILx6b4EdYb6/yg==
+X-Received: by 2002:a05:6a00:12ca:b0:845:e8b9:347 with SMTP id
+ d2e1a72fcca58-84f2dfc5b61mr1942283b3a.13.1785883151828; Tue, 04 Aug 2026
+ 15:39:11 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 4 Aug 2026 15:20:41 -0700
-X-Gm-Features: AUfX_mzkFKRHTDQOiQvLQ1e0yQheZQmYXCL22A9YUJawwpQUjT54D9_OoZJNsuw
-Message-ID: <CAEvNRgEOE5oeFVRYYucsCGJaFAQYS1oNRXAwGKzRAyqmoHT9OQ@mail.gmail.com>
-Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
-To: Suzuki K Poulose <suzuki.poulose@arm.com>, Sean Christopherson <seanjc@google.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, "hughd@google.com" <hughd@google.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
+References: <20260715153254.92010-1-leon.hwang@linux.dev> <20260715153254.92010-5-leon.hwang@linux.dev>
+ <DK167GCPUAJE.3GGIPEE5MIX3G@etsalapatis.com> <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
+In-Reply-To: <39e09b62-53b4-4f3a-928a-1fdeac8c7dc4@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 4 Aug 2026 15:38:57 -0700
+X-Gm-Features: AUfX_mwjaukr5y4EtOpVncveiSyKWnlvIRQQJrJCqYL5tHOXcu-Pz67lPbswVBk
+Message-ID: <CAEf4BzaNo4y4ZhLT9ZAcOGx3UOtiTRZkHXy0-TGJjvAV39w82g@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v10 4/9] libbpf: Add support for global percpu data
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: Emil Tsalapatis <emil@etsalapatis.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	John Fastabend <john.fastabend@gmail.com>, Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kernel-patches-bot@fb.com
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Suzuki K Poulose <suzuki.poulose@arm.com> writes:
-
-> On 04/08/2026 22:35, Sean Christopherson wrote:
->> On Tue, Aug 04, 2026, Ackerley Tng wrote:
->>> "David Hildenbrand (Arm)" <david@kernel.org> writes:
->>>> Andrew wants to give it some more time in -next, so I'm expecting it to
->>>> land for 7.3.
->>>>
->>>>> 7.2 or 7.3, then I would strongly prefer to base v10 on linux-next (where
->>>>> the fix will presumably land soonish), and target 7.4 for in-place
->>>>> conversion. Then v10 can be applied against an early 7.3-rcN and we don't
->>>>> need to juggle branches (assuming Andrew is ok taking the proposed patch
->>>>> through the KVM tree).
->>>>
->>>> Agreed. We'd also have to get the actual preparation patch into 7.3. I can
->>>> send it out and coordinate with Andrew.
->>>>
->>>
->>> Thank you!
->>>
->>> When we were discussing this earlier at guest_memfd biweekly, before
->>> deciding to refactor out a function like lru_cache_drain_for_folio(), we
->>> did say that the likelihood of actually draining in practice is low,
->>> especially on a machine with heavy load making allocations all the time.
->>>
->>> I think the threads with Xiaoyao have resolved, I can put v10 out
->>> tomorrow. Would it be okay to go with the following from v8, and then
->>> clean up later when lru_cache_drain_for_folio() is available?
->>
->> No.
->>
->>> I'm hoping not to push this back by a full cycle to 7.4,
->>
->> Sorry, but we've missed 7.3, irrespective of the lru_cache_drain_for_folio() fix.
->> Even if v10 is perfect, applying tomorrow means it will get ~3 business days in
->> linux-next before I send pull requests to Paolo.  That's just not enough soak
->> time for land a 40+ patch series, even if half of those patches are selftests.
->>
->>> and also hold back other series dependent on this one.
->>
->> Eh, I don't think there will be meaningful impact in practice.  If v10 is good
->> to go, I'll get it applied on 7.3-r1, and will also get an early pull request
->> over to Paolo (probably around 7.3-rc4).  I.e. folks can start posting against
->> the landed series shortly after rc1, and I'll have a set-in-stone base on which
->> to apply more stuff around rc4/rc5.
+On Sun, Jul 19, 2026 at 10:00=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
 >
-> For the record, Arm CCA KVM support depends on this series and that
-> being a big series (around 40+ patches), it is an inconvenience for the
-> Maintainers to make an effort to review the series.  That said,  we are
-> happy with the way this is progressing and next cycle merge for this
-> series would be perfect for us.
+> On 18/7/26 05:39, Emil Tsalapatis wrote:
+> > On Wed Jul 15, 2026 at 11:32 AM EDT, Leon Hwang wrote:
+>
+> [...]
+>
+> >>
+> >>  struct elf_sec_desc {
+> >> @@ -1839,6 +1842,8 @@ static size_t bpf_map_mmap_sz(const struct bpf_m=
+ap *map)
+> >>      switch (map->def.type) {
+> >>      case BPF_MAP_TYPE_ARRAY:
+> >>              return array_map_mmap_sz(map->def.value_size, map->def.ma=
+x_entries);
+> >> +    case BPF_MAP_TYPE_PERCPU_ARRAY:
+> >> +            return map->def.value_size;
+> >>      case BPF_MAP_TYPE_ARENA:
+> >>              return page_sz * map->def.max_entries;
+> >>      default:
+> >> @@ -1866,7 +1871,8 @@ static int bpf_map_mmap_resize(struct bpf_map *m=
+ap, size_t old_sz, size_t new_sz
+> >>      return 0;
+> >>  }
+> >>
+> >> -static char *internal_map_name(struct bpf_object *obj, const char *re=
+al_name)
+> >> +static char *internal_map_name(struct bpf_object *obj, const char *re=
+al_name,
+> >> +                           enum libbpf_map_type type)
+> >
+> > We can avoid passing the type here by testing against ".percpu" since
+> > that's how we are deriving the map type in the first place. But more
+> > importantly:
+> >
+
+I think type is cleaner, because it's not just .percpu, but also
+.percpu.whateveryouwant, so having type is cleaner, IMO.
+
+> >>  {
+> >>      char map_name[BPF_OBJ_NAME_LEN], *p;
+> >>      int pfx_len, sfx_len =3D max((size_t)7, strlen(real_name));
+> >> @@ -1907,8 +1913,11 @@ static char *internal_map_name(struct bpf_objec=
+t *obj, const char *real_name)
+> >>      if (sfx_len >=3D BPF_OBJ_NAME_LEN)
+> >>              sfx_len =3D BPF_OBJ_NAME_LEN - 1;
+> >>
+> >> -    /* if there are two or more dots in map name, it's a custom dot m=
+ap */
+> >> -    if (strchr(real_name + 1, '.') !=3D NULL)
+> >> +    /*
+> >> +     * Don't prefix the bpf_object name if this is a custom dot map
+> >> +     * (containing two or more dots) or a percpu data map.
+> >> +     */
+> >> +    if (strchr(real_name + 1, '.') !=3D NULL || type =3D=3D LIBBPF_MA=
+P_PERCPU)
+> >
+> > Is there a reason we don't use the exact same logic as the other
+> > internal maps here? I understand that a lot of the conventions around
+> > the naming are there for legacy reasons, but it seems like we're
+> > singling out the .percpu section for highly nonbvious reasons. Imo we
+> > should consider doing the same prefixing for a bare ".percpu" section
+> > that we do for the other internal ones. At the very least, there needs
+> > to be some explanation as to why .percpu gets special treatment.
+>
+>
+> I prefer passing 'type'. Excluding _PERCPU here is to avoid the legacy
+> naming convention for new internal maps.
+
+
++1
+
+and it's not that .percpu gets special treatment, it's all the legacy
+maps that have special treatment
+
+>
+> >
+> > @Andrii Wdyt?
+> >
+> >>              pfx_len =3D 0;
+> >>      else
+> >>              pfx_len =3D min((size_t)BPF_OBJ_NAME_LEN - sfx_len - 1, s=
+trlen(obj->name));
+> >> @@ -1938,7 +1947,7 @@ static bool map_is_mmapable(struct bpf_object *o=
+bj, struct bpf_map *map)
+> >>      struct btf_var_secinfo *vsi;
+> >>      int i, n;
+> >>
+> >> -    if (!map->btf_value_type_id)
+> >> +    if (!map->btf_value_type_id || map->libbpf_type =3D=3D LIBBPF_MAP=
+_PERCPU)
+> >>              return false;
+> >
+> > Nit: These are two separate checks rolled into one, and each one checks
+> > a different thing. THe type check against MAP_PERCPU merits a comment a=
+s
+> > well: It's the only internal section that is not really mappable becaus=
+e
+> > there's no way to represent it as userspace state.
+>
+>
+> Ack.
+>
+> Will add a new iff for libbpf_type check with a comment.
+
+yep, but don't overdo comments, it's not that hard to understand why
+per-cpu map is not mmapable
+
+>
+> >
+> >>
+> >>      t =3D btf__type_by_id(obj->btf, map->btf_value_type_id);
+> >> @@ -1962,6 +1971,7 @@ static int
+> >>  bpf_object__init_internal_map(struct bpf_object *obj, enum libbpf_map=
+_type type,
+> >>                            const char *real_name, int sec_idx, void *d=
+ata, size_t data_sz)
+> >>  {
+> >> +    bool is_percpu =3D type =3D=3D LIBBPF_MAP_PERCPU;
+> >>      struct bpf_map_def *def;
+> >>      struct bpf_map *map;
+> >>      size_t mmap_sz;
+> [...]
+>
+> >> @@ -4944,7 +4970,7 @@ static int map_fill_btf_type_info(struct bpf_obj=
+ect *obj, struct bpf_map *map)
+> >>
+> >>      /*
+> >>       * LLVM annotates global data differently in BTF, that is,
+> >> -     * only as '.data', '.bss' or '.rodata'.
+> >> +     * only as '.data', '.bss', '.percpu' or '.rodata'.
+> >>       */
+> >>      if (!bpf_map__is_internal(map))
+> >>              return -ENOENT;
+> >> @@ -5293,18 +5319,30 @@ static int
+> >>  bpf_object__populate_internal_map(struct bpf_object *obj, struct bpf_=
+map *map)
+> >>  {
+> >>      enum libbpf_map_type map_type =3D map->libbpf_type;
+> >> +    bool is_percpu =3D map_type =3D=3D LIBBPF_MAP_PERCPU;
+> >
+> > Nit: If we do
+> >       __u64 update_flags =3D is_percpu ? BPF_F_ALL_CPUS : 0;
+> >
+> > we can declare the variable as const and ...
+> >
+> >> +    __u64 update_flags =3D 0;
+> >>      int err, zero =3D 0;
+> >>      size_t mmap_sz;
+> >>
+> >> +    if (is_percpu) {
+> >> +            if (!obj->gen_loader && !kernel_supports(obj, FEAT_PERCPU=
+_DATA)) {
+> >> +                    pr_warn("map '%s': kernel does not support percpu=
+ data.\n",
+> >> +                            bpf_map__name(map));
+> >> +                    return -EOPNOTSUPP;
+> >> +            }
+> >> +
+> >> +            update_flags =3D BPF_F_ALL_CPUS;
+> >> +    }
+> >
+> > ... we can collapse the above into a single nested level:
+> >
+> >       if (is_percpu && !obj->gen_loader && !kernel_supports(obj, FEAT_P=
+ERCPU_DATA)) {
+> >               ...
+> >       }
+>
+> Good point.
+>
+> >
+> >> +
+> >>      if (obj->gen_loader) {
+> >>              bpf_gen__map_update_elem(obj->gen_loader, map - obj->maps=
+,
+> >> -                                     map->mmaped, map->def.value_size=
+);
+> >> +                                     map->mmaped, map->def.value_size=
+, update_flags);
+> >>              if (map_type =3D=3D LIBBPF_MAP_RODATA || map_type =3D=3D =
+LIBBPF_MAP_KCONFIG)
+> >>                      bpf_gen__map_freeze(obj->gen_loader, map - obj->m=
+aps);
+> >>              return 0;
+> >>      }
+> >>
+> >> -    err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, 0);
+> >> +    err =3D bpf_map_update_elem(map->fd, &zero, map->mmaped, update_f=
+lags);
+> >>      if (err) {
+> >>              err =3D -errno;
+> >>              pr_warn("map '%s': failed to set initial contents: %s\n",
+> >> @@ -5349,6 +5387,13 @@ bpf_object__populate_internal_map(struct bpf_ob=
+ject *obj, struct bpf_map *map)
+> >>                      return err;
+> >>              }
+> >>              map->mmaped =3D mmaped;
+> >> +    } else if (is_percpu) {
+> >> +            if (mprotect(map->mmaped, mmap_sz, PROT_READ)) {
+> >> +                    err =3D -errno;
+> >> +                    pr_warn("map '%s': failed to mprotect() contents:=
+ %s\n",
+> >> +                            bpf_map__name(map), errstr(err));
+> >> +                    return err;
+> >> +            }
+> >>      } else if (map->mmaped) {
+> >>              munmap(map->mmaped, mmap_sz);
+> >>              map->mmaped =3D NULL;
+> >> @@ -10807,11 +10852,16 @@ static bool map_uses_real_name(const struct =
+bpf_map *map)
+> >>       * such map's corresponding ELF section name as a map name.
+> >>       * This check distinguishes .data/.rodata from .data.* and .rodat=
+a.*
+> >>       * maps to know which name has to be returned to the user.
+> >> +     * Map name of the custom .percpu.* maps might be truncated to
+> >> +     * BPF_OBJ_NAME_LEN-1 chars in internal_map_name(). Hence, percpu=
+ data
+> >> +     * maps must use real name for their user-visible name.
+> >>       */
+> >>      if (map->libbpf_type =3D=3D LIBBPF_MAP_DATA && strcmp(map->real_n=
+ame, DATA_SEC) !=3D 0)
+> >>              return true;
+> >>      if (map->libbpf_type =3D=3D LIBBPF_MAP_RODATA && strcmp(map->real=
+_name, RODATA_SEC) !=3D 0)
+> >>              return true;
+> >> +    if (map->libbpf_type =3D=3D LIBBPF_MAP_PERCPU)
+> >> +            return true;
+> >
+> > Same comment as above here wrt uniformity. This is the part that
+> > requires us to check agianst the map type in __init_internal_map().
+>
+>
+> Let us wait for Andrii's comment.
 >
 
-I saw the exchange on v16 of the ARM CCA series.
+I think it's fine and basically inevitable
 
-I'm going to make every effort for the conversions series to get into
-7.3-rc1!!
-
-Sean, for the two attachments you left, did you intend 0001 to be the
-first patch in the conversions series, or separately handled? and 0002
-will replace these 2 patches (in-place, in terms of order), right?
-
-+ "KVM: guest_memfd: Introduce function to check GFN private/shared
-  status"
-+ "KVM: guest_memfd: Wire up core private/shared attribute interfaces"
-
+> Thanks,
+> Leon
 >
->>
->> And if v10 has issues, then *not* rushing it into 7.3 will likely be the fastest
->> path forward.
+> >
+> >>      return false;
+> >>  }
+> >>
+> >
 >
-> Absolutely !Like any work, if it is not ready to merge, it is not.
->
-> Cheers
-> Suzuki
