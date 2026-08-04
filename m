@@ -1,183 +1,145 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010007.outbound.protection.outlook.com [52.101.69.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D76447D94A;
-	Tue,  4 Aug 2026 21:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785879328; cv=fail; b=DJEOIgq4WuefyvZ17tliLhcp9dFZoloZlJ7b2Z55WUIbWV4REjGVSxqWAdKKxgyxQcNd+a7EDGWEcV2eB1AHZCyUNMcxihGRyiLUWDw/s4WES1zit1wYLhaXRXy6StbyGX3PbSNzB4tcR9htHaAn0DYQO8r1EPDDp6YzfWXRVQ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785879328; c=relaxed/simple;
-	bh=4jOaZwfp0H0UXI6ftUlkb1/34GT3+i7oFw1ALIklebs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=KYZhOxbWPzkUBHTbZxt/puEAKpGpRYZkVa4jRxXPVI7/81+zrSoozxGIPXGTgmMo9aSMNYPBwzkB6MVD98CoRuDCQhDPw86jfjVDxiTY0vMlT12OA00FgkNA9ceTf/KWxPz6FtBak+cZMLZw94peeT84gXGNWJifQTL13/RJNPU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=nJV3q3NI; arc=fail smtp.client-ip=52.101.69.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 719C647D93A
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 21:35:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785879348; cv=none; b=IcMpfz+UEhlua6+TLun2MWcRTXjM2V8MaJnTycSLmzshmh8wDZf/9+aVfcM4zGwcPIvn8g6d4fCgjOe1jwdivG9QRBv/D2wJ4vNoY4+Yate2ptC2Hijx07p6DFsWQy45VQuYYRl6zZTdKGOTu97c+bsxHrl8dGmqRhrCD5fTauM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785879348; c=relaxed/simple;
+	bh=dwcQ0xf/SdI8q7f4yUqmfMXSNwVIvYNuvj5PnvLO7gw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=HvOFt7QciUAuMt570CYD4NDOqeI7niziQH52DeHQlV3g+FcdPKzXWXeRHQH0gyV+NDN/GiRO404rS7o0jgY/yyKNu8K+hEEhHgS23oNlTSyMibSQdmIuD87mifR7M9T/L6+ZvgiqM0da6DYb8A2IhPsBiPFFcYUMKE1YW0RyRNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DO+MBM1F; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="nJV3q3NI"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XoGtuzaDra0oilsbZw2wmBimKX+wV+Ye/3DGQjqhmT0NaaL1EHSuSBWyT+v2hoN1x6qQai11ajJnnF2kHV9PB5VvRG44mC1LTIEOeLnN6ESE1ivsHtmQOmCERAgfJJyaCu6eCYrWlARLn9a6uzNi7X2q896E4wYw1cA96nFOic6Py3R+EB/0OuPLND8akIloHvVwG1zDzFXCLMegJ+iViqob8m1YjCiOF7XSgM52Cv32oIl2H7kYeNxPcmcaiqYr/oXZ1xkM6RfmbiHOtiV1CQdhLyGWoXEZjh1XnLvpY2L/wvm1x4aC0VRo479isjbDcNcWhN9oMXBP8QU/lD55Gg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4rmvzitUsKC5xazc70vanyEYc+O77bfzPIMvM6IcIGc=;
- b=SZ9RthJXUg5v5vH/iWEzzei4VeG25QCGzgi1TnQRuod1mHgs6Ap8X+HhoAlmS7n5dBRLW3ifI2CElWIGf5HDpoP2x1Eh6X2hLooPryOdqjbjZCmcXZDvm21CXPLVZMKIvK547dl6TYkLkXEWElxRElvVGm4w/P6SDjNP3tFURl7Xj1XlZXdJ3koMe9gQQpfltlhsQio7VUZV0uA6xJE9OrB+zNaB94QFQkOBVvfZ1h8QEZpCQRCpWKyUA6uNeNc7pU5vIgI8OzlegipCLZdzRoxzHJECZDQwMoHI6ytoR2aLC4nxxf+l6+qMNuyDEqN3MTBTtbSIDkfutOki2y34kQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 131.228.6.101) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4rmvzitUsKC5xazc70vanyEYc+O77bfzPIMvM6IcIGc=;
- b=nJV3q3NIVdUT4+SCPiPv90ClUqMCa1WAG32l781Z5No3o3a/36gFN+fhlBolRfcIQd0d3rWwDiA9KiiUOpmWqBqc/ZTzEgfm1unJihcDoqiL3NYJJR8+N2OZynYNvLgtF51NxTfVwiwXe40xx4jCRAoU3T4eBQYE30OjpSdA90+Vnm4Zlnhhdj6prK63uz3Jk/mlHJit4TOPep5ZRustra/M4tbH02OSgxo9FqYa2u2igSlvV2OMOZ2q8diRw1D19i/RuiEKsojsLdUlg16ojgLFVnod3a9TgQpFdLsotOLTBMPwSjEw0JID2C/bm+aYaeTGFmtdc4wJCpyZY3vf4Q==
-Received: from AS4PR10CA0023.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:5d8::15)
- by DBAPR07MB6726.eurprd07.prod.outlook.com (2603:10a6:10:192::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.15; Tue, 4 Aug
- 2026 21:35:20 +0000
-Received: from AM3PEPF00009BA0.eurprd04.prod.outlook.com
- (2603:10a6:20b:5d8:cafe::a7) by AS4PR10CA0023.outlook.office365.com
- (2603:10a6:20b:5d8::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.270.18 via Frontend Transport; Tue, 4
- Aug 2026 21:35:20 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.6.101)
- smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
-Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
- designates 131.228.6.101 as permitted sender)
- receiver=protection.outlook.com; client-ip=131.228.6.101;
- helo=fr712usmtp1.zeu.alcatel-lucent.com; pr=C
-Received: from fr712usmtp1.zeu.alcatel-lucent.com (131.228.6.101) by
- AM3PEPF00009BA0.mail.protection.outlook.com (10.167.16.25) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.8
- via Frontend Transport; Tue, 4 Aug 2026 21:35:19 +0000
-Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
-	by fr712usmtp1.zeu.alcatel-lucent.com (Postfix) with ESMTP id 3BCA01C0030;
-	Wed,  5 Aug 2026 00:35:18 +0300 (EEST)
-From: chia-yu.chang@nokia-bell-labs.com
-To: shaojijie@huawei.com,
-	shenjian15@huawei.com,
-	linux-rdma@vger.kernel.org,
-	eperezma@redhat.com,
-	jasowang@redhat.com,
-	virtualization@lists.linux.dev,
-	mst@redhat.com,
-	xuanzhuo@linux.alibaba.com,
-	pabeni@redhat.com,
-	edumazet@google.com,
-	linux-doc@vger.kernel.org,
-	corbet@lwn.net,
-	horms@kernel.org,
-	dsahern@kernel.org,
-	kuniyu@google.com,
-	bpf@vger.kernel.org,
-	netdev@vger.kernel.org,
-	dave.taht@gmail.com,
-	jhs@mojatatu.com,
-	kuba@kernel.org,
-	stephen@networkplumber.org,
-	xiyou.wangcong@gmail.com,
-	jiri@resnulli.us,
-	davem@davemloft.net,
-	andrew+netdev@lunn.ch,
-	donald.hunter@gmail.com,
-	ast@fiberby.net,
-	liuhangbin@gmail.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org,
-	ij@kernel.org,
-	ncardwell@google.com,
-	koen.de_schepper@nokia-bell-labs.com,
-	g.white@cablelabs.com,
-	ingemar.s.johansson@ericsson.com,
-	mirja.kuehlewind@ericsson.com,
-	cheshire@apple.com,
-	rs.ietf@gmx.at,
-	Jason_Livingood@comcast.com,
-	vidhi_goel@apple.com
-Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-Subject: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in the RX path
-Date: Tue,  4 Aug 2026 23:35:10 +0200
-Message-Id: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DO+MBM1F"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8487eb67173so391814b3a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 14:35:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785879346; x=1786484146; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5bYnpDQ6zlSv6ilwY+IJ9PnRIeS2oETKLqCHbQFwvVI=;
+        b=DO+MBM1FqPbTQKhTSgwojEXovf+0IZLTY0slID9bcKawLRn/QMcyT4bNZ87U0krKut
+         ab092af60m1Mj0XVmxCsmwb1Ds9CZPUnGiR36HLkVDotJ/r3W3Bgk5lv2sD14KpuMgkn
+         Z72i1WiD1djcdOCKRaT2uXMovh4Og5OS30DsZ0lL3O8pVy1pAeI0kyosdZ0oPS2ssaLt
+         T3Eu82qAbha1BgS44t31pmvyr0xL/TVu3wstia9obrsIU+XGCZDWRw80WjFF9u+ouJu1
+         gzPwmfHRpOxiab5JdyOspgGpCX9K3w9xHwr4urNF1aqCJDqWhGFeH0q69QRs4IycR84J
+         wRSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785879346; x=1786484146;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=5bYnpDQ6zlSv6ilwY+IJ9PnRIeS2oETKLqCHbQFwvVI=;
+        b=DyGq6+vjwMkJUNXfRL9KfrKJSnWZS/fGlJWIGWS675nwLhAnJ4gkut7SVjXk80kS3v
+         iKSs4KC/LeRcz5I/yMGyN3aiZpnRF8hZwwfxec8P7/oC1vAiSbm9q/D+t6NgKtKJfrWU
+         EoccONdJElxlwAMH1I1NhmZQhPukjxc79DbSRy5r3jQW+WRp0a8/PtpJXTdrQFBMpjla
+         M7N6ABqel+J9/jjUDN4JOQdhpCaRXW1MlLp9zInwrGzBdcLCu8MDnCOKIjmDsFrnHlQ8
+         c0uAAfFmxrDBxBU5lLqjsdKx+kQyU2/WB8NtOkUeucYxcfaADgX5eHAzp/UWzIGYqlrx
+         OHqA==
+X-Forwarded-Encrypted: i=1; AHgh+RoKQoT4wtFIS2/rMHA8TxQW198Vt+upbvgXpr+bKkD0qbxSpK7YCCKGkgn9qRFFL3RW23V1GESg89LBALaOlZQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOlp1rQotti2CFt5kfcT7Roqkwo0042vg55K+aTviGu526+bYK
+	m6jlEXYj4zOq/bG6zVqHMPzTsCf0uXH8J8stEzPlehN0O69rgk+2IWGVre6RKoDjSX/U+meAEX7
+	2hH9faA==
+X-Received: from pfbkq9.prod.google.com ([2002:a05:6a00:4b09:b0:848:8808:ae6b])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3d12:b0:842:708f:39be
+ with SMTP id d2e1a72fcca58-84f2dff7a22mr1642518b3a.5.1785879346115; Tue, 04
+ Aug 2026 14:35:46 -0700 (PDT)
+Date: Tue, 4 Aug 2026 14:35:45 -0700
+In-Reply-To: <CAEvNRgHYhKACDfx9ZZy4a-TTS4yWzEJt=Jc92=eXxS15LPnTYg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM3PEPF00009BA0:EE_|DBAPR07MB6726:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: e8e8d2ec-3a87-4c9e-7230-08def270488b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|376014|7416014|36860700016|23010399003|1800799024|11063799006|10067099003|56012099006|3023799007|22082099003|18002099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	gQEryuspky913K1veG+KahkhX+IFIyGbXdqLTL7TnNN/woTbY6LNSqI2jTUfxTJ5tCeJjc98jCpnT64q3rHuulIDbkaO94Hh1bPiNKw3qzz/B43T8DAs/4VaV7RIvW5DMeZFcswxoyNgxD+f9PU6c9AofAfl73PfZ1HT2R08Q0BvlD1PFVNoa/reJcUd0qrvlIUoE66YQSnHUXb4OsqwQicv3Hb9NaBk4vU6cxFqM8dDrchDo3altkbN+Bb+jg+BjNwueqVyxYxEYgnOREj83CuzRyTMw+N39pohnqvC+q1sDhfyhO4Z7NPXgXYQwNSYSGglH5fZ85siHI3pdmdsbP5AU98QApzDD/vHp0jZypzUObU8OJMD6TO2iBuE3fv8qRtVdEhG1nwbZ1VAzy394TyDZJcwHNZLBAFL2DaluiTz8spq0BHjD1YAI9SKdppQTn+UR0pkbfu7XiiYps+alvqTv5DCYYu9XGAiHBJQoONklzYhHHEuPM2rCq8gxUA42R12ZJANIyLIm7kPs6eASAnDAVVr+IGPnURvWTPL6EFb79WRGXNEtvDGYHgvup1gstksihkum7Q1ZDL4kcF6I7Ax+X68dkg0+smwLqycYCFVmdybBte26WXcnCdODMGOxtaTWvMKuZ/1TKWnnN54LpbidUWCD2jQKE6D5AD+D0zta0oF+kFzuyT/TBEHFRWfcKXThWHfj09gs7kbcBXLtV+O2FDk4VZ1Xmm/1iTSSc4R2qGozj00P6+nvrnsGXfZ
-X-Forefront-Antispam-Report:
-	CIP:131.228.6.101;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fr712usmtp1.zeu.alcatel-lucent.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(7416014)(36860700016)(23010399003)(1800799024)(11063799006)(10067099003)(56012099006)(3023799007)(22082099003)(18002099003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	kvw5b51LUwMK9Zw/CZU1S6bOM2mI1orYFnhP37QSO4ovtGW6i2lNw8/6ILv8m/r6+hAIMrd9sPlrPVeB81Ake9ilXHUF+u8xQ1EsTcQEa8mwKVWWtusPmhonNzsKXmYiq9Q7Kp1M1YPizXxDg1BPFcFMaaoV/U5BZ1NN1g1I2to7LafUqyIue8MHOnIoel3ME1FUkVjlIdXRfC/Dzn6+2aNyPa2TmJcwIoLoVpb+dXtuKuseFGzygt+spXc/+STZWr/MOLpiMZq37b7fvRqzh2IR5pDbfTN9LUUl8hsfi5yWVQt6r7SjS3t8YGW0iIyZO9fvXLTvzzdlOB6caPyULrFjxwiroMnpIjq6jdgYnjoXuB+KvemU2g+nNKF/74yGqtHXSozk5TlzAbBoHXUgZlX46skaOzG5wjsUoMBOTnP/gOuYhlDfEncXDnTf+ENq
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Aug 2026 21:35:19.9770
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8e8d2ec-3a87-4c9e-7230-08def270488b
-X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.6.101];Helo=[fr712usmtp1.zeu.alcatel-lucent.com]
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM3PEPF00009BA0.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR07MB6726
+Mime-Version: 1.0
+References: <4460e252-b6de-4df3-bea8-0368a9d0f4ff@kernel.org>
+ <CAEvNRgEUQSju2tW_1zMk2=QmveZNtmkjjCZdqVBgBD2JPh0k4Q@mail.gmail.com>
+ <a823e3d2-8acf-49d9-a812-ac1bb2136d7f@kernel.org> <edc3566b-370c-41a0-a71d-2e4a0e1a94f7@kernel.org>
+ <CAEvNRgEas_9BEV-cNxXu4_wQx8sR2M4_OaW6DEd4=fszALMV0w@mail.gmail.com>
+ <60552bee-3326-4917-b00f-5fb7ba3b8adb@kernel.org> <be77c2cb-6e41-4382-9d2f-cd299f634196@kernel.org>
+ <anCtzQrUkFSSq8De@google.com> <99037993-ee13-4160-8c87-b6642faea554@kernel.org>
+ <CAEvNRgHYhKACDfx9ZZy4a-TTS4yWzEJt=Jc92=eXxS15LPnTYg@mail.gmail.com>
+Message-ID: <anJbMf5GBe0Pxh_x@google.com>
+Subject: Re: [PATCH v9 14/41] mm: swap: Introduce lru_add_drain_progressive()
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
+	Vlastimil Babka <vbabka@kernel.org>, "hughd@google.com" <hughd@google.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+On Tue, Aug 04, 2026, Ackerley Tng wrote:
+> "David Hildenbrand (Arm)" <david@kernel.org> writes:
+> > Andrew wants to give it some more time in -next, so I'm expecting it to
+> > land for 7.3.
+> >
+> >> 7.2 or 7.3, then I would strongly prefer to base v10 on linux-next (where
+> >> the fix will presumably land soonish), and target 7.4 for in-place
+> >> conversion. Then v10 can be applied against an early 7.3-rcN and we don't
+> >> need to juggle branches (assuming Andrew is ok taking the proposed patch
+> >> through the KVM tree).
+> >
+> > Agreed. We'd also have to get the actual preparation patch into 7.3. I can
+> > send it out and coordinate with Andrew.
+> >
+> 
+> Thank you!
+> 
+> When we were discussing this earlier at guest_memfd biweekly, before
+> deciding to refactor out a function like lru_cache_drain_for_folio(), we
+> did say that the likelihood of actually draining in practice is low,
+> especially on a machine with heavy load making allocations all the time.
+> 
+> I think the threads with Xiaoyao have resolved, I can put v10 out
+> tomorrow. Would it be okay to go with the following from v8, and then
+> clean up later when lru_cache_drain_for_folio() is available?
 
-Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
-segment with the CWR flag set is received. This is incorrect because
-the hns3 hardware GRO resets the IP ToS byte to 0 during packet
-aggregation. Consequently, no valid ECN signals are carreid, meaning
-that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
-SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
-the upper network stack.
+No.
 
-Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
-in hns3_gro_complete().
-
-Fixes: d474d88f88261 ("net: hns3: add hns3_gro_complete for HW GRO process")
-
-Signed-off-by: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
-
----
-v5:
-- Remove SKB_GSO_TCP_ECN flag and update the commit message
-
-v3:
-- Rewrite the commit message for clarity
----
- drivers/net/ethernet/hisilicon/hns3/hns3_enet.c | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-index 6ecb32e28e79..5149eca0104a 100644
---- a/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-+++ b/drivers/net/ethernet/hisilicon/hns3/hns3_enet.c
-@@ -3916,8 +3916,6 @@ static int hns3_gro_complete(struct sk_buff *skb, u32 l234info)
- 	}
+> I'm hoping not to push this back by a full cycle to 7.4,
  
- 	skb_shinfo(skb)->gso_segs = NAPI_GRO_CB(skb)->count;
--	if (th->cwr)
--		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_ECN;
- 
- 	if (l234info & BIT(HNS3_RXD_GRO_FIXID_B))
- 		skb_shinfo(skb)->gso_type |= SKB_GSO_TCP_FIXEDID;
--- 
-2.34.1
+Sorry, but we've missed 7.3, irrespective of the lru_cache_drain_for_folio() fix.
+Even if v10 is perfect, applying tomorrow means it will get ~3 business days in
+linux-next before I send pull requests to Paolo.  That's just not enough soak
+time for land a 40+ patch series, even if half of those patches are selftests.
 
+> and also hold back other series dependent on this one.
+
+Eh, I don't think there will be meaningful impact in practice.  If v10 is good
+to go, I'll get it applied on 7.3-r1, and will also get an early pull request
+over to Paolo (probably around 7.3-rc4).  I.e. folks can start posting against
+the landed series shortly after rc1, and I'll have a set-in-stone base on which
+to apply more stuff around rc4/rc5.
+
+And if v10 has issues, then *not* rushing it into 7.3 will likely be the fastest
+path forward.
