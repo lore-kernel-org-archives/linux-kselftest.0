@@ -1,109 +1,104 @@
-Received: from mail-pf1-f200.google.com (mail-pf1-f200.google.com [209.85.210.200])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C066D332EC1
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 04:21:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3752E378833
+	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 05:29:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785817289; cv=none; b=p12bknFq0hKwxpTk3m+BqdzIsyzQzC1oLTmB14C6alNcOyJn9OYJt+4dF/1eEt7MDz5Ul2Od6TwT8BPBWRM7xrcYwixCZwA5iaFLOjHr7b0K4ELnTnGJTNIGfdrsBt1vXGNfnHuv1n6p3MjAtycyEw57Gjf9j9FJrYaGo+Rgh4g=
+	t=1785821367; cv=none; b=i7ESaupmp6O1oID7o1MWj0ha6eBK+c0xQqkvj0bSx0NLtgp9GGIyeQz5OD0aMOT1aTJwC64EHcxrA8zODCLm0oOScN+EnFEoWA1yQAqP8P4McwVBsPzllZ9PakJRSF3MI2RXydBGh8/WyGAXVzgXmLdsKCdG2/5sBaYsQQNXbFY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785817289; c=relaxed/simple;
-	bh=JD1AvwQ5UXWFZTP1zIISu/PE9c1xITWEefPIXoyw37M=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=KW6OK0AvuQ6pDsI3UE5V12xWmjsAdzv6EC7vKkolcH/jIUbOJ0mgTNxBJFEvP9wsiQ/xXDiR8Dg/OmRiSZhiyWkuAMHI/doeskVmUPa6zOPw6q9FZWLEfCTVxdZ4ntDLgbk/V82GugNYDSVGunPiIuHmK7Ix/bwBbczFOh2LLx4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kwBHyF6D; arc=none smtp.client-ip=209.85.210.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
+	s=arc-20240116; t=1785821367; c=relaxed/simple;
+	bh=KtQJfOnplEAnHToqIT7C1s7SUHW63edaUagP26DUzzk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JepJuE9g4dnMTfysCLTxmWPRgz7HOra6MDrVG1YPl+LfwPp3XreNx1FlM0zb4rZ3bMlSVYJhfYuOxNiMcrf6hc88SvyIll8imU1jJSB+c+aS4E1GxlNpQtNMhfq3lqFbYMI53LxE4UEuVlN3zlnjY1J+wuPgd6M1GZbHCAhc/6M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VtQZhloG; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kwBHyF6D"
-Received: by mail-pf1-f200.google.com with SMTP id d2e1a72fcca58-84e1da97175so6785379b3a.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 21:21:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VtQZhloG"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2cc7e86e7aeso40278525ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 03 Aug 2026 22:29:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785817287; x=1786422087; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=TR4qhJ/Sx3Yvhb5MktlPGJQjJ+lc6YwHU5a7NNiYmZs=;
-        b=kwBHyF6DPgRmkdM8FmyC/W8Swk03OO56SnQjUudVu1nTAE7OnrqH93/tJ0bU+JK5XK
-         PlZCF+xjdKEILDE4p2VHCD+J8dOB3z64w9UM8ZESSj2YEUPoZduchfIuwc8uEAjzZnmw
-         FfCvRangQP/4+W3+5JnGYrBRPpXvoWNRsqS7Z2nF1U0dCVaPejBQolTZ3ZA+w9Bh9v+c
-         ANXTehB1PQqccbErIddRmxqbh9TRTJEEG2WKItthAuA9eSZMT3N6LuSOMa6K0256zbS+
-         lw9i/s+aBOqpo5P+eVIDve79E+4sEX7zYZ8A4D2UEX2FFCqXDVVUp5rsc4P+xcT6oYlB
-         zHPw==
+        d=gmail.com; s=20251104; t=1785821365; x=1786426165; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=K6o4n5pupeB2d8RGbxcjX552Uqn/Hcl7H29fyuT3cEs=;
+        b=VtQZhloGZ2kLwgTJqiHSWYii8K/KdYBMNLHZrsIMUpkcAszHw9bZ9UfaEXPWkDc+DI
+         t93vi5ad25QiYilJehzCJBX9NqDrfGltM1KJL79fcIE4YMhFFTFbVPFK282yIEUzwZ2a
+         oRXuHECrEJ98xC/DMPr/Mex2uSxVqOf9v4fFfnItTwPFzZJIPcc3wmXNRFze5AKBwGPO
+         IY3srokmb0TgtrH8Q45W80s+tstL2omn/uNTjeVkXGSQ81TZQpgDEob6Ny3JAFJEC/8C
+         cVe7X+V3XkPT1ljHXCzRCzUbjyYu5oAxGcWVqnW0/ZvVzUtX1sDoRf24bDX6HLQ1NZit
+         BulQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785817287; x=1786422087;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1785821365; x=1786426165;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TR4qhJ/Sx3Yvhb5MktlPGJQjJ+lc6YwHU5a7NNiYmZs=;
-        b=gvIKR1TPft824ZtPeg+6A6Se0+LyieOFPZovKYVTINvc3hYGkRMo7gyd4Ta142M2d5
-         TYjeAf/O39arhTm9uJNX/SmP3LuJeYydNSk9rTra5b4Y+QkUbRRAKEmm4L26BHj1EG+D
-         Jl2QJKQHh6SWTgIKA68HV8bXrkJVkiDmMQynchtjME/YP/lNkvc8eYvB7bU1Zw1aJz3L
-         +8bJCyUutLiGxRwPsBOZNGkAMw1xW0R6ILX4IMT3fvu2RTCcPZp8OlwBNJNN4dxmpUJy
-         bQ5i41QKF/z7hfZeY4dxekZxYq8vx2y7Ebc+FwwWFgN2zlQX42CT3wMl9FTTbjAPmB1v
-         7Xuw==
-X-Forwarded-Encrypted: i=1; AHgh+RoZGvlPVMeZf8dfwyvGOZjC895hQC38dWU4OuOZ4SRPQ+tULT91YP8ZoPz/P3C2NC9Q0tR3RcKw2lMc/YIq0aI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBfcFHEvToA2N4vVY6KwkJFKXGpYo3fg3xe7WpwW0rPCJCA5Td
-	KR/i5DCpoGDZj/M5PHRn4+RPohO4FkW3w845wSyMO5fuLher1RhY+/ranK4ELSJrztGp2/65zY2
-	sBCWRBlmXnw==
-X-Received: from pfks7.prod.google.com ([2002:a05:6a00:1947:b0:848:4f56:7671])
- (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:c82:b0:84a:6540:3389
- with SMTP id d2e1a72fcca58-84ee47f5779mr11550310b3a.10.1785817286673; Mon, 03
- Aug 2026 21:21:26 -0700 (PDT)
-Date: Tue,  4 Aug 2026 04:20:45 +0000
-In-Reply-To: <20260804042053.56940-1-wfelipe@google.com>
+        bh=K6o4n5pupeB2d8RGbxcjX552Uqn/Hcl7H29fyuT3cEs=;
+        b=HMwtqqaeYGvm1fvCmutCYEbN9hnORb+5uRVLMMeSgpMt0snibXh/K6z6dNqGrnmgME
+         yHDfrBa9RtS1BVEwxMLE5VImGYdUKDnTPx899PpZ4e9AT+ufYx7BD+0V85bji1BWKpRV
+         R1s5JGwVNkVcWghC6qYwqQgGs0rGJ/9FSNZjJtsV7zmwb10fwrWXGydvgOid1bTjDHBg
+         IvUK++FNKqx39SO7xRxZ2Mio+48Rzbr9BdLNahP5dDd0R+MKfG3kT8LU5hJiJYOacG3v
+         buPII9sM7Uj/mDIHR0twsYH1SEU3kkXuYAem6TVKPVVD9I9cfcZTtLXixvGDpLnx+Cc2
+         c0cA==
+X-Forwarded-Encrypted: i=1; AHgh+RrsMhst5VdyxkCCRNu+Ja/BWNKFiLiPxVQ6+Kg0MqrKQuhdR138rNOip69/e2JuEqJJMzVgYdhxsvZdd8x0QE4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzB//B0AddHEw5JPb6xF+pGz9BtpI8wU6fDJVCDx0fCtaAzcQfF
+	t/2PxrxFfHwylWs1oWsrkYoRqWFaebamSgBGgPJrFjgBJv41MnW2jtCZ
+X-Gm-Gg: AR+sD11BhVRROBAmEzr2u/EYuU2n2hGwdLBy9dF24ahaL+hX5fLmSljbHQl2RY1b2PQ
+	ETpZaixYD/DddbPi+dtlMsmTqxISKlT943TqG117UGiV04CZW3qCkwTIWoEDE++BL85wFbQOG91
+	iHIgqMkphvjGWgA8Gv3LULq1hIJLzilJnWrE6S69kYejWhS0BemTdy8Ladb/MWryu4XZ9JIGkMb
+	H2kJz7GdPIQxynkOMJs8MkYgEnHfIjwZKaAQjAr+4ngOOlW0vxBob0ORSvcm3xDtH6ChDu8yeBd
+	QNn0iOAHzG5AJAOENMJzJmJRY/a/4t3fCQ98nd3aguNM8B2vwjZa7zGIMXjHvAesSkxZXX9vPnV
+	vbaYTaz5e3GZ01A1WdQRb/RAbk6egB4N9uNDARNpjoDKOzjTPUYK/EuMnO0dXx6TF5cy5MsAvH/
+	RXw/JGQcOlqM94TbYNtjtCatedFaRNVPNX7165bp9nRG6V6346F0D+Py6P6LtRdREeX8lO4cBfk
+	jscrWEUfdLromFw/HPppVl9He1Mp6xsUg==
+X-Received: by 2002:a17:902:ce09:b0:2ca:3e3f:4956 with SMTP id d9443c01a7336-2d05244dc84mr129723385ad.44.1785821365283;
+        Mon, 03 Aug 2026 22:29:25 -0700 (PDT)
+Received: from anna.. ([114.70.9.168])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d04ae5a904sm47056345ad.20.2026.08.03.22.29.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Aug 2026 22:29:24 -0700 (PDT)
+From: chanyoung <ppoo1220@gmail.com>
+To: netdev@vger.kernel.org
+Cc: Sabrina Dubroca <sd@queasysnail.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	David Howells <dhowells@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	chanyoung <ppoo1220@gmail.com>
+Subject: [PATCH net v2 0/2] tls: fix plaintext sk_msg ring over-fill
+Date: Tue,  4 Aug 2026 14:28:34 +0900
+Message-ID: <20260804052837.49015-1-ppoo1220@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260804042053.56940-1-wfelipe@google.com>
-X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
-Message-ID: <20260804042053.56940-3-wfelipe@google.com>
-Subject: [PATCH 2/2] selftests/cgroup: test_zswap: fix implicit unsigned
- promotion bug in test_no_kmem_bypass
-From: Wilson Felipe Pereira <wfelipe@google.com>
-To: Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Wilson Felipe Pereira <wfelipe@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-In test_no_kmem_bypass(), delta (stored_pages * page_size - zswapped) is
-checked against stored_pages * page_size / 4 to verify that the pages
-pushed to zswap belong to the test memory cgroup.
+An unprivileged user can oops the kernel by splicing into a kTLS socket
+whose open record already has a full plaintext sk_msg ring.  Reproduced on
+net (53658c6f3682) with a stock config, no KASAN.
 
-Due to slight stat update timing differences, delta can evaluate to a small
-negative number (e.g. -5MB out of 1GB). Because delta is declared as a
-signed int and stored_pages is an unsigned size_t, C's usual arithmetic
-conversions implicitly promote a negative delta to a large unsigned 64-bit
-integer, causing `delta < stored_pages * page_size / 4` to falsely evaluate
-to 0 and fail the test.
+Patch 2 oopses an unpatched kernel and passes with patch 1 applied.
 
-Fix this by checking abs(delta), ensuring the test correctly compares the
-absolute difference between system zswap and cgroup zswapped bytes.
+v2:
+  - fix the copy path so a full record is never left unpushed, rather than
+    making tls_sw_sendmsg_splice() tolerate a full ring (Sabrina)
+  - selftest: drop the comments, one splice instead of four, reuse a single
+    pipe, compare the whole blob, sweep 16..44 fragments
+v1: https://lore.kernel.org/netdev/20260726105556.2719227-1-ppoo1220@gmail.com/
 
-Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
----
- tools/testing/selftests/cgroup/test_zswap.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+chanyoung (2):
+  tls: don't leave a full plaintext sk_msg ring unpushed
+  selftests: tls: add a test for splicing onto a full plaintext record
 
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 312d51887a1d8..7bc2519862f7e 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -624,7 +624,8 @@ static int test_no_kmem_bypass(const char *root)
- 		if (stored_pages > stored_pages_threshold) {
- 			int zswapped = cg_read_key_long(test_group, "memory.stat", "zswapped ");
- 			int delta = stored_pages * page_size - zswapped;
--			int result_ok = delta < stored_pages * page_size / 4;
-+			int result_ok = abs(delta) <
-+					stored_pages * page_size / 4;
- 
- 			ret = result_ok ? KSFT_PASS : KSFT_FAIL;
- 			break;
+ net/tls/tls_sw.c                  | 14 ++++++++++++
+ tools/testing/selftests/net/tls.c | 37 +++++++++++++++++++++++++++++++
+ 2 files changed, 51 insertions(+)
+
 -- 
-2.55.0.571.g244d577d93-goog
+2.43.0
 
