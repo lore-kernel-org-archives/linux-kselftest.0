@@ -1,83 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F19C3A6EF1;
-	Wed,  5 Aug 2026 18:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7E553D7D67;
+	Wed,  5 Aug 2026 19:18:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785955851; cv=none; b=R4gOlg3LdZLFbDbz2GPHhLwEUkk/ZtMzKqoCV77OyOIZ/Jeeu9gHcKWBzVo7ZHIsw2IqXp93sKt2okLoWJf9aniDS9HEVLkxQ1gXre+pG8nGUrKw3oQTMyeq47qjMV5fLdVYLlGlcM3HJ+JljD+LKxN6NMDBYO5Xs48T+OFQfS0=
+	t=1785957515; cv=none; b=XBNvzTKUymkoG2yG1eEYrakz4yQzus9D7h0GO5UnmjpynH6ub3dwm6BuzKUGK7L+GCpdUB0hxoyYrF0DmwemOBFg5DXRsgIocNwWRsrducDOy1V3BfXlAhMFyyRZjn1fgPsifG4SAhhuencrthzMjESlOgE+zAqDKRql21S1Fxw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785955851; c=relaxed/simple;
-	bh=+IKzGTkI0IE2HoQPbkT6tmm6ABvnhWQz9HUilx1DejU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JN6eQxCj5X5V9+75AVkOzbgkAJv/QfePmFlbo3AwrhA7Tc8/uV1iiXZ/6QYd9D7HsKme9vlj/s+SNF23WilxXhT9Vn0uh/BhpiAbwd1DrV9dKYMmTb+ERv2z0zZ0xZAErhiia9textT/eF6/NiWYiTwI/zbTKRloDQ6tAYVAYaI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gajx3gTe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785957515; c=relaxed/simple;
+	bh=6g9tZrigqIs9PwapcvJ5MOapPQyj79YP2CqzyUFfC28=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jUMycGbeyZv/uglkzkjMfcOrUuKCEVSsxaN1UtOMtVxHfhR6bOkgUggW/1VQSvv9sFKiHuhTbXIHyZYFTXb4SfFQdoOtBbuK4D3uyLtFbB5nP0FwAjQa4psHqepZVOAOljQqOpFvL0f4MFGt2y/m337mbRNJAEyOmqkZgaeEOFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=kIaPsDHd; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gajx3gTe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBFF91F000E9;
-	Wed,  5 Aug 2026 18:50:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785955849;
-	bh=POZ8NcYk2hT/7JnAyuDtTDJ1zWN6iu+RzDbVxr71B/g=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=gajx3gTehn/yt6FvtOfVoe5HZHMpSN9Yz+BJGsjqwIlNbNiCCYxQbEmp7oMAqVrMR
-	 Yb9GVcveiX5PnXguxOZrz+c/3bz5kuvNw3sGicP+SdZylohnFQ2lvNyVYOZvunDdAu
-	 SAd/dVNDXSjgYp5vkG7nF4PWCB5vFHnbjT70FipYtxY/2TxJ4EfMmT3VDUzMJLU1/q
-	 PyEvfD94mJo4JvowWL3EV3iIvQQJH6bAKGTkBI/37bZCqHCTILyJMP0NIn4x5wQEH1
-	 tDm9AWkfLFgAv4lTv/Yo9psd7YG8LpAyV4o1i3Lk+RpqOHEmWMvtF+4cI1/D98+n7K
-	 w2px1rJAU7jBw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0A44392FFC3;
-	Wed,  5 Aug 2026 18:50:10 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="kIaPsDHd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1785957511;
+	bh=6g9tZrigqIs9PwapcvJ5MOapPQyj79YP2CqzyUFfC28=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kIaPsDHdtITekt0vp867zrzcgjs+fTIIoL4Gtv6NlPXrJdjvlIgZunegMQ2W7Rxsk
+	 v6Wm5myfWVVGm976Gq06R1m4Avnm+cZVu2DvMBNxsAYvPObYi+/FjFIfQZNU2M2IjD
+	 JjC11UiXpTZl5JiJZgMs2DRKZSC4u9FzdD+6AYrE=
+Date: Wed, 5 Aug 2026 21:18:30 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: David Gow <david@davidgow.net>
+Cc: Michal Simek <monstr@monstr.eu>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
+Message-ID: <e11bc960-b31c-408a-a57e-631e76806bb5@t-8ch.de>
+References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
+ <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+ <42dfe558-f75b-4d7c-a560-449101bae4f5@davidgow.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH bpf-next v4 0/2] bpf: Fix sleepable check for tracing/lsm
- prog
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178595580939.485227.13936630340553482919.git-patchwork-notify@kernel.org>
-Date: Wed, 05 Aug 2026 18:50:09 +0000
-References: <20260805150810.34907-1-leon.hwang@linux.dev>
-In-Reply-To: <20260805150810.34907-1-leon.hwang@linux.dev>
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
- john.fastabend@gmail.com, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, rhkrqnwk98@gmail.com,
- varunrmallya@gmail.com, vmalik@redhat.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+In-Reply-To: <42dfe558-f75b-4d7c-a560-449101bae4f5@davidgow.net>
 
-Hello:
-
-This series was applied to bpf/bpf-next.git (master)
-by Andrii Nakryiko <andrii@kernel.org>:
-
-On Wed,  5 Aug 2026 23:08:08 +0800 you wrote:
-> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
-> is allowed to attach to '__x64_'-alike prefix symbols.
+On 2026-08-05 21:59:16+0800, David Gow wrote:
+> Le 04/08/2026 à 13:32, Thomas Weißschuh a écrit :
+> > Add a basic configuration to run kunit tests on microblaze.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> > ---
 > 
-> It is because the verifier does not verify whether the symbol is a kernel
-> function or a bpf prog. That said, a sleepable tracing prog is allowed to
-> attach to a bpf prog target whose name has '__x64_'-alike prefix.
+> Works well here, though there are still a couple of test failures (and a
+> longer timeout is needed to get through them all on my machine):
 > 
-> [...]
+> > Testing complete. Ran 965 tests: passed: 866, failed: 3, skipped: 96
+> > Failures: blake2s.test_hash_alignment_consistency,
+> memcpy.memmove_overlap_test, printf.dentry
 
-Here is the summary with links:
-  - [bpf-next,v4,1/2] bpf: Fix sleepable check for tracing/lsm prog
-    https://git.kernel.org/bpf/bpf-next/c/00244bdaa423
-  - [bpf-next,v4,2/2] selftests/bpf: Verify rejection of sleepable tracing prog
-    https://git.kernel.org/bpf/bpf-next/c/045809795751
+These are all due to the broken memmove() implementation.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+It should be fixed by *either*:
+- Disabling CONFIG_OPT_LIB_FUNCTION
+- Enabling CONFIG_OPT_LIB_ASM
 
+> I'm okay with this going in via either the microblaze or KUnit trees. Any
+> preferences?
 
+None from me. I would have expected it to go through microblaze, though.
+
+> Reviewed-by: David Gow <david@davidgow.net>
+
+Thanks!
+
+(...)
