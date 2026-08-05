@@ -1,80 +1,404 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B2EE418A3C;
-	Wed,  5 Aug 2026 09:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C1A9409277
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 10:07:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785923816; cv=none; b=lTPvBBqB4wDwDevUdb3vbtW94Ec9mmLe/AjHBEnryZ7CW27PGD2GFEcJQIqpbnZ81+ZICE3VmHGMm8it/1dSqiQ5gkUkckm/evZL6TEGm03NyH6ofXxaZtv2EwHR+t3MJlXC37rcex9APRNRxaN4s1sF13UvAs0ooK4aRTGni6I=
+	t=1785924433; cv=none; b=oBC3NbtXiJfgzj6PtiMilCYLYXrh/XPFcfANft7IFebKmTggaY6AoMkcMFGbKifOuo4HP6TOaPfXVqpIlWX8x1/IdXmPsyB52JbeU4ht2MD0Q0VyTw2zgX8f90ull0SeDbicBT784dl6uFkOMYpim8k7F/kGgEVDCMPeLaZYDoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785923816; c=relaxed/simple;
-	bh=xuH3gpgJFAGYO7rG8J+JcNb7SQ3cW3MFenm8IkyXAt4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YDBvCm+eh+bnbvQ0UmxkO8zJDp1m5V/6n0xA8i7uv71ceepWnWW3HMvX5Ox9pLpO+mWP7G0Op5oOparO7F0tBmCGPaXJupmqFJrZl/UCsh8lutRzp+EjLJtkG0kopiP8VOVF8atS5W4Guqt873ueK/HBiE8vh7EbB8LEXAbpM4A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=oOMpvFOl; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1785924433; c=relaxed/simple;
+	bh=B5bQv7frE8jt5IaVnB2ovCal6ANrNCQJw7+lBprdOZQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SnQVPFSjW+/zvyqmuvr3W8aaTxChTtcBesXNoMMNKQkSf9ukTgs1lxzQZgwmmLW2BENRRHRK03+NrD2xk+p7HgfMuU2n8137JYiYhffmfwaIGAlJdlZrxf4wwBl2GlIxrSELemLK48T1za9cMGtKohHdU3sFSPJNjNlI7WZnbec=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hJ84ordA; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="oOMpvFOl"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=vU82h41VzbqOPFwNUo1mFYWL1ePw+xHIJXcLdUBuRgg=; b=oOMpvFOlvVgbjBjW1Q0GdXKLba
-	4cZiDdQDjM9suKS0j5POtbauzQ1B0+UxGxo8WXGJ8CN9pTgawsnshqR41YoCPuy+BgcfCPxQq7O0a
-	bsKgIPrO+X+7sH97wSpRJs6AqOtCar5uXJQaxOVKLt+ihSMhUsSjK0sN5H+A+XME8g6ecrQCHgQx0
-	0/Xyq3mTO4FX4bnYvja2z7tT3SF1gl194oEW+XWW/rkZJcIUvkFPitwgR3r43OxqZiDux/RpHLRx8
-	7ZtElOxVbjbgS/ptX1kBCLQBAaoqRNYVd7L+u4kxdwSCE6YSA27do0TLP6jHhpf/Y8+lpcXmpilUf
-	BVMv7GYA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wrYMW-00DpjT-0p;
-	Wed, 05 Aug 2026 09:56:36 +0000
-Date: Wed, 5 Aug 2026 02:56:30 -0700
-From: Breno Leitao <leitao@debian.org>
-To: Gustavo Luiz Duarte <gustavold@gmail.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	asantostc@gmail.com, kernel-team@meta.com
-Subject: Re: [PATCH net-next 1/2] netconsole: publish the userdata payload
- with RCU
-Message-ID: <anMInvnYk9fafp_Y@gmail.com>
-References: <20260803-netcons-userdata-rcu-v1-0-1e5e6b62b75d@debian.org>
- <20260803-netcons-userdata-rcu-v1-1-1e5e6b62b75d@debian.org>
- <CAGSyskVKAwf8nb_3uFDbYUugR+dtO-cwSef8C9nSEgKZt_K=CQ@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hJ84ordA"
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-47f703a9d05so501931f8f.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 03:07:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1785924430; x=1786529230; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1AhK4VD+NMKqhR3cJcndUaz+mOuTJcgBioYBISeP+sk=;
+        b=hJ84ordAaRx4NKNzdYiuJnxloS9EG4uTMRG0qvz8xjmfO0J8F70rgAvCMvR6tpicKZ
+         4j9I9m2iIYtl5hlNV921rJayidyyn14uVLm/wwNK2Oe00nTfEydXPXIda1AY3f3cKcYF
+         jOxIBPYA47q57XPNwbQX8hfwL9s9j/jzPSrhVmKxswRwTjeSKjUCqTwdeXgPtpuzox7h
+         AhCwAjiGbbZhOF98wfGaObe1AOfTYXnHsYsOElVH4gwiOnIIOIq9y6vlbVYNApy1x5hV
+         +gGhsEgWY6zCXhvUpSySBBcr4m9LrfCuYsNGL6mD2Rf7s20JxsQeoB+zQ1MiYZEVk1D/
+         uYhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785924430; x=1786529230;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1AhK4VD+NMKqhR3cJcndUaz+mOuTJcgBioYBISeP+sk=;
+        b=WsEWRszTp1SLeNCF/au6zjngzA0S26zDTxvJBAyNoPweeBnhn8urrtW9iS9ALenPla
+         LL3JTqraoyYPG3WnynC1juTRyoe/gUahy6DM5vjCp0HSsYuVo/l/gz3SHm8WHfkG2fGD
+         vyo+TX+Sgot0L3h+pZG8y7rWRfW9f0Hwl5bCvooAtKDdu91q/7o8ccGGhRXAg72M94T7
+         LA0cDDWLqeng7qaL1Q59U1Pr5j/P1JJtz+o+Cr3W4aKw8PYFFkB7G/11s/akSAgC8Nj/
+         u3jm0CjjnU9+kRMtaB4sAwDSvuVq9MDAUsW1n2kAKnR/m9IuJ0bwDZBSGXKfZanRi8Ku
+         vl2Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqlF67wreh1rO74nJq+iGq7VYNRI8SGKtlHCitWTCZ2UYUqKgAVJy5XtqnYBT+T1wktMHk4KMVORc6LyZtz9vE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysCk4pjyu4Y0L79CX0H0zTQNgzHk5sSIAiuTAWtOI/MSiXJN5T
+	hpG3woLEeDGUMgjd2Kfo+uTdvAgKDfaeLX7FT+c6Z51ohVaCgfbGX1YQYrfcgMxy+is=
+X-Gm-Gg: AR+sD11nUkH/Q6qFUg7/oeLm+940bFLAMIsZG7TGWrqRZ1a0YjxLEPho2h/KeXYQV/8
+	VDKZnKKwyiKDmrlARlMmTg3alKtTelKhJieubv61UaTtjKUdFd3VXJQc073Jk8Kj0bJ6APOE+0+
+	yuGDvyNHzI2qRdc86jKjEEjpqY4dzKKnD8IjGGZgpvMAzK9HlAJg8omXYwyg1iErZP6QBsmFOfr
+	je0bkTHEVbb/lUfI/AN/xzQNIEPkBcde4lYFjmvofHYzqJmh2dKNnxKBRLAEh8fyhMJBhv4nYtG
+	iNtMsEEh2wh4E3yiDvPSDa05TBlge23z8QZVHaaGTuLitWLIDRjS6l8gaxQ9N0EB/2yhOoRHgU+
+	aUSrZfOFOv6nFRyIiEePc/WZ32iWAYsQBPcOXmZ22m0BQr/kN598keac8W+aRL/l2OCmYfOe73X
+	tDXuU5qUhxTX4STyiYpGQFp2njsMTpMwbdjXRY+SV5fLEy3vuoaePXcLN9H61QM0c0HA==
+X-Received: by 2002:a05:600c:4f4c:b0:499:4892:e84e with SMTP id 5b1f17b1804b1-4994e7b74afmr77866375e9.11.1785924429725;
+        Wed, 05 Aug 2026 03:07:09 -0700 (PDT)
+Received: from [192.168.1.3] ([37.18.141.193])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47febfe5b1bsm6743054f8f.12.2026.08.05.03.07.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Aug 2026 03:07:09 -0700 (PDT)
+Message-ID: <6ee32efc-01be-4532-aa59-3948f59156c0@linaro.org>
+Date: Wed, 5 Aug 2026 11:07:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGSyskVKAwf8nb_3uFDbYUugR+dtO-cwSef8C9nSEgKZt_K=CQ@mail.gmail.com>
-X-Debian-User: leitao
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 3/4] perf/arm64: Add BRBE support for
+ bpf_get_branch_snapshot()
+To: Puranjay Mohan <puranjay12@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Catalin Marinas <catalin.marinas@arm.com>, Leo Yan <leo.yan@arm.com>,
+ Rob Herring <robh@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+ Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Shuah Khan <shuah@kernel.org>,
+ Breno Leitao <leitao@debian.org>, Ravi Bangoria <ravi.bangoria@amd.com>,
+ Stephane Eranian <eranian@google.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Usama Arif
+ <usama.arif@linux.dev>, linux-arm-kernel@lists.infradead.org,
+ linux-perf-users@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kernel-team@meta.com
+References: <20260616155716.2631508-1-puranjay@kernel.org>
+ <20260616155716.2631508-4-puranjay@kernel.org>
+ <8a24abbc-10bc-42bb-8fee-0a174d8f1751@linaro.org>
+ <CANk7y0inRXCUKtuio3Cb03DvuNPq6yp1o+tsE8PZitrY0LaOPQ@mail.gmail.com>
+Content-Language: en-US
+From: James Clark <james.clark@linaro.org>
+In-Reply-To: <CANk7y0inRXCUKtuio3Cb03DvuNPq6yp1o+tsE8PZitrY0LaOPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 04, 2026 at 06:09:44PM +0100, Gustavo Luiz Duarte wrote:
-> > @@ -176,8 +190,7 @@ struct netconsole_target {
-> >  #ifdef CONFIG_NETCONSOLE_DYNAMIC
-> >         struct config_group     group;
-> >         struct config_group     userdata_group;
-> > -       char                    *userdata;
-> > -       size_t                  userdata_length;
-> > +       struct netcons_userdata __rcu *userdata;
+
+
+On 03/08/2026 7:54 pm, Puranjay Mohan wrote:
+> On Mon, Aug 3, 2026 at 12:07 PM James Clark <james.clark@linaro.org> wrote:
+>>
+>>
+>>
+>> On 16/06/2026 16:57, Puranjay Mohan wrote:
+>>> Enable bpf_get_branch_snapshot() on ARM64 by implementing the
+>>> perf_snapshot_branch_stack static call for BRBE.
+>>>
+>>> BRBE is paused before masking exceptions to avoid branch buffer
+>>> pollution from trace_hardirqs_off(). Exceptions are then masked with
+>>> local_daif_save() to prevent PMU overflow pseudo-NMIs from interfering.
+>>> If an overflow between pause and DAIF save re-enables BRBE, the snapshot
+>>> detects this via BRBFCR_EL1.PAUSED and bails out.
+>>>
+>>> Branch records are read using perf_entry_from_brbe_regset() with a NULL
+>>> event pointer to bypass event-specific filtering. The buffer is
+>>> invalidated after reading.
+>>>
+>>> Introduce a for_each_brbe_entry() iterator to deduplicate bank
+>>> iteration between brbe_read_filtered_entries() and the snapshot.
+>>>
+>>> Signed-off-by: Puranjay Mohan <puranjay@kernel.org>
+>>> Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+>>> ---
+>>>    drivers/perf/arm_brbe.c  | 128 ++++++++++++++++++++++++++++++++-------
+>>>    drivers/perf/arm_brbe.h  |   9 +++
+>>>    drivers/perf/arm_pmuv3.c |   5 +-
+>>>    3 files changed, 120 insertions(+), 22 deletions(-)
+>>>
+>>> diff --git a/drivers/perf/arm_brbe.c b/drivers/perf/arm_brbe.c
+>>> index effbdeacfcbb..a141ad7abcf2 100644
+>>> --- a/drivers/perf/arm_brbe.c
+>>> +++ b/drivers/perf/arm_brbe.c
+>>> @@ -9,6 +9,7 @@
+>>>    #include <linux/types.h>
+>>>    #include <linux/bitmap.h>
+>>>    #include <linux/perf/arm_pmu.h>
+>>> +#include <asm/daifflags.h>
+>>>    #include "arm_brbe.h"
+>>>
+>>>    #define BRBFCR_EL1_BRANCH_FILTERS (BRBFCR_EL1_DIRECT   | \
+>>> @@ -256,6 +257,14 @@ static bool valid_brbe_version(int brbe_version)
+>>>               brbe_version == ID_AA64DFR0_EL1_BRBE_BRBE_V1P1;
+>>>    }
+>>>
+>>> +static __always_inline bool cpu_has_brbe(void)
+>>
+>> This should be more like cpu_valid_brbe_version(). has_brbe() only
+>> implies that the CPU has BRBE, not that it's a version that the driver
+>> supports. And it's actually just a wrapper around valid_brbe_version()
+>> that accesses the ID reg on that CPU, not a functionally different check.
+>>
+>> But it also looks like valid_brbe_version() isn't called from anywhere
+>> else, so why not delete that function and use its name for the new one?
 > 
-> With userdata now annotated with __rcu, it should be freed with
-> kfree(rcu_access_pointer(nt->userdata)) to avoid a sparse warning:
+> I will do that in next version
+> 
+>>
+>>> +{
+>>> +     u64 aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+>>> +     int brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
+>>> +
+>>> +     return valid_brbe_version(brbe);
+>>> +}
+>>> +
+>>>    static void select_brbe_bank(int bank)
+>>>    {
+>>>        u64 brbfcr;
+>>> @@ -271,6 +280,20 @@ static void select_brbe_bank(int bank)
+>>>        isb();
+>>>    }
+>>>
+>>> +static inline void __brbe_advance(int *bank, int *idx, int nr_hw)
+>>> +{
+>>> +     if (++(*idx) >= BRBE_BANK_MAX_ENTRIES &&
+>>> +         *bank * BRBE_BANK_MAX_ENTRIES + *idx < nr_hw) {
+>>> +             *idx = 0;
+>>> +             select_brbe_bank(++(*bank));
+>>> +     }
+>>> +}
+>>> +
+>>> +#define for_each_brbe_entry(idx, nr_hw)                                      \
+>>> +     for (int __bank = (select_brbe_bank(0), 0), idx = 0;            \
+>>> +          __bank * BRBE_BANK_MAX_ENTRIES + idx < (nr_hw);            \
+>>> +          __brbe_advance(&__bank, &idx, (nr_hw)))
+>>> +
+>>>    static bool __read_brbe_regset(struct brbe_regset *entry, int idx)
+>>>    {
+>>>        entry->brbinf = get_brbinf_reg(idx);
+>>> @@ -474,11 +497,9 @@ unsigned int brbe_num_branch_records(const struct arm_pmu *armpmu)
+>>>
+>>>    void brbe_probe(struct arm_pmu *armpmu)
+>>>    {
+>>> -     u64 brbidr, aa64dfr0 = read_sysreg_s(SYS_ID_AA64DFR0_EL1);
+>>> -     u32 brbe;
+>>> +     u64 brbidr;
+>>>
+>>> -     brbe = cpuid_feature_extract_unsigned_field(aa64dfr0, ID_AA64DFR0_EL1_BRBE_SHIFT);
+>>> -     if (!valid_brbe_version(brbe))
+>>> +     if (!cpu_has_brbe())
+>>>                return;
+>>>
+>>>        brbidr = read_sysreg_s(SYS_BRBIDR0_EL1);
+>>> @@ -618,10 +639,10 @@ static bool perf_entry_from_brbe_regset(int index, struct perf_branch_entry *ent
+>>>
+>>>        brbe_set_perf_entry_type(entry, brbinf);
+>>>
+>>> -     if (!branch_sample_no_cycles(event))
+>>> +     if (!event || !branch_sample_no_cycles(event))
+>>>                entry->cycles = brbinf_get_cycles(brbinf);
+>>>
+>>> -     if (!branch_sample_no_flags(event)) {
+>>> +     if (!event || !branch_sample_no_flags(event)) {
+>>>                /* Mispredict info is available for source only and complete branch records. */
+>>>                if (!brbe_record_is_target_only(brbinf)) {
+>>>                        entry->mispred = brbinf_get_mispredict(brbinf);
+>>> @@ -774,32 +795,97 @@ void brbe_read_filtered_entries(struct perf_branch_stack *branch_stack,
+>>>    {
+>>>        struct arm_pmu *cpu_pmu = to_arm_pmu(event->pmu);
+>>>        int nr_hw = brbe_num_branch_records(cpu_pmu);
+>>> -     int nr_banks = DIV_ROUND_UP(nr_hw, BRBE_BANK_MAX_ENTRIES);
+>>>        int nr_filtered = 0;
+>>>        u64 branch_sample_type = event->attr.branch_sample_type;
+>>>        DECLARE_BITMAP(event_type_mask, PERF_BR_ARM64_MAX);
+>>>
+>>>        prepare_event_branch_type_mask(branch_sample_type, event_type_mask);
+>>>
+>>> -     for (int bank = 0; bank < nr_banks; bank++) {
+>>> -             int nr_remaining = nr_hw - (bank * BRBE_BANK_MAX_ENTRIES);
+>>> -             int nr_this_bank = min(nr_remaining, BRBE_BANK_MAX_ENTRIES);
+>>> +     for_each_brbe_entry(i, nr_hw) {
+>>> +             struct perf_branch_entry *pbe = &branch_stack->entries[nr_filtered];
+>>>
+>>> -             select_brbe_bank(bank);
+>>> +             if (!perf_entry_from_brbe_regset(i, pbe, event))
+>>> +                     break;
+>>>
+>>> -             for (int i = 0; i < nr_this_bank; i++) {
+>>> -                     struct perf_branch_entry *pbe = &branch_stack->entries[nr_filtered];
+>>> +             if (!filter_branch_record(pbe, branch_sample_type, event_type_mask))
+>>> +                     continue;
+>>>
+>>> -                     if (!perf_entry_from_brbe_regset(i, pbe, event))
+>>> -                             goto done;
+>>> +             nr_filtered++;
+>>> +     }
+>>>
+>>> -                     if (!filter_branch_record(pbe, branch_sample_type, event_type_mask))
+>>> -                             continue;
+>>> +     branch_stack->nr = nr_filtered;
+>>> +}
+>>>
+>>> -                     nr_filtered++;
+>>> -             }
+>>> +/*
+>>> + * Best-effort BRBE snapshot for BPF tracing. Pause BRBE to avoid
+>>> + * self-recording and return 0 if the snapshot state appears disturbed.
+>>> + */
+>>> +int arm_brbe_snapshot_branch_stack(struct perf_branch_entry *entries, unsigned int cnt)
+>>> +{
+>>> +     unsigned long flags;
+>>> +     int nr_hw, nr_copied = 0;
+>>> +     u64 brbfcr, brbcr;
+>>> +
+>>> +     if (!cnt)
+>>> +             return 0;
+>>
+>> If you're trying to avoid branches before pausing BRBE, can't you check
+>> this after the pause?
+> 
+> will drop this in the next version and this is just an optimization.
+> 
+>>
+>>> +
+>>> +     /* Guard against running on a CPU without BRBE (e.g. big.LITTLE). */
+>>> +     if (!cpu_has_brbe())
+>>> +             return 0;
+>>> +
+>>> +     /*
+>>> +      * Pause BRBE first to avoid recording our own branches. The
+>>> +      * sysreg read/write and ISB are branchless, so pausing before
+>>> +      * checking BRBCR avoids polluting the buffer with our own
+>>> +      * conditional branches.
+>>> +      */
+>>> +     brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>>> +     brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+>>> +     write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>>
+>> Can this work without first disabling interrupts? Sashiko pointed it
+>> out, but I think it's correct. If you read an active state into brbfcr,
+>> then the PMU event fires and disables BRBE, then you disable interrupts,
+>> then you would restore an active state when it should be inactive.
+>> Surely the only way to do it properly is to disable interrupts before
+>> touching anything at all, if the PMU handler is also touching the same
+>> registers?
+>>
+>> If you want to avoid trace_hardirqs_off() can you make a new
+>> raw_local_daif_save() that disables interrupts and then call
+>> trace_hardirqs_off() yourself after pausing BRBE? Or not call
+>> trace_hardirqs_off() at all? There is a comment mentioning something
+>> like that in arch/arm64/kernel/suspend.c.
+> 
+> Yes. I'll add raw_local_daif_save()/raw_local_daif_restore() and mask before
+> touching any BRBE register, which fixes the stale restore. trace_hardirqs_off()
+> then moves below the pause so lockdep still sees a balanced off/on pair while
+> its branches land in an already paused buffer.
+> 
+>>
+>> Also, disabling interrupts doesn't stop the PMU event from overflowing
+>> and changing the state of PAUSED either. I think this is another path
+>> that leads to you restoring the wrong state, so don't you also need to
+>> disable the PMU?
+> 
+> Hardware only sets PAUSED on a BRBE freeze event (RBHYTD), and a freeze needs
+> BRBE to not already be paused (RNXCWF). So once we have paused, nothing changes
+> underneath us and the PMU does not need disabling. It would not help anyway:
+> armv8pmu_stop() calls brbe_disable(), which zeroes BRBCR_EL1 and discards the
+> records we came to read.
 
-Good catch, thanks. I will fix in v2 in both netconsole_target_release()
-and free_param_target().
+That does mean you throw away real freeze events while paused though, in 
+addition to the brbe_invalidate() you need to avoid non contiguous 
+buffers. So it takes branches away from PMU events.
 
-I willthe plain kfree() instead of kfree_rcu(): both callers free nt
-itself on the next line, and the target is already unlinked from
-target_list at that point, so the payload cannot outlive the target.
+> 
+> You are right that a freeze can still land in the window between reading BRBFCR
+> and setting PAUSED, and restoring the value we read would then clear a PAUSED
+> bit the hardware set. So v6 checks PMOVSCLR_EL0 and leaves BRBE paused if a
+> counter has overflowed. Reads of PMOVSCLR are non-destructive and it stays set
+> until the overflow handler clears it, so it is still visible after we have set
+> PAUSED ourselves:
+> 
+>          if (!valid_brbe_version())
+>                  return 0;
+> 
+>          flags = raw_local_daif_save();
+> 
+>          brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+>          brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+> 
+>          write_sysreg_s(brbfcr | BRBFCR_EL1_PAUSED, SYS_BRBFCR_EL1);
+>          isb();
+> 
+>          trace_hardirqs_off();
+> 
+>          /* BRBCR_EL1 is zero while the driver has BRBE disabled. */
+>          if (!brbcr)
+>                  goto restore;
+> 
+>          ... read the records ...
+> 
 
-Thanks for the review,
---breno
+Up to the point where you read the records you technically don't need 
+any branches (if you don't do trace_hardirqs_off()) so you could do the 
+whole thing without pausing. Just disable interrupts, read every branch 
+entry unconditionally, re-enable interrupts and then find the last valid 
+entry and do the branchy stuff after reading.
+
+I'm thinking out loud, but doesn't that make it a lot easier? And it 
+avoids the brbe_invalidate() which takes the branches away from the PMU 
+event. It also avoids having to think too hard about racing with PMU 
+events causing a freeze even after interrupts are disabled and after 
+reading the freeze value:
+
+   raw_local_daif_save();
+   brbfcr = read_sysreg_s(SYS_BRBFCR_EL1);
+   brbcr = read_sysreg_s(SYS_BRBCR_EL1);
+   select_bank(0);
+   read_record(0);
+   read_record(1);
+   ...
+   select_bank(0);
+   read_record(0);
+   read_record(1);
+   ...
+   write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+   isb();
+   local_daif_restore();
+
+   /* Now do post processing, find last valid record, check if it was 
+enabled by looking at brbcr etc. */
+
+>          if ((brbfcr & BRBFCR_EL1_PAUSED) || read_pmovsclr())
+>                  brbfcr |= BRBFCR_EL1_PAUSED;
+>          else
+>                  brbe_invalidate();
+> restore:
+>          write_sysreg_s(brbfcr, SYS_BRBFCR_EL1);
+>          isb();
+>          local_daif_restore(flags);
+> 
+> If BRBE stays paused the records are left alone, they belong to the pending
+> overflow handler. Otherwise recording resumes and the records either side of
+> the pause are not contiguous (RPKZCF), so they are discarded.
+> 
+> What do you think about this?
+> 
+> Thanks,
+> Puranjay
+
