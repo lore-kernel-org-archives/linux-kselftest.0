@@ -1,56 +1,56 @@
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BAF361959
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 00:21:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4913630B0
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 00:21:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785889265; cv=none; b=XOGQQtkoDXkko8FrTrBpjBdPqiuXcPQHjQvH7GQSTfkCFLLS1vM07J7MrqKAKiiQkRfsn0Ut9ZUjpFLNYX6KRkTwBfgSfVgxHBuBHVD6giZE3wvb42oJTq8BjzC1gMSVtPK9SiItqJn4n1eZqicbKi9Ml2aq9t4jvsvDRa0s4hY=
+	t=1785889268; cv=none; b=r7DodQQ8Vw0vfD3myNpy21LgpY8nwbJ0//O5rX+AqnoWqAnIeQL93Pg0lpRgyBTutiiul2JBhL/uvXuBVMcwr4+mub32gBzfOnpl71/hE/p2XDdSdqMLeqeVzveRvpbLdDAY/Ep2Gx6OXddT0+91iu2RRbdQO2c1I8hOduOVB1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785889265; c=relaxed/simple;
-	bh=/s/WutWgBkDkoqWk1gtwHnk/Af6S+Dr8yUYiF5uC5uE=;
+	s=arc-20240116; t=1785889268; c=relaxed/simple;
+	bh=T71iOqyVmFY/MGsmZht8xB3dYyQ3zRiPgT9cXGe6XUQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tY58baIrKdrYXP3YOYUXIhAJebYYP1UPMNx9Sk+ctQ1fP13EZeJB2oTebfl1CatZsF5Pr3WNbWPFKPKYnK1ymbgDhCyyhYL2O8CyVS1k7n0XyDgtI4TIg52k3HRgTbndfPQ/bUYWR/SHlzarhMDF0A1dIc4m4aR0bHDTJA2l/sw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jm8j/9CR; arc=none smtp.client-ip=209.85.216.72
+	 To:Cc:Content-Type; b=sCWGI93mK7yPgtuVe+qXRWkNOSf2cIpNmEY3qdhGhSom8TE3Yvymm+qHnn7f6MWKWDZDtB4J6vpVSlqsBMphObipGjh2lTefbfL5a+atkWmBo7W3glW9u31QnQc1Xy6ZATR2QM9HJ25xwdPOH3Elu6KC0X76gmdN3Bew0S+vJNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=PALQ+z03; arc=none smtp.client-ip=209.85.216.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jm8j/9CR"
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38ce7fabf76so586762a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 17:21:04 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="PALQ+z03"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38e1118e4abso574631a91.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 17:21:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785889263; x=1786494063; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1785889265; x=1786494065; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=siogvW8DGq9Kjt0WBylwgP+rzy7WuNyV/ARa/oJc9U4=;
-        b=Jm8j/9CRg7TQ5nmacWlytTIjQ9N4ScPxlmdobKjSweEJXKiiYRWn86yhfN3tYp91Wj
-         WhmffRz5zY9IQW8hjC5hAhyk9r6hPAa4YQkD1PYIKPJfCoYfNpkYulsh4ucwnc3K0LnR
-         ZHwutDRP22R8QYCipmvOYMlgbuVMDj9qiEooXmTlipTTuKeiid9wV1HE4ExWrCpmycgH
-         t173JdS+s4Ix4qVu4ca88c2DfY4MfN3e9yrMX3W1WG50jLx6vyRmUASnauVh5STsuHST
-         7CW0MZIOzv/GdGIkoMhDF+QQxbuVi1gYsPNNdSAFRaKJJbfxP25y96/1MQ0TruOEZXuV
-         SJBg==
+        bh=kQa1LdCTelcrIgQEyZfGOjiJ3/AvuOT6kbHPsy1D0H8=;
+        b=PALQ+z03Oe9r91Pw2rX/RlD+G11yuwSeErClaF+5OzUFJVIW7a92AGxlQFiWK1rFl5
+         1GHEjTCBRqWCTQJFpBSm5A14iyIxISNsUuH//rFix5Rb6/dRhg1qR5o87M0nwXMlHPZ0
+         koHPy13/HFDyM6Vo5WWGWHhGJ190okXoxclZsaxFpnJ0vAAppJWCDoScPat3vF4r4zsd
+         HgpxnejdQQPbo5wIR1X0sHlgBI57K3+lLb7cLTOiHT6ScdcDu3Yp0PZBeb0jGj5jRjhg
+         XitYozG86Pbw4UZx9zI4O2EHBi2plzF4le7znXYGyHzeUf73vGIlGTd/eqTqovyIXkQ2
+         RiJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785889263; x=1786494063;
+        d=1e100.net; s=20251104; t=1785889265; x=1786494065;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=siogvW8DGq9Kjt0WBylwgP+rzy7WuNyV/ARa/oJc9U4=;
-        b=fsYRmUfaqTe8i5mxpD4QeFPyEm3lCzJ4HpFn+BsnEUANbl5SNM8TS6G5Wkf+pEV6tU
-         DlpLrcRMM35+nYUB3+v6RMxi3HknuM/iOcqk3/ZtwMBYIKMZTOu7nwdhz7dgjnl692dT
-         CaMRH7OlWj39wVKbwRNvymCO1tiybFrqpc2M20prf8Ux9CDzQhW6qgzlKniwShG569+8
-         EtJbMMf4otNxx0VXbxRfYGqZxy9hmO6lQsRCpL4/xgiv2Lm6SoitpUqK+chU4Pje3aiq
-         8kYpGCd9YEGi4G5GcIBU36aQeCcJLQiIFy8tmmU1S46CvRkt5ZLvEPyx63vhbvlPjI5I
-         ND4A==
-X-Forwarded-Encrypted: i=1; AHgh+RqDnLXJ1XeneQYuVnLVA2kCDvde3lnEvqz1V5CS0OinonJsETK/s+VSFA0qxTHapgoekPvdDx+rDNBXBxP8vEs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRd1/8FqmcC0HqrgoMSrA647SKC/hrcYPisx5gLI3cxZkKQTDf
-	1m2DJLCPqJWwSplOu3mv7750hqI/4aU+QzQOCzeC4kG/mDd4wPZ7R1VzrvXgq4IogL83zfk1iEz
-	Ze4lmNlw4
-X-Received: from pjcc15.prod.google.com ([2002:a17:90b:574f:b0:384:f6e1:ff87])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3a8d:b0:38e:57a3:f218
- with SMTP id 98e67ed59e1d1-3903c5b9f70mr2337359a91.13.1785889263273; Tue, 04
- Aug 2026 17:21:03 -0700 (PDT)
-Date: Wed, 05 Aug 2026 00:20:58 +0000
+        bh=kQa1LdCTelcrIgQEyZfGOjiJ3/AvuOT6kbHPsy1D0H8=;
+        b=ab/snHp54Ri9/BT6/NglVPxZWufsR/e7D/A1t31pFR3rwNfHS6cS7xsUQYSd0ISQoo
+         D83BS7NOs32Kufw0uPko36f3tLGfSqdqZeeqjKC4E6hVgpK18n2D9zMOc0cpRf6MyC2w
+         I+AN8aYdX4+cIevttLSAG4Tqe0rnPMoqrqTUTsm1Lfb/cDls8RWgHtQLZZEOrGR6tkPz
+         gAC3gvmASHZraoFrCFVMO2Ab+njAJHV9NcFovJW4hWdRcSvlg9wvDzKMVkhkwCo3jhNv
+         JX2/zVxj/x8fZ2P19h/K+qay/rw48KfEXqDHwKAj9mxGWx6BpVFQTOWxTCtT34bGr851
+         U9sQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rprm4MeMJ4CrlHnZvjlNc/doxC7iEDdm3NWtmhkFJd0qj7nRB2Qn2rh5DjdaAitqvK8NTIC7OOkfdl+qAEd7B8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP3veyqEILl5xkbMeyMkC67gP23V3f5hQuSyJzBRlMy8fdOHHU
+	Mv4Fe6lSkBkXoGQo0yRUdlFku7n7W5Yv5a1L06XukPcJXABR5fNG0jPMnDWdsah8mCj/kiLWdQK
+	X+YZhbAE/
+X-Received: from pjij10.prod.google.com ([2002:a17:90a:588a:b0:38e:a556:bb27])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2245:b0:36b:bec8:94c5
+ with SMTP id 98e67ed59e1d1-3903c5a6abbmr1882084a91.10.1785889264240; Tue, 04
+ Aug 2026 17:21:04 -0700 (PDT)
+Date: Wed, 05 Aug 2026 00:20:59 +0000
 In-Reply-To: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,13 +60,13 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
 X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785889261; l=4427;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785889261; l=25046;
  i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=MlKUyD/iWnX4HMtGpIO1fGxO+tR5jQHpAHxHPe4ktOs=; b=YP1lLaWRuUfua8sT8yiH96WEn4Jt3QeI9RmH5Gtd6f+QJuJXSb04Hgv7aeu24lvoH9nFaKwvz
- pdEMFnQdUSLAAHO3op5B83LCSfitMvmUc/32CQVhI+y89c08qVwQhh6
+ bh=T71iOqyVmFY/MGsmZht8xB3dYyQ3zRiPgT9cXGe6XUQ=; b=Eqw7ao1XyvKN8LTq15oc+x9E3C4C4BswluaXkB66xtCCficTNr03IpmxZ3o99/pGgVS8k+XIJ
+ zQzCDZcCoQcC15u62lvH8E86GDp/ORYfUzeNU63A3BmStkFCMtx/f2N
 X-Mailer: b4 0.14.3
-Message-ID: <20260805-igb_v3_b4-v10-1-9c86dc849c0d@google.com>
-Subject: [PATCH v10 1/3] vfio: selftests: Add helpers to re-enable interrupts
+Message-ID: <20260805-igb_v3_b4-v10-2-9c86dc849c0d@google.com>
+Subject: [PATCH v10 2/3] vfio: selftests: igb: Add driver for Intel 82576 device
 From: Josh Hilke <jrhilke@google.com>
 To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -74,105 +74,706 @@ Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel
 	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
 Content-Type: text/plain; charset="utf-8"
 
-From: Alex Williamson <alex.williamson@nvidia.com>
+Add a VFIO selftest driver for the Intel Gigabit Ethernet controller
+(IGB), specifically targeting the 82576 device. IGB is fully virtualized
+in QEMU which makes it easy to run VFIO selftests without needing any
+specific hardware.
 
-Selftest drivers that recover from a fault by issuing VFIO_DEVICE_RESET
-need to re-arm device interrupts afterwards.  VFIO_DEVICE_RESET tears
-down the kernel-side IRQ trigger so a subsequent VFIO_DEVICE_SET_IRQS
-is required, but the user-side eventfds (and any fd cached in a test
-fixture) are still valid and must be preserved.
+Since IGB is an Ethernet device, it cannot support DMA transfers smaller
+than the minimum Ethernet payload size (60 bytes) without hardware padding
+corrupting adjacent memory. The driver asserts that the transfer size is
+at least 60 bytes to prevent this.
 
-vfio_pci_irq_enable() refuses to be called for vectors that already
-have an eventfd (VFIO_ASSERT_LT), and vfio_pci_irq_disable() closes
-all eventfds before resetting the trigger, so neither is suitable.
+All VFIO selftest drivers must implement DMA/memcpy operations, but IGB
+doesn't have a native memcpy feature, so the loopback feature (described
+in section 3.5.6.3 of IGB specification) is used to implement it. To
+support testing on both QEMU and physical hardware, the driver uses PHY
+internal loopback with some QEMU-specific fallbacks. The driver also
+supports MSI-X routing and interrupt management, and disables PCIe
+completion timeout retries to ensure clean recovery during invalid-DMA
+tests.
 
-Add vfio_pci_irq_reenable(device, index, vector, count) which asserts
-that the requested range has existing eventfds and re-issues
-VFIO_DEVICE_SET_IRQS using them.  Signature mirrors vfio_pci_irq_enable().
+Users can verify the driver works in QEMU by building the kernel,
+building VFIO selftests, and then running the vfio_pci_driver_test using
+this command:
 
-Add vfio_pci_msi{,x}_reenable() wrappers around vfio_pci_irq_reenable()
-for additional ease of use and readability.
+vng \
+--run arch/x86/boot/bzImage \
+--user root \
+--disable-microvm \
+--memory 32G \
+--cpus 8 \
+--qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+--qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
+--qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
+--append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
+--exec "modprobe vfio-pci && \
+  ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
+  ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
 
 Assisted-by: Claude:claude-opus-4-7
+Assisted-by: Gemini:gemini-3.1-pro-preview
+Co-developed-by: Alex Williamson <alex.williamson@nvidia.com>
 Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
-Reviewed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Josh Hilke <jrhilke@google.com>
 ---
- .../vfio/lib/include/libvfio/vfio_pci_device.h     | 14 ++++++++++++++
- tools/testing/selftests/vfio/lib/vfio_pci_device.c | 22 ++++++++++++++++++++++
- 2 files changed, 36 insertions(+)
+ .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 585 +++++++++++++++++++++
+ tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
+ tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   3 +-
+ 6 files changed, 591 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-index 59acef381d05..89a039ab3075 100644
---- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-+++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
-@@ -84,6 +84,8 @@ static inline void vfio_pci_cmd_clear(struct vfio_pci_device *device, u16 bits)
- void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
- 			 u32 vector, int count);
- void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
-+void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
-+			   u32 vector, int count);
- void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector);
- 
- static inline void fcntl_set_nonblock(int fd)
-@@ -108,6 +110,12 @@ static inline void vfio_pci_msi_disable(struct vfio_pci_device *device)
- 	vfio_pci_irq_disable(device, VFIO_PCI_MSI_IRQ_INDEX);
- }
- 
-+static inline void vfio_pci_msi_reenable(struct vfio_pci_device *device,
-+					 u32 vector, int count)
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/e1000_82575.h b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_82575.h
+new file mode 120000
+index 000000000000..b84affdec559
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_82575.h
+@@ -0,0 +1 @@
++../../../../../../../drivers/net/ethernet/intel/igb/e1000_82575.h
+\ No newline at end of file
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/e1000_defines.h b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_defines.h
+new file mode 120000
+index 000000000000..9f97f4330086
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_defines.h
+@@ -0,0 +1 @@
++../../../../../../../drivers/net/ethernet/intel/igb/e1000_defines.h
+\ No newline at end of file
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/e1000_regs.h b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_regs.h
+new file mode 120000
+index 000000000000..c733634171bb
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/e1000_regs.h
+@@ -0,0 +1 @@
++../../../../../../../drivers/net/ethernet/intel/igb/e1000_regs.h
+\ No newline at end of file
+diff --git a/tools/testing/selftests/vfio/lib/drivers/igb/igb.c b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+new file mode 100644
+index 000000000000..fd9e05d77ea4
+--- /dev/null
++++ b/tools/testing/selftests/vfio/lib/drivers/igb/igb.c
+@@ -0,0 +1,585 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <unistd.h>
++#include <errno.h>
++#include <stdint.h>
++#include <linux/io.h>
++#include <linux/pci_regs.h>
++#include <linux/pci_ids.h>
++#include <linux/kernel.h>
++#include <linux/compiler.h>
++#include <asm/barrier.h>
++#include <linux/mii.h>
++#include <libvfio/vfio_pci_device.h>
++
++#include "e1000_regs.h"
++#include "e1000_defines.h"
++#include "e1000_82575.h"
++
++#define PCI_DEVICE_ID_INTEL_82576 0x10C9
++#define IGB_MAX_CHUNK_SIZE 1024
++#define MSIX_VECTOR 0
++#define MSIX_VECTOR_MASK (1 << MSIX_VECTOR)
++#define RING_SIZE 4096 /* Number of descriptors in ring */
++
++struct igb_tx_desc {
++	union {
++		struct {
++			u64 buffer_addr; /* Address of descriptor's data buffer */
++			u32 cmd_type_len; /* Command/Type/Length */
++			u32 olinfo_status; /* Context/Buffer info */
++		} read;
++
++		struct {
++			u64 rsvd;        /* Reserved */
++			u32 nxtseq_seed; /* Next sequence seed */
++			u32 status;      /* Descriptor status */
++		} wb;
++	};
++};
++
++struct igb_rx_desc {
++	union {
++		struct {
++			u64 pkt_addr; /* Packet buffer address */
++			u64 hdr_addr; /* Header buffer address */
++		} read;
++		struct {
++			u16 pkt_info;     /* RSS type, Packet type */
++			u16 hdr_info;     /* Split Head, buf len */
++			u32 rss;          /* RSS Hash */
++			u32 status_error; /* ext status/error */
++			u16 length;       /* Packet length */
++			u16 vlan;         /* VLAN tag */
++		} wb; /* writeback */
++	};
++};
++
++struct igb {
++	void *bar0;
++	u32 tx_tail;
++	u32 rx_tail;
++	struct igb_tx_desc tx_ring[RING_SIZE] __attribute__((aligned(128)));
++	struct igb_rx_desc rx_ring[RING_SIZE] __attribute__((aligned(128)));
++};
++
++static inline struct igb *to_igb_state(struct vfio_pci_device *device)
 +{
-+	vfio_pci_irq_reenable(device, VFIO_PCI_MSI_IRQ_INDEX, vector, count);
++	return (struct igb *)device->driver.region.vaddr;
 +}
 +
- static inline void vfio_pci_msix_enable(struct vfio_pci_device *device,
- 					u32 vector, int count)
- {
-@@ -119,6 +127,12 @@ static inline void vfio_pci_msix_disable(struct vfio_pci_device *device)
- 	vfio_pci_irq_disable(device, VFIO_PCI_MSIX_IRQ_INDEX);
- }
- 
-+static inline void vfio_pci_msix_reenable(struct vfio_pci_device *device,
-+					  u32 vector, int count)
++static inline void igb_write32(struct igb *igb, u32 reg, u32 val)
 +{
-+	vfio_pci_irq_reenable(device, VFIO_PCI_MSIX_IRQ_INDEX, vector, count);
++	writel(val, igb->bar0 + reg);
 +}
 +
- static inline int __to_iova(struct vfio_pci_device *device, void *vaddr, iova_t *iova)
- {
- 	return __iommu_hva2iova(device->iommu, vaddr, iova);
-diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-index 28868343f2ab..65a4fffb480c 100644
---- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-+++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
-@@ -105,6 +105,28 @@ void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index)
- 	vfio_pci_irq_set(device, index, 0, 0, NULL);
- }
- 
-+/*
-+ * Re-issue VFIO_DEVICE_SET_IRQS for an already-enabled vector range using
-+ * the existing eventfds.  Intended for drivers that need to re-arm device
-+ * interrupts after a VFIO_DEVICE_RESET, which tears down the kernel-side
-+ * IRQ trigger but leaves user-side eventfds intact.  Recreating the
-+ * eventfds would invalidate any test-fixture cache of the fd, so this
-+ * helper deliberately preserves them.
-+ */
-+void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
-+			   u32 vector, int count)
++static inline u32 igb_read32(struct igb *igb, u32 reg)
 +{
++	return readl(igb->bar0 + reg);
++}
++
++static int igb_write_phy(struct igb *igb, u32 offset, u16 data)
++{
++	u32 mdic;
 +	int i;
 +
-+	check_supported_irq_index(index);
++	/*
++	 * Write a PHY register over MDIO.
++	 *
++	 * A production driver would hold the SW/FW semaphore (SWSM.SWESMBI + the
++	 * SW_FW_SYNC PHY bit) across the MDIO transaction to serialize against the
++	 * device's management firmware.  The selftest owns the assigned function
++	 * exclusively on a dedicated test device with no active manageability
++	 * contending for the PHY, so the sync is omitted; it should be added here
++	 * if this ever needs to run on a manageability-enabled NIC.
++	 */
++	mdic = (((u32)data) |
++		(offset << E1000_MDIC_REG_SHIFT) |
++		(1 << E1000_MDIC_PHY_SHIFT) |
++		E1000_MDIC_OP_WRITE);
 +
-+	for (i = vector; i < vector + count; i++)
-+		VFIO_ASSERT_GE(device->msi_eventfds[i], 0,
-+			       "vector %d eventfd not allocated\n", i);
++	igb_write32(igb, E1000_MDIC, mdic);
 +
-+	vfio_pci_irq_set(device, index, vector, count, device->msi_eventfds + vector);
++	for (i = 0; i < 1000; i++) {
++		usleep(50);
++		mdic = igb_read32(igb, E1000_MDIC);
++		if (mdic & E1000_MDIC_READY)
++			break;
++	}
++
++	if (!(mdic & E1000_MDIC_READY))
++		return -1;
++
++	if (mdic & E1000_MDIC_ERROR)
++		return -1;
++
++	return 0;
 +}
 +
- static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
- 			     struct vfio_irq_info *irq_info)
- {
++/*
++ * Configure the device for PHY internal loopback per 82576 datasheet
++ * section 3.5.6.3.1.  Force the PHY to 1Gb/s full duplex with loopback
++ * enabled, then force the MAC link state to match.  Internal loopback
++ * wraps data at the end of the PHY datapath (section 3.5.6.3), so the
++ * physical link state is irrelevant.
++ *
++ * Section 3.5.6.1 directs to "Use PHY Loopback instead of MAC Loopback
++ * on the 82576", and section 3.5.6.2 states "MAC Loopback is not used
++ * on this device."  RCTL.LBM_MAC is still set elsewhere as a QEMU-only
++ * accommodation; see the RCTL programming in the caller for the
++ * rationale.
++ */
++static void igb_setup_loopback(struct igb *igb)
++{
++	u32 ctrl;
++	int ret;
++
++	/*
++	 * Kick the autoneg machinery solely to bring STATUS.LU up under
++	 * QEMU's igb emulation: QEMU only updates STATUS.LU via its
++	 * autoneg-done timer, and without LU set its receive path
++	 * (e1000x_hw_rx_enabled) drops every loopback frame.  On real
++	 * hardware autoneg cannot complete before the next PHY write
++	 * below clears the autoneg-enable bit, so this is effectively a
++	 * no-op there.
++	 */
++	(void)igb_write_phy(igb, MII_BMCR,
++			    BMCR_ANENABLE | BMCR_ANRESTART);
++
++	/* PHY control: loopback + 1Gb/s full duplex, autoneg disabled. */
++	ret = igb_write_phy(igb, MII_BMCR,
++			    BMCR_LOOPBACK |
++			    BMCR_SPEED1000 |
++			    BMCR_FULLDPLX);
++	VFIO_ASSERT_EQ(ret, 0, "Failed to write PHY control register");
++
++	/*
++	 * Brief delay before forcing the MAC, mirroring the kernel ethtool
++	 * selftest in igb_integrated_phy_loopback().  Not specified by the
++	 * datasheet, but empirically required by the kernel driver.
++	 */
++	usleep(50000);
++
++	/*
++	 * Force the MAC to 1Gb/s full duplex with link up.  Without forcing
++	 * the link state the descriptor engine does not run, since the chip
++	 * normally waits for a real negotiated link.
++	 */
++	ctrl = igb_read32(igb, E1000_CTRL);
++	ctrl &= ~E1000_CTRL_SPD_SEL;
++	ctrl |= E1000_CTRL_FRCSPD |
++		E1000_CTRL_FRCDPX |
++		E1000_CTRL_SPD_1000 |
++		E1000_CTRL_FD |
++		E1000_CTRL_SLU;
++	igb_write32(igb, E1000_CTRL, ctrl);
++
++	/*
++	 * Settling delay matching the kernel ethtool selftest's msleep(500)
++	 * at the tail of igb_integrated_phy_loopback().  Not specified by
++	 * the datasheet; empirical, and inherited from the kernel driver.
++	 */
++	usleep(500000);
++}
++
++static int igb_probe(struct vfio_pci_device *device)
++{
++	if (!vfio_pci_device_match(device, PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82576))
++		return -EINVAL;
++
++	return 0;
++}
++
++static void igb_reset(struct igb *igb)
++{
++	int retries = 20;
++
++	igb_write32(igb, E1000_CTRL, igb_read32(igb, E1000_CTRL) | E1000_CTRL_RST);
++	/*
++	 * Must wait at least 1 millisecond after setting the reset bit before
++	 * checking if this device is ready to be used (82576 datasheet section
++	 * 4.2.1.6.1).  The delay also ensures the reset has taken effect and
++	 * cleared EECD.AUTO_RD before it is polled below.
++	 */
++	usleep(1000);
++
++	/*
++	 * Poll NVM Auto Read Done rather than CTRL.RST, matching
++	 * igb_get_auto_rd_done() in the igb driver: AUTO_RD implies both that
++	 * the reset completed and that the device finished re-reading its
++	 * configuration from NVM, which is what actually makes it usable.
++	 */
++	while (retries-- > 0 && !(igb_read32(igb, E1000_EECD) & E1000_EECD_AUTO_RD))
++		usleep(1000);
++
++	/*
++	 * QEMU's igb emulation does not set E1000_EECD_AUTO_RD. If we timed out,
++	 * check if CTRL.RST is cleared, which is what QEMU uses to signal reset
++	 * completion.
++	 */
++	if (retries < 0) {
++		VFIO_ASSERT_EQ(igb_read32(igb, E1000_CTRL) & E1000_CTRL_RST, 0,
++			       "Device reset did not complete (CTRL.RST not cleared)");
++	}
++
++	igb_write32(igb, E1000_IMC, 0xFFFFFFFF);
++}
++
++/*
++ * Program the device into a usable state.  Split out of igb_init() so it
++ * can be reused after a device reset to re-program the registers that
++ * CTRL.RST clears.  Expects bar0 to be mapped and MSI-X already enabled
++ * via VFIO.
++ */
++static void igb_hw_init(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++	u64 iova_tx, iova_rx;
++	u32 ctrl, rctl;
++	u16 cmd_reg;
++	int retries;
++
++	iova_tx = to_iova(device, igb->tx_ring);
++	iova_rx = to_iova(device, igb->rx_ring);
++
++
++
++	/* Signal that the driver is loaded */
++	ctrl = igb_read32(igb, E1000_CTRL_EXT);
++	ctrl |= E1000_CTRL_EXT_DRV_LOAD;
++	ctrl &= ~E1000_CTRL_EXT_LINK_MODE_MASK;
++	igb_write32(igb, E1000_CTRL_EXT, ctrl);
++
++	/* Enable PCI Bus Master. */
++	cmd_reg = vfio_pci_config_readw(device, PCI_COMMAND);
++	if ((cmd_reg & (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY)) !=
++	    (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY)) {
++		cmd_reg |= (PCI_COMMAND_MASTER | PCI_COMMAND_MEMORY);
++		vfio_pci_config_writew(device, PCI_COMMAND, cmd_reg);
++	}
++
++	/* Configure PHY internal loopback for testing. */
++	igb_setup_loopback(igb);
++
++	/*
++	 * Disable DMA re-send on PCIe completion timeout (82576 datasheet
++	 * section 8.6.1, GCR.Completion_Timeout_Resend, bit 16).  The
++	 * mix_and_match test intentionally submits descriptors targeting
++	 * unmapped IOVAs; with the default (set) value, the device keeps
++	 * retrying the failed read indefinitely, which keeps PCIe AER and
++	 * IOMMU error handling busy and interferes with reset recovery.
++	 */
++	ctrl = igb_read32(igb, E1000_GCR);
++	ctrl &= ~E1000_GCR_CMPL_TMOUT_RESEND;
++	igb_write32(igb, E1000_GCR, ctrl);
++
++	/* Configure TX and RX descriptor rings */
++	igb_write32(igb, E1000_TDBAL(0), (u32)iova_tx);
++	igb_write32(igb, E1000_TDBAH(0), (u32)(iova_tx >> 32));
++	igb_write32(igb, E1000_TDLEN(0), RING_SIZE * sizeof(struct igb_tx_desc));
++	igb_write32(igb, E1000_TDH(0), 0);
++	igb_write32(igb, E1000_TDT(0), 0);
++	igb_write32(igb, E1000_TXDCTL(0), E1000_TXDCTL_QUEUE_ENABLE);
++
++	igb_write32(igb, E1000_RDBAL(0), (u32)iova_rx);
++	igb_write32(igb, E1000_RDBAH(0), (u32)(iova_rx >> 32));
++	igb_write32(igb, E1000_RDLEN(0), RING_SIZE * sizeof(struct igb_rx_desc));
++	igb_write32(igb, E1000_RDH(0), 0);
++	igb_write32(igb, E1000_RDT(0), 0);
++
++	/*
++	 * Select the advanced one-buffer descriptor format.  Per 82576
++	 * datasheet section 7.1.5.2: "SRRCTL[n].DESCTYPE must be set to a
++	 * value other than 000b for the 82576 to write back the special
++	 * descriptors."  struct igb_rx_desc matches the advanced one-buffer
++	 * writeback layout (section 7.1.5.2), so polling rx.wb.status_error
++	 * requires this format.  Section 8.10.2 specifies DESCTYPE[27:25].
++	 *
++	 * The direct write also zeroes SRRCTL.BSIZEPACKET, which is
++	 * intentional: per section 7.1.3.1 a zero BSIZEPACKET falls back to
++	 * the RCTL.BSIZE buffer size, whose reset default (00b) is 2048
++	 * bytes -- ample for the loopback frames here.
++	 */
++	igb_write32(igb, E1000_SRRCTL(0), E1000_SRRCTL_DESCTYPE_ADV_ONEBUF);
++
++	igb_write32(igb, E1000_RXDCTL(0), E1000_RXDCTL_QUEUE_ENABLE);
++
++	/*
++	 * Enable Receiver and Transmitter.  RCTL.LBM_MAC is set in addition
++	 * to PHY loopback as a QEMU-only accommodation: QEMU's emulated igb
++	 * does not honor PHY register 0 bit 14 (PHY internal loopback) and
++	 * relies on RCTL.LBM_MAC to wrap TX descriptors back to the RX
++	 * queue.  Datasheet 8.10.1 (RCTL register) advises "When using the
++	 * internal PHY, LBM should remain set to 00b", so setting LBM_MAC
++	 * here deviates from datasheet guidance; empirically the bit has
++	 * no observable effect on real 82576 hardware because MAC loopback
++	 * is not implemented (datasheet 3.5.6.2).  Setting both lets the
++	 * selftest work on both real hardware and QEMU without conditional
++	 * code paths.
++	 */
++	rctl = E1000_RCTL_EN |       /* Receiver Enable */
++	       E1000_RCTL_UPE |      /* Unicast Promiscuous (for dummy MAC) */
++	       E1000_RCTL_MPE |      /* Multicast Promiscuous */
++	       E1000_RCTL_BAM |      /* Broadcast Accept Mode */
++	       E1000_RCTL_LBM_MAC |  /* MAC Loopback - for QEMU emulation only */
++	       E1000_RCTL_SECRC;     /* Strip CRC (needed for memcmp) */
++	igb_write32(igb, E1000_RCTL, rctl);
++	igb_write32(igb, E1000_TCTL, E1000_TCTL_EN | E1000_TCTL_PSP);
++
++	/*
++	 * Wait for TX and RX queues to be enabled.  Per the RXDCTL/TXDCTL
++	 * register definitions (8.10.10/8.12.13), the per-queue enable bit
++	 * "remains zero" until the global RCTL.RXEN/TCTL.TXEN are set, so
++	 * E1000_RCTL_EN and E1000_TCTL_EN must already be written above.
++	 */
++	retries = 2000;
++	while (retries-- > 0) {
++		if ((igb_read32(igb, E1000_TXDCTL(0)) & E1000_TXDCTL_QUEUE_ENABLE) &&
++		    (igb_read32(igb, E1000_RXDCTL(0)) & E1000_RXDCTL_QUEUE_ENABLE))
++			break;
++		usleep(10);
++	}
++	VFIO_ASSERT_GE(retries, 0);
++
++	/*
++	 * Program MSI-X interrupt routing per 82576 datasheet:
++	 *
++	 * GPIE (section 7.3.2.11, Table 7-47): set Multiple_MSIX (bit 4) to
++	 * route interrupt causes through IVAR mapping, and EIAME (bit 30)
++	 * to apply EIAM on MSI-X assertion (without EIAME, EIAM only
++	 * applies on EICR read/write).
++	 *
++	 * EIAC (section 8.8.5): enable auto-clear of EICR for vector 0.
++	 * Without auto-clear the cause stays set after delivery and the
++	 * test can see spurious interrupts on the next memcpy batch.
++	 *
++	 * EIAM (section 8.8.6): enable auto-mask of EIMS for vector 0 on
++	 * MSI-X assertion (effective because EIAME is set).
++	 *
++	 * IVAR (section 7.3.1.2, register definition in 8.8.13): map RX
++	 * cause 0 to MSI-X vector 0 and mark the entry valid.
++	 */
++	igb_write32(igb, E1000_GPIE, E1000_GPIE_MSIX_MODE | E1000_GPIE_EIAME);
++	igb_write32(igb, E1000_EIAC, MSIX_VECTOR_MASK);
++	igb_write32(igb, E1000_EIAM, MSIX_VECTOR_MASK);
++
++	/* Map vector 0 to interrupt cause 0 and mark it valid */
++	igb_write32(igb, E1000_IVAR0, E1000_IVAR_VALID);
++
++	/* Enable interrupts on vector 0 */
++	igb_write32(igb, E1000_EIMS, MSIX_VECTOR_MASK);
++
++	/* Initialize driver state and capability limits */
++	igb->tx_tail = 0;
++	igb->rx_tail = 0;
++
++	device->driver.max_memcpy_size = IGB_MAX_CHUNK_SIZE;
++	device->driver.max_memcpy_count = RING_SIZE - 1;
++	device->driver.msi = MSIX_VECTOR;
++}
++
++static void igb_init(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++
++	VFIO_ASSERT_GE(device->driver.region.size, sizeof(struct igb));
++
++	igb->bar0 = device->bars[0].vaddr;
++
++	igb_reset(igb);
++
++	/*
++	 * Enable MSI-X via VFIO before device-side register programming.
++	 * vfio_pci_msix_enable() only touches the VFIO IRQ machinery and the
++	 * PCI MSI-X capability via config space; it has no ordering
++	 * dependency on the device-side writes performed by igb_hw_init().
++	 * Placing it here keeps igb_hw_init() reusable from the reset
++	 * recovery path (which calls vfio_pci_irq_reenable() instead).
++	 */
++	vfio_pci_msix_enable(device, MSIX_VECTOR, 1);
++
++	igb_hw_init(device);
++}
++
++static void igb_remove(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++
++	igb_write32(igb, E1000_RCTL, 0);
++	igb_write32(igb, E1000_TCTL, 0);
++	igb_reset(igb);
++
++	vfio_pci_msix_disable(device);
++}
++
++static void igb_irq_disable(struct igb *igb)
++{
++	igb_write32(igb, E1000_EIMC, MSIX_VECTOR_MASK);
++}
++
++static void igb_irq_enable(struct igb *igb)
++{
++	igb_write32(igb, E1000_EIMS, MSIX_VECTOR_MASK);
++}
++
++static void igb_irq_clear(struct igb *igb)
++{
++	/*
++	 * Use write-to-clear (datasheet 7.3.4.2).  In MSI-X mode with EIAC
++	 * programmed, section 8.8.5 explicitly states "If any bits are set
++	 * in EIAC, the EICR register should not be read", which rules out
++	 * the read-to-clear path in 7.3.4.3.  Bits not in EIAC are still
++	 * cleared by writing 1.
++	 */
++	igb_write32(igb, E1000_EICR, 0xFFFFFFFF);
++}
++
++static void igb_memcpy_start(struct vfio_pci_device *device, iova_t src,
++			     iova_t dst, u64 size, u64 count)
++{
++	struct igb *igb = to_igb_state(device);
++	struct igb_rx_desc *rx;
++	struct igb_tx_desc *tx;
++	u32 i;
++
++	VFIO_ASSERT_GE(size, 60,
++		       "IGB driver requires memcpy size to be at least 60 bytes (Ethernet minimum payload size)");
++
++	igb_irq_disable(igb);
++
++	for (i = 0; i < count; i++) {
++		tx = &igb->tx_ring[igb->tx_tail];
++		rx = &igb->rx_ring[igb->rx_tail];
++
++		memset(tx, 0, sizeof(struct igb_tx_desc));
++		memset(rx, 0, sizeof(struct igb_rx_desc));
++
++		rx->read.pkt_addr = cpu_to_le64(dst);
++		rx->read.hdr_addr = cpu_to_le64(0);
++
++		tx->read.buffer_addr = cpu_to_le64(src);
++		/*
++		 * Build an advanced data descriptor per 82576 datasheet
++		 * section 7.2.2.3.  DEXT marks the descriptor as advanced
++		 * (required by hardware); DTYP=data selects the data
++		 * descriptor; IFCS asks the MAC to append the Ethernet
++		 * FCS (without it the frame is dropped as malformed);
++		 * EOP marks end of packet.  DTALEN is the buffer length
++		 * in bits 15:0 of cmd_type_len.
++		 */
++		tx->read.cmd_type_len = cpu_to_le32((uint32_t)size |
++			E1000_ADVTXD_DTYP_DATA |
++			E1000_ADVTXD_DCMD_DEXT |
++			E1000_ADVTXD_DCMD_IFCS |
++			E1000_ADVTXD_DCMD_EOP);
++		/*
++		 * PAYLEN (section 7.2.2.3.11) is the total payload size
++		 * in olinfo_status[31:14].
++		 */
++		tx->read.olinfo_status =
++			cpu_to_le32((uint32_t)size << E1000_ADVTXD_PAYLEN_SHIFT);
++
++		igb->tx_tail = (igb->tx_tail + 1) % RING_SIZE;
++		igb->rx_tail = (igb->rx_tail + 1) % RING_SIZE;
++	}
++
++	igb_write32(igb, E1000_RDT(0), igb->rx_tail);
++	igb_write32(igb, E1000_TDT(0), igb->tx_tail);
++}
++
++/*
++ * Reset the device via VFIO_DEVICE_RESET (PCIe FLR on the 82576) and
++ * re-program it.  VFIO_DEVICE_RESET tears down the kernel-side MSI-X
++ * trigger but leaves user-side eventfds intact, so re-arm the trigger
++ * via vfio_pci_irq_reenable() before reprogramming so any caller-cached
++ * eventfd remains valid.
++ *
++ * FLR clears device-side state to power-on reset values (datasheet
++ * 4.2.1.5.1: a PF FLR is "equivalent to a D0->D3->D0 transition"), so
++ * EIMS and EICR come back as 0 from their register-defined initial
++ * values, and igb_hw_init() resets tx_tail/rx_tail to 0.  The next
++ * igb_memcpy_start() will memset each descriptor it touches before
++ * submission, so no explicit IMC/EICR writes or ring memsets are
++ * needed here.
++ */
++static void igb_error_reset_and_reinit(struct vfio_pci_device *device)
++{
++	vfio_pci_device_reset(device);
++	vfio_pci_msix_reenable(device, MSIX_VECTOR, 1);
++	igb_hw_init(device);
++}
++
++static int igb_memcpy_wait(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++	struct igb_rx_desc *rx;
++	u32 status = 0;
++	u32 prev_tail;
++	int retries;
++
++	prev_tail = (igb->rx_tail + RING_SIZE - 1) % RING_SIZE;
++	rx = &igb->rx_ring[prev_tail];
++
++	/*
++	 * Real 82576 hardware processes the descriptor ring at line rate.
++	 * max_memcpy_size = (RING_SIZE - 1) * IGB_MAX_CHUNK_SIZE ~= 4 MB,
++	 * split into 4095 1 KB frames.  At 1 Gb/s (~125 MB/s) the worst
++	 * valid memcpy takes ~32 ms on the wire, plus per-frame preamble,
++	 * SFD, IFG and FCS overhead (~3%) and descriptor fetch/writeback
++	 * latency.  Wait up to ~200 ms before declaring the device hung;
++	 * ~6x the line-rate floor leaves comfortable headroom for host
++	 * scheduling jitter while keeping the intentional invalid-DMA
++	 * tests bounded.
++	 */
++	retries = 200;
++	while (retries-- > 0) {
++		status = le32_to_cpu(READ_ONCE(rx->wb.status_error));
++		if (status & 1)
++			break;
++		usleep(1000);
++	}
++
++	if (status & 1)
++		/*
++		 * Ensure the test code doesn't speculatively read the DMA
++		 * destination buffer before we have verified that the
++		 * descriptor writeback is complete.
++		 */
++		rmb();
++
++	igb_irq_clear(igb);
++
++	igb_irq_enable(igb);
++
++	if (status & 1)
++		return 0;
++
++	/*
++	 * The descriptor never completed.  On real 82576 hardware this
++	 * typically follows a DMA-read fault from one of the intentional
++	 * unmapped-IOVA tests; the fault leaves the descriptor engine
++	 * unable to service subsequent valid descriptors.  CTRL.RST alone
++	 * reinitializes the queue registers but leaves the engine wedged
++	 * for the current process, so a broader VFIO_DEVICE_RESET (FLR)
++	 * is required.
++	 */
++	igb_error_reset_and_reinit(device);
++
++	return -ETIMEDOUT;
++}
++
++static void igb_send_msi(struct vfio_pci_device *device)
++{
++	struct igb *igb = to_igb_state(device);
++
++	igb_write32(igb, E1000_EICS, MSIX_VECTOR_MASK);
++}
++
++const struct vfio_pci_driver_ops igb_ops = {
++	.name = "igb",
++	.probe = igb_probe,
++	.init = igb_init,
++	.remove = igb_remove,
++	.memcpy_start = igb_memcpy_start,
++	.memcpy_wait = igb_memcpy_wait,
++	.send_msi = igb_send_msi,
++};
+diff --git a/tools/testing/selftests/vfio/lib/libvfio.mk b/tools/testing/selftests/vfio/lib/libvfio.mk
+index 82132b648744..bcfa74ae040e 100644
+--- a/tools/testing/selftests/vfio/lib/libvfio.mk
++++ b/tools/testing/selftests/vfio/lib/libvfio.mk
+@@ -16,6 +16,7 @@ LIBVFIO_C += drivers/dsa/dsa.c
+ endif
+ 
+ LIBVFIO_C += drivers/nv_falcon/nv_falcon.c
++LIBVFIO_C += drivers/igb/igb.c
+ 
+ LIBVFIO_OUTPUT := $(OUTPUT)/libvfio
+ 
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+index 153bf4a7a19f..5e65434d2318 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_driver.c
+@@ -6,8 +6,8 @@
+ extern struct vfio_pci_driver_ops dsa_ops;
+ extern struct vfio_pci_driver_ops ioat_ops;
+ #endif
+-
+ extern struct vfio_pci_driver_ops nv_falcon_ops;
++extern struct vfio_pci_driver_ops igb_ops;
+ 
+ static struct vfio_pci_driver_ops *driver_ops[] = {
+ #ifdef __x86_64__
+@@ -15,6 +15,7 @@ static struct vfio_pci_driver_ops *driver_ops[] = {
+ 	&ioat_ops,
+ #endif
+ 	&nv_falcon_ops,
++	&igb_ops,
+ };
+ 
+ void vfio_pci_driver_probe(struct vfio_pci_device *device)
 
 -- 
 2.55.0.571.g244d577d93-goog
