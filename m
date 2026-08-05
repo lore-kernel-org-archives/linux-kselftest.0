@@ -1,37 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059B243231B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05A88432BCD;
 	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785928709; cv=none; b=FpEaL0AeOb+qKQrvX6GEbkDVTPbxiT7SbxRUQpn4yTawvW1WNqoPYUzLtKn/peyg/xR69g1eI4h2p62jE3MYq5XEg9hR20Noa/J82Y93SpFKGPnW7htSJYqoH5jLtTNL8jKDEul0UJbNlU0fAWG9eWVZY7Hkb5h02HpU3eb2+hI=
+	t=1785928709; cv=none; b=hug7pdVr2x2TYuiCg4wB6z5wzsr2xolOX2G1pigUNqgBC/rYU+5vGv9/6aJVcWFJ35/k4g1GMbvu4fr8SAtXxBdmSTrOp+yvwpXwbRi36JHKioMfXFp2u0P6QvOzlTUlsDy20OAnMhX5OP6jAYac7L94S4TbAINoVweAV4rhFrM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785928709; c=relaxed/simple;
-	bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UFWBEoY6xve/Yz0bjdzSkB7nT77MfE9X0NyU+B0JOMIlhPm2v8pX+gTN9gLKHq1F0UTj+vdOysZZoIKxEKab/MjH5dNi/F1YoEhcKUrJ7YvuFP/8JLkkDYS9v4YwELiN4V9eoZYu45b63RAiPF/QntE3rZV6BagqTQlSsjuDP7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpsQvHVg; arc=none smtp.client-ip=10.30.226.201
+	bh=UT1LepNEWbCDWJUaYqv5zlUitw1W3TiARj2cPHvoCUY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=gNHIQ5x7SrFQkE1EkTAX0IGIKC/Zi+S/i+UJNolyrQq1te1w6+HED0SE2oSQQ/wq9MGgmDAy5y4y8n8MvFx/ZiKjpP1kwUc11P8PxIGKKEiRgAsJy0Sts6tJTchsPUozR1gN2EJapu0d7Rqx3FCf6KxOoi/71/Q3o/BFXpSXGyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t4bnVzSW; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpsQvHVg"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CD6C19425;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t4bnVzSW"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1C68C4AF09;
 	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1785928708;
-	bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=YpsQvHVgzgU/4xG+7gT7zXvCPuqVsdtYwQicGeAvGwQQR2nYq6EdBX3cCuYyMInHo
-	 SYppcgKGgfgAa5myeGJQ/N/Etpg0nsxMz6nQUq3kPmSnOu3mQd3a9x2wpi2/TpMhFS
-	 vnoqT1Fcl9WCuEizfz66ntBdVPAVmqs2d7PW5BI2gAuWAq05ROdZu75Tb/U3AlDJ1x
-	 LTH/MG0AkTmOiA30ora27eOIMHS+Vb7L85KdfNJW6INatUxxrDppH40kBGMGQC7W9A
-	 Hvo/s8mSGLrdwofbB/gG2dTHmoZEakQIijzuVQtTzoLwDTynPQ5cW/Afe2DRHiwDRo
-	 K3+rHaBAGQSGg==
+	bh=UT1LepNEWbCDWJUaYqv5zlUitw1W3TiARj2cPHvoCUY=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=t4bnVzSW253zztAizs4KD1n/F8LF6BjSGZqoXiLNUHLADW43SyAl+F4vGC3mLRJ+G
+	 1VIsXo/OelgBOP2pLzTSSTfsGRvcaQ3YhdVpRZD0jjtkFz1kI4pROqRNOWDt5Q4x2o
+	 ZGcrwwanX4CvtFlLtS0cTDmfxV+MQywibHlqLDQgZqK8tnpRDI0Xu8V2pUnVtBhDBx
+	 1qghbEiFfddqgF+XYph7lFv3JglkGfCol5n0/SYZTF0mTTbQdU/iWK9RSP+RdaPJ82
+	 CsG8jvkgSatiYLI88pIahlTv6hfJq9j+EFdjtAYRkXq9eNAbbyUNMLhv3xGIhfp0f9
+	 bKMe0WZuzKzhA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE44C55174;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 910CDC56203;
 	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
 From: Shivam Kalra via B4 Relay <devnull+shivamkalra98.zohomail.in@kernel.org>
-Subject: [PATCH 0/3] mm: support splitting mappingless swapcache folios
-Date: Wed, 05 Aug 2026 16:48:23 +0530
-Message-Id: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
+Date: Wed, 05 Aug 2026 16:48:25 +0530
+Subject: [PATCH 2/3] mm: add KUnit coverage for mappingless swapcache
+ folios
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -40,10 +41,9 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP8bc2oC/yXMTQ6CQAxA4auQrm3CFOLfVYyLzlCgRsfJVNCEc
- HdGXX6L9xYwySoG52qBLLOaPmOB21UQRo6DoHbFQDXt6wMR+hYfnJLG4S5maG9OgcMoePLc9Y4
- a1xwZSp6y9Pr5rS/Xv23yNwmv7w/WdQOr4E30fAAAAA==
-X-Change-ID: 20260722-b4-mappingless-swapcache-9badf123138a
+Message-Id: <20260805-b4-mappingless-swapcache-v1-2-b1d78ba257ca@zohomail.in>
+References: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
+In-Reply-To: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
 To: Andrew Morton <akpm@linux-foundation.org>, 
  David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
  Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
@@ -56,11 +56,11 @@ To: Andrew Morton <akpm@linux-foundation.org>,
 Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, Shivam Kalra <shivamkalra98@zohomail.in>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785928706; l=2322;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785928706; l=3587;
  i=shivamkalra98@zohomail.in; s=20260402; h=from:subject:message-id;
- bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
- b=h7y3Pjsg4r+NdPMicPmvEWMC2Ho6ZdL0IIy0BTtTOeVECkZ/mZLDLYhfb2ahKy3FOQMnebkaH
- flAUIWn8AC6DVQVxGuodSOCJ5ZwParkiGLGybn9or1t3EVrTEdorstP
+ bh=3IHZ3BPfu/ApButT5xoLEv/VnC/YC3Wow9MhmnAZMzc=;
+ b=kwJo2F0rrfAhLwyUMaWx9mR8UMYCkW+NJtcJ+vkgWEVRteK7dzLUswl4dzXKcjsjnKaY7gy+o
+ aZ7xqewrI1jABqzhx/4AhTC7/o5MsARKWLGAI5QWdu0WThzRY5Qn8TP
 X-Developer-Key: i=shivamkalra98@zohomail.in; a=ed25519;
  pk=U8kQSxcte8P8iZ6zB7phIj+Yl+i/5ntifBGuclgypx8=
 X-Endpoint-Received: by B4 Relay for shivamkalra98@zohomail.in/20260402
@@ -68,53 +68,118 @@ X-Endpoint-Received: by B4 Relay for shivamkalra98@zohomail.in/20260402
 X-Original-From: Shivam Kalra <shivamkalra98@zohomail.in>
 Reply-To: shivamkalra98@zohomail.in
 
-Large shmem folios lose their address-space mapping when they are written
-to swap, but remain valid members of the swap cache. Folios read from swap
-but not yet associated with an anon_vma can have the same mappingless
-swapcache state. folio_check_splittable() currently mistakes both cases for
-truncation and rejects the split with -EBUSY.
+From: Shivam Kalra <shivamkalra98@zohomail.in>
 
-Implement the longstanding TODO for this state. Allow mappingless
-swapcache folios to use the existing uniform order-0 swapcache split path,
-while continuing to reject truly truncated folios and unsupported
-higher-order or non-uniform swapcache splits.
+Add focused coverage for the folio_check_splittable() eligibility checks.
+Verify that an ordinary mappingless folio is rejected, a mappingless
+swapcache folio is accepted, and unsupported target orders and split types
+remain rejected.
 
-memory_failure() is one caller affected by the restriction: it cannot
-isolate a poisoned base page within a mappingless swapcache THP. The
-end-to-end test uses this case to exercise the complete shmem pageout,
-swapcache split, and swapin path.
-
-The first patch contains the MM implementation. The second adds focused
-KUnit coverage for the split eligibility checks. The third adds the
-end-to-end hwpoison selftest, which pages out a shmem THP, poisons a tail
-page, and verifies both isolation and the data read back from swap.
-
-Tests:
-  - The split_hwpoison_swapcache kselftest passes under x86_64 QEMU
-      using virtme-ng 1.41 (2 GiB RAM, 4 KiB pages). 
+Build the test only when KUnit is built in because
+folio_check_splittable() is intentionally not exported.
 
 Signed-off-by: Shivam Kalra <shivamkalra98@zohomail.in>
 ---
-Shivam Kalra (3):
-      mm/huge_memory: allow splitting mappingless swapcache folios
-      mm: add KUnit coverage for mappingless swapcache folios
-      selftests/mm: test hwpoison recovery of mappingless swapcache THPs
+ mm/Kconfig                   | 14 ++++++++++++
+ mm/Makefile                  |  1 +
+ mm/tests/folio_split_kunit.c | 52 ++++++++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 67 insertions(+)
 
- mm/Kconfig                                         |  14 ++
- mm/Makefile                                        |   1 +
- mm/huge_memory.c                                   |  18 +-
- mm/tests/folio_split_kunit.c                       |  52 ++++
- tools/testing/selftests/mm/Makefile                |   2 +
- tools/testing/selftests/mm/run_vmtests.sh          |   1 +
- .../selftests/mm/split_hwpoison_swapcache.sh       |  57 +++++
- .../selftests/mm/split_hwpoison_swapcache_test.c   | 261 +++++++++++++++++++++
- 8 files changed, 395 insertions(+), 11 deletions(-)
----
-base-commit: 0b53bff4fa05ff0d3ffbd3d3bb10fae69dfab498
-change-id: 20260722-b4-mappingless-swapcache-9badf123138a
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 331daf7fcfab..164dc1438900 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1503,6 +1503,20 @@ config LAZY_MMU_MODE_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config FOLIO_SPLIT_KUNIT_TEST
++	bool "KUnit tests for folio splitting" if !KUNIT_ALL_TESTS
++	depends on KUNIT=y
++	depends on TRANSPARENT_HUGEPAGE
++	depends on SWAP
++	default KUNIT_ALL_TESTS
++	help
++	  Enable this option to test folio split eligibility checks. The tests
++	  verify support for mappingless folios in the swap cache and ensure
++	  that unsupported target orders and split types are still rejected.
++	  The tests are built into the kernel and run during KUnit execution.
++
++	  If unsure, say N.
++
+ source "mm/damon/Kconfig"
+ 
+ endmenu
+diff --git a/mm/Makefile b/mm/Makefile
+index ab37ef428d98..f09057b40e1a 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -146,4 +146,5 @@ obj-$(CONFIG_SHRINKER_DEBUG) += shrinker_debug.o
+ obj-$(CONFIG_EXECMEM) += execmem.o
+ obj-$(CONFIG_TMPFS_QUOTA) += shmem_quota.o
+ obj-$(CONFIG_LAZY_MMU_MODE_KUNIT_TEST) += tests/lazy_mmu_mode_kunit.o
++obj-$(CONFIG_FOLIO_SPLIT_KUNIT_TEST) += tests/folio_split_kunit.o
+ obj-$(CONFIG_MEM_ALLOC_PROFILING) += alloc_tag.o
+diff --git a/mm/tests/folio_split_kunit.c b/mm/tests/folio_split_kunit.c
+new file mode 100644
+index 000000000000..f91c1a320bbf
+--- /dev/null
++++ b/mm/tests/folio_split_kunit.c
+@@ -0,0 +1,52 @@
++// SPDX-License-Identifier: GPL-2.0-only
++#include <kunit/test.h>
++#include <linux/errno.h>
++#include <linux/mm.h>
++#include <linux/huge_mm.h>
++#include <linux/module.h>
++#include <linux/pagemap.h>
++
++static void folio_check_splittable_mappingless_swapcache(struct kunit *test)
++{
++	struct folio *folio;
++	int ret;
++
++	folio = folio_alloc(GFP_KERNEL, 2);
++	KUNIT_ASSERT_NOT_NULL(test, folio);
++	folio_lock(folio);
++
++	KUNIT_EXPECT_PTR_EQ(test, folio->mapping, NULL);
++	ret = folio_check_splittable(folio, 0, SPLIT_TYPE_UNIFORM);
++	KUNIT_EXPECT_EQ(test, ret, -EBUSY);
++
++	/* Only the eligibility check is exercised here. */
++	folio_set_swapbacked(folio);
++	folio_set_swapcache(folio);
++
++	ret = folio_check_splittable(folio, 0, SPLIT_TYPE_UNIFORM);
++	KUNIT_EXPECT_EQ(test, ret, 0);
++	ret = folio_check_splittable(folio, 1, SPLIT_TYPE_UNIFORM);
++	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
++	ret = folio_check_splittable(folio, 0, SPLIT_TYPE_NON_UNIFORM);
++	KUNIT_EXPECT_EQ(test, ret, -EINVAL);
++
++	folio_clear_swapcache(folio);
++	folio_clear_swapbacked(folio);
++	folio_unlock(folio);
++	folio_put(folio);
++}
++
++static struct kunit_case folio_split_test_cases[] = {
++	KUNIT_CASE(folio_check_splittable_mappingless_swapcache),
++	{}
++};
++
++static struct kunit_suite folio_split_test_suite = {
++	.name = "folio_split",
++	.test_cases = folio_split_test_cases,
++};
++
++kunit_test_suite(folio_split_test_suite);
++
++MODULE_DESCRIPTION("Tests for folio splitting");
++MODULE_LICENSE("GPL");
 
-Best regards,
---  
-Shivam Kalra <shivamkalra98@zohomail.in>
+-- 
+2.43.0
 
 
