@@ -1,157 +1,131 @@
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012055.outbound.protection.outlook.com [40.93.195.55])
+Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C85D46DFE5;
-	Wed,  5 Aug 2026 15:32:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785943986; cv=fail; b=PkLLkwWOR0rXwXt1NCQrIF8JisVL54d4N+QJniudA8kJH27UP+QKtarb4rPPTATj1Cp2VnUZ3S5krppidnj8YZRPt49VHD9g3LCe5899B836GKJX221VFRqXvjuwscvBrojadecuty2i0yYrxBrw2ktKDqaihgqA+ZzycoXqnIg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785943986; c=relaxed/simple;
-	bh=8pVrfb7DwSyQjud+N5ATlCLTKAtqhC3hUDDXdAXhtEY=;
-	h=Content-Type:Date:Message-Id:From:Subject:Cc:To:References:
-	 In-Reply-To:MIME-Version; b=m1zKMKvN43UZnOkoyHOPHSf5yVYQpLe17DchZXgmAqDtwRVg6/V30nUi88MMKB3B9z2cw6lzrzV5BH4ivDnUPkK4gW+J9eZXoB5Cl8PFfBF6xpP899o1HShr5eDy8RozjD0ovNJqM9duc4VbI/SE4NjLbOnh4PuK331msR9VX4E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=WTIk/f6h; arc=fail smtp.client-ip=40.93.195.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DC4D47F2C4
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785944052; cv=none; b=dFEIMfCAJ4Uz0cqdN+VToA4GlKxfoMi0ybR8iIZf+Hrgcn0AaAM/8GTpKnfa3ah31B/u7KdIHOtJ6znPQ1B+JZxj8kazGhdyRWj7TX84qQeJfkB/u1bbh8KtJMy4tO2ayyonEKZWAim0mMlawFbXAh0s9KkJdu3p0cLh5TLWvP8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785944052; c=relaxed/simple;
+	bh=5QGg8UA6TP6BiR80nmMNPD+9XP0RRFAEKZsYNq+PShI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=u3M2WJ5o0Ynu0+EMTo8XyeCU5797uLnDOEJ272ku68U6IlfgH/nKQ8UDmRXYzkKIBlh5hMpQTTehD3P3MPbam4quzCaF1vpFIsoDjL8zwyP9VxT0+9Ah3r2OqBIppsVEBFSwVdPPTvZSvefawGYgVkw8Ei5jBsU1c2EzNCEfc3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=slDBi+5+; arc=none smtp.client-ip=91.218.175.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="WTIk/f6h"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MvA5uF5jt7F5VdyygwKxLuBeqqP/oBPRILDfmIQmZO3r9MQl4zcEYxdzinXqEVaafz3vJLSEKlSi2uzPSkBwV4HQYCB/mqCBU7/CG6td1upjl1VoFQqUxyFF4MVAzmiyLrwvo+h5EpJ7AZNu90cleWLU+t2f28qPwhvmsOW88bVBKC+RaX5QXGz/lmt/F2IzBhBg8PKiihQveqNzXDHpbUU6ptJFjxejV4+VLJGa1PsPC3YID4/rJ+4TYavjsLP3ACCv1lq0Y1XDbuv/HC21X24EhScFjduA6qiqoCZtw/Tb4RFt/kICKCPtQQoWIcXrryq5mVm57YlJozeUVAedlw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mF/wSDasJLPRyQsEhzJ9VdqLbsfAPw1WEjOgN0U/gJg=;
- b=MK3Mqadqau6gX7RHZDgzNlXFOc8Vsa5ww/nsqMakzcjIZ0EALXK+NzV1xKdrjgWnIkPZ2HnPTpSC0g1jwx3zR+mW+/OCODWfkTUhVY81YAOzbH9jqBwVa4Xxfmmdc81jOv+hil4I+BF5nBI9X0kuWB8tgFC0YGKAIsZzJn21PrTaFo08RKsqi704WKO9VLNQJjpF0+3vbKCzmBf/AThWsDPvnYe8x/8DU8HmoFqa6TClt7bNaEsqUCtmEqR8agwZJh0x/AGc9LKMgCwh/rkB9s+A7CKTrp5DEEEdOUbm6Z/RYgx5T7Y3OpavvEo1PKYlmAFyXdC0cd7PILf7URjV8w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mF/wSDasJLPRyQsEhzJ9VdqLbsfAPw1WEjOgN0U/gJg=;
- b=WTIk/f6ho4YDqtbdWK2u61xbAFkE8OV9rzS27UzxiSlNAk0C8uxfyRqESkOx6PNbhMEIsOgifeCyNPLNq9iH91D0MqJAsEvd0auDgdVz0nuiNCm3XLlOh/o6sySMOhaFwPCiQ/Lu/Yf1QdxBS0cOgxR9qfjx1CiTfq+8RojbwmKBT15l+6/tTgpSMYYpuS9poYp2pSNvn2BMLt4fKJ9XWxDNLlwFKWP6uwB+Q3P0wi9kOepiDyAQb+I3lFyURdXipQrItHJ31PcWRcXLe45o2haopjoCp+NaicvioxolAh0Q2Iegp6da+I6GGSgEtX+pfhJKDt07CVRT7XLgpo+j6w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by MN2PR12MB4440.namprd12.prod.outlook.com (2603:10b6:208:26e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Wed, 5 Aug
- 2026 15:32:45 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0292.018; Wed, 5 Aug 2026
- 15:32:45 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 05 Aug 2026 11:32:44 -0400
-Message-Id: <DKH4AQPWT2WA.YAGFEOHERIED@nvidia.com>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH v2 2/4] selftests: mm: move
- gather_after_split_folio_orders() into vm_util.c file
-Cc: <liam@infradead.org>, <nico.pache@linux.dev>, <dev.jain@arm.com>,
- <ryan.roberts@arm.com>, <baohua@kernel.org>, <lance.yang@linux.dev>,
- <usama.arif@linux.dev>, <linux-mm@kvack.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-To: "Baolin Wang" <baolin.wang@linux.alibaba.com>,
- <akpm@linux-foundation.org>, <david@kernel.org>, <ljs@kernel.org>
-X-Mailer: aerc 0.21.0
-References: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
- <cb0697506337320d438bce15cdd3c4caccb914a1.1785564857.git.baolin.wang@linux.alibaba.com>
-In-Reply-To: <cb0697506337320d438bce15cdd3c4caccb914a1.1785564857.git.baolin.wang@linux.alibaba.com>
-X-ClientProxiedBy: BL1P221CA0026.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:208:2c5::27) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="slDBi+5+"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785944039;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=htN/R7/vpvjJoj57m1JcFVCCQB3lZ4Dh9rkDr6cbV4k=;
+	b=slDBi+5+gotQFoyTbh6AFITlB5cTmV9fuhq7RoT6Fpqi3I0AymEJxofg4tke/BeUYogbSZ
+	w3r+PNeAJ/ulwtRneVutsoRd7FY8LML8XLlV8k/RkNvnWbn83aJ0YD/81IIn7eLxhAMbsU
+	zzI+yo/btDFe7qoxmjoOe7rNv1PdkoY=
+From: Kaitao Cheng <kaitao.cheng@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH bpf-next v2 1/3] bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
+Date: Wed,  5 Aug 2026 23:33:38 +0800
+Message-ID: <20260805153340.34776-2-kaitao.cheng@linux.dev>
+In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|MN2PR12MB4440:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7ded4c71-37da-46bd-9b98-08def306cbec
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|23010399003|366016|1800799024|6133799003|10067099003|11063799006|56012099006|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	xWYPZlc/sLs6F06B76hS1/VYmfUeixu+aU6x5NMh3IJBos00Ek2ESM6imryF2AFe29I+RUo0Ws3kdmhznPQV3KYg8WaqWmvSYCL27umizk1nfpKcOqoP2szOEPLAgu4Ntn6hnDQAz4wnB3NvAE64JaQ06cNcj4wHFbBSb4FFU9jlz9/qBX97lbBzZtq1aJb93/MNUH7dKXgBXTuHj9O0uUW2vkckQfNCqW810S4W8NpyIEutk34pgCg9FLLSt7gNhpgmt0zL8AW6hDF5hVKxE5dQnJAvNymgh4kmbm23448IiWKNtjCzb5RzXRQwdN0LGDyzcKceZ4iKGBJOjT2qJTeAYtJt6P8IuB1LfOfCggFLEuKoG4DeSlmU1WOLANaDGhZiUy4GAnMgK/XbXqMK2tndM5ZKMdz4othOxJHv4gt0GqPAKjOq+44DRcE9eizjDbEvUaueOOxIeJ/p9qiePkhcO9yALIUYUkTGHvLrkYVjDJ/LxdJDlnMbBpkjMH0jkuM5XpcJD+r8lLtP//fIBnjfK5oQJVcRjlGedsf4X5qk78obYDweQgeJBPmWPtUHP6r2K2pdxdd9V19aN7ka47qzPLJ9nN2v6KPb55RvbjL2MJJQXnW6sGNMzoNyjPH47IzQQUgXxaHouaopJ5EWz0LN8kqetR4ypWM/qH3BO00=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(366016)(1800799024)(6133799003)(10067099003)(11063799006)(56012099006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RDg4N2FDaWF6NEZCbGJxMFN4aFM1eEtzYytuWE85MDRDa01oMmJScTJFMHF2?=
- =?utf-8?B?VTFRdG5DRHpDUXIxZU45U0dsbW1yNzNQM1FENVZOQ0VEbThEUlJoaTZRQThZ?=
- =?utf-8?B?cEQvZTcwcUxuOXcvTVZZVG14VklGMnVTQnkvLzFNa0ZrZW8xR3A3b016R2xx?=
- =?utf-8?B?cHhPTTJXVExUMTlVcndLbjJqQTdld05JQzZRUlgzZXEzOXlpYk1pRC9ucG5M?=
- =?utf-8?B?ZDVxdU5vSlpVcEppaGw3TlBaRjg3cmIxV3RCajNTd2grNlp0R29pWFJBWDYy?=
- =?utf-8?B?d2RiVHVSL0V5NUxnM0dpKzJqZ1ZSRnBaejdvZEVhMlBEMXhrKzBSd2o4N1Yx?=
- =?utf-8?B?WTUyS0VxMG80NVR0eDZxZFZIb2VZU3dHV0MyOVNSSXJSWENmOXA3MnF3aW9q?=
- =?utf-8?B?cHUzRHU2bHM5MlJMQzNXV3JDZStsT00vZnJsVlZUVUZBd1ZieG1pc2VKbHVO?=
- =?utf-8?B?Y2tHWFpFQXlGcnhUY1pEb1k2bmV4cDVyOTdST0NYTGdEZ3lxR1JoMnRaWWc1?=
- =?utf-8?B?RGhxSGdCWWhhZlQ4WHVjcVExYk9tL0xEd25wVDNBS0N3T2tBbW91K3R2TlZv?=
- =?utf-8?B?bENVS2RpYUFWY1UwS2NLMUx3KzJOOWp4R0M4Qm5UYjR2T2l1aitwNm91di9H?=
- =?utf-8?B?d0NMNi9hZHlsamp4UzlRcEM2MU96K3QvVWpPOFprMHZqenJ2UzR0M0MvWUsx?=
- =?utf-8?B?QU1LT0QxdE1pbFdWSFNtWU1mK3pNdis5aU8wUjF0dlRsVDhhUThNd0VsUnVs?=
- =?utf-8?B?Q0c1WjB5UnZBWDR5VUFwU25GVnpJSXJzL1dRZGZmWUpQdE44K3J3dlpXL3lH?=
- =?utf-8?B?a2gzZGJBR0pNN1lwSnY4YW12azZBZ3RZUTFCVXVvR1hvT0RGTFZoL1NrZkp1?=
- =?utf-8?B?bk1vNnB0bWhRbUpsMGI1OTlLL3V1YjRyVGlJbE5SSHJRSWQwbkp2MktWRWNR?=
- =?utf-8?B?VWt5TWFyU0NiejU5ZXFDUjVoU3p5TGwyTGZKWlBMSXlUVXFaR0JXYUhLVU1H?=
- =?utf-8?B?eHMvRHV6dUFLTXdlR0RyMll3bGNPV2s3bkxXR2Y1V0NlZnpLUFo5SlA5ZXQr?=
- =?utf-8?B?VnZmaDRNc1E2WjNRNEVpOFN6ZmtIL1d2S2JqWndmN1FWUWlrczFFckRFTlVH?=
- =?utf-8?B?R1lZdzJHcjIrT2FRY1lObnNtbjd6S0t0aGN1ZXZ5Z0U1cWlhQ3VMV0U2MHBo?=
- =?utf-8?B?K1ZyWGRCc1Jnd05WOGRYdEFDRm1HWU9ha0RsTzJRODQ4SFllQ3BwV1c4T2ZU?=
- =?utf-8?B?TlVEcHBTWWNwa291WDV6ZjljM01ZMHhPazBiVEZyR3Q5K1BrN3hjQjNTa01u?=
- =?utf-8?B?ZkNOYk5sb2srZitvWldxT09EYjhmVGxWMFJCaFZIbUhaaGFCaEhPeW1idmVt?=
- =?utf-8?B?MXhiYS93WUo5S3pLZ3FVMERwa1J0YXlCLzV1cHFVVEFPNmU1V2daUWJkTGls?=
- =?utf-8?B?d3JRUTk4UmhXNHpEUGJTSFB1M3JaWExSbkNmdTcrSnBVRDl1aDB3R1ZuOUYv?=
- =?utf-8?B?eTM0c1Q5WUdtVXJGR3pkSk16Z0thbWtSZ1hLZThsUGV2K0JpS3ZuVitIZWNk?=
- =?utf-8?B?UkhvWWM2WTgwRDd3UTZmQTYzUm5IOWp1Qk9EeWF4ZGZVOWNNM1RNVXlZZWVa?=
- =?utf-8?B?NURCbE91QUJJb1B5ODJUVFAxeVNJejhsNzRpcVhvQXRBUjl3WnFGWUZENTFp?=
- =?utf-8?B?cjlMUFJzVHlQcEVHWVEzSnB2VEpaVmhJQTRSWmRJTEdzZENCWStWWW5pYXdy?=
- =?utf-8?B?TWlEcDZ4VGJ3akVmb3Azci9TZG05eFM3UC8xMkhzVk1pRU56Z2w4VW5VeFNa?=
- =?utf-8?B?dzRjRDlyb2pCRWVNOGZYek1Qei9aeVpjcHlxM1FPVm1aV1gyenMvT0RObXps?=
- =?utf-8?B?Nk9XTHBYemVLb241MjdTbzM5VHE0dTRHWjlVdDd3TUpWcWFxdzQvZTdDZmxy?=
- =?utf-8?B?em9Qd3lhdGUrN0JUb3U3bGptcHl3RHRyVFlQQjZjL24veXQ4N2xWSzJTMmFJ?=
- =?utf-8?B?ZGFGRjc3eHdiVTZPQzBneDVnb1RJeCtXalJOWW9yT1hGRC93UmxUU2Q5U2FF?=
- =?utf-8?B?M1RSR3BMOWxheEJtdHIyREJpc0kyQmk5K3FlMnJLSktqamN1TWs0aTlTWXZL?=
- =?utf-8?B?MTJISXl2VnpLalVxVDhONHp2Wkw3ZEM2WkFRTS9WT1ZIcytWOFp1ZldCL3lp?=
- =?utf-8?B?K3dGRzFkU2ZvOEk4bzVqNXpsWmdSendzdmt0c0MvMWVxbW12OFN3aGNLenZU?=
- =?utf-8?B?OFp3UGtkY1NwT0htYklTRE40aHFyTmhsRXBxd01EMit3MjlVTG5BL1Irbkxx?=
- =?utf-8?Q?T+VOs0wOI4kvRECOiZ?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7ded4c71-37da-46bd-9b98-08def306cbec
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2026 15:32:45.0976
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MWlkyPfQvWfPvGc+T1g36P53cCK+EtN8NK7V33jvjI0s4BgaIbxpisS+I6U5kmfj
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4440
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Sat Aug 1, 2026 at 2:26 AM EDT, Baolin Wang wrote:
-> Move gather_after_split_folio_orders() to vm_util.c as a helper function
-> in preparation for implementing checks for mTHP collapse. While we are
-> at it, rename this function to indicate that it is not only used for
-> large folio splits.
->
-> No functional changes.
->
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  .../selftests/mm/split_huge_page_test.c       | 125 +-----------------
->  tools/testing/selftests/mm/vm_util.c          | 119 +++++++++++++++++
->  tools/testing/selftests/mm/vm_util.h          |   2 +
->  3 files changed, 122 insertions(+), 124 deletions(-)
->
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+Introduce the KF_SPINLOCK_SAFE kfunc metadata flag in BTF so kfuncs may
+be explicitly marked as safe to call while holding bpf_spin_lock.
 
+Allow kfuncs defined in kernel modules to be marked with KF_SPINLOCK_SAFE.
 
---=20
-Best Regards,
-Yan, Zi
+Example: BTF_ID_FLAGS(func, $kfunc_name, KF_SPINLOCK_SAFE)
+
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+---
+ include/linux/btf.h   |  1 +
+ kernel/bpf/verifier.c | 20 +++++++++++++++-----
+ 2 files changed, 16 insertions(+), 5 deletions(-)
+
+diff --git a/include/linux/btf.h b/include/linux/btf.h
+index c09b7994de4e..3f5255d095a2 100644
+--- a/include/linux/btf.h
++++ b/include/linux/btf.h
+@@ -79,6 +79,7 @@
+ #define KF_ARENA_ARG1   (1 << 14) /* kfunc takes an arena pointer as its first argument */
+ #define KF_ARENA_ARG2   (1 << 15) /* kfunc takes an arena pointer as its second argument */
+ #define KF_IMPLICIT_ARGS (1 << 16) /* kfunc has implicit arguments supplied by the verifier */
++#define KF_SPINLOCK_SAFE (1 << 17) /* kfunc is allowed inside bpf_spin_lock-ed region */
+ 
+ /*
+  * Tag marking a kernel function as a kfunc. This is meant to minimize the
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index b274004fccfd..9c1f8d552655 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11832,11 +11832,21 @@ static bool is_bpf_stream_kfunc(u32 btf_id)
+ 	       btf_id == special_kfunc_list[KF_bpf_stream_print_stack];
+ }
+ 
+-static bool kfunc_spin_allowed(u32 btf_id)
++static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id, s16 offset)
+ {
+-	return is_bpf_graph_api_kfunc(btf_id) || is_bpf_iter_num_api_kfunc(btf_id) ||
+-	       is_bpf_res_spin_lock_kfunc(btf_id) || is_bpf_arena_kfunc(btf_id) ||
+-	       is_bpf_stream_kfunc(btf_id);
++	struct bpf_kfunc_meta kfunc;
++	int err;
++
++	if (is_bpf_graph_api_kfunc(func_id) || is_bpf_iter_num_api_kfunc(func_id) ||
++	    is_bpf_res_spin_lock_kfunc(func_id) || is_bpf_arena_kfunc(func_id) ||
++	    is_bpf_stream_kfunc(func_id))
++		return true;
++
++	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
++	if (err || !kfunc.flags)
++		return false;
++
++	return *kfunc.flags & KF_SPINLOCK_SAFE;
+ }
+ 
+ static bool is_sync_callback_calling_kfunc(u32 btf_id)
+@@ -17415,7 +17425,7 @@ static int do_check_insn(struct bpf_verifier_env *env, bool *do_print_state)
+ 				     insn->imm != BPF_FUNC_spin_unlock &&
+ 				     insn->imm != BPF_FUNC_kptr_xchg) ||
+ 				    (insn->src_reg == BPF_PSEUDO_KFUNC_CALL &&
+-				     (insn->off != 0 || !kfunc_spin_allowed(insn->imm)))) {
++				     !kfunc_spin_allowed(env, insn->imm, insn->off))) {
+ 					verbose(env,
+ 						"function calls are not allowed while holding a lock\n");
+ 					return -EINVAL;
+-- 
+2.50.1 (Apple Git-155)
 
