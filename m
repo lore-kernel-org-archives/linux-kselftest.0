@@ -1,101 +1,101 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3D883CAE9B;
-	Wed,  5 Aug 2026 22:18:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84EBB3F4830;
+	Wed,  5 Aug 2026 22:35:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785968332; cv=fail; b=r3AEcbTB1zbpEYniI5DjtnppiUz1MtQ3eSwZcoOT4bBDMGr4eG/HUywvM+y8oTqGPTIDpsYOx7makxQkw4eh4yZeuML3HPC1Ud6K6LWsGhy3mOKaWNPT6Ny8smaxB6W3Sj0VU8CtDDA4xHFk5ryCgmr8rqSmS4jYt/EYSzJccm4=
+	t=1785969328; cv=fail; b=fLRbrEw9+kudf18L3tlGAC1Wek9EGFmtpb/8S2ZXDdUXkUi/hSgdmTs/ugNfs/YjWol/EAc+q79KaVksJo7nvEk1d3jgIb2zZP4vOb9c5aYXGSmHrWIt8/+cf2afg74QO0lkoG5tl16+QkGnwR6Xl+YAb7DD/ZdKizzaAOvnLXs=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785968332; c=relaxed/simple;
-	bh=tMBLzhjlGvurwee5HTysWJQC202MkDoD8aV4UwuGGzE=;
+	s=arc-20240116; t=1785969328; c=relaxed/simple;
+	bh=c31xmSgLgJan7QfuVUGlV6PH7dcBKp3yrazQ+EST5/I=;
 	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=aS98emqD9qsTqAge8xkTddrexmlwVA6bClGcZu9rOiZnNxi6QXiO3URBM9ao3gCtE4FtY9n0G4jKJPCztceRk0XAzTKUwBxYSd+mLIJtmcFG8ougsbxdD/OC4sG2WGT4FLJIIIktP0XSYPMCAAjDBWGAjca5gIoOoq6dew73fJs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OtrtDkqa; arc=fail smtp.client-ip=192.198.163.7
+	 Content-Type:MIME-Version; b=O3m2JQkbBbhqiXv31eZK/TBP2UhgSrEBuTvm8ZWzK+fJQu/uZREKc8xO0LKmAMCFk7CmpzuHWf1eLr2YAJBb/ecb9sj8CyE3YsUdWbAnX7X1mgqnL1IIjCq0vgNIBH8jHkEvjMgHzjX+HYQ3R9tWI+yry+IJRkh75dxAyh+AUT0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d9Geo45q; arc=fail smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OtrtDkqa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d9Geo45q"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1785968330; x=1817504330;
+  t=1785969323; x=1817505323;
   h=message-id:date:subject:to:cc:references:from:
    in-reply-to:content-transfer-encoding:mime-version;
-  bh=tMBLzhjlGvurwee5HTysWJQC202MkDoD8aV4UwuGGzE=;
-  b=OtrtDkqajYztvvcl4Vy64VIICUMf8eDJsbR08BPMzXNuOr/eKrklbhSv
-   +iOGjQZtZJ2o7OOU4Cfe7s+MGnX6iAaGDfNlTfkNcSRawIEy0kaOTpNmm
-   +39repcb8iz7beC776PALQ62X/wKzWwujys2urWdE8x9bAro5BncU51jZ
-   6GzUdZwcmp8qqiyx8Qy5GzJhR9DYxN44nrtORC9yU395doBlBjF28WPZt
-   /p2pAZ0a081FuXatCwQPHhFMIy37wYH0KuFgMssDiU//HAwRGB8lBLant
-   3NZE6O6QY412jHF7BLR+LgjrWn8A51u0ZuQALzF1Vd4Fk3yNpirS2hdrU
+  bh=c31xmSgLgJan7QfuVUGlV6PH7dcBKp3yrazQ+EST5/I=;
+  b=d9Geo45qgSDelQI0666ToLkmXw5S3Gkq8fPlC11jtC41Skx0oOKbCsY9
+   7RxOdVG7cL1dIBkvsqieNWXtT6YELfCqMqfWfrYdZSa2U58EGSrD2FNdd
+   iOafL5PgHv7JrS++2EHxDaXmBuwKictKZdjDSdf0y9svXla1E0EovNNOT
+   mjL0sIlaTEmOUaeBNLaic93dfcK1CelQzzBsMZkV9AzQmxVB7Uz7wDNeG
+   MlnQ20zp9Cl7dOpnoBHj50ofY5iT4P7/Xzy6H/NaSBfdhgZIw3WDTn5dZ
+   NWJ6snIiMoLxs7f3HdX42I/R96/rQ0+O6Rvxl1V+2F8nCq7OsZnItAtDd
    Q==;
-X-CSE-ConnectionGUID: sMyrJB7oR6iTcqNgeRq6kg==
-X-CSE-MsgGUID: LxRZSHaZRXymUoqZFmw+jg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="112108361"
+X-CSE-ConnectionGUID: mdUGoJvCQeyU6i8yO0wLag==
+X-CSE-MsgGUID: rNFKXpIkSHWPTGo+qZEYSw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="86326128"
 X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="112108361"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:18:49 -0700
-X-CSE-ConnectionGUID: DvnZRwmITNaKbAfrzr/+aQ==
-X-CSE-MsgGUID: kZnnvlZgSw6ZjQw+rXfowg==
+   d="scan'208";a="86326128"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:35:21 -0700
+X-CSE-ConnectionGUID: vKGCkrjhQ6GkQ/woWjK1dw==
+X-CSE-MsgGUID: b1hCcotzT52A7l/yr58R8Q==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
-   d="scan'208";a="261987938"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:18:49 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+   d="scan'208";a="285300620"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 15:35:14 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 5 Aug 2026 15:18:48 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ 15.2.2562.45; Wed, 5 Aug 2026 15:35:14 -0700
+Received: from ORSEDG903.ED.cps.intel.com (10.7.248.13) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Wed, 5 Aug 2026 15:18:48 -0700
-Received: from SA9PR02CU001.outbound.protection.outlook.com (40.93.196.40) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ 15.2.2562.45 via Frontend Transport; Wed, 5 Aug 2026 15:35:14 -0700
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (40.93.194.1) by
+ edgegateway.intel.com (134.134.137.113) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 5 Aug 2026 15:18:48 -0700
+ 15.2.2562.45; Wed, 5 Aug 2026 15:35:14 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XyZ2g1QvBGrlc8I+am5dZ+0IstHQxsWNORcB4SlkcQN6NBnJRLkWm4RZ+tbq90dZs2n6cyot/s0guol18sSH3QpjsdY8iRmJmSlVwdDu5n+wpCd15+Dl6DvM6YExuVKgRZRO+LEnTpsmq6LGoxjWP0GY6+P2xMj2KwnLW3ypzRT4Z28cl60ZboSz1/D9+p0QrR4bvreH0Gi/42zA9Npds9U7Q5xeFbkN2JTLakMCKbfe8NRwz7saPAVovrBYvbtizuhKoV7sSz04zv06LUfAZF6NTep82eeEAfdCD5cuZn10phJkQS4tTPORRC9qi/8ZZ80EMqyLxHIfUICzi3DZHA==
+ b=jXXOel5bJzFeM5aqQVIVJBNjszRn3J8+HAt3PYHwalclmgiZ1YzK41LlMAtR4gkLT6gs5rGqYd0zFRxKApV7iZgDodQ+x3RqqZy6amsSqCwVz7V/5Qv7zB0lraUM6GcbDn18d7wRuwGbXozwJNcO6PxcwJbmZxN3afxWhlGps6b27fdXJRyaHNa/XWJ+iUeVJvEg0+ZWeOadzxf74VWSiyFFkIcaA2qvpb+ODfKm3boofccuwid2m+pybMmWQgVDLBHX5edWbxuIY6q12NMk7lsqI5zTi9eyKP7E2N5MpSJ5AeicjV0Zw0BN7rY6c80p83TW0VG9sSjXVLPpBEFNwQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qwBdSMuJRdFvVx21BGuPTwok0FWCXeD/krvsAGUqIdM=;
- b=c09IY9eC6ovOYuduck1Kiq+6IT4u66scH26aCmdkNgpXDnWBz2bNHW4yMQfw5AzxX2bSK9Ss5oZiegNH4B90CxRwhfJ5RF34+rnuq35w79+HYMa18Hi6oF85bq3upX4oBRVryOKGFag5jjE4joQYlGY+rPlluGr0FToRu9EAEOUhcdY652NAF+AmvOuL4ouFS+hTxHZsWMQGKnYfuROjqJZdHpV4ND7sXXeoQu6NMb96giEwLeYNnZZKf7Gq9ow3VuoX1QoYdYyBzFBn/E6M19ZziTWMlvQ44ViIXnJ/7+xmiGLhUEkIMnJU9y26BptMgwy2rXUDv292NPQhznzudw==
+ bh=fA0oY2x2V73+4qGOZl12PJxZfJV+XNSTmnV1r/6uxWE=;
+ b=moKgYQHgUsQ7vylDpxy19R/DSwMZ4PrFM8Ayv67WqndiztbMhU//Yiw+jZ3MjO39s5waCVr0xMXUoG4Y2ECPl2w/LxZtlEzpU22da/poTUdB9sACDNI566n34AAq7a1BQAWt/k9kVpceYgPy0SvtNzu3dM3FLe5WtTglXo7DzQjPSFPdwPRxEh8nLIi4ARJVm0gEli6HAi11LU7klNy7NzWOexIoJnVYnX2vkKTSmQ76K329gh3XcF0I9SlZogZ04BICEqZ5dBX29GvkKFIMIt2Ab7aU1GcdLHzQY4hpbmsWovCJ2f03I1YxJCGodxA6jnpLnWFpOBubrz6KDmrF9w==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
  dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=intel.com;
 Received: from IA0PR11MB8379.namprd11.prod.outlook.com (2603:10b6:208:488::20)
- by SJ5PPFC15A51B16.namprd11.prod.outlook.com (2603:10b6:a0f:fc02::851) with
+ by MN0PR11MB6207.namprd11.prod.outlook.com (2603:10b6:208:3c5::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Wed, 5 Aug
- 2026 22:18:45 +0000
+ 2026 22:35:10 +0000
 Received: from IA0PR11MB8379.namprd11.prod.outlook.com
  ([fe80::549f:e4b3:e10d:aaa6]) by IA0PR11MB8379.namprd11.prod.outlook.com
  ([fe80::549f:e4b3:e10d:aaa6%6]) with mapi id 15.21.0292.018; Wed, 5 Aug 2026
- 22:18:44 +0000
-Message-ID: <5836583e-baa8-454b-903f-d7364a346165@intel.com>
-Date: Wed, 5 Aug 2026 15:18:40 -0700
+ 22:35:10 +0000
+Message-ID: <23a738a3-85dd-4fdf-851e-3b875f48e70d@intel.com>
+Date: Wed, 5 Aug 2026 15:35:06 -0700
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/3] selftests/resctrl: Add L3_CAT_OCCUP test to verify
- CAT bounds occupancy
-To: Richard Cheng <icheng@nvidia.com>, <tony.luck@intel.co>,
+Subject: Re: [PATCH 2/3] selftests/resctrl: Add L3_CAT_VALIDATE to check
+ invalid CBMs
+To: Richard Cheng <icheng@nvidia.com>, Tony Luck <tony.luck@intel.com>,
 	<shuah@kernel.org>
 CC: <Dave.Martin@arm.com>, <james.morse@arm.com>, <babu.moger@amd.com>,
 	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
 	<fenghuay@nvidia.com>, <newtonl@nvidia.com>, <kristinc@nvidia.com>,
 	<kaihengf@nvidia.com>, <kobak@nvidia.com>, <sdonthineni@nvidia.com>
 References: <20260608110641.44457-1-icheng@nvidia.com>
- <20260608110641.44457-2-icheng@nvidia.com>
+ <20260608110641.44457-3-icheng@nvidia.com>
 Content-Language: en-US
 From: Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20260608110641.44457-2-icheng@nvidia.com>
+In-Reply-To: <20260608110641.44457-3-icheng@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4P221CA0004.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:303:8b::9) To IA0PR11MB8379.namprd11.prod.outlook.com
+X-ClientProxiedBy: MW4PR04CA0217.namprd04.prod.outlook.com
+ (2603:10b6:303:87::12) To IA0PR11MB8379.namprd11.prod.outlook.com
  (2603:10b6:208:488::20)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -104,406 +104,231 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR11MB8379:EE_|SJ5PPFC15A51B16:EE_
-X-MS-Office365-Filtering-Correlation-Id: 792f7df9-b7c2-460a-dbb9-08def33f830e
+X-MS-TrafficTypeDiagnostic: IA0PR11MB8379:EE_|MN0PR11MB6207:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa365d39-38fb-43eb-ab97-08def341cede
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|23010399003|18002099003|22082099003|11063799006|4143699003|3023799007|6133799003|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info: VoH1xtVdMW4Nc0jclJJqeXxonTT6XJ7SJb5AAPJA2IczFp8tRZzF00jPCg6H7ylt+A2m8eG+CMusV2krLyIn/BmlESWoJdww5aJIzstcyWHe02kITtHG3oTsiezzX2ATcSiIEp8IbaeSyB3T5TZl6GZC8PKfZdPF5dc3OkQbFvq3YN1vmYad/jxPgrqxgX+LjkDG9Xmtgs993iR+IJcuUvyOPmeSqSJ39tElfdKWdmcuap9AuJlaT6ovMnh/0h/b6Q+mVyDKigBnbnbPQZg71NXfQqbtBpz2faffE/dUoqO5PE+w3dOVB2rJYjCDC6qM7lcAsBrQL3yq0BSQafexFXcMGf8KK+0zHycFmYRRdSAMMO9xofTuRcipkyCsC0NJAmsc/Yp8dw49CesYqfwcxtMd67x4aRq9LHAj2NMNLmwxeAlSxgtVNjzocFV3Bs3phibxTlGGahnzyGV3fpFO2IfR0pdvOahwcG5RkxnIvg3OUiDxYWjBsjth0zyblPD1kwLgVDHuipSZgJLzxktZ/Ea1ltKdmrweR8cy5DK/ev/qYylovDPE8dyH8jbL986MeU7KrzbgBly+Nse0bKTQJakhwsqSmbVro0UmKqR9x+UbgEgdSdTKkU5XsliHRzdyrcrFBRrLZUg4sceOmIfyKJDN7tQqyYdUYsWW2In12gA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR11MB8379.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(23010399003)(18002099003)(22082099003)(11063799006)(4143699003)(3023799007)(6133799003)(10067099003)(56012099006);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|18002099003|22082099003|56012099006|4143699003|11063799006|5023799004|3023799007|6133799003|10067099003;
+X-Microsoft-Antispam-Message-Info: UjA78iS7lgKkHgB3G3cMc/VLV13cz+xTOld2PlqbMWK9oRDoOAwig+x3fKRcfRILKKE8JPdZyiNxtpY2iv0tCf5MUNNq8fje97Do5AyW6CZq/7ZpHCSx5dm58xe+t6NmMuBHe9n5/1sMZZZQHfJXPb9zqg5gHxOg2UfHKAoPqtMEpqAZF+3tK7G1lTK85l8I7A5457IvIYlyKIAggpUuyz4UsH/AG5T81GKo/JikOfn3tBoF3VQvlM3pk/Q0GcewOfhBBgMs0MCUwGOsjHvImCQdJQm/jrw3SlG56fUyJlmgth79MmygYv+NgHhADWoKiPQZKg4hXBv0bqU/bFmLSx91x+G2e5EwriEbNanbM7u9tgvyUTBnceZ6fqAdtToaeF47IJluAPAjVndRy2rJuElepL0V1vPx6gChBICHAy21gMeW2xNliNTugaQWc7tpi2DZhCJpFAB16pfln0xpUR2XtA5RS3QfhUf9LcyabmvitokHSDtxJHNrersFuEZQEfdGSk147t3WmWw67f5REWXX8MZy5D1UvHbcRhzd4ajC09RDdKqvngyM3d558QFahd4iinZC5KkrHtYClaSW4Z2U59/kwc7jxi199HP8dUExUKQQTkHaL4ORPzwUTACF5K0SF/OV48sGLVLVjIC6y+BXXhOx//jFp8VQCTzAVCw=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR11MB8379.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(18002099003)(22082099003)(56012099006)(4143699003)(11063799006)(5023799004)(3023799007)(6133799003)(10067099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MWROdVpObEpWbkVQS3h0azUyWklESDRxeU42UmNtNEJkS0RmcTYvMW4vRlZL?=
- =?utf-8?B?V1JPMlUwOXgrODN3M1ZBU0tldmhXQTFEVGJQRTZFY28rYjNRNnZDUnJDUFA4?=
- =?utf-8?B?ditOZktuY1hNazdWQ0dITjM1MlpCVnI0ZnU2aytrdnNDbFFQNVMzeDhnT3JH?=
- =?utf-8?B?WWVYejhFKy92Z2N5RXR4RVhPOTlOd3g1VTNjRlMrV01zdENud254b2NpRk5o?=
- =?utf-8?B?cUFBdk5RbktJeGJKU3FvUHFRSjl4eXRXN25Kdmt0RlpKY1Q5ZmIrdzBNYmdB?=
- =?utf-8?B?cXcxN0poUzB0dWtjdWYyTXpwZ0d3SDFGQ21qWlk5NzUxWTV1UDRsckVtVlpP?=
- =?utf-8?B?STZUbk8wMGZHcTBCdURaQkJTYkhmR1BkbWlHbm9DR0Fwd2htZW8vZUJUcGls?=
- =?utf-8?B?MnFxRGVRWXlncVRKc3lTcWJ3R2lMWVVoZ2toeXVCY2dBalRBQUJXSVZOMkxC?=
- =?utf-8?B?c1E1cmZaWnNRNU1LK2U3TlVXTzg5WFV1VU5MZnlaanFFdDlLVlhSQmVTSDlX?=
- =?utf-8?B?ajg1Ymw1QnIxdU4zRGRxZ2x6N3pnQXI1a0hObFNCNkZQeldadzNJL3c1SzRR?=
- =?utf-8?B?bU05QXNYdGtoM1dibTA3aHl1MWhVZkdUWjBQajkvT0FEZDRoYVNrZGZ0QXN3?=
- =?utf-8?B?NzlDTG83amx3WVpPRmtDZ3RyUENzajM2ZG5iMUFzQnQrSXRlZ0JKNkhtdi9B?=
- =?utf-8?B?OXYxbGxaajNnTXl5SGI0QUttOXpGbFc1Tkk5Uktrc0J2YzJzMkprWmt5RWtp?=
- =?utf-8?B?aFlyUDFoQjFrK1FlazFWM3o5MUxCQy9TYmM0SzBFV240MlJPa0djVVJ6a3ZH?=
- =?utf-8?B?Q0ptTTVySEY3Q2NIcU41MTdTWXB1WUF2NFZta1YxTkl0SmZqZFRpb2RJYnNK?=
- =?utf-8?B?dXFnN0ZrNHVnc0tFTHZyVWJyWmJpUXJFcUxsUDFuNngzTytRWCtzU0VOSnJ3?=
- =?utf-8?B?M0xmeURnU1F5dkpQSFdxWkszaXFKZUZvcUpmVGxoaDR0RENEK0cxWnA2c2N3?=
- =?utf-8?B?Q1FrbnRYR3QxVlVEU2ZnK1VVZEVJWGQ1Tk9rT1NJOFNPSU12Z212MEQwM01Q?=
- =?utf-8?B?WGYwWk0rekhGSFo3eVBDcHhWZEFGWWYwT2xrejhyd2t4c29YMXZRZzlxL1Er?=
- =?utf-8?B?R2RCNUVYc3U4L0hLZVRVb3B0Zi8xN0ROeFdkRUpFWk1YS1JRVGR0TkROd2NT?=
- =?utf-8?B?MTdYbWpLR29Ucm9ScFh6dnJnZE5BR2RTd2k3UnpBTVkrd0VSTXVFZ3JGdkJV?=
- =?utf-8?B?UWZKVVZ0SCtack16amhnSXAwNi9JL1BxL01BVUVXNGNrMlZDclFsaFNEZFN2?=
- =?utf-8?B?WjNQRkhrdW5UajNnalkveEtwZ0kwcld5VjZXbWtzTmVTTnZ1ZnpUaU52K01V?=
- =?utf-8?B?cnd5aGNiWE85eWUvaU8vbExQYmg2REU5Z3U2WVdXbFBDY1EvSnp4azlzU1F4?=
- =?utf-8?B?L2s0dE5NcFdBZ0h5dDhIMmZzQ21MQ2hlZDNFRVZyRGs2M1NKV1J0QkcxYnhw?=
- =?utf-8?B?SEZKNW15dmY5dytIZmlVYzlnc2diV1h3aWJDR2dIVzNGZ2M2WXlTelAwMkRy?=
- =?utf-8?B?dHAxM1ZUdVJhdUpqMTNRMWt6N0pjRkYyV2RFbm5UZVRpUmdYN2lWTytoa3dL?=
- =?utf-8?B?cmEzTXFyUnAzZXZLaHRhWjI2YUNQeHZmL3Budk81eXRqWStNdTUzTW0waWZp?=
- =?utf-8?B?MGhZNGFMZ1FKa3ZDUTYya25OUnhmL3grU2hyaEZ1dml2OU93dTVkZkU3d2ty?=
- =?utf-8?B?cURmanhEVHp6TVlDMy80cFk1cjVVZUFVbHdvS0czOEF3L21FczVraTFxVDg5?=
- =?utf-8?B?ajNJV1E5dnpHZUdESFRUaVB4Vy9BNFFQQzVhTjFCd25vTjd3UktaM2JrQ0Nj?=
- =?utf-8?B?cG9nYmwvWGhXZU1zOVJJcmJ5VmVIalhwM3QzdGdaSjRzamdSZ2c4UmtBV2o4?=
- =?utf-8?B?aS9UNEYzQU1YVjVsMWUxWFc5akd3UkZ0MkFkWFhZT0lRZUpXSVR4RVlBYlFB?=
- =?utf-8?B?bzdwR2pJVGROakt2Z2VPZGtXZE1WcXJBd3BYYXZMazFmRnpzeUhSNlVtOHM5?=
- =?utf-8?B?bDgxaWVrNVJ3a2J1WmNHSERjbmI2d0VwNUtWR3pZUTZOOWRFWWlvZGVDSmpx?=
- =?utf-8?B?QkYxajBQOGF5L3g1S0dRYS9rY1VsUm03ekZGM2E5UmZuUXd0a01nUzZNUlY2?=
- =?utf-8?B?ZkorTG5tWUZOemJsMjdjUVRncFlBbVpGTkwrbGs5d0dlOFVjVTlEMHN4SDVq?=
- =?utf-8?B?UFNicGlKRzluaHZOUnNGL1hEQk5uMHdpRmV0OXI5eGNTNEVydldWeGpDbkE3?=
- =?utf-8?B?Nkk4Z1FvSFhnYVQ4ZEY4MWl1Z2JqdlV6eUg0ZDZhR1hkejdYNk0zbmpoVEZZ?=
- =?utf-8?Q?0wDdIYmMdpIY+K/w=3D?=
-X-Exchange-RoutingPolicyChecked: nHfmy0rVQ7Erapay7KzxMXz1QGLQGZ8k82VrxtDMd/F47YgUQ+u3m01BWF/iDTwIcovGh2H2U1JNObqZEAbW6kufE/k38hCoQjXAHhopwoLJAsNLELwXf2A+n+V9K5rj6beI92UMTdhvdxpy7UJ5HDo4nTjHwHe5qDV6xYh7VajJdSHS+JDMFq6z4flbCUjYjKHV4r24PjlDFTs2HBzJLAqnzOaXlFMaXrBUd5TKBgm+DHWzV/jhYNkljlH8uu8IUEqZgDWiwfB799LLBXqi3i7usRYFzyE+WXSlrfFt6VFZlnKmNBir40ORJ3/ZInh5NO215ei0lP93TCfbMxmp2w==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 792f7df9-b7c2-460a-dbb9-08def33f830e
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmZFVEJtVFlUaEtlRkNwWXhiK1g3VDdyTytYcG8wM3JRWVM0VWhnRXlJT2RV?=
+ =?utf-8?B?cWlocGRvU2lyUGNNZy9ZdnRPd0VCc1FJN1JqeFptY0E0S2REZlZFUGJhbFYz?=
+ =?utf-8?B?MGt6aTVseGVydSs3eFBaSUJKSWVVb0htaGFqc2tnQXllK2s1MDRkMnZ4ZFRo?=
+ =?utf-8?B?RjJtWW8zRXl2RzFaNllkSXJDUDZaWWNtV2ZoNWZBNENIcEVUN3hWM1BkVkJP?=
+ =?utf-8?B?MUx3WUJrdkRNQmFGQ0JaS3ZrTTcwNng4VTJpem5ZU1p3SzBjVXpyVVNUV2Ez?=
+ =?utf-8?B?OUNtT3JGUEhIc2FtQm5iRnd2L3VubG9zQkFKMzRpbUFuVnB3WHNHOXJjKzQ5?=
+ =?utf-8?B?M2VHN1h2N1RXbkQvSXlZVGF0WHdtalB0bXQyRENNWENPMWZaZW9QMWd0dDdF?=
+ =?utf-8?B?cjRJWUlzeVpnbTNWRFgveUJXQkdhT1dnUXFwRnEyNjdsd21KZHl3NDFUSk94?=
+ =?utf-8?B?VTNkZGhZWXJaSTk5UUN2M3FLTzdwYURlSkxzZ0ZLUjd5UWtnYTBWdGsxaHhV?=
+ =?utf-8?B?dTlrUHBjRDJDNkxhWlh6R1ZtbnBnN3RLU0o2TFZVYmNBQmpNTzVFNEpsakEv?=
+ =?utf-8?B?cm5zMXA3RFN3QVNGSTRzNmZESzV4SkNBUjZVbE55dHR4MU1KYmwrWEpoVHRp?=
+ =?utf-8?B?NE5qcGJzdGlXVDJpNmdLYkdoM3hZdG5DVWZ3NXRaNmxKeFZranNPem9GejRY?=
+ =?utf-8?B?cWlkUTZzU3RxMEpKM0Z0WURsMFQvMExwQmVWRTlldkxZZkluU0lUVUxFaDN4?=
+ =?utf-8?B?SVdyZFFaM1FOeDBSMVVFZFdnblUyeHUzcmVVcTM3TnRsbWg1Ni9aMzdqenBh?=
+ =?utf-8?B?Q2IyNjl5SDM1bFNEb1BzQU9HWlRkUEdmOEVGN01RTkpTVXNxOWMzVDFlR0RG?=
+ =?utf-8?B?MkVMTHhXT0lESm9RNU5jaG55WVkzM2h6elhZd2s0Z2Jud2NudzBueDhlVFRF?=
+ =?utf-8?B?YWdzOTZFSmdraWFocmhzMG12OWlsamd6TnpYVGVSSEtDend3TVBBaXkxR2VZ?=
+ =?utf-8?B?b0xyOGxSM0U3NlZFWTZnTEVwdXdRSGZ2c1llOXlpQVhpS1hvdk1CSVJrNVAv?=
+ =?utf-8?B?MURmZEVBMFI1aFA4azlEOS9NclFVMUZQUFNGTTZ3MHBXdXNlM0tlcDR1bWo4?=
+ =?utf-8?B?aWN1dWdoNld3RFBPbFl5ZnhhYkFvRDlsZEo4L3BHODhEU0ZiTm4xSmN2Qlc4?=
+ =?utf-8?B?bkNYM0U4VzliWEFuRDQ5alltSGlFQ3RBNStXZWlqWVVZWmF2eHBUcE81NE4y?=
+ =?utf-8?B?Y2pva0FKZDVLSERjQVZzbUZoaTI2a25TQ1d4Z1dQMW9xZTFRekd5SGRzUGp3?=
+ =?utf-8?B?MTF4NFkxb08yMDQyb0xGTmRCSGo5R24vNXBxdDhhSVFRR0NjUUV3ZytkWVpu?=
+ =?utf-8?B?M2pTT1UxWW9KL205WVNkb1JJOWdQV0NqNHd6cUwzeHIwWVUvSzk4YXcrK1By?=
+ =?utf-8?B?NmgwN2VmQkt0Sm5KV2h1UUJDOEFWbnZIUTY5MmJ2NVdxc2ZETFdVaW5mdC9i?=
+ =?utf-8?B?NEo5cWdlWHhlSC9ORjUwQWhzc1ozcjk0ajgycUJBT2VxWGFSQi83WFFRaHR1?=
+ =?utf-8?B?SGorMElqL2VkSXE2VVUvTHdJRVRRZ040enFBdkdHRkVBcDN6V3BHcGt2clUy?=
+ =?utf-8?B?R2NSamIwV2locStaejRVRnJoYkZYNEQyZ0pBS2pHQWNPRTZkMWJmQkF0cFpq?=
+ =?utf-8?B?ZW5kcGk3aEUwZkRkUm9pTEIzVlNtVktOTXIvYlVxR0tkeFB3b2swejg0N2dT?=
+ =?utf-8?B?SEYxMEVaTVRkaGNYS3RUS2ZhdDlQdW5GKzNrckljOTBpaU5DZHVEbzk4RHlh?=
+ =?utf-8?B?UG1CaUpPd2xsRUszeXNBY1MzaGVKTWtVUWZtUmZzc0UyWGNoUnlRT2N5MnlL?=
+ =?utf-8?B?aHR5MDNSeGVaNzhDcm1Yb3dqV05XbXdYc01JSE1EWWgyZXdrKzlnM3JCVTdW?=
+ =?utf-8?B?aktPa2p1RjU2bFZ1TjQwVCtKdDBrN3VuK3JtNmZlclJzOWU1Q1krdjN3clRi?=
+ =?utf-8?B?UHVQQ0x6eVZQOEorVWU0b3l4UnB4RGx4alVMWjg4d1ZJQWdBaFlSUkJhZ3Bv?=
+ =?utf-8?B?SHljdFZQcFBTUHJHdjR2WTNZWkZVZ3ZvMUVXS1VpekFRcGtlNG0vTGU2ZDVR?=
+ =?utf-8?B?Vk9jdDdHTGNVRnExOUJCN1hqRy8xNU1KM3Z3dVdzSzVvTHdyQTNoWnpVc0JR?=
+ =?utf-8?B?SmRWNUJpanVtUnZ5RGc1Z0NyeFNLb3lCUGROMXozdHZhc1hnV2VlZEs1Qis0?=
+ =?utf-8?B?U0szazYraitRbTR0STRTcmJvSmw1WUtiMDRFelNNTXVmSzlxcDBXNWxtNi9D?=
+ =?utf-8?B?SWxXbTk2a3BjVXN1VTlsQjVwYlJQdGY5UzgvV1hXNHhOWmQvWEVuUURJMTJG?=
+ =?utf-8?Q?3ItLuNCvnWc6avko=3D?=
+X-Exchange-RoutingPolicyChecked: tLBLcxFuPB6RxKptxrubkphlDeKTmjLp5TzRurw1rWEvxl0NJYtdDuCkIVUJ+swjeuHrHbW2tF+ZOBz4hSt6jj4s8c+ua92KJHmNnRKXiEIh4mglsdP/m6ObHYYpRlZefvS5NYBXax1FSPWWM8z2P3mo2DAOdIEPx4dy1n4DL/sp/akJ78XwpI8U49fgRxytrq6+yjwtDai2hjtML0aUTk3EWiej+kHN4CTJ3bkEDGGJhTPja43xiTug9KoOCzHQZu94q/FeWdpDt6eLZ33+XNnjCUPeEvEAdTlOifoMuoeMig/toa+mrH6y/POh4wHv/C16tuM23dLok3erevF77Q==
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa365d39-38fb-43eb-ab97-08def341cede
 X-MS-Exchange-CrossTenant-AuthSource: IA0PR11MB8379.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2026 22:18:44.2463
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2026 22:35:10.3981
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ofWppUVoehhUnvzo04U86SRe7zSrdcUxzBQo1wboqGff9XOwLiwl78PC4EDBIrSTbYWsL4wrVSngdYvhjDo24Xctp9hE72ySHrI44ZQnsvk=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPFC15A51B16
+X-MS-Exchange-CrossTenant-UserPrincipalName: aSbB3fl4pEAbUuquHbZDVp6b9+h6c6kOl/ESbeKo0amDpGNz96YIQ+dQKdGYUsJuPEEd5L7HioTzpxU+LmhJsPv26E80tw4nxQpt9O+Y2lc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6207
 X-OriginatorOrg: intel.com
 
 Hi Richard,
 
+Thank you very much. This is useful.
+
 On 6/8/26 4:06 AM, Richard Cheng wrote:
-> L3_CAT needs a CPU-exclusive cache portion, so it's skipped when MPAM
-> reports every CBM bit as shareable, leaving L3 allocation untested. CMT
-> only checks occupancy accuracy, not that a CBM actually limits it.
-
-hmmm ... CMT test ensures that the LLC occupancy is within a % of the size
-of the cache allocation. To me this implies that it indeed tests that
-the CBM limits the allocation, no?
-
+> A CAT allocation is a CBM, and the kernel must refuse masks that can't
+> describe a valid allocation. Nothing in the suite check this.
 > 
-> L3_CAT_OCCUP gives a group a small CBM, run a workload spanning the
-> whole cache, and check every occupancy sample stays within the
-> allocation. An unenforced CBM would instead let occupancy grow to the
-> full cache.
-> 
-> Move CON_MON_LCC_OCCUP_PATH to resctrl.h to share it with CMT.
+> Implement L3_CAT_VALIDATE, first confirm a valid full mask is accepted,
+
+How about "L3_CBM_VALIDATE"?
+
+> then write an empty mask and a mask with bits outside cbm_mask and
+> confirm each is refused. A mask below min_cbm_bits is also checked where
+
+The empty mask is not always a valid test (more below).
+
+> the platform needs more than one bit.
+(nit: please write changelog in imperative tone)
+
 > 
 > Signed-off-by: Richard Cheng <icheng@nvidia.com>
 > ---
->  tools/testing/selftests/resctrl/cat_test.c    | 201 ++++++++++++++++++
->  tools/testing/selftests/resctrl/cmt_test.c    |   3 -
->  tools/testing/selftests/resctrl/resctrl.h     |   4 +
->  .../testing/selftests/resctrl/resctrl_tests.c |   1 +
->  4 files changed, 206 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/resctrl/cat_test.c    | 79 +++++++++++++++++++
+>  tools/testing/selftests/resctrl/resctrl.h     |  1 +
+>  .../testing/selftests/resctrl/resctrl_tests.c |  1 +
+>  3 files changed, 81 insertions(+)
 > 
 > diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index f00b622c1460..16a947f1ed16 100644
+> index 16a947f1ed16..d236988916d9 100644
 > --- a/tools/testing/selftests/resctrl/cat_test.c
 > +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -402,3 +402,204 @@ struct resctrl_test l2_noncont_cat_test = {
->  	.feature_check = noncont_cat_feature_check,
->  	.run_test = noncont_cat_run_test,
+> @@ -603,3 +603,82 @@ struct resctrl_test l3_cat_occup_test = {
+>  	.run_test = cat_occup_run_test,
+>  	.cleanup = cat_occup_test_cleanup,
 >  };
 > +
 > +/*
-> + * L3_CAT_OCCUP - Verify that a CAT allocation bounds cache occupancy.
+> + * L3_CAT_VALIDATE - Verify the kernel rejects invalid L3 CBM writes.
 > + *
-> + * Unlike L3_CAT (which measures interference between groups and needs an
-> + * exclusive cache portion), this test gives a control group a strict subset
-
-Please let comment just refer to what this test does. These comments are unlikely
-to be updated if L3_CAT ever changes.
-
-> + * of the CBM, then runs a benchmark whose buffer spans the *whole* cache -
-> + * i.e. much larger than the allocation. With CAT enforced, the group can
-> + * only keep its allocated portion resident, so llc_occupancy settles near
-> + * the allocation size. Without enforcement occupancy would instead climb
-> + * towards the full cache. This works even when all CBM bits are shareable
-> + * (where L3_CAT is skipped).
-
-hmmm ... these statements state as fact what really depends on system load and
-interference that this test make no attempt to avoid.
-
+> + * CAT allocation accepts a Capacity Bit Mask (CBM). The kernel must reject
+> + * masks that cannot represent a valid allocation: an empty mask, a mask with
+> + * bits outside cbm_mask, or (where the platform requires it) a mask with
+> + * fewer than min_cbm_bits bits. A rejected schemata write makes
+> + * write_schemata() return non-zero, which is the signal this test checks.
 > + */
-> +#define CAT_OCCUP_RESULT_FILE		"result_cat_occup"
-> +#define CAT_OCCUP_NUM_OF_RUNS		5
-> +
-> +static int cat_occup_cpu;
-> +
-> +static int cat_occup_init(const struct resctrl_val_param *param, int domain_id)
+> +static int cat_validate_run_test(const struct resctrl_test *test,
 
-Please take a look at recent resctrl selftest changes that provides more
-data to the init() that will avoid the cat_occup_cpu global.
-Even so, why not just use cmt_init() that reduces interference from rest of
-system to improve chances of workload's cache occupancy to match its
-cache allocation?
+All tests in this file are "cat" tests so this function name could be more
+specific. How about "cbm_validate_run_test()"?
 
+> +				 const struct user_params *uparams)
 > +{
+> +	unsigned long full_mask, bad_mask;
+> +	unsigned int min_cbm_bits, start;
 > +	char schemata[64];
-> +
-> +	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
-> +		param->ctrlgrp, domain_id);
-> +
-> +	/*
-> +	 * Confine the benchmark to the allocated portion *before* it starts
-> +	 * filling (resctrl_val() calls init() before forking the benchmark),
-> +	 * so occupancy reflects the restricted CBM from the first sample.
-> +	 */
-> +	snprintf(schemata, sizeof(schemata), "%lx", param->mask);
-> +
-> +	return write_schemata(param->ctrlgrp, schemata, cat_occup_cpu, "L3");
-> +}
-> +
-> +static int cat_occup_setup(const struct resctrl_test *test,
-> +			   const struct user_params *uparams,
-> +			   struct resctrl_val_param *p)
-> +{
-> +	if (p->num_of_runs >= CAT_OCCUP_NUM_OF_RUNS)
-> +		return END_OF_TESTS;
-> +
-> +	p->num_of_runs++;
-> +
-> +	return 0;
-> +}
+> +	int count_of_bits, ret;
 
-cmt_setup()?
+(reverse fir please)
 
-> +
-> +static int cat_occup_measure(const struct user_params *uparams,
-> +			     struct resctrl_val_param *param, pid_t bm_pid)
-> +{
-> +	sleep(1);
-> +	return measure_llc_resctrl(param->filename, bm_pid);
-> +}
-
-
-cmt_measure()?
-
-This test has a lot in common with the existing CMT test since it 
-duplicates cmt_setup(), cmt_measure(), and cmt_feature_check(). From what I 
-can tell it can use cmt_init() also. Could the implementation be simplified
-by instead considering it a CMT test, move code to cmt_test.c, and avoid
-all this duplication?
-
-> +
-> +static int cat_occup_check_results(struct resctrl_val_param *param,
-> +				   size_t alloc_span, size_t cache_size,
-> +				   int no_of_bits)
-> +{
-> +	char *token_array[8], temp[512];
-> +	unsigned long occu, max_occu = 0, ceiling, floor;
-
-Please follow kernel coding style (throughout this series) by, in this example,
-using reverse-fir tree ordering.
-
-> +	int runs = 0;
-> +	int fail = 0;
-> +	FILE *fp;
-> +
-> +	/*
-> +	 * Check every sample, not an average: CAT is a hard limit, so a single
-
-hmmm ... "is a hard limit" does not match what the code does
-
-> +	 * sample above the allocation is a real violation that an average
-> +	 * could mask.
-> +	 */
-> +	ceiling = alloc_span + (cache_size - alloc_span) / 2;
-> +	floor = alloc_span / 2;
-> +
-> +	ksft_print_msg("Checking for pass/fail\n");
-> +	fp = fopen(param->filename, "r");
-> +	if (!fp) {
-> +		ksft_perror("Error in opening file");
-> +
-> +		return -1;
-> +	}
-> +
-> +	while (fgets(temp, sizeof(temp), fp)) {
-> +		char *token = strtok(temp, ":\t");
-> +		int fields = 0;
-> +
-> +		while (token) {
-> +			token_array[fields++] = token;
-> +			token = strtok(NULL, ":\t");
-> +		}
-> +
-> +		/* Field 3 is the resctrl-reported llc_occupancy value. */
-> +		occu = strtoul(token_array[3], NULL, 0);
-> +		runs++;
-> +
-> +		if (occu > max_occu)
-> +			max_occu = occu;
-> +
-> +		if (occu > ceiling) {
-> +			ksft_print_msg("Fail: run %d occupancy %lu exceeds ceiling %lu\n",
-> +				       runs, occu, ceiling);
-> +			fail = 1;
-
-KSFT_FAIL is available to avoid using magic numbers.
-
-> +		}
-> +	}
-> +	fclose(fp);
-> +
-> +	if (!runs) {
-> +		ksft_print_msg("No occupancy samples collected\n");
-> +		return -1;
-> +	}
-> +
-> +	if (max_occu < floor) {
-> +		ksft_print_msg("Fail: peak occupancy %lu never reached floor %lu\n",
-> +			       max_occu, floor);
-
-I think this test should be dropped. We cannot control the environments in which
-the tests are run and legitimate interference may cause this test to fail without
-it meaning that there is a bug in resctrl. 
-
-
-> +		fail = 1;
-> +	}
-> +
-> +	ksft_print_msg("%s CAT confines occupancy to the allocated %d-bit portion\n",
-> +		       fail ? "Fail:" : "Pass:", no_of_bits);
-> +	ksft_print_msg("occupancy=%lu alloc=%zu full=%zu ceiling=%lu floor=%lu\n",
-> +		       max_occu, alloc_span, cache_size, ceiling, floor);
-> +
-> +	return fail;
-> +}
-> +
-> +static void cat_occup_test_cleanup(void)
-> +{
-> +	remove(CAT_OCCUP_RESULT_FILE);
-> +}
-> +
-> +static int cat_occup_run_test(const struct resctrl_test *test,
-> +			      const struct user_params *uparams)
-> +{
-> +	struct fill_buf_param fill_buf = {};
-> +	unsigned long cache_total_size = 0;
-> +	unsigned long full_mask;
-> +	int count_of_bits;
-> +	size_t alloc_span;
-> +	int n, ret;
 > +
 > +	ret = get_full_cbm(test->resource, &full_mask);
 > +	if (ret)
 > +		return ret;
 > +
-> +	ret = get_cache_size(uparams->cpu, test->resource, &cache_total_size);
+> +	ret = resource_info_unsigned_get(test->resource, "min_cbm_bits",
+> +					 &min_cbm_bits);
 > +	if (ret)
 > +		return ret;
-> +	ksft_print_msg("Cache size :%lu\n", cache_total_size);
 > +
 > +	count_of_bits = count_bits(full_mask);
 > +
-> +	/*
-> +	 * Allocate a strict subset of the cache so the benchmark buffer
-> +	 * is larger than the allocation and CAT has something to enforce.
-> +	 */
-> +	n = uparams->bits ? : count_of_bits / 2;
-> +	if (n < 1 || n >= count_of_bits) {
-> +		ksft_print_msg("Invalid number of CBM bits %d, expected 1 to %d\n",
-> +			       n, count_of_bits - 1);
-> +		return -1;
+> +	/* A valid full CBM must be accepted */
+> +	snprintf(schemata, sizeof(schemata), "%lx", full_mask);
+> +	if (write_schemata("", schemata, uparams->cpu, test->resource)) {
+> +		ksft_print_msg("Valid CBM 0x%lx was rejected\n", full_mask);
+> +		return 1;
+
+KSFT_FAIL?
+
 > +	}
 > +
-> +	struct resctrl_val_param param = {
-> +		.ctrlgrp	= "c1",
-> +		.filename	= CAT_OCCUP_RESULT_FILE,
-> +		.mask		= ~(full_mask << n) & full_mask,
-> +		.num_of_runs	= 0,
-> +		.init		= cat_occup_init,
-> +		.setup		= cat_occup_setup,
-> +		.measure	= cat_occup_measure,
-> +	};
-> +
-> +	alloc_span = cache_portion_size(cache_total_size, param.mask, full_mask);
-> +
-> +	/* Benchmark buffer spans the full cache: larger than the allocation. */
-> +	fill_buf.buf_size = cache_total_size;
-> +	fill_buf.memflush = uparams->fill_buf ? uparams->fill_buf->memflush : true;
-> +	param.fill_buf = &fill_buf;
+> +	/* An empty mask must be rejected. */
 
-This prevents usage of user provided benchmark. Please compare with cmt_run_test()
-initialization. You can find more details about how the workload and parameters are
-communicated in e958c21e2ede ("selftests/resctrl: Make benchmark parameter passing robust")
+Some systems do support an empty mask (AMD) so this needs to depend on min_cbm_bits
+being larger than zero.
 
-> +	cat_occup_cpu = uparams->cpu;
+> +	if (!write_schemata("", "0", uparams->cpu, test->resource)) {
+> +		ksft_print_msg("Empty CBM was accepted, must be rejected\n");
+> +		return 1;
+> +	}
 > +
-> +	remove(param.filename);
+> +	/* A mask with a bit outside cbm_mask must be rejected. */
+> +	bad_mask = full_mask | (1UL << count_of_bits);
+> +	snprintf(schemata, sizeof(schemata), "%lx", bad_mask);
+> +	if (!write_schemata("", schemata, uparams->cpu, test->resource)) {
+> +		ksft_print_msg("Out-of-range CBM 0x%lx was accepted, must be rejected\n",
+> +			       bad_mask);
+> +		return 1;
+
+KSFT_FAIL?
+
+> +	}
 > +
-> +	ret = resctrl_val(test, uparams, &param);
-> +	if (ret)
-> +		return ret;
+> +	/*
+> +	 * A mask with fewer than min_cbm_bits bits must be rejected. When
+> +	 * min_cbm_bits is 1 the only sub-minimum mask is the empty mask
+> +	 * This case only applies when the platform requires more contiguous bits.
+> +	 */
+> +	if (min_cbm_bits > 1) {
+> +		count_contiguous_bits(full_mask, &start);
+
+The return value should be checked here to ensure that the create_bit_mask() below 
+is valid.
+
+> +		bad_mask = create_bit_mask(start, min_cbm_bits - 1);
+> +		snprintf(schemata, sizeof(schemata), "%lx", bad_mask);
+> +		if (!write_schemata("", schemata, uparams->cpu, test->resource)) {
+> +			ksft_print_msg("CBM 0x%lx with too few bits was accepted\n",
+> +				       bad_mask);
+> +			return 1;
+
+KSFT_FAIL?
+
+> +		}
+> +	}
 > +
-> +	return cat_occup_check_results(&param, alloc_span, cache_total_size, n);
+> +	ksft_print_msg("Pass: CAT rejects invalid CBM writes\n");
+> +
+> +	return 0;
 > +}
-
-Fundamentally this looks like a duplicate of cmt_run_test()? Only differences I see
-is the size of the buffer and how the test results are checked for pass/fail. Looking
-at the pass/fail I do not see a big difference with what the CMT test tests. I do not
-see what value this tests add beyond what the CMT test already provides.
-
-
 > +
-> +static bool cat_occup_feature_check(const struct resctrl_test *test)
-> +{
-> +	return test_resource_feature_check(test) &&
-> +	       resctrl_mon_feature_exists("L3_MON", "llc_occupancy");
-> +}
-> +
-> +struct resctrl_test l3_cat_occup_test = {
-> +	.name = "L3_CAT_OCCUP",
+> +struct resctrl_test l3_cat_validate_test = {
+> +	.name = "L3_CAT_VALIDATE",
 > +	.group = "CAT",
 > +	.resource = "L3",
-> +	.feature_check = cat_occup_feature_check,
-> +	.run_test = cat_occup_run_test,
-> +	.cleanup = cat_occup_test_cleanup,
+> +	.feature_check = test_resource_feature_check,
+> +	.run_test = cat_validate_run_test,
 > +};
-> diff --git a/tools/testing/selftests/resctrl/cmt_test.c b/tools/testing/selftests/resctrl/cmt_test.c
-> index d09e693dc739..ef51daa8061a 100644
-> --- a/tools/testing/selftests/resctrl/cmt_test.c
-> +++ b/tools/testing/selftests/resctrl/cmt_test.c
-> @@ -16,9 +16,6 @@
->  #define MAX_DIFF		2000000
->  #define MAX_DIFF_PERCENT	15
->  
-> -#define CON_MON_LCC_OCCUP_PATH		\
-> -	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
-> -
->  static int cmt_init(const struct resctrl_val_param *param, int domain_id)
->  {
->  	sprintf(llc_occup_path, CON_MON_LCC_OCCUP_PATH, RESCTRL_PATH,
 > diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
-> index afe635b6e48d..ce3abf0bdac2 100644
+> index ce3abf0bdac2..e2e3cf7833bc 100644
 > --- a/tools/testing/selftests/resctrl/resctrl.h
 > +++ b/tools/testing/selftests/resctrl/resctrl.h
-> @@ -31,6 +31,9 @@
->  #define PHYS_ID_PATH		"/sys/devices/system/cpu/cpu"
->  #define INFO_PATH		"/sys/fs/resctrl/info"
->  
-> +#define CON_MON_LCC_OCCUP_PATH		\
-> +	"%s/%s/mon_data/mon_L3_%02d/llc_occupancy"
-> +
->  /*
->   * CPU vendor IDs
->   *
-> @@ -244,6 +247,7 @@ extern struct resctrl_test mbm_test;
->  extern struct resctrl_test mba_test;
+> @@ -248,6 +248,7 @@ extern struct resctrl_test mba_test;
 >  extern struct resctrl_test cmt_test;
 >  extern struct resctrl_test l3_cat_test;
-> +extern struct resctrl_test l3_cat_occup_test;
+>  extern struct resctrl_test l3_cat_occup_test;
+> +extern struct resctrl_test l3_cat_validate_test;
 >  extern struct resctrl_test l3_noncont_cat_test;
 >  extern struct resctrl_test l2_noncont_cat_test;
 >  
 > diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
-> index dbcd5eea9fbc..324a60818aa1 100644
+> index 324a60818aa1..66739e96f33c 100644
 > --- a/tools/testing/selftests/resctrl/resctrl_tests.c
 > +++ b/tools/testing/selftests/resctrl/resctrl_tests.c
-> @@ -19,6 +19,7 @@ static struct resctrl_test *resctrl_tests[] = {
->  	&mba_test,
+> @@ -20,6 +20,7 @@ static struct resctrl_test *resctrl_tests[] = {
 >  	&cmt_test,
 >  	&l3_cat_test,
-> +	&l3_cat_occup_test,
+>  	&l3_cat_occup_test,
+> +	&l3_cat_validate_test,
 >  	&l3_noncont_cat_test,
 >  	&l2_noncont_cat_test,
 >  };
+
+Thank you.
 
 Reinette
