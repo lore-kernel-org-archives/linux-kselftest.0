@@ -1,150 +1,97 @@
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B5DD4156D0
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 10:41:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785926482; cv=pass; b=vBx62SDAb2/k4R50dPlWP3dGFDx446nLgaKZITyv3lKFhyvf+/oV4dcq2U8z89RN4wacg9qXiAPeTAYkPPtnHU12n8d1+poYjW7GSZt0wrWFjpYP21fCaPJgSvUyTw2mQGXhj0zR+sCqbEa4zkz2oeoQF+WINAtwDdZmfmGvBYM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785926482; c=relaxed/simple;
-	bh=5niBt8DyKkV5MwxSbrsZ3eqRRMmoyzmdPFe+ZCtEli8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P9LzNFJL11J/p9lj3nnjgK95OA3hVu/+gsAjmYhfPcn7s43TPtuRfyVHkYWm3Meoot4V/zHfFV7EnzE3NazT0PayjE2pLYlieKZmX8U06DalwbCeUAwxsLsXopyr51gWuHgWvjlllhF85fd31lumvayDwFUf2VRRgljn497UFa4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qPSABqIG; arc=pass smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD0A42AD2E;
+	Wed,  5 Aug 2026 10:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785927128; cv=none; b=Yc/UORB48r55JaZtIyD8UGm69xL2e0oBtkII/AGJ7zM30rEJ2K9rKuWNwpOhMSCOJNKfMTwoFte7k4SP+60qE8Sj7xLJ/iyup7NK/13siUpG++dLHUgAvtpr7Mh5mVhMP3djKcsOUJyfJeXQDheGikZ37O08oh1g4k0AdXQ/J0I=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785927128; c=relaxed/simple;
+	bh=osqcgEZrB4tIRuddtFyChcekiAZrXeFH6SN6KLCXUeQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AvOsIV7T3at0VUBo9jkuBNMbB5iJeG0y25BvSHOUhJAihdxk+IPMvuc+TPiZAcgZWLMpTliDvNXYGnpczZETQr1VIY5+8eLSNTg6H1wsqe1qoDsdhvhOSqRIwY+M7PvnL84bubsofztc1bpaG2Cxxzqluw2mZXMcxXT0f4FQFWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MccCTMFj; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qPSABqIG"
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-39c86945164so7374591fa.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 03:41:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785926478; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oDWtLkj7ljQRId7QU8DDaUmgWizSkMK8K3iTzO5gglWrT1xUUKioV6diEvL0XXdzVf
-         H1gtqIrFk33JRiQR3aokLgNOGTHW+6Yfq7xcZbqKIhe1GfvgggEk6G+EFMF4Tm2/sCWV
-         yqPgzkaKmK7BvwlgKGn+/03KHWW973pzZGMog6dx850uVyZFgRHSpcsCkKdjXyO8L1UP
-         ctdgUIg9y7M2230jvtobYG99qG1e0+yg/B6WlzL6VL0cQ3tG8cJwLSQrliJkdHGr5oac
-         2NUWgZmEHzjHkqGv1mOtioH1QGckZT5Bv16iS9QffT0+KTRJp0zwAR7gO7Ag0xFcc0pp
-         Hz8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=5niBt8DyKkV5MwxSbrsZ3eqRRMmoyzmdPFe+ZCtEli8=;
-        fh=R9zYem+XCOIDt+fHeFn0djb0VZjqBpHvhRMGppCSbJg=;
-        b=WdnjzLBi3JkaAS+PBnkaZu9XC/I6DKMw2JNh7JYpJJcGiqFOk8WRiwkPpoSwthisu5
-         Me41ktY+qZ3SVLsB+Qo816OFEsx2/TGKR2KrILXV9zKhwj9MI33XK7B69oUt2ouRH//o
-         8a3df7d9p8fST0P/ZRp6w2axLClNkkaxM+KcW7/5kJfpid/oCWUWWJRIqIKKc6WPBxvY
-         OPsxEZQcA6GKqHUsMlQTMdnzf6xFOgo5vu2WaPInuu4YRdJY/F2+i2WQ2N1dUhBY/foE
-         i4Aczh/WrOulvfM1d/rJ4m2zVS/LXajsmQrWvSl+oN8xFevNXrIZsBKcfvvsWsxLSRhf
-         ZVAg==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785926478; x=1786531278; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5niBt8DyKkV5MwxSbrsZ3eqRRMmoyzmdPFe+ZCtEli8=;
-        b=qPSABqIGps0T6TKTjNDT4h28762RiQMmdmQiZcjqtABYlDnnIhj+j5rYozCj4RurXN
-         UrNLziAORRnMfleTLqEnj4EA28Atu9GluXGZma3Pu+aNs8igXtVJCrV6Y/Eg5FeVOncu
-         5qkLYsxKElvyL/Z8RLZWhbokmu5ved1m5zE4B5E/bElfAfUu8/AQJCAptPh68Qg8O2zi
-         MTAZbvbWR/cx3cOOkvA63+x75vkRpGF+8cuQ6K9w27tjx6NIUOrJnb1pqc1O8zwp3LWv
-         rS8VlOomIeHwgzKeM7PeZvdKkybuVkYzCm6t1Fe9m74zLgrAf0bB93+Ol6byjI4ukC18
-         UEEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785926478; x=1786531278;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=5niBt8DyKkV5MwxSbrsZ3eqRRMmoyzmdPFe+ZCtEli8=;
-        b=T/QORs0JlSoRIIs4Jf6D/ExLn40inYkTyUCFg1VXB483+NQlCPgGyI4s8kry0cTT8H
-         sYbPcWJ5gshvvkZr8TtHSYx77BeC1jn4UQc9Fs0Fge1UjsplZeF7QVeAdzmeZDrHRM0f
-         ersqfwD8vKQfjH7N2Dt3xD2ET4Mt/SL8IbXKe+0YxfEUBCi53ggMJkpELFr95IIeWJIh
-         U1t7Cd8etiRwzVDKGhTtG3oGpcGO7bV7wed5nBXSuux4i5tgivK4e56RknRu6hrJNsIo
-         iHTFoQxXjwhPa2eYLAMfCmKtxlv2BHyZ5k+L8N5YyJXHSH3VhxXoEDlYPVwGV9Dj8ug8
-         oHvw==
-X-Forwarded-Encrypted: i=1; AHgh+RrJTyhsXtlYO8fHGqEv1Jvbm4N7RWJg89ctX4NhMotpIiCSJj2vB9xqym5lIPvjvI437/WkA97rxZVL64ZW4/M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWb32aun7EZqCUuENP4s9nHnNJxs0LYwOCIW+Z88c4phrDCFN/
-	lUD+KpezH5oto/XrbB/tXrCz8Ys06r/gJhKTpUW/UwJFZuKJLN6V6245COyF4M4F0mf6mGSovqi
-	R4hR7xifnGukefsyJ7AWj9/zc+eFvsIU=
-X-Gm-Gg: AR+sD13eGlaiMTKxshhr09r1YYaUFXOPDFcB7QXbtFOU9vDVmMf7+FEx6A/+ED0T9fh
-	7YBvhGZEcMeIGvABlsBosCurjPilMHyIZ13SpYPUDmaI+bXvC5fxaht72B5n8aicshsRYqMH+eC
-	JYOh1ghK6Z3+rEvG+cghfdSSPz8FKYcuPlDRI1xWlbmdS3JtO/rQjMkDZPqwkbutDmmfoCB+r1U
-	/bt5CeToI52fVuBT8LLgMG3HEVJXbr3lzI728lScEzU1pRx/su0ychsM+lnfUDJzY/Sl2vhgZR8
-	INox/2R9z9mcNYYjWN3hbtuol5XSZols0FAktfzJhnkUWALd2FXeZCkWC/NNmb4IY8syq7Wg73m
-	ife/YdsarXUojIfi5TPB57MYxyph9gpCVOCoL5Hwc5DTd6g==
-X-Received: by 2002:a05:651c:a20f:10b0:39a:fa7c:b152 with SMTP id
- 38308e7fff4ca-39fbb1a6880mr5507661fa.4.1785926478218; Wed, 05 Aug 2026
- 03:41:18 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MccCTMFj"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A7A4153B;
+	Wed,  5 Aug 2026 03:52:02 -0700 (PDT)
+Received: from [10.57.44.180] (unknown [10.57.44.180])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 743203F632;
+	Wed,  5 Aug 2026 03:51:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1785927126; bh=osqcgEZrB4tIRuddtFyChcekiAZrXeFH6SN6KLCXUeQ=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=MccCTMFj2hIMMjW795szcS5FxXktDxGWArGGS9xJv4VDpKX5Fq4pBTHZ+Dqo3dGwn
+	 I3za+Zt5GbrL3mgj2p5MRpqTGbT/okZGd5AlVXHozUBVFgINdiUcI9YZ5TtSpFFehy
+	 9K99FQyL3HUPo3MkG8rpZnXuHfDYEsMZGyYwsLhU=
+Message-ID: <d2584ac3-51c7-4eac-8f37-ae29d899169c@arm.com>
+Date: Wed, 5 Aug 2026 11:51:55 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260804014714.4362-1-sigefriedhyy@gmail.com>
-In-Reply-To: <20260804014714.4362-1-sigefriedhyy@gmail.com>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Wed, 5 Aug 2026 19:41:06 +0900
-X-Gm-Features: AUfX_myaYvRXHpMPIXlPqkonD5M3Gijs2W5bvZsdGfZVgRcOCjHXYxfLchXmdwU
-Message-ID: <CA+7S2vKRASitG1pK_RPG1L-hDsJyev1q-+ViRhCppBg9aFuZvQ@mail.gmail.com>
-Subject: Re: [PATCH net-next v5 00/10] ipv6: report why a route was deleted in RTM_DELROUTE
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Bobby Eshleman <bobbyeshleman@meta.com>, 
-	Chris J Arges <carges@cloudflare.com>, Daniel Zahka <daniel.zahka@gmail.com>, 
-	David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>, 
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Gal Pressman <gal@nvidia.com>, Ido Schimmel <idosch@nvidia.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Nimrod Oren <noren@nvidia.com>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 09/41] KVM: guest_memfd: Filter both shared and private
+ when invalidating
+Content-Language: en-GB
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
+ liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-9-35f9aec2aed2@google.com>
+From: Suzuki K Poulose <suzuki.poulose@arm.com>
+In-Reply-To: <20260728-gmem-inplace-conversion-v9-9-35f9aec2aed2@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-I checked the sashiko's comment:
-https://patchwork.kernel.org/project/netdevbpf/patch/20260804014714.4362-10-sigefriedhyy@gmail.com/
+On 29/07/2026 01:35, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> Before conversion, a guest_memfd could be either all shared, or all
+> private, configured at creation time using the INIT_SHARED flag. Hence,
+> when zapping pages from stage 2 page tables, guest_memfd can filter which
+> to zap based on the initial shared/private state.
+> 
+> With conversion, guest_memfd tracks shared/private state on a per-page
+> level, so a range can contain both private and shared pages. Zap both
+> private and shared pages for simplicity.
+> 
+> An alternative would be to iterate guest_memfd attributes and only zap both
+> if shared and private pages exist within the range. Setting both the shared
+> and private filters lets the zapping logic do that iteration instead.
+> 
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-> Should this new UAPI attribute also be added to the Netlink YAML
-> specification?
+Reviewed-by: Suzuki K Poulose <suzuki.poulose@arm.com>
 
-> Is this new attribute missing from the netlink YAML
-> specification?
-> should this new attribute be documented in
-> Documentation/netlink/specs/rt-route.yaml
-
-> Is the del-reason (RTA_DEL_REASON) attribute missing from the YAML
-> specification?
-
-> Is there a missing patch in this series to actually report the
-> deletion reason?
-
-> Does this del_reason actually get passed from the deletion path?
-
-These are answered by later patches in the same series.
-
-> This is a pre-existing issue, but could this RTM_NEWROUTE be emitted
-> out of order with respect to an RTM_DELROUTE?
-
-Not related to the current series but might be worth sending a follow
-up separately.
-
-> Should this new enum and its entries include doc properties to
-> describe the specific deletion reasons for the uAPI documentation?
-
-Agreed, but it is a nit. If I need to send out patch series 6 due to
-adjusting later review comments, I will include the fix for this
-comment as well.
-
-> Is RTA_DEL_REASON missing from rtm_ipv6_policy and rtm_ipv4_policy?
-> [...] Should it be added to the policies as NLA_IGNORE or
-> NLA_REJECT?
-> Will the new RTA_DEL_REASON attribute be rejected if user space
-> echoes it back? [...] causing an ABI breakage.
-
-The comment seems wrong. The attribute is kernel to user space
-notification-only, user space code should never set it.
-
-
-Thanks,
-
-Yuyang
