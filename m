@@ -1,147 +1,234 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011021.outbound.protection.outlook.com [40.107.208.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D26737B014;
-	Wed,  5 Aug 2026 06:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785910089; cv=none; b=cmNphjG4/qf8NBrEwAOpq8AOv46JyRDzPonsMUJJqMGzem0P+SQzuMwFYVbx4CNzWvgGSyoaeElgsnuFVClX6N1NGctZbWAamTQjlVzGonm76K6kyMAvyJzbhaH+EpQlEaszWRgagcSFZakuxGoqlmMiIk7mi3zLdNi2m6fB+vA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785910089; c=relaxed/simple;
-	bh=jpoMjcNw/89ZNPXSZbs1mBTNGTOjMQwKk9aH/Yc+QeQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oAEx2PPoVxk5nYKFL7v+GrwMZqPonZwsKRIgsJR3xf1dQ9x7LJsgjXh2FvjMt7nQWWdzdW/WuDqdQ/h5L8SwKHZFfq5h8cdDvbBP8MVVrTMoZUORE2xFrOP+W7uyL67E023YSiLxi41PvssMheWWjVBVIs/UD1IkQpo9v0tnsX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=oco2K8fJ; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D10683CA4AF;
+	Wed,  5 Aug 2026 06:41:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.21
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785912079; cv=fail; b=Qx5NIq+Uvvvo0OOk7vUz93/ofrbb2wyEuoPiCbTm7EYJFnIOQOFHoJiUx/ItySYNk7C8ExzFpUbRJ1aDQFKn3/Mpl0E4QhMCWsy8LrXnvq2ZMX7DKMbUTvgeyHBa+IOOmNoOhtYK1QqCY9UFjFCmtsMDC0HHJO6s/T8w2EzwDTs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785912079; c=relaxed/simple;
+	bh=6YpaUZG/dEytQdwZs+uQW7CIHQm9uiyT1mCFeYw/aiA=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=ufiOQA42t8Xp6YfM5niwokijNKr641n2SGAWlPn5BdFJkuhzNqjRHFNxYjIt8YS96F/MdMeJuFSbyU4J/7ZYLKBegOyxcSRmjLx5gxFF5y9KRe5T6A4o3cZtrOHKp8ycMhHEINpWNXkOLjyzuP0JB2qzq9ffk/HdJ9KzPx3gkCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=oUGBCddW; arc=fail smtp.client-ip=40.107.208.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="oco2K8fJ"
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6755mPba2910524;
-	Wed, 5 Aug 2026 06:07:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=pp1; bh=uDTPb6dzY9jtW1k/H
-	1n8YTGW2zvvVpmc+b0m99r+uvo=; b=oco2K8fJysB/C0jQvAzfMBu4x8D2hR/pA
-	+GxSlQNSNKGEFy/IFIPSDWpGFrZJPVEwhVOiD8Dt0Rs8enXz6uUB+LW0yvpDVMgy
-	cpOp5nL58Ir26D1LrNbAg9htDqfPDtlNcuoZCryuAfNLLwPxRxcVTPldXZeKZGq4
-	ZnnzlIknN5ngrawsnvIAGAyCEnlXrPYOq3xeKzP6kZB88ndMrvnr7nWqueDCkEiX
-	O041Wo3/8tRoMe4kHyApmtYfE6UmbRtDKhyPBOfk1dq6c6E9kqx9sJz29kwTQw8Q
-	AgnA28vixNyYkHxEeFV33vCsNsUJAiHr5GbI5W8pyjzic8WKAZ6+w==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77g96qt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Aug 2026 06:07:49 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 6755uiHP030288;
-	Wed, 5 Aug 2026 06:07:48 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fswtyn0re-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Aug 2026 06:07:48 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67567itA31916536
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 5 Aug 2026 06:07:44 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id A154620043;
-	Wed,  5 Aug 2026 06:07:44 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 12C3020040;
-	Wed,  5 Aug 2026 06:07:41 +0000 (GMT)
-Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.ibm.com.com (unknown [9.124.213.166])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  5 Aug 2026 06:07:40 +0000 (GMT)
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com, maddy@linux.ibm.com, ast@kernel.org,
-        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
-        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
-        venkat88@linux.ibm.com, yeswanth@linux.ibm.com, skb99@linux.ibm.com
-Subject: [PATCH v10 8/8] powerpc64/bpf: fix percpu private stack leak on JIT failure
-Date: Wed,  5 Aug 2026 11:37:04 +0530
-Message-ID: <cf132f76a7af898af9f9690952067e213430c43f.1785906979.git.skb99@linux.ibm.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <cover.1785906979.git.skb99@linux.ibm.com>
-References: <cover.1785906979.git.skb99@linux.ibm.com>
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="oUGBCddW"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=PGAW3w3LViXmPsh8V3DEGzvOaXZj1usnWwb1+I2wC+BitNEp7HYdk7ta1W3sEPi5HjIcNR9smmMLGkAkhkPfXZRDNsOBb9Nz5ibypn3o4/VHi5sg/K1UbU9GkHd5gJA6cycBPt1AfnMRcYCRpPLMQFKnoHzy0PX0dY/9e7BZ/U70Apr/LscaK6FYOS4fdJAbkfbOdI7/1mMyCL+ypVDa5KiX3dJyF1BN/v6uBYmtttAl6Oz7ITMreostKmP1J9s6d2StHG5oNxqgbK8k3ONjI/Q1iT+pnyhNJWjd+PY5h8mGSp2C3owL75+XoGroSw2ApSIrGCZ/QMYgM/touG48Mw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=R3x7VEe6Nw3J8dp/2fK+blzdJ9zV/j4pRmT1R964lPQ=;
+ b=QzQB8/KZNBW7GJEEFl7bXp34pIb3tw7BoY6j9/g2mtd9JpEGpxXlfJEKv+fqcLHrslw+AJLG5d8GaSuWzT/lWUKzguoOfsB3yrvxSYu2s4ivGy9r6OVRmC9EYFw6py2FQpvOZMOcvNYwe9e7SqDhauCwVlE15MGocBEP/lK5J7PXF5/F+iP8RRrjYkn9dt0Q8eNPzegqKrgL2efVSsB9g6mEo8Lrk8j3T2sBLBEQ2UgkOuJhYuD0nQM+SnGBmberp7/bUgK1GBgy1CaRAOQTZbwMj1HetpXQqY7hiX8ONRPiKP2Y1Tn4XL61OMB6BvtTn6YnBU9MVgy+Ws6wOLgmuA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=R3x7VEe6Nw3J8dp/2fK+blzdJ9zV/j4pRmT1R964lPQ=;
+ b=oUGBCddWlHegtqlGGkykEgKyh25H1XxVfe2sFapXL3XxctJzY7/N4cBDuc7LKDwnY6+8NusUPlFipSGbPhiwArPfrKb3IDyWq2uLNeITqRobIXq99V3nJr/h7x8uNtFtErJy5p+/p/6J/ZE7Kkcp+OzhccTTPz7rLKqKtcSSnm0=
+Received: from BL0PR05CA0008.namprd05.prod.outlook.com (2603:10b6:208:91::18)
+ by LV3PR12MB9117.namprd12.prod.outlook.com (2603:10b6:408:195::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Wed, 5 Aug
+ 2026 06:41:11 +0000
+Received: from BL02EPF0001A103.namprd05.prod.outlook.com
+ (2603:10b6:208:91:cafe::69) by BL0PR05CA0008.outlook.office365.com
+ (2603:10b6:208:91::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.16 via Frontend Transport; Wed, 5
+ Aug 2026 06:41:11 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ BL02EPF0001A103.mail.protection.outlook.com (10.167.241.133) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.292.8 via Frontend Transport; Wed, 5 Aug 2026 06:41:11 +0000
+Received: from [127.0.1.1] (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.41; Wed, 5 Aug
+ 2026 01:40:59 -0500
+From: Shivank Garg <shivankg@amd.com>
+Subject: [PATCH v3 0/9] KVM: guest_memfd: folio migration for
+ non-confidential VMs
+Date: Wed, 5 Aug 2026 06:40:29 +0000
+Message-ID: <20260805-shivank-gmem-migrate-v3-0-00d8bdec4e1d@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA1MDA0MiBTYWx0ZWRfX6nKtj2oKgSdR
- pYWlWXvuAEEjUtDZXKZy/q42KogMk1hRjQ2FEEVdKqkFsZ01zOHeBI8pteiCgAK1l8HF3POzHDz
- FfORLlOGSDYumJ3DXWGheX9kbt9RwWtF2cc2Z2wPTP0c3Jp9czEDpMqQaIyG1y9b5iu72KUCv5E
- fEfUX8O3HYg7iEdf8mHEZOKc8e+hZjl89EzN0/cqmjHEBVNE5NXjMA7qQ5//hpWELyUaC/nSNWj
- daVQIAGEaTUoxsqknAihWiapUYO5Sc9I2BGHE1TXh9SztXWjMqyOuehs4Wgdd5JCD8zJ9g6c/tg
- kLJEZeC5pDDnqpBWoobWveaoiiTRP6pBbU7f+hUSA2RU/kwZTPCDwGMlxS2NGpGMPAriq4ckLdL
- Lil6NOgSMzRQME8uTPCaQ1M5fjLN2lX079kny1tVTNyxfJAZUqZQQo736IIyMxDe0ekYTI0EEVM
- Xr0inrDvwuYIvuejNxA==
-X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a72d335 cx=c_pps
- a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
- a=V8glGbnc2Ofi9Qvn3v5h:22 a=VwQbUJbxAAAA:8 a=VnNF1IyMAAAA:8
- a=SJ-jtujo7bo76xSWeacA:9
-X-Proofpoint-GUID: 0mGG3xd-nK8OsZBkB_0MKgKDqqrY6o-3
-X-Proofpoint-ORIG-GUID: 0mGG3xd-nK8OsZBkB_0MKgKDqqrY6o-3
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA1MDA0MiBTYWx0ZWRfXwUR7Kt01Sf6s
- 64I2kGrFBBiFCVh8JmUMSmlkxGkeAp00Os9TEM064Wz4oDLQsHFt3oZqGen9oReZvHTJRibw2du
- AhBuMxtqzMqRqfp1e4HUZEvKwNVIYko=
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-05_02,2026-08-04_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
- suspectscore=0 clxscore=1015 impostorscore=0 bulkscore=0 adultscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608050042
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN3acmoC/4XNQQ6CMBCF4auYrq1pBxnBlfcwLkqZwsQUTEsaD
+ eHuFjasjMv/JfPNLCIFpiiuh1kEShx5HHIUx4OwvRk6ktzmFqAAFWotY8/JDE/ZefLScxfMRLK
+ y2pa6bgplUOTTVyDH7429P3L3HKcxfLYvSa/rHzBpqSS0gNg4i64ub8a3Jzt6sXIJduIC1Q8CV
+ gJrY7WrzgTNTizL8gWpNTKA+QAAAA==
+X-Change-ID: 20260611-shivank-gmem-migrate-8c1c519b30a6
+To: "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+	Andrew Morton <akpm@linux-foundation.org>, Vlastimil Babka
+	<vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+	<mhocko@suse.com>, Brendan Jackman <jackmanb@google.com>, Johannes Weiner
+	<hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>, David Hildenbrand
+	<david@kernel.org>, Matthew Brost <matthew.brost@intel.com>, Joshua Hahn
+	<joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park
+	<byungchul@sk.com>, Gregory Price <gourry@gourry.net>, Ying Huang
+	<ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, "Paolo
+ Bonzini" <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, Chao Peng
+	<chao.p.peng@linux.intel.com>, Nikunj A Dadhania <nikunj@amd.com>, "Michael
+ Roth" <michael.roth@amd.com>, Pankaj Gupta <pankaj.gupta@amd.com>, "Ackerley
+ Tng" <ackerleytng@google.com>, Sean Christopherson <seanjc@google.com>,
+	"Vishal Annapurve" <vannapurve@google.com>, Nikita Kalyazin
+	<nikita.kalyazin@linux.dev>, Patrick Roy <patrick.roy@linux.dev>, "Pratik
+ Sampat" <prsampat@amd.com>, Ashish Kalra <Ashish.Kalra@amd.com>, "Thomas
+ Gleixner" <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, Peter Shier <pshier@google.com>, "Jim
+ Mattson" <jmattson@google.com>, Ricardo Koller <ricarkol@google.com>, "Ira
+ Weiny" <iweiny@kernel.org>, Fuad Tabba <fuad.tabba@linux.dev>
+CC: <linux-fsdevel@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+	<linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-doc@vger.kernel.org>, Shivank Garg
+	<shivankg@amd.com>, Sashiko <sashiko-bot@kernel.org>
+X-Mailer: b4 0.15-dev-47d62
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785912059; l=4784;
+ i=shivankg@amd.com; s=20260518; h=from:subject:message-id;
+ bh=6YpaUZG/dEytQdwZs+uQW7CIHQm9uiyT1mCFeYw/aiA=;
+ b=N9UBFTS3Klw9d7OkUXWnt7t1k25cHHAtXyr/C4esTFUtisMCAIBlE0Iehm6wGSmcMHIdgagk2
+ O4T2PiVurvkBhnU0k7FccTVO6Ss1TZZijn5xrss25UZi64RBL6MWwUj
+X-Developer-Key: i=shivankg@amd.com; a=ed25519;
+ pk=2l2QGTeXuGkZTtfmx0nPQU8iFZfjYmX/ymMojitevx4=
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL02EPF0001A103:EE_|LV3PR12MB9117:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ac01d0a-20c9-4f66-a3e6-08def2bc89c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|23010399003|36860700016|1800799024|82310400026|13003099007|921020|6133799003|10067099003|11063799006|56012099006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	k5WxsUpEjy+W6sM6mYdAQ59xkWyKr7LFUET5BMGtY5IAC++hKH90PPN4mav0l3ulh/jLfGq5eNx7Ap6s8pwvJsxX/ryjmehW0pxoU2fWE77xnTxbF6egZ2KwoK8F6k7NSaa0i0Cs2YeMerH/nQ1Fmo7AfEwwzlkZG5U91qt2k1jXiS59/hwo7PsS09L9MNFVWLMI39gY2rfLyTIVSv/G1eoS2RQlZm+mm3Q8/KcTuBSsb1bPUDIuHOYq9QIjgEAPNCt4L4NnOPANLa9dEOekLXSFmH6qa4n7eLbY3Tb1y0KBEZWod3qU11eWY3pfgfby7VcUmxsQ68j+sebC0Jel7sdptdeYy4Rm7mD9y//aQASZKcSQUHo3r0az8ga8ROuPMsWNyQhYmfSG+AAboHcSJfIQFyeC5aRuVkg7yCyQbtrk+fg6qVsmoElgN73Gd0hHEBuq8Udz6vQz+Cg3qWOw30VhwgeY8W12ehVg2RcGywBcpa5aryrdi06gbTUN3wpLCyRqeA9BBug50RCNyb9HErni2r8m0W+mGuDdZTYUaDuVFSEm7Vysnj4JCJCRPYp1BvzY7evTbMdV6APKUfkav+3Qa89+ITmHodAAAA3D1NblVsBZmG5VBe6B4BMwzu5Ug2NJS2ZZDltqz2vfFuWEIvxYfPNMcpirxHA8+9E3EW6ca+EYacsqFN37mEai0qBB
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(23010399003)(36860700016)(1800799024)(82310400026)(13003099007)(921020)(6133799003)(10067099003)(11063799006)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	ykodeOeYq94s5WR8QSr2rY8/M/wrVcJ8k08vAtY/KkU8Gfb5dpAt+S069A8TeDze8o55cgMXPXF7Ghcbs310pZmWH+8HCWs/k/8Arp97noUjcSrsWBcXN2SZBWDNIDjA7t0SZ/bcWB69+Z3yGXOi2yF5UYlUdcvhOYKbb26UYLma9dqec98O7sCAYmU6ddq5aMcHcaFtv2eoPhYI9t+jiBBgIS8LgmCuRyEkrgCe9XuyieiAP9YRO4LmiFsTjtGiEvrmCVV8iQ3plYe4Tcv83D+TFKGGoWeDCdmkVgg8CdZt5afGe5FY6ubo+pbI6j5Ewelw3v0Ha/jY3BJylwBYo6gS1KiaJxmnkZab7ktzQO/Q//2xNHER05OQmEgxoRtQdl5FvBsVOGXK4MFTjcV7ok55mphWM3GaFhHJH8m4LD2hFj0eCbAipk6RbJ4fz3V5
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2026 06:41:11.2085
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ac01d0a-20c9-4f66-a3e6-08def2bc89c7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BL02EPF0001A103.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR12MB9117
 
-From: Abhishek Dubey <adubey@linux.ibm.com>
+guest_memfd folios are currently always marked unmovable, so the kernel cannot
+perform memory compaction, offlining, etc. This is unavoidable for
+confidential VMs (SEV-SNP, TDX), since memory is encrypted and copying it
+needs firmware assistance. However, for non-confidential VMs (like
+Firecracker), we can migrate the folios.
 
-The existing conditional statement in bpf_int_jit_compile() frees the
-percpu private stack at out_addrs only when the image buffer was never
-allocated.
+This series enables folio migration for non-confidential guest_memfd and
+also lays the groundwork for migrating confidential guest_memfd later.
+Once firmware-assisted copying support is available, those VMs can be
+made movable, the confidential folio content can be copied separately,
+and the destination folio marked with FOLIO_CONTENT_COPIED[4] so
+__migrate_folio() skips the host-side folio_mc_copy().
 
-If bpf_jit_build_body() fails during a code-generation pass, the
-image buffer has already been allocated, so !image is false and the
-percpu stack is not freed.
+Testing
+-------
+Host: 7.2-rc6+(c21bb419386) + this, AMD EPYC ZEN 3, 2 NUMA nodes
 
-Because JIT compilation failed, fp->jited remains at 0. The subsequent
-bpf_jit_free() path only frees priv_stack_ptr when fp->jited is set, so
-freeing is skipped here too, leaking the percpu allocation.
+- KVM selftest: allocate folios on node 0, migrate them to node 1 and
+  back and verify resulting NUMA node and the folio contents at each
+  step.
 
-Fix implements freeing the private stack whenever fp->jited was not set,
-i.e. compilation did not succeed, instead of keying off !image. !fp->jited
-already covers the !image case, since image is only NULL on early-failure
-paths where fp->jited is likewise 0.
+- Firecracker [1]: booted a microVM backed by guest_memfd. While the
+  guest was running, forced host-side migration of its folios via
+  migratepages(8) and explicit move_pages(2) of guest_memfd
+  pages. Verify with /proc/firecracker_pid/numa_maps.
 
-Reported-by: sashiko-bot@kernel.org
-Closes: https://lore.kernel.org/bpf/20260616135426.A06B71F000E9@smtp.kernel.org
-Fixes: 156d985123b6 ("powerpc64/bpf: Implement JIT support for private stack")
-Cc: stable@vger.kernel.org
-Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
-Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
+Notes
+-----
+- Sashiko pointed out a pre-existing ABBA deadlock between
+  kvm_gmem_error_folio() and truncation. It's being addressed separately
+  by Hao Zhang. [2][3]
+
+[1] https://github.com/firecracker-microvm/firecracker/tree/feature/secret-hiding
+    In builder.rs, add GUEST_MEMFD_FLAG_MIGRATABLE to bit-2 and pass it instead
+    of GUEST_MEMFD_FLAG_NO_DIRECT_MAP to vm.create_guest_memfd().
+[2] https://lore.kernel.org/all/ambEdSPjerZIVN0b@192.168.1.215/
+[3] https://sashiko.dev/#/patchset/20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95%40amd.com
+[4] https://lore.kernel.org/all/20260630-shivank-batch-migrate-offload-v6-1-da95d7e8b8a2@amd.com
+
+Signed-off-by: Shivank Garg <shivankg@amd.com>
 ---
- arch/powerpc/net/bpf_jit_comp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changes in v3:
+- Fix unbalanced mmu_invalidate_in_progress count unbinding dying guest_memfd. (Sashiko)
+- Fix maxnode handling in xapic_ipi_test selftest.
+- Add GUEST_MEMFD_FLAG_MIGRATABLE documentation
+- Replace open-coded sizeof() * 8 calculation with BITS_PER_TYPE()
+- Add get_numa_mem_nodes() and use  MPOL_F_MEMS_ALLOWED for allowed NUMA ndoes
+  instead of hardcoded NUMA node IDs. (Sashiko)
+- Extend migration selftest to verify rejection without MIGRATABLE flag and
+  move repeated checks into common helpers.
+- Drop RFC tag.
+- Link to v2: https://lore.kernel.org/r/20260728-shivank-gmem-migrate-v2-0-269ac1f84e2b@amd.com
 
-diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-index 3c20bb13cfd7..825999f8717b 100644
---- a/arch/powerpc/net/bpf_jit_comp.c
-+++ b/arch/powerpc/net/bpf_jit_comp.c
-@@ -404,7 +404,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 				(void *)fimage + FUNCTION_DESCR_SIZE);
- 
- out_addrs:
--		if (!image && priv_stack_ptr) {
-+		if (!fp->jited && priv_stack_ptr) {
- 			fp->aux->priv_stack_ptr = NULL;
- 			free_percpu(priv_stack_ptr);
- 		}
+Changes in v2:
+- Make folio migration opt-in through GUEST_MEMFD_FLAG_MIGRATABLE,
+  preserving unmovable behavior if userspace don't explictly ask. (Alexandru, David, Sean)
+- Add kvm_arch_supports_gmem_migration() so arch can control whether
+  GUEST_MEMFD_FLAG_MIGRATABLE is advertised.
+- Allocate movable folios with GFP_HIGHUSER_MOVABLE. (David)
+- Keep guest_memfd unevictable. (David, Sashiko, Sean)
+- Split migrate_folio() implementation and enablement as separate patches.
+- Update selftest with new flag.
+- Link to v1: https://lore.kernel.org/r/20260611-shivank-gmem-migrate-v1-0-2d266bfc6f95@amd.com
+
+---
+Shivank Garg (9):
+      KVM: guest_memfd: take the invalidate lock when unbinding a dying file
+      mm: split AS_UNMOVABLE back out of AS_INACCESSIBLE
+      KVM: guest_memfd: implement folio migration for non-confidential VMs
+      KVM: guest_memfd: add GUEST_MEMFD_FLAG_MIGRATABLE
+      KVM: selftests: fix maxnode arguments in xapic_ipi_test
+      KVM: selftests: use BITS_PER_TYPE() for NUMA masks
+      KVM: selftests: add get_numa_mem_nodes()
+      KVM: selftests: use allowed NUMA nodes in guest_memfd_test
+      KVM: selftests: exercise guest_memfd folio migration
+
+ Documentation/virt/kvm/api.rst                   |   3 +
+ arch/x86/kvm/x86.c                               |   9 ++
+ include/linux/kvm_host.h                         |   4 +
+ include/linux/pagemap.h                          |  24 ++-
+ include/uapi/linux/kvm.h                         |   1 +
+ mm/compaction.c                                  |  12 +-
+ mm/migrate.c                                     |   2 +-
+ tools/include/uapi/linux/kvm.h                   |   1 +
+ tools/testing/selftests/kvm/guest_memfd_test.c   | 193 +++++++++++++++++++----
+ tools/testing/selftests/kvm/include/numaif.h     |  52 +-----
+ tools/testing/selftests/kvm/x86/xapic_ipi_test.c |  14 +-
+ virt/kvm/guest_memfd.c                           |  76 +++++++--
+ 12 files changed, 284 insertions(+), 107 deletions(-)
+---
+base-commit: c21bb4193868a8de71fc4693fa741e195fdf5d86
+change-id: 20260611-shivank-gmem-migrate-8c1c519b30a6
+
+Best regards,
 -- 
-2.54.0
+Shivank Garg <shivankg@amd.com>
 
