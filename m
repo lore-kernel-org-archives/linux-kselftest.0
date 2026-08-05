@@ -1,275 +1,225 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FB803F86E2
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 09:21:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B45346AC0;
+	Wed,  5 Aug 2026 09:29:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785921684; cv=none; b=Yrue0Zqpw8ycnuhefParYXUy3TjuhsSIuISSioM+UgAwjAQcuNWfrrROdaB1YUmtfh/4m8chad7TPx/HuWLVTiecigqPZtyq4Gbntq/h2ETirv2SHfWEHZKgkEUvuTaWbpuipRMQYx7+uEefHNwj1ujhrHSJ223QuTP2QcfO3AE=
+	t=1785922194; cv=none; b=UdRFYRvF95tTKlp//NFbCLetc6dA2m2sgW3oSk8F5yclPxko0ZEdGHLXyX+AV0RnhkfoMDVUdM7t8YvTRTtp5JUmyNhrMMyZ1KajpiAh5Cxr3zTDFkfwepItAh5OaZTGVw+45ofhBO9UOT3ZuJhUUpazLVLk1WqIoheTHAjA6XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785921684; c=relaxed/simple;
-	bh=rihW06zt0jOo7vObDCfKiZAycA+BvyIzlcHZEkPoyUc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aTpENMe0TSPfXbGf/R8VO0vP8abRaW4qB3jPNrqm48zkpKnN2xntnShdpVFkBa7GWPpOaa4sMOlWhtm+jG0vcFNPt3qD6akAd9Avj/rd/O1ZM7wD7vxdFgoU5zgefmaRk+MFXcQndtXSpu1e4aH6OWxXJX1lsnO4ac97bovt6TI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ohTCorAb; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785922194; c=relaxed/simple;
+	bh=PYNJT8vFG7Wp9GRzPv1qzS9fMJddCPuQjB8CIEbc2Lw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VXhXe7jPLizMtic2mkgu4k1xQ7kZPNTD9D6bGaU0oAbGDxHSikdTuE+AoqGL2srCED8bwiTShiXCyukWmnOkrYu+qpJjHzphwbzfESdl6muQWCJBxdoLU5M9oFXzS/bmrduxuyaQdPkmyOn2z4AthPhFfjJz1f0A3PlAuyWHPgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ag2H6Enn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ohTCorAb"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785921671;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vahvZ+wmKcdNUH+2tDukG0ly53D64r43IRpsGL/ZSOo=;
-	b=ohTCorAbGwbGa7IEdo6ou/29iah3yAmnh5kkgYKl3VlAImSs3aZY47HGkrUV4yxt4c9Q7B
-	GYIgkJf/PuguFkXCFtc2PTKPp4k+qXZalPfBGUWvCDyvmyauPlanKGHIjXGcdy5I8f9h42
-	t0JuAWdKsvBMLUBvthEx+Vsyk6Q0s0Q=
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Clark Williams <clrkwllms@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-rt-devel@lists.linux.dev
-Subject: [PATCH bpf-next v2 4/4] selftests/bpf: Add a test for arena fault-in under memory.max
-Date: Wed,  5 Aug 2026 17:15:57 +0800
-Message-ID: <20260805091720.139924-5-jiayuan.chen@linux.dev>
-In-Reply-To: <20260805091720.139924-1-jiayuan.chen@linux.dev>
-References: <20260805091720.139924-1-jiayuan.chen@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ag2H6Enn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CEF1F000E9;
+	Wed,  5 Aug 2026 09:29:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1785922193;
+	bh=/gjtDrTd3eRi22+TbpqZHqyTIg00RD4cowSNfL//SUg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=ag2H6EnnFi4b+rjAY/vOuSJSppombJiw6yEHEy7W/bgMRsj6+S4B3EhWbErU4pYX7
+	 S/nUW4Om/ISFjyJ5TLWoQxid9jVaN4NTRu1/HmvCQQdrfFiIVpGCQ2PKjOcsZFKbWx
+	 dGsB6hzGq0UoOE95Cq1AwT+O95gAcTcmYnZcUBQ984wiE+110RP5FFe1DF1ry0Rd8h
+	 W57wr2rOnjHXUH06E8Pah5rdwcPf4a3re/C/qRj7I56Op/IKZJ0qri623UPEmi0Sq5
+	 2Ehn5nEPZJSyU1L6GNRn0jYgOpJMzCB4nl18Zr20xgDWMXBYkxWD8Ap43Hy0b9xNTK
+	 dClMMia43hoJg==
+Date: Wed, 5 Aug 2026 10:29:31 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 06/15] mm: propagate VMA anonymous page offset on map,
+ remap, split + merge
+Message-ID: <anMBoUbb2_lqiP4d@lucifer>
+References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
+ <20260729-b4-scalable-cow-virt-pgoff-v3-6-e8ecfefea812@kernel.org>
+ <4ad4b17b-bae6-4169-8649-bff4a29e7fde@kernel.org>
+ <anB9MWSSITYpDibA@lucifer>
+ <6ea7cdad-afb1-45af-a63c-30b760fe160d@kernel.org>
+ <anLyhaI6kW-EWk13@lucifer>
+ <aba0e91c-ab9c-4420-9ed4-9e42cf03ecfb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aba0e91c-ab9c-4420-9ed4-9e42cf03ecfb@kernel.org>
 
-A child joins a memcg capped at 64M and faults an arena in until it runs
-out of the budget. Without the kernel fix the child dies with SIGSEGV on
-a valid arena address; with it, the child is killed by the memcg OOM
-killer.
+On Wed, Aug 05, 2026 at 11:19:20AM +0200, David Hildenbrand (Arm) wrote:
+> On 8/5/26 10:59, Lorenzo Stoakes (ARM) wrote:
+> > On Wed, Aug 05, 2026 at 09:35:56AM +0200, David Hildenbrand (Arm) wrote:
+> >> On 8/3/26 15:46, Lorenzo Stoakes (ARM) wrote:
+> >>>
+> >>> No this would be incorrect.
+> >>>
+> >>> A read-only mapping would become unmergeable here. So this is something apart
+> >>> from the rmap aspect,
+> >>
+> >> I'd assume that we should never even consider anon_pgoff when merging
+> >> !is_cow_mapping(), it doesn't make any sense.
+> >>
+> >> No anon folios -> no anon_vma -> no anon_pgoff
+> >
+> > You can merge unfaulted ranges is the thing here.
+> >
+> > But anyway I actually wonder whether this whole branch shouldn't be:
+> >
+> > 	if (!vma->anon_vma) {
+> > 		...
+> > 	}
+> >
+> > Because that way we keep anon_pgoff updated even for MAP_SHARED mappings. This
+> > isn't necessary and doesn't impact anything _except_ print_bad_page_map which
+> > outputs both pgoffs.
+>
+> Agreed.
+>
+> >
+> > But it'd be consistent, avoid any confusion about gating on VMA_SHARED, and
+> > simplify the code :)
+> >
+> >>
+> >> But I think I am missing one detail here:
+> >>
+> >>> and it is a contract that upon move of an unfaulted
+> >>> mapping (which for read-only anon would always be unfaulted) that vma->vm_pgoff
+> >>> is updated.
+> >>
+> >> "read-only anon": I assume you mean an anon mapping that does not have
+> >> VM_MAYWRITE set?
+> >
+> > A MAP_SHARED mapping of a read-only file becomes a MAP_PRIVATE !VMA_MAYWRITE_BIT
+> > mapping and must adhere to the same contract.
+>
+> Right, but that is not an anon mapping, it's a file mapping that similarly
+> cannot have anon folios, ever.
+>
+> >
+> > Also mmap hooks can clear the VMA_MAYWRITE_BIT.
+>
+> Right, but again, if we'd have that being done to anon mappings, other things in
+> MM would already be broken.
+>
+> We assume that anon folios can only ever end up in cow mappings.
+>
+> >
+> > However:
+> >
+> > - If you're a driver clearing VMA_MAYWRITE_BIT you should only be doing this for
+> >   'special' mappings anyway (I have a series I've not sent yet that establishes
+> >   this as an invariant also) - and these are not mergeable anyway.
+>
+> Jup.
+>
+> >
+> > - If you're a !VMA_MAYWRITE_BIT MAP_PRIVATE-file backed mappings you never set
+> >   vma->anon_vma and always update anon pgoff so you always have alignment for
+> >   purposes of merge.
+>
+> Jup.
+>
+> >
+> > So I think also we can then change needs_adjacent_anon_pgoff() to:
+> >
+> > static bool needs_adjacent_anon_pgoff(const struct vma_merge_struct *vmg)
+> > {
+> > 	return vmg->file && is_cow_mapping(...);
+> > }
+>
+> Agreed.
+>
+> >
+> > [I have to create a vma_flags_t variant of is_cow_mapping()]
+> >
+> > With those two changes we gate on VMA_SHARED_BIT nowhere :)
+>
+> That's much clearer.
 
-With the fix:
+Yes agreed :)
 
-  serial_test_arena_memcg:PASS:child killed by signal
-  serial_test_arena_memcg:PASS:not killed by SIGSEGV
-  #5       arena_memcg:OK
+>
+> I was thinking for a second whether to have a more expressive
+> "mapping_might_have_anon_folio" or sth like that. But it's a bit mouthful.
+>
+> Most instances of is_cow_mapping() in memory.c want to know exactly that.
 
-  # dmesg
-   arena_vm_fault+0x655/0xa90
-  Memory cgroup out of memory: Killed process 512, file-rss:67920kB
+Yeah and obviously once scalable CoW is in even that name will be wrong :)
 
-Without the fix:
+I think the semantics are a non-obvious but I do like that we are explicit in
+saying 'is a CoW mapping'. We just maybe need to be more consistent with that.
 
-  serial_test_arena_memcg:PASS:child killed by signal
-  serial_test_arena_memcg:FAIL:not killed by SIGSEGV: actual 11
-  #5       arena_memcg:FAIL
+Maybe once scalable CoW is in can work to improve consistency of that...
 
-  # dmesg
-  test_progs[508]: segfault at 100004025000 ...
+>
+> >
+> >>
+> >> I recall that that's a combination that cannot be created. While you can create
+> >> something that does not have VM_WRITE set, IIRC VM_MAYWRITE is always set for
+> >> anon vmas.
+> >
+> > For pure anon yeah, see above for the MAP_SHARED->MAP_PRIVATE-file backed weird
+> > case.
+> >
+>
+> Agreed.
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/prog_tests/arena_memcg.c    | 139 ++++++++++++++++++
- .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
- 2 files changed, 163 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
- create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+Cool will make the changes as above then! :)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-new file mode 100644
-index 000000000000..ca039ebd3d67
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <test_progs.h>
-+#include <fcntl.h>
-+#include <signal.h>
-+#include <sys/mman.h>
-+#include <sys/wait.h>
-+#include <unistd.h>
-+#include <sys/user.h>
-+#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-+#include <unistd.h>
-+#define PAGE_SIZE getpagesize()
-+#endif
-+
-+#include "cgroup_helpers.h"
-+#include "arena_memcg.skel.h"
-+
-+#define CG_PATH		"/arena_memcg"
-+
-+/* Budget the arena gets on top of whatever is already charged after load. */
-+#define ARENA_BUDGET	(64 * 1024 * 1024)
-+
-+static void dump_memcg(int (*rd)(const char *, const char *, char *, size_t))
-+{
-+	char buf[512];
-+
-+	/*
-+	 * memory.current reads 0 once the child has left the cgroup, so it only
-+	 * carries information when dumped from the live child; memory.peak and
-+	 * memory.events survive the child and tell the story either way.
-+	 */
-+	if (!rd(CG_PATH, "memory.current", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.current: %s", buf);
-+	if (!rd(CG_PATH, "memory.max", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.max: %s", buf);
-+	if (!rd(CG_PATH, "memory.peak", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.peak: %s", buf);
-+	if (!rd(CG_PATH, "memory.events", buf, sizeof(buf)))
-+		fprintf(stderr, "memory.events:\n%s", buf);
-+	fflush(NULL); /* _exit() in the child would not flush stdio otherwise */
-+}
-+
-+void serial_test_arena_memcg(void)
-+{
-+	int cgroup_fd = -1, status;
-+	const long ps = PAGE_SIZE;
-+	char buf[64];
-+	pid_t pid;
-+
-+	if (setup_cgroup_environment())
-+		return;
-+
-+	cgroup_fd = create_and_get_cgroup(CG_PATH);
-+	if (!ASSERT_OK_FD(cgroup_fd, "create_and_get_cgroup"))
-+		goto out;
-+
-+	/* No memory controller -> nothing to test. */
-+	if (read_cgroup_file(CG_PATH, "memory.current", buf, sizeof(buf))) {
-+		test__skip();
-+		goto out;
-+	}
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork"))
-+		goto out;
-+	if (pid == 0) {
-+		struct arena_memcg *cskel;
-+		__u32 i, npages;
-+		char *base;
-+		size_t sz;
-+		long cur;
-+
-+		/*
-+		 * Do everything from the child: the arena vma is VM_DONTCOPY so
-+		 * it would not survive fork(), only the child should be under the
-+		 * limit so that a memcg OOM cannot pick test_progs, and a map is
-+		 * charged to the memcg of the task that creates it - so join
-+		 * before load. The cgroup work dir belongs to the parent that set
-+		 * the environment up, so reach it with the _parent() helpers.
-+		 * Errors are reported to the parent through the exit code, since
-+		 * ASSERT_* in a forked child does not reach it.
-+		 */
-+		snprintf(buf, sizeof(buf), "%d", getpid());
-+		if (write_cgroup_file_parent(CG_PATH, "cgroup.procs", buf))
-+			_exit(2);
-+
-+		cskel = arena_memcg__open_and_load();
-+		if (!cskel)
-+			_exit(3);
-+
-+		base = bpf_map__initial_value(cskel->maps.arena, &sz);
-+		if (!base)
-+			_exit(4);
-+		npages = bpf_map__max_entries(cskel->maps.arena);
-+
-+		/*
-+		 * Cap only now, after load: everything but the fault-in is
-+		 * charged, so the arena gets a fixed budget regardless of what
-+		 * the load itself cost, and the load can never hit the limit.
-+		 */
-+		if (read_cgroup_file_parent(CG_PATH, "memory.current", buf, sizeof(buf)))
-+			_exit(5);
-+		cur = strtol(buf, NULL, 10);
-+		snprintf(buf, sizeof(buf), "%ld", cur + ARENA_BUDGET);
-+		if (write_cgroup_file_parent(CG_PATH, "memory.max", buf))
-+			_exit(6);
-+
-+		for (i = 0; i < npages; i++)
-+			base[(size_t)i * ps] = 1;
-+		/* Faulted everything without dying: no pressure built, dump why. */
-+		dump_memcg(read_cgroup_file_parent);
-+		_exit(0);
-+	}
-+
-+	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
-+		goto out;
-+
-+	/* A non-zero exit means the child failed to set up; the code says where. */
-+	if (WIFEXITED(status) && WEXITSTATUS(status)) {
-+		ASSERT_OK(WEXITSTATUS(status), "child setup");
-+		goto out;
-+	}
-+
-+	/*
-+	 * Faulting a valid arena address until memory.max is hit must not look
-+	 * like an invalid access. Without the fix the fault path allocated with
-+	 * the non-blocking allocator, turned its -ENOMEM into VM_FAULT_SIGSEGV,
-+	 * and the child died with SIGSEGV on a valid address; now it is handled
-+	 * by the memcg OOM path and the child is killed by SIGKILL instead.
-+	 */
-+	if (!ASSERT_TRUE(WIFSIGNALED(status), "child killed by signal"))
-+		goto out;
-+	if (!ASSERT_NEQ(WTERMSIG(status), SIGSEGV, "not killed by SIGSEGV"))
-+		dump_memcg(read_cgroup_file);
-+out:
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/testing/selftests/bpf/progs/arena_memcg.c
-new file mode 100644
-index 000000000000..adecd9e8463e
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
-@@ -0,0 +1,24 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include "bpf_arena_common.h"
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARENA);
-+	__uint(map_flags, BPF_F_MMAPABLE);
-+	__uint(max_entries, 100000); /* number of pages */
-+#ifdef __TARGET_ARCH_arm64
-+	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-+#else
-+	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-+#endif
-+} arena SEC(".maps");
-+
-+SEC("syscall")
-+int noop(void *ctx)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+>
+> >>
+> >> --
+> >> Cheers,
+> >>
+> >> David
+> >
+> > (It's funny to me that if you want a truly read-only MAP_PRIVATE file-backed
+> > mapping (no idea why you would but anyway) you have to MAP_SHARED, but an
+> > actually MAP_PRIVATE file-backed mapping of a read-only file is writable [which
+> > makes sense obviously] :)
+> I guess this boils down to
+>
+> MAP_PRIVATE of a read-only file allows you to COW. Which is usually what you
+> want when placing breakpoints / letting the debugger go wild.
+>
+> MAP_SHARED of a read-only file doesn't allow you to COW, and can consequently
+> never become writable.
+>
+> It's confusing, yes.
 
+Yeah indeed, it's just amusing to think about, but in practice makes perfect
+sense.
+
+Though honestly I wish we didn't remove VMA_SHARED_BIT in this situation and
+then rely on the hugely-confusingly-named VMA_MAY_SHARE_BIT for stuff where we
+_really_ need to figure out whether it was mapped shared.
+
+But that's another thing :)
+
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
