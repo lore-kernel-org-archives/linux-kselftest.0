@@ -1,170 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B549E3603D5;
-	Wed,  5 Aug 2026 15:04:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DC5142EED8
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:08:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785942281; cv=none; b=jf3yP1UKVQgG2HvSdSlzrzbNBz361S/qhxszmMCYhMREwZPL+yRXYPiLP409Geffzt0ZyxcKmbZN86wZmNTvrh9Gkh0AW5UY5KpyduLwa58Tm5nIVe5h29dX8fw0Nbqr2XxmkSHRiFGtm+HPDNgNOyIhSvVHiNIpWLkEE8FPfEo=
+	t=1785942526; cv=none; b=f+JsJbNDmkFP3PkQdv7N/bpx01nV7VtVOMR96LIygfbnk8DWQXBevVmXxa19T+10LmgJVEmGipYfjeml+8rqrl4VG9UZOE2hpN9nacT3/hbQOB7OnySczh+YbTtza90axA1cZwGe21zLdjDIHduZ9/Z29tM50/Xx/0FIp1Lfqes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785942281; c=relaxed/simple;
-	bh=IjtKBShZ2HR7FUSKpVkZBNrbiX9dqrRLfoGphSEdGzk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FBtoClxfeYLyX3V+3d+spMkz4EGedLFv/qWgq1sZO74YJtNDiDh3NBmGfjaaXicPepnBjtlxAqMhbrpTWE14APWyoZ6YqMsY39yvY2aVwtQfL+bT4wA0CEfHgGZXxg5IFPfobZvzXlcciXU8urKuqReS6XcDqWlt1wOtmxIe+hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bAawcvZD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785942526; c=relaxed/simple;
+	bh=Xi1OgDbyB/Evc8ioBE8gFyoHFsNQEXX7oTxNLufPR/M=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jbPjGh77Glcp8av0zBjNePFhJ+R98XD5htWjj5B/aJLqSC7taKQfp+JX6W6DQ1l0Q6FGASGv6aMw3mDOl0mTgxBDqPsI8WSrwvcQ2gHZkv+5/apYr6DDb8TKUWikv8vetwKfKjB/Qp+fvPejVte1tOZ8cG74PhWCRyfuvIpDyCk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=uYZ+1Xyy; arc=none smtp.client-ip=91.218.175.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bAawcvZD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB4D81F000E9;
-	Wed,  5 Aug 2026 15:04:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785942280;
-	bh=+WIUjDOLWA2cmNsrMJ3COyrPfHejs0/NnuALvN954yU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=bAawcvZDCXe2kUmxFtde0kLLp6v+k3gUDQVU/+tjpWkoziwMUz7ymP/z/AauaQFFa
-	 pAQfjdFzJjaJH1L67n1PEEKqhHtGvXzrX93VIo/wn6x78fyTyyaI/UPBBgDOtuLHIB
-	 Jc8mfZOyQCgRfRYj66Wv8+nbWfGL2Az6LwVlHon3d5IrXeBlCUjuOuAuoMWRYX0S8r
-	 V28TeVHvkVay/dhARgUwXredKx9HGe6tHXwWzveYx/5Ip7djKJ8qTw1sYZXs5vIAfP
-	 C1tN9POIqI2wiBr8vr4SYN2CVl/g4j0eHUMm3xdZ7tERcYxEiXFYJR0NZ39G9uJbR9
-	 sIV0BbBpp+SvA==
-Date: Wed, 5 Aug 2026 16:04:36 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, Aishwarya.TCV@arm.com
-Subject: Re: [PATCH v3 1/2] kselftest/arm64: Add seccomp ptrace x0 bypass test
-Message-ID: <a9ef63ac-6012-4788-8fd7-5902b6448484@sirena.org.uk>
-References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
- <20260728021122.2640104-2-ruanjinjie@huawei.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="uYZ+1Xyy"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1785942519;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=AmGOoR5eHblWxTntREzpR+YPiusEuFcyx+N/a238v3o=;
+	b=uYZ+1Xyymr+o0EfKUZB5tmSXYpHZIIxHrJaZ3FrgivNJuq085PdyzSxR2EFTHcPUJ+jLW7
+	ISCjUovSqjDz/KX1t5+mR/5PlcDbBspgwXhjETKb8qUY2lIx5OUDKC/QQMvY4f7wQMvLwE
+	7pZKlVSQlBCQ9QAFz5uYmcCU/3sR7rA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Sechang Lim <rhkrqnwk98@gmail.com>,
+	Varun R Mallya <varunrmallya@gmail.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Viktor Malik <vmalik@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org
+Subject: [PATCH bpf-next v4 1/2] bpf: Fix sleepable check for tracing/lsm prog
+Date: Wed,  5 Aug 2026 23:08:09 +0800
+Message-ID: <20260805150810.34907-2-leon.hwang@linux.dev>
+In-Reply-To: <20260805150810.34907-1-leon.hwang@linux.dev>
+References: <20260805150810.34907-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="dp8bJ/aSpXY72ubm"
-Content-Disposition: inline
-In-Reply-To: <20260728021122.2640104-2-ruanjinjie@huawei.com>
-X-Cookie: Apply only to affected area.
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
+When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing prog
+is allowed to attach to '__x64_'-alike prefix symbols.
 
---dp8bJ/aSpXY72ubm
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+It is because the verifier does not verify whether the symbol is a kernel
+function or a bpf prog. That said, a sleepable tracing prog is allowed to
+attach to a bpf prog target whose name has '__x64_'-alike prefix.
 
-On Tue, Jul 28, 2026 at 10:11:21AM +0800, Jinjie Ruan wrote:
-> As Kees suggested, add a test that verifies that seccomp observes the
-> correct first argument after a ptracer modifies x0 at a syscall-enter-stop
-> on arm64.
+For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
+prog, and copies buffer from a user pointer with bpf_copy_from_user()
+helper. After attaching the XDP prog to lo interface, the kernel BUG
+could be triggered by 'ping -c 1 -W 1 127.0.0.1':
 
-This change is now in -next and is breaking the build on Arm's internal
-KernelCI instance, the same thing can also be seen on at least upstream
-KernelCI mixed in with extra issues due to what looks like a
-missing/failed headers_install - I'll report the infra aspects of that
-separately:
+[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
 
-  CC       seccomp_ptrace_x0_bypass
-seccomp_ptrace_x0_bypass.c: In function =E2=80=98do_child=E2=80=99:
-seccomp_ptrace_x0_bypass.c:67:28: error: array type has incomplete element =
-type =E2=80=98struct sock_filter=E2=80=99
-   67 |         struct sock_filter filter[] =3D {
-      |                            ^~~~~~
-seccomp_ptrace_x0_bypass.c:68:17: warning: implicit declaration of function=
- =E2=80=98BPF_STMT=E2=80=99; did you mean =E2=80=98BPF_STX=E2=80=99? [-Wimp=
-licit-function-declaration]
-   68 |                 BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct =
-seccomp_data, nr)),  /* nr */
-      |                 ^~~~~~~~
-      |                 BPF_STX
-seccomp_ptrace_x0_bypass.c:69:17: warning: implicit declaration of function=
- =E2=80=98BPF_JUMP=E2=80=99; did you mean =E2=80=98BPF_JMP=E2=80=99? [-Wimp=
-licit-function-declaration]
-   69 |                 BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_write, 0, =
-3),
-      |                 ^~~~~~~~
-      |                 BPF_JMP
-seccomp_ptrace_x0_bypass.c:75:16: error: variable =E2=80=98prog=E2=80=99 ha=
-s initializer but incomplete type
-   75 |         struct sock_fprog prog =3D {
-      |                ^~~~~~~~~~
-seccomp_ptrace_x0_bypass.c:76:18: error: =E2=80=98struct sock_fprog=E2=80=
-=99 has no member named =E2=80=98len=E2=80=99
-   76 |                 .len =3D ARRAY_SIZE(filter),
-      |                  ^~~
-In file included from seccomp_ptrace_x0_bypass.c:38:
-/tmp/kci/linux/tools/testing/selftests/kselftest.h:64:25: warning: excess e=
-lements in struct initializer
-   64 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-      |                         ^
-seccomp_ptrace_x0_bypass.c:76:24: note: in expansion of macro =E2=80=98ARRA=
-Y_SIZE=E2=80=99
-   76 |                 .len =3D ARRAY_SIZE(filter),
-      |                        ^~~~~~~~~~
-/tmp/kci/linux/tools/testing/selftests/kselftest.h:64:25: note: (near initi=
-alization for =E2=80=98prog=E2=80=99)
-   64 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
-      |                         ^
-seccomp_ptrace_x0_bypass.c:76:24: note: in expansion of macro =E2=80=98ARRA=
-Y_SIZE=E2=80=99
-   76 |                 .len =3D ARRAY_SIZE(filter),
-      |                        ^~~~~~~~~~
-seccomp_ptrace_x0_bypass.c:77:18: error: =E2=80=98struct sock_fprog=E2=80=
-=99 has no member named =E2=80=98filter=E2=80=99
-   77 |                 .filter =3D filter,
-      |                  ^~~~~~
-seccomp_ptrace_x0_bypass.c:77:27: warning: excess elements in struct initia=
-lizer
-   77 |                 .filter =3D filter,
-      |                           ^~~~~~
-seccomp_ptrace_x0_bypass.c:77:27: note: (near initialization for =E2=80=98p=
-rog=E2=80=99)
-seccomp_ptrace_x0_bypass.c:75:27: error: storage size of =E2=80=98prog=E2=
-=80=99 isn=E2=80=99t known
-   75 |         struct sock_fprog prog =3D {
-      |                           ^~~~
-seccomp_ptrace_x0_bypass.c:75:27: warning: unused variable =E2=80=98prog=E2=
-=80=99 [-Wunused-variable]
-seccomp_ptrace_x0_bypass.c:67:28: warning: unused variable =E2=80=98filter=
-=E2=80=99 [-Wunused-variable]
-   67 |         struct sock_filter filter[] =3D {
+Similar issue could be applied to lsm prog, when the
+prog->aux->attach_btf_id is in the LSM allowing list but the attach_btf is
+a malicious bpf prog's btf.
 
+Fix it by disallowing sleepable tracing/lsm prog always when its target
+btf is not kernel's btf.
 
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/abi/seccomp_ptrace_x0_bypass.c
-> @@ -0,0 +1,195 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Test that seccomp, tracepoints and audit observe the correct syscall
-> + * arguments after a ptracer has modified them at syscall-enter-stop.
+Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
+Fixes: 1e6c62a88215 ("bpf: Introduce sleepable BPF programs")
+Acked-by: Viktor Malik <vmalik@redhat.com>
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+ kernel/bpf/verifier.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-> +#include <linux/filter.h>
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 7439afdc851a..f364453a2ecb 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -19022,6 +19022,9 @@ static int btf_id_allow_sleepable(u32 btf_id, unsigned long addr, const struct b
+ 	const struct btf_type *t;
+ 	const char *tname;
+ 
++	if (!btf_is_kernel(btf))
++		return -EINVAL;
++
+ 	switch (prog->type) {
+ 	case BPF_PROG_TYPE_TRACING:
+ 		t = btf_type_by_id(btf, btf_id);
+-- 
+2.55.0
 
-The relevant definitions ought to be being picked up from here, there's
-a copy of a current version in tools/include and has been for a while
-(since at least v6.18) but there's no Makefile update to ensure that
-gets picked up.
-
-> +#ifndef __NR_write
-> +#define __NR_write 64
-> +#endif
-
-That's...  interesting.
-
---dp8bJ/aSpXY72ubm
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmpzUQMACgkQJNaLcl1U
-h9CC+Af/S2JNSN8xqScmGeETq+TDNtps1QwX8hARIuySbPHNluk7tHsqiDMKQISC
-kk+xVbZRIisD9UZzbfCyfm4wH6ogqQ6aW5kpl1b2kD1GtbSoJX5Ky5OGveWJhCne
-NOc9Wi3qbz+rI1NVUI6SRzlKbPunKDn0rzCKTtMYk2IQ2tsqHA+lyELuZAQAEScF
-uCYkF6+61zw9Eo9EJEtw1Zwk0ZoyBYbVhuMiXKguVsHLJgCYzxTRFAvevw8bmMYr
-KpSLNPMpnmgA1NtF1552/cv6Q+aR4QZqEDB219mbCvomjYdq2EUfwpapOBfE3a5b
-rc3qgensNTkKuxz4i2/E73E3elUjfw==
-=yow2
------END PGP SIGNATURE-----
-
---dp8bJ/aSpXY72ubm--
