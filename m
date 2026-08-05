@@ -1,203 +1,102 @@
-Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B2F038886A
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:08:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 433E134D398;
+	Wed,  5 Aug 2026 15:14:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785942531; cv=none; b=NgBbsdjHt2SkTbTHVJz/73xjO48AccifW5N1yG8aalNCqhROTxZSjtLzN4DckT/XDSfjyvjJCtDsF1dsXMYf7ePje02tcNL3pxSeAkr9k2K8cVxMbghpX3zyqbJs9UB+/bX5VDkKdjwBBWSKg+CaSCI8XG5Br8sKihQJHUHZ4/8=
+	t=1785942865; cv=none; b=MkffV9mBDpxYfdAgLMKfZG8ECDxp/BMosLfzsvWV8nNvjb8QdQA7MbDRzPDr9SCwYWeIK2fZviJLutLuK+JzKMRHBre25XXbRhtSLbPtgVNClXUhSDU53lNL02yDohd9bYDhAD54HnTjgI10U2fPbyLanLvEjogpyhiAW2QrVDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785942531; c=relaxed/simple;
-	bh=5Ii+EUcR6gRiGNfLX2CgyLaYP8nwfuEFGsphfc0oDfU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KEUPZh/fLF4gaX3VFRpw8fIqcvnSGv7eXDnHrd7jXlSfGImHZriRXLBP8wQ9aJla41ZXRvFQqzGbO9FXL2wQObW+ijiUhK8mlLwkJlDciOMdQbU23jsGHo4GfFhtjcDbKJ/KZL4R7NgTK1A/T2X7hhb7jzj/z8AHUS6A+013LrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=caUv1jxE; arc=none smtp.client-ip=91.218.175.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785942865; c=relaxed/simple;
+	bh=OrMAJ/+ElRn0PwfvEFMLcbcTOOOQ13gtCgJF/jmaHFY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nv8zAW2sdEh9Rg2+HyjtYp+WNHhShI+3tLX6skjm2y7wUkxxc0PjOZQQ1R+RFoyGmGekN6tWsLEOYeQLPj1Z192DWDrMgxMj5NqQAc9bk9i8pKq5eXd/t2vbZddf1ZHDwY4v48OvdHpIKLCONlh6xkyySD/oha1hbErB+QsdAp8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=bAY628uj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MCMnAi3P; arc=none smtp.client-ip=202.12.124.152
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="caUv1jxE"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785942524;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=OQ1bFyt6iqOdNwnHAc57w4fAPU5hgSUfE7fOGu+3Mg0=;
-	b=caUv1jxEVUzoBBj9SvcZXWoO8XyCgELU0VEZeCvV4/Vnb4bR8vq8OKMtdQE50QHldedpBk
-	vXX5R5r7prm9Tj4IqkojDR4e5QelDzgXW3IqtqUVP9vcr4DsAM3iTocx66KPJg3zIb9htm
-	Kx7AldP5/QligcYoeegDeAOuCO+j6LE=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Sechang Lim <rhkrqnwk98@gmail.com>,
-	Varun R Mallya <varunrmallya@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Viktor Malik <vmalik@redhat.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org
-Subject: [PATCH bpf-next v4 2/2] selftests/bpf: Verify rejection of sleepable tracing prog
-Date: Wed,  5 Aug 2026 23:08:10 +0800
-Message-ID: <20260805150810.34907-3-leon.hwang@linux.dev>
-In-Reply-To: <20260805150810.34907-1-leon.hwang@linux.dev>
-References: <20260805150810.34907-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="bAY628uj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MCMnAi3P"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B415A7A00DF;
+	Wed,  5 Aug 2026 11:14:20 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-01.internal (MEProxy); Wed, 05 Aug 2026 11:14:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1785942860; x=
+	1786029260; bh=PMNQPlInX9ujF7JqRa863xUmon9aK87yLiuZsWJbl+M=; b=b
+	AY628ujp6PNWL/JaZIAGBzc4H5wGNzLCMKN9uPRryzQHkqTbNXFidTtLvmeUWxYp
+	HRO/oNzIv8YIqt/pEyiKr+VvnvRK+iphDgIb5fROoTamVAx7dn87cR5tgL0HYjyh
+	1LfP5H1UTVTi8k06KBXDeNhZ+0xZSnwCjqZyBd2DlH4y8PtfjMSLU8yrDtaDjG2a
+	lYLDxpkpVLSnk465oZMXftXu9Xtthojq0OmF8YPH8SL3kLEeCtHXnVxtrH6p361U
+	Odzm9tQKQAK5GX3n+jOO9dBm12dDNq1pgRl6Wo4S0cEN+4sY8qYmrrS9aqAxaPGy
+	1WlRctvYQbbPht2JK6PBQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1785942860; x=1786029260; bh=PMNQPlInX9ujF7JqRa863xUmon9aK87yLiu
+	ZsWJbl+M=; b=MCMnAi3P4xMsKrNXshlFBCa1N1vo3Yo5TrctYrc6cZrjajD1wxY
+	NVu6t6H2Jb2fM0qR7Dz2GLvKCLZEFQoWeiWAPNgUKm8Psujp3TW31iY2t1qd75nw
+	dgLNHhwJG2vU3N67TBwPdCiaD4gOGpX1BhLxHP9VsXAzWRcwNOgH3AMrsanl+f7s
+	xhQagZRAtYE5+V84Q2C9exKMz++eedRrT+VLpLEFvgNOeBa8lDpnbiiy8xy/LeQC
+	8sH6qpyQt19r+5Oa44GCZ1YKHmtmheyRLCS9j/VqRaNjmBkaVg+/xi0yr4jFWz1c
+	ZT+KBQDvDqOQWi6+iJNpTBFa114mgIBvn7A==
+X-ME-Sender: <xms:S1Nzagy98l1BNpqIDI2PHnk7QRhUd77rTZPZcNK5j2U0WrErMjytsw>
+    <xme:S1Nzakvc4QpRSrG14roQ-fyH4Ysejt8xKFESdcot_flrJINCNf3G7Ukog5LqSchKe
+    HklpgbZdONlb9cnNXKuPe-Eg3AY5PWK5Zg3O03Ip3TiGQlNh0ND1Zf6>
+X-ME-Received: <xmr:S1NzapNwDIgVS1vKU5Nq4EMm5sQm8RzfunB2UWtQzDhscrgt0vgb89eGN3c>
+X-ME-Proxy-Cause: dmFkZTFXDFwVm5W0xBZGcJj7Nl1lXhDBR1FUroKQrSjwipeLMmgzI2AwBV+QdHALrBxEsY
+    eMGi0Q1bi52iJJVhZR7IFduwgGfIC+kvSDhVt3+bxsWAZz7KgeP7tM/tfi6vaj0rR8yBvR
+    bTQjq9GZs8aTpXRNdWvBhCZTh4MN7swWSqS6BMaeVMnCD6eG+dV41XjTgVQZ9nAnYjYcn/
+    ihjdb+UUUKVNqSMAGTjaJECj/vNsitzyhuqyzHS6TV6BrbgM6HU91rgbPvvkR2UdYPAdqj
+    iMq7yF/2/jhjySPm2gzgfF/OrMMlJLSus9iMti9XmddzcrEF7m894YHtGe0QLK+X1LHDPD
+    ioI68h9nOepIuxsWoi/CGPm4YEbub8SMtWjQSzCvMJ1R5YIsS6zRRwkhHM33ijFVC3N7zT
+    gyaDlFaaebEx+UV+2wi1GXQBMlc9dUFDXA7oaylHzXgTIqfZIi/9YZjAgKS9ycON75KRUm
+    3WyoO9FZFcxOutteJT4AQnk385wpcZEYZqyjDwGNUYH7bdhgUCnduHfsn2FzJhoQNUXPjF
+    izta4ZPvp+F+L057iQcclGmyRqOKl/eFeGI51DC05ogGSXpxuR7+T36uvLhxoEzuSUAMgW
+    wa8yt92AlmIsI1YY5zrm9pc+FM0b+yAXrzlZjl8LyBjWudyvm+Gu6GjxgWoQ
+X-ME-Proxy: <xmx:S1NzakxwB7PEd_2jweoB_7COuyOzxpAuIp-_L5HSORZ8sIlaIr2Elw>
+    <xmx:S1NzavPS81gebZ2HIFt1h0nHc4xksTOi6bSsWpQEEXXL9HLijt2zTw>
+    <xmx:S1NzavRYzuv39oRb_bYE3t28xAH777NiHq7bqJvYC02Nqt9JLUo38Q>
+    <xmx:S1NzaqUPhcBkLZZJ4WOLy2TBFgEda75KckT_mXh9F-GsFUjx6cs6DA>
+    <xmx:TFNzaomrWVzERvUv-rBKYEbaAU2PYz_ZtnMihW6wmBm2wbPnN1CZIk2e>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Aug 2026 11:14:18 -0400 (EDT)
+Date: Wed, 5 Aug 2026 16:14:17 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Baolin Wang <baolin.wang@linux.alibaba.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	ziy@nvidia.com, liam@infradead.org, nico.pache@linux.dev, dev.jain@arm.com, 
+	ryan.roberts@arm.com, baohua@kernel.org, lance.yang@linux.dev, usama.arif@linux.dev, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] add anon mTHP collapse test cases
+Message-ID: <anNTCO-mMa_y0AvA@thinkstation>
+References: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
 
-Add a test to verify that the sleepable tracing prog cannot attach to a
-'__x64_sys' prefix prog target.
+On Sat, Aug 01, 2026 at 02:26:34PM +0800, Baolin Wang wrote:
+> This patchset is split from the previous shmem mTHP collapse patchset[1],
+> which only adds anon mTHP collapse selftests. All khugepaged test cases
+> can pass.
 
-When CONFIG_FUNCTION_ERROR_INJECTION is disabled, without the fix, the
-test would trigger the BUG:
+The patchset looks good to me:
 
-[    3.460756] BUG: sleeping function called from invalid context at kernel/bpf/trampoline.c:1324
+Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../selftests/bpf/prog_tests/fexit_bpf2bpf.c  | 57 +++++++++++++++++++
- .../selftests/bpf/progs/fentry_sleepable.c    | 18 ++++++
- tools/testing/selftests/bpf/progs/xdp_dummy.c |  6 ++
- 3 files changed, 81 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/progs/fentry_sleepable.c
+Thanks for doing this.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-index 4a87d7163c8c..2523c07a16c6 100644
---- a/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-+++ b/tools/testing/selftests/bpf/prog_tests/fexit_bpf2bpf.c
-@@ -5,6 +5,7 @@
- #include <bpf/btf.h>
- #include "bind4_prog.skel.h"
- #include "freplace_progmap.skel.h"
-+#include "fentry_sleepable.skel.h"
- #include "xdp_dummy.skel.h"
- 
- typedef int (*test_cb)(struct bpf_object *obj);
-@@ -576,6 +577,60 @@ static void test_func_replace_progmap(void)
- 	freplace_progmap__destroy(skel);
- }
- 
-+static void test_sleepable_fentry_to_xdp(void)
-+{
-+	struct fentry_sleepable *skel = NULL;
-+	struct xdp_dummy *skel_xdp = NULL;
-+	int ifindex, prog_fd, err;
-+	char buff[64] = {};
-+
-+#ifndef __x86_64__
-+	test__skip();
-+	return;
-+#endif
-+
-+	ifindex = if_nametoindex("lo");
-+	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
-+		return;
-+
-+	skel_xdp = xdp_dummy__open_and_load();
-+	if (!ASSERT_OK_PTR(skel_xdp, "xdp_dummy__open_and_load"))
-+		return;
-+
-+	skel = fentry_sleepable__open();
-+	if (!ASSERT_OK_PTR(skel, "fentry_sleepable__open"))
-+		goto out;
-+
-+	skel->bss->user_ptr = buff;
-+
-+	prog_fd = bpf_program__fd(skel_xdp->progs.__x64_sys_nop);
-+	err = bpf_program__set_attach_target(skel->progs.fentry_xdp, prog_fd, "__x64_sys_nop");
-+	if (!ASSERT_OK(err, "bpf_program__set_attach_target"))
-+		goto out;
-+
-+	err = fentry_sleepable__load(skel);
-+	ASSERT_ERR(err, "fentry_sleepable__load");
-+	if (err)
-+		goto out;
-+
-+	skel->links.fentry_xdp = bpf_program__attach_trace(skel->progs.fentry_xdp);
-+	if (!ASSERT_OK_PTR(skel->links.fentry_xdp, "bpf_program__attach_trace"))
-+		goto out;
-+
-+	skel_xdp->links.__x64_sys_nop = bpf_program__attach_xdp(skel_xdp->progs.__x64_sys_nop,
-+								ifindex);
-+	if (!ASSERT_OK_PTR(skel_xdp->links.__x64_sys_nop, "bpf_program__attach_xdp"))
-+		goto out;
-+
-+	err = system("ping -q -c 1 -W 1 127.0.0.1 > /dev/null");
-+	ASSERT_OK(err, "ping");
-+	ASSERT_ERR(skel->bss->retval, "retval");
-+
-+out:
-+	fentry_sleepable__destroy(skel);
-+	xdp_dummy__destroy(skel_xdp);
-+}
-+
- /* NOTE: affect other tests, must run in serial mode */
- void serial_test_fexit_bpf2bpf(void)
- {
-@@ -607,4 +662,6 @@ void serial_test_fexit_bpf2bpf(void)
- 		test_func_replace_int_with_void();
- 	if (test__start_subtest("freplace_void"))
- 		test_func_replace_void();
-+	if (test__start_subtest("sleepable_fentry_to_xdp"))
-+		test_sleepable_fentry_to_xdp();
- }
-diff --git a/tools/testing/selftests/bpf/progs/fentry_sleepable.c b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-new file mode 100644
-index 000000000000..8c0fc691d329
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/fentry_sleepable.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+char LICENSE[] SEC("license") = "GPL";
-+
-+void *user_ptr;
-+int retval;
-+
-+SEC("fentry.s")
-+int BPF_PROG(fentry_xdp)
-+{
-+	char buff[64];
-+
-+	retval = bpf_copy_from_user(buff, sizeof(buff), user_ptr);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/bpf/progs/xdp_dummy.c b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-index d988b2e0cee8..5f1e0771021d 100644
---- a/tools/testing/selftests/bpf/progs/xdp_dummy.c
-+++ b/tools/testing/selftests/bpf/progs/xdp_dummy.c
-@@ -10,4 +10,10 @@ int xdp_dummy_prog(struct xdp_md *ctx)
- 	return XDP_PASS;
- }
- 
-+SEC("xdp")
-+int __x64_sys_nop(struct xdp_md *ctx)
-+{
-+	return XDP_PASS;
-+}
-+
- char _license[] SEC("license") = "GPL";
 -- 
-2.55.0
-
+  Kiryl Shutsemau / Kirill A. Shutemov
