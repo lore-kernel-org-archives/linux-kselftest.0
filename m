@@ -1,123 +1,285 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11012033.outbound.protection.outlook.com [40.93.195.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE8F47D446
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:54:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785945285; cv=none; b=W9iVZ74GL4BLRnJfsttHDwJi0fFblTrEjrKHvwC3G33GDxl7jApZfntsMy3JuoK+IZgSWzRdaqBqMvNB5g05S1WMNiHSVbCtLZc9lYcvRKWSuHP21ySE7XGQVinGlsFgvP3kguSXEPZ9pKXR1rRxD374wDSwVQFsgHtUSMzitLE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785945285; c=relaxed/simple;
-	bh=rZdAOZRrlWJDlWCV6+LShKvadlRsq30zPunO2V/Grcc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Qx18tdodL0niE3gxuyMc1fsBxIFZACaYImZGiRpNELNbMF7cD8P8WEpzycvhcYEAphsf0rJMKzV/x8sAU0dpY/ibvbFl+V+DD4IDjFdaaXyATlZe0X3ldgBhAz4HXbmPRTZIUzilQUH1JpGTEUng91lVMpOxjDOt9hQvj305NqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fldv0WhK; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 355703EDE42;
+	Wed,  5 Aug 2026 16:00:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.33
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785945619; cv=fail; b=FXDPm5bA/WvRwNQANTqMUrl+1B5WG4BlFg/nlStlobMlxaxeeaY1sR8tV4JNCEMjTPiJ0FUzTxny+VtE4ApEjIpnKE+f/mZARfLsxL4Bg3TTLAygyPL4hIqM8bgcsfcFo/hzyXhmPpmPDV+XYYeT8jLuX/3X2/s23w7TsXU+Lqc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785945619; c=relaxed/simple;
+	bh=UquYywW9mBGcnpONzi54P57G1wZAdE0HEWQKKpoP9rI=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:References:
+	 In-Reply-To:MIME-Version; b=T6Fn+qnD/YiUkXptqUPTKxpTO7L0ugRaA+IGiXFj13GZ724RLUNMj/WfZcodqR8Tj3iTSUwEmYLgJ10XgkR1BY59jm8R3maWm3z3t732kJNkQM5/wQtmK6NCVTYx4ThG1fUm9nd09AMSr97BX6dWEJbJaou9bPuB76dbw42N2/U=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ewRXtWGY; arc=fail smtp.client-ip=40.93.195.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fldv0WhK"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2cf27856f9cso14694855ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 08:54:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785945283; x=1786550083; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SiDL1RzWS9KxGO4Do/pBrGufTQ4ZH9KDIw9xKfe1s38=;
-        b=fldv0WhKjLPQHzjJ+A8uDyjAi5ZQrt+aoSeqmyozfvny2K6jp4H/XBq4iTfHJ8LhX6
-         9wXJZROGfbEdrDcZZS6mguwnxgUKFkgdHHS/pL0w8G4x+HcDbLcll/85WrP/jOvLsJux
-         aTbnNO4uOINQE2LlXBBwVGo09YZdLePaXoRQ4DwdSv2ehffA93U6mD6BRuoIj9wJcgUB
-         SdCpio78d4Yoaq94c8Wcx3KDItu/Lrrd1Z1wvjLN6p2De5z684VmJb0B4V4dL+soRlY2
-         KIL6/NjbtK8LaJq0JKtPgUNxNsVo0uuSnAwHMUqM0xi2bEA7JfAWUQ/xAa+s//2BcyrE
-         WOBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785945283; x=1786550083;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=SiDL1RzWS9KxGO4Do/pBrGufTQ4ZH9KDIw9xKfe1s38=;
-        b=e3YSWmOX4XI6E5VvxXWqt8ZzYhM5+E9ANAlRXsSippmnMEq2fRL6Hhzg+3EZkFqibD
-         8gq1uV0fRyStlnqpe4FAQ/fnKYilyWpvwWmu6HAZbr8PHDdXor/fAyB1ei3m7k6NyH4p
-         UPy9KZNOgC+uJ5t6Bc1fE70BWaht/ut3j+5H/3LLobuyU86ZAAMMMmwKSSgHTEvTo0H2
-         zfaNBEwJHCesbnk+7J5vSRB1EMcnJSJbVM+HojrW5Er9ysr7IkmsAuQD20qqPKXd0jZA
-         VUSVmsVMWOmvCeDUWOINjcIolQ9fMfw4lUqsuTjp2xqXFln15s39Ygd58to4p8iMkASJ
-         MTug==
-X-Forwarded-Encrypted: i=1; AHgh+RoPmyxbCr9/yDGzPgNBVTcUWuiSHZLxrgqAQvYwOyE836bOTkeqYHFm7+iCwWLSPf/hsRaaQslJjEWvgfGb6B4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrJrrYZOJaDgKo1Ba3BcCvRBGbVRZiLMukM1eYgXpgK9M3KplL
-	3gVfwS2B3yG/QPfHYuhIZkGV97znBsDazaQZu2OafqRrpNC3viV0yev6
-X-Gm-Gg: AR+sD12/l19abCRsNS01xeArkIka09bBa9FS+L+KhyASPAdCq0oxd5hPDqFDRvwvEwW
-	CCn5ofEylhQVs9K/venxKgMvBdzf5kFrdhKIZEvFs0cKoeS/fZWrhz1avJM2LDOH0JvU0KM21h9
-	URZLiUPb+m6EMo/o+L/g3ohsq6NRsTWPePusTIqPCAZKOQIjvhUTbYoRjJC81RDER7vgnqQ7Xmf
-	Hj1RpyG3Tj3VNXIdHaatJ7iwBvK11/2Fv9l9rc4klj/CsEsRB0TyeMsuVBnZk3G+CcP5LqW7cK+
-	02DWxBDMdu61CvD+Ibdi7mIdQKYUKoc5dFxz82IMw4F/x/As6WfB5ghwB/Yc4xD4kT2T0QGW5tU
-	VhuJOUyZSKUedXTEgiJqiBEH9bIwhoP9cMFcLQEOgSnk4B51xyLSDz4ihat/uRqYZhWWuOSYUsI
-	8mqICeaQM0t6NGkes2axDoXwwGu/kYAFWNntXFywEB20QRBS/5mEKKgIFpBED2Tp9vuLvWGR44U
-	7DFn5HQepvoPQSYLwGBXFH6
-X-Received: by 2002:a17:903:3201:b0:2d0:401c:2ebb with SMTP id d9443c01a7336-2d0ca7125cemr99090365ad.4.1785945283158;
-        Wed, 05 Aug 2026 08:54:43 -0700 (PDT)
-Received: from KASONG-MC4 ([101.32.222.185])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d0aa4ba225sm18570705ad.61.2026.08.05.08.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Aug 2026 08:54:42 -0700 (PDT)
-Date: Wed, 5 Aug 2026 23:54:34 +0800
-From: Kairui Song <ryncsn@gmail.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Shivam Kalra <shivamkalra98@zohomail.in>, 
-	Kairui Song <kasong@tencent.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Nico Pache <nico.pache@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] mm: support splitting mappingless swapcache folios
-Message-ID: <anNOroQdjQh7xmU9@KASONG-MC4>
-References: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
- <590B3189-5B66-4ECB-84CD-7B7EF18C0E54@nvidia.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ewRXtWGY"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=hsHtN73QArecYhDYt+CWRcvZf4B3m3Arj/6RCQsqGOV2Yo4wXpxwtUPpLuBWChk6LmqscsqsRtHgesYwPwg9OkGeWogNuqyEDD5O0xHfdxqiEqzhfESBqTX3iSq/GkKq+JsSW4229ZV1N405lk8S5WLeRpO1WDG7fcyOtPMACjBvg98J4xt6sGa/QIoXhitqL8GG1whRHqCL5ZB3oTOvtm0w1AcmyL39f4BuD6y0cy2hitN/YFO1LZbQdN2HHvVNN7eCsi4fMTZZTEYrBiCLm1GTaryjWECvf4Yy8/CpHk2f1W9EC/H3jRgTpyShfyrgdaYuty7PQXlI+c1SqMy+NQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1u/G3r2JaX5QaxcioHoI4gyB+Ar4Ocwk1kfs7HTCXW8=;
+ b=VeahmdaSYSASHNEJMqZ6fEamlQtA0DHzndPrHZG8FLXgfEPgS5FYv1FObnNMmrK4Kx1O5ywepuZGgtpuwF1XxM2L5y9KRFtepSLa6TnS/VhW9W69nEYeYcrqzKC8Z48hYyLEvngbg2Dfv5tepB6tgzNBJDm/oipwepHRiroYhw8hlCuyfDfWJR3HK/JJKrl8M++E+sQado7QBTAyNqcgVAGRJ/rk99+P0wEdciPE/RF8FcV4/ij1KsjEa0wHMiU+nn264FOD7sH7Ps2g1sloDgxMdEvJvUgykflXhtyj/M3D7j0vJtlWEEHXorUmMXhJV9Fe1mdV39kmYdX7CGMvEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1u/G3r2JaX5QaxcioHoI4gyB+Ar4Ocwk1kfs7HTCXW8=;
+ b=ewRXtWGY7wWQmnLHs13xCviC22b/Rs8ZacM3b/jquS/C1FV11ZK6Q1AIWhsTGekwSHGZ5Ir8KrIfOown0xZqLVTFVuGjJMYUspoFo0l/A0ZT2aOub7t57z7IG4A4LeeH2kLLRUMedQKyeJu8gd341GeBh8dn4AYHCuwAb5CsNbnbhvgGLo5hKdwX9ewayLs+uYTI2+03fg8dYgsWYZ6rARDTrQwVAX+Oqm3Op4wu3FqpWMm7MpToyYDpeTQOzIKV9I8cGMB+o+Tm5FRPmlId8w0BQ8kADK6G92AnwDE5F9dds3z//wrZJregzaW4Xx4JSrJm5V0Bqrp4eaGxNpYO2A==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by DS0PR12MB6415.namprd12.prod.outlook.com (2603:10b6:8:cc::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Wed, 5 Aug
+ 2026 15:59:56 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0292.018; Wed, 5 Aug 2026
+ 15:59:56 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 05 Aug 2026 11:59:55 -0400
+Message-Id: <DKH4VJXGIUNU.2ZENW7583Q6K5@nvidia.com>
+Subject: Re: [PATCH v2 3/4] selftests: mm: implement the mTHP-sized hugepage
+ check helpers
+Cc: <liam@infradead.org>, <nico.pache@linux.dev>, <dev.jain@arm.com>,
+ <ryan.roberts@arm.com>, <baohua@kernel.org>, <lance.yang@linux.dev>,
+ <usama.arif@linux.dev>, <linux-mm@kvack.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+To: "Baolin Wang" <baolin.wang@linux.alibaba.com>,
+ <akpm@linux-foundation.org>, <david@kernel.org>, <ljs@kernel.org>
+From: "Zi Yan" <ziy@nvidia.com>
+X-Mailer: aerc 0.21.0
+References: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
+ <eb75f6d510fb48f14e25fde85e5a5e2b67cef394.1785564857.git.baolin.wang@linux.alibaba.com>
+In-Reply-To: <eb75f6d510fb48f14e25fde85e5a5e2b67cef394.1785564857.git.baolin.wang@linux.alibaba.com>
+X-ClientProxiedBy: BN9P223CA0005.NAMP223.PROD.OUTLOOK.COM
+ (2603:10b6:408:10b::10) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <590B3189-5B66-4ECB-84CD-7B7EF18C0E54@nvidia.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DS0PR12MB6415:EE_
+X-MS-Office365-Filtering-Correlation-Id: dfbbee43-c51e-4e70-9bd7-08def30a9836
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|23010399003|7416014|366016|6133799003|22082099003|18002099003|11063799006|56012099006|10067099003|4143699003;
+X-Microsoft-Antispam-Message-Info:
+	Fic+FQ33od9wiLkbsp2sagtgDGB+oaNSPe+bd87+audz57hx2SUYzzUhPavTqo5mCf7hEIdsU95l/PLLCY5aMxW8yDyLtPP1YKFNda5cPAlrSGu5swZFNfPCEevwGJyJBt+7txzmurOFGdWdPhtV8KiJO2eMkYLLy2SKQ8kJ1/1of2TUXBWQUQabBPQIRZR6QscdRZ61WZ7URHDIe6RwHm61EZ31r86iKeKPme0JPqASA8sDhGgBqK2jxrgskHXNnleUvEKMCgvpGkqXsy7l53ijALdEhT0QNZLAqSwInQQLzZcHcbmqI6b61RNYNNdtwUijHFkmJ3mQKB5DTDSxhTIXWaMkmbFtqBpTalG7ejNihOfhoDCRC6eihpi1xVex57MDVbbmZs13MlwHasJh33YYvd4ISshOfguK9i723O0aWs2F+lXHMU8spJT+Pv4LWebwX//Ks9lcx8q7Rjw+WlYMyH8UZ2l1XdsE5L4ILzNLpnwz3H+jtafdJobBJYhQHMU5tWX+BXkFm6OF8XRclGNugwUnDy6o/+hKSCHstg+fswu40Axhhjci8/zvjqsu/34pzM+ps234uEEF7bC8hItwmrUKgQbfz8GrvDCgXJ8ucSoxEJHoR4gFpLiOf0wu7Q/ukOh4KbDZdDlWn/VASRvQOA/M9ZjXHYZCGUQhjGM=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(23010399003)(7416014)(366016)(6133799003)(22082099003)(18002099003)(11063799006)(56012099006)(10067099003)(4143699003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MS9ZV0lXYnlKWmxudS9WZHE0eUtnNXc5RVZLelpFVGYzZU9KZnBhMStXWGRy?=
+ =?utf-8?B?NzgxTElsM0htbDVaUkduQ2JoYkdDTUlzWjc5clZnemdHbDMzbjZ1dlRGeW1G?=
+ =?utf-8?B?cWJVd3hBMGdXcTZ0ZzZjb0piYzNpdU50MW12REg4eUNjTWUxS1owWVA0Y201?=
+ =?utf-8?B?dnVXa0pib0MrVnFQamxsU1N1cFB3QTB3WVhjekI2emgzNWx6dFU5QzAzMWY1?=
+ =?utf-8?B?UnJYY3N1VzJ6RXlwK0E0OGxMNzdMcE1qc1lsK2oxWU9KQW1UcHp1MFd6V05E?=
+ =?utf-8?B?TlFaaFhJYWMrWWM1SnFyNGZqYjRXeSt6RlVHYjZtTnF5S2N2WmNLbkxVaXg5?=
+ =?utf-8?B?ODNuRE9wY2h5Y2JySzBhOHpSWmp1VUEvTmhnTm5JWW1xbUY2TVpSeU9ydURs?=
+ =?utf-8?B?anhxd1BjRmJtakF6UTRsVGhYTTNMekVQQk5VT1lidFY0MFcyT0hod0xiMk1X?=
+ =?utf-8?B?aUZzZ21NRUNuVG1PT1JjR0VaTXZvOUg3ZkRZTVZLWUxJVkhzekFoV3dXUjhE?=
+ =?utf-8?B?YStyK01aSXRnOUx0ZHpIRlQzUHRsNmxBR1NrbWV3b1RWRVNqMURpMERaMmo4?=
+ =?utf-8?B?UDVHOG5ZNCtuRUxNMmR6TVVKUEFCQmFReUpUdVdxbGRWVHhSTHpndWU3dDk1?=
+ =?utf-8?B?ZWNXbTg0Y3BrWmZaSUgwNzdvZE00MURGaytGQ2V0NHAzUVBBbXQ3RWUrR1JY?=
+ =?utf-8?B?L1ZiVVNDUlVzamFlZ3VQUzNPQm0vT0Z6cWJFTXArMkdjR2NPZ3d4WmJpYUtu?=
+ =?utf-8?B?RGxkbFVyRFlSYnFtRmZXUnBoYlBuMmdxQlBxRWQrSVZPUGZFUURCZmhXRmND?=
+ =?utf-8?B?RWlyaHJQK3h6OU5NM1BRN243Q0VseEEwekdvNDYrME5LVW9PVFZvekNEaWsw?=
+ =?utf-8?B?Uk1SUHc4VHVGb2sxeklqYWRRc3BCUnd1bytpNnBaUjNrNmxYNlRidnFjYVFa?=
+ =?utf-8?B?VW8zYmFoaFhzeWRKa2t1WlpReHd6d3piWk56eWJZbCs4L3VRd2xYcHoxT3Fz?=
+ =?utf-8?B?NGh2Wm9zYjBCTzBWMG1YV0xVM1YxenhDZTA1ZDl6aHllazg3ajZDanJIYi9z?=
+ =?utf-8?B?VEM0TG8xVHY2aFg1SWxiazJlZVZVMjM4RjNxWVdmaGxlRjNmMVZtbURCTFBR?=
+ =?utf-8?B?akZ0OEswTzFFTHM3aFp3U0sxL2xmdkFoWkFZYnlpbnRkOWprS25rWVN0Z0xy?=
+ =?utf-8?B?clZ6WFpSVmNFZ25TQXFOc20xNWRJejNGcTRMOEUwREwrM0FrVi9SMzdnTUwy?=
+ =?utf-8?B?a1ViWm5iUWx2TDMyTzZxSG9qdGlHUmhma2M2NHZVTHRlM2pIK0ExUDFmcFU4?=
+ =?utf-8?B?QlpHbEZwaGppM3Ira2ttSEJGVU9mZ1dwMUt1S0NTMTJTdmlOV3BOQkdPTWJk?=
+ =?utf-8?B?RmVYNy9vMjFvRTdid0lsQjRCYys4cjZSdXpReG1vWGo4ZDNBYUlqalU5enJL?=
+ =?utf-8?B?ZTlSMXNyT28wWmNubjJYM3EwektYazg2c0N6bjNSNkVCNU5GZkhHK3BjOTRt?=
+ =?utf-8?B?cjRBVlkvRTZXTzRaNjVlbXJhU3NMaVZtYTlUdUQ2V2hMbTlKYVRvSitMNXdW?=
+ =?utf-8?B?ZVRDTkZ3RFJEeHlhcUo5OHFSSXZLUEt2dWxoeVFaY0xndnFTWk52aHI2UmV6?=
+ =?utf-8?B?RzdxWXkxazFOOXIyeDJqdlJ2ZmRvS1BxM2JvZ2hLamVuT0RGZVJxTFNMSHk2?=
+ =?utf-8?B?eFd1UDhrYWtmd1VGWmlYb2tMMlJYZTZIZ0QxRVEzbmtLNmtXcG9hM3pzNjh0?=
+ =?utf-8?B?cEw1WkxPQkN6WWRZWWtiVU1La2FubHJuL2gzMDRhYlhLS1FYNFdCRjJaVGVp?=
+ =?utf-8?B?Nks1ZTljQ1NIZXBIYVdQMXZ3c2RiK3FRN2FiOGpQSyt3V0NXd2dreHVxanBO?=
+ =?utf-8?B?akMzN09hS0xuNG1IVXlIMGZnVm9UaUtBdnZsME5SVVpuNXVEdHB2MUpOSkdB?=
+ =?utf-8?B?S1lYUm1zZDc3MG8wNWRtQmVMdlJtenJ2WjUxU1NUbnV4bFlJVGtnVlFXd3B6?=
+ =?utf-8?B?YUsyVmpmb2ZuNnN1MFJqRE9uQTBzdUtHMzFMUnRPWWFrdjNrSmNWdUJZZVI3?=
+ =?utf-8?B?RnNFeFZ1TlJEZ055Sm9mMUpUeWdxNHFoRHlwOVRpMjhmVkp6MWMrcG9wVS9U?=
+ =?utf-8?B?S0djeXVJK0I5NUVScjVXWVNzeXlWLzVMZnNxait6WTJOd2xDVXVLM1BTLy9M?=
+ =?utf-8?B?MUNCU3gvRmRlVDk5Q2NWMWFlNnRNYTFlTzVzU2xkUDFZc0NoeXlRQ2g0NFhH?=
+ =?utf-8?B?ZHMrdFZyZ2w0OFVLYkszWW8wZk90MWtMdGRuaFhUa2ltazRBc1VsbFVyS2hk?=
+ =?utf-8?Q?QMDRExw49GILYb9la3?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dfbbee43-c51e-4e70-9bd7-08def30a9836
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Aug 2026 15:59:56.4008
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: las6dw8QnBGGAlgNZKGinLRV7KydeogSa+xeHVkt/N6UpsYDzqtWF/UjI58kk6y2
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6415
 
-On Wed, Aug 05, 2026 at 08:03:33AM +0800, Zi Yan wrote:
-> On 5 Aug 2026, at 7:18, Shivam Kalra via B4 Relay wrote:
-> 
-> > Large shmem folios lose their address-space mapping when they are written
-> > to swap, but remain valid members of the swap cache. Folios read from swap
-> > but not yet associated with an anon_vma can have the same mappingless
-> > swapcache state. folio_check_splittable() currently mistakes both cases for
-> > truncation and rejects the split with -EBUSY.
-> >
-> > Implement the longstanding TODO for this state. Allow mappingless
-> > swapcache folios to use the existing uniform order-0 swapcache split path,
-> > while continuing to reject truly truncated folios and unsupported
-> > higher-order or non-uniform swapcache splits.
-> 
-> Thank you for your patches.
-> 
-> As Kairui (cc’d) mentioned in [1] (see “A bit more details on this”),
-> we might not need to implement this split. I will let Kairui to decide
-> how we should deal with this patchset.
-> 
-> [1] https://lore.kernel.org/all/CAMgjq7CHDG8JhesSPMkn1kzG8jKb0BXO756BvxMQC_MCn2eTyA@mail.gmail.com/
+On Sat Aug 1, 2026 at 2:26 AM EDT, Baolin Wang wrote:
+> Implement mTHP-sized hugepage checking helpers using gather_folio_orders(=
+).
+> Also rename the existing PMD-sized huge page check function to
+> __check_pmd_huge() for clarity.
+>
+> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> ---
+>  tools/testing/selftests/mm/vm_util.c | 60 ++++++++++++++++++++++++++--
+>  1 file changed, 56 insertions(+), 4 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftes=
+ts/mm/vm_util.c
+> index 09e5d5cabe21..1240d783669c 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -15,6 +15,10 @@
+>  #define SMAP_FILE_PATH "/proc/self/smaps"
+>  #define STATUS_FILE_PATH "/proc/self/status"
+>  #define MAX_LINE_LENGTH 500
+> +#define PAGEMAP_PATH "/proc/self/pagemap"
+> +#define KPAGEFLAGS_PATH "/proc/kpageflags"
+> +#define GET_ORDER(nr_pages)    (31 - __builtin_clz(nr_pages))
 
-Thanks for the CC, this is actually not hard to implement as shown by
-Shivam, I just found the code more and more hard to follow and fragile
-as we add more logic to it. And we don't have to reject higher order
-split either which can be seen easily if the code is cleaner.
+This is a fast way of getting log2, but there is no check of the type of
+nr_pages. What prevents one using it on a long variable?
 
-Personally I think doing some cleanup first is better, I haven't post any
-code as right now there doesn't seem to be much user of this. It will be
-needed if more clean THP swapcache begin to show up due to things like
-THP readahead for swap, which isn't here yet. I think I can send an RFC
-tomorrow just for reference. I'm fine if we prefer to remove that TODO
-using this smaller change first :)
+At least you can convert nr_pages to unsigned int and add a comment.
+
+> +#define NR_ORDERS 20
+
+Why 20? mTHP orders can only be in [1, pmd_order - 1] and different arch
+has different pmd_orders. check_large_folios() probably should just cap
+NR_ORDERS at pmd_order.
+
+> =20
+>  unsigned int __page_size;
+>  unsigned int __page_shift;
+> @@ -348,7 +352,7 @@ char *__get_smap_entry(void *addr, const char *patter=
+n, char *buf, size_t len)
+>  	return entry;
+>  }
+> =20
+> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
+> +static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+>  		  uint64_t hpage_size)
+>  {
+>  	char buffer[MAX_LINE_LENGTH];
+> @@ -366,19 +370,67 @@ bool __check_huge(void *addr, char *pattern, int nr=
+_hpages,
+>  	return thp =3D=3D (nr_hpages * (hpage_size >> 10));
+>  }
+> =20
+> +static bool check_large_folios(void *addr, unsigned long size, int nr_hp=
+ages, uint64_t hpage_size)
+> +{
+> +	int order =3D 0, pagesize =3D getpagesize();
+> +	int nr_pages =3D hpage_size / pagesize;
+> +	int pagemap_fd, kpageflags_fd;
+> +	int orders[NR_ORDERS], status;
+
+NR_ORDERS is a constant, so you can put orders on stack. I think you can
+rename it to MAX_NR_ORDERS, use 20, and check pmd_order is not bigger
+than MAX_NR_ORDERS.
+
+> +	bool ret =3D false;
+> +
+> +	if (nr_pages > 0)
+> +		order =3D GET_ORDER(nr_pages);
+
+This funciton can fail early if nr_pages is 0.
+
+> +
+> +	if (!order || order >=3D NR_ORDERS)
+> +		ksft_exit_fail_msg("invalid order\n");
+
+It should check against pmd_order.
+
+> +
+> +	memset(orders, 0, sizeof(int) * NR_ORDERS);
+> +	pagemap_fd =3D open(PAGEMAP_PATH, O_RDONLY);
+> +	if (pagemap_fd =3D=3D -1)
+> +		ksft_exit_fail_msg("read pagemap fail\n");
+> +
+> +	kpageflags_fd =3D open(KPAGEFLAGS_PATH, O_RDONLY);
+> +	if (kpageflags_fd =3D=3D -1) {
+> +		close(pagemap_fd);
+> +		ksft_exit_fail_msg("read kpageflags fail\n");
+> +	}
+> +
+> +	status =3D gather_folio_orders(addr, size, pagemap_fd,
+> +			kpageflags_fd, orders, NR_ORDERS);
+> +	if (status)
+> +		goto out;
+> +
+> +	if (orders[order] =3D=3D nr_hpages)
+> +		ret =3D true;
+> +
+> +out:
+> +	close(pagemap_fd);
+> +	close(kpageflags_fd);
+> +	return ret;
+> +}
+> +
+>  bool check_huge_anon(void *addr, unsigned long size, int nr_hpages, uint=
+64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +	if (hpage_size =3D=3D read_pmd_pagesize())
+
+read_pmd_pagesize() can fail and return 0. Either you need a check here
+or add a ksft_exit_fail_msg() in read_pmd_pagesize() to remove the
+burden from all callers.
+
+> +		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size=
+);
+> +
+> +	return check_large_folios(addr, size, nr_hpages, hpage_size);
+>  }
+> =20
+>  bool check_huge_file(void *addr, unsigned long size, int nr_hpages, uint=
+64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> +	if (hpage_size =3D=3D read_pmd_pagesize())
+> +		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size)=
+;
+> +
+> +	return check_large_folios(addr, size, nr_hpages, hpage_size);
+>  }
+> =20
+>  bool check_huge_shmem(void *addr, unsigned long size, int nr_hpages, uin=
+t64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> +	if (hpage_size =3D=3D read_pmd_pagesize())
+> +		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size=
+);
+> +
+> +	return check_large_folios(addr, size, nr_hpages, hpage_size);
+>  }
+> =20
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+
+All read_pmd_pagesize()s above need to be handled.
+
+
+--=20
+Best Regards,
+Yan, Zi
+
