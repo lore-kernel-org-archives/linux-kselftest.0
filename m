@@ -1,63 +1,63 @@
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+Received: from mail-oi1-f182.google.com (mail-oi1-f182.google.com [209.85.167.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008783CCFAC
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AB143CE0A4
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:10:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785899405; cv=none; b=TLint72m9eOnmvuVsVPfptl2FndN8f9lykd9GcpC4LhbC50ZkPriYz6bbIMmZxOvN40y2j75zHCYaxqI9ngc7Z2y6E0rkiO6XsSSI42+pmr2eCjbp6bhOzmB1/USEGAEtZdrxPFd7OoaZX1zl8T/3UAT93md+mwkR8hrJAisWz0=
+	t=1785899409; cv=none; b=oO80HNZiWBADWDgVZOCowFt6ugs2FtkUyuvVXe3UlIQFkTkVG8NhM2fDuUBVoXsLy6G5MTAyN42rXtjA2lTuS9TU/NPsYcQX4zzxZ0Nn9a+fHmIC6cP6uldWXaAFvEiityUqsjnwHWgMgeeqM7JwHG0+sdP1SlTjNA0MaLe98vQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785899405; c=relaxed/simple;
-	bh=tLELQpHtU/0IDXoPocx7/QH5OaArIrW/4on7sRVtSdE=;
+	s=arc-20240116; t=1785899409; c=relaxed/simple;
+	bh=Jq8G1a8IW2voSAiSYYJVtT2lfUBUkeHKC/7i6E9dQz0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=I1SJ4YjNEsd5BhTlgU08TC9hp+3gSMSwoPnbld+q7n2y0ULgy1PpXQ/pGGefeG4hLXHe8xz851j92iDmWSDGHZgSKvIehSqFADrTtcZbJzhdXg1mVN183UuD4EEMpkPZmc5OuMR7hldizqDqyh8yyitKDu02Z6OY29xk9bVCZ3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oy5fcAKl; arc=none smtp.client-ip=209.85.167.178
+	 MIME-Version; b=tZFOaMtjaqPUMPRV2NHgLtJwMu/mjfYIQ4rQAL9i+s90F3+hUTi8fiR/Nh/QRtmd8aPvhS26iXOZ7Wswbn1ZZSzAldVld1ZmB8e0+AC7ddR2RhD/w6wjPHxHbjX89GcYlFgnR++embVT6RFrQaOTwDccAfofAjpX66A4zyFSuIM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QraSKoix; arc=none smtp.client-ip=209.85.167.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oy5fcAKl"
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-4a45b3f0becso342694b6e.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:10:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QraSKoix"
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-495b250b01cso333261b6e.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:10:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785899403; x=1786504203; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785899405; x=1786504205; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Xek4/jAvqHeG34Edizig0yMhAwZJCf3f9l9B7GvH4hQ=;
-        b=oy5fcAKlHORXfl9svRM6QwJpwBM5oS4h/U5zbR0Qc1HyCVo+KBrWaAG2S/Tbg1u5//
-         Gm4Hi12HJGFHLoz/iEG7oPWFShgM1OSSCFpd5WYTFM19ZPqK/3KV5ItntahNgTUT7G4S
-         aJair7SCYXolj9Z6fL9oNdXpTxNjBzayHxpsdKk2uV6Ssn0DF69nKL/uRLnyz9py7BjN
-         ZmyWvanSAs1j1Y+XGeag5UbMkWAqkVOg5KffG19id8FtBtyUB4XDVxkpwhEhLw7sPFHT
-         AV3ivCBXAOiTd+z5yLF9FERiMmiB9RkY+RZPAICVeY7hljjMfIFN4km6uVzEHE/myPYF
-         mKpg==
+        bh=+/4t3Qh7FD+LIP4Bq9IadDXflLYCCWPdGdCvaAGpR3A=;
+        b=QraSKoix/3RHO0vI/Kv4Vt1lYmX9XkWKcvKDuAqUzERfNofgGgLiiHXi8TX9JNRPbb
+         G8AXnPMRXzIG3EoftM0sfw9Xh9LLjGOrGMsM6mzT2c5oxn1ZKTREjbPFXps2SrqhqR+/
+         FqHfAUPAR9o9oFUpMkljYkskpdP5V+KHPtpwFdGNJPIGG6g5TgGmwGgZ6MALGOgeTDRX
+         wNM1HDXGbnanuj6twnC/cZI2/w3k7CAcY6pFnmthGe5owOgg1G709+yDj4FIaPBP9+qQ
+         TX67KR4AsTqgVvd2frH6MqnBzK3PQUjC8pQv5MLT9nX3G4rmRodqLUM5MQ9hU3JofFwj
+         T46w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785899403; x=1786504203;
+        d=1e100.net; s=20251104; t=1785899405; x=1786504205;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Xek4/jAvqHeG34Edizig0yMhAwZJCf3f9l9B7GvH4hQ=;
-        b=sNQaeXhP0g88eS4jyxoAhS/QrMBKKc7TDyX/NOvTqMEdVO9YOuaSszB2201uz2tuCS
-         K4QkRhcWXXk/bRglC77aO6oM3MPTchZ9FEABWujS+jP+OSL9L0/NvOXR9SoyHf97ECOB
-         MVaymvFHpkuevUMrcJkUb4MpJz1xous6vQ8zjErve5/B8gtCEo8vG3RADXHi+wGce+en
-         o092eOgh60hLNg4UXErgNPo/jGLSPuoGYtN2AvWmNaIf7A/A2y/Wf+O0nfhdFKao+6NY
-         Ar/50q/WUQTDBEknWM0DcHQVkKaFFWm41gSbeNPM4D9msvIHxXiVe1nONgv8Nis7AymK
-         t6jw==
-X-Forwarded-Encrypted: i=1; AHgh+RrUHA9p62Yl+8Pcqk5M+/L5FffEJf7vKLEAyfu/x7S9lOA1bOh89APeZzuI12EldJK6XTXluafgWjNN6imbriQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4SECuPrE2NXWrPLmcCi/SfKjEFYzqOO282mmAfoj8sQ6Jez7K
-	XFEqkDXouMQ6oqIXhhZcZn3BnccxgJ+pRe19L5P1oMNORcA8YLPoaiQ7
-X-Gm-Gg: AR+sD107dr+mZEcqHYkj8Jjt4tuKlCM4iLDyg3gc14gV6Ls+Olw77XmqcdBi6uL/Fos
-	Tic+e+xcF2A+vh8sMoo0Ycb93XwpSq7ehSOcirTdNTZkmbWYX+CQqb1FaWFvikns8mHVzthd/sg
-	14m2FBLyxvoDEXHA+kXmQ5VhKUG+/YyXKlEHAxLc/r74KO26Nt6sXKwl2inuZBT5WNxfrNbPax8
-	HcU3K3AItG1PjLqFfa2xE4oUrUBS+jP+XFw1l7SWN81BwI6u3mZgpCxU3cCHdGiV64sKrZXUWB9
-	X1rH1WinZpfA7+xBJcqB45kyzNJUoURDqHpPzUNYgD+1+Y2wIN3m4LeGYIECrHrypGlqkhn7br0
-	0fLP1tGnskIJLjZu3O//Esih+FRxbeQO8yIvA+4Iw+egUxf57d+lruL+nep7lRbAoQ57gSBwXb1
-	/LbpnNXA0ZiYGqagtGlBcm+nYgMMkvF8Mlgqcwb+TzqGhOIYoVFisvsRMuqO8NDjj17O77
-X-Received: by 2002:a05:6808:50a7:b0:495:f79d:8bd5 with SMTP id 5614622812f47-4afae09f3d9mr1770859b6e.12.1785899402760;
-        Tue, 04 Aug 2026 20:10:02 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:1f::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4afae4fc68fsm980909b6e.8.2026.08.04.20.10.01
+        bh=+/4t3Qh7FD+LIP4Bq9IadDXflLYCCWPdGdCvaAGpR3A=;
+        b=lxFeAP1U009+Y83As0DXPcxB/owwQ5cM+7GtSmvVE/iTQsBxT843uL8q1mWJZ9hAya
+         j+2A4RUsKEmTfdzOAjMIGGhtOGwzg00zoIfKWsRddtn6F4BgMCypsEQqoK48OyfmnD4I
+         XdcFc2RIp2h+ZlPlyJ/eO08AEptZR5sopNipx9Q9KFxQqVjeXMQcD9TfB83JmSpaKGLa
+         T4epaADJ6622T3qJqaZ1Hbg25RGr2BCb74mmLs/oZHoWuWogXh/XGY7qWf4ECUm6MySc
+         2Lfm5pocyBkQfQui/RrzjPcfUrhL27CmEBGqPVMig/95tUjv2+gDRcmjTJppR28qGXWP
+         KASw==
+X-Forwarded-Encrypted: i=1; AHgh+RqYoyZRySxm44aVuO8qmTue8Bvpilf1JmAJCnWZk4qd9w9KqppydG0XCtkROZbEyC5hiTSkHmeRptcb4mf9A20=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTXHVhdg4+RQlzJqm9rm0rHs1JXCJX/JC8OE+XMlGcybqhTDTZ
+	pcZGD0VauNFIfWcKLFKCMiqu0+hO5NjEW+Dp4faMRq7iTmGUoI4Q0VB5
+X-Gm-Gg: AR+sD11ewLNRwSarbLHB3q+mSxvV/6KjX/DH1xRCkGk3t1oxKWrueQm26sMX09YIEkX
+	FDyVM+LxNfbXNXvEJaynXBpIRGfw/viYj0l0ZaQEHhJL1usSZW/YExvworExCB7wp4vZ6uoBan+
+	RRfEAR3rQlnf4fjvk0d+3ZfnHRvzYH4NEj9thMO6JJ5+KPkNXDtWzBTYnQZEr2immACND1ehMyA
+	46wOVSUWR4Gyac6cJD984ssrWA4FWUISBKvOni4iEIRzmxD/lYKx+CP5ZWCOhbrrVQB9nSNWttu
+	iDYM1ZcLgnU/hM9HMhdDK60Uc9Ht/Xb2S1LZXJcKfxHt7TyaPVB6tSaW5PPt1KCoyKIYty0Stih
+	Dq+aJQc5pgrlIE1AAUem6W1U0rfWKMk/FDRJ76EzP9x1n0tZweLm3rq6kP0Dn0jLT/Wenwf+qRP
+	sJQOp8yX5/x1oSOMhMKmxcnSjAurJL6v1KpF7ZNZwc8/iAurkHVU1o7+mnXw==
+X-Received: by 2002:a05:6808:1185:b0:4a4:934:b316 with SMTP id 5614622812f47-4afae2607a0mr1829050b6e.21.1785899405603;
+        Tue, 04 Aug 2026 20:10:05 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:31::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4afae75ce1bsm977189b6e.15.2026.08.04.20.10.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 20:10:01 -0700 (PDT)
+        Tue, 04 Aug 2026 20:10:04 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -69,9 +69,9 @@ Cc: andrew+netdev@lunn.ch,
 	pabeni@redhat.com,
 	shuah@kernel.org,
 	alexander.duyck@gmail.com
-Subject: [PATCH net-next 08/14] selftests: net: shaper: Add child node deletion reparent test
-Date: Tue,  4 Aug 2026 20:09:30 -0700
-Message-ID: <20260805030936.1092907-9-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next 09/14] selftests: net: shaper: Add queue migration between nodes test
+Date: Tue,  4 Aug 2026 20:09:31 -0700
+Message-ID: <20260805030936.1092907-10-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
 References: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
@@ -85,38 +85,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Mohsin Bashir <hmohsin@meta.com>
 
-Add delete_child_reparent to verify that deleting a child node
-reparents its queue leaves to the parent node. Creates a two-level
-hierarchy (N1 with Q1,Q2 and child N2 with Q3), deletes N2, and
-verifies Q3's parent becomes N1.
+Add move_queue_between_nodes to verify that a queue can be moved
+from one node to another via re-grouping. Creates N1 with Q1,Q2
+and N2 with Q3, then re-groups N2 with Q1,Q3 to steal Q1 from
+N1. Verifies Q1 moved to N2 and Q2 remains under N1.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
 ---
- tools/testing/selftests/drivers/net/shaper.py | 77 +++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ tools/testing/selftests/drivers/net/shaper.py | 102 ++++++++++++++++++
+ 1 file changed, 102 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/shaper.py b/tools/testing/selftests/drivers/net/shaper.py
-index 3b72661202f9..1b88e183f1b9 100755
+index 1b88e183f1b9..62c74a0c0563 100755
 --- a/tools/testing/selftests/drivers/net/shaper.py
 +++ b/tools/testing/selftests/drivers/net/shaper.py
-@@ -648,6 +648,82 @@ def nested_depth_limit(cfg, nl_shaper) -> None:
-         cleanup.exec()
-     ksft_eq(len(nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)), 0)
+@@ -724,6 +724,107 @@ def delete_child_reparent(cfg, nl_shaper) -> None:
+     shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
+     ksft_eq(len(shapers), 0)
  
-+def delete_child_reparent(cfg, nl_shaper) -> None:
-+    r"""Deleting a child node reparents its queue leaf to the parent.
++def move_queue_between_nodes(cfg, nl_shaper) -> None:
++    r"""Move a queue between nodes by re-grouping the destination node.
 +
-+        netdev              netdev
-+          |                   |
-+          N1      del N2      N1
-+        / | \     ----->    / | \
-+      Q1 Q2 N2            Q1 Q2 Q3
-+             |
-+            Q3
++        netdev                  netdev
++        /    \    .group N2      /    \
++       N1     N2  {Q1,Q3}       N1     N2
++      /  \    |   ------->       |    /  \
++     Q1  Q2  Q3                 Q2  Q1   Q3
 +    """
 +    n1_bw_max = 10000
-+    n2_bw_max = 5000
++    n2_bw_max = 20000
 +
 +    _require_caps(cfg, nl_shaper, 'node',
 +                  ['support-bw-max', 'support-metric-bps', 'support-nesting'],
@@ -126,7 +124,7 @@ index 3b72661202f9..1b88e183f1b9 100755
 +
 +    _require_queues(cfg, 4)
 +
-+    # Create parent node N1 with Q1, Q2
++    # Create N1 with Q1, Q2
 +    n1_handle = nl_shaper.group({
 +                   'ifindex': cfg.ifindex,
 +                   'leaves':[{'handle': {'scope': 'queue', 'id': 1},
@@ -140,25 +138,27 @@ index 3b72661202f9..1b88e183f1b9 100755
 +    for i in range(1, 3):
 +        defer(_delete_shaper, cfg, nl_shaper, {'scope': 'queue', 'id': i})
 +
-+    # Create child node N2 under N1 with Q3
++    # Create N2 with Q3
 +    n2_handle = nl_shaper.group({
 +                   'ifindex': cfg.ifindex,
 +                   'leaves':[{'handle': {'scope': 'queue', 'id': 3},
 +                              'weight': 1}],
 +                   'handle': {'scope':'node'},
-+                   'parent': {'scope': 'node', 'id': n1_id},
 +                   'metric': 'bps',
 +                   'bw-max': n2_bw_max})
 +    n2_id = n2_handle['handle']['id']
 +    defer(_delete_shaper, cfg, nl_shaper, {'scope': 'queue', 'id': 3})
 +
-+    # Delete child N2 - Q3 should reparent to N1
-+    nl_shaper.delete({'ifindex': cfg.ifindex,
-+                      'handle': {'scope': 'node', 'id': n2_id}})
-+
-+    with ksft_raises(NlError):
-+        nl_shaper.get({'ifindex': cfg.ifindex,
-+                       'handle': {'scope': 'node', 'id': n2_id}})
++    # Move Q1 from N1 to N2 by re-grouping N2 with Q1, Q3
++    nl_shaper.group({
++                   'ifindex': cfg.ifindex,
++                   'leaves':[{'handle': {'scope': 'queue', 'id': 1},
++                              'weight': 2},
++                             {'handle': {'scope': 'queue', 'id': 3},
++                              'weight': 1}],
++                   'handle': {'scope':'node', 'id': n2_id},
++                   'metric': 'bps',
++                   'bw-max': n2_bw_max})
 +
 +    shaper_n1 = nl_shaper.get({'ifindex': cfg.ifindex,
 +                               'handle': {'scope': 'node', 'id': n1_id}})
@@ -167,10 +167,35 @@ index 3b72661202f9..1b88e183f1b9 100755
 +                        'parent': {'scope': 'netdev'},
 +                        'metric': 'bps',
 +                        'bw-max': n1_bw_max})
++    shaper_n2 = nl_shaper.get({'ifindex': cfg.ifindex,
++                               'handle': {'scope': 'node', 'id': n2_id}})
++    ksft_eq(shaper_n2, {'ifindex': cfg.ifindex,
++                        'handle': {'scope': 'node', 'id': n2_id},
++                        'parent': {'scope': 'netdev'},
++                        'metric': 'bps',
++                        'bw-max': n2_bw_max})
++
++    # Verify Q1 moved to N2
++    shaper_q1 = nl_shaper.get({'ifindex': cfg.ifindex,
++                               'handle': {'scope': 'queue', 'id': 1}})
++    ksft_eq(shaper_q1, {'ifindex': cfg.ifindex,
++                        'parent': {'scope': 'node', 'id': n2_id},
++                        'handle': {'scope': 'queue', 'id': 1},
++                        'weight': 2})
++
++    # Verify Q2 still under N1
++    shaper_q2 = nl_shaper.get({'ifindex': cfg.ifindex,
++                               'handle': {'scope': 'queue', 'id': 2}})
++    ksft_eq(shaper_q2, {'ifindex': cfg.ifindex,
++                        'parent': {'scope': 'node', 'id': n1_id},
++                        'handle': {'scope': 'queue', 'id': 2},
++                        'weight': 1})
++
++    # Verify Q3 remained under N2
 +    shaper_q3 = nl_shaper.get({'ifindex': cfg.ifindex,
 +                               'handle': {'scope': 'queue', 'id': 3}})
 +    ksft_eq(shaper_q3, {'ifindex': cfg.ifindex,
-+                        'parent': {'scope': 'node', 'id': n1_id},
++                        'parent': {'scope': 'node', 'id': n2_id},
 +                        'handle': {'scope': 'queue', 'id': 3},
 +                        'weight': 1})
 +
@@ -183,11 +208,11 @@ index 3b72661202f9..1b88e183f1b9 100755
  def queue_update(cfg, nl_shaper) -> None:
      nq = _require_queues(cfg, 4)
      if not cfg.queues:
-@@ -765,6 +841,7 @@ def main() -> None:
-                   group_update_rate,
+@@ -842,6 +943,7 @@ def main() -> None:
                    delegation,
                    nested_depth_limit,
-+                  delete_child_reparent,
+                   delete_child_reparent,
++                  move_queue_between_nodes,
                    dup_leaves,
                    queue_update],
                   args=(cfg, NetshaperFamily()))
