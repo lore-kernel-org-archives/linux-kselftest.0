@@ -1,225 +1,232 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93B45346AC0;
-	Wed,  5 Aug 2026 09:29:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6333FB7DD;
+	Wed,  5 Aug 2026 09:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785922194; cv=none; b=UdRFYRvF95tTKlp//NFbCLetc6dA2m2sgW3oSk8F5yclPxko0ZEdGHLXyX+AV0RnhkfoMDVUdM7t8YvTRTtp5JUmyNhrMMyZ1KajpiAh5Cxr3zTDFkfwepItAh5OaZTGVw+45ofhBO9UOT3ZuJhUUpazLVLk1WqIoheTHAjA6XY=
+	t=1785922290; cv=none; b=exS1nuKMppyrblyxCHaAepSbigLldY5LwXsDZc0P4GXjoYSh/WdNRVgtd7j9RuF3kotVAN1oZHlNrxcQ7DXrzO9Ogc5DjDirA4ySHLYt+/LC9Bg0GhPrvGZcP8c7uNkE/et55wnOsj/9xdBOrV+gcHGmM3ZnJSFBzxs8zIDozlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785922194; c=relaxed/simple;
-	bh=PYNJT8vFG7Wp9GRzPv1qzS9fMJddCPuQjB8CIEbc2Lw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VXhXe7jPLizMtic2mkgu4k1xQ7kZPNTD9D6bGaU0oAbGDxHSikdTuE+AoqGL2srCED8bwiTShiXCyukWmnOkrYu+qpJjHzphwbzfESdl6muQWCJBxdoLU5M9oFXzS/bmrduxuyaQdPkmyOn2z4AthPhFfjJz1f0A3PlAuyWHPgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ag2H6Enn; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1785922290; c=relaxed/simple;
+	bh=FVYv55IBEwcQrHQ6rs2iggdCKCYsB3hRc6patjAnlnY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uemFjbD9qtGRlalxm0D7JL+4tng6U+9NhO/vHj9hFPFh2luq7DTGI3EscwJddU1KDvI5LJFRJWSIdgA9hMOMB9TXTEDTp+H5wQghAimLdTudnSCvfevAB6LA9SO9UmqRl7GehdxYb92gds5iLjcr5Hu0Gb1enKNNvIA40hS61qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=jhXinj0C; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ag2H6Enn"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6CEF1F000E9;
-	Wed,  5 Aug 2026 09:29:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1785922193;
-	bh=/gjtDrTd3eRi22+TbpqZHqyTIg00RD4cowSNfL//SUg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=ag2H6EnnFi4b+rjAY/vOuSJSppombJiw6yEHEy7W/bgMRsj6+S4B3EhWbErU4pYX7
-	 S/nUW4Om/ISFjyJ5TLWoQxid9jVaN4NTRu1/HmvCQQdrfFiIVpGCQ2PKjOcsZFKbWx
-	 dGsB6hzGq0UoOE95Cq1AwT+O95gAcTcmYnZcUBQ984wiE+110RP5FFe1DF1ry0Rd8h
-	 W57wr2rOnjHXUH06E8Pah5rdwcPf4a3re/C/qRj7I56Op/IKZJ0qri623UPEmi0Sq5
-	 2Ehn5nEPZJSyU1L6GNRn0jYgOpJMzCB4nl18Zr20xgDWMXBYkxWD8Ap43Hy0b9xNTK
-	 dClMMia43hoJg==
-Date: Wed, 5 Aug 2026 10:29:31 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 06/15] mm: propagate VMA anonymous page offset on map,
- remap, split + merge
-Message-ID: <anMBoUbb2_lqiP4d@lucifer>
-References: <20260729-b4-scalable-cow-virt-pgoff-v3-0-e8ecfefea812@kernel.org>
- <20260729-b4-scalable-cow-virt-pgoff-v3-6-e8ecfefea812@kernel.org>
- <4ad4b17b-bae6-4169-8649-bff4a29e7fde@kernel.org>
- <anB9MWSSITYpDibA@lucifer>
- <6ea7cdad-afb1-45af-a63c-30b760fe160d@kernel.org>
- <anLyhaI6kW-EWk13@lucifer>
- <aba0e91c-ab9c-4420-9ed4-9e42cf03ecfb@kernel.org>
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="jhXinj0C"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=HCP6mO+wKKfIvYSWgV3yoR0hiLYWZQCLwXNtJuiZRtM=; b=jhXinj0CchuihGOKOsi5MD6O4W
+	u+At7TWxLwHWZ3B6/Gu53v8QbU8MF7wc6mubv18a/7llwgDbUTK4o2l9pTEoKzPZNxhTsp6IXYZW1
+	34UGn9+6hCOBNkXnyllVTAVvqzrbK+MenGznX5Z0AV05Ovwzahhsd6cWVADXSH0PVimAwVsMynMRO
+	YxxdS+qtR/HRGBrYoZb9ggUG1LsPb5CWp4Iakz1AAyal6SuzahPza41YtGfgUOVcif/6dpbEAOvak
+	3B3cNx4fYOe2YP8o3Ys98BjnwUBBl1f72Q+qSLeDu4q7aLEvOBMBFnNSuJyNNxs6SSOuQnLvns6q3
+	Vo6/Hqmg==;
+Received: from [2a07:aa00:8c:e0:2ef0:7ea2:4f15:3280] (helo=u09cd745991455d.ant.amazon.com)
+	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
+	id 1wrXtU-00000001ABs-2rNZ;
+	Wed, 05 Aug 2026 09:26:38 +0000
+Message-ID: <38e16d4386a5ca428366a55ffa83ab34e0e1b72a.camel@infradead.org>
+Subject: Re: [PATCH v7 31/36] KVM: x86: Add KVM_[GS]ET_CLOCK_GUEST for
+ accurate KVM clock migration
+From: David Woodhouse <dwmw2@infradead.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>,  Borislav Petkov	 <bp@alien8.de>, Dave
+ Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"	
+ <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross	
+ <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
+ Durrant	 <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
+ Bischoff	 <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
+ Gouly	 <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, Dongli
+ Zhang	 <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Date: Wed, 05 Aug 2026 11:26:30 +0200
+In-Reply-To: <anJ36SBzN7HL4A2D@google.com>
+References: <20260728144954.355376-1-dwmw2@infradead.org>
+	 <20260728144954.355376-32-dwmw2@infradead.org>
+	 <am0upFND1r93HPxq@google.com>
+	 <d2d98dd31718eb925ae44b0eceb325538a8174ae.camel@infradead.org>
+	 <anJ36SBzN7HL4A2D@google.com>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+	boundary="=-oAGZuj5i7ES/IfXkCZMt"
+User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aba0e91c-ab9c-4420-9ed4-9e42cf03ecfb@kernel.org>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
 
-On Wed, Aug 05, 2026 at 11:19:20AM +0200, David Hildenbrand (Arm) wrote:
-> On 8/5/26 10:59, Lorenzo Stoakes (ARM) wrote:
-> > On Wed, Aug 05, 2026 at 09:35:56AM +0200, David Hildenbrand (Arm) wrote:
-> >> On 8/3/26 15:46, Lorenzo Stoakes (ARM) wrote:
-> >>>
-> >>> No this would be incorrect.
-> >>>
-> >>> A read-only mapping would become unmergeable here. So this is something apart
-> >>> from the rmap aspect,
-> >>
-> >> I'd assume that we should never even consider anon_pgoff when merging
-> >> !is_cow_mapping(), it doesn't make any sense.
-> >>
-> >> No anon folios -> no anon_vma -> no anon_pgoff
-> >
-> > You can merge unfaulted ranges is the thing here.
-> >
-> > But anyway I actually wonder whether this whole branch shouldn't be:
-> >
-> > 	if (!vma->anon_vma) {
-> > 		...
-> > 	}
-> >
-> > Because that way we keep anon_pgoff updated even for MAP_SHARED mappings. This
-> > isn't necessary and doesn't impact anything _except_ print_bad_page_map which
-> > outputs both pgoffs.
->
-> Agreed.
->
-> >
-> > But it'd be consistent, avoid any confusion about gating on VMA_SHARED, and
-> > simplify the code :)
-> >
-> >>
-> >> But I think I am missing one detail here:
-> >>
-> >>> and it is a contract that upon move of an unfaulted
-> >>> mapping (which for read-only anon would always be unfaulted) that vma->vm_pgoff
-> >>> is updated.
-> >>
-> >> "read-only anon": I assume you mean an anon mapping that does not have
-> >> VM_MAYWRITE set?
-> >
-> > A MAP_SHARED mapping of a read-only file becomes a MAP_PRIVATE !VMA_MAYWRITE_BIT
-> > mapping and must adhere to the same contract.
->
-> Right, but that is not an anon mapping, it's a file mapping that similarly
-> cannot have anon folios, ever.
->
-> >
-> > Also mmap hooks can clear the VMA_MAYWRITE_BIT.
->
-> Right, but again, if we'd have that being done to anon mappings, other things in
-> MM would already be broken.
->
-> We assume that anon folios can only ever end up in cow mappings.
->
-> >
-> > However:
-> >
-> > - If you're a driver clearing VMA_MAYWRITE_BIT you should only be doing this for
-> >   'special' mappings anyway (I have a series I've not sent yet that establishes
-> >   this as an invariant also) - and these are not mergeable anyway.
->
-> Jup.
->
-> >
-> > - If you're a !VMA_MAYWRITE_BIT MAP_PRIVATE-file backed mappings you never set
-> >   vma->anon_vma and always update anon pgoff so you always have alignment for
-> >   purposes of merge.
->
-> Jup.
->
-> >
-> > So I think also we can then change needs_adjacent_anon_pgoff() to:
-> >
-> > static bool needs_adjacent_anon_pgoff(const struct vma_merge_struct *vmg)
-> > {
-> > 	return vmg->file && is_cow_mapping(...);
-> > }
->
-> Agreed.
->
-> >
-> > [I have to create a vma_flags_t variant of is_cow_mapping()]
-> >
-> > With those two changes we gate on VMA_SHARED_BIT nowhere :)
->
-> That's much clearer.
 
-Yes agreed :)
+--=-oAGZuj5i7ES/IfXkCZMt
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
->
-> I was thinking for a second whether to have a more expressive
-> "mapping_might_have_anon_folio" or sth like that. But it's a bit mouthful.
->
-> Most instances of is_cow_mapping() in memory.c want to know exactly that.
+On Tue, 2026-08-04 at 16:38 -0700, Sean Christopherson wrote:
+> On Sat, Aug 01, 2026, David Woodhouse wrote:
+> > On Fri, 2026-07-31 at 16:24 -0700, Sean Christopherson wrote:
+> > >=20
+> > > > +	/*
+> > > > +	 * Allow for a discrepancy of 1 kHz either way between the TSC
+> > > > +	 * frequency used to generate the user's pvclock and the current
+> > > > +	 * host's measured frequency, since they may not precisely match.
+> > > > +	 */
+> > > > +	if (user_tsc_hz < curr_tsc_hz - 1000 ||
+> > > > +	=C2=A0=C2=A0=C2=A0 user_tsc_hz > curr_tsc_hz + 1000) {
+> > >=20
+> > > I don't follow, why is KVM restricting what frequency userspace can s=
+et?
+> >=20
+> > Userspace actually sets the frequency with KVM_SET_TSC_KHZ. What KVM is
+> > insisting upon here is that the input to KVM_SET_CLOCK_GUEST is
+> > *consistent* with the guest's TSC frequency (within a little slop
+> > caused by different host TSCs).
+>=20
+> Why does KVM care though?=C2=A0 I know some people hate that KVM's uAPI i=
+s permissive
+> to a fault, but trying to "help" userspace often ends badly for everyone.=
+=C2=A0 E.g.
+> what happens if userspace does KVM_SET_TSC_KHZ after KVM_SET_CLOCK_GUEST?
 
-Yeah and obviously once scalable CoW is in even that name will be wrong :)
+The two operations have to be considered in isolation, at the time they
+happen.
 
-I think the semantics are a non-obvious but I do like that we are explicit in
-saying 'is a CoW mapping'. We just maybe need to be more consistent with that.
+The KVM clock provides a y=3Dmx+c relationship from TSC (x) to kvmclock
+(y), where the rate (m) depends on the TSC frequency.
 
-Maybe once scalable CoW is in can work to improve consistency of that...
+The KVM_SET_CLOCK_GUEST function provides an equivalent y=3Dmx+c
+relationship, instructing the kernel to make them match.
 
->
-> >
-> >>
-> >> I recall that that's a combination that cannot be created. While you can create
-> >> something that does not have VM_WRITE set, IIRC VM_MAYWRITE is always set for
-> >> anon vmas.
-> >
-> > For pure anon yeah, see above for the MAP_SHARED->MAP_PRIVATE-file backed weird
-> > case.
-> >
->
-> Agreed.
+If the rates are the *same* then this is basically a case of adjusting
+the constant epoch (c) to make the two parallel lines coincide.
 
-Cool will make the changes as above then! :)
+If they *aren't* parallel, then what is KVM_SET_CLOCK_GUEST even asking
+for? I guess the kernel can adjust the guest's kvmclock so that it
+*intersects* the requested line at some point around now, but that
+really isn't what KVM_SET_CLOCK_GUEST exists for.
 
->
-> >>
-> >> --
-> >> Cheers,
-> >>
-> >> David
-> >
-> > (It's funny to me that if you want a truly read-only MAP_PRIVATE file-backed
-> > mapping (no idea why you would but anyway) you have to MAP_SHARED, but an
-> > actually MAP_PRIVATE file-backed mapping of a read-only file is writable [which
-> > makes sense obviously] :)
-> I guess this boils down to
->
-> MAP_PRIVATE of a read-only file allows you to COW. Which is usually what you
-> want when placing breakpoints / letting the debugger go wild.
->
-> MAP_SHARED of a read-only file doesn't allow you to COW, and can consequently
-> never become writable.
->
-> It's confusing, yes.
+--=-oAGZuj5i7ES/IfXkCZMt
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
 
-Yeah indeed, it's just amusing to think about, but in practice makes perfect
-sense.
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCE8Ew
+ggWvMIIEl6ADAgECAhANkOKMSmGXhF5eMl0rsRhvMA0GCSqGSIb3DQEBDAUAMGUxCzAJBgNVBAYT
+AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
+BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjAeFw0yNDAzMTMwMDAwMDBaFw0zNDAz
+MTIyMzU5NTlaMGIxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UE
+AxMxRGlnaUNlcnQgQXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTCCAiIw
+DQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOfSIeC0vv1xPQ+dgSxbIIrkaru6skAWJYaGFzmv
+q4Kq+2wU2jxhcWlJg/JeP5jEkq/LM3pn5aaLao79j+XRmS7J1ZpJKUODJVoM4s9MQJhTMvo4qS5Z
+S64g6QR7Obkz3I1Lr3aWeSBmDDEyzue+NKtuWZ1Cxy3RdXo/w5HgRc3l2AercOM3Gt1XonTzEtTb
+Z/Hwc0Sn9Gz8RmGRK6Ka4hVDl8q/2l110KaV233Kh5etP0csXS8MIMdVRfRu3sc5hp13DG7lCKzK
+72a2GEpI8Wpl26G6I1/LMzz/98T+FqjTqxsdquk7Cj7m2vKGLW1BorpQH7WFGPdJQXJe1hfbfiZA
+CcVdCtl4nAacFacmsiArZBfX7AQGL7isvHUwwYFEtcApyGW4p2Lt+t8nvU0CANA6BHOpOz1xOP8W
+mAESbUriIjyuTUf3fJ9oDNCurVqhASMJCDaWI3lYX/QAoiAzt6akqbbZxo2ujW7mGGqc0KxqE2cs
+h2T79v7pC8aUtHBfwNrTR19GnZVxE0eQ7ViIQhR6mpSaUQFA9sG+cmD2G8TnCgYsLa0q8De6F61a
+CBevQGHNzrbZ3JAMneveYg/Jy1XxQHDRcvrMfWKe0jjcWbdKYlaGVPm5V1ILwYz7Yv5ewo3NUrxI
+GJiywe9qPhuJSDZs7VehTuI0FxGIsgKzVjgbAgMBAAGjggFcMIIBWDASBgNVHRMBAf8ECDAGAQH/
+AgEAMB0GA1UdDgQWBBT3m6JO05fF9DQPQw6Bhc6RkzKv+TAfBgNVHSMEGDAWgBTOw0q5mVXyuNtg
+v6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MHkGCCsGAQUFBwEBBG0wazAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEMG
+CCsGAQUFBzAChjdodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURS
+b290RzIuY3J0MEUGA1UdHwQ+MDwwOqA4oDaGNGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdp
+Q2VydEFzc3VyZWRJRFJvb3RHMi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUA
+A4IBAQA+b8Uw53sDspdZgukU+qzLyyHkcjlxGGhHlP+zrmDLKm1wEFvCRS2pili3Hy67i8N4N5NU
+vw5Rg6kv3lxb9S9Rktxk43k+tvm68pl7OxQE55ZjVY87P0lUPGwEqOOwLLyH02ZQcsfq5p5LrOH9
+0JvmvZ1yy73HS+VpDAqOlytE0NSvTIRqFFkKQGQwfjvtql9YflujuNNvJztjBaHKYZsnNSg+J38o
+jYq4TP3pSg3UdVH0PncVjPQyqxC9xef5Xae92Kbkzol3x7Nel3A1bwAkalrDMspvTHvey6LfiBks
+FIqviTnoy7fgjaRAJgHS+RXx/cmuRd3rUAclSVVrYu8RMIIHAzCCBOugAwIBAgIQAzUotrsybJHx
+HTjKOIVdIDANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQs
+IEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQg
+MjAyNCBDQTEwHhcNMjYwNzE4MDAwMDAwWhcNMjgwMTA0MjM1OTU5WjAeMRwwGgYDVQQDDBNkd213
+MkBpbmZyYWRlYWQub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2pYux73kdbYX
+sWF8f1u6DJP91qcqaZetsyfPkZk0B+MmXmAEv0kVes5n15V2mbDThOnpoPFly0UugQO9JYqLfrtD
+tKD5yL58fgrDB9Dw+LQikgrHafl6YSCds5AvUu/8hw2J6noKrcOLJpKlKn9Fl/4IB9Q3JIdLx5aa
+EtTqMalIPqHFOlgrJ7s+aua8xbB8YQ9ahqYBXWRJNv3P/2b1DYtdrz1oqZPE3CcB8Pc6Gf2a1Tcm
+6TAgtEx7Cf1BFcrsrMz7TWHmGQITieNb2r9UYWSc2Gp+GtYFNJCgT0JJXKUBIauPMKBLteYrL8Fo
+ff/uY44dC/mDWjdCP/5x0qelPQjlBvWdHL5zvBTOj06rJ0m3HNI/hnIcDh0Qu2j9reb9rLVcdym6
+bWmBM4uDEB8Zv9Ph0KTBFSy1IosyakuD1j1Os30EzjGfbi0EUXIvnOcYbTBAbM5UAzrxEHMhBvoX
+Pvnx+OyvjJmc9tWxTX6AcSz+m40esbT17URBeZS18afgieiikm5TynlUYP1LciR3hSgGVzvGXnKO
+02VDFR5itGWdRKZ2W5wIShNfWfhSa0D0K5UdIDt5Qc7sjzwK1Yb1sY5Tu0uA5mhIS82q1ov83uxB
+sFkriNnhGv/M1NCDVLBiOMsHu73qUM+yKmgKLwF9Hfn9WI25glbAMI4S5r3hYzcCAwEAAaOCAfcw
+ggHzMB8GA1UdIwQYMBaAFPebok7Tl8X0NA9DDoGFzpGTMq/5MB0GA1UdDgQWBBRcYhqbcGzn1jrT
+JOZaB8O7qllDpzAwBgNVHREEKTAngRNkd213MkBpbmZyYWRlYWQub3JngRBkYXZpZEB3b29kaG91
+LnNlMBQGA1UdIAQNMAswCQYHZ4EMAQUBAjAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYB
+BQUHAwIGCCsGAQUFBwMEMIGpBgNVHR8EgaEwgZ4wTaBLoEmGR2h0dHA6Ly9jcmwzLmRpZ2ljZXJ0
+LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsME2gS6BJ
+hkdodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZT
+SEEzODQyMDI0Q0ExLmNybDCBjQYIKwYBBQUHAQEEgYAwfjAkBggrBgEFBQcwAYYYaHR0cDovL29j
+c3AuZGlnaWNlcnQuY29tMFYGCCsGAQUFBzAChkpodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v
+RGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZTSEEzODQyMDI0Q0ExLmNydDANBgkqhkiG9w0B
+AQsFAAOCAgEAocabrh1cPd5s3vY5rnlBVQSTc7zs2ZWs67dAIltR+05WELrYClVzzUhMs/LOJPlr
+EUo45UDDomXq38DxFepaPd9+iNLjXfn33EX/IG44j04lU/oF/Rg9VeQILkYLbCZ/x9wOjNHZc4SN
+ydY7Dhvf/sT5aBz88u7D5+azZJ7Qf1U57wYseCH1Mt0nDrtr5y19IJ8D9xJJ33RFL6vfpHZBBAQ8
++3RqkKNxLoV2aFvQhxdhjNLDqTv3LjUIdicwPraN7JkxEu7CV2Lka7eRqJgkWL7SK0YmBjGpRafs
++icP/ON5RCCKTTb6VlX8eTG2sJJfsFhvJNCCt6xexbWzWtIrfP7NvPBvwBB737AyEGBZkS5aNizT
+McURJGTv9UKvBh1LF/+tNhYtLvPCN7oecGzhCHht9jcwSkygTo3Y6YlK3QgOu+ncmiBbfeuwlLZ1
+LxbYvG6hgNqXv7u6YyADbYajAQJXJ2OQen39pm3Q/AQSyLYG+B8lDglWsM8tYXPlEdrYJcksGK6F
+nqIX6Bumn43rBooLJdiZp4WmfWdL2pxe+LxRDjprmqu1WprixDxULSTOKJZoqTlugs6y3Bc+if+s
+gHnBBtz9WQ6MtPHkh7zONDAFIKcBmv8OqPQCx0F3Wv3OEybwMpXx0OsKgK8wLldaX1pXcMuyDgTL
+Sqs0AV0OHUgwggcDMIIE66ADAgECAhADNSi2uzJskfEdOMo4hV0gMA0GCSqGSIb3DQEBCwUAMGIx
+CzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UEAxMxRGlnaUNlcnQg
+QXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTAeFw0yNjA3MTgwMDAwMDBa
+Fw0yODAxMDQyMzU5NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqG
+SIb3DQEBAQUAA4ICDwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZe
+YAS/SRV6zmfXlXaZsNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2z
+kC9S7/yHDYnqegqtw4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qG
+pgFdZEk2/c//ZvUNi12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41va
+v1RhZJzYan4a1gU0kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0c
+vnO8FM6PTqsnSbcc0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PW
+PU6zfQTOMZ9uLQRRci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXt
+REF5lLXxp+CJ6KKSblPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQr
+lR0gO3lBzuyPPArVhvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7Iq
+aAovAX0d+f1YjbmCVsAwjhLmveFjNwIDAQABo4IB9zCCAfMwHwYDVR0jBBgwFoAU95uiTtOXxfQ0
+D0MOgYXOkZMyr/kwHQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3
+bXcyQGluZnJhZGVhZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEC
+MA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgakGA1UdHwSB
+oTCBnjBNoEugSYZHaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZEcyU01J
+TUVSU0E0MDk2U0hBMzg0MjAyNENBMS5jcmwwTaBLoEmGR2h0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv
+bS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsMIGNBggrBgEF
+BQcBAQSBgDB+MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wVgYIKwYBBQUH
+MAKGSmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNB
+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
+h/TFd2tqzGcQBYemqXDhjKcAAAAAAAA=
 
-Though honestly I wish we didn't remove VMA_SHARED_BIT in this situation and
-then rely on the hugely-confusingly-named VMA_MAY_SHARE_BIT for stuff where we
-_really_ need to figure out whether it was mapped shared.
 
-But that's another thing :)
-
->
-> --
-> Cheers,
->
-> David
-
---
-Cheers, Lorenzo
+--=-oAGZuj5i7ES/IfXkCZMt--
