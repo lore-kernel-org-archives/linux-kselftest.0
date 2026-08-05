@@ -1,41 +1,37 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BCB42CB18;
-	Wed,  5 Aug 2026 10:59:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 059B243231B;
+	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785927562; cv=none; b=sMKcJdlGsLoPwgmBJU3cCRzooi+TNMBlN7gLZ42tktgVdCCoqLw3Jzdhq1QfbP4ucEoZdfFJgwzsOcC8S5mMg4RfvqQLfI8+edKHHgxm1EQfoj8OQxLRCHuf85Hh7r4tsRcnzNagTQpXV4GvzpKrbWciKg2jvhyUp7tQnkno8H4=
+	t=1785928709; cv=none; b=FpEaL0AeOb+qKQrvX6GEbkDVTPbxiT7SbxRUQpn4yTawvW1WNqoPYUzLtKn/peyg/xR69g1eI4h2p62jE3MYq5XEg9hR20Noa/J82Y93SpFKGPnW7htSJYqoH5jLtTNL8jKDEul0UJbNlU0fAWG9eWVZY7Hkb5h02HpU3eb2+hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785927562; c=relaxed/simple;
-	bh=MsmLy0KjlGvz7Z+I9vf/fAAWD7ems2kzDzIs+rWqR4U=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=r5KXgE/phvqzS0PhSZdMIoFqPjcaX/ytBZjae1cZz1ZBUHLx277xt01+A8H/HKJ8pdP5v1hoDuAE/Ha0OWb+pF5uo+FtpeIiDv1lMJhupPnL9L9sTKgQej159DDD6AVPrzGqAnunfM77MWHjnly7SIuepHISJfr+RngbMJC4DA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=YPjxJGki; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1785928709; c=relaxed/simple;
+	bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UFWBEoY6xve/Yz0bjdzSkB7nT77MfE9X0NyU+B0JOMIlhPm2v8pX+gTN9gLKHq1F0UTj+vdOysZZoIKxEKab/MjH5dNi/F1YoEhcKUrJ7YvuFP/8JLkkDYS9v4YwELiN4V9eoZYu45b63RAiPF/QntE3rZV6BagqTQlSsjuDP7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YpsQvHVg; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="YPjxJGki"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=TOslnepK47dHho2QtfJP4nojTAlEBKd7pBk23hTvEPI=; b=YPjxJGki8nLrPvNgsPP6aYL2Oe
-	ftRQb3GR6sW+LM9EadVOTltC2h9jqHndN3eAANyihbCyOKLBqnKkoLJoWvMSCkFeeKXlqtO5FdZHG
-	uthlCHreyeD/3HAm9kmovNvfWZ6qWIr6pNjxIMz1kS8asRD4F+iyjyNKsQ/+W94AKu/N0yYHqFGaf
-	CG2BY3J7tPtkR3/y6Jlt6dmnUc3pJ5rS2ugtyjYSNUc2hPkdC4CqEBIAvF9WsxwsQeFdVyy+H8zAO
-	5o2caMz/vDY87+XruDOo2oCvQjwWWjiL0XMq9VdWi/i1ALdp5sEpU2tunkU+ogawZ/33zd8V/PSHq
-	6NsGKZxA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wrZL6-00Ds06-2H;
-	Wed, 05 Aug 2026 10:59:13 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Wed, 05 Aug 2026 03:58:20 -0700
-Subject: [PATCH net-next v2 2/2] selftests: netconsole: add a userdata
- torture test
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YpsQvHVg"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 88CD6C19425;
+	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1785928708;
+	bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=YpsQvHVgzgU/4xG+7gT7zXvCPuqVsdtYwQicGeAvGwQQR2nYq6EdBX3cCuYyMInHo
+	 SYppcgKGgfgAa5myeGJQ/N/Etpg0nsxMz6nQUq3kPmSnOu3mQd3a9x2wpi2/TpMhFS
+	 vnoqT1Fcl9WCuEizfz66ntBdVPAVmqs2d7PW5BI2gAuWAq05ROdZu75Tb/U3AlDJ1x
+	 LTH/MG0AkTmOiA30ora27eOIMHS+Vb7L85KdfNJW6INatUxxrDppH40kBGMGQC7W9A
+	 Hvo/s8mSGLrdwofbB/gG2dTHmoZEakQIijzuVQtTzoLwDTynPQ5cW/Afe2DRHiwDRo
+	 K3+rHaBAGQSGg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 6CE44C55174;
+	Wed,  5 Aug 2026 11:18:28 +0000 (UTC)
+From: Shivam Kalra via B4 Relay <devnull+shivamkalra98.zohomail.in@kernel.org>
+Subject: [PATCH 0/3] mm: support splitting mappingless swapcache folios
+Date: Wed, 05 Aug 2026 16:48:23 +0530
+Message-Id: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,294 +40,81 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260805-netcons-userdata-rcu-v2-2-c5e80f6a7a46@debian.org>
-References: <20260805-netcons-userdata-rcu-v2-0-c5e80f6a7a46@debian.org>
-In-Reply-To: <20260805-netcons-userdata-rcu-v2-0-c5e80f6a7a46@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, gustavold@gmail.com, asantostc@gmail.com, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7858; i=leitao@debian.org;
- h=from:subject:message-id; bh=MsmLy0KjlGvz7Z+I9vf/fAAWD7ems2kzDzIs+rWqR4U=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqcxdyU49Eq39dS0DaUaU14fogFML6x64isjCHn
- kxAtisg2eOJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCanMXcgAKCRA1o5Of/Hh3
- bYrHD/45reACrbzUBBwp5mGFuADIc40UlfxMsg73d7Qk2xdg3VB0C+h3HdcM4LckZivUHwkShv1
- 3WOZmxN1DvvlOycNsqrGsi/005Osqg55etCye5EwOlJ/l9/Pbn92mPdWNygbkBVvoj/XcSl/G2k
- Q0imwZH8yCFlBKWglH3mhGLYFxlVdjiB41N/siH3GoG6xnTxDthm72UqOQj2Zuz3WBD+tYENdsx
- PIkonZPGeI0PVCMxBx0kKuYdn4ePzGtOHJrV9ew7VivlIdNFPgHztvecs9smuN21+gGmVHhrw35
- abVdLBifWJr74pycF9F4QfFpMQBIvXKJQNf8j7Eb2ixAE/ZrJpm/Wt6BIt4zPRsgLhLNAZEetcv
- qAcezyvt1+Y9//nm7t8cJH+KcEStdynqQgE8lVQ4UCYwf+cNTPtw6fzaqEI+igmABNaK7KNn2X2
- eP+ZQtFSjueTXdgG/qYKBwAQSF5sDD4SytxDM6xs3+xGwUyH+SAPW78oslRVmV4diQ2Oxr3HOIy
- vDzsBuCZZ6jc/Zqa6EM8HEJXdFsiWy1uMdh9oY8bZD6wM3idjwSqdUVXVd2lj4kQ2U2T4MHAw8R
- VX3LA1X3cHEP+zpv3n4hG8a0Boc2H+oFhorLj19Qv6jDHaZzqGYRztuk0KJkxAdqs+hcz8jpoOJ
- XckwDB86KlTgRaQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+X-B4-Tracking: v=1; b=H4sIAP8bc2oC/yXMTQ6CQAxA4auQrm3CFOLfVYyLzlCgRsfJVNCEc
+ HdGXX6L9xYwySoG52qBLLOaPmOB21UQRo6DoHbFQDXt6wMR+hYfnJLG4S5maG9OgcMoePLc9Y4
+ a1xwZSp6y9Pr5rS/Xv23yNwmv7w/WdQOr4E30fAAAAA==
+X-Change-ID: 20260722-b4-mappingless-swapcache-9badf123138a
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Ryan Roberts <ryan.roberts@arm.com>, 
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Shuah Khan <shuah@kernel.org>, Nico Pache <nico.pache@linux.dev>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Shivam Kalra <shivamkalra98@zohomail.in>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785928706; l=2322;
+ i=shivamkalra98@zohomail.in; s=20260402; h=from:subject:message-id;
+ bh=MU5empUMl3yldn/ojRHKh06PTEKGbPUZ4kS1eWRJoVY=;
+ b=h7y3Pjsg4r+NdPMicPmvEWMC2Ho6ZdL0IIy0BTtTOeVECkZ/mZLDLYhfb2ahKy3FOQMnebkaH
+ flAUIWn8AC6DVQVxGuodSOCJ5ZwParkiGLGybn9or1t3EVrTEdorstP
+X-Developer-Key: i=shivamkalra98@zohomail.in; a=ed25519;
+ pk=U8kQSxcte8P8iZ6zB7phIj+Yl+i/5ntifBGuclgypx8=
+X-Endpoint-Received: by B4 Relay for shivamkalra98@zohomail.in/20260402
+ with auth_id=716
+X-Original-From: Shivam Kalra <shivamkalra98@zohomail.in>
+Reply-To: shivamkalra98@zohomail.in
 
-The userdata payload is rebuilt and republished on every configfs write,
-including while the target is enabled and messages are being sent.
+Large shmem folios lose their address-space mapping when they are written
+to swap, but remain valid members of the swap cache. Folios read from swap
+but not yet associated with an anon_vma can have the same mappingless
+swapcache state. folio_check_splittable() currently mistakes both cases for
+truncation and rejects the split with -EBUSY.
 
-Add netcons_userdata.sh that runs random tests with userdata.
+Implement the longstanding TODO for this state. Allow mappingless
+swapcache folios to use the existing uniform order-0 swapcache split path,
+while continuing to reject truly truncated folios and unsupported
+higher-order or non-uniform swapcache splits.
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
+memory_failure() is one caller affected by the restriction: it cannot
+isolate a poisoned base page within a mappingless swapcache THP. The
+end-to-end test uses this case to exercise the complete shmem pageout,
+swapcache split, and swapin path.
+
+The first patch contains the MM implementation. The second adds focused
+KUnit coverage for the split eligibility checks. The third adds the
+end-to-end hwpoison selftest, which pages out a shmem THP, poisons a tail
+page, and verifies both isolation and the data read back from swap.
+
+Tests:
+  - The split_hwpoison_swapcache kselftest passes under x86_64 QEMU
+      using virtme-ng 1.41 (2 GiB RAM, 4 KiB pages). 
+
+Signed-off-by: Shivam Kalra <shivamkalra98@zohomail.in>
 ---
- .../selftests/drivers/net/netconsole/Makefile      |   1 +
- .../drivers/net/netconsole/netcons_userdata.sh     | 229 +++++++++++++++++++++
- 2 files changed, 230 insertions(+)
+Shivam Kalra (3):
+      mm/huge_memory: allow splitting mappingless swapcache folios
+      mm: add KUnit coverage for mappingless swapcache folios
+      selftests/mm: test hwpoison recovery of mappingless swapcache THPs
 
-diff --git a/tools/testing/selftests/drivers/net/netconsole/Makefile b/tools/testing/selftests/drivers/net/netconsole/Makefile
-index b56c70b7e2742..f0674c0017fc4 100644
---- a/tools/testing/selftests/drivers/net/netconsole/Makefile
-+++ b/tools/testing/selftests/drivers/net/netconsole/Makefile
-@@ -13,6 +13,7 @@ TEST_PROGS := \
- 	netcons_resume.sh \
- 	netcons_sysdata.sh \
- 	netcons_torture.sh \
-+	netcons_userdata.sh \
- # end of TEST_PROGS
- 
- include ../../../lib.mk
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_userdata.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_userdata.sh
-new file mode 100755
-index 0000000000000..113903f4ce1c5
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_userdata.sh
-@@ -0,0 +1,229 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# Exercise the netconsole userdata payload.
-+#
-+# The first part checks that the payload the target transmits follows what
-+# configfs says: a value shows up in the next message, an update replaces the
-+# previous one, clearing the value drops the entry, and so does removing the
-+# key.
-+#
-+# The second part rewrites values, creates and deletes keys, and clears the
-+# payload entirely while messages are being sent, so the transmit path keeps
-+# picking up payloads that are being replaced underneath it. It runs twice,
-+# once with a payload small enough to fit in a single packet and once large
-+# enough to be fragmented.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+set -euo pipefail
-+
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+
-+source "${SCRIPTDIR}"/../lib/sh/lib_netcons.sh
-+
-+# Number of times each torture worker loops
-+ITERATIONS=${1:-200}
-+
-+# Keys owned by each torture worker. Workers do not share keys, so a failing
-+# configfs operation means a real problem and not a lost race.
-+CHURN_KEY="churnkey"
-+TRANSIENT_KEY="transientkey"
-+# Number of keys used to push a message past MAX_PRINT_CHUNK
-+BULK_KEYS=8
-+
-+USERDATA_DIR="${NETCONS_PATH}/userdata"
-+# Values are capped at MAX_EXTRADATA_VALUE_LEN(200) bytes, so ${BULK_KEYS}
-+# entries of this size are enough to force fragmentation
-+LONG_VALUE=$(printf -- 'v%.0s' {1..190})
-+
-+function write_key() {
-+	local KEY="${1}"
-+	local VALUE="${2}"
-+
-+	mkdir -p "${USERDATA_DIR}/${KEY}"
-+	echo "${VALUE}" > "${USERDATA_DIR}/${KEY}/value"
-+}
-+
-+# Send a single message and capture it on the destination interface
-+function send_and_capture() {
-+	rm -f "${OUTPUT_FILE}"
-+
-+	listen_port_and_save_to "${OUTPUT_FILE}" &
-+	wait_for_port "${NAMESPACE}" "${PORT}" "${IP_VERSION}"
-+	echo "${MSG}: ${TARGET}" > /dev/kmsg
-+	busywait "${BUSYWAIT_TIMEOUT}" test -s "${OUTPUT_FILE}" || true
-+	pkill_socat
-+	validate_msg "${OUTPUT_FILE}"
-+}
-+
-+function expect_in_msg() {
-+	local WANTED="${1}"
-+
-+	if ! grep -q -- "${WANTED}" "${OUTPUT_FILE}"; then
-+		echo "FAIL: '${WANTED}' not found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+function expect_not_in_msg() {
-+	local UNWANTED="${1}"
-+
-+	if grep -q -- "${UNWANTED}" "${OUTPUT_FILE}"; then
-+		echo "FAIL: '${UNWANTED}' found in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+# Every write publishes a new payload and frees the previous one. An empty
-+# value is skipped when the payload is formatted, so this also drives the
-+# target through having no payload at all.
-+function churn_value() {
-+	local i
-+
-+	for i in $(seq "${ITERATIONS}")
-+	do
-+		echo "value${i}" > "${USERDATA_DIR}/${CHURN_KEY}/value"
-+		echo > "${USERDATA_DIR}/${CHURN_KEY}/value"
-+	done
-+}
-+
-+# Create and delete a key underneath the sender
-+function churn_key() {
-+	local i
-+
-+	for i in $(seq "${ITERATIONS}")
-+	do
-+		mkdir "${USERDATA_DIR}/${TRANSIENT_KEY}"
-+		echo "transient${i}" > "${USERDATA_DIR}/${TRANSIENT_KEY}/value"
-+		rmdir "${USERDATA_DIR}/${TRANSIENT_KEY}"
-+	done
-+}
-+
-+# Keep the transmit path busy while the payload is being replaced
-+function send_messages() {
-+	local i
-+
-+	for i in $(seq "${ITERATIONS}")
-+	do
-+		echo "${MSG}: ${TARGET} ${i}" > /dev/kmsg
-+	done
-+}
-+
-+# Run the workers concurrently and fail if any of them hits an error
-+function run_workers() {
-+	local PIDS=()
-+	local WORKER
-+	local RET=0
-+	local PID
-+
-+	for WORKER in "$@"
-+	do
-+		"${WORKER}" &
-+		PIDS+=("$!")
-+	done
-+
-+	# Reap every worker before reporting a failure, otherwise a surviving
-+	# worker keeps writing to configfs while the exit trap cleans it up.
-+	for PID in "${PIDS[@]}"
-+	do
-+		wait "${PID}" || RET=1
-+	done
-+
-+	if [[ "${RET}" -ne 0 ]]
-+	then
-+		echo "FAIL: userdata torture worker failed" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+function create_bulk_keys() {
-+	local i
-+
-+	for i in $(seq "${BULK_KEYS}")
-+	do
-+		write_key "bulk${i}" "${LONG_VALUE}"
-+	done
-+}
-+
-+function delete_bulk_keys() {
-+	local i
-+
-+	for i in $(seq "${BULK_KEYS}")
-+	do
-+		rmdir "${USERDATA_DIR}/bulk${i}"
-+	done
-+}
-+
-+# ========== #
-+# Start here #
-+# ========== #
-+
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
-+
-+IP_VERSION="ipv4"
-+# The content of kmsg will be saved to the following file
-+OUTPUT_FILE="/tmp/${TARGET}"
-+
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
-+# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-+echo "6 5" > /proc/sys/kernel/printk
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+# Create one namespace and two interfaces
-+set_network "${IP_VERSION}"
-+# Create a dynamic target for netconsole
-+create_dynamic_target
-+
-+# ===================================================
-+# TEST #1
-+# A value written to configfs reaches the destination
-+# ===================================================
-+write_key "${USERDATA_KEY}" "first"
-+send_and_capture
-+expect_in_msg "${USERDATA_KEY}=first"
-+
-+# ===================================================
-+# TEST #2
-+# Updating the value replaces the previous payload
-+# ===================================================
-+write_key "${USERDATA_KEY}" "second"
-+send_and_capture
-+expect_in_msg "${USERDATA_KEY}=second"
-+expect_not_in_msg "${USERDATA_KEY}=first"
-+
-+# ===================================================
-+# TEST #3
-+# Clearing the value drops the entry
-+# ===================================================
-+echo > "${USERDATA_DIR}/${USERDATA_KEY}/value"
-+send_and_capture
-+expect_not_in_msg "${USERDATA_KEY}="
-+
-+# ===================================================
-+# TEST #4
-+# Removing the key drops the entry
-+# ===================================================
-+write_key "${USERDATA_KEY}" "third"
-+rmdir "${USERDATA_DIR}/${USERDATA_KEY}"
-+send_and_capture
-+expect_not_in_msg "${USERDATA_KEY}="
-+rm "${OUTPUT_FILE}"
-+
-+# ===================================================
-+# TEST #5
-+# Torture the payload while messages are being sent,
-+# first unfragmented and then fragmented
-+# ===================================================
-+write_key "${CHURN_KEY}" "${USERDATA_VALUE}"
-+run_workers churn_value churn_key send_messages
-+
-+create_bulk_keys
-+run_workers churn_value churn_key send_messages
-+delete_bulk_keys
-+
-+exit "${ksft_pass}"
+ mm/Kconfig                                         |  14 ++
+ mm/Makefile                                        |   1 +
+ mm/huge_memory.c                                   |  18 +-
+ mm/tests/folio_split_kunit.c                       |  52 ++++
+ tools/testing/selftests/mm/Makefile                |   2 +
+ tools/testing/selftests/mm/run_vmtests.sh          |   1 +
+ .../selftests/mm/split_hwpoison_swapcache.sh       |  57 +++++
+ .../selftests/mm/split_hwpoison_swapcache_test.c   | 261 +++++++++++++++++++++
+ 8 files changed, 395 insertions(+), 11 deletions(-)
+---
+base-commit: 0b53bff4fa05ff0d3ffbd3d3bb10fae69dfab498
+change-id: 20260722-b4-mappingless-swapcache-9badf123138a
 
--- 
-2.53.0-Meta
+Best regards,
+--  
+Shivam Kalra <shivamkalra98@zohomail.in>
+
 
