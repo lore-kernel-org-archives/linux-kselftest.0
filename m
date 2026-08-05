@@ -1,117 +1,94 @@
-Received: from out-171.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A198483BE5
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 16:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 865763C5522
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 16:52:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785948705; cv=none; b=okTOTYS+7ujRBOBBe5LdqSnrSFVanLM7JJCgieLiFhIu1RAWgb6VO3iVufjObXK4a65UhCRkiBhHaUZ3sWhdOXRLrjHWstcKnnT3R9HHHHnd3GFPVURE6P6qwyrvjc0Dj2W0CkMck/SdaxOs3zyAX22szneJNSlrk3td6MDHtzk=
+	t=1785948725; cv=none; b=kyP0kV3yzh1UpFh6KHzYhdGvQID+jXbYwmHMi/kOKh6M6gRYI71ShkgfpMALGpnnwQ6aRbY3okPxfaSDqBJcyYvrsxuyCdic43POZjxfUEV+P2miObDNe1aBzKsoCueBlbZjpujVkmMcxCpBi7szt3rdMQDj+X6pXCQ2KYlRoXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785948705; c=relaxed/simple;
-	bh=273XCrzmAdbCT89p9Ch08I6IsbJHTHk266OvP2ce1h8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SW4N6oqYB3QDFHvZCc7Wjo3VsIMY8i1MewM0UhVmeU/6l2Rno51ZV4KkKy54Xkx9lSeUrK5dzZSi0ecd2Atxg5uwydInA5z/C2YL/GeHFh2HZG2uUnL1ySrNPCfuFnI/IPj808NLkg09I0WFQ8UCk98w0F7KWplLKdZL+paJSBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=pCitqSgA; arc=none smtp.client-ip=37.59.57.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1785948725; c=relaxed/simple;
+	bh=sOsdyBoiXmMdokFUU9NitwvAChVZDM4AjqSp3wYEXpE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YpqS895TelXFZLLW3tWpxMRVVEKWgtYpsrFy309FbwxD393d0hivWOmA0xH0vKoSdjldm/AnRVxYC0zV/JjEFg+ldf3XizJ9EQJCKhDvvIDn5aKilqgz0nZcCpxXC9+i67zJFTL2bAkaQrtpf6V8nxwH730+RidOl118+I8a1pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=MdxQ4GZo; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="pCitqSgA"
-Message-ID: <b1825aab-b1d2-40c4-a74c-bb05ce50327d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785948690;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zpcBlsFzi4+7YT+H0jx3YNPc4qypxBr5/eqR94FR2YE=;
-	b=pCitqSgA9Xtw97JhC3Y/0oWPfkxXS2AQgmtk0CGcym3yQ6YC78edeAkHjUh7Rc9KW5mS0a
-	cpb8g9zIkVGN2/h+a5IMSSGHBXbSalu3if1sbcWdEcaGv3R10/5qMZaSoCP30chJd5BB5F
-	fybZDNA9SbshMMiRngLiZIyn8VrjNHQ=
-Date: Thu, 6 Aug 2026 00:51:08 +0800
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="MdxQ4GZo"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-8487ed7f7beso1395895b3a.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 09:52:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1785948723; x=1786553523; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=xT6qDM8229kackm0k69E3MspU4jCbRhJTWhhWYM4wYM=;
+        b=MdxQ4GZoZUlmg/ANGkVDWhlyF2DQwSuQcmn5W4VK6CqQD1lRMqlv3/uHplYFB1DC39
+         txKO+gOtwDxOOfBPIqad/f7KAQXuUSkHZxzpmOj9t1fvOVgjA9JhkI3ebHpKjevkGR6p
+         6mQlts5UCG4WeZ4gxG9k/KWrVN23A5Z9To1RMLmGRF4C++FIfmF8gPQJCy9iyt78vekM
+         JiS6sDRkDk82ztH6R5PPyYnCNt47aK53Now7iDpJCu22O0twbKBb4NI4zR4zlU+zpDS4
+         TQ/O+hb1Fse1Ji0Tc3lApqkaDCdse8OmVM6g1wvPgfT40CKutjf62zoMf5N9SP5oTBqn
+         bggA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785948723; x=1786553523;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=xT6qDM8229kackm0k69E3MspU4jCbRhJTWhhWYM4wYM=;
+        b=IVFPb830IyHNndxrv18LSBbCiG6O9l13PLnXxixnHsldV89h8hGlJ3lSCbajnRcDuZ
+         SR/nwmB27MlX2Lw9PXK8aaVXRwxTck7Ffr/zPTUWp1mXbwzAbhWvQOUwHwJkS5t9MAgM
+         Q1HShdsZYhUpgoM5oVymwbZL2KRz1e/KVFobyAgRyT5RMLteN8dBBUI1g2/By90hA2dN
+         soiPlkr/h4EztNpoBFNEmKxsF/5SF1u8iXNnwAw3yXWORHAhyjYjJGki6sctR70D/T8x
+         I++AIGmX45wiHtUwGj9pT9dmpKaE5/T+p4zNiageuoAau3kDEwF6ZKyFtsF1hykBI+Tc
+         eP7A==
+X-Forwarded-Encrypted: i=1; AHgh+Rrn8m85knQ8pwK12BBxyFNK8U9JrSzCl3jrsid65i+h11NOqTL+oZZZnN+bFVaR0C9/Vt+VLBMgktlt1boP70s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxqyx3rJkKkX6f7tATfOCrJ7/PAN2EnsLz2+AD6coewQcV1TOrZ
+	j2sKCE/SARmor+UfQymnC9WjvpRg8QTbR5yVVm0ZGGZo8Q7RAFQv87fl6t+8JuDgRfWmPo/chBH
+	Q3ORcPQ==
+X-Received: from pfbmy12.prod.google.com ([2002:a05:6a00:6d4c:b0:847:9540:3064])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4392:b0:845:e8b5:8c49
+ with SMTP id d2e1a72fcca58-84f2e03173cmr10143997b3a.10.1785948722737; Wed, 05
+ Aug 2026 09:52:02 -0700 (PDT)
+Date: Wed,  5 Aug 2026 09:46:11 -0700
+In-Reply-To: <220260710050442.826777-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next v2 0/3] bpf: Allow selected kfuncs under
- bpf_spin_lock
-To: Kaitao Cheng <kaitao.cheng@linux.dev>, Alexei Starovoitov
- <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>,
- John Fastabend <john.fastabend@gmail.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260709164751.621326-1-hemanth.selam@gmail.com> <20260709174955.628913-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.55.0.571.g244d577d93-goog
+Message-ID: <178594809140.3634744.9965381810030919938.b4-ty@google.com>
+Subject: Re: [PATCH v2 0/2] KVM: selftests: SEV: address two TODOs in the SEV tests
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, pbonzini@redhat.com, shuah@kernel.org, 
+	Hemanth Selam <hemanth.selam@gmail.com>
+Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
 
-On 2026/8/5 23:33, Kaitao Cheng wrote:
-> The verifier currently has a hard-coded allowlist of kfuncs that may be
-> called while a BPF program holds a bpf_spin_lock. This works for the
-> small set of built-in kfuncs known to the verifier, but it does not give
-> kfunc providers a registration-time way to declare that a kfunc is safe
-> in such a region. In particular, module kfuncs cannot be added to that
-> allowlist without changing verifier code.
+On Thu, 09 Jul 2026 23:19:53 +0530, Hemanth Selam wrote:
+> This small series fills in two pre-existing TODOs in the x86 SEV
+> selftests. Both are test-only changes; there is no functional change to
+> the kernel.
 > 
-> This series adds a new KF_SPINLOCK_SAFE kfunc flag and teaches the
-> verifier to use kfunc registration metadata when deciding whether a
-> kfunc call is allowed while a bpf_spin_lock is held.
+> Patch 1 adds negative coverage to sev_init2_tests: when the platform
+> does not support a given SEV VM type (SEV-ES or SEV-SNP), it verifies
+> that KVM_CREATE_VM rejects that type with -EINVAL. Previously the test
+> only exercised the VM types that were supported, so a mismatch between
+> KVM_CAP_VM_TYPES and the actual KVM_CREATE_VM enforcement would have
+> gone unnoticed.
 > 
-> The built-in kfuncs that are currently accepted by the verifier's
-> lock-held allowlist are annotated with the new flag. This preserves the
-> existing behavior while removing the verifier-side category checks and
-> uses the same mechanism for built-in and module kfuncs.
-> 
-> The selftest coverage marks one bpf_testmod kfunc as KF_SPINLOCK_SAFE
-> and verifies that it can be called under a bpf_spin_lock. It also calls
-> another registered but unmarked bpf_testmod kfunc under the lock and
-> checks that the verifier rejects it.
-> 
-> Changes in v2:
-> - Rename KF_SPIN_LOCK to KF_SPINLOCK_SAFE. (Kumar Kartikeya Dwivedi,
->   Leon Hwang)
-> - Deprecate the verifier's lock-held allowlist mechanism and annotate the
->   relevant kfuncs uniformly with KF_SPINLOCK_SAFE (Kumar Kartikeya Dwivedi)
-> - Add selftests. (Leon Hwang)
-> 
-> Link to v1:
-> https://lore.kernel.org/bpf/DKG0YUDSTBUY.1X220287HT9V3@gmail.com/
-> 
-> Kaitao Cheng (3):
->   bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
->   bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
->   selftests/bpf: Test module kfunc calls under spin lock
-> 
->  include/linux/btf.h                           |  1 +
->  kernel/bpf/arena.c                            |  6 +-
->  kernel/bpf/helpers.c                          | 56 ++++++++++---------
->  kernel/bpf/rqspinlock.c                       |  8 +--
->  kernel/bpf/verifier.c                         | 38 +++----------
->  .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
->  .../selftests/bpf/progs/kfunc_call_fail.c     | 12 ++++
->  .../selftests/bpf/progs/kfunc_call_test.c     | 12 ++++
->  .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 +-
->  9 files changed, 72 insertions(+), 65 deletions(-)
-> 
+> [...]
 
+Applied to kvm-x86 selftests, with many fixups, thanks!  (FYI, I applied v3; I
+tried to fixup In-Reply-To to get the threading right, but just in case I
+botched that...)
 
-Nice to drop those 'is_*_kfunc()' helpers in verifier.
+[1/1] KVM: selftests: Add a test for KVM_CREATE_VM VM type enforcement
+      https://github.com/kvm-x86/linux/commit/b18ee21055a7
 
-BTW, some of those kfuncs can be dropped from the special_kfunc_list.
-That would be better.
-
-Any way, this series looks good to me.
-
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-
+--
+https://github.com/kvm-x86/linux/tree/next
