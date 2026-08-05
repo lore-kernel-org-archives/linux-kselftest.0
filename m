@@ -1,160 +1,196 @@
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2BC543551F
-	for <linux-kselftest@vger.kernel.org>; Tue,  4 Aug 2026 23:40:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.173
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785886802; cv=pass; b=sCIxTb1eXpw7JW9ckLsJd50Aim/3YbXDTkdF4Voix5LGPrdK2dKPCan7NdAAliFAc1WgI4UA5t0HOWcubgzb8H/H5sOn7LcuTwAHnJf21ud6xADM6QNt6/IHVeTAPB0RwCwH4ksZXgRRKG2a1SKjHQyO7/8luTEqx8T6T4YLEeQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785886802; c=relaxed/simple;
-	bh=uoWCewIAZ9hyxMRAN9wvtPH2p06arJIF2GepBNWFaiU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fFRDWECXBlidoQd4z3Oa5or0mSBXCdnsvri8/kwQgp+6B+HF10hxxDhPA+o02TJtW1sY5EZ6imfUAIg+D6rVxIzxtWpuxPWlsDRhVkzL6HaHCiMtmsU1OajouWIEucjzSuRcIVe0NslQXQQqj1VB84QZAaCL0xChvQLs35k9N/I=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sgN4ihYa; arc=pass smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D139361940
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 00:21:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785889265; cv=none; b=HTYdNp0dhj82a0b2LJT9YXZLpZ96PoHC/feQpH/WbsATwE4JqOVU6NYkaoKwwzfNnn/8pZcUmn3peuB4KsYVTw8uWtpVWZiitKEPpL1ORi+a3s5XUMxQwSKZUS9eo0o5zLlhnv4PaE3iRSPbLEk7Xx56EzD8z3Ope+EnzQCtKHo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785889265; c=relaxed/simple;
+	bh=sLFbKfSOzTOgEZoliwMAFgQy/seHdKaiywfAzh200YM=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sL/OaaP7SDCgH9OB65ZVMZqeRLdTYJvGYL1llb8gny1paaiIflYZ6kx3ywlWKkD1251/xdzZOS9gRyi6BhKX8n3yRg4dGjkm5fnef7fYlSjP+NQoqvQ9Zpx+aWx45MfV0LnPH4MGv4c2Pv8cPS81SMjYBrMWGZuLcoDl9tNve+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=twK/V5y2; arc=none smtp.client-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sgN4ihYa"
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2cc891373e0so4860235ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 16:40:00 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785886800; cv=none;
-        d=google.com; s=arc-20260327;
-        b=SwutQIKmmRSozL7y1NnQ2pBWMyDaggVjNtWvI22mWoouHoY/ZRkOlmPBtTfUaPmBtL
-         mD1pdsvWSsdayFvu6nLMOfB2EDDE4lDeKDaQFjgBYLa/Ohq0TjIiBxJPodJNW25bbWK+
-         1JF+CTpvwVibVndxWLjR0XqsW++1Z0WzKM93zN67NLAGZ1qByYOgRBS3B0/JkDkCwU6x
-         TRr08PFw16gGrPBn2qZptnYRoKZmz2pttkWAF3erlrQOpoOGwli8kPSNL3/sRL0UO9jN
-         SDljD4zBgCuyohOt3EoQliTCv2shB1ZvCGeZF0g2QyeMPriw/6joyvzSdrMfO+GK1OOD
-         VVRw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=PRVM8hQUlMTlXsPIs4erLL1+dRInZl3+7seIzd4uNV8=;
-        fh=7frZMliWPy4wahkqxILc4hHW/WSU+1IlQNssIc/UayM=;
-        b=GQdWhkDFlwJsMKqQJt3hNvyw3yTPekh29rrbN//xwQriUQFqS2PEzAqpIPz0OW9Swu
-         NFLPQhOHgSAeJ2iotJmE7zM/GUmAuAqV4iXAM0q20xogThp0S3HhkQb8aNlmgdOrpH+p
-         x7e9a394d8fQ5u1AJ8ADDo9GH8Tuj/jq31SQz6jt/Wl162ORqI43veU+mDNkug0EL7/u
-         Am5j2793GvgtDb5uMEkisjV6vilqkScdgplvXTpPOuuNfyN97pST4mNprOwJP6gQp1Cp
-         iLYmYFvCg11c3nfok69xUkD0iTxE4rIoPycCZYUCIKHYsp4y+o+/gwme9gyQ33oc5S1N
-         gO5w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="twK/V5y2"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38dd87656d3so493935a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 17:21:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785886800; x=1786491600; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=PRVM8hQUlMTlXsPIs4erLL1+dRInZl3+7seIzd4uNV8=;
-        b=sgN4ihYagqnkBGz0+ICStRp9gi+GUDtvg3F5Mbo/cdEZAGr09gLesahGSo/2aLxznP
-         kEYFia/Ce7Qit49nangIUnpdB0VJLRhLc78wY4NCnPzPYpucQyHk92Uhh+U6Uxx4r21y
-         Q5ezAhEwQlFk0NthXkB7u2OLLr10uzKP5ZZeeELTfuIOPcnF2WLaCnFKiuUTdXCduTfi
-         jfJHOFBEap/OLh078EkucT5UV6YAeQymxtybebZJhdrP04MlxZAr5aKqWIi7NVweUJVo
-         w1qvVI03rhIgMfflygEyc7lG0W28Rw9w8+4dD4xwj5ZkEGx0BYRmaRaUw6ipWyN3/4vU
-         q0eA==
+        d=google.com; s=20251104; t=1785889262; x=1786494062; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Pr3cQnrTGmUiECdXxfqO/gRSt1KNbd++por5s4HYq+A=;
+        b=twK/V5y2h9UpKMq2UkRBnA8uzNDlmgdjgOv+hA+YbWMh8/MYtE7iq3kEBY4XuQ3jHf
+         behakTjZunPYneevbcyuw5y+nZJGXA7todR6vP8DbpHoIsKA8wZ2wfgSngvRwWg5+GLq
+         VgeF9MNLcLTFqbblhFdjPSV312kvo6wjSfAVnoDuczTnO1jzKhrRqZjBTjEonu8iqHc4
+         OR1ZSgv/UuVac/dqKot8X847jxN/nrRY4Nhm5QwpxBl7xTHziaxYb4OUpyLJHS6ReMeG
+         y366XbysA+tZGbrEzdog/ZC4aqmg/7rVl0/uwpIzpodxG+Go6AYTu4fWF8NQF1x8CIy3
+         cfxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785886800; x=1786491600;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1785889262; x=1786494062;
+        h=content-type:cc:to:from:subject:message-id:mime-version:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PRVM8hQUlMTlXsPIs4erLL1+dRInZl3+7seIzd4uNV8=;
-        b=ZQWynsOdaCiCfYuCzAeRBXXXDI/Sv81d872ZnwaObZ+BE+pGgOFHY5cxIvYlUiQTmW
-         ukSsD92bT+468qxW5ZFm9lpoy+8xBolC44t+L2OU/o8KsGskqhAci+bCzRvTB9u7fJ1/
-         MiJu8Q0kTk0oepbjKWupZssiyWkohnjyWeQYhotnQGACpxpnru+gSAnDktfFbqbgP1Ha
-         TTBs7WO1QRPhY02QAPL5tLB38kAU/Jc2jKn1ZWlUwlnVqy0WBOqUMO6IpXrUCU20EW1Z
-         Wr0/0qtIf61VrUy+YMeCSb/NWHye/3rpTk6HJc1oWGu+MDY7rO36a9AA91oF39FmyfK8
-         +ldA==
-X-Forwarded-Encrypted: i=1; AHgh+RoQwPYLnl+nJq4qDOYwuFNL8Aflm5QqDUV2/UN3DxRAW8pP9xBgFoz5OCzUyBRISHfC1UOkjNwvmiSWFlZ01bc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpWvro608qoU+dHWUuXSaHjrXVouJn97vVLcibrHr9SUirqMhd
-	4Y+Z/1Z/gWKgRSRgPmlKKG5xbkjx03BLJgCYICweu84ShtlMGL071B9ifuecE36kj+vLxaqoWab
-	10pEgNq0A8S/CWbke3K1bwfq9OxRhbLg=
-X-Gm-Gg: AR+sD12dM28y4OlU8k1e77v56DeHM2NZ5vJ5e+dJts7lNThlf0yY+DAn2ITM3vLeH6m
-	Lmhp2jpidkr7WBrnvPenwYD54uhEWpw3OShOYUSw/lV8WEhSqyImFD5DvUFrGsWFIlxmUW0tGKK
-	q4nBnudDCHUA/AXtw1nNEhI/b36LS/C1uNFfVbwAVSdJHRNtI7QkOpg7rbcMuF8byL95GMrnZAw
-	NbB14NOO+9pgGTejo9jxaVfHrt43T8V1rwoTXADb9gmQMqudxXTUajKPIMNuLsmOjPHZ+dEd2SD
-	WBFe1wxinZ8tz0d+gya0IW/7bnBfEiHyE0ypevHiUUPkxNZ2Hnzox9evh5P1ahejJc/a7hKUuAt
-	l32IVdVn8S4emf1+stjXcPYEC89XOm5jr7HHQsezZ9nUaClENeuYA
-X-Received: by 2002:a05:6a20:c79a:b0:3c3:af85:85e7 with SMTP id
- adf61e73a8af0-3cb860767d6mr2645020637.34.1785886799943; Tue, 04 Aug 2026
- 16:39:59 -0700 (PDT)
+        bh=Pr3cQnrTGmUiECdXxfqO/gRSt1KNbd++por5s4HYq+A=;
+        b=gES/xwgBD7VEWszoerWM5NHPoEm4EjIp+QDhc9zsYF/Q8nsRC1U0l9lMoa1ZCqtT2p
+         xu2KDMKkPnrqSM8xXIzaQSrFHt7d50KDnCuN8Qn4JicXyBGhucYUS7ZvJjTAq1eQ+T7x
+         t25M37RwYcfZNE4QZ0uj2YP9tIN5F65/doyrEHt8i0xkYFOQqTcteQ7h4lHAGkqPE8Zt
+         DjsinITIOdw4V/TbDbbbXJ5MRiNiOxbs+rIsJrZ5/E8zl8i0KbEV4ctIn4954GUFo/Zo
+         VyK3aSZ0tAzLoN08vSTZWkh+c+KihGpKNX0lxUK4GgaSsQ9IEtJLKSmKlVOhBAA+QyHD
+         W9ow==
+X-Forwarded-Encrypted: i=1; AHgh+Rp9QBlS6VAS4YkwRbrtMxX+ilbykfi1GiFEgQyNZB0yrX2T9sXg+sLMdkYBjcn4j3s8Yl3WMJNdv2FQNAWoass=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtYhI8JQw3fZig/m4a1RejVqVa7c4Km2RVDXs7tZnZqwBumMm9
+	+jY7kzImo4y60bJzLV2D8hGFKT0pP9f4a3xjOqDYQNPP9iFjdcGm3FaloA1FgsysQn7iHdAxUoI
+	G/QP/QBm9
+X-Received: from pjbgn23.prod.google.com ([2002:a17:90a:c797:b0:38d:ed16:8b30])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2dca:b0:38e:9045:bac0
+ with SMTP id 98e67ed59e1d1-3903c55928emr2660916a91.5.1785889262333; Tue, 04
+ Aug 2026 17:21:02 -0700 (PDT)
+Date: Wed, 05 Aug 2026 00:20:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260804145710.43062-1-leon.hwang@linux.dev> <20260804145710.43062-2-leon.hwang@linux.dev>
-In-Reply-To: <20260804145710.43062-2-leon.hwang@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 4 Aug 2026 16:39:43 -0700
-X-Gm-Features: AUfX_mww-a-GnHSPAMD6NdZrovu5pLCa3Uv6H92muVbZPcm4_2Im8TywcmphJxE
-Message-ID: <CAEf4BzY0=ZL5MD9j-tLewfuLhRVMipAYnRJ2CD5Biji9iiZG7Q@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3 1/2] bpf: Fix sleepable check for tracing prog
-To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, Sechang Lim <rhkrqnwk98@gmail.com>, 
-	Varun R Mallya <varunrmallya@gmail.com>, Viktor Malik <vmalik@redhat.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+X-B4-Tracking: v=1; b=H4sIAOmBcmoC/2XQS2oDMQwG4KsEr+vih2xZXfUeoYTaVieGNi4zx
+ aSEuXs9oQuHWUro+5F0EwvPhRfxcriJmVtZSr30Qqung0jn98vEsuTeEEYZr1ChLFM8NXuKIIE
+ 0QdJg0SbR579n/ijXe9jxrdfnsvzU+fee3WDr/qdoNaQ0kEo6z8jGoU9Jv061Tp/8nOqX2GKaG
+ ymM1HVK2inLOUcKcUf9QI0Zqe9URdbZEOmQYUdxpGGk2Cl47ZNFcEh+R8NIaaSh076ssd6gicA 7SgO1D2+i7VaGHHww/eWPdF3XP/iewSjLAQAA
+X-Change-Id: 20260707-igb_v3_b4-49194c14373c
+X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785889261; l=5064;
+ i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
+ bh=sLFbKfSOzTOgEZoliwMAFgQy/seHdKaiywfAzh200YM=; b=QRSXirJpRY4w5NU9OHqeukPHuvr0rH832rQcFR2dXn3ywzrgll43a16zecLK4r/PMLpiaglvm
+ xAOsW+JHxyRB3MHG4xfgc9k8OGcTNE5aJkIsriDsHbhpoz2BzW0iWDU
+X-Mailer: b4 0.14.3
+Message-ID: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
+Subject: [PATCH v10 0/3] vfio: selftests: Add driver for Intel Ethernet
+ Gigabit Controller (IGB)
+From: Josh Hilke <jrhilke@google.com>
+To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>, 
+	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
+Content-Type: text/plain; charset="utf-8"
 
-On Tue, Aug 4, 2026 at 7:57=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> wr=
-ote:
->
-> When CONFIG_FUNCTION_ERROR_INJECTION is disabled, a sleepable tracing pro=
-g
-> is allowed to attach to '__x64_'-alike prefix symbols.
->
-> It is because the verifier does not verify whether the symbol is a kernel
-> function or a bpf prog. That said, a sleepable tracing prog is allowed to
-> attach to a bpf prog target whose name has '__x64_'-alike prefix.
->
-> For example, a sleepable fentry prog attaches to a '__x64_sys_nop' XDP
-> prog, and copies buffer from a user pointer with bpf_copy_from_user()
-> helper. After attaching the XDP prog to lo interface, the kernel BUG
-> could be triggered by 'ping -c 1 -W 1 127.0.0.1':
->
-> [    3.460756] BUG: sleeping function called from invalid context at kern=
-el/bpf/trampoline.c:1324
->
-> Fix it by disallowing sleepable tracing prog always when its target btf
-> is not kernel's btf.
->
-> Fixes: 16d9c5660692 ("bpf: Always allow sleepable programs on syscalls")
-> Acked-by: Viktor Malik <vmalik@redhat.com>
-> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> ---
->  kernel/bpf/verifier.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index b274004fccfd..7bb541e343b2 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -19019,6 +19019,9 @@ static int btf_id_allow_sleepable(u32 btf_id, uns=
-igned long addr, const struct b
->
->         switch (prog->type) {
->         case BPF_PROG_TYPE_TRACING:
-> +               if (!btf_is_kernel(btf))
-> +                       return -EINVAL;
-> +
+This v10 of a series which adds a VFIO selftest driver for the Intel
+Gigabit Ethernet controller (IGB), specifically targeting the 82576
+device. IGB is fully virtualized in QEMU, making it suitable for running
+VFIO selftests without specialized hardware.
 
-see sashiko reply, just move it outside of switch and disallow
-sleepable for anything that is not kernel/module BTF, regardless of
-program type
+v9: https://lore.kernel.org/kvm/20260730-igb_v3_b4-v9-0-9e4d8682437e@google.com/
 
-pw-bot: cr
+Version 10 adds an assert in the IGB driver to prevent DMA transfers
+smaller than 60 bytes, avoiding out-of-bounds DMA writes caused by
+hardware padding on short transfers, and squashes the recovery logic
+(previously Patch 5) into the main driver patch to keep the driver
+self-contained. Also add some logic from Alex to correct the ordering of
+Tx/Rx queue setup.
 
+This series applies on top of linux-next, but the VFIO selftests don't
+build without this patch which fixes a compile error for the test
+fixture:
+https://lore.kernel.org/linux-kselftest/20260630213341.1664345-1-dmatlack@google.com/
 
->                 t =3D btf_type_by_id(btf, btf_id);
->                 if (!t)
->                         return -EINVAL;
-> --
-> 2.55.0
->
+Testing
+=======
+- VFIO selftests builds clean at every commit
+- vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
+  command to run the tests:
+
+  vng \
+  --run arch/x86/boot/bzImage \
+  --user root \
+  --disable-microvm \
+  --memory 32G \
+  --cpus 8 \
+  --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
+  --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
+  --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
+  --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
+  --exec "modprobe vfio-pci && \
+          ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
+          ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
+--------
+Changelog:
+
+v9 -> v10:
+- Add assert in IGB driver to prevent DMA transfers < 60 bytes (Ethernet
+  minimum payload size) to avoid memory corruption from hardware padding. (Sashiko)
+- Squash recovery logic into the main driver patch to make the driver self-contained. 
+- Set per-queue enable bits _after_ enabling global queue bits (Alex)
+
+v8 -> v9:
+- Enable Pad Short Packets (PSP) in TCTL to support transfers < 60 bytes. (Sashiko)
+- Correct misleading comment about interrupt delivery in Patch 1. (Sashiko)
+
+v7 -> v8:
+- Rebase onto linux-next branch. (Alex)
+- Implement retry limit in vfio_pci_device_reset(). (Alex)
+- Carry David's reviewed-by tag onto the patches that haven't been
+  touched since v6.
+
+v6 -> v7:
+- Allow the driver to be used on any architecture. (Alex) 
+- Fix regression in reset logic for the physical device. (Alex)
+
+v5 -> v6:
+- Retry on EAGAIN during device reset to handle transient lock contention (Sashiko).
+
+v4 -> v5:
+- Reordered igb_remove() to reset the device before disabling MSI-X (Sashiko)
+- Refactored hardware reset logic into igb_reset() helper.
+- Simplified reset completion check to usleep + assertion instead of retry loop (Sashiko).
+- Allow arbitrary test data by enabling Multicast Promiscuous (MPE)
+  and Broadcast Accept (BAM) modes (Sashiko).
+- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number (Sashiko).
+
+v3 -> v4
+- Enable MSI-X mode in GPIE (Sashiko)
+- Fix hardware initilization order to avoid race conditions (Alex/Sashiko)
+- Add memory barrier to prevent speculative reads (Alex/Sashiko)
+- Clean up stale references in commit messages and comments (Alex/Sashiko)
+- Add a comment to address software/firmware semaphore (Alex/Sashiko)
+
+v2 -> v3
+- Poll reset bit and document the required wait time (David/Sashiko)
+- Fix the logic for enabling PCI_COMMAND_MEMORY (David/Sashiko)
+- Fail the test if autonegotation fails (David/Sashiko)
+- Handle endianness conversions (David/Sashiko)
+- Use real IGB headers at the start of the series (David)
+- Add E1000_TXD_CMD_IFCS to the TX descriptor command word (Sashiko)
+
+v1 -> v2
+- Removed the chunking loop in igb_memcpy_start() (David)
+- Removed redundant writes to status_error and hdr_addr (David)
+- Include official IGB header files (David)
+
+Signed-off-by: Josh Hilke <jrhilke@google.com>
+---
+Alex Williamson (1):
+      vfio: selftests: Add helpers to re-enable interrupts
+
+Josh Hilke (2):
+      vfio: selftests: igb: Add driver for Intel 82576 device
+      vfio: selftests: Retry on EAGAIN during device reset
+
+ .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
+ .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
+ tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 585 +++++++++++++++++++++
+ .../vfio/lib/include/libvfio/vfio_pci_device.h     |  15 +
+ tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c |  42 +-
+ tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   3 +-
+ 8 files changed, 647 insertions(+), 2 deletions(-)
+---
+base-commit: 0f6da28aab51b16762ed82e8fdeaa5042da45b08
+change-id: 20260707-igb_v3_b4-49194c14373c
+
+Best regards,
+-- 
+Josh Hilke <jrhilke@google.com>
+
