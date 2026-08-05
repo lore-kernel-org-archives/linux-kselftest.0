@@ -1,63 +1,63 @@
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+Received: from mail-oo1-f41.google.com (mail-oo1-f41.google.com [209.85.161.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22013C108E
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECE53C10B2
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:09:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785899391; cv=none; b=ICxdAIsBOlvarZisnS77nMCV3R04WJw7duWXeqQKbU7vCDEslJNoUhlmC7BlVvtcxMkZnOev24JV/XfHq6rOPJfBmffqy+p0/HNS5Oy/O8ytfAJc9BMObGA16kw8MLLzeRu8qGWSfEXh6F9n2tXiATKZpuS8bmZdyRnoP77lRSc=
+	t=1785899392; cv=none; b=KJ3vMTl8AIUMZmYiIgI2rbFtH9JsxREh78dHtxXLOvW5xSQcQfJzFD3GYNV/aHFOky/XzfaYDM2+TBp3ocRHw57GFAJc5vEfUiNmmc6wei1UhdWMC4liopUWBpeNvpAr6nGcVnF37b5MOIiY7HCn+TciCIo9t0wZUAbZqb8O9XU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785899391; c=relaxed/simple;
-	bh=rVcVd3C3n+Q0mPC6lk/W4y9JERWfHLNkhFct7QT2Nq0=;
+	s=arc-20240116; t=1785899392; c=relaxed/simple;
+	bh=XRFbGwBPH+VhcUUJQun7WEUilFRIAXetdV49cKT2ZsY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=vACQJyhx0Vg9xSUg2aQ7m/JpdabzKvPL+qVQWhib0LjAWDKn5lnhVo+eKZfy9TndBWq3g8PJVtIYiRi77bnwvREk6iaWl7a66/seLgBalwNgllFUsAqf2MXfwOO9cIlnIqLFPAQ5pnHxMHH0qVKHi4JLAtPBj+6FXsWRuQ6NciU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZHuapcYM; arc=none smtp.client-ip=209.85.167.176
+	 MIME-Version; b=k/zuseh+RQMGOXNS89zHV1uuSr7M+f4VL13EgH5ut0hzLksv6X8VuTNT6cQTv5lYpE0cLUY2b1tQyovoTysCUUqhnBjmbl/rbFYj91iUtGdmmExHB9qnBoHv9Vuv5+pNNaIUIZ7WmLb6g0tZDl0QoJhr9VXdZS1wLko2SV+pkcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a02UEEks; arc=none smtp.client-ip=209.85.161.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZHuapcYM"
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-4a46a53abc9so315725b6e.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:09:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a02UEEks"
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-6ae4475c68aso193662eaf.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:09:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785899385; x=1786504185; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785899388; x=1786504188; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=TNgnmn2b+Vqb757WTvKl3lRNBm9PUuScJQ0FPRh8Z4E=;
-        b=ZHuapcYM53FQY1mprUSQ8NQCexXrXWFPzKjxcsNuMdEY1rmOF093QxExwWf3e+jVYC
-         e3J46hOug+ngs9vVHqgD0Q4B4HlpLD3CXF14RTIlHrE3VjMM/rREuTwN9cryljYZdfTC
-         9UkdED6F2sdMOZ38uv8CNtLBOKNSfl5tHcj5OStFU4QHlWeqgyFP0oUA/UWSMdxOsrZa
-         TB0juBvXAEnH4QsyqVV8n1GZTOOCoWRLWHjvKNHCrzMoMaClO+TWpX8jqQezG64HJ45a
-         2ZUgTRd3pwr6dS8OuKtW6KF1cMnBotja8qk/aApZQq9gZe6MpeOoLOLhAiCGLJq+5FPV
-         InQg==
+        bh=kHy5sGAOZy1JqOYJk5ores2aowoHjNjgJFZMFnGPHyE=;
+        b=a02UEEksFWf7VoDG6peKCswahEDu+Wxlm73XYa/rya/kgotgyu+48nd4LcTn+5fHAg
+         3QeQTwesRn+/azVHmspQsD4sX7qYmsHxrfBYO6AgmCt4SzJxzRX8zy4rldbFkrqpMao3
+         Z+ledxb8IW+POtEO6Mq7PXPsAfChCzGc3oTpadsAcdHT4MtUXpHvi+6w47uTB+8Ll87g
+         pIC9H0dsABLeGdL7VuKrtis5dcygVumpQNuJbcirb1KaV0s6J9V3QTr8DxVZh1hnyWic
+         CKBI4XaCs7Pn+2FFR4wNLnYh0Oad+Xwg02MFJ662PcuMflD+CbCa9QmI1daY5lC4w5Ta
+         Dl6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785899385; x=1786504185;
+        d=1e100.net; s=20251104; t=1785899388; x=1786504188;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=TNgnmn2b+Vqb757WTvKl3lRNBm9PUuScJQ0FPRh8Z4E=;
-        b=tH5UPK8KSjjQnQ1f7xPOgJX7FL76OvfNK1+Ze/viNnzWXB29kcEdX+KuaWAxCKwF6e
-         AQ/2dcxTApTfaRQ9ZLAwmjVH8bFvgpealTuZUmx2/jK1GPv8zg2CrOpQpbizEgXu79l4
-         jRpKe2UX5DRsY+4p5QdAVQKvPufOIQLTHEq6Cq+cyS5qynQ34u9bxQ37skyetSpFDMq4
-         AEv18L2QMrw0HSNCT00f8N5+5fU7RPG+Am5TTfYJpymujWaM4L2z5603Nih2LFD1bQbK
-         52+99D2bRs1p36UBu6okFdfOS6RDFX/q6iHkXhTkFnjng5+7flUrSlC7HYqgQEQ04tiG
-         vkcg==
-X-Forwarded-Encrypted: i=1; AHgh+RqZCYoqmJ6zKlE/H4Jt//mk2z1fwez3fc7Hb4UZ8w4n/mVjeCEVRx1RBC3hREY1O8yaITG6/d6AQ8j7ZTDHzW0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtZbbTtmiQFTAQCfyvPIDB0/5dwRQKxRHEG9zgfd8DLqhtr4wM
-	9zmva8xBGAaO2gERgJ0/IoAG7VTHfPn2YqMi2uEKzUzIePonlh17sdAY
-X-Gm-Gg: AR+sD13CWfLnpH4liluZW0R5LHndfdOZuhrIoS1KEzuR5IkkXTDEv8xAJkSpLGU3k4U
-	5Ib2bv1cQv2UUrKrSi5GvH3c2x/dVgK/2UM1jdKu8g8zyvL4fc2N+Xy9a72FdiH2Kq2pdvZaSsy
-	PSLsogK9eRjEhVBZf7QYOA+NCcEfBtq27umSkSrCNskYxEzjh/2ldbSqNv5ilqFIHtiu8KxcgvP
-	Tlocf5tWZtWk4x8+HacrKnpjZpvDLo0NWA14lmTCo+6UAthDvaVoEYDaAsVjKLi0r7HJotxJTYV
-	n2VhLM7xlTEaqoZPIgBDnj+PODExextUt9ksgIMxm1XD6v/hBYG895gkZrhqOHOFYM/niv+Kesy
-	FIlI/rG2t/2TRB01aCsjeTzoJtngY1Slcoj+mdErIz3Aycw9LKdmANtCSHo9sk4CSvc76Ok4wFl
-	22sUxC9zESh92TPUdFKXb5sNb3A8C5qI4btMLs/Nc9UjsqZx+fg3Tu/rY0Ww==
-X-Received: by 2002:a05:6808:118c:b0:497:df42:1e05 with SMTP id 5614622812f47-4afade463b8mr2002026b6e.8.1785899385498;
-        Tue, 04 Aug 2026 20:09:45 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:59::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4afae45b630sm1066020b6e.1.2026.08.04.20.09.43
+        bh=kHy5sGAOZy1JqOYJk5ores2aowoHjNjgJFZMFnGPHyE=;
+        b=l+FQwwITwLpovkjCAF/Wr0jrvz9Ic/Jkm2AD6E8ezw6S7Tq3iecrPGvuA7ykmBof3x
+         zO4F9vzi9XklY75EnpGmM7veIoJNHmJs0q7pN01riPx+L5FpcbR0loC5TYD4Hjas2XS7
+         3j964hDSsTgVJ93GtDmkzKwJReerCHvgUPf90f6EOKjU31S9E5PFW/lJipJeY+aGCGF7
+         989eG7Y2V35PUhHsbuWlkdOnFihaRPCdlsxq78pkdZt1DOedLE1kkG2EViA+JivXLX1M
+         rNEm4HdbOWd/gruoHztyKhey8Iun00yZyhBwYt44jPcUjSfSfcln3JceU6LH84t65ezG
+         JQaQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqbLykMZP9ospkERecZM0BqEjrnduXOCubmzCg/YnYytFA3pJQKq/BrHOpaqvk0KuucbaQU5sQgcXuJeUmpCbE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyFS1lU/FGhEUC++ZWVfxpyNbtRa4BNimwMFv1K4f/LRXAk87tQ
+	MTP7PYU5qO2oGCn77e1ddRP2GpSTIfxSu57uVxie67e6OCLiQWAdx5qE
+X-Gm-Gg: AR+sD12J4abmUMIktbtf7YN4nmn9b62EmjL3xo6lCxGuXPfnuohLpFneJ/FEntpMf40
+	lN9fmJaVx4P7fv+dVitliusBYFR/Nhz6vMCElllnxR3QlgFbBvH3jERPf02fWpE2wBL/zyWWLvh
+	7pthj14vffTwKdThyO60r6XxENHJjamUM0MQdgjW5ePI0GiLAfJyotHQbFoollMT2xoxu/nrGU2
+	Hl1rxhxs8zDXg1S/HfCk7hdKMag3WmjQVbA38We5nyazxUvCFOdc7VZCnM0YkojwzgDiZc2Dpp7
+	nYXBGQM3xQJCwRrfYlKpW62tAfIu174lvsQhmDD3/Q4siNAcVQ/+QBTcJ1gvZw6+OBpREnytkFM
+	lYEXCxlRDpPjionoxxWOrmY7oc4TOWwkodLXFGCv0wJtqQ0QQd5fWCdIdkxNlcqBCIgFteccusO
+	m5H1xDXMzdAIuPRQGwJyPZOlqJ61usMrYAj8dzbRp2eYIGbplgjvX54QL/OQ==
+X-Received: by 2002:a05:6820:f012:b0:6ae:87e3:e306 with SMTP id 006d021491bc7-6ae96ecc5e5mr1905385eaf.20.1785899388158;
+        Tue, 04 Aug 2026 20:09:48 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:46::])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f1df5a4f9bsm2087653a34.23.2026.08.04.20.09.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 20:09:44 -0700 (PDT)
+        Tue, 04 Aug 2026 20:09:47 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -69,9 +69,9 @@ Cc: andrew+netdev@lunn.ch,
 	pabeni@redhat.com,
 	shuah@kernel.org,
 	alexander.duyck@gmail.com
-Subject: [PATCH net-next 02/14] selftests: net: shaper: Prepare helpers for group tests
-Date: Tue,  4 Aug 2026 20:09:24 -0700
-Message-ID: <20260805030936.1092907-3-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next 03/14] selftests: net: shaper: Decouple basic_groups from netdev rate limiting
+Date: Tue,  4 Aug 2026 20:09:25 -0700
+Message-ID: <20260805030936.1092907-4-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
 References: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
@@ -85,134 +85,34 @@ Content-Transfer-Encoding: 8bit
 
 From: Mohsin Bashir <hmohsin@meta.com>
 
-dup_leaves expects the kernel to reject a group request that lists the same
-queue twice. When that rejection does not happen, ksft_raises only records
-a failed check and leaves cm.exception as None, so the following errno
-check raises AttributeError. Worse, the accepted group request leaves a
-node shaper and queue 0 behind, which makes later tests fail for an
-unrelated reason. Handle the negative test explicitly instead. If group
-fails, verify that the errno is EINVAL and return. If group succeeds,
-delete the node returned by the operation and queue 0 before reporting the
-failure.
+Decouple basic_groups from the set_nshapers test dependency. The
+test was gated on cfg.netdev which is set by set_nshapers. Replace
+with direct capability checks: netdev scope support (required for
+grouping under netdev handle) and queue scope nesting + weight.
 
-Give the duplicate leaves different weights so the request still contains
-two distinct leaf entries while exercising duplicate handle validation.
-This also introduces _delete_shaper(), cached _cap_get(), and
-_require_caps() helpers as preparation for the following shaper group
-tests. The follow-on tests need the same capability checks for node and
-queue scope support. Keeping that logic in one place avoids repeating raw
-EOPNOTSUPP handling in each test.
+Remove bw-max and metric from the .group call so the test validates
+pure queue grouping without rate limiting. The rate-limited variant is
+restored in the following patch, which adds a dedicated
+basic_groups_with_rate test.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
 ---
- tools/testing/selftests/drivers/net/shaper.py | 145 +++++++++++-------
- 1 file changed, 86 insertions(+), 59 deletions(-)
+ tools/testing/selftests/drivers/net/shaper.py | 40 ++++++++-----------
+ 1 file changed, 16 insertions(+), 24 deletions(-)
 
 diff --git a/tools/testing/selftests/drivers/net/shaper.py b/tools/testing/selftests/drivers/net/shaper.py
-index c80a4bf8cc05..1954f3263f25 100755
+index 1954f3263f25..45a4bf42995e 100755
 --- a/tools/testing/selftests/drivers/net/shaper.py
 +++ b/tools/testing/selftests/drivers/net/shaper.py
-@@ -2,13 +2,52 @@
- # SPDX-License-Identifier: GPL-2.0
+@@ -168,19 +168,11 @@ def del_nshapers(cfg, nl_shaper) -> None:
+     ksft_eq(len(shapers), 0)
  
- import errno
-+import glob
- 
- from lib.py import ksft_run, ksft_exit
--from lib.py import ksft_eq, ksft_raises, ksft_true, KsftSkipEx
-+from lib.py import ksft_eq, ksft_true, ksft_raises, KsftSkipEx
- from lib.py import EthtoolFamily, NetshaperFamily
- from lib.py import NetDrvEnv
- from lib.py import NlError
--from lib.py import cmd
-+from lib.py import cmd, defer
-+
-+def _delete_shaper(cfg, nl_shaper, handle) -> None:
-+    """ Delete the shaper identified by handle, ignoring a missing-shaper error. """
-+    try:
-+        nl_shaper.delete({'ifindex': cfg.ifindex,
-+                          'handle': handle})
-+    except NlError as e:
-+        if e.error != errno.ENOENT:
-+            raise
-+
-+def _require_queues(cfg, count):
-+    """ Return the netdev TX queue count, skipping the test if fewer than count exist. """
-+    qcnt = len(glob.glob(f"/sys/class/net/{cfg.ifname}/queues/tx-*"))
-+    if qcnt < count:
-+        raise KsftSkipEx(f"netdev has {qcnt} queues, {count} required")
-+    return qcnt
-+
-+def _cap_get(cfg, nl_shaper, scope):
-+    """ Return the shaper capabilities for the given scope, caching them on cfg. """
-+    if not hasattr(cfg, 'cap_cache'):
-+        cfg.cap_cache = {}
-+    if scope not in cfg.cap_cache:
-+        cfg.cap_cache[scope] = nl_shaper.cap_get({'ifindex': cfg.ifindex,
-+                                                  'scope': scope})
-+
-+    return cfg.cap_cache[scope]
-+
-+def _require_caps(cfg, nl_shaper, scope, caps, msg) -> None:
-+    """ Skip the test unless the given scope advertises all the required caps. """
-+    try:
-+        supported = _cap_get(cfg, nl_shaper, scope)
-+    except NlError as e:
-+        if e.error == errno.EOPNOTSUPP:
-+            raise KsftSkipEx(f"{scope} scope shapers not supported by the device")
-+        raise
-+
-+    if not set(caps).issubset(supported):
-+        raise KsftSkipEx(msg)
- 
- def get_shapers(cfg, nl_shaper) -> None:
-     try:
-@@ -44,17 +83,8 @@ def set_qshapers(cfg, nl_shaper) -> None:
-     if not 'support-bw-max' in caps or not 'support-metric-bps' in caps:
-         raise KsftSkipEx("device does not support queue scope shapers with bw_max and metric bps")
- 
--    cfg.queues = True;
--    netnl = EthtoolFamily()
--    channels = netnl.channels_get({'header': {'dev-index': cfg.ifindex}})
--    if channels['combined-count'] == 0:
--        cfg.rx_type = 'rx'
--        cfg.nr_queues = channels['rx-count']
--    else:
--        cfg.rx_type = 'combined'
--        cfg.nr_queues = channels['combined-count']
--    if cfg.nr_queues < 3:
--        raise KsftSkipEx(f"device does not support enough queues min 3 found {cfg.nr_queues}")
-+    _require_queues(cfg, 3)
-+    cfg.queues = True
- 
-     nl_shaper.set({'ifindex': cfg.ifindex,
-                    'handle': {'scope': 'queue', 'id': 1},
-@@ -140,8 +170,7 @@ def del_nshapers(cfg, nl_shaper) -> None:
  def basic_groups(cfg, nl_shaper) -> None:
-     if not cfg.netdev:
-         raise KsftSkipEx("netdev shaper not supported by the device")
--    if cfg.nr_queues < 3:
--        raise KsftSkipEx(f"netdev does not have enough queues min 3 reported {cfg.nr_queues}")
-+    _require_queues(cfg, 3)
+-    if not cfg.netdev:
+-        raise KsftSkipEx("netdev shaper not supported by the device")
+     _require_queues(cfg, 3)
  
-     try:
-         caps = nl_shaper.cap_get({'ifindex': cfg.ifindex,
-@@ -186,28 +215,14 @@ def basic_groups(cfg, nl_shaper) -> None:
-                       'handle': {'scope': 'netdev'}})
- 
- def qgroups(cfg, nl_shaper) -> None:
--    if cfg.nr_queues < 4:
--        raise KsftSkipEx(f"netdev does not have enough queues min 4 reported {cfg.nr_queues}")
--    try:
--        caps = nl_shaper.cap_get({'ifindex': cfg.ifindex,
--                                  'scope':'node'})
--    except NlError as e:
--        if e.error == 95:
--            raise KsftSkipEx("shapers not supported by the device")
--        raise
--    if not 'support-bw-max' in caps or not 'support-metric-bps' in caps:
--        raise KsftSkipEx("device does not support node scope shapers with bw_max and metric bps")
 -    try:
 -        caps = nl_shaper.cap_get({'ifindex': cfg.ifindex,
 -                                  'scope':'queue'})
@@ -220,135 +120,59 @@ index c80a4bf8cc05..1954f3263f25 100755
 -        if e.error == 95:
 -            raise KsftSkipEx("shapers not supported by the device")
 -        raise
--    if not 'support-nesting' in caps or not 'support-weight' in caps or not 'support-metric-bps' in caps:
--            raise KsftSkipEx("device does not support nested queue scope shapers with weight")
-+    _require_queues(cfg, 4)
-+    _require_caps(cfg, nl_shaper, 'node',
-+                  ['support-bw-max', 'support-metric-bps'],
-+                  "device does not support node scope shapers with bw_max and metric bps")
-+    _require_caps(cfg, nl_shaper, 'queue',
-+                  ['support-nesting', 'support-weight'],
-+                  "device does not support nested queue scope shapers with weight")
- 
--    cfg.groups = True;
-     node_handle = nl_shaper.group({
-                    'ifindex': cfg.ifindex,
-                    'leaves':[{'handle': {'scope': 'queue', 'id': 1},
-@@ -285,17 +300,12 @@ def qgroups(cfg, nl_shaper) -> None:
-     ksft_eq(len(shapers), 0)
- 
- def delegation(cfg, nl_shaper) -> None:
--    if not cfg.groups:
--        raise KsftSkipEx("device does not support node scope")
--    try:
--        caps = nl_shaper.cap_get({'ifindex': cfg.ifindex,
--                                  'scope':'node'})
--    except NlError as e:
--        if e.error == 95:
--            raise KsftSkipEx("node scope shapers not supported by the device")
--        raise
--    if not 'support-nesting' in caps:
--        raise KsftSkipEx("device does not support node scope shapers nesting")
-+    _require_queues(cfg, 4)
-+    _require_caps(cfg, nl_shaper, 'node',
-+                  ['support-bw-max', 'support-metric-bps', 'support-nesting'],
-+                  "device does not support node scope shapers with bw_max, metric bps and nesting")
+-    if not 'support-weight' in caps:
+-        raise KsftSkipEx("device does not support queue scope shapers with weight")
++    _require_caps(cfg, nl_shaper, 'netdev', [], "netdev scope not supported by the device")
 +    _require_caps(cfg, nl_shaper, 'queue', ['support-nesting', 'support-weight'],
-+                  "device does not support nested queue scope shapers with weight")
++                  "queue scope not supported with nesting and weight")
  
      node_handle = nl_shaper.group({
-                    'ifindex': cfg.ifindex,
-@@ -376,19 +386,24 @@ def delegation(cfg, nl_shaper) -> None:
-     ksft_eq(len(shapers), 0)
+                         'ifindex': cfg.ifindex,
+@@ -188,31 +180,31 @@ def basic_groups(cfg, nl_shaper) -> None:
+                                    'weight': 1},
+                                   {'handle': {'scope': 'queue', 'id': 2},
+                                    'weight': 2}],
+-                         'handle': {'scope':'netdev'},
+-                         'metric': 'bps',
+-                         'bw-max': 10000})
++                         'handle': {'scope':'netdev'}})
+     ksft_eq(node_handle, {'ifindex': cfg.ifindex,
+                           'handle': {'scope': 'netdev'}})
  
- def queue_update(cfg, nl_shaper) -> None:
--    if cfg.nr_queues < 4:
--        raise KsftSkipEx(f"netdev does not have enough queues min 4 reported {cfg.nr_queues}")
-+    nq = _require_queues(cfg, 4)
-     if not cfg.queues:
-         raise KsftSkipEx("device does not support queue scope")
++    del_node = defer(_delete_shaper, cfg, nl_shaper, {'scope': 'netdev'})
++    del_queues = [defer(_delete_shaper, cfg, nl_shaper,
++                        {'scope': 'queue', 'id': qid})
++                  for qid in (1, 2)]
++
+     shaper = nl_shaper.get({'ifindex': cfg.ifindex,
+                             'handle': {'scope': 'queue', 'id': 1}})
+     ksft_eq(shaper, {'ifindex': cfg.ifindex,
+                      'parent': {'scope': 'netdev'},
+                      'handle': {'scope': 'queue', 'id': 1},
+                      'weight': 1 })
++    for dq in del_queues:
++        dq.exec()
  
-+    netnl = EthtoolFamily()
-+    channels = netnl.channels_get({'header': {'dev-index': cfg.ifindex}})
-+    ch_type = 'combined' if channels['combined-count'] else 'tx'
-+
-     for i in range(3):
-         nl_shaper.set({'ifindex': cfg.ifindex,
-                        'handle': {'scope': 'queue', 'id': i},
-                        'metric': 'bps',
-                        'bw-max': (i + 1) * 1000})
-+    defer(cmd, f"ethtool -L {cfg.dev['ifname']} {ch_type} {nq}")
-+
-     # Delete a channel, with no shapers configured on top of the related
-     # queue: no changes expected
--    cmd(f"ethtool -L {cfg.dev['ifname']} {cfg.rx_type} 3")
-+    cmd(f"ethtool -L {cfg.dev['ifname']} {ch_type} 3")
+-    nl_shaper.delete({'ifindex': cfg.ifindex,
+-                      'handle': {'scope': 'queue', 'id': 2}})
+-    nl_shaper.delete({'ifindex': cfg.ifindex,
+-                      'handle': {'scope': 'queue', 'id': 1}})
+-
+-    # Deleting all the leaves shaper does not affect the node one
+-    # when the latter has 'netdev' scope.
      shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
-     ksft_eq(shapers, [{'ifindex': cfg.ifindex,
-                        'parent': {'scope': 'netdev'},
-@@ -408,7 +423,7 @@ def queue_update(cfg, nl_shaper) -> None:
+-    ksft_eq(len(shapers), 1)
++    ksft_eq(shapers, [{'ifindex': cfg.ifindex,
++                       'handle': {'scope': 'netdev'}}])
  
-     # Delete a channel, with a shaper configured on top of the related
-     # queue: the shaper must be deleted, too
--    cmd(f"ethtool -L {cfg.dev['ifname']} {cfg.rx_type} 2")
-+    cmd(f"ethtool -L {cfg.dev['ifname']} {ch_type} 2")
+-    nl_shaper.delete({'ifindex': cfg.ifindex,
+-                      'handle': {'scope': 'netdev'}})
++    del_node.exec()
++    shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
++    ksft_eq(len(shapers), 0)
  
-     shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
-     ksft_eq(shapers, [{'ifindex': cfg.ifindex,
-@@ -423,7 +438,7 @@ def queue_update(cfg, nl_shaper) -> None:
-                        'bw-max': 2000}])
- 
-     # Restore the original channels number, no expected changes
--    cmd(f"ethtool -L {cfg.dev['ifname']} {cfg.rx_type} {cfg.nr_queues}")
-+    cmd(f"ethtool -L {cfg.dev['ifname']} {ch_type} {nq}")
-     shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
-     ksft_eq(shapers, [{'ifindex': cfg.ifindex,
-                        'parent': {'scope': 'netdev'},
-@@ -443,25 +458,37 @@ def queue_update(cfg, nl_shaper) -> None:
- 
- def dup_leaves(cfg, nl_shaper) -> None:
-     """ Ensure that the kernel rejects duplicate leaves. """
--    if not cfg.groups:
--        raise KsftSkipEx("device does not support node scope")
-+    _require_caps(cfg, nl_shaper, 'node', ['support-bw-max', 'support-metric-bps'],
-+                  "device does not support node scope shapers with bw_max and metric bps")
-+    _require_caps(cfg, nl_shaper, 'queue', ['support-nesting', 'support-weight'],
-+                  "device does not support nested queue scope shapers with weight")
- 
-+    node_handle = None
-     with ksft_raises(NlError) as cm:
--        nl_shaper.group({
-+        node_handle = nl_shaper.group({
-                    'ifindex': cfg.ifindex,
--                   'leaves':[{'handle': {'scope': 'queue', 'id': 0}},
--                             {'handle': {'scope': 'queue', 'id': 0}}],
-+                   'leaves':[{'handle': {'scope': 'queue', 'id': 0},
-+                              'weight': 1},
-+                             {'handle': {'scope': 'queue', 'id': 0},
-+                              'weight': 2}],
-                    'handle': {'scope':'node'},
-                    'metric': 'bps',
-                    'bw-max': 10000})
-+
-+    # Clean up in case the kernel wrongly accepted the request.
-+    if node_handle:
-+        _delete_shaper(cfg, nl_shaper, node_handle['handle'])
-+    _delete_shaper(cfg, nl_shaper, {'scope': 'queue', 'id': 0})
-+
-+    # ksft_raises() has already recorded the failure if nothing was raised.
-+    if cm.exception is None:
-+        return
-     ksft_eq(cm.exception.error, errno.EINVAL)
- 
- def main() -> None:
-     with NetDrvEnv(__file__, queue_count=4) as cfg:
-         cfg.queues = False
-         cfg.netdev = False
--        cfg.groups = False
--        cfg.nr_queues = 0
-         ksft_run([get_shapers,
-                   get_caps,
-                   set_qshapers,
+ def qgroups(cfg, nl_shaper) -> None:
+     _require_queues(cfg, 4)
 -- 
 2.53.0-Meta
 
