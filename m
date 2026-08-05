@@ -1,95 +1,95 @@
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E9B137EFE7
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 14:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD82837F005
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 14:22:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785939749; cv=pass; b=klKHmDkyEMncs0U67x4K+Md29jlsa4hechsDKmvq7A8bK9f1XOE6elOzfLkqOVv5AsEnLsRFCDKvsYv2P413oXj9aWIPy2ImlvsMOZMWCzN/TtCEJ4YF6omfPDa6HqFbHfgUqVeKJiEMu+rdSeEnly2jg2AQZq9BlDa+trlNQt4=
+	t=1785939774; cv=pass; b=UNobfxcau8gX3teEyHlMtHUSfCmwQIzNQzM+wIdii4CAaous+fYJzuOSSMlckg5fOPS7ByE9RD4gswDBNXkcPKWNayzsm1cF7tqmiu83U0gF7tXnRt/0n9Q5TjaHPLgCFFOTozdjU4ratNr3vlXdl/ndfwOPprTMMvlXnCrZ1W0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785939749; c=relaxed/simple;
-	bh=PBTXPiYdjm3vlQmsRzLNpMwqKaxNZRd51NNDLZRc90k=;
+	s=arc-20240116; t=1785939774; c=relaxed/simple;
+	bh=zoqyZIgm1EFWmYCKlkiSGKUErGHHlemelV0Nuq3FxEs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jl1EbAgmF4PIrYKTSzb9bi4faIi7jI5JFwaG44Od0YQdkJLHu/xaHmyMFE8hG1v94TIq38OnMGs4clDXhDstpVZBjRKrFHdiOxggUqfQUAHL/vT3pG2srdyp8P4oYhmGZgAGSrxGpjRJEjikqTbr2zmkTv3PULdzAp0zC7it2dA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=COoO2U8O; arc=pass smtp.client-ip=209.85.167.180
+	 To:Cc:Content-Type; b=r7uZLWtrAlfqPl4PrXus3FkykpM79dp7z+i3BIFaTEQdQBXaERZWHCVgLZ0td6gcPkFi2/Wz0oyPQgf/jEcTjr2HjB1S9OjMEfZJu/8/GCLVMa7rIdM+C1KmTVOSBgSauZ/HuaQ5SXsbniFNTYBPWzF5S8lpjSbBYKmGEn3pHYE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gQwVT5OR; arc=pass smtp.client-ip=209.85.167.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="COoO2U8O"
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-495e602352cso61739b6e.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 07:22:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1785939740; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gQwVT5OR"
+Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-495e5f0f428so151663b6e.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 07:22:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1785939767; cv=none;
         d=google.com; s=arc-20260327;
-        b=oN9CfGs2aoFaQ1mGz8lUg8qmjqGWPBEfUmlLMNZHgEOeLS3Lz+rMtAiL4Y7ycMGvFA
-         XTPlqc89N6qTjL/hvzQL5JBXmVytqFLX2VuJONyr6baG3v3hjL+2XpSozOQexhEO7Y0F
-         WvfP/irTzQCTjXVgqcl24Poe/wZFm2HIyJClp2iJcsRVS3MB8ZKw0kGCrKIndO/JLs/U
-         0cYUn/kNQ2hS/JE7287sw1DfbqTkr5fGsfIp1PReVfud5bi56DX+7CLTnYUIcQ3YOoo9
-         pJEoVHPrMiJ5w2xPmV3IhA1336ihaB6nJU2MSRDDVgYsu6rIXu9WSf8Yu1FNGhpMlv9J
-         2EjQ==
+        b=HyOwjnkGPJq5BFytu05yIcGYbu2DhLbLWPhqZKKP6KbNzX9VrqD1o+UPUq0dt2IvSe
+         qNpGsnFbKoy/rytVLVmmnq97iTXN3zz95rSaXj26mJh43kqcRJZQwwvZSy98dNKIhW6C
+         DqrooaLOJuX7uNoyMzyLKuZzXtjSfNU2jbotJ0fA0EZ8HQzvt3y/6OnirKa1ood5/2zN
+         6O9ql9LV8XvNKdBVZ3TJxI8PVxzE8wQMjpuI8BSreano9FMpr34ODjdg77a/+9557w8N
+         qKBmfWpSUbHnHyuxLMMi6LYNMqMkCuAOH0zcIxanYvvqvS/WEPe+MLR72lIRtQDe0pUu
+         hbRQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=PBTXPiYdjm3vlQmsRzLNpMwqKaxNZRd51NNDLZRc90k=;
-        fh=Fy4GTJtKi8XqvYrdPuly41+t0Yi5QKenJ+GvK83MBro=;
-        b=EnEPbpWvDej08XBBHq7lz6kXLv83hSeBkhLK9+CFHChxIpR0QL2Sq8TimxTrMCuumF
-         enbeBWtJT7yBfB1jVmRYkEyWV37MPVgDdaN6xBOLboC/EaRWHKztz9kBC6e2X5Esnpfi
-         tgt9sIEEk0PgyrwcNtL/W8q3r/zNsCyV663SpP3rAV0rXKD8IDYnY8IiLffNpX6dtIbA
-         7YDdmM+A5C/j6SWltnGV0hXJmX/WULywuwsmD1utZFBRI4BRI6uHNeHDqSkin8/gXD1B
-         MmGoMq/adkLMTMXPYm3X4KdgiC5Y03AfeGq5Sew/vHGneBEFquODFzgmSJCxF+QxuAmB
-         XdXQ==;
+        bh=zoqyZIgm1EFWmYCKlkiSGKUErGHHlemelV0Nuq3FxEs=;
+        fh=5fdgkD4GYZM/4CHLU+TN3bjNR59X9QuUdMOV9FLnq9M=;
+        b=N87FX3uf7gBZQ5auCnTcFXhtJVDtMvI/OqL5Kj19BKaQattlAiu2ku2o+wh3/og2Y1
+         g2Ac4CgTkkkN15Vaqjry8PLzUGVpPIiUfv1VCL/ntnWa2V2tpy1I6WcOTH9/DmUrBnra
+         qo2S6ApBn4PBP6GpbrU9BLwcWRm5fTBGQ/0+cmNld/jP6LuCctqW1ZWX/SRwiBLkDdTS
+         53dRxk6oTDMXeoYcPnX9wC3VR1M5BC/fmiTYfYXy9qRGpbKXBnoT0XLCZ9uqOQUyelWB
+         tdINMMTRO/XIUS9v5MSPwO9fPB9wSvimec1/jzqSSHJG15UJtlTHFfFiPAzLViSfRJcP
+         bkyg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785939740; x=1786544540; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785939767; x=1786544567; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=PBTXPiYdjm3vlQmsRzLNpMwqKaxNZRd51NNDLZRc90k=;
-        b=COoO2U8OjkiVkhgfoS7++u5iBfYDAKH4nDzXzAdi/RivU8d4C9NnSJLYwFXgoFDq+y
-         O61Gwr1GNZjhOSOX/dKZo+7w1A9rU1mNBWnQy7TMG10C0niFzQ5isHs5K1xSvQu/27/T
-         ZySFyot/VDbOJ8lEMuag7404blne1uTLbhvFeuA4/95F6VJGm3H6vYZE0RKkqUsJLRSA
-         gJPyOpRRwtOEwk8U3hsx5ZAFiOqjmB/CO7xp9w9oE1iYtQJdM6R3xpUeHhxqRZ3KE+Zg
-         yJaGCQ4ZhIj+OQivYITgVfYpUF3FwAvEz/JYyu6kGubBTXV7AUgQJbZvulnUmgAKaduR
-         8mYg==
+        bh=zoqyZIgm1EFWmYCKlkiSGKUErGHHlemelV0Nuq3FxEs=;
+        b=gQwVT5ORXPSasdlgoeUPyIFhbf+eZF8lXaJan2FaicbvLqcuboK8qE4gssjPxJjI9O
+         dK6kNZFxTtq3MWxBdkFXqartCeMFBmAB2N1rlZ+OX6uY78AZN8BNwHsny+mOxzZZtSO7
+         lkMYKDH6Ca9ERWSRn9JvEaTMqAn7tQBMWZ3KGNlNKcblDap2o3/oNa0a6oWrpc9a8xQR
+         bx0wsPYswBin6EoKhcmxJ1/R928VYU+QsPcerXqNZ97xNAfWB6RytYLTiA+DX1NF4zTR
+         ZIeLaywpQ2M+VcwH2NATK89hHccpfW32InmOTcWqdowrkXjCevY7o5asEawcK7WI9dbO
+         XQQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785939740; x=1786544540;
+        d=1e100.net; s=20251104; t=1785939767; x=1786544567;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PBTXPiYdjm3vlQmsRzLNpMwqKaxNZRd51NNDLZRc90k=;
-        b=hyOx5Ka0WleHmESped2mh25+Csnwoig66iDUbLbvO2639QeMLX2dImskWyLSGbXZSH
-         rmfEUi/IserYfH0LjQbMIdQwSV7cXJgUp9PhOeFqnhwdA6F/pkdv4WFckfikeK3nGEN9
-         9PIzgtOHI2AW+qKYgDucaa/Gl94MmSLBOxxd6Grs6cssOTBiZFYA9uNibrJ0Bd731b5d
-         6BEAfAW2lmiyfIuLCxvcCDvBC01N0pDwcJ2g2xLacA16cb3dMjJaesvP5fyh7jBF754R
-         6eyu0UAKHLfssagWeRIAP9F1MkCSF4MPZ1MjfP1cOtjHbfZbadu3TR39YpOCBU8LN1TX
-         rdPw==
-X-Forwarded-Encrypted: i=1; AHgh+RrARZ7wkgDVAmA853mcr2FomGUQRIaXwc4uCfg/uVBogRjj7QzompssIL9Vzg5jePM70vQp/wdwwPrhVeCVxEo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztO7lufio96An3doVPBc/64OEf3gcAcsWeepOD1kxJUXHogFW+
-	siaekgvfEMhgegSJ0y4vIpJIcUB4wWctb1qwcnhUOp4bVVCIgeUq/R4el5qzYRQvlDE/c8G7KRp
-	KAEzzR07tPfBF+OzG/BLlGHF+W8Uq0RE=
-X-Gm-Gg: AR+sD12Nq9dlw0GzFpicCN3SKMJou1RToofmWBCLkcxqqvjGn14/tqXLQjb2R2ULF66
-	0WU2DjjtoeSgxed65f9ILclCJ+9Ih8va0KwES57cQI3vrxzAMmG2MW+N2qxZOO6Dfxm+KzcCGKo
-	gWMxLuq2w1a/xuAGDVUy1DJFbUfulo83FQKyOk+nWnEI64aanS7pF+z/CeMqS0QqNuZSEtO1ZN2
-	6ZejfkjWsAGQ5mC8QLLlDUaoW526nkxMf0wknmjU/TzJYd0LgjTvEhF7YigP0wm+zFBMZ3GX9Rs
-	oopexFxS0Uqb5kA8COuwe7d4dh+zi/cEIrILCSyCBrPQheKjy6fBbhZ4g6Gm
-X-Received: by 2002:a05:6808:3082:b0:4a4:82b:2a35 with SMTP id
- 5614622812f47-4afadefa686mr2996765b6e.1.1785939740248; Wed, 05 Aug 2026
- 07:22:20 -0700 (PDT)
+        bh=zoqyZIgm1EFWmYCKlkiSGKUErGHHlemelV0Nuq3FxEs=;
+        b=NS9O8QNYr6A5mxKS1PfKmR9jBcEtSgyLCEk7tmCVmcd6cEoSBzI5fi8hU3D6CjKgSz
+         rkFTjxDDeMeHJBYb7EAbZ0t0BI0zDLipSzgeeZqAxRsMw48rtWqKJLw2t7vxIyDzOcm3
+         I9THBVpid5nponJtxe/gHCL08ppadQIdmskjp8se8/C8ve5oljZ48QNoKdnEzt6+CNhg
+         WjYsIQuY5ouVdMj7WkVQgri0qE7P9/Bhtz/GJigQCyNvzSeJoiIJD4jyBKuors8VtcQ+
+         9JINlwnQu5IbVN9TmT39s/1KSsaxE+S7MyXPUvw+34F6yivbA22y93S5RxmP9m+A05Ls
+         A8Qw==
+X-Forwarded-Encrypted: i=1; AHgh+RokWoTsGYCZRAqsPhpUhu1Um07Da+pwxCe6wnaYDVRyPwS44dTxgpbRp8bbXObr1+F9FVYY7MH5fQ8iWZp8tQE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2cneEEAqSEk8C33p+tSKoyq7t6HeLsbKP9wcSq9l0KZcQiLyS
+	XYlI5I7Sb3cLzZYdtDzbSC7PVS21ABXlkpb+PPHwc0qdbVGBCe5d6+KNxqKu1yEUnIUCWsYIRqm
+	7FNzgbiSZ0/dOeG1lGC2DIB+hi8QHMSE=
+X-Gm-Gg: AR+sD136E53lUYfLpGiK7EJL7g/km5vcKXhlA+J1JbIJ84OwTZaK8ZUiQYWpBmIvJ9n
+	2CWR6e2Q+jSLeGdV2S4h/NEqjROvZ+zs/vxJNO2w9XZMxCqFEHHl3SzVhMoN/0f+wPeFcIuhP0x
+	lBCVer50sa5mvtNqRAdBeJ/DpZ8OhBgfFT/hXIzYQ9LloK5wtQFumVNKw6mLLDiHZBNV0HFKlsn
+	iiGR+7B+GM5r0OAgx6y6S6yiwtJLK39g8FEcWSMM1UqQBldDDAvYsQLnCClt6/QYEMVk9ZHUC9E
+	ZlqF5fQWjjFHiHxJk1bZ8YL8xadZnLIdWqkJyK9B6htNDmZSMOazTFZCB1HQ
+X-Received: by 2002:a05:6808:50a7:b0:4a4:ade8:a27b with SMTP id
+ 5614622812f47-4afadf34316mr2545848b6e.1.1785939766818; Wed, 05 Aug 2026
+ 07:22:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260805-netcons-userdata-rcu-v2-0-c5e80f6a7a46@debian.org> <20260805-netcons-userdata-rcu-v2-1-c5e80f6a7a46@debian.org>
-In-Reply-To: <20260805-netcons-userdata-rcu-v2-1-c5e80f6a7a46@debian.org>
+References: <20260805-netcons-userdata-rcu-v2-0-c5e80f6a7a46@debian.org> <20260805-netcons-userdata-rcu-v2-2-c5e80f6a7a46@debian.org>
+In-Reply-To: <20260805-netcons-userdata-rcu-v2-2-c5e80f6a7a46@debian.org>
 From: Gustavo Luiz Duarte <gustavold@gmail.com>
-Date: Wed, 5 Aug 2026 15:22:07 +0100
-X-Gm-Features: AUfX_myEBJXrwCd_oNjePYEUGRCdQy9tXUD1opmu4-BqJqeTjHWmE-CrsEfGEVM
-Message-ID: <CAGSyskX-C3vyySs91KEUEUczGrwyxH36=UVN_chte+m-k_NAvA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 1/2] netconsole: publish the userdata payload
- with RCU
+Date: Wed, 5 Aug 2026 15:22:35 +0100
+X-Gm-Features: AUfX_myvpD_v6B0dSVMW2yccuOyWTBeIMYT64tQPb_nOAiYzeDrWrNVWBqp2-jE
+Message-ID: <CAGSyskUmNJQy=vSb5-zbMfsC5RdMp-P-CkEa3_kfRAHUsns81g@mail.gmail.com>
+Subject: Re: [PATCH net-next v2 2/2] selftests: netconsole: add a userdata
+ torture test
 To: Breno Leitao <leitao@debian.org>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
 	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -101,25 +101,10 @@ Content-Transfer-Encoding: quoted-printable
 On Wed, Aug 5, 2026 at 11:59=E2=80=AFAM Breno Leitao <leitao@debian.org> wr=
 ote:
 >
-> update_userdata() takes target_list_lock to swap nt->userdata and
-> nt->userdata_length, then frees the old buffer. Since commit
-> 7eab73b18630 ("netconsole: convert to NBCON console infrastructure")
-> that lock is also the console's device_lock, so writing a userdata value
-> from configfs serialises against the printk core emitting messages.
+> The userdata payload is rebuilt and republished on every configfs write,
+> including while the target is enabled and messages are being sent.
 >
-> The buffer is immutable once published, which is what RCU is for. Move
-> the string and its length into a single netcons_userdata object and
-> publish it with rcu_replace_pointer(), freeing the old one with
-> kfree_rcu().
->
-> New userdata design:
->
-> 0) Unify the userdata fields into a struct netcons_userdata
-> 1) update_userdata() no longer needs target_list_lock.
-> 2) writers stay serialised by dynamic_netconsole_mutex.
-> 3) reading userdata needs an RCU read lock.
->
-> No functional change intended.
+> Add netcons_userdata.sh that runs random tests with userdata.
 >
 > Signed-off-by: Breno Leitao <leitao@debian.org>
 
