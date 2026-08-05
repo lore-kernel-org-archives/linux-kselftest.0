@@ -1,30 +1,32 @@
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from out-178.mta0.migadu.com (out-178.mta0.migadu.com [91.218.175.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9870945041C
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:34:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E696447FB1E
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 15:34:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785944052; cv=none; b=g8zt/zCCQIZPwd2O3hpmhegYA9akvsunzxYmg9rFOPl5LgNtFP9iOFJ+LMpEf/z04nZDPuib/Aht6G6TWxrvkKLfC4Rft7yCHcOjuio0/zXTIme5R07bvm1FZGhdRZ+51Xb3iBnNT5v/mhqTadRJXwhqGtlAOb5MId4uTItZhJY=
+	t=1785944056; cv=none; b=HhMcvswFKBXpqihHQe+6ItxGiLp/aRRqQy1XAvhTwzrOzu9EJpNaYyxlmr79GW0bTryxmJRHJpgKn7yILUjt95iwEnatrQKCnNqBI1SziFnmyLR0pqfNi5oI1DlW/r4ojcRrcpH8FqAhHpHPAf+g/mocgGQlAiGWdR4kb+7Q5Js=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785944052; c=relaxed/simple;
-	bh=Q867QdylhrILIZl7uwIyJN/YV4LNHOtgP0zdTrLDEZE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Q65xQ5AOfntMLxjvW9Y8tCu2idqthSmvrO2xS4A/wyPUeXDtS+PSm4dmtey+3eqK+KQd9hgDlJKkOXgAuiHLZce/nG4xrQYU15mqEav4s2kGNAqxMUJCJiF/v7rNgXgAh9BKvmBg6UCfNA+G8LF2ENZashp83F90VYNs5Hs11p8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=aIkdqtfl; arc=none smtp.client-ip=91.218.175.172
+	s=arc-20240116; t=1785944056; c=relaxed/simple;
+	bh=Fq9mPhF+x4kABBj3fAZkbuJ1hBAgDuPfZcD+bGPvZNI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Bgn/4LTs4kHo8wenAfN3w9FT5SyL1YfuW/3+SYv3ixU9gfmzbFnA7FcgtexF2m72amwZDY4SgxnoW3RxLaTYTdGlBDRzp7WtT9rqulzt1ItGDr5Z1UnqCIpeHY2RP6g+m1E8Vidc92QBd1R4wPv0HwhlUzYlQTvvx8l9qHREJac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=G/LtLcDR; arc=none smtp.client-ip=91.218.175.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="aIkdqtfl"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="G/LtLcDR"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1785944033;
+	t=1785944045;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=NMfeASp4Msjw1vMvRPi7MNiVqL+aI2n/OIGsp1byVBc=;
-	b=aIkdqtflaUhpE2A00Mt0bPIcWwHMNiGqurNxvmppE3mbM/ArVuM0pKeME7m8dLcTMW7aLh
-	W0hY9u4Yx2ARYHwn3ncpeOdcFrhqfmjD2rh5ufWb/8+3mACvJc/81/tfCn5ybbCvDJnK2p
-	ZhaIxJYE/U8apn923Hh0AlGI65Mkx/E=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=NyCUO76kvyNGTAYi37CSbvCLeWxsrL1T0JqZ1cD6Rbc=;
+	b=G/LtLcDRu7v9/sVoV/lpFoKigUzmmdYA/rDC4yNlwENcO3eHQPdEIxaALDl/6vqYgVF02T
+	epXATG558Oj7JtpAORycqVp2rnEremLg0gzDzIV2/CzK3nXOFRtLK9EUHXnu8RN9cSNmII
+	ZFtxWKWPvN+4SNTmGdySiCloEgopE7M=
 From: Kaitao Cheng <kaitao.cheng@linux.dev>
 To: Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
@@ -43,10 +45,12 @@ To: Alexei Starovoitov <ast@kernel.org>,
 Cc: bpf@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Kaitao Cheng <kaitao.cheng@linux.dev>
-Subject: [PATCH bpf-next v2 0/3] bpf: Allow selected kfuncs under bpf_spin_lock
-Date: Wed,  5 Aug 2026 23:33:37 +0800
-Message-ID: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+	Kaitao Cheng <chengkaitao@kylinos.cn>
+Subject: [PATCH bpf-next v2 2/3] bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
+Date: Wed,  5 Aug 2026 23:33:39 +0800
+Message-ID: <20260805153340.34776-3-kaitao.cheng@linux.dev>
+In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,53 +60,204 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The verifier currently has a hard-coded allowlist of kfuncs that may be
-called while a BPF program holds a bpf_spin_lock. This works for the
-small set of built-in kfuncs known to the verifier, but it does not give
-kfunc providers a registration-time way to declare that a kfunc is safe
-in such a region. In particular, module kfuncs cannot be added to that
-allowlist without changing verifier code.
+From: Kaitao Cheng <chengkaitao@kylinos.cn>
 
-This series adds a new KF_SPINLOCK_SAFE kfunc flag and teaches the
-verifier to use kfunc registration metadata when deciding whether a
-kfunc call is allowed while a bpf_spin_lock is held.
+The verifier currently keeps a hard-coded list of kfuncs that may be
+called while holding a bpf_spin_lock. With KF_SPINLOCK_SAFE available,
+retaining this list creates two sources of truth and requires verifier
+changes whenever another lock-safe kfunc is added.
 
-The built-in kfuncs that are currently accepted by the verifier's
-lock-held allowlist are annotated with the new flag. This preserves the
-existing behavior while removing the verifier-side category checks and
-uses the same mechanism for built-in and module kfuncs.
+Mark every kfunc currently accepted by kfunc_spin_allowed() with
+KF_SPINLOCK_SAFE. This covers the graph, numeric iterator, resource
+spin lock, arena, and stream kfuncs.
 
-The selftest coverage marks one bpf_testmod kfunc as KF_SPINLOCK_SAFE
-and verifies that it can be called under a bpf_spin_lock. It also calls
-another registered but unmarked bpf_testmod kfunc under the lock and
-checks that the verifier rejects it.
+Remove the obsolete category checks and make kfunc_spin_allowed() rely
+solely on the kfunc registration metadata. This preserves the behavior
+of existing kfuncs while using the same mechanism for built-in and
+module kfuncs.
 
-Changes in v2:
-- Rename KF_SPIN_LOCK to KF_SPINLOCK_SAFE. (Kumar Kartikeya Dwivedi,
-  Leon Hwang)
-- Deprecate the verifier's lock-held allowlist mechanism and annotate the
-  relevant kfuncs uniformly with KF_SPINLOCK_SAFE (Kumar Kartikeya Dwivedi)
-- Add selftests. (Leon Hwang)
+Signed-off-by: Kaitao Cheng <chengkaitao@kylinos.cn>
+---
+ kernel/bpf/arena.c      |  6 ++---
+ kernel/bpf/helpers.c    | 56 +++++++++++++++++++++--------------------
+ kernel/bpf/rqspinlock.c |  8 +++---
+ kernel/bpf/verifier.c   | 32 -----------------------
+ 4 files changed, 36 insertions(+), 66 deletions(-)
 
-Link to v1:
-https://lore.kernel.org/bpf/DKG0YUDSTBUY.1X220287HT9V3@gmail.com/
-
-Kaitao Cheng (3):
-  bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
-  bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
-  selftests/bpf: Test module kfunc calls under spin lock
-
- include/linux/btf.h                           |  1 +
- kernel/bpf/arena.c                            |  6 +-
- kernel/bpf/helpers.c                          | 56 ++++++++++---------
- kernel/bpf/rqspinlock.c                       |  8 +--
- kernel/bpf/verifier.c                         | 38 +++----------
- .../selftests/bpf/prog_tests/kfunc_call.c     |  2 +
- .../selftests/bpf/progs/kfunc_call_fail.c     | 12 ++++
- .../selftests/bpf/progs/kfunc_call_test.c     | 12 ++++
- .../selftests/bpf/test_kmods/bpf_testmod.c    |  2 +-
- 9 files changed, 72 insertions(+), 65 deletions(-)
-
+diff --git a/kernel/bpf/arena.c b/kernel/bpf/arena.c
+index 555ee2531ef9..7b6847200b43 100644
+--- a/kernel/bpf/arena.c
++++ b/kernel/bpf/arena.c
+@@ -1118,9 +1118,9 @@ __bpf_kfunc int bpf_arena_reserve_pages(void *p__map, void *ptr__ign, u32 page_c
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(arena_kfuncs)
+-BTF_ID_FLAGS(func, bpf_arena_alloc_pages, KF_ARENA_RET | KF_ARENA_ARG2)
+-BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_ARENA_ARG2)
+-BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_ARENA_ARG2)
++BTF_ID_FLAGS(func, bpf_arena_alloc_pages, KF_ARENA_RET | KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_arena_free_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_arena_reserve_pages, KF_ARENA_ARG2 | KF_SPINLOCK_SAFE)
+ BTF_KFUNCS_END(arena_kfuncs)
+ 
+ static const struct btf_kfunc_id_set common_kfunc_set = {
+diff --git a/kernel/bpf/helpers.c b/kernel/bpf/helpers.c
+index 4709a5ad0474..6388b6b23e49 100644
+--- a/kernel/bpf/helpers.c
++++ b/kernel/bpf/helpers.c
+@@ -4812,30 +4812,32 @@ BTF_ID_FLAGS(func, bpf_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_obj_drop_impl, KF_RELEASE)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_drop, KF_RELEASE | KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_percpu_obj_drop_impl, KF_RELEASE)
+-BTF_ID_FLAGS(func, bpf_refcount_acquire, KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_refcount_acquire_impl, KF_ACQUIRE | KF_RET_NULL | KF_RCU)
+-BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_list_push_front_impl)
+-BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_list_push_back_impl)
+-BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_list_is_first)
+-BTF_ID_FLAGS(func, bpf_list_is_last)
+-BTF_ID_FLAGS(func, bpf_list_empty)
++BTF_ID_FLAGS(func, bpf_refcount_acquire,
++	     KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_refcount_acquire_impl,
++	     KF_ACQUIRE | KF_RET_NULL | KF_RCU | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_push_front, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_push_front_impl, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_push_back, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_push_back_impl, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_add, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_pop_front, KF_ACQUIRE | KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_pop_back, KF_ACQUIRE | KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_del, KF_ACQUIRE | KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_front, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_back, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_is_first, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_is_last, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_list_empty, KF_SPINLOCK_SAFE)
+ BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_task_release, KF_RELEASE)
+-BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_rbtree_add, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_rbtree_add_impl)
+-BTF_ID_FLAGS(func, bpf_rbtree_first, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_rbtree_root, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_rbtree_left, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_rbtree_right, KF_RET_NULL)
++BTF_ID_FLAGS(func, bpf_rbtree_remove, KF_ACQUIRE | KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_add, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_add_impl, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_first, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_root, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_left, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_rbtree_right, KF_RET_NULL | KF_SPINLOCK_SAFE)
+ 
+ #ifdef CONFIG_CGROUPS
+ BTF_ID_FLAGS(func, bpf_cgroup_acquire, KF_ACQUIRE | KF_RCU | KF_RET_NULL)
+@@ -4885,9 +4887,9 @@ BTF_ID_FLAGS(func, bpf_rcu_read_lock)
+ BTF_ID_FLAGS(func, bpf_rcu_read_unlock)
+ BTF_ID_FLAGS(func, bpf_dynptr_slice, KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_dynptr_slice_rdwr, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_iter_num_new, KF_ITER_NEW)
+-BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEXT | KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY)
++BTF_ID_FLAGS(func, bpf_iter_num_new, KF_ITER_NEW | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_iter_num_next, KF_ITER_NEXT | KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_iter_num_destroy, KF_ITER_DESTROY | KF_SPINLOCK_SAFE)
+ BTF_ID_FLAGS(func, bpf_iter_task_vma_new, KF_ITER_NEW | KF_RCU)
+ BTF_ID_FLAGS(func, bpf_iter_task_vma_next, KF_ITER_NEXT | KF_RET_NULL)
+ BTF_ID_FLAGS(func, bpf_iter_task_vma_destroy, KF_ITER_DESTROY)
+@@ -4962,8 +4964,8 @@ BTF_ID_FLAGS(func, bpf_strncasestr);
+ #if defined(CONFIG_BPF_LSM) && defined(CONFIG_CGROUPS)
+ BTF_ID_FLAGS(func, bpf_cgroup_read_xattr, KF_RCU)
+ #endif
+-BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS)
+-BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS)
++BTF_ID_FLAGS(func, bpf_stream_vprintk, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_stream_print_stack, KF_IMPLICIT_ARGS | KF_SPINLOCK_SAFE)
+ BTF_ID_FLAGS(func, bpf_task_work_schedule_signal, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_task_work_schedule_resume, KF_IMPLICIT_ARGS)
+ BTF_ID_FLAGS(func, bpf_dynptr_from_file)
+diff --git a/kernel/bpf/rqspinlock.c b/kernel/bpf/rqspinlock.c
+index e4e338cdb437..e527cb425cf4 100644
+--- a/kernel/bpf/rqspinlock.c
++++ b/kernel/bpf/rqspinlock.c
+@@ -744,10 +744,10 @@ __bpf_kfunc void bpf_res_spin_unlock_irqrestore(struct bpf_res_spin_lock *lock,
+ __bpf_kfunc_end_defs();
+ 
+ BTF_KFUNCS_START(rqspinlock_kfunc_ids)
+-BTF_ID_FLAGS(func, bpf_res_spin_lock, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_res_spin_unlock)
+-BTF_ID_FLAGS(func, bpf_res_spin_lock_irqsave, KF_RET_NULL)
+-BTF_ID_FLAGS(func, bpf_res_spin_unlock_irqrestore)
++BTF_ID_FLAGS(func, bpf_res_spin_lock, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_res_spin_unlock, KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_res_spin_lock_irqsave, KF_RET_NULL | KF_SPINLOCK_SAFE)
++BTF_ID_FLAGS(func, bpf_res_spin_unlock_irqrestore, KF_SPINLOCK_SAFE)
+ BTF_KFUNCS_END(rqspinlock_kfunc_ids)
+ 
+ static const struct btf_kfunc_id_set rqspinlock_kfunc_set = {
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index 9c1f8d552655..7c1edcae293a 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -11797,20 +11797,6 @@ static bool is_bpf_rbtree_api_kfunc(u32 btf_id)
+ 	       btf_id == special_kfunc_list[KF_bpf_rbtree_right];
+ }
+ 
+-static bool is_bpf_iter_num_api_kfunc(u32 btf_id)
+-{
+-	return btf_id == special_kfunc_list[KF_bpf_iter_num_new] ||
+-	       btf_id == special_kfunc_list[KF_bpf_iter_num_next] ||
+-	       btf_id == special_kfunc_list[KF_bpf_iter_num_destroy];
+-}
+-
+-static bool is_bpf_graph_api_kfunc(u32 btf_id)
+-{
+-	return is_bpf_list_api_kfunc(btf_id) ||
+-	       is_bpf_rbtree_api_kfunc(btf_id) ||
+-	       is_bpf_refcount_acquire_kfunc(btf_id);
+-}
+-
+ static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
+ {
+ 	return btf_id == special_kfunc_list[KF_bpf_res_spin_lock] ||
+@@ -11819,29 +11805,11 @@ static bool is_bpf_res_spin_lock_kfunc(u32 btf_id)
+ 	       btf_id == special_kfunc_list[KF_bpf_res_spin_unlock_irqrestore];
+ }
+ 
+-static bool is_bpf_arena_kfunc(u32 btf_id)
+-{
+-	return btf_id == special_kfunc_list[KF_bpf_arena_alloc_pages] ||
+-	       btf_id == special_kfunc_list[KF_bpf_arena_free_pages] ||
+-	       btf_id == special_kfunc_list[KF_bpf_arena_reserve_pages];
+-}
+-
+-static bool is_bpf_stream_kfunc(u32 btf_id)
+-{
+-	return btf_id == special_kfunc_list[KF_bpf_stream_vprintk] ||
+-	       btf_id == special_kfunc_list[KF_bpf_stream_print_stack];
+-}
+-
+ static bool kfunc_spin_allowed(struct bpf_verifier_env *env, s32 func_id, s16 offset)
+ {
+ 	struct bpf_kfunc_meta kfunc;
+ 	int err;
+ 
+-	if (is_bpf_graph_api_kfunc(func_id) || is_bpf_iter_num_api_kfunc(func_id) ||
+-	    is_bpf_res_spin_lock_kfunc(func_id) || is_bpf_arena_kfunc(func_id) ||
+-	    is_bpf_stream_kfunc(func_id))
+-		return true;
+-
+ 	err = fetch_kfunc_meta(env, func_id, offset, &kfunc);
+ 	if (err || !kfunc.flags)
+ 		return false;
 -- 
 2.50.1 (Apple Git-155)
 
