@@ -1,74 +1,72 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D139361940
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 00:21:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53BAF361959
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 00:21:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785889265; cv=none; b=HTYdNp0dhj82a0b2LJT9YXZLpZ96PoHC/feQpH/WbsATwE4JqOVU6NYkaoKwwzfNnn/8pZcUmn3peuB4KsYVTw8uWtpVWZiitKEPpL1ORi+a3s5XUMxQwSKZUS9eo0o5zLlhnv4PaE3iRSPbLEk7Xx56EzD8z3Ope+EnzQCtKHo=
+	t=1785889265; cv=none; b=XOGQQtkoDXkko8FrTrBpjBdPqiuXcPQHjQvH7GQSTfkCFLLS1vM07J7MrqKAKiiQkRfsn0Ut9ZUjpFLNYX6KRkTwBfgSfVgxHBuBHVD6giZE3wvb42oJTq8BjzC1gMSVtPK9SiItqJn4n1eZqicbKi9Ml2aq9t4jvsvDRa0s4hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1785889265; c=relaxed/simple;
-	bh=sLFbKfSOzTOgEZoliwMAFgQy/seHdKaiywfAzh200YM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=sL/OaaP7SDCgH9OB65ZVMZqeRLdTYJvGYL1llb8gny1paaiIflYZ6kx3ywlWKkD1251/xdzZOS9gRyi6BhKX8n3yRg4dGjkm5fnef7fYlSjP+NQoqvQ9Zpx+aWx45MfV0LnPH4MGv4c2Pv8cPS81SMjYBrMWGZuLcoDl9tNve+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=twK/V5y2; arc=none smtp.client-ip=209.85.216.70
+	bh=/s/WutWgBkDkoqWk1gtwHnk/Af6S+Dr8yUYiF5uC5uE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=tY58baIrKdrYXP3YOYUXIhAJebYYP1UPMNx9Sk+ctQ1fP13EZeJB2oTebfl1CatZsF5Pr3WNbWPFKPKYnK1ymbgDhCyyhYL2O8CyVS1k7n0XyDgtI4TIg52k3HRgTbndfPQ/bUYWR/SHlzarhMDF0A1dIc4m4aR0bHDTJA2l/sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Jm8j/9CR; arc=none smtp.client-ip=209.85.216.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jrhilke.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="twK/V5y2"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38dd87656d3so493935a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 17:21:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Jm8j/9CR"
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-38ce7fabf76so586762a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 17:21:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785889262; x=1786494062; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Pr3cQnrTGmUiECdXxfqO/gRSt1KNbd++por5s4HYq+A=;
-        b=twK/V5y2h9UpKMq2UkRBnA8uzNDlmgdjgOv+hA+YbWMh8/MYtE7iq3kEBY4XuQ3jHf
-         behakTjZunPYneevbcyuw5y+nZJGXA7todR6vP8DbpHoIsKA8wZ2wfgSngvRwWg5+GLq
-         VgeF9MNLcLTFqbblhFdjPSV312kvo6wjSfAVnoDuczTnO1jzKhrRqZjBTjEonu8iqHc4
-         OR1ZSgv/UuVac/dqKot8X847jxN/nrRY4Nhm5QwpxBl7xTHziaxYb4OUpyLJHS6ReMeG
-         y366XbysA+tZGbrEzdog/ZC4aqmg/7rVl0/uwpIzpodxG+Go6AYTu4fWF8NQF1x8CIy3
-         cfxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785889262; x=1786494062;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1785889263; x=1786494063; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Pr3cQnrTGmUiECdXxfqO/gRSt1KNbd++por5s4HYq+A=;
-        b=gES/xwgBD7VEWszoerWM5NHPoEm4EjIp+QDhc9zsYF/Q8nsRC1U0l9lMoa1ZCqtT2p
-         xu2KDMKkPnrqSM8xXIzaQSrFHt7d50KDnCuN8Qn4JicXyBGhucYUS7ZvJjTAq1eQ+T7x
-         t25M37RwYcfZNE4QZ0uj2YP9tIN5F65/doyrEHt8i0xkYFOQqTcteQ7h4lHAGkqPE8Zt
-         DjsinITIOdw4V/TbDbbbXJ5MRiNiOxbs+rIsJrZ5/E8zl8i0KbEV4ctIn4954GUFo/Zo
-         VyK3aSZ0tAzLoN08vSTZWkh+c+KihGpKNX0lxUK4GgaSsQ9IEtJLKSmKlVOhBAA+QyHD
-         W9ow==
-X-Forwarded-Encrypted: i=1; AHgh+Rp9QBlS6VAS4YkwRbrtMxX+ilbykfi1GiFEgQyNZB0yrX2T9sXg+sLMdkYBjcn4j3s8Yl3WMJNdv2FQNAWoass=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtYhI8JQw3fZig/m4a1RejVqVa7c4Km2RVDXs7tZnZqwBumMm9
-	+jY7kzImo4y60bJzLV2D8hGFKT0pP9f4a3xjOqDYQNPP9iFjdcGm3FaloA1FgsysQn7iHdAxUoI
-	G/QP/QBm9
-X-Received: from pjbgn23.prod.google.com ([2002:a17:90a:c797:b0:38d:ed16:8b30])
- (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2dca:b0:38e:9045:bac0
- with SMTP id 98e67ed59e1d1-3903c55928emr2660916a91.5.1785889262333; Tue, 04
- Aug 2026 17:21:02 -0700 (PDT)
-Date: Wed, 05 Aug 2026 00:20:57 +0000
+        bh=siogvW8DGq9Kjt0WBylwgP+rzy7WuNyV/ARa/oJc9U4=;
+        b=Jm8j/9CRg7TQ5nmacWlytTIjQ9N4ScPxlmdobKjSweEJXKiiYRWn86yhfN3tYp91Wj
+         WhmffRz5zY9IQW8hjC5hAhyk9r6hPAa4YQkD1PYIKPJfCoYfNpkYulsh4ucwnc3K0LnR
+         ZHwutDRP22R8QYCipmvOYMlgbuVMDj9qiEooXmTlipTTuKeiid9wV1HE4ExWrCpmycgH
+         t173JdS+s4Ix4qVu4ca88c2DfY4MfN3e9yrMX3W1WG50jLx6vyRmUASnauVh5STsuHST
+         7CW0MZIOzv/GdGIkoMhDF+QQxbuVi1gYsPNNdSAFRaKJJbfxP25y96/1MQ0TruOEZXuV
+         SJBg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1785889263; x=1786494063;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=siogvW8DGq9Kjt0WBylwgP+rzy7WuNyV/ARa/oJc9U4=;
+        b=fsYRmUfaqTe8i5mxpD4QeFPyEm3lCzJ4HpFn+BsnEUANbl5SNM8TS6G5Wkf+pEV6tU
+         DlpLrcRMM35+nYUB3+v6RMxi3HknuM/iOcqk3/ZtwMBYIKMZTOu7nwdhz7dgjnl692dT
+         CaMRH7OlWj39wVKbwRNvymCO1tiybFrqpc2M20prf8Ux9CDzQhW6qgzlKniwShG569+8
+         EtJbMMf4otNxx0VXbxRfYGqZxy9hmO6lQsRCpL4/xgiv2Lm6SoitpUqK+chU4Pje3aiq
+         8kYpGCd9YEGi4G5GcIBU36aQeCcJLQiIFy8tmmU1S46CvRkt5ZLvEPyx63vhbvlPjI5I
+         ND4A==
+X-Forwarded-Encrypted: i=1; AHgh+RqDnLXJ1XeneQYuVnLVA2kCDvde3lnEvqz1V5CS0OinonJsETK/s+VSFA0qxTHapgoekPvdDx+rDNBXBxP8vEs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRd1/8FqmcC0HqrgoMSrA647SKC/hrcYPisx5gLI3cxZkKQTDf
+	1m2DJLCPqJWwSplOu3mv7750hqI/4aU+QzQOCzeC4kG/mDd4wPZ7R1VzrvXgq4IogL83zfk1iEz
+	Ze4lmNlw4
+X-Received: from pjcc15.prod.google.com ([2002:a17:90b:574f:b0:384:f6e1:ff87])
+ (user=jrhilke job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3a8d:b0:38e:57a3:f218
+ with SMTP id 98e67ed59e1d1-3903c5b9f70mr2337359a91.13.1785889263273; Tue, 04
+ Aug 2026 17:21:03 -0700 (PDT)
+Date: Wed, 05 Aug 2026 00:20:58 +0000
+In-Reply-To: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-B4-Tracking: v=1; b=H4sIAOmBcmoC/2XQS2oDMQwG4KsEr+vih2xZXfUeoYTaVieGNi4zx
- aSEuXs9oQuHWUro+5F0EwvPhRfxcriJmVtZSr30Qqung0jn98vEsuTeEEYZr1ChLFM8NXuKIIE
- 0QdJg0SbR579n/ijXe9jxrdfnsvzU+fee3WDr/qdoNaQ0kEo6z8jGoU9Jv061Tp/8nOqX2GKaG
- ymM1HVK2inLOUcKcUf9QI0Zqe9URdbZEOmQYUdxpGGk2Cl47ZNFcEh+R8NIaaSh076ssd6gicA 7SgO1D2+i7VaGHHww/eWPdF3XP/iewSjLAQAA
-X-Change-Id: 20260707-igb_v3_b4-49194c14373c
+References: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
 X-Developer-Key: i=jrhilke@google.com; a=ed25519; pk=cK+Urrh214DoCHywJiTwhMP+zcs1ofpGrewToO/i/3A=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1785889261; l=5064;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1785889261; l=4427;
  i=jrhilke@google.com; s=20260710; h=from:subject:message-id;
- bh=sLFbKfSOzTOgEZoliwMAFgQy/seHdKaiywfAzh200YM=; b=QRSXirJpRY4w5NU9OHqeukPHuvr0rH832rQcFR2dXn3ywzrgll43a16zecLK4r/PMLpiaglvm
- xAOsW+JHxyRB3MHG4xfgc9k8OGcTNE5aJkIsriDsHbhpoz2BzW0iWDU
+ bh=MlKUyD/iWnX4HMtGpIO1fGxO+tR5jQHpAHxHPe4ktOs=; b=YP1lLaWRuUfua8sT8yiH96WEn4Jt3QeI9RmH5Gtd6f+QJuJXSb04Hgv7aeu24lvoH9nFaKwvz
+ pdEMFnQdUSLAAHO3op5B83LCSfitMvmUc/32CQVhI+y89c08qVwQhh6
 X-Mailer: b4 0.14.3
-Message-ID: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
-Subject: [PATCH v10 0/3] vfio: selftests: Add driver for Intel Ethernet
- Gigabit Controller (IGB)
+Message-ID: <20260805-igb_v3_b4-v10-1-9c86dc849c0d@google.com>
+Subject: [PATCH v10 1/3] vfio: selftests: Add helpers to re-enable interrupts
 From: Josh Hilke <jrhilke@google.com>
 To: David Matlack <dmatlack@google.com>, Alex Williamson <alex@shazbot.org>
 Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, 
@@ -76,121 +74,106 @@ Cc: Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, kvm@vger.kernel
 	Josh Hilke <jrhilke@google.com>, Alex Williamson <alex.williamson@nvidia.com>
 Content-Type: text/plain; charset="utf-8"
 
-This v10 of a series which adds a VFIO selftest driver for the Intel
-Gigabit Ethernet controller (IGB), specifically targeting the 82576
-device. IGB is fully virtualized in QEMU, making it suitable for running
-VFIO selftests without specialized hardware.
+From: Alex Williamson <alex.williamson@nvidia.com>
 
-v9: https://lore.kernel.org/kvm/20260730-igb_v3_b4-v9-0-9e4d8682437e@google.com/
+Selftest drivers that recover from a fault by issuing VFIO_DEVICE_RESET
+need to re-arm device interrupts afterwards.  VFIO_DEVICE_RESET tears
+down the kernel-side IRQ trigger so a subsequent VFIO_DEVICE_SET_IRQS
+is required, but the user-side eventfds (and any fd cached in a test
+fixture) are still valid and must be preserved.
 
-Version 10 adds an assert in the IGB driver to prevent DMA transfers
-smaller than 60 bytes, avoiding out-of-bounds DMA writes caused by
-hardware padding on short transfers, and squashes the recovery logic
-(previously Patch 5) into the main driver patch to keep the driver
-self-contained. Also add some logic from Alex to correct the ordering of
-Tx/Rx queue setup.
+vfio_pci_irq_enable() refuses to be called for vectors that already
+have an eventfd (VFIO_ASSERT_LT), and vfio_pci_irq_disable() closes
+all eventfds before resetting the trigger, so neither is suitable.
 
-This series applies on top of linux-next, but the VFIO selftests don't
-build without this patch which fixes a compile error for the test
-fixture:
-https://lore.kernel.org/linux-kselftest/20260630213341.1664345-1-dmatlack@google.com/
+Add vfio_pci_irq_reenable(device, index, vector, count) which asserts
+that the requested range has existing eventfds and re-issues
+VFIO_DEVICE_SET_IRQS using them.  Signature mirrors vfio_pci_irq_enable().
 
-Testing
-=======
-- VFIO selftests builds clean at every commit
-- vfio_pci_driver_test passes using IGB driver + QEMU. Use the following
-  command to run the tests:
+Add vfio_pci_msi{,x}_reenable() wrappers around vfio_pci_irq_reenable()
+for additional ease of use and readability.
 
-  vng \
-  --run arch/x86/boot/bzImage \
-  --user root \
-  --disable-microvm \
-  --memory 32G \
-  --cpus 8 \
-  --qemu-opts="-M q35,accel=kvm,kernel-irqchip=split" \
-  --qemu-opts="-device intel-iommu,intremap=on,caching-mode=on,device-iotlb=on" \
-  --qemu-opts="-netdev user,id=net0 -device igb,netdev=net0,addr=09.0" \
-  --append "console=ttyS0 earlyprintk=ttyS0 intel_iommu=on iommu=pt" \
-  --exec "modprobe vfio-pci && \
-          ./tools/testing/selftests/vfio/scripts/setup.sh 0000:00:09.0 && \
-          ./tools/testing/selftests/vfio/scripts/run.sh ./tools/testing/selftests/vfio/vfio_pci_driver_test"
---------
-Changelog:
-
-v9 -> v10:
-- Add assert in IGB driver to prevent DMA transfers < 60 bytes (Ethernet
-  minimum payload size) to avoid memory corruption from hardware padding. (Sashiko)
-- Squash recovery logic into the main driver patch to make the driver self-contained. 
-- Set per-queue enable bits _after_ enabling global queue bits (Alex)
-
-v8 -> v9:
-- Enable Pad Short Packets (PSP) in TCTL to support transfers < 60 bytes. (Sashiko)
-- Correct misleading comment about interrupt delivery in Patch 1. (Sashiko)
-
-v7 -> v8:
-- Rebase onto linux-next branch. (Alex)
-- Implement retry limit in vfio_pci_device_reset(). (Alex)
-- Carry David's reviewed-by tag onto the patches that haven't been
-  touched since v6.
-
-v6 -> v7:
-- Allow the driver to be used on any architecture. (Alex) 
-- Fix regression in reset logic for the physical device. (Alex)
-
-v5 -> v6:
-- Retry on EAGAIN during device reset to handle transient lock contention (Sashiko).
-
-v4 -> v5:
-- Reordered igb_remove() to reset the device before disabling MSI-X (Sashiko)
-- Refactored hardware reset logic into igb_reset() helper.
-- Simplified reset completion check to usleep + assertion instead of retry loop (Sashiko).
-- Allow arbitrary test data by enabling Multicast Promiscuous (MPE)
-  and Broadcast Accept (BAM) modes (Sashiko).
-- Fixed igb_send_msi() to use MSIX_VECTOR_MASK instead of magic number (Sashiko).
-
-v3 -> v4
-- Enable MSI-X mode in GPIE (Sashiko)
-- Fix hardware initilization order to avoid race conditions (Alex/Sashiko)
-- Add memory barrier to prevent speculative reads (Alex/Sashiko)
-- Clean up stale references in commit messages and comments (Alex/Sashiko)
-- Add a comment to address software/firmware semaphore (Alex/Sashiko)
-
-v2 -> v3
-- Poll reset bit and document the required wait time (David/Sashiko)
-- Fix the logic for enabling PCI_COMMAND_MEMORY (David/Sashiko)
-- Fail the test if autonegotation fails (David/Sashiko)
-- Handle endianness conversions (David/Sashiko)
-- Use real IGB headers at the start of the series (David)
-- Add E1000_TXD_CMD_IFCS to the TX descriptor command word (Sashiko)
-
-v1 -> v2
-- Removed the chunking loop in igb_memcpy_start() (David)
-- Removed redundant writes to status_error and hdr_addr (David)
-- Include official IGB header files (David)
-
-Signed-off-by: Josh Hilke <jrhilke@google.com>
+Assisted-by: Claude:claude-opus-4-7
+Signed-off-by: Alex Williamson <alex.williamson@nvidia.com>
+Reviewed-by: David Matlack <dmatlack@google.com>
 ---
-Alex Williamson (1):
-      vfio: selftests: Add helpers to re-enable interrupts
+ .../vfio/lib/include/libvfio/vfio_pci_device.h     | 14 ++++++++++++++
+ tools/testing/selftests/vfio/lib/vfio_pci_device.c | 22 ++++++++++++++++++++++
+ 2 files changed, 36 insertions(+)
 
-Josh Hilke (2):
-      vfio: selftests: igb: Add driver for Intel 82576 device
-      vfio: selftests: Retry on EAGAIN during device reset
+diff --git a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+index 59acef381d05..89a039ab3075 100644
+--- a/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
++++ b/tools/testing/selftests/vfio/lib/include/libvfio/vfio_pci_device.h
+@@ -84,6 +84,8 @@ static inline void vfio_pci_cmd_clear(struct vfio_pci_device *device, u16 bits)
+ void vfio_pci_irq_enable(struct vfio_pci_device *device, u32 index,
+ 			 u32 vector, int count);
+ void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index);
++void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
++			   u32 vector, int count);
+ void vfio_pci_irq_trigger(struct vfio_pci_device *device, u32 index, u32 vector);
+ 
+ static inline void fcntl_set_nonblock(int fd)
+@@ -108,6 +110,12 @@ static inline void vfio_pci_msi_disable(struct vfio_pci_device *device)
+ 	vfio_pci_irq_disable(device, VFIO_PCI_MSI_IRQ_INDEX);
+ }
+ 
++static inline void vfio_pci_msi_reenable(struct vfio_pci_device *device,
++					 u32 vector, int count)
++{
++	vfio_pci_irq_reenable(device, VFIO_PCI_MSI_IRQ_INDEX, vector, count);
++}
++
+ static inline void vfio_pci_msix_enable(struct vfio_pci_device *device,
+ 					u32 vector, int count)
+ {
+@@ -119,6 +127,12 @@ static inline void vfio_pci_msix_disable(struct vfio_pci_device *device)
+ 	vfio_pci_irq_disable(device, VFIO_PCI_MSIX_IRQ_INDEX);
+ }
+ 
++static inline void vfio_pci_msix_reenable(struct vfio_pci_device *device,
++					  u32 vector, int count)
++{
++	vfio_pci_irq_reenable(device, VFIO_PCI_MSIX_IRQ_INDEX, vector, count);
++}
++
+ static inline int __to_iova(struct vfio_pci_device *device, void *vaddr, iova_t *iova)
+ {
+ 	return __iommu_hva2iova(device->iommu, vaddr, iova);
+diff --git a/tools/testing/selftests/vfio/lib/vfio_pci_device.c b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+index 28868343f2ab..65a4fffb480c 100644
+--- a/tools/testing/selftests/vfio/lib/vfio_pci_device.c
++++ b/tools/testing/selftests/vfio/lib/vfio_pci_device.c
+@@ -105,6 +105,28 @@ void vfio_pci_irq_disable(struct vfio_pci_device *device, u32 index)
+ 	vfio_pci_irq_set(device, index, 0, 0, NULL);
+ }
+ 
++/*
++ * Re-issue VFIO_DEVICE_SET_IRQS for an already-enabled vector range using
++ * the existing eventfds.  Intended for drivers that need to re-arm device
++ * interrupts after a VFIO_DEVICE_RESET, which tears down the kernel-side
++ * IRQ trigger but leaves user-side eventfds intact.  Recreating the
++ * eventfds would invalidate any test-fixture cache of the fd, so this
++ * helper deliberately preserves them.
++ */
++void vfio_pci_irq_reenable(struct vfio_pci_device *device, u32 index,
++			   u32 vector, int count)
++{
++	int i;
++
++	check_supported_irq_index(index);
++
++	for (i = vector; i < vector + count; i++)
++		VFIO_ASSERT_GE(device->msi_eventfds[i], 0,
++			       "vector %d eventfd not allocated\n", i);
++
++	vfio_pci_irq_set(device, index, vector, count, device->msi_eventfds + vector);
++}
++
+ static void vfio_pci_irq_get(struct vfio_pci_device *device, u32 index,
+ 			     struct vfio_irq_info *irq_info)
+ {
 
- .../selftests/vfio/lib/drivers/igb/e1000_82575.h   |   1 +
- .../selftests/vfio/lib/drivers/igb/e1000_defines.h |   1 +
- .../selftests/vfio/lib/drivers/igb/e1000_regs.h    |   1 +
- tools/testing/selftests/vfio/lib/drivers/igb/igb.c | 585 +++++++++++++++++++++
- .../vfio/lib/include/libvfio/vfio_pci_device.h     |  15 +
- tools/testing/selftests/vfio/lib/libvfio.mk        |   1 +
- tools/testing/selftests/vfio/lib/vfio_pci_device.c |  42 +-
- tools/testing/selftests/vfio/lib/vfio_pci_driver.c |   3 +-
- 8 files changed, 647 insertions(+), 2 deletions(-)
----
-base-commit: 0f6da28aab51b16762ed82e8fdeaa5042da45b08
-change-id: 20260707-igb_v3_b4-49194c14373c
-
-Best regards,
 -- 
-Josh Hilke <jrhilke@google.com>
+2.55.0.571.g244d577d93-goog
 
