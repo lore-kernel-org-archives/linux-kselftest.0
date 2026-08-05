@@ -1,63 +1,63 @@
-Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAEEA3CE4B5
-	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 828BD3CFF72
+	for <linux-kselftest@vger.kernel.org>; Wed,  5 Aug 2026 03:10:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785899415; cv=none; b=LAYzX/iLwqrEhiMdspcYEwD+tjDxT+nsDkmblJ7Vmjm5DDW/lo9URx70BjHzSxO88cykxrR5qpZeCmJRhB9qV6znDWY29SzUog7bz617hNqgSbNNc9BitJENlpocohEvasolsKnmCzZxhTvwS7nCfVc5CtQS8M1NRJvH391qGdk=
+	t=1785899417; cv=none; b=IFP5F0jjCZ9EEIxjqQ3sH8fujphyz9Gig/zUUSyPpILNGj7mC4jwWSSMh7MxtQA+kJ4eTtZB9kYnlkpC5AThGpVOukrZst9kfvfhUQlnTTqFbs1rfKH5HawsfSJnyKN52bFlyjxgVur1WFKf+w50O+vyk2patL4ljuXYGN3wyXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785899415; c=relaxed/simple;
-	bh=oOK+6ucr5hFnvPa1Cyt6MMMW2Oz8T8PdrwBeO7VqXz0=;
+	s=arc-20240116; t=1785899417; c=relaxed/simple;
+	bh=BVyEg/yYgPSwLV5IwdhaQQaJYuhZyIaj0diGnbsjN/E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RanPOAyT06QG2PGIsXuxZSY8GRYrIQJetn4nUNZnY6GkJO4ulvKpNMCuIFbYF2HV8BvhKQzCF0VQ+AB47ft1idT0vop/yHGmLLpjJ/mLkOrTqnCfwDTtFY6wI3kdEW7TUSPdLY6Ji+qZ0TOFX+huYy3Pb9KCb3i6gsoRrNF9yg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ge5RN1e3; arc=none smtp.client-ip=209.85.210.45
+	 MIME-Version; b=BXy7efxaIpYqBHZvASkjym2+0p2fMtCGYjHTN+av1A4joqNk+5ed1/A8u5ZOPFyY8mJbnrleDndzUeqqbEULTEu+hVHbbSqKX0cjICzaZ40UPR/b8yl63d8sZxBkSKSJiaEIsW2BvZ356xAtIRMPNJt2rmJQR6X+ZyZgcxeyrV8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BG1uqBpM; arc=none smtp.client-ip=209.85.210.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ge5RN1e3"
-Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7eb64085c45so467869a34.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:10:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BG1uqBpM"
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-7eb4d532e65so281615a34.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 04 Aug 2026 20:10:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1785899411; x=1786504211; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1785899414; x=1786504214; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OyAL7vKiCo/6sYMJZ1fmy0xuR69l2pnMk9awj9AE7OI=;
-        b=ge5RN1e3/0j9vNY5SSEMZE56WU74ok3jrFS9M6b1EqhnNt0UI8KdL0pK1j3wu6Wd7d
-         wI+FjEJcnrIhfA+ytoVJv2YO9Fez0dM2OtVt9UBBv/1+5sPqds2CWkDSRKnP9QJ7sGL5
-         sFY+goJomrh+a2V1iGyTCu1F1BqeQuit0ViP/cyMV+WSj+/U/QTBoMCcptB/uXs9Pz5E
-         c3m9MidPEKaYO4QzlU14BmxzF3KiNSWAyroTTxa+H9pwYWcVp2wWBDsgoa1PH+jB5wxI
-         rBYzPN11A9UitunZhfklSYCxTnXNs/rrLNPIOdAKh19lADyqfP3Im+mIQb2Nr2/4R/dj
-         d7jA==
+        bh=wP2lXcYocA4uRBulyzxXopr9bWkNcIAmOaQO5fndKNg=;
+        b=BG1uqBpMFB6GxFqavNvHDRjYkU3K3+ij/6BoE+9kjINbb50QG9WuV7g1aUNOHvaH0L
+         y78xHcwW9d38lPATELKAYlua53nLENkdynGyGb+EG8siIYBLrpMEQ7ojXTuEC7tSXrb+
+         gKjlHsgQl5sBBSlT7a9AKSwItzzpqs0BaLxKoloYKT/LwmJfStyOSFh5UU5JY3HuaE3h
+         6JKiFHDEF/9Tfri0gytvZ5MM17FVcOevNcXyME0pG0UeHrvxeQLteNVAb5KAfN+bRuus
+         FQPr7pl5fUZaouVIiEVqcohPWd3oQhH8zo43LB5GNJkAcuyGOc6BX0lQj9ozuDM2mUHD
+         Rk4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785899411; x=1786504211;
+        d=1e100.net; s=20251104; t=1785899414; x=1786504214;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=OyAL7vKiCo/6sYMJZ1fmy0xuR69l2pnMk9awj9AE7OI=;
-        b=XS37q6G/1VomGUfNqYsXjX645qnsZTZpAEcoZ/Z+xs4+MxG7zxgPpUDwvCgaJmOztQ
-         AfU4WDHnLHDRMrYyws4nmMApzxCl3COOFlhDQ4p0omQ4Lp3L2njziiVQm28HXnmOTVvA
-         uNzdFeUzTdjkfD3gh9cmn8xisRKovQSWVvJSKoEBhjJWx/h9IdUDgAl47qShdHUi1Umh
-         nCzBSoXXtmMWKaQwJDFD6gWBHtmt6TwEH/bGzlssFWMSnOOwaDkFojpveQw6TT6KmqBD
-         QhK9WnF5yBUOw3G3G77+yu4sNfQm/zPF7LGnVnwwL3il9GoteYCgKnnAwXUZxGHKQ7cg
-         SW1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RqfvRE5bJHM5YVQTF/VwAtQzHuANcguG53CLsGGsaD+L2IRe5L6LQ6e6V58g/MPyGlwN2sotaRlZFTc7NClccg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjwlNrLC17lfSOTFLfjEd3rQ/EpFc6/65Ry5/NrlliULBDFvKv
-	HolnmC4AGZIKbUjQFfjNqj+KIeWYk+Sps9B+fEtWZWwuUotTQBAZDZQD
-X-Gm-Gg: AR+sD11uTbsm7EWVtIoexOOx6trN+/BrPd9mZAtlKIUsvlHKYJK6d2eun8RziFd9wR9
-	DTbh9WQFXWPEpzKoQuOGqFHK9xqNqWXyqSGR2LlbRoP3HQxE6dCr9iE59qQcE1dcFNNpgnVlYTf
-	QVk6uygIHYwCmjTGmYY2wNHY39+QLvIra/PYACAxD62FcuDJin4KLIsYe3SjSgjGQMhx8MCYSup
-	xA4IKiCqNZuFOHOjYcz7JnGzf/M3gMu4+//lg23u9nE3FKPzoasVtgwf1L8/jHKLaNXA/kGoPSJ
-	ItbRraw8FGNmq4kOVbKT6+icmjbKYfVtwtaSX2EFD8pqmJEdKjhKxHXhRqi6UyB59i2jQFecN6Z
-	Xoj6L0CBG5opeJFCKVAy7hQh42STL36x/IxNPkAMAhNLLIB3xJREMH0WfVDsPNQE/je8pr/Xxsv
-	pnn7XBym8HCP3XYYgmnB1l5cSYyLBjFoT/zjDnjn9ays6WiIc6UxcpFQBHmg==
-X-Received: by 2002:a05:6871:df:b0:43c:44c9:b87e with SMTP id 586e51a60fabf-4599ebe0291mr1927971fac.3.1785899411436;
-        Tue, 04 Aug 2026 20:10:11 -0700 (PDT)
-Received: from localhost ([2a03:2880:31ff:34::])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-4599e1bc01csm1331966fac.4.2026.08.04.20.10.10
+        bh=wP2lXcYocA4uRBulyzxXopr9bWkNcIAmOaQO5fndKNg=;
+        b=jnVAHLS2D6LFfZe/eopc0In96tZCzq4eDdDlokGGlfCrs5qJ44NvwtggeDa/MGpWap
+         wGtZqppAP3+Ge70GSs9Wj/mHcYKEgp1+UoGFiODJB87Vfx5DPxCW2kcgUB/AAks/7TYt
+         xDZeoC+uJvo2JVxobLTxN9bSNAioTTh+5Z76Tfh0RR5Itws64pUgFiH8YScSdkRoH2lH
+         CSHqpCgsvqG0k13Yy50P3ZjI3nPiy2ISWY9H1IKXy9Ph9PlVR5o6RwTGAm0luT2TBoP+
+         AYz8dE2NySxORh73OLe8bJNKypOlrj21LJVRFIO3U630/nbw8s1j6obwah0chsf+7EsW
+         eCfg==
+X-Forwarded-Encrypted: i=1; AHgh+RoyFGWIUVf5gm86K2MtCEWhoMDoYGe/q5/kkDhhHi+NndMcs9nuAZ9Vt5h/dAbYVcMGGvtB6+SsOscfSt471HA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwcY3DlnStyRT/BCieIbKIoyQaxwwQ9+bITY/l1YLbpVaaiLA2
+	0uOhLTmNJ2WS4pOs9wptrFonRPsziX4J7X0Hsb5RZJ4GA5+9Dkg235YI
+X-Gm-Gg: AR+sD12ISnixkfnp2BMHMnln/LmDGm9UNidW2rAUMmjDyHHsEapfp6ofLPAaWBxWBXr
+	8OaYP6sGiNV0+pPPrdf4dbgGV49OqzDoalamW/jtsWPC5OhLkQrviWxJd9GQAdoYZxRhRIgzyOK
+	vznJItJFSIAX6cUR5Mf4l9AG7OYLpXtWbygqS5JcH2Fs9iAxTlocv8nChLyFE11aIWJ0+HLAjrq
+	DEjpg4TQWWXEw6JVBJMDgYqxF1jB+AWM6QdC3caWynj4A5dbMADn1zsToHwOLw4DZczQihWRTM9
+	47mDZuOIsf23cEhCbg5iiVlI4HWSHoHcqfb1f/TzQ4h7DH8ZMDhP6vKnyTvkH44SW4Zci1Q3z3R
+	l/0e9x8QjJe2ljYMjKujqw0KxYTwD1nWrPSKVaIbifO2JFMC3Oim0wMDBsbv3FCOPo/XWQGuQL0
+	3rOdRg4JHVwx0dJlQKaNTRTfPKpHur0m6+BKxvsvUtv9cLqF9yLDfnhb0YTtGwMmG+6omr
+X-Received: by 2002:a05:6820:2083:b0:6aa:da04:b56f with SMTP id 006d021491bc7-6ae96c10163mr2164961eaf.3.1785899414376;
+        Tue, 04 Aug 2026 20:10:14 -0700 (PDT)
+Received: from localhost ([2a03:2880:31ff:44::])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6ae94013615sm1584904eaf.10.2026.08.04.20.10.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Aug 2026 20:10:10 -0700 (PDT)
+        Tue, 04 Aug 2026 20:10:13 -0700 (PDT)
 From: Mohsin Bashir <mohsin.bashr@gmail.com>
 To: netdev@vger.kernel.org
 Cc: andrew+netdev@lunn.ch,
@@ -69,9 +69,9 @@ Cc: andrew+netdev@lunn.ch,
 	pabeni@redhat.com,
 	shuah@kernel.org,
 	alexander.duyck@gmail.com
-Subject: [PATCH net-next 11/14] selftests: net: shaper: Cover scalar attributes
-Date: Tue,  4 Aug 2026 20:09:33 -0700
-Message-ID: <20260805030936.1092907-12-mohsin.bashr@gmail.com>
+Subject: [PATCH net-next 12/14] selftests: net: shaper: Reject invalid set requests
+Date: Tue,  4 Aug 2026 20:09:34 -0700
+Message-ID: <20260805030936.1092907-13-mohsin.bashr@gmail.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
 References: <20260805030936.1092907-1-mohsin.bashr@gmail.com>
@@ -85,87 +85,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Mohsin Bashir <hmohsin@meta.com>
 
-Exercise queue-scope scalar shaper attributes reported by the device,
-including rate limits, burst, priority and weight. Build the set request
-from advertised capabilities so devices are tested for the attributes they
-claim rather than skipped for missing unrelated fields.
+Verify that invalid set requests fail without corrupting existing queue
+shaper state. The test covers invalid node creation through set and invalid
+queue identifiers, then confirms the original queue configuration remains
+unchanged.
 
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Mohsin Bashir <hmohsin@meta.com>
 ---
- tools/testing/selftests/drivers/net/shaper.py | 68 +++++++++++++++++++
- 1 file changed, 68 insertions(+)
+ tools/testing/selftests/drivers/net/shaper.py | 41 +++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
 diff --git a/tools/testing/selftests/drivers/net/shaper.py b/tools/testing/selftests/drivers/net/shaper.py
-index e7af94264409..8dd4897e999e 100755
+index 8dd4897e999e..02a11e6b9a05 100755
 --- a/tools/testing/selftests/drivers/net/shaper.py
 +++ b/tools/testing/selftests/drivers/net/shaper.py
-@@ -168,6 +168,73 @@ def del_nshapers(cfg, nl_shaper) -> None:
+@@ -235,6 +235,46 @@ def set_all_supported_attrs(cfg, nl_shaper) -> None:
      shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
      ksft_eq(len(shapers), 0)
  
-+def set_all_supported_attrs(cfg, nl_shaper) -> None:
-+    """ Set every queue-scope attribute the device advertises and verify the read-back. """
-+    _require_queues(cfg, 1)
++def invalid_set_preserves_state(cfg, nl_shaper) -> None:
++    """ Verify a rejected .set leaves the existing shaper configuration unchanged. """
++    nq = _require_queues(cfg, 1)
++    _require_caps(cfg, nl_shaper, 'queue',
++                  ['support-bw-max', 'support-metric-bps'],
++                  "device does not support queue scope bw_max with bps metric")
 +
-+    _require_caps(cfg, nl_shaper, 'queue', [],
-+                  "queue scope shapers not supported by the device")
-+    caps = _cap_get(cfg, nl_shaper, 'queue')
-+
-+    attrs = {'ifindex': cfg.ifindex,
-+             'handle': {'scope': 'queue', 'id': 0}}
-+    expected = {'ifindex': cfg.ifindex,
-+                'parent': {'scope': 'netdev'},
-+                'handle': {'scope': 'queue', 'id': 0}}
-+
-+    rate_attrs = {'support-bw-min': ('bw-min', 10000, 100),
-+                  'support-bw-max': ('bw-max', 20000, 200),
-+                  'support-burst': ('burst', 3000, 30)}
-+    rate_attr_supported = any(cap in caps for cap in rate_attrs)
-+    bps_supported = 'support-metric-bps' in caps
-+    pps_supported = 'support-metric-pps' in caps
-+
-+    def add_rate_attrs(metric, value_idx) -> None:
-+        attrs['metric'] = metric
-+        expected['metric'] = metric
-+        for cap, (attr, bps_value, pps_value) in rate_attrs.items():
-+            if cap not in caps:
-+                continue
-+
-+            value = bps_value if value_idx == 0 else pps_value
-+            attrs[attr] = value
-+            expected[attr] = value
-+
-+    if rate_attr_supported:
-+        if bps_supported:
-+            add_rate_attrs('bps', 0)
-+        elif pps_supported:
-+            add_rate_attrs('pps', 1)
-+
-+    if 'support-priority' in caps:
-+        attrs['priority'] = 1
-+        expected['priority'] = 1
-+    if 'support-weight' in caps:
-+        attrs['weight'] = 2
-+        expected['weight'] = 2
-+
-+    if len(attrs) == 2:
-+        raise KsftSkipEx("device does not advertise any supported queue shaper attributes")
-+
-+    nl_shaper.set(attrs)
++    initial = {'ifindex': cfg.ifindex,
++               'parent': {'scope': 'netdev'},
++               'handle': {'scope': 'queue', 'id': 0},
++               'metric': 'bps',
++               'bw-max': 10000}
++    nl_shaper.set({'ifindex': cfg.ifindex,
++                   'handle': {'scope': 'queue', 'id': 0},
++                   'metric': 'bps',
++                   'bw-max': 10000})
 +    defer(_delete_shaper, cfg, nl_shaper, {'scope': 'queue', 'id': 0})
 +
++    with ksft_raises(NlError):
++        nl_shaper.set({'ifindex': cfg.ifindex,
++                       'handle': {'scope': 'node', 'id': 0},
++                       'metric': 'bps',
++                       'bw-max': 20000})
 +    shaper = nl_shaper.get({'ifindex': cfg.ifindex,
 +                            'handle': {'scope': 'queue', 'id': 0}})
-+    ksft_eq(shaper, expected)
++    ksft_eq(shaper, initial)
 +
-+    if rate_attr_supported and bps_supported and pps_supported:
-+        add_rate_attrs('pps', 1)
-+        nl_shaper.set(attrs)
-+
-+        shaper = nl_shaper.get({'ifindex': cfg.ifindex,
-+                                'handle': {'scope': 'queue', 'id': 0}})
-+        ksft_eq(shaper, expected)
++    with ksft_raises(NlError):
++        nl_shaper.set({'ifindex': cfg.ifindex,
++                       'handle': {'scope': 'queue', 'id': nq},
++                       'metric': 'bps',
++                       'bw-max': 20000})
++    shaper = nl_shaper.get({'ifindex': cfg.ifindex,
++                            'handle': {'scope': 'queue', 'id': 0}})
++    ksft_eq(shaper, initial)
 +
 +    _delete_shaper(cfg, nl_shaper, {'scope': 'queue', 'id': 0})
 +    shapers = nl_shaper.get({'ifindex': cfg.ifindex}, dump=True)
@@ -174,11 +147,11 @@ index e7af94264409..8dd4897e999e 100755
  def _group_under_netdev(cfg, nl_shaper, bw_max=None):
      r"""Group queues under a netdev-scope node; caller owns node teardown.
  
-@@ -1084,6 +1151,7 @@ def main() -> None:
-                   del_qshapers,
+@@ -1152,6 +1192,7 @@ def main() -> None:
                    set_nshapers,
                    del_nshapers,
-+                  set_all_supported_attrs,
+                   set_all_supported_attrs,
++                  invalid_set_preserves_state,
                    basic_groups,
                    basic_groups_with_rate,
                    qgroups,
