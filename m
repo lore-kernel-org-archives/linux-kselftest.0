@@ -1,73 +1,82 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-2-111.ptr.blmpb.com (va-2-111.ptr.blmpb.com [209.127.231.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28AAA3CB2FE;
-	Thu,  6 Aug 2026 08:30:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DFD6352C2C
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 08:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786005041; cv=none; b=VZktftSYPIGIeOEkDRHmNeZPn/A8ZGG4J02hp3j2pXF1zgrdQHxFh7nUX38qyPC0kkOtmgt8jqxXmUudbTqv8b9nDjmew4ylYu/RtLzcJ9a6SlvFeZk9mys8fVwaZbBWWMizYAC070NbcN2mP4Mf+WL3q0cIFCe89GWtArlp9+Y=
+	t=1786005086; cv=none; b=h/Ci7onmT3335lDz/6OmaZKG7YpSxHrZ7JUXAlQHX/Ws/8yLmJphC4amj2ttWuNUqvs4vTsdNwl81mHjyaaMt5xsJm/jOiBNFJ9Q1e6MCM4nKCbYs0QbN6GnrpNRmwqzcsiF7jflYiZYyNMELYhs18rHM1AkFEledNU/PgDiV5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786005041; c=relaxed/simple;
-	bh=tZf7xKKc+1d2MNQgkLvIjW8ujEjid1DyCjtobMNJ3tM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=rncGMivkvlwwzersRFnecTggB93wpd9JjOGo55f+bDbg1ZLJ+e7ypay7YG/3Tt+5YxRCzRGvbDHA+SUf2xLiXjEGmobyrTa2QVfEIR2hS0uPg406yzJtKJR4PV7YVBQ5rVoo9A8H38CekVXssCtvUN/td/w52nwrZ+hD283I+rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3U+sDmts; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=7o8EsxQc; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1786005086; c=relaxed/simple;
+	bh=2HRJ/1Ly3wa43+KYdFLO9xCBqnRBXqeiOk2T4FLmXAI=;
+	h=Content-Type:Date:Cc:Message-Id:Subject:Mime-Version:To:From; b=hyBOt2+phgx0Z1BPFiyAbHb5lqcUKCcfOVMziUbXeH/TTQwYrnRmRuuFjuB8dtx13vABT+aQZ7P04s2AuC7d2OC0f046hLKs/SFu+1vpTrAQfDQtbXV3TIUfrGEatHiV/tqUf4xJ+rJfzMN9BpAI52ruP9BFEcCc9g9elybu+wo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=MT8UzQ0q; arc=none smtp.client-ip=209.127.231.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3U+sDmts";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="7o8EsxQc"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1786005038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tZf7xKKc+1d2MNQgkLvIjW8ujEjid1DyCjtobMNJ3tM=;
-	b=3U+sDmtsKA+gIobhreS8X5tZMGQYfmuSSZS4qPnpbkB12L0+Q3YwHunpfZzVLtSTHcdcNw
-	KfJ8EABF/J+YRK8Cn6tP73xzTRSFvvT9kALj8HH5CSFMGnEXfZOGx4KAZZYLLMD4jPGvTI
-	RYpCZwU8sqymXkEx1lXTGSd30O+M0LkB0lE3Sj2dCuQGfh2RByjotBPRF/nUi3D7SYq+KB
-	M6tNTsZ0RPQ3Ie7pMYkyaYCI92qPAoq3stLeXEy3ilNNAk0J6/+EHtxl7XI4k5np7JKGpn
-	UWLAlnXZH6XVL0jJZAJAuMuNB+i0++CK4BhRWVQ9xNTI5QWvI5rjt7u6G4LTNA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1786005038;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=tZf7xKKc+1d2MNQgkLvIjW8ujEjid1DyCjtobMNJ3tM=;
-	b=7o8EsxQcewlMoX0tfcRt/S/CFJgOsMEMUZCKY2z4IwAgXrtmyS+s+DlSYK9o+PaWyj0g+3
-	Dx3nZz0cNTv/iSAQ==
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, Radim =?utf-8?B?S3LEjW3DocWZ?=
- <radim.krcmar@oss.qualcomm.com>,
- Jesse Taube <jtaubepe@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Charlie Jenkins
- <thecharlesjenkins@gmail.com>
-Subject: Re: [PATCH v3 06/17] riscv: cfi: Use generated instruction headers
-In-Reply-To: <20260707-riscv_insn_table-v3-6-3f8e5f75ba97@gmail.com>
-References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
- <20260707-riscv_insn_table-v3-6-3f8e5f75ba97@gmail.com>
-Date: Thu, 06 Aug 2026 10:30:37 +0200
-Message-ID: <87fr0rd51u.fsf@yellow.woof>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="MT8UzQ0q"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1786005078; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=d2SiBPq9Qel7pXsDTBlK71WE5oJf95jSaIB3kduOeTM=;
+ b=MT8UzQ0qIR1w5JYswS6oSxMCaTaZSPCXXnH5AvSDTyK5Ga6BzFsRAdAVXWt9jEpRjXLEIk
+ fdK12YrcdGuZxikCiqrjQNyOxMhEKfclo0erpKaMJV+UaLIiyFdixnBr1IxB6ryKKRFATv
+ sydRLPcPBngELyX131PRNAxUjftYPqPyIF1tMvxtvcbmv9Wx5dRHhGg3Xk6MEi4ieEVTvi
+ KaNGBXZ1vbVbugJcho4GgHgiS4NHlVnq1TLcvWqfbHrFk6RpN3KL+yE5/ZXivGC4U8OIcW
+ JmTps6tHbMt95A9HUVXL0+ERU6BfjVuhY0rvwb/kFpVpLZsgHVtDtsjGhzI9yw==
+Content-Type: text/plain; charset=UTF-8
+Date: Thu,  6 Aug 2026 16:31:00 +0800
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 7bit
+X-Original-From: Rui Qi <qirui.001@bytedance.com>
+Cc: "Heiko Carstens" <hca@linux.ibm.com>, 
+	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
+	<linux-kernel@vger.kernel.org>, "Rui Qi" <qirui.001@bytedance.com>
+Message-Id: <20260806083101.2651025-1-qirui.001@bytedance.com>
+Subject: [PATCH 1/2] selftests/ftrace: Force C locale for readelf in uprobe test
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+X-Lms-Return-Path: <lba+26a744654+9821bf+vger.kernel.org+qirui.001@bytedance.com>
+To: "Steven Rostedt" <rostedt@goodmis.org>, 
+	"Masami Hiramatsu" <mhiramat@kernel.org>, 
+	"Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, 
+	"Shuah Khan" <shuah@kernel.org>
+From: "Rui Qi" <qirui.001@bytedance.com>
 
-Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
+The add_remove_uprobe test parses the entry point from readelf -h output
+by looking for the English "Entry" field. readelf output is localized
+via gettext, while the ftracetest runner does not force LC_ALL=C and the
+top-level Makefile leaves LANG effective for child processes.
 
-> Migrate the code that is decoding cfi instructions to use the generated
-> instruction headers.
->
-> Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+If readelf prints a translated field name, ENTRYPOINT becomes empty and
+the uprobe_events write is rejected because the offset after PATH: is
+missing.
 
-Reviewed-by: Nam Cao <namcao@linutronix.de>
+Run readelf with LC_ALL=C so the parsed header field remains stable
+across locales.
+
+Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+---
+ .../selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc       | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
+index f2048c244526..f33a863be68b 100644
+--- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
++++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
+@@ -12,7 +12,7 @@ echo 0 > events/enable
+ echo > dynamic_events
+ 
+ REALBIN=`readlink -f /bin/sh`
+-ENTRYPOINT=`readelf -h ${REALBIN} | grep Entry | sed -e 's/[^0]*//'`
++ENTRYPOINT=`LC_ALL=C readelf -h ${REALBIN} | grep Entry | sed -e 's/[^0]*//'`
+ 
+ echo "p:myevent ${REALBIN}:${ENTRYPOINT}" >> uprobe_events
+ 
+-- 
+2.20.1
