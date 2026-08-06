@@ -1,646 +1,2004 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E94F83DD854
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 22:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D1E427F99;
+	Thu,  6 Aug 2026 23:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786054730; cv=none; b=OyZL+jQFX66HtlLMKXQpCkoLV0sLnfuVnVcL6OPRL5wwkFn0xoXNFg8rkm4uSCPf5ODWHjIjCGC04BRv89EeFilW9THnmPIuUHcDi6LWjScVSvU8FQ5Pi2K6axf05Pjqi7t8gby6RpDfB/Wq6qBhIghpfJyVOIxCNtwBiU6NH80=
+	t=1786058868; cv=none; b=khcpbRH+3QYoyBQsAPuGYVOHZVewM1fTQXdCBoWWrzanpPv/p5yBdpLJkdJW60OIARih/HkrRT/nhIgd3B9Egurxeh1jsDBR9TEkQufni6U4gm0mdcsNxdhtx/jXJkJ58AUFHaK3qhuCxd/P7wgmL4SQYoMm2rGuinY/6pUUYpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786054730; c=relaxed/simple;
-	bh=Q6UiM+NSh59x28X4+l0krHjo7gLiDykvSP65z6Gt3io=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n57MkGwnlZNSW8BRI2iFN0Kqdu+ickIxVoRhYfGAeY7cEqzbPHEsRYUpK9xDQiQV+v/YgLxPFBGXjEn5UhxT9YWxeO/1QGarj0k8EVHlb7vZDaOpHWjnoAvPZEMbAy5oFC430nk0zBbkiJBZDAnUuwusS9Q4MW1956Wkt2bbbms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KTnDRIPS; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786058868; c=relaxed/simple;
+	bh=HNLYPEhcwPzVDIexJ+svtIUDx83mU1GNRxrBDoTFQtY=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=IbTDgWimgeU/8BlLxjJ2z3ks0bO8E+cgJXaBjvWC1v4lbDgefSo5QqT0AqTNmNm5quf+WZVt09QROiMEcEALCKHaqODL9RNwYeQozDMWCGO02KF0JpS1wf98ROaP7ujbK2EZDSArHZBZACjSJ4b3SAx7GVd4JJ7dmJliX/39IC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Uej4he46; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KTnDRIPS"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cf27856f9cso34665835ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 15:18:47 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Uej4he46"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F71F1F000E9;
+	Thu,  6 Aug 2026 23:27:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786054727; x=1786659527; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
-        b=KTnDRIPSetR3lD+qmR6r6fD9Ur9GztH3QlGlHHKylVsKz0rOgfe9NSg0AURcbvIWfe
-         NgRcAO7osI68NhKj+TTJdMJXyWWvzIP9KN6jZ0ddjlWLd98vUdgkD0UnEtccECEGFFzy
-         Y1Yq5uenSlqyeFuvAFZCZeWXN20dbzSzdyflE0XmREoS8U4sAR3gfD9wPhtr2lnntaIs
-         lNsR/oratIg+2AtZAWixp4mWifXTaiCCnai0ajUDvstKFV6ReXHBMDXaKFeQ/xA9IUXM
-         IbE7i+rJmhlEQgwJnfXcgKvtUBXnEJScVyfsF2CPVsc0mrUHHw0YpWAj5rtaodKIxdbO
-         elsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786054727; x=1786659527;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=Ymry1hvBnXf9k9HJyCKIW/LGlgOgsWSR1QFJjFRqgWs=;
-        b=LDvivIB3EJa7uVKGtNIUDmelyMWXY7Uj3izlzvP6YM6FqslwWsqIgBPH9V0EZP+7l3
-         GLd8zRuy+3YzHaETfBEjWtq3YovMGPK/uM5ta0PjUWplQlyCOyBWtUmcpFFrP+pNJuEz
-         eXUGoGt7iZiNH406U/YHqn6ZToijmGy00HPfYmDU6mKTD40zaPoNlB33j1BW9OJhekZk
-         EH2XFR1z7lVGqvXns/iRqDOP1JAIEGaI12jHrLHiaCI1sCOmy321s9aR4w36PPxVafu8
-         rWcE5zHQMW6N/HB+w0W/43nmULGN/JfBDYw7Deop/GpU2wcdQ6wISmRIA4RzQgYS2x/a
-         axCg==
-X-Forwarded-Encrypted: i=1; AHgh+RqJDa+dcd7oVQButnL1mUxVoyvShMkhtPOLewavZCKnxX8MwDQskOvl21prm/VqA381gcAgcvC6ck2T8CbX9m0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYztI93VB/ZLQ6+2qsAEyzeEGhOGw76tcooJ6TacssxXvA5L2a
-	aNgQftQHgjwRzfeb6cw9GMbCQ27kiN9wJJcSG7ppoBgIInitWRZWz73v
-X-Gm-Gg: AR+sD13+JojEMH3Au3dRqJZx3wNkeU+PWDdBl5jEoqaz9t1X+KQ7y2faCmYnFYt4zNe
-	i2qkXXVepUQUUI4oQAU236LULUA+0Txqowdhkg3fzegu8xOsXDpMzka+ALjq7qvRgEwKCtoxlkw
-	ikMSYZdJPG19VI+FqiVbY2P9kXX80nHXqzShXPFqJY7/3MVFZfGzJrwHbYI1BQogPBGJ8zETEzZ
-	DBLTXlqNcbc8Ph33wt9VvGv+roRQ+5JAlKUlbgDkd01QSS4iMbRKHSWBxams2vdFPnNyc8ugJAk
-	rfn+hac+JbibqbIb/bfpMpZH9I/r7t028qTB0tbUWXNKxX/EztQd3KFxekwR4zJrAP2aIs1zN2m
-	UNSPH9ZoBw/HTD1cE8pJV/INhokyPlq4FIp1XysX8r1Ht/AiWuBuftjQzBYPYKZJXSiLn7pe/mv
-	8yRm1QFZEy8zyGimJK6Z+Vv4RP+ljOS4gBtFjGjyxthu8eWqPig4LtK7PtzVG6+1pTW/d6PGSwp
-	igoSqgC
-X-Received: by 2002:a17:903:18d:b0:2cc:9179:32e with SMTP id d9443c01a7336-2d0ca759b87mr189529035ad.10.1786054726985;
-        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:42::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bcadc59dsm585515eec.25.2026.08.06.15.18.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 15:18:46 -0700 (PDT)
-Date: Thu, 6 Aug 2026 15:18:43 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
- correctness test for flush
-Message-ID: <anUIQ1oWjUSQhZ4C@devvm16600.scu0.facebook.com>
-References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
- <20260721174833.1232771-3-ziyang.meme@gmail.com>
- <amCBeD8sGVdi1Nm4@localhost.localdomain>
+	d=linux-foundation.org; s=korg; t=1786058863;
+	bh=QOexAOdt39X5EbqgvgXRk/eJlkz/7TxkfO67E3zteA0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Uej4he4633WD4YmmRYPxBhZbUVu2joNtnlrh86gmeFKohl0AkBu9Mv4CrN1y5BtOs
+	 idRdaa0kzUQ/d8PkQhhzXkIJTVDdqSpdKmBcHxtQiu+uiriTlK0/ib9yuP1V17mv/K
+	 YHolVuy50sNOkQ5j2uA1VyqXmXCqtkN59oXT9Oj0=
+Date: Thu, 6 Aug 2026 16:27:40 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>, "Liam R. Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
+ Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo
+ <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, Kees Cook
+ <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, Ryan
+ Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
+ <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>, Matthew Brost
+ <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim
+ <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price
+ <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, Alistair
+ Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin
+ <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>, Arnd
+ Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank
+ <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
+ <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Alex
+ Deucher <alexander.deucher@amd.com>, Christian =?ISO-8859-1?Q?K=F6nig?=
+ <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, Simona Vetter
+ <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
+ <tzimmermann@suse.de>, Boris Brezillon <boris.brezillon@collabora.com>,
+ Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
+ Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>,
+ Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra
+ <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
+ Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
+ <mark.rutland@arm.com>, Alexander Shishkin
+ <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
+ Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, James
+ Clark <james.clark@linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>, John
+ Hubbard <jhubbard@nvidia.com>, Muchun Song <muchun.song@linux.dev>, Oscar
+ Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, Kairui Song
+ <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
+ <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, Youngjun Park
+ <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+ amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+ intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, syzbot@syzkaller.appspotmail.com
+Subject: Re: [PATCH v4 00/20] mm/rmap: index MAP_PRIVATE file-backed folios
+ by anonymous pgoff
+Message-Id: <20260806162740.1d3d50dafd572445949a7f76@linux-foundation.org>
+In-Reply-To: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
+References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1; format=flowed
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <amCBeD8sGVdi1Nm4@localhost.localdomain>
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Jul 22, 2026 at 11:43:49AM +0200, Michal Koutný wrote:
->Hello Ziyang.
->
->On Tue, Jul 21, 2026 at 10:48:31AM -0700, Ziyang Men <ziyang.meme@gmail.com> wrote:
->> Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
->> return values that agree with what userspace reads from cgroupfs, across
->> a whole cgroup subtree that has been charged on many CPUs.
->>
->> It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
->> calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
->> only asserts each value is greater than zero, so it never checks that a
->> value is actually correct.  This test compares the kfunc values against
->> what userspace reads from memory.stat, and checks every node in the
->> cgroup tree.
->>
->> Moreover, cgroup_iter_memcg does not exercise the rstat flush
->> (mem_cgroup_flush_stats()).  This test does: it launches a process on
->> each leaf that charges and holds memory across multiple CPUs (so the
->> leaf's rstat is dirty on K per-cpu trees), then confirms the flush works
->> for both the BPF and the file path by checking two properties:
->>
->>   1. after the flush, each leaf's anon is at least what the process
->>      charged there;
->>
->>   2. after the flush, the sum of the leaves' charged memory equals the
->>      amount at the root.
->>
->> The BPF reader and the file reader run in two separate rounds.  Each
->> round builds the same cgroup tree from scratch and charges the same
->> amount of memory, so both rounds start from the same state and the
->> numbers are comparable.  In detail:
->>
->>   - round 1 (BPF) builds the subtree, forks one child per leaf that
->>     charges the leaf across K CPUs and then blocks holding the charge,
->>     walks the tree with a SEC("iter.s/cgroup") program that flushes the
->>     subtree at the root and reads each cgroup via the memcg kfuncs
->>     (bpf_get_mem_cgroup, bpf_mem_cgroup_flush_stats,
->>     bpf_mem_cgroup_page_state, bpf_mem_cgroup_vm_events,
->>     bpf_put_mem_cgroup) into a hash map;
->>
->>   - round 2 (cgroupfs) builds and charges an identical tree the same way,
->>     then reads every cgroup's memory.stat / memory.current from
->>     userspace.
->>
->> The subtests differ in how many CPUs each leaf is charged on (a single
->> CPU or across K CPUs), and run on two cgroup tree sizes.  The charging
->> children pin CPUs and there is one per leaf, so the test is registered
->> serial.
->>
->> The traditional path reads memory.stat / memory.current through a new
->> read_cgroup_file() helper added to cgroup_helpers (the read counterpart
->> of write_cgroup_file).  When the memcg kfuncs are unavailable
->> (CONFIG_MEMCG=n) the test skips cleanly; the base selftest config now
->> selects CONFIG_MEMCG=y.
->>
->> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
->> Assisted-by: Claude:claude-opus-4-8
->> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
+On Thu, 06 Aug 2026 21:21:25 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 
-Hi Michal,
+> In memory management we've managed to manufacture a great deal of confusion
+> around the concept of anonymous memory. We have:
+> 
+> 1. 'Pure anon' memory - anonymous VMAs whose folios are anonymous and
+>    swap-backed (thus for reclaim purposes, treated as anonymous). These are
+>    simple enough.
+> 
+> 2. shmem - file-backed VMAs, file-backed folios (from rmap perspective) so
+>    present in the page cache and mapped by an address_space object, but
+>    whose folios are also swap-backed (thus treated as anonymous for reclaim
+>    purposes).
+> 
+> 3. MAP_PRIVATE-mapped /dev/zero - a strange beast whose VMAs have
+>    vma->vm_file set, but which clears vma->vm_ops to satisfy
+>    vma_is_anonymous(), resulting in VMAs that were mmap()'d referencing a
+>    file, but are in every other sense anonymous, including the folios.
+> 
+> 4. Other MAP_PRIVATE-file backed mappings - These possess file-backed VMAs
+>    and have file-backed folios until CoW'd, at which point those CoW'd
+>    folios are anonymous.
+> 
+> This series fixes issues 3 and 4.
 
-Thanks for your detailed review! We appreciated for your time.
->
->On one hand, this migth be useful to ensure somewhat stable behavior of
->the reported stats, OTOH, it's exposing quite some implementation
->details (flushing, per-cpu charging).
->I'd say that flushing for BPF progs should work (which is what
->cgroup_iter_memcg() should test IIUC) and yield some precision effect,
-Yes the test in cgroup_iter_memcg involves using the flushing. Our concern is
-how it ensures the state after the flush is correct. Existing approach in
-cgroup_iter_memcg only checks whether the read value is non-zero, rather than
-compare it with the actualy ones, e.g.,
+Thanks, I've updated mm.git's mm-unstable branch to this version.
 
-	ASSERT_GT(memcg_query->nr_file_pages, 0, "final file value");
-	ASSERT_GT(memcg_query->nr_file_mapped, 0, "final file mapped value");
-	
-This ensures the flush does happen and take effect, but it does not check the
-flush take effect as expected. And this is why we want to compare with the file
-reading: it is a stronger evidance for the correctness of the flush function.
+It's about 450 patches away from head-of-queue, so it will be a
+second-week-of-merge-window thing.  Three weeks to go.
 
-Besides, another check missed from the cgroup_iter_memcg is that it contains no
-accumulation tests for a cgroup subtree. Currently it only creates one children
-cgroup and puts the reading task in it. The flush never have a chance to
-merge-up the deltas in the leaves.
+> v4:
+> - Updated tags (thanks everyone!)
+> - Adjusted some prose as per David.
+> - Adjusted whitespace to 2 tabs in 2/15 as per David.
+> - Improved linear_page_index(), __linear_anon_page_index() to be more
+>   succinct in 2/15 as per David and updated commit message to reflect it.
+> - Added commit to provide vma_[flags_]is_cow_mapping() - nearly all callers
+>   are calling is_cow_mapping() as is_cow_mapping(vma->vm_flags) so just
+>   provide a helper to do this for them.
+> - In the same commit update all is_cow_mapping() callers and remove the
+>   now-unused function.
+> - Change linear_anon_page_index() to assert on !CoW mapping using
+>   vma_is_cow_mapping() in 2/15 as per David.
+> - Updated 4/15 to output index differently depending on whether the VMA is
+>   a CoW mapping or not or whether the file index differs from the anon
+>   index as per Gregory.
+> - Updated 6/15 to change the 'update page offset' logic in copy_vma() to
+>   not be gated on CoW or VMA_SHARED_BIT as discussed with David.
+> - Updated 6/15 to improve the 'faulted in anon vma' assert stuff. It was
+>   very unclear so rename the variable sensibly and update the comment.
+> - Added a separate commit to fix the mess that is the faulted_in_anon_vma
+>   and the VM_WARN_ON_ONCE_VMA() assert in copy_vma() - make it actually
+>   only update the vmap in cases where the VMA was replaced (backwards
+>   remap), update the checks to reflect this in a way that's actually
+>   understandable and improve the comment.
+> - Updated needs_adjacent_anon_gpoff() in 9/15 to use
+>   vma_flags_is_cow_mapping() as per David. Updated the comment to reflect
+>   it.
+> - Broke out changes to vma_address_end() into a separate patch as per David.
+> - Eliminated pgoff in vma_address_end() as it adds confusion - just use
+>   pgoff_end, which was what pgoff used to be (confusingly).
+> - Placed more variables in vma_address_end() as constants at the start of
+>   the function.
+> - Dropped KSM comment in 9/15 as per David.
+> - Dropped linear_folio_page_index() patch altogether as per
+>   David.
+> - Realised all off uffd is only anon so use linear_anon_page_index()
+>   throughout there and also the huge memory case for the same reason.
+> - Added a patch to make remove_migration_pmd() accept a folio instead of a
+>   page.
+> - Added a patch to calculate large folio index using PFN as suggested by
+>   David, eliminating the need for linear page index lookup at all.
+> - Added a patch to add self merge VMA userland tests.
 
-Another missing parts for the cgroup_iter_memcg is that it charges the memory
-and then reads the stats on the same cpu, which means a (possible broken) flush
-that processed only that CPU would pass the weak non-zero test. The new tests
-strengthen the check by pin each child to multiple CPUs. This increase the code
-length but greatly improves the test coverage.
+Well this grew up.  Here's how v4 altered mm.git:
 
-We understand that kernel perfers short, dedicated codes and this is our
-target as well. Please do let us know if you have any suggestions for test
-design. Thanks!
 
->however, the comparison with memory.stat may be source of false
->positives due to noise.
->Also, this is supposed to measure convergence in some "static" situation
->but in reality the things are moving (memcg charges/uncharges) in
->various pace so some differences would still occur (IMO such deviations
->are OK, perhaps the test should spell out its preconditions and limitations).
-Yes. In the v1 serials of this patch, we actually design another selftests which
-simulates the real-world dynamic workloads, by making the leaf process keep
-churn memory, and measure the results correspondingly. However this approach
-incurs three problems:
+ arch/s390/mm/gmap_helpers.c                            |    2 
+ drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c                |    4 
+ drivers/gpu/drm/drm_gem_shmem_helper.c                 |    2 
+ drivers/gpu/drm/panthor/panthor_gem.c                  |    2 
+ drivers/gpu/drm/ttm/ttm_bo_vm.c                        |    2 
+ drivers/gpu/drm/xe/xe_device.c                         |    2 
+ fs/proc/task_mmu.c                                     |    2 
+ include/linux/mm.h                                     |   61 ++---
+ include/linux/mm_types.h                               |   12 -
+ include/linux/pagemap.h                                |   61 +----
+ include/linux/rmap.h                                   |    6 
+ include/linux/swapops.h                                |    6 
+ kernel/events/uprobes.c                                |    2 
+ mm/gup.c                                               |    2 
+ mm/huge_memory.c                                       |   27 +-
+ mm/hugetlb.c                                           |    2 
+ mm/internal.h                                          |   45 +--
+ mm/interval_tree.c                                     |    4 
+ mm/ksm.c                                               |    7 
+ mm/memory.c                                            |   40 +--
+ mm/mempolicy.c                                         |    2 
+ mm/migrate.c                                           |   23 -
+ mm/mremap.c                                            |    6 
+ mm/rmap.c                                              |    8 
+ mm/userfaultfd.c                                       |    6 
+ mm/vma.c                                               |  118 +++++-----
+ mm/vma.h                                               |   70 -----
+ mm/vma_init.c                                          |    2 
+ tools/testing/selftests/mm/merge.c                     |   10 
+ tools/testing/selftests/proc/proc-self-map-files-001.c |    2 
+ tools/testing/selftests/proc/proc-self-map-files-002.c |    2 
+ tools/testing/vma/include/dup.h                        |   41 ++-
+ tools/testing/vma/shared.c                             |    2 
+ tools/testing/vma/tests/merge.c                        |   59 ++---
+ tools/testing/vma/tests/mmap.c                         |    6 
+ tools/testing/vma/tests/vma.c                          |   46 +++
+ 36 files changed, 337 insertions(+), 357 deletions(-)
 
-	1) We have to manually wait the state become "steady", but it is hard to
-	   quantilize the steady state for processes keep churning, so as for
-	   real-world workloads.
-	2) The error margin would be further increased in the highly dynamic worklaods,
-	   and the confidence area for compare number narrows more;
-	3) The code would be more complicated than this one.
+--- a/arch/s390/mm/gmap_helpers.c~b
++++ a/arch/s390/mm/gmap_helpers.c
+@@ -200,7 +200,7 @@ static int find_zeropage_pte_entry(pte_t
+ 		 * currently only works in COW mappings, which is also where
+ 		 * mm_forbids_zeropage() is checked.
+ 		 */
+-		if (!is_cow_mapping(walk->vma->vm_flags))
++		if (!vma_is_cow_mapping(walk->vma))
+ 			return -EFAULT;
+ 
+ 		*found_addr = addr;
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c~b
++++ a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+@@ -377,9 +377,9 @@ static int amdgpu_gem_object_mmap(struct
+ 	/* Workaround for Thunk bug creating PROT_NONE,MAP_PRIVATE mappings
+ 	 * for debugger access to invisible VRAM. Should have used MAP_SHARED
+ 	 * instead. Clearing VM_MAYWRITE prevents the mapping from ever
+-	 * becoming writable and makes is_cow_mapping(vm_flags) false.
++	 * becoming writable and makes vma_is_cow_mapping(vma) false.
+ 	 */
+-	if (is_cow_mapping(vma->vm_flags) &&
++	if (vma_is_cow_mapping(vma) &&
+ 	    !(vma->vm_flags & VM_ACCESS_FLAGS))
+ 		vm_flags_clear(vma, VM_MAYWRITE);
+ 
+--- a/drivers/gpu/drm/drm_gem_shmem_helper.c~b
++++ a/drivers/gpu/drm/drm_gem_shmem_helper.c
+@@ -753,7 +753,7 @@ int drm_gem_shmem_mmap(struct drm_gem_sh
+ 		return ret;
+ 	}
+ 
+-	if (is_cow_mapping(vma->vm_flags))
++	if (vma_is_cow_mapping(vma))
+ 		return -EINVAL;
+ 
+ 	dma_resv_lock(shmem->base.resv, NULL);
+--- a/drivers/gpu/drm/panthor/panthor_gem.c~b
++++ a/drivers/gpu/drm/panthor/panthor_gem.c
+@@ -761,7 +761,7 @@ static int panthor_gem_mmap(struct drm_g
+ 		return ret;
+ 	}
+ 
+-	if (is_cow_mapping(vma->vm_flags))
++	if (vma_is_cow_mapping(vma))
+ 		return -EINVAL;
+ 
+ 	if (!refcount_inc_not_zero(&bo->cmap.mmap_count)) {
+--- a/drivers/gpu/drm/ttm/ttm_bo_vm.c~b
++++ a/drivers/gpu/drm/ttm/ttm_bo_vm.c
+@@ -489,7 +489,7 @@ static const struct vm_operations_struct
+ int ttm_bo_mmap_obj(struct vm_area_struct *vma, struct ttm_buffer_object *bo)
+ {
+ 	/* Enforce no COW since would have really strange behavior with it. */
+-	if (is_cow_mapping(vma->vm_flags))
++	if (vma_is_cow_mapping(vma))
+ 		return -EINVAL;
+ 
+ 	drm_gem_object_get(&bo->base);
+--- a/drivers/gpu/drm/xe/xe_device.c~b
++++ a/drivers/gpu/drm/xe/xe_device.c
+@@ -330,7 +330,7 @@ static int xe_pci_barrier_mmap(struct fi
+ 	if (vma->vm_end - vma->vm_start > SZ_4K)
+ 		return -EINVAL;
+ 
+-	if (is_cow_mapping(vma->vm_flags))
++	if (vma_is_cow_mapping(vma))
+ 		return -EINVAL;
+ 
+ 	if (vma->vm_flags & (VM_READ | VM_EXEC))
+--- a/fs/proc/task_mmu.c~b
++++ a/fs/proc/task_mmu.c
+@@ -1693,7 +1693,7 @@ static inline bool pte_is_pinned(struct
+ 
+ 	if (!pte_write(pte))
+ 		return false;
+-	if (!is_cow_mapping(vma->vm_flags))
++	if (!vma_is_cow_mapping(vma))
+ 		return false;
+ 	if (likely(!mm_flags_test(MMF_HAS_PINNED, vma->vm_mm)))
+ 		return false;
+--- a/include/linux/mm.h~b
++++ a/include/linux/mm.h
+@@ -2269,17 +2269,20 @@ void unpin_user_pages(struct page **page
+ void unpin_user_folio(struct folio *folio, unsigned long npages);
+ void unpin_folios(struct folio **folios, unsigned long nfolios);
+ 
+-static inline bool is_cow_mapping(vm_flags_t flags)
++static inline bool vma_flags_is_cow_mapping(const vma_flags_t *flags)
+ {
+-	return (flags & (VM_SHARED | VM_MAYWRITE)) == VM_MAYWRITE;
++	return vma_flags_test(flags, VMA_MAYWRITE_BIT) &&
++		!vma_flags_test(flags, VMA_SHARED_BIT);
+ }
+ 
+-static inline bool vma_desc_is_cow_mapping(struct vm_area_desc *desc)
++static inline bool vma_is_cow_mapping(const struct vm_area_struct *vma)
+ {
+-	const vma_flags_t *flags = &desc->vma_flags;
++	return vma_flags_is_cow_mapping(&vma->flags);
++}
+ 
+-	return vma_flags_test(flags, VMA_MAYWRITE_BIT) &&
+-		!vma_flags_test(flags, VMA_SHARED_BIT);
++static inline bool vma_desc_is_cow_mapping(struct vm_area_desc *desc)
++{
++	return vma_flags_is_cow_mapping(&desc->vma_flags);
+ }
+ 
+ #ifndef CONFIG_MMU
+@@ -4391,62 +4394,62 @@ static inline pgoff_t vma_last_pgoff(con
+ }
+ 
+ /**
+- * vma_start_virt_pgoff() - Get the virtual page offset of the start of @vma
+- * @vma: The VMA whose virtual page offset is required.
++ * vma_start_anon_pgoff() - Get the anonymous page offset of the start of @vma
++ * @vma: The VMA whose anonymous page offset is required.
+  *
+  * If unfaulted, then this is vma->vm_start >> PAGE_SHIFT, if faulted then the
+- * virtual page offset at the time of first fault.
++ * anonymous page offset at the time of first fault.
+  *
+  * If the VMA is anonymous, this returns the same value as vma_start_pgoff().
+  *
+  * This value is used for tracking MAP_PRIVATE file-backed mappings by their
+- * virtual page offset.
++ * anonymous page offset.
+  *
+- * Returns: The virtual page offset of the start of @vma.
++ * Returns: The anonymous page offset of the start of @vma.
+  */
+-static inline pgoff_t vma_start_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_start_anon_pgoff(const struct vm_area_struct *vma)
+ {
+ 	pgoff_t pgoff = 0;
+ 
+ #ifdef CONFIG_64BIT
+-	pgoff += vma->__vm_virt_pgoff_hi;
++	pgoff += vma->__vm_anon_pgoff_hi;
+ 	pgoff <<= 32;
+ #endif
+-	pgoff += vma->__vm_virt_pgoff_lo;
++	pgoff += vma->__vm_anon_pgoff_lo;
+ 	return pgoff;
+ }
+ 
+ /**
+- * vma_end_virt_pgoff() - Get the virtual page offset of the exclusive end of
++ * vma_end_anon_pgoff() - Get the anonymous page offset of the exclusive end of
+  * @vma.
+- * @vma: The VMA whose end virtual page offset is required.
++ * @vma: The VMA whose end anonymous page offset is required.
+  *
+- * This returns the virtual exclusive end page offset of @vma, which is useful
++ * This returns the anonymous exclusive end page offset of @vma, which is useful
+  * for expressing page offset ranges.
+  *
+- * See the description of vma_start_virt_pgoff() for a description of VMA
+- * virtual page offsets.
++ * See the description of vma_start_anon_pgoff() for a description of VMA
++ * anonymous page offsets.
+  *
+- * Returns: The exclusive end virtual page offset of @vma.
++ * Returns: The exclusive end anonymous page offset of @vma.
+  */
+-static inline pgoff_t vma_end_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_end_anon_pgoff(const struct vm_area_struct *vma)
+ {
+-	return vma_start_virt_pgoff(vma) + vma_pages(vma);
++	return vma_start_anon_pgoff(vma) + vma_pages(vma);
+ }
+ 
+ /**
+- * vma_last_virt_pgoff() - Get the virtual page offset of the last page in
++ * vma_last_anon_pgoff() - Get the anonymous page offset of the last page in
+  * @vma.
+- * @vma: The VMA whose last virtual page offset is required.
++ * @vma: The VMA whose last anonymous page offset is required.
+  *
+- * See the description of vma_start_virt_pgoff() for a description of VMA
+- * virtual page offsets.
++ * See the description of vma_start_anon_pgoff() for a description of VMA
++ * anonymous page offsets.
+  *
+- * Returns: The last virtual page offset of @vma.
++ * Returns: The last anonymous page offset of @vma.
+  */
+-static inline pgoff_t vma_last_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_last_anon_pgoff(const struct vm_area_struct *vma)
+ {
+-	return vma_end_virt_pgoff(vma) - 1;
++	return vma_end_anon_pgoff(vma) - 1;
+ }
+ 
+ static inline unsigned long vma_desc_size(const struct vm_area_desc *desc)
+--- a/include/linux/mm_types.h~b
++++ a/include/linux/mm_types.h
+@@ -968,10 +968,10 @@ struct vm_area_struct {
+ 	unsigned int vm_lock_seq;
+ #endif
+ 	/*
+-	 * Low 32-bits of virtual page offset.
+-	 * See vma_start_virt_pgoff() comment for details.
++	 * Low 32-bits of anonymous page offset.
++	 * See vma_start_anon_pgoff() comment for details.
+ 	 */
+-	unsigned int __vm_virt_pgoff_lo;
++	unsigned int __vm_anon_pgoff_lo;
+ 	/*
+ 	 * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_vma
+ 	 * list, after a COW of one of the file pages.	A MAP_SHARED vma
+@@ -1049,10 +1049,10 @@ struct vm_area_struct {
+ #endif
+ #ifdef CONFIG_64BIT
+ 	/*
+-	 * High 32-bits of virtual page offset.
+-	 * See vma_start_virt_pgoff() comment for details.
++	 * High 32-bits of anonymous page offset.
++	 * See vma_start_anon_pgoff() comment for details.
+ 	 */
+-	unsigned int __vm_virt_pgoff_hi;
++	unsigned int __vm_anon_pgoff_hi;
+ #endif
+ 	/*
+ 	 * For areas with an address space and backing store,
+--- a/include/linux/pagemap.h~b
++++ a/include/linux/pagemap.h
+@@ -1094,79 +1094,46 @@ static inline pgoff_t linear_page_delta(
+ static inline pgoff_t linear_page_index(const struct vm_area_struct *vma,
+ 					const unsigned long address)
+ {
+-	pgoff_t pgoff;
+-
+-	pgoff = linear_page_delta(vma, address);
+-	pgoff += vma_start_pgoff(vma);
+-	return pgoff;
++	return linear_page_delta(vma, address) + vma_start_pgoff(vma);
+ }
+ 
+-static inline pgoff_t __linear_virt_page_index(const struct vm_area_struct *vma,
+-					       const unsigned long address)
++static inline pgoff_t __linear_anon_page_index(const struct vm_area_struct *vma,
++		const unsigned long address)
+ {
+-	pgoff_t pgoff;
+-
+-	pgoff = linear_page_delta(vma, address);
+-	pgoff += vma_start_virt_pgoff(vma);
+-	return pgoff;
++	return linear_page_delta(vma, address) + vma_start_anon_pgoff(vma);
+ }
+ 
+ /**
+- * linear_virt_page_index() - Determine the absolute virtual page offset of
++ * linear_anon_page_index() - Determine the absolute anonymous page offset of
+  * @address within @vma.
+  * @vma: An anonymous or MAP_PRIVATE file-backed VMA in which @address resides.
+  * @address: The address whose absolute page offset is required.
+  *
+- * This returns the virtual page offset of @address, which is the page offset
++ * This returns the anonymous page offset of @address, which is the page offset
+  * the address possessed at the time the VMA was first faulted.
+  *
+  * For anonymous mappings, this returns the same value as linear_page_index().
+  *
+- * For MAP_PRIVATE file-backed mappings, this returns the virtual page offset of
+- * @address, which is the page offset the address possessed at the time the VMA
+- * was first faulted.
++ * For MAP_PRIVATE file-backed mappings, this returns the anonymous page offset
++ * of @address, which is the page offset the address possessed at the time the
++ * VMA was first faulted.
+  *
+  * It is not valid to call this function for shared file-backed mappings.
+  *
+- * Returns: The absolute virtual page offset of @address within @vma.
++ * Returns: The absolute anonymous page offset of @address within @vma.
+  */
+-static inline pgoff_t linear_virt_page_index(const struct vm_area_struct *vma,
+-					     const unsigned long address)
++static inline pgoff_t linear_anon_page_index(const struct vm_area_struct *vma,
++		const unsigned long address)
+ {
+-	const pgoff_t pgoff = __linear_virt_page_index(vma, address);
++	const pgoff_t pgoff = __linear_anon_page_index(vma, address);
+ 
+-	VM_WARN_ON_ONCE(vma_test(vma, VMA_SHARED_BIT));
++	VM_WARN_ON_ONCE(!vma_is_cow_mapping(vma));
+ 	if (vma_is_anonymous(vma))
+ 		VM_WARN_ON_ONCE(pgoff != linear_page_index(vma, address));
+ 
+ 	return pgoff;
+ }
+ 
+-/**
+- * linear_folio_page_index() - Determine the absolute page offset of
+- * @address within @vma from @folio.
+- * @folio: The folio whose linear page index is sought.
+- * @vma: The VMA in which @address resides.
+- * @address: The address whose absolute page offset is required.
+- *
+- * Determines whether to obtain the virtual linear page index based on whether
+- * @folio is anonymous or not.
+- *
+- * See the descriptions of linear_virt_page_index() and linear_page_index() for
+- * details of each.
+- *
+- * Returns: The absolute page offset of @address within @vma.
+- */
+-static inline pgoff_t linear_folio_page_index(const struct folio *folio,
+-					      const struct vm_area_struct *vma,
+-					      const unsigned long address)
+-{
+-	if (folio_test_anon(folio))
+-		return linear_virt_page_index(vma, address);
+-
+-	return linear_page_index(vma, address);
+-}
+-
+ struct wait_page_key {
+ 	struct folio *folio;
+ 	int bit_nr;
+--- a/include/linux/rmap.h~b
++++ a/include/linux/rmap.h
+@@ -864,14 +864,14 @@ struct page *make_device_exclusive(struc
+ struct page_vma_mapped_walk {
+ 	unsigned long pfn;
+ 	unsigned long nr_pages;
+-	pgoff_t pgoff;
++	pgoff_t pgoff;	/* Only meaningful if nr_pages > 1 and not a KSM walk */
+ 	struct vm_area_struct *vma;
+ 	unsigned long address;
+ 	pmd_t *pmd;
+ 	pte_t *pte;
+ 	spinlock_t *ptl;
+ 	unsigned int flags;
+-	bool is_anon_walk;
++	bool pgoff_is_anon : 1;
+ };
+ 
+ #define DEFINE_FOLIO_VMA_WALK(name, _folio, _vma, _address, _flags)	\
+@@ -882,7 +882,7 @@ struct page_vma_mapped_walk {
+ 		.vma = _vma,						\
+ 		.address = _address,					\
+ 		.flags = _flags,					\
+-		.is_anon_walk = folio_test_anon(_folio),		\
++		.pgoff_is_anon = folio_test_anon(_folio),		\
+ 	}
+ 
+ static inline void page_vma_mapped_walk_done(struct page_vma_mapped_walk *pvmw)
+--- a/include/linux/swapops.h~b
++++ a/include/linux/swapops.h
+@@ -325,8 +325,8 @@ struct page_vma_mapped_walk;
+ extern int set_pmd_migration_entry(struct page_vma_mapped_walk *pvmw,
+ 		struct page *page);
+ 
+-extern void remove_migration_pmd(struct page_vma_mapped_walk *pvmw,
+-		struct page *new);
++void remove_migration_pmd(struct page_vma_mapped_walk *pvmw,
++		struct folio *folio);
+ 
+ extern void pmd_migration_entry_wait(struct mm_struct *mm, pmd_t *pmd);
+ 
+@@ -346,7 +346,7 @@ static inline int set_pmd_migration_entr
+ }
+ 
+ static inline void remove_migration_pmd(struct page_vma_mapped_walk *pvmw,
+-		struct page *new)
++		struct folio *folio)
+ {
+ 	BUILD_BUG();
+ }
+--- a/kernel/events/uprobes.c~b
++++ a/kernel/events/uprobes.c
+@@ -513,7 +513,7 @@ int uprobe_write(struct arch_uprobe *aup
+ 
+ 	uprobe = container_of(auprobe, struct uprobe, arch);
+ 
+-	if (WARN_ON_ONCE(!is_cow_mapping(vma->vm_flags)))
++	if (WARN_ON_ONCE(!vma_is_cow_mapping(vma)))
+ 		return -EINVAL;
+ 
+ 	/*
+--- a/mm/gup.c~b
++++ a/mm/gup.c
+@@ -1236,7 +1236,7 @@ static int check_vma_flags(struct vm_are
+ 			 * Anon pages in shared mappings are surprising: now
+ 			 * just reject it.
+ 			 */
+-			if (!is_cow_mapping(vm_flags))
++			if (!vma_is_cow_mapping(vma))
+ 				return -EFAULT;
+ 		}
+ 	} else if (!(vm_flags & VM_READ)) {
+--- a/mm/huge_memory.c~b
++++ a/mm/huge_memory.c
+@@ -1681,7 +1681,7 @@ vm_fault_t vmf_insert_pfn_pmd(struct vm_
+ 	BUG_ON(!(vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)));
+ 	BUG_ON((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) ==
+ 						(VM_PFNMAP|VM_MIXEDMAP));
+-	BUG_ON((vma->vm_flags & VM_PFNMAP) && is_cow_mapping(vma->vm_flags));
++	BUG_ON((vma->vm_flags & VM_PFNMAP) && vma_is_cow_mapping(vma));
+ 
+ 	pfnmap_setup_cachemode_pfn(pfn, &pgprot);
+ 
+@@ -1789,7 +1789,7 @@ vm_fault_t vmf_insert_pfn_pud(struct vm_
+ 	BUG_ON(!(vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)));
+ 	BUG_ON((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) ==
+ 						(VM_PFNMAP|VM_MIXEDMAP));
+-	BUG_ON((vma->vm_flags & VM_PFNMAP) && is_cow_mapping(vma->vm_flags));
++	BUG_ON((vma->vm_flags & VM_PFNMAP) && vma_is_cow_mapping(vma));
+ 
+ 	pfnmap_setup_cachemode_pfn(pfn, &pgprot);
+ 
+@@ -1931,7 +1931,7 @@ int copy_huge_pmd(struct mm_struct *dst_
+ 		 * applied special bit, or we made the PRIVATE mapping be
+ 		 * able to wrongly write to the backend MMIO.
+ 		 */
+-		VM_WARN_ON_ONCE(is_cow_mapping(src_vma->vm_flags) && pmd_write(pmd));
++		VM_WARN_ON_ONCE(vma_is_cow_mapping(src_vma) && pmd_write(pmd));
+ 		goto set_pmd;
+ 	}
+ 
+@@ -2052,7 +2052,7 @@ int copy_huge_pud(struct mm_struct *dst_
+ 	 * TODO: once we support anonymous pages, use
+ 	 * folio_try_dup_anon_rmap_*() and split if duplicating fails.
+ 	 */
+-	if (is_cow_mapping(vma->vm_flags) && pud_write(pud)) {
++	if (vma_is_cow_mapping(vma) && pud_write(pud)) {
+ 		pudp_set_wrprotect(src_mm, addr, src_pud);
+ 		pud = pud_wrprotect(pud);
+ 	}
+@@ -2930,8 +2930,7 @@ int move_pages_huge_pmd(struct mm_struct
+ 		}
+ 
+ 		folio_move_anon_rmap(src_folio, dst_vma);
+-		src_folio->index = linear_folio_page_index(src_folio, dst_vma,
+-							   dst_addr);
++		src_folio->index = linear_anon_page_index(dst_vma, dst_addr);
+ 
+ 		_dst_pmd = folio_mk_pmd(src_folio, dst_vma->vm_page_prot);
+ 		/* Follow mremap() behavior and treat the entry dirty after the move */
+@@ -5078,9 +5077,8 @@ int set_pmd_migration_entry(struct page_
+ 	return 0;
+ }
+ 
+-void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct page *new)
++void remove_migration_pmd(struct page_vma_mapped_walk *pvmw, struct folio *folio)
+ {
+-	struct folio *folio = page_folio(new);
+ 	struct vm_area_struct *vma = pvmw->vma;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	unsigned long address = pvmw->address;
+@@ -5116,11 +5114,9 @@ void remove_migration_pmd(struct page_vm
+ 		swp_entry_t entry;
+ 
+ 		if (pmd_write(pmde))
+-			entry = make_writable_device_private_entry(
+-							page_to_pfn(new));
++			entry = make_writable_device_private_entry(folio_pfn(folio));
+ 		else
+-			entry = make_readable_device_private_entry(
+-							page_to_pfn(new));
++			entry = make_readable_device_private_entry(folio_pfn(folio));
+ 		pmde = softleaf_to_pmd(entry);
+ 
+ 		if (pmd_swp_soft_dirty(*pvmw->pmd))
+@@ -5135,11 +5131,12 @@ void remove_migration_pmd(struct page_vm
+ 		if (!softleaf_is_migration_read(entry))
+ 			rmap_flags |= RMAP_EXCLUSIVE;
+ 
+-		folio_add_anon_rmap_pmd(folio, new, vma, haddr, rmap_flags);
++		folio_add_anon_rmap_pmd(folio, &folio->page, vma, haddr, rmap_flags);
+ 	} else {
+-		folio_add_file_rmap_pmd(folio, new, vma);
++		folio_add_file_rmap_pmd(folio, &folio->page, vma);
+ 	}
+-	VM_BUG_ON(pmd_write(pmde) && folio_test_anon(folio) && !PageAnonExclusive(new));
++	VM_WARN_ON_ONCE(pmd_write(pmde) && folio_test_anon(folio) &&
++			!PageAnonExclusive(&folio->page));
+ 	set_pmd_at(mm, haddr, pvmw->pmd, pmde);
+ 
+ 	/* No need to invalidate - it was non-present before */
+--- a/mm/hugetlb.c~b
++++ a/mm/hugetlb.c
+@@ -4898,7 +4898,7 @@ int copy_hugetlb_page_range(struct mm_st
+ 	pte_t *src_pte, *dst_pte, entry;
+ 	struct folio *pte_folio;
+ 	unsigned long addr;
+-	bool cow = is_cow_mapping(src_vma->vm_flags);
++	bool cow = vma_is_cow_mapping(src_vma);
+ 	struct hstate *h = hstate_vma(src_vma);
+ 	unsigned long sz = huge_page_size(h);
+ 	unsigned long npages = pages_per_huge_page(h);
+--- a/mm/internal.h~b
++++ a/mm/internal.h
+@@ -240,19 +240,18 @@ static inline int mmap_file(struct file
+ {
+ 	int err = vfs_mmap(file, vma);
+ 
+-	/* Hooks cannot mark themselves anonymous. */
+-	if (WARN_ON_ONCE(vma_is_anonymous(vma)))
+-		err = -EINVAL;
+-
+-	if (likely(!err))
+-		return 0;
+-
+ 	/*
+-	 * OK, we tried to call the file hook for mmap(), but an error
+-	 * arose. The mapping is in an inconsistent state and we must not invoke
+-	 * any further hooks on it.
++	 * Either we tried to call the file hook for mmap() and an error arose
++	 * or a driver set vma->vm_ops = NULL intending there to be no VMA
++	 * operations.
++	 *
++	 * In the former case the VMA is in an inconsistent state and we mustn't
++	 * invoke any further hooks on it, in the latter case the hook actually
++	 * wanted no further hooks to be invoked, so fix both by setting dummy
++	 * VMA ops.
+ 	 */
+-	vma->vm_ops = &vma_dummy_vm_ops;
++	if (unlikely(err || !vma->vm_ops))
++		vma->vm_ops = &vma_dummy_vm_ops;
+ 
+ 	return err;
+ }
+@@ -950,7 +949,7 @@ folio_within_range(struct folio *folio,
+ 
+ 	pgoff_folio = folio_pgoff(folio);
+ 	pgoff_vma_start = folio_test_anon(folio) ?
+-		vma_start_virt_pgoff(vma) : vma_start_pgoff(vma);
++		vma_start_anon_pgoff(vma) : vma_start_pgoff(vma);
+ 
+ 	if (start < vma->vm_start)
+ 		start = vma->vm_start;
+@@ -1064,20 +1063,20 @@ static inline unsigned long vma_fileback
+  * vma_anon_address - Find the virtual address an anonymous page range is mapped
+  * at.
+  * @vma: The vma which maps this object.
+- * @pgoff_virt: The virtual page index belonging to the folio.
++ * @pgoff_anon: The anonymous page index belonging to the folio.
+  * @nr_pages: The number of pages to consider.
+  *
+  * This is only valid for anonymous or MAP_PRIVATE-mapped file-backed VMAs.
+  *
+- * Returns: If any page in this range is mapped by this VMA, return the first address
+- * where any of these pages appear. Otherwise, return -EFAULT.
++ * Returns: If any page in this range is mapped by this VMA, return the first
++ * address where any of these pages appear. Otherwise, return -EFAULT.
+  */
+ static inline unsigned long vma_anon_address(const struct vm_area_struct *vma,
+-		pgoff_t pgoff_virt, unsigned long nr_pages)
++		pgoff_t pgoff_anon, unsigned long nr_pages)
+ {
+-	VM_WARN_ON_ONCE(!vma_is_anonymous(vma) && vma_test(vma, VMA_SHARED_BIT));
++	VM_WARN_ON_ONCE(!vma_is_cow_mapping(vma));
+ 
+-	return __vma_address(vma, pgoff_virt, vma_start_virt_pgoff(vma), nr_pages);
++	return __vma_address(vma, pgoff_anon, vma_start_anon_pgoff(vma), nr_pages);
+ }
+ 
+ /*
+@@ -1086,22 +1085,20 @@ static inline unsigned long vma_anon_add
+  */
+ static inline unsigned long vma_address_end(struct page_vma_mapped_walk *pvmw)
+ {
++	const pgoff_t pgoff_end = pvmw->pgoff + pvmw->nr_pages;
+ 	const struct vm_area_struct *vma = pvmw->vma;
+-	const pgoff_t pgoff = pvmw->pgoff;
+ 	pgoff_t pgoff_vma_start;
+ 	unsigned long address;
+-	pgoff_t pgoff_end;
+ 
+ 	/* Common case, plus ->pgoff is invalid for KSM */
+ 	if (pvmw->nr_pages == 1)
+ 		return pvmw->address + PAGE_SIZE;
+ 
+-	if (pvmw->is_anon_walk)
+-		pgoff_vma_start = vma_start_virt_pgoff(vma);
++	if (pvmw->pgoff_is_anon)
++		pgoff_vma_start = vma_start_anon_pgoff(vma);
+ 	else
+ 		pgoff_vma_start = vma_start_pgoff(vma);
+ 
+-	pgoff_end = pgoff + pvmw->nr_pages;
+ 	address = vma->vm_start +
+ 		((pgoff_end - pgoff_vma_start) << PAGE_SHIFT);
+ 	/* Check for address beyond vma (or wrapped through 0?) */
+@@ -1393,7 +1390,7 @@ static inline bool gup_must_unshare(stru
+ 		 * ... because we only care about writable private ("COW")
+ 		 * mappings where we have to break COW early.
+ 		 */
+-		return is_cow_mapping(vma->vm_flags);
++		return vma_is_cow_mapping(vma);
+ 	}
+ 
+ 	/* Paired with a memory barrier in folio_try_share_anon_rmap_*(). */
+--- a/mm/interval_tree.c~b
++++ a/mm/interval_tree.c
+@@ -83,12 +83,12 @@ mapping_rmap_tree_iter_next(struct vm_ar
+ 
+ static pgoff_t avc_start_pgoff(struct anon_vma_chain *avc)
+ {
+-	return vma_start_virt_pgoff(avc->vma);
++	return vma_start_anon_pgoff(avc->vma);
+ }
+ 
+ static pgoff_t avc_last_pgoff(struct anon_vma_chain *avc)
+ {
+-	return vma_last_virt_pgoff(avc->vma);
++	return vma_last_anon_pgoff(avc->vma);
+ }
+ 
+ INTERVAL_TREE_DEFINE(struct anon_vma_chain, rb, pgoff_t, rb_subtree_last,
+--- a/mm/ksm.c~b
++++ a/mm/ksm.c
+@@ -1625,8 +1625,7 @@ static int try_to_merge_with_ksm_page(st
+ 	 * stable_tree, break_cow() will clean it up.
+ 	 */
+ 	rmap_item->anon_vma = vma->anon_vma;
+-	/* The VMA is always anon/MAP_PRIVATE-file backed so use anon index. */
+-	rmap_item->linear_page_index = linear_virt_page_index(vma, rmap_item->address);
++	rmap_item->linear_page_index = linear_anon_page_index(vma, rmap_item->address);
+ 	get_anon_vma(vma->anon_vma);
+ out:
+ 	mmap_read_unlock(mm);
+@@ -3153,7 +3152,7 @@ struct folio *ksm_might_need_to_copy(str
+ 			return folio;	/* no need to copy it */
+ 	} else if (!anon_vma) {
+ 		return folio;		/* no need to copy it */
+-	} else if (folio->index == linear_virt_page_index(vma, addr) &&
++	} else if (folio->index == linear_anon_page_index(vma, addr) &&
+ 			anon_vma->root == vma->anon_vma->root) {
+ 		return folio;		/* still no need to copy it */
+ 	}
+@@ -3223,7 +3222,7 @@ again:
+ 		/*
+ 		 * Currently, KSM folios are always small folios, so it's
+ 		 * sufficient to search for a single page. We can simply use
+-		 * the linear_virt_page_index of the original de-duplicate
++		 * the linear_anon_page_index of the original de-duplicate
+ 		 * anonymous page that we remembered in the rmap_item while
+ 		 * de-duplicating. Note that mremap() always de-duplicates KSM
+ 		 * folios: so if there was mremap() in our parent or our child,
+--- a/mm/memory.c~b
++++ a/mm/memory.c
+@@ -631,14 +631,14 @@ static void print_bad_page_map(struct vm
+ {
+ 	struct address_space *mapping;
+ 	char entry_str[PTVAL_STR_MAX];
+-	pgoff_t index, virt_index;
++	pgoff_t index, anon_index;
+ 
+ 	if (is_bad_page_map_ratelimited())
+ 		return;
+ 
+ 	mapping = vma->vm_file ? vma->vm_file->f_mapping : NULL;
+ 	index = linear_page_index(vma, addr);
+-	virt_index = __linear_virt_page_index(vma, addr);
++	anon_index = __linear_anon_page_index(vma, addr);
+ 
+ 	ptval_bytes_to_hex_str(entry_str, sizeof(entry_str), entry, entry_size);
+ 	pr_alert("BUG: Bad page map in process %s  %s:%s", current->comm,
+@@ -646,9 +646,14 @@ static void print_bad_page_map(struct vm
+ 	__print_bad_page_map_pgtable(vma->vm_mm, addr);
+ 	if (page)
+ 		dump_page(page, "bad page map");
+-	pr_alert("addr:%px vm_flags:%08lx anon_vma:%px mapping:%px index:%lx virt_index:%lx\n",
+-		 (void *)addr, vma->vm_flags, vma->anon_vma, mapping, index,
+-		 virt_index);
++	pr_alert("addr:%px vm_flags:%08lx anon_vma:%px mapping:%px",
++		 (void *)addr, vma->vm_flags, vma->anon_vma, mapping);
++	if (!vma_is_cow_mapping(vma) || index == anon_index) {
++		pr_cont(" index:%lx\n", index);
++	} else {
++		pr_cont(" index:%lx (file) %lx (anon)\n", index, anon_index);
++	}
++
+ 	pr_alert("file:%pD fault:%ps mmap:%ps mmap_prepare: %ps read_folio:%ps\n",
+ 		 vma->vm_file,
+ 		 vma->vm_ops ? vma->vm_ops->fault : NULL,
+@@ -782,7 +787,7 @@ static inline struct page *__vm_normal_p
+ 				/* Only CoW'ed anon folios are "normal". */
+ 				if (pfn == index)
+ 					return NULL;
+-				if (!is_cow_mapping(vma->vm_flags))
++				if (!vma_is_cow_mapping(vma))
+ 					return NULL;
+ 			}
+ 		}
+@@ -1004,7 +1009,6 @@ copy_nonpresent_pte(struct mm_struct *ds
+ 		pte_t *dst_pte, pte_t *src_pte, struct vm_area_struct *dst_vma,
+ 		struct vm_area_struct *src_vma, unsigned long addr, int *rss)
+ {
+-	vm_flags_t vm_flags = dst_vma->vm_flags;
+ 	pte_t orig_pte = ptep_get(src_pte);
+ 	softleaf_t entry = softleaf_from_pte(orig_pte);
+ 	pte_t pte = orig_pte;
+@@ -1028,7 +1032,7 @@ copy_nonpresent_pte(struct mm_struct *ds
+ 		rss[mm_counter(folio)]++;
+ 
+ 		if (!softleaf_is_migration_read(entry) &&
+-				is_cow_mapping(vm_flags)) {
++				vma_is_cow_mapping(dst_vma)) {
+ 			/*
+ 			 * COW mappings require pages in both parent and child
+ 			 * to be set to read. A previously exclusive entry is
+@@ -1069,7 +1073,7 @@ copy_nonpresent_pte(struct mm_struct *ds
+ 		 * save and restore device driver state).
+ 		 */
+ 		if (softleaf_is_device_private_write(entry) &&
+-		    is_cow_mapping(vm_flags)) {
++		    vma_is_cow_mapping(dst_vma)) {
+ 			entry = make_readable_device_private_entry(
+ 							swp_offset(entry));
+ 			pte = swp_entry_to_pte(entry);
+@@ -1084,7 +1088,7 @@ copy_nonpresent_pte(struct mm_struct *ds
+ 		 * exclusive entries currently only support private writable
+ 		 * (ie. COW) mappings.
+ 		 */
+-		VM_BUG_ON(!is_cow_mapping(src_vma->vm_flags));
++		VM_BUG_ON(!vma_is_cow_mapping(src_vma));
+ 		if (try_restore_exclusive_pte(src_vma, addr, src_pte, orig_pte))
+ 			return -EBUSY;
+ 		return -ENOENT;
+@@ -1183,7 +1187,7 @@ static __always_inline void __copy_prese
+ 	}
+ 
+ 	/* If it's a COW mapping, write protect it both processes. */
+-	if (is_cow_mapping(src_vma->vm_flags) && writable) {
++	if (vma_is_cow_mapping(src_vma) && writable) {
+ 		wrprotect_ptes(src_mm, addr, src_pte, nr);
+ 		pte = pte_wrprotect(pte);
+ 	}
+@@ -1604,9 +1608,9 @@ copy_page_range(struct vm_area_struct *d
+ 	 * We need to invalidate the secondary MMU mappings only when
+ 	 * there could be a permission downgrade on the ptes of the
+ 	 * parent mm. And a permission downgrade will only happen if
+-	 * is_cow_mapping() returns true.
++	 * vma_is_cow_mapping() returns true.
+ 	 */
+-	is_cow = is_cow_mapping(src_vma->vm_flags);
++	is_cow = vma_is_cow_mapping(src_vma);
+ 
+ 	if (is_cow) {
+ 		mmu_notifier_range_init(&range, MMU_NOTIFY_PROTECTION_PAGE,
+@@ -2439,7 +2443,7 @@ static bool vm_mixed_zeropage_allowed(st
+ 	if (mm_forbids_zeropage(vma->vm_mm))
+ 		return false;
+ 	/* zeropages in COW mappings are common and unproblematic. */
+-	if (is_cow_mapping(vma->vm_flags))
++	if (vma_is_cow_mapping(vma))
+ 		return true;
+ 	/* Mappings that do not allow for writable PTEs are unproblematic. */
+ 	if (!(vma->vm_flags & (VM_WRITE | VM_MAYWRITE)))
+@@ -2890,7 +2894,7 @@ vm_fault_t vmf_insert_pfn_prot(struct vm
+ 	BUG_ON(!(vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)));
+ 	BUG_ON((vma->vm_flags & (VM_PFNMAP|VM_MIXEDMAP)) ==
+ 						(VM_PFNMAP|VM_MIXEDMAP));
+-	BUG_ON((vma->vm_flags & VM_PFNMAP) && is_cow_mapping(vma->vm_flags));
++	BUG_ON((vma->vm_flags & VM_PFNMAP) && vma_is_cow_mapping(vma));
+ 	BUG_ON((vma->vm_flags & VM_MIXEDMAP) && pfn_valid(pfn));
+ 
+ 	if (addr < vma->vm_start || addr >= vma->vm_end)
+@@ -3302,7 +3306,7 @@ static int remap_pfn_range_prepare_vma(s
+ 				       unsigned long size)
+ {
+ 	const unsigned long end = addr + PAGE_ALIGN(size);
+-	const bool is_cow = is_cow_mapping(vma->vm_flags);
++	const bool is_cow = vma_is_cow_mapping(vma);
+ 	int err;
+ 
+ 	err = get_remap_pgoff(is_cow, addr, end, vma->vm_start, vma->vm_end,
+@@ -6802,7 +6806,7 @@ static vm_fault_t sanitize_fault_flags(s
+ 		 * FAULT_FLAG_UNSHARE only applies to COW mappings. Let's
+ 		 * just treat it like an ordinary read-fault otherwise.
+ 		 */
+-		if (!is_cow_mapping(vma->vm_flags))
++		if (!vma_is_cow_mapping(vma))
+ 			*flags &= ~FAULT_FLAG_UNSHARE;
+ 	} else if (*flags & FAULT_FLAG_WRITE) {
+ 		/* Write faults on read-only mappings are impossible ... */
+@@ -6810,7 +6814,7 @@ static vm_fault_t sanitize_fault_flags(s
+ 			return VM_FAULT_SIGSEGV;
+ 		/* ... and FOLL_FORCE only applies to COW mappings. */
+ 		if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE) &&
+-				 !is_cow_mapping(vma->vm_flags)))
++				 !vma_is_cow_mapping(vma)))
+ 			return VM_FAULT_SIGSEGV;
+ 	}
+ #ifdef CONFIG_PER_VMA_LOCK
+--- a/mm/mempolicy.c~b
++++ a/mm/mempolicy.c
+@@ -844,7 +844,7 @@ bool folio_can_map_prot_numa(struct foli
+ 		return false;
+ 
+ 	/* Also skip shared copy-on-write folios */
+-	if (is_cow_mapping(vma->vm_flags) && folio_maybe_mapped_shared(folio))
++	if (vma_is_cow_mapping(vma) && folio_maybe_mapped_shared(folio))
+ 		return false;
+ 
+ 	/* Folios are pinned and can't be migrated */
+--- a/mm/migrate.c~b
++++ a/mm/migrate.c
+@@ -356,25 +356,18 @@ static bool remove_migration_pte(struct
+ 
+ 	while (page_vma_mapped_walk(&pvmw)) {
+ 		rmap_t rmap_flags = RMAP_NONE;
+-		pte_t old_pte;
+-		pte_t pte;
++		unsigned long idx = 0;
+ 		softleaf_t entry;
+ 		struct page *new;
+-		unsigned long idx = 0;
+-
+-		/* pgoff is invalid for ksm pages, but they are never large */
+-		if (folio_test_large(folio) && !folio_test_hugetlb(folio)) {
+-			idx += linear_folio_page_index(folio, vma, pvmw.address);
+-			idx -= pvmw.pgoff;
+-		}
+-		new = folio_page(folio, idx);
++		pte_t old_pte;
++		pte_t pte;
+ 
+ #ifdef CONFIG_ARCH_HAS_PMD_SOFTLEAVES
+ 		/* PMD-mapped THP migration entry */
+ 		if (!pvmw.pte) {
+ 			VM_BUG_ON_FOLIO(folio_test_hugetlb(folio) ||
+ 					!folio_test_pmd_mappable(folio), folio);
+-			remove_migration_pmd(&pvmw, new);
++			remove_migration_pmd(&pvmw, folio);
+ 			continue;
+ 		}
+ #endif
+@@ -383,14 +376,18 @@ static bool remove_migration_pte(struct
+ 						pvmw.pte);
+ 		else
+ 			old_pte = ptep_get(pvmw.pte);
++
++		entry = softleaf_from_pte(old_pte);
++		if (folio_test_large(folio) && !folio_test_hugetlb(folio))
++			idx = softleaf_to_pfn(entry) - pvmw.pfn;
++
+ 		if (rmap_walk_arg->map_unused_to_zeropage &&
+ 		    try_to_map_unused_to_zeropage(&pvmw, folio, old_pte, idx))
+ 			continue;
+ 
+ 		folio_get(folio);
++		new = folio_page(folio, idx);
+ 		pte = mk_pte(new, READ_ONCE(vma->vm_page_prot));
+-
+-		entry = softleaf_from_pte(old_pte);
+ 		if (!softleaf_is_migration_young(entry))
+ 			pte = pte_mkold(pte);
+ 		if (folio_test_dirty(folio) && softleaf_is_migration_dirty(entry))
+--- a/mm/mremap.c~b
++++ a/mm/mremap.c
+@@ -1266,8 +1266,8 @@ static int copy_vma_and_data(struct vma_
+ 			     struct vm_area_struct **new_vma_ptr)
+ {
+ 	const pgoff_t new_pgoff = linear_page_index(vrm->vma, vrm->addr);
+-	const pgoff_t new_virt_pgoff =
+-		__linear_virt_page_index(vrm->vma, vrm->addr);
++	const pgoff_t new_anon_pgoff =
++		__linear_anon_page_index(vrm->vma, vrm->addr);
+ 	struct vm_area_struct *vma = vrm->vma;
+ 	struct vm_area_struct *new_vma;
+ 	unsigned long moved_len;
+@@ -1275,7 +1275,7 @@ static int copy_vma_and_data(struct vma_
+ 	PAGETABLE_MOVE(pmc, NULL, NULL, vrm->addr, vrm->new_addr, vrm->old_len);
+ 
+ 	new_vma = copy_vma(&vma, vrm->new_addr, vrm->new_len, new_pgoff,
+-			   new_virt_pgoff, &pmc.need_rmap_locks);
++			   new_anon_pgoff, &pmc.need_rmap_locks);
+ 	if (!new_vma) {
+ 		vrm_uncharge(vrm);
+ 		*new_vma_ptr = NULL;
+--- a/mm/rmap.c~b
++++ a/mm/rmap.c
+@@ -1240,7 +1240,7 @@ static bool mapping_wrprotect_range_one(
+ 		.vma		= vma,
+ 		.address	= address,
+ 		.flags		= PVMW_SYNC,
+-		.is_anon_walk   = false,
++		.pgoff_is_anon	= false,
+ 	};
+ 
+ 	state->cleaned += page_vma_mkclean_one(&pvmw);
+@@ -1318,7 +1318,7 @@ int pfn_mkclean_range(unsigned long pfn,
+ 		.pgoff		= pgoff,
+ 		.vma		= vma,
+ 		.flags		= PVMW_SYNC,
+-		.is_anon_walk   = false,
++		.pgoff_is_anon	= false,
+ 	};
+ 
+ 	if (invalid_mkclean_vma(vma, NULL))
+@@ -1485,7 +1485,7 @@ static void __folio_set_anon(struct foli
+ 	 */
+ 	anon_vma = (void *) anon_vma + FOLIO_MAPPING_ANON;
+ 	WRITE_ONCE(folio->mapping, (struct address_space *) anon_vma);
+-	folio->index = linear_virt_page_index(vma, address);
++	folio->index = linear_anon_page_index(vma, address);
+ }
+ 
+ /**
+@@ -1513,7 +1513,7 @@ static void __page_check_anon_rmap(const
+ 	VM_BUG_ON_FOLIO(folio_anon_vma(folio)->root != vma->anon_vma->root,
+ 			folio);
+ 	VM_BUG_ON_PAGE(page_pgoff(folio, page) !=
+-		       linear_virt_page_index(vma, address), page);
++		       linear_anon_page_index(vma, address), page);
+ }
+ 
+ static __always_inline void __folio_add_anon_rmap(struct folio *folio,
+--- a/mm/userfaultfd.c~b
++++ a/mm/userfaultfd.c
+@@ -1352,8 +1352,7 @@ static long move_present_ptes(struct mm_
+ 		}
+ 
+ 		folio_move_anon_rmap(src_folio, dst_vma);
+-		src_folio->index = linear_folio_page_index(src_folio, dst_vma,
+-							   dst_addr);
++		src_folio->index = linear_anon_page_index(dst_vma, dst_addr);
+ 
+ 		orig_dst_pte = folio_mk_pte(src_folio, dst_vma->vm_page_prot);
+ 		/* Set soft dirty bit so userspace can notice the pte was moved */
+@@ -1429,8 +1428,7 @@ static int move_swap_pte(struct mm_struc
+ 	 */
+ 	if (src_folio) {
+ 		folio_move_anon_rmap(src_folio, dst_vma);
+-		src_folio->index = linear_folio_page_index(src_folio, dst_vma,
+-							   dst_addr);
++		src_folio->index = linear_anon_page_index(dst_vma, dst_addr);
+ 	} else {
+ 		/*
+ 		 * Check if the swap entry is cached after acquiring the src_pte
+--- a/mm/vma.c~b
++++ a/mm/vma.c
+@@ -18,7 +18,7 @@ struct mmap_state {
+ 	unsigned long addr;
+ 	unsigned long end;
+ 	pgoff_t pgoff;
+-	pgoff_t virt_pgoff;
++	pgoff_t anon_pgoff;
+ 	unsigned long pglen;
+ 	union {
+ 		vm_flags_t vm_flags;
+@@ -47,22 +47,14 @@ struct mmap_state {
+ 	bool file_doesnt_need_get :1;
+ };
+ 
+-static inline pgoff_t map_anon_pgoff(const struct mmap_state *map)
+-{
+-	if (vma_flags_test(&map->vma_flags, VMA_SHARED_BIT))
+-		return map->pgoff;
+-
+-	return map->virt_pgoff;
+-}
+-
+-#define MMAP_STATE(name, mm_, vmi_, addr_, len_, pgoff_, virt_pgoff_, vma_flags_, file_) \
++#define MMAP_STATE(name, mm_, vmi_, addr_, len_, pgoff_, anon_pgoff_, vma_flags_, file_) \
+ 	struct mmap_state name = {					\
+ 		.mm = mm_,						\
+ 		.vmi = vmi_,						\
+ 		.addr = addr_,						\
+ 		.end = (addr_) + (len_),				\
+ 		.pgoff = pgoff_,					\
+-		.virt_pgoff = virt_pgoff_,				\
++		.anon_pgoff = anon_pgoff_,				\
+ 		.pglen = PHYS_PFN(len_),				\
+ 		.vma_flags = vma_flags_,				\
+ 		.file = file_,						\
+@@ -77,7 +69,7 @@ static inline pgoff_t map_anon_pgoff(con
+ 		.end = (map_)->end,					\
+ 		.vma_flags = (map_)->vma_flags,				\
+ 		.pgoff = (map_)->pgoff,					\
+-		.anon_pgoff = map_anon_pgoff(map_),			\
++		.anon_pgoff = (map_)->anon_pgoff,			\
+ 		.file = (map_)->file,					\
+ 		.prev = (map_)->prev,					\
+ 		.middle = vma_,						\
+@@ -93,11 +85,11 @@ static void __vma_set_range(struct vm_ar
+ }
+ 
+ static void vma_set_range(struct vm_area_struct *vma, unsigned long start,
+-			  unsigned long end, pgoff_t pgoff, pgoff_t virt_pgoff)
++			  unsigned long end, pgoff_t pgoff, pgoff_t anon_pgoff)
+ {
+ 	__vma_set_range(vma, start, end);
+ 	vma_set_pgoff(vma, pgoff);
+-	vma_set_virt_pgoff(vma, virt_pgoff);
++	vma_set_anon_pgoff(vma, anon_pgoff);
+ }
+ 
+ /* Was this VMA ever forked from a parent, i.e. maybe contains CoW mappings? */
+@@ -213,6 +205,25 @@ static void init_multi_vma_prep(struct v
+ }
+ 
+ /*
++ * Does this merge require that adjacent VMAs must have adjacent anonymous page
++ * offsets in addition to having adjacent vma->vm_pgoff?
++ *
++ * This is only required for MAP_PRIVATE-file backed mappings as the page offset
++ * for pure anonymous VMAs is equal to the anonymous page offset.
++ *
++ * Read-only shared mappings (with VMA_SHARED_BIT cleared) are always unfaulted
++ * so automatically have correct anonymous page offset (as it is always updated
++ * on remap).
++ *
++ * 'Special' mappings in the sense of VDSO, VVAR etc. have !file but would in
++ * any case not be candidates for merge nor be mergeable.
++ */
++static bool needs_adjacent_anon_pgoff(const struct vma_merge_struct *vmg)
++{
++	return vmg->file && vma_flags_is_cow_mapping(&vmg->vma_flags);
++}
++
++/*
+  * Return true if we can merge this (vma_flags,anon_vma,file,vm_pgoff)
+  * in front of (at a lower virtual address and file offset than) the vma.
+  *
+@@ -233,7 +244,8 @@ static bool can_vma_merge_before(struct
+ 		return false;
+ 	if (vmg_end_pgoff(vmg) != vma_start_pgoff(vmg->next))
+ 		return false;
+-	if (vmg_end_anon_pgoff(vmg) != vma_start_anon_pgoff(vmg->next))
++	if (needs_adjacent_anon_pgoff(vmg) &&
++	    vmg_end_anon_pgoff(vmg) != vma_start_anon_pgoff(vmg->next))
+ 		return false;
+ 	return true;
+ }
+@@ -255,7 +267,8 @@ static bool can_vma_merge_after(struct v
+ 		return false;
+ 	if (vma_end_pgoff(vmg->prev) != vmg_start_pgoff(vmg))
+ 		return false;
+-	if (vma_end_anon_pgoff(vmg->prev) != vmg_start_anon_pgoff(vmg))
++	if (needs_adjacent_anon_pgoff(vmg) &&
++	    vma_end_anon_pgoff(vmg->prev) != vmg_start_anon_pgoff(vmg))
+ 		return false;
+ 	return true;
+ }
+@@ -1930,27 +1943,27 @@ static int vma_link(struct mm_struct *mm
+  */
+ struct vm_area_struct *copy_vma(struct vm_area_struct **vmap,
+ 	unsigned long addr, unsigned long len, pgoff_t pgoff,
+-	pgoff_t virt_pgoff, bool *need_rmap_locks)
++	pgoff_t anon_pgoff, bool *need_rmap_locks)
+ {
+ 	struct vm_area_struct *vma = *vmap;
+-	const bool is_shared = vma_test(vma, VMA_SHARED_BIT);
+-	unsigned long vma_start = vma->vm_start;
++	unsigned long old_vma_start = vma->vm_start;
+ 	struct mm_struct *mm = vma->vm_mm;
+ 	struct vm_area_struct *new_vma;
+-	bool faulted_in_anon_vma = true;
++	bool can_self_merge = false;
+ 	VMA_ITERATOR(vmi, mm, addr);
+ 	VMG_VMA_STATE(vmg, &vmi, NULL, vma, addr, addr + len);
+ 
+ 	/*
+-	 * If a vma has not yet been faulted, update its virtual pgoff to match
+-	 * the new location to increase its chance of merging.
++	 * If a vma has not yet been faulted, update its anonymous pgoff to
++	 * match the new location to increase its chance of merging.
+ 	 */
+-	if (!vma->anon_vma && !is_shared) {
+-		virt_pgoff = addr >> PAGE_SHIFT;
++	if (!vma->anon_vma) {
++		anon_pgoff = addr >> PAGE_SHIFT;
+ 
+-		if (vma_is_anonymous(vma))
+-			pgoff = virt_pgoff;
+-		faulted_in_anon_vma = false;
++		if (vma_is_anonymous(vma)) {
++			pgoff = anon_pgoff;
++			can_self_merge = true;
++		}
+ 	}
+ 
+ 	/*
+@@ -1966,39 +1979,35 @@ struct vm_area_struct *copy_vma(struct v
+ 		return NULL;	/* should never get here */
+ 
+ 	vmg.pgoff = pgoff;
+-	vmg.anon_pgoff = is_shared ? pgoff : virt_pgoff;
++	vmg.anon_pgoff = anon_pgoff;
+ 	vmg.next = vma_iter_next_rewind(&vmi, NULL);
+ 	new_vma = vma_merge_copied_range(&vmg);
+ 
+ 	if (new_vma) {
+-		/*
+-		 * Source vma may have been merged into new_vma
+-		 */
+-		if (unlikely(vma_start >= new_vma->vm_start &&
+-			     vma_start < new_vma->vm_end)) {
++		/* Self-merged and VMA replaced. */
++		if (unlikely(new_vma->vm_start < old_vma_start &&
++			     new_vma->vm_end > old_vma_start)) {
+ 			/*
+-			 * The only way we can get a vma_merge with
+-			 * self during an mremap is if the vma hasn't
+-			 * been faulted in yet and we were allowed to
+-			 * reset the dst vma->vm_pgoff to the
+-			 * destination address of the mremap to allow
+-			 * the merge to happen. mremap must change the
+-			 * vm_pgoff linearity between src and dst vmas
+-			 * (in turn preventing a vma_merge) to be
+-			 * safe. It is only safe to keep the vm_pgoff
+-			 * linear if there are no pages mapped yet.
++			 * The only way a VMA can both self-merge and be
++			 * replaced is if the remap places the new VMA
++			 * immediately prior to its old self ('next') and
++			 * immediately after another VMA ('prev') causing the
++			 * next to be removed and prev to be expanded to cover
++			 * the entire range.
++			 *
++			 * This should only be possible if the anonymous page
++			 * offset was updated, i.e. the VMA is unfaulted.
+ 			 */
+-			VM_WARN_ON_ONCE_VMA(faulted_in_anon_vma, new_vma);
++			VM_WARN_ON_ONCE_VMA(!can_self_merge, new_vma);
+ 			*vmap = vma = new_vma;
+ 		}
+ 		*need_rmap_locks =
+-			(vma_start_pgoff(new_vma) <= vma_start_pgoff(vma)) ||
+-			(vma_start_anon_pgoff(new_vma) <= vma_start_anon_pgoff(vma));
++			(vma_start_pgoff(new_vma) <= vma_start_pgoff(vma));
+ 	} else {
+ 		new_vma = vm_area_dup(vma);
+ 		if (!new_vma)
+ 			goto out;
+-		vma_set_range(new_vma, addr, addr + len, pgoff, virt_pgoff);
++		vma_set_range(new_vma, addr, addr + len, pgoff, anon_pgoff);
+ 		if (vma_dup_policy(vma, new_vma))
+ 			goto out_free_vma;
+ 		if (anon_vma_clone(new_vma, vma, VMA_OP_REMAP))
+@@ -2066,7 +2075,7 @@ static int anon_vma_compatible(struct vm
+ 	/* Page offset must align. */
+ 	if (vma_end_pgoff(a) != vma_start_pgoff(b))
+ 		return false;
+-	/* Anon page offset must align. */
++	/* Only reached from anon path, so either MAP_PRIVATE file or anon. */
+ 	if (vma_end_anon_pgoff(a) != vma_start_anon_pgoff(b))
+ 		return false;
+ 	return true;
+@@ -2615,8 +2624,11 @@ static int __mmap_new_file_vma(struct mm
+ static bool map_is_dev_zero(const struct mmap_state *map)
+ {
+ 	const struct file *file = map->file;
+-	const struct inode *inode = file_inode(file);
++	struct inode *inode;
+ 
++	if (!file)
++		return false;
++	inode = file_inode(file);
+ 	if (!S_ISCHR(inode->i_mode))
+ 		return false;
+ 	return imajor(inode) == MEM_MAJOR && iminor(inode) == DEVZERO_MINOR;
+@@ -2671,7 +2683,7 @@ static int __mmap_new_vma(struct mmap_st
+ 	if (is_anon)
+ 		vma_set_anonymous(vma);
+ 
+-	vma_set_range(vma, map->addr, map->end, map->pgoff, map->virt_pgoff);
++	vma_set_range(vma, map->addr, map->end, map->pgoff, map->anon_pgoff);
+ 	vma->flags = map->vma_flags;
+ 	vma->vm_page_prot = map->page_prot;
+ 
+@@ -2869,8 +2881,8 @@ static unsigned long __mmap_region(struc
+ 	struct vm_area_struct *vma = NULL;
+ 	bool have_mmap_prepare = file && file->f_op->mmap_prepare;
+ 	VMA_ITERATOR(vmi, mm, addr);
+-	const pgoff_t virt_pgoff = addr >> PAGE_SHIFT;
+-	MMAP_STATE(map, mm, &vmi, addr, len, pgoff, virt_pgoff, vma_flags, file);
++	const pgoff_t anon_pgoff = addr >> PAGE_SHIFT;
++	MMAP_STATE(map, mm, &vmi, addr, len, pgoff, anon_pgoff, vma_flags, file);
+ 	struct vm_area_desc desc = {
+ 		.mm = mm,
+ 		.file = file,
+@@ -3452,7 +3464,7 @@ int insert_vm_struct(struct mm_struct *m
+ 		WARN_ON_ONCE(vma->anon_vma);
+ 		vma_set_pgoff(vma, vma->vm_start >> PAGE_SHIFT);
+ 	}
+-	vma_set_virt_pgoff(vma, vma->vm_start >> PAGE_SHIFT);
++	vma_set_anon_pgoff(vma, vma->vm_start >> PAGE_SHIFT);
+ 
+ 	if (vma_link(mm, vma)) {
+ 		if (vma_test(vma, VMA_ACCOUNT_BIT))
+--- a/mm/vma.h~b
++++ a/mm/vma.h
+@@ -291,86 +291,32 @@ static inline pgoff_t vmg_end_anon_pgoff
+ 	return vmg_start_anon_pgoff(vmg) + vmg_pages(vmg);
+ }
+ 
+-static inline void __vma_set_virt_pgoff(struct vm_area_struct *vma, pgoff_t pgoff)
++static inline void __vma_set_anon_pgoff(struct vm_area_struct *vma, pgoff_t pgoff)
+ {
+ #ifdef CONFIG_64BIT
+-	vma->__vm_virt_pgoff_hi = pgoff >> 32;
++	vma->__vm_anon_pgoff_hi = pgoff >> 32;
+ #endif
+-	vma->__vm_virt_pgoff_lo = pgoff & GENMASK(31, 0);
++	vma->__vm_anon_pgoff_lo = pgoff & GENMASK(31, 0);
+ }
+ 
+-static inline void vma_set_virt_pgoff(struct vm_area_struct *vma, pgoff_t pgoff)
++static inline void vma_set_anon_pgoff(struct vm_area_struct *vma, pgoff_t pgoff)
+ {
+ 	vma_assert_can_modify(vma);
+-	__vma_set_virt_pgoff(vma, pgoff);
++	__vma_set_anon_pgoff(vma, pgoff);
+ }
+ 
+ static inline void vma_add_pgoff(struct vm_area_struct *vma, pgoff_t delta)
+ {
+ 	vma_assert_can_modify(vma);
+ 	vma_set_pgoff(vma, vma_start_pgoff(vma) + delta);
+-	vma_set_virt_pgoff(vma, vma_start_virt_pgoff(vma) + delta);
++	vma_set_anon_pgoff(vma, vma_start_anon_pgoff(vma) + delta);
+ }
+ 
+ static inline void vma_sub_pgoff(struct vm_area_struct *vma, pgoff_t delta)
+ {
+ 	vma_assert_can_modify(vma);
+ 	vma_set_pgoff(vma, vma_start_pgoff(vma) - delta);
+-	vma_set_virt_pgoff(vma, vma_start_virt_pgoff(vma) - delta);
+-}
+-
+-/**
+- * vma_anon_pgoff_addr() - Calculates the absolute anonymous page offset of
+- * @address.
+- * @vma: The VMA whose anonymous page offset is required.
+- * @address: The address whose absolute page offset is required.
+- *
+- * If the VMA is a shared file-backed mapping, then the file-based page offset
+- * is returned.
+- *
+- * Otherwise, the virtual page offset is returned.
+- *
+- * This means that shared file-backed mappings are correctly merged based on
+- * their file page offset compatibility.
+- *
+- * Returns: The absolute anonymous page offset of @address within @vma.
+- */
+-static inline pgoff_t vma_anon_pgoff_addr(const struct vm_area_struct *vma,
+-					  unsigned long address)
+-{
+-	if (vma_test(vma, VMA_SHARED_BIT))
+-		return linear_page_index(vma, address);
+-
+-	return linear_virt_page_index(vma, address);
+-}
+-
+-/**
+- * vma_start_anon_pgoff() - Calculates the absolute anonymous page offset used
+- * for purposes of merge compatibility.
+- * @vma: The VMA whose anonymous page offset is required.
+- *
+- * See vma_anon_pgoff_addr().
+- *
+- * Returns: The absolute anonymous page offset of @vma for purposes of merging.
+- */
+-static inline pgoff_t vma_start_anon_pgoff(const struct vm_area_struct *vma)
+-{
+-	return vma_anon_pgoff_addr(vma, vma->vm_start);
+-}
+-
+-/**
+- * vma_end_anon_pgoff() - Calculates the absolute exclusive end anonymous page
+- * offset used for purposes of merge compatibility.
+- * @vma: The VMA whose anonymous end page offset is required.
+- *
+- * See vma_start_anon_pgoff().
+- *
+- * Returns: The absolute exclusive end anonymous page offset of @vma for
+- * purposes of merging.
+- */
+-static inline pgoff_t vma_end_anon_pgoff(const struct vm_area_struct *vma)
+-{
+-	return vma_start_anon_pgoff(vma) + vma_pages(vma);
++	vma_set_anon_pgoff(vma, vma_start_anon_pgoff(vma) - delta);
+ }
+ 
+ #define VMG_STATE(name, mm_, vmi_, start_, end_, vma_flags_, pgoff_, anon_pgoff_) \
+@@ -396,7 +342,7 @@ static inline pgoff_t vma_end_anon_pgoff
+ 		.end = end_,						\
+ 		.vm_flags = vma_->vm_flags,				\
+ 		.pgoff = linear_page_index(vma_, start_),		\
+-		.anon_pgoff = vma_anon_pgoff_addr(vma_, start_),	\
++		.anon_pgoff = __linear_anon_page_index(vma_, start_),	\
+ 		.file = vma_->vm_file,					\
+ 		.anon_vma = vma_->anon_vma,				\
+ 		.policy = vma_policy(vma_),				\
+--- a/mm/vma_init.c~b
++++ a/mm/vma_init.c
+@@ -51,7 +51,7 @@ static void vm_area_init_from(const stru
+ 	dest->vm_end = src->vm_end;
+ 	dest->anon_vma = src->anon_vma;
+ 	dest->vm_pgoff = vma_start_pgoff(src);
+-	__vma_set_virt_pgoff(dest, vma_start_virt_pgoff(src));
++	__vma_set_anon_pgoff(dest, vma_start_anon_pgoff(src));
+ 	dest->vm_file = src->vm_file;
+ 	dest->vm_private_data = src->vm_private_data;
+ 	vm_flags_init(dest, src->vm_flags);
+--- a/tools/testing/selftests/mm/merge.c~b
++++ a/tools/testing/selftests/mm/merge.c
+@@ -1305,7 +1305,7 @@ TEST_F(merge, merge_vmas_with_mseal)
+ 	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 2 * page_size);
+ }
+ 
+-TEST_F(merge, virt_and_page_offset_mismatch_memfd)
++TEST_F(merge, anon_and_page_offset_mismatch_memfd)
+ {
+ 	struct procmap_fd *procmap = &self->procmap;
+ 	unsigned int page_size = self->page_size;
+@@ -1314,7 +1314,7 @@ TEST_F(merge, virt_and_page_offset_misma
+ 	int fd;
+ 
+ 	/* Create a 10 page memfd descriptor. */
+-	fd = memfd_create("virt_page_offset_test", MFD_CLOEXEC);
++	fd = memfd_create("anon_page_offset_test", MFD_CLOEXEC);
+ 	ASSERT_NE(fd, -1);
+ 	ASSERT_EQ(ftruncate(fd, 10 * page_size), 0);
+ 
+@@ -1346,10 +1346,10 @@ TEST_F(merge, virt_and_page_offset_misma
+ 	 * | unfaulted |           | faulted |
+ 	 * |-----------|           |---------|
+ 	 *
+-	 * Because virtual page offset of the faulted region is now
++	 * Because the anonymous page offset of the faulted region is now
+ 	 * &carveout[10 * page_size], despite the two regions being mergeable
+-	 * due to file page offset, they are NOT mergeable due to virtual page
+-	 * offset.
++	 * due to file page offset, they are NOT mergeable due to anonymous
++	 * page offset.
+ 	 */
+ 	ptr2 = sys_mremap(ptr2, 5 * page_size, 5 * page_size,
+ 			  MREMAP_MAYMOVE | MREMAP_FIXED,
+--- a/tools/testing/selftests/proc/proc-self-map-files-001.c~b
++++ a/tools/testing/selftests/proc/proc-self-map-files-001.c
+@@ -51,7 +51,7 @@ int main(void)
+ 	int fd;
+ 	unsigned long a, b;
+ 
+-	fd = open("/dev/zero", O_RDONLY);
++	fd = open("/proc/self/exe", O_RDONLY);
+ 	if (fd == -1)
+ 		return 1;
+ 
+--- a/tools/testing/selftests/proc/proc-self-map-files-002.c~b
++++ a/tools/testing/selftests/proc/proc-self-map-files-002.c
+@@ -57,7 +57,7 @@ int main(void)
+ 	int fd;
+ 	unsigned long a, b;
+ 
+-	fd = open("/dev/zero", O_RDONLY);
++	fd = open("/proc/self/exe", O_RDONLY);
+ 	if (fd == -1)
+ 		return 1;
+ 
+--- a/tools/testing/vma/include/dup.h~b
++++ a/tools/testing/vma/include/dup.h
+@@ -599,7 +599,7 @@ struct vm_area_struct {
+ 	 */
+ 	unsigned int vm_lock_seq;
+ #endif
+-	unsigned int __vm_virt_pgoff_lo;
++	unsigned int __vm_anon_pgoff_lo;
+ 
+ 	/*
+ 	 * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_vma
+@@ -637,7 +637,7 @@ struct vm_area_struct {
+ 	refcount_t vm_refcnt;
+ #endif
+ #ifdef CONFIG_64BIT
+-	unsigned int __vm_virt_pgoff_hi;
++	unsigned int __vm_anon_pgoff_hi;
+ #endif
+ 	/*
+ 	 * For areas with an address space and backing store,
+@@ -1184,6 +1184,17 @@ static inline bool vma_is_shared_maywrit
+ 	return is_shared_maywrite(&vma->flags);
+ }
+ 
++static inline bool vma_flags_is_cow_mapping(const vma_flags_t *flags)
++{
++	return vma_flags_test(flags, VMA_MAYWRITE_BIT) &&
++		!vma_flags_test(flags, VMA_SHARED_BIT);
++}
++
++static inline bool vma_is_cow_mapping(const struct vm_area_struct *vma)
++{
++	return vma_flags_is_cow_mapping(&vma->flags);
++}
++
+ static inline struct vm_area_struct *vma_next(struct vma_iterator *vmi)
+ {
+ 	/*
+@@ -1346,26 +1357,26 @@ static inline pgoff_t vma_end_pgoff(cons
+ 	return vma_start_pgoff(vma) + vma_pages(vma);
+ }
+ 
+-static inline pgoff_t vma_start_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_start_anon_pgoff(const struct vm_area_struct *vma)
+ {
+ 	pgoff_t pgoff = 0;
+ 
+ #ifdef CONFIG_64BIT
+-	pgoff += vma->__vm_virt_pgoff_hi;
++	pgoff += vma->__vm_anon_pgoff_hi;
+ 	pgoff <<= 32;
+ #endif
+-	pgoff += vma->__vm_virt_pgoff_lo;
++	pgoff += vma->__vm_anon_pgoff_lo;
+ 	return pgoff;
+ }
+ 
+-static inline pgoff_t vma_end_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_end_anon_pgoff(const struct vm_area_struct *vma)
+ {
+-	return vma_start_virt_pgoff(vma) + vma_pages(vma);
++	return vma_start_anon_pgoff(vma) + vma_pages(vma);
+ }
+ 
+-static inline pgoff_t vma_last_virt_pgoff(const struct vm_area_struct *vma)
++static inline pgoff_t vma_last_anon_pgoff(const struct vm_area_struct *vma)
+ {
+-	return vma_end_virt_pgoff(vma) - 1;
++	return vma_end_anon_pgoff(vma) - 1;
+ }
+ 
+ static inline int vfs_mmap_prepare(struct file *file, struct vm_area_desc *desc)
+@@ -1633,22 +1644,22 @@ static inline pgprot_t vma_get_page_prot
+ 	return vma_flags_to_page_prot(vma->flags);
+ }
+ 
+-static inline pgoff_t __linear_virt_page_index(const struct vm_area_struct *vma,
++static inline pgoff_t __linear_anon_page_index(const struct vm_area_struct *vma,
+ 					       const unsigned long address)
+ {
+ 	pgoff_t pgoff;
+ 
+ 	pgoff = linear_page_delta(vma, address);
+-	pgoff += vma_start_virt_pgoff(vma);
++	pgoff += vma_start_anon_pgoff(vma);
+ 	return pgoff;
+ }
+ 
+-static inline pgoff_t linear_virt_page_index(const struct vm_area_struct *vma,
+-					     const unsigned long address)
++static inline pgoff_t linear_anon_page_index(const struct vm_area_struct *vma,
++		const unsigned long address)
+ {
+-	const pgoff_t pgoff = __linear_virt_page_index(vma, address);
++	const pgoff_t pgoff = __linear_anon_page_index(vma, address);
+ 
+-	VM_WARN_ON_ONCE(vma_test(vma, VMA_SHARED_BIT));
++	VM_WARN_ON_ONCE(!vma_is_cow_mapping(vma));
+ 	if (vma_is_anonymous(vma))
+ 		VM_WARN_ON_ONCE(pgoff != linear_page_index(vma, address));
+ 
+--- a/tools/testing/vma/shared.c~b
++++ a/tools/testing/vma/shared.c
+@@ -24,7 +24,7 @@ struct vm_area_struct *alloc_vma(struct
+ 	vma->vm_start = start;
+ 	vma->vm_end = end;
+ 	vma_set_pgoff(vma, pgoff);
+-	vma_set_virt_pgoff(vma, start >> PAGE_SHIFT);
++	vma_set_anon_pgoff(vma, start >> PAGE_SHIFT);
+ 	vma->flags = vma_flags;
+ 	vma_assert_detached(vma);
+ 
+--- a/tools/testing/vma/tests/merge.c~b
++++ a/tools/testing/vma/tests/merge.c
+@@ -121,7 +121,7 @@ static bool test_simple_merge(void)
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x3000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_FLAGS_SAME_MASK(&vma->flags, vma_flags);
+ 
+ 	detach_free_vma(vma);
+@@ -154,7 +154,7 @@ static bool test_simple_modify(void)
+ 	ASSERT_EQ(vma->vm_start, 0x1000);
+ 	ASSERT_EQ(vma->vm_end, 0x2000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 1);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 1);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 1);
+ 
+ 	/*
+ 	 * Now walk through the three split VMAs and make sure they are as
+@@ -167,7 +167,7 @@ static bool test_simple_modify(void)
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x1000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 
+ 	detach_free_vma(vma);
+ 	vma_iter_clear(&vmi);
+@@ -177,7 +177,7 @@ static bool test_simple_modify(void)
+ 	ASSERT_EQ(vma->vm_start, 0x1000);
+ 	ASSERT_EQ(vma->vm_end, 0x2000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 1);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 1);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 1);
+ 
+ 	detach_free_vma(vma);
+ 	vma_iter_clear(&vmi);
+@@ -187,7 +187,7 @@ static bool test_simple_modify(void)
+ 	ASSERT_EQ(vma->vm_start, 0x2000);
+ 	ASSERT_EQ(vma->vm_end, 0x3000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 2);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 2);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 2);
+ 
+ 	detach_free_vma(vma);
+ 	mtree_destroy(&mm.mm_mt);
+@@ -217,7 +217,7 @@ static bool test_simple_expand(void)
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x3000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 
+ 	detach_free_vma(vma);
+ 	mtree_destroy(&mm.mm_mt);
+@@ -240,7 +240,7 @@ static bool test_simple_shrink(void)
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x1000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 
+ 	detach_free_vma(vma);
+ 	mtree_destroy(&mm.mm_mt);
+@@ -353,7 +353,7 @@ static bool __test_merge_new(bool is_sti
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x5000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 3);
+@@ -375,7 +375,7 @@ static bool __test_merge_new(bool is_sti
+ 	ASSERT_EQ(vma->vm_start, 0x6000);
+ 	ASSERT_EQ(vma->vm_end, 0x9000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 6);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 6);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 6);
+ 	ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 3);
+@@ -396,7 +396,7 @@ static bool __test_merge_new(bool is_sti
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x9000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 2);
+@@ -417,7 +417,7 @@ static bool __test_merge_new(bool is_sti
+ 	ASSERT_EQ(vma->vm_start, 0xa000);
+ 	ASSERT_EQ(vma->vm_end, 0xc000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0xa);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0xa);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0xa);
+ 	ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 2);
+@@ -437,7 +437,7 @@ static bool __test_merge_new(bool is_sti
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0xc000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 1);
+@@ -458,7 +458,7 @@ static bool __test_merge_new(bool is_sti
+ 		ASSERT_EQ(vma->vm_start, 0);
+ 		ASSERT_EQ(vma->vm_end, 0xc000);
+ 		ASSERT_EQ(vma_start_pgoff(vma), 0);
+-		ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++		ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 		ASSERT_EQ(vma->anon_vma, &dummy_anon_vma);
+ 
+ 		detach_free_vma(vma);
+@@ -655,7 +655,8 @@ static bool test_vma_merge_with_close(vo
+ 	ASSERT_EQ(vmg.state, VMA_MERGE_SUCCESS);
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x5000);
+-	ASSERT_EQ(vma_prev->vm_pgoff, 0);
++	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 
+ 	ASSERT_EQ(cleanup_mm(&mm, &vmi), 2);
+ 
+@@ -766,7 +767,8 @@ static bool test_vma_merge_with_close(vo
+ 	ASSERT_EQ(vmg.state, VMA_MERGE_SUCCESS);
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x5000);
+-	ASSERT_EQ(vma_prev->vm_pgoff, 0);
++	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 
+ 	ASSERT_EQ(cleanup_mm(&mm, &vmi), 2);
+ 
+@@ -821,7 +823,7 @@ static bool test_vma_merge_new_with_clos
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x5000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_EQ(vma->vm_ops, &vm_ops);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 2);
+@@ -878,12 +880,12 @@ static bool __test_merge_existing(bool p
+ 	ASSERT_EQ(vma_next->vm_start, 0x3000);
+ 	ASSERT_EQ(vma_next->vm_end, 0x9000);
+ 	ASSERT_EQ(vma_start_pgoff(vma_next), 3);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma_next), 3);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_next), 3);
+ 	ASSERT_EQ(vma_next->anon_vma, &dummy_anon_vma);
+ 	ASSERT_EQ(vma->vm_start, 0x2000);
+ 	ASSERT_EQ(vma->vm_end, 0x3000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 2);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 2);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 2);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_TRUE(vma_write_started(vma_next));
+ 	ASSERT_EQ(mm.map_count, 2);
+@@ -913,7 +915,8 @@ static bool __test_merge_existing(bool p
+ 	ASSERT_EQ(vmg.state, VMA_MERGE_SUCCESS);
+ 	ASSERT_EQ(vma_next->vm_start, 0x2000);
+ 	ASSERT_EQ(vma_next->vm_end, 0x9000);
+-	ASSERT_EQ(vma_next->vm_pgoff, 2);
++	ASSERT_EQ(vma_start_pgoff(vma_next), 2);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_next), 2);
+ 	ASSERT_EQ(vma_next->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma_next));
+ 	ASSERT_EQ(mm.map_count, 1);
+@@ -946,12 +949,12 @@ static bool __test_merge_existing(bool p
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x6000);
+ 	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 	ASSERT_EQ(vma_prev->anon_vma, &dummy_anon_vma);
+ 	ASSERT_EQ(vma->vm_start, 0x6000);
+ 	ASSERT_EQ(vma->vm_end, 0x7000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 6);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 6);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 6);
+ 	ASSERT_TRUE(vma_write_started(vma_prev));
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 2);
+@@ -983,7 +986,7 @@ static bool __test_merge_existing(bool p
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x7000);
+ 	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 	ASSERT_EQ(vma_prev->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma_prev));
+ 	ASSERT_EQ(mm.map_count, 1);
+@@ -1016,7 +1019,7 @@ static bool __test_merge_existing(bool p
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x9000);
+ 	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 	ASSERT_EQ(vma_prev->anon_vma, &dummy_anon_vma);
+ 	ASSERT_TRUE(vma_write_started(vma_prev));
+ 	ASSERT_EQ(mm.map_count, 1);
+@@ -1146,7 +1149,8 @@ static bool test_anon_vma_non_mergeable(
+ 	ASSERT_EQ(vmg.state, VMA_MERGE_SUCCESS);
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x7000);
+-	ASSERT_EQ(vma_prev->vm_pgoff, 0);
++	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 	ASSERT_TRUE(vma_write_started(vma_prev));
+ 	ASSERT_FALSE(vma_write_started(vma_next));
+ 
+@@ -1177,7 +1181,8 @@ static bool test_anon_vma_non_mergeable(
+ 	ASSERT_EQ(vmg.state, VMA_MERGE_SUCCESS);
+ 	ASSERT_EQ(vma_prev->vm_start, 0);
+ 	ASSERT_EQ(vma_prev->vm_end, 0x7000);
+-	ASSERT_EQ(vma_prev->vm_pgoff, 0);
++	ASSERT_EQ(vma_start_pgoff(vma_prev), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma_prev), 0);
+ 	ASSERT_TRUE(vma_write_started(vma_prev));
+ 	ASSERT_FALSE(vma_write_started(vma_next));
+ 
+@@ -1439,7 +1444,7 @@ static bool test_merge_extend(void)
+ 	ASSERT_EQ(vma->vm_start, 0);
+ 	ASSERT_EQ(vma->vm_end, 0x4000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 0);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(mm.map_count, 1);
+ 
+@@ -1480,7 +1485,7 @@ static bool test_expand_only_mode(void)
+ 	ASSERT_EQ(vma->vm_start, 0x3000);
+ 	ASSERT_EQ(vma->vm_end, 0x9000);
+ 	ASSERT_EQ(vma_start_pgoff(vma), 3);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 3);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 3);
+ 	ASSERT_TRUE(vma_write_started(vma));
+ 	ASSERT_EQ(vma_iter_addr(&vmi), 0x3000);
+ 	vma_assert_attached(vma);
+--- a/tools/testing/vma/tests/mmap.c~b
++++ a/tools/testing/vma/tests/mmap.c
+@@ -74,7 +74,7 @@ static bool test_pure_anon_dev_zero(void
+ 
+ 	/*
+ 	 * Map a MAP_PRIVATE-/dev/zero mapping at address 0x300000 with a page
+-	 * offset of 0x10, which we expect to be reset to the virtual page
++	 * offset of 0x10, which we expect to be reset to the anonymous page
+ 	 * offset.
+ 	 */
+ 	addr = __mmap_region(&file, 0x300000, 0x3000, vma_flags, 0x10, NULL);
+@@ -86,9 +86,9 @@ static bool test_pure_anon_dev_zero(void
+ 	ASSERT_TRUE(vma_is_anonymous(vma));
+ 	ASSERT_EQ(vma->vm_file, NULL);
+ 	ASSERT_EQ(vma->vm_private_data, NULL);
+-	/* Expect virtual page offsets. */
++	/* Expect anonymous page offsets. */
+ 	ASSERT_EQ(vma->vm_pgoff, 0x300);
+-	ASSERT_EQ(vma_start_virt_pgoff(vma), 0x300);
++	ASSERT_EQ(vma_start_anon_pgoff(vma), 0x300);
+ 
+ 	cleanup_mm(&mm, &vmi);
+ 	return true;
+--- a/tools/testing/vma/tests/vma.c~b
++++ a/tools/testing/vma/tests/vma.c
+@@ -33,7 +33,51 @@ static bool test_copy_vma(void)
+ 	struct mm_struct mm = {};
+ 	bool need_locks = false;
+ 	VMA_ITERATOR(vmi, &mm, 0);
+-	struct vm_area_struct *vma, *vma_new, *vma_next;
++	struct vm_area_struct *vma, *vma_prev, *vma_new, *vma_next, *vma_orig;
++
++	/* Move forwards, adjacent to old self - self-merge. */
++
++	vma = alloc_and_link_vma(&mm, 0x1000, 0x2000, 1, vma_flags);
++	vma_set_anonymous(vma);
++	vma_orig = vma;
++	vma_new = copy_vma(&vma, 0x2000, 0x1000, 1, 1, &need_locks);
++	ASSERT_EQ(vma_new, vma_orig);
++	ASSERT_EQ(vma, vma_orig);
++	ASSERT_EQ(vma_new->vm_start, 0x1000);
++	ASSERT_EQ(vma_new->vm_end, 0x3000);
++
++	cleanup_mm(&mm, &vmi);
++
++	/* Move backwards, adjacent to old self - self-merge. */
++
++	vma = alloc_and_link_vma(&mm, 0x2000, 0x3000, 2, vma_flags);
++	vma_set_anonymous(vma);
++	vma_orig = vma;
++	vma_new = copy_vma(&vma, 0x1000, 0x1000, 2, 2, &need_locks);
++	ASSERT_EQ(vma_new, vma_orig);
++	ASSERT_EQ(vma, vma_orig);
++	ASSERT_EQ(vma_new->vm_start, 0x1000);
++	ASSERT_EQ(vma_new->vm_end, 0x3000);
++
++	cleanup_mm(&mm, &vmi);
++
++	/*
++	 * Move backwards between prior VMA and old self - self-merge and vma
++	 * updated to a new VMA.
++	 */
++
++	vma_prev = alloc_and_link_vma(&mm, 0x1000, 0x2000, 1, vma_flags);
++	vma_set_anonymous(vma_prev);
++	vma = alloc_and_link_vma(&mm, 0x3000, 0x4000, 3, vma_flags);
++	vma_set_anonymous(vma);
++	vma_orig = vma;
++	vma_new = copy_vma(&vma, 0x2000, 0x1000, 3, 3, &need_locks);
++	ASSERT_NE(vma_new, vma_orig);
++	ASSERT_EQ(vma_new, vma);
++	ASSERT_EQ(vma_new->vm_start, 0x1000);
++	ASSERT_EQ(vma_new->vm_end, 0x4000);
++
++	cleanup_mm(&mm, &vmi);
+ 
+ 	/* Move backwards and do not merge. */
+ 
+_
 
-So the current design is a compromise of the dynamic workloads and fault tolerance.
 
->As for the implementation in general -- it'd need some tighter
->connection with existing cgroup selftests (e.g. use integer types like
->cgroup selftest, utilization/adaptation of existing helpers to reduce
->copies of same/similar code).
-Keep the same style as other selftests in important for long-term maintaince. 
-We totally agree with it and will cross check it in the next version.
->
->
->> --- a/tools/testing/selftests/cgroup/Makefile
->> +++ b/tools/testing/selftests/cgroup/Makefile
->> @@ -14,14 +14,29 @@ TEST_GEN_PROGS += test_freezer
->>  TEST_GEN_PROGS += test_hugetlb_memcg
->>  TEST_GEN_PROGS += test_kill
->>  TEST_GEN_PROGS += test_kmem
->> +TEST_GEN_PROGS += test_memcg_stat_cross_cpu
->>  TEST_GEN_PROGS += test_memcontrol
->
->Yeah, this is perhaps so much different from test_memcontrol that it
->deserves a separate prog, OTOH it'd be good to share some common
->cg/memcg functions across the two (some notes below).
-Good suggestion, we will take more common cgroup functions functions in
-the next version.
-
->
->
->> +unsigned long long cg_get_id(const char *cgroup)
->
->This duplicates get_cgroup_id_from_path() from
->tools/testing/selftests/bpf/cgroup_helpers.c
-I see. Will replace it.
-
->
->> +/* ---- allowed CPU set --------------------------------------------------- */
->> +
->> +static int *cpu_list; /* ids of the CPUs this process may run on */
->
->I think it'd be simpler to just use cpu_set_t and the standard helper
->macros/functions for this.
-Make sense. I will do it. 
-
->
->> +/* Recursively create children of @path. @path must already exist and be recorded. */
->> +static int build_children(const char *path, int fanout, int depth)
->> +{
->> +	char child[PATH_MAX];
->> +	int i;
->> +
->> +	if (depth == 0)
->> +		return 0;
->> +
->> +	/* Enable memory on this interior node so its children get a memcg. */
->> +	if (cg_write(path, "cgroup.subtree_control", "+memory"))
->> +		return -1;
->> +
->> +	for (i = 0; i < fanout; i++) {
->> +		snprintf(child, sizeof(child), "%s/c%d", path, i);
->> +		if (add_node(child, depth == 1, NULL))
->> +			return -1;
->
->is_leaf := depth == 1
->doesn't look correct (I see below the test builds hierarchies with
->depth > 1)
->Ah, it's non-conventional meaning of "leaf", I'd suggest a subtree or
->partition or similar (IIUC the purpose).
-Yes this misunderstanding mostly comes from the variable naming, we will fix it
-in the next version.
->
->
->> +		if (build_children(child, fanout, depth - 1))
->> +			return -1;
->> +	}
->> +	return 0;
->> +}
->> +
->> +static size_t tree_capacity(int fanout, int depth)
->> +{
->> +	size_t total = 1, level = 1;
->> +	int d;
->> +
->> +	for (d = 0; d < depth; d++) {
->> +		level *= fanout;
->> +		total += level;
->> +	}
->> +	return total;
->> +}
->> +
->> +/* The tree is arranged in the DFS order within an array */
->> +static int build_tree(int fanout, int depth, int *root_fd)
->> +{
->> +	n_nodes = 0;
->> +	n_leaves = 0;
->> +	nodes = calloc(tree_capacity(fanout, depth), sizeof(*nodes));
->> +	if (!nodes)
->> +		return -1;
->> +
->> +	if (add_node(subtree_root, depth == 0, root_fd))
->> +		return -1;
->> +	return build_children(subtree_root, fanout, depth);
->> +}
->> +
->> +/* ---- cross-CPU charge (one pinning child per leaf) --------------------- */
->> +
->> +static pid_t *charger_pids;
->> +static int n_chargers;
->> +/* parent pid, for the children's PR_SET_PDEATHSIG race check */
->> +static pid_t test_pid;
->> +static int charge_ready[2] = { -1, -1 };	/* child -> parent "ready" barrier */
->> +static int charge_ctrl[2] = { -1, -1 };	/* parent -> child "exit" (close to signal) */
->> +
->> +/*
->> + * One charging child, dedicated to a single leaf and spread over K CPUs.  It
->> + * joins its leaf, maps a resident anon region, then faults the region in K
->> + * slices, each on a different CPU, so this leaf's rstat ends up dirty on K
->> + * per-cpu trees.  The region stays mapped, so the charge persists while the
->> + * parent reads.  After signalling readiness the child blocks (holding the
->> + * charge) until the parent closes the control pipe.  Never returns.
->> + *
->> + * @base is this child's starting index into cpu_list; its K CPUs are
->> + * (base + 0..K-1) mod n_cpu.
->> + */
->> +static void charger_child(const struct cg_node *leaf, int base, int k,
->> +			  size_t resident_bytes)
->> +{
->
->It'd be nicer if this shared alloc_* functions from test_memcontrol.c
->(module adjustoment to cater both users).
-Will do. Thanks.
->
->> +static int file_read_node(const char *path, struct file_snap *o)
->> +{
->> +	char buf[8192];
->> +
->> +	memset(o, 0, sizeof(*o));
->> +
->> +	if (cg_read(path, "memory.stat", buf, sizeof(buf)))
->> +		return -1;
->> +	parse_stat(buf, o);
->
->We have cg_read_key_long() for such extractions.
-Great. Will use.
->
->> +
->> +/* ---- correctness comparison -------------------------------------------- */
->> +
->> +static bool close_enough(__u64 a, __u64 b, __u64 tol)
->> +{
->> +	return (a > b ? a - b : b - a) <= tol;
->> +}
->
->See
->tools/testing/selftests/cgroup/lib/include/cgroup_util.h:values_close()
-Oh I see, thanks!
->
->
->> +
->> +/* Dump one node's bpf-vs-file stats; called when a mismatch is detected. */
->> +static void dump_node(int i, const struct memcg_stat_snapshot *b,
->> +		      const struct file_snap *f)
->> +{
->> +	ksft_print_msg("node %d bpf : anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
->> +		       i, b->anon, b->file, b->shmem, b->file_mapped, b->pgfault);
->> +	ksft_print_msg("node %d file: anon=%llu file=%llu shmem=%llu fmapped=%llu pgfault=%llu\n",
->> +		       i, f->anon, f->file, f->shmem, f->file_mapped, f->pgfault);
->> +}
->> +
->> +/*
->> + * Compare the BPF kfunc snapshots (round 1) against the memory.stat values
->> + * (round 2), node by node.  The two rounds are independent, equivalently
->> + * charged trees, so the flushed stats are compared within a small tolerance
->> + * that absorbs per-round overhead (i.e., a charging child's own stack pages).
->> + * A wrong unit, enum or field in the kfunc path would miss by far more.
->> + *
->> + * Two per-round checks verify the flush itself: each leaf was charged
->> + * resident_bytes of anon spread over K CPUs, so its flushed anon must be at
->> + * least that; and the root's recursive anon must equal the sum of the leaves'
->> + * anon (rstat propagated the charge up the tree).
->> + *
->> + * Returns 0 if every check passes, -1 otherwise.
->> + */
->> +static int check_correctness(const struct memcg_stat_snapshot *bpf,
->> +			     const struct file_snap *file, const bool *is_leaf,
->> +			     int n, size_t resident_bytes)
->> +{
->> +	__u64 stat_tol = 64 * page_size;
->> +	__u64 pgf_tol = 1024;
->
->These are central values of the test.  It's necessary to explain the
->choice of them.
-I think it would be good set per_leaf tolerance rather than a total tolerance
-since the errors merges up at root, may be we can try:
-
-	stat_tol = leaves_below(node) * CHARGER_SLACK_PAGES * page_size;
-	pgf_tol  = leaves_below(node) * CHARGER_SLACK_FAULTS;
-
->
->
->> +	__u64 broot = 0, bsum = 0, froot = 0, fsum = 0;
->> +	int i, mism = 0, flush_bad = 0;
->> +
->> +	for (i = 0; i < n; i++) {
->> +		const struct memcg_stat_snapshot *b = &bpf[i];
->> +		const struct file_snap *f = &file[i];
->> +		__u64 bcur = b->usage_pages * page_size;
->> +
->> +		/* kfunc path (round 1) compared with memory.stat path (round 2) */
->> +		if (!close_enough(b->anon, f->anon, stat_tol) ||
->> +		    !close_enough(b->file, f->file, stat_tol) ||
->> +		    !close_enough(b->shmem, f->shmem, stat_tol) ||
->> +		    !close_enough(b->file_mapped, f->file_mapped, stat_tol) ||
->> +		    !close_enough(b->pgfault, f->pgfault, pgf_tol)) {
->> +			mism++;
->> +			dump_node(i, b, f);
->> +		}
->> +
->> +		/* memory.current is live (no flush) and must bound the flushed anon */
->> +		if (b->anon == 0 || b->anon > bcur) {
->> +			flush_bad++;
->> +			ksft_print_msg("node %d: anon=%llu exceeds current=%llu\n",
->> +				       i, b->anon, bcur);
->> +		}
->> +
->> +		/* each leaf's flush must have gathered the full cross-CPU charge */
->> +		if (is_leaf[i]) {
->> +			if (b->anon < resident_bytes || f->anon < resident_bytes) {
->> +				flush_bad++;
->> +				ksft_print_msg("node %d: short flush bpf=%llu file=%llu\n",
->> +					       i, b->anon, f->anon);
->> +			}
->> +			bsum += b->anon;
->> +			fsum += f->anon;
->> +		}
->> +		if (i == 0) { /* nodes[0] == subtree_root */
->> +			broot = b->anon;
->> +			froot = f->anon;
->> +		}
->> +	}
->> +
->> +	if (mism) {
->> +		ksft_print_msg("bpf (round 1) disagrees with memory.stat (round 2)\n");
->> +		return -1;
->> +	}
->> +	if (flush_bad) {
->> +		ksft_print_msg("flush did not aggregate the cross-cpu charge\n");
->> +		return -1;
->> +	}
->> +	if (broot != bsum || froot != fsum) {
->> +		ksft_print_msg("root anon != sum of leaf anon: bpf %llu/%llu file %llu/%llu\n",
->> +			       broot, bsum, froot, fsum);
->> +		return -1;
->> +	}
->> +	if (bsum == 0) {
->> +		ksft_print_msg("tree carries no anon\n");
->> +		return -1;
->> +	}
->> +	return 0;
->> +}
->> +
->> +/* ---- one case ---------------------------------------------------------- */
->> +
->> +struct testcase {
->> +	const char *name;
->> +	int fanout;
->> +	int depth;
->> +	int cpus_per_leaf; /* K: CPUs each leaf is charged on; 0 = all CPUs */
->> +	size_t resident_bytes; /* anon charged per leaf */
->> +};
->> +
->> +/*
->> + * Remove the subtree in reverse creation order.  Nodes are recorded in DFS
->> + * order (a parent precedes all its descendants), so iterating backwards
->> + * removes every child before its parent.
->> + */
->> +static void destroy_tree(void)
->> +{
->> +	int i;
->> +
->> +	if (!nodes)
->> +		return;
->> +	for (i = n_nodes - 1; i >= 0; i--)
->> +		cg_destroy(nodes[i].path);
->> +	free(nodes);
->> +	nodes = NULL;
->> +}
->> +
->> +/*
->> + * Round 1: build and charge a fresh tree, walk it with the BPF iterator (which
->> + * flushes and reads each cgroup via the memcg kfuncs), and capture one snapshot
->> + * per node into @snap.  @is_leaf records the tree shape so the later comparison
->> + * can run after the tree is gone.  Returns the node count, or -1 on failure.
->> + * The tree is always torn down before returning.
->> + */
->> +static int capture_bpf_round(const struct testcase *tc,
->> +			     struct memcg_stat_snapshot *snap, bool *is_leaf)
->> +{
->> +	struct memcg_stat_cross_cpu *skel = NULL;
->> +	struct bpf_link *link = NULL;
->> +	int root_fd = -1, ret = -1, i, mfd;
->> +
->> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
->> +		ksft_print_msg("build tree (bpf) failed\n");
->> +		goto out;
->> +	}
->> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
->> +		goto out;
->> +
->> +	skel = memcg_stat_cross_cpu__open();
->> +	if (!skel) {
->> +		ksft_print_msg("skel open failed\n");
->> +		goto out;
->> +	}
->> +	if (bpf_map__set_max_entries(skel->maps.results, n_nodes + 8)) {
->> +		ksft_print_msg("set max_entries failed\n");
->> +		goto out;
->> +	}
->> +	if (memcg_stat_cross_cpu__load(skel)) {
->> +		ksft_print_msg("skel load failed\n");
->> +		goto out;
->> +	}
->> +
->> +	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
->> +	union bpf_iter_link_info linfo = {};
->> +
->> +	linfo.cgroup.cgroup_fd = root_fd;
->> +	linfo.cgroup.order = BPF_CGROUP_ITER_DESCENDANTS_PRE;
->> +	opts.link_info = &linfo;
->> +	opts.link_info_len = sizeof(linfo);
->> +
->> +	link = bpf_program__attach_iter(skel->progs.cgroup_memcg_stat_cross_cpu,
->> +					&opts);
->> +	if (!link) {
->> +		ksft_print_msg("attach iter failed\n");
->> +		goto out;
->> +	}
->> +
->> +	/* bpf walk through the cgroup tree and fetch result */
->> +	if (bpf_walk_once(link)) {
->> +		ksft_print_msg("bpf walk failed\n");
->> +		goto out;
->> +	}
->> +
->> +	mfd = bpf_map__fd(skel->maps.results);
->> +	for (i = 0; i < n_nodes; i++) {
->> +		/* Save the position for the leaf, used for later correctness check */
->> +		is_leaf[i] = nodes[i].is_leaf;
->> +		if (bpf_map_lookup_elem(mfd, &nodes[i].id, &snap[i])) {
->> +			ksft_print_msg("map lookup failed for node %d\n", i);
->> +			goto out;
->> +		}
->> +	}
->> +	ret = n_nodes;
->> +out:
->> +	bpf_link__destroy(link);
->> +	memcg_stat_cross_cpu__destroy(skel);
->> +	if (root_fd >= 0)
->> +		close(root_fd);
->> +	stop_chargers();
->> +	destroy_tree();
->> +	return ret;
->> +}
->> +
->> +/*
->> + * Round 2: build and charge an identical fresh tree, then read every cgroup via
->> + * memory.stat / memory.current.  The tree is reset after bpf read, so each
->> + * read does a real rstat flush.  Returns the node count, or -1 on failure.
->> + * The tree is always clear before returning.
->> + */
->> +static int capture_file_round(const struct testcase *tc, struct file_snap *snap)
->> +{
->> +	int root_fd = -1, ret = -1, i;
->> +
->> +	if (build_tree(tc->fanout, tc->depth, &root_fd)) {
->> +		ksft_print_msg("build tree (file) failed\n");
->> +		goto out;
->> +	}
->> +	if (start_chargers(tc->cpus_per_leaf, tc->resident_bytes))
->> +		goto out;
->> +
->> +	for (i = 0; i < n_nodes; i++)
->> +		if (file_read_node(nodes[i].path, &snap[i])) {
->> +			ksft_print_msg("file read failed for node %d\n", i);
->> +			goto out;
->> +		}
->> +	ret = n_nodes;
->> +out:
->> +	if (root_fd >= 0)
->> +		close(root_fd);
->> +	stop_chargers();
->> +	destroy_tree();
->> +	return ret;
->> +}
->> +
->> +static int run_case(const struct testcase *tc)
->> +{
->> +	struct memcg_stat_snapshot *bpf = NULL;
->> +	struct file_snap *file = NULL;
->> +	bool *is_leaf = NULL;
->> +	size_t cap = tree_capacity(tc->fanout, tc->depth);
->> +	int nb, nf, ret = KSFT_FAIL;
->> +
->> +	bpf = calloc(cap, sizeof(*bpf));
->> +	file = calloc(cap, sizeof(*file));
->> +	is_leaf = calloc(cap, sizeof(*is_leaf));
->
->(This caught my eye, it looks like those could be better members of
->struct cg_node. But I'm not 100% leaned to it.)
-Good catch, I will move them to the cg_node in next.
->
->> +	/* round 2: file reader flushes and reads a fresh, equivalent tree */
->
->Hm, I think that's quite a strong assumption that the 2nd tree would be
->equivalent (wrt memcg state). Could you back it up with some arguments
->if you want to rely on it?
-Yes. I just measure it and it seems the anon is identical but the pg_fault is
-not. So maybe the two tree design is not necessary. I think maybe we can remove
-two trees in the next version, but just perform one time flush and read from
-both bpf and file. This can remove the noise and provide more accurate results.
-What do you think?
-
->
->
->
->Thanks for an interesting comparer,
->Michal
-
-Thanks for your review agian and detailed feedback!
-
-Best,
-Ziyang
 
