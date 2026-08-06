@@ -1,166 +1,132 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4DBE486E41
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 18:19:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E42EB48AE06
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 18:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786040344; cv=none; b=Rr8UzU3zlC2SWU2iWmc3p7CAPvcYhSIBEbpSRUjYn/gTSzAlgvKycG5NllDsSx65g3/raUChIvWtiqglrPjZ1oD1w4pPcl+/Y//MRbx345ZPdW8P2PIgPrUh0mBafq/TYmJabhrtTCjdHfHeBJRCYkrfVd5Rd3/h6+o6P9faq0s=
+	t=1786040710; cv=none; b=BdWccOGKT411z/PIm94Vfu2Lt2Z0iGrwemoUyQpTlcRww53VIWQQJUo74FGKp1DzsdVkVYT9rVtekAYd5bYJoyg7h2+IStzTL2uK4+Q57OBl8mpe0fhxME3aaO+tCwkLAuo+cG9LltOVcPIGzZ76T4luraoeIvHiGA8o3xoMlvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786040344; c=relaxed/simple;
-	bh=f/x5XOGSOVXL62dnTLwAi4t3GHNIl7TACwaS3NY/NUY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=a/XB7mw14AEFBDh9euBJSNWNDauemUfuYumbVsd/NinD051itrZZEFVEbexMj6mCUvkz035FtUwX8jrpDE+ohLqyvTOwO6z/8lhguQjkCaOJz5IbbSsUGug0Dph37kAhfL/fUjh0uW2gg3xO/jGna76gE5REAGNp8ODCAtUQWQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=PegDMw+7; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786040710; c=relaxed/simple;
+	bh=OAnGXhoMWN0VX4aRXp3qSN6EwUoruIJ70j69kxghWfM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=GreeK/jo8q5119S9SnG68FUldJ02FnQ0wBGw7bVS+n4zn3oSCVjxFQstCZK3X42pULMdjaTLwqwhctElVknGIoF9ARq0aWy7kftMoPpA2r18apnL0fQxitk0Q/OrqnvBUVwWK2bWi1WgMcxUCWOno7PhT1sHB5cKB/zsc3wTP38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rNN3IMG1; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="PegDMw+7"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786040341;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=1Od46/DzmUAyLPulZmr0Tuh5N+v6QlQ8E5evsDJ+JEQ=;
-	b=PegDMw+7hUivGCzPLr5wXE5J9uFatOVwup+ZHxb7znyoX+ThZzN2ASdg54Ct2TOL1JRreZ
-	yOlJ6Cu9pNFj2QfJm9RY0kB1CaRR+ESUygoyvnrca7pflqxlVoU5CeXnmNtAyAJSh6LMw/
-	YlAqzEM8j9kbe8yhVpySoHRZLnWBwg4=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-266-njgfHLFnOPukWvRfLr7D5Q-1; Thu,
- 06 Aug 2026 14:18:58 -0400
-X-MC-Unique: njgfHLFnOPukWvRfLr7D5Q-1
-X-Mimecast-MFC-AGG-ID: njgfHLFnOPukWvRfLr7D5Q_1786040336
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id DDFAD18002C8;
-	Thu,  6 Aug 2026 18:18:55 +0000 (UTC)
-Received: from fedora.redhat.com (unknown [10.22.64.255])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F249E180034C;
-	Thu,  6 Aug 2026 18:18:52 +0000 (UTC)
-From: Audra Mitchell <audra@redhat.com>
-To: david@kernel.org
-Cc: jocolema@redhat.com,
-	raquini@redhat.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rNN3IMG1"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so1873283a91.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786040708; x=1786645508; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=rNN3IMG1BNlGchnOjZlFZrkh2BI0nTwD6or5ACQrLo2bfQYsxI4LX8sKNjYEiew29w
+         d7NlyengXoAoaRY6LL8O8zFGtGG8r1dXVYGAr4hzEGxxYD8AH+Ojh00kISYTcYrQvwST
+         Pb3jXyPVZMU8MusBD+A0pIPluCWmxCH4Y9gfY3nLdG2RPWH9mzPXo1lxSeVFyTRasuV3
+         jI+iII9LvtQHQLRX5lilQEw2PrhRsj62shYDOvIGX+lIJCKoODd5h12wLoalfAw+qBEd
+         MsrtW4hsc0krY8hWLd88cS/kL0J1Iuj7Cnh2ngid9CB2RirbLRXCBopExXv2KwP/nOLp
+         h7GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786040708; x=1786645508;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eRxIpMxQf2eH73MswyccHSNChNNfT/J5n/NCnkKxEHE=;
+        b=LOhpYomVH3hOjvauj5BGxXOS9oIuBA1xcZwdmuYHpofwAW1ZkmWeTICRboOk/CuPDz
+         QrQFf2uLsTGcbNBSEOej9Y6dSHC7gl9aNgOaSZOkA8BOyJZdH/Y/9X26+5u491j7FdsH
+         PFns5a6p/xFym9AzIAyhCv+S1D0xojMnoeD++ulVMmFBmm0OqpgQ1hWzDEksOYOeaFNR
+         bxOfJoYFgG/Cis41kvCBdOan0nyxLI6OGkm63+QGV5ph46jF0ziVbpj2bTboINWnrLdh
+         1Fza7ImdZNNPW0z/Q6mRa8mXxiF6/OrkdaKe+GPz5Sach7qoITMhkQY7RvZ9wDgeUhT+
+         etew==
+X-Forwarded-Encrypted: i=1; AHgh+RoteL/PLC7o5396bbkepf4fcTuZsR4jnGoNgPU10fY0uhi486am6wbjHWKGMbNTvY4pbOlinKklougj/9DUUCM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHiWfYnKzqDEjqEzJui1Tmgm8KT2Vl3FkzCzwDDClNCp76G0im
+	5Naor3Uep4cU7756lIwP9Y4orJYqdp2GxmWfokgn7+EJBTC25ho6bssS
+X-Gm-Gg: AR+sD12nByWbtXLnz9VAYKBL9sJOy8o1VUe5ac0iKzVGAXW52wnWuMFogGcPw4NCwgW
+	pUjkPhsPpfPIWNObRDGu9IwBWs9pNJFtre4mziFB0RLnNgFlCzC1vqGCHat4P9M3+k96Ja0BNKI
+	C9DTcfu7bBIjLysvZ0zKOtH9nMjUxzCGdQHs662uCMDfES6pSVqdeNsVDCt8D3WlWMJyF8jsn+D
+	1ByP9No6rZySgXQsmy/A1W7Mab1pguXqArtDrYrlnfGtndkgi5ep6NsEU1kpTe2HZx9S0grKcXk
+	ZIDlqBalVOQxSzAiyyrC085ifb6T8FPnECymkbYmIj4oESoEP2wqh9GddHwEpntlpgzFrJsGPT3
+	vJmvmhK1fsfhkahlJuindiXHg4uczot4QYAVTouG6pv5AiNVeKGD4ajdvCud8Zm1YCifFFJqA8x
+	++QVpD2iMAm71ijOMcoRil7s5ydc9F43euhCaHWQBh7M2GmFUX01F0G1+P25U1K44R9TVMxDwAj
+	aOZCIPo
+X-Received: by 2002:a17:90b:3889:b0:381:973e:fa08 with SMTP id 98e67ed59e1d1-3903c5cfba2mr14353244a91.18.1786040708017;
+        Thu, 06 Aug 2026 11:25:08 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:6e::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315867bc261sm29668669eec.28.2026.08.06.11.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 11:25:07 -0700 (PDT)
+Date: Thu, 6 Aug 2026 11:25:04 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: JP Kobryn <jp.kobryn@linux.dev>
+Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jiri Kosina <jikos@kernel.org>,
+	Benjamin Tissoires <bentiss@kernel.org>,
+	David Vernet <void@manifault.com>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Andrea Righi <arighi@nvidia.com>,
+	Changwoo Min <changwoo@igalia.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
 	Andrew Morton <akpm@linux-foundation.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Colin Ian King <colin.i.king@gmail.com>,
-	Muhammad Usama Anjum <usama.anjum@arm.com>,
-	Andrei Vagin <avagin@google.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] selftests/mm: Fix soft-dirty kselftest supported check
-Date: Thu,  6 Aug 2026 14:17:04 -0400
-Message-ID: <20260806181843.1839943-3-audra@redhat.com>
-In-Reply-To: <20260806181843.1839943-1-audra@redhat.com>
-References: <7d6b4401-e230-4ca7-b64f-c1277fa643b8@kernel.org>
- <20260806181843.1839943-1-audra@redhat.com>
+	Mykola Lysenko <mykolal@meta.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
+	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
+	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/4] selftests/cgroup: add memcg_stat_cross_cpu
+ correctness test for flush
+Message-ID: <anTRgIZe5wgAsdCU@devvm16600.scu0.facebook.com>
+References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
+ <20260721174833.1232771-3-ziyang.meme@gmail.com>
+ <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <f83b6c93-b32e-434a-94b7-68628a2e8527@linux.dev>
 
-On architectures with separate user address space, such as s390 or
-those without an MMU, the soft-dirty kselftest may fail when checking
-to see if the feature is supported.
+On Wed, Jul 22, 2026 at 11:42:58AM -0700, JP Kobryn wrote:
+>On 7/21/26 10:48 AM, Ziyang Men wrote:
+>>Add a test_progs selftest that verifies the memory-cgroup BPF kfuncs
+>>return values that agree with what userspace reads from cgroupfs, across
+>>a whole cgroup subtree that has been charged on many CPUs.
+>>
+>>It complements the existing cgroup_iter_memcg test.  cgroup_iter_memcg
+>>calls the memcg kfuncs on a single cgroup (BPF_CGROUP_ITER_SELF_ONLY) and
+>>only asserts each value is greater than zero, so it never checks that a
+>>value is actually correct.  This test compares the kfunc values against
+>>what userspace reads from memory.stat, and checks every node in the
+>>cgroup tree.
+>>
+>Can you extend the existing test instead of adding a new one?
 
-  # --------------------
-  # running ./soft-dirty
-  # --------------------
-  # TAP version 13
-  # 1..15
-  # Bail out! PAGEMAP_SCAN succeeded unexpectedly
-  # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-  # [FAIL]
-  not ok 1 soft-dirty # exit=1
-  # SUMMARY: PASS=0 SKIP=0 FAIL=1
+Hi JP,
 
-The soft-dirty test will initate an ioctl with the PAGEMAP_SCAN flag with
-an invalid address for the page_region. This is done intentionally to
-have the ioctl return with an expected EFAULT and with the correct
-categories returned.
+Good suggestion. Actually extending the exisiting one was the plan in the v1.
+However, existing selftests with similar purpose is the cgroup_iter_memcg, which
+is in the bpf/. After discussed with the bpf reviewer in v1, we think this
+selftest may suit better in the cgroup/ rather than the bpf/, since 1) it tests
+the cgroup functionalities (bpf is a tool), and 2) together with the selftest,
+this patch serials also ships a common Makefile lib.bpf.mk for easily compiling
+selftests for other subsystems using bpf. Currently there is no other selftests
+in cgroup/ relies on BPF and we think it is good to put this selftest here as
+the first consumer.
 
-However, on architectures with separate user address space, such as s390 or
-those without an MMU, the call to __access_ok (used to validate the
-variables provided with the ioctl) will always return true and we will not
-fail as expected.
+We appreciate any possible suggestions. Thanks very much!
 
-        if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
-            !IS_ENABLED(CONFIG_MMU))
-                return true;
-
-Let's simplify the check for PAGEMAP_SCAN and provide a valid page_region
-address so that we get a non-errno return if it is supported.
-
-Fixes: 600bca580579 ("selftests/mm: check that PAGEMAP_SCAN returns correct categories")
-
-Signed-off-by: Audra Mitchell <audra@redhat.com>
----
- tools/testing/selftests/mm/vm_util.c | 23 ++++++++++++++---------
- 1 file changed, 14 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 6b65bd0a1e0b..4a8e339a7403 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -66,20 +66,25 @@ static uint64_t pagemap_scan_get_categories(int fd, char *start)
- }
- 
- /* `start` is any valid address. */
--static bool pagemap_scan_supported(int fd, char *start)
-+static bool pagemap_scan_supported(int fd)
- {
-+	const size_t pagesize = getpagesize();
- 	static int supported = -1;
--	int ret;
-+	struct page_region r;
-+	void *test_area;
- 
- 	if (supported != -1)
- 		return supported;
- 
--	/* Provide an invalid address in order to trigger EFAULT. */
--	ret = __pagemap_scan_get_categories(fd, start, (struct page_region *) ~0UL);
--	if (ret == 0)
--		ksft_exit_fail_msg("PAGEMAP_SCAN succeeded unexpectedly\n");
--
--	supported = errno == EFAULT;
-+	test_area = mmap(0, pagesize, PROT_READ | PROT_WRITE,
-+			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (test_area == MAP_FAILED) {
-+		ksft_print_msg("WARN: mmap() failed: %s\n", strerror(errno));
-+		supported = 0;
-+	} else {
-+		supported = __pagemap_scan_get_categories(fd, test_area, &r) >= 0;
-+		munmap(test_area, pagesize);
-+	}
- 
- 	return supported;
- }
-@@ -89,7 +94,7 @@ static bool page_entry_is(int fd, char *start, char *desc,
- {
- 	bool m = pagemap_get_entry(fd, start) & pagemap_flags;
- 
--	if (pagemap_scan_supported(fd, start)) {
-+	if (pagemap_scan_supported(fd)) {
- 		bool s = pagemap_scan_get_categories(fd, start) & pagescan_flags;
- 
- 		if (m == s)
--- 
-2.52.0
-
+Best,
+Ziyang
