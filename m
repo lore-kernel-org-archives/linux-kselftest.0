@@ -1,120 +1,141 @@
-Received: from va-2-114.ptr.blmpb.com (va-2-114.ptr.blmpb.com [209.127.231.114])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73FC63DDDCA
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 08:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.231.114
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721CE3DDDCA
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 08:32:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786005102; cv=none; b=evQtFOuMfONYyAsk5ClmW9kuKNCI2TSbBBphB6n8mmzmvrQzmXut95akkGqIB0bwAe/bOY+oyL3AUL56tC1V50E/0hNRT0ibX8lPUPaB1fsUkR2r9PtcjkMxlr+RK+XlP7JFu5a1e+nx+sqXaZgBJkI+Hc8pFb4ygDzYT2JwSIs=
+	t=1786005178; cv=none; b=I/QbrGyIDGWrZKmkwlRIrPHhtw9kptCWxJCsnF0SywFInz5rS8+hzK003V0QXKlTBHCnIOgY1aksklsp2qAARA597rawh22w1MjjjMqARlaVom/9xZKaw5hRyT0KWUK97SIF6ReRtD/BA2m1nDwAv0u3ykPpf9Kx8VbLPAw4fKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786005102; c=relaxed/simple;
-	bh=rfAg9+vlZRSeBDERi47CIWrnDjrZUkZOOA7cBBlEE8Q=;
-	h=Cc:In-Reply-To:To:From:Subject:Message-Id:References:Date:
-	 Mime-Version:Content-Type; b=KHdH8qlq9i3yKT5ZVJBuNt5ww3mL813Fkgq4Mn6uZpp1qHk6GMalvcJ9q6oXuu2lHgt3QkfJKO/l06OyM9goPfINtxMMDjwjihlpLx5doGlemDxl/PFbYeVsFHC41DZ9uF0RTDtoNu3oFGQUn/5uhReopEHqBKzXIEX8fsuMqvk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=bcPqDrc4; arc=none smtp.client-ip=209.127.231.114
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1786005178; c=relaxed/simple;
+	bh=a8S7/JFgNnijj79KFMHsJp0QhSQmc5cbmCjp8MdJIz4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p+JRZc6C0XbZ6JRLHfHnpmtXgY/Dxxqaw8kk1ArRfuMAo/z/jBIdXsPYs+7mC8i0NqS8YyVS3hrcM5HR/iK3HkiEidWTR1/9h9XjeXrvkOui4O7pUIbMADM5MQUENmxn/MjDFZZQy36V+sDBt2oueBsMj8AL8mgYbTxO9ryK8KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TsTigD0/; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="bcPqDrc4"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1786005089; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=TzwvI+eXJsGb/cAPo0rfIYUZtB1cCMLRnPpRkYG8Z0s=;
- b=bcPqDrc4BsrVxQQqv84RZ5X7TS6yX0axyhdBZaAh34219lv0faocuFqxa4cBaaoN9ahbj7
- jmIGKNnXrdxXOBY5hfIWM3K5mLKv7VSZK1R5+cL/nb/FicrwD+jQVNdvnWFpxmQOy/yPfO
- 22+jqz6s70rbylpdeVaUt/DzoftFzHgGvyNLsDLRPdrmugoVjQ4R2+xKCwYYIc3iO6C9X9
- G2En7FFMoGy9U2sWvDkM93eVunkzyEGabr4r9IxG1yBUISkQEi5/sLbfuvHle2iIoE6FJ+
- rt1wXxjccy/vrl1ehmPHXN9qukmWsfjYW189jbG3mFMBekG7+3JkewqCQjUr0g==
-Cc: "Heiko Carstens" <hca@linux.ibm.com>, 
-	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>, "Rui Qi" <qirui.001@bytedance.com>
-In-Reply-To: <20260806083101.2651025-1-qirui.001@bytedance.com>
-To: "Steven Rostedt" <rostedt@goodmis.org>, 
-	"Masami Hiramatsu" <mhiramat@kernel.org>, 
-	"Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, 
-	"Shuah Khan" <shuah@kernel.org>
-X-Lms-Return-Path: <lba+26a74465e+e934ec+vger.kernel.org+qirui.001@bytedance.com>
-X-Mailer: git-send-email 2.20.1
-X-Original-From: Rui Qi <qirui.001@bytedance.com>
-From: "Rui Qi" <qirui.001@bytedance.com>
-Subject: [PATCH 2/2] selftests/ftrace: Convert ELF entry point to file offset in uprobe test
-Message-Id: <20260806083101.2651025-2-qirui.001@bytedance.com>
-References: <20260806083101.2651025-1-qirui.001@bytedance.com>
-Date: Thu,  6 Aug 2026 16:31:01 +0800
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TsTigD0/"
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-47fde295992so554822f8f.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 01:32:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1786005172; x=1786609972; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=a8S7/JFgNnijj79KFMHsJp0QhSQmc5cbmCjp8MdJIz4=;
+        b=TsTigD0/XPbfkWE22/1rFlVGn1dDgZHbprne7m2tTdo0sXWTL8TMNZVUJQuzpIXmyH
+         OpKgEP083D7pWnDzI4B3B0ZZ2LCoB1UrZtuEOfOSZjgDJotb2z/R9qpzOuDRm5NDOzXh
+         fiQ3KhNiIi/OXrpNDINseyrWh7OuiLnkLf9SfOOWe0Xd2O4WP1oPJA+ha7ySHBoo1JQX
+         szvAKJYqDZBcwvKcCR39cxWSL8/Siv1qCV5MmyoW/6dZKDN1J5oOo0GM8PhLFdMMkgR6
+         tVj+kzY8SzUKZp7J0oFC4CXh5SRcrtqz1ghGV86XCMwSeK8UPKzYn3JhB4uan2pGPRdy
+         4AiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786005172; x=1786609972;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=a8S7/JFgNnijj79KFMHsJp0QhSQmc5cbmCjp8MdJIz4=;
+        b=FjFHrthVCyszKL3T6ZSRT/YpRkUnr37K+VmI1ygkMijCDb2NtA6OXh/73t9mw1+mid
+         BlbCSvfCr6MGj0u//W3guMQe7V0tDB+RaWRdVNSWx6qJ0qR7FT4dKUDRBBE1iuTGiMpv
+         LShNiku3UueEKAxZKIE3kmDCtKGRExHcU1m/KxAI7S6qS+XkfTyD0BXbjwB1+vESuMWQ
+         t/EhhK8eJm64cEuELVuSkzcqdeiuoR6zLwmVyT0IQ5K9G8llsv6/dJho3FCB7tAWNDa8
+         T90Z8iCg6XNvJ8mEvb5x8dwpnKpCfDDV/GY4oQxqJ8Dl7pZsLR7okz3lXZ/8Dm7Gl1NN
+         7Ezg==
+X-Forwarded-Encrypted: i=1; AHgh+RpXisDv19f+dDhy5zdz/ls+0yKixR00aYblxPYH71GkwnxzRbkHlepfPnnm3tQE5U3ygYFUhXzB2tqem5XocR0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwowXzWsg+aWxbLZ+R3BotsmE2eiDqN12Mhj0yvIfhY9/mt+O3W
+	nF3kr5vyZ28qdl5/TW0Qy5T107TLs63NsSRgF3FIrXdArBISRKrTUk24dLuiB/tKWtihQ4I2lXb
+	L5VusK6ZRSg==
+X-Gm-Gg: AR+sD13vSkdkla37sS9jrzL00CLPWzliGxlfuGnGXa26X4bnO0o+CPyN3a2YxB5F3JN
+	7m2lMVWVF6ZFyMk6jQi+xJyDgJjt7sQTkElAHAmZo+sgcSLL3LrdNhQOJWStBBaTFh3h/DmNvF5
+	qrJD9Qz7dNnYFG71qtEXYYimcIXxzaXNMdxWgyYu3YcP+nY0k98BOaiUQtUykvinLiganTK9vN1
+	XH8oi1mAbANnaBHiWK+yC21fgjoAXxUbKTf7q/ISlgcggJ5um/1VFkPAsGausdTthzoDv3eYa3/
+	2oktyvBxyoHVSWTz/qIz8AoFskCx7l4xgTx5SR8OeAsmnpN+y72M4ex8yH32b7RabZ57Kc9EMrn
+	HQimObEfTfj6cOPbXt3zrAxlCdunAa8DAO6fooA51jjwAX0hmYVT3syTkHs5DZ2cp+Zt/wI3sUo
+	kffWA87HgyBrb8a+2wRU/bl8VwIDefdlT8Y+yyvsrXOAKIFRUyQLhk+II+c1souQCO
+X-Received: by 2002:a05:6000:2893:b0:47f:8abb:1fd2 with SMTP id ffacd0b85a97d-47ff4ba8c30mr7832158f8f.3.1786005171925;
+        Thu, 06 Aug 2026 01:32:51 -0700 (PDT)
+Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-47ff79a7258sm4332220f8f.3.2026.08.06.01.32.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 01:32:51 -0700 (PDT)
+Date: Thu, 6 Aug 2026 10:32:49 +0200
+From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
+To: Wilson Felipe Pereira <wfelipe@google.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, 
+	Nhat Pham <nphamcs@gmail.com>, Chengming Zhou <chengming.zhou@linux.dev>, 
+	Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 2/2] selftests/cgroup: test_zswap: fix implicit unsigned
+ promotion bug in test_no_kmem_bypass
+Message-ID: <anRFukpcm9Pb97AQ@localhost.localdomain>
+References: <20260804042053.56940-1-wfelipe@google.com>
+ <20260804042053.56940-3-wfelipe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="lcbrsqi5muuudvb7"
+Content-Disposition: inline
+In-Reply-To: <20260804042053.56940-3-wfelipe@google.com>
 
-The add_remove_uprobe test uses "readelf -h" to obtain the ELF entry
-point (e_entry) and passes it directly as the offset to uprobe_events.
-However, uprobe_events expects a file offset, not a virtual address.
 
-For PIE binaries (ET_DYN), the virtual address happens to equal the file
-offset because the first LOAD segment has p_vaddr == p_offset, so the
-test works by coincidence. But for non-PIE executables (ET_EXEC),
-e_entry is an absolute virtual address (e.g. 0x406ad0) that far exceeds
-the file size (e.g. 0x7be60). When the probe is enabled, uprobe_register()
-checks offset > i_size_read(inode) and rejects it with -EINVAL.
+--lcbrsqi5muuudvb7
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 2/2] selftests/cgroup: test_zswap: fix implicit unsigned
+ promotion bug in test_no_kmem_bypass
+MIME-Version: 1.0
 
-Fix this by converting the virtual address to a file offset using the
-ELF program headers: scan readelf -lW output for the LOAD segment
-containing the entry point, then compute file_offset = e_entry -
-p_vaddr + p_offset. For PIE binaries the result is unchanged; for
-non-PIE binaries the offset is correctly translated.
+On Tue, Aug 04, 2026 at 04:20:45AM +0000, Wilson Felipe Pereira <wfelipe@go=
+ogle.com> wrote:
+> In test_no_kmem_bypass(), delta (stored_pages * page_size - zswapped) is
+> checked against stored_pages * page_size / 4 to verify that the pages
+> pushed to zswap belong to the test memory cgroup.
+>=20
+> Due to slight stat update timing differences, delta can evaluate to a sma=
+ll
+> negative number (e.g. -5MB out of 1GB). Because delta is declared as a
+> signed int and stored_pages is an unsigned size_t, C's usual arithmetic
+> conversions implicitly promote a negative delta to a large unsigned 64-bit
+> integer, causing `delta < stored_pages * page_size / 4` to falsely evalua=
+te
+> to 0 and fail the test.
 
-The conversion uses only POSIX shell primitives (printf, arithmetic
-expansion) with no dependency on gawk or perl.
+Thanks for the breakdown.
 
-Fixes: dc4b165855f2 ("selftests/ftrace: Use readelf to find entry point in uprobe test")
-Signed-off-by: Rui Qi <qirui.001@bytedance.com>
----
- .../test.d/dynevent/add_remove_uprobe.tc      | 27 +++++++++++++++++--
- 1 file changed, 25 insertions(+), 2 deletions(-)
+> Fix this by checking abs(delta), ensuring the test correctly compares the
+> absolute difference between system zswap and cgroup zswapped bytes.
 
-diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-index f33a863be68b..9207fd817aae 100644
---- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-+++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
-@@ -12,9 +12,32 @@ echo 0 > events/enable
- echo > dynamic_events
- 
- REALBIN=`readlink -f /bin/sh`
--ENTRYPOINT=`LC_ALL=C readelf -h ${REALBIN} | grep Entry | sed -e 's/[^0]*//'`
- 
--echo "p:myevent ${REALBIN}:${ENTRYPOINT}" >> uprobe_events
-+# Get the entry point virtual address from ELF header
-+ENTRY=`LC_ALL=C readelf -hW ${REALBIN} | grep "Entry point" | awk '{print $NF}'`
-+
-+# Convert virtual address to file offset: find the LOAD segment containing
-+# the entry point, then compute file_offset = e_entry - p_vaddr + p_offset.
-+# For PIE binaries this is a no-op (vaddr == file offset), but for non-PIE
-+# executables the virtual address is much larger than the file size and
-+# must be converted, otherwise uprobe_register() rejects it with -EINVAL.
-+ENTRY_DEC=$(printf '%d' "$ENTRY")
-+OFFSET=$ENTRY
-+while IFS= read -r line; do
-+    set -- $line
-+    [ "$1" = "LOAD" ] || continue
-+    VA_DEC=$(printf '%d' "$3")
-+    OFF_DEC=$(printf '%d' "$2")
-+    FSZ_DEC=$(printf '%d' "$5")
-+    if [ "$ENTRY_DEC" -ge "$VA_DEC" ] && [ "$ENTRY_DEC" -lt "$((VA_DEC + FSZ_DEC))" ]; then
-+        OFFSET=$(printf '0x%x' "$((ENTRY_DEC - VA_DEC + OFF_DEC))")
-+        break
-+    fi
-+done << EOF
-+$(LC_ALL=C readelf -lW ${REALBIN} | grep LOAD)
-+EOF
-+
-+echo "p:myevent ${REALBIN}:${OFFSET}" >> uprobe_events
- 
- grep -q myevent uprobe_events
- test -d events/uprobes/myevent
--- 
-2.20.1
+I still think the delta quantity has some meaning here and taking the
+abs() changes the semantics of the checked inequality.
+
+What about making both zswapped and delta `long`s? (Under similar
+reasoning, there's already a possible loss after squashing
+cg_read_key_long() result into the `int`.)
+
+In any way, also
+Fixes: a549f9f31561a ("selftests: cgroup: add test_zswap with no kmem bypas=
+s test")
+
+Thanks,
+Michal
+
+--lcbrsqi5muuudvb7
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCanRGrBsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AjG7wEAubwExH9IrXsRlyXqhce7
+oitcuCe9bJ98x6HC+nOhwGYBAP1BPxXMx8oSYQJbEG2gUmqt3VXQUyW00jKZMzWe
+GagA
+=B29m
+-----END PGP SIGNATURE-----
+
+--lcbrsqi5muuudvb7--
