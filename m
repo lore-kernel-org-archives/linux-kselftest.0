@@ -1,209 +1,58 @@
-Received: from out-176.mta1.migadu.com (out-176.mta1.migadu.com [95.215.58.176])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9311432B9A1
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 18:57:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9288738B148;
+	Thu,  6 Aug 2026 19:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786042650; cv=none; b=G9xSpNy7cgRW5QPVVQrlsYE4Hq6ZHd837k7llYZdHpp3FygRnlyB5//QXnnvQ9s80encWuebHMlKROGz3g4JqFHFR6ta56P0SLhV6HvEZ4qI8A5S43xkSYjUvBEC6z/8AIv6X2uku8JeIqtN7j2LBTNHRr/9CBCx1dS32Hg3QWo=
+	t=1786043764; cv=none; b=Zy5R0QSbOjGZUh7vSky+8+tM0YNdgMk0Gy9uqYdHOFJKaZeU78EvQ9LgzXQ0P/ANO7FOLlpMvIJ7KpIxzXPKd+c6vdr5Sauc30zIQjTkp+hGcWRzI2SDWsxkZ/etnbhu6mGIhxsagj6LFcXDLXQe4kY8Jx3+mO3chxkulTMsyQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786042650; c=relaxed/simple;
-	bh=FfMf+Bp6cLwLev3QZf8OODCZ/4jlepMwXNtHzfiav+k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gB9ATl6JSjrB1oJsnVGTgPF9ftSoTLSguWwZSZFEQVH9XPh0hjE4q8fzS+95iEj9XS+IpKQfxv2K2d0Vc5vilae5mcPvKnrmC1I6d08mlMy0pzRn8A2MnfPxNZLlyUwVP0HPFMsm/NmDlFYAMfDyOwoP1kBnditRW+Yd0HpugYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ggeh4y7k; arc=none smtp.client-ip=95.215.58.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786043764; c=relaxed/simple;
+	bh=Ayoefe+u83fV40A93AX5I//aRU9OYWNyojyyOJjUzkc=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sJly9atTdMDBs17+R4lg+d4ast5gdzlqbA1pQd33ShpLuGwBn4a6GqGfOnoXliDhV1SonxIUErjFKJ/HSz+4xcSHZRNUynt2EK7/WQ59RJkXjmXDf6AfWouS6IGnT5vICzueoW3rIVDolTUwKlYyEU0Tdfa8C9VcwraAn4ixu7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxWkrqd9; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ggeh4y7k"
-Message-ID: <71b9f5ae-eed4-4d03-a3b9-2493b525bc34@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786042632;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TnKlokgKaGMjeqkxKWUO8tLs0dQnQKHqVL+e33E5DO8=;
-	b=Ggeh4y7kbrGNYFxeOSk2gLH6+hWkgTkYttMIZpU58zvB9C+cPzborhZ1wXg0Cv1gJKNrbK
-	cY3oeA8sRY7UB/XVMBLD1tkGSb7hAxkHtWXcIp5dmkgOkcikTfpwbfCV0QQQsoT8q/5m+4
-	JTvfbHCXKRWdsJSExSu7kD4BmCpZSGE=
-Date: Thu, 6 Aug 2026 11:56:47 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxWkrqd9"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C57A01F000E9;
+	Thu,  6 Aug 2026 19:16:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786043763;
+	bh=AklPtlKe3UTLcRSVQyR6y+5whHoeaUhYUouu2XQfPjY=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=KxWkrqd98zLESmj/3kWcnlvp0SvGH6+nU1rvMPdvWU0QRSwrSZfZkcdTqU2p3Eh+3
+	 OY2gSvjo4Ef7YfHgn4RXyrAqdWH5+tUrVH647+z9OyNB+2hJR5MPS8O1IlFEengx/Q
+	 Ch831ka2CLoc9hL6BgBDnBxZI4AwRHchqfxy0W2qIk7t4KQU7dx09tqiqA2Vx6sSY7
+	 TjuekrSFXc43ZY+7Ls+h9IGZZmDsYs/pNx8o5320+sewXtDH3+F6z+GHDB3V8c76oz
+	 YxbSKMX3tFbDJ+8egXHrpC0KxmSYoSkonT5nC8foE6tF9SxrS3QRkCHOJUD/JsAEvL
+	 rnj/rgvC+4Kuw==
+Date: Thu, 6 Aug 2026 12:16:02 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 2/2] selftests: drv-net: ncdevmem:
+ gracefully retry bind()
+Message-ID: <20260806121602.711dfa34@kernel.org>
+In-Reply-To: <20260803181852.491437-2-almasrymina@google.com>
+References: <20260803181852.491437-1-almasrymina@google.com>
+	<20260803181852.491437-2-almasrymina@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf v2] selftests/bpf: keep polling connection that is
- still in progress
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 8/3/26 12:36 AM, Alexis LothorÃ© (eBPF Foundation) wrote:
-> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
-> following logs:
-> 
->   (network_helpers.c:309: errno: Operation now in progress) \
->     Failed to connect to server
->   send_and_test_data:FAIL:connect to server unexpected error: -115
-> 
-> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
-> socket (see settimeo() in client_socket()), allowing connect() to return
-> an error and to set errno to EINPROGRESS instead of blocking until
-> connection result is known. Increasing the timeout value for those tests
-> is likely not a good solution (and it has already been done by commit
-> 2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
-> they involve subtests that expect the connection to fail, and so
-> increasing the timeout value would increase overall test execution
-> duration again (not only the connection, but any socket operation).
-> 
-> Another solution, as documented in man 2 connect, is to poll the socket
-> for POLLOUT once connect has returned EINPROGRESS, and to get the actual
-> connection result through getsockopt: this allows to keep the overall
-> timeout values low for the general traffic, while letting a chance to
-> the connection to succeed even if CI runners are loaded.
-> 
-> When connect() returns EINPROGRESS, poll the socket for POLLOUT and
-> check the connection result via getsockopt(SO_ERROR).
-> 
-> Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
-> Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> ---
-> Changes in v2:
-> - drop unneeded initialization
-> - add back error message for immediate connection failure, and slightly
->   reword the async connection failure error message
-> - Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
-> ---
-> I manage to reproduce the issue locally by running `./test_progs -a
-> tc_tunnel` in a qemu machine, while making all my CPUs busy with
-> stress-ng on host side; the issue happens pretty quickly. I have not
-> been able to reproduce the issue anymore with this fix.
-> ---
->  tools/testing/selftests/bpf/network_helpers.c | 41 ++++++++++++++++++++++++---
->  1 file changed, 37 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index db935a9d9fc1..52e7b72f8a77 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
-> @@ -14,6 +14,7 @@
->  #include <sys/types.h>
->  #include <sys/un.h>
->  #include <sys/eventfd.h>
-> +#include <sys/poll.h>
->  
->  #include <linux/err.h>
->  #include <linux/in.h>
-> @@ -40,6 +41,8 @@
->  #define IPPROTO_MPTCP 262
->  #endif
->  
-> +#define CONNECTION_IN_PROGRESS_TIMEOUT_MS	3000
-> +
->  #define clean_errno() (errno == 0 ? "None" : strerror(errno))
->  #define log_err(MSG, ...) ({						\
->  			int __save = errno;				\
-> @@ -294,7 +297,8 @@ int client_socket(int family, int type,
->  int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
->  		    const struct network_helper_opts *opts)
->  {
-> -	int fd;
-> +	socklen_t errlen;
-> +	int fd, err;
->  
->  	if (!opts)
->  		opts = &default_opts;
-> @@ -305,13 +309,42 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
->  		return -1;
->  	}
->  
-> -	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> +	err = connect(fd, (const struct sockaddr *)addr, addrlen);
-> +	if (err && errno == EINPROGRESS) {
-> +		struct pollfd pfd = { .fd = fd, .events = POLLOUT };
-> +
-> +		err = poll(&pfd, 1, CONNECTION_IN_PROGRESS_TIMEOUT_MS);
+On Mon,  3 Aug 2026 18:18:26 +0000 Mina Almasry wrote:
+> During tests, ethnl_rings_set randomly bounces the link causing a
+> transient IPv6 Duplicate Address Detection "tentative" race, resulting
+> in spurious -EADDRNOTAVAIL aborts inside the ncdevmem server.
 
-Hi Alexis, thanks for the patch.
-
-When I ran tc_* selftests in parallel it looked like they hanged.
-
-I think what's happening is that this 3s timeout is additive, making
-some tests to wait for too long. For example tc_tunnel has 1s timeout,
-but with this change it actually becomes 4s. AI says a successful
-tc_tunnel run makes 50+ connections, so it adds up to minutes.
-
-We should probably be using opts->timeout_ms as an absolute budget set
-by the caller, and pass it (or remainder?) to the poll().
-
-> +
-> +		if (err <= 0) {
-> +			if (err == 0) {
-> +				log_err("Connection timeout");
-> +				errno = ETIMEDOUT;
-> +			} else {
-> +				log_err("Failed to poll connection status");
-> +			}
-> +			goto close;
-> +		}
-
-Also poll() can return EINTR here. I think we should retry EINTR,
-taking into account the absolute deadline.
-
-pw-bot: cr
-
-> +
-> +		errlen = sizeof(err);
-> +		if (getsockopt(fd, SOL_SOCKET, SO_ERROR, &err, &errlen) < 0) {
-> +			log_err("Failed to getsockopt");
-> +			goto close;
-> +		}
-> +
-> +		if (err) {
-> +			log_err("Eventually failed to connect to server");
-> +			errno = err;
-> +			goto close;
-> +		}
-> +	} else if (err) {
->  		log_err("Failed to connect to server");
-> -		save_errno_close(fd);
-> -		return -1;
-> +		goto close;
->  	}
->  
->  	return fd;
-> +close:
-> +	save_errno_close(fd);
-> +	return -1;
->  }
->  
->  int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
-> 
-> ---
-> base-commit: 2efc18d4bb9ad28d240b69bd324937f1ec12e93d
-> change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
-> 
-> Best regards,
-> --  
-> Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
-> 
-
+The test env is supposed to disable DAD and addr flush on down.
+If DAD is enabled multiple ksft tests would fail.
