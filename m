@@ -1,439 +1,399 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11021127.outbound.protection.outlook.com [52.101.62.127])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8E7418363
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 19:48:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786045733; cv=none; b=Xs0O9siYn7JeF56dfLzSNIDLQ9ZxIB1dxHER3UJ81bbfobDeqOVuj3r33Os0lhi8b/b1SrASf+qe7zo1HY+MjVZaueD6rdD0R78J2h01Z8bXpjq7OOTtJD/QfnEdN8wPZx86NmYmu2hnBmWcbFeNogB6xyC80feXtHS8P7k6LBk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786045733; c=relaxed/simple;
-	bh=gPimxkPqli+lAHjaIahR3kSSOR2AKsJn+nrHP39GhCA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oVHIR1/leifiBil95dKxETCkK0VSK+A0eeIzhEjXq7cOS8uzMGgt5XQos7iNDK+uiR4FBn22dTZ708od4378ZhcLb354XOdJh948TKyGy8aMPFxJcV07acGUldvDeO1aXMhcPXJY9My7ZNSSZt0zyiJmxV2e+HQpmYeqyCfgx9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qc+3K9dT; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8232F494830;
+	Thu,  6 Aug 2026 19:55:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786046134; cv=fail; b=uFMMR4dMez6CN611vOAkLPzR8EHFDFfxLcD/GgrkQbc6+Gqu0/xD045Pygy21/bmx2N0WGsnd2svNAlnxviGGKKuLjnr2kIGwuYiCCAuaT6cPMCSzqxO95HMO0NYJ8WszhMqf6vyDgis19IOoQ2QZ/BjO8fqIQKdqUklVTrfKaI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786046134; c=relaxed/simple;
+	bh=IJ5SBq3e6Bt1pNsfc3TGuAfLtTYBHefo+h+4Oc+xK3o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=juL0mt46mTY9RJJN6B4hmuoq52OfALHfMJzdzVOs/TS1TUevnGATwelaK68zarOVh7HVkd/uqfoHBpYtJCTaTREiX9Ma9z7WwV2DGjfXIQe2YiKvLcAu0c9lcfMA9zlNXhCLJsMD3mR73sOyCiVuyyYJInokkO5sblsdMscTi4w=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=ho/+IDpO; arc=fail smtp.client-ip=52.101.62.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rambus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qc+3K9dT"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cfff5f88dbso38130685ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 12:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786045721; x=1786650521; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sol2WO6spiJABjGJXVw88JoISuJHWDSM4SUE68dh/Oo=;
-        b=qc+3K9dTCsc4bal/1qEIxka8OT/7fELT8ZQ34ntLfiCupyUpaWo6HrxUyy1ABDNL6i
-         qHYmG0qwernzRbCW6vjacWpeBbWTW+GqnbT//1mPzVrcnqw2elENGuESBEUDJuKQlCcP
-         hQ9ZKcrt10V62omOZYV/+BQdHDsfpm/Et6V0Hu7BSSclTT8DyuxErdi+xR8PPBgAPUxu
-         7+d3E9E7m4R4t02FAqVRUuxZGrSwWVrKJGrvveYbYX6zAlKzPKeKp6wPg06V7JQ/q4jy
-         bTkg99cmcA17pV4Xe7j/5j3Cw+mrWd0HiynpXxzFx48DptuOenbrn2gEOzJ1CH7ld/W0
-         U5fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786045721; x=1786650521;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sol2WO6spiJABjGJXVw88JoISuJHWDSM4SUE68dh/Oo=;
-        b=HV3inV7/LQharrOfUQMUJtQpWX6Xd4rdfKjzYKRLYLzTIMreEQSIHoPhyYCyZ4wuR5
-         PRT6dOsAJKSydQeJnRgMRkdOMBDkReYc6aWleo4PIJCIew3RFCCj+Uk4GLm9W6MPw4U9
-         ne2huaiG8VplPqCmMLG/dnYB7Pesfu2La+CEibDAOEb+i39SYANajX/ZkMPxjaCe9zFB
-         VwQU0ZxXK421ID7SKvAnbpn52zqITZuZ37seEb+zKdHwP2fsRBNcMsApBe7U/B3sEJvO
-         BYHI7djiYBLmKZNpVo+B3cQ1YfRKrLkUKz4YBEuZa/NRt3t/KqbS7UBjxcXFynwB2BlL
-         +rlg==
-X-Forwarded-Encrypted: i=1; AHgh+RqTZuRVDsRMUh6giOc7/ewi9WiXFaJSRC3y0XFlMoL+MySUSdTQJamN+Dd90TpRBbYlEJBppJ2gzo0VVTOmm0o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrhHI0FcHpmP76Rb06vd6Wu3rIbERRCoMthvAZO9oSJxkaag4q
-	eql/AnMFAr8GFXxCcQiVj3SaoO7hOZ66R5fPpsqiUkS8VgAijEduENOF
-X-Gm-Gg: AR+sD13jjO6g/KFdWJIFYNmM754vdLncDZDWgCzviTKIaqn/3rFnpdOYkuv3GSLXO/+
-	96+u2w+MbDuQkLCPt0Wyq/qoAszOu+yjpDVD5BCVmUoYEoKdbwOq72u4lmWLZ3cUAgneTz4/mWS
-	mF0Avgm2uzQabWrEg3L2gTXAgwqMUPIX8W7L9aSkArwuEuy6LKv8YjSQOpjIBx0YP1nW4+2aa/m
-	FV0pxKTtIhN4Ko5stAZTBRxHgCbztAIB1gVZFNnIPNyxnZpkiYmFdbY07eeells9z27/g3V6jqV
-	ZjtpEdJT31GMYsMMOFWZw0FpTfuDnLYzXGxPi+AeZy6R4RsF7FKHjQZEhutd/D9U+4/zFAyW0gq
-	ltbOsjb3799VV5/nLITHBtdT3z6kMhF1VV50Gkv7jT67OO9h25OJfiSU0b1+oVa00zL7Q+AsJvJ
-	aiU7JtSveixfzMOJTBXjrNGNkG8z1S/oAL35XhFnpIlCOVbBK78RcgBhMZAqc+RPiyOpLKywVG6
-	wUSm7n0
-X-Received: by 2002:a05:6a21:139a:b0:3bf:82c5:ed13 with SMTP id adf61e73a8af0-3cb860269a0mr22194217637.38.1786045720625;
-        Thu, 06 Aug 2026 12:48:40 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:42::])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-14100a73dbdsm736497c88.15.2026.08.06.12.48.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 12:48:40 -0700 (PDT)
-Date: Thu, 6 Aug 2026 12:48:37 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Viktor Malik <vmalik@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, kernel-team@meta.com, bpf@vger.kernel.org,
-	llvm@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/4] selftests: add shared lib.bpf.mk to build BPF
- progs and skeletons
-Message-ID: <anTlFSsr5FqQt+o8@devvm16600.scu0.facebook.com>
-References: <20260721174833.1232771-1-ziyang.meme@gmail.com>
- <20260721174833.1232771-2-ziyang.meme@gmail.com>
- <f2a0db3b-ac66-4b29-9dff-a691d9464123@redhat.com>
+	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="ho/+IDpO"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=uiJnMeEVWrARVeJAKxi/PtgNm4tltOI3qfIiw001ZI9Vk75BJOm7jHvwJbCE8VyGXK0VGzNLvmslepboOSNLtFj1YGKB8TIFW/Vwy/lVeXwQ/JZa9H5JEuKr3I5pqWbdQLvAJ5HyjeQE0szfuAi9J9iN/9WPBbFyf98sdR8MZuckn06jahw+jfg2w//8ybNh9lVeCDDkpvXSCu46+5RG5yrxpZ+L605TdJ5fnWw4eWYw5iP9oD39r82E3A7CcKIV88k+A4TVdDhw6J0SccX+boi19+0MI+kB9Iy080v/up8MDf8siHEEBFOCyOG+VT7gsa4llT2poNins/Gl5TiNhw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YKOKyGfa2aAjHKsoye5pnQe6zvJ10LSCqxewIjsiY/4=;
+ b=aot2IUFkNfwPv1f2fexuGQxg2VSPYJ/61QmVgc+4BwL5zJlZnF/1D/zN5bYhkfizrz3NsGetIbMzW1pjla6ScGxeWvqhI/VQcfLnyBgEPSHL4uipJ1CyFnqcYdOi0WOImULlJom7/ErfYPmzqDOoW8Mb4Bx86lxFOIWoVmLdFumes3Hpkguf+Sc7yoWeSksLpZylyR9K1GiIjoVkDRwkTFcMk2mkZdZ2/yWF4tHPR34Yl/zsG2vrphQ/y3YAJ6bsk9dn9gcFfA0g5D0FTHyuwO/mmwIbtq+gmLzCU667jljy0ESU1rMgerhcPKDS8LFtu/AMBDfScJJwpIH2kb0IQA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 192.86.86.210) smtp.rcpttodomain=cryptography.com smtp.mailfrom=rambus.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=rambus.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rambus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YKOKyGfa2aAjHKsoye5pnQe6zvJ10LSCqxewIjsiY/4=;
+ b=ho/+IDpOu717dxzmrc7el+GtE797/jh4R/F3uXTxYpkdgtOInLxyhX+VUT/bVpJE7ObfsUYjxwfbdgvvUdp+T0B9AYNYybwagBKb4KwLIhREoXt+T9++dhq/pVcsnpl1953Wjkx+Yn7yVT7UJ0n/+Gwwz1IZmXZ9mCUIdOnptF9QUoOYYCXNJGzmaFXSAKkvsOmYco7FomKxJREkBJerU6CFJCQWauMrmMbekO4aMFzXCUj/andVAqBZhXOKQGCJCDYR5IxzfvfggOr++SLyp8bYlzBjb884G+chXocKdItIGwfh23tJ2LQOK1vG+mqIwmZ4W88DgVneq/h4V0Rg1A==
+Received: from SJ0PR03CA0030.namprd03.prod.outlook.com (2603:10b6:a03:33a::35)
+ by MW4PR04MB7153.namprd04.prod.outlook.com (2603:10b6:303:67::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Thu, 6 Aug
+ 2026 19:55:26 +0000
+Received: from BY1PEPF0001AE18.namprd04.prod.outlook.com
+ (2603:10b6:a03:33a:cafe::30) by SJ0PR03CA0030.outlook.office365.com
+ (2603:10b6:a03:33a::35) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.292.21 via Frontend Transport; Thu, 6
+ Aug 2026 19:55:26 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.86.86.210)
+ smtp.mailfrom=rambus.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=rambus.com;
+Received-SPF: Pass (protection.outlook.com: domain of rambus.com designates
+ 192.86.86.210 as permitted sender) receiver=protection.outlook.com;
+ client-ip=192.86.86.210; helo=hqxsv-psmtppxy02.rambus.com; pr=C
+Received: from hqxsv-psmtppxy02.rambus.com (192.86.86.210) by
+ BY1PEPF0001AE18.mail.protection.outlook.com (10.167.242.100) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.6
+ via Frontend Transport; Thu, 6 Aug 2026 19:55:25 +0000
+Received: from hqxsv-cmdev3-skrishnamoorthy.rambus.com (hqn-lb-int-float.rambus.com [10.12.20.20])
+	by hqxsv-psmtppxy02.rambus.com (Postfix) with ESMTPS id A43111801748;
+	Thu,  6 Aug 2026 19:55:25 +0000 (UTC)
+From: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
+To: Albert Ou <aou@eecs.berkeley.edu>,
+	Alex Ousherovitch <aousherovitch@rambus.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <pjw@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Alexandre Ghiti <alex@ghiti.fr>,
+	devicetree@vger.kernel.org,
+	Joel Wittenauer <Joel.Wittenauer@cryptography.com>,
+	linux-api@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Thi Nguyen <thin@rambus.com>
+Subject: [PATCH v3 00/19] crypto: cmh - add Rambus CryptoManager Hub driver
+Date: Thu,  6 Aug 2026 12:54:59 -0700
+Message-ID: <20260806195519.2703224-1-skrishnamoorthy@rambus.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <f2a0db3b-ac66-4b29-9dff-a691d9464123@redhat.com>
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE18:EE_|MW4PR04MB7153:EE_
+Content-Type: text/plain
+X-MS-Office365-Filtering-Correlation-Id: 8d81a04e-5164-4cc9-ed6d-08def3f4a8a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|23010399003|36860700016|7416014|376014|18002099003|11063799006|3023799007|13003099007|6133799003|10067099003|56012099006|921020;
+X-Microsoft-Antispam-Message-Info:
+	XduhScxT5DBYQU27E5dn7StrbTAHtMG/sCX1bY8jVPxINncVD/OkMCmE3pVN6/QLHt405yTuy7qBQEYBVE2VzczTgiNwT0F14JJOI6NJxZQqsH03Zj70rcJKaNO5ej1rRVGechItJ5IK6evKo3+Ba3jFUIN9trVYvHcQWiv8aK27p9Iov9G/ZzpGgUR0pDTQZu6TxbeK3Es5GlGXRKMFLtkgoDfneh9hIGhv1/ncPVEvc82tof3P+6lR5iMeZfjqogs+bRpMwZY58FfHgPmRhHVZxUA1Q/VV0Nb3010/1s4Ohw6o6SV/YPn5GnnjuV0EhipF1kEK+hBgXFS/ETzSKzRMiW2g8Q9ge6L1kqJLxsCoqc9jCy9BnTZjAllY81xTrickq8fP3gMfr/fpnq1U5wl3lRVOle44wzmoGNROs1XrcZOExbAz4/DWorepYL2htx62sK6Rz+TEPGOjTr+nl4rldmIw5QDh6WNrGF2H1vXKGjyy1cios84wtJ8j0NBoxL6+vGHD6d6iGzOTXjFMpeK3tvwnhugMgP9gB+9AgkEkndyQjnukn7Uec7enD57Frmy5MGAl+IW9r6FRELO/TRP3pZSvhOnbS0u6U5t9opppDrmIYakT/VOGjda6r9kuU45qYX/5feDkVELe4IbhhOoKdGV5IQjCuFuoZvDp4JyGTGFFTvh4l2oULMoTM0GanxtYBAomQhd0t8umhSF/OM7DAPJ1tKOlLKgJLNYQkgpAqBAOJiJJ/wBXrdYX88fO
+X-Forefront-Antispam-Report:
+	CIP:192.86.86.210;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hqxsv-psmtppxy02.rambus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(23010399003)(36860700016)(7416014)(376014)(18002099003)(11063799006)(3023799007)(13003099007)(6133799003)(10067099003)(56012099006)(921020);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	gSsU/Exyt+i+gkv0Y+9hC2i3SMBpNH/Uja2J9+o3kt1hrNO/o3B+6+zIqMuNtMjiPnrEqBGhcjLLnUw/xVMrYE+73jipNbNaKPjRmCprp+q87NZ6KFB4ml5nik/CItuIv5yuwA5z0VX0Rp0kxEVciHAO2XyBE/YfZ0CQHmXsOApaX7DiBbxgkC5Sj9g640c79TysfaN217Odwv8XiU/S5Ay924/FJYQKjCoUbJJgTO8F12bsFf18ubQIcBdFqP8LsundCOt+eq/JRBcGkpz8wRkBEx1tGKZ/uC+TVs7Cd+RxVDvbbig5PWM89zbgO9lxlAZybUp+VMGfUCLpZeHrfdESzWtcVXKrtKLBIzlShjinOgHTOwlVBE+vreoPOalkIQiidnuv5TsX2wC2bSS8o7o9/PL6CVWMXiU7SK5+16YfIPJWqyZwpT52U41qquSY
+X-OriginatorOrg: rambus.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 19:55:25.8164
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8d81a04e-5164-4cc9-ed6d-08def3f4a8a8
+X-MS-Exchange-CrossTenant-Id: bd0ba799-c2b9-413c-9c56-5d1731c4827c
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bd0ba799-c2b9-413c-9c56-5d1731c4827c;Ip=[192.86.86.210];Helo=[hqxsv-psmtppxy02.rambus.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	BY1PEPF0001AE18.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR04MB7153
 
-On Wed, Jul 22, 2026 at 08:50:06AM +0200, Viktor Malik wrote:
->On 7/21/26 19:48, Ziyang Men wrote:
->> The libbpf + bpftool + vmlinux.h + BPF-object + skeleton build tool-chain
->> is currently duplicated across tools/testing/selftests/{bpf,sched_ext,
->> hid}/, each carrying ~100-140 lines of near-identical Makefile.  As more
->> subsystems grow BPF-based selftests, the duplication scales poorly.
->>
->> Add tools/testing/selftests/lib.bpf.mk, a single includable fragment that
->> provides the whole chain end-to-end. It builds the in-tree libbpf.a and a
->> host bpftool, generates vmlinux.h from the kernel's BTF, compiles *.bpf.c
->> into BPF objects (clang --target=bpf) and generates their skeletons. It
->> also provides what the user-space test binary needs to build: the header
->> search paths (so #includes resolve), a bpf_link macro that wraps the link
->> command, and BPF_LDLIBS, so the test can be statically linked against
->> libbpf.a.
->>
->> To use: set BPF_SRCS and OVERRIDE_TARGETS := 1 before including ../lib.mk
->> (so lib.mk's default link rule is suppressed), then include ../lib.bpf.mk
->> and list $(BPF_SKELS) as prerequisites of the test binary, e.g.,:
->>
->>     BPF_SRCS         := progs/foo.bpf.c
->>     OVERRIDE_TARGETS := 1
->>     include ../lib.mk
->>     include ../lib.bpf.mk
->>     $(OUTPUT)/foo_test: foo_test.c $(BPF_SKELS)
->>             $(call bpf_link,$@,$<)
->>
->> This saves much work for configuring selftests in other folder, such the cgroup.
->>
->> net/bpf.mk (which only builds *.bpf.o, without skeleton or vmlinux.h
->> generation) is left unchanged; replacing the existing duplication
->> mentioned above is the next step.
->>
->> Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
->> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
->> Suggested-by: Mykola Lysenko <mykolal@meta.com>
->> Assisted-by: Claude:claude-opus-4-8
->> Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
->> ---
->>  tools/testing/selftests/lib.bpf.mk | 247 +++++++++++++++++++++++++++++
->>  1 file changed, 247 insertions(+)
->>  create mode 100644 tools/testing/selftests/lib.bpf.mk
->>
->> diff --git a/tools/testing/selftests/lib.bpf.mk b/tools/testing/selftests/lib.bpf.mk
->> new file mode 100644
->> index 000000000000..6f175c6568e9
->> --- /dev/null
->> +++ b/tools/testing/selftests/lib.bpf.mk
->> @@ -0,0 +1,247 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +#
->> +# Shared fragment for selftests that compile *.bpf.c into BPF objects +
->> +# skeletons and link them into userspace test binaries, without each
->> +# subsystem's Makefile re-implementing the libbpf/bpftool/vmlinux.h machinery.
->> +#
->> +# Caller contract (per-test Makefile):
->> +#
->> +#     BPF_SRCS         := foo.bpf.c bar.bpf.c
->> +#     TEST_GEN_PROGS   := foo_test
->> +#     OVERRIDE_TARGETS := 1              # MUST be set before lib.mk
->> +#     include ../lib.mk                  # defines OUTPUT, CC, Q, msg,
->> +#     include ../lib.bpf.mk              #   selfdir, top_srcdir; honours OVERRIDE
->> +#
->> +#     $(OUTPUT)/foo_test: foo_test.c $(BPF_SKELS)
->> +#         $(call bpf_link,$@,$<)
->> +#
->> +# Optional knobs (set before including lib.bpf.mk):
->> +#   BPF_PROG_EXT     - source suffix, default .bpf.c; set to .c for the legacy
->> +#                      "progs/foo.c -> foo.bpf.o" layout.
->> +#   BPF_EXTRA_HDRS   - extra prerequisites (headers) for the BPF objects.
->> +#   BPF_EXTRA_CFLAGS - appended to BPF_CFLAGS for the BPF compile.
->> +#   BPF_SKEL_EXT     - skeleton suffix, default .skel.h (e.g. .bpf.skel.h).
->> +#   BPF_GEN_SUBSKEL  - if set, also emit a subskeleton next to each skeleton.
->> +#   BPF_OBJ_DIR      - dir for generated *.bpf.o (default $(OUTPUT)).
->> +#   BPF_SKEL_DIR     - dir for generated skeletons (default $(OUTPUT)).
->> +# A caller with unusual compile needs may override BPF_CFLAGS wholesale after
->> +# the include (the object recipe expands it lazily).
->> +# BPF_SRCS entries may live in a subdirectory (e.g. progs/foo.bpf.c); the
->> +# objects and skeletons are always emitted flat under $(OUTPUT), keyed by the
->> +# source basename (foo.bpf.o / foo.skel.h).
->> +#
->> +# lib.mk MUST be included first: this fragment consumes the vars it defines
->> +# (OUTPUT, top_srcdir, CC, CLANG, Q, msg) and needs OVERRIDE_TARGETS to have
->> +# already suppressed lib.mk's default link rule.
->> +
->> +include $(top_srcdir)/tools/scripts/Makefile.arch	# ARCH / SRCARCH
->> +# Pull in the shared toolchain definitions (HOSTCC/HOSTLD/CLANG) so this
->> +# fragment picks the *same* host compiler the libbpf and bpftool sub-makes
->> +# will: in particular HOSTCC becomes clang under LLVM=1 (gcc otherwise).
->> +# Without this the host bpftool and its bootstrap libbpf can end up built with
->> +# a mix of gcc and clang, which trips clang on gcc-only flags (-Wstrict-aliasing=3).
->> +#
->> +# Makefile.include's allow-override resets CC to a bare "clang", which would
->> +# drop the --target=<arch> flag lib.mk set for LLVM=1 cross builds (make LLVM=1
->> +# ARCH=arm64).  lib.mk ran first and configured CC for the target, so save it
->> +# across the include and restore it afterwards.
->> +lib_bpf_mk_saved_cc := $(CC)
->> +include $(top_srcdir)/tools/scripts/Makefile.include
->> +CC := $(lib_bpf_mk_saved_cc)
->> +
->> +CLANG  ?= clang
->> +HOSTCC ?= gcc
->> +HOSTLD ?= ld
->> +ifneq ($(V),1)
->> +submake_extras := feature_display=0
->> +endif
->> +
->> +# ---- paths & tools --------------------------------------------------------
->> +TOOLSDIR    := $(top_srcdir)/tools
->> +LIBDIR      := $(TOOLSDIR)/lib
->> +BPFDIR      := $(LIBDIR)/bpf
->> +TOOLSINCDIR := $(TOOLSDIR)/include
->> +BPFTOOLDIR  := $(TOOLSDIR)/bpf/bpftool
->> +APIDIR      := $(TOOLSINCDIR)/uapi
->> +
->> +# Everything generated lives under $(OUTPUT) so O= and in-tree both work and
->> +# per-test builds (distinct $(OUTPUT)) never collide.
->> +SCRATCH_DIR := $(OUTPUT)/tools
->> +BUILD_DIR   := $(SCRATCH_DIR)/build
->> +INCLUDE_DIR := $(SCRATCH_DIR)/include
->> +BPFOBJ      := $(BUILD_DIR)/libbpf/libbpf.a
->> +
->> +# bpftool must run on the *host*; split the host toolchain out when cross-building.
->> +ifneq ($(CROSS_COMPILE),)
->> +HOST_BUILD_DIR   := $(BUILD_DIR)/host
->> +HOST_SCRATCH_DIR := $(OUTPUT)/host-tools
->> +else
->> +HOST_BUILD_DIR   := $(BUILD_DIR)
->> +HOST_SCRATCH_DIR := $(SCRATCH_DIR)
->> +endif
->> +HOST_BPFOBJ     := $(HOST_BUILD_DIR)/libbpf/libbpf.a
->> +DEFAULT_BPFTOOL := $(HOST_SCRATCH_DIR)/sbin/bpftool
->> +BPFTOOL         ?= $(DEFAULT_BPFTOOL)
->> +
->> +# ---- vmlinux BTF discovery -----------------------------------------------
->> +VMLINUX_BTF_PATHS ?= $(if $(O),$(O)/vmlinux)				\
->> +		     $(if $(KBUILD_OUTPUT),$(KBUILD_OUTPUT)/vmlinux)	\
->> +		     $(top_srcdir)/vmlinux				\
->> +		     /sys/kernel/btf/vmlinux				\
->> +		     /boot/vmlinux-$(shell uname -r)
->> +VMLINUX_BTF ?= $(abspath $(firstword $(wildcard $(VMLINUX_BTF_PATHS))))
->> +ifeq ($(VMLINUX_BTF),)
->> +$(error Cannot find a vmlinux for VMLINUX_BTF at any of "$(VMLINUX_BTF_PATHS)")
->> +endif
->> +
->> +# ---- clang flags ----------------------------------------------------------
->> +# Clang's default system includes (not the ones seen under --target=bpf); fixes
->> +# "missing" asm/byteorder.h etc. '-idirafter' so we never shadow real includes.
->> +define get_sys_includes
->> +$(shell $(1) $(2) -v -E - </dev/null 2>&1 \
->> +	| sed -n '/<...> search starts here:/,/End of search list./{ s| \(/.*\)|-idirafter \1|p }') \
->> +$(shell $(1) $(2) -dM -E - </dev/null | grep '__riscv_xlen ' | awk '{printf("-D__riscv_xlen=%d -D__BITS_PER_LONG=%d", $$3, $$3)}')
->> +endef
->> +ifneq ($(CROSS_COMPILE),)
->> +CLANG_TARGET_ARCH = --target=$(notdir $(CROSS_COMPILE:%-=%))
->> +endif
->> +CLANG_SYS_INCLUDES = $(call get_sys_includes,$(CLANG),$(CLANG_TARGET_ARCH))
->> +
->> +IS_LITTLE_ENDIAN = $(shell $(CC) -dM -E - </dev/null | \
->> +			grep 'define __BYTE_ORDER__ __ORDER_LITTLE_ENDIAN__')
->> +MENDIAN = $(if $(IS_LITTLE_ENDIAN),-mlittle-endian,-mbig-endian)
->> +
->> +# Prefer -mcpu=v3; fall back to v2 on clang too old to know it (probed once).
->> +CLANG_BPF_CPU := $(shell $(CLANG) --target=bpf -mcpu=help 2>&1 | grep -q 'v3' \
->> +			 && echo v3 || echo v2)
->> +
->> +# -fms-extensions + -Wno-microsoft-anon-tag: required so clang accepts the
->> +# anonymous nested struct/union members bpftool emits into vmlinux.h.
->> +BPF_CFLAGS = -g -Wall -Werror -D__TARGET_ARCH_$(SRCARCH) $(MENDIAN)	\
->> +	     -I$(INCLUDE_DIR) -I$(APIDIR) -I$(TOOLSINCDIR)		\
->> +	     -std=gnu11							\
->> +	     -fno-strict-aliasing					\
->> +	     -fms-extensions -Wno-microsoft-anon-tag			\
->> +	     -Wno-compare-distinct-pointer-types			\
->> +	     $(CLANG_SYS_INCLUDES) $(BPF_EXTRA_CFLAGS)
->> +
->> +# $1 = src .bpf.c, $2 = dst .bpf.o
->> +define BPF_BUILD_RULE
->> +	$(call msg,CLNG-BPF,,$2)
->> +	$(Q)$(CLANG) $(BPF_CFLAGS) -O2 --target=bpf -mcpu=$(CLANG_BPF_CPU) -c $1 -o $2
->> +endef
->> +
->> +# ---- output dirs for generated objects/skeletons --------------------------
->> +# Default: flat under $(OUTPUT) (what bpf/, hid/, cgroup/ do).  A caller may
->> +# segregate the generated files into subdirs, e.g. BPF_SKEL_DIR := $(OUTPUT)/...
->> +BPF_OBJ_DIR  ?= $(OUTPUT)
->> +BPF_SKEL_DIR ?= $(OUTPUT)
->> +
->> +# ---- scratch dirs ---------------------------------------------------------
->> +MAKE_DIRS := $(sort $(BUILD_DIR)/libbpf $(HOST_BUILD_DIR)/libbpf		\
->> +		    $(HOST_BUILD_DIR)/bpftool $(INCLUDE_DIR)		\
->> +		    $(filter-out $(OUTPUT),$(BPF_OBJ_DIR) $(BPF_SKEL_DIR)))
->> +$(MAKE_DIRS):
->> +	$(call msg,MKDIR,,$@)
->> +	$(Q)mkdir -p $@
->> +
->> +# ---- libbpf (target) ------------------------------------------------------
->> +# Pass ARCH/CROSS_COMPILE/CC through: lib.mk's CC is file-origin and is not
->> +# exported, so without this the libbpf sub-make would rebuild for the host under
->> +# a pure-LLVM cross build (make LLVM=1 ARCH=<arch>).  -fPIC keeps the static
->> +# libbpf linkable into position-independent (PIE) test binaries.
->> +$(BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile) \
->> +	   $(APIDIR)/linux/bpf.h | $(BUILD_DIR)/libbpf
->> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) OUTPUT=$(BUILD_DIR)/libbpf/ \
->> +		    ARCH=$(ARCH) CROSS_COMPILE=$(CROSS_COMPILE) CC="$(CC)"     \
->> +		    EXTRA_CFLAGS='-g -O0 -fPIC'				      \
-Hi Viktor, 
+From: Alex Ousherovitch <aousherovitch@rambus.com>
 
-Thanks for your suggestions!
->
->Looking at the same line in tools/testing/selftests/bpf/Makefile:
->
->            EXTRA_CFLAGS='-g $(OPT_FLAGS) $(SAN_CFLAGS) $(EXTRA_CFLAGS)' \
->
->is there a reason why this is not respected and -O0 and -fPIC are
->hard-coded?
-Yes it is true that there is no good reason. I will fix it in the next version.
+crypto: cmh - add Rambus CryptoManager Hub hardware crypto accelerator
 
->What if someone wants to build selftests (including libbpf)
->with -O2 and some additional flags?
-I will add a flag such as OPT_FLAGS ?= $(if $(RELEASE),-O2,O0), which follows
-the pattern in the bpf/Makefile:37. So if we run 
-$ make -> -g -O0 -fPIC (taget libbpf) and -g -O0 (host bpftool)
-$ make RELEASE=1 -> -g -O2 -fPIC (taget libbpf) and -g -O2 (host bpftool)
+This series adds a driver for the Rambus CryptoManager Hub (CMH), a
+hardware cryptographic accelerator IP from Cryptography Research at
+Rambus Inc. (https://www.rambus.com/cryptographyresearch/).
+CMH provides a broad set of symmetric, asymmetric, and post-quantum
+cryptographic algorithms accelerated in hardware, accessed via a
+mailbox-based Virtual Command Queue (VCQ) interface.
 
->Is that possible with the new
->lib.bpf.mk? It would be nice if it used at least EXTRA_CFLAGS or
->USERCFLAGS defined in lib.mk.
-Good idea. I will add the EXTRA_CFLAGS for target libbpf, host libbpf and host
-bpgtool. Such that: 
-$ make OPT_FLAGS=-O2 EXTRA_CFLAGS=-DFOO -> -g -O2 -fPIC -DFOO (for target
-libbpf) and -g -O2 -DFOO (for host bpftool)
+The hardware is a platform device matched via device tree
+(compatible = "rambus,cmh-v1030").  It exposes a single MMIO register region
+(SIC) with per-mailbox doorbell, status, and command registers.
+Each mailbox has DMA-coherent queue memory for VCQ command
+submission and completion.
 
->
->Same questions would apply to other rules for libbpf and bpftool below.
-I would check it them as as well in next version.
+Driver architecture:
 
->Thanks!
->Viktor
->
->
-Thanks for your time and reviewing. Please let me know your concerns. Thanks!
+  In-kernel users                       /dev/cmh_mgmt (ioctl)
+  (dm-crypt, IPsec, kTLS, fscrypt)      (key management)
+       |                                        |
+       v                                        v
+  +----------------------------------------------------+
+  |        Kernel Crypto API + hwrng (72 total)        |
+  |   ahash | skcipher | aead | akcipher | sig | kpp   |
+  +----------------------------------------------------+
+       |                                           |
+       v                                           v
+  +------------------+    +------------------------+
+  | Transaction Mgr  |--->| Key / Mgmt subsystem   |
+  | (kthread, CMQ)   |    | (datastore, ioctl ops) |
+  +------------------+    +------------------------+
+       |
+       v
+  +------------------+     +-------------------+
+  | MQI (VCQ pack,   |---->| Response Handler  |
+  |  DMA map, submit)|     | (threaded IRQ,    |
+  +------------------+     |  watchdog, unmap) |
+       |                   +-------------------+
+       v                          ^
+  +-----------+              +-----------+
+  | Hardware  |--- IRQ ----->| Hardware  |
+  | (mailbox) |              | (mailbox) |
+  +-----------+              +-----------+
 
-Best,
-Ziyang
+The transaction manager runs as a dedicated kthread that pulls
+requests from a central command queue, packs VCQ entries, maps DMA
+buffers, and submits to the least-loaded mailbox.  Completion is
+handled by per-mailbox threaded IRQs.  The driver returns
+-EINPROGRESS for async crypto requests and supports the
+CRYPTO_TFM_REQ_MAY_BACKLOG flag for queue-full backpressure.
 
->> +		    DESTDIR=$(SCRATCH_DIR) prefix= all install_headers
->> +
->> +# ---- libbpf (host) -- a distinct rule only when cross-compiling -----------
->> +ifneq ($(BPFOBJ),$(HOST_BPFOBJ))
->> +$(HOST_BPFOBJ): $(wildcard $(BPFDIR)/*.[ch] $(BPFDIR)/Makefile) \
->> +		| $(HOST_BUILD_DIR)/libbpf
->> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFDIR) ARCH= CROSS_COMPILE=	      \
->> +		    OUTPUT=$(HOST_BUILD_DIR)/libbpf/ CC=$(HOSTCC) LD=$(HOSTLD) \
->> +		    EXTRA_CFLAGS='-g -O0'				      \
->> +		    DESTDIR=$(HOST_SCRATCH_DIR) prefix= all install_headers
->> +endif
->> +
->> +# ---- bpftool (host) -------------------------------------------------------
->> +$(DEFAULT_BPFTOOL): $(wildcard $(BPFTOOLDIR)/*.[ch] $(BPFTOOLDIR)/Makefile) \
->> +		    $(HOST_BPFOBJ) | $(HOST_BUILD_DIR)/bpftool
->> +	$(Q)$(MAKE) $(submake_extras) -C $(BPFTOOLDIR)		  \
->> +		    ARCH= CROSS_COMPILE= CC=$(HOSTCC) LD=$(HOSTLD) \
->> +		    EXTRA_CFLAGS='-g -O0'			  \
->> +		    OUTPUT=$(HOST_BUILD_DIR)/bpftool/		  \
->> +		    LIBBPF_OUTPUT=$(HOST_BUILD_DIR)/libbpf/	  \
->> +		    LIBBPF_DESTDIR=$(HOST_SCRATCH_DIR)/		  \
->> +		    prefix= DESTDIR=$(HOST_SCRATCH_DIR)/ install-bin
->> +
->> +# ---- vmlinux.h ------------------------------------------------------------
->> +$(INCLUDE_DIR)/vmlinux.h: $(VMLINUX_BTF) $(BPFTOOL) | $(INCLUDE_DIR)
->> +ifeq ($(VMLINUX_H),)
->> +	$(call msg,GEN,,$@)
->> +	$(Q)$(BPFTOOL) btf dump file $(VMLINUX_BTF) format c > $@
->> +else
->> +	$(call msg,CP,,$@)
->> +	$(Q)cp "$(VMLINUX_H)" $@
->> +endif
->> +
->> +# ---- BPF objects + skeletons ---------------------------------------------
->> +# Sources may sit in a subdir and use the modern *.bpf.c or the legacy *.c
->> +# suffix (BPF_PROG_EXT); objects go in $(BPF_OBJ_DIR) and skeletons in
->> +# $(BPF_SKEL_DIR) (both default to $(OUTPUT)), keyed by the source basename.
->> +BPF_PROG_EXT ?= .bpf.c
->> +bpf_stems := $(patsubst %$(BPF_PROG_EXT),%,$(notdir $(BPF_SRCS)))
->> +# The output namespace is flat, so two sources with the same basename would
->> +# collapse into one object/skeleton; fail loudly instead of silently dropping.
->> +ifneq ($(words $(bpf_stems)),$(words $(sort $(bpf_stems))))
->> +$(error lib.bpf.mk: BPF_SRCS has colliding basenames: $(BPF_SRCS))
->> +endif
->> +# BPF_SKEL_EXT lets a caller pick the skeleton suffix (default .skel.h; e.g.
->> +# .bpf.skel.h).  With BPF_GEN_SUBSKEL set, a matching subskeleton is emitted
->> +# alongside (foo.subskel.h / foo.bpf.subskel.h).
->> +BPF_SKEL_EXT    ?= .skel.h
->> +BPF_SUBSKEL_EXT := $(patsubst %skel.h,%subskel.h,$(BPF_SKEL_EXT))
->> +BPF_OBJS  := $(addprefix $(BPF_OBJ_DIR)/,$(addsuffix .bpf.o,$(bpf_stems)))
->> +BPF_SKELS := $(addprefix $(BPF_SKEL_DIR)/,$(addsuffix $(BPF_SKEL_EXT),$(bpf_stems)))
->> +
->> +# Locate the sources wherever the caller keeps them (e.g. progs/).
->> +vpath %$(BPF_PROG_EXT) $(sort $(dir $(BPF_SRCS)))
->> +
->> +$(BPF_OBJS): $(BPF_OBJ_DIR)/%.bpf.o: %$(BPF_PROG_EXT) $(BPF_EXTRA_HDRS) \
->> +	     $(wildcard *.bpf.h) $(INCLUDE_DIR)/vmlinux.h | $(BPF_OBJ_DIR) $(BPFOBJ)
->> +	$(call BPF_BUILD_RULE,$<,$@)
->> +
->> +$(BPF_SKELS): $(BPF_SKEL_DIR)/%$(BPF_SKEL_EXT): $(BPF_OBJ_DIR)/%.bpf.o $(BPFTOOL) | $(BPF_SKEL_DIR)
->> +	$(call msg,GEN-SKEL,,$@)
->> +	$(Q)$(BPFTOOL) gen object $(<:.o=.linked.o) $<
->> +	$(Q)$(BPFTOOL) gen skeleton $(<:.o=.linked.o) name $(notdir $(<:.bpf.o=)) > $@
->> +ifneq ($(BPF_GEN_SUBSKEL),)
->> +	$(Q)$(BPFTOOL) gen subskeleton $(<:.o=.linked.o) name $(notdir $(<:.bpf.o=)) > $(@:$(BPF_SKEL_EXT)=$(BPF_SUBSKEL_EXT))
->> +endif
->> +
->> +# ---- exports consumed by the caller --------------------------------------
->> +# -I$(OUTPUT)/-I$(BPF_SKEL_DIR): so the test .c can #include "foo.skel.h".
->> +# -I$(INCLUDE_DIR): so userspace can pull in the generated vmlinux.h if needed.
->> +CFLAGS += -I$(OUTPUT) -I$(BPF_SKEL_DIR) -I$(INCLUDE_DIR)
->> +
->> +# Static libbpf.a first, then its deps. libbpf may pull in zstd (BTF decompress)
->> +# only when built against it; link -lzstd only if libzstd is present.
->> +BPF_LDLIBS := $(BPFOBJ) -lelf -lz
->> +ifneq ($(shell pkg-config --exists libzstd 2>/dev/null && echo y),)
->> +BPF_LDLIBS += -lzstd
->> +endif
->> +
->> +TEST_GEN_FILES += $(BPF_OBJS)
->> +
->> +# Link helper: $1 = output binary, $2 = test .c (skels are the target's deps).
->> +define bpf_link
->> +	$(call msg,BINARY,,$1)
->> +	$(Q)$(CC) $(CFLAGS) $2 $(BPF_LDLIBS) $(LDLIBS) -o $1
->> +endef
->> +
->> +EXTRA_CLEAN += $(SCRATCH_DIR) $(HOST_SCRATCH_DIR)			\
->> +	       $(addprefix $(BPF_OBJ_DIR)/,*.bpf.o *.linked.o)		\
->> +	       $(addprefix $(BPF_SKEL_DIR)/,*$(BPF_SKEL_EXT) *$(BPF_SUBSKEL_EXT))
->
+Registered algorithms (72 total):
+
+  Type       Count  Algorithms
+  ---------  -----  --------------------------------------------------
+  ahash         15  SHA-{224,256,384,512}, SHA3-{224,256,384,512},
+                     SHAKE-{128,256}, cSHAKE-{128,256},
+                     KMAC-{128,256}, SM3
+  ahash(HMAC)    8  HMAC-SHA-{224,256,384,512},
+                     HMAC-SHA3-{224,256,384,512}
+  ahash(MAC)     4  CMAC(AES), CMAC(SM4), XCBC(SM4), Poly1305
+  skcipher      11  AES-{ECB,CBC,CTR,CFB,XTS},
+                     SM4-{ECB,CBC,CTR,CFB,XTS}, ChaCha20
+  aead           6  AES-{GCM,CCM}, SM4-{GCM,CCM},
+                     rfc7539(chacha20,poly1305),
+                     rfc7539esp(chacha20,poly1305)
+  akcipher       1  RSA (2048--4096 bit; 512/1024 legacy/test)
+  sig           23  ECDSA P-{256,384,521}, SM2 (verify-only),
+                     ML-DSA-{44,65,87},
+                     SLH-DSA (12 parameter sets),
+                     LMS, LMS-HSS, XMSS, XMSS-MT
+  kpp            3  ECDH P-{256,384}, X25519
+  hwrng          1  DRBG-backed /dev/hwrng
+
+The keyed MACs (HMAC, CMAC, XCBC, Poly1305) accumulate input for a
+single finalize-time submission -- the hardware has no keyed-MAC
+save/restore -- and fall back to a generic software MAC (Poly1305 uses
+the in-kernel library) once the input or a clone exceeds a 64 KB window,
+so they are not input-capped.  KMAC has no software equivalent and keeps
+the cap; the driver selects the generic MAC/hash and Poly1305-library
+configs for the fallbacks.
+
+Ioctl-only algorithms (not registered with the crypto API at all):
+  - EdDSA (Ed25519, Ed448): sign and verify
+  - ML-KEM (ML-KEM-512/768/1024): no standard kernel KEM API exists
+
+The driver also exposes /dev/cmh_mgmt, a misc device providing 44
+ioctl commands.  Relative to the in-kernel crypto API these fall into
+two groups; the distinction matters because some commands name the
+same primitives the driver also registers, and that overlap is
+deliberate and bounded:
+
+(1) Operations with no crypto API representation - the large
+    majority.  The crypto API has no transform type or verb for
+    these, so a character device is the only available UAPI:
+      - hardware key lifecycle: create, import, export, derive,
+        destroy, enumerate (keystore CRUD) - no keystore verb
+      - KIC key derivation (HKDF, AES-CMAC-KDF, DKEK)
+      - asymmetric key generation (RSA, EC, EdDSA, ML-DSA, SLH-DSA)
+        and public-key derivation - the crypto API has no keygen verb
+      - ML-KEM encapsulate/decapsulate - no kernel KEM API exists
+      - SM2 encrypt/decrypt and key exchange (multi-step GM/T 0003)
+      - EdDSA sign/verify - not registered with the crypto API
+      - EAC Chip Authentication and DRBG (re)configuration
+
+(2) Hardware-held-key operations on algorithms that ARE also
+    registered (RSA decrypt, ECDSA/ML-DSA/SLH-DSA sign, ECDH).  These
+    name the same primitives as the registered akcipher/sig/kpp
+    transforms, but the crypto API's set_priv_key()/set_secret()
+    accept only raw key bytes supplied by the caller; they cannot
+    reference a private key that is generated inside, and never
+    leaves, the hardware datastore - the central security property of
+    this device.  The ioctl path keeps the private key
+    hardware-resident, while the registered transforms serve raw-key
+    in-kernel users.  The two paths are complementary, not redundant.
+
+The device requires CAP_SYS_ADMIN.
+
+/dev/cmh_mgmt is built conditionally on CONFIG_CRYPTO_DEV_CMH_MGMT
+(default n); when disabled the ioctl interface is absent while all
+kernel crypto API algorithms remain registered.
+
+The ML-DSA sig algorithms are registered at priority 5001.  The
+kernel's crypto/mldsa.c registers at priority 5000 with verify-only
+(sign returns -EOPNOTSUPP).  Our driver provides full HW-accelerated
+sign + verify, so the higher priority ensures the hardware
+implementation is preferred when the driver is loaded.
+
+Power management uses DEFINE_SIMPLE_DEV_PM_OPS.  On suspend the
+transaction manager drains in-flight requests (configurable 10s
+timeout, returns -ECANCELED on timeout), stops the kthread, and
+masks IRQs.  On resume it re-verifies SIC/boot status and restarts
+the kthread.
+
+Dependencies:
+  - Kernel 7.1+ (based on Herbert Xu's cryptodev-2.6 tree, 7.2.0-rc1)
+  - sig_alg backend (upstream since 6.13)
+  - CRYPTO_AHASH_REQ_VIRT (native support, no REQ_VIRT interop fallback needed)
+  - CMH eSW loaded independently by hardware before driver probe
+
+The driver registers all algorithms through the standard in-kernel
+crypto API; in-kernel users (dm-crypt, fscrypt, IPsec, etc.) consume
+them directly.  Key provisioning and hardware-held-key operations are
+exposed to user space via /dev/cmh_mgmt ioctls.
+
+Public hardware documentation:
+  Product brief: https://go.rambus.com/ch-7xx-and-cc-7xx-product-brief
+  No public datasheets are currently available.  The driver was
+  developed against the Rambus CryptoManager Hub Hardware Reference
+  Manual (Rambus Inc. confidential).  Detailed hardware reference is
+  available under NDA from Rambus Inc.; contact the maintainers listed
+  in MAINTAINERS for access during review.
+
+Tested on RISC-V and ARM64 QEMU emulation with the CMH hardware
+model (QEMU TCG, 512 MiB RAM).  Also exercised on Xilinx VMK180
+FPGA board with real CMH IP.
+
+  - testmgr: 41 CMH algorithm registrations matched by upstream
+    test vectors, all pass; 30 names report "No test for" (PQC
+    families, KMAC, cSHAKE - no upstream vectors yet).
+  - kselftest tools/testing/selftests/drivers/crypto/cmh:
+    6 pass, 0 fail.
+
+checkpatch.pl --strict: 0 errors, 0 warnings, 0 checks on all
+files (the only output is the expected per-file "does MAINTAINERS
+need updating?" reminder, satisfied by the MAINTAINERS patch).
+sparse (C=2): 0 warnings.
+W=1 -Werror: clean.
+make dt_binding_check: clean (dtschema validates the
+rambus,cmh.yaml binding).
+
+Tested with the following debug options enabled simultaneously
+(submit-checklist "Test your code" item 1):
+  CONFIG_PROVE_LOCKING, CONFIG_PROVE_RCU, CONFIG_DEBUG_LOCK_ALLOC,
+  CONFIG_DEBUG_OBJECTS_RCU_HEAD, CONFIG_SLUB_DEBUG,
+  CONFIG_DEBUG_PAGEALLOC, CONFIG_DEBUG_MUTEXES, CONFIG_DEBUG_SPINLOCK,
+  CONFIG_DEBUG_PREEMPT, CONFIG_DEBUG_ATOMIC_SLEEP.
+  Result: no lockdep warnings, no ODEBUG splats, no slab corruption.
+
+Additionally tested (separate passes - mutually exclusive configs):
+  - CONFIG_KASAN + CONFIG_UBSAN + CONFIG_DEBUG_KMEMLEAK + CONFIG_KFENCE:
+    no sanitizer findings; KMEMLEAK scan reports 0 unreferenced objects.
+  - CONFIG_KCSAN (arm64; riscv64 lacks HAVE_ARCH_KCSAN):
+    0 data-race reports attributed to the driver.
+
+Stack usage: worst-case under 1 KB on both riscv64 and arm64
+(scripts/checkstack.pl).  Hardware command buffers live in
+per-request context (heap-allocated by the crypto framework).
+
+Alex Ousherovitch (19):
+  dt-bindings: crypto: add Rambus CryptoManager Hub
+  crypto: cmh - add core platform driver
+  crypto: cmh - add key provisioning and management
+  crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+  crypto: cmh - add HMAC ahash
+  crypto: cmh - add CSHAKE/KMAC ahash
+  crypto: cmh - add SM3 ahash
+  crypto: cmh - add AES skcipher/aead/cmac
+  crypto: cmh - add SM4 skcipher/aead/cmac/xcbc
+  crypto: cmh - add ChaCha20-Poly1305
+  crypto: cmh - add DRBG hwrng
+  crypto: cmh - add RSA akcipher
+  crypto: cmh - add ECDSA/SM2 sig
+  crypto: cmh - add ECDH/X25519 kpp
+  crypto: cmh - add ML-KEM/ML-DSA (QSE)
+  crypto: cmh - add SLH-DSA/LMS/XMSS (HCQ)
+  Documentation: ioctl: add CMH ioctl documentation and register 'J'
+  selftests: crypto: cmh - add kselftest for management ioctl
+  MAINTAINERS: add Rambus CryptoManager Hub (CMH)
+
+---
+
+Changes in v3:
+ - dt-bindings: crypto: cmh: rework the mailbox topology per DT review --
+   mailbox@N child nodes; cores discovered from CORE_ENABLE, not the DT.
+ - dt-bindings: crypto: cmh: adopt the "rambus" vendor prefix and a
+   device-specific "rambus,cmh-v1030" compatible (the IP revision) per
+   DT review; rename the per-mailbox properties to rambus,slots-log2 /
+   rambus,strides-log2 / rambus,cores and the crypto driver-name prefix
+   to rambus-cmh-*.
+ - dt-bindings: crypto: cmh: describe the optional functional clocks
+   (core, core-div2, rt) and an optional host-driven reset-gpios; the
+   driver enables all supplied clocks and acquires the optional reset
+   line deasserted.
+ - crypto: cmh: register the platform driver from module_init() without
+   unregistering on probe failure; propagate -EPROBE_DEFER from
+   of_irq_get().
+ - crypto: cmh: harden the key-management and crypto error paths; fix
+   three transaction-manager concurrency issues found by an automated
+   kernel-style review of v2.
+ - crypto: cmh: further automated kernel-style review fixes (hwrng bounce
+   buffer and short-read, truncated export state, RSA re-key unmap, MAC
+   setkey ordering, CCM fallback alignment, persistent PKE/PQC key buffer).
+ - crypto: cmh: give the buffered keyed MACs (hmac, cmac, xcbc, poly1305)
+   a software fallback past the 64 KB window instead of a hard input cap;
+   KMAC keeps its hard cap and rejects export/import.
+ - crypto: cmh: rfc7539(chacha20,poly1305): always issue the AAD-final
+   command, fixing -EIO on empty-AAD requests.
+ - crypto: cmh: chacha20 skcipher: leave req->iv unchanged on completion,
+   matching the generic chacha20 skcipher.
+ - Documentation: cmh: describe the management ioctls as a permanent
+   interface and add ioctl struct layouts; document the keyed-MAC
+   software fallback and KMAC exception.
+
+Changes in v2:
+ - crypto: cmh: wait for both eSW readiness bits at probe. The probe
+   readiness gate polled SW_BOOT_STATUS for MISSION (bit 6, primary
+   VCQ engine) only, but the sidecar engine signals readiness
+   separately via MISSION2 (bit 7), asserted asynchronously. Gate on
+   both bits so an operation offloaded to the sidecar cannot race an
+   engine that is not yet up.
+ - crypto: cmh: compute cmac(sm4) of a zero-length message in software.
+   The SM4 core mishandles an empty CMAC input, so -- exactly like the
+   existing xcbc(sm4) empty-message path, and per NIST SP 800-38B -- the
+   driver now derives the K2 subkey and computes the tag with a software
+   cipher. Surfaced by the testmgr fuzz comparison against the generic
+   cmac(sm4); no change for non-empty messages.
+ - Documentation: link cmh_mgmt.rst into the userspace-api/ioctl index
+   toctree, fixing a "document isn't included in any toctree" htmldocs
+   warning reported on the v1 posting of patch 17.
+ - crypto: cmh: carry the XTS block offset (xts_offset) inline in the
+   AES INIT command, matching the updated CMH hardware ABI that
+   retired the separate XTS_OFFSET command. Always 0 on the skcipher
+   path (data units start at block 0); no functional change.
+ - MAINTAINERS: drop the internal moderated list (sipsupport@rambus.com)
+   and the T: tree line from the CMH entry, per review. The driver
+   goes through the crypto tree, so keep only linux-crypto@vger.kernel.org
+   and no T: line.
+ - Rebased onto current cryptodev-2.6 (v7.2-rc1); no code changes were
+   required (the merge window touches none of the crypto APIs the driver
+   uses).
+
+v1: https://lore.kernel.org/linux-crypto/20260625173328.1140487-1-skrishnamoorthy@rambus.com/
+v2: https://lore.kernel.org/linux-crypto/20260709203037.1884436-1-skrishnamoorthy@rambus.com/
+
+base-commit: e264401ce4776a288524e5b87593d4d864147115
+-- 
+2.43.7
