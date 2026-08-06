@@ -1,30 +1,30 @@
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C55346E7A;
-	Thu,  6 Aug 2026 03:34:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E031344D8C;
+	Thu,  6 Aug 2026 03:34:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785987286; cv=none; b=L1Q9EN+p4KI6UpYU0DUvo2qBmCaPos1Qae7g9dRD/wcBH1hsd5rd8fIo3XvAYN2k8soiHRGA7uIaEO1w5+DA9xELAOf1ANnUHnXSMKmBX4w5Vkh+aShldSftyC3H+rIgDefCGftnSsX883058RYDHO/Si8BgJz409D2T0zYTM/c=
+	t=1785987293; cv=none; b=LDOCFce/Cc+F+l3YDxnTR0eWFdKWo31UQ5nBZDLAf2Z0qtJU4PraQYGmQKwcDruJxTMFUZoC4FUQVNKC29yoiI9s5EtzvgMOHdx0Ivo4xymkN9b5sTg/V5chQIdZmwaLFtyW2NIIeuIY2dL558WGzZE1Jdkgeo8Zc2NUrYQdIIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785987286; c=relaxed/simple;
-	bh=6m3LqiTH3to5XVoAe+K9dfrUghMuLZ2vGY9XnUYG5Yg=;
+	s=arc-20240116; t=1785987293; c=relaxed/simple;
+	bh=xkR/WG0h3iXlkVroJUgHZQCXKLQHYboRlwF460XRxbQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QnjEXkyunEkVB2ZlbIq12hlxnkN8RWvBO8g74bUStbjKrPwBUBNqEyTp+nKO3Cw+p7x1/SqfFnFUbkoxJMBSTxeB6qNsOTijedykTDjzPe3drOdYzsuxvYENYnblUX0QPWN0s1ABAcZaTL437qc56igulyARXCWh/5aoKjD5vp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Sfocj12s; arc=none smtp.client-ip=115.124.30.132
+	 MIME-Version; b=CuIYf/C9Y5sRCkXRAsXpgtgAwIxer10jqmnbrloHhfb8l4QBixErTSCaPdADYZZx6E2ZjeTnX/MVdrBVKkdQbhZp09qoL4DbTfhJI7TiCEGWYiizEQM2eWAt5aiSn2GAZttP/GVY3Mxb6zUhypn70Qmqy0U89dL4DUpEVKjWV2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=C/ewzn88; arc=none smtp.client-ip=115.124.30.101
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Sfocj12s"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="C/ewzn88"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1785987274; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=6LrUd86Cka2Fg/6CzJjG2iZT3DCfqjLks/rpZbSOQ0w=;
-	b=Sfocj12sLHtMLIga/CbjY5rX6WinINW6qKUN965yYNOOlfylFqrY0wCVkAn2gly1osdpVk/NghknuYyZvHdTAVSPEvrLmUXKwsq4qyElq+pZzTpGzqjLDVmtDYP3FY7P3vAu7nUge0TOdsqGr0dVbIzcvO9CGt/uQmE8JSk8bRs=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0X8SfgDs_1785987273;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SfgDs_1785987273 cluster:ay36)
+	t=1785987275; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=woc0uHeb0S0kVhMWIcUT+/bpQEyJ/gRxiaIY7wa7seE=;
+	b=C/ewzn88VpUnQWNZEnrKqRM5VqrSUKBIfKv6DJyGZFniq/tHNS+8BeLoaIXUk3HM/Kzz4nWCOpxRO6b7gMvqPlatm0K5jtLGFT3k6MaXQVb6H+Zi90mFGgg8jYodCEKR8uebaSlk72G0Q/zTkTFT8uUimwIPAsf8FVE2I4itj6U=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0X8SfgE4_1785987274;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SfgE4_1785987274 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Thu, 06 Aug 2026 11:34:33 +0800
+          Thu, 06 Aug 2026 11:34:34 +0800
 From: Baolin Wang <baolin.wang@linux.alibaba.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -42,9 +42,9 @@ Cc: ziy@nvidia.com,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/4] selftests: mm: implement the mTHP-sized hugepage check helpers
-Date: Thu,  6 Aug 2026 11:34:14 +0800
-Message-ID: <56b16691f605426b33b5cf47319233de6127a6b3.1785985999.git.baolin.wang@linux.alibaba.com>
+Subject: [PATCH v3 4/4] selftests: mm: add mTHP collapse test cases
+Date: Thu,  6 Aug 2026 11:34:15 +0800
+Message-ID: <f260058520214a9611922a96326bc54ba282fb73.1785985999.git.baolin.wang@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.5
 In-Reply-To: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
 References: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
@@ -56,129 +56,344 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Implement mTHP-sized hugepage checking helpers using gather_folio_orders().
-Also rename the existing PMD-sized huge page check function to
-__check_pmd_huge() for clarity.
+Added a new command 'mthp_khugepaged' for mTHP collapse, along with the '-c'
+parameter to specify the collapse order. Additionally, added mTHP collapse
+test cases for 'collapse_full', 'collapse_empty', and 'collapse_single_mthp'
+for anonymous folios. All khugepaged test cases passed.
 
 Reviewed-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
 Tested-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
 Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 ---
- tools/testing/selftests/mm/vm_util.c | 76 ++++++++++++++++++++++++++--
- 1 file changed, 72 insertions(+), 4 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c   | 137 +++++++++++++++++++---
+ tools/testing/selftests/mm/run_vmtests.sh |   2 +
+ 2 files changed, 120 insertions(+), 19 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 5a427f494cd8..13b5cff7dfe3 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -15,6 +15,9 @@
- #define SMAP_FILE_PATH "/proc/self/smaps"
- #define STATUS_FILE_PATH "/proc/self/status"
- #define MAX_LINE_LENGTH 500
-+#define PAGEMAP_PATH "/proc/self/pagemap"
-+#define KPAGEFLAGS_PATH "/proc/kpageflags"
-+#define MAX_NR_ORDERS 20
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index fd724be9b665..7f87aeed301c 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -26,9 +26,11 @@
  
- unsigned int __page_size;
- unsigned int __page_shift;
-@@ -348,7 +351,7 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
- 	return entry;
+ #define BASE_ADDR ((void *)(1UL << 30))
+ static unsigned long hpage_pmd_size;
++static int hpage_pmd_order;
+ static unsigned long page_size;
+ static int hpage_pmd_nr;
+ static int anon_order;
++static int collapse_order;
+ 
+ #define PID_SMAPS "/proc/self/smaps"
+ #define TEST_FILE "collapse_test_file"
+@@ -69,6 +71,7 @@ struct collapse_context {
+ };
+ 
+ static struct collapse_context *khugepaged_context;
++static struct collapse_context *mthp_khugepaged_context;
+ static struct collapse_context *madvise_context;
+ 
+ struct file_info {
+@@ -573,25 +576,25 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
  }
  
--bool __check_huge(void *addr, char *pattern, int nr_hpages,
-+static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
- 		  uint64_t hpage_size)
+ #define TICK 500000
+-static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
+-			  struct mem_ops *ops)
++static bool wait_for_scan(const char *msg, char *p, size_t len,
++		int nr_hpages, int collap_order, struct mem_ops *ops)
  {
- 	char buffer[MAX_LINE_LENGTH];
-@@ -366,19 +369,84 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
- 	return thp == (nr_hpages * (hpage_size >> 10));
+-	size_t len = nr_hpages * hpage_pmd_size;
++	unsigned long hpage_size = page_size << collap_order;
+ 	int full_scans;
+ 	int timeout = 6; /* 3 seconds */
+ 
+ 	/* Sanity check */
+-	if (!ops->check_huge(p, len, 0, hpage_pmd_size))
++	if (!ops->check_huge(p, len, 0, hpage_size))
+ 		ksft_exit_fail_msg("Unexpected huge page\n");
+ 
+-	madvise(p, nr_hpages * hpage_pmd_size, MADV_HUGEPAGE);
++	madvise(p, len, MADV_HUGEPAGE);
+ 
+ 	/* Wait until the second full_scan completed */
+ 	full_scans = thp_read_num("khugepaged/full_scans") + 2;
+ 
+ 	ksft_print_msg("%s...", msg);
+ 	while (timeout--) {
+-		if (ops->check_huge(p, len, nr_hpages, hpage_pmd_size))
++		if (ops->check_huge(p, len, nr_hpages, hpage_size))
+ 			break;
+ 		if (thp_read_num("khugepaged/full_scans") >= full_scans)
+ 			break;
+@@ -614,7 +617,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
+ 	if (!is_tmpfs(ops) && ops == &__read_write_file_write_ops)
+ 		expect = false;
+ 
+-	if (wait_for_scan(msg, p, nr_hpages, ops)) {
++	if (wait_for_scan(msg, p, len, nr_hpages, hpage_pmd_order, ops)) {
+ 		if (expect)
+ 			fail("Timeout");
+ 		else
+@@ -636,12 +639,62 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
+ 		fail("Fail");
  }
  
-+static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-+		uint64_t hpage_size)
++static void mthp_khugepaged_collapse(const char *msg, char *p, int nr_hpages,
++				struct mem_ops *ops, bool expect)
 +{
-+	int order = 0, pagesize = getpagesize();
-+	unsigned int nr_pages = hpage_size / pagesize;
-+	int orders[MAX_NR_ORDERS], status;
-+	int pagemap_fd, kpageflags_fd;
-+	bool ret = false;
++	unsigned long hpage_size = page_size << collapse_order;
++	struct thp_settings settings = *thp_current_settings();
++	/* mTHP collpase only allocates PMD sized memory */
++	size_t len = hpage_pmd_size;
 +
-+	if (!nr_pages)
-+		ksft_exit_fail_msg("invalid hugepage size\n");
-+
-+	order = 31 - __builtin_clz(nr_pages);
-+	if (!order || order >= MAX_NR_ORDERS)
-+		ksft_exit_fail_msg("invalid order\n");
-+
-+	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
-+	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-+	if (pagemap_fd == -1)
-+		ksft_exit_fail_msg("read pagemap fail\n");
-+
-+	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-+	if (kpageflags_fd == -1) {
-+		close(pagemap_fd);
-+		ksft_exit_fail_msg("read kpageflags fail\n");
++	/* Set mTHP setting for mTHP collapse */
++	if (ops == &__anon_ops) {
++		settings.thp_enabled = THP_NEVER;
++		settings.hugepages[collapse_order].enabled = THP_MADVISE;
 +	}
 +
-+	status = gather_folio_orders(addr, len, pagemap_fd,
-+			kpageflags_fd, orders, MAX_NR_ORDERS);
-+	if (status)
-+		goto out;
++	thp_push_settings(&settings);
 +
-+	if (orders[order] == nr_hpages)
-+		ret = true;
++	if (wait_for_scan(msg, p, len, nr_hpages, collapse_order, ops)) {
++		if (expect)
++			fail("Timeout");
++		else
++			success("OK");
 +
-+out:
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
-+	return ret;
++		/* Restore THP settings for mTHP collapse. */
++		thp_pop_settings();
++		return;
++	}
++
++	/*
++	 * For file and shmem memory, khugepaged only retracts pte entries after
++	 * putting the new hugepage in the page cache. The hugepage must be
++	 * subsequently refaulted to install the pmd mapping for the mm.
++	 */
++	if (ops != &__anon_ops)
++		ops->fault(p, 0, nr_hpages * hpage_size);
++
++	if (ops->check_huge(p, len, expect ? nr_hpages : 0, hpage_size))
++		success("OK");
++	else
++		fail("Fail");
++
++	/* Restore THP settings for mTHP collapse. */
++	thp_pop_settings();
 +}
 +
- bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+ static struct collapse_context __khugepaged_context = {
+ 	.collapse = &khugepaged_collapse,
+ 	.enforce_pte_scan_limits = true,
+ 	.name = "khugepaged",
+ };
+ 
++static struct collapse_context __mthp_khugepaged_context = {
++	.collapse = &mthp_khugepaged_collapse,
++	.enforce_pte_scan_limits = true,
++	.name = "mthp_khugepaged",
++};
++
+ static struct collapse_context __madvise_context = {
+ 	.collapse = &madvise_collapse,
+ 	.enforce_pte_scan_limits = false,
+@@ -680,10 +733,17 @@ static void alloc_at_fault(void)
+ static void collapse_full(struct collapse_context *c, struct mem_ops *ops)
  {
--	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-+	uint64_t pmd_pagesize = read_pmd_pagesize();
+ 	void *p;
+-	int nr_hpages = 4;
++	int nr_pmds = 4, nr_hpages = 4;
+ 	unsigned long size = nr_hpages * hpage_pmd_size;
+ 
+-	p = ops->setup_area(nr_hpages);
++	/* Only try 1 PMD sized range for mTHP collapse. */
++	if (c == &__mthp_khugepaged_context) {
++		nr_pmds = 1;
++		nr_hpages = 1 << (hpage_pmd_order - collapse_order);
++		size = hpage_pmd_size;
++	}
 +
-+	if (!pmd_pagesize)
-+		ksft_exit_fail_msg("reading PMD pagesize failed\n");
++	p = ops->setup_area(nr_pmds);
+ 	ops->fault(p, 0, size);
+ 	c->collapse("Collapse multiple fully populated PTE table", p, nr_hpages,
+ 		    ops, true);
+@@ -695,10 +755,31 @@ static void collapse_full(struct collapse_context *c, struct mem_ops *ops)
+ 
+ static void collapse_empty(struct collapse_context *c, struct mem_ops *ops)
+ {
++	int nr_hpages = 1;
++	void *p;
 +
-+	if (hpage_size == pmd_pagesize)
-+		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
++	if (c == &__mthp_khugepaged_context)
++		nr_hpages = 1 << (hpage_pmd_order - collapse_order);
 +
-+	return check_large_folios(addr, len, nr_hpages, hpage_size);
++	p = ops->setup_area(1);
++	c->collapse("Do not collapse empty PTE table", p, nr_hpages, ops, false);
++	ops->cleanup_area(p, hpage_pmd_size);
++	ksft_test_result_report(exit_status, "%s\n", __func__);
++}
++
++static void collapse_single_mthp(struct collapse_context *c, struct mem_ops *ops)
++{
++	unsigned long hpage_size = page_size << collapse_order;
+ 	void *p;
+ 
+ 	p = ops->setup_area(1);
+-	c->collapse("Do not collapse empty PTE table", p, 1, ops, false);
++	/*
++	 * Only fault collapse_order sized ranges, and only check 1
++	 * collapse_order sized huge page.
++	 */
++	ops->fault(p, 0, hpage_size);
++	c->collapse("Collapse PTE table with half PTE entries present",
++		p, 1, ops, true);
+ 	ops->cleanup_area(p, hpage_pmd_size);
+ 	ksft_test_result_report(exit_status, "%s\n", __func__);
+ }
+@@ -1114,8 +1195,8 @@ static void madvise_retracted_page_tables(struct collapse_context *c,
+ 	ops->fault(p, 0, size);
+ 
+ 	/* Let khugepaged collapse and leave pmd cleared */
+-	if (wait_for_scan("Collapse and leave PMD cleared", p, nr_hpages,
+-			  ops)) {
++	if (wait_for_scan("Collapse and leave PMD cleared", p, size, nr_hpages,
++			  hpage_pmd_order, ops)) {
+ 		fail("Timeout");
+ 		return;
+ 	}
+@@ -1131,17 +1212,19 @@ static void usage(void)
+ {
+ 	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
+ 	fprintf(stderr, "\t<test type>\t: <context>:<mem_type>\n");
+-	fprintf(stderr, "\t<context>\t: [all|khugepaged|madvise]\n");
++	fprintf(stderr, "\t<context>\t: [all|khugepaged|mthp_khugepaged|madvise]\n");
+ 	fprintf(stderr, "\t<mem_type>\t: [all|anon|file|shmem]\n");
+ 	fprintf(stderr, "\n\t\"file,all\" mem_type requires [dir] argument\n");
+ 	fprintf(stderr, "\n\t\"file,all\" mem_type requires a file system\n");
+ 	fprintf(stderr,	"\twith PMD-sized large folio support\n");
+ 	fprintf(stderr, "\n\tif [dir] is a (sub)directory of a tmpfs mount, tmpfs must be\n");
+ 	fprintf(stderr,	"\tmounted with huge=advise option for khugepaged tests to work\n");
++	fprintf(stderr, "\n\tmthp_khugepaged only supports anon mem_type now.\n");
+ 	fprintf(stderr,	"\n\tSupported Options:\n");
+ 	fprintf(stderr,	"\t\t-h: This help message.\n");
+ 	fprintf(stderr,	"\t\t-s: mTHP size, expressed as page order.\n");
+ 	fprintf(stderr,	"\t\t    Defaults to 0. Use this size for anon or shmem allocations.\n");
++	fprintf(stderr,	"\t\t-c: collapse order for mTHP collapse, expressed as page order.\n");
+ 	exit(1);
  }
  
- bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-+	uint64_t pmd_pagesize = read_pmd_pagesize();
-+
-+	if (!pmd_pagesize)
-+		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+
-+	if (hpage_size == pmd_pagesize)
-+		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-+
-+	return check_large_folios(addr, len, nr_hpages, hpage_size);
- }
+@@ -1151,11 +1234,14 @@ static void parse_test_type(int argc, char **argv)
+ 	char *buf;
+ 	const char *token;
  
- bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-+	uint64_t pmd_pagesize = read_pmd_pagesize();
-+
-+	if (!pmd_pagesize)
-+		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+
-+	if (hpage_size == pmd_pagesize)
-+		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-+
-+	return check_large_folios(addr, len, nr_hpages, hpage_size);
- }
+-	while ((opt = getopt(argc, argv, "s:h")) != -1) {
++	while ((opt = getopt(argc, argv, "s:c:h")) != -1) {
+ 		switch (opt) {
+ 		case 's':
+ 			anon_order = atoi(optarg);
+ 			break;
++		case 'c':
++			collapse_order = atoi(optarg);
++			break;
+ 		case 'h':
+ 		default:
+ 			usage();
+@@ -1181,6 +1267,10 @@ static void parse_test_type(int argc, char **argv)
+ 		madvise_context =  &__madvise_context;
+ 	} else if (!strcmp(token, "khugepaged")) {
+ 		khugepaged_context =  &__khugepaged_context;
++	} else if (!strcmp(token, "mthp_khugepaged")) {
++		mthp_khugepaged_context =  &__mthp_khugepaged_context;
++		if (collapse_order <= 0 || collapse_order >= hpage_pmd_order)
++			usage();
+ 	} else if (!strcmp(token, "madvise")) {
+ 		madvise_context =  &__madvise_context;
+ 	} else {
+@@ -1196,14 +1286,20 @@ static void parse_test_type(int argc, char **argv)
+ 		read_write_file_write_ops =  &__read_write_file_write_ops;
+ 		anon_ops = &__anon_ops;
+ 		shmem_ops = &__shmem_ops;
++		if (mthp_khugepaged_context)
++			usage();
+ 	} else if (!strcmp(buf, "anon")) {
+ 		anon_ops = &__anon_ops;
+ 	} else if (!strcmp(buf, "file")) {
+ 		read_only_file_ops =  &__read_only_file_ops;
+ 		read_write_file_read_ops =  &__read_write_file_read_ops;
+ 		read_write_file_write_ops =  &__read_write_file_write_ops;
++		if (mthp_khugepaged_context)
++			usage();
+ 	} else if (!strcmp(buf, "shmem")) {
+ 		shmem_ops = &__shmem_ops;
++		if (mthp_khugepaged_context)
++			usage();
+ 	} else {
+ 		usage();
+ 	}
+@@ -1246,7 +1342,6 @@ static int nr_test_cases;
  
- int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+ int main(int argc, char **argv)
+ {
+-	int hpage_pmd_order;
+ 	struct thp_settings default_settings = {
+ 		.thp_enabled = THP_MADVISE,
+ 		.thp_defrag = THP_DEFRAG_ALWAYS,
+@@ -1272,10 +1367,6 @@ int main(int argc, char **argv)
+ 	if (!thp_is_enabled())
+ 		ksft_exit_skip("Transparent Hugepages not available\n");
+ 
+-	parse_test_type(argc, argv);
+-
+-	setbuf(stdout, NULL);
+-
+ 	page_size = getpagesize();
+ 	hpage_pmd_size = read_pmd_pagesize();
+ 	if (!hpage_pmd_size)
+@@ -1283,6 +1374,10 @@ int main(int argc, char **argv)
+ 	hpage_pmd_nr = hpage_pmd_size / page_size;
+ 	hpage_pmd_order = __builtin_ctz(hpage_pmd_nr);
+ 
++	parse_test_type(argc, argv);
++
++	setbuf(stdout, NULL);
++
+ 	default_settings.khugepaged.max_ptes_none = hpage_pmd_nr - 1;
+ 	default_settings.khugepaged.max_ptes_swap = hpage_pmd_nr / 8;
+ 	default_settings.khugepaged.max_ptes_shared = hpage_pmd_nr / 2;
+@@ -1300,6 +1395,7 @@ int main(int argc, char **argv)
+ 	TEST(collapse_full, khugepaged_context, read_write_file_read_ops);
+ 	TEST(collapse_full, khugepaged_context, read_write_file_write_ops);
+ 	TEST(collapse_full, khugepaged_context, shmem_ops);
++	TEST(collapse_full, mthp_khugepaged_context, anon_ops);
+ 	TEST(collapse_full, madvise_context, anon_ops);
+ 	TEST(collapse_full, madvise_context, read_only_file_ops);
+ 	TEST(collapse_full, madvise_context, read_write_file_read_ops);
+@@ -1307,8 +1403,11 @@ int main(int argc, char **argv)
+ 	TEST(collapse_full, madvise_context, shmem_ops);
+ 
+ 	TEST(collapse_empty, khugepaged_context, anon_ops);
++	TEST(collapse_empty, mthp_khugepaged_context, anon_ops);
+ 	TEST(collapse_empty, madvise_context, anon_ops);
+ 
++	TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
++
+ 	TEST(collapse_single_pte_entry, khugepaged_context, anon_ops);
+ 	TEST(collapse_single_pte_entry, khugepaged_context, read_only_file_ops);
+ 	TEST(collapse_single_pte_entry, khugepaged_context, read_write_file_read_ops);
+diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+index 687d115e3bd8..d09f9f6a384e 100755
+--- a/tools/testing/selftests/mm/run_vmtests.sh
++++ b/tools/testing/selftests/mm/run_vmtests.sh
+@@ -410,6 +410,8 @@ CATEGORY="thp" run_test ./khugepaged all:shmem
+ 
+ CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
+ 
++CATEGORY="thp" run_test ./khugepaged -c 4 mthp_khugepaged:anon
++
+ # Try to create XFS if not provided
+ if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
+     if test_selected "thp"; then
 -- 
 2.47.3
 
