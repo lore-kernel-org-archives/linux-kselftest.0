@@ -1,185 +1,77 @@
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8CB47F790
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 20:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92D13E5A0C;
+	Thu,  6 Aug 2026 20:34:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786048410; cv=none; b=SP5J1/cdWTUfvhQo4y+nkd/9ukYlgbrC5vtX/O2Gvz4+MgaNLrIKecdUU6ygGMkoE9+qx0wrst3/c2M6n4EB7PyhMab0CRsF7M+RXl0QoQETHxjfDIQhvT2kpcM+pAJbnoa4j67xK4PIWYL4kPlRsILY2c3urGJRKGAD/TC4fQM=
+	t=1786048477; cv=none; b=ffcp4ppfwRsDmxenhvFjgu5EyPU7EE2ObJs/XjbubhMZKctXvDueibIllpzvmGCsWrSIze91Yj/taVzmNRWmluUIepfJXnhqSPr8SByYBjBfHl2zCUwUoIWqRxfsy52UQhwVVrom5te6FiEhB1qH2uowcuDgIy+W3sob3kN6p+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786048410; c=relaxed/simple;
-	bh=dw+GY6/HPrn7SdKFhf5hhYtXZMuWgnFA9FB9qbGGED8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cY2MKAWOEjzhr7iz1iUIyd+ImhJCRx0tHc0DxBscqHBoGPtW2skKeTglGwWirunk9G5x5OGBsHM5Cwdss1Uk86/IgVV5sG870Fu1em2BhUn05gJpM7yYUcFDoDmTEZ5V4oPzllP6pdys6MhGMS5tH0Mqxm6W3yyXJHC7DgWG5OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BsCPcDjE; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786048477; c=relaxed/simple;
+	bh=VI4ATDwtqPcrSdiXUhO3moE8rQo7xcV++52yJlhnZgM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gj2fHfFzEjxCwxy/0qs5D+tITVtQ++jdh7T4PbV425rmmbiVnOIkRRMkZfRZhUFPtIg+AEmbnbxRVoojiQy9OsYPiUsHT8ose7n/OfE6OliZbRWzeLlNmokVm6AY1PmDIAWD2KaEyWZKevx+j8wxC2iVzlWHjo+UnfJO4iG/Ge0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNt8EABs; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BsCPcDjE"
-Message-ID: <7cb9e702-9fe0-4672-a6de-7619562cde21@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786048405;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0olaPV6sfveLTm+8kCKxJgkQ6YSt65IwoLcmZ7nQvJ4=;
-	b=BsCPcDjEhw/Cp9uH5uJGZA3aCYnU7jKn/99lAt+VibZntcTcPIK4dC+W8j6vkXsofXpFKr
-	gjehqWoTqcscLLqf6wS/htkVm29H8tw8Ynpld5upT8FNGdTXdrfaa1bElBUbn7wGobNQTl
-	BtZgKseKrV5Q5pbghYg8rmkghKTJmnY=
-Date: Thu, 6 Aug 2026 13:33:10 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNt8EABs"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFF41F000E9;
+	Thu,  6 Aug 2026 20:34:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786048476;
+	bh=yaEHoymnyFlCJ1/O4dVpG1O047FOhYwcrBZpz9qzpYs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=cNt8EABsFUNh0Ul/KeeYR+ET6A7dV92rdyscj5XsI1dBm8u5g9C9IBC0R/yOQqj6B
+	 YARmX/rk3NBeg0Oc2NUgeQvbgntmMYEaqveROXY+RqVte71OPyQXR1oRBs33ngWzCO
+	 18yQa9rhvJLdZtq4kpxbf/eQIuSOOkgcGmJ+BLCgQm7bJF4CKcEY+36+Ie0Yy5hz6q
+	 fgLlDNcx1/pZf47j1Tm1fzpf2STM3VOBpJ+jooGyNEWjPbwWAzcbYuEdry7R9SGHXn
+	 md48skHegQFOdLWipj0AoRdw/vtuWoXoMsgMm2fAPyxJ9QmUDRdu+xM8QQcZAFdLCl
+	 9xT26bsLc0vaw==
+Date: Thu, 6 Aug 2026 13:34:35 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Mina Almasry <almasrymina@google.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David
+ S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
+ Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Stanislav
+ Fomichev <sdf@fomichev.me>, Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: devmem: fix 5-tuple
+ flow steering
+Message-ID: <20260806133435.38c34e31@kernel.org>
+In-Reply-To: <CAHS8izP=mgsdxv3AtjJo9JY5OHC17zeX-VbPPH_gFF=Ndb_qjw@mail.gmail.com>
+References: <20260803181852.491437-1-almasrymina@google.com>
+	<20260806121631.13175f7e@kernel.org>
+	<CAHS8izP=mgsdxv3AtjJo9JY5OHC17zeX-VbPPH_gFF=Ndb_qjw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH 2/3] selftests/bpf: Route libarena build artifacts to
- OUTPUT
-To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
- <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260728-selftests-bpf_oot-v1-2-05feb15d94db@marliere.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 7/28/26 5:06 PM, Ricardo B. MarliÃ¨re (SUSE) wrote:
-> libarena's BPF objects, linked objects, and skeleton headers are always
-> written into the source tree regardless of whether an out-of-tree build
-> directory was specified via O=.
+On Thu, 6 Aug 2026 13:05:49 -0700 Mina Almasry wrote:
+> Yes the test fails, but it gets past the flow steering configuration problem.
 > 
-> Add OUTPUT support to libarena/Makefile: default OUTPUT to '.' for
-> standalone builds, prefix all generated file targets with $(OUTPUT)/, and
-> use addprefix to propagate the directory into the per-object lists. Create
-> $(OUTPUT) at Makefile-load time with a $(shell mkdir -p) so all rules have
-> a valid destination.
+> And in the code, the change looks correct to me. If flow_steer is
+> False, then we don't pass the -c arg to ncdevmem. ncdevmem is written
+> so that if -c is not set, 5-tuple flow steering is not possible (the
+> client side port is random), so it falls back to 3-tuple flow
+> steering, which doesn't work on GVE or any other driver that supports
+> only 5-tuple flow steering.
 > 
-> In the parent bpf/Makefile, pass OUTPUT="$(OUTPUT)/libarena" in
-> LIBARENA_MAKE_ARGS and update LIBARENA_SKEL/LIBARENA_ASAN_SKEL to reflect
-> the new location. Pass the absolute target path as the make goal so the
-> sub-make goal matches the $(OUTPUT)/... rule in libarena/Makefile
-> regardless of the invocation directory.
+> run_rx (devmem.check_rx test case) doesn't have this problem because
+> it does `flow_steer=not hasattr(cfg, 'netns')`, but run_rx_hds has
+> this problem because it forgets to override flow_steer at all. This
+> patch fixes that.
 > 
-> Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
-> ---
->  tools/testing/selftests/bpf/Makefile          | 11 ++++++-----
->  tools/testing/selftests/bpf/libarena/Makefile | 24 ++++++++++++++----------
->  2 files changed, 20 insertions(+), 15 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
-> index b289183475d4..7d42632f9d42 100644
-> --- a/tools/testing/selftests/bpf/Makefile
-> +++ b/tools/testing/selftests/bpf/Makefile
-> @@ -826,7 +826,8 @@ LIBARENA_MAKE_ARGS = \
->  		CLANG="$(CLANG)" \
->  		BPF_CFLAGS="$(BPF_CFLAGS) $(CLANG_CFLAGS)" \
->  		BPF_TARGET_ENDIAN="$(BPF_TARGET_ENDIAN)" \
-> -		Q="$(Q)"
-> +		Q="$(Q)" \
-> +		OUTPUT="$(OUTPUT)/libarena"
->  
->  LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
->  				 libarena/include/*		\
-> @@ -835,17 +836,17 @@ LIBARENA_BPF_DEPS := $(wildcard libarena/Makefile		\
->  				 libarena/selftests/*		\
->  				 libarena/*.bpf.o)
->  
-> -LIBARENA_SKEL := libarena/libarena.skel.h
-> +LIBARENA_SKEL := $(OUTPUT)/libarena/libarena.skel.h
->  
->  $(LIBARENA_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
-> -	+$(MAKE) -C libarena libarena.skel.h $(LIBARENA_MAKE_ARGS)
-> +	+$(MAKE) -C libarena $(LIBARENA_SKEL) $(LIBARENA_MAKE_ARGS)
->  
->  ifneq ($(CLANG_HAS_ARENA_ASAN),)
-> -LIBARENA_ASAN_SKEL := libarena/libarena_asan.skel.h
-> +LIBARENA_ASAN_SKEL := $(OUTPUT)/libarena/libarena_asan.skel.h
->  CFLAGS += -DHAS_BPF_ARENA_ASAN
->  
->  $(LIBARENA_ASAN_SKEL): $(INCLUDE_DIR)/vmlinux.h $(BPFOBJ) $(LIBARENA_BPF_DEPS)
-> -	+$(MAKE) -C libarena libarena_asan.skel.h $(LIBARENA_MAKE_ARGS)
-> +	+$(MAKE) -C libarena $(LIBARENA_ASAN_SKEL) $(LIBARENA_MAKE_ARGS)
->  endif
->  
->  # Define test_progs test runner.
-> diff --git a/tools/testing/selftests/bpf/libarena/Makefile b/tools/testing/selftests/bpf/libarena/Makefile
-> index 5e2ab514805e..195d5f833186 100644
-> --- a/tools/testing/selftests/bpf/libarena/Makefile
-> +++ b/tools/testing/selftests/bpf/libarena/Makefile
-> @@ -27,10 +27,14 @@ BPFDIR=$(abspath $(LIBARENA)/..)
->  INCLUDE_DIR ?= $(BPFDIR)/tools/include
->  LIBBPF_INCLUDE ?= $(INCLUDE_DIR)
->  
-> +# Build output directory; defaults to in-tree for standalone builds.
-> +OUTPUT ?= .
-> +$(shell mkdir -p $(OUTPUT))
+> To be honest while looking at this there were a few weird things. Like
+> I'm not sure why the python arg is named `flow_steer` (it likely
+> should be 5_tuple_flow_steer), and why flow_steer setting is tied to
+> hasattr(cfg, 'netns'), it should be a proprety of the driver you're
+> runing on (unless all in-netns drivers will support 3-tuple flow
+> steering).
 
-This runs while make parses the file, including under make -n, and
-discards mkdir's status. Let's create $(OUTPUT) via order-only
-directory prereq instead.
-
-> +
->  # Scan src/ and selftests/ to generate the final binaries
->  LIBARENA_SOURCES = $(wildcard $(LIBARENA)/src/*.bpf.c) $(wildcard $(LIBARENA)/selftests/*.bpf.c)
-> -LIBARENA_OBJECTS = $(notdir $(LIBARENA_SOURCES:.bpf.c=.bpf.o))
-> -LIBARENA_OBJECTS_ASAN = $(notdir $(LIBARENA_SOURCES:.bpf.c=_asan.bpf.o))
-> +LIBARENA_OBJECTS = $(addprefix $(OUTPUT)/,$(notdir $(LIBARENA_SOURCES:.bpf.c=.bpf.o)))
-> +LIBARENA_OBJECTS_ASAN = $(addprefix $(OUTPUT)/,$(notdir $(LIBARENA_SOURCES:.bpf.c=_asan.bpf.o)))
->  
->  INCLUDES = -I$(LIBARENA)/include -I$(BPFDIR)
->  ifneq ($(INCLUDE_DIR),)
-> @@ -61,32 +65,32 @@ CFLAGS += $(INCLUDES)
->  vpath %.bpf.c $(LIBARENA)/src $(LIBARENA)/selftests
->  vpath %.c $(LIBARENA)/src $(LIBARENA)/selftests
->  
-> -skeletons: libarena.skel.h libarena_asan.skel.h
-> +skeletons: $(OUTPUT)/libarena.skel.h $(OUTPUT)/libarena_asan.skel.h
->  .PHONY: skeletons
->  
-> -libarena_asan.skel.h: libarena_asan.bpf.o
-> +$(OUTPUT)/libarena_asan.skel.h: $(OUTPUT)/libarena_asan.bpf.o
->  	$(call msg,GEN-SKEL,libarena,$@)
->  	$(Q)$(BPFTOOL) gen skeleton $< name "libarena_asan" > $@
->  
-> -libarena.skel.h: libarena.bpf.o
-> +$(OUTPUT)/libarena.skel.h: $(OUTPUT)/libarena.bpf.o
->  	$(call msg,GEN-SKEL,libarena,$@)
->  	$(Q)$(BPFTOOL) gen skeleton $< name "libarena" > $@
->  
-> -libarena_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
-> +$(OUTPUT)/libarena_asan.bpf.o: $(LIBARENA_OBJECTS_ASAN)
->  	$(call msg,GEN-OBJ,libarena,$@)
->  	$(Q)$(BPFTOOL) gen object $@ $^
->  
-> -libarena.bpf.o: $(LIBARENA_OBJECTS)
-> +$(OUTPUT)/libarena.bpf.o: $(LIBARENA_OBJECTS)
->  	$(call msg,GEN-OBJ,libarena,$@)
->  	$(Q)$(BPFTOOL) gen object $@ $^
->  
-> -%_asan.bpf.o: %.bpf.c
-> +$(OUTPUT)/%_asan.bpf.o: %.bpf.c
->  	$(call msg,CLNG-BPF,libarena,$@)
->  	$(Q)$(CLANG) $(BPF_CFLAGS) $(ASAN_FLAGS) -DBPF_ARENA_ASAN $(BPF_TARGET_ENDIAN) -c $< -o $@
->  
-> -%.bpf.o: %.bpf.c
-> +$(OUTPUT)/%.bpf.o: %.bpf.c
->  	$(call msg,CLNG-BPF,libarena,$@)
->  	$(Q)$(CLANG) $(BPF_CFLAGS) $(BPF_TARGET_ENDIAN) -c $< -o $@
->  
->  clean:
-> -	$(Q)rm -f *.skel.h *.bpf.o *.linked*.o
-> +	$(Q)rm -f $(OUTPUT)/*.skel.h $(OUTPUT)/*.bpf.o $(OUTPUT)/*.linked*.o
-> 
-
+Could we clean this up and add explicit test cases for inserting
+specific rule types? We want the one-sided-tuple format at Meta,
+falling back silently would be a loss of signal.
