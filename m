@@ -1,95 +1,135 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6D53D47BF;
-	Thu,  6 Aug 2026 08:23:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1652C3EFFA7;
+	Thu,  6 Aug 2026 08:25:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786004597; cv=none; b=GmLIQh/voWMDD3yww8LObt8go+M9XlGQvXyyafFeRovAjWs+7IkW5LX4xgwLvGSFvU0huuJs0Dh08SiM5PqmG/kvqlcWu3lBEyPufT8LqnmOUG2MQxaiU0S3S/+ZioXYE54jJRizXvVTCvEqHuKcJbsfNBwiUfHoJsde7fQxnlM=
+	t=1786004727; cv=none; b=allCWNM27E2w/xOPe1SuovDf5tCdh2+C9ilWbxSZ6Zq/d7wZPKkYX9qzzV3yZzPvdBKmOd16+BaT17swyrI20gKC5wP2I+c4vOVlndJGRGBLkxrhm5FSqVnf1Kb8I5o4GH5vTrW25LrgTjxkgse7f2cbLElzNX7RTSKuEyj9i7A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786004597; c=relaxed/simple;
-	bh=LR0lpA9h89VSb0evYK9TzKmvwzjzTitcrbaIcjjOuWo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=S403jtXP1MC4M4Tj+PBChpXY2Pl4pL8xV45CParU8EBfm6a6yv66y4JbalujW5PuSGime1PXOOEr8qY7kgHd7MmZgELxMG2zpaVHDk1vNJ7CcKBNz3bH6/WGVFoe8x3XSIP0pD8Nib38rDjyj91e1gXPevfPx34yQ+D88p9b8pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3FYghH40; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hKbqMjrj; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1786004727; c=relaxed/simple;
+	bh=EtoUC10RvYxFSimpW9zBON3W+wVo+Kuru8pdzr+Zm94=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WhKSUyVHzrxe3nLV6ohKhSgnSwrO7BphokVETSwN1Na+mw6vdJc/p5ZjpAMN2pnWt4rInAxzyeTJVMu6YK15LeSNhhowfBUIELQnFFws+6OAr3V22P4L03jyJBMOG0s9pkRoRn0KRJnbYv/GdBQsJ4Z1rqJBV0PxfZvU/dcqXnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=mcxP7Igm; arc=none smtp.client-ip=115.124.30.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3FYghH40";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hKbqMjrj"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1786004594;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i1hzS6FheJp1n77P4UsaZHsQqZI4eItJ8gjMhgc47M8=;
-	b=3FYghH40fpnYDZWlmZ5jI+mrrcv4UDui7sPgWAvIGC1R+RhqVEyN+IbSoWLF0eyD98/kOH
-	NuidWmexSUOfU4h69r3BwVXpNWdoGqOc8OWkIz0unT68FIEfo2lKjlOlwXoDr7vpARGaQJ
-	wL8JFewZjCbNum2G97CR/niKt320DOlzcaMDY0rp3l4nXLywF+D7JXMSbn1ixNGs0XUhCG
-	Not+bog+FU4+SX+LM9gS/JBeLX7bZ6sBy3NAjj0wpuFzj+vx/DlHybx3589cWD9Krwbduh
-	pHeMfFiM0/fbR/IIqhGD+R3CUFjOEmEXM87fuqAcqCxhcNXeFnyHYhDBiTJsiw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1786004594;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=i1hzS6FheJp1n77P4UsaZHsQqZI4eItJ8gjMhgc47M8=;
-	b=hKbqMjrj7aHywt4MUgZoaZH3RBSlIY18taYCwQo7M8SVh8PvJzopR45pwn3et1EjPw6KUK
-	RBnBkYeqRVOBLVAg==
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, Radim =?utf-8?B?S3LEjW3DocWZ?=
- <radim.krcmar@oss.qualcomm.com>,
- Jesse Taube <jtaubepe@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Charlie Jenkins
- <thecharlesjenkins@gmail.com>
-Subject: Re: [PATCH v3 04/17] riscv: Add kprobes instruction simulation KUnit
-In-Reply-To: <20260707-riscv_insn_table-v3-4-3f8e5f75ba97@gmail.com>
-References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
- <20260707-riscv_insn_table-v3-4-3f8e5f75ba97@gmail.com>
-Date: Thu, 06 Aug 2026 10:23:12 +0200
-Message-ID: <87ldajd5e7.fsf@yellow.woof>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="mcxP7Igm"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786004718; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=6n9+tn1FX85xHqa53wOOTAdXVH64YAjilIMF7HdWsJo=;
+	b=mcxP7Igm1hPNnZOzVtzFvgx8aT3Cv8t+pEIF9BmY3Omj07iNj5xM8X2KeaasuJ6ZQh2OcCY6N4pTcYe1SuP2GKwcWt8WPKAhI96lhuKOfnPriu7BAFWcjO3WrmSJb9gm6dKRBWwORXIizxwzH/+60JZUQC4182ri4puegrTUcUY=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R171e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=yaoyuan@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X8TPEvo_1786004716;
+Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0X8TPEvo_1786004716 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Aug 2026 16:25:17 +0800
+Date: Thu, 6 Aug 2026 16:25:16 +0800
+From: Yao Yuan <yaoyuan@linux.alibaba.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
+	Oliver Upton <oupton@kernel.org>, Peter Maydell <peter.maydell@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 04/14] KVM: arm64: Ensure GCS memory effects are
+ visible
+Message-ID: <q2kb7muy5d3rdl2d3pvipggc33xkgq2o7tn6wy6p75qeegas5n@ijikgyexqt74>
+References: <20260803-arm64-gcs-v18-0-fd8c40f5ad88@kernel.org>
+ <20260803-arm64-gcs-v18-4-fd8c40f5ad88@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260803-arm64-gcs-v18-4-fd8c40f5ad88@kernel.org>
 
-> +		} else if (riscv_insn_is_c_jr(i)) {
-> +			u32 rs1_index = riscv_insn_c_jr_extract_xs1(i);
-> +
-> +			simulate_c_jr(i, addr, &regs);
-> +
-> +			KUNIT_EXPECT_EQ_MSG(test, regs.epc,
-> +					    riscv_insn_reg_get_val((unsigned long *)&regs,
-> +								   rs1_index),
-> +					    "c.jr instruction (0x%x) incorrectly simulated", i);
+On Mon, Aug 03, 2026 at 11:56:49PM +0800, Mark Brown wrote:
+> In order to allow efficient implementation of GCS implementations are
+> permitted to do GCS specific caching, with barriers implicit in stack
+> switch operations and GCSB DSYNC as an explicit barrier.  Since we do
+> not use GCS in the hypervisor or host kernel the hypervisor cannot rely
+> on any barriers being present in vCPU context switches other than those
+> it explicitly inserts.  Add explicit barriers when loading and saving
+> vCPU state.
+>
 
-Should we set a value to rs1, just like everything else?
+Reviewed-by: Yuan Yao <yaoyuan@linux.alibaba.com>
 
-> diff --git a/arch/riscv/kernel/tests/kprobes/test-kprobes.h b/arch/riscv/kernel/tests/kprobes/test-kprobes.h
-> index 537f44aa9d3f..7a672de8f130 100644
-> --- a/arch/riscv/kernel/tests/kprobes/test-kprobes.h
-> +++ b/arch/riscv/kernel/tests/kprobes/test-kprobes.h
-> @@ -19,6 +19,12 @@ extern void *test_kprobes_addresses[];
->  /* array of functions that return KPROBE_TEST_MAGIC */
->  extern long (*test_kprobes_functions[])(void);
->  
-> +void test_kprobes_arbitrary(void);
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kvm/hyp/nvhe/switch.c   | 13 +++++++++++++
+>  arch/arm64/kvm/hyp/vhe/sysreg-sr.c | 14 ++++++++++++++
+>  2 files changed, 27 insertions(+)
+>
+> diff --git a/arch/arm64/kvm/hyp/nvhe/switch.c b/arch/arm64/kvm/hyp/nvhe/switch.c
+> index 7318e3e6a5f3..fe8727bf2833 100644
+> --- a/arch/arm64/kvm/hyp/nvhe/switch.c
+> +++ b/arch/arm64/kvm/hyp/nvhe/switch.c
+> @@ -301,6 +301,12 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
+>  	 */
+>  	dsb(nsh);
+>
+> +	/*
+> +	 * Ensure any GCS memory effects are visible to this CPU.
+> +	 */
+> +	if (ctxt_has_gcs(guest_ctxt))
+> +		gcsb_dsync();
 > +
-> +extern unsigned int *test_kprobes_arbitrary_addr;
+>  	__kvm_adjust_pc(vcpu);
+>
+>  	/*
+> @@ -345,6 +351,13 @@ int __kvm_vcpu_run(struct kvm_vcpu *vcpu)
+>  	 */
+>  	dsb(nsh);
+>
+> +	/*
+> +	 * Ensure any GCS memory effects from the outgoing vCPU are
+> +	 * visible elsewhere.
+> +	 */
+> +	if (ctxt_has_gcs(guest_ctxt))
+> +		gcsb_dsync();
 > +
-> +extern unsigned int *test_kprobes_c_bnez_addr1;
+>  	__deactivate_traps(vcpu);
+>  	__load_host_stage2();
+>
+> diff --git a/arch/arm64/kvm/hyp/vhe/sysreg-sr.c b/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> index 2431c18f5792..4594992b008c 100644
+> --- a/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> +++ b/arch/arm64/kvm/hyp/vhe/sysreg-sr.c
+> @@ -239,6 +239,13 @@ void __vcpu_load_switch_sysregs(struct kvm_vcpu *vcpu)
+>  	if (vcpu_has_nv(vcpu))
+>  		dsb(nsh);
+>
+> +	/*
+> +	 * Ensure any GCS memory effects are visible to the incoming
+> +	 * vCPU.
+> +	 */
+> +	if (ctxt_has_gcs(guest_ctxt))
+> +		gcsb_dsync();
 > +
-
-Are these declarations used somewhere?
-
-Nam
+>  	/*
+>  	 * Load guest EL1 and user state
+>  	 *
+> @@ -299,5 +306,12 @@ void __vcpu_put_switch_sysregs(struct kvm_vcpu *vcpu)
+>  	/* Restore host user state */
+>  	__sysreg_restore_user_state(host_ctxt);
+>
+> +	/*
+> +	 * Ensure any GCS memory effects from the outgoing vCPU are
+> +	 * visible elsewhere.
+> +	 */
+> +	if (ctxt_has_gcs(guest_ctxt))
+> +		gcsb_dsync();
+> +
+>  	vcpu_clear_flag(vcpu, SYSREGS_ON_CPU);
+>  }
+>
+> --
+> 2.47.3
+>
