@@ -1,719 +1,222 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0a-00206402.pphosted.com (mx0a-00206402.pphosted.com [148.163.148.77])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D628944C65C;
-	Thu,  6 Aug 2026 15:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786029724; cv=none; b=ZvTcuC9Cib10+Bkrc78RNSj1De9lH/njFowGRCFsMW6/N8IhKbB5VViqu8i7ST123mFTjqZ1/EJVFkoxA+DhULRd9yzlDYYG/Fjk/sYTaq/zZqqc3FwI5i7mo39bSfheZ+/gEatK0deT//baigV3KJA/fpybeeFBGojNJHzRtCU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786029724; c=relaxed/simple;
-	bh=LAuNu6btUORQiT0+hUozqw2apavt7T4XjbH5BeZJucU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Ws7fm/sJu3NR8deVZhhAOAxFhKeD1lIIuo3qdqOJ72kmuZti3DPKy89EgwdiDijijSpWYX6Ny9qyaZzpmYlnUXDOFpVZegULlkw1w1scky70w2YnpzDbEPm0257ckkXIRDgLpYHS34xfwtgSJqzmjzlSAB1kRbpq8rM8ujmv4NY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4ZC6oyb; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E64442A799
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 15:32:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=148.163.148.77
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786030324; cv=pass; b=KEOy7H6QjqpRtRxF7tOygNvyWUvPXNFWbCjXe3s5IxKi5vzMKKqDhVCmRc9QYqdsNTIPbbLK3s0UnuvlWUHz+Ugkjdlpl/eYzb+KUr3XiA0Ku3Nel4WJp1mlCySJBWbgFAaP269ul4PQFW5hJWaJmZGYwCGWV2XQJG4zCuJMoR4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786030324; c=relaxed/simple;
+	bh=q1yKAchAKLYq079ovpGA477d3rJNusw7Xe8p+FR68lg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nALN0/IDocXjL0YIdWY0KAx64Fgdb1ex6XE2D/Bc69iDsM158BnkQCTScw9cx5jJBWYvq3SgMLTqBQPtEfjn5mzxZ37gzjmwqQrGHBn33cZcxhSZNMw+5FJlzKxc4JfT/2cew1Seh4ZaHnYyZ3Nb2FuhZSLlT54iVAmRwqpgt8o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com; spf=pass smtp.mailfrom=crowdstrike.com; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=cD4zTm5M; dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b=jUwr7YyE; arc=pass smtp.client-ip=148.163.148.77
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=crowdstrike.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crowdstrike.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4ZC6oyb"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5025E1F000E9;
-	Thu,  6 Aug 2026 15:22:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786029722;
-	bh=Ipmc9Co9/zys60B9FxN6cT0UkdlhDiJDapWUnTN8IP4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=J4ZC6oybP1GVcGieATyF6neA6jtopaplYjAJFoQXegNkdFw5p53FFkz1UbD0FQbpU
-	 V9NXwJSQmlKflx5XAUr4h0qpJF9jCeJxuAX0md3s4AOTYDWhnX7ddx/yxjLNOqyZL0
-	 1STcicbAg67XMjXlL72wk0VMsns33MT8yxurUHrmnGkkF/mOLU9BowMm1r4d7kGjG0
-	 z6mBCNtYxMfrWhLtQyY1j2VN11UkyquLaCzbFWyFkFmZT/xY2qd37OQzp4w26bwm+8
-	 Yy+V2rB0yv+UjDjl1/35FT47KmYpZO6v++POqVwp41LgIcrD1B4MNrqnJ6mnnIgWwE
-	 B0RBZQCpPA/RQ==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/ftrace: Add boot-time tracing test framework
-Date: Fri,  7 Aug 2026 00:21:58 +0900
-Message-ID: <178602971811.141946.7845996127759581471.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178602969872.141946.3932041319962687996.stgit@devnote2>
-References: <178602969872.141946.3932041319962687996.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="cD4zTm5M";
+	dkim=pass (2048-bit key) header.d=crowdstrike.com header.i=@crowdstrike.com header.b="jUwr7YyE"
+Received: from pps.filterd (m0354651.ppops.net [127.0.0.1])
+	by mx0a-00206402.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 676F6FK24162565
+	for <linux-kselftest@vger.kernel.org>; Thu, 6 Aug 2026 15:32:01 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crowdstrike.com;
+	 h=cc:content-transfer-encoding:content-type:date:from
+	:in-reply-to:message-id:mime-version:references:subject:to; s=
+	default; bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=; b=cD4z
+	Tm5M17fPCDrNyQnDpnqttK1cC6kuMPVg4/jD/NafaBCKl0S12uY23MLt8b4AzTR1
+	tNtAlGU6iP65NOCAbZGM/AFS1P8A8jFJtgC+Gka/cS6al6ZUwTehMeQPyb49rJQ/
+	ju69mZ7d/ia/w2ssTJghneL2trmQpwiu1JI2o4ewFKbpqsE6YwXRn0dDomX5s3g/
+	TzyMqV1CTrn8xM9VTU4dBjoou0s9LDokE/Lr5b8h6sM33N7AXcM7VGNgAH/pGgMd
+	cZseJx5SSRaCvi1pYSw14VZx4tyjkzymIS24edQKmC4N7Wsh7W7pzQS0ATIUeCok
+	yJesokBCRMEHIY5+8g==
+Received: from mail-yx1-f71.google.com (mail-yx1-f71.google.com [74.125.224.71])
+	by mx0a-00206402.pphosted.com (PPS) with ESMTPS id 4fvq5k9nvg-1
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 15:32:01 +0000 (GMT)
+Received: by mail-yx1-f71.google.com with SMTP id 956f58d0204a3-667656a12c5so5928072d50.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 08:32:01 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786030320; cv=none;
+        d=google.com; s=arc-20260327;
+        b=U/Xasy09ytNToo7TU3nqDXYFN3F0kuRcL4HUgLszHgYMS2gSvHS9g5iuQU+MD9tXJ2
+         UbhJfPjiPKTXf0zJeBvSwZChBSSH+KxRN+WGr6vy6puLuMQL+vTr9ks04GdHwJRCydQ9
+         s0R9qaWwx3nXR6gi6WmQT8AZ65OVna3nTDpaBU7jQCOGXK62aWTfhwhDBWeuuiEuukz3
+         8/Da+JCGuWkJCbqaNTe04OP+LxHX6sz1bIfek5GWtJkU4Z2YsvdYFvs7PTk0rBwANVnJ
+         L7KmMM8r9hUydcjV5VOWchm6yw61zZnrCkq99tru7jx/SJXB+CSAxUCDTa51Ft3v4Mi2
+         fH4Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
+        fh=DGDl7iqR8tL7MWH1MK2QPHiCzOATaumJ7rU+UBHcHO0=;
+        b=K3kTgNnNXrYA56EpXvYwixiNjrdNl66XXe9FSBxMr+NoMUiik0fnUevZe1Ssu+ALlE
+         Y4U3GxCcclqBbnuniuGaFBaX0K1Y0I/uBaVz9k1d930RtR2SDmZqnIbFLTaqzlFqHjYY
+         wzZvHT2S14/9CeJILm4dysnNSy7XspxzzMX5u3IbfeEpRaqhf23HhG0uHJBvyxuyZuLW
+         1SlnXgkHR9pbT4NFgNZAuPGDHh95IzV8Rbq5dF0DH3r8ZeDLryX+12piqO51oO82lgyr
+         fDc9ViIguVwQF/xEgzL7ILcnWIo3IRFxtclzWrS13cbl6QeyCiYtXV4707lonUNAMmw0
+         BMnA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=crowdstrike.com; s=google; t=1786030320; x=1786635120; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
+        b=jUwr7YyEutR2ntg8mjiTkWr8G03wYaEMxMSDpwpeIO060yep4vdjVdLNRvdpnYyHTh
+         Q2ja/+7W1N89qUtLLHRF2mQFXrKXQw1q7TKbCzzFGzCy8phwlVgFemybh4MsP+CUcdjM
+         lH3nwDnpqcmGChjsCbjpWZo8NYW4J3mXH8mmmFURQgcdbKZ6uwkM5LI8SnhJQM7acml/
+         nJF1EDne5owqizd5ct1e56AakdqqUXBYpxOm46SB/gVYfEap/FbxbnM7SCuYg+6J+inK
+         m/vmdXVQn4/+CKbdIOqRKB//rjFCjK81hRMhXyWjyAMGfCvtjZljQDehl4TxvX+xCLXI
+         vkGw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786030320; x=1786635120;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=c2fkWs3IPyqlvD9JKIug3ApdmdvPne7OgC9UgDf+NxM=;
+        b=Rsk6zvmzCBmYzD9qMenaEP50kd/A78nqN1R+HR1aLh1kLEC1lVPKTOj2x28/4lf2Cv
+         DNVJqqoqHhyIm85VMh9+Soy+fAXXy9vcQR9nvQhOtkUMDQMNzsd3RjgegQKBYBtct6s7
+         yMZZTXarNK23jYZ1wI07wVU4cb8AfarMqch8PftCaf85v9/7xn0UclPgLyEhC1NqGIy4
+         ssvHt4JIOZwisnQRLVLW5BmAWcGT3jB7bhGO5j504asmLOFj3HUCqNrA1F7ilMnckYcR
+         FEaksrXFaVh+JzZW7oIJD2sJXXqDCGY0Jp8kXJSOOU8j0soZ8HpjDi/I/kUTGLptksWO
+         vfDQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpOAkFcEzmDa7A3BuXRvswfi3DW6tn1wbiQgFwz/PDmOl3WJt4URfuKhyUex/wEopRU1XkcnEGbjtVM2gDqjZ8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2/l9cO1VxKRGPgjUjBWceLz/ziDwGKO9L+Xvlmx7xW6TIcuL5
+	fJdAZR55TkIPPDrHWb1QMoDTDgreL5UAwFWnVLDryCeTnaFpXH0wOFQMfaXAF1caW7fs1E+K5At
+	3AkW5T4G3Uy3qbFSp+4kzTr+UoG+fOau6MUG7DYrE5N9sng9QwxZhRFX8qf7MIUGphixgiHuJIG
+	Ih+Bj9bsp8y+Bqx+OSP7vW1oFAEcfQGiCTUsmfo+Yg6+ZE
+X-Gm-Gg: AR+sD121GWqjJJT3XZoVKr1kxHsEjwl/AanqMFdQa4db3bIh5JfXyIYa4STnuV5mRl6
+	2w3/NSBjPitI8xnAYv6PAwYqB9aNhHyoaEVPLA7E4ME2LMiWhkmJciifxDD8dE8IF1wAZU2f2zM
+	U/CLd9suYGBjBk0dDR35/Paa4+1suBj9lnWbPsL9+IVOWUhAVLR4iN2AlGig==
+X-Received: by 2002:a05:690e:488a:b0:664:bd5c:6e72 with SMTP id 956f58d0204a3-6699aa7511dmr7229014d50.34.1786030320276;
+        Thu, 06 Aug 2026 08:32:00 -0700 (PDT)
+X-Received: by 2002:a05:690e:488a:b0:664:bd5c:6e72 with SMTP id
+ 956f58d0204a3-6699aa7511dmr7228964d50.34.1786030319671; Thu, 06 Aug 2026
+ 08:31:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20260731175358.3542156-1-andrey.grodzovsky@crowdstrike.com>
+ <20260731175358.3542156-3-andrey.grodzovsky@crowdstrike.com> <am0-QoUNQo4p2sBg@redhat.com>
+In-Reply-To: <am0-QoUNQo4p2sBg@redhat.com>
+From: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+Date: Thu, 6 Aug 2026 11:31:47 -0400
+X-Gm-Features: AUfX_mw1nwxsETix0HLa6WjJrBSSAU1_0A9CQBJUP5Fq4BDIA8mjk_ZZNVuhTmY
+Message-ID: <CAOu3gNhFL+1JmWRVwJVq4xUn-8mENkNwYexCwpFZ8FaZY82SRw@mail.gmail.com>
+Subject: Re: [RFC PATCH bpf-next v2 2/2] selftests/livepatch: update
+ test-ftrace.sh for deprecated ftrace_enabled
+To: Joe Lawrence <joe.lawrence@redhat.com>
+Cc: bpf@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        live-patching@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org, rostedt@goodmis.org, mbenes@suse.cz,
+        corbet@lwn.net, jpoimboe@kernel.org, shuah@kernel.org,
+        jolsa@kernel.org, mhiramat@kernel.org, stable@vger.kernel.org,
+        linux-open-source@crowdstrike.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDEyMCBTYWx0ZWRfX/QEAOlyvcgG0
+ 6WzRNOQpD5yMgBMinyNRVO/QJYFpiZ3ZzKtKxrd+dUu87phS5/BnVA2RAMmh94YRdozcBMpjWOk
+ nmrtNYi855zxkMlukP2SFqO12/PLL4FVR0TRZMHwE7w/H/xVtx97
+X-Proofpoint-ORIG-GUID: _BLucKIDlp6gEEKuR65w4ZSOiKYrI57U
+X-Authority-Analysis: v=2.4 cv=QfJWeMbv c=1 sm=1 tr=0 ts=6a74a8f1 cx=c_pps
+ a=ngMg22mHWrP7m7pwYf9JkA==:117 a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10
+ a=KZhmPCYDdY0A:10 a=VkNPw1HP01LnGYTKEx00:22 a=T2KQ53IYiC3MXPrxx8bB:22
+ a=b3B37AjAgz0HnGB3MuNd:22 a=ngmC-yC5AAAA:8 a=e25ExAebAAAA:8 a=20KFwNOVAAAA:8
+ a=meVymXHHAAAA:8 a=pl6vuDidAAAA:8 a=dDW-ktzWsA5qhXuJ1JwA:9 a=QEXdDO2ut3YA:10
+ a=yHXA93iunegOHmWoMUFd:22 a=P5XVh-r7Nk77isVNjX_M:22 a=Fx-rEtueDibNKiZPBj-h:22
+ a=2JgSa4NbpEOStq-L5dxp:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDEyMCBTYWx0ZWRfX2qk/kx70fdDN
+ dlNCV/hG3wnnGeJKooO5frU3DgStCdKrBoIhBzCF8PyFoNspilJs04aBV9hcczUedGSoJ7xHPzy
+ qR5pNoh2io19C8tHE1P74Pzc9lU05rL3AUN+iMVojrxGELjuavcRbVf8VHiMfJCFgieTV8nkFh/
+ SKF7SfcmutF0vFtHdMzSVEeCLRjnsEoUiFirGSsVmtb1AuB66R6qDacUm1zgvP468bbTEKxXMAF
+ lTLr/NUpeEpa9EHIz0FAt825QW6DSigRiM+z6vIJoRQprMPDAiC1ksRnm+rVlBWAtYOmIEAWpmH
+ 22r/N4hyGliqMJPxuLavksU6rhna9lHtu7jkXv5W+jzfgA7pZIu1VzdTC+WdC9DRGPaVWJAfce7
+ ZhO0GlnvKm0Ok2Ctfqx6s+yklulZfUWg/uP9fE+9ipfd2CD1gsdjdl1vqUNn6WUp1niCtDFgtlw
+ hlhoC+nvIp9khMqa+EA==
+X-Proofpoint-GUID: _BLucKIDlp6gEEKuR65w4ZSOiKYrI57U
+X-Proofpoint-Virus-Version: vendor=nai engine=6900 definitions=11867
+ signatures=596817
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ malwarescore=0 adultscore=0 lowpriorityscore=0 spamscore=0 clxscore=1015
+ impostorscore=0 suspectscore=0 bulkscore=0 priorityscore=1501 phishscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060120
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Thank you Joe and Steven for your comments; I sent V3.
 
-Add an automated test framework under
-tools/testing/selftests/ftrace/boottime/ to verify boot-time tracing
-configuration parsing.
+Andrey
 
-The test runner (run_boottime_test.sh) sources ktap_helpers.sh to
-generate output in TAP version 13 format. It builds a minimal
-initramfs with busybox, attaches bootconfig examples using
-tools/bootconfig/bootconfig, boots QEMU, and runs corresponding
-tracefs checker scripts.
-
-Assisted-by: Antigravity:gemini-3.6-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
-Changes in v2:
- - Copy shared library dependencies using ldd if busybox is dynamically
-   linked.
- - Wrap QEMU execution with timeout command and add -T/--timeout CLI
-   option.
- - Add pre-flight checks for busybox architecture compatibility and
-   cpio tool in run_boottime_test.sh.
- - Fix POSIX syntax compatibility and allow bypassing HOST_ARCH skip
-   when custom kernel/QEMU parameters are passed.
- - Add boottime/run_boottime_test.sh to TEST_PROGS_EXTENDED in
-   selftests/ftrace/Makefile.
----
- tools/testing/selftests/ftrace/Makefile            |    4 
- tools/testing/selftests/ftrace/boottime/Makefile   |   10 +
- tools/testing/selftests/ftrace/boottime/README     |   58 ++++
- .../ftrace/boottime/bootconfigs/01-kprobe.bconf    |    5 
- .../ftrace/boottime/bootconfigs/02-synth.bconf     |    4 
- .../ftrace/boottime/bootconfigs/03-eprobe.bconf    |    4 
- .../ftrace/boottime/bootconfigs/04-fprobe.bconf    |    4 
- .../ftrace/boottime/bootconfigs/05-tprobe.bconf    |    4 
- .../ftrace/boottime/bootconfigs/06-instance.bconf  |    5 
- .../selftests/ftrace/boottime/run_boottime_test.sh |  264 ++++++++++++++++++++
- .../selftests/ftrace/boottime/tests/01-kprobe.sh   |   18 +
- .../selftests/ftrace/boottime/tests/02-synth.sh    |   18 +
- .../selftests/ftrace/boottime/tests/03-eprobe.sh   |   18 +
- .../selftests/ftrace/boottime/tests/04-fprobe.sh   |   18 +
- .../selftests/ftrace/boottime/tests/05-tprobe.sh   |   18 +
- .../selftests/ftrace/boottime/tests/06-instance.sh |   23 ++
- tools/testing/selftests/ftrace/config              |    4 
- 17 files changed, 477 insertions(+), 2 deletions(-)
- create mode 100644 tools/testing/selftests/ftrace/boottime/Makefile
- create mode 100644 tools/testing/selftests/ftrace/boottime/README
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
- create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
- create mode 100755 tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
- create mode 100755 tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
-
-diff --git a/tools/testing/selftests/ftrace/Makefile b/tools/testing/selftests/ftrace/Makefile
-index 7c12263f8260..f804fdc595db 100644
---- a/tools/testing/selftests/ftrace/Makefile
-+++ b/tools/testing/selftests/ftrace/Makefile
-@@ -1,9 +1,9 @@
- # SPDX-License-Identifier: GPL-2.0
- all:
- 
--TEST_PROGS_EXTENDED := ftracetest
-+TEST_PROGS_EXTENDED := ftracetest boottime/run_boottime_test.sh
- TEST_PROGS := ftracetest-ktap
--TEST_FILES := test.d settings
-+TEST_FILES := test.d settings boottime
- EXTRA_CLEAN := $(OUTPUT)/logs/*
- 
- TEST_GEN_FILES := poll
-diff --git a/tools/testing/selftests/ftrace/boottime/Makefile b/tools/testing/selftests/ftrace/boottime/Makefile
-new file mode 100644
-index 000000000000..fd0975350f10
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/Makefile
-@@ -0,0 +1,10 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+all:
-+
-+run_tests:
-+	@./run_boottime_test.sh
-+
-+clean:
-+
-+.PHONY: all run_tests clean
-diff --git a/tools/testing/selftests/ftrace/boottime/README b/tools/testing/selftests/ftrace/boottime/README
-new file mode 100644
-index 000000000000..a6f930a6e44c
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/README
-@@ -0,0 +1,58 @@
-+Boot-Time Tracing Test Suite
-+============================
-+
-+This directory contains an automated test framework to verify kernel boot-time
-+tracing configuration parsing and tracefs application during early boot.
-+
-+Overview
-+--------
-+The test runner (`run_boottime_test.sh`) constructs a lightweight initramfs with
-+busybox and a tracefs checker script from `tests/`, attaches a bootconfig example
-+from `bootconfigs/` using the `bootconfig` tool, boots the target kernel image under
-+QEMU, and reports results according to the TAP version 13 format.
-+
-+Required Tools
-+--------------
-+- Host Architecture: x86 (x86_64/i686/i386/x86; tests skip on non-x86 hosts)
-+- `qemu-system-x86_64` (or custom QEMU executable)
-+- `busybox` (host binary at `/usr/bin/busybox` or custom path)
-+- `bootconfig` (compiled from `tools/bootconfig/bootconfig` or in PATH)
-+- `cpio` (standard archiver)
-+
-+Required Kernel Configurations
-+------------------------------
-+The kernel binary under test must be compiled with:
-+- `CONFIG_BOOT_CONFIG=y`
-+- `CONFIG_BOOTTIME_TRACING=y`
-+
-+Additional feature-specific config options enable respective testcases:
-+- `CONFIG_KPROBE_EVENTS=y` (for `01-kprobe`)
-+- `CONFIG_SYNTH_EVENTS=y`  (for `02-synth`)
-+- `CONFIG_EPROBE_EVENTS=y` (for `03-eprobe`)
-+- `CONFIG_FPROBE_EVENTS=y` (for `04-fprobe` and `05-tprobe`)
-+- `CONFIG_FUNCTION_TRACER=y` (for tracer options in `06-instance`)
-+
-+Usage
-+-----
-+To run all test cases with a compiled kernel image:
-+
-+  $ ./run_boottime_test.sh -k /path/to/bzImage
-+
-+To run a specific test case (e.g. `01-kprobe`):
-+
-+  $ ./run_boottime_test.sh -k /path/to/bzImage -t 01-kprobe
-+
-+Customizing Tool Paths:
-+
-+  $ ./run_boottime_test.sh -b /path/to/bootconfig \
-+                         -k /path/to/bzImage \
-+                         -q /path/to/qemu-system-x86_64 \
-+                         -B /path/to/busybox
-+
-+Environment Variables
-+---------------------
-+Tool locations and kernel paths can also be set via environment variables:
-+- `BOOTCONFIG`: Path to the `bootconfig` tool
-+- `KERNEL`: Path to the `bzImage` kernel binary
-+- `QEMU`: Path to the QEMU binary
-+- `BUSYBOX`: Path to the `busybox` binary
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
-new file mode 100644
-index 000000000000..f607840e3858
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
-@@ -0,0 +1,5 @@
-+ftrace.event.kprobes.vfs_read {
-+	probes = "vfs_read $arg1 $arg2"
-+	filter = "common_pid < 200"
-+	enable
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
-new file mode 100644
-index 000000000000..b1f37713f33c
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
-@@ -0,0 +1,4 @@
-+ftrace.event.synthetic.boot_lat {
-+	fields = "unsigned long id", "u64 delta"
-+	enable
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
-new file mode 100644
-index 000000000000..f954aa7fb8bd
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
-@@ -0,0 +1,4 @@
-+ftrace.event.eprobes.ep_read {
-+	probes = "syscalls/sys_enter_openat"
-+	enable
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
-new file mode 100644
-index 000000000000..82ae2ac0629f
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
-@@ -0,0 +1,4 @@
-+ftrace.event.fprobes.fp_read {
-+	probes = "vfs_read"
-+	enable
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
-new file mode 100644
-index 000000000000..02a2803c770a
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
-@@ -0,0 +1,4 @@
-+ftrace.event.tracepoints.tp_sched {
-+	probes = "sched_switch"
-+	enable
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf b/tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
-new file mode 100644
-index 000000000000..31f81da570ea
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
-@@ -0,0 +1,5 @@
-+ftrace.instance.foo {
-+	event.sched.sched_switch.enable
-+	buffer_size = 1MB
-+	tracing_on = 1
-+}
-diff --git a/tools/testing/selftests/ftrace/boottime/run_boottime_test.sh b/tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
-new file mode 100755
-index 000000000000..cecc09b4075e
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
-@@ -0,0 +1,264 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Boot-time tracing test runner
-+# Builds a lightweight initramfs, attaches a bootconfig, boots QEMU,
-+# and verifies tracefs configuration using test scripts.
-+
-+set -e
-+
-+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-+KERNEL_SRC="$(cd "$SCRIPT_DIR/../../../../.." && pwd)"
-+
-+# Source KTAP helpers
-+KSELFTEST_DIR="$(cd "$SCRIPT_DIR/../../kselftest" && pwd)"
-+if [ -f "$KSELFTEST_DIR/ktap_helpers.sh" ]; then
-+	. "$KSELFTEST_DIR/ktap_helpers.sh"
-+else
-+	echo "Error: ktap_helpers.sh not found at $KSELFTEST_DIR"
-+	exit 1
-+fi
-+
-+BOOTCONFIG="${BOOTCONFIG:-"$KERNEL_SRC/tools/bootconfig/bootconfig"}"
-+KERNEL="${KERNEL:-"$KERNEL_SRC/arch/x86/boot/bzImage"}"
-+QEMU="${QEMU:-"qemu-system-x86_64"}"
-+BUSYBOX="${BUSYBOX:-"$(which busybox 2>/dev/null || echo "/usr/bin/busybox")"}"
-+TIMEOUT="${TIMEOUT:-30s}"
-+TARGET_TEST="all"
-+
-+usage() {
-+	echo "Usage: $0 [options]"
-+	echo "Options:"
-+	echo "  -b, --bootconfig PATH   Path to bootconfig tool (default: $BOOTCONFIG)"
-+	echo "  -k, --kernel PATH       Path to kernel image (default: $KERNEL)"
-+	echo "  -q, --qemu PATH         Path to QEMU executable (default: $QEMU)"
-+	echo "  -B, --busybox PATH      Path to busybox binary (default: $BUSYBOX)"
-+	echo "  -T, --timeout DURATION  QEMU execution timeout (default: $TIMEOUT)"
-+	echo "  -t, --test NAME         Run specific test (e.g. 01-kprobe) or 'all'"
-+	echo "  -h, --help              Show this help message"
-+	exit 1
-+}
-+
-+while [ $# -gt 0 ]; do
-+	case "$1" in
-+		-b|--bootconfig)
-+			BOOTCONFIG="$2"
-+			shift 2
-+			;;
-+		-k|--kernel)
-+			KERNEL="$2"
-+			shift 2
-+			;;
-+		-q|--qemu)
-+			QEMU="$2"
-+			shift 2
-+			;;
-+		-B|--busybox)
-+			BUSYBOX="$2"
-+			shift 2
-+			;;
-+		-T|--timeout)
-+			TIMEOUT="$2"
-+			shift 2
-+			;;
-+		-t|--test)
-+			TARGET_TEST="$2"
-+			shift 2
-+			;;
-+		-h|--help)
-+			usage
-+			;;
-+		*)
-+			echo "Unknown option: $1"
-+			usage
-+			;;
-+	esac
-+done
-+
-+# Check host architecture
-+HOST_ARCH="$(uname -m)"
-+case "$HOST_ARCH" in
-+	x86_64|i686|i386|x86)
-+		;;
-+	*)
-+		if [ "$KERNEL" = "$KERNEL_SRC/arch/x86/boot/bzImage" ]; then
-+			ktap_print_header
-+			ktap_skip_all \
-+				"Default boot-time tracing test is x86 only ($HOST_ARCH)"
-+			exit 0
-+		fi
-+		;;
-+esac
-+
-+# Ensure bootconfig tool is built if Makefile exists
-+if [ ! -x "$BOOTCONFIG" ]; then
-+	if [ -f "$KERNEL_SRC/tools/bootconfig/Makefile" ]; then
-+		make -C "$KERNEL_SRC/tools/bootconfig" > /dev/null 2>&1 || true
-+	fi
-+	if [ ! -x "$BOOTCONFIG" ]; then
-+		BOOTCONFIG="$(which bootconfig 2>/dev/null || true)"
-+	fi
-+fi
-+
-+if [ ! -x "$BOOTCONFIG" ]; then
-+	ktap_print_header
-+	ktap_skip_all "bootconfig tool not found at $BOOTCONFIG"
-+	exit 0
-+fi
-+
-+if [ ! -f "$KERNEL" ]; then
-+	ktap_print_header
-+	ktap_skip_all "Kernel image not found at $KERNEL"
-+	exit 0
-+fi
-+
-+if ! command -v "$QEMU" >/dev/null 2>&1; then
-+	ktap_print_header
-+	ktap_skip_all "QEMU binary not found: $QEMU"
-+	exit 0
-+fi
-+
-+if [ ! -x "$BUSYBOX" ]; then
-+	ktap_print_header
-+	ktap_skip_all "busybox binary not found at $BUSYBOX"
-+	exit 0
-+fi
-+
-+# Verify busybox architecture compatibility
-+if command -v file >/dev/null 2>&1; then
-+	BUSYBOX_INFO="$(file -b "$BUSYBOX" 2>/dev/null || true)"
-+	case "$KERNEL" in
-+		*x86*)
-+			case "$BUSYBOX_INFO" in
-+				*x86-64*|*x86_64*|*80386*|*i386*)
-+					;;
-+				*)
-+					ktap_print_header
-+					ktap_skip_all "busybox binary architecture is incompatible with x86 kernel ($BUSYBOX_INFO)"
-+					exit 0
-+					;;
-+			esac
-+			;;
-+	esac
-+fi
-+
-+if ! command -v cpio >/dev/null 2>&1; then
-+	ktap_print_header
-+	ktap_skip_all "cpio tool not found"
-+	exit 0
-+fi
-+
-+run_single_test() {
-+	local bconf_file="$1"
-+	local test_script="$2"
-+	local name="$(basename "$bconf_file" .bconf)"
-+
-+	local workdir="$(mktemp -d)"
-+	trap 'rm -rf "$workdir"' EXIT
-+
-+	local rootfs="$workdir/rootfs"
-+	mkdir -p "$rootfs"/{bin,sbin,etc,proc,sys,dev,tmp}
-+
-+	cp "$BUSYBOX" "$rootfs/bin/busybox"
-+	chmod +x "$rootfs/bin/busybox"
-+	(cd "$rootfs/bin" && for applet in sh cat mount umount echo sync reboot \
-+		poweroff cpio grep; do ln -s busybox $applet; done)
-+
-+	if command -v ldd >/dev/null 2>&1; then
-+		for lib in $(ldd "$BUSYBOX" 2>/dev/null | grep -o '/[^ ]*'); do
-+			if [ -f "$lib" ]; then
-+				mkdir -p "$rootfs$(dirname "$lib")"
-+				cp -L "$lib" "$rootfs$lib" 2>/dev/null || true
-+			fi
-+		done
-+	fi
-+
-+	cat << 'EOF' > "$rootfs/init"
-+#!/bin/sh
-+mount -t proc proc /proc 2>/dev/null
-+mount -t sysfs sys /sys 2>/dev/null
-+mount -t tracefs nodev /sys/kernel/tracing 2>/dev/null
-+
-+/bin/check_test.sh
-+RET=$?
-+
-+if [ $RET -eq 0 ]; then
-+	echo "TEST RESULT: PASS"
-+else
-+	echo "TEST RESULT: FAIL"
-+fi
-+
-+sync
-+echo o > /proc/sysrq-trigger 2>/dev/null || reboot -f 2>/dev/null || poweroff -f 2>/dev/null
-+EOF
-+	chmod +x "$rootfs/init"
-+
-+	cp "$test_script" "$rootfs/bin/check_test.sh"
-+	chmod +x "$rootfs/bin/check_test.sh"
-+
-+	local initramfs="$workdir/initramfs.cpio"
-+	(cd "$rootfs" && find . | cpio -o -H newc --quiet) > "$initramfs"
-+
-+	# Attach bootconfig
-+	"$BOOTCONFIG" -a "$bconf_file" "$initramfs" > /dev/null
-+
-+	# Run QEMU with timeout
-+	local timeout_cmd=""
-+	if command -v timeout >/dev/null 2>&1; then
-+		timeout_cmd="timeout $TIMEOUT"
-+	fi
-+
-+	local logfile="$workdir/qemu.log"
-+	$timeout_cmd "$QEMU" -kernel "$KERNEL" \
-+		-initrd "$initramfs" \
-+		-append "bootconfig console=ttyS0 quiet panic=-1" \
-+		-nographic \
-+		-no-reboot > "$logfile" 2>&1 || true
-+
-+	if grep -q "TEST RESULT: PASS" "$logfile"; then
-+		ktap_test_pass "$name"
-+		rm -rf "$workdir"
-+		trap - EXIT
-+		return 0
-+	else
-+		ktap_test_fail "$name"
-+		ktap_print_msg "QEMU Console Output for $name:"
-+		while IFS= read -r line; do
-+			ktap_print_msg "$line"
-+		done < "$logfile"
-+		rm -rf "$workdir"
-+		trap - EXIT
-+		return 1
-+	fi
-+}
-+
-+TEST_FILES=("$SCRIPT_DIR/bootconfigs"/*.bconf)
-+TOTAL_TESTS=0
-+for bconf in "${TEST_FILES[@]}"; do
-+	name="$(basename "$bconf" .bconf)"
-+	if [ "$TARGET_TEST" != "all" ] && [ "$TARGET_TEST" != "$name" ]; then
-+		continue
-+	fi
-+	TOTAL_TESTS=$((TOTAL_TESTS + 1))
-+done
-+
-+ktap_print_header
-+ktap_set_plan "$TOTAL_TESTS"
-+
-+for bconf in "${TEST_FILES[@]}"; do
-+	name="$(basename "$bconf" .bconf)"
-+	test_script="$SCRIPT_DIR/tests/$name.sh"
-+
-+	if [ "$TARGET_TEST" != "all" ] && [ "$TARGET_TEST" != "$name" ]; then
-+		continue
-+	fi
-+
-+	if [ ! -f "$test_script" ]; then
-+		ktap_test_skip "$name (test script missing)"
-+		continue
-+	fi
-+
-+	run_single_test "$bconf" "$test_script" || true
-+done
-+
-+ktap_finished
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh b/tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
-new file mode 100755
-index 000000000000..a20e7e82d158
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check kprobe bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/events/kprobes/vfs_read" ]; then
-+	echo "FAIL: kprobe event kprobes/vfs_read does not exist"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/events/kprobes/vfs_read/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: kprobe event kprobes/vfs_read is not enabled ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 01-kprobe"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/02-synth.sh b/tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
-new file mode 100755
-index 000000000000..46d3b152cbea
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check synthetic event bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/events/synthetic/boot_lat" ]; then
-+	echo "FAIL: synthetic event synthetic/boot_lat does not exist"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/events/synthetic/boot_lat/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: synthetic event synthetic/boot_lat is not enabled ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 02-synth"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh b/tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
-new file mode 100755
-index 000000000000..108f9ba31c06
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check eprobe event bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/events/eprobes/ep_read" ]; then
-+	echo "FAIL: eprobe event eprobes/ep_read does not exist"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/events/eprobes/ep_read/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: eprobe event eprobes/ep_read is not enabled ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 03-eprobe"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh b/tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
-new file mode 100755
-index 000000000000..c0a316bf7dde
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check fprobe event bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/events/fprobes/fp_read" ]; then
-+	echo "FAIL: fprobe event fprobes/fp_read does not exist"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/events/fprobes/fp_read/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: fprobe event fprobes/fp_read is not enabled ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 04-fprobe"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh b/tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
-new file mode 100755
-index 000000000000..b29119b81e07
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
-@@ -0,0 +1,18 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check tracepoint probe event bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/events/tracepoints/tp_sched" ]; then
-+	echo "FAIL: tracepoint probe event tracepoints/tp_sched does not exist"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/events/tracepoints/tp_sched/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: tracepoint probe event tracepoints/tp_sched is not enabled ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 05-tprobe"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/06-instance.sh b/tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
-new file mode 100755
-index 000000000000..a95fdddaa6a6
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
-@@ -0,0 +1,23 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Check instance bootconfig settings on tracefs
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -d "$TRACEDIR/instances/foo" ]; then
-+	echo "FAIL: trace instance foo does not exist"
-+	exit 1
-+fi
-+
-+if [ ! -d "$TRACEDIR/instances/foo/events/sched/sched_switch" ]; then
-+	echo "FAIL: event sched_switch does not exist in instance foo"
-+	exit 1
-+fi
-+
-+ENABLE=$(cat "$TRACEDIR/instances/foo/events/sched/sched_switch/enable")
-+if [ "$ENABLE" != "1" ]; then
-+	echo "FAIL: event sched_switch is not enabled in instance foo ($ENABLE)"
-+	exit 1
-+fi
-+
-+echo "PASS: 06-instance"
-+exit 0
-diff --git a/tools/testing/selftests/ftrace/config b/tools/testing/selftests/ftrace/config
-index 544de0db5f58..fec41c6b290e 100644
---- a/tools/testing/selftests/ftrace/config
-+++ b/tools/testing/selftests/ftrace/config
-@@ -1,3 +1,5 @@
-+CONFIG_BOOT_CONFIG=y
-+CONFIG_BOOTTIME_TRACING=y
- CONFIG_BPF_SYSCALL=y
- CONFIG_DEBUG_INFO_BTF=y
- CONFIG_DEBUG_INFO_DWARF4=y
-@@ -8,6 +10,7 @@ CONFIG_FTRACE=y
- CONFIG_FTRACE_SYSCALLS=y
- CONFIG_FUNCTION_GRAPH_RETVAL=y
- CONFIG_FUNCTION_PROFILER=y
-+CONFIG_FUNCTION_TRACER=y
- CONFIG_HIST_TRIGGERS=y
- CONFIG_IRQSOFF_TRACER=y
- CONFIG_KALLSYMS_ALL=y
-@@ -24,6 +27,7 @@ CONFIG_SAMPLE_TRACE_EVENTS=m
- CONFIG_SAMPLE_TRACE_PRINTK=m
- CONFIG_SCHED_TRACER=y
- CONFIG_STACK_TRACER=y
-+CONFIG_SYNTH_EVENTS=y
- CONFIG_TRACER_SNAPSHOT=y
- CONFIG_UPROBES=y
- CONFIG_UPROBE_EVENTS=y
-
+On Fri, Jul 31, 2026 at 8:31=E2=80=AFPM Joe Lawrence <joe.lawrence@redhat.c=
+om> wrote:
+>
+> On Fri, Jul 31, 2026 at 01:53:58PM -0400, Andrey Grodzovsky wrote:
+> > kernel.ftrace_enabled=3D0 is now refused on kernels that deprecate the
+> > knob, so the old disable/reload flow no longer applies there. Probe
+> > for this with ftrace_disable_supported() and keep the full original
+> > scenario (disable, fail to load a livepatch, re-enable, load, confirm
+> > disable is refused while loaded) on kernels where it still works;
+> > otherwise just confirm the write is refused.
+> >
+> > Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+> > Suggested-by: Miroslav Benes <mbenes@suse.cz>
+> > Assisted-by: Claude:claude-sonnet-5
+> > Signed-off-by: Andrey Grodzovsky <andrey.grodzovsky@crowdstrike.com>
+> > ---
+> >  .../testing/selftests/livepatch/https://urldefense.com/v3/__http://fun=
+ctions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87Va=
+VkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$   | 13 ++++++
+> >  .../selftests/livepatch/https://urldefense.com/v3/__http://test-ftrace=
+.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87VaVkoNZc=
+qFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAJf9tNxM$         | 45 ++++++++++++=
+-------
+> >  2 files changed, 41 insertions(+), 17 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/livepatch/https://urldefense.com/v=
+3/__http://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotP=
+ltPcR5ezYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$  b/to=
+ols/testing/selftests/livepatch/https://urldefense.com/v3/__http://function=
+s.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5ezYC87VaVkoNZ=
+cqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
+> > index 30dc677b2f45..7fa4bda70221 100644
+> > --- a/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
+p://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5e=
+zYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
+> > +++ b/tools/testing/selftests/livepatch/https://urldefense.com/v3/__htt=
+p://functions.sh__;!!BmdzS3_lV9HdKG8!zXXcFqHACaJ7PyoFMFh-_8DFTwWSotPltPcR5e=
+zYC87VaVkoNZcqFkVTtLbYUQp4DKEh9Z-0WLN8c5sMeyug2BCCuslAibAtHJo$
+> > @@ -126,6 +126,19 @@ function set_ftrace_enabled() {
+> >       echo "livepatch: kernel.ftrace_enabled =3D $result" > /dev/kmsg
+> >  }
+> >
+> > +# ftrace_disable_supported() - probe whether kernel.ftrace_enabled=3D0
+> > +#    can still disable ftrace on this kernel. Newer kernels deprecate
+> > +#    the knob and always refuse the write with -EOPNOTSUPP.
+> > +function ftrace_disable_supported() {
+> > +     local result
+> > +
+> > +     sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
+> > +     result=3D$(sysctl --values kernel.ftrace_enabled)
+> > +     sysctl -q kernel.ftrace_enabled=3D1 &> /dev/null
+> > +
+> > +     [[ "$result" =3D=3D "0" ]]
+> > +}
+>
+> Small nit: AFAICT, it doesn't really affect the test pattern, but it
+> would be a bit cleaner if this function restored the original value
+> instead of always turning it on, like (untested):
+>
+>         orig=3D$(sysctl --values kernel.ftrace_enabled)
+>         sysctl -q kernel.ftrace_enabled=3D0 &> /dev/null
+>         result=3D$(sysctl --values kernel.ftrace_enabled)
+>         sysctl -q "kernel.ftrace_enabled=3D$orig" &> /dev/null
+>
+>         [[ "$result" =3D=3D "0" ]]
+>
+> --
+> Joe
+>
