@@ -1,79 +1,83 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 986353F825A;
-	Thu,  6 Aug 2026 12:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C05D742901C;
+	Thu,  6 Aug 2026 12:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786018809; cv=none; b=jA9E53zXPPDq4S9WrdiZF3P3nDh6b9wbwYIQo+W+FaUhUvrXgaIcikwzbssuQHmqUsPc+OiAjA4y+sGugprqM/iA9NT+w+7wuxMartJYWgXlUmsWP9HEFr3O8NrW4VDiJeJRvSMsUF1nXi10JolkT5rKusY3XY1KYn0Y7thBwAM=
+	t=1786018915; cv=none; b=KeDuPJTOymStgiGfGyHB2LXHpDzsawixSWCEMEXyaQLv67lFluSYGAemMRCedLIqukSnEo1pjhcfBidxsMvPXOajwsONOZGq8I4CLN6rhuY9KfcCxW1peHXRsd/Z2C6PDiI/zmXfF06BeHnI6fphYurPEDYGMCTP48xDGklyxGI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786018809; c=relaxed/simple;
-	bh=/6NSNy4+LnPKF4OkSSDMH0CGyaDS0qRTalBg5O8t+IM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rg7o1hpyIV2GhQrMnarb1W929ZmnK/eKZWvBOGwGquZbNS+p/OPat87/gY5j0K1S12Kd97CTBexbNa8UxktPApK4aX1l9YIJ6nrKYARJQLk9O+29fP+JTEimb5uqr8m6zcLk+6XXUyyojBKBrUrqlICsgqkqgInx5cDmCSpIFLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gfG3LPxe; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gfG3LPxe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 427061F000E9;
-	Thu,  6 Aug 2026 12:20:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786018808;
-	bh=7C1FpHXQHhaXmJHx/8OCdTfxUT9wAJECfFf7MxmJFok=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gfG3LPxeUPq84Xp2JFwWxR+xz6vWQPO9xA8azlKyQaXXtCueQNjKnnBacy/zVDZrL
-	 l5traZsL4ERhfpYjx7Qb7DuwGzVBKWZvoS7u8rKbX2a9NmHWqCqZJLLwBA2c3FUt5O
-	 HecAcRZGO7uHXHhjlvEaPT1Nz8oO/w5C64IJz8GIMrxBsuKTPJvdGgSLo4XkOBu1j9
-	 +b0ZdUKkwzYUEAtvniztZGUdWmdFB0JPVpRu0kf9VZTSuJKDO/sSu19jQp6xnMyqol
-	 WSRDf5gED372yERjG3MA5QbKh9w1yUmGhZutyJvevaA/0kz2W2XDYhZ6wMxrdTI6t5
-	 vbsW7qxqelqYA==
-Date: Thu, 6 Aug 2026 13:20:02 +0100
-From: Will Deacon <will@kernel.org>
-To: Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Karl Mehltretter <kmehltretter@gmail.com>, kernel-team@android.com,
-	Mark Rutland <mark.rutland@arm.com>,
-	Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] arm64/fpsimd: ptrace: Fix inactive SVE and SSVE
- regsets
-Message-ID: <anR78qO5RGalbFNo@willie-the-truck>
-References: <20260729004255.15630-1-kmehltretter@gmail.com>
- <178566413306.4141663.7146790540592743319.b4-ty@kernel.org>
- <21702e5c-2dcc-46ad-bffe-26cd76d844b9@sirena.org.uk>
- <anRoiIbOFVjj7qPN@willie-the-truck>
- <be47f939-bc44-46b8-ba38-988403dd87b0@sirena.org.uk>
+	s=arc-20240116; t=1786018915; c=relaxed/simple;
+	bh=4DNuvtRJ/KRqzWG3Phg0vgIRZQXpDIPkScITOHaKLtE=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=ihQWvA84FzmkBbldT+6DCuaglNoI/QsRjWsBj+8MiBlk+RCwV+V2bR301N33ObJI8dyfLNoU0LiGwX1LPTwdbhBY48yBSbAr575O4zQbdLYc/xCUHh6uI5LKQ1CagWA8kffcE/wjMtCH3MWn6jntTKXZhPT2FYTQRk/1kefLpRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [123.138.236.242])
+	by gateway (Coremail) with SMTP id _____8Axw+lcfHRqnfsKAA--.12249S3;
+	Thu, 06 Aug 2026 20:21:48 +0800 (CST)
+Received: from [10.130.40.83] (unknown [123.138.236.242])
+	by front1 (Coremail) with SMTP id qMiowJAxSsRafHRq08UlAA--.21220S2;
+	Thu, 06 Aug 2026 20:21:47 +0800 (CST)
+Subject: Re: [PATCH v4 0/4] LoongArch bpf kptr xchg inline support
+To: Chenguang Zhao <chenguang.zhao@linux.dev>, chenhuacai@kernel.org,
+ kernel@xen0n.name, ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ martin.lau@linux.dev, eddyz87@gmail.com, memxor@gmail.com
+Cc: hengqi.chen@gmail.com, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, shuah@kernel.org, loongarch@lists.linux.dev,
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Chenguang Zhao <zhaochenguang@kylinos.cn>
+References: <20260729022837.355549-1-chenguang.zhao@linux.dev>
+From: Tiezhu Yang <yangtiezhu@loongson.cn>
+Message-ID: <b11c0259-87fe-8132-f028-13fd6ec969cc@loongson.cn>
+Date: Thu, 6 Aug 2026 20:21:46 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <be47f939-bc44-46b8-ba38-988403dd87b0@sirena.org.uk>
+In-Reply-To: <20260729022837.355549-1-chenguang.zhao@linux.dev>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowJAxSsRafHRq08UlAA--.21220S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
+	ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
+	BjDU0xBIdaVrnRJUUUmYb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26c
+	xKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r106r15M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vE
+	j48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxV
+	AFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x02
+	67AKxVW8Jr0_Cr1UM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
+	ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E
+	87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lc7I2V7IY0V
+	AS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCF54CYxVAaw2AFwI0_JF0_Jw1l4c8EcI0E
+	c7CjxVAaw2AFwI0_Jw0_GFyl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_JF
+	0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY
+	17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcV
+	C0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY
+	6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa
+	73UjIFyTuYvjxU7MmhUUUUU
 
-On Thu, Aug 06, 2026 at 01:15:25PM +0100, Mark Brown wrote:
-> On Thu, Aug 06, 2026 at 11:57:12AM +0100, Will Deacon wrote:
-> > On Wed, Aug 05, 2026 at 10:27:18PM +0100, Mark Brown wrote:
+On 2026/7/29 上午10:28, Chenguang Zhao wrote:
+> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
 > 
-> > > As noted in the changelog applying patch 1 as a fix and this only for
-> > > -next blows up the fp-ptrace test rather impressively in any
-> > > configuration which can generate headers only reports:
-> 
-> > >    https://lava.sirena.org.uk/scheduler/job/3075737#L3231
-> 
-> > > for the release.  Both patches really do need to go together.
-> 
-> > By "blows up" you mean the test fails, right? That's the same behaviour
-> > if anybody runs the test on a kernel without the fix. Both patches are
-> > merged in for-next/core.
-> 
-> Right, the test starts reporting 96 fails which doesn't look great in a
-> dashboard.  I'd misread the original branch as being merged as a fix but
-> I see it's not been merged into the fixes branch, sorry for the
-> confusion.
+> This series enables the BPF verifier to inline bpf_kptr_xchg()
+> into BPF_XCHG on LoongArch64, and fixes the underlying JIT
+> atomic ordering that makes such inlining safe.
 
-No problem, thank you for running the tests :)
+The first three patches apply cleanly on top of the loongarch-next
+branch of linux-loongson.git.
 
-Will
+The following selftest passed on LoongArch:
+
+   # ./test_progs -t kptr_xchg_inline
+
+Acked-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+Tested-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+
+Thanks,
+Tiezhu
+
