@@ -1,32 +1,50 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A9913AFCFD;
-	Thu,  6 Aug 2026 01:30:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9FBC3AA1BA;
+	Thu,  6 Aug 2026 01:41:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785979822; cv=none; b=p8FPM4quIOjTEWVKOGkICMFxlMu48RIS/kFS8BIFbhIy8ACb0Xe5Z4XKyAm8HPc8O8i3aD9KIqMcMm0jBLpszVj+l7FyqVtff6Li/xe5+7uWYkK0/KlDo3H9eO2Zt/Udo/ukYCj6lvo6mZ66kHkd2e02rAdvhYd55c/HsccRFtw=
+	t=1785980479; cv=none; b=alokdmzJUadm99yZ7Bc41/X6NCLbuhLB9rZEXIwqrYGZnSOO7775vbokNGDOXEEzXaAfG3UqEy1W5TYP37m72kjlkY8U7EfcAErOXNCgDPrP36MPpXuy99GZsTFPChBfz/xV/7RzYp32xSzRWGLOZ29jV3gyEqEHPbUPMeELScA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785979822; c=relaxed/simple;
-	bh=LVzR84VohNyS8HLG+uYy4MAtGMgu7yKKxZjsZZT/3OE=;
+	s=arc-20240116; t=1785980479; c=relaxed/simple;
+	bh=ZnLZ/DOQZzlu7P9MJedwhIePtxgeG0zn9ITPXcqWNF8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=thPa5hJZ++VTX/0ZcSgv0hTKzm02hJxKK33YsfRlI6RCZDI7Q862f2qhLObtmUti19o+nr9XcBoHNNRkl+d1O1zh6POCcM3W4sf7gGRM/3QmOE54N1As2zNX1x5kBcl/hT1BjqM30elLif42uh6+T/3n/BugASZLcRz6nzWf8JI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XNsHk37g; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 In-Reply-To:Content-Type; b=NvNcU1pE7bDEhd30zL3nQZPfrlME0OoqdkPPcxHsTYBADyOixj0mqsXAaJthdbvF1okBPpUXt7vbn+71fD6Lh5v6w3Wp4DzAeJPybRWVmGQazcrgTZ0A1yHZa2ioP8kNz+jaY93i6M2hAOc9fNzpm7xcFQeL/CSkDquGAcUTqI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NfgkUNh0; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XNsHk37g"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785979815; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=IyxeyywyanPFlbyo+b+/1dTM4zZGbGAIjDiWbCcAXnw=;
-	b=XNsHk37gTFmMi8I1UNu2hkaJqXiXHiDeSeROymkWu3us7/m07OCH5kEUB5VEXP9rMYc37HgpoVhQElzNKe75xPXF7iWFNCvqqajJvuag1Yof2SSt3bYfWjg3hLEqbCdchtQ23m5gUSfCrHtifdk3oiT4cAzd5HgZ60wUNL77s3E=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0X8SLPHI_1785979813;
-Received: from 30.74.144.136(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SLPHI_1785979813 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 06 Aug 2026 09:30:14 +0800
-Message-ID: <e17f9ee5-6606-46a4-a756-9d7a5462cd45@linux.alibaba.com>
-Date: Thu, 6 Aug 2026 09:30:13 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NfgkUNh0"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1785980477; x=1817516477;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ZnLZ/DOQZzlu7P9MJedwhIePtxgeG0zn9ITPXcqWNF8=;
+  b=NfgkUNh0XFc4GUDxKHhm1wsWGrzsctFB2SfKCeUxqxUqAShx0bEm0A5x
+   7qoTwJw47MtdLNc/0s057XdGQhrm0o7QMxlN3zxpOYtkudRfG5WwE7H5h
+   eXEpYIRByZgMxeJ5Ixb4V4+9XUzwxrseY8AcH8vDcS/GqheN7QytiiPCg
+   BAEqSHHHOmde/yWTQK8kyniGXlsjkinuOCJt6e0VoDxNZUOCkwJ6HIsw8
+   HvCVeLXcv/QlKsY8m8784X0x66LKPD3hmwZArWBIVBH6Itx0mJDaDjwsg
+   gsb0ZVHIPCoapj17M8VEsLQ+iKw92pFcbp/pbO4QJYSMpATMiDP/xev1B
+   Q==;
+X-CSE-ConnectionGUID: ODnsCHRRSBuMbjRig+u+og==
+X-CSE-MsgGUID: t9bncxeTTV6ZmrTVGsStdg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11866"; a="85691167"
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="85691167"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 18:41:16 -0700
+X-CSE-ConnectionGUID: 5oIPZ2NyTCqHZV8yl6Tp9w==
+X-CSE-MsgGUID: x7bSvlzdSNGXBVIWi4OGbg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,207,1779174000"; 
+   d="scan'208";a="260186253"
+Received: from fuxiaogu-mobl1.ccr.corp.intel.com (HELO [10.238.208.47]) ([10.238.208.47])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2026 18:41:01 -0700
+Message-ID: <fda26964-721d-4a8c-9225-46ca3a5b2785@intel.com>
+Date: Thu, 6 Aug 2026 09:40:58 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,88 +52,123 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] selftests: mm: add mTHP collapse test cases
-To: Zi Yan <ziy@nvidia.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
- liam@infradead.org, nico.pache@linux.dev, dev.jain@arm.com,
- ryan.roberts@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- usama.arif@linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
- <dd8013c1ddada90913876e3bd912c07e613fba8d.1785564857.git.baolin.wang@linux.alibaba.com>
- <DKH5VECNN2LF.M3RGFY0NORWI@nvidia.com>
- <8551bb7d-945c-4be8-b7dc-01ff15fdbc76@linux.alibaba.com>
- <E5080E9F-980C-4445-9C19-9C792270A751@nvidia.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <E5080E9F-980C-4445-9C19-9C792270A751@nvidia.com>
+Subject: Re: [PATCH v9 03/41] KVM: Enumerate support for PRIVATE memory iff
+ kvm_arch_has_private_mem is defined
+To: Sean Christopherson <seanjc@google.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com,
+ andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Vlastimil Babka <vbabka@kernel.org>,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
+ <20260728-gmem-inplace-conversion-v9-3-35f9aec2aed2@google.com>
+ <7dafaa90-f3d4-4be4-a5cc-472163f18040@intel.com>
+ <CAEvNRgG3qXrG2ix2MEcyVo0GXaen-Pte4gFAwEN+9AY=VtGU5w@mail.gmail.com>
+ <b9ad1a1d-c167-4adb-980b-90096515a363@intel.com>
+ <anPYxp-LMWaLDbMk@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <anPYxp-LMWaLDbMk@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-
-
-On 8/6/26 9:25 AM, Zi Yan wrote:
-> On 5 Aug 2026, at 21:17, Baolin Wang wrote:
-> 
->> On 8/6/26 12:46 AM, Zi Yan wrote:
->>> On Sat Aug 1, 2026 at 2:26 AM EDT, Baolin Wang wrote:
->>>> Added a new command 'mthp_khugepaged' for mTHP collapse, along with the '-c'
->>>> parameter to specify the collapse order. Additionally, added mTHP collapse
->>>> test cases for 'collapse_full', 'collapse_empty', and 'collapse_single_mthp'
->>>> for anonymous folios. All khugepaged test cases passed.
->>>>
->>>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
->>>> ---
->>>>    tools/testing/selftests/mm/khugepaged.c   | 130 ++++++++++++++++++----
->>>>    tools/testing/selftests/mm/run_vmtests.sh |   2 +
->>>>    2 files changed, 113 insertions(+), 19 deletions(-)
->>>>
->>>> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
->>>> index f69be6be0ecd..64d6da6aa90d 100644
->>>> --- a/tools/testing/selftests/mm/khugepaged.c
->>>> +++ b/tools/testing/selftests/mm/khugepaged.c
->>>> @@ -26,9 +26,11 @@
->>>>     #define BASE_ADDR ((void *)(1UL << 30))
->>>>    static unsigned long hpage_pmd_size;
->>>> +static int hpage_pmd_order;
->>>>    static unsigned long page_size;
->>>>    static int hpage_pmd_nr;
->>>>    static int anon_order;
->>>> +static int collapse_order;
+On 8/6/2026 8:43 AM, Sean Christopherson wrote:
+> On Wed, Aug 05, 2026, Xiaoyao Li wrote:
+>> On 7/31/2026 4:34 AM, Ackerley Tng wrote:
+>>> I think another way to phrase this is that if we don't make this change,
+>>> say, on the foo architecture where there's no CoCo and no private mem
+>>> support, kvm_supported_mem_attributes() would return true for the !kvm
+>>> case, which is over-reporting.
+>>
+>> Under the condition that the foo architecture enables
+>> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+>>
+>>> How about this, replacing the entire changelog paragraph above:
 >>>
->>> <snip>
->>>
->>>>   diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
->>>> index 687d115e3bd8..d09f9f6a384e 100755
->>>> --- a/tools/testing/selftests/mm/run_vmtests.sh
->>>> +++ b/tools/testing/selftests/mm/run_vmtests.sh
->>>> @@ -410,6 +410,8 @@ CATEGORY="thp" run_test ./khugepaged all:shmem
->>>>     CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
->>>>   +CATEGORY="thp" run_test ./khugepaged -c 4 mthp_khugepaged:anon
->>>
->>> Why only testing collapse_order == 4? It is more useful to test all
->>> possible mTHP orders. -c can accept common separated order and a range.
+>>>     Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE
+>>>     based on kvm_arch_has_private_mem being #defined. This improves
+>>>     reporting accuracy by not reporting support for
+>>>     KVM_MEMORY_ATTRIBUTE_PRIVATE when kvm_supported_mem_attributes() is
+>>>     called with kvm == NULL.
 >>
->> This also follows the previous '-s' parameter configuration, which is used to specify the mTHP order allocation.
+>> It doesn't help for the case where kvm == NULL, but help for the case where
+>> CONFIG_KVM_VM_MEMORY_ATTRIBUTES is defined but kvm_arch_has_private_mem not.
 >>
->> I think specifying a single order size already tests the overall mTHP collapse
+>> sorry for being picky. I think we can say
+>>
+>> This improves the reporting accuracy by avoiding the case where
+>> KVM_MEMORY_ATTRIBUTE_PRIVATE is reported when kvm == null even without
+>> kvm_arch_has_private_mem being #defined.
 > 
-> Got it. If a single order covers the flow, I am fine with it.
+> How about this?
 > 
->> flow, so I'm not sure whether testing all orders is worthwhile. Maybe I can add a few more orders?
->> ./khugepaged -c 2 mthp_khugepaged:anon
->> ./khugepaged -c 4 mthp_khugepaged:anon
->> ./khugepaged -c 8 mthp_khugepaged:anon
->>
->>> Why only testing mthp_khugepaged:anon? IIRC, file and shmem are not
->>> supported, so khugepaged should reject them, right?
->>
->> Currently, I have not added test cases for shmem mTHP collapse, so adding file or shmem would be no-ops and might mislead others. I will add the shmem/file mTHP collapse feature and test cases in a following patchset.
-> 
-> Right. I mean when one specifies ./khugepaged mthp_khugepaged:file/shmem, the
-> program should show some error like “file/shmem not supported”.
+> Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE based
+> on kvm_arch_has_private_mem being #defined in anticipation of tracking
+> PRIVATE vs. SHARED state per-guest_memfd, not per-VM (to allow in-place
+> conversion).
 
-Yes, that works too. I still prefer to add the corresponding test cases 
-after I add shmem mTHP collapse support:)
+Sorry, maybe I'm stupid. I still don't understand how to connect it to 
+tracking PRIVATE vs. SHARED state per-guest_memfd.
 
-But if you have a strong opinion on this, I can also add a "not 
-supported" message first.
+There are two diffs in this patch, and we are talking about the second 
+diff, right?
+
+If the kvm_supported_mem_attributes() will be used by gmem, I can buy 
+the justification. But it won't. At least, it won't after this series.
+
+> guest_memfd support for memory attributes is expected to be unconditional
+> to avoid yet more macros (all architectures that support guest_memfd are
+> expected to use per-gmem attributes at some point), at which point
+> enumerating support KVM_MEMORY_ATTRIBUTE_PRIVATE based solely on memory
+> attributes being supported by KVM at-large would result in a system-scope
+
+s/memory attributes/CONFIG_KVM_VM_MEMORY_ATTRIBUTES/ ?
+
+> check (NULL @kvm) over-reporting support on arm64.
+
+I think arm64 won't define CONFIG_KVM_VM_MEMORY_ATTRIBUTES? So it seems 
+to have nothing to do with arm64.
+
+It matters for x86. After patch 20, CONFIG_KVM_VM_MEMORY_ATTRIBUTES is 
+user-configurable. At that time, people can disable 
+CONFIG_KVM_SW_PROTECTED_VM, CONFIG_KVM_INTEL_TDX and CONFIG_KVM_AMD_SEV, 
+but enable CONFIG_KVM_VM_MEMORY_ATTRIBUTES on x86. In this case, 
+kvm_supported_mem_attributes() reports KVM_MEMORY_ATTRIBUTE_PRIVATE for 
+system-scope query which is totally wrong. I think this is the case we 
+want to prevent not something won't happen for arm64?
+
+>>
+>>>     Give architectures full control over overriding the default definition
+>>>     of kvm_arch_has_private_mem() by removing the coupling with
+>>>     CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+>>>
+>>>     In a later patch, kvm_arch_has_private_mem() will be defined based on
+>>>     whether architectural features are compiled in, and made orthogonal to
+>>>     CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+>>
+
