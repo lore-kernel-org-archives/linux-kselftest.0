@@ -1,148 +1,109 @@
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C170430D3ED
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 00:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4197D2DC783;
+	Thu,  6 Aug 2026 00:47:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785977033; cv=none; b=M93Up1YAxaHcT4HLPS9cE4GdmZNRooQRcAdr4uDsDjJovvRDoH+Qg997g+GX7rH1LooeOxmbBZO1pFHIieTrT37+4G+atvrAK+dkU/SAc9z/3TMOQIPaiozrsgRQcRpxDKBH0OMaMLCiVH/QBDry306HbVWrygeGGl5unB07RxE=
+	t=1785977267; cv=none; b=ov000L4kB/Vae7nHupHBS7ZnN+7M+SSDnQt11Tyh0KNfDUj9Jg7Ef+DNHo9T0k2yMGBjLwVXX6oBZp0BnrUNpHziKbkbws4J5hZGU7MK8zb26bSqq187QBxi/caqPzhupfZMBPDKi+FA80thKGA9UT+I3gBNDASvwfG6KRWZbJ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785977033; c=relaxed/simple;
-	bh=MOBnrAzJHjAXv0busTUd8AQe2wVTRESDC3GYmdGx6Jc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=pqT4YUaYAtv/wZ85y1YOflWK9x/CJvMnt1rBGL8kODlLApVnCrPXDDO/Z57iCuZ9oyUvHkoZsX7pCOYrOFo1TW63jo6E1m9GIQvxYYYRH1mbk6V2kFS9AlxJacTxFxlbPY6ZcFd0LRyqmcb+2oyzzGQb11RN3YDF7mmkl94JIt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=s9W9uVBX; arc=none smtp.client-ip=209.85.215.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1785977267; c=relaxed/simple;
+	bh=7PtjdmlqkA9eY64qxhiXBWOHiNt50wGBTiFvKFFWuuM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VsRNV10pAse02szu1TRX2VBXsIOQqoS/5QP0ErV9berI5BLFFCaUiDqCrWcFG2anzCVkW0W2ijNu77qPz7GlPKwOUwM5020zecGc8dobWIjM8it7Im+gsuQwbbotD0Vf3QtVz6X0PqXnRcIraFZlNFWg/JuiiVd0WMh3nsALLiY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Vwe18/D4; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="s9W9uVBX"
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cb5cc1e139bso1153184a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 05 Aug 2026 17:43:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1785977031; x=1786581831; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GW1XyS3pE1vmBMrFND4uaqlT60WFAOcGNZed7ARn/tI=;
-        b=s9W9uVBXMZADMYL3esIoidDW/3wdqPJ/VWnjeAbH6rJQJRQPL0AggH0/MOCz7FWeoV
-         EGW4WNmQRuMx2WRkobs6JklVdkd+HnuAtR8jtJ4gUbjU23NQXBvQlRiBLlu8KpzKJc1G
-         XUx5jKHagJDb77xXRqa877eee8TI6vhVWvZHj0OBitBkg8QBF3NnBLs+k1wcrnH1WrKL
-         Xba3KfjDaCPDRtpnL5ff33HcpEBLdJPB3hzbvB37BGUJNXddi1+omIEmN9n8Qnw3NCYi
-         L3wzawiNBzx2tbrN/pDuO+IiJRzFiJ5msDIUPSakKdCbGAicfGYnrwjwmfFT+s7HPha/
-         aMog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1785977031; x=1786581831;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=GW1XyS3pE1vmBMrFND4uaqlT60WFAOcGNZed7ARn/tI=;
-        b=QdedLUpkfrNAfe19FzXRhWLxdLgxbY5GOrqs8mNmoDUWw1cuhiov7shD95RbNhY8Xa
-         +mSlhJWrJM9dYmmDjSSFXkh8amn9widahvdhy4x4e4rClW55B0Lw50ZUxvmRdgm8xfho
-         VCMbebhZlc0SNZYtugrxhUQocz8Yfw6pDrmpJCspwE0zBGQzIvBEC7gAc8FD14H9Bm8p
-         AZ/wFHG4EOgHZ5Grglgx1doHzSmSFTS6E1olUtO+N99Dpqn1evXCB9Z5s30LbMounKB1
-         Kl63Y4+iC769PfzreURGQu0lcQpqny3Qx+ckgekoiA/6PdCZWszd21JpHFyB9PzNK8aD
-         0tMg==
-X-Forwarded-Encrypted: i=1; AHgh+RqozmDyVh594i0ODUDfY7ELW2bYJxxJnsDZhSR/Oj1lQpnNvDkJOppTG+6YjncWgpTgWfU/MwqC8/tzaqWJHsg=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6WtDLeVBIwAPv2R+zwiLZ9XSMb9qiBrwR4rN0knebrrYyYjKH
-	Jcp9RX7AOVZOiLh2qWbeIzNRaInumALmDM6gGFYMJLJ0rj0BOKZJz0/iBTcoV4ahJE8/a4I/fH0
-	ATLGOOA==
-X-Received: from pgki21.prod.google.com ([2002:a63:e455:0:b0:c9e:9c6:a85e])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6112:b0:3b4:e4f6:4f15
- with SMTP id adf61e73a8af0-3cb85e9922cmr13235742637.5.1785977030773; Wed, 05
- Aug 2026 17:43:50 -0700 (PDT)
-Date: Wed, 5 Aug 2026 17:43:50 -0700
-In-Reply-To: <b9ad1a1d-c167-4adb-980b-90096515a363@intel.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Vwe18/D4"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1785977261; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=OKPwPKGJNzrSd7Eti/6rUaxXlZPULugR3ZSio0R9ypM=;
+	b=Vwe18/D4XPmfZe5izgcaFeFiLqnZthdVQNBnjtsloDw6PdBCo2wVy7khE8MBS8sPCwaNiUL6vLULckQw1HvyrByTEsmFz3QQIDoOWEZRn7eTxmu2RsBRr6kj9ZEeRJG0Uk9BeC27xP3Ch7PS32a2ph5x9Y76lLg03FXQoZHjUOM=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R441e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0X8SEFVa_1785977259;
+Received: from 30.74.144.136(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SEFVa_1785977259 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Aug 2026 08:47:40 +0800
+Message-ID: <9a9b5563-9aae-4780-b628-d85b836f33cd@linux.alibaba.com>
+Date: Thu, 6 Aug 2026 08:47:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com>
- <20260728-gmem-inplace-conversion-v9-3-35f9aec2aed2@google.com>
- <7dafaa90-f3d4-4be4-a5cc-472163f18040@intel.com> <CAEvNRgG3qXrG2ix2MEcyVo0GXaen-Pte4gFAwEN+9AY=VtGU5w@mail.gmail.com>
- <b9ad1a1d-c167-4adb-980b-90096515a363@intel.com>
-Message-ID: <anPYxp-LMWaLDbMk@google.com>
-Subject: Re: [PATCH v9 03/41] KVM: Enumerate support for PRIVATE memory iff
- kvm_arch_has_private_mem is defined
-From: Sean Christopherson <seanjc@google.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] selftests: mm: extend the check_huge() to support
+ mTHP check
+To: Zi Yan <ziy@nvidia.com>, akpm@linux-foundation.org, david@kernel.org,
+ ljs@kernel.org
+Cc: liam@infradead.org, nico.pache@linux.dev, dev.jain@arm.com,
+ ryan.roberts@arm.com, baohua@kernel.org, lance.yang@linux.dev,
+ usama.arif@linux.dev, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <cover.1785564857.git.baolin.wang@linux.alibaba.com>
+ <f2ad5bbe868dc7ed8642842ad2f9751a1ce79f70.1785564857.git.baolin.wang@linux.alibaba.com>
+ <DKH49QGMDJGZ.1GN8OC454DA9U@nvidia.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <DKH49QGMDJGZ.1GN8OC454DA9U@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 05, 2026, Xiaoyao Li wrote:
-> On 7/31/2026 4:34 AM, Ackerley Tng wrote:
-> > I think another way to phrase this is that if we don't make this change,
-> > say, on the foo architecture where there's no CoCo and no private mem
-> > support, kvm_supported_mem_attributes() would return true for the !kvm
-> > case, which is over-reporting.
-> 
-> Under the condition that the foo architecture enables
-> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
-> 
-> > How about this, replacing the entire changelog paragraph above:
-> > 
-> >    Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE
-> >    based on kvm_arch_has_private_mem being #defined. This improves
-> >    reporting accuracy by not reporting support for
-> >    KVM_MEMORY_ATTRIBUTE_PRIVATE when kvm_supported_mem_attributes() is
-> >    called with kvm == NULL.
-> 
-> It doesn't help for the case where kvm == NULL, but help for the case where
-> CONFIG_KVM_VM_MEMORY_ATTRIBUTES is defined but kvm_arch_has_private_mem not.
-> 
-> sorry for being picky. I think we can say
-> 
-> This improves the reporting accuracy by avoiding the case where
-> KVM_MEMORY_ATTRIBUTE_PRIVATE is reported when kvm == null even without
-> kvm_arch_has_private_mem being #defined.
 
-How about this?
 
-Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE based
-on kvm_arch_has_private_mem being #defined in anticipation of tracking
-PRIVATE vs. SHARED state per-guest_memfd, not per-VM (to allow in-place
-conversion).
-
-guest_memfd support for memory attributes is expected to be unconditional
-to avoid yet more macros (all architectures that support guest_memfd are
-expected to use per-gmem attributes at some point), at which point
-enumerating support KVM_MEMORY_ATTRIBUTE_PRIVATE based solely on memory
-attributes being supported by KVM at-large would result in a system-scope
-check (NULL @kvm) over-reporting support on arm64.
-
+On 8/5/26 11:31 PM, Zi Yan wrote:
+> On Sat Aug 1, 2026 at 2:26 AM EDT, Baolin Wang wrote:
+>> To support checking for various sized mTHPs during mTHP collapse, extend the
+>> check_huge() function prototype to accept two new parameters specifying the
+>> address range and mTHP size, in preparation for the following patches.
+>>
+>> No functional changes.
+>>
+>> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+>> ---
+>>   .../selftests/mm/folio_split_race_test.c      |  2 +-
+>>   tools/testing/selftests/mm/khugepaged.c       | 66 ++++++++++---------
+>>   tools/testing/selftests/mm/pagemap_ioctl.c    |  2 +-
+>>   .../testing/selftests/mm/prctl_thp_disable.c  |  2 +-
+>>   tools/testing/selftests/mm/soft-dirty.c       |  2 +-
+>>   .../selftests/mm/split_huge_page_test.c       | 14 ++--
+>>   tools/testing/selftests/mm/uffd-common.c      |  4 +-
+>>   tools/testing/selftests/mm/vm_util.c          |  6 +-
+>>   tools/testing/selftests/mm/vm_util.h          |  6 +-
+>>   9 files changed, 56 insertions(+), 48 deletions(-)
+>>
 > 
-> >    Give architectures full control over overriding the default definition
-> >    of kvm_arch_has_private_mem() by removing the coupling with
-> >    CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
-> > 
-> >    In a later patch, kvm_arch_has_private_mem() will be defined based on
-> >    whether architectural features are compiled in, and made orthogonal to
-> >    CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+> <snip>
 > 
+>> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+>> index 7799154b67ee..c7ae28dfda63 100644
+>> --- a/tools/testing/selftests/mm/vm_util.h
+>> +++ b/tools/testing/selftests/mm/vm_util.h
+>> @@ -90,9 +90,9 @@ void clear_softdirty(void);
+>>   bool check_for_pattern(FILE *fp, const char *pattern, char *buf, size_t len);
+>>   uint64_t read_pmd_pagesize(void);
+>>   unsigned long rss_anon(void);
+>> -bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size);
+>> -bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size);
+>> -bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size);
+>> +bool check_huge_anon(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size);
+>> +bool check_huge_file(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size);
+>> +bool check_huge_shmem(void *addr, unsigned long size, int nr_hpages, uint64_t hpage_size);
+>>   int64_t allocate_transhuge(void *ptr, int pagemap_fd);
+>>   int pageflags_get(unsigned long pfn, int kpageflags_fd, uint64_t *flags);
+>>   
+> 
+> I get what "size" means only after I see Patch 3 where
+> gather_after_split_folio_orders() is used. I think len is a better name
+> if not addr_len and its type should be size_t to match
+> gather_after_split_folio_orders()'s signature. The rest patches should
+> have the same rename and type change. Thanks.
+
+Will do.
+
+> Otherwise, LGTM.
+> 
+> Acked-by: Zi Yan <ziy@nvidia.com>
+
+Thanks.
