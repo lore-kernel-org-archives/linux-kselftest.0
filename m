@@ -1,43 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2EA40A940;
-	Thu,  6 Aug 2026 11:58:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A03B73D903B;
+	Thu,  6 Aug 2026 12:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786017525; cv=none; b=XGP//eb1gj+3FPIVyuRDZI4sAMdO1IEHwRSh9atKdsor6yNoIEo07UasQB+YbJkCi228nVGbeOAz+QykPB42cXN9sJ8JNqKrb0xctpzKsea7ukCDrhxOLKw39HQfDefu3bZmQtShErGxmc3KzAIj1mRH/+nizMXJQwmaxL4KFig=
+	t=1786018531; cv=none; b=nP21q8eLnYIbYiGdvzmL76TVEgQBndyRJz/Gpih1QutIDffWnaRZSHV+yY4540XdJ+daxzBvtxSwHSugZd5w1p06YtzbSa0DuK4xd6R7zHrytPiqgO1XLqwJDVAYzUFSutQjxtQBZF/haeunDIxA1T6/lNsxahxZ/t10kwrw/5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786017525; c=relaxed/simple;
-	bh=Iz+bElwmgovz6NBcmEner0w7gj5r5eUppgbit8V/urM=;
+	s=arc-20240116; t=1786018531; c=relaxed/simple;
+	bh=AyBTb+LrQWw8ZftTOUlkjfJ9+uZwoeLY8rsjbVYcI9g=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fm7s8qyXaXSqmtv2eRQwvQUBMl5Zj5LXaTwKgGZN9wokJOTaHMPI/UT/PIvBsPCX3jqw3i9DZYKr5vtJAAEzF28qFqBTIMLUeTvrEPjhJDkC54T8zZijQinVoCTG9NIVJDJd8b1JDOWyiOdF2LS1csUJyxV11EDUoTvmhgfvW9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOJXKEpY; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=ELpmOR3B9BDkmc/1pUpuFyTYPIM5MjyHRBoVIZQVbnF9pa1AM0FcqwAIct9/GSNHLq0xt3lNXgeI94rqCZRPawNnFnGpYGT2KVGzhcJOhRa4v6IGIqNHI+1daFGAd9g5U1F7f6J0Mno1G3zgLKxdUdHSYKSVmRFgfUK4Xo7fTN8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lTllz68x; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOJXKEpY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78FA81F000E9;
-	Thu,  6 Aug 2026 11:58:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lTllz68x"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B71E1F000E9;
+	Thu,  6 Aug 2026 12:15:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786017524;
-	bh=PipOiU3WDi/ShqcfhWwddc2/xW9Ic+f6bHEQmclKRiA=;
+	s=k20260515; t=1786018530;
+	bh=bG/+1c+prL+c0d/X4aPTc5uYn6Pj3WLl3WBugC2I9aI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KOJXKEpYVV95XhacNsHdG5GB19/T7i6BhFc7ZR3q1IC6p3XOB4VgOcow9bUabrHWP
-	 +Zf6HUkvX1sjH/s2efi48HmNIZJ0Q7KxqeIVB6X3EFQHhkWA8Vx7WmbsfZHIz1t73x
-	 H/zCocTWlmFTDzLgtIcI2HL8ETBQGs2znXSMLx6aEb/Gb2WJ7FHMMi8aHRxK6lTLN4
-	 ywxkPNDqwjLo0heK02XtDD1SRqsawWLPhjXhy5ylt8WwtYTwY0MH/zvo9zmyAbY6U+
-	 Ge9t+fRR7bJnW1kG1inKbdPKsd/ZQW9olH6diK1eVNuqeB+BwLVdNseyGTH0Ldu+6L
-	 CdARooEV/JIZQ==
-Date: Thu, 6 Aug 2026 12:58:39 +0100
+	b=lTllz68xCe4f1rgksWmtWWCvTofKNstA7LECnUYwBCh0SEIfNCBGrJs9Hizz4SAdN
+	 44RYFVBqY1x/2hQaxP07kcrPewf+6iNO0CTOoIb9I9Yt2zmvVC3da3mpc8NzuVpbuL
+	 l9vO8rP1R/LmTC0hipYCCTtuQSbLvJUaEZYI9qvieQyz8wAl8Oa4XdZiA28OWohlo+
+	 UlrpR8g8NXeRKDKJKpu/WV/4XO50wcjcG3VoFCVlk8lMkeYsxefy0xJ0F7zVNl5zmI
+	 Cck2eEvuWOK6ABLOQNEluL9XAo15oEXorD0IOoMJ7uOOeTNuUCsKlsnMHj781vobSW
+	 iPih0d9JMvVZg==
+Date: Thu, 6 Aug 2026 13:15:25 +0100
 From: Mark Brown <broonie@kernel.org>
-To: Jinjie Ruan <ruanjinjie@huawei.com>
-Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org, Aishwarya.TCV@arm.com
-Subject: Re: [PATCH v3 1/2] kselftest/arm64: Add seccomp ptrace x0 bypass test
-Message-ID: <d37ac12d-1e19-4711-add5-6f3cf82f48ac@sirena.org.uk>
-References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
- <20260728021122.2640104-2-ruanjinjie@huawei.com>
- <a9ef63ac-6012-4788-8fd7-5902b6448484@sirena.org.uk>
- <bd1db584-ce6b-46b5-ab66-11fb7873007b@huawei.com>
+To: Will Deacon <will@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Karl Mehltretter <kmehltretter@gmail.com>, kernel-team@android.com,
+	Mark Rutland <mark.rutland@arm.com>,
+	Oleg Nesterov <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] arm64/fpsimd: ptrace: Fix inactive SVE and SSVE
+ regsets
+Message-ID: <be47f939-bc44-46b8-ba38-988403dd87b0@sirena.org.uk>
+References: <20260729004255.15630-1-kmehltretter@gmail.com>
+ <178566413306.4141663.7146790540592743319.b4-ty@kernel.org>
+ <21702e5c-2dcc-46ad-bffe-26cd76d844b9@sirena.org.uk>
+ <anRoiIbOFVjj7qPN@willie-the-truck>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -45,45 +49,49 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="9kq+jgVm4G0pwUVj"
+	protocol="application/pgp-signature"; boundary="xDS/6FBQB0QLC0Ie"
 Content-Disposition: inline
-In-Reply-To: <bd1db584-ce6b-46b5-ab66-11fb7873007b@huawei.com>
+In-Reply-To: <anRoiIbOFVjj7qPN@willie-the-truck>
 X-Cookie: Brain fried -- Core dumped
 
 
---9kq+jgVm4G0pwUVj
-Content-Type: text/plain; charset=utf-8
+--xDS/6FBQB0QLC0Ie
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 06, 2026 at 04:22:31PM +0800, Jinjie Ruan wrote:
-> =E5=9C=A8 2026/8/5 23:04, Mark Brown =E5=86=99=E9=81=93:
-> > On Tue, Jul 28, 2026 at 10:11:21AM +0800, Jinjie Ruan wrote:
+On Thu, Aug 06, 2026 at 11:57:12AM +0100, Will Deacon wrote:
+> On Wed, Aug 05, 2026 at 10:27:18PM +0100, Mark Brown wrote:
 
-> > The relevant definitions ought to be being picked up from here, there's
-> > a copy of a current version in tools/include and has been for a while
-> > (since at least v6.18) but there's no Makefile update to ensure that
-> > gets picked up.
+> > As noted in the changelog applying patch 1 as a fix and this only for
+> > -next blows up the fp-ptrace test rather impressively in any
+> > configuration which can generate headers only reports:
 
-> Will add -I$(top_srcdir)/tools/include to CFLAGS for this test.
+> >    https://lava.sirena.org.uk/scheduler/job/3075737#L3231
 
-It turns out that's actually getting pulled in already - the issue is
-that linux/filter.h doesn't include uapi/linux/filter.h and the
-definition is in the uapi header.  I sent a fix for this yesterday.
+> > for the release.  Both patches really do need to go together.
 
---9kq+jgVm4G0pwUVj
+> By "blows up" you mean the test fails, right? That's the same behaviour
+> if anybody runs the test on a kernel without the fix. Both patches are
+> merged in for-next/core.
+
+Right, the test starts reporting 96 fails which doesn't look great in a
+dashboard.  I'd misread the original branch as being merged as a fix but
+I see it's not been merged into the fixes branch, sorry for the
+confusion.
+
+--xDS/6FBQB0QLC0Ie
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmp0du8ACgkQJNaLcl1U
-h9AvDwf/fQZl+XgNBHgNp8Whb+LhD5qXRzfbnZn8Rj+a1RP0C6qrKxHB0clVOlWg
-UDkOIK3qALyXI2VivsHf3CLJPVVD9vGRnqvYe3ZFH88KcHsQGvsKYjo3OB50Iw3u
-4sqjREgnWhdVBWQIbUDudgV5o71l7EDuzCqEo9t7cnbYdcOwMVITaqMp1p6hzWIi
-LyvcB4XiayAsGcUIFjOQctHLVpfOxleL0JAGSTeHEqMWjDLtJfuebUUqvK29hT6I
-RUIdoxwdtivcwZN9hWUN56+1sJKFWFZbn+w6qY00iIy6drwLKafX78E5CgUyUcyc
-qLov6Jd+xvES3sJpZ4MaV6p4X84mgQ==
-=dtmO
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmp0etwACgkQJNaLcl1U
+h9Cj5Af/RbhK3IBFPx1Y04cMjPSnwL1Cn4ML+QhLP/52CHHOMTpnRcP1+VnW5dAn
+zcHezU4q3urEGIfdn0/i2LE7ZoigpjxV20tEyPlzVbG37e4+Ofd+kZS56fJuYiC5
+NVtv6M4JSeW/+sn83mTYmgGMZHAKCLufpqfUXDlWCLuZvnqIzCM0FpqyUEem2rWA
+r3EMTFd5fGlfyMToQEY2V+EATPL9ivAcgLoh+vJkPyAs6dAJm38tU81llNLGFYQA
+xgKzFf1CmDmf+fxsnjksO0Hgb5mlU994v6r7C6IapvBA3x2o8coL7bZnK/BOkLIQ
+wg1zPZ676mCKUVKGLw7tm5AGZXGJuQ==
+=8cS5
 -----END PGP SIGNATURE-----
 
---9kq+jgVm4G0pwUVj--
+--xDS/6FBQB0QLC0Ie--
