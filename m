@@ -1,399 +1,273 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from TYDPR03CU002.outbound.protection.outlook.com (mail-japaneastazon11013004.outbound.protection.outlook.com [52.101.127.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E031344D8C;
-	Thu,  6 Aug 2026 03:34:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785987293; cv=none; b=LDOCFce/Cc+F+l3YDxnTR0eWFdKWo31UQ5nBZDLAf2Z0qtJU4PraQYGmQKwcDruJxTMFUZoC4FUQVNKC29yoiI9s5EtzvgMOHdx0Ivo4xymkN9b5sTg/V5chQIdZmwaLFtyW2NIIeuIY2dL558WGzZE1Jdkgeo8Zc2NUrYQdIIQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785987293; c=relaxed/simple;
-	bh=xkR/WG0h3iXlkVroJUgHZQCXKLQHYboRlwF460XRxbQ=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A884A3016FB;
+	Thu,  6 Aug 2026 04:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.127.4
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1785990074; cv=fail; b=dtLWunNfjLPVjeCJjBAAeylSVjK216EAP3zqbMY4AI/8RyZZFBAazBxG7s39+e5xOHoLq1CXAJwGpt/EaQyrkzcsB7jg5dj9Yriu04qg7dmJ0BpNSewRJ0+Pgjeh42dztuCclQPPar5VFCL8alRZkQ5mP75r1+LInZMh/zHy6co=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1785990074; c=relaxed/simple;
+	bh=cD4WE61J+wl5LGna6akH1Il6yO33U+dAhvUTnDyW8aU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CuIYf/C9Y5sRCkXRAsXpgtgAwIxer10jqmnbrloHhfb8l4QBixErTSCaPdADYZZx6E2ZjeTnX/MVdrBVKkdQbhZp09qoL4DbTfhJI7TiCEGWYiizEQM2eWAt5aiSn2GAZttP/GVY3Mxb6zUhypn70Qmqy0U89dL4DUpEVKjWV2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=C/ewzn88; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	 Content-Type:MIME-Version; b=peznr02O85MHXfFSx3OuyAEp/TTGlILih3D02yFZ9VuCPkZ/OdrmJ/4OqZmOCvCLJuLDmRXG9bXbYshaWxGDANSFhvqzA5I830n9zB7cFMS6AVdr7xLizYkVA1JT8WJ0dYOITdelDnNNcUi6rxwRqdgPnGWlAhRF5P+vUiiiZvU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=DVRQSSIA; arc=fail smtp.client-ip=52.101.127.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="C/ewzn88"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1785987275; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=woc0uHeb0S0kVhMWIcUT+/bpQEyJ/gRxiaIY7wa7seE=;
-	b=C/ewzn88VpUnQWNZEnrKqRM5VqrSUKBIfKv6DJyGZFniq/tHNS+8BeLoaIXUk3HM/Kzz4nWCOpxRO6b7gMvqPlatm0K5jtLGFT3k6MaXQVb6H+Zi90mFGgg8jYodCEKR8uebaSlk72G0Q/zTkTFT8uUimwIPAsf8FVE2I4itj6U=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0X8SfgE4_1785987274;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SfgE4_1785987274 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 06 Aug 2026 11:34:34 +0800
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org
-Cc: ziy@nvidia.com,
-	liam@infradead.org,
-	nico.pache@linux.dev,
-	dev.jain@arm.com,
-	ryan.roberts@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	kas@kernel.org,
-	baolin.wang@linux.alibaba.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/4] selftests: mm: add mTHP collapse test cases
-Date: Thu,  6 Aug 2026 11:34:15 +0800
-Message-ID: <f260058520214a9611922a96326bc54ba282fb73.1785985999.git.baolin.wang@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
-References: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
+	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="DVRQSSIA"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nvPuXeLcNZWoNJ+V6yeFCUgisKWm9snDkW2FfEqn1pIN9IYcYV6cZs0DAL18mBLb2dFIBxq6QN1rhYkH81uP8yz0QyIR8gM6TZklxqyMc+CCmutPi97vKqAG5m6jUBnkSJ+QZoYy+kI8iU6Fa2wBW7Mp+7i08kKJyeIpx3pViYD9jdUq64K83H/quTMbTGJ752y33w2pHAU3iZZEQcWgy55I1WorgKylj6p+LmeCmlDb0yuZ3ALW59BAsIFJOx7LLOEoazV8HeFzzp84J75NXceHn0s/2FfI/90OCSDbPd9T+6NqAXMpcwN9QQK6rkNchgpSXcvngVmD8pzmwtYkKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=LYPk1yDmoj+LXORkOZjH8UVO6PsrE0P1pUEkiGHiq/A=;
+ b=B1rCi8NI0f/tzebjglCKmTTchml41jsgNPToFNmcdoCgTIb7ktJEbLsHwAH0xATKRaYyAViFN9GN4RnNo2dB2Dmc6Al1IdErD1Ti7J0ht8UO0UeC3M5PD9B8TuIknzho/I0flEB3sdBbwNsTxrjFJGOVDWHt1S0Ra/jpx4PozfxGxjmp+SRuokiFqUyG/w2h1q12oU7XpeOO08jNBjpIQaPnGCnueFy7ymbc5/pbc2Ya27JIrmj7vRvLPcySnjk96vNIyrnq+bMoxg7NKK7INiRwpYolhZMjIHvIWKHsxWMZKEeS9wbNwSaTDmtqPyV1cmVjI1FBLjylafuf0ndntw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=LYPk1yDmoj+LXORkOZjH8UVO6PsrE0P1pUEkiGHiq/A=;
+ b=DVRQSSIAwM9G04+mUSnlGJKzS2ok1054sTNFHbxaWpv1Fqn8Vx+Sfz0MhNZ+K+iUHiKVBFcRoRoJAxbpUq28VTVjGdFk1dQGIz3krjmoWy1zeZn9PVp8qZQhAPlLOO++zb6K32htZ6WaOemIi7jiLVkeCh3hYMsoM3oS/tKbI5pZPNdfj4cUIL8Nvy+lnBOYGrBNiwKEsA0GREQfJc9kPVEIW1wAkqOZJNhta64s5llvgc/AMk74foFCMgXmducv9zl6TUJMwsxpVF22h6n5evKA+L4o7A6aZexOEQE2R3JmZurvxsFpZBWRC0VQflvPHe6BXbCWoBCLwjl3iCWwqQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
+ by TY1PPFF38CE2865.apcprd06.prod.outlook.com (2603:1096:408::930) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Thu, 6 Aug
+ 2026 04:21:10 +0000
+Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
+ ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
+ ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0292.019; Thu, 6 Aug 2026
+ 04:21:09 +0000
+From: Fuyu Zhao <zhaofuyu@vivo.com>
+To: bpf@vger.kernel.org
+Cc: Fuyu Zhao <zhaofuyu@vivo.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org (open list),
+	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
+Subject: [RFC PATCH bpf-next 2/2] selftests/bpf: add tests for selective kmod BTF loading
+Date: Thu,  6 Aug 2026 12:20:27 +0800
+Message-ID: <20260806042042.3239428-3-zhaofuyu@vivo.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260806042042.3239428-1-zhaofuyu@vivo.com>
+References: <20260806042042.3239428-1-zhaofuyu@vivo.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: TPYP295CA0035.TWNP295.PROD.OUTLOOK.COM (2603:1096:7d0:7::7)
+ To PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|TY1PPFF38CE2865:EE_
+X-MS-Office365-Filtering-Correlation-Id: d28b513c-3d6e-490f-8bf1-08def3722462
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|52116014|366016|1800799024|38350700014|6133799003|10067099003|56012099006|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	o5fyrAcb+pXM5WPfDOCPWYNyapTCnevDa/NO81l7ldO+6dyDWPJrDymYMFX+mOkwBpmwhUgXuDE6KfcAAT0U1Tf7TAyf6R5Sdo/AUOVWV0m98DlhNvh4v9UmOxVsYxUumBaNk/RfcHWGeoATwliQ/FgYIZBrfCoa+D8qvYgT1tK7p2aJEzuPFgoCA7zkOCc78sbpYeB9hHysaxbvwm50IrEsuDNTXYMc23skPOHCpjJKnCPuSPxsbhvgyIFodYfHrbAzEZZ0oGl4JmP7Tp9zK7NuBbml1O75xXCuoAHZtKvbhteuWKw87hiMoxced1w39/Po1fV5M+i8w8c+jd89ErpRmol4vKUjSzCiAsN/v0Hr+vUur3coISNTS1jd/VTL36iiTpYqCOYGXM8VSkJg/WETsrBzA4EjcoUpsCxKkLXVobx4jBX76d8cVSW0TK+7gPcS70yh+Mav50jhy3/nV6kNN0WsCwmtK+4TwNrh9rjaQz2hUCzdUooKVf28KQdzeUbBG6zFE/v6qE5vHm7PKZFAMQCWc4nQ69naWqe/FkpP6BvoJihy7aagL46fpNhnry0oeEr2LlafqFTjN6REtNVX4aZObwDFDOP2jEiBJjE7yJjn8O1vgpnL3C/U5XwIvPZK/oc8T2wQGeBncqN4t1JJzn/ZzxwWUp+6E9/GmestF053MGHqr+CCY5uBrjeiQzVLFNkRk+Q7wYSYT3Q6OcqvfiwjKOJ2pSkFxuhC+HI=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(52116014)(366016)(1800799024)(38350700014)(6133799003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?0zHhXePLAWkU+yKsHCH8KYVT+zGjYKJOLCrnqX3szlwJu/1O+dDHN4V9r4j1?=
+ =?us-ascii?Q?jU3NFDmCyWPniDzbhWsavB+ezqg2PIcjW7sygKH7AABPdjPaNF8iS0mhOz+l?=
+ =?us-ascii?Q?ZknRVQNiEf+StC1lzPvRJienVze+lBMClYsNpXBK3o6AzdTSZ2XYb/2vY3bG?=
+ =?us-ascii?Q?QH36UfU6Ep7tTj3R+VnBI2fH+7F6MxuajO7EAFFy81jxTMLZNtEKF7pMM7q6?=
+ =?us-ascii?Q?gYtqKsSK9GcMzuPYjG/0AOBM2jVZBW431x6Wn2d107atAwFD7Vbo+WYzYTPF?=
+ =?us-ascii?Q?tzmUSP2pB6lLOqzik2U3ZnigK8ns5m56SQnznPaNy+BvIrt2q4EUD5rXhrGq?=
+ =?us-ascii?Q?j04j6PhWxAakk6S8DRZe0sMohNCo/oK6F0BnHab4rgnW4b9FA2gYAv+yZl3C?=
+ =?us-ascii?Q?aRlMQpGd/FUpya4d7vkJgcZQfIqwY3Ri9BLgnmPkmdP8D7eo5aOYGFhpL78+?=
+ =?us-ascii?Q?ffjaqQZ24wfx4iJuWezaSjSKT74MyYi9JYr6XcsF3Fxe6dPsqUpWM+QHbckU?=
+ =?us-ascii?Q?TgKOIm64oM7vfGiAOs2H2FEVU0NNkVMQWbZZgEzEtlt0stp9tpZy89+8wzBK?=
+ =?us-ascii?Q?P5jZa0rzvYm6B1BfOTfZVufg/EMtlOa3Wb7VQf7TbraiH69CdscnQPBSpXFT?=
+ =?us-ascii?Q?4ioE3h/QUsqAUwwe/wzFHXoLUpfpbxSkdhkISGMkJG1+18Cjn8MGt2NGggS4?=
+ =?us-ascii?Q?dI9y8S8FwJqXWDnLuhRwMnHq8DDZdSFxIkaAuUD0lwMdW8S76Lgej67SEfWW?=
+ =?us-ascii?Q?KUS8kJ/sWVv6KRveN11WL5F4kLcJ303ve90mLbh0QpGzmvZqBEqNLJ/2x7AO?=
+ =?us-ascii?Q?QrTH05dqW0Ql9CEACorMzFlEg8KSxGRt0DhdizcFSW6Z6AUbySrjS0eSmJjc?=
+ =?us-ascii?Q?VZNYLW0AhR3WkHIWuN1i1WQI/VjVj3S0XlQF506H4QqNXspVbcPfShNDePSA?=
+ =?us-ascii?Q?Ozn//Ur5eyWOOi0iwJqzwHdpgl77E6jHp74Cy10JPfX1+23L3rfGNYBbDHl1?=
+ =?us-ascii?Q?4fH9XRiGFGtAS2jnvFHUBBPvs//aHFml/PH/CCxJ4nPI+uv0UVMZZxqp8SI+?=
+ =?us-ascii?Q?J/ghClMWV1Pu6kKY8O3PPvBuxvn7qfTghcQHFieSmdMbXVGfBsSi8ld4D2cd?=
+ =?us-ascii?Q?6yK/39Y800/lw2M+Q3i5HIVS0u7WwVjrABMnXmCxT0IZ4IyputDtGGl+XN/7?=
+ =?us-ascii?Q?srgz40Il3YmJAHrLsRPi7MOU0ZUIOjeQycwfQ649P90qV+78njLhcwpLeeof?=
+ =?us-ascii?Q?TTg1H2t8iM4/vgvZdujle+2LnTEL8S8eQ0MfyM+0wJ8EJTTK653XHkzyS1vS?=
+ =?us-ascii?Q?H7RDTc0o8v0d+U/8IIGsdRY0V6+pA+jlP79tVaUJqbPdv5v7lcgNlk6i4ZeZ?=
+ =?us-ascii?Q?EVwAtsVm7JeVnY6ejDqnB8FqqD5snbQo4dV5UEIrJal85Tt3Xsmg9bvvXxLw?=
+ =?us-ascii?Q?IsvCyCYXGY+MYPQJ6enKgfIZWmtfR3xvsjXoqY0kX0L2u8/G6++i7TddA1az?=
+ =?us-ascii?Q?Lpxu8XgkswqqzBabyxM6n9Q/4Z52S1u1VDHQ+gCVJgwi7q99oNUmXKS02ufP?=
+ =?us-ascii?Q?4CvEde2HnV4MDjyOMaEq9f6grbSJDiNWgy+bNbRHlu2Z4c8ZYWI+irMa4cI1?=
+ =?us-ascii?Q?TaUkGIbAqPZlrvj/kAdg/AYE5JeNAes7z5yNB4unjv8mTh3yQYRZD0cqUKWs?=
+ =?us-ascii?Q?OUMkXUfq9jDtaTymDGbm8i+yG59cvQ0mG1+jyQciwCHYjEB1YQzkjo0dL7Ye?=
+ =?us-ascii?Q?Q0PHJjj39w=3D=3D?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d28b513c-3d6e-490f-8bf1-08def3722462
+X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 04:21:09.8658
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: v7Tlttxxl9EyD+ChVLSCUfq7CLQNdIYQNSmPMdqP1LwzJ8K86ozuJNVyJ6Cc1dIi/1Uw5tNdPzmTp9pYTRAxVA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY1PPFF38CE2865
 
-Added a new command 'mthp_khugepaged' for mTHP collapse, along with the '-c'
-parameter to specify the collapse order. Additionally, added mTHP collapse
-test cases for 'collapse_full', 'collapse_empty', and 'collapse_single_mthp'
-for anonymous folios. All khugepaged test cases passed.
+Add test cases to verify the new ".kmod_btfs" section logic in libbpf.
+The added test cases cover three main scenarios:
 
-Reviewed-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
-Tested-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
-Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+  - Valid module: targeting an existing kernel module BTF to ensure
+    successful loading.
+  - Non-existent module: targeting a fake or missing module, verifying
+    that the process results in an expected failure.
+  - Duplicates and unneeded: providing a mix of repeated and extra
+    module names to ensure the parsing logic remains robust.
+
+Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
 ---
- tools/testing/selftests/mm/khugepaged.c   | 137 +++++++++++++++++++---
- tools/testing/selftests/mm/run_vmtests.sh |   2 +
- 2 files changed, 120 insertions(+), 19 deletions(-)
+ .../selftests/bpf/prog_tests/kmod_btfs.c      | 47 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kmod_btfs.c | 14 ++++++
+ .../selftests/bpf/progs/kmod_btfs_mix.c       | 15 ++++++
+ .../selftests/bpf/progs/kmod_btfs_nonexist.c  | 17 +++++++
+ 4 files changed, 93 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
+ create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index fd724be9b665..7f87aeed301c 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -26,9 +26,11 @@
- 
- #define BASE_ADDR ((void *)(1UL << 30))
- static unsigned long hpage_pmd_size;
-+static int hpage_pmd_order;
- static unsigned long page_size;
- static int hpage_pmd_nr;
- static int anon_order;
-+static int collapse_order;
- 
- #define PID_SMAPS "/proc/self/smaps"
- #define TEST_FILE "collapse_test_file"
-@@ -69,6 +71,7 @@ struct collapse_context {
- };
- 
- static struct collapse_context *khugepaged_context;
-+static struct collapse_context *mthp_khugepaged_context;
- static struct collapse_context *madvise_context;
- 
- struct file_info {
-@@ -573,25 +576,25 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
- }
- 
- #define TICK 500000
--static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
--			  struct mem_ops *ops)
-+static bool wait_for_scan(const char *msg, char *p, size_t len,
-+		int nr_hpages, int collap_order, struct mem_ops *ops)
- {
--	size_t len = nr_hpages * hpage_pmd_size;
-+	unsigned long hpage_size = page_size << collap_order;
- 	int full_scans;
- 	int timeout = 6; /* 3 seconds */
- 
- 	/* Sanity check */
--	if (!ops->check_huge(p, len, 0, hpage_pmd_size))
-+	if (!ops->check_huge(p, len, 0, hpage_size))
- 		ksft_exit_fail_msg("Unexpected huge page\n");
- 
--	madvise(p, nr_hpages * hpage_pmd_size, MADV_HUGEPAGE);
-+	madvise(p, len, MADV_HUGEPAGE);
- 
- 	/* Wait until the second full_scan completed */
- 	full_scans = thp_read_num("khugepaged/full_scans") + 2;
- 
- 	ksft_print_msg("%s...", msg);
- 	while (timeout--) {
--		if (ops->check_huge(p, len, nr_hpages, hpage_pmd_size))
-+		if (ops->check_huge(p, len, nr_hpages, hpage_size))
- 			break;
- 		if (thp_read_num("khugepaged/full_scans") >= full_scans)
- 			break;
-@@ -614,7 +617,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
- 	if (!is_tmpfs(ops) && ops == &__read_write_file_write_ops)
- 		expect = false;
- 
--	if (wait_for_scan(msg, p, nr_hpages, ops)) {
-+	if (wait_for_scan(msg, p, len, nr_hpages, hpage_pmd_order, ops)) {
- 		if (expect)
- 			fail("Timeout");
- 		else
-@@ -636,12 +639,62 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
- 		fail("Fail");
- }
- 
-+static void mthp_khugepaged_collapse(const char *msg, char *p, int nr_hpages,
-+				struct mem_ops *ops, bool expect)
+diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+new file mode 100644
+index 000000000000..0608f2809223
+--- /dev/null
++++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
+@@ -0,0 +1,47 @@
++// SPDX-License-Identifier: GPL-2.0
++#include <test_progs.h>
++#include "kmod_btfs.skel.h"
++#include "kmod_btfs_nonexist.skel.h"
++#include "kmod_btfs_mix.skel.h"
++
++static void kmod_btfs_pass(void)
 +{
-+	unsigned long hpage_size = page_size << collapse_order;
-+	struct thp_settings settings = *thp_current_settings();
-+	/* mTHP collpase only allocates PMD sized memory */
-+	size_t len = hpage_pmd_size;
++	struct kmod_btfs *kmod_btfs_skel;
 +
-+	/* Set mTHP setting for mTHP collapse */
-+	if (ops == &__anon_ops) {
-+		settings.thp_enabled = THP_NEVER;
-+		settings.hugepages[collapse_order].enabled = THP_MADVISE;
-+	}
-+
-+	thp_push_settings(&settings);
-+
-+	if (wait_for_scan(msg, p, len, nr_hpages, collapse_order, ops)) {
-+		if (expect)
-+			fail("Timeout");
-+		else
-+			success("OK");
-+
-+		/* Restore THP settings for mTHP collapse. */
-+		thp_pop_settings();
++	kmod_btfs_skel = kmod_btfs__open_and_load();
++	if (!ASSERT_OK_PTR(kmod_btfs_skel, "kmod_btfs__open_and_load"))
 +		return;
-+	}
 +
-+	/*
-+	 * For file and shmem memory, khugepaged only retracts pte entries after
-+	 * putting the new hugepage in the page cache. The hugepage must be
-+	 * subsequently refaulted to install the pmd mapping for the mm.
-+	 */
-+	if (ops != &__anon_ops)
-+		ops->fault(p, 0, nr_hpages * hpage_size);
-+
-+	if (ops->check_huge(p, len, expect ? nr_hpages : 0, hpage_size))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	/* Restore THP settings for mTHP collapse. */
-+	thp_pop_settings();
++	kmod_btfs__destroy(kmod_btfs_skel);
 +}
 +
- static struct collapse_context __khugepaged_context = {
- 	.collapse = &khugepaged_collapse,
- 	.enforce_pte_scan_limits = true,
- 	.name = "khugepaged",
- };
- 
-+static struct collapse_context __mthp_khugepaged_context = {
-+	.collapse = &mthp_khugepaged_collapse,
-+	.enforce_pte_scan_limits = true,
-+	.name = "mthp_khugepaged",
-+};
-+
- static struct collapse_context __madvise_context = {
- 	.collapse = &madvise_collapse,
- 	.enforce_pte_scan_limits = false,
-@@ -680,10 +733,17 @@ static void alloc_at_fault(void)
- static void collapse_full(struct collapse_context *c, struct mem_ops *ops)
- {
- 	void *p;
--	int nr_hpages = 4;
-+	int nr_pmds = 4, nr_hpages = 4;
- 	unsigned long size = nr_hpages * hpage_pmd_size;
- 
--	p = ops->setup_area(nr_hpages);
-+	/* Only try 1 PMD sized range for mTHP collapse. */
-+	if (c == &__mthp_khugepaged_context) {
-+		nr_pmds = 1;
-+		nr_hpages = 1 << (hpage_pmd_order - collapse_order);
-+		size = hpage_pmd_size;
-+	}
-+
-+	p = ops->setup_area(nr_pmds);
- 	ops->fault(p, 0, size);
- 	c->collapse("Collapse multiple fully populated PTE table", p, nr_hpages,
- 		    ops, true);
-@@ -695,10 +755,31 @@ static void collapse_full(struct collapse_context *c, struct mem_ops *ops)
- 
- static void collapse_empty(struct collapse_context *c, struct mem_ops *ops)
- {
-+	int nr_hpages = 1;
-+	void *p;
-+
-+	if (c == &__mthp_khugepaged_context)
-+		nr_hpages = 1 << (hpage_pmd_order - collapse_order);
-+
-+	p = ops->setup_area(1);
-+	c->collapse("Do not collapse empty PTE table", p, nr_hpages, ops, false);
-+	ops->cleanup_area(p, hpage_pmd_size);
-+	ksft_test_result_report(exit_status, "%s\n", __func__);
-+}
-+
-+static void collapse_single_mthp(struct collapse_context *c, struct mem_ops *ops)
++static void kmod_btfs_nonexist(void)
 +{
-+	unsigned long hpage_size = page_size << collapse_order;
- 	void *p;
- 
- 	p = ops->setup_area(1);
--	c->collapse("Do not collapse empty PTE table", p, 1, ops, false);
-+	/*
-+	 * Only fault collapse_order sized ranges, and only check 1
-+	 * collapse_order sized huge page.
-+	 */
-+	ops->fault(p, 0, hpage_size);
-+	c->collapse("Collapse PTE table with half PTE entries present",
-+		p, 1, ops, true);
- 	ops->cleanup_area(p, hpage_pmd_size);
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
- }
-@@ -1114,8 +1195,8 @@ static void madvise_retracted_page_tables(struct collapse_context *c,
- 	ops->fault(p, 0, size);
- 
- 	/* Let khugepaged collapse and leave pmd cleared */
--	if (wait_for_scan("Collapse and leave PMD cleared", p, nr_hpages,
--			  ops)) {
-+	if (wait_for_scan("Collapse and leave PMD cleared", p, size, nr_hpages,
-+			  hpage_pmd_order, ops)) {
- 		fail("Timeout");
- 		return;
- 	}
-@@ -1131,17 +1212,19 @@ static void usage(void)
- {
- 	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
- 	fprintf(stderr, "\t<test type>\t: <context>:<mem_type>\n");
--	fprintf(stderr, "\t<context>\t: [all|khugepaged|madvise]\n");
-+	fprintf(stderr, "\t<context>\t: [all|khugepaged|mthp_khugepaged|madvise]\n");
- 	fprintf(stderr, "\t<mem_type>\t: [all|anon|file|shmem]\n");
- 	fprintf(stderr, "\n\t\"file,all\" mem_type requires [dir] argument\n");
- 	fprintf(stderr, "\n\t\"file,all\" mem_type requires a file system\n");
- 	fprintf(stderr,	"\twith PMD-sized large folio support\n");
- 	fprintf(stderr, "\n\tif [dir] is a (sub)directory of a tmpfs mount, tmpfs must be\n");
- 	fprintf(stderr,	"\tmounted with huge=advise option for khugepaged tests to work\n");
-+	fprintf(stderr, "\n\tmthp_khugepaged only supports anon mem_type now.\n");
- 	fprintf(stderr,	"\n\tSupported Options:\n");
- 	fprintf(stderr,	"\t\t-h: This help message.\n");
- 	fprintf(stderr,	"\t\t-s: mTHP size, expressed as page order.\n");
- 	fprintf(stderr,	"\t\t    Defaults to 0. Use this size for anon or shmem allocations.\n");
-+	fprintf(stderr,	"\t\t-c: collapse order for mTHP collapse, expressed as page order.\n");
- 	exit(1);
- }
- 
-@@ -1151,11 +1234,14 @@ static void parse_test_type(int argc, char **argv)
- 	char *buf;
- 	const char *token;
- 
--	while ((opt = getopt(argc, argv, "s:h")) != -1) {
-+	while ((opt = getopt(argc, argv, "s:c:h")) != -1) {
- 		switch (opt) {
- 		case 's':
- 			anon_order = atoi(optarg);
- 			break;
-+		case 'c':
-+			collapse_order = atoi(optarg);
-+			break;
- 		case 'h':
- 		default:
- 			usage();
-@@ -1181,6 +1267,10 @@ static void parse_test_type(int argc, char **argv)
- 		madvise_context =  &__madvise_context;
- 	} else if (!strcmp(token, "khugepaged")) {
- 		khugepaged_context =  &__khugepaged_context;
-+	} else if (!strcmp(token, "mthp_khugepaged")) {
-+		mthp_khugepaged_context =  &__mthp_khugepaged_context;
-+		if (collapse_order <= 0 || collapse_order >= hpage_pmd_order)
-+			usage();
- 	} else if (!strcmp(token, "madvise")) {
- 		madvise_context =  &__madvise_context;
- 	} else {
-@@ -1196,14 +1286,20 @@ static void parse_test_type(int argc, char **argv)
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
- 		anon_ops = &__anon_ops;
- 		shmem_ops = &__shmem_ops;
-+		if (mthp_khugepaged_context)
-+			usage();
- 	} else if (!strcmp(buf, "anon")) {
- 		anon_ops = &__anon_ops;
- 	} else if (!strcmp(buf, "file")) {
- 		read_only_file_ops =  &__read_only_file_ops;
- 		read_write_file_read_ops =  &__read_write_file_read_ops;
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
-+		if (mthp_khugepaged_context)
-+			usage();
- 	} else if (!strcmp(buf, "shmem")) {
- 		shmem_ops = &__shmem_ops;
-+		if (mthp_khugepaged_context)
-+			usage();
- 	} else {
- 		usage();
- 	}
-@@ -1246,7 +1342,6 @@ static int nr_test_cases;
- 
- int main(int argc, char **argv)
- {
--	int hpage_pmd_order;
- 	struct thp_settings default_settings = {
- 		.thp_enabled = THP_MADVISE,
- 		.thp_defrag = THP_DEFRAG_ALWAYS,
-@@ -1272,10 +1367,6 @@ int main(int argc, char **argv)
- 	if (!thp_is_enabled())
- 		ksft_exit_skip("Transparent Hugepages not available\n");
- 
--	parse_test_type(argc, argv);
--
--	setbuf(stdout, NULL);
--
- 	page_size = getpagesize();
- 	hpage_pmd_size = read_pmd_pagesize();
- 	if (!hpage_pmd_size)
-@@ -1283,6 +1374,10 @@ int main(int argc, char **argv)
- 	hpage_pmd_nr = hpage_pmd_size / page_size;
- 	hpage_pmd_order = __builtin_ctz(hpage_pmd_nr);
- 
-+	parse_test_type(argc, argv);
++	struct kmod_btfs_nonexist *kmod_btfs_nonexist_skel;
 +
-+	setbuf(stdout, NULL);
++	kmod_btfs_nonexist_skel = kmod_btfs_nonexist__open_and_load();
++	ASSERT_NULL(kmod_btfs_nonexist_skel, "kmod_btfs_nonexist__open_and_load");
++}
 +
- 	default_settings.khugepaged.max_ptes_none = hpage_pmd_nr - 1;
- 	default_settings.khugepaged.max_ptes_swap = hpage_pmd_nr / 8;
- 	default_settings.khugepaged.max_ptes_shared = hpage_pmd_nr / 2;
-@@ -1300,6 +1395,7 @@ int main(int argc, char **argv)
- 	TEST(collapse_full, khugepaged_context, read_write_file_read_ops);
- 	TEST(collapse_full, khugepaged_context, read_write_file_write_ops);
- 	TEST(collapse_full, khugepaged_context, shmem_ops);
-+	TEST(collapse_full, mthp_khugepaged_context, anon_ops);
- 	TEST(collapse_full, madvise_context, anon_ops);
- 	TEST(collapse_full, madvise_context, read_only_file_ops);
- 	TEST(collapse_full, madvise_context, read_write_file_read_ops);
-@@ -1307,8 +1403,11 @@ int main(int argc, char **argv)
- 	TEST(collapse_full, madvise_context, shmem_ops);
- 
- 	TEST(collapse_empty, khugepaged_context, anon_ops);
-+	TEST(collapse_empty, mthp_khugepaged_context, anon_ops);
- 	TEST(collapse_empty, madvise_context, anon_ops);
- 
-+	TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
++static void kmod_btfs_mix(void)
++{
++	struct kmod_btfs_mix *kmod_btfs_mix_skel;
 +
- 	TEST(collapse_single_pte_entry, khugepaged_context, anon_ops);
- 	TEST(collapse_single_pte_entry, khugepaged_context, read_only_file_ops);
- 	TEST(collapse_single_pte_entry, khugepaged_context, read_write_file_read_ops);
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 687d115e3bd8..d09f9f6a384e 100755
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -410,6 +410,8 @@ CATEGORY="thp" run_test ./khugepaged all:shmem
- 
- CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
- 
-+CATEGORY="thp" run_test ./khugepaged -c 4 mthp_khugepaged:anon
++	kmod_btfs_mix_skel = kmod_btfs_mix__open_and_load();
++	if (!ASSERT_OK_PTR(kmod_btfs_mix_skel, "kmod_btfs_mix__open_and_load"))
++		return;
 +
- # Try to create XFS if not provided
- if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
-     if test_selected "thp"; then
++	kmod_btfs_mix__destroy(kmod_btfs_mix_skel);
++}
++
++void test_kmod_btfs(void)
++{
++	if (test__start_subtest("kmod_btfs_pass"))
++		kmod_btfs_pass();
++
++	if (test__start_subtest("kmod_btfs_nonexist"))
++		kmod_btfs_nonexist();
++
++	if (test__start_subtest("kmod_btfs_mix"))
++		kmod_btfs_mix();
++}
+diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs.c b/tools/testing/selftests/bpf/progs/kmod_btfs.c
+new file mode 100644
+index 000000000000..8b986bc2e9ff
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kmod_btfs.c
+@@ -0,0 +1,14 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++SEC("fexit/bpf_testmod_loop_test")
++int test_kmod_btfs(void *ctx)
++{
++	return 0;
++}
++
++DEFINE_KMOD_BTFS(_needed_kmods) = { "bpf_testmod" };
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c b/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
+new file mode 100644
+index 000000000000..f445cf56ab16
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
+@@ -0,0 +1,15 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++SEC("fexit/bpf_testmod_loop_test")
++int test_kmod_btfs_mix(void *ctx)
++{
++	return 0;
++}
++
++/* mix of duplicated and unneeded modules */
++DEFINE_KMOD_BTFS(_needed_kmods) = { "bpf_testmod", "bpf_testmod", "bpf_test_no_cfi" };
++
++char _license[] SEC("license") = "GPL";
+diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
+new file mode 100644
+index 000000000000..431e3273821b
+--- /dev/null
++++ b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
+@@ -0,0 +1,17 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <vmlinux.h>
++#include <bpf/bpf_helpers.h>
++
++SEC("fexit/bpf_testmod_loop_test")
++int test_kmod_btfs_nonexist(void *ctx)
++{
++	return 0;
++}
++
++/* This should fail to load, because .kmod_btfs does not contain
++ * the needed module 'bpf_testmod'.
++ */
++DEFINE_KMOD_BTFS(_needed_kmods) = { "module_nonexist" };
++
++char _license[] SEC("license") = "GPL";
 -- 
-2.47.3
+2.34.1
 
