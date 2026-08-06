@@ -1,180 +1,111 @@
-Received: from mail-pf1-f176.google.com (mail-pf1-f176.google.com [209.85.210.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-98.freemail.mail.aliyun.com (out30-98.freemail.mail.aliyun.com [115.124.30.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77DF643847D
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 10:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A52462BD022;
+	Thu,  6 Aug 2026 10:30:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786011171; cv=none; b=jKJH9y7VPeZOtxIaGNczaY4WIbI5hEuQyWE8Zl5Wib55WG62zp09oNkD0XsHpcVTo6U9OUoiwv5W5BrZgwhPVyOXEaPQ2sQVz6PscMvSI16/3xeHMnvljmTyzv5UR49pZ9wGLhAWT0bIxK87Mqb7l1PFM4kT5gtNTjFUMQAzlhU=
+	t=1786012245; cv=none; b=B1o/v4AlmMR87/NmwDV1/da9C8BaA7oshRiZoY6zW66V1EcrcNv3OlZtc9svhcWHTvVo2As2LYLRKwy6IfsUkFV+VJ2tCqrn0cKLvD8pXfw7IAl69YUQFW+qDDlHod2A8yBiHal06vvQbIdDJ4nbfKOIxGGQMRHXJyfdAcal2xQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786011171; c=relaxed/simple;
-	bh=VrzyduWAQBp2atZUJGEwneCO6VgDa36h9AzGxsS+y70=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TNsMf31pR76EMy5gLLn7n8ZEnv4atY3lH5On2sk6tvXz9oS7d2+O5HY5LvTE240J7Ztk/9QckfEJwzth3lGyPh3hsdbmR+dg8mPWvG2F11qc3ZMbXwBhdW0K0UQPV0507kzkJY6+EnB/GPUWR8sD4DBCOiEo9TWBWwvWV5J4qc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LXjH1Zid; arc=none smtp.client-ip=209.85.210.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786012245; c=relaxed/simple;
+	bh=oAv50T8xwff7UHt0lxGZW6rlXPJ54zctMsKzlERzAgw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VaAARzg/Zsb2fK4gV6IvEC4pDu7S/piHCm3rHhKSsXiSFW1M1v2BGYZUzPW04smcEW+6FK4BWiUWl3Zj/pRcw2CKEJfbUq46jsuWxa+j7KbkLyu+xrmJiMyA5//odj1TjkANKOKWdsR9dK3rHLFKXVr/EITH/z8bFwwKLGkC5cI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=x454Pjnm; arc=none smtp.client-ip=115.124.30.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LXjH1Zid"
-Received: by mail-pf1-f176.google.com with SMTP id d2e1a72fcca58-8486672f03cso2447534b3a.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 03:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786011170; x=1786615970; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=A5pZPZKOV8wB+qQsGx++/PxBsNUpy69jm91FCX96JKg=;
-        b=LXjH1ZidmOFQfXJ6UmjVjmp+UbeyaPQNdSV5MvvDJNFi61sXGaYUBZcJNtEJlxFmk+
-         bCKRGMOohajw9cjvvuUN9wT5ivqH8D4cloa9FtZNFuam5f23Z09DO3eMN0mXGZw7NzSw
-         MleWkPIcR6p4C2n/JArNJ9m9E7ZuzIiGybWn108EY/9PwinhlaUXGjmwaN2YWMqZyUhV
-         G6RoH6D7wYL8gWMSYbjposUJjZDXu2weADuaopn/G7mUaqHYJ027h76wiPgFmakG1N05
-         z22zU8e/XsRb2CALqAO/MZe34ZV/hYXwTLviz2fuL/qSbNFMvoF7G97j5HBkMd4ro9bs
-         Y8gw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786011170; x=1786615970;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=A5pZPZKOV8wB+qQsGx++/PxBsNUpy69jm91FCX96JKg=;
-        b=VGoviUl0TguuuyiIWM1L0a0gt0XAvJxT0uxUMnPbDNBz+Y0WaTaPrG4vR1GCiqlaIN
-         wRBEQJEygq2uzE5ZZosM9KdQ9L3+vz/aQTmSWc+Yw0xMlcNZxuFrsJksd2IQlh5LYH1w
-         Mlw/ix1dN4yySUzZI7y21mHlpUmIfiavsZRwQi3gZDsmuVYFBI9zXzNbYap2WmRY6hZl
-         V5VaWsMdk818bxeqZ4YGv3ul7KZTV0vgM7c1TUiDtIKfq5ZHfjoZ46lLJCl9SKfaUdUR
-         UHVDOgbkbXkIj66Hyb7tK8+KeF37ZCwyuf6hWSY3fFUq9ihWaTFVzhvbSNLy6v+36FdC
-         EUgw==
-X-Forwarded-Encrypted: i=1; AHgh+RquCqyql3YpJgxUyGsMqYXavH+sdRbsYZ5MjROK9m/CMjySuuuo6ooL3RRy07vseM8Ql0vb5BPcN5uWe6wPw2U=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxsVKr945dRluBo9CJ8Ajw6nKqP9NvsTcb45YmuFjOzrGS1vCpH
-	pzNQCXfBQ2b6ljbzOGUh31BG+uwzsE3UZij+3V/7NuyAje98Pa/kiUr+
-X-Gm-Gg: AR+sD10a6ZPXoiXhVVPpo2bIqrWVN3zxvXYhPE38L8iLmYiRVO2QQD7PyHI2le8hzRo
-	YhfmA3t+4s3nTJALUNIQJCXGRT0QtHmPcZ7cpvo0sVzURzQ0PFIWe8orH4mXysVk0z2WrDIRkL3
-	slOj5gNEE5DpXJCn7DN3Dp0Tpgh9R5MI+mliXtyEn60PlV3BNp19yddXSGSQN5DVf5zTkBicWXu
-	P0mgKOsi5t/reWGCd7LF+cb0oIz6WJ+b1ySUPQ2VN0moxTg57NPWW5rBvMmhxvbBCndaHxHv+Ox
-	YZDim+cVQnSQdI+V5uQGE3GwGsGwgqFiRPJqAZN1KWffieumKXfMLGMk55DhYb2Lc+LQEWyaI40
-	vZ7IKXqxMFoF8dfEpfL3DB4cgGOFKpJ1yStKoDbteFXVeoxoTJq4pVs8aoigPJDnzccCMkcx1mO
-	wsQcpAUl8DhCKH7dWD5qF0LXlOQht8QAImgLhD2dXfSZHvTMbLsFgwys3chtLB9QPK7AWXpeaGT
-	WKKAvpicm42odXgKTv7kY6Ayt1QpVZcwkvFjglK0XvTTLBwKQ==
-X-Received: by 2002:a05:6a00:4294:b0:83e:b443:965e with SMTP id d2e1a72fcca58-84f2dfc5413mr15446711b3a.3.1786011169755;
-        Thu, 06 Aug 2026 03:12:49 -0700 (PDT)
-Received: from BOOK-P74QMIQ7E8.localdomain ([220.73.18.179])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f45bc9cffsm1090371b3a.59.2026.08.06.03.12.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 03:12:49 -0700 (PDT)
-From: Hyunjung Ko <hj351016@gmail.com>
-To: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Tao Liu <taoliu828@163.com>
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hyunjung Ko <hj351016@gmail.com>
-Subject: [PATCH net v2 2/2] selftests: tc-testing: add act_ct test for malformed header handling
-Date: Thu,  6 Aug 2026 19:12:35 +0900
-Message-Id: <20260806101235.809370-2-hj351016@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260806101235.809370-1-hj351016@gmail.com>
-References: <20260806101235.809370-1-hj351016@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="x454Pjnm"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786012229; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=Eq6flyfzd4bdwnbjtjvmyFpLtE3ryk+Zs3DvD7iNvRQ=;
+	b=x454PjnmHUTRBCSFmULHgVgyi3jJWH8oAI3WU1p8Wg2BESIjW5kUT15O6m2jYokhcX2JwRKXWyBCe6OU71U8smf5NZgcEROZEstFw4TfrRj/smjhW1kFHJmjEHKJeX/gODlvnmU+SlXQbKWaUS5RJdOHP0LqSHYMRE2vLdkMds4=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037033178;MF=yaoyuan@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X8TiMfa_1786012228;
+Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0X8TiMfa_1786012228 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Aug 2026 18:30:29 +0800
+Date: Thu, 6 Aug 2026 18:30:28 +0800
+From: Yao Yuan <yaoyuan@linux.alibaba.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
+	Oliver Upton <oupton@kernel.org>, Peter Maydell <peter.maydell@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 05/14] KVM: arm64: Set PSTATE.EXLOCK when entering an
+ exception
+Message-ID: <cftn7d77lbuaby6hkkkxvcryl2ktnpkbda75dmnqhy2k7gcb6m@f7sy5flqka5d>
+References: <20260803-arm64-gcs-v18-0-fd8c40f5ad88@kernel.org>
+ <20260803-arm64-gcs-v18-5-fd8c40f5ad88@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260803-arm64-gcs-v18-5-fd8c40f5ad88@kernel.org>
 
-Add a tdc case covering the leak fixed by the previous patch.
+On Mon, Aug 03, 2026 at 11:56:50PM +0800, Mark Brown wrote:
+> As per DDI 0487 R_WTXBY we need to manage PSTATE.EXLOCK when entering an
+> exception, when the exception is entered from a lower EL the bit is cleared
+> while if entering from the same EL it is set to GCSCR_ELx.EXLOCKEN.
+> Implement this behaviour in enter_exception64().
+...
+> +static unsigned long compute_exlock(struct kvm_vcpu *vcpu,
+> +				    unsigned long mode,
+> +				    unsigned long target_mode)
+> +{
+> +	u64 gcscr;
+> +
+> +	if (!kvm_has_gcs(kern_hyp_va(vcpu->kvm)))
+> +		return 0;
+> +
+> +	/* GCS can't be enabled for 32 bit */
+> +	if (mode & PSR_MODE32_BIT)
+> +		return 0;
+> +
+> +	/* When taking an exception to a higher EL EXLOCK is cleared. */
+> +	if ((mode | PSR_MODE_THREAD_BIT) != target_mode)
+> +		return 0;
 
-The test attaches "action ct" to a clsact ingress chain and injects ten
-IPv6 frames whose nexthdr says hop-by-hop but which carry nothing after
-the 40-byte header, so ipv6_find_hdr() fails and
-tcf_ct_ipv6_is_fragment() returns -EPROTO.
+Reviewed-by: Yuan Yao <yaoyuan@linux.alibaba.com>
 
-Before the fix act_ct returned TC_ACT_CONSUMED for these packets, so
-tc_run() never reached its TC_ACT_SHOT arm and the clsact drop counter
-stayed at zero while the skbs leaked. After the fix the packets are
-dropped properly and the counter reflects them, which is what the test
-matches on:
-
-  before:  Sent 476 bytes 11 pkt (dropped 0, overlimits 0 requeues 0)
-  after:   Sent 400 bytes 10 pkt (dropped 10, overlimits 0 requeues 0)
-
-Assisted-by: Anthropic-Claude-Code:Claude-Opus-5
-Signed-off-by: Hyunjung Ko <hj351016@gmail.com>
----
-
- .../selftests/tc-testing/tc-tests/actions/ct.json  | 40 ++++++++++++++++++++++
- 1 file changed, 40 insertions(+)
-
-New in v2, requested by Jamal.
-
-Caveat on how far I verified it: I do not have a scapy-capable tdc
-environment set up, so I have not run tdc.py over this case itself.
-What I did run, on both an unpatched and a patched v7.2-rc6 under
-qemu, is exactly what the case does - clsact ingress plus "matchall
-action ct" on a veth pair, ten of the same malformed frames injected
-on the peer, then "tc -s qdisc show dev <dev> clsact":
-
-  unpatched:  Sent 476 bytes 11 pkt (dropped 0, overlimits 0 requeues 0)
-  patched:    Sent 400 bytes 10 pkt (dropped 10, overlimits 0 requeues 0)
-
-so the matchPattern does discriminate. The JSON itself is modelled on
-the existing scapy cases in the same file (3992, 9c2a). A run through
-tdc.py proper before this is applied would be welcome.
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json b/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
-index da65f838bd52..8ab48def89b6 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/actions/ct.json
-@@ -702,5 +702,45 @@
-             "$TC qdisc del dev $DUMMY clsact",
-             "$TC qdisc del dev $DUMMY root handle 1:"
-         ]
-+    },
-+    {
-+        "id": "c7a3",
-+        "name": "Verify act_ct drops a packet whose header checks fail",
-+        "category": [
-+            "actions",
-+            "ct",
-+            "scapy"
-+        ],
-+        "plugins": {
-+            "requires": [
-+                "nsPlugin",
-+                "scapyPlugin"
-+            ]
-+        },
-+        "setup": [
-+            [
-+                "$TC qdisc del dev $DEV1 clsact",
-+                0,
-+                1,
-+                2,
-+                255
-+            ],
-+            "$TC qdisc add dev $DEV1 clsact"
-+        ],
-+        "cmdUnderTest": "$TC filter add dev $DEV1 ingress protocol all prio 1 matchall action ct",
-+        "scapy": [
-+            {
-+                "iface": "$DEV0",
-+                "count": 10,
-+                "packet": "Ether(type=0x86dd)/IPv6(nh=0, plen=0, src='::1', dst='::2')"
-+            }
-+        ],
-+        "expExitCode": "0",
-+        "verifyCmd": "$TC -s qdisc show dev $DEV1 clsact",
-+        "matchPattern": "dropped 10",
-+        "matchCount": "1",
-+        "teardown": [
-+            "$TC qdisc del dev $DEV1 clsact"
-+        ]
-     }
- ]
---
-2.43.0
+> +
+> +	/*
+> +	 * When taking an exception to the same EL EXLOCK is set to
+> +	 * the effective value of GCSR_ELx.EXLOCKEN.
+> +	 */
+> +	if (is_hyp_ctxt(vcpu))
+> +		gcscr = __vcpu_read_sys_reg(vcpu, GCSCR_EL2);
+> +	else
+> +		gcscr = __vcpu_read_sys_reg(vcpu, GCSCR_EL1);
+> +
+> +	if (gcscr & GCSCR_ELx_EXLOCKEN)
+> +		return PSR_EXLOCK_BIT;
+> +
+> +	return 0;
+> +}
+> +
+>  /*
+>   * This performs the exception entry at a given EL (@target_mode), stashing PC
+>   * and PSTATE into ELR and SPSR respectively, and compute the new PC/PSTATE.
+> @@ -154,6 +186,11 @@ static void enter_exception64(struct kvm_vcpu *vcpu, unsigned long target_mode,
+>  	// PSTATE.BTYPE is set to zero upon any exception to AArch64
+>  	// See ARM DDI 0487E.a, pages D1-2293 to D1-2294.
+>
+> +	// PSTATE.EXLOCK is set to 0 upon any exception to a higher
+> +	// EL, or to GCSCR_ELx.EXLOCKEN for an exception to the same
+> +	// exception level.  See ARM DDI 0487 R_WTXBY.
+> +	new |= compute_exlock(vcpu, mode, target_mode);
+> +
+>  	new |= PSR_D_BIT;
+>  	new |= PSR_A_BIT;
+>  	new |= PSR_I_BIT;
+>
+> --
+> 2.47.3
+>
