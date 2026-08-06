@@ -1,177 +1,86 @@
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3714363C77
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 16:33:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3233D345CBF;
+	Thu,  6 Aug 2026 16:36:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786034006; cv=none; b=sdatvUcxErEkt/rZj+x9ZWRaoPttDVb3LsmNBKGUT/dZZgkNKtfhGXQZ5qwFrE6FPx4ivlImIqQwnNkQAMS52ip1kspsrRNVpuOi4P4VhySQou5DMchx0bgwNYqyKCwX6GPHVasRg746BYYOwRlOppgtPpU1HmoMX+6uDtpasOQ=
+	t=1786034198; cv=none; b=X2GbjWgWIIkA1+/eIAMjmejyNXrq2oEQaAobsdwJR4vhMYAciHTGS+OfH60Ue6dGkdKk6Wzww51Pmh72aBDbCivJR3uLixEAi9owRsVXa/ePDfxRoFohGauhrPNEeVo1cNF+AXMYaXRlYodTauR3R+kON6kdssD+K0HJv6WF28s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786034006; c=relaxed/simple;
-	bh=i3uyX6cbzovaPp4w1Qii84/2UaXmZJk5Df4imXwwFfI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Q8zyKvjfZO5Y+yoQpXFu/HDhICihY6cO9uIjKA2pv2wkWIt5h1xcsbb9ac/RZomlhe4aQyh0JU+FrNiTIUcaARTY6AxvGcbssft/Mln/eWQgajq5+pr7yu8RtNeBlmEmRlaRAEUjjG3zJQBJZ4CoNbSKBXGh+UupXLMPXJCqt8M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wjRVuh0d; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786034198; c=relaxed/simple;
+	bh=sRdRPD8g3aRqE7KOzs3ztuYv8xFcGuz+Rx+4mNl0k5c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dselPfa6WX1nY9L7BZY90Xm+DDuuCSkEu1tGDKD1LAGbz/CjcakoJhqpTRczeJN5fkjcDB43YStffXRKFS0fdBY/IxzV4igJTzpI571N0Zr7c6utIInctb+QiY/ywb+sNyLofEvleKeISiZHOf72CDLmAZzjlfsBjf1Np1nPgOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2tNMIwE; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wjRVuh0d"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786034002;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=01/KKGQN1pRCjT8ifmm+BwGyoJjIbb2a0e5ACArQx18=;
-	b=wjRVuh0dNNFe9EHN9BZaHH1VkIXC3mpNW/GFD0SNyM2VsOzHStpZ81InBG8Xk0vCxYIHFy
-	wgeRMRw1xlKA+AEK3+shYkEVo4kOZ7y3TEejL+zTsib0RTrLeaoEDRUDvQEX2r+Xog0QPO
-	uQUws5w0AfVYAhwKwbUDSSBizMRAgR0=
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v11 10/10] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Fri,  7 Aug 2026 00:31:25 +0800
-Message-ID: <20260806163125.11172-11-leon.hwang@linux.dev>
-In-Reply-To: <20260806163125.11172-1-leon.hwang@linux.dev>
-References: <20260806163125.11172-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2tNMIwE"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 276711F000E9;
+	Thu,  6 Aug 2026 16:36:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786034196;
+	bh=dYgTROmA3S9YYxoIX0RnvvNWtlrrmgkIbAsRfNBVPWk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=W2tNMIwEAfNCTwDDnhL0AFQucPE5sv85OfGCC5ymuYtjo8GULNbbUz0sRypf8w/Hb
+	 2wUIU99yWex7ZwO/wqqjm1+lQxJtFRF9cn/XlibJHtYd7gQqvN61fC9TBx8cFl8Ejy
+	 Nb+/TZJ6cpRATbqWrcXFyTG171V8vI1eb6kTf90x3qJ73U68vo7ffd+ip0vQW/U83+
+	 2Jj+qC6v4Y3zYwtkBToz2v49qwTjn92dDszm0ferAxlrCm1IpXR0ONxCXUJjoEKeNx
+	 P6VXwozmDt/s27fPNPoEgrGIAZ+8pR7V+eQjbm+SxK+DYsuaKWjaQF6jZxOO+L38qU
+	 KMaDmaySwmZag==
+Message-ID: <956a07d1-8f70-4376-9505-623db0223479@kernel.org>
+Date: Thu, 6 Aug 2026 09:36:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/17] riscv: Maintain epc on misaligned emulation
+ error
+To: Nam Cao <namcao@linutronix.de>,
+ Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Alexandre Ghiti <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>,
+ Atish Patra <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>,
+ Paolo Bonzini <pbonzini@redhat.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ =?UTF-8?B?UmFkaW0gS3LEjW3DocWZ?= <radim.krcmar@oss.qualcomm.com>,
+ Jesse Taube <jtaubepe@redhat.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, Damien Le Moal <damien.lemoal@wdc.com>
+References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
+ <20260707-riscv_insn_table-v3-7-3f8e5f75ba97@gmail.com>
+ <87cxvvd4o4.fsf@yellow.woof>
+From: Damien Le Moal <dlemoal@kernel.org>
+Content-Language: en-US
+Organization: Western Digital Research
+In-Reply-To: <87cxvvd4o4.fsf@yellow.woof>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On 2026/08/06 1:38, Nam Cao wrote:
+> Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
+>> Currently the epc is set to zero when there is a misaligned emulation
+>> error. This will print a misleading error message with the current epc
+>> value of zero instead of the epc value that triggered the emulation.
+>> Avoid setting epc to zero to maintain the state of epc.
+>>
+>> Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> 
+> I see no reason why epc must be set to zero, so:
+> Reviewed-by: Nam Cao <namcao@linutronix.de>
+> 
+> But to be sure, I add to CC: Damien Le Moal <damien.lemoal@wdc.com>
+> 
+> Damien, any reason that epc must be cleared?
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+It has been a while since I touched this, and frankly, I do not remember at all.
+As the original commit 956d705dd279f says: Code heavily inspired from the
+OpenSBI project. So I may have copied this without thinking too much. That's
+likely Anup's code, so maybe Anup can weight in here.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 91f6ec07ba85..2625651b34c7 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -301,6 +301,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -317,4 +367,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 202cb9e8375b..a9443fb2050e 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -60,4 +60,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
+
 -- 
-2.55.0
-
+Damien Le Moal
+Western Digital Research
