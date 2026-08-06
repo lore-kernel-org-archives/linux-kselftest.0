@@ -1,103 +1,89 @@
-Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D547A3F825A;
-	Thu,  6 Aug 2026 11:47:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F2EA40A940;
+	Thu,  6 Aug 2026 11:58:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786016835; cv=none; b=ioPxrIoY6jlSi7ugyjobBJssbGPLQex2stj+qRqQ5Ry5VTvZ7dsjVyj5byqxrTMHuHI5QPqVcL57FW6YJs3uyRWwhfQTStOVg2+e5odHjK7TmsyNmCpY8NWd/NIyyz2wLVRjnJKpUI3vxELh+vSXnKHwZ+in+4ksQodXL7W3gNQ=
+	t=1786017525; cv=none; b=XGP//eb1gj+3FPIVyuRDZI4sAMdO1IEHwRSh9atKdsor6yNoIEo07UasQB+YbJkCi228nVGbeOAz+QykPB42cXN9sJ8JNqKrb0xctpzKsea7ukCDrhxOLKw39HQfDefu3bZmQtShErGxmc3KzAIj1mRH/+nizMXJQwmaxL4KFig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786016835; c=relaxed/simple;
-	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=eXuHAvMJ/67g6G8QJ/9GHoYZulRpAhIZwJhNfrwESS4YR+w9GTquUgRxDPIFmAiBpTvlVH5SIse/7Mk/t/8JfDouOlzo7Lk80IiKpihEqIz1t2BSTvOftqMstw22AgO7kENe/ZRLWGS+aC7Dmg/JKy0zAhh4VNGQ2dHPNKYKJsw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=lljNPPOj; arc=none smtp.client-ip=113.46.200.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1786017525; c=relaxed/simple;
+	bh=Iz+bElwmgovz6NBcmEner0w7gj5r5eUppgbit8V/urM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fm7s8qyXaXSqmtv2eRQwvQUBMl5Zj5LXaTwKgGZN9wokJOTaHMPI/UT/PIvBsPCX3jqw3i9DZYKr5vtJAAEzF28qFqBTIMLUeTvrEPjhJDkC54T8zZijQinVoCTG9NIVJDJd8b1JDOWyiOdF2LS1csUJyxV11EDUoTvmhgfvW9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KOJXKEpY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="lljNPPOj"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=fdc5I/dA1nqBQdw+Khjbswi+ogkkUJq35gfyiNviWk0=;
-	b=lljNPPOjwihvLNXNkomfvwIJ2aT3JrR9zX4iO8JmLfCfs0AeVhfIggM5EeYG8gkCXpB95R1el
-	OsDybiQqwDZkG2zcdM8/ashc+PW1MY24PXpCpj1HY7ceD0yXtZJR/vB22qDeVkzbBGWCCiDwvon
-	Kloe7IEbytFWhvXDfL6Ns1A=
-Received: from mail.maildlp.com (unknown [172.19.163.200])
-	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hG4yL5yJSzLlTg;
-	Thu,  6 Aug 2026 19:37:30 +0800 (CST)
-Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
-	by mail.maildlp.com (Postfix) with ESMTPS id D2D2A4055B;
-	Thu,  6 Aug 2026 19:47:02 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 6 Aug 2026 19:47:01 +0800
-Message-ID: <169d0d62-2296-476f-95f9-5916d777090e@huawei.com>
-Date: Thu, 6 Aug 2026 19:47:00 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KOJXKEpY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78FA81F000E9;
+	Thu,  6 Aug 2026 11:58:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786017524;
+	bh=PipOiU3WDi/ShqcfhWwddc2/xW9Ic+f6bHEQmclKRiA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=KOJXKEpYVV95XhacNsHdG5GB19/T7i6BhFc7ZR3q1IC6p3XOB4VgOcow9bUabrHWP
+	 +Zf6HUkvX1sjH/s2efi48HmNIZJ0Q7KxqeIVB6X3EFQHhkWA8Vx7WmbsfZHIz1t73x
+	 H/zCocTWlmFTDzLgtIcI2HL8ETBQGs2znXSMLx6aEb/Gb2WJ7FHMMi8aHRxK6lTLN4
+	 ywxkPNDqwjLo0heK02XtDD1SRqsawWLPhjXhy5ylt8WwtYTwY0MH/zvo9zmyAbY6U+
+	 Ge9t+fRR7bJnW1kG1inKbdPKsd/ZQW9olH6diK1eVNuqeB+BwLVdNseyGTH0Ldu+6L
+	 CdARooEV/JIZQ==
+Date: Thu, 6 Aug 2026 12:58:39 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Jinjie Ruan <ruanjinjie@huawei.com>
+Cc: catalin.marinas@arm.com, will@kernel.org, shuah@kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kselftest@vger.kernel.org, Aishwarya.TCV@arm.com
+Subject: Re: [PATCH v3 1/2] kselftest/arm64: Add seccomp ptrace x0 bypass test
+Message-ID: <d37ac12d-1e19-4711-add5-6f3cf82f48ac@sirena.org.uk>
+References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
+ <20260728021122.2640104-2-ruanjinjie@huawei.com>
+ <a9ef63ac-6012-4788-8fd7-5902b6448484@sirena.org.uk>
+ <bd1db584-ce6b-46b5-ab66-11fb7873007b@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>
-Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
- the RX path
-To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
-	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
-	<virtualization@lists.linux.dev>, <mst@redhat.com>,
-	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
-	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
-	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
-	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
-	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
-	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
-	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
-	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
-	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems200002.china.huawei.com (7.221.188.68) To
- kwepemo500018.china.huawei.com (7.202.195.199)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="9kq+jgVm4G0pwUVj"
+Content-Disposition: inline
+In-Reply-To: <bd1db584-ce6b-46b5-ab66-11fb7873007b@huawei.com>
+X-Cookie: Brain fried -- Core dumped
 
 
-on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->
-> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
-> segment with the CWR flag set is received. This is incorrect because
-> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
-> aggregation. Consequently, no valid ECN signals are carreid, meaning
-> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
-> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
-> the upper network stack.
->
-> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
-> in hns3_gro_complete().
->
-> Fixes: d474d88f88261 ("net: hns3: add hns3_gro_complete for HW GRO process")
+--9kq+jgVm4G0pwUVj
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-One note:
-since this patch fixes a bug (incorrect SKB_GSO_TCP_ECN flag set in hns3_gro_complete),
-it should target net instead of net-next.
+On Thu, Aug 06, 2026 at 04:22:31PM +0800, Jinjie Ruan wrote:
+> =E5=9C=A8 2026/8/5 23:04, Mark Brown =E5=86=99=E9=81=93:
+> > On Tue, Jul 28, 2026 at 10:11:21AM +0800, Jinjie Ruan wrote:
 
-I'm running HW tests on hns3 to verify the fix. Will share results
-based on what I observe.
+> > The relevant definitions ought to be being picked up from here, there's
+> > a copy of a current version in tools/include and has been for a while
+> > (since at least v6.18) but there's no Makefile update to ensure that
+> > gets picked up.
 
-Thanks,
-Jijie Shao
+> Will add -I$(top_srcdir)/tools/include to CFLAGS for this test.
 
+It turns out that's actually getting pulled in already - the issue is
+that linux/filter.h doesn't include uapi/linux/filter.h and the
+definition is in the uapi header.  I sent a fix for this yesterday.
 
+--9kq+jgVm4G0pwUVj
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
 
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmp0du8ACgkQJNaLcl1U
+h9AvDwf/fQZl+XgNBHgNp8Whb+LhD5qXRzfbnZn8Rj+a1RP0C6qrKxHB0clVOlWg
+UDkOIK3qALyXI2VivsHf3CLJPVVD9vGRnqvYe3ZFH88KcHsQGvsKYjo3OB50Iw3u
+4sqjREgnWhdVBWQIbUDudgV5o71l7EDuzCqEo9t7cnbYdcOwMVITaqMp1p6hzWIi
+LyvcB4XiayAsGcUIFjOQctHLVpfOxleL0JAGSTeHEqMWjDLtJfuebUUqvK29hT6I
+RUIdoxwdtivcwZN9hWUN56+1sJKFWFZbn+w6qY00iIy6drwLKafX78E5CgUyUcyc
+qLov6Jd+xvES3sJpZ4MaV6p4X84mgQ==
+=dtmO
+-----END PGP SIGNATURE-----
 
-
+--9kq+jgVm4G0pwUVj--
