@@ -1,93 +1,116 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 422BD31352B;
-	Thu,  6 Aug 2026 07:09:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0E63DD862;
+	Thu,  6 Aug 2026 07:52:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786000194; cv=none; b=LFFIPwIKWHwXbW8d2+XDcOwl4XiJ1rRzNt3Y2x8K0L7DP2c8LYm1HbKC/cbWZ3HrjfStu44xLVOBhVZc4sL2ktBf+AaG/PkT5D3FHDHdU1gmSMm1wO7shg8vQZD34tDzpD3Js/NcjFkb2sTunEshsO+SVBaglLSmUQIUMAwEuSE=
+	t=1786002742; cv=none; b=hsdJ433Cda/Fks8TUrsuf9X4Au9jifx2s90uVSJ8j8ph+7vPz2Qpd5NHuamRQFpBXcD1MEGKYGnxT+rWNLmXQqS/MMKuzYv4ttqmNbtSvxpgqMbPW4JYlZJpuPSoLXlgD1Yn1Bbr/qEzW7hysSJ2BYmKlahw9ctsGRFh/XqkRWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786000194; c=relaxed/simple;
-	bh=SA1dDGK1hMCaPxy1+vkgdXJOHpv3pEn/RgU7VJg7WnM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=RZwV+DtLxvm+f0U+LJb/swY58k6q+RGlycSX4+N/yHvbLyswLrmoBw7ugZ9JKBUcYJE0OR+y1Zzr90B/mQ1TH/auRk5uybneRNKavzQudHV5EzOok0S0dOgm7Z2o/PdhSS0YXNwNmV5iQ3UjdyA30GOJXzQ2TNEYSW61QCAwmjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oy/uxERE; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=bwtbJhpx; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1786002742; c=relaxed/simple;
+	bh=cyJjygUTcWoAmU+IN9viNm1qaL3IAsUPuxkfMeZHQ5I=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=EgGUciDxhkv78OFnK2qPK5Pr7ThBUwpy+w7Lbn4eYj6NLTHWh8nEZ3iro6qMzJ5SMkaN/fjnVGJlFvCW966m+qbvAZ5g1iSQl07Mw1AP7pHbNJYhtCTTjTfmRe7HWcLAsy4sLg4hQkJy+ajfikP88CHnDVE+DZAj/KyU1ZPkaM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=d4XI3hJJ; arc=none smtp.client-ip=220.197.31.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oy/uxERE";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="bwtbJhpx"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1786000190;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eMT4S1LkWt8Ik0+XZRVYI9d+h5TnrJVOqIGCgTgfYIs=;
-	b=oy/uxERExhL2WaAwWd/K4RgtnvN0AEg7Hn6/85XUvPfoyLwYN+HaaO4X4und2xDRys+BBU
-	MpBH0BaoZFoyEbNcnHB189Mh8a2kPnIWAq30qF/8Ie9HBs+EGNLZWlzk+vEVMoNR8m+kAa
-	6IsNmonvA0YcReWDC+MwoXW6UqZFGq38AbM5YvUEoAgYZDQqIoMkhf8OkVUSq9Kj6Tfxyg
-	zBMcceT5pUQcKbaOdb7XxAdm3Fp+3/K99p5MSm0VqvkGW+2O3YevJLnrIwH77x4wYceT9S
-	Han6Wz9QBij6Fwpb5P/HGP2E3FqjgBJwlUBlyViDqC5XvJdAMDXEzQYsw2wFaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1786000190;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eMT4S1LkWt8Ik0+XZRVYI9d+h5TnrJVOqIGCgTgfYIs=;
-	b=bwtbJhpx1H17PQArbXdA2T8ILJ7epNL6NyKp17SWMYNcd47jKpDMPD0hISSHG0iOqz1J9X
-	uuvpwRmzWve4/8AQ==
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, Radim =?utf-8?B?S3LEjW3DocWZ?=
- <radim.krcmar@oss.qualcomm.com>,
- Jesse Taube <jtaubepe@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Charlie Jenkins
- <thecharlesjenkins@gmail.com>
-Subject: Re: [PATCH v3 03/17] riscv: kgdb: Use generated instruction headers
-In-Reply-To: <20260707-riscv_insn_table-v3-3-3f8e5f75ba97@gmail.com>
-References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
- <20260707-riscv_insn_table-v3-3-3f8e5f75ba97@gmail.com>
-Date: Thu, 06 Aug 2026 09:09:50 +0200
-Message-ID: <87o6ffd8sh.fsf@yellow.woof>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="d4XI3hJJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Ed
+	6WxXmO/sQLzhZwOEPID5bXGk+YxYWCDlW+DllF+Ek=; b=d4XI3hJJmfIk1BpSvM
+	xLEGiezfYXIPz+czvfQbGVMikoJeRJK/ARkqguEYJU702qTZRJY6YxmAZWIsDac4
+	/sTrb5VelO11TaP9eZOaT9VBcTayx+aLT02VT1Tgr4HmTHCug3w55XxaZXBuwef8
+	Q+NFA/zQ5xOlvTBQXXwrdRCc8=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wB3wVTePHRqYcLgMA--.151S2;
+	Thu, 06 Aug 2026 15:50:58 +0800 (CST)
+From: Qingshuang Fu <fffsqian@163.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	davem@davemloft.net,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Qingshuang Fu <fffsqian@163.com>
+Subject: [PATCH] selftests: netfilter: Remove unused variables in conntrack_dump_flush
+Date: Thu,  6 Aug 2026 15:50:52 +0800
+Message-Id: <20260806075052.1934904-1-fffsqian@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wB3wVTePHRqYcLgMA--.151S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw47Zr43WFy7Gr4DZr1fWFg_yoW8uF4Dp3
+	WrKw15Jr4xtFW3uw4kCa15AFySqrZIkw1xuF1UC3s3Xwsxtr97WFWfKFyUC3W5ArWvgr4f
+	CFyj9r4jvanxAaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piuT5PUUUUU=
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwgL+yWp0POJDIAAA3U
 
-Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
-> +#define riscv_insn_branch(_insn, regs_ptr, _opcode, _pc, _comparison, type)     \
-> +	({                                                                      \
-> +		unsigned long _ret;                                             \
-> +		if ((type)riscv_insn_reg_get_val(                               \
-> +			    regs_ptr,                                           \
-> +			    riscv_insn_##_insn##_extract_xs1(_opcode))          \
-> +			    _comparison(type) riscv_insn_reg_get_val(           \
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-That _comparison(type) looks like _comparison is a function and type is
-its argument.
+The variables 'rplnlh' in conntrack_data_insert() and 'rplnlh' together
+with 'nest' in conntracK_count_zone() and conntrack_flush_zone() were
+declared but never used since they were introduced.
 
-Can we change to
-    _comparison (type)riscv_insn_reg_get_val(
-to make it clearer?
+Similarly, commit 76342e842587 ("selftests: netfilter: remove unused
+parameter") removed the unused 'err' variable from these functions but
+overlooked the remaining unused 'rplnlh' and 'nest' variables.  Remove
+them to clean up the code.
 
->  		} else if (riscv_insn_is_c_beqz(op_code)) {
-> -			rs1_num = decode_register_index_short(op_code,
-> -							      RVC_C1_RS1_OPOFF);
-> -			if (!rs1_num || regs_ptr[rs1_num] == 0)
-> -				*next_addr = RVC_EXTRACT_BTYPE_IMM(op_code) + pc;
-> +			rs1_num = riscv_insn_c_beqz_extract_xs1(op_code);
-> +			if (regs_ptr[8 + rs1_num] == 0)
-> +				*next_addr = riscv_insn_c_beqz_extract_imm(op_code) + pc;
+Fixes: eff3c558bb7e ("netfilter: ctnetlink: support filtering by zone")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+ .../testing/selftests/net/netfilter/conntrack_dump_flush.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
 
-Would it make sense to include the +8 part in riscv_insn_c_beqz_extract_xs1()?
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+index 5cecb8a1bc94..c8e4794ec5cb 100644
+--- a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
++++ b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+@@ -102,7 +102,6 @@ static int conntrack_data_insert(struct mnl_socket *sock, struct nlmsghdr *nlh,
+ 				 uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *rplnlh;
+ 	unsigned int portid;
+ 	int ret;
+ 
+@@ -219,9 +218,8 @@ static int count_entries(const struct nlmsghdr *nlh, void *data)
+ static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *nlh, *rplnlh;
++	struct nlmsghdr *nlh;
+ 	struct nfgenmsg *nfh;
+-	struct nlattr *nest;
+ 	unsigned int portid;
+ 	int ret;
+ 
+@@ -266,9 +264,8 @@ static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
+ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *nlh, *rplnlh;
++	struct nlmsghdr *nlh;
+ 	struct nfgenmsg *nfh;
+-	struct nlattr *nest;
+ 	unsigned int portid;
+ 	int ret;
+ 
 
-Nam
+base-commit: 0d839570765118029aa8bf4a95444c6a11aacf85
+-- 
+2.25.1
+
