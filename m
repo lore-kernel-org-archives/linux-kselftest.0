@@ -1,77 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-184.mta0.migadu.com (out-184.mta0.migadu.com [91.218.175.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E92D13E5A0C;
-	Thu,  6 Aug 2026 20:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D8F444236C
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 20:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786048477; cv=none; b=ffcp4ppfwRsDmxenhvFjgu5EyPU7EE2ObJs/XjbubhMZKctXvDueibIllpzvmGCsWrSIze91Yj/taVzmNRWmluUIepfJXnhqSPr8SByYBjBfHl2zCUwUoIWqRxfsy52UQhwVVrom5te6FiEhB1qH2uowcuDgIy+W3sob3kN6p+c=
+	t=1786048570; cv=none; b=jyls78nDOsFyuCNn023UdRs2g31i5+VA8g/divqQxoXKD6oREawK0sremtyL3RSY1kKboSOB8BWU3q/lDZChpXoi/1C6DZ7Dy5tr1pTvIb5bFa58QzWH9EN9KU19qrBljYSzh3Mk0HDqeJI5MH4xdlVEU27A2oRxN2qd5dXUgGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786048477; c=relaxed/simple;
-	bh=VI4ATDwtqPcrSdiXUhO3moE8rQo7xcV++52yJlhnZgM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gj2fHfFzEjxCwxy/0qs5D+tITVtQ++jdh7T4PbV425rmmbiVnOIkRRMkZfRZhUFPtIg+AEmbnbxRVoojiQy9OsYPiUsHT8ose7n/OfE6OliZbRWzeLlNmokVm6AY1PmDIAWD2KaEyWZKevx+j8wxC2iVzlWHjo+UnfJO4iG/Ge0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cNt8EABs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786048570; c=relaxed/simple;
+	bh=HK/stiK0snN20FV/66pU3dzEM8eLuDF2fWmrLeiterc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JQ+owGkLSSfObKhnj1EmFawfLC3mdCWf+K1MyzElA/FUywqNsdu80VQrUbTcE0gpdAxFrH6FyGQMtvRtQIacaO29vH5cqxErFwwDPKMhXN6A342C2PA+lJL/R1WcYep/WTzDubuD/ZiOF7PnaarWKmwfVFw7lFV/O7z5eGRzr2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Mg/hnzxa; arc=none smtp.client-ip=91.218.175.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cNt8EABs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7AFF41F000E9;
-	Thu,  6 Aug 2026 20:34:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786048476;
-	bh=yaEHoymnyFlCJ1/O4dVpG1O047FOhYwcrBZpz9qzpYs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=cNt8EABsFUNh0Ul/KeeYR+ET6A7dV92rdyscj5XsI1dBm8u5g9C9IBC0R/yOQqj6B
-	 YARmX/rk3NBeg0Oc2NUgeQvbgntmMYEaqveROXY+RqVte71OPyQXR1oRBs33ngWzCO
-	 18yQa9rhvJLdZtq4kpxbf/eQIuSOOkgcGmJ+BLCgQm7bJF4CKcEY+36+Ie0Yy5hz6q
-	 fgLlDNcx1/pZf47j1Tm1fzpf2STM3VOBpJ+jooGyNEWjPbwWAzcbYuEdry7R9SGHXn
-	 md48skHegQFOdLWipj0AoRdw/vtuWoXoMsgMm2fAPyxJ9QmUDRdu+xM8QQcZAFdLCl
-	 9xT26bsLc0vaw==
-Date: Thu, 6 Aug 2026 13:34:35 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Mina Almasry <almasrymina@google.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>, "David
- S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo
- Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, Stanislav
- Fomichev <sdf@fomichev.me>, Bobby Eshleman <bobbyeshleman@meta.com>
-Subject: Re: [PATCH net-next v2 1/2] selftests: drv-net: devmem: fix 5-tuple
- flow steering
-Message-ID: <20260806133435.38c34e31@kernel.org>
-In-Reply-To: <CAHS8izP=mgsdxv3AtjJo9JY5OHC17zeX-VbPPH_gFF=Ndb_qjw@mail.gmail.com>
-References: <20260803181852.491437-1-almasrymina@google.com>
-	<20260806121631.13175f7e@kernel.org>
-	<CAHS8izP=mgsdxv3AtjJo9JY5OHC17zeX-VbPPH_gFF=Ndb_qjw@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Mg/hnzxa"
+Message-ID: <de5afc86-fad5-4140-bdde-4da54e92915e@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786048566;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=b2vBzBrgYplXrUdCTZCvF7A2T0H/vOdVAAbIRRJr3k4=;
+	b=Mg/hnzxavZZCaxXr+UblvSj0nmHMMwMvxJPNMTau4vUimsEglXTmEknA3x4jIJj8IjdqZv
+	0pLwoCAZLtjbe5SqBs8x42AzF+Ww/k5jgO+DEo6B6xM85+aS3l4x/GVV0s9pNXGKdNon8o
+	qT8UAVvBsGBaVF+/5vT8A4P/VLzWlCY=
+Date: Thu, 6 Aug 2026 13:35:36 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH 3/3] selftests/bpf: Route test_kmods build artifacts to
+ OUTPUT
+To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260728-selftests-bpf_oot-v1-0-05feb15d94db@marliere.net>
+ <20260728-selftests-bpf_oot-v1-3-05feb15d94db@marliere.net>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <20260728-selftests-bpf_oot-v1-3-05feb15d94db@marliere.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, 6 Aug 2026 13:05:49 -0700 Mina Almasry wrote:
-> Yes the test fails, but it gets past the flow steering configuration problem.
+On 7/28/26 5:06 PM, Ricardo B. MarliÃ¨re (SUSE) wrote:
+> [...]
 > 
-> And in the code, the change looks correct to me. If flow_steer is
-> False, then we don't pass the -c arg to ncdevmem. ncdevmem is written
-> so that if -c is not set, 5-tuple flow steering is not possible (the
-> client side port is random), so it falls back to 3-tuple flow
-> steering, which doesn't work on GVE or any other driver that supports
-> only 5-tuple flow steering.
-> 
-> run_rx (devmem.check_rx test case) doesn't have this problem because
-> it does `flow_steer=not hasattr(cfg, 'netns')`, but run_rx_hds has
-> this problem because it forgets to override flow_steer at all. This
-> patch fixes that.
-> 
-> To be honest while looking at this there were a few weird things. Like
-> I'm not sure why the python arg is named `flow_steer` (it likely
-> should be 5_tuple_flow_steer), and why flow_steer setting is tied to
-> hasattr(cfg, 'netns'), it should be a proprety of the driver you're
-> runing on (unless all in-netns drivers will support 3-tuple flow
-> steering).
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index 7d42632f9d42..b150a66f3c25 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
+> @@ -135,6 +135,9 @@ TEST_PROGS_EXTENDED := \
+>  TEST_KMODS := bpf_testmod.ko bpf_test_no_cfi.ko bpf_test_modorder_x.ko \
+>  	bpf_test_modorder_y.ko bpf_test_rqspinlock.ko
+>  TEST_KMOD_TARGETS = $(addprefix $(OUTPUT)/,$(TEST_KMODS))
+> +# Build directory for kernel modules: routed to $(OUTPUT)/test_kmods when
+> +# OUTPUT is set so that kbuild intermediates stay out of the source tree.
+> +TEST_KMODS_OUTDIR := $(if $(OUTPUT),$(OUTPUT)/test_kmods,test_kmods)
+>  
+>  # Compile but not part of 'make run_tests'
+>  TEST_GEN_PROGS_EXTENDED = \
+> @@ -163,8 +166,8 @@ override define CLEAN
+>  	$(Q)$(RM) -r $(TEST_GEN_FILES)
+>  	$(Q)$(RM) -r $(TEST_KMODS)
+>  	$(Q)$(RM) -r $(EXTRA_CLEAN)
+> -	$(Q)$(MAKE) -C test_kmods clean
+> -	$(Q)$(MAKE) -C libarena clean
+> +	$(Q)$(MAKE) -C test_kmods $(if $(OUTPUT),OUTPUT=$(OUTPUT)/test_kmods) clean
+> +	$(Q)$(MAKE) -C libarena $(if $(OUTPUT),OUTPUT=$(OUTPUT)/libarena) clean
 
-Could we clean this up and add explicit test cases for inserting
-specific rule types? We want the one-sided-tuple format at Meta,
-falling back silently would be a loss of signal.
+This is broken. What happens if the caller set OUTPUT but not O= ?
+
+If at linux root you do:
+
+  $ make defconfig && make -j$(nproc)
+  $ mkdir -p /tmp/kout
+  $ make -C tools/testing/selftests/bpf OUTPUT=/tmp/kout clean
+
+it destroys the root Makefile:
+
+  $ git diff --stat -- Makefile
+  Makefile | 2364 +------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+  1 file changed, 5 insertions(+), 2359 deletions(-)
+
+  $ cat Makefile
+  # Automatically generated by /home/isolodrai/sandbox/2026-08-06.review.out-of-tree-fixes/linux/Makefile: don't edit
+  export KBUILD_OUTPUT = /home/isolodrai/sandbox/2026-08-06.review.out-of-tree-fixes/linux
+  export KBUILD_EXTMOD = /home/isolodrai/sandbox/2026-08-06.review.out-of-tree-fixes/linux/tools/testing/selftests/bpf/test_kmods
+  export KBUILD_EXTMOD_OUTPUT = /tmp/kout/test_kmods
+  include /home/isolodrai/sandbox/2026-08-06.review.out-of-tree-fixes/linux/Makefile
+
+pw-bot: cr
+
+
+Also the selftests clean loop runs clean rules this way [1]:
+
+clean:
+	@for TARGET in $(TARGETS) $(INSTALL_DEP_TARGETS); do \
+		BUILD_TARGET=$$BUILD/$$TARGET;	\
+		$(MAKE) OUTPUT=$$BUILD_TARGET -C $$TARGET clean;\
+	done;
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/Makefile?h=v7.2-rc6#n325
+
+
+>  	$(Q)$(MAKE) docs-clean
+>  endef
+>  
+> [...]
+> 
+
