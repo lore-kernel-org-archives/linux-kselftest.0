@@ -1,29 +1,30 @@
-Received: from out30-111.freemail.mail.aliyun.com (out30-111.freemail.mail.aliyun.com [115.124.30.111])
+Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B876A282F20;
-	Thu,  6 Aug 2026 03:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C55346E7A;
+	Thu,  6 Aug 2026 03:34:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.132
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785987282; cv=none; b=lAsSQLSJYfaWwCYDJMBmq6+U5qYKTit0IMBIw6RAOhDYYpWpEoTG6KSyuSAQZhQUCbSniZM22q/J78BL87IeBMy0dbF2T/Yn2WG8HmhAfVvSFAiNA9ZeTKCzeyhCKXIUuKtghmfygwVkr0PZfLBCI1ceTKkpy1r+lYZWT+LN5KI=
+	t=1785987286; cv=none; b=L1Q9EN+p4KI6UpYU0DUvo2qBmCaPos1Qae7g9dRD/wcBH1hsd5rd8fIo3XvAYN2k8soiHRGA7uIaEO1w5+DA9xELAOf1ANnUHnXSMKmBX4w5Vkh+aShldSftyC3H+rIgDefCGftnSsX883058RYDHO/Si8BgJz409D2T0zYTM/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785987282; c=relaxed/simple;
-	bh=lPsvHFKzsJz6b9mjY4SjDc9N3XFiJXefzy/sF9e0jSY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=faUz91uJaqSUjpAJpbrdJ/x/ID/nXwoijT5BE+biC7rA/7YXvJcHJKlamI4xh9seju2a8Ro+98BB2EkwpfqiyaAydQ4yNNOF2FYLcqrpd0HnRVEsFxR7jRGOKb9dmMdLFxmgcbl/Yo4YXqezjwXG7J5p6LzQ3Xj2qA/F9vuz1o4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Ses3yiKO; arc=none smtp.client-ip=115.124.30.111
+	s=arc-20240116; t=1785987286; c=relaxed/simple;
+	bh=6m3LqiTH3to5XVoAe+K9dfrUghMuLZ2vGY9XnUYG5Yg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=QnjEXkyunEkVB2ZlbIq12hlxnkN8RWvBO8g74bUStbjKrPwBUBNqEyTp+nKO3Cw+p7x1/SqfFnFUbkoxJMBSTxeB6qNsOTijedykTDjzPe3drOdYzsuxvYENYnblUX0QPWN0s1ABAcZaTL437qc56igulyARXCWh/5aoKjD5vp4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Sfocj12s; arc=none smtp.client-ip=115.124.30.132
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Ses3yiKO"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Sfocj12s"
 DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
 	d=linux.alibaba.com; s=default;
-	t=1785987271; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=w0e7fE5gawtbSIp2pytOUjBhFgpDkQIh9Ss4Lpx8mFs=;
-	b=Ses3yiKO7OzFdisch0DQWdIucMBxrotmcxLSsB2ERywN+c3ackkrwtp67uY6l9G6/4dQ50YCYjGjP4HxMi0GR5QQspTvpYZTIJKNtR1gEATaNeenhVZlvZiqCFuK8TdKz4y5g9sUTGbwZEzyGI43BXNhNcLWVywX0j0HY6OsC38=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R621e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0X8SlEJY_1785987270;
-Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SlEJY_1785987270 cluster:ay36)
+	t=1785987274; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=6LrUd86Cka2Fg/6CzJjG2iZT3DCfqjLks/rpZbSOQ0w=;
+	b=Sfocj12sLHtMLIga/CbjY5rX6WinINW6qKUN965yYNOOlfylFqrY0wCVkAn2gly1osdpVk/NghknuYyZvHdTAVSPEvrLmUXKwsq4qyElq+pZzTpGzqjLDVmtDYP3FY7P3vAu7nUge0TOdsqGr0dVbIzcvO9CGt/uQmE8JSk8bRs=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R841e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033032089153;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=16;SR=0;TI=SMTPD_---0X8SfgDs_1785987273;
+Received: from localhost(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X8SfgDs_1785987273 cluster:ay36)
           by smtp.aliyun-inc.com;
-          Thu, 06 Aug 2026 11:34:31 +0800
+          Thu, 06 Aug 2026 11:34:33 +0800
 From: Baolin Wang <baolin.wang@linux.alibaba.com>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -41,10 +42,12 @@ Cc: ziy@nvidia.com,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/4] add anon mTHP collapse test cases
-Date: Thu,  6 Aug 2026 11:34:11 +0800
-Message-ID: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
+Subject: [PATCH v3 3/4] selftests: mm: implement the mTHP-sized hugepage check helpers
+Date: Thu,  6 Aug 2026 11:34:14 +0800
+Message-ID: <56b16691f605426b33b5cf47319233de6127a6b3.1785985999.git.baolin.wang@linux.alibaba.com>
 X-Mailer: git-send-email 2.43.5
+In-Reply-To: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
+References: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,45 +56,129 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This patchset is split from the previous shmem mTHP collapse patchset[1],
-which only adds anon mTHP collapse selftests. All khugepaged test cases
-can pass.
+Implement mTHP-sized hugepage checking helpers using gather_folio_orders().
+Also rename the existing PMD-sized huge page check function to
+__check_pmd_huge() for clarity.
 
-[1] https://lore.kernel.org/all/cover.1781083630.git.baolin.wang@linux.alibaba.com/
+Reviewed-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
+Tested-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
+Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+---
+ tools/testing/selftests/mm/vm_util.c | 76 ++++++++++++++++++++++++++--
+ 1 file changed, 72 insertions(+), 4 deletions(-)
 
-Changes from v2:
- - Collect reviewed/tested tags from Nico, Zi and Kiryl. Thanks.
- - Change check_huge_anon/shmem/file()'s parameter type to 'size_t'
-   and rename to 'len' (per Zi).
- - Use safe type to calculate the order (per Zi).
- - Check return value for read_pmd_pagesize() (per Zi).
- - Add more usage() info to indicate that mthp_khugepaged currently
-   only supports anonymous folios (per Zi).
- - Other minor coding style changes (per Zi).
-
-Changes from v1:
-- Add order and hpage_size check (per Sashiko).
-- Change to use THP_MADVISE for mTHP collapse (per Sashiko).
-
-Baolin Wang (4):
-  selftests: mm: extend the check_huge() to support mTHP check
-  selftests: mm: move gather_after_split_folio_orders() into vm_util.c
-    file
-  selftests: mm: implement the mTHP-sized hugepage check helpers
-  selftests: mm: add mTHP collapse test cases
-
- .../selftests/mm/folio_split_race_test.c      |   2 +-
- tools/testing/selftests/mm/khugepaged.c       | 197 +++++++++++++----
- tools/testing/selftests/mm/pagemap_ioctl.c    |   2 +-
- .../testing/selftests/mm/prctl_thp_disable.c  |   2 +-
- tools/testing/selftests/mm/run_vmtests.sh     |   2 +
- tools/testing/selftests/mm/soft-dirty.c       |   2 +-
- .../selftests/mm/split_huge_page_test.c       | 139 +-----------
- tools/testing/selftests/mm/uffd-common.c      |   4 +-
- tools/testing/selftests/mm/vm_util.c          | 201 +++++++++++++++++-
- tools/testing/selftests/mm/vm_util.h          |   8 +-
- 10 files changed, 367 insertions(+), 192 deletions(-)
-
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index 5a427f494cd8..13b5cff7dfe3 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -15,6 +15,9 @@
+ #define SMAP_FILE_PATH "/proc/self/smaps"
+ #define STATUS_FILE_PATH "/proc/self/status"
+ #define MAX_LINE_LENGTH 500
++#define PAGEMAP_PATH "/proc/self/pagemap"
++#define KPAGEFLAGS_PATH "/proc/kpageflags"
++#define MAX_NR_ORDERS 20
+ 
+ unsigned int __page_size;
+ unsigned int __page_shift;
+@@ -348,7 +351,7 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+ 	return entry;
+ }
+ 
+-bool __check_huge(void *addr, char *pattern, int nr_hpages,
++static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+ 		  uint64_t hpage_size)
+ {
+ 	char buffer[MAX_LINE_LENGTH];
+@@ -366,19 +369,84 @@ bool __check_huge(void *addr, char *pattern, int nr_hpages,
+ 	return thp == (nr_hpages * (hpage_size >> 10));
+ }
+ 
++static bool check_large_folios(void *addr, size_t len, int nr_hpages,
++		uint64_t hpage_size)
++{
++	int order = 0, pagesize = getpagesize();
++	unsigned int nr_pages = hpage_size / pagesize;
++	int orders[MAX_NR_ORDERS], status;
++	int pagemap_fd, kpageflags_fd;
++	bool ret = false;
++
++	if (!nr_pages)
++		ksft_exit_fail_msg("invalid hugepage size\n");
++
++	order = 31 - __builtin_clz(nr_pages);
++	if (!order || order >= MAX_NR_ORDERS)
++		ksft_exit_fail_msg("invalid order\n");
++
++	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
++	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
++	if (pagemap_fd == -1)
++		ksft_exit_fail_msg("read pagemap fail\n");
++
++	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
++	if (kpageflags_fd == -1) {
++		close(pagemap_fd);
++		ksft_exit_fail_msg("read kpageflags fail\n");
++	}
++
++	status = gather_folio_orders(addr, len, pagemap_fd,
++			kpageflags_fd, orders, MAX_NR_ORDERS);
++	if (status)
++		goto out;
++
++	if (orders[order] == nr_hpages)
++		ret = true;
++
++out:
++	close(pagemap_fd);
++	close(kpageflags_fd);
++	return ret;
++}
++
+ bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+ {
+-	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
++	uint64_t pmd_pagesize = read_pmd_pagesize();
++
++	if (!pmd_pagesize)
++		ksft_exit_fail_msg("reading PMD pagesize failed\n");
++
++	if (hpage_size == pmd_pagesize)
++		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
++
++	return check_large_folios(addr, len, nr_hpages, hpage_size);
+ }
+ 
+ bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+ {
+-	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
++	uint64_t pmd_pagesize = read_pmd_pagesize();
++
++	if (!pmd_pagesize)
++		ksft_exit_fail_msg("reading PMD pagesize failed\n");
++
++	if (hpage_size == pmd_pagesize)
++		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
++
++	return check_large_folios(addr, len, nr_hpages, hpage_size);
+ }
+ 
+ bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+ {
+-	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
++	uint64_t pmd_pagesize = read_pmd_pagesize();
++
++	if (!pmd_pagesize)
++		ksft_exit_fail_msg("reading PMD pagesize failed\n");
++
++	if (hpage_size == pmd_pagesize)
++		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
++
++	return check_large_folios(addr, len, nr_hpages, hpage_size);
+ }
+ 
+ int64_t allocate_transhuge(void *ptr, int pagemap_fd)
 -- 
 2.47.3
 
