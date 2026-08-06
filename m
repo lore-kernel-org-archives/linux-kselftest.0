@@ -1,89 +1,89 @@
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADF82449EA9
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 11:02:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA33844C4E4
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 11:02:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786014142; cv=none; b=r7uAA3jnVtA5wChMGJHECT3pvTHKGg5bA1UXUr7wujIwnN7tdZ9Di+TeHi1oW6pZwXE8TwsuWUnuFsEt9GyAj8nBy2iN8Q570c+iaa4gPWT8IyfeDYcza2EyrYxPLPHHvuv1M42rDGg5nb3qWaj7aKulEHWhkElrhdpIeKCkKnM=
+	t=1786014142; cv=none; b=ANqjblnx4hM/z8MVUoQz/2+kbRi2XQKFlDnSapWQuTJ9ojcuB3IJqs01cLcEbUesf0Q4mzxCNWYwWST6a4MOANG1uqXQc03zEDxhe1y7S9ncJw/zEYbnZJ/2B9FL5oSIK15cDR5SmJFw3dT1jYlQCe6pbXisKvrjCku0ZCO8f44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786014142; c=relaxed/simple;
-	bh=r8Gnr1+T9r7J2+wuhx0yw3OuTJgTw0C5QxW83obdyic=;
+	bh=8lt42/buAHFphD/X2Ubb5FOVWRvH0w8Fo9mbigYmOzg=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qw+R4AHr57o0h7BFnBv/0jHUGHucjVeP8UTDo/GLoWMKz11aU1EAqhL+9dmHUJSQGjEvb79Fr2cZ93IBTszJgLEH2DkAl04fgkqZCtmVnQpVbmAU2hm3FiFkqK/awqrz5wsA5OM8KBme/6zkiUBUIzNuBA9m1CgMAMptnfC1+Ig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=pgJ8mGu3; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=NdtVcsLd; arc=none smtp.client-ip=205.220.168.131
+	 MIME-Version; b=MQ0r6Rq5Hvrri6d6o1vU3rjW6Gc8E80rrmhToMjh2Zgx5FslSPUf/GyPIi6pCk/txrq0IAU3ntPRt7+joW5GMg0Oj9uOjKvoye9bWjqmFMXJLFW6vDBNp99kql+YtUrY7RyiKjoXpAXNRdqesjZak4KpNkpyLNlBwPONlIKePbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=RvXhU4m3; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=WUHPnysC; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="pgJ8mGu3";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="NdtVcsLd"
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6769nto91626143
-	for <linux-kselftest@vger.kernel.org>; Thu, 6 Aug 2026 11:02:19 GMT
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="RvXhU4m3";
+	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="WUHPnysC"
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6769ncUY1227546
+	for <linux-kselftest@vger.kernel.org>; Thu, 6 Aug 2026 11:02:20 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=JpV5+FuyfSk
-	2NiHdf+Bry5eOP6QolE5Yf8x3iNNSqIA=; b=pgJ8mGu35O0r7cDOANuk5PfjhFn
-	NWKTqhEoaujEVM0DeVik7Vl9PwVHC9b202I6CSNHDaZbFXtzFD+NkH3mSQRLU/Le
-	gGxzFE4Bkh5zQ/SSOURAtazLsma0/h8hptr4JT1kzqTe65zaoJIyx1PNE7Vocj1p
-	jejXjT1lW0EJHygY+IWjhD6me+iEZbaYl7xy45mZizKwpONwYFmUXbG6Uvens7s2
-	uAemE34PkBu2joz3HlnjVfntfSCZ63K94zYIJZsFDSICuWVrMfltPnJwkMHxkhw6
-	a+jG5vcvywbwMtNi+aqjNJ6pjphM75/XmnZBVGNJU7c+Ns9l9XjoL7UPzgA==
-Received: from mail-yw1-f198.google.com (mail-yw1-f198.google.com [209.85.128.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fvntngvss-1
+	:mime-version:references:subject:to; s=qcppdkim1; bh=OQ2LB/2wLJ9
+	xLA2vO6RiQF0IzMe+r6MJZcfrmV+gTOg=; b=RvXhU4m3/0kALrH0zjqfvUiOl8a
+	rD3fMYbsUQuOUqz0clSaoAcxIY1VucRyjvytMx/ak1KZV7kUOTWPOqLOZP6SfmV/
+	oMugcgRozjN5KRHVuformVW2vInx8DbWe3ZJLw4LxeaLjZ9kfb9OI4Z+DtrSHMoV
+	VT9eKjsHwTgrVA5Lf2D5kr/15gOA33xD9aFPf39EBInxIRf1c+r+y+W8U9mxw67l
+	/WtKYvV3y32YYDERi7/Ku+AMYNZfAD4NXXAX77bwrQdEt8L42Mw6Ue8TRSRtgBJv
+	0iH3sRo2dcG926ONPOlqjliHsCQ72rlgCJOhju7m96uzzi9kC9lajl1HxxQ==
+Received: from mail-yw1-f200.google.com (mail-yw1-f200.google.com [209.85.128.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4fvqduge5m-1
 	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 11:02:18 +0000 (GMT)
-Received: by mail-yw1-f198.google.com with SMTP id 00721157ae682-81aea53d559so38906527b3.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 04:02:18 -0700 (PDT)
+	for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 11:02:19 +0000 (GMT)
+Received: by mail-yw1-f200.google.com with SMTP id 00721157ae682-81eddfe28b4so56576657b3.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 04:02:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1786014138; x=1786618938; darn=vger.kernel.org;
+        d=oss.qualcomm.com; s=google; t=1786014139; x=1786618939; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=JpV5+FuyfSk2NiHdf+Bry5eOP6QolE5Yf8x3iNNSqIA=;
-        b=NdtVcsLd783fPlds6GQiMeeli4xRos/ImpVjhFor0a6xzMPmHcQvhxkeQTSsZs61oh
-         bj+58ZuGlmXBZIXOS3vSX1LmSUfbZYRWnd7s5FqRtUtszvNzS+E93HjRuBTGnU8K9z+q
-         aiV9tHISb9A2mqKTQEuo8dG+lH2WJE1YbZHF1Zf1R7EqbJeE8Ul6NytZQUOaHNBAiOHO
-         M/HCO1N2zxRuWQYQn2FahtREAKrARK4iLMXuU94f3QMBCeRZ1hPmeCwbeCpe9eKigPiR
-         d/u3BWvkDsLskOUmE5A9kzS+psXiHViNiOmfYTRQ0Uy8mJM7cO1v6ubasJG26wnLIuVl
-         4zMQ==
+        bh=OQ2LB/2wLJ9xLA2vO6RiQF0IzMe+r6MJZcfrmV+gTOg=;
+        b=WUHPnysCaGADE3APCSnEBYdk/Ii6vciaM2Eixdxo3O0leEmb3FeaSjDq4vJi5FMdU2
+         w8dz8eF7NEnd8Pg60xiImOKGw86EaDODhdzGDYkxquBa1wgl6HuLBacX/FO+GrpJG8p8
+         RrnqVRlpzexP+BZUSdgH8v3/nqV7/tOlUuVIaj548eYibSN280h4qxiyaPjLSIBnTbwY
+         fw3onX2TeigPma8NyuYrocMlWtQpq/Pe1aUeSrpnVGQGZBxTzX4OfctgmO2WM2ReoQHP
+         ZoDs+HznD4h2v+N/cFxXjSo7sljY4jiYtr/M4OSgM7cl89HEzrkvY8svR3dTpW+inDIU
+         SW3A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786014138; x=1786618938;
+        d=1e100.net; s=20251104; t=1786014139; x=1786618939;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JpV5+FuyfSk2NiHdf+Bry5eOP6QolE5Yf8x3iNNSqIA=;
-        b=PBI8YzI1wC8aKhj7YT7trpGmKuw1PtXx0fV8dKxtLNcHLDkH50jsuMhEXJoPC3tS6P
-         eVig1CcjhcDTla9Xa0pA872CZYlkt5qI/z7hsogb9Pgkno057qzKEXjXDfUSBl4kdXSz
-         GoDtxzH4fJEevPBSxH5nCInWOP7eNpr64KecijGRnuTAIXRmxIcb+PD56qSQ8Re4VbXX
-         BvPpV8BTLAPpWOf2WgoEuoVPKDqkrGDLEv9FciT//DKYgQNIkgg3nSQgeH5qRQD52D6l
-         p+moFQiDbOAWYzmOdzK+s6O7BhBv9rU2fpPPNjgcI3sDkH3PiKhAG2qtSfeHv78QFpgj
-         T9og==
-X-Forwarded-Encrypted: i=1; AHgh+RpesapKPG8ibidJQT0kQq4pD2Ov+SJtoTBxkgdUf0Ex9WwDebMwG1X8o3JdcIyas3m9omzpgl6Zr3MJOS7739c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxodO6tEBk5FI4K6VK0o9a7YIBcrHb4mhGbYa6EQW8Rhb0Fb8k4
-	mA0iCwZ8n86xBv84oGD+6w4voEf3a3uqielHXK+m+OOIQt12zKV07MbBOU4q6FIgDQiHMA7EUsE
-	gEP0rbkckfWL8SBrdldDc5pZCXHGS1qBvZZgbyIC5ULry4Y24YlWG0IpQip1JIqhaGCXYpgA=
-X-Gm-Gg: AR+sD13P/3RszCFDEH51KUWJgTY4geW0Bi0fxWZ4gOQ/tkyD20bmRuLHw9eZFllcol/
-	3/LPGYyzBYUdyYk6+m9QohKisY/dLTklGjUZpw5Uvg5PR3aGmPXXMvWVIG7pSul1nwbiH4me+S2
-	NyKRFlyfX3/dF9+7WHT/rDQ/SqRCVu1vQ1stBRJKJAT1W61Vu9OwsN2Bvi9Y5YOZOvEJLLt3qvL
-	ue6fzWSA34BunrkH+KJSD10znnaFqw6VH8So7WollJXFO5tkLoLt2/RaGyVwgwxwMsHE79uoEq9
-	pdxeLMWfAmtXximo2g0XjBBxn4ixU1JGyU6w4xeFqH4yOqCtQClFLua6huECZfgIl5K4RqP8tsr
-	DVf1s1i/noEA1/Iks2vU=
-X-Received: by 2002:a05:690c:b85:b0:81e:6cd1:5329 with SMTP id 00721157ae682-8202275ac60mr82831067b3.34.1786014137614;
-        Thu, 06 Aug 2026 04:02:17 -0700 (PDT)
-X-Received: by 2002:a05:690c:b85:b0:81e:6cd1:5329 with SMTP id 00721157ae682-8202275ac60mr82830557b3.34.1786014136982;
-        Thu, 06 Aug 2026 04:02:16 -0700 (PDT)
+        bh=OQ2LB/2wLJ9xLA2vO6RiQF0IzMe+r6MJZcfrmV+gTOg=;
+        b=AEZvOPOJ53An84VvoVIF6lr+0JINYPu9m4k0NFcCn2Jy0iOkkzzOEwti+PUBsIMHxh
+         RQTjRAmrNUntuW8EmQbWfxekaOLhOmoE/cWEHystuNAz5Azi0TjOW/6cIjCc+Kl4a3sy
+         kfgmul/z+CfUnSAYWbvYqqjJ1yj4X0Rf8p/YeGTyKvz0Wuk4k3IAlGo8WKhuxOTXdy+v
+         EbB6+IOYZtku8KGYAaGj2vCg5MOw1ihUJ5uSobZCsdnj3Y0CsR2K6Y0vTm9hmkSIClo4
+         uq6UsCTQV26NBDW7YGCa01V3YfvM3gxfp4UtBdeHoPC1KEYKQtHMV7uMMhKWqD1dD8D8
+         wJWQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqlogGp7QyQVL/1UvBQWgBNsLFhz46k7Af0KRp4Vq1Nfpqm3YH3a99qGH4/NAI3Gll2DvhJUVDOmAKXD5HomoU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx4LRSYdcw88DbpBBHRh+3StEBsIRgmMhkQ/iTqGjy+5QPK5UVe
+	buCLz3hfpMUG7I8kbV9/xid8ISQ2KA2Vqa0TnY9FtvmG0PhTE378EgXGSVE7V3kRgGZ5zMzMjdr
+	4Za58sDxiY8x3ZjN8d60EN1L1E94RhKr7/3JJ3WyUYmiJ5IReirJOz8T9DETpdI0M7bbJxZA=
+X-Gm-Gg: AR+sD11eitju5YbIcx9brNufkRB9JKyXoSsXzLYlB0edmiCQt2L6W9LnqZq7VMfMkFz
+	pdRQBu0DwamXd4E2eqmbs47854YDbfq6l8BQ9g6uamqz05heR35nGovwOOlVRYbrsLIlLDdUsiw
+	L7vVoxEnLTSp41xNGxg+IP9RtzJnhGYB3MkzZam80D3Iw2P/pRA3q2KdNQlyrMYh8nW8xYWwqpS
+	0vuvorOG2uL+95Z6bvVuz9UIY+vP1UA0nMjVetYxjt96i0yXXPXexOPgiwFA/vkyTxIHiRei/QB
+	XRtvW3uRuX0sjXKbV4j0mBrM5tP0Ke2kqqTO8PON8joeTFN8E75rD1GzoBNiAjlIYdd7HeieCle
+	prwC9N68yykjs7fr0BSM=
+X-Received: by 2002:a05:690c:448c:b0:809:ae5:1d2f with SMTP id 00721157ae682-8201c4895f7mr84040817b3.9.1786014138838;
+        Thu, 06 Aug 2026 04:02:18 -0700 (PDT)
+X-Received: by 2002:a05:690c:448c:b0:809:ae5:1d2f with SMTP id 00721157ae682-8201c4895f7mr84040527b3.9.1786014138430;
+        Thu, 06 Aug 2026 04:02:18 -0700 (PDT)
 Received: from juillet.lan ([2a01:cde0:108:24ed:1501:7670:a13c:4834])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-820131db335sm36808917b3.3.2026.08.06.04.02.15
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-820131db335sm36808917b3.3.2026.08.06.04.02.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 04:02:16 -0700 (PDT)
+        Thu, 06 Aug 2026 04:02:17 -0700 (PDT)
 From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 To: rafael@kernel.org
 Cc: linux-pm@vger.kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
         linux-kselftest@vger.kernel.org, manaf.pallikunhi@oss.qualcomm.com
-Subject: [PATCH 1/2] powercap: Add generic zone hierarchy creation helpers
-Date: Thu,  6 Aug 2026 13:01:58 +0200
-Message-ID: <20260806110159.69690-2-daniel.lezcano@oss.qualcomm.com>
+Subject: [PATCH 2/2] selftests/powercap: Add powercap hierarchy creation API tests
+Date: Thu,  6 Aug 2026 13:01:59 +0200
+Message-ID: <20260806110159.69690-3-daniel.lezcano@oss.qualcomm.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
 References: <20260806110159.69690-1-daniel.lezcano@oss.qualcomm.com>
@@ -94,473 +94,491 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDA4NyBTYWx0ZWRfXz6MJeT7tlQqq
- HjOVTjmdq98vsXu0GzIA4fUFD3q6pJbrSUhIhYBaXx1Hkcg+OeasyAofLrPODQPvy5x6fhZcrRt
- UVU1g6dqMf6fcCqjsnRSxsMZePcV8UDcUCdua7a4FjsI+H1YPCnKlQ0tZrWz5CLA7HkIu1Ec4bL
- 6/QO6v2vmYTEiWK7oFsFaSX/b+EnXc4ycf037eoeaJBbVP27+Gl479Lb8lo0eMfQeNYRN/aj34c
- yAT5Cb4G5OeN+Sew8R+0EEX3j5p2c7YS30eWJWPMcRXzol3KEEXpIRgYiLAZLeym2w5jlKhc9Ux
- 8uCVmh2g2CN5yDDN/Yv40Id0ZvLIck7ZXuV70xsz2y0/0nucx2MnYby6SqSu15eD75XYG4O3UFi
- AcaZSlFP5ci4ZVzoUFWkFqBw/n4hvP3OHSVQ6PeSXSVC4ap2YxzEOu4JbH1r17De47+cz5qFVzW
- /V+1yRctYYwUtbgYgsw==
-X-Proofpoint-ORIG-GUID: 979nF6BWXE_JdLRGKc1p6qdqXxLW24QW
-X-Proofpoint-GUID: 979nF6BWXE_JdLRGKc1p6qdqXxLW24QW
-X-Authority-Analysis: v=2.4 cv=LpKiDHdc c=1 sm=1 tr=0 ts=6a7469ba cx=c_pps
- a=g1v0Z557R90hA0UpD/5Yag==:117 a=xqWC_Br6kY4A:10 a=Sv0fKeRqtYgA:10
+X-Proofpoint-GUID: Cb5TL73ekt70ilXfGAm-8MlQsNgk5e6K
+X-Proofpoint-ORIG-GUID: Cb5TL73ekt70ilXfGAm-8MlQsNgk5e6K
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDA4NyBTYWx0ZWRfX5MdEIQ7yCEco
+ VfpAb5ax+zBrHn2D3S4cXNQFYP16P8oc4XdZiF4g2rU4CMWGQLBiLoCLYNGH4nLNcTSJ+Ol4Y9/
+ x8uWIzEb5s70KI9VoNlZjKKXkjMjloQ4toXDEx6QW5YQc/QWYS98WbvuA5ak3MwmTRvXdXiwDJ7
+ WgjChRtesq/EQxrQw4OBa02JsmQLZFNGTzjnZSVEI8cuFAg0c1u9rfMJzttJIMTlURikTDGFrna
+ ty7X+iiw/45zv89rz9RyezWsJWqZ2OqBBp25l0r0BcPzBm8brvajstxJ4hdm5rL/oeyGgfPDbT1
+ ozo9Jv7Qs+AnFOEEpU2IklNUwHo6tvv1oUbwOjkTBLRwCb3ULZ+JHOJPrYdo2MLAS+PURROWyry
+ fdlUaQDkxfNR3yhO47EiT/Ms5Iyb34AKjFYQYkK46LL/gYrS9spvC6jPfMGxaSEpHISvQNMmJOI
+ 92/paE2sl3iU8hpPnig==
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDA4NyBTYWx0ZWRfXwm+fTvtAVZjZ
+ dFzlTxjERWz62DxlQKtQRGjy1vpWmXDtCduZgKxLMrUo1TlrTdMLUNktGrjsWwxxg156WZB0dvG
+ NzDoJlm0XfII7m+FuDQoDztfU5TAyf0=
+X-Authority-Analysis: v=2.4 cv=bdtbluPB c=1 sm=1 tr=0 ts=6a7469bb cx=c_pps
+ a=NMvoxGxYzVyQPkMeJjVPKg==:117 a=xqWC_Br6kY4A:10 a=Sv0fKeRqtYgA:10
  a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22 a=u7WPNUs3qKkmUXheDGA7:22
- a=yOCtJkima9RkubShWh1s:22 a=EUspDBNiAAAA:8 a=jGdnt-AriNhNVhWiu9AA:9
- a=MFSWADHSvvjO3QEy5MdX:22
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDA4NyBTYWx0ZWRfX2JsAMNDyxNvO
- gQMIQqJ91zrd81GI3MgRra5xHsdPZy9Pl5bdDYEREDR/DYCLubLrcOdrbIhAv0fxej6ZSDgUwIL
- GRYMbW+FsxNm+CF7mbmj/2KEeHkpFqQ=
+ a=YMgV9FUhrdKAYTUUvYB2:22 a=EUspDBNiAAAA:8 a=xFgmAgSJGoImdcxQjNwA:9
+ a=kLokIza1BN8a-hAJ3hfR:22
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
  definitions=2026-08-05_06,2026-08-05_01,2025-10-01_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1011 lowpriorityscore=0 adultscore=0 bulkscore=0 spamscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 suspectscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060087
+ phishscore=0 clxscore=1011 spamscore=0 bulkscore=0 malwarescore=0
+ suspectscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
+ impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608060087
 
-Powercap controllers may need to create several powercap zones organized
-as a hierarchy. At present, each controller has to open-code the
-hierarchy traversal, parent lookup, error rollback and reverse-order
-destruction.
+The powercap hierarchy API introduces generic helpers to duplicate,
+instantiate and destroy a complete powercap hierarchy from a static
+description.
 
-Introduce struct powercap_hierarchy to describe a powercap
-hierarchy. Each node contains its name, parent, backend-specific data
-and the powercap zone created for it.
+Add a kselftest exercising this API. The test builds a synthetic
+powercap hierarchy composed of a package, three CPU clusters and twelve
+CPUs, registers it as a powercap control type and verifies that the
+expected sysfs hierarchy and attributes are created. It also validates
+that the hierarchy is correctly removed when the module is unloaded.
 
-For example, the following description:
+The test consists of:
 
-  static struct powercap_node nodes[] = {
-          { .name = "package" },
-          { .name = "cpu", .parent = &nodes[0] },
-          { .name = "gpu", .parent = &nodes[0] },
-  };
+* a kernel module implementing a synthetic powercap hierarchy and
+  dummy callbacks;
+* a userspace kselftest script that loads the module, validates the
+  exported sysfs hierarchy and attribute values, unloads the module
+  and verifies that all objects have been removed.
 
-  static struct powercap_hierarchy hierarchy = {
-          .nodes = nodes,
-          .nr_nodes = ARRAY_SIZE(nodes),
-  };
-
-creates the following hierarchy:
-
-  package
-  |-- cpu
-  `-- gpu
-
-Add powercap_hierarchy_dup() to create a runtime copy of a hierarchy
-description. Rebase the parent pointers so that the copy does not keep
-references to the original array, which may be stored in init memory.
-
-Add powercap_hierarchy_create() to walk the description in order
-and create each zone through a controller-provided callback. The parent
-zone is passed to the callback, keeping the node creation operation
-specific to the controller.
-
-The backend is responsible for allocating and registering each powercap
-zone from the creation callback. The powercap_zone object is expected to
-be embedded in a backend-specific structure, allowing the backend
-callbacks to retrieve their private data later using container_of().
-
-For example:
-
-  struct foo_powercap_zone {
-          struct powercap_zone zone;
-          struct foo_domain *domain;
-  };
-
-  foo_zone = kzalloc(sizeof(*foo_zone), GFP_KERNEL);
-  if (!foo_zone)
-          return ERR_PTR(-ENOMEM);
-
-  foo_zone->domain = domain;
-
-  pcz = powercap_register_zone(&foo_zone->zone, pct, name, parent,
-                               &foo_zone_ops, nr_constraints,
-                               &foo_constraint_ops);
-
-Its allocation, private state and lifetime remain under the control of
-the backend.
-
-The creation callback therefore returns the same powercap_zone pointer
-that was passed to powercap_register_zone(). The hierarchy helper stores
-this pointer to provide it as the parent of subsequent nodes and to pass
-it back to the backend during hierarchy destruction.
-
-Add powercap_hierarchy_destroy() to destroy the hierarchy in
-reverse order, ensuring that children are removed before their parents.
-Use the same mechanism to roll back previously created zones when the
-creation of a subsequent node fails.
-
-Serialize creation and destruction of each hierarchy to prevent
-concurrent updates of the powercap zone pointers stored in its runtime
-copy.
-
-This provides a common mechanism for creating controller-defined
-powercap hierarchies while keeping controller-specific operations
-outside the powercap core.
+This provides a regression test for the powercap hierarchy helpers and
+their integration with the powercap core.
 
 Cc: Manaf Meethalavalappu Pallikunhi <manaf.pallikunhi@oss.qualcomm.com>
 Signed-off-by: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
 ---
- drivers/powercap/powercap_sys.c | 148 ++++++++++++++++++++++++++
- include/linux/powercap.h        | 178 ++++++++++++++++++++++++++++++++
- 2 files changed, 326 insertions(+)
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/powercap/Kbuild       |   3 +
+ tools/testing/selftests/powercap/Makefile     |  17 ++
+ .../selftests/powercap/powercap_hierarchy.c   | 247 ++++++++++++++++++
+ .../selftests/powercap/powercap_hierarchy.sh  | 118 +++++++++
+ 5 files changed, 386 insertions(+)
+ create mode 100644 tools/testing/selftests/powercap/Kbuild
+ create mode 100644 tools/testing/selftests/powercap/Makefile
+ create mode 100644 tools/testing/selftests/powercap/powercap_hierarchy.c
+ create mode 100755 tools/testing/selftests/powercap/powercap_hierarchy.sh
 
-diff --git a/drivers/powercap/powercap_sys.c b/drivers/powercap/powercap_sys.c
-index 9197fa20d93f..fefb36c5bcd2 100644
---- a/drivers/powercap/powercap_sys.c
-+++ b/drivers/powercap/powercap_sys.c
-@@ -667,6 +667,154 @@ int powercap_unregister_control_type(struct powercap_control_type *control_type)
- }
- EXPORT_SYMBOL_GPL(powercap_unregister_control_type);
- 
-+struct powercap_hierarchy *
-+powercap_hierarchy_dup(const struct powercap_hierarchy *hierarchy)
+diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
+index 8d4db2241cc2..2fac671e9145 100644
+--- a/tools/testing/selftests/Makefile
++++ b/tools/testing/selftests/Makefile
+@@ -93,6 +93,7 @@ TARGETS += pidfd
+ TARGETS += pid_namespace
+ TARGETS += pipe
+ TARGETS += power_supply
++TARGETS += powercap
+ TARGETS += powerpc
+ TARGETS += prctl
+ TARGETS += proc
+diff --git a/tools/testing/selftests/powercap/Kbuild b/tools/testing/selftests/powercap/Kbuild
+new file mode 100644
+index 000000000000..baa0d0ba9593
+--- /dev/null
++++ b/tools/testing/selftests/powercap/Kbuild
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++obj-m += powercap_hierarchy.o
+\ No newline at end of file
+diff --git a/tools/testing/selftests/powercap/Makefile b/tools/testing/selftests/powercap/Makefile
+new file mode 100644
+index 000000000000..210d6e6c5577
+--- /dev/null
++++ b/tools/testing/selftests/powercap/Makefile
+@@ -0,0 +1,17 @@
++# SPDX-License-Identifier: GPL-2.0
++
++# User-space test script
++TEST_PROGS := powercap_hierarchy.sh
++
++# Kernel module built as part of the test
++TEST_FILES := powercap_hierarchy.ko
++
++KDIR ?= $(if $(O),$(O),$(realpath ../../../..))
++
++all:
++	$(MAKE) -C $(KDIR) M=$(CURDIR) modules
++
++clean:
++	$(MAKE) -C $(KDIR) M=$(CURDIR) clean
++
++include ../lib.mk
+diff --git a/tools/testing/selftests/powercap/powercap_hierarchy.c b/tools/testing/selftests/powercap/powercap_hierarchy.c
+new file mode 100644
+index 000000000000..9531fc86aa01
+--- /dev/null
++++ b/tools/testing/selftests/powercap/powercap_hierarchy.c
+@@ -0,0 +1,247 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * Copyright (c) Qualcomm Technologies, Inc. and/or its subsidiaries.
++ *
++ * Author: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
++ *
++ * Powercap hierarchy description test module
++ */
++#include <linux/powercap.h>
++
++struct pch_test_data {
++	int value;
++};
++
++static struct powercap_node __initdata pch_test_nodes[] = {
++	[0] = { .name = "package",
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[1] = { .name = "cluster0", .parent = &pch_test_nodes[0],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[2] = { .name = "cluster1", .parent = &pch_test_nodes[0],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[3] = { .name = "cluster2", .parent = &pch_test_nodes[0],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[4] = { .name = "cpu0", .parent = &pch_test_nodes[1],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[5] = { .name = "cpu1", .parent = &pch_test_nodes[1],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[6] = { .name = "cpu2", .parent = &pch_test_nodes[1],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[7] = { .name = "cpu3", .parent = &pch_test_nodes[1],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[8] = { .name = "cpu4", .parent = &pch_test_nodes[2],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[9] = { .name = "cpu5", .parent = &pch_test_nodes[2],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[10] = { .name = "cpu6", .parent = &pch_test_nodes[2],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[11] = { .name = "cpu7", .parent = &pch_test_nodes[2],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[12] = { .name = "cpu8", .parent = &pch_test_nodes[3],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[13] = { .name = "cpu9", .parent = &pch_test_nodes[3],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[14] = { .name = "cpu10", .parent = &pch_test_nodes[3],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++	[15] = { .name = "cpu11", .parent = &pch_test_nodes[3],
++		.data = &(struct pch_test_data) { .value = 0xDEADBEEF } },
++};
++
++static struct powercap_hierarchy __initdata pch_test_hierarchy = {
++	.nodes = pch_test_nodes,
++	.nr_nodes = ARRAY_SIZE(pch_test_nodes),
++};
++
++static struct powercap_hierarchy *hierarchy;
++
++static struct powercap_control_type *pct;
++
++struct pch_test {
++	struct powercap_zone zone;
++};
++
++static struct pch_test *to_pch_test(struct powercap_zone *pcz)
 +{
-+	struct powercap_hierarchy *copy;
-+	size_t i;
-+
-+	if (!hierarchy || !hierarchy->nodes || !hierarchy->nr_nodes)
-+		return ERR_PTR(-EINVAL);
-+
-+	copy = kzalloc_obj(*copy);
-+	if (!copy)
-+		return ERR_PTR(-ENOMEM);
-+
-+	/*
-+	 * The source node array may live in init memory. A shallow copy would
-+	 * leave parent pointers referencing that array after it has been freed.
-+	 * Copy the nodes now and rebase their parent pointers below. The name
-+	 * and data objects remain owned by the backend and are not duplicated.
-+	 */
-+	copy->nodes = kmemdup_array(hierarchy->nodes, hierarchy->nr_nodes,
-+				    sizeof(*copy->nodes), GFP_KERNEL);
-+	if (!copy->nodes) {
-+		kfree(copy);
-+		return ERR_PTR(-ENOMEM);
-+	}
-+
-+	copy->nr_nodes = hierarchy->nr_nodes;
-+	mutex_init(&copy->lock);
-+
-+	for (i = 0; i < copy->nr_nodes; i++) {
-+		const struct powercap_node *parent = hierarchy->nodes[i].parent;
-+		ptrdiff_t index;
-+
-+		copy->nodes[i].pcz = NULL;
-+
-+		if (!copy->nodes[i].name)
-+			goto invalid;
-+
-+		if (!parent)
-+			continue;
-+
-+		index = parent - hierarchy->nodes;
-+		if (index < 0 || index >= i)
-+			goto invalid;
-+
-+		copy->nodes[i].parent = &copy->nodes[index];
-+	}
-+
-+	return copy;
-+
-+invalid:
-+	mutex_destroy(&copy->lock);
-+	kfree(copy->nodes);
-+	kfree(copy);
-+
-+	return ERR_PTR(-EINVAL);
++	return container_of(pcz, struct pch_test, zone);
 +}
-+EXPORT_SYMBOL_GPL(powercap_hierarchy_dup);
 +
-+void powercap_hierarchy_free(struct powercap_hierarchy *hierarchy)
++static int pch_test_get_max_power_range_uw(struct powercap_zone *pcz,
++					   u64 *power_uw)
 +{
-+	if (!hierarchy)
-+		return;
-+
-+	mutex_destroy(&hierarchy->lock);
-+	kfree(hierarchy->nodes);
-+	kfree(hierarchy);
-+}
-+EXPORT_SYMBOL_GPL(powercap_hierarchy_free);
-+
-+static void __powercap_hierarchy_destroy(struct powercap_control_type *pct,
-+					 struct powercap_hierarchy *hierarchy,
-+					 powercap_node_destroy_t powercap_node_destroy)
-+{
-+	size_t i;
-+
-+	for (i = hierarchy->nr_nodes; i-- > 0;) {
-+		if (!hierarchy->nodes[i].pcz)
-+			continue;
-+
-+		powercap_node_destroy(pct, hierarchy->nodes[i].pcz,
-+				      hierarchy->nodes[i].data);
-+
-+		hierarchy->nodes[i].pcz = NULL;
-+	}
-+}
-+
-+int powercap_hierarchy_destroy(struct powercap_control_type *pct,
-+			       struct powercap_hierarchy *hierarchy,
-+			       powercap_node_destroy_t powercap_node_destroy)
-+{
-+	if (!pct || !hierarchy || !hierarchy->nodes ||
-+	    !hierarchy->nr_nodes || !powercap_node_destroy)
-+		return -EINVAL;
-+
-+	guard(mutex)(&hierarchy->lock);
-+
-+	__powercap_hierarchy_destroy(pct, hierarchy, powercap_node_destroy);
-+
++	*power_uw = 0xBADC0FFEE;
 +	return 0;
 +}
-+EXPORT_SYMBOL_GPL(powercap_hierarchy_destroy);
 +
-+int powercap_hierarchy_create(struct powercap_control_type *pct,
-+			      struct powercap_hierarchy *hierarchy,
-+			      powercap_node_create_t powercap_node_create,
-+			      powercap_node_destroy_t powercap_node_destroy)
++static int pch_test_get_power_uw(struct powercap_zone *pcz,
++				 u64 *power_uw)
 +{
++	*power_uw = 0xC0FFEE;
++	return 0;
++}
++
++static int pch_test_release(struct powercap_zone *pcz)
++{
++	kfree(to_pch_test(pcz));
++	return 0;
++}
++
++static const struct powercap_zone_ops pch_test_ops = {
++	.get_max_power_range_uw = pch_test_get_max_power_range_uw,
++	.get_power_uw = pch_test_get_power_uw,
++	.release = pch_test_release,
++};
++
++static int pch_test_set_power_limit_uw(struct powercap_zone *pcz,
++				       int cid, u64 power_uw)
++{
++	return 0;
++}
++
++static int pch_test_get_power_limit_uw(struct powercap_zone *pcz,
++				       int cid, u64 *power_uw)
++{
++	*power_uw = 0xDEADC0DE;
++	return 0;
++}
++
++static int pch_test_set_time_window_us(struct powercap_zone *pcz,
++				       int cid, u64 power_uw)
++{
++	return 0;
++}
++
++static int pch_test_get_time_window_us(struct powercap_zone *pcz,
++				       int cid, u64 *power_uw)
++{
++	*power_uw = 0xDEADC0DE;
++	return 0;
++}
++
++static int pch_test_get_max_power_uw(struct powercap_zone *pcz,
++				     int cid, u64 *power_uw)
++{
++	*power_uw = 0xDEADC0DE;
++	return 0;
++}
++
++static const char *pch_test_get_name(struct powercap_zone *pcz, int cid)
++{
++	return "my constraint name";
++}
++
++static const struct powercap_zone_constraint_ops pch_test_constraint_ops = {
++	.set_power_limit_uw = pch_test_set_power_limit_uw,
++	.get_power_limit_uw = pch_test_get_power_limit_uw,
++	.set_time_window_us = pch_test_set_time_window_us,
++	.get_time_window_us = pch_test_get_time_window_us,
++	.get_max_power_uw = pch_test_get_max_power_uw,
++	.get_name = pch_test_get_name,
++};
++
++static struct powercap_zone *pch_test_create(struct powercap_control_type *pct,
++					     const char *name, void *data,
++					     struct powercap_zone *parent)
++{
++	struct pch_test_data *pcht_data = data;
++	struct pch_test *pcht;
 +	struct powercap_zone *pcz;
++
++	if (!pct) {
++		pr_err("Invalid NULL controller type\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (!name) {
++		pr_err("Invalid NULL name\n");
++		return ERR_PTR(-EINVAL);
++	}
++
++	if (pcht_data->value != 0xDEADBEEF) {
++		pr_err("Invalid pcht data != 0xDEADBEEF");
++		return ERR_PTR(-EINVAL);
++	}
++
++	pcht = kzalloc_obj(*pcht);
++	if (!pcht)
++		return ERR_PTR(-ENOMEM);
++
++	pcz = powercap_register_zone(&pcht->zone, pct, name, parent,
++				     &pch_test_ops, 1, &pch_test_constraint_ops);
++	if (IS_ERR(pcz)) {
++		pr_err("Failed to register powercap zone '%s': %ld\n",
++		       name, PTR_ERR(pcz));
++	}
++
++	return pcz;
++}
++
++static void pch_test_destroy(struct powercap_control_type *pct,
++			     struct powercap_zone *zone,
++			     void *data)
++{
++	struct pch_test_data *pcht_data = data;
++
++	if (!pct) {
++		pr_err("Invalid NULL controller type\n");
++		return;
++        }
++
++	if (!zone) {
++		pr_err("Invalid NULL zone\n");
++		return;
++        }
++
++	if (pcht_data->value != 0xDEADBEEF) {
++		pr_err("Invalid pcht data != 0xDEADBEEF");
++		return;
++        }
++
++	powercap_unregister_zone(pct, zone);
++}
++
++static int __init pch_test_init(void)
++{
 +	int ret;
-+	size_t i;
 +
-+	if (!pct || !hierarchy || !hierarchy->nodes || !hierarchy->nr_nodes ||
-+	    !powercap_node_create || !powercap_node_destroy)
-+		return -EINVAL;
++	hierarchy = powercap_hierarchy_dup(&pch_test_hierarchy);
++	if (IS_ERR(hierarchy)) {
++		ret = PTR_ERR(hierarchy);
++		pr_err("Failed to dup the hierarchy: %d\n", ret);
++		return ret;
++	}
 +
-+	guard(mutex)(&hierarchy->lock);
++	pct = powercap_register_control_type(NULL, "powercap-test", NULL);
++	if (IS_ERR(pct)) {
++		ret = PTR_ERR(pct);
++		pr_err("Failed to register control type: %d\n", ret);
++		goto out_free_hierarchy;
++	}
 +
-+	for (i = 0; i < hierarchy->nr_nodes; i++) {
-+		struct powercap_zone *parent = NULL;
-+
-+		if (hierarchy->nodes[i].parent) {
-+			parent = hierarchy->nodes[i].parent->pcz;
-+			if (!parent) {
-+				ret = -EINVAL;
-+				goto rollback;
-+			}
-+		}
-+
-+		pcz = powercap_node_create(pct, hierarchy->nodes[i].name,
-+					   hierarchy->nodes[i].data, parent);
-+		if (IS_ERR_OR_NULL(pcz)) {
-+			ret = pcz ? PTR_ERR(pcz) : -EINVAL;
-+			goto rollback;
-+		}
-+
-+		hierarchy->nodes[i].pcz = pcz;
++	ret = powercap_hierarchy_create(pct, hierarchy, pch_test_create, pch_test_destroy);
++	if (ret) {
++		pr_err("Failed to create the hierarchy: %d\n", ret);
++		goto out_unregister_pct;
 +	}
 +
 +	return 0;
 +
-+rollback:
-+	__powercap_hierarchy_destroy(pct, hierarchy, powercap_node_destroy);
-+
++out_unregister_pct:
++	powercap_unregister_control_type(pct);
++out_free_hierarchy:
++	powercap_hierarchy_free(hierarchy);
 +	return ret;
 +}
-+EXPORT_SYMBOL_GPL(powercap_hierarchy_create);
++module_init(pch_test_init);
 +
- static int __init powercap_init(void)
- {
- 	int result;
-diff --git a/include/linux/powercap.h b/include/linux/powercap.h
-index 603419db924c..939cd58dff4f 100644
---- a/include/linux/powercap.h
-+++ b/include/linux/powercap.h
-@@ -9,6 +9,7 @@
- 
- #include <linux/device.h>
- #include <linux/idr.h>
-+#include <linux/mutex.h>
- 
- /*
-  * A power cap class device can contain multiple powercap control_types.
-@@ -309,4 +310,181 @@ struct powercap_zone *powercap_register_zone(
- int powercap_unregister_zone(struct powercap_control_type *control_type,
- 				struct powercap_zone *power_zone);
- 
-+/**
-+ * struct powercap_node - Description of a node in a powercap hierarchy
-+ * @name: Name of the powercap zone.
-+ * @parent: Parent node, or NULL if the node is a hierarchy root.
-+ * @pcz: Powercap zone created for this node. This field is managed by the
-+ *	 hierarchy creation and destruction helpers.
-+ * @data: Private data passed unchanged to the creation and destruction
-+ *	  callbacks.
-+ *
-+ * This structure describes one node of a powercap hierarchy. The backend
-+ * supplies an array of nodes through &struct powercap_hierarchy.
-+ *
-+ * Nodes must be ordered so that a parent appears before all its children.
-+ *
-+ * The @name and @data objects must remain valid until the duplicated hierarchy
-+ * has been freed. The @parent pointer is rebased by powercap_hierarchy_dup(),
-+ * allowing the original node array to be released after duplication.
-+ *
-+ * The @pcz field is runtime state managed by powercap_hierarchy_create() and
-+ * powercap_hierarchy_destroy(). It is cleared when a node is destroyed.
-+ */
-+struct powercap_node {
-+	const char *name;
-+	struct powercap_node *parent;
-+	struct powercap_zone *pcz;
-+	void *data;
-+};
++static void __exit pch_test_exit(void)
++{
++	powercap_hierarchy_destroy(pct, hierarchy, pch_test_destroy);
++	powercap_hierarchy_free(hierarchy);
++	powercap_unregister_control_type(pct);
++}
++module_exit(pch_test_exit);
 +
-+/**
-+ * struct powercap_hierarchy - Powercap zone hierarchy
-+ * @nodes: Array describing the hierarchy nodes.
-+ * @nr_nodes: Number of entries in @nodes.
-+ * @lock: Lock serializing hierarchy creation and destruction.
-+ *
-+ * A backend may place the initial description in init memory and duplicate it
-+ * with powercap_hierarchy_dup() before the init sections are released. The
-+ * duplicated hierarchy owns the @nodes array, but not the objects referenced
-+ * by &struct powercap_node.name and &struct powercap_node.data.
-+ */
-+struct powercap_hierarchy {
-+	struct powercap_node *nodes;
-+	size_t nr_nodes;
-+	struct mutex lock;
-+};
++MODULE_DESCRIPTION("Powercap hierarchy test driver");
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Daniel Lezcano <daniel.lezcano@oss.qualcomm.com");
 +
-+/**
-+ * powercap_hierarchy_dup - Duplicate a powercap hierarchy description
-+ * @hierarchy: Hierarchy description to duplicate.
-+ *
-+ * Allocate a runtime hierarchy and copy the nodes from @hierarchy. Parent
-+ * pointers are rebased to the duplicated node array and the runtime pcz fields
-+ * are initialized to NULL.
-+ *
-+ * Every parent must belong to the source node array and precede its children.
-+ * The node names and private data are not duplicated and must remain valid
-+ * until powercap_hierarchy_free() is called.
-+ *
-+ * Context: Process context. May sleep.
-+ *
-+ * Return: A pointer to the duplicated hierarchy on success, or an ERR_PTR()
-+ * encoded error otherwise.
-+ */
-+struct powercap_hierarchy *powercap_hierarchy_dup(const struct powercap_hierarchy *hierarchy);
+diff --git a/tools/testing/selftests/powercap/powercap_hierarchy.sh b/tools/testing/selftests/powercap/powercap_hierarchy.sh
+new file mode 100755
+index 000000000000..eb070181ca89
+--- /dev/null
++++ b/tools/testing/selftests/powercap/powercap_hierarchy.sh
+@@ -0,0 +1,118 @@
++#!/bin/sh
++# SPDX-License-Identifier: GPL-2.0
 +
-+/**
-+ * powercap_hierarchy_free - Free a duplicated powercap hierarchy
-+ * @hierarchy: Hierarchy to free, or NULL.
-+ *
-+ * Free the node array and hierarchy allocated by powercap_hierarchy_dup(). All
-+ * registered zones must have been destroyed before calling this function.
-+ */
-+void powercap_hierarchy_free(struct powercap_hierarchy *hierarchy);
++ksft_pass=0
++ksft_fail=1
++ksft_skip=4
 +
-+/**
-+ * typedef powercap_node_create_t - Create a powercap hierarchy node
-+ * @pct: Powercap control type owning the hierarchy.
-+ * @name: Name of the powercap zone to create.
-+ * @data: Private data associated with the hierarchy node.
-+ * @parent: Parent powercap zone, or NULL for a root node.
-+ *
-+ * Callback invoked by powercap_hierarchy_create() for each node in the
-+ * hierarchy. The callback must create and register a powercap zone below
-+ * @parent. The backend is expected to embed struct powercap_zone in its own
-+ * object, pass the address of that member to powercap_register_zone(), and
-+ * return the same address from this callback. This lets the backend recover
-+ * its object with container_of() from subsequent powercap callbacks.
-+ *
-+ * Context: Called with the powercap hierarchy mutex held. The callback may
-+ * sleep, but must not call powercap_hierarchy_create() or
-+ * powercap_hierarchy_destroy() for the same hierarchy.
-+ *
-+ * Return: A valid pointer to the created powercap zone on success, or an
-+ * ERR_PTR() encoded error on failure.
-+ */
-+typedef struct powercap_zone *(*powercap_node_create_t)(struct powercap_control_type *pct,
-+							const char *name, void *data,
-+							struct powercap_zone *parent);
-+/**
-+ * typedef powercap_node_destroy_t - Destroy a powercap hierarchy node
-+ * @pct: Powercap control type owning the hierarchy.
-+ * @zone: Powercap zone to destroy.
-+ * @data: Private data associated with the hierarchy node.
-+ *
-+ * Callback invoked when a hierarchy is destroyed or when its creation must
-+ * be rolled back. The callback must unregister the powercap zone represented
-+ * by @zone. The backend remains responsible for the lifetime of the enclosing
-+ * object, including releasing it from the powercap zone release callback when
-+ * necessary.
-+ *
-+ * Nodes are passed to this callback in reverse creation order, ensuring that
-+ * all children are destroyed before their parent.
-+ *
-+ * Context: Called with the powercap hierarchy mutex held. The callback may
-+ * sleep, but must not call powercap_hierarchy_create() or
-+ * powercap_hierarchy_destroy() for the same hierarchy.
-+ */
-+typedef void (*powercap_node_destroy_t)(struct powercap_control_type *pct,
-+					struct powercap_zone *zone,
-+					void *data);
++MODULE=powercap_hierarchy
++CONTROL=powercap-test
++SYSFS=/sys/devices/virtual/powercap/$CONTROL
 +
-+/**
-+ * powercap_hierarchy_destroy - Destroy a powercap hierarchy
-+ * @pct: Powercap control type owning the hierarchy.
-+ * @hierarchy: Hierarchy to destroy.
-+ * @powercap_node_destroy: Callback used to destroy each powercap zone.
-+ *
-+ * Destroy all powercap zones previously created for @hierarchy. Nodes are
-+ * destroyed in reverse array order so that children are removed before their
-+ * parents.
-+ *
-+ * Entries whose &struct powercap_node.pcz field is NULL are ignored. After
-+ * a zone has been destroyed, its pcz field is cleared.
-+ *
-+ * The caller must ensure that no users of the hierarchy remain when this
-+ * function is called.
-+ *
-+ * Context: Process context. May sleep.
-+ *
-+ * Return: 0 on success or -EINVAL if an argument is invalid.
-+ */
-+int powercap_hierarchy_destroy(struct powercap_control_type *pct,
-+			       struct powercap_hierarchy *hierarchy,
-+			       powercap_node_destroy_t powercap_node_destroy);
++fail()
++{
++	echo "FAIL: $*"
++	exit $ksft_fail
++}
 +
-+/**
-+ * powercap_hierarchy_create - Create a powercap hierarchy
-+ * @pct: Powercap control type that will own the hierarchy.
-+ * @hierarchy: Hierarchy to create.
-+ * @powercap_node_create: Callback used to create each powercap zone.
-+ * @powercap_node_destroy: Callback used to roll back an incomplete hierarchy.
-+ *
-+ * Create the powercap zones described by @hierarchy in array order. For each
-+ * entry, @powercap_node_create is called with the powercap zone stored in its
-+ * parent entry. Root nodes are created with a NULL parent.
-+ *
-+ * Each parent entry must precede all its children in the node array. All pcz
-+ * fields must be NULL when this function is called.
-+ *
-+ * If a node cannot be created, all zones created by this invocation are
-+ * destroyed in reverse order by calling @powercap_node_destroy. Therefore,
-+ * @powercap_node_destroy must be provided even when the caller does not
-+ * expect to destroy the hierarchy explicitly.
-+ *
-+ * The hierarchy and the objects referenced by its name and data fields must
-+ * remain valid until powercap_hierarchy_destroy() has completed.
-+ *
-+ * Context: Process context. May sleep.
-+ *
-+ * Return: 0 on success, -EINVAL if an argument or hierarchy entry is invalid,
-+ * -EBUSY if the hierarchy already contains a created zone, or the error
-+ * returned by @powercap_node_create.
-+ */
-+int powercap_hierarchy_create(struct powercap_control_type *pct,
-+			      struct powercap_hierarchy *hierarchy,
-+			      powercap_node_create_t powercap_node_create,
-+			      powercap_node_destroy_t powercap_node_destroy);
++skip()
++{
++	echo "SKIP: $*"
++	exit $ksft_skip
++}
 +
- #endif
++cleanup()
++{
++	if lsmod | grep -q "^${MODULE}\b"; then
++		if ! rmmod "$MODULE"; then
++			echo "WARNING: failed to unload $MODULE"
++		fi
++	fi
++}
++
++trap cleanup EXIT INT TERM
++
++[ "$(id -u)" -eq 0 ] || skip "must be run as root"
++
++insmod ./powercap_hierarchy.ko || fail "failed to load module"
++
++[ -d "$SYSFS" ] || fail "missing $SYSFS"
++
++check_zone()
++{
++	zone=$1
++
++	[ -f "$zone/name" ] || fail "$zone/name missing"
++
++	[ -f "$zone/power_uw" ] || \
++		fail "$zone/power_uw missing"
++
++	[ -f "$zone/max_power_range_uw" ] || \
++		fail "$zone/max_power_range_uw missing"
++
++	power=$(cat "$zone/power_uw")
++	[ "$power" = "12648430" ] || \
++		fail "$zone: unexpected power_uw ($power)"
++
++	max=$(cat "$zone/max_power_range_uw")
++	[ "$max" = "50159747054" ] || \
++		fail "$zone: unexpected max_power_range_uw ($max)"
++
++	constraint="$zone/constraint_0"
++
++	name=$(cat "$constraint""_name")
++	[ "$name" = "my constraint name" ] || \
++		fail "$constraint: bad constraint name"
++
++	pl=$(cat "$constraint""_power_limit_uw")
++	[ "$pl" = "3735929054" ] || \
++		fail "$constraint: bad power limit"
++
++	mp=$(cat "$constraint""_max_power_uw")
++	[ "$mp" = "3735929054" ] || \
++		fail "$constraint: bad max power"
++}
++
++zones=0
++
++find "$SYSFS" -type f -name name | while read namefile
++do
++	zone=$(dirname "$namefile")
++
++	case "$zone" in
++		*/constraint_*)
++			continue
++			;;
++	esac
++
++	check_zone "$zone"
++
++	zones=$((zones + 1))
++done
++
++#
++# Count the number of powercap zones.
++#
++count=$(find "$SYSFS" -type f -name name | \
++	grep -v constraint | wc -l)
++
++[ "$count" -eq 16 ] || \
++	fail "expected 16 zones, got $count"
++
++#
++# Explicitly unload the module.
++#
++cleanup
++
++#
++# Verify that the hierarchy disappeared.
++#
++if [ -d "$SYSFS" ]; then
++	fail "$SYSFS still exists after module removal"
++fi
++
++trap - EXIT INT TERM
++
++echo "PASS"
++
++exit $ksft_pass
 -- 
 2.53.0
 
