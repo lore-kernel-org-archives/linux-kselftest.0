@@ -1,300 +1,247 @@
-Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACBE73F1AD9;
-	Thu,  6 Aug 2026 09:46:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1533C42A14C
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 10:12:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786009616; cv=none; b=skfopT64K5HAaxYkFsz6SVKrqlCweqFaGuT0Ny6XmjTeN8q0qTA7d3fyYFP5+ypFvMvdtR0reGNyGUzS4DkAW/JqDNafUYKktUnr1auCkwDi8f7iQ0s7Fli/ZJzZWD91SKEzYfFtsE1CdR3yOywcHcIvdAparvP3nHnyIKHN+yM=
+	t=1786011168; cv=none; b=gH9jmFVadhPeUl8Ae8EMZChe+RIIGEco6N7PVwYHZUUdTnomTIl+nhBB2x4b1w2M1wchOgaR8HgRfXzB2NVzH7LiXlkFgXrLNfjZ19Txtn1E0FBHLp2xVopH7AL2liXQfhfCnx4nXV53BCfhmIh6Tj6KpGpa4/1/ryxOdu1cTDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786009616; c=relaxed/simple;
-	bh=WGjpApM1QS/+/4gE7zGSR2fGxkMnAOBbZ+dzB3diWFA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=lqFzft8BjjqtuscZ3A6RyAAOYg/6L7E5tzhrBoMVOdeWlLWdQihj+Pvx3TdgLcc15ZGHcWL7qJ4ELgEhwpidaTUlAWvrLC93XA0hm0kOh6xaMc6q0gQNWCgc8YTJbiY+a4TBxod353iApkXmM1dVqz7IKJ2jDieaP87rOxIamPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=v+VzKLjK; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=TU1Q2fmD; arc=none smtp.client-ip=103.168.172.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
+	s=arc-20240116; t=1786011168; c=relaxed/simple;
+	bh=tJZkQVtwb2qjjFvyr3KVCnCJ7+UJG/qi4Xu2JXjyjgU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eqrWnOUH2wZun3oY/eTi6yQiZEmnbjTNWcCh0h2fObYQOvx5XfJILj4DvU8aGystkih9MjeVS3de8/z1xKgQKpeT1dPfiDBT4Y6Ru5FdstLiPFVdZivwpBEdypDm6GS7O3YpiXKlfUr2o29yoLY2BC91J2dlArQvwRoAuAMAsNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MREQxzRY; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="v+VzKLjK";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="TU1Q2fmD"
-Received: from ams-compute-01.internal (ams-compute-01.internal [10.64.2.61])
-	by mailfout.phl.internal (Postfix) with ESMTP id 64C81EC0181;
-	Thu,  6 Aug 2026 05:46:51 -0400 (EDT)
-Received: from ams-imap-19 ([10.64.2.39])
-  by ams-compute-01.internal (MEProxy); Thu, 06 Aug 2026 05:46:52 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1786009610;
-	 x=1786096010; bh=3Cwml3kDGqwN88ArLgRyqqKml7+F2SCPibDeasxjiYw=; b=
-	v+VzKLjKVOy22eBHGJXNBvrIr/zc3v5CLvuDAhSTSP77ZXbemoQj6+bpvsSWJWh6
-	LmzXVmz2/nIgUtO2MgjFnMv4wY7362I9AOWBV5Hr8NhPyNTIFH+2aPfhmc5wu9XF
-	hN678tMGLiR1YS5T+qQ67YptlH8OBdtD1hTHDsPq/NB3FjhHjrYQZDgYIArrzez4
-	DI0unrVLLN1ogQf4IDfixtZAPAAOyiyU4t7ktOrkGpFFPSjW4V61XSS5B6fDRJOr
-	JGEVzSZRdKuA3KLpixTpeo2I8uDQsvPjsm/IKjF5zVnPFtsm988mcY7Xrv1h4xC1
-	/66QqjpU5fikKoN9MIuLVw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786009610; x=
-	1786096010; bh=3Cwml3kDGqwN88ArLgRyqqKml7+F2SCPibDeasxjiYw=; b=T
-	U1Q2fmDLYXVFUMTuhZCafl5I3bGQ8uVso7Kk6P3Dr5xt4hBacKmPz/nJ1DOilgvH
-	BfyKdDZcu+JZgEcJ5VwqlgSKF4WtVVjtnxSVcDxx5dmRgdBMZV6rmeDLDjc6QQl3
-	xgvpxRaTRhezPh7lpEoaAhAoKWha/EQe6fGFPVwIxGBHOWzE+xPSBOdoEnj4Pphu
-	cEE6c1JRlifnuEO81lk9V+nPrJuliJ69iXNqS61KcmAcQ5eAOyuUL8pl4eyvIG5L
-	RVwvjRmDdgPKXH90ZQO2v+1pyx9/1Nb75OEdj1/HFPPJem0MjC8h/8WK40LyiM8L
-	KhXK9OMXiH1A0REV5VTjQ==
-X-ME-Sender: <xms:BVh0ajbpLpBvHs0m4DoABwM9jgQExhduzs9-PttP5tTw6hSUmDqrGw>
-    <xme:BVh0atOj1jbTkSnZFQFBQ1Cn84KMqtaSbpPA3tOIn7vBBXyui6adObju1-jJRggL-
-    X60KhLjl1D_8hg41JdtbW3uitmk4Wrvd0_k213_WV4lkQmKyYI9uc7s>
-X-ME-Proxy-Cause: dmFkZTFg/vNmH/Q80/GJjeUrMBYJLwYbgipZTRdWmtBPfVXulLWEQqrlyyfTKliylbiUJH
-    w93/c93TEioXIwS3GFJMQVzZs9jTO6CTXbhWrWOyr8bsLe7QU3FmaLJULLCrz0+LX6XTXm
-    FtHBvA70lH8IqwJpi+EpC0Lu7uaZVTw8bbGBF+Wo1Ur5FF0mh2HYqXV9L+ABEiWKt0Ww4Z
-    xwKJ7vM2e/DSNq1Oh63tak03vIQ8dwvsu0+MgIKO98RSP53GJbpSwENTnX2nkwiNDnfAFM
-    t8QFfUwbAwA/nVSe5IzAVsry8MVWr/flj7XrJ+8v83AXNQ+agCYuTFzE23puZ7YzhCiKKF
-    lP1Yx40JYauQE6/NhRblXjZRWuvTKW6KD24pIhneyjIqKvGKC97hBv4HIkw5INL3d67lmY
-    u+45Uy8nCTzqnTlDIImPZJRIWC4mvOoNd8KwDCr/dCV3mBZm+7MFpBvLcAAJ3i3uFLi3Ou
-    pbnH2JSoTYZVAISzBrJyaXHsHGY30BL4B4TLlcDvV5AxALOPAuODqMpN7lb4dTuZs12vFy
-    yy+RmwR8Ca2oOuVzonxfZ9ueVBUw+LL2VCFnEg0OpLHTc5EiNd/fhs0qZ8ZqbpCtK4W3rh
-    GXT71zshg8ei5VyF4qj75AnI6wNw0k+cnmdVplVzIEeW8faYipEl/T9+vzUg
-X-ME-Proxy: <xmx:CFh0ajrqmHGpfnvUhLBNxgnmjW4QNQWQRclVEcWZ8VDazmJH82KqdQ>
-    <xmx:CFh0aqBW5DpoQHSsC9085bTOp2FmTxoOvuzK7UsdTidXFBvNptT_yg>
-    <xmx:CFh0akozSBdIZzjYGkoPhAHoLjGcOqq29VyU2QrCgBa0YnCx-IQ-ow>
-    <xmx:CFh0alBnP8PzCtSQJIKXM4b78WrAhkoykvokhUbuk6f7ByoWrjbbIQ>
-    <xmx:Clh0asnjvnrhLXHnUd5YY5OnQrciQXHauB70fo5d9nnnRVwF3YEEkDDI>
-Feedback-ID: i559e4809:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 6D0542F81644; Thu,  6 Aug 2026 05:46:45 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MREQxzRY"
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84e84a6c4bfso878603b3a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 03:12:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786011166; x=1786615966; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Uyan3HYAysDdmSD1Jx4k3XmyCNsWmK9jFSOoc7MH43M=;
+        b=MREQxzRY8v4WXkMZMbD1JzwklBY7hxvRGecGLm+nG654XrNM3nkoGtrxSbQQk/IhPR
+         /pr1Up4S2UQ6p95kSGJD2+CnjlptWJRL1iFGVA5TB8uzYhdy6oTyxAjXwyCvxR//MqML
+         EH+UdszWRAiXLzj0c/FjjQqpIpUqB3GRfYk4Rf6V9/k+ZPT2j7KIpqQLlpxeHucbBdvK
+         ELryKOGM9JR9rOKgZ7/oEDmKMxhPDTCv79tOHv1JRRgNkBznSmPgINEfPlScINwf6eEF
+         m9wz/7bxoDykhp4VERekbCaILosNeIfWzi8zs5trVNtH3jgWlFWGV4/8NyK1bDSRZRhV
+         MBQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786011166; x=1786615966;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Uyan3HYAysDdmSD1Jx4k3XmyCNsWmK9jFSOoc7MH43M=;
+        b=nYmzhC3qs1wkSRKppRmObZNUEzS7zB0CWGIsuGX3YIESHzd8PSkwi7Vbn68MdwoZ+r
+         97AAgL8A7VdxsZLFKTfCov+WuUPaOoBmH64CPf7V8BuWkLzoxs+lyaUume1zlaVqmdnG
+         7t59N3ERd1F8ycjEXmMfoMQ1U3uSYLMBTAiJXyBrGcpZLrrqGz1yTizk/vri1P9BUfwI
+         eQ8XU35NCiWe6wjANDv/JKfFa4BFP3jVUTkSABzurCmvQtE443GsNxH1NlMtOZi5Id1z
+         ry9XQpNSnVAw5Ocp+UgkAmc6pRhIASEquaJfKFINZp/LoLlBuvyDijGAETgOWzO6IOCB
+         jisA==
+X-Forwarded-Encrypted: i=1; AHgh+RqqzBDqMc7ibwY2XfeLTbKEbAwIP/dvTD48jQq+y2SDy58E7xRAPU7ehIozH+59RowA6ypj2JJZxyNy/+ETZ3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyk09RyLSWtD9TX+rkGw75TwAEmFOyqC98w233OEaLHORo9S19F
+	lrURsKiPjM6UZCtGNVCZVwrK1kbCyzObw/WGeiHRvVK4DR2i19dMT/3J
+X-Gm-Gg: AR+sD12IyfEToZSo4r20I5G0hbWBRk/ViNsg/q0ryIL7nxbY63/X31UPVEHa00YK9wW
+	UeGBcbCGSo4fEeC/aXwpDgaWtdfjfFp0q2vTYf+kFx0vp60nkjH1RmjOKrh5pKRyMPoX7os+jJG
+	lXxAqy/+ik6vjPwF4qjINjzfCKwrj06WSbSpDXPPl+KLBwIkuRfeeXZUBMhbAoqM5OKDlq4sm7A
+	3+WVUi+58QhcoGIjKrmF+fKU+BYqc7nJVHQLbBrsgxr8stEP3Q0fGx2hjSoMzveiXZZHF1Wd+WX
+	uhrNABLwDMNbiJnW1fugRQdIkdhcG4taVJoBWiB9kICbPXoV0b9taUm3ZIJBpHrTojY/sKa05BZ
+	o0MFPYby/kneS9fMQYXT3xoEW3tA4mKENRU13+yioulbLmEcaLkQT6aUNj6EJhkTSnyYsBRkBma
+	EnlNZqudLGOYYk2yrqDAYQfL0idhwaWV05shpho6OMZFHxBr7rPm+B5AwH6Nb7hXKPnnnvFKG9X
+	5rNTwJqdBCO6CssyiSsrsU35PQK4oJR289AU+Y=
+X-Received: by 2002:a05:6a00:2e14:b0:842:446a:4cb5 with SMTP id d2e1a72fcca58-84f418a3e81mr6318346b3a.0.1786011166071;
+        Thu, 06 Aug 2026 03:12:46 -0700 (PDT)
+Received: from BOOK-P74QMIQ7E8.localdomain ([220.73.18.179])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f45bc9cffsm1090371b3a.59.2026.08.06.03.12.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 03:12:45 -0700 (PDT)
+From: Hyunjung Ko <hj351016@gmail.com>
+To: Jamal Hadi Salim <jhs@mojatatu.com>,
+	Jiri Pirko <jiri@resnulli.us>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Tao Liu <taoliu828@163.com>
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hyunjung Ko <hj351016@gmail.com>,
+	stable@vger.kernel.org
+Subject: [PATCH net v2 1/2] net/sched: act_ct: fix sk_buff leak when the header checks reject a packet
+Date: Thu,  6 Aug 2026 19:12:34 +0900
+Message-Id: <20260806101235.809370-1-hj351016@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 06 Aug 2026 12:45:52 +0300
-From: "Alice Mikityanska" <alice.kernel@fastmail.im>
-To: "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
- "David Ahern" <dsahern@kernel.org>, "Ido Schimmel" <idosch@nvidia.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Simon Horman" <horms@kernel.org>,
- "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, "Alice Mikityanska" <alice@isovalent.com>,
- syzbot <syzbot+ce13c07d96d04716eaa2@syzkaller.appspotmail.com>,
- vadim.fedorenko@linux.dev
-Message-Id: <a2f88a4b-4105-40df-a46c-f1bc0f67af1f@app.fastmail.com>
-In-Reply-To: <willemdebruijn.kernel.220b53c78c5f4@gmail.com>
-References: <20260805205957.1652619-1-alice.kernel@fastmail.im>
- <willemdebruijn.kernel.220b53c78c5f4@gmail.com>
-Subject: Re: [PATCH net-next 4/4] net: Fix UDP length overflow with PMTU discover and
- big MTU
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 6, 2026, at 06:26, Willem de Bruijn wrote:
-> Alice Mikityanska wrote:
->> From: Alice Mikityanska <alice@isovalent.com>
->> 
->> This commit bounds cork->base.fragsize to IP(6)_MAX_MTU to avoid a
->> possible overflow of UDP length that triggers a WARN in
->> udp_set_len_short when setsockopt IP(V6)_MTU_DISCOVER is set to
->> IPV6_PMTUDISC_DO or IP(V6)_PMTUDISC_PROBE, and a large packet is sent
->> over a netdev with an unusually large MTU.
->> 
->> Steps to reproduce (included in the new selftest):
->> 
->> 1. Set device MTU bigger than IP6_MAX_MTU (or IP_MAX_MTU + 20).
->>    cork->base.fragsize will be set to that MTU in ip(6)_setup_cork.
->> 2. Set IP(V6)_MTU_DISCOVER to IP(V6)_PMTUDISC_PROBE or IPV6_PMTUDISC_DO.
->>    It lets maxnonfragsize be set to device MTU (cork->fragsize) in
->>    __ip(6)_append_data, rather than to IP(6)_MAX_MTU.
->> 3. Send 65528 bytes of payload (+8 bytes of UDP header, +20/40 bytes of
->>    IPv4/IPv6 header). Device MTU allows it (it's only one byte bigger
->>    than IP6_MAX_MTU or IP_MAX_MTU + IPv4 header, and the device MTU is
->>    bigger than that).
->> 4. The UDP length in the built packet is 65536, which overflows the
->>    16-bit length field and triggers the WARN in udp_set_len_short.
->
-> This is discovered thanks to udp_set_len_short, but is this a
-> preexisting bug and the fix go to net with a Fixes tag?
+tcf_ct_handle_fragments() runs its header sanity checks before handing
+anything to the defragmentation engine:
 
-You're right, it's preexisting, it can go to net.
+	if (family == NFPROTO_IPV4)
+		err = tcf_ct_ipv4_is_fragment(skb, &frag);
+	else
+		err = tcf_ct_ipv6_is_fragment(skb, &frag);
+	if (err || !frag)
+		return err;
 
-For the Fixes tag, I'm not sure about the first occurrence of this bug.
-It could even be as old as 1470ddf7f8ce ("inet: Remove explicit write
-references to sk/inet in ip_append_data"), but I can't compile this
-kernel with modern tools and check myself, unless I bring up some VM
-with an ancient distro from 2011. And I guess, it could be even older,
-as corking existed before. At the same time, something else might have
-prevented this bug back then.
+tcf_ct_ipv4_is_fragment() returns -EINVAL or -ENOMEM;
+tcf_ct_ipv6_is_fragment() adds -EPROTO when ipv6_find_hdr() fails. None of
+them frees or queues the skb, so on that path the caller still owns it.
 
-If needed, I can try to do this archaeology.
+tcf_ct_act() however funnels every non-zero return into the
+ownership-transfer exit:
 
->> Note: IP_PMTUDISC_DO with IPv4 is safe, because ip_dst_mtu_maybe_forward
->> always clamps at IP_MAX_MTU, unlike ip6_dst_mtu_maybe_forward.
->
-> That was introduced in commit 14972cbd34ff ("net: lwtunnel: Handle
-> fragmentation"), the message of which includes "This includes .. some
-> mtu fixes" without elaborating on those.
->
-> That introduced the same clamp in ip6_mtu. Which was removed in
-> commit 427faee167bc ("net: ipv6: introduce ip6_dst_mtu_maybe_forward")
+	err = tcf_ct_handle_fragments(net, skb, family, p->zone, &defrag);
+	if (err)
+		goto out_frag;
+	...
+out_frag:
+	if (err != -EINPROGRESS)
+		tcf_action_inc_drop_qstats(&c->common);
+	return TC_ACT_CONSUMED;
 
-Looks like it could be by accident, it's a refactoring commit. The
-similar change for IPv4 in commit ac6627a28dbf ("net: ipv4: Consolidate
-ipv4_mtu and ip_dst_mtu_maybe_forward") preserves the clamp.
+TC_ACT_CONSUMED means the action took ownership of the skb, so no caller
+frees it - sch_handle_ingress(), sch_handle_egress() and
+tcf_qevent_handle() all deliberately skip the free for that verdict. The
+skb is therefore orphaned: one sk_buff plus its data buffer is leaked per
+malformed packet, unbounded. Note the drop counter is already incremented
+for these errors, so the statistics claim a drop that never happens.
 
-> Tangential to this fix, but maybe that should be reinstated. I don't
-> immediately see why the two would diverge on this point.
+Three different ownership states reach out_frag: today - the skb may be
+queued by the defrag engine (-EINPROGRESS), already freed by
+nf_ct_handle_fragments(), or still owned by us. Tell the caller which of
+those it is, and free the packet ourselves in the last case, which
+restores the TC_ACT_SHOT behaviour that predated the Fixes: commit.
 
-I agree; even though the output case should be fixed by my patch, it
-might still be relevant for forwarding. Let's see if Vadim has any
-comment on the history of the above.
+Reproduced on v7.2-rc6 with a 54-byte frame carrying a 40-byte IPv6
+header with nexthdr = 0 (hop-by-hop) and nothing after it, on a
+clsact ingress chain with "action ct". kmemleak reports one leaked
+232-byte skbuff_head_cache object plus its 704-byte data buffer per
+packet; with this patch it reports none.
 
->> Reported-by: syzbot+ce13c07d96d04716eaa2@syzkaller.appspotmail.com
->> Closes: https://lore.kernel.org/netdev/6a6a966c.86abc875.e5c3d.0054.GAE@google.com/
->> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
->> Assisted-by: Claude:claude-sonnet-4.6
->> Cc: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
->
-> I only see this patch 4/4. Is there more that did not make it to the list?
+Fixes: 3f14b377d01d ("net/sched: act_ct: fix skb leak and crash on ooo frags")
+Cc: stable@vger.kernel.org # v6.8+
+Assisted-by: Anthropic-Claude-Code:Claude-Opus-5
+Signed-off-by: Hyunjung Ko <hj351016@gmail.com>
+---
+ net/sched/act_ct.c | 29 +++++++++++++++++++++++++----
+ 1 file changed, 25 insertions(+), 4 deletions(-)
 
-Sorry, I sent it like this by accident, this is an only patch in this
-submission.
+v2:
+ - add a tdc selftest (patch 2/2), as requested by Jamal
+ - add Assisted-by: tag
+ - no functional change to the fix itself
+v1: https://lore.kernel.org/netdev/20260805095539.204356-1-hj351016@gmail.com/
 
->
->> ---
->>  net/ipv4/ip_output.c                         |  2 +
->>  net/ipv6/ip6_output.c                        |  2 +-
->>  tools/testing/selftests/net/Makefile         |  1 +
->>  tools/testing/selftests/net/cork_fragsize.py | 77 ++++++++++++++++++++
->>  4 files changed, 81 insertions(+), 1 deletion(-)
->>  create mode 100755 tools/testing/selftests/net/cork_fragsize.py
->> 
->> diff --git a/net/ipv4/ip_output.c b/net/ipv4/ip_output.c
->> index e6dd1e5b8c32..2bc997c4fa7b 100644
->> --- a/net/ipv4/ip_output.c
->> +++ b/net/ipv4/ip_output.c
->> @@ -1299,6 +1299,8 @@ static int ip_setup_cork(struct sock *sk, struct inet_cork *cork,
->>  
->>  	cork->fragsize = ip_sk_use_pmtu(sk) ?
->>  			 dst4_mtu(&rt->dst) : READ_ONCE(rt->dst.dev->mtu);
->> +	if (cork->fragsize > IP_MAX_MTU)
->> +		cork->fragsize = IP_MAX_MTU;
->>  
->>  	if (!inetdev_valid_mtu(cork->fragsize))
->>  		return -ENETUNREACH;
->> diff --git a/net/ipv6/ip6_output.c b/net/ipv6/ip6_output.c
->> index 368e4fa3b43c..91c92cb8e529 100644
->> --- a/net/ipv6/ip6_output.c
->> +++ b/net/ipv6/ip6_output.c
->> @@ -1430,7 +1430,7 @@ static int ip6_setup_cork(struct sock *sk, struct inet_cork_full *cork,
->>  	if (frag_size && frag_size < mtu)
->>  		mtu = frag_size;
->>  
->> -	cork->base.fragsize = mtu;
->> +	cork->base.fragsize = min(mtu, IP6_MAX_MTU);
->>  	cork->base.gso_size = ipc6->gso_size;
->>  	cork->base.tx_flags = 0;
->>  	cork->base.mark = ipc6->sockc.mark;
->> diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
->> index b43ddf192ecc..628203fda424 100644
->> --- a/tools/testing/selftests/net/Makefile
->> +++ b/tools/testing/selftests/net/Makefile
->> @@ -25,6 +25,7 @@ TEST_PROGS := \
->>  	cmsg_so_mark.sh \
->>  	cmsg_so_priority.sh \
->>  	cmsg_time.sh \
->> +	cork_fragsize.py \
->>  	double_udp_encap.sh \
->>  	drop_monitor_tests.sh \
->>  	ecmp_rehash.sh \
->> diff --git a/tools/testing/selftests/net/cork_fragsize.py b/tools/testing/selftests/net/cork_fragsize.py
->> new file mode 100755
->> index 000000000000..7a1bb069227a
->> --- /dev/null
->> +++ b/tools/testing/selftests/net/cork_fragsize.py
->> @@ -0,0 +1,77 @@
->> +#!/usr/bin/env python3
->> +# SPDX-License-Identifier: GPL-2.0
->> +
->> +# Test possible UDP length overflow in udp_send_skb/udp_v6_send_skb.
->> +
->> +from lib.py import ksft_run, ksft_exit, ksft_true
->> +from lib.py import ip, NetNS, NetNSEnter
->> +import errno
->> +import socket
->> +import subprocess
->> +
->> +
->> +IP_MTU_DISCOVER = 10
->> +IP_PMTUDISC_PROBE = 3
->> +IPV6_MTU_DISCOVER = 23
->> +IPV6_PMTUDISC_DO = 2
->> +
->> +
->> +def check_dmesg_clean(func) -> bool:
->> +    dmesg = subprocess.Popen(['dmesg'], stdout=subprocess.PIPE)
->> +    result = subprocess.run(['grep', '-q', f'WARNING:.*{func}'], stdin=dmesg.stdout)
->> +    dmesg.wait()
->> +    return result.returncode != 0 and dmesg.returncode == 0
->> +
->> +
->> +def test_ipv6() -> None:
->> +    with NetNS() as ns:
->> +        ip('link add dummy type dummy', ns=ns)
->> +        ip('link set dummy mtu 65576', ns=ns)
->> +        ip('link set dummy up', ns=ns)
->> +        ip('-6 addr add fd00::1/64 dev dummy nodad', ns=ns)
->> +        ip('-6 neigh add fd00::2 lladdr 02:00:00:00:00:02 dev dummy nud permanent', ns=ns)
->> +
->> +        with NetNSEnter(ns):
->> +            with socket.socket(socket.AF_INET6, socket.SOCK_DGRAM) as fd:
->> +                fd.setsockopt(socket.IPPROTO_IPV6, IPV6_MTU_DISCOVER, IPV6_PMTUDISC_DO)
->> +                try:
->> +                    fd.sendto(b' ' * 65528, ('fd00::2', 1234))
->> +                except OSError as e:
->> +                    # Ignore EMSGSIZE: it happens on kernels with the fix.
->> +                    if e.errno != errno.EMSGSIZE:
->> +                        raise
->> +
->> +        ip('link del dummy', ns=ns)
->> +
->> +    ksft_true(check_dmesg_clean('udp_v6_send_skb'), 'WARNING detected in dmesg')
->> +
->> +
->> +def test_ipv4() -> None:
->> +    with NetNS() as ns:
->> +        ip('link add dummy type dummy', ns=ns)
->> +        ip('link set dummy mtu 65556', ns=ns)
->> +        ip('link set dummy up', ns=ns)
->> +        ip('addr add 10.0.0.1/24 dev dummy', ns=ns)
->> +        ip('neigh add 10.0.0.2 lladdr 02:00:00:00:00:02 dev dummy nud permanent', ns=ns)
->> +
->> +        with NetNSEnter(ns):
->> +            with socket.socket(socket.AF_INET, socket.SOCK_DGRAM) as fd:
->> +                fd.setsockopt(socket.IPPROTO_IP, IP_MTU_DISCOVER, IP_PMTUDISC_PROBE)
->> +                try:
->> +                    fd.sendto(b' ' * 65528, ('10.0.0.2', 1234))
->> +                except OSError as e:
->> +                    # Ignore EMSGSIZE: the check happens after the WARN is printed.
->> +                    if e.errno != errno.EMSGSIZE:
->> +                        raise
->> +
->> +        ip('link del dummy', ns=ns)
->> +
->> +    ksft_true(check_dmesg_clean('udp_send_skb'), 'WARNING detected in dmesg')
->> +
->> +
->> +if __name__ == "__main__":
->> +    ksft_run([
->> +        test_ipv6,
->> +        test_ipv4,
->> +    ])
->> +    ksft_exit()
->> -- 
->> 2.55.0
->>
+Reproducer needs CONFIG_NET_ACT_CT, plus CONFIG_DEBUG_KMEMLEAK and
+kmemleak=on to observe it:
+
+  ip link add veth0 type veth peer name veth1
+  ip link set veth0 up; ip link set veth1 up
+  tc qdisc add dev veth0 clsact
+  tc filter add dev veth0 ingress matchall action ct
+
+then inject at veth1 a 54-byte frame: ethertype 0x86DD, a 40-byte IPv6
+header with nexthdr = 0 (hop-by-hop) and nothing after it, so
+ipv6_find_hdr() fails with -EBADMSG and tcf_ct_ipv6_is_fragment()
+returns -EPROTO.
+
+Before, one sk_buff plus its data buffer per packet:
+
+  kmemleak: 50 new suspected memory leaks
+  unreferenced object 0xffff888103ed13c0 (size 232):
+    kmem_cache_alloc_node_noprof+0x2f1/0x3e0
+    __alloc_skb+0xe5/0x860
+    alloc_skb_with_frags+0x82/0x750
+    sock_alloc_send_pskb+0x658/0x7e0
+    packet_sendmsg+0x1833/0x4860
+    __x64_sys_sendto+0xe0/0x1c0
+    do_syscall_64+0x102/0x5a0
+
+After: kmemleak reports no unreferenced objects.
+
+Note /proc/slabinfo is not a usable check here on a KASAN build -
+skbuff_head_cache active_objs still grows because the quarantine holds
+the freed objects. kmemleak is the reliable signal.
+
+Patch 2/2 turns the same case into a tdc test, using the clsact drop
+counter as the discriminator: before the fix act_ct returns
+TC_ACT_CONSUMED, so tc_run() never reaches its TC_ACT_SHOT arm and the
+counter stays at zero while the skbs leak.
+
+diff --git a/net/sched/act_ct.c b/net/sched/act_ct.c
+index be535a261fa0..e250969c84ac 100644
+--- a/net/sched/act_ct.c
++++ b/net/sched/act_ct.c
+@@ -840,8 +840,15 @@ static int tcf_ct_ipv6_is_fragment(struct sk_buff *skb, bool *frag)
+ 	return 0;
+ }
+ 
++/* On error, tells the caller whether it still owns @skb and must free it
++ * itself.  @skb is ours only when the header checks below reject the packet
++ * before it is handed to the defragmentation engine; once nf_ct_handle_
++ * fragments() has been called the skb is either queued (-EINPROGRESS) or has
++ * already been freed by it.
++ */
+ static int tcf_ct_handle_fragments(struct net *net, struct sk_buff *skb,
+-				   u8 family, u16 zone, bool *defrag)
++				   u8 family, u16 zone, bool *defrag,
++				   bool *skb_is_ours)
+ {
+ 	enum ip_conntrack_info ctinfo;
+ 	struct tc_skb_cb cb;
+@@ -859,8 +866,12 @@ static int tcf_ct_handle_fragments(struct net *net, struct sk_buff *skb,
+ 		err = tcf_ct_ipv4_is_fragment(skb, &frag);
+ 	else
+ 		err = tcf_ct_ipv6_is_fragment(skb, &frag);
+-	if (err || !frag)
++	if (err) {
++		*skb_is_ours = true;
+ 		return err;
++	}
++	if (!frag)
++		return 0;
+ 
+ 	cb = *tc_skb_cb(skb);
+ 	err = nf_ct_handle_fragments(net, skb, zone, family, &proto, &cb.mru);
+@@ -977,6 +988,7 @@ TC_INDIRECT_SCOPE int tcf_ct_act(struct sk_buff *skb, const struct tc_action *a,
+ 	int nh_ofs, err, retval;
+ 	struct tcf_ct_params *p;
+ 	bool add_helper = false;
++	bool skb_is_ours = false;
+ 	bool skip_add = false;
+ 	bool defrag = false;
+ 	struct nf_conn *ct;
+@@ -1012,9 +1024,18 @@ TC_INDIRECT_SCOPE int tcf_ct_act(struct sk_buff *skb, const struct tc_action *a,
+ 	 */
+ 	nh_ofs = skb_network_offset(skb);
+ 	skb_pull_rcsum(skb, nh_ofs);
+-	err = tcf_ct_handle_fragments(net, skb, family, p->zone, &defrag);
+-	if (err)
++	err = tcf_ct_handle_fragments(net, skb, family, p->zone, &defrag,
++				      &skb_is_ours);
++	if (err) {
++		/* The skb is still ours only when the header checks rejected
++		 * it; returning TC_ACT_CONSUMED for such a packet would leak
++		 * it, since no caller frees an skb it was told it no longer
++		 * owns.
++		 */
++		if (skb_is_ours)
++			goto drop;
+ 		goto out_frag;
++	}
+ 
+ 	err = nf_ct_skb_network_trim(skb, family);
+ 	if (err)
+--
+2.43.0
