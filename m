@@ -1,95 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 364FE488DA0;
-	Thu,  6 Aug 2026 17:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC8402E06EF;
+	Thu,  6 Aug 2026 18:06:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786038603; cv=none; b=jrzCB2cnSCZEtguGLoPWOkNLfJoIUiPvzFf8dNO+llO7m/TAWVOSOB3EwSoZuBfwDQ/g76hIkAL3ZiQXckBd3RM4wlCgrBo0wwfTOWEMqddz/xL7etO5GpQthtgGTOOqJrGnH+1GCImC4ECO1ZPB/eYBxW35q8GtBnqeFRFvgZU=
+	t=1786039565; cv=none; b=TIZJHnurYLVEYd0KskHfrI1k5esz6mK/UsRBtlUOunGKp72fw4nQQfr9GQVjCmn848d/kuzrS250DTseVaZqpLUS5ZcLXj+LLJWRycCs4bOs+QZeH0abWPkv6ZnXHgsbqbi0WxHDKMITAhOYDTnwY6Yi4+JDx64+QLiepzcS2Iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786038603; c=relaxed/simple;
-	bh=02qgsS8wEkD51wzpErsigtQtEXxICnIkVbKaDwzvd80=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Gvdd4ZXyp+6QlSiyLw68FQWgLDEPc2iuUNYMsoUZMfhWLPvxnd6ysf/XFmlFVbzNAGzZXDsOQD0xXsTuPcrT0gvYL4/JVCAiCfSaPKbk0k2UjI1abug9bL8dsjNF0p1YvQNJIfDOsgpWk+Zilbq93Z3bxYtXGgdxcy22aZxy+vI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6OhYPqd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786039565; c=relaxed/simple;
+	bh=KiYfHqCHFGmfrfJH+AeBviS8gL4ccQy1n2LBSmSt/Xg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=qc3aXMXh59E3qGhvpXge6yQkXlL2zFFGKzOEsJG1k2+loTbYSNNP3b6DHr6xr3G5wx8fVzXirTr4pBVBlLVoJNOSk7KVg2lb8LCMq23lxMgLR7L0fyXTM9vTxGOtt1Ymq0hJiNdaw3aoPSZnw9Yd9GOKGGAGVTgsDMED5VRnPNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ILRYTfxu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6OhYPqd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26E7F1F00A3F;
-	Thu,  6 Aug 2026 17:49:55 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ILRYTfxu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B426A1F000E9;
+	Thu,  6 Aug 2026 18:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786038596;
-	bh=F8TiAXM26OEiIQfSONIS9MNS6RD/HRmk32N/8eNuLjU=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=U6OhYPqdn+GQvWoWvsOy0p2/U857WvEy39li6wmpQeVkvxOAvEA/iLxfQ5bu8o0lN
-	 5PcRznYH1r4MX2QFfKB+HslOavDabaA10jeML3sKnCUlBRNL6cOkEZCOl4IIDFGDva
-	 5ruC3i31YUrfJH53PjSQ8PkmD5lqz3gJFGr/LDRIXsbs6FksGgXIE0zHxaA/FVFZj8
-	 KPN/UNOvj/oGBXnl3OCb4kbKhKYYg3JICdETUOU76jHMJh7/idUy+s0JoJbIJv/S00
-	 783UbRxqbils4fwLSj0RPKoYGQMgrAv11fRSffZNtocrZBE3pU3dCyP1Jd7oEjavKA
-	 mA2tuduuRQ2HQ==
-From: Sasha Levin <sashal@kernel.org>
-To: gregkh@linuxfoundation.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Sasha Levin <sashal@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	stable@vger.kernel.org,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re=20=28SUSE=29?= <ricardo@marliere.net>
-Subject: Re: [PATCH 7.1.y] selftests/bpf: Add tests for sleepable tracepoint programs
-Date: Thu,  6 Aug 2026 13:49:40 -0400
-Message-ID: <20260806131002.stable-0003@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260805-selftests-bpf-sleepable-v1-1-e29fa5af4119@marliere.net>
-References: <20260805-selftests-bpf-sleepable-v1-1-e29fa5af4119@marliere.net>
+	s=k20260515; t=1786039563;
+	bh=GXPgn1oZ8GLufiYOpYxHEAlYi2lmrI8rfY2EyqvnlW4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=ILRYTfxuiYC2kZl9KdNkWRPvXSjr6MXA0bKS04Cnqir3xLyZGPYgshvgr0YLqEbtn
+	 BIezdHZq8hSLipcKPUxQaCtvyt96Erm440ZAtBw1Ng7J20/OoBc+wHpGNED+JFr5lL
+	 5HQnj8sm1MTHjAOLMyGchxjuo9m3PAdfArqsrJLnv51uJ2/LqYyO3K5+okVLZpniy4
+	 ZuZlMqEl01CrRT3Y6/WrcIkE3x5X7e7mcZDrnroexrYTtUEr5+ky+svBNsEjwPgKLs
+	 +QKJJe1PzWW/PpcEvKNloJSO5Zc3FZZykPZ1uMJIh/ZPp95DC4FVTMALmj2jVTTVdI
+	 Z3feliwYyDR5A==
+Date: Thu, 6 Aug 2026 12:05:58 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Guodong Xu <docular.xu@gmail.com>
+cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+    Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+    Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+    Zong Li <zong.li@sifive.com>, Deepak Gupta <debug@rivosinc.com>, 
+    Anup Patel <anup@brainfault.org>, Atish Patra <atish.patra@linux.dev>, 
+    Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+    Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>, 
+    Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+    Chen Wang <chen.wang@linux.dev>, linux-doc@vger.kernel.org, 
+    linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+    kvm@vger.kernel.org, kvm-riscv@lists.infradead.org, 
+    Paul Walmsley <paul.walmsley@sifive.com>, Conor Dooley <conor@kernel.org>, 
+    Jesse Taube <jtaubepe@redhat.com>, 
+    Charlie Jenkins <thecharlesjenkins@gmail.com>, 
+    Andrew Jones <andrew.jones@oss.qualcomm.com>, devicetree@vger.kernel.org, 
+    spacemit@lists.linux.dev, sophgo@lists.linux.dev, 
+    linux-kselftest@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
+Subject: Re: [PATCH v5 04/17] riscv: Standardize extension capitalization
+In-Reply-To: <20260701-rva23u64-hwprobe-v2-v5-4-2c61f94a695a@gmail.com>
+Message-ID: <59f93f2b-db1d-f7ff-d893-05dbca87b549@kernel.org>
+References: <20260701-rva23u64-hwprobe-v2-v5-0-2c61f94a695a@gmail.com> <20260701-rva23u64-hwprobe-v2-v5-4-2c61f94a695a@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, Aug 05, 2026 at 02:54:34PM -0300, Ricardo B. Marlière (SUSE) wrote:
-> Hi, backporting commit 23b933c6223f ("bpf: Verifier support for sleepable
-> tracepoint programs") without backporting this commit breaks the selftest,
-> as seen in openSUSE CI:
+On Wed, 1 Jul 2026, Guodong Xu wrote:
 
-Agreed on the diagnosis: 23b933c6223f went into 7.1.y as a Stable-dep-of
-and changed the verifier error string without updating the expectation,
-so the verifier/sleepable.c hunk is both correct and needed there.
+> From: Charlie Jenkins <charlie@rivosinc.com>
+> 
+> The base extensions are often lowercase and were written as lowercase in
+> hwcap, but other references to these extensions in the kernel are
+> uppercase. Standardize the case to make it easier to handle macro
+> expansion.
+> 
+> Acked-by: Anup Patel <anup@brainfault.org>
+> Reviewed-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Charlie Jenkins <thecharlesjenkins@gmail.com>
+> [Apply KVM_ISA_EXT_ARR(), fixup all KVM use.]
+> Signed-off-by: Andrew Jones <andrew.jones@oss.qualcomm.com>
+> Signed-off-by: Guodong Xu <docular.xu@gmail.com>
 
-The rest of the commit is the problem:
+Thanks, queued for v7.3.
 
->  .../bpf/prog_tests/sleepable_tracepoints.c         | 142 +++++++++++++++++++++
->  .../bpf/progs/test_sleepable_tracepoints.c         | 112 ++++++++++++++++
->  .../bpf/progs/test_sleepable_tracepoints_fail.c    |  18 +++
->  tools/testing/selftests/bpf/verifier/sleepable.c   |  17 ++-
-
-The three new files use SEC("tp_btf.s/..."), SEC("raw_tp.s/...") and
-SEC("tp.s/..."). 7.1.y does not carry 0cd420a6f40c7 ("libbpf: Add section
-handlers for sleepable tracepoints"), so its libbpf has no SEC_DEF entry
-for any ".s" tracepoint variant, and sec_def_matches() will not match a
-".s" suffix against the plain "tp_btf+"/"raw_tp+"/"tp+" entries. Every
-program in the two new progs/ files then fails to load and
-test_sleepable_tracepoints__open_and_load() fails outright - so as posted
-this trades a test_verifier failure for a permanently failing test_progs
-test.
-
-The runtime pieces are missing from 7.1.y as well - 439ebd5b5708 ("bpf:
-Add sleepable support for raw tracepoint programs"), 12628ffaf98b ("bpf:
-Add bpf_prog_run_array_sleepable()") and 57918341dd19 ("bpf: Add
-sleepable support for classic tracepoint programs") - so even with the
-libbpf section handlers the functional subtests would still fail.
-
-Could you send a v2 carrying only the
-tools/testing/selftests/bpf/verifier/sleepable.c hunk, with a note in the
-commit message explaining why the new prog_tests/ and progs/ files are
-omitted?
-
--- 
-Thanks,
-Sasha
+- Paul
