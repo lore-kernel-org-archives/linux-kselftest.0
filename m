@@ -1,171 +1,84 @@
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3E530FF08;
-	Thu,  6 Aug 2026 09:04:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7F6421F1B;
+	Thu,  6 Aug 2026 09:10:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786007063; cv=none; b=ey2393YqGVP9uv5ue0rTF+cYCrRX84puVXYJwRBLWA9kLAYOxK1vqAYFbLqOcQIkKbnMHJ9bnCdYa3/cnVveeaaW0CSPa5Jt+JdZ+KL3I0sF5emkrFjOBMBoi11t7moPgOjY11ZeyByxxrDsspGocOESNJh93EUj4H8tMJy++ZE=
+	t=1786007454; cv=none; b=dNWCUgZj9EEh4pFpYVHI5X6zxuZpq0GzYgSCBv5QRmtsmnO9fmP5eu/jSo+IxUplVzl2MtLfrnH7bB+qNvMOFE6dXjBodKG52NzK3RgMNEW3uAeklnIa18m9ya5oMsVmjDT8w1T3HcSLooE+i6syq9en67ClWNGQzzDPCxQMs2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786007063; c=relaxed/simple;
-	bh=B8/69GPoQft63t6vKlmcovoad80jxzWLlb9yEv7T9EA=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=OA/uvEaAscChgmDKQZJK/slV4WDpo0OrSnDf0f9FyuXMSsoAhvDAf8cJw1fXlJVyMZ0fHTgYYL0fLvN6paazCfxTMXVUP0N36XKrTwn885QlK/yjgUgvVr8ql9d2+KXknoCy9y6+kZbE0v6VaIs8AurQOTkoleT0K75ffGoaWFg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=nh9PJo5o; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7kp901Ur; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=BMg3Ql8P; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HQLL07cb; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+	s=arc-20240116; t=1786007454; c=relaxed/simple;
+	bh=5PAIYNCXMzKjXjS2Bk+18ajPd0rSl53iubWcQPOToE0=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=kFnEFl2hmCwY5pQJ3EFNv1U2753/ZqpgFMOlvcSxUOEuJND9pGqUu8vR+HmbLLnsfDQxxypfpN0DW9TqDMLT9OA2/QTjUErOpf+4BO+aZWQfdgWvPqAAwa4t+/UA9vHFeXYi00iTAAA7O51ff/VE4AHeh305w+ZavunLe0PxoW0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O2hLdmtD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="nh9PJo5o";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7kp901Ur";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="BMg3Ql8P";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HQLL07cb"
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 1A34C3E06;
-	Thu,  6 Aug 2026 09:04:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786007056; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DGKz2qvrhIfucCzgjxp4vh+wLFIgfMjvUPxJjhY5uTE=;
-	b=nh9PJo5o72OxkQ9un2g4QDr+IH1NwGWzZfDkawZbyKtI7IPjm9rwjifKy5fTtNOWtxE7iI
-	wzGaz9+SlV4BVGovqo1UcfcFApHnjoF/GvGudPfQ+/+pdRLvhrpiQJk/Yi8M5Nl4egI1/R
-	tF5uY8dg9yOVVQqtCC4FNALjVJkUVqE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786007056;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DGKz2qvrhIfucCzgjxp4vh+wLFIgfMjvUPxJjhY5uTE=;
-	b=7kp901UrG6p3eGeAJTLSYehdICbVGCjWTVWTuQJycaYvSXSwTkSb/p9em1Eg2KEfYEVEYW
-	EU1McX+E8u45R5Dg==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=BMg3Ql8P;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=HQLL07cb
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1786007052; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DGKz2qvrhIfucCzgjxp4vh+wLFIgfMjvUPxJjhY5uTE=;
-	b=BMg3Ql8PrACdUEHQ4Cmq/m01lcTz26vwsaQtFXA2/FOzgI6s2Fg2ygyUj6mFOmEdKYych6
-	KNo9R6GL3G95KnxehoFS9yorjySBJ2MFalrPJyRxPVuIche/ObljIAU6siiRe/hXtjMM1S
-	MnFZ8tT4lwpCdDI5kWCYOnEsh5B42Ho=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1786007052;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=DGKz2qvrhIfucCzgjxp4vh+wLFIgfMjvUPxJjhY5uTE=;
-	b=HQLL07cbuvXZsf1Dl0SwWZdTwt3kJkU+vH1/BR30s27rNuuvCp1nNsFm1jitA7XDaHHtqN
-	zdtN/57EprDXu8BA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 50382779B6;
-	Thu,  6 Aug 2026 09:04:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id pkKaEAtOdGpHEwAAD6G6ig
-	(envelope-from <fmancera@suse.de>); Thu, 06 Aug 2026 09:04:11 +0000
-Message-ID: <a0c1a965-37d6-4cb9-b21a-1afc3b162e03@suse.de>
-Date: Thu, 6 Aug 2026 11:03:57 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O2hLdmtD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A08541F00A3A;
+	Thu,  6 Aug 2026 09:10:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786007451;
+	bh=gPc/u9Up7eVWllgtzkNXgVbHyJFWOFFaOBF27HtrdPY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=O2hLdmtDkX2nqc+L7a0b/hWiH5kGf9Z2NJJFE6fnP7nX3EMrB4DOxBtBiWqZZUCXr
+	 rh/srLhKXTfeA0Z2hdaziywujrDOzQuuGsKFWwGCVcS9JuJO0bZma49R+PvgUoxIFz
+	 nsAASfMdQWNyrVn4FVF++gvX9Bqd0KxlNZsk099j6GBtXypyBQe8c8n0tDgXXen+5u
+	 HgFyNDjEQSG1OPB3SZPMLsnBlqgTOWio1R4D7ngFsC4qrqgmh308QMSfN+3IZ0Tka6
+	 w1PJnhu4noOx5zaGn8GEp5hfDqyGnrOaYngk2H8s0B0ZWuvfeDH3E3CuSJjMbKTQ6d
+	 5Bym/8N4BYQCg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56A743930033;
+	Thu,  6 Aug 2026 09:10:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: netfilter: Remove unused variables in
- conntrack_dump_flush
-From: Fernando Fernandez Mancera <fmancera@suse.de>
-To: Qingshuang Fu <fffsqian@163.com>, Pablo Neira Ayuso
- <pablo@netfilter.org>, Florian Westphal <fw@strlen.de>, davem@davemloft.net,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Qingshuang Fu <fuqingshuang@kylinos.cn>
-References: <20260806075052.1934904-1-fffsqian@163.com>
- <824bc2e7-5ee7-441b-949d-817817f32fd0@suse.de>
-Content-Language: en-US
-In-Reply-To: <824bc2e7-5ee7-441b-949d-817817f32fd0@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Score: -4.51
-X-Spam-Level: 
-X-Rspamd-Action: no action
-X-Rspamd-Queue-Id: 1A34C3E06
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-0.999];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FREEMAIL_ENVRCPT(0.00)[163.com];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[163.com,netfilter.org,strlen.de,davemloft.net,google.com,kernel.org,redhat.com];
-	MID_RHS_MATCH_FROM(0.00)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:email,suse.de:dkim,kylinos.cn:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
+Subject: Re: [PATCH bpf-next v2 0/3] bpf: Allow selected kfuncs under
+ bpf_spin_lock
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178600741091.736609.7351771465681958135.git-patchwork-notify@kernel.org>
+Date: Thu, 06 Aug 2026 09:10:10 +0000
+References: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+In-Reply-To: <20260805153340.34776-1-kaitao.cheng@linux.dev>
+To: Kaitao Cheng <kaitao.cheng@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, john.fastabend@gmail.com, shuah@kernel.org,
+ leon.hwang@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 
-On 8/6/26 10:45 AM, Fernando Fernandez Mancera wrote:
-> On 8/6/26 9:50 AM, Qingshuang Fu wrote:
->> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
->>
->> The variables 'rplnlh' in conntrack_data_insert() and 'rplnlh' together
->> with 'nest' in conntracK_count_zone() and conntrack_flush_zone() were
->> declared but never used since they were introduced.
->>
->> Similarly, commit 76342e842587 ("selftests: netfilter: remove unused
->> parameter") removed the unused 'err' variable from these functions but
->> overlooked the remaining unused 'rplnlh' and 'nest' variables.  Remove
->> them to clean up the code.
->>
->> Fixes: eff3c558bb7e ("netfilter: ctnetlink: support filtering by zone")
->> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
->> ---
+Hello:
+
+This series was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
+
+On Wed,  5 Aug 2026 23:33:37 +0800 you wrote:
+> The verifier currently has a hard-coded allowlist of kfuncs that may be
+> called while a BPF program holds a bpf_spin_lock. This works for the
+> small set of built-in kfuncs known to the verifier, but it does not give
+> kfunc providers a registration-time way to declare that a kfunc is safe
+> in such a region. In particular, module kfuncs cannot be added to that
+> allowlist without changing verifier code.
 > 
-> Thanks for patch, it looks good to me but could we avoid the fixes tag 
-> here?
-> 
-> Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+> [...]
 
-Actually, since you are at it.. could you also include the following 
-diff? Thanks!
+Here is the summary with links:
+  - [bpf-next,v2,1/3] bpf: Add KF_SPINLOCK_SAFE flag for kfuncs under bpf_spin_lock
+    https://git.kernel.org/bpf/bpf-next/c/ed3b3093b624
+  - [bpf-next,v2,2/3] bpf: Mark existing lock-safe kfuncs with KF_SPINLOCK_SAFE
+    https://git.kernel.org/bpf/bpf-next/c/7619a0ee9340
+  - [bpf-next,v2,3/3] selftests/bpf: Test module kfunc calls under spin lock
+    https://git.kernel.org/bpf/bpf-next/c/bca83aa31f15
 
---- a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
-+++ b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
-@@ -216,7 +216,7 @@ static int count_entries(const struct nlmsghdr *nlh, 
-void *data)
-         return MNL_CB_OK;
-  }
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
--static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
-+static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
-  {
-         char buf[MNL_SOCKET_BUFFER_SIZE];
-         struct nlmsghdr *nlh;
+
