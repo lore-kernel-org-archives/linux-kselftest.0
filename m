@@ -1,42 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A49C3DB65A;
-	Thu,  6 Aug 2026 19:24:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E993C48094F;
+	Thu,  6 Aug 2026 19:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786044277; cv=none; b=Wgz3EK3S1dqTSi5JHFVlVV37EBZF7hI0ZDVCsX+pZqCzZPnQqGqUYT24Nl6BMMW0c5yZ0fyjOQbEZON/BB7BMpOvtyHciuQsAgBLiqX5rZNBNKMVQgRNm32tjmT9MqzCPVTEM/jM43EDFqn7tu4H3LCOwH6M4E/nvnYSQQwD3kE=
+	t=1786044361; cv=none; b=alhwTxYKaA7w5GFp0JSBxIthpbBanyjxM9EOdSeSSr3i10htCoEsR9AREymJfys5HfE7QsZfVuy1T5F2W+TzXS4j8OXD+2RQLEytLUaUL1x+1sr+MkYTm7o5Rsev4vCOpLhc8wYBoY0wIkuZDatFHpExdsfR2Gog/ZAqA8LTenE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786044277; c=relaxed/simple;
-	bh=L9nnKKvzG2Un9kfY+954zDHaL9Xm2J96qt5yymYDuvE=;
+	s=arc-20240116; t=1786044361; c=relaxed/simple;
+	bh=l/i41j/2VO2nnEGkvLuq0WRZ6mp8jDTXu1vga28DSUE=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AWFsdGv8O1F2g2shleqni8ORHatY1cZnMUZfLOOAW3JPAnytDpt1xTlXQVYuZSt/nmxTi1hH5Wr4obLN9g6Krv04K0yN4WrJ5dzOXBI/6VHKs9vXWFLksEQ7alu80qQKivm+PsDyW9N7Zj3YVb21IrLzCjHH9FnRuRvQ20e1KqE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Aeb8Dv5m; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=eRsuo1CfuZnSOp4Td+9n5zX6wWHrR2DD51rUTv5/VCMAf59xsJ5Cu5RyhJuQRTjn8WKGRA/bdoTGfEM1WsoL1xtOSti9drC4X8yJ3lWuMrKEbfHJHIm3QPeDdfN7OAoys9poHiJf7oauOAuLqJ4L16b5/e12QwStdFedKx3kgcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GZWSoCw7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Aeb8Dv5m"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E05491F000E9;
-	Thu,  6 Aug 2026 19:24:28 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GZWSoCw7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 101DD1F000E9;
+	Thu,  6 Aug 2026 19:25:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786044269;
-	bh=LsIBvB51t9iA/FCIB/hk1znk1OldWwKr7A6TDwpRrno=;
+	s=k20260515; t=1786044358;
+	bh=P7F/Ww0+JDR+9HwTaEj+G81ekCSaa/YuzRnXnts1XuA=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Aeb8Dv5mDlE5E4ywspbzuQhAammaice3kvpLiNCLWRY7y74nkvDOv6D44I0UYNftO
-	 KD+7QoFGk1fAmEmSIqNj7tToIPR2982NsQSpfBi8dMK5mgBx/j8GrBeTEjWN4UnBbj
-	 0odDGGa6K+wR4f/MUTg8iVNcOiy1tNObqmBWcPbzKambZf00BgfEXKJDuBC9C6/C5H
-	 dLZQTrbcjo8/GwicaBVAl0Mpt3uZiL6/XyV4VQ1mBCmLDEbQCBOp1ZGMrB/4LaOxZf
-	 pXWN2y0QNXFBR/TAEhNm/AuEv63ncvdsumQxkM6nYnulvsFvuXRvIHYfEbHrAY6i/6
-	 UwIBtv9HhWjHA==
-Date: Thu, 6 Aug 2026 12:24:28 -0700
+	b=GZWSoCw7+xoHK5USXMtNv+MaWqT9sSNylRi+lwtSps0qHCWzGFJLTlkvG+v4KNc11
+	 XHSEoP9L3jV/2iYOZVZnG3QNWd4TbPG0vW0jpuYX9l7vOactuqoul/GhXhk+CvgETl
+	 T3VFsXUlkgokkmPLA0ZF/mElu/rIV1SAzZGbNy9kVbcur9rPq7awJqJfD7vCaRHUYf
+	 MG90hTTMPCDEHycr77rfXoxW+G0tvm1HL/6+P5l/IsqidP4Nbeu6XcS4lX4+dq6X9x
+	 MTip3c0tLjGgSlcLeOqAhOAN8uYepApy+9CnKZtJ/6eobNyHEc8ncq6W/kytxItnEK
+	 tsb5jKtM7cMTQ==
+Date: Thu, 6 Aug 2026 12:25:57 -0700
 From: Jakub Kicinski <kuba@kernel.org>
 To: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 Cc: netdev@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
  pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 3/4] selftests: net: test IPV6_FL_F_REFLECT
-Message-ID: <20260806122428.2a71c491@kernel.org>
-In-Reply-To: <20260804025910.50145-4-marcelomspessoto@gmail.com>
+Subject: Re: [PATCH net-next v2 4/4] selftests: net: adopt harness for flow
+ label mgr
+Message-ID: <20260806122557.32c3e005@kernel.org>
+In-Reply-To: <20260804025910.50145-5-marcelomspessoto@gmail.com>
 References: <20260804025910.50145-1-marcelomspessoto@gmail.com>
-	<20260804025910.50145-4-marcelomspessoto@gmail.com>
+	<20260804025910.50145-5-marcelomspessoto@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,13 +47,19 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon,  3 Aug 2026 23:59:09 -0300 Marcelo Mendes Spessoto Junior wrote:
->  echo "TEST management"
-> -./in_netns.sh ./ipv6_flowlabel_mgr
-> +./in_netns.sh \
-> +  sh -c 'sysctl -q -w net.ipv6.flowlabel_consistency=0 && ./ipv6_flowlabel_mgr'
+On Mon,  3 Aug 2026 23:59:10 -0300 Marcelo Mendes Spessoto Junior wrote:
+> +TEST(cannot_put_non_existent_label)
+> +{
+> +	int fd, err;
+> +
+> +	fd = socket(PF_INET6, SOCK_DGRAM, 0);
+> +	ASSERT_GE(fd, 0) TH_LOG("socket failed");
+> +
+> +	err = flowlabel_put(fd, 10);
+> +	ASSERT_TRUE(err) TH_LOG("expected put of a non-existent label to fail");
+> +	ASSERT_EQ(ESRCH, errno) TH_LOG("expected ESRCH, got %d", errno);
 
-Would it be possible to make the netns prep part of the test itself? 
-We can use the setup function in the harness to make each case run,
-or do it once.
+nit: I think you're using ASSERTS where EXPECT should be used.
+My understanding is that EXPECT is better if the test can continue.
 
+> +	ASSERT_EQ(0, close(fd));
