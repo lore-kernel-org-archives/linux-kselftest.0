@@ -1,109 +1,83 @@
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 002F23016FB;
-	Thu,  6 Aug 2026 06:50:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A28B38551D;
+	Thu,  6 Aug 2026 06:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1785999038; cv=none; b=tUEVeVEXd54TopvbCEt8kwQQ9Y/Li9v9CBDpIUg/6EklQdgRm9TsGyWH1FEOM4uZBjA74Md9Fyd29gdXOz+YbGhl3pzJKjL4WpJq5B8+q3pGTzJkr7eHDryx2o4UsvHBZJM0QMY2erdFLOhBGRbr1ftoKEc4CN5IpJvL+pwfvrc=
+	t=1785999124; cv=none; b=T7w68IAUjmiQjtgD+Fq2E6DjPCToTQOw8JonYiIx4YUaG1Yym81Hy076A5XTksxvizuZ7ad9KSt71agR2J6IFdcRm0Qsc/EeVN9SmQvb7FvdMNdbZTo3VvfVgkkfmIESNOpMpYryhobZd4ZKMqjQlP2WGpYIbo9ysL/W9lR53I0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1785999038; c=relaxed/simple;
-	bh=sNvMyVmUpRAfzcSXPr1g2CIkuQnrdvuZJp9As/3btz0=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=plRsikPKRj60EY5llhF0cHavkVgcxr7uGEOmJQFYF6o3iZkMaxX79XX6EEboHeZ1GlTITqwh4IaDEyxyq3awWTPjCRAdlPON6Fp5teDH6jeYCtSV3XsTHr6+OvrqDBCIzcUlEscv4YKVLb5EIMYd3Ru5PXk8yngEbs+MCtNEduc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=IeOlfN+u; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JtCtLWZW; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+	s=arc-20240116; t=1785999124; c=relaxed/simple;
+	bh=vkG8XIqRe+o8AgwJqlAVMeUNOmNm0mUbnlXEHa/a/14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fyl6mmC596EFPDax5iFJXFSLjZuMGy47V8qdDj7V0vAKzObGcgJ7w/sTIRNb6zrqcjaePiDN3RXbzV23YufWssMaZ8TKeBYn3jg6f3bwW2F4pfLr33CDN0SRTMTDvAMZCEXtTRwP/ue+vND82evCPcyS2a1FiwwdX3jGOFXCC5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=blVOxzEg; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="IeOlfN+u";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JtCtLWZW"
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1785999034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a3YEdpBzGJfCE9OG01zLjkQZVUUGB2Ok8wj7FV80Wpo=;
-	b=IeOlfN+uUd41IzpnVVeFTGiSNJzEZiJDadZyDldZWHnQFj0Cjb+64np/UNsudJCXnfbDiU
-	3Z1WAvs1jg8VgQQa5eZUNlDk/UrcL/KON9Zss9ZrBCkqEybinXlDr1rSneL8Y+hsrFwrZ/
-	Zsk3Fe/WYyX8L/1k/uMPl67wN8yXysW5bIVpHQkfkpEjudbIBtBlJZ/QvnfiPMqTbgidzf
-	4T7wHiyTZOK/ZZbdYXdrIUoAv3nfiNcI0+4z9cNwmSygyu869QOuXC8X29m6+82u2iYjj7
-	9Kj0ksoNGpm2B2hsbY9lxuzvCbqzud31ryL3OuxD+UpTVCvvw29cGEfMuAPZ6A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1785999034;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a3YEdpBzGJfCE9OG01zLjkQZVUUGB2Ok8wj7FV80Wpo=;
-	b=JtCtLWZWHSsSUdkjhlr/qrdsxP8mDAZVs7eb0+pCe/dXM8MCf6cXP0BCZtYYzfUFx7e1LM
-	czhWMq2Lo1n2JVCw==
-To: Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
- <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
- <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
- <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
- <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
- Khan <shuah@kernel.org>, Radim =?utf-8?B?S3LEjW3DocWZ?=
- <radim.krcmar@oss.qualcomm.com>,
- Jesse Taube <jtaubepe@redhat.com>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, Charlie Jenkins
- <thecharlesjenkins@gmail.com>
-Subject: Re: [PATCH v3 02/17] riscv: alternatives: Use generated instruction
- headers for patching code
-In-Reply-To: <20260707-riscv_insn_table-v3-2-3f8e5f75ba97@gmail.com>
-References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
- <20260707-riscv_insn_table-v3-2-3f8e5f75ba97@gmail.com>
-Date: Thu, 06 Aug 2026 08:50:32 +0200
-Message-ID: <87qzkbd9on.fsf@yellow.woof>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="blVOxzEg"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1785999117; h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+	bh=aGK/RoC19nUT02iTa9oP7JFher0vxY/EWJohRihzv6k=;
+	b=blVOxzEgxxjO0SxaWZdXqBmxsBSxeuQmQTEtTC1GdGFnbyoNLEbS7IeWCw3O1RhIw/cI/My1DPWdo6aLoCTviZtMqk/XcMXGEtI09NcoxbJRnrx3e9K5f+pGWNtFQVsd0AJY6XW21Fx/gaMc+/DpeU1+ddhXfQnvo1jknkkSQGk=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=yaoyuan@linux.alibaba.com;NM=1;PH=DS;RN=15;SR=0;TI=SMTPD_---0X8TCDP1_1785999116;
+Received: from localhost(mailfrom:yaoyuan@linux.alibaba.com fp:SMTPD_---0X8TCDP1_1785999116 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 06 Aug 2026 14:51:57 +0800
+Date: Thu, 6 Aug 2026 14:51:55 +0800
+From: Yao Yuan <yaoyuan@linux.alibaba.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
+	Oliver Upton <oupton@kernel.org>, Peter Maydell <peter.maydell@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v18 03/14] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <rduid57zbypxwiujgfez67walqgqkekhyktkbibtiqcjh5buge@jqqcu52yl5nc>
+References: <20260803-arm64-gcs-v18-0-fd8c40f5ad88@kernel.org>
+ <20260803-arm64-gcs-v18-3-fd8c40f5ad88@kernel.org>
+ <enhoyivbkdaacgyazubgfzftt34xjemtrybvgpuqvr4czjtbhm@7qvrce5lmdyw>
+ <6d63905e-8c6e-4c88-b60b-d34ab1401783@sirena.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6d63905e-8c6e-4c88-b60b-d34ab1401783@sirena.org.uk>
 
-Charlie Jenkins <thecharlesjenkins@gmail.com> writes:
-> @@ -78,14 +79,24 @@ static void riscv_alternative_fix_auipc_jalr(void *ptr, u32 auipc_insn,
->  					     u32 jalr_insn, int patch_offset)
->  {
->  	u32 call[2] = { auipc_insn, jalr_insn };
-> +	u32 auipc_imm;
->  	s32 imm;
->  
->  	/* get and adjust new target address */
-> -	imm = riscv_insn_extract_utype_itype_imm(auipc_insn, jalr_insn);
-> +	imm = riscv_insn_auipc_extract_imm(auipc_insn) + riscv_insn_jalr_extract_imm(jalr_insn);
->  	imm -= patch_offset;
->  
-> +	/*
-> +	 * When the 32-bit immediate is split across auipc and jalr, the
-> +	 * constructed immediates need to be treated as individually sign
-> +	 * extended numbers. Add the sign bit of the lower 12 bits to the upper
-> +	 * 20 bits to undo the bleeding of the sign.
-> +	 */
-> +	auipc_imm = (imm & BIT(11)) << 1;
-> +
->  	/* update instructions */
-> -	riscv_insn_insert_utype_itype_imm(&call[0], &call[1], imm);
-> +	riscv_insn_auipc_insert_imm(&call[0], auipc_imm);
-> +	riscv_insn_jalr_insert_imm(&call[1], imm);
+On Wed, Aug 05, 2026 at 01:32:26PM +0800, Mark Brown wrote:
+> On Wed, Aug 05, 2026 at 05:48:04PM +0800, Yao Yuan wrote:
+> > On Mon, Aug 03, 2026 at 11:56:48PM +0800, Mark Brown wrote:
+>
+> > >
+> > >  		if (ctxt_has_s1poe(&vcpu->arch.ctxt))
+> > >  			write_sysreg_el1(__vcpu_sys_reg(vcpu, POR_EL2), SYS_POR);
+> > > +
+> > > +		if (ctxt_has_gcs(&vcpu->arch.ctxt)) {
+> > > +			write_sysreg_el1(__vcpu_sys_reg(vcpu, GCSCR_EL2), SYS_GCSCR);
+> > > +			write_sysreg_el1(__vcpu_sys_reg(vcpu, GCSPR_EL2), SYS_GCSPR);
+> > > +		}
+>
+> > Looks the s1pie checking for GCS vEL2 context switch is
+> > necessary yet IIUC, KVM does vEL2 context switch for nested
+> > L1's EL2, it should follow same rule as non-nested L1's EL1
+> > context switch.
+>
+> Right, it's not really needed in either case but hopefully helps code
+> generation a bit.  Thanks for spotting that.
+>
+> Please delete unneeded context from mails when replying.  Doing this
+> makes it much easier to find your reply in the message, helping ensure
+> it won't be missed by people scrolling through the irrelevant quoted
+> material.
 
-Looking at the old riscv_insn_insert_utype_itype_imm(), for auipc we have
-
-	*utype_insn &= ~(RV_U_IMM_31_12_MASK);
-	*utype_insn |= (imm & RV_U_IMM_31_12_MASK) + ((imm & BIT(11)) << 1);
-
-but the new code does
-
-	auipc_imm = (imm & BIT(11)) << 1;
-	*_insn &= ~GENMASK(31, 12);
-	*_insn |= (((auipc_imm >> 12) & GENMASK(19, 0)) << 12);
-
-which is not equivalent. The new code is missing (imm & RV_U_IMM_31_12_MASK)
-from the old code.
-
-Or am I confused somewhere?
-
-Nam
+Sure. let me try delete more next time.
+I delete some but decide to leave the whole context switch
+diffs to help other guys to see the realted changes when
+read my comment.
