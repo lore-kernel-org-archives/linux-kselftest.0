@@ -1,149 +1,95 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 694983DA7E4;
-	Thu,  6 Aug 2026 08:22:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F6D53D47BF;
+	Thu,  6 Aug 2026 08:23:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786004562; cv=none; b=YbX89lcreUMrVVTBWUFhHLx61g1AHwIgo2vyyHeJtVMpZMTl/HeRO4u1ZsGZilFeNBCEpaEIGU6lMgR9/ALyUwtC6alAZtX9oOJyJBHoc2wC81vl2ktKxr2YWUR2vyr6L6l2hv8ezveufQj8b1N6kXG9gKWP2OFqw4eyNWmxOc0=
+	t=1786004597; cv=none; b=GmLIQh/voWMDD3yww8LObt8go+M9XlGQvXyyafFeRovAjWs+7IkW5LX4xgwLvGSFvU0huuJs0Dh08SiM5PqmG/kvqlcWu3lBEyPufT8LqnmOUG2MQxaiU0S3S/+ZioXYE54jJRizXvVTCvEqHuKcJbsfNBwiUfHoJsde7fQxnlM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786004562; c=relaxed/simple;
-	bh=sHkZLSSOGg+fI3Dt3vUjkXesaInaqIgYgOcwYebg2a4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=otKiED2WAXHqUoQ6LehJ5+70w865Hpju4QUxM+4yWVqScFNf0PsjxuRicnVXkowS9zq2HDunvWsBV3lZ663JzwJtUtkSecHN1KiuUPRMKAb1b/Mbe+rnQyx/ymlZvBxSvaAPqkjA3Ji3w6sIjJoT7WmfE1nzo5uq2fvrFmULZuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=rNkOuxuO; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1786004597; c=relaxed/simple;
+	bh=LR0lpA9h89VSb0evYK9TzKmvwzjzTitcrbaIcjjOuWo=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=S403jtXP1MC4M4Tj+PBChpXY2Pl4pL8xV45CParU8EBfm6a6yv66y4JbalujW5PuSGime1PXOOEr8qY7kgHd7MmZgELxMG2zpaVHDk1vNJ7CcKBNz3bH6/WGVFoe8x3XSIP0pD8Nib38rDjyj91e1gXPevfPx34yQ+D88p9b8pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3FYghH40; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hKbqMjrj; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="rNkOuxuO"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=4NuVl080bt4cA2uVz75kzQbvjwfydsHS9/195tFer8k=;
-	b=rNkOuxuOy6FOR22QgZpBTFAow9DPI4vCWJsA0NRKxpTmhfRz8z3kOdqX5jiIFnSN0EVCLVxSS
-	Qi+F61a0r7NvpEwRy0fo3We9RaHuk1A90ySGA38QqKG+/+RfiXGTumdoY8xEg3kCaGB0cot4vu+
-	P7Fit34Z3j/1NNuCfITREv0=
-Received: from mail.maildlp.com (unknown [172.19.162.144])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4hG0Px1xDLzcb0W;
-	Thu,  6 Aug 2026 16:12:37 +0800 (CST)
-Received: from dggpemf500011.china.huawei.com (unknown [7.185.36.131])
-	by mail.maildlp.com (Postfix) with ESMTPS id 66A1A4056D;
-	Thu,  6 Aug 2026 16:22:33 +0800 (CST)
-Received: from [10.67.109.254] (10.67.109.254) by
- dggpemf500011.china.huawei.com (7.185.36.131) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Thu, 6 Aug 2026 16:22:32 +0800
-Message-ID: <bd1db584-ce6b-46b5-ab66-11fb7873007b@huawei.com>
-Date: Thu, 6 Aug 2026 16:22:31 +0800
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3FYghH40";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hKbqMjrj"
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1786004594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i1hzS6FheJp1n77P4UsaZHsQqZI4eItJ8gjMhgc47M8=;
+	b=3FYghH40fpnYDZWlmZ5jI+mrrcv4UDui7sPgWAvIGC1R+RhqVEyN+IbSoWLF0eyD98/kOH
+	NuidWmexSUOfU4h69r3BwVXpNWdoGqOc8OWkIz0unT68FIEfo2lKjlOlwXoDr7vpARGaQJ
+	wL8JFewZjCbNum2G97CR/niKt320DOlzcaMDY0rp3l4nXLywF+D7JXMSbn1ixNGs0XUhCG
+	Not+bog+FU4+SX+LM9gS/JBeLX7bZ6sBy3NAjj0wpuFzj+vx/DlHybx3589cWD9Krwbduh
+	pHeMfFiM0/fbR/IIqhGD+R3CUFjOEmEXM87fuqAcqCxhcNXeFnyHYhDBiTJsiw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1786004594;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=i1hzS6FheJp1n77P4UsaZHsQqZI4eItJ8gjMhgc47M8=;
+	b=hKbqMjrj7aHywt4MUgZoaZH3RBSlIY18taYCwQo7M8SVh8PvJzopR45pwn3et1EjPw6KUK
+	RBnBkYeqRVOBLVAg==
+To: Charlie Jenkins <thecharlesjenkins@gmail.com>, Paul Walmsley
+ <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Alexandre Ghiti
+ <alex@ghiti.fr>, Anup Patel <anup@brainfault.org>, Atish Patra
+ <atish.patra@linux.dev>, Conor Dooley <conor@kernel.org>, Paolo Bonzini
+ <pbonzini@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, Shuah
+ Khan <shuah@kernel.org>, Radim =?utf-8?B?S3LEjW3DocWZ?=
+ <radim.krcmar@oss.qualcomm.com>,
+ Jesse Taube <jtaubepe@redhat.com>
+Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, kvm-riscv@lists.infradead.org,
+ linux-kselftest@vger.kernel.org, Charlie Jenkins
+ <thecharlesjenkins@gmail.com>
+Subject: Re: [PATCH v3 04/17] riscv: Add kprobes instruction simulation KUnit
+In-Reply-To: <20260707-riscv_insn_table-v3-4-3f8e5f75ba97@gmail.com>
+References: <20260707-riscv_insn_table-v3-0-3f8e5f75ba97@gmail.com>
+ <20260707-riscv_insn_table-v3-4-3f8e5f75ba97@gmail.com>
+Date: Thu, 06 Aug 2026 10:23:12 +0200
+Message-ID: <87ldajd5e7.fsf@yellow.woof>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/2] kselftest/arm64: Add seccomp ptrace x0 bypass test
-To: Mark Brown <broonie@kernel.org>
-CC: <catalin.marinas@arm.com>, <will@kernel.org>, <shuah@kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kselftest@vger.kernel.org>, <Aishwarya.TCV@arm.com>
-References: <20260728021122.2640104-1-ruanjinjie@huawei.com>
- <20260728021122.2640104-2-ruanjinjie@huawei.com>
- <a9ef63ac-6012-4788-8fd7-5902b6448484@sirena.org.uk>
-From: Jinjie Ruan <ruanjinjie@huawei.com>
-In-Reply-To: <a9ef63ac-6012-4788-8fd7-5902b6448484@sirena.org.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- dggpemf500011.china.huawei.com (7.185.36.131)
+Content-Type: text/plain
 
+> +		} else if (riscv_insn_is_c_jr(i)) {
+> +			u32 rs1_index = riscv_insn_c_jr_extract_xs1(i);
+> +
+> +			simulate_c_jr(i, addr, &regs);
+> +
+> +			KUNIT_EXPECT_EQ_MSG(test, regs.epc,
+> +					    riscv_insn_reg_get_val((unsigned long *)&regs,
+> +								   rs1_index),
+> +					    "c.jr instruction (0x%x) incorrectly simulated", i);
 
+Should we set a value to rs1, just like everything else?
 
-在 2026/8/5 23:04, Mark Brown 写道:
-> On Tue, Jul 28, 2026 at 10:11:21AM +0800, Jinjie Ruan wrote:
->> As Kees suggested, add a test that verifies that seccomp observes the
->> correct first argument after a ptracer modifies x0 at a syscall-enter-stop
->> on arm64.
-> 
-> This change is now in -next and is breaking the build on Arm's internal
-> KernelCI instance, the same thing can also be seen on at least upstream
-> KernelCI mixed in with extra issues due to what looks like a
-> missing/failed headers_install - I'll report the infra aspects of that
-> separately:
+> diff --git a/arch/riscv/kernel/tests/kprobes/test-kprobes.h b/arch/riscv/kernel/tests/kprobes/test-kprobes.h
+> index 537f44aa9d3f..7a672de8f130 100644
+> --- a/arch/riscv/kernel/tests/kprobes/test-kprobes.h
+> +++ b/arch/riscv/kernel/tests/kprobes/test-kprobes.h
+> @@ -19,6 +19,12 @@ extern void *test_kprobes_addresses[];
+>  /* array of functions that return KPROBE_TEST_MAGIC */
+>  extern long (*test_kprobes_functions[])(void);
+>  
+> +void test_kprobes_arbitrary(void);
+> +
+> +extern unsigned int *test_kprobes_arbitrary_addr;
+> +
+> +extern unsigned int *test_kprobes_c_bnez_addr1;
+> +
 
-Thank you for the report.
+Are these declarations used somewhere?
 
-> 
->   CC       seccomp_ptrace_x0_bypass
-> seccomp_ptrace_x0_bypass.c: In function ‘do_child’:
-> seccomp_ptrace_x0_bypass.c:67:28: error: array type has incomplete element type ‘struct sock_filter’
->    67 |         struct sock_filter filter[] = {
->       |                            ^~~~~~
-> seccomp_ptrace_x0_bypass.c:68:17: warning: implicit declaration of function ‘BPF_STMT’; did you mean ‘BPF_STX’? [-Wimplicit-function-declaration]
->    68 |                 BPF_STMT(BPF_LD | BPF_W | BPF_ABS, offsetof(struct seccomp_data, nr)),  /* nr */
->       |                 ^~~~~~~~
->       |                 BPF_STX
-> seccomp_ptrace_x0_bypass.c:69:17: warning: implicit declaration of function ‘BPF_JUMP’; did you mean ‘BPF_JMP’? [-Wimplicit-function-declaration]
->    69 |                 BPF_JUMP(BPF_JMP | BPF_JEQ | BPF_K, __NR_write, 0, 3),
->       |                 ^~~~~~~~
->       |                 BPF_JMP
-> seccomp_ptrace_x0_bypass.c:75:16: error: variable ‘prog’ has initializer but incomplete type
->    75 |         struct sock_fprog prog = {
->       |                ^~~~~~~~~~
-> seccomp_ptrace_x0_bypass.c:76:18: error: ‘struct sock_fprog’ has no member named ‘len’
->    76 |                 .len = ARRAY_SIZE(filter),
->       |                  ^~~
-> In file included from seccomp_ptrace_x0_bypass.c:38:
-> /tmp/kci/linux/tools/testing/selftests/kselftest.h:64:25: warning: excess elements in struct initializer
->    64 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
->       |                         ^
-> seccomp_ptrace_x0_bypass.c:76:24: note: in expansion of macro ‘ARRAY_SIZE’
->    76 |                 .len = ARRAY_SIZE(filter),
->       |                        ^~~~~~~~~~
-> /tmp/kci/linux/tools/testing/selftests/kselftest.h:64:25: note: (near initialization for ‘prog’)
->    64 | #define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
->       |                         ^
-> seccomp_ptrace_x0_bypass.c:76:24: note: in expansion of macro ‘ARRAY_SIZE’
->    76 |                 .len = ARRAY_SIZE(filter),
->       |                        ^~~~~~~~~~
-> seccomp_ptrace_x0_bypass.c:77:18: error: ‘struct sock_fprog’ has no member named ‘filter’
->    77 |                 .filter = filter,
->       |                  ^~~~~~
-> seccomp_ptrace_x0_bypass.c:77:27: warning: excess elements in struct initializer
->    77 |                 .filter = filter,
->       |                           ^~~~~~
-> seccomp_ptrace_x0_bypass.c:77:27: note: (near initialization for ‘prog’)
-> seccomp_ptrace_x0_bypass.c:75:27: error: storage size of ‘prog’ isn’t known
->    75 |         struct sock_fprog prog = {
->       |                           ^~~~
-> seccomp_ptrace_x0_bypass.c:75:27: warning: unused variable ‘prog’ [-Wunused-variable]
-> seccomp_ptrace_x0_bypass.c:67:28: warning: unused variable ‘filter’ [-Wunused-variable]
->    67 |         struct sock_filter filter[] = {
-> 
-> 
->> --- /dev/null
->> +++ b/tools/testing/selftests/arm64/abi/seccomp_ptrace_x0_bypass.c
->> @@ -0,0 +1,195 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Test that seccomp, tracepoints and audit observe the correct syscall
->> + * arguments after a ptracer has modified them at syscall-enter-stop.
-> 
->> +#include <linux/filter.h>
-> 
-> The relevant definitions ought to be being picked up from here, there's
-> a copy of a current version in tools/include and has been for a while
-> (since at least v6.18) but there's no Makefile update to ensure that
-> gets picked up.
-
-Will add -I$(top_srcdir)/tools/include to CFLAGS for this test.
-
-> 
->> +#ifndef __NR_write
->> +#define __NR_write 64
->> +#endif
-> 
-> That's...  interesting.
-
-I'll remove the hardcoded __NR_write.
-
+Nam
