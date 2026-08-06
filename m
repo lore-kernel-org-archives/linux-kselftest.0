@@ -1,147 +1,280 @@
-Received: from MW6PR02CU001.outbound.protection.outlook.com (mail-westus2azon11012024.outbound.protection.outlook.com [52.101.48.24])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D34834F24A;
-	Thu,  6 Aug 2026 16:23:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.48.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786033406; cv=fail; b=TA5D/ajWgBIFbqx37iy8BOijwWVttBP02p7UaUs/pLMOHL+NkoA8MqT3Z6hGecs7T3FvVm5lqXpOub/AvSemteCRZLScFxdH5kVKAaB69Vwd9tl6V8OQmX11QXSFtdpJax6jrsZS1j20YHPjYFKrW3/4HsljFUgoi7TnsupmhLg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786033406; c=relaxed/simple;
-	bh=kqwkCm44lIDlOlyHTiWRLuHPU0U3u4YXcTzqarglbBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=TklLZmuriZmeIGAFz06Kl7GxwNH1RsoneH7ROg6xYlwOK/Avv5eMdZlz7DuZARNE4uG2SDX1sPk83kJ+wBzUe9/aepzMnSHsSdP0RpAOLs6JIrJ9MUtROoKZhjbwtBP4GgsEoq/sGhaZ0I3uFLELTCsgerha7P+IH8eZYABE2ys=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=k6QgkqFV; arc=fail smtp.client-ip=52.101.48.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D2C3360EEE
+	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 16:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786033904; cv=none; b=o9nsP5OpOOGeckBidKZjk6GY1axGC5xPh4x/7BeuQt00Ca7yWeQNLYFrmo1yXzhyrYtaRRVWGyBOWGKxEd74LfRx38zm5fZjAVjsr7P1i2PST7eeOhEVuRNBPpg6b1YnjMhbJr5nVjMovO0k/yV99zcKw1ieMXL/HWxU8iMXwHc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786033904; c=relaxed/simple;
+	bh=yDRmQCPdz3r7SxZ252Shn8sqYQmTCxnMFmKANVUqrpw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jjTNo/3XHx7VPz1S+Qf3TjAYl3ly4f9zdqzfTChZcoSaLiZWiBWHjpg0nQ2kVX8o++RnCtllsmXD+nx3rXXOgQNFcc+EhVKKHgxe0or8KqqB+19kUCj+52gHT15D7O2zsvQK66W17/Xn/C1MHZ/+MD7woGe8ZzLcqvWYlrtxWLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LZU1/kcQ; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="k6QgkqFV"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=qFTbu9WuENUFKj3v2EjHIwngSigpljgGF/6rj8aosUzwWYEyxIe435u2uErI+M+nUuuRDqZX5F2oMI5kPUlqrGOTj4r5pjSrg9oW0wiSJApo0whzvwakIJz6oF/BohQo9Ei/WG1UMvwSBa2/8JKzXyqxs7TZGCTVUDk376MrRyrfHUwhRgNunh/LcJuDYcINcLB3UceiTDW94RJI4fF/ld1HGNN5xnwH68WwhjOjt8uxIXAWXzzI1zg7sHX82jvW0PebwqxKGOxVnDu/PSz4q1ZFItVvUmw0pHlz3cBtC+BvWti9henqLOVc7LPWrVMcvldr95en4nmFQVOvZLMkew==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lpYaZ4LTz3I98Hk3iwqHGDImNHkyCGdV5kamcfXXa8U=;
- b=NG/DZfrxTNWL99+ZUDAn3QEYPtnvbqkVfkIbUmgSEhdwB4JJRnqVwHWz/F5ilEjnoQRgyQXQA5UL54rYXFphM07NlorsqORGzT7HWn3oJnCOr546YOaJzjJ6KqNswe27xb4NKMXK1jAsXmKYrrAoLs3U9N+7D8tbbU4MJ4QUUYdtFz9SU+l9COwBZ8h4yrL/Tr4+Z0lA91J4Yby460cL7AzPXjIFk8b3U5b3n9xD3kQQm+qtwbaKg4kpPZvZyIb2lgKi7aTB2/aT4i8p3rJB/UTJOwJSrDFjdhE4y0OCmLL5Y1rw6LeoX/yRfY6fbk9kKtrno2NLhhnzJ7BPztua0Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lpYaZ4LTz3I98Hk3iwqHGDImNHkyCGdV5kamcfXXa8U=;
- b=k6QgkqFVKlfZ5/BOGKX24h3Q3IiEB1IOT2uxkR/7RrNsRCLfUjYYKoSOSgtqAEuu8Z/yqX6PKMxHoJWp4SbiTvRKNCQtZiLe5E95fjdCVCPNd+miOhPKeic6zaEEEczJ6g9nC9MzzThMsyk8YyeeHBJu6rnjfx40di+r4lAjNZjac0B5IhW6wyRZKvpvKWr9dVFZSQVIsS/s/oLwirM6P68A6qwvqmIiZJEDMlF3spMm6Hh0Qsy9O8U/UvEJ8r9k+3My3noRR9nFuLqHk7/g7Z32RukMvNSZBrkuybhtgdFSDmS8zAS6u2EyZsTKz9Ovqvd3WMmRJ7bodyeLQk0EHw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by SA1PR12MB6799.namprd12.prod.outlook.com (2603:10b6:806:25b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.19; Thu, 6 Aug
- 2026 16:23:20 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0292.018; Thu, 6 Aug 2026
- 16:23:19 +0000
-From: Zi Yan <ziy@nvidia.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
- liam@infradead.org, nico.pache@linux.dev, dev.jain@arm.com,
- ryan.roberts@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- usama.arif@linux.dev, kas@kernel.org, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] selftests: mm: add mTHP collapse test cases
-Date: Thu, 06 Aug 2026 12:23:18 -0400
-X-Mailer: MailMate (3.0r7024)
-Message-ID: <3D9E14AE-8A9A-4882-BA3D-1DA95E651C49@nvidia.com>
-In-Reply-To:
- <f260058520214a9611922a96326bc54ba282fb73.1785985999.git.baolin.wang@linux.alibaba.com>
-References: <cover.1785985999.git.baolin.wang@linux.alibaba.com>
- <f260058520214a9611922a96326bc54ba282fb73.1785985999.git.baolin.wang@linux.alibaba.com>
-Content-Type: text/plain
-X-MS-Reactions: disallow
-X-ClientProxiedBy: MN2PR18CA0024.namprd18.prod.outlook.com
- (2603:10b6:208:23c::29) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LZU1/kcQ"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786033898;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=K8Qbgwvn7GdyFJgZP6HF2wJzIG6Gjh9WMK17K7m0a7o=;
+	b=LZU1/kcQLnZi73gvdJ0Knf5FZ1em93I+lu2i+e9xN7kbVcG0GrvSxCEi23cUZOL4XvE+9U
+	Xk8lHgHJ0nb3O3/PfmE+lqjPiDoG4uES22knP0+zwla63al6AlJyQWaC7FaurMauzaboif
+	NFkTfI3ofMZH4KE0EB4QPT252jdmAsA=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Quentin Monnet <qmo@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	kernel-patches-bot@fb.com
+Subject: [PATCH bpf-next v11 00/10] bpf: Introduce global percpu data
+Date: Fri,  7 Aug 2026 00:31:15 +0800
+Message-ID: <20260806163125.11172-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|SA1PR12MB6799:EE_
-X-MS-Office365-Filtering-Correlation-Id: 118b6011-38fa-4c55-c211-08def3d7072d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|7416014|11063799006|4143699003|22082099003|18002099003|6133799003|10067099003|56012099006;
-X-Microsoft-Antispam-Message-Info:
-	bD5WL+S0XU2kQ2WxK+jqlbqlt2Ykq1LuKuFeWW0y7Cm7QKgD83Gv2M9EI8iBl6pry/ivp8aOcvKxeljHrDJNstUFpSYcfgbTHwn8CCdfelATgkdC/ogMhPpOxFbIdVGE0lP3R3eaaoo8wcfdoIp1dR50xYTUyHevDpmktwGeFTWGkMDBvYIwflApXIUtURmMmem0mOAUZKrKIOg9PWMug0eDBrZd4ZtQDmt37XIP6uPRJlV//4NloMJh9iNS0sDRl0DAsIIl0CpPz2PZTUEPmxcHd5M2vW/Iur3v9CPKYa6pJMndyZ8ehsEAoIAzROhh1X2OaOOv2cRh/OB90w7+GI4H0B0WaA/wGRwVN9nfqAqfCrtXjlotI5MWpYUoj3cgvKi6nyPK6piVzTgTcdDa2GGGrqg9NXYKk10JBCmdu1a4kP1TlUzPFD8RG173VZhe4UMyx4pCZka9ijCHxmfr7jgC+fT+glW79+YWewThgF+0v2RlMVDEDQziAiII1T2h4PQDamyVD2wh+B5EcrbmZZgpq92/6K1EqYWAbNtn2DHHjC9TLESjI6w3b8beWHvM5/nr6mA7v3Y2A/P2K4g6Jv1y31VTQ/sFFAbdnCg9tPl8VsVIYMDZ7qgOyufiMLhE/KXbbwMubvIuo6SAcOPinwKpQ5SHdKAheLvXLKRqkJ0=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(7416014)(11063799006)(4143699003)(22082099003)(18002099003)(6133799003)(10067099003)(56012099006);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?oBicW4IOPhp4H1xylEZ/HlovHKshfasaAHcdi99/v/VICPjcNHpJ/O8wXfty?=
- =?us-ascii?Q?GjXLpatJnTFpVHP30NCiuUltz+1wmU/t3r/PyiSPYxF++URu0xXEwqUO9xLZ?=
- =?us-ascii?Q?jvNM0uc1QDX4enWK/3i54KptbXdSlxlwhqREpI02L6Mjmh5O/dOhDmI+FU0o?=
- =?us-ascii?Q?+ErFDzXAA1DZis7ITbA5vcnp5CvfasiakuricoSq3GG39Tqd3zSlH0rUDekF?=
- =?us-ascii?Q?qTnp1gP60vnJzSnJRqn4nJsu0lzenEXPaeWGCdLyYBdC+xLD9Qqb/eM0veUQ?=
- =?us-ascii?Q?bY5+JK/BXMRgYbs51Bw61+MlB5vfmRs09AVljyzqkb0fOE4zN/uwVnt/Rgt8?=
- =?us-ascii?Q?Btbd0JQ8Mo44F95MH/8UaqeuTdm12rik/su5utXfjEGJDYnq/E7iur4wDP8v?=
- =?us-ascii?Q?yWKNIvjig95wCoUiinmzCwlTuS7SPY1vzIkuASKlg8wzgF8P9dS2CVIv2niY?=
- =?us-ascii?Q?JY9aCaYZ6fmH9EoSKqeUTiYPDlCzRiEIuN6k6Lj7r7zojmVbY5ZyfWE6k/JH?=
- =?us-ascii?Q?MOu97b+JhpfwsneArQwMDF2qaJYNocxvdH72/mNcBpIc8etNLibByRNw4Ns4?=
- =?us-ascii?Q?R6SKzUgK97pXr/ui5h4Lm2YvYRUowdx2jP54Any4qE9VFLS05r80cEEHo9Mm?=
- =?us-ascii?Q?t0gKDCTGi8da9u4J2XoFY245HrBf6Bv0wbuujZXwYMlr2x8zLIrGPIcYe2Dp?=
- =?us-ascii?Q?jEW38FHunMiJVn2RZcCC8YJCQI7sXCIpztnkTnnLPsLIP/JRThosaQH4n8An?=
- =?us-ascii?Q?PySZ3wM9xKX+J2rvWsjcswKIm2j59D58inG/GrEeZ2jybMIwc7Oj7nblW5K7?=
- =?us-ascii?Q?72UU68zDW6MckX+CSolS/x6elpZxQiEEU/Br2wky4GC6eLVBmJcN/vVU0ZSA?=
- =?us-ascii?Q?KyByhtdl1hay/u4MLW9gpOWWX+gUfiP3IKlf1Uwd+xaXI6SCNT594CaLsWI+?=
- =?us-ascii?Q?W8ntJT9Z1HUXgNNnN5XZtY4PmRrR6+BhuiszbfSeiuQYYCWbT7B03quaW6l8?=
- =?us-ascii?Q?8T2BBnqr3oqZl733oMPg62MFDHxEpmigDHym4p9HpJKmQoXLGrcYgpRcEdHy?=
- =?us-ascii?Q?EaHhWAUxKwmw6gR5O6uEhFz8JZoToQvtYhD4frvCg8eqFUqviDXSqBKZN2wX?=
- =?us-ascii?Q?FqG1+UvgqO93qpChcQ9axwi7uOsjH7WbQqffRIOM+wxGlAQbeMCf0Nippury?=
- =?us-ascii?Q?gMdGVHztViS9aU+Q/EtiQkehrVUg6mBETT7Og93xcV35MXwD4i1NrhlZVhhQ?=
- =?us-ascii?Q?fLo2TdwYE5cLRpAva5FWWRRkbxx+Q2Qns4mnC33zDRubcucLGUeJTmUKo7Je?=
- =?us-ascii?Q?v/UH6SH4HTB4tbrG41wAB8fgUooq1Q+Fu1qTh7w8I+IyLX2AbbjAvrW+fBB1?=
- =?us-ascii?Q?MdSKNyZxLv+opcPZoccOGAJ1vKpHtYV49MpTIHXncmEmbJ4D2s1YAEauSlW0?=
- =?us-ascii?Q?qutCiyBxljONoMkmybpOnZaK9D/6a6PA9Id7EsmIlUUBhNRH9M7FJPo+FDGH?=
- =?us-ascii?Q?q5LrxqJ7ZthVr/y5b9uUGTbVNHc6QBivES8dfqUhQFw7N/4T34cYmjwW+bxw?=
- =?us-ascii?Q?icl/tvvgvvTFT14rtWobyjQPKnLEov3XgcfRKkReM/iln65N3z5KjQ3iUz3J?=
- =?us-ascii?Q?ImLHqWRbquXoSrK52WTf8bYP/eZmFLgT561XRHZEREnNNNuwJKpTUdXWNSs2?=
- =?us-ascii?Q?7worbUIh2FyBdLRNIdSE18hqJ/RZdjud5XWGT9dXYZJhqWfk?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 118b6011-38fa-4c55-c211-08def3d7072d
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 06 Aug 2026 16:23:19.8604
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IIX7gZJtLDJnNOrnZPbts+b8lqrx/SARpeqBzQdorNmjX50/CNrRiCqZwaDLIlVJ
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6799
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On 5 Aug 2026, at 23:34, Baolin Wang wrote:
+This patch set introduces global percpu data, similar to commit
+6316f78306c1 ("Merge branch 'support-global-data'"), to reduce restrictions
+in C for BPF programs.
 
-> Added a new command 'mthp_khugepaged' for mTHP collapse, along with the '-c'
-> parameter to specify the collapse order. Additionally, added mTHP collapse
-> test cases for 'collapse_full', 'collapse_empty', and 'collapse_single_mthp'
-> for anonymous folios. All khugepaged test cases passed.
->
-> Reviewed-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
-> Tested-by: Nico Pache (Red Hat) <nico.pache@linux.dev>
-> Acked-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> Signed-off-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> ---
->  tools/testing/selftests/mm/khugepaged.c   | 137 +++++++++++++++++++---
->  tools/testing/selftests/mm/run_vmtests.sh |   2 +
->  2 files changed, 120 insertions(+), 19 deletions(-)
->
-LGTM.
+With this enhancement, it becomes possible to define and use global percpu
+variables, like the DEFINE_PER_CPU() macro in the kernel
+include/linux/percpu-defs.h.
 
-Acked-by: Zi Yan <ziy@nvidia.com>
+The section name for global peurcpu data is ".percpu". Even though, a one-byte
+percpu variable (e.g., char run SEC(".percpu") = 0;) can trigger a crash
+with Clang 17 [1], users are expected to use such small variables as global
+percpu data with newer Clang versions, which don't have the issue.
 
+The idea stems from the bpfsnoop [2], which itself was inspired by
+retsnoop [3]. During testing of bpfsnoop on the v6.6 kernel, two LBR
+(Last Branch Record) entries were observed related to the
+bpf_get_smp_processor_id() helper.
 
-Best Regards,
-Yan, Zi
+Since commit 1ae6921009e5 ("bpf: inline bpf_get_smp_processor_id() helper"),
+the bpf_get_smp_processor_id() helper has been inlined on x86_64, reducing
+the overhead and consequently minimizing these two LBR records.
+
+However, the introduction of global percpu data offers a more robust
+solution. By leveraging the percpu_array map and percpu instruction,
+global percpu data can be implemented intrinsically.
+
+This feature also facilitates sharing percpu information between tail
+callers and callees or between freplace callers and callees through a
+shared global percpu variable. Previously, this was achieved using a
+1-entry percpu_array map, which this patch set aims to improve upon.
+
+Links:
+[1] https://lore.kernel.org/bpf/fd1b3f58-c27f-403d-ad99-644b7d06ecb3@linux.dev/
+[2] https://github.com/bpfsnoop/bpfsnoop
+[3] https://github.com/anakryiko/retsnoop
+
+Changes:
+v10 -> v11:
+* Drop env->prog->jit_requested check when inlining insns for global
+  percpu data.
+* Do not autocreate percpu_array map when kernel does not have global
+  percpu data support in libbpf.
+* Check map->btf_value_type_id in bpftool's is_skel_data().
+* Exercise bpf_map__lookup_elem() in selftest.
+* Collect Reviewed-by tags from Emil, thanks.
+* Drop all duplicate blank lines in kernel/bpf/*.c. (Emil)
+* Factor out check_map_mem_read() helper. (Emil)
+* Check bpf_jit_supports_percpu_insn() first in
+  percpu_array_map_direct_value_addr/meta(). (Emil)
+* Add comment for 'map->libbpf_type == LIBBPF_MAP_PERCPU' in libbpf's
+  map_is_mmapable(). (Emil)
+* Init update_flags as a const var in libbpf's
+  bpf_object__populate_internal_map(). (Emil)
+* Keep is_mmapable_map() beyond is_skel_data() in bpftool. (Emil)
+* Add 'run' and 'cpu_id' in selftest. (Emil)
+* Drop subskel test. Verify the generated subskel manually. (Emil)
+* Add comment to the raw insns in selftest. (Emil)
+* v10: https://lore.kernel.org/bpf/20260715153254.92010-1-leon.hwang@linux.dev/
+
+v9 -> v10:
+* Rebase latest bpf-next tree to resolve code conflict in verifier in
+  patch #1.
+* v9: https://lore.kernel.org/bpf/20260713154024.30851-1-leon.hwang@linux.dev/
+
+v8 -> v9:
+* Use real name for percpu data maps in libbpf in patch #4.
+* Add long map name test in patch #6.
+* Move parse_cpu_mask_file() to test_percpu_data_on_cpus() in test in
+  patch #6.
+* Validate map type in get_map_ident() for percpu data maps in patch #5.
+* Update code comment in verifier in patch #2. (per Andrii)
+* Pass 'type' to internal_map_name in libbpf in patch #4. (per Andrii)
+* Factor out the helper is_skel_data() in bpftool in patch #5.
+  (per Quentin and Andrii)
+* v8: https://lore.kernel.org/bpf/20260629152406.52582-1-leon.hwang@linux.dev/
+
+v7 -> v8:
+* Send patch #1 and #2 separately that fix interpreter fallback issues.
+  (Andrii)
+* Use 'array->elem_size' to avoid 'range' local variable in
+  percpu_array_map_direct_value_meta(). (Andrii)
+* Keep original map name for percpu data's map in libbpf. (Andrii)
+* Factor out helper bpf_map_is_skel_data() in bpftool. (Andrii)
+* Update commit message of direct access read-only percpu_array map.
+  (Andrii)
+* Add test to verify that it is disallowed to directly write data of
+  read-only percpu_array map. (Andrii)
+* Drop unused 'num_cpus' in test. (bot+bpf-ci)
+* Factor out helper test_percpu_data_on_cpus() in test. (bot+bpf-ci)
+* v7: https://lore.kernel.org/bpf/20260622143557.22955-1-leon.hwang@linux.dev/
+
+v6 -> v7:
+* Use tgt_endian() in bpf_gen__map_update_elem() in patch #6. (Sashiko)
+* Use sizeof(args) in verifier_snprintf test in patch #10. (Sashiko)
+* Drop xlated test of v6. (Alexei)
+* v6: https://lore.kernel.org/bpf/20260615152646.27639-1-leon.hwang@linux.dev/
+
+v5 -> v6:
+* Prevent running user addr_space_cast and addr_percpu insns in
+  interpreter. (Sashiko)
+* Cast __percpu pointer to u64 with (__force unsigned long). (lkp)
+* Exclude BPF_MAP_TYPE_PERCPU_ARRAY in check_mem_access() before calling
+  bpf_map_direct_read(), and add a test to verify it.
+  (Sashiko, bot+bpf-ci)
+* Skip percpu data variables for subskeleton in bpftool. (Sashiko)
+* Protect skel->percpu using mprotect(..., PROT_READ) in light skeleton.
+  (Sashiko, bot+bpf-ci)
+* Drop roundup() in tests. (Sashiko)
+* Call test_global_percpu_data_verifier_log() without
+  test__start_subtest(). (Sashiko)
+* Cast insn->imm to __u64 with (__u32) in xlated test. (Sashiko)
+* Check cnt using the new idx in xlated test. (Sashiko)
+* v5: https://lore.kernel.org/bpf/20260608145113.65857-1-leon.hwang@linux.dev/
+
+v4 -> v5:
+* Add prog->jit_requested check to prevent running percpu data in
+  interpreter in patch #1.
+* Factor out verifier log tests using its own patch.
+* Address comments from Alexei:
+  * Move map_type check from check_mem_access() to bpf_map_direct_read()
+    in patch #2.
+  * Move BPF_MAP_TYPE_INSN_ARRAY map_type check from const_reg_xfer() to
+    bpf_map_direct_read() in patch #2.
+  * Add a test to verify that the off of xlated ldimm64 insn matches the
+    off encoded in the ELF ldimm64 insn.
+  * Drop patch #5 of v4.
+* Address reviews from Sashiko:
+  * Update commit message of patch #6 to indicate that maps.percpu->mmaped
+    has been marked as read-only in libbpf.
+  * Lookup elem on specified CPU using BPF_F_CPU in tests.
+  * Drop unnecessary err == -EOPNOTSUPP in test.
+  * Locate target field using its offset in the iter test.
+* v4: https://lore.kernel.org/bpf/20260414132421.63409-1-leon.hwang@linux.dev/
+
+v3 -> v4:
+* Drop duplicate blank lines in verifier.
+* Add percpu data feature probe in libbpf.
+* Update percpu_array map using BPF_F_ALL_CPUS flag for lskel, if no cpu flag
+  is set.
+* Add two tests to verify verifier log.
+* Add a test to verify mov64_percpu_reg instruction.
+* Add a test to verify bpf_iter for percpu data map.
+* Update percpu_array map using BPF_F_ALL_CPUS flag in libbpf
+  (per Alexei and Andrii).
+* Address comments from Andrii:
+  * Use .percpu as section identifier.
+  * Use bpf_jit_supports_percpu_insn() instead of CONFIG_SMP.
+  * Drop bpf_map__is_internal_percpu() API.
+  * Drop unnecessary __aligned(8) in libbpf, verified by selftest.
+  * Make mmap data read-only after loading prog.
+v3: https://lore.kernel.org/bpf/20250526162146.24429-1-leon.hwang@linux.dev/
+
+v2 -> v3:
+  * Use ".data..percpu" as PERCPU_DATA_SEC.
+  * Address comment from Alexei:
+    * Add u8, array of ints and struct { .. } vars to selftest.
+v2: https://lore.kernel.org/bpf/20250213161931.46399-1-leon.hwang@linux.dev/
+
+v1 -> v2:
+  * Address comments from Andrii:
+    * Use LIBBPF_MAP_PERCPU and SEC_PERCPU.
+    * Reuse mmaped of libbpf's struct bpf_map for .percpu map data.
+    * Set .percpu struct pointer to NULL after loading skeleton.
+    * Make sure value size of .percpu map is __aligned(8).
+    * Use raw_tp and opts.cpu to test global percpu variables on all CPUs.
+  * Address comments from Alexei:
+    * Test non-zero offset of global percpu variable.
+    * Test case about BPF_PSEUDO_MAP_IDX_VALUE.
+v1: https://lore.kernel.org/bpf/20250127162158.84906-1-leon.hwang@linux.dev/
+
+rfc -> v1:
+  * Address comments from Andrii:
+    * Keep one image of global percpu variable for all CPUs.
+    * Reject non-ARRAY map in bpf_map_direct_read(), check_reg_const_str(),
+      and check_bpf_snprintf_call() in verifier.
+    * Split out libbpf changes from kernel-side changes.
+    * Use ".percpu" as PERCPU_DATA_SEC.
+    * Use enum libbpf_map_type to distinguish BSS, DATA, RODATA and
+      PERCPU_DATA.
+    * Avoid using errno for checking err from libbpf_num_possible_cpus().
+    * Use "map '%s': " prefix for error message.
+rfc: https://lore.kernel.org/bpf/20250113152437.67196-1-leon.hwang@linux.dev/
+
+Leon Hwang (10):
+  bpf: Drop duplicate blank lines in kernel/bpf/
+  bpf: Factor out check_map_mem_read helper in verifier
+  bpf: Introduce global percpu data
+  libbpf: Probe percpu data feature
+  libbpf: Add support for global percpu data
+  bpftool: Generate skeleton for global percpu data
+  selftests/bpf: Add tests to verify global percpu data
+  selftests/bpf: Test direct reading/writing read-only percpu_array map
+  selftests/bpf: Test verifier log for global percpu data
+  selftests/bpf: Verify bpf_iter for global percpu data
+
+ kernel/bpf/arraymap.c                         |  38 ++-
+ kernel/bpf/backtrack.c                        |   2 -
+ kernel/bpf/btf.c                              |   1 -
+ kernel/bpf/cfg.c                              |   1 -
+ kernel/bpf/const_fold.c                       |   1 -
+ kernel/bpf/fixups.c                           |  38 ++-
+ kernel/bpf/hashtab.c                          |   2 -
+ kernel/bpf/helpers.c                          |   1 -
+ kernel/bpf/liveness.c                         |   2 -
+ kernel/bpf/queue_stack_maps.c                 |   1 -
+ kernel/bpf/syscall.c                          |   5 -
+ kernel/bpf/verifier.c                         | 100 +++---
+ tools/bpf/bpftool/gen.c                       |  53 ++-
+ tools/lib/bpf/bpf_gen_internal.h              |   3 +-
+ tools/lib/bpf/features.c                      |  35 ++
+ tools/lib/bpf/gen_loader.c                    |   3 +-
+ tools/lib/bpf/libbpf.c                        |  76 ++++-
+ tools/lib/bpf/libbpf_internal.h               |   2 +
+ tools/lib/bpf/skel_internal.h                 |  24 +-
+ tools/testing/selftests/bpf/Makefile          |   2 +-
+ .../bpf/prog_tests/global_data_init.c         | 310 ++++++++++++++++++
+ .../bpf/progs/test_global_percpu_data.c       |  88 +++++
+ 22 files changed, 696 insertions(+), 92 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+
+-- 
+2.55.0
+
