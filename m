@@ -1,238 +1,283 @@
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4CCC386C3E
-	for <linux-kselftest@vger.kernel.org>; Thu,  6 Aug 2026 17:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786036385; cv=pass; b=hH7vXr1vNjPZInaB+oiadA1ERzWIG4UcqPVtMN6O2nnBs9hqAfgtN0ukfXqR/aByE1XX6YUk+VQII020J5omObukSwNRyfYWMhnOApNGPIk2G8h+pSM5f1GmDPLXFFwH53r1HWa/iFEL/+duxk88x/k+cNohP5XewnRVzXXFMSs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786036385; c=relaxed/simple;
-	bh=bXUKWDUfgbn9sVNEKtlFWPHzFvLv4UFxp+9Iiunsy00=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rlHntGvsfSIzvhdEMhH7quaav0QmwpUETTVj2KdWB79yikiqw9T31MbgXcgFtWHKWbNLQMDugzKH3MY7Fe0CtSiUei/KL7Hh3HjNFrKn3RfjQK9YErKN3qYNYU5Cz6EIuXynT7aF25y4QyNom2UgIaBeFnaM6K1i12jP+/hXgwc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=N3sxl8N7; arc=pass smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6FFD44E677;
+	Thu,  6 Aug 2026 17:15:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786036544; cv=none; b=rQbZB9sgAkYEIhEdavO6ZmjMV7dL1s5ObPN7gW0+X2kA8ymh92omC/rtLZ7v2ywnZfkcc5F+RFVys6EkhdmKc7JEOVKBjvEbMdvN47uzUe4GGtdgRMgEFS5oA8Z4Kdfjy5vZl7aET1eUVRKIaZfgjWsBXvU5C//C8OGttENnLTM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786036544; c=relaxed/simple;
+	bh=ha5QBk1yWOiy4lWNRVG9FJv6MtwNkRHwOydFUNFwKXU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=l/4sfLYEi25d07p5NIqc/sNFmbB4NtaLNan5TwdDz+Ogot73REmEMf3IRToPzwbqtfMg5hS0N5zPa9cCHMFe7BRJEDEmvVguuTnokoyMnUgo3Ow/0CoihzE//sGMG4th7O9EsbEI/G0gNnnQOXgUlfHICuvIhcpbyZLlcEnTHQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EQrGpcce; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="N3sxl8N7"
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-51c10e86e52so8881cf.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 10:13:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786036383; cv=none;
-        d=google.com; s=arc-20260327;
-        b=cE8xDoBuSpjzn91PCOO441m/zYFf4ba+tExEW3xu+ngu7qr7vcXPpLbSBHdZjJa7Yv
-         PKBDxrw2kg8TRn5P6qISRhoDOgG6ESm5I9ms8pkbHtRqtd0PZdeMiwV9SRpw0eQ0Y5I9
-         eYnS+MZaov3yryjd7It5NFdRzwnFhFPzhYtygyAk9iV7oVGIiS4G6Qj6BsOwQKwIT+00
-         GzMOSUDAuPIgDfNX3Bhr0vrIgGBqiveMaEVv8FqjSBNP/WgepgFVgtQeeZz2NhY2BcSA
-         7MaTv99dJLLRJCNwd89sm8q3sQmUTW1pVVIP1Q+Dn8BPgYNpVg1cq5nxfMmUakRXumM6
-         9YaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=kOondB7zlLOm/USRZeEDNtNtm81Uo+XUZekrXkBxZ6g=;
-        fh=yuo69Ve1CV6GGAGq8jctKiP8m1jr7rdaYVF3OlDGhuo=;
-        b=aJyG8C+3/UWXLWgyAv6q8InwlsjsGnZ70cXiSv+Pw8rKuqGY+eGYgjhO32HC08IKs0
-         bcwzV+GD4Mhr+wAky0rU/kvcqP/5/pu/a1xx8LU0PrS9w+EoPAKHST6qWMREvLqOzaxo
-         sFS9ekS9RixOowOQPu5mGaaJUyZAEyfLZHYUnwAe+ndWgdhBNci9zMxB0wz2CgWvJt4j
-         GU2zeaCtVO9BbcS+Q1BVI2e/mgLliwgIHI/YSV6y0by+EsSUm/mjNj0luAlXII8C3utW
-         WI+Hnoi+yReCBvSFNcfGd//SjYIjP785AqfbYYyh0wj3UkZUtez0bM9lxlRuu0e9CRlw
-         GdbQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786036383; x=1786641183; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=kOondB7zlLOm/USRZeEDNtNtm81Uo+XUZekrXkBxZ6g=;
-        b=N3sxl8N7xUHUgOJuAtDF4ECLmULfshPvKGF9lkXQ7HCElDVHXFLjMuAY2YGW8TAfCQ
-         TcNKiIVDOpNx7o/qatDeeCKXqbFxbzi+jPNpuX/KMbRkkUU4TpmJdrMsROYBbrfdbztx
-         p93i2X0RvCsmESZVeiP/UafhPdFJ03oisKqs/kw4Kr+Ldynf84jGylgis4XK9zF8bWj2
-         yenrLx9UJLkEH3ijWBFXBqP5VWCKNB+sVhuYklW5Ca4nRqhiRZecirnsmu2bjFRcP6pf
-         6inwhgHdLykg4DnJJ13a8DsHxiLKfCIdYrnhc6Gz2Rn/uMOGTusCGVy8Jorxo1LRMwiw
-         nJAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786036383; x=1786641183;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kOondB7zlLOm/USRZeEDNtNtm81Uo+XUZekrXkBxZ6g=;
-        b=i0TKW3BtLNKh5753Gdu/w7fDu+b9ZdHDHr6ipZRjbzzstQEBGdLUM7SAiIuO13Bgxp
-         eD02aRjNTKVDT94ABSxkL5KTKsciOTKAzyo6PGN1IEIy+b+HYtyO2t98UKYAzz6lo8Od
-         mktjwNhOI334dgRbsHHDu4nwSN9gvIe/Fr6R8+JiRq8pGxY8jQNHbnlYDP4fjn/pAdfe
-         OwOqpjOePJUTpWwoRZea9uJUBCvYQU8j9BQO1o3UMwRsvz9+5q1vZXk5MscIwykURCqt
-         Gfns3vUFsJggmY+nLr1epZyJ9tBrSUONdXtySrR8bwjB06QzSJvVPzc5umZFgA8Tzz7G
-         jQlA==
-X-Forwarded-Encrypted: i=1; AHgh+RpUAKvMcBVYELdOnbp2JgBraZAI22xjBKx9rnpo2G0mgru2CkggwW947D8rnfV9u6tNulhiicyjLzqLbXfFCR8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6PgI+wjPioPWecrK5n3Q27ZQaxzniA1kTzYY5txOmCWmP8u9s
-	6grzHv+nTkpii/WAQbhGaLEqbgae/Sfa1WUoWz4tBvRWSLSiID5yYr3KbXiIzwUfLwNTZ6VG/e7
-	MbTTqobBrL9ODobZsRw7pJzBVwvLBGCwp3/B3k8f49mkNROmuuYVWZik2
-X-Gm-Gg: AR+sD12DUfS9NrOChbjt8fu0EhLohJug8hVbhiDQvzxrzkHeP9ezwGlXsVX/AFvwO/X
-	eTNww7VyyzwoqzVX7npCmKLzZwsIo7tffLny9QnG2tjFVqH9+Eq9lgZxJXqgKWLfZiZIMmZUAEe
-	TXb4HnG/+CDhztI7SRxr8mpZ2pdXteGuCr8tbXxjEk9QC/Z6xgcKE6r9jCymOfUp1o7BNYz0Wml
-	jmk1obG0aJXel3x6U0dYOxJPbiBEkrfGU3VwSalo4iXzVO5CsFwqh0oSnni9x00eYu5DOhL+633
-	odAZA6vXPGfhqPxyuRPMIMRTWhzi+BHkMHroa7jz9suWbwElArPMSTucBFNJTQLAJvC2/Ta2qjs
-	=
-X-Received: by 2002:a05:622a:4885:b0:516:3f51:81cb with SMTP id
- d75a77b69052e-52cfea4c54fmr20988091cf.13.1786036381929; Thu, 06 Aug 2026
- 10:13:01 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EQrGpcce"
+Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 676End5Y2866541;
+	Thu, 6 Aug 2026 17:15:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=1alqfZ
+	1jTe2JAaWwmSa1hG3KVu9zh4ggV1HcL7tjo8o=; b=EQrGpccenRbHLJyuD2SZcB
+	AH0poMT2CghXuHj0HzzG7mCAu7p5SEEHlGTXt3qOihqsB0jBXYNKQ3pdUcIlEu+y
+	k2p0kz8A/2gcbzSZ+qIGsSRRzGgIxLMysoQjf9DdBPjx+hcjOnOkCC4WqX8bi+68
+	px0D27gQPDxfVhk9RwU0D7R9kUrkE8/hdL91cdSAHaVvtoYoTVjlFJ/3z33A/HcE
+	U4tn9ch4fvnrh/GKfgX3TrQRNPZmHsX8xX6yTuNjHrxvMzra5BNZovfQZSHNTVY0
+	ixdy6dYCQk3HSh7TspNT0qjollgT2uaCh5b065/wpIiKo3wBDtu3hMq7g2aS4/uA
+	==
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fs77gh06b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 17:15:21 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 676HBFjQ027429;
+	Thu, 6 Aug 2026 17:15:20 GMT
+Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsugwc869-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 06 Aug 2026 17:15:20 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 676HFGCt22413980
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 6 Aug 2026 17:15:16 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 366FE2004D;
+	Thu,  6 Aug 2026 17:15:16 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 5031420040;
+	Thu,  6 Aug 2026 17:15:13 +0000 (GMT)
+Received: from [9.124.215.184] (unknown [9.124.215.184])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Thu,  6 Aug 2026 17:15:13 +0000 (GMT)
+Message-ID: <47182652-a719-4be8-a7a7-6e864fde2bbc@linux.ibm.com>
+Date: Thu, 6 Aug 2026 22:45:11 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260728083742.2359320-1-cui.tao@linux.dev> <anS3saMkFog89yxy@localhost.localdomain>
-In-Reply-To: <anS3saMkFog89yxy@localhost.localdomain>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Thu, 6 Aug 2026 10:12:51 -0700
-X-Gm-Features: AUfX_myBqmi3uQlB-HqUGfH-0Y4PN_2k2H_3hlPoqzbY_beS516q1vCa1M6xGG4
-Message-ID: <CAJuCfpGdVuY5L8+yMXEwQ-GuTB_PNb7Vkzp9w3CQKosaeE1aLQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/cgroup: add PSI pressure trigger and
- validation tests
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc: Tao Cui <cui.tao@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ziyang Men <ziyang.meme@gmail.com>, Tao Cui <cuitao@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 1/8] powerpc/bpf: fix alignment of long branch
+ trampoline address
+To: Saket Kumar Bhaskar <skb99@linux.ibm.com>, bpf@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org
+Cc: maddy@linux.ibm.com, ast@kernel.org, andrii@kernel.org,
+        daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com
+References: <cover.1785906979.git.skb99@linux.ibm.com>
+ <26e8e6fa5d0279ec92281d5324678f00294e2cb7.1785906979.git.skb99@linux.ibm.com>
+Content-Language: en-US
+From: Hari Bathini <hbathini@linux.ibm.com>
+In-Reply-To: <26e8e6fa5d0279ec92281d5324678f00294e2cb7.1785906979.git.skb99@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA2MDEzMSBTYWx0ZWRfX0XEBMogXoNPA
+ oWj0hI9Iq7BoDNYqQuMmge1+Y69yUdAKf1KHidLQosuNG4VQ0JoD8CwbUJmTe0zl2P3V+MiCJW8
+ QiTEIrMaX+mVG52Tc0iohlwxfDpVNsE+8PoOdMXwQv4NP0xk5sX15LJYyIJuX1PO6h5XXpoUhsF
+ 4RJi4lmrLdHJGid2JugKWy01Xdgp/bJx3B3iaEyTuIiq+cf7PlIJzI1cwjGhRu3U964jdWaMuJ2
+ AZaAkkU98NDuaT9HLDgNuFaydNZfcst7VugOlWKa+l+7YBIkmD6zZrDbvGshiM8OjYfDyzbinwW
+ 5GjBpN/qPr5RiDZchrA7QjPRFotoyzq/CQbtTS/KX0rOp1euQ6TLyANiqSX5xRryvbiKrhaQuPw
+ 7Q46XZ2eqBQS1dTynXUiOMpU2c9bN+PJ1CfIn78BljdNAjMEWPqdZdl7Mfur/5aUUVEhb+ECI61
+ e/EbGwt/nkBv+M62jog==
+X-Authority-Analysis: v=2.4 cv=WIFPmHsR c=1 sm=1 tr=0 ts=6a74c129 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=RnoormkPH1_aCDwRdu11:22 a=V8glGbnc2Ofi9Qvn3v5h:22 a=VnNF1IyMAAAA:8
+ a=VwQbUJbxAAAA:8 a=kQundSBVMOOzkBbW8r0A:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-GUID: 8xqp97YAn34uLoj_m-KsiFF1TVYMAhPk
+X-Proofpoint-ORIG-GUID: 8xqp97YAn34uLoj_m-KsiFF1TVYMAhPk
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA2MDEzMSBTYWx0ZWRfXzRJoBamWP5RR
+ kazw5V+o3CNCI9suQCqHnbNpAz5A/VFVgq0/7MUZ4yug5JIiFRTolZiV98WwupUR4p8LCQigI6I
+ 3uE9Ikp+KYKvrML7RUkFm5RTfvv4cr8=
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-06_01,2026-08-05_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ spamscore=0 lowpriorityscore=0 priorityscore=1501 phishscore=0 malwarescore=0
+ suspectscore=0 clxscore=1011 impostorscore=0 bulkscore=0 adultscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.22.0-2606150000 definitions=main-2608060131
 
-On Thu, Aug 6, 2026 at 9:52=E2=80=AFAM Michal Koutn=C3=BD <mkoutny@suse.com=
-> wrote:
->
-> Hi,
-> thanks for continuing with this.
 
-Thanks for adding these tests and sorry I was not able to review them
-yet. I'll try to review them this weekend and will provide my
-feedback.
-Thanks,
-Suren.
 
->
-> On Tue, Jul 28, 2026 at 04:37:42PM +0800, Tao Cui <cui.tao@linux.dev> wro=
-te:
-> > +/* Trigger smoke test: second on same fd -> EBUSY; IRQ rejects "some".=
- */
-> > +static int test_proc_triggers(const char *root)
-> > +{
-> > +     static const char *const resources[] =3D { "io", "memory", "cpu" =
-};
-> > +     int ret =3D KSFT_FAIL;
-> > +     int fd =3D -1;
-> > +     int i;
-> > +
-> > +     (void)root;
->
-> WTH?
->
-> > +
-> > +     for (i =3D 0; i < (int)ARRAY_SIZE(resources); i++) {
->
-> This (int) cast is quite uncommon, look around.
->
-> > +/* Induce deterministic CPU pressure (more hogs than CPUs). */
-> > +static int test_cgroup_trigger_fire(const char *root)
-> > +{
-> > +     char *cg =3D NULL, *cpupress =3D NULL;
-> > +     int fd =3D -1, ret =3D KSFT_FAIL;
-> > +     struct pollfd pfd;
-> > +     long ncpus, i;
-> > +     pid_t pid;
-> > +
-> > +     cg =3D cg_name(root, "psi_trigger_test");
-> > +     if (!cg)
-> > +             goto cleanup;
-> > +     if (cg_create(cg))
-> > +             goto cleanup;
-> > +
-> > +     cpupress =3D cg_control(cg, "cpu.pressure");
-> > +     if (!cpupress)
-> > +             goto cleanup;
-> > +     fd =3D open(cpupress, O_RDWR);
-> > +     if (fd < 0) {
-> > +             ksft_print_msg("open cpu.pressure: %s\n", strerror(errno)=
-);
-> > +             goto cleanup;
-> > +     }
-> > +
-> > +     /* 1us threshold in a 1s window: any cpu stall fires it. */
-> > +     errno =3D 0;
-> > +     if (write_trigger(fd, "some 1 1000000") <=3D 0) {
-> > +             ksft_print_msg("arming trigger failed: %s\n", strerror(er=
-rno));
-> > +             goto cleanup;
-> > +     }
->
-> When I see this, could you increase the window size to 2000000 (so that
-> it has potential to run for unprivileged users)?
->
-> > +
-> > +     ncpus =3D sysconf(_SC_NPROCESSORS_ONLN);
-> > +     if (ncpus <=3D 0)
-> > +             ncpus =3D 1;
-> > +
-> > +     pid =3D fork();
-> > +     if (pid < 0) {
-> > +             ksft_print_msg("fork: %s\n", strerror(errno));
-> > +             goto cleanup;
-> > +     }
-> > +     if (pid =3D=3D 0) {
-> > +             /* Enter the cgroup, then over-subscribe it with CPU hogs=
-. */
-> > +             if (cg_enter_current(cg))
-> > +                     _exit(KSFT_FAIL);
-> > +             for (i =3D 0; i < ncpus; i++) {
-> > +                     if (fork() =3D=3D 0) {
-> > +                             for (;;)
-> > +                                     asm volatile("" ::: "memory");
-> > +                             _exit(0);
-> > +                     }
-> > +             }
-> > +             for (;;)
-> > +                     asm volatile("" ::: "memory");  /* child is also =
-a hog */
-> > +             _exit(0);
-> > +     }
->
-> This part could be replaced with generalized hog_cpus_timed() from
-> test_cpu.c (after move to cgroup_util.c).
->
-> > +int main(int argc, char **argv)
-> > +{
-> > +     char root[PATH_MAX];
-> > +     int mempress_fd;
-> > +     int i;
-> > +
-> > +     (void)argc;
->
-> What's up with this?
->
-> > +
-> > +     ksft_print_header();
-> > +     ksft_set_plan(ARRAY_SIZE(tests));
-> > +
-> > +     if (cg_find_unified_root(root, sizeof(root), NULL))
-> > +             ksft_exit_skip("cgroup v2 isn't mounted\n");
-> > +
-> > +     /* PSI must be enabled (CONFIG_PSI=3Dy, not default-disabled). */
-> > +     mempress_fd =3D open("/proc/pressure/memory", O_RDONLY);
-> > +     if (mempress_fd < 0)
-> > +             ksft_exit_skip("PSI unavailable (CONFIG_PSI=3Dn or psi=3D=
-0)\n");
-> > +     close(mempress_fd);
-> > +
-> > +     if (cg_read_strstr(root, "cgroup.controllers", "memory"))
-> > +             ksft_exit_skip("memory controller isn't available\n");
-> > +     if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
-> > +             if (cg_write(root, "cgroup.subtree_control", "+memory"))
-> > +                     ksft_exit_skip("failed to enable memory controlle=
-r\n");
->
-> The memory controller is unnecessary now, right?
->
->
-> Regards,
-> Michal
+On 05/08/26 11:36 am, Saket Kumar Bhaskar wrote:
+> From: Abhishek Dubey <adubey@linux.ibm.com>
+> 
+> Ensure the dummy trampoline address field present between the OOL stub
+> and the long branch stub is 8-byte aligned, for memory compatibility
+> when content loaded to a register.
+
+This fix is not complete. With 2/8 it looks complete. Some part
+of it needs to be in this patch instead..
+
+> 
+> Reported-by: Hari Bathini <hbathini@linux.ibm.com>
+> Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+> Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+> Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
+> ---
+>   arch/powerpc/net/bpf_jit.h        |  4 ++--
+>   arch/powerpc/net/bpf_jit_comp.c   | 39 +++++++++++++++++++++++++++----
+>   arch/powerpc/net/bpf_jit_comp32.c |  4 ++--
+>   arch/powerpc/net/bpf_jit_comp64.c |  4 ++--
+>   4 files changed, 40 insertions(+), 11 deletions(-)
+> 
+> diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+> index f32de8704d4d..71e6e7d01057 100644
+> --- a/arch/powerpc/net/bpf_jit.h
+> +++ b/arch/powerpc/net/bpf_jit.h
+> @@ -214,8 +214,8 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+>   int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
+>   		       u32 *addrs, int pass, bool extra_pass);
+>   void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
+> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
+>   void bpf_jit_realloc_regs(struct codegen_context *ctx);
+>   int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
+>   void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
+> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+> index 7b07b43575f1..42046f73c279 100644
+> --- a/arch/powerpc/net/bpf_jit_comp.c
+> +++ b/arch/powerpc/net/bpf_jit_comp.c
+> @@ -49,11 +49,39 @@ asm (
+>   "	.popsection				;"
+>   );
+>   
+> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
+> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+>   	int ool_stub_idx, long_branch_stub_idx;
+> +	int ool_stub_sz;
+>   
+>   	/*
+> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
+> +	 * in the fimage. The alignment NOP must appear before OOL stub,
+> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
+> +	 *
+> +	 * dummy_tramp_addr must be 8-byte aligned for load-register
+> +	 * compatibility. The fimage can be non 8-byte aligned, so final
+> +	 * alignment depends on start of fimage and the stub's instruction
+> +	 * count offset. The OOL stub size is 4 instructions (with
+> +	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 3 instructions (without)
+> +	 * before dummy_tramp_addr.
+> +	 *
+> +	 * Emit a NOP here if (ctx->idx + ool_stub_sz) is odd, so that
+> +	 * dummy_tramp_addr lands at an even instruction offset (== 8-byte
+> +	 * aligned from an 8-byte aligned base).
+> +	 *
+> +	 * In pass=0 when image==NULL, conservatively account for space
+> +	 * required to accommodate alignment NOP. In case final pass skips
+> +	 * emitting alignment NOP, the image buffer have 4 spare bytes and
+> +	 * jited_len signifies correct program size.
+> +	 */
+> +
+> +	ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
+> +	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL))
+> +		EMIT(PPC_RAW_NOP());
+> +
+> +	/*
+> +	 *      nop     // optional, for alignment of dummy_tramp_addr
+>   	 * Out-of-line stub:
+>   	 *	mflr	r0
+>   	 *	[b|bl]	tramp
+> @@ -70,7 +98,7 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
+>   
+>   	/*
+>   	 * Long branch stub:
+> -	 *	.long	<dummy_tramp_addr>
+> +	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
+>   	 *	mflr	r11
+>   	 *	bcl	20,31,$+4
+>   	 *	mflr	r12
+> @@ -81,6 +109,7 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
+>   	 */
+>   	if (image)
+>   		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
+> +
+>   	ctx->idx += SZL / 4;
+>   	long_branch_stub_idx = ctx->idx;
+>   	EMIT(PPC_RAW_MFLR(_R11));
+> @@ -107,7 +136,7 @@ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg,
+>   		PPC_JMP(ctx->alt_exit_addr);
+>   	} else {
+>   		ctx->alt_exit_addr = ctx->idx * 4;
+> -		bpf_jit_build_epilogue(image, ctx);
+> +		bpf_jit_build_epilogue(image, NULL, ctx);
+>   	}
+>   
+>   	return 0;
+> @@ -286,7 +315,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>   	 */
+>   	bpf_jit_build_prologue(NULL, &cgctx);
+>   	addrs[fp->len] = cgctx.idx * 4;
+> -	bpf_jit_build_epilogue(NULL, &cgctx);
+> +	bpf_jit_build_epilogue(NULL, NULL, &cgctx);
+>   
+>   	fixup_len = fp->aux->num_exentries * BPF_FIXUP_LEN * 4;
+>   	extable_len = fp->aux->num_exentries * sizeof(struct exception_table_entry);
+> @@ -318,7 +347,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+>   			bpf_jit_binary_pack_free(fhdr, hdr);
+>   			goto out_err;
+>   		}
+> -		bpf_jit_build_epilogue(code_base, &cgctx);
+> +		bpf_jit_build_epilogue(code_base, fcode_base, &cgctx);
+>   
+>   		if (bpf_jit_enable > 1)
+>   			pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
+> diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+> index bfdc50740da8..95bda0dee925 100644
+> --- a/arch/powerpc/net/bpf_jit_comp32.c
+> +++ b/arch/powerpc/net/bpf_jit_comp32.c
+> @@ -229,7 +229,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+>   
+>   }
+>   
+> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+>   	EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_0)));
+>   
+> @@ -237,7 +237,7 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+>   
+>   	EMIT(PPC_RAW_BLR());
+>   
+> -	bpf_jit_build_fentry_stubs(image, ctx);
+> +	bpf_jit_build_fentry_stubs(image, fimage, ctx);
+>   }
+>   
+>   /* Relative offset needs to be calculated based on final image location */
+> diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+> index dab106cae22b..ed78992f4dac 100644
+> --- a/arch/powerpc/net/bpf_jit_comp64.c
+> +++ b/arch/powerpc/net/bpf_jit_comp64.c
+> @@ -398,7 +398,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+>   	}
+>   }
+>   
+> -void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+> +void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx)
+>   {
+>   	bpf_jit_emit_common_epilogue(image, ctx);
+>   
+> @@ -407,7 +407,7 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+>   
+>   	EMIT(PPC_RAW_BLR());
+>   
+> -	bpf_jit_build_fentry_stubs(image, ctx);
+> +	bpf_jit_build_fentry_stubs(image, fimage, ctx);
+>   }
+>   
+>   /*
+
+- Hari
