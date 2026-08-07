@@ -1,763 +1,187 @@
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from SA9PR02CU001.outbound.protection.outlook.com (mail-southcentralusazon11013008.outbound.protection.outlook.com [40.93.196.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F470372B3C
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:08:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786111684; cv=none; b=ZEOMQGD/4kioCCntlUpBR3NY3UBd96u6HZdFHkpP6gbMOHT3Wj+ab9kZ3+dqvf1BEpLknSQieYQQIsP38nsoYSgiaf4v1ONj4Nlt83VsN0yA8SUuNC3rO05cqiQfukF2GKcJp6yETQEIY4sIlTYXfjMmFbsIGdLoqicYG4U8pz8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786111684; c=relaxed/simple;
-	bh=6rMezGZAT/1DzOb4Y3EKXCAHfujt1Zo3rGda2dxGorU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FJocsPUhUstKqd5o380T5+uhJQcvgcKR+qPnGmf0cBUiqpQpb4tUILQpCByODdKCXzWO9r5+D1cMvCsK8rEb9TxLbbxbtPwmPCw2YTtKIuAlddYutOa4xP68PI6ZcGkCEJ4g4+FQ2Z38uwUIqrFgtRW7gkea8dvxXRj/YVwCzMc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=g1VBvpXe; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A23151F936;
+	Fri,  7 Aug 2026 14:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.196.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786112297; cv=fail; b=Ohr8D+m40c5ljfmLCWjl0QkkmzdPLZpVGjn++8V83cPU4cxk1HGPfVHbj7al4GJuTDpq8qKJh7haB0AE+8ZK1vGlki9HmKOHD/+EoBOrvwEIk05pKb70jNG0Ez+/PtQkOvy4DC+79m8WltBRXwe5VX1VsmxLZeVP3JNy+sswiq8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786112297; c=relaxed/simple;
+	bh=Uut152AN6gXgVxLfOpg++MeL3hz9WFw+JXx2+UlFhCU=;
+	h=Content-Type:Date:Message-Id:Subject:Cc:To:From:References:
+	 In-Reply-To:MIME-Version; b=EQ8kueUwlNqlBW86eIEfFVn3Z9Tk3GRg6l46GziEnC+GmX8a8Btw3d/ijmesnn6d/c2xQ5+THZa0fWrtmVPGf0/AvTimo8BrkwAy7LaL+wpyQHsUZBYEb9tr5EKtoDzmTIrWTRjerntfNuGBqFZ03piJN4lSEZ1+tWMFPkyk8UQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ql1VEk/f; arc=fail smtp.client-ip=40.93.196.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="g1VBvpXe"
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-47df6a5655aso446912f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:08:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786111680; x=1786716480; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9iibtAF/E02RhjAbXHr1nvy835Zrtj3KSFTKn1i2JtU=;
-        b=g1VBvpXevGL4ZPSFopr20QW/7NQBglBJxgjUtjbDvRBmUTEbAcKDordpklxmzw4ff8
-         yn6T/odPNfz1XSE94Z7oNAY9x7XMhFMT9/k5VG8dkWbAY+BrcJA3jEeH43dmuHTO5ZlP
-         1XZm9Xavyw8IbPPkrjk4T6V2hx2G7gKFWN4cw9QdoBqWgW8yxr206fSmCsgLzrzK5IHW
-         AVeuOGybvTf+1Eb3vBLvaCDlSnp6RhubKE26mjfZD2rJjiA1M3XZSJun8eer4q0Tj/WP
-         0XGcTbuXMASPT5mSWtuMjDVsvv0NNXd9OMaXcZjmkUhULPR33F8Rp1S/7ah4a5LUDIH0
-         KpqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786111680; x=1786716480;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9iibtAF/E02RhjAbXHr1nvy835Zrtj3KSFTKn1i2JtU=;
-        b=Dtt7y8sAEyb73CH6MiHl2VVnJEUzqQM+b7QEy30HHk06xB/W7saGrtuypfGouPUheG
-         IuIT2YQq0RMTLKHPU0nJQas51Ailre010zmittH4WsMwhScxpFSADbWoNUh+jaCeOdOr
-         n0SbqAlpzua5qG2BRojncflRJnf95vNvlL6llL52kjp3/W/Jt5zzjRPxcVTFZcf1aHK+
-         w4hhvLiM3fwMCn6rgfjE0r+L+Usl1GxFVDASIe9S6NBA6R5nwaTEeWe/kZC1qVX4zS1L
-         kC2QWwlrx12n/bY2VzB17a+FXZjuhjdw8s+guSOezUb3bTNPyxWm0yfPh7j9ftqpJP4w
-         NyuA==
-X-Forwarded-Encrypted: i=1; AHgh+RrVYBWt5EiK4IPKkbDb9c/HZcojzAtHvkSp8Om7DgI9Q9tgyNnSOnaTxD7NFu7zKo0MfQFES0yQ85wx1IfGJSI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxPX6NuD9fkSY5HNvsn8Dps/MIA/Gn2fuhVDPEY9z8zZU5yD9ag
-	6c8wPXv04CFHK9rPOtUQ4WSZLSdFfv1ia+rQwY4gu3o6P789mf0dH+IV
-X-Gm-Gg: AR+sD122MZzUmzGSxHzc+lDfeZh9p8jQzskLvCk3244LTnxV9Vph7M6iGEK/R61lrQ5
-	D9kQI7QV+9vAr2Lk7eKhNAb5Lg4Y+m/Zl7Y1K8oIfowSyFBk5jv8U4yh8MLqVlcDLFDnCivG+gj
-	D7NxCL1N6/A955/WolC8QYDJZLA9WO69xCqmINxdKjjI+/N0ihqUuqzau6bVoktahUDa0yp8s4b
-	TuGB5Xbl+JONqH7VAOaYgF84ZhNvL1sg/0f+glDDCRdnsvTKP0lX4MJnivxQsBszEDjbhlow9IZ
-	tbIF5KSeIJ+xj51oJLCHNU5W5+zE0gOgW25qtNtupaW9Y92r37NikO7eXP7dhBbYjgp+lhaAq9a
-	U06ace9M/a6QS3utMI7qCN/VR014HNT7jTLut85kapP1tlYGlM1u7wgBgWFwt14b11CoxmBA29i
-	DZPkHMHW1gF5gocPC1tnu9u66l5A6LOA6JDFsAMxfR5CUxK3eYjD9yZkMf5EXRWcKPG/spySTG3
-	kjk9rk5GC1kd5uIyGBd63ALrFLDhmrdAOvXSGxxvstWEQ7yX+AxQp3hgycKcIP0vm5724C1aQaB
-	39bsyt+3GEnhe2cYwWNwLo8=
-X-Received: by 2002:a5d:584c:0:b0:47f:959f:d5e with SMTP id ffacd0b85a97d-47fec487b60mr18228988f8f.0.1786111679215;
-        Fri, 07 Aug 2026 07:07:59 -0700 (PDT)
-Received: from L-022584.energy.envision.com (dynamic-077-179-201-133.77.179.pool.telefonica.de. [77.179.201.133])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021506c0sm5980064f8f.11.2026.08.07.07.07.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 07:07:58 -0700 (PDT)
-From: Xin Xie <xiexinet@gmail.com>
-To: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	andrew+netdev@lunn.ch,
-	shuah@kernel.org,
-	kees@kernel.org,
-	petr.wozniak@gmail.com,
-	qingfang.deng@linux.dev,
-	fmaurer@redhat.com,
-	luka.gejak@linux.dev,
-	bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com,
-	skhawaja@google.com,
-	stable@vger.kernel.org,
-	sdf.kernel@gmail.com,
-	Xin Xie <xiexinet@gmail.com>
-Subject: [PATCH net v5 4/4] selftests: net: hsr: cover GSO super-packets on PRP slave ingress
-Date: Fri,  7 Aug 2026 16:07:50 +0200
-Message-ID: <20260807140751.1351-5-xiexinet@gmail.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260807140751.1351-1-xiexinet@gmail.com>
-References: <20260807140751.1351-1-xiexinet@gmail.com>
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ql1VEk/f"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=H6x+Ox4aaTy/SQNvwHsLCpci1nove8Y8OWO04OASLACQD9tURxmJYQuhBgOUSyxJhjUBT3qbnGfrhM/YM0Jjych4Y4fQMkMDEkQnUi9GddydtGpM7quSQY7iVDI5r+xYyS2EUl7lbzzXWZ7r++JJWfKIJ9BVCjZrlwmMEL4IHRI/0ucBmekJMrIxYEBbIKep33ZWGW2h5YtT73dGk6tK6twFeD2oh+4xwIXfCGgMNLG01JBFoq0e8noM4vEBRuEO0ARn2FcY96oSD5gCXsB3q5L4IqW8IQYxjiDfjk+PZVocnSkQDaqgfU9oYIKea/e0/trBUfkDRTGCAE4kIJQSLw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Uut152AN6gXgVxLfOpg++MeL3hz9WFw+JXx2+UlFhCU=;
+ b=BxbPXqcO+UbCGJZ5NhglsD0Acq6rhE8WDLwHGY8LNCJZA7p/uFxGUMuGqazMxcxJC111HUaw3gQCkEUgmPYBNotJquzgJU9uDGFyiaEzoa7Tw3wQqJmJsKLzmLFhFTyp1H5q9zuAN1SWMIgqg7Hytgc6XvgaWdK9EewRezaC0hY0OmnvQ4caFrcxboi10O7ysNgA9zXCat7uaUCRsIhVkTfpXvGYwaUiLNYeo6UnD5nq9zXnqJ5aHI5zMq7W2IbIHurlx1pBAfBjX+shohM66lZI6eZ1sOpJRNBV4957gcMYGXP/UJblgI+4GRHKCG892FFJlFxn9YMEwvHvCCYdUQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Uut152AN6gXgVxLfOpg++MeL3hz9WFw+JXx2+UlFhCU=;
+ b=Ql1VEk/fIH3+Ktl18uFxu/MVUHxVfh9mK5tH6z4d9P6SAoYeqQ9/nUvhdxxT5WCDGiQ2lKSSSNPc4/6qfPpJp34EsNpp8HXaOwWfV5Wy1IKHpUA4cu93tzsyg9lyjedQnQg6F+3TKZjMO2d2hR318NqbpoO9kyKcJywwkyM3iE+SKQ0iXIiQnAXlh05nVdIXBO2/No7D49tobN8x+7nm3GhFGLv7L39q0wOMM0TLtBaaYlAgXDHfR5rPHDzrLIb41allrnUCBJw26DAhGV0LJnmRVvL2hOTQPnoUFWI7kTu+McwG3ysEbG0ICcd5pKWzYa1EFiviy2mHo2OSK0Q3Tw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by DM4PR12MB7600.namprd12.prod.outlook.com (2603:10b6:8:108::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.21; Fri, 7 Aug
+ 2026 14:18:06 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0292.022; Fri, 7 Aug 2026
+ 14:18:06 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 07 Aug 2026 10:18:05 -0400
+Message-Id: <DKIRYOJXLIYN.32KI06POZL7SY@nvidia.com>
+Subject: Re: [PATCH 0/3] mm: support splitting mappingless swapcache folios
+Cc: "Shivam Kalra" <shivamkalra98@zohomail.in>, "Kairui Song"
+ <kasong@tencent.com>, "Andrew Morton" <akpm@linux-foundation.org>, "David
+ Hildenbrand" <david@kernel.org>, "Lorenzo Stoakes" <ljs@kernel.org>,
+ "Baolin Wang" <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <liam@infradead.org>, "Ryan Roberts" <ryan.roberts@arm.com>, "Dev Jain"
+ <dev.jain@arm.com>, "Barry Song" <baohua@kernel.org>, "Lance Yang"
+ <lance.yang@linux.dev>, "Usama Arif" <usama.arif@linux.dev>, "Vlastimil
+ Babka" <vbabka@kernel.org>, "Mike Rapoport" <rppt@kernel.org>, "Suren
+ Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>, "Shuah
+ Khan" <shuah@kernel.org>, "Nico Pache" <nico.pache@linux.dev>,
+ <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+To: "Kairui Song" <ryncsn@gmail.com>
+From: "Zi Yan" <ziy@nvidia.com>
+X-Mailer: aerc 0.21.0
+References: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in> <590B3189-5B66-4ECB-84CD-7B7EF18C0E54@nvidia.com> <anNOroQdjQh7xmU9@KASONG-MC4>
+In-Reply-To: <anNOroQdjQh7xmU9@KASONG-MC4>
+X-ClientProxiedBy: MN0P222CA0025.NAMP222.PROD.OUTLOOK.COM
+ (2603:10b6:208:531::33) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|DM4PR12MB7600:EE_
+X-MS-Office365-Filtering-Correlation-Id: c022cc04-c775-4a05-a04c-08def48eb35e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|11063799006|4133799003|4143699003|10067099003|56012099006|6133799003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	aBF5Feo68Y2LFHHOHDmCzbIjYHUSDJUwNK2E+z+oHdnMwaBPMXENIdijvF/XgJF9fXEzxZcSvefoDJMwMA1K48xl6k7dk/mzFmGPfw2TLBSff+FNwAaFU5AOT6PtjiRYqDrGBFUcqc+6Vj8p7hk4yF5hkaQMqbnZud3YL+puA3ycyqHrF118A6tLVRmXFT2hxc+y2l+TRBeCzmbLTgc9zKc4rot8ceVgkvoT0RUqHWJrqEX5kXufuojHpQST3T6hLl9tXWXURm/gcUNOzRsFQ0mY3f6K3W8ihmGl6P+PrC4VzQyy/9YJwpk2oQtQhUbgAOe0Sr+/T8CaYZOP9ev+F1sFno87unf+gCqXKI+xHirqhpE5TWmwPYh8viYmVK0WcSjiP1XEYGaFijHF1M0Ovp+HMRlY8V8GXinIweID4+Se5v7nx29Wwy5JVMSaJuuUp4ugAkmNF0Ws3+IILsDbdZ4eagp8BYi4QfuToEsktV4688bPJmmv07q5xeIR1YJQph3K9IkRcpcnBt7YAgXqKsD9DhZ7HU7BlJp/aF7E0SyhS8rnxVXGiHzhc2aHlEnqJj82zvr/6H1Id/cfubWeRU7NO34T03lOb7RpGelzjCm9u6VOzR3JR298LdVdbdWAhjFpYCFEqXCm0UvSAIMpla5ffIV7QsDZG2Dd+dtfM24=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(11063799006)(4133799003)(4143699003)(10067099003)(56012099006)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?TTA3RFkvaWg4KzBxaTNIalRpdnFKVXBSS1lQbk1JWkN5ZEhDcWVuNTlra1JQ?=
+ =?utf-8?B?dDlHSGFHbnlpZUJWYnVjVHhjMVNZZjJyd2g2Z1V2dzk3SGlrb01jUlNyVVpZ?=
+ =?utf-8?B?eGtpc2s2bWltU0o2MEFVdjQ2N1pnMmF2cWRGUFJ1dXlkdjBVN0hGR1JFaVRK?=
+ =?utf-8?B?SWdjNEFlQ2lyZkZxRlZnWjZYZllPT3hhUEtTZDhCamVPcW1ydGxsUlkrVHRT?=
+ =?utf-8?B?bzhFZ21LdDMrQTJKcWdCcFdyNW9HZ1hYMjZyL3BhbnNuVkYyejMxUkNPMzlB?=
+ =?utf-8?B?SU1DWDJKdVlDZWxvNlE0QkdMU2ZidlVwbi9MbHRCQTRHV0pISHdsZ0tZMGFF?=
+ =?utf-8?B?SjZtUXZSbko1THRDeXAwMzlSZWlrVWRKZ0hSenhlcmx4czU2WUljY0gvaUY5?=
+ =?utf-8?B?bWY5MnhVVnM1YW5tNWRSdFB0U2R0U25HVHRpSm1rZ0ZjWFRtSG5icUsrbWlL?=
+ =?utf-8?B?dEtpUWNqZTRzQUwvMkIxT2pBWURaaExBT2MzTi9aR1BYZ1hxcEZ3K0dyeXZV?=
+ =?utf-8?B?UVdhSGw4c0Qyc2tXNFNkSGJmNWxEWU5rM01UQmxaTEx0RG9GQ3ZLc0I5YmJ0?=
+ =?utf-8?B?M3NGKzkzdy9PRVhwbDhTSDViUEIvdmtpZitXTHp2eXc0S1lTb3FXaE0rTXJ6?=
+ =?utf-8?B?L01CeHE2VXlmc0Q4aitLOFl2S2xOSGIrNHVWblFMLzZZNVJqMTVTR0lvN1dj?=
+ =?utf-8?B?Ull4N3VHM3pjdWNyeFdyTWErS1kyVHIzcWVhQm1MQTh1QUE4RzF1ZGlMTDNQ?=
+ =?utf-8?B?azlKNDZ3VUVXOEp5SEpVS2djVzE3M254cHZmakdScjZZWDBZQ0lEdEU2a3Rq?=
+ =?utf-8?B?Y2NCeVE1WlhDdTJQWGtsMWFoZEV2bnl4OGRIem90YXAxQUJaUktNRjNDeEhx?=
+ =?utf-8?B?aVhDQVJHMFFxN3ZZeGFNbXVzQTJyOGFabEFRc0JKMWp1WmVnUHFpbDh4bEZT?=
+ =?utf-8?B?TU5yRGxjcnpDckF6N0U4ekl4SjFaYUMyVFcvTGZSdFRnM2VEa1V1NE5NMU5t?=
+ =?utf-8?B?d1MzaW5sZnVNNmxwTjdZS0F4UWtUZklLUlhQUWoraTFpZDVXYU1CRmJ1Ylpx?=
+ =?utf-8?B?d2xyakZpenlHSG9PTzl4VExXUXVBb3JDVUw3dW0xeEdhQTZ2UytwTzdzUGxk?=
+ =?utf-8?B?VXFEcFp6amUrcStDcHZPVW5lMEpvbTNYTDVseEFGT0w0ejQ0WVpuYnk0MlVu?=
+ =?utf-8?B?K3FsbkZFejFMZWI4UTZQaGZEOTQ2ckcyWWhvUE04MEpqZGNzM29zeHp1c3Y4?=
+ =?utf-8?B?dENSRkYvaEhrczNTcHMyckNoc0o0RjBKdHpLQTQzcXBtZUsxK3NFSjRqRS91?=
+ =?utf-8?B?ejl1Q2lRaEhqK1VnR2hiOWNaYVNwMHViTXh4WElzWGorWlBPYTMxeTdLVVYx?=
+ =?utf-8?B?c0NjenVxblEyRTBBVzIzMExua0NVM1R2MnAraWRxeFdSRGh6ZFQ2cmFGd3lB?=
+ =?utf-8?B?ZHJMNzR1UTE4dnFndVRSVlVENDlrOUpBd3BOWW5uZHZvUTBkMEU1dmxyYmYz?=
+ =?utf-8?B?ZmFCNlpVWWh2Z3FTMFdIeGxIVm1iQ0V4WVEvcllBUEQrTEhqTjBOTEhDYlNW?=
+ =?utf-8?B?ZnB5clRnTGpZK3RublRkYzV1WG1DYjFuNHRlT1dPQy9pZ0lOcWxvd3FVbkZQ?=
+ =?utf-8?B?L2xHRDJUcUtqWnlIWmlLdW9rNlVzUmdydy93ZlhtelJ6dnNmYWR5bE12UlpR?=
+ =?utf-8?B?R3JoVUpDTkJCWDIyUzNMMDl4R01ha3JtcU1qOTU2RmwxRlVNZkJGT3RFYmxU?=
+ =?utf-8?B?ODcyakZjTklQb0l4eFozQlROWXU4SmQyT1lORFRtVXlxcWR3Wk5RU1ZWWG1m?=
+ =?utf-8?B?SGQwcHhVSmF3dGlUV2tQSnRUNnljbDRJdXJROWhJMUFYdmFUTmcvMXdCZ0FW?=
+ =?utf-8?B?clhuckh5RjdMZ1ZjTi8rQ0tVUGVMYk5QNEhyMjV3Z1VHc0NvQ0FRWjRxWnpu?=
+ =?utf-8?B?MzNZM2pvaW8weXBtYytxUUtVVFdCSTNRTWU3UzNTRGlvRlFVQ1Z5K3l4aHkr?=
+ =?utf-8?B?b0JyK0tSQkFTaWQ3N3c2WnpoWnB0T2hGTXNlZkRtbDRlb2NGbXF5U2Q4Ylg1?=
+ =?utf-8?B?RkFxbTM3M0JMbFFsYkhVN0d3L1hKNXdHbEZ3ZEkwQndUdGxlNmRXRUhlSWxJ?=
+ =?utf-8?B?OUQvMzZsL1RnTFJjamJGVXBZbWd3UEdIdGYrbG5PL0puYmEwUXI5WFF4bTcx?=
+ =?utf-8?B?Z1h3NzZER1ZCWVhLM0JqVEMvRFJXME5KWVp0eVl1dXo1VnlNdlpaUm9CQWpI?=
+ =?utf-8?B?ZEdHeXdvMEVrRnhySjgxVWdwa21aaTFGWjlJS21NclYwTnMzYXdNaFY4c1lX?=
+ =?utf-8?Q?vBUBdQoNwRaHYY8EoX?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c022cc04-c775-4a05-a04c-08def48eb35e
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Aug 2026 14:18:06.7103
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UPKMOrkOQEeMGKOaTNRR1ok0MA4Y5BQumF6pTEO4RUOcUjaBT1wVOn5EZYO2PfDm
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB7600
 
-Add a PRP LAN-slave GSO case which verifies that plain aggregates are
-segmented and delivered locally to the master. Also bound the iperf3 server
-readiness wait.
+On Wed Aug 5, 2026 at 11:54 AM EDT, Kairui Song wrote:
+> On Wed, Aug 05, 2026 at 08:03:33AM +0800, Zi Yan wrote:
+>> On 5 Aug 2026, at 7:18, Shivam Kalra via B4 Relay wrote:
+>>=20
+>> > Large shmem folios lose their address-space mapping when they are writ=
+ten
+>> > to swap, but remain valid members of the swap cache. Folios read from =
+swap
+>> > but not yet associated with an anon_vma can have the same mappingless
+>> > swapcache state. folio_check_splittable() currently mistakes both case=
+s for
+>> > truncation and rejects the split with -EBUSY.
+>> >
+>> > Implement the longstanding TODO for this state. Allow mappingless
+>> > swapcache folios to use the existing uniform order-0 swapcache split p=
+ath,
+>> > while continuing to reject truly truncated folios and unsupported
+>> > higher-order or non-uniform swapcache splits.
+>>=20
+>> Thank you for your patches.
+>>=20
+>> As Kairui (cc=E2=80=99d) mentioned in [1] (see =E2=80=9CA bit more detai=
+ls on this=E2=80=9D),
+>> we might not need to implement this split. I will let Kairui to decide
+>> how we should deal with this patchset.
+>>=20
+>> [1] https://lore.kernel.org/all/CAMgjq7CHDG8JhesSPMkn1kzG8jKb0BXO756BvxM=
+QC_MCn2eTyA@mail.gmail.com/
+>
+> Thanks for the CC, this is actually not hard to implement as shown by
+> Shivam, I just found the code more and more hard to follow and fragile
+> as we add more logic to it. And we don't have to reject higher order
+> split either which can be seen easily if the code is cleaner.
+>
+> Personally I think doing some cleanup first is better, I haven't post any
+> code as right now there doesn't seem to be much user of this. It will be
+> needed if more clean THP swapcache begin to show up due to things like
+> THP readahead for swap, which isn't here yet. I think I can send an RFC
+> tomorrow just for reference. I'm fine if we prefer to remove that TODO
+> using this smaller change first :)
 
-Signed-off-by: Xin Xie <xiexinet@gmail.com>
----
- tools/testing/selftests/net/hsr/Makefile      |   1 +
- .../selftests/net/hsr/hsr_gro_superpacket.sh  | 631 ++++++++++++++++++
- 2 files changed, 632 insertions(+)
- create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+Thanks. Can you also help review this patchset? The changes looks good
+to me but I am not sure if I get all the details about swapcache handling.
 
-diff --git a/tools/testing/selftests/net/hsr/Makefile b/tools/testing/selftests/net/hsr/Makefile
-index 31fb9326cf53..0d105476e7c5 100644
---- a/tools/testing/selftests/net/hsr/Makefile
-+++ b/tools/testing/selftests/net/hsr/Makefile
-@@ -3,6 +3,7 @@
- top_srcdir = ../../../../..
- 
- TEST_PROGS := \
-+	hsr_gro_superpacket.sh \
- 	hsr_ping.sh \
- 	hsr_redbox.sh \
- 	link_faults.sh \
-diff --git a/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
-new file mode 100755
-index 000000000000..ebcbd9fc41ec
---- /dev/null
-+++ b/tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
-@@ -0,0 +1,631 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test HSR handling of GRO/GSO super-packets:
-+#
-+#  1. Enslaving a device to an HSR master disables GRO on it
-+#     (dev_disable_gro()).
-+#  2. The HSR master does not advertise GSO/TSO features.
-+#  3. A TCP stream from a TSO-enabled SAN (which therefore emits GSO
-+#     super-packets) is unfolded at the HSR forward entry. Evidence:
-+#     interface-counter deltas show super-packet-sized frames leaving
-+#     the SAN and per-frame-sized traffic leaving the DUT's LAN ports.
-+#
-+# Topology (100.64.0.0/24):
-+#
-+#   ns_san                    ns_dut                      ns_peer
-+#  +-----------+  interlink  +---------------+  LAN A/B  +-----------+
-+#  | s0 [0.1]  |-------------| d_il   hsr0   |-----------| hsr1 [0.3]|
-+#  +-----------+             | d_a / d_b     |           | p_a / p_b |
-+#                            +---------------+           +-----------+
-+#
-+# SAN traffic reaches ns_peer only through hsr0's forward path
-+# (interlink RX -> LAN A/B TX), so every SAN frame is tagged and
-+# forwarded by the DUT.
-+
-+source ./hsr_common.sh
-+
-+san_ip="100.64.0.1"
-+peer_ip="100.64.0.3"
-+
-+# Aggregate counter thresholds for the stream test (bytes/packets):
-+# SAN_AVG_MIN proves GSO super-packets left the SAN; LAN_AVG_MAX is a
-+# guard with margin, not the protocol maximum (see do_tso_stream_test).
-+SAN_AVG_MIN=2048
-+LAN_AVG_MAX=1514
-+
-+iperf_pid=""
-+server_wrapper=""
-+active_srv_ns=""
-+workdir=""
-+pidfile=""
-+ns_dut=""
-+ns_san=""
-+ns_peer=""
-+ns_ls=""
-+rcfile=""
-+
-+# Delete the per-server private work directory and reset its
-+# variables. Called after a successful reap and from the EXIT
-+# trap, which owns all failure paths.
-+cleanup_workdir()
-+{
-+	# remove only the known non-empty private directory
-+	if [ -n "${workdir}" ] && [ -d "${workdir}" ]; then
-+		rm -rf "${workdir}"
-+	fi
-+	workdir=""
-+	pidfile=""
-+	rcfile=""
-+}
-+
-+cleanup()
-+{
-+	# Server cleanup targets only the namespace of the currently
-+	# active server (recorded by start_iperf_server); after a
-+	# successful reap nothing is active.
-+	if [ -n "${active_srv_ns}" ]; then
-+		# exact-PID kill only after RE-validating identity (guards
-+		# against PID reuse between publication and cleanup)
-+		if [ -n "${iperf_pid}" ] && valid_server_pid "${active_srv_ns}" "${iperf_pid}"; then
-+			kill "${iperf_pid}" 2>/dev/null
-+		fi
-+		iperf_pid=""
-+		if [ -n "${server_wrapper}" ]; then
-+			# the wrapper waits on the server; reap it with a 5s
-+			# bound so a live-but-unpublished server can never
-+			# hang cleanup
-+			for _ in $(seq 1 50); do
-+				kill -0 "${server_wrapper}" 2>/dev/null || break
-+				sleep 0.1
-+			done
-+			kill "${server_wrapper}" 2>/dev/null
-+			wait "${server_wrapper}" 2>/dev/null
-+			server_wrapper=""
-+		fi
-+		# last resort, namespace-scoped only: TERM the iperf3
-+		# processes that actually live in the active server netns,
-+		# poll for bounded exit, then SIGKILL any survivor before
-+		# touching the namespace name. A blind pkill would scan
-+		# the host PID space and hit unrelated tests.
-+		local _p _still
-+		for _p in $(ip netns pids "${active_srv_ns}" 2>/dev/null); do
-+			if is_iperf3_pid "$_p"; then
-+				kill "$_p" 2>/dev/null
-+			fi
-+		done
-+		for _ in $(seq 1 50); do
-+			_still=0
-+			for _p in $(ip netns pids "${active_srv_ns}" 2>/dev/null); do
-+				if is_iperf3_pid "$_p"; then
-+					_still=1
-+					break
-+				fi
-+			done
-+			[ "$_still" -eq 0 ] && break
-+			sleep 0.1
-+		done
-+		for _p in $(ip netns pids "${active_srv_ns}" 2>/dev/null); do
-+			if is_iperf3_pid "$_p"; then
-+				kill -9 "$_p" 2>/dev/null
-+			fi
-+		done
-+	fi
-+	active_srv_ns=""
-+	cleanup_workdir
-+	cleanup_all_ns
-+}
-+
-+trap cleanup EXIT
-+
-+check_tool()
-+{
-+	if ! command -v "$1" > /dev/null 2>&1; then
-+		echo "SKIP: Could not run test without $1"
-+		exit $ksft_skip
-+	fi
-+}
-+
-+nsx()
-+{
-+	ip netns exec "$1" bash -c "$2"
-+}
-+
-+is_iperf3_pid()
-+{
-+	[ "$(cat /proc/"$1"/comm 2>/dev/null)" = "iperf3" ]
-+}
-+
-+# Bounded reap of the one-shot server: wait at most 5s for it to
-+# exit, then reap the wrapper and REQUIRE the rcfile with its real
-+# status. A stuck server can never hang the script.
-+reap_iperf_server()
-+{
-+	local server_rc
-+
-+	for _ in $(seq 1 50); do
-+		kill -0 "${iperf_pid}" 2>/dev/null || break
-+		sleep 0.1
-+	done
-+	if kill -0 "${iperf_pid}" 2>/dev/null; then
-+		echo "FAIL: iperf3 server did not exit within 5s" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	wait "${server_wrapper}"
-+	server_wrapper=""
-+	if [ ! -s "${rcfile}" ]; then
-+		echo "FAIL: iperf3 server status file missing (${rcfile})" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	server_rc=$(cat "${rcfile}")
-+	if ! [[ "$server_rc" =~ ^[0-9]+$ ]] || [ "$server_rc" -ne 0 ]; then
-+		echo "FAIL: iperf3 server exited with rc='${server_rc}'" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	iperf_pid=""
-+	cleanup_workdir
-+	active_srv_ns=""
-+	return 0
-+}
-+
-+# Decimal-counter validation for the snapshot blocks: every value must
-+# be a plain decimal number. A parse failure in read_tx_counters yields
-+# empty/garbled fields, which this check turns into an immediate FAIL.
-+valid_decimals()
-+{
-+	local v
-+
-+	for v in "$@"; do
-+		[[ "$v" =~ ^[0-9]+$ ]] || return 1
-+	done
-+	return 0
-+}
-+
-+setup_topo()
-+{
-+	setup_ns ns_dut ns_san ns_peer || exit $?
-+
-+	ip link add d_a netns "$ns_dut" type veth peer name p_a netns "$ns_peer"
-+	ip link add d_b netns "$ns_dut" type veth peer name p_b netns "$ns_peer"
-+	ip link add d_il netns "$ns_dut" type veth peer name s0 netns "$ns_san"
-+
-+	# HSR tags add 6 bytes per frame; give the LAN legs headroom.
-+	for iface in d_a d_b; do
-+		nsx "$ns_dut" "ip link set $iface mtu 1600; \
-+			ip link set $iface up"
-+	done
-+	for iface in p_a p_b; do
-+		nsx "$ns_peer" "ip link set $iface mtu 1600; \
-+			ip link set $iface up"
-+	done
-+
-+	nsx "$ns_dut" "ip link set d_il up"
-+	nsx "$ns_san" "ip link set s0 up; ip addr add $san_ip/24 dev s0"
-+
-+	nsx "$ns_dut" "ip link add hsr0 type hsr \
-+		slave1 d_a slave2 d_b interlink d_il proto 0; \
-+		ip link set hsr0 up"
-+	nsx "$ns_peer" "ip link add hsr1 type hsr \
-+		slave1 p_a slave2 p_b proto 0; \
-+		ip link set hsr1 up; ip addr add $peer_ip/24 dev hsr1"
-+
-+	# Let the nodes see each other's supervision frames.
-+	sleep 2
-+}
-+
-+check_feature()
-+{
-+	local ns="$1"
-+	local iface="$2"
-+	local feature="$3"
-+	local want="$4"
-+
-+	if nsx "$ns" "ethtool -k $iface" | grep -q "^$feature: $want"; then
-+		echo "INFO: $ns/$iface $feature is $want [ OK ]"
-+	else
-+		echo "FAIL: $ns/$iface $feature is not $want" 1>&2
-+		ret=1
-+	fi
-+}
-+
-+# Off-or-absent variant: fails only when the feature is present AND on,
-+# so devices that simply do not list the feature do not fail it.
-+check_feature_not_on()
-+{
-+	local ns="$1"
-+	local iface="$2"
-+	local feature="$3"
-+
-+	if nsx "$ns" "ethtool -k $iface" | grep -q "^$feature: on"; then
-+		echo "FAIL: $ns/$iface $feature is on" 1>&2
-+		ret=1
-+	else
-+		echo "INFO: $ns/$iface $feature not on [ OK ]"
-+	fi
-+}
-+
-+do_gro_feature_checks()
-+{
-+	echo "INFO: Checking that enslavement disabled GRO."
-+	check_feature "$ns_dut" d_a generic-receive-offload off
-+	check_feature "$ns_dut" d_b generic-receive-offload off
-+	check_feature "$ns_dut" d_il generic-receive-offload off
-+	stop_if_error "GRO not disabled on enslaved devices."
-+
-+	echo "INFO: Checking that enslavement disabled HW-GRO."
-+	check_feature "$ns_dut" d_a rx-gro-hw off
-+	check_feature "$ns_dut" d_b rx-gro-hw off
-+	check_feature "$ns_dut" d_il rx-gro-hw off
-+	stop_if_error "HW-GRO not disabled on enslaved devices."
-+
-+	echo "INFO: Checking that the HSR master does not advertise GSO/TSO."
-+	check_feature "$ns_dut" hsr0 generic-segmentation-offload off
-+	check_feature "$ns_dut" hsr0 tcp-segmentation-offload off
-+	check_feature_not_on "$ns_dut" hsr0 tx-udp-segmentation
-+	check_feature_not_on "$ns_dut" hsr0 tx-gso-list
-+	stop_if_error "HSR master still advertises GSO-family features."
-+}
-+
-+alloc_workdir()
-+{
-+	# Allocated only here, long after the initial topology cleanup, so
-+	# cleanup() at setup_topo() time can never remove it. mktemp failure
-+	# is a hard test failure.
-+	workdir=$(mktemp -d /tmp/hsr_gro_test.XXXXXX) || {
-+		echo "FAIL: mktemp -d failed" 1>&2
-+		exit 1
-+	}
-+	chmod 700 "${workdir}"
-+	pidfile="${workdir}/iperf.pid"
-+	rcfile="${workdir}/iperf.rc"
-+}
-+
-+# Numeric, alive, comm == iperf3, and really owned by the given netns.
-+valid_server_pid()
-+{
-+	local pns="$1" p="$2"
-+
-+	[[ "$p" =~ ^[0-9]+$ ]] || return 1
-+	kill -0 "$p" 2>/dev/null || return 1
-+	[ "$(cat /proc/"$p"/comm 2>/dev/null)" = "iperf3" ] || return 1
-+	ip netns pids "$pns" 2>/dev/null | grep -qx "$p"
-+}
-+
-+start_iperf_server()
-+{
-+	local srv_ns="$1"
-+	local srv_ip="${2:-}"
-+	local candidate_pid
-+
-+	# One-shot server, no -D: the wrapper records its exact PID and its
-+	# real exit status (netns shares the PID namespace and the host fs).
-+	alloc_workdir
-+	# record the server namespace for cleanup() before
-+	# anything can fail with the server running
-+	active_srv_ns="$srv_ns"
-+	( nsx "$srv_ns" "iperf3 -s -1 ${srv_ip:+-B $srv_ip} > /dev/null 2>&1 & \
-+		echo \$! > ${pidfile}; \
-+		wait \$!; \
-+		echo \$? > ${rcfile}" ) &
-+	server_wrapper=$!
-+	# the wrapper writes the pidfile asynchronously; wait for it to
-+	# appear instead of racing the read
-+	for _ in $(seq 1 50); do
-+		[ -s "${pidfile}" ] && break
-+		sleep 0.1
-+	done
-+	if [ ! -s "${pidfile}" ]; then
-+		echo "FAIL: iperf3 server did not publish a pid" \
-+			"(no pidfile)" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	candidate_pid=$(<"${pidfile}")
-+	if ! valid_server_pid "$srv_ns" "${candidate_pid}"; then
-+		echo "FAIL: iperf3 server pid '${candidate_pid}'" \
-+			"failed validation" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	# publish only after full validation
-+	iperf_pid="${candidate_pid}"
-+	sleep 1
-+	return 0
-+}
-+
-+# Print "<bytes> <packets>" for exactly one TX record of ns/dev; anything
-+# else (missing, duplicated, non-numeric) is a hard FAIL.
-+read_tx_counters()
-+{
-+	local ns="$1" dev="$2"
-+	local out cnt
-+
-+	out=$(nsx "$ns" "ip -s link show $dev" | \
-+		awk '/^ +TX:/{getline; print $1, $2}')
-+	cnt=$(echo "$out" | grep -c '^[0-9]* [0-9]*$')
-+	if [ "$cnt" -ne 1 ]; then
-+		echo "FAIL: cannot parse TX counters of $ns/$dev" \
-+			"(records=$cnt)" 1>&2
-+		return 1
-+	fi
-+	echo "$out"
-+	return 0
-+}
-+
-+# Print "<bytes> <packets>" for exactly one RX record of ns/dev; the
-+# same single-record discipline as read_tx_counters.
-+read_rx_counters()
-+{
-+	local ns="$1" dev="$2"
-+	local out cnt
-+
-+	out=$(nsx "$ns" "ip -s link show $dev" | \
-+		awk '/^ +RX:/{getline; print $1, $2}')
-+	cnt=$(echo "$out" | grep -c '^[0-9]* [0-9]*$')
-+	if [ "$cnt" -ne 1 ]; then
-+		echo "FAIL: cannot parse RX counters of $ns/$dev" \
-+			"(records=$cnt)" 1>&2
-+		return 1
-+	fi
-+	echo "$out"
-+	return 0
-+}
-+
-+eval_counter_delta()
-+{
-+	local name="$1" b0="$2" p0="$3" b1="$4" p1="$5" op="$6" limit="$7"
-+	local bd pd
-+
-+	if ! [[ "$b0" =~ ^[0-9]+$ && "$b1" =~ ^[0-9]+$ && \
-+		"$p0" =~ ^[0-9]+$ && "$p1" =~ ^[0-9]+$ ]]; then
-+		echo "FAIL: non-numeric counter input for $name" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	bd=$((b1 - b0))
-+	pd=$((p1 - p0))
-+	if [ "$bd" -lt 0 ] || [ "$pd" -le 0 ]; then
-+		echo "FAIL: counter delta invalid for $name" \
-+			"(bytes=$bd pkts=$pd)" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+	if [ "$op" = "gt" ]; then
-+		if [ "$bd" -le $((pd * limit)) ]; then
-+			echo "FAIL: $name bytes/packets $bd/$pd <= $limit" 1>&2
-+			ret=1
-+			return 1
-+		fi
-+	else
-+		if [ "$bd" -gt $((pd * limit)) ]; then
-+			echo "FAIL: $name bytes/packets $bd/$pd > $limit" 1>&2
-+			ret=1
-+			return 1
-+		fi
-+	fi
-+	echo "INFO: $name counter delta bytes=$bd packets=$pd" \
-+		"(op $op limit $limit) [ OK ]"
-+	return 0
-+}
-+
-+# LAN-slave plain-GSO regression: a plain SAN aggregate entering a PRP
-+# LAN slave must be segmented at the forward entry, not dropped. PRP
-+# drops slave-to-slave forwarding by design (prp_drop_frame), so the
-+# consumer of LAN-slave SAN traffic is local delivery to the master.
-+# Two independent oracles: the SAN-side proof that aggregates really
-+# arrived at the DUT, and the volume + per-frame shape of the local
-+# delivery. On the broken gate the aggregates are dropped and TCP
-+# crawls on retransmitted single segments, separating the kernels by
-+# an order of magnitude in delivered bytes.
-+do_lansan_gso_test()
-+{
-+	local prp_ip="10.99.1.1" ls_ip="10.99.1.10"
-+	local out san_b0 san_p0 san_b1 san_p1
-+	local a_b0 a_p0 a_b1 a_p1 r_b0 r_p0 r_b1 r_p1
-+
-+	setup_ns ns_ls || exit $?
-+
-+	ip link add d_pa netns "$ns_dut" type veth peer name ls_a netns "$ns_ls"
-+	ip link add d_pb netns "$ns_dut" type veth peer name ls_p netns "$ns_ls"
-+
-+	nsx "$ns_dut" "ip link set d_pa mtu 1600 up"
-+	nsx "$ns_dut" "ip link set d_pb mtu 1600 up"
-+	nsx "$ns_ls" "ip link set ls_a mtu 1600 up; \
-+		ip link set ls_p mtu 1600 up; ip addr add $ls_ip/24 dev ls_a"
-+
-+	# PRP DUT with the SAN on a LAN slave: plain SAN aggregates are
-+	# valid traffic on a PRP LAN and must not be dropped.
-+	nsx "$ns_dut" "ip link add prp0 type hsr \
-+		slave1 d_pa slave2 d_pb proto 1; \
-+		ip link set prp0 up; ip addr add $prp_ip/24 dev prp0"
-+
-+	# Let supervision frames converge.
-+	sleep 2
-+
-+	echo "INFO: Enabling TSO/GSO on the LAN-side SAN interface."
-+	nsx "$ns_ls" "ethtool -K ls_a tso on gso on"
-+	check_feature "$ns_ls" ls_a tcp-segmentation-offload on
-+	stop_if_error "Could not enable TSO on the LAN-side SAN interface."
-+
-+	start_iperf_server "$ns_dut" "$prp_ip" || return
-+
-+	read -r r_b0 r_p0 <<EOF
-+$(read_rx_counters "$ns_dut" prp0)
-+EOF
-+	read -r san_b0 san_p0 <<EOF
-+$(read_tx_counters "$ns_ls" ls_a)
-+EOF
-+	if ! valid_decimals "$r_b0" "$r_p0" "$san_b0" "$san_p0"; then
-+		echo "FAIL: baseline counter snapshot invalid" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+
-+	if ! out=$(nsx "$ns_ls" "timeout 60 iperf3 -c $prp_ip -M 1446 \
-+		-b 2G -t 10" 2>&1); then
-+		echo "FAIL: LAN-slave GSO local-delivery stream failed:" 1>&2
-+		echo "$out" 1>&2
-+		ret=1
-+		return
-+	fi
-+
-+	read -r r_b1 r_p1 <<EOF
-+$(read_rx_counters "$ns_dut" prp0)
-+EOF
-+	read -r san_b1 san_p1 <<EOF
-+$(read_tx_counters "$ns_ls" ls_a)
-+EOF
-+	if ! valid_decimals "$r_b1" "$r_p1" "$san_b1" "$san_p1"; then
-+		echo "FAIL: final counter snapshot invalid" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+
-+	# Oracle 1 - aggregates really arrived: the SAN emitted
-+	# super-packets toward the DUT.
-+	eval_counter_delta "SAN ls_a TX" "$san_b0" "$san_p0" \
-+		"$san_b1" "$san_p1" gt "$SAN_AVG_MIN"
-+	[ "${ret:-0}" -eq 0 ] || return
-+
-+	# Oracle 2 - local delivery of those aggregates: volume and
-+	# per-frame shape on the PRP master. The volume gate separates
-+	# full delivery from the retransmit crawl the broken gate leaves;
-+	# the average gate proves the bytes arrived per-frame.
-+	if [ $((r_b1 - r_b0)) -lt 100000000 ]; then
-+		echo "FAIL: LAN-slave local delivery degraded" \
-+			"(prp0 RX delta $((r_b1 - r_b0)) bytes < 100000000)" 1>&2
-+		ret=1
-+		return
-+	fi
-+	if [ $((r_b1 - r_b0)) -gt $(( (r_p1 - r_p0) * LAN_AVG_MAX )) ]; then
-+		echo "FAIL: local delivery not per-frame" \
-+			"(avg $(( (r_b1 - r_b0) / (r_p1 - r_p0) )) > $LAN_AVG_MAX)" 1>&2
-+		ret=1
-+		return
-+	fi
-+	echo "INFO: LAN-slave local delivery prp0 RX delta" \
-+		"$((r_b1 - r_b0)) bytes / $((r_p1 - r_p0)) pkts [ OK ]"
-+	reap_iperf_server || return
-+	echo "INFO: LAN-slave plain-GSO regression [ OK ]"
-+}
-+
-+do_tso_stream_test()
-+{
-+	local out sender_retr
-+	local san_b0 san_p0 san_b1 san_p1
-+	local a_b0 a_p0 a_b1 a_p1 b_b0 b_p0 b_b1 b_p1
-+
-+	echo "INFO: Enabling TSO/GSO on the SAN interface."
-+	nsx "$ns_san" "ethtool -K s0 tso on gso on"
-+	check_feature "$ns_san" s0 tcp-segmentation-offload on
-+	stop_if_error "Could not enable TSO on the SAN interface."
-+
-+	echo "INFO: Running 10s TCP stream SAN -> peer through the HSR DUT."
-+	start_iperf_server "$ns_peer" || return
-+
-+	# Counter snapshots around the stream window. The SAN-side average
-+	# must exceed SAN_AVG_MIN (aggregate proof that GSO super-packets
-+	# really left the SAN); each DUT LAN leg must stay under LAN_AVG_MAX
-+	# (aggregate proof that bulk output was segmented per-frame). These
-+	# are aggregate discriminators, not a per-frame maximum proof.
-+	san_b0=0; san_p0=0; a_b0=0; a_p0=0; b_b0=0; b_p0=0
-+	read -r san_b0 san_p0 <<EOF
-+$(read_tx_counters "$ns_san" s0)
-+EOF
-+	read -r a_b0 a_p0 <<EOF
-+$(read_tx_counters "$ns_dut" d_a)
-+EOF
-+	read -r b_b0 b_p0 <<EOF
-+$(read_tx_counters "$ns_dut" d_b)
-+EOF
-+	if ! valid_decimals "$san_b0" "$san_p0" "$a_b0" "$a_p0" \
-+		"$b_b0" "$b_p0"; then
-+		echo "FAIL: baseline TX counter snapshot invalid" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+
-+	# rate-capped: the PRIMARY discriminator is the counter inequality
-+	# above, not max throughput; retransmits are informational only.
-+	# Uncapped runs flap at VM/CI edge rates without indicating a
-+	# functional problem.
-+	if ! out=$(nsx "$ns_san" "timeout 60 iperf3 -c $peer_ip -M 1446 \
-+		-b 2G -t 10" 2>&1); then
-+		echo "FAIL: iperf3 client failed:" 1>&2
-+		echo "$out" 1>&2
-+		ret=1
-+		return
-+	fi
-+
-+	read -r san_b1 san_p1 <<EOF
-+$(read_tx_counters "$ns_san" s0)
-+EOF
-+	read -r a_b1 a_p1 <<EOF
-+$(read_tx_counters "$ns_dut" d_a)
-+EOF
-+	read -r b_b1 b_p1 <<EOF
-+$(read_tx_counters "$ns_dut" d_b)
-+EOF
-+	if ! valid_decimals "$san_b1" "$san_p1" "$a_b1" "$a_p1" \
-+		"$b_b1" "$b_p1"; then
-+		echo "FAIL: final TX counter snapshot invalid" 1>&2
-+		ret=1
-+		return 1
-+	fi
-+
-+	eval_counter_delta "SAN s0 TX" "$san_b0" "$san_p0" "$san_b1" "$san_p1" \
-+		gt "$SAN_AVG_MIN"
-+	eval_counter_delta "DUT d_a TX" "$a_b0" "$a_p0" "$a_b1" "$a_p1" \
-+		le "$LAN_AVG_MAX"
-+	eval_counter_delta "DUT d_b TX" "$b_b0" "$b_p0" "$b_b1" "$b_p1" \
-+		le "$LAN_AVG_MAX"
-+	[ "${ret:-0}" -eq 0 ] || return
-+
-+	# success path: bounded reap with the server's real status
-+	reap_iperf_server || return
-+
-+	# secondary health signal only: anchored, single-match, numeric —
-+	# any parse anomaly is a loud FAIL, but the value itself no longer
-+	# gates (the counter inequalities above are the primary evidence).
-+	sender_retr=$(echo "$out" | awk '/sec .* sender$/ {print $(NF-1)}')
-+	if [ "$(echo "$sender_retr" | grep -Ec '^[0-9]+$')" -ne 1 ]; then
-+		echo "FAIL: cannot parse sender retransmits reliably" 1>&2
-+		echo "$out" 1>&2
-+		ret=1
-+		return
-+	fi
-+	echo "INFO: TCP stream done;" \
-+		"sender retransmits=$sender_retr (secondary signal)"
-+	echo "$out" | grep -E "sender|receiver"
-+}
-+
-+check_prerequisites
-+check_tool ethtool
-+check_tool iperf3
-+check_tool timeout
-+
-+# iproute2 must know the HSR interlink syntax.
-+if ! ip link help hsr 2>&1 | grep -qi interlink; then
-+	echo "SKIP: iproute2 has no HSR interlink support"
-+	exit $ksft_skip
-+fi
-+
-+setup_topo
-+
-+echo "INFO: Initial validation ping (SAN -> peer through the DUT)."
-+do_ping "$ns_san" "$peer_ip"
-+stop_if_error "Initial validation failed."
-+
-+do_gro_feature_checks
-+do_tso_stream_test
-+stop_if_error "GSO super-packet stream test failed."
-+
-+do_lansan_gso_test
-+stop_if_error "LAN-slave plain-GSO regression failed."
-+
-+echo "INFO: All good."
-+cleanup
-+exit $ret
--- 
-2.43.0
+--=20
+Best Regards,
+Yan, Zi
 
