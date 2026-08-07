@@ -1,41 +1,41 @@
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6AE470452;
-	Fri,  7 Aug 2026 15:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0294756CC;
+	Fri,  7 Aug 2026 15:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786116292; cv=none; b=HBYPSf+F3ypRDpfoBdVWMsifVNLSqYAfDlaweiDFngZ2Jf1sEjA7G+4H4VwiyH7Sed/UF6frycxaF3Et0UIC4Fhr1mKyjm+a1i031KyK6I8t3+Sh5fUg7KDLc5I8TRgdYeRGD1ASK3M0326EDlKPN/IdG/jv/zLu4z60p+PLGyY=
+	t=1786116299; cv=none; b=ERYwbf/VmFTj358CPD8nOA5688DG0s8/46ccTtrO4Z99J/t5g/7jVCM5bdifpzJHrPs8h9reSLN+deQzUHTYBW5hLWguL0+6ZHMknbaoPw3IVSzS1CsPhUi3diSXrbcgcFa4CAMMt/4qnFyOdS7dPKvTZuSCs7OzbHUimS0gaH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786116292; c=relaxed/simple;
-	bh=mbPH+yDTkyf4HUiYmumJ2FL11KCUrSAjeFTHGLRHd0o=;
+	s=arc-20240116; t=1786116299; c=relaxed/simple;
+	bh=aUTcqhiQU+LOUtLD2na1hV1whG+qurl0iTsHGzzbspE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mLlVLdhJxsAU/J3se6JfvM1AKamkOLOLh2AuFVPggR7mdaS50t99wHVKmEE3SxbmXb2aTassHWdYBtP9aWrdoG9U2GgHds2zj6PrWNfVOot4N8Gr+J1gj+z4egQbbOdnpkCVhrOjUBdlZqSOz2KkRqNNVXIvQy6VUuVGm7oHQtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=caIolu1N; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=eKWiWIE3rJmsjyMN65JB1tnBVn4eJEwswIVaUOgrEQ2GRoTnlkjvrVZvMOlblcmkLk/9GCgOoUFhmh5rLzSPcXOInbRvoUQ++9TTd6kQG5NyYPKaZXkRyV8FMigRcCT7Vo6dW1pFuF7zRNGh2JIIu1QRmm/1jmcKkwZJNdzwo2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=stHaQoOx; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="caIolu1N"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="stHaQoOx"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C9F501A14B1;
-	Fri,  7 Aug 2026 15:24:49 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 703E21A14B1;
+	Fri,  7 Aug 2026 15:24:56 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 9F81E603F0;
-	Fri,  7 Aug 2026 15:24:49 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5387111C37AC6;
-	Fri,  7 Aug 2026 17:24:42 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 44B55603F0;
+	Fri,  7 Aug 2026 15:24:56 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B3F2711C37AC7;
+	Fri,  7 Aug 2026 17:24:48 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786116284; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1786116291; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=0J1KxenFDZGUE5Mu6uRgHiDCQC8jHOcpWf/cSeow/Y4=;
-	b=caIolu1Na/PpDGYENv7Kzh14HaLXbz+ERZZZqeFVr/rT+CA5SUg+GEPQ7juRX0r5d56Yqn
-	KvV44q5fCrJrTgbQFeYTXv2DuBOBuVv/gmnUOf29HcU24O8JkxNPkF8Nr0nNLgMzI0bH44
-	fI7qU+rFLNEuBOthAxPAtsQz5RBSNra7TAV5llEljaD+t1SMDbsZzyz52vg9qqkQOvHtQA
-	LGtfifx1zYQzb90KfZ1BSohjek8V9ehDo0xqQEd2DlRCJzrqz1QL1k+4pbs1OFmD+JWKPh
-	m3gc4mmEp6C62/LBQAzFd7H0+35DQdOBLFKLA9c+qO/tk+CDy8KTy6IiC1jeDw==
+	bh=+5/knxcJlBUKp1ChAv/X70u7U7YXIDT3HlNZuqOXBIU=;
+	b=stHaQoOxBxHlZaLiKKf2VjH+RdwQwxeFojyht4v8pBPJCtN1qq4fh8hA6YuODBSsKG1Wg4
+	TSCETC458omiK2bRllJHpKOj1wZVQnjvyiGWJotGdVxDgqEregoZqHlDt4JQk86MySpc/H
+	7pRecZ28M/7NvEtL8jrBw7Rst+TPa0E8ImTZ0PUx55AgRGdhvKZq4PaSqllMM1n8RSfEkb
+	/2qHpnCUw2imX99n5p8Lpe2yPPr68qzSClH0pEKuPkQ9KggZHAvPWxkm1+knKx9Ic+mL5/
+	6xgU1tBikn1MIES8qbcqJslfHZqBNOmu+0noQgEb72H6Ur557NuXXWynqv5WDg==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 07 Aug 2026 17:24:07 +0200
-Subject: [PATCH v5 6/7] clk: Add support for clock nexus dt bindings
+Date: Fri, 07 Aug 2026 17:24:08 +0200
+Subject: [PATCH v5 7/7] clk: tests: Add Kunit testing for nexus nodes
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-6-8785f9531cf0@bootlin.com>
+Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-7-8785f9531cf0@bootlin.com>
 References: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
 In-Reply-To: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -60,124 +60,128 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
  "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
- Herve Codina <herve.codina@bootlin.com>, Frank Li <Frank.Li@nxp.com>
+ Frank Li <Frank.Li@nxp.com>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-A nexus node is some kind of parent device abstracting the outer
-connections. They are particularly useful for describing connectors-like
-interfaces but not only. Certain IP blocks will typically include inner
-blocks and distribute resources to them.
+Add a nexus node with a child requesting a mapped clock in the fake DT
+overlay to verify that the parsing is also correctly working.
 
-In the case of clocks, there is already the concept of clock controller,
-but this usually indicates some kind of control over the said clock,
-ie. gate or rate control. When there is none of this, an existing
-approach is to reference the upper clock, which is wrong from a hardware
-point of view.
+Create an of_find_node_by_name() like kunit helper to garbage collect the
+node automatically in case of failed assertion.
 
-Nexus nodes are already part of the device-tree specification and clocks
-are already mentioned:
-https://github.com/devicetree-org/devicetree-specification/blob/v0.4/source/chapter2-devicetree-basics.rst#nexus-nodes-and-specifier-mapping
-
-Following the introductions of nexus nodes support for interrupts, gpios
-and pwms, here is the same logic applied again to the clk subsystem,
-just by transitioning from of_parse_phandle_with_args() to
-of_parse_phandle_with_args_map():
-
-* Nexus OF support:
-commit bd6f2fd5a1d5 ("of: Support parsing phandle argument lists through a nexus node")
-* GPIO adoption:
-commit c11e6f0f04db ("gpio: Support gpio nexus dt bindings")
-* PWM adoption:
-commit e71e46a6f19c ("pwm: Add support for pwm nexus dt bindings")
-
-Only expected Nexus property:
-- clock-map: maps inner clocks to inlet clocks
-(the other properties have been judged not relevant for clocks)
-
-Here is an example:
-
-Example:
-    soc_clk: clock-controller {
-        #clock-cells = <1>;
-    };
-
-    container: container {
-        #clock-cells = <1>;
-        clock-map = <0 &soc_clk 2>,
-                    <1 &soc_clk 6>;
-
-        child-device {
-            clocks = <&container 1>;
-	    /* This is equivalent to <&soc_clk 6> */
-        };
-    };
-
-The child device does not need to know about the outer implementation,
-and only knows about what the nexus provides. The nexus acts as a
-pass-through, with no extra control.
-
+Suggested-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
-Reviewed-by: Brian Masney <bmasney@redhat.com>
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
 ---
- drivers/clk/clk-conf.c | 12 ++++++------
- drivers/clk/clk.c      |  4 ++--
- 2 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/clk/clk_kunit_helpers.c          | 31 +++++++++++++++++++++++++++++++
+ drivers/clk/clk_test.c                   | 15 +++++++++++++++
+ drivers/clk/kunit_clk_parse_clkspec.dtso | 10 ++++++++++
+ include/kunit/clk.h                      |  2 ++
+ 4 files changed, 58 insertions(+)
 
-diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
-index 303a0bb26e54..5380d43b56a4 100644
---- a/drivers/clk/clk-conf.c
-+++ b/drivers/clk/clk-conf.c
-@@ -25,8 +25,8 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
- 		       node);
+diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_helpers.c
+index 68a28e70bb61..ab6b2cffcad6 100644
+--- a/drivers/clk/clk_kunit_helpers.c
++++ b/drivers/clk/clk_kunit_helpers.c
+@@ -233,5 +233,36 @@ int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
+ }
+ EXPORT_SYMBOL_GPL(of_clk_add_hw_provider_kunit);
  
- 	for (index = 0; index < num_parents; index++) {
--		rc = of_parse_phandle_with_args(node, "assigned-clock-parents",
--					"#clock-cells",	index, &clkspec);
-+		rc = of_parse_phandle_with_args_map(node, "assigned-clock-parents",
-+						    "clock", index, &clkspec);
- 		if (rc < 0) {
- 			/* skip empty (null) phandles */
- 			if (rc == -ENOENT)
-@@ -47,8 +47,8 @@ static int __set_clk_parents(struct device_node *node, bool clk_supplier)
- 			return PTR_ERR(pclk);
- 		}
++KUNIT_DEFINE_ACTION_WRAPPER(of_node_put_wrapper, of_node_put, struct device_node *);
++
++/**
++ * clk_of_find_node_by_name_kunit() - Test managed of_find_node_by_name()
++ * @test: The test context
++ * @from: Parent device node to start searching from, or NULL to search from root
++ * @name: The name string to match against
++ *
++ * Just like of_find_node_by_name(), except the device_node is managed by
++ * the test case and is automatically put after the test case concludes.
++ *
++ * Return: the device_node on success, NULL if not found, or an error pointer on failure.
++ */
++struct device_node *clk_of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
++						   const char *name)
++{
++	struct device_node *np;
++	int ret;
++
++	np = of_find_node_by_name(from, name);
++	if (!np)
++		return NULL;
++
++	ret = kunit_add_action_or_reset(test, of_node_put_wrapper, np);
++	if (ret)
++		return ERR_PTR(ret);
++
++	return np;
++}
++EXPORT_SYMBOL_GPL(clk_of_find_node_by_name_kunit);
++
+ MODULE_LICENSE("GPL");
+ MODULE_DESCRIPTION("KUnit helpers for clk providers and consumers");
+diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+index 4084559e157d..37e4137d37c9 100644
+--- a/drivers/clk/clk_test.c
++++ b/drivers/clk/clk_test.c
+@@ -3650,10 +3650,25 @@ static void of_clk_get_parent_name_gets_parent_name(struct kunit *test)
+ 			   of_clk_get_parent_name(ctx->cons_np, 0));
+ }
  
--		rc = of_parse_phandle_with_args(node, "assigned-clocks",
--					"#clock-cells", index, &clkspec);
-+		rc = of_parse_phandle_with_args_map(node, "assigned-clocks",
-+						    "clock", index, &clkspec);
- 		if (rc < 0)
- 			goto err;
- 		if (clkspec.np == node && !clk_supplier) {
-@@ -121,8 +121,8 @@ static int __set_clk_rates(struct device_node *node, bool clk_supplier)
- 			rate = rates[index];
++static void of_clk_get_hw_maps_thru_nexus(struct kunit *test)
++{
++	struct clk_parse_clkspec_ctx *ctx = test->priv;
++	struct clk_hw *expected;
++	struct device_node *np;
++
++	np = clk_of_find_node_by_name_kunit(test, NULL, "kunit-clock-nexus-child");
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
++	expected = of_clk_get_hw(ctx->cons_np, 1, NULL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
++
++	KUNIT_EXPECT_PTR_EQ(test, expected, of_clk_get_hw(np, 0, NULL));
++}
++
+ static struct kunit_case clk_parse_clkspec_test_cases[] = {
+ 	KUNIT_CASE(clk_parse_clkspec_with_correct_index_and_name),
+ 	KUNIT_CASE(clk_parse_clkspec_with_incorrect_index_and_name),
+ 	KUNIT_CASE(of_clk_get_parent_name_gets_parent_name),
++	KUNIT_CASE(of_clk_get_hw_maps_thru_nexus),
+ 	{}
+ };
  
- 		if (rate) {
--			rc = of_parse_phandle_with_args(node, "assigned-clocks",
--					"#clock-cells",	index, &clkspec);
-+			rc = of_parse_phandle_with_args_map(node, "assigned-clocks",
-+							    "clock", index, &clkspec);
- 			if (rc < 0) {
- 				/* skip empty (null) phandles */
- 				if (rc == -ENOENT)
-diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
-index 45f5d7a4ccc1..6acf042673c3 100644
---- a/drivers/clk/clk.c
-+++ b/drivers/clk/clk.c
-@@ -5207,8 +5207,8 @@ static int of_parse_clkspec(const struct device_node *np, int index,
- 		 */
- 		if (name)
- 			index = of_property_match_string(np, "clock-names", name);
--		ret = of_parse_phandle_with_args(np, "clocks", "#clock-cells",
--						 index, out_args);
-+		ret = of_parse_phandle_with_args_map(np, "clocks", "clock",
-+						     index, out_args);
- 		if (!ret)
- 			break;
- 		if (name && index >= 0)
+diff --git a/drivers/clk/kunit_clk_parse_clkspec.dtso b/drivers/clk/kunit_clk_parse_clkspec.dtso
+index c93feb93e101..a4115216d2aa 100644
+--- a/drivers/clk/kunit_clk_parse_clkspec.dtso
++++ b/drivers/clk/kunit_clk_parse_clkspec.dtso
+@@ -18,4 +18,14 @@ kunit-clock-consumer {
+ 		clocks = <&kunit_clock_provider1 0>, <&kunit_clock_provider2 0>;
+ 		clock-names = "first_clock", "second_clock";
+ 	};
++
++	kunit_clock_nexus: kunit-clock-nexus {
++		clocks = <&kunit_clock_provider2 0>;
++		clock-map = <&kunit_clock_provider2 0>;
++		#clock-cells = <0>;
++
++		kunit-clock-nexus-child {
++			clocks = <&kunit_clock_nexus>;
++		};
++	};
+ };
+diff --git a/include/kunit/clk.h b/include/kunit/clk.h
+index f226044cc78d..0b5ab8e971c9 100644
+--- a/include/kunit/clk.h
++++ b/include/kunit/clk.h
+@@ -29,5 +29,7 @@ int of_clk_hw_register_kunit(struct kunit *test, struct device_node *node,
+ int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
+ 				 struct clk_hw *(*get)(struct of_phandle_args *clkspec, void *data),
+ 				 void *data);
++struct device_node *clk_of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
++						   const char *name);
+ 
+ #endif
 
 -- 
 2.54.0
