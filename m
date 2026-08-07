@@ -1,73 +1,73 @@
 Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0557847426D;
-	Fri,  7 Aug 2026 11:37:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FF53FC5AE;
+	Fri,  7 Aug 2026 11:37:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786102656; cv=none; b=DSQs2rwQgWGOrt0MMVF/KY9ZzF2xg11J1+bO389kIX5/UmWJSxzrspdZ7xvmCjDgIIfoVx5ytdCDInV23jCecDPnDFi7oORr/UwfMG34CP+myhRaxsq+JkKVF4SnzrFLQHq+NvT8HmH6rHRtg/lftx6xgmUjtGQFwGxkuWR5Dm4=
+	t=1786102659; cv=none; b=nxS+dFlrRAtMvhPYGruT0HGZ4xkUqFUotZTaJlMMyXuWaapvptvLXyKwfPj9QRiaSPnP00eL7sq/ckqu6mnhuEPXkMPQ+Z7ODvqaUrYT45CApdJ6HBMSc9+89+GdzzMSLidhyJ3SNThQbCwcjfauOMJ/o92rlP15PtQNLfQ9uE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786102656; c=relaxed/simple;
-	bh=DtaUsi/AmaF/PfbZkl7UuFW6bWfuvRjmbzsb/2kyjmM=;
+	s=arc-20240116; t=1786102659; c=relaxed/simple;
+	bh=F/TF2/zns+QnkbIDlaS4JtzV6yU5B+IfMUtnKwD6VCI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QpSt7jTsjyGhq9PVGeBNrX6D0r4lUXcxIX71w+g/ry+NrZdx1eS5UkFPLugnwnGLFvXRWkFvQAQrO+7U6K0ftLmLtxH5ZvIQatOeyJf/J5nsNisxegdsYCjU/jtBUw+BGTfd2RhrcYnL+9YwzMVWQM4m8kauadH1t53F+CoF7jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Q9hN0SdJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=g8Yh/WF6; arc=none smtp.client-ip=202.12.124.148
+	 MIME-Version; b=GfVgbO0uDITXGnV7cb165DTaX//9wnlggVDnHFkU1Lg/w105e/GwxJNqHPujfUxPr2M4vaireElEDD/dOlQDqeElq9cRhTXQYBKt1nb+vJrwx1VFD18KgB87PgXiSQyAd7DabW2YgoxBVz5weyu7TxQpXKyCa0focAv5rLxH7jo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=WxjzI+jD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DFMFvzsp; arc=none smtp.client-ip=202.12.124.148
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Q9hN0SdJ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="g8Yh/WF6"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.stl.internal (Postfix) with ESMTP id 78CC51D0008B;
-	Fri,  7 Aug 2026 07:37:28 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="WxjzI+jD";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DFMFvzsp"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 38B421D000DA;
+	Fri,  7 Aug 2026 07:37:31 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Fri, 07 Aug 2026 07:37:29 -0400
+  by phl-compute-05.internal (MEProxy); Fri, 07 Aug 2026 07:37:31 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786102648; x=
-	1786189048; bh=pirjW+/uVLVtcgVpdoTceZVcLT7vNoA014N2uc8FC80=; b=Q
-	9hN0SdJ9Y9uH3hM+MxqgXo0HDBkt/N9uqhuZ6VZBY6lFDAeKwIzjVJ3ZhxC4ugbs
-	m27ai2iux7fEFmVLViKGIras0QSTknlk0lid6Nziv1PTjnS9+xZDLyPBeuZICTKB
-	/kO5DnhliidD2z1hVOTa0+QSfm21dQRkaQS4cm/fZwqIQrJJHZKGdq6vfyakSzaH
-	wVQDLarjIpz9JdDM/WihTv5gUgbEGTjh2RN6OWl9uXCHKyk/zca9tO5xlXqopF3R
-	UDyZmc8J5GBjdj/bTH0raHkmND+neoUS1R8gyTjuHJfWWuTLJ7+iCYjwTurVOAyj
-	5ZpDPM/R0FAknXCnjvwaA==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786102651; x=
+	1786189051; bh=OqABGYaTDBjD+cwWJAm5MV885+wK1zKh6mDVYP63LKI=; b=W
+	xjzI+jD+AKuhzGdFBCgf8zaJLRFQ5VC18xsWsxekiPDCXdCcpZo9GbG/u3x0bJrL
+	WKo+Wp6CbYCxRIYss4kRANOy2S0x5Mvj7hwkVNRmaA1HVVFVEp6jKV8dHHNFBIsO
+	82ez0QTonL9r+IrQ+mOOaOPB8Aj6Untdu229hlkmSITokttshsd93JQeC8bh1nbO
+	SAxAcx/+PyIgUXgWbri6lEM2aCS/8Kc4ZErqdPPKJNM4afpclsk5vwRiNrUFJcWd
+	S3oY6o8FQXkpBqtioc8XP5f8+owugenmUqip1uAX6TReOVNg29wR1xrqTQP7cxRW
+	khvk6WBnQeMxesduSaiUw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786102648; x=1786189048; bh=p
-	irjW+/uVLVtcgVpdoTceZVcLT7vNoA014N2uc8FC80=; b=g8Yh/WF6MX99h9Wlw
-	o85ZrnLBr8qmIxdASmUlXqOHCW2hkCk/qc/i/QzOfmQTk7nzMfl6SwM0+4jown6w
-	slHt1s56OegoN5Ph4WVono6Vntqi4i+jpM2xPhJpQ5g2moOkCtda1Xa8bko2FOS9
-	h+Y5MrG0Uk0RsDDjL46a/MSVbvzLgHhvUGFOB97bTSTGDlPcsxoA1b2cmalMbhY+
-	SK+ooA4+SGKis82L/3POJahPeJ5d7Gjg2vMV2fUmF5QZVxAnYwssQjT1hquzxGq4
-	hmIA1JVjRuEVIJIdrwdFVG2OLr+w6Lc353FNiL8A5+Zxet7RHpBO/kuwrzOsjKVL
-	sG4pA==
-X-ME-Sender: <xms:eMN1aqrhNgrMntKxg8baWybzxWFmnVxBYSdfDC6MXhnFVGVYhzyfAA>
-    <xme:eMN1askY_-rFSIUlIQm69rxFnSZeBS1eMD2RwcsVRLyvTzQWX9eVL7Djr8MxvCo9Z
-    JpE55QIJXPvDI9HGP9OiGIZAIekV9lKuolCbu8ZSFSkG4E8Dzj3Y3mq>
-X-ME-Received: <xmr:eMN1antj664BNqUz5UwWUQ9IHYs3e5C41tFNlaDPjx6dpV8MXTuU9HqaKT4>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786102651; x=1786189051; bh=O
+	qABGYaTDBjD+cwWJAm5MV885+wK1zKh6mDVYP63LKI=; b=DFMFvzsp6InJdi/IH
+	B4xHaxSxATDcX9SMie17GDw9dOmjs0Bde1NdPYO/yrfHlWR2njTsFBSW36AtNRCD
+	k1b/uLcOJ+jrZRaZAZVh3dLWS7pKIXJKLGICWsN4ylfLCZzIntZX90B5ic+nLVdC
+	o8K9btkxM0uK9qn6a1EBgClO3K+ntTy/IGuvE4DF7n0KhRSQ5PkLF9ao/wzXAROC
+	a/XPy7M+lf8HGFO27LonZayAxkdIali8U4KZFkHIs40/lAQ1gHbzYgIDxABdJRHl
+	F/PAf9r9iY7eSAQUs1sJ2br26/KQKjWgplCQ5Q97A4CAYs6K9zr2ukV/sJfGdWtJ
+	mmBHQ==
+X-ME-Sender: <xms:e8N1ar8LklwlXwlBult7o2uiCgqoV0_LF9rytw4dj3Lk4E69Qsi88Q>
+    <xme:e8N1arrh-uRrkivzjAmlJFCvnsqJHGccQ2E-7pzkwsQDsAo9jzuobrsEbGKx6l83J
+    XG1q-pmZ7h9JPcEoKwkWIqt5sPKwhlBQyqYRCnpVOU3AvUbL5pnmcc>
+X-ME-Received: <xmr:e8N1ahh41JFiifcysJBXzcxTxHF8rng_6-O8S_YuK5UDlDfV9iFn1d_8-xs>
 X-ME-Proxy-Cause: dmFkZTEcBCtHwgFqhRPkncf0k+1ylINMWkiJotqLKgP2XUmyCnaVLH6jJFUJYUtwVpCetV
     bzy51nCrHgVQnKUbL6xUc35a2wACIZl+NbR3y/w0ModeWlKP4SKCXfcn2Mi8esZBMBdaWx
     faB4jzBJOawj2LBnFTgyCBiywrPp7FpNgfXB5cgYmB0wgvQ/HhhWAfKjMf/weJgLhMF/VV
     yXrMoja9EZiHjuXu8bb94hiDoU2fqI8TuwJJmzzN4TUL6MxSST+GnkpA2ZnKWVewXCphJB
-    Lec89iAB+bDvFyV3zsxjbJ8cA1IEQ3aF+gxi5HDHtN75oTRJtbf/Sd54tDaiXy5fa0cQX5
-    hoGETtTIfFLGj1cGbXs4/N0rNKNVrZgeu1OU1QhAOZ7bPZc3Aw4JqqhOgEIexTauJZxkHU
-    TbWF4BgZy0M4TbmGMdjoesA5287sX/xP4xHusiyuAp+GBpqhHmkmTvjKuXPRjKfVOqi0I1
-    RL9MiNNUq75n+PI2g1y2ZZc7rmd3xeZEl1E6coDyGfmfuDk/5ftusYa+ukpqGLMxSVfYAS
-    ijiJYmhr3aMVUvE1AQl64BB8i5VpuNLTyO9VuJ1p/8t2Lnq1L+CNDOKErEKx3n3kTvpvfI
-    3DwLmLDIO16LxOm4k3YjuSFLS0SjcFaAcQbmVLF7pxpDdfjB3r545/i6foFw
-X-ME-Proxy: <xmx:eMN1ajfu2cYELSHHTqnw6RPvfzenRaaDZXEOED7X68YiHgeuDfHG9A>
-    <xmx:eMN1ahYqTJJoY0IRrz2MMBQhwFPo9aYHjClRQlnBu-Luj3y-ePpTpA>
-    <xmx:eMN1aj3Bzpcv031zHIpkLAii6HDyvxlXXSxxwl7qwInmS9ouowLj5A>
-    <xmx:eMN1aio70r4Qf1SXvhfKX7_7irnLgKo896ih0SkB-KOwR57wQGdimg>
-    <xmx:eMN1aqLYxdpofsqQOUtz5Y2DurtILfygebTam6eLttDT1-Z0q2z6emoH>
+    Lec89iAB+bDvFyV3zsxjbJ8cA1IEQ3aF+gxi5HDHtN75oTRJtbf/Sd54tDaiXy5fa0cQol
+    MW02m0ZGtjHD58JE8hq66IpVl0U+UPJ3nIC2pthVrT/8lSmS/xrVKgAZ9KysURaeJoEhw5
+    WpFpAmC8vf159gkJAGhW8a/tUyRz26I4LvuoRP+Xa0VlHgTOMmYlw0igpjphktySm6WZ13
+    46PBg7JdeKJ/GB9sE5rFCoFlTqgY+IR6H61d+UuuYKrpZ00RVuMZsiGazJ3uH1j1nzi7u7
+    5rP73EdU+fkpAuY1FQ1fYfRVDALBGosYQnjzbDtPx9MVdzp/o2L7ailpK8+VfvossfiVSM
+    c+3BZp/vLcPZJs/IZbkaQEAhNUonJ23UQVWpdakD9zo2ikaCXh83KADXdxeg
+X-ME-Proxy: <xmx:e8N1ahDDWPOCa7pTVvb9j3E2-wDEVVu6Imisbecl5-FnuTxcvXUrxA>
+    <xmx:e8N1anvAk92JhG_mNKV5fONnnQwMUuWLn1iH7XSDxmZHPHPm3dLGGw>
+    <xmx:e8N1aj6IhDGf231MftnQwaZ2V2HL-ejya7VUhq2hdpSZSq-5VWirRQ>
+    <xmx:e8N1apfc7tSfOsgo9cSRQ55TEVL7VRpfjco3eEKNI4NOTN-emqzflw>
+    <xmx:e8N1apxSqpk366C8GniXfpuSTKu_ngI1OqfYZVI9GcLrEMmmmE2x1fQk>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Aug 2026 07:37:27 -0400 (EDT)
+ 7 Aug 2026 07:37:30 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -93,9 +93,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kas@kernel.org
-Subject: [PATCH v2 15/17] selftests/mm: race collapse of windows with holes
-Date: Fri,  7 Aug 2026 12:36:45 +0100
-Message-ID: <20260807113647.3744609-16-kirill@shutemov.name>
+Subject: [PATCH v2 16/17] selftests/mm: add memory-pressure threads to the khugepaged race harness
+Date: Fri,  7 Aug 2026 12:36:46 +0100
+Message-ID: <20260807113647.3744609-17-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260807113647.3744609-1-kirill@shutemov.name>
 References: <20260807113647.3744609-1-kirill@shutemov.name>
@@ -109,169 +109,301 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The harness pins max_ptes_none to 0, so khugepaged only collapses a window
-once every PTE in it is present.  Collapsing a window that has holes never
-happens, and that is a different path: a hole is not copied from anywhere
-but zero-filled into the new folio, and the slot is re-checked under the
-page table lock at install time in case a racing fault filled it first.
+The harness races collapse against faults, pins, fork, mremap and
+MADV_DONTNEED, but nothing in it elevates a source folio's refcount from
+the reclaim or compaction side.
 
-Run both ends of the occupancy scale, one after the other, for every
-driver mode -- mTHP collapse supports only those two, 0 and
-HPAGE_PMD_NR - 1, and coerces anything between them to 0.  Each result
-says which end it ran:
+Add two more threads, and run every mode and occupancy limit both with and
+without them:
 
-  ok 1 stepped/strict: 5s, 231 steps, no corruption
-  ok 2 stepped/holes: 5s, 194 steps, no corruption
+ - pageout: cycles MADV_PAGEOUT over a dedicated neighbour region, faults
+   it back in and checks the content each round, since a page's pattern
+   must survive the trip through swap.  Idle when the host has no swap,
+   because then there is no anon reclaim to drive.
 
--z narrows a run to the hole-heavy end, the way -m narrows it to one mode.
+ - compactor: writes /proc/sys/vm/compact_memory in a loop.  Compaction
+   isolates and migrates folios, so it competes with a collapse for the
+   pages it is gathering, with refcount elevations and migration entries
+   of its own.
+
+-p narrows a run to the combinations that have them, the way -z narrows
+the occupancy and -m the mode.  Each result says which it ran:
+
+  ok 2 stepped/strict/pressure: 5s, 88 steps, no corruption
 
 Assisted-by: Claude-Code:claude-opus-5
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged_race.c | 57 +++++++++++++-------
- 1 file changed, 39 insertions(+), 18 deletions(-)
+ tools/testing/selftests/mm/khugepaged_race.c | 147 +++++++++++++++++--
+ 1 file changed, 136 insertions(+), 11 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
-index 3dc651dc56b3..a2a91906285b 100644
+index a2a91906285b..abd142db7cbe 100644
 --- a/tools/testing/selftests/mm/khugepaged_race.c
 +++ b/tools/testing/selftests/mm/khugepaged_race.c
-@@ -11,9 +11,12 @@
-  *   free	khugepaged left to run (scan_sleep_millisecs=0), for soak;
-  *   madvise	MADV_COLLAPSE in a loop.
+@@ -18,6 +18,12 @@
+  * zero-filled, and re-checked under the page table lock at install time in
+  * case a racing fault got there first.
   *
-- * All anon THP orders are enabled (inherit) and max_ptes_none is 0, so a
-- * window has to be fully populated before khugepaged will collapse it, and
-- * the racing MADV_DONTNEED decides which orders it can still use.
-+ * All anon THP orders are enabled (inherit).  Occupancy runs at both ends
-+ * of what mTHP collapse supports: max_ptes_none 0, where a window must be
-+ * fully populated, and HPAGE_PMD_NR - 1, where a window full of holes
-+ * collapses too.  The holes are not copied from anywhere -- they are
-+ * zero-filled, and re-checked under the page table lock at install time in
-+ * case a racing fault got there first.
-  *
++ * -p adds memory pressure to any of the above: MADV_PAGEOUT cycling
++ * on a dedicated neighbor region (swap traffic and LRU churn; skipped
++ * with a note when the host has no swap) and a compact_memory trigger
++ * loop (compaction migrates source folios, racing collapse's freeze
++ * with refcount elevation and migration entries of its own).
++ *
   * Correctness signals: every racing page must read as its pattern or
   * zero (MADV_DONTNEED), never anything else.  The faulters and the fork
-@@ -196,9 +199,11 @@ static unsigned long now_ms(void)
+  * children check that continuously, a final sweep checks it once more, plus
+@@ -61,6 +67,8 @@ static unsigned long page_size;
+ static char *region;		/* NR_AREAS * hpage_pmd_size */
+ static char *mremap_area;	/* region + NR_SHARED_AREAS areas */
+ static char *mremap_scratch;	/* well above the region */
++static char *pageout_area;	/* -p: dedicated pressure region */
++static size_t pageout_size;
+ static int gup_fd = -1;
+ static volatile int stop;
+ static volatile int corrupted;
+@@ -188,6 +196,70 @@ static void *mremapper_fn(void *arg)
+ 	return NULL;
+ }
+ 
++/*
++ * -p: swap traffic and LRU churn on a region of our own. The content
++ * check is exact: a page out and back through swap must preserve the
++ * pattern, and nothing else ever writes here.
++ */
++static void *pageout_fn(void *arg)
++{
++	unsigned int seed = (unsigned long)arg;
++	unsigned long nr = pageout_size / page_size;
++	unsigned long i;
++
++	for (i = 0; i < nr; i++)
++		*(unsigned int *)(pageout_area + i * page_size) = pattern(i);
++
++	while (!stop) {
++		madvise(pageout_area, pageout_size, MADV_PAGEOUT);
++		for (i = 0; i < nr && !stop; i++) {
++			unsigned int val = *(unsigned int *)(pageout_area +
++							     i * page_size);
++
++			if (val != pattern(i)) {
++				corrupted = 1;
++				ksft_print_msg("Pageout corruption at page %lu: %#x != %#x\n",
++					       i, val, pattern(i));
++			}
++		}
++		usleep(rand_r(&seed) % 2000);
++	}
++	return NULL;
++}
++
++/* -p: compaction migrates the collapse sources out from under us. */
++static void *compactor_fn(void *arg)
++{
++	unsigned int seed = (unsigned long)arg;
++	int fd = open("/proc/sys/vm/compact_memory", O_WRONLY);
++
++	if (fd < 0) {
++		ksft_print_msg("No compact_memory; compactor idle\n");
++		return NULL;
++	}
++	while (!stop) {
++		if (write(fd, "1", 1) < 0)
++			break;
++		usleep(10000 + rand_r(&seed) % 100000);
++	}
++	close(fd);
++	return NULL;
++}
++
++static bool swap_available(void)
++{
++	char line[256];
++	int lines = 0;
++	FILE *fp = fopen("/proc/swaps", "r");
++
++	if (!fp)
++		return false;
++	while (fgets(line, sizeof(line), fp))
++		lines++;
++	fclose(fp);
++	return lines > 1;
++}
++
+ static unsigned long now_ms(void)
+ {
+ 	struct timeval tv;
+@@ -199,11 +271,14 @@ static unsigned long now_ms(void)
  static void usage(void)
  {
  	fprintf(stderr,
--		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-a areas]\n"
-+		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-z] [-a areas]\n"
+-		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-z] [-a areas]\n"
++		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-z] [-p] [-a areas]\n"
  		"\tWithout -m, every mode runs in turn.\n"
  		"\t-d: seconds per mode (default 5)\n"
-+		"\tBoth occupancy limits run unless -z asks for holes only.\n"
-+		"\t-z: only max_ptes_none = HPAGE_PMD_NR - 1 (hole-heavy)\n"
+ 		"\tBoth occupancy limits run unless -z asks for holes only.\n"
+ 		"\t-z: only max_ptes_none = HPAGE_PMD_NR - 1 (hole-heavy)\n"
++		"\tRuns with and without memory pressure unless -p asks for\n"
++		"\tpressure only.\n"
++		"\t-p: only with the pageout and compaction threads\n"
  		"\t-a: number of shared PMD-sized playground areas (default 3)\n");
  	exit(1);
  }
-@@ -216,6 +221,9 @@ int main(int argc, char **argv)
+@@ -212,18 +287,22 @@ int main(int argc, char **argv)
+ {
+ 	static const char * const thread_names[] = {
+ 		"faulter", "faulter2", "dontneed", "pinner", "forker",
+-		"mremapper",
++		"mremapper", "pageout", "compactor",
+ 	};
+ 	void *(*const thread_fns[])(void *) = {
+ 		faulter_fn, faulter_fn, dontneed_fn, pinner_fn, forker_fn,
+-		mremapper_fn,
++		mremapper_fn, pageout_fn, compactor_fn,
+ 	};
++	const unsigned long pageout_bit = 1UL << 6, compactor_bit = 1UL << 7;
  	const int nr_threads = ARRAY_SIZE(thread_names);
  	pthread_t threads[ARRAY_SIZE(thread_names)];
  	static const char * const all_modes[] = { "stepped", "free", "madvise" };
-+	static const int all_nones[] = { 0, 1 };	/* strict, holes */
-+	const int *nones = all_nones;
-+	int nr_nones = ARRAY_SIZE(all_nones);
+ 	static const int all_nones[] = { 0, 1 };	/* strict, holes */
++	static const int all_press[] = { 0, 1 };	/* quiet, under pressure */
+ 	const int *nones = all_nones;
++	const int *press = all_press;
+ 	int nr_nones = ARRAY_SIZE(all_nones);
++	int nr_press = ARRAY_SIZE(all_press);
  	const char *one_mode[1];
  	const char * const *modes = all_modes;
  	int nr_modes = ARRAY_SIZE(all_modes);
-@@ -225,11 +233,12 @@ int main(int argc, char **argv)
+@@ -232,13 +311,15 @@ int main(int argc, char **argv)
+ 	unsigned long end_ms;
  	int duration_s = 5;
  	unsigned long thread_mask = ~0UL;
++	unsigned long base_mask;
  	int nr_areas_arg = 0;
-+	bool holes_only = false;
+ 	bool holes_only = false;
++	bool pressure_only = false;
  	unsigned long i;
  	int steps = 0;
  	int opt;
  
--	while ((opt = getopt(argc, argv, "a:d:m:t:h")) != -1) {
-+	while ((opt = getopt(argc, argv, "a:d:m:t:zh")) != -1) {
+-	while ((opt = getopt(argc, argv, "a:d:m:t:zh")) != -1) {
++	while ((opt = getopt(argc, argv, "a:d:m:t:zph")) != -1) {
  		switch (opt) {
  		case 'a':
  			nr_areas_arg = atoi(optarg);
-@@ -244,10 +253,18 @@ int main(int argc, char **argv)
- 			/* debug: bitmask of racing threads to start */
- 			thread_mask = strtoul(optarg, NULL, 0);
+@@ -256,6 +337,9 @@ int main(int argc, char **argv)
+ 		case 'z':
+ 			holes_only = true;
  			break;
-+		case 'z':
-+			holes_only = true;
++		case 'p':
++			pressure_only = true;
 +			break;
  		default:
  			usage();
  		}
+@@ -265,6 +349,11 @@ int main(int argc, char **argv)
+ 		nr_nones = 1;
  	}
-+	if (holes_only) {
-+		nones = all_nones + 1;
-+		nr_nones = 1;
+ 
++	if (pressure_only) {
++		press = all_press + 1;
++		nr_press = 1;
 +	}
 +
  	if (mode_arg) {
  		if (strcmp(mode_arg, "stepped") && strcmp(mode_arg, "free") &&
  		    strcmp(mode_arg, "madvise"))
-@@ -287,7 +304,7 @@ int main(int argc, char **argv)
+@@ -304,7 +393,12 @@ int main(int argc, char **argv)
  		 -1, 0) != (void *)mremap_scratch)
  		ksft_exit_fail_perror("mmap() mremap scratch");
  
--	ksft_set_plan(nr_modes);
-+	ksft_set_plan(nr_modes * nr_nones);
+-	ksft_set_plan(nr_modes * nr_nones);
++	base_mask = thread_mask;
++	if (!swap_available())
++		/* No swap, no anon reclaim: compaction-only pressure. */
++		ksft_print_msg("no swap: the pageout thread stays idle\n");
++
++	ksft_set_plan(nr_modes * nr_nones * nr_press);
  
  	thp_save_settings();
  	thp_read_settings(&settings);
-@@ -299,8 +316,9 @@ int main(int argc, char **argv)
+@@ -316,9 +410,17 @@ int main(int argc, char **argv)
  	 */
  	thp_push_settings(&settings);
  
--	for (int m = 0; m < nr_modes; m++) {
--		const char *mode = modes[m];
-+	for (int mn = 0; mn < nr_modes * nr_nones; mn++) {
-+		const char *mode = modes[mn / nr_nones];
-+		bool holes = nones[mn % nr_nones];
+-	for (int mn = 0; mn < nr_modes * nr_nones; mn++) {
+-		const char *mode = modes[mn / nr_nones];
+-		bool holes = nones[mn % nr_nones];
++	for (int run = 0; run < nr_modes * nr_nones * nr_press; run++) {
++		int rem = run % (nr_nones * nr_press);
++		const char *mode = modes[run / (nr_nones * nr_press)];
++		bool holes = nones[rem / nr_press];
++		bool pressure = press[rem % nr_press];
++
++		thread_mask = base_mask;
++		if (!pressure)
++			thread_mask &= ~(pageout_bit | compactor_bit);
++		else if (!swap_available())
++			thread_mask &= ~pageout_bit;
  
  		thp_read_settings(&settings);
  		settings.thp_enabled = THP_MADVISE;
-@@ -310,14 +328,16 @@ int main(int argc, char **argv)
- 		settings.khugepaged.scan_sleep_millisecs =
- 			strcmp(mode, "free") ? 1000 : 0;
- 		settings.khugepaged.alloc_sleep_millisecs = 10;
+@@ -354,6 +456,24 @@ int main(int argc, char **argv)
+ 			ksft_exit_fail_perror("mmap() playground");
+ 		mremap_area = region + nr_shared_areas * hpage_pmd_size;
+ 
++		if (thread_mask & pageout_bit) {
++			/*
++			 * Big enough to cycle real reclaim, small enough not
++			 * to dominate a TCG guest: 4 PMD areas, clamped to
++			 * [16M, 64M].
++			 */
++			pageout_size = 4 * hpage_pmd_size;
++			pageout_size = pageout_size < (16UL << 20) ?
++				       (16UL << 20) :
++				       pageout_size > (64UL << 20) ?
++				       (64UL << 20) : pageout_size;
++			pageout_area = mmap(NULL, pageout_size,
++					    PROT_READ | PROT_WRITE,
++					    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
++			if (pageout_area == MAP_FAILED)
++				ksft_exit_fail_perror("mmap() pageout area");
++		}
 +
- 		/*
--		 * Strict occupancy: mTHP collapse only supports 0 or
--		 * HPAGE_PMD_NR - 1 and coerces anything else to 0 anyway, and 0
--		 * also keeps khugepaged from burning the whole step in doomed
--		 * PMD-sized allocations on 512M-PMD configs: under racing
--		 * MADV_DONTNEED a fully populated PMD area is rare.
-+		 * mTHP collapse only supports the two ends of the occupancy
-+		 * scale: 0 or HPAGE_PMD_NR - 1 (anything else coerces to 0).
-+		 * Strict needs a fully populated window, which is rare under
-+		 * racing MADV_DONTNEED; hole-heavy windows collapse instead,
-+		 * so the two ends race different paths.
- 		 */
--		settings.khugepaged.max_ptes_none = 0;
-+		settings.khugepaged.max_ptes_none = holes ?
-+			(hpage_pmd_size / page_size) - 1 : 0;
- 		settings.khugepaged.pages_to_scan =
- 			nr_areas * (hpage_pmd_size / page_size) * 8;
- 		for (i = 0; i < NR_ORDERS; i++) {
-@@ -383,8 +403,9 @@ int main(int argc, char **argv)
+ 		/* Populate so the first pass has something to collapse. */
+ 		for (i = 0; i < nr_shared_areas * hpage_pmd_size / page_size; i++)
+ 			*(unsigned int *)(region + i * page_size) = pattern(i);
+@@ -403,8 +523,9 @@ int main(int argc, char **argv)
  			check_page(i);
  
  		ksft_test_result(!corrupted,
--				 "%s: %ds, %d steps, no corruption\n",
--				 mode, duration_s, steps);
-+				 "%s/%s: %ds, %d steps, no corruption\n",
-+				 mode, holes ? "holes" : "strict",
-+				 duration_s, steps);
+-				 "%s/%s: %ds, %d steps, no corruption\n",
++				 "%s/%s%s: %ds, %d steps, no corruption\n",
+ 				 mode, holes ? "holes" : "strict",
++				 pressure ? "/pressure" : "",
+ 				 duration_s, steps);
  
  		/*
- 		 * Hand the address space and the settings back before the
-@@ -398,9 +419,9 @@ int main(int argc, char **argv)
+@@ -413,15 +534,19 @@ int main(int argc, char **argv)
+ 		 * and its scan cadence differs.
+ 		 */
+ 		munmap(region, nr_areas * hpage_pmd_size);
++		if (pageout_area) {
++			munmap(pageout_area, pageout_size);
++			pageout_area = NULL;
++		}
+ 		thp_pop_settings();
+ 		stop = 0;
+ 		steps = 0;
  
  		if (corrupted) {
  			/* Memory is suspect; the rest would prove nothing. */
--			while (++m < nr_modes)
-+			while (++mn < nr_modes * nr_nones)
+-			while (++mn < nr_modes * nr_nones)
++			while (++run < nr_modes * nr_nones * nr_press)
  				ksft_test_result_skip("%s: skipped after corruption\n",
--						      modes[m]);
-+						      modes[mn / nr_nones]);
+-						      modes[mn / nr_nones]);
++						      modes[run / (nr_nones * nr_press)]);
  			break;
  		}
  	}
