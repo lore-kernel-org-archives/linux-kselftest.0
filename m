@@ -1,47 +1,98 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.5])
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D4C13D8105;
-	Fri,  7 Aug 2026 06:49:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52A5E455177;
+	Fri,  7 Aug 2026 07:02:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786085360; cv=none; b=Xc3c486IARBiSxfon+bc/Hh0Pl4EX21pQdwIQQjEx0ovsevmcg8XZiJVQkpfOGsSSmTqxBcolICqp+OrgA0QR4NLLnDNOU9EcSp437OS0KLOKOqDFo53/RrDxatqzaVOFtDhOuD5paVaZ4ikkTQWP8wmU8Kb3MNWhOVqTp3AUcI=
+	t=1786086180; cv=none; b=ajM54sPQYencKmiGs1wUzxownM3e1LFtuRBTKvb6WOdZzRAbSzrwd6tHkvmzlPg9tc7sgD5mfwZGj0BBzxtM27sIkWmC/GjBL5PMvUINkYK4MEUBGeNRJfLgb6qXkZPtDFejTOHt9M+XX+R/MQD0daDeWLxrcaF8hP1IJGsXk1M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786085360; c=relaxed/simple;
-	bh=rAnJDWZOjgQZGj5vdiYX+LKXqnRLkVN1h81pn8OofZY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=gLSAQXZ69k0rivmTBz4bISO23Xt+NDoaQB02NF3xwDF75xmeX8KjcCvsegglHrdXwquALGd2tC/yATPBabynb3v3HzN7KWHaekAlQVQGGl2aPQ8+cp3kJ/T73u5oDJH4nM21fqdWkyg4zo8sFgkmPONdU4dwPQDEzJ9f6Ne2D7o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=iriP9Ww9; arc=none smtp.client-ip=220.197.31.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786086180; c=relaxed/simple;
+	bh=6HduimIZ7ib5YtvSjnxyAzJJAPkkLNqQAwlWa7TzeQ4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AZIgOQdergWyTWe2RdK0Crw7VtoWW757AzZJgD4zm3LdAz3ne3eAF+L9A0AknyjH8Hm3Mx7N0eQdQbmeFAWzBZqe06Ng9lbPdw5hn7rYHjL9Ap2sI0QJitot4HbvFt80dEQJf59ZD9F1acjCsaHk4WvD2uIplOAe7QV6Uzs2oxE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=prda60MS; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="iriP9Ww9"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=o+
-	pQySnj2tke+BcxYstuQ/c3I+18MgXYsNi289JUnaQ=; b=iriP9Ww9MTzaujkqVP
-	W2yemald0eM4CBiRaXCezot3axCfl1EFGoMRZO9eDx479M/XJwppD2HWpEMJz4ip
-	LU6NAr6T6zDFReSk/vqoU705SveAfwA7tmv+feKJpU/jdnSW+D4s3/6EMb3A3+uw
-	VCVRvvaKFQmAFVwpdv7Tr6vDo=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wAHDmCyf3VqlTqDMQ--.260S2;
-	Fri, 07 Aug 2026 14:48:20 +0800 (CST)
-From: Qingshuang Fu <fffsqian@163.com>
-To: Antonio Quartulli <antonio@openvpn.net>,
-	Sabrina Dubroca <sd@queasysnail.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="prda60MS"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786086175;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nmnNnkKZaC6z/s8sNb+drFXBEauMY/l5sTUHuEf6x40=;
+	b=prda60MSdMi03FYQX8L+/loT6b5foyZ0pO1qiijpR9hAHQH6/pPFJMqcWbh5ya7u6Y045A
+	H7jbnme9dtuLXAx9uGrtRM5C4ARU8ASnohlen1hhYCajk0I7wbX+74sr3PUVS/USXxyuz8
+	6kl667qHNptBEFa/dZ7GJcAn8DOCR7g=
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	davem@davemloft.net,
 	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	KP Singh <kpsingh@kernel.org>,
+	Tao Chen <chen.dylane@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Tobias Klauser <tklauser@distanz.ch>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Rong Tao <rongtao@cestc.cn>,
+	Hao Luo <haoluo@google.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Kees Cook <kees@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Jeff Xu <jeffxu@chromium.org>,
+	mkoutny@suse.com,
+	Jan Hendrik Farr <kernel@jfarr.cc>,
+	Christian Brauner <brauner@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Brian Gerst <brgerst@gmail.com>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Willem de Bruijn <willemb@google.com>,
+	Jason Xing <kerneljasonxing@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
 	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>,
-	Qingshuang Fu <fffsqian@163.com>
-Subject: [PATCH] selftests/net: ovpn: fix socket leak in ovpn_socket() error paths
-Date: Fri,  7 Aug 2026 14:48:16 +0800
-Message-Id: <20260807064816.53811-1-fffsqian@163.com>
-X-Mailer: git-send-email 2.25.1
+	bpf@vger.kernel.org,
+	cgroups@vger.kernel.org,
+	linux-mm@kvack.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next 1/4] mm/bpf: Add bpf_try_to_free_mem_cgroup_pages kfunc
+Date: Fri,  7 Aug 2026 15:01:49 +0800
+Message-ID: <5cd3efa9a4c614ba0b03cf4a3bd459dea67a9f61.1786086076.git.zhuhui@kylinos.cn>
+In-Reply-To: <cover.1786086076.git.zhuhui@kylinos.cn>
+References: <cover.1786086076.git.zhuhui@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -49,88 +100,122 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wAHDmCyf3VqlTqDMQ--.260S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uw4xtF48Gr15WFyxXF1xAFb_yoW8KFy7pF
-	s7Ga4DtryxJr1xX3W8trW8JF1I9ws7K3y7C348Kw13Zr4DJrnYq34FkFWq9Fy7CFs5Xw4f
-	Zw4xCFWYvr1DXw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pipVbPUUUUU=
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwhQFz2p1f7QgJwAA3P
+X-Migadu-Flow: FLOW_OUT
 
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-The ovpn_socket() function creates a socket but fails to close it on
-several error paths, leading to a file descriptor leak:
+Expose the memory cgroup reclaim interface to BPF programs by adding
+the bpf_try_to_free_mem_cgroup_pages kfunc. This allows BPF to
+trigger memory reclamation for a specific cgroup.
 
-1. When the address family is neither AF_INET nor AF_INET6, the socket
-   is leaked in the switch default case.
-2. When setsockopt() for SO_REUSEADDR, SO_REUSEPORT, or SO_MARK fails,
-   the socket is leaked.
-3. When setsockopt() for IPV6_V6ONLY fails, the socket is leaked.
+The kfunc wraps try_to_free_mem_cgroup_pages and introduces a
+swappiness parameter with the following semantics:
+Values in [MIN_SWAPPINESS, SWAPPINESS_ANON_ONLY] are passed through
+as an explicit swappiness override.
+Values below MIN_SWAPPINESS indicate the use of the system default
+(passed as NULL to the core reclaim path).
+Values above SWAPPINESS_ANON_ONLY result in 0.
 
-The existing err_socket label already handles closing the socket for
-the bind() failure path. Fix all other error paths to use goto
-err_socket instead of returning directly, ensuring the socket is
-properly closed on every error path.
+Note that the swappiness override is only respected by the core
+reclaim path if the MEMCG_RECLAIM_PROACTIVE flag is set in
+reclaim_options.
 
-Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
-Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+Swap usage during reclaim is gated on reclaim_options: swap is
+considered only when MEMCG_RECLAIM_MAY_SWAP is set. Without this
+flag, reclaim is restricted to file-backed pages regardless of the
+swappiness value or the cgroup's swappiness setting.
+
+Also include <linux/swap.h> for the swappiness macro definitions and
+register the function with the KF_SLEEPABLE flag.
+
+Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
 ---
- tools/testing/selftests/net/ovpn/ovpn-cli.c | 15 ++++++++-------
- 1 file changed, 8 insertions(+), 7 deletions(-)
+ mm/bpf_memcontrol.c | 58 +++++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/tools/testing/selftests/net/ovpn/ovpn-cli.c b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-index f4effa7580c0..81b81d5fc162 100644
---- a/tools/testing/selftests/net/ovpn/ovpn-cli.c
-+++ b/tools/testing/selftests/net/ovpn/ovpn-cli.c
-@@ -507,7 +507,8 @@ static int ovpn_socket(struct ovpn_ctx *ctx, sa_family_t family, int proto)
- 		sock_len = sizeof(*in6);
- 		break;
- 	default:
--		return -1;
-+		ret = -EINVAL;
-+		goto err_socket;
- 	}
+diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+index 716df49d7647..3f7a5c97e135 100644
+--- a/mm/bpf_memcontrol.c
++++ b/mm/bpf_memcontrol.c
+@@ -6,6 +6,7 @@
+  */
  
- 	int opt = 1;
-@@ -516,13 +517,13 @@ static int ovpn_socket(struct ovpn_ctx *ctx, sa_family_t family, int proto)
+ #include <linux/memcontrol.h>
++#include <linux/swap.h>
+ #include <linux/bpf.h>
  
- 	if (ret < 0) {
- 		perror("setsockopt for SO_REUSEADDR");
--		return ret;
-+		goto err_socket;
- 	}
+ __bpf_kfunc_start_defs();
+@@ -159,6 +160,61 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+ 	mem_cgroup_flush_stats(memcg);
+ }
  
- 	ret = setsockopt(s, SOL_SOCKET, SO_REUSEPORT, &opt, sizeof(opt));
- 	if (ret < 0) {
- 		perror("setsockopt for SO_REUSEPORT");
--		return ret;
-+		goto err_socket;
- 	}
++/**
++ * bpf_try_to_free_mem_cgroup_pages - attempt to reclaim pages from
++ *                                    a memory cgroup
++ * @memcg:           the target memory cgroup to reclaim from
++ * @nr_pages:        the number of pages to reclaim
++ * @gfp_mask:        GFP flags controlling the reclaim behavior
++ * @reclaim_options: bitmask of MEMCG_RECLAIM_* flags to tune
++ *                   reclaim strategy
++ * @swappiness:      swappiness override value, or a sentinel to use
++ *                   the default
++ *
++ * BPF-facing wrapper around try_to_free_mem_cgroup_pages() that
++ * validates and translates the @swappiness argument before
++ * delegating to the core reclaim path.
++ *
++ * The @swappiness parameter follows these semantics:
++ *   - Values in [MIN_SWAPPINESS, SWAPPINESS_ANON_ONLY] are passed
++ *     through as an explicit swappiness override.
++ *   - Values below MIN_SWAPPINESS are treated as "use the system
++ *     default"; the override pointer is set to NULL and the cgroup's
++ *     own swappiness setting takes effect.
++ *   - Values above SWAPPINESS_ANON_ONLY are rejected as invalid.
++ *   - If @reclaim_options does not include MEMCG_RECLAIM_PROACTIVE,
++ *     the @swappiness override is ignored entirely by the core
++ *     reclaim path and the system default is used regardless.
++ *
++ * Swap usage during reclaim is gated on @reclaim_options: swap is
++ * considered only when MEMCG_RECLAIM_MAY_SWAP is set.  Without this
++ * flag, reclaim is restricted to file-backed pages regardless of the
++ * @swappiness value or the cgroup's swappiness setting.
++ *
++ * Return:
++ *   The number of pages actually reclaimed on success, or 0
++ *   if @swappiness exceeds SWAPPINESS_ANON_ONLY.
++ */
++__bpf_kfunc unsigned long
++bpf_try_to_free_mem_cgroup_pages(struct mem_cgroup *memcg,
++				 unsigned long nr_pages,
++				 gfp_t gfp_mask,
++				 unsigned int reclaim_options,
++				 int swappiness)
++{
++	int *swapiness_ptr;
++
++	if (swappiness > SWAPPINESS_ANON_ONLY)
++		return 0;
++	else if (swappiness < MIN_SWAPPINESS)
++		swapiness_ptr = NULL;
++	else
++		swapiness_ptr = &swappiness;
++
++	return try_to_free_mem_cgroup_pages(memcg, nr_pages, gfp_mask,
++					    reclaim_options, swapiness_ptr);
++}
++
+ __bpf_kfunc_end_defs();
  
- 	if (ctx->mark != 0) {
-@@ -530,16 +531,16 @@ static int ovpn_socket(struct ovpn_ctx *ctx, sa_family_t family, int proto)
- 				 sizeof(ctx->mark));
- 		if (ret < 0) {
- 			perror("setsockopt for SO_MARK");
--			return ret;
-+			goto err_socket;
- 		}
- 	}
+ BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+@@ -172,6 +228,8 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
+ BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
+ BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
  
- 	if (family == AF_INET6) {
- 		opt = 0;
--		if (setsockopt(s, IPPROTO_IPV6, IPV6_V6ONLY, &opt,
--			       sizeof(opt))) {
-+		ret = setsockopt(s, IPPROTO_IPV6, IPV6_V6ONLY, &opt, sizeof(opt));
-+		if (ret < 0) {
- 			perror("failed to set IPV6_V6ONLY");
--			return -1;
-+			goto err_socket;
- 		}
- 	}
++BTF_ID_FLAGS(func, bpf_try_to_free_mem_cgroup_pages, KF_SLEEPABLE)
++
+ BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
  
-
-base-commit: f9a2394a23482bfd330911e9c8295b71724feacd
+ static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
 -- 
-2.25.1
+2.53.0
 
