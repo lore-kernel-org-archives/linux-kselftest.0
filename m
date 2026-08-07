@@ -1,64 +1,64 @@
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A572305688
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 03:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD88954781
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 03:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786074683; cv=none; b=NAEc0fRwEgQLmyccKoagTd+G4jkUz8iuR6AbCtenG4aGSci/K+q9qi3T/CRfHlqyFjQ7tpWBxLFpCUNQjIDqH9FQUX7DXqD4BbUHQ53s6yn4JwubdTsjgkReCrk7e1fOxh8uJk+2aqvOx7QztbwQ0yCzcrj6Ry0e5g1oX/YUCUA=
+	t=1786074690; cv=none; b=ffMbX9B19tjvNtWXO7DtTOR6XjvIzL8LAFdLKkKeHL2jMcGM1/2FgTs81FC95+d1LRO7f6myx9reEo5wI54SMVoC/P4QWxe99ZnbJCNdX52ej/1QhwdbIhBsdsYoK5hZcWZoUpZ69UaQUi81TsBuA3h9ZYih9hP4rxLVVYnCMNI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786074683; c=relaxed/simple;
-	bh=H76/QGVHjgoBCmbEg8m4levfeDQTMHbDutu6CiCCVkw=;
+	s=arc-20240116; t=1786074690; c=relaxed/simple;
+	bh=DsE3iVom0V6Bg34N2TQD9xICdojiH9gD7eZ+FHQsqVI=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=cq71dQyd2sDY4XcqxdWMHX9uYW+Z2eSTv89WUYb5DoJSrhJeAUbY/3s6/hg7HvxaAdLWozSXMGw8kCsHfjNkSaXH1rtXvnfMVKE1gzXpXEcihOwDyoIU95G9cnxz/TRllyvglbRnR62T7EMM2qOKlr19VS+/jo4DK3BuMzyHZHE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oh+8ldbV; arc=none smtp.client-ip=209.85.210.177
+	 MIME-Version; b=ryAnQnv6/lveZrZUrdntZWXdfNZZo1mGY5/aUATSJUrW6d37crXI2EBbgz4b8P24aYJ2wRIT1QsaTfMJbnTUiSLINWLeBt9nN+0vSlhDYDYZm8WWgtypyfYm5P3ZCGQ4dviYl6pXpcUbKscpZVI55m3A/vXCnG+xW8mg0yAWyoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d/gqUODd; arc=none smtp.client-ip=209.85.210.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oh+8ldbV"
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-8487214ad2bso4527441b3a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 20:51:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d/gqUODd"
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-8485b358552so2529111b3a.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 20:51:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786074681; x=1786679481; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786074688; x=1786679488; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=c/3ISunVfIRnbCDBwOOCuYiYx2dMKx7N5JMFDQezhpM=;
-        b=oh+8ldbV083d7AEX3zfOhsYngBBZU7j/RJWGwggfOo8CsDjDdp+p2qvj70zZ4scQDw
-         EHe4R+XCphRhbfq/3u25ucFW0noHnG1z4QkJBtMOeakrCzOSx0Wf5OoiExbeKke1fEYZ
-         9P41BprmVku1xFX0viJUaj8KIaBdFJBCFgn+2SZ9E0CaOX5aix8DNN3yxOM8pqFyPz7p
-         69XdZrHOeOXsKBEMm8jOJeSon6bVAkqvpUuQiBkuUGrdV4YPHgGw5affQZ9X/CuFnfi9
-         KyIodE4EW0vN9iaY46uIofYb+Mofu3gcs5xoOoqQFOeWBrLnN8qn4kJyvQmOnqJ9vJJG
-         w4Sw==
+        bh=roc/IS/aTyNJNRiP/nrbSlyNrCVYc83nltBjgP79s1s=;
+        b=d/gqUODd9JuqNLzNNtueXFzHV2UdoLKI6RmLPYbdYbHtRwq2amisvWzvC0bBcFQ6T/
+         srFnhWhn0ny0vNY/Jn6uB40lwbbFDpiVAqhx9g+1oEXOeAo+/F/fJj9tK0W1joIiZ7f+
+         x0/IbF4W62vrYiTaz2TzNkzfB7EKN2MgjvYDnfNdEUmjW8Rv7TI1eZqw13wrISBjsBMF
+         QkH4bw48cSo74fADgoz55ZbuV/LFHQTxv4C45qVjm5Eg6MGYotEv65Xmmy4GDH0JGEKs
+         JXFboOCeiC0VS/mwFXmCHAZyetcV/dV+cxMufo1aPRnKlSTLN3905yEm+XlwA0f9ZQ+6
+         oOIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786074681; x=1786679481;
+        d=1e100.net; s=20251104; t=1786074688; x=1786679488;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=c/3ISunVfIRnbCDBwOOCuYiYx2dMKx7N5JMFDQezhpM=;
-        b=kYxOwIVtFasHhK6ZB6dSKRV58g04J6X2r7CT/MYzrHLlPZJIHJyhmxCui9xiP7Jl1o
-         ZIvvYkmyejvt5reSWUsoGn6vZp7aL28di0gPMqGJd7ml1Y1bylz4G6wAThsbuMXjzlC0
-         g3GOmZvfQJ5SaU+4ZA2tqCHIRvUczkhnNpyCpCCc0hRbGmDKYu/3TXWVwuMpOPbddS1P
-         CI+W3Cevn9hgcQ89GadqkpFFS8T+DMhhvrsJl1pmyR3lPR2TbmG4lyeb6k91AtL8WLUi
-         fSq4rJtT/HVbZT/er+6cmV6ZVCotnEbTfkJLBieeamjU5s+0Qf3p4QO6iPAyagVWyQfu
-         gATw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq6YCT16MqTxRcLBUHym3zNAlX5bgxNVgG3ibrUMUQPSzTJAHHd8xVsvO8QbcDjuq2Euw2ApATpiNUN0aFZkNQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7P3CFxsu1wGzYK6MAVBf29ngTpHQkZkyr4YGeoVsSa60bnDaG
-	AvfPxQPDk8RTLOIpMRsggn1WUoCU4XOHiYEen8C7ldoH23RdUhZ1nhwh
-X-Gm-Gg: AR+sD12YuTfqFLaJdoSRUYLGLrADH558fDtUhxqb9lxfRuAo/t7tOjfCRPk7pYLMnF2
-	p95Sn5ErgO+gEDurOVavg/Rkxd9BDy0dEABiPWBMlxRyC0JhdIP/MMPuEBYd5spcPzEYk+PK0CQ
-	v8im9dIXjPbH1bkD/DbOnJegfauEPcOS6Q+FZxEU24zJqfCHmvYc++6S11sjVn8GUv/rkgRFxEI
-	3ygdL69KnrdvNPGKSGRbwRuz0nKXm03o9veRhZBTlhU6VxMNDgHqav4dvTj5UMtAv9+eGWfP2JO
-	fTcWufE2WMIC9iKj8I5j+qTleD9kg8O7k/IRAjQMhIHi1QWUWWysBVXnIbKxKVDFVgOnx0vlXtl
-	b3Bs8/0ULeigK8HPpX+EE+s9zHWlp18Npv1smCsVAXxyWS+o8xbfqbBoJVl7yPxjYcbuzKUT9bx
-	x8MeARjLjs/HYc58uYTnKJ+e6fdXB1uyw840t39WtfPBk8sGiOiTfg8mqFdrKsxXb8D0XNAdUPI
-	UH0nI4=
-X-Received: by 2002:a05:6a00:170b:b0:82f:50cd:e586 with SMTP id d2e1a72fcca58-84f5df8e917mr782211b3a.13.1786074681506;
-        Thu, 06 Aug 2026 20:51:21 -0700 (PDT)
+        bh=roc/IS/aTyNJNRiP/nrbSlyNrCVYc83nltBjgP79s1s=;
+        b=GRT210oDcz1pArw4MhLE30c5K2SbgmsIYJy8mZTGVcHBOZEJUQpGD7AecI/LtY8f9G
+         vNeNs7dQixRfnLtjIxjPPIhc2ABTB8uGQQP25KGBzCz6NSMZhaY8LdyrHVJSeStFwf2B
+         1tDAOLGh9JflKlOgpS1XAyy2j/FonsX9AdNVXPHMWq1ETZiWePbqXS/vBG1L+kuMiG4C
+         YIej5vQpNRtxnXBu1ErGZcs7I9Esy1+uE+GBscHmhoWNbwjqaaF4Vz9P/AmpmVVywRhj
+         RtutpQKze01oWdRen5zzCwrklHXWKDFMMO+NthQ2odxl2PVBPpuK0xSwhePeZbTkOXue
+         CIWQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrK5VER4Z+6TcGsLd68P0wZUo3dv8qsn+SbjqdkzZSIJF2Ut032wb7GhFA2fBFplWBXNfnJ7SCN0hTJrPqkiw4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywc6ZhdTasmwN4+ck3iROwLwfqhGxAfogXwGAaEOzEc636yyZiH
+	NScEEnYr0EF94kMmiod7Bgyr0K9EquuJp+XTPC1c3MRkfKTu6gMXg2ud
+X-Gm-Gg: AR+sD12ZzSma0Q+QqUY7iaukFnxq1vSx0jkS6SwvNFk9xItvGbdh1kc+KlAvUd3/qJm
+	l0Z75ePtu+loa7pujJ8LhFOfy50mUBMZeZ9b4HbQbuFMokPzIE2dM5ctLbKKEtbLatwncM/L60k
+	8sdE6YciqJIJMxptdGl21IdGRRKx9VcES1KnUuQgc+eFWYJEbyfZnnbSUVfX4NvvZqlxufGjLCw
+	v0bNeoVQHETtgQDtyY6i8wpPnknKnegX9CAThiM1VzAyTOvEFHfThMi4NdMD69EdRxaK3PfFYpB
+	Am7OQ1/xgD+/bRsHM0oNSVob7dyP5U4Hx4FxGKqP62PRqqtFySLz51ktSzsXVPtX9roEb+EVKya
+	044cJO3oaS4/p5R1O16BqdbnV5XTVRH/xoACZvRsD7Bv0IFYe4gDt1TN2TD1Q4a0x92vtHvm55h
+	/+epygLEkr1Os9aR3iuzL/AdPIcOeii+XVp7OCygS9m0x3Kbxh3n77s+uHqzLDavXWAEe1jrM6R
+	NiKWVs=
+X-Received: by 2002:a05:6a00:4504:b0:845:da74:5d7c with SMTP id d2e1a72fcca58-84f2e0dba2cmr23794104b3a.32.1786074688151;
+        Thu, 06 Aug 2026 20:51:28 -0700 (PDT)
 Received: from cyh-System-Product-Name.. ([129.227.183.200])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a3d0d96sm287586b3a.18.2026.08.06.20.51.18
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a3d0d96sm287586b3a.18.2026.08.06.20.51.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Aug 2026 20:51:21 -0700 (PDT)
+        Thu, 06 Aug 2026 20:51:27 -0700 (PDT)
 From: "Yuhang.chen" <yhchen312@gmail.com>
 To: anup@brainfault.org
 Cc: atish.patra@linux.dev,
@@ -75,9 +75,9 @@ Cc: atish.patra@linux.dev,
 	linux-kselftest@vger.kernel.org,
 	zhouquan@iscas.ac.cn,
 	"Yuhang.chen" <yhchen312@gmail.com>
-Subject: [PATCH 1/2] RISC-V: KVM: Add PMU event filter support
-Date: Fri,  7 Aug 2026 11:50:38 +0800
-Message-Id: <20260807035039.294998-2-yhchen312@gmail.com>
+Subject: [PATCH 2/2] RISC-V: KVM: selftests: Add PMU event filter test
+Date: Fri,  7 Aug 2026 11:50:39 +0800
+Message-Id: <20260807035039.294998-3-yhchen312@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20260807035039.294998-1-yhchen312@gmail.com>
 References: <20260807035039.294998-1-yhchen312@gmail.com>
@@ -89,221 +89,245 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Allow userspace to restrict which SBI PMU events a guest is permitted
-to program via the new VM ioctl KVM_SET_PMU_EVENT_FILTER.  It takes a
-struct kvm_pmu_event_filter whose events[] array holds SBI PMU event
-indices encoded as (type << 16) | code.  The action field selects ALLOW
-(only listed events may be programmed) or DENY (listed events are
-rejected); nevents == 0 clears any active filter.
+Add a selftest that exercises KVM_SET_PMU_EVENT_FILTER on RISC-V. The
+guest programs the CPU cycles and instructions SBI PMU events through
+SBI_EXT_PMU_COUNTER_CFG_MATCH while the host installs filters with the
+ALLOW and DENY actions, asserting that disallowed events return
+SBI_ERR_NOT_SUPPORTED and allowed events succeed.
 
-The filter is enforced in kvm_riscv_vcpu_pmu_ctr_cfg_match(), where a
-disallowed event fails configuration with SBI_ERR_NOT_SUPPORTED.  It
-governs new counter configuration only and is not retroactive.  The
-filter lives in struct kvm_arch, read via SRCU on the vCPU run path and
-replaced under kvm->lock with synchronize_srcu_expedited().
-
-Advertise the feature with KVM_CAP_PMU_EVENT_FILTER.
+The test also validates ioctl argument rejection: an invalid action, a
+non-zero flags field, and an over-large nevents value are each expected
+to fail with -EINVAL or -E2BIG. A baseline run verifies PMU
+availability and the test skips (KSFT_SKIP) when PMU or the filter
+capability is absent.
 
 Assisted-by: YuanSheng:deepseek-v4-pro
 Co-developed-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Quan Zhou <zhouquan@iscas.ac.cn>
 Signed-off-by: Yuhang.chen <yhchen312@gmail.com>
 ---
- arch/riscv/include/asm/kvm_host.h |  3 ++
- arch/riscv/include/uapi/asm/kvm.h | 20 ++++++++++
- arch/riscv/kvm/vcpu_pmu.c         | 28 +++++++++++++
- arch/riscv/kvm/vm.c               | 66 ++++++++++++++++++++++++++++++-
- 4 files changed, 116 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/Makefile.kvm      |   1 +
+ .../kvm/riscv/pmu_event_filter_test.c         | 199 ++++++++++++++++++
+ 2 files changed, 200 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/riscv/pmu_event_filter_test.c
 
-diff --git a/arch/riscv/include/asm/kvm_host.h b/arch/riscv/include/asm/kvm_host.h
-index 60017ceec9d2..1cd3d6a11057 100644
---- a/arch/riscv/include/asm/kvm_host.h
-+++ b/arch/riscv/include/asm/kvm_host.h
-@@ -95,6 +95,9 @@ struct kvm_arch {
- 
- 	/* KVM_CAP_RISCV_MP_STATE_RESET */
- 	bool mp_state_reset;
-+
-+	/* KVM_SET_PMU_EVENT_FILTER */
-+	struct kvm_pmu_event_filter __rcu *pmu_event_filter;
- };
- 
- struct kvm_cpu_trap {
-diff --git a/arch/riscv/include/uapi/asm/kvm.h b/arch/riscv/include/uapi/asm/kvm.h
-index 504e73305343..da4f639fa89f 100644
---- a/arch/riscv/include/uapi/asm/kvm.h
-+++ b/arch/riscv/include/uapi/asm/kvm.h
-@@ -12,6 +12,7 @@
- #ifndef __ASSEMBLER__
- 
- #include <linux/types.h>
-+#include <linux/stddef.h>
- #include <asm/bitsperlong.h>
- #include <asm/ptrace.h>
- 
-@@ -396,6 +397,25 @@ struct kvm_riscv_sbi_fwft {
- /* One single KVM irqchip, ie. the AIA */
- #define KVM_NR_IRQCHIPS			1
- 
-+/* for KVM_CAP_PMU_EVENT_FILTER */
-+#define KVM_PMU_EVENT_ALLOW	0
-+#define KVM_PMU_EVENT_DENY	1
-+
+diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
+index d28a057fa6c2..5d2dc3b25eac 100644
+--- a/tools/testing/selftests/kvm/Makefile.kvm
++++ b/tools/testing/selftests/kvm/Makefile.kvm
+@@ -218,6 +218,7 @@ TEST_GEN_PROGS_s390 += pre_fault_memory_test
+ TEST_GEN_PROGS_riscv = $(TEST_GEN_PROGS_COMMON)
+ TEST_GEN_PROGS_riscv += riscv/sbi_pmu_test
+ TEST_GEN_PROGS_riscv += riscv/ebreak_test
++TEST_GEN_PROGS_riscv += riscv/pmu_event_filter_test
+ TEST_GEN_PROGS_riscv += access_tracking_perf_test
+ TEST_GEN_PROGS_riscv += arch_timer
+ TEST_GEN_PROGS_riscv += coalesced_io_test
+diff --git a/tools/testing/selftests/kvm/riscv/pmu_event_filter_test.c b/tools/testing/selftests/kvm/riscv/pmu_event_filter_test.c
+new file mode 100644
+index 000000000000..1a76fce2aca6
+--- /dev/null
++++ b/tools/testing/selftests/kvm/riscv/pmu_event_filter_test.c
+@@ -0,0 +1,199 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * For KVM_SET_PMU_EVENT_FILTER: restrict which SBI PMU events a guest may
-+ * configure.  Each @events entry is a SBI PMU event index (type in bits
-+ * 19:16, code in bits 15:0).  %KVM_PMU_EVENT_ALLOW permits only listed
-+ * events; %KVM_PMU_EVENT_DENY rejects them.  Enforced at counter
-+ * configuration (SBI PMU COUNTER_CFG_MATCH), not retroactively.
++ * Test for RISC-V KVM_SET_PMU_EVENT_FILTER.
++ *
++ * Verify that a VM-scoped PMU event filter installed via the
++ * KVM_SET_PMU_EVENT_FILTER ioctl is enforced when a guest configures a
++ * counter through the SBI PMU COUNTER_CFG_MATCH call:
++ *
++ *   - with no filter, events are programmable (baseline / PMU probe);
++ *   - KVM_PMU_EVENT_DENY rejects the listed events;
++ *   - KVM_PMU_EVENT_ALLOW admits only the listed events;
++ *   - replacing the filter with an empty DENY list re-enables everything.
++ *
++ * The filter is checked before any perf event is created, so the test only
++ * ever programs the cycle event (always supported by the host PMU) and varies
++ * the filter *list* contents to exercise membership without depending on host
++ * support for other events.  Counter management and SBI error reporting happen
++ * in the guest; the host installs filters and checks the reported errors.
 + */
-+struct kvm_pmu_event_filter {
-+	__u32 action;
-+	__u32 nevents;
-+	__u32 flags;
-+	__u32 pad;
-+	__DECLARE_FLEX_ARRAY(__u64, events);
-+};
++#include <errno.h>
++#include <stdlib.h>
++#include <string.h>
 +
- #endif
- 
- #endif /* __LINUX_KVM_RISCV_H */
-diff --git a/arch/riscv/kvm/vcpu_pmu.c b/arch/riscv/kvm/vcpu_pmu.c
-index bb46dcbfb24d..bc7d297a63ce 100644
---- a/arch/riscv/kvm/vcpu_pmu.c
-+++ b/arch/riscv/kvm/vcpu_pmu.c
-@@ -733,6 +733,29 @@ int kvm_riscv_vcpu_pmu_ctr_stop(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 	return 0;
- }
- 
-+static bool kvm_riscv_pmu_event_allowed(struct kvm *kvm, unsigned long eidx)
++#include "kvm_util.h"
++#include "test_util.h"
++#include "processor.h"
++#include "ucall_common.h"
++#include "sbi.h"
++
++/* SBI PMU hardware event indexes (type == HW == 0, so eidx == code). */
++#define EV_CYCLES	SBI_PMU_HW_CPU_CYCLES		/* 1 */
++#define EV_INSTR	SBI_PMU_HW_INSTRUCTIONS		/* 2 */
++
++/* Must match KVM_PMU_EVENT_FILTER_MAX_EVENTS in arch/riscv/kvm/vm.c. */
++#define MAX_EVENTS	256
++
++static void guest_code(void)
 +{
-+	struct kvm_pmu_event_filter *filter;
-+	bool in_list = false;
-+	unsigned int i;
++	struct sbiret ret;
++	unsigned long ctr;
++	long err;
 +
-+	filter = srcu_dereference(kvm->arch.pmu_event_filter, &kvm->srcu);
-+	if (!filter)
-+		return true;
++	for (;;) {
++		/*
++		 * Request the fixed cycle counter (cbase=0, cmask=1) for the
++		 * cycle event.  The host installs (or clears) the filter
++		 * before each entry, so the result reflects the active policy.
++		 */
++		ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH,
++				0, 1, 0, EV_CYCLES, 0, 0);
++		err = ret.error;
++		ctr = ret.value;
 +
-+	for (i = 0; i < filter->nevents; i++) {
-+		if ((unsigned long)filter->events[i] == eidx) {
-+			in_list = true;
-+			break;
-+		}
++		/* Release the counter on success so the next iteration reuses it. */
++		if (!err)
++			sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_STOP,
++				  ctr, 1, SBI_PMU_STOP_FLAG_RESET, 0, 0, 0);
++
++		GUEST_SYNC1(err);
 +	}
-+
-+	/* ALLOW: permit only listed events; DENY: reject them. */
-+	if (filter->action == KVM_PMU_EVENT_ALLOW)
-+		return in_list;
-+	return !in_list;
 +}
 +
- int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_base,
- 				     unsigned long ctr_mask, unsigned long flags,
- 				     unsigned long eidx, u64 evtdata,
-@@ -773,6 +796,11 @@ int kvm_riscv_vcpu_pmu_ctr_cfg_match(struct kvm_vcpu *vcpu, unsigned long ctr_ba
- 		goto out;
- 	}
- 
-+	if (!kvm_riscv_pmu_event_allowed(vcpu->kvm, eidx)) {
-+		sbiret = SBI_ERR_NOT_SUPPORTED;
-+		goto out;
-+	}
-+
- 	/*
- 	 * SKIP_MATCH flag indicates the caller is aware of the assigned counter
- 	 * for this event. Just do a sanity check if it already marked used.
-diff --git a/arch/riscv/kvm/vm.c b/arch/riscv/kvm/vm.c
-index a9f083feeb76..6f822c43f156 100644
---- a/arch/riscv/kvm/vm.c
-+++ b/arch/riscv/kvm/vm.c
-@@ -53,6 +53,8 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
- {
- 	kvm_destroy_vcpus(kvm);
- 
-+	kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->srcu, 1));
-+
- 	kvm_riscv_aia_destroy_vm(kvm);
- }
- 
-@@ -187,6 +189,7 @@ int kvm_vm_ioctl_check_extension(struct kvm *kvm, long ext)
- 	case KVM_CAP_MP_STATE:
- 	case KVM_CAP_IMMEDIATE_EXIT:
- 	case KVM_CAP_SET_GUEST_DEBUG:
-+	case KVM_CAP_PMU_EVENT_FILTER:
- 		r = 1;
- 		break;
- 	case KVM_CAP_NR_VCPUS:
-@@ -265,7 +268,68 @@ int kvm_vm_ioctl_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
- 	}
- }
- 
-+#define KVM_PMU_EVENT_FILTER_MAX_EVENTS	256
-+
-+static int kvm_riscv_vm_ioctl_set_pmu_event_filter(struct kvm *kvm,
-+						   void __user *argp)
++static struct kvm_pmu_event_filter *
++build_filter(__u32 action, __u32 flags, const __u64 *events, __u32 nevents)
 +{
-+	struct kvm_pmu_event_filter __user *user_filter = argp;
-+	struct kvm_pmu_event_filter *filter, tmp;
-+	size_t size;
-+	int r = 0;
++	struct kvm_pmu_event_filter *f;
++	size_t size = sizeof(*f) + (size_t)nevents * sizeof(__u64);
 +
-+	if (copy_from_user(&tmp, user_filter, sizeof(tmp)))
-+		return -EFAULT;
-+
-+	if (tmp.action != KVM_PMU_EVENT_ALLOW &&
-+	    tmp.action != KVM_PMU_EVENT_DENY)
-+		return -EINVAL;
-+
-+	if (tmp.flags)
-+		return -EINVAL;
-+
-+	if (tmp.nevents > KVM_PMU_EVENT_FILTER_MAX_EVENTS)
-+		return -E2BIG;
-+
-+	size = struct_size(filter, events, tmp.nevents);
-+	filter = kzalloc(size, GFP_KERNEL_ACCOUNT);
-+	if (!filter)
-+		return -ENOMEM;
-+
-+	filter->action = tmp.action;
-+	filter->nevents = tmp.nevents;
-+	filter->flags = tmp.flags;
-+
-+	if (copy_from_user(filter->events, user_filter->events,
-+			   flex_array_size(filter, events, filter->nevents))) {
-+		r = -EFAULT;
-+		goto cleanup;
-+	}
-+
-+	mutex_lock(&kvm->lock);
-+	filter = rcu_replace_pointer(kvm->arch.pmu_event_filter, filter,
-+				     mutex_is_locked(&kvm->lock));
-+	mutex_unlock(&kvm->lock);
-+	synchronize_srcu_expedited(&kvm->srcu);
-+
-+cleanup:
-+	kfree(filter);
-+	return r;
++	f = calloc(1, size);
++	TEST_ASSERT(f, "calloc(pmu_event_filter)");
++	f->action = action;
++	f->nevents = nevents;
++	f->flags = flags;
++	if (nevents && events)
++		memcpy(f->events, events, nevents * sizeof(__u64));
++	return f;
 +}
 +
- int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
- {
--	return -EINVAL;
-+	struct kvm *kvm = filp->private_data;
-+	void __user *argp = (void __user *)arg;
-+	int r;
++/* Install a filter, asserting success. */
++static void set_filter(struct kvm_vm *vm, __u32 action,
++		       const __u64 *events, __u32 nevents)
++{
++	struct kvm_pmu_event_filter *f = build_filter(action, 0, events, nevents);
 +
-+	switch (ioctl) {
-+	case KVM_SET_PMU_EVENT_FILTER:
-+		r = kvm_riscv_vm_ioctl_set_pmu_event_filter(kvm, argp);
-+		break;
-+	default:
-+		r = -EINVAL;
++	vm_ioctl(vm, KVM_SET_PMU_EVENT_FILTER, f);
++	free(f);
++}
++
++/* Install a filter and return the raw ioctl result (for negative tests). */
++static int try_set_filter(struct kvm_vm *vm, __u32 action, __u32 flags,
++			  const __u64 *events, __u32 nevents)
++{
++	struct kvm_pmu_event_filter *f = build_filter(action, flags, events, nevents);
++	int ret = __vm_ioctl(vm, KVM_SET_PMU_EVENT_FILTER, f);
++
++	free(f);
++	return ret;
++}
++
++/* Run the guest one step and return the cfg_match error code it reports. */
++static long run_one(struct kvm_vcpu *vcpu)
++{
++	struct ucall uc;
++
++	vcpu_run(vcpu);
++	TEST_ASSERT_EQ(get_ucall(vcpu, &uc), UCALL_SYNC);
++	return (long)uc.args[0];
++}
++
++static void test_filter_case(struct kvm_vm *vm, struct kvm_vcpu *vcpu,
++			     __u32 action, const __u64 *events, __u32 nevents,
++			     long expect, const char *desc)
++{
++	long err;
++
++	set_filter(vm, action, events, nevents);
++	err = run_one(vcpu);
++	TEST_ASSERT_EQ(err, expect);
++	pr_info("%s: err=%ld (expected %ld)\n", desc, err, expect);
++}
++
++static void test_bad_args(struct kvm_vm *vm)
++{
++	__u64 ev = EV_CYCLES;
++	int ret;
++
++	/* Invalid action. */
++	errno = 0;
++	ret = try_set_filter(vm, 2, 0, &ev, 1);
++	TEST_ASSERT(ret < 0 && errno == EINVAL,
++		    "invalid action should fail with EINVAL, got ret=%d errno=%d",
++		    ret, errno);
++
++	/* Non-zero flags are not supported. */
++	errno = 0;
++	ret = try_set_filter(vm, KVM_PMU_EVENT_ALLOW, 1, &ev, 1);
++	TEST_ASSERT(ret < 0 && errno == EINVAL,
++		    "non-zero flags should fail with EINVAL, got ret=%d errno=%d",
++		    ret, errno);
++
++	/* Too many events. */
++	errno = 0;
++	ret = try_set_filter(vm, KVM_PMU_EVENT_DENY, 0, NULL, MAX_EVENTS + 1);
++	TEST_ASSERT(ret < 0 && errno == E2BIG,
++		    "nevents > max should fail with E2BIG, got ret=%d errno=%d",
++		    ret, errno);
++}
++
++int main(void)
++{
++	struct kvm_vm *vm;
++	struct kvm_vcpu *vcpu;
++	long err;
++
++	TEST_REQUIRE(kvm_has_cap(KVM_CAP_PMU_EVENT_FILTER));
++
++	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++
++	/*
++	 * Baseline / PMU probe: with no filter the cycle event must be
++	 * programmable.  If it isn't, the host PMU is unusable in this
++	 * environment (e.g. Sscofpmf unavailable under TCG); skip the rest.
++	 */
++	err = run_one(vcpu);
++	if (err) {
++		pr_info("PMU unavailable (baseline cfg_match err=%ld), skipping\n",
++			err);
++		kvm_vm_free(vm);
++		exit(KSFT_SKIP);
 +	}
 +
-+	return r;
- }
++	/* DENY{cycles}: the cycle event is rejected. */
++	test_filter_case(vm, vcpu, KVM_PMU_EVENT_DENY,
++			 &(__u64){ EV_CYCLES }, 1,
++			 SBI_ERR_NOT_SUPPORTED, "deny cycles");
++
++	/* ALLOW{cycles}: the cycle event is admitted. */
++	test_filter_case(vm, vcpu, KVM_PMU_EVENT_ALLOW,
++			 &(__u64){ EV_CYCLES }, 1,
++			 0, "allow cycles");
++
++	/*
++	 * ALLOW{instructions}: cycles is not in the allow list, so it is
++	 * rejected.  Instructions itself is never programmed, so host support
++	 * for it is irrelevant.
++	 */
++	test_filter_case(vm, vcpu, KVM_PMU_EVENT_ALLOW,
++			 &(__u64){ EV_INSTR }, 1,
++			 SBI_ERR_NOT_SUPPORTED, "cycles not in allow{instr}");
++
++	/* Empty DENY list: nothing is denied, cycles is programmable again. */
++	test_filter_case(vm, vcpu, KVM_PMU_EVENT_DENY, NULL, 0,
++			 0, "clear (deny empty)");
++
++	test_bad_args(vm);
++
++	kvm_vm_free(vm);
++	return 0;
++}
 -- 
 2.34.1
 
