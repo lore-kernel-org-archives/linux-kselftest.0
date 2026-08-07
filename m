@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7174D477294;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4112847606D;
 	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786139570; cv=none; b=ce8QOXuQ5Hq3kkXBgBbIcxe69ZMRukkLa4HmmHngAAV8u/zy4ojKsfo0difPLNtAUr+f9sPvS+bbEvgjq37mPCcbpHq9L1+J1T75kTQQwTAAdb1B4QvloIL/WTjweDcnEAwNvsWlGzUldwav5O2JV+d1uEUy7oViHSFASnS970k=
+	t=1786139570; cv=none; b=EAbL0WqWpI6RUGnqPbphELzjEsl54OVVpFFlt59Hd9Vx+sOMzELmuas7T/zjXQk90PW0fEq01gfIKOTpeWD8p6BUHYxAdfZ1byPu8W+2X+KbYd8e2mW9/Oz2b00LPNvUHXeSZVKdikcsp4AGOiCR8q2gCiXHiRRsOy/15JVOdcY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786139570; c=relaxed/simple;
-	bh=An4LoFfCbfkYxKMIjD8JecRW0dhBJE2uKbwzXFHa1d8=;
+	bh=FoI3ZMvAwFhi7kaXsVeKkdELz832DofYJBPVRl9mtgo=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BfeChF9A65mfqDtb7pZc1WCuc2TbiMKG4OkwGv+njbDREJU1nhHvbZ96/usRj4YA4WPbaHL0NS20DdIaP+lFfFEKoMYpsqrLhourrytoN3htcpf1ADcmVOZ4NUHroteC+U2yW4X1v0ovzyN2mrDrB2vIEM5H5ZuExt5Q4xkQ4DA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=byQXBm9C; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=TRo9TxU9QPPUTLcWYQmspyxYvZ/UGkSB3h+j+18Eh59dVC5Jg8Vle5t/5+Cam5UIpp5vxhE2/IVD10BGy6H3xlOT95zXMvUOHJNn1anfIDPWz/oCxj9eFI0r1JpM+JtiOtpb3w8MIdS2lufqnKKVuN9c+zOWxfTmaqquimlC1ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZ12nlj4; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="byQXBm9C"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 582D7C19425;
-	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZ12nlj4"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DC1DAC2BCF7;
+	Fri,  7 Aug 2026 21:52:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786139570;
-	bh=An4LoFfCbfkYxKMIjD8JecRW0dhBJE2uKbwzXFHa1d8=;
+	s=k20201202; t=1786139569;
+	bh=FoI3ZMvAwFhi7kaXsVeKkdELz832DofYJBPVRl9mtgo=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=byQXBm9Cp6SfRJKQQFLpngbooXY0gH9fn5S7Fnp9O7w+lkiNB4RC2R0i1S7xmUT7o
-	 vnDq8WBqmbBTFt0qTHuJzko2TO2buKIvB+uKgGXAnLs9EEEMxVeQH7rPjuvfp/bK3B
-	 fotVUr2pyldGx8bCFLz49dXAjCQpg6eUDjPFBu9vA4gmbZIN6Q8TWgGsFKi1ydfkjG
-	 0mmoMGjW9W8nd6LW2p0VqoWMKy6fMtuu+Uz8JignkWvCPL7iC7UYS4h2sOAPfU59wM
-	 U3L432szzaTGgs0QrggBQBZPyhZHUQqFoOzfVfTLfVla+XSx05zC3WO1yiidOhi60R
-	 s/Cmb+QkTUddg==
+	b=MZ12nlj4zg6jc33zJXDKBEAaD/2iRklHNAS3yqR77/cY7X3ZJKAcrJ58VSIp7lhGu
+	 ACCJy4wxgey6mcl1O1bfQezwlRgXCE9weYeGS1Bxn5M/OSPMvj/Je7PmCQNt7iGrDE
+	 S5hmlbXeV/ypmRrGSir13wZ+hn+H/TNo/ffnLg8fsX7v2CJDSOY9uwYskZzfRq/e4e
+	 JNyfbgPDjLv2fI83BbyS0+oKR6WkdWJ9A3yES7p7vG3wELaD/VDZMou/U8gsYdtxHC
+	 BK40gZGMnLuCMYH2q9rrdO0a6QC7TIsM+y2Qf6UxXhX98fpJ433AmOOKhmgaZBjtop
+	 qqA644ZGh4obA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 401FFC5ACD3;
-	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C7290C5ACD4;
+	Fri,  7 Aug 2026 21:52:49 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 07 Aug 2026 14:53:05 -0700
-Subject: [PATCH v10 26/41] KVM: selftests: Add helpers for calling ioctls
- on guest_memfd
+Date: Fri, 07 Aug 2026 14:53:00 -0700
+Subject: [PATCH v10 21/41] KVM: guest_memfd: Enable INIT_SHARED on
+ guest_memfd for x86 Coco VMs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260807-gmem-inplace-conversion-v10-26-2fc18ee6d3ba@google.com>
+Message-Id: <20260807-gmem-inplace-conversion-v10-21-2fc18ee6d3ba@google.com>
 References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
 In-Reply-To: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -75,13 +75,14 @@ To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com,
 Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
- linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
+ linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>, 
+ Xiaoyao Li <xiaoyao.li@intel.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786139565; l=5371;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786139565; l=1641;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=8UvBMuLdULVikAkOmOgNwZEpUmR3XOSiX8ZbtcAA7h8=;
- b=id25AOQXYxAU2fhUjboBx62DxhKQXAQhUqYPjkGYJ1lwXkIzB/jvotUmYQOqQKMcvazqhW/y0
- NAlz2QlNDI6CSuUTnGjy3NDs9O45/NCcRJiIRR/Fhqh+bcOCvdhIi4a
+ bh=5c5dIhQl3iWs3iceAiL8YJI/msPrnkAFg0lQ3bgVOW4=;
+ b=UFZH2wM8ekLm4JtT1xYICDEeZuWmO10XkYOEwLNUAayGVaTkOQFrtplSWoHHOIzAaNHX6v238
+ KUC3rk4iwceAAxaAu6Ixrfp57qOfaUHTUgYifWYSAeKfD3DcUx7Bej/
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -91,163 +92,47 @@ Reply-To: ackerleytng@google.com
 
 From: Sean Christopherson <seanjc@google.com>
 
-Add helper functions to kvm_util.h to support calling ioctls, specifically
-KVM_SET_MEMORY_ATTRIBUTES2, on a guest_memfd file descriptor.
-
-Introduce gmem_ioctl() and __gmem_ioctl() macros, modeled after the
-existing vm_ioctl() helpers, to provide a standard way to call ioctls
-on a guest_memfd.
-
-Add gmem_set_memory_attributes() and its derivatives (gmem_set_private(),
-gmem_set_shared()) to set memory attributes on a guest_memfd region.
-Also provide "__" variants that return the ioctl error code instead of
-aborting the test. These helpers will be used by upcoming guest_memfd
-tests.
-
-To avoid code duplication, factor out the check for supported memory
-attributes into a new macro, TEST_ASSERT_SUPPORTED_ATTRIBUTES, and use
-it in both the existing vm_set_memory_attributes() and the new
-gmem_set_memory_attributes() helpers.
+Now that guest_memfd supports tracking private vs. shared within gmem
+itself, allow userspace to specify INIT_SHARED on a guest_memfd instance
+for x86 Confidential Computing (CoCo) VMs, so long as in-place conversion
+is enabled, i.e. when it's actually possible for a guest_memfd instance to
+contain shared memory.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 Tested-by: Shivank Garg <shivankg@amd.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- tools/testing/selftests/kvm/include/kvm_util.h | 94 +++++++++++++++++++++++---
- 1 file changed, 86 insertions(+), 8 deletions(-)
+ arch/x86/kvm/x86.c | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/kvm_util.h b/tools/testing/selftests/kvm/include/kvm_util.h
-index a091c495442a1..575032e9791d2 100644
---- a/tools/testing/selftests/kvm/include/kvm_util.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util.h
-@@ -392,6 +392,16 @@ static __always_inline void static_assert_is_vcpu(struct kvm_vcpu *vcpu) { }
- 	__TEST_ASSERT_VM_VCPU_IOCTL(!ret, #cmd, ret, (vcpu)->vm);	\
- })
- 
-+#define __gmem_ioctl(gmem_fd, cmd, arg)				\
-+	kvm_do_ioctl(gmem_fd, cmd, arg)
-+
-+#define gmem_ioctl(gmem_fd, cmd, arg)				\
-+({								\
-+	int ret = __gmem_ioctl(gmem_fd, cmd, arg);		\
-+								\
-+	TEST_ASSERT(!ret, __KVM_IOCTL_ERROR(#cmd, ret));	\
-+})
-+
- /*
-  * Looks up and returns the value corresponding to the capability
-  * (KVM_CAP_*) given by cap.
-@@ -418,8 +428,16 @@ static inline void vm_enable_cap(struct kvm_vm *vm, u32 cap, u64 arg0)
- 	vm_ioctl(vm, KVM_ENABLE_CAP, &enable_cap);
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index 39968610868fd..1ac60628b4c07 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -10631,14 +10631,15 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
  }
  
-+/*
-+ * KVM_SET_MEMORY_ATTRIBUTES{,2} overwrites _all_ attributes.  These
-+ * flows need significant enhancements to support multiple attributes.
-+ */
-+#define TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes)				\
-+	TEST_ASSERT(!(attributes) || (attributes) == KVM_MEMORY_ATTRIBUTE_PRIVATE,	\
-+		    "Update me to support multiple attributes!")
-+
- static inline void vm_set_memory_attributes(struct kvm_vm *vm, gpa_t gpa,
--					    u64 size, u64 attributes)
-+					    size_t size, u64 attributes)
+ #ifdef CONFIG_KVM_GUEST_MEMFD
+-/*
+- * KVM doesn't yet support initializing guest_memfd memory as shared for VMs
+- * with private memory (the private vs. shared tracking needs to be moved into
+- * guest_memfd).
+- */
+ bool kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
  {
- 	struct kvm_memory_attributes attr = {
- 		.attributes = attributes,
-@@ -428,17 +446,11 @@ static inline void vm_set_memory_attributes(struct kvm_vm *vm, gpa_t gpa,
- 		.flags = 0,
- 	};
- 
--	/*
--	 * KVM_SET_MEMORY_ATTRIBUTES overwrites _all_ attributes.  These flows
--	 * need significant enhancements to support multiple attributes.
--	 */
--	TEST_ASSERT(!attributes || attributes == KVM_MEMORY_ATTRIBUTE_PRIVATE,
--		    "Update me to support multiple attributes!");
-+	TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes);
- 
- 	vm_ioctl(vm, KVM_SET_MEMORY_ATTRIBUTES, &attr);
+-	return !kvm_arch_has_private_mem(kvm);
++	/*
++	 * INIT_SHARED is supported if in-place conversion is enabled, or if
++	 * the VM doesn't support private memory.  If the VM has private memory
++	 * and in-place conversion is disabled, then guest_memfd can _only_ be
++	 * used for private memory.
++	 */
++	return gmem_in_place_conversion || !kvm_arch_has_private_mem(kvm);
  }
  
--
- static inline void vm_mem_set_private(struct kvm_vm *vm, gpa_t gpa,
- 				      u64 size)
- {
-@@ -451,6 +463,72 @@ static inline void vm_mem_set_shared(struct kvm_vm *vm, gpa_t gpa,
- 	vm_set_memory_attributes(vm, gpa, size, 0);
- }
- 
-+static inline int __gmem_set_memory_attributes(int fd, u64 offset,
-+					       size_t size, u64 attributes,
-+					       u64 *error_offset)
-+{
-+	struct kvm_memory_attributes2 attr = {
-+		.attributes = attributes,
-+		.offset = offset,
-+		.size = size,
-+		.flags = 0,
-+		.error_offset = 0,
-+	};
-+	int r;
-+
-+	r = __gmem_ioctl(fd, KVM_SET_MEMORY_ATTRIBUTES2, &attr);
-+
-+	/* Copy error_offset regardless of r so caller can check. */
-+	if (error_offset)
-+		*error_offset = attr.error_offset;
-+
-+	return r;
-+}
-+
-+static inline int __gmem_set_private(int fd, u64 offset, size_t size,
-+				     u64 *error_offset)
-+{
-+	return __gmem_set_memory_attributes(fd, offset, size,
-+					    KVM_MEMORY_ATTRIBUTE_PRIVATE,
-+					    error_offset);
-+}
-+
-+static inline int __gmem_set_shared(int fd, u64 offset, size_t size,
-+				    u64 *error_offset)
-+{
-+	return __gmem_set_memory_attributes(fd, offset, size, 0,
-+					    error_offset);
-+}
-+
-+static inline void gmem_set_memory_attributes(int fd, u64 offset,
-+					      size_t size, u64 attributes)
-+{
-+	struct kvm_memory_attributes2 attr = {
-+		.attributes = attributes,
-+		.offset = offset,
-+		.size = size,
-+		.flags = 0,
-+	};
-+
-+	TEST_ASSERT_SUPPORTED_ATTRIBUTES(attributes);
-+
-+	__TEST_REQUIRE(kvm_check_cap(KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES) > 0,
-+		       "No valid attributes for guest_memfd ioctl!");
-+
-+	gmem_ioctl(fd, KVM_SET_MEMORY_ATTRIBUTES2, &attr);
-+}
-+
-+static inline void gmem_set_private(int fd, u64 offset, size_t size)
-+{
-+	gmem_set_memory_attributes(fd, offset, size,
-+				   KVM_MEMORY_ATTRIBUTE_PRIVATE);
-+}
-+
-+static inline void gmem_set_shared(int fd, u64 offset, size_t size)
-+{
-+	gmem_set_memory_attributes(fd, offset, size, 0);
-+}
-+
- void vm_guest_mem_fallocate(struct kvm_vm *vm, gpa_t gpa, u64 size,
- 			    bool punch_hole);
- 
+ #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
 
 -- 
 2.55.0.654.g21b8a5bc05-goog
