@@ -1,151 +1,139 @@
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7345540EB9D
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:49:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6C427466A;
+	Fri,  7 Aug 2026 15:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786114182; cv=none; b=MvmPSiX8VJLTvNBmWlXkN5TgUFkbkbMS2hnrY79qog52ExshjP8If4r3inbPCKyEZoiIVNLn61twP1bKq8c1SlZr1qUBx2eDxDbKz+4mKG4rNQkoApSZ/tgPmRFvZldbXdDBcEn7YQAXGXfW9hVCU+Rx6U/i8+Y9INFshn1f3uM=
+	t=1786116263; cv=none; b=lgYq6Sp5JN/sRzoM1gsoNpxcCGnlO3dE/9Ph0GgIDhgFgIBOZwm0gzZQQ5YiH0oDnl13GwhygFYM3Jk6RwpzxlNSnAKXVdyU6RGi4NbRM2PLS6hnDTB3rR3ehq8YSxi9/tnhKZxu6wFyyHfcvz/cTMWcfO7JPwbtxPh5ZAeI9hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786114182; c=relaxed/simple;
-	bh=rIBVD0ltrU8+8xGc90Oa/79dIW3TVRlPoGEf1xQTtFM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IoZAI27dW7u3IIPngA6ktodBq0zUIifjPgD6jM1ucN/BR1JfWB7Ymj+BijHAr1SQBRqDWwihVDM7lyWb3BIRjJMLVxjUNhb77lkOjsgIg7R7GJy0i6rCvkEcAx2kqDG2mi+DjF/E/CtQLqmUFXlY1vga8O7sNEbN974FL9conVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sslaz9qR; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786116263; c=relaxed/simple;
+	bh=/YIMkYiiMnTbvDCILWTkQCZ7s+D6ywrIjdQ0XntujtI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TQrx4le8xfJL+jP6Xd73U367Sta7BzlyuwjgPiodavtZNbqgO93SqCHyOHKcLggI8O0VzBWzwZG+mS89j6FO1n0q+VBUUVtT7+qY5fDPywB0d7G6ITatBb6IabARMvtCR1yG29EhgumjXDawbOX5cOzx0ELDX0aqlET6Qir0qT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=z7FLizxK; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sslaz9qR"
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47df6a5655aso452218f8f.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:49:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786114179; x=1786718979; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ukm+OuNktymp77TFPbZkArdXVPXyYalBdkMMLYPXS10=;
-        b=sslaz9qR/vyd7bq8Jp3kC/7MM6pDm3ok0jS0ye5F72fSL//pg44ult3NDuC57AznN7
-         Vs1wMnEuJzbWWuiLbQ+peM1204aAfC/vT0F8pt4jJcDV6NcnbAmOLGFusdatHeqclcbk
-         Vi+P+evunyo1FFr6ughqdVFHx0EwjQe5xPLUb5g8uPXyRyzEwjKnzjM2KiLLvDiMVBsu
-         AE6F709bBBpqy8xrctxGjCknf0KlWbA+fDve0kgL8Vp2jpieBfsBPaCqzvyXleLfdN2t
-         o6AMi6M+pl1L0pySGJAObaaEvsS3qTxlPdul26jf0ZCqfqNENPBH3zkyc0oysYE7t02P
-         nIJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786114179; x=1786718979;
-        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ukm+OuNktymp77TFPbZkArdXVPXyYalBdkMMLYPXS10=;
-        b=ZJaNIFg3IxnhbQ7W1OeOsmo+5aEl7JulLo8M2YUxWM10PnnAHn2720vDsscVtMsnad
-         aMiyV5epwQLy0jVKjDZ/LVdlksGd3tkbMBQcJKIN2yLxAI/M6ZxFi9fQjIAQi4S2+rcT
-         D4JTYhQ1/UFOUwDj4B2tMgCHMLfmOjaQP3AUgZdC5RGDjsP2XnWwniglwn41AdHxxhG8
-         LYFuPTbjngZviA6EuwTO2VlZPlw7vWywUuVFIpTpUnRxanUiZ44xS2OXTYKYbn/0umFc
-         3aTsyjbjO/knR+U9+i5iDT2nZDjkvDAzzuQDoOWJQ19IOMsrBm1WsOO9UAWfoOLcvt9n
-         PAUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqswxlCBdj47wPSYmT6FHq+DtcLvC98F0P44jjytIqiwUvQaI+GDoXrVvIdI4gkQvIecVpjieDp3g8534xAQ6k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTL7wpXU3s49NSToCDfKcY7gBixvmEDO+lYBiRixHhsrbKIH78
-	+9nE7xZ/HPKtfXEWoPWj9lQ+1Bzrsi+15gwdz8N1Yc1Pdyc3yAyzgtgw
-X-Gm-Gg: AR+sD13u34760GkewMfLT4NwSZx5rFe7Vo/hzLGVKPlgANmtlTwSCmhDrHzW8PyD4eu
-	Jr/nWaqqJeRIOJiyZ+iG1b7SQc+RUfsStUEstEpxRtPhgR1BdBg64A/QRGwxnalL+BXHcyBSwZH
-	naq+kbiy1/vwJLp+d+KXDT9rmJ0MKqjK80BBq2UEqHXPCtavVDli6oklfXj0B5j49DeLNzUyR3h
-	jEeU+neg2ptWEDihFEknnccT4ArEmIisNqQVuek/ObBVmuPm3UwM+Gh8gvoUp8w03UIH3drXz4W
-	GBD+RilaSe5LcGa8c7fAmOQ0OGqXqex7spLAcx2ADBF+7oLH4Xu1ytME00yhiwOM7KbaZWIDwkh
-	tMk3Xz9THWKneoBhQvl98gFQV32ZeOC7BuCK5+xC4aaorzznX0SUUnDED2XsBdthApHPnRiZRv6
-	oDyJoYzFOiWaVhSJiXy8leOAlLMsj2h9LvTaHa0QJylptyOB8Lkbl2sbRRjMpw4Q8/G02RpmUrU
-	YleuFjYKTShO1Jr32pWzufNF7OGq6/ENQRJ4OnJzdn1gIVeOS0UoqamaL4FNpJgTnBMYSj3f/re
-	v6qlEKzx5gy+M4uC7WY7W/yZrn9WvIYLutXn
-X-Received: by 2002:a05:600c:34d0:b0:496:c249:ddb1 with SMTP id 5b1f17b1804b1-4994e7d7feamr167001975e9.4.1786114178649;
-        Fri, 07 Aug 2026 07:49:38 -0700 (PDT)
-Received: from [192.168.2.69] (dynamic-077-179-201-133.77.179.pool.telefonica.de. [77.179.201.133])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995d85254asm26878245e9.1.2026.08.07.07.49.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2026 07:49:37 -0700 (PDT)
-Message-ID: <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
-Date: Fri, 7 Aug 2026 16:49:36 +0200
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="z7FLizxK"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 9194B4E4113F;
+	Fri,  7 Aug 2026 15:24:18 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5D5E9603F0;
+	Fri,  7 Aug 2026 15:24:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A5CF911C37ABC;
+	Fri,  7 Aug 2026 17:24:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786116257; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=iy2SF4T0jZmpRaS70n22aR4+O9IH+F6owy2QheVd4dw=;
+	b=z7FLizxK9zikxs9sg0JQi1JbD+J2VVQuEY/D7Bx35POpcVQq2OmJDa9AUdLhiTWX3djQqH
+	pFXOSzZFAe8UtZbg9kzmH6dx2Z98rJa7dHBjpu/PkGIq7/by/lGz56byB1e3h06omLjaKi
+	2tLGlXkmdrZJ6QDoJ6G/sxoXCxA+j3hXvIapYpKauTYWaPm5g78MNLPr7licz3gmigIzLI
+	N3jikVwTQCOkwDUQeyRm581gLCedw+PZbH2w26kTBz09OQAvuXcOf/Ft3/lWyj5QmMWgWn
+	6l/KxdldhMoypyB5kaHRUN2cDk0B2VcwS5xDBNawgX4pHcwV47Jp46I3CYwvhQ==
+From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
+Subject: [PATCH v5 0/7] clk: Add support for clock nexus
+Date: Fri, 07 Aug 2026 17:24:01 +0200
+Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
- counter updates
-To: Hangbin Liu <liuhangbin@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
- shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
- qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
- bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
- stable@vger.kernel.org, sdf.kernel@gmail.com
-References: <20260803222211.877-1-xiexinet@gmail.com>
- <20260803222211.877-3-xiexinet@gmail.com> <anXrR6-2UVYF1iZa@fedora>
-Content-Language: en-GB
-From: Xin Xie <xiexinet@gmail.com>
-Autocrypt: addr=xiexinet@gmail.com; keydata=
- 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
- sNySbH3veZ/55EtlXA==
-In-Reply-To: <anXrR6-2UVYF1iZa@fedora>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/5XQMQ7CMAwF0KugzBglaVIXJu6BGNrUUEu0qZISg
+ VDvTmACsZTJ+n94X/JDRApMUexWDxEocWQ/5GDXK+G6ejgTcJuz0FKXEpWE6LqBuKUACUFDcAq
+ IRy0VXMc4Bap7qA1KslQ3W92KDI2BTnx7jxyOOXccJx/u782kX+1ffNIgoTFlJbHCApH2jffTh
+ YeN8714DaTiEy0XoUVGt5WxhqoiH/eLmk8UF6Emo2iVNUiqzD/5Rud5fgKPdACZgAEAAA==
+X-Change-ID: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+To: Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
+ Rae Moar <raemoar63@gmail.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Pascal EBERHARD <pascal.eberhard@se.com>, 
+ Wolfram Sang <wsa+renesas@sang-engineering.com>, 
+ Fran Li <Frank.li@oss.nxp.com>, linux-clk@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
+ Frank Li <Frank.Li@nxp.com>, Herve Codina <herve.codina@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 07/08/2026 16:27, Hangbin Liu wrote:
-> 
-> Maybe use a shorter commit description.
-> 
-> Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
-> 
-> And the counters in hsr_deliver_master() also need to protected. Especially
-> multicast.
-> 
-> Thanks
-> Hangbin
+Adding support for clock nexus had some prerequisites requested by
+Stephen, such as adding new selftests, the initial discussions come
+from:
 
-Thanks.
+Link: https://lore.kernel.org/linux-clk/20260129201003.288605-1-miquel.raynal@bootlin.com/
 
-The long commit description was from v4. I reworked and shortened it in v5:
+Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+---
+Changes in v5:
+- Collected tags.
+- Added the of_ prefix on the new kunit helper.
+- Reworded a commit message.
+- All remaining points raised by Sashiko do not seem relevant.
+- Link to v4: https://lore.kernel.org/r/20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com
 
-https://lore.kernel.org/netdev/20260807140751.1351-3-xiexinet@gmail.com/
+Changes in v4:
+- Fixed the kernel doc of of_find_node_by_name_kunit() which was lacking
+  the fact that it could return NULL upon lookup failure. Also improved
+  the commit message by mentioning the addition of that helper.
+- All other Sashiko reports have either been disregarded because they
+  were way too unrelated or just not relevant enough in my opinion.
+- Link to v3: https://lore.kernel.org/r/20260716-schneider-v7-2-rc1-eip201-upstream-v3-0-98454e83845c@bootlin.com
 
-Regarding the statistics, Paolo previously suggested addressing the HSR dev stats races in a separate series, since there are already several occurrences:
+Changes in v3:
+- Prevent out-of-bounds clock-ranges fallback in of_parse_clkspec()
+- tests: Check of_clk_add_hw_provider_kunit() return value and fix node
+  ref leaks
+- Link to v2: https://lore.kernel.org/r/20260710-schneider-v7-2-rc1-eip201-upstream-v2-0-b4680787377e@bootlin.com
 
-https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
+Changes in v2:
+- Collected tags.
+- Rebased on top of v7.2-rc1
+- Exported (test) clock symbols using the _IF_KUNIT() variant, and
+  imported the NS in the test file.
+- Fixed a leaking node reported by Brian in the tests. Also used
+  existing helpers to simplify the test implementation as he wisely
+  suggested.
+- Reworded the nexus node binding description as suggested by Stephen.
+- Dropped redundant and non restraining properties from the Nexus
+  node as suggested by Rob.
+- Assigned clock/clock-rate properties now traverse Nexus nodes.
+- Rename helpers following Stephen proposals.
+- Rework tests following Stephen hints.
+- Link to v1: https://lore.kernel.org/r/20260327-schneider-v7-0-rc1-crypto-v1-0-5e6ff7853994@bootlin.com
 
-Would you prefer that I drop the DEV_STATS_* conversions from the next revision and address all HSR statistics consistently in a follow-up, including hsr_deliver_master() and multicast, rather than adding per-CPU accounting to this series?
+---
+Miquel Raynal (Schneider Electric) (7):
+      dt-bindings: clock: Introduce nexus nodes
+      clk: tests: Add clk_parse_clkspec() Kunit testing
+      clk: tests: Add Kunit testing for of_clk_get_parent_name()
+      clk: Improve a couple of comments
+      clk: Use the generic OF phandle parsing in only one place
+      clk: Add support for clock nexus dt bindings
+      clk: tests: Add Kunit testing for nexus nodes
 
+ .../bindings/clock/clock-nexus-node.yaml           |  30 +++++
+ drivers/clk/Makefile                               |   1 +
+ drivers/clk/clk-conf.c                             |  12 +-
+ drivers/clk/clk.c                                  |  15 ++-
+ drivers/clk/clk_kunit_helpers.c                    |  31 +++++
+ drivers/clk/clk_test.c                             | 139 +++++++++++++++++++++
+ drivers/clk/kunit_clk_parse_clkspec.dtso           |  31 +++++
+ include/kunit/clk.h                                |   2 +
+ 8 files changed, 249 insertions(+), 12 deletions(-)
+---
+base-commit: 7f26e010764df304602f33912a0550dcf46e72c2
+change-id: 20260710-schneider-v7-2-rc1-eip201-upstream-a470e5eab92d
+
+Best regards,
 -- 
-Xin
+Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
+
