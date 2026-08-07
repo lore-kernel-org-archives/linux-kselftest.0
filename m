@@ -1,169 +1,116 @@
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6D039C00F
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 07:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BD1A3B0AE6
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 07:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786086477; cv=none; b=n3h+dlZScjJlhsrLiYh/Kzv+G8uMzhPn0O4sPGEZaNZOLuhYlDgYNSZWsAjmj8qAEtdN8ER/AbNgOv0y7gmPjc4L/fd0+fZgkdni+sjY3ac/2Q1433xmQA3qK80kotaYaCvtnncvfar6QZqGfWGlKgJ+g5/kYPgpqlbgKzrXUzo=
+	t=1786086634; cv=none; b=HM9NDzjtTe6ElLutBYl/zjGno2n5dh1SfjtzwFG3vp2+QsruxjIqPFMpNs6bn5hdNSDlkghOSVWdrPLzc5qlaL8oucz8TCo4W4Wjs04vFnnnF+zmJLq8D2sAiSskivwGv91qH3FiioA6Bqc/3uzWMxoe3Tn48lxoXH4kBzyBB/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786086477; c=relaxed/simple;
-	bh=4JFfyud0ViTeW+K0tLZ1hg5DaeVAY0NyBjvL2WbsxTo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WlDzKoCfJI0UlAC5HKHVQB7yLXEk7np0YCWbgb0WxqDHsESZuyrp1WVy4KvzkAlfdezcWsazZUgS4ZGij4ZnhIfJf9lIRjGY0HB0AjIYe1Ejh2hhuP9pl0P6ENzGlZWc7KNb+FzCX8CDg2HFWKaKGEooeW4hvGxAasAXVYKOaCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=LfqITn2G; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=openvpn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
+	s=arc-20240116; t=1786086634; c=relaxed/simple;
+	bh=IAgQobVEQ0CWQcCIqZTlDhgLxtmPcEiR8bt94FC10is=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFOvJIh2McO7eOWjU5hpXxWRYiUsVdb2xqiXa7cAiC1vKmmqpXqGprr9zyViEWG/VsRz18xXt26RUtzs6273/Hx80G1U2047uLTBXlqDF9FZPJa9sDU98VGgHP6UecpZ53B7bm79Im2H8RDdY0Wb6niOIiOjBJXa9ochjS+zi+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EzhEskIj; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="LfqITn2G"
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-498028b3d5eso29907045e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 00:07:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EzhEskIj"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ca7c1176317so2694817a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 00:10:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=openvpn.net; s=google; t=1786086474; x=1786691274; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:from:content-language:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=QMsmR/uX9VDEyf5PzjWtsFu058wtvxYUxRMxUh1B8Co=;
-        b=LfqITn2GauWayY8eGWRQ1SBomypMt8kUVJZcl5hvClzuvr7h9EK6QogvYTclUQm9+U
-         xCttY/rzyvnjJCLp52QIRCqvaqxD2Igq2byD49nwroSMQ4nVy4oVGGBai5uCc8rrqtXi
-         rTg0BvEiX676XMjoCogoCaXMV48am88sG4bLdHtkLyi9lLnJ4X3Nr/vEAAfxSmTwnuDM
-         Eg7cuqYglCu8O5vyLzA4nDqiYyU83/5lSkwIfI/zrERG5hUrzcX62+XFHDToEztj5wP+
-         GIe/IVogeGTcVn8h5E/ats1g2zy0INWL5JFvjPRCXy4j2q9+yGoXjL5ztUw7RRAFc9gV
-         6DrA==
+        d=gmail.com; s=20251104; t=1786086633; x=1786691433; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NPzl1sllQPeAew0/T4KJhPua2DmqJee68WA88kC38zk=;
+        b=EzhEskIjWl8fva57CgIzoxFvd043lv3Nl6E9MviHXT/y79n6BInwiff04k1j4zkgHj
+         Rj7PMg0M0GNhh0Pz4oeOH5VUmvb+mhNh4L6wwK7V1AKunK3HCGDknIQ934/8y60n9q3i
+         udFQn2kQFgsCFpki9VJ8ESMfeXx2vXd8YGfe9GWpnSd+qCSQ6qlI39VxG1R38Q9oIF+A
+         qhxDGddeX36t8j9baVfEghGCRQcVFYzKyV3kByZ30hbSqsMtBjxU7YY0EAtgThMqc3RC
+         5tB61bchZyxOEoCiBzzFC7epBYOC2VTNaa/M3dKU4walYC5sWEKuEMcCQPXS8a+geYTX
+         2YDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786086474; x=1786691274;
-        h=content-transfer-encoding:content-type:in-reply-to:organization
-         :autocrypt:from:content-language:references:cc:to:subject:user-agent
-         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=QMsmR/uX9VDEyf5PzjWtsFu058wtvxYUxRMxUh1B8Co=;
-        b=lIQyf+obVojHFbbYb64o7XvpNvjBM3kc1kTZUJyLf8PDVRgUNv1nUM1LIkmeUTAT1J
-         AsRLwApKPDtHSROyRyC8JD3Jd3Epfy0/wnbMPPKU4X5RqZ7zm8FkqwURdzdDfdRNzd11
-         5gnAGaOYQ57GU4P4LPhd81klrkebnMpKWAQXuaoR7fFSrXafLEllghinuASsDf/Ic7q7
-         wNMEOCy1GRLCf9q06ObC1Z+dOTsnCBR+AndULCLilUmBrFYPKyahz7eyUkbwH2Oj8ltP
-         gZKBY4dzFxtoYU0n7qb0quExkNuy5DV+PXSusrQXJzZoGWjL2sBEBizR8z347SF4YLD5
-         Oa+A==
-X-Forwarded-Encrypted: i=1; AHgh+Rod4ESTQRIKhG4lUuBLR9klKpVt7kRVaKaUEZGaHyky5UOkxVWVb8UJkYgweM138w3NvUMOzK+0XVygZ8+c3iU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwzEu3IUEC+7xKqdtpyrn1vAGzAif1WLG3rf6RJ5WH2WPjYg+Ai
-	rujHtqLCPEbeXs/nVJ3ANOJH6vpkRA6iPc9a9RQlku9vi7u0p68kibYmt90tBWSOdF0uY+CtZaL
-	LLlVpxLn26hjjI/4jUMNKK/H5xOiCrTm5glcLg0fnDvx2xzrXxUq4z9PC4G6/OUU=
-X-Gm-Gg: AR+sD11dOQkqmPWb3BZUH5C42/zunm1PmvGnUmuEshDUp1gL3XFTQ4kKPbkEOtv8evn
-	ioXkOtF0LbRp39pDGm5lFZBKjeXbNFq0a8d1/34yttlBx0QDmLgh+UDfClZ7oHRA5nayUF4RCTm
-	63d72a2XjATv50EQII2O5lKpHQTmn5AFd2SS5D4K/Jk7PW7+bW2gk0J++8SK7a16Q6gGUNq6YVb
-	m3yn8NgDwkabie4e34+PSVYOl1UkzxzH+sZJ6eWGb+RhAzXLEQ6DrFQrStMslld7SunjFliBJnH
-	3vqyihUMyne0tu7HhIkDRwWXbEdqZdngOobbpn5wMe/OvQ0H6ZjDSl7y3sGJNQE4S30QuESbDNQ
-	ifnU6avydy8qOJlI7+h1DH5D8RipU5jPnjLELJu8k8nyqOTV6ULgY0CeZ0TrdAEuoCGKbolsiHO
-	kfqwS+0evAfaqel8fZVeDJYI0x1VZwsjbyKedem+3hWv6nC+1Ddo/w2uJizojuHj8nQVNq
-X-Received: by 2002:a05:600c:4514:b0:496:bbce:f3 with SMTP id 5b1f17b1804b1-4994e71ed7bmr258910355e9.6.1786086474389;
-        Fri, 07 Aug 2026 00:07:54 -0700 (PDT)
-Received: from [192.168.182.19] ([185.242.181.115])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995428f294sm121706305e9.15.2026.08.07.00.07.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Aug 2026 00:07:53 -0700 (PDT)
-Message-ID: <9f20537c-a737-4bf0-b9b7-d2ce57c5fe11@openvpn.net>
-Date: Fri, 7 Aug 2026 09:07:51 +0200
+        d=1e100.net; s=20251104; t=1786086633; x=1786691433;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NPzl1sllQPeAew0/T4KJhPua2DmqJee68WA88kC38zk=;
+        b=mds1cQk+8rkQVE3SQ1K5fIh2QhWySliej/to3KKI3M+HvNZu2AEWb0wsBYrkbg42mf
+         +QMYhKAsrDKTG7q0PFAFjrJKRV5otEXngC7nghgdJCoDfn4xhf0TFlOBHv0cEPl7LANq
+         nwy2W64iVZvexD+t98EG8Qd2956BNz9vUjUf0vsHHvbV011r7Nx1DGZVPctxPC0J18Dw
+         A2DpNjhupUZV7sCIYCu/1vMXOiWxoxDH27FogIMrz2HUFV98oKSgXuhBlhoXCS5lM2LQ
+         WwY01NYmYNaMzZZ7ngaffKM7wwBRi0Dd1r7TVb7jRVuedmhMj4SVwxDIfZgsReNaT/z7
+         s8DQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr/+mJlerHxy7WftxHPd7LdUaQV7An34oEx/9BeL6ChTD1wzaga4U+7s5rD9JQ3xm6c3k+NgSQ8nzt4s0qFEF4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLfJHimBbxgllF61eQCV02j9nOrCjVdHDwzZeAKJ4RsW25MZyh
+	yDbCmavDwCCnYVeVe56uGQ/bAYoWhESuQKNK+cSfMHe32fShHs9sJJ1+
+X-Gm-Gg: AR+sD12DWPkdiSqvn9zweOPRSIEATRgDfAL444AnEvLJutYvjARWOTZbmLohI4I/d8I
+	99cnXfdqesKJ82ySLEqqa9T5LyFYlnoYf+J4PqEqcykV2PsXLP6bSn5O+8grpPrGLcr+crbFfRq
+	ZqDVozHOz/lYrH+ZH/IpHlt/5Y7mhmwdVRRsgObTIZKFbwal7d5b9dOoKeUKhAh65vagsgAptjv
+	WGch/Rs+pbxIwaGhQSTWyH37bSOrxqxQ45aDftWcvBIZV7875PmwiiYmh3O1129eVW1JgmLpPoZ
+	3Gm05f+5NrDrC1OsZpKh/jYLfxs1fM+C3mnp6q87ykjU2NELtzTAXl47uC1m9zBRb5EFzYpLMz6
+	hop0BVb/InEM7Z52tBJfrqSttj2XHKk6/YfpZqU3lQWfBkFZqyMVIeWvCh9A5WUgmR0sd9vQVA3
+	dpSD3LjkF5sQQa52BnWZhCHNyhS3dnaZxzgH/mbccKfbX6fVnGmyFqFLIiXZamkprgpzdQLpA4O
+	uaVo4xua5xX
+X-Received: by 2002:a05:6a20:7f9a:b0:3c3:875d:c538 with SMTP id adf61e73a8af0-3cb85dbce51mr23474608637.8.1786086632688;
+        Fri, 07 Aug 2026 00:10:32 -0700 (PDT)
+Received: from 10-86-27-207.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be8a706fsm4079878eec.8.2026.08.07.00.10.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 00:10:32 -0700 (PDT)
+From: Gokul K <gokul02k@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: Compare the entire XSAVE buffer in the SEV smoke test
+Date: Fri,  7 Aug 2026 12:40:26 +0530
+Message-ID: <20260807071026.195503-1-gokul02k@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/net: ovpn: fix socket leak in ovpn_socket()
- error paths
-To: Qingshuang Fu <fffsqian@163.com>, Sabrina Dubroca <sd@queasysnail.net>,
- "David S . Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Qingshuang Fu <fuqingshuang@kylinos.cn>
-References: <20260807064816.53811-1-fffsqian@163.com>
-Content-Language: en-US
-From: Antonio Quartulli <antonio@openvpn.net>
-Autocrypt: addr=antonio@openvpn.net; keydata=
- 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
- ifS0+hzvnPVD9wXa9kdjO+0H
-Organization: OpenVPN Inc.
-In-Reply-To: <20260807064816.53811-1-fffsqian@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi there,
+compare_xsave() stops at index 4094, so the last byte of the XSAVE state
+is never compared.  Both buffers handed to it are 4096 bytes: the host
+copy is a struct kvm_xsave, whose region[] member is 1024 u32s, and the
+guest copy is the PAGE_SIZE shared page that guest_code_xsave() runs
+XSAVE into.  A VMSA synchronization bug that corrupted only that final
+byte would go unreported and the test would still pass.
 
-On 07/08/2026 08:48, Qingshuang Fu wrote:
-> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-> 
-> The ovpn_socket() function creates a socket but fails to close it on
-> several error paths, leading to a file descriptor leak:
-> 
-> 1. When the address family is neither AF_INET nor AF_INET6, the socket
->     is leaked in the switch default case.
-> 2. When setsockopt() for SO_REUSEADDR, SO_REUSEPORT, or SO_MARK fails,
->     the socket is leaked.
-> 3. When setsockopt() for IPV6_V6ONLY fails, the socket is leaked.
-> 
-> The existing err_socket label already handles closing the socket for
-> the bind() failure path. Fix all other error paths to use goto
-> err_socket instead of returning directly, ensuring the socket is
-> properly closed on every error path.
-> 
-> Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
+Bound the loop with sizeof(struct kvm_xsave) rather than an open-coded
+length, and make the index unsigned so it does not mix signedness with
+sizeof.
 
-We'd rather send changes like this to net-next, so no Fixes tag required.
+Fixes: 8c53183dbaa2 ("selftests: kvm: add test for transferring FPU state into VMSA")
+Signed-off-by: Gokul K <gokul02k@gmail.com>
+---
+ tools/testing/selftests/kvm/x86/sev_smoke_test.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
-
-This said, we already have a patch reworking this part of the selftest 
-with, which is also addressing this issue:
-
-https://patchwork.openvpn.net/project/ovpn/patch/20260512144358.419599-4-a@unstable.cc/
-
-It is pending to be sent to net-next as soon as we're finished with the 
-fixes in our pipe.
-
-Thanks for your contribution in any case!
-
-
-Regards,
-
-
-
+diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+index 6b2cbe2a90b7..c7af27954356 100644
+--- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
++++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+@@ -90,9 +90,10 @@ asm("guest_code_xsave:\n"
+ 
+ static void compare_xsave(u8 *from_host, u8 *from_guest)
+ {
+-	int i;
++	unsigned int i;
+ 	bool bad = false;
+-	for (i = 0; i < 4095; i++) {
++
++	for (i = 0; i < sizeof(struct kvm_xsave); i++) {
+ 		if (from_host[i] != from_guest[i]) {
+ 			printf("mismatch at %u | %02hhx %02hhx\n",
+ 			       i, from_host[i], from_guest[i]);
 -- 
-Antonio Quartulli
-OpenVPN Inc.
+2.54.0
+
 
