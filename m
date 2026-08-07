@@ -1,188 +1,74 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0294756CC;
-	Fri,  7 Aug 2026 15:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9136B38D3ED;
+	Fri,  7 Aug 2026 15:43:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786116299; cv=none; b=ERYwbf/VmFTj358CPD8nOA5688DG0s8/46ccTtrO4Z99J/t5g/7jVCM5bdifpzJHrPs8h9reSLN+deQzUHTYBW5hLWguL0+6ZHMknbaoPw3IVSzS1CsPhUi3diSXrbcgcFa4CAMMt/4qnFyOdS7dPKvTZuSCs7OzbHUimS0gaH8=
+	t=1786117382; cv=none; b=u1ABsOMcj39hAiGuIRoBlVe+nU7Ix819fqdWz65veuKh4wRqXo4RaZKfmDFuTBsaLr9tE4u58qGS/inDsjxFKNANZT034qxst69AEEDsboe57vnCiRHZhfXISsjFyigd9BDM1EblSV/Weirilt4BBaXIooGKCER8Lnx/DzDWX64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786116299; c=relaxed/simple;
-	bh=aUTcqhiQU+LOUtLD2na1hV1whG+qurl0iTsHGzzbspE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eKWiWIE3rJmsjyMN65JB1tnBVn4eJEwswIVaUOgrEQ2GRoTnlkjvrVZvMOlblcmkLk/9GCgOoUFhmh5rLzSPcXOInbRvoUQ++9TTd6kQG5NyYPKaZXkRyV8FMigRcCT7Vo6dW1pFuF7zRNGh2JIIu1QRmm/1jmcKkwZJNdzwo2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=stHaQoOx; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1786117382; c=relaxed/simple;
+	bh=Jcnnm7VkmktJ41K4TCW7yowd09lHnz03qHJKrpLE0Os=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=YjR++qxpUfICK/KeAHVDd0ed2K1Ux4bia0WBF2JD4BG1U0Gv/Pi/gyNOFnR26RpiHxJFUoRe8MKG9I0yo1op9RBSkMJvv8Fv3aA2Vu1Ar4m2zlSi6lfBLYE34MPmy/Mj/6/WIQ+XbR8M+HQz9F0fLW6TjnN/yBD3ab5I1X5bhsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LFImxXB5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="stHaQoOx"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 703E21A14B1;
-	Fri,  7 Aug 2026 15:24:56 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 44B55603F0;
-	Fri,  7 Aug 2026 15:24:56 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B3F2711C37AC7;
-	Fri,  7 Aug 2026 17:24:48 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786116291; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=+5/knxcJlBUKp1ChAv/X70u7U7YXIDT3HlNZuqOXBIU=;
-	b=stHaQoOxBxHlZaLiKKf2VjH+RdwQwxeFojyht4v8pBPJCtN1qq4fh8hA6YuODBSsKG1Wg4
-	TSCETC458omiK2bRllJHpKOj1wZVQnjvyiGWJotGdVxDgqEregoZqHlDt4JQk86MySpc/H
-	7pRecZ28M/7NvEtL8jrBw7Rst+TPa0E8ImTZ0PUx55AgRGdhvKZq4PaSqllMM1n8RSfEkb
-	/2qHpnCUw2imX99n5p8Lpe2yPPr68qzSClH0pEKuPkQ9KggZHAvPWxkm1+knKx9Ic+mL5/
-	6xgU1tBikn1MIES8qbcqJslfHZqBNOmu+0noQgEb72H6Ur557NuXXWynqv5WDg==
-From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 07 Aug 2026 17:24:08 +0200
-Subject: [PATCH v5 7/7] clk: tests: Add Kunit testing for nexus nodes
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LFImxXB5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C23E11F000E9;
+	Fri,  7 Aug 2026 15:43:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786117381;
+	bh=b3UiILwB9Rxz85rD4UEk91LUAtaGAfQ48+KjzWPOZcI=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=LFImxXB56ll6Lx1VLvUbab+vqXIhkZzYN+7IhSa4H5U+xhIVy0x7wO/4y4snNY3bV
+	 3bLSFNMgZO9ND/knCuvYlX87b5I0WYqVydF6eyXRKmc/QStXupzKowdalBwqvhC6VU
+	 I6pSyiSzIzH+W3vlbUpxAunlJSJBZ+kmcFJR7Srb+hYim6hwAT4Y9u6JknQjwREGEH
+	 YBWDvsymi4ecnO3oIyBM2a/rt35UvfbetV9TkVNP6NmHzwB2XVmjNHgz/Wtu3CE5gw
+	 I/5ezvN8Aw/vwEGpOaG2rdNVV94u28q+uVLKqj4M4TlwOF6d3jAQ4QwqPlRoEKckM7
+	 Czbyj0rrDQLHw==
+From: Thomas Gleixner <tglx@kernel.org>
+To: Usama Arif <usama.arif@linux.dev>, Dmitry Ilvokhin <d@ilvokhin.com>
+Cc: Usama Arif <usama.arif@linux.dev>, peterz@infradead.org,
+ andrealmeid@igalia.com, dave@stgolabs.net, dvhart@infradead.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ mingo@redhat.com, shuah@kernel.org, shakeel.butt@linux.dev,
+ hannes@cmpxchg.org, riel@surriel.com, kernel-team@meta.com
+Subject: Re: [PATCH] futex: Avoid hash-bucket locking for mismatched waits
+In-Reply-To: <20260805132831.2852771-1-usama.arif@linux.dev>
+References: <20260805132831.2852771-1-usama.arif@linux.dev>
+Date: Fri, 07 Aug 2026 17:42:58 +0200
+Message-ID: <87jyq2dji5.ffs@fw13>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-7-8785f9531cf0@bootlin.com>
-References: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
-In-Reply-To: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Brian Masney <bmasney@redhat.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
- Rae Moar <raemoar63@gmail.com>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Pascal EBERHARD <pascal.eberhard@se.com>, 
- Wolfram Sang <wsa+renesas@sang-engineering.com>, 
- Fran Li <Frank.li@oss.nxp.com>, linux-clk@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>, 
- Frank Li <Frank.Li@nxp.com>
-X-Mailer: b4 0.14.3
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain
 
-Add a nexus node with a child requesting a mapped clock in the fake DT
-overlay to verify that the parsing is also correctly working.
+On Wed, Aug 05 2026 at 06:28, Usama Arif wrote:
+> On Tue, 4 Aug 2026 17:07:59 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
+> The above data shows the significance of the patch.
+> It provides a very meaningful improvement (22.4% of time spent in futex_q_lock()
+> will be significantly optimized and will also deliver second-order effects)
+> and has no measurable impact on latency in the matching path.
+> IMHO, this patch is a free lunch.
 
-Create an of_find_node_by_name() like kunit helper to garbage collect the
-node automatically in case of failed assertion.
+Not really free. The user space access is not exactly cheap either
+because CLAC/STAC are memory fencing to meet the SMAP guarantees.
 
-Suggested-by: Stephen Boyd <sboyd@kernel.org>
-Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-Reviewed-by: Frank Li <Frank.Li@nxp.com>
----
- drivers/clk/clk_kunit_helpers.c          | 31 +++++++++++++++++++++++++++++++
- drivers/clk/clk_test.c                   | 15 +++++++++++++++
- drivers/clk/kunit_clk_parse_clkspec.dtso | 10 ++++++++++
- include/kunit/clk.h                      |  2 ++
- 4 files changed, 58 insertions(+)
+I've tried that lockless read/test before and gave up when a
+multi-waiter real world test case degraded by 5-10% depending on micro
+architecture.
 
-diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_helpers.c
-index 68a28e70bb61..ab6b2cffcad6 100644
---- a/drivers/clk/clk_kunit_helpers.c
-+++ b/drivers/clk/clk_kunit_helpers.c
-@@ -233,5 +233,36 @@ int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
- }
- EXPORT_SYMBOL_GPL(of_clk_add_hw_provider_kunit);
- 
-+KUNIT_DEFINE_ACTION_WRAPPER(of_node_put_wrapper, of_node_put, struct device_node *);
-+
-+/**
-+ * clk_of_find_node_by_name_kunit() - Test managed of_find_node_by_name()
-+ * @test: The test context
-+ * @from: Parent device node to start searching from, or NULL to search from root
-+ * @name: The name string to match against
-+ *
-+ * Just like of_find_node_by_name(), except the device_node is managed by
-+ * the test case and is automatically put after the test case concludes.
-+ *
-+ * Return: the device_node on success, NULL if not found, or an error pointer on failure.
-+ */
-+struct device_node *clk_of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
-+						   const char *name)
-+{
-+	struct device_node *np;
-+	int ret;
-+
-+	np = of_find_node_by_name(from, name);
-+	if (!np)
-+		return NULL;
-+
-+	ret = kunit_add_action_or_reset(test, of_node_put_wrapper, np);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return np;
-+}
-+EXPORT_SYMBOL_GPL(clk_of_find_node_by_name_kunit);
-+
- MODULE_LICENSE("GPL");
- MODULE_DESCRIPTION("KUnit helpers for clk providers and consumers");
-diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
-index 4084559e157d..37e4137d37c9 100644
---- a/drivers/clk/clk_test.c
-+++ b/drivers/clk/clk_test.c
-@@ -3650,10 +3650,25 @@ static void of_clk_get_parent_name_gets_parent_name(struct kunit *test)
- 			   of_clk_get_parent_name(ctx->cons_np, 0));
- }
- 
-+static void of_clk_get_hw_maps_thru_nexus(struct kunit *test)
-+{
-+	struct clk_parse_clkspec_ctx *ctx = test->priv;
-+	struct clk_hw *expected;
-+	struct device_node *np;
-+
-+	np = clk_of_find_node_by_name_kunit(test, NULL, "kunit-clock-nexus-child");
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, np);
-+	expected = of_clk_get_hw(ctx->cons_np, 1, NULL);
-+	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, expected);
-+
-+	KUNIT_EXPECT_PTR_EQ(test, expected, of_clk_get_hw(np, 0, NULL));
-+}
-+
- static struct kunit_case clk_parse_clkspec_test_cases[] = {
- 	KUNIT_CASE(clk_parse_clkspec_with_correct_index_and_name),
- 	KUNIT_CASE(clk_parse_clkspec_with_incorrect_index_and_name),
- 	KUNIT_CASE(of_clk_get_parent_name_gets_parent_name),
-+	KUNIT_CASE(of_clk_get_hw_maps_thru_nexus),
- 	{}
- };
- 
-diff --git a/drivers/clk/kunit_clk_parse_clkspec.dtso b/drivers/clk/kunit_clk_parse_clkspec.dtso
-index c93feb93e101..a4115216d2aa 100644
---- a/drivers/clk/kunit_clk_parse_clkspec.dtso
-+++ b/drivers/clk/kunit_clk_parse_clkspec.dtso
-@@ -18,4 +18,14 @@ kunit-clock-consumer {
- 		clocks = <&kunit_clock_provider1 0>, <&kunit_clock_provider2 0>;
- 		clock-names = "first_clock", "second_clock";
- 	};
-+
-+	kunit_clock_nexus: kunit-clock-nexus {
-+		clocks = <&kunit_clock_provider2 0>;
-+		clock-map = <&kunit_clock_provider2 0>;
-+		#clock-cells = <0>;
-+
-+		kunit-clock-nexus-child {
-+			clocks = <&kunit_clock_nexus>;
-+		};
-+	};
- };
-diff --git a/include/kunit/clk.h b/include/kunit/clk.h
-index f226044cc78d..0b5ab8e971c9 100644
---- a/include/kunit/clk.h
-+++ b/include/kunit/clk.h
-@@ -29,5 +29,7 @@ int of_clk_hw_register_kunit(struct kunit *test, struct device_node *node,
- int of_clk_add_hw_provider_kunit(struct kunit *test, struct device_node *np,
- 				 struct clk_hw *(*get)(struct of_phandle_args *clkspec, void *data),
- 				 void *data);
-+struct device_node *clk_of_find_node_by_name_kunit(struct kunit *test, struct device_node *from,
-+						   const char *name);
- 
- #endif
+It's carefully written to minimize lock contention in order to optimize
+wakeup latencies. The effect of the extra unlocked access and it's side
+effects shifts the timing enough that it runs into significantly more
+lock contentions than before.
 
--- 
-2.54.0
+So it might be great for your use case, but not so great for others.
+
+Thanks,
+
+        tglx
 
