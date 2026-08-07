@@ -1,62 +1,63 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DD0367B99
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 22:09:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9569045C6FA
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 22:10:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786140598; cv=none; b=luU0S4B9TIx7sX0Oled9c4kMkLRzf7slyl7O7rAgepY/mwK1vMqIscKhiAv95t6A+/Ard4ZNjIPnYWVDac1CrsiN2GmMT2t2st3Ff3Db42826JEwwg2W/ZDp5oaNhXEKv1d5YOytb7VJnPnu/ym0YY2mokFmQKD54bhaYnlDloA=
+	t=1786140602; cv=none; b=flWE+iL899jje33fhxU83vxgz8s8TV/LGh9Ymm8tgfRyR9kmxdxViOEPlHi8Shm46RURAytVJ7nbkvgsO+8Dd2SM08x/gWuWH3/ikYSbVxEkiBGZ8E4yQ0qx8yHGoQTo+QirE/cPSyh4EVA0C+1bzgsvl0zAkuQ39NLk/nxwL4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786140598; c=relaxed/simple;
-	bh=UcqvRMX4ClQZN0TPP3OykRW3KVwHC9bLdn/rP0jH8+A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jcv85xeJTqTm/BAt3ZfNdGov9wCFx7bUeg/SVJy7BbbF7KZfZwVZWSzuF+N7bA4fNKdKalxZIjGOqgcdB71OElnFPHCtxpp3dqwYlmaWg+svg71/IBZ/VCDksq7lYV8ae4Wr/B88bvcP8E1DyMCpxhw5u9vcfVNsQQdiu7B3ffM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NhZKugad; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1786140602; c=relaxed/simple;
+	bh=V5PT+zcfv5kwBc3zsPLyOemrZEyr7x51j1JNaZhSLI8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=iEjXzJInQbh3vp8B7tQSI5V6mR70ZSDaPPYTQlTgYbY1lPV9TOSmyQEv6/enZHTGILK6j4puAbEwPmA+pZ+DtrRDorpT47XapKOmcxidwalF11SXQWD7zOZLqlJp4UE1Jme4HxQaawM0fcksNfCoJ1Kumgpan/fP45DRxdLnnNo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VXAqTPzL; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NhZKugad"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84867f07d63so23364b3a.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 15:09:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VXAqTPzL"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cc891373e0so700595ad.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 15:10:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786140596; x=1786745396; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=S9Bei40zc5v/rBys6hRWt3NShw4r+i0ulzXGe0MjsfY=;
-        b=NhZKugadxgr5DTbflrwvXSQjO1msw0fGGXXSSaXNSmQj5Y9Sal5oKyn3mP/OmZ6Dce
-         3g176a49hkWiTYMizgeL+zxpL3f8v5Utl3EBM487AujVx5ySE/+FB8wxNZBXsgJ6FlA8
-         YH8ioiRx0U/03RCxuiJq7jJHcUV5pBpE9VZiL1H+iivXCx88D1rW9c3a5VT4WpUIL6p9
-         KUCKcjWKImULKapASCs2bIk+r86DRkDXP+J9ZGbMLTnPLUc0smBByaAzMAlKJr3cwea7
-         rIiSUW3esNTE4DiR8Driv5OpK1WIBGYPu0sUlmXRImUOf0MsFnRR/evWj9E0h+4XaJZq
-         yYSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786140596; x=1786745396;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1786140600; x=1786745400; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=S9Bei40zc5v/rBys6hRWt3NShw4r+i0ulzXGe0MjsfY=;
-        b=NSE692KlMzs5f7MpmKhoQzviYAb9hFV1I5C7z0PqV/eMsSyW718F6hoEiKefowjgRn
-         cYUD+83he545glrhPvLlLRnGg849dhOsO6v760ozc5T0tP348E9vhCmYUH03/bVJTmwC
-         TpY1O2IF0NiNEyWLXjbPH4OQvmgjlFP4ZgnhY6pHM9ONeJcWbIHX++exXJQfN2fEFC/0
-         Y54U+WBc++e3Id0edVxi7+r6rIM1gRuJeX2wYGyel9+xnmOaFAMEGZrRJ09lUbXT6fTB
-         +KrJaEl/AOiY4w11+b2n1HT04OwUP8+qHELLBYVpwnWgA/mpTFw8xrA7hQ7WK8ulbW/Z
-         dQig==
-X-Forwarded-Encrypted: i=1; AHgh+Rq3sdEVY8YeLTxs9s1qgcARHvOJeOInRI+dHOa+LQZM2WjBLCm/tAUB2p7Z10CX9gL7TdGDOWq3mzzV2r1kpX8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzY9IkyjGrB4QoKvrEyVpcD92CqJE1cgY8Hi7D8gYN48wckHc1H
-	B/Y46RgsWUQCTfCRGxQWiyCD2NkorlTovSJwzMC0EuGbTiyYgtd4OQwEFGNWZmKw
-X-Gm-Gg: AR+sD1213VawF/wW5M5bsw37PetYknBD4Ki9lEeAU/qCq291HX21h/2Frt6nVntwxTF
-	sHFCQCB2B2UFpkxdhPdTIO/jN81TMs9b6aqS9TIkbGPkxB5SS+5tV377oWW82YdlC/fcETVxwgU
-	Ou/5qZUr1OfS0XwNIMApdSJ8G1wjOTVQXeAQMHCCF9cVehKALlGN8Ioz3FnplEEO4HdR5JjYEmA
-	c7c0YqVMxOsvxRlYmwnMHsgxJixVtVeMkyZ8Bxwg5RvF1KZ0voq9zLd90G0Ued1atcBXFY2Fw1O
-	5rK4FsFGy94u+vm81dvGp5dmPcFmzvzxHMlRcKNB+vLkjMA3MR+sPfXKb/StrIQrJ/H5eai7Eet
-	TtAPU04TA2vNh9ifeai1+dKEyuRl0+JWDJw2waAkSgKCJcsgiJirUYTw7kftgbsPZ344Rn5LKb1
-	0jmQh39eMUX3YLKfq7ZijzVPELe4hL+OGobqUuRd67F5y/mg3zEN7ZOLFvsot08K4LgrkNgeFEx
-	LOG8g==
-X-Received: by 2002:a05:6a21:391:b0:3c3:8044:8b0d with SMTP id adf61e73a8af0-3cb85e2b60cmr32859059637.12.1786140596348;
-        Fri, 07 Aug 2026 15:09:56 -0700 (PDT)
+        bh=kZPO0FvOtEF8M9IFK2RY794kxXwOWSbOPIOTROMX56g=;
+        b=VXAqTPzLDm4AnEFgYVxXKRuKSfYMxynzNJh5wMFTiE6JGFb9gYBebrPBoVsQRmnBtN
+         Ls1LF0g2MSeM29/x3uSw7OVmtXcYvNxtBJ4wpNPYvjBJC7Ze5NJk5bmI0tpN4iHln2yM
+         zPKSz7vnlSvd5gV05lKcQ1UoPsZuvGM2TfKLFRDk8wsuXR6oSMJYS/tQKYfqZG+IHzMX
+         rBFx0+g2FovHppZS7RPTQ6Ewp60TxQ8B4zC119e5s/KNnS9loU/nxYHg/GxXfVgXVH12
+         7+I35LPx3u7NthrcwR/Tg1lcubbL/mHmpsD5weCBXNV6Zo4vqiPLEagv4eOvcocrvOTO
+         QzBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786140600; x=1786745400;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=kZPO0FvOtEF8M9IFK2RY794kxXwOWSbOPIOTROMX56g=;
+        b=ePkLv9u1jJdDYOZZjW9mAI9GQR1JfvEvaYx4br9ka7O+87et0Wnmih9KoekZq3F127
+         EVYQREhpjYs7Kk5U3oFldnTkJXbKVJ0/mDFjSt0p0fZf3N67BkviTHkRMv3NkUaiWAgI
+         T2bsxbNchtH2HKFRVnFol4jblK58s0fu6cFLYhmiyj5UCW6X87+Af9GMyRhguWO7QyBy
+         1iU/wNJM5iWQGFyVzX/VH/5wsHqYEU81qvOMsRSf0F9RoMcW4hzfNDWu4hauh5wl8m00
+         fR9ROOcq2V/Zq9LcDCml76oXjE7jEQCdJFCz9y8fn6RNQ/4S4OwCUp38H+3SbboDNYq2
+         FP/Q==
+X-Forwarded-Encrypted: i=1; AHgh+RqMFCQiYngHeU0ig5/IHpwQhdQTX5bSEb+ZVQJSrrzimlplxwTGuaR13Q+ySujR/W3wXAo9x6Ra38vTYlqsmKY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxkOeE5r/nUOgR9MydlKRGtU5R3DICPdtRVxPGX7HAOweCXbyUS
+	jTliSR9XEtsrN7/bTALb9atzaWgG5/vaNzUEyTmUk7erPl39mCGyIpLhmf8HyMWc
+X-Gm-Gg: AR+sD12j9xd9DVLMwYBQG76RCLQjWsPP37bBwBFxuq6IHBYWNcqpBZxEIh/MmLzcZLI
+	MQjx8U/AUXkUOuJwyi9Ezzz7GUypbuHeQsFg+QRF9QLVovIhJvl2uo6Z/Dp9aMGkrCbCA7UNbly
+	nkKPHBNJgPCzJN5Pk3BheABqJvJahfh1aL/YYrfZJF0mXFxp/GVlJOELAzCms5clfQ7GiUAvylE
+	9/2yrPmXNdVPoefcVcrDsv3aUGRVBJ/6jW6a9Tu1z3ZchThVjXRmneJYHs00+67N2qBctKQJD1E
+	oFDLEQaJzbTmgxjkwrEpu/zQgFVT3IhS4IEaB7aRk0eEY8oEoFHikZvPEqwDl9b2NJqckkHeKRz
+	VDTLyXqo1cGfMuDDFfds8+N3wwRvfapMB+wI7YuyEiU+Ag1Kpy78kAT+1O8n16E71GdYtNIaHqQ
+	wIdSszGgKY7kg/BUimxFRtoh0MSp00ZSdAXjPwTVMhScCd53jjbbnsNIbyvQqmxK3F5g==
+X-Received: by 2002:a05:6a21:3390:b0:3c3:93ce:663 with SMTP id adf61e73a8af0-3cb85f4a26emr28784462637.26.1786140599730;
+        Fri, 07 Aug 2026 15:09:59 -0700 (PDT)
 Received: from fedora ([2804:1b3:a8c3:8ee5:1c39:64d9:e257:73dc])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be568bd3sm11182762eec.0.2026.08.07.15.09.53
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be568bd3sm11182762eec.0.2026.08.07.15.09.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 15:09:55 -0700 (PDT)
+        Fri, 07 Aug 2026 15:09:59 -0700 (PDT)
 From: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 To: "David S . Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -68,10 +69,12 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
-Subject: [PATCH net-next v3 0/5] net: selftests: adjustments to ipv6_flowlabel_mgr
-Date: Fri,  7 Aug 2026 19:09:37 -0300
-Message-ID: <20260807220942.421382-1-marcelomspessoto@gmail.com>
+Subject: [PATCH net-next v3 1/5] selftests: net: test IPV6_FL_A_RENEW
+Date: Fri,  7 Aug 2026 19:09:38 -0300
+Message-ID: <20260807220942.421382-2-marcelomspessoto@gmail.com>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260807220942.421382-1-marcelomspessoto@gmail.com>
+References: <20260807220942.421382-1-marcelomspessoto@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,62 +83,117 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The ipv6_flowlabel_mgr test file was lacking coverage for the
-IPV6_FL_A_RENEW action, and the IPV6_FL_F_REMOTE and IPV6_FL_F_REFLECT
-flags. The first two patches from this set aim to add a proper test
-case for RENEW and REMOTE.
+RENEW was the only flow label action without selftests coverage.
 
-The third patch was added to insert network namespace creation inside
-the test suite, instead of relying on external wrapper scripts. This
-change conforms to other net test implementations, such as
-tools/testing/selftests/net/icmp_rfc4884.c, and it is important for
-the fourth and fifth patches.
+Assert renew returns no error on correct usage and fails for labels
+that do not exist.
 
-The fourth patch adds the IPV6_FL_F_REFLECT test.
+This test is based on the previously implemented EXCL share test,
+which demonstrates that a new flow label with the same value can be
+created after the linger period. Renew is used here to show that a
+flow label can last longer and block a new flow label creation after
+the previous linger time. This test, however, demands sleep during
+execution, and should be placed as a conditional test under the -l
+option.
 
-The fifth patch proposes the adoption of "kselftest_harness.h" helpers,
-improving code readability and conforming to the implementation of the most
-recent selftests.
+The addition of the expect_fail_errno helper is necessary to assert
+the corresponding error when a function can fail in multiple ways.
 
+Signed-off-by: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
 ---
-v3:
-- Remove unused FL_MAX_LINGER variable
-- Set flr_share explicitly for renew tests
-- Add corner case for expect_fail_errno macro where test succeeds when
-  it should've failed
-- Add a new intermediate patch, between remote test patch and reflect test
-  patch, placing the netns setup inside the test file
-- Add missing skip for setuid fail, addressing stale code from harness
-  migration
-- Delimit EXPECT and ASSERT usage (use former when test can continue)
-- Minor commit message rewording
-- Apply more missing scripts/checkpath.pl fixes
-v2:
-- Apply missing scripts/checkpath.pl fixes and other formatting
-  enhancements
-- Add new basic IPV6_FL_A_RENEW tests
-- Put label after IPV6_FL_F_REMOTE test, freeing the value for a
-  subsequent test
-- Delegate flowlabel_consistency configuration to wrapper sh script
-  instead of doing it on the main test code
-- Skip IPV6_FL_F_REFLECT tests if flowlabel_consistency is set,
-  instead of failing the test or attempting to change it
-- Compare resulting error for failure assertions
-- https://lore.kernel.org/all/20260804025910.50145-1-marcelomspessoto@gmail.com/
-v1:
-- https://lore.kernel.org/all/20260727043516.93101-1-marcelospe@proton.me/
+ .../selftests/net/ipv6_flowlabel_mgr.c        | 58 ++++++++++++++++++-
+ 1 file changed, 57 insertions(+), 1 deletion(-)
 
-Marcelo Mendes Spessoto Junior (5):
-  selftests: net: test IPV6_FL_A_RENEW
-  selftests: net: test IPV6_FL_F_REMOTE
-  selftests: net: create own netns in ipv6_flowlabel_mgr
-  selftests: net: test IPV6_FL_F_REFLECT
-  selftests: net: adopt harness for flow label mgr
-
- tools/testing/selftests/net/ipv6_flowlabel.sh |   2 +-
- .../selftests/net/ipv6_flowlabel_mgr.c        | 584 ++++++++++++++----
- 2 files changed, 466 insertions(+), 120 deletions(-)
-
+diff --git a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
+index af95b48acea9..ec187890a1ed 100644
+--- a/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
++++ b/tools/testing/selftests/net/ipv6_flowlabel_mgr.c
+@@ -42,6 +42,23 @@
+ #define expect_pass(x)	__expect(x)
+ #define expect_fail(x)	__expect(!(x))
+ 
++#define expect_fail_errno(x, e)						\
++	do {								\
++		int __exp = (e);					\
++		int __ret = (x);					\
++		int __err = errno;					\
++		if (__ret && __err == __exp)				\
++			fprintf(stderr, "[OK]   " #x "\n");		\
++		else if (!__ret)					\
++			error(1, 0, "[ERR]  " #x			\
++			      " (line %d): unexpectedly succeeded",	\
++			      __LINE__);				\
++		else							\
++			error(1, 0, "[ERR]  " #x			\
++			      " (line %d): expected errno %d, got %d",	\
++			      __LINE__, __exp, __err);			\
++	} while (0)
++
+ static bool cfg_long_running;
+ static bool cfg_verbose;
+ 
+@@ -71,6 +88,19 @@ static int flowlabel_put(int fd, uint32_t label)
+ 	return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
+ }
+ 
++static int flowlabel_renew(int fd, uint32_t label, uint8_t share,
++			   uint16_t linger)
++{
++	struct in6_flowlabel_req req = {
++		.flr_action = IPV6_FL_A_RENEW,
++		.flr_label = htonl(label),
++		.flr_share = share,
++		.flr_linger = linger,
++	};
++
++	return setsockopt(fd, SOL_IPV6, IPV6_FLOWLABEL_MGR, &req, sizeof(req));
++}
++
+ static void run_tests(int fd)
+ {
+ 	int wstatus;
+@@ -94,7 +124,7 @@ static void run_tests(int fd)
+ 	expect_pass(flowlabel_get(fd, 1, IPV6_FL_S_ANY, IPV6_FL_F_CREATE));
+ 	explain("cannot get it again with the exclusive (FL_FL_EXCL) flag");
+ 	expect_fail(flowlabel_get(fd, 1, IPV6_FL_S_ANY,
+-					 IPV6_FL_F_CREATE | IPV6_FL_F_EXCL));
++				  IPV6_FL_F_CREATE | IPV6_FL_F_EXCL));
+ 	explain("can now put exactly three references");
+ 	expect_pass(flowlabel_put(fd, 1));
+ 	expect_pass(flowlabel_put(fd, 1));
+@@ -160,6 +190,32 @@ static void run_tests(int fd)
+ 		error(1, errno, "wait");
+ 	if (!WIFEXITED(wstatus) || WEXITSTATUS(wstatus) != 0)
+ 		error(1, errno, "wait: unexpected child result");
++
++	explain("It is not possible to renew a label that does not exist");
++	expect_fail_errno(flowlabel_renew(fd, 5, IPV6_FL_S_EXCL,
++					  2 * (FL_MIN_LINGER * 2 + 1)),
++			  ESRCH);
++
++	explain("Create a label for basic renew validation");
++	expect_pass(flowlabel_get(fd, 5, IPV6_FL_S_EXCL, IPV6_FL_F_CREATE));
++	explain("renew does not error for an existing, valid label");
++	expect_pass(flowlabel_renew(fd, 5, IPV6_FL_S_EXCL,
++				    2 * (FL_MIN_LINGER * 2 + 1)));
++
++	if (cfg_long_running) {
++		explain("create a new label with FL_MIN_LINGER linger time");
++		expect_pass(flowlabel_get(fd, 6, IPV6_FL_S_EXCL,
++					  IPV6_FL_F_CREATE));
++		explain("renew the label to extend linger, then put it");
++		expect_pass(flowlabel_renew(fd, 6, IPV6_FL_S_EXCL,
++					    2 * (FL_MIN_LINGER * 2 + 1)));
++		expect_pass(flowlabel_put(fd, 6));
++		sleep(FL_MIN_LINGER * 2 + 1);
++		explain("cannot create: new linger time not over yet");
++		expect_fail_errno(flowlabel_get(fd, 6, IPV6_FL_S_ANY,
++						IPV6_FL_F_CREATE),
++				  EPERM);
++	}
+ }
+ 
+ static void parse_opts(int argc, char **argv)
 -- 
 2.55.0
 
