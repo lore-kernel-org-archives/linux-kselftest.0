@@ -1,131 +1,163 @@
-Received: from mail-oo1-f42.google.com (mail-oo1-f42.google.com [209.85.161.42])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA04837266E
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7C5339396
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:27:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786112658; cv=none; b=UOm9jAt2e1Co2qW1+oqbocgD7EkGw8cVDmsKLn2uRCEwkmsYphbpqkKSWnhVvNJYPnUL6Cd8cwPZ1y34NWSqx4EnS8JbfnIFXhQVxnNKOfX1/Mzsvx2qm4rAymUKHFyZRIIR7mD2Yu8cE+mrJ6KGJXlV0vqjPAJriimspzQLxNs=
+	t=1786112853; cv=none; b=loikDx2eoFZ12J6g0ai7I30d57ZVctKZ6Z24To4JMc8fqjc4i44af9y7EhPPBRVtH6SdcVZz0dOJ1xVrSqhGg9FPCdzJ/xL0g2dML8ttLozWjJT0j1E3WG8IYQAh60YQyEw4puVVbNIzYM7hOVI8uRV4PxUNle8DFlnotNgSvKE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786112658; c=relaxed/simple;
-	bh=G4JigUvci/jEjPBhVDLUYj0Nij9+zOu5w/lLNwfurek=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:From:Subject:Cc:
-	 References:In-Reply-To; b=qK4bNoLT2BITDntGPurxPA3CaKh+hb3hvGt53aG3Rcvf4+LLf9R1cUUFXp+InaBJ90rv5IcX+BO+bm94GdRRTWh33MRT5eT6oe64zNcu9nqBv+txluuIB2cO/Bp6bY0fGL0PAhOGKnWO9cT8z85fdbDH4jAB6VGLxV7oKG7sAuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=r8Us8PZr; arc=none smtp.client-ip=209.85.161.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+	s=arc-20240116; t=1786112853; c=relaxed/simple;
+	bh=tJ6YIoKNUDojeg86gqnCuw1WTPa7k4m9/MpBN2CPG+0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Doj4zaZSY61W7ky7dy7/2tC5eyybhjLz0MhRjQYX+tX94HY3jYQStjMyCQ80kLl5RZHQZKwTpwlP8+aZPgREiD5XQmUzCoBY5cg5ZModF/asVHAsL1xaFv6IuwElL+WcgL/v0n7z9ywnLM0siHNwBhEyNGxKc0hWLprzBdb0Vn0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BQbqc2jZ; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="r8Us8PZr"
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-6acb63301acso1639352eaf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:24:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BQbqc2jZ"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ca766c1c9ccso2667640a12.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786112850; x=1786717650; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=dY6T8KLKe7c50VCzbw04TgHR78SFTtnFy4T2vHFIKTs=;
+        b=BQbqc2jZvfZL+tgjDrZGUNXRoSQDjlvLCKTmrNYmIPTIzs7SEuIxMINYi/dNAPagrh
+         qwP5jS/UsbQyPCf6ocQ6TtTEwHQDo+YGagEJxvO6r0vy+UWHBFxoLG1ivYmkMOL69wXo
+         BUsr6yrzdc5VPdDxtzYOf9jwcep9cNibfMw26Z6U0ypmMcbvI/FTk7RVRIdQOafX9CMD
+         g5iiiPTU5xtz+cwbQ69oC+sW9lXMmingA94DguRfi0Um5YH12uQxu2wFNhX4ZUilWUzE
+         QK+aNFtgkqifGFgd/TMmJnanV/km9nDQmJeb7Bg3ZMJU/dpyrr2U+VeqRzyvwhBbzEgb
+         gFzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786112656; x=1786717456;
-        h=in-reply-to:references:cc:subject:from:to:message-id:date
-         :content-type:content-transfer-encoding:mime-version:dkim-signature
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=G4JigUvci/jEjPBhVDLUYj0Nij9+zOu5w/lLNwfurek=;
-        b=FJMc6VHnx9lTlg+XO5TVX390NyHql0swrrlFIWykZ9mLxWmwemgYBvBGsJDYc3inie
-         IDwzgQfEquu3js80//n8JxTR450/iZoFhlkxDVlA2QYrIg5sAI7c2KLcMX9b5/YjPnIA
-         AdsKxIF03oxQL8STEVjbMrJL3gld0kVtfptNfl/sgJmR3khZknm+l9nhF7Y/Hg7kBF44
-         wD7bw5CRQcxdi65IdDluRlpa1gaEbghHtw3aLphK6EfzC9oYNHXbhy6Xk2LlVEWECWQn
-         FBKizxbJW1x/g0ZDbfk5CT/a5OY5EDL54j3WG97bVYFfp/FUhw0k5LtC7kn570uMwEWW
-         nDlw==
-X-Forwarded-Encrypted: i=1; AHgh+RoQRQ7Ukrad9sHG0ji51Re/c2A1884FDmSem/o2Y+9DwTybRwBS7z06cRJ0MIC0UNYHrPncEStuxcB7XPIaEx0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwG4RlIcLO3UikfAnfHFmuooXmNkXNCD3aWTeIklr+fSjYz19P1
-	TYHk2Jr/Bs1OZeFESB2xhRjWgJ8f8NIIVGznfIyOwAwvShB7ESmLVvYU
-X-Gm-Gg: AR+sD12S2LUtWlnqJ92yUW+vLqW1A4dvLw/erQiJsWhHW7I2aQgFXooDQF81YdI37iw
-	250R1WHq4X0bCPHFK8SXzzk/0hJXpRHXEM5/o7aILy2Tq9InDOKqF/Xjr16XT/2CC61OhjMS/au
-	4aL+WtNiDn2D+30IaS3KCrZZmc2hXONJV1+VjMR3vEe+ktcVUZD57bwttJ19DkHLzv0JKxmLYTF
-	ZOLykIaLd8OxtUZC+CSZISIKuInaNpYduaDUtaz/2HFtIU/rfchySmH4zus68rHdNkc55IlF4U7
-	VVAFX+DvWp0WVsFubGZcJ7Qdw4tN9gJ8up8b8QkvmF0RtC4uUjWKutD7HOXaqXLTP57N66cRPYq
-	7FLKf0yBN+3yKVKgHVRKYGp2ipIWY6CdN1HnvZrK5YEZwCgAfYyQduZIgQubEx+REBEjgbJR/jX
-	k9V9MQEulIsdf9aSd7ErWag8v5qR7k309mVSvaPF17ISDCkW5KNGIK+zX0uNa77Sr0XRowfSq3B
-	9/1ZFs7VigZrNoEqQT5ZjDA6Sg+iP+0eZeLiGR7p6MhfrBOPHqholPWUFTlmhXE3ZCb8uASI/jS
-	uWk=
-X-Received: by 2002:a05:6820:f007:b0:6a1:451c:9cd8 with SMTP id 006d021491bc7-6b042da34c3mr63442eaf.4.1786112655683;
-        Fri, 07 Aug 2026 07:24:15 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b02be475b6sm2408541eaf.11.2026.08.07.07.24.14
+        d=1e100.net; s=20251104; t=1786112850; x=1786717650;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=dY6T8KLKe7c50VCzbw04TgHR78SFTtnFy4T2vHFIKTs=;
+        b=FWmfNYV63cdcgP1k99vzOHnHZcSTVCjo/X7w+1zta+AgyCt0UV+MwbA5Swf+sY95Wl
+         tYEracvCwQIk36cauG6aneZxC/Ouam5Jst8YBYMEDtY9VdpX56LRNTqKgV3cEPZpdCDK
+         B3jNcCaS7v24lPSPh+JIjF7vupc6JfWnMkdFpSuKY0glVcSKd3PGxn5vzqkPCXQzrXeC
+         0v+qsb4WfvbzPbJD5XF/6TiGMzpvDFtbedRkcGuYPaUkbtkX2nxgROrt0/6YWz0Iab+c
+         13Pd5gLRBdisTacGmKi8bPTXUX3Vlhb6H+KFQ9ZTKOg2gQ5JyQyoZXz7+iY69DYSjKPP
+         CZFg==
+X-Forwarded-Encrypted: i=1; AHgh+RoWUDPnq3cHJd8s6MCqZJE8sYabiKoM7VhqHWrsRBscDr0msRZb9CVvITkwtYO1gww/3vRT6poEpRGCt2K0bGE=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy5Liny/FaqluEwoJJSQW5NGiIuOp0C0ffjiVmgaY1H9wbpmmNC
+	ve76FdhIboXZ6BVp4V342k5ZgelHINkFOgm3aOY8YD400wthWXOndGii
+X-Gm-Gg: AR+sD12PAWTPaTKOKPK0glUqbRnH5iYEBlGGalc2vqaYYv7nK/7GIiTpJtaO05mYuFe
+	/7WgvXtyHqMtw8RrrnVxKmrj0g18IWQdNCQhYbWxk6NPU77CzPULRCiuNuZGWvTZS6zp7MA6HzD
+	XxY4naACL/V+ScsHo7DZGeTuGxVrrpsOYmzpVl1OzjQKv4C3LRW197J06XqpsYwwGrgHG8SMrtn
+	DXr/KlPhVC14wTmVVvBkc/sfJxs29t5qounENucguXXrqNc1k/3ghrKInnCECX75qal000S4Flp
+	745Xi5PWQKEVAKSeoOzsXOPL2l5U4Uptuu6BaY/hrAoI7eTLX/EIR1CqClkb0HNd/BnNAfk8MAm
+	k7q2tpGm2LsdFCHjGdPn74BSPjxgOKFHa97opGwv2p2PjOHph9Y+0LKC1YeQistIMQqFYpX/foa
+	za2uxNz/q5Y2yu6xRW0bTHme6YH/xoJWUbGL52uOe9wnJiD8USPqutAf4=
+X-Received: by 2002:a05:6a00:1705:b0:82f:38df:681c with SMTP id d2e1a72fcca58-84f2e0228e1mr21662231b3a.6.1786112849746;
+        Fri, 07 Aug 2026 07:27:29 -0700 (PDT)
+Received: from fedora ([203.175.12.242])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a553071sm1125866b3a.43.2026.08.07.07.27.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 07:24:15 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 829D6609E3;
-	Fri,  7 Aug 2026 14:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786112653;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=G4JigUvci/jEjPBhVDLUYj0Nij9+zOu5w/lLNwfurek=;
-	b=r8Us8PZrMwruUGV62MD2igliPvDNuaD/ikBeMxWX6pa2xnEZds2E+peKfy97Qrh4E14dtW
-	qiwedx0VHfVUM7V/ZO9sZ4oh0s3uyhHvnrQBVgDEDa/080pIR473B+gPhtjCmAvIgmV6Hs
-	KFbUExcXyZM5ZmlIF45ZKFiE4V5peU5CSxNaj010+z52rmhOgbcnGy0VI1PmcbZ+Y3OXzf
-	uHNF1eyEQQl7Qp7O4XjIfScLSlHJx6b8vEs6PVkWxqie8QbZlBJ2ddv+nZTPk5jp84dv06
-	ORtLPshfw2pU7mRJHNPuJ9mzbxTWw8CpiVZKT/iBEGJo/ufZMqMCddResgZLzA==
+        Fri, 07 Aug 2026 07:27:28 -0700 (PDT)
+Date: Fri, 7 Aug 2026 22:27:19 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Xin Xie <xiexinet@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
+	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+	stable@vger.kernel.org, sdf.kernel@gmail.com
+Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
+ counter updates
+Message-ID: <anXrR6-2UVYF1iZa@fedora>
+References: <20260803222211.877-1-xiexinet@gmail.com>
+ <20260803222211.877-3-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 07 Aug 2026 11:24:08 -0300
-Message-Id: <DKIS3B7UYPHB.2DJBGSQH050R7@marliere.net>
-To: "Greg KH" <gregkh@linuxfoundation.org>,
- =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>
-From: =?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?=
- <ricardo@marliere.net>
-Subject: Re: [PATCH] selftests/bpf: Fail unbound UDP on sockmap update
-Cc: "Shuah Khan" <shuah@kernel.org>, <sashal@kernel.org>, "Andrii Nakryiko"
- <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>, "Alexei
- Starovoitov" <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>,
- "Martin KaFai Lau" <martin.lau@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Song Liu" <song@kernel.org>, "Yonghong Song"
- <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <stable@vger.kernel.org>, "Michal Luczaj" <mhal@rbox.co>, "Kuniyuki
- Iwashima" <kuniyu@google.com>, "Jakub Sitnicki" <jakub@cloudflare.com>
-X-Mailer: aerc 0.21.0-146-g87073a0460e3-dirty
-References: <20260807-selftests-bpf-sockmap-v1-1-8c4936fa03cd@marliere.net>
- <2026080745-difficult-batch-6866@gregkh>
-In-Reply-To: <2026080745-difficult-batch-6866@gregkh>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260803222211.877-3-xiexinet@gmail.com>
 
-On Fri Aug 7, 2026 at 10:58 AM -03, Greg KH wrote:
-> On Fri, Aug 07, 2026 at 10:45:27AM -0300, Ricardo B. Marli=C3=A8re (SUSE)=
- wrote:
->> From: Michal Luczaj <mhal@rbox.co>
->>=20
->> [ Upstream commit 203b06932777b9ad5085319389dea566f5c2ca63 ]
->>=20
->> sockmap now rejects unbound UDP sockets. Adjust test_maps. While at it,
->> check socket()'s return value.
->>=20
->> This effectively reverts commit c39aa2159974 ("bpf, selftests: Fix
->> test_maps now that sockmap supports UDP").
->>=20
->> Signed-off-by: Michal Luczaj <mhal@rbox.co>
->> Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
->> Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
->> Link: https://lore.kernel.org/bpf/20260707-sockmap-lookup-udp-leak-v4-4-=
-f878346f27ab@rbox.co
->> Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
->> ---
->> Signed-off-by: Ricardo B. Marli=C3=A8re (SUSE) <ricardo@marliere.net>
->
-> This goes above the --- line, right?
->
+Hi Xie Xin,
+On Tue, Aug 04, 2026 at 12:22:09AM +0200, Xin Xie wrote:
+> hsr->seqnr_lock is currently held across entire hsr_forward_skb()
+> calls: master TX (hsr_dev_xmit()), interlink RX (hsr_handle_frame()),
+> and both supervision frame builders hold it while frames are built,
+> classified, duplicated and forwarded on every port. The only state
+> that actually needs the lock is the sequence counters themselves
+> (hsr->sequence_nr / hsr->sup_sequence_nr).
+> 
+> Shrink the locking to the individual counter updates:
+> handle_std_frame() now takes the lock around its sequence number
+> allocation (replacing the lockdep assertion), the master TX and
+> interlink RX paths drop their outer lock, and the supervision
+> builders release the lock right after updating their counter instead
+> of holding it across frame construction and forwarding.
+> 
+> Statistics: the outer seqnr_lock also incidentally serialized the
+> tx_packets/tx_bytes/tx_dropped updates in hsr_forward_skb(), which are
+> reachable from the concurrently callable master-TX, supervision and
+> interlink-RX paths. Those updates now use DEV_STATS_INC()/
+> DEV_STATS_ADD(), the atomic legacy-stat helpers, so narrowing the lock
+> does not turn them into lossy plain read-modify-writes.
+> 
+> Ordering: with IFF_NO_QUEUE and dev->lltx, hsr_dev_xmit() is
+> concurrently callable, and this change removes the old
+> allocation-through-forward ordering guarantee there: master-TX frames
+> may now be emitted out of sequence-allocation order. On the current
+> tree this is safe because duplicate discard tracks individual
+> sequence numbers in sparse bitmaps (commit aae9d6b616b5 ("hsr:
+> Implement more robust duplicate discard for HSR") and
+> commit 415e6367512b ("hsr: Implement more robust duplicate discard
+> for PRP")) rather than requiring monotonic arrival. Sequence numbers
+> remain unique and monotonically allocated per counter.
+> 
+> This is a latency/critical-section prerequisite for unfolding GSO
+> super-packets at the forward entry (not a functional prerequisite):
+> the segmentation work should not extend the global sequence lock's
+> critical section. Patch 3 depends on this change; their automatic
+> stable selection is limited to 7.0 and newer, where sparse-bitmap
+> duplicate discard accepts out-of-order arrival. Older stable branches
+> require an adapted backport.
+> 
+> History of the lock being narrowed: it was introduced by
+> commit 06afd2c31d33 ("hsr: Synchronize sending frames to have always
+> incremented outgoing seq nr.") and briefly removed by
+> commit b3c9e65eb227 ("net: hsr: remove seqnr_lock") in net. Merge
+> commit 46ae4d0a4897 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
+> reverted that removal because
+> commit 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames
+> received via interlink port.") in net-next had already superseded it
+> by adding locking for the interlink RX path. All sequence counter
+> updates remain protected; only the forwarding work moves out of the
+> critical section.
+> 
+> Cc: <stable@vger.kernel.org> # 7.0.x
+> Signed-off-by: Xin Xie <xiexinet@gmail.com>
 
-Yeah I'm currently fighting with `b4` in the stable workflow :/
+Maybe use a shorter commit description.
 
-> Please slow down, there's no rush here.
+[ ... ]
+> @@ -746,8 +747,8 @@ void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
+>  	 * So check and increment stats for master port only here.
+>  	 */
+>  	if (port->type == HSR_PT_MASTER || port->type == HSR_PT_INTERLINK) {
+> -		port->dev->stats.tx_packets++;
+> -		port->dev->stats.tx_bytes += skb->len;
+> +		DEV_STATS_INC(port->dev, tx_packets);
+> +		DEV_STATS_ADD(port->dev, tx_bytes, skb->len);
 
-This is actually a different commit, I sent before seeing your reply on the
-other one. I'll double check before sending, thx
+Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
 
->
-> thanks,
->
-> greg k-h
+And the counters in hsr_deliver_master() also need to protected. Especially
+multicast.
 
-
+Thanks
+Hangbin
