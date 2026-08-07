@@ -1,33 +1,69 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF0D38E8C3;
-	Fri,  7 Aug 2026 14:35:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7345540EB9D
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:49:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786113342; cv=none; b=rgMsrjOoxuwgC72vKZ/LknQ6uZ7jf+JR/hLBgirYZJh29C2ij9CupHgNQZE1ByOGVURaxvZpWRozOj7znzR8ryw68ZlARqOmWR8biRkBXhISq3FU9peqeQxjdlnVSGY0yF2TBGTiR97WtnySAzrlgIuCFzc+OE8tarbXFRnHnn8=
+	t=1786114182; cv=none; b=MvmPSiX8VJLTvNBmWlXkN5TgUFkbkbMS2hnrY79qog52ExshjP8If4r3inbPCKyEZoiIVNLn61twP1bKq8c1SlZr1qUBx2eDxDbKz+4mKG4rNQkoApSZ/tgPmRFvZldbXdDBcEn7YQAXGXfW9hVCU+Rx6U/i8+Y9INFshn1f3uM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786113342; c=relaxed/simple;
-	bh=kRuxVW5nMI+o4h4F4RtkT03d1/YymNsIxIQq/gLwewA=;
+	s=arc-20240116; t=1786114182; c=relaxed/simple;
+	bh=rIBVD0ltrU8+8xGc90Oa/79dIW3TVRlPoGEf1xQTtFM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sCpGhJ66dlMad8kMEALdRlUGna3uy86nBJYfehsm+HTlx79WIsUUJ6Zz6Kp4LLePbQhaqYLoNyxMZaDwTKZC7ZFQqJVKYGrUONFThT7jL59K3b9ONPOsT6oFhsH1anrZbK74jGJq48w30msl1vO/S9392Qq374VBs/Yc3avWrvU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cO4jAMG2; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=IoZAI27dW7u3IIPngA6ktodBq0zUIifjPgD6jM1ucN/BR1JfWB7Ymj+BijHAr1SQBRqDWwihVDM7lyWb3BIRjJMLVxjUNhb77lkOjsgIg7R7GJy0i6rCvkEcAx2kqDG2mi+DjF/E/CtQLqmUFXlY1vga8O7sNEbN974FL9conVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sslaz9qR; arc=none smtp.client-ip=209.85.221.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cO4jAMG2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D57D1F000E9;
-	Fri,  7 Aug 2026 14:35:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786113341;
-	bh=SiconhQnpjAKJhJrHS8zmboQaF7/KkpqRkwt9AKBFKM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=cO4jAMG2t8RFD2STp4VqH1DZPCjpAKkI8Gg14qCPV+zmAg7Lp4iQFqUtzZ6Rwx2xW
-	 0M9ndGPpEqZn7pXzAMB8z05/Ut+FExhm+qvakakp8xYj7MKIc6Q9E8LjMJIR3vfwB2
-	 UWQ3BuGGqR4exDAv8KYvtdEmcHYO4AFceSebdUDd0qTR92ymdz+ikdsbE6YzS9Lp0U
-	 ObbuXYiuxwEQMSrnEAdsuIS/ottd01HD0dFnbegyGBuPbyDqoxPPiu4juip75w+ehu
-	 CDgPk06nKRdLsWiylE/TGg6kJ/gNcoscPbmQ9nwTU0/1zhlk9WavdikrZc6sosLfzz
-	 FVskXy/SI8KTg==
-Message-ID: <43b5db93-1c1b-436e-a8fa-d89582e31894@kernel.org>
-Date: Fri, 7 Aug 2026 16:35:32 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sslaz9qR"
+Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-47df6a5655aso452218f8f.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:49:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786114179; x=1786718979; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Ukm+OuNktymp77TFPbZkArdXVPXyYalBdkMMLYPXS10=;
+        b=sslaz9qR/vyd7bq8Jp3kC/7MM6pDm3ok0jS0ye5F72fSL//pg44ult3NDuC57AznN7
+         Vs1wMnEuJzbWWuiLbQ+peM1204aAfC/vT0F8pt4jJcDV6NcnbAmOLGFusdatHeqclcbk
+         Vi+P+evunyo1FFr6ughqdVFHx0EwjQe5xPLUb5g8uPXyRyzEwjKnzjM2KiLLvDiMVBsu
+         AE6F709bBBpqy8xrctxGjCknf0KlWbA+fDve0kgL8Vp2jpieBfsBPaCqzvyXleLfdN2t
+         o6AMi6M+pl1L0pySGJAObaaEvsS3qTxlPdul26jf0ZCqfqNENPBH3zkyc0oysYE7t02P
+         nIJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786114179; x=1786718979;
+        h=content-transfer-encoding:content-type:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Ukm+OuNktymp77TFPbZkArdXVPXyYalBdkMMLYPXS10=;
+        b=ZJaNIFg3IxnhbQ7W1OeOsmo+5aEl7JulLo8M2YUxWM10PnnAHn2720vDsscVtMsnad
+         aMiyV5epwQLy0jVKjDZ/LVdlksGd3tkbMBQcJKIN2yLxAI/M6ZxFi9fQjIAQi4S2+rcT
+         D4JTYhQ1/UFOUwDj4B2tMgCHMLfmOjaQP3AUgZdC5RGDjsP2XnWwniglwn41AdHxxhG8
+         LYFuPTbjngZviA6EuwTO2VlZPlw7vWywUuVFIpTpUnRxanUiZ44xS2OXTYKYbn/0umFc
+         3aTsyjbjO/knR+U9+i5iDT2nZDjkvDAzzuQDoOWJQ19IOMsrBm1WsOO9UAWfoOLcvt9n
+         PAUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqswxlCBdj47wPSYmT6FHq+DtcLvC98F0P44jjytIqiwUvQaI+GDoXrVvIdI4gkQvIecVpjieDp3g8534xAQ6k=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTL7wpXU3s49NSToCDfKcY7gBixvmEDO+lYBiRixHhsrbKIH78
+	+9nE7xZ/HPKtfXEWoPWj9lQ+1Bzrsi+15gwdz8N1Yc1Pdyc3yAyzgtgw
+X-Gm-Gg: AR+sD13u34760GkewMfLT4NwSZx5rFe7Vo/hzLGVKPlgANmtlTwSCmhDrHzW8PyD4eu
+	Jr/nWaqqJeRIOJiyZ+iG1b7SQc+RUfsStUEstEpxRtPhgR1BdBg64A/QRGwxnalL+BXHcyBSwZH
+	naq+kbiy1/vwJLp+d+KXDT9rmJ0MKqjK80BBq2UEqHXPCtavVDli6oklfXj0B5j49DeLNzUyR3h
+	jEeU+neg2ptWEDihFEknnccT4ArEmIisNqQVuek/ObBVmuPm3UwM+Gh8gvoUp8w03UIH3drXz4W
+	GBD+RilaSe5LcGa8c7fAmOQ0OGqXqex7spLAcx2ADBF+7oLH4Xu1ytME00yhiwOM7KbaZWIDwkh
+	tMk3Xz9THWKneoBhQvl98gFQV32ZeOC7BuCK5+xC4aaorzznX0SUUnDED2XsBdthApHPnRiZRv6
+	oDyJoYzFOiWaVhSJiXy8leOAlLMsj2h9LvTaHa0QJylptyOB8Lkbl2sbRRjMpw4Q8/G02RpmUrU
+	YleuFjYKTShO1Jr32pWzufNF7OGq6/ENQRJ4OnJzdn1gIVeOS0UoqamaL4FNpJgTnBMYSj3f/re
+	v6qlEKzx5gy+M4uC7WY7W/yZrn9WvIYLutXn
+X-Received: by 2002:a05:600c:34d0:b0:496:c249:ddb1 with SMTP id 5b1f17b1804b1-4994e7d7feamr167001975e9.4.1786114178649;
+        Fri, 07 Aug 2026 07:49:38 -0700 (PDT)
+Received: from [192.168.2.69] (dynamic-077-179-201-133.77.179.pool.telefonica.de. [77.179.201.133])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995d85254asm26878245e9.1.2026.08.07.07.49.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2026 07:49:37 -0700 (PDT)
+Message-ID: <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
+Date: Fri, 7 Aug 2026 16:49:36 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,141 +71,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: fix read_file() return value check
-To: Hongfu Li <hongfu.li@linux.dev>, akpm@linux-foundation.org,
- ljs@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- usama.arif@linux.dev, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
-References: <20260807013555.36525-1-hongfu.li@linux.dev>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260807013555.36525-1-hongfu.li@linux.dev>
+Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
+ counter updates
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
+ shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
+ qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
+ bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+ stable@vger.kernel.org, sdf.kernel@gmail.com
+References: <20260803222211.877-1-xiexinet@gmail.com>
+ <20260803222211.877-3-xiexinet@gmail.com> <anXrR6-2UVYF1iZa@fedora>
+Content-Language: en-GB
+From: Xin Xie <xiexinet@gmail.com>
+Autocrypt: addr=xiexinet@gmail.com; keydata=
+ xsDNBGpiHugBDADJ5KuJaOYfUx7TGbRw0UE1km4dLnJomCSNtgq2T9BqgZ6TRPEy37soAmW3
+ XxCPvhfL6CPLldzy6O6EkUD7/8zlbQP1DM6gUIQUyKxxkb8uR+oCogDKjsxt0QPycP/dR9fk
+ SL4qKReprnkOOcGeLahLHzofVdn46mc5igCBsAA/PPSpo1GqsfGk+zYV97rSVa8zhnSXsqZ/
+ 9DbUfQynZKVqYN4tm1B30JE5SEWDCko95Qw9fAORX2W356MOQJGr05z9qMSy7CkF7bAUkziG
+ d6ZSPsGEsel5jYByP8ZvwQ2A8kdKpRy8+zQCaC+vEotTH7Fs7SIzE/Z5mEVIi1xQqEzN1rqG
+ BW7KgzRDWjw8lKsoBbxv20nfhUzuZLan2HzUJ+LxZ18Os4zkWg9sxHgMi+AGqn/+0ppbDcOH
+ 9Jm072/xA7O1MCXLgr4FOP+4PJH1vcqU+0EZVz7KCjrwkdz+l5Ojso2FLXq2MGoqWGShIsDV
+ bF1JYpgm4spdPbnISkidUC0AEQEAAc0cWGluIFhpZSA8eGlleGluZXRAZ21haWwuY29tPsLB
+ DQQTAQgANxYhBAHOahKZFnMu2n/CxrTrSufyPi3LBQJqYh7oBQkFo5qAAhsDBAsJCAcFFQgJ
+ CgsFFgIDAQAACgkQtOtK5/I+LctmngwAlmrGPWnWxDW6PSJeR9SM0faqwuY33TWAE35nshm/
+ EEkBgpVVhG4z4Cdy7L+6TG6NHVDnvl+IHLyyOZlL3LQPQIpiKVgo6jHmm9TF6mK+Vo3nsXAA
+ uSJYu9iY9Aywmy2JVQ15ttQ0NfcoZ0sV14bT7pSr9zXB6D8p3XA4AQI6IBeLvj993Z1+tPyC
+ 6BJ+2aWWLBx7xGpFo3X8dhjS/Lm8QoietKbI+ACefKKCDNiM2KG53P76wdXJp52u4dqP6eFc
+ +Qv35QefnALoPkOGQEdd1qvUycyZhuaCj8h0AxDu7bL3G/IM8G2K8qsbSJuui8zCSZ9b/QZf
+ H7u1nevPOgxyWC1Pep/TbRZ62ktn8lrmWA8PZjuaJJQGjahuK1GgTQZNG+7DB7NwjLr6aXIm
+ JirtT4FeR+IUovvL/ll+VHzpGpFbgXz4GTsWsikQkT1huFSB8MRLlWMXdAKblL96L754j8Z5
+ p/YV26YTppXI56uJ3XyOwZSrfrK1pfqNIp2Yr9vUzsDNBGpiHukBDACePM1YZ1FvAiFay/2v
+ KVDNpuazmpVb1CBFy+rqM9HcuHe+5CuxLd4RI4hb0qmjlm5Vi5M8+AuNB/wi/f8oDuhJwlMn
+ v9L0lfgpRRdShnB26hnt2wWwWFgOU3BwymSruxhEYq+eIjjxCAo6yW7Qm+ArZ+riETMI67sy
+ ZyLx6o4yRiWxOrh1nhwV/f6PIOl+Iv4yLAG3eFXpU7/EZpim610bKMwcXEpiRkf3NjiflIha
+ adoKHV0LCiVNrU7r8TICjjnugpl1tXAR2RlaRcSxmvOzrXY2O/xBLpwPr5erbdk8RCaxUzS0
+ kK0hw+/On3Sr4Z4gtLl2xtDkjRh3KQ9ZqMPrFD/5XOs842ueNivwIyAf2kQJjKfJGWc771EM
+ 0ZWo1r1AthbuM+IeN5QM74rMJxaf5WyDX3ZeqBA55fCJGJ3zrp7Tqeoq8DYufiNkppE9S71z
+ Cvxva2f8mUWTlTUf8s33sRD7C87XpT0whKpn1I9/nJB9Kb0dKyRCdcsT4o1ynxUAEQEAAcLA
+ /AQYAQgAJhYhBAHOahKZFnMu2n/CxrTrSufyPi3LBQJqYh7pBQkFo5qAAhsMAAoJELTrSufy
+ Pi3L/iwL/3aoCeq19Pog3fqisRyEZeX8pXw2GYlrJWYoM0mQ1USaTpdsMwCXaoFMoSBqid0F
+ VPrqlH4bSIEEAzVmFPX0NjGhREDMrQ9eR5S9yqSpBvX+hz+xgpt4NOPhbVQmV+9f4lX9TJT7
+ GOO3EX2eeokg6ZAISycCAx7srXuc8oyRTJtnUQziH9GXrEeon88LHf1QHg0Z0sL/c7DfDqvW
+ 9924M4ngQAZ8RgCBGZocoWuXCemSPkfQVLt5DzycSgSQODhbNSEmr+jb1V9Svf9D9k0CQfEY
+ cB3uwOHWb6Z/yaEARbGZPSPn89YjXBncQTpgSvUM578b5x3pKi6PjZB/hwtUsRgrWGWoIwRi
+ +ZmcHnCzsuo6uuNYX8VvmWqYsVajykjnpjdCGmU89QUsVmrtnDPBrfr8VVJcZPnCJhE595Pk
+ LO29Oj0au9kr7kMW5Q+fBeHj5zz6VggAaRRU74/sgtwLODBWESPZ9LqUUdB5L/XbrSq2VDlD
+ sNySbH3veZ/55EtlXA==
+In-Reply-To: <anXrR6-2UVYF1iZa@fedora>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/7/26 03:35, Hongfu Li wrote:
-> From: Hongfu Li <lihongfu@kylinos.cn>
+On 07/08/2026 16:27, Hangbin Liu wrote:
 > 
-> read_file() returns 0 on open/read failures and never returns negative
-> values. Existing < 0 error checks never trigger, so read failures are
-> silently ignored. Check for zero return to detect read_file() failures.
+> Maybe use a shorter commit description.
 > 
-> Also fix misleading error message in get_finfo(). The error string
-> incorrectly references read_num when reading uevent files.
+> Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
 > 
-> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 4 ++--
->  tools/testing/selftests/mm/vm_util.c    | 2 +-
->  2 files changed, 3 insertions(+), 3 deletions(-)
+> And the counters in hsr_deliver_master() also need to protected. Especially
+> multicast.
 > 
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 10e8dedcb087..506310d4b4d5 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -138,8 +138,8 @@ static void get_finfo(const char *dir)
->  		     major(path_stat.st_dev), minor(path_stat.st_dev))
->  	    >= sizeof(path))
->  		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
-> -	if (read_file(path, buf, sizeof(buf)) < 0)
-> -		ksft_exit_fail_perror("read_file(read_num)");
-> +	if (!read_file(path, buf, sizeof(buf)))
-> +		ksft_exit_fail_perror("read_file(uevent)");
->  	if (strstr(buf, "DEVTYPE=disk")) {
->  		/* Found it */
->  		if (snprintf(finfo.dev_queue_read_ahead_path,
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index ef1ea11981a7..2697d50d07f4 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -755,7 +755,7 @@ unsigned long read_num(const char *path)
->  {
->  	char buf[21];
->  
-> -	if (read_file(path, buf, sizeof(buf)) < 0)
-> +	if (!read_file(path, buf, sizeof(buf)))
->  		ksft_exit_fail_perror("read_file()");
->  
->  	return strtoul(buf, NULL, 10);
+> Thanks
+> Hangbin
 
+Thanks.
 
-Yeah, that looks correct. Do we have Fixes: tags?
+The long commit description was from v4. I reworked and shortened it in v5:
 
-I think it was already wrong in read_num() in
+https://lore.kernel.org/netdev/20260807140751.1351-3-xiexinet@gmail.com/
 
+Regarding the statistics, Paolo previously suggested addressing the HSR dev stats races in a separate series, since there are already several occurrences:
 
-commit e0c13f9761df8f97cf5e81495d12ecbc4075684a
-Author: Kiryl Shutsemau <kas@kernel.org>
-Date:   Wed Jun 3 16:00:06 2020 -0700
+https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
 
-    khugepaged: add self test
-
-
-where we had
-
-+       ret = read_file(path, buf, sizeof(buf));
-+       if (ret < 0) {
-+               perror("read_file(read_num)");
-+               exit(EXIT_FAILURE);
-+       }
-
-
-So likely
-
-Fixes: e0c13f9761df ("khugepaged: add self test")
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
+Would you prefer that I drop the DEV_STATS_* conversions from the next revision and address all HSR statistics consistently in a follow-up, including hsr_deliver_master() and multicast, rather than adding per-CPU accounting to this series?
 
 -- 
-Cheers,
-
-David
+Xin
