@@ -1,163 +1,175 @@
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7C5339396
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 14:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EF0D38E8C3;
+	Fri,  7 Aug 2026 14:35:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786112853; cv=none; b=loikDx2eoFZ12J6g0ai7I30d57ZVctKZ6Z24To4JMc8fqjc4i44af9y7EhPPBRVtH6SdcVZz0dOJ1xVrSqhGg9FPCdzJ/xL0g2dML8ttLozWjJT0j1E3WG8IYQAh60YQyEw4puVVbNIzYM7hOVI8uRV4PxUNle8DFlnotNgSvKE=
+	t=1786113342; cv=none; b=rgMsrjOoxuwgC72vKZ/LknQ6uZ7jf+JR/hLBgirYZJh29C2ij9CupHgNQZE1ByOGVURaxvZpWRozOj7znzR8ryw68ZlARqOmWR8biRkBXhISq3FU9peqeQxjdlnVSGY0yF2TBGTiR97WtnySAzrlgIuCFzc+OE8tarbXFRnHnn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786112853; c=relaxed/simple;
-	bh=tJ6YIoKNUDojeg86gqnCuw1WTPa7k4m9/MpBN2CPG+0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Doj4zaZSY61W7ky7dy7/2tC5eyybhjLz0MhRjQYX+tX94HY3jYQStjMyCQ80kLl5RZHQZKwTpwlP8+aZPgREiD5XQmUzCoBY5cg5ZModF/asVHAsL1xaFv6IuwElL+WcgL/v0n7z9ywnLM0siHNwBhEyNGxKc0hWLprzBdb0Vn0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BQbqc2jZ; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786113342; c=relaxed/simple;
+	bh=kRuxVW5nMI+o4h4F4RtkT03d1/YymNsIxIQq/gLwewA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sCpGhJ66dlMad8kMEALdRlUGna3uy86nBJYfehsm+HTlx79WIsUUJ6Zz6Kp4LLePbQhaqYLoNyxMZaDwTKZC7ZFQqJVKYGrUONFThT7jL59K3b9ONPOsT6oFhsH1anrZbK74jGJq48w30msl1vO/S9392Qq374VBs/Yc3avWrvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cO4jAMG2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BQbqc2jZ"
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-ca766c1c9ccso2667640a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 07:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786112850; x=1786717650; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dY6T8KLKe7c50VCzbw04TgHR78SFTtnFy4T2vHFIKTs=;
-        b=BQbqc2jZvfZL+tgjDrZGUNXRoSQDjlvLCKTmrNYmIPTIzs7SEuIxMINYi/dNAPagrh
-         qwP5jS/UsbQyPCf6ocQ6TtTEwHQDo+YGagEJxvO6r0vy+UWHBFxoLG1ivYmkMOL69wXo
-         BUsr6yrzdc5VPdDxtzYOf9jwcep9cNibfMw26Z6U0ypmMcbvI/FTk7RVRIdQOafX9CMD
-         g5iiiPTU5xtz+cwbQ69oC+sW9lXMmingA94DguRfi0Um5YH12uQxu2wFNhX4ZUilWUzE
-         QK+aNFtgkqifGFgd/TMmJnanV/km9nDQmJeb7Bg3ZMJU/dpyrr2U+VeqRzyvwhBbzEgb
-         gFzQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786112850; x=1786717650;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dY6T8KLKe7c50VCzbw04TgHR78SFTtnFy4T2vHFIKTs=;
-        b=FWmfNYV63cdcgP1k99vzOHnHZcSTVCjo/X7w+1zta+AgyCt0UV+MwbA5Swf+sY95Wl
-         tYEracvCwQIk36cauG6aneZxC/Ouam5Jst8YBYMEDtY9VdpX56LRNTqKgV3cEPZpdCDK
-         B3jNcCaS7v24lPSPh+JIjF7vupc6JfWnMkdFpSuKY0glVcSKd3PGxn5vzqkPCXQzrXeC
-         0v+qsb4WfvbzPbJD5XF/6TiGMzpvDFtbedRkcGuYPaUkbtkX2nxgROrt0/6YWz0Iab+c
-         13Pd5gLRBdisTacGmKi8bPTXUX3Vlhb6H+KFQ9ZTKOg2gQ5JyQyoZXz7+iY69DYSjKPP
-         CZFg==
-X-Forwarded-Encrypted: i=1; AHgh+RoWUDPnq3cHJd8s6MCqZJE8sYabiKoM7VhqHWrsRBscDr0msRZb9CVvITkwtYO1gww/3vRT6poEpRGCt2K0bGE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5Liny/FaqluEwoJJSQW5NGiIuOp0C0ffjiVmgaY1H9wbpmmNC
-	ve76FdhIboXZ6BVp4V342k5ZgelHINkFOgm3aOY8YD400wthWXOndGii
-X-Gm-Gg: AR+sD12PAWTPaTKOKPK0glUqbRnH5iYEBlGGalc2vqaYYv7nK/7GIiTpJtaO05mYuFe
-	/7WgvXtyHqMtw8RrrnVxKmrj0g18IWQdNCQhYbWxk6NPU77CzPULRCiuNuZGWvTZS6zp7MA6HzD
-	XxY4naACL/V+ScsHo7DZGeTuGxVrrpsOYmzpVl1OzjQKv4C3LRW197J06XqpsYwwGrgHG8SMrtn
-	DXr/KlPhVC14wTmVVvBkc/sfJxs29t5qounENucguXXrqNc1k/3ghrKInnCECX75qal000S4Flp
-	745Xi5PWQKEVAKSeoOzsXOPL2l5U4Uptuu6BaY/hrAoI7eTLX/EIR1CqClkb0HNd/BnNAfk8MAm
-	k7q2tpGm2LsdFCHjGdPn74BSPjxgOKFHa97opGwv2p2PjOHph9Y+0LKC1YeQistIMQqFYpX/foa
-	za2uxNz/q5Y2yu6xRW0bTHme6YH/xoJWUbGL52uOe9wnJiD8USPqutAf4=
-X-Received: by 2002:a05:6a00:1705:b0:82f:38df:681c with SMTP id d2e1a72fcca58-84f2e0228e1mr21662231b3a.6.1786112849746;
-        Fri, 07 Aug 2026 07:27:29 -0700 (PDT)
-Received: from fedora ([203.175.12.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a553071sm1125866b3a.43.2026.08.07.07.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 07:27:28 -0700 (PDT)
-Date: Fri, 7 Aug 2026 22:27:19 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
-	stable@vger.kernel.org, sdf.kernel@gmail.com
-Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
- counter updates
-Message-ID: <anXrR6-2UVYF1iZa@fedora>
-References: <20260803222211.877-1-xiexinet@gmail.com>
- <20260803222211.877-3-xiexinet@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cO4jAMG2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D57D1F000E9;
+	Fri,  7 Aug 2026 14:35:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786113341;
+	bh=SiconhQnpjAKJhJrHS8zmboQaF7/KkpqRkwt9AKBFKM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=cO4jAMG2t8RFD2STp4VqH1DZPCjpAKkI8Gg14qCPV+zmAg7Lp4iQFqUtzZ6Rwx2xW
+	 0M9ndGPpEqZn7pXzAMB8z05/Ut+FExhm+qvakakp8xYj7MKIc6Q9E8LjMJIR3vfwB2
+	 UWQ3BuGGqR4exDAv8KYvtdEmcHYO4AFceSebdUDd0qTR92ymdz+ikdsbE6YzS9Lp0U
+	 ObbuXYiuxwEQMSrnEAdsuIS/ottd01HD0dFnbegyGBuPbyDqoxPPiu4juip75w+ehu
+	 CDgPk06nKRdLsWiylE/TGg6kJ/gNcoscPbmQ9nwTU0/1zhlk9WavdikrZc6sosLfzz
+	 FVskXy/SI8KTg==
+Message-ID: <43b5db93-1c1b-436e-a8fa-d89582e31894@kernel.org>
+Date: Fri, 7 Aug 2026 16:35:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260803222211.877-3-xiexinet@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: fix read_file() return value check
+To: Hongfu Li <hongfu.li@linux.dev>, akpm@linux-foundation.org,
+ ljs@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
+ liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
+ usama.arif@linux.dev, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
+ mhocko@suse.com, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
+References: <20260807013555.36525-1-hongfu.li@linux.dev>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260807013555.36525-1-hongfu.li@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Xie Xin,
-On Tue, Aug 04, 2026 at 12:22:09AM +0200, Xin Xie wrote:
-> hsr->seqnr_lock is currently held across entire hsr_forward_skb()
-> calls: master TX (hsr_dev_xmit()), interlink RX (hsr_handle_frame()),
-> and both supervision frame builders hold it while frames are built,
-> classified, duplicated and forwarded on every port. The only state
-> that actually needs the lock is the sequence counters themselves
-> (hsr->sequence_nr / hsr->sup_sequence_nr).
+On 8/7/26 03:35, Hongfu Li wrote:
+> From: Hongfu Li <lihongfu@kylinos.cn>
 > 
-> Shrink the locking to the individual counter updates:
-> handle_std_frame() now takes the lock around its sequence number
-> allocation (replacing the lockdep assertion), the master TX and
-> interlink RX paths drop their outer lock, and the supervision
-> builders release the lock right after updating their counter instead
-> of holding it across frame construction and forwarding.
+> read_file() returns 0 on open/read failures and never returns negative
+> values. Existing < 0 error checks never trigger, so read failures are
+> silently ignored. Check for zero return to detect read_file() failures.
 > 
-> Statistics: the outer seqnr_lock also incidentally serialized the
-> tx_packets/tx_bytes/tx_dropped updates in hsr_forward_skb(), which are
-> reachable from the concurrently callable master-TX, supervision and
-> interlink-RX paths. Those updates now use DEV_STATS_INC()/
-> DEV_STATS_ADD(), the atomic legacy-stat helpers, so narrowing the lock
-> does not turn them into lossy plain read-modify-writes.
+> Also fix misleading error message in get_finfo(). The error string
+> incorrectly references read_num when reading uevent files.
 > 
-> Ordering: with IFF_NO_QUEUE and dev->lltx, hsr_dev_xmit() is
-> concurrently callable, and this change removes the old
-> allocation-through-forward ordering guarantee there: master-TX frames
-> may now be emitted out of sequence-allocation order. On the current
-> tree this is safe because duplicate discard tracks individual
-> sequence numbers in sparse bitmaps (commit aae9d6b616b5 ("hsr:
-> Implement more robust duplicate discard for HSR") and
-> commit 415e6367512b ("hsr: Implement more robust duplicate discard
-> for PRP")) rather than requiring monotonic arrival. Sequence numbers
-> remain unique and monotonically allocated per counter.
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 4 ++--
+>  tools/testing/selftests/mm/vm_util.c    | 2 +-
+>  2 files changed, 3 insertions(+), 3 deletions(-)
 > 
-> This is a latency/critical-section prerequisite for unfolding GSO
-> super-packets at the forward entry (not a functional prerequisite):
-> the segmentation work should not extend the global sequence lock's
-> critical section. Patch 3 depends on this change; their automatic
-> stable selection is limited to 7.0 and newer, where sparse-bitmap
-> duplicate discard accepts out-of-order arrival. Older stable branches
-> require an adapted backport.
-> 
-> History of the lock being narrowed: it was introduced by
-> commit 06afd2c31d33 ("hsr: Synchronize sending frames to have always
-> incremented outgoing seq nr.") and briefly removed by
-> commit b3c9e65eb227 ("net: hsr: remove seqnr_lock") in net. Merge
-> commit 46ae4d0a4897 ("Merge git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net")
-> reverted that removal because
-> commit 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames
-> received via interlink port.") in net-next had already superseded it
-> by adding locking for the interlink RX path. All sequence counter
-> updates remain protected; only the forwarding work moves out of the
-> critical section.
-> 
-> Cc: <stable@vger.kernel.org> # 7.0.x
-> Signed-off-by: Xin Xie <xiexinet@gmail.com>
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 10e8dedcb087..506310d4b4d5 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -138,8 +138,8 @@ static void get_finfo(const char *dir)
+>  		     major(path_stat.st_dev), minor(path_stat.st_dev))
+>  	    >= sizeof(path))
+>  		ksft_exit_fail_msg("%s: Pathname is too long\n", __func__);
+> -	if (read_file(path, buf, sizeof(buf)) < 0)
+> -		ksft_exit_fail_perror("read_file(read_num)");
+> +	if (!read_file(path, buf, sizeof(buf)))
+> +		ksft_exit_fail_perror("read_file(uevent)");
+>  	if (strstr(buf, "DEVTYPE=disk")) {
+>  		/* Found it */
+>  		if (snprintf(finfo.dev_queue_read_ahead_path,
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index ef1ea11981a7..2697d50d07f4 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -755,7 +755,7 @@ unsigned long read_num(const char *path)
+>  {
+>  	char buf[21];
+>  
+> -	if (read_file(path, buf, sizeof(buf)) < 0)
+> +	if (!read_file(path, buf, sizeof(buf)))
+>  		ksft_exit_fail_perror("read_file()");
+>  
+>  	return strtoul(buf, NULL, 10);
 
-Maybe use a shorter commit description.
 
-[ ... ]
-> @@ -746,8 +747,8 @@ void hsr_forward_skb(struct sk_buff *skb, struct hsr_port *port)
->  	 * So check and increment stats for master port only here.
->  	 */
->  	if (port->type == HSR_PT_MASTER || port->type == HSR_PT_INTERLINK) {
-> -		port->dev->stats.tx_packets++;
-> -		port->dev->stats.tx_bytes += skb->len;
-> +		DEV_STATS_INC(port->dev, tx_packets);
-> +		DEV_STATS_ADD(port->dev, tx_bytes, skb->len);
+Yeah, that looks correct. Do we have Fixes: tags?
 
-Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
+I think it was already wrong in read_num() in
 
-And the counters in hsr_deliver_master() also need to protected. Especially
-multicast.
 
-Thanks
-Hangbin
+commit e0c13f9761df8f97cf5e81495d12ecbc4075684a
+Author: Kiryl Shutsemau <kas@kernel.org>
+Date:   Wed Jun 3 16:00:06 2020 -0700
+
+    khugepaged: add self test
+
+
+where we had
+
++       ret = read_file(path, buf, sizeof(buf));
++       if (ret < 0) {
++               perror("read_file(read_num)");
++               exit(EXIT_FAILURE);
++       }
+
+
+So likely
+
+Fixes: e0c13f9761df ("khugepaged: add self test")
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+
+-- 
+Cheers,
+
+David
