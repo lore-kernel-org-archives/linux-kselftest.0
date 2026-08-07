@@ -1,41 +1,41 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A004233C1AD;
-	Fri,  7 Aug 2026 15:24:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58228397958;
+	Fri,  7 Aug 2026 15:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786116268; cv=none; b=sPE+D5+GQb6ofj87NpDzIm8EBgacrR7ZaS7W4SwQBXP6ijsVbPypPIO4gtm6krczvN/4HBpMw0lr9uXr1477FjrtihhzYKSQOIC+QVZsmB3qCWtC1l9jOmmv6i753O1EGyO6+rK020olZp6RUCzVN0NSPJq1memcsoP9JKBbI/s=
+	t=1786116275; cv=none; b=O4FqNr6zxfelti8IYEIM0Fj+7oxl2MRjy6cTr1tfdMiQWAP3RlqenY/NyX1KK/fps3LD/29d/NszIMySg78YgnQ7bvJzOnLAdtNer2rVy0PYmROM3zhKtxRsKxB+SyDshk4gGuCUuwN80nnAP4bpV3pwJDhwcHg0/Tg5UMSltv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786116268; c=relaxed/simple;
-	bh=i5qo6wAWZZi28BDqurxnpPB8CHJV06srZ3HQ2FG2z4s=;
+	s=arc-20240116; t=1786116275; c=relaxed/simple;
+	bh=SqwL52+7XQEG3gedT1KMYbrlbaVXpcJY38355Z1cIMU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UnCObn2oRlrZhsypTF4qVG/CR7zd0rFmp2OA2PhXuepHUrazIBSPgY633UrrjOUbRFSP9sGDNYcoyj4lw9unv6WL6BIt1tsBs2LI2eGuwy2ou/PbS5Vea6CabR/ZgftIJ1VrIlpXmcCtNzowG9gigVX4VnObubxhcaPr0nYI5IM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=tGSXOq5T; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=Cgq15d9TMwiArquEdzElnL5qIlj2TRjNtyeISgql9l5XeBTkeavIXgd+wLNzpgg32FHwsXPlIpCbTkX6dGJbtdP/xTOYnES2xsF6Oa96/js172079IJqtSYyiwN0Yc89mydsAyc8QlUcuFaOOXT2OX1wzAxoa1nJ8XUufH12sac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=P1Jb9ZFO; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="tGSXOq5T"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="P1Jb9ZFO"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 146954E41140;
-	Fri,  7 Aug 2026 15:24:25 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id B88FF1A14B2;
+	Fri,  7 Aug 2026 15:24:31 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id DDF4F603F0;
-	Fri,  7 Aug 2026 15:24:24 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 785A211C37AC1;
-	Fri,  7 Aug 2026 17:24:17 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8DF37603F0;
+	Fri,  7 Aug 2026 15:24:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E3B0A11C37AC7;
+	Fri,  7 Aug 2026 17:24:23 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786116259; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1786116266; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=eNH/a49MoQbWQgpYX6dujOb3+PD1cc1o+/U0FHTru1s=;
-	b=tGSXOq5ToHY3ybmvZXRhD7kjBZr95vpZ+cwKr+OkTZvg9SJxd2IOxpVHy9MLQNwWxI43d/
-	9i5gDoHX6UJJsmZYiDXCw5zxM23x9eqANlMYtJvUCcl8RUrJeHEU/qvGZCyZKAGWvLHbfI
-	WvpgYaCrtcp0nWXQbb0L5k3FPVc9s6NTRgBy5m01NaiORLJBXvEka4+NcOmfPklKsAsiWx
-	Duo9mtMcYA1ho+mW6lLRTxVOLGUD48/n+pbfF8F1vadQh1FMos/OvgCb1MzA6zK77kiUgw
-	jL4jVl3+lGX9roJW4Uu1F/zuyzVw5s1WoqLQLtELRQwNhyV3AZsSxOeCoKvCXg==
+	bh=5yh8sLUU7nbVpgrrx+0PC5E3UZ5E1089AOER+xaEt6I=;
+	b=P1Jb9ZFOvG56ayKOyaaVHKcNLZMj5CzSv+pG2tKYf5j3nn7V3sQ8mFDq3Z5hBxUeo6ryXf
+	s+t7hpBY08K+R8Ff6Md0wVD2ISYT0aBwsNN+Mv54IpSZniAc/JEVlrtPQx6GACdQYcKdbY
+	LDLByDQyBsJQBjzKgrio76qVYUogiCGtfa3GMKqcjg9AOm13F185jeK1UaRv6y+EvSClUG
+	YC6faOVEWmu+lMYFODDDfosungbXusWJKNwly6mTYT2GrBQcsDtzHWO4t4N68vzPxYT8AH
+	aCSRLUJBi3ECLxnFdmmRStmsm9yZ+Wv1bm1SA5WjMIt1H96KsrS08JFZDiMVXg==
 From: "Miquel Raynal (Schneider Electric)" <miquel.raynal@bootlin.com>
-Date: Fri, 07 Aug 2026 17:24:02 +0200
-Subject: [PATCH v5 1/7] dt-bindings: clock: Introduce nexus nodes
+Date: Fri, 07 Aug 2026 17:24:03 +0200
+Subject: [PATCH v5 2/7] clk: tests: Add clk_parse_clkspec() Kunit testing
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,8 +43,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-1-8785f9531cf0@bootlin.com>
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-2-8785f9531cf0@bootlin.com>
 References: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
 In-Reply-To: <20260807-schneider-v7-2-rc1-eip201-upstream-v5-0-8785f9531cf0@bootlin.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -64,58 +64,214 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Hardware containers can just decouple external resources like clock
-without any more control. Nexus nodes already exist for PWM and GPIOs,
-add a binding to allow them for clocks as well.
+Create a new set of kunit tests to make sure clk_parse_clkspec() is
+working as expected. We currently verify if we get a proper device when
+using indexes and names. If we make an out of bounds request we expect
+an error.
 
-No examples are given, the file is litteraly a copy-paste from Hervé
-Codina's work on PWM Nexus nodes, hence we just point to the examples
-there which already illustrate very clearly the concept of the various
-properties.
+For testing purposes, we must ensure of_clk_get_hw()'s symbol is
+exported.
 
+Suggested-by: Stephen Boyd <sboyd@kernel.org>
 Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin.com>
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 Reviewed-by: Frank Li <Frank.Li@nxp.com>
 ---
- .../bindings/clock/clock-nexus-node.yaml           | 30 ++++++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ drivers/clk/Makefile                     |   1 +
+ drivers/clk/clk.c                        |   2 +
+ drivers/clk/clk_test.c                   | 110 +++++++++++++++++++++++++++++++
+ drivers/clk/kunit_clk_parse_clkspec.dtso |  21 ++++++
+ 4 files changed, 134 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml b/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml
+diff --git a/drivers/clk/Makefile b/drivers/clk/Makefile
+index cc108a75a900..035b984db70d 100644
+--- a/drivers/clk/Makefile
++++ b/drivers/clk/Makefile
+@@ -19,6 +19,7 @@ clk-test-y			:= clk_test.o \
+ 				   kunit_clk_assigned_rates_zero.dtbo.o \
+ 				   kunit_clk_assigned_rates_zero_consumer.dtbo.o \
+ 				   kunit_clk_hw_get_dev_of_node.dtbo.o \
++				   kunit_clk_parse_clkspec.dtbo.o \
+ 				   kunit_clk_parent_data_test.dtbo.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk-divider.o
+ obj-$(CONFIG_COMMON_CLK)	+= clk-fixed-factor.o
+diff --git a/drivers/clk/clk.c b/drivers/clk/clk.c
+index 048adfa86a5d..08874cf9b561 100644
+--- a/drivers/clk/clk.c
++++ b/drivers/clk/clk.c
+@@ -24,6 +24,7 @@
+ #include <linux/spinlock.h>
+ #include <linux/string.h>
+ #include <linux/stringhash.h>
++#include <kunit/visibility.h>
+ 
+ #include "clk.h"
+ 
+@@ -5300,6 +5301,7 @@ struct clk_hw *of_clk_get_hw(struct device_node *np, int index,
+ 
+ 	return hw;
+ }
++EXPORT_SYMBOL_IF_KUNIT(of_clk_get_hw);
+ 
+ static struct clk *__of_clk_get(struct device_node *np,
+ 				int index, const char *dev_id,
+diff --git a/drivers/clk/clk_test.c b/drivers/clk/clk_test.c
+index b1961daac5e2..f47f81b7d72a 100644
+--- a/drivers/clk/clk_test.c
++++ b/drivers/clk/clk_test.c
+@@ -3541,10 +3541,119 @@ static struct kunit_suite clk_hw_get_dev_of_node_test_suite = {
+ 	.test_cases = clk_hw_get_dev_of_node_test_cases,
+ };
+ 
++static const struct clk_init_data clk_parse_clkspec_1_init_data = {
++	.name = "clk_parse_clkspec_1",
++	.ops = &empty_clk_ops,
++};
++
++static const struct clk_init_data clk_parse_clkspec_2_init_data = {
++	.name = "clk_parse_clkspec_2",
++	.ops = &empty_clk_ops,
++};
++
++struct clk_parse_clkspec_ctx {
++	struct device_node *cons_np;
++};
++
++static int clk_parse_clkspec_init(struct kunit *test)
++{
++	struct device_node *prov1_np, *prov2_np;
++	struct clk_parse_clkspec_ctx *ctx;
++	struct clk_hw *hw1, *hw2;
++
++	ctx = kunit_kzalloc(test, sizeof(*ctx), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, ctx);
++	test->priv = ctx;
++
++	KUNIT_ASSERT_EQ(test, 0, of_overlay_apply_kunit(test, kunit_clk_parse_clkspec));
++
++	/* Register provider 1 */
++	hw1 = kunit_kzalloc(test, sizeof(*hw1), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw1);
++	hw1->init = &clk_parse_clkspec_1_init_data;
++
++	prov1_np = of_find_compatible_node(NULL, NULL, "test,clock-provider1");
++	KUNIT_ASSERT_NOT_NULL(test, prov1_np);
++	of_node_put_kunit(test, prov1_np);
++
++	KUNIT_ASSERT_EQ(test, 0, of_clk_hw_register_kunit(test, prov1_np, hw1));
++	KUNIT_ASSERT_EQ(test, 0, of_clk_add_hw_provider_kunit(test, prov1_np, of_clk_hw_simple_get, hw1));
++
++	/* Register provider 2 */
++	hw2 = kunit_kzalloc(test, sizeof(*hw2), GFP_KERNEL);
++	KUNIT_ASSERT_NOT_ERR_OR_NULL(test, hw2);
++	hw2->init = &clk_parse_clkspec_2_init_data;
++
++	prov2_np = of_find_compatible_node(NULL, NULL, "test,clock-provider2");
++	KUNIT_ASSERT_NOT_NULL(test, prov2_np);
++	of_node_put_kunit(test, prov2_np);
++
++	KUNIT_ASSERT_EQ(test, 0, of_clk_hw_register_kunit(test, prov2_np, hw2));
++	KUNIT_ASSERT_EQ(test, 0, of_clk_add_hw_provider_kunit(test, prov2_np, of_clk_hw_simple_get, hw2));
++
++	ctx->cons_np = of_find_compatible_node(NULL, NULL, "test,clock-consumer");
++	KUNIT_ASSERT_NOT_NULL(test, ctx->cons_np);
++	of_node_put_kunit(test, ctx->cons_np);
++
++	return 0;
++}
++
++/* Test DT phandle lookups using correct index or name succeed */
++static void clk_parse_clkspec_with_correct_index_and_name(struct kunit *test)
++{
++	struct clk_parse_clkspec_ctx *ctx = test->priv;
++	struct clk_hw *hw1, *hw2, *hw3, *hw4;
++
++	/* Get clocks by index */
++	hw1 = of_clk_get_hw(ctx->cons_np, 0, NULL);
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, hw1);
++
++	hw2 = of_clk_get_hw(ctx->cons_np, 1, NULL);
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, hw2);
++	KUNIT_EXPECT_PTR_NE(test, hw1, hw2);
++
++	/* Get clocks by name */
++	hw3 = of_clk_get_hw(ctx->cons_np, 0, "first_clock");
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, hw3);
++	KUNIT_EXPECT_PTR_EQ(test, hw1, hw3);
++
++	hw4 = of_clk_get_hw(ctx->cons_np, 0, "second_clock");
++	KUNIT_EXPECT_NOT_ERR_OR_NULL(test, hw4);
++	KUNIT_EXPECT_PTR_EQ(test, hw2, hw4);
++}
++
++/* Test DT phandle lookups using wrong index or name fail */
++static void clk_parse_clkspec_with_incorrect_index_and_name(struct kunit *test)
++{
++	struct clk_parse_clkspec_ctx *ctx = test->priv;
++	struct clk_hw *hw;
++
++	/* Get clock by index */
++	hw = of_clk_get_hw(ctx->cons_np, 2, NULL);
++	KUNIT_EXPECT_TRUE(test, IS_ERR(hw));
++
++	/* Get clock by name */
++	hw = of_clk_get_hw(ctx->cons_np, 0, "third_clock");
++	KUNIT_EXPECT_TRUE(test, IS_ERR(hw));
++}
++
++static struct kunit_case clk_parse_clkspec_test_cases[] = {
++	KUNIT_CASE(clk_parse_clkspec_with_correct_index_and_name),
++	KUNIT_CASE(clk_parse_clkspec_with_incorrect_index_and_name),
++	{}
++};
++
++/* Test suite to verify clk_parse_clkspec() */
++static struct kunit_suite clk_parse_clkspec_test_suite = {
++	.name = "clk_parse_clkspec",
++	.init = clk_parse_clkspec_init,
++	.test_cases = clk_parse_clkspec_test_cases,
++};
+ 
+ kunit_test_suites(
+ 	&clk_assigned_rates_suite,
+ 	&clk_hw_get_dev_of_node_test_suite,
++	&clk_parse_clkspec_test_suite,
+ 	&clk_leaf_mux_set_rate_parent_test_suite,
+ 	&clk_test_suite,
+ 	&clk_multiple_parents_mux_test_suite,
+@@ -3562,4 +3671,5 @@ kunit_test_suites(
+ 	&clk_uncached_test_suite,
+ );
+ MODULE_DESCRIPTION("Kunit tests for clk framework");
++MODULE_IMPORT_NS("EXPORTED_FOR_KUNIT_TESTING");
+ MODULE_LICENSE("GPL v2");
+diff --git a/drivers/clk/kunit_clk_parse_clkspec.dtso b/drivers/clk/kunit_clk_parse_clkspec.dtso
 new file mode 100644
-index 000000000000..ff3283bd5fb1
+index 000000000000..c93feb93e101
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/clock/clock-nexus-node.yaml
-@@ -0,0 +1,30 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/clock/clock-nexus-node.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/clk/kunit_clk_parse_clkspec.dtso
+@@ -0,0 +1,21 @@
++// SPDX-License-Identifier: GPL-2.0
++/dts-v1/;
++/plugin/;
 +
-+title: Clock Nexus
++&{/} {
++	kunit_clock_provider1: kunit-clock-provider1 {
++		compatible = "test,clock-provider1";
++		#clock-cells = <1>;
++	};
 +
-+description: >
-+  A nexus node allows to remap a clock specifier list in a consumer node
-+  through a container or a connector node in a generic way. With this
-+  remapping, the consumer node needs to know only about the nexus
-+  node. Resources behind the nexus node are decoupled by the nexus node
-+  itself.
++	kunit_clock_provider2: kunit-clock-provider2 {
++		compatible = "test,clock-provider2";
++		#clock-cells = <1>;
++	};
 +
-+maintainers:
-+  - Miquel Raynal <miquel.raynal@bootlin.com>
-+
-+select: true
-+
-+properties:
-+  clock-map:
-+    $ref: /schemas/types.yaml#/definitions/uint32-matrix
-+
-+dependentRequired:
-+  clock-map: ['#clock-cells']
-+
-+additionalProperties: true
-+
-+# See the original pwm-nexus-node.yaml description for examples
++	kunit-clock-consumer {
++		compatible = "test,clock-consumer";
++		clocks = <&kunit_clock_provider1 0>, <&kunit_clock_provider2 0>;
++		clock-names = "first_clock", "second_clock";
++	};
++};
 
 -- 
 2.54.0
