@@ -1,57 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB21A21A453
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 00:20:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27694B04BE
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 00:21:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786062050; cv=none; b=q7RfP+Tl53zaeSysSPD4MZHUzrNN4QcqHwOkcuH3KKY11JZ4sWOl9+AXbLb/AyEIM9X96TQqKbPnt+XUW0HVJGYI4wibGRFTfZVDxdUVIp3EMDirkdIUgy3tTRatcFFN5dl01v7W6cNk8bm5yLQ+EV1HH15RdFhkwPf7CG6LXq4=
+	t=1786062116; cv=none; b=Z1CntONlxxS6OE8aSrIMBA3oaffeyzNg0zzl/ezxOsu1tSSUxH1a4h7lPz2aYubTfLl2/CYj0UQTsDljBm/nECdI8thRrjEHQlo/Z01cugMdrkBCZGnp3BWZySU8Fu1rcSt445r2TlmbRe4DDGdjCKHzAxPg3fLS0JcMn3RHdjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786062050; c=relaxed/simple;
-	bh=p3LsJQjqd++4Om2G0h2XXjMJa1xYuFDhErPRV0y8Gyk=;
+	s=arc-20240116; t=1786062116; c=relaxed/simple;
+	bh=GgmzBn2bK4/+Nptd0PQMA3IKNs50uCHVJqzFT5zonJA=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Vrz/6k/5Egwie84fvUmKn+FZlw4Cq82l+6LtuNGmlEr4ZZgQZE40SzyJsuGWGC6w6DH3OSHZ/HA7NW4vAYQx+2dPyjGf4ofOy4x9MPqQf18gnm7kSWzJeu06oNDMzF23MQv/1xmXoxk8mzuWffD21PJAEGQV5s2Zld/udg5wDTk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cpwqkY92; arc=none smtp.client-ip=100.103.45.18
+	 Subject:Content-Type; b=Z+NaY6DFRuy9ARzl1E+4e2C/RPIeYUy5qrl4wTP3JRdEoZ7RP46V2cPWlzU0XUVVHXAP04I4SM9HWEo11hclq8Bi8EBQqhljDJOxY4lG6YvbqJ0HhhvcEPxeqoupyD/012xuzLFMAlHdqdZa9kGBaeafOmzz0BJSCx9xIntffE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TifKaZ21; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cpwqkY92"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4B141F00A3D;
-	Fri,  7 Aug 2026 00:20:48 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TifKaZ21"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5401F00A3D;
+	Fri,  7 Aug 2026 00:21:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786062049;
-	bh=SiSwk3Up80zpe+rX7ykzgEhuiD1iYv+Js5A4E28WLwQ=;
+	s=k20260515; t=1786062115;
+	bh=ovFPQ/DXQo9dXBLb8dyq//h8ZYEpAII21uwyLWlh3BI=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=cpwqkY92cYaJzDiDlm30Ab1U+Yi3pI6LUJ8Q1dTII4lGxCUINXkYKxP+++8kv0PvU
-	 2YZ+BSGMIYDFrMQSlxc3hdrzwL41Oh0rrpsMPd28tIkYlFYl0P/rLzJBOYR8JteJFY
-	 f5td3fkUw/gtdQ4W00ztnJLYQJB+a4Im+efU5fA9UXgfFC5SjzHBYGofpggiTKY3E3
-	 a5QT8dxDsGuRMKwpuYqBhjHOiqCExGeibr/QTfrmDDzvwiVmQlllhcN/s9Yzn9UWCY
-	 ORLm3ajc5QMdadiBvISOYwxg1932HXsc6+RHX4O1ICx3R+G6lGTsihdXVrBVZS24EK
-	 2+Tyw/Rv1FGhw==
+	b=TifKaZ21XyeRqPaN9D2TErcvS1rC20MTBGPXqzHFV70RDTMIUaHBGRK+coVgXgfpz
+	 vBIXxrigNWqLG9ZcxlZZc0Ay22eTJJqsyFgrueZdlzZYkPz6vYxRStcQOSoK/g+8v2
+	 uvkZOMMUkq8uqovcyaPUzL/X4yYxglL9H0jdqoFOWbSTwIppEu9+rf38AJWtxIcgA/
+	 5dJuuGwauVree6h1FsTD2vxdpEaNnkz/KOVUEK87/KALd8nvLXSuohznsViq1Q7Er1
+	 /DGlIHw8KHdmbXmC/HS7PmDEHnvgn0d/1RHe3TB4aHzJvDq/5pCZPqCj8r+CqRf3vv
+	 DTtLN1dy21C/w==
 Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id E149EF4006E;
-	Thu,  6 Aug 2026 20:20:47 -0400 (EDT)
+	by mailfauth.phl.internal (Postfix) with ESMTP id 17952F40071;
+	Thu,  6 Aug 2026 20:21:54 -0400 (EDT)
 Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Thu, 06 Aug 2026 20:20:47 -0400
-X-ME-Sender: <xms:3yR1aoRqlK5sh8mR73H7f_RNNriQSMQy4gpYSMRIh-tA8aVSlBAJ7Q>
-    <xme:3yR1agnGIjLjPcamg1j110L0CJWLBOzt4RmMi8DmtKW93l4M84ez8JPfZGf3p6Y_M
-    RHSB5jPzm3Djyk-06Ux3xPetI2ZEqiQUKAZfICjcCIfV7HNwTW-9H6R>
-X-ME-Proxy-Cause: dmFkZTG4ELMJdm2RYTJe5KSfzuNF1duodZdTjSH92g+jCJ1jZp1GfxCxhytzAYW4dHPwnq
-    sWSAdUmInHf315e61gJAv25qhwb29wSZPtdj9lg9cM4Z3lRAArl3wBR9RmhjdZNyxKZwyE
-    s0g+4TwkAA0/jkwZ8fZnXzoS5jhg+tlVZd+hUPGqnM9B9jwX2uBcKycWPNVcAC3qNtenj5
-    ouxOdTfCMLGYtScvCZ+dPBREMGip42Gtxi74wIVR6bS6dEtIfyQRBByI7k1gz0zNIUAYjY
-    ovD4ISWAleUALuAHVhEJx1CAKx78lOLyYn/BHxV27gr0+TZ2Bw8XjhRQdY+7cl0Y8+louB
-    L+WKkZ1705m455uVWtOJiwJX2MdAB0s6mZl/jmesOB180fMvRvKqWxVmCxTSFL8bV3J4Nm
-    oxriy2zaAr+idFNzNhnmWyq0cQNvm5Rxnhz1Tquh5FUZQbwDH/BiujvdwCyrJlWP8b5FvY
-    I/lpevQrk+RWAAN1TiJpUma7fYskSpSqFjhVLDAcXhjy/ZukVnu3IL7xbpviMgk8TSBdwA
-    wSdzaiXQE+FmGBrRehP09AfG3EQOJJ6mXlHkfynhccun7oxeo7lW2TbNu1RD8v6Zc9xE72
-    Uw53NAHccLN2vhXdbOgzqsM6OeEXX3u9e/fncToqWYPzgEJlINUxYCH+kqbQ
-X-ME-Proxy: <xmx:3yR1at0XfAEXwWyBJ8J1E84FPzZMBke0mVVY7sL5Th5vGyNcr5V2iQ>
-    <xmx:3yR1av-J57t8Ib--gt5biR2nCbrMnskez70u1ZDr7_QQK8UvrlDoFg>
-    <xmx:3yR1aq72bzB62CFA7XnKAsxSnw5JWnpVBMYehIhIIrXX2mb6Bs2Oxw>
-    <xmx:3yR1avvG5UBjF8fMP9_nM-hEz-n_RquX5TjLbD6Cl0Myu8wFFTxQaQ>
-    <xmx:3yR1ak10UPToe6QlbXxDpkeClerTOt0dNO8sGPM14XLH7qv7bdDbgD_E>
+  by phl-compute-10.internal (MEProxy); Thu, 06 Aug 2026 20:21:54 -0400
+X-ME-Sender: <xms:IiV1ahGlcBzB1dYw7k46LTef6cPyQJPSeIxSTW8l3SkbTEV0YbYpDQ>
+    <xme:IiV1ahJifhW64ewlT1nJd_5d8eFXlDO_UiwwkqbfHp9XKh10ZLPzB7UTiSsMf6ULq
+    qyDxWdZ6u5_hF_sS-DTuvw52kHzZ2hQ4zHJV0Zhss5gYDbcklGd5Yc>
+X-ME-Proxy-Cause: dmFkZTGpG8kugYTZ8gIs8s5LYJjkyVCQ3+3h8nqdl5GfXl8WEhceEM84zEDPrmqAKTmQuF
+    JehrkmagCcuJpfOVF9Mc4dYhvxULaJCaECBpvrIvaoTXZPq4KM4U/dgK2yJeuk+y9L2VXP
+    X//8npVNslDOKQpuIyKfe5ASnoGmfuxXxXg4zBK3bhY2LLjzpTBVc9VoUhlMkqq07Ieg+T
+    uwi1GuSlWKy7fCz6pw49WOYkY6H0YMpCsd7BC9V3T+Z2ljQmY2BaagYOXM+YapH7JfXuSK
+    Ym5DZ/+YLxpJjCZuf9br/vYMR9l1+VpA8OvLxWQKHlxDVYCSbaNTtkjcYkMRZIe8z9VXAZ
+    19S02MA+HnSVb7XZ69+MjF0NDH8KfZGfCDs719LZb0K+oVduotKDKsz1lcf4finfVQ5fsv
+    IVElWFqlY3n9o91/hFgJbm7VTftSCmHBQ8QEJVRh5ym54D2LVFqEfijqujRO1DBTwqyCos
+    jNDcQEYDSGdkNF3gZJVKJ3aq4MUBvliZl1/X8ZZD3nNTVItGEGzDhoqVa4XqJgFkg7wPab
+    d4pJs5JqIRMymCuGfeqwEuXXxqiGGh+pia7trR4OLVkWPco8s2PMCHHkBERmJA88ulxAkY
+    em77EiFKhJDOVJhQ8sZbrBYaDjscR21Gc45ZhOt3B7DBWf7BuW1cwhY3jMQw
+X-ME-Proxy: <xmx:IiV1agqsje816eoaQ2GED36nZIfGvCqOIZB8B3Al8gjfShyrWOqdMA>
+    <xmx:IiV1aigPAIRoDd_-bWcjvW4cNLaHsfYg8E9WgwNxTlITOfyBoMsRGQ>
+    <xmx:IiV1aiN_T7pL8_mcyDcEY03KLq8pRE3fgk-5HcrlLMfCLoiABvJz3g>
+    <xmx:IiV1asz-hwsuMGKsYCn6RYQ1uXGa-IoQm7czm7CxNOddzEy436XpgA>
+    <xmx:IiV1akr-M6x44oBH3QVea7iDfoBVaFK0WcZtJc2xUKiZoovtU8PYGRT1>
 Feedback-ID: ifa6e4810:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C6F17780070; Thu,  6 Aug 2026 20:20:47 -0400 (EDT)
+	id F030B780070; Thu,  6 Aug 2026 20:21:53 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -60,44 +60,72 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-ThreadId: AaCQ_tCgbt_c
-Date: Thu, 06 Aug 2026 20:20:27 -0400
+Date: Thu, 06 Aug 2026 20:21:32 -0400
 From: "Chuck Lever" <cel@kernel.org>
-To: "Jakub Kicinski" <kuba@kernel.org>
+To: "Sabrina Dubroca" <sd@queasysnail.net>
 Cc: "John Fastabend" <john.fastabend@gmail.com>,
- "Sabrina Dubroca" <sd@queasysnail.net>,
- "David S. Miller" <davem@davemloft.net>,
+ "Jakub Kicinski" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
  "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
  "Simon Horman" <horms@kernel.org>, "Dave Watson" <davejwatson@fb.com>,
  "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Message-Id: <885eed00-f944-49ee-ab97-ce8853091124@app.fastmail.com>
-In-Reply-To: <20260803154707.6dc9171f@kernel.org>
+Message-Id: <967e5460-0b80-4689-889f-c160fcac834c@app.fastmail.com>
+In-Reply-To: <amtGINRBf2NTqt_J@krikkit>
 References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
  <20260726-tls-follow-on-v1-5-99bf4cc1c729@kernel.org>
- <20260803154707.6dc9171f@kernel.org>
+ <amtGINRBf2NTqt_J@krikkit>
 Subject: Re: [PATCH net 5/9] net/tls: Consume empty data records in tls_sw_recvmsg()
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 
 
-On Mon, Aug 3, 2026, at 6:47 PM, Jakub Kicinski wrote:
-> On Sun, 26 Jul 2026 20:33:33 -0400 Chuck Lever wrote:
->> -		/* Do not use async mode if record is non-data */
->> +		/* Do not use async mode if record is non-data, or if it
->> +		 * is empty: the receive loop frees an empty record's skb,
->> +		 * so its decryption must have completed.
->> +		 */
->>  		if (tlm->control == TLS_RECORD_TYPE_DATA)
->> -			darg.async = ctx->async_capable;
->> +			darg.async = ctx->async_capable && to_decrypt;
+On Thu, Jul 30, 2026, at 8:40 AM, Sabrina Dubroca wrote:
+> 2026-07-26, 20:33:33 -0400, Chuck Lever wrote:
+>> TLS 1.2 and TLS 1.3 both permit zero-length application_data
+>> records as a traffic-analysis countermeasure (RFC 5246, Section
+>> 6.2.1; RFC 8446, Section 5.1). Such a record decrypts to
+>> full_len == 0, so every arm of the receive loop reaches
+>> "decrypted += chunk" and "len -= chunk" with chunk == 0: len
+>> never reaches zero, and tls_strp_msg_ready() holds the second
+>> loop term true while the peer keeps records arriving. The peek
+>> arm and the async arm also queue each record on rx_list, which
+>> then grows without bound. tls_rx_rec_wait() returns without
+>> waiting whenever a record is already parsed, so its signal check
+>> never runs
 >
-> I vaguely recall that we depend on all records being async
-> uniformly within a single recvmsg call
+> So we should just move the signal check to the top of
+> tls_rx_rec_wait()'s loop? (just after all the existing error handling
+> code)
 
-That holds, but it keys off the accumulated async flag rather than
-darg.async, so a synchronous record among async ones is still queued
-on rx_list. Empty records return before that block and copy nothing.
+It appears that only the signal check can move. sk_err and sk_shutdown
+are tested under !tls_strp_msg_ready() so that an already-parsed record
+is delivered before an error or EOF is reported. Hoisting those would
+let an error preempt deliverable data.
+
+However, hoisting signal_pending() alone is safe, since the record stays
+parsed for the next call. It is also just two call sites rather than
+everywhere: recvmsg and splice. Let's target that consolidation against
+net-next rather than net.
+
+
+> > +                 if (!darg.zc)
+> > +                         consume_skb(darg.skb);
+>
+> I don't see why you need this special handling. Could you explain that?
+
+On the zero-copy path darg.skb is the strparser anchor, which
+tls_rx_rec_done() has already released. Freeing it again would be a
+double free. On the other path it is a freshly allocated clear_skb
+that nothing else owns.
+
+Or, were you requesting the placement of a documenting comment?
+
+
+> I don't think the way ktls handles MSG_EOR on RX makes any sense,
+> outside of non-DATA records.
+  
+Agreed.
 
 
 -- 
