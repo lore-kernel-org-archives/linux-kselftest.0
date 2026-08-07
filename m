@@ -1,35 +1,67 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A201524BBEB;
-	Fri,  7 Aug 2026 00:44:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28DB23D7F4
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 01:01:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786063462; cv=none; b=c6x3TbtVusWVtstoWLMyaobVQ4HeGJqzu36DvsbVdj7TI7k38qdKo6p7iYaaJ2OAo1XV7k7wLE14mrC9LxTnMtndyLj3yoUTE9nMfK1jJeSmTP1wfK8rP0zduHShhM1pjQ+mqei6cshVNZEvTHW8TELCEolmnhD9sLVkZem4AMA=
+	t=1786064509; cv=none; b=hsWGBr5LmWNW8iqKr+sZKs8m6a7juqK8BEVjFp5pjMEeoZvPKVA3GwMI9LtdWiH1ZbdXoo5fazm/Po6u1xqSU0cKKWdEJKZgaxIupYUedE9G4ZGhwqMPu7O/oz6JbqFbXwBAGS4w0qjQIGJOIxRAyC5JG2nalw6oDToqyV7sijc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786063462; c=relaxed/simple;
-	bh=diDfx9CY5qqZjzw/PWn4z/sy4AeRV2lOKdlZaBCioOQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=B+uwrb+e88LhbwwoHC/PWBU6C2DEDmOLFblFlzX0+9jd97Rbl/k2BoFbSoR+YEs4Go0/d51I+VtfIGcZW3Ibx7hHuUBLBqiRFc4d9XpCJfvL75A/Lo6m3hkzdTyNxhWxKXuhWmBpBve2oB2Ik8zG1Yqtvnpy1AT2rU6dFjAzVHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlIzDS45; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786064509; c=relaxed/simple;
+	bh=ijoFRb8I4+XfGKhziEfySAslvbu5Jp7Eu4JILnrr21g=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cwDO5KWzFyIQQMe168gZDWCTX5WLcl63WVfmzv9qpd9uDuQe1ITJsFblnGDWzYf9hqpCnRL0PjA07I79bb/zi9WwzpdBsUOtelryW53db92NDbMVI/5LgKjzWiZTsgMoTFm5WE2lr3wYq77/Nl+R9Tyni5jUkVzYhtn3HxWVueA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xa6hllnu; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlIzDS45"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F0791F00A3A;
-	Fri,  7 Aug 2026 00:44:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786063460;
-	bh=n6RqouRsqmNA2+Fx2ZooauUKUTtvMf6N/rExkNV7EbU=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=HlIzDS456hP9qcUcvdex32ndePO9XkwMo97MdMokvJgRiyN/nnr0dukk5ne4Fb3cJ
-	 ByrEfHgwawCc1EQA4xHCWo24psOYUQKLGI+HNwD+6wM9+VMUd1kwLVCfcC2MCJY4MY
-	 lsscriF6gT6mm0GE0iTD/0RN0ppYkg0wGQ78Fbj4BshoDYilc1EeWM7u/3y/w5Rpsj
-	 IQf6XLayHg+3K111REu42LBbMX0HXW9d2QB3VCZZzOCOf+sjqjhpbp597U+7jSGpOM
-	 LM9f1EP9buTE3+8XjKkDHKGUQsN3QE7xbLzjpr7gLSXkI4Cw6f0lCjbnFUsSHinjBJ
-	 h+GmHBVSxCEcA==
-From: Chuck Lever <cel@kernel.org>
-Date: Thu, 06 Aug 2026 20:44:08 -0400
-Subject: [PATCH net 2/2] selftests: tls: cover splice after a failed
- decrypt
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xa6hllnu"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cf52d15d88so26901125ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 06 Aug 2026 18:01:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786064507; x=1786669307; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=MLGlXfDDWhpZIsWPnXZToOCK71F6INAB2KuWQUQm6mQ=;
+        b=Xa6hllnuADsAHxIhn+8S84ftMtguMQmWt7NNTSqaNH4uBRjYCs6vBSSLnTQV5id6rE
+         YdDXNqlvzpHYDlr2oQPXt/SxEjVVLv9oGFAJt9qb7lQavYcgmdCoGjeoiAJXlnVm420P
+         IYEy8pAm8hqiCgurLVC6O2j4gqg0sdx6fJ+7F6jplqHn3ULK09+yd9ZHoFiJKqbL9QIg
+         tQDtaoU1no9RIUNZCYeTvMQpQ0iSzbkJI34ZM0qf7wa5q7gZrDGiak7WczO4U5lfSKAn
+         C87a+d6iOq4fptcEKfDoTQ5TpgH8+UZr8ez13XL2z2VqMRpFSLJ3YBN3XsMyHSOXMyp2
+         myMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786064507; x=1786669307;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=MLGlXfDDWhpZIsWPnXZToOCK71F6INAB2KuWQUQm6mQ=;
+        b=skoLONAfO0q+SqBs29KlL9lMm6bSPkaNAJFjd7IkYhNxQpb6o4wbiuiYKV2Gx5yAis
+         4plocdzEbayt6BIw4U6h/+bo4mlIcn3I5VXGzBlCY4bLbZqouZOfzdbgIsFxCfPN8PMX
+         1fE5IuxPPQPBMb2VWgnAVJId9yUnTdRI9236UKcAOdBXEU0zYqD/4nUcT4fiEkhX213g
+         6Yg409IDDo5QlX7svrQ56p0gTk7H5J5KsKhM0ei7CjPLglHt0ZpBciyvzPb5x/Am3zHx
+         3ccRu6RNkgUac6nRsJCNwKsuESFM6rE6Vq6vW5rnk4DmMksFjHh/qYmBaWhllF1jUj2N
+         9etA==
+X-Forwarded-Encrypted: i=1; AHgh+RosTZjUod3v4vbD2WtDmonfmqh+QG6XgH8Ds0HyMmXgjVefD6b+s051+EXzSo+Vye3gWwAdUs2tpOnfi6aylBA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuiTz2MRJ5zLfJDfOKdu3yMiECkKMcsWCqZuFgR+R3WySiB9AH
+	+tFBWL6r4lnFsmRoOT99gNIFza3MRK15kPSXk2Gis79aSlX2MklR4hVP
+X-Gm-Gg: AR+sD10xCkKZ9U3JazF3/yatnRBOT1Fh2AF9O9aSxT64TRwcQoT3SInWQyRbt+4qtSV
+	Aq2PQpBXKgeCJXNBjWGeMn2Es9h7Pn4Ca1Kd2/rgYEY3FZsSJsxcj6g2yybdyzSpHWuS7eO3Lvp
+	4T0UN71iXlvGx3m+PjA1ZpT2Bo0VDLFtF6pI0lmHjBYM0K8PfWY7vZHELBK55prohvVIjyF1bmj
+	5cGznv9y+UhpAltOKW5EDhA13uvQm8juIRFM+VTMAyszOjQkDO2ikgNBHh3bp577Klgtm/G+w7I
+	UbVfe1Jh1Za8WIerOaiT70gt8muiLkWEvg9sXZSQufNI75SdJ+8YP/XK/VyUOTqaBXnqM+ruWtC
+	sGlKoyXwlRsiGe/jKPhJhmdNt/Z5sZ3Jkr+i6B5huVm1ewdHu7vu30uIVSzIKk9obWJA070kdn5
+	8hRo9Sy/MeOyEAA6Yq9DwvbhAgU4sa4UJE5+MHvccdDmwTLKCpCo69TtRaFKbk4V4n16KRDSdq9
+	7SDE+r5syi6VUHA2UWkBMWx1PmGxE6SsjA=
+X-Received: by 2002:a17:902:e541:b0:2c9:f44e:9942 with SMTP id d9443c01a7336-2d0ca7fa95dmr202648585ad.13.1786064506751;
+        Thu, 06 Aug 2026 18:01:46 -0700 (PDT)
+Received: from [192.168.0.160] (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d14d7684f8sm1527725ad.33.2026.08.06.18.01.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Aug 2026 18:01:46 -0700 (PDT)
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+Subject: [PATCH 0/3] audit: Measure and reduce syscall filtering overhead
+Date: Thu, 06 Aug 2026 18:01:18 -0700
+Message-Id: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,176 +70,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260806-tls-splice-crypto-fix-v1-2-a2624005a286@kernel.org>
-References: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
-In-Reply-To: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>, 
- Jakub Kicinski <kuba@kernel.org>, Sabrina Dubroca <sd@queasysnail.net>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Chuck Lever <cel@kernel.org>
-X-Mailer: b4 0.16-dev-da966
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4542; i=cel@kernel.org;
- h=from:subject:message-id; bh=diDfx9CY5qqZjzw/PWn4z/sy4AeRV2lOKdlZaBCioOQ=;
- b=owEBbQKS/ZANAwAKATNqszNvZn+XAcsmYgBqdSphjRU7PGofo1B7PNCAfIyY9GeQVN7+grxHy
- N3Ds1FpClaJAjMEAAEKAB0WIQQosuWwEobfJDzyPv4zarMzb2Z/lwUCanUqYQAKCRAzarMzb2Z/
- l1l2EACPzipUDRkHliXZxXtbF/jpsnyX5M4a/rrV0eLJCLEMfK3JLy7ZV/DMwkF0Fmro719f1yc
- 1UUrSxqYGoD5f0MTpPo8IyDbWH58E8UMkKiC7cFIenBd7JNxbIjiPuaZhXpmkTEFg+S9ZMUeQIB
- soOhRd8atzT0XrJEhBRIL3s2W4L4J1YrZFr4mlMMxbmLog2UoO2/cnsu17S7XgJfrRtITwDatlr
- v6wu+AauOWJ4Wf3GdoW4yfH+O/YDRnGGZyYFVw68R/gm3VOgMpgjC7nRFBp+wFLJTsYAIEAPzMG
- 7YAx/N4eiWr5MwG30ZTcnC+4zQtrLxTKC+PsMAgrrCHfQGqZqfrBPlYQY/s7VrINfEVEAsF9F1v
- 2OwUrYHRFEy8Rvczmd3NVFyVbi60gOk/ica8MMuOhNCKl7D2wp1/weql61uFyAp2E5vgSoHL03W
- HAbXupQBzi7Ed5CbJqPk4XBJcgymkR73FSnvPftygcZ9oyXS+kJJDzzXIzQnY121275hybhzG3p
- ncedQvoKZ1YhkI79wPHDxnMQ9p0h0oUzVa8rlNShzXuVmj6Uf7m22Kovt/tkzlHXl5hKALXzNzE
- /O10CjdEGcFM9lkpjJsstosYBJKK7z8EN3lhYyFIrFxvOo5wMmfPMoCsDqXPG5u1MYH3KKqZUys
- gxkensG+NJxlljg==
-X-Developer-Key: i=cel@kernel.org; a=openpgp;
- fpr=28B2E5B01286DF243CF23EFE336AB3336F667F97
+X-B4-Tracking: v=1; b=H4sIAF4udWoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDCwMz3cTSlMwSXUuzRMNUc8MUY4skQyWg2oKi1LTMCrA50bG1tQCcBI0
+ lVwAAAA==
+To: Shuah Khan <shuah@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+ Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>, 
+ Amy Griffis <amy.griffis@hp.com>
+Cc: Stanislav Kinsburskii <skinsburskii@gmail.com>, 
+ Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ audit@vger.kernel.org
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786064505; l=3293;
+ i=skinsburskii@gmail.com; s=20260722; h=from:subject:message-id;
+ bh=ijoFRb8I4+XfGKhziEfySAslvbu5Jp7Eu4JILnrr21g=;
+ b=/me/Wzzt3Q0JL3nWbvqc3DH08vOV+4pgXG8UcSC6ui6xM8FXaEkyc9K7WiicOYR9uN+oyVgM7
+ p18cS5xN0f9Bi72Mcz7ssoQkRFDroSmck6dr9zx3x+VZb7isJcuO5FI
+X-Developer-Key: i=skinsburskii@gmail.com; a=ed25519;
+ pk=bDpriHBYgeTdkIDweZDCemxsU93neJBOCn3YLIuJpnE=
 
-Nothing in this file splices a socket whose last decrypt failed, so
-the check that fails tls_sw_splice_read() on a broken connection can
-be removed without a test noticing. Such a splice hands the
-application plaintext that recvmsg() and read_sock() already refuse
-to return.
+This series adds a repeatable microbenchmark for audit's fixed syscall
+overhead and uses it to address two cases where audit continues doing work
+which cannot produce a record.
 
-Extend the bad_auth pattern. Corrupt an authenticated record, confirm
-recvmsg() reports EBADMSG, then splice the same socket and require
-EBADMSG again. A synchronous decrypt fails again on the still-queued
-record, so only an async decrypt reaches EBADMSG through the
-recorded-failure check alone.
+Patch 1 adds audit_bench, a manually run getpid(2) microbenchmark under
+tools/testing/selftests/audit.  It leaves policy management to the caller
+so the same workload can measure different rule configurations without
+silently changing the system policy.
 
-bad_auth builds the same corrupted record, so its construction moves
-into a helper the two tests share.
+Patch 2 fixes audit_n_rules and audit_signals accounting when rules are
+removed automatically with a watch or tree, or after an LSM rule update
+fails.  These paths could leave the counters nonzero after the last
+applicable rule had disappeared, causing every subsequent syscall to
+allocate a non-dummy audit context.  It also centralizes rule accounting
+so all rule removal paths share the same bookkeeping.
 
-Signed-off-by: Chuck Lever <cel@kernel.org>
+The median getpid latency in the same unpinned VM was:
+
+                                  no rules   stale state   fixed
+  automatically removed watch       38 ns       55 ns      38 ns
+  automatically removed tree        38 ns       59 ns      38 ns
+
+Patch 3 builds on those lifecycle helpers.  It maintains an aggregate mask
+of the syscall numbers present in exit rules and checks that mask before
+walking the exit filter list.  The mask is architecture-independent and
+therefore conservative: overlapping syscall numbers may cause an
+unnecessary scan, but cannot suppress a match.
+
+For an unrelated getpid workload, the median latency scaled as follows:
+
+  exit rules                         1       32      128      256
+  before                            55 ns    71 ns   428 ns   791 ns
+  after                             55 ns    55 ns    55 ns    55 ns
+
+The aggregate mask is updated through the centralized accounting helpers.
+Insertion sets the relevant bits before publishing the rule with
+list_add_rcu(); removal unlinks the rule before clearing them.  This keeps
+the lockless rejection test conservative during concurrent rule changes.
+
+The series does not change the audit userspace ABI or rule matching
+semantics.  The benchmark and complete reproduction procedures are
+documented in the individual patches.
+
 ---
- tools/testing/selftests/net/tls.c | 75 +++++++++++++++++++++++++++++++++------
- 1 file changed, 65 insertions(+), 10 deletions(-)
+Stanislav Kinsburskii (3):
+      selftests/audit: Add syscall overhead benchmark
+      audit: Fix filter rule accounting after automatic removal
+      audit: Skip exit filtering for syscalls without rules
 
-diff --git a/tools/testing/selftests/net/tls.c b/tools/testing/selftests/net/tls.c
-index a0e72e402748..9d3cd4fff062 100644
---- a/tools/testing/selftests/net/tls.c
-+++ b/tools/testing/selftests/net/tls.c
-@@ -24,6 +24,7 @@
- #include "kselftest_harness.h"
- 
- #define TLS_PAYLOAD_MAX_LEN 16384
-+#define TLS_HDR_LEN 5
- #define SOL_TLS 282
- 
- static int fips_enabled;
-@@ -2732,28 +2733,83 @@ TEST_F(tls_err, bad_rec)
- 	EXPECT_EQ(errno, EAGAIN);
- }
- 
-+/* cfd carries a byte stream, so one recv() can return part of a
-+ * record. Take the fragment length from the record header and wait
-+ * for the remainder.
-+ */
-+static void tls_send_bad_auth(struct __test_metadata *_metadata,
-+			      int fd, int cfd, int fd2)
-+{
-+	char buf[128];
-+	int len;
-+
-+	memrnd(buf, sizeof(buf) / 2);
-+	ASSERT_EQ(send(fd, buf, sizeof(buf) / 2, 0), sizeof(buf) / 2);
-+
-+	ASSERT_EQ(recv(cfd, buf, TLS_HDR_LEN, MSG_WAITALL), TLS_HDR_LEN);
-+
-+	len = ((unsigned char)buf[3] << 8) | (unsigned char)buf[4];
-+	ASSERT_GT(len, 0);
-+	ASSERT_LE(len, (int)sizeof(buf) - TLS_HDR_LEN);
-+
-+	ASSERT_EQ(recv(cfd, buf + TLS_HDR_LEN, len, MSG_WAITALL), len);
-+
-+	buf[TLS_HDR_LEN + len - 1]++;
-+
-+	ASSERT_EQ(send(fd2, buf, TLS_HDR_LEN + len, 0), TLS_HDR_LEN + len);
-+}
-+
- TEST_F(tls_err, bad_auth)
- {
- 	char buf[128];
--	int n;
- 
- 	if (self->notls)
- 		SKIP(return, "no TLS support");
- 
--	memrnd(buf, sizeof(buf) / 2);
--	EXPECT_EQ(send(self->fd, buf, sizeof(buf) / 2, 0), sizeof(buf) / 2);
--	n = recv(self->cfd, buf, sizeof(buf), 0);
--	EXPECT_GT(n, sizeof(buf) / 2);
-+	tls_send_bad_auth(_metadata, self->fd, self->cfd, self->fd2);
- 
--	buf[n - 1]++;
--
--	EXPECT_EQ(send(self->fd2, buf, n, 0), n);
- 	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
- 	EXPECT_EQ(errno, EBADMSG);
- 	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
- 	EXPECT_EQ(errno, EBADMSG);
- }
- 
-+/* A record that did not authenticate breaks the connection for every
-+ * reader, splice included.
-+ *
-+ * The two decrypt paths reach that result differently. A synchronous
-+ * decrypt leaves the record parsed, so the splice re-runs the decrypt
-+ * and fails on the record itself; the ctx->async_wait.err check in
-+ * tls_sw_splice_read() is not what stops it. Only an asynchronous
-+ * decrypt, which needs a TLS 1.2 socket and an AEAD advertising
-+ * CRYPTO_ALG_ASYNC, consumes the record before the failure is
-+ * recorded, leaving that check the sole reason the splice fails.
-+ */
-+TEST_F(tls_err, bad_auth_splice)
-+{
-+	char buf[128];
-+	ssize_t ret;
-+	int p[2];
-+
-+	if (self->notls)
-+		SKIP(return, "no TLS support");
-+
-+	tls_send_bad_auth(_metadata, self->fd, self->cfd, self->fd2);
-+
-+	EXPECT_EQ(recv(self->cfd2, buf, sizeof(buf), 0), -1);
-+	EXPECT_EQ(errno, EBADMSG);
-+
-+	ASSERT_GE(pipe(p), 0);
-+
-+	ret = splice(self->cfd2, NULL, p[1], NULL, sizeof(buf),
-+		     SPLICE_F_NONBLOCK);
-+	EXPECT_EQ(ret, -1);
-+	EXPECT_EQ(errno, EBADMSG);
-+
-+	close(p[0]);
-+	close(p[1]);
-+}
-+
- TEST_F(tls_err, bad_in_large_read)
- {
- 	char txt[3][64];
-@@ -3009,7 +3065,6 @@ static size_t parse_tls_records(struct __test_metadata *_metadata,
- {
- 	const __u8 *rec = rx_buf;
- 	size_t total_plaintext_rx = 0;
--	const __u8 rec_header_len = 5;
- 
- 	while (rec < rx_buf + rx_len) {
- 		__u16 record_payload_len;
-@@ -3029,7 +3084,7 @@ static size_t parse_tls_records(struct __test_metadata *_metadata,
- 
- 		/* Plaintext must not exceed the specified limit */
- 		ASSERT_LE(plaintext_len, max_payload_len);
--		rec += rec_header_len + record_payload_len;
-+		rec += TLS_HDR_LEN + record_payload_len;
- 	}
- 
- 	return total_plaintext_rx;
+ MAINTAINERS                                 |   1 +
+ kernel/audit.h                              |   7 +
+ kernel/audit_tree.c                         |   1 +
+ kernel/audit_watch.c                        |   2 +
+ kernel/auditfilter.c                        | 140 +++++++++++------
+ kernel/auditsc.c                            |  13 ++
+ tools/testing/selftests/Makefile            |   1 +
+ tools/testing/selftests/audit/.gitignore    |   2 +
+ tools/testing/selftests/audit/Makefile      |   9 ++
+ tools/testing/selftests/audit/README        |  30 ++++
+ tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
+ 11 files changed, 389 insertions(+), 44 deletions(-)
+---
+base-commit: ea2bff00da89d7767d677bb68470130ba96f4928
+change-id: 20260806-audit-96a1e71d38b1
 
+Best regards,
 -- 
-2.54.0
+Stanislav Kinsburskii <skinsburskii@gmail.com>
 
