@@ -1,92 +1,189 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3483AE19D;
-	Fri,  7 Aug 2026 07:23:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC103F660D;
+	Fri,  7 Aug 2026 08:00:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786087445; cv=none; b=UyBD7S1zSRnpjlMKl2nBZBmTSutgD7Dk+GQq7F7sqsAlBEDG2+WmmoyiEGqajdeDBEyGqzF6kUPVuus9OZEBiMAL5w4LD4Ky+bjE1hlziivZnahXavArpfwixeR4E1rhl2vjhmCrjG1Hct98Se6mHAYok+4CDptPCyMfddGXuFk=
+	t=1786089666; cv=none; b=OQSrWzsFhLA2IfBt6UE+Ttbk/NEgpEjZp3Jm642/ZTHEOyP4Bv7BcUfdSrQTvdI7rbZSNP8EdBgjFxtXJ4ZoTpxfv9K499FdZ75DncWbLX18qRsm93JXcZ/7khkewRtj55Y2TeFKnI/8pGlxGe/CYBRe84buTtNh99jKo/oVgTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786087445; c=relaxed/simple;
-	bh=+aleDCCvXTmwPBPdFHKzA6RGhkUii/c3JTIYFCe6rLo=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=FGXI47PTYhZHmAg+kSP0IXSCa/s0Wm1GbPzgkMx/BsyWqaCHEbinc+WD7BfuUeyMr63q4QTDXfyWbIYGkic9DHumFMeD91QIjFgSX4u8Bpp4Gjiy/sCKYn8J8U0Eli6TgiFLSoiyCMP8GkfMO0qbk4FONlnHW8ON9MniWmqYYcY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=Jqk31spB; arc=none smtp.client-ip=117.135.210.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+	s=arc-20240116; t=1786089666; c=relaxed/simple;
+	bh=vA+iyiMuAKU4WdXWINwunM/+iSBzTZ/BPT8+SmqDbp4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eL/Dl9UPs+pL4y+dDesHia9yVkzR4aPatoXO6knTTioCx5jt/XeSmXxDgBwQhbCoFjJmTJxrv4aaDT12YlucFry9AaFAjd8OTdR9UXLmr75Amn60/uafY625IyD7qi0RQs/IYDHlPMVQkEAJJ5a7U6ZpAShr0u1VH01Tymh/ABQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=LEkKyh2w; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="Jqk31spB"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="LEkKyh2w"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=+aleDCCvXTmwPBPdFHKzA6RGhkUii/c3JTIYFCe6rLo=; b=J
-	qk31spB/hL2LKYYCdnrwNDwHJCCw3MVa9MTAonyuhS2EZoRtEw2p7ZDX6USQFywp
-	TLfeNit/SLL+qVmqo7FVWk0TEjz8Rr9fR8PpZwegfewLxjPmyHSke8TcYAFRUDJF
-	+xfMCy8+pV1u/aVONqAW5cqzOxranfvYiUmX3G3iEQ=
-Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
- ajax-webmail-wmsvr-40-111 (Coremail) ; Fri, 7 Aug 2026 15:23:09 +0800 (CST)
-Date: Fri, 7 Aug 2026 15:23:09 +0800 (CST)
-From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
-To: "Antonio Quartulli" <antonio@openvpn.net>
-Cc: "Sabrina Dubroca" <sd@queasysnail.net>,
-	"David S . Miller" <davem@davemloft.net>,
-	"Eric Dumazet" <edumazet@google.com>,
-	"Jakub Kicinski" <kuba@kernel.org>,
-	"Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
-	"Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re:Re: [PATCH] selftests/net: ovpn: fix socket leak in
- ovpn_socket() error paths
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-Sender: fffsqian@163.com
-In-Reply-To: <9f20537c-a737-4bf0-b9b7-d2ce57c5fe11@openvpn.net>
-References: <20260807064816.53811-1-fffsqian@163.com>
- <9f20537c-a737-4bf0-b9b7-d2ce57c5fe11@openvpn.net>
-X-NTES-SC: AL_Qu2TBPyTuEsj7yGZbekckk4Vhu49Xcq2vvQv34Fec/kEtgr/+wI7dnBNLF/w7+WmMQaIljyUbB9/yuN3QKxGXXJob8at3lJd26qIbV59AA==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Lr
+	5ELda4t3IwetdpAFGn/lX6FGeF2LyHiG4brun4dGU=; b=LEkKyh2whOQ8s+XJiI
+	of7giGAeNu9DKUKUB4DNbJ90l1vx2ytrCgdU/GMYacPrA6fwTZH4RzKhDRhjR7jh
+	FclDj+LzX6TWcL1M4Ku1/KFlS8i2q/MWgeuICO2ZniD5K7ROmdJFCGIw8JEEDiU1
+	K0DioJjHYfi22Z0Gw8bWSLoOg=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-2 (Coremail) with SMTP id _____wCn7EdlkHVq3qccNw--.18515S2;
+	Fri, 07 Aug 2026 15:59:34 +0800 (CST)
+From: Qingshuang Fu <fffsqian@163.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>,
+	Florian Westphal <fw@strlen.de>,
+	davem@davemloft.net,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Qingshuang Fu <fffsqian@163.com>,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: [PATCH net v2] selftests: netfilter: conntrack_dump_flush: remove unused variables and fix typo
+Date: Fri,  7 Aug 2026 15:59:28 +0800
+Message-Id: <20260807075928.64326-1-fffsqian@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <1beb09cf.50c9.19fdb1ab7c8.Coremail.fuqingshuang@kylinos.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:bygvCgD3v7Tdh3VqMcwtAA--.16168W
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6h0R22p1h91QKQAA3B
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wCn7EdlkHVq3qccNw--.18515S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxArykCF47XrWDZw17Zw1fWFg_yoW7Jr1Dpw
+	18Gwn5Gw18Jr4S93WkCan8AF9xtr9xA34Sqr4xGa4rZanxtr1Yy398ta4fGryYyrWjqr9r
+	uFWjgF90ya1ay3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRxhLbUUUUU=
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwgg2AWp1kGjaSgAA3K
 
-QXQgMjAyNi0wOC0wNyAxNTowNzo1MSwgIkFudG9uaW8gUXVhcnR1bGxpIiA8YW50b25pb0BvcGVu
-dnBuLm5ldD4gd3JvdGU6Cj5IaSB0aGVyZSwKPgo+T24gMDcvMDgvMjAyNiAwODo0OCwgUWluZ3No
-dWFuZyBGdSB3cm90ZToKPj4gRnJvbTogUWluZ3NodWFuZyBGdSA8ZnVxaW5nc2h1YW5nQGt5bGlu
-b3MuY24+Cj4+IAo+PiBUaGUgb3Zwbl9zb2NrZXQoKSBmdW5jdGlvbiBjcmVhdGVzIGEgc29ja2V0
-IGJ1dCBmYWlscyB0byBjbG9zZSBpdCBvbgo+PiBzZXZlcmFsIGVycm9yIHBhdGhzLCBsZWFkaW5n
-IHRvIGEgZmlsZSBkZXNjcmlwdG9yIGxlYWs6Cj4+IAo+PiAxLiBXaGVuIHRoZSBhZGRyZXNzIGZh
-bWlseSBpcyBuZWl0aGVyIEFGX0lORVQgbm9yIEFGX0lORVQ2LCB0aGUgc29ja2V0Cj4+ICAgICBp
-cyBsZWFrZWQgaW4gdGhlIHN3aXRjaCBkZWZhdWx0IGNhc2UuCj4+IDIuIFdoZW4gc2V0c29ja29w
-dCgpIGZvciBTT19SRVVTRUFERFIsIFNPX1JFVVNFUE9SVCwgb3IgU09fTUFSSyBmYWlscywKPj4g
-ICAgIHRoZSBzb2NrZXQgaXMgbGVha2VkLgo+PiAzLiBXaGVuIHNldHNvY2tvcHQoKSBmb3IgSVBW
-Nl9WNk9OTFkgZmFpbHMsIHRoZSBzb2NrZXQgaXMgbGVha2VkLgo+PiAKPj4gVGhlIGV4aXN0aW5n
-IGVycl9zb2NrZXQgbGFiZWwgYWxyZWFkeSBoYW5kbGVzIGNsb3NpbmcgdGhlIHNvY2tldCBmb3IK
-Pj4gdGhlIGJpbmQoKSBmYWlsdXJlIHBhdGguIEZpeCBhbGwgb3RoZXIgZXJyb3IgcGF0aHMgdG8g
-dXNlIGdvdG8KPj4gZXJyX3NvY2tldCBpbnN0ZWFkIG9mIHJldHVybmluZyBkaXJlY3RseSwgZW5z
-dXJpbmcgdGhlIHNvY2tldCBpcwo+PiBwcm9wZXJseSBjbG9zZWQgb24gZXZlcnkgZXJyb3IgcGF0
-aC4KPj4gCj4+IEZpeGVzOiA5NTliYzMzMGE0MzkgKCJ0ZXN0aW5nL3NlbGZ0ZXN0czogYWRkIHRl
-c3QgdG9vbCBhbmQgc2NyaXB0cyBmb3Igb3ZwbiBtb2R1bGUiKQo+Cj5XZSdkIHJhdGhlciBzZW5k
-IGNoYW5nZXMgbGlrZSB0aGlzIHRvIG5ldC1uZXh0LCBzbyBubyBGaXhlcyB0YWcgcmVxdWlyZWQu
-Cj4KPj4gU2lnbmVkLW9mZi1ieTogUWluZ3NodWFuZyBGdSA8ZnVxaW5nc2h1YW5nQGt5bGlub3Mu
-Y24+Cj4KPlRoaXMgc2FpZCwgd2UgYWxyZWFkeSBoYXZlIGEgcGF0Y2ggcmV3b3JraW5nIHRoaXMg
-cGFydCBvZiB0aGUgc2VsZnRlc3QgCj53aXRoLCB3aGljaCBpcyBhbHNvIGFkZHJlc3NpbmcgdGhp
-cyBpc3N1ZToKPgo+aHR0cHM6Ly9wYXRjaHdvcmsub3BlbnZwbi5uZXQvcHJvamVjdC9vdnBuL3Bh
-dGNoLzIwMjYwNTEyMTQ0MzU4LjQxOTU5OS00LWFAdW5zdGFibGUuY2MvCj4KPkl0IGlzIHBlbmRp
-bmcgdG8gYmUgc2VudCB0byBuZXQtbmV4dCBhcyBzb29uIGFzIHdlJ3JlIGZpbmlzaGVkIHdpdGgg
-dGhlIAo+Zml4ZXMgaW4gb3VyIHBpcGUuCj4KPlRoYW5rcyBmb3IgeW91ciBjb250cmlidXRpb24g
-aW4gYW55IGNhc2UhCj4KPgo+UmVnYXJkcywKPgo+Cj4KPi0tIAo+QW50b25pbyBRdWFydHVsbGkK
-Pk9wZW5WUE4gSW5jLgoKSGksCgpUaGFua3MgZm9yIHRoZSBxdWljayByZXBseSBhbmQgdGhlIHBy
-b3ZpZGVkIHBhdGNod29yayBsaW5rLgoKSSBzZWUgeW91IGFscmVhZHkgaGF2ZSBhIHBlbmRpbmcg
-c2VyaWVzIHRoYXQgcmVzb2x2ZXMgdGhpcyBzb2NrZXQgbGVhayBwcm9ibGVtLCBzbyBJJ2xsIHdp
-dGhkcmF3IG15IHBhdGNoIGFuZCB3b24ndCBmb2xsb3cgdXAgb24gdGhpcyBzdWJtaXNzaW9uIGZ1
-cnRoZXIuCgpJJ2xsIHRyYWNrIHlvdXIgcGF0Y2ggc2VyaWVzIHRvIHJldmlldyB0aGUgY2hhbmdl
-cyBsYXRlci4KCkJlc3QgcmVnYXJkcywKUWluZ3NodWFuZyBGdQoK
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+
+Remove unused 'rplnlh' in conntrack_data_insert(), and remove unused
+'rplnlh' and 'nest' variables in conntrack_count_zone() and
+conntrack_flush_zone(). These variables were declared but never used
+since their introduction.
+
+Also fix typo: rename misspelled conntracK_count_zone() to
+conntrack_count_zone().
+
+Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+v2:
+  - Drop Fixes tag as this is a cleanup, not a bug fix
+  - Add Reviewed-by tag from Fernando Fernandez Mancera
+  - Also fix the typo in function name conntracK_count_zone
+  - Link to v1: https://lore.kernel.org/all/20260806075052.1934904-1-fffsqian@163.com/
+---
+ .../net/netfilter/conntrack_dump_flush.c      | 31 +++++++++----------
+ 1 file changed, 14 insertions(+), 17 deletions(-)
+
+diff --git a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+index 5cecb8a1bc94..31b8250ddc53 100644
+--- a/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
++++ b/tools/testing/selftests/net/netfilter/conntrack_dump_flush.c
+@@ -102,7 +102,6 @@ static int conntrack_data_insert(struct mnl_socket *sock, struct nlmsghdr *nlh,
+ 				 uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *rplnlh;
+ 	unsigned int portid;
+ 	int ret;
+ 
+@@ -216,12 +215,11 @@ static int count_entries(const struct nlmsghdr *nlh, void *data)
+ 	return MNL_CB_OK;
+ }
+ 
+-static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
++static int conntrack_count_zone(struct mnl_socket *sock, uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *nlh, *rplnlh;
++	struct nlmsghdr *nlh;
+ 	struct nfgenmsg *nfh;
+-	struct nlattr *nest;
+ 	unsigned int portid;
+ 	int ret;
+ 
+@@ -266,9 +264,8 @@ static int conntracK_count_zone(struct mnl_socket *sock, uint16_t zone)
+ static int conntrack_flush_zone(struct mnl_socket *sock, uint16_t zone)
+ {
+ 	char buf[MNL_SOCKET_BUFFER_SIZE];
+-	struct nlmsghdr *nlh, *rplnlh;
++	struct nlmsghdr *nlh;
+ 	struct nfgenmsg *nfh;
+-	struct nlattr *nest;
+ 	unsigned int portid;
+ 	int ret;
+ 
+@@ -326,7 +323,7 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 	ret = mnl_socket_bind(self->sock, 0, MNL_SOCKET_AUTOPID);
+ 	EXPECT_EQ(ret, 0);
+ 
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
+ 	if (ret < 0 && errno == EPERM)
+ 		SKIP(return, "Needs to be run as root");
+ 	else if (ret < 0 && errno == EOPNOTSUPP)
+@@ -423,7 +420,7 @@ FIXTURE_SETUP(conntrack_dump_flush)
+ 					 NF_CT_DEFAULT_ZONE_ID);
+ 	EXPECT_EQ(ret, 0);
+ 
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
+ 	EXPECT_GE(ret, 2);
+ 	if (ret > 2)
+ 		SKIP(return, "kernel does not support filtering by zone");
+@@ -437,7 +434,7 @@ TEST_F(conntrack_dump_flush, test_dump_by_zone)
+ {
+ 	int ret;
+ 
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+@@ -447,13 +444,13 @@ TEST_F(conntrack_dump_flush, test_flush_by_zone)
+ 
+ 	ret = conntrack_flush_zone(self->sock, TEST_ZONE_ID);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntracK_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
+ 	EXPECT_EQ(ret, 2);
+ }
+ 
+@@ -463,13 +460,13 @@ TEST_F(conntrack_dump_flush, test_flush_by_zone_default)
+ 
+ 	ret = conntrack_flush_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
+ 	EXPECT_EQ(ret, 0);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID + 1);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 1);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntracK_count_zone(self->sock, TEST_ZONE_ID + 2);
++	ret = conntrack_count_zone(self->sock, TEST_ZONE_ID + 2);
+ 	EXPECT_EQ(ret, 2);
+-	ret = conntracK_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
++	ret = conntrack_count_zone(self->sock, NF_CT_DEFAULT_ZONE_ID);
+ 	EXPECT_EQ(ret, 0);
+ }
+ 
+
+base-commit: 0d839570765118029aa8bf4a95444c6a11aacf85
+-- 
+2.25.1
+
