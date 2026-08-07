@@ -1,106 +1,88 @@
-Received: from va-1-115.ptr.blmpb.com (va-1-115.ptr.blmpb.com [209.127.230.115])
+Received: from va-1-114.ptr.blmpb.com (va-1-114.ptr.blmpb.com [209.127.230.114])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2030463B8E
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 08:01:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.115
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8020A384CD5
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 08:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.114
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786089701; cv=none; b=NmcHYnIGj2N70HbM3cAtFsMi3PNrwEnyVlCZevlnQNfLHL3xIxEXx5v6LnVBK8eztE3EqchIT7/K+1N00DEjvKA94fg5ppOCmHa3N9pxEPRcVpEEAeYMK1VXGG8rihWbFsv42rkceA6HgAWa7Ez3sMaAgsL3CwjJb/g7GUZz8Ks=
+	t=1786090537; cv=none; b=d503me6Qc+GFkiUE+soNaWFxkHislUBCroz6EayL9w0HHY/LP+BtL7dz3OzaO5qQiI04T6ir8Et4xeR9WSzz+TxxQm38LbDTyhEJMomZKA5R2iZON7h+C3jO5JZOs0IWbcvgUr119GankOuf+kxMWMW+U3ZBZlmmrNyPNfH1ebc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786089701; c=relaxed/simple;
-	bh=FpWnexbTRPZZjWnkVgOVliYNIT8UTJAknZ1Ml5PJrm8=;
-	h=From:References:Content-Type:To:Subject:Date:In-Reply-To:Cc:
-	 Message-Id:Mime-Version; b=in7bFijBzLZrhY2QWleiSF5ONX03TBUMLwci64WFL3395/cIJcV+Ghy/XswaHFgxmuul6RWxVquPZ2L0JbE2eX2xXMwy4Gu8QfNG7D8pwLdH8pioGvRWVFUEdK6aHx7GvvDvzbnxo2ZeS19uQ+JvqdGYjN+QsZ7nC1NkzZ+fqEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=EPvHblHY; arc=none smtp.client-ip=209.127.230.115
+	s=arc-20240116; t=1786090537; c=relaxed/simple;
+	bh=3+o2/VO5R0mB+68o7NKmUJbTFlIi1AwDevpwEFP7E9A=;
+	h=To:Date:Mime-Version:In-Reply-To:Cc:Message-Id:References:
+	 Content-Type:From:Subject; b=lOKGDBU89MQIqMMopIz78eOwpZ6Gli5NQodeQf0+1iG8sVT1YsfUeVpjKlC4X9/WEmM6zdFWVoS2jR5CrBsKlMh7ONv0oqgomukni/q1JpwiCWCpC1woQl+S/zeji/buVuA4x9iEy32MwljtdmOBwMgoS5qLcoFmSt5twWFnBNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=Xoeu3nT1; arc=none smtp.client-ip=209.127.230.114
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="EPvHblHY"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="Xoeu3nT1"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1786089684; h=from:subject:
+ s=2212171451; d=bytedance.com; t=1786090529; h=from:subject:
  mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
  mime-version:in-reply-to:message-id;
- bh=nLOA9Bye6eC2C0r/n8G6G6RgBNHXoYHLuuMhRrEPYzM=;
- b=EPvHblHYegMfPrIl76ov26yiVB0saQtYA9g1JR7gzDSaKKolWl/mkggC08xuSrBD0bXkKz
- 0zW80kScl/vcaCNvLlcxmC+jO9JjUbUTp1KaggscC3kRe4YahMT3SwD0jdoKcf7Z8cxYO2
- t09cmt9q7Vp46DWhb1X8kC2+pnVkqXZZFepu+JsX598MVlml6ljwyBKrwxxHPzQpOAt9Dx
- Wb92qGKgLI6xHe39jN2QJ9WWisv5pEXAzojDMp0zfKpajCJhJAjhOrOERFJ8kAt5NtzqtY
- 3l5OGe+mT6SFKlTeoOyYSZC0ZdeDEoMSJJzPqwKEbevUkgnxmhrzYUYCuV0f4g==
-User-Agent: Mozilla Thunderbird
-From: "Rui Qi" <qirui.001@bytedance.com>
-X-Original-From: Rui Qi <qirui.001@bytedance.com>
-References: <20260806083101.2651025-1-qirui.001@bytedance.com> <20260807104709.0626fd20ed7618273dcbead2@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Subject: Re: [PATCH 1/2] selftests/ftrace: Force C locale for readelf in uprobe test
-Date: Fri, 7 Aug 2026 16:01:05 +0800
-In-Reply-To: <20260807104709.0626fd20ed7618273dcbead2@kernel.org>
-Cc: "Steven Rostedt" <rostedt@goodmis.org>, 
-	"Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, 
-	"Shuah Khan" <shuah@kernel.org>, "Heiko Carstens" <hca@linux.ibm.com>, 
-	<linux-trace-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>, 
-	<linux-kernel@vger.kernel.org>
-Message-Id: <a1f16b86-89ca-4286-841b-da9a081c8d33@bytedance.com>
+ bh=DbvObTx+d2D9PFgjN7VFX42tnaAlyiskU4HY5Chv8tA=;
+ b=Xoeu3nT19ies+apLFad9bl4ppsl42T4Pp0uAohgdGvLTNmIqzFTG+aOe3NA9b1b60jhQAJ
+ 7qC1RnekwYMKKuLkJ+oqbGJ6lfzuoZASc+/3pMnOn8TbaDwnY6W0XCIRoGWmStRzueZMH1
+ XYY8eHTx2NDIQgYW80Q92s/BipjejGZLi/vApLsdPcKXdeF227S4XoDfKxeJ/Pb9h2lVRo
+ LWRfJKl4VFaBCvUlZTYfHY84toUg3gDFHPNhsLsl1CO9ylKQUn1sVJWGuxwIMKZ/v8NxVQ
+ xaxzCu4yPh0LG2KIpORqvcXHnXdc05njiyfS9S1TYyZW9PvDj2RkUFnqSQRlbw==
+Content-Transfer-Encoding: 7bit
+X-Lms-Return-Path: <lba+26a75941f+1cbac0+vger.kernel.org+qirui.001@bytedance.com>
+X-Mailer: git-send-email 2.20.1
+To: "Steven Rostedt" <rostedt@goodmis.org>, 
+	"Masami Hiramatsu" <mhiramat@kernel.org>
+Date: Fri,  7 Aug 2026 16:15:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Lms-Return-Path: <lba+26a7590d1+dfa1de+vger.kernel.org+qirui.001@bytedance.com>
-Content-Transfer-Encoding: 7bit
+In-Reply-To: <20260806083101.2651025-1-qirui.001@bytedance.com>
+Cc: "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>, 
+	"Shuah Khan" <shuah@kernel.org>, "Heiko Carstens" <hca@linux.ibm.com>, 
+	<linux-kernel@vger.kernel.org>, <linux-trace-kernel@vger.kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, "Rui Qi" <qirui.001@bytedance.com>
+Message-Id: <20260807081512.2974757-1-qirui.001@bytedance.com>
+X-Original-From: Rui Qi <qirui.001@bytedance.com>
+References: <20260806083101.2651025-1-qirui.001@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+From: "Rui Qi" <qirui.001@bytedance.com>
+Subject: [PATCH v2 0/2] selftests/ftrace: Fix add_remove_uprobe robustness
 
-On 8/7/26 9:47 AM, Masami Hiramatsu (Google) wrote:
-> On Thu,  6 Aug 2026 16:31:00 +0800
-> "Rui Qi" <qirui.001@bytedance.com> wrote:
-> 
->> The add_remove_uprobe test parses the entry point from readelf -h output
->> by looking for the English "Entry" field. readelf output is localized
->> via gettext, while the ftracetest runner does not force LC_ALL=C and the
->> top-level Makefile leaves LANG effective for child processes.
-> 
-> Hmm, to make it safer, I think we should force LC_ALL=C in the top level
-> of ftracetest, instead of setting it in each test case.
-> 
-> Thank you,
-> 
+Hi,
 
-Thank you for the suggestion.
+This series fixes two ways add_remove_uprobe can construct an invalid
+uprobe offset.
 
-Agreed, setting LC_ALL=C in the ftracetest runner is better than fixing
-this one readelf invocation. I will update ftracetest to export LC_ALL=C
-so all test cases inherit the C locale, and send a v2.
+Patch 1 follows Masami's feedback on v1 and forces the C locale in the
+top-level ftracetest runner, rather than setting LC_ALL=C around each
+readelf invocation.
 
-Thanks,
-Rui
+Patch 2 fixes the remaining offset issue. readelf reports the ELF entry
+point as a virtual address, while uprobe_events expects a file offset.
+Convert the entry point through the LOAD program headers so the test also
+works for non-PIE executables.
 
+Changes in v2:
+- Move LC_ALL=C to the top-level ftracetest runner, as suggested by
+  Masami.
+- Keep the entry-point-to-file-offset conversion as the second patch and
+  rely on the runner-provided locale for readelf output.
 
->>
->> If readelf prints a translated field name, ENTRYPOINT becomes empty and
->> the uprobe_events write is rejected because the offset after PATH: is
->> missing.
->>
->> Run readelf with LC_ALL=C so the parsed header field remains stable
->> across locales.
->>
->> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
->> ---
->>  .../selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc       | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
->> index f2048c244526..f33a863be68b 100644
->> --- a/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
->> +++ b/tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
->> @@ -12,7 +12,7 @@ echo 0 > events/enable
->>  echo > dynamic_events
->>  
->>  REALBIN=`readlink -f /bin/sh`
->> -ENTRYPOINT=`readelf -h ${REALBIN} | grep Entry | sed -e 's/[^0]*//'`
->> +ENTRYPOINT=`LC_ALL=C readelf -h ${REALBIN} | grep Entry | sed -e 's/[^0]*//'`
->>  
->>  echo "p:myevent ${REALBIN}:${ENTRYPOINT}" >> uprobe_events
->>  
->> -- 
->> 2.20.1
-> 
+Testing:
+- ./scripts/checkpatch.pl --strict -g HEAD~2..HEAD
+- sh -n tools/testing/selftests/ftrace/ftracetest
+- sh -n tools/testing/selftests/ftrace/test.d/dynevent/add_remove_uprobe.tc
+
+Rui Qi (2):
+  selftests/ftrace: Force C locale in ftracetest
+  selftests/ftrace: Convert ELF entry point to file offset in uprobe
+    test
+
+ tools/testing/selftests/ftrace/ftracetest     |  3 +++
+ .../test.d/dynevent/add_remove_uprobe.tc      | 27 +++++++++++++++++--
+ 2 files changed, 28 insertions(+), 2 deletions(-)
+
+-- 
+2.20.1
