@@ -1,882 +1,169 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6132D38AC96;
-	Fri,  7 Aug 2026 07:04:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6D039C00F
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 07:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786086301; cv=none; b=NoMfvr4u/UCX5fafchPJmo7RFOfN96ncZPMZiy4bwycmu390zV5CaMrjDWtVUlkj0tOyh7WerTd7DmRSpNDzJH+QUIfzQxcI3nlePD1O0FCtb00kxsUzGF8dW/e7IA9QeI/iTvWxvbJmb9kC96bKL4tyAyPHKbPGoUk1u7xz0ug=
+	t=1786086477; cv=none; b=n3h+dlZScjJlhsrLiYh/Kzv+G8uMzhPn0O4sPGEZaNZOLuhYlDgYNSZWsAjmj8qAEtdN8ER/AbNgOv0y7gmPjc4L/fd0+fZgkdni+sjY3ac/2Q1433xmQA3qK80kotaYaCvtnncvfar6QZqGfWGlKgJ+g5/kYPgpqlbgKzrXUzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786086301; c=relaxed/simple;
-	bh=FFIUTaU+9A61WU/aXFapOXAypEKF+bWXwpKUNCOTaTA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BGHoytsfZcoZfpDWxuAsuVR3RNuadr2gabDfzwjFLcH+JWjAen8YrDKOocL5SWRE/w5wya1xNumXnpgEKVJLWRXaKFjYlbxDgy+xnqDJY4Cot8wpBsGgVO16IIp8EO2Q7vBeYuyTrGaJ2PtgywN0Y559l+3o70sZ/ibV0oq6+to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dj96D+Tl; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786086477; c=relaxed/simple;
+	bh=4JFfyud0ViTeW+K0tLZ1hg5DaeVAY0NyBjvL2WbsxTo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=WlDzKoCfJI0UlAC5HKHVQB7yLXEk7np0YCWbgb0WxqDHsESZuyrp1WVy4KvzkAlfdezcWsazZUgS4ZGij4ZnhIfJf9lIRjGY0HB0AjIYe1Ejh2hhuP9pl0P6ENzGlZWc7KNb+FzCX8CDg2HFWKaKGEooeW4hvGxAasAXVYKOaCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=openvpn.net; spf=pass smtp.mailfrom=openvpn.com; dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b=LfqITn2G; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=openvpn.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openvpn.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dj96D+Tl"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786086290;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=lVFGsj6wF8TniSm635aV4RrzfQPS2L0YIewv428Po2A=;
-	b=dj96D+Tlrgu8b1nz1jlaA0I5jwuCOMazRznMbo5mBfUQgUZm2BVoRNoHt3B1Bb9+RVAQ1v
-	IiVJ0tIXW/29eoF1vHHPlnhitG2vPqYOyQmZpavVB0uT9EuiHRNpYbJu1jfqGMk8Ub3cMa
-	LIZ9Ze9jGOx72/aU+HWLE6Voqv+bZIQ=
-From: "Hui Zhu" <hui.zhu@linux.dev>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	davem@davemloft.net,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	KP Singh <kpsingh@kernel.org>,
-	Tao Chen <chen.dylane@linux.dev>,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Anton Protopopov <a.s.protopopov@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Tobias Klauser <tklauser@distanz.ch>,
-	Eyal Birger <eyal.birger@gmail.com>,
-	Rong Tao <rongtao@cestc.cn>,
-	Hao Luo <haoluo@google.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Kees Cook <kees@kernel.org>,
-	Tejun Heo <tj@kernel.org>,
-	Jeff Xu <jeffxu@chromium.org>,
-	mkoutny@suse.com,
-	Jan Hendrik Farr <kernel@jfarr.cc>,
-	Christian Brauner <brauner@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Brian Gerst <brgerst@gmail.com>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Willem de Bruijn <willemb@google.com>,
-	Jason Xing <kerneljasonxing@gmail.com>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Lance Yang <lance.yang@linux.dev>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Barry Song <baohua@kernel.org>,
-	Geliang Tang <geliang@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-mm@kvack.org,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Cc: Hui Zhu <zhuhui@kylinos.cn>
-Subject: [PATCH bpf-next 4/4] selftests/bpf: add memcg async reclaim test for bpf_wq/bpf_thread_wq
-Date: Fri,  7 Aug 2026 15:04:12 +0800
-Message-ID: <8c34a7f2ad826054c7e3ae88276614415755e3bc.1786086076.git.zhuhui@kylinos.cn>
-In-Reply-To: <cover.1786086076.git.zhuhui@kylinos.cn>
-References: <cover.1786086076.git.zhuhui@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=openvpn.net header.i=@openvpn.net header.b="LfqITn2G"
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-498028b3d5eso29907045e9.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 00:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=openvpn.net; s=google; t=1786086474; x=1786691274; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:from:content-language:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=QMsmR/uX9VDEyf5PzjWtsFu058wtvxYUxRMxUh1B8Co=;
+        b=LfqITn2GauWayY8eGWRQ1SBomypMt8kUVJZcl5hvClzuvr7h9EK6QogvYTclUQm9+U
+         xCttY/rzyvnjJCLp52QIRCqvaqxD2Igq2byD49nwroSMQ4nVy4oVGGBai5uCc8rrqtXi
+         rTg0BvEiX676XMjoCogoCaXMV48am88sG4bLdHtkLyi9lLnJ4X3Nr/vEAAfxSmTwnuDM
+         Eg7cuqYglCu8O5vyLzA4nDqiYyU83/5lSkwIfI/zrERG5hUrzcX62+XFHDToEztj5wP+
+         GIe/IVogeGTcVn8h5E/ats1g2zy0INWL5JFvjPRCXy4j2q9+yGoXjL5ztUw7RRAFc9gV
+         6DrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786086474; x=1786691274;
+        h=content-transfer-encoding:content-type:in-reply-to:organization
+         :autocrypt:from:content-language:references:cc:to:subject:user-agent
+         :mime-version:date:message-id:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=QMsmR/uX9VDEyf5PzjWtsFu058wtvxYUxRMxUh1B8Co=;
+        b=lIQyf+obVojHFbbYb64o7XvpNvjBM3kc1kTZUJyLf8PDVRgUNv1nUM1LIkmeUTAT1J
+         AsRLwApKPDtHSROyRyC8JD3Jd3Epfy0/wnbMPPKU4X5RqZ7zm8FkqwURdzdDfdRNzd11
+         5gnAGaOYQ57GU4P4LPhd81klrkebnMpKWAQXuaoR7fFSrXafLEllghinuASsDf/Ic7q7
+         wNMEOCy1GRLCf9q06ObC1Z+dOTsnCBR+AndULCLilUmBrFYPKyahz7eyUkbwH2Oj8ltP
+         gZKBY4dzFxtoYU0n7qb0quExkNuy5DV+PXSusrQXJzZoGWjL2sBEBizR8z347SF4YLD5
+         Oa+A==
+X-Forwarded-Encrypted: i=1; AHgh+Rod4ESTQRIKhG4lUuBLR9klKpVt7kRVaKaUEZGaHyky5UOkxVWVb8UJkYgweM138w3NvUMOzK+0XVygZ8+c3iU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzEu3IUEC+7xKqdtpyrn1vAGzAif1WLG3rf6RJ5WH2WPjYg+Ai
+	rujHtqLCPEbeXs/nVJ3ANOJH6vpkRA6iPc9a9RQlku9vi7u0p68kibYmt90tBWSOdF0uY+CtZaL
+	LLlVpxLn26hjjI/4jUMNKK/H5xOiCrTm5glcLg0fnDvx2xzrXxUq4z9PC4G6/OUU=
+X-Gm-Gg: AR+sD11dOQkqmPWb3BZUH5C42/zunm1PmvGnUmuEshDUp1gL3XFTQ4kKPbkEOtv8evn
+	ioXkOtF0LbRp39pDGm5lFZBKjeXbNFq0a8d1/34yttlBx0QDmLgh+UDfClZ7oHRA5nayUF4RCTm
+	63d72a2XjATv50EQII2O5lKpHQTmn5AFd2SS5D4K/Jk7PW7+bW2gk0J++8SK7a16Q6gGUNq6YVb
+	m3yn8NgDwkabie4e34+PSVYOl1UkzxzH+sZJ6eWGb+RhAzXLEQ6DrFQrStMslld7SunjFliBJnH
+	3vqyihUMyne0tu7HhIkDRwWXbEdqZdngOobbpn5wMe/OvQ0H6ZjDSl7y3sGJNQE4S30QuESbDNQ
+	ifnU6avydy8qOJlI7+h1DH5D8RipU5jPnjLELJu8k8nyqOTV6ULgY0CeZ0TrdAEuoCGKbolsiHO
+	kfqwS+0evAfaqel8fZVeDJYI0x1VZwsjbyKedem+3hWv6nC+1Ddo/w2uJizojuHj8nQVNq
+X-Received: by 2002:a05:600c:4514:b0:496:bbce:f3 with SMTP id 5b1f17b1804b1-4994e71ed7bmr258910355e9.6.1786086474389;
+        Fri, 07 Aug 2026 00:07:54 -0700 (PDT)
+Received: from [192.168.182.19] ([185.242.181.115])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995428f294sm121706305e9.15.2026.08.07.00.07.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Aug 2026 00:07:53 -0700 (PDT)
+Message-ID: <9f20537c-a737-4bf0-b9b7-d2ce57c5fe11@openvpn.net>
+Date: Fri, 7 Aug 2026 09:07:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/net: ovpn: fix socket leak in ovpn_socket()
+ error paths
+To: Qingshuang Fu <fffsqian@163.com>, Sabrina Dubroca <sd@queasysnail.net>,
+ "David S . Miller" <davem@davemloft.net>, Eric Dumazet
+ <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Qingshuang Fu <fuqingshuang@kylinos.cn>
+References: <20260807064816.53811-1-fffsqian@163.com>
+Content-Language: en-US
+From: Antonio Quartulli <antonio@openvpn.net>
+Autocrypt: addr=antonio@openvpn.net; keydata=
+ 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
+ ifS0+hzvnPVD9wXa9kdjO+0H
+Organization: OpenVPN Inc.
+In-Reply-To: <20260807064816.53811-1-fffsqian@163.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Hui Zhu <zhuhui@kylinos.cn>
+Hi there,
 
-Add memcg_async_reclaim selftest that verifies BPF-driven async
-proactive reclaim can mitigate refault-induced slowdown under memory
-pressure.
+On 07/08/2026 08:48, Qingshuang Fu wrote:
+> From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> 
+> The ovpn_socket() function creates a socket but fails to close it on
+> several error paths, leading to a file descriptor leak:
+> 
+> 1. When the address family is neither AF_INET nor AF_INET6, the socket
+>     is leaked in the switch default case.
+> 2. When setsockopt() for SO_REUSEADDR, SO_REUSEPORT, or SO_MARK fails,
+>     the socket is leaked.
+> 3. When setsockopt() for IPV6_V6ONLY fails, the socket is leaked.
+> 
+> The existing err_socket label already handles closing the socket for
+> the bind() failure path. Fix all other error paths to use goto
+> err_socket instead of returning directly, ensuring the socket is
+> properly closed on every error path.
+> 
+> Fixes: 959bc330a439 ("testing/selftests: add test tool and scripts for ovpn module")
 
-The test creates a parent cgroup with a fixed memory.max, and two
-child cgroups (high/low) under it. Both children concurrently write
-and repeatedly read-fault a file larger than the shared limit. A BPF
-program monitors the "high" cgroup's WORKINGSET_REFAULT_FILE stat via
-a periodic timer, and when it detects refault growth beyond a
-threshold, triggers async reclaim on the "low" cgroup using
-bpf_try_to_free_mem_cgroup_pages(), expecting the "high" cgroup's
-workload to finish faster than without such reclaim.
+We'd rather send changes like this to net-next, so no Fixes tag required.
 
-Two variants are covered:
-- test_memcg_wq_async_reclaim: async work driven by bpf_wq.
-- test_memcg_thread_wq_async_reclaim: async work driven by the new
-  bpf_thread_wq, which pins the reclaim work to the "low" cgroup's
-  resource context via bpf_thread_wq_init()'s cgroup_id argument.
+> Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
----
- .../bpf/prog_tests/memcg_async_reclaim.c      | 479 ++++++++++++++++++
- .../selftests/bpf/progs/memcg_async_reclaim.c | 255 ++++++++++
- 2 files changed, 734 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
- create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+This said, we already have a patch reworking this part of the selftest 
+with, which is also addressing this issue:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-new file mode 100644
-index 000000000000..40a5fe62cb38
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
-@@ -0,0 +1,479 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Memory controller eBPF async reclaim test
-+ */
-+
-+#include <test_progs.h>
-+#include <sys/mman.h>
-+#include <sys/stat.h>
-+#include <sys/time.h>
-+#include <sys/vfs.h>
-+#include <sys/wait.h>
-+#include <fcntl.h>
-+#include <linux/magic.h>
-+#include <unistd.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+
-+#include "cgroup_helpers.h"
-+
-+struct bpf_args_s {
-+	u64 high_cgroup_id;
-+	u64 low_cgroup_id;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+#include "memcg_async_reclaim.skel.h"
-+
-+#define FILE_SIZE (32 * 1024 * 1024ul)
-+#define BUFFER_SIZE (4096)
-+#define CG_LIMIT (32 * 1024 * 1024ul)
-+#define READ_TIMES 16
-+
-+#define CG_DIR "/memcg_async_reclaim"
-+#define CG_HIGH_DIR CG_DIR "/high"
-+#define CG_LOW_DIR CG_DIR "/low"
-+
-+#define CHECK_PERIOD_NS (2 * 1000 * 1000ull)
-+#define EVENT_DELTA_THRESHOLD 1
-+
-+/*
-+ * Test files must reside on a filesystem that supports page reclaim without
-+ * swap (e.g. ext4). If /tmp is on tmpfs, the file pages are shmem-backed
-+ * and can only be reclaimed through swap. But the test disables swap
-+ * (memory.swap.max=0), making reclaim impossible and causing OOM.
-+ *
-+ * Pick a directory on a non-tmpfs filesystem: try $TMPDIR first, then /tmp,
-+ * and fall back to the current directory if the chosen path is on tmpfs.
-+ */
-+static int get_test_dir(char *buf, size_t size)
-+{
-+	static const char * const candidates[] = { "/tmp", "." };
-+	const char *tmpdir = getenv("TMPDIR");
-+	struct statfs sfs;
-+	size_t i;
-+
-+	if (tmpdir && tmpdir[0] && statfs(tmpdir, &sfs) == 0 &&
-+	    sfs.f_type != TMPFS_MAGIC) {
-+		snprintf(buf, size, "%s", tmpdir);
-+		return 0;
-+	}
-+
-+	for (i = 0; i < ARRAY_SIZE(candidates); i++) {
-+		if (statfs(candidates[i], &sfs) == 0 &&
-+		    sfs.f_type != TMPFS_MAGIC) {
-+			snprintf(buf, size, "%s", candidates[i]);
-+			return 0;
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+static int setup_high_low_cgroups(u64 *high_cgroup_id, u64 *low_cgroup_id)
-+{
-+	int ret;
-+	char limit_buf[20];
-+
-+	ret = setup_cgroup_environment();
-+	if (!ASSERT_OK(ret, "setup_cgroup_environment"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	ret = enable_controllers(CG_DIR, "memory");
-+	if (!ASSERT_OK(ret, "enable_controllers"))
-+		goto cleanup;
-+
-+	snprintf(limit_buf, sizeof(limit_buf), "%lu", CG_LIMIT);
-+	ret = write_cgroup_file(CG_DIR, "memory.max", limit_buf);
-+	if (!ASSERT_OK(ret, "write_cgroup_file memory.max"))
-+		goto cleanup;
-+
-+	ret = write_cgroup_file(CG_DIR, "memory.swap.max", "0");
-+	if (!ASSERT_OK(ret, "write_cgroup_file memory.swap.max"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_HIGH_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_HIGH_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*high_cgroup_id = get_cgroup_id(CG_HIGH_DIR);
-+	if (!ASSERT_GT(*high_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	ret = create_and_get_cgroup(CG_LOW_DIR);
-+	if (!ASSERT_GE(ret, 0, "create_and_get_cgroup " CG_LOW_DIR))
-+		goto cleanup;
-+	close(ret);
-+
-+	*low_cgroup_id = get_cgroup_id(CG_LOW_DIR);
-+	if (!ASSERT_GT(*high_cgroup_id, 0, "get_cgroup_id"))
-+		goto cleanup;
-+
-+	return 0;
-+
-+cleanup:
-+	cleanup_cgroup_environment();
-+	return -1;
-+}
-+
-+static int write_file(const char *filename)
-+{
-+	int ret = -1;
-+	size_t written = 0;
-+	char *buffer;
-+	FILE *fp;
-+
-+	fp = fopen(filename, "wb");
-+	if (!fp)
-+		goto out;
-+
-+	buffer = malloc(BUFFER_SIZE);
-+	if (!buffer)
-+		goto cleanup_fp;
-+
-+	memset(buffer, 'A', BUFFER_SIZE);
-+
-+	while (written < FILE_SIZE) {
-+		size_t to_write = FILE_SIZE - written < BUFFER_SIZE ?
-+				  FILE_SIZE - written : BUFFER_SIZE;
-+
-+		if (fwrite(buffer, 1, to_write, fp) != to_write)
-+			goto cleanup;
-+		written += to_write;
-+	}
-+
-+	ret = 0;
-+cleanup:
-+	free(buffer);
-+cleanup_fp:
-+	fclose(fp);
-+out:
-+	return ret;
-+}
-+
-+static int read_file(const char *filename, int iterations)
-+{
-+	int ret = -1;
-+	long page_size = sysconf(_SC_PAGESIZE);
-+	char *map;
-+	size_t i;
-+	int fd;
-+	struct stat sb;
-+
-+	fd = open(filename, O_RDONLY);
-+	if (fd == -1)
-+		goto out;
-+
-+	if (fstat(fd, &sb) == -1)
-+		goto cleanup_fd;
-+
-+	if (sb.st_size != FILE_SIZE) {
-+		fprintf(stderr, "File size mismatch: expected %lu, got %lu\n",
-+			(unsigned long)FILE_SIZE, (unsigned long)sb.st_size);
-+		goto cleanup_fd;
-+	}
-+
-+	map = mmap(NULL, FILE_SIZE, PROT_READ, MAP_PRIVATE, fd, 0);
-+	if (map == MAP_FAILED)
-+		goto cleanup_fd;
-+
-+	for (int iter = 0; iter < iterations; iter++) {
-+		for (i = 0; i < FILE_SIZE; i += page_size) {
-+			/* access a byte to trigger page fault */
-+			asm volatile("" :: "r"(map[i]) : "memory");
-+		}
-+	}
-+
-+	if (munmap(map, FILE_SIZE) == -1)
-+		goto cleanup_fd;
-+
-+	ret = 0;
-+
-+cleanup_fd:
-+	close(fd);
-+out:
-+	return ret;
-+}
-+
-+static int real_test_child_work(const char *cgroup_path, char *data_filename,
-+				char *time_filename, int read_times)
-+{
-+	struct timeval start, end;
-+	double elapsed;
-+	FILE *fp;
-+
-+	if (!ASSERT_OK(join_parent_cgroup(cgroup_path), "join_parent_cgroup"))
-+		return -1;
-+
-+	gettimeofday(&start, NULL);
-+
-+	if (!ASSERT_OK(write_file(data_filename), "write_file"))
-+		return -1;
-+
-+	if (!ASSERT_OK(read_file(data_filename, read_times), "read_file"))
-+		return -1;
-+
-+	gettimeofday(&end, NULL);
-+
-+	if (!time_filename)
-+		return 0;
-+
-+	elapsed = (end.tv_sec - start.tv_sec) +
-+		  (end.tv_usec - start.tv_usec) / 1000000.0;
-+	printf("%.6f\n", elapsed);
-+
-+	fp = fopen(time_filename, "w");
-+	if (!ASSERT_OK_PTR(fp, "fopen"))
-+		return -1;
-+	fprintf(fp, "%.6f", elapsed);
-+	fclose(fp);
-+
-+	return 0;
-+}
-+
-+static int get_time(char *time_filename, double *time)
-+{
-+	int ret = -1;
-+	FILE *fp;
-+	char buf[64];
-+
-+	fp = fopen(time_filename, "r");
-+	if (!ASSERT_OK_PTR(fp, "fopen"))
-+		goto out;
-+
-+	if (!ASSERT_OK_PTR(fgets(buf, sizeof(buf), fp), "fgets"))
-+		goto cleanup;
-+
-+	if (sscanf(buf, "%lf", time) != 1) {
-+		PRINT_FAIL("sscanf %s", buf);
-+		goto cleanup;
-+	}
-+
-+	ret = 0;
-+cleanup:
-+	fclose(fp);
-+out:
-+	return ret;
-+}
-+
-+static int
-+run_high_low_workload(double *high_elapsed, double *low_elapsed, int read_times)
-+{
-+	char test_dir[PATH_MAX], high_data_file[PATH_MAX], low_data_file[PATH_MAX];
-+	char high_time_file[PATH_MAX], low_time_file[PATH_MAX];
-+	int ret, fd;
-+	pid_t high_pid, low_pid;
-+	int status;
-+
-+	ret = get_test_dir(test_dir, sizeof(test_dir));
-+	if (!ASSERT_OK(ret, "get_test_dir: no non-tmpfs directory found"))
-+		return -1;
-+
-+	fd = snprintf(high_data_file, sizeof(high_data_file),
-+		      "%s/memcg_async_high_data_XXXXXX", test_dir);
-+	if (!ASSERT_LT(fd, sizeof(high_data_file), "high_data_file path"))
-+		return -1;
-+
-+	fd = snprintf(low_data_file, sizeof(low_data_file),
-+		      "%s/memcg_async_low_data_XXXXXX", test_dir);
-+	if (!ASSERT_LT(fd, sizeof(low_data_file), "low_data_file path"))
-+		return -1;
-+
-+	fd = snprintf(high_time_file, sizeof(high_time_file),
-+		      "%s/memcg_async_high_time_XXXXXX", test_dir);
-+	if (!ASSERT_LT(fd, sizeof(high_time_file), "high_time_file path"))
-+		return -1;
-+
-+	fd = snprintf(low_time_file, sizeof(low_time_file),
-+		      "%s/memcg_async_low_time_XXXXXX", test_dir);
-+	if (!ASSERT_LT(fd, sizeof(low_time_file), "low_time_file path"))
-+		return -1;
-+
-+	fd = mkstemp(high_data_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		return -1;
-+	close(fd);
-+
-+	fd = mkstemp(low_data_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup_high_data;
-+	close(fd);
-+
-+	fd = mkstemp(high_time_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup_low_data;
-+	close(fd);
-+
-+	fd = mkstemp(low_time_file);
-+	if (!ASSERT_GE(fd, 0, "mkstemp"))
-+		goto cleanup_high_time;
-+	close(fd);
-+
-+	low_pid = fork();
-+	if (!ASSERT_GE(low_pid, 0, "fork low"))
-+		goto cleanup_low_time;
-+	if (low_pid == 0)
-+		exit(real_test_child_work(CG_LOW_DIR, low_data_file,
-+					  low_time_file, read_times));
-+
-+	high_pid = fork();
-+	if (!ASSERT_GE(high_pid, 0, "fork high")) {
-+		(void)waitpid(low_pid, NULL, 0);
-+		goto cleanup_low_time;
-+	}
-+	if (high_pid == 0)
-+		exit(real_test_child_work(CG_HIGH_DIR, high_data_file,
-+					  high_time_file, read_times));
-+
-+	ret = waitpid(low_pid, &status, 0);
-+	if (!ASSERT_GT(ret, 0, "low waitpid"))
-+		goto cleanup_low_time;
-+	if (!ASSERT_TRUE(WIFEXITED(status), "low exited"))
-+		goto cleanup_low_time;
-+	if (!ASSERT_EQ(WEXITSTATUS(status), 0, "low exit status"))
-+		goto cleanup_low_time;
-+
-+	ret = waitpid(high_pid, &status, 0);
-+	if (!ASSERT_GT(ret, 0, "high waitpid"))
-+		goto cleanup_low_time;
-+	if (!ASSERT_TRUE(WIFEXITED(status), "high exited"))
-+		goto cleanup_low_time;
-+	if (!ASSERT_EQ(WEXITSTATUS(status), 0, "high exit status"))
-+		goto cleanup_low_time;
-+
-+	if (get_time(high_time_file, high_elapsed))
-+		goto cleanup_low_time;
-+	if (get_time(low_time_file, low_elapsed))
-+		goto cleanup_low_time;
-+
-+	ret = 0;
-+
-+cleanup_low_time:
-+	unlink(low_time_file);
-+cleanup_high_time:
-+	unlink(high_time_file);
-+cleanup_low_data:
-+	unlink(low_data_file);
-+cleanup_high_data:
-+	unlink(high_data_file);
-+	return ret;
-+}
-+
-+static int
-+setup_bpf(u64 high_cgroup_id, u64 low_cgroup_id,
-+	  struct memcg_async_reclaim **skel_ptr, bool use_thread_wq)
-+{
-+	struct memcg_async_reclaim *skel;
-+	struct bpf_args_s bpf_args = {
-+		.high_cgroup_id = high_cgroup_id,
-+		.low_cgroup_id = low_cgroup_id,
-+		.event_delta_threshold = EVENT_DELTA_THRESHOLD,
-+		.check_ns = CHECK_PERIOD_NS,
-+	};
-+	LIBBPF_OPTS(bpf_test_run_opts, run_opts,
-+		.ctx_in = &bpf_args,
-+		.ctx_size_in = sizeof(bpf_args));
-+	int prog_init_fd, err;
-+
-+	skel = memcg_async_reclaim__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "memcg_async_reclaim__open_and_load"))
-+		return -1;
-+
-+	if (use_thread_wq)
-+		prog_init_fd = bpf_program__fd(skel->progs.thread_wq_prog_init);
-+	else
-+		prog_init_fd = bpf_program__fd(skel->progs.wq_prog_init);
-+	if (!ASSERT_GE(prog_init_fd, 0, "bpf_program__fd"))
-+		goto error_out;
-+
-+	err = bpf_prog_test_run_opts(prog_init_fd, &run_opts);
-+	if (!ASSERT_OK(err, "bpf_prog_test_run_opts"))
-+		goto error_out;
-+	if (!ASSERT_EQ(run_opts.retval, 0, "prog_init retval"))
-+		goto error_out;
-+
-+	*skel_ptr = skel;
-+	return 0;
-+
-+error_out:
-+	memcg_async_reclaim__destroy(skel);
-+	return -1;
-+}
-+
-+void test_memcg_wq_async_reclaim(void)
-+{
-+	u64 high_cgroup_id, low_cgroup_id;
-+	int err;
-+	double high_time = 0.0, low_time = 0.0;
-+	struct memcg_async_reclaim *skel = NULL;
-+
-+	err = setup_high_low_cgroups(&high_cgroup_id, &low_cgroup_id);
-+	if (!ASSERT_OK(err, "setup_high_low_cgroups reclaim"))
-+		return;
-+
-+	err = setup_bpf(high_cgroup_id, low_cgroup_id, &skel, false);
-+	if (!ASSERT_OK(err, "setup_bpf"))
-+		goto out;
-+
-+	err = run_high_low_workload(&high_time, &low_time, READ_TIMES);
-+	if (!ASSERT_OK(err, "run_high_low_workload reclaim"))
-+		goto out;
-+
-+	if (high_time >= low_time) {
-+		PRINT_FAIL("high cgroup not improved with async reclaim: high_time=%f low_time=%f",
-+			   high_time, low_time);
-+	}
-+
-+out:
-+	if (skel)
-+		memcg_async_reclaim__destroy(skel);
-+	/*
-+	 * Wait for bpf_wq to release the reference to cgroup
-+	 * to ensure the successful deletion of cgroup.
-+	 */
-+	sleep(1);
-+	cleanup_cgroup_environment();
-+}
-+
-+void test_memcg_thread_wq_async_reclaim(void)
-+{
-+	u64 high_cgroup_id, low_cgroup_id;
-+	int err;
-+	double high_time = 0.0, low_time = 0.0;
-+	struct memcg_async_reclaim *skel = NULL;
-+
-+	err = setup_high_low_cgroups(&high_cgroup_id, &low_cgroup_id);
-+	if (!ASSERT_OK(err, "setup_high_low_cgroups reclaim"))
-+		return;
-+
-+	err = setup_bpf(high_cgroup_id, low_cgroup_id, &skel, true);
-+	if (!ASSERT_OK(err, "setup_bpf"))
-+		goto out;
-+
-+	err = run_high_low_workload(&high_time, &low_time, READ_TIMES);
-+	if (!ASSERT_OK(err, "run_high_low_workload reclaim"))
-+		goto out;
-+
-+	if (high_time >= low_time) {
-+		PRINT_FAIL("high cgroup not improved with async reclaim: high_time=%f low_time=%f",
-+			   high_time, low_time);
-+	}
-+
-+out:
-+	if (skel)
-+		memcg_async_reclaim__destroy(skel);
-+	/*
-+	 * Wait for bpf_thread_wq to release the reference to cgroup
-+	 * to ensure the successful deletion of cgroup.
-+	 */
-+	sleep(1);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-new file mode 100644
-index 000000000000..eaccc8a37388
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
-@@ -0,0 +1,255 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include "vmlinux.h"
-+#include "bpf_experimental.h"
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+#define BIT(nr)			(1UL << (nr))
-+
-+#define ___GFP_IO		BIT(___GFP_IO_BIT)
-+#define ___GFP_FS		BIT(___GFP_FS_BIT)
-+#define ___GFP_DIRECT_RECLAIM	BIT(___GFP_DIRECT_RECLAIM_BIT)
-+#define ___GFP_KSWAPD_RECLAIM	BIT(___GFP_KSWAPD_RECLAIM_BIT)
-+
-+#define __GFP_IO		((gfp_t)___GFP_IO)
-+#define __GFP_FS		((gfp_t)___GFP_FS)
-+#define __GFP_DIRECT_RECLAIM	((gfp_t)___GFP_DIRECT_RECLAIM)
-+#define __GFP_KSWAPD_RECLAIM	((gfp_t)___GFP_KSWAPD_RECLAIM)
-+#define __GFP_RECLAIM	((gfp_t)(___GFP_DIRECT_RECLAIM | ___GFP_KSWAPD_RECLAIM))
-+
-+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
-+#define CLOCK_MONOTONIC_ID	1
-+#define RECLAIM_PAGES		32
-+#define RECLAIM_MAX_ITER	32
-+
-+struct bpf_args_s {
-+	u64 high_cgroup_id;
-+	u64 low_cgroup_id;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+struct cgroup_memcg {
-+	struct cgroup *cgrp;
-+	struct mem_cgroup *memcg;
-+};
-+
-+static u64 wq_high_cgroup_id;
-+static u64 wq_low_cgroup_id;
-+
-+static int get_cgroup_memcg_from_id(u64 cgroup_id, struct cgroup_memcg *cm)
-+{
-+	cm->cgrp = bpf_cgroup_from_id(cgroup_id);
-+	if (!cm->cgrp)
-+		return -1;
-+
-+	cm->memcg = bpf_get_mem_cgroup(&cm->cgrp->self);
-+	if (!cm->memcg) {
-+		bpf_cgroup_release(cm->cgrp);
-+		return -1;
-+	}
-+
-+	return 0;
-+}
-+
-+static void put_cgroup_memcg(struct cgroup_memcg *cm)
-+{
-+	bpf_put_mem_cgroup(cm->memcg);
-+	bpf_cgroup_release(cm->cgrp);
-+}
-+
-+static int get_cgroup_event(u64 cgroup_id, u64 *val)
-+{
-+	struct cgroup_memcg cm;
-+
-+	if (get_cgroup_memcg_from_id(cgroup_id, &cm))
-+		return -1;
-+	bpf_mem_cgroup_flush_stats(cm.memcg);
-+	*val = bpf_mem_cgroup_page_state(cm.memcg, WORKINGSET_REFAULT_FILE);
-+	put_cgroup_memcg(&cm);
-+
-+	return 0;
-+}
-+
-+static bool
-+should_reclaim_cgroup(u64 cgroup_id, u64 *prev_event, u64 event_delta_threshold)
-+{
-+	u64 cur, delta;
-+
-+	if (get_cgroup_event(cgroup_id, &cur))
-+		return false;
-+
-+	delta = cur - *prev_event;
-+	*prev_event = cur;
-+
-+	return delta >= event_delta_threshold;
-+}
-+
-+static int reclaim_cgroup(u64 cgroup_id)
-+{
-+	struct cgroup_memcg cm;
-+	int i;
-+
-+	if (get_cgroup_memcg_from_id(cgroup_id, &cm))
-+		return 0;
-+
-+	for (i = 0; i < RECLAIM_MAX_ITER; i++) {
-+		if (!bpf_try_to_free_mem_cgroup_pages(cm.memcg, RECLAIM_PAGES,
-+						      GFP_KERNEL, 0, -1))
-+			break;
-+	}
-+
-+	put_cgroup_memcg(&cm);
-+
-+	return 0;
-+}
-+
-+struct wq_elem {
-+	struct bpf_timer timer;
-+	struct bpf_wq work;
-+	u64 prev_event;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct wq_elem);
-+} wq_map SEC(".maps");
-+
-+static int async_free(void *map, int *key, void *value)
-+{
-+	struct wq_elem *elem = value;
-+
-+	if (should_reclaim_cgroup(wq_high_cgroup_id, &elem->prev_event,
-+		elem->event_delta_threshold)) {
-+		reclaim_cgroup(wq_low_cgroup_id);
-+		bpf_wq_start(&elem->work, 0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int wq_timer_cb(void *map, int *key, struct wq_elem *elem)
-+{
-+	bpf_wq_start(&elem->work, 0);
-+	bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int wq_prog_init(struct bpf_args_s *ctx)
-+{
-+	struct wq_elem *elem;
-+	__u32 key = 0;
-+	int ret;
-+
-+	elem = bpf_map_lookup_elem(&wq_map, &key);
-+	if (!elem)
-+		return -1;
-+
-+	ret = bpf_wq_init(&elem->work, &wq_map, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_wq_set_callback(&elem->work, async_free, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_init(&elem->timer, &wq_map, CLOCK_MONOTONIC_ID);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_set_callback(&elem->timer, wq_timer_cb);
-+	if (ret)
-+		return ret;
-+
-+	elem->prev_event = 0;
-+	elem->event_delta_threshold = ctx->event_delta_threshold;
-+	elem->check_ns = ctx->check_ns;
-+
-+	wq_high_cgroup_id = ctx->high_cgroup_id;
-+	wq_low_cgroup_id = ctx->low_cgroup_id;
-+
-+	return bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+}
-+
-+struct thread_wq_elem {
-+	struct bpf_timer timer;
-+	struct bpf_thread_wq work;
-+	u64 prev_event;
-+	u64 event_delta_threshold;
-+	u64 check_ns;
-+};
-+
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, struct thread_wq_elem);
-+} thread_wq_map SEC(".maps");
-+
-+static int thread_async_free(void *map, int *key, void *value)
-+{
-+	struct thread_wq_elem *elem = value;
-+
-+	if (should_reclaim_cgroup(wq_high_cgroup_id, &elem->prev_event,
-+		elem->event_delta_threshold)) {
-+		reclaim_cgroup(wq_low_cgroup_id);
-+		bpf_thread_wq_start(&elem->work, 0);
-+	}
-+
-+	return 0;
-+}
-+
-+static int thread_wq_timer_cb(void *map, int *key, struct thread_wq_elem *elem)
-+{
-+	bpf_thread_wq_start(&elem->work, 0);
-+	bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+
-+	return 0;
-+}
-+
-+SEC("syscall")
-+int thread_wq_prog_init(struct bpf_args_s *ctx)
-+{
-+	struct thread_wq_elem *elem;
-+	__u32 key = 0;
-+	int ret;
-+
-+	elem = bpf_map_lookup_elem(&thread_wq_map, &key);
-+	if (!elem)
-+		return -1;
-+
-+	ret = bpf_thread_wq_init(&elem->work, &thread_wq_map,
-+				 ctx->low_cgroup_id, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_thread_wq_set_callback(&elem->work, thread_async_free, 0);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_init(&elem->timer, &thread_wq_map, CLOCK_MONOTONIC_ID);
-+	if (ret)
-+		return ret;
-+
-+	ret = bpf_timer_set_callback(&elem->timer, thread_wq_timer_cb);
-+	if (ret)
-+		return ret;
-+
-+	elem->prev_event = 0;
-+	elem->event_delta_threshold = ctx->event_delta_threshold;
-+	elem->check_ns = ctx->check_ns;
-+
-+	wq_high_cgroup_id = ctx->high_cgroup_id;
-+	wq_low_cgroup_id = ctx->low_cgroup_id;
-+
-+	return bpf_timer_start(&elem->timer, elem->check_ns, 0);
-+}
-+
-+char LICENSE[] SEC("license") = "GPL";
+https://patchwork.openvpn.net/project/ovpn/patch/20260512144358.419599-4-a@unstable.cc/
+
+It is pending to be sent to net-next as soon as we're finished with the 
+fixes in our pipe.
+
+Thanks for your contribution in any case!
+
+
+Regards,
+
+
+
 -- 
-2.53.0
+Antonio Quartulli
+OpenVPN Inc.
 
