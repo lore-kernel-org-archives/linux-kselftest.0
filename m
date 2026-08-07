@@ -1,106 +1,86 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B699647607F;
-	Fri,  7 Aug 2026 12:59:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31A5C47A86A;
+	Fri,  7 Aug 2026 13:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786107588; cv=none; b=mZ6i3hSDOpLFyPgwankBKBTp6NWxwEOcoKShyuIqCU69O0uqU1V+IGZfWxiBUAxS8dhJ2+DQApjpqf4WSbMVM9uHdmY22+qNg+LFFmvYNNYyuUJCNWAu9u1tOE2MmzpQov4A5ubtwYdQPcWZBGgjnCm2VJ1ZKssgngm7eIN2wLY=
+	t=1786108147; cv=none; b=OTlaju51+DK6iFMoRP9iPQXdVKY0Xw5CEUBkY1Z6EqnmizWx1eBuw9fDGh/utc4TPXnjkX6Rmh0zdO849uc/S89R7TnQqvl1nxZ4n3vKrXvn0oiTPKFSwLoNHxLyNCLSz01xAs5KMuQZ9KU/IOK2Jh3bv2DLRRGYB1+CLfbuw1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786107588; c=relaxed/simple;
-	bh=yMiK1yh6xy1Np/nBghOM2UqhnZKJlwY+ByNtCjfrCI8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=o/Tkuw3s1xz1/9ejIqnkv0XPip+PoSNZ/fBgafx062lE1rdgtfiRNdpQkK8+sREHikvhJdwE50a+oS+PwKyysw/LSn2BCNUx/rrsxD9b6Um8ni18lRZDh7OzqE2ypvEUDc7/hAcvj7jAK+5twDGiwHCyofpVOel0J6ujgMo7Mnw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wt/1R8rw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786108147; c=relaxed/simple;
+	bh=39hw1uijqgPI4iLf860OBuF/9OOCXl9Ic1r1bXtE7Xw=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=QDQmx/0owwljARz89FTFkBR+0W9K6DUJySpjqF1/GpwDKo9/UMZ9+0um+4FBBlxCva6+N5OKG4cEZnDiad8X4EYvaIijjB5lUndzrLUnGEuhHIdIZJKH6ajK39hbDKTT3ywdxfarl9UQOyaD2DXSsAs4R6h8tFrVehqA+MkOcfU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nPXZYl+5; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wt/1R8rw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF291F000E9;
-	Fri,  7 Aug 2026 12:59:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786107582;
-	bh=WGWe62w4uZOGlTd+Rt6sdGbT/Nouu499hkPKmGKxmLg=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=Wt/1R8rwmGTx2f8PYIuCEP4H+iJa5y9BsvjmVm2lUyxYIkXsJ2OOrEl5qLluvQ4FO
-	 gR8D6wPxIvholh5dqf9AmiEaTihz/DZ7/bp3LNMdFRqmi/poK/JuGskMzKSHvZz+rH
-	 wVEKyeNooy4xgO4DalnL9F977Tkbpw3ASKWDczWH9A4b3a4BcVOrxHmugYRcpbuQzL
-	 Xd4CGv3HFgkDILwOJfoJUrtiD31AgyG9Av8qqFdmErTziujfC9Rda8lqxV2iYJvKuq
-	 oCdL+JelJ10bP+bqSvX5WpnSA9ps34stkgjh3ky3C1ZnFutjcidlObQMoPtYi2Kww8
-	 wb4QUz12MUEOA==
-Content-Type: multipart/mixed; boundary="===============4091664156689549777=="
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nPXZYl+5"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 2E9371A14A9;
+	Fri,  7 Aug 2026 13:08:51 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F3BDC603F0;
+	Fri,  7 Aug 2026 13:08:50 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C4AA211C37825;
+	Fri,  7 Aug 2026 15:08:46 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786108129; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=39hw1uijqgPI4iLf860OBuF/9OOCXl9Ic1r1bXtE7Xw=;
+	b=nPXZYl+5HZV5UcLXy4QIts2W1wa96utv77R3CodIWlB4tyq1xkaIZAkBRv08R2Nt/6K+qI
+	KQOrQqPR+iHsCFR7rFlQE8s3LN154WcZWGUKaObFazOhVmafhOWh266TEmfUdY3hYdrg3n
+	JOeaaDBQ+L9zxNzV9SFCjseRXLROHEMC6TTf7vgvnhIkWf0/fISVcw6pDXn4JNukcKn+dR
+	tv+TYtGW/rZJNgutGRLzYjCzel1XwpSIU/1FtGIVEeFDxqakehbB6O/zfGr9nZqQGfm5Il
+	gEKYk9BnsROXHIrYLcpb3+aarh7HzNvpz/mjZgWV8elPJzOFM0BNb2QJCTnaAg==
+From: Miquel Raynal <miquel.raynal@bootlin.com>
+To: Frank Li <Frank.li@oss.nxp.com>
+Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
+ <sboyd@kernel.org>,  Brian Masney <bmasney@redhat.com>,  Rob Herring
+ <robh@kernel.org>,  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Conor
+ Dooley <conor+dt@kernel.org>,  Brendan Higgins
+ <brendan.higgins@linux.dev>,  David Gow <david@davidgow.net>,  Rae Moar
+ <raemoar63@gmail.com>,  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+  Pascal EBERHARD <pascal.eberhard@se.com>,  Wolfram Sang
+ <wsa+renesas@sang-engineering.com>,  linux-clk@vger.kernel.org,
+  devicetree@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  linux-kselftest@vger.kernel.org,  kunit-dev@googlegroups.com
+Subject: Re: [PATCH v4 5/7] clk: Use the generic OF phandle parsing in only
+ one place
+In-Reply-To: <amOwe6kq9T1Q5FBL@lizhi-Precision-Tower-5810> (Frank Li's message
+	of "Fri, 24 Jul 2026 14:35:39 -0400")
+References: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
+	<20260717-schneider-v7-2-rc1-eip201-upstream-v4-5-751547e160e5@bootlin.com>
+	<amOwe6kq9T1Q5FBL@lizhi-Precision-Tower-5810>
+User-Agent: mu4e 1.12.12; emacs 30.2
+Date: Fri, 07 Aug 2026 15:08:45 +0200
+Message-ID: <87bjbecc2q.fsf@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <20bc24b322d3a8ef52eef9b3cd05eef275efabc0be00be3fd6df5a9765bba321@mail.kernel.org>
-In-Reply-To: <e827cffd10c37ae7d0b1fca59523acda38db1704.1786099877.git.skb99@linux.ibm.com>
-References: <e827cffd10c37ae7d0b1fca59523acda38db1704.1786099877.git.skb99@linux.ibm.com>
-Subject: Re: [PATCH v11 3/8] selftests/bpf: Fixing powerpc JIT disassembly failure
-From: bot+bpf-ci@kernel.org
-To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri,  7 Aug 2026 12:59:41 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
---===============4091664156689549777==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On 24/07/2026 at 14:35:39 -04, Frank Li <Frank.li@oss.nxp.com> wrote:
 
-> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> index 3558fe10e28cf..c4aa1d69d3bbf 100644
-> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
-> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
-
-[ ... ]
-
-> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
->  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
->  		goto out;
+> On Fri, Jul 17, 2026 at 05:59:21PM +0200, Miquel Raynal (Schneider Electr=
+ic) wrote:
+>> There should be one single entry in the OF world, so that the way we
+>> parse the DT is always the same. make sure this is the case by avoid
+>> calling of_parse_phandle_with_args() from of_clk_get_parent_name(). This
+>> is even more relevant as we currently fail to parse clock-ranges. As a
+>> result, it seems to be safer to directly call of_parse_clkspec() there,
+>> but doing so implies that we do not try the "clock-ranges" path if we
+>> already found a "clocks" property..
 >
-> +	/*
-> +	 * last 8 bytes contains dummy_trampoline address in JIT
-> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
-> +	 * which can't disassemble to a valid instruction.
-> +	 */
-> +	triple = LLVMGetDefaultTargetTriple();
-> +	if (triple) {
-> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
-> +			trunc_len = 8;
-> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
-> +			trunc_len = 4;
-> +		LLVMDisposeMessage(triple);
-> +	}
-> +
->  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
-> +
+> Sorry, I can't understand well what commit said.
 
-This isn't a bug, but are the two new blank lines inside this loop
-intentional? Dropping them would keep the diff to just the truncation
-logic and match how the loops in disasm_one_func() are laid out.
+I tried to reorder the commit sentences, hopefully it will make the text
+easier to read.
 
->  		fprintf(text_out, "func #%d:\n", i);
->  		/*
->  		 * Disabled JIT have zero func_lens, hence underflow
->  		 */
->  		disasm_len = func_lens[i] > trunc_len ?
->  					func_lens[i] - trunc_len : 0;
->  		disasm_one_func(text_out, image + pc, disasm_len);
-> +
->  		fprintf(text_out, "\n");
->  		pc += func_lens[i];
->  	}
-
-> selftests/bpf: Fixing powerpc JIT disassembly failure
-
-This isn't a bug, but would the subject read better in the imperative
-mood, "selftests/bpf: Fix powerpc JIT disassembly failure", to match
-the rest of the series?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31176427801
---===============4091664156689549777==--
+Thanks,
+Miqu=C3=A8l
