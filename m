@@ -1,104 +1,69 @@
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7FF53FC5AE;
-	Fri,  7 Aug 2026 11:37:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1206A47127E;
+	Fri,  7 Aug 2026 11:43:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786102659; cv=none; b=nxS+dFlrRAtMvhPYGruT0HGZ4xkUqFUotZTaJlMMyXuWaapvptvLXyKwfPj9QRiaSPnP00eL7sq/ckqu6mnhuEPXkMPQ+Z7ODvqaUrYT45CApdJ6HBMSc9+89+GdzzMSLidhyJ3SNThQbCwcjfauOMJ/o92rlP15PtQNLfQ9uE4=
+	t=1786103011; cv=none; b=KNAHNv6IRS7xU7KzvlhxGFYXaA5cKiwBUZiWXobu/O2oElajSln4vtTye3T0dAcwd+bqRG0kgTLsO2swMymfmfRecVRbKfOmWV7lcUM6nxOltED58h1y40n3tCuoWa7tC2i1uYvSpgdSRyMq+9ljMWKdMVSPNBH1hUpkW9uj5HI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786102659; c=relaxed/simple;
-	bh=F/TF2/zns+QnkbIDlaS4JtzV6yU5B+IfMUtnKwD6VCI=;
+	s=arc-20240116; t=1786103011; c=relaxed/simple;
+	bh=ZuY7yrKh/FvEvwnT3ZXShF2gryyW9PxNeLTmIOnKCps=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GfVgbO0uDITXGnV7cb165DTaX//9wnlggVDnHFkU1Lg/w105e/GwxJNqHPujfUxPr2M4vaireElEDD/dOlQDqeElq9cRhTXQYBKt1nb+vJrwx1VFD18KgB87PgXiSQyAd7DabW2YgoxBVz5weyu7TxQpXKyCa0focAv5rLxH7jo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=WxjzI+jD; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=DFMFvzsp; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	 MIME-Version; b=buv63TiJcX5lQ7EcGxUZo0V9yJOBmmkds2zMw9oPnnxlk52jNxnujXPqNSxf5RI8qLY4qDmx01INyjK8YzO8qeBkf8HDi9APlkcMweeghM1y7inHbGT/giMkj7UdRwmdyNY1wnc3LXhf0/ha8Jg7wTN4tfP1NPeLsDeytVUjknU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bvS5xtqb; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="WxjzI+jD";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="DFMFvzsp"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 38B421D000DA;
-	Fri,  7 Aug 2026 07:37:31 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-05.internal (MEProxy); Fri, 07 Aug 2026 07:37:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786102651; x=
-	1786189051; bh=OqABGYaTDBjD+cwWJAm5MV885+wK1zKh6mDVYP63LKI=; b=W
-	xjzI+jD+AKuhzGdFBCgf8zaJLRFQ5VC18xsWsxekiPDCXdCcpZo9GbG/u3x0bJrL
-	WKo+Wp6CbYCxRIYss4kRANOy2S0x5Mvj7hwkVNRmaA1HVVFVEp6jKV8dHHNFBIsO
-	82ez0QTonL9r+IrQ+mOOaOPB8Aj6Untdu229hlkmSITokttshsd93JQeC8bh1nbO
-	SAxAcx/+PyIgUXgWbri6lEM2aCS/8Kc4ZErqdPPKJNM4afpclsk5vwRiNrUFJcWd
-	S3oY6o8FQXkpBqtioc8XP5f8+owugenmUqip1uAX6TReOVNg29wR1xrqTQP7cxRW
-	khvk6WBnQeMxesduSaiUw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786102651; x=1786189051; bh=O
-	qABGYaTDBjD+cwWJAm5MV885+wK1zKh6mDVYP63LKI=; b=DFMFvzsp6InJdi/IH
-	B4xHaxSxATDcX9SMie17GDw9dOmjs0Bde1NdPYO/yrfHlWR2njTsFBSW36AtNRCD
-	k1b/uLcOJ+jrZRaZAZVh3dLWS7pKIXJKLGICWsN4ylfLCZzIntZX90B5ic+nLVdC
-	o8K9btkxM0uK9qn6a1EBgClO3K+ntTy/IGuvE4DF7n0KhRSQ5PkLF9ao/wzXAROC
-	a/XPy7M+lf8HGFO27LonZayAxkdIali8U4KZFkHIs40/lAQ1gHbzYgIDxABdJRHl
-	F/PAf9r9iY7eSAQUs1sJ2br26/KQKjWgplCQ5Q97A4CAYs6K9zr2ukV/sJfGdWtJ
-	mmBHQ==
-X-ME-Sender: <xms:e8N1ar8LklwlXwlBult7o2uiCgqoV0_LF9rytw4dj3Lk4E69Qsi88Q>
-    <xme:e8N1arrh-uRrkivzjAmlJFCvnsqJHGccQ2E-7pzkwsQDsAo9jzuobrsEbGKx6l83J
-    XG1q-pmZ7h9JPcEoKwkWIqt5sPKwhlBQyqYRCnpVOU3AvUbL5pnmcc>
-X-ME-Received: <xmr:e8N1ahh41JFiifcysJBXzcxTxHF8rng_6-O8S_YuK5UDlDfV9iFn1d_8-xs>
-X-ME-Proxy-Cause: dmFkZTEcBCtHwgFqhRPkncf0k+1ylINMWkiJotqLKgP2XUmyCnaVLH6jJFUJYUtwVpCetV
-    bzy51nCrHgVQnKUbL6xUc35a2wACIZl+NbR3y/w0ModeWlKP4SKCXfcn2Mi8esZBMBdaWx
-    faB4jzBJOawj2LBnFTgyCBiywrPp7FpNgfXB5cgYmB0wgvQ/HhhWAfKjMf/weJgLhMF/VV
-    yXrMoja9EZiHjuXu8bb94hiDoU2fqI8TuwJJmzzN4TUL6MxSST+GnkpA2ZnKWVewXCphJB
-    Lec89iAB+bDvFyV3zsxjbJ8cA1IEQ3aF+gxi5HDHtN75oTRJtbf/Sd54tDaiXy5fa0cQol
-    MW02m0ZGtjHD58JE8hq66IpVl0U+UPJ3nIC2pthVrT/8lSmS/xrVKgAZ9KysURaeJoEhw5
-    WpFpAmC8vf159gkJAGhW8a/tUyRz26I4LvuoRP+Xa0VlHgTOMmYlw0igpjphktySm6WZ13
-    46PBg7JdeKJ/GB9sE5rFCoFlTqgY+IR6H61d+UuuYKrpZ00RVuMZsiGazJ3uH1j1nzi7u7
-    5rP73EdU+fkpAuY1FQ1fYfRVDALBGosYQnjzbDtPx9MVdzp/o2L7ailpK8+VfvossfiVSM
-    c+3BZp/vLcPZJs/IZbkaQEAhNUonJ23UQVWpdakD9zo2ikaCXh83KADXdxeg
-X-ME-Proxy: <xmx:e8N1ahDDWPOCa7pTVvb9j3E2-wDEVVu6Imisbecl5-FnuTxcvXUrxA>
-    <xmx:e8N1anvAk92JhG_mNKV5fONnnQwMUuWLn1iH7XSDxmZHPHPm3dLGGw>
-    <xmx:e8N1aj6IhDGf231MftnQwaZ2V2HL-ejya7VUhq2hdpSZSq-5VWirRQ>
-    <xmx:e8N1apfc7tSfOsgo9cSRQ55TEVL7VRpfjco3eEKNI4NOTN-emqzflw>
-    <xmx:e8N1apxSqpk366C8GniXfpuSTKu_ngI1OqfYZVI9GcLrEMmmmE2x1fQk>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 7 Aug 2026 07:37:30 -0400 (EDT)
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	nico.pache@linux.dev
-Cc: baolin.wang@linux.alibaba.com,
-	baohua@kernel.org,
-	dev.jain@arm.com,
-	hughd@google.com,
-	lance.yang@linux.dev,
-	liam@infradead.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	ziy@nvidia.com,
-	usama.anjum@arm.com,
-	agordeev@linux.ibm.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kas@kernel.org
-Subject: [PATCH v2 16/17] selftests/mm: add memory-pressure threads to the khugepaged race harness
-Date: Fri,  7 Aug 2026 12:36:46 +0100
-Message-ID: <20260807113647.3744609-17-kirill@shutemov.name>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260807113647.3744609-1-kirill@shutemov.name>
-References: <20260807113647.3744609-1-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bvS5xtqb"
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6770Hqpx4161784;
+	Fri, 7 Aug 2026 11:42:58 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=pp1; bh=p1TicfB5S0+K/h3RM
+	ik8nu2lOBPxV0c+748/XkvTC54=; b=bvS5xtqbRlAtziQ7X9ay3xPRIzgynhzlG
+	nPkus266M7I91gNUYU04cfChrazWi+6oMgMdBrmjCTwC5o9gzfNFDRq3GtEbicz4
+	nhVkx6PRKdgWVdCMIC3VlKAbcCHQiz+dGllWxSo1f2xSayYT1balk8Zxtlfekau1
+	Fgitho0WGMc7aFm0Yh1brZjahYp1CktGI9+EMgYA2L1fHEqfiS6lNvyH1I/tCY1I
+	j+ayzi8zCQns/stzf5scaIPTJouLyoWh9coF+4nfysqGF41suFx+2rNLsg9c3gIY
+	4rMpcDgXkQ1oGbLBGg8CM9pyRY11q9JSjMED9YD4uAifT9FXuBNzg==
+Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fvxyyunjq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Aug 2026 11:42:57 +0000 (GMT)
+Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 677BfHVO005748;
+	Fri, 7 Aug 2026 11:42:56 GMT
+Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
+	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4fswbgqa74-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 07 Aug 2026 11:42:56 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 677BgrqN41091548
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 7 Aug 2026 11:42:53 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 1D7D02004F;
+	Fri,  7 Aug 2026 11:42:53 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 14E5720043;
+	Fri,  7 Aug 2026 11:42:49 +0000 (GMT)
+Received: from li-1cb9f04c-2ae1-11b2-a85c-a8a0a83790a8.ibm.com.com (unknown [9.39.23.224])
+	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Fri,  7 Aug 2026 11:42:48 +0000 (GMT)
+From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+To: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com, maddy@linux.ibm.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, shuah@kernel.org,
+        linux-kselftest@vger.kernel.org, stable@vger.kernel.org,
+        venkat88@linux.ibm.com, yeswanth@linux.ibm.com, skb99@linux.ibm.com
+Subject: [PATCH v11 1/8] powerpc/bpf: fix alignment of long branch trampoline address
+Date: Fri,  7 Aug 2026 17:12:36 +0530
+Message-ID: <27ec08c30f6c37b3f25ba735f9cd7f81ff9e98d5.1786099877.git.skb99@linux.ibm.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <cover.1786099877.git.skb99@linux.ibm.com>
+References: <cover.1786099877.git.skb99@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -106,307 +71,235 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Authority-Analysis: v=2.4 cv=SYrHsPRu c=1 sm=1 tr=0 ts=6a75c4c1 cx=c_pps
+ a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
+ a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=RnoormkPH1_aCDwRdu11:22
+ a=U7nrCbtTmkRpXpFmAIza:22 a=VnNF1IyMAAAA:8 a=VwQbUJbxAAAA:8
+ a=yPSppd1sqRoqKrzqNxkA:9
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODA3MDA4NyBTYWx0ZWRfX/HKO6lICbFig
+ 4itFK+/w0spsV2RzISlo7k4tCeyRrxsVPhrbOH+m0ah/3gxV1/DcDvNTiCaP1J6tPKp52yEI5I+
+ 188NXYNB7D2YFDbyISBOu3FMZiGmtNY=
+X-Proofpoint-ORIG-GUID: b5eQ5oZXQCCkk3-dOuzTTGh7pWihMiJq
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA3MDA4NyBTYWx0ZWRfX1ptPrPrwad1S
+ bbUhycPQF5fzbOpyq7vzut4ABlPjbq8Q7fvU2n7mFHBjJ1RMGNF/dnJL+NFwPVgZHDpsQjMWwnx
+ dnmZqy1/s+DOKy48axCYgrIzBmBPrJ82HZB42xYC9pYqz9Bd7onYH8He3xxBPvTioCaqPGe68Fd
+ W+LMj6B8GVwYcxw7enEZT62BJXhuqQvPUEFcBw82ZI64BjPeEqrooMAUutMpxeKYfrwm6S2I/GV
+ FpNESMhuIBjyiFv1ekc0cL8MhoPrzTYeBMxEfnFp545nJ6p+eUnxP7AMofA6OoWQLThoXExFPeR
+ TRoXPQ0wcZipuuXanvl91y7K8eEC9l83FiUWW02eFuNUdXhG7kKe57TSP4wiKH8fKEYbTh/VCxV
+ oVdzUOSHkeuiVqdiApRm3PZorrRbAyeymGDIloZTFjSbXsmxOcW6vaETgRoOTw5edW2uxXFioyG
+ YuZK+PIClWEv+ANNJqg==
+X-Proofpoint-GUID: b5eQ5oZXQCCkk3-dOuzTTGh7pWihMiJq
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-07_01,2026-08-06_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1015 malwarescore=0 priorityscore=1501 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 impostorscore=0 phishscore=0 spamscore=0
+ adultscore=0 classifier=typeunknown authscore=0 authtc= authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
+ definitions=main-2608070087
 
-From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+From: Abhishek Dubey <adubey@linux.ibm.com>
 
-The harness races collapse against faults, pins, fork, mremap and
-MADV_DONTNEED, but nothing in it elevates a source folio's refcount from
-the reclaim or compaction side.
+Ensure the dummy trampoline address field present between the OOL stub
+and the long branch stub is 8-byte aligned, for memory compatibility
+when content loaded to a register.
 
-Add two more threads, and run every mode and occupancy limit both with and
-without them:
-
- - pageout: cycles MADV_PAGEOUT over a dedicated neighbour region, faults
-   it back in and checks the content each round, since a page's pattern
-   must survive the trip through swap.  Idle when the host has no swap,
-   because then there is no anon reclaim to drive.
-
- - compactor: writes /proc/sys/vm/compact_memory in a loop.  Compaction
-   isolates and migrates folios, so it competes with a collapse for the
-   pages it is gathering, with refcount elevations and migration entries
-   of its own.
-
--p narrows a run to the combinations that have them, the way -z narrows
-the occupancy and -m the mode.  Each result says which it ran:
-
-  ok 2 stepped/strict/pressure: 5s, 88 steps, no corruption
-
-Assisted-by: Claude-Code:claude-opus-5
-Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+Reported-by: Hari Bathini <hbathini@linux.ibm.com>
+Fixes: d243b62b7bd3 ("powerpc64/bpf: Add support for bpf trampolines")
+Cc: stable@vger.kernel.org
+Signed-off-by: Abhishek Dubey <adubey@linux.ibm.com>
+Signed-off-by: Saket Kumar Bhaskar <skb99@linux.ibm.com>
+Tested-by: Yeswanth Krishna Tellakula <yeswanth@linux.ibm.com>
 ---
- tools/testing/selftests/mm/khugepaged_race.c | 147 +++++++++++++++++--
- 1 file changed, 136 insertions(+), 11 deletions(-)
+ arch/powerpc/net/bpf_jit.h        |  7 +++---
+ arch/powerpc/net/bpf_jit_comp.c   | 42 ++++++++++++++++++++++++++-----
+ arch/powerpc/net/bpf_jit_comp32.c |  6 +++--
+ arch/powerpc/net/bpf_jit_comp64.c |  7 +++---
+ 4 files changed, 48 insertions(+), 14 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/khugepaged_race.c b/tools/testing/selftests/mm/khugepaged_race.c
-index a2a91906285b..abd142db7cbe 100644
---- a/tools/testing/selftests/mm/khugepaged_race.c
-+++ b/tools/testing/selftests/mm/khugepaged_race.c
-@@ -18,6 +18,12 @@
-  * zero-filled, and re-checked under the page table lock at install time in
-  * case a racing fault got there first.
-  *
-+ * -p adds memory pressure to any of the above: MADV_PAGEOUT cycling
-+ * on a dedicated neighbor region (swap traffic and LRU churn; skipped
-+ * with a note when the host has no swap) and a compact_memory trigger
-+ * loop (compaction migrates source folios, racing collapse's freeze
-+ * with refcount elevation and migration entries of its own).
-+ *
-  * Correctness signals: every racing page must read as its pattern or
-  * zero (MADV_DONTNEED), never anything else.  The faulters and the fork
-  * children check that continuously, a final sweep checks it once more, plus
-@@ -61,6 +67,8 @@ static unsigned long page_size;
- static char *region;		/* NR_AREAS * hpage_pmd_size */
- static char *mremap_area;	/* region + NR_SHARED_AREAS areas */
- static char *mremap_scratch;	/* well above the region */
-+static char *pageout_area;	/* -p: dedicated pressure region */
-+static size_t pageout_size;
- static int gup_fd = -1;
- static volatile int stop;
- static volatile int corrupted;
-@@ -188,6 +196,70 @@ static void *mremapper_fn(void *arg)
- 	return NULL;
- }
+diff --git a/arch/powerpc/net/bpf_jit.h b/arch/powerpc/net/bpf_jit.h
+index f32de8704d4d..6632de9871dd 100644
+--- a/arch/powerpc/net/bpf_jit.h
++++ b/arch/powerpc/net/bpf_jit.h
+@@ -214,10 +214,11 @@ int bpf_jit_emit_func_call_rel(u32 *image, u32 *fimage, struct codegen_context *
+ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct codegen_context *ctx,
+ 		       u32 *addrs, int pass, bool extra_pass);
+ void bpf_jit_build_prologue(u32 *image, struct codegen_context *ctx);
+-void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx);
+-void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx);
++void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx);
++void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx);
+ void bpf_jit_realloc_regs(struct codegen_context *ctx);
+-int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr);
++int bpf_jit_emit_exit_insn(u32 *image, u32 *fimage, struct codegen_context *ctx, int tmp_reg,
++										long exit_addr);
+ void prepare_for_fsession_fentry(u32 *image, struct codegen_context *ctx, int cookie_cnt,
+ 								int cookie_off, int retval_off);
+ void store_func_meta(u32 *image, struct codegen_context *ctx, u64 func_meta, int func_meta_off);
+diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
+index 7b07b43575f1..f2e0f9755e65 100644
+--- a/arch/powerpc/net/bpf_jit_comp.c
++++ b/arch/powerpc/net/bpf_jit_comp.c
+@@ -49,11 +49,39 @@ asm (
+ "	.popsection				;"
+ );
  
-+/*
-+ * -p: swap traffic and LRU churn on a region of our own. The content
-+ * check is exact: a page out and back through swap must preserve the
-+ * pattern, and nothing else ever writes here.
-+ */
-+static void *pageout_fn(void *arg)
-+{
-+	unsigned int seed = (unsigned long)arg;
-+	unsigned long nr = pageout_size / page_size;
-+	unsigned long i;
-+
-+	for (i = 0; i < nr; i++)
-+		*(unsigned int *)(pageout_area + i * page_size) = pattern(i);
-+
-+	while (!stop) {
-+		madvise(pageout_area, pageout_size, MADV_PAGEOUT);
-+		for (i = 0; i < nr && !stop; i++) {
-+			unsigned int val = *(unsigned int *)(pageout_area +
-+							     i * page_size);
-+
-+			if (val != pattern(i)) {
-+				corrupted = 1;
-+				ksft_print_msg("Pageout corruption at page %lu: %#x != %#x\n",
-+					       i, val, pattern(i));
-+			}
-+		}
-+		usleep(rand_r(&seed) % 2000);
-+	}
-+	return NULL;
-+}
-+
-+/* -p: compaction migrates the collapse sources out from under us. */
-+static void *compactor_fn(void *arg)
-+{
-+	unsigned int seed = (unsigned long)arg;
-+	int fd = open("/proc/sys/vm/compact_memory", O_WRONLY);
-+
-+	if (fd < 0) {
-+		ksft_print_msg("No compact_memory; compactor idle\n");
-+		return NULL;
-+	}
-+	while (!stop) {
-+		if (write(fd, "1", 1) < 0)
-+			break;
-+		usleep(10000 + rand_r(&seed) % 100000);
-+	}
-+	close(fd);
-+	return NULL;
-+}
-+
-+static bool swap_available(void)
-+{
-+	char line[256];
-+	int lines = 0;
-+	FILE *fp = fopen("/proc/swaps", "r");
-+
-+	if (!fp)
-+		return false;
-+	while (fgets(line, sizeof(line), fp))
-+		lines++;
-+	fclose(fp);
-+	return lines > 1;
-+}
-+
- static unsigned long now_ms(void)
+-void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
++void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
  {
- 	struct timeval tv;
-@@ -199,11 +271,14 @@ static unsigned long now_ms(void)
- static void usage(void)
- {
- 	fprintf(stderr,
--		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-z] [-a areas]\n"
-+		"Usage: khugepaged_race [-d seconds] [-m stepped|free|madvise] [-z] [-p] [-a areas]\n"
- 		"\tWithout -m, every mode runs in turn.\n"
- 		"\t-d: seconds per mode (default 5)\n"
- 		"\tBoth occupancy limits run unless -z asks for holes only.\n"
- 		"\t-z: only max_ptes_none = HPAGE_PMD_NR - 1 (hole-heavy)\n"
-+		"\tRuns with and without memory pressure unless -p asks for\n"
-+		"\tpressure only.\n"
-+		"\t-p: only with the pageout and compaction threads\n"
- 		"\t-a: number of shared PMD-sized playground areas (default 3)\n");
- 	exit(1);
- }
-@@ -212,18 +287,22 @@ int main(int argc, char **argv)
- {
- 	static const char * const thread_names[] = {
- 		"faulter", "faulter2", "dontneed", "pinner", "forker",
--		"mremapper",
-+		"mremapper", "pageout", "compactor",
- 	};
- 	void *(*const thread_fns[])(void *) = {
- 		faulter_fn, faulter_fn, dontneed_fn, pinner_fn, forker_fn,
--		mremapper_fn,
-+		mremapper_fn, pageout_fn, compactor_fn,
- 	};
-+	const unsigned long pageout_bit = 1UL << 6, compactor_bit = 1UL << 7;
- 	const int nr_threads = ARRAY_SIZE(thread_names);
- 	pthread_t threads[ARRAY_SIZE(thread_names)];
- 	static const char * const all_modes[] = { "stepped", "free", "madvise" };
- 	static const int all_nones[] = { 0, 1 };	/* strict, holes */
-+	static const int all_press[] = { 0, 1 };	/* quiet, under pressure */
- 	const int *nones = all_nones;
-+	const int *press = all_press;
- 	int nr_nones = ARRAY_SIZE(all_nones);
-+	int nr_press = ARRAY_SIZE(all_press);
- 	const char *one_mode[1];
- 	const char * const *modes = all_modes;
- 	int nr_modes = ARRAY_SIZE(all_modes);
-@@ -232,13 +311,15 @@ int main(int argc, char **argv)
- 	unsigned long end_ms;
- 	int duration_s = 5;
- 	unsigned long thread_mask = ~0UL;
-+	unsigned long base_mask;
- 	int nr_areas_arg = 0;
- 	bool holes_only = false;
-+	bool pressure_only = false;
- 	unsigned long i;
- 	int steps = 0;
- 	int opt;
+ 	int ool_stub_idx, long_branch_stub_idx;
++	int ool_stub_sz;
  
--	while ((opt = getopt(argc, argv, "a:d:m:t:zh")) != -1) {
-+	while ((opt = getopt(argc, argv, "a:d:m:t:zph")) != -1) {
- 		switch (opt) {
- 		case 'a':
- 			nr_areas_arg = atoi(optarg);
-@@ -256,6 +337,9 @@ int main(int argc, char **argv)
- 		case 'z':
- 			holes_only = true;
- 			break;
-+		case 'p':
-+			pressure_only = true;
-+			break;
- 		default:
- 			usage();
- 		}
-@@ -265,6 +349,11 @@ int main(int argc, char **argv)
- 		nr_nones = 1;
- 	}
- 
-+	if (pressure_only) {
-+		press = all_press + 1;
-+		nr_press = 1;
-+	}
+ 	/*
++	 * In the final pass, align the mis-aligned dummy_tramp_addr field
++	 * in the fimage. The alignment NOP must appear before OOL stub,
++	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
++	 *
++	 * dummy_tramp_addr must be 8-byte aligned for load-register
++	 * compatibility. The fimage can be non 8-byte aligned, so final
++	 * alignment depends on start of fimage and the stub's instruction
++	 * count offset. The OOL stub size is 4 instructions (with
++	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 3 instructions (without)
++	 * before dummy_tramp_addr.
++	 *
++	 * Emit a NOP here if (ctx->idx + ool_stub_sz) is odd, so that
++	 * dummy_tramp_addr lands at an even instruction offset (== 8-byte
++	 * aligned from an 8-byte aligned base).
++	 *
++	 * In pass=0 when image==NULL, conservatively account for space
++	 * required to accommodate alignment NOP. In case final pass skips
++	 * emitting alignment NOP, the image buffer have 4 spare bytes and
++	 * jited_len signifies correct program size.
++	 */
 +
- 	if (mode_arg) {
- 		if (strcmp(mode_arg, "stepped") && strcmp(mode_arg, "free") &&
- 		    strcmp(mode_arg, "madvise"))
-@@ -304,7 +393,12 @@ int main(int argc, char **argv)
- 		 -1, 0) != (void *)mremap_scratch)
- 		ksft_exit_fail_perror("mmap() mremap scratch");
- 
--	ksft_set_plan(nr_modes * nr_nones);
-+	base_mask = thread_mask;
-+	if (!swap_available())
-+		/* No swap, no anon reclaim: compaction-only pressure. */
-+		ksft_print_msg("no swap: the pageout thread stays idle\n");
++	ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
++	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL))
++		EMIT(PPC_RAW_NOP());
 +
-+	ksft_set_plan(nr_modes * nr_nones * nr_press);
++	/*
++	 *      nop     // optional, for alignment of dummy_tramp_addr
+ 	 * Out-of-line stub:
+ 	 *	mflr	r0
+ 	 *	[b|bl]	tramp
+@@ -70,7 +98,7 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
  
- 	thp_save_settings();
- 	thp_read_settings(&settings);
-@@ -316,9 +410,17 @@ int main(int argc, char **argv)
+ 	/*
+ 	 * Long branch stub:
+-	 *	.long	<dummy_tramp_addr>
++	 *	.long	<dummy_tramp_addr>  // 8-byte aligned
+ 	 *	mflr	r11
+ 	 *	bcl	20,31,$+4
+ 	 *	mflr	r12
+@@ -81,6 +109,7 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
  	 */
- 	thp_push_settings(&settings);
- 
--	for (int mn = 0; mn < nr_modes * nr_nones; mn++) {
--		const char *mode = modes[mn / nr_nones];
--		bool holes = nones[mn % nr_nones];
-+	for (int run = 0; run < nr_modes * nr_nones * nr_press; run++) {
-+		int rem = run % (nr_nones * nr_press);
-+		const char *mode = modes[run / (nr_nones * nr_press)];
-+		bool holes = nones[rem / nr_press];
-+		bool pressure = press[rem % nr_press];
+ 	if (image)
+ 		*((unsigned long *)&image[ctx->idx]) = (unsigned long)dummy_tramp;
 +
-+		thread_mask = base_mask;
-+		if (!pressure)
-+			thread_mask &= ~(pageout_bit | compactor_bit);
-+		else if (!swap_available())
-+			thread_mask &= ~pageout_bit;
- 
- 		thp_read_settings(&settings);
- 		settings.thp_enabled = THP_MADVISE;
-@@ -354,6 +456,24 @@ int main(int argc, char **argv)
- 			ksft_exit_fail_perror("mmap() playground");
- 		mremap_area = region + nr_shared_areas * hpage_pmd_size;
- 
-+		if (thread_mask & pageout_bit) {
-+			/*
-+			 * Big enough to cycle real reclaim, small enough not
-+			 * to dominate a TCG guest: 4 PMD areas, clamped to
-+			 * [16M, 64M].
-+			 */
-+			pageout_size = 4 * hpage_pmd_size;
-+			pageout_size = pageout_size < (16UL << 20) ?
-+				       (16UL << 20) :
-+				       pageout_size > (64UL << 20) ?
-+				       (64UL << 20) : pageout_size;
-+			pageout_area = mmap(NULL, pageout_size,
-+					    PROT_READ | PROT_WRITE,
-+					    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+			if (pageout_area == MAP_FAILED)
-+				ksft_exit_fail_perror("mmap() pageout area");
-+		}
-+
- 		/* Populate so the first pass has something to collapse. */
- 		for (i = 0; i < nr_shared_areas * hpage_pmd_size / page_size; i++)
- 			*(unsigned int *)(region + i * page_size) = pattern(i);
-@@ -403,8 +523,9 @@ int main(int argc, char **argv)
- 			check_page(i);
- 
- 		ksft_test_result(!corrupted,
--				 "%s/%s: %ds, %d steps, no corruption\n",
-+				 "%s/%s%s: %ds, %d steps, no corruption\n",
- 				 mode, holes ? "holes" : "strict",
-+				 pressure ? "/pressure" : "",
- 				 duration_s, steps);
- 
- 		/*
-@@ -413,15 +534,19 @@ int main(int argc, char **argv)
- 		 * and its scan cadence differs.
- 		 */
- 		munmap(region, nr_areas * hpage_pmd_size);
-+		if (pageout_area) {
-+			munmap(pageout_area, pageout_size);
-+			pageout_area = NULL;
-+		}
- 		thp_pop_settings();
- 		stop = 0;
- 		steps = 0;
- 
- 		if (corrupted) {
- 			/* Memory is suspect; the rest would prove nothing. */
--			while (++mn < nr_modes * nr_nones)
-+			while (++run < nr_modes * nr_nones * nr_press)
- 				ksft_test_result_skip("%s: skipped after corruption\n",
--						      modes[mn / nr_nones]);
-+						      modes[run / (nr_nones * nr_press)]);
- 			break;
- 		}
+ 	ctx->idx += SZL / 4;
+ 	long_branch_stub_idx = ctx->idx;
+ 	EMIT(PPC_RAW_MFLR(_R11));
+@@ -97,7 +126,8 @@ void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
  	}
+ }
+ 
+-int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg, long exit_addr)
++int bpf_jit_emit_exit_insn(u32 *image, u32 *fimage, struct codegen_context *ctx,
++							int tmp_reg, long exit_addr)
+ {
+ 	if (!exit_addr || is_offset_in_branch_range(exit_addr - (ctx->idx * 4))) {
+ 		PPC_JMP(exit_addr);
+@@ -107,7 +137,7 @@ int bpf_jit_emit_exit_insn(u32 *image, struct codegen_context *ctx, int tmp_reg,
+ 		PPC_JMP(ctx->alt_exit_addr);
+ 	} else {
+ 		ctx->alt_exit_addr = ctx->idx * 4;
+-		bpf_jit_build_epilogue(image, ctx);
++		bpf_jit_build_epilogue(image, fimage, ctx);
+ 	}
+ 
+ 	return 0;
+@@ -286,7 +316,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 	 */
+ 	bpf_jit_build_prologue(NULL, &cgctx);
+ 	addrs[fp->len] = cgctx.idx * 4;
+-	bpf_jit_build_epilogue(NULL, &cgctx);
++	bpf_jit_build_epilogue(NULL, NULL, &cgctx);
+ 
+ 	fixup_len = fp->aux->num_exentries * BPF_FIXUP_LEN * 4;
+ 	extable_len = fp->aux->num_exentries * sizeof(struct exception_table_entry);
+@@ -318,7 +348,7 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
+ 			bpf_jit_binary_pack_free(fhdr, hdr);
+ 			goto out_err;
+ 		}
+-		bpf_jit_build_epilogue(code_base, &cgctx);
++		bpf_jit_build_epilogue(code_base, fcode_base, &cgctx);
+ 
+ 		if (bpf_jit_enable > 1)
+ 			pr_info("Pass %d: shrink = %d, seen = 0x%x\n", pass,
+diff --git a/arch/powerpc/net/bpf_jit_comp32.c b/arch/powerpc/net/bpf_jit_comp32.c
+index bfdc50740da8..1cf12edf0343 100644
+--- a/arch/powerpc/net/bpf_jit_comp32.c
++++ b/arch/powerpc/net/bpf_jit_comp32.c
+@@ -229,7 +229,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 
+ }
+ 
+-void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
++void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx)
+ {
+ 	EMIT(PPC_RAW_MR(_R3, bpf_to_ppc(BPF_REG_0)));
+ 
+@@ -237,7 +237,7 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+ 
+ 	EMIT(PPC_RAW_BLR());
+ 
+-	bpf_jit_build_fentry_stubs(image, ctx);
++	bpf_jit_build_fentry_stubs(image, fimage, ctx);
+ }
+ 
+ /* Relative offset needs to be calculated based on final image location */
+@@ -1150,6 +1150,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 			 */
+ 			if (i != flen - 1) {
+ 				ret = bpf_jit_emit_exit_insn(image, ctx, _R0, exit_addr);
++				ret = bpf_jit_emit_exit_insn(image, fimage,
++								ctx, _R0, exit_addr);
+ 				if (ret)
+ 					return ret;
+ 			}
+diff --git a/arch/powerpc/net/bpf_jit_comp64.c b/arch/powerpc/net/bpf_jit_comp64.c
+index dab106cae22b..951eb10ca1f6 100644
+--- a/arch/powerpc/net/bpf_jit_comp64.c
++++ b/arch/powerpc/net/bpf_jit_comp64.c
+@@ -398,7 +398,7 @@ static void bpf_jit_emit_common_epilogue(u32 *image, struct codegen_context *ctx
+ 	}
+ }
+ 
+-void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
++void bpf_jit_build_epilogue(u32 *image, u32 *fimage, struct codegen_context *ctx)
+ {
+ 	bpf_jit_emit_common_epilogue(image, ctx);
+ 
+@@ -407,7 +407,7 @@ void bpf_jit_build_epilogue(u32 *image, struct codegen_context *ctx)
+ 
+ 	EMIT(PPC_RAW_BLR());
+ 
+-	bpf_jit_build_fentry_stubs(image, ctx);
++	bpf_jit_build_fentry_stubs(image, fimage, ctx);
+ }
+ 
+ /*
+@@ -1737,7 +1737,8 @@ int bpf_jit_build_body(struct bpf_prog *fp, u32 *image, u32 *fimage, struct code
+ 			 * we'll just fall through to the epilogue.
+ 			 */
+ 			if (i != flen - 1) {
+-				ret = bpf_jit_emit_exit_insn(image, ctx, tmp1_reg, exit_addr);
++				ret = bpf_jit_emit_exit_insn(image, fimage, ctx,
++								tmp1_reg, exit_addr);
+ 				if (ret)
+ 					return ret;
+ 			}
 -- 
 2.54.0
 
