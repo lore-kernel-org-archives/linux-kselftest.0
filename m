@@ -1,84 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C7EC3BB9E1;
-	Fri,  7 Aug 2026 22:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECD9187346
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 22:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786140988; cv=none; b=tez2gME6G93k3fp5sNf1CCdQsBSzgcYi6pTHzQrWlWL+xAsd+Ete8thEDfeJfMLQYHDONPeLSXzT8iHRFInMi8bQrpb+38Ox4WjfD44JNqM+lbWw+/VBQmLfl5nJsPDgqaUmLNOOg6VK7LiO4oBBwEq7ZeGJd2InS6l1p6Q6tDU=
+	t=1786141695; cv=none; b=TZOSUNQSODy1p1bVd+TmQ3Evvy+Mw6EHUwo7zxW2Ign6Z94sGmSd693CN6UoNUahU9J9/7wP+rLRq0D/elZOx3a1gM5+hHWFHrttMGx0gKnnJrA5n0/sErP1jNickJTw4uo96FornoLcwoBg6cB0J5Et709RsgpPTNO//FSKjPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786140988; c=relaxed/simple;
-	bh=XzdZgNj42FXdFPBBfkatrrkmMdcbF828JQBV4Z140Vo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VlrYyjhUzVgv+dyNm+stKDQ/mmEBLmmTCVK3RygB0UFGptNYlE8IJ6XMeTTfYjmAlt6rT+mkzlZaoE7k4vMAapuuxM6B5O4nyHFcOjIIh/PZd1OHerXWOtriIDS/g6JHOZTI6/JaPdNOVXgB1eODtp0TmFCdfCa8Mr11AVPf0SQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XcW2MqHp; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786141695; c=relaxed/simple;
+	bh=K0zsIsEW8Yn0Vht5R5cH081Ha1e8oN7aKLVhk3oUXX8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ekFKuhCH10FE6RpfDxQZhcU1FXjb2VcGtYGF5AHxe6YFdcbBeKK7TZ358jgo+Lq0+RQWxz7OfXy1DTHi2nOk2Co/NdtXfry/csd7kDV7Osh2qnhQ0/POcgukVFj9EYP/xfJ8coKoVhQFvrEkWKzYe5d0C8RB/2ZKDe0cAfQtKkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IQzY2xlx; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XcW2MqHp"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C74D51F000E9;
-	Fri,  7 Aug 2026 22:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786140987;
-	bh=H6viO78zkue0BwkFP2Ba4VC+7mxPN5fyGC+OMVryzlQ=;
-	h=From:To:Cc:Subject:Date;
-	b=XcW2MqHpLbieS5i2XDpM90JTbdeTSnc4XHgvK/nO0vh/h5lKF+lDYWP1SY6/VqywE
-	 6XtpTtutaRjsU2fVAT/7mmtWL2D7B+YsGXiwliWDXW/Fvv+8C/mJ9n8zlozfMtdX2W
-	 Olfmo7BigPWaWYH6vytB06gdOuKIIlP3dIq+RXCijZxZL0FpOeqz4v2JkbowRo03Yc
-	 XaZ5Aj1HTK6OoYYUx9VEvTjMGbyPC+ih06jVvEzqadiBi0ppcGQAyKIDr9xkiVD76X
-	 bsxoBH/fe1dtGRPcsuY17XqTJtBrngXjUCYjkTpNtJtVMOdBhAEDprqhKqYeMO73Ak
-	 0iM59BQWgY7kA==
-From: Jakub Kicinski <kuba@kernel.org>
-To: david@ixit.cz
-Cc: Jakub Kicinski <kuba@kernel.org>,
-	bongsu.jeon@samsung.com,
-	shuah@kernel.org,
-	oe-linux-nfc@lists.linux.dev,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH nfc] selftests/nci: increase t4t_tag_read timeout for debug kernels
-Date: Fri,  7 Aug 2026 15:16:22 -0700
-Message-ID: <20260807221622.1727540-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IQzY2xlx"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e08baf860so39689a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 15:28:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786141685; x=1786746485; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8g4CqNNY+lAFMI0SaWVSjLctp/XfPNWJ0tNY272o3EE=;
+        b=IQzY2xlxyXHHuB8xkTjOM2Q4lYdOEsonMYBlIQ6sGnxNghN6boUEL2Sj+9YnfCuXEw
+         BYOiIzjrSRbXqexnfg/5d03iXc+iHFlUCbtVeNNj/VvsQaL9IH7DIcvSUQJVtATmsFM+
+         mPFHNubFatREccdNfiHP/BIhfz2TnctyCClNYIhjETpbH3JTb/2UkyZZJ0Yo76/2WnK4
+         W/9RThR2McVethI9EqxFQkyaCwlHoChj7TpLDbi1aBDJAwwhin8uyMmR4SpPNO+LFzvc
+         4Aci10HL9aRUlpdUfpdzJRjBf3DfKKr6qdoU/ElRRVBlzThMUiIu0XupN2i1IKn4ESwK
+         dL+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786141685; x=1786746485;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8g4CqNNY+lAFMI0SaWVSjLctp/XfPNWJ0tNY272o3EE=;
+        b=CpAfPeM4yPOr1Lnf8bImSI1UT+abGwSW1QWAhJg/lENltEB7tmFH83BO5J1Ht535T4
+         WcQVaJ+Ve2FPSRXZawyB8eJKbn1UUv+tEuOZj8MA82cEr0fgHum5kd7agaiIpcEv4X3E
+         yfoE1mdH6kdZ2vZ5HcOtf2RZcWCFE/SvfZhk3vGqcwsMsXvriKO+krubVBL3HcanrMlJ
+         BRPC+nnHQjGigH+Sez3XlpPGqt2blKXYIcbnSfmPIIHvXhGsAvg64R738RrNIEobkQZf
+         RhTXUISDL729/2UiufGHjViVr0pSRPT5uikuFEiJD+LfTCTduP/ES1A5Vv9qYz1PgA/l
+         3iSg==
+X-Forwarded-Encrypted: i=1; AHgh+RozM7VGcayKCNCS1Ux96QfZpDPlERKdX9KIi2uZKnZLWuZmgoJXU7s/VLXkM9lPTrYgGN1kWm0VKZeTzTOOoRM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyG9GxSB8Dgguk21nrteA5O0wTtdWqV5ms2snUeAKj89QzTYS0A
+	7xzQkMLvtMjhXaWO3oexHuyuX9ECCTBHMEJzJDH6UtmHVEXWzrUjnnI7dyCb9/8DoA==
+X-Gm-Gg: AR+sD10qO7X6pt7y6CXfrGiH5MsDPchBlrW5AZmtYj9iHbFvKhLBL+V75VbNkgc6R4W
+	vO0noLhzAf+/DrFh+R61itRY4YU7eLlUav1uQR4jHlskejmy6GOtBQCiT52ueKfBFxWt7BkFJ/5
+	Ohnnoh0z+ZcUJGrndvn/VcGfjQ20eA+DSX66brrYv0I6wdgs42f5siK1IQITsPH79g6Db5L5n5J
+	bEGgiTO1wFmViAfUV4/LNhiGPHJB418gUHyxgtxmUH30NzEc3FsTHQKBolwTyroPGdXHOJ45toS
+	JxGsVS51Ef82h2DkSfDYZFV96kS8Iqe2Cne1VSokp922jgReQR5oIEPOrdGOFH12UMr7dbKVUL1
+	cj2IufZcYuQaGiehEJMfS2lLMgC2CPN2LuwUJY/Kt4EkLSUBaNIz+SS7jjBGFqGTWHZQ8jasaVc
+	8X1w3KLHyMVBlSlmpGkMDt78jSLFYftKaqg4DrOJOGGHzEyulMeZ3gVGkxi0ZjrJcoy3WLF33mf
+	i5ZvYD/etByJgWHzHgZh7bwYwutQQ==
+X-Received: by 2002:a17:90b:274d:b0:38e:fea2:df53 with SMTP id 98e67ed59e1d1-3903c534d46mr29628863a91.4.1786141684888;
+        Fri, 07 Aug 2026 15:28:04 -0700 (PDT)
+Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39085f2c714sm6201387a91.10.2026.08.07.15.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 15:28:04 -0700 (PDT)
+Date: Fri, 7 Aug 2026 22:27:56 +0000
+From: David Matlack <dmatlack@google.com>
+To: Alex Williamson <alex@shazbot.org>
+Cc: Josh Hilke <jrhilke@google.com>, Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Vipin Sharma <vipinsh@google.com>,
+	Alex Williamson <alex.williamson@nvidia.com>
+Subject: Re: [PATCH v10 0/3] vfio: selftests: Add driver for Intel Ethernet
+ Gigabit Controller (IGB)
+Message-ID: <anZb7DlyLSMgp6sK@google.com>
+References: <20260805-igb_v3_b4-v10-0-9c86dc849c0d@google.com>
+ <20260805094621.665d5ec0@shazbot.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260805094621.665d5ec0@shazbot.org>
 
-The t4t_tag_read test occasionally exceeds the default 30-second
-TEST_TIMEOUT_DEFAULT, triggering flaky "Test terminated by timeout"
-failures (~4% rate on slow CI systems with debug configs).
+On 2026-08-05 09:46 AM, Alex Williamson wrote:
+> On Wed, 05 Aug 2026 00:20:57 +0000
+> Josh Hilke <jrhilke@google.com> wrote:
+> 
+> > This v10 of a series which adds a VFIO selftest driver for the Intel
+> > Gigabit Ethernet controller (IGB), specifically targeting the 82576
+> > device. IGB is fully virtualized in QEMU, making it suitable for running
+> > VFIO selftests without specialized hardware.
+> 
+> LGTM, passes on physical NIC.  Thanks for the re-spins.
+> 
+> David, do you want to double check and provide an Ack?  Thanks,
+> 
+> Alex
 
-TBH this is potentially papering over a real issue. The test usually
-takes 7sec to finish, with this fix it sometimes takes 37s. What
-happens when it needs extra time I do not know. But the upshot is
-that it used to flake 4% of the time in NIPA and now it passes
-(200 clean runs). So unless someone has time to really dig into this,
-let's silence it?
-
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-CC: bongsu.jeon@samsung.com
-CC: david@ixit.cz
-CC: shuah@kernel.org
-CC: oe-linux-nfc@lists.linux.dev
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/nci/nci_dev.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index 312f84ee0444..77344227dd7f 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -836,7 +836,7 @@ int disconnect_tag(int nfc_sock, int virtual_fd)
- 	return status;
- }
- 
--TEST_F(NCI, t4t_tag_read)
-+TEST_F_TIMEOUT(NCI, t4t_tag_read, 120)
- {
- 	int nfc_sock;
- 	int status;
--- 
-2.55.0
-
+Acked-by: David Matlack <dmatlack@google.com>
