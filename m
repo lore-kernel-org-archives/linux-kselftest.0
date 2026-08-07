@@ -1,180 +1,141 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D64F93812F0;
-	Fri,  7 Aug 2026 21:59:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14DD0367B99
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 22:09:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786139949; cv=none; b=foBAS3jj7L38HmMBNpj28DE9i0Xy2UY55Mddtoq7tKs6kiJtwwzr+F9ztNzrwS8uv/bRIBn1NVd5PX15NsZgM+EyHo4jLSKPYTLhvwRnHkGdvUWK0Xgw2IlP60vmmu1QxoTZXGXvXk3xVWftMgKWtVhZ72/QB7uOvK2/lvP7Xic=
+	t=1786140598; cv=none; b=luU0S4B9TIx7sX0Oled9c4kMkLRzf7slyl7O7rAgepY/mwK1vMqIscKhiAv95t6A+/Ard4ZNjIPnYWVDac1CrsiN2GmMT2t2st3Ff3Db42826JEwwg2W/ZDp5oaNhXEKv1d5YOytb7VJnPnu/ym0YY2mokFmQKD54bhaYnlDloA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786139949; c=relaxed/simple;
-	bh=OMPA9zXQ5zDnWya5oPn/91CDMMEk4mnMb/BLCxXR530=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=C5obDny8E550ti7+XtxE19+xnULrYct95JE0IhDReFgBnGoxGsffcaPHyFSB9+olMDwaPedFNfGRZEd0pt3S80waFZo1c9M2P60vAu0tvOXvVwjxQn5Jn7WWHUjTt5rtCXyoal9q9qd3C/FiDlRkWr58QOnk6fOGD+lZ4d0p8mE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+uWovCZ; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1786140598; c=relaxed/simple;
+	bh=UcqvRMX4ClQZN0TPP3OykRW3KVwHC9bLdn/rP0jH8+A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jcv85xeJTqTm/BAt3ZfNdGov9wCFx7bUeg/SVJy7BbbF7KZfZwVZWSzuF+N7bA4fNKdKalxZIjGOqgcdB71OElnFPHCtxpp3dqwYlmaWg+svg71/IBZ/VCDksq7lYV8ae4Wr/B88bvcP8E1DyMCpxhw5u9vcfVNsQQdiu7B3ffM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NhZKugad; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+uWovCZ"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786139948; x=1817675948;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OMPA9zXQ5zDnWya5oPn/91CDMMEk4mnMb/BLCxXR530=;
-  b=C+uWovCZMuzV8TSqCqBH9NfN4V4hR095+j4+xoFPicAfzVRilYuJJWR5
-   6IeP1d8VKhwGSlpJ8gCF/0btASaMyZT5VmFlMiDDMoaxSA3W9+MYl50Xi
-   CjOqqvox/aQJlKJ/gggEAoVEQruv2emnk3WKMQb74i95RofocITQgYKKQ
-   DDj/QPaVZu+KcmY54SVNB4bcM3Ez8Qsdst4lkklp3u8yID1zGxUtl8of0
-   ssLzhIq1tjv72frds4ohlOk9Dm0gdWwi/vwjX/PUSEWgwkkWk9XcYTkre
-   nPyxDqas+INKJwb8dLGBDk+qA34t7b2V6fKkhpXGjJiOEbfbaTtLbeJhP
-   A==;
-X-CSE-ConnectionGUID: ckEJIw4xTTOpmSiuSITDug==
-X-CSE-MsgGUID: h2ez+Jz8SCi1wGG3ujGx+g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11868"; a="112302732"
-X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
-   d="scan'208";a="112302732"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Aug 2026 14:59:07 -0700
-X-CSE-ConnectionGUID: dnAzD3ZaTrmIUwx9c7YBcQ==
-X-CSE-MsgGUID: +dRjWKiRRi2D2SXSdRA0vA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,210,1779174000"; 
-   d="scan'208";a="287198450"
-Received: from lkp-server01.sh.intel.com (HELO 6eda058d650d) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 07 Aug 2026 14:59:03 -0700
-Received: from kbuild by 6eda058d650d with local (Exim 4.98.2)
-	(envelope-from <lkp@intel.com>)
-	id 1wsSah-00000000JLw-3pMV;
-	Fri, 07 Aug 2026 21:58:59 +0000
-Date: Sat, 8 Aug 2026 05:58:31 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rong Tao <rtoax@foxmail.com>, andrii@kernel.org, vmalik@redhat.com,
-	ast@kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, rtoax@foxmail.com,
-	Rong Tao <rongtao@cestc.cn>, Daniel Borkmann <daniel@iogearbox.net>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Yuzuki Ishiyama <ishiyama@hpc.is.uec.ac.jp>,
-	"(open list:BPF \\(Safe Dynamic Programs and Tools\\))" <bpf@vger.kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test
- bpf_strcat,bpf_strncat kfuncs
-Message-ID: <202608080502.lI7AVjty-lkp@intel.com>
-References: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NhZKugad"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84867f07d63so23364b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 15:09:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786140596; x=1786745396; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=S9Bei40zc5v/rBys6hRWt3NShw4r+i0ulzXGe0MjsfY=;
+        b=NhZKugadxgr5DTbflrwvXSQjO1msw0fGGXXSSaXNSmQj5Y9Sal5oKyn3mP/OmZ6Dce
+         3g176a49hkWiTYMizgeL+zxpL3f8v5Utl3EBM487AujVx5ySE/+FB8wxNZBXsgJ6FlA8
+         YH8ioiRx0U/03RCxuiJq7jJHcUV5pBpE9VZiL1H+iivXCx88D1rW9c3a5VT4WpUIL6p9
+         KUCKcjWKImULKapASCs2bIk+r86DRkDXP+J9ZGbMLTnPLUc0smBByaAzMAlKJr3cwea7
+         rIiSUW3esNTE4DiR8Driv5OpK1WIBGYPu0sUlmXRImUOf0MsFnRR/evWj9E0h+4XaJZq
+         yYSA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786140596; x=1786745396;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=S9Bei40zc5v/rBys6hRWt3NShw4r+i0ulzXGe0MjsfY=;
+        b=NSE692KlMzs5f7MpmKhoQzviYAb9hFV1I5C7z0PqV/eMsSyW718F6hoEiKefowjgRn
+         cYUD+83he545glrhPvLlLRnGg849dhOsO6v760ozc5T0tP348E9vhCmYUH03/bVJTmwC
+         TpY1O2IF0NiNEyWLXjbPH4OQvmgjlFP4ZgnhY6pHM9ONeJcWbIHX++exXJQfN2fEFC/0
+         Y54U+WBc++e3Id0edVxi7+r6rIM1gRuJeX2wYGyel9+xnmOaFAMEGZrRJ09lUbXT6fTB
+         +KrJaEl/AOiY4w11+b2n1HT04OwUP8+qHELLBYVpwnWgA/mpTFw8xrA7hQ7WK8ulbW/Z
+         dQig==
+X-Forwarded-Encrypted: i=1; AHgh+Rq3sdEVY8YeLTxs9s1qgcARHvOJeOInRI+dHOa+LQZM2WjBLCm/tAUB2p7Z10CX9gL7TdGDOWq3mzzV2r1kpX8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzY9IkyjGrB4QoKvrEyVpcD92CqJE1cgY8Hi7D8gYN48wckHc1H
+	B/Y46RgsWUQCTfCRGxQWiyCD2NkorlTovSJwzMC0EuGbTiyYgtd4OQwEFGNWZmKw
+X-Gm-Gg: AR+sD1213VawF/wW5M5bsw37PetYknBD4Ki9lEeAU/qCq291HX21h/2Frt6nVntwxTF
+	sHFCQCB2B2UFpkxdhPdTIO/jN81TMs9b6aqS9TIkbGPkxB5SS+5tV377oWW82YdlC/fcETVxwgU
+	Ou/5qZUr1OfS0XwNIMApdSJ8G1wjOTVQXeAQMHCCF9cVehKALlGN8Ioz3FnplEEO4HdR5JjYEmA
+	c7c0YqVMxOsvxRlYmwnMHsgxJixVtVeMkyZ8Bxwg5RvF1KZ0voq9zLd90G0Ued1atcBXFY2Fw1O
+	5rK4FsFGy94u+vm81dvGp5dmPcFmzvzxHMlRcKNB+vLkjMA3MR+sPfXKb/StrIQrJ/H5eai7Eet
+	TtAPU04TA2vNh9ifeai1+dKEyuRl0+JWDJw2waAkSgKCJcsgiJirUYTw7kftgbsPZ344Rn5LKb1
+	0jmQh39eMUX3YLKfq7ZijzVPELe4hL+OGobqUuRd67F5y/mg3zEN7ZOLFvsot08K4LgrkNgeFEx
+	LOG8g==
+X-Received: by 2002:a05:6a21:391:b0:3c3:8044:8b0d with SMTP id adf61e73a8af0-3cb85e2b60cmr32859059637.12.1786140596348;
+        Fri, 07 Aug 2026 15:09:56 -0700 (PDT)
+Received: from fedora ([2804:1b3:a8c3:8ee5:1c39:64d9:e257:73dc])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be568bd3sm11182762eec.0.2026.08.07.15.09.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 15:09:55 -0700 (PDT)
+From: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
+Subject: [PATCH net-next v3 0/5] net: selftests: adjustments to ipv6_flowlabel_mgr
+Date: Fri,  7 Aug 2026 19:09:37 -0300
+Message-ID: <20260807220942.421382-1-marcelomspessoto@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <tencent_DB0510330C3A8574B3C62E6154165FCB4709@qq.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Rong,
+The ipv6_flowlabel_mgr test file was lacking coverage for the
+IPV6_FL_A_RENEW action, and the IPV6_FL_F_REMOTE and IPV6_FL_F_REFLECT
+flags. The first two patches from this set aim to add a proper test
+case for RENEW and REMOTE.
 
-kernel test robot noticed the following build errors:
+The third patch was added to insert network namespace creation inside
+the test suite, instead of relying on external wrapper scripts. This
+change conforms to other net test implementations, such as
+tools/testing/selftests/net/icmp_rfc4884.c, and it is important for
+the fourth and fifth patches.
 
-[auto build test ERROR on bpf-next/master]
+The fourth patch adds the IPV6_FL_F_REFLECT test.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rong-Tao/selftests-bpf-Test-bpf_strcat-bpf_strncat-kfuncs/20260807-065842
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/bpf/bpf-next.git master
-patch link:    https://lore.kernel.org/r/tencent_DB0510330C3A8574B3C62E6154165FCB4709%40qq.com
-patch subject: [PATCH bpf-next v2 2/2] selftests/bpf: Test bpf_strcat,bpf_strncat kfuncs
-config: s390-randconfig-r052-20260807 (https://download.01.org/0day-ci/archive/20260808/202608080502.lI7AVjty-lkp@intel.com/config)
-compiler: clang version 24.0.0git (https://github.com/llvm/llvm-project 12df34b8469b8095359de8c249cb1b2753fadeea)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20260808/202608080502.lI7AVjty-lkp@intel.com/reproduce)
+The fifth patch proposes the adoption of "kselftest_harness.h" helpers,
+improving code readability and conforming to the implementation of the most
+recent selftests.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202608080502.lI7AVjty-lkp@intel.com/
+---
+v3:
+- Remove unused FL_MAX_LINGER variable
+- Set flr_share explicitly for renew tests
+- Add corner case for expect_fail_errno macro where test succeeds when
+  it should've failed
+- Add a new intermediate patch, between remote test patch and reflect test
+  patch, placing the netns setup inside the test file
+- Add missing skip for setuid fail, addressing stale code from harness
+  migration
+- Delimit EXPECT and ASSERT usage (use former when test can continue)
+- Minor commit message rewording
+- Apply more missing scripts/checkpath.pl fixes
+v2:
+- Apply missing scripts/checkpath.pl fixes and other formatting
+  enhancements
+- Add new basic IPV6_FL_A_RENEW tests
+- Put label after IPV6_FL_F_REMOTE test, freeing the value for a
+  subsequent test
+- Delegate flowlabel_consistency configuration to wrapper sh script
+  instead of doing it on the main test code
+- Skip IPV6_FL_F_REFLECT tests if flowlabel_consistency is set,
+  instead of failing the test or attempting to change it
+- Compare resulting error for failure assertions
+- https://lore.kernel.org/all/20260804025910.50145-1-marcelomspessoto@gmail.com/
+v1:
+- https://lore.kernel.org/all/20260727043516.93101-1-marcelospe@proton.me/
 
-All errors (new ones prefixed by >>):
+Marcelo Mendes Spessoto Junior (5):
+  selftests: net: test IPV6_FL_A_RENEW
+  selftests: net: test IPV6_FL_F_REMOTE
+  selftests: net: create own netns in ipv6_flowlabel_mgr
+  selftests: net: test IPV6_FL_F_REFLECT
+  selftests: net: adopt harness for flow label mgr
 
->> kernel/bpf/helpers.c:4228:3: error: invalid lvalue in asm output
-    4228 |                 __put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-         |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/uaccess.h:612:2: note: expanded from macro '__put_kernel_nofault'
-     612 |         arch_put_kernel_nofault(dst, src, type, local_label);   \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/include/asm/uaccess.h:471:33: note: expanded from macro 'arch_put_kernel_nofault'
-     471 | #define arch_put_kernel_nofault __mvc_kernel_nofault
-         |                                 ^
-   arch/s390/include/asm/uaccess.h:424:19: note: expanded from macro '__mvc_kernel_nofault'
-     424 |                         : [_dst] "=Q" (*(type *)dst)                    \
-         |                                        ^~~~~~~~~~~~
-   kernel/bpf/helpers.c:4233:2: error: invalid lvalue in asm output
-    4233 |         __put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   include/linux/uaccess.h:612:2: note: expanded from macro '__put_kernel_nofault'
-     612 |         arch_put_kernel_nofault(dst, src, type, local_label);   \
-         |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   arch/s390/include/asm/uaccess.h:471:33: note: expanded from macro 'arch_put_kernel_nofault'
-     471 | #define arch_put_kernel_nofault __mvc_kernel_nofault
-         |                                 ^
-   arch/s390/include/asm/uaccess.h:424:19: note: expanded from macro '__mvc_kernel_nofault'
-     424 |                         : [_dst] "=Q" (*(type *)dst)                    \
-         |                                        ^~~~~~~~~~~~
-   2 errors generated.
+ tools/testing/selftests/net/ipv6_flowlabel.sh |   2 +-
+ .../selftests/net/ipv6_flowlabel_mgr.c        | 584 ++++++++++++++----
+ 2 files changed, 466 insertions(+), 120 deletions(-)
 
+-- 
+2.55.0
 
-vim +4228 kernel/bpf/helpers.c
-
-  4197	
-  4198	static int __bpf_strncat(char *dst, u32 dsz, const char *src, u32 sz)
-  4199	{
-  4200		int dlen, slen, space, copied;
-  4201		char cs = '?';
-  4202	
-  4203		if (!copy_from_kernel_nofault_allowed(dst, 1) ||
-  4204		    !copy_from_kernel_nofault_allowed(src, 1)) {
-  4205			return -ERANGE;
-  4206		}
-  4207	
-  4208		dlen = bpf_strnlen(dst, dsz);
-  4209		if (dlen < 0)
-  4210			return dlen;
-  4211		slen = bpf_strnlen(src, sz);
-  4212		if (slen < 0)
-  4213			return slen;
-  4214	
-  4215		if (dlen >= dsz || sz == 0 || dsz == 0)
-  4216			return -EINVAL;
-  4217	
-  4218		space = dsz - dlen;
-  4219		if (space <= 1 || space < min(slen, sz) + 1)
-  4220			return -E2BIG;
-  4221	
-  4222		guard(pagefault)();
-  4223		for (copied = 0; copied < space - 1 && copied < slen; copied++) {
-  4224			__get_kernel_nofault(&cs, src, char, err_out);
-  4225			if (cs == '\0')
-  4226				break;
-  4227	
-> 4228			__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-  4229	
-  4230			src++;
-  4231		}
-  4232		cs = '\0';
-  4233		__put_kernel_nofault(dst + dlen + copied, &cs, char, err_out);
-  4234	
-  4235		__get_kernel_nofault(&cs, src, char, err_out);
-  4236		if (cs != '\0' && sz > copied)
-  4237			return -E2BIG;
-  4238	
-  4239		return dlen + copied;
-  4240	err_out:
-  4241		return -EFAULT;
-  4242	}
-  4243	
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
