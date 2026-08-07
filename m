@@ -1,38 +1,38 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4112847606D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60844749DF;
 	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786139570; cv=none; b=EAbL0WqWpI6RUGnqPbphELzjEsl54OVVpFFlt59Hd9Vx+sOMzELmuas7T/zjXQk90PW0fEq01gfIKOTpeWD8p6BUHYxAdfZ1byPu8W+2X+KbYd8e2mW9/Oz2b00LPNvUHXeSZVKdikcsp4AGOiCR8q2gCiXHiRRsOy/15JVOdcY=
+	t=1786139570; cv=none; b=NEVLmvlvthXn64ma8teOy89rTsavqeckYrbgDPlbdbEf7CoAGxOyJg5knvlTiM2p19K3NB74H8OKmzf7ZlDlGgfugbGO1uIhdXGHC97Nq1a2XGSDnlojaIMnE1nF8QUAWY4vbgYsJcO4/YdNFGKl20VFtz6C3HDAGNWWL6CzvtA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786139570; c=relaxed/simple;
-	bh=FoI3ZMvAwFhi7kaXsVeKkdELz832DofYJBPVRl9mtgo=;
+	bh=zMXMT+CDwoTrBMuFmmiwUiagBKEjr4ONLUkzSNsyvXY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TRo9TxU9QPPUTLcWYQmspyxYvZ/UGkSB3h+j+18Eh59dVC5Jg8Vle5t/5+Cam5UIpp5vxhE2/IVD10BGy6H3xlOT95zXMvUOHJNn1anfIDPWz/oCxj9eFI0r1JpM+JtiOtpb3w8MIdS2lufqnKKVuN9c+zOWxfTmaqquimlC1ic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZ12nlj4; arc=none smtp.client-ip=10.30.226.201
+	 In-Reply-To:To:Cc; b=d28hWxA1m/qzz/BqY9lkbAUs9EgQysYLTS/7bERw2sj4KuFe2U4I7rKcLoTGgamXM0k4MTyzeJ/XyAR+pROSEpIZR6U9ejnW+Bng9sb5suyc6VRrDvqwg76aWfdH0Ym1fRD1bW64PluyIzRGnxSSqkOW6w6h6JQyypcoM2fAkL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRwBCpot; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZ12nlj4"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DC1DAC2BCF7;
-	Fri,  7 Aug 2026 21:52:49 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRwBCpot"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8BC2BC2BCB8;
+	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786139569;
-	bh=FoI3ZMvAwFhi7kaXsVeKkdELz832DofYJBPVRl9mtgo=;
+	s=k20201202; t=1786139570;
+	bh=zMXMT+CDwoTrBMuFmmiwUiagBKEjr4ONLUkzSNsyvXY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=MZ12nlj4zg6jc33zJXDKBEAaD/2iRklHNAS3yqR77/cY7X3ZJKAcrJ58VSIp7lhGu
-	 ACCJy4wxgey6mcl1O1bfQezwlRgXCE9weYeGS1Bxn5M/OSPMvj/Je7PmCQNt7iGrDE
-	 S5hmlbXeV/ypmRrGSir13wZ+hn+H/TNo/ffnLg8fsX7v2CJDSOY9uwYskZzfRq/e4e
-	 JNyfbgPDjLv2fI83BbyS0+oKR6WkdWJ9A3yES7p7vG3wELaD/VDZMou/U8gsYdtxHC
-	 BK40gZGMnLuCMYH2q9rrdO0a6QC7TIsM+y2Qf6UxXhX98fpJ433AmOOKhmgaZBjtop
-	 qqA644ZGh4obA==
+	b=IRwBCpotsMnRqE/t6vavV+M4sse+zzk7TBSXJwNTqlg1x94Vbeksur0htLnBjMrvM
+	 1SwGLaiJ0o73mnoTwcgUEQaZQSv1y/EdT+2UWYvtm0i0D4KUR4XGYjNvTYBiJqrJaO
+	 QoMoGIK3AySjaXRQL6LxeRjJM4RkCc2hyAMnq+sL9qq1lVEkSrU2S+ewYBLzUvH8YB
+	 oXF1rnmjkAl9vzvwFCegc1hua66gfVuQPsSVHFIgUjN+DdorY5Dn60ffJ2vMBWkB2s
+	 Yxt6yhXfo2cz/SKCdnfN3OtqMhkbIc0S593XUDwor3TSQyj4lyMSgCoFcoLw8k1x73
+	 wroXB1cSBBYeA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id C7290C5ACD4;
-	Fri,  7 Aug 2026 21:52:49 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7611CC5ACD3;
+	Fri,  7 Aug 2026 21:52:50 +0000 (UTC)
 From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
-Date: Fri, 07 Aug 2026 14:53:00 -0700
-Subject: [PATCH v10 21/41] KVM: guest_memfd: Enable INIT_SHARED on
- guest_memfd for x86 Coco VMs
+Date: Fri, 07 Aug 2026 14:53:07 -0700
+Subject: [PATCH v10 28/41] KVM: selftests: Test conversion flow when
+ INIT_SHARED
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -41,7 +41,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260807-gmem-inplace-conversion-v10-21-2fc18ee6d3ba@google.com>
+Message-Id: <20260807-gmem-inplace-conversion-v10-28-2fc18ee6d3ba@google.com>
 References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
 In-Reply-To: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
 To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
@@ -75,14 +75,13 @@ To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com,
 Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
  linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
- linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>, 
- Xiaoyao Li <xiaoyao.li@intel.com>
+ linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
 X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786139565; l=1641;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786139565; l=1820;
  i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=5c5dIhQl3iWs3iceAiL8YJI/msPrnkAFg0lQ3bgVOW4=;
- b=UFZH2wM8ekLm4JtT1xYICDEeZuWmO10XkYOEwLNUAayGVaTkOQFrtplSWoHHOIzAaNHX6v238
- KUC3rk4iwceAAxaAu6Ixrfp57qOfaUHTUgYifWYSAeKfD3DcUx7Bej/
+ bh=LCMkQdX+H3WVboFtkpu0Izn3eeZarl7aVfYLiu9r/3g=;
+ b=Lg18aCDxNaQup8NnlNTU3r1S8o1MRkDWstNEis+KSXSyH1OUBseYjRh3CJcj4zFmpEdW+XyOJ
+ IxkFnrEGoYoAIKkN6uEs1bKZAjbgT73XPsOUXQEIVLnllJdawedKU53
 X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
  pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
 X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
@@ -90,49 +89,51 @@ X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
 X-Original-From: Ackerley Tng <ackerleytng@google.com>
 Reply-To: ackerleytng@google.com
 
-From: Sean Christopherson <seanjc@google.com>
+From: Ackerley Tng <ackerleytng@google.com>
 
-Now that guest_memfd supports tracking private vs. shared within gmem
-itself, allow userspace to specify INIT_SHARED on a guest_memfd instance
-for x86 Confidential Computing (CoCo) VMs, so long as in-place conversion
-is enabled, i.e. when it's actually possible for a guest_memfd instance to
-contain shared memory.
+Add a test case to verify that conversions between private and shared
+memory work correctly when the memory is initially created as shared.
 
+Co-developed-by: Sean Christopherson <seanjc@google.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 Reviewed-by: Fuad Tabba <tabba@google.com>
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 Tested-by: Shivank Garg <shivankg@amd.com>
 Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
- arch/x86/kvm/x86.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+ .../selftests/kvm/x86/guest_memfd_conversions_test.c        | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 39968610868fd..1ac60628b4c07 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10631,14 +10631,15 @@ bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
+diff --git a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
+index 77f95d49349ce..4c20d3d8e9349 100644
+--- a/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
++++ b/tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
+@@ -97,6 +97,12 @@ static void __gmem_conversions_##test(test_data_t *t, int nr_pages)		\
+ #define GMEM_CONVERSION_TEST_INIT_PRIVATE(test)					\
+ 	__GMEM_CONVERSION_TEST_INIT_PRIVATE(test, 1)
+ 
++#define __GMEM_CONVERSION_TEST_INIT_SHARED(test, __nr_pages)			\
++	GMEM_CONVERSION_TEST(test, __nr_pages, GUEST_MEMFD_FLAG_INIT_SHARED)
++
++#define GMEM_CONVERSION_TEST_INIT_SHARED(test)					\
++	__GMEM_CONVERSION_TEST_INIT_SHARED(test, 1)
++
+ struct guest_check_data {
+ 	void *mem;
+ 	char expected_val;
+@@ -188,6 +194,13 @@ GMEM_CONVERSION_TEST_INIT_PRIVATE(init_private)
+ 	test_convert_to_private(t, 0, 'C', 'E');
  }
  
- #ifdef CONFIG_KVM_GUEST_MEMFD
--/*
-- * KVM doesn't yet support initializing guest_memfd memory as shared for VMs
-- * with private memory (the private vs. shared tracking needs to be moved into
-- * guest_memfd).
-- */
- bool kvm_arch_supports_gmem_init_shared(struct kvm *kvm)
++GMEM_CONVERSION_TEST_INIT_SHARED(init_shared)
++{
++	test_shared(t, 0, 0, 'A', 'B');
++	test_convert_to_private(t, 0, 'B', 'C');
++	test_convert_to_shared(t, 0, 'C', 'D', 'E');
++}
++
+ int main(int argc, char *argv[])
  {
--	return !kvm_arch_has_private_mem(kvm);
-+	/*
-+	 * INIT_SHARED is supported if in-place conversion is enabled, or if
-+	 * the VM doesn't support private memory.  If the VM has private memory
-+	 * and in-place conversion is disabled, then guest_memfd can _only_ be
-+	 * used for private memory.
-+	 */
-+	return gmem_in_place_conversion || !kvm_arch_has_private_mem(kvm);
- }
- 
- #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+ 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_SW_PROTECTED_VM));
 
 -- 
 2.55.0.654.g21b8a5bc05-goog
