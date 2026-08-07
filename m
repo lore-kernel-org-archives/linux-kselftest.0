@@ -1,57 +1,57 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651424B0495
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 00:17:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 114691C5D5E;
+	Fri,  7 Aug 2026 00:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786061876; cv=none; b=byBe6IfqGpDI5gdqTv9UUFjXwZGGnomIzMuUDCCEE/DTLxHschvytOV2zK12PovIs77wAKezRaWzEF0XddwV674a5GVJVWbzwMQQmUi0ETVb2tS350TgZ2yjP+QMBtDH1jdYEZTpIGTbcSoGxn6qA/0O7oOuzPLsPniuky4SnJo=
+	t=1786061977; cv=none; b=Dtr/Wd1e345mowcd7cxU3CHehk2SJaBGDUTt5EwIpGfBOZjGxZgUEyBh+lSn1Yswol6GuJcl4agyEeszs4OpTouW6TXDrJxRvDLhulZACDobAjIiZS1JRSeKFtE9lHe3z4641AGReOnzGA4MXguRXdd2onGCex19z5cUGskWaXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786061876; c=relaxed/simple;
-	bh=VgncDmnLpV5j4nAmnp54PyOYRb9MX84DWvxwoXbrfPc=;
+	s=arc-20240116; t=1786061977; c=relaxed/simple;
+	bh=V8IaqEy5qWw7jIE4YOq+dbpEGeWEW2R8k/1/Gr6OQgQ=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=KsJhKkUyGZQpyPt45omz+y8ie7tvobRiy3dRE4xfmarP875kj5V7Vxb7n720ei6wW6MJcyqqvUVkHwjAus35pj6wl6C7LbZFfu7Iqh67Sm/PDCIJp7B3Fp/+EwR8GCJNTQAsYB+LEuc+2C3F6oTNBW4SgEHYFiNXXBox4firEhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W2YZazkc; arc=none smtp.client-ip=100.103.45.18
+	 Subject:Content-Type; b=kcoFaa2Wlwln5q4Mey/hD+8HuORJf0/WHnw9N0AO8dqXEkAmiYQzQ7f1kvTK9I+IYf5u5x7838H2k8Ni7xJyPk0GxPiiI5U9726NJwK9PSjYuc6/9NdqiVyA70yWGh3nAFuT3sjsJ78nQDvDurq7nAooPUGVZM2qtAI0ixXFsR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MbaR58Ly; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W2YZazkc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E69A51F00A3E;
-	Fri,  7 Aug 2026 00:17:54 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MbaR58Ly"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3401D1F000E9;
+	Fri,  7 Aug 2026 00:19:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786061875;
-	bh=2YbgrN5QJ/HCdjlIqSCLm+xT0EJ1uk/RpEylLMinMy0=;
+	s=k20260515; t=1786061975;
+	bh=W4zCl7qHolRbQRkQLhBSvQ7C4Hj5pceivvDw4IzZRUY=;
 	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=W2YZazkch/DemYGo3V16oP57pv+VqrS41axCxt6Xr3OAZaITMW77sF4HPGiEDCVfB
-	 uFdCtQpLp7gtViLv1R4URzCQJ+4f5wdEIU9NL26aJInLutWQ7y1iJkS9JoMt5YZ8M3
-	 x1udvKgrW/2fwgHmQXjJjpB2MOADIQLaeDqEKYjZxVhQuz6ADY9O+Yx0oKFkF5Xz88
-	 OKyYuZ3YHn33Ajc3zax65vRkT7wfCDlj0U652jD3zUmjHsV0Y1Xd2nJqk6OYXTV7jl
-	 58lUvE/7li0KgyYuNShFrSQT9qhBr7ixzpVb7iIEb+DYMCLiirb2kHq2xh+JAXEGsO
-	 GnvKnTTdqf0qw==
+	b=MbaR58Lyry2zkiY5uZ4GeMcHyOtFymOUz0QG0oA9JNG6PDyZ3hMq4QD/4UBoeFyIt
+	 /pUb8jGcNzkHBnnxNo1guTvzhKo8NlGHrFYlHiZKzPSnVsB0plDbxzVQWixHfT/aYV
+	 w0J0Ri+7RTikBNeM00GB/NRQw56vGID/1qHpNkuTYxA7qyUIZoApR6iGjoS3QLPA8E
+	 nJsdbI2qYSWB2IIp+depS3A6wTKLd4o9Bg76VP66x3W5w1oft5eVwiM4Tq+ae2Tqn3
+	 ValzZB76VSNf+EhXsHp/jCFAIVTs7JhZvgY6c62IeMwBxzlgrEoqAKV9GYi4q5blL8
+	 NvSc0WUOOpEuw==
 Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id C211CF4006C;
-	Thu,  6 Aug 2026 20:17:53 -0400 (EDT)
+	by mailfauth.phl.internal (Postfix) with ESMTP id 4086AF4006C;
+	Thu,  6 Aug 2026 20:19:34 -0400 (EDT)
 Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Thu, 06 Aug 2026 20:17:53 -0400
-X-ME-Sender: <xms:MSR1atQVQF3kU_Kqhz40L-VIXUwHFzZP4JuXmSsHm_TPMBmCO1oL8g>
-    <xme:MSR1ahmX5Br5MBwYOSaWPmyqbZRh4tFSZF6OlIMFxbCvINti_rAVYJo5UGa0YnbAb
-    lYuXjCpV_PNRCTWrnrhcqSSCI2JSAcGHEx3XYcbElkBMgmqgYF5v1uO>
-X-ME-Proxy-Cause: dmFkZTFIF3yBPe+YwGZSPnYigUANaFs4vrAmKV2+PKRTgi3H0D1rH/kT8gAkHvenWEG9mM
-    Nq0iI4ovMP6dcsYS9+WMNTDEAooFtwvqCgaXzqIsCXR3a+X8uMPwvJIPZqYc+6tQ/SMUr8
-    y+7WO/H2y06C/v7+XkjyXD3SatL0t8Vtxkgeagm5wpsnlPj4S8DO7HF7g3XMUaUEysItkn
-    NtfLY4bzbLTQ5wEM6/zLmSQEZNRpygFK5aYguEKtHxm9yV/ZdIjjWUzwKNWJzlaXHu/w4B
-    aC1hngXx7oOS+lRCgyubND/RE+lRp9CiggMCUE0rwJMSTQHPOFk+FuDqkp/4fuEG4ENeZF
-    pMkyJU5iJEW+gjzSXqhUpeLjC0rcFAGWVM6wMJQ17J8Gnap/aZeHMT1bI1RBSz0VHcDoX4
-    7za9bp13Ipv+I9Nv590SuZXZqGvdOphr3TiLP2RxTZjicn59un2eqfcUKc9ggRv+xA4uA4
-    Gtwd4kVIIvvizSqyOAhSQT9ALGA8PkofBBpkkwOp6/+ov55b4ISK4+p7nUU5xEtWAGP09b
-    tEsVzD7SrBNaEFPFVbRS+vzZ1VdIhnI9PP1TWf4IZWYZ75RiMTHRROBHViROA8uFv2dmPa
-    AoOhQ1NlnI0YBbEvU5Fum1idTPGZ99B/G+rOe3FT2DLLQ6qdA55UP9FsN5fA
-X-ME-Proxy: <xmx:MSR1ai2t4TQy0V76NFhsM4hJkB7nt-ZU0vCFha8jMzMUxrLNeafPEg>
-    <xmx:MSR1ag_9DehKWCnCjEM602oLzu9wJYPVkuJHl0Gw9jhnt3LavsoF2g>
-    <xmx:MSR1an5U73qHBe8ox-mfH9szpOUIX9xaJOEzqVnIn4JvbLNu0Yxbcw>
-    <xmx:MSR1aouYKUPHwVQ2S1UtozesPYyUXMCwiPmMoSneOBFFi2pHp9ZLNw>
-    <xmx:MSR1ap0OOOrOGl2uQ73yEguycLmBqTUM2-S0lyzCro8CudKba3INMrPu>
+  by phl-compute-10.internal (MEProxy); Thu, 06 Aug 2026 20:19:34 -0400
+X-ME-Sender: <xms:liR1alf3tWGjW7HX52kCmVbpcNQYHOAuMp99ZbthUv8iI5dA-Y1lPg>
+    <xme:liR1auBNdWi9o50EjXoKANo4Mutofb9vkelmyv3iuJlyC8cJ4FkNGUiCqKoGTocmO
+    iVwuA-1vX2WaXvpCfdf9VTE2zwrs9QpptzStUvJWybgig4I2zudrF4>
+X-ME-Proxy-Cause: dmFkZTGSY9PEkFs+Z6IK1TdtwMvMWIX8CVW5mG4y2RyRaPt525LAaaUM76zO0O9DYqZ+v4
+    OqKkQzYR1b2AyaroH7pladrEHvNJUQbYSpnENMU16hxcqvW4tWKim6aXB26+RTXriSM2RY
+    MSuAML4d9+5YYkdtDPUYxZY4nMxuSOvMSkoFMAEi3eCVSh7cWyOgQycFnOvQA65l7BsFca
+    UbcF0L0LpYrU6u5crjw/XbdZT8Cv70BDepUHUCpv5XluGS1U2Vie56lrg461HxUaxuQQbm
+    MXjB1PD6zkUx4mgSCcZNY85QsyNI78mTF0nnBjwWQ3pNrGo0YiF9w/ZMWFJst/q7hqfolN
+    ydeep8t9tSm3vQY0cYvVldGZtx8f9zJYODMTPg/uPUXvo0AmvDCsbSIVDl/CQlKokSjZFv
+    xOIytJviUHOtXoXjq008cOtovyBY91dLjaBYr9IhEsiwL99jc1oN9R7SDoNYLeNm1+kFKs
+    D8nM+ccyudD49Td8X7Tlb+XADP/a4jH/ypmeCq2zeJ6i1AFAlUL7A1EkKsQ3lxv+KmYwCH
+    Ly8ZAhYkGF5heCl7x0teiDmKMVAAUtp8pxONoCNFt4x+7GVBU0IaK+Mptn1wSR2qpW3c1m
+    tHxLRcRpoJLT2zUZrezV4y4b0iMM8+lDy6ZykBgtkKuTfjemjcGuk1xQCQXA
+X-ME-Proxy: <xmx:liR1ahA3SPJkEtsE_NaU_SrIZJqs2at3zUYSNJietqYCKax4jldgfA>
+    <xmx:liR1arak3KOhgCCG42pycu4wSXwpoCPrg3E8N_7kpvDQi2VQ_OLCYQ>
+    <xmx:liR1apnAgHxiZJYjxotF2edMNXMYTis2Ici767uzs7CEQoJuwB69rg>
+    <xmx:liR1agriGKjNMDiYSkoWekydX9g99DRcb3utb-7jXxOd5LCIWlDPZA>
+    <xmx:liR1arBzNsMgQdA8PH1wEqZ1P459baeSFAl6c1-axQlVhr39AnB6WKTG>
 Feedback-ID: ifa6e4810:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 9F889780070; Thu,  6 Aug 2026 20:17:53 -0400 (EDT)
+	id 230DC780070; Thu,  6 Aug 2026 20:19:34 -0400 (EDT)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -59,8 +59,8 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A0WByMxMWtsc
-Date: Thu, 06 Aug 2026 20:17:33 -0400
+X-ThreadId: AtKkMkI09JcJ
+Date: Thu, 06 Aug 2026 20:19:13 -0400
 From: "Chuck Lever" <cel@kernel.org>
 To: "Sabrina Dubroca" <sd@queasysnail.net>
 Cc: "John Fastabend" <john.fastabend@gmail.com>,
@@ -69,87 +69,56 @@ Cc: "John Fastabend" <john.fastabend@gmail.com>,
  "Simon Horman" <horms@kernel.org>, "Dave Watson" <davejwatson@fb.com>,
  "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
  linux-kselftest@vger.kernel.org
-Message-Id: <2dc8c2c0-7b5a-4c1e-a9b9-e4d06977c0d1@app.fastmail.com>
-In-Reply-To: <amuIA8GjpwBf1ecB@krikkit>
+Message-Id: <afb12cda-18c3-407b-96aa-a8bbd6b0b475@app.fastmail.com>
+In-Reply-To: <amsppyDTgxm-b5pk@krikkit>
 References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
- <20260726-tls-follow-on-v1-1-99bf4cc1c729@kernel.org>
- <amsVm65P9E0_SUT3@krikkit>
- <eaa66ad3-fd50-4ec5-b097-e60bd11b2bc9@app.fastmail.com>
- <amuIA8GjpwBf1ecB@krikkit>
-Subject: Re: [PATCH net 1/9] net/tls: Bound time spent on no-data records in
- tls_sw_read_sock()
+ <20260726-tls-follow-on-v1-2-99bf4cc1c729@kernel.org>
+ <amsppyDTgxm-b5pk@krikkit>
+Subject: Re: [PATCH net 2/9] net/tls: Consume empty data records in
+ tls_sw_splice_read()
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
 
 
-On Thu, Jul 30, 2026, at 1:21 PM, Sabrina Dubroca wrote:
-> 2026-07-30, 09:05:17 -0400, Chuck Lever wrote:
->> 
->> 
->> On Thu, Jul 30, 2026, at 5:12 AM, Sabrina Dubroca wrote:
->> > 2026-07-26, 20:33:29 -0400, Chuck Lever wrote:
->> 
->> >> Bound a run of such records, as net_rx_action() bounds a softirq
->> >> poll. The first record that delivers no bytes arms a deadline
->> >> TLS_RX_NODATA_NS ahead; any record that delivers bytes disarms it,
->> >> so a normal stream never trips it. Breaking out with nothing copied
->> >
->> > Another thought here: I think a peer that sends "some" 0-length data
->> > records followed by one (possibly very small) data record, and then
->> > repeats that sequence, will not hit this "rate-limiting" of no-data
->> > records. Is that right? And if so, is that a problem?
->> 
->> That occurred to me too. It's right on the cusp between still
->> making progress and gumming things up. Neither the packet-count
->> limit nor the time-bound address this case.
->> 
->> I don't have a good answer.
+On Thu, Jul 30, 2026, at 6:38 AM, Sabrina Dubroca wrote:
+> 2026-07-26, 20:33:30 -0400, Chuck Lever wrote:
+>> +/* TLS 1.2 and TLS 1.3 both permit a zero-length application_data
+>> + * record as a traffic-analysis countermeasure (RFC 5246, Section
+>> + * 6.2.1; RFC 8446, Section 5.1).
+>> + */
+>> +static bool tls_rx_empty_data_rec(int len, unsigned char control)
+>> +{
+>> +	return !len && control == TLS_RECORD_TYPE_DATA;
+>> +}
 >
-> I'm not sure that can be addressed in a generic way within ktls. Maybe
-> the caller needs to do its own accounting of "this read_sock/read_actor
-> dance has been going on for too long now, let's stop".
+> I'm not convinced by this helper. The record type check is redundant
+> for splice and read_sock, and it doesn't save much for recvmsg.
 
-The consumer can, but only by killing the connection. During a run of
-empty records, read_actor is never called and nothing decrements
-desc->count, so the consumer never regains control. The socket lock is
-held throughout, and __sk_flush_backlog() takes only sk_lock.slock, so
-sk_lock.owned stays set. Anything needing lock_sock() blocks behind the
-reader, kernel_sock_shutdown() included. The one channel left is a
-store to sk->sk_err, which tls_rx_rec_wait() tests first in its loop.
-That works, but it is terminal for the connection.
-
-To be non-lethal, the bound has to be inside ktls. v2 of this series
-will use a count rather than a deadline, as Jakub requested.
+Agreed. v2 of the series will drop it.
 
 
-> If we hit the nodata_deadline, we break out of the loop, read_actor
-> returns 0 since it's an empty record, and we jump to
-> read_sock_requeue.
+> If we're going to keep it, I'd rather pass it the skb and fetch the
+> length and record type directly in the helper
   
-Well, but consume_skb() has already run, and the break leaves the loop
-for read_sock_end, which does not requeue. read_actor is never reached
-for an empty record.
+That doesn't work for recvmsg. The length has to be read before
+tls_rx_rec_done(), because on the zero-copy path darg.skb is the
+strparser anchor and that call releases it. The type it needs is the
+accumulated control, not the skb's. So the three sites will have to
+open-code it.
 
 
-> sk->sk_data_ready is tls_data_ready at this point, no? I'm confused by
-> "the consumer" here.
+> I don't think we should be leaking mentions of the "anchor" outside of
+> strp.c.
 
-It depends on which callback was installed first, and unfortunately
-two current in-tree read_sock consumers differ in that order.
+I will reword it.
 
-svcsock (to become a read_sock consumer soon) installs svc_data_ready
-at socket setup and the handshake runs later, so ktls sits on top:
-sk_data_ready is tls_data_ready and saved_data_ready is svc_data_ready.
-The release-time announce already reaches that consumer.
 
-But nvme-tcp is the reverse. It starts TLS in nvme_tcp_alloc_queue() and
-installs its own callback afterward in nvme_tcp_start_queue().
-saved_data_ready is sock_def_readable and the announce never queues its
-io_work.
+> This looping (and the existing one in the other RX handlers) is making
+> rcvtimeo a bit pointless AFAICT [...] Am I reading this wrong?
 
-The explicit poke is for the second case. v2 of this series will rewrite
-the comment to state the condition rather than name a function.
+You are not. rcvtimeo is applied at the reader lock and again in
+tls_rx_rec_wait(), and neither bounds the loop as a whole.
 
 
 -- 
