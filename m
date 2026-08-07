@@ -1,144 +1,140 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0B65384CD5
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 21:22:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA7D4503F5;
+	Fri,  7 Aug 2026 21:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786137773; cv=none; b=CvTNPSNws5v2/yxJ/Gailzw3AHliP9X2xH3w3kl7gp72G+jgy8rh+S3qw/B02JF/JVNt9L4yHiIpgjVBznGV1kAhA3fe9FAhrBZTpivHVS61nmOSs4p2ptCroIvgezKywiSssQd68vEvweDGQnPpIbSQXUXYIYbvc/j+MvNzt5o=
+	t=1786139047; cv=none; b=c0vdnvZBb1CcBXmFiSRZwcQx7J3/rf6bgjkCGmTdhccsFuOY/+axwi+kM15ajwbxs9EpT/5BF9erYR6vTvbGSIaNc26hbMYmhbwY0lrlVJR29K7wEuZwrbquv+njgmg1+2OhvIoXy0tFWtPfUQJCgdh3vVd8eQJuTofu09YgofU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786137773; c=relaxed/simple;
-	bh=y6i7cx39WD7HSV+yrKeXcNZ2XryPQykkSj0bXTMcu9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mkTBNh+kH37WabVJftRooJeu6IUDNM6hA0+co03odd/FmWieNUTgyVxvjq2GqEp/Yw/L7a6Im3sWe2WWDXBba5YYaFXzgTfKQwG2eM+sFDmooVKBGv8ZnrdR8AcsC7DXIQAu7sXMAurX24G3nL4oVT0X6prJ6C+uISWFbqWCHyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U/9Eycxp; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786139047; c=relaxed/simple;
+	bh=JQcWIT+1S/tWgjvXfbDkpTr7gOUS5VS5O+trfb/ofAY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=SUOJkhbIHJpHXaX0yeIHzZ6lCG7w8blwgb9PxfUvEFvCUKeFUU5wuKeXXurB/Etw6BBVecbU2Bkk1v/6rVDL8F9eLDI5wJaz8+mL3TQYIG0zHL8MGjZKBJdXGU3s7NwXKFDqE/aUTY7iM3xUy7FVriRXZCT+AaV+qk7FjoBbOhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYijX0wk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U/9Eycxp"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cf6d65d8a7so581485ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 14:22:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786137771; x=1786742571; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wGhPRnqQkvQ9XTDuFD2lcLHAbRWoNgCOpfXPrXNXFpc=;
-        b=U/9Eycxpu4u+Ktpx6DOI8zPQDkoPsYDV3sCmK59RIg+sZ1h1nMM3y4744GurbZ/S2K
-         w1HsleTWTEsKxmDtnxTrsjf7XxSZiVckakTvNhMVBA3bJp3sjVvJLnNh55FZJlK8xSrp
-         5pE4eWqNshCgMZbMgTp+9x/JrdBNzMIhn8oXp2qYeXvdMSZLeEJFsK9wZzgCkfzN9nT9
-         lJwncvh/8C2GRex07rVsBUR3LdFypGfohfJcsLgN9Qks9/yJB5tqjLgwedcPYRG4vb8/
-         O6KbUkdkI3DZ9aWpZHj0Kw6Ntwef6JQQrivdiqDMgDrw4wkAJg5f3Yk+Q9w0CYZjUVPF
-         Q5bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786137771; x=1786742571;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:from
-         :date:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=wGhPRnqQkvQ9XTDuFD2lcLHAbRWoNgCOpfXPrXNXFpc=;
-        b=fPgwIsfczy2OVE/ejWgA/ZsUw8CnviEUKmJC2MugMX3GWC+NaUofnx0mPr8Cot69Xd
-         LQ659rl/mCJLBkfcqiw8wvd+a7EAXbUgD9mKsx2xbfaiTqco0Kv7GuzhGrO3yfqKukCW
-         1l0WFPc0ZnuEMPw/AAecF2zHDtUj0tLXR9jd26Dh4UFNeA5+FPWAYyAF3C8JveC1EeS5
-         NuUaKNQek631QG7wkrtLIaqSMfraHeKL8U/+6OInqQ5ExV6OnOenOKgquIgjD9PcPzJ1
-         0lxbqribbD/6jK2ToHkPOafdIR5UULyZujAyVV87i1xYEQH5QT8d1GFo2sgSt+EFYtny
-         0Ong==
-X-Forwarded-Encrypted: i=1; AHgh+RqUK/U3KtdbtwbZXiUzs9bHEkmCaDmZNDsQwBept7oTJQ0s/zuzjQykDDm6UZraAGMSDK6IxqKlcpW+FGo2Os4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyw0L8TMMbJC+Syp5IjQkHTj8cp5g972ZoKXc3OsfAp9lAyV+dA
-	S8Re5AOvB7X9IEWw2IebfD8j6n1HpTDv86NusfxQYxn87AtYEVA5LLQC
-X-Gm-Gg: AR+sD13mpejgnyvKMH2IZVeZeD9h50SfT5xxuYMQJLXrp96cewvdj4DnxQv64ufMmuc
-	kzUQb+5VXKlZEHAsELEpMpt6gg1qrByYuhDChVOhcXk+zFCzplmhj7/2Lory+5WkLzy7oYs9Oyd
-	fEmtuO8M8pZLZg2vxRjuYuWJmZuCQToGF3mCooAKj9j4DUM0IwzA1LZjEZ5uRUlvgRCVJBytLPL
-	9yqu02ibbrLuCerHTAMKTWBz2V06hAj+Uvp9ALJiZnUh5blxdNfLHD2aNdEAqb5Agoqnh0Vfzg4
-	oAvsg0y/SZiJN/bXt7RKuL8NBEVpRqrtyqV4S1LpnXeuQdOksjYTA60i01ue4i/yUBi53YbnFEr
-	1NyOPIeZsbu4QRIJDtCutkTbzWnbJivoF8IBXsQBrHUHgvCUIa5EWmJhIiWIlz/Q3yj/DCR6Z3e
-	mv4N02UHvG2Gt/Inon4LhfyrdoD9wo5wdyytgnU6MPsjAXlnhg/QDWnOIddyJoV0ICwoXdrerxO
-	HSdqUD1iIGpSSVpJHgX4Lnf
-X-Received: by 2002:a17:902:e5c1:b0:2d0:cc92:f7ae with SMTP id d9443c01a7336-2d294b29499mr79128275ad.3.1786137771208;
-        Fri, 07 Aug 2026 14:22:51 -0700 (PDT)
-Received: from KASONG-MC4 ([101.32.222.185])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d14dbeaad6sm13880585ad.51.2026.08.07.14.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 14:22:50 -0700 (PDT)
-Date: Sat, 8 Aug 2026 05:22:41 +0800
-From: Kairui Song <ryncsn@gmail.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Shivam Kalra <shivamkalra98@zohomail.in>, 
-	Kairui Song <kasong@tencent.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Nico Pache <nico.pache@linux.dev>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYijX0wk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF58C1F000E9;
+	Fri,  7 Aug 2026 21:44:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786139045;
+	bh=5/o05a6r7jF5fualbliVrZ++Vos0kZBurmfa59XjZxI=;
+	h=From:To:Cc:Subject:Date;
+	b=cYijX0wkC2o/BnFl3/7nm3AjIiht3PJoPullB6igA5OibuV5VVZUt2C+ft0jPwHpm
+	 Yd7BiT5hLUfn+WTyrpTywzRikOaTjGBol+hUivDEtbE/Hv8NesVuHPQz1i7RRiKxzq
+	 hdXHm5W4GHxrAEuSFunES3w3TEjwMdEz4fIEuOqIwZgt3rqcKShZQjoNT3s9DT0/tM
+	 aPoik4m08R8qi3f0/n8mWd6pqco+o2umXUmGq9uFX3cETaQBs8IwtIWvEC2h3nM6fs
+	 97LuCcbmdpuMqJShvQGpmiKH3VTmUI0WHYX6WTuQxN1PLAaokLCWt2ISiobODqKR+R
+	 P7Dht4LrTXKQw==
+From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To: Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>
+Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] mm: support splitting mappingless swapcache folios
-Message-ID: <anZLkwwxHdhM2M2Q@KASONG-MC4>
-References: <20260805-b4-mappingless-swapcache-v1-0-b1d78ba257ca@zohomail.in>
- <590B3189-5B66-4ECB-84CD-7B7EF18C0E54@nvidia.com>
- <anNOroQdjQh7xmU9@KASONG-MC4>
- <DKIRYOJXLIYN.32KI06POZL7SY@nvidia.com>
+Subject: [PATCH v3 0/2] tracing/boot: Support eprobe, fprobe, and tprobe events and add test framework
+Date: Sat,  8 Aug 2026 06:44:01 +0900
+Message-ID: <178613904128.259829.16130019979800943264.stgit@devnote2>
+X-Mailer: git-send-email 2.43.0
+User-Agent: StGit/0.19
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DKIRYOJXLIYN.32KI06POZL7SY@nvidia.com>
 
-On Fri, Aug 07, 2026 at 10:18:05AM +0800, Zi Yan wrote:
-> On Wed Aug 5, 2026 at 11:54 AM EDT, Kairui Song wrote:
-> > On Wed, Aug 05, 2026 at 08:03:33AM +0800, Zi Yan wrote:
-> >> On 5 Aug 2026, at 7:18, Shivam Kalra via B4 Relay wrote:
-> >> 
-> >> > Large shmem folios lose their address-space mapping when they are written
-> >> > to swap, but remain valid members of the swap cache. Folios read from swap
-> >> > but not yet associated with an anon_vma can have the same mappingless
-> >> > swapcache state. folio_check_splittable() currently mistakes both cases for
-> >> > truncation and rejects the split with -EBUSY.
-> >> >
-> >> > Implement the longstanding TODO for this state. Allow mappingless
-> >> > swapcache folios to use the existing uniform order-0 swapcache split path,
-> >> > while continuing to reject truly truncated folios and unsupported
-> >> > higher-order or non-uniform swapcache splits.
-> >> 
-> >> Thank you for your patches.
-> >> 
-> >> As Kairui (cc’d) mentioned in [1] (see “A bit more details on this”),
-> >> we might not need to implement this split. I will let Kairui to decide
-> >> how we should deal with this patchset.
-> >> 
-> >> [1] https://lore.kernel.org/all/CAMgjq7CHDG8JhesSPMkn1kzG8jKb0BXO756BvxMQC_MCn2eTyA@mail.gmail.com/
-> >
-> > Thanks for the CC, this is actually not hard to implement as shown by
-> > Shivam, I just found the code more and more hard to follow and fragile
-> > as we add more logic to it. And we don't have to reject higher order
-> > split either which can be seen easily if the code is cleaner.
-> >
-> > Personally I think doing some cleanup first is better, I haven't post any
-> > code as right now there doesn't seem to be much user of this. It will be
-> > needed if more clean THP swapcache begin to show up due to things like
-> > THP readahead for swap, which isn't here yet. I think I can send an RFC
-> > tomorrow just for reference. I'm fine if we prefer to remove that TODO
-> > using this smaller change first :)
-> 
-> Thanks. Can you also help review this patchset? The changes looks good
-> to me but I am not sure if I get all the details about swapcache handling.
-> 
-> -- 
-> Best Regards,
-> Yan, Zi
+Hi,
 
-Hello,
+This is the 3rd version of series to extend kernel boot-time tracing to
+support newly added dynamic event types (eprobes, fprobes, and tracepoint
+probes) and introduces an automated QEMU-based test suite under
+tools/testing/selftests/ftrace/boottime/.
+The previous version is here:
 
-Thanks for the reminder, I got a bit busy so delayed for a day on that
-RFC.
+ https://lore.kernel.org/all/178602969872.141946.3932041319962687996.stgit@devnote2/
 
-For this series I think it's functionally fine, just the split logic is
-a bit complex to follow and we still have restriction on swap cache
-for order 0 uniform split only. I'll have a closer look later. Also
-let me know how you think about that RFC.
+Changes in v3:
+ - tracing/boot: Check return values of strscpy() and snprintf() in
+   trace_boot_add_probe_event() to prevent silent buffer truncation.
+ - selftests/ftrace: Remove boottime/run_boottime_test.sh from
+   TEST_PROGS_EXTENDED in Makefile to prevent lib.mk from flattening it
+   into top-level ftrace/ on make install.
+ - selftests/ftrace: Support executing run_boottime_test.sh both in-tree
+   and in installed kselftest environment.
+ - selftests/ftrace: Add HUP, INT, and TERM signal handlers to tempdir
+   cleanup trap.
+ - selftests/ftrace: Validate workdir creation and update
+   run_single_test() to return 0 on test failure so set -e is not
+   suspended by invocation in an AND-OR list.
+
+Changes in v2:
+ - Fix raw command detection logic for eprobes, fprobes, and tprobes
+   by requiring ':' or isspace() after type prefix.
+ - Consolidate duplicate loop logic into trace_boot_add_probe_event()
+   helper function.
+ - Copy shared library dependencies using ldd if busybox is dynamically
+   linked.
+ - Wrap QEMU execution with timeout command and add -T/--timeout CLI
+   option.
+ - Add pre-flight checks for busybox architecture compatibility and
+   cpio tool in run_boottime_test.sh.
+ - Fix POSIX syntax compatibility and allow bypassing HOST_ARCH skip
+   when custom kernel/QEMU parameters are passed.
+ - Add boottime/run_boottime_test.sh to TEST_PROGS_EXTENDED in
+   selftests/ftrace/Makefile.
+
+Thanks,
+
+---
+base-commit: 54f133c6178d06b169dceae18cc92c4945933b8c
+
+Masami Hiramatsu (Google) (2):
+      tracing/boot: Add support for eprobe, fprobe, and tprobe events
+      selftests/ftrace: Add boot-time tracing test framework
+
+
+ Documentation/trace/boottime-trace.rst             |   18 +
+ kernel/trace/trace_boot.c                          |   97 +++++++
+ kernel/trace/trace_dynevent.c                      |    5 
+ tools/testing/selftests/ftrace/Makefile            |    2 
+ tools/testing/selftests/ftrace/boottime/Makefile   |   10 +
+ tools/testing/selftests/ftrace/boottime/README     |   58 ++++
+ .../ftrace/boottime/bootconfigs/01-kprobe.bconf    |    5 
+ .../ftrace/boottime/bootconfigs/02-synth.bconf     |    4 
+ .../ftrace/boottime/bootconfigs/03-eprobe.bconf    |    4 
+ .../ftrace/boottime/bootconfigs/04-fprobe.bconf    |    4 
+ .../ftrace/boottime/bootconfigs/05-tprobe.bconf    |    4 
+ .../ftrace/boottime/bootconfigs/06-instance.bconf  |    5 
+ .../selftests/ftrace/boottime/run_boottime_test.sh |  271 ++++++++++++++++++++
+ .../selftests/ftrace/boottime/tests/01-kprobe.sh   |   18 +
+ .../selftests/ftrace/boottime/tests/02-synth.sh    |   18 +
+ .../selftests/ftrace/boottime/tests/03-eprobe.sh   |   18 +
+ .../selftests/ftrace/boottime/tests/04-fprobe.sh   |   18 +
+ .../selftests/ftrace/boottime/tests/05-tprobe.sh   |   18 +
+ .../selftests/ftrace/boottime/tests/06-instance.sh |   23 ++
+ tools/testing/selftests/ftrace/config              |    4 
+ 20 files changed, 600 insertions(+), 4 deletions(-)
+ create mode 100644 tools/testing/selftests/ftrace/boottime/Makefile
+ create mode 100644 tools/testing/selftests/ftrace/boottime/README
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
+ create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
+ create mode 100755 tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
+ create mode 100755 tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
