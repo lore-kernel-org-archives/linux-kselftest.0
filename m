@@ -1,315 +1,220 @@
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2287B3822B5;
-	Fri,  7 Aug 2026 11:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 430AC47604B
+	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 12:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786103272; cv=none; b=tgRgFzfysArNES0ZdGDmX5I9p7mHBAKlIDK8XQTpHlTvZgZcjceMf1U5cgYxFjJQuJQS6qwB4zJaIDn6JL0t0/bvXSTD059xv/nMt0Y7ngXwO+QWjiFTCBffnqFfKp9m1myUA8oYl/GIIkX5eTzKv4PtkSCSlmCajlqpGYwNnXA=
+	t=1786104803; cv=none; b=cDksS5VzHtyBQaew/0CKD2naRf4GY7q9pqjCCcpuTNP+ph1ROYO4/n0w5aoJo1UENlnGZZvdS3eI1aP2KEnuvEjTEJd0bLEVmp2q4K8q6sBsfdQ85fBz8C5EEgrxv5lJacuEW9W7Z1faqcEccVTNxThFItpAqstr9aIIfLsqER4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786103272; c=relaxed/simple;
-	bh=n3qsYUZdhOi+YdEJq58p1aH1UxkYJwuz96lAgFW9424=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CnYidFpUR7lIxHQ8QCZ550vQuUH67pDCDhnBxMdGZsjT0eoqraJjcEjxn2mLd5aDlg48+pgLJ07/YsS2lw/sIRvVduTdVVk9DwYxY5GKclg8frLbiUjrHFKjp0m2MXNYMaNc0EriNbTpuv3YsoZTEiWMqcyGsYC8fwUhWv3eqZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=eQbTHGpC; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	s=arc-20240116; t=1786104803; c=relaxed/simple;
+	bh=4r96qpMJsNweRuHbWhrMwI6A+/kGgFiPkndPA4GSebI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FgMA8HfG3ljXEbT8I75EcYgmBf07YvkuqRhMwsUvY+wAGGRzbbmJlrvwJQ9BJn5WABSXwJv2BXDcWjubwtPg1Dq+hvp/FJeTmOX+4broJ70Lji5BWBIXATVHLSgw3R+VXLleehofCGfSS+StGAVseEj6bE69eCRzBPqz4ihkTyY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0LdVsBX; arc=none smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="eQbTHGpC"
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6770IM1C2277771;
-	Fri, 7 Aug 2026 11:47:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=h+ukd/SkPDc4T9uabC+jG/Unvhu3go
-	Fgt8a64UfAh9E=; b=eQbTHGpCyNJrFgj10uc5TnxZszMCZRxjAymoTFRomakcJw
-	D0XchxTtqMBJGvj1o3aCZcuBesE0eoHeR1+/laPAM3ruoifO4xYiMzmXiH2WdAQW
-	UdgVPuDJ87KtKiKL835DniQ5i/3xF3McTrZg3AtXZyuTsAdcG+rxuMxw9+pMq+Ge
-	nXU9VmCKoAMkdzwBl98xUUYrQWvnBQaVHKOmw6tfCTmvG3nXbxIdVMPhIxfuv0UE
-	tSLof9/fUD0xShEZ1p3EYyb3i9FclmVKYfcvb4+0qiWVVOR+4L1Dgf41oCCtKH4P
-	/zkGcrmnm1MXUKQ1TI9vgXmqJR8igw1oAJ7X3SAg==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4fvy01knpj-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Aug 2026 11:47:15 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 677BflW4018886;
-	Fri, 7 Aug 2026 11:47:14 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4fsugwfm2g-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Aug 2026 11:47:14 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 677Bl9EY36110756
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 7 Aug 2026 11:47:09 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id ADEAF20043;
-	Fri,  7 Aug 2026 11:47:09 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id F152A20040;
-	Fri,  7 Aug 2026 11:47:05 +0000 (GMT)
-Received: from linux.ibm.com (unknown [9.39.23.224])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri,  7 Aug 2026 11:47:05 +0000 (GMT)
-Date: Fri, 7 Aug 2026 17:17:03 +0530
-From: Saket Kumar Bhaskar <skb99@linux.ibm.com>
-To: Hari Bathini <hbathini@linux.ibm.com>
-Cc: bpf@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, maddy@linux.ibm.com,
-        ast@kernel.org, andrii@kernel.org, daniel@iogearbox.net,
-        shuah@kernel.org, linux-kselftest@vger.kernel.org,
-        stable@vger.kernel.org, venkat88@linux.ibm.com, yeswanth@linux.ibm.com
-Subject: Re: [PATCH v10 0/8] powerpc/bpf: address missing verifier selftest
- coverage
-Message-ID: <anXFt7w7NG0lzX22@linux.ibm.com>
-References: <cover.1785871099.git.skb99@linux.ibm.com>
- <7ffaff94-b1b1-4420-8c19-c88bf49139a6@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0LdVsBX"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38e88b60121so2744975a91.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 05:13:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786104798; x=1786709598; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=/pFfoKxUGeYDD+KaCR3NP+7Oo42dFdA9+7ZCaeGWARI=;
+        b=A0LdVsBX2mmkLqPjEzB1/cTCDDU0+DZZ0Rt5Lsz7sIP7O8Otu+x9Ga+FYe1eJihymR
+         lTqQ9WnnyS3LBOgAD7ZfK7UCCueEMN313+uMxBBkVeEvNHeFyd0IV2rgBtQgQAHlTCwI
+         aXLXCK0+cpWNiSzrl1X881kx23QKZmtBINxxrGFVAZu9q0AjCXaAEPVb+w+3sucTccQd
+         nZCZyEiCrCy2MNlewrW+i6YeANQh4rZkocr9LtGTkD0acA62LPLkqLUh0e7juruXB7Gi
+         UQn0AE7fTmAU5W2cMHyqkpNAnbq6sp2U++6BbE91gySlhLUkLhts9OVYOvvoRAUh8w4y
+         GXKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786104798; x=1786709598;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=/pFfoKxUGeYDD+KaCR3NP+7Oo42dFdA9+7ZCaeGWARI=;
+        b=q33ZyBcKIQwNH9Y1WIAKuxoGGBuF0OdfehaiWKUVh8rztMkCvB0UtVl4+LQkF5Iubp
+         z5vGkpYyQX9M5GE/X4kJql4kh6tdqtUg7nPikQ8E2qE+Os1nGYMWu7JfRAWEMYwhLKwF
+         UoVZfLdJS0vXJDEb/uOjKMR3jBsypQChhq/CgHHTONwMIOLUF2qPMs51jsg7FdFWaf2P
+         cOTchppJSmKyZ/0zKHKgaonqu9EFSu3XPhFplnQ+KqeJzjpbZlgwRgLnWaV7WMbac1V7
+         BOUEdROW8Oiw+OWwX73EknReTX6dsvAGW5kXeiECVHcZVLMRhbt+svdYEmsPZj6DMKik
+         2IdA==
+X-Forwarded-Encrypted: i=1; AHgh+RomhCSJbEa/ip87kaj3VevFiOIEfRfaXYiiLIqLl5mgJEbSe8YutV8iMTc5vDhDemuQy1axeFgSvLHf2rXx/u8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQbnywH4AOdvMC78ihVpKLrqzXV/V6Kin8CUTvL5gpA3Q8kP5Q
+	6FshtNiGyWLxt51NTnPXzDIsXrFhaGrMluwixBy4gYmTbd3SXvxfRIyp
+X-Gm-Gg: AR+sD13xRW+baBx12KsIR1udLQD9qeMGH2z46V9edM4NI/zA2UzHUpGEsvcMkeeEIRg
+	gAsOvpoXTa7HQah4QPAqJCAFTZD/YPvS0Gz6eSB/9/e8n2uar11+/5Ninbq5017t6sFGTOfcAFz
+	BUDPO3DeQ2uZv3qPTLXQV8ZRWhEMj7kpdAhI2GaDdKHUdWYP/bZ0oqRUiUM+cty8WyYwoJ+bCFK
+	klEA+ME8TQNomx0duJog/68SxbUlByRwXk5EQELMrwiT2JCIGgeipMj8SQ4w5DD8xvJdlj2QAts
+	55v+H4t56E9QPdulL3ntOukHzQivrCgjtejRI/50c5DdsRR/gZe9YF9+4BnS2RNRGYaAlzuNhG1
+	70Dp/AC7tpq8+CfPSE5CLylpczskrfmiOSu24b5mcA9zhR86ufpmWz4qsXzXH/u0HQH1D9/6fjD
+	Kils3a7fZuyRmLtFC257/c0lD4YAi4o4fdQ2xnv7OvQ4IGQ7Dj6ZUksPqJnLsBaLBwTizhq1hhY
+	L3ag9t9FjE=
+X-Received: by 2002:a17:90b:3847:b0:38e:b400:a860 with SMTP id 98e67ed59e1d1-3903c5a7285mr20060925a91.13.1786104798131;
+        Fri, 07 Aug 2026 05:13:18 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bebde2e6sm6839102eec.21.2026.08.07.05.13.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Aug 2026 05:13:17 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] KVM: selftests: SEV: Sanity check the launch measurement
+Date: Fri,  7 Aug 2026 17:43:08 +0530
+Message-ID: <20260807121308.1885737-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7ffaff94-b1b1-4420-8c19-c88bf49139a6@linux.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -Wyl3wYOdcE0B_KlwODW2MxtQvCPmvwT
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODA3MDA4NyBTYWx0ZWRfX43CbWbym0RRc
- COreO8vhJdGJhIvpyVjDVqEcPzEqsJ3J4HNcFESN1ZipE02UDU1xEIugd+rfK0L7bJv3W7PMNSs
- W7fqF55ctBlkrAEDfQRVluc24xqxF7s=
-X-Proofpoint-ORIG-GUID: -Wyl3wYOdcE0B_KlwODW2MxtQvCPmvwT
-X-Authority-Analysis: v=2.4 cv=afNRWxot c=1 sm=1 tr=0 ts=6a75c5c3 cx=c_pps
- a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
- a=kj9zAlcOel0A:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=uAbxVGIbfxUO_5tXvNgY:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=z2HySi5senPPToodcdcA:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODA3MDA4NyBTYWx0ZWRfX6aTBucDAmdDW
- Rfq22ISpiVY0m+BadQz31UUpxVhv5om8jkLMtUyBa5r8QPKnCIDI0qP5JctOO2ReJZz0INi56k8
- xV0GYkIeW7wTjRTc/EjcV9f7/yA948D7pvlzplQDKJNsDbLq+IinlLjr9qYcNXL6kvZd2CVPHuu
- 3HCtwLxf1CNL290v0m/OjjY/p6MvIeTtcmdUO/9Wg63s+xC+3ShFLWr0gtMEFwuSdXGpLCdHfSD
- 54HrcVw/LHcRsf2GtJOS/UzEBZMWf11eKaK8O/F5xPUSXh/00w8bS405xW+okSBnr51gfL7Bxy9
- ycpFjucA8tCt9uXq2YkyH+jd5kQ2dtg668B9KuhXHl4e2Mhz5SpmBi/hQLfvyqUnBER58mdVfkR
- jkeDxg8XRYJd2XfzLJTcK1fULUVIt0i8t48k9MeOCZyBfCnPed52CZghB1OYoS7jjE04XttqrU0
- 3SJUGTDH3Yg42Y54W6g==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-07_01,2026-08-06_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 spamscore=0 phishscore=0 impostorscore=0 adultscore=0
- suspectscore=0 bulkscore=0 clxscore=1015 priorityscore=1501
- lowpriorityscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608070087
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 06, 2026 at 11:04:04PM +0530, Hari Bathini wrote:
-> 
-> 
-> On 05/08/26 11:36 am, Saket Kumar Bhaskar wrote:
-> > From: Abhishek Dubey <adubey@linux.ibm.com>
-> > 
-> > The verifier selftest validates JITed instructions by matching expected
-> > disassembly output. The first two patches fix issues in powerpc instruction
-> > disassembly that were causing test flow failures. The fix is common for
-> > 64-bit & 32-bit powerpc. Add support for the powerpc-specific "__powerpc64"
-> > architecture tag in the third patch, enabling proper test filtering in
-> > verifier test files. Introduce verifier testcases for tailcalls on powerpc64.
-> > 
-> > The first patch in series is fix patch, correcting memory alignment with
-> > 8-byte boundary for long branch address field. The subsequent patches
-> > enables verifier selftests on powerpc. The fifth patch in the series fixes
-> > incorrect comparator usage for comparing tailcall info with tailcall
-> > threshold. The last two patches fix JIT buffer overflow for large BPF progs
-> > and private stack memory leak (identified by bot during reviews).
-> > 
-> > Issue Details:
-> > --------------
-> > 
-> >      The Long branch stub in the trampoline implementation[1] provides
-> >      flexibility to handles short as well as long branch distance to
-> >      actual trampoline. Whereas, the 8 bytes long dummy_tramp_addr field
-> >      sitting before long branch stub leads to failure when enabling
-> >      verifier based seltest for ppc64.
-> >      The verifier selftests require disassembing the final jited image
-> >      to get native instructions. Later the disassembled instruction
-> >      sequence is matched against sequence of instructions provided in
-> >      test-file under __jited() wrapper. The final jited image contains
-> >      Out-of-line stub and Long branch stub as part of epilogue jitting
-> >      for a bpf program. The 8 bytes space for dummy_tramp is sandwiched
-> >      between both above mentioned stubs. These 8 bytes contain memory
-> >      address of dummy trampoline during trampoline invocation which don't
-> >      correspond to any powerpc instructions. So, disassembly fails
-> >      resulting in failure of verifier selftests.
-> >      The following code snippet shows the problem with current arrangement
-> >      made for dummy_tramp_addr.
-> >      /* Out-of-line stub */
-> >      mflr    r0
-> >      [b|bl]  tramp
-> >      mtlr    r0 //only with OOL
-> >      b       bpf_func + 4
-> >      /* Long branch stub */
-> >      .long   <dummy_tramp_addr>  <---Invalid bytes sequence, disassembly fails
-> >      mflr    r11
-> >      bcl     20,31,$+4
-> >      mflr    r12
-> >      ld      r12, -8-SZL(r12)
-> >      mtctr   r12
-> >      mtlr    r11 //retain ftrace ABI
-> >      bctr
-> > 
-> >      Consider test program binary of size 112 bytes:
-> >      0:  00000060 10004de8 00002039 f8ff21f9 81ff21f8 7000e1fb 3000e13b
-> >      28: 3000e13b 2a006038 f8ff7ff8 00000039 7000e1eb 80002138 7843037d
-> >      56: 2000804e a602087c 00000060 a603087c bcffff4b c0341d00 000000c0
-> >      84: a602687d 05009f42 a602887d f0ff8ce9 a603897d a603687d 2004804e
-> > 
-> >      Disassembly output of above binary for ppc64le:
-> >      pc:0     left:112    00 00 00 60  :  nop
-> >      pc:4     left:108    10 00 4d e8  :  ld 2, 16(13)
-> >      pc:8     left:104    00 00 20 39  :  li 9, 0
-> >      pc:12    left:100    f8 ff 21 f9  :  std 9, -8(1)
-> >      pc:16    left:96     81 ff 21 f8  :  stdu 1, -128(1)
-> >      pc:20    left:92     70 00 e1 fb  :  std 31, 112(1)
-> >      pc:24    left:88     30 00 e1 3b  :  addi 31, 1, 48
-> >      pc:28    left:84     30 00 e1 3b  :  addi 31, 1, 48
-> >      pc:32    left:80     2a 00 60 38  :  li 3, 42
-> >      pc:36    left:76     f8 ff 7f f8  :  std 3, -8(31)
-> >      pc:40    left:72     00 00 00 39  :  li 8, 0
-> >      pc:44    left:68     70 00 e1 eb  :  ld 31, 112(1)
-> >      pc:48    left:64     80 00 21 38  :  addi 1, 1, 128
-> >      pc:52    left:60     78 43 03 7d  :  mr    3, 8
-> >      pc:56    left:56     20 00 80 4e  :  blr
-> >      pc:60    left:52     a6 02 08 7c  :  mflr 0
-> >      pc:64    left:48     00 00 00 60  :  nop
-> >      pc:68    left:44     a6 03 08 7c  :  mtlr 0
-> >      pc:72    left:40     bc ff ff 4b  :  b .-68
-> >      pc:76    left:36     c0 34 1d 00  :
-> >      ...
-> > 
-> >      Failure log:
-> >      Can't disasm instruction at offset 76: c0 34 1d 00 00 00 00 c0 a6 02 68 7d 05 00 9f 42
-> >      --------------------------------------
-> > 
-> >      Observation:
-> >      Can't disasm instruction at offset 76 as this address has
-> >      ".long <dummy_tramp_addr>" (0xc0341d00000000c0)
-> >      But valid instructions follow at offset 84 onwards.
-> > 
-> >      Move the long branch address space to the bottom of the long
-> >      branch stub. This allows uninterrupted disassembly until the
-> >      last 8 bytes. Exclude these last bytes from the overall
-> >      program length to prevent failure in assembly generation.
-> > 
-> >      Following is disassembler output for same test program with moved down
-> >      dummy_tramp_addr field:
-> >      .....
-> >      .....
-> >      pc:68    left:44     a6 03 08 7c  :  mtlr 0
-> >      pc:72    left:40     bc ff ff 4b  :  b .-68
-> >      pc:76    left:36     a6 02 68 7d  :  mflr 11
-> >      pc:80    left:32     05 00 9f 42  :  bcl 20, 31, .+4
-> >      pc:84    left:28     a6 02 88 7d  :  mflr 12
-> >      pc:88    left:24     14 00 8c e9  :  ld 12, 20(12)
-> >      pc:92    left:20     a6 03 89 7d  :  mtctr 12
-> >      pc:96    left:16     a6 03 68 7d  :  mtlr 11
-> >      pc:100   left:12     20 04 80 4e  :  bctr
-> >      pc:104   left:8      c0 34 1d 00  :
-> > 
-> >      Failure log:
-> >      Can't disasm instruction at offset 104: c0 34 1d 00 00 00 00 c0
-> >      ---------------------------------------
-> >      Disassembly logic can truncate at 104, ignoring last 8 bytes.
-> > 
-> >      Update the dummy_tramp_addr field offset calculation from the end
-> >      of the program to reflect its new location, for bpf_arch_text_poke()
-> >      to update the actual trampoline's address in this field.
-> > 
-> >      [1] https://lore.kernel.org/all/20241030070850.1361304-18-hbathini@linux.ibm.com
-> > 
-> > v9->v10:
-> >    Modified expected JIT instruction in selftest for
-> >    CONFIG_PPC_KERNEL_PCREL incase of PPC_LI64 instruction.
-> >    Fix for stale entries in exception table
-> >    Update ARCH_POWERPC64 enum value to 0x40 to resolve rebase
-> >    conflict with ARCH_LOONGARCH (0x20).
-> > 
-> > v8->v9:
-> >    Dynamic pass handling until code keeps shrinking
-> >    Fix private stack memory leak
-> > 
-> > v7->v8:
-> >    Fixed bot identified issues of alt_exit_addr and BPF_EXIT
-> >    Fixed 32-bit ppc function signature mismatch
-> > 
-> > v6->v7:
-> >    Fixed JIT buffer overflow in case of large BPF progs
-> >    Addressed remaining bot comments
-> > 
-> > v5->v6:
-> >    Changed alignment NOP emittion dependency on fimage layout
-> >    Adjust tail truncate length for 32-bit ppc
-> >    Addressed few minor bot comments
-> > 
-> > v4->v5:
-> >    Handled alignment NOP emit logic and corresponding stub offsets
-> >    Handled image buffer overflow problem in last pass
-> >    Above changes took care of other bot reviews
-> >    Included LLVMDisposeMessage() for graceful freeing
-> >    Adjusted parameters in bpf_jit_build_fentry_stubs for ppc32
-> >    Adjusted expected JIT inst. in tailcall test for
-> > CONFIG_PPC_KERNEL_PCREL config
-> >    Added fix patch at last for inaccurate use of cmplwi inst.
-> > 
-> > v3->v4:
-> >    Changed logic for emitting alignment NOP
-> > 
-> > v2->v3:
-> >    Removed fixed NOP from bottom of long branch stub
-> >    Rebased on top of bpf-next
-> > 
-> > v1->v2:
-> >    Added fix-patch to correct memory alignment in-place
-> >    Moved the optional alignmnet NOP before OOL stub
-> > 
-> > [v1]: https://lore.kernel.org/bpf/20260225013627.22098-1-adubey@linux.ibm.com
-> > [v2]: https://lore.kernel.org/bpf/20260403004011.44417-1-adubey@linux.ibm.com
-> > [v3]: https://lore.kernel.org/bpf/20260411221413.44304-1-adubey@linux.ibm.com
-> > [v4]: https://lore.kernel.org/bpf/20260517214043.12975-1-adubey@linux.ibm.com
-> > [v5]: https://lore.kernel.org/bpf/20260519233812.18787-1-adubey@linux.ibm.com
-> > [v6]: https://lore.kernel.org/bpf/20260529015855.364704-1-adubey@linux.ibm.com
-> > [v7]: https://lore.kernel.org/bpf/20260611153826.31187-1-adubey@linux.ibm.com
-> > [v8]: https://lore.kernel.org/bpf/20260616164741.32252-1-adubey@linux.ibm.com
-> > [v9]: https://lore.kernel.org/bpf/20260623231411.6216-1-adubey@linux.ibm.com/
-> > 
-> > Abhishek Dubey (8):
-> >    powerpc/bpf: fix alignment of long branch trampoline addres to t
-> >    powerpc/bpf: Move out dummy_tramp_addr after Long branch stub
-> >    selftest/bpf: Fixing powerpc JIT disassembly failure
-> >    selftest/bpf: Enable verifier selftest for powerpc64
-> >    powerpc64/bpf: fix compare instruction emitted for tailcall
-> >    selftest/bpf: Add tailcall verifier selftest for powerpc64
-> >    powerpc/bpf: fix buffer overflow in JIT for large BPF programs
-> >    powerpc64/bpf: fix percpu private stack leak on JIT failure
-> > 
-> >   arch/powerpc/net/bpf_jit.h                    |  20 +++-
-> >   arch/powerpc/net/bpf_jit_comp.c               | 102 +++++++++++++-----
-> >   arch/powerpc/net/bpf_jit_comp32.c             |   7 +-
-> >   arch/powerpc/net/bpf_jit_comp64.c             |  15 +--
-> >   .../selftests/bpf/jit_disasm_helpers.c        |  25 ++++-
-> >   tools/testing/selftests/bpf/progs/bpf_misc.h  |   1 +
-> >   .../bpf/progs/verifier_tailcall_jit.c         |  74 +++++++++++++
-> >   tools/testing/selftests/bpf/test_loader.c     |   5 +
-> >   8 files changed, 209 insertions(+), 40 deletions(-)
-> > 
-> 
-> Alexei, Maddy,
-> 
-> Given this has changes in common code too, should this go via bpf tree?
-> If yes, @Saket can you post the next revision with bpf tag to make
-> it explicit...
-> 
-> - Hari
-I have sent the v11 for this series
-https://lore.kernel.org/all/27ec08c30f6c37b3f25ba735f9cd7f81ff9e98d5.1786099877.git.skb99@linux.ibm.com/
+test_sev() launches the guest but discards the measurement returned by
+KVM_SEV_LAUNCH_MEASURE, with a TODO to validate it.  A full
+attestation-style validation isn't possible from the selftest because
+userspace does not possess the transport keys the PSP uses to derive the
+measurement, so the expected value cannot be recomputed here.
 
-- Saket
+Capture the measurement for SEV and SEV-ES guests and sanity check it:
+assert that the firmware reports the blob length defined by the SEV API
+specification, and that both the measurement and the nonce are non-zero.
+Describe the blob layout with a struct so the buffer and field sizes are
+derived from a single definition instead of open-coded magic numbers.
+SNP does not return a measurement through this path, so it is skipped.
+
+  # ./sev_smoke_test; echo "exit=$?"
+  Random seed: 0x6b8b4567
+  exit=0
+
+  # ./sev_init2_tests; echo "exit=$?"
+  Random seed: 0x6b8b4567
+  exit=0
+
+  # ./sev_migrate_tests; echo "exit=$?"
+  Random seed: 0x6b8b4567
+  exit=0
+
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+---
+ tools/testing/selftests/kvm/include/x86/sev.h | 12 +++++++
+ tools/testing/selftests/kvm/lib/x86/sev.c     | 11 +++++--
+ .../selftests/kvm/x86/sev_smoke_test.c        | 33 +++++++++++++++++--
+ 3 files changed, 52 insertions(+), 4 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86/sev.h b/tools/testing/selftests/kvm/include/x86/sev.h
+index dec383e59a47..b29bf3aa0682 100644
+--- a/tools/testing/selftests/kvm/include/x86/sev.h
++++ b/tools/testing/selftests/kvm/include/x86/sev.h
+@@ -31,6 +31,18 @@ enum sev_guest_state {
+ 
+ #define GHCB_MSR_TERM_REQ	0x100
+ 
++/*
++ * Layout of the blob returned by KVM_SEV_LAUNCH_MEASURE, per the SEV API
++ * specification, section 6.5.2: a measurement (HMAC-SHA256) followed by the
++ * nonce used to derive it.  Deriving the buffer and field sizes from this
++ * struct keeps callers layout-agnostic; only this definition needs to change
++ * if the measurement ABI is ever extended.
++ */
++struct sev_launch_measure_blob {
++	u8 measurement[32];
++	u8 mnonce[16];
++};
++
+ static inline bool is_sev_snp_vm(struct kvm_vm *vm)
+ {
+ 	return vm->type == KVM_X86_SNP_VM;
+diff --git a/tools/testing/selftests/kvm/lib/x86/sev.c b/tools/testing/selftests/kvm/lib/x86/sev.c
+index 93f916903461..4bfb97a0364f 100644
+--- a/tools/testing/selftests/kvm/lib/x86/sev.c
++++ b/tools/testing/selftests/kvm/lib/x86/sev.c
+@@ -108,10 +108,17 @@ void sev_vm_launch_measure(struct kvm_vm *vm, u8 *measurement)
+ 	struct kvm_sev_launch_measure launch_measure;
+ 	struct kvm_sev_guest_status guest_status;
+ 
+-	launch_measure.len = 256;
++	launch_measure.len = sizeof(struct sev_launch_measure_blob);
+ 	launch_measure.uaddr = (__u64)measurement;
+ 	vm_sev_ioctl(vm, KVM_SEV_LAUNCH_MEASURE, &launch_measure);
+ 
++	/*
++	 * '.len' is an in/out field; the firmware reports back the actual size
++	 * of the measurement blob, which must match the layout described by
++	 * struct sev_launch_measure_blob.
++	 */
++	TEST_ASSERT_EQ(launch_measure.len, sizeof(struct sev_launch_measure_blob));
++
+ 	vm_sev_ioctl(vm, KVM_SEV_GUEST_STATUS, &guest_status);
+ 	TEST_ASSERT_EQ(guest_status.state, SEV_GUEST_STATE_LAUNCH_SECRET);
+ }
+@@ -191,7 +198,7 @@ void vm_sev_launch(struct kvm_vm *vm, u64 policy, u8 *measurement)
+ 	sev_vm_launch(vm, policy);
+ 
+ 	if (!measurement)
+-		measurement = alloca(256);
++		measurement = alloca(sizeof(struct sev_launch_measure_blob));
+ 
+ 	sev_vm_launch_measure(vm, measurement);
+ 
+diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+index bf27b6187afa..51adf7a1e1b6 100644
+--- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
++++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
+@@ -150,16 +150,45 @@ static void test_sync_vmsa(u32 type, u64 policy)
+ 	kvm_vm_free(vm);
+ }
+ 
++static bool is_range_nonzero(const u8 *buf, size_t len)
++{
++	size_t i;
++
++	for (i = 0; i < len; i++)
++		if (buf[i])
++			return true;
++
++	return false;
++}
++
+ static void test_sev(void *guest_code, u32 type, u64 policy)
+ {
++	struct sev_launch_measure_blob blob;
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm;
+ 	struct ucall uc;
+ 
+ 	vm = vm_sev_create_with_one_vcpu(type, guest_code, &vcpu);
+ 
+-	/* TODO: Validate the measurement is as expected. */
+-	vm_sev_launch(vm, policy, NULL);
++	/*
++	 * Capture and sanity check the launch measurement.  A full
++	 * attestation-style validation (recomputing the expected value) isn't
++	 * possible here as userspace does not possess the transport keys the
++	 * PSP uses to derive the measurement.  At minimum, the firmware must
++	 * hand back a non-zero measurement and a non-zero nonce (the blob
++	 * length is validated by vm_sev_launch()).  SNP does not return a
++	 * measurement through this path, so skip it.
++	 */
++	if (is_sev_snp_vm(vm)) {
++		vm_sev_launch(vm, policy, NULL);
++	} else {
++		memset(&blob, 0, sizeof(blob));
++		vm_sev_launch(vm, policy, (u8 *)&blob);
++		TEST_ASSERT(is_range_nonzero(blob.measurement, sizeof(blob.measurement)),
++			    "SEV launch measurement is unexpectedly all zeros");
++		TEST_ASSERT(is_range_nonzero(blob.mnonce, sizeof(blob.mnonce)),
++			    "SEV launch measurement nonce is unexpectedly all zeros");
++	}
+ 
+ 	for (;;) {
+ 		vcpu_run(vcpu);
+-- 
+2.43.7
+
