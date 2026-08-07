@@ -1,140 +1,106 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF6E14749D3;
-	Fri,  7 Aug 2026 12:50:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B699647607F;
+	Fri,  7 Aug 2026 12:59:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786107035; cv=none; b=olQfBt4gRZ1KXwqVbtMy1jbdwpbo2ANdErF1A2CG0Vcbn3vbv4JxW6Eybo/cx3AJinFmV8bGjB2iO322ntw/6tFmpanPwhk8erglf7/ycuxgIOkQ3cfjXdEmrTqBxxK/Ddi5hWQi+b+cLNU/tRYD/kX3TZ9scVxOVf5+D3uHhi4=
+	t=1786107588; cv=none; b=mZ6i3hSDOpLFyPgwankBKBTp6NWxwEOcoKShyuIqCU69O0uqU1V+IGZfWxiBUAxS8dhJ2+DQApjpqf4WSbMVM9uHdmY22+qNg+LFFmvYNNYyuUJCNWAu9u1tOE2MmzpQov4A5ubtwYdQPcWZBGgjnCm2VJ1ZKssgngm7eIN2wLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786107035; c=relaxed/simple;
-	bh=xcwc27dtgaEfeclKCaFaHyK44PWLjl6vV/kiSw+kWsI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=uIckkYN7edVmelb+tNuHPG5JE+Mw2KhdSI/tlcI5yzJPrKsybfjH9fUD8DzKeJHPrtyAhqgvVH13SiEcIffVe7ktWzvoKD82rcRm3CiCinoEkHQteThU7y1vmbrFYsr0UKkK2nvnLEFY3Czgaf/Z2yi8UVTsOgHf9Zdj4J+LxCI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=c2t0R/lf; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1786107588; c=relaxed/simple;
+	bh=yMiK1yh6xy1Np/nBghOM2UqhnZKJlwY+ByNtCjfrCI8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=o/Tkuw3s1xz1/9ejIqnkv0XPip+PoSNZ/fBgafx062lE1rdgtfiRNdpQkK8+sREHikvhJdwE50a+oS+PwKyysw/LSn2BCNUx/rrsxD9b6Um8ni18lRZDh7OzqE2ypvEUDc7/hAcvj7jAK+5twDGiwHCyofpVOel0J6ujgMo7Mnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wt/1R8rw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="c2t0R/lf"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 03D4B1A14A2;
-	Fri,  7 Aug 2026 12:50:22 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id C2E69603F0;
-	Fri,  7 Aug 2026 12:50:21 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B5E611C377B9;
-	Fri,  7 Aug 2026 14:50:13 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1786107016; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=suSWk7tHHlNpm3KUJH6c7fI1wM3gzEsCFQhFgi5mZn0=;
-	b=c2t0R/lfxbDbZ+8GeFQCc5gOFXCS/d4cHMVhRbjHgWmGlWsay8TYUnl19XMjpSlxHvnHvI
-	io1yYLwk90U8jvcA+dUpBc6XL7JPoJnXxmOIeI/GX86eyKCK/cGMvRfcyCd+axDP2Zv5Pt
-	OCsu11IS17A7kviqpjhtZ3ynV6XZgVsq2d93bKptvWvupxoC/Y9W6IJvnYec55Qu6oMVDA
-	ssOWg88QZbBgJm6gDZeLuP9ynBYGkIqOK+IMTuliqp4pAakjMb5QxSB/CiHYkxHhRm2JCR
-	jsq2iflttlaN3ZTSq7nxlXUp2rG9N0iAsbCgnLLTMxDNNLYmWJmr0s3PWaoL8w==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Brian Masney <bmasney@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
- <sboyd@kernel.org>,  Rob Herring <robh@kernel.org>,  Krzysztof Kozlowski
- <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>,  Brendan
- Higgins <brendan.higgins@linux.dev>,  David Gow <david@davidgow.net>,  Rae
- Moar <raemoar63@gmail.com>,  Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>,  Pascal EBERHARD <pascal.eberhard@se.com>,
-  Wolfram Sang <wsa+renesas@sang-engineering.com>,
-  linux-clk@vger.kernel.org,  devicetree@vger.kernel.org,
-  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  kunit-dev@googlegroups.com
-Subject: Re: [PATCH v4 7/7] clk: tests: Add Kunit testing for nexus nodes
-In-Reply-To: <al_zh1cOInMXEU8x@redhat.com> (Brian Masney's message of "Tue, 21
-	Jul 2026 18:32:39 -0400")
-References: <20260717-schneider-v7-2-rc1-eip201-upstream-v4-0-751547e160e5@bootlin.com>
-	<20260717-schneider-v7-2-rc1-eip201-upstream-v4-7-751547e160e5@bootlin.com>
-	<al_zh1cOInMXEU8x@redhat.com>
-User-Agent: mu4e 1.12.12; emacs 30.2
-Date: Fri, 07 Aug 2026 14:50:12 +0200
-Message-ID: <87jyq2ccxn.fsf@bootlin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wt/1R8rw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BF291F000E9;
+	Fri,  7 Aug 2026 12:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786107582;
+	bh=WGWe62w4uZOGlTd+Rt6sdGbT/Nouu499hkPKmGKxmLg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Wt/1R8rwmGTx2f8PYIuCEP4H+iJa5y9BsvjmVm2lUyxYIkXsJ2OOrEl5qLluvQ4FO
+	 gR8D6wPxIvholh5dqf9AmiEaTihz/DZ7/bp3LNMdFRqmi/poK/JuGskMzKSHvZz+rH
+	 wVEKyeNooy4xgO4DalnL9F977Tkbpw3ASKWDczWH9A4b3a4BcVOrxHmugYRcpbuQzL
+	 Xd4CGv3HFgkDILwOJfoJUrtiD31AgyG9Av8qqFdmErTziujfC9Rda8lqxV2iYJvKuq
+	 oCdL+JelJ10bP+bqSvX5WpnSA9ps34stkgjh3ky3C1ZnFutjcidlObQMoPtYi2Kww8
+	 wb4QUz12MUEOA==
+Content-Type: multipart/mixed; boundary="===============4091664156689549777=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Last-TLS-Session-Version: TLSv1.3
+Message-Id: <20bc24b322d3a8ef52eef9b3cd05eef275efabc0be00be3fd6df5a9765bba321@mail.kernel.org>
+In-Reply-To: <e827cffd10c37ae7d0b1fca59523acda38db1704.1786099877.git.skb99@linux.ibm.com>
+References: <e827cffd10c37ae7d0b1fca59523acda38db1704.1786099877.git.skb99@linux.ibm.com>
+Subject: Re: [PATCH v11 3/8] selftests/bpf: Fixing powerpc JIT disassembly failure
+From: bot+bpf-ci@kernel.org
+To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
+Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri,  7 Aug 2026 12:59:41 +0000 (UTC)
 
-On 21/07/2026 at 18:32:39 -04, Brian Masney <bmasney@redhat.com> wrote:
+--===============4091664156689549777==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Fri, Jul 17, 2026 at 05:59:23PM +0200, Miquel Raynal (Schneider Electr=
-ic) wrote:
->> Add a nexus node with a child requesting a mapped clock in the fake DT
->> overlay to verify that the parsing is also correctly working.
->>=20
->> Create an of_find_node_by_name() like kunit helper to garbage collect the
->> node automatically in case of failed assertion.
->>=20
->> Suggested-by: Stephen Boyd <sboyd@kernel.org>
->> Signed-off-by: Miquel Raynal (Schneider Electric) <miquel.raynal@bootlin=
-.com>
->> ---
->>  drivers/clk/clk_kunit_helpers.c          | 31 +++++++++++++++++++++++++=
-++++++
->>  drivers/clk/clk_test.c                   | 15 +++++++++++++++
->>  drivers/clk/kunit_clk_parse_clkspec.dtso | 10 ++++++++++
->>  include/kunit/clk.h                      |  2 ++
->>  4 files changed, 58 insertions(+)
->>=20
->> diff --git a/drivers/clk/clk_kunit_helpers.c b/drivers/clk/clk_kunit_hel=
-pers.c
->> index 68a28e70bb61..daaf1cf1546c 100644
->> --- a/drivers/clk/clk_kunit_helpers.c
->> +++ b/drivers/clk/clk_kunit_helpers.c
->> @@ -233,5 +233,36 @@ int of_clk_add_hw_provider_kunit(struct kunit *test=
-, struct device_node *np,
->>  }
->>  EXPORT_SYMBOL_GPL(of_clk_add_hw_provider_kunit);
->>=20=20
->> +KUNIT_DEFINE_ACTION_WRAPPER(of_node_put_wrapper, of_node_put, struct de=
-vice_node *);
->> +
->> +/**
->> + * of_find_node_by_name_kunit() - Test managed of_find_node_by_name()
->> + * @test: The test context
->> + * @from: Parent device node to start searching from, or NULL to search=
- from root
->> + * @name: The name string to match against
->> + *
->> + * Just like of_find_node_by_name(), except the device_noded is managed=
- by
->> + * the test case and is automatically put after the test case concludes.
->> + *
->> + * Return: the device_node on success, NULL if not found, or a negative=
- errno value on failure.
->> + */
->> +struct device_node *of_find_node_by_name_kunit(struct kunit *test, stru=
-ct device_node *from,
->> +					       const char *name)
->> +{
->> +	struct device_node *np;
->> +	int ret;
->> +
->> +	np =3D of_find_node_by_name(from, name);
->> +	if (!np)
->> +		return NULL;
->> +
->> +	ret =3D kunit_add_action_or_reset(test, of_node_put_wrapper, np);
->> +	if (ret)
->> +		return ERR_PTR(ret);
->> +
->> +	return np;
->> +}
->> +EXPORT_SYMBOL_GPL(of_find_node_by_name_kunit);
+> diff --git a/tools/testing/selftests/bpf/jit_disasm_helpers.c b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> index 3558fe10e28cf..c4aa1d69d3bbf 100644
+> --- a/tools/testing/selftests/bpf/jit_disasm_helpers.c
+> +++ b/tools/testing/selftests/bpf/jit_disasm_helpers.c
+
+[ ... ]
+
+> @@ -225,9 +227,30 @@ int get_jited_program_text(int fd, char *text, size_t text_sz)
+>  	if (!ASSERT_OK(err, "bpf_prog_get_info_by_fd #2"))
+>  		goto out;
 >
-> Should this be prefixed with clk_ since this is in
-> clk_kunit_helpers.c?
+> +	/*
+> +	 * last 8 bytes contains dummy_trampoline address in JIT
+> +	 * output on 64-bit and last 4 bytes on 32-bit powerpc,
+> +	 * which can't disassemble to a valid instruction.
+> +	 */
+> +	triple = LLVMGetDefaultTargetTriple();
+> +	if (triple) {
+> +		if (strstr(triple, "powerpc64") || strstr(triple, "ppc64"))
+> +			trunc_len = 8;
+> +		else if (strstr(triple, "powerpc") || strstr(triple, "ppc"))
+> +			trunc_len = 4;
+> +		LLVMDisposeMessage(triple);
+> +	}
+> +
+>  	for (pc = 0, i = 0; i < jited_funcs; ++i) {
+> +
 
-That's right, I missed it. I'll rename the helper.
+This isn't a bug, but are the two new blank lines inside this loop
+intentional? Dropping them would keep the diff to just the truncation
+logic and match how the loops in disasm_one_func() are laid out.
 
-Thanks!
-Miqu=C3=A8l
+>  		fprintf(text_out, "func #%d:\n", i);
+>  		/*
+>  		 * Disabled JIT have zero func_lens, hence underflow
+>  		 */
+>  		disasm_len = func_lens[i] > trunc_len ?
+>  					func_lens[i] - trunc_len : 0;
+>  		disasm_one_func(text_out, image + pc, disasm_len);
+> +
+>  		fprintf(text_out, "\n");
+>  		pc += func_lens[i];
+>  	}
+
+> selftests/bpf: Fixing powerpc JIT disassembly failure
+
+This isn't a bug, but would the subject read better in the imperative
+mood, "selftests/bpf: Fix powerpc JIT disassembly failure", to match
+the rest of the series?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31176427801
+--===============4091664156689549777==--
