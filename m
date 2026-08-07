@@ -1,132 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A27694B04BE
-	for <linux-kselftest@vger.kernel.org>; Fri,  7 Aug 2026 00:21:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B9981F63D9;
+	Fri,  7 Aug 2026 00:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786062116; cv=none; b=Z1CntONlxxS6OE8aSrIMBA3oaffeyzNg0zzl/ezxOsu1tSSUxH1a4h7lPz2aYubTfLl2/CYj0UQTsDljBm/nECdI8thRrjEHQlo/Z01cugMdrkBCZGnp3BWZySU8Fu1rcSt445r2TlmbRe4DDGdjCKHzAxPg3fLS0JcMn3RHdjU=
+	t=1786062291; cv=none; b=ZGK3MsPA4r4O1pVPmruf6KZuVXZzPtc+9XAMf9+KaQq+OMCbaZBFiDpG3Lxu22Q7lE6ywZI6SPZgIafQLXku4IZapM6aIB9xUisNtGDUF6b6x/uOwdCinluRUdWfvLsVhUVETXTxyeq6KMCDOYmmNO7ptoW6z79gQ1vMXhIR3Tg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786062116; c=relaxed/simple;
-	bh=GgmzBn2bK4/+Nptd0PQMA3IKNs50uCHVJqzFT5zonJA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Z+NaY6DFRuy9ARzl1E+4e2C/RPIeYUy5qrl4wTP3JRdEoZ7RP46V2cPWlzU0XUVVHXAP04I4SM9HWEo11hclq8Bi8EBQqhljDJOxY4lG6YvbqJ0HhhvcEPxeqoupyD/012xuzLFMAlHdqdZa9kGBaeafOmzz0BJSCx9xIntffE0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TifKaZ21; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786062291; c=relaxed/simple;
+	bh=boS94ZSlKZKREDR+sAeqr4EGsykk7ip4fw7bc15aHNw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SShlNY1Twjo2KjMmVChoq+3Wmc5B4mBClkAuj/TR9ZRZ8Hv5XJt/X+MWK168tEGtHVDHsI5Lqs3CCfrf5GHbjl/QVoc3EfVZ8PESXL5McYANw4oNPbW4ZXvCO7CVoXzB672IF9BL41bCmKs3JUw9CImCpVaI2JUF4VoHvwtoJ2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=dRj6MU7z; arc=none smtp.client-ip=115.124.30.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TifKaZ21"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D5401F00A3D;
-	Fri,  7 Aug 2026 00:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786062115;
-	bh=ovFPQ/DXQo9dXBLb8dyq//h8ZYEpAII21uwyLWlh3BI=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=TifKaZ21XyeRqPaN9D2TErcvS1rC20MTBGPXqzHFV70RDTMIUaHBGRK+coVgXgfpz
-	 vBIXxrigNWqLG9ZcxlZZc0Ay22eTJJqsyFgrueZdlzZYkPz6vYxRStcQOSoK/g+8v2
-	 uvkZOMMUkq8uqovcyaPUzL/X4yYxglL9H0jdqoFOWbSTwIppEu9+rf38AJWtxIcgA/
-	 5dJuuGwauVree6h1FsTD2vxdpEaNnkz/KOVUEK87/KALd8nvLXSuohznsViq1Q7Er1
-	 /DGlIHw8KHdmbXmC/HS7PmDEHnvgn0d/1RHe3TB4aHzJvDq/5pCZPqCj8r+CqRf3vv
-	 DTtLN1dy21C/w==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 17952F40071;
-	Thu,  6 Aug 2026 20:21:54 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Thu, 06 Aug 2026 20:21:54 -0400
-X-ME-Sender: <xms:IiV1ahGlcBzB1dYw7k46LTef6cPyQJPSeIxSTW8l3SkbTEV0YbYpDQ>
-    <xme:IiV1ahJifhW64ewlT1nJd_5d8eFXlDO_UiwwkqbfHp9XKh10ZLPzB7UTiSsMf6ULq
-    qyDxWdZ6u5_hF_sS-DTuvw52kHzZ2hQ4zHJV0Zhss5gYDbcklGd5Yc>
-X-ME-Proxy-Cause: dmFkZTGpG8kugYTZ8gIs8s5LYJjkyVCQ3+3h8nqdl5GfXl8WEhceEM84zEDPrmqAKTmQuF
-    JehrkmagCcuJpfOVF9Mc4dYhvxULaJCaECBpvrIvaoTXZPq4KM4U/dgK2yJeuk+y9L2VXP
-    X//8npVNslDOKQpuIyKfe5ASnoGmfuxXxXg4zBK3bhY2LLjzpTBVc9VoUhlMkqq07Ieg+T
-    uwi1GuSlWKy7fCz6pw49WOYkY6H0YMpCsd7BC9V3T+Z2ljQmY2BaagYOXM+YapH7JfXuSK
-    Ym5DZ/+YLxpJjCZuf9br/vYMR9l1+VpA8OvLxWQKHlxDVYCSbaNTtkjcYkMRZIe8z9VXAZ
-    19S02MA+HnSVb7XZ69+MjF0NDH8KfZGfCDs719LZb0K+oVduotKDKsz1lcf4finfVQ5fsv
-    IVElWFqlY3n9o91/hFgJbm7VTftSCmHBQ8QEJVRh5ym54D2LVFqEfijqujRO1DBTwqyCos
-    jNDcQEYDSGdkNF3gZJVKJ3aq4MUBvliZl1/X8ZZD3nNTVItGEGzDhoqVa4XqJgFkg7wPab
-    d4pJs5JqIRMymCuGfeqwEuXXxqiGGh+pia7trR4OLVkWPco8s2PMCHHkBERmJA88ulxAkY
-    em77EiFKhJDOVJhQ8sZbrBYaDjscR21Gc45ZhOt3B7DBWf7BuW1cwhY3jMQw
-X-ME-Proxy: <xmx:IiV1agqsje816eoaQ2GED36nZIfGvCqOIZB8B3Al8gjfShyrWOqdMA>
-    <xmx:IiV1aigPAIRoDd_-bWcjvW4cNLaHsfYg8E9WgwNxTlITOfyBoMsRGQ>
-    <xmx:IiV1aiN_T7pL8_mcyDcEY03KLq8pRE3fgk-5HcrlLMfCLoiABvJz3g>
-    <xmx:IiV1asz-hwsuMGKsYCn6RYQ1uXGa-IoQm7czm7CxNOddzEy436XpgA>
-    <xmx:IiV1akr-M6x44oBH3QVea7iDfoBVaFK0WcZtJc2xUKiZoovtU8PYGRT1>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id F030B780070; Thu,  6 Aug 2026 20:21:53 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="dRj6MU7z"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1786062278; h=From:To:Subject:Date:Message-Id:MIME-Version;
+	bh=Ja0xHUy1uLe/iPUk1mrxNeEqzUToXVTj7trH39SP5fg=;
+	b=dRj6MU7zulj8RJR63XzbE3onnozpKcF6Eo7KolIRdbHecK9uswzRbXGern0OZ7RSxVFJkEjOCjAVdnMeFQW6A6NUbfXM6Ar7oqeTP5aTCMtfgkn6YuxsoURX7zOm0wKNEG2ODulkc43sMOlZ4E8wb4EIA3G0yXl4FZWlKzMFlY8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=feng.tang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0X8V4iI0_1786062277;
+Received: from localhost(mailfrom:feng.tang@linux.alibaba.com fp:SMTPD_---0X8V4iI0_1786062277 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Fri, 07 Aug 2026 08:24:38 +0800
+From: Feng Tang <feng.tang@linux.alibaba.com>
+To: Jakub Kicinski <kuba@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Andi Kleen <ak@linux.intel.com>,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Cc: Feng Tang <feng.tang@linux.alibaba.com>
+Subject: [PATCH net-next v3] selftests: net: reuseport_bpf_numa: consider cpuless numa node
+Date: Fri,  7 Aug 2026 08:24:36 +0800
+Message-Id: <20260807002436.43991-1-feng.tang@linux.alibaba.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AaCQ_tCgbt_c
-Date: Thu, 06 Aug 2026 20:21:32 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Sabrina Dubroca" <sd@queasysnail.net>
-Cc: "John Fastabend" <john.fastabend@gmail.com>,
- "Jakub Kicinski" <kuba@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Paolo Abeni" <pabeni@redhat.com>,
- "Simon Horman" <horms@kernel.org>, "Dave Watson" <davejwatson@fb.com>,
- "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-Message-Id: <967e5460-0b80-4689-889f-c160fcac834c@app.fastmail.com>
-In-Reply-To: <amtGINRBf2NTqt_J@krikkit>
-References: <20260726-tls-follow-on-v1-0-99bf4cc1c729@kernel.org>
- <20260726-tls-follow-on-v1-5-99bf4cc1c729@kernel.org>
- <amtGINRBf2NTqt_J@krikkit>
-Subject: Re: [PATCH net 5/9] net/tls: Consume empty data records in tls_sw_recvmsg()
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+reuseport_bpf_numa case failed when testing on a platform with CXL
+memory:
 
+    #./reuseport_bpf_numa
+    ---- IPv4 UDP ----
+    send node 0, receive socket 0
+    ./reuseport_bpf_numa: failed to pin to node: Invalid argument
 
-On Thu, Jul 30, 2026, at 8:40 AM, Sabrina Dubroca wrote:
-> 2026-07-26, 20:33:33 -0400, Chuck Lever wrote:
->> TLS 1.2 and TLS 1.3 both permit zero-length application_data
->> records as a traffic-analysis countermeasure (RFC 5246, Section
->> 6.2.1; RFC 8446, Section 5.1). Such a record decrypts to
->> full_len == 0, so every arm of the receive loop reaches
->> "decrypted += chunk" and "len -= chunk" with chunk == 0: len
->> never reaches zero, and tls_strp_msg_ready() holds the second
->> loop term true while the peer keeps records arriving. The peek
->> arm and the async arm also queue each record on rx_list, which
->> then grows without bound. tls_rx_rec_wait() returns without
->> waiting whenever a record is already parsed, so its signal check
->> never runs
->
-> So we should just move the signal check to the top of
-> tls_rx_rec_wait()'s loop? (just after all the existing error handling
-> code)
+The root cause is that the platform has 2 numa nodes: node 0 has
+both cpu and memory, while node 1 is a CXL node which only has
+memory, and caused numa_run_on_node() to fail.
 
-It appears that only the signal check can move. sk_err and sk_shutdown
-are tested under !tls_strp_msg_ready() so that an already-parsed record
-is delivered before an error or EOF is reported. Hoisting those would
-let an error preempt deliverable data.
+Add sanity check to skip cpuless numa node for the numa binding test.
 
-However, hoisting signal_pending() alone is safe, since the record stays
-parsed for the next call. It is also just two call sites rather than
-everywhere: recvmsg and splice. Let's target that consolidation against
-net-next rather than net.
+Signed-off-by: Feng Tang <feng.tang@linux.alibaba.com>
+---
+Changelog:
+  since v2:
+    * fix spelling issue (Jakub, Sashiko)
+	* remove unnecessary 'inline' for is_cpuless_node() (Jakub)
 
+  since v1:
+    * address comments from Sashiko bot
+      https://lore.kernel.org/all/20260730113738.41C901F000E9@smtp.kernel.org/
+    * lift the cpuless node check out of send_from_node() 
 
-> > +                 if (!darg.zc)
-> > +                         consume_skb(darg.skb);
->
-> I don't see why you need this special handling. Could you explain that?
+ .../selftests/net/reuseport_bpf_numa.c        | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
-On the zero-copy path darg.skb is the strparser anchor, which
-tls_rx_rec_done() has already released. Freeing it again would be a
-double free. On the other path it is a freshly allocated clear_skb
-that nothing else owns.
-
-Or, were you requesting the placement of a documenting comment?
-
-
-> I don't think the way ktls handles MSG_EOR on RX makes any sense,
-> outside of non-DATA records.
-  
-Agreed.
-
-
+diff --git a/tools/testing/selftests/net/reuseport_bpf_numa.c b/tools/testing/selftests/net/reuseport_bpf_numa.c
+index 8ec52fc5ef41..6e4817ef57c5 100644
+--- a/tools/testing/selftests/net/reuseport_bpf_numa.c
++++ b/tools/testing/selftests/net/reuseport_bpf_numa.c
+@@ -104,6 +104,26 @@ static void attach_bpf(int fd)
+ 	close(bpf_fd);
+ }
+ 
++/*
++ * Return true if it is a cpuless node. Return false if it isn't or any
++ * error (very unlikely) happens during the libnuma calls.
++ */
++static bool is_cpuless_node(int node_id)
++{
++	struct bitmask *cpumask;
++	bool ret = false;
++
++	cpumask = numa_allocate_cpumask();
++	if (!cpumask)
++		return ret;
++
++	if (!numa_node_to_cpus(node_id, cpumask) && !numa_bitmask_weight(cpumask))
++		ret = true;
++
++	numa_bitmask_free(cpumask);
++	return ret;
++}
++
+ static void send_from_node(int node_id, int family, int proto)
+ {
+ 	struct sockaddr_storage saddr, daddr;
+@@ -213,6 +233,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = 0; node < len; ++node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
+@@ -221,6 +243,8 @@ static void test(int *rcv_fd, int len, int family, int proto)
+ 	for (node = len - 1; node >= 0; --node) {
+ 		if (!numa_bitmask_isbitset(numa_nodes_ptr, node))
+ 			continue;
++		if (is_cpuless_node(node))
++			continue;
+ 		send_from_node(node, family, proto);
+ 		receive_on_node(rcv_fd, len, epfd, node, proto);
+ 	}
 -- 
-Chuck Lever
+2.43.5
+
