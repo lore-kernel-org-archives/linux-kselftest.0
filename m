@@ -1,64 +1,64 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C373A3E68
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 08:11:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1BC93A7848
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 08:11:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786176683; cv=none; b=oTmZdFtwkWdTxAo5usZuJBl13GZMAtW5ytxO4eUnValKpoZbfm8gfTpSTfqNmX3YqoZ5HVSMgRaOaHyrnvcwsH4tAyIK4qClGePATG7wrALyv3QMRaWCAjgUmaZLkErTWW2+CHABwLICSlpsJPIuLLjbEgMUg9A3YICdAZovUMQ=
+	t=1786176694; cv=none; b=tLzN+yGPahiHvZyv5dEeXTJi1XLp4pTZKAL7BpDH+KQG6w/Vv1gb50UHYwoOezGFj3GkNwfMYDHDkgvUPFqzsUgzvHt0hSdk/MT5ekXaDWeF3/MmUX5bQorDVzBgYy81a6DTq587NVBmIhLddVJkV14kvQtazvCtXBNVRTjM7xc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786176683; c=relaxed/simple;
-	bh=kz5eF8EgHJZV4kT1Yjijkfp28Af36RtKI66Pm5tq4pQ=;
+	s=arc-20240116; t=1786176694; c=relaxed/simple;
+	bh=MGb5suHwKenoO8+Yoit0TZ1mClXS7TepI3s00xmuOag=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=LUzxpBQg2EPO+LRfiODWzyhOLUfPF2bsSZmSIiyWb650V3GfUbVa6EpAMarcthxu3OByy327VBj3EMEZEC2f1ckXkuOnSsOKAuGyXuMtrek2opoPGmAjMYH0mYEdHBoEqGqm3OfsWkUsSYURFPgExz07Rpkij9xFHTw2lfFmSwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SRjWmcoJ; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=F77nWGtdj5RxPflhwKW8jTXWU1pCBBcvjhBLe3gE1Zka7wFQQ2nZsJTgXWgLHbTK7QxgcTnOoz0c2uu3Cuc7N8ZU7h3CXp8sEMosTzOWDErtOCgIEHY7/aR6NRu1vHgQZe3p/ea84ZOYTZwODvrRqqVFjVbNqqO6l04R3utpbJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZITh+bIa; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SRjWmcoJ"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-c981c2c37cbso149637a12.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 01:11:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZITh+bIa"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so172618a91.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 01:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786176682; x=1786781482; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786176692; x=1786781492; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=8XV1qyiW1WN9UH6X3Jv/ZBqv2q+Lebe5phUQECTXzBc=;
-        b=SRjWmcoJZDdTSWMc1KgFI003tZZFY9UHqKiudZzgwwHYlUfmT2I4vylEyI4jFCCmkd
-         Gjy71Rb8UmuhaaGnP7F10PDbzVrqYN7i4/usN1kAJsScZEOmDpxWVOQd782znwuEMYPb
-         IP3d7BbSn0ISI4zyjTLlbY14zEWls2xSlSG9+xaE3lL+fx1Px2Hj22GCFaROEdFUlVuM
-         WBG83zjUXY9dRQCn6dcoFZy0A5MZwySHwaudrGxN3QPxKKWsJ5XCg/SWYJGKGC9/n+zt
-         QFesoXVbUy2kial5ybp53Cbn+du8VfTbzyBy/udsUlHm+q++VSt1bLRNjMb5ORKtvdWI
-         zVbA==
+        bh=F9dVgwGHiDFCuZ0x2p4Z0K2PT+mB10F3qNo0u+NxB+U=;
+        b=ZITh+bIajm7bYWL/DiNPGuZ6oWti+Aeoagi7E6GE4vCcaGjfD4jZ7xT1ET7vVGhcsq
+         msHlaZ1nycChIHwiMUX3OCIDB/abgpAhcLgwX/cXxptfhsQ6tae5aWSuGRaaBqqfGy/i
+         Y2i/48oCIko3JSzYpCZ2yGoA2XtwzPcMpouu7RFwpX+Z+UTjJPet2ioIIXsdCcQ5NTOl
+         eMKM1ivHEcWZ57qSJzU1Ex5WOtJKS11rTOmDYaWFdMxD0KZXOIccmafIYGdiSo53Zaji
+         A4LKpwS3R67akJ6EfQQHVMsrD5Snx0w8JPXYEAAA/QaQfV4UrcUtAzFGnknxcfztQ2a4
+         jwCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786176682; x=1786781482;
+        d=1e100.net; s=20251104; t=1786176692; x=1786781492;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=8XV1qyiW1WN9UH6X3Jv/ZBqv2q+Lebe5phUQECTXzBc=;
-        b=jeetyCpOST8lm+65D+IuDswy7q3/Vc5xSLD4BeQvdAlhym3aNYT8WHMjTH3QcGLizR
-         J23622BJ8Hii0iWPVdrC5nMFpdNbh28w03ht0HM7kywTS5jYhWEcRhKLig2nSUoss9Rq
-         ZKw/IMWhB2M2vyHx5cGARSPDzQCeFg17V4r6BWvpTLrsyZoC/GbRE2cDBwik8ZxtD9/6
-         EipQcYv8Iiho5DzszbYcjIxslwbGZLx/U05ceL43RK833d+jHt+DBlrNkPQyMP0ylCpC
-         FiqQbEBBKSk1QQb5UuJ6y/qe58vW0VX1pdZ1br9tI61B0aZ+gW2VS3L0AELIHlOkZZqR
-         WA1w==
-X-Forwarded-Encrypted: i=1; AHgh+RpPTsOjhGPmiMyqNgP5z89PeZtEaMh8EEk2iUYAcOah9JPOhyEj3/uquaL8vL3SbWENOFzxdG5CeTOLg9m1Hk8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLk5v9WwkYfRdJY/ThUBm+MjVXvJ+L3yI3SdMzyXyZRBk0ou5r
-	0hMisBhpAwWmLCWMXQCYMcrNzcwNshZQg5f9x3fR3L6h6ujgCnLbYm1xNz9qlUiU
-X-Gm-Gg: AR+sD10klMtzS1Jmeid4KKcvWVfOfNb3S/kXfbAor0z8mokWDiMQiq+xRoTvvlVYclP
-	iHkoeAwDzKwVK7aynsMXxaPEzTl9Q1GzwV+kNoRZ7T0U5WZQELys8neW0V1PJjQ2r+u4oohMSuQ
-	egh/1qUMdIMi6CgNhQuPD7OD+sUZsby/ej491X3o+oD7owYrk+vEVdQZgkIMrTkRVEKs2rrlXOi
-	ET0Htx93ncu1txNo1k3hCbg3Vg2bAR4aZxe6vPNEpj/mV+Z4DuofPkJT8wudW2LigtGjyMdPZeF
-	tW56ifhms/EYcu87GJ7v4Ho9EUs1Jo1NgbgdOFHAbNn89B6U05rPUMtGcGBQtTbiPCAKY/BUCtN
-	y8cGqUXmMdlUU6Ek+/QlQFdvm0TjOhS5NAHzMlFU76O6jEavUgmvj1vqrc1PgbVzW8xYyQ6ei71
-	H5xFzPvLREgIw4DHN6bUEoTeE4bJ6Lu0qS9Q6E3QZu/xwawRgGEMBVAPqEutP4+hmBs8IIR2638
-	g==
-X-Received: by 2002:a05:6a21:6197:b0:3c3:7891:6523 with SMTP id adf61e73a8af0-3cb85ffd1b7mr35612051637.34.1786176682050;
-        Sat, 08 Aug 2026 01:11:22 -0700 (PDT)
+        bh=F9dVgwGHiDFCuZ0x2p4Z0K2PT+mB10F3qNo0u+NxB+U=;
+        b=W5uxV44lG+VG8UJc0Rs91VUA4iWxAA3kYQcSkQJUnSmb9BeR3E4qn5n11GiE6xuXzs
+         GvuXjmN6iT4tbJkevjw3ZfQw7ltWYcnEExl2RDqDq6f9lzmrhOlT9LWzpP0P2N2s6S+Q
+         bkXIGR9YM/ttjIBYPsyqTznWU5gFT6dCrk/u9vC23YS7Br7qmyjJ5yXYXL2ar7GSoRXy
+         a/wZHhtkNv+ioVAkhDjMPkdF3qdzIi9jbT6cF2tUm5HWDRfniDdCTVtAdv8XdgSJC1nL
+         TPpumtvdPWZZykrskA57yD5ktTPPGhh4uUykrLjgw7V6lrJFdT9EYJ6NgyCXJbaTCWQZ
+         IDIQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoPPkDU1SS4uNfi0IPj4pV3pvHrY4GUH8a7A1bWzNE6kaFQEIitcFADwuJvUX23hv6dh545PCxiOVhYQiunJZ4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYJTgp+K1Onf6CvZS0uE2SO0P7qwjpVz3C+b8914b8TgPgJ4DZ
+	rVNaxR1sj3+3OhBi1AaoJpNc2ieAmJUCn06/e3W2ttw7ZO/IQnu5g8lo
+X-Gm-Gg: AR+sD11XELDMY885joAp3plSLBAkkZsa/PmuEQlNexZctm/YqvQ8ypfWKPW1xmgwFqK
+	fKullTkA2YXMuWqafTMvF4X6dy54Q7UV/KjIgXVv3vHkUBv28F+8wsIgZKGt+R/OTxhL0E7gP3S
+	IwkbW9gSlyxhfxqG5OKL2MD5gNwd16zyNrbPs8dewY2ubB9tnm1S2VBv5q2JSkKYTxT9m0uL2Du
+	eJb/4BJJ5wjXviFattR9kfO/VkRQ0fc39+dk9AIuuHYKnuflrPCeZvi9o8af4hUlf9IuPwhZGDL
+	2YLcdZsXNI9siNGaHM/q0cml1yraLUF7uJJcYX0wWUJpzJQ0OjT89qtJcNWVKW6HJpj73E2DmGS
+	WHLMo6re3IAbsBvNKJPigR02PO1K33BBJNeT0Ct5Wpad4UkvRCejWE6EBrdr83AVGMkXyfmvdYd
+	AtKjqG4DYgD/b2+HZtSlDzRDC0tpQ8W0dYLZEawfmRwAFRO2zuvPVgATvmS+K0E7H/kkFC7cjxj
+	IXoqGlhUPof
+X-Received: by 2002:a17:90b:258f:b0:38e:c232:9d3f with SMTP id 98e67ed59e1d1-39282247ee9mr6250045a91.5.1786176692047;
+        Sat, 08 Aug 2026 01:11:32 -0700 (PDT)
 Received: from 10-86-27-207.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141019b4244sm13957833c88.4.2026.08.08.01.11.19
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141019b41d9sm13660310c88.5.2026.08.08.01.11.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Aug 2026 01:11:21 -0700 (PDT)
+        Sat, 08 Aug 2026 01:11:31 -0700 (PDT)
 From: Gokul K <gokul02k@gmail.com>
 To: Sean Christopherson <seanjc@google.com>,
 	Paolo Bonzini <pbonzini@redhat.com>
@@ -66,9 +66,9 @@ Cc: Shuah Khan <shuah@kernel.org>,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] KVM: selftests: Free the VM when the SEV smoke test's guest completes
-Date: Sat,  8 Aug 2026 13:40:49 +0530
-Message-ID: <20260808081050.408657-2-gokul02k@gmail.com>
+Subject: [PATCH 2/2] KVM: selftests: Free the VM when NX hugepage disabling is denied
+Date: Sat,  8 Aug 2026 13:40:50 +0530
+Message-ID: <20260808081050.408657-3-gokul02k@gmail.com>
 X-Mailer: git-send-email 2.54.0
 In-Reply-To: <20260808081050.408657-1-gokul02k@gmail.com>
 References: <20260808081050.408657-1-gokul02k@gmail.com>
@@ -80,47 +80,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-test_sev() returns directly out of the UCALL_DONE case rather than
-leaving the loop, so the plain-SEV path skips the kvm_vm_free() at the
-end of the function.  The SEV-ES path is unaffected; it breaks out of
-the loop and frees the VM correctly.
+run_test() returns as soon as it has confirmed that disabling NX huge
+pages fails with -EPERM, without freeing the VM created a few lines
+earlier.
 
-main() invokes test_sev() once per supported SEV VM type, so a full run
-leaks a VM and its file descriptors.  Nothing fails today because the
-process exits shortly afterwards, which is presumably why this was not
-noticed, but the leak also means the plain-SEV path never exercises VM
-teardown.
+This is not an obscure path.  nx_huge_pages_test.sh runs the test a
+second time without CAP_SYS_BOOT for any non-root user, and main() calls
+run_test() with disable_nx_huge_pages=true on its second invocation, so
+an ordinary run of the wrapper script always takes it.
 
-Use a goto so UCALL_DONE joins the existing exit path.  A plain break
-would only leave the switch statement and spin the loop again.
+Free the VM before returning.
 
-Fixes: be250ff437fa ("KVM: selftests: Add a basic SEV smoke test")
+Fixes: b774da3f2e57 ("KVM: selftests: Test disabling NX hugepages on a VM")
 Signed-off-by: Gokul K <gokul02k@gmail.com>
 ---
- tools/testing/selftests/kvm/x86/sev_smoke_test.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ tools/testing/selftests/kvm/x86/nx_huge_pages_test.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/kvm/x86/sev_smoke_test.c b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-index 6b2cbe2a90b7..646ae93e3c46 100644
---- a/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-+++ b/tools/testing/selftests/kvm/x86/sev_smoke_test.c
-@@ -178,7 +178,7 @@ static void test_sev(void *guest_code, u32 type, u64 policy)
- 		case UCALL_SYNC:
- 			continue;
- 		case UCALL_DONE:
--			return;
-+			goto done;
- 		case UCALL_ABORT:
- 			REPORT_GUEST_ASSERT(uc);
- 		default:
-@@ -187,6 +187,7 @@ static void test_sev(void *guest_code, u32 type, u64 policy)
+diff --git a/tools/testing/selftests/kvm/x86/nx_huge_pages_test.c b/tools/testing/selftests/kvm/x86/nx_huge_pages_test.c
+index 70950067b989..49b70c05daec 100644
+--- a/tools/testing/selftests/kvm/x86/nx_huge_pages_test.c
++++ b/tools/testing/selftests/kvm/x86/nx_huge_pages_test.c
+@@ -120,6 +120,7 @@ void run_test(int reclaim_period_ms, bool disable_nx_huge_pages,
+ 		} else {
+ 			TEST_ASSERT(r == -1 && errno == EPERM,
+ 				    "This process should not have permission to disable NX huge pages");
++			kvm_vm_free(vm);
+ 			return;
  		}
  	}
- 
-+done:
- 	kvm_vm_free(vm);
- }
- 
 -- 
 2.54.0
 
