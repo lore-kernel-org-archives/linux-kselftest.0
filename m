@@ -1,134 +1,124 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFA237996C
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 06:44:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50A61392829
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 08:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786171476; cv=none; b=A02zggSvmjS5dG/61h+UdgmJwTq7ohk4oeju387bPLLC8LyiFZtXGctsrdWm9el4o4i+c73jxImR5p9OzYm+NG9S7ObFWNgfdh4afo359h4fpSv8FDPqxKWyrK4MRwwvWO85LNlEp72+ywFXER0myJXQX34u9Y34GdrXJftjA4w=
+	t=1786176675; cv=none; b=jFSyIox36OTdm3tIX6mUWDxDzqU8ZHiSktWBRpDaDGcOvdPsLAikZn0/6+qJgG88wDIX+mHjH+tp9umVi7LoRIBUsRTQZ6rBPnXDEmCjJ/kj38eKwciWjmY/hwAD1eoMRx3HQSvBGKvyd3uXDl57GueRa3t+SwolCIl7yQeCC9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786171476; c=relaxed/simple;
-	bh=M/Qp24d7AQPobPqz77kL5+0YRq2C+cjqQ9d92ywDsYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=t+6s2JtNGoP0g3naWPjHDgLkIywO4Wbhghlgoub62ZQZ84ReiANJ0JSq/GIlyAtC4oFMSX+Qr7EIf2IBvGfnj/42FlWIYZvu7VUGHXs086vQCdaP6eUwvFp7HI0NA2WDrlFOY6kD5DwMa/l4cFjk+Us03OHZZNC4c3E/MM3MzsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhTu/RL2; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1786176675; c=relaxed/simple;
+	bh=lrC44I8iM/31bF4d4aI5ZoY4vfzbALhpHlYJjauf8dI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qdOHzt4DfS6ReDY2UyWUSajxy5n1pUXsSqPFgl/cLvJ7tNWlWRee1IbJ6je+PbmzkQGYJ01nbmGtUUGRdrqOam5SdRFZY9orKiSZ0GFu1bCNI7r0MXhRiiHViGBAxUHuZRLpgtvVuAbPAc88D+GtUbEogpqlsHYw/Yr9l36wpD8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BTBw2R30; arc=none smtp.client-ip=209.85.215.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhTu/RL2"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cca0c5799eso2785105ad.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 23:44:35 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BTBw2R30"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c9aea40d799so118573a12.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 01:11:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786171474; x=1786776274; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=7PHlSYB+1wYgvGMRp4f+WoEwtmY9OUjUGH1XA1YdgyI=;
-        b=YhTu/RL2UpkNWL+xFXybxigHn9N8X/3cMQVTXs/uUD5IZ68EA2yxhluN2zJCBgJrf0
-         qsfZ3ZL9jEXYnXg1EHyGiBAMEaUlG4ykCwjvhUPRj7ku+Ta8Sf+wSRcndOhp3KoVtxlq
-         Taa5ThvEkV5bHzTuHubc1tU4TXUjPvT2TVTXTPwXJjfKC+xTUNd+upt8ahv8xnD+4ufh
-         AwJ6de5T5F2KSIH5Diu0KvEfdjGUBcCQdtwc5nJkQJFCOTCCpx6/gOh00yO0U05Nhdn2
-         FkOxY3o/xA1tP97eri6pnwkSviuNlunGLa0tW890et6/s/lJCKL7rSkzqr4dh4MsEU1H
-         ckCA==
+        d=gmail.com; s=20251104; t=1786176673; x=1786781473; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Wux81zj1Lg+H9qFJc6k3PJIeFmxAFwN6X2fCIKjgs3Q=;
+        b=BTBw2R30csVw3GOoGpvRoEGzCEaaKUwTfG3930kwuMxABiZg0TxbiJnM6qTe9IJ2al
+         Dog/pOsMhbJL+13DEHCgTfIIbMcKshUSeYUCDWQi0aWRGEAAYTRgAMPwuPhkOXvQJO2A
+         cJlJukzY+/+gMhAl7H06JuVpzwwveRLJIwJKo44ZfjmF3PSadApJzqFffgu/RqrQhZdg
+         pVzfQC/V22Yl9ztdPwKZ1i1D4Tq5uKE9B6xkSGBd6HJgTdWQgrOffYjBBqBzdewKqlzr
+         BQymPEufd4r7BbQ23Ee/5u915IDZOFxz5XJoCB2ax8x5Vc0ArZ62Gtck+a8nfieRHXoB
+         x9FQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786171474; x=1786776274;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=7PHlSYB+1wYgvGMRp4f+WoEwtmY9OUjUGH1XA1YdgyI=;
-        b=ltrGXFp3LOnnbw65mzazXxLqtsxb7aV8WPMkxUsSjGanbhOUtISbyPZ8lMPxx4AKP3
-         N/t+BKKb913HpSdMr/1YaxCOrCuhw96XxZ0nI6hHWi87KKhDVCyJmvTuHH5naUtHt4dO
-         2g93gwh4Fp0cI2x+0/kDUPNaB0N7KVrXAHVWy0sSWvPCxhJU90/rnCRqpSbOx1qPyr4v
-         sOA6q4D9yfwl5lyx3pjyUQoexgKGUQJ3nJKGBYoGDTUPpqcGmDVdMOgACbWDBsojYxxi
-         +75OTFUY/z2GEi+IJRTgljxOc14smmmq+ObOiHux7SKhgQK7qOn3K8fPhM0Jkkfd20Ya
-         x9lA==
-X-Forwarded-Encrypted: i=1; AHgh+Rq0qFROWi/P6Ynkp1eD1F5YCPEkBeFNbjp6zaZA/KDzYVZYaQN30ewv8RermYwxgMdoRtgnJWjuVincBrtMZOY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6r6NxQWbpInV2nMG7v3767ubufHqGpneXfLllLOFzNiME9GEb
-	2loDM9IOE9311y0nN5vuBHwkRTRDh03U3xQZYzcWJ9xJx8tRC/AOZL3A
-X-Gm-Gg: AR+sD13EFcTs/5e7CaukSqhpzWyfFiwiagUS958GezgVgk8K0UMCDmC689BUIszjnE8
-	xFxDlkUQWA7Hx4ClBkUEBygtjm4vCsm84w+yijAROcrhKYTiLtR5fOCUy7LSGQzxfOo5mrPGEuj
-	2nSay6INPoCzNdGkGPzU1Hhw+dDaNL9JXbBQFHuvlUALlpn74kM+Ain/wEL/ymXWi8GbYptal8A
-	lR8cvzNNUPk1EM3UEAA6c7rOEeWc/vqK7LyMbXIbeaDGvI/2UX55WNHkZYvRJ135eLkwQjz1cdQ
-	0R2aS5Dm/MBsbLfeHkcn5WVeiXM4YcrOHiQRQ0H2Fp93iXS5DTbIuiZ7gR99CrBz9Vf18GajCfq
-	LLPUZRPwE71qirQsj3//cQfXMSx8eTlq0RGu4wbXmUKNW09qH/aeEZvwolRr3748HSRT190Yni/
-	sfBSEKJ0CYTS+rHsLK/Jy+ve70XJErzKkp7elLohG+tGZYUKaIrVgeGXE=
-X-Received: by 2002:a05:6a20:2d13:b0:3c4:396d:4a7f with SMTP id adf61e73a8af0-3cbce7d0551mr6695809637.15.1786171474289;
-        Fri, 07 Aug 2026 23:44:34 -0700 (PDT)
-Received: from fedora ([203.175.12.241])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe8f35b3adsm1518804a12.17.2026.08.07.23.44.26
+        d=1e100.net; s=20251104; t=1786176673; x=1786781473;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=Wux81zj1Lg+H9qFJc6k3PJIeFmxAFwN6X2fCIKjgs3Q=;
+        b=iBJRXHOnBOIbREj4XSomxRCVefrWvXTTLNUyzDmyaa26Lc/vNaPRqLkptZ6dFEmQQA
+         vqEOXmTaZl7R6o/Mo8c1A3BmOE9Sn2eIaEiS4i6L0KAVlktT3J4Bp7lmcacR30N3P/kC
+         WKt6EL4YjJsnymtxC4gPdSzcbIABNe6TClAef2Qs6uSdfTFWqabjyip5G9qYYO8kdIZA
+         36ErqIC5QUFBAsBjnoCuQxVSOEyeYuIKQiKJd5qZsPjkmMsDz2ruK+hQjaRXufEvLeIZ
+         G6YxZmzxou4YyzBLrOU0CSaGlI+1Fxnoo/k9V25oFvgKodfPV53/hI/dr3GHON3Fadp1
+         j9uQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrtIJ2V5LTGtUPMN7CdfLoSrUYmM/Ngu9icyNxk67TxZvi642ixyUJtdjIXjBKGUcnB46coV+UFF0RWTcTkXcY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwTVLPe7YdOl9/getimfRcxb41ZOIi/QAsXegXXZU5gwfRb/6SJ
+	iqpPnS9Ca83ADUajBhVsyu4rKJYYejc2HOAv8bVW3ygyiGGn7F4ygLcr
+X-Gm-Gg: AR+sD13VM6IicFSlF8IZL7aQ07Q+EMQDC30IGBau3imolfDBS/+NadZckX6tCRUi4FB
+	Cx00v3IzcRo4iEMO+yIQ024zmyPAZR+oHf/GQ42JRSkiHEAdDanAZvVXhXyxyKd5VUNi6PlhdHy
+	nGoil9BnPNKoaDk1kJ5YofhvU5TUx8uFXhSQOHdGex+pvssM1sl8D5IPHnBqWQolLNjJcVyQxw6
+	0ZcfsQBy8pjUt03a1bsVDjeNUPyRWL2DCS7Q+tfVVcR7cQwmsUuQGDTwKkVLvFBKsKQGiDLSgRu
+	eP6rvzaToLsPkdCii5obRE2PcnVrrhKDLCMcN5lzJOUe2xv++EqSswg/oO48abbijNlJYT/aQ0i
+	YfMfBCvCj6cMZ5MrtlBtS1zbVMc2m4/Bzp63vvUivM1xaUjD/9VV8mSPzi90QurZveyDygPdw0A
+	BzaivtWGV6gbCvjdCRVt4yJ67Wj8xMcdGcAjKGOjiY9O3/6uPbpWTCpcIP7NVGNpQ7OyHNm05Fd
+	Q==
+X-Received: by 2002:a05:6a20:430b:b0:3c3:6928:8b25 with SMTP id adf61e73a8af0-3cbce8d4439mr6418307637.17.1786176673027;
+        Sat, 08 Aug 2026 01:11:13 -0700 (PDT)
+Received: from 10-86-27-207.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be8a754dsm15208279eec.11.2026.08.08.01.11.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 23:44:33 -0700 (PDT)
-Date: Sat, 8 Aug 2026 14:44:23 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
-	stable@vger.kernel.org, sdf.kernel@gmail.com
-Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
- counter updates
-Message-ID: <anbQR-XiDQ0G4cPo@fedora>
-References: <20260803222211.877-1-xiexinet@gmail.com>
- <20260803222211.877-3-xiexinet@gmail.com>
- <anXrR6-2UVYF1iZa@fedora>
- <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
+        Sat, 08 Aug 2026 01:11:12 -0700 (PDT)
+From: Gokul K <gokul02k@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] KVM: selftests: Fix two VMs leaked on early returns
+Date: Sat,  8 Aug 2026 13:40:48 +0530
+Message-ID: <20260808081050.408657-1-gokul02k@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 07, 2026 at 04:49:36PM +0200, Xin Xie wrote:
-> On 07/08/2026 16:27, Hangbin Liu wrote:
-> > 
-> > Maybe use a shorter commit description.
-> > 
-> > Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
-> > 
-> > And the counters in hsr_deliver_master() also need to protected. Especially
-> > multicast.
-> > 
-> > Thanks
-> > Hangbin
-> 
-> Thanks.
-> 
-> The long commit description was from v4. I reworked and shortened it in v5:
-> 
-> https://lore.kernel.org/netdev/20260807140751.1351-3-xiexinet@gmail.com/
+Two x86 selftests create a VM and then take an early return that skips the
+kvm_vm_free() at the end of the function.
 
-This length is much shorter. It would be nice to mention Felix's patch, which
-is why we can remove the lock from forwarding path now.
+Patch 1 is the plain-SEV path of sev_smoke_test(), which returns straight
+out of the UCALL_DONE case instead of leaving the loop.  The SEV-ES path
+next to it breaks out and frees correctly.
 
-And use tag like
-    Cc: <stable@vger.kernel.org> # aae9d6b616b5: hsr: Implement more robust duplicate discard for HSR
+Patch 2 is nx_huge_pages_test, which returns as soon as it has confirmed
+that disabling NX huge pages is denied without CAP_SYS_BOOT.  This one is
+not an unusual error path: nx_huge_pages_test.sh runs the test without
+CAP_SYS_BOOT for any non-root user, so a normal run always takes it.
 
-as Simon suggested.
+Neither leak causes a failure today, since the process exits shortly
+afterwards.  They do mean those paths never exercise VM teardown.
 
-Maybe also
+The two patches are independent and either can be applied on its own.
 
-Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
+Found by auditing every function under tools/testing/selftests/kvm/ that
+creates a VM and later calls kvm_vm_free(), looking for returns in
+between.  Seven other hits were false positives, mostly returns after
+REPORT_GUEST_ASSERT() or TEST_FAIL(), which abort the process and make
+the return unreachable.  Two more that do look real, in get-reg-list.c
+and arm64/external_aborts.c, are left out here because they belong to
+different maintainers.
 
-> 
-> Regarding the statistics, Paolo previously suggested addressing the HSR dev stats races in a separate series, since there are already several occurrences:
-> 
-> https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
-> 
-> Would you prefer that I drop the DEV_STATS_* conversions from the next revision and address all HSR statistics consistently in a follow-up, including hsr_deliver_master() and multicast, rather than adding per-CPU accounting to this series?
-> 
+Compile-tested only.  This host has neither SEV (kvm_amd sev=N) nor
+hugetlb configured, so both tests SKIP rather than run.
 
-Makes sense to me. The counter problem should be a separate issue apart
-from this one.
+Note patch 1 touches sev_smoke_test.c, which an unrelated patch I sent
+earlier also touches [1].  They modify different functions, do not
+conflict, and neither depends on the other.
 
-Thanks
-Hangbin
+[1] https://lore.kernel.org/all/20260807071026.195503-1-gokul02k@gmail.com/
+
+Gokul K (2):
+  KVM: selftests: Free the VM when the SEV smoke test's guest completes
+  KVM: selftests: Free the VM when NX hugepage disabling is denied
+
+ tools/testing/selftests/kvm/x86/nx_huge_pages_test.c | 1 +
+ tools/testing/selftests/kvm/x86/sev_smoke_test.c     | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+-- 
+2.54.0
+
+
