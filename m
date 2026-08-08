@@ -1,137 +1,113 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3281A9FA0
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 06:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3B63815D9
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 06:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786169986; cv=none; b=l1JKZXFtDV2jlpZXr1qxhW2Pt0mZJRtAgfL1wMxN5RepylSu9aQIJot0N7b2RjHsMbWrDF9c9NExugYDNQU8ShCUpTRu00omW81CmksCxOFigVbt0uKVV0wLv4YqE3Res9xZWW8WhM3HQtOxDZOghU5NpLip9z1h9uXoOAHOdxk=
+	t=1786170403; cv=none; b=tyClgM5YZ/4zIV499oKEux4JhcvwgPB39fZKh+3iXA6JY6XyEiW3QwBDvLd06XaHxTwjCjfATtIxygaga5pKiupBvFtsr1pVmp6uBuIJkxtIIu0Fuc25s8pok9uDVyUDax1n2aTk7A0S0pqgWoqT0/DRgqZYpWW1aOF/z9pZTiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786169986; c=relaxed/simple;
-	bh=W11b7zco+e8P2IpKVXeEYVsW72hZWQbixLyrhVbiIaU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JuCnCDA74YVb91n7R1m0VfxS4MwXe9+0wF/+zXSdfn7VMYs7Y7BnKZQQBtg2LIazSJadH4zuDp85yzzeL6k6u3w5qbo1HMbLLfLxMXgB90oaIoKhiGJduA6YWIfHqt44LnApfV80xoWUFyHFrNDmYK6uZT+pk4Ob6aIyxjFIrME=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jV9zj4J/; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1786170403; c=relaxed/simple;
+	bh=qtBFllAz+p5PJC/LQ3QUUdjCCSGJucmC1kQ61oLXxio=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Igf1fE+i4hizjMLYkoxm9xeHjKyHViM/5cGY0hfWXsMBP82SoIu0QLAHz8fZ0tdG/Usm/IIK5GUOu6r/hZ8rG9zSPFCU0lFA6BSrMsPOT8y0ak/6o0j4/EhkpOGyrXiwFGN7LIhWctN2MA0IrB8aA+MUzbHCORYf8M1V2kjG4v0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayPlr+/4; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jV9zj4J/"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2cf52d15d88so2142485ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 23:19:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayPlr+/4"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2d02b4c3601so3207005ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 23:26:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786169982; x=1786774782; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tf+JFvFnkhWNzBxADsggU6iInPDRTBZiIUNUWTJVRg4=;
-        b=jV9zj4J/Ukrkomz/YXWucF1b9fRd82lGh3gwQmRuqRXDEu+5snYN0q90w+u6cFACin
-         i7htb69Zrg2b53XQ7czQKl3JHPRcYswe85RhEELkcvgchaIMXQlsZXLb0my9ZHBiNs1s
-         hn2MFyn/Sv7b3OTiXYGoTX83UZM7ptG80iv/jH0JYfRIB4NzjJO8ldP4kl1eExxQPg9p
-         shV82j3A49TsqD9CuOuZVgta8y0ED+Y84ULwW7LnV9VOE2hWvbAM3bRLIERDtSdbvugk
-         bGaz9Reswz0fMUvve/kk2ij4JhTPXqn8Fi6V2k8heR4xZaYuGGTB2HOwihvFYCs3V3kn
-         G0gQ==
+        d=gmail.com; s=20251104; t=1786170401; x=1786775201; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NIaIillW/ES5KIua50EkDl/Ri/Ln0jxYV+0KVd83QO0=;
+        b=ayPlr+/4k8Omm7f5exWi1le/vvvcx5Dkv5XthOXuNngZDA5qdYmTEPI92Sdt3+lOFh
+         GW+6XB/P0sd2vZvXqNCJ1qm3/NvydKwCO26BGbNCX5sXqlsfHG43nmce9dCgCobvKzRN
+         M5K16BgfhxA8Rkpshru+ngjYIWW6+zdxF0a0uDGwnFE0gTNPDgffMzOiwwchFgQtpjWB
+         vftjHfFafewcrZW3BfOPFSV0ZzYuEfusWpj6jHszCqS4+g3lK/UxlCWwW40e80TQKFLT
+         ATKXiy19mA5xQsxC4STdSSp2+zzW//0kevyrcmPjZz0ASQ4TPZ93lHE7gD6D1+PhfOFD
+         7KAw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786169982; x=1786774782;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=tf+JFvFnkhWNzBxADsggU6iInPDRTBZiIUNUWTJVRg4=;
-        b=MGXkM1S7aF2gec/wsB6PhhAf1LbEJjku0kogVyLiFPZmWGZae3RgLF6nA/xRn4unDK
-         2N2ps0SzHX09PREtXv+bcQAt4F0orwy4AHiqLhLdgIpZeM68tb+89xwostv9/5eh71Hx
-         Z3A/HGeBJyziNeymWUhTDHz+SAP/pL0TYDF1MWAfpVvrrW7SCq6s/NoWhOsdGK071zcP
-         7WE4ObcT3sLAeWtAfdhDj+nR7+hWWBIpb7NlfzAYu2YSJFElH6wdsd1XArIeOqn8DNqg
-         JX6sJNksfY+6ZQO2hYC/xpnk9m8iiQj461DWlQELiKZo7RzZw89+tFXckesiMpCIzUaa
-         3sqw==
-X-Forwarded-Encrypted: i=1; AHgh+RrRrFWRLBk9eePjXBYC1SSOBvUA7gLnxVTTCiSrfGYWpkbQo0pr4fxhFnqXKh9o29efduv1TdmHiIKF6eTO9mI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyJlV8FZiVmwwA/+oLQAmjeDvDiI8zhZMj0BRbCikrL7F1T+Cmq
-	Ac2JgVjGV83m1gydeQv8r0M/re7nVJFRz6PgLut0dfmS2d2RUhLATPTc
-X-Gm-Gg: AR+sD106FPhHH994yAuVm9U8qgAXUAxtNxy0hWXlMNYqla87nAD+Vh9rJm9pPh39bM+
-	kDFAAQHxFOOF/Hw3uYTiDelZmERwj2KcKq60ym2Ai9b/x+OyPmhRRCEVWP2dB/C5X4QmqCCq0Vu
-	cdNc26Hmh1cfojjQgdSWXoBEckCiJ28ldP6SB2wbRLL3sMWWZHmmXxQ2ZLJrEt87TWz4yEeWlGK
-	IzOm7TnoUrQbQgg02eIcxp8WXD+UDkyofUTMRx0hgULjNMqy0Mq5lJeyz/mpWkeN0DALlKZvmf/
-	GyNbddpvHJNzfHWhpUCYPuSRUwdURrkhg6QhrCD4gkSWwVi/2FuKRvzJQTvENYsWStbh18qfW3Y
-	f84golLuk7IUVd0d9XQmGiWFzW82HGQO2TdauaSUAuVwuQueXTIwN6ESYRJ4zpvSfVqcNJgguSo
-	0yemYSIFIhBI9zrCzUwCLTjj3ft2SMcqkRlV7VfpBQ4zisS+3gy6ai9SY67RUT+b16OxFBfUzzJ
-	g==
-X-Received: by 2002:a17:902:fd87:b0:2c7:f12d:5d37 with SMTP id d9443c01a7336-2d2a8d55b6dmr79068905ad.17.1786169981975;
-        Fri, 07 Aug 2026 23:19:41 -0700 (PDT)
-Received: from 10-86-27-207.ban-spse ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bebdf796sm14356280eec.22.2026.08.07.23.19.39
+        d=1e100.net; s=20251104; t=1786170401; x=1786775201;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NIaIillW/ES5KIua50EkDl/Ri/Ln0jxYV+0KVd83QO0=;
+        b=bH2LBBhvGmRbQonGIRak7+BTddGv40VLp7yDLs2khlzkSKdisiJPHLPG7genwzjdL9
+         m4ZxHpVkYAozzir5BGBs1vOHso8R7O4p6GtITNwWSwtYHcsrDvaoJAjiYi1f6ZCRrwQ8
+         E2t6sszI3X2pR+pVQsjkru1peYifGI+5m/wSrtz9XGmmT5kC65KAOLa8wFEgDr9IVAou
+         tIj+K+pXOL/RBwncWDuL1QTUgfZBrOw4XvNh0s8jJ25iB68ynBdKdZFSng7+GH590dev
+         5QUhsm9BtvP7a7teQLwTWaVkT1UqVDeJMSQ3fpXYTjhDptquemwZ4mKrLPncoe2VWLfL
+         mtUg==
+X-Forwarded-Encrypted: i=1; AHgh+RqI+aO7MCKVnya2uxqKQAhF1JywY1BUIbi13leG+SQ73NT8RipSDBE0az6WN6I/TKdUZr2CyBySaIIFRha9OYc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw8QyfobS8l6yRHwL+lp1uqzyooTjabGiOOjvtjOD38GQ1DYuu
+	UBszoi2Qb+u8OUOk5VREC8MIg/AYvPguoXPSBh8IvaJ7ANbB1tpKBB6IlQ0EqA==
+X-Gm-Gg: AR+sD11ZnY3If5QbHwfZm+T1jgMBvKsU9c/VWxeCRQPbAMcISrM7asETjB0Lj+j0L9L
+	mW9TusxdnzWw5r/f3I1/tiiMrN4Uz+M3zWNdkotLxA0NMXZrgF4P27hZvB8jq8z9TvpYJO8nE6d
+	iPpAArmtBukj5nprs1Ti12RoC3aHpMZTQxtwaTOa0dxAr9AUgrlhtLYasTAu2zNU/3U+t2U914i
+	06lhSpyYspttRUjjJYGUP/Hnmz2waergEe0qb8ag3zcueGxLd/L2hycpbJvqTScd6usqpIrTwwm
+	xyUQHgoCsNnFwUGUr4N+BO9oZUploTnaB+rE8VRZdZd59kV/Lzp9Cc4WR6nweoSUkKPcxR4wKtn
+	kWDWlDYI59w146P9lCni0n2mFLBlMGJNnbL2YqQK2D842NphntSaVbAjp6iUlES5xAN7o1T6SJ+
+	0AfbzvFR+pHstSYBsawIm+Qd2kiW9vZGfi0su/GmqML3lDAZyToygbkDU=
+X-Received: by 2002:a17:902:f54a:b0:2d0:cc92:f7ac with SMTP id d9443c01a7336-2d0cc9302b2mr308403715ad.14.1786170400784;
+        Fri, 07 Aug 2026 23:26:40 -0700 (PDT)
+Received: from fedora ([203.175.12.241])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d16c4fc743sm15991535ad.80.2026.08.07.23.26.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 23:19:41 -0700 (PDT)
-From: Gokul K <gokul02k@gmail.com>
-To: Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>
-Cc: Shuah Khan <shuah@kernel.org>,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Fix the bounds of the SEV debug dst buffer check
-Date: Sat,  8 Aug 2026 11:49:34 +0530
-Message-ID: <20260808061934.400892-1-gokul02k@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        Fri, 07 Aug 2026 23:26:39 -0700 (PDT)
+Date: Sat, 8 Aug 2026 14:26:33 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: Pablo Neira Ayuso <pablo@netfilter.org>
+Cc: Qingshuang Fu <fffsqian@163.com>, Florian Westphal <fw@strlen.de>,
+	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Fernando Fernandez Mancera <fmancera@suse.de>
+Subject: Re: [PATCH net v2] selftests: netfilter: conntrack_dump_flush:
+ remove unused variables and fix typo
+Message-ID: <anbMGS9TFOEUUWu-@fedora>
+References: <20260807075928.64326-1-fffsqian@163.com>
+ <anWgQSbZWK6D2ONg@fedora>
+ <anWyMUFvONx6k1d5@chamomile>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <anWyMUFvONx6k1d5@chamomile>
 
-validate_dst() is passed a starting offset and a byte count, but bounds
-its loop with "i < nr_bytes", comparing the offset against the count
-rather than against offset + nr_bytes.  Only calls that pass offset 0
-check the region they were asked to check.  Every other call checks too
-few bytes, and any call whose offset is >= the count returns without
-checking anything at all.
+On Fri, Aug 07, 2026 at 12:23:45PM +0200, Pablo Neira Ayuso wrote:
+> On Fri, Aug 07, 2026 at 05:07:13PM +0800, Hangbin Liu wrote:
+> > On Fri, Aug 07, 2026 at 03:59:28PM +0800, Qingshuang Fu wrote:
+> > > From: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> > > 
+> > > Remove unused 'rplnlh' in conntrack_data_insert(), and remove unused
+> > > 'rplnlh' and 'nest' variables in conntrack_count_zone() and
+> > > conntrack_flush_zone(). These variables were declared but never used
+> > > since their introduction.
+> > > 
+> > > Also fix typo: rename misspelled conntracK_count_zone() to
+> > > conntrack_count_zone().
+> > > 
+> > > Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
+> > > Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+> > 
+> > > ---
+> > > v2:
+> > >   - Drop Fixes tag as this is a cleanup, not a bug fix
+> > 
+> > If not a bug fix, you should target to net-next.
+> 
+> We will handle this though the nf-next tree.
 
-Of the 1990 validate_dst() calls a full run makes per VM type, 740 (37%)
-check zero bytes, only the 29 zero-offset calls are correct, and 62% of
-the intended bytes are checked overall.  The unaligned offsets the sweep
-deliberately picks to exercise partial chunks are precisely the ones
-that end up checking nothing.
+Oh, good. That's more reasonable.
 
-The bug is latent today: validate_buffers() runs first and compares all
-of src[] against dst[], so a genuine {en,de}crypt corruption is still
-caught.  That is presumably why this went unnoticed.
-
-Bound the loop with offset + nr_bytes, and rename the parameter to
-offset so it cannot be mistaken for a length again.  The caller already
-guarantees offset + nr_bytes <= BUFFER_SIZE, so the corrected loop stays
-in bounds.
-
-Fixes: 6edd35e77a42 ("KVM: selftests: Add a test to verify SEV {en,de}crypt debug ioctls")
-Signed-off-by: Gokul K <gokul02k@gmail.com>
----
-Compile-tested only: this host has no SEV (kvm_amd sev=N, no /dev/sev), so
-the test SKIPs here rather than running.
-
-The figures above come from replaying the exact offset/size sweep of
-__test_sev_dbg() and test_sev_dbg() outside the kernel against both the
-current and the corrected loop.  Injecting a single-byte corruption at every
-position the check is supposed to cover, the current loop detects 62% of them
-and the corrected loop detects all of them.
-
- tools/testing/selftests/kvm/x86/sev_dbg_test.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/x86/sev_dbg_test.c b/tools/testing/selftests/kvm/x86/sev_dbg_test.c
-index eaa8201b937d..0277e38e3556 100644
---- a/tools/testing/selftests/kvm/x86/sev_dbg_test.c
-+++ b/tools/testing/selftests/kvm/x86/sev_dbg_test.c
-@@ -14,9 +14,11 @@ static u8 *data;
- static u8 src[BUFFER_SIZE] __aligned(PAGE_SIZE);
- static u8 dst[BUFFER_SIZE] __aligned(PAGE_SIZE);
- 
--static void validate_dst(int i, int nr_bytes, u8 pattern)
-+static void validate_dst(int offset, int nr_bytes, u8 pattern)
- {
--	for ( ; i < nr_bytes; i++)
-+	int i;
-+
-+	for (i = offset; i < offset + nr_bytes; i++)
- 		TEST_ASSERT(dst[i] == pattern,
- 			    "Expected 0x%x at byte %u, got 0x%x",
- 			    pattern, i, dst[i]);
--- 
-2.54.0
-
-
+Hangbin
