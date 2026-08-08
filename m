@@ -1,65 +1,65 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7994630ACE6
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 00:57:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A655830DD2F
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 00:57:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786150624; cv=none; b=SI+c4n66tZi4PX5nmD0G4R4o1I7PuHp2FGvdycug5PqY6cS4ZECLgT/YFM3ix5P2ZrpFkOUXXBs4fcRQGYccd9aVKjTURFU5KGVXMh5j6zRxL/PYvh/sS4M5Anbmpuq5IleqVIbKqYvbMlqNFbXYyqcXCe1q3GAEuVV9k9GS2n0=
+	t=1786150630; cv=none; b=WPl+4DoJ/5UldZsO2/GcJ3Gwb3hOLDuXJMXm+6q9aXGNBZV83UjR8CEMwAyoHbiGcgQorKqx+3LVnc8Z0oMS96MgoeFZTHpe8OgK9sIxBn+8vmkbnvnsBeJ3Y2eukpn+uR5RmTZ2JiXucdjieeiz7RiLN1587yc4D8/6vISIsfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786150624; c=relaxed/simple;
-	bh=XQJawEmB4ChsklAv/eN7LUVOMlZahRxCMEiqQmik0xo=;
+	s=arc-20240116; t=1786150630; c=relaxed/simple;
+	bh=fWRY/BVInbtKwwxx8kY/fDClI/KPxpsYiPVnvVfMlE0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZK41rYOZN8R/vHXh9oesyO6MSPzf5Cr3WA/7hYnpef/Nj8AY4eSCsNBq5EH8HiUgXUt3u8cco/Y9u4cJqaob+64sIJ0vr/nPj+t5GzDoGFhwyw5hhn5TGwEnTRZ80pmevRpXosKPR5PtTX0gKTbwHgP5v5PxZNfm20+7tWpb9IU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=j6PU/HIz; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version; b=LDGZkB8/SOm34nuj/UsJ9uAayzjC3iyMqf3aCj5vQ0cBTNrcuWPBOweihtnwAI1y+gW0/fi2Lqv19TxltcJ+U8rrFfbAuit8TrZ6fZ2pJvLY6SRJwudyCxh+Qy5pcgZG2CPbXQkOzXYrdozD+IJqQ9iu0Xg76RKbM2wHoluwKuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=U9KoDqw5; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="j6PU/HIz"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-381b831d535so168662a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 17:57:03 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="U9KoDqw5"
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-38e58034d05so87943a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 17:57:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786150623; x=1786755423; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786150628; x=1786755428; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Y1uuKJgg5m2EeiKe39lLJSMZdROY6ZIIFzIHwqt463s=;
-        b=j6PU/HIzDFLyEw5cXWhHi9Qt4wDjYCK4cBi1CbnYLtgy+aIEPa1T9UzqZi2Uw2V16h
-         Nu+lfPQdKCL2zPPKbF6s7qq3jx54+bUzeI+QlCDBEI3aDXYKlVxZi5RDPdKsr4KWy3ZX
-         DfPzsWxGt36AtmtuvY2wpq42GDtEw6vscsbhH2eL1gOE9qcjBis7jEkRVmrz12wVVBOd
-         0N7Fo7n2PSx7fCZmBgRNHfFvj5r6yWgP/FC9X/clETAo2fI1ChTMxjqh08jehHrImIR2
-         oCO6bR4AQlxHNmqvNhjdWCY1sEkWs+ZeiAjYDR+4lGRqqzF7lRMmJY8eogubTsrF8F6d
-         Uw0A==
+        bh=t4jPqOjdoT8ifNwfss2R1qo2V56xomcYJOjozZZx/JE=;
+        b=U9KoDqw5J4wJgGrsLhKq9FRq55VXNKEm6/1/YfKqvRQICFRIYcJCD7kz64J97ETbN0
+         Nvk9LadtpnADxrjAIItbjo9I8iylUt54+Wl3eHSq/txgBTjcRKv18b+mQpUmwJZPGU3S
+         3DGgOxfCnTNWdGW2HAJXt1/d0/AaeyjgormLLDMspM5gWOOoef6EMSpjxdbzvA+y/EDp
+         fFwjVx3qA5npfT61N5fjM4nkuOYPv0WLRSLdS9tRvA4eBWsk6Nc0O7/46lk83/TQYtm8
+         YILAQB3koOuaii17lhf982BiJMMGeEgemfS+iCiOGQFBLg0Lcg3FEYLkCvjjmjKIp7UI
+         woxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786150623; x=1786755423;
+        d=1e100.net; s=20251104; t=1786150628; x=1786755428;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:sender:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Y1uuKJgg5m2EeiKe39lLJSMZdROY6ZIIFzIHwqt463s=;
-        b=OF1CXaCQK+G8cXw0XRXgskUjL3tOJ1KvQzxdV/kVRS9SE77DzmJWEmzOxpKChWCJB/
-         rIQTXbW2fPxEtIMYHOOHAO+sAgu+2wIu4MRhzbYK1Ym3e44V9ayT4lffrk/fq3cMnH94
-         MLZ+kKcC4kt80npNdnHrgJdQKI47dl02bRwrf0Q2L3gsrcJ+BtA3Ev5H5PFyPWyHjlEa
-         OYqFqf2iuzubHKT++4jbopgwsiVT84QDOhzSaM8qJAQQpDOdjVTF4xYmmUE4xFU2QQF+
-         aeNL0Kwa1aQtmENnXN47eOOAAqP8bSle6TJs2uEu7ylQm+TBONY1GLaHPsfPvKsT0Iaa
-         rtOQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrHqBntvCiKBII33wf+XluHMO8ez3CMkxDnPxiIVw6Xlt2REDMtdwsCJn9ixw7IJNKg+FdGOcpHufpVoHOt0MA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzTmQKUWUOHto8vWa35bQnb0gFkXLN+RGo4f/3RvtLuPk2GlRUh
-	eNYbIz87f620dAVs8VJv4QC6kuSgnPUBFQ9L96nHlREEXAeleIedtvUs
-X-Gm-Gg: AR+sD100cq+eDTDBQmZX9EVHZV9qoaB58BagyR3ul6UjJBsSWu02B3Odp0XXoQnUYkF
-	PsKrYJuPZ67qZ3qLJfzIMRVirQuhkwX92dpvfKF0GpFkWUH4fsEMZxrm0cKVazz1ppF03nUSiq/
-	eJgO9t2yPBTrNx8XAGZsqzd5feig8NNEEj6X8oryb6AWu/DmDXq5DnHsj+Klii5Yr86HhWPH8zK
-	SCKZkw08CZv5c8Chk+5B8nyzsMnlBoQbn7AvWKfi8HxS8RMKCsIsTvSBQFeY6StWnzUuyT3v+vQ
-	0jM9kUIvV1XkGaw6EQeScR6hMoG4ECBvuCgcGn0awmqrJhuhzvc7jS1657MRxQAn8c7Q3zLa/xF
-	djzhqLP4LLfH4RCBUG8v/YI1gKHWvHH1iZpCYAJe1euLMxfevCUESK05u7SvmkCs8W/d5IU1z+L
-	FI5QRwyg9N6MNMbs7ZfM+PE5EOXEZI2KtrflUPF7+M4sWjIOamIgb4EXGnvyIKf7WvaEQM/rm2O
-	FZEa+REK1sTX441g66vzptH+zVcB2nmhKGuZxrw7vkjiK8yI9Q=
-X-Received: by 2002:a17:90b:2dc7:b0:380:fead:448d with SMTP id 98e67ed59e1d1-392620e6e25mr8963187a91.13.1786150622906;
-        Fri, 07 Aug 2026 17:57:02 -0700 (PDT)
+        bh=t4jPqOjdoT8ifNwfss2R1qo2V56xomcYJOjozZZx/JE=;
+        b=O9+8uTBDcCrQIW9gFXZzN8Z6JrcFAnOiolMoNc/37GuXMDmx4+UseqRKERiVV6tL/1
+         SJ1vXTHda+/lxis8wAV8b9KK/ovspXrrCQz7PYoFDMrFDd0wvcLfGvTnxJt/vzx5gCkt
+         XhjixnwTyb4gQRlqDlkcZ14m9hKC3UiKdZMeCqYewy1y6RAvxUDQ/9gWIR9KfQA0d8PU
+         GZqBCfDXC6dbKkXZuGp8DZMxr65mRqvf5hT9nPTX6i7o+m+nepPr8TyK28M/g3puyw+b
+         KqeZoiFWaFUh4HFWSvle0HcrwplgxnYbYa0fQqVh84iviptsMIKAcxmNLw2vxyNPeOuc
+         xDrw==
+X-Forwarded-Encrypted: i=1; AHgh+RrrbfwZ1Oci6lt32/JeLZbxcfXbwPluMsdZRo1UAV8pLKb2LBM8BX0v9Yjnk4WDAHwrm9NbJ4IUClbn1XwGANc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtWCGJ4sw/2zY+QMDt4gj+HBj2W3JnSSkYXTFZGDZ0KUDPfqYD
+	BZyCkO5Dpo7BDDvA9p8x2RsoWgYwf9DEqmeqM1jQ3GfWJ+VauyJHTrER
+X-Gm-Gg: AR+sD107By6qvVZWQBSkkX5iEIBXL2jyeUuedlTMxd2iIQLqld5Uv4oEdRBZ6J8R6Vf
+	TU17GPDAp/TPFrKWwcrSSNJFC9DJ1lWQVbRpq5uBAejrE7KGgOox8bsN9V8NbpADok1iUi00YRG
+	7CM8tml8ZIOTtK7K3FYtPEZhoQaml+mf49bS0oJgts4Hk3EThDt7MMVSZXM02r3RS+fzKljaQlk
+	y2yDn9FZQF1nOpA0eQdwMNm1omI7gYkYV3j8kpW5iuoo27FD7zfrJdCqe3JsmnwGPwk2f+XNaNS
+	j5BCvUO0ts9p1iFQ7Fc0sfaG3834T5hSUT/oPFDMyGBrzQ6sJdPxFnQoXAVkg2iQugFDLZvITUH
+	J0hTKEPOkwKNmt/ziNRAMm5hOrqGUYL5yI5gSAfMaJVX/rMEe3fcZNzyMfidwb3wEg1EuzlllzB
+	D5MEWCNYGhKGDE/kFVMzZMJ6C78BBaAh5tcjlWRifQW9kW7sCYIkr4vTlu+FHXJOpreeY54i4Fi
+	lt1b9LUKy4EL4gnBSUZhTWxI+NlVvKY8sQS+dO8rdSNxTesDN8=
+X-Received: by 2002:a17:90b:270e:b0:366:3517:1aa2 with SMTP id 98e67ed59e1d1-3903bb0cf61mr28884033a91.0.1786150627679;
+        Fri, 07 Aug 2026 17:57:07 -0700 (PDT)
 Received: from m-upc-A520M-HDV.flets-east.jp ([2400:2410:3f60:500:d7e9:6449:7464:1dfa])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925fc6c13asm4205182a91.2.2026.08.07.17.56.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3925fc6c13asm4205182a91.2.2026.08.07.17.57.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 17:57:02 -0700 (PDT)
+        Fri, 07 Aug 2026 17:57:07 -0700 (PDT)
 Sender: Yuyang Huang <uyoko90@gmail.com>
 From: Yuyang Huang <sigefriedhyy@gmail.com>
 To: Yuyang Huang <sigefriedhyy@gmail.com>
@@ -81,9 +81,9 @@ Cc: "David S. Miller" <davem@davemloft.net>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	netdev@vger.kernel.org
-Subject: [PATCH net-next v6 03/10] ipv6: record the reason for kernel-initiated route deletions
-Date: Sat,  8 Aug 2026 09:56:35 +0900
-Message-ID: <20260808005642.26901-4-sigefriedhyy@gmail.com>
+Subject: [PATCH net-next v6 04/10] ipv6: add a deletion reason argument to rt6_fill_node()
+Date: Sat,  8 Aug 2026 09:56:36 +0900
+Message-ID: <20260808005642.26901-5-sigefriedhyy@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260808005642.26901-1-sigefriedhyy@gmail.com>
 References: <20260808005642.26901-1-sigefriedhyy@gmail.com>
@@ -95,81 +95,113 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Record why the kernel deletes an IPv6 route on its own:
-
-- RT_DEL_REASON_EXPIRED for routes reaped by the FIB6 garbage
-  collector after their RTF_EXPIRES lifetime ran out.
-- RT_DEL_REASON_RA_WITHDRAWN for default routes, prefix routes and
-  RFC 4191 route information routes withdrawn by a zero-lifetime
-  Router Advertisement.
-
-Deleting a default route because its metric changed is not a
-withdrawal, so it keeps RT_DEL_REASON_UNSPEC.
+Add the deletion reason to rt6_fill_node() so that it can report it to
+user space. All callers pass RT_DEL_REASON_UNSPEC for now.
 
 Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
 Reviewed-by: Ido Schimmel <idosch@nvidia.com>
 ---
- net/ipv6/addrconf.c | 3 ++-
- net/ipv6/ip6_fib.c  | 2 +-
- net/ipv6/ndisc.c    | 4 +++-
- net/ipv6/route.c    | 2 +-
- 4 files changed, 7 insertions(+), 4 deletions(-)
+ net/ipv6/route.c | 27 +++++++++++++++++----------
+ 1 file changed, 17 insertions(+), 10 deletions(-)
 
-diff --git a/net/ipv6/addrconf.c b/net/ipv6/addrconf.c
-index f6fa2715b450..9d89be7e0544 100644
---- a/net/ipv6/addrconf.c
-+++ b/net/ipv6/addrconf.c
-@@ -2874,7 +2874,8 @@ void addrconf_prefix_rcv(struct net_device *dev, u8 *opt, int len, bool sllao)
- 		if (rt) {
- 			/* Autoconf prefix route */
- 			if (valid_lft == 0) {
--				ip6_del_rt(net, rt, false);
-+				ip6_del_rt_reason(net, rt,
-+						  RT_DEL_REASON_RA_WITHDRAWN);
- 				rt = NULL;
- 			} else {
- 				table = rt->fib6_table;
-diff --git a/net/ipv6/ip6_fib.c b/net/ipv6/ip6_fib.c
-index 1f6f6f33ded1..f8a9ec7fa616 100644
---- a/net/ipv6/ip6_fib.c
-+++ b/net/ipv6/ip6_fib.c
-@@ -2403,7 +2403,7 @@ static void fib6_gc_table(struct net *net,
- 
- 	hlist_for_each_entry_safe(rt, n, &tb6->tb6_gc_hlist, gc_link)
- 		if (fib6_age(rt, gc_args) == -1)
--			fib6_del(rt, &info, RT_DEL_REASON_UNSPEC);
-+			fib6_del(rt, &info, RT_DEL_REASON_EXPIRED);
- }
- 
- static void fib6_gc_all(struct net *net, struct fib6_gc_args *gc_args)
-diff --git a/net/ipv6/ndisc.c b/net/ipv6/ndisc.c
-index fe36b3f51285..1111c4ebc61d 100644
---- a/net/ipv6/ndisc.c
-+++ b/net/ipv6/ndisc.c
-@@ -1361,7 +1361,9 @@ static enum skb_drop_reason ndisc_router_discovery(struct sk_buff *skb)
- 	defrtr_usr_metric = in6_dev->cnf.ra_defrtr_metric;
- 	/* delete the route if lifetime is 0 or if metric needs change */
- 	if (rt && (lifetime == 0 || rt->fib6_metric != defrtr_usr_metric)) {
--		ip6_del_rt(net, rt, false);
-+		ip6_del_rt_reason(net, rt,
-+				  lifetime == 0 ? RT_DEL_REASON_RA_WITHDRAWN :
-+						  RT_DEL_REASON_UNSPEC);
- 		rt = NULL;
- 	}
- 
 diff --git a/net/ipv6/route.c b/net/ipv6/route.c
-index 252f1825a199..bb14d7f7bad4 100644
+index bb14d7f7bad4..6732e95bf7b3 100644
 --- a/net/ipv6/route.c
 +++ b/net/ipv6/route.c
-@@ -1020,7 +1020,7 @@ int rt6_route_rcv(struct net_device *dev, u8 *opt, int len,
- 					gwaddr, dev);
+@@ -111,7 +111,7 @@ static int rt6_fill_node(struct net *net, struct sk_buff *skb,
+ 			 struct fib6_info *rt, struct dst_entry *dst,
+ 			 struct in6_addr *dest, struct in6_addr *src,
+ 			 int iif, int type, u32 portid, u32 seq,
+-			 unsigned int flags);
++			 unsigned int flags, enum rt_del_reason del_reason);
+ static struct rt6_info *rt6_find_cached_rt(const struct fib6_result *res,
+ 					   const struct in6_addr *daddr,
+ 					   const struct in6_addr *saddr);
+@@ -4037,7 +4037,8 @@ static int __ip6_del_rt_siblings(struct fib6_info *rt, struct fib6_config *cfg)
  
- 	if (rt && !lifetime) {
--		ip6_del_rt(net, rt, false);
-+		ip6_del_rt_reason(net, rt, RT_DEL_REASON_RA_WITHDRAWN);
- 		rt = NULL;
+ 			if (rt6_fill_node(net, skb, rt, NULL,
+ 					  NULL, NULL, 0, RTM_DELROUTE,
+-					  info->portid, seq, 0) < 0) {
++					  info->portid, seq, 0,
++					  RT_DEL_REASON_UNSPEC) < 0) {
+ 				kfree_skb(skb);
+ 				skb = NULL;
+ 			} else
+@@ -5786,7 +5787,7 @@ static int rt6_fill_node(struct net *net, struct sk_buff *skb,
+ 			 struct fib6_info *rt, struct dst_entry *dst,
+ 			 struct in6_addr *dest, struct in6_addr *src,
+ 			 int iif, int type, u32 portid, u32 seq,
+-			 unsigned int flags)
++			 unsigned int flags, enum rt_del_reason del_reason)
+ {
+ 	struct rt6_info *rt6 = dst_rt6_info(dst);
+ 	struct rt6key *rt6_dst, *rt6_src;
+@@ -6066,7 +6067,8 @@ static int rt6_nh_dump_exceptions(struct fib6_nh *nh, void *arg)
+ 					    &rt6_ex->rt6i->dst, NULL, NULL, 0,
+ 					    RTM_NEWROUTE,
+ 					    NETLINK_CB(dump->cb->skb).portid,
+-					    dump->cb->nlh->nlmsg_seq, w->flags);
++					    dump->cb->nlh->nlmsg_seq, w->flags,
++					    RT_DEL_REASON_UNSPEC);
+ 			if (err)
+ 				return err;
+ 
+@@ -6114,7 +6116,8 @@ int rt6_dump_route(struct fib6_info *rt, void *p_arg, unsigned int skip)
+ 			if (rt6_fill_node(net, arg->skb, rt, NULL, NULL, NULL,
+ 					  0, RTM_NEWROUTE,
+ 					  NETLINK_CB(arg->cb->skb).portid,
+-					  arg->cb->nlh->nlmsg_seq, flags)) {
++					  arg->cb->nlh->nlmsg_seq, flags,
++					  RT_DEL_REASON_UNSPEC)) {
+ 				return 0;
+ 			}
+ 			count++;
+@@ -6347,12 +6350,14 @@ static int inet6_rtm_getroute(struct sk_buff *in_skb, struct nlmsghdr *nlh,
+ 			err = rt6_fill_node(net, skb, from, NULL, NULL, NULL,
+ 					    iif, RTM_NEWROUTE,
+ 					    NETLINK_CB(in_skb).portid,
+-					    nlh->nlmsg_seq, 0);
++					    nlh->nlmsg_seq, 0,
++					    RT_DEL_REASON_UNSPEC);
+ 		else
+ 			err = rt6_fill_node(net, skb, from, dst, &fl6.daddr,
+ 					    &fl6.saddr, iif, RTM_NEWROUTE,
+ 					    NETLINK_CB(in_skb).portid,
+-					    nlh->nlmsg_seq, 0);
++					    nlh->nlmsg_seq, 0,
++					    RT_DEL_REASON_UNSPEC);
+ 	} else {
+ 		err = -ENETUNREACH;
+ 	}
+@@ -6388,7 +6393,8 @@ void inet6_rt_notify(int event, struct fib6_info *rt, struct nl_info *info,
+ 		goto errout;
+ 
+ 	err = rt6_fill_node(net, skb, rt, NULL, NULL, NULL, 0,
+-			    event, info->portid, seq, nlm_flags);
++			    event, info->portid, seq, nlm_flags,
++			    RT_DEL_REASON_UNSPEC);
+ 	if (err < 0) {
+ 		kfree_skb(skb);
+ 		/* -EMSGSIZE implies needed space grew under us. */
+@@ -6421,7 +6427,8 @@ void fib6_rt_update(struct net *net, struct fib6_info *rt,
+ 		goto errout;
+ 
+ 	err = rt6_fill_node(net, skb, rt, NULL, NULL, NULL, 0,
+-			    RTM_NEWROUTE, info->portid, seq, NLM_F_REPLACE);
++			    RTM_NEWROUTE, info->portid, seq, NLM_F_REPLACE,
++			    RT_DEL_REASON_UNSPEC);
+ 	if (err < 0) {
+ 		/* -EMSGSIZE implies BUG in rt6_nlmsg_size() */
+ 		WARN_ON(err == -EMSGSIZE);
+@@ -6474,7 +6481,7 @@ void fib6_info_hw_flags_set(struct net *net, struct fib6_info *f6i,
  	}
  
+ 	err = rt6_fill_node(net, skb, f6i, NULL, NULL, NULL, 0, RTM_NEWROUTE, 0,
+-			    0, 0);
++			    0, 0, RT_DEL_REASON_UNSPEC);
+ 	if (err < 0) {
+ 		/* -EMSGSIZE implies BUG in rt6_nlmsg_size() */
+ 		WARN_ON(err == -EMSGSIZE);
 -- 
 2.43.0
 
