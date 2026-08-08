@@ -1,79 +1,82 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC3B63815D9
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 06:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CFA237996C
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 06:44:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786170403; cv=none; b=tyClgM5YZ/4zIV499oKEux4JhcvwgPB39fZKh+3iXA6JY6XyEiW3QwBDvLd06XaHxTwjCjfATtIxygaga5pKiupBvFtsr1pVmp6uBuIJkxtIIu0Fuc25s8pok9uDVyUDax1n2aTk7A0S0pqgWoqT0/DRgqZYpWW1aOF/z9pZTiM=
+	t=1786171476; cv=none; b=A02zggSvmjS5dG/61h+UdgmJwTq7ohk4oeju387bPLLC8LyiFZtXGctsrdWm9el4o4i+c73jxImR5p9OzYm+NG9S7ObFWNgfdh4afo359h4fpSv8FDPqxKWyrK4MRwwvWO85LNlEp72+ywFXER0myJXQX34u9Y34GdrXJftjA4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786170403; c=relaxed/simple;
-	bh=qtBFllAz+p5PJC/LQ3QUUdjCCSGJucmC1kQ61oLXxio=;
+	s=arc-20240116; t=1786171476; c=relaxed/simple;
+	bh=M/Qp24d7AQPobPqz77kL5+0YRq2C+cjqQ9d92ywDsYw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Igf1fE+i4hizjMLYkoxm9xeHjKyHViM/5cGY0hfWXsMBP82SoIu0QLAHz8fZ0tdG/Usm/IIK5GUOu6r/hZ8rG9zSPFCU0lFA6BSrMsPOT8y0ak/6o0j4/EhkpOGyrXiwFGN7LIhWctN2MA0IrB8aA+MUzbHCORYf8M1V2kjG4v0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayPlr+/4; arc=none smtp.client-ip=209.85.214.169
+	 Content-Type:Content-Disposition:In-Reply-To; b=t+6s2JtNGoP0g3naWPjHDgLkIywO4Wbhghlgoub62ZQZ84ReiANJ0JSq/GIlyAtC4oFMSX+Qr7EIf2IBvGfnj/42FlWIYZvu7VUGHXs086vQCdaP6eUwvFp7HI0NA2WDrlFOY6kD5DwMa/l4cFjk+Us03OHZZNC4c3E/MM3MzsQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YhTu/RL2; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayPlr+/4"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2d02b4c3601so3207005ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 23:26:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YhTu/RL2"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2cca0c5799eso2785105ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 07 Aug 2026 23:44:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786170401; x=1786775201; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786171474; x=1786776274; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NIaIillW/ES5KIua50EkDl/Ri/Ln0jxYV+0KVd83QO0=;
-        b=ayPlr+/4k8Omm7f5exWi1le/vvvcx5Dkv5XthOXuNngZDA5qdYmTEPI92Sdt3+lOFh
-         GW+6XB/P0sd2vZvXqNCJ1qm3/NvydKwCO26BGbNCX5sXqlsfHG43nmce9dCgCobvKzRN
-         M5K16BgfhxA8Rkpshru+ngjYIWW6+zdxF0a0uDGwnFE0gTNPDgffMzOiwwchFgQtpjWB
-         vftjHfFafewcrZW3BfOPFSV0ZzYuEfusWpj6jHszCqS4+g3lK/UxlCWwW40e80TQKFLT
-         ATKXiy19mA5xQsxC4STdSSp2+zzW//0kevyrcmPjZz0ASQ4TPZ93lHE7gD6D1+PhfOFD
-         7KAw==
+        bh=7PHlSYB+1wYgvGMRp4f+WoEwtmY9OUjUGH1XA1YdgyI=;
+        b=YhTu/RL2UpkNWL+xFXybxigHn9N8X/3cMQVTXs/uUD5IZ68EA2yxhluN2zJCBgJrf0
+         qsfZ3ZL9jEXYnXg1EHyGiBAMEaUlG4ykCwjvhUPRj7ku+Ta8Sf+wSRcndOhp3KoVtxlq
+         Taa5ThvEkV5bHzTuHubc1tU4TXUjPvT2TVTXTPwXJjfKC+xTUNd+upt8ahv8xnD+4ufh
+         AwJ6de5T5F2KSIH5Diu0KvEfdjGUBcCQdtwc5nJkQJFCOTCCpx6/gOh00yO0U05Nhdn2
+         FkOxY3o/xA1tP97eri6pnwkSviuNlunGLa0tW890et6/s/lJCKL7rSkzqr4dh4MsEU1H
+         ckCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786170401; x=1786775201;
+        d=1e100.net; s=20251104; t=1786171474; x=1786776274;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NIaIillW/ES5KIua50EkDl/Ri/Ln0jxYV+0KVd83QO0=;
-        b=bH2LBBhvGmRbQonGIRak7+BTddGv40VLp7yDLs2khlzkSKdisiJPHLPG7genwzjdL9
-         m4ZxHpVkYAozzir5BGBs1vOHso8R7O4p6GtITNwWSwtYHcsrDvaoJAjiYi1f6ZCRrwQ8
-         E2t6sszI3X2pR+pVQsjkru1peYifGI+5m/wSrtz9XGmmT5kC65KAOLa8wFEgDr9IVAou
-         tIj+K+pXOL/RBwncWDuL1QTUgfZBrOw4XvNh0s8jJ25iB68ynBdKdZFSng7+GH590dev
-         5QUhsm9BtvP7a7teQLwTWaVkT1UqVDeJMSQ3fpXYTjhDptquemwZ4mKrLPncoe2VWLfL
-         mtUg==
-X-Forwarded-Encrypted: i=1; AHgh+RqI+aO7MCKVnya2uxqKQAhF1JywY1BUIbi13leG+SQ73NT8RipSDBE0az6WN6I/TKdUZr2CyBySaIIFRha9OYc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw8QyfobS8l6yRHwL+lp1uqzyooTjabGiOOjvtjOD38GQ1DYuu
-	UBszoi2Qb+u8OUOk5VREC8MIg/AYvPguoXPSBh8IvaJ7ANbB1tpKBB6IlQ0EqA==
-X-Gm-Gg: AR+sD11ZnY3If5QbHwfZm+T1jgMBvKsU9c/VWxeCRQPbAMcISrM7asETjB0Lj+j0L9L
-	mW9TusxdnzWw5r/f3I1/tiiMrN4Uz+M3zWNdkotLxA0NMXZrgF4P27hZvB8jq8z9TvpYJO8nE6d
-	iPpAArmtBukj5nprs1Ti12RoC3aHpMZTQxtwaTOa0dxAr9AUgrlhtLYasTAu2zNU/3U+t2U914i
-	06lhSpyYspttRUjjJYGUP/Hnmz2waergEe0qb8ag3zcueGxLd/L2hycpbJvqTScd6usqpIrTwwm
-	xyUQHgoCsNnFwUGUr4N+BO9oZUploTnaB+rE8VRZdZd59kV/Lzp9Cc4WR6nweoSUkKPcxR4wKtn
-	kWDWlDYI59w146P9lCni0n2mFLBlMGJNnbL2YqQK2D842NphntSaVbAjp6iUlES5xAN7o1T6SJ+
-	0AfbzvFR+pHstSYBsawIm+Qd2kiW9vZGfi0su/GmqML3lDAZyToygbkDU=
-X-Received: by 2002:a17:902:f54a:b0:2d0:cc92:f7ac with SMTP id d9443c01a7336-2d0cc9302b2mr308403715ad.14.1786170400784;
-        Fri, 07 Aug 2026 23:26:40 -0700 (PDT)
+        bh=7PHlSYB+1wYgvGMRp4f+WoEwtmY9OUjUGH1XA1YdgyI=;
+        b=ltrGXFp3LOnnbw65mzazXxLqtsxb7aV8WPMkxUsSjGanbhOUtISbyPZ8lMPxx4AKP3
+         N/t+BKKb913HpSdMr/1YaxCOrCuhw96XxZ0nI6hHWi87KKhDVCyJmvTuHH5naUtHt4dO
+         2g93gwh4Fp0cI2x+0/kDUPNaB0N7KVrXAHVWy0sSWvPCxhJU90/rnCRqpSbOx1qPyr4v
+         sOA6q4D9yfwl5lyx3pjyUQoexgKGUQJ3nJKGBYoGDTUPpqcGmDVdMOgACbWDBsojYxxi
+         +75OTFUY/z2GEi+IJRTgljxOc14smmmq+ObOiHux7SKhgQK7qOn3K8fPhM0Jkkfd20Ya
+         x9lA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq0qFROWi/P6Ynkp1eD1F5YCPEkBeFNbjp6zaZA/KDzYVZYaQN30ewv8RermYwxgMdoRtgnJWjuVincBrtMZOY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6r6NxQWbpInV2nMG7v3767ubufHqGpneXfLllLOFzNiME9GEb
+	2loDM9IOE9311y0nN5vuBHwkRTRDh03U3xQZYzcWJ9xJx8tRC/AOZL3A
+X-Gm-Gg: AR+sD13EFcTs/5e7CaukSqhpzWyfFiwiagUS958GezgVgk8K0UMCDmC689BUIszjnE8
+	xFxDlkUQWA7Hx4ClBkUEBygtjm4vCsm84w+yijAROcrhKYTiLtR5fOCUy7LSGQzxfOo5mrPGEuj
+	2nSay6INPoCzNdGkGPzU1Hhw+dDaNL9JXbBQFHuvlUALlpn74kM+Ain/wEL/ymXWi8GbYptal8A
+	lR8cvzNNUPk1EM3UEAA6c7rOEeWc/vqK7LyMbXIbeaDGvI/2UX55WNHkZYvRJ135eLkwQjz1cdQ
+	0R2aS5Dm/MBsbLfeHkcn5WVeiXM4YcrOHiQRQ0H2Fp93iXS5DTbIuiZ7gR99CrBz9Vf18GajCfq
+	LLPUZRPwE71qirQsj3//cQfXMSx8eTlq0RGu4wbXmUKNW09qH/aeEZvwolRr3748HSRT190Yni/
+	sfBSEKJ0CYTS+rHsLK/Jy+ve70XJErzKkp7elLohG+tGZYUKaIrVgeGXE=
+X-Received: by 2002:a05:6a20:2d13:b0:3c4:396d:4a7f with SMTP id adf61e73a8af0-3cbce7d0551mr6695809637.15.1786171474289;
+        Fri, 07 Aug 2026 23:44:34 -0700 (PDT)
 Received: from fedora ([203.175.12.241])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d16c4fc743sm15991535ad.80.2026.08.07.23.26.36
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbe8f35b3adsm1518804a12.17.2026.08.07.23.44.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Aug 2026 23:26:39 -0700 (PDT)
-Date: Sat, 8 Aug 2026 14:26:33 +0800
+        Fri, 07 Aug 2026 23:44:33 -0700 (PDT)
+Date: Sat, 8 Aug 2026 14:44:23 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Pablo Neira Ayuso <pablo@netfilter.org>
-Cc: Qingshuang Fu <fffsqian@163.com>, Florian Westphal <fw@strlen.de>,
-	netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>,
-	Fernando Fernandez Mancera <fmancera@suse.de>
-Subject: Re: [PATCH net v2] selftests: netfilter: conntrack_dump_flush:
- remove unused variables and fix typo
-Message-ID: <anbMGS9TFOEUUWu-@fedora>
-References: <20260807075928.64326-1-fffsqian@163.com>
- <anWgQSbZWK6D2ONg@fedora>
- <anWyMUFvONx6k1d5@chamomile>
+To: Xin Xie <xiexinet@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
+	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+	stable@vger.kernel.org, sdf.kernel@gmail.com
+Subject: Re: [PATCH net v4 2/4] net: hsr: shrink seqnr_lock to sequence
+ counter updates
+Message-ID: <anbQR-XiDQ0G4cPo@fedora>
+References: <20260803222211.877-1-xiexinet@gmail.com>
+ <20260803222211.877-3-xiexinet@gmail.com>
+ <anXrR6-2UVYF1iZa@fedora>
+ <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -82,32 +85,50 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <anWyMUFvONx6k1d5@chamomile>
+In-Reply-To: <156d1de2-927f-450c-a809-dff6892d527c@gmail.com>
 
-On Fri, Aug 07, 2026 at 12:23:45PM +0200, Pablo Neira Ayuso wrote:
-> On Fri, Aug 07, 2026 at 05:07:13PM +0800, Hangbin Liu wrote:
-> > On Fri, Aug 07, 2026 at 03:59:28PM +0800, Qingshuang Fu wrote:
-> > > From: Qingshuang Fu <fuqingshuang@kylinos.cn>
-> > > 
-> > > Remove unused 'rplnlh' in conntrack_data_insert(), and remove unused
-> > > 'rplnlh' and 'nest' variables in conntrack_count_zone() and
-> > > conntrack_flush_zone(). These variables were declared but never used
-> > > since their introduction.
-> > > 
-> > > Also fix typo: rename misspelled conntracK_count_zone() to
-> > > conntrack_count_zone().
-> > > 
-> > > Reviewed-by: Fernando Fernandez Mancera <fmancera@suse.de>
-> > > Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+On Fri, Aug 07, 2026 at 04:49:36PM +0200, Xin Xie wrote:
+> On 07/08/2026 16:27, Hangbin Liu wrote:
 > > 
-> > > ---
-> > > v2:
-> > >   - Drop Fixes tag as this is a cleanup, not a bug fix
+> > Maybe use a shorter commit description.
 > > 
-> > If not a bug fix, you should target to net-next.
+> > Note: Avoid these macros in fast path, prefer per-cpu or per-queue counters.
+> > 
+> > And the counters in hsr_deliver_master() also need to protected. Especially
+> > multicast.
+> > 
+> > Thanks
+> > Hangbin
 > 
-> We will handle this though the nf-next tree.
+> Thanks.
+> 
+> The long commit description was from v4. I reworked and shortened it in v5:
+> 
+> https://lore.kernel.org/netdev/20260807140751.1351-3-xiexinet@gmail.com/
 
-Oh, good. That's more reasonable.
+This length is much shorter. It would be nice to mention Felix's patch, which
+is why we can remove the lock from forwarding path now.
 
+And use tag like
+    Cc: <stable@vger.kernel.org> # aae9d6b616b5: hsr: Implement more robust duplicate discard for HSR
+
+as Simon suggested.
+
+Maybe also
+
+Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
+
+> 
+> Regarding the statistics, Paolo previously suggested addressing the HSR dev stats races in a separate series, since there are already several occurrences:
+> 
+> https://lore.kernel.org/netdev/4fc3b9f1-4bef-4b34-ae7a-e89037cce829@redhat.com/
+> 
+> Would you prefer that I drop the DEV_STATS_* conversions from the next revision and address all HSR statistics consistently in a follow-up, including hsr_deliver_master() and multicast, rather than adding per-CPU accounting to this series?
+> 
+
+Makes sense to me. The counter problem should be a separate issue apart
+from this one.
+
+Thanks
 Hangbin
