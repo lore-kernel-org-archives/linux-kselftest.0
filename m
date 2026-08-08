@@ -1,72 +1,55 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-177.mta0.migadu.com (out-177.mta0.migadu.com [91.218.175.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA08C883F
-	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 14:03:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 371C11D5CE0
+	for <linux-kselftest@vger.kernel.org>; Sat,  8 Aug 2026 14:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786197811; cv=none; b=q9srYYJBhXLljSjqbU7qTZOtRLVDIJFykGuFeOGzv9Nk0dXmY7rl2jkLn5bvGKR48Y4NygC4NaLo/9eMv514buqLvCb+Vj4Vv/X0hxpKQUOHxJrwFHZcg/WCzNq545KpzNBxBMzuxHqAJAFjL05iS+bUySol0hw/bnHn7dRRlUQ=
+	t=1786198086; cv=none; b=DA+vLHU/Az3mjCXe7j4s9sPIfav+pdHxmgpwQ2NuVA/kmdMy00KolKk8W0BxDpziCzuWXLfcJJG4yyW0Tmp8eJg1Eqz9kpi2O8uVLHtnfiJSYIINtnccFyjYdTRh0GLwJroTfld3eHmBEe67tYPdzZP8mEp4h8miHSwDIjBGxHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786197811; c=relaxed/simple;
-	bh=qV8EWCvezkBaBw9y2aume0AWW9XOYdG802eycHS0Abg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=a4h2Ur9Ssh8eT3qrdMtx3LJub8rW4rZ5s8fDeE03xDtwrsbaLj+VqQONdjA6NuNrxU1M56OlKu/1K+X3lLE5Qo75cqj8B9jpdGzwhEXfG5AF34exP5teYgFUWY7/z1Mqd3L7GsHT7hVaLrUOPiPqZJpxM/7c8z3d8vfARgLiMLw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SALwBGKj; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786198086; c=relaxed/simple;
+	bh=TmJrm89N6RG14n33SUAB/EiKXmPzuGvpEn78XOHy650=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TFHqvCwHNKTjxIr6S0z6zm5L+LOk1SwUgAeIvbxg6OS3B5PUaTHe8cuc3tkqWBknc7RUUxx1Ce5rSHorzlr6fptck7x+MPPUAPbL1cERuG0ytcJ3wP8K5lH4CZIAqSFA2JtqUb4gLvJiWSev9ehHv09CpJPCKcNCTGR+pjsyG1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=lqwYREcl; arc=none smtp.client-ip=91.218.175.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SALwBGKj"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cf27856f9cso5440415ad.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 07:03:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786197810; x=1786802610; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Zh0Gc0PJJF5/srbJo8dz+JvtQdZ+zW1fsqn1yIoKUI8=;
-        b=SALwBGKjJnHEThVNqvRo0pbqWm0nrsi1yJi62IlPWa9pjqwgtHX6T6u8f4tn/FiDNh
-         g4+iMVPssdW5aAtM+6vdDwGFua6ASHBVThtJ4JeUeTzHG9eLBXT1hfmMMgBIJmOIVvKm
-         EFEUzFpGkHogDwnUgMN4BVrY58ths9bco7zou+uv6bZQadNoEr2A741qVE+sx0SWM+VS
-         R1yA3Bl1vlBbDJTfsuG26JYPB+hKnsIr5C91N5IE6EFpmEPJZnHHq2VLfAevMykGZYph
-         Xk4HiKuxoJ0CBg+X5yZRYQ0pFCPoF/nnDMZRn+vvrV+BXZEP+4hTmvV9KqlQvqYQMDUG
-         eyxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786197810; x=1786802610;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Zh0Gc0PJJF5/srbJo8dz+JvtQdZ+zW1fsqn1yIoKUI8=;
-        b=gUaE2IjvfFJEi3BYCaxMQKyjJZIT0IDwg5E/ADJLTEcqPMoeBFkfGiudQCTrdrGnNY
-         ULKjG3OUsVMCiiiG1pG5i5f8EfjzYWVoee9Xm+7zYs0dMMXOe6WIL92dxwxgiIztFZZU
-         9X4bQ3TeYbiMu/VukWSgEdCATeZyfcanDv35LjyvzlLXfgjN4mqCqxB3J4vkEaaHZ7j9
-         j6wvL0QXjdWPLSW9U69cMIQKR2ZW92F3d6BATr1Qy86eJTuZU7eP0YLihN9bRS/s4tYu
-         9vRH5d+XpP2geRPhRZYqZ7PR37+SH6pjJ+eGnvKP4fcG0wDa2DmPtXH00SuTspHON7Da
-         7PZg==
-X-Gm-Message-State: AOJu0Yy1rwdj4C46q+TonBvYrB0mnE9GVrwIYKzTCrkJDq8khg5lAakj
-	+AU6ZDL5D9/3YmMGFklcRwvwF/EWPKEkm4BYoQU9mJGpg+BtBjPfK1h7
-X-Gm-Gg: AR+sD1272OUcxHPtJn7UqU2cBLzT5OMfUdc6QW5TOpLCzbf6yoGFMu//G28JNBN9ZLN
-	1tjPpXqut7CTTbctZ/DBGOlQaqdlqyy5So12vix41euJsDYu6EQjFIXjrpf6CSbXXuP/lk6ED0Q
-	LagpKYMCQxHgH7A3wAA+v402cUgOIT4HYN3zPnMBlPaE1j9kmct5Vnqzd/+4AaCMcQsYKPhPb3A
-	CI15rKkZHSX6poMG8mEFslO1EDAxB0sc4I4MW5+I8wwbrm/6OBl4Bp/GwhMfokt5F2ygFInoF6F
-	9m9h0SiOic4A+hPKO0SoyWmMez95m5X/Xa9syfttaIluAZqPRgK7ra+Edi7PlO5TyzsLCrxrZVm
-	aEtaVw1A265PD5RFmMJvOmlja2NIM5NJJfskgpBmVIU3hrtf50VX0ezCBVEDaNCcHhpY2wIRnmG
-	XDtAk5FEeZGaCnVtko83bkTcCcaWm64vpUJB9aBpgs7oYgJSNjYawMjhWob0Cj+sdz4cR/
-X-Received: by 2002:a17:903:1b66:b0:2c9:e9db:8167 with SMTP id d9443c01a7336-2d0ca7125c0mr384049245ad.7.1786197809941;
-        Sat, 08 Aug 2026 07:03:29 -0700 (PDT)
-Received: from mohammed-rizwan-HP-Laptop-15-bs1xx.. ([2406:7400:63:cd19:6ccb:b987:b875:e968])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315be8a9220sm21644406eec.7.2026.08.08.07.03.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 08 Aug 2026 07:03:29 -0700 (PDT)
-From: Mohammed Rizwan Kaniyate <mrizwank004@gmail.com>
-X-Google-Original-From: Mohammed Rizwan Kaniyate mrizwankan004@gmail.com
-To: nphamcs@gmail.com,
-	shuah@kernel.org,
-	hannes@cmpxchg.org
-Cc: linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="lqwYREcl"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786198071;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=jqYn1wblY9FldRcAfyRNPo2Ja5369GK00LFkYGT2PGI=;
+	b=lqwYREclYrwGhxjyzbijgy59jiNCm0KT0p+38kjPZJfrt+pIWq+U7QcIZ46c/Tf0Vpzihj
+	TmjcJT+o4jMv+cfb1KUjCU1PBb7dQOdWd4+7xOgjk+3TGTEaC4Jd+KFbedxI203JXvLfaG
+	n+gqQp+mpp0KpXqk0EmOM5F46BC4+G8=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
 	linux-kernel@vger.kernel.org,
-	Mohammed Rizwan Kaniyate <mrizwank004@gmail.com>
-Subject: [PATCH 1/1] selftests/cachestat: add fault-path errno coverage for cachestat
-Date: Sat,  8 Aug 2026 19:33:06 +0530
-Message-ID: <20260808140306.945459-1-mrizwank004@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf-next v3 0/4] bpf: arena: handle memory.max on fault-in with reclaim/OOM
+Date: Sat,  8 Aug 2026 22:05:52 +0800
+Message-ID: <20260808140720.293604-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,106 +57,71 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-From: Mohammed Rizwan Kaniyate <mrizwank004@gmail.com>
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That accounting exposes two problems in the arena user page fault path.
 
-Add a dedicated fault test for cachestat argument
-validation and errno behaviour.
-The test verifies EBADF, EFAULT and EINVAL case
-using a common helper that
-resets/checks errno and reports mismatch.
+1. The fault-in allocation runs under arena->spinlock, so it can only use the
+   non-blocking allocator, which never reclaims. Once memory.current is at
+   memory.max the allocation simply fails. Reaching memory.max is completely
+   normal for a healthy application - e.g. reading a large file fills
+   memory.current with page cache - so the process ends up killed for no real
+   reason.
 
-Signed-off-by: Mohammed Rizwan Kaniyate <mrizwank004@gmail.com>
----
- .../selftests/cachestat/test_cachestat.c      | 56 +++++++++++++++++--
- 1 file changed, 50 insertions(+), 6 deletions(-)
+2. That failure is turned into VM_FAULT_SIGSEGV, which is misleading: the
+   faulting address is a perfectly valid arena address. When we know it is an
+   out-of-memory condition we can return VM_FAULT_OOM and let the memcg OOM
+   path handle it properly.
 
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-index 542cd09cb4434..6b23022b4ec76 100644
---- a/tools/testing/selftests/cachestat/test_cachestat.c
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -18,7 +18,7 @@
- 
- #include "kselftest.h"
- 
--#define NR_TESTS	9
-+#define NR_TESTS	10
- 
- static const char * const dev_files[] = {
- 	"/dev/zero", "/dev/null", "/dev/urandom",
-@@ -294,23 +294,67 @@ bool run_cachestat_test(enum file_type type)
- 	return ret;
- }
- 
-+bool expect_cachestat_errno(int fd, struct cachestat_range *csr, struct cachestat *cs,
-+	unsigned int flags, int expected_errno, const char *desc)
-+{
-+	int sys_ret;
-+
-+	errno = 0;
-+
-+	sys_ret = syscall(__NR_cachestat, fd, csr, cs, flags);
-+
-+	if (sys_ret == -1 && errno == expected_errno) {
-+		ksft_print_msg("cachestat test success for %s\n", desc);
-+	} else {
-+		ksft_print_msg("cachestat test fail : %s: ret=%d, errno=%d expected_errno=%d\n",
-+			desc, sys_ret, errno, expected_errno);
-+		return false;
-+	}
-+
-+	return true;
-+}
-+
-+bool test_cachestat_faults(void)
-+{
-+	bool ret = true;
-+	struct cachestat cs = {0};
-+	struct cachestat_range cr = {0, 0};
-+	// Test that the cachestat syscall fails with a bad file descriptor
-+	ret &= expect_cachestat_errno(-1, &cr, &cs, 0, EBADF, "bad file descriptor");
-+
-+	// Fails with a NULL cacherange
-+	ret &= expect_cachestat_errno(0, NULL, &cs, 0, EFAULT, "NULL range");
-+	// Fails with a NULL result
-+	ret &= expect_cachestat_errno(0, &cr, NULL, 0, EFAULT, "NULL result");
-+	// Fails with invalid user space address
-+	ret &= expect_cachestat_errno(0, (struct cachestat_range *)0x1, &cs,
-+		0, EFAULT, "invalid range address");
-+	// Fails with invalid user space address
-+	ret &= expect_cachestat_errno(0, &cr, (struct cachestat *)0x1, 0,
-+		EFAULT, "invalid result address");
-+	// Fails with invalid flag
-+	ret &= expect_cachestat_errno(0, &cr, &cs, 1, EINVAL, "invalid flags");
-+
-+	return ret;
-+}
-+
- int main(void)
- {
- 	int ret;
- 
- 	ksft_print_header();
- 
-+	errno = 0;
- 	ret = syscall(__NR_cachestat, -1, NULL, NULL, 0);
- 	if (ret == -1 && errno == ENOSYS)
- 		ksft_exit_skip("cachestat syscall not available\n");
--
-+	ret = 0;
- 	ksft_set_plan(NR_TESTS);
- 
--	if (ret == -1 && errno == EBADF) {
--		ksft_test_result_pass("bad file descriptor recognized\n");
--		ret = 0;
-+	if (test_cachestat_faults()) {
-+		ksft_test_result_pass("cachestat syscall fault tests passed\n");
- 	} else {
--		ksft_test_result_fail("bad file descriptor ignored\n");
-+		ksft_test_result_fail("cachestat syscall fault tests failed\n");
- 		ret = 1;
- 	}
- 
+Preallocate the page outside the lock (patch 2), the way do_anonymous_page()
+does, so the allocation can sleep and go through reclaim and the OOM path.
+This needs a sleepable allocator (patch 1), because can_alloc_pages() is a
+conservative guess for BPF program context and always forces the non-blocking
+allocator under PREEMPT_RT. patch 3&4 adds a selftest that faults an arena in
+under a memory.max limit: without the fix the child gets SIGSEGV on a valid
+address, with it the child is killed by the memcg OOM killer.
+
+
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
+
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
+
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
+
+Jiayuan Chen (4):
+  bpf: Add a sleepable page allocator for map memory
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
+
+ include/linux/bpf.h                           |   1 +
+ kernel/bpf/arena.c                            |  92 ++++++++---
+ kernel/bpf/syscall.c                          |  21 ++-
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+ 7 files changed, 340 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+
 -- 
 2.43.0
 
