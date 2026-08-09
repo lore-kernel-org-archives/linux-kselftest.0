@@ -1,124 +1,113 @@
-Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-182.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D91368C1F
-	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 12:31:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786278667; cv=pass; b=qoVzWD7A2rLPVUeD8qQMO05uhOk/Zhua9reXnswxAzDwk5vasEHWOmB0K+diMohf9pMWF5wLO2XBcvs6uHz7sTyF205qHDFlwqwb9mTxlf/7HkG35FnU09wli7zUbOmlnQNhCn5m9e3qmen1zh8PPNZHjtWhegzgndhCJv6OG2M=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786278667; c=relaxed/simple;
-	bh=HT3vo3/zV1p+l+nVtI0/0qwtWPomW6WUQNX2aSf2RZc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tUzpPS8iV7P2ZRH+Z4OPXBAJ/AnSA8dT0PDbagQY+lUOEEr1wzumeUEMEfDjIRLU88MJsVP/iRXbaFMmNLrom+ian74BokWkTfrk2nv8jOwxA0tXjaNDNhYB1y7dVBJ84YkYXHsExrduAzUaUw1VAxyg6GC33Ke7WUhiU5ugO54=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jjqqEwjy; arc=pass smtp.client-ip=209.85.208.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49A023911BD
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 15:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786287717; cv=none; b=LPDRQIVj+DRbDfshjVRWnUF3yy1okEzdzFvqReze6MMX/ahS1bwfaM8cVsa92TvaNtS9fLwnNosG15IyHQIHVH/qMBHtEhaOt7ADmeMxNSX9+pWxi6AS+LLDlmKaIw2TqnvlhY38lUUULTYepTEk4lZJjON7dkkjy3yTbA0LqEA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786287717; c=relaxed/simple;
+	bh=3oNs8QSrFoe5bUDHUnLg5XCzSZ0JCxLnph4plr9mrKM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=r4TS3oKnckOS94isGoc/VOYWQ1iHKR9ipsFeCvxXffAgvh8mtJ0oAJOg1V9TKIYytPMoXEXslYbHw8gqhHLWYMeb2ywYPU/+6wGeX32EVmqLX1Aj+n1S2TmnyToqDAP7lIv1YnoAQO7qQpTnco9phOqtdAGVVJwYsi4ewWOPHPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SZPA9Knj; arc=none smtp.client-ip=37.59.57.117
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jjqqEwjy"
-Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-39c95395230so7881821fa.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 05:31:05 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786278664; cv=none;
-        d=google.com; s=arc-20260327;
-        b=B3MCAEOMvJdVk4u7N55PayW24CI+VFivvsfxC+yxZMu19VMcVuYJTKGlwIXOSEyLa0
-         Wo00boWO+zIbEk/gwC2wJLvjoR8ce4sSTnNYeaxTGLSLNDyZ7iUtPbvEQAJI+0A1bRWU
-         36+/x+MpElqnmh1u54JYDptzBsmjFFy+wyXN96bEhGuzXcmd2BTnu+dgCth2XDnse6aF
-         LW2Ts1G85we2oM44v0NkZLi8Y80d+/z9EO9V1mdW6XLgVSN+T5aR8f/mvALoAJqBL5No
-         eqT+hPp13+rD7Xmfv6ehSAStmfT00s+2+95EgzdtjfMLCmef15YhrimkS8uupk9vK2wU
-         /MAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=HT3vo3/zV1p+l+nVtI0/0qwtWPomW6WUQNX2aSf2RZc=;
-        fh=xvE7DYEGgRrTpwGqeWbCuDzDu90BsMDfpJoGgubDmqs=;
-        b=Zqe3lOLwBMb4WusHKrlxuScWKbrVikcnMBgEiuhjj2ExcE+dmbQyOXcbkTRYDCn/O/
-         DAEKxLpSyHXwk1LoU8DtiCa+u6H0jQgzazazquBMQP+JjWoqKXWVHjQtycGVxHwasSwy
-         fDmjpveEfP+9Ur8GfEBkvlQyoHdm+bBK5AxHVNddCsgVa9og13U5Db4FB+KghSTR6I+Y
-         4E7XL+5s8HREPatU5b8SUOY31LI74GNWQiaRAXAZB0H4u7F0WZwwdPQ/HizLVp3haKzH
-         qb829V4u9E+OD/zrHjfrW8GRwd8AKyy0IU7Hn9lfnbEhcvCBRonNiRccTuPmzSG35STa
-         Jr9w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786278664; x=1786883464; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HT3vo3/zV1p+l+nVtI0/0qwtWPomW6WUQNX2aSf2RZc=;
-        b=jjqqEwjyLccib5qsPXZbXg/FV1EswzQM96rSJpdtVoEEaLGib0pCgTMwH6nbhB1jCv
-         9JqossYXSv4bD2vJ5aJq3oGAQ4m+EMGWxbyGx8z1Ei6m6v/FAeixhZZzry+2T+KxWf6r
-         KCXFFEFpZD6yMR6aVG/E6GWpmJ1J9K2nkhUkwjH894Trlz4XMbZKV6WmfMCeikGCmRmy
-         O+0dp6iJqEs43e6WoFrT5cSCrOtwEbIj3KrN4Ufe20nbGXyjG5V9Mh9mRGVco/G/y373
-         mS04VhQadzMsrv4/VA/QEqDML3Q701/iHl3sqgL83WjKG64KUtHb4WOunTUGUfMmg9VT
-         X+tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786278664; x=1786883464;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=HT3vo3/zV1p+l+nVtI0/0qwtWPomW6WUQNX2aSf2RZc=;
-        b=aFcC8EQ/jpwsuqX+eE3wkjLU2e3pJkr4vtHQfTRw5MWY4IIm3fwbrd0eknNz36ZCYg
-         OGNmsGO1w6KEDN/qg5r919Vih/xiXfIULEKv2aIXizHr+4WfU53708f9mwai7oaBW4LP
-         QLYfVmkMrOsnEJKEMRJbTo99ocawW/ZJCK0+XnW96Vt97LwXACrk1+AvGoG892v57n0/
-         kp2gJk9I04Is/UF0h5D/pfbnhv1VB0BrbJDvNl6JRT/kUNVASQiANxJ78Ed2NvMegiHp
-         ySXl4vw2zcOESHmL5SVW22LilIwF1v555oyqMbN3GmnTcTBQXbXBMWdflJZjes6K5fwn
-         R4Wg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq+/dObZZYCOagB52U97Kv5LU61SkAUmIKkTkZCzJ5VnfHWhVd6UmJrDUKzN+bC2q1XcNzO/8cQrPEjO86iLWU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUTziuoIqCn3PKCiwuRx8cojqwCZp1pkfnCTpaJ3OICVVys1lZ
-	2UveRbJ6AikbQT2xZF11gqpbaPacCBGi7EEd5d13OvFQ646Tptyq24d0YZNo83U6D6MPDfpdbHS
-	vkYkUQ3DRxrhSqAHXfBN3YV8WYNiuIyc=
-X-Gm-Gg: AR+sD12VGoV+AfF2FcKy2x1OISM2vUMvzKXI5zF2lRyaorf8WL80N69HXFLG+Gk49hf
-	m70uO0ym7kHPJmL5KYxEPvr63oBXVbckJe4BIRIi5L9mgu7/Zwzc3U3eSQ72l+FG4e0SwVadoDk
-	cBjOS+st4h36npAXRYRJXzI1c7XOnY3KVg+XAKxgCMyuDE+zjLQtoKS2x7ltdwUnARPkdVkzXoa
-	e5rs40DTUBiucZfyYh2g5HFRellMp268eaGYt48fdW8Z2k3FnxEffA0jh/7M/hx/pRdemxOj44u
-	8PqyPOtC56o/SL3C1f/7Tr3axi5afuguWk9j/4xaEfw1rFNLDh6DMqg+udW8mkLUNojX2FvkJih
-	WT/HksDLCD5AIaD9E8DzjjlPiRc2sytVvBOsWugj9jF9V
-X-Received: by 2002:a05:651c:50b:b0:39c:628a:5c9e with SMTP id
- 38308e7fff4ca-39fdf4c7159mr16729681fa.19.1786278663583; Sun, 09 Aug 2026
- 05:31:03 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SZPA9Knj"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786287711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=KP+Yi6mHI4T84FcQS0INnfN/N5ZjzIUJJSjrPWRGYuE=;
+	b=SZPA9KnjuC0GirlVYdSwgj8GrkTkmTpk3VBdRooUPPjP1FBTPFiMTxjJYOk9PxI8BgedlP
+	kVrH4ZF1A/puOLuaTX04FJLlNQSgKIQfKWUepGh15GSLs3XginZx9qyxXErc6qMvTmbFX5
+	Q6xttTrQN9dPtOeD9V9/+1dn97kp7r0=
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Avinash Duduskar <avinash.duduskar@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Jordan Rife <jordan@jrife.io>,
+	Rong Tao <rongtao@cestc.cn>,
+	Eyal Birger <eyal.birger@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>,
+	Jingguo Tan <tanjingguo@huawei.com>,
+	Lin Ma <malin89@huawei.com>,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for bpf progs
+Date: Sun,  9 Aug 2026 23:00:58 +0800
+Message-ID: <20260809150111.45000-1-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260808005642.26901-1-sigefriedhyy@gmail.com>
- <20260808005642.26901-2-sigefriedhyy@gmail.com> <20260809085043.GA2339479@shredder>
-In-Reply-To: <20260809085043.GA2339479@shredder>
-From: Yuyang Huang <sigefriedhyy@gmail.com>
-Date: Sun, 9 Aug 2026 21:30:50 +0900
-X-Gm-Features: AUfX_mwo6B4semUt36dKvyNKR5MqJ_kwj5w307xK6PG6zmt18TOQVUDOZzOYmao
-Message-ID: <CA+7S2vJ0rFcXgGxVUw6X4k8BdAbLWwk2W9APQW5ZYXVMHa0J3w@mail.gmail.com>
-Subject: Re: [PATCH net-next v6 01/10] ipv6: add ip6_del_rt_reason()
-To: Ido Schimmel <idosch@nvidia.com>
-Cc: "David S. Miller" <davem@davemloft.net>, Chris J Arges <carges@cloudflare.com>, 
-	Daniel Zahka <daniel.zahka@gmail.com>, David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>, 
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>, Donald Hunter <donald.hunter@gmail.com>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>, 
-	Stanislav Fomichev <sdf@fomichev.me>, Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-> Nitpick. It's accurate for IPv6 which is the only address family that
-> currently emits the new attribute. It's also accurate for IPv4. Other
-> address families (MPLS / PHONET / IPMR) can start making use of
-> strict_start_type in their policies, but it doesn't belong in this
-> series.
->
-> Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Similar to the tracing_multi link support for kernel functions [1], add
+support for bpf progs.
 
-Thanks.
+When attaching to bpf progs, it must attaches to the target by text poke
+way.
 
-I also went through the two Sashiko runs on this series:
+[1] https://lore.kernel.org/bpf/20260606123955.345967-1-jolsa@kernel.org/
 
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260808005642.26901-1-sigefriedhyy%40gmail.com
-https://sashiko.dev/#/patchset/20260808005642.26901-1-sigefriedhyy%40gmail.com
+Leon Hwang (13):
+  bpf: Initialize ftrace_managed in bpf_trampoline_get
+  bpf: Factor out update_fentry_multi helper
+  bpf: Drop unnecessary ftrace_location() in update_fentry_multi()
+  bpf: Add tracing_multi link support for bpf progs
+  libbpf: Add tracing_multi link support for bpf progs
+  bpf: Add tracing_multi link fdinfo support for bpf progs
+  bpf: Add tracing_multi link info support for bpf progs
+  selftests/bpf: Add tracing_multi bpf prog attach test
+  selftests/bpf: Add tracing_multi bpf prog attach failure tests
+  selftests/bpf: Add tracing_multi bpf prog cookie test
+  selftests/bpf: Add tracing_multi bpf prog rollback test
+  selftests/bpf: Add tracing_multi bpf prog link info test
+  selftests/bpf: Test tailcall with fentry.multi
 
-Most of the comments describe the intermediate state of a split
-series and are answered by later patches. The remaining one, the bare
-OSError caught around the RA sent in the selftest, does not seem worth
-a respin on its own; I will fix it if the series needs one more revision.
+ include/linux/bpf.h                           |   3 +
+ include/uapi/linux/bpf.h                      |   6 +-
+ kernel/bpf/trampoline.c                       |  87 +++---
+ kernel/bpf/verifier.c                         |  22 +-
+ kernel/trace/bpf_trace.c                      | 212 ++++++++++++---
+ tools/bpf/bpftool/link.c                      |  59 +++-
+ tools/include/uapi/linux/bpf.h                |   6 +-
+ tools/lib/bpf/bpf.c                           |   1 +
+ tools/lib/bpf/bpf.h                           |   2 +
+ tools/lib/bpf/libbpf.c                        |  39 ++-
+ tools/lib/bpf/libbpf.h                        |   4 +-
+ tools/lib/bpf/libbpf_internal.h               |   1 +
+ .../selftests/bpf/prog_tests/fill_link_info.c | 170 ++++++++++--
+ .../selftests/bpf/prog_tests/tailcalls.c      |  62 +++++
+ .../selftests/bpf/prog_tests/tracing_multi.c  | 254 ++++++++++++++++++
+ .../selftests/bpf/progs/tracing_multi_bpf.c   |  61 +++++
+ 16 files changed, 869 insertions(+), 120 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
 
-Thanks,
-Yuyang
+--
+2.55.0
