@@ -1,155 +1,276 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11010051.outbound.protection.outlook.com [52.101.201.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2FEA78F2B;
-	Sun,  9 Aug 2026 08:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786265458; cv=fail; b=tUuJJcXVvwVIbqhu7oDMX2kDfzwb5/6KfKjx9zGqZWrbjhfOvdykip0CTZLVIvCUANKDrLDvewOLFqm02qQR9y71FThLzMGQr42B3Q5Ddpp/BfHMzOl/gFSg05I7d4SPAw7rrwWn7Kd1tRtgXGI73fvMJ5P98/9qDIgUyG+dy64=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786265458; c=relaxed/simple;
-	bh=y8XzuABbxFoxyEn1yTROP08c57VJuuLMBJL0avh3Uk8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=K59mpYCN+FK+Au646vVofRgEVLnjZXfg1jVUiYTmLxngR3diQsGnVe0H1Fmwly9lrlbf/NwaaBxc9doVWbZ6r2GjYQYcVUwt1M3WaIaxNWjNpPNLD2SqsijlDlPw0iN1aSssY2P4YLxgrxcSr/EFts+bH6EYU3/pWJalKC93sjU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=fail (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=I+JzYRhv reason="signature verification failed"; arc=fail smtp.client-ip=52.101.201.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C5A73CCA12
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 12:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786277701; cv=none; b=vDnSZvVnVYb4eFgzBgRpgDNkLx/mMlAtGS3J0KFcUqYsFuWfIxnHLCR9DpBGrrKBJFriLD9EJfhogaxtkiw2Kp/izhiRqQy+Gza2NxHUrtQcxv3iG1+2tIAGH07/MqXHM1QFww4Nz1zeozsDgDbtInSF2qi8PxMfMokqk7g20Fk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786277701; c=relaxed/simple;
+	bh=klnf9MkQOZEuNAusvbaqGOTptHp+TZ19A5wrN75Ehm4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fy3fJong2PKnk7gLPR+XEnUw5dimj4uUcnOTAkhkDlUFZXAFgVOJhTgkh1V8J6c/kUbtum1BPMq2WAa3XHOo1xY6ZTyQnvB82bca/2kl767P/BzeitVlxeZmM5I6psUNxpqV7/lphbWo/dhrTO4todTy249X28qoEjDEmZf8ol0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RbMXsqAo; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="I+JzYRhv"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=x2SQBGXdrQzVo8aeQDTIjruRABDZ7FsOSB0t511QOoubXgikkHV73tJComMcX48LwbYlQ3kCxGi3Nl5HDWuJLRBNxUq4QsJuW9rigYGokqV4sSjZamEu5RWOZPnCn2dBGzdHYYtXY44PV9T6z6eSfSwGiVFPce7QjqKhw83oYx7KojuodFM6TZp4jhX68PIsMLmI+F+nznYbkVA+zZ9QCb0MKdS9SAidTwa3qCDUaZT6UbwbyeKMfc1YqQgIf4tmf1PBUOyfQL5nVpY8NWuvMbcy7APFhC5uE+tHAJZuKo3+jf5dJ7ov3Wl+IzU6zMj+XlCuRKyQNz3GwP/MfpG2yw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JdWTCATNLrv7khP6pHIQ8PJimc7cIYEJxpSeRwfCzoY=;
- b=DjMV5NoAE/AMMa7zX9roffgO6r0YRU6XNgbKXf68qiY+d33yb2dRY3zIEsTn8jigX3nc2iLu5k5Oe/Y+bj+1p9w8m5dOMNnXZCInhuI+l+IOGeQvouJve0QwG2J1MLaXeMXKN2SnGrE3DNHM3rRQ3d5dhQxNFEdZku25smSS9I0A22K98IzlVuxFyu40wP+EYF9DMwyW+F0JO3/f4+Bc5xCAp4l6NW12bI/WrPDi+YiO8gvVS8aBIKLOUTCSS5XPLE84xuJA9cYtIbn6q9R1OzmU1Namkvuos0jEquORZOCSE/CM4UDYXZCrYV1DWl0Fbqc691cqN06rR+/XY6g+lw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JdWTCATNLrv7khP6pHIQ8PJimc7cIYEJxpSeRwfCzoY=;
- b=I+JzYRhvH0c3eIj1AoaMbAbMRoNICUmdOT5ld4egWCfRM3pZAHvJw6KNoADzhJurfpgWFdnAD6coWkg9h/60rwbv1TzzXtfUPjemdipVFE21YxeG03e4nhI8H3xE/ZzPKA0Qe7NqduTFRo4CMnGRGojD+6TkenLGEZtrTnBWMw49t3Ezr5vvHzRMjlDZEkYgJLA6NG6IRUEIftyTdIOk0L6zUQP8C47dajtXrdVOc1zJkEqM/3lYDDb8YjoctE8El33Byy+7PIsPKhz0ntrOxqmOnez1fvU5rYwP09VgNMBHHbycUImYsec2+ihSCa/lleSWgJX/FePTEI6nBVQjcA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com (2603:10b6:806:306::12)
- by IA0PR12MB7773.namprd12.prod.outlook.com (2603:10b6:208:431::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.23; Sun, 9 Aug
- 2026 08:50:52 +0000
-Received: from SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2]) by SA3PR12MB7901.namprd12.prod.outlook.com
- ([fe80::6f7f:5844:f0f7:acc2%5]) with mapi id 15.21.0292.024; Sun, 9 Aug 2026
- 08:50:52 +0000
-Date: Sun, 9 Aug 2026 11:50:43 +0300
-From: Ido Schimmel <idosch@nvidia.com>
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Chris J Arges <carges@cloudflare.com>,
-	Daniel Zahka <daniel.zahka@gmail.com>,
-	David Ahern <dsahern@kernel.org>, David Wei <dw@davidwei.uk>,
-	Dimitri Daskalakis <dimitri.daskalakis1@gmail.com>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, Simon Horman <horms@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Willem de Bruijn <willemb@google.com>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v6 01/10] ipv6: add ip6_del_rt_reason()
-Message-ID: <20260809085043.GA2339479@shredder>
-References: <20260808005642.26901-1-sigefriedhyy@gmail.com>
- <20260808005642.26901-2-sigefriedhyy@gmail.com>
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260808005642.26901-2-sigefriedhyy@gmail.com>
-X-ClientProxiedBy: FR4P281CA0102.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:cb::9) To SA3PR12MB7901.namprd12.prod.outlook.com
- (2603:10b6:806:306::12)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RbMXsqAo"
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-4731f5ffa74so63843f8f.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 05:14:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786277697; x=1786882497; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=8B1k8I62v4BSaNdCWABrCbb5cCPW1YuTo+r9jTUQOp0=;
+        b=RbMXsqAossq944bNBtQeSkiVTUHdjttNoUWz/uqjeYsTFIHy1ED09jRdt6oOlvfQV9
+         1feBV54ZbmEem9YIQuMeO1+YRNFfm8AKh4ZHlai0nKxaSLoVusuQdaPfSwhnkIzXjD7q
+         MRdd8mEbH/8xa5+xtnkvvJK6OKSPhacDjaKGOOb/BcX6gVaUi9bHCKxhKRD99Cm4jZYE
+         e9vIB+HHgiM2g4oCBFdZMARYp1w00a8Kpx/siBXy+1KuvHBWAN5MTAzYxa86jkh7ugz3
+         0rcj/dbKYuzTL0r8c+LvSLP+6rgtSo7jOPtWTOkhaFMbWSiR13etWh3tny4OMJAXAyrv
+         p+8g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786277697; x=1786882497;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=8B1k8I62v4BSaNdCWABrCbb5cCPW1YuTo+r9jTUQOp0=;
+        b=et2fYJrWJMBPvMiilm0+ghRbq9qvQkEy0jTXvehsJi3U/C6lf7EgbUcbgTgt40yW1z
+         ACBiRTI8evOL7NjkSdFLGxhk+mrUKolz6/A1ZsWLjzrrsqjA0pl/HEFX7RDuLYmy3bKz
+         GdyWiTs/fMbNhKjyOrrb/CmCK+54hPPVxfhO9S+f6DrZQJulQX9iw9bkTQ2dWYLXAoo+
+         gAog8aK1zNvEZOUUvBgvhAHkQlSlMnXc7cgDKhuyFOEu6sraLhgRzBsN+5u92yXvpJ2H
+         uL2Fh725IUiKn6ZaU26foobVMDtkfyzT/7gUahSEhy6JqhdwCq3hq0i1AlT52cA5yxY1
+         yeTg==
+X-Forwarded-Encrypted: i=1; AHgh+RojG9me37CWiQNs/JbS9HAUCkdC5A2XIBZxGqSyiYDjfZLH/xWOkk/g735u4pav33c7BlLBHAG1HtDrjcJVJis=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwMCZc/wJNsMr+kRn/VNCm3TEdqqkHEvFYKWjJpuTYeLD8Tx5Tu
+	hKf248R0sDK1ikLMrXbjeuVKtjXQ0lJ+XtPmeC/9SLQpOTwj5I2g8QCq
+X-Gm-Gg: AR+sD117MkM2yBQ+pY63+7VhGOxVCgNjGnWb4w5E/0bSUWzoBOAAXd6G7+AYHlieS2i
+	T4B8x/UX9ORUbF/3lTdUNzw/CypnWnucrbc+/NYy9v4tA3jZ+oecIJbnEjMnFIK1znCM/ttj9yr
+	Bkam9aLoCvYR/Z38jUrmO9X/6vRcgE0KKH5HyHd4LDrm4/jvnmLShs9IZsyyGDDNQ8adEtkLlOd
+	vqMRgEvgiJ4G3krk8adyKo7SkZ6Qualc7zj4/uLBFDEpQjP1Icqmu9rdFJZur5Oq0RzeeeFB4aJ
+	cudRAhD0wFE6GqsRDvAn94VQT6VMEiKWRPxpOr30dvGhW7H11x3ZoVr+DE0XqR8Ch3+hgpJbBgc
+	V8JSgxG9xQ9pvFseKHkVTb/XGTM5Plhjdt7+yIEpGXwRFE1Udp8uZx9HngjCm3yT5L4/l2/wMI5
+	NYkvDHIAJdKmiQOhOzYZPAdz7d/0f1TmpTS/iUyC7PbyVTn0cOMf21HC+ryFnaajPQfLCNpbuTz
+	bFNpYv3kjWHH0jt+kU21Wipy5ecThbItAAxHmKxYm2eMCzKFAYipC3qDovi4+NMrTgSKKoah0QT
+	uiHCLFAdcUm1XrzPO5os
+X-Received: by 2002:a05:600c:c8c:b0:493:bea7:6b67 with SMTP id 5b1f17b1804b1-4994e7c7327mr236237495e9.3.1786277696982;
+        Sun, 09 Aug 2026 05:14:56 -0700 (PDT)
+Received: from L-022584.energy.envision.com (dynamic-077-012-133-135.77.12.pool.telefonica.de. [77.12.133.135])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-480021e7b3fsm25158434f8f.20.2026.08.09.05.14.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 09 Aug 2026 05:14:56 -0700 (PDT)
+From: Xin Xie <xiexinet@gmail.com>
+To: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	andrew+netdev@lunn.ch,
+	shuah@kernel.org,
+	kees@kernel.org,
+	petr.wozniak@gmail.com,
+	qingfang.deng@linux.dev,
+	fmaurer@redhat.com,
+	luka.gejak@linux.dev,
+	bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com,
+	skhawaja@google.com,
+	liuhangbin@gmail.com,
+	stable@vger.kernel.org,
+	sdf.kernel@gmail.com,
+	Xin Xie <xiexinet@gmail.com>
+Subject: [PATCH net v6 0/4] net: hsr: fix GRO/GSO super-packet handling
+Date: Sun,  9 Aug 2026 14:14:50 +0200
+Message-ID: <20260809121455.1745-1-xiexinet@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SA3PR12MB7901:EE_|IA0PR12MB7773:EE_
-X-MS-Office365-Filtering-Correlation-Id: 37e8a41e-7e50-4886-d2c9-08def5f3512f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|376014|7416014|23010399003|18002099003|22082099003|10067099003|56012099006|11063799006|4143699003|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	I6tG9dkwBFzN6Khh6aa9YMW5Ltl1Vd1MGPsS2oS/IKPnuQFSFdeCOVfgCsEdTV3pX3TP3mMSGy91suHntOQSKpI1kF2+8TNa32ezUhNmthHjFWQ6fpzhcey/e9jWL29/cBCIps3W/G9LFHkBgBIgYnzZzYbVpnveBM8MNuh798q4qyNALDpXx6X3uPLRrK8tbqfUkggUp4Tk+I5fznIxeQds2bkn0oMH3FivAKCf9x62q4zDc0RqgHRTUWEaENitw3u+3s93MRQYly4IkHatfTm/cSu7pAXVV9VepD0b6qYD6PqGvi0tzHUFjezYb62BFtms2Hjk1GI5hVv0MBHXR2gkGY+DxuPVKz27GdV+1YUeE+6QDhbrIbGiei7M8UsRUmK3az5/qhc/PrNOyKpCaw4EEP9Z3hojiVhDB7x48zb6IE2uzGdn8gn7V7c+Hlv+VEYq0D0xlBSunvN4Wtx1frSpUSykgzgOtHyYWGBAg/gNCyfKda1Fj2rDqUNEVndO91/Ap9NKhMu+xk8UQAv5+V/41jbwIndBOvLUHBUS2UwlfTMSfFTYkWcyMuiBiB/LodTvZEiw86TAfMHfj2q7vWAzRxWMkFPYzQQv0uvPZ2sAaLoa+eUFtBfxBZ7PMflb7lFmbEKrSjgSAhUTJwAJZ/LgtHEtRMhu7jHI9PxvLco=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA3PR12MB7901.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(7416014)(23010399003)(18002099003)(22082099003)(10067099003)(56012099006)(11063799006)(4143699003)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?iso-8859-1?Q?eqsciufp6fjZsr/gH7rv77fNkxdptNy3UIOx2byKiqyEUgcpw7qW0AXMKY?=
- =?iso-8859-1?Q?B5mapson9qR8YpShQTu68F0cWwZP7WGSHBTykMaPMF9pue9u0Gc9LrE8Jx?=
- =?iso-8859-1?Q?evJGfsfNXEm3Y8Enj1RoZYfwkAIuyxvb6YpXi4s0fMk7YtIYoFI8ZvJ4VJ?=
- =?iso-8859-1?Q?SU0QcQXYzTo9qkuP+dcNeiU1DYlB8gKpWZ/LnceICiT2oWvZOqF/KZlI7a?=
- =?iso-8859-1?Q?/J3ongAGKMTVvDVMRPDCpe4BWztF9bZD93qID+Mur/3fN7HWoZMQ+q3A6c?=
- =?iso-8859-1?Q?8ZH48BmkohM+S1qmgfgyHQ2epI4d72LAXLM8yon3T/cfQY2wWEYJZBaHrp?=
- =?iso-8859-1?Q?Y/SzZvJtcnjx2BAUTS6AnmHsD4vUVRXGxSQbC4LEq4ScIBy8DWpdaPHLkn?=
- =?iso-8859-1?Q?KO+byOLLhdgZes0E0FRJ6cjaJGK72Tc6rqGFyf1+os5/4fFeIVwq7Cv+YK?=
- =?iso-8859-1?Q?6tkQ9tKr4CaQokqLjPDAKk06GnYc0RVqneL0xynarjRRRb8lIt92Pq0xgT?=
- =?iso-8859-1?Q?MkoLMv2wMTfynW0hloS5B2lplDCF2glQhRjN5FxFAfj4DjphmkySas0V1C?=
- =?iso-8859-1?Q?TityyTwZ9Y+hdiSG0wVPeURaJeJFIaQ6i5KXLItMrpfJ+bQz4RRiCw78K9?=
- =?iso-8859-1?Q?OAVrzrT0IAoiBSk9FIsrABmpC95rCsAmhvdBlhRpP5/oWljAJ7SnL8KPVk?=
- =?iso-8859-1?Q?jtwZkJ7D9zjeml4OCmQdOsC2DgcqQYu76FnbPcCqU+c2AufordKNJLVl6/?=
- =?iso-8859-1?Q?s+tGfIFEhccInGqAE4cUFRUS983t976A9N1lYVPZ8C7JBNHRqaENjcTONY?=
- =?iso-8859-1?Q?UxK+YvA66ZDnF1+AdyiL0M8Hhg7KgBCB58XYQXEfarrb+EkgtT+sdX48cG?=
- =?iso-8859-1?Q?3qjiCpGUA9xiJGJVT/1IWOEGuK2NIc3UWsawbMxCHw+u1tZpF2Aw9qhf4n?=
- =?iso-8859-1?Q?FrG6yCZHtW+4wnfn9i40yHWh7wU4zkpoGmxCX1r0jiuXtoRqYlbVHIihGZ?=
- =?iso-8859-1?Q?iVdEAZfqH6wrFTNIUioA9PIeaURqeFv9ITjNcXQJauzKjYcICdMru/03dM?=
- =?iso-8859-1?Q?xnHDZbIl4EC4qCvM3Q0hQmAu3LCBQM3rHDxozOt8yhMUUpyE94IjrxgoBk?=
- =?iso-8859-1?Q?FwF6IS+agmy500xk+7Y0AtIYHzG/RwIhu4pEXL+vW7yMcU987DOwFCuVNT?=
- =?iso-8859-1?Q?GCI6NJa1dhFhRpZG7HUtvbXe0WOr11MjNHOjR/JHdz3ZqPz2G/wPN836Bp?=
- =?iso-8859-1?Q?+ueTGkDuC01IgwtRJu4ZrJHj4wiQm0QLEu23w/vbkrrtEhQrvv3VKjIkBL?=
- =?iso-8859-1?Q?6Jq9sy6mH2rZKo1aK39G0tPu/cKLId/EvCL66DxoHnZZAB4EAIFtMuT9EH?=
- =?iso-8859-1?Q?nMs8bJjFQms2Il9GpNRi6XKmTj4xLni9dLZkCkeLLWfhLEnFRBjHRDFGoa?=
- =?iso-8859-1?Q?dyChoggfDx9fHppGr4yRM5+uCYaGmxeWYO4G3lTwuczS130kXvLgNt2hgO?=
- =?iso-8859-1?Q?nfaWZMadaal5Wx+8DAIJ3QO1KWdKVpi9lzOwC/J1lptDGL1HStGqGGBEWV?=
- =?iso-8859-1?Q?QCrftrc0qmwZvLiSRf+SN+y6HahvHqnAHvOf9y2Vhm30KC2Hrn/OzHdf7a?=
- =?iso-8859-1?Q?bsCNiXAFQZxD8s81bPf7p3ZeAIEb6+/mc2dmg43q4HQ/4r+3insalIazQD?=
- =?iso-8859-1?Q?VijASnGh3f6pIgcFbbdTTK/ti0U63iXXK55MIzIrNGGz1tAkPHeAbi84Jb?=
- =?iso-8859-1?Q?9ZKR+F0J7Jex9gYJMKw0TFk4lQbNft9S4KXth0O3UOQ33J?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 37e8a41e-7e50-4886-d2c9-08def5f3512f
-X-MS-Exchange-CrossTenant-AuthSource: SA3PR12MB7901.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Aug 2026 08:50:52.3370
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MTGNsGUJVfJUt6hrmthX7piJkqVWIIfBFL1d4Tp2Ezf3DOUzE3sBjH2APTGPN5PzaT2wKhvj5xIlWUkHGHHQBA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7773
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 08, 2026 at 09:56:33AM +0900, Yuyang Huang wrote:
-> Add RTA_DEL_REASON and enum rt_del_reason to the rtnetlink uAPI, and
-> add ip6_del_rt_reason(), which takes the reason a route is being
-> deleted. It has no skip_notify argument: a caller that records a
-> deletion reason wants the notification that carries it.
-> 
-> The reason is unused for now. Subsequent patches propagate it to the
-> deletion path and report it on RTM_DELROUTE.
-> 
-> Signed-off-by: Yuyang Huang <sigefriedhyy@gmail.com>
+HSR/PRP requires per-wire-frame tags/RCTs and sequence numbers, and
+duplicate discard is per frame. RX GRO and TX GSO can present
+multiple frames as one skb and violate that assumption: a super-skb
+is either rejected by a constrained lower device, or forwarded
+without valid per-frame trailers and sequence numbers.
 
-"
-Discovered by: opus-5, old-prompts · Missed by: sashiko-gemini
-Is the statement "the kernel rejects it in requests" accurate for the whole
-shared RTA_* namespace?
-"
+Patch 1 adds netif_disable_gro()/dev_disable_gro() and disables
+GRO and GRO_HW on lower devices at HSR/PRP enslavement time,
+mirroring the existing LRO treatment. Disabling is explicitly
+best-effort: a later privileged override can re-enable GRO, and
+devices with fixed-on GRO_HW (for example a virtio-net device
+negotiating guest TSO without VIRTIO_NET_F_CTRL_GUEST_OFFLOADS)
+cannot be forced off, so enslavement succeeds whether or not the
+feature could be cleared.
 
-Nitpick. It's accurate for IPv6 which is the only address family that
-currently emits the new attribute. It's also accurate for IPv4. Other
-address families (MPLS / PHONET / IPMR) can start making use of
-strict_start_type in their policies, but it doesn't belong in this
-series.
+Patch 2 shrinks hsr->seqnr_lock from whole hsr_forward_skb() calls
+to the sequence counter updates, so the segmentation work of
+patch 3 never runs under the global sequence lock. The outer lock
+also incidentally serialized the master/interlink tx statistics
+updates in hsr_forward_skb(); those are now updated without the
+outer lock, and consistent per-cpu/per-queue statistics for all HSR
+paths (including hsr_deliver_master() and multicast) are handled in
+a separate series.
 
-Reviewed-by: Ido Schimmel <idosch@nvidia.com>
+Patch 3 unfolds GSO super-packets at the forward entry with the
+top-level GSO dispatch (__skb_gso_segment()), so each wire frame
+gets its own tag/RCT and sequence number. Admission is decided by a
+content-based classifier, not by the ingress port: plain-Ethernet
+aggregates are segmented on every ingress role (master, interlink,
+and LAN slaves), while aggregates whose effective protocol is
+ETH_P_HSR or ETH_P_PRP carry per-frame trailers that software
+segmentation cannot reconstruct and are dropped. Aggregates with
+unreadable net_iov (device-memory) fragments are also dropped: their
+payload is not host-readable, and software segmentation would produce
+segments with uninitialized payload that are silently dropped at
+transmit or expose uninitialized data where netmem transmit is
+enabled. The classifier unwraps accelerated VLAN and one in-band
+VLAN level, and treats NETIF_F_HW_HSR_TAG_RM lowers as plain by
+construction. The trailer-free premise of the plain-aggregate path is
+proven for in-tree software GRO: its IPv4 and IPv6 length checks
+reject frames with trailing bytes beyond the L3 length, so an
+RCT-bearing PRP frame is not merged. Device-specific fixed-on GRO_HW
+output is not claimed to be completely covered. Locally destined
+segments are delivered to the host; the rest are forwarded per frame.
+
+Patch 4 adds a kselftest covering the series, including a LAN-slave
+plain-GSO regression: a plain SAN aggregate entering a PRP LAN slave
+must be segmented, with local delivery and per-frame arrival proven
+by independent counter oracles.
+
+Patch 1 is a safe, partial, best-effort mitigation and is
+independently stable-selectable; patch 3, named by subject in its
+message, is the fallback for plain, trailer-free GSO aggregates.
+Patch 3 depends on patch 2, and patches 2 and 3 are selected for
+stable only where the sparse-bitmap duplicate discard is present,
+which accepts out-of-order arrival. The stable tag names that
+prerequisite, which exists only in 7.0 and newer.
+Older branches need adapted backports.
+
+Validation:
+* the v6 kernel builds cleanly;
+* LAN-slave plain-GSO regression on the v6 kernel: aggregates arrive
+  at the PRP master and are delivered per-frame (SAN TX avg ~38 KB
+  per frame; prp0 RX avg ~1476 B per frame);
+* interlink super-packet test passes (DUT LAN legs avg ~1496 B per
+  frame with the SAN emitting ~38 KB super-packets);
+* fixed-on GRO_HW: unchanged from v5 (patch 1 control flow
+  untouched); with a virtio guest negotiating TSO without
+  VIRTIO_NET_F_CTRL_GUEST_OFFLOADS, HSR setup succeeds without the
+  v4-era "failed to disable GRO!" splat (v5 evidence reused);
+* the bounded server-readiness/reap waits pass on the v6 kernel;
+* hsr_ping, hsr_redbox, link_faults and prp_ping all pass;
+* checkpatch: 0 errors; shellcheck unchanged from v5 (0 errors);
+* the series applies cleanly with plain git am on current net.
+
+Note on the net-next conflict: this series conflicts with our own PRP
+RedBox support now merged in net-next
+(https://lore.kernel.org/netdev/20260717201457.54-1-xiexinet@gmail.com/).
+On current net it applies cleanly (re-verified by a full-series
+git am). For net-next the conflict is confined to two sites:
+
+1. net/hsr/hsr_device.c, send_prp_supervision_frame(): net-next
+   added the PRP RedBox Type-30 TLV and EOT construction where
+   patch 2/4 shrinks the seqnr_lock critical section. Resolution:
+   keep the lock release immediately after the sup_sequence_nr
+   update (as in this patch), build the whole TLV chain (LifeCheck
+   payload, Type-30 RedBox-MAC TLV, EOT) unlocked, and drop the
+   two stale unlocks from the padding-error and normal-exit paths.
+2. tools/testing/selftests/net/hsr/Makefile: insert
+   hsr_gro_superpacket.sh at its sorted position.
+
+The resolution was independently proven by composition on the
+current net-next (4fa4977a0d90): the composed tree preserves the
+Type-30 RedBox-MAC TLV and EOT construction with one balanced lock
+region. This series' conflict-relevant hunks are unchanged from v5,
+which applied and validated the same resolution on an earlier
+net-next (2fbade662450): the composed tree builds cleanly and
+hsr_prp_redbox.sh passes on the composed kernel.
+
+---
+
+Changes in v6:
+
+A confirmed defect is fixed: a GSO aggregate carrying unreadable
+net_iov (device-memory) fragments could reach the forward-entry
+segmentation, where the software copy path cannot read such fragments
+and would leave the segment payload uninitialized â€” silently dropped
+at transmit on most devices, or exposing uninitialized data where
+netmem transmit is enabled. v6 rejects such aggregates before
+segmentation (skb_frags_readable() gate) and patch 3 describes this
+accurately.
+
+The selftest is hardened: the server reap now polls the wrapper's
+status file instead of a recycled-PID candidate, server-PID
+validation retries across the fork/exec window, and server readiness
+polls the listening socket instead of a fixed sleep; all waits stay
+bounded.
+
+Further changes:
+- patch 1: the comment now names fixed-on GRO_HW only (plain GRO is
+  always changeable).
+- patch 3: the prerequisite is named by subject and commit; the
+  hw_features wording states the unconditional GSO_MASK removal (only
+  GSO_MASK member types become fixed-off;
+  generic-segmentation-offload stays changeable and is cleared at
+  runtime); the classifier comment describes its own policy.
+- patch 4: the message describes the new test file, the header
+  documents the LAN-slave case, and the master-RX bound has its own
+  named constant.
+- maintainer feedback adopted: patch 2 mentions commit aae9d6b616b5
+  ("hsr: Implement more robust duplicate discard for HSR"), uses the
+  commit-annotated stable tag (verified equivalent to the former
+  7.0.x floor: the prerequisite exists only in 7.0.y/7.1.y), carries
+  the syzbot Reported-by/Closes pair and the two Fixes: tags, and
+  moves all statistics work out of the series (plain increments
+  restored; consistent per-cpu/per-queue statistics are a separate
+  follow-up series).
+
+The remaining review findings were assessed and left unchanged: the
+one-way best-effort GRO disable mirrors dev_disable_lro() and is
+ethtool-recoverable; the kernel-doc already names the re-enable path;
+out-of-order emission is tolerated by the sparse-bitmap duplicate
+discard on both ends under the stable floor; the remaining statistics
+races are accounting-precision issues covered by the follow-up
+series; the software-GRO RCT claim holds (IPv4/IPv6 length checks
+reject trailing bytes); the generic-segmentation-offload selftest
+oracle was verified empirically on the identical tree; test cleanup
+re-validates PID identity before signalling and has a netns-scoped
+fallback; in-place skb mutations during forwarding are pre-existing
+and handled by a separate series.
+
+Previous postings (newest first):
+v5: https://lore.kernel.org/netdev/20260807140751.1351-1-xiexinet@gmail.com/
+v4: https://lore.kernel.org/netdev/20260803222211.877-1-xiexinet@gmail.com/
+v3: https://lore.kernel.org/netdev/20260731090224.18-1-xiexinet@gmail.com/
+v2: https://lore.kernel.org/netdev/20260724161253.79-1-xiexinet@gmail.com/
+v1: https://lore.kernel.org/netdev/20260722171836.196-1-xiexinet@gmail.com/
+
+
+Xin Xie (4):
+  net: hsr: fix packet drops caused by GRO superpackets
+  net: hsr: shrink seqnr_lock to sequence counter updates
+  net: hsr: unfold GSO super-packets at the forward entry
+  selftests: net: hsr: cover GSO super-packets on PRP slave ingress
+
+ include/linux/netdevice.h                     |   2 +
+ net/core/dev.c                                |  15 +
+ net/core/dev_api.c                            |  21 +
+ net/hsr/hsr_device.c                          |  17 +-
+ net/hsr/hsr_forward.c                         | 109 ++-
+ net/hsr/hsr_slave.c                           |  16 +-
+ tools/testing/selftests/net/hsr/Makefile      |   1 +
+ .../selftests/net/hsr/hsr_gro_superpacket.sh  | 678 ++++++++++++++++++
+ 8 files changed, 835 insertions(+), 24 deletions(-)
+ create mode 100755 tools/testing/selftests/net/hsr/hsr_gro_superpacket.sh
+
+-- 
+2.43.0
+
