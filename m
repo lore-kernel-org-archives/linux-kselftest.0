@@ -1,32 +1,32 @@
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from out-171.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 712803A1D05
-	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 15:02:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F8733C73E1
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 15:02:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786287730; cv=none; b=laANdm85JD5WLErMJy0E8gglrzhlflF1jtFtGeWHPuwPShdWl82UqoymOC4J+BrccfLr0sv4ozUtRaTnxUvrriPdlrjzOH5saIcKLkv9czfEJG8/55GARuhDEfizc1GFcLZnIz3xtvqmC9YOczxp8Pd8UC4+gg2G2uvw+zm3yF8=
+	t=1786287735; cv=none; b=AKXPz2vFei+9Hmq1GJS//Xj2no/X4n1AXkwAUc+20U4HfNO3q7nm/AGlNeLvskp+Nl+eraPIOYsowum2hd16NIJEqPWaM94RjifldAuJGb9RIGpRQT54O3+CpYqSHLaeSiwcDv09IBY+fUGhb1AASukHWcoblWFaTZBJrP1lVJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786287730; c=relaxed/simple;
-	bh=3MTCI5XeL+tPy6FWJF/tlCqoSyBh5wU07XGAQFqDxbg=;
+	s=arc-20240116; t=1786287735; c=relaxed/simple;
+	bh=BEoCcAyF+R/sOKReri78++IeZsP6ZHkO2YpBECkJFOo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eaT3ACWyT7RU7R9hbv+XfA9Y5v0R+2pGXFJV+EXHDmDZLKa69e28OBTtaebErs0zCGsCdkPrvQ96pESzZKp5Ibt0jhHHM+UnmyGF99AxgLW0KCmKR/OadcIpM+NTzpgp6wrQqz4KOPWffeEgIRWl2jO96G4wGhPYPYAEfDOj/vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UjRYenol; arc=none smtp.client-ip=95.215.58.175
+	 MIME-Version; b=U9xjL5AgxBQf2AwP3TOi4F9Zmwmq09gdAYFiImpxYuTCxG0KqUx9n7uYxt2ocJ26MyBAqNHE72tuMjNvZNyc2K5B0nSiqOKhcveFmUEhVNRYzIn0zQHFNUhvc/9MZgsn7Qgi4j30+SkyD64zCKsrwAYargbehSKHXYFYonb0a1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jraZSiFr; arc=none smtp.client-ip=37.59.57.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UjRYenol"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jraZSiFr"
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786287724;
+	t=1786287731;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=WPqBAE7OME6JB+B8bz7yQ1+hF2jZRRJRbW/HV1BzL+Q=;
-	b=UjRYenolm0FPBJHMfJyghG/DV6Gs0ZAgHFe/SIRAsx3bNSXY86fuBoDqgrD/Op3NBewr/Z
-	//+VS5rYncX176hSQ5o1Dmw8dsa9AQC4q3x8iuUqf4ZjzDi957Hn6ca+gI8Oe3eN1dD0dq
-	nfovL+/g547OyHmBE3lR9FTNyO/PSAQ=
+	bh=UvmPAjSTsp9C9P0krIgzdAKGfO6OEzvEZTGyYBjPPWc=;
+	b=jraZSiFrWBbR17WCYVve0oahjZvxb//yOWl+2/23IGcg46nIn7usGNytHs1T8uMcx5MWq8
+	1j1GlQ+r/NxKs9JJViz8j2XFng86QT4dIMlPAoSd0jL9ADi5ga6t0iIUx0CmMwlXWGZobh
+	/Bp/FSe2ZPmoZCYaL3QXYT5dVvJ0Qsc=
 From: Leon Hwang <leon.hwang@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Alexei Starovoitov <ast@kernel.org>,
@@ -57,9 +57,9 @@ Cc: Alexei Starovoitov <ast@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	linux-trace-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 02/13] bpf: Factor out update_fentry_multi helper
-Date: Sun,  9 Aug 2026 23:01:00 +0800
-Message-ID: <20260809150111.45000-3-leon.hwang@linux.dev>
+Subject: [PATCH bpf-next 03/13] bpf: Drop unnecessary ftrace_location() in update_fentry_multi()
+Date: Sun,  9 Aug 2026 23:01:01 +0800
+Message-ID: <20260809150111.45000-4-leon.hwang@linux.dev>
 In-Reply-To: <20260809150111.45000-1-leon.hwang@linux.dev>
 References: <20260809150111.45000-1-leon.hwang@linux.dev>
 Precedence: bulk
@@ -71,84 +71,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-The tracing_multi register, unregister, and modify callbacks differ only
-in the trampoline image and ftrace hash they use. Move their common
-address setup, hash insertion, and current image update into
-update_fentry_multi().
-
-No functional changes intended.
+Since 'tr->ip' is already a 'ftrace_location()'-ed IP in
+bpf_trampoline_lookup(), it is unnecessary to call ftrace_location() again
+in update_fentry_multi().
 
 Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
 ---
- kernel/bpf/trampoline.c | 34 ++++++++++++++--------------------
- 1 file changed, 14 insertions(+), 20 deletions(-)
+ kernel/bpf/trampoline.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
-index 8c2c1d1b9094..6e1898e1b200 100644
+index 6e1898e1b200..eddd259d3776 100644
 --- a/kernel/bpf/trampoline.c
 +++ b/kernel/bpf/trampoline.c
-@@ -1568,47 +1568,41 @@ static void ftrace_hash_add(struct ftrace_hash *hash, struct ftrace_func_entry *
- 	add_ftrace_hash_entry(hash, entry);
- }
- 
--static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_image *im, void *ptr)
-+static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
-+			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
-+			       struct bpf_tracing_multi_data *data)
+@@ -1573,12 +1573,11 @@ static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
+ 			       struct bpf_tracing_multi_data *data)
  {
--	unsigned long addr = (unsigned long) im->image;
-+	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
- 	unsigned long ip = ftrace_location(tr->ip);
--	struct bpf_tracing_multi_data *data = ptr;
+ 	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+-	unsigned long ip = ftrace_location(tr->ip);
  
  	if (bpf_trampoline_use_jmp(tr->flags))
  		addr = ftrace_jmp_set(addr);
  
--	ftrace_hash_add(data->reg, data->entry, ip, addr);
-+	ftrace_hash_add(hash, data->entry, ip, addr);
+-	ftrace_hash_add(hash, data->entry, ip, addr);
++	ftrace_hash_add(hash, data->entry, tr->ip, addr);
  	tr->cur_image = im;
  	return 0;
  }
- 
--static int unregister_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *ptr)
-+static int register_fentry_multi(struct bpf_trampoline *tr, struct bpf_tramp_image *im, void *ptr)
- {
--	unsigned long addr = (unsigned long) tr->cur_image->image;
--	unsigned long ip = ftrace_location(tr->ip);
- 	struct bpf_tracing_multi_data *data = ptr;
- 
--	if (bpf_trampoline_use_jmp(tr->flags))
--		addr = ftrace_jmp_set(addr);
-+	return update_fentry_multi(tr, 0, im, data->reg, data);
-+}
- 
--	ftrace_hash_add(data->unreg, data->entry, ip, addr);
--	tr->cur_image = NULL;
--	return 0;
-+static int unregister_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, void *ptr)
-+{
-+	struct bpf_tracing_multi_data *data = ptr;
-+
-+	return update_fentry_multi(tr, orig_flags, NULL, data->unreg, data);
- }
- 
- static int modify_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags, struct bpf_tramp_image *im,
- 			       bool lock_direct_mutex, void *ptr)
- {
--	unsigned long addr = (unsigned long) im->image;
--	unsigned long ip = ftrace_location(tr->ip);
- 	struct bpf_tracing_multi_data *data = ptr;
- 
--	if (bpf_trampoline_use_jmp(tr->flags))
--		addr = ftrace_jmp_set(addr);
--
--	ftrace_hash_add(data->modify, data->entry, ip, addr);
--	tr->cur_image = im;
--	return 0;
-+	return update_fentry_multi(tr, orig_flags, im, data->modify, data);
- }
- 
- static const struct bpf_trampoline_ops trampoline_multi_ops = {
 -- 
 2.55.0
 
