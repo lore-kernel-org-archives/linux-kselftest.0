@@ -1,420 +1,553 @@
-Received: from mail-qt1-f173.google.com (mail-qt1-f173.google.com [209.85.160.173])
+Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4EA62E6CB3
-	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 00:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E2335C19B
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 03:45:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786236686; cv=pass; b=norFSiBw1GjcRMqAr0Fwe2wPonjq9vjegI2NHogDzxZDthqCarfhJk6hP6cVeDCLCIxGUzHmzdWz7A1wt4neKGHbzc3Nz5p47+CnPdlezUW45AG1eXbnmCwZyhOAvRhuVGRx06WgAvet0tpq5ETbx+2jpaKOAp8kbbU4+sA/7h0=
+	t=1786247107; cv=pass; b=Y8y9pkK5upErOiomZkTdonHkZ4al0exeY6vXIxSL5NSZ4jXTOWs1kMAxLqFp37RoWB9c1CYA7gD+S2Q+odHC2p4CvO/e+U/BXhmwWQ8OmaECP1+p65EiiXYdoNYrS5/n9jdb5YNuU9lUbt07svpAFh6MsJIk9OrAP6t2CcTdRRc=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786236686; c=relaxed/simple;
-	bh=zs4SfiVaTFG87zEuWa7DYEYXMveiqU+3HeFFRIGyKW0=;
+	s=arc-20240116; t=1786247107; c=relaxed/simple;
+	bh=T0pGFxhxXGrL/kMAbpO1veK76flk1lXKaFcRxlspGtc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PHp11JusgdzqTNB/vDHLI1cYtiUMfGBUp74gjuGI4cE5DAykp5KewqcVf0RHBanGhI79R8Ga1nl04zAn6nJ8FbyCHWlJkHqg1K6D6QTVU+ou/7pajEW/84LE7FtiBrtDpiOMCOmjroPXQ43ATvhibgE4wDMJIIWbL8Tyv8SPGOY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mayzSwPH; arc=pass smtp.client-ip=209.85.160.173
+	 To:Cc:Content-Type; b=YSgAQa+I6ZQkqUsDdP3iZvpcN2GnLKQ7oyhD9SrNCD8JuKNhUQ1BEL2eu1dfmmCa848wczQpugUuOKsFLyVKfft3qk9lztiJXKNTGcqU+SSg86BUspiNxjyQmPIoCy3R68cTpB3ViGVeSoNjYrHNXJRytvG3ME9Txciq+9EfKYs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tQl2yyEC; arc=pass smtp.client-ip=209.85.160.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mayzSwPH"
-Received: by mail-qt1-f173.google.com with SMTP id d75a77b69052e-51c15a5b265so178771cf.0
-        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 17:51:22 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786236682; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tQl2yyEC"
+Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-51c01c79467so140771cf.0
+        for <linux-kselftest@vger.kernel.org>; Sat, 08 Aug 2026 20:45:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786247103; cv=none;
         d=google.com; s=arc-20260327;
-        b=gB64AktMYFy9q2y9b5pSGYnSr8XiJMbuGaweSEYUvAKT2j5Eg1CVStJDPLN4R+p2+g
-         dyre5OuOCEkN4R8bGwjCdu6rQcf30+5EU84mpFEFpq80z9YQI/U5uL4oYebtwT8e+MVu
-         KwKvfxWzkyFCz7912LSSZ1s4R8ibWEWo91DFC4UEki6N01QIYUGG5UaPmA/BhUwrmThB
-         INDW6eEqqvY844TelMe4aCaK9rKdkCY3E0hf+dHVbFiWB4U+y0LA0v2mmdU61d5FTYL3
-         UEpNHIAUyxQJLi2oxq0LxT3sWa2xFqRInNqTmQl7I/+q2WxBYWz9n8+gxO6AOqdklQEY
-         OyGQ==
+        b=gEgpsGWy5o6yz5nQ0RuxmkPKmlOkif57EJsE6X49j/Arp2H16msjdDmYG+55kMz6/Z
+         dsEclST92HGfaJ+S5rKiNt+Om3KymJewYzcWi01knFqbrNiXBiNABeD55o+XOuV8dMVK
+         CbERuydcK0OT2bRqKFQDPcqaPYiFnxTCl0PivXvnoI+W+5y34aNfmSj6Z2/fDcYq+V11
+         ND5Msn/1RuP/eMCSRIn22jr6+uXC0se7EaXWm4VsbjWxx9U8iMxmIjj5CjD9vPXjDPw5
+         SFOfBG2AXoCji5A1iAtF13qe8cA2IIKFgivb2/coj5EI0XbI0Xp/ayW9WuFyC5VmiKo7
+         4s+A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=5t26LPlL2x6rRQWr8/8g+glnpY16lnjlFmjLTvMppKc=;
-        fh=i4RefMwQS1TdX0f3gA5cjITAFzYttZVoL8T8G4nJ5yA=;
-        b=TzU3U4id7WBUyNnDgQZm47Gf0xhWTYS5a1TJGS/KyzHF8kUkKOyvYZTHfExAkCixmk
-         CvkchIAGjUnDg9oc8JK1hdDN7kh8zLBfDCvJQ4JgGslquuqK0h5u5WsBkBKRycWXhRua
-         V2O8W8w1eRww9ShGwvTd136cXcn7bueE7vSMHxo3CWvlrOqm5yd12Or87st5Ly/tMCvt
-         sf8g5Y+Oay1qAQLUyQ6mpgzdNSZokpM9aAU99b+ggJ2Hs6jYVOsEmeNNmV5u+E/pOYlQ
-         oh6fpUsxi46vG+UsOUwRx8wtsCho3WRxd8p+ZQkOS4nX3daBOxKvzWXkNz+nPiQZq4Al
-         boow==;
+        bh=NkogbAmn7Wcdi8/UNOS2zMEvw0dJAg09JNaIPc7jdGg=;
+        fh=fQPRHlE0z+7qhvcao+DFGCfcYVCkZND3naO+TeXS1/Y=;
+        b=HkL7cYUadd9PHbXNoGBE3HY5oF8oxvQsT8fiHbEi8UH/SUbNu9XAt4oEXCojs6vwA5
+         /pd9TF+YexxCvn+GyVNP+8e/UqlRcIWdBTignJI1hz+moZLiyYCeJJa6nphZibiXC0MT
+         tomiI8lQOjuxv/IIDJQtfhumzUOYDawFO3gIP2sNRNv0KLy5O9pRSyXCtsZkGtE+VLV1
+         jTa+N16kwLMsY9rn13f1rnHzG4E/P1PAxV9Ad/jlz58t2g8iso4ra2nsivIXgh10H2vc
+         nscklFEpup8/7b47bWQyEoU3RueBJdDi7e6NYCdRzi+lLZ/VHK9V69tdALSqpictB5RO
+         XtBA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786236682; x=1786841482; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786247103; x=1786851903; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=5t26LPlL2x6rRQWr8/8g+glnpY16lnjlFmjLTvMppKc=;
-        b=mayzSwPHAL/EG8FJoZI5aKdT8CHoYJZoOfGR60texMJUcsaFfweID2d2APveCsFmm1
-         7NfP3GfZ2EQU894bhlpMILuLG+mTAieRNk2Jbtyqn98artzE34Y0EuWwG/QK6ZJ6toMn
-         n5lK4xcaN8kCTgvUrVo9N9V5hR2yPbiohBmiih119V+93+N+BujhVBcKw9vy47pvbFo+
-         TwQZREPnF2dEqkUaMXFFfIH2oMsuXEzfppmkQt9dP8O7W2ds8X2A8VUohwh1dmhKplIl
-         3fWjha0ZSz5WNIA8LvL1QIChiW5WKOaWQhiyxQJ06q+i6dlaSnIGjChtT02tH4Fvqxot
-         LKGA==
+        bh=NkogbAmn7Wcdi8/UNOS2zMEvw0dJAg09JNaIPc7jdGg=;
+        b=tQl2yyECe6pxzvPUvRlOSzozWw3323p2AwLb00MIl5i+Qu5kIBhCQX+OGCmsSJrNEj
+         hZ6o9UdU/7dzfYkBWtrT8pNEdNnIsWfvC0DrgbR7ZSqvyl9In6ObE6rW0I0DfUuOh2qA
+         HUYxddNQpxcLVR0MbC5MtBGeyuTuBSGzDya423k8E90LuYX6nQZXqOdqrg+Ogl+ReyLx
+         WMZXidH77yv9mQu14F5ssdGxdbKJyKZQWc4vhM0OM6UD9QuXDyyG1Qg5HzcXGZpxT5ok
+         VXMHHKMBl8SGgwA8CBlC27sPH0t9Og2OTgqz4KSdr2IjoKNhRlUMcWlgfHDuK4zL8Tpb
+         UJmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786236682; x=1786841482;
+        d=1e100.net; s=20251104; t=1786247103; x=1786851903;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=5t26LPlL2x6rRQWr8/8g+glnpY16lnjlFmjLTvMppKc=;
-        b=VuSA9QJnOs1K7sGUo04KRPbbf2OwSPG8iG60MybR94uWzrNELfYOAMATTZa0zrJLtS
-         FDIsP2q537qssk7ktvhRSUwTRsG8wYCbZW1fkZISYjkXiulJr7Gx+HsnqLwFCwoScutc
-         UTR5/Sr1LHt64ojQWN8KOQ2vOOP4Tge0BACidIUpQ/58XNji01mAwJXzSufOvI93iVzR
-         9P8lrSBr/gQhBbJNU44iNN7GxsP9Ud8Ix229LeuKBQB9ZDqU+F9eshiAjh6/B+p16fw5
-         +pvKPXRf0F1WBdqCBmVKpv6MCFLj7oK7SCtxh/gG9tb0yOci9LfrwcRsaQS8klRWIP57
-         RZyA==
-X-Forwarded-Encrypted: i=1; AHgh+RqD7RDKwuLtB+iUN+RP4AOB0FB0l2WfbLMRwz+RmFCLaAHdtpnBuzMIE22oiGcixWuFRDIrvRDNVhoZG0OTLs4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxkltevAdNCmB+XJv3Ulwmwv/w1XeYfyZS3Yc/dlbPdh8xzO2Oo
-	OPqLt/vxUX/88tTexke/svY25k2K0vKMDFk6e2be95d+t0gvOlRVkfjKE1kUg1Uh5X5hy+HHdhP
-	xznMoRtwtc0/+EOTO+/FROwZ3mt8AcfrXCeE48khy
-X-Gm-Gg: AR+sD11QaaeFBwt4TCgrLGOlzC0Y/9cTaNSbwzwoNQesTMJFjRuwRcZxpVZAXijydE4
-	jVA8XBR/jX/WNp6+YY7uKg/EMh5wl1tEoIKcdLCKs30UGgHWhQ0JhhiazH06UMV2CayhhZVh2Oz
-	r40N/9rPuwgk9dzV6Xxq/YjsOwU4VMV7+zYNr67LWvbcBTBwt3UXgQAa9WxFxtniCX/ooHKwJcd
-	6rppguDxilr/OL3MnHK29oKgkxIUxjV8Trr3/bi09zngdHC84ZpYqilfyL9B7WJJcb8BN1J/hic
-	c2/7HsSd8Zdmr6m+8uJgQmIBC9vkrA31+xvHfaIZ4Jo=
-X-Received: by 2002:a05:622a:2c2:b0:517:5d71:84e5 with SMTP id
- d75a77b69052e-52d28104052mr10844831cf.5.1786236681095; Sat, 08 Aug 2026
- 17:51:21 -0700 (PDT)
+        bh=NkogbAmn7Wcdi8/UNOS2zMEvw0dJAg09JNaIPc7jdGg=;
+        b=YwWxX7EUdqBVol2fTXCWmjEgZdUVuKEi1NOvZZ/TuApG1gXgoKn1IGpCNrunC+wQKc
+         FJDIPt5IpOTgWEPHdoBCPkBSM2EHK9c0f5/TyUeKmsKFmiXAy2Lrgv72redsvbqBB/qV
+         v9hcRgy9TjsUBOMxdfYiuBNUnb5qCfwoQc66z+lBC86APY4WnzpukNhrmx2z6Yb1NfXr
+         ZsIOHyfVkusZcZ4GYYYaor97Jgz0uouPNVaHk1i0OvGjbiJ1Wqb8ZwaOAeQ0kiq9AAMz
+         sG45HK30Scq620AIzc276IZl2LRgMMGr3W09HeVELchTtHZenbuRdlAfFsBSMXoCgmF+
+         BiCg==
+X-Forwarded-Encrypted: i=1; AHgh+Rqd8rQAH3NybCF6dlJgtZNQBofu/FaCVX6tgQx+lTNd+DFarN8+RmzktBxEfPyQsYZiyPPvfiE5UN83eio+0AA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTyvLyEhycvx1XdELiOE/0rRmYbQ1G1kQ3z6iQQ5T/RliHQeCS
+	TNYF9UMv4W8W1KJ/zllqOevsXeKyTVfvu7UP3fDL1TE5EKur9QYfIq1w79etFllnmVSTnrzIyR3
+	AtRMGV78bR5rglH1wqSyw0dIe9EFSPbemKvfKJhvK
+X-Gm-Gg: AR+sD11HA5UIiHOOunzRm4smyzmrMwz049VjEzcP2ASnH8v8vXWyRsQyIcoMePRNqxb
+	dAqK9cp1USXaFFv9qU+xgWxulDYfBFkd+RlBHpr8JlI9oOBc5Z8OgeR6MLwIGr0yGdwxlfQhdhZ
+	apk/WTpThaayT7Kv5KV0yf547ahANOF1iO0GmYoDOwjqMh0MH5NlfNG3bLdqCyCjYQVqAkhluXc
+	bxaNhmVvbyRLr7+crHkmrS81M/4n1njGxgPbeF78Grk/J75RL8BzhPeK5e+DYjCrYTFVadMmmSd
+	1r4JrHO3taLXQOrEXkdu2+Ju3wrlenBiLTTLlzBadf8=
+X-Received: by 2002:a05:622a:1f12:b0:51c:6b7:d3de with SMTP id
+ d75a77b69052e-52d2810403cmr13879741cf.5.1786247102454; Sat, 08 Aug 2026
+ 20:45:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org> <20260806-b4-scalable-cow-virt-pgoff-v4-1-ab318a350404@kernel.org>
-In-Reply-To: <20260806-b4-scalable-cow-virt-pgoff-v4-1-ab318a350404@kernel.org>
+References: <20260728083742.2359320-1-cui.tao@linux.dev>
+In-Reply-To: <20260728083742.2359320-1-cui.tao@linux.dev>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Sat, 8 Aug 2026 17:51:10 -0700
-X-Gm-Features: AUfX_mwrAfErRpWaGdsaXjFbVsuLxmBdhaCS8dBRSF7bNpazo-ZM1X1L3isxLV8
-Message-ID: <CAJuCfpFAA1H2pOi6EOarNtrdzLQDJyhm6QOGsfZ4SFTuM5eiLQ@mail.gmail.com>
-Subject: Re: [PATCH v4 01/20] mm/vma: introduce VMA anon page offset field and
- add helpers
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, 
-	Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>, 
-	Ying Huang <ying.huang@linux.alibaba.com>, Alistair Popple <apopple@nvidia.com>, 
-	Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Alex Deucher <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Boris Brezillon <boris.brezillon@collabora.com>, 
-	Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Masami Hiramatsu <mhiramat@kernel.org>, 
-	Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, 
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
-	James Clark <james.clark@linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, Kairui Song <kasong@tencent.com>, 
-	Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham <nphamcs@gmail.com>, 
-	Baoquan He <baoquan.he@linux.dev>, Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org, 
-	linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Date: Sat, 8 Aug 2026 20:44:50 -0700
+X-Gm-Features: AUfX_mzzisx242Oaznh-4i7q-AEZQvUdF8Br6aVq-DC_MaLshBRAgK_OZ_tS0YQ
+Message-ID: <CAJuCfpHyX5BP88Fk1dOY3F=vk-Me3D-8vF=Dv_Uh17TnaphBhw@mail.gmail.com>
+Subject: Re: [PATCH v2] selftests/cgroup: add PSI pressure trigger and
+ validation tests
+To: Tao Cui <cui.tao@linux.dev>
+Cc: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, Shuah Khan <shuah@kernel.org>, 
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Ziyang Men <ziyang.meme@gmail.com>, 
+	Tao Cui <cuitao@kylinos.cn>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Aug 6, 2026 at 1:22=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kernel.or=
-g> wrote:
+On Tue, Jul 28, 2026 at 1:38=E2=80=AFAM Tao Cui <cui.tao@linux.dev> wrote:
 >
-> Establish fields in vm_area_struct to store the anonymous page offset of
-> VMAs.
+> From: Tao Cui <cuitao@kylinos.cn>
 >
-> Initially, the anonymous page offset of a VMA is vma->vm_start >>
-> PAGE_SHIFT.
+> The cgroup selftests have no PSI coverage. Add test_psi.c: trigger
+> smoke tests (one per fd, IRQ full-only), cgroup.pressure toggle, and a
+> CPU-pressure trigger test using over-subscription. Skips when PSI is
+> disabled or a resource is absent.
 >
-> When a VMA is remapped to new_address its anonymous page offset is either
-> updated to new_address >> PAGE_SHIFT if unfaulted or, if faulted, remains
-> equal to the anonymous page offset it had when first faulted.
->
-> Currently, anonymous folios belonging to CoW'd MAP_PRIVATE-mapped
-> file-backed VMAs are tracked by their file offsets. By adding anonymous
-> offset as a property of VMAs, we can now track them by their anonymous pa=
-ge
-> offset instead.
->
-> By tracking this, we provide the means by which to eliminate this
-> inconsistency, and more importantly lay the foundations for future work f=
-or
-> the scalable CoW anonymous rmap rework.
->
-> This patch simply adds the fields and some simple helpers. Subsequent
-> patches will update mm code to make use of these fields correctly.
->
-> The fields chosen are packed in the VMA such that, for 64-bit kernel
-> builds, no additional space is taken up.
->
-> The first field is present on cacheline 0 containing key VMA fields, and
-> the second on cacheline 3, which contains file-backed reverse mapping
-> fields.
->
-> Given the relative time spent accessing reverse mapping fields as well as
-> updating them, there shouldn't be any performance impact here from false
-> sharing.
->
-> Update the VMA userland tests to account for this change.
->
-> No callsites are updated yet, so no functional change intended.
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
-> Reviewed-by: Xu Xin <xu.xin16@zte.com.cn>
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
 > ---
->  include/linux/mm.h              | 59 +++++++++++++++++++++++++++++++++++=
-++++++
->  include/linux/mm_types.h        | 12 +++++++++
->  mm/vma.h                        | 14 ++++++++++
->  mm/vma_init.c                   |  1 +
->  tools/testing/vma/include/dup.h | 26 ++++++++++++++++++
->  5 files changed, 112 insertions(+)
+> Changes since v1 (Michal Koutny, sashiko review):
+> - Trim errno checks to smoke level; loosen toggle range checks.
+> - Switch trigger test from memory to CPU pressure (deterministic, no SKIP=
+).
+> - churn_memory() removed -- sysconf/shared-helper point is moot.
+> - Runner stays out of the cgroup; hogs reaped via cg_killall().
+> - Add PSI/IRQ skip-guards, zero-init buffers, .gitignore entry.
+> ---
+>  tools/testing/selftests/cgroup/.gitignore |   1 +
+>  tools/testing/selftests/cgroup/Makefile   |   2 +
+>  tools/testing/selftests/cgroup/config     |   1 +
+>  tools/testing/selftests/cgroup/test_psi.c | 280 ++++++++++++++++++++++
+>  4 files changed, 284 insertions(+)
+>  create mode 100644 tools/testing/selftests/cgroup/test_psi.c
 >
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 87feaa5a2b78..df78847f5f07 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -4393,6 +4393,65 @@ static inline pgoff_t vma_last_pgoff(const struct =
-vm_area_struct *vma)
->         return vma_end_pgoff(vma) - 1;
->  }
+> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/se=
+lftests/cgroup/.gitignore
+> index 952e4448bf07..ce2b907c57ea 100644
+> --- a/tools/testing/selftests/cgroup/.gitignore
+> +++ b/tools/testing/selftests/cgroup/.gitignore
+> @@ -8,5 +8,6 @@ test_kill
+>  test_kmem
+>  test_memcontrol
+>  test_pids
+> +test_psi
+>  test_zswap
+>  wait_inotify
+> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/self=
+tests/cgroup/Makefile
+> index e01584c2189a..a8c69e37332a 100644
+> --- a/tools/testing/selftests/cgroup/Makefile
+> +++ b/tools/testing/selftests/cgroup/Makefile
+> @@ -16,6 +16,7 @@ TEST_GEN_PROGS +=3D test_kill
+>  TEST_GEN_PROGS +=3D test_kmem
+>  TEST_GEN_PROGS +=3D test_memcontrol
+>  TEST_GEN_PROGS +=3D test_pids
+> +TEST_GEN_PROGS +=3D test_psi
+>  TEST_GEN_PROGS +=3D test_zswap
 >
-> +/**
-> + * vma_start_anon_pgoff() - Get the anonymous page offset of the start o=
-f @vma
-> + * @vma: The VMA whose anonymous page offset is required.
-> + *
-> + * If unfaulted, then this is vma->vm_start >> PAGE_SHIFT, if faulted th=
-en the
-> + * anonymous page offset at the time of first fault.
-> + *
-> + * If the VMA is anonymous, this returns the same value as vma_start_pgo=
-ff().
-> + *
-> + * This value is used for tracking MAP_PRIVATE file-backed mappings by t=
-heir
-> + * anonymous page offset.
+>  LOCAL_HDRS +=3D $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pi=
+dfd.h
+> @@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_pids: $(LIBCGROUP_O)
+> +$(OUTPUT)/test_psi: $(LIBCGROUP_O)
+>  $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
+> diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selfte=
+sts/cgroup/config
+> index 39f979690dd3..8a3ef479e83d 100644
+> --- a/tools/testing/selftests/cgroup/config
+> +++ b/tools/testing/selftests/cgroup/config
+> @@ -4,3 +4,4 @@ CONFIG_CGROUP_FREEZER=3Dy
+>  CONFIG_CGROUP_SCHED=3Dy
+>  CONFIG_MEMCG=3Dy
+>  CONFIG_PAGE_COUNTER=3Dy
+> +CONFIG_PSI=3Dy
+> diff --git a/tools/testing/selftests/cgroup/test_psi.c b/tools/testing/se=
+lftests/cgroup/test_psi.c
+> new file mode 100644
+> index 000000000000..51dc35e26013
+> --- /dev/null
+> +++ b/tools/testing/selftests/cgroup/test_psi.c
+> @@ -0,0 +1,280 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#define _GNU_SOURCE
+> +#include <errno.h>
+> +#include <fcntl.h>
+> +#include <poll.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <string.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include <linux/limits.h>
+> +
+> +#include "kselftest.h"
+> +#include "cgroup_util.h"
+> +
+> +/* How long to wait for the CPU-pressure trigger before giving up. */
+> +#define PSI_POLL_TIMEOUT_MS    5000
+> +
+> +static int pressure_open(const char *resource)
+> +{
+> +       char path[PATH_MAX];
+> +
+> +       snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
+> +       return open(path, O_RDWR);
+> +}
+> +
+> +/* Write a trigger descriptor, including the trailing NUL the parser exp=
+ects. */
+> +static ssize_t write_trigger(int fd, const char *trigger)
+> +{
+> +       return write(fd, trigger, strlen(trigger) + 1);
+> +}
+> +
+> +/* Trigger smoke test: second on same fd -> EBUSY; IRQ rejects "some". *=
+/
 
-I assume this function should not be used with shared file-backed
-mappings, right? If so, maybe add a comment like the one you have for
-linear_anon_page_index(): "It is not valid to call this function for
-shared file-backed mappings."?
+Please write more descriptive comments for your tests. I have to guess
+what you mean by this.
 
+> +static int test_proc_triggers(const char *root)
 
+Why do you pass root here if you are not using it? AI glitch?
 
-> + *
-> + * Returns: The anonymous page offset of the start of @vma.
-> + */
-> +static inline pgoff_t vma_start_anon_pgoff(const struct vm_area_struct *=
-vma)
 > +{
-> +       pgoff_t pgoff =3D 0;
+> +       static const char *const resources[] =3D { "io", "memory", "cpu" =
+};
+> +       int ret =3D KSFT_FAIL;
+> +       int fd =3D -1;
+> +       int i;
 > +
-> +#ifdef CONFIG_64BIT
-> +       pgoff +=3D vma->__vm_anon_pgoff_hi;
-> +       pgoff <<=3D 32;
-> +#endif
-> +       pgoff +=3D vma->__vm_anon_pgoff_lo;
-> +       return pgoff;
+> +       (void)root;
+> +
+> +       for (i =3D 0; i < (int)ARRAY_SIZE(resources); i++) {
+> +               fd =3D pressure_open(resources[i]);
+> +               if (fd < 0) {
+> +                       ksft_print_msg("open /proc/pressure/%s: %s\n",
+> +                                      resources[i], strerror(errno));
+
+You could move these ksft_print_msg() into pressure_open() and make
+that function a bit more useful while making the code here simpler.
+
+> +                       goto cleanup;
+> +               }
+> +
+> +               errno =3D 0;
+
+Why are you resetting the errno? If the next syscall fails, it will
+reset the errno and if it succeeds, you won't be using errno anyway.
+I'm confused.
+
+> +               if (write_trigger(fd, "some 150000 2000000") <=3D 0) {
+> +                       ksft_print_msg("%s: 'some' trigger rejected: %s\n=
+",
+> +                                      resources[i], strerror(errno));
+> +                       goto cleanup;
+> +               }
+> +               /* A second trigger on the same fd must fail with EBUSY. =
+*/
+> +               errno =3D 0;
+> +               if (write_trigger(fd, "full 150000 2000000") !=3D -1 || e=
+rrno !=3D EBUSY) {
+> +                       ksft_print_msg("%s: second trigger expected EBUSY=
+, got %s\n",
+> +                                      resources[i], strerror(errno));
+> +                       goto cleanup;
+> +               }
+> +
+> +               close(fd);
+> +               fd =3D -1;
+
+When you jump to cleanup label you always need to close the fd. You
+could simplify the flow if you remove all these "fd =3D -1;" and change
+the end of the function to be:
+
+        return KSFT_PASS
+cleanup:
+        close(fd);
+        return ret;
+}
+
+> +       }
+> +
+> +       /* IRQ is full-only, and only exists with CONFIG_IRQ_TIME_ACCOUNT=
+ING. */
+
+It would be better if you split this test into separate tests for
+"io", "memory", "cpu" and "irq" and if "irq" is not available you can
+return KSFT_SKIP for that test only. This way when a test fails the
+user will know exactly what failed.
+
+> +       fd =3D pressure_open("irq");
+> +       if (fd >=3D 0) {
+> +               errno =3D 0;
+> +               if (write_trigger(fd, "some 150000 1000000") !=3D -1) {
+> +                       ksft_print_msg("irq 'some': expected failure, got=
+ %s\n",
+> +                                      strerror(errno));
+> +                       goto cleanup;
+> +               }
+> +               close(fd);
+> +               fd =3D -1;
+> +       }
+> +
+> +       ret =3D KSFT_PASS;
+> +cleanup:
+> +       if (fd >=3D 0)
+> +               close(fd);
+> +       return ret;
 > +}
 > +
-> +/**
-> + * vma_end_anon_pgoff() - Get the anonymous page offset of the exclusive=
- end of
-> + * @vma.
-> + * @vma: The VMA whose end anonymous page offset is required.
-> + *
-> + * This returns the anonymous exclusive end page offset of @vma, which i=
-s useful
-> + * for expressing page offset ranges.
-> + *
-> + * See the description of vma_start_anon_pgoff() for a description of VM=
-A
-> + * anonymous page offsets.
-> + *
-> + * Returns: The exclusive end anonymous page offset of @vma.
-> + */
-> +static inline pgoff_t vma_end_anon_pgoff(const struct vm_area_struct *vm=
-a)
+> +/* cgroup.pressure 0/1 hides/shows the *.pressure files and round-trips.=
+ */
+
+The above comment needs to be expanded to explain what you are
+testing. It does not read as a proper English sentence.
+
+> +static int test_cgroup_pressure_toggle(const char *root)
 > +{
-> +       return vma_start_anon_pgoff(vma) + vma_pages(vma);
+> +       char buf[BUF_SIZE] =3D { 0 };
+> +       char *cg =3D NULL;
+> +       int ret =3D KSFT_FAIL;
+> +
+> +       cg =3D cg_name(root, "psi_toggle_test");
+> +       if (!cg)
+> +               goto cleanup;
+> +       if (cg_create(cg))
+> +               goto cleanup;
+
+Jumping to "cleanup" above results in a call to cg_destroy() while
+cg_create() failed. It will try to rmdir() a directory which we never
+created.
+
+> +
+> +       if (cg_write(cg, "cgroup.pressure", "0")) {
+> +               ksft_print_msg("failed to disable cgroup.pressure\n");
+
+Reporting strerror() in these failure logs would be useful.
+
+> +               goto cleanup;
+> +       }
+> +       if (cg_read(cg, "cgroup.pressure", buf, sizeof(buf)) < 0 || atoi(=
+buf) !=3D 0) {
+
+atoi() will return 0 even on error, so if you want to really check the
+value is 0 use a more robust method like strtol() or simply do a
+string comparison.
+
+> +               ksft_print_msg("cgroup.pressure=3D0 readback: '%s'\n", bu=
+f);
+> +               goto cleanup;
+> +       }
+> +       if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) >=3D 0) {
+> +               ksft_print_msg("memory.pressure visible while disabled\n"=
+);
+> +               goto cleanup;
+> +       }
+> +
+> +       if (cg_write(cg, "cgroup.pressure", "1")) {
+> +               ksft_print_msg("failed to re-enable cgroup.pressure\n");
+> +               goto cleanup;
+> +       }
+> +       if (cg_read(cg, "cgroup.pressure", buf, sizeof(buf)) < 0 || atoi(=
+buf) !=3D 1) {
+> +               ksft_print_msg("cgroup.pressure=3D1 readback: '%s'\n", bu=
+f);
+> +               goto cleanup;
+> +       }
+> +       if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) < 0) {
+> +               ksft_print_msg("memory.pressure unreadable while enabled\=
+n");
+> +               goto cleanup;
+> +       }
+> +
+> +       ret =3D KSFT_PASS;
+> +cleanup:
+> +       if (cg)
+> +               cg_destroy(cg);
+> +       free(cg);
+
+free(NULL) works but would be cleaner to do this instead:
+
+      if (cg) {
+              cg_destroy(cg);
+              free(cg);
+      }
+
+> +       return ret;
 > +}
 > +
-> +/**
-> + * vma_last_anon_pgoff() - Get the anonymous page offset of the last pag=
-e in
-> + * @vma.
-> + * @vma: The VMA whose last anonymous page offset is required.
-> + *
-> + * See the description of vma_start_anon_pgoff() for a description of VM=
-A
-> + * anonymous page offsets.
-> + *
-> + * Returns: The last anonymous page offset of @vma.
-> + */
-> +static inline pgoff_t vma_last_anon_pgoff(const struct vm_area_struct *v=
-ma)
+> +/* Induce deterministic CPU pressure (more hogs than CPUs). */
+> +static int test_cgroup_trigger_fire(const char *root)
 > +{
-> +       return vma_end_anon_pgoff(vma) - 1;
+> +       char *cg =3D NULL, *cpupress =3D NULL;
+> +       int fd =3D -1, ret =3D KSFT_FAIL;
+> +       struct pollfd pfd;
+> +       long ncpus, i;
+> +       pid_t pid;
+> +
+> +       cg =3D cg_name(root, "psi_trigger_test");
+> +       if (!cg)
+> +               goto cleanup;
+> +       if (cg_create(cg))
+> +               goto cleanup;
+
+Same issue with this jump. You will be calling cg_killall(cg) and
+cg_destroy(cg) even though cg_create() did not succeed.
+
+> +
+> +       cpupress =3D cg_control(cg, "cpu.pressure");
+> +       if (!cpupress)
+> +               goto cleanup;
+> +       fd =3D open(cpupress, O_RDWR);
+> +       if (fd < 0) {
+> +               ksft_print_msg("open cpu.pressure: %s\n", strerror(errno)=
+);
+> +               goto cleanup;
+> +       }
+> +
+> +       /* 1us threshold in a 1s window: any cpu stall fires it. */
+> +       errno =3D 0;
+> +       if (write_trigger(fd, "some 1 1000000") <=3D 0) {
+> +               ksft_print_msg("arming trigger failed: %s\n", strerror(er=
+rno));
+> +               goto cleanup;
+> +       }
+> +
+> +       ncpus =3D sysconf(_SC_NPROCESSORS_ONLN);
+> +       if (ncpus <=3D 0)
+
+Why is this not treated as a test failure?
+
+> +               ncpus =3D 1;
+> +
+> +       pid =3D fork();
+> +       if (pid < 0) {
+> +               ksft_print_msg("fork: %s\n", strerror(errno));
+> +               goto cleanup;
+> +       }
+> +       if (pid =3D=3D 0) {
+> +               /* Enter the cgroup, then over-subscribe it with CPU hogs=
+. */
+> +               if (cg_enter_current(cg))
+> +                       _exit(KSFT_FAIL);
+> +               for (i =3D 0; i < ncpus; i++) {
+> +                       if (fork() =3D=3D 0) {
+> +                               for (;;)
+> +                                       asm volatile("" ::: "memory");
+> +                               _exit(0);
+> +                       }
+> +               }
+> +               for (;;)
+> +                       asm volatile("" ::: "memory");  /* child is also =
+a hog */
+> +               _exit(0);
+> +       }
+> +
+> +       pfd.fd =3D fd;
+> +       pfd.events =3D POLLPRI;
+> +       switch (poll(&pfd, 1, PSI_POLL_TIMEOUT_MS)) {
+> +       case -1:
+> +               ksft_print_msg("poll: %s\n", strerror(errno));
+> +               break;
+> +       case 0:
+> +               ksft_print_msg("no trigger event; could not induce cpu pr=
+essure\n");
+> +               ret =3D KSFT_SKIP;
+> +               break;
+> +       default:
+> +               if (pfd.revents & POLLPRI)
+> +                       ret =3D KSFT_PASS;
+> +               else
+> +                       ksft_print_msg("poll returned 0x%x\n", pfd.revent=
+s);
+> +               break;
+> +       }
+> +
+> +       /* Stop the hogs (bounded, so waitpid can't hang) and reap the ch=
+ild. */
+> +       cg_killall(cg);
+> +       waitpid(pid, NULL, 0);
+> +
+> +cleanup:
+> +       if (fd >=3D 0)
+> +               close(fd);
+> +       if (cg) {
+> +               cg_killall(cg);
+> +               cg_destroy(cg);
+> +       }
+> +       free(cpupress);
+> +       free(cg);
+> +       return ret;
 > +}
 > +
->  static inline unsigned long vma_desc_size(const struct vm_area_desc *des=
-c)
->  {
->         return desc->end - desc->start;
-> diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-> index 939b5ea8c9e0..ebf0d912be7d 100644
-> --- a/include/linux/mm_types.h
-> +++ b/include/linux/mm_types.h
-> @@ -967,6 +967,11 @@ struct vm_area_struct {
->          */
->         unsigned int vm_lock_seq;
->  #endif
-> +       /*
-> +        * Low 32-bits of anonymous page offset.
-> +        * See vma_start_anon_pgoff() comment for details.
-> +        */
-> +       unsigned int __vm_anon_pgoff_lo;
->         /*
->          * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_v=
-ma
->          * list, after a COW of one of the file pages.  A MAP_SHARED vma
-> @@ -1041,6 +1046,13 @@ struct vm_area_struct {
->  #ifdef CONFIG_DEBUG_LOCK_ALLOC
->         struct lockdep_map vmlock_dep_map;
->  #endif
-> +#endif
-> +#ifdef CONFIG_64BIT
-> +       /*
-> +        * High 32-bits of anonymous page offset.
-> +        * See vma_start_anon_pgoff() comment for details.
-> +        */
-> +       unsigned int __vm_anon_pgoff_hi;
->  #endif
->         /*
->          * For areas with an address space and backing store,
-> diff --git a/mm/vma.h b/mm/vma.h
-> index 0bc7d521e976..54ed7c744e3b 100644
-> --- a/mm/vma.h
-> +++ b/mm/vma.h
-> @@ -283,6 +283,20 @@ static inline void vma_set_pgoff(struct vm_area_stru=
-ct *vma, pgoff_t pgoff)
->         vma->vm_pgoff =3D pgoff;
->  }
->
-> +static inline void __vma_set_anon_pgoff(struct vm_area_struct *vma, pgof=
-f_t pgoff)
+> +#define TEST(x) { #x, x }
+> +
+> +struct psi_test {
+> +       const char *name;
+> +       int (*fn)(const char *root);
+> +};
+> +
+> +static struct psi_test tests[] =3D {
+> +       TEST(test_proc_triggers),
+> +       TEST(test_cgroup_pressure_toggle),
+> +       TEST(test_cgroup_trigger_fire),
+
+Instead of setting up these tests manually you could use
+TEST_HARNESS_MAIN, TEST_F and other helpers from kselftest_harness.h.
+
+> +};
+> +
+> +int main(int argc, char **argv)
 > +{
-> +#ifdef CONFIG_64BIT
-> +       vma->__vm_anon_pgoff_hi =3D pgoff >> 32;
-> +#endif
-> +       vma->__vm_anon_pgoff_lo =3D pgoff & GENMASK(31, 0);
+> +       char root[PATH_MAX];
+> +       int mempress_fd;
+> +       int i;
+> +
+> +       (void)argc;
+> +
+> +       ksft_print_header();
+> +       ksft_set_plan(ARRAY_SIZE(tests));
+> +
+> +       if (cg_find_unified_root(root, sizeof(root), NULL))
+> +               ksft_exit_skip("cgroup v2 isn't mounted\n");
+> +
+> +       /* PSI must be enabled (CONFIG_PSI=3Dy, not default-disabled). */
+> +       mempress_fd =3D open("/proc/pressure/memory", O_RDONLY);
+> +       if (mempress_fd < 0)
+> +               ksft_exit_skip("PSI unavailable (CONFIG_PSI=3Dn or psi=3D=
+0)\n");
+> +       close(mempress_fd);
+> +
+> +       if (cg_read_strstr(root, "cgroup.controllers", "memory"))
+> +               ksft_exit_skip("memory controller isn't available\n");
+> +       if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
+> +               if (cg_write(root, "cgroup.subtree_control", "+memory"))
+> +                       ksft_exit_skip("failed to enable memory controlle=
+r\n");
+> +
+> +       for (i =3D 0; i < (int)ARRAY_SIZE(tests); i++) {
+> +               switch (tests[i].fn(root)) {
+> +               case KSFT_PASS:
+> +                       ksft_test_result_pass("%s\n", tests[i].name);
+> +                       break;
+> +               case KSFT_SKIP:
+> +                       ksft_test_result_skip("%s\n", tests[i].name);
+> +                       break;
+> +               default:
+> +                       ksft_test_result_fail("%s\n", tests[i].name);
+> +                       break;
+> +               }
+> +       }
+> +
+> +       ksft_finished();
 > +}
-> +
-> +static inline void vma_set_anon_pgoff(struct vm_area_struct *vma, pgoff_=
-t pgoff)
-> +{
-> +       vma_assert_can_modify(vma);
-> +       __vma_set_anon_pgoff(vma, pgoff);
-> +}
-> +
->  static inline void vma_add_pgoff(struct vm_area_struct *vma, pgoff_t del=
-ta)
->  {
->         vma_assert_can_modify(vma);
-> diff --git a/mm/vma_init.c b/mm/vma_init.c
-> index 715feee283f0..baa7e82f47e3 100644
-> --- a/mm/vma_init.c
-> +++ b/mm/vma_init.c
-> @@ -51,6 +51,7 @@ static void vm_area_init_from(const struct vm_area_stru=
-ct *src,
->         dest->vm_end =3D src->vm_end;
->         dest->anon_vma =3D src->anon_vma;
->         dest->vm_pgoff =3D vma_start_pgoff(src);
-> +       __vma_set_anon_pgoff(dest, vma_start_anon_pgoff(src));
->         dest->vm_file =3D src->vm_file;
->         dest->vm_private_data =3D src->vm_private_data;
->         vm_flags_init(dest, src->vm_flags);
-> diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/=
-dup.h
-> index c52b23773cd2..26d9210b1e8b 100644
-> --- a/tools/testing/vma/include/dup.h
-> +++ b/tools/testing/vma/include/dup.h
-> @@ -577,6 +577,7 @@ struct vm_area_struct {
->          */
->         unsigned int vm_lock_seq;
->  #endif
-> +       unsigned int __vm_anon_pgoff_lo;
->
->         /*
->          * A file's MAP_PRIVATE vma can be in both i_mmap tree and anon_v=
-ma
-> @@ -612,6 +613,9 @@ struct vm_area_struct {
->  #ifdef CONFIG_PER_VMA_LOCK
->         /* Unstable RCU readers are allowed to read this. */
->         refcount_t vm_refcnt;
-> +#endif
-> +#ifdef CONFIG_64BIT
-> +       unsigned int __vm_anon_pgoff_hi;
->  #endif
->         /*
->          * For areas with an address space and backing store,
-> @@ -1320,6 +1324,28 @@ static inline pgoff_t vma_end_pgoff(const struct v=
-m_area_struct *vma)
->         return vma_start_pgoff(vma) + vma_pages(vma);
->  }
->
-> +static inline pgoff_t vma_start_anon_pgoff(const struct vm_area_struct *=
-vma)
-> +{
-> +       pgoff_t pgoff =3D 0;
-> +
-> +#ifdef CONFIG_64BIT
-> +       pgoff +=3D vma->__vm_anon_pgoff_hi;
-> +       pgoff <<=3D 32;
-> +#endif
-> +       pgoff +=3D vma->__vm_anon_pgoff_lo;
-> +       return pgoff;
-> +}
-> +
-> +static inline pgoff_t vma_end_anon_pgoff(const struct vm_area_struct *vm=
-a)
-> +{
-> +       return vma_start_anon_pgoff(vma) + vma_pages(vma);
-> +}
-> +
-> +static inline pgoff_t vma_last_anon_pgoff(const struct vm_area_struct *v=
-ma)
-> +{
-> +       return vma_end_anon_pgoff(vma) - 1;
-> +}
-> +
->  static inline int vfs_mmap_prepare(struct file *file, struct vm_area_des=
-c *desc)
->  {
->         return file->f_op->mmap_prepare(desc);
->
 > --
-> 2.55.0
+> 2.43.0
 >
