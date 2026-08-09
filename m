@@ -1,132 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from va-1-113.ptr.blmpb.com (va-1-113.ptr.blmpb.com [209.127.230.113])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4B111F16B;
-	Sun,  9 Aug 2026 08:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 369D5394EB0
+	for <linux-kselftest@vger.kernel.org>; Sun,  9 Aug 2026 08:21:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.127.230.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786262626; cv=none; b=Tw91jdP3w6Dkqw9CrvYnz8ahaWswE8By91apCxVjDwvsvnRs4DhIZdrC3k5oqOx91WRjodIf7Ul76+96E7tz99f5bdSk66UAfWQ7e5ix111dxKpbHot8KqbhlLmw9QX8tf/l9AVKvpC30jaiMxdl5QXzxzWTBcHEbxdjiSbXQg0=
+	t=1786263710; cv=none; b=Mh0KKpaIVrn6wyP3HVsu28JxNZ/fqjkBuw41GjbivrOvHzEq07MjvrqHsfjwFerzO9rtMRkP8OtO+vL3xZxzoLU/1UjtTOR/Mm75ieI+rHdRUM5YQUnsOtNO3uLILdHqq2nc6QJn2LE/qyvFiKsgSZraSaF/GtBx+CCumpQMm1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786262626; c=relaxed/simple;
-	bh=W0UcuhIPDeSXz0Fsy1mHSnpDzfBEm8n+bclRDJOKP4M=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=jQsYnEdoofPMr1hhByr/n/tcAiYzdxFumUczEz1L7lKMGortfrbqBFtMMUbCYx0QaxjQfxx0r+sf5lc/TzNp6h3aO8d8MOY2WsjdBcdFGi0S7ot/4fhSQQyqtBVsjx8Xdl//vIKFfPdhkgEeKCRc+M/D91OXWpmrl0tRh2Perug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eN4rk+K1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786263710; c=relaxed/simple;
+	bh=6xga2Rem33SBu03y3gctGh9ND9hhWHOzbjuyhtOHQzo=;
+	h=Message-Id:In-Reply-To:References:Content-Type:To:Cc:Subject:
+	 Mime-Version:Date:From; b=SaFkVN2l0HUK9Vbc+Q5OlVlCu1VPlwbgKPlkxi1bhkr2mGQwYCogR4ClMo1qWQH69+MnkntpnlAJO2srHteVY0LqzFyeqaTjWqOpoJbTygpMuAq/jONiU9RSgNOn2Xru+ryVezK2BK4Xbx0GfqYVp0xkZjzr4Xo2QMIlYn7cjz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=YCZc5CWD; arc=none smtp.client-ip=209.127.230.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eN4rk+K1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 832F91F000E9;
-	Sun,  9 Aug 2026 08:03:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786262625;
-	bh=UUnD4YT4HuSOBagwB//yv3X0Nx1d1hKHYt4Fov9+dc8=;
-	h=From:Date:Subject:To:Cc;
-	b=eN4rk+K1PFz/8b8/Qu0TTafuUNHxYuoiiH5kdUll/FLdwZtnj3kIbKRy4GfaohDFT
-	 XhNKai0vQ/+l02TMioR+oB56F1d+WFZZe4yBhasn1z7GoHNc2q9egVNMDjz2P5Ghgy
-	 V2VeBdI+o57IwyRmBXxx1n6hjKyk4SgD911/SoJq5rFpSPZIfjCA7R3ymZK9bXksC+
-	 4iq9M/NMZFv0DcR/7x5njYxH6geX7j/gtmRP8DNzejUN3qhNRNB83PILJ3Xwprk8px
-	 Ppqld6zT+v9L+nNV3i7AHhmcCnvbyHFnBqC5z9rEDB8Th/WdzClA5l1SQVE4XvVAv8
-	 PXYm0tpZfc68Q==
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Sun, 09 Aug 2026 11:03:35 +0300
-Subject: [PATCH] selftests/mm: thuge-gen: fix test_shmget() for PAGE_SIZE
- check
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="YCZc5CWD"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+ s=2212171451; d=bytedance.com; t=1786263697; h=from:subject:
+ mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
+ mime-version:in-reply-to:message-id;
+ bh=0Yk0lYL9aqPBymANq4am5jSB+FYd5S9sbi6/i8dc480=;
+ b=YCZc5CWDxLfbLTzlyJ0VYTLolNveLYQYsBvLsJZx0IL1+1IOHu0F4E8XwKaqblJVpDIYPB
+ aArDrZkWSFZCN6DarCHZ3U9THa/STwjW0qPvV/B7yc790Utygxz2r2oUYaLB/Gj4zZV6OC
+ hpqGrs3due4wTvYwIyxTT2l3vdM9r7mRpGOb7zvmd8rF7jQVyZ+LsobnoTFnDBVavEuAMv
+ sXO+jJdkxJFV4POvkEl+AcQYXSYAdf3AFblnNsi5xikifTxwYgbqyOCY17i+o/fJLrp+Ey
+ cnNvOC0LD+fz1aS6o82OjqGuyjNpba1Gu5sqzK8ojitLLUdbMzjMDpX1tE4+jw==
+Message-Id: <20260809082111.3827531-2-qirui.001@bytedance.com>
+X-Original-From: Rui Qi <qirui.001@bytedance.com>
+In-Reply-To: <20260809082111.3827531-1-qirui.001@bytedance.com>
+References: <20260809082111.3827531-1-qirui.001@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+X-Mailer: git-send-email 2.20.1
+Content-Transfer-Encoding: 7bit
+To: "Tejun Heo" <tj@kernel.org>
+Cc: "Waiman Long" <longman@redhat.com>, 
+	"Ridong Chen" <ridong.chen@linux.dev>, 
+	"Johannes Weiner" <hannes@cmpxchg.org>, 
+	=?utf-8?q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	"Shuah Khan" <shuah@kernel.org>, <cgroups@vger.kernel.org>, 
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, 
+	"Rui Qi" <qirui.001@bytedance.com>
+Subject: [PATCH 1/2] selftests/cgroup: Avoid awk -e in cpuset tests
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260809-selftests-thuge-gen-fix-v1-1-1919f4b3d12f@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAFY0eGoC/yWMyw7CIBBFf6WZtROxhvr4FeMCcGgxhRpmMCZN/
- 13Q5Tn3sQJTDsRw7VbI9A4cllThsOvATSaNhOFRGXrVD+qsLsg0eyEWRplKjUdK6MMHtXFKez0
- c1clBXb8yVf17vt3/zMU+yUm7aw1rmNBmk9zUVIyLxH2MWBKLsTPBtn0B2IuDMZ8AAAA=
-X-Change-ID: 20260809-selftests-thuge-gen-fix-5ac05f56307c
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Mike Rapoport <rppt@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-mm@kvack.org
-X-Mailer: b4 0.16-dev
+Mime-Version: 1.0
+X-Lms-Return-Path: <lba+26a78388f+989199+vger.kernel.org+qirui.001@bytedance.com>
+Date: Sun,  9 Aug 2026 16:21:10 +0800
+From: "Rui Qi" <qirui.001@bytedance.com>
 
-Commit 49a4e7186b08 ("selftests/mm: thuge-gen: add setup of HugeTLB pages")
-changed thuge-gen test to use common functions for reading hugetlb
-attributes from sysfs, but it missed that the original read_free() function
-special cased PAGE_SIZE tests.
+The cpuset selftests use awk -e to parse cgroup mount points. This
+works with gawk, but mawk rejects the option. In test_cpuset_prs.sh,
+this leaves CGROUP2 empty and causes the test to skip as if cgroup v2
+were not mounted. The same non-portable invocation exists in the cpuset
+v1 hotplug test.
 
-For PAGE_SIZE tests, failure to read sysfs was ignored and read_free()
-returned 0.
+The scripts only need to pass a single awk program. Use the standard awk
+invocation without -e so mount point detection works with awk
+implementations that do not support the gawk extension.
 
-This allowed test_shmget() to essentially skip the check of how many huge
-pages was consumed when it ran with PAGE_SIZE.
-
-Commit 3199b0c09efa ("selftests/mm: fix read_file() return value check")
-fixed the common read_file() to actually return error on failure and this
-exposed the issue in test_shmget() that checks the number of free hugetlb
-pages even for PAGE_SIZE test, tries to access
-
-/sys/kernel/mm/hugepages/hugepages-<PAGE_SIZE>/free_hugepages
-
-and obviously fails there.
-
-Gate the checks for free huge pages on size != getpagesize() and initialize
-before and after variables to values matching PAGE_SIZE test.
-
-Fixes: 49a4e7186b08 ("selftests/mm: thuge-gen: add setup of HugeTLB pages")
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Fixes: a8c52eba880a ("kselftest/cgroup: Add cpuset v2 partition root state test")
+Fixes: 812c5945bdb8 ("cgroup/cpuset: Add test_cpuset_v1_hp.sh")
+Signed-off-by: Rui Qi <qirui.001@bytedance.com>
 ---
-selftests/mm: thuge-gen: fix test_shmget() for PAGE_SIZE check
----
- tools/testing/selftests/mm/thuge-gen.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ tools/testing/selftests/cgroup/test_cpuset_prs.sh   | 2 +-
+ tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-index 22b9c2f1c35d..50d0805b65db 100644
---- a/tools/testing/selftests/mm/thuge-gen.c
-+++ b/tools/testing/selftests/mm/thuge-gen.c
-@@ -71,12 +71,16 @@ void test_mmap(unsigned long size, unsigned flags)
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+index 400a696a0d21..16c38eb11e63 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+@@ -20,7 +20,7 @@ skip_test() {
+ WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
  
- void test_shmget(unsigned long size, unsigned flags)
- {
--	int id;
--	unsigned long before, after;
-+	/* values for PAGE_SIZE test */
-+	unsigned long before = NUM_PAGES;
-+	unsigned long after = 0;
- 	struct shm_info i;
- 	char *map;
-+	int id;
-+
-+	if (size != getpagesize())
-+		before = hugetlb_free_pages(size);
+ # Find cgroup v2 mount point
+-CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
++CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+ [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
+ SUBPARTS_CPUS=$CGROUP2/.__DEBUG__.cpuset.cpus.subpartitions
+ CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
+diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+index 7406c24be1ac..da97f1643f9a 100755
+--- a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
++++ b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+@@ -14,7 +14,7 @@ skip_test() {
+ [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
  
--	before = hugetlb_free_pages(size);
- 	id = shmget(IPC_PRIVATE, size * NUM_PAGES, IPC_CREAT|0600|flags);
- 	if (id < 0) {
- 		if (errno == EPERM) {
-@@ -97,10 +101,11 @@ void test_shmget(unsigned long size, unsigned flags)
- 	shmctl(id, IPC_RMID, NULL);
+ # Find cpuset v1 mount point
+-CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk -e '{print $3}')
++CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk '{print $3}')
+ [[ -n "$CPUSET" ]] || skip_test "cpuset v1 mount point not found!"
  
- 	memset(map, 0xff, size*NUM_PAGES);
--	after = hugetlb_free_pages(size);
-+	if (size != getpagesize())
-+		after = hugetlb_free_pages(size);
- 
- 	show(size);
--	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
-+	ksft_test_result((before - after) == NUM_PAGES,
- 			 "%s: mmap %lu %x\n", __func__, size, flags);
- 	if (shmdt(map))
- 		ksft_exit_fail_msg("%s: shmdt: %s\n", __func__, strerror(errno));
-
----
-base-commit: 17e5919bdca144d4e67337f53bf57d7811f62192
-change-id: 20260809-selftests-thuge-gen-fix-5ac05f56307c
-
---
-Sincerely yours,
-Mike.
-
+ #
+-- 
+2.20.1
