@@ -1,472 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF573F9F22
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 14:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76016418A28
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 14:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786372943; cv=none; b=KtQ/Lpng8Yw9fmCBNMZGwtzdd9V4JtuvqRChmwC810pEmslD9J0QyCG7FZO0CI75Oo5IzsV3vDLpeVpetDwasf29l86Ui9urro6MP2RQWnLlZy/ubq/urEO+wAUVrwaY+NjvMvStgpaIkKMR7swCuX2uCrn5celkSrEp0bD0ixg=
+	t=1786373407; cv=none; b=SQ203drqGAC5h3073VTwtHzurJNAb1Z0G5I43G7k1Oeaad65hoy9M5YNtAh6tTi/IICw5HQ94TI1f/DmaN3B8SpXXX9SgYm9Y1oN/sC3P6rPRGVJjroNcUus3uv9yCSqTxlKNPcSEY04v31rv+4QkJghM7hnWSCEwL2vtVrgbe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786372943; c=relaxed/simple;
-	bh=WHaPQl9nG7pwT6aelfxaUIlj2tbbwAr7H8mc25m1s/A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EMLbE+uxqWEUwzu3WR4gabgUwQdPZ5sX2ZoFInyydsKpJaTJiwIGI8ApqG4CB2g8NMIApRUmOb+HRwtqZ2UxXDAH+unc1YL+n79GU+eX/b81X+TdjtHSlDeLEHlFe0WE+VHfCWudMXQAItXW9F6qWdupO4somwmngRRgzrEXKxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ji0ldL2K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786373407; c=relaxed/simple;
+	bh=BUKRM5UNVrjcwfigAkAdTCB4TpOi9su7mFoaox95Fsg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tg5Of0hYKV7sxm8f74WdpEf8IEBn1m+8RsYWmebepXJ5W7MMXPG5aw7pkFmiisRCSjo9QEAk+AGI8x7EpQc/KOTwP15vQMonVXXZzjPUs6ptxa4RoDEDMkAfPzPHNQuLkVqSHTq/WoX+gziKoW3lmhACqdI3hFd2pSCm05TDPbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=hAEubWER; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ji0ldL2K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E670B1F00ACF
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 14:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786372940;
-	bh=1NWYE7s2kG2vApGn1CM5LqHxBz/sRWAXVRkICaESsgI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=ji0ldL2KLgu1g5KpSvwQCsgVMXf2LTmHWUPtUfHHL734RpPhDwKzMTGbvB8JGN6gw
-	 5vqbcocNiZYAS4IBsBgE0vAwASY9lUBdZHBjvPOhCnXo0OWYCySxg50pJOz0cGjkgu
-	 6Ladfq4m6Lp9hN6FtHVae2auxn1N1Z04sMfoecX0LCfSos6/sZrFJR6UxqGxHIyteI
-	 Q8qI5zZ24VaYUUyPOTHqZVLWGgLa+iBCpq/Do/IOPHD195jvsD3Pi8Lxl4VfzXVnO8
-	 QWOq0G/rUf3JQHBJPYdGD/r86YcmVm0mNSizWs0qZi2EO7BAsj3u/TzlnD1BW7FIVJ
-	 kulK2w6ezHKow==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-6a051904222so2262133a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 07:42:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RovQ5wgddzqrOQkK79X0wksh8NKSIPlDxX0pgB/ZBTuloDRCeKRbFxSE1HjmVXpKWrT25jHUxmLVuwXOhMIKL4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YydFCms/NXlWMIoiYIfDHkwTMsDg5x2wsPJpYr6pmnMIAbTx57t
-	6s0ocomDSeJwKZ9phJ6uqI3sMONYH2ZCjuY8JBbQXR10mecPOc+6e/JblIYkgauy86rAiM9m9y0
-	Cg1jyJ9k9Zow+kuokNbOy47ocUHGEeU8=
-X-Received: by 2002:a05:6402:5515:b0:6a1:f95b:8ced with SMTP id
- 4fb4d7f45d1cf-6a1f95b8e6fmr6864130a12.4.1786372939467; Mon, 10 Aug 2026
- 07:42:19 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="hAEubWER"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1786373401;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2Q6+029G7RX00+t8jXWjA93xlFFwy4mUEXvvA9ZvLWg=;
+	b=hAEubWERGs9q++Hzs9sPRoQh7wnFPHLAI8h/YCgL/PumJjfam1Ecdrddc2m1uCDs/m/1xG
+	i/so93F+Zf20040GF4hpF4v+OInXr1vUdDKnWbuFII6M5ye4Q5dtu2FuvI0HmDuN5QiwZE
+	J7fNA8ENxAnoP4FyZfhRAvIpDJDWdQc=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-32-yDBOBY94NviefHAlFhblyw-1; Mon,
+ 10 Aug 2026 10:49:57 -0400
+X-MC-Unique: yDBOBY94NviefHAlFhblyw-1
+X-Mimecast-MFC-AGG-ID: yDBOBY94NviefHAlFhblyw_1786373396
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C0BDC1800611;
+	Mon, 10 Aug 2026 14:49:55 +0000 (UTC)
+Received: from [10.22.80.220] (unknown [10.22.80.220])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 2AFA9195DF95;
+	Mon, 10 Aug 2026 14:49:53 +0000 (UTC)
+Message-ID: <afd8ff90-4c70-40b2-ac98-ecd2552e981d@redhat.com>
+Date: Mon, 10 Aug 2026 10:49:53 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260807103714.33074-1-dongtai.guo@linux.dev> <20260807103714.33074-3-dongtai.guo@linux.dev>
-In-Reply-To: <20260807103714.33074-3-dongtai.guo@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Mon, 10 Aug 2026 22:42:08 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H4PKRNCa4g=6TGepP+trtM82JiMoWgVr3O7PqbZYP9uGw@mail.gmail.com>
-X-Gm-Features: AUfX_mylGF0TY6FDYfRhuwV2zjLnDdK1yWUYNWpJU2vhIKc7fAtDrVrc6klRqkA
-Message-ID: <CAAhV-H4PKRNCa4g=6TGepP+trtM82JiMoWgVr3O7PqbZYP9uGw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/4] LoongArch: kexec: add KHO support
-To: George Guo <dongtai.guo@linux.dev>
-Cc: rppt@kernel.org, pasha.tatashin@soleen.com, pratyush@kernel.org, 
-	shuah@kernel.org, ardb@kernel.org, guodongtai@kylinos.cn, kernel@xen0n.name, 
-	graf@amazon.com, loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org, 
-	Kexin Liu <liukexin@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] selftests/cgroup: Avoid awk -e in cpuset tests
+To: Rui Qi <qirui.001@bytedance.com>, Tejun Heo <tj@kernel.org>
+Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner
+ <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260809082111.3827531-1-qirui.001@bytedance.com>
+ <20260809082111.3827531-2-qirui.001@bytedance.com>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260809082111.3827531-2-qirui.001@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi, George,
-
-On Fri, Aug 7, 2026 at 6:38=E2=80=AFPM George Guo <dongtai.guo@linux.dev> w=
-rote:
+On 8/9/26 4:21 AM, Rui Qi wrote:
+> The cpuset selftests use awk -e to parse cgroup mount points. This
+> works with gawk, but mawk rejects the option. In test_cpuset_prs.sh,
+> this leaves CGROUP2 empty and causes the test to skip as if cgroup v2
+> were not mounted. The same non-portable invocation exists in the cpuset
+> v1 hotplug test.
 >
-> From: George Guo <guodongtai@kylinos.cn>
+> The scripts only need to pass a single awk program. Use the standard awk
+> invocation without -e so mount point detection works with awk
+> implementations that do not support the gawk extension.
 >
-> Enable Kexec Handover (KHO) on LoongArch64.
->
-> LoongArch has no boot FDT: the efistub passes the EFI system table and
-> the command line to the core kernel directly, so the arm64 /chosen path
-> (append linux,kho-fdt / linux,kho-scratch and let
-> early_init_dt_check_kho() read them) does not apply.  Follow the x86
-> model instead, which has no boot FDT either: carry the KHO pointer out of
-> band and call kho_populate() directly.  The channel is the EFI
-> configuration table entry added by the previous patch.
->
-> - Kconfig: ARCH_SUPPORTS_KEXEC_HANDOVER is def_bool 64BIT.
-> - machine_kexec_file.c: kho_load_data() builds a small handover blob
->   (struct linux_efi_kho_data) holding the KHO state FDT and scratch
->   addresses, and a new EFI configuration table with a
->   LINUX_EFI_KHO_TABLE_GUID entry pointing to it; both are loaded as kexec
->   segments.
-> - machine_kexec.c: before jumping to the next kernel, switch the EFI
->   system table to the extended configuration table.
-> - setup.c: kho_populate_from_efi() scans the configuration table for
->   LINUX_EFI_KHO_TABLE_GUID and calls kho_populate() from setup_arch(),
->   after efi_init() and before memblock_init().
->
-> Handover is set up by the kexec_file_load() syscall only.  kho_load_data(=
-)
-> runs from load_other_segments(), which the older kexec_load() syscall doe=
-s
-> not reach.  This matches x86, where KHO lives in the bzImage64 loader.
->
-> Tested on a LoongArch machine booting through ACPI/UEFI.  After the kexec=
-,
-> the second kernel reports
->
->   KHO: found kexec handover data.
->
-> and the two-stage test passes: luo_kexec_simple --stage 1, kexec into the
-> second kernel, then luo_kexec_simple --stage 2.
->
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+> Fixes: a8c52eba880a ("kselftest/cgroup: Add cpuset v2 partition root state test")
+> Fixes: 812c5945bdb8 ("cgroup/cpuset: Add test_cpuset_v1_hp.sh")
+> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
 > ---
->  arch/loongarch/Kconfig                     |   3 +
->  arch/loongarch/include/asm/kexec.h         |   7 ++
->  arch/loongarch/kernel/machine_kexec.c      |  16 +++
->  arch/loongarch/kernel/machine_kexec_file.c | 131 +++++++++++++++++++++
->  arch/loongarch/kernel/setup.c              |  41 +++++++
->  5 files changed, 198 insertions(+)
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh   | 2 +-
+>   tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
 >
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index d8d252325017..698828ef70f0 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -684,6 +684,9 @@ config ARCH_SUPPORTS_KEXEC
->  config ARCH_SUPPORTS_KEXEC_FILE
->         def_bool 64BIT
->
-> +config ARCH_SUPPORTS_KEXEC_HANDOVER
-> +       def_bool 64BIT
-> +
->  config ARCH_SELECTS_KEXEC_FILE
->         def_bool 64BIT
->         depends on KEXEC_FILE
-> diff --git a/arch/loongarch/include/asm/kexec.h b/arch/loongarch/include/=
-asm/kexec.h
-> index 6be136e9f0a0..2bcc8bc0d3cc 100644
-> --- a/arch/loongarch/include/asm/kexec.h
-> +++ b/arch/loongarch/include/asm/kexec.h
-> @@ -39,6 +39,13 @@ struct kimage_arch {
->         unsigned long efi_boot;
->         unsigned long cmdline_ptr;
->         unsigned long systable_ptr;
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +       void *kho_data;                 /* KHO handover blob buffer (virt=
-ual) */
-> +       unsigned long kho_data_mem;     /* physical address of the KHO ha=
-ndover blob */
-> +       void *efi_tables;               /* new EFI config table buffer (v=
-irtual) */
-> +       unsigned long efi_tables_mem;   /* physical address of new EFI co=
-nfig table */
-> +       unsigned long efi_tables_cnt;   /* number of entries in new EFI c=
-onfig table */
-> +#endif
->  };
->
->  struct kimage;
-> diff --git a/arch/loongarch/kernel/machine_kexec.c b/arch/loongarch/kerne=
-l/machine_kexec.c
-> index 1883cae93bc3..c98a5607684d 100644
-> --- a/arch/loongarch/kernel/machine_kexec.c
-> +++ b/arch/loongarch/kernel/machine_kexec.c
-> @@ -6,6 +6,7 @@
->   */
->  #include <linux/compiler.h>
->  #include <linux/cpu.h>
-> +#include <linux/efi.h>
->  #include <linux/kexec.h>
->  #include <linux/crash_dump.h>
->  #include <linux/delay.h>
-> @@ -287,6 +288,21 @@ void machine_kexec(struct kimage *image)
->         pr_notice("We will call new kernel at 0x%lx\n", start_addr);
->         pr_notice("Bye ...\n");
->
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +       /*
-> +        * KHO: switch the EFI system table to the extended configuration=
- table
-> +        * built in kho_load_data(), which carries the LINUX_EFI_KHO_TABL=
-E_GUID
-> +        * entry the next kernel reads to find the KHO handover blob.
-> +        */
-> +       if (internal->efi_tables_mem) {
-> +               efi_system_table_t *st =3D
-> +                       (efi_system_table_t *)TO_CACHE(systable_ptr);
-> +
-> +               st->tables    =3D internal->efi_tables_mem;
-> +               st->nr_tables =3D internal->efi_tables_cnt;
-> +       }
-> +#endif
-> +
->         /* Make reboot code buffer available to the boot CPU. */
->         flush_cache_all();
->
-> diff --git a/arch/loongarch/kernel/machine_kexec_file.c b/arch/loongarch/=
-kernel/machine_kexec_file.c
-> index 5584b798ba46..d4c2243b6cb0 100644
-> --- a/arch/loongarch/kernel/machine_kexec_file.c
-> +++ b/arch/loongarch/kernel/machine_kexec_file.c
-> @@ -10,6 +10,7 @@
->
->  #define pr_fmt(fmt) "kexec_file: " fmt
->
-> +#include <linux/efi.h>
->  #include <linux/ioport.h>
->  #include <linux/kernel.h>
->  #include <linux/kexec.h>
-> @@ -18,6 +19,7 @@
->  #include <linux/string.h>
->  #include <linux/types.h>
->  #include <linux/vmalloc.h>
-> +#include <asm/addrspace.h>
->  #include <asm/bootinfo.h>
->
->  const struct kexec_file_ops * const kexec_file_loaders[] =3D {
-> @@ -32,6 +34,13 @@ int arch_kimage_file_post_load_cleanup(struct kimage *=
-image)
->         image->elf_headers =3D NULL;
->         image->elf_headers_sz =3D 0;
->
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +       kfree(image->arch.kho_data);
-> +       image->arch.kho_data =3D NULL;
-> +       kvfree(image->arch.efi_tables);
-> +       image->arch.efi_tables =3D NULL;
-> +#endif
-> +
->         return kexec_image_post_load_cleanup_default(image);
->  }
->
-> @@ -55,6 +64,121 @@ static void cmdline_add_initrd(struct kimage *image, =
-unsigned long *cmdline_tmpl
->         *cmdline_tmplen +=3D initrd_strlen;
->  }
->
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +/*
-> + * Hand the KHO state to the next kernel through a dedicated EFI configu=
-ration
-> + * table entry.
-> + *
-> + * LoongArch has no boot FDT: the efistub passes the EFI system table an=
-d the
-> + * command line to the core kernel directly.  So instead of the arm64 /c=
-hosen
-> + * FDT path, build a small handover blob (struct linux_efi_kho_data) hol=
-ding the
-> + * KHO state FDT and scratch addresses, register it in the EFI configura=
-tion
-> + * table under LINUX_EFI_KHO_TABLE_GUID, and let the next kernel read it=
- and
-> + * call kho_populate() directly.
-> + *
-> + * Both the blob and the extended configuration table are loaded as kexe=
-c
-> + * segments; machine_kexec() switches st->tables to the new table before=
- jumping.
-> + *
-> + * image->kho.fdt and image->kho.scratch are filled in by kho_fill_kimag=
-e()
-> + * before the arch loader runs, so they are valid here.
-> + */
-> +static int kho_load_data(struct kimage *image)
-> +{
-> +       struct linux_efi_kho_data *kho;
-> +       efi_system_table_t *st;
-> +       efi_config_table_t *ct, *new_ct;
-> +       size_t old_sz, new_sz;
-> +       struct kexec_buf kbuf =3D {
-> +               .image          =3D image,
-> +               .buf_min        =3D 0,
-> +               .buf_max        =3D ULONG_MAX,
-> +               .top_down       =3D true,
-> +       };
-> +       int ret;
-> +
-> +       if (!image->kho.fdt || !image->kho.scratch)
-> +               return 0;
-> +
-> +       if (!fw_arg2) {
-> +               pr_err("KHO requires an EFI boot, no EFI system table fou=
-nd\n");
-> +               return -EINVAL;
-> +       }
-This check is unnecessary, if no EFI system table, you cannot boot
-your system, and have no chance for kexec.
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 400a696a0d21..16c38eb11e63 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -20,7 +20,7 @@ skip_test() {
+>   WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
+>   
+>   # Find cgroup v2 mount point
+> -CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
+> +CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+>   [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
+>   SUBPARTS_CPUS=$CGROUP2/.__DEBUG__.cpuset.cpus.subpartitions
+>   CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> index 7406c24be1ac..da97f1643f9a 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> @@ -14,7 +14,7 @@ skip_test() {
+>   [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
+>   
+>   # Find cpuset v1 mount point
+> -CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk -e '{print $3}')
+> +CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk '{print $3}')
+>   [[ -n "$CPUSET" ]] || skip_test "cpuset v1 mount point not found!"
+>   
+>   #
 
-> +
-> +       /* Build the handover blob and load it as a kexec segment. */
-> +       kho =3D kzalloc(sizeof(*kho), GFP_KERNEL);
-> +       if (!kho)
-> +               return -ENOMEM;
-> +
-> +       kho->fdt_addr     =3D image->kho.fdt;
-> +       kho->fdt_size     =3D PAGE_SIZE;
-> +       kho->scratch_addr =3D image->kho.scratch->mem;
-> +       kho->scratch_size =3D image->kho.scratch->memsz;
-> +
-> +       kbuf.buffer     =3D kho;
-> +       kbuf.bufsz      =3D sizeof(*kho);
-> +       kbuf.memsz      =3D sizeof(*kho);
-> +       kbuf.buf_align  =3D sizeof(u64);
-> +       kbuf.mem        =3D KEXEC_BUF_MEM_UNKNOWN;
-> +
-> +       ret =3D kexec_add_buffer(&kbuf);
-> +       if (ret) {
-> +               kfree(kho);
-> +               return ret;
-> +       }
-> +       image->arch.kho_data     =3D kho;
-> +       image->arch.kho_data_mem =3D kbuf.mem;
-> +
-> +       kexec_dprintk("Loaded KHO handover blob at 0x%lx bufsz=3D0x%lx me=
-msz=3D0x%lx\n",
-> +                     image->arch.kho_data_mem, kbuf.bufsz, kbuf.memsz);
-> +       kexec_dprintk("KHO fdt at 0x%llx, scratch at 0x%llx size 0x%llx\n=
-",
-> +                     kho->fdt_addr, kho->scratch_addr, kho->scratch_size=
-);
-> +
-> +       /*
-> +        * Build a new EFI configuration table with a LINUX_EFI_KHO_TABLE=
-_GUID
-> +        * entry appended, pointing at the handover blob, and load it as =
-a kexec
-> +        * segment.  machine_kexec() updates st->tables / st->nr_tables t=
-o point
-> +        * to it before jumping.
-> +        *
-> +        * fw_arg2 is the EFI system table physical address passed by the
-> +        * firmware/bootloader.  Use it directly because image->arch.syst=
-able_ptr
-> +        * is set later in machine_kexec_prepare(), which runs after this=
-.
-> +        */
-> +       st =3D (efi_system_table_t *)TO_CACHE(fw_arg2);
-> +       ct =3D (efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
-> +       old_sz =3D st->nr_tables * sizeof(efi_config_table_t);
-> +       new_sz =3D old_sz + sizeof(efi_config_table_t);
-> +
-> +       new_ct =3D kvmalloc(new_sz, GFP_KERNEL);
-> +       if (!new_ct)
-> +               return -ENOMEM;
-> +
-> +       memcpy(new_ct, ct, old_sz);
-> +       new_ct[st->nr_tables].guid  =3D LINUX_EFI_KHO_TABLE_GUID;
-> +       new_ct[st->nr_tables].table =3D (void *)image->arch.kho_data_mem;
-> +
-> +       kbuf.buffer     =3D new_ct;
-> +       kbuf.bufsz      =3D new_sz;
-> +       kbuf.memsz      =3D new_sz;
-> +       kbuf.buf_align  =3D sizeof(void *);
-> +       kbuf.mem        =3D KEXEC_BUF_MEM_UNKNOWN;
-> +
-> +       ret =3D kexec_add_buffer(&kbuf);
-> +       if (ret) {
-> +               kvfree(new_ct);
-> +               return ret;
-> +       }
-> +       image->arch.efi_tables     =3D new_ct;
-> +       image->arch.efi_tables_mem =3D kbuf.mem;
-> +       image->arch.efi_tables_cnt =3D st->nr_tables + 1;
-> +
-> +       kexec_dprintk("Loaded EFI config table at 0x%lx bufsz=3D0x%lx mem=
-sz=3D0x%lx nr_tables=3D%lu\n",
-> +                     image->arch.efi_tables_mem, kbuf.bufsz, kbuf.memsz,
-> +                     image->arch.efi_tables_cnt);
-> +
-> +       return 0;
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_CRASH_DUMP
->
->  static int prepare_elf_headers(void **addr, unsigned long *sz)
-> @@ -220,6 +344,13 @@ int load_other_segments(struct kimage *image,
->                 cmdline_add_initrd(image, &cmdline_tmplen, modified_cmdli=
-ne, initrd_load_addr);
->         }
->
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +       /* Load the KHO handover blob and the extended EFI configuration =
-table */
-> +       ret =3D kho_load_data(image);
-> +       if (ret)
-> +               goto out_err;
-> +#endif
-> +
->         if (cmdline_len + cmdline_tmplen > COMMAND_LINE_SIZE) {
->                 pr_err("Appending command line exceeds COMMAND_LINE_SIZE\=
-n");
->                 ret =3D -EINVAL;
-> diff --git a/arch/loongarch/kernel/setup.c b/arch/loongarch/kernel/setup.=
-c
-> index 6fa4a22a58fd..1e2fbf37aecf 100644
-> --- a/arch/loongarch/kernel/setup.c
-> +++ b/arch/loongarch/kernel/setup.c
-> @@ -20,6 +20,7 @@
->  #include <linux/initrd.h>
->  #include <linux/ioport.h>
->  #include <linux/kexec.h>
-> +#include <linux/kexec_handover.h>
->  #include <linux/crash_dump.h>
->  #include <linux/root_dev.h>
->  #include <linux/console.h>
-> @@ -280,6 +281,45 @@ static void __init arch_reserve_crashkernel(void)
->         reserve_crashkernel_generic(crash_size, crash_base, low_size, hig=
-h);
->  }
->
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +/*
-> + * On a KHO kexec boot the previous kernel registered a handover blob in=
- the EFI
-> + * configuration table under LINUX_EFI_KHO_TABLE_GUID (see
-> + * arch/loongarch/kernel/machine_kexec_file.c).  Scan the configuration =
-table
-> + * for it, read the KHO state FDT and scratch addresses, and hand them t=
-o the
-> + * KHO core.  fw_arg2 is the EFI system table physical address.
-> + *
-> + * This runs from setup_arch(), after efi_init() and before memblock_ini=
-t(),
-> + * which is where the generic reader early_init_dt_check_kho() would cal=
-l
-> + * kho_populate().
-> + */
-> +static void __init kho_populate_from_efi(void)
-> +{
-> +       efi_system_table_t *st;
-> +       efi_config_table_t *ct;
-> +       struct linux_efi_kho_data *kho;
-> +       unsigned long i;
-> +
-> +       if (!fw_arg2)
-> +               return;
-> +
-> +       st =3D (efi_system_table_t *)TO_CACHE(fw_arg2);
-> +       ct =3D (efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
-> +
-> +       for (i =3D 0; i < st->nr_tables; i++) {
-> +               if (efi_guidcmp(ct[i].guid, LINUX_EFI_KHO_TABLE_GUID))
-> +                       continue;
-> +
-> +               kho =3D (struct linux_efi_kho_data *)TO_CACHE((unsigned l=
-ong)ct[i].table);
-> +               kho_populate(kho->fdt_addr, kho->fdt_size,
-> +                            kho->scratch_addr, kho->scratch_size);
-> +               break;
-> +       }
-> +}
-If you do this in efi.c, you can significantly simplify the code. By
-defining the KHO table in arch_tables[], you almost only need to call
-kho_populate() at the end of efi_init().
+The test systems that I used have gawk. That is why I don't have this 
+problem. Anyway, I support to make it more usable with other systems 
+that use mawk.
 
-Huacai
+Acked-by: Waiman Long <longman@redhat.com>
 
-> +#else
-> +static void __init kho_populate_from_efi(void) { }
-> +#endif
-> +
->  static void __init fdt_setup(void)
->  {
->  #ifdef CONFIG_OF_EARLY_FLATTREE
-> @@ -599,6 +639,7 @@ void __init setup_arch(char **cmdline_p)
->
->         init_environ();
->         efi_init();
-> +       kho_populate_from_efi();
->         fdt_setup();
->         memblock_init();
->         pagetable_init();
-> --
-> 2.53.0
->
