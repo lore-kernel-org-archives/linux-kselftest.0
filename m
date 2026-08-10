@@ -1,74 +1,81 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F22532B13A
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 02:02:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9547D2EAD1B
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 02:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786327340; cv=none; b=oQFIDdcblOEeFJ1+Cp2Gcra3PhnJaIUOhFEmAe9ZYZkyehCNa8R3q8Hmk4i6Zcqmr0X9L3V/yssLhjz13PgO+dPA804krn0JLgwN1B6puUNmXoItsYG0L/heJB3eyDY6cqbd3GK/Lw/9QZ4U9Rawf9ZlicRqXxRduX6OM7h9rGU=
+	t=1786328630; cv=none; b=rz664No/sIduXbaUZF+wN3LpG+DQyOYOkSqwWBpOJtSJgOBRjM3WIKC7+cupkP63TNrZzSgLojmUB/TY/fBZ82mf7nrUFfQ8KZjwtSwvPGvk+xIpTqDquo7wHjqqUBoHekXsVanYqjyEXIc6XJmgt6MdnqJBa55i3HzFrwgwhg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786327340; c=relaxed/simple;
-	bh=xGVbTqcbmXKJDuCBlsOgJcwXwqXfOP2u9fxjxnzVUh4=;
+	s=arc-20240116; t=1786328630; c=relaxed/simple;
+	bh=brIXrSHMNh+w2+wqvBdY6ZLq52aicUd2kThuQ+xFW+o=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eY551cLtoLv+lEc2RSNCQln0vbKpzwURSuX/1m6Rxzf3FWUILug2ZdCrn2ctRgk5OCM7HRGt8xvvZyfCsnoiBXNr5YpNjROuNwpw+Wn9ygsWNyZdR2dMUeNgSADPl366NHYR7MGFS7RDVjg5D+E1hvi8rhTyPc/aYgZuZjA6mlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O3ieLwwh; arc=none smtp.client-ip=209.85.216.49
+	 Content-Type:Content-Disposition:In-Reply-To; b=e91bFPiZCs5HUv2oo/TUa0hMgF+fLGynYG2MfF6TYu9UaEwUMqkn1kO/YhrRxpkzVNeJc59EBN3mdwFceDseVgZNpmL6q0mG1YrNe9e2NWS1K7Fv8DXnnuRFHvdwvIABQ+X0QbcRJpjaenMJfOm//G9B/+iyPK+H5JSYXfa3SN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ukle3woU; arc=none smtp.client-ip=209.85.215.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O3ieLwwh"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-3811f512167so1932351a91.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 19:02:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ukle3woU"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbb7926836eso770941a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 19:23:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786327337; x=1786932137; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786328628; x=1786933428; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=6bMsTpWX3mOf0fEaABifWS6yDxE6k9F3K84LoGarf68=;
-        b=O3ieLwwhciqa/vy+ySo9fbIAeNEcaeio2oOtDvkUu8oCG32W+M6YSXxXPM5k2wZzWu
-         lLihcBJBb4Fiya9s7hL19D4Hh2XDtPYTo2PNHEmOAAaDiaHzmm431d3iCKRC+rI9e9Vz
-         0gi+kVUioRmKgvlKim5Q7Q+tOxK4sg5CWfDppnCzCp4UYn/uzCvZb/5Up7qQo6QRiHYu
-         K0RWgQWetx58+yjMHfFKyHOWXtEcc+DBeyK5dDZbxMpBI+ou3RnBuLum1v8vhk0iwH0n
-         wf8zlytrYNtGU3XEQA/em4B0hlcEBBTe+VMV9wvEWZyefP0UVcyFThEPcmZC4AnzvjO4
-         1ikw==
+        bh=L8/Xu6Bl9nz3vhT2oV8jvDAfGpBWDs2/HnpOEeUYYe8=;
+        b=Ukle3woUorjutusatcUOV+w/so4QfCzhHs1JAVMuDNrk/XsRMDs1glmFRHrONcXSQ/
+         K1E4iT65wsrW/ErPgFxHim02hn9FN2u1JTwBxGBnjUzy4stsbgZvg3MIoUnK6bWmUcIX
+         cmU8BJzWEaOA8Z7PZsKXU53M4MYCstFV4ztc1z/pmUX59KOU8AI0MQjrcxWuop2z0qkM
+         4wtUcDmQePfEokOmb7cr4QSx7TxXwKKD4eQEMLBdxuagCHRD0pdysbeszR/EeiRlxC/a
+         RJTy6wZ1huV6fWy7bTUAjSwB9Vv4Ke12ObvApLXUq52+EIFXZvf9PNit+CHdxmd++/p2
+         MLtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786327337; x=1786932137;
+        d=1e100.net; s=20251104; t=1786328628; x=1786933428;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=6bMsTpWX3mOf0fEaABifWS6yDxE6k9F3K84LoGarf68=;
-        b=h3gpfXAP06g+gYeb+bYfXaDa9Y+HZLqyzEeDEk2BVPhpVScvO/xV/GEH4IaC0QAV/N
-         de9X8gj2oC2FZ8XnSj8vr/3euqfCckB9lRkaJgfhlPvwO+bvvYlxm5NXsUYxyncovx+5
-         MLoaWCZV8nbl4yNdFTSspiDGOGEKnADpqCySGEl3E9ZROlt8VoxfW0Q0PHiiFKDJyE7Q
-         /XewqcOFteJKnE71L2zMp4Phay6CilHLGL5z/sv0OdCY8Cyq9fIbGxkWrvmcRcAa1Lmb
-         q0p8+Q/j2Ec3/l5EbhWHfU9J7JE7UcpN27NzAenihiQWHTL+udCswxDYHWFlsBdq84Y/
-         2knQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7HDwNvnUbBI4JXH6rjgXuOaeujEUK0+otXJp272sM7rwvRC8JQ+6PUTEAY0FT3sY6dAj15UZ2Fymjai/m52Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzeSGnB4K8uzD9x0jzfwsmgQEnN5v/rswYyx/8HoHo2C9jBX6AS
-	Hf/uGr43nsrpC8x1bLEEuJQkyZu/xZdj9HHGb0UpLp0jAkEe8kyQeNEs
-X-Gm-Gg: AR+sD11jORxrETAslx8iBpN2dR7SnqXeTbTRVv5fud+mJkY0CgN/KP0/8O0+0g+cq3q
-	6s29fVFqDRMNLcYMBfIXkEBjsu9UTXGg66psp4tFd8txZhPWEAZnfWH2oqxvEzAkuHuSKCwE5Yo
-	OrRkXReKGMieNAEPoczmhglEqTjukomdlEMPczZ92IvRYcXk7gU64/4tGrucBRaK+Nbx6s+dsBI
-	0gbeEsv/EKNpI6enaOwenx0RVQGOtC/ONaCOkpHOGOrj7+WZVLUQ+Hpo5UtCYa08epo9YnBMWw7
-	mYfo7zUQ+bWcRfY1XX+bd7/XmrWhUujLdhkPjx/KHuOOj/d+dpYfyz81Aphvy3tpv02hA2n+Vy/
-	i3Ktb0dF++fRIthn+ir6Cj2T2gWFCSRIv3XBVoXBM42L4BUpU1GQMSphLDnBmtIiVyCK3skf1Az
-	15wnwQJN0ca5SEGZTBn9XCp9OKtqA3as9sZXkqjtcpZ8CSEQSnt029iHI=
-X-Received: by 2002:a17:90b:224e:b0:38e:2524:724f with SMTP id 98e67ed59e1d1-3903c5b353bmr33888345a91.12.1786327337076;
-        Sun, 09 Aug 2026 19:02:17 -0700 (PDT)
+        bh=L8/Xu6Bl9nz3vhT2oV8jvDAfGpBWDs2/HnpOEeUYYe8=;
+        b=f2G3/UBOMSk4/wwOZdkugyK8MrSpbHohPbOT9qztAjLfI2DoIirvipsx5TuqMdP+C3
+         eHVG0d4C2ozyj3A487wOIjfFPExaXJCrYWy+X+WaMsDd2WJ/7M/WOypqU9z+uZW0nlyu
+         X7o+obxE1lb5YYJV6PJd7oG2sWYCATtxdNWeHbmf7SnS2Ufbv++EGmuZLoLKHI/dCF2a
+         2eUDobtmcGNmBbAk8vaWzxIXmZU+0gXsFMwXcdZL/kmXYGH2VLXuqYS54h3RoL2SMhX8
+         nGYXVcffE0jsEXVhE2FSwn9jcEWz4ople1/LfGQrySGaLQS0ns4g3soPkS6Qn7gtWp/E
+         WBRQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoXjbFpCn5tX8fz3UlCNlU9gR7WspDoAX1Emdi8MoV1zOnSGs/DOw1WKAw/mNDd7EgqvI3+/E3nyGq3lfkibZc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlrsvsiHLtVf0s6Nlct2r94TGZ4HwOFU0v2BZAFc4yyvkuuW7B
+	td85c7tHQknnE5eLyBs9r5dgJMbchK/puaZsllqFoGqk3zqtddTNRI2g
+X-Gm-Gg: AR+sD11Gp82PLvRr180Dbg8P9kxMCapWq0cisqeJgHZByEWFN+Le+zCQVPQxvG5V2aW
+	tm6gmGyr9M47g7oMlOSdUZJvZ2JgZvaMAIOHJkJS7gNGSs5fZTfVUvu9Xs2LKjNNRO7BNxP6T4t
+	SAa977cKHT7+mf6cDOq3BHViN2oZdfE0JgIDkAV9BfREbJ3WEO0ToW/NVaBNO7yms2LKovB+uP5
+	x2J7ixQt09JQs3uBfcSOS0k14aRx2WPH6862Gsmnj4AKnCiUo0rXiDrKWKENlON0g1NRpzoascl
+	WPQKsSr6qaro7aRkPDSLNoH6LwFCFbnOa6iAZnbax7f/AK5odUH+EsiQa4D+coCT5K1QwBmtqY6
+	cLkakBwy+fu387kK+2QgqnuhEXqAgqRP5IUft9IFxzRqLjTQfYuBZyMdPFzlejcHuyP5LyEy/Zl
+	69Yb1EEr+ALcrA3cp4iGCh8UU5MN7NlDurE9yfgAwelOQWHwUJOBpfUyQ=
+X-Received: by 2002:a05:6a00:ad5:b0:846:de21:3da4 with SMTP id d2e1a72fcca58-84f2e021ff5mr41007248b3a.3.1786328627675;
+        Sun, 09 Aug 2026 19:23:47 -0700 (PDT)
 Received: from fedora ([203.175.12.242])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-390b370b145sm5025301a91.2.2026.08.09.19.02.13
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a58bd4bsm3074067b3a.56.2026.08.09.19.23.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Aug 2026 19:02:16 -0700 (PDT)
-Date: Mon, 10 Aug 2026 10:02:10 +0800
+        Sun, 09 Aug 2026 19:23:46 -0700 (PDT)
+Date: Mon, 10 Aug 2026 10:23:35 +0800
 From: Hangbin Liu <liuhangbin@gmail.com>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	jv@jvosburgh.net, shuah@kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net-next] selftests: bonding: disable DAD for IPv6
- addresses
-Message-ID: <ankxIiVLu3qY5jw5@fedora>
-References: <20260808162345.2442594-1-kuba@kernel.org>
+To: Xin Xie <xiexinet@gmail.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, davem@davemloft.net,
+	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
+	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
+	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
+	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
+	stable@vger.kernel.org, sdf.kernel@gmail.com,
+	syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
+Subject: Re: [PATCH 2/4] net: hsr: shrink seqnr_lock to sequence counter
+ updates
+Message-ID: <ank2JxDbOpX_wr5f@fedora>
+References: <20260809121455.1745-1-xiexinet@gmail.com>
+ <20260809121455.1745-3-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,80 +84,145 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260808162345.2442594-1-kuba@kernel.org>
+In-Reply-To: <20260809121455.1745-3-xiexinet@gmail.com>
 
-On Sat, Aug 08, 2026 at 09:23:45AM -0700, Jakub Kicinski wrote:
-> bond_reset() waits up to 2 seconds for IPv6 connectivity.
-> With default settings DAD itself may take almost 2 seconds,
-> causing flakes on debug builds. It used to flake once or
-> twice a week, recently it started failing once a day.
-> Probably some downstream changes to scheduler, or our machines
-> go busier.
+On Sun, Aug 09, 2026 at 02:14:52PM +0200, Xin Xie wrote:
+> Commit 06afd2c31d33 ("hsr: Synchronize sending frames to have always
+> incremented outgoing seq nr.") and commit 430d67bdcb04 ("net: hsr: Use
+> the seqnr lock for frames received via interlink port.") hold
+> seqnr_lock across the whole forwarding path. Transmitting while
+> holding the lock can create lock-dependency issues when HSR devices
+> are stacked with other net devices, up to a real deadlock (see
+> Reported-by/Closes).
 > 
-> A lot of selftests already use nodad, let's use nodad in bonding, too.
-> I don't see an obvious reason why DAD would be important to the test.
-
-In this case, how about add nodad to all IPv6 address setting on bonding
-tests, e.g. bond_options.sh, bond_macvlan_ipvlan.sh.
-
-After that, we may event remove the sleep time in bond_macvlan_ipvlan.sh.
-In my local testing all the macvlan/ipvlan test passed with nodad set.
-
-Thanks
-Hangbin
+> Since commit aae9d6b616b5 ("hsr: Implement more robust duplicate
+> discard for HSR"), duplicate discard is order-independent (sparse
+> bitmaps), so only the sequence counter updates need serialization.
+> Limit seqnr_lock to the counter updates in handle_std_frame(); the
+> master TX path (hsr_dev_xmit()) and the interlink RX path
+> (hsr_handle_frame()) drop their outer lock, and the supervision frame
+> builders release it right after their counter update.
 > 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> Concurrent forwarding may emit frames out of allocation order, which
+> sparse-bitmap discard tolerates. The master/interlink tx statistics are
+> no longer serialized; consistent per-cpu/per-queue statistics for all
+> HSR paths are handled in a separate series.
+> 
+> Fixes: 06afd2c31d33 ("hsr: Synchronize sending frames to have always incremented outgoing seq nr.")
+> Fixes: 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames received via interlink port.")
+> Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
+> Cc: <stable@vger.kernel.org> # aae9d6b616b5: hsr: Implement more robust duplicate discard for HSR
+> Signed-off-by: Xin Xie <xiexinet@gmail.com>
 > ---
-> CC: liuhangbin@gmail.com
-> CC: jv@jvosburgh.net
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  .../selftests/drivers/net/bonding/bond_topo_2d1c.sh    | 10 ++++------
->  1 file changed, 4 insertions(+), 6 deletions(-)
+>  net/hsr/hsr_device.c  | 15 ++++-----------
+>  net/hsr/hsr_forward.c |  3 ++-
+>  net/hsr/hsr_slave.c   | 11 +----------
+>  3 files changed, 7 insertions(+), 22 deletions(-)
 > 
-> diff --git a/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh b/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
-> index 167aa4a4a12a..903c7a6c7287 100644
-> --- a/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
-> +++ b/tools/testing/selftests/drivers/net/bonding/bond_topo_2d1c.sh
-> @@ -48,7 +48,7 @@ gateway_create()
->  	ip -n ${g_ns} link add br0 type bridge
->  	ip -n ${g_ns} link set br0 up
->  	ip -n ${g_ns} addr add ${g_ip4}/24 dev br0
-> -	ip -n ${g_ns} addr add ${g_ip6}/24 dev br0
-> +	ip -n ${g_ns} addr add ${g_ip6}/24 dev br0 nodad
+> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
+> index 5555b71ab19b..3fd1762d8916 100644
+> --- a/net/hsr/hsr_device.c
+> +++ b/net/hsr/hsr_device.c
+> @@ -232,9 +232,7 @@ static netdev_tx_t hsr_dev_xmit(struct sk_buff *skb, struct net_device *dev)
+>  		skb->dev = master->dev;
+>  		skb_reset_mac_header(skb);
+>  		skb_reset_mac_len(skb);
+> -		spin_lock_bh(&hsr->seqnr_lock);
+>  		hsr_forward_skb(skb, master);
+> -		spin_unlock_bh(&hsr->seqnr_lock);
+>  	} else {
+>  		dev_core_stats_tx_dropped_inc(dev);
+>  		dev_kfree_skb_any(skb);
+> @@ -335,6 +333,7 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
+>  		hsr_stag->sequence_nr = htons(hsr->sequence_nr);
+>  		hsr->sequence_nr++;
+>  	}
+> +	spin_unlock_bh(&hsr->seqnr_lock);
+>  
+>  	hsr_stag->tlv.HSR_TLV_type = type;
+>  	/* HSRv0 has 6 unused bytes after the MAC */
+> @@ -356,14 +355,10 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
+>  		ether_addr_copy(hsr_sp->macaddress_A, hsr->macaddress_redbox);
+>  	}
+>  
+> -	if (skb_put_padto(skb, ETH_ZLEN)) {
+> -		spin_unlock_bh(&hsr->seqnr_lock);
+> +	if (skb_put_padto(skb, ETH_ZLEN))
+>  		return;
+> -	}
+>  
+>  	hsr_forward_skb(skb, port);
+> -	spin_unlock_bh(&hsr->seqnr_lock);
+> -	return;
 >  }
 >  
->  gateway_destroy()
-> @@ -75,7 +75,7 @@ server_create()
+>  static void send_prp_supervision_frame(struct hsr_port *master,
+> @@ -390,6 +385,7 @@ static void send_prp_supervision_frame(struct hsr_port *master,
+>  	spin_lock_bh(&hsr->seqnr_lock);
+>  	hsr_stag->sequence_nr = htons(hsr->sup_sequence_nr);
+>  	hsr->sup_sequence_nr++;
+> +	spin_unlock_bh(&hsr->seqnr_lock);
+>  	hsr_stag->tlv.HSR_TLV_type = PRP_TLV_LIFE_CHECK_DD;
+>  	hsr_stag->tlv.HSR_TLV_length = sizeof(struct hsr_sup_payload);
 >  
->  	ip -n ${s_ns} link set bond0 up
->  	ip -n ${s_ns} addr add ${s_ip4}/24 dev bond0
-> -	ip -n ${s_ns} addr add ${s_ip6}/24 dev bond0
-> +	ip -n ${s_ns} addr add ${s_ip6}/24 dev bond0 nodad
+> @@ -397,13 +393,10 @@ static void send_prp_supervision_frame(struct hsr_port *master,
+>  	hsr_sp = skb_put(skb, sizeof(struct hsr_sup_payload));
+>  	ether_addr_copy(hsr_sp->macaddress_A, master->dev->dev_addr);
+>  
+> -	if (skb_put_padto(skb, ETH_ZLEN)) {
+> -		spin_unlock_bh(&hsr->seqnr_lock);
+> +	if (skb_put_padto(skb, ETH_ZLEN))
+>  		return;
+> -	}
+>  
+>  	hsr_forward_skb(skb, master);
+> -	spin_unlock_bh(&hsr->seqnr_lock);
 >  }
 >  
->  # Reset bond with new mode and options
-> @@ -97,9 +97,7 @@ bond_reset()
->  
->  	ip -n ${s_ns} link set bond0 up
->  	ip -n ${s_ns} addr add ${s_ip4}/24 dev bond0
-> -	ip -n ${s_ns} addr add ${s_ip6}/24 dev bond0
-> -	# Wait for IPv6 address ready as it needs DAD
-> -	slowwait 2 ip netns exec ${s_ns} ping6 ${c_ip6} -c 1 -W 0.1 &> /dev/null
-> +	ip -n ${s_ns} addr add ${s_ip6}/24 dev bond0 nodad
+>  /* Announce (supervision frame) timer function
+> diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
+> index 0774981a65c1..8e4158a9b57c 100644
+> --- a/net/hsr/hsr_forward.c
+> +++ b/net/hsr/hsr_forward.c
+> @@ -621,9 +621,10 @@ static void handle_std_frame(struct sk_buff *skb,
+>  	if (port->type == HSR_PT_MASTER ||
+>  	    port->type == HSR_PT_INTERLINK) {
+>  		/* Sequence nr for the master/interlink node */
+> -		lockdep_assert_held(&hsr->seqnr_lock);
+> +		spin_lock_bh(&hsr->seqnr_lock);
+>  		frame->sequence_nr = hsr->sequence_nr;
+>  		hsr->sequence_nr++;
+> +		spin_unlock_bh(&hsr->seqnr_lock);
+>  	}
 >  }
 >  
->  server_destroy()
-> @@ -124,7 +122,7 @@ client_create()
+> diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
+> index bb2182a169a3..8b96eafe15b3 100644
+> --- a/net/hsr/hsr_slave.c
+> +++ b/net/hsr/hsr_slave.c
+> @@ -73,16 +73,7 @@ static rx_handler_result_t hsr_handle_frame(struct sk_buff **pskb)
+>  	}
+>  	skb_reset_mac_len(skb);
 >  
->  	ip -n ${c_ns} link set eth0 up
->  	ip -n ${c_ns} addr add ${c_ip4}/24 dev eth0
-> -	ip -n ${c_ns} addr add ${c_ip6}/24 dev eth0
-> +	ip -n ${c_ns} addr add ${c_ip6}/24 dev eth0 nodad
->  }
+> -	/* Only the frames received over the interlink port will assign a
+> -	 * sequence number and require synchronisation vs other sender.
+> -	 */
+> -	if (port->type == HSR_PT_INTERLINK) {
+> -		spin_lock_bh(&hsr->seqnr_lock);
+> -		hsr_forward_skb(skb, port);
+> -		spin_unlock_bh(&hsr->seqnr_lock);
+> -	} else {
+> -		hsr_forward_skb(skb, port);
+> -	}
+> +	hsr_forward_skb(skb, port);
 >  
->  client_destroy()
+>  finish_consume:
+>  	return RX_HANDLER_CONSUMED;
 > -- 
-> 2.55.0
+> 2.43.0
 > 
+
+Thanks for the fix.
+
+Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
