@@ -1,123 +1,94 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from relay.hostedemail.com (smtprelay0017.hostedemail.com [216.40.44.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B77B41A4E5
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 14:53:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38BE440BCD1;
+	Mon, 10 Aug 2026 14:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786373640; cv=none; b=BHZxyrP869zEPA6Efz945N5qJWpNcJsjEXY73WLr9TPSQj07pm8RYBsaTgkx/z+67cpvh/v+Ndk1Tgel8506+9b0UZKN6K/ftsC0ay9L8sQDfL5ugx4+EnFAo7h7HF7nyb9JPeHuPRDF+j32wNqbE65snMjEJp97Shl6T2iXRO4=
+	t=1786373951; cv=none; b=oy7TFiV632xdlUGixjIMOomRQ1oiqnmzuLbkVsLkH0D0VLaYHvgM0TaFgFOo7uTB1/i/NJO9sqb08gpXUQj5aZfQvrrxsAVjQQ4o/snS9ZHRtax+Zsa0KJDAWcBWijjCCsX4CnKVdX7CLNzlt5wB7dzEcuVc3lsFd0N3o9Jw1fg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786373640; c=relaxed/simple;
-	bh=v+hWlRb/+2ON5x+WLGELLJ58XLHiL6oW14FeOg5Rr6A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SsSmgWeP3Ohr7f4kO356rvPLevp9tcyTa6ovPm2yBXcp+y8oGbGdx9IBg5bjcph/Aj+Em0lRKtfS1RyOBSORnnn8Hd8nXcl2vRP/8ZqDA1ULjcb0U5OvOZ4MoTAlZMuk+gmX76MwdOdqOx1XBC3heoUR0Xpg15L5U8Adch4qOdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=HPTnPTkC; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="HPTnPTkC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786373637;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Rae3SwcibOQ9VkUJPLO5/hVfp6x6hrWcHH6YJPE5fhE=;
-	b=HPTnPTkCbgjNJjctgjlIkgjk+7WKp9Ws7IPc3GhUTxaIsMd0HfRs1+gVqbDCGre/mvKLyT
-	nO/gGVNOZNvcSUhZUPjU0MT4lejyPo+O+pDREaQwMPSF77w7aconiTlh6exlzP6ma9DTcF
-	P5hXoLBxBXKU3DLq+2rl9kEwiwUFGUQ=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-422-zGtsHuKMMEeN6SuTaS29hQ-1; Mon,
- 10 Aug 2026 10:53:51 -0400
-X-MC-Unique: zGtsHuKMMEeN6SuTaS29hQ-1
-X-Mimecast-MFC-AGG-ID: zGtsHuKMMEeN6SuTaS29hQ_1786373630
-Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E992E1800643;
-	Mon, 10 Aug 2026 14:53:49 +0000 (UTC)
-Received: from [10.22.80.220] (unknown [10.22.80.220])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 3DE4D1800348;
-	Mon, 10 Aug 2026 14:53:48 +0000 (UTC)
-Message-ID: <1ddd2e4a-ef12-4e9d-b589-28ddb4f46fb3@redhat.com>
-Date: Mon, 10 Aug 2026 10:53:47 -0400
+	s=arc-20240116; t=1786373951; c=relaxed/simple;
+	bh=6oaD6Y/WO5GY8LOX2fIeqDfX2/uh/iYrW5EFkQLNIvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=tzfioj2+NQVDB86uZwQOqMhWv3u/Phd7VLPW9u0K9SSkAC0iGNjxMdzdr3DjfdLS1Wz8PWpCYkfM2HuFqfq8F1uBIC2gI4SatUNUqHzSPhN715Xo0sXZEhqt26SldyLli6t71P9y4Ugrcjq51jwJP6ZC54mWybAlMRRNIlFbL30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; arc=none smtp.client-ip=216.40.44.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+Received: from omf09.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay06.hostedemail.com (Postfix) with ESMTP id 64FCDA19EC;
+	Mon, 10 Aug 2026 14:52:52 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf09.hostedemail.com (Postfix) with ESMTPA id 9C60B2002B;
+	Mon, 10 Aug 2026 14:52:50 +0000 (UTC)
+Date: Mon, 10 Aug 2026 10:53:00 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v1 0/4] selftests/ftrace: Add a boottime tracing test
+ framework
+Message-ID: <20260810105300.1aed1c7d@gandalf.local.home>
+In-Reply-To: <178635442508.380779.3709136256425432083.stgit@devnote2>
+References: <178635442508.380779.3709136256425432083.stgit@devnote2>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/cgroup: Preserve CPU hotplug write errors
-To: Rui Qi <qirui.001@bytedance.com>, Tejun Heo <tj@kernel.org>
-Cc: Ridong Chen <ridong.chen@linux.dev>, Johannes Weiner
- <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260809082111.3827531-1-qirui.001@bytedance.com>
- <20260809082111.3827531-3-qirui.001@bytedance.com>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260809082111.3827531-3-qirui.001@bytedance.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: 9C60B2002B
+X-Stat-Signature: ap1ui6gkom7jkwfm54g59b1yp5exqmz8
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+2ckMmgq/v6NfTetdZEKhhE+8XwXI3Brs=
+X-HE-Tag: 1786373570-538850
+X-HE-Meta: U2FsdGVkX19sBzX9roItXbYIBXkKxxqOHxJNt1eWHmRG+vKs8J0ESdLtSw7UI1jE60cn8nM+i/+wo63neYRYPF5Z+eK1ms+bS0j4KLIUD6NgB9OyyS4QR0lIFj24DNoQndTr0ePj+8IvpCQdxtKSeXlOU5ZGR67VM88u2abxOJf3gnUb3BatVTKoKSRBgKMUGC1c9y5Ae/p8TPgKtWo78wCvOn1K+l6OWL6OAGj9zaVDm6trSgy/ikYNjwhvQeO2iEl8rUGjVF0F5bVNqUsDcgk5ewlOsEZNqHEmvnqhTF+dhXpcUlmWZw7XKekboSWRG3zqvV8lGArvw2ZnUdCdF+F3eLB8ZiLM
 
-On 8/9/26 4:21 AM, Rui Qi wrote:
-> The cpuset partition root state selftest checks several CPU hotplug
-> transitions. If writing to a CPU online file fails, the helper still
-> runs pause afterwards and returns the status of pause instead of the
-> failed write.
->
-> This hides the real hotplug failure and can make later checks run
-> against expectations for a transition that never happened. Move the
-> write before the bookkeeping and return when it fails, so callers can
-> observe the hotplug error and the test does not record a CPU as offline
-> unless the offline operation actually succeeded.
->
-> Fixes: a8c52eba880a ("kselftest/cgroup: Add cpuset v2 partition root state test")
-> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+On Mon, 10 Aug 2026 18:33:45 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-I am aware that on x86-64, cpu0/online may not exist. Other than that, 
-under what condition will the write fail as only root is allowed to run 
-the script?
+> Hi,
+> 
+> This series adds a boottime tracing test framework to selftests/ftrace.
+> This is based on v3 series[1] of the boot-time trace (via bootconfig)
+> testing script.
+> 
+> [1] https://lore.kernel.org/all/178613904128.259829.16130019979800943264.stgit@devnote2/
+> 
+> The new run_boottime_test.sh can run tests not only for boottime trace
+> but also other kernel cmdline tracing options, including persistent
+> ring buffer and its backup.
+> This makes it possible to easily detect regression bugs in the kernel
+> boot trace options.
+> 
+> Here is an example of the test output.
+> -----
+> TAP version 13
+> 1..14
+> ok 1 01-kprobe
+> ok 2 02-synth
+> ok 3 03-eprobe
+> ok 4 04-fprobe
+> ok 5 05-tprobe
+> ok 6 06-instance
+> ok 7 cmdline-01-ftrace
+> ok 8 cmdline-02-trace-event
+> ok 9 cmdline-03-trace-buf-size
+> ok 10 cmdline-04-trace-options
+> ok 11 cmdline-05-trace-clock
+> ok 12 cmdline-06-trace-instance
+> ok 13 persistent-01-reserve-mem
+> ok 14 persistent-02-backup-instance
+> # Totals: pass:14 fail:0 xfail:0 xpass:0 skip:0 error:0
+> -----
 
-Cheers,
-Longman
+Just to understand this better. This series creates a small ramdisk and
+runs qemu on a given kernel to boot in qemu and test, right?
 
-> ---
->   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> index 16c38eb11e63..a2f7208633bc 100755
-> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-> @@ -412,6 +412,7 @@ write_cpu_online()
->   	CPU=${1%=*}
->   	VAL=${1#*=}
->   	CPUFILE=//sys/devices/system/cpu/cpu${CPU}/online
-> +	echo $VAL > $CPUFILE || return 1
->   	if [[ $VAL -eq 0 ]]
->   	then
->   		OFFLINE_CPUS="$OFFLINE_CPUS $CPU"
-> @@ -421,7 +422,6 @@ write_cpu_online()
->   					sort | uniq -u)
->   		}
->   	fi
-> -	echo $VAL > $CPUFILE
->   	pause 0.05
->   }
->   
-> @@ -493,6 +493,7 @@ set_ctrl_state()
->   			eval $COMM $REDIRECT
->   			;;
->   		    O*) VAL=${CMD#?}
-> +			COMM="write_cpu_online $VAL"
->   			write_cpu_online $VAL
->   			;;
->   		    T*) COMM="echo 0 > $TFILE"
+Can you add the examples you have in the documentation patch to the cover
+letter. That will market more exactly what you are doing.
 
+-- Steve
