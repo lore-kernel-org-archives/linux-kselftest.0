@@ -1,228 +1,81 @@
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9547D2EAD1B
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 02:23:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726701A38F9;
+	Mon, 10 Aug 2026 03:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786328630; cv=none; b=rz664No/sIduXbaUZF+wN3LpG+DQyOYOkSqwWBpOJtSJgOBRjM3WIKC7+cupkP63TNrZzSgLojmUB/TY/fBZ82mf7nrUFfQ8KZjwtSwvPGvk+xIpTqDquo7wHjqqUBoHekXsVanYqjyEXIc6XJmgt6MdnqJBa55i3HzFrwgwhg0=
+	t=1786330925; cv=none; b=PaP/Gg+VdEwSk5sGX/bP3yfX0ZoEFGnNVy3oRri3IkD1iGutNlH5wgOj6OcVI0sHclq99Czx40ejj02Kq0dycCu9fgcgeOwKGrY4fIeNlKdpOioHEaOvDtvzWj664ESMgIGfXGoa4x4tS4M4nJC91mWm8EqG50HQjY6FYSQFcY0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786328630; c=relaxed/simple;
-	bh=brIXrSHMNh+w2+wqvBdY6ZLq52aicUd2kThuQ+xFW+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=e91bFPiZCs5HUv2oo/TUa0hMgF+fLGynYG2MfF6TYu9UaEwUMqkn1kO/YhrRxpkzVNeJc59EBN3mdwFceDseVgZNpmL6q0mG1YrNe9e2NWS1K7Fv8DXnnuRFHvdwvIABQ+X0QbcRJpjaenMJfOm//G9B/+iyPK+H5JSYXfa3SN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ukle3woU; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786330925; c=relaxed/simple;
+	bh=ksdh6wyPf0BWarU30unhsM0g+/5W5jnE2e0r3+kZZp8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=aNeViZh/S3UtkrSavNxMlecxTt9+k0ZoJ0PS0WvShNdTZHFrSctF8rVSa+fskycw0KKveHNafb0vvKkaM2R4pa+TSwpZtaO1qarrh61ZgfCOZA466aZc+n+joYG+vKbBbttSn2RrFnhax9t7R/2H0xYAWJQpUj+04Lr6EsgZj1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mvgGG5zi; arc=none smtp.client-ip=117.135.210.3
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ukle3woU"
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbb7926836eso770941a12.3
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 19:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786328628; x=1786933428; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=L8/Xu6Bl9nz3vhT2oV8jvDAfGpBWDs2/HnpOEeUYYe8=;
-        b=Ukle3woUorjutusatcUOV+w/so4QfCzhHs1JAVMuDNrk/XsRMDs1glmFRHrONcXSQ/
-         K1E4iT65wsrW/ErPgFxHim02hn9FN2u1JTwBxGBnjUzy4stsbgZvg3MIoUnK6bWmUcIX
-         cmU8BJzWEaOA8Z7PZsKXU53M4MYCstFV4ztc1z/pmUX59KOU8AI0MQjrcxWuop2z0qkM
-         4wtUcDmQePfEokOmb7cr4QSx7TxXwKKD4eQEMLBdxuagCHRD0pdysbeszR/EeiRlxC/a
-         RJTy6wZ1huV6fWy7bTUAjSwB9Vv4Ke12ObvApLXUq52+EIFXZvf9PNit+CHdxmd++/p2
-         MLtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786328628; x=1786933428;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=L8/Xu6Bl9nz3vhT2oV8jvDAfGpBWDs2/HnpOEeUYYe8=;
-        b=f2G3/UBOMSk4/wwOZdkugyK8MrSpbHohPbOT9qztAjLfI2DoIirvipsx5TuqMdP+C3
-         eHVG0d4C2ozyj3A487wOIjfFPExaXJCrYWy+X+WaMsDd2WJ/7M/WOypqU9z+uZW0nlyu
-         X7o+obxE1lb5YYJV6PJd7oG2sWYCATtxdNWeHbmf7SnS2Ufbv++EGmuZLoLKHI/dCF2a
-         2eUDobtmcGNmBbAk8vaWzxIXmZU+0gXsFMwXcdZL/kmXYGH2VLXuqYS54h3RoL2SMhX8
-         nGYXVcffE0jsEXVhE2FSwn9jcEWz4ople1/LfGQrySGaLQS0ns4g3soPkS6Qn7gtWp/E
-         WBRQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoXjbFpCn5tX8fz3UlCNlU9gR7WspDoAX1Emdi8MoV1zOnSGs/DOw1WKAw/mNDd7EgqvI3+/E3nyGq3lfkibZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwlrsvsiHLtVf0s6Nlct2r94TGZ4HwOFU0v2BZAFc4yyvkuuW7B
-	td85c7tHQknnE5eLyBs9r5dgJMbchK/puaZsllqFoGqk3zqtddTNRI2g
-X-Gm-Gg: AR+sD11Gp82PLvRr180Dbg8P9kxMCapWq0cisqeJgHZByEWFN+Le+zCQVPQxvG5V2aW
-	tm6gmGyr9M47g7oMlOSdUZJvZ2JgZvaMAIOHJkJS7gNGSs5fZTfVUvu9Xs2LKjNNRO7BNxP6T4t
-	SAa977cKHT7+mf6cDOq3BHViN2oZdfE0JgIDkAV9BfREbJ3WEO0ToW/NVaBNO7yms2LKovB+uP5
-	x2J7ixQt09JQs3uBfcSOS0k14aRx2WPH6862Gsmnj4AKnCiUo0rXiDrKWKENlON0g1NRpzoascl
-	WPQKsSr6qaro7aRkPDSLNoH6LwFCFbnOa6iAZnbax7f/AK5odUH+EsiQa4D+coCT5K1QwBmtqY6
-	cLkakBwy+fu387kK+2QgqnuhEXqAgqRP5IUft9IFxzRqLjTQfYuBZyMdPFzlejcHuyP5LyEy/Zl
-	69Yb1EEr+ALcrA3cp4iGCh8UU5MN7NlDurE9yfgAwelOQWHwUJOBpfUyQ=
-X-Received: by 2002:a05:6a00:ad5:b0:846:de21:3da4 with SMTP id d2e1a72fcca58-84f2e021ff5mr41007248b3a.3.1786328627675;
-        Sun, 09 Aug 2026 19:23:47 -0700 (PDT)
-Received: from fedora ([203.175.12.242])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-84f5a58bd4bsm3074067b3a.56.2026.08.09.19.23.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Aug 2026 19:23:46 -0700 (PDT)
-Date: Mon, 10 Aug 2026 10:23:35 +0800
-From: Hangbin Liu <liuhangbin@gmail.com>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	horms@kernel.org, andrew+netdev@lunn.ch, shuah@kernel.org,
-	kees@kernel.org, petr.wozniak@gmail.com, qingfang.deng@linux.dev,
-	fmaurer@redhat.com, luka.gejak@linux.dev, bigeasy@linutronix.de,
-	xiaoliang.yang_1@nxp.com, skhawaja@google.com,
-	stable@vger.kernel.org, sdf.kernel@gmail.com,
-	syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
-Subject: Re: [PATCH 2/4] net: hsr: shrink seqnr_lock to sequence counter
- updates
-Message-ID: <ank2JxDbOpX_wr5f@fedora>
-References: <20260809121455.1745-1-xiexinet@gmail.com>
- <20260809121455.1745-3-xiexinet@gmail.com>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mvgGG5zi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=ksdh6wyPf0BWarU30unhsM0g+/5W5jnE2e0r3+kZZp8=; b=m
+	vgGG5zi0d3S6Bn+2l2y570plNmHJpLPGOZLqyUjNxZIebP9ilBNHLtZa/ZMDhCP9
+	HQnN9JDO+uKbmS9osZo7UVulI+34mPcDtJV1KWFla1QdF2cOyR6/vBwUCagOIOxg
+	MuayIdaDTKH7N5NkqBAoH70zvTWF7GA8KJvgyIerws=
+Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
+ ajax-webmail-wmsvr-40-137 (Coremail) ; Mon, 10 Aug 2026 11:01:09 +0800
+ (CST)
+Date: Mon, 10 Aug 2026 11:01:09 +0800 (CST)
+From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
+To: "Hangbin Liu" <liuhangbin@gmail.com>
+Cc: "Pablo Neira Ayuso" <pablo@netfilter.org>,
+	"Florian Westphal" <fw@strlen.de>, netfilter-devel@vger.kernel.org,
+	coreteam@netfilter.org, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	"Fernando Fernandez Mancera" <fmancera@suse.de>
+Subject: Re: [PATCH net v2] selftests: netfilter: conntrack_dump_flush:
+ remove unused variables and fix typo
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+Sender: fffsqian@163.com
+In-Reply-To: <anbMGS9TFOEUUWu-@fedora>
+References: <20260807075928.64326-1-fffsqian@163.com>
+ <anWgQSbZWK6D2ONg@fedora> <anWyMUFvONx6k1d5@chamomile>
+ <anbMGS9TFOEUUWu-@fedora>
+X-NTES-SC: AL_Qu2TBP+Yv0At7yCbbekckk4Vhu49Xcq2vvQv34Fec9MFiRvq2ysnRH96GVDLyc6fMh6joje9QD9v6t1IfYBeYNQ0he/sUyMeyFmHKi/F/A==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260809121455.1745-3-xiexinet@gmail.com>
+Message-ID: <72b995d7.271c.19fe99ded3b.Coremail.fuqingshuang@kylinos.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:iSgvCgBnPsH2Pnlq2WUuAA--.1127W
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6hbFkGp5PvYDfAAA3N
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Sun, Aug 09, 2026 at 02:14:52PM +0200, Xin Xie wrote:
-> Commit 06afd2c31d33 ("hsr: Synchronize sending frames to have always
-> incremented outgoing seq nr.") and commit 430d67bdcb04 ("net: hsr: Use
-> the seqnr lock for frames received via interlink port.") hold
-> seqnr_lock across the whole forwarding path. Transmitting while
-> holding the lock can create lock-dependency issues when HSR devices
-> are stacked with other net devices, up to a real deadlock (see
-> Reported-by/Closes).
-> 
-> Since commit aae9d6b616b5 ("hsr: Implement more robust duplicate
-> discard for HSR"), duplicate discard is order-independent (sparse
-> bitmaps), so only the sequence counter updates need serialization.
-> Limit seqnr_lock to the counter updates in handle_std_frame(); the
-> master TX path (hsr_dev_xmit()) and the interlink RX path
-> (hsr_handle_frame()) drop their outer lock, and the supervision frame
-> builders release it right after their counter update.
-> 
-> Concurrent forwarding may emit frames out of allocation order, which
-> sparse-bitmap discard tolerates. The master/interlink tx statistics are
-> no longer serialized; consistent per-cpu/per-queue statistics for all
-> HSR paths are handled in a separate series.
-> 
-> Fixes: 06afd2c31d33 ("hsr: Synchronize sending frames to have always incremented outgoing seq nr.")
-> Fixes: 430d67bdcb04 ("net: hsr: Use the seqnr lock for frames received via interlink port.")
-> Reported-by: syzbot+fbf74291c3b7e753b481@syzkaller.appspotmail.com
-> Closes: https://syzkaller.appspot.com/bug?extid=fbf74291c3b7e753b481
-> Cc: <stable@vger.kernel.org> # aae9d6b616b5: hsr: Implement more robust duplicate discard for HSR
-> Signed-off-by: Xin Xie <xiexinet@gmail.com>
-> ---
->  net/hsr/hsr_device.c  | 15 ++++-----------
->  net/hsr/hsr_forward.c |  3 ++-
->  net/hsr/hsr_slave.c   | 11 +----------
->  3 files changed, 7 insertions(+), 22 deletions(-)
-> 
-> diff --git a/net/hsr/hsr_device.c b/net/hsr/hsr_device.c
-> index 5555b71ab19b..3fd1762d8916 100644
-> --- a/net/hsr/hsr_device.c
-> +++ b/net/hsr/hsr_device.c
-> @@ -232,9 +232,7 @@ static netdev_tx_t hsr_dev_xmit(struct sk_buff *skb, struct net_device *dev)
->  		skb->dev = master->dev;
->  		skb_reset_mac_header(skb);
->  		skb_reset_mac_len(skb);
-> -		spin_lock_bh(&hsr->seqnr_lock);
->  		hsr_forward_skb(skb, master);
-> -		spin_unlock_bh(&hsr->seqnr_lock);
->  	} else {
->  		dev_core_stats_tx_dropped_inc(dev);
->  		dev_kfree_skb_any(skb);
-> @@ -335,6 +333,7 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
->  		hsr_stag->sequence_nr = htons(hsr->sequence_nr);
->  		hsr->sequence_nr++;
->  	}
-> +	spin_unlock_bh(&hsr->seqnr_lock);
->  
->  	hsr_stag->tlv.HSR_TLV_type = type;
->  	/* HSRv0 has 6 unused bytes after the MAC */
-> @@ -356,14 +355,10 @@ static void send_hsr_supervision_frame(struct hsr_port *port,
->  		ether_addr_copy(hsr_sp->macaddress_A, hsr->macaddress_redbox);
->  	}
->  
-> -	if (skb_put_padto(skb, ETH_ZLEN)) {
-> -		spin_unlock_bh(&hsr->seqnr_lock);
-> +	if (skb_put_padto(skb, ETH_ZLEN))
->  		return;
-> -	}
->  
->  	hsr_forward_skb(skb, port);
-> -	spin_unlock_bh(&hsr->seqnr_lock);
-> -	return;
->  }
->  
->  static void send_prp_supervision_frame(struct hsr_port *master,
-> @@ -390,6 +385,7 @@ static void send_prp_supervision_frame(struct hsr_port *master,
->  	spin_lock_bh(&hsr->seqnr_lock);
->  	hsr_stag->sequence_nr = htons(hsr->sup_sequence_nr);
->  	hsr->sup_sequence_nr++;
-> +	spin_unlock_bh(&hsr->seqnr_lock);
->  	hsr_stag->tlv.HSR_TLV_type = PRP_TLV_LIFE_CHECK_DD;
->  	hsr_stag->tlv.HSR_TLV_length = sizeof(struct hsr_sup_payload);
->  
-> @@ -397,13 +393,10 @@ static void send_prp_supervision_frame(struct hsr_port *master,
->  	hsr_sp = skb_put(skb, sizeof(struct hsr_sup_payload));
->  	ether_addr_copy(hsr_sp->macaddress_A, master->dev->dev_addr);
->  
-> -	if (skb_put_padto(skb, ETH_ZLEN)) {
-> -		spin_unlock_bh(&hsr->seqnr_lock);
-> +	if (skb_put_padto(skb, ETH_ZLEN))
->  		return;
-> -	}
->  
->  	hsr_forward_skb(skb, master);
-> -	spin_unlock_bh(&hsr->seqnr_lock);
->  }
->  
->  /* Announce (supervision frame) timer function
-> diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
-> index 0774981a65c1..8e4158a9b57c 100644
-> --- a/net/hsr/hsr_forward.c
-> +++ b/net/hsr/hsr_forward.c
-> @@ -621,9 +621,10 @@ static void handle_std_frame(struct sk_buff *skb,
->  	if (port->type == HSR_PT_MASTER ||
->  	    port->type == HSR_PT_INTERLINK) {
->  		/* Sequence nr for the master/interlink node */
-> -		lockdep_assert_held(&hsr->seqnr_lock);
-> +		spin_lock_bh(&hsr->seqnr_lock);
->  		frame->sequence_nr = hsr->sequence_nr;
->  		hsr->sequence_nr++;
-> +		spin_unlock_bh(&hsr->seqnr_lock);
->  	}
->  }
->  
-> diff --git a/net/hsr/hsr_slave.c b/net/hsr/hsr_slave.c
-> index bb2182a169a3..8b96eafe15b3 100644
-> --- a/net/hsr/hsr_slave.c
-> +++ b/net/hsr/hsr_slave.c
-> @@ -73,16 +73,7 @@ static rx_handler_result_t hsr_handle_frame(struct sk_buff **pskb)
->  	}
->  	skb_reset_mac_len(skb);
->  
-> -	/* Only the frames received over the interlink port will assign a
-> -	 * sequence number and require synchronisation vs other sender.
-> -	 */
-> -	if (port->type == HSR_PT_INTERLINK) {
-> -		spin_lock_bh(&hsr->seqnr_lock);
-> -		hsr_forward_skb(skb, port);
-> -		spin_unlock_bh(&hsr->seqnr_lock);
-> -	} else {
-> -		hsr_forward_skb(skb, port);
-> -	}
-> +	hsr_forward_skb(skb, port);
->  
->  finish_consume:
->  	return RX_HANDLER_CONSUMED;
-> -- 
-> 2.43.0
-> 
-
-Thanks for the fix.
-
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+CgpBdCAyMDI2LTA4LTA4IDE0OjI2OjMzLCAiSGFuZ2JpbiBMaXUiIDxsaXVoYW5nYmluQGdtYWls
+LmNvbT4gd3JvdGU6Cgo+T24gRnJpLCBBdWcgMDcsIDIwMjYgYXQgMTI6MjM6NDVQTSArMDIwMCwg
+UGFibG8gTmVpcmEgQXl1c28gd3JvdGU6Cj4+IE9uIEZyaSwgQXVnIDA3LCAyMDI2IGF0IDA1OjA3
+OjEzUE0gKzA4MDAsIEhhbmdiaW4gTGl1IHdyb3RlOgo+PiA+IE9uIEZyaSwgQXVnIDA3LCAyMDI2
+IGF0IDAzOjU5OjI4UE0gKzA4MDAsIFFpbmdzaHVhbmcgRnUgd3JvdGU6Cj4+ID4gPiBGcm9tOiBR
+aW5nc2h1YW5nIEZ1IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPj4gPiA+IAo+PiA+ID4gUmVt
+b3ZlIHVudXNlZCAncnBsbmxoJyBpbiBjb25udHJhY2tfZGF0YV9pbnNlcnQoKSwgYW5kIHJlbW92
+ZSB1bnVzZWQKPj4gPiA+ICdycGxubGgnIGFuZCAnbmVzdCcgdmFyaWFibGVzIGluIGNvbm50cmFj
+a19jb3VudF96b25lKCkgYW5kCj4+ID4gPiBjb25udHJhY2tfZmx1c2hfem9uZSgpLiBUaGVzZSB2
+YXJpYWJsZXMgd2VyZSBkZWNsYXJlZCBidXQgbmV2ZXIgdXNlZAo+PiA+ID4gc2luY2UgdGhlaXIg
+aW50cm9kdWN0aW9uLgo+PiA+ID4gCj4+ID4gPiBBbHNvIGZpeCB0eXBvOiByZW5hbWUgbWlzc3Bl
+bGxlZCBjb25udHJhY0tfY291bnRfem9uZSgpIHRvCj4+ID4gPiBjb25udHJhY2tfY291bnRfem9u
+ZSgpLgo+PiA+ID4gCj4+ID4gPiBSZXZpZXdlZC1ieTogRmVybmFuZG8gRmVybmFuZGV6IE1hbmNl
+cmEgPGZtYW5jZXJhQHN1c2UuZGU+Cj4+ID4gPiBTaWduZWQtb2ZmLWJ5OiBRaW5nc2h1YW5nIEZ1
+IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPj4gPiAKPj4gPiA+IC0tLQo+PiA+ID4gdjI6Cj4+
+ID4gPiAgIC0gRHJvcCBGaXhlcyB0YWcgYXMgdGhpcyBpcyBhIGNsZWFudXAsIG5vdCBhIGJ1ZyBm
+aXgKPj4gPiAKPj4gPiBJZiBub3QgYSBidWcgZml4LCB5b3Ugc2hvdWxkIHRhcmdldCB0byBuZXQt
+bmV4dC4KPj4gCj4+IFdlIHdpbGwgaGFuZGxlIHRoaXMgdGhvdWdoIHRoZSBuZi1uZXh0IHRyZWUu
+Cj4KPk9oLCBnb29kLiBUaGF0J3MgbW9yZSByZWFzb25hYmxlLgo+CgpUaGFua3MgYWxsIGZvciB0
+aGUgcmV2aWV3IGFuZCBjbGFyaWZpY2F0aW9uLgoKQmVzdCByZWdhcmRzLApRaW5nc2h1YW5nIEZ1
+Cg==
