@@ -1,81 +1,81 @@
-Received: from mail-qt1-f169.google.com (mail-qt1-f169.google.com [209.85.160.169])
+Received: from mail-qt1-f178.google.com (mail-qt1-f178.google.com [209.85.160.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20D7C410D30
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 16:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84BD440D595
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 16:25:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.178
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786379084; cv=pass; b=Z46Sract0834qekxqiYWXMOIyLvfWHCYK4hjkM4fyEW3idTSbYSAcN/jMSs/a6JQpbrugxg2t0fhLJXtVNXVFV7HSfLVHh95i065pATBf0wd/b6zvTBU9i9iCROD6o9eh23fE6OrPC/diPjmH0VGouMkndzMGD2HHMMD+HFPDL0=
+	t=1786379131; cv=pass; b=ecYEkx18t8iYXkIQ2nV4GeAFD6/nhl7kneDCpBd7RAB0weib/ctHRd5YUt+CaQFo1z6eJGKpZ3HS9BG4ysfYnaR/LzV/m3R52YRNfDwIHeOXSoZzkVEKsPNIzUAm3Pjr7Mp4J3Jsr42t+q4ZbRXFlDrbZEGSF/r6PTBb9K7Gp1s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786379084; c=relaxed/simple;
-	bh=xsv3OYq+qhqNl5YPp2xtEfRcSQIlgKl80gny1Oxx4q8=;
+	s=arc-20240116; t=1786379131; c=relaxed/simple;
+	bh=vvgNKu9uyv9I5R9kHg2ihehIkxNH8NosNyyy4+wPpsc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GNJXGYdbPLZqN4egoXrjV3tmY2imw9BnPv11IVS2V83Jr9r0gxUDefc+8e+3eZP1hMgU7xE2QduJqtGt9dmnEkERibDKVUCavFXMD24qVZNlBrt5p5sC2ZgHIYynyWTDAUB7Isqo7tmqsibvqO9w0+aiSMoJzuCbXJIaJ5Gt6DA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CwVJn2aU; arc=pass smtp.client-ip=209.85.160.169
+	 To:Cc:Content-Type; b=Dmfo1QAuAZWsgJuQq32JHaNG3eICI9kuCbXvLRL7Slc6qx8m4iX0WUDAcLl0Q8kWCHx8bx1l0n7DEDbY2VU+y0yZm5y8BE52hqkPFuiNAldRoeMp4pYZRtpIM65ZAO7MVGt1MFt0bvSG4hFSOqIjp6xvyKi/mYB+CQs/d0fzL4o=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=cnSX4srl; arc=pass smtp.client-ip=209.85.160.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CwVJn2aU"
-Received: by mail-qt1-f169.google.com with SMTP id d75a77b69052e-51c10e86e52so428361cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 09:24:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786379076; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="cnSX4srl"
+Received: by mail-qt1-f178.google.com with SMTP id d75a77b69052e-51c10e86e52so429531cf.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 09:25:29 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786379128; cv=none;
         d=google.com; s=arc-20260327;
-        b=KWPcbInV3OqTfS5Y2pTr9o8cP8yAY/deZ9ukwYJE4PtIyyvqHhY0V074Q8H1EPf5uG
-         jfqoxEIpbAYxCjH+j7CQqRfvhNvNIu7xokYsO24IuDu+8GxXVd1qhM1hxkLDQB31sxRr
-         R9cMo9EAUioUETsCJbefIiB5xpHG3OFk8HhKADKa3OUBJPsTsJic2kthf55kQ/xkZ1qG
-         UaZktGgn9+Y9fIFJb/dOFEstKub086C4mqtl9BAXCiVc10/8EDOsTHrQqsP+idP0CjJh
-         waE9SN2SorMghlygDdnS8mJ9Vu8oDoCuILpFBd8reJqO62EaZfHufXgUsBkxRw7jyNgV
-         TVTQ==
+        b=mtnEOUcm8xiHtUpwDcBfXO57BC8wQeLW6+rXL7aq0bVROWOEJi6kqWY7BOTVoe/nFA
+         qJXPzQjFTBrB5fDoc9AjwWGm1h0PdRkDqDAJgaxFEcoBEXVV4/S8FPxMYPYX1FIInWEK
+         DJIjtpOTPbvARw6Wz0sOY66vfQ2ZFMndgiDU4b9gz0Y47REA3qfFHTAldfBuQLu4UWlA
+         SMEe+fLy11SuwVBjfI5+ifieajpTD4DjzqlbP7Df6lLVFAQjx7MXoKJwLWNSuJ0eOA3P
+         jNn1uwb5hy5aLQTtg5K38hSHDLJ7VGw/c8VAI+d+WFYG8oHckOrn0PBtunp1pUGigEj4
+         +4Qw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=JnpU+yjthofc0zpgkM1QSjOc8GqltDckB0JeUB3rUkg=;
-        fh=fAjMjRm+rz9Jyp3Qsd5nNAYOEfoIRxLDsiminvvfPaU=;
-        b=k5fzSIwYEFg6Gnnay3LYknuNltH2OBiHwVSL3ONzqedXECnRKNEgdSC3YWnyp17j4P
-         K+pxsbY0FI9SmPm6AfyrG2qlJj7xw6Xkxa/iyxJ8V5MPSPGdrknzFFTlByb2lXTDBsM/
-         lxtRz1cmTJRnohfSGiGa9DihMVuyi9c8etK2XAkRPZdfBGU8vnZQTCpixsMPO9t03f+G
-         rbOiPM5FygELf24A8DHVsN+FJYy4GuU1N6GSI9yFapGayWErAnG9AJKEu3447/XlDH0F
-         GVkGfBIGT886UwOwooldSbjJiXLI38UD+DKcVmV6cxtJwkQTwJD6zsaVrmS3Iyd0a2Fm
-         aIDg==;
+        bh=oQBA7RZMWG8pbHKGdFOSfTUai8Qp0mhMLH3fVjxyT/A=;
+        fh=7W8zRG5X2WoWwibmLLxWkPDkBtu2U87gpRvNO9h1VlI=;
+        b=Dg30tj5tzCBVkekARpoJjxOuhz/otCRnKjRi+YPnbj6JhvC/+dkv2JDnl25Cp+KT12
+         eQvDLfRM0w8nHdYHFexTHY4HegIufVuYng6tkyFkCJ8lS0NHmYgvc3j9Rrx+fjE2av92
+         risiGmP0svwdk9dNj7b1mJITnRrZrMZAQv/WjN6Q3j0FYbB5GIrsS7UkK3+64FcQDCEo
+         5M/4H4j/b50tzb2Hj6uvCd09RInMD8yPnJPKiPi/jRs3ZlkKPEkZRpDR8Bc0rCs4gHPY
+         RD/DwLgD8sR4Kk13OsGOsFx6F9exEN7IK19Vt6o5G9GX/7y4AQvBNnB9/qsIpwEzF7XW
+         Vw8A==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786379076; x=1786983876; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1786379128; x=1786983928; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=JnpU+yjthofc0zpgkM1QSjOc8GqltDckB0JeUB3rUkg=;
-        b=CwVJn2aUT+uPUxvWndznLyNgoAttgvstZNGf6IG+zWNLE0PcW9XUojG1o+LB55xczN
-         eoxS4uFpilcfMF2uGQ9vvcoKMshs03OE07DjaKlRhDxGm2YN8wF6Pz6zC94t0Ebqm6Y/
-         Jmg1TzeA6qCQJz7G6PidXwbBeZQZOElJQcKgtahyQBla3thC2s5HmQy85YM6cBds+D8C
-         Tv+j1RMaHLEQl+fxJQZph3PbguWzf/bB1D/ZMG7wc3BRdQ9EnSqvsmZG9vh+fGU6lqyC
-         qCjCDULhxVX+9MktVBl/uCczxb1m4VD/7p1X5DngHRseshP7DSlWncnCytksMbggpEzU
-         g3cw==
+        bh=oQBA7RZMWG8pbHKGdFOSfTUai8Qp0mhMLH3fVjxyT/A=;
+        b=cnSX4srljyHNxtz8+ebQsbPLVxspqfpoIqSLmsWAildeeNYgXoHZa7KGoAxUyX77W8
+         D4KguptuceXODwM8sSDS3p0s/amPy4tk+0ZFSm55MxazfgCDZe3PeT+WxElOCjKq6roJ
+         r4vSyIRR9ejNSjq49zaOp9cMSJmbiSZC3WBoxA53w7seEAZpUaGyTpMnkkdcP1xyK+wX
+         VYAwX8Auqw00xcAkHeGfaFPwoYNXnXXfhtwyP1COxg5ltXdanflWeA8lr2oOomNqfTA1
+         Hwi7+82yfHl6cT+dEZ5OgCgY09gNanMzX3aOPmbj/3VwMfiwJkmXH1dCPDhOCNdC48cZ
+         8Vpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786379076; x=1786983876;
+        d=1e100.net; s=20251104; t=1786379128; x=1786983928;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=JnpU+yjthofc0zpgkM1QSjOc8GqltDckB0JeUB3rUkg=;
-        b=N83BLtOqYRoaLeMwh7khyObDvwWb/3x8FmxLYI3wmr4Bj1fGCPiNd9nlTaxmytc7eM
-         4HJGe5ZdgtDkwUf0+fR7Z7F19pdSgh1rH2aCzCKqgvsNMtQl7Mh+jV5nUDZxlK6TY+Kc
-         TR24vzLHfxDWgCZj6uUri+43Qlwqh0K70WrNpEB5DqU+n8OUwWHoJeIidln3c8YvhK3z
-         N2sILtVHqh7eFYiAs3lYpmwFYSyRJ1BSexwdalq6MQ2uXFN9ZOdp0ItNhPPOoPUibs1A
-         cGG7EArJag28yDVZjL/l0bi23onXAD5Lu4Th7gTPArJuEgMo+ubBHu0dgVDzQa58x0EM
-         peHg==
-X-Forwarded-Encrypted: i=1; AHgh+RrQ+8PhE2oxJDg+8k7+tRujK9AkcjSP3LD5dFUIoAc9WVJeC2q8Pi4J5QCWS1yMNtOJU78pFxHiIhYZW+qVDU4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsyxMdf1crvj0V3KAQIj+c52M8lT1qeftV8F4c6M98Bynpl9l1
-	oUi5OXyUJ+c0I9upkF4I+YdV0QUnOT1vy2dQbgORvHqt4cqRSz/qFmILBqz8oQC//7ftzBTbjya
-	RPT7U7SZ6VTnxAvksZNuqXR3RenChD8jFS+4/DIh9
-X-Gm-Gg: AR+sD110QjyLhsUVZaj5ocOR9OdRnPN+4VN+CYhaRa0jCddbtNGOn1VIBC/LolI3C3Q
-	vI0u5I7zSlnNWLdtEP4zu362bkmnzjHeiyzG1BBRl9OpGgFr3Jx46oRn3icW+S+y3kHFonDiK8s
-	M7qS5tb5HZ5xbgYY790qBrpANj+gAGlPuDhdTyNpfyjjh0LvRpqH7pkxzzxth/+OikoKrRNKGQN
-	L910rcs3MxQyN9oZt3CVTtgmzybpgVU29zuL1ZINpBvgO4PhjAa58s+ImSo0LdBPjVtAy6Ul5J6
-	yuXLZ+E3Q4chpnhRrlxpFCSEQGEpRD3GlKuLZWqIPVyXjZOUVD2BfA==
-X-Received: by 2002:a05:622a:2b0a:b0:519:b655:235 with SMTP id
- d75a77b69052e-52d2810222bmr38915311cf.3.1786379075203; Mon, 10 Aug 2026
- 09:24:35 -0700 (PDT)
+        bh=oQBA7RZMWG8pbHKGdFOSfTUai8Qp0mhMLH3fVjxyT/A=;
+        b=jgRlE557qH7R9X1BypCipcR27NcBFbCtwus+yNjBxJ/ToGVFQAHVReNkdESEQDf18I
+         CTCvNzUqy0iUg7FU5neB09erI+4rpnFdyMcN5g5hUkiN5CUr/5EIlNoNG0PUexAkpJ6g
+         8IFAO8ZrslZODBM0UUnD6VGv05bbmQAFnP7HI2h5tjK5YpSCBHIXeW54Q6lky8LJyDtd
+         PjCKgFczXESBe/6iEGTgcyLqDO6Gm5GNNSxiKTNNGO50mjr9iOLMqP7q4wfqfbapXx5e
+         pvftpf57SoM6ldd8CRQD69mfyk1uwavxvDvPKyGdVRIVzOsVzSSqWWVZJXqYRkL8h2ta
+         I5/A==
+X-Forwarded-Encrypted: i=1; AHgh+Ro82qbIxzDPH1dQnr00qjVnptr+92vTfeOZ1wAR3Zj95cxXurl/hOwrhbQCxXLet2qt63Dv9zMKaeOrK01J1Lw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBu7ERw5Y7KbHZcTP1Hl92pNG6VLMmKsLoV7mnmBBh4RCF3fCH
+	sArLMiZ/efGGQ30ZvvaHFuKby6V9/rD/4nEIbwin1svJb3afQ1IxbJudsLqSCDb2hsx7j7pCmqb
+	ifodZwlw9nRAqLUI+fuT6ZIXKW20aXdOaPsAxNzoy
+X-Gm-Gg: AR+sD112EwqELd+t2EhE6IItsqIPFEKHX0DiDuRVVeHuVsCwnpEjahO1FiBpwNCpDgK
+	nERF5IpEX62+AefOtaFmq7LUcBFq2F+ToWkJI89PGG45Ps3J1Cbx/NMgYzHWxFaYgla0ak/FuML
+	Xpt8Jv2kE03j3FOwPm0SYTfNpk3bdqU5k7iLXr8r3VJKBtmhGwAH/G+EACUCAoV6k4nO++wymx/
+	sWENtYMWjrbvD03/A3UWRUn4Nx7fH+7b2qFJrXmdzX7vS4mPJ1a7R6ZX1sD9fYofbaIEQdG8v1C
+	w7RQVRJ3j8OTz+MqqXnVxX6Qsh8ZaAaVka+V2VxScdw=
+X-Received: by 2002:a05:622a:1b06:b0:516:3f51:81cb with SMTP id
+ d75a77b69052e-52d2817b938mr34999921cf.13.1786379127554; Mon, 10 Aug 2026
+ 09:25:27 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -83,15 +83,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
- <20260806-b4-scalable-cow-virt-pgoff-v4-1-ab318a350404@kernel.org>
- <CAJuCfpFAA1H2pOi6EOarNtrdzLQDJyhm6QOGsfZ4SFTuM5eiLQ@mail.gmail.com> <anmLnvWAyIJwjsXj@lucifer>
-In-Reply-To: <anmLnvWAyIJwjsXj@lucifer>
+ <20260806-b4-scalable-cow-virt-pgoff-v4-3-ab318a350404@kernel.org>
+ <CAJuCfpGjE66Duhw0r8H0GKBFDExjroRar6n5MgVOOQjz4ZfTuA@mail.gmail.com> <anmNojqwGzdiLkIm@lucifer>
+In-Reply-To: <anmNojqwGzdiLkIm@lucifer>
 From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 10 Aug 2026 09:24:23 -0700
-X-Gm-Features: AUfX_mykce6fbL166nHsURFiLv_kMzKY9gOukzdEiVHYnjVKW8Vop-MtXqL00bE
-Message-ID: <CAJuCfpGJuf3NOuPg4+7TaWhNOv5sN7WEY2awZOpDv1VV13J-DQ@mail.gmail.com>
-Subject: Re: [PATCH v4 01/20] mm/vma: introduce VMA anon page offset field and
- add helpers
+Date: Mon, 10 Aug 2026 09:25:16 -0700
+X-Gm-Features: AUfX_mz9WU1SPgoH6YTV3DTKwNKGMKFcURK6j4M8chTMyTH0jJu5GwZ0wv2wrtI
+Message-ID: <CAJuCfpHtaeeqn9UbnG1U0iA8uhrcQpEG8g8+G_RybVbwoOE0sA@mail.gmail.com>
+Subject: Re: [PATCH v4 03/20] mm: introduce linear_anon_page_index()
 To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
 Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
 	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
@@ -138,70 +137,116 @@ Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.o
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 10, 2026 at 1:36=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.o=
+On Mon, Aug 10, 2026 at 1:40=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.o=
 rg> wrote:
 >
-> On Sat, Aug 08, 2026 at 05:51:10PM -0700, Suren Baghdasaryan wrote:
-> > On Thu, Aug 6, 2026 at 1:22=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kerne=
+> On Sat, Aug 08, 2026 at 05:49:48PM -0700, Suren Baghdasaryan wrote:
+> > On Thu, Aug 6, 2026 at 1:23=E2=80=AFPM Lorenzo Stoakes (ARM) <ljs@kerne=
 l.org> wrote:
-> > > diff --git a/include/linux/mm.h b/include/linux/mm.h
-> > > index 87feaa5a2b78..df78847f5f07 100644
-> > > --- a/include/linux/mm.h
-> > > +++ b/include/linux/mm.h
-> > > @@ -4393,6 +4393,65 @@ static inline pgoff_t vma_last_pgoff(const str=
-uct vm_area_struct *vma)
-> > >         return vma_end_pgoff(vma) - 1;
-> > >  }
 > > >
-> > > +/**
-> > > + * vma_start_anon_pgoff() - Get the anonymous page offset of the sta=
-rt of @vma
-> > > + * @vma: The VMA whose anonymous page offset is required.
-> > > + *
-> > > + * If unfaulted, then this is vma->vm_start >> PAGE_SHIFT, if faulte=
-d then the
-> > > + * anonymous page offset at the time of first fault.
-> > > + *
-> > > + * If the VMA is anonymous, this returns the same value as vma_start=
-_pgoff().
-> > > + *
-> > > + * This value is used for tracking MAP_PRIVATE file-backed mappings =
-by their
-> > > + * anonymous page offset.
+> > > This function provides the anonymous equivalent of linear_page_index(=
+),
+> > > instead offsetting based on the anonymous page offset of the VMA.
+> > >
+> > > It is valid only for anonymous or MAP_PRIVATE file-backed mappings, i=
+n
+> > > other words CoW mappings.
+> > >
+> > > For pure anon VMAs, this will be equal to linear_page_index().
+> > >
+> > > Assert that both of these invariants are true In linear_anon_page_ind=
+ex()
 > >
-> > I assume this function should not be used with shared file-backed
-> > mappings, right? If so, maybe add a comment like the one you have for
-> > linear_anon_page_index(): "It is not valid to call this function for
-> > shared file-backed mappings."?
+> > s/In/in
 >
-> No that's not the case, it is valid to access this for any VMA though it'=
-s only
-> meaningful for MAP_PRIVATE and anonymous VMAs (though in the latter case =
-pgoff
-> =3D=3D anon pgoff).
+> Ack. I ran these patches through claude several times and it didn't get t=
+his ;)
+> the machines are not taking over just yet...
 >
-> The code keeps the anon pgoff values consistent even for shared mappings =
-because
-> - hey - we have the field anyway and it's easiest and safest to just keep=
- it the
-> same.
+> Andrew - could you change this in-place? Thanks!
 >
-> One alternative would be to have code that checks the flags and zeroes th=
-e field
-> otherwise , but then you have problems like - early on initialisation now
-> there's an ordering requirement which can easily go wrong.
+> > > diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+> > > index c6fc783aaee5..0adfa6605653 100644
+> > > --- a/include/linux/pagemap.h
+> > > +++ b/include/linux/pagemap.h
+> > > @@ -1094,10 +1094,44 @@ static inline pgoff_t linear_page_delta(const=
+ struct vm_area_struct *vma,
+> > >  static inline pgoff_t linear_page_index(const struct vm_area_struct =
+*vma,
+> > >                                         const unsigned long address)
+> > >  {
+> > > -       pgoff_t pgoff;
+> > > +       return linear_page_delta(vma, address) + vma_start_pgoff(vma)=
+;
+> > > +}
+> > > +
+> > > +static inline pgoff_t __linear_anon_page_index(const struct vm_area_=
+struct *vma,
+> > > +               const unsigned long address)
+> > > +{
+> > > +       return linear_page_delta(vma, address) + vma_start_anon_pgoff=
+(vma);
+> > > +}
+> > > +
+> > > +/**
+> > > + * linear_anon_page_index() - Determine the absolute anonymous page =
+offset of
+> > > + * @address within @vma.
+> > > + * @vma: An anonymous or MAP_PRIVATE file-backed VMA in which @addre=
+ss resides.
+> > > + * @address: The address whose absolute page offset is required.
+> > > + *
+> > > + * This returns the anonymous page offset of @address, which is the =
+page offset
+> > > + * the address possessed at the time the VMA was first faulted.
+> > > + *
+> > > + * For anonymous mappings, this returns the same value as linear_pag=
+e_index().
+> > > + *
+> > > + * For MAP_PRIVATE file-backed mappings, this returns the anonymous =
+page offset
+> > > + * of @address, which is the page offset the address possessed at th=
+e time the
+> > > + * VMA was first faulted.
+> > > + *
+> > > + * It is not valid to call this function for shared file-backed mapp=
+ings.
+> > > + *
+> > > + * Returns: The absolute anonymous page offset of @address within @v=
+ma.
+> > > + */
+> > > +static inline pgoff_t linear_anon_page_index(const struct vm_area_st=
+ruct *vma,
+> > > +               const unsigned long address)
+> > > +{
+> > > +       const pgoff_t pgoff =3D __linear_anon_page_index(vma, address=
+);
+> > > +
+> > > +       VM_WARN_ON_ONCE(!vma_is_cow_mapping(vma));
+> >
+> > As discussed off the list, this assertion works even for read-only
+> > anon mappings because, as you said, "there's no such thing as a pure
+> > anon mapping that is !VMA_MAYWRITE_BIT, there is no way to achieve
+> > that."
+> > It took me some time to see that after reading your discussion with
+> > David at [1] and [2], and I don't think it's very intuitive. Could you
+> > please add a comment explaining that? Maybe add a comment at
+> > vma_is_cow_mapping() definition since you are using the same assertion
+> > in another patch of this series?
 >
-> Another alternative is to just leave it stale, but then that seems object=
-ively
-> worse and again requires branching code on update and set.
+> Sure will do! It is very confusing stuff (and I was duly confused also at
+> first).
 >
-> All-in-all it's easier to keep this working the same for any type of mapp=
-ing,
-> it's just useless to do anything with the anon pgoff for a shared mapping=
- :)
+> To save a respin (unless there's more stuff I need to address) I will pro=
+bably
+> reply to the relevant patch with a proposed new comment.
 
-Makes sense. Thanks for the explanation!
+Sounds good!
 
+>
+> >
+> > [1] https://lore.kernel.org/linux-mm/anBjpdMicqaGADr-@lucifer/
+> > [2] https://lore.kernel.org/linux-mm/anLyhaI6kW-EWk13@lucifer/
 >
 > --
 > Cheers, Lorenzo
