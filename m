@@ -1,197 +1,102 @@
-Received: from out-187.mta1.migadu.com (out-187.mta1.migadu.com [95.215.58.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-98.mta1.migadu.com [95.215.58.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 941D525228D
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 09:42:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BFAF3A59BA
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 09:43:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786354969; cv=none; b=DEeZB1xXO5wzPZjaQ9q1lRHSM57YjBGPmMTLrVwunFWBQv7lktTvFaAoixcURaDIA9L7r4QPPR0rmssIImpEqfsTc3syUStnxLJqAlCTnNYSEbYAPZlj5JWDn9jpV7XuQLmKrwj73oIK9Dt4wlnvezwQn8XB0JIyaio/spYJxU0=
+	t=1786355034; cv=none; b=UnWHZVCWlatZ7EQJsnINZDSmniQ9iKpsvv1X18Mcw+8N5JVlTs1xJJbbm+Y2BjN0lU5hi7tbzUZ9gT66w4f8P++8NHRd6M4Nl7DANC8oT6OUjMkTm8rRQqG3YyPb7gsTO87mPoLOdiwcJN7bajaIYtkFYckQBkfetKXXd7rSTvA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786354969; c=relaxed/simple;
-	bh=pXvOdQwVcRI4o3cSBezn8YOPLrt2oF9EEnHUzSsntt0=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=q/Z+o7OrIISeKAnCCHZxH0AUcVBTOCg939kDhtSGYJmtm/E1v8yLYz+d2nuPYfxl+xrfxyuBruTLbDJU09M3FADxtu8qsYjQMkkeQaadVUGaim+7rV8REBPWaKo6+xEnshFr1K/FLqU1fd/NNZGjk4V+5E3p0m2j+VtXEESOSv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=U6avpM00; arc=none smtp.client-ip=95.215.58.187
+	s=arc-20240116; t=1786355034; c=relaxed/simple;
+	bh=oM0nShtvENJ/IoYuzI4EAurH6RtVncCAM7zuaIO1J30=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b9RDgnX3DQTXvpLBGQMrdrXPzRMXEkelZZm5Ki+sxxrXMvfGCU79Tr0JLYGmv+2gPbTClC4/yYeWF7AAWZElkoWlkrxmAc3dlG6AZ/K9qQsfqKlUiaAsGi6ez81fKvQMfa85kstMVP+DZLCgXU9HSKI/DEDuU0VapBqkOBVvYoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MYaqsu/H; arc=none smtp.client-ip=95.215.58.98
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="U6avpM00"
-Message-ID: <53467765-7ffa-4da4-9473-2ea770048f96@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786354965;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2x97XEkL9/hfiKG5eM3hQ+3kNVvep8/7s1qs1TGOscQ=;
-	b=U6avpM00iquNlfSe/eaFZcyMpH7DGnAzt+9E6RsiB++oTPNT7b+sKf3iwGakzmo0VBWDXb
-	D4IrkPdKG0WGA5farBEIyqW1NZWZY2XW3+CXsukz8sP0ZD1SZ+rBABtBLoxWrzO66KLaeK
-	Cvonv5c0xhi2vpuF2jCYufqxpW7sGV4=
-Date: Mon, 10 Aug 2026 17:42:38 +0800
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MYaqsu/H"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=oM0nShtvENJ/IoYuzI4EAurH6RtVncCAM7zuaIO1J30=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786355031; v=1; x=1786959831;
+ b=MYaqsu/H3U0KVOKCCen3mzHz8hT/6YK+6UUVA4iT+gKdsbqa82CVA1DmRqRUUAHtCHKNyJ+j
+ 56MOpFxJDVwapfWReUKuZFWyj9gJ0cGKpPTPhJ0r0D1/7XpOepj5S6zYhh+/Al/BVQFi6xlcekx
+ 9rCNgfYRtxes5DL7YleMLhzU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [10.0.11.3] (2a11:3:200::10a9)
+	by mta10.migadu.com with ESMTPS id fe8757a2b2912904;
+	Mon, 10 Aug 2026 09:43:51 +0000
+X-Migadu-Scanner: mta10.migadu.com
+Authentication-Results: mta10.migadu.com;
+	none
+Message-ID: <a99bc12d-0103-4780-94b0-ecc82e4e0b95@linux.dev>
+Date: Mon, 10 Aug 2026 17:43:28 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Cc: cui.tao@linux.dev, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, Suren Baghdasaryan
- <surenb@google.com>, Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Ziyang Men <ziyang.meme@gmail.com>, Tao Cui <cuitao@kylinos.cn>
-Subject: Re: [PATCH v2] selftests/cgroup: add PSI pressure trigger and
- validation tests
-To: =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-References: <20260728083742.2359320-1-cui.tao@linux.dev>
- <anS3saMkFog89yxy@localhost.localdomain>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <anS3saMkFog89yxy@localhost.localdomain>
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 0/7] rust: use vertical import style and remove
+ redundant imports
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Jens Axboe <axboe@kernel.dk>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ rust-for-linux@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
+References: <20260521-miscdev-use-format-v3-0-56240ca70d0c@linux.dev>
+ <CANiq72k3cjgHiimYqGfuQjPy+A3oOUEoMxUJCS-FgBm25D4MLA@mail.gmail.com>
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <CANiq72k3cjgHiimYqGfuQjPy+A3oOUEoMxUJCS-FgBm25D4MLA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
 
-Hi Michal,
+On 5/26/26 01:51, Miguel Ojeda wrote:
+> On Thu, May 21, 2026 at 8:57 AM Alvin Sun <alvin.sun@linux.dev> wrote:
+>> Adopt the vertical import style and drop redundant imports already
+>> re-exported via `kernel::prelude`.
+> I can take this if block and misc Ack. The changes are straightforward anyway.
 
-在 2026/8/7 00:52, Michal Koutný 写道:
-> Hi,
-> thanks for continuing with this.
-> 
-Thanks -- though honestly I owe you the thanks. Your v1 review is what
-got me to drop the memory-pressure approach and churn_memory(), and to
-keep the runner out of the cgroup. v2 basically exists because you took
-the time on v1. Still only my second selftests patch, so still feeling
-my way around the conventions here (clearly -- see below).
-> On Tue, Jul 28, 2026 at 04:37:42PM +0800, Tao Cui <cui.tao@linux.dev> wrote:
->> +/* Trigger smoke test: second on same fd -> EBUSY; IRQ rejects "some". */
->> +static int test_proc_triggers(const char *root)
->> +{
->> +	static const char *const resources[] = { "io", "memory", "cpu" };
->> +	int ret = KSFT_FAIL;
->> +	int fd = -1;
->> +	int i;
->> +
->> +	(void)root;
-> 
-> WTH?
-> 
-Yeah, bogus. Dropping the param entirely; details in my reply to Suren.
->> +
->> +	for (i = 0; i < (int)ARRAY_SIZE(resources); i++) {
-> 
-> This (int) cast is quite uncommon, look around.
-> 
-Dropping it, size_t loop var.
->> +/* Induce deterministic CPU pressure (more hogs than CPUs). */
->> +static int test_cgroup_trigger_fire(const char *root)
->> +{
->> +	char *cg = NULL, *cpupress = NULL;
->> +	int fd = -1, ret = KSFT_FAIL;
->> +	struct pollfd pfd;
->> +	long ncpus, i;
->> +	pid_t pid;
->> +
->> +	cg = cg_name(root, "psi_trigger_test");
->> +	if (!cg)
->> +		goto cleanup;
->> +	if (cg_create(cg))
->> +		goto cleanup;
->> +
->> +	cpupress = cg_control(cg, "cpu.pressure");
->> +	if (!cpupress)
->> +		goto cleanup;
->> +	fd = open(cpupress, O_RDWR);
->> +	if (fd < 0) {
->> +		ksft_print_msg("open cpu.pressure: %s\n", strerror(errno));
->> +		goto cleanup;
->> +	}
->> +
->> +	/* 1us threshold in a 1s window: any cpu stall fires it. */
->> +	errno = 0;
->> +	if (write_trigger(fd, "some 1 1000000") <= 0) {
->> +		ksft_print_msg("arming trigger failed: %s\n", strerror(errno));
->> +		goto cleanup;
->> +	}
-> 
-> When I see this, could you increase the window size to 2000000 (so that
-> it has potential to run for unprivileged users)?
-> 
-Yes, "some 1 2000000".
->> +
->> +	ncpus = sysconf(_SC_NPROCESSORS_ONLN);
->> +	if (ncpus <= 0)
->> +		ncpus = 1;
->> +
->> +	pid = fork();
->> +	if (pid < 0) {
->> +		ksft_print_msg("fork: %s\n", strerror(errno));
->> +		goto cleanup;
->> +	}
->> +	if (pid == 0) {
->> +		/* Enter the cgroup, then over-subscribe it with CPU hogs. */
->> +		if (cg_enter_current(cg))
->> +			_exit(KSFT_FAIL);
->> +		for (i = 0; i < ncpus; i++) {
->> +			if (fork() == 0) {
->> +				for (;;)
->> +					asm volatile("" ::: "memory");
->> +				_exit(0);
->> +			}
->> +		}
->> +		for (;;)
->> +			asm volatile("" ::: "memory");	/* child is also a hog */
->> +		_exit(0);
->> +	}
-> 
-> This part could be replaced with generalized hog_cpus_timed() from
-> test_cpu.c (after move to cgroup_util.c).
-> 
-Agreed it shouldn't be open-coded. One snag though: hog_cpus_timed()
-runs for a fixed duration and returns, but here I want hogs that keep
-running until the trigger fires and then get killed. So I'll move a
-shared helper into cgroup_util.[ch] and call it from both spots, rather
-than using hog_cpus_timed() as-is.
->> +int main(int argc, char **argv)
->> +{
->> +	char root[PATH_MAX];
->> +	int mempress_fd;
->> +	int i;
->> +
->> +	(void)argc;
-> 
-> What's up with this?
-> 
-Leftover, removed.
->> +
->> +	ksft_print_header();
->> +	ksft_set_plan(ARRAY_SIZE(tests));
->> +
->> +	if (cg_find_unified_root(root, sizeof(root), NULL))
->> +		ksft_exit_skip("cgroup v2 isn't mounted\n");
->> +
->> +	/* PSI must be enabled (CONFIG_PSI=y, not default-disabled). */
->> +	mempress_fd = open("/proc/pressure/memory", O_RDONLY);
->> +	if (mempress_fd < 0)
->> +		ksft_exit_skip("PSI unavailable (CONFIG_PSI=n or psi=0)\n");
->> +	close(mempress_fd);
->> +
->> +	if (cg_read_strstr(root, "cgroup.controllers", "memory"))
->> +		ksft_exit_skip("memory controller isn't available\n");
->> +	if (cg_read_strstr(root, "cgroup.subtree_control", "memory"))
->> +		if (cg_write(root, "cgroup.subtree_control", "+memory"))
->> +			ksft_exit_skip("failed to enable memory controller\n");
-> 
-> The memory controller is unnecessary now, right?
-> 
-Right. v1 leftover, CPU pressure now, so that setup is dead code.
-Dropping it.
+Hi Miguel,
 
-I'll fold all of this into v3.
+I would like to follow up on the remaining patches from this series:
 
-Thanks,
-Tao
-> 
-> Regards,
-> Michal
+   rust: block: mq: use vertical import style
+   rust: block: mq: remove redundant imports and format
+   rust: block: rnull: use vertical import style
+   rust: doctest: use vertical import style
 
+As far as I can tell, these have not been merged yet. Andreas already
+acked the block parts [1][2][3] and David Gow acked the doctest change
+[4]. Is there anything else needed from my side before they can be
+picked up, such as a rebase onto a newer base?
+
+[1] 
+https://lore.kernel.org/rust-for-linux/87v7bgf8f3.fsf@t14s.mail-host-address-is-not-set/
+[2] 
+https://lore.kernel.org/rust-for-linux/87se6kf8af.fsf@t14s.mail-host-address-is-not-set/
+[3] 
+https://lore.kernel.org/rust-for-linux/87pl1of7ve.fsf@t14s.mail-host-address-is-not-set/
+[4] 
+https://lore.kernel.org/rust-for-linux/5748f9ca-e684-42a0-9297-e587b178a47c@davidgow.net/
+
+Best regards,
+Alvin
+
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
