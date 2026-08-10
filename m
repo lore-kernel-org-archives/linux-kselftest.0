@@ -1,92 +1,84 @@
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831D23F9F3B
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 23:23:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811913B6BFD;
+	Mon, 10 Aug 2026 23:40:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786404194; cv=none; b=JK04fPV+YPsSza598VDZqzuexm/wUOcagizhykEr7XR3tFibswAnrQTq5EK84smzSdAPnZkYZUAmku8bXDVsR9Q/9ooqagkqWQONg9yu6IgWdxZ3T1t4IkQZiNAUwQRKtR9GLql5Hlz/Tpy5G2+BfKGKOn8u4dXE7doAwoNP2C0=
+	t=1786405252; cv=none; b=oPe8rirwLQZKn/iRDEoAzr1KQPTXiyK5Qpz/J6Zc2v8ShNCQAk0Nkzmb/5EZsxs6Ci6rQFulu0WsShfnpD/qjPgNknxW4X6xh7MMOdVLDdUyuSd4EvY6bFKaTnA9oo9KfdFlF2ZVB7vrBgPYRFaKnAZAgondudPkapPlFWjOHkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786404194; c=relaxed/simple;
-	bh=6riWePLyH2qYVpMlK+T7n9ft2OfONf7BSNufpXaF5IY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LVgAxmV6eSfOzAQDzRwfNjISoYfghHjRYeVoiCkFj3wjHm3IVUD6Z4la8yv60PEuE42GTFKIcXWzIGgX0JgdXR3fzZKQ6mnCXK8HkQevmAhvoCRkXqMpWsrkUQ+gzhrmd4y0J7WeK7RdAnTF8lB1AqwTDt6MPFFuimaqIRoDlMM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i5QQIT6K; arc=none smtp.client-ip=209.85.214.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786405252; c=relaxed/simple;
+	bh=jkcMwrKVVK8447gJahzt3XxXmie987PHKSdD5enZTvQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=PytztrxyZjEoaJbvmpR8T97XvVAHYF5E5OIQYPSF82krsfmpqQqBtWSafSb5x4Uhza15jLpxBnkaCl5AGHC0Ufl+roQH++rV18yz+4WLlWxRYzOVCB14P48k9VllOGxy4LfLaRxFlKbltoXkCzUwncCifj5f3nTtNSwi8EcuC9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVysRlxt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i5QQIT6K"
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc6dd43737so4837755ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 16:23:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786404193; x=1787008993; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FpMqKDZdeqkAxP+HMbo4Vf8RyrsMvHYCAM3HPa8Xz3s=;
-        b=i5QQIT6KOO80pdis5TMSEZl5JDgS0kyM22Ryt0UJqA7PHuGWVGn52ej9OAYgHAvW4E
-         VYeCD9t/Fwz2lxuoIMYjUKQlbF1j6gAN+nJIsCsj5F7cvqqolk5bD7INvJ+FO3z8rALA
-         KNgslamz3nRwE2JviGqRyMqKUFAFOyX17ky18RQ4DahFZoNbyxzyrVmGYjS9VS8jR+vu
-         AAI1QnBEnXdqi6ooZLn0OondriMyyGy+qUefTgcUyxzvQfkA01dnpWBPVAEOnBCC9Cy4
-         V3EMP8eMs1jVW15UBOEiAxtUNjCSM8LenlR0GnMxOF9c42n3xNhSF+3F12uQc1MH7HQY
-         O0eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786404193; x=1787008993;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FpMqKDZdeqkAxP+HMbo4Vf8RyrsMvHYCAM3HPa8Xz3s=;
-        b=l5R9Uy2NVGmv8yV2fNLn/BclraP9Xp8o6vlNWwxXzIGTd3IXsaFPGUYkwdGo+GtDvI
-         ROWAHwKUOvxGTKtS61k7HmpIhLuhMGEUn761Rc+kHWtgNOaJEoGFlnBpYGYix0VQRGMH
-         YVQXslRuAz6Q/QalnrTmYBGVSztp/r4pPZnsxrrebkno8EDVNZFCutZE7uEtLD02R/RV
-         1zHbqlxRp1xxF599ge8Ag4wDs2g+kU3GDhbvtEUO58dHYNfTbIya9Q/OVn3Pp96OfJUJ
-         a3KOoTv2AmsOYc6Cj7jKHcPU+fW2I7KoCwAp6V0y+W+Dbu2qPVX2i6GG66A0UVYsNh95
-         0zWw==
-X-Forwarded-Encrypted: i=1; AHgh+RoT0K6+3ww1zaPWjmKxRpYGxUmsG5NYAxh3TKlkmMeNY+4FXN+iof8Nr6NN2tjeNcYPR7yfyEkd4A2axFNmQfU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyN5ztkF+zJLw50GUfgYoGMzp4Zoan12u+i563pHdGbCLX51ODF
-	kXs6EG2w+iYFVBkQVS2vxq8fgFmpIpbrnwJY35gFp4r9Vheb3198DJEtpNZ1xdyUy+Y+/hJQXK8
-	JaJqmIg==
-X-Received: from plkb4.prod.google.com ([2002:a17:903:fa4:b0:2c0:a516:2c2])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fdad:b0:2bf:9760:b94d
- with SMTP id d9443c01a7336-2d0ca7fd072mr611571635ad.15.1786404192685; Mon, 10
- Aug 2026 16:23:12 -0700 (PDT)
-Date: Mon, 10 Aug 2026 16:23:12 -0700
-In-Reply-To: <20260728121138.1103610-5-tarunsahu@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVysRlxt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AC3A1F000E9;
+	Mon, 10 Aug 2026 23:40:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786405251;
+	bh=e94jut7BDx2TeLjil2fsKpSXP24Q6d6ykiaNSn52s6A=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=iVysRlxt8aH2RKYYjf7M8oQdMjvsGOqxaL0bmNDRnWFBgbNzobOvA+YaxGC8V/40d
+	 jjxfzjR5FqNFzuCbVU7FITVbOpaHft48zARG9j6MeFlv0ShP5kOkckqe+PUFsXYxsr
+	 RHgS2LsUBW324Ooq82AVNujtW7MIEQrhCtgo2VlrsTG8gh1qhL/D1Jvd36ZZu+NYdC
+	 3+fhi3LE6biDSyaqldNjc6ULBs3t0yaK/zHgLWR6cNEjAzvFX3VZxL2IPqts+9zKSM
+	 43c+c562+6izbC3ZczmKBF+cx5PIoZpc/BfXCMgON/xkS9S01jBYF/+tRp5z8XssgD
+	 1KHCnc2e+vbCA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0988392626C;
+	Mon, 10 Aug 2026 23:40:08 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com> <20260728121138.1103610-5-tarunsahu@google.com>
-Message-ID: <anpdYD1UaO0ffQgi@google.com>
-Subject: Re: [PATCH v4 04/11] KVM: Track weak reference to vm_file in struct kvm
-From: Sean Christopherson <seanjc@google.com>
-To: Tarun Sahu <tarunsahu@google.com>
-Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 1/2] net/sched: act_ct: fix sk_buff leak when the
+ header checks reject a packet
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178640520739.254991.6676555820239919462.git-patchwork-notify@kernel.org>
+Date: Mon, 10 Aug 2026 23:40:07 +0000
+References: <20260806101235.809370-1-hj351016@gmail.com>
+In-Reply-To: <20260806101235.809370-1-hj351016@gmail.com>
+To: Hyunjung Ko <hj351016@gmail.com>
+Cc: jhs@mojatatu.com, jiri@resnulli.us, davem@davemloft.net,
+ edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, horms@kernel.org,
+ shuah@kernel.org, taoliu828@163.com, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org
 
-On Tue, Jul 28, 2026, Tarun Sahu wrote:
-> - Add a weak reference 'vm_file' in struct kvm under
+Hello:
 
-"vm_file" is effectively already claimed by vm_area_struct.vm_file.  *If* we go
-this route, I would very strongly prefer to take a dependency on "vfio: Use
-file-based reference counting for KVM"[*].  I'll poke that thread, we really
-should land that one particular patch long before the s390-is-arm64 insanity.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Empashish on "if" because this all feels backwards.  It's not at all clear to
-me why liveupdate goes directly to guest_memfd, but then requires a token associated
-with the VM.
+On Thu,  6 Aug 2026 19:12:34 +0900 you wrote:
+> tcf_ct_handle_fragments() runs its header sanity checks before handing
+> anything to the defragmentation engine:
+> 
+> 	if (family == NFPROTO_IPV4)
+> 		err = tcf_ct_ipv4_is_fragment(skb, &frag);
+> 	else
+> 		err = tcf_ct_ipv6_is_fragment(skb, &frag);
+> 	if (err || !frag)
+> 		return err;
+> 
+> [...]
 
-https://lore.kernel.org/all/20260731130902.654679-2-seiden@linux.ibm.com
+Here is the summary with links:
+  - [net,v2,1/2] net/sched: act_ct: fix sk_buff leak when the header checks reject a packet
+    https://git.kernel.org/netdev/net/c/8a7ed561671a
+  - [net,v2,2/2] selftests: tc-testing: add act_ct test for malformed header handling
+    https://git.kernel.org/netdev/net/c/f1b3416ceaf7
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
