@@ -1,195 +1,153 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D17042C517;
-	Mon, 10 Aug 2026 20:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD860382371
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 20:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786394269; cv=none; b=eGAnJvQnWeEQ7xePsPf/vo/8ab1AGR0n1/4ipF8pGdKGbWdMX3X7UaKEz6sSmGaFWvLkrRocxz9LQ1m0qcREuoMiahUdNBCuYsBlzg6EYaOPlL3LCqqeG91Soa62hg/EAaGk+ORzB3nXFNcq164CeN9e/5dG9ufzOuonwcS6iHs=
+	t=1786395381; cv=none; b=D2BS5GeRCarnXijpKqTMb1GC4ThheGRLFk+tCQ+Ne1iQxOfXbsS/beEgcxibKzFivDLu74We8c16p7os7JfK7tg6fdPlwv+2rQaWeY8Rwevxt3neDPgo3L1F+OgBCDdvKijyaueHGy07e68KDi9I6CQ1/jeZm0uOB0nJgCvTldE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786394269; c=relaxed/simple;
-	bh=SSEOECfzeUlHZPeyjKJ6/2pL6ifQvQEbRSx7N8yWinQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=mThDxdZ6XfukQ67p6BxqCiO70QOuBarOSzJ3a64ljH5PMS01DUwT1Z1SSb971aCNKfzOBRin4gRpCWgjAEWpwv5yVoZO8r5Qn9cEmZ1XSNsnqhVlpZUP+uY0TQNfeMQ8obDoQ4za1cpz4kUZg7eLrd2kGlf+qe8cRVNFE2EGJ2s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLwFaIxC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786395381; c=relaxed/simple;
+	bh=g1qunPZef/v32X6gsoYph7lKJyJHMnhVcr3SRaJB95E=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=rzIvo4Nz6t9wmWtWkkShJCUGglxVhq/dzyjhtxfmYAi8F/evk3IKOBcjjhF2dHChF35XHba++7VGSpePGZZmTvyq0LAv4IP1tlWzWFHM0nbRXP05t78CbKb8BDpPq9nod5Xd2nVg9e+/pu00IaDWNrvaRhP4jLImOwy46P62gy0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=dPGGCOlz; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLwFaIxC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 312DC1F000E9;
-	Mon, 10 Aug 2026 20:37:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786394268;
-	bh=in6MBxaXPFo7ck2FE7fT8KctsIkQpoh8TexIzsMSQqA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=YLwFaIxCNY5q6SCRrm7yxkzwO4kU2XXXMEe3yvkElP8EbT+dhtj6LECjg3AWYjre4
-	 LoEtrm+FT4ufvBP1eGVDyb37vrPkjl6UT5ZxHteHsPH35/gV/+sP5q3i3MNCpherKW
-	 vTvVyXT0HVeASl0SXdLdSUHArf1qUCRfAVj0mi1nTzQKGwmPuvbs4QCWxcBkGKBB3M
-	 Qg56wG5E965oM41YkwdnhB2R9o3ny9f7C86Q8FN1WuLweqgasYnmValdxpt/ALYDNU
-	 YzncK3MAAQZw5nfgU1O/6AShiTz4t2qb3qScggsCJTZuC52YFKGJUvbGB1iQC/X0sP
-	 gUjtpSrOGWxjw==
-Content-Type: multipart/mixed; boundary="===============0153095071770105731=="
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="dPGGCOlz"
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-7eb34c17b96so1751911a34.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 13:56:18 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786395377; x=1787000177;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=fM9gXkFDf6Q4+fK1aOhq3yZ+OMkHmF++pbE357q8/Ag=;
+        b=aL1VsCAMRBgtDANWaLsKVJIpIyrDOSjiQNGurgpBeHrUQGLbPJ63ZZ3gMiExHSRHcX
+         xwSviHSy7SRKTgR3rWZtfIKqJO2WlJ4Ys+nV5OrX1ou8Zb7P9UPET1v3uIqmm+qEpoqn
+         30R4Mc0eRwQM5mGpHPsb/tlTDVqyOOIZWjCvwSNu7BNotj/8+OarXck6q1swkOD8D7KV
+         KlZYP7h8EJLU/XhAHazEKC8YD6IwV6GSPOLLuT7+OguLEUQ1lP67OI8Ppuqa2YcdyrUU
+         Vy0x+dCQKZJNek4qjCqBEsVPiuwrjCVSIVhw1kdWESslTNaEf9JsBoJEMscV56JaOIAn
+         p86w==
+X-Gm-Message-State: AOJu0YyHQt9NLHe1/ZucIW8sqp7Tg7Ax5JPRmZAgVqcCVuWoVbRv1uJM
+	XFtz5FFK0PM+fP4sSbjDiZBzHUB+yX59C9+IPFuuFp9X0ELJmGzA+JXz8Ju+oQ==
+X-Gm-Gg: AR+sD10zFyBr2u8BFVEROjImVlrTidFBeE7LmGXZOtNJ5alrAdgoC6jcF/RintPBUQO
+	tMFacSiBNEdCFxXI8P933fqHmYbHmgZkd6cXx3H83cNEs+cAe4g64OKo36ucHMWg9O0DGoDfwdN
+	sjGVQe96AcFfpwUXZPZERdamh+x6/Ms18CB90y7+F29+jInAneC3ePkb96B0KsodOBJ5FIh9x4g
+	ikSn9TF9EmeL2oL/R5ETQhBNPLhhX0DEsL5NyufVAxgd9xKMCLveAeBwOHpkYoFTyQUI7V/JXml
+	OMEIpUnB3+o3hfjOOvcNCCgg1eVb/TXZJ1RumtUz1/GtOu8fbBCXwr0UNaHUjqkwl3waTG9qMGf
+	CYubI6DIlzL+Y+X3giqZm7uToX3p9p/5KGyMxUqbkc6Z5wcf8a4bIq3s3Y6BYKgv2aey0oX6PtW
+	ZtI8vKe6H629x7SNb+uBDUahQKdOeGI/TZ6y5CevY3qLjSTjKqDa07Rp2WIOs9YiZz2fmDNLWQX
+	/heBLewAX2lDdpfzJMdtWYCFh4dx7Dki9VmkvsaFhqe9nE4Pj+RKZOLkLtvCCfCvA==
+X-Received: by 2002:a05:6830:82b4:b0:7dc:c7aa:22bd with SMTP id 46e09a7af769-7f39a8737d9mr2644284a34.6.1786395377534;
+        Mon, 10 Aug 2026 13:56:17 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f35b76ff90sm7895965a34.17.2026.08.10.13.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 13:56:17 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7FA5F609A3;
+	Mon, 10 Aug 2026 20:56:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1786395374;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=fM9gXkFDf6Q4+fK1aOhq3yZ+OMkHmF++pbE357q8/Ag=;
+	b=dPGGCOlzRdGU2WcnHIHOvfP0QJl7wrvolJ4HRzXORzaFweoi8lZnT7JloqnId43klKBuBd
+	To74ncsbXhTeU6xTMwO89Gph7auVIpcP52tnjNbrLqjqGfv9lcSYcaSsjh2BtfRLn0XGp7
+	YEgAtwy1IHyUMcXgU0Ay3ViuW3BY9+I1iDmvjR6LYKeN6bfKvWdGvKnxxFSyYadOugm19s
+	gt+vE2AYojSYu7BM40Xr5eP8zCB+oyLV36J0YLRyDSKp5pxAU7Iif9iI02s089+lu/YCCV
+	NYEflydrl8vSE1KlFV9akULxRO9wXSID9He/A+Sn13ojf73x3h9yvjxPPGVxNQ==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Mon, 10 Aug 2026 17:56:00 -0300
+Subject: [PATCH] selftests/namespaces: Fix racy pipe handshake in timens
+ and pidns_separate
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <31c1f4967879c62248ab104f137e2eceb2b071a37ffe4f2d48415a169a98c02f@mail.kernel.org>
-In-Reply-To: <CAOZ_KyvMmC8Sa1Yiaqe2istdxYrc0fpeF7RHEb_UeGD046nqig@mail.gmail.com>
-References: <CAOZ_KyvMmC8Sa1Yiaqe2istdxYrc0fpeF7RHEb_UeGD046nqig@mail.gmail.com>
-Subject: Re: [PATCH bpf-next v3] libbpf: avoid overflow in BTF.ext bounds check
-From: bot+bpf-ci@kernel.org
-To: carrerasdarren@gmail.com,bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,shuah@kernel.org,jolsa@kernel.org,yonghong.song@linux.dev,song@kernel.org,martin.lau@linux.dev,memxor@gmail.com,daniel@iogearbox.net,ast@kernel.org,ihor.solodrai@linux.dev,eddyz87@gmail.com,andrii@kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 10 Aug 2026 20:37:47 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260810-selftests-namespaces_race-v1-1-4307e833783e@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAN86emoC/yWMUQrCMBBEr1L222CaokavIiJJumlXbFp2owild
+ zfRn4E3zLwVBJlQ4NKswPgmoTkVaHcNhNGlARX1hcFoc9S21UrwGTNKFpXchLK4gHLnkqq3MZ5
+ t7A6nzkD5L4yRPj/39fZnefkHhlyFdeGdoPLsUhhrNTMNlPaTk4wM2/YFsZpOwZ0AAAA=
+X-Change-ID: 20260810-selftests-namespaces_race-d8ff98f35732
+To: Shuah Khan <shuah@kernel.org>, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re?= <rbm@suse.com>, 
+ Christian Brauner <brauner@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786395368; l=2194;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=g1qunPZef/v32X6gsoYph7lKJyJHMnhVcr3SRaJB95E=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QOs44UoOC8IHm8sHncVOo0uzlpdK135oaMR7BDAgcXqbV1k43rehmo2d/uoprp4XUzp6CX2vud8
+ +gDm3xPQ+GQo=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
---===============0153095071770105731==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+In timens_separate and pidns_separate both the child and the grandchild
+write a 'Y' readiness byte to the same pipe, but the parent expects a
+single 'Y' followed by the grandchild's pid. If the grandchild's byte
+arrives first, the parent takes it for the child's and reads the pid
+misaligned, ending up with a garbage value.
 
-> diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-> index 8417de92d028..744f33e2aec9 100644
-> --- a/tools/lib/bpf/btf.c
-> +++ b/tools/lib/bpf/btf.c
-> @@ -3364,7 +3364,7 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
->  {
->  	const struct btf_ext_info_sec *sinfo;
->  	struct btf_ext_info *ext_info;
-> -	__u32 info_left, record_size;
-> +	__u32 data_left, info_left, record_size;
->  	size_t sec_cnt = 0;
->  	void *info;
->
-> @@ -3377,16 +3377,17 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
->  		return -EINVAL;
->  	}
->
-> -	/* The start of the info sec (including the __u32 record_size). */
-> -	info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-> -	info_left = ext_sec->len;
-> -
-> -	if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
-> +	data_left = btf_ext->data_size - btf_ext->hdr->hdr_len;
-> +	if (ext_sec->off > data_left || ext_sec->len > data_left - ext_sec->off) {
->  		pr_debug("%s section (off:%u len:%u) is beyond the end of the ELF section .BTF.ext\n",
->  			 ext_sec->desc, ext_sec->off, ext_sec->len);
->  		return -EINVAL;
->  	}
->
-> +	/* The start of the info sec (including the __u32 record_size). */
-> +	info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-> +	info_left = ext_sec->len;
-> +
->  	/* At least a record size */
->  	if (info_left < sizeof(__u32)) {
->  		pr_debug(".BTF.ext %s record size not found\n", ext_sec->desc);
+The parent stores that pid in self->grandchild_pid so that
+FIXTURE_TEARDOWN() can kill the grandchild. A garbage pid leaves the real
+grandchild alive in pause(), holding the test runner's TAP pipe open and
+hanging the whole collection.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c b/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-> index 7d1b478c99a0..77db87dabb03 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/test_btf_ext.c
-> @@ -1,9 +1,31 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /* Copyright (c) 2025 Meta Platforms Inc. */
->  #include <test_progs.h>
-> +#include "bpf/libbpf_internal.h"
->  #include "test_btf_ext.skel.h"
->  #include "btf_helpers.h"
->
-> +static void subtest_invalid_info_len(void)
-> +{
-> +	struct {
-> +		struct btf_ext_header hdr;
-> +		__u32 record_size;
-> +	} raw = {
-> +		.hdr = {
-> +			.magic = BTF_MAGIC,
-> +			.version = BTF_VERSION,
-> +			.hdr_len = sizeof(raw.hdr),
-> +			.func_info_len = UINT32_MAX - 7,
-> +		},
-> +		.record_size = sizeof(struct bpf_func_info_min),
-> +	};
-> +	struct btf_ext *btf_ext;
-> +
-> +	btf_ext = btf_ext__new((void *)&raw, sizeof(raw));
-> +	if (!ASSERT_ERR_PTR(btf_ext, "invalid_info_len"))
-> +		btf_ext__free(btf_ext);
-> +}
-> +
+The grandchild has nothing to report, so drop its write() and leave the
+child as the sole writer.
 
-Does this new test actually fail on the unfixed code when running on
-64-bit architectures?
+Fixes: fdb48976b637 ("selftests/namespaces: Kill grandchild in nsid fixture teardown")
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+Hi,
 
-With sizeof(struct btf_ext_header) == 32 and sizeof(raw) == 36, the
-test supplies hdr_len=32, func_info_off=0, func_info_len=0xFFFFFFF8,
-giving data_left = 36 - 32 = 4.
+Please consider merging this simple fix. The error has been found through
+openSUSE CI, which hits it sometimes:
 
-With the fixed check, 0xFFFFFFF8 > 4 - 0 yields -EINVAL and ASSERT_ERR_PTR
-succeeds as expected.
+https://openqa.opensuse.org/tests/6132140#step/kselftests_run/107
 
-Without the fixed check, in btf_ext_parse_sec_info():
+Thanks!
+---
+ tools/testing/selftests/namespaces/nsid_test.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-  info = data + 32 + 0
-  btf_ext->data + 36 < info + 0xFFFFFFF8
-
-On LP64, the __u32 len is promoted to a 64-bit offset, so info + 0xFFFFFFF8
-becomes data + 4294967320, which is greater than data + 36, and the unfixed
-code also returns -EINVAL.
-
-The divergence only appears where the pointer addition wraps, that is on
-32-bit builds. Since BPF CI runs on x86_64/arm64, ASSERT_ERR_PTR passes
-whether or not the bounds check is fixed, so the test doesn't actually
-guard the overflow behavior on the builds where it runs.
-
-
-> @@ -59,6 +81,8 @@ static void subtest_line_func_info(void)
->
->  void test_btf_ext(void)
->  {
-> +	if (test__start_subtest("invalid_info_len"))
-> +		subtest_invalid_info_len();
->  	if (test__start_subtest("line_func_info"))
->  		subtest_line_func_info();
->  }
-
-Commit message issue:
-
->     libbpf: avoid overflow in BTF.ext bounds check
->
->     An invalid BTF.ext subsection length can wrap the pointer addition used by
->     btf_ext_parse_sec_info() on 32-bit builds. The wrapped pointer passes the
->     bounds check and parsing then reads beyond the copied BTF.ext data.
->
->     Validate the offset and length with subtraction before forming the section
->     pointer. Add a selftest using an overflowing func_info_len.
->
->     Fixes: cf579164e9ea ("libbpf: Support BTF.ext loading and output in either endianness")
-
-Does the Fixes: tag point at the commit that introduced the overflow?
-
-cf579164e9ea only renamed the function (btf_ext_setup_info ->
-btf_ext_parse_sec_info) and added endianness handling. The overflowing
-expression itself is unchanged by that commit. Checking its parent:
-
-  $ git show f896b4a5399e:tools/lib/bpf/btf.c | grep -n 'data_size < info'
-  2918:  if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
-
-The same pointer-based check is present in the earlier ancestors 769ad3a61e33
-and e8957c0dde3c. It was absent only in the original 2993e0515bb4 (which used
-`last_func_info_pos > data_size`). The 32-bit wrap dates from the commit that
-introduced btf_ext_setup_info() and its pointer-based bound check, well before
-cf579164e9ea (v6.12).
-
-Because cf579164e9ea landed in v6.12, the current tag excludes every stable
-kernel between the real origin and v6.12, even though they contain the
-identical wrapping comparison. Should the tag reference the commit that
-added the pointer-based check in btf_ext_setup_info()?
-
+diff --git a/tools/testing/selftests/namespaces/nsid_test.c b/tools/testing/selftests/namespaces/nsid_test.c
+index 46dc838cba82..a16f31f41d38 100644
+--- a/tools/testing/selftests/namespaces/nsid_test.c
++++ b/tools/testing/selftests/namespaces/nsid_test.c
+@@ -649,8 +649,6 @@ TEST_F(nsid, timens_separate)
+ 		/* Fork a grandchild to actually enter the new namespace */
+ 		pid_t grandchild = fork();
+ 		if (grandchild == 0) {
+-			/* Grandchild is in the new namespace */
+-			write(pipefd[1], "Y", 1);
+ 			close(pipefd[1]);
+ 			pause();
+ 			_exit(0);
+@@ -771,8 +769,6 @@ TEST_F(nsid, pidns_separate)
+ 		/* Fork a grandchild to actually enter the new namespace */
+ 		pid_t grandchild = fork();
+ 		if (grandchild == 0) {
+-			/* Grandchild is in the new namespace */
+-			write(pipefd[1], "Y", 1);
+ 			close(pipefd[1]);
+ 			pause();
+ 			_exit(0);
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+base-commit: db2ddb87143519e20a95aa36c60b36107b736a58
+change-id: 20260810-selftests-namespaces_race-d8ff98f35732
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31426491597
---===============0153095071770105731==--
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+
