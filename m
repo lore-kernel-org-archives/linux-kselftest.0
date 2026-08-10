@@ -1,217 +1,322 @@
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E9D739C632
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 22:19:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786400355; cv=pass; b=HJPFYyfgMzGcrH2w1NpuryCCZRO4Kc15NU3vDtnTGClueSVhaY+6EbvcWsiOrWegKHyqjfzd3re3Fe8n8SAgJz5+V+YOeZ6aEVGaTdLeZD16KNNaCJd6HyVJHWdXzqQ4LdXCOlIvj1OkLsGrLXmImXnR4KBqd3Jk1JP9klTaIcs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786400355; c=relaxed/simple;
-	bh=vfIc2n/bE2oddAwstk6unKCtfZaW5or+jlhpvREdR90=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=VwQP5DB+8TDN9NYMebgpOmEQrVzOojHI27By2WM/3+n5vSxEgE2Saii6jD3PQg7mCA6vimdwqqhU6HcZ+mhT9F6JsNstZ21E1RUZRTQVeCKiSOIgWE/bhoPrzVCSoTEkdhDG5OEcjnqpfVkHX8gUKIDbNKrj7SoN5qWCfOs7ot8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aomjanC1; arc=pass smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B56B13B2FCA
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 22:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786400811; cv=none; b=NaE+26X2y6kPRDslxsd7qjBXzTMRBjdj6Ok0qGD0HWM1CJSzXj4ui4O83DcJN5lzZrXgVYrReBXKFbR2KnTbyt0Z5R2ejRGn2Bh1cye0I85jt5m5Jnv7tMiL/Mh9Z3f6a1tZwubz2MdXx+/PYRKNpNMEHf7uiM8vNW2H7QCU/T8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786400811; c=relaxed/simple;
+	bh=acthpId0xxIMHj8cbxHwbEk9kB79SbNDgsYVPE9NfSY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Tvkm6+emO9THR4HUD3A71S54+JoVkcAYAqbKImtT/ZX6xiB4xSRqv6wzKD8W0lifwn83kHE5oVNzaA6X7NeAw68grv1QpNQFN8esGpnetokvJjPcUUIPbm/k6511Br65wrHPVIv42O+oGACdxNcpdHPuHwNR1XtYqyOFtU/n5UA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Rq9DNgO7; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aomjanC1"
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5aeb59d54b1so2580985e87.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 15:19:13 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786400351; cv=none;
-        d=google.com; s=arc-20260327;
-        b=AUGMn0/tH8aLVAdgZUGTjx4YQFob3WdWFnCjS8BvzLrFhSiR9jtolsIgqv+VT6XBlr
-         dbhxQazIPwN8zYY7RA0ZNoedwv7dH/bJgZJ86KqU8Gp1Az0MLExKerK5VdbNUbI+XgVF
-         76Gy8ZTw+bSM/RQI9QwIVK2GsJlpR3l5ZmaGHmU4PMiBSKm+A819luobc0tlxx/jPIgz
-         OAkIfGemBAy0Pn/rPtPP5sRG5vIyBI7OIMsw3L8mTyvxfAFVCJdzfa4exAv1mZkteKYO
-         wvdRFZPrT3jiC/2zplYxfEg7bgjMh8S6saZOrqZu2bsVOCi3loL7gOqQxVC9RNDlNI1r
-         J7NQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=wApo2Os9DOMxJiDoIUlPqNDJnbj6WyChdIL/Dd+3c/o=;
-        fh=wuZqzkV/uQl3Lx27/kiNyOzdA1cULOb4Q4mn/LcNlUg=;
-        b=IKqpVBVr5tTWhgJMlqraYhIWOlvZO+rwZO7pyWdK3QYrrlfp/2ZGr2fUSiFCxAHefn
-         z/2zAXjJut3lF+SOexh71F7xhHbOxmBsczSbV6Yn7E8oq4tV6JNxBLcKlEcCyZAgOhun
-         L5zBx7ICe0YENqYK3S+eaDlJqUtk2NJNlrYhEMRCqYBuVCt8pP7oX8X2Fo+CnYDAJa1S
-         N9qN+pp3E3Ae9+plb/4AeUzdhXjxL9917vZZLGm71UUIXq4ufAnqee95l1JhyMpkR7N8
-         lOhL90M0EnD5hNy9zXqp0madjYQU+BPVyZdeobSJi32XxrPV5YGwPkzRj3zJ0Dtiss3e
-         bmIQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Rq9DNgO7"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d001671a54so55898715ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 15:26:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786400351; x=1787005151; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=wApo2Os9DOMxJiDoIUlPqNDJnbj6WyChdIL/Dd+3c/o=;
-        b=aomjanC13uOaLcJT+Jw9rpzBbjQtM55pc3E3VzL2XzZV66S+AeIEvCkqcNUXWmFdGR
-         r+lkd4MJEgkCuF8OoLxgyyyDRS423LfxGsyJEPwDLGGegmhiNmGQTk1P38XpqyS4JV/L
-         q43yJfg+CT8BX617tOfrQwLbs30cwJfqsNJezGHxjdVOydJIpfauwQEc2AyKvgduCpbO
-         Hwy8TK5uBk544a3Qm/dCEYzGrHJtBQCfMtpFpg1oEqj1gKyxBktBS87i+F8qiA66y2pL
-         omZ2kjGBnP72NCW5Ba8JweAaZEKaJs9XqrutEjs2oXZ9Zc9pLf8F5OCjNH7+8BA/n2tg
-         j/mA==
+        d=google.com; s=20251104; t=1786400808; x=1787005608; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eCvqvKq7txaLhgLohGrMSKSRSQETuQwS11gkekNEjOI=;
+        b=Rq9DNgO7M8Hx2BpymgTHIitV+njbE7QQsUeUXoUa2RWALem7yxHF1Y+oDnVmQeMvCJ
+         SPY+QRu9QJSzn37UMH3VYzG8SE2YO+UzWk15ZmZkVowCVMTx5YN6Tflk1Mk0bISSokAY
+         LY7UL5K5sVNg9vIZy+B/YFt+LwZDl3g0s3i5kbJjoeMZPfyKeBHYM08RQQXdX7CmVAC2
+         balI8JfVdKLCqmI8iZ/bGgQ5yPsRrIegf8LjQQNpJRM9ENCv88pnWeJNmg6nUCB+WYTU
+         zjvJOaetbWf1efGmHyP/YpbHmipqII+SAH8xGo9CBaudItHyy8gRcqg61lJetiiXg2kA
+         V6nw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786400351; x=1787005151;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=wApo2Os9DOMxJiDoIUlPqNDJnbj6WyChdIL/Dd+3c/o=;
-        b=sJAq/BioFK/3dIZcqo5jZlpZwn1befNtNXj9XNlUExT6GOY67w+bYWoihsCpzlZTBL
-         UaolNRn0nqlYaHRtQlDQmkh5fUHEfFoPsxd8IGwR3Jw1UJ0fVkS7u9D2sYBLIyDJdS4u
-         UedEPgTqpyb1MJfs1gPvgFTVB1Bc6eKMLf5t6LQH1IQhytBvVbFKcF2UnNFAMNbV0Ist
-         bVes0k/u8SDKomg8l396W6d7VKhxQswIHkYwworhOPx2eZSuoE2n3Q+mpD21FVw3p05B
-         cYM6rrOruIkOpDC+6Kw30kVJQqcreIQnwm6imiaoimMzdqTWRiLC7ybmb4MNfcpW9bTn
-         x3Ww==
-X-Forwarded-Encrypted: i=1; AHgh+RoUR/Ajb0npaqygmCBb4lfhKelj+2rM/UmLdxon9L+G6RRsLqM20NuOYEmaIz3bBwHRi/WVZjhuXZqHp+HCeOM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YynxIZdf5BO/ZBQgybM94+9HDHiLrDoRB2OHNhj1UZFqhQnbxMb
-	FShm2Au7OHkzoNkfu3mg0P7YJwXi7G1DWqwlCHr0YTkYQw1ZLWaCyAHUpRPq4end6/wf7fBpAY1
-	EQp3kvslL0YMLNjePx8fjAYsMBOkm99LT0MkByHhcIw==
-X-Gm-Gg: AR+sD12W1wUJfTJJZ7dWdc2C2PWIZ0UabaPFQ3Y2YZFYGXNsa3Q0OvFuT3QL/M2nKy+
-	rJV8YInsF8G0GGuVZpYotc8Oc98YcXdq5U1B/9Vhw87ss8c1oBzEaLx8rBvMeel6rO0mTwdFuAr
-	ykxhijyoGkCGjx2b6sJ0iREzPU1kjMl3MwYxsfr3I9qaJv6oriX6qthN5r6pRthzsq7KF52zviY
-	EENNBn0ZQYJXIxh0B0djIxdItkviD+DQqvlKCTPNE+A11k53/IHV2Lu0TznamTy8D2/7+p4Tqr+
-	6YJ2mcBvOd/bFCl0o5x4Fx7Rq4uuDjFYhiS5E7HO2zP3KyTHUIKL2Yq1i2gOCoh/rVaYnWLGal4
-	Cbxel4DsW+HU7UxVVH1eJfZGskY1XeNV8nCJo9C8gJWE/aV1nYvZjZ+8wNuU=
-X-Received: by 2002:a05:651c:221c:b0:39f:1b37:82bd with SMTP id
- 38308e7fff4ca-39fe56dec18mr26298821fa.11.1786400351228; Mon, 10 Aug 2026
- 15:19:11 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786400808; x=1787005608;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eCvqvKq7txaLhgLohGrMSKSRSQETuQwS11gkekNEjOI=;
+        b=WQ+rSgAFoI8cO36cnEysE4cdwprSZ8lE5kCmRPHoT+O5ISqgK32H6sBKW7eNiuosFV
+         KwcTIRBOytEKHA6hlADNulpzKrdsmTxi8gwmd7T9whqJTJWdc0puU8zR3mjQA/QPRmex
+         mvOlsk5bjwIAHWMi9dPbhHUMRUxcAJVzOaXjw/3JbMUmakM0TY0p9J6uRXLoiZwzUcUy
+         weN779m35f1h2u0uMVON+9nQwQiahWNXelL+0rti3GXzv+3yPO513hLFoWiUdPRXhNdZ
+         F3IzcsQHlNc/dc1lRBnCdg73vicni1jh+obK15Kh9avYppVRVcGnhO4RhdWYUrzcJAg0
+         sGzg==
+X-Forwarded-Encrypted: i=1; AHgh+Ro9N0JOvpzHZE8RyC/xalSC3jDIIwIZAPK+EcboRRSrFZdiOGWFc40f20tT9pmCy08D+mC+ur3+ZufPp91H5nA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyydPZitMw3jxYj6T6o+474UQYdwNlicTsdFy2mZBB8AqnLzKbB
+	OorWGR7DlArXkzNvya2E0ZF1nDpIqM+FEIYpjfErRWEDiFRBg1Pu/lssenDE5D4jxLv179D1lMu
+	dFjdpwg==
+X-Received: from pgv28.prod.google.com ([2002:a63:155c:0:b0:cbe:3002:6608])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:a121:b0:3c3:8651:b317
+ with SMTP id adf61e73a8af0-3cc1a13d4d0mr5100843637.10.1786400807414; Mon, 10
+ Aug 2026 15:26:47 -0700 (PDT)
+Date: Mon, 10 Aug 2026 15:26:46 -0700
+In-Reply-To: <CAEvNRgHyRdt7rp=5e5FMbTT=fXNfB=np7VWd_GdmJcPOQgps4g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: Darren Carreras <carrerasdarren@gmail.com>
-Date: Mon, 10 Aug 2026 18:18:58 -0400
-X-Gm-Features: AUfX_mxnlk3L8yNt0ijwIWYQcLthDwOVLOVpEqCKKhMsVDc5_Kr-34hOoFXhTBA
-Message-ID: <CAOZ_Kyv0=7CTApDchNOhwFVDAim73K2eYPLpuwi9=341pYg40A@mail.gmail.com>
-Subject: [PATCH bpf-next v4] libbpf: avoid overflow in BTF.ext bounds check
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, jolsa@kernel.org, yonghong.song@linux.dev, song@kernel.org, 
-	martin.lau@linux.dev, memxor@gmail.com, daniel@iogearbox.net, ast@kernel.org, 
-	ihor.solodrai@linux.dev, eddyz87@gmail.com, andrii@kernel.org
-Content-Type: multipart/mixed; boundary="0000000000005caeda0658b8beb0"
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-11-2fc18ee6d3ba@google.com>
+ <eb1b5763-37bc-4cb3-890c-1e619e5a8ae4@kernel.org> <CAEvNRgHyRdt7rp=5e5FMbTT=fXNfB=np7VWd_GdmJcPOQgps4g@mail.gmail.com>
+Message-ID: <anpQJvFw9s-XP3pW@google.com>
+Subject: Re: [PATCH v10 11/41] KVM: guest_memfd: Ensure pages are not in use
+ before conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
---0000000000005caeda0658b8beb0
-Content-Type: text/plain; charset="UTF-8"
+On Mon, Aug 10, 2026, Ackerley Tng wrote:
+> "David Hildenbrand (Arm)" <david@kernel.org> writes:
+> 
+> > On 8/7/26 23:52, Ackerley Tng via B4 Relay wrote:
+> >> From: Ackerley Tng <ackerleytng@google.com>
+> >>
+> >> When converting memory to private in guest_memfd, it is necessary to ensure
+> >> that the pages are not currently being accessed by any other part of the
+> >> kernel or userspace to avoid any current user writing to guest private
+> >> memory.
+> >>
+> >> guest_memfd checks for unexpected refcounts to determine whether a page is
+> >> still in use. The only expected refcounts after unmapping the range
+> >> requested for conversion are those that are held by guest_memfd itself.
+> >>
+> >> Update the kvm_memory_attributes2 structure to include an error_offset
+> >> field. This allows KVM to report the exact offset where a conversion
+> >> failed to userspace. If the safety check fails, return -EAGAIN and copy
+> >> the error_offset back to userspace so that it can potentially retry the
+> >> operation or handle the failure gracefully.
+> >>
+> >> Update documentation to document the error_offset field and the possible
+> >> -EAGAIN error.
+> >>
+> >> Suggested-by: David Hildenbrand <david@kernel.org>
+> >> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
+> >> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> >> Reviewed-by: Fuad Tabba <tabba@google.com>
+> >> Tested-by: Shivank Garg <shivankg@amd.com>
+> >> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> >> ---
+> >
+> > [...]
+> >
+> >>  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
+> >> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> >> index 3783e63476569..13c3989136f67 100644
+> >> --- a/virt/kvm/guest_memfd.c
+> >> +++ b/virt/kvm/guest_memfd.c
+> >> @@ -524,8 +524,42 @@ static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
+> >>  	return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
+> >>  }
+> >>
+> >> +static bool kvm_gmem_is_safe_for_conversion(struct inode *inode, pgoff_t start,
+> >> +					    size_t nr_pages, pgoff_t *err_index)
+> >
+> > I would focus on the "to_private" aspect or abstract it to
+> > "kvm_gmem_mem_has_unexpected_refs" or sth like that.
 
-An invalid BTF.ext subsection length can wrap the pointer addition used by
-btf_ext_parse_sec_info() on 32-bit builds. The wrapped pointer passes the
-bounds check and parsing then reads beyond the copied BTF.ext data.
++1.  Maybe "kvm_gmem_page_has_outstanding_references"?
 
-Validate the offset and length with subtraction before forming the section
-pointer.
+> Do you mean something like kvm_gmem_is_safe_for_to_private_conversion,
+> as in that you want to emphasise that "safe" here refers to a to_private
+> and not a to_shared conversion?
 
-Fixes: ae4ab4b4117d ("btf: expose API to work with raw btf_ext data")
-Closes: https://issues.oss-fuzz.com/issues/477315119
-Signed-off-by: Darren Carreras <carrerasdarren@gmail.com>
----
-Changes in v4:
-- Drop the selftest because the malformed length is already rejected by the
-  old check on 64-bit CI; the behavioral divergence is specific to 32-bit.
-- Correct the Fixes tag to the commit that introduced the pointer-based check.
+I'm obviously not David, but for me, the problem with names like
+kvm_gmem_is_safe_for_conversion() is that (a) it conflates what the function is
+literally doing with how the function is being used, which often makes the code
+harder to understand as it obfuscates things, and (b) can become stale or even
+outright broken far too easily.  E.g. if KVM adds more checks on whether
+or not a conversion is "safe", then the name of the function is a lie because it
+doesn't actually check that the target data is safe for conversion, only that
+its "safe" for a specific aspect of conversion.
 
-Changes in v3:
-- Remove the nested mbox envelope and mail headers from the Gmail attachment
-  so Patchwork's generated mbox applies with git am.
+And there is real risk to hiding what a function does.  E.g. looking at this code
+without diving into the details:
 
-Changes in v2:
-- Resend as plain text because Gmail mangled the v1 diff and Patchwork
-  reported "Patch is empty."
-- Include the authorized DCO Signed-off-by line.
+        if (to_private) {
+                unmap_mapping_pages(mapping, start, nr_pages, false);
 
- tools/lib/bpf/btf.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+                if (!kvm_gmem_is_safe_for_conversion(inode, start, nr_pages,
+                                                     err_index)) {
+                        mas_destroy(&mas);
+                        r = -EAGAIN;
+                        goto out;
+                }
+        }
 
-diff --git a/tools/lib/bpf/btf.c b/tools/lib/bpf/btf.c
-index 8417de9..744f33e 100644
---- a/tools/lib/bpf/btf.c
-+++ b/tools/lib/bpf/btf.c
-@@ -3364,7 +3364,7 @@ static int btf_ext_parse_sec_info(struct btf_ext *btf_ext,
- {
-  const struct btf_ext_info_sec *sinfo;
-  struct btf_ext_info *ext_info;
-- __u32 info_left, record_size;
-+ __u32 data_left, info_left, record_size;
-  size_t sec_cnt = 0;
-  void *info;
+and one might thing that it's perfectly find to check for "safety" before
+unmapping pages.   In fact, looking at the code without a priori knowledge of
+the rules, and the above flat out looks wrong.  E.g. I could definitely see
+someone "fixing" the code to:
 
-@@ -3377,16 +3377,17 @@ static int btf_ext_parse_sec_info(struct
-btf_ext *btf_ext,
-  return -EINVAL;
-  }
+        if (to_private) {
+                if (!kvm_gmem_is_safe_for_conversion(inode, start, nr_pages,
+                                                     err_index)) {
+                        mas_destroy(&mas);
+                        r = -EAGAIN;
+                        goto out;
+                }
 
-- /* The start of the info sec (including the __u32 record_size). */
-- info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-- info_left = ext_sec->len;
--
-- if (btf_ext->data + btf_ext->data_size < info + ext_sec->len) {
-+ data_left = btf_ext->data_size - btf_ext->hdr->hdr_len;
-+ if (ext_sec->off > data_left || ext_sec->len > data_left - ext_sec->off) {
-  pr_debug("%s section (off:%u len:%u) is beyond the end of the ELF
-section .BTF.ext\n",
-  ext_sec->desc, ext_sec->off, ext_sec->len);
-  return -EINVAL;
-  }
+                unmap_mapping_pages(mapping, start, nr_pages, false);
+	}
 
-+ /* The start of the info sec (including the __u32 record_size). */
-+ info = btf_ext->data + btf_ext->hdr->hdr_len + ext_sec->off;
-+ info_left = ext_sec->len;
-+
-  /* At least a record size */
-  if (info_left < sizeof(__u32)) {
-  pr_debug(".BTF.ext %s record size not found\n", ext_sec->desc);
+Whereas this:
 
---0000000000005caeda0658b8beb0
-Content-Type: text/plain; charset="US-ASCII"; 
-	name="v4-libbpf-avoid-overflow-in-BTF.ext-bounds-check-body.txt"
-Content-Disposition: attachment; 
-	filename="v4-libbpf-avoid-overflow-in-BTF.ext-bounds-check-body.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_msnsmo7x0>
-X-Attachment-Id: f_msnsmo7x0
+        if (to_private) {
+                unmap_mapping_pages(mapping, start, nr_pages, false);
 
-QW4gaW52YWxpZCBCVEYuZXh0IHN1YnNlY3Rpb24gbGVuZ3RoIGNhbiB3cmFwIHRoZSBwb2ludGVy
-IGFkZGl0aW9uIHVzZWQgYnkKYnRmX2V4dF9wYXJzZV9zZWNfaW5mbygpIG9uIDMyLWJpdCBidWls
-ZHMuIFRoZSB3cmFwcGVkIHBvaW50ZXIgcGFzc2VzIHRoZQpib3VuZHMgY2hlY2sgYW5kIHBhcnNp
-bmcgdGhlbiByZWFkcyBiZXlvbmQgdGhlIGNvcGllZCBCVEYuZXh0IGRhdGEuCgpWYWxpZGF0ZSB0
-aGUgb2Zmc2V0IGFuZCBsZW5ndGggd2l0aCBzdWJ0cmFjdGlvbiBiZWZvcmUgZm9ybWluZyB0aGUg
-c2VjdGlvbgpwb2ludGVyLgoKRml4ZXM6IGFlNGFiNGI0MTE3ZCAoImJ0ZjogZXhwb3NlIEFQSSB0
-byB3b3JrIHdpdGggcmF3IGJ0Zl9leHQgZGF0YSIpCkNsb3NlczogaHR0cHM6Ly9pc3N1ZXMub3Nz
-LWZ1enouY29tL2lzc3Vlcy80NzczMTUxMTkKU2lnbmVkLW9mZi1ieTogRGFycmVuIENhcnJlcmFz
-IDxjYXJyZXJhc2RhcnJlbkBnbWFpbC5jb20+Ci0tLQpDaGFuZ2VzIGluIHY0OgotIERyb3AgdGhl
-IHNlbGZ0ZXN0IGJlY2F1c2UgdGhlIG1hbGZvcm1lZCBsZW5ndGggaXMgYWxyZWFkeSByZWplY3Rl
-ZCBieSB0aGUKICBvbGQgY2hlY2sgb24gNjQtYml0IENJOyB0aGUgYmVoYXZpb3JhbCBkaXZlcmdl
-bmNlIGlzIHNwZWNpZmljIHRvIDMyLWJpdC4KLSBDb3JyZWN0IHRoZSBGaXhlcyB0YWcgdG8gdGhl
-IGNvbW1pdCB0aGF0IGludHJvZHVjZWQgdGhlIHBvaW50ZXItYmFzZWQgY2hlY2suCgpDaGFuZ2Vz
-IGluIHYzOgotIFJlbW92ZSB0aGUgbmVzdGVkIG1ib3ggZW52ZWxvcGUgYW5kIG1haWwgaGVhZGVy
-cyBmcm9tIHRoZSBHbWFpbCBhdHRhY2htZW50CiAgc28gUGF0Y2h3b3JrJ3MgZ2VuZXJhdGVkIG1i
-b3ggYXBwbGllcyB3aXRoIGdpdCBhbS4KCkNoYW5nZXMgaW4gdjI6Ci0gUmVzZW5kIGFzIHBsYWlu
-IHRleHQgYmVjYXVzZSBHbWFpbCBtYW5nbGVkIHRoZSB2MSBkaWZmIGFuZCBQYXRjaHdvcmsKICBy
-ZXBvcnRlZCAiUGF0Y2ggaXMgZW1wdHkuIgotIEluY2x1ZGUgdGhlIGF1dGhvcml6ZWQgRENPIFNp
-Z25lZC1vZmYtYnkgbGluZS4KCiB0b29scy9saWIvYnBmL2J0Zi5jIHwgMTMgKysrKysrKy0tLS0t
-LQogMSBmaWxlIGNoYW5nZWQsIDcgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkKCmRpZmYg
-LS1naXQgYS90b29scy9saWIvYnBmL2J0Zi5jIGIvdG9vbHMvbGliL2JwZi9idGYuYwppbmRleCA4
-NDE3ZGU5Li43NDRmMzNlIDEwMDY0NAotLS0gYS90b29scy9saWIvYnBmL2J0Zi5jCisrKyBiL3Rv
-b2xzL2xpYi9icGYvYnRmLmMKQEAgLTMzNjQsNyArMzM2NCw3IEBAIHN0YXRpYyBpbnQgYnRmX2V4
-dF9wYXJzZV9zZWNfaW5mbyhzdHJ1Y3QgYnRmX2V4dCAqYnRmX2V4dCwKIHsKIAljb25zdCBzdHJ1
-Y3QgYnRmX2V4dF9pbmZvX3NlYyAqc2luZm87CiAJc3RydWN0IGJ0Zl9leHRfaW5mbyAqZXh0X2lu
-Zm87Ci0JX191MzIgaW5mb19sZWZ0LCByZWNvcmRfc2l6ZTsKKwlfX3UzMiBkYXRhX2xlZnQsIGlu
-Zm9fbGVmdCwgcmVjb3JkX3NpemU7CiAJc2l6ZV90IHNlY19jbnQgPSAwOwogCXZvaWQgKmluZm87
-CiAKQEAgLTMzNzcsMTYgKzMzNzcsMTcgQEAgc3RhdGljIGludCBidGZfZXh0X3BhcnNlX3NlY19p
-bmZvKHN0cnVjdCBidGZfZXh0ICpidGZfZXh0LAogCQlyZXR1cm4gLUVJTlZBTDsKIAl9CiAKLQkv
-KiBUaGUgc3RhcnQgb2YgdGhlIGluZm8gc2VjIChpbmNsdWRpbmcgdGhlIF9fdTMyIHJlY29yZF9z
-aXplKS4gKi8KLQlpbmZvID0gYnRmX2V4dC0+ZGF0YSArIGJ0Zl9leHQtPmhkci0+aGRyX2xlbiAr
-IGV4dF9zZWMtPm9mZjsKLQlpbmZvX2xlZnQgPSBleHRfc2VjLT5sZW47Ci0KLQlpZiAoYnRmX2V4
-dC0+ZGF0YSArIGJ0Zl9leHQtPmRhdGFfc2l6ZSA8IGluZm8gKyBleHRfc2VjLT5sZW4pIHsKKwlk
-YXRhX2xlZnQgPSBidGZfZXh0LT5kYXRhX3NpemUgLSBidGZfZXh0LT5oZHItPmhkcl9sZW47CisJ
-aWYgKGV4dF9zZWMtPm9mZiA+IGRhdGFfbGVmdCB8fCBleHRfc2VjLT5sZW4gPiBkYXRhX2xlZnQg
-LSBleHRfc2VjLT5vZmYpIHsKIAkJcHJfZGVidWcoIiVzIHNlY3Rpb24gKG9mZjoldSBsZW46JXUp
-IGlzIGJleW9uZCB0aGUgZW5kIG9mIHRoZSBFTEYgc2VjdGlvbiAuQlRGLmV4dFxuIiwKIAkJCSBl
-eHRfc2VjLT5kZXNjLCBleHRfc2VjLT5vZmYsIGV4dF9zZWMtPmxlbik7CiAJCXJldHVybiAtRUlO
-VkFMOwogCX0KIAorCS8qIFRoZSBzdGFydCBvZiB0aGUgaW5mbyBzZWMgKGluY2x1ZGluZyB0aGUg
-X191MzIgcmVjb3JkX3NpemUpLiAqLworCWluZm8gPSBidGZfZXh0LT5kYXRhICsgYnRmX2V4dC0+
-aGRyLT5oZHJfbGVuICsgZXh0X3NlYy0+b2ZmOworCWluZm9fbGVmdCA9IGV4dF9zZWMtPmxlbjsK
-KwogCS8qIEF0IGxlYXN0IGEgcmVjb3JkIHNpemUgKi8KIAlpZiAoaW5mb19sZWZ0IDwgc2l6ZW9m
-KF9fdTMyKSkgewogCQlwcl9kZWJ1ZygiLkJURi5leHQgJXMgcmVjb3JkIHNpemUgbm90IGZvdW5k
-XG4iLCBleHRfc2VjLT5kZXNjKTsK
---0000000000005caeda0658b8beb0--
+                if (kvm_gmem_has_outstanding_references(inode, start, nr_pages,
+							err_index)) {
+                        mas_destroy(&mas);
+                        r = -EAGAIN;
+                        goto out;
+                }
+        }
+
+helps the reader understand what's being checked without having to look at the
+details, and also helps communicate the ordering dependency without needing a
+comment.
+
+There are definitely times where the usage of a function bleeds into its name,
+but usually that's because the name and the usage are on and the same.  E.g.
+get_user() describes both the usage and the "what".  And it's easy/possible to
+go too far in the opposite direction, e.g. by giving a play-by-play of what a
+function is doing, but that's why we have bikshedding sessions :-)
+
+> Perhaps a little ahead of its time,
+
+Ya.
+
+> but later with restructuring for huge pages, we also need no additional
+> refcounts other than gmem's own so that restructuring is safe, hence this
+> function name was meant to extend there as well.
+
+Given that I've read that at least five times and still don't understand the
+nuance, I think it's safe (ha!) to say we'll need to revisit and review those
+changes no matter what. :-)
+
+ 
+> In this case "unexpected" (especially since the next patch adds checks
+> for maybe dma pinned and unmapping), begs the question "unexpected in
+> what way"?
+
+Ya, that's why I like "outstanding", it succinctly captures that one or more
+references have been "loaned" but not yet "repaid".
+
+> >> +	struct address_space *mapping = inode->i_mapping;
+> >> +	const int filemap_get_folios_refcount = 1;
+> >> +	pgoff_t last = start + nr_pages - 1;
+> >> +	struct folio_batch fbatch;
+> >> +	bool safe = true;
+> >> +	pgoff_t next;
+> >> +	int i;
+> >> +
+> >> +	folio_batch_init(&fbatch);
+> >> +
+> >> +	next = start;
+> >> +	while (safe && filemap_get_folios(mapping, &next, last, &fbatch)) {
+> >> +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+> >> +			struct folio *folio = fbatch.folios[i];
+> >> +
+> >> +			if (folio_ref_count(folio) !=
+> >> +			    folio_nr_pages(folio) + filemap_get_folios_refcount) {
+> >
+> > I'd rather add a comment than have this filemap_get_folios_refcount.
+
++1, the local variable just made me scratch my head.
+
+> >
+> > /*
+> >  * We expect one reference per folio-page in the pagecache and one
+> >  * reference from filemap_get_folios().
+
+Nit, please no pronouns in KVM code.
+
+> >  */
+> > if (folio_ref_count(folio) != folio_nr_pages(folio) + 1)
+> >
+> 
+> This comment explains what's "unexpected". I can do this and switch it
+> to kvm_gmem_mem_has_unexpected_refs() unless people have other
+> suggestions.
+> 
+> I wish there was a folio_pagecache_refs(folio) that
+> folio_expected_ref_count() can share with this, and also
+> folio_swapcache_refs(), to solidify the definition of refcounts taken by
+> the pagecache.
+
+...
+
+> >> @@ -542,8 +576,21 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> >>
+> >>  	mas_init(&mas, mt, start);
+> >>  	r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
+> >> -	if (r)
+> >> +	if (r) {
+> >> +		*err_index = start;
+> >>  		goto out;
+> >> +	}
+> >> +
+> >> +	if (to_private) {
+> >
+> > I'd add a comment here for the "why are we unmapping".
+> >
+> 
+> Does this sound right:
+> 
+> Unmap here to ensure that userspace page tables have no mappings, which
+> also ensures refcounts from those mappings are dropped.
+
+How about:
+
+		/*
+		 * Forcefully unmap the pages from all userspace page tables,
+		 * and then verify there are no outstanding references, e.g.
+		 * acquired via GUP or similar.  Tell userspace to try again if
+		 * there are oustanding references and hope that whatever has
+		 * pinned the page will put its reference "soon".
+		 */
+		unmap_mapping_pages(mapping, start, nr_pages, false);
+
+                if (!kvm_gmem_is_safe_for_conversion(inode, start, nr_pages,
+                                                     err_index)) {
+                        mas_destroy(&mas);
+                        r = -EAGAIN;
+                        goto out;
+                }
+
+
+> 
+> > --
+> > Cheers,
+> >
+> > David
