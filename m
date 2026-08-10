@@ -1,157 +1,92 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED3D1414A09
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 23:22:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 831D23F9F3B
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 23:23:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786404165; cv=none; b=n5TbHqNeXYTKfG/YM4uU6fRPBZvEmfsBu9rSOAep6brC6GvtnyUaTi0hNmBlR9mOWs/FT8yEynMCSF1jKa/0PMgoUXLXJMFFqtCU5v3QAims+z+AgPu+yr4/+rAMqyrWEkS9bfUY0SJLD3LBRRqhjgTaNOtrf1v5kQzXOcsrwuw=
+	t=1786404194; cv=none; b=JK04fPV+YPsSza598VDZqzuexm/wUOcagizhykEr7XR3tFibswAnrQTq5EK84smzSdAPnZkYZUAmku8bXDVsR9Q/9ooqagkqWQONg9yu6IgWdxZ3T1t4IkQZiNAUwQRKtR9GLql5Hlz/Tpy5G2+BfKGKOn8u4dXE7doAwoNP2C0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786404165; c=relaxed/simple;
-	bh=M0MjLcWTskDALbCS54CZ4/9+M5FLfIcdbvqgABIt+TA=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=Q2Nm4EDs9eJ/JFVoWDE0SmiOE0rm22+geSFr5GkZw9Z8b2isBtTUvjrD9qy2Fox5fJSKjRZlbPtq0bEyIlDMogRfOVCPBlBhxHC9QjoEWXC5yjjDfXq+irhHmBgBKDiZMeJBuLjZ9lGfFh8XOlO4N7wmXOZ2T45o34IXzfg2Igs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HnvX48gj; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786404194; c=relaxed/simple;
+	bh=6riWePLyH2qYVpMlK+T7n9ft2OfONf7BSNufpXaF5IY=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=LVgAxmV6eSfOzAQDzRwfNjISoYfghHjRYeVoiCkFj3wjHm3IVUD6Z4la8yv60PEuE42GTFKIcXWzIGgX0JgdXR3fzZKQ6mnCXK8HkQevmAhvoCRkXqMpWsrkUQ+gzhrmd4y0J7WeK7RdAnTF8lB1AqwTDt6MPFFuimaqIRoDlMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=i5QQIT6K; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HnvX48gj"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2d0407aedd6so26597575ad.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 16:22:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="i5QQIT6K"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc6dd43737so4837755ad.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 16:23:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786404163; x=1787008963; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=3sR0roWS7ay8jw9jkIlC9XLTYMTiMVpzbqbRgtEhFxM=;
-        b=HnvX48gj+gTC5lccl2ewu0YBISb1i2fwxlC3R54THhBzaD4SakFXTiUU938tYQ2zZl
-         cpsCnZanlARXkk2fSmGz3ydyJT5Mfg3jLIaOc6NOefN0+hnsDgTAJyQcXu60rZA4ZqNO
-         4XzFYsB8n4VCw8IdroVlUTsAd09l+0hDUVuyOQrHUE+qJ7ba+jSyFGc4+RpLiNRWCBWP
-         PRJLE1awyrXkCSGJ1THSePufgAoL8mt+7EoaWokTL22M8SJZNgUv/mOPQWidkC2w1KWK
-         zRtmUvNXarhg1qT5RKBL2qLe9J2eizRzAirb2/u3/ck4B7LOVCJhljBJUOr1R8hvN0oA
-         YpHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786404163; x=1787008963;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1786404193; x=1787008993; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3sR0roWS7ay8jw9jkIlC9XLTYMTiMVpzbqbRgtEhFxM=;
-        b=GbdROlfuBDIPdCmVTFivlFuYUqytP1hVrNLHfHlItJONs+ggCpLvJxBOPgRjKqVaEo
-         B3CwOwVNrvcXivDdBwRmH0ubjnXeSHEw40xJ1scuwoEMnmVpQeRKu9Mb1mY8lM9U9GF0
-         VFkBVQ4tD7wRJFqtPvkauVEdzR1u+PvZ/DfLW8rZ006Hvz0KanAg+JjfRb9+MRR2qnsT
-         utTIaw32gLYtIib7scpLUkO56ELUxZbA/erthYzbKCriGhhTNqLNn1mV3yIEV+qRSdLc
-         j8Hy6gT4P4+F1AqxCaKS2mGPc1xgpRuE0TP85e9g21T14qecueZLkWKm2u7KHclFvxlO
-         lLdQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rpyk2f5LRwlz0W2uQ8ng7Ih5YOZ5+5twZmlQssRF/Pyw2Poe10XaURgSEJfWIVzF8SGdnoXuuRiRkpyG9SQpxA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVyjBGzdmVR4Tr54XWyIwZIpwuW0TQMrDptEh2ip7haiiGctVh
-	ZP0miLd8Sv48ckiqErfpIPp53dBBEOVmyL6eIcxcAorM5ens6YAnH3NC
-X-Gm-Gg: AR+sD11m3aqY+hLDjlEyQu6LyKK1NUnYbRnEl0T3/SJvjqFzztPQ6e1wPSSCq/UB79R
-	xLrq+v7TvD1bCzPvc/4zUbzZY6ZpqcDAzMh9cINkRx5h6/rIk+xjZsbKzB6xZpeUuDrBC+cDAa4
-	xrO2qQML09S3muT10ug71YKNwMxE5TVLLoRJTK74TAIHJub3nFFzt9C/BmKMhCfb4nDxWSmMy41
-	0A1jtWoPGPz4ijaumm2RT1EMfJ3F21/KOCb9NP5xTsmqsBaulRbhw3d4yzv3seIzQh2J3PxsnzQ
-	LCPmzisnn4SS+bKKGFQIF0b3SdLFa200avHp3ETVIYa226U4nRquoNhRzvGhmDkVU7KHKw5aUG0
-	bqehhT8o/uE5vNCKocrzjlKsWE07Jnpo9/ECMxUJFmCaUYeLQZExQjUT3zCS2IviZo5zLE9D8k+
-	z7TZTnAxvydN4qbmqP5b3gk1jfVYe6MiHpLrFQs9GCPWLaha2LH7EW7JpbMvEkNQb9Kr7m+3Zg7
-	Jvg6MpGe+ZcLvVR
-X-Received: by 2002:a17:90b:3b52:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-392cc8d043emr4789411a91.3.1786404163218;
-        Mon, 10 Aug 2026 16:22:43 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d5238e07sm1164685a91.15.2026.08.10.16.22.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Aug 2026 16:22:42 -0700 (PDT)
-Message-ID: <8ea2c2ef5a50333c84865d09c860a9617edbda9b.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v11 03/10] bpf: Introduce global percpu data
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann
- <daniel@iogearbox.net>,  Andrii Nakryiko <andrii@kernel.org>, Martin KaFai
- Lau <martin.lau@linux.dev>, Kumar Kartikeya Dwivedi	 <memxor@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song	 <yonghong.song@linux.dev>, Jiri
- Olsa <jolsa@kernel.org>, John Fastabend	 <john.fastabend@gmail.com>,
- Quentin Monnet <qmo@kernel.org>, Shuah Khan	 <shuah@kernel.org>,
- linux-kernel@vger.kernel.org, 	linux-kselftest@vger.kernel.org,
- kernel-patches-bot@fb.com
-Date: Mon, 10 Aug 2026 16:22:39 -0700
-In-Reply-To: <20260806163125.11172-4-leon.hwang@linux.dev>
-References: <20260806163125.11172-1-leon.hwang@linux.dev>
-	 <20260806163125.11172-4-leon.hwang@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=FpMqKDZdeqkAxP+HMbo4Vf8RyrsMvHYCAM3HPa8Xz3s=;
+        b=i5QQIT6KOO80pdis5TMSEZl5JDgS0kyM22Ryt0UJqA7PHuGWVGn52ej9OAYgHAvW4E
+         VYeCD9t/Fwz2lxuoIMYjUKQlbF1j6gAN+nJIsCsj5F7cvqqolk5bD7INvJ+FO3z8rALA
+         KNgslamz3nRwE2JviGqRyMqKUFAFOyX17ky18RQ4DahFZoNbyxzyrVmGYjS9VS8jR+vu
+         AAI1QnBEnXdqi6ooZLn0OondriMyyGy+qUefTgcUyxzvQfkA01dnpWBPVAEOnBCC9Cy4
+         V3EMP8eMs1jVW15UBOEiAxtUNjCSM8LenlR0GnMxOF9c42n3xNhSF+3F12uQc1MH7HQY
+         O0eg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786404193; x=1787008993;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FpMqKDZdeqkAxP+HMbo4Vf8RyrsMvHYCAM3HPa8Xz3s=;
+        b=l5R9Uy2NVGmv8yV2fNLn/BclraP9Xp8o6vlNWwxXzIGTd3IXsaFPGUYkwdGo+GtDvI
+         ROWAHwKUOvxGTKtS61k7HmpIhLuhMGEUn761Rc+kHWtgNOaJEoGFlnBpYGYix0VQRGMH
+         YVQXslRuAz6Q/QalnrTmYBGVSztp/r4pPZnsxrrebkno8EDVNZFCutZE7uEtLD02R/RV
+         1zHbqlxRp1xxF599ge8Ag4wDs2g+kU3GDhbvtEUO58dHYNfTbIya9Q/OVn3Pp96OfJUJ
+         a3KOoTv2AmsOYc6Cj7jKHcPU+fW2I7KoCwAp6V0y+W+Dbu2qPVX2i6GG66A0UVYsNh95
+         0zWw==
+X-Forwarded-Encrypted: i=1; AHgh+RoT0K6+3ww1zaPWjmKxRpYGxUmsG5NYAxh3TKlkmMeNY+4FXN+iof8Nr6NN2tjeNcYPR7yfyEkd4A2axFNmQfU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyN5ztkF+zJLw50GUfgYoGMzp4Zoan12u+i563pHdGbCLX51ODF
+	kXs6EG2w+iYFVBkQVS2vxq8fgFmpIpbrnwJY35gFp4r9Vheb3198DJEtpNZ1xdyUy+Y+/hJQXK8
+	JaJqmIg==
+X-Received: from plkb4.prod.google.com ([2002:a17:903:fa4:b0:2c0:a516:2c2])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:fdad:b0:2bf:9760:b94d
+ with SMTP id d9443c01a7336-2d0ca7fd072mr611571635ad.15.1786404192685; Mon, 10
+ Aug 2026 16:23:12 -0700 (PDT)
+Date: Mon, 10 Aug 2026 16:23:12 -0700
+In-Reply-To: <20260728121138.1103610-5-tarunsahu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+References: <20260728121138.1103610-1-tarunsahu@google.com> <20260728121138.1103610-5-tarunsahu@google.com>
+Message-ID: <anpdYD1UaO0ffQgi@google.com>
+Subject: Re: [PATCH v4 04/11] KVM: Track weak reference to vm_file in struct kvm
+From: Sean Christopherson <seanjc@google.com>
+To: Tarun Sahu <tarunsahu@google.com>
+Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
+	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
+	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
+	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
+	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
+	suzuki.poulose@arm.com
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri, 2026-08-07 at 00:31 +0800, Leon Hwang wrote:
+On Tue, Jul 28, 2026, Tarun Sahu wrote:
+> - Add a weak reference 'vm_file' in struct kvm under
 
-...
+"vm_file" is effectively already claimed by vm_area_struct.vm_file.  *If* we go
+this route, I would very strongly prefer to take a dependency on "vfio: Use
+file-based reference counting for KVM"[*].  I'll poke that thread, we really
+should land that one particular patch long before the s390-is-arm64 insanity.
 
-> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
-> index 440e73e1b11b..f2398749103b 100644
-> --- a/kernel/bpf/fixups.c
-> +++ b/kernel/bpf/fixups.c
-> @@ -1817,6 +1817,43 @@ int bpf_do_misc_fixups(struct bpf_verifier_env *en=
-v)
-> =C2=A0			goto next_insn;
-> =C2=A0		}
-> =C2=A0
-> +		if (bpf_jit_supports_percpu_insn() &&
-> +		=C2=A0=C2=A0=C2=A0 insn->code =3D=3D (BPF_LD | BPF_IMM | BPF_DW) &&
-> +		=C2=A0=C2=A0=C2=A0 (insn->src_reg =3D=3D BPF_PSEUDO_MAP_VALUE ||
-> +		=C2=A0=C2=A0=C2=A0=C2=A0 insn->src_reg =3D=3D BPF_PSEUDO_MAP_IDX_VALUE=
-)) {
-> +			struct bpf_map *map;
-> +
-> +			aux =3D &env->insn_aux_data[i + delta];
-> +			map =3D env->used_maps[aux->map_index];
-> +			if (map->map_type !=3D BPF_MAP_TYPE_PERCPU_ARRAY)
-> +				goto next_insn;
-> +
-> +			prog->jit_required =3D true;
-> +
-> +			/*
-> +			 * We are *skipping* first half of ld_imm64 insn
-> +			 * with 'i++;', patching over second half of it
-> +			 * with that same half + mov64_percpu_reg insn.
-> +			 * All because bpf_patch_insn_data() can only
-> +			 * replace one 8-byte insn, which does not work
-> +			 * well for ld_imm64 insn.
-> +			 */
-> +
-> +			insn_buf[0] =3D insn[1];
-> +			insn_buf[1] =3D BPF_MOV64_PERCPU_REG(insn->dst_reg, insn->dst_reg);
-> +			cnt =3D 2;
+Empashish on "if" because this all feels backwards.  It's not at all clear to
+me why liveupdate goes directly to guest_memfd, but then requires a token associated
+with the VM.
 
-Hi Leon,
-
-Sorry for joining the discussion so late, but Andrii asked me to take
-a look at the verifier part of the changes. Could you please elaborate
-on what exactly does not work with 16-byte instructions and
-bpf_patch_insn_data()? Note that e.g. 'if (insn->imm =3D=3D BPF_FUNC_timer_=
-set_callback) {'
-case in the same bpf_do_misc_fixups() applies a patch containing BPF_LD_IMM=
-64().
-
-The rest of the patch lgtm.
-
-> +
-> +			i++;
-> +			new_prog =3D bpf_patch_insn_data(env, i + delta, insn_buf, cnt);
-> +			if (!new_prog)
-> +				return -ENOMEM;
-> +
-> +			delta=C2=A0=C2=A0=C2=A0 +=3D cnt - 1;
-> +			env->prog =3D prog =3D new_prog;
-> +			insn=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 =3D new_prog->insnsi + i + delta;
-> +			goto next_insn;
-> +		}
-> +
-> =C2=A0		if (insn->code !=3D (BPF_JMP | BPF_CALL))
-> =C2=A0			goto next_insn;
-> =C2=A0		if (insn->src_reg =3D=3D BPF_PSEUDO_CALL)
-
-...
+https://lore.kernel.org/all/20260731130902.654679-2-seiden@linux.ibm.com
