@@ -1,155 +1,166 @@
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4132C3195FD
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 22:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786401209; cv=pass; b=qhIbyi1hEJdQNg2LW7dBJsFu1BTAaezwBR2eUVscZCIX9wRU+5w/D2TfBwuV5mgPVJb0hI6FYTodFSl9KFoXIb00sAO3o6CPmlMyZrJ7y3qg3RctowmP4G6RMVN5KcBp+Zjy5GnCwqlUxMnC36heUDuHvWUp4/K/6/HYFv8XI0Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786401209; c=relaxed/simple;
-	bh=Tg9xRpc1WXewMgxZVABLzvXqiigCDgPIk39FCFXFpQo=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=SKBUp2vnCVKBb2nkbZC5gleQMkAVBJCNY63RW5EKemyT9Vjhx+xrB4EIaFmd9AmhZ/RbjBZjSBSSmQrpBOpqOmR90jW7KRfBu69fOW+4d2BkG2AAjjLo36JIQzzCs/7/sPTOwDWtITnkSFg/7m8FLZldURfLm+l64hx5B9E0z1Q=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RnFoJ/zu; arc=pass smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A22928F5
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 22:47:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786402023; cv=none; b=ZNt7cCchagkv2AwI+H8Gjuo5VNCFkYyztaqZbL7ponytzff+1LECjo6qAYFHpXpFyXMg/PxxA7dP9SC1rckV5vo+kzTd3a/YqKBrwSVWArzce7vvl+vsGMKfTg89uihNOUAL9pcO9beOh5HKqI5W6WKFI3Oi4ikP8SYWzzbC0+k=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786402023; c=relaxed/simple;
+	bh=j0OQmT53umZb7i6H00ow16BYQr6XaIiq74a3wXvSmQc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bpWi+yHqMAZPRTTDSftt4IHXLQstBIcj0avjZkw5ObVwKVtN+pbIIa1SJeepPtjVvrHG8EoKJgBeTHUAmB1tf2uH/haAJD8IfehjCpX3tgRRCwRIUTM1ILEuW4wEucgoSBIVm/0JVkJOFognlj5EesSt/kC6jv6jA6UM3FBkzok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=P4xuI4HE; arc=none smtp.client-ip=209.85.214.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RnFoJ/zu"
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39ee96f8047so15387311fa.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 15:33:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786401206; cv=none;
-        d=google.com; s=arc-20260327;
-        b=E5eBK+sSrb8gQPlgRxDyHCdGV/JF9dnsDSh2AxRTQNjQpbeyq0rZEKXeJokFzqH3Zo
-         kehBYH7bCTJlZ0DYU3tsdVBQhnqEzRt69XM8bOawqYs0alhVDrqLmG4QLmHp1+/jyqqR
-         zg5y3DgLgo3igjYlnVuhNwB6q+z6DtpoHD9acEwIJ88GVXWKOA6QfqWATszZicuJslbu
-         jFIgd+yn93WyrRFditRxv5ZhwpMNA2aFkWk8ZPgEg758+zdonoWEL5IrodGEYxFd0kgK
-         SoObo5Mcx6qLDKHTa2GlmBMRdsoQ7w2AYe0N89A6DtyeeGQ50ZisOR6Aza3RCVnS8/Ch
-         JjXQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:mime-version:dkim-signature;
-        bh=ozXtc4neLgrQ0Z4k4ooMYRHrbRa09iWpdvHd0UYRFrY=;
-        fh=msT7uky/OGisT30STzb5iy4gzVO6bN/abNdrvoEXv48=;
-        b=sDIN/RKUoz4dU/n9vmMDJVm8t3qnw4BESZbAaYyXezT6wmoZ0VhVD/3EY5ogbcA+jr
-         JZafkTVgCmoNILAvrqxDAmHTXnCn9yq5ZGfVvf8xYZVjSVV9Zq9YMI3s578cndlPPfiz
-         GJeGaKzQXC1wAc0NaNB3+HTe2X89PczxoRcThrRzOd9TRSqqlG3FsZYx3uIo5yfPQyKo
-         ZekdWHOMTQfUUsKh9udZti41UFpZZZPXiWwHeRO9nrvTsQa4y2Pjw/UgNv89p8BakfNh
-         X6zKxrztBjduww6hcKqIaKkPSQotRcw/ZU9CxjVXGi2ymK/bGbhqJc67DxSRFOwEljYq
-         +K7g==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="P4xuI4HE"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2ccf2360620so21963475ad.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 15:47:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786401206; x=1787006006; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=ozXtc4neLgrQ0Z4k4ooMYRHrbRa09iWpdvHd0UYRFrY=;
-        b=RnFoJ/zuWrtWqgHFR9u6X6lwOnuuADUxo7Bqv3U56cqg+kPWs96khQUBhhApi3tAjj
-         I+gIeznUTCQ19ehl/NZgEXnh3A4+Ef2mUoaD4ecw+ptPCKk6GNa01o0W/SnGWDrUhWji
-         9R2PnrfdSs00dez9T2y2Lb2MXm87IX3rcdIKP5YnnWQWUYCQngG2b/kEuTWoOIGkNHKJ
-         lUiQNMosCAx1Tnx3jOdhGlAmny0qZQjmMCRtN22ruYkZ6zf7zKISS2AWrGyQKzV8f8lI
-         BARgf5EispCNFBnZAG/pIPpt2YQMQq8plu+FwcPGwEXrs8Q18ZEGTRS+psyyQqhP82aD
-         cZhQ==
+        d=gmail.com; s=20251104; t=1786402021; x=1787006821; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GSgLjB/IGBoUiOT3dGu6Xr2ioiybikIeSufKLnKV+5A=;
+        b=P4xuI4HElZe7p0IfsOkFrq6eCDodfYTXhFcQNQWxoRUuTeBDMCKOZsPq46j3udl9gD
+         CCfBbGrzAs/UmB3BootdJTmI5qcwMC1cQq214S0kDof/0IrinaO8MFYcMv0QG8TNjKY2
+         8jjOwMLeSwOd4o9MviyO/Lu49ePL46ifdbBcbCfRdnq0x9PlmUzyLSjk0hUmTsipmBdy
+         UD698jqBj1XhCKFGnJdDN1EwhwFQU+3BkNjozdSxDhyRF7Jv4UZlnDtpEP6Of/DJzBXe
+         SGhYkBnkAlA01IRiwATSvei8pEZ5NEbwiYjr19E3z4KZG+DysjOsuzv1RXjleJQc8Vhx
+         FI7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786401206; x=1787006006;
-        h=content-type:cc:to:subject:message-id:date:from:mime-version
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=ozXtc4neLgrQ0Z4k4ooMYRHrbRa09iWpdvHd0UYRFrY=;
-        b=mAIKd5nBFpRv/arQ4FI5x3OWwgpAA9kAlVcW/V+D9BZpxyRhBxPT7skuVIpth7EqAC
-         YiOBupPexktqlYIzB6qOb3C22OKGU+YByoIYZi4RFgvMEfPTJ4lZLRn3jp3wPIv5y81d
-         bmKCOnpLnqTw5Zdr+e7W8tueHt9B6li2/jjR3CzEcvGjg3i0usktzJvi24+uMygANVHG
-         7KSodhu0dO9baVtdep1x6KpWhEQS6FpkHHD/5P17ztU1+YG3IdRaFZrx4kpER5rSdfjy
-         kWY5u1TD4HkgOGHY66lAe2lTGUTuh7rRXlkjIu32chlAiKp4BsKRfg6YQLP4DP5bBh4C
-         wkmg==
-X-Forwarded-Encrypted: i=1; AHgh+RqFAxbR0Ymhpr2KswT7WZhZseC6iU6pxpQPi+fisjOiXL/MvC/AP9wTthriE3UWxrYYws4o5zVFtgoFe4ncgas=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw2CyyAfs2Og57ZBvnXSHGs3p+Z3h6DLQ75NKGexOMBbIdEz8p
-	xSNzuSKzJbEA59v4HMx1dpZ9frcF8iBOTCZe1uNU8SVsauI7lfanH2Ojh2rXp3sw+IR88QTMHAf
-	0W9+SUZJLorAfaLls+oT690X4zS3NWe8=
-X-Gm-Gg: AR+sD11CMsq6qh1lrVE6zJNtKrmTJb+ulqGmXyqVBaOI6cmEY5hdi4lUVyVVqkXkv69
-	1BUzZgmrAQySYS1TF+7jIG4dpCLWKDdflM01qhLC+tpR4YZ55MtCptVVCTpGzLDm1ep4BR1hLfp
-	LEABEtVCIBodFr+7V0lBJqAKcF/v9xgIGHRpe30OijHwf3w3kNWWrrF+5crxpNGr8rpJhU1ErO9
-	mK27WOnEbrmfe8gM39OaB/WQ+gamScYmreT5+RwPiKX+P+ApngaWpMcw3KszqwmX8EGAhAEi4tu
-	8oq4UNOqLbSZjVabHghaq8aXzSe8kUSSHnwxyaPKcSTtsPYrnXAfd0LnUzh5SoRnRoFbNbjqj6s
-	UMbdAck89zUR/iyppLmejEgk8+4uMJgDuuaJ5cu8uH1zKORj2cG3Neg08a0Q=
-X-Received: by 2002:a05:651c:2227:b0:39c:7922:b446 with SMTP id
- 38308e7fff4ca-3a00e92f0acmr6770071fa.14.1786401206305; Mon, 10 Aug 2026
- 15:33:26 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1786402021; x=1787006821;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GSgLjB/IGBoUiOT3dGu6Xr2ioiybikIeSufKLnKV+5A=;
+        b=FdsrPbgFs1XSRfsPlJnpQk5kpzAOeY+jp5fbFQh6mVthIFzp1wc1ExO/a/mEAw0MSw
+         H/izjd7XakDoM7QjI2qaSoI4ASg5BvG4E0DjmTWUXGDTfrfRZu2+2uw1Opd3Y3q6QhQZ
+         nCQBVeXtFh8RALB/rEGn4GwOEWT+U/CVXcpVuvP/oe3pGWwbJfh45PM3IruxMlrB19Yu
+         Rij+owrEOsxjzljTNQyoIab0rB/hta28kN1YF1TerTfpgoz694JHQQgXPcW+qGNzhKIG
+         EnfawNYhFW9jBv9M2oLDZVz8LnXy/dN76WvI1HY8HmPdFo9jAMwjrnKNYP4LIqfbjbIq
+         o17Q==
+X-Forwarded-Encrypted: i=1; AHgh+Ro81UlVh3evC0lcWZupGxZG0291XZmykad+i60GL5hOB2LyAD0Dakqp7a88zae/+/y72CSDbKWJVRy6pbafv/s=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxn4oMOFHIAQCWJZHdWfJ5k4L+dVhrO1KIiFMC+yV9RHztQn7g6
+	E0Lry77RC2fM6MmcRP+83QxJdliqCe917HYQuPvRx1N5Lc7LO0bnJGtX
+X-Gm-Gg: AR+sD11RB4PDvDDyTEZDtcRHBikRF3kuOMfAFoJcl2rAnf2K7GGHVYgWJBIGw1DQ2mj
+	RgIPlE19HPAwpHSinYgRgLF7dEropZUzaHpjltTkc72BwMu+haz38rm55IxLwRWnH9IXU9EfjDY
+	4ZJ8Blic8vTQnoA+Qm4l8aPihHualBd7sLPB52bvH5xFL8Jy3rwfO6lLK8GVXLQ6+rTSyB3GuYt
+	hvlbO5rb1ibwTyW7hD60ayVyoAgm5TH3gYjur2HMBKADXYXLcxdcs6iev5su+i+I303HTcq+8Qt
+	ySmhPPua5zl0hm070f8E7gic86MeJU7tFMRmYqfE/kAm/8+PeIEXGqtSS4JZJJFMAmWknEYI8+I
+	Ez+uhIByF30dyehlqLRdLtzEolRtnJT8fo383vXuSIxLcJ+AXp352jF4UkcNWt2lyWC1cEfqT3D
+	zT+GWR+5rgILvNM7pjg8V0V5zpM1WBEABWiRUsRx8tHlZMp9yi8WHdkV0rNFEK2xJdIlOuM/ezk
+	4hE3KnG
+X-Received: by 2002:a17:90b:590e:b0:38e:6a44:671b with SMTP id 98e67ed59e1d1-3909d301d9cmr33764302a91.0.1786402021510;
+        Mon, 10 Aug 2026 15:47:01 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:68::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-315bec26a46sm47194173eec.27.2026.08.10.15.46.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 15:47:00 -0700 (PDT)
+Date: Mon, 10 Aug 2026 15:46:58 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>, kernel-team@meta.com,
+	linux-block@vger.kernel.org, bpf@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] block: add BPF kfuncs to read blkcg io.stat
+Message-ID: <anpU4oV46MDVDixj@devvm16600.scu0.facebook.com>
+References: <20260807193732.4073299-1-ziyang.meme@gmail.com>
+ <20260807193732.4073299-2-ziyang.meme@gmail.com>
+ <anot9w6mg9538RWm@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Darren Carreras <carrerasdarren@gmail.com>
-Date: Mon, 10 Aug 2026 18:33:14 -0400
-X-Gm-Features: AUfX_myVIXbJRGl1gg-c3nl3CCYj5Hn1YHhK51lrmdbTXUegSV6eEhMXshul4I8
-Message-ID: <CAOZ_KyvEkVnT+jakLfeSfs0g5yq6t6YvVJ9humZfyQ-6OKSW6Q@mail.gmail.com>
-Subject: [PATCH bpf-next v5] libbpf: avoid overflow in BTF.ext bounds check
-To: bpf@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	shuah@kernel.org, jolsa@kernel.org, yonghong.song@linux.dev, song@kernel.org, 
-	martin.lau@linux.dev, memxor@gmail.com, daniel@iogearbox.net, ast@kernel.org, 
-	ihor.solodrai@linux.dev, eddyz87@gmail.com, andrii@kernel.org
-Content-Type: multipart/mixed; boundary="000000000000541d820658b8f19e"
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <anot9w6mg9538RWm@slm.duckdns.org>
 
---000000000000541d820658b8f19e
-Content-Type: text/plain; charset="UTF-8"
+Hi Tejun,
 
+Thanks for your review and suggestions!
 
+On Mon, Aug 10, 2026 at 10:00:55AM -1000, Tejun Heo wrote:
+>Hello,
+>
+>On Fri, Aug 07, 2026 at 12:37:31PM -0700, Ziyang Men wrote:
+>> +__bpf_kfunc struct blkcg *bpf_get_root_blkcg(void)
+>> +__bpf_kfunc struct blkcg *bpf_get_blkcg(struct cgroup_subsys_state *css)
+>> +__bpf_kfunc void bpf_put_blkcg(struct blkcg *blkcg)
+>> +__bpf_kfunc void bpf_blkcg_flush_stats(struct blkcg *blkcg)
+>
+>I wonder whether making the above deal with css's would make more sense so
+>that we don't end up with per-subsystem iterators. If casting to per-subsys
+>type is necessary, we can provide RCU protected cast kfucns.
+>
 
---000000000000541d820658b8f19e
-Content-Type: text/plain; charset="US-ASCII"; 
-	name="v5-libbpf-avoid-overflow-in-BTF.ext-bounds-check-body.txt"
-Content-Disposition: attachment; 
-	filename="v5-libbpf-avoid-overflow-in-BTF.ext-bounds-check-body.txt"
-Content-Transfer-Encoding: base64
-Content-ID: <f_msnt4vg00>
-X-Attachment-Id: f_msnt4vg00
+Good idea! These do nothing block specific and we already have some common
+helpers for it such as the bpf_get_root_blkcg(). What is missing is a way to get
+one controller's css from a cgroup with a reference held, and the cast. So
+I would add in kernel/cgroup/
 
-QW4gaW52YWxpZCBCVEYuZXh0IHN1YnNlY3Rpb24gbGVuZ3RoIGNhbiB3cmFwIHRoZSBwb2ludGVy
-IGFkZGl0aW9uIHVzZWQgYnkKYnRmX2V4dF9wYXJzZV9zZWNfaW5mbygpIG9uIDMyLWJpdCBidWls
-ZHMuIFRoZSB3cmFwcGVkIHBvaW50ZXIgcGFzc2VzIHRoZQpib3VuZHMgY2hlY2sgYW5kIHBhcnNp
-bmcgdGhlbiByZWFkcyBiZXlvbmQgdGhlIGNvcGllZCBCVEYuZXh0IGRhdGEuCgpWYWxpZGF0ZSB0
-aGUgb2Zmc2V0IGFuZCBsZW5ndGggd2l0aCBzdWJ0cmFjdGlvbiBiZWZvcmUgZm9ybWluZyB0aGUg
-c2VjdGlvbgpwb2ludGVyLgoKRml4ZXM6IGFlNGFiNGI0MTE3ZCAoImJ0ZjogZXhwb3NlIEFQSSB0
-byB3b3JrIHdpdGggcmF3IGJ0Zl9leHQgZGF0YSIpCkNsb3NlczogaHR0cHM6Ly9pc3N1ZXMub3Nz
-LWZ1enouY29tL2lzc3Vlcy80NzczMTUxMTkKU2lnbmVkLW9mZi1ieTogRGFycmVuIENhcnJlcmFz
-IDxjYXJyZXJhc2RhcnJlbkBnbWFpbC5jb20+Ci0tLQpDaGFuZ2VzIGluIHY1OgotIFJlc2VuZCBm
-cm9tIGEgY2xlYW4gY29tcG9zZSB3aW5kb3cgYmVjYXVzZSBHbWFpbCByZXRhaW5lZCBhIHN0YWxl
-IHJpY2gtdGV4dAogIGNvcHkgYmVzaWRlIHRoZSB2NCBhdHRhY2htZW50LCBwcm9kdWNpbmcgYSBk
-dXBsaWNhdGVkIG1hbGZvcm1lZCBwYXRjaCBib2R5LgoKQ2hhbmdlcyBpbiB2NDoKLSBEcm9wIHRo
-ZSBzZWxmdGVzdCBiZWNhdXNlIHRoZSBtYWxmb3JtZWQgbGVuZ3RoIGlzIGFscmVhZHkgcmVqZWN0
-ZWQgYnkgdGhlCiAgb2xkIGNoZWNrIG9uIDY0LWJpdCBDSTsgdGhlIGJlaGF2aW9yYWwgZGl2ZXJn
-ZW5jZSBpcyBzcGVjaWZpYyB0byAzMi1iaXQuCi0gQ29ycmVjdCB0aGUgRml4ZXMgdGFnIHRvIHRo
-ZSBjb21taXQgdGhhdCBpbnRyb2R1Y2VkIHRoZSBwb2ludGVyLWJhc2VkIGNoZWNrLgoKQ2hhbmdl
-cyBpbiB2MzoKLSBSZW1vdmUgdGhlIG5lc3RlZCBtYm94IGVudmVsb3BlIGFuZCBtYWlsIGhlYWRl
-cnMgZnJvbSB0aGUgR21haWwgYXR0YWNobWVudAogIHNvIFBhdGNod29yaydzIGdlbmVyYXRlZCBt
-Ym94IGFwcGxpZXMgd2l0aCBnaXQgYW0uCgpDaGFuZ2VzIGluIHYyOgotIFJlc2VuZCBhcyBwbGFp
-biB0ZXh0IGJlY2F1c2UgR21haWwgbWFuZ2xlZCB0aGUgdjEgZGlmZiBhbmQgUGF0Y2h3b3JrCiAg
-cmVwb3J0ZWQgIlBhdGNoIGlzIGVtcHR5LiIKLSBJbmNsdWRlIHRoZSBhdXRob3JpemVkIERDTyBT
-aWduZWQtb2ZmLWJ5IGxpbmUuCgogdG9vbHMvbGliL2JwZi9idGYuYyB8IDEzICsrKysrKystLS0t
-LS0KIDEgZmlsZSBjaGFuZ2VkLCA3IGluc2VydGlvbnMoKyksIDYgZGVsZXRpb25zKC0pCgpkaWZm
-IC0tZ2l0IGEvdG9vbHMvbGliL2JwZi9idGYuYyBiL3Rvb2xzL2xpYi9icGYvYnRmLmMKaW5kZXgg
-ODQxN2RlOS4uNzQ0ZjMzZSAxMDA2NDQKLS0tIGEvdG9vbHMvbGliL2JwZi9idGYuYworKysgYi90
-b29scy9saWIvYnBmL2J0Zi5jCkBAIC0zMzY0LDcgKzMzNjQsNyBAQCBzdGF0aWMgaW50IGJ0Zl9l
-eHRfcGFyc2Vfc2VjX2luZm8oc3RydWN0IGJ0Zl9leHQgKmJ0Zl9leHQsCiB7CiAJY29uc3Qgc3Ry
-dWN0IGJ0Zl9leHRfaW5mb19zZWMgKnNpbmZvOwogCXN0cnVjdCBidGZfZXh0X2luZm8gKmV4dF9p
-bmZvOwotCV9fdTMyIGluZm9fbGVmdCwgcmVjb3JkX3NpemU7CisJX191MzIgZGF0YV9sZWZ0LCBp
-bmZvX2xlZnQsIHJlY29yZF9zaXplOwogCXNpemVfdCBzZWNfY250ID0gMDsKIAl2b2lkICppbmZv
-OwogCkBAIC0zMzc3LDE2ICszMzc3LDE3IEBAIHN0YXRpYyBpbnQgYnRmX2V4dF9wYXJzZV9zZWNf
-aW5mbyhzdHJ1Y3QgYnRmX2V4dCAqYnRmX2V4dCwKIAkJcmV0dXJuIC1FSU5WQUw7CiAJfQogCi0J
-LyogVGhlIHN0YXJ0IG9mIHRoZSBpbmZvIHNlYyAoaW5jbHVkaW5nIHRoZSBfX3UzMiByZWNvcmRf
-c2l6ZSkuICovCi0JaW5mbyA9IGJ0Zl9leHQtPmRhdGEgKyBidGZfZXh0LT5oZHItPmhkcl9sZW4g
-KyBleHRfc2VjLT5vZmY7Ci0JaW5mb19sZWZ0ID0gZXh0X3NlYy0+bGVuOwotCi0JaWYgKGJ0Zl9l
-eHQtPmRhdGEgKyBidGZfZXh0LT5kYXRhX3NpemUgPCBpbmZvICsgZXh0X3NlYy0+bGVuKSB7CisJ
-ZGF0YV9sZWZ0ID0gYnRmX2V4dC0+ZGF0YV9zaXplIC0gYnRmX2V4dC0+aGRyLT5oZHJfbGVuOwor
-CWlmIChleHRfc2VjLT5vZmYgPiBkYXRhX2xlZnQgfHwgZXh0X3NlYy0+bGVuID4gZGF0YV9sZWZ0
-IC0gZXh0X3NlYy0+b2ZmKSB7CiAJCXByX2RlYnVnKCIlcyBzZWN0aW9uIChvZmY6JXUgbGVuOiV1
-KSBpcyBiZXlvbmQgdGhlIGVuZCBvZiB0aGUgRUxGIHNlY3Rpb24gLkJURi5leHRcbiIsCiAJCQkg
-ZXh0X3NlYy0+ZGVzYywgZXh0X3NlYy0+b2ZmLCBleHRfc2VjLT5sZW4pOwogCQlyZXR1cm4gLUVJ
-TlZBTDsKIAl9CiAKKwkvKiBUaGUgc3RhcnQgb2YgdGhlIGluZm8gc2VjIChpbmNsdWRpbmcgdGhl
-IF9fdTMyIHJlY29yZF9zaXplKS4gKi8KKwlpbmZvID0gYnRmX2V4dC0+ZGF0YSArIGJ0Zl9leHQt
-Pmhkci0+aGRyX2xlbiArIGV4dF9zZWMtPm9mZjsKKwlpbmZvX2xlZnQgPSBleHRfc2VjLT5sZW47
-CisKIAkvKiBBdCBsZWFzdCBhIHJlY29yZCBzaXplICovCiAJaWYgKGluZm9fbGVmdCA8IHNpemVv
-ZihfX3UzMikpIHsKIAkJcHJfZGVidWcoIi5CVEYuZXh0ICVzIHJlY29yZCBzaXplIG5vdCBmb3Vu
-ZFxuIiwgZXh0X3NlYy0+ZGVzYyk7Cg==
---000000000000541d820658b8f19e--
+   struct cgroup_subsys_state *bpf_cgroup_css(struct cgroup *cgrp, int ssid);
+   void bpf_css_release(struct cgroup_subsys_state *css);
+
+where the @ssid is an enum cgroup_subsys_id value. Afterwards, the only piece for
+blkcg left is:
+   struct blkcg *bpf_css_to_blkcg(struct cgroup_subsys_state *css);
+
+Note the bpf_blkcg_flush_stats may keep its current shape as it mirrors the
+blkcg_print_stat() which skips the root.
+
+With these helpers we can also replace the existing ones in
+mm/bpf_memcontrol.c as well:
+	bpf_get_mem_cgroup()
+	bpf_put_mem_cgroup()
+	bpf_mem_cgroup_flush_stats()
+
+they map onto bpf_cgroup_css() plus a bpf_css_to_memcg() cast the same way.
+
+Hi Roman, JP, Shakeel: Do you think it is worth applying above changes for
+the memory controller as well? If you are happy with the direction I am glad to
+send the conversion as a follow-up once the generic kfuncs are in. Would you
+take it?
+
+>> +__bpf_kfunc u64 bpf_blkg_iostat_bytes(struct blkcg_gq *blkg,
+>> +				      enum blkg_iostat_type rw)
+>> +__bpf_kfunc u64 bpf_blkg_iostat_ios(struct blkcg_gq *blkg,
+>> +				    enum blkg_iostat_type rw)
+>> +__bpf_kfunc u64 bpf_blkg_dev(struct blkcg_gq *blkg)
+>
+>Ignoring 32bit split reads (do we really care for BPF accesses?), the above
+>can easily be done with BPF_CORE_READ(), right?
+
+Agree, these parts will be removed in the next version.
+
+>
+>Thanks.
+>
+>-- 
+>tejun
+
+Please let me know whether the above ideas works. Thanks very much!
+
+Best,
+Ziyang
