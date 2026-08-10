@@ -1,422 +1,217 @@
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9131F37F725
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 06:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71412E1746;
+	Mon, 10 Aug 2026 07:44:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786344761; cv=none; b=Q51p8XOpfTiKogiojXtNy5VKEyU79FOaTYnlHMofvb8ofez5k21csnaLPbQdHA52zzwEiBkEjTBg+rbngb845xdXS4S5uuqZeLKcn0oIfcS1/QMdQky8kX41xbLrI72iJFM9BSpFUsy7TMpiMmnCcxAiMn25aXmzobvEKYxqyL4=
+	t=1786347890; cv=none; b=T712nPwyfQqIy3AfphX1W8/77XRlUnk7k51kvmpyuf1t/yPxGSJvjAA1sKZF1TlAZR0LMGQM2Npej93rBIfgI/SE2Mf784MJDrNldY/K7arNkUWwCmAIzp+OGJBTNmQ6cNFi8CNOebm8wm3ZGD1rJ4RzzIEdq8tAfD0D1lsUl7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786344761; c=relaxed/simple;
-	bh=J1h/VWHxwOYhzoUmA4coJqUbPUJQg3qvABZR8N3qWrI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S5QoAogpkjIeTrl1nNrD4QI/cskSMEDlzPVWRzaHC8gaaifRNafHK+aUbys/9PSfcIudS1PsXyswBrdr4WqlGkchdzN5jSH9SmlW1T2W9NWHk11sh2Imss677jCSzGiUKBWCC6Dxlr8n8De4TY0b9naIYfUcxGIS30i5CyjpqZU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XPnEKo5u; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786347890; c=relaxed/simple;
+	bh=1wb7Cf02LCWeiPlolXjnWVYxXT8O2WMADH6hi7KOxUw=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=Owe9bcKA6EolmNKrpvHwuS+A5wM4d7kvWDYbz/jMZCF7YU/mtgq7TOG+7xGiHNcJSoauY+Nt7qZvZQTTL+DH+p3if/N4DEFul+iDenraMIkcsdR1dwMUTJtqogM774UA/XmQchVOujmZRECj1H55hk2RycKL60+m21D/AL6rMFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MsRbcc2A; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XPnEKo5u"
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495437bb891so12180105e9.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 09 Aug 2026 23:52:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786344758; x=1786949558; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=bFy+Qxh8OeuJq/9T2myZ48PAmPlx9sX4LAljRqn7fVg=;
-        b=XPnEKo5upljX/nLuGu0KAm7PbesGV5o3O9h655qFahakIxCriPuBlJ7RGHRJoBeEXH
-         WSbKxt25gVxZNzkD9g+pM9HfmpBXH6uuMECIbfEHmU40q7qzQstch5wRa1uJ2pZeqeRb
-         u2hJQEw4H/fCHmfZEAYsdgRaneeQ4Kp/6Dim+CwjyIwViAyN0S9ALb58Qk0PDetpWUKs
-         ek+Fa9SW7hwdKacPx1Jyv7H9oVonB4mikIAvy/mI2f6XAfJGDCENYAu++tmEvYp+gmzV
-         Y+6u0DBqtr98GeujMgX6Veupl/N0GPC3+tVFpdk8LG5KDag62JLom9RiFiRo5+l9ZrQ3
-         q2zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786344758; x=1786949558;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bFy+Qxh8OeuJq/9T2myZ48PAmPlx9sX4LAljRqn7fVg=;
-        b=R2c2FLGz+XeUD8mQMhZAajlGaa8kpZ8NqnTLO580Q/xprJHvOBoSSkeMo3uUwVZHiw
-         oBTRPd+cUxIZKfOX8uTxR7BPQtc2fm9UNtB0MbvJxEWIAAofGLuWV9ASkdrbRvCHpXiM
-         JSz6wyl6nlswbXOAT1S73pwiq2VGJ2FUN80bms94SJha2h6HIjvX4uRJr5n67HP9Ck25
-         1TwoZPadWDfN2F6St/lfye17JBNVZScRFW1yYccmLigJrt3mowBXwgiwoXyYgIZo9g4L
-         fZ5BKbQBzlDbc14hfBM+BGsFCw78vmYHOVTHUedl4ickBj7Yo6FfWbcW4bvAQPJ9G70g
-         F+Og==
-X-Forwarded-Encrypted: i=1; AHgh+RoX2dXS65L9zIGHcSTCS6X4Go7/rj6B0FCMm8C1l4m3PphZISehYFZW902ZjNMbkpFRN3HZl9/RKbQNoEzSkaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIpZJF01HvTk3UYmwViLta4bBthgYOz5syUzJvg3CWdcYpKpdR
-	a1/wVl9c+R3I0/iIUUqZknEosecrCOP2oCegMHj6eLD9b0GHLu/FjXx3
-X-Gm-Gg: AR+sD13eK0syHvME23fxIx9vQ6bOgiyqZbqX5xfzIlDpBpiPAW/DuVKTSz9lCx+u9FT
-	EIwbCBw9z4agEJorqo8uZbix9cX15b511oU5aj1iGyj8qDy6xofQukohk9mXlNWUhtQ4CWDei+M
-	qTruvuMyu9o9jUkSoNQnHgabzrOaZqif3zXgHI7X1LZ2/qkSC7AaHKV162b6ecksJFz3lCSgVa3
-	hfUwnTkpQ5QK7+lgMFc+i3suyh2EvNltalWRV6rZ9ItazJHl/yWjrEB5BfiqVnamZThIHcOgqA/
-	WF8/yfMxn1t8c2BbipOLhDWSMVaF/WAl0pkznagsSwUm6BW6zS6Iw8p0gIgiOTuVxUogRWuHIgB
-	zx01M0S8lpnkQaqhf4SuSKQgZbKRa7+dsNge+5QJSxr1HiioYfy9qjP7W6I7LC6I/pX9CnBVebP
-	GJQiN3qi7YxHOMtXPe1sw9ti5iB48zBiCNWCUxTFuUubYHZ0SxxoM/A4CAjOutfOv5McBnY2aOZ
-	sceebkFjGzVhxM+UH/Wdy06upD64oawDNl3xnsSHna1VkP2dE8S9q3wujMGwuzg3L1HNwWhvVdV
-	nUcUNy9CVaOb0dp2naGm9lLIufKatlo/Af8FOiE6Gyk3ecfQbAeTWR8Va/dEz3RS1reJvFb56cJ
-	Y9g==
-X-Received: by 2002:a05:600c:3154:b0:495:3bc6:d381 with SMTP id 5b1f17b1804b1-49962453c45mr186359385e9.2.1786344757658;
-        Sun, 09 Aug 2026 23:52:37 -0700 (PDT)
-Received: from MBP-von-Karl.localdomain (dynamic-2a02-3100-a1e8-7401-78b1-a175-5d13-e92e.310.pool.telefonica.de. [2a02:3100:a1e8:7401:78b1:a175:5d13:e92e])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4995420c68fsm358800705e9.1.2026.08.09.23.52.36
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Sun, 09 Aug 2026 23:52:37 -0700 (PDT)
-From: Karl Mehltretter <kmehltretter@gmail.com>
-To: Marc Zyngier <maz@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev
-Cc: Karl Mehltretter <kmehltretter@gmail.com>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Eric Auger <eric.auger@redhat.com>,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [RFC PATCH 2/2] KVM: arm64: selftests: Test VGICv3 redistributor region retry
-Date: Mon, 10 Aug 2026 08:52:17 +0200
-Message-Id: <1cf282aec3fff31e89bdb98f636b7027afcf129a.1786344511.git.kmehltretter@gmail.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
-In-Reply-To: <cover.1786344511.git.kmehltretter@gmail.com>
-References: <cover.1786344511.git.kmehltretter@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MsRbcc2A"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 898951F000E9;
+	Mon, 10 Aug 2026 07:44:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786347888;
+	bh=tJ7eKx0iJr2rvTOygQR5LhDZ7PkCW/kB1UHfv12h8v4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=MsRbcc2AocCHdbttjw53ER9ijXVYMv4LCQRrI/qdzpd+ZNbh4XbH57P8v59eEDqrf
+	 x43MyBiAxMLHVRK1achYhEysTDupCjCzYgUGVraby0O7HCUHnyD+9E9HcZid1sDx/8
+	 yCJo8EnwCTar6tDaaPI7Y1ytwBVsB7bE1UGhfW8uNdBxFx2SkW7TaM3pCF2K32hv23
+	 ZkrDnTSbn4ozzQ/+ItNiunpIO6fifLfSYHJl7yyDzQFUUDnHL7dSc787CAuZxBpSMe
+	 XfOxi3eaNqHwEAkOBF+JFRWudXtKhkqTo2Tw0OlQuB7WXw5LVa4oCRfsO/UJAqXApU
+	 nuazPWwcgRqpw==
+Content-Type: multipart/mixed; boundary="===============2480451235356564507=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Message-Id: <8a1536c653af9eb59c0f6e30adfc9911f72dc08d87026c9ae89b32f329026c3b@mail.kernel.org>
+In-Reply-To: <20260810055709.729203-1-chenguang.zhao@linux.dev>
+References: <20260810055709.729203-1-chenguang.zhao@linux.dev>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add kptr-xchg benchmark
+From: bot+bpf-ci@kernel.org
+To: chenguang.zhao@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,chenguang.zhao@liux.dev,zhaochenguang@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 10 Aug 2026 07:44:47 +0000 (UTC)
 
-The existing redistributor-region test already adds valid partial
-regions, rejects a later region that collides with the distributor, and
-retries with a valid region. Its guest code does not access a
-redistributor, so it misses redistributor MMIO bus entries lost by the
-failed rollback.
+--===============2480451235356564507==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Run a guest that reads GICR_TYPER from the second redistributor in the
-original region and verifies its processor number. Put the test layout
-outside the default guest memory slot so an absent iodev results in a
-KVM_EXIT_MMIO instead of an ordinary RAM access.
+> diff --git a/tools/testing/selftests/bpf/Makefile b/tools/testing/selftests/bpf/Makefile
+> index d3655a706482..76782b442aa9 100644
+> --- a/tools/testing/selftests/bpf/Makefile
+> +++ b/tools/testing/selftests/bpf/Makefile
 
-Allow the common VGIC setup helper to select the guest entry point so the
-retry case can reuse the normal test setup.
+[ ... ]
 
-Assisted-by: Codex:gpt-5.6-sol
-Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> diff --git a/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+> new file mode 100644
+> index 000000000000..b8a0d346fda6
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/benchs/bench_kptr_xchg.c
+> @@ -0,0 +1,96 @@
+
+[ ... ]
+
+> +enum {
+> +	ARG_NR_LOOPS = 7000,
+> +};
+> +
+> +static const struct argp_option opts[] = {
+> +	{ "nr_loops", ARG_NR_LOOPS, "nr_loops", 0,
+> +	  "Set number of bpf_kptr_xchg() calls per trigger"},
+> +	{},
+> +};
+> +
+> +static error_t parse_arg(int key, char *arg, struct argp_state *state)
+> +{
+> +	switch (key) {
+> +	case ARG_NR_LOOPS:
+> +		args.nr_loops = strtol(arg, NULL, 10);
+> +		break;
+
+Should parse_arg() validate the nr_loops value here? Looking at the BPF
+program, the loop is capped at MAX_XCHG_LOOPS (4096):
+
+tools/testing/selftests/bpf/progs/kptr_xchg_bench.c:benchmark() {
+	for (i = 0; i < MAX_XCHG_LOOPS; i++) {
+		if (i >= nr_loops)
+			break;
+		...
+	}
+}
+
+So passing --nr_loops 100000 silently benchmarks only 4096 iterations,
+and --nr_loops -1 (which strtol accepts and wraps to 4294967295 when
+assigned to __u32) also silently runs 4096. The user gets throughput
+numbers for a different workload than requested.
+
+bench_trigger.c already handles this by rejecting out-of-range values at
+parse time:
+
+	ret = strtol(arg, NULL, 10);
+	if (ret < 1 || ret > MAX_TRIG_BATCH_ITERS) {
+		fprintf(stderr, "invalid --trig-batch-iters value ...\n");
+		argp_usage(state);
+	}
+
+Could bench_kptr_xchg.c add the same range check against MAX_XCHG_LOOPS
+to make the cap visible rather than silent?
+
+> +static const struct argp bench_kptr_xchg_argp = {
+> +	.options = opts,
+> +	.parser = parse_arg,
+> +};
+
+Is bench_kptr_xchg_argp intended to be static? All other benches export
+their argp non-static (bench_bpf_loop_argp, bench_xdp_lb_argp,
+bench_sockmap_argp, etc.) and register them in two places:
+
+1. bench.c declares extern struct argp bench_*_argp
+2. bench.c adds them to the static bench_parsers[] child list
+
+This patch adds neither. Consequences:
+
+`./bench --help` never shows the "kptr-xchg" option group or --nr_loops,
+because --help is served from the first-pass child list.
+
+--nr_loops only works today because bench_bpf_loop_argp and
+bench_bpf_for_argp (both already in bench_parsers[]) also declare a
+long option named "nr_loops", so the first pass consumes the argument
+into an unrelated bench's args struct rather than erroring out. The
+second pass then parses it again with the correct parser, so the
+documented invocation happens to work. Any option name unique to this
+bench would make the first pass abort with "unrecognized option".
+
+Should bench_kptr_xchg_argp drop static, get an extern declaration in
+bench.c, and be added to bench_parsers[] alongside the other benches?
+
+> diff --git a/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+> new file mode 100644
+> index 000000000000..363883073e2c
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/kptr_xchg_bench.c
+
+[ ... ]
+
+> +SEC("fentry/" SYS_PREFIX "sys_getpgid")
+> +int benchmark(void *ctx)
+> +{
+> +	struct bin_data *old;
+> +	u32 i;
+> +
+> +	for (i = 0; i < MAX_XCHG_LOOPS; i++) {
+> +		if (i >= nr_loops)
+> +			break;
+> +
+> +		old = bpf_kptr_xchg(&ptr, NULL);
+> +		if (old)
+> +			bpf_obj_drop(old);
+> +	}
+> +
+> +	__sync_add_and_fetch(&hits, i);
+> +	return 0;
+> +}
+> +
+> +/*
+> + * BTF FUNC records are not generated for kfuncs referenced only through
+> + * optimized paths. Keep bpf_obj_drop() visible to libbpf's kfunc linker.
+> + */
+> +void __btf_root(void)
+> +{
+> +	bpf_obj_drop(NULL);
+> +}
+
+Is __btf_root() needed in this file? The workaround was copied from
+kptr_xchg_inline.c, but that file actually requires it because the only
+reference to bpf_obj_drop is inside a __naked function's inline assembly
+via __imm(bpf_obj_drop), so clang never sees a C-level call and emits no
+BTF FUNC record. That file's own comment says exactly that: "BTF FUNC
+records are not generated for kfuncs referenced from inline assembly."
+
+kptr_xchg_bench.c has no inline assembly. benchmark() calls the kfunc
+with a plain C call:
+
+	old = bpf_kptr_xchg(&ptr, NULL);
+	if (old)
+		bpf_obj_drop(old);
+
+clang cannot prove old is always NULL (bpf_kptr_xchg is an opaque helper
+call), so the call site survives -O2 and a BTF FUNC record for
+bpf_obj_drop is emitted normally. This is confirmed by twenty other
+programs in progs/ that call bpf_obj_drop() from ordinary C and define
+no such helper: linked_list.c, refcounted_kptr.c, irq.c,
+local_kptr_stash.c, rbtree_search.c, bpf_qdisc_fifo.c, etc.
+kptr_xchg_inline.c is the only file in the tree that actually needs the
+hack.
+
+The rewritten comment also generalises the original's precise claim
+("from inline assembly") into "referenced only through optimized paths",
+which is not a real libbpf/clang behaviour and does not describe
+anything happening in this file.
+
+The function is never loaded (it is unreferenced, non-SEC() .text, so
+libbpf never appends it as a subprog, which is why the bpf_obj_drop(NULL)
+inside it never reaches the verifier's KF_RELEASE check), so there is no
+load failure. But it is dead code carrying an incorrect technical
+rationale that invites copying into future programs.
+
+Should both the function and the comment be removed?
+
+
 ---
- tools/testing/selftests/kvm/arm64/vgic_init.c | 115 +++++++++++++-----
- 1 file changed, 86 insertions(+), 29 deletions(-)
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-diff --git a/tools/testing/selftests/kvm/arm64/vgic_init.c b/tools/testing/selftests/kvm/arm64/vgic_init.c
-index 47e34b43afb29..8b321a1409b34 100644
---- a/tools/testing/selftests/kvm/arm64/vgic_init.c
-+++ b/tools/testing/selftests/kvm/arm64/vgic_init.c
-@@ -5,6 +5,7 @@
-  * Copyright (C) 2020, Red Hat, Inc.
-  */
- #include <linux/kernel.h>
-+#include <linux/sizes.h>
- #include <sys/syscall.h>
- #include <asm/kvm.h>
- #include <asm/kvm_para.h>
-@@ -13,12 +14,23 @@
- 
- #include "test_util.h"
- #include "kvm_util.h"
-+#include "gic.h"
- #include "processor.h"
-+#include "ucall_common.h"
- #include "vgic.h"
- #include "gic_v3.h"
- 
- #define NR_VCPUS		4
- 
-+/* Keep the redistributor range outside the default guest memory slot. */
-+#define REDIST_TEST_REGION0_BASE	GICR_BASE_GPA
-+#define REDIST_TEST_REGION1_BASE	\
-+	(REDIST_TEST_REGION0_BASE + 2 * KVM_VGIC_V3_REDIST_SIZE)
-+#define REDIST_TEST_DIST_BASE	\
-+	(REDIST_TEST_REGION1_BASE + KVM_VGIC_V3_REDIST_SIZE)
-+#define REDIST_TEST_REGION2_BASE	\
-+	(REDIST_TEST_DIST_BASE + KVM_VGIC_V3_DIST_SIZE)
-+
- #define REG_OFFSET(vcpu, offset) (((u64)vcpu << 32) | offset)
- 
- #define VGIC_DEV_IS_V2(_d) ((_d) == KVM_DEV_TYPE_ARM_VGIC_V2)
-@@ -65,6 +77,16 @@ static void guest_code(void)
- 	GUEST_DONE();
- }
- 
-+static void guest_read_second_redist(void)
-+{
-+	u64 typer = readq((void *)(unsigned long)(REDIST_TEST_REGION0_BASE +
-+						   KVM_VGIC_V3_REDIST_SIZE +
-+						   GICR_TYPER));
-+
-+	GUEST_ASSERT_EQ(GICR_TYPER_CPU_NUMBER(typer), 1);
-+	GUEST_DONE();
-+}
-+
- /* we don't want to assert on run execution, hence that helper */
- static int run_vcpu(struct kvm_vcpu *vcpu)
- {
-@@ -73,12 +95,13 @@ static int run_vcpu(struct kvm_vcpu *vcpu)
- 
- static struct vm_gic vm_gic_create_with_vcpus(u32 gic_dev_type,
- 					      u32 nr_vcpus,
-+					      void (*guest_fn)(void),
- 					      struct kvm_vcpu *vcpus[])
- {
- 	struct vm_gic v;
- 
- 	v.gic_dev_type = gic_dev_type;
--	v.vm = vm_create_with_vcpus(nr_vcpus, guest_code, vcpus);
-+	v.vm = vm_create_with_vcpus(nr_vcpus, guest_fn, vcpus);
- 	v.gic_fd = kvm_create_device(v.vm, gic_dev_type);
- 
- 	return v;
-@@ -240,38 +263,40 @@ static void subtest_v3_redist_regions(struct vm_gic *v)
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL, "redist region attr value with count== 0");
- 
--	addr = REDIST_REGION_ATTR_ADDR(2, 0x200000, 0, 1);
-+	addr = REDIST_REGION_ATTR_ADDR(2, REDIST_TEST_REGION0_BASE, 0, 1);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL,
- 		    "attempt to register the first rdist region with index != 0");
- 
--	addr = REDIST_REGION_ATTR_ADDR(2, 0x201000, 0, 1);
-+	addr = REDIST_REGION_ATTR_ADDR(2, REDIST_TEST_REGION0_BASE + 0x1000,
-+				       0, 1);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL, "rdist region with misaligned address");
- 
--	addr = REDIST_REGION_ATTR_ADDR(2, 0x200000, 0, 0);
-+	addr = REDIST_REGION_ATTR_ADDR(2, REDIST_TEST_REGION0_BASE, 0, 0);
- 	kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 			    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 
--	addr = REDIST_REGION_ATTR_ADDR(2, 0x200000, 0, 1);
-+	addr = REDIST_REGION_ATTR_ADDR(2, REDIST_TEST_REGION0_BASE, 0, 1);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL, "register an rdist region with already used index");
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x210000, 0, 2);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION0_BASE + 0x10000,
-+				       0, 2);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL,
- 		    "register an rdist region overlapping with another one");
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x240000, 0, 2);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION1_BASE, 0, 2);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL, "register redist region with index not +1");
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x240000, 0, 1);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION1_BASE, 0, 1);
- 	kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 			    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 
-@@ -288,7 +313,7 @@ static void subtest_v3_redist_regions(struct vm_gic *v)
- 	TEST_ASSERT(ret && errno == E2BIG,
- 		    "register redist region with top address beyond IPA range");
- 
--	addr = 0x260000;
-+	addr = REDIST_TEST_DIST_BASE;
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL,
-@@ -296,19 +321,19 @@ static void subtest_v3_redist_regions(struct vm_gic *v)
- 
- 	/*
- 	 * Now there are 2 redist regions:
--	 * region 0 @ 0x200000 2 redists
--	 * region 1 @ 0x240000 1 redist
-+	 * region 0 has 2 redistributors
-+	 * region 1 has 1 redistributor
- 	 * Attempt to read their characteristics
- 	 */
- 
- 	addr = REDIST_REGION_ATTR_ADDR(0, 0, 0, 0);
--	expected_addr = REDIST_REGION_ATTR_ADDR(2, 0x200000, 0, 0);
-+	expected_addr = REDIST_REGION_ATTR_ADDR(2, REDIST_TEST_REGION0_BASE, 0, 0);
- 	ret = __kvm_device_attr_get(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(!ret && addr == expected_addr, "read characteristics of region #0");
- 
- 	addr = REDIST_REGION_ATTR_ADDR(0, 0, 0, 1);
--	expected_addr = REDIST_REGION_ATTR_ADDR(1, 0x240000, 0, 1);
-+	expected_addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION1_BASE, 0, 1);
- 	ret = __kvm_device_attr_get(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(!ret && addr == expected_addr, "read characteristics of region #1");
-@@ -318,11 +343,11 @@ static void subtest_v3_redist_regions(struct vm_gic *v)
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == ENOENT, "read characteristics of non existing region");
- 
--	addr = 0x260000;
-+	addr = REDIST_TEST_DIST_BASE;
- 	kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 			    KVM_VGIC_V3_ADDR_TYPE_DIST, &addr);
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x260000, 0, 2);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_DIST_BASE, 0, 2);
- 	ret = __kvm_device_attr_set(v->gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 				    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 	TEST_ASSERT(ret && errno == EINVAL, "register redist region colliding with dist");
-@@ -338,7 +363,7 @@ static void test_vgic_then_vcpus(u32 gic_dev_type)
- 	struct vm_gic v;
- 	int ret, i;
- 
--	v = vm_gic_create_with_vcpus(gic_dev_type, 1, vcpus);
-+	v = vm_gic_create_with_vcpus(gic_dev_type, 1, guest_code, vcpus);
- 
- 	subtest_dist_rdist(&v);
- 
-@@ -359,7 +384,8 @@ static void test_vcpus_then_vgic(u32 gic_dev_type)
- 	struct vm_gic v;
- 	int ret;
- 
--	v = vm_gic_create_with_vcpus(gic_dev_type, NR_VCPUS, vcpus);
-+	v = vm_gic_create_with_vcpus(gic_dev_type, NR_VCPUS, guest_code,
-+				     vcpus);
- 
- 	subtest_dist_rdist(&v);
- 
-@@ -403,6 +429,29 @@ static void test_v2_uaccess_cpuif_no_vcpus(void)
- 	vm_gic_destroy(&v);
- }
- 
-+static void run_vcpu_expect_done(struct kvm_vcpu *vcpu)
-+{
-+	struct ucall uc;
-+
-+	vcpu_run(vcpu);
-+
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_DONE:
-+		return;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	case UCALL_NONE:
-+		if (vcpu->run->exit_reason == KVM_EXIT_MMIO)
-+			TEST_FAIL("Unexpected MMIO exit at 0x%llx",
-+				  vcpu->run->mmio.phys_addr);
-+		fallthrough;
-+	default:
-+		TEST_FAIL("Unexpected ucall %lu, exit_reason %u",
-+			  uc.cmd, vcpu->run->exit_reason);
-+	}
-+}
-+
- static void test_v3_new_redist_regions(void)
- {
- 	struct kvm_vcpu *vcpus[NR_VCPUS];
-@@ -411,7 +460,8 @@ static void test_v3_new_redist_regions(void)
- 	u64 addr;
- 	int ret;
- 
--	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS, vcpus);
-+	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS,
-+				     guest_code, vcpus);
- 	subtest_v3_redist_regions(&v);
- 	kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_CTRL,
- 			    KVM_DEV_ARM_VGIC_CTRL_INIT, NULL);
-@@ -420,12 +470,13 @@ static void test_v3_new_redist_regions(void)
- 	TEST_ASSERT(ret == -ENXIO, "running without sufficient number of rdists");
- 	vm_gic_destroy(&v);
- 
--	/* step2 */
-+	/* Step 2: adding enough redistributors after KVM_RUN is rejected. */
- 
--	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS, vcpus);
-+	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS,
-+				     guest_code, vcpus);
- 	subtest_v3_redist_regions(&v);
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x280000, 0, 2);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION2_BASE, 0, 2);
- 	kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 			    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 
-@@ -434,9 +485,10 @@ static void test_v3_new_redist_regions(void)
- 
- 	vm_gic_destroy(&v);
- 
--	/* step 3 */
-+	/* Step 3: retry the failed region setup and exercise an existing rdist. */
- 
--	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS, vcpus);
-+	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS,
-+				     guest_read_second_redist, vcpus);
- 	subtest_v3_redist_regions(&v);
- 
- 	ret = __kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
-@@ -444,15 +496,17 @@ static void test_v3_new_redist_regions(void)
- 	TEST_ASSERT(ret && errno == EFAULT,
- 		    "register a third region allowing to cover the 4 vcpus");
- 
--	addr = REDIST_REGION_ATTR_ADDR(1, 0x280000, 0, 2);
-+	addr = REDIST_REGION_ATTR_ADDR(1, REDIST_TEST_REGION2_BASE, 0, 2);
- 	kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_ADDR,
- 			    KVM_VGIC_V3_ADDR_TYPE_REDIST_REGION, &addr);
- 
-+	virt_map(v.vm, REDIST_TEST_REGION0_BASE, REDIST_TEST_REGION0_BASE,
-+		 vm_calc_num_guest_pages(v.vm->mode,
-+					 2 * KVM_VGIC_V3_REDIST_SIZE));
- 	kvm_device_attr_set(v.gic_fd, KVM_DEV_ARM_VGIC_GRP_CTRL,
- 			    KVM_DEV_ARM_VGIC_CTRL_INIT, NULL);
- 
--	ret = run_vcpu(vcpus[3]);
--	TEST_ASSERT(!ret, "vcpu run");
-+	run_vcpu_expect_done(vcpus[0]);
- 
- 	vm_gic_destroy(&v);
- }
-@@ -608,7 +662,8 @@ static void test_v3_redist_ipa_range_check_at_vcpu_run(void)
- 	int ret, i;
- 	u64 addr;
- 
--	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, 1, vcpus);
-+	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, 1,
-+				     guest_code, vcpus);
- 
- 	/* Set space for 3 redists, we have 1 vcpu, so this succeeds. */
- 	addr = max_phys_size - (3 * 2 * 0x10000);
-@@ -641,7 +696,8 @@ static void test_v3_its_region(void)
- 	u64 addr;
- 	int its_fd, ret;
- 
--	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS, vcpus);
-+	v = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS,
-+				     guest_code, vcpus);
- 	its_fd = kvm_create_device(v.vm, KVM_DEV_TYPE_ARM_VGIC_ITS);
- 
- 	addr = 0x401000;
-@@ -684,7 +740,8 @@ static void test_v3_nassgicap(void)
- 	u32 typer2;
- 	int ret;
- 
--	vm = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS, vcpus);
-+	vm = vm_gic_create_with_vcpus(KVM_DEV_TYPE_ARM_VGIC_V3, NR_VCPUS,
-+				      guest_code, vcpus);
- 	kvm_device_attr_get(vm.gic_fd, KVM_DEV_ARM_VGIC_GRP_DIST_REGS,
- 			    GICD_TYPER2, &typer2);
- 	has_nassgicap = typer2 & GICD_TYPER2_nASSGIcap;
--- 
-2.53.0
-
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31362294949
+--===============2480451235356564507==--
