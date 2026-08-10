@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE43F437847;
-	Mon, 10 Aug 2026 18:13:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A849E2FFFA4;
+	Mon, 10 Aug 2026 18:14:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786385605; cv=none; b=szM80+46llpN9nhCkRNHIgEsatBdCyNGS5X5miwroQrTBwkMwS26H6sC0uYSMxj0EMlZi85esvjpgaIIEqoeIKq214mZHYWDBTnt6FBtfjNJVhZeIk3f5s35utdvOHe7N8MKAFZdnsg874nuvWDzMpPX51LiSgWq7l2xyJstZDA=
+	t=1786385692; cv=none; b=jp78NapToB5yEzmsIiomcHrhLC5/vw2PGEjj+Oz3LNZ7d7nmPA62wgXNzL8KVc5NOVm7zVPmzV/IZyNflIxqEU+deNxieeOTQEKcR+85lTUmUxNxP94g5F4JMlBf+8+0Wpn9C0hblCRH7U5um/CDD+uA9ige3yW8ZeJBCX22Xoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786385605; c=relaxed/simple;
-	bh=5ya32EeiX/6ALIqvU9TY2YYC5n096KOB3wJrQ287IQo=;
+	s=arc-20240116; t=1786385692; c=relaxed/simple;
+	bh=7FCDNAJf754g9ThUIWfhj0JsG/kwCOjfqjOlpIMGuds=;
 	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MepHQwHooeDymeLWtGDlV2MU1CQNi4Z0OrTAqpcLRTmLta3ixCmxTUXko/HMTRHVhnzkK7BFNM+RzqQY2ELgWQ7XFXacFj5qKiGOCsObnsPpH/WaxIs8TeCWP92ifjq9Y+ygfZT/9F0Y74abstEjdyC9ukvajjLidyBOJQVTNRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SESZTbiL; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version:Content-Type; b=i+vxSZTiVBQvs5eF1KNz56sj0GmUuXr6yoas7MWbfbiz6jY6mE+/KYQQi+tzcYNxqWR5PFjIqktHovOvwxqJOiFmypyRtnZ0F/H0I76ruweKhYQOx2AVbc+ZtVX2gtccMVy+IDoJoi3JvTCpoGv+FRXco8KfWDCYdgbOFBouKKE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lXyMVZf0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SESZTbiL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AD841F00A3A;
-	Mon, 10 Aug 2026 18:13:23 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lXyMVZf0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4017B1F000E9;
+	Mon, 10 Aug 2026 18:14:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786385603;
-	bh=LIl/DIAXKD2O5Z+P4VyBIwLQq43iQSjULudMrBjU0ak=;
+	s=k20260515; t=1786385691;
+	bh=dMZrLhd95Z+l3YT7FvBLisejImxLm9Qc82s/7wFoEZk=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=SESZTbiLYuOb3qt5M/ePfIeGEYF9QnlqcyuS+Kosl8lXPs4CLM0evu5y7tzedAAoc
-	 Huq6rSEGXiI7E+Em1QHEngCozJp2PsPi5GYaqNeS/PkFuDmXtNmS9pXO7VTHHxKML8
-	 X8y3TRc1iaUssYwG5iTmjlIyOjdGdehEEvsSqvlxdk4iTWzJFPA8t7FR763fEKv3DU
-	 Y8E8T3STiVy445rWE2R+ukDb5codpt0yjxyQNsuuCkut0D/ndkt4xB+mSNy6g61TDN
-	 cD5ZhNVxOEEB7c8rmtGjG1Kx+dR8rW+FTgZRskyF4Z0vMEssNeSMXb/VGLsG87fxao
-	 tMSNNM9vmSr7w==
-Date: Mon, 10 Aug 2026 11:13:22 -0700
+	b=lXyMVZf0JVOO3VasjDG88/5wEbtb0ZnOLMMncRA7qqseMTRgpihDwmvd3K7Iyy4OW
+	 qFIp5f3fyG1bgP/lCe79jVRkO9riOzSlXJQJOvO+W3njxVkC8ayHpCacQ1SuZG6Agb
+	 8Ge5/CcfxXvlOGNJMDHlsn+1S4ivp9HTdx8ksJtXBWcqqagdTDo8SVAhQz51Qc6FKC
+	 WELsHugdqi8FkN18O2Sq0nsPqFh5Nq3q9nxGObpmMGWRp6T5EMy03sWXvOY1ADw6fW
+	 UUdwZnPlAya42sfwV3fkpeYB0nFDnxdzQmWGf8r5lxqaVn4e8/qtmqYoIZLdu+O706
+	 d6X4fJUal3vWA==
+Date: Mon, 10 Aug 2026 11:14:50 -0700
 From: Jakub Kicinski <kuba@kernel.org>
-To: Petr Machata <petrm@nvidia.com>
-Cc: <davem@davemloft.net>, <netdev@vger.kernel.org>, <edumazet@google.com>,
- <pabeni@redhat.com>, <andrew+netdev@lunn.ch>, <horms@kernel.org>,
- <danieller@nvidia.com>, <shuah@kernel.org>,
- <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH net-next] selftests: drv-net: hide the devlink
- port_split test
-Message-ID: <20260810111322.20341a39@kernel.org>
-In-Reply-To: <87jypy9qy7.fsf@pmachata.org>
-References: <20260808164843.2475226-1-kuba@kernel.org>
-	<87jypy9qy7.fsf@pmachata.org>
+To: Hangbin Liu <liuhangbin@gmail.com>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ jv@jvosburgh.net, shuah@kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net-next] selftests: bonding: disable DAD for IPv6
+ addresses
+Message-ID: <20260810111450.176b34d6@kernel.org>
+In-Reply-To: <ankxIiVLu3qY5jw5@fedora>
+References: <20260808162345.2442594-1-kuba@kernel.org>
+	<ankxIiVLu3qY5jw5@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,55 +47,25 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 10 Aug 2026 13:04:48 +0200 Petr Machata wrote:
-> > The devlink port_split test has limited applicability.
-> > NICs (as opposed to switches) require at least a re-probe
-> > to apply the split configuration.  
+On Mon, 10 Aug 2026 10:02:10 +0800 Hangbin Liu wrote:
+> On Sat, Aug 08, 2026 at 09:23:45AM -0700, Jakub Kicinski wrote:
+> > bond_reset() waits up to 2 seconds for IPv6 connectivity.
+> > With default settings DAD itself may take almost 2 seconds,
+> > causing flakes on debug builds. It used to flake once or
+> > twice a week, recently it started failing once a day.
+> > Probably some downstream changes to scheduler, or our machines
+> > go busier.
+> > 
+> > A lot of selftests already use nodad, let's use nodad in bonding, too.
+> > I don't see an obvious reason why DAD would be important to the test.  
 > 
-> Interesting, apparently some NICs require reboot after devlink port
-> split. Hmm, should I just move the test to drivers/mlxsw?
-
-It's not really mlxsw specific in any way :S
-The cmode + NETIF compatibility would be my long term preference.
-
-> > On top of that the test is not compatible with our driver env,
-> > it just splits all ports on the system, not only what NETIF
-> > points at.
-> >
-> > Long term we may want to add some indication in devlink whether
-> > the port splitting is runtime (cmode of sorts), and fix the
-> > test to follow driver env. But since no (known) NIC driver can
-> > support runtime anyway let's just hide the test from the selftest
-> > framework by moving it to extra files.  
+> In this case, how about add nodad to all IPv6 address setting on bonding
+> tests, e.g. bond_options.sh, bond_macvlan_ipvlan.sh.
 > 
-> Sure, go for it.
-> 
-> > Having this test randomly break unrelated NICs within the DUT
-> > makes people implement allow-lists for ksft, which then means
-> > their setups don't run new tests.  
-> 
-> So I'm fine with the patch, but I don't buy this argument. People
-> presumably understand that allow-listing implies that only the, well,
-> allowed tests will be run.
+> After that, we may event remove the sleep time in bond_macvlan_ipvlan.sh.
+> In my local testing all the macvlan/ipvlan test passed with nodad set.
 
-One note here - that's a fine position to take for downstream CIs.
-But upstream / in NIPA we want to test the drivers as much as we want
-to test the tests. It's _very_ useful during review to see how well 
-the test works across the runners before merging. So allowlists are
-explicitly a no-no for NIPA reporting.
+Can you do that as a follow up, please?
 
-> Presumably there was a history of new stuff
-> blowing up, or gradual enablement or whatever, otherwise why not just
-> blacklist the one problematic one? I.e. don't blame the existence of
-> allow-lists on devlink_port_split.
-
-IIRC Intel devs mentioned port split as problematic explicitly.
-I also had issues with it in NIPA.
-
-But fair point, maybe once the auto-neg / link config tests appear
-upstream this will be more prevalent problem. For now devlink port
-split is the only one.. let's just squirrel it away.
-
-> Reviewed-by: Petr Machata <petrm@nvidia.com>
-
-Thanks! I may need to respin and use PROGS_EXTENDED as AI suggests.
+bond_options.sh is the worst offender for flakiness right now.
+I would like to squash these flakes ASAP.
