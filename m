@@ -1,81 +1,107 @@
-Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.3])
+Received: from out-184.mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726701A38F9;
-	Mon, 10 Aug 2026 03:01:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0558282F27;
+	Mon, 10 Aug 2026 03:07:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786330925; cv=none; b=PaP/Gg+VdEwSk5sGX/bP3yfX0ZoEFGnNVy3oRri3IkD1iGutNlH5wgOj6OcVI0sHclq99Czx40ejj02Kq0dycCu9fgcgeOwKGrY4fIeNlKdpOioHEaOvDtvzWj664ESMgIGfXGoa4x4tS4M4nJC91mWm8EqG50HQjY6FYSQFcY0=
+	t=1786331271; cv=none; b=CQWO6WnWTI/sOCDBishbDUR6QEtbMx818+ikSmczEwvbv70bfKuuIsbEgq/12Dmv4Rrpt+lT0vKgjXNoxYWQfMeYCjqG/VKcEOvcC/+XqAhLsdXnzxcS32XEpAqUSmwY1wllk2jZC3ZPdhD2GzOrLZ333FSpKCd5kmarz43QoEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786330925; c=relaxed/simple;
-	bh=ksdh6wyPf0BWarU30unhsM0g+/5W5jnE2e0r3+kZZp8=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
-	 MIME-Version:Message-ID; b=aNeViZh/S3UtkrSavNxMlecxTt9+k0ZoJ0PS0WvShNdTZHFrSctF8rVSa+fskycw0KKveHNafb0vvKkaM2R4pa+TSwpZtaO1qarrh61ZgfCOZA466aZc+n+joYG+vKbBbttSn2RrFnhax9t7R/2H0xYAWJQpUj+04Lr6EsgZj1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=mvgGG5zi; arc=none smtp.client-ip=117.135.210.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1786331271; c=relaxed/simple;
+	bh=+RsgpMp9YhI5qE4OtlGKLdupHUj6YaWI99WnpPeb2RY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FkPdTobXVuqK5ALT+UDSj9K6hiia/VcV/rcpLZ+mVfc/AnRrqfF4Qg8PLbSuUKBzfgTCCaoQlWsnyDbQTiqAGHKouqxEqQwIWGJdTMEjldvB+EXqDZXzIL+hwiYYrWo2B1jZwDVZ15AKF6hxpju5CkDjIGXoPhhxg0TwyOlfWus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HsCPcdGq; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="mvgGG5zi"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
-	Message-ID; bh=ksdh6wyPf0BWarU30unhsM0g+/5W5jnE2e0r3+kZZp8=; b=m
-	vgGG5zi0d3S6Bn+2l2y570plNmHJpLPGOZLqyUjNxZIebP9ilBNHLtZa/ZMDhCP9
-	HQnN9JDO+uKbmS9osZo7UVulI+34mPcDtJV1KWFla1QdF2cOyR6/vBwUCagOIOxg
-	MuayIdaDTKH7N5NkqBAoH70zvTWF7GA8KJvgyIerws=
-Received: from fuqingshuang$kylinos.cn ( [116.128.244.169] ) by
- ajax-webmail-wmsvr-40-137 (Coremail) ; Mon, 10 Aug 2026 11:01:09 +0800
- (CST)
-Date: Mon, 10 Aug 2026 11:01:09 +0800 (CST)
-From: "Qingshuang Fu" <fuqingshuang@kylinos.cn>
-To: "Hangbin Liu" <liuhangbin@gmail.com>
-Cc: "Pablo Neira Ayuso" <pablo@netfilter.org>,
-	"Florian Westphal" <fw@strlen.de>, netfilter-devel@vger.kernel.org,
-	coreteam@netfilter.org, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-	"Fernando Fernandez Mancera" <fmancera@suse.de>
-Subject: Re: [PATCH net v2] selftests: netfilter: conntrack_dump_flush:
- remove unused variables and fix typo
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
- 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
-Sender: fffsqian@163.com
-In-Reply-To: <anbMGS9TFOEUUWu-@fedora>
-References: <20260807075928.64326-1-fffsqian@163.com>
- <anWgQSbZWK6D2ONg@fedora> <anWyMUFvONx6k1d5@chamomile>
- <anbMGS9TFOEUUWu-@fedora>
-X-NTES-SC: AL_Qu2TBP+Yv0At7yCbbekckk4Vhu49Xcq2vvQv34Fec9MFiRvq2ysnRH96GVDLyc6fMh6joje9QD9v6t1IfYBeYNQ0he/sUyMeyFmHKi/F/A==
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=GBK
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HsCPcdGq"
+Message-ID: <7eb471c1-e30c-48cf-8639-28ecb5a17734@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786331257;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m/DSE2urStIQIpSbLrk51AXy14cPdEPeJYoXg5FqJJ4=;
+	b=HsCPcdGqV2hYqsGnP7Xryf3GCatOVeNoAbYinuFeVfXqSCKjyMjWGTTg/Vf8zHx9pgewgc
+	pwPll3qurSz16Q9CHYbR8Zyobctijl5V3MCe1brxp2YAIq3qSItQMoYBE/hJVLBsPJVOuQ
+	ARjKEtUQJOnU3sRFazvcwtxJhyOWGSE=
+Date: Mon, 10 Aug 2026 11:07:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-ID: <72b995d7.271c.19fe99ded3b.Coremail.fuqingshuang@kylinos.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID:iSgvCgBnPsH2Pnlq2WUuAA--.1127W
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6hbFkGp5PvYDfAAA3N
-X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+Subject: Re: [PATCH 1/2] selftests/cgroup: Avoid awk -e in cpuset tests
+To: Rui Qi <qirui.001@bytedance.com>, Tejun Heo <tj@kernel.org>
+Cc: Waiman Long <longman@redhat.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260809082111.3827531-1-qirui.001@bytedance.com>
+ <20260809082111.3827531-2-qirui.001@bytedance.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Ridong Chen <ridong.chen@linux.dev>
+In-Reply-To: <20260809082111.3827531-2-qirui.001@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-CgpBdCAyMDI2LTA4LTA4IDE0OjI2OjMzLCAiSGFuZ2JpbiBMaXUiIDxsaXVoYW5nYmluQGdtYWls
-LmNvbT4gd3JvdGU6Cgo+T24gRnJpLCBBdWcgMDcsIDIwMjYgYXQgMTI6MjM6NDVQTSArMDIwMCwg
-UGFibG8gTmVpcmEgQXl1c28gd3JvdGU6Cj4+IE9uIEZyaSwgQXVnIDA3LCAyMDI2IGF0IDA1OjA3
-OjEzUE0gKzA4MDAsIEhhbmdiaW4gTGl1IHdyb3RlOgo+PiA+IE9uIEZyaSwgQXVnIDA3LCAyMDI2
-IGF0IDAzOjU5OjI4UE0gKzA4MDAsIFFpbmdzaHVhbmcgRnUgd3JvdGU6Cj4+ID4gPiBGcm9tOiBR
-aW5nc2h1YW5nIEZ1IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPj4gPiA+IAo+PiA+ID4gUmVt
-b3ZlIHVudXNlZCAncnBsbmxoJyBpbiBjb25udHJhY2tfZGF0YV9pbnNlcnQoKSwgYW5kIHJlbW92
-ZSB1bnVzZWQKPj4gPiA+ICdycGxubGgnIGFuZCAnbmVzdCcgdmFyaWFibGVzIGluIGNvbm50cmFj
-a19jb3VudF96b25lKCkgYW5kCj4+ID4gPiBjb25udHJhY2tfZmx1c2hfem9uZSgpLiBUaGVzZSB2
-YXJpYWJsZXMgd2VyZSBkZWNsYXJlZCBidXQgbmV2ZXIgdXNlZAo+PiA+ID4gc2luY2UgdGhlaXIg
-aW50cm9kdWN0aW9uLgo+PiA+ID4gCj4+ID4gPiBBbHNvIGZpeCB0eXBvOiByZW5hbWUgbWlzc3Bl
-bGxlZCBjb25udHJhY0tfY291bnRfem9uZSgpIHRvCj4+ID4gPiBjb25udHJhY2tfY291bnRfem9u
-ZSgpLgo+PiA+ID4gCj4+ID4gPiBSZXZpZXdlZC1ieTogRmVybmFuZG8gRmVybmFuZGV6IE1hbmNl
-cmEgPGZtYW5jZXJhQHN1c2UuZGU+Cj4+ID4gPiBTaWduZWQtb2ZmLWJ5OiBRaW5nc2h1YW5nIEZ1
-IDxmdXFpbmdzaHVhbmdAa3lsaW5vcy5jbj4KPj4gPiAKPj4gPiA+IC0tLQo+PiA+ID4gdjI6Cj4+
-ID4gPiAgIC0gRHJvcCBGaXhlcyB0YWcgYXMgdGhpcyBpcyBhIGNsZWFudXAsIG5vdCBhIGJ1ZyBm
-aXgKPj4gPiAKPj4gPiBJZiBub3QgYSBidWcgZml4LCB5b3Ugc2hvdWxkIHRhcmdldCB0byBuZXQt
-bmV4dC4KPj4gCj4+IFdlIHdpbGwgaGFuZGxlIHRoaXMgdGhvdWdoIHRoZSBuZi1uZXh0IHRyZWUu
-Cj4KPk9oLCBnb29kLiBUaGF0J3MgbW9yZSByZWFzb25hYmxlLgo+CgpUaGFua3MgYWxsIGZvciB0
-aGUgcmV2aWV3IGFuZCBjbGFyaWZpY2F0aW9uLgoKQmVzdCByZWdhcmRzLApRaW5nc2h1YW5nIEZ1
-Cg==
+
+
+On 8/9/2026 4:21 PM, Rui Qi wrote:
+> The cpuset selftests use awk -e to parse cgroup mount points. This
+> works with gawk, but mawk rejects the option. In test_cpuset_prs.sh,
+> this leaves CGROUP2 empty and causes the test to skip as if cgroup v2
+> were not mounted. The same non-portable invocation exists in the cpuset
+> v1 hotplug test.
+> 
+> The scripts only need to pass a single awk program. Use the standard awk
+> invocation without -e so mount point detection works with awk
+> implementations that do not support the gawk extension.
+> 
+> Fixes: a8c52eba880a ("kselftest/cgroup: Add cpuset v2 partition root state test")
+> Fixes: 812c5945bdb8 ("cgroup/cpuset: Add test_cpuset_v1_hp.sh")
+> Signed-off-by: Rui Qi <qirui.001@bytedance.com>
+> ---
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh   | 2 +-
+>   tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh | 2 +-
+>   2 files changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index 400a696a0d21..16c38eb11e63 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -20,7 +20,7 @@ skip_test() {
+>   WAIT_INOTIFY=$(cd $(dirname $0); pwd)/wait_inotify
+>   
+>   # Find cgroup v2 mount point
+> -CGROUP2=$(mount -t cgroup2 | head -1 | awk -e '{print $3}')
+> +CGROUP2=$(mount -t cgroup2 | head -1 | awk '{print $3}')
+>   [[ -n "$CGROUP2" ]] || skip_test "Cgroup v2 mount point not found!"
+>   SUBPARTS_CPUS=$CGROUP2/.__DEBUG__.cpuset.cpus.subpartitions
+>   CPULIST=$(cat $CGROUP2/cpuset.cpus.effective)
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> index 7406c24be1ac..da97f1643f9a 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_v1_hp.sh
+> @@ -14,7 +14,7 @@ skip_test() {
+>   [[ $(id -u) -eq 0 ]] || skip_test "Test must be run as root!"
+>   
+>   # Find cpuset v1 mount point
+> -CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk -e '{print $3}')
+> +CPUSET=$(mount -t cgroup | grep cpuset | head -1 | awk '{print $3}')
+>   [[ -n "$CPUSET" ]] || skip_test "cpuset v1 mount point not found!"
+>   
+>   #
+
+Looks good to me.
+
+Reviewed-by: Ridong Chen <ridong.chen@linux.dev>
+
+-- 
+Best regards
+Ridong
+
