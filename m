@@ -1,251 +1,142 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 169723385B6;
-	Mon, 10 Aug 2026 17:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17CB2431A3E;
+	Mon, 10 Aug 2026 17:39:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786383462; cv=none; b=Az6YRvcVcxz0Bs4qqWcWXTZSDNUvHIjlqc2L2h1392mnJ3WyrGNKuJsI/yEnebCn4atacOPVpcLFqnZEGJDwzZqT43X354SDyDnHv0MZlR5k+yUnnsZvi7mVyzSShI/u0nDhrUkb5Sv2QehK4I/FCv2crkWYCrUZ6xozX/ECZ0w=
+	t=1786383543; cv=none; b=i11YBB6YRs0Tl57bbPjama5a3KeLm9ZQ1sxoVvTqH7DBfBh7YkD32jxC43Gu9t1EEVa86gQO92XyX9cZRPHa8DiwS7OUNy19GukN0MvSUc9EUxWo0l6OZtJBp8GGIY+07QXoI1zNH9t+hPumES3eUD5UGUBVbZIfwexJhXar4V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786383462; c=relaxed/simple;
-	bh=lTTO9OXw5vNLQl5pdoQbMXm3INgyM9+VRXRssH2A4/k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=H0lmMrbJd3+Gt9dOk7wmD6kokzA5BcteDnIgiNybXdD49Dot+ibCRKRBqJf6Xb23ZA6z25awJMn6UO1TFCDGcX6HgaNMR36a/mrFNHnUnc5jd+KrSE+q6eB7Z3b5CQPC3avaT74Sq0zBu4U+N8NOMKfirw2p+kbQuWAOlWWMoJM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9zHXe+a; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786383543; c=relaxed/simple;
+	bh=RfLhOSQvhYAKZE+pQ1F7+bGcU7TqNlrodW+yIygFNfU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Y3MQbvOHYuZ48dUulMHwXVsBMusLVZ4WmEePp1tHvybRqT8buBurm+Wm5zFGhSYHE7an6fPp9rqzGjhp+IeyDJOxcJaF3iAIZ+Nfh50qId+m8tF3K51lCgqWmtY4xnikjQRrmJsnWDYME425WnXM1vpEnNbRIqXZNAxzMnVH4Xk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j2LGryio; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9zHXe+a"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2DCF11F000E9;
-	Mon, 10 Aug 2026 17:37:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j2LGryio"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15BB31F000E9;
+	Mon, 10 Aug 2026 17:39:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786383460;
-	bh=cCkjfXypJR2v+/AHSNaCI4DX4ZfH0QJoQz2XhQgPjXU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=O9zHXe+aARtSwL33CnDRJn0/woco1aLTR1Z2ZIE4QuWj35vrgiuJJdBGrLFraulje
-	 Pj0zjNswaahLPJ8+fcpuSwf1M7QXI+6WN1T/AULK0vSdpkRFHOJ6q94FFTW//sAs2g
-	 KqgGx3OiiQACXiIIWuRqW1g1m5zIplFu1l3shpgA0BfF85h303+OJicPsB6Uch9i5d
-	 W0rdsZf0K8N+CzKUixzQ55JBeoZde4YUOL7zlG+Oh0BbWSFvJqVM7j68dBxuXPZi5V
-	 RlPLho30bUzMWJU0F30JghzGH91ALkZkSmbg/2d380nZnV/b9sA9uJx1PEvpS5n7P7
-	 bqfmsi1LgKrrQ==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: George Guo <dongtai.guo@linux.dev>
-Cc: chenhuacai@kernel.org,  rppt@kernel.org,  pasha.tatashin@soleen.com,
-  pratyush@kernel.org,  shuah@kernel.org,  ardb@kernel.org,
-  guodongtai@kylinos.cn,  kernel@xen0n.name,  graf@amazon.com,
-  loongarch@lists.linux.dev,  linux-kernel@vger.kernel.org,
-  kexec@lists.infradead.org,  linux-mm@kvack.org,
-  linux-kselftest@vger.kernel.org,  linux-efi@vger.kernel.org,  Kexin Liu
- <liukexin@kylinos.cn>
-Subject: Re: [PATCH v4 2/4] LoongArch: kexec: add KHO support
-In-Reply-To: <20260807103714.33074-3-dongtai.guo@linux.dev> (George Guo's
-	message of "Fri, 7 Aug 2026 18:37:12 +0800")
-References: <20260807103714.33074-1-dongtai.guo@linux.dev>
-	<20260807103714.33074-3-dongtai.guo@linux.dev>
-Date: Mon, 10 Aug 2026 19:37:36 +0200
-Message-ID: <2vxzo6f96fmn.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=k20260515; t=1786383541;
+	bh=vbwI0agcJA8dKBs/XlFn0k0bgT/849qJ3MJdymD2ssc=;
+	h=From:Subject:Date:To:Cc;
+	b=j2LGryioIAbJhdF92X/59kdeNBvj6SsaETNGgciPAo+sF6GrpUp4wMQHqFW5WlMb4
+	 7lc745luDx3Pw5hCHiPiCvtQiAp2e1SvhgDWSJo0odnSVVtN9s3oARTz8V5IhBGxKV
+	 cB3/X0Dk7XJulTkyASNTDtPCuQqq2qQG7kncM8kceNJACQ8IM3DuCHePZ7BcIynrRl
+	 rje1Yh+Qomnwe4CA1zs5lFQUn/eZ1kWroLJWP36Ow//nlkD53JQi7i3gC1XqJ7M/xp
+	 2YpgoPHh46ecgSLHqF6+uR4qZtgw0ncNbXsDvyOhyaJsJyK9IFBrmOQEkIBciVvVu1
+	 6b0+BwCgmpCUw==
+From: Jeff Layton <jlayton@kernel.org>
+Subject: [PATCH 0/7] nfsd/sunrpc: harden the netlink listener interfaces
+Date: Mon, 10 Aug 2026 13:38:47 -0400
+Message-Id: <20260810-nfsd-nl-hang-v1-0-2519fdd5bc1a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDc0Nz3by04hTdvBxdkKSuoUGicZJxqqVxmlGiElBLQVFqWmYF2Ljo2Np
+ aAJtJ4iReAAAA
+X-Change-ID: 20260717-nfsd-nl-hang-10a3b3e93f2a
+To: Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, 
+ Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
+ Tom Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, 
+ Anna Schumaker <anna@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ "J. Bruce Fields" <bfields@fieldses.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>, 
+ linux-kselftest@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3324; i=jlayton@kernel.org;
+ h=from:subject:message-id; bh=RfLhOSQvhYAKZE+pQ1F7+bGcU7TqNlrodW+yIygFNfU=;
+ b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBqegytCTjxyAlCmU9Lb96GCo5UZwIFG5V6DrlCk
+ ABGPL7pDJSJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCanoMrQAKCRAADmhBGVaC
+ Fa8TD/94w+tiMY0yC9g+fxatoqhh/NWNScbdu7DdwLz6AoK+157VdOXMJ/sG/9tAu/SqI21xc48
+ 42Aa52QsukAsAu4VFMSLjZbg3ErlyzzMsIt6rgWF0vnaLP4hafLlkBRJ2p2WUCTDjvAjTv6VvJ1
+ ZieQBJLbWfJOxmHVdU9swpHYvsbGQusBjywLdj5ygJNs1Vmm2UA1x+DJ1mApU1uglUcILHt/+1Y
+ oEymgw8B1sPS9iGlair9e7wBHAWKKIz6JrS5KbMZqbx43Ii+LC98KsT8Xc/n0x2zos3siwfuAmB
+ InY2BX4fQff3kNWfUWzo00qXlx0PQbo80zpkLqKFcWZNE8+59LOGrawDN+Qloz0pVdqWF+R10/M
+ kC0sxnBPriRMwZc19raJhK0oEYMz2SyaQ9psoGCcHQkgrdw6RvZfNOmAYOFaAdDv+YFsqSY3+mQ
+ 6EfhEYj59uM1hqThtAFQZ4tnOgI374ThIT/HF2ztkuslhU23AZAnqtYAuhyOmcUL4/u2ykAMgcr
+ Lg+7u+WWOPxG2ZB5DYIoW4xF25kl6+EKvzDqHnJkIMpGHUe940CySMKLtpWKJqVkpFsAvvppj1C
+ 3OOHfMC6EtOiAlkW+PlDFrGSnArYtu6TFUrxj2n8HAliDz8GrfvL5/TUUY03G/FAT7fZK3SDG0n
+ ANgXPMgtSxMR7ug==
+X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
+ fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
 
-On Fri, Aug 07 2026, George Guo wrote:
+syzbot keeps landing in nfsd_nl_listener_set_doit(), where a stall under
+nfsd_mutex blocks every other NFSD netlink op. This is hardening rather than
+a fix for any one report: it narrows what userland can push into that path
+and shortens the worst stalls.
 
-> From: George Guo <guodongtai@kylinos.cn>
->
-> Enable Kexec Handover (KHO) on LoongArch64.
->
-> LoongArch has no boot FDT: the efistub passes the EFI system table and
-> the command line to the core kernel directly, so the arm64 /chosen path
-> (append linux,kho-fdt / linux,kho-scratch and let
-> early_init_dt_check_kho() read them) does not apply.  Follow the x86
-> model instead, which has no boot FDT either: carry the KHO pointer out of
-> band and call kho_populate() directly.  The channel is the EFI
-> configuration table entry added by the previous patch.
->
-> - Kconfig: ARCH_SUPPORTS_KEXEC_HANDOVER is def_bool 64BIT.
-> - machine_kexec_file.c: kho_load_data() builds a small handover blob
->   (struct linux_efi_kho_data) holding the KHO state FDT and scratch
->   addresses, and a new EFI configuration table with a
->   LINUX_EFI_KHO_TABLE_GUID entry pointing to it; both are loaded as kexec
->   segments.
-> - machine_kexec.c: before jumping to the next kernel, switch the EFI
->   system table to the extended configuration table.
-> - setup.c: kho_populate_from_efi() scans the configuration table for
->   LINUX_EFI_KHO_TABLE_GUID and calls kho_populate() from setup_arch(),
->   after efi_init() and before memblock_init().
->
-> Handover is set up by the kexec_file_load() syscall only.  kho_load_data()
-> runs from load_other_segments(), which the older kexec_load() syscall does
-> not reach.  This matches x86, where KHO lives in the bzImage64 loader.
->
-> Tested on a LoongArch machine booting through ACPI/UEFI.  After the kexec,
-> the second kernel reports
->
->   KHO: found kexec handover data.
->
-> and the two-stage test passes: luo_kexec_simple --stage 1, kexec into the
-> second kernel, then luo_kexec_simple --stage 2.
->
-> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
-> Signed-off-by: George Guo <guodongtai@kylinos.cn>
-[...]
-> @@ -55,6 +64,121 @@ static void cmdline_add_initrd(struct kimage *image, unsigned long *cmdline_tmpl
->  	*cmdline_tmplen += initrd_strlen;
->  }
->  
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +/*
-> + * Hand the KHO state to the next kernel through a dedicated EFI configuration
-> + * table entry.
-> + *
-> + * LoongArch has no boot FDT: the efistub passes the EFI system table and the
-> + * command line to the core kernel directly.  So instead of the arm64 /chosen
-> + * FDT path, build a small handover blob (struct linux_efi_kho_data) holding the
-> + * KHO state FDT and scratch addresses, register it in the EFI configuration
-> + * table under LINUX_EFI_KHO_TABLE_GUID, and let the next kernel read it and
-> + * call kho_populate() directly.
-> + *
-> + * Both the blob and the extended configuration table are loaded as kexec
-> + * segments; machine_kexec() switches st->tables to the new table before jumping.
-> + *
-> + * image->kho.fdt and image->kho.scratch are filled in by kho_fill_kimage()
-> + * before the arch loader runs, so they are valid here.
-> + */
-> +static int kho_load_data(struct kimage *image)
-> +{
-> +	struct linux_efi_kho_data *kho;
-> +	efi_system_table_t *st;
-> +	efi_config_table_t *ct, *new_ct;
-> +	size_t old_sz, new_sz;
-> +	struct kexec_buf kbuf = {
-> +		.image		= image,
-> +		.buf_min	= 0,
-> +		.buf_max	= ULONG_MAX,
-> +		.top_down	= true,
-> +	};
-> +	int ret;
-> +
-> +	if (!image->kho.fdt || !image->kho.scratch)
-> +		return 0;
-> +
-> +	if (!fw_arg2) {
-> +		pr_err("KHO requires an EFI boot, no EFI system table found\n");
-> +		return -EINVAL;
-> +	}
-> +
-> +	/* Build the handover blob and load it as a kexec segment. */
-> +	kho = kzalloc(sizeof(*kho), GFP_KERNEL);
-> +	if (!kho)
-> +		return -ENOMEM;
-> +
-> +	kho->fdt_addr     = image->kho.fdt;
-> +	kho->fdt_size     = PAGE_SIZE;
-> +	kho->scratch_addr = image->kho.scratch->mem;
-> +	kho->scratch_size = image->kho.scratch->memsz;
-> +
-> +	kbuf.buffer	= kho;
-> +	kbuf.bufsz	= sizeof(*kho);
-> +	kbuf.memsz	= sizeof(*kho);
-> +	kbuf.buf_align	= sizeof(u64);
-> +	kbuf.mem	= KEXEC_BUF_MEM_UNKNOWN;
-> +
-> +	ret = kexec_add_buffer(&kbuf);
-> +	if (ret) {
-> +		kfree(kho);
-> +		return ret;
-> +	}
-> +	image->arch.kho_data	 = kho;
-> +	image->arch.kho_data_mem = kbuf.mem;
-> +
-> +	kexec_dprintk("Loaded KHO handover blob at 0x%lx bufsz=0x%lx memsz=0x%lx\n",
-> +		      image->arch.kho_data_mem, kbuf.bufsz, kbuf.memsz);
-> +	kexec_dprintk("KHO fdt at 0x%llx, scratch at 0x%llx size 0x%llx\n",
-> +		      kho->fdt_addr, kho->scratch_addr, kho->scratch_size);
-> +
-> +	/*
-> +	 * Build a new EFI configuration table with a LINUX_EFI_KHO_TABLE_GUID
-> +	 * entry appended, pointing at the handover blob, and load it as a kexec
-> +	 * segment.  machine_kexec() updates st->tables / st->nr_tables to point
-> +	 * to it before jumping.
-> +	 *
-> +	 * fw_arg2 is the EFI system table physical address passed by the
-> +	 * firmware/bootloader.  Use it directly because image->arch.systable_ptr
-> +	 * is set later in machine_kexec_prepare(), which runs after this.
-> +	 */
+  1: reject transport names NFSD cannot instantiate, before nfsd_mutex is
+     taken
+  2: cap a listener_set request at 1024 entries
+  3: stop svc_register() losing a registration error to a later program
+  4: bound the local rpcbind client to a single 1s attempt
+  5: report listener creation failures through extack
+  6: listener_set validation tests
+  7: a per-netns rpcbind stub, and the listener round-trip tests
 
-This looks wrong. I don't think you should be modifying the EFI
-configuration table in this way. You also should have this in
-architecture-agnostic code.
+Measured against a local rpcbind that accepts the connection and never
+replies. The wait is paid per listener, since svc_xprt_create_from_sa()
+passes flags of 0 and every listener therefore calls svc_register():
 
-I'm not an EFI expert, but I took a look at how the other Linux-specific
-tables work. I picked LINUX_EFI_MEMRESERVE_TABLE_GUID as my example. The
-table is allocated and installed from the EFI stub (see
-install_memreserve_table()). Then efi_memreserve_map_root() maps the
-table and it is used by efi_mem_reserve_persistent().
+  per rpcbind call   10s AF_LOCAL, 60s loopback TCP  ->  1s
+  per listener       20s / 120s                      ->  2s
+  entries/request    bounded only by message size    ->  1024
+  worst request      unbounded                       ->  ~34min
 
-You should do something similar. Allocate and install the table from the
-stub, and then just update it on kexec. This would also let other
-architectures use this GUID without having to reinvent this again.
+Three things this does not do:
 
-> +	st = (efi_system_table_t *)TO_CACHE(fw_arg2);
-> +	ct = (efi_config_table_t *)TO_CACHE((unsigned long)st->tables);
-> +	old_sz = st->nr_tables * sizeof(efi_config_table_t);
-> +	new_sz = old_sz + sizeof(efi_config_table_t);
-> +
-> +	new_ct = kvmalloc(new_sz, GFP_KERNEL);
-> +	if (!new_ct)
-> +		return -ENOMEM;
-> +
-> +	memcpy(new_ct, ct, old_sz);
-> +	new_ct[st->nr_tables].guid  = LINUX_EFI_KHO_TABLE_GUID;
-> +	new_ct[st->nr_tables].table = (void *)image->arch.kho_data_mem;
-> +
-> +	kbuf.buffer	= new_ct;
-> +	kbuf.bufsz	= new_sz;
-> +	kbuf.memsz	= new_sz;
-> +	kbuf.buf_align	= sizeof(void *);
-> +	kbuf.mem	= KEXEC_BUF_MEM_UNKNOWN;
-> +
-> +	ret = kexec_add_buffer(&kbuf);
-> +	if (ret) {
-> +		kvfree(new_ct);
-> +		return ret;
-> +	}
-> +	image->arch.efi_tables	   = new_ct;
-> +	image->arch.efi_tables_mem = kbuf.mem;
-> +	image->arch.efi_tables_cnt = st->nr_tables + 1;
-> +
-> +	kexec_dprintk("Loaded EFI config table at 0x%lx bufsz=0x%lx memsz=0x%lx nr_tables=%lu\n",
-> +		      image->arch.efi_tables_mem, kbuf.bufsz, kbuf.memsz,
-> +		      image->arch.efi_tables_cnt);
-> +
-> +	return 0;
-> +}
-> +#endif
-> +
->  #ifdef CONFIG_CRASH_DUMP
->  
->  static int prepare_elf_headers(void **addr, unsigned long *sz)
-> @@ -220,6 +344,13 @@ int load_other_segments(struct kimage *image,
->  		cmdline_add_initrd(image, &cmdline_tmplen, modified_cmdline, initrd_load_addr);
->  	}
->  
-> +#ifdef CONFIG_KEXEC_HANDOVER
-> +	/* Load the KHO handover blob and the extended EFI configuration table */
-> +	ret = kho_load_data(image);
-> +	if (ret)
-> +		goto out_err;
-> +#endif
-> +
->  	if (cmdline_len + cmdline_tmplen > COMMAND_LINE_SIZE) {
->  		pr_err("Appending command line exceeds COMMAND_LINE_SIZE\n");
->  		ret = -EINVAL;
-[...]
+- "rdma" is still accepted, so 1024 entries can still mean 1024
+  request_module("svcrdma") upcalls under nfsd_mutex where svcrdma is
+  unavailable. Not counted above.
+- write_ports() reaches the same code with the same mutex held. It is
+  legacy, so it is left alone.
+- ~34min is still ~17x the hung-task threshold, so the reproducer should be
+  expected to keep tripping the watchdog. The durable fix is to make rpcbind
+  registration asynchronous so those RPCs stop running under nfsd_mutex at
+  all. That needs behavioural changes we should discuss first, so it is a
+  separate patchset.
 
+Patch 3 is a flag day for CONFIG_NFS_LOCALIO=y: a registration failure now
+aborts listener creation there too, matching CONFIG_NFS_LOCALIO=n. Details
+in that patch.
+
+Please consider these for v7.4.
+
+Signed-off-by: Jeff Layton <jlayton@kernel.org>
+---
+Jeff Layton (7):
+      NFSD: validate transport name in listener_set before serv creation
+      NFSD: cap the number of listeners accepted in listener_set
+      SUNRPC: keep the first error in svc_register()
+      SUNRPC: bound the local rpcbind client timeout to 1s
+      NFSD: report listener creation failures through extack
+      selftests/nfsd: exercise listener_set request validation
+      selftests/nfsd: add a per-netns rpcbind stub and the listener round-trips
+
+ fs/nfsd/nfsctl.c                                   |  42 +-
+ net/sunrpc/rpcb_clnt.c                             |  12 +
+ net/sunrpc/svc.c                                   |   9 +-
+ tools/testing/selftests/Makefile                   |   1 +
+ tools/testing/selftests/nfsd/.gitignore            |   1 +
+ tools/testing/selftests/nfsd/Makefile              |   6 +
+ tools/testing/selftests/nfsd/config                |   4 +
+ .../testing/selftests/nfsd/nfsd_netlink_listener.c | 920 +++++++++++++++++++++
+ tools/testing/selftests/nfsd/settings              |   1 +
+ 9 files changed, 987 insertions(+), 9 deletions(-)
+---
+base-commit: 0b6d2c7e3abca8d17fddeecb6e4c32a8438ec2fb
+change-id: 20260717-nfsd-nl-hang-10a3b3e93f2a
+
+Best regards,
 -- 
-Regards,
-Pratyush Yadav
+Jeff Layton <jlayton@kernel.org>
+
