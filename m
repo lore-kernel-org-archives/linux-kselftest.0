@@ -1,46 +1,47 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012001.outbound.protection.outlook.com [52.101.43.1])
+Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011012.outbound.protection.outlook.com [52.101.57.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3692E3AFD0C;
-	Mon, 10 Aug 2026 09:51:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADA9B35B634;
+	Mon, 10 Aug 2026 09:51:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.12
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786355503; cv=fail; b=XqeQHJQMVQjzr7eYXDFccqYlNyJHtLj8rCtUYpkCA3WO2eJGhJtrkHlhOMP6PA4Fwd1wo4c9Nyqj6YtCk4jeodxohRMD/OdHbaS5jU44hwx8ycqK8nKdAcMVbuaMcANqU9bvKzwJZUD5wuGYVwH6eUHuxJh7behQXGcScIlvbqI=
+	t=1786355512; cv=fail; b=P2yn9WhCMuLt+YHsBEbcy9+/BDSu9ZgU5OkSSNVSFUQ/VM5pPh/xT4PgtazJBpOMeV7LvVHJ1o2sqGG9fwsr01cv/+i7puXD3aPizsmCR3EN355F4s7e9q9EHV/g5TBT6H4Ml2ONUBTwg6+YViPgK8SEVj/kvlB/zKwLotYSq0c=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786355503; c=relaxed/simple;
-	bh=sdPi9RzDZyliVvHNES/TlcxW05iy47WdgKwoMoYwv3Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=BqypeoKjbZ2T6TN37vr654H/XeF9GCZ3zGdionWhjo0tRmDfrHnnAC1cTWKD0MvNG2STUefBlm6t+zBZhslym1BfLFmloqS1AWY0MK+JLoOQAb937u08emuEfgnigHjExn5ikwsL1H9ZKkbyLCSnPiorBC/Oj+L1VIFJZLKfejo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=ohweEIkv; arc=fail smtp.client-ip=52.101.43.1
+	s=arc-20240116; t=1786355512; c=relaxed/simple;
+	bh=vzdWAMRjzhT5jOKCz2XGS03ZNis4SQ8JULcZ6hOxIwA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=PFT2/l4YYW6be+wTJV3vzfLa2EGn8FluOYudwtBozuQaLTUXv6OR00uhhQXPbdnspYoOevliOwjmS6QNl7K6ngmE3xUKWQZd067xhi5cfC+wlpEVCzW8X/Ava14D/4wqmwEwZHVQP/JmIXWEml+VxcH12DghRfsVttNz5xYTxb0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ogvao+x7; arc=fail smtp.client-ip=52.101.57.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="ohweEIkv"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ogvao+x7"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UEfuHTtHupbVTLYWJGGPSt+DhgJAcCcXKUtq40Bem/poOW1mk6PGoglGxQYkY9IyxSR9c4oIOkARBBFxSX0Q9EPvJZJhgMiyPWuBCujnF4ZwJwPkkRMd7b563WQhb60i1I1KWaNpE/1kr9AAQG6wpjW8J1VG6chlEID5wwL5SA1OcCCMEnLnTilINgtaeKMLsOfpvzID+T3BDp67riRn1SQkN0Qf4A8O1LuFfy7q+ZfrgkNZh+QBcoXHgsAoKexuqsn+L+gc+KaWQot0RYmDyTJZUlFD9Uvr7VwLGKxmb68Ewl23uByMWvQoXKGP7Sig3FDne/gkyzNwtHSSE7kCcw==
+ b=rhfe90yaj+foFZ/r0ohoMWyKt9KaU5MWm5QEaUuz2jd+VIv7GthqgCvRVJkoWCkg9UP/Q4NOYjpO37wKWjMr8JUnHXUrCHMPMsj5hWYcs9Dbi1yJ3AsgJwWU+AHDFBfbeiWi6WIWrGGDZ+jNDA1FqqCLhF/nXPT0oEaPkZX0z291A32phxVFt8gPgFTWQCmiDfHgwLZYdNLI7Euk0mnLZ0WkqwUenei96eVePaKUsgTjYjjJiPA+Q0ajpqNsfBMGEQnt3iwG2is655b4CvMAhkr59zsUXVulXStsnisxERBcvgAkM5eI1PbLlLP0VRy8OXqhkEyLAb9nZ1ZERZlrKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=AWGyxU/TfDaBYg36msx8kQ/E0331NdbuhoARgGptPjg=;
- b=xpnB16rPIT2DrnS8uQLCC91oh3ioud8/DOYGaa6SXs9RL84Vg1HMwjISOmsy0TKdQ5zsT2BE9uSFuiOJePVOdDXK2x7rghbFJWW3CZVcNMEXosHKI1E8Qo4qWlGpIt+ZR9JA8mFaCtxQ2340BnQjQhHw4jZqn56WuT0kCuMRT1wXD6SqIHJwXnTU4Hb03eUf2RL+O1PELzfEoi2g/r2X4PM5CL4/92Kvo0sb3+iiSXWd1rhu4IJOf9oDncLTtj3osNp+XwjPJWQ0CctofRFa/KDeSA4XBMEGIwlSW3tb+3gBnd7NdVt8qfyBzxel4DY/ViFg+X8btQpTOGiNapRd8g==
+ bh=IFdGQSj6EY2Tbp7GUsbbw7lcjbzmbP1Bt4+RL0di7Vk=;
+ b=Njx79+pZttYAfV+pYowaAfHrPU3qAwA/8H900XmwDzVdHYoML7G8mo0kOghTBIpnVnyEaE7egvdkQW6bVtAfHRdz7VQdGd2wh5TqI5Q3J8Ys4qqMidcUgjh5QRmSmPQQJEDhC2eN8nhsivcOarapD4dJ3zqEYD0UkaAPUMc/fXQqKnm3B5bivuLbxuZBkZGm9CoqbpMs567+XONcgbUSSxGTLQpNsZw27MbcpPFh4ygt1K9DGNU6rx9cZ8Rzu40R5Ha8tPxrM6Itnz+S0pBeYEEvLoEDQyF5xUQH8mw84sOth561gRbaqIWFm+JajgMA7kD+OTyXUGkSB0bXSby4nA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=AWGyxU/TfDaBYg36msx8kQ/E0331NdbuhoARgGptPjg=;
- b=ohweEIkvANvkkaBK8TXHBW9IHPTiBAbUt7NR/3OofFJSD4Cn7ijzY09dbl6lDND0luBvn0Y3nLhGkL5ld6BooQAa3TLKGibPHwzQM8vqz+vtgencPDOg9cLx0a7CZlTlnPyy3gR/cCLTuwvY7SU7tybzYRfcvb8pB5y8U2opC0+ir/PP418rB86d932CXsCKe6DtqeWi+W1Me2ecS9h7dYD14gMHYIDNFGkpXrxBeDBIiLTG7OCp9hollG1Ypq+FySQfaJYatiCpeg8QrrHWHog9cWhD89d0oQEDBvbP65z1M4rhPrltf3XUzRp5dIdXInW5h08VnqKZJ0H362nYaA==
+ bh=IFdGQSj6EY2Tbp7GUsbbw7lcjbzmbP1Bt4+RL0di7Vk=;
+ b=Ogvao+x7dDrlChdYhsmB7n4bf4ba51IGlOFPLJuwsk6FrvZ/AUMmeGzDMfQ+oJaGAb92P0c+qLzPXahQW0xg4Vbcq9yW/1jOIXYpHSamXQm+gAdFmnaOqoEOXcnqAgKQ6n3Qtsk2BArH4T4EnTfUPlhWUHv3fh5bABkrVaoM4ghwEkLVaBbXswiaiLnpONOHtqhgz7ysZqoFU/5KooeQC0LhKHibJqgvv4zQUqOzkQMH1oPr0Rkj9BqNGA0fBF5wmRd2FlbkezY7bdjIAEFu5z2I29BKcDQ62VZ8eZWl3+il6dLhYk1FA5VSQ9VH/TxkyH8Ww+N+NeS+wZa0HVkrqw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com (2603:10b6:207:47::27)
  by DM4PR12MB5987.namprd12.prod.outlook.com (2603:10b6:8:6a::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.292.25; Mon, 10 Aug
- 2026 09:51:37 +0000
+ 2026 09:51:45 +0000
 Received: from BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8]) by BL0PR12MB2370.namprd12.prod.outlook.com
  ([fe80::86cf:c3ec:2cf5:74c8%5]) with mapi id 15.21.0292.024; Mon, 10 Aug 2026
- 09:51:37 +0000
+ 09:51:44 +0000
 From: Richard Cheng <icheng@nvidia.com>
 To: tony.luck@intel.co,
 	shuah@kernel.org,
@@ -57,14 +58,16 @@ Cc: Dave.Martin@arm.com,
 	kobak@nvidia.com,
 	sdonthineni@nvidia.com,
 	Richard Cheng <icheng@nvidia.com>
-Subject: [PATCH v2 0/2] selftests/resctrl: Increase L3 cache test coverage
-Date: Mon, 10 Aug 2026 17:51:21 +0800
-Message-ID: <20260810095124.32244-1-icheng@nvidia.com>
+Subject: [PATCH v2 1/2] selftests/resctrl: Add L3_CBM_VALIDATE to check CBM writes
+Date: Mon, 10 Aug 2026 17:51:22 +0800
+Message-ID: <20260810095124.32244-2-icheng@nvidia.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260810095124.32244-1-icheng@nvidia.com>
+References: <20260810095124.32244-1-icheng@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SI2PR02CA0022.apcprd02.prod.outlook.com
- (2603:1096:4:195::23) To BL0PR12MB2370.namprd12.prod.outlook.com
+X-ClientProxiedBy: SI2PR06CA0014.apcprd06.prod.outlook.com
+ (2603:1096:4:186::11) To BL0PR12MB2370.namprd12.prod.outlook.com
  (2603:10b6:207:47::27)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -74,92 +77,221 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: BL0PR12MB2370:EE_|DM4PR12MB5987:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8e2f1d98-dddf-4a35-8539-08def6c4f7ca
+X-MS-Office365-Filtering-Correlation-Id: d8a32dab-2275-4580-ae90-08def6c4fc66
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|11063799006|10067099003|6133799003|56012099006|18002099003;
+	BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|11063799006|10067099003|6133799003|3023799007|56012099006|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	XVGMSUhzEVgCuvPJVTJvAoFUdxgLdcMrVe7JjA/H5f2jNykL8ossmU5okwIHGC39+LqdZM0kGxrtfwwAcLs+in+zzNY2oru9qKS4iGEkAD9Wp4OtO8YmLj7SXF4E3CX7NDvceoB7TJdtca9r6NK5Auvugp1+N/oJwVmg6V3DPuRnMMRiZEaBF20IypzK2uE7iOoSrBOXCCjD0t1Oav2z35v8NWgx/kFIuycn/BcVEI+yUez5g6aT6L6+yt4MB3l6BsWLTrm8CAOuq6eWM20XOVa7B3oNjh0IkEU9pweYIUk+uCvML2BYJHx4F3KBlBnqN7mualhu72uYzINT/qTuMG8pgQOwEs5Zo5zmIOFZpUMp7dcU43nrTo7/utKYjR6kgzXB9UNieSnjVyiFhnWlB6xmoRLdcy3btm4W9HGJMh6QUU3wgTe9ZdtTgNx0Rz59oab7PAKFneVjufUtCTkodfJMRk+J5xdoq32xz5zzAyLRQCseySo5luJEtHZjcmUF08rTTxYEsS5EUxwAFA2HKwn0gphZnGibBK1FmyQ6ngEf3wElNOxGNTd6lsVBSeRFTMveOfyc2EQnjUap1ENIcIwooE7r5IVKpMACLH5ks8TdS/VUGTo/8dnuoh2hOH87ydydZUlYx7Cr57NQataqssS75YrhJdBUCqaZNkgl7Mc=
+	1IK4Lw97ZtxtgxNlvVzUPlyX6NDcLhjI5wv4QKhsvVox4EFMQPHoGOb22QjYBeUKq/xb9snf3jMVyuRUL3ViPVYtRdEDAuQOxmakgJpj0G1TZfd1daZE0Iqaw2dFhIows6p5+KFCT3qYXzvkBbH9BNfmwRLMBwlAguQ7d1ZZtFJq0SroRgVl0V76Mw7FHrDXX2E5jbFJ6KmCLPPsLGm9HiOHqH0XY8yFvDlC1KtamonY91sMI87jQWBwBafGAGS+DWdctwCCXulWieDjImFqEA0lMvvhjb3KGKU2BEU0eSzv14QuOD8mGrCm/wEebEQrRgOn8v+RMS5vWklm8lzKJP9BsLTT/ACEIzstjwKMMppbizJCrqV+zKGaYv9hLoqFJ9JRRvhNVrgZtj4fjMSaX6myEoWvdiLeH2lozEZN5AnpPVCU7QgDckJt9oCr8XXE25KIqcHR8j1WOJpnoI53q0/TVg9SOa+wNXA9YkvfOTaRY9O858D/u3Pv7dmUwrRQkrDiYXy+2rICOhuHHp6+GGiKdukOFVRM+ioNZPmQl60gd65jn41BgTgSSS2Fj7yrKCaCPWO18XIifWZAuncTL2N1qblsm4HpUYgbUQfnm3Ed2vYuqzxlg/E9woz9XffH36rLoWsi0psiDchwS9xNbAtgs2KMnaSRwfEu5+MRG50=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(11063799006)(10067099003)(6133799003)(56012099006)(18002099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL0PR12MB2370.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(11063799006)(10067099003)(6133799003)(3023799007)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7g6Wc4R8uphOT/jX5Y/uPwlLtbUvdBkCC71WXFFIfdF7e0+b2Ou8A8Mzlal1?=
- =?us-ascii?Q?iiu6WYN5hxnmgeSqXDEvv/ILk6xURygmNYo1AONECO6OdcR7KfgyA5bb3n3Q?=
- =?us-ascii?Q?LdeNbhEshAn15nxmCTn9xlB0O423SD4hjQ1MUClPkLVnBu/N10BEUXrNQwBF?=
- =?us-ascii?Q?K7tLGR3EZcwknncgb+wYngJOpPhrAd/Ig480V1PtgX5pWRVtQp2tkQ4WtNO2?=
- =?us-ascii?Q?nrYWsOuIx8D4zqOaeErqQ2bytBx12rSVJjpkLYTZGepybeaPVVGHE6eARSa1?=
- =?us-ascii?Q?2hhh8aN96VxFMnLtEt0CgKt+whiqawM/TJC5J8RKJ9Id47Q6N4y+VIV59PNW?=
- =?us-ascii?Q?pgo1Z5kwBqPKXZ4eVLozsc+zwvDD8KqVZJ9QdwW3cSPb2CWVPepRJdNO4czX?=
- =?us-ascii?Q?rET37zfbT+dnEMCZ1iFcuyedngzinPXvmYZ949vSrUvdNPoBGf8FJvG+FazW?=
- =?us-ascii?Q?tTlDItdQVAxByEZY50aTBZLJQX9XyA9mL+CjOqhLBzICfeHqqSWaJ7PChCkV?=
- =?us-ascii?Q?jZRC7erIK6zhLNvN9uQKEfkD6uWkGEv6x5c3kc7p/FV15zJMzxwOxwTcEDgU?=
- =?us-ascii?Q?KuFiUK+3H0+a4x20Y48QWzzZzvjj6mjXMHE0w7LIrmb6ZqQUr1pVAqqEhRIa?=
- =?us-ascii?Q?eAG4ich69hy/oOK6ZGXqASI5AR6mCwN9njHAMDq16BgAo5kCzZYX6/1o2Gfo?=
- =?us-ascii?Q?SoERdTlvmqcbZGUSA3YQbb0Y+7inWvSyMvsT54+M16Ask++2NtiIdEzdpfx/?=
- =?us-ascii?Q?22pMrFvBfngPSwFKpPQ7EXlELUFFmtMfZbiYJm2Hs65RHKzo/6tglWDG4h/G?=
- =?us-ascii?Q?l27sd3uRXxeaODv221BXoDqlA9PzHUro5ATP99sIM180nRLgrAdmVBfAHEQk?=
- =?us-ascii?Q?6DGhOalYUvBu/vLK7rVi5G2/PeT1RBBege5gzk+K5qn3XvjqUyYwls5R2EdC?=
- =?us-ascii?Q?1Yur+EXET5etQXZNc4ux9LD2yepxVV7tFfsTgeYv4Kf10Zwdr7N4TL+3vSDw?=
- =?us-ascii?Q?bWCeTvAVBFS/TSKWauRnmYCens29RZtn1W4FUAatHrDycptualsCpbE6nCe8?=
- =?us-ascii?Q?R2XInOrxq3DNrBKbyjUqFDWyYRAHwP5sI/q5XyFTuGujHNpKsC/beqsq5u8F?=
- =?us-ascii?Q?v9LI6UNsVhdgLm5WsgS6UEDm56sWrWUkjboyx80KwjsFQjfSzIpxQnJ3w+ZQ?=
- =?us-ascii?Q?gKfaAvGQmyWrL3wmwOvCVhFQysfA75M5I1PfsZ2cSmn1zyd6Vk5hninjFtzu?=
- =?us-ascii?Q?yvi+/esOGXCwMPbE37JmTnOjFcfV9CnouMUxHczoiSGnhVFTELte77SaowHi?=
- =?us-ascii?Q?/yBu+CH04FSaHKflj85QDGvnQO6iu8tvAUduW/QzTharuRuhXgwEuTlLqa0s?=
- =?us-ascii?Q?xjb2mn9nSMh+XEdjNLhlh54uClT6ixqy85M6yvxcJbpTCPkvwBBv0vFG6nbN?=
- =?us-ascii?Q?jg3NR3r7U5YwLi9uJpUPLy4U0jjhHTNBKmChyy53BnMkmuy3vfYHQqx96T4p?=
- =?us-ascii?Q?tzQqzi6BZV0MBoYJaVLVxEv9pQ7tGSNsHZSwMMFeGCcnLCLdVKhwztttY/4c?=
- =?us-ascii?Q?iVmzh3zD7Sjve4+mEsGhU0JKRWZ8azumIKnwNSiw2DQCIKaLcQttutlOYGlE?=
- =?us-ascii?Q?5p3fd4VWfDT5OCLER+IjHkymAwS9rkZszLB6nvsImaFdSpWLJhlzG8U0AstK?=
- =?us-ascii?Q?TxILubAgfzHLOH9CcRdAPpawfnKyci5O5NsEFcufwGf4zYy+i+/3WbMF6oYS?=
- =?us-ascii?Q?ghD/wUHsXw=3D=3D?=
+	=?us-ascii?Q?fJtXnYqHst/A/LT4xm7sbx/92D7pP8xOw6u5hYBTVyUCil+noKNzF7I5NUSL?=
+ =?us-ascii?Q?1XP4mqgZgEc0TLQpSLxxaztbfyZj1cgfzYODuVbDGXtwyeeShmLa/986nwOl?=
+ =?us-ascii?Q?/cCXGCeg15fFtyeax++5wqnhe2MnztMIR+hpalBkx8B2P7JZd7bD/mTtUawS?=
+ =?us-ascii?Q?dy2YyI5d1uJSB9TOm70Bno6yZeQ2FeH8J6qF6i9iQLSZSZTxGBhGIp/CsZFZ?=
+ =?us-ascii?Q?M+lyItKegSFpvwzcReq5N/gghzwn8qOp2w41VpY6v0+WLz1mQZ6IObGqmfXp?=
+ =?us-ascii?Q?62ktWgmFqEGJ/WRuYcRWk4r8AqjQUycz7fbqdaiMpJcCeEItw+YVG6cuvdcm?=
+ =?us-ascii?Q?H8/+qrhLl9NTNqSeFDTB16o0TQXuFh/snBozlCNXBvsVl3DlWDz2qw4bQaxK?=
+ =?us-ascii?Q?rKepJp5LRwqx6EBKAXe1iVLayHHJ7fTMHIhK0Wkc5uby34tVKBPfcd6XjATN?=
+ =?us-ascii?Q?XEcvENIoR+MHq1D1lCH9Dr4Ovzf64nT0Gxm2epuVP0eQag0raOJ5faRb9T9f?=
+ =?us-ascii?Q?rle7c2sYoZ8FMbg46IZLAHabOyFDo1ajYwnlfmmGS0ZPKUKG/VvLlmNEkO6V?=
+ =?us-ascii?Q?DmernzhUiQT3NLlAN+5GXZBqrUsq48pf7xB78JqK53iCgic9k52yroYsIjv4?=
+ =?us-ascii?Q?5YI02q/zV/nlUfEqV9hOVc4xURWy4oRxzAflZkke4fE9Tx89FjIXDHkVciKn?=
+ =?us-ascii?Q?ksS6SRGJk587Lz4SFFzwhaoWVOaa8LeqKSstfILdnnPwnN+h1t+riOyUelYy?=
+ =?us-ascii?Q?4nUWEGWKUldKrl7KyYlLOwRWe8RTl/qIjaxQ9qsZ7nHMuDD+lH3JShGNZ2an?=
+ =?us-ascii?Q?wqPTZ9DlJYv4ZAxp9DxYq9fB6KRz7SflkzHkiouhc/siEE4kugwm+nUo2nXa?=
+ =?us-ascii?Q?3dTi4w5Oj5iP1aQHdcV9YfPvX2udq0RzFZhFmvHpH+sj2nhfeqao3UwLB4xX?=
+ =?us-ascii?Q?wDWfUDYdUGbIp5C63U7Lmhs8LX7CTH2FASp+eomdyIYomJUxTN2cneHQWXzz?=
+ =?us-ascii?Q?BtKojl23E/jqMO/McbSj9OykHTpQIJn8EIKV6a3SXwTbjPGMC3DbHyiR0V3k?=
+ =?us-ascii?Q?Axr/WzwELqbj9BQK8R7s9nPjRRR0MfKJ0wsdJTcY5lspxTY/w8re1byoHhob?=
+ =?us-ascii?Q?BzwIXaxo/vy/iNoqQEUb9OnukCgR/eTnUPMGgwsqfgtXyiGexU9yc1G6a5UD?=
+ =?us-ascii?Q?Xwp9ZpQoDAAtSu+Hs8FS+deP3xYNBCJ2lP9Y3Gtw7njSSLxgbpGPzvw0up1B?=
+ =?us-ascii?Q?MO4pDbykAugFFOB++3E4bRzIJUOFtcvhqwu89IsyqgaGHYauFjFA/wa9OBW3?=
+ =?us-ascii?Q?7cMiMCVM8W7ziijZ8rT2+HN+bhplQODUBaKJHzalhz70wu56t/hP69f4cazF?=
+ =?us-ascii?Q?GozbH+D8G/fe1VOmVrUo8p0U+cHCvzYrqcpZ2BmHJULb4hqMRR3gOzgH5cCQ?=
+ =?us-ascii?Q?zIq9uSGiIFHfmMvfbiF/H3RRgzxYprdmSklXqH/kycSKD7xeK5JZXJvTGrzm?=
+ =?us-ascii?Q?YmXa/60qlwefJHBJ2VMfCKWgFxF5AxOC/LDPVcKEo529GVx+/+eXoroTyNga?=
+ =?us-ascii?Q?mJE2xv2fcQO3q97pvJ4LC3uMQmHRsb+V7tIxx2SjbCnUd9VmIFzbpVdkELdt?=
+ =?us-ascii?Q?jH0HvCxh7Fj4I4eKRlnBjMZmPPjeGGWMvvWhCjgejqVSB+Tqj29ex432H5Wp?=
+ =?us-ascii?Q?zj41x9xTK9bDtHE969hxdhOwlD7YG/ZgWsWmoQH8EyjyUiyn7rWsWGVgWSFz?=
+ =?us-ascii?Q?yWL70q4UPA=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8e2f1d98-dddf-4a35-8539-08def6c4f7ca
+X-MS-Exchange-CrossTenant-Network-Message-Id: d8a32dab-2275-4580-ae90-08def6c4fc66
 X-MS-Exchange-CrossTenant-AuthSource: BL0PR12MB2370.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2026 09:51:37.3775
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Aug 2026 09:51:44.5313
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: v+pJLtqp5j1HRPTZqVJbVxC5FOgDGbSQXGq0yUMF6KY0SYGAgAqLo7xlNwkv9E5bRo3LVajHSwVx6llYnq+rbA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: A4OQjTc0IyCjxf42pMznAYJfJl3OMZVxf9cEl0KciPJUalsGaQQpBUqRW3ETUuYejyKVnepf8ENtd8rdhukYBg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5987
 
-The resctrl selftests check L3 cache isolation L3_CAT and occupancy
-accuracy CMT, but some basic L3 behavior is untested. That CBM writes
-are handle correctly and that info/L3/bit_usage reports allocations
-correctly.
+Add L3_CBM_VALIDATE to verify that resctrl enforces the L3 CBM rules
+advertised by cbm_mask and min_cbm_bits.
 
-Add two self-contained tests for these. Each gates on the feature it
-needs, so it runs wherever that feature exists and skips otherwise.
-They were exercised on an arm64 MPAM platform.
+Confirm that the full mask is accepted. Check the empty mask according
+to min_cbm_bits, and confirm that out-of-range and undersized masks are
+rejected.
 
-Changes since v1:
-- Drop L3_CAT_OCCUP because CMT already tests cache occupancy bounds.
-- Rework L3_CAT_VALIDATE as L3_CBM_VALIDATE to check valid and invalid
-  CBMs using cbm_mask and min_cbm_bits.
-- Rework L3_BIT_USAGE to use valid partial allocations and simplify
-  domain bit_usage parsing.
+This catches inconsistencies between the advertised capabilities and
+schemata validation.
 
+Signed-off-by: Richard Cheng <icheng@nvidia.com>
+---
+Changelog:
 
-Running checkpatch.pl will have warning on patch 1 about string issue,
-I've tweaked it for several times so I'll let you decide whether we
-should decrease the message or leave it as is.
+v1 -> v2:
+    - Rename L3_CAT_VALIDATE to L3_CBM_VALIDATE
+    - Handle empty CBMs according to min_cbm_bits
+    - Check count_contiguous_bits() before using its result
+    - Use KSFT_FAIL and reverse-fir-tree ordering
+    - Use a 64-bit out-of-range mask
 
+Best regards,
+Richard Cheng.
+---
+ tools/testing/selftests/resctrl/cat_test.c    | 91 +++++++++++++++++++
+ tools/testing/selftests/resctrl/resctrl.h     |  1 +
+ .../testing/selftests/resctrl/resctrl_tests.c |  1 +
+ 3 files changed, 93 insertions(+)
 
-Richard Cheng (2):
-  selftests/resctrl: Add L3_CBM_VALIDATE to check CBM writes
-  selftests/resctrl: Add L3_BIT_USAGE to check allocation reporting
-
- tools/testing/selftests/resctrl/cat_test.c    | 285 ++++++++++++++++++
- tools/testing/selftests/resctrl/resctrl.h     |   2 +
- .../testing/selftests/resctrl/resctrl_tests.c |   2 +
- 3 files changed, 289 insertions(+)
-
-
-base-commit: 840ef6c78e6a2f694b578ecb9063241c992aaa9e
+diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+index 371a2f26dc47..a06c57954740 100644
+--- a/tools/testing/selftests/resctrl/cat_test.c
++++ b/tools/testing/selftests/resctrl/cat_test.c
+@@ -357,6 +357,89 @@ static bool noncont_cat_feature_check(const struct resctrl_test *test)
+ 	return resource_info_file_exists(test->resource, "sparse_masks");
+ }
+ 
++/*
++ * L3_CBM_VALIDATE - Verify L3 CBM write validation.
++ *
++ * A full CBM must be accepted. An empty CBM is valid only when min_cbm_bits
++ * is zero. Masks with bits outside cbm_mask or fewer than min_cbm_bits must
++ * be rejected.
++ */
++static int cbm_validate_run_test(const struct resctrl_test *test,
++				 const struct user_params *uparams)
++{
++	unsigned int min_cbm_bits, contiguous_bits;
++	unsigned long long invalid_mask;
++	unsigned int count_of_bits;
++	unsigned long full_mask;
++	unsigned int start;
++	char schemata[64];
++	int ret;
++
++	ret = get_full_cbm(test->resource, &full_mask);
++	if (ret)
++		return ret;
++
++	ret = resource_info_unsigned_get(test->resource, "min_cbm_bits",
++					 &min_cbm_bits);
++	if (ret)
++		return ret;
++
++	count_of_bits = count_bits(full_mask);
++
++	/* A valid full CBM must be accepted. */
++	snprintf(schemata, sizeof(schemata), "%lx", full_mask);
++	if (write_schemata("", schemata, uparams->cpu, test->resource)) {
++		ksft_print_msg("Valid CBM 0x%lx was rejected\n", full_mask);
++		return KSFT_FAIL;
++	}
++
++	ret = write_schemata("", "0", uparams->cpu, test->resource);
++	if (min_cbm_bits && !ret) {
++		ksft_print_msg("Empty CBM was accepted, must be rejected\n");
++		return KSFT_FAIL;
++	}
++	if (!min_cbm_bits && ret) {
++		ksft_print_msg("Empty CBM was rejected, must be accepted\n");
++		return KSFT_FAIL;
++	}
++
++	/* A mask with a bit outside cbm_mask must be rejected. */
++	invalid_mask = (unsigned long long)full_mask | (1ULL << count_of_bits);
++	snprintf(schemata, sizeof(schemata), "%llx", invalid_mask);
++	if (!write_schemata("", schemata, uparams->cpu, test->resource)) {
++		ksft_print_msg("Out-of-range CBM 0x%llx was accepted, must be rejected\n",
++			       invalid_mask);
++		return KSFT_FAIL;
++	}
++
++	/*
++	 * When min_cbm_bits is greater than one, a non-empty mask with fewer
++	 * bits must be rejected.
++	 */
++	if (min_cbm_bits > 1) {
++		contiguous_bits = count_contiguous_bits(full_mask, &start);
++		if (contiguous_bits < min_cbm_bits) {
++			ksft_print_msg("Full CBM has %u contiguous bits, fewer than "
++				       "min_cbm_bits=%u\n",
++				       contiguous_bits, min_cbm_bits);
++			return KSFT_FAIL;
++		}
++
++		invalid_mask = create_bit_mask(start, min_cbm_bits - 1);
++		snprintf(schemata, sizeof(schemata), "%llx", invalid_mask);
++		if (!write_schemata("", schemata, uparams->cpu,
++				    test->resource)) {
++			ksft_print_msg("CBM 0x%llx with too few bits was accepted\n",
++				       invalid_mask);
++			return KSFT_FAIL;
++		}
++	}
++
++	ksft_print_msg("Pass: L3 CBM writes were validated correctly\n");
++
++	return 0;
++}
++
+ struct resctrl_test l3_cat_test = {
+ 	.name = "L3_CAT",
+ 	.group = "CAT",
+@@ -366,6 +449,14 @@ struct resctrl_test l3_cat_test = {
+ 	.cleanup = cat_test_cleanup,
+ };
+ 
++struct resctrl_test l3_cbm_validate_test = {
++	.name = "L3_CBM_VALIDATE",
++	.group = "CAT",
++	.resource = "L3",
++	.feature_check = test_resource_feature_check,
++	.run_test = cbm_validate_run_test,
++};
++
+ struct resctrl_test l3_noncont_cat_test = {
+ 	.name = "L3_NONCONT_CAT",
+ 	.group = "CAT",
+diff --git a/tools/testing/selftests/resctrl/resctrl.h b/tools/testing/selftests/resctrl/resctrl.h
+index 175101022bf3..a6fc688ed997 100644
+--- a/tools/testing/selftests/resctrl/resctrl.h
++++ b/tools/testing/selftests/resctrl/resctrl.h
+@@ -240,6 +240,7 @@ extern struct resctrl_test mbm_test;
+ extern struct resctrl_test mba_test;
+ extern struct resctrl_test cmt_test;
+ extern struct resctrl_test l3_cat_test;
++extern struct resctrl_test l3_cbm_validate_test;
+ extern struct resctrl_test l3_noncont_cat_test;
+ extern struct resctrl_test l2_noncont_cat_test;
+ 
+diff --git a/tools/testing/selftests/resctrl/resctrl_tests.c b/tools/testing/selftests/resctrl/resctrl_tests.c
+index dbcd5eea9fbc..57a4d0815b67 100644
+--- a/tools/testing/selftests/resctrl/resctrl_tests.c
++++ b/tools/testing/selftests/resctrl/resctrl_tests.c
+@@ -19,6 +19,7 @@ static struct resctrl_test *resctrl_tests[] = {
+ 	&mba_test,
+ 	&cmt_test,
+ 	&l3_cat_test,
++	&l3_cbm_validate_test,
+ 	&l3_noncont_cat_test,
+ 	&l2_noncont_cat_test,
+ };
 -- 
 2.53.0
 
