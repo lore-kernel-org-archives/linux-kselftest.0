@@ -1,157 +1,213 @@
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com [209.85.208.69])
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 210C03DD51C
-	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 13:08:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 149BA3C1974
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 13:13:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786367334; cv=none; b=sjON50nhJ4xmkARD7poUlLJCIufhcwoNEKxl1tOvm5UfVOcdUKZ95+ynNlQhqrlx6iiWgQpdqGvONj1YKrly//DLTt5IPM8rpH9qnCbvx/OC3Sq+PypMDbTcdLf+If3LsNrpxcvZds/nW3hcGYPbc++WlqU9ecQfhzEu/KzaxJI=
+	t=1786367627; cv=none; b=SW1FK7XekH0I5hRw0celcpX4WPj3SbkFYw3WrkPlEI/iYFnYreY9HXeZTv1+CftoY6d3Yyygfexhues6f5AxiLdGVAmy4e59GAHFTQ812i0ZVnwXY2ejOlb1ZDTpBTQ5mgWauNSjNKefZoZk5J4JtuAQdl1E6WpMkEvRNNmgVPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786367334; c=relaxed/simple;
-	bh=vBxAOqpXOy3xBw2jLlc1xHZGLUnTc7rwy+EMZmi2RU4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=bBOEUB7mxguOHNGTcRMAj7iOT3rRjRrpvdmUvvHGN6BK8+ifVTunsu1RlGQB67Wc8Icxb/lupzbdg+8vuRYqyBgunNSwTLJz/A2KHJkImVfuC1rAkxXwsTPYNqRPxz13eSBYRXoNFsMqiFVXXVdGpzgrvNhP978bTx9jTNWDPRI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wjfh450M; arc=none smtp.client-ip=209.85.208.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1786367627; c=relaxed/simple;
+	bh=+p361PJ3B+QMHcZkiDEsM9uslCImslOoTSD1bEzCyJk=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ExCK58+NiPvIJ8HW3pHrtVq6+phxCBzkp1cPPJnfwGJfyEOk81POplQ9L8UnxVQY2oQhGb5+sxoATiU8NLRhUlQYbmE6PCvxPknHr0KSzT2pZqKPUNFpI3cIjPveiEz8mJa30PIsax3cMjkRHmwUkrPmAMXyBn++EppG1KvbOT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bqeEJioY; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wjfh450M"
-Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-69eae8773d6so2127437a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 06:08:52 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bqeEJioY"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a1a546a6bbso2419295a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 06:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786367331; x=1786972131; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=oMcbMXyReyKJIZVlqYCZytsphgwWMjfKxVFVMEfDD0k=;
-        b=wjfh450MF/lZ9b81aSP9jT08j1BV6UKDes01K8ph9w9uWjq4UOT04fk7nv8/Adlb4M
-         hVkB+bi3kjkQzKZvQ0dHAv2eaSCQdo2a/1wC4Mw9R7KSbvp84NtwoiHL9dNRi0DtQbPg
-         8v2IFEucuDZvUghWsLduM8J0oqxSK+yUsoiGwDgLE5QTU9vblK2srySjb4rChYmi44Mh
-         +lw1MtdtoY0NDjGUrSENEgqyxA9X09Ph+DiAbJI/WNZ0X9e7YrxZiaW5l/UzFHnyryFa
-         9L+lc/8LOjLz49QUNCl6xRC4OJzwW3HgVlZO+tc9Kk9u0qmJw4RGT4a1cA6bP+nWVgeQ
-         kdYg==
+        d=gmail.com; s=20251104; t=1786367624; x=1786972424; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=omSmpY+SPBy7RnMBwSboFmt1RUmEOInaHtgqQGhZ4w0=;
+        b=bqeEJioYn4bSJgBxcqAJIchULM+3EIjjJDVS5Slu6T3wBa2LvYSpPeJgG9/UhMphai
+         5G75SVGkI5xEvsoymeUuO/Gh5aSDFRw81RTpZK3lqMxlMkdCKP+DHzJLEdq8NTMR7o3f
+         B0gPff9GFMlgbTgYhqTLm+GxjX2xJrFjhyPVuGgJ645g+uWe5kTEgls5vr2j8DZjeWPL
+         5oT+b586PZ8knq1xULscJYsu4oZBS7/87pqdxAeg5eDfAmx3miunA8eUILINNH5873f+
+         u7yq/Uf00P3Ot0+jZQABtOTf5bVNEdmbppGMoV4oFZhQHHHzjYTTHVpEoYKMEpPEc/6O
+         58Gg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786367331; x=1786972131;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oMcbMXyReyKJIZVlqYCZytsphgwWMjfKxVFVMEfDD0k=;
-        b=S76GXXKLU6TgoGHUUZS0vLh5JQp53cl3lEQ98r/3x815QXDzei288MELa2aJ7iJQj3
-         BG86v+e3fmJrhRod17UHLZQI3XoB6Be+rOl8tP5iBWT3pC4qie2xP0G86oi5WeocVBuc
-         Iel48d0Iri/71SwlbTc4asyfWj8V/xJBI+HZIE+j/38SJ0tqDBishCyXI/shfREn26dw
-         5vC6MoBA9aVY0pF6Z53hiEJCNdZElo1ytrowBR45YI/fn1oSx7YpGeMIG10OpFVsNFtx
-         ZjK8RTHFXzlDwiX3E3s2bd1sy3iH+tuFdJvSLzeJUs6KMKSLtyahS92Fw5BrXzzbDBUw
-         fBrQ==
-X-Gm-Message-State: AOJu0YyjYwrIQrnX46YNuB0hM1956LSgCKqOsLcTvqFLj29lzduuMpk9
-	9pY6ERkfg1KGglr/SaGIBOLv6SyM+9p4rnQ66pUnGtKWSEG9ZV7CgmqBod7hofqNaUdejOX6z41
-	LAnl4OJ4Wrh8DpsTUrg==
-X-Received: from edbek14.prod.google.com ([2002:a05:6402:370e:b0:69f:da3d:dc37])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:5048:b0:69a:a4cb:2882 with SMTP id 4fb4d7f45d1cf-6a355db411emr1046692a12.9.1786367331218;
- Mon, 10 Aug 2026 06:08:51 -0700 (PDT)
-Date: Mon, 10 Aug 2026 13:08:50 +0000
-In-Reply-To: <CAEvNRgHW0P78eL0ip799XF+2geKwz7MQrjSFTgvCdUAuh9oykg@mail.gmail.com>
+        d=1e100.net; s=20251104; t=1786367624; x=1786972424;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:date:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=omSmpY+SPBy7RnMBwSboFmt1RUmEOInaHtgqQGhZ4w0=;
+        b=bpkXSQNNJaFJ2A84Pz3sX4Z9DjRVXl4zsRFOhBWg1wWH5S3OgBEcfMVrK+avUSNngB
+         HMh2oKNaL8wgoyNVXeAGaGeWNl/kRlxvbx+up3h5nMn2K0HzVAy5j38YgwVo759tr1bU
+         c3f3iSJpRENmkcF8i2DxBbeCxsfJ8kfLoNl65uu3K2AdmRqtFiM5Rzs8bPRAb2yh+L0n
+         g2fzHsypP98h6LIUFg2Ui6g+zm45/Sp0g631zCxeoY1uzNCrOXkTR6CKXGMt83fnj4jE
+         ZujJcyWdfktUNnVDgvy7rZvpv++P+SAbDoVBVrBXTRH4a6Ng2Sct7ehcRdHozcaMkf+K
+         v5Rg==
+X-Forwarded-Encrypted: i=1; AHgh+Rok/MbKvXcAp1sfn6/pBkqUJ5O4+lzhW+sf2Np8Qpp2hz6Kw3tWlPsJqAZcv2US4crkfUHkjOsEdOe26nnWmz0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywg1oUoE9cuDU46VqtsZXCjneYp0S3tvbFhY2T3RxDGnPqPH1wO
+	iBd+eWPdIEuSAxNGL5i1z3WQ4pWC6GzhHVmBHtLJ9X2a4ZNUvcw18ybY
+X-Gm-Gg: AR+sD11vhlyVDhKdfQUFwLOVisNFbO76FlZviHPsE8sXCiP6iDPJZdJ/TMSuYBN2NiG
+	orco3EJb8YEZa+gjf7GqZfE+ltcgrSY2fRYuMr1C4KXcoDnCHWV/Jrmtm5mgAAfugDGVRmiqFym
+	FN12oqadVMA5FoE8GFl7ANWO0FPTXKzErrikwoBvuyIE7LtlFFSPXs8S+svEilYa9r8aPPAvOjA
+	+WJdzb3WfVV7mPT0r50PB/kRzPPUZj7vgz/0TXh90IIYHa6z0Fw5TVrdEzBPRrkGNn8Oua/gAzs
+	Zoa0R0vzTH1Xg6lD19GxmndEjFIfEtUgcknLRLdlwzmsB3WsSqbtvYYvAytkIZbpJ3LasYorKuN
+	1R1WoTO9rG/VulP/RWbJO4dzsGl9RCrgCv8uCtjEXtNdV4zATMU0YC9MqMz/7VTuHCKWUpr+Hwg
+	r5l3fq1gK2jkypVOR7h46CoJ7tiVDlNjSinnFdd4leHxANMis=
+X-Received: by 2002:a05:6402:388d:b0:698:ae69:3992 with SMTP id 4fb4d7f45d1cf-6a1b4b98deemr13567414a12.16.1786367623915;
+        Mon, 10 Aug 2026 06:13:43 -0700 (PDT)
+Received: from krava ([173.38.220.33])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a1e7d5aacesm4507663a12.21.2026.08.10.06.13.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 06:13:43 -0700 (PDT)
+From: Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date: Mon, 10 Aug 2026 15:13:41 +0200
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Avinash Duduskar <avinash.duduskar@gmail.com>,
+	Anton Protopopov <a.s.protopopov@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+	Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+	Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+	Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support for
+ bpf progs
+Message-ID: <annOhedRtHBce3px@krava>
+References: <20260809150111.45000-1-leon.hwang@linux.dev>
+ <20260809150111.45000-5-leon.hwang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-8-tarunsahu@google.com> <CAEvNRgHW0P78eL0ip799XF+2geKwz7MQrjSFTgvCdUAuh9oykg@mail.gmail.com>
-Message-ID: <9huz7bly86n1.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH v4 07/11] KVM: guest_memfd: Add support for freezing mappings
-From: tarunsahu@google.com
-To: Ackerley Tng <ackerleytng@google.com>, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, seanjc@google.com, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>
-Cc: linux-kselftest@vger.kernel.org, andre.przywara@arm.com, 
-	michael.roth@amd.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	will@kernel.org, vannapurve@google.com, maz@kernel.org, fvdl@google.com, 
-	kvm@vger.kernel.org, oliver.upton@linux.dev, kvmarm@lists.linux.dev, 
-	alexandru.elisei@arm.com, skhawaja@google.com, aneesh.kumar@kernel.org, 
-	linux-doc@vger.kernel.org, David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, 
-	kexec@lists.infradead.org, suzuki.poulose@arm.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260809150111.45000-5-leon.hwang@linux.dev>
 
-Ackerley Tng <ackerleytng@google.com> writes:
+On Sun, Aug 09, 2026 at 11:01:02PM +0800, Leon Hwang wrote:
 
-> Tarun Sahu <tarunsahu@google.com> writes:
->
->>
->> [...snip...]
->>
->> @@ -273,16 +284,30 @@ static long kvm_gmem_allocate(struct inode *inode, loff_t offset, loff_t len)
->>  static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->>  			       loff_t len)
->>  {
->> +	struct inode *inode = file_inode(file);
->>  	int ret;
->> +	int idx;
->>
->> -	if (!(mode & FALLOC_FL_KEEP_SIZE))
->> -		return -EOPNOTSUPP;
->> +	idx = srcu_read_lock(&kvm_gmem_freeze_srcu);
->> +	if (kvm_gmem_is_frozen(inode)) {
->> +		srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
->> +		return -EPERM;
->> +	}
->>
->> -	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE))
->> -		return -EOPNOTSUPP;
->> +	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
->> +		ret = -EOPNOTSUPP;
->> +		goto out;
->> +	}
->>
->> -	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len))
->> -		return -EINVAL;
->> +	if (mode & ~(FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE)) {
->> +		ret = -EOPNOTSUPP;
->> +		goto out;
->> +	}
->> +
->> +	if (!PAGE_ALIGNED(offset) || !PAGE_ALIGNED(len)) {
->> +		ret = -EINVAL;
->> +		goto out;
->> +	}
->>
->
-> Continuing from [1], this guard is actually meant for PUNCH_HOLE... I
-> wonder if there could be a deeper refactoring to check when actually
-> punching a hole, basically the equivalent place as kvm_gmem_get_folio()
-> in the flow of fallocating.
->
-> Will srcu_read_lock() be taken in a nested way for the fallocate case?
-> It can be taken in a nested way with some intricacies, but maybe if the
-> freeze check can be done just as the folio is about to be removed (as
-> described in the above paragraph), it would avoid this nested locking
-> here.
->
-> [1] https://lore.kernel.org/all/2vxzzf0kl3dt.fsf@kernel.org/
+SNIP
 
-Instead of avoiding on remove folio, We can just add the freeze check
-across the PUNCH_HOLE, So there will be no nested lock anymore. Nested
-lock is just with fallocate populate -> kvm_gmem_get_pfn. So this nested
-ness will be removed with this update.
+> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+> index eddd259d3776..fc51ea2428be 100644
+> --- a/kernel/bpf/trampoline.c
+> +++ b/kernel/bpf/trampoline.c
+> @@ -1572,12 +1572,23 @@ static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
+>  			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
+>  			       struct bpf_tracing_multi_data *data)
+>  {
+> -	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+> +	if (tr->func.ftrace_managed) {
+> +		unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+>  
+> -	if (bpf_trampoline_use_jmp(tr->flags))
+> -		addr = ftrace_jmp_set(addr);
+> +		if (bpf_trampoline_use_jmp(tr->flags))
+> +			addr = ftrace_jmp_set(addr);
+> +
+> +		ftrace_hash_add(hash, data->entry, tr->ip, addr);
+> +	} else {
+> +		void *old_addr = tr->cur_image ? tr->cur_image->image : NULL;
+> +		void *new_addr = im ? im->image : NULL;
+> +		int ret;
+> +
+> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, new_addr);
+> +		if (ret)
+> +			return ret;
+> +	}
 
-~Tarun
+hum, so IIUC this sequentially attaches to target bpf program as it
+would with current API, so there's no attachent speedup, right?
 
->
->>  	if (mode & FALLOC_FL_PUNCH_HOLE)
->>  		ret = kvm_gmem_punch_hole(file_inode(file), offset, len);
->> @@ -291,6 +316,9 @@ static long kvm_gmem_fallocate(struct file *file, int mode, loff_t offset,
->>
->>  	if (!ret)
->>  		file_modified(file);
->> +
->> +out:
->> +	srcu_read_unlock(&kvm_gmem_freeze_srcu, idx);
->>  	return ret;
->>  }
->>
->>
->> [...snip...]
->>
+>  
+> -	ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>  	tr->cur_image = im;
+>  	return 0;
+>  }
+> @@ -1627,6 +1638,18 @@ static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+>  
+>  static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>  {
+> +	if (!tr->func.ftrace_managed) {
+> +		void *failed_addr = tr->cur_image ? tr->cur_image->image : NULL;
+> +		void *old_addr = tr->multi_attach.old_image ?
+> +				 tr->multi_attach.old_image->image : NULL;
+> +		u32 orig_flags = tr->flags;
+> +		int ret;
+> +
+> +		tr->flags = tr->multi_attach.old_flags;
+> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, failed_addr, old_addr);
+> +		WARN_ONCE(ret, "bpf_trampoline_update_fentry failed: %d\n", ret);
+> +	}
+> +
+>  	if (tr->cur_image)
+>  		bpf_tramp_image_put(tr->cur_image);
+>  	tr->cur_image = tr->multi_attach.old_image;
+> @@ -1643,6 +1666,7 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>  	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
+>  
+>  int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+> +				u64 *keys, struct bpf_prog **progs,
+>  				struct bpf_tracing_multi_link *link)
+>  {
+>  	struct bpf_tracing_multi_data *data = &link->data;
+> @@ -1651,18 +1675,18 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>  	struct bpf_tracing_multi_node *mnode;
+>  	struct bpf_trampoline *tr;
+>  	int i, err, rollback_cnt;
+> -	u64 key;
+>  
+>  	for_each_mnode(mnode, link) {
+>  		rollback_cnt = i;
+>  
+> -		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+> +		if (progs)
+> +			err = bpf_check_attach_target(NULL, prog, progs[i], ids[i], &tgt_info);
+> +		else
+> +			err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+>  		if (err)
+>  			goto rollback_put;
+>  
+> -		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
+> -
+> -		tr = bpf_trampoline_get(key, &tgt_info);
+> +		tr = bpf_trampoline_get(keys[i], &tgt_info);
+>  		if (!tr) {
+>  			err = -ENOMEM;
+>  			goto rollback_put;
+> @@ -1691,6 +1715,9 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>  	for_each_mnode(mnode, link) {
+>  		bpf_trampoline_multi_attach_init(mnode->trampoline);
+>  
+> +		if (progs && progs[i]->aux->tail_call_reachable)
+> +			mnode->trampoline->flags |= BPF_TRAMP_F_TAIL_CALL_CTX;
+> +
+>  		data->entry = &mnode->entry;
+>  		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
+>  						 &trampoline_multi_ops, data);
+
+IIUC for bpf_program targets the actuall attachment is happening in
+here, right?
+
+the rest of the function logic won't execute, because there won't
+be any data in the reg/noreg/mod hashes..?
+
+you seem to use the tracing_multi API to ease up attachment to multiple
+bpf programs and end up with just single link fd for all attachments
+
+I think it'd be cleaner to have separate api or code paths for that
+
+jirka
