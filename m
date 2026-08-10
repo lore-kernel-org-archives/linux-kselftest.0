@@ -1,60 +1,124 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4842740D59E;
-	Mon, 10 Aug 2026 19:36:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874C940D59E
+	for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 19:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786390581; cv=none; b=JdgBUY1Y/jDKZQ1PS69KbDwvGymh+YH9ANQbjZrYpEee++8Vb3bab3iRU4PcaQI6Q3n5DWZYQYpMNqCP2Snfpj8HtMjnZlhxDrQsJCyZQjfwL4plp588Bo7GjjtsURT56gkDnvwFcOzZsAXI9GfWFmfr4v0GndTKRwIXy+JQU1U=
+	t=1786390621; cv=none; b=qNAxP7stzdySpiL04/oV6JucJvOUwxYVrbLdiWivWVT0HQ9th7gehwPaKcG/WvcFc7IhfE0ynqJBeFXIBUDGa/Gb1NNZdaJpAsemxku5gv99oYhkcJKlq+F8nM9K4JPG2W+p+f7UQa0XQzr2anUmDL/O6yCdGwU+DevAObSZAZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786390581; c=relaxed/simple;
-	bh=QaI3f+JgF1cl1I0tD7pA+f7nPitkkzyAZMje2nFqsLk=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=qVgICKIDVAtoOztf6GLYJ7mkyrqn9u9t16kSdUDxYNJb3NPScBDaOLEjMvI3H1XFmqrFqUM2U4VmmcwVB6TwXrqfRWGzvcCciSV9ihst6ThfihyfrdGRH1GQ0R+MX/Dsblwbnqx1AgGA8vwgBltIZ5y92kHTU7otK+cDZW4oo4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UQVEehY7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786390621; c=relaxed/simple;
+	bh=+vVAKun35hRGw+gwnIJQxOswWypKvX3Q6pgw7V+MUiM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=G9AkPUETTSehPcADzKka3e7CovAI1tx1NY/i5Z2ggIIt0ladb2G99ImdYo/dVee8jiLeNpfUQ7yYlvdbOXXokh3NvYLFRFozJLPcswRQIFFfz+0xOURr8wwjWdxxqY5mt4RZ7ZyGQfGD6Dl7YTbs4OUaKk4LnQrORTN1lT30Qbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nxfi2+HP; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UQVEehY7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A70AE1F000E9;
-	Mon, 10 Aug 2026 19:36:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786390579;
-	bh=QaI3f+JgF1cl1I0tD7pA+f7nPitkkzyAZMje2nFqsLk=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=UQVEehY7HSlr66TOhq+af3CBjJ5wRNmXYupmVUQYkncrpoywumEZ3DQ2oPyZBfqDD
-	 Vp9PEcUAUXhkmvxuu+8o9+depA/pOgRRXzg+ciQjyDoHDF55mH/AbEvvKgzvkHKdh9
-	 0s7erUfjRJejA5lUZgYnAtCgbwlZmAgycPOBzm+Y5CbXtI41EbujKTKpq6/grdIhPV
-	 FieCtlEKNViHqDUW7YSxn5ew0CZIZ5IhKT5kDBXnW6ogL8mQLwZrGTnIAJGB2/Cd5d
-	 XOZzBTQ55/vzFpAAIXmk5KsF56T7obVEYlmIXxnteCDkQFgeL8uS6Tar6ThrIEbHFi
-	 kWAzgLETl8/XA==
-Date: Mon, 10 Aug 2026 09:36:19 -1000
-Message-ID: <ae7f84d5a5b8da71f57a9102b30b8491@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Rui Qi <qirui.001@bytedance.com>
-Cc: longman@redhat.com, ridong.chen@linux.dev, hannes@cmpxchg.org,
- mkoutny@suse.com, shuah@kernel.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] selftests/cgroup: Avoid awk -e in cpuset tests
-In-Reply-To: <20260809082111.3827531-2-qirui.001@bytedance.com>
-References: <20260809082111.3827531-2-qirui.001@bytedance.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nxfi2+HP"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38ea87caafeso1623740a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 12:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786390620; x=1786995420; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=bkxBdM9TZi9JLjzHaRgivZKf0+W+j5yecJ/UiPRgOE0=;
+        b=Nxfi2+HPhcZNJ4gFpWTzauATv0sXDhYBq/zXo1Oc1TRm7nI4gRrvUMKZTIK/a4Ga8x
+         NA4pbEIspWUq85ep3C1v+q34mxepxkqQbuIFRGQESmQJiJQuGSZRBZaFL+03RAGUZW7I
+         /nSuxaJxVinQZdjln1SdP1pLlGZZed10JzwGR1QpWHWbGNAxfFLu5ibrKKOEZZvWZMVi
+         b+143CxoUzc75ba7QmNCdpntkU4gwbjWrL9Pb7SoKr2xNCJQZo5TltenvwTXkWLmAfWW
+         kfV+oHXOp14X21PcjZn2Mf3FL6bbYHtfzZx5v7L+3SWZceICFTWsMP2c2ivu4tRkXi65
+         GZ0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786390620; x=1786995420;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bkxBdM9TZi9JLjzHaRgivZKf0+W+j5yecJ/UiPRgOE0=;
+        b=fYizCKNZvTSBPytM2lokLv2FMIy2FLXpITJL13582pOUDtFSVPJXmvnR7ZCily938o
+         suLwAjUJhwD0nmu3Ay58ORT4feuAD59wwtEWydECxhkEF7HfPwvWVzeui75ZqWTwaxn2
+         dyqDeiVHXHQJ1kB39jclmID2wUNsZ+ysg7UM7TPVLQDByZxwUQZbDxgeHO3BnuTNqb5A
+         ERdG/ch2NH22ZoxoF/rMPMMhznkf5GJVel2Cda6eEUUvoXhCkvErtQ018avnIG38Ns6T
+         OWPP17J122g22gTcMEDRr0EN3gwZweXpmAHoDOGraS+ncr1wc4sz2sHaeYFZ/TpsNwzX
+         l2qw==
+X-Forwarded-Encrypted: i=1; AHgh+Ropt/2Bu+iB+SMdfOh8wZQyr1e5vE5E7EXk5wijGexGrKzoLzOgXiqJjClZgzphMgO43WUD1ads0BU9u7Ulpr8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz53iRiq28UlNCLSlycw9D25ItG3ygFVJJsrH+qMSXcqMjbvAyv
+	IK4UXVU8wHUFqlmdZkn0EE8XpyqVyYNx6BN565MQOu7C9ICiC69qh9Y2
+X-Gm-Gg: AR+sD13wza/hgub0HU5l7zvi3yZVjRnDDZSpdi4y65RXzQEcIceemmss349/zbmqgz1
+	YH8hUTQTjrzvXI7pt8VXB6FVFAgfZHlZUUxC4yHpvoEYQY3d3OwAsbseIc8LJqkvUAi9PQycNbQ
+	mddK8B5Yd1VvRmqrsWv+SAhuWwFFIYfiFf7AVVwN8Ef7GTH/mhrYzhUr9gpL9hhh/i4T624jCv0
+	v9H9vflXt90cVz4MT0xmLSxHxxPD228dJ4FUmQiaeMM8DDdaNHPyy4sCVCgqcwlHuQ5ap2PS1Vs
+	ZOKNEgI1F1ug/4W0NyWCEXQzrLoQaFCmPrbjKDFdWKH1efTBLnzjZyeryI5iIqQI2K74jouzxnA
+	+OV/mfdZMEVHt+lixi0pmuzoTVFOArTPYkbUhKjBjuD0gmgHYcrXqw3oBUeL0koRK7VEiJBdVN9
+	sSzbJnuBFUcUBHtMzVppyL2U0km9E2OIDTLOYxiL3LEjiyabPpfglop+ZX7jGrz57stnLkmiVmF
+	9C2splDZMn4gar6
+X-Received: by 2002:a17:90b:1e43:b0:392:7f74:58c9 with SMTP id 98e67ed59e1d1-3927f745de2mr15777147a91.15.1786390619744;
+        Mon, 10 Aug 2026 12:36:59 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-392d51c333bsm800057a91.8.2026.08.10.12.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 12:36:59 -0700 (PDT)
+Message-ID: <394bdd5e8cd366cacaa6ced8a32e851b43e67e11.camel@gmail.com>
+Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Test RCU iterator state
+ pruning
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Ning Ding <dingning04@gmail.com>, bpf@vger.kernel.org
+Cc: memxor@gmail.com, ast@kernel.org, daniel@iogearbox.net,
+ andrii@kernel.org, 	linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, shuah@kernel.org
+Date: Mon, 10 Aug 2026 12:36:56 -0700
+In-Reply-To: <20260807004320.134069-3-dingning04@gmail.com>
+References: <20260807004320.134069-1-dingning04@gmail.com>
+	 <20260807004320.134069-3-dingning04@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
 
-On Sun, Aug 09, 2026 at 04:21:10PM +0800, Rui Qi wrote:
-> The cpuset selftests use awk -e to parse cgroup mount points. This
-> works with gawk, but mawk rejects the option. In test_cpuset_prs.sh,
-> this leaves CGROUP2 empty and causes the test to skip as if cgroup v2
-> were not mounted. The same non-portable invocation exists in the cpuset
-> v1 hotplug test.
->
-> The scripts only need to pass a single awk program. Use the standard awk
-> invocation without -e so mount point detection works with awk
-> implementations that do not support the gawk extension.
+On Thu, 2026-08-06 at 17:43 -0700, Ning Ding wrote:
 
-Applied to cgroup/for-7.3.
+...
 
-Thanks.
+> +SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+> +__failure __msg("expected an RCU CS when using bpf_iter_task_next")
+> +__flag(BPF_F_TEST_STATE_FREQ)
+> +int BPF_PROG(iter_tasks_rcu_state_pruning)
+> +{
+> +	struct bpf_iter_task it;
+> +
+> +	bpf_rcu_read_lock();
+> +	bpf_iter_task_new(&it, NULL, BPF_TASK_ITER_ALL_PROCS);
+> +
+> +	if (likely(bpf_get_prandom_u32())) {
 
---
-tejun
+Could you please convert this test to inline assembly?
+The presence of 'likely' might not be sufficient to guarantee
+the codegen pattern, so we usually resort to the assembly for
+tests where that is important.
+
+> +		/* Keep the outer RCU lock active. */
+> +		bpf_rcu_read_lock();
+> +		bpf_rcu_read_unlock();
+> +	} else {
+> +		/* Create an unprotected gap. */
+> +		bpf_rcu_read_unlock();
+> +		bpf_rcu_read_lock();
+> +	}
+> +
+> +	bpf_iter_task_next(&it);
+> +	bpf_iter_task_destroy(&it);
+> +	bpf_rcu_read_unlock();
+> +
+> +	return 0;
+> +}
+> +
+> =C2=A0SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
+> =C2=A0__failure __msg("expected an RCU CS when using bpf_iter_css_next")
+> =C2=A0int BPF_PROG(iter_css_lock_and_unlock)
