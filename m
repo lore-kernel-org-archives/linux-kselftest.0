@@ -1,141 +1,119 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63812432E70;
-	Mon, 10 Aug 2026 17:39:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36820432E93;
+	Mon, 10 Aug 2026 17:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786383546; cv=none; b=nEJgMzzZHZFv/mH1DWTVa7f+IWlceEZOkHbFBy6/1bLeQXaEQmiTA4KqF+0LkD3Iqd/9XrZe5ISSmSff7fm0OyJZ90oGzrJ/eYtQujwPxp4PQSWmYlE7FVtFGk/fw7RIzikFnObLeDa3/iJStaCHDQyvmu/gmnTiWJyC4pKz2W8=
+	t=1786383547; cv=none; b=EPw2vKgvNtK0I+N1N1jPpEzVrg9EM1HBqbBfpQn4cNBE64eNbLzZ3phNHZr1yzaVUGbaxyZSyiWsRZStlJph85+BBxqJdVa+nFmJTORZOwWizITq3KFYpgIXUv0H9zo3cx8P+CXLBmC6hCarrDDPLcA4tO7Z+3nEDwyaLp+mo9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786383546; c=relaxed/simple;
-	bh=wvCDV6FUUGUKLu+qd8tUSkHX6KpxGk5Xwj978KtfzJA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HGTZjsOpqQGsWYnmzM6yWKlAc28mZ9g/d2zyiVOI1vOH/K8Nvs+jHXyDYLla86d4ULRHurhOHAs3PT9PVXezI/fu2pmEbXKq8jQw7+SnYnesnJODtGWCY3+aVxUxTuRv/KjbKloMMJ53LBmw+PT2PKkFstAARzXSY+SUlOzwfjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FjXzEOdJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786383547; c=relaxed/simple;
+	bh=Fy+B1k2FCnaKIoHjyoxcd0duChUWH6ux2biCUHj4zP8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=iyRL6IfXckzIxD64R3T8uG67kwXII8/uZazwxHZ8mkj8ajjdkdlzO7ra92ArGol57G+NxzaXUiGij7kbq3HFndurJAB6Ie0h1Rkv2kEvC9Kn9or98M3nsfRF6YsFd2j3PNARLfkiuQKEFVHWm5dHk1ARarwhHdFYpNMVA0ZRoKI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XwJWbYMf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FjXzEOdJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96CD61F00A3D;
-	Mon, 10 Aug 2026 17:39:03 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XwJWbYMf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F51B1F00A3A;
+	Mon, 10 Aug 2026 17:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
 	s=k20260515; t=1786383545;
-	bh=X1CGXomtQU4g6qOdGivQ1WvTQyymrShiwvPN5yiskEg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=FjXzEOdJMtIq4cU8yX8LhNWXjIl6CYLc90IYhlcvb5o3hlFr3tYG3nGfEVeGvV6oV
-	 EqLwqCbLvMLiVfqB88NGbpWvxlgZO7K9wfkQbJDfcAF1N6881b/r6Ko+hYkmeImNF3
-	 lzovQhKNVQGay99K6KPtO7RbKA6+qWtajosJFcrsFi6qkOI7FBLNdosh6LHyw8hAUs
-	 j07bQbAEtX+Sg2LuW8eo4jHLiChLmMQxbPlyFM0RtCqeBrOdT6ftE4YxE4Y8Qs6Ekx
-	 XyQNWc0iL4wPe3+0V5SBPUVEiQ/5fWj8m0geZpOIQb0G90dfa27JkHrYf2re06FgK5
-	 BsY4DSWjpjJbg==
-From: Jeff Layton <jlayton@kernel.org>
-Date: Mon, 10 Aug 2026 13:38:49 -0400
-Subject: [PATCH 2/7] NFSD: cap the number of listeners accepted in
- listener_set
+	bh=jk4/iqf3QlrsL8m2XoV0Xf9bF4tI4hIm7T5gSdo0XHA=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=XwJWbYMflVEGgLIja1EWAoDBtXPLApa/NkhtMQDGRnVjjt8ci9J1uJS4baCLClDhH
+	 JhCTVMEaM4RnoWd5AE7v1RSt4+WHhsIMue+11gnSAPlkTWA3jsm/MztKnqM9HYEeYg
+	 F3HSfe9YPb6L13yci31ejGgFbBoYJK2sLluFBiRbBIi3K1112oKRwXmMH8XCDjiNUL
+	 O4zDHyOMnNvMLmr5Ff9Bj2+8yk4LsoiqXXgEIHKDsq6F5hm/JS2p/xGzzmlILvoWnP
+	 Ji1fJM1uOHgWg47TYrlX+f49ixOfpnWV5UxPoLlXiAw19dKwWcQVnkKgo3rIGsRrsP
+	 InFqbiVqMUrdg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: George Guo <dongtai.guo@linux.dev>,  rppt@kernel.org,
+  pasha.tatashin@soleen.com,  pratyush@kernel.org,  shuah@kernel.org,
+  ardb@kernel.org,  guodongtai@kylinos.cn,  kernel@xen0n.name,
+  graf@amazon.com,  loongarch@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  kexec@lists.infradead.org,
+  linux-mm@kvack.org,  linux-kselftest@vger.kernel.org,
+  linux-efi@vger.kernel.org,  Kexin Liu <liukexin@kylinos.cn>
+Subject: Re: [PATCH v4 3/4] liveupdate: luo_session: include linux/mm.h for
+ virt/phys translation
+In-Reply-To: <CAAhV-H4pK10ONo=viJyUJBiiFb_7pbB9LaNkQWH=83r+7E0iTA@mail.gmail.com>
+	(Huacai Chen's message of "Mon, 10 Aug 2026 22:37:25 +0800")
+References: <20260807103714.33074-1-dongtai.guo@linux.dev>
+	<20260807103714.33074-4-dongtai.guo@linux.dev>
+	<CAAhV-H4pK10ONo=viJyUJBiiFb_7pbB9LaNkQWH=83r+7E0iTA@mail.gmail.com>
+Date: Mon, 10 Aug 2026 19:39:01 +0200
+Message-ID: <2vxzjypx6fka.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260810-nfsd-nl-hang-v1-2-2519fdd5bc1a@kernel.org>
-References: <20260810-nfsd-nl-hang-v1-0-2519fdd5bc1a@kernel.org>
-In-Reply-To: <20260810-nfsd-nl-hang-v1-0-2519fdd5bc1a@kernel.org>
-To: Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, 
- Olga Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, 
- Tom Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, 
- Anna Schumaker <anna@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- "J. Bruce Fields" <bfields@fieldses.org>, Shuah Khan <shuah@kernel.org>
-Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
- netdev@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>, 
- linux-kselftest@vger.kernel.org, Jeff Layton <jlayton@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2696; i=jlayton@kernel.org;
- h=from:subject:message-id; bh=wvCDV6FUUGUKLu+qd8tUSkHX6KpxGk5Xwj978KtfzJA=;
- b=owEBbQKS/ZANAwAKAQAOaEEZVoIVAcsmYgBqegyy+HMsMUh/WsODuvmO1Xu1PfDS0WptqlDkD
- Y/vWn+nNpeJAjMEAAEKAB0WIQRLwNeyRHGyoYTq9dMADmhBGVaCFQUCanoMsgAKCRAADmhBGVaC
- Fd7xEAClWvltEm6zzGnaIxLS6go3jwsSmnOk+ADwAZAPh2DWuioWGsUfM6kiuA2KOLlvw6zxUa1
- xOZdlzGZmRyVOWkAWvC2TXVVf08vLOVx0dxte/qhkCtByDgO9yHk6v/buJA7FLtdK4yMsYw1hGE
- fLaYTGG3tr2aiaYXPNQZ+2kqnCgCaAusitRK9ZB26Ple+yT4e2qS9Kn3fsGwr2U8x5PtCMO8Sge
- wjHatple8fbreMar6dTWr5B+mun6/uSpvYcQ6ClOE/LDyHcvq4UU0ZvcasYfmz5++FnymiE4BU1
- uNRc1zulcRnA0mnbj/R6OoaWMjB1PTFH1XpL+xvm+uCIgsPJnLdNvIfywxEvH1i4PnKS2RlHAdZ
- EUfY3vNlRRt0w9nQb2q0ZTEU52JiVgdH9Y7UM6FSXVhnv+cv6yCEA314OOcOfqk6GDyox7JgsSw
- 5jJFETrGNe5BCRug5LwjXoBIEjS+nwtw4zdN0RDg3jG7jCTOZmZVj70FcBw2qnnGASlaVvyIVJr
- 4039kqnmgU+zoKeiGTiD5Jh+WgLFqPij+uIq5LXWtwW+VzUfE3gMGnmkl52PS+UA1q283pEdvTB
- WkWyUGzvU1Qsrca4dbCLK8y1ul4DU8J8S3bNmEEpLHe3bHfvqT9PnVHfhYruAnAiuUfX5byiM5x
- FeB+qQEdC+ALfpw==
-X-Developer-Key: i=jlayton@kernel.org; a=openpgp;
- fpr=4BC0D7B24471B2A184EAF5D3000E684119568215
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-nfsd_nl_listener_set_doit() matches each requested listener against the
-existing set in a nested loop that is O(N * M) in the requested (N) and
-existing (M) counts, run under sv_lock with bottom halves disabled. A
-userland request with a very large listener list can therefore spin in
-atomic context for a long time.
+On Mon, Aug 10 2026, Huacai Chen wrote:
 
-Reject requests carrying more than NFSD_NL_LISTENER_MAX (1024) entries in
-nfsd_nl_validate_listeners(), before any lock is taken. The limit is far
-above any realistic configuration.
+> Hi, George,
+>
+> This should be the 2nd patch.
 
-M is not capped here: write_ports() can add listeners too, via
-svc_addsock() and svc_xprt_create(). But each one costs a real socket, so M
-is bounded by resources, where N was bounded only by the message size.
-Capping N leaves ~1M iterations plus 1024 nla_parse_nested() calls under
-sv_lock as the worst case.
+Agreed.
 
-Signed-off-by: Jeff Layton <jlayton@kernel.org>
-Assisted-by: LLM
----
- fs/nfsd/nfsctl.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+With that done,
 
-diff --git a/fs/nfsd/nfsctl.c b/fs/nfsd/nfsctl.c
-index e5844d8454b8..66931caaaaed 100644
---- a/fs/nfsd/nfsctl.c
-+++ b/fs/nfsd/nfsctl.c
-@@ -1992,21 +1992,22 @@ static bool nfsd_nl_transport_supported(const char *name)
- 	return false;
- }
- 
-+/* Upper bound on the number of listeners a single request may carry. */
-+#define NFSD_NL_LISTENER_MAX	1024
-+
- /**
-  * nfsd_nl_validate_listeners - sanity-check the listener list from userland
-  * @info: netlink metadata and command arguments
-  *
-- * Walk every NFSD_A_SERVER_SOCK_ADDR attribute and confirm that each entry
-- * is well-formed: it parses against the policy, carries both an address and
-- * a supported transport name, and the address is long enough for its family.
-- * Doing this up front lets the callers below assume every entry is valid and
-- * guarantees we make no changes when the request is malformed.
-+ * Walk every NFSD_A_SERVER_SOCK_ADDR attribute and confirm that the list is
-+ * not oversized and that each entry is well-formed.
-  *
-  * Return: 0 if every entry is valid, or a negative errno otherwise.
-  */
- static int nfsd_nl_validate_listeners(struct genl_info *info)
- {
- 	const struct nlattr *attr;
-+	unsigned int count = 0;
- 	int rem;
- 
- 	nlmsg_for_each_attr_type(attr, NFSD_A_SERVER_SOCK_ADDR, info->nlhdr,
-@@ -2015,6 +2016,11 @@ static int nfsd_nl_validate_listeners(struct genl_info *info)
- 		struct sockaddr *sa;
- 		int err;
- 
-+		if (++count > NFSD_NL_LISTENER_MAX) {
-+			NL_SET_ERR_MSG(info->extack, "too many listeners");
-+			return -E2BIG;
-+		}
-+
- 		err = nla_parse_nested(tb, NFSD_A_SOCK_MAX, attr,
- 				       nfsd_sock_nl_policy, info->extack);
- 		if (err < 0)
+Reviewed-by: Pratyush Yadav <pratyush@kernel.org>
 
--- 
-2.55.0
+>
+> Huacai
+>
+> On Fri, Aug 7, 2026 at 6:39=E2=80=AFPM George Guo <dongtai.guo@linux.dev>=
+ wrote:
+>>
+>> From: George Guo <guodongtai@kylinos.cn>
+>>
+>> luo_session.c calls virt_to_phys() and phys_to_virt(). On LoongArch with
+>> CONFIG_KFENCE=3Dy, these macros (in arch/loongarch/include/asm/io.h) exp=
+and
+>> to offset_in_page() and page_address(), both declared in <linux/mm.h>.
+>>
+>> Since luo_session.c only includes <linux/io.h>, the translation unit fai=
+ls
+>> to build with CONFIG_KFENCE=3Dy:
+>>
+>>   asm/io.h: error: implicit declaration of function 'offset_in_page'
+>>   asm/io.h: error: implicit declaration of function 'page_address'
+>>
+>> Add the missing include to fix these build errors.
+>>
+>> Co-developed-by: Kexin Liu <liukexin@kylinos.cn>
+>> Signed-off-by: Kexin Liu <liukexin@kylinos.cn>
+>> Signed-off-by: George Guo <guodongtai@kylinos.cn>
+>> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+>> ---
+>>  kernel/liveupdate/luo_session.c | 1 +
+>>  1 file changed, 1 insertion(+)
+>>
+>> diff --git a/kernel/liveupdate/luo_session.c b/kernel/liveupdate/luo_ses=
+sion.c
+>> index f38b5b18f3f8..31490ac7b63d 100644
+>> --- a/kernel/liveupdate/luo_session.c
+>> +++ b/kernel/liveupdate/luo_session.c
+>> @@ -94,6 +94,7 @@
+>>  #include <linux/kho/abi/luo.h>
+>>  #include <linux/list.h>
+>>  #include <linux/liveupdate.h>
+>> +#include <linux/mm.h>
+>>  #include <linux/mutex.h>
+>>  #include <linux/rwsem.h>
+>>  #include <linux/slab.h>
+>> --
+>> 2.53.0
+>>
+>>
 
+--=20
+Regards,
+Pratyush Yadav
