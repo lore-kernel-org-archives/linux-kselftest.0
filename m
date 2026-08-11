@@ -1,98 +1,119 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D0C4433024;
-	Tue, 11 Aug 2026 10:32:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4D641A77C;
+	Tue, 11 Aug 2026 10:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786444328; cv=none; b=oeHaVZbgPl5n3XqcJsRwcQuqTuE7LIESw4VeWBINPeQ48QWoLJQcvYUbDyBOf3G5vN/ljz7Ndkjqs0ltxOJBHGbDii12fOpQ2aEJPVQZsr8L8VfGyyrDysT5MsnBFrIA3felsc/8zzytygB8i7RBSv5RCEjCrFzdX2YU5nKjy8Q=
+	t=1786444869; cv=none; b=nTh3F15IgY3Y10iUaP4HKy6QpkcuGl0XT7ld0khBVSxCNfwbXVVsoNdOjQnitS0/m/R/MVZ0S5qGW125gJyix0fUz5TW1fhJnQJgCiuiQqqbr1egg5Xpsc17pwy2hIV7ZARQ09NcZCPwD+2l6NxAfotzJf2HX5lXuVzEE3f/7HM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786444328; c=relaxed/simple;
-	bh=gStdq8IVQqJ0gwSpuGR4KyjP8u00daUPac7gXFqnwdA=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=UAX2mDXZQb5RJ/ziqSBShYPs5hq1kM4ETgEu/BH+jRfjm6yLosIcl8H5XekCdOe8GGgi2xJIkkiTy7DrdDeikp4A3oYew7uiDi+Ks3pXmI8aWAU2yZyFIB6NhdyvrTBtdApqeGHyp9Gd56OzTHh1Ca3aOlyjQkP6m37fpzBN0mk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QkssVT/Z; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786444869; c=relaxed/simple;
+	bh=tyclHrYDCHhWuufJXIrjBWusfgADQYoFaERR+jCpDKQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jyWB4SLSxsoFqxediFelChnyoU4RO8tmkweB7Au1ZkFmBO7VflPe9OaQ1oWcf65m4qXGLOxxCWE+1acXLcJSWDnBPidJJjq3BZuYvNK5jV1tHNSYOqkQ8cz4vozQj8Psvrym9CUspVIS5SJYgPFegvkcyRePwl9QNNYTqa2GnCE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=VO5F2StU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kA4+/zAY; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QkssVT/Z"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81E6B1F00A3A;
-	Tue, 11 Aug 2026 10:32:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786444326;
-	bh=6kqp/Jib2qHuKnuXjTW7DmBQCS/40A0zxBCp5T9KsPM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=QkssVT/ZEngrzN04DrcXhMOGvp2/M5W0FwI70XNEh6QmviL80rjbG/xm8Z8DY/veP
-	 4/5hlZB68qF+W0qhrPBu5QDHdz3LEebs5hqxgz2tSMDSR18UIxm6/2431u8q7I28du
-	 4aEWTQIDWhF2GnpPLVvUbA14iMQp0K+2zHB07Zks59uo8rVarUwQQa6ooozIlDHYvA
-	 Z3mRlx13lH0cw3mBOSJ0fVwwSye7D9hO8Ae9MJcZvPI7XmEu1ahiNwljhCI63aDXFd
-	 ZJDHJ+g49/1tM/69n2VTE+I2MMdqysmC6BCKSzET2ZAzZuovCQj6yokstS57mwsjHh
-	 nB/WQuPbeVmGA==
-From: Pratyush Yadav <pratyush@kernel.org>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Tarun Sahu <tarunsahu@google.com>,  fuad.tabba@linux.dev,  Andrew Morton
- <akpm@linux-foundation.org>,  seanjc@google.com,  dmatlack@google.com,
-  Shuah Khan <skhan@linuxfoundation.org>,  Jonathan Corbet
- <corbet@lwn.net>,  david@redhat.com,  Pasha Tatashin
- <pasha.tatashin@soleen.com>,  Pratyush Yadav <pratyush@kernel.org>,
-  sagis@google.com,  Paolo Bonzini <pbonzini@redhat.com>,  Mike Rapoport
- <rppt@kernel.org>,  Alexander Graf <graf@amazon.com>,
-  linux-kselftest@vger.kernel.org,  andre.przywara@arm.com,
-  michael.roth@amd.com,  linux-kernel@vger.kernel.org,  linux-mm@kvack.org,
-  will@kernel.org,  vannapurve@google.com,  maz@kernel.org,
-  fvdl@google.com,  kvm@vger.kernel.org,  oliver.upton@linux.dev,
-  kvmarm@lists.linux.dev,  alexandru.elisei@arm.com,  skhawaja@google.com,
-  aneesh.kumar@kernel.org,  linux-doc@vger.kernel.org,  David Hildenbrand
- <david@kernel.org>,  yan.y.zhao@intel.com,  kexec@lists.infradead.org,
-  suzuki.poulose@arm.com
-Subject: Re: [PATCH v4 06/11] KVM: guest_memfd: Move internal definitions to
- internal header
-In-Reply-To: <CAEvNRgEVxQS2r0_iPHciV=NEKFzwnrfitp-QdP1keAg5Ud7-TQ@mail.gmail.com>
-	(Ackerley Tng's message of "Thu, 30 Jul 2026 11:12:54 -0700")
-References: <20260728121138.1103610-1-tarunsahu@google.com>
-	<20260728121138.1103610-7-tarunsahu@google.com>
-	<CAEvNRgEVxQS2r0_iPHciV=NEKFzwnrfitp-QdP1keAg5Ud7-TQ@mail.gmail.com>
-Date: Tue, 11 Aug 2026 12:31:59 +0200
-Message-ID: <2vxztsp13q3k.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="VO5F2StU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kA4+/zAY"
+Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id F1C767A0148;
+	Tue, 11 Aug 2026 06:41:03 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-11.internal (MEProxy); Tue, 11 Aug 2026 06:41:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1786444863; x=
+	1786531263; bh=LhfTMBV0u5ndx99DLMPhYIAC66Bi8zfIMpwTBOVt0wA=; b=V
+	O5F2StUknBK9oZiR760IyT1PghodioaXSxnYVlYbeDM5rXY9HRu1AE9sG6KGQpI2
+	fXZ23btKvWHDOIH/+tg/j/4mmp9G39OPVUeBtxh2SQO3ututKnaeEnjkdUXPXiK/
+	9W8wKpS1Fwuktc3hAC/PFnwiH+3BMe2sdab1Vpj3QUErR8slb8swbkr9W2IYswvK
+	kRDc1m5BFjisfcW+Ls1xAO9km1GjGn1ElOT6NhU0hTdfLuA8eHOJQo423w7ROX3K
+	9mQXxAp8RE9E83uxNLpCzYseLYa2FqScN+2fhHLVgnSyvg2XSUKw40Mq5fwEeH4f
+	2eiR0/a8ZV0n0wLnF1PzA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1786444863; x=1786531263; bh=LhfTMBV0u5ndx99DLMPhYIAC66Bi8zfIMpw
+	TBOVt0wA=; b=kA4+/zAYRbaM86lWsXdChPAG+znmYTXO3/vAIOhqUCDhp0GlxwG
+	/9u+TldD0sQAcA3Ax31MxdE+C6l9QUARKHu8YZkchREL88NoQsXSdIu2nwoIUVNk
+	fTeU2MYpvW4Fx51oEPsONG74Er8Ovi8bdYvp+rSL/xvZAL+r+FBGpsdFtr62ufEl
+	4nDkug4eb2p2Rxf6IX79c3T4xifJ2DgOP47qFxrkzUvHTShOfHbDn0maGrimzl1W
+	w1z8ehgladpPecr/jPQ15UxRaB3r2n3qwWHv5YPhNj6Pli8/5OujX9OKF85Ewuld
+	ZmuEnYB/iVTYmLt6nUb9G41ny37hqqigBLQ==
+X-ME-Sender: <xms:P_x6arQE4CmZQeV3AfuIvJZO1LeAPbv7Bn0mI27PeAjVmMIaNVGNYg>
+    <xme:P_x6aoqLcH1JifPHM9fcTm74_QH797mCfiTcSl9OepiSPfc5iOMUkVTlChH1_LF8E
+    9aA5YN7UGGDevHjzhWARNZpPj4CUISEDBb-uDM-pJ5euSL4Cgce8A>
+X-ME-Received: <xmr:P_x6at2ATKXhYGVNBVqhk--O1g58rs8etWNlgPu2qJSTqISh-5SrJN6tlXw>
+X-ME-Proxy-Cause: dmFkZTGhtI7V57Fx6tcs3/GlFdg82lPItonlqnd7qTADeeqVJI2rylRDTox7wxzy3jmGcb
+    zskKqqOUCs6zsYEloKJyLsHjh9Nyhap5U17NPmwsIT3XPpoWjFxfQXO4A7EUQaqKuzu9RA
+    tZYrWQ+o0HcvLP+oItdeInO0MeR7KWXVk6cRkReQA1lj6ReD5D8DDw/DhglzdR8fGqs3cr
+    PHFchAj6VI1G/PT6TxkBpx3uJ3nlunEzqnW5rRp14xngs+F7QTb0KzO9aZJe8cL/tHNmaQ
+    9+hYiQCVN2xl9rRf+mK+dl7fzemUDRKdj1SlFgiR25x+LXYgtejS/SMz7lYycITlhj9crn
+    irRziUIXmPE6dO89W8lszDp9mudAsDZPSzyk4WAbXDQtGA4SPLDXgOWpvpQHR1a2fJvFz5
+    7WDzMWe3gFJJTfrOx2Y7Qw7dDTev/Td9Y6yYXMU/HIpy097VlXwmy3QrBf2SzIIkxzyk0c
+    avy9RZEmNwV/9fdSr/jmxFABLvpthBrosfqLofiG7PIJpU0T76QzlVLrQ7S3E5jywgqrzo
+    tDqXwF4ANY3MfFxAlm15RkSMTzk9UllyR2pYs+gjm4oBo+M2nBIR3irpcLzKNVZIsAONPs
+    mClToD0YJ2xAF0GRTSEN+3pOjJD2VpLI3rG9wx6rQs0EeAjPlIeYCGlgPy+w
+X-ME-Proxy: <xmx:P_x6av7WRkyTpxSxTsMk_7UyKP0Rtkq85rhSdfQ7QsmoPUH0-j4icw>
+    <xmx:P_x6apT3yl2W4uZFTeVFgn-iHltNfKqBuOGKxYKYbv-5WW1M7q4GIQ>
+    <xmx:P_x6akWf-BC9j-JPxasp4nuZYsI3DC9G8RgpA0SUuXUyPl0I8eoaVw>
+    <xmx:P_x6auFkGolJNzQoxr_zIkp717X0Q9SPvFrql5EEZfnkyEyKYAstKw>
+    <xmx:P_x6amk4LGpAR7t-e0flzdmRuwH2HrXZKx_8_KaQgKPD_WQBzCgST4Um>
+Feedback-ID: i934648bf:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Aug 2026 06:41:03 -0400 (EDT)
+Date: Tue, 11 Aug 2026 12:41:01 +0200
+From: Sabrina Dubroca <sd@queasysnail.net>
+To: Chuck Lever <cel@kernel.org>
+Cc: John Fastabend <john.fastabend@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net 1/2] net/tls: Fail tls_sw_splice_read() after a
+ failed async decrypt
+Message-ID: <anr8PY66jUrIWcvJ@krikkit>
+References: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
+ <20260806-tls-splice-crypto-fix-v1-1-a2624005a286@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20260806-tls-splice-crypto-fix-v1-1-a2624005a286@kernel.org>
 
-On Thu, Jul 30 2026, Ackerley Tng wrote:
+2026-08-06, 20:44:07 -0400, Chuck Lever wrote:
+> When an async decrypt fails, tls_decrypt_done() records the error in
+> ctx->async_wait.err and calls tls_err_abort(), which stores it in
+> sk_err. tls_sw_recvmsg() and tls_sw_read_sock() each read
+> async_wait.err once they hold the reader lock and fail the call: a
+> record that did not authenticate breaks the connection.
+> 
+> tls_sw_splice_read() has no such check, and sk_err does not stand in
+> for one. tls_rx_rec_wait() tests sk_err only inside the loop it
+> skips whenever a record is already parsed, and the first reader to
+> reach sock_error() clears it, while async_wait.err persists. A
+> splice therefore keeps delivering records on a connection that
+> recvmsg() and read_sock() refuse to read.
+> 
+> Read async_wait.err in tls_sw_splice_read() as the other two readers
+> do.
+> 
+> Fixes: f314bfee81b1 ("tls: rx: return the already-copied data on crypto error")
+> Reviewed-by: Jakub Kicinski <kuba@kernel.org>
+> Signed-off-by: Chuck Lever <cel@kernel.org>
 
-> Tarun Sahu <tarunsahu@google.com> writes:
->
->> Extract 'struct gmem_file', 'struct gmem_inode', and GMEM_I() from
->> virt/kvm/guest_memfd.c into a new internal header virt/kvm/guest_memfd.h.
->> Also split __kvm_gmem_create() to expose a non-static
->> __kvm_gmem_create_file() helper that returns a 'struct file *' instead of
->> an fd.
->>
->
-> This is done basically to support a new virt/kvm/guest_memfd_luo.c
-> file.
-
-My $0.02 on this: I think it is useful to split out the live update code
-into a separate file. It makes for easier reviews, and puts a clear
-boundary between core and live update. We have done it for memfd/shmem
-for example (see mm/memfd_luo.c) and for other live update series in
-flight like PCI or IOMMU.
-
->
-> Would like to know what Sean thinks of this! I'd like to know for future
-> guest_memfd work too.
->
->> These internal definitions and helpers allow upcoming guest_memfd Live
->> Update Orchestrator (LUO) preservation code to access guest_memfd
->> internals and reconstruct guest_memfd file instances from preserved state
->> without installing them into a file descriptor table up front.
->>
->> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
-[...]
+Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
 
 -- 
-Regards,
-Pratyush Yadav
+Sabrina
