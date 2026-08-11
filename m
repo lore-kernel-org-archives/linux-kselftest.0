@@ -1,98 +1,80 @@
-Received: from canpmsgout02.his.huawei.com (canpmsgout02.his.huawei.com [113.46.200.217])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70496382298;
-	Tue, 11 Aug 2026 13:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.217
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3328F40F740;
+	Tue, 11 Aug 2026 13:50:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786455139; cv=none; b=N2pRAgHqaxYgom6v4OlxtnSFGU1bSC6Jyu3qozJFGn/Ocmcj5kfgQJZB5aOpfBVqDsEYv1g4k2Q0xGXsftbrlKwr53029n7PzZn+UT+K2vxl612GvBP/7XBBQChBZY6XFvKk1nAEgxNCV8QaJLKgVFXoYf/Yns+In6/bIs2MTOc=
+	t=1786456263; cv=none; b=O8qbHG2ahQBNMc6r1kmUJa+1EAYdHLbU9SHCJFWr73oKmv4/E+DtFLc2H5eFBTjSDxeOZ9u7DzfoB3plABJHTNKJwQA6SCnFOq0jO3zYPnrWmXPKOKttMLookQFVKR68fiSM5OY5MC5QOpp+R0v8ZxLKJz9OSXj64kasbBkRSLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786455139; c=relaxed/simple;
-	bh=7oUk7vcZMZh7Kmnjr0sRE4TUfpBeeMTt+zlm+6qAkq8=;
-	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=lf3NUTjbLURSFcNqxw0eAan+jZwuhtCyuaOMLBoaHHvfUjkFIt9KmScO/B+9J7KpjoNzTke6SVuB/1+RKPFsQVmnTFtde4JufOIW3XmdOZqoQMCqbmT2BmN8UK/u/GeUuc1419bta4c0OyyZyQf8txs7Gy9JM4bUZUK8NMTq7c4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=1eWBaKqw; arc=none smtp.client-ip=113.46.200.217
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	s=arc-20240116; t=1786456263; c=relaxed/simple;
+	bh=XQnR3FwMk43aX3E6wiqFSGbhBRnjD7g3DycvM9/dCuQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=D3X1GMCGYzNFpsDo2uRkqzHsq02OFJLhb/E49OxAqioYElSrAzwM87sYKXb7amOaKRupPJrf/1bTox4514OA76a5UYb8hN859notoEEfrviUAlBPYuoaCimPsBoQnsndpPqmDjU5/s1ONm/mHi0DVXttJgPBQHCzSyUJmofO19k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCdElYSt; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="1eWBaKqw"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=7oUk7vcZMZh7Kmnjr0sRE4TUfpBeeMTt+zlm+6qAkq8=;
-	b=1eWBaKqwvWQTJuOPnnjp6koX97ircDeqhOomYz9PRZGrQn38a3eLyzDdexfoau1XDMSz5J6Fz
-	pD7EntVYieru84JzuQ+bD0FXZZgNx9weiEXKuBMH4JiZ/jSSxBwoqAIShMwcwpky75vbO8ZWZVW
-	HV6pLlt7Sm86/Cixlkdd+Z8=
-Received: from mail.maildlp.com (unknown [172.19.162.197])
-	by canpmsgout02.his.huawei.com (SkyGuard) with ESMTPS id 4hKC2T5jlGzcb0T;
-	Tue, 11 Aug 2026 21:21:53 +0800 (CST)
-Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
-	by mail.maildlp.com (Postfix) with ESMTPS id 73EB34057D;
-	Tue, 11 Aug 2026 21:31:59 +0800 (CST)
-Received: from [10.67.120.192] (10.67.120.192) by
- kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 11 Aug 2026 21:31:58 +0800
-Message-ID: <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
-Date: Tue, 11 Aug 2026 21:31:57 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCdElYSt"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32D61F000E9;
+	Tue, 11 Aug 2026 13:50:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786456255;
+	bh=BIbM2EuvbgXn7Yp0pCHKcZ2yAr1UuFLoWeHyxVzgAVk=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=jCdElYStzQpkBAscxnOGCuZvQEdKZKxSKhdD2ZVZILD0opEWmMOsOJxHqd7VuMaKu
+	 cNAJ5QeAqzl3FuEH6UNeTkmneJtknnzAi3A/q/yIHmYHGEM7hkCQYQS+IJhMoRKT+Q
+	 dIynMCPFs3qB8gtLrAD3OnPebVFw2SyLvuUhyjebPEVw6UiqxpXIbpc3nrvvDoi7zQ
+	 slvuHz5zqNgvfeJvYet+JjCyBnNVcJLkxOtgj7IZ0BA/N1gUfIrOr73uPY7ZbfJcJJ
+	 BTF70TVm3ufEXZAWDb4H+f/Th0V9zkfwgGKVkkoW0POuJzusj82pxSi0WsmKpdpwhc
+	 qo29UujUZ3bSw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568EB3810900;
+	Tue, 11 Aug 2026 13:50:12 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-CC: <shaojijie@huawei.com>
-Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
- the RX path
-To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
-	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
-	<virtualization@lists.linux.dev>, <mst@redhat.com>,
-	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
-	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
-	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
-	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
-	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
-	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
-	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
-	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
-	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
-	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
-	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
-	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-From: Jijie Shao <shaojijie@huawei.com>
-In-Reply-To: <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
- kwepemo500018.china.huawei.com (7.202.195.199)
+Subject: Re: [PATCH net 0/2] net/tls: Fail splice after a failed async decrypt
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178645621096.532553.2035307199203449109.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Aug 2026 13:50:10 +0000
+References: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
+In-Reply-To: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
+To: Chuck Lever <cel@kernel.org>
+Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
 
+Hello:
 
-on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
-> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
->
-> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
-> segment with the CWR flag set is received. This is incorrect because
-> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
-> aggregation. Consequently, no valid ECN signals are carreid, meaning
-> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
-> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
-> the upper network stack.
->
-> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
-> in hns3_gro_complete().
+This series was applied to netdev/net.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
+On Thu, 06 Aug 2026 20:44:06 -0400 you wrote:
+> tls_sw_recvmsg() and tls_sw_read_sock() both read ctx->async_wait.err
+> once they hold the reader lock, so a record that failed
+> authentication fails the call. tls_sw_splice_read() has no such
+> check. sk_err does not stand in for one. The first reader to reach
+> sock_error() clears sk_err, while async_wait.err persists. A splice
+> therefore keeps delivering records on a connection the other two
+> readers have already refused.
+> 
+> [...]
 
-Tested on hns3 HW (2x 100G, direct cable, openEuler 24.03, kernel 7.2.0-rc6).
+Here is the summary with links:
+  - [net,1/2] net/tls: Fail tls_sw_splice_read() after a failed async decrypt
+    https://git.kernel.org/netdev/net/c/976df67f463d
+  - [net,2/2] selftests: tls: cover splice after a failed decrypt
+    https://git.kernel.org/netdev/net/c/8a4222973913
 
-tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets carry
-tos 0x0, while non-aggregated packets keep their ToS/ECN marks — so the
-zeroing is done by HW GRO, not the sender. Before patch, CWR packets had
-SKB_GSO_TCP_ECN set (0x5 = SKB_GSO_TCPV4 | SKB_GSO_TCP_ECN). After patch,
-all GRO events gso_type=0x1 (SKB_GSO_TCPV4 only), no 0x5 observed.
-
-Tested-by: Jijie Shao <shaojijie@huawei.com>
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
