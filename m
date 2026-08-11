@@ -1,226 +1,278 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1434E33556D;
-	Tue, 11 Aug 2026 17:57:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58E85376BE2
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 18:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786471038; cv=none; b=nMglGDRI1rxK1HNrfStN3L8P8AltGMuHSFzu5ZUWwvZs/bR8uWyQVCy/8RPx/ci9as+7aK4PeqYF2H4KPSZ4BdizeIpdOaHuV1nCYTFy8qfWggH6ffM/xPVHAgc7P5gYo2TOQIPyJKj6y+tc9n4HyPxhM86SzVADU4dbA/Qit8w=
+	t=1786472217; cv=none; b=L5G08J3w5Uc2urn0RdOXekMnWERDhDKFiImySzSq+lob97/2SZBmGxCyRt/K4bU7YgUK+C6yYfUptYMP7SC+GED99eMqbtVrONFedndD3lKfy2CGJd4NHLEyXeNdzx4qsO8GG9tu+TEkw68Xf96jd3iBCQESQHoJYKyBhxs8y9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786471038; c=relaxed/simple;
-	bh=lc6nlfL/TgrlC747A3IEU0ciMhetr5c6SQFU+wpDSB4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qHSOObfUnUBLX2Nwc4DxY04WWPNYgua55Z9OBODhiDTt/C6CJQ6JzgWAkoKwGkLFdMVLONcY4rrUNOnCxvVNB/pi8j/ujrzs2DNkrALn43c1a4UyDw//l24eMpD8ulnttoT1xWAOM/N397qixLEHDRzLSueEng27nMyD0a59OR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X4emHB7M; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786472217; c=relaxed/simple;
+	bh=AumMWY1ubn4SyyhsX+ZeHNFSWmr0ptQKDNdlTMYytNk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VzYWGOBa6DpbvyKC1TjakWGs3Xqdz1NLYhIoKOtQYI2WTmY5qtdACZKIPMsPyFY/c4s6h/b83yVlwyBkXFAVc5EgB6QHU0gjYp9YdpzyIN6eh4gVgJkwhWqa3HLoXg7xQt1Q1ooaDNKjQHrAE7/HVu9y1PojhEaly2caVujK0ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qgIQ/YuO; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X4emHB7M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 086321F000E9;
-	Tue, 11 Aug 2026 17:56:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786471036;
-	bh=g/k363n5Lvqavno9fCoFoqYAurRBI/pjeBdWiyEPQAI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=X4emHB7MFkge8y440tlJsYBHJo5+N8Li59e/0ORXOxym8rC+y/HdLt15DOSVbQWZ1
-	 4HO9ZhlCXXfzjkUtIBxtAGmKsTbVUwax3Osp2lGhzk5U6PlORe0UqDJZF2aS14FEkG
-	 AncR9K+gj0URdsSSUZaOsznpEDLwe/cJqEhunPqw+hFAeWd3SOCySFNhesYu2UURLH
-	 3x+CVp0x/ZkCUXlvWC5Vm+AnAcaZt7I+AF0LdrdCIhLZoEehItGo3B1D8Zo7s9HOQL
-	 KUGYasF/2xyLJJbsiIa9x3ecW1a3ytFa0oB+z3tdXlL8ksBKDj0DPO6yA1//U+UCRc
-	 A8CF2e7vWz+TQ==
-Message-ID: <4c638fc5-5a74-43d0-b5bf-d7ef893cb994@kernel.org>
-Date: Tue, 11 Aug 2026 19:56:57 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qgIQ/YuO"
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-8143daf89c7so1208597b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 11:16:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786472215; x=1787077015; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FmmD1hAxyqj/8ubLIuskVYDVdJ5Fqw/YM97R28jKxTg=;
+        b=qgIQ/YuO3fp+Q0/Kr5PPfHNIsk6Jmjl5wIT6XLF73coTeC7jFBvFgeL1/gUz9LQLtG
+         7+jiRct3pSq/EJMAp/16oSMskri0Y7HXTkpbQQxUS1Nzbi7n5+VB54ogpQrffqynhNyU
+         mFovD6iSDVyxpitKEI/fcXKEqEbMv32luCaZFubg90SPUFSUeeEUQCs6atXblQGxv4Tu
+         04ET2qh+vCMD21h8/4TVxVrETKFR46XnpjG2YemBas1Dg/E2g3l98Q3Dwud5KxCrPnK7
+         ZMRSnTWvfEthRFLIS0HE2jE3Z1YsxxeOZwG67Zzn38nWSDHVIadC0dIPpz2L6lS4KA86
+         nipA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786472215; x=1787077015;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FmmD1hAxyqj/8ubLIuskVYDVdJ5Fqw/YM97R28jKxTg=;
+        b=ZLCPqFK+E1KZTBtU0gHeDjqBJz/W4VQIP106YpqiGF9kgf4pdwKrp9XJTKi/FlFgs/
+         9wRtjgbD3NgSY5rYkqBc0gb3hhvqQ4yW2dN8RaFhPGH5ut1xi6RSYgAAjpwozRTyxXbW
+         ok5Bgzg4ghIMq809XRFtzvSv+I1jNuvd1I8S6+ChwaktPywbLTF5Z1JuFEetV7rvIWpU
+         Nh+hD0Txo4pSGWSGmhOvaCcO2TREC6nMpRmF3lycH3z+BsOIauOmCZ4gpAF//VAUCrv2
+         xp4RZAHESKFT3DyLMHS+m5evjqy/54YtlHkmBUWbYiP5wmmhejddZjjPuFO3gRE97G4m
+         vY5A==
+X-Forwarded-Encrypted: i=1; AHgh+RpPPxXU8e9j/Kgn1SAXcSOwPhmZklKOOrNlkzX0O+RQiHW824+NkYTPoENe90jjptGwxZI4Kul/nrKsJaBIgy4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYESOD7L8QtvqXjajltyHTftJtRWk4hVPp0uzChc++Te0DyN/N
+	elq/kn1b0pOeUmxPblb+3klXd8UiXAg6pcMbOZnFRpawhIDWUgnTNFkxPdaluvPJ
+X-Gm-Gg: AR+sD12BeaNT76GlHdnQ9j2XJwvoNbZDxt0ddSn70yparYyUj2mxi9Uhqsi2ZtMGY0n
+	JgMI6/nfEbbpcYfYA4npNUO3K406S20jfIx2R8iQxSElMxFuC8zquizQZEqw+ZTIvcAGZQNmeO7
+	Wn51XWQfbuPsPTChmwpmeVLitqXadcpFLm4XqpHYAJrzCSkyzKrA0wRh8yFiUBnrKbljoj3zwrE
+	Cohk/XYW33oNaJMtj9NYsyLsYE/ZxbWxPw0OG6pFES6iQaVsAl4dWajRCmyTLwKcYQtHPQDUYjx
+	rI0f77E43btiM8NOoHK10XX+TXEJMOT4tpGrnSHszshI3POgoHUX0ZNDiGU51WiP0Ns4a5VRFCY
+	htlHLnYfEvbwl327WJp2kLRh8sOLneNqunlX2L7hUjL9ZCsvubpGFDPy8w5awe2RNyww1g2CBN+
+	ns0vQr9hRfOS+EUd1+EzSXIJdZrBwzy2z8DbXAcspUgtqe5WKHW3nY4+W0kAWaVss5HQ==
+X-Received: by 2002:a05:690c:e204:10b0:81d:d035:eb4b with SMTP id 00721157ae682-82f2d2d09ebmr31608757b3.19.1786472215123;
+        Tue, 11 Aug 2026 11:16:55 -0700 (PDT)
+Received: from houminxi ([163.123.141.225])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-830a9631445sm1414527b3.29.2026.08.11.11.16.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 11:16:53 -0700 (PDT)
+From: Minxi Hou <houminxi@gmail.com>
+To: netdev@vger.kernel.org
+Cc: aconole@redhat.com,
+	davem@davemloft.net,
+	dev@openvswitch.org,
+	echaudro@redhat.com,
+	edumazet@google.com,
+	horms@kernel.org,
+	i.maximets@ovn.org,
+	i.maximets@redhat.com,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	Minxi Hou <houminxi@gmail.com>
+Subject: [PATCH net-next v10] selftests/net/openvswitch: add SCTP flow key support and test
+Date: Tue, 11 Aug 2026 14:16:45 -0400
+Message-ID: <20260811181645.1918420-1-houminxi@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 11/41] KVM: guest_memfd: Ensure pages are not in use
- before conversion
-To: Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com,
- brauner@kernel.org, chao.p.peng@linux.intel.com, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-11-2fc18ee6d3ba@google.com>
- <eb1b5763-37bc-4cb3-890c-1e619e5a8ae4@kernel.org>
- <CAEvNRgHyRdt7rp=5e5FMbTT=fXNfB=np7VWd_GdmJcPOQgps4g@mail.gmail.com>
- <anpQJvFw9s-XP3pW@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <anpQJvFw9s-XP3pW@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-> helps the reader understand what's being checked without having to look at the
-> details, and also helps communicate the ordering dependency without needing a
-> comment.
-> 
-> There are definitely times where the usage of a function bleeds into its name,
-> but usually that's because the name and the usage are on and the same.  E.g.
-> get_user() describes both the usage and the "what".  And it's easy/possible to
-> go too far in the opposite direction, e.g. by giving a play-by-play of what a
-> function is doing, but that's why we have bikshedding sessions :-)
+The ovskey flow-string parser has no OVS_KEY_ATTR_SCTP entry, so a
+flow string containing sctp(src=.../dst=...) parses without error but
+silently drops the L4 key. The resulting flow carries only
+ipv4(proto=132), and the kernel rejects it: match_validate() in
+flow_netlink.c requires OVS_KEY_ATTR_SCTP when the IP protocol is
+IPPROTO_SCTP and returns -EINVAL for the missing key.
 
-Note that the problem I have with kvm_gmem_is_safe_for_conversion() that it is
-all about *conversion to private*, not *conversion to shared*. In that sense,
-the function name is just confusing.
+Register OVS_KEY_ATTR_SCTP in the parse table and add a matching
+selftest that verifies SCTP flow key matching (sctp src/dst port).
 
-> 
->> Perhaps a little ahead of its time,
-> 
-> Ya.
-> 
->> but later with restructuring for huge pages, we also need no additional
->> refcounts other than gmem's own so that restructuring is safe, hence this
->> function name was meant to extend there as well.
-> 
-> Given that I've read that at least five times and still don't understand the
-> nuance, I think it's safe (ha!) to say we'll need to revisit and review those
-> changes no matter what. :-)
-> 
->  
->> In this case "unexpected" (especially since the next patch adds checks
->> for maybe dma pinned and unmapping), begs the question "unexpected in
->> what way"?
-> 
-> Ya, that's why I like "outstanding", it succinctly captures that one or more
-> references have been "loaned" but not yet "repaid".
-> 
->>>
->>> I'd rather add a comment than have this filemap_get_folios_refcount.
-> 
-> +1, the local variable just made me scratch my head.
-> 
->>>
->>> /*
->>>  * We expect one reference per folio-page in the pagecache and one
->>>  * reference from filemap_get_folios().
-> 
-> Nit, please no pronouns in KVM code.
+One listener serves the whole test. socat's fork option handles each
+association in a child, so the flow rules are the only thing that
+changes between the three phases and the listener is never restarted
+underneath them. -t 1 bounds how long a forked child lingers after
+its association closes, and the existing kill -TERM of the captured
+pid on teardown removes the listener itself.
 
-Whatever floats KVM's boat :)
+Also enable CONFIG_IP_SCTP in the selftest kernel config. The config
+checker strips underscores before comparing keys, so the entry sorts
+before CONFIG_IPV6 rather than after it.
 
-> 
->>>  */
->>> if (folio_ref_count(folio) != folio_nr_pages(folio) + 1)
->>>
->>
->> This comment explains what's "unexpected". I can do this and switch it
->> to kvm_gmem_mem_has_unexpected_refs() unless people have other
->> suggestions.
->>
->> I wish there was a folio_pagecache_refs(folio) that
->> folio_expected_ref_count() can share with this, and also
->> folio_swapcache_refs(), to solidify the definition of refcounts taken by
->> the pagecache.
-> 
-> ...
-> 
->>>
->>> I'd add a comment here for the "why are we unmapping".
->>>
->>
->> Does this sound right:
->>
->> Unmap here to ensure that userspace page tables have no mappings, which
->> also ensures refcounts from those mappings are dropped.
-> 
-> How about:
-> 
-> 		/*
-> 		 * Forcefully unmap the pages from all userspace page tables,
-> 		 * and then verify there are no outstanding references, e.g.
-> 		 * acquired via GUP or similar.  Tell userspace to try again if
-> 		 * there are oustanding references and hope that whatever has
-> 		 * pinned the page will put its reference "soon".
-> 		 */
-> 		unmap_mapping_pages(mapping, start, nr_pages, false);
-> 
->                 if (!kvm_gmem_is_safe_for_conversion(inode, start, nr_pages,
->                                                      err_index)) {
->                         mas_destroy(&mas);
->                         r = -EAGAIN;
->                         goto out;
->                 }
+Signed-off-by: Minxi Hou <houminxi@gmail.com>
+---
+v10:
+  - drop the sctp() key probe. OVS_KEY_ATTR_SCTP is unconditional in
+    the kernel datapath (no kconfig gates it in flow_netlink.c), so
+    the probe only ever fired for a missing ovs-dpctl.py parse-table
+    entry and turned that regression into a skip: the same gap that
+    hid the v5 loss. A parse-table regression now fails the test
+    instead of skipping it (Jakub)
+  - drop setsid. The forked children exit when their association
+    closes, socat -t 1 bounds how long they linger, and the existing
+    kill -TERM of the captured pid removes the listener itself (Jakub)
+  - bound listener child lifetime with socat -t 1 (Jakub)
+v9:
+  - one forking listener for the whole test instead of restarting it
+    between phases (Aaron)
+  - signal the daemon's process group on cleanup so the children a
+    forking listener leaves behind are reaped
+  - sort CONFIG_IP_SCTP the way the config checker compares keys
+v8: https://lore.kernel.org/netdev/20260731062655.4088575-1-houminxi@gmail.com/
+v7: https://lore.kernel.org/netdev/20260729064549.3647518-1-houminxi@gmail.com/
+v6: https://lore.kernel.org/netdev/20260724150624.3457427-1-houminxi@gmail.com/
+v5: https://lore.kernel.org/netdev/20260723084203.3483560-1-houminxi@gmail.com/
+v4: https://lore.kernel.org/netdev/20260719162657.3263089-1-houminxi@gmail.com/
+v3: https://lore.kernel.org/netdev/20260715015446.530018-1-houminxi@gmail.com/
+v2: https://lore.kernel.org/netdev/20260707034718.2717982-1-houminxi@gmail.com/
+v1: https://lore.kernel.org/netdev/20260702090908.1253688-1-houminxi@gmail.com/
+---
+ .../testing/selftests/net/openvswitch/config  |  1 +
+ .../selftests/net/openvswitch/openvswitch.sh  | 90 +++++++++++++++++++
+ .../selftests/net/openvswitch/ovs-dpctl.py    |  5 ++
+ 3 files changed, 96 insertions(+)
 
-
-Sounds good besides the function still not being clear about *which* kind of
-conversion.
-
-
+diff --git a/tools/testing/selftests/net/openvswitch/config b/tools/testing/selftests/net/openvswitch/config
+index 05ca6affb510..a825e0b5c88e 100644
+--- a/tools/testing/selftests/net/openvswitch/config
++++ b/tools/testing/selftests/net/openvswitch/config
+@@ -1,5 +1,6 @@
+ CONFIG_GENEVE=m
+ CONFIG_INET_DIAG=y
++CONFIG_IP_SCTP=y
+ CONFIG_IPV6=y
+ CONFIG_NETFILTER=y
+ CONFIG_NET_IPGRE=m
+diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+index f63001dc2510..a31f7fb6882d 100755
+--- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
++++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
+@@ -33,6 +33,7 @@ tests="
+ 	action_set				set: SET action rewrites fields
+ 	trunc					trunc: output truncation
+ 	icmpv6					icmpv6: ICMPv6 echo type match
++	sctp_connect_v4				sctp: SCTP flow key matching
+ 	psample					psample: Sampling packets with psample"
+ 
+ info() {
+@@ -610,6 +611,95 @@ test_icmpv6() {
+ 	return 0
+ }
+ 
++# Check for an SCTP endpoint via /proc, which works without sctp_diag.
++sctp_eps_has() {
++	ip netns exec "$1" awk -v p="$2" '$6==p' /proc/net/sctp/eps | grep -q .
++}
++
++# sctp_connect_v4 test
++# - sctp(dst=4443) matches client-to-server INIT
++# - sctp(src=4443) matches server-to-client INIT-ACK
++# - remove flows and verify connection fails, reinstall and recover
++test_sctp_connect_v4() {
++	local t="test_sctp_connect_v4"
++	local srv_ip=172.31.110.20
++
++	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
++	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
++
++	sbx_add "$t" || return $?
++	ovs_add_dp "$t" sctp4 || return 1
++
++	info "create namespaces"
++	for ns in client server; do
++		ovs_add_netns_and_veths "$t" "sctp4" "$ns" \
++		    "${ns:0:1}0" "${ns:0:1}1" || return 1
++	done
++
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
++	ip netns exec client ip link set c1 up
++	ip netns exec server ip addr add "${srv_ip}/24" dev s1
++	ip netns exec server ip link set s1 up
++
++	# ARP forwarding
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0806),arp()' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0806),arp()' \
++	    '1' || return 1
++
++	# SCTP port matching: dst for request, src for reply
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
++	    '1' || return 1
++
++	# The listener forks a child per association, so one instance serves
++	# the whole test and the flows stay the only variable. -t 1 bounds
++	# how long a child lingers after its association closes.
++	ovs_netns_spawn_daemon "$t" "server" \
++	    socat -u -t 1 SCTP4-LISTEN:4443,fork STDOUT
++	ovs_wait sctp_eps_has server 4443 || return 1
++
++	info "verify SCTP association with port-keyed flows"
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    || return 1
++
++	ovs_del_flows "$t" sctp4
++
++	info "verify connection fails without flows"
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0806),arp()' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0806),arp()' \
++	    '1' || return 1
++
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    >/dev/null 2>&1 \
++	    && { info "connection should fail without flows"
++	         return 1; }
++
++	info "reinstall flows and verify recovery"
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)' \
++	    '2' || return 1
++	ovs_add_flow "$t" sctp4 \
++	    'in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)' \
++	    '1' || return 1
++
++	ovs_sbx "$t" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:${srv_ip}:4443" </dev/null \
++	    || return 1
++
++	return 0
++}
++
+ # psample test
+ # - use psample to observe packets
+ test_psample() {
+diff --git a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+index 3ece07d47281..1615843c225e 100644
+--- a/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
++++ b/tools/testing/selftests/net/openvswitch/ovs-dpctl.py
+@@ -1984,6 +1984,11 @@ class ovskey(nla):
+                 "udp",
+                 ovskey.ovs_key_udp,
+             ),
++            (
++                "OVS_KEY_ATTR_SCTP",
++                "sctp",
++                ovskey.ovs_key_sctp,
++            ),
+             (
+                 "OVS_KEY_ATTR_ICMP",
+                 "icmp",
 -- 
-Cheers,
+2.55.0
 
-David
