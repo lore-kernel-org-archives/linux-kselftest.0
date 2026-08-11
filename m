@@ -1,80 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3328F40F740;
-	Tue, 11 Aug 2026 13:50:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F9F446845
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:05:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786456263; cv=none; b=O8qbHG2ahQBNMc6r1kmUJa+1EAYdHLbU9SHCJFWr73oKmv4/E+DtFLc2H5eFBTjSDxeOZ9u7DzfoB3plABJHTNKJwQA6SCnFOq0jO3zYPnrWmXPKOKttMLookQFVKR68fiSM5OY5MC5QOpp+R0v8ZxLKJz9OSXj64kasbBkRSLw=
+	t=1786457149; cv=none; b=BwiG7Ptk8SNf5qi6p/+q30f7qAOi8rFR49mFTtvUZat42HYTYvapKUaPeSmVhyqfJvQ9HUCUHULgPZg3jtsxk9M9w4fA/+nBVhjOnDAGtNdTzQUHKf6G4NmJebm3JZudohPcdT01uwXLsbHQbD3lN4sb7MliCYrMY/y+gs8jags=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786456263; c=relaxed/simple;
-	bh=XQnR3FwMk43aX3E6wiqFSGbhBRnjD7g3DycvM9/dCuQ=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=D3X1GMCGYzNFpsDo2uRkqzHsq02OFJLhb/E49OxAqioYElSrAzwM87sYKXb7amOaKRupPJrf/1bTox4514OA76a5UYb8hN859notoEEfrviUAlBPYuoaCimPsBoQnsndpPqmDjU5/s1ONm/mHi0DVXttJgPBQHCzSyUJmofO19k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jCdElYSt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786457149; c=relaxed/simple;
+	bh=IpGRwjcNXY0ZjSkV0KzCG7krK0XNKqIE0KLfGji2OHs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=t6HwleoJa1WfAx6sjxll00GbvAE6gZjszcgjxY7I1Ypbjj4kYyQVU/dRQAsbCLvo39PYj3GnGyeLkgKkZ2ea8eXzxcmuIsuWuntd2C8oKMAlwuLU+5eDtbkWjPEP97qQF/3hDVFTnjCyD4O+id2b/ksGzm969WSyhk8/8BVct+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=rECrfNiz; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jCdElYSt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32D61F000E9;
-	Tue, 11 Aug 2026 13:50:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786456255;
-	bh=BIbM2EuvbgXn7Yp0pCHKcZ2yAr1UuFLoWeHyxVzgAVk=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=jCdElYStzQpkBAscxnOGCuZvQEdKZKxSKhdD2ZVZILD0opEWmMOsOJxHqd7VuMaKu
-	 cNAJ5QeAqzl3FuEH6UNeTkmneJtknnzAi3A/q/yIHmYHGEM7hkCQYQS+IJhMoRKT+Q
-	 dIynMCPFs3qB8gtLrAD3OnPebVFw2SyLvuUhyjebPEVw6UiqxpXIbpc3nrvvDoi7zQ
-	 slvuHz5zqNgvfeJvYet+JjCyBnNVcJLkxOtgj7IZ0BA/N1gUfIrOr73uPY7ZbfJcJJ
-	 BTF70TVm3ufEXZAWDb4H+f/Th0V9zkfwgGKVkkoW0POuJzusj82pxSi0WsmKpdpwhc
-	 qo29UujUZ3bSw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 568EB3810900;
-	Tue, 11 Aug 2026 13:50:12 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="rECrfNiz"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cfc52ddc55so46612695ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:05:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786457146; x=1787061946; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=iAJktWiCLBpTuTmwKXB+qiv4Wjmxms+UGlXDoh/JJdk=;
+        b=rECrfNizDdV4vI1MnkyyolEio222NwToG7pVVrndUb3uV5l0Dw1F0NFyyqxxSl4rX/
+         U8Cy/gptGAYkcIekbSy18r4ZVhCDLCtoYMBAWl69zFIoS99GoJ1yL13vqYWQCB+sExvG
+         puiMj4+VC98SntxxPhFw1E/4PpeNLdRgTLTL+EFbQ5BhgCTJ9he3BPnXe7Dg9vdkPzYK
+         Y7GE3hv3xl5RAPIxuDvvT/ZPk1/OY8OSZFsQOa/YHg8VS29UCYnUW/MokJU+slldyFe4
+         u0bWRRYlCIw3o1lKw9VfP332HKiGNlAa9G2o4OG331RlyWlcq2NH6Om9Wlcn7/lQ0z6f
+         Gd5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786457146; x=1787061946;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=iAJktWiCLBpTuTmwKXB+qiv4Wjmxms+UGlXDoh/JJdk=;
+        b=GR5UqpKW8sa/qm0Ltu2rL0/WLaUzt8MYhD3b3dZuABhBKJJ2tORSJEkoBymAiHyiz2
+         TAD7Z3pVbw6pU6mtVjrFBOl1a94H/8ppIiQyoHakjT6JudQFTFel6cHJbt6GjpCdKl2W
+         LMS6QEeyNdzjPi8RAgdC21jzR7E2bLO8EYJI44WALCD5b9/bqL6YRZlqRgmikUZHcLpE
+         svp3bMXzrA+l3t7BU4KXNlbvVvdGDLFL0X52YKIHnUzehd5MRHdl4NYzR+uqm1ZqoCyD
+         X5QZQ1wEA7IEp2v5Qy0nsAfJ1s9qHP03PeRY+BG4zK+1ZGE6grykpsZz6EvYBPmFP9hJ
+         dPCg==
+X-Forwarded-Encrypted: i=1; AHgh+RrjIdLuh4Vif9DqcYVRDGuQGp5B1UkMkW6JvMKj2/wWVb0ghFaguzUupzmgaJzeRQ2NWG8EZee8tGCJA4AJOQY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YysSAqclnY6tSMnUwdJw8fRpbGDEJ0FCOmJs1ybcjJaoN5kPHg8
+	3WHNLGHYdZG/CnSf6I5eUT4hfk2YGrvdAn/ubEZgSflnzbmt6ppHBZ732qliOQkRSD576+K6hpx
+	q7SxBfQ==
+X-Received: from plok3.prod.google.com ([2002:a17:903:3bc3:b0:2cc:8fa5:7221])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f64a:b0:2c6:a012:6241
+ with SMTP id d9443c01a7336-2d3177a171dmr43949945ad.6.1786457145880; Tue, 11
+ Aug 2026 07:05:45 -0700 (PDT)
+Date: Tue, 11 Aug 2026 07:05:45 -0700
+In-Reply-To: <2vxzpkzo51wg.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net 0/2] net/tls: Fail splice after a failed async decrypt
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178645621096.532553.2035307199203449109.git-patchwork-notify@kernel.org>
-Date: Tue, 11 Aug 2026 13:50:10 +0000
-References: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
-In-Reply-To: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
-To: Chuck Lever <cel@kernel.org>
-Cc: john.fastabend@gmail.com, kuba@kernel.org, sd@queasysnail.net,
- davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
- horms@kernel.org, shuah@kernel.org, netdev@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Mime-Version: 1.0
+References: <20260728121138.1103610-1-tarunsahu@google.com>
+ <20260728121138.1103610-6-tarunsahu@google.com> <anphyjFv3FhF61iB@google.com> <2vxzpkzo51wg.fsf@kernel.org>
+Message-ID: <anssOQFNZ2LfihbU@google.com>
+Subject: Re: [PATCH v4 05/11] KVM: LUO: Support VM preservation across live updates
+From: Sean Christopherson <seanjc@google.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Tarun Sahu <tarunsahu@google.com>, ackerleytng@google.com, fuad.tabba@linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, sagis@google.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
+	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
+	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
+	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
+	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
+	suzuki.poulose@arm.com
+Content-Type: text/plain; charset="us-ascii"
 
-Hello:
-
-This series was applied to netdev/net.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
-
-On Thu, 06 Aug 2026 20:44:06 -0400 you wrote:
-> tls_sw_recvmsg() and tls_sw_read_sock() both read ctx->async_wait.err
-> once they hold the reader lock, so a record that failed
-> authentication fails the call. tls_sw_splice_read() has no such
-> check. sk_err does not stand in for one. The first reader to reach
-> sock_error() clears sk_err, while async_wait.err persists. A splice
-> therefore keeps delivering records on a connection the other two
-> readers have already refused.
+On Tue, Aug 11, 2026, Pratyush Yadav wrote:
+> On Mon, Aug 10 2026, Sean Christopherson wrote:
 > 
-> [...]
+> > On Tue, Jul 28, 2026, Tarun Sahu wrote:
+> >> Register a Live Update Orchestrator (LUO) file handler for KVM VM files
+> >> to serialize and deserialize VM state across kexec live updates.
+> >> 
+> >> Currently, Only VM type (e.g. arch.vm_type on x86) is preserved as part
+> >> of VM preservation.
+> >
+> > Why?
+> >
+> >> On retrieval, kvm_luo_retrieve() recreates the KVM VM file via
+> >> kvm_create_vm_file() and use an atomically incremented ID for the internal
+> >> fdname, as the final fdname assigned by userspace is not yet known during
+> >> retrieval. As this fdname is only used in debugfs infra, This will not break
+> >> any UAPI.
+> >> 
+> >> This infrastructure establishes the foundation for preserving guest_memfd
+> >> instances across live updates, and can be expanded in the future to
+> >> preserve additional VM state.
+> >
+> > Uh, why guest_memfd?  As much as I want to push guest_memfd adoption, it seems
+> > guest_memfd should be the _last_ thing we support, not the first.  As evidenced
+> > by the last two decades, it's very doable to have KVM VMs without guest_memfd,
+> > but it's rather hard to have VMs without vCPUs.
+> 
+> You _can_ preserve vCPUs today using KVM_{GET,SET}_REGS, they just won't
+> run in the background during the reboot.
 
-Here is the summary with links:
-  - [net,1/2] net/tls: Fail tls_sw_splice_read() after a failed async decrypt
-    https://git.kernel.org/netdev/net/c/976df67f463d
-  - [net,2/2] selftests: tls: cover splice after a failed decrypt
-    https://git.kernel.org/netdev/net/c/8a4222973913
+What about x86 CoCo VMs?  Which are quite literally _the_ reason guest_memfd was
+created in the first place.  
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+> This series can save you from dumping VM memory to disk if it is backed by
+> guest_memfd.
 
+Or to word it another way, one _can_ save guest_memfd, it's just slower.  My
+point is that this series needs to provide a _lot_ more information about the
+bigger KVM picture.  For those of us that are on the very fringes of live update,
+it's practically impossible to review because, to us, it seems very arbitrary.
 
+The part that's especially confusing is the saving of the VM type.  That comes
+straight from userspace, so it's super bizarre to automatically save/restore that,
+but nothing else.
+
+> >> +KVM LIVE UPDATE
+> >> +M:	Pasha Tatashin <pasha.tatashin@soleen.com>
+> >> +M:	Mike Rapoport <rppt@kernel.org>
+> >> +M:	Pratyush Yadav <pratyush@kernel.org>
+> >> +R:	Tarun Sahu <tarunsahu@google.com>
+> >> +L:	kexec@lists.infradead.org
+> >> +L:	kvm@vger.kernel.org
+> >> +S:	Maintained
+> >> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
+> >
+> > NAK on taking changes through a different tree.  This is KVM code, period.
+> >
+> > In general, I'm skeptical of the dedicated MAINTAINERS entry.  It's extremely
+> > difficult to tell since this series is little more than a skeleton (either that
+> > or liveupdate is way simpler that I was expecting), but I suspect that maintaining
+
+...
+
+> > E.g. the LUO APIs seem pretty straightforward; I assume the bulk of the complexity
+> > is going to be in knowing what to save/restore, and how, which is much more about
+> > KVM than it is about liveupdate.
+> 
+> I think it is fine if you want to take these changes through the KVM
+> tree, but I would like live update maintainers to be listed as reviewers
+> at least.
+
+Why not simply add a file pattern match to the LIVE UPDATE entry?
+
+diff --git MAINTAINERS MAINTAINERS
+index 8014b9f8253e..2eb57b22c37f 100644
+--- MAINTAINERS
++++ MAINTAINERS
+@@ -15052,8 +15052,8 @@ F:      include/linux/liveupdate.h
+ F:     include/uapi/linux/liveupdate.h
+ F:     kernel/liveupdate/
+ F:     lib/tests/liveupdate.c
+-F:     mm/memfd_luo.c
+ F:     tools/testing/selftests/liveupdate/
++N:     [^a-z]luo
+ 
+ LLC (802.2)
+ L:     netdev@vger.kernel.org
+
+> At the same time, I also keep being (pleasantly)
+> surprised at preservation being relatively simple. For example, the code
+> to preserve a shmem file (via memfd) is roughly 600 lines, a big chunk
+> of which is comments. The code of course has some limitations, but it is
+> good enough for use in production.
+> 
+> For one, we care about ABI breakages and versioning. 
+
+Which is amusing to me because that implies KVM does not, and I would hazard to
+guess that KVM has the biggest ABI surface of any subsystem in the kernel by a
+country mile (though I'm probably wildly underestimating the effective ABI surface
+of filesystems).
+
+> The serialized state is a part of live update ABI and changes to it should be
+> ACKed by us. 
+
+Meh, "Don't break userspace" is a universal rule in the kernel, I genuinely don't
+see why liveupdate needs special treatment.
+
+> For another, how the file handlers interact with their dependencies can
+> affect the behaviour that VMMs observe. Those changes should also pass by
+> some live update eyes.
+
+Perhaps in the short term, but IMO, that's not a winning strategy in the long
+term.  From my perspective, that like saying the PAGE CACHE maintainers should
+review every usage of the filemap APIs, because how the APIs are used impacts
+the page cache and affects userspace-visible behavior.  There are myriad analogies
+like that throughout the kernel.
+
+Yes, liveupdate is new and shiny, but IMO for it to be successful and maintainable,
+it needs to be treated like any other core infrastructure in the kernel, not a
+special snowflake whose details are known only by a handful of people.  Because
+I think it's likely liveupdate goes one of two ways: either liveupdate becomes a
+very niche thing that is used sparingly throughout the kernel, or it becomes a
+broadly used feature that is supported by many filesystems and subsystems.
+
+If liveupdate is relegated to niche status, then it probably isn't going to see
+a significant amount of ongoing development, at which point the folks working on
+liveupdate will naturally migrate to other projects, and maintenance will largely
+be left to subsystem maintainers.
+
+If liveupdate is broadly used, then having a single group of people maintain
+every subsystem's usage won't scale, and maintenance will again largely fall on
+the shoulder of subsystem maintainers.  Which is totally fine and working as
+intended, because that's exactly what subystem maintainers are signing up for
+by merging support for liveupdate.
