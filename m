@@ -1,154 +1,176 @@
-Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86291438478;
-	Tue, 11 Aug 2026 10:45:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74A53B42D3;
+	Tue, 11 Aug 2026 11:31:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786445134; cv=none; b=QKFx31nnhM9F491fBXjglUhkqQ9LIrlpkUsofvuDUQQDP+nWTo2KfGIDWxL5jr+I6BGCygIlk/QRMDHhMUXfy7QHhY/V3Ge0na7EfO9Fq5RrEtHu9MZAaq2amIgAFwqrFP3VsN6CwcjUsv/c75N7hA6Y7Wq6Gfl1Fuz/4sarheY=
+	t=1786447912; cv=none; b=bteNnyAR3ESvUKsFo5zKgYhqI+z+iw7eXux/6w7zVjUryrQ93EaXuZu88Ntj50tApDyQIr56tTv0HIvxi2r20NY5VI+TrQRDrs78AsCNz8BTD0WUKAzaASF26u2vDrV8FXmxwF+37jL+F0aYBrhBlks0WL0qc7iiXLyr3dAzddM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786445134; c=relaxed/simple;
-	bh=XDe+OzTEShYpwzZw71sAnZLiED5TP0/3ChFs4D3wiwE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=igB7OPF6L7LdXQYTWWK1oqih3+9srPlH3wyH4Fr0RxhMppNhukTHsvlKHWmsRq1qFUBlxPNPD2WJMXmx5yJexL0Db2H0TiYtkmtFoRamAuVc6qvp+4qJD8fmwYCPEVD9L6PtEmEp37l6fTguVoq/4MN7A/AQtHdoEtomR/Peah0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net; spf=pass smtp.mailfrom=queasysnail.net; dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b=IZRfM9I8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YRT9Qzym; arc=none smtp.client-ip=202.12.124.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=queasysnail.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=queasysnail.net
+	s=arc-20240116; t=1786447912; c=relaxed/simple;
+	bh=vkmS5xbZv/MhrmuCuWRhhmFAuTY1aGqY1fkJvBus3Io=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=lf6istahwf4INGLFlN6va8ta78YHse419ZQZXuJRw+qB1vyE2WqW8LILqgciLVbccN1Zdo6WipnY9fuMWPwF36ebCWxysgnG4tO/F1pU9R3n3Wcp5G1MONkxPbHy63X+2oIZc0Ww9CTGynAKrXBw/yS9SSnXZU4jknfUZz0/nIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=om8xJIfj; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=queasysnail.net header.i=@queasysnail.net header.b="IZRfM9I8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YRT9Qzym"
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 46B027A0115;
-	Tue, 11 Aug 2026 06:45:30 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Tue, 11 Aug 2026 06:45:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=queasysnail.net;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786445130; x=
-	1786531530; bh=RGDeTJLMFgZOusS15+9aVNQP/TeeRU41XDCmbuDB164=; b=I
-	ZRfM9I8K3XivyQDoekLueMe48IWBIr/oBSrOMoxlTI5tPQlJeXXtYjCqySrEiNmI
-	k2MSLJSsNrPLC/sszdZEU1jdLwO7SGI0gSMJySvyiusw7wZ9l36fsEQq62oUELf9
-	m5hvTMOeXrqcIjLJEnQCPNXA4SRVWxgHCusLEwv5SlV8SHC0fZfg6fRtb+NntJEg
-	WitAhVKzaWz8my5e5F84ekuBepVrZR+GsZtTRK7vhU1MiTMR7L8N2GEdkj3my0PQ
-	SVi25DBL0zjgtkvvkvn5wMxEH4MNG/WBKAyhYBspuly7PwC2dGVwUY+eFwsCR2mH
-	W5j/mPWkOFxmdv1CA5wcA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1786445130; x=1786531530; bh=RGDeTJLMFgZOusS15+9aVNQP/TeeRU41XDC
-	mbuDB164=; b=YRT9QzymeOO6zELz/35q/CXNhwNyvCz6LceG/9AWd2OpM3oxiJ5
-	imKlVsC3Ez7xbp+V/pv6mIBnpnadaVyWMUOCmDqu+JpIR91IVC4HgG9b/kX5oAEs
-	kHeZqzfUP3dexvA/xb6gH5O0IGfOg/klzQHySglZrYUSfFlDf9Og3Yq0uM0ldsmA
-	Gq7j/LU70XhAv+pG7mm+9yJCL2+C1WPP3GuvdOtUUoxLpNtCjQG5zW0Tyu/Czh1E
-	KVtpEwuElks3jth544T0z04D8S02iD21XmFl8gbvxgoHiA17xnkbfjqNwHJ9Ndoa
-	qb36ys/uwDP4XRLcqsrrIrD3wRaZM5i0sSg==
-X-ME-Sender: <xms:Sv16an4V-fQSy2Qiqb8w7wMbSJ8t6ZfEv4WFiIaaHLNNxzIR9tvO6w>
-    <xme:Sv16aowtaiKITAZ7lENNaMoedj9FEASGJKh96NhIxNYtKxbXT9a7WdERWHOg8E8HS
-    7rjRRdHxMjcEUPu9-It04BjkHg_yutYn41O10wJFIA17LuC-vIFtw>
-X-ME-Received: <xmr:Sv16ardH_EA1mJKx9ycnwdIgN96zJR_jIWtD9FhUSbE7dewLnGEdSeeNdwM>
-X-ME-Proxy-Cause: dmFkZTFHfvZoUdfu8oKWje9ufN8AFSWAswEitTXWlZgWeBi+jwhxu5ILCOKpzs5lI1qaED
-    TiSA/r5u/cpuVDX7ABkUD1+cRl1wuIxXDL+smkcTG85Z0er/LYdP/xg1lDtYYM3w8DqHuO
-    xwe4QogrIjzjyOfhYqzzaP7IoU/n6s2obWDhG03te1KoEhteGk/sAbtfpyc64mg+mlKBn4
-    4gsG+VLX6QktKqLdZcnsYst1cYkDmbg05XW/CM0fvIBysgyeYYiZHq7vpOSuJrb6ebdyza
-    jIwufUESgFpEAmHOdEUEaORb9tdeKGSFtQLS/mjrgowyeiiJjMCB84oJJnaXCibQGXLmq4
-    M+pNyutbo/WS+qO5VGJKJeO/wg1/HoksBOSwZdMVur7dKVcFzsoxS6Nmt4FXnfmCBY6cca
-    zgvy0orCoiOIs4cKBmvlr5HSXjn8pjLd1mZYCqXf+GJwa9+fnilBJcG2ilAzm7UF6gQgrw
-    VlWqt3NMwWiekdxhoQ8nYF3CtZ6Jjwpqvt/kExyJpXWGrcvjXymJaDaPCVh58rfqoAQHeq
-    xZlaO+jQlzMsLs2GAxSH2X71Ax3ab7MhImZBfGq+Auz1hYU4yjhGOnRQLCTzVpfITmUjoK
-    ru1lJPNjtAYbEe0NpUbSJXFOtOlWT2QW6RU7oANvusL0OLtyuAXzFCvcU5Mw
-X-ME-Proxy: <xmx:Sv16atBdvt-ITCxnAr2X7Fv860fsOvh9v2e3KjcNU7KoZncoNAPh9g>
-    <xmx:Sv16av4KaPDfQC0L_emrbNX4AK9-kBQtbQD9AKCjkrDF_aFPbYdNXg>
-    <xmx:Sv16amcfA2_oCIawlI_-eeW3qmbIlBZsEAsr1bksF-QEJxXs3mJGtQ>
-    <xmx:Sv16alt_CZ7zi8XHyWZKGydvrXgf9K2JG9aWt5FDYOiyKvH74FNOFA>
-    <xmx:Sv16aksCxuPOvTvT2ICuERjJGDg23L_7MSM2TUiwoS-UyK5oivzPIgzL>
-Feedback-ID: i934648bf:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Aug 2026 06:45:29 -0400 (EDT)
-Date: Tue, 11 Aug 2026 12:45:27 +0200
-From: Sabrina Dubroca <sd@queasysnail.net>
-To: Chuck Lever <cel@kernel.org>
-Cc: John Fastabend <john.fastabend@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net 2/2] selftests: tls: cover splice after a failed
- decrypt
-Message-ID: <anr9R3FfLC_Kug8m@krikkit>
-References: <20260806-tls-splice-crypto-fix-v1-0-a2624005a286@kernel.org>
- <20260806-tls-splice-crypto-fix-v1-2-a2624005a286@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="om8xJIfj"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16A141F000E9;
+	Tue, 11 Aug 2026 11:31:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786447910;
+	bh=4h7/hkwvCsY0fI00T2PR/Y4OZG0mhUElOQ2zn4pF7HM=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date;
+	b=om8xJIfjsRUCvKibHk4AB92a86v/0sm2xMl+BtSmgoyg7QzhmHmd3v9z3YvwkioCW
+	 9u/nZK6wJXKOBRJSadI/b5pqpyXdCXcN7dsJ9BaeaAZz90F1BIBA4twS1gV3wuBHJO
+	 mJtZngYdB7FxDju+zrnYNhjNPFjwE8vD9dfqPU/3VUsDjvBzcsgX4U7GyWO21QietQ
+	 +uDGaQz1ywUPS27qK7TYb35Ab1PJEijr+OqHQQPgoG/BBG0vdmmBqVwPLY/LGZtoQR
+	 7NrPUAPpNv5bhHusvIMbXZwA2gJ2vJg4PJ/zmo8j6qYfhy4KZUMw6mp3S6iqu2krU4
+	 1EuINsbUcsIhg==
+From: Pratyush Yadav <pratyush@kernel.org>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Tarun Sahu <tarunsahu@google.com>,  ackerleytng@google.com,
+  fuad.tabba@linux.dev,  Andrew Morton <akpm@linux-foundation.org>,
+  dmatlack@google.com,  Shuah Khan <skhan@linuxfoundation.org>,  Jonathan
+ Corbet <corbet@lwn.net>,  david@redhat.com,  Pasha Tatashin
+ <pasha.tatashin@soleen.com>,  Pratyush Yadav <pratyush@kernel.org>,
+  sagis@google.com,  Paolo Bonzini <pbonzini@redhat.com>,  Mike Rapoport
+ <rppt@kernel.org>,  Alexander Graf <graf@amazon.com>,
+  linux-kselftest@vger.kernel.org,  andre.przywara@arm.com,
+  michael.roth@amd.com,  linux-kernel@vger.kernel.org,  linux-mm@kvack.org,
+  will@kernel.org,  vannapurve@google.com,  maz@kernel.org,
+  fvdl@google.com,  kvm@vger.kernel.org,  oliver.upton@linux.dev,
+  kvmarm@lists.linux.dev,  alexandru.elisei@arm.com,  skhawaja@google.com,
+  aneesh.kumar@kernel.org,  linux-doc@vger.kernel.org,  David Hildenbrand
+ <david@kernel.org>,  yan.y.zhao@intel.com,  kexec@lists.infradead.org,
+  suzuki.poulose@arm.com
+Subject: Re: [PATCH v4 05/11] KVM: LUO: Support VM preservation across live
+ updates
+In-Reply-To: <anphyjFv3FhF61iB@google.com> (Sean Christopherson's message of
+	"Mon, 10 Aug 2026 16:42:02 -0700")
+References: <20260728121138.1103610-1-tarunsahu@google.com>
+	<20260728121138.1103610-6-tarunsahu@google.com>
+	<anphyjFv3FhF61iB@google.com>
+Date: Tue, 11 Aug 2026 13:31:43 +0200
+Message-ID: <2vxzpkzo51wg.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20260806-tls-splice-crypto-fix-v1-2-a2624005a286@kernel.org>
+Content-Type: text/plain
 
-2026-08-06, 20:44:08 -0400, Chuck Lever wrote:
-> Nothing in this file splices a socket whose last decrypt failed, so
-> the check that fails tls_sw_splice_read() on a broken connection can
-> be removed without a test noticing. Such a splice hands the
-> application plaintext that recvmsg() and read_sock() already refuse
-> to return.
-> 
-> Extend the bad_auth pattern. Corrupt an authenticated record, confirm
-> recvmsg() reports EBADMSG, then splice the same socket and require
-> EBADMSG again. A synchronous decrypt fails again on the still-queued
-> record, so only an async decrypt reaches EBADMSG through the
-> recorded-failure check alone.
-> 
-> bad_auth builds the same corrupted record, so its construction moves
-> into a helper the two tests share.
-> 
-> Signed-off-by: Chuck Lever <cel@kernel.org>
-> ---
->  tools/testing/selftests/net/tls.c | 75 +++++++++++++++++++++++++++++++++------
->  1 file changed, 65 insertions(+), 10 deletions(-)
+On Mon, Aug 10 2026, Sean Christopherson wrote:
 
-Reviewed-by: Sabrina Dubroca <sd@queasysnail.net>
+> On Tue, Jul 28, 2026, Tarun Sahu wrote:
+>> Register a Live Update Orchestrator (LUO) file handler for KVM VM files
+>> to serialize and deserialize VM state across kexec live updates.
+>> 
+>> Currently, Only VM type (e.g. arch.vm_type on x86) is preserved as part
+>> of VM preservation.
+>
+> Why?
+>
+>> On retrieval, kvm_luo_retrieve() recreates the KVM VM file via
+>> kvm_create_vm_file() and use an atomically incremented ID for the internal
+>> fdname, as the final fdname assigned by userspace is not yet known during
+>> retrieval. As this fdname is only used in debugfs infra, This will not break
+>> any UAPI.
+>> 
+>> This infrastructure establishes the foundation for preserving guest_memfd
+>> instances across live updates, and can be expanded in the future to
+>> preserve additional VM state.
+>
+> Uh, why guest_memfd?  As much as I want to push guest_memfd adoption, it seems
+> guest_memfd should be the _last_ thing we support, not the first.  As evidenced
+> by the last two decades, it's very doable to have KVM VMs without guest_memfd,
+> but it's rather hard to have VMs without vCPUs.
 
+You _can_ preserve vCPUs today using KVM_{GET,SET}_REGS, they just won't
+run in the background during the reboot. This series can save you from
+dumping VM memory to disk if it is backed by guest_memfd.
 
-(just one nit:)
+>
+>> Also updates MAINTAINERS to include virt/kvm/kvm_luo.c and
+>> include/linux/kho/abi/kvm.h.
+>> 
+>> Signed-off-by: Tarun Sahu <tarunsahu@google.com>
+>> ---
+>>  MAINTAINERS                 |  11 ++
+>>  include/linux/kho/abi/kvm.h |  39 ++++++++
+>>  virt/kvm/Makefile.kvm       |   1 +
+>>  virt/kvm/kvm_luo.c          | 195 ++++++++++++++++++++++++++++++++++++
+>>  virt/kvm/kvm_main.c         |   8 ++
+>>  virt/kvm/kvm_mm.h           |   8 ++
+>>  6 files changed, 262 insertions(+)
+>>  create mode 100644 include/linux/kho/abi/kvm.h
+>>  create mode 100644 virt/kvm/kvm_luo.c
+>> 
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index a3ed337e827d..0283f0fd6ef4 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -14539,6 +14539,17 @@ S:	Maintained
+>>  F:	Documentation/devicetree/bindings/leds/backlight/kinetic,ktz8866.yaml
+>>  F:	drivers/video/backlight/ktz8866.c
+>>  
+>> +KVM LIVE UPDATE
+>> +M:	Pasha Tatashin <pasha.tatashin@soleen.com>
+>> +M:	Mike Rapoport <rppt@kernel.org>
+>> +M:	Pratyush Yadav <pratyush@kernel.org>
+>> +R:	Tarun Sahu <tarunsahu@google.com>
+>> +L:	kexec@lists.infradead.org
+>> +L:	kvm@vger.kernel.org
+>> +S:	Maintained
+>> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/liveupdate/linux.git
+>
+> NAK on taking changes through a different tree.  This is KVM code, period.
+>
+> In general, I'm skeptical of the dedicated MAINTAINERS entry.  It's extremely
+> difficult to tell since this series is little more than a skeleton (either that
+> or liveupdate is way simpler that I was expecting), but I suspect that maintaining
 
-> +/* cfd carries a byte stream, so one recv() can return part of a
-> + * record. Take the fragment length from the record header and wait
-> + * for the remainder.
-> + */
+It's a bit of both. This series of course doesn't support everything
+that guest_memfd can. At the same time, I also keep being (pleasantly)
+surprised at preservation being relatively simple. For example, the code
+to preserve a shmem file (via memfd) is roughly 600 lines, a big chunk
+of which is comments. The code of course has some limitations, but it is
+good enough for use in production.
 
-I understand what the function does, but it took me a while to parse
-this comment. Now I see it applies more to the
-"MSG_WAITALL/len/MSG_WAITALL" construct than to the overall function
-(the function's name gives a good enough description of what it does).
+> liveupdate for KVM (or for any subsystem) will require more subsystem-specific
+> knowledge than liveupdate knowledge.
+>
+> E.g. the LUO APIs seem pretty straightforward; I assume the bulk of the complexity
+> is going to be in knowing what to save/restore, and how, which is much more about
+> KVM than it is about liveupdate.
 
-> +static void tls_send_bad_auth(struct __test_metadata *_metadata,
-> +			      int fd, int cfd, int fd2)
-> +{
-> +	char buf[128];
-> +	int len;
-> +
-> +	memrnd(buf, sizeof(buf) / 2);
-> +	ASSERT_EQ(send(fd, buf, sizeof(buf) / 2, 0), sizeof(buf) / 2);
-> +
-> +	ASSERT_EQ(recv(cfd, buf, TLS_HDR_LEN, MSG_WAITALL), TLS_HDR_LEN);
-> +
-> +	len = ((unsigned char)buf[3] << 8) | (unsigned char)buf[4];
-> +	ASSERT_GT(len, 0);
-> +	ASSERT_LE(len, (int)sizeof(buf) - TLS_HDR_LEN);
-> +
-> +	ASSERT_EQ(recv(cfd, buf + TLS_HDR_LEN, len, MSG_WAITALL), len);
-> +
-> +	buf[TLS_HDR_LEN + len - 1]++;
-> +
-> +	ASSERT_EQ(send(fd2, buf, TLS_HDR_LEN + len, 0), TLS_HDR_LEN + len);
-> +}
+I think it is fine if you want to take these changes through the KVM
+tree, but I would like live update maintainers to be listed as reviewers
+at least.
+
+For one, we care about ABI breakages and versioning. The serialized
+state is a part of live update ABI and changes to it should be ACKed by
+us. For another, how the file handlers interact with their dependencies
+can affect the behaviour that VMMs observe. Those changes should also
+pass by some live update eyes.
+
+So I think we should have a separate entry for KVM LIVE UPDATE that
+lists the live update maintainers (or perhaps only kexec@) as a
+reviewer. The patches can still flow through KVM tree but we'd get a
+chance to ACK/NACK them.
+
+Of course this all can evolve later as we see fit but I think this is a
+good starting point.
+
+>
+>> +F:	virt/kvm/kvm_luo.c
+>> +
+>>  KVM PARAVIRT (KVM/paravirt)
+>>  M:	Paolo Bonzini <pbonzini@redhat.com>
+>>  R:	Vitaly Kuznetsov <vkuznets@redhat.com>
+[...]
 
 -- 
-Sabrina
+Regards,
+Pratyush Yadav
