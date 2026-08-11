@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08673F4DDC;
-	Tue, 11 Aug 2026 16:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30E08435503;
+	Tue, 11 Aug 2026 16:14:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786464673; cv=none; b=ewlsVLmCcZRGjRDsx96RKgV2xtYTM6DQC7Dd76fvzmog29AwgoHi9uOAbz2wVrBuNWJjl2FgJ9oD/3bsr6djVSAUNk9GFNcdgyMju0EnwFA2uceAYaeMaTF/RWaUIl/0V1OjavUyyE/kU9iOhw7jocKrVdAnAMHehPWs53w2Ua4=
+	t=1786464894; cv=none; b=usO37skfnl9PzbNOFZ3faLnt1kFFP0SIjlOSrqY+a05FwXwNvoctJaNjSmSWqv8O/3GRZZwoHJ9071kFdcPD0in+ZHdFwROjCjN6oCeWeCIyLIDmE37H4Fh0OKjWrOXAy+hn5d03oO92TCWxeiyDjvFnHnSLjeGJvSTTLwHLmAY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786464673; c=relaxed/simple;
-	bh=Q7P5tdRF64kaESCPCVNKTW7zKQP1WTOuJUymFKeK1pk=;
+	s=arc-20240116; t=1786464894; c=relaxed/simple;
+	bh=xFXzUJO3SpKR898Rf+BRq6EerZSjh/ZvYmARYbxgIrw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=okQH76wjaP3gTYWpzEpzoiwR1gF+07gb1QrKCw7lYKrLqAJKu2binG9DWchBVHSyHAUizOF05aAgLW3yBfqsYpvx8j/X+Z2giqppWdAhc5nPCB2gGm7W8hRBfbz8j0HijG0fjZ3A0VnhzVQ5wYdL6fqPN4NEnYdDdDQxLCiP88A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jMjLXqCO; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=krlQ+xOiaEuSAbUq1gKkaqo2kniHfa004iebImlfwqETATu8EK0eOlY6hknl2AzaBWZvlQsniZudtoxnM5Ye05848PEGpztRmzvzvWTVUBhmcvs7mFxtLYLifjfVIYaR0RUXJpcD7SjzhfNfj7deFtnoNcUoXqgjJGd/1D/1Cms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AqIEyxYo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jMjLXqCO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728441F000E9;
-	Tue, 11 Aug 2026 16:11:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AqIEyxYo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D19C41F000E9;
+	Tue, 11 Aug 2026 16:14:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786464671;
-	bh=Un/OfXb3LOyN540R6UlGcb5CTwWvA8koOuzxF4qHLao=;
+	s=k20260515; t=1786464892;
+	bh=ibHFa0NT6MxhyCm/QcqTUG2/hFc7gFbSlpWq8jjQ7cA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jMjLXqCObthVZJds8KrwkJZ8tG5aCvdK6chypyAltVhQgquuxxqwD8Fzn2Ha2ux+4
-	 xd0LOndlPKYnD5c8PUDY/IGJa+cfz9/5Fyq8j9gqBg5m52VYrBlpA6Ki04Xd8Rc2ZB
-	 Tkk5S0MIF1BwLc1xP5NMqtv0iEUG3YQEWIgfQr76LuiNTNGNcuJkoQGzNIXfTC7lBT
-	 tNbXExTKLQLJ5ITFP54eBbfdkefM32H8BOhQwfUmZKcEQOfCCU+jBU4EZNBWMfaIqi
-	 DfWC62ShGtIj2LNVrmfXfJ1Llhym9HpP/BVIPMIBc+Kay1xcjlexlcgvX5SC+xb2eo
-	 UaraW2d0LIuDw==
-Message-ID: <db04536b-a98f-4025-a095-9ca49de10e12@kernel.org>
-Date: Tue, 11 Aug 2026 18:11:04 +0200
+	b=AqIEyxYo6WM3YdPSsSHbSDLMZr1JxmvH7h6KOYcSNIk3QXd2QVDV+IXaf+fBWHLQf
+	 0b9y8y43sz8IUXGlQYKUUEcnqC/pPtKubYZ31f00YbF6B+5+QQkC3l+M/2k7hoZ0Tt
+	 a7TQCvXUCihZYHiWPRbGiwyJJrqK+B21ErINP+HNxYn1zaWYuXdldZOzPWtmT+qrvZ
+	 sV76ODh7HoZ2k3TTs7JrMZ6FV8O2QKp0q8LprjSmZii3bN/k4gT3tA/YRKP9iVuwNC
+	 pS0kSyWEURkoxvEHc5Mvx9ktzU6+nR50vPxDfujsHFVAaE1UrxqHbWhCnNE+/m0SZu
+	 pGLlpPrOKHZTQ==
+Message-ID: <08302615-8635-403f-b817-08a8a889cd58@kernel.org>
+Date: Tue, 11 Aug 2026 18:14:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,21 +35,69 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/mm: Fix soft-dirty kselftest supported
- check
-To: Audra Mitchell <audra@redhat.com>
-Cc: jocolema@redhat.com, raquini@redhat.com,
- Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Colin Ian King <colin.i.king@gmail.com>,
- Muhammad Usama Anjum <usama.anjum@arm.com>, Andrei Vagin
- <avagin@google.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <7d6b4401-e230-4ca7-b64f-c1277fa643b8@kernel.org>
- <20260806181843.1839943-1-audra@redhat.com>
- <20260806181843.1839943-3-audra@redhat.com>
+Subject: Re: [PATCH v4 02/20] mm: provide vma_[flags_]is_cow_mapping() and
+ remove is_cow_mapping()
+To: Andrew Morton <akpm@linux-foundation.org>,
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: "Liam R. Howlett" <liam@infradead.org>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
+ "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
+ Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
+ <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>,
+ Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>,
+ Matthew Brost <matthew.brost@intel.com>,
+ Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
+ Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
+ Ying Huang <ying.huang@linux.alibaba.com>,
+ Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
+ Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
+ Arnd Bergmann <arnd@arndb.de>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>, Alex Deucher
+ <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?=
+ <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
+ Boris Brezillon <boris.brezillon@collabora.com>,
+ Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
+ Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>,
+ =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, Masami Hiramatsu
+ <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, James Clark
+ <james.clark@linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, Muchun Song <muchun.song@linux.dev>,
+ Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
+ Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
+ linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+ dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+ linux-perf-users@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
+ <20260806-b4-scalable-cow-virt-pgoff-v4-2-ab318a350404@kernel.org>
+ <ann-vS6MYT9kuXqu@lucifer>
+ <20260810151007.c1cfbcf46d498d2f8ce566f9@linux-foundation.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,101 +144,32 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260806181843.1839943-3-audra@redhat.com>
+In-Reply-To: <20260810151007.c1cfbcf46d498d2f8ce566f9@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/6/26 20:17, Audra Mitchell wrote:
-> On architectures with separate user address space, such as s390 or
-> those without an MMU, the soft-dirty kselftest may fail when checking
-> to see if the feature is supported.
+On 8/11/26 00:10, Andrew Morton wrote:
+> On Mon, 10 Aug 2026 18:59:34 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
 > 
->   # --------------------
->   # running ./soft-dirty
->   # --------------------
->   # TAP version 13
->   # 1..15
->   # Bail out! PAGEMAP_SCAN succeeded unexpectedly
->   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
->   # [FAIL]
->   not ok 1 soft-dirty # exit=1
->   # SUMMARY: PASS=0 SKIP=0 FAIL=1
+>> Hi Andrew - would it be possible to insert the comments added below? Trying
+>> to avoid a respin if possible :)
 > 
-> The soft-dirty test will initate an ioctl with the PAGEMAP_SCAN flag with
-> an invalid address for the page_region. This is done intentionally to
-> have the ioctl return with an expected EFAULT and with the correct
-> categories returned.
+> np, like this?
 > 
-> However, on architectures with separate user address space, such as s390 or
-> those without an MMU, the call to __access_ok (used to validate the
-> variables provided with the ioctl) will always return true and we will not
-> fail as expected.
+> From: Andrew Morton <akpm@linux-foundation.org>
+> Subject: mm-provide-vma_is_cow_mapping-and-remove-is_cow_mapping-fix
+> Date: Mon Aug 10 03:07:02 PM PDT 2026
 > 
->         if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
->             !IS_ENABLED(CONFIG_MMU))
->                 return true;
+> add comments, per Lorenzo
 > 
-> Let's simplify the check for PAGEMAP_SCAN and provide a valid page_region
-> address so that we get a non-errno return if it is supported.
-> 
-> Fixes: 600bca580579 ("selftests/mm: check that PAGEMAP_SCAN returns correct categories")
-> 
-> Signed-off-by: Audra Mitchell <audra@redhat.com>
+> Link: https://lore.kernel.org/ann-vS6MYT9kuXqu@lucifer
+> Cc: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
 > ---
->  tools/testing/selftests/mm/vm_util.c | 23 ++++++++++++++---------
->  1 file changed, 14 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 6b65bd0a1e0b..4a8e339a7403 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -66,20 +66,25 @@ static uint64_t pagemap_scan_get_categories(int fd, char *start)
->  }
->  
->  /* `start` is any valid address. */
 
-Acked to dropping that.
+To the whole resulting thing
 
-> -static bool pagemap_scan_supported(int fd, char *start)
-> +static bool pagemap_scan_supported(int fd)
->  {
-> +	const size_t pagesize = getpagesize();
->  	static int supported = -1;
-> -	int ret;
-> +	struct page_region r;
-> +	void *test_area;
->  
->  	if (supported != -1)
->  		return supported;
->  
-> -	/* Provide an invalid address in order to trigger EFAULT. */
-> -	ret = __pagemap_scan_get_categories(fd, start, (struct page_region *) ~0UL);
-> -	if (ret == 0)
-> -		ksft_exit_fail_msg("PAGEMAP_SCAN succeeded unexpectedly\n");
-> -
-> -	supported = errno == EFAULT;
-> +	test_area = mmap(0, pagesize, PROT_READ | PROT_WRITE,
-> +			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-> +	if (test_area == MAP_FAILED) {
-> +		ksft_print_msg("WARN: mmap() failed: %s\n", strerror(errno));
-> +		supported = 0;
-
-You can really just
-
-ksft_exit_fail_msg("mmap() failed\n");
-
-here, because this is one of the things that really should never fail.
-Which leaves us with:
-
-
-test_area = mmap(0, pagesize, PROT_READ | PROT_WRITE,
-		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-if (test_area == MAP_FAILED)
-	ksft_print_msg("WARN: mmap() failed: %s\n", strerror(errno));
-supported = __pagemap_scan_get_categories(fd, test_area, &r) >= 0;
-munmap(test_area, pagesize);
-
-
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
