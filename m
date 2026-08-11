@@ -1,198 +1,143 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2780D40B100;
-	Tue, 11 Aug 2026 06:41:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF0E13FB055;
+	Tue, 11 Aug 2026 07:43:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786430468; cv=none; b=A5DJ7zBA4Wb/0EzlsE6qUpCdY+KCTH1eVCiVMiDO3kLu/0Ocy6ObzofwA23OHCqG630UJUW/cXwHS2WVV0ZbGFdex+oS5XHtbTgzRbamoLQIN3tInjunY0I2tJJVwwF4H2DTJIk0rc70QFd+6nYTcmAX5khpRhy0lFY8w0rNQRY=
+	t=1786434223; cv=none; b=gmyi+rl2eqBJEhJk8AUnpjxPR7Ysw/u4QRLxbMgkn0y4VL/bIk26jFk2K5+H2HTYe8Sm2oW2qXkFkNq9rq+VZKTDCutbLUZ7UD8bmhtp6N11RYb/V0bCCV0ynUxb78ghAZL6OJfrowESZ+DykSaxZOi9dHo/Ztmh1h3M/SXIKVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786430468; c=relaxed/simple;
-	bh=Nv3zGXf5UtcJRT1/eR1fHVz+qZ5Gti15bQLLVlFnmuQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Tv6nB92x3iZKZiqZiHKDk+ahCJ4ZJ8E+MSrv85ImMTbpWY+v7Vv/qHuk2NNlb2wXhD83y737dTa6vTtneb276Ns+FX4PSxIyJmolqUCuKqd85XokCYOvCXI1n5bef/uNDpLz3C7glbBPHcdZGeN6XKNrYG2Hm2fnV03uU6umdjM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SoYkBEDZ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786434223; c=relaxed/simple;
+	bh=eyAG6Jmsv9SrSGFS/sxLFSdUlwwtvd30wm4wtCIQRnY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xi+7zMkKbNVSJwKnI41Tav2q0nu45AvVfovesQmAgfvmk0oeVzkrlJYFtcy7ZSszuDBVoWzCB4LSaK4xNck2sU/PFIPQBpJXEogfW9hlFXo1zXpfUZR7BoOu++wIVTL/xpcuD0gWxJIOwrlCMoehRk22/O9AIrB+spBDhHLrRiE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ht8P1SBq; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SoYkBEDZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A26FC4AF15;
-	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux.dev; s=korg;
-	t=1786430466; bh=Nv3zGXf5UtcJRT1/eR1fHVz+qZ5Gti15bQLLVlFnmuQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=SoYkBEDZrix2GhHlm2FjjWHljB7LH/VGGNP1OGr4o8WzAyUREypdahSoirHuGRq4J
-	 liANZlP3goHjOULggreoy/vagNUbwJK+nZ4sD+mwZ4A0Rrh+jJ3QfpZ1YfutD8ZRFY
-	 aNTn+OYOCpzCtQP0DHPsXHxnflmgB4DHL0h0I0Fo=
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 1EFD1C5B570;
-	Tue, 11 Aug 2026 06:41:06 +0000 (UTC)
-From: Alvin Sun <alvin.sun@linux.dev>
-Date: Tue, 11 Aug 2026 14:39:46 +0800
-Subject: [PATCH v10 04/10] rust: macros: auto-insert OwnerModule in
- #[vtable]
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ht8P1SBq"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786434221; x=1817970221;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=eyAG6Jmsv9SrSGFS/sxLFSdUlwwtvd30wm4wtCIQRnY=;
+  b=Ht8P1SBqAdw9yemATyt+o3c/W6TOj2ZnnHi72oNhy+TvWeSDQM0CNH53
+   RoKPcf3ULiZLeHZD0FSQXxPy8DyhQGpEyEowSjxKefEcc0HiG6QYD6qgD
+   7LYXz4S7PaG94KIZjB1uRkVk4yH/5zcbTPiAyxjC8mmIdjNvkyFtV5u0H
+   M9637Ag3FxlU/uq/mRy68ATDYSUVbhpNtW/29f9P3B+sLUgY0CEtT+2tL
+   9+d8C4A96a0tNREMulEDu6HCWr06JfTsg1CKuyxnFC2IO+wi7eSpdsQoF
+   JoTQ7c7wcQpFRKT6krxG2cWtLCROutWytuQTvpddcbfjibzkwWcmfmv+j
+   w==;
+X-CSE-ConnectionGUID: zD/GVcvXSDKczzgM2QYWYw==
+X-CSE-MsgGUID: cfHlDrSxTP62+4JgFJkUUA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11871"; a="86719633"
+X-IronPort-AV: E=Sophos;i="6.25,217,1779174000"; 
+   d="scan'208";a="86719633"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2026 00:43:41 -0700
+X-CSE-ConnectionGUID: wNlDlRZARwiYdikmBanWjA==
+X-CSE-MsgGUID: utH7HKWvSh2JspRfIAjlrg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,217,1779174000"; 
+   d="scan'208";a="293207295"
+Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2026 00:43:35 -0700
+Message-ID: <12ab0d52-b432-4c16-979e-2198a34e8d65@linux.intel.com>
+Date: Tue, 11 Aug 2026 15:43:33 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 12/22] KVM: selftests: Require guest_memfd for TDX VMs
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-12-15ad654a50db@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260722-tdx-selftests-v14-12-15ad654a50db@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260811-fix-fops-owner-v10-4-7e71776f9dbe@linux.dev>
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-In-Reply-To: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
-To: Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
- Gary Guo <gary@garyguo.net>, 
- =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
- Danilo Krummrich <dakr@kernel.org>, Luis Chamberlain <mcgrof@kernel.org>, 
- Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>, 
- Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, 
- Daniel Almeida <daniel.almeida@collabora.com>, 
- Arnd Bergmann <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
- Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
- Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
- Igor Korotin <igor.korotin@linux.dev>, 
- FUJITA Tomonori <fujita.tomonori@gmail.com>, 
- Bjorn Helgaas <bhelgaas@google.com>, 
- =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
- =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, 
- Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
- Carlos Llamas <cmllamas@google.com>
-Cc: rust-for-linux@vger.kernel.org, linux-modules@vger.kernel.org, 
- driver-core@lists.linux.dev, dri-devel@lists.freedesktop.org, 
- nova-gpu@lists.linux.dev, linux-kselftest@vger.kernel.org, 
- kunit-dev@googlegroups.com, linux-block@vger.kernel.org, 
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
- linux-pci@vger.kernel.org, Alvin Sun <alvin.sun@linux.dev>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786430463; l=4626;
- i=alvin.sun@linux.dev; s=20260317; h=from:subject:message-id;
- bh=Nv3zGXf5UtcJRT1/eR1fHVz+qZ5Gti15bQLLVlFnmuQ=;
- b=PFnAVW6hOOtSEnzZMgMp1/De4eUBix1/CuXzS8+dUZ/YUGrGikMhLTJHrdkqo+64ZPO47zWC5
- 9oDIIe0C1tVDZF2yiJ//7Uy8nzSL4umFv9AfeRabt3J8M79nhZPSfQ+
-X-Developer-Key: i=alvin.sun@linux.dev; a=ed25519;
- pk=CHcwQp8GSoj25V/L1ZWNSQjWp9eSIb0s9LKr0Nm3WuE=
-X-Endpoint-Received: by B4 Relay for alvin.sun@linux.dev/20260317 with
- auth_id=684
 
-Auto-add `type OwnerModule: ::kernel::ModuleMetadata;` as a required
-associated type on the trait side if not already defined, and
-auto-insert `type OwnerModule = crate::LocalModule;` on the impl side
-if not explicitly provided, eliminating the need to manually declare
-and implement `OwnerModule` in every vtable trait and impl.
+On 7/23/2026 7:13 AM, Lisa Wang wrote:
+> Force guest_memfd for TDX VMs.
+> 
+> KVM supports guest_memfd for TDX private memory. Without in-place
+> conversion supports, all pages default attributes are private. Thus,
+> set page to "shared" for shared pages.
+> 
+> Signed-off-by: Lisa Wang <wyihan@google.com>
 
-Assisted-by: opencode:glm-5.2
-Reviewed-by: Andreas Hindborg <a.hindborg@kernel.org>
-Suggested-by: Gary Guo <gary@garyguo.net>
-Link: https://lore.kernel.org/all/DIMMWHUOLPSH.13JFRHDKDQJGO@garyguo.net
-Reviewed-by: Gary Guo <gary@garyguo.net>
-Acked-by: Danilo Krummrich <dakr@kernel.org>
-Reviewed-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Alvin Sun <alvin.sun@linux.dev>
----
- rust/macros/lib.rs    |  6 ++++++
- rust/macros/vtable.rs | 41 ++++++++++++++++++++++++++++++++++++-----
- 2 files changed, 42 insertions(+), 5 deletions(-)
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index 4a48fabbc2682..3f4a980f5ae68 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -177,6 +177,12 @@ pub fn module(input: TokenStream) -> TokenStream {
- ///
- /// This macro should not be used when all functions are required.
- ///
-+/// Additionally, this macro automatically handles the `OwnerModule`
-+/// associated type: on the trait side, `type OwnerModule: ModuleMetadata;`
-+/// is added as a required associated type if not already defined; on the
-+/// impl side, `type OwnerModule = LocalModule;` is automatically inserted
-+/// if not explicitly defined.
-+///
- /// # Examples
- ///
- /// ```
-diff --git a/rust/macros/vtable.rs b/rust/macros/vtable.rs
-index c6510b0c4ea1d..be9a5ed8abe5e 100644
---- a/rust/macros/vtable.rs
-+++ b/rust/macros/vtable.rs
-@@ -30,6 +30,22 @@ fn handle_trait(mut item: ItemTrait) -> Result<ItemTrait> {
-          const USE_VTABLE_ATTR: ();
-     });
- 
-+    // Add `type OwnerModule: ModuleMetadata` as a required associated type if
-+    // the trait does not already define it.
-+    if !item
-+        .items
-+        .iter()
-+        .any(|i| matches!(i, TraitItem::Type(t) if t.ident == "OwnerModule"))
-+    {
-+        gen_items.push(parse_quote! {
-+            /// The module implementing this vtable trait.
-+            ///
-+            /// Automatically set to `crate::LocalModule` by the `#[vtable]`
-+            /// impl macro.
-+            type OwnerModule: ::kernel::ModuleMetadata;
-+        });
-+    }
-+
-     for item in &item.items {
-         if let TraitItem::Fn(fn_item) = item {
-             let name = &fn_item.sig.ident;
-@@ -57,12 +73,18 @@ fn handle_trait(mut item: ItemTrait) -> Result<ItemTrait> {
- 
- fn handle_impl(mut item: ItemImpl) -> Result<ItemImpl> {
-     let mut gen_items = Vec::new();
--    let mut defined_consts = HashSet::new();
-+    let mut defined_items = HashSet::new();
- 
--    // Iterate over all user-defined constants to gather any possible explicit overrides.
-+    // Iterate over all user-defined items to gather any possible explicit overrides.
-     for item in &item.items {
--        if let ImplItem::Const(const_item) = item {
--            defined_consts.insert(const_item.ident.clone());
-+        match item {
-+            ImplItem::Const(const_item) => {
-+                defined_items.insert(const_item.ident.clone());
-+            }
-+            ImplItem::Type(type_item) => {
-+                defined_items.insert(type_item.ident.clone());
-+            }
-+            _ => {}
-         }
-     }
- 
-@@ -70,6 +92,15 @@ fn handle_impl(mut item: ItemImpl) -> Result<ItemImpl> {
-         const USE_VTABLE_ATTR: () = ();
-     });
- 
-+    // Auto-insert `type OwnerModule = crate::LocalModule` if not explicitly defined.
-+    // `crate::LocalModule` resolves to the real module type (via `module!`) or a
-+    // dummy fallback in non-module contexts (e.g., doctests).
-+    if !defined_items.contains(&parse_quote!(OwnerModule)) {
-+        gen_items.push(parse_quote! {
-+            type OwnerModule = crate::LocalModule;
-+        });
-+    }
-+
-     for item in &item.items {
-         if let ImplItem::Fn(fn_item) = item {
-             let name = &fn_item.sig.ident;
-@@ -78,7 +109,7 @@ fn handle_impl(mut item: ItemImpl) -> Result<ItemImpl> {
-                 name.span(),
-             );
-             // Skip if it's declared already -- this allows user override.
--            if defined_consts.contains(&gen_const_name) {
-+            if defined_items.contains(&gen_const_name) {
-                 continue;
-             }
-             let cfg_attrs = crate::helpers::gather_cfg_attrs(&fn_item.attrs);
+One nit below.
 
--- 
-2.43.0
+> ---
+>  tools/testing/selftests/kvm/lib/kvm_util.c     | 2 +-
+>  tools/testing/selftests/kvm/lib/ucall_common.c | 8 ++++++++
+>  2 files changed, 9 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+> index 0b9d2d383bfa..4a48c4b42095 100644
+> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
+> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+> @@ -472,7 +472,7 @@ void kvm_set_files_rlimit(u32 nr_vcpus)
+>  static bool is_guest_memfd_required(struct vm_shape shape)
+>  {
+>  #ifdef __x86_64__
+> -	return shape.type == KVM_X86_SNP_VM;
+> +	return (shape.type == KVM_X86_SNP_VM || shape.type == KVM_X86_TDX_VM);
 
+Nit:
+The parentheses can be dropped.
+
+>  #else
+>  	return false;
+>  #endif
+> diff --git a/tools/testing/selftests/kvm/lib/ucall_common.c b/tools/testing/selftests/kvm/lib/ucall_common.c
+> index 029ce21f9f2f..c03dfc763172 100644
+> --- a/tools/testing/selftests/kvm/lib/ucall_common.c
+> +++ b/tools/testing/selftests/kvm/lib/ucall_common.c
+> @@ -27,6 +27,7 @@ static struct ucall_header *ucall_pool;
+>  
+>  void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>  {
+> +	struct userspace_mem_region *region;
+>  	struct ucall_header *hdr;
+>  	struct ucall *uc;
+>  	gva_t gva;
+> @@ -37,6 +38,13 @@ void ucall_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>  	hdr = (struct ucall_header *)addr_gva2hva(vm, gva);
+>  	memset(hdr, 0, sizeof(*hdr));
+>  
+> +	region = vm_get_mem_region(vm, MEM_REGION_DATA);
+> +	if (region->region.flags & KVM_MEM_GUEST_MEMFD) {
+> +		size_t aligned_sz = align_up(sizeof(*hdr), vm->page_size);
+> +
+> +		vm_mem_set_shared(vm, addr_gva2gpa(vm, gva), aligned_sz);
+> +	}
+> +
+>  	for (i = 0; i < KVM_MAX_VCPUS; ++i) {
+>  		uc = &hdr->ucalls[i];
+>  		uc->hva = uc;
+> 
 
