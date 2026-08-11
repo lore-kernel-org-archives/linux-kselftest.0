@@ -1,99 +1,123 @@
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73EB42FCD4
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A2B44A405
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:48:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458958; cv=none; b=Mke3UQY1mmkzdSTYHMDy9Q1klcscUIqLREKZQW8vYWELOKKnI8DbCrzjoWPFZ0hs4WMGFIFH7zT4TQXqNDI2wPM9w9sq0TvkgIkGq5NSM8eyCl/piORJbL3EUFqroXy/kEev6j8wyyhNt5kcjB5QWUiaUD0uitq0uToitxc19PM=
+	t=1786459718; cv=none; b=Z00kC2SAOhpnws/HjA2gxBiMs70/zyj2cK0luDRp/1WuTBrn20mkSaXK3niJnKTvf0iKeHxev4OelCuCrCJMXxrKO9d1TztxJhiKey7vYVLWaN5TmaazPm+lGy1oYHNs74gP1EraxFbYWGfCCqPGFifUrE5h3yebzHyx+mUwTdc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458958; c=relaxed/simple;
-	bh=DEDUOb+TiRrLK8YeC/7fFq7vsbrZrBwxkC3fk1wCwyU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R7CSJ2Alk93LML27ULYT2dwn9BasSWj+0vvPLyLROkbhYB19YzeJJydeHYhvPEG+OLEMjl6GZW739GnBLbmKxXu+NEKNl0+rYLE7CbitqU3ozpqIIJ0R0TCbUExRQvzfbIiFJSaqDs08e4nZA7ZsVJhtUdHkHl/ZWA7DN8ZcF/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLSflrFr; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786459718; c=relaxed/simple;
+	bh=kC6mE8NpGgNSd4MwTOaZbaSstSPzKrQUvf1uS76/vyk=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SInOC7JgfVNeBPcE9dOFYhDUqMmHdKBX/lDVYUNySNk2//ravs4o/PDjBz7aACq5qSWlpTrLu0Fwwc8gk5jxDf3z3jqmNGMM8iJT1gliAW5jKXwM7c9AxvzvonfjLrvgVmBZf3XT/ZHziva2wy1nWkdob/RpDrs6DjN7sYltC48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GRcmnaII; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLSflrFr"
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso23846385e9.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:35:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GRcmnaII"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc7e86e7c5so55977615ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:48:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786458955; x=1787063755; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=nyOgrpKJkHA8gAiY75lnj2+ioe7jla8qo9VP71q6SwU=;
-        b=MLSflrFrvWqtC/DBLzv+U1PZiDOaUAlYRpgJu2J9tYiCGXCdQ+J0TISy54WZ9KGhlu
-         9Re6qoOuNuVTUbV6jEtXy4O3pQliZ/xHfc9IM047D5ZD3dTVtWmvJ467ay5cUnVDqgkc
-         cIxccfUbf5Rkp+gAlwQfqwvFq0w8R1DgMyixosDkrH0j/rvbEiVwHbKPtyz+TUk1X1Z8
-         9ith216bgtshsyjQjdbSI/9KSKJ/8Q0vseJQFTeMVrmLPRACYaVIKKh95Lo5QXvcTs7Z
-         KMH+9/gUrWqycoNtedkBXdw8kTPPnN42bGhb4eyCep9nKvM7RQyvpMTXj2RnJrI9O9wl
-         O8jg==
+        d=google.com; s=20251104; t=1786459715; x=1787064515; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rVhz6t6uiOZc1DDgF6HOTd7wvK1RF7/iSTLQV7TuFds=;
+        b=GRcmnaIIP+/yPM8zZlFCvYTUg7pu0uPG2or4YQbI6T7pDdYf7ir/gu9/xuDWSHK070
+         ioMRjOdOy7cxBJGjiT0FE7jyIIio+NMvbKINGAxNfrOsjkzDiuq6AdQ1yDpYgA/zEkcO
+         CqRG3yJ/s3dWdkKPPPaOtcp25+VsyQIo4R/hOcz/X0HLBInaj29OUhdm7eX2m6UnOQM8
+         3kFNHAH7Dqqv8oVfl943ixjGqSPEr17og0wiS11D0AIDf6LjKBGt6mw4iV17qI5ftXyT
+         YJ/mFO/f1LEbouwNfnriX1zuw8NCCwstASSzSvZ+4QJ+sr+rl+9tm9fM14/jWCMN63Dh
+         bEWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786458955; x=1787063755;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1786459715; x=1787064515;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=nyOgrpKJkHA8gAiY75lnj2+ioe7jla8qo9VP71q6SwU=;
-        b=kjHEHdpqVlHJ0HyQ3PScTcWr1B+jPMKftuu/PsfUDU6nHWbzVqBIxsKNF6vYllVpeY
-         3opMLlK3M9qH1s4FRKMe+gW5cyH1crkswt+obE0U9kuWiSSw7qKjpE/maFHpL4hS8itS
-         EC7d92h1McRdQCvxv6O3cN1v4QWlqDmL1uZml7HzCwmSOaHGhJOuWWyrlEo4cWA2Vnur
-         esPkeuX0V56lovUEMXFBT5pifUYExa1iqm8A4DDBb3mqmdhgQxH90CyoACk6DZKu0oC2
-         Ez/qMbSHu2aNg8Y4jY7GuhqHLQ5DEmRxeuLtUJQFDyTw6aC30lxEGgsSt3oktH1mQAHb
-         biqA==
-X-Forwarded-Encrypted: i=1; AHgh+RogFTbMczZfY/q2eeSuLb+Jwax0zvoOEDZDiUiJX7TkjVlEhMLzKWd8WiFJZzxfLwEpcq3v0xNCWvGW6vGzwAo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywfuf3BGp+P8NijtJqZ5Sk/uzd4MP2MOYvC2BFfBdRFERxPHleR
-	ZjxmCIdORDG5BaATBBrZBHYHNwCeTi9TSX7KpltSQ4oJxVz14tUJnElb
-X-Gm-Gg: AR+sD127haTZ9+HSDxZhruyLTT6LwJVAkRwXaxlxiG0H7hsuj+3dkAEtqoWyYKUva1R
-	KvA7l0J2QcaSpAg/ZHzTwiRZuHpg3hEjxfYVKC2H1dYWQxURzOVFZTeNe/7KLTsazBAFnmZnVzG
-	LdNkgvTHvTFlRiBRXHcy28k9vtwwNaKSNu0qxCiz0y1Id66EjfNuxRVzi9udc1Y5sC6aRz+gHn9
-	idZ4e7V4guZskdZlkeeii6Y2nhJ7G72Zuu8RZTJO9rpiq1+6RYpNTCziNK4WehyHIC78gRHzeGv
-	7hGDFdGdS1Bu+Cg/WVwKLZHb3998YUnon9M0B6VBG/0RKWiEzNA2bxm1DV1miCco+JfoPcQII4F
-	BXEFCgJT45sX50PHkwMGcoHi0/6PlqWqIQXpb8x1ocHgozTHxd7Q2aCYRFT6VJQ7StV5/qb4yEK
-	Bcqzdt59TLd0xn7xEU358Nx93myoCYyNwQuRlRyW0qf8Z4/mBOTuHgKK7+fBTSA+igWdD7Xt2U
-X-Received: by 2002:a05:600c:3495:b0:495:4811:7998 with SMTP id 5b1f17b1804b1-4997848412bmr75446575e9.17.1786458954997;
-        Tue, 11 Aug 2026 07:35:54 -0700 (PDT)
-Received: from localhost.localdomain ([45.249.68.153])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499788a5be9sm74296965e9.4.2026.08.11.07.35.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 07:35:54 -0700 (PDT)
-From: Joyeta Modak <joyetamdk@gmail.com>
-To: kees@kernel.org,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Joyeta Modak <joyetamdk@gmail.com>
-Subject: [PATCH] selftests/exec: add missing SPDX-License-Identifier tag
-Date: Tue, 11 Aug 2026 20:05:43 +0530
-Message-ID: <20260811143543.45989-1-joyetamdk@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        bh=rVhz6t6uiOZc1DDgF6HOTd7wvK1RF7/iSTLQV7TuFds=;
+        b=QrHJHncitHhcvh0DYmwL4rOsMNRAVBegEP9lYRBvX1uh2yYUiSOSVQezyUhQLLORZ6
+         15vLboyDReShhTcQIp6k2bHkq3lrA2Took058+U0ev0f2S8JlWnNLvipbPWerdAzL/xl
+         6/y7dJ2ybilFKk8DnkEj5OUmuiA3u6Jlv7we1RVKzOqF5av813HbEZRRu7g9jJCJcm6h
+         QjuN5O5khxj2xBiwoBCOs230EDXsKXkd4JNo5e+f/NIEAYUIonwE495xkomhgvqV1+7U
+         JBQFSrZQu/7oCwiXMrvX//BuBEyRdbHJsn0Jz9bXIoV2tUBWYFQb0yKmgPIx6Z8HELA9
+         PINg==
+X-Forwarded-Encrypted: i=1; AHgh+RrA0J50nQrs/VekcR2dHsQdjbqd/W7gCvvqotLEbXQwSLcJBThIVvSGwLoEtL0LMebVyxNoNKntQO+6XX0Mkjc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCeXVpunfigcGKvFi6AisgjRvCOMjnVDWBUuR1kr7zBJNhZzu9
+	Z8+eAv6MipIrvtCfNyn00iJeapi5xVhTJt8vXKkwDzMjwD6UKgM+o/enjrFbrM9LeXfFQRttlMR
+	6uPSl8w==
+X-Received: from plbje14.prod.google.com ([2002:a17:903:264e:b0:2ca:eea9:9845])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d488:b0:2d1:1a18:4d0a
+ with SMTP id d9443c01a7336-2d3177a2163mr42800725ad.9.1786459715153; Tue, 11
+ Aug 2026 07:48:35 -0700 (PDT)
+Date: Tue, 11 Aug 2026 07:48:34 -0700
+In-Reply-To: <9huzqzk4zt3n.fsf@tarunix.c.googlers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260728121138.1103610-1-tarunsahu@google.com>
+ <20260728121138.1103610-2-tarunsahu@google.com> <anpXjM_lg_UTpl0q@google.com> <9huzqzk4zt3n.fsf@tarunix.c.googlers.com>
+Message-ID: <ans2Qvo0453cc_DD@google.com>
+Subject: Re: [PATCH v4 01/11] liveupdate: Add LIVEUPDATE_GUEST_MEMFD config option
+From: Sean Christopherson <seanjc@google.com>
+To: tarunsahu@google.com
+Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
+	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
+	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
+	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
+	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
+	suzuki.poulose@arm.com
+Content-Type: text/plain; charset="us-ascii"
 
-Add the missing SPDX-License-Identifier tag to
-recursion-depth.c . The file uses the ISC License
- as indicated by the existing license text in the
- file header.
+On Tue, Aug 11, 2026, tarunsahu@google.com wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Tue, Jul 28, 2026, Tarun Sahu wrote:
+> >> Introduce the LIVEUPDATE_GUEST_MEMFD Kconfig option. This option
+> >> enables live update support for KVM guest_memfd files, enabling
+> >> guest_memfd-backed memory preservation across kernel upgrades.
+> >> 
+> >> Currently this support only guest_memfd files that are full-shared
+> >> (INIT_SHARED and no support for private_mem).
+> >
+> > Why?  Specifically, why do we need/want a separate Kconfig for guest_memfd
+> > liveupdate versus KVM liveupdate?  I can _maybe_ see a KVM-wide Kconfig, but
+> > even that seems like a stretch given that (AFAIK) hypervisors are the one and
+> > only use-case for liveupdate.
+> 
+> LIVEUPDATE is used in many subsystem. It is possible to enable
+> liveupdate and kvm without enabling KVM_GUEST_MEMFD. So GUEST_MEMFD
+> preservation must depend on CONFIG_LIVEUPDATE and KVM_GUEST_MEMFD both.
+> LIVEUPDATE_GUEST_MEMFD Kconfig is wrapper on both of them. It need not
+> to be visible in menu, So I can make it hidden. WDYT?
+> 
+> Also, KVM VM_FILE preservation and GUEST_MEMFD preservation both depends
+> on LIVEUPDATE_GUEST_MEMFD in this patch series. [PATCH 05/11]*
+> Which is wrong. So I will update KVM VM_FILE preservation to depend only
+> on CONFIG_LIVEUPDATE.
 
-Signed-off-by: Joyeta Modak <joyetamdk@gmail.com>
----
- tools/testing/selftests/exec/recursion-depth.c | 1 +
- 1 file changed, 1 insertion(+)
+Or just handle it all in the makefile?  E.g.
 
-diff --git a/tools/testing/selftests/exec/recursion-depth.c b/tools/testing/selftests/exec/recursion-depth.c
-index 7b5c4f6d1928..a6c42a9b22d7 100644
---- a/tools/testing/selftests/exec/recursion-depth.c
-+++ b/tools/testing/selftests/exec/recursion-depth.c
-@@ -1,3 +1,4 @@
-+// SPDX-License-Identifier: ISC
- /*
-  * Copyright (c) 2019 Alexey Dobriyan <adobriyan@gmail.com>
-  *
--- 
-2.53.0
+diff --git virt/kvm/Makefile.kvm virt/kvm/Makefile.kvm
+index d047d4cf58c9..e6f098498795 100644
+--- virt/kvm/Makefile.kvm
++++ virt/kvm/Makefile.kvm
+@@ -13,3 +13,8 @@ kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
+ kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
+ kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
+ kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd.o
++
++ifdef CONFIG_LIVEUPDATE
++kvm-y += $(KVM)/kvm_luo.o
++kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd_luo.o
++endif
 
