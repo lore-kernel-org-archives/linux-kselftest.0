@@ -1,128 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F6E52C032C;
-	Tue, 11 Aug 2026 04:41:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F0BF19E992
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 05:00:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786423294; cv=none; b=EpEv4Pp2yqVmfynlgvzgRNQzlZwDWmcjU9ShtgiA73J7X/xT6MKj4h1lH5jp4AzbXfuVhAokI9l1R1Ay4HuVlc3MigPOY5c4nL37CQrOP2M+4uk4LNIXOSdPM39e6fYIafCAijtLPQwdjDbO4HobN2t4R6Gr7Y4aNVVnHAfW+gU=
+	t=1786424440; cv=none; b=npjlfnnaHuPvDdkTUHIJF9Gpzi0a9ct1hXyTdVhPPz9uWLdg+tKxF9uXjOj4uiXRzXyEyo+xFJu06OO7NmhAO5hKtI4mX0xU3uqk6I6S79C3vvTqHjF0P6E0ds9noaOIHzobiiktoY7k3jaX+B/Fp+B0CnbVPFPhHcaVotCurO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786423294; c=relaxed/simple;
-	bh=bAqYbBhZjwhNVKy3FeyaGQVXxIZByhj9THKeaY8b5x4=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=WbJE4WAOH7gL7bLUyHqDUHpOJ2VcmL9V/hElpgAWZj++JNY47nTXSpJZyxqqFzkaEL2ZNFkKum97Nbb2XFLW7MO8L6frXjLma4XFg/aHBN4K9SpdNOuhWuyTIdSNQTNoCkdaHY9UzWqZQAH8DbR8Zo6ZfrukdGH5Ms4GkKUDOD4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWm+9Qkk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786424440; c=relaxed/simple;
+	bh=96uq6DR7meULD6e0vhzPQPh15pvpeq+zRFpv9E5X/6o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=k3iaO5jdd07n4ABIoXCzQozJ3JcDoEGj9M/bGUCDlNKwJsWmeGcQtwDa1Gn38FkLN8oujybD6MgHJFzT6AOhEqeFI6VZVKHjsmTObevEpfPi1PtuxBPNa+69TQv1g+DWib/f4cMgfRJRxRT75TIzBU/BhC5f8LLGQBeJAq4Ixnk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iYHzDPko; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWm+9Qkk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01B8B1F000E9;
-	Tue, 11 Aug 2026 04:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786423293;
-	bh=Bq7zIpdiDC6ha4zXitwqMece8LycbMp4UrIwfL4R7FU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HWm+9QkkB3Gnml6qnrE5K63yR7aXlFW1S7TR7khDpf7XTnsT0IlBeoE0VwZBWLFgR
-	 Hx0JphlLOa+kiQavAFppNT3fBFpfM+1r7VcgNPW0IYbYNiL/0cTiVcTtpLwlgVQOZN
-	 PtrxQb0cTPafk86/M1XP2lHUN1SCn+ddnHVKlwnaR0n+5eYkBEYpx7oJLJ2A8mHGu8
-	 Yb5pmhe4BlrZqysqp7SX5/xym/t/KMe+LmnfeJmw8jUaAgKbmKHlXj2xeXlOi38mab
-	 lokGc16wT4/Ru62mpWdh66RRfwBnJarI0jM5qLVU+2RMV+B3bprVFDPnacYGqUpkAc
-	 7FnSLZkwiuzJg==
-Content-Type: multipart/mixed; boundary="===============6798297792273501143=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iYHzDPko"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2caced6038eso7194465ad.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 22:00:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786424439; x=1787029239; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=FBt9KUApkZajktq9wAzF4z4ZyRD+OJ573CFHiv7VWA0=;
+        b=iYHzDPkoHjgPlLHZDfmYvwom/bPp6Cn9Omlpl5zozv6+d7k1ftI/naWS+sMJnJ+VP0
+         p/VFswwjVZxl5mGCZ7efIdvdrknGyC04MbXnRVFxribHxXTh1DAw668piiDPsYPfGzli
+         sWSPfEmQdTZE0THikrA+sQ8+0bCUaCjzmJ0XkH3tOj2eaDekijprW33piUYKKr+JXCND
+         VUTgayFwzkQRCN1ocvnJAo2StqPOytDqOGko6LWvoaJPFbAevjDYUEUkaxeCa2HWOHFL
+         VbpdNdkiggQjK+PeHy+/Y7EuVvN+E+NSaRurB/lM7w6iA5kGoxKwr3PbUvy+1Ajcj2Nt
+         9ELQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786424439; x=1787029239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FBt9KUApkZajktq9wAzF4z4ZyRD+OJ573CFHiv7VWA0=;
+        b=g4eJR+KSUp9y06s9Dy0eN3132fVvDZTswvkOx4fnfqtmVQfc9XTarR9oyHQ6R+NxSj
+         c7M62QMqKcKgfKmArTPvReMEb+1fzmBBFmgIuFKm3bHZqV9R5dplDPEdApxrEHj7dit4
+         mzyiw6E+I8E65Ww3U9H4VmnSllZnTeEdp5EPOWfBrojbuy1Pwh1YVUx0K5CDYBHkuwxl
+         a9E3hMIDbgM0dedVqdqa4LlJwm6ho0TLsMbFbClieKW0sBTa4BUZk4UuwkjcNHnaNv4h
+         Ym2QIPWfR5McdMxBO/ZS6zVBe9NvyODPFylVXgqVIudoRK0w2A20jW4c8MJ2cHdLDMUs
+         ukeA==
+X-Forwarded-Encrypted: i=1; AHgh+RrOkvAEQhdC/zFWyf/GVJnFVmSrMk6AzvFMLt55CXA7slwkNRN+QMVYeIEAQwibSvcJHJI6cl08F9tukujYrGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7Lr/8vFO13TNwR/bly2anpZdRzgUMvg+tTtBYNyiUdqlI8rjO
+	xbbLcN5k/0aO4nGO4Z7VpXZVtF4Qmx4c84fG2/q8K2V7X+AM5BJ6l81t
+X-Gm-Gg: AR+sD11PcYeGG2Dt3281gBHR6mpYH646ldmGY4GCF1s/EvjrunQnGGM0xf4Xfa7DTAg
+	w+iLdsLDeYm2mtZENAaMQNDE82a2PeF0IlkTjNj/Ue/Ypyqbg9X2q2SemWtswZIQkT9fJB9L5oz
+	muVXkxkLgDBF1RTTRuL1DhhAmpxez+C0kPsZVahimA8wlM6rSdL2iIW4PkClLLf/GwJTUbt49yb
+	j/OB/3Li1khKKhzlpIl/+Kohb3JSDziJNKVdBzsn7mnYwL7/0ISmjcEhd0y6MbAxVa54MM+b5qR
+	aCxYz4S5BKIZqyF7S/f5ALfYtQRNs6noFJsPXaZBeAZY1KshLwWX3aQFo6o/EAxN7cceS7MhtQM
+	FAOK2VrmYCxB5rFLEM6XnEavRsFYNGOC0TzfALv7yG1zYpEtWUg8kjFg1S/zQoubIKR/zgOqjUI
+	5JHducZyVolJ7Xs5TSETmm7yosz7kWq0LiuMYZ2bRKo/XWhAtjdPVmIbBhJyuEbR9hFFL+uMOAK
+	Ho=
+X-Received: by 2002:a17:902:f64c:b0:2c0:d94f:50c7 with SMTP id d9443c01a7336-2d3187e903bmr5964185ad.7.1786424438583;
+        Mon, 10 Aug 2026 22:00:38 -0700 (PDT)
+Received: from 10-86-27-207.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31c64e10011sm535444eec.28.2026.08.10.22.00.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Aug 2026 22:00:37 -0700 (PDT)
+From: Gokul K <gokul02k@gmail.com>
+To: Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>
+Cc: Shuah Khan <shuah@kernel.org>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] KVM: selftests: Fix two VMs leaked on early returns
+Date: Tue, 11 Aug 2026 10:30:27 +0530
+Message-ID: <20260811050029.530698-1-gokul02k@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <3ac6ad5d1acfbf15bc536519ba1fc748ea85ece109397bbb50e56cdffb9ce726@mail.kernel.org>
-In-Reply-To: <20260811035955.132989-3-dingning04@gmail.com>
-References: <20260811035955.132989-3-dingning04@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Test RCU iterator state pruning
-From: bot+bpf-ci@kernel.org
-To: dingning04@gmail.com,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,dingning04@gmail.com,zhouchuyi@bytedance.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 11 Aug 2026 04:41:31 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
 
---===============6798297792273501143==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Two x86 selftests create a VM and then take an early return that skips the
+kvm_vm_free() at the end of the function.  Both now jump to that existing
+cleanup instead.
 
-> selftests/bpf: Test RCU iterator state pruning
->
-> Add a path where RCU protection reaches zero and then starts again.
-> The iterator is untrusted after this gap and must be rejected.
->
-> Signed-off-by: Ning Ding <dingning04@gmail.com>
+Patch 1 is the plain-SEV path of sev_smoke_test(), which returns straight
+out of the UCALL_DONE case instead of leaving the loop.  The SEV-ES path
+next to it breaks out and frees correctly.
 
-This isn't a bug, but could the changelog mention why BPF_F_TEST_STATE_FREQ
-is needed and that both arms deliberately converge with the same RCU lock
-depth, so a future reader knows what keeps this test meaningful?
+Patch 2 is nx_huge_pages_test, which returns as soon as it has confirmed
+that disabling NX huge pages is denied without CAP_SYS_BOOT.
 
-> diff --git a/tools/testing/selftests/bpf/progs/iters_task_failure.c b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-> index fe3663dedbe1..566a1d3dffea 100644
-> --- a/tools/testing/selftests/bpf/progs/iters_task_failure.c
-> +++ b/tools/testing/selftests/bpf/progs/iters_task_failure.c
-> @@ -61,6 +61,52 @@ int BPF_PROG(iter_tasks_lock_and_unlock)
->  	return 0;
->  }
->
-> +SEC("?fentry.s/" SYS_PREFIX "sys_getpgid")
-> +__failure __msg("expected an RCU CS when using bpf_iter_task_next")
-> +__flag(BPF_F_TEST_STATE_FREQ)
-> +int BPF_PROG(iter_tasks_rcu_state_pruning)
-> +{
-> +	struct bpf_iter_task it;
-> +
-> +	asm volatile (
-> +		"call %[bpf_rcu_read_lock];"
-> +		"r1 = %[it];"
-> +		"r2 = 0;"
-> +		"r3 = 0;" /* BPF_TASK_ITER_ALL_PROCS */
-> +		"call %[bpf_iter_task_new];"
-> +
-> +		"call %[bpf_get_prandom_u32];"
-> +		"if w0 == 0 goto unprotected_%=;"
-> +
-> +		/* Keep the outer RCU lock active on the straight-line path. */
-> +		"call %[bpf_rcu_read_lock];"
-> +		"call %[bpf_rcu_read_unlock];"
+The two patches are independent and either can be applied on its own.
 
-This isn't a bug, but would it help to say what the nested lock/unlock
-pair is for here - e.g. that it scratches the caller-saved registers so
-the only state difference at merge_ is the iterator's MEM_RCU vs
-PTR_UNTRUSTED type?
+Found by auditing every function under tools/testing/selftests/kvm/ that
+creates a VM and later calls kvm_vm_free(), looking for returns in
+between.  Seven other hits were false positives, mostly returns after
+REPORT_GUEST_ASSERT() or TEST_FAIL(), which abort the process and make the
+return unreachable.  Two more that do look real, in get-reg-list.c and
+arm64/external_aborts.c, are left out because they belong to different
+maintainers.
 
-> +		"goto merge_%=;"
-> +
-> +	"unprotected_%=:"
-> +		/* Create an unprotected gap on the taken path. */
-> +		"call %[bpf_rcu_read_unlock];"
-> +		"call %[bpf_rcu_read_lock];"
-> +
-> +	"merge_%=: r1 = %[it];"
-> +		"call %[bpf_iter_task_next];"
-> +		"r1 = %[it];"
-> +		"call %[bpf_iter_task_destroy];"
-> +		"call %[bpf_rcu_read_unlock];"
-> +		:
-> +		: __imm_ptr(it),
-> +		  __imm(bpf_get_prandom_u32),
-> +		  __imm(bpf_iter_task_new),
-> +		  __imm(bpf_iter_task_next),
-> +		  __imm(bpf_iter_task_destroy),
-> +		  __imm(bpf_rcu_read_lock),
-> +		  __imm(bpf_rcu_read_unlock)
-> +		: __clobber_common
-> +	);
-> +
-> +	return 0;
-> +}
-> +
+Compile-tested only.  This host has neither SEV (kvm_amd sev=N) nor hugetlb
+configured, so both tests SKIP rather than run.
+
+Note patch 1 touches sev_smoke_test.c, which an unrelated patch I sent
+earlier also touches [1].  They modify different functions and do not
+conflict in either order.
+
+v2:
+ - nx_huge_pages_test: goto the existing cleanup instead of open-coding
+   kvm_vm_free() before the return, matching patch 1 (Sean)
+ - Drop the claims that these paths never exercise VM teardown, and that
+   the nx_huge_pages path is not obscure.  Neither justification holds
+   up: teardown still happens, just at process exit, and how often a
+   leaking path runs does not change whether it should be fixed (Sean)
+ - Rebase onto current kvm-x86/next
+
+[1] https://lore.kernel.org/all/20260807071026.195503-1-gokul02k@gmail.com/
+v1: https://lore.kernel.org/all/20260808081050.408657-1-gokul02k@gmail.com/
+
+Gokul K (2):
+  KVM: selftests: Free the VM when the SEV smoke test's guest completes
+  KVM: selftests: Free the VM when NX hugepage disabling is denied
+
+ tools/testing/selftests/kvm/x86/nx_huge_pages_test.c | 3 ++-
+ tools/testing/selftests/kvm/x86/sev_smoke_test.c     | 3 ++-
+ 2 files changed, 4 insertions(+), 2 deletions(-)
+
+-- 
+2.54.0
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31457825387
---===============6798297792273501143==--
