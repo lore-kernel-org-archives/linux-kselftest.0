@@ -1,204 +1,149 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A98E2F5A12;
-	Tue, 11 Aug 2026 19:25:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786476345; cv=none; b=jb8FUmt5TWlaunvzHqfvOqzSfL8kXFLa6Q2r2+ZBLCuHLsZznynF2S6aP4D5SP8KRaFdKTGh2ScZKYR7NtTIb3EcOK0CZLV965CoSp8Ra9zXaGz7alU0X4Vs5gPKLdGIfuH1fn5z25w62iAyWV+PrgOt2o0vb2Jdafwu3sBtGdc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786476345; c=relaxed/simple;
-	bh=/LsIYChc/MAnsTy+F0FLbPWqnINkbEE++Grc/fOfoAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=YTHn7Lg8NLX3tc/hjQtPrR36Tyrt3ueppmeI28XTBIRkSzKmikNxw7QiBcoFWA0mYys9A2h3hZmxOS9oz/ibnyGcMiN/mefmRM5mVF7ywkTu4vOCNqZdjvvVGGTG+JUOmYn36g2Pztd3yectQ3//Lgw/4B4/85+Tnbpot49IeGQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QjR46Q4l; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8D644749F0
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 19:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786477191; cv=pass; b=ZAcUndJyU0CREj6yw0NrKTYqyqwZl+4X78Ls9kvYwGDsBKYy0EHNUdJ3DW0LxiVF5praNfSth8L10zwYzlRPxYZff5BQyCzT8DwrCaw5nRdUbAHeTV1kVrBlCwQ3LpTBwi/teNszJhn+QVIN5CbxFF546p6VdpN3ntFzWAb92kk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786477191; c=relaxed/simple;
+	bh=4UuIwl6rqjNT2GK6MHDUeAAQX29Svi83Q77R51FpwQc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=BRohAtl7AsqqoJDtIQGPBOEvmpL+AVapNJ+fj4vyAnu6U6BnzlEpTecDmeP7vsikvEr7pl3T2PZvSQYJ4NGXiyeaek3HXlPlQY7ruu6dGZMNPlHiqYgnj9ADEtaFkjVQhpafbYVP88JwzqeT2Prs6nV4y3KF7A8kziHkRAXFn3M=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=K4IQV6NL; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QjR46Q4l"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B2051F000E9;
-	Tue, 11 Aug 2026 19:25:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786476343;
-	bh=d/kFT/bPhzj3VGlufcHrxy72DzfiKj46fSUWmYSSRdY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=QjR46Q4l38ohpBPR9a3NVpyj00X97b0QAtzWD4CJusxEIHEk06ZVprfqvGEwliaFz
-	 ApBeXPVAZFUoE+1iAOYtGAf1euN2IjulS05jD3suRf8nP+UXfJAjvY23m4sDGtj2gN
-	 0iZV+swR1WmPVz6C9JwEZAJHMXnIVG0wfTVbm3960TN4McRip96oHmA0zV1PTgK4PR
-	 sMEkhML8HuqBfgHxpw5B+Vxc7jB7S5Ing8jtzB1kK0TmQkbcsUP5Z6S8nxav9KhiA5
-	 LIHxirdJ5+/7iEag07J0iZPWWUreSRXob3X4jSbGiOtkALzPRhYglSoT5SwTdh0u/I
-	 C3aXsRk4aSs+g==
-Date: Tue, 11 Aug 2026 20:25:07 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Huang Rui <ray.huang@amd.com>, 
-	Matthew Auld <matthew.auld@intel.com>, 
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 17/20] mm/vma: only permit MAP_PRIVATE /dev/zero to be
- mapped anonymous
-Message-ID: <ant1xwiG3djtoXoe@lucifer>
-References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
- <20260806-b4-scalable-cow-virt-pgoff-v4-17-ab318a350404@kernel.org>
- <c7930f14-5978-4709-bac2-54950c988883@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="K4IQV6NL"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cede6375caso3325ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 12:39:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786477189; cv=none;
+        d=google.com; s=arc-20260327;
+        b=PxOzlENK4v+2tSHcdf/qXqoIgwD36g30TvqFCPBerGkzhzSpEZQuD0lbHwnCbDTzbm
+         IYLC45pbUKA1ypgf/EVRgnOlKAkkw6SKA1bZW7///4Y1SI6+Oxz4VsQvs+w2K69cQQ9G
+         WPzthOv82HQy36yY64i0is7QS0OcDMQbKCYcjYpj8QzsZ95GrWkionVTD0Gzcl03fZr9
+         2wvZseH3SmtM75NAVNFi4F1AgVmnbzl+PlawuSLY7XPuhtySs2lhJ+46FnLkl/hUOB7l
+         hLRa+WSkjIrKzyGmS0F6gXTBx80bNZ5T6LvhcP4BR8wRc7pF8YCoRnKeNipJ4jqs1/ap
+         nAYQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=4UuIwl6rqjNT2GK6MHDUeAAQX29Svi83Q77R51FpwQc=;
+        fh=KQ8g5nQTDwiMXE9XPn23qtkZcDYc78TysoQIC0I9WVg=;
+        b=s0wysE/hs/bzO8eXqcQDmiYKy24UtRWdKC8K6AaMhSNxhiPtSGFCd5OFrS6xrH4idN
+         eV2iiTc+bn38+Xx1EJuRl7zPrI0DSFppdS/os112uOrmfCJ65xnF0sVFqsZHheftMHVX
+         +EFE8FrDBSBD86Gu6D1oejPNn5k3XiCcMWSqYaGbc+Q65FnoKX34MOZo3kgglU97gHzI
+         DjAtvW87S0YCKC42XCoF73sA7ZR83en+W69LEJfgNWnYt4ZiEIYSL94qItsaycf4MFEF
+         +UldPPLEC18J9u4lMRPng6xkWaVbNBMTfK97fbboXqTV54l8fzfURsf+Ab7O1P/YIUAT
+         d9UA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786477189; x=1787081989; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=4UuIwl6rqjNT2GK6MHDUeAAQX29Svi83Q77R51FpwQc=;
+        b=K4IQV6NL4pt8Zv7Fm3LFD71UHJcsxBoRBTgNZH4KWHOhUEqtKDqOHufV5hQcdK4FA7
+         1b2h9mVVDmz4ue12polGkYzvn6bWKjOuSoCm8k6ufQNIvxSh3f3Pm7bbHtL8NdorGeYV
+         kEb2YvhG/5Hif7PUGHDzjKgVt4dIUKfBM7dv1pSwiTdORIUicP+5GKpxxB0DxQbsJUCZ
+         uuP+l+M/GAtNtISneHchNWdZiQRJ0WP/j0Px+92gnO8urjqeH94GoFJh6Wxec5MBq646
+         iRK4OaLQJkIg4O3wXnyYPX0xp+sEq8UWV3L6GcriuxgEYwlAzj1k5B4Hp8cQ8Q7unzZc
+         vPYQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786477189; x=1787081989;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4UuIwl6rqjNT2GK6MHDUeAAQX29Svi83Q77R51FpwQc=;
+        b=W5EIM41ssVSvgomVkzBIUhF1sVb2LTLcU4Svc0n8EJBgkcFvSU5kgbO125vmPTpFz8
+         xZuSX/KKKUqqwU0Eeb2gjGuojG59xHXpldiCWLk6l+5iNBjnzjkux9llV5XhADBEdxJR
+         6YtdQltwX4bWrDhxf2vY+0edlaqgPBX/t99H9GtsGgKTOyFXziyngHeyC5plJ8ijFRMA
+         P3kfx31OneBRGJ8ssgAhOa4XJqiwowpLyN4LwSalpJfNoOCk4FE8l6vzYdPZwlnS1v+b
+         Jm/ayzR6LZznXYZ/oL0P8nyJqsIx/R+5TZe193V0xgumg+pb151R1ytTnj3ClOdUDxs0
+         UKEQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rq+kZ1Km2+H7PEbyzz5TLeqO+fTvRxbnV/4Qxr5J2JOEX7VvFUK+uJbTsi3c4iWxNXNyi4L3X1utKVjBU6Nx+g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyODZsV5po8DR0/hstN03MfnoHdKw013wGKJvHAQH6qzeXNUEmz
+	dnxUeDGL5FAoDYohrg85T915Me4BvaDYKgHAO03+Un+IwKiO7CBOYJpleMzbcu980lMAVzVpHSz
+	ID/m64JsJhorUDZYv1KaIjpQjtnx05XkVokmG0gDB
+X-Gm-Gg: AR+sD13q35gi4xDlDTv9furzPPB1THS9ebqCZV0IyVr/TbSeEknrPrRy9/xK0rKZlYE
+	Qpa1jUybU+u/mP7YwU4VUQubX/3D5HJ9iVN5zAm7bv8oFVYH3YzstRkUgbEOtWPs6jpqQ+n3kVV
+	BSOVWWLsGM4FvsgYeynRMwvuqvW46JN6DAOLLCr9bwH2UFWzhI0DECB53lq9Xnr0L8h7ohkrdn+
+	0zOxjqYc+sD4hOcgQ0CAg2mDsO+YOYH9b6enqyn9RtjfNpuDpYXWlQBWO7+Ij7QJnqYS8Yaw3mI
+	Vg89qpdfF8HFa1RMVNnbJuUVDJ1HJBZGct4rLoDALJ34u0FHUGix7ufUUhQ4hPguVTiDSMAfasR
+	BDN8RIJWzPT3w76PR8ysxZldXUVId6lU=
+X-Received: by 2002:a17:903:3e24:b0:2d0:1aaf:daec with SMTP id
+ d9443c01a7336-2d33a9bb8b9mr1376625ad.9.1786477188642; Tue, 11 Aug 2026
+ 12:39:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7930f14-5978-4709-bac2-54950c988883@kernel.org>
+References: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org> <CAG48ez3QwUopEyfB0tEc84A57g3GZdnptazJW+htiTi2e0Gc=A@mail.gmail.com>
+In-Reply-To: <CAG48ez3QwUopEyfB0tEc84A57g3GZdnptazJW+htiTi2e0Gc=A@mail.gmail.com>
+From: Jann Horn <jannh@google.com>
+Date: Tue, 11 Aug 2026 21:39:12 +0200
+X-Gm-Features: AUfX_myNWbh_52Kb4nyJ3nHpbMubkiK4TzA6UuwI2EkOKm05z8EIDPP_R-GhG1w
+Message-ID: <CAG48ez0Ty5GTR_vYazWsWOigWP2=8SYstw13zaiJB3auBi1bcw@mail.gmail.com>
+Subject: Re: [PATCH 00/11] coredump: allow to create sparse coredumps on the
+ coredump socket
+To: Christian Brauner <brauner@kernel.org>
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 11, 2026 at 07:07:27PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/6/26 22:21, Lorenzo Stoakes (ARM) wrote:
-> > In order to use mmap_prepare() with MAP_PRIVATE mappings of /dev/zero
-> > without the success_hook hack we explicitly permitted mmap_prepare handlers
-> > to set NULL vm_ops.
+On Tue, Aug 11, 2026 at 9:07=E2=80=AFPM Jann Horn <jannh@google.com> wrote:
+> On Tue, Aug 11, 2026 at 5:27=E2=80=AFPM Christian Brauner <brauner@kernel=
+.org> wrote:
+> > A server that raises COREDUMP_HEADER in coredump_ack->mask doesn't get
+> > the coredump as a plain byte stream but as a sequence of frames. Each
+> > one a struct coredump_frame_header followed by what it describes. A dat=
+a
+> > frame carries its bytes. If a server also raises COREDUMP_SPARSE, zero
+> > frames are sent for unpopulated mappings. They only indicate how many
+> > zero bytes need to be written and to not include data. Reassembling the
+> > frames gives back the same coredump. A debugger and everything else
+> > still see an ordinary core file and nothing outside the coredump server
+> > has to learn anything.
 >
-> The sentence is a bit hard to get as you are mixing "with" with another "without".
+> Hmm...
 >
-> >
-> > However this is dangerous and we really only want to allow this for
-> > MAP_PRIVATE-mapped /dev/zero.
-> >
-> > Make it possible to explicitly identify /dev/zero by setting a global
-> > DEVZERO_MINOR device minor number then explicitly check for this in mmap
-> > code for a MAP_PRIVATE mapping and only set the VMA anonymous if we have
-> > positively identified it.
-> >
-> > Then remove all ability for mmap_prepare or mmap hooks to set a VMA
-> > anonymous and update mmap_zero_prepare() to leave it to the core mmap code
-> > to mark the VMA anonymous.
-> >
-> > Note that this disallows nested MAP_PRIVATE-mappings of /dev/zero
-> > regions. Doing this would be broken in any case.
+> I think what you're doing is probably the easiest way to do this in
+> practice. I guess some design alternatives would be:
 >
-> What exactly do you mean by "nested MAP_PRIVATE mappings"? You mean, reusing
-> parts in other drives?
+> 1. (overengineered, not generically useful enough): If the transport
+> was a pipe (which already has the concept of different types of pipe
+> buffers) instead of a unix domain socket, we could introduce a special
+> representation for zero-filled pipe buffers and some API for receiving
+> zeroed holes through lseek(pipefd, 0, SEEK_DATA), but that's probably
+> not sufficiently useful for stuff other than core dumping to be worth
+> the effort.
+> 2. (somewhat overengineered) With some refactoring, we could maybe do
+> something like /proc/kcore and create a seekable virtual coredump file
+> that we send over the socket via SCM_RIGHTS?
+> 3. We could leave the userspace memory dump out of the core dump data,
+> and let userspace take care of filling out the memory contents using
+> /proc/$pid/pagemap and /proc/$pid/mem? That would also avoid task
+> switches and SKB allocations, and probably reduce the number of data
+> copies involved in this by 1.
 
-I should have said stacked I think.
+I also wonder what userspace actually does with this data - does
+userspace just want to write it to disk, potentially after compressing
+it? Or does userspace actually do some fancy parsing of the data
+stream to extract stack memory or something like that? Or does
+userspace buffer the whole thing into RAM and then process it from
+there (it kinda looks like systemd tries to do that but I might be
+reading this wrong)?
 
->
-> Do you mean things like ...
->
-> [...]
->
-> >
-> > An example of this is drm_gem_shmem_mmap() which deliberately clears
-> > vma->vm_ops before handing the VMA to dma-buf. Cases such as this will be
-> > updated when they are converted to mmap_prepare.
->
-> ... this?
-
-Yup.
-
->
-> >
-> > Also, in order to avoid a single commit bisection hazard, add a temporary
-> > workaround to set the VMA anonymous only after vma->vm_file is assigned in
-> > __mmap_new_file_vma().
-> >
-> > This is because vma_set_range() calls vma_set_pgoff() and
-> > assert_sane_pgoff() in turn, prior to the vma->vm_file being assigned. If
-> > we set the VMA anonymous early then this assert will fail.
-> >
-> > This is removed in the subsequent commit.
-> >
-> > Also update the VMA userland tests to reflect the change.
-> >
-> > Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> > ---
->
-> [...]
->
-> >
-> > +static bool map_is_dev_zero(const struct mmap_state *map)
-> > +{
-> > +	const struct file *file = map->file;
-> > +	struct inode *inode;
-> > +
-> > +	if (!file)
-> > +		return false;
-> > +	inode = file_inode(file);
-> > +	if (!S_ISCHR(inode->i_mode))
-> > +		return false;
-> > +	return imajor(inode) == MEM_MAJOR && iminor(inode) == DEVZERO_MINOR;
-> > +}
->
-> My brain is a bit slow after digging through this series.
->
-> We identify shmem, for example, through shmem_vm_ops/shmem_anon_vm_ops.
->
-> So naturally I am wondering: couldn't we do something similar to identify that?
-> Like, checking for zero_fops?
-
-We don't assign vm_ops for a MAP_PRIVATE-/dev/zero mapping. So that won't work.
-
-We could expose zero->f_ops but then it's literally in drivers/char/ and that's
-just weird to expose in mm.h or whatever.
-
-I'm giving a really minimal possible thing to export, which is the DEVZERO_MINOR
-number which avoids all kinds of weirdness like that. No driver stuff exported,
-just a number :) MEM_MAJOR is already available.
-
-So I think it's the least bad choice in this one, very very specific scenario.
-
->
-> > +
-> > +static bool map_is_private(const struct mmap_state *map)
-> > +{
-> > +	return !vma_flags_test(&map->vma_flags, VMA_SHARED_BIT);
->
-> Can't we use the is_cow_mapping() helper instead somehow?
-
-Lol... yup. Let's see how the rest of the review goes and we'll see whether I
-can ask Andrew to change it or I'll change it on a respin.
-
->
->
->
->
-> --
-> Cheers,
->
-> David
-
---
-Cheers, Lorenzo
+Anyway, I've looked through your code and it does look fine to me.
