@@ -1,116 +1,116 @@
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B2C7330D2A
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 20:41:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED133BED79;
+	Tue, 11 Aug 2026 20:55:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786480889; cv=none; b=LCc5HuVpNMXoKq9E/zPsboiUs6F/kXODdy4P99wox6tPkdQbpZJGJKD5REKSSK67evvHLgcNTTVo7OPb9PaWHy8kqBOE8BgQkHVmzcR9K6WX/txTJIFBWC0miRzIODAOtiELmJblSXr6t+Z24+Z2ECZLyO0QfqmNXOjbL/ZQ6U8=
+	t=1786481709; cv=none; b=otQ8fVC6Y2+a9BFH83BLq+AxMc6fv1ycyzZA6AVbBeqV4Pt3eR896gU9erFP0KWJUS0Bp2d0WyLY6hr9Jq5QNKr/1iQbRWZic0l9fkmVuNbAA9SkIY/SnNIPXl1CdDpbiK7PSG295IedhjFVBNpFwLaaQDHF3l28b8uHps06rsY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786480889; c=relaxed/simple;
-	bh=p2h9krMxZkoZc/3Sp+Bf7UgOmB7A/VM67RM5yQWAkTo=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=DXTuFH9HggTsIg4JZPxRuOf4KjTTUMZzScuSl1rRemLkGgUvIMOaIVyG5fS+aUsX5WI/h35nuj0pwWPOeuEONgL7xvHLy0u097NGQVWp2PbTDEj7AhiXBwnshBX4uNA0N0fo+ML8KfP5D3Wj6r3s3PPeMksY0warNGYaT33/NCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=H6DzY8Yo; arc=none smtp.client-ip=209.85.215.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tjmercier.bounces.google.com
+	s=arc-20240116; t=1786481709; c=relaxed/simple;
+	bh=JNU6NKML9Hlqwjfne/ZO5VcHY63eTRd/wUqGZQvX3xo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SNBx07+pUQhxElkHbp3VVernWn/vbb0Z3Zi5OQFzIVzEMqBqS3jY7qxbntw464quxQb19s5QLh8nb93xJKd3QPETvDsuO7kIELYPJsEGG+kUhaiUKFTrbk7PqmugKpWku99G4S14vH7sM1IZc2eSs+nzv5UdyY/qiSapLmQt8Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdcZNlmS; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="H6DzY8Yo"
-Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-ca7c1e22995so260098a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 13:41:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786480888; x=1787085688; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=HJ+kHjelH5pg9wQKl1OmAN9lbWOp3U72jOs17+JTkO0=;
-        b=H6DzY8Yo6UYDicWd5kT3DeBZV3YQu9eVquU3hGXkinNgDFxzTXrLlK/lUsaAB6Zv3t
-         f/O2EV1eY0Nos6s0GOxJ3k2RXkXALfdBpm8dlbJ1oRKnWfpF/Z+zfBKyHCTeecYyvvLW
-         tPZr9pNypCQeMF5ihWTB7Wy8t3OtjZgDKeqzkI6YP/YyA3FJBjv8d7+LeKKaEW3S56Y0
-         cx2zXwU2Y/x3X/3LRfELzejMHb3k+8ug4FweGNt1HrhkGfhyhRYgz88BiRgd8NdtW35j
-         wG8ckMdIapeM/k944b67DjtX4tVGWHIETGq9xM3Of+zVzSyBBEsAYHlT6qlTnhFnyPMr
-         irfQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786480888; x=1787085688;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=HJ+kHjelH5pg9wQKl1OmAN9lbWOp3U72jOs17+JTkO0=;
-        b=gSY0qa1Ci9EXt4y+Z2onEcfjr2kn+tj/KWUHHqRzrj7rLGnKMsfn3cQz94aCr6z5b8
-         qtk917iXJSZvh6h41nxAZHwQSsNmPe+6KKv47XSQe8MnyfYwV5KkVtrVNO9odjtflbh6
-         Lfy8UuoBz34QoJ1Q/EvfMwCVJvufx0Cu1HYokkrupv5lll6mrEovspaaf3VJNLIi6aWh
-         oufqFyXYdNKvpISgVK2J3vjCW5VkVVcglh9V8NSIXDzqaNXJHObMvAyjZkmjbc2X1e8f
-         fS168faNys1LYZj9rqLmIWA173NsBSbgYdI996lM1IdLmr9mfcnVbg27mYfvQFRKceoB
-         nzxQ==
-X-Forwarded-Encrypted: i=1; AHgh+RooImhrgMlA3ARJ2Wiky57H4Zg3a1MXJEEMQYux7C4S1eXPsSz65i+KEaUiyPOHrWN0+cuBw+a5csf0mxRIDho=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVNs4jWfPADcx9U3CpkzgFw53MYe8TKCVttKE68dr9hfbgA/po
-	sSMjmG1JmzXzW9Kktkbts9niPbSlgPVvO3V2Qvxsb7w2FF4Ach9QX+WpfWp2V/1Rbghcd6N+OEJ
-	oV8Sj5EFovbXr80Y4nA==
-X-Received: from pgvq11.prod.google.com ([2002:a65:624b:0:b0:c9b:f0c9:631a])
- (user=tjmercier job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:bea6:b0:3c1:b9c:4890 with SMTP id adf61e73a8af0-3cc2ba60c41mr7899605637.22.1786480887687;
- Tue, 11 Aug 2026 13:41:27 -0700 (PDT)
-Date: Tue, 11 Aug 2026 13:41:23 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdcZNlmS"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271731F000E9;
+	Tue, 11 Aug 2026 20:55:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786481707;
+	bh=aQNBClanQhcKXlEpeCTI+ghlkNL60DbeIDtW87Lh0Wk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OdcZNlmSpnlJRGeLjEVeUj5DvZ8Ix6Lhlzc13RQ+BvCLPnyAZpflaGcOjujFWkisL
+	 zoSCGkfa1K+3RazlVtZqWkANfM+hjaYPMRfroV23KO9qxU8tdG6NyVAA/FLX2Htg1c
+	 kpIkZ6v1obesytonpw9MzZuzGTIuMawmrYwgDOUdRlk8ReqflGiTBuK6WvzipLgt7o
+	 r2dO61VSgFz9UyX1nykqqw4y88jjE9/PuCI9TWxLuaEtqaZiV3z6B00CDgmrtyLh8v
+	 ZvsbRJgLYL+JdX3TvbThNDha88TlzzC8dT8bSG4FVOS77BTbsa8jYXW7mB2EQuTfu5
+	 9PNssn489T28g==
+Date: Tue, 11 Aug 2026 22:55:00 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Jann Horn <jannh@google.com>
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/11] coredump: allow to create sparse coredumps on the
+ coredump socket
+Message-ID: <20260811-morastig-schadenfroh-kabine-e2ae880d038e@brauner>
+References: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org>
+ <CAG48ez3QwUopEyfB0tEc84A57g3GZdnptazJW+htiTi2e0Gc=A@mail.gmail.com>
+ <CAG48ez0Ty5GTR_vYazWsWOigWP2=8SYstw13zaiJB3auBi1bcw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.679.g6767b8d81c-goog
-Message-ID: <20260811204123.3198370-1-tjmercier@google.com>
-Subject: [PATCH] kselftests: dmabuf-heaps: Open heap device files O_RDONLY
-From: "T.J. Mercier" <tjmercier@google.com>
-To: sumit.semwal@linaro.org, benjamin.gaignard@collabora.com, 
-	Brian.Starkey@arm.com, jstultz@google.com, linux-media@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org
-Cc: christian.koenig@amd.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"T.J. Mercier" <tjmercier@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez0Ty5GTR_vYazWsWOigWP2=8SYstw13zaiJB3auBi1bcw@mail.gmail.com>
 
-Write permissions on the /dev/dma_heap/* device files are not required
-to issue ioctls and allocate dmabufs. Applications should be opening
-these file as O_RDONLY. The BPF dmabuf_iter selftest already does
-this. [1]
+On Tue, Aug 11, 2026 at 09:39:12PM +0200, Jann Horn wrote:
+> On Tue, Aug 11, 2026 at 9:07 PM Jann Horn <jannh@google.com> wrote:
+> > On Tue, Aug 11, 2026 at 5:27 PM Christian Brauner <brauner@kernel.org> wrote:
+> > > A server that raises COREDUMP_HEADER in coredump_ack->mask doesn't get
+> > > the coredump as a plain byte stream but as a sequence of frames. Each
+> > > one a struct coredump_frame_header followed by what it describes. A data
+> > > frame carries its bytes. If a server also raises COREDUMP_SPARSE, zero
+> > > frames are sent for unpopulated mappings. They only indicate how many
+> > > zero bytes need to be written and to not include data. Reassembling the
+> > > frames gives back the same coredump. A debugger and everything else
+> > > still see an ordinary core file and nothing outside the coredump server
+> > > has to learn anything.
+> >
+> > Hmm...
+> >
+> > I think what you're doing is probably the easiest way to do this in
+> > practice. I guess some design alternatives would be:
+> >
+> > 1. (overengineered, not generically useful enough): If the transport
+> > was a pipe (which already has the concept of different types of pipe
+> > buffers) instead of a unix domain socket, we could introduce a special
+> > representation for zero-filled pipe buffers and some API for receiving
+> > zeroed holes through lseek(pipefd, 0, SEEK_DATA), but that's probably
+> > not sufficiently useful for stuff other than core dumping to be worth
+> > the effort.
+> > 2. (somewhat overengineered) With some refactoring, we could maybe do
+> > something like /proc/kcore and create a seekable virtual coredump file
+> > that we send over the socket via SCM_RIGHTS?
+> > 3. We could leave the userspace memory dump out of the core dump data,
+> > and let userspace take care of filling out the memory contents using
+> > /proc/$pid/pagemap and /proc/$pid/mem? That would also avoid task
+> > switches and SKB allocations, and probably reduce the number of data
+> > copies involved in this by 1.
+> 
+> I also wonder what userspace actually does with this data - does
+> userspace just want to write it to disk, potentially after compressing
+> it? Or does userspace actually do some fancy parsing of the data
 
-Users are pointing to these selftests as examples of how use dmabuf,
-and encountering permission errors on systems where write permissions
-are not available on /dev/dma_heap/*. Apply the principle of least
-privilege to selftests which open dmabuf heaps by removing the write
-access mode and using O_RDONLY for the open() instead.
+That would be the most straightforward use-case, yes.
 
-The same is true for the vgem test using /dev/dri/card.
+> stream to extract stack memory or something like that? Or does
+> userspace buffer the whole thing into RAM and then process it from
+> there (it kinda looks like systemd tries to do that but I might be
+> reading this wrong)?
 
-[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=v7.1#n49
+I'm not sure about that. I think it's writing it to disk and then
+parsing it. But it also wranges it into a socket to forward to
+containers or services.
 
-Signed-off-by: T.J. Mercier <tjmercier@google.com>
----
- tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Note that systemd has a pull request for the coredump socket up:
 
-diff --git a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-index fc9694fc4e89..45b420e37c97 100644
---- a/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-+++ b/tools/testing/selftests/dmabuf-heaps/dmabuf-heap.c
-@@ -48,7 +48,7 @@ static int open_vgem(void)
- 
- 		snprintf(name, 80, "%s%u", drmstr, i);
- 
--		fd = open(name, O_RDWR);
-+		fd = open(name, O_RDONLY);
- 		if (fd < 0)
- 			continue;
- 
-@@ -96,7 +96,7 @@ static int dmabuf_heap_open(char *name)
- 	if (ret < 0)
- 		ksft_exit_fail_msg("snprintf failed! %d\n", ret);
- 
--	fd = open(buf, O_RDWR);
-+	fd = open(buf, O_RDONLY);
- 	if (fd < 0)
- 		ksft_exit_fail_msg("open %s failed: %s\n", buf, strerror(errno));
- 
+https://github.com/systemd/systemd/pull/43330
 
-base-commit: 9a11db68872055e6ead919bad04d6330851c522d
--- 
-2.55.0.679.g6767b8d81c-goog
+This should kill the usermodehelper soon on kernels that support the
+socket.
 
+> Anyway, I've looked through your code and it does look fine to me.
+
+Thanks.
