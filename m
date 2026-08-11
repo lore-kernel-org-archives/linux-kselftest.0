@@ -1,202 +1,200 @@
-Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939C638D686
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 06:12:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24BA318B9B;
+	Tue, 11 Aug 2026 06:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786428772; cv=none; b=dixqBirHIbJ/4N0TBT2FE9qc9VthuI3gMAeEaOsdogzEQ3dKr8etiVmv0u9HMRGroe9v8o0/LRxFvzmA2L5p59emX/HbFgTTIx2NM8lAm/akXLcqDBoruPjK0lebpRkgfoRd9Th7hTjvBfVnyceZvOXI4xg31AJfpHAahuaH6hU=
+	t=1786429960; cv=none; b=d8dPLQEurrwcUgLLBrpnmBPERBVZSTvPPyG830Hnd+hl5Rv6T+97lqBZgiQHC4L4fM8KF/ft9SXPOAI7c4aVkNG7DPbwB6TX+hjn04weSrzFECLGa8GhghD072L6V/MOyl5IIyKdjZdovsn8KY026IMX+mSgi5NlD+Tr3lffbME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786428772; c=relaxed/simple;
-	bh=lkiMx7uA/A5/aSn1bsWFGNt11TcSrA6IVEQGhDwO9+s=;
+	s=arc-20240116; t=1786429960; c=relaxed/simple;
+	bh=MDeqe2jSiJcmxbD0bbD/r5Z1VSW6NoU5Zo8Ln43j3Ks=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g30zkfEkFx6EG5+n84Z1vjw8q7ZXox9zW7NXA1NlE6ZvHrTWIefbj2SOD4PHXi6LSa1zanjKET6ihCO2Jr9CpyFtdJ5vx0gHADvZfX9+oHW7wXR10u+f3QH3yvwSsTfLFn6hZ3Z8x+gRYgKze8uXulWFyTo5PP9vys7ZP8mydBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gh5bmr7a; arc=none smtp.client-ip=91.218.175.185
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=A3/Sof4meaS2GRo7FbICtsQoq4V3VQPhq9gKZoqWX3Jbw3TPSp06NVC3czQkSSO9zK4cKetUFeLL/vip6av80VCH9TUn7hoJ5KiMJcTrQihZa9SKckzm1AVt1ukPdKDZipChAw0h6p7nBlEitjug3ZJnVswFLzrTNDWC09KySh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=So0qBxTZ; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gh5bmr7a"
-Message-ID: <0a2fc4c0-db9e-4b53-8232-aeb0dda112b2@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786428767;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ogf+73rRak/6Js/7MzR2OgNYsxkzJu6wOHRliPqhoyU=;
-	b=gh5bmr7aHa3c+DIMKyoVCuJ/lCW6Gomgq7WERSM2AdMXYoKnziX2JRdRGRwYTHP7Gt1gJ3
-	/8mvD0SUFuI0QkU6Vv6j6rLjIcsBzUfzhaM4W6wSt6T2SqQqMkvlCxqiqfFk3KImDN+rNs
-	bS+igK7ntBtS1upZv8vmma7ZSM6WuOA=
-Date: Tue, 11 Aug 2026 14:12:31 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="So0qBxTZ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786429958; x=1817965958;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=MDeqe2jSiJcmxbD0bbD/r5Z1VSW6NoU5Zo8Ln43j3Ks=;
+  b=So0qBxTZERJzTd264J2NulVdOfLetOxLn8s9c5YhOQ9k01SxV+aQddtd
+   Om+vWgXREuLkKjZyjDkc3b2ig3qLMRMV02bLUmFkUkX5K4AuJ4Sg3rzXx
+   /M2hFNIOFaMLwvzo0mgU3FktWrrMY8I/hDTi8iQqlY6kWQ2s1k7O2lVTP
+   1woZVjyA/J5iTZvQ43bP8rqWodbe/Yl84Fsefvkqggp0vXSUDv3vr0md6
+   DQ21PtSe5U8cOANtX1y2Rk2RP3s5gj6KXXUCxTABbKsWKCUAACCxjpLem
+   FQXfUILgBFRzhByULq6HdoASqkTWa+dCTm9Gf+L+rNo/BGzy8OLRB3qkh
+   g==;
+X-CSE-ConnectionGUID: PZcz+DvmTp+547ls6yB8nw==
+X-CSE-MsgGUID: Par90D74QUegJkvmBaz+Yw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11871"; a="97611429"
+X-IronPort-AV: E=Sophos;i="6.25,217,1779174000"; 
+   d="scan'208";a="97611429"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 23:32:37 -0700
+X-CSE-ConnectionGUID: gOWIzqxqROu0+izp0da+kg==
+X-CSE-MsgGUID: dKqF2AB6SHefGa5U1MZEBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,217,1779174000"; 
+   d="scan'208";a="259401913"
+Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
+  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Aug 2026 23:32:31 -0700
+Message-ID: <2b499ed1-5823-4439-81c3-11ad06957347@linux.intel.com>
+Date: Tue, 11 Aug 2026 14:32:29 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support for
- bpf progs
-To: Jiri Olsa <olsajiri@gmail.com>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
- Avinash Duduskar <avinash.duduskar@gmail.com>,
- Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
- <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
- Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
- Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
- Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260809150111.45000-1-leon.hwang@linux.dev>
- <20260809150111.45000-5-leon.hwang@linux.dev> <annOhedRtHBce3px@krava>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 11/22] KVM: selftests: Set up TDX boot parameters
+ region
+To: Lisa Wang <wyihan@google.com>
+Cc: Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+ Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>,
+ kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-11-15ad654a50db@google.com>
 Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <annOhedRtHBce3px@krava>
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260722-tdx-selftests-v14-11-15ad654a50db@google.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 
-On 10/8/26 21:13, Jiri Olsa wrote:
-> On Sun, Aug 09, 2026 at 11:01:02PM +0800, Leon Hwang wrote:
+On 7/23/2026 7:13 AM, Lisa Wang wrote:
+> From: Sagi Shahar <sagis@google.com>
 > 
-> SNIP
-> 
->> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
->> index eddd259d3776..fc51ea2428be 100644
->> --- a/kernel/bpf/trampoline.c
->> +++ b/kernel/bpf/trampoline.c
->> @@ -1572,12 +1572,23 @@ static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
->>  			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
->>  			       struct bpf_tracing_multi_data *data)
->>  {
->> -	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
->> +	if (tr->func.ftrace_managed) {
->> +		unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
->>  
->> -	if (bpf_trampoline_use_jmp(tr->flags))
->> -		addr = ftrace_jmp_set(addr);
->> +		if (bpf_trampoline_use_jmp(tr->flags))
->> +			addr = ftrace_jmp_set(addr);
->> +
->> +		ftrace_hash_add(hash, data->entry, tr->ip, addr);
->> +	} else {
->> +		void *old_addr = tr->cur_image ? tr->cur_image->image : NULL;
->> +		void *new_addr = im ? im->image : NULL;
->> +		int ret;
->> +
->> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, new_addr);
->> +		if (ret)
->> +			return ret;
->> +	}
-> 
-> hum, so IIUC this sequentially attaches to target bpf program as it
-> would with current API, so there's no attachent speedup, right?
+> Allocate memory for TDX boot parameters and define the utility functions
+> necessary to fill this memory with the boot parameters.
 
+The code change looks good to me.
 
-Correct.
+But I think it's better to describe how the parameters are initialized based
+on the HVA when VM_MEM_SRC_SHMEM is used alongside KVM_MEM_GUEST_MEMFD.
+Same for the patch 10.
 
 > 
->>  
->> -	ftrace_hash_add(hash, data->entry, tr->ip, addr);
->>  	tr->cur_image = im;
->>  	return 0;
->>  }
->> @@ -1627,6 +1638,18 @@ static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
->>  
->>  static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
->>  {
->> +	if (!tr->func.ftrace_managed) {
->> +		void *failed_addr = tr->cur_image ? tr->cur_image->image : NULL;
->> +		void *old_addr = tr->multi_attach.old_image ?
->> +				 tr->multi_attach.old_image->image : NULL;
->> +		u32 orig_flags = tr->flags;
->> +		int ret;
->> +
->> +		tr->flags = tr->multi_attach.old_flags;
->> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, failed_addr, old_addr);
->> +		WARN_ONCE(ret, "bpf_trampoline_update_fentry failed: %d\n", ret);
->> +	}
->> +
->>  	if (tr->cur_image)
->>  		bpf_tramp_image_put(tr->cur_image);
->>  	tr->cur_image = tr->multi_attach.old_image;
->> @@ -1643,6 +1666,7 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
->>  	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
->>  
->>  int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
->> +				u64 *keys, struct bpf_prog **progs,
->>  				struct bpf_tracing_multi_link *link)
->>  {
->>  	struct bpf_tracing_multi_data *data = &link->data;
->> @@ -1651,18 +1675,18 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
->>  	struct bpf_tracing_multi_node *mnode;
->>  	struct bpf_trampoline *tr;
->>  	int i, err, rollback_cnt;
->> -	u64 key;
->>  
->>  	for_each_mnode(mnode, link) {
->>  		rollback_cnt = i;
->>  
->> -		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
->> +		if (progs)
->> +			err = bpf_check_attach_target(NULL, prog, progs[i], ids[i], &tgt_info);
->> +		else
->> +			err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
->>  		if (err)
->>  			goto rollback_put;
->>  
->> -		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
->> -
->> -		tr = bpf_trampoline_get(key, &tgt_info);
->> +		tr = bpf_trampoline_get(keys[i], &tgt_info);
->>  		if (!tr) {
->>  			err = -ENOMEM;
->>  			goto rollback_put;
->> @@ -1691,6 +1715,9 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
->>  	for_each_mnode(mnode, link) {
->>  		bpf_trampoline_multi_attach_init(mnode->trampoline);
->>  
->> +		if (progs && progs[i]->aux->tail_call_reachable)
->> +			mnode->trampoline->flags |= BPF_TRAMP_F_TAIL_CALL_CTX;
->> +
->>  		data->entry = &mnode->entry;
->>  		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
->>  						 &trampoline_multi_ops, data);
+> Co-developed-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>  .../selftests/kvm/include/x86/tdx/tdx_util.h       |  2 +
+>  tools/testing/selftests/kvm/lib/x86/processor.c    |  2 +
+>  tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 51 ++++++++++++++++++++++
+>  3 files changed, 55 insertions(+)
 > 
-> IIUC for bpf_program targets the actuall attachment is happening in
-> here, right?
-
-
-Right.
-
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> index 642ffa010da3..f5003cbaa106 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -46,5 +46,7 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
+>  
+>  void tdx_init_vm(struct kvm_vm *vm, u64 attributes);
+>  void tdx_vm_setup_boot_code_region(struct kvm_vm *vm);
+> +void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpus);
+> +void tdx_vm_load_common_boot_parameters(struct kvm_vm *vm);
+>  
+>  #endif /* SELFTESTS_TDX_TDX_UTIL_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index f93953777ca1..748c6041f8bf 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -794,6 +794,8 @@ void kvm_arch_vm_post_create(struct kvm_vm *vm, unsigned int nr_vcpus)
+>  	if (is_tdx_vm(vm)) {
+>  		tdx_init_vm(vm, 0);
+>  		tdx_vm_setup_boot_code_region(vm);
+> +		tdx_vm_setup_boot_parameters_region(vm, nr_vcpus);
+> +		tdx_vm_load_common_boot_parameters(vm);
+>  	}
+>  
+>  	r = __vm_ioctl(vm, KVM_GET_TSC_KHZ, NULL);
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> index d64d153d19e2..2ce8c297f7ed 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> @@ -6,6 +6,7 @@
+>  
+>  /* Arbitrarily selected to avoid overlaps with anything else */
+>  #define TD_BOOT_CODE_SLOT	20
+> +#define TD_BOOT_PARAMETERS_SLOT	21
+>  
+>  #define X86_RESET_VECTOR	0xfffffff0ul
+>  #define X86_RESET_VECTOR_SIZE	16
+> @@ -49,6 +50,56 @@ void tdx_vm_setup_boot_code_region(struct kvm_vm *vm)
+>  	hva[2] = 0xcc;
+>  }
+>  
+> +void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpus)
+> +{
+> +	size_t boot_params_size =
+> +		sizeof(struct td_boot_parameters) +
+> +		nr_runnable_vcpus * sizeof(struct td_per_vcpu_parameters);
+> +	int npages = DIV_ROUND_UP(boot_params_size, PAGE_SIZE);
+> +	const u64 gmem_flags = 0;
+> +	gpa_t gpa;
+> +
+> +	vm_mem_add(vm, VM_MEM_SRC_SHMEM, TD_BOOT_PARAMETERS_GPA,
+> +		   TD_BOOT_PARAMETERS_SLOT, npages,
+> +		   KVM_MEM_GUEST_MEMFD, -1, 0, gmem_flags);
+> +	gpa = vm_phy_pages_alloc(vm, npages, TD_BOOT_PARAMETERS_GPA, TD_BOOT_PARAMETERS_SLOT);
+> +	TEST_ASSERT(gpa == TD_BOOT_PARAMETERS_GPA, "Failed vm_phy_pages_alloc\n");
+> +
+> +	virt_map(vm, TD_BOOT_PARAMETERS_GPA, TD_BOOT_PARAMETERS_GPA, npages);
+> +}
+> +
+> +void tdx_vm_load_common_boot_parameters(struct kvm_vm *vm)
+> +{
+> +	struct td_boot_parameters *params =
+> +		addr_gpa2hva(vm, TD_BOOT_PARAMETERS_GPA);
+> +	u32 cr4;
+> +
+> +	cr4 = kvm_get_default_cr4(vm->mmu.pgtable_levels);
+> +
+> +	/* TDX spec 11.6.2: CR4 bit MCE is fixed to 1 */
+> +	cr4 |= X86_CR4_MCE;
+> +
+> +	/* TDX spec 11.6.2: CR4 bit VMXE and SMXE are fixed to 0 */
+> +	cr4 &= ~(X86_CR4_VMXE | X86_CR4_SMXE);
+> +
+> +	/* Set parameters! */
+> +	params->cr0 = kvm_get_default_cr0();
+> +	TEST_ASSERT(vm->mmu.pgd < (1ULL << 32),
+> +		    "PGD must be within 32-bit address space for 32-bit boot code");
+> +	params->cr3 = vm->mmu.pgd;
+> +	params->cr4 = cr4;
+> +	params->idtr.base = vm->arch.idt;
+> +	params->idtr.limit = kvm_get_default_idt_limit();
+> +	params->gdtr.base = vm->arch.gdt;
+> +	params->gdtr.limit = kvm_get_default_gdt_limit();
+> +
+> +	TEST_ASSERT(params->cr0 != 0, "cr0 should not be 0");
+> +	TEST_ASSERT(params->cr3 != 0, "cr3 should not be 0");
+> +	TEST_ASSERT(params->cr4 != 0, "cr4 should not be 0");
+> +	TEST_ASSERT(params->gdtr.base != 0, "gdt base address should not be 0");
+> +	TEST_ASSERT(params->idtr.base != 0, "idt base address should not be 0");
+> +}
+> +
+>  static struct kvm_tdx_capabilities *tdx_read_capabilities(struct kvm_vm *vm)
+>  {
+>  	static struct kvm_tdx_capabilities *tdx_cap;
 > 
-> the rest of the function logic won't execute, because there won't
-> be any data in the reg/noreg/mod hashes..?
-> 
-> you seem to use the tracing_multi API to ease up attachment to multiple
-> bpf programs and end up with just single link fd for all attachments
-> 
-> I think it'd be cleaner to have separate api or code paths for that
-> 
-
-
-Makes sense.
-
-I'd like to use the same UAPI, and re-implement it with another code
-path, mainly in trampoline.c. And, the re-implementation will get rid of
-HAVE_SINGLE_FTRACE_DIRECT_OPS for targeting bpf progs at the same time.
-
-Then, I think I can speed up the attachment using text-poke in batch on
-x86_64.
-
-Thanks,
-Leon
 
