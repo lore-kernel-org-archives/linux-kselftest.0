@@ -1,123 +1,130 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DEAF3264F2
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:16:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81C5D367B84;
+	Tue, 11 Aug 2026 14:26:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786457773; cv=none; b=mRLtSm27wGh/RIjTFB4ZgC8HFMKE3AWK4WrxaD75JUcFH/mvCNX2h5YWPg+I96ia6jIh7JvKrZcNQHokAjd1TeSZTi2+mpZa62+4HpsGrnnr5/WIlnVF2Vr47Dt/V5I+5Xbr1YCE+hWoCwCJPQT89U5uWOsgBkWuEXqjyM3UnnU=
+	t=1786458396; cv=none; b=mAKlczyTuv1KUDB1PNuT7jO/F9FA1ZfYDY18zOTkKdROtz8o1wpJQ4kd2LWBIaUaJKddyiiVCbOGkirqBQsiEjjGN60sBlzmaGOEcapFdOXp4s9JXIpXxgTURGwPAw49kNc3vXur/9Zrqv+O5H2S55GsWRVnNEWFCr65Fq+2H0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786457773; c=relaxed/simple;
-	bh=0x2URhZVNyLUMnaCJcyZpjyHlUxRNnCvJLXmuoMKMjI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=XT4DYr89Ji5rZOvgGEtWyeLowzQtTIe1WoD8MMj+fVy8lAuAsR54SrIpEnmYnql/J+pEnubuDYn0xD1XTOTpnFwQ5oa2vzmiPytkUKsmVEArFy4h1J572gUfujd2Sg0hCX1uz0OkrDqDNz93B5KKqcURA+I8CiFJp0NFPZAQVCo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=XEO4CqtS; arc=none smtp.client-ip=209.85.210.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786458396; c=relaxed/simple;
+	bh=zXNrmr/h0+aN+aJKm6hUkbXp5UPtBJs2i/R7sTjzWHw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GjAkGzXTyE5Dltt/cLdDyTzG4phL4fP6+fxseeEmek3KCcuwK4hn7OoM8cKxr5Oc4i8Ye7Kh2nzIn4dK9pW2b8FelA0erZMntd6+HD/AHGj/EbKd9O8dncLkFuuYjUb8SHLEMjULI0YKQ5UV6+ytuFy5ApPGJiKa/zBvTkMatwk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eVNOQGeu; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="XEO4CqtS"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-848544a8496so3395491b3a.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:16:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786457772; x=1787062572; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=0x2URhZVNyLUMnaCJcyZpjyHlUxRNnCvJLXmuoMKMjI=;
-        b=XEO4CqtS8aDisY+Uw7VySRK0BIWEWbYHQIsFGfqni7rAGJbYKYNhet2im8KYQoPPuo
-         80dW73Ssja6qRmy18juP6gb6zhSu1Ofp2Fe7BCBat5vCXXx/krQp2ubmAS2C8JPSxE5V
-         X7HIT30zzpcncs3FC+i4eVeELwXtBn8YCbhR8AIeW55Db1LmKi+u9dw7gx2faf00mvmo
-         l6QyQQtmSdouN0pXKR8n8fk948lJMW376Tmg/GalgBWPCTWGdp3hRlVEpnn91uD6dEcR
-         AMLTwYa4Q70dYWszBdy2gWWTGGIwbPpPDt3yP9Nv/WNEaIN/0M3N8jOWBuGaUyMV2+7x
-         49EA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786457772; x=1787062572;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=0x2URhZVNyLUMnaCJcyZpjyHlUxRNnCvJLXmuoMKMjI=;
-        b=OD4YkBRzN4gQ87btXpf3ewIalXpWv6pikkyR8PoP7NC8iXtsPDHWZl+/NCS+CLGclU
-         /39f45KBwCQQd12XacHexWfOme8gA1vaN4VQQccUBWzMTRCMLDfKWwUOJxkBINjfUP8o
-         9sTMzqtCO7UFbCyvDepnewzaLb1vMN1b9y1WSQ9knnCGTSnOKRot+RTmrOmsQHF1iu7N
-         0cHUS2UfDltSTO1kVD7eK+WA/eSnWQdmvtBwPmx0gHYv7k6BptPY+fDeFYzfn7uVaBn/
-         Sjh39SWeKwmF/eSozVvQvOYBecZNBexQEZLYrOQnQvGYRbTmc+969zLRefy1MMY180v0
-         tlUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpSvoSPislUXLM6cpr1xHFNpXoXBCDunV9Mz20aD11ZSa/f+wpuLkdtgyS0nx46ds+I21RDxbUcls5VzCtNLTA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoUfi9aHnptJkCxvHvV9IT6DvII7Iu+47ER2q40bLUiCFYlPJW
-	wnpElbMI1tFYwmaCuTPO0ZzZ+5xMsogmtw3ndY3626+WcgROxE4iWk05o/lidz9FBI9TDNh/rEZ
-	rko2G6Q==
-X-Received: from pfbkm16.prod.google.com ([2002:a05:6a00:3c50:b0:84a:310d:317a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:f8b:b0:84e:4d6:78fe
- with SMTP id d2e1a72fcca58-84fa86b672amr4014025b3a.3.1786457771384; Tue, 11
- Aug 2026 07:16:11 -0700 (PDT)
-Date: Tue, 11 Aug 2026 07:16:10 -0700
-In-Reply-To: <bb9a12cc663130eb2caa8e839d0f6ca53d722d1c.camel@infradead.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eVNOQGeu"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 387904E410F8;
+	Tue, 11 Aug 2026 14:26:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0A73E6033C;
+	Tue, 11 Aug 2026 14:26:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1020311C48D19;
+	Tue, 11 Aug 2026 16:26:21 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786458386; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=cXUxedOIBssKclFtEsdMAk4+uoxwahPc9iX1cU90uIw=;
+	b=eVNOQGeuHl2w1zL8FbCDX2EQcr8K6irtZ2V3UoVcW7rQZEufxPvFAI7uLNdqGn4lSh8UeG
+	I4ME/U8zJ9IVB7v0H8iAYiNzyxWNUHb1Lx0mYZ/KethPbDE1ILQsTwpdgLDSsy1+d+66Q8
+	DwIoc4DiP/QhPWMxC3zhDNXcnRVF3dL08gz4iX8dRakkDB/vPU+7F4mQb+nIdkqBi7o9Ef
+	+v68et7OybK/KTQ6USyip6ojuOjN1LBSf2QP2fcDbtEeoF/kCbYVpN9UisQ2C3gRRnDyvO
+	fhWSV5fBaOCiBD9aMYzjhSYWN/dOwzmZ6ys/mASeuvctvsrzkiF7T4ookuLMWA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf v3 0/2] selftest/bpf: make test_tc_tunnel and
+ test_tc_edt more robust to CI load
+Date: Tue, 11 Aug 2026 16:26:11 +0200
+Message-Id: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-18-dwmw2@infradead.org>
- <anoOz2rZ02KFk1l-@google.com> <acd9b32617f75d188c370a464a922af0d650d4f5.camel@infradead.org>
- <ano6-gIZtqMfipiD@google.com> <bb9a12cc663130eb2caa8e839d0f6ca53d722d1c.camel@infradead.org>
-Message-ID: <ansuqrD2KwFuLWbV@google.com>
-Subject: Re: [PATCH v7 17/36] KVM: x86: Allow KVM master clock mode when TSCs
- are offset from each other
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNTQ6CMBAF4KuYrq3pD1DqynsYQ1oYpIotoYVIC
+ HcX6sIY4/JN3nxvRh56Ax4ddzPqYTTeOLsGvt+hslH2CthUa0aMsIwISnAoizBYC21Rt+o+YSZ
+ AKiqprghH61fXQ22eUTwj3dXo8j76Qd+gDJu11Rrjg+unuDvSWP47MVJMccKU0imXUiXypJ0Lr
+ bGH0j2iP7KPkBP+K7BVyFKhWS6qWon0W1iW5QVVEOHMCQEAAA==
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Aug 10, 2026, David Woodhouse wrote:
-> On Mon, 2026-08-10 at 13:56 -0700, Sean Christopherson wrote:
-> > =C2=A0
-> > > > To allow different offsets, KVM would need to track a per-vCPU offs=
-et to the
-> > > > master clock and apply that in kvm_guest_time_update() (and maybe o=
-ther places?).
-> > > > Which is doable, but it's not clear to me why we'd want to support =
-that (though
-> > > > I haven't fully processed the back half ot his series, so it's very=
- possible I'm
-> > > > missing something obvious).
-> > >=20
-> > > Because I want to reduce the number of cases where we have to fall ba=
-ck
-> > > to non-masterclock mode. Especially the ones which are driven by
-> > > *guests* rather than weird choices on the VMM's part.
-> >=20
-> > But why though?=C2=A0 What is the harm to the host or guest?=C2=A0 E.g.=
- does it make it more
-> > difficult to accurately migrate the VM?=C2=A0 I'm not opposed to allowi=
-ng master-clock
-> > mode with diverging offsets, just trying to understand why it matters.
->=20
-> Accurate migration without masterclock is hard, yes. The
-> KVM_SET_CLOCK_GUEST thing relies on it (because the principle is that
-> you get the *TSC* right, then the KVM clock is just a fixed
-> mathematical function of that).
->=20
-> That *shouldn't* be difficult with offsets between vCPUs. Just use the
-> TSC of vCPU0 as the reference for KVM_SET_CLOCK_GUEST and let the
-> others just have their offset from that.
+Hello,
+this is the v3 of the series aiming to reduce the flakyness of
+tc_tunnel/tc_edt tests in CI. This revision handles Ihor's feedback
+about the need to conform to the timeout value passed in opts->timeout.
+The first commit has been reorganized a bit more than what was needed
+for this change, to make sure that the code can be followed easily.
+There's also now a second commit to make sure that test_tc_edt benefits
+from this new connect() handling.
 
-Yeah, my only (quite mild) concern is that we would introduce fragility by =
-adding
-yet another variable that needs to be accounted for, but AFAICT it's litera=
-lly
-just the tsc_timestamp in the shared data structure that consumes the per-v=
-CPU
-offset.
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v3:
+- set errno before logging errors
+- respect time budget set by
+- respect opts->timeout_ms when polling: only poll for the remaining
+  time not already consume by connect()
+- keep polling if poll returns with EINTR
+- reorder early returns and add intermediate variables to clarify code
+  flow
+- Link to v2: https://patch.msgid.link/20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com
+
+Changes in v2:
+- drop unneeded initialization
+- add back error message for immediate connection failure, and slightly
+  reword the async connection failure error message
+- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+---
+Alexis Lothoré (eBPF Foundation) (2):
+      selftests/bpf: keep polling connection that is still in progress
+      selftests/bpf: add connect timeout to test_tc_edt
+
+ tools/testing/selftests/bpf/network_helpers.c      | 70 ++++++++++++++++++++--
+ .../testing/selftests/bpf/prog_tests/test_tc_edt.c |  2 +-
+ tools/testing/selftests/bpf/testing_helpers.h      |  9 +++
+ 3 files changed, 75 insertions(+), 6 deletions(-)
+---
+base-commit: 53cc65185a51fa9dd288cd1137a21467eced2df4
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
