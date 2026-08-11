@@ -1,55 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174A9442FD7;
-	Mon, 10 Aug 2026 23:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFAF4CA4E;
+	Tue, 11 Aug 2026 00:00:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786406283; cv=none; b=Cpz9xuzj95maGaBtWY9uajhQM86lq6O3yk6cidWK/bvSamyBtPKVfdwX7O9VpUoH0kSBQQA4XBlaMsOg5sk/1Jqg4umFMehF4kk1pR+VSAhgluC6Ug/frziA/kD5BYAlduZQeqyFK9akDCYzlTLn1+9O/nuwjkvt/PjA8ZSfcSY=
+	t=1786406453; cv=none; b=KyQJMDfUoDckZJps2GROcRiRmnEnNPl5c688540w1TOFaRKZ0DDYdsep5163Bv1dcwzv/Ky8Pjj38ry39X++yGWOEYmQWJ+fGDSQO1X5vnf6Z6b0WqCv3e4zXSzjy/EPaDJVMtgjLHk6iEMt3S1d/XkCLoLQ5OTydmWPGmH2dQI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786406283; c=relaxed/simple;
-	bh=VDtHbmeKqh6oRnyVwsPt6yN29w5NWtQXcuRhzcrZVbc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=n25r75zW3lnDN/5wTPEs3+KjqhA+Va+cIm8lMh6hu5NjDirt+T1StwojUl5satW894CRbekLERd58TfAKl9Sa7Z3TYw0CsptLjJgdH4bnudaLVt/S5ve8/pe8TDpuceRofO1nBHijttYQLNT41SxCNSLbve9z9byeHQuO0zUNYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HbI9PdyK; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786406453; c=relaxed/simple;
+	bh=CWQAD2WlweWuEc6uMZeFr3d0VYpCCHUwUbabTlK9aDk=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=FVs+sDZScA1dZ6VeS7WY+p9ca8QrNX4JYCLqrX+4bHXiT6xjU+1aRES6gwPbEEVIULLplOmr2tJ0cFEnrtkbpP9f+Nu08KZZ1uYUbDxPMtzX8LrZuVno8rCvcIi/o0Qw7ANyJQN88KT+k3TBJ3kl3rspDKS94JqNBrXErt2UUjc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ERPz+9Lw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HbI9PdyK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 292ED1F000E9;
-	Mon, 10 Aug 2026 23:57:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ERPz+9Lw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D46761F000E9;
+	Tue, 11 Aug 2026 00:00:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786406281;
-	bh=Qb5Px/WCo590F+EXyft+FRFZ7I6ikGxdKrhx1/Zd1XA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=HbI9PdyK4QzFQZaK50mRdWEwBOARjR0B7m8pLd5+AeUZiar7WIBhbrizOc/xM0JMZ
-	 K8gQ7bmXNxM3DYLl9pK5Qjvl/OBw1KW0RiT3/K7BRPFqjeAG7zqEknwuKqilEAFU4P
-	 Xy/k9+QR6osdJnujLfkiTo/ZFub+rVfwxtmzc02cB2r8s6mj7IpoeNucZoUEu8C4Q+
-	 ein6ZgJtnI2tnRpr9LT2EUR/z6XkUUITK7mAPwEgV55sRpSc3g7ihSZDDfAjCl4uik
-	 R9hlPvU3i1Ul3J1r27/QzXFS5y034w2DJuypBkjroHLu1LSwu1lcZq8u5NNFWadtVT
-	 U5DawK0m2ucUQ==
-From: Sasha Levin <sashal@kernel.org>
-To: Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	gregkh@linuxfoundation.org
-Cc: Sasha Levin <sashal@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Mykyta Yatsenko <yatsenko@meta.com>,
-	=?UTF-8?q?Ricardo=20B=2E=20Marli=C3=A8re=20=28SUSE=29?= <ricardo@marliere.net>
-Subject: Re: [PATCH 7.1.y v3] selftests/bpf: Add tests for sleepable tracepoint programs
-Date: Mon, 10 Aug 2026 19:57:44 -0400
-Message-ID: <20260810234738.0006-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260808-selftests-bpf-sleepable-v3-1-45ace406061a@marliere.net>
-References: <20260808-selftests-bpf-sleepable-v3-1-45ace406061a@marliere.net>
+	s=k20260515; t=1786406451;
+	bh=w9op98tL5JjEiJmc7uQU1o77dhpJn6UwG6jiizJ8r0M=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=ERPz+9Lwjbm5+mO5d6KuqviGqNCE6r+2KRjVT9Ym6i2J46o1EhriYg85o3hv/yQu4
+	 hQ6Me8amsxKJUsndgkNeg47Wgv4DnaMmFCZM2E86RULc2bInvDGHEcOg77G3aOmr3Z
+	 uF3D6+AZxUefiRmvUSY19+vMJBEOrmwN6b8QwuoAZ5hu74KA75ssvMc83t6AORzDac
+	 8jhP4E5NA5hP5uzd4Ch7iA+J1FvSluE58sFd4aWXh6YUtUC78NT+9OX/8SosqFzpNg
+	 uP+KsAtdtSWjyTG5ujVO9FjKZ6LnCHLuJ8SUGymJ/9t34Bf4lsOOUhg5GoMV1xJeEN
+	 VpTLOxC5akG9Q==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 93974392626C;
+	Tue, 11 Aug 2026 00:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,14 +37,44 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next 1/2] selftests: drv-net: pace ethtool_std_stats
+ packet generation
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178640640814.260499.16695015712060305281.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Aug 2026 00:00:08 +0000
+References: <20260808163653.2460381-1-kuba@kernel.org>
+In-Reply-To: <20260808163653.2460381-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, andrew@lunn.ch,
+ shuah@kernel.org, petrm@nvidia.com, ioana.ciornei@nxp.com,
+ linux-kselftest@vger.kernel.org
 
-> [ rbm: Removed hunks from (new) files:
->         tools/testing/selftests/bpf/prog_tests/sleepable_tracepoints.c
->         tools/testing/selftests/bpf/progs/test_sleepable_tracepoints.c
->         tools/testing/selftests/bpf/progs/test_sleepable_tracepoints_fail.c
+Hello:
 
-Queued for 7.1, thanks.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
+On Sat,  8 Aug 2026 09:36:52 -0700 you wrote:
+> mausezahn defaults to sending packets back to back at the maximum rate,
+> which can cause packet loss, especially if receiver is running a debug
+> kernel. Space the generated packets out (-d 10usec), like ethtool_rmon
+> already does.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> 
+> [...]
+
+Here is the summary with links:
+  - [net-next,1/2] selftests: drv-net: pace ethtool_std_stats packet generation
+    https://git.kernel.org/netdev/net-next/c/f4cf60568747
+  - [net-next,2/2] selftests: drv-net: let ethtool stats settle before reading
+    https://git.kernel.org/netdev/net-next/c/855631afe0f5
+
+You are awesome, thank you!
 -- 
-Thanks,
-Sasha
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
