@@ -1,123 +1,102 @@
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A2B44A405
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:48:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0866449B13;
+	Tue, 11 Aug 2026 14:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786459718; cv=none; b=Z00kC2SAOhpnws/HjA2gxBiMs70/zyj2cK0luDRp/1WuTBrn20mkSaXK3niJnKTvf0iKeHxev4OelCuCrCJMXxrKO9d1TztxJhiKey7vYVLWaN5TmaazPm+lGy1oYHNs74gP1EraxFbYWGfCCqPGFifUrE5h3yebzHyx+mUwTdc=
+	t=1786459868; cv=none; b=JTOXTax8L0EqQkBW+KtP/uv3zYm2Qc07x1TjwN4vhW/8X0GZCSiYmce9OycUrcbBfifBlHNpFxU7WEnUaPkrqBK4oCnokE9dhvWlSEgwaO/mgdooLeKcAooPIgop4In9CGP5QJxqFRzbc1INmCUH3C0G+lGRndYUovxjU6Iyy/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786459718; c=relaxed/simple;
-	bh=kC6mE8NpGgNSd4MwTOaZbaSstSPzKrQUvf1uS76/vyk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=SInOC7JgfVNeBPcE9dOFYhDUqMmHdKBX/lDVYUNySNk2//ravs4o/PDjBz7aACq5qSWlpTrLu0Fwwc8gk5jxDf3z3jqmNGMM8iJT1gliAW5jKXwM7c9AxvzvonfjLrvgVmBZf3XT/ZHziva2wy1nWkdob/RpDrs6DjN7sYltC48=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GRcmnaII; arc=none smtp.client-ip=209.85.214.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786459868; c=relaxed/simple;
+	bh=rqu8jS3anZAL/br0gBitePzXff7fiVul2q5O3XUbBFM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ey4/NY2CK2fBnF/7pzjq0V0rm6mv4Zx5eAr6IZDmCPOxwxUv/ZHOll6YfMDhQNhETXA3Wc9+zfZXpj5GfJTCDvvhrlFnBiGWMPM7FYJe7wIfA0gSgm+Bu8cJXU/Z64itwTpr7qXEMbOT/zb5gBSJ5l9IIgnxQqdYW7g26e+wT2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcLppvUP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GRcmnaII"
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2cc7e86e7c5so55977615ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:48:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786459715; x=1787064515; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rVhz6t6uiOZc1DDgF6HOTd7wvK1RF7/iSTLQV7TuFds=;
-        b=GRcmnaIIP+/yPM8zZlFCvYTUg7pu0uPG2or4YQbI6T7pDdYf7ir/gu9/xuDWSHK070
-         ioMRjOdOy7cxBJGjiT0FE7jyIIio+NMvbKINGAxNfrOsjkzDiuq6AdQ1yDpYgA/zEkcO
-         CqRG3yJ/s3dWdkKPPPaOtcp25+VsyQIo4R/hOcz/X0HLBInaj29OUhdm7eX2m6UnOQM8
-         3kFNHAH7Dqqv8oVfl943ixjGqSPEr17og0wiS11D0AIDf6LjKBGt6mw4iV17qI5ftXyT
-         YJ/mFO/f1LEbouwNfnriX1zuw8NCCwstASSzSvZ+4QJ+sr+rl+9tm9fM14/jWCMN63Dh
-         bEWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786459715; x=1787064515;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=rVhz6t6uiOZc1DDgF6HOTd7wvK1RF7/iSTLQV7TuFds=;
-        b=QrHJHncitHhcvh0DYmwL4rOsMNRAVBegEP9lYRBvX1uh2yYUiSOSVQezyUhQLLORZ6
-         15vLboyDReShhTcQIp6k2bHkq3lrA2Took058+U0ev0f2S8JlWnNLvipbPWerdAzL/xl
-         6/y7dJ2ybilFKk8DnkEj5OUmuiA3u6Jlv7we1RVKzOqF5av813HbEZRRu7g9jJCJcm6h
-         QjuN5O5khxj2xBiwoBCOs230EDXsKXkd4JNo5e+f/NIEAYUIonwE495xkomhgvqV1+7U
-         JBQFSrZQu/7oCwiXMrvX//BuBEyRdbHJsn0Jz9bXIoV2tUBWYFQb0yKmgPIx6Z8HELA9
-         PINg==
-X-Forwarded-Encrypted: i=1; AHgh+RrA0J50nQrs/VekcR2dHsQdjbqd/W7gCvvqotLEbXQwSLcJBThIVvSGwLoEtL0LMebVyxNoNKntQO+6XX0Mkjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCeXVpunfigcGKvFi6AisgjRvCOMjnVDWBUuR1kr7zBJNhZzu9
-	Z8+eAv6MipIrvtCfNyn00iJeapi5xVhTJt8vXKkwDzMjwD6UKgM+o/enjrFbrM9LeXfFQRttlMR
-	6uPSl8w==
-X-Received: from plbje14.prod.google.com ([2002:a17:903:264e:b0:2ca:eea9:9845])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d488:b0:2d1:1a18:4d0a
- with SMTP id d9443c01a7336-2d3177a2163mr42800725ad.9.1786459715153; Tue, 11
- Aug 2026 07:48:35 -0700 (PDT)
-Date: Tue, 11 Aug 2026 07:48:34 -0700
-In-Reply-To: <9huzqzk4zt3n.fsf@tarunix.c.googlers.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcLppvUP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70E141F000E9;
+	Tue, 11 Aug 2026 14:51:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786459866;
+	bh=KmOnNXudqcFp6teaxFKRc1ujH1quWByZqtk3hAP9zdU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=hcLppvUPDfD3HtYAA6l5AOwGbvZDWqXtfjtOdEnByjpDC9RB5gjVTfsozUoouP09d
+	 9PUFEI4jn/mb3na3w9Pv5f4Vho3MUwWeZav2vj4VjEOeTjS+SHffn1aUFIuSkOZdFt
+	 DdWWFhHCrvB9OmCq3vX1PP1wugtOdDvfW8Jys6sffb+zuqe9h/gO5SS8OlzmsO4zqj
+	 TgLNvXSUOF8y4cuIT7d2pGUmmxi1WUtFEu5EpLpcNo8cQSDgJaRVnTq7tCkG8Q6BRW
+	 5Y1pf15PVRgZUWYqEWZLjvD1bYsIVQ0BD64800nPOMJPts6yT1EynBwkiFdIbG3Hfw
+	 FtBGFpu5HZnSA==
+Date: Tue, 11 Aug 2026 07:51:04 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Cosmin Ratiu <cratiu@nvidia.com>
+Cc: Patrisious Haddad <phaddad@nvidia.com>, "netdev@vger.kernel.org"
+ <netdev@vger.kernel.org>, "daniel.zahka@gmail.com"
+ <daniel.zahka@gmail.com>, Chris Mi <cmi@nvidia.com>, "davem@davemloft.net"
+ <davem@davemloft.net>, "pabeni@redhat.com" <pabeni@redhat.com>,
+ "horms@kernel.org" <horms@kernel.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, "kees@kernel.org" <kees@kernel.org>, Dragos
+ Tatulea <dtatulea@nvidia.com>, Boris Pismenny <borisp@nvidia.com>, Rahul
+ Rameshbabu <rrameshbabu@nvidia.com>, Jianbo Liu <jianbol@nvidia.com>,
+ "leon@kernel.org" <leon@kernel.org>, Saeed Mahameed <saeedm@nvidia.com>,
+ "shuah@kernel.org" <shuah@kernel.org>, "sd@queasysnail.net"
+ <sd@queasysnail.net>, Mark Bloch <mbloch@nvidia.com>, Alex Lazar
+ <alazar@nvidia.com>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, Gal
+ Pressman <gal@nvidia.com>, Carolina Jubran <cjubran@nvidia.com>, Raed Salem
+ <raeds@nvidia.com>, "Jacob.e.keller@intel.com" <Jacob.e.keller@intel.com>,
+ "skhan@linuxfoundation.org" <skhan@linuxfoundation.org>,
+ "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+ "edumazet@google.com" <edumazet@google.com>, Lama Kayal
+ <lkayal@nvidia.com>, Tariq Toukan <tariqt@nvidia.com>,
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+ "sdf.kernel@gmail.com" <sdf.kernel@gmail.com>, "doruk@0sec.ai"
+ <doruk@0sec.ai>, "sdf@fomichev.me" <sdf@fomichev.me>,
+ "aleksandr.loktionov@intel.com" <aleksandr.loktionov@intel.com>
+Subject: Re: [PATCH net-next V2 12/13] selftests: drv-net: psp: Fix
+ responder parsing
+Message-ID: <20260811075104.0fabe360@kernel.org>
+In-Reply-To: <73586539333ece6aff68ff29f7e43ceb59e7b581.camel@nvidia.com>
+References: <20260804083535.2946459-1-tariqt@nvidia.com>
+	<20260804083535.2946459-13-tariqt@nvidia.com>
+	<20260807175858.70a717d6@kernel.org>
+	<51b31f2497f1c42464f803818b0e9b6cc6b9aa56.camel@nvidia.com>
+	<20260810133305.3b7448c8@kernel.org>
+	<73586539333ece6aff68ff29f7e43ceb59e7b581.camel@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-2-tarunsahu@google.com> <anpXjM_lg_UTpl0q@google.com> <9huzqzk4zt3n.fsf@tarunix.c.googlers.com>
-Message-ID: <ans2Qvo0453cc_DD@google.com>
-Subject: Re: [PATCH v4 01/11] liveupdate: Add LIVEUPDATE_GUEST_MEMFD config option
-From: Sean Christopherson <seanjc@google.com>
-To: tarunsahu@google.com
-Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 11, 2026, tarunsahu@google.com wrote:
-> Sean Christopherson <seanjc@google.com> writes:
+On Tue, 11 Aug 2026 12:41:14 +0000 Cosmin Ratiu wrote:
+> > > I actually replaced n by off. Did you mean "don't replace n by
+> > > off"?  
+> > 
+> > Of course!
+> >   
+> > > Because the two are identical after the recv error checking. I
+> > > don't
+> > > see the point of maintaining two variables when one suffices.
+> > > Either n
+> > > or off can describe the number of bytes in buf. off is static and
+> > > persists across chunks, while n is temporary.  
+> > 
+> > The variables have semantic meaning, which makes it easier to follow
+> > the code.
+> >   
+> > > So to clarify, do you want to keep both?  
+> > 
+> > Yes.  
 > 
-> > On Tue, Jul 28, 2026, Tarun Sahu wrote:
-> >> Introduce the LIVEUPDATE_GUEST_MEMFD Kconfig option. This option
-> >> enables live update support for KVM guest_memfd files, enabling
-> >> guest_memfd-backed memory preservation across kernel upgrades.
-> >> 
-> >> Currently this support only guest_memfd files that are full-shared
-> >> (INIT_SHARED and no support for private_mem).
-> >
-> > Why?  Specifically, why do we need/want a separate Kconfig for guest_memfd
-> > liveupdate versus KVM liveupdate?  I can _maybe_ see a KVM-wide Kconfig, but
-> > even that seems like a stretch given that (AFAIK) hypervisors are the one and
-> > only use-case for liveupdate.
+> I'm sorry, but the code is wrong.
+> cmd() matches on n (which never changes!) but __consume() only
+> decrements off. Strap a loop on top and the result is just confusion
+> and a source of bugs (e.g. the one I'm trying to fix with this patch).
 > 
-> LIVEUPDATE is used in many subsystem. It is possible to enable
-> liveupdate and kvm without enabling KVM_GUEST_MEMFD. So GUEST_MEMFD
-> preservation must depend on CONFIG_LIVEUPDATE and KVM_GUEST_MEMFD both.
-> LIVEUPDATE_GUEST_MEMFD Kconfig is wrapper on both of them. It need not
-> to be visible in menu, So I can make it hidden. WDYT?
-> 
-> Also, KVM VM_FILE preservation and GUEST_MEMFD preservation both depends
-> on LIVEUPDATE_GUEST_MEMFD in this patch series. [PATCH 05/11]*
-> Which is wrong. So I will update KVM VM_FILE preservation to depend only
-> on CONFIG_LIVEUPDATE.
+> A single variable should be used to keep track of the length of data
+> left to parse.
 
-Or just handle it all in the makefile?  E.g.
-
-diff --git virt/kvm/Makefile.kvm virt/kvm/Makefile.kvm
-index d047d4cf58c9..e6f098498795 100644
---- virt/kvm/Makefile.kvm
-+++ virt/kvm/Makefile.kvm
-@@ -13,3 +13,8 @@ kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
- kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
- kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
- kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd.o
-+
-+ifdef CONFIG_LIVEUPDATE
-+kvm-y += $(KVM)/kvm_luo.o
-+kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd_luo.o
-+endif
-
+and in your opinion that variable, which represents the amount of data
+left to parse is supposed to be called "off" ?
