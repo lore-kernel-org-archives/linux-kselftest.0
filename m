@@ -1,203 +1,118 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E983B19A9;
-	Tue, 11 Aug 2026 16:56:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F95234D90C;
+	Tue, 11 Aug 2026 16:58:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786467405; cv=none; b=W2Y5gzBqAwaenodfnHdZANJGeDeuW6XtB4uuFw+7B00wZML/51Vt/RnV2rXaZOwN8FdCedih82BdM+yw0tbjEspa3Su2MKu/yQR00JU3F5Lc0g8HttBTLgWaido6/NMlXwoEOHx/uenlUawyz1GqAne/pzxgnCEkt+DtWYTwghE=
+	t=1786467534; cv=none; b=ljGxNnub/OjMhbdxG5tU5kXGuJULMUQyyj7cglI3PoSY0EY/jMbpVXcKpeffMsefNZRvWVaayrWjG/5jifsoS+lboNAbvnQTgxogmTZC6uNN94brjMi/UXS6e0jVF//97U1X6+r18f4PdQ5SIUeLKXBJsbwb41Is6p82ftLQ3pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786467405; c=relaxed/simple;
-	bh=N2W+JWlJEn4t+Ox8VGfTEVn3Tqfz3G/nW4t/4BiK/9Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=T5OU/gjENc7M/OWuecyn33R+ORlG0ylk7WfV24kYmOyjCwP3g2mr62CNxHjL5JsZ0mQARTuCblwkCKNArCby9PMPWa6cGbGBBGUrajYZ6eKWQb3JWkFuJB99tJGY0YlFWHNn9aOP/4r/dIzsWE8y4wPU3OjAbShAVNVJgq4EI+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W/Vb1pQG; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786467534; c=relaxed/simple;
+	bh=gMqlF/D6+JFVkHUqdhJ/c7btsZHh8yXgKeSwMrQ3zRU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MgmsAsTUhSjKI4uCgp9GDzoXs2mUabGC4gU+gKmZIY4MSZdJULfqbRfuNhQvW7ABLAf5sILaC9Js2eVN5YelXgiuLk1sVjk70j/e96MdHe597UBABIzgFdXIk+w4IQjm8IdRjHdLyPLVb7KIftAuPmMeiPUrZoJkQiF4+DZHajQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=hSQFwMB+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Gts6PYdY; arc=none smtp.client-ip=103.168.172.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W/Vb1pQG"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE01C1F000E9;
-	Tue, 11 Aug 2026 16:56:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786467404;
-	bh=r5qZYpI3vdFTuCg+CitkfYsMkpKr8Bt5j6c7z26nFx8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=W/Vb1pQGIt8ImwWIbkSP5AG6G/VOBiBOX4x6XHdZksbRB66RKihy0UhfB3ZBNSKqk
-	 MDe+qKP8SivV1qPY3Ye13lmBHpKmXPkTam8vcWXlNVMSCcXSBL9FVVP4g5Et/2gzen
-	 d1QUqGImGS7T28Jvk8kwx5h4GH7SnzU0FtHbyq4M/DyIMfLUsuVhCrVbIbruG0Za8A
-	 NjVzOGJp3jQgNX24mDf9MErtOAmZu0Y4TCtIaP8Cd5d66fLUvnvMitsYvVNEyc5CcH
-	 kTsI9nuDVOLeqhtOq99QUOnZd5WsJ5nmLRuAFp9qrhu7DM4Lljby9bJpgvaBoe1yLH
-	 /oAqNA1sLwjaw==
-Message-ID: <cf70ce8f-cdde-43ec-a50e-796d4e390f3f@kernel.org>
-Date: Tue, 11 Aug 2026 18:56:18 +0200
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="hSQFwMB+";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Gts6PYdY"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailflow.phl.internal (Postfix) with ESMTP id 25FB31380437;
+	Tue, 11 Aug 2026 12:58:51 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-04.internal (MEProxy); Tue, 11 Aug 2026 12:58:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1786467531; x=
+	1786474731; bh=TjyAvX7Mugue+C5cYh+R1a7/5p4l8Irr+ax7oHoUcio=; b=h
+	SQFwMB+XetV9+hyyHHxogEKB2YDwOPjRDNI52tI2w9feqalcTr+bd1BTZ1sKa4xr
+	gGF+EbMb614itLTZR7PNJMNVVog+FIL5bN65sU2N+VbAzEIgaJSJ/5HMvHhFaypi
+	RuM2kzzFKlB3YZjsYuARHTQUQHusi3SkT6AWc8Boji4E0IIWPWJ+90ZEHcj/UM21
+	KsYgsxk6iDjjTB8h19N459e+aYJJMt++4ljEoQxjkTf9MIhseLXYNO1saFwHHEFW
+	ahLuTOf2uFXS1NyJlLwC0T6EIn5iigzG8+Sr+b4Uy9Vcb2YkF4hb/0nuqe6eUJug
+	zstTBrBulAfPRws80dqww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1786467531; x=1786474731; bh=TjyAvX7Mugue+C5cYh+R1a7/5p4l8Irr+ax
+	7oHoUcio=; b=Gts6PYdYpzbZm+JHlw4zdQRDReNiMeaypzlpXJ7DISg8QYcr41q
+	/7xkSl0T82xmcaWXOq79yORI5DJBL0YCbNu803OYoPQO3/WoykwcJiFgRVOO0zvX
+	xdJvKSxUSbVOG9aYeOKjEZKUDgdFpWP8HuGuNzIqjN8lt83P/O3Q+9bGkJbcxyAy
+	bOk31cyOpsCi2CVM7PXITBBuUG7FA8igyNEq2MHoleRD+mRtuSvfpyT+YHspYgMY
+	KBFnz2XBx+wYzP5BabvbwVt1HskfUTNCOLEyBJ7rHUbbXKajrzOAsT84CD+VJERn
+	s/iaEV0DBlM1PqS+6YKIi+SKOo7xVujNkHw==
+X-ME-Sender: <xms:ylR7agnVyLXt57mfNJTAqkJUVRgSEZtjj0VSTBC6_pF3zvYwmqqrVA>
+    <xme:ylR7atdV6iRwGP556xrHjmG8zmONPqURMAYY7h3qZpqnw21P_hHQpbBvKwDicVa83
+    CAjMhwarW5i7abFupQotQMcxv7vSq37h9bkTjZP4S47uPT6ksvmTF0>
+X-ME-Received: <xmr:ylR7akN8kCwbLJyXMylgfSEiHFj84_8l_yR5EmUP9E-Nf3g3H-MN7s3GuZc>
+X-ME-Proxy-Cause: dmFkZTGw/dvbcaEj2HngP33VDAg9eCbiq0lwbqHTn2QAHQczq+P2RKDp+L8ud0Spkr0mhk
+    3uDL/BCZgN9VBSnXxgqgZmjprKpgFZCp9D7x5ua2QdXa8Y3zq2jFdoTz+wMcpgHeI+dZMv
+    SH3nFGwlFziDUIaHYaLWqOBy0TSFxRiM+s9hg1mDYkmth4uP8oXNyv6Xr7cFS7ZMYoupr+
+    JjHmtkfeO0jrGgEmm5N1yLT5ZvMVq5j3TaMJMixbHC3ieE50Rn1Tzv6oyFX+2ZghkjdR60
+    h2pwdEs6Y2LSL3tQnMz/EVeo4YapSMlo4GYY0Y44Ov9KhB6d1btj8zbKNkgL/98kdsDhGK
+    D9atn1Her8TmYPe+HvKEbXY9gJdp+hFiEy997w9uyjKgg108vLs/nEPVEm7oeI+Cud0fVv
+    2uLCiuBNEGs9i+C+6gyKxbBxh0jpKynfpA0PZHJ7SLVbotgrX6StpXKMu6/j2GVfriPnmR
+    TilxE+3Ojf+x17pITfhU9f+KyC0dJHpk2oemh1NHBYYNUT1fMK5BzB3i4L4Ji13rD96OfW
+    NobxrnpwSmEkA/7i/yfqzT2KE4YqdAVn+BDGgZaJBPBYyMMjBoqCGKB9OOjKHn3oxI++1O
+    3AiTfaFLnGJzkzZi9A9GjXD6CNsgRQpR2HzCjSqvmKFys3rZxggvsj0uFXiw
+X-ME-Proxy: <xmx:ylR7agMuyidBzdKUldr4igDduleH70rXOyrDW3rWnWvhXvl9XawgNA>
+    <xmx:ylR7at6YfL_eTGP9rvVq5nQgu1IxIhGjY0I9NuGwqQ-WsFIUn5tBGg>
+    <xmx:ylR7asam06tmpINrcvxWcvE4IgplarF_0SIgGJng6doHA_gaRupRDg>
+    <xmx:ylR7atF0lHg9u-3aYD32lFFRjKhvAnSfStaB3KF6mSwgr3RO-fiXYg>
+    <xmx:y1R7akL3f04RQ37VXqAHBMwA5ZZZQG_hpcbyQggrqITDtd4YK2ykpBZV>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 11 Aug 2026 12:58:49 -0400 (EDT)
+Date: Tue, 11 Aug 2026 17:58:48 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Alexander Gordeev <agordeev@linux.ibm.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 00/17] selftests/mm: improve khugepaged coverage
+Message-ID: <antUso_Mfdh3EiHk@thinkstation>
+References: <20260807113647.3744609-1-kirill@shutemov.name>
+ <f9e0fe38-47de-4577-b638-1142d4ffbe6c-agordeev@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 16/20] tools/testing/selftests/mm: test anonymous page
- offset merge behaviour
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
- Pedro Falcato <pfalcato@suse.de>,
- "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>,
- Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>,
- Harry Yoo <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>,
- Matthew Brost <matthew.brost@intel.com>,
- Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
- Byungchul Park <byungchul@sk.com>, Gregory Price <gourry@gourry.net>,
- Ying Huang <ying.huang@linux.alibaba.com>,
- Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Xu Xin <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, Alex Deucher
- <alexander.deucher@amd.com>, =?UTF-8?Q?Christian_K=C3=B6nig?=
- <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>,
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>,
- Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>,
- =?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>, James Clark
- <james.clark@linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
- Youngjun Park <youngjun.park@lge.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org, linux-s390@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
- <20260806-b4-scalable-cow-virt-pgoff-v4-16-ab318a350404@kernel.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260806-b4-scalable-cow-virt-pgoff-v4-16-ab318a350404@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f9e0fe38-47de-4577-b638-1142d4ffbe6c-agordeev@linux.ibm.com>
 
-On 8/6/26 22:21, Lorenzo Stoakes (ARM) wrote:
-> While maintaining anonymous page offsets for VMAs has no impact for most
-> merge cases, it does impact MAP_PRIVATE-mapped file-backed mappings which
-> happen to have matching page offset but not matching anonymous page offset.
+On Mon, Aug 10, 2026 at 02:58:43PM +0200, Alexander Gordeev wrote:
+> On Fri, Aug 07, 2026 at 12:36:30PM +0100, Kiryl Shutsemau wrote:
 > 
-> Assert this behaviour by attempting to map an unfaulted MAP_PRIVATE-memfd
-> region with a faulted one with compatible file page offsets but
-> incompatible anonymous page offsets.
+> Hi Kiryl,
 > 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  tools/testing/selftests/mm/merge.c | 57 ++++++++++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
+> ...
+> >  - Dropped the swap-skip patch, an equivalent has landed
+> >    (Alexander Gordeev).
 > 
-> diff --git a/tools/testing/selftests/mm/merge.c b/tools/testing/selftests/mm/merge.c
-> index 519e5ac02db7..cb7cdb6b7ada 100644
-> --- a/tools/testing/selftests/mm/merge.c
-> +++ b/tools/testing/selftests/mm/merge.c
-> @@ -1305,6 +1305,63 @@ TEST_F(merge, merge_vmas_with_mseal)
->  	ASSERT_EQ(procmap->query.vma_end, (unsigned long)ptr + 2 * page_size);
->  }
->  
-> +TEST_F(merge, anon_and_page_offset_mismatch_memfd)
-> +{
-> +	struct procmap_fd *procmap = &self->procmap;
-> +	unsigned int page_size = self->page_size;
-> +	char *carveout = self->carveout;
-> +	char *ptr, *ptr2;
-> +	int fd;
-> +
-> +	/* Create a 10 page memfd descriptor. */
-> +	fd = memfd_create("anon_page_offset_test", MFD_CLOEXEC);
-> +	ASSERT_NE(fd, -1);
-> +	ASSERT_EQ(ftruncate(fd, 10 * page_size), 0);
-> +
-> +	/* Map a region using the memfd at page offset 0. */
-> +	ptr = mmap(carveout, 5 * page_size, PROT_READ | PROT_WRITE,
-> +		   MAP_FIXED | MAP_PRIVATE, fd, 0);
-> +	ASSERT_NE(ptr, MAP_FAILED);
-> +
-> +	/*
-> +	 * Map another separately, and fault in, at page offset 5:
-> +	 *
+> And dropped [1] following David feedback [2]. Would you pursue the proper fix?
 
-"Fault in" is imprecise, as a read-fault won't do. "Trigger a CoW fault." might
-be better.
+Yes.  v3 will handle the failure rather than predict it.
 
+is_swap_enabled() already skips these cases when no swap is active, so what
+is left is swap that exists but cannot take what the case asks for.  The
+series already has swapout_range(), which reissues MADV_PAGEOUT for up to two
+seconds and reports whether the count arrived; I will make the two cases skip
+when it does not.  That covers swap too small, swap full, a memcg limit and a
+folio still under writeback, without reading /proc/meminfo for any of them.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+An error from madvise() itself stays a hard failure -- that is the kernel
+refusing, not the machine being short of swap.
 
 -- 
-Cheers,
-
-David
+  Kiryl Shutsemau / Kirill A. Shutemov
