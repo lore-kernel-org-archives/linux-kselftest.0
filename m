@@ -1,110 +1,208 @@
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89C13418341
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 21:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3630F47D926
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 21:46:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786483378; cv=none; b=V7y84dFwuu7UrXtow4ThrNu+O+KIC7uSxYl6fc1U/h5kq1QvglUPxY3p6TElxqzBf4y90E7zpbKZMiRES7xgMZsVc87msAFfphdk6YTv1j8tcZZ5aGVStWTM6vsIUKGPuSiXZPeoP0QQ1/fwS2pXUSfKGgomQ88fJ1VRKIB8zH8=
+	t=1786484795; cv=none; b=kAzBZ0ZjBzNIPIKqZg9aiwxM5YsmeKoWmHpzJZKmBym8PYxeGpvs/u7XD9BU8Q5lRXRMmahCHEsJhp3xi9HIoUWWKYume07QmSz9vLi+8tGO+cghgv1XsZjAQgTXa7cSS/L0RdEr6Xs+8hXZ09vTfNIAERmFAURRw/wLWACjVv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786483378; c=relaxed/simple;
-	bh=XN/rifqNvJQDtxhcJX1CkOjTxm/idHUoaQKoCIcr3J0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=soJOFB4JMAzO4lG7hQeJC9TyWre+8lJri/ZB8zFBmcjBfA7vsgZ+vcrxhhO2ZGF3+xMRCfuRxkc9/Yo/7X5q9R3Rgv+U00z/jCuhoObrTfNFtWXp+QgbMFcRNqElIEdAKOE+VqXxhqNZE5M5zzyIC50HSBSyZO2L5fvMEulnRuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iHLshkuD; arc=none smtp.client-ip=209.85.210.180
+	s=arc-20240116; t=1786484795; c=relaxed/simple;
+	bh=Bzrq/VKcfobXcbNSIJ48oES/vQOba3cFYNFGC6yNXhQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=KpNNy2WSIZDmiM6rmUNHd99dISGvFkexqvz5H6/Z+GDZnO/q5f6f05DuDFugJDiLfJQ4AlZwxqrJEbBx7I+Dn6ooSn+B7nVIKBksmCwnRu179ZdS9YwCXcd1UPMeFPjadvuUt+eWX3yjOVJtnmRYHOpGfHFnw9XL0vQFefR2tEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=V4Ss0UvV; arc=none smtp.client-ip=209.85.215.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iHLshkuD"
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84f77cc7302so150369b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:22:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="V4Ss0UvV"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cbb20f82a0eso248189a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:46:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786483376; x=1787088176; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=duzXNp2G2UESyfsX/Nv+I5To/x8QlNagRZc9TfujvZ8=;
-        b=iHLshkuD8hBFuauu4Di391vGvcjQPTjaGzzEbn5A5oegjFPuo2toVazuiHN6PYmxAb
-         /HpeaZ7L7FPd2yTnQjuluPzw2qiaz26lrtn3pQu1kZ4cVTxgo5BKjGilTiLxUTwV4eT6
-         em6hDsWoiS+ZCtPV54S7Wg1VaWBad7TAFpQWvmLxaNR9V1eBftl8BqCFF6hraUieoE84
-         BM/SD5uATWeSfQY/znDz3wI7Go4cW22PGFkMHMFP3eDnMDiuxegNYylALhxUhHMkIcHZ
-         Bf7aMENNcRKgAG7GIoc3J9AIIgV16iuBudza6Y2fGq5QIb8b0/ewFob6ACmvz/5WZYnS
-         QJSw==
+        d=google.com; s=20251104; t=1786484792; x=1787089592; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=GNP84U5NVANNewsvSEzbCgg+MDCqvRSKiMtE5jPKweo=;
+        b=V4Ss0UvVLYZDBtkpuwM9otI200+jqPqEFJftlM4PNtzd8rjir/s2fPmhMOUYZO4bnT
+         rUs/EzczADWpKnCzG4da+7/C3Sp/hM+U/kRuclHztpX1fVGv1DNhlvegl/UxqYHg19Oy
+         sj33bXn8AkV8A62U4GIg5Ivx5/A0cac8mWhkdKLIuMGTayeEo6fNyB9omuz+uuaxZrS5
+         JNX8qDXbQaFogvLxn1yR42mepWAkd475AUPMtrcom+k7WZOEnfKcsxC2qPTpIwh19yxl
+         LQDQAuXLWk5WbTrFwo2OVsi5mC/SKZOGDHwRul3WfqynfL952DJMRpK6sm6JmRHF+CL+
+         8V1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786483376; x=1787088176;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
+        d=1e100.net; s=20251104; t=1786484792; x=1787089592;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=duzXNp2G2UESyfsX/Nv+I5To/x8QlNagRZc9TfujvZ8=;
-        b=XX8OekOk0T5zcKb2n00T/nUKvEiij4/geNJX7Pr6dt6aj1Q3ma9UAKpm6pp8dLcLsa
-         yPWoYl/ewn+M1Yaf4wpSvkBHhcvRYoE+nyCK19cWOLs3SWtF+42nQ0ZoLGlQQfAn0Yxv
-         6Witjzp8RACkA9gxxDbegaI4lc5WgAjnA/HTuNnPN3ZC4JetYYhaWAcdcwBFVQY9nZY+
-         hHOIoUSehjY6gnwHGbe10tNl1uJAJ94aRNt7U/JCEje+C8xPTChF70L41/fGzUtycdsq
-         oPs/V2kB7DwypuujUmcDhAfLxCRXUs60Ly1pk2ubm+jrmEdtyOwCAkGhUafUdVQbf28b
-         1cvg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq/W63rj3GoSWe7NI84QVHrfZY9YAznxQops0FBGR1HUgafNjUpssUN/QOkquEVjW2JRfxttuDk224SRffFyO8=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzrxm6EEEk8GIDhZftLXhySRAQEOGlbbCO9yK1lQC97/4BxOgJM
-	IdfJxeyVX98xkBhZJwC0Sb76hN/S2arf6fOZNL8SCtyHzq2oR1nw2nWRwNAFLgNdig==
-X-Gm-Gg: AR+sD13uA+LMNp3oROS17C8U2DVBaHf95TjBmYhtvmaYpaLNzcdUR5HZNjlYRn3CsHp
-	OuMpGOFEa0sHVkle26lblEXNmIv/jlxzBI3JMO1MT1dBgkOE7RN9fxFC11P0jK5MYI/salZati3
-	srZxqqRob3BNoF2CT2NTEwJB5qak6FfnGQmNCUezxObygOjLYMG6SG4p7Ih1elh3GRrI+ncCk1u
-	aDA7VuuD748bTuMdZdSl3Ef+N2eHVVwiXTWP982Qa9Q6Hc+eJmIvnrPf0YbZ3zIWkYcbjlz6Rk6
-	H0Jd+8t1S9WsaerY5BSjo+fwx6B93S71ZeButpxnUWeX1P4ILHIzaWJQUxB5kiUYjhvFf8Ms9MA
-	FZocG0kbyXEd3BHf1TZio3+4hrTbgnvLMy7EMH3FcGqq0CPl64LTjtzJ/uIOdowtIGRh115Sszf
-	N1UtaPiGEcqQUpuqGzRrrQ8ONfiD6Gt3ZpkmwdQM8RB4LmkG1DH496jbWEwIo8uccuHvZRR2GaO
-	vTnmc3hMOSBoJ3xWLzYlb2eJc7eRA==
-X-Received: by 2002:a05:6a20:a105:b0:3c3:a168:edc3 with SMTP id adf61e73a8af0-3cc2bcbf252mr7676629637.38.1786483374995;
-        Tue, 11 Aug 2026 14:22:54 -0700 (PDT)
-Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbed8bdaeb5sm1461553a12.11.2026.08.11.14.22.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Aug 2026 14:22:53 -0700 (PDT)
-Date: Tue, 11 Aug 2026 21:22:50 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>,
-	Justin Stitt <justinstitt@google.com>, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, llvm@lists.linux.dev,
-	Mark Bloch <mbloch@nvidia.com>, Bill Wendling <morbo@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <ndesaulniers@google.com>, netdev@vger.kernel.org,
-	Saeed Mahameed <saeedm@nvidia.com>, Shuah Khan <shuah@kernel.org>,
-	Tariq Toukan <tariqt@nvidia.com>, patches@lists.linux.dev
-Subject: Re: [PATCH v3 11/11] vfio: selftests: mlx5 driver - add send_msi
- support
-Message-ID: <anuSqnU7WPy-9enn@google.com>
-References: <0-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
- <11-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+        bh=GNP84U5NVANNewsvSEzbCgg+MDCqvRSKiMtE5jPKweo=;
+        b=L2IahFeabDZ1UjPuYddUcO66Pr2xu+H6W6Q/o98hxSt6is+gCP+V+3mgcaWu+aKg7f
+         QJMApH6KieQb8avhZ5sNUQ1LuZy7lPuWJJLHs8urw/VjwdRvdHG1H2tcTEHgDnSzVkTd
+         2iAt6DwS0OvJ3IloPZSNh+k1haLKDq1a6ZIT5fjKNNDilQwlUTvbs3egsTfMerbeRGIs
+         hYgY/QkziDdjyD5V2e4jxV24Ua18YhkEGefOpWSBLX32AoTfzk2lLbshDOSbjDW/doHJ
+         7CKJLz9pxFViGj4304mViLajqYZ+mh3yM7cShoWc5MUrSEZ0N/gr+AKAnSEWkePUc8UB
+         o2ig==
+X-Forwarded-Encrypted: i=1; AHgh+RoWv6qIooOQiSeU0d7lVQ0B+iT57JEQ1FymLzXw69zkMnlzIeW9mhgBKpHSWpV3Om3VTLbOzbsJ/RVDFtFfvGg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzjr2OokcZt0V5UkLj5H16CIiDfx7zVaLFVl7pOdUPFAU7Ob7If
+	dK9Lpsnl5xttSfx7QdQlISh+31lwVUL07jAAGb8B6VmZjCw0ovUlo/Mur7EIfS+zw6m+/upVeeV
+	zVgN01g==
+X-Received: from pfbgp12.prod.google.com ([2002:a05:6a00:3b8c:b0:84b:4480:8b65])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:2ea8:b0:847:98ff:4af5
+ with SMTP id d2e1a72fcca58-84fb54c5d00mr290195b3a.26.1786484792108; Tue, 11
+ Aug 2026 14:46:32 -0700 (PDT)
+Date: Tue, 11 Aug 2026 14:46:31 -0700
+In-Reply-To: <3dc73f745b6abfd1eb53e7d3fce2067eaa3b3c92.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <11-v3-76f117ad04f1+28a90-mlx5st_jgg@nvidia.com>
+Mime-Version: 1.0
+References: <bb9a12cc663130eb2caa8e839d0f6ca53d722d1c.camel@infradead.org>
+ <ansuqrD2KwFuLWbV@google.com> <ansywxh0VX5rtfWc@google.com>
+ <e256fa4af96e916ba30019cbba501fa896025fb0.camel@infradead.org>
+ <antQYJvRxJxOjtut@google.com> <f5dc701cf3319a7b3c8fd1497f26d051aa9fa3ba.camel@infradead.org>
+ <antb01WqOrs-tztm@google.com> <6ab49538675d97f1f4bf01574b1b066aae0bc05c.camel@infradead.org>
+ <ants4VjfAiblaWsl@google.com> <3dc73f745b6abfd1eb53e7d3fce2067eaa3b3c92.camel@infradead.org>
+Message-ID: <anuYNxD81OE3MrQw@google.com>
+Subject: Re: [PATCH v7 17/36] KVM: x86: Allow KVM master clock mode when TSCs
+ are offset from each other
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2026-07-16 02:03 PM, Jason Gunthorpe wrote:
-> Wire an MSI-X vector to a dedicated EQ so the mlx5 driver supports
-> send_msi().
-> 
-> Each EQ can be linked to an MSI-X vector, and the CQ can be set up
-> to deliver an event to the EQ. Thus, when everything is armed, an
-> RDMA WRITE posted to the QP generates a CQE, which generates an
-> EQE, which generates an MSI-X.
-> 
-> To keep things simple this just re-uses all the existing QPs and
-> CQs, so they generate single MSIs during memcpy.
-> 
-> send_msi() drains any accumulated MSI EQ events from prior memcpy
-> completions, posts a small signaled RDMA Write, then polls the CQ to
-> consume the resulting CQE (avoiding stale completions on subsequent
-> test cycles).
-> 
-> Assisted-by: Claude:claude-opus-4.6
-> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+On Tue, Aug 11, 2026, David Woodhouse wrote:
+> On Tue, 2026-08-11 at 11:41 -0700, Sean Christopherson wrote:
+> > OMG, I hate this code.=C2=A0 After literally hours of staring at this, =
+and even typing
+> > up a lengthy example of why guest time would go off the rails, I finall=
+y spotted
+> > that l1_tsc_offset is accounted for by the call to kvm_read_l1_tsc().=
+=C2=A0 FML.
+> >=20
+> > Thanks for being patient and not flaming me too much :-)
+>=20
+> Haha, no judgement. We *all* hate this code. That's why I threw my toys
+> out of the pram and went on this crusade to clean it up a bit.
+>=20
+> > > > > And your variant just added a dependency on wallclock time back i=
+nto it
+> > > >=20
+> > > > Can you elaborate?=C2=A0 I'm guessing I don't entirely understand w=
+hat you mean by
+> > > > wallclock time.
+> > >=20
+> > > The system_time field? The unspecified might-be-UTC-might-have-leap-s=
+econds one :)
+> >=20
+> > Ok, I think I finally understand the goal.=C2=A0 I got turned around by=
+ the combination
+> > of the name SET_CLOCK_GUEST and the full pvclock structure being passed=
+ to the
+> > guest.=C2=A0 I was expecting SET_CLOCK_GUEST to literally set the entir=
+e clock, e.g.
+> > mul+shift, timestamp, etc.
+>=20
+> That's an implementation detail.=C2=A0
 
-Acked-by: David Matlack <dmatlack@google.com>
+Yes and no.  If the payload didn't literally have all the assets needed to =
+set
+the kvmclock fields, then I wouldn't care.  But I don't think I'd be the on=
+ly
+person to see a GET+SET pair and expect GET to return exactly what was writ=
+ten
+via SET.
+
+> It is literally getting the clock as the guest sees it, and setting it
+> again on the destination from the same guest-ABI pvclock structure.
+> From the userspace point of view those actions *are* symmetrical.
+
+Only if userspace holds it just so.
+
+> I'd actually *like* it to just be a memcpy at both ends, even on the
+> SET side, just copying what userspace provides into what we offer to
+> the guest as its pvclock.
+>=20
+> But as well as wanting to do some sanity checking, we also live in a
+> world where we might have to switch to the non-masterclock mode at any
+> time, and we have to ingest the information into the per-VM kvmclock
+> setup in a way that the kernel "understands", and that's why it ends up
+> implemented the way it is.
+>=20
+> I looked at rewriting the masterclock base information from what
+> userspace is providing, but there are *host* TSC values in there, and
+> it ended up in some cases wanting to set ka->master_cycle_now to a
+> value which is *negative* on the new host, and I didn't want to
+> exercise that wrap-around path. So instead we just adjust
+> ka->kvmclock_offset to give appropriate results based on the existing
+> masterclock base.
+>=20
+> Each vCPU's pvclock is then *regenerated* from the VM-side kvmclock
+> data, giving rise to that annoying =C2=B11ns discrepancy that I whined ab=
+out
+> a while back, but didn't give in to my perfectionism and eliminate...
+> yet.
+>=20
+> As far as userspace is concerned, KVM_SET_CLOCK_GUEST *does* set the
+> entire clock (at least the relationship between guest TSC and kvmclock
+> nanoseconds, which is what it's for). It's just that the kernel then
+> "tweaks" it a little bit to give a slightly different y=3Dm(x-x')+c
+> equation which is still within the noise of the original.
+
+Again, if and only if the fields match what has been written previoiusly.  =
+To
+me, that's not a SET operation given the full inputs.
+
+I completely agree that conceptually this is intended to SET the entire clo=
+ck,
+but as you note above, reality doesn't allow for that.
+
+> And the kernel actually does that kind of 'tweak' all the time.
+> Although we're working on narrowing them down because "within the
+> noise" is in the eye of the beholder; Dongli had some patches for that
+> which I think I rounded up and included?
+>=20
+> > But all of that metadata is just a means to an end: the one and only go=
+al is to
+> > calculate the per-VM kvmclock_offset for the "new" host's TSC+time snap=
+shot, by
+> > computing the nanoseconds delta for the new snapshot as if it the guest=
+ observed
+> > the TSC while running on the old host.
+>=20
+> That is currently how it is implemented. It isn't the API contract.
+>=20
+> > And that is done in the kernel instead of in userspace to minimize the =
+amount of
+> > slop introduced due to delay between taking the snapshot and computing =
+the offset.
+>=20
+> Huh? There should be no delays here. If *anything* in this new code is
+> done with something other than a *simultaneous* reading of TSC and
+> ktime that I sweated blood and tears and got shouted at by Thomas for,
+> then that *is* something I care about...
+
+Sorry, I didn't mean to imply there would be delay on the SET side.  What I=
+ was
+trying to say is that if this were punted to userspace, then there _would_ =
+be a
+ton of slop because it would be practically impossible for userspace to pro=
+vide
+the correct offset. (I was walking myself through why KVM needed to provide=
+ uAPI
+to compute the offset, as opposed to provide uAPI to let userspace jam in w=
+hatever
+value it wanted).
