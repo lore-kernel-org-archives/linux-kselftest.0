@@ -1,116 +1,126 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED133BED79;
-	Tue, 11 Aug 2026 20:55:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786481709; cv=none; b=otQ8fVC6Y2+a9BFH83BLq+AxMc6fv1ycyzZA6AVbBeqV4Pt3eR896gU9erFP0KWJUS0Bp2d0WyLY6hr9Jq5QNKr/1iQbRWZic0l9fkmVuNbAA9SkIY/SnNIPXl1CdDpbiK7PSG295IedhjFVBNpFwLaaQDHF3l28b8uHps06rsY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786481709; c=relaxed/simple;
-	bh=JNU6NKML9Hlqwjfne/ZO5VcHY63eTRd/wUqGZQvX3xo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SNBx07+pUQhxElkHbp3VVernWn/vbb0Z3Zi5OQFzIVzEMqBqS3jY7qxbntw464quxQb19s5QLh8nb93xJKd3QPETvDsuO7kIELYPJsEGG+kUhaiUKFTrbk7PqmugKpWku99G4S14vH7sM1IZc2eSs+nzv5UdyY/qiSapLmQt8Cs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OdcZNlmS; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2879B3403E1
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 20:58:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.178
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786481892; cv=pass; b=n3ePRFxIbGYOXiOkbUXCQjrxL4LNLMTaBiV8TvmLZGphBkAzpGicCNiLd2oKECEJUlZ/4H65zLZDPwBFZZiJIb5poTY2NbgvZjryH0yi4G83Cz/MVhAXg6b5Wxy/7ynZMBbM23uAlLifAH9F5nT2xBBiS1QXsIkYLG7uk72AytQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786481892; c=relaxed/simple;
+	bh=2HxJNolFAmmdynxiD24QiH/b/aKUErhnmhqEKLHulNk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XYGejFAAMSXukBQ447XOFWMcFlkZR5Q+OsjotGKR0ngbm6RoOT6zCXgxJ62sK0e3G1f5lJzACcy8t/U3SQtrUUgqr54PTv5/hXktRlwgCZWAHJgnya/KcwG9DIPPitvjF6qFU5OL5xOVCwj3NdxPRP6APuqzjOcQg4q+TDS4e8s=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NzWTvtrf; arc=pass smtp.client-ip=209.85.215.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OdcZNlmS"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 271731F000E9;
-	Tue, 11 Aug 2026 20:55:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786481707;
-	bh=aQNBClanQhcKXlEpeCTI+ghlkNL60DbeIDtW87Lh0Wk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=OdcZNlmSpnlJRGeLjEVeUj5DvZ8Ix6Lhlzc13RQ+BvCLPnyAZpflaGcOjujFWkisL
-	 zoSCGkfa1K+3RazlVtZqWkANfM+hjaYPMRfroV23KO9qxU8tdG6NyVAA/FLX2Htg1c
-	 kpIkZ6v1obesytonpw9MzZuzGTIuMawmrYwgDOUdRlk8ReqflGiTBuK6WvzipLgt7o
-	 r2dO61VSgFz9UyX1nykqqw4y88jjE9/PuCI9TWxLuaEtqaZiV3z6B00CDgmrtyLh8v
-	 ZvsbRJgLYL+JdX3TvbThNDha88TlzzC8dT8bSG4FVOS77BTbsa8jYXW7mB2EQuTfu5
-	 9PNssn489T28g==
-Date: Tue, 11 Aug 2026 22:55:00 +0200
-From: Christian Brauner <brauner@kernel.org>
-To: Jann Horn <jannh@google.com>
-Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 00/11] coredump: allow to create sparse coredumps on the
- coredump socket
-Message-ID: <20260811-morastig-schadenfroh-kabine-e2ae880d038e@brauner>
-References: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org>
- <CAG48ez3QwUopEyfB0tEc84A57g3GZdnptazJW+htiTi2e0Gc=A@mail.gmail.com>
- <CAG48ez0Ty5GTR_vYazWsWOigWP2=8SYstw13zaiJB3auBi1bcw@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NzWTvtrf"
+Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cbedc9ec119so134747a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 13:58:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786481890; cv=none;
+        d=google.com; s=arc-20260327;
+        b=A2M2+e6dvjTCO0UFH+cSIWalL9F+bgSGic993RiTJwVqjLEi4xAutK3m2iVfWIwBo1
+         0rCcvsvAL0x8H3OHF5bB+Z2qTU+TZsxS/ioiIiUWyrjtm/oyHSRqjlFMtKWJejYFqQvq
+         Wfl2eDA25Fdu59z7kyRj/APSDTgM/QqD4ak2zQZKxWH6m+bR0ay7/ttnGeYv6itgvp5b
+         J1quzw2tOPrbNAPWLeHX6y8sujvjsZX33AGQzMjCo10eFUm6i14LSSI714BDofg3aHJf
+         fIGrM9tTX2/6Iim6UKx9Q9/0/9dNlAIb3EtExiVVPEAg1XPfGXZ2KeANydJ+62AXbYmh
+         UuLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=2HxJNolFAmmdynxiD24QiH/b/aKUErhnmhqEKLHulNk=;
+        fh=MYKbgcvM1i/NTPeFFoNdvOrOuclUIEMXskdu0eCQDPY=;
+        b=lzolFU65hH9IR37ZhHrwQ0HByEqI3QelXL6dWEy/qhgv1JRgsvFBFOBdbUkefDGs2s
+         3WFFnUtv1D1nriPiSA4ETvPVO571CrFfA9bDY6nUzCcWQSLlUxVk8cqX7krtBf3/PdlA
+         wcZtWfG/R6IGI0FzopihZTFXeLi6ASo23/MfzMtALJF9q5YQuD1bs02Wh2OQ5Ibv7Qzj
+         FXyJ5HxoVWAMiMLSi3unViJ32+Z+QFS0pdDVOBP96GHi0jlXJGiBgP43KOLN5hcmOn4m
+         oIuLV+Cisb7ISREv5rIV1gtj562YrmYfrdcm4wBBhe3EhMrouygDpV1FuQ//TDR7wIWh
+         1DyA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786481890; x=1787086690; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=2HxJNolFAmmdynxiD24QiH/b/aKUErhnmhqEKLHulNk=;
+        b=NzWTvtrfy96nK5Lgxq0+pRu5Bp6lmuZoZTsowLe4/X6uPmn+20M3l1aOF6OB0n434W
+         840//RHdPccbuEVZrw/qhOk7p+zAdcH5mj53jXRHaYMGbR7dmPQH1YLkfE+FQY4gxyhM
+         fa+oWxKlas3rTdGljqjCVY7LNy6YsaPQlRJ8P0z5q56KxDhPxKI+QUSX/KVVSg62nqXM
+         JoPrlWFMlFqmI7R3W3BdXl8ZhXIHM+xVJrKGxLrcmWdSgs+6uYDbECnA31Qkh8NJ9p3T
+         AeqG8fdVvcInt9/JDaigI7va1S//XlZODUMvGwu1IjIdXDiyceAGfGkKy/oiQeKgSmKR
+         UcAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786481890; x=1787086690;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=2HxJNolFAmmdynxiD24QiH/b/aKUErhnmhqEKLHulNk=;
+        b=RIoKScDSgELCm7E/z7a7yLzLcjEvH/pgV3kkpXb1nkURKPDi578xW64HH4jvlC1/i4
+         x9hKA3H4jq0Tdh3ryw8gc+1S0YY5KJq+lMksf22XHgFKYpaxyXmaxUsnRhqBKIIuU5jL
+         LAAN+O1O/D48oJv0KxcsnFrbehV+ERYpac6mjD2PRJi6U6pdciB445AzMSakToBve1GJ
+         kfAshmCRBaD3Kg3gruXr8II8kemrow38NbNsMHOFKXMZ85EhYTtooYh7n4QPlsl5kvhL
+         Srj+p0PKv9QcBEntkXFJBK/2VVYTbuXTxvIyY9khzUKroCa7WhVQMtgQxMt0OrsmlluE
+         l33A==
+X-Forwarded-Encrypted: i=1; AHgh+Rq0qjsRzKWLSkO2XBQf2mATt8Pfm6t+Jf6ASmKmnqpdwaVw26adZUXhjgxS/4+5by1gY/BCYGdmBiZ4qzzxFuE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxLcycAGMfsF0ZlCu/DeiiHIAhz4AseujH6qM/BwMYZPxZ8cELB
+	UuaPV3wIQVP0gtu1AcZlh3e+LiT8BcoPqQ9ZRdiTrlarOPZ8mO3vHrMwhoAVzX2W+PKM3xssFEv
+	hJZsKXZWOKt0o03HDbO1Z7P1Clqg53WODON2Lyaw=
+X-Gm-Gg: AR+sD10pPlZP9ErdhXfaIWpLlxNgtu5o9XkigAvExN71KdwqoSrfvbGvTYyCOXj1Bxr
+	TeblBWvK3o1vxEDkwW+UfqgciMEsgm9m7lrB/cF0txV4/jxVGdsvPwcUaU4WMNHtcMolh4nvzBn
+	IpH6I137MVyiGnXg1V9IizrCOP9N7Chgv8bGh8AeOXtujGKU+M7+zUYkuw3s9JJQnip/adAFoTo
+	7EdwKaBcRME/8MJqSWG+sw5JMvUlehz3LEb5Dr8bE6yiP/MaY1clHRRKAQageX7fCULwN/8jvae
+	UpO91l+1HQd2RSkx/kXhfXuwzLzSgfnZ30iLfHlPHkx2E1vQK1hIDF7Xg675CyxWerL9QXmhlc/
+	oXTKZRkVSR2U2OKrjQ8mbTJKrpbTaGZZ1Prehg8bqw9AmK4A8kMyEMBFaMxziLS3hzsKiOYYM
+X-Received: by 2002:a05:6a21:6014:b0:3c3:8d4c:6679 with SMTP id
+ adf61e73a8af0-3cc2baf91c1mr8926509637.20.1786481889874; Tue, 11 Aug 2026
+ 13:58:09 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAG48ez0Ty5GTR_vYazWsWOigWP2=8SYstw13zaiJB3auBi1bcw@mail.gmail.com>
+References: <20260811204123.3198370-1-tjmercier@google.com>
+In-Reply-To: <20260811204123.3198370-1-tjmercier@google.com>
+From: John Stultz <jstultz@google.com>
+Date: Tue, 11 Aug 2026 13:57:57 -0700
+X-Gm-Features: AUfX_myHUGWyest017h6R42yiKHyXXmXDv2AxIQm6g3i9kVslMqq8mjeEi_Jdwc
+Message-ID: <CANDhNCp8TTQF4j3zCt0EaQYfvB+nGRrM73Q43aQi0jzUG+ormw@mail.gmail.com>
+Subject: Re: [PATCH] kselftests: dmabuf-heaps: Open heap device files O_RDONLY
+To: "T.J. Mercier" <tjmercier@google.com>
+Cc: sumit.semwal@linaro.org, benjamin.gaignard@collabora.com, 
+	Brian.Starkey@arm.com, linux-media@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org, 
+	christian.koenig@amd.com, shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 11, 2026 at 09:39:12PM +0200, Jann Horn wrote:
-> On Tue, Aug 11, 2026 at 9:07 PM Jann Horn <jannh@google.com> wrote:
-> > On Tue, Aug 11, 2026 at 5:27 PM Christian Brauner <brauner@kernel.org> wrote:
-> > > A server that raises COREDUMP_HEADER in coredump_ack->mask doesn't get
-> > > the coredump as a plain byte stream but as a sequence of frames. Each
-> > > one a struct coredump_frame_header followed by what it describes. A data
-> > > frame carries its bytes. If a server also raises COREDUMP_SPARSE, zero
-> > > frames are sent for unpopulated mappings. They only indicate how many
-> > > zero bytes need to be written and to not include data. Reassembling the
-> > > frames gives back the same coredump. A debugger and everything else
-> > > still see an ordinary core file and nothing outside the coredump server
-> > > has to learn anything.
-> >
-> > Hmm...
-> >
-> > I think what you're doing is probably the easiest way to do this in
-> > practice. I guess some design alternatives would be:
-> >
-> > 1. (overengineered, not generically useful enough): If the transport
-> > was a pipe (which already has the concept of different types of pipe
-> > buffers) instead of a unix domain socket, we could introduce a special
-> > representation for zero-filled pipe buffers and some API for receiving
-> > zeroed holes through lseek(pipefd, 0, SEEK_DATA), but that's probably
-> > not sufficiently useful for stuff other than core dumping to be worth
-> > the effort.
-> > 2. (somewhat overengineered) With some refactoring, we could maybe do
-> > something like /proc/kcore and create a seekable virtual coredump file
-> > that we send over the socket via SCM_RIGHTS?
-> > 3. We could leave the userspace memory dump out of the core dump data,
-> > and let userspace take care of filling out the memory contents using
-> > /proc/$pid/pagemap and /proc/$pid/mem? That would also avoid task
-> > switches and SKB allocations, and probably reduce the number of data
-> > copies involved in this by 1.
-> 
-> I also wonder what userspace actually does with this data - does
-> userspace just want to write it to disk, potentially after compressing
-> it? Or does userspace actually do some fancy parsing of the data
+On Tue, Aug 11, 2026 at 1:41=E2=80=AFPM T.J. Mercier <tjmercier@google.com>=
+ wrote:
+>
+> Write permissions on the /dev/dma_heap/* device files are not required
+> to issue ioctls and allocate dmabufs. Applications should be opening
+> these file as O_RDONLY. The BPF dmabuf_iter selftest already does
+> this. [1]
+>
+> Users are pointing to these selftests as examples of how use dmabuf,
+> and encountering permission errors on systems where write permissions
+> are not available on /dev/dma_heap/*. Apply the principle of least
+> privilege to selftests which open dmabuf heaps by removing the write
+> access mode and using O_RDONLY for the open() instead.
+>
+> The same is true for the vgem test using /dev/dri/card.
+>
+> [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tr=
+ee/tools/testing/selftests/bpf/prog_tests/dmabuf_iter.c?h=3Dv7.1#n49
+>
+> Signed-off-by: T.J. Mercier <tjmercier@google.com>
 
-That would be the most straightforward use-case, yes.
+Acked-by: John Stultz <jstultz@google.com>
 
-> stream to extract stack memory or something like that? Or does
-> userspace buffer the whole thing into RAM and then process it from
-> there (it kinda looks like systemd tries to do that but I might be
-> reading this wrong)?
-
-I'm not sure about that. I think it's writing it to disk and then
-parsing it. But it also wranges it into a socket to forward to
-containers or services.
-
-Note that systemd has a pull request for the coredump socket up:
-
-https://github.com/systemd/systemd/pull/43330
-
-This should kill the usermodehelper soon on kernels that support the
-socket.
-
-> Anyway, I've looked through your code and it does look fine to me.
-
-Thanks.
+thanks
+-john
