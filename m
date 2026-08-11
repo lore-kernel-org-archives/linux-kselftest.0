@@ -1,134 +1,202 @@
-Received: from out-173.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
+Received: from out-185.mta0.migadu.com (out-185.mta0.migadu.com [91.218.175.185])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCEF37DE84
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 06:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 939C638D686
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 06:12:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.185
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786428192; cv=none; b=WRYWwGIZ5AJcYW0Zg93lmadjJYOHFBf4FOVGp5V/lXcrhmG5lNGgpiMOvmQw6EdXD97cz4X2e90lgWVirZ3D6BOMdKWiaS3na//oh8aOcFE/QFsim91QxbThJt1qZu3w28A3oXPT6PGr+kptSmihCVazo+x8Uat4GgJGClKkxZk=
+	t=1786428772; cv=none; b=dixqBirHIbJ/4N0TBT2FE9qc9VthuI3gMAeEaOsdogzEQ3dKr8etiVmv0u9HMRGroe9v8o0/LRxFvzmA2L5p59emX/HbFgTTIx2NM8lAm/akXLcqDBoruPjK0lebpRkgfoRd9Th7hTjvBfVnyceZvOXI4xg31AJfpHAahuaH6hU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786428192; c=relaxed/simple;
-	bh=bMHq+iTrEIOj6rLzHjU0abNJ0o/E5StGKA6mMJ0Agdw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lWT/6hPl3Gxg7yLLWeiIQEGy2bTha4dRcnRCX9nuITIOsqCZgWlmnPRHczvc9R5ngQ++aBXXu+ZtD9tvC9LMTq7he+OZbU6EUkB+8wvLj5gjuVLp0JPYcBLEtWOxQaBWrIUv8MYv4vTYpmWzspMIzIuHx9t2YAaIs0tBhnZKgLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dwjLWgXd; arc=none smtp.client-ip=37.59.57.117
+	s=arc-20240116; t=1786428772; c=relaxed/simple;
+	bh=lkiMx7uA/A5/aSn1bsWFGNt11TcSrA6IVEQGhDwO9+s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=g30zkfEkFx6EG5+n84Z1vjw8q7ZXox9zW7NXA1NlE6ZvHrTWIefbj2SOD4PHXi6LSa1zanjKET6ihCO2Jr9CpyFtdJ5vx0gHADvZfX9+oHW7wXR10u+f3QH3yvwSsTfLFn6hZ3Z8x+gRYgKze8uXulWFyTo5PP9vys7ZP8mydBs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gh5bmr7a; arc=none smtp.client-ip=91.218.175.185
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dwjLWgXd"
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gh5bmr7a"
+Message-ID: <0a2fc4c0-db9e-4b53-8232-aeb0dda112b2@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786428188;
+	t=1786428767;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=uJJi6fAW87uNl1GyGL1wWoOrHzVefNmtF4hW3yne+6I=;
-	b=dwjLWgXdHe5FfZ1oqSdC5E94o5zj3BhveFwy74U09yRS/yiWF1lpeL4LKHeXP014CFeVuE
-	FbOF9kg0dHZM8ev5G/lEvQawQzZTB8FLEXCnKObwDBhKQEeNa0arBDVIP93lrI3s/2xEpX
-	4urR/cDI4SEFBtZrnpKwrvOAxjQdw4U=
-From: Jinyu Tang <jinyu.tang@linux.dev>
-To: Anup Patel <anup@brainfault.org>,
-	Anup Patel <apatel@ventanamicro.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>
-Cc: kvm@vger.kernel.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Shuah Khan <shuah@kernel.org>,
-	Atish Patra <atish.patra@linux.dev>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andrew Jones <andrew.jones@oss.qualcomm.com>,
-	Conor Dooley <conor.dooley@microchip.com>,
-	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
-	Nutty Liu <nutty.liu@hotmail.com>,
-	Jinyu Tang <tjytimi@163.com>,
-	Jinyu Tang <jinyu.tang@linux.dev>
-Subject: [PATCH 3/3] KVM: selftests: Enable pre_fault_memory_test for RISC-V
-Date: Tue, 11 Aug 2026 14:01:34 +0800
-Message-ID: <20260811060134.106973-4-jinyu.tang@linux.dev>
-In-Reply-To: <20260811060134.106973-1-jinyu.tang@linux.dev>
-References: <20260811060134.106973-1-jinyu.tang@linux.dev>
+	bh=ogf+73rRak/6Js/7MzR2OgNYsxkzJu6wOHRliPqhoyU=;
+	b=gh5bmr7aHa3c+DIMKyoVCuJ/lCW6Gomgq7WERSM2AdMXYoKnziX2JRdRGRwYTHP7Gt1gJ3
+	/8mvD0SUFuI0QkU6Vv6j6rLjIcsBzUfzhaM4W6wSt6T2SqQqMkvlCxqiqfFk3KImDN+rNs
+	bS+igK7ntBtS1upZv8vmma7ZSM6WuOA=
+Date: Tue, 11 Aug 2026 14:12:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next 04/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Jiri Olsa <olsajiri@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+ Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+ Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+ Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260809150111.45000-1-leon.hwang@linux.dev>
+ <20260809150111.45000-5-leon.hwang@linux.dev> <annOhedRtHBce3px@krava>
+Content-Language: en-US
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <annOhedRtHBce3px@krava>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
-RISC-V now supports KVM_PRE_FAULT_MEMORY, so include the generic
-pre_fault_memory_test in the RISC-V KVM selftest build.
+On 10/8/26 21:13, Jiri Olsa wrote:
+> On Sun, Aug 09, 2026 at 11:01:02PM +0800, Leon Hwang wrote:
+> 
+> SNIP
+> 
+>> diff --git a/kernel/bpf/trampoline.c b/kernel/bpf/trampoline.c
+>> index eddd259d3776..fc51ea2428be 100644
+>> --- a/kernel/bpf/trampoline.c
+>> +++ b/kernel/bpf/trampoline.c
+>> @@ -1572,12 +1572,23 @@ static int update_fentry_multi(struct bpf_trampoline *tr, u32 orig_flags,
+>>  			       struct bpf_tramp_image *im, struct ftrace_hash *hash,
+>>  			       struct bpf_tracing_multi_data *data)
+>>  {
+>> -	unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+>> +	if (tr->func.ftrace_managed) {
+>> +		unsigned long addr = (unsigned long)(im ? im->image : tr->cur_image->image);
+>>  
+>> -	if (bpf_trampoline_use_jmp(tr->flags))
+>> -		addr = ftrace_jmp_set(addr);
+>> +		if (bpf_trampoline_use_jmp(tr->flags))
+>> +			addr = ftrace_jmp_set(addr);
+>> +
+>> +		ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>> +	} else {
+>> +		void *old_addr = tr->cur_image ? tr->cur_image->image : NULL;
+>> +		void *new_addr = im ? im->image : NULL;
+>> +		int ret;
+>> +
+>> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, old_addr, new_addr);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+> 
+> hum, so IIUC this sequentially attaches to target bpf program as it
+> would with current API, so there's no attachent speedup, right?
 
-The test uses PAGE_SIZE from the architecture processor header. Define
-the normal 4K RISC-V selftest page size so the generic test can build
-for RISC-V.
 
-RISC-V selects VM_MODE_DEFAULT at runtime. Initialize the supported
-guest modes before creating the VM so the generic test can run on
-RISC-V hosts where the default mode is discovered from KVM
-capabilities.
+Correct.
 
-Signed-off-by: Jinyu Tang <jinyu.tang@linux.dev>
----
- tools/testing/selftests/kvm/Makefile.kvm              | 1 +
- tools/testing/selftests/kvm/include/riscv/processor.h | 3 +++
- tools/testing/selftests/kvm/pre_fault_memory_test.c   | 3 +++
- 3 files changed, 7 insertions(+)
+> 
+>>  
+>> -	ftrace_hash_add(hash, data->entry, tr->ip, addr);
+>>  	tr->cur_image = im;
+>>  	return 0;
+>>  }
+>> @@ -1627,6 +1638,18 @@ static void bpf_trampoline_multi_attach_free(struct bpf_trampoline *tr)
+>>  
+>>  static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>>  {
+>> +	if (!tr->func.ftrace_managed) {
+>> +		void *failed_addr = tr->cur_image ? tr->cur_image->image : NULL;
+>> +		void *old_addr = tr->multi_attach.old_image ?
+>> +				 tr->multi_attach.old_image->image : NULL;
+>> +		u32 orig_flags = tr->flags;
+>> +		int ret;
+>> +
+>> +		tr->flags = tr->multi_attach.old_flags;
+>> +		ret = bpf_trampoline_update_fentry(tr, orig_flags, failed_addr, old_addr);
+>> +		WARN_ONCE(ret, "bpf_trampoline_update_fentry failed: %d\n", ret);
+>> +	}
+>> +
+>>  	if (tr->cur_image)
+>>  		bpf_tramp_image_put(tr->cur_image);
+>>  	tr->cur_image = tr->multi_attach.old_image;
+>> @@ -1643,6 +1666,7 @@ static void bpf_trampoline_multi_attach_rollback(struct bpf_trampoline *tr)
+>>  	for_each_mnode_cnt(mnode, link, link->nodes_cnt)
+>>  
+>>  int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>> +				u64 *keys, struct bpf_prog **progs,
+>>  				struct bpf_tracing_multi_link *link)
+>>  {
+>>  	struct bpf_tracing_multi_data *data = &link->data;
+>> @@ -1651,18 +1675,18 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>>  	struct bpf_tracing_multi_node *mnode;
+>>  	struct bpf_trampoline *tr;
+>>  	int i, err, rollback_cnt;
+>> -	u64 key;
+>>  
+>>  	for_each_mnode(mnode, link) {
+>>  		rollback_cnt = i;
+>>  
+>> -		err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+>> +		if (progs)
+>> +			err = bpf_check_attach_target(NULL, prog, progs[i], ids[i], &tgt_info);
+>> +		else
+>> +			err = bpf_check_attach_btf_id_multi(btf, prog, ids[i], &tgt_info);
+>>  		if (err)
+>>  			goto rollback_put;
+>>  
+>> -		key = bpf_trampoline_compute_key(NULL, btf, ids[i]);
+>> -
+>> -		tr = bpf_trampoline_get(key, &tgt_info);
+>> +		tr = bpf_trampoline_get(keys[i], &tgt_info);
+>>  		if (!tr) {
+>>  			err = -ENOMEM;
+>>  			goto rollback_put;
+>> @@ -1691,6 +1715,9 @@ int bpf_trampoline_multi_attach(struct bpf_prog *prog, u32 *ids,
+>>  	for_each_mnode(mnode, link) {
+>>  		bpf_trampoline_multi_attach_init(mnode->trampoline);
+>>  
+>> +		if (progs && progs[i]->aux->tail_call_reachable)
+>> +			mnode->trampoline->flags |= BPF_TRAMP_F_TAIL_CALL_CTX;
+>> +
+>>  		data->entry = &mnode->entry;
+>>  		err = __bpf_trampoline_link_prog(&mnode->node, mnode->trampoline, NULL,
+>>  						 &trampoline_multi_ops, data);
+> 
+> IIUC for bpf_program targets the actuall attachment is happening in
+> here, right?
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 6fc34e9bf8e1..ac64ac92fd4b 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -225,6 +225,7 @@ TEST_GEN_PROGS_riscv += coalesced_io_test
- TEST_GEN_PROGS_riscv += dirty_log_perf_test
- TEST_GEN_PROGS_riscv += get-reg-list
- TEST_GEN_PROGS_riscv += mmu_stress_test
-+TEST_GEN_PROGS_riscv += pre_fault_memory_test
- TEST_GEN_PROGS_riscv += rseq_test
- TEST_GEN_PROGS_riscv += steal_time
- 
-diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
-index abde3c71c891..70487c8ed155 100644
---- a/tools/testing/selftests/kvm/include/riscv/processor.h
-+++ b/tools/testing/selftests/kvm/include/riscv/processor.h
-@@ -12,6 +12,9 @@
- #include <asm/vdso/processor.h>
- #include "kvm_util.h"
- 
-+#define PAGE_SHIFT		12
-+#define PAGE_SIZE		BIT_ULL(PAGE_SHIFT)
-+
- #define INSN_OPCODE_MASK	0x007c
- #define INSN_OPCODE_SHIFT	2
- #define INSN_OPCODE_SYSTEM	28
-diff --git a/tools/testing/selftests/kvm/pre_fault_memory_test.c b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-index a0fcae3cb7a8..6eebf0524673 100644
---- a/tools/testing/selftests/kvm/pre_fault_memory_test.c
-+++ b/tools/testing/selftests/kvm/pre_fault_memory_test.c
-@@ -8,6 +8,7 @@
- #include <linux/sizes.h>
- 
- #include <test_util.h>
-+#include <guest_modes.h>
- #include <kvm_util.h>
- #include <processor.h>
- #include <pthread.h>
-@@ -219,6 +220,8 @@ static void test_pre_fault_memory(unsigned long vm_type, bool private)
- 
- int main(int argc, char *argv[])
- {
-+	guest_modes_append_default();
-+
- 	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
- 
- 	test_pre_fault_memory(0, false);
--- 
-2.43.0
+
+Right.
+
+> 
+> the rest of the function logic won't execute, because there won't
+> be any data in the reg/noreg/mod hashes..?
+> 
+> you seem to use the tracing_multi API to ease up attachment to multiple
+> bpf programs and end up with just single link fd for all attachments
+> 
+> I think it'd be cleaner to have separate api or code paths for that
+> 
+
+
+Makes sense.
+
+I'd like to use the same UAPI, and re-implement it with another code
+path, mainly in trampoline.c. And, the re-implementation will get rid of
+HAVE_SINGLE_FTRACE_DIRECT_OPS for targeting bpf progs at the same time.
+
+Then, I think I can speed up the attachment using text-poke in batch on
+x86_64.
+
+Thanks,
+Leon
 
