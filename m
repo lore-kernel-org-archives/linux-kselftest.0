@@ -1,46 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 752601F12FB;
-	Tue, 11 Aug 2026 00:46:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22244258EE9;
+	Tue, 11 Aug 2026 01:20:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786409209; cv=none; b=uolh11//Jcj+fBkn4jhUWMsKUJKSqlz+84Gor/2sz0LxmyL4zdUy/KGZDQY6EBpo5JIeYEuP3I4+1GCg3qND78rQlF4zRL8z7LL+MTCQUHhbA/3pLeWaaS3tku2E4DTQGcVPIWjItIfoGhn2sQR54gGBrNduLhTjYh2x+wRrp+I=
+	t=1786411253; cv=none; b=eGSbgceYeNk0qhjYxMCJ+CFhkajvCp8BeYVvxxKDpV/tgMkMo62BZBchyXX+1tTyhMN/hSYxONpISMSHVcuKAq6bIsPZJQlLJ5jQw3fXdGBykRp7ffMT1so2wnDJ+gN/uWU6DeMdBGi3UBesrO3Kmj9HkgLDmswUaJAqg8it5cA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786409209; c=relaxed/simple;
-	bh=TdbAYwImypxnphYGIRFHvgfYIaZVDjOlu+3E8FqPa0E=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bvvPj6A8b4y74iNeBWNJDYBi/rBQj0un00lSnuuvjt2CtVwuakNiLZyGLfzMB4cqD99V22LTxINN/7uIDwkWQLZsGfkA+nqYSuVrZIcZ+VjahwLyANgH+A+MMN8cSRUKlG6rVw20dExBBFSZv4CPMOquaLCmbkKrnCdx2lTcvfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MFjI6lS1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786411253; c=relaxed/simple;
+	bh=ncSPbof2n7XY7GYOlH+ZNFvB1wCwF8USmwa0zYj6IL4=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=hXwBvVZOlN9MV5TFKDoS1VQMcjIqgs0OEWsyoeQFcvovcO2eqqNTJkJH/MCQKg8kJqWmXgNH0t3apND1FIx85ezkIMPf74JZ57xcSqAMNJdbrVcuFAaO4MzKqCIxlqZdSQWPZ+OvQQp/n/4rXg9eawFY0O5rwcLlOYtGLoPP828=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F4YZQDUu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MFjI6lS1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA27A1F000E9;
-	Tue, 11 Aug 2026 00:46:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F4YZQDUu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A16591F000E9;
+	Tue, 11 Aug 2026 01:20:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786409208;
-	bh=0C6wnVcLsZr9CuU/8FjVtnOu4RPEnRWbc5uFWvIj8vw=;
-	h=From:To:Cc:Subject:Date;
-	b=MFjI6lS1+jrkDand1Diqp1NizYK+2haSsCQZjibRYynxVQtuJ9gNIauuZr3uEuodZ
-	 b6f1+CyjcgL6h1ovEsJHgbmY31awbkZBA+otnXj7AMtY/BYslaY/l8mqVILlPc7eTz
-	 X4yGiCLJ0ehRm5SGobne6cisBCZA31B0lL+UIORv6eH+90TuZIufzDSuRXsZeMB9nT
-	 mGOyqUz9VJu9NmC5Lb1JV2Fgr2Rehnke3xVKJgzCIYIWNNjE53qwumPSdunJS6MrZc
-	 Qfv1ipvRvcXjF2wVvrf+d280kRZurF08OAbBNWx7B9lxZfeY5xl9F7iFzoI44qXTZs
-	 IfK13+DA0A+qQ==
-From: Jakub Kicinski <kuba@kernel.org>
-To: davem@davemloft.net
-Cc: netdev@vger.kernel.org,
-	edumazet@google.com,
-	pabeni@redhat.com,
-	andrew+netdev@lunn.ch,
-	horms@kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Petr Machata <petrm@nvidia.com>,
-	danieller@nvidia.com,
-	shuah@kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next v2] selftests: drv-net: hide the devlink port_split test
-Date: Mon, 10 Aug 2026 17:46:45 -0700
-Message-ID: <20260811004645.1072124-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
+	s=k20260515; t=1786411251;
+	bh=Pfi0/DCA5eUgtizZugnGEFyBtc4Pqmh70ACc/EItHzY=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=F4YZQDUuIQDKUfLWXjPpoeRVtZkoFRK5nM8/7VHl8/QrNm3Ad2J4BttHSlRGMght2
+	 uF8QJ6eN7PZFiTSGUB2AIflUxDL2/3R7G28WqBNrANqahVdd7wXgT6bkSbQ1HHzghR
+	 Go1iIsS6i3t2HIpc+NC2xExrt8zTZ/CeFZzvqssYvQ8t4KdfJXjnuqTkcLj/22/SUf
+	 e8rdH20a5leXEbPeIDyD0un8ALnbDAbYreYF+zaXqwTNyA6YbJS982JkxBWgqfUq6i
+	 MjPayCLPrfIDvze5o9TbE8K3pkZPRKIDSlYeXMwF76bmuvKQNfHrWhf1FUe3g7gIFn
+	 UUivni+xmbdQg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56783392626F;
+	Tue, 11 Aug 2026 01:20:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -48,64 +37,42 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next] selftests: bonding: disable DAD for IPv6
+ addresses
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178641120814.284305.4899806613461037021.git-patchwork-notify@kernel.org>
+Date: Tue, 11 Aug 2026 01:20:08 +0000
+References: <20260808162345.2442594-1-kuba@kernel.org>
+In-Reply-To: <20260808162345.2442594-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+ liuhangbin@gmail.com, jv@jvosburgh.net, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org
 
-The devlink port_split test has limited applicability.
-NICs (as opposed to switches) require at least a re-probe
-to apply the split configuration.
+Hello:
 
-On top of that the test is not compatible with our driver env,
-it just splits all ports on the system, not only what NETIF
-points at.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Long term we may want to add some indication in devlink whether
-the port splitting is runtime (cmode of sorts), and fix the
-test to follow driver env. But since no (known) NIC driver can
-support runtime anyway let's just hide the test from the selftest
-framework by moving it to extra files.
+On Sat,  8 Aug 2026 09:23:45 -0700 you wrote:
+> bond_reset() waits up to 2 seconds for IPv6 connectivity.
+> With default settings DAD itself may take almost 2 seconds,
+> causing flakes on debug builds. It used to flake once or
+> twice a week, recently it started failing once a day.
+> Probably some downstream changes to scheduler, or our machines
+> go busier.
+> 
+> [...]
 
-Having this test randomly break unrelated NICs within the DUT
-makes people implement allow-lists for ksft, which then means
-their setups don't run new tests. It's very useful during test
-review to see whether the test works across all the runners.
+Here is the summary with links:
+  - [net-next] selftests: bonding: disable DAD for IPv6 addresses
+    https://git.kernel.org/netdev/net-next/c/30dbc21f6375
 
-Reviewed-by: Petr Machata <petrm@nvidia.com>
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-v2:
- - use TEST_PROGS_EXTENDED instead of TEST_FILES
-v1: https://lore.kernel.org/20260808164843.2475226-1-kuba@kernel.org
-
-CC: danieller@nvidia.com
-CC: petrm@nvidia.com
-CC: shuah@kernel.org
-CC: linux-kselftest@vger.kernel.org
----
- tools/testing/selftests/drivers/net/hw/Makefile | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 234db5c2c90c..78bb0169350b 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -19,7 +19,6 @@ TEST_GEN_FILES := \
- 
- TEST_PROGS = \
- 	csum.py \
--	devlink_port_split.py \
- 	devlink_rate_cross_esw.py \
- 	devlink_rate_tc_bw.py \
- 	devmem.py \
-@@ -54,6 +53,10 @@ TEST_PROGS = \
- 	xsk_reconfig.py \
- 	#
- 
-+TEST_PROGS_EXTENDED := \
-+	devlink_port_split.py \
-+# end of TEST_PROGS_EXTENDED
-+
- TEST_FILES := \
- 	devmem_lib.py \
- 	ethtool_lib.sh \
+You are awesome, thank you!
 -- 
-2.55.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
