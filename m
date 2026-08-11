@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D97023FE351;
-	Tue, 11 Aug 2026 16:08:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08673F4DDC;
+	Tue, 11 Aug 2026 16:11:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786464506; cv=none; b=WqiYXOJx3sc+6oeyD4MC851ua3EzaTQu8/V0ZTLYwQf/1XwHq7mVVbWWHbI5kHhXyke8yVXmrRLAro4fufIfF1wnm/QnmRD0ZPdE4S3+cFN4w3ejVRptS+IQuBQZKe4euhTI7SBniC4moGD0nYTAo7CMfZxJV6zwxfHzkSqsjoA=
+	t=1786464673; cv=none; b=ewlsVLmCcZRGjRDsx96RKgV2xtYTM6DQC7Dd76fvzmog29AwgoHi9uOAbz2wVrBuNWJjl2FgJ9oD/3bsr6djVSAUNk9GFNcdgyMju0EnwFA2uceAYaeMaTF/RWaUIl/0V1OjavUyyE/kU9iOhw7jocKrVdAnAMHehPWs53w2Ua4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786464506; c=relaxed/simple;
-	bh=metH4q6D5gmXjaPMS+Uh1MOxQ9mYrjK63WXtvqQxlWQ=;
+	s=arc-20240116; t=1786464673; c=relaxed/simple;
+	bh=Q7P5tdRF64kaESCPCVNKTW7zKQP1WTOuJUymFKeK1pk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=URJ02XlLNdIwQXnBvTqkb3gf6SBnNu9VU5pfq3YnUwCPNsehtfpED0VNhFboahGxj/YsvZiA8rozdTr+Fcx3vz304uFe36Y3g6B02cUVchi/wg3v05WrXdXP7ArCgV38OAaHPEaytUG3Ni8R6shZk+/uIZ80EjHQtRjaq8gX19w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lk+vEfVc; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=okQH76wjaP3gTYWpzEpzoiwR1gF+07gb1QrKCw7lYKrLqAJKu2binG9DWchBVHSyHAUizOF05aAgLW3yBfqsYpvx8j/X+Z2giqppWdAhc5nPCB2gGm7W8hRBfbz8j0HijG0fjZ3A0VnhzVQ5wYdL6fqPN4NEnYdDdDQxLCiP88A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jMjLXqCO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lk+vEfVc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2F6E1F000E9;
-	Tue, 11 Aug 2026 16:08:20 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jMjLXqCO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 728441F000E9;
+	Tue, 11 Aug 2026 16:11:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786464505;
-	bh=xmg81tHabzo4RT6HDzXFVW7aWU/ujZl8HGXm0j6eoJQ=;
+	s=k20260515; t=1786464671;
+	bh=Un/OfXb3LOyN540R6UlGcb5CTwWvA8koOuzxF4qHLao=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=lk+vEfVcXe9M5cOICIf7aOMbbe2WJIgeUeSlWMAXv9rK8SqFY6+H6jT4B/v1F1zXj
-	 gU7fGCNehjoFo3pA4YZiYyrmP+PpbQ3R2v9OIMhheMIr/56GTHioWGoMlTv4c+4pQu
-	 xwR/f9FERInOkxPm+/ZAUuO/3Id3Z7POUK+VKVmArW/HxkRjMNGHYFCwSIDQMVIzDf
-	 8nUxgSO42xlxLj9wAitdw7DRRmIMyShTVpI6r1B859pJ+VXR/mVfonyDDCAM1gmysv
-	 ollR9qtnYrtMPpgbFQwMLXyKInh0FidVIaIw2ZRTsVbBJgKXFEHOp9TcGrMyfwOzXp
-	 KEDxiZtcJywQA==
-Message-ID: <2e44c28e-6ade-4638-a17b-ce1cc2e8bbe5@kernel.org>
-Date: Tue, 11 Aug 2026 18:08:18 +0200
+	b=jMjLXqCObthVZJds8KrwkJZ8tG5aCvdK6chypyAltVhQgquuxxqwD8Fzn2Ha2ux+4
+	 xd0LOndlPKYnD5c8PUDY/IGJa+cfz9/5Fyq8j9gqBg5m52VYrBlpA6Ki04Xd8Rc2ZB
+	 Tkk5S0MIF1BwLc1xP5NMqtv0iEUG3YQEWIgfQr76LuiNTNGNcuJkoQGzNIXfTC7lBT
+	 tNbXExTKLQLJ5ITFP54eBbfdkefM32H8BOhQwfUmZKcEQOfCCU+jBU4EZNBWMfaIqi
+	 DfWC62ShGtIj2LNVrmfXfJ1Llhym9HpP/BVIPMIBc+Kay1xcjlexlcgvX5SC+xb2eo
+	 UaraW2d0LIuDw==
+Message-ID: <db04536b-a98f-4025-a095-9ca49de10e12@kernel.org>
+Date: Tue, 11 Aug 2026 18:11:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,21 +35,21 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] Correct __pagemap_scan_get_categories return value
-To: Andrew Morton <akpm@linux-foundation.org>,
- Audra Mitchell <audra@redhat.com>
-Cc: jocolema@redhat.com, raquini@redhat.com, Lorenzo Stoakes
- <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Muhammad Usama Anjum <usama.anjum@arm.com>,
- Andrei Vagin <avagin@google.com>, Colin Ian King <colin.i.king@gmail.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+Subject: Re: [PATCH 2/2] selftests/mm: Fix soft-dirty kselftest supported
+ check
+To: Audra Mitchell <audra@redhat.com>
+Cc: jocolema@redhat.com, raquini@redhat.com,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Colin Ian King <colin.i.king@gmail.com>,
+ Muhammad Usama Anjum <usama.anjum@arm.com>, Andrei Vagin
+ <avagin@google.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <7d6b4401-e230-4ca7-b64f-c1277fa643b8@kernel.org>
  <20260806181843.1839943-1-audra@redhat.com>
- <20260806181843.1839943-2-audra@redhat.com>
- <20260806122714.08ef839853939a22de815db9@linux-foundation.org>
+ <20260806181843.1839943-3-audra@redhat.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -96,46 +96,100 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260806122714.08ef839853939a22de815db9@linux-foundation.org>
+In-Reply-To: <20260806181843.1839943-3-audra@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/6/26 21:27, Andrew Morton wrote:
-> On Thu,  6 Aug 2026 14:17:03 -0400 Audra Mitchell <audra@redhat.com> wrote:
+On 8/6/26 20:17, Audra Mitchell wrote:
+> On architectures with separate user address space, such as s390 or
+> those without an MMU, the soft-dirty kselftest may fail when checking
+> to see if the feature is supported.
 > 
->> Currently __pagemap_scan_get_categories returns the result from the
->> ioctl call which should be an int, not uint64_t. The ioctl may
->> return -1 on error, which will be interpreted as UINT64_MAX. Adjust
->> the return type to use the correct value.
+>   # --------------------
+>   # running ./soft-dirty
+>   # --------------------
+>   # TAP version 13
+>   # 1..15
+>   # Bail out! PAGEMAP_SCAN succeeded unexpectedly
+>   # # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
+>   # [FAIL]
+>   not ok 1 soft-dirty # exit=1
+>   # SUMMARY: PASS=0 SKIP=0 FAIL=1
 > 
-> I don't know why these were resent.
+> The soft-dirty test will initate an ioctl with the PAGEMAP_SCAN flag with
+> an invalid address for the page_region. This is done intentionally to
+> have the ioctl return with an expected EFAULT and with the correct
+> categories returned.
 > 
-> It's conventional (and useful) to include a [0/N] cover letter when
-> more than a single patch is being sent.  That's the place to tell us
-> why a new version has been sent.
-
-Heh, I was CCed on one, apparently Audra messed up the CC/TO list :)
-
+> However, on architectures with separate user address space, such as s390 or
+> those without an MMU, the call to __access_ok (used to validate the
+> variables provided with the ioctl) will always return true and we will not
+> fail as expected.
 > 
-> And please see how people are tracking versioning infomation in the
-> email subjects.
+>         if (IS_ENABLED(CONFIG_ALTERNATE_USER_ADDRESS_SPACE) ||
+>             !IS_ENABLED(CONFIG_MMU))
+>                 return true;
 > 
-> And it's nice to prepare a Subject: which identifies what part of the
-> kernel is being altered.  I think the main audience here is those who
-> are scanning subjects wondering "am I interested in this".
+> Let's simplify the check for PAGEMAP_SCAN and provide a valid page_region
+> address so that we get a non-errno return if it is supported.
 > 
-> So to sum up, a good title for this patch would have been
+> Fixes: 600bca580579 ("selftests/mm: check that PAGEMAP_SCAN returns correct categories")
 > 
-> Subject: [PATCH v1 1/2] selftests/mm: correct __pagemap_scan_get_categories return value
+> Signed-off-by: Audra Mitchell <audra@redhat.com>
+> ---
+>  tools/testing/selftests/mm/vm_util.c | 23 ++++++++++++++---------
+>  1 file changed, 14 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 6b65bd0a1e0b..4a8e339a7403 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -66,20 +66,25 @@ static uint64_t pagemap_scan_get_categories(int fd, char *start)
+>  }
+>  
+>  /* `start` is any valid address. */
 
-Yes. With that
+Acked to dropping that.
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+> -static bool pagemap_scan_supported(int fd, char *start)
+> +static bool pagemap_scan_supported(int fd)
+>  {
+> +	const size_t pagesize = getpagesize();
+>  	static int supported = -1;
+> -	int ret;
+> +	struct page_region r;
+> +	void *test_area;
+>  
+>  	if (supported != -1)
+>  		return supported;
+>  
+> -	/* Provide an invalid address in order to trigger EFAULT. */
+> -	ret = __pagemap_scan_get_categories(fd, start, (struct page_region *) ~0UL);
+> -	if (ret == 0)
+> -		ksft_exit_fail_msg("PAGEMAP_SCAN succeeded unexpectedly\n");
+> -
+> -	supported = errno == EFAULT;
+> +	test_area = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+> +			MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+> +	if (test_area == MAP_FAILED) {
+> +		ksft_print_msg("WARN: mmap() failed: %s\n", strerror(errno));
+> +		supported = 0;
+
+You can really just
+
+ksft_exit_fail_msg("mmap() failed\n");
+
+here, because this is one of the things that really should never fail.
+Which leaves us with:
 
 
-Audra, I would suggest that you take a look at b4 for patch series management.
+test_area = mmap(0, pagesize, PROT_READ | PROT_WRITE,
+		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+if (test_area == MAP_FAILED)
+	ksft_print_msg("WARN: mmap() failed: %s\n", strerror(errno));
+supported = __pagemap_scan_get_categories(fd, test_area, &r) >= 0;
+munmap(test_area, pagesize);
 
-(also, don't send new revisions in reply to previous submissions)
 
 
 -- 
