@@ -1,126 +1,169 @@
-Received: from out-183.mta0.migadu.com (out-183.mta0.migadu.com [91.218.175.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 141851DB95E;
-	Tue, 11 Aug 2026 00:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB28422E3F0
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 00:18:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786407457; cv=none; b=eswJD9+gzWVDS+2YdazleGKhmL4JRbH1rgnipyjyf+EKX+WZPqrFhajEJFqtyx+X0q4e2mMTS3Zgms8HfwoLxAfzJoA7KrZqX4i+JccOObZHN97u7qv6rT5V3POf/pXvFTPudN4AVvvyREVShnKSJmB/J6Qn7UCDlhcXHkHYUrQ=
+	t=1786407540; cv=none; b=RDEG2vd5VEsdfnO6rcTHR4VHYVATpVgMLtghLM9P5Y1lrDNj5DglIBkJiaBqaJjHLclw1aLkQQDL6+/BzSwcU6yzEaUGbdhQCdnFC8j8SvoEGLQCoo5t5JkPki/ByEUvvAXnBjPtYm2trOt3CyMCREY0/atht+O7q1XqJOGttWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786407457; c=relaxed/simple;
-	bh=fKO3PCwqdUycjDKKA3zllYcKF3xrw5UX5mN0GnoqEfQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aE3kcNZoOEqpOLfTZw7HnSugAnimJqk7lNo7LV98Zet4rUqydQ9sdaZ4xD6gD/w5ThOZKyHiNPoALrrJy8zvzEIiZTm+iIQ+MRld8lqT+QMiBhGTK01fsJ4vDke2Nbpr/o+W4lkREGTodNHHC4SkrUpqNuNoIKzH48HlIEYFIK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Nkv7Mbhf; arc=none smtp.client-ip=91.218.175.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786407540; c=relaxed/simple;
+	bh=W9uYraziRHJ/HXbsiKxTSK4X1mr9zUukCf8sFFZRRAo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=c+TfWwrXPPXTjTlk6ch8FpGc26ipiJm7Z2W/HQrSn9QK887iazOS35ECQlQTrKHDrKoOrbouPFY6MUfc8AJLlnr3lS/lwapdPm9cVz0R6SoyLgXtD5H0NHBmP7MhC5Wh03rASZL09Ycdp/XWYDT6fiHR7YxC8+Ax4ONWvfKmEhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=D/rW2gWm; arc=none smtp.client-ip=209.85.210.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Nkv7Mbhf"
-Message-ID: <4306439e-a00f-4b10-b8a0-9be6e046873d@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786407453;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=0FbObMeyvKUb5vzu1M8X9q3Z4AyeRD9aHK9DZu6JVXk=;
-	b=Nkv7MbhfNGLeWCuNuA5m4yIf98dnAV8j3uWTkYacuGjz1nVr3UsBKPl+FP+pL9Hf+negcf
-	jUuapBpEk7D2VDreJEeEnwEzc5uQ6yR2LshtaMI2WL2eQw4FlR62cNByaQ8IRDfp8Ub/qZ
-	QuW51Nlt5bC3MIA79WeGOYCC74gYfrk=
-Date: Mon, 10 Aug 2026 17:17:26 -0700
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="D/rW2gWm"
+Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-84e1da97175so3474919b3a.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 10 Aug 2026 17:18:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786407538; x=1787012338; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=eAiudkcAvitRicnlZsTp/8XRyAoMENjhlvyXGhGU0wA=;
+        b=D/rW2gWmTNAE5+DCLMdWb4DPZZMk+8nv4EYnFqKoFHlMaIG2Nnr6Uk1E/naDkrIY+Q
+         aVjS8+ZQGu/Xa3WUw+QT+YRkTo93E1jLOoRx0O8uAX6XIN1wn/pon0A3rmNZn1ByTKLb
+         kz+kqL6fmyLBAsMsQmKRdsJsl1gwGSkqgnfAoNwQWqSbb2C3jmHM/oq/P0gLtSNqDk4X
+         aK1AgfWLfSf83fXvTYu7b8PnjB9//fYKw/S2HB5TECWpSGT2Rr/fUNvi8AC4q9jgjVsc
+         GSpoK68iMOshthALn/mjGpCRKsBCil3eJMwp3l5t4zIEKFSjgrOQ4IGzjaDNxRdDqncm
+         Tdgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786407538; x=1787012338;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eAiudkcAvitRicnlZsTp/8XRyAoMENjhlvyXGhGU0wA=;
+        b=RJuKDaqLHMvZXTdQtHy0dxTWjhFrl1d9lxv4Q0lE9pk5o0dwgzomDZ/UEaQliQ55qn
+         3o2U25Gcrib2m/HtZ24QrXCqgCdEkKXKvzMOYY/Dbza6A0T7KYMqHhn3bGIc0Q9JLMHM
+         fxDCX2kWE3ZwXN/gBgFTR3jmujKcIxLbHbKRFvTBRHDUdlYiPpeA1B4e4Yi7VBtwDErP
+         x6HD0mfUWMRkMTyTeYZRBNAT1/ZtNSP/EMJh5Ni1oTW+v+iOub7CsvDhIhGZgsl3lswo
+         Igpuu6Q+XDC4JPdY9JhIUd3/aKWqbJOrRYHzvSpM7ZEvtzjfoSKLAVTvKcuCUkLUcb2X
+         5h/w==
+X-Forwarded-Encrypted: i=1; AHgh+RrR+RvJD30jMhwQ4io5Uyv1c1sRwHUrFI3NVH2jl9ZeUrnZwjmANvbeHnFxf2/Z5jPLQYvLCzWV5p3FAFRROLk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9t8lswLRsz/52MW1+JjSbuFrWExVVJZWh2D1avvO0wydyl37r
+	B2oebgLK2Y+vTfaNuyO/L6GnDu1llKdc6DLwEd0isGQN+dgaa2exhvsGwA31XQ2Rpn31WPZZJG6
+	5/nbxBQ==
+X-Received: from pglg7.prod.google.com ([2002:a63:1107:0:b0:cbe:948f:d640])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:4613:b0:842:2a81:4c63
+ with SMTP id d2e1a72fcca58-84f9c95fbfemr5369150b3a.25.1786407537909; Mon, 10
+ Aug 2026 17:18:57 -0700 (PDT)
+Date: Mon, 10 Aug 2026 17:18:57 -0700
+In-Reply-To: <CAEvNRgGSK9tO_-TvQvXoMwVwGygh5WjjBUOY-zLOA5yP2DwS1g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH 1/2] block: add BPF kfuncs to read blkcg io.stat
-To: Ziyang Men <ziyang.meme@gmail.com>, Tejun Heo <tj@kernel.org>
-Cc: Jens Axboe <axboe@kernel.dk>, Josef Bacik <josef@toxicpanda.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Roman Gushchin <roman.gushchin@linux.dev>,
- Shakeel Butt <shakeel.butt@linux.dev>, Mykola Lysenko <mykolal@meta.com>,
- kernel-team@meta.com, linux-block@vger.kernel.org, bpf@vger.kernel.org,
- cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260807193732.4073299-1-ziyang.meme@gmail.com>
- <20260807193732.4073299-2-ziyang.meme@gmail.com>
- <anot9w6mg9538RWm@slm.duckdns.org>
- <anpU4oV46MDVDixj@devvm16600.scu0.facebook.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: JP Kobryn <jp.kobryn@linux.dev>
-In-Reply-To: <anpU4oV46MDVDixj@devvm16600.scu0.facebook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-16-2fc18ee6d3ba@google.com>
+ <dd9ebd52-7171-4353-8c83-9363019d55b8@kernel.org> <CAEvNRgGSK9tO_-TvQvXoMwVwGygh5WjjBUOY-zLOA5yP2DwS1g@mail.gmail.com>
+Message-ID: <anpqcZlwvjWCWGId@google.com>
+Subject: Re: [PATCH v10 16/41] KVM: guest_memfd: Zero page while getting pfn
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On 8/10/26 3:46 PM, Ziyang Men wrote:
-> Hi Tejun,
+On Mon, Aug 10, 2026, Ackerley Tng wrote:
+> "David Hildenbrand (Arm)" <david@kernel.org> writes:
 > 
-> Thanks for your review and suggestions!
+> > On 8/7/26 23:52, Ackerley Tng via B4 Relay wrote:
+> >> From: Ackerley Tng <ackerleytng@google.com>
+> >>
+> >> Move the folio initialization logic from kvm_gmem_get_pfn() into
+> >> __kvm_gmem_get_pfn() to also zero pages if the page is to be used in
+> >> kvm_gmem_populate().
+> >>
+> >> With in-place conversion, the existing data in a guest_memfd page can be
+> >> populated into guest memory through platform-specific ioctls.
+> >>
+> >> Without first zeroing the page obtained using __kvm_gmem_get_pfn(), it
+> >> might contain uninitialized host memory, which would leak to the guest if
+> >> the populate completes.
+> >>
+> >> guest_memfd pages are zeroed at most once in the page's entire lifetime
+> >> with guest_memfd, and that is tracked using the uptodate flag.
+> >>
+> >> Zeroing the page in __kvm_gmem_get_pfn() is chosen over zeroing in
+> >> kvm_gmem_get_folio() since other flows, such as a future write() syscall,
+> >> can get a page, write to the page and then set page uptodate without
+> >> zeroing.
+> >>
+> >> This aligns with the concept of zeroing before first use - the other place
+> >> where zeroing happens is in kvm_gmem_fault_user_mapping().
+> >>
+> >> Don't mark the page uptodate again after populating, since the page would
+> >> already be marked uptodate before the post_populate() call.
+> >
+> > The downside is that __kvm_gmem_populate() will now zero+write. I assume we
+> > don't care about possible performance impacts?
+> >
 > 
-> On Mon, Aug 10, 2026 at 10:00:55AM -1000, Tejun Heo wrote:
->> Hello,
->>
->> On Fri, Aug 07, 2026 at 12:37:31PM -0700, Ziyang Men wrote:
->>> +__bpf_kfunc struct blkcg *bpf_get_root_blkcg(void)
->>> +__bpf_kfunc struct blkcg *bpf_get_blkcg(struct cgroup_subsys_state 
->>> *css)
->>> +__bpf_kfunc void bpf_put_blkcg(struct blkcg *blkcg)
->>> +__bpf_kfunc void bpf_blkcg_flush_stats(struct blkcg *blkcg)
->>
->> I wonder whether making the above deal with css's would make more 
->> sense so
->> that we don't end up with per-subsystem iterators. If casting to per- 
->> subsys
->> type is necessary, we can provide RCU protected cast kfucns.
->>
-> 
-> Good idea! These do nothing block specific and we already have some common
-> helpers for it such as the bpf_get_root_blkcg(). What is missing is a 
-> way to get
-> one controller's css from a cgroup with a reference held, and the cast. So
-> I would add in kernel/cgroup/
-> 
->    struct cgroup_subsys_state *bpf_cgroup_css(struct cgroup *cgrp, int 
-> ssid);
->    void bpf_css_release(struct cgroup_subsys_state *css);
-> 
-> where the @ssid is an enum cgroup_subsys_id value. Afterwards, the only 
-> piece for
-> blkcg left is:
->    struct blkcg *bpf_css_to_blkcg(struct cgroup_subsys_state *css);
-> 
-> Note the bpf_blkcg_flush_stats may keep its current shape as it mirrors the
-> blkcg_print_stat() which skips the root.
-> 
-> With these helpers we can also replace the existing ones in
-> mm/bpf_memcontrol.c as well:
->      bpf_get_mem_cgroup()
->      bpf_put_mem_cgroup()
->      bpf_mem_cgroup_flush_stats()
-> 
-> they map onto bpf_cgroup_css() plus a bpf_css_to_memcg() cast the same way.
-> 
-> Hi Roman, JP, Shakeel: Do you think it is worth applying above changes for
-> the memory controller as well? If you are happy with the direction I am 
-> glad to
-> send the conversion as a follow-up once the generic kfuncs are in. Would 
-> you
-> take it?
+> Would we rather zero in kvm_gmem_populate() only if !uptodate &&
+> gmem_in_place_conversion && src_addr == 0? That could work too.
 
-The get/put kfuncs above use KF_ACQUIRE/RELEASE so the verifier can
-reject memcg access after the put. Replacing them with a generic API
-would call for tracking a new lifetime relationship between the css and
-memcg (or other derived) pointer.
+No.  I'm 99% certain we discussed this (multiple times?), and the consensus was
+that any performance penalties due to redundant zeroing would pale in comparison
+to the cost of actually assigning the page to the VM.
 
-For generic flushing, css_rstat_flush() is already a kfunc. The
-memcontrol version above uses memcg_vmstats_needs_flush() for skipping
-as needed so that should remain intact.
+> Previously, without in-place conversion, populate never reads memory
+> from guest_memfd so there was no danger of leaking uninitialized memory.
+> >> @@ -1159,8 +1159,6 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+> >>  	}
+> >>
+> >>  	ret = post_populate(kvm, gfn, pfn, src_page, opaque);
+> >> -	if (!ret)
+> >> -		folio_mark_uptodate(folio);
+> >
+> > In case post-populate failed, do we want to re-zero the pages?
+> 
+> I believe we can't re-zero the pages. When SNP fails to populate it
+> could be because SNP didn't like the CPUIDs userspace set up, and after
+> the error userspace is expected to check what SNP likes, then
+> retry.
+> 
+> IIUC zeroing will destroy the message SNP wanted to leave for userspace.
+> 
+> Michael should be able to explain more here :)
+
+Not Michael, but the above is correct.  If firmware rejects a CPUID page, then
+KVM copies back the expected CPUID values provided by firmware.
+
+That said, now that we have have @may_writeback_src we _could_ re-zero the page,
+i.e. only zero pages for which @may_writeback_src is %false.
+
+And _that_ said, I vote "no".  KVM zeros the memory mostly to ensure userspace
+can't read stale data, e.g. someone else's data.  I don't think we need to
+guarantee that a failed populate() (or rather, whatever ioctl called into it)
+will leave memory in any particular state.  It would be easier to document that
+the page contents may be modified on failure.
