@@ -1,83 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C3B448BBB;
-	Tue, 11 Aug 2026 14:26:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF50D449B04
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:33:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458413; cv=none; b=QL6EsG4FDY6GBYa8Wc5TJBSU+UGB/RBbg21lCw5tiBifsnYzOxLRB/+f4HTEk7Kx82zPCRsoYX1REG4vP6+ds+hwNahv5FtmojfVsKIdsydezm5vsXqIoYvt/UIClu4X6y69IlxnXQAM2hrPmYYXcihPfCCm/IlEi130IKccoN0=
+	t=1786458822; cv=none; b=sPdsAE90q380jhLLITfiwpv7MP3NkuKRg2OpRpPaYBs94OD/JEkN5B/t0gIzbS0NdDOb3z6OhQqcqqgIuqN7URdz3vbDEhScT/HCgsxsMRyxTI0TgN4LS7jDlJpSZX8RW00Dm0kU4KbmkFYixQOt5P3bHMMzgF+3wplkUVSNN0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458413; c=relaxed/simple;
-	bh=Ue8zue8fhHadLkzART9NdhJHTb1WxMohxR7tgvjXXS8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uM/pMZucOud9Va6H5hWMMW6U6yt/dmsJvK7tbs5vz0MWxIN10Dnlv9Um0Y9O6lXXpO++t9EVSHtHjuUWBXKnRTKglmG3GVV30935HcMcEDoy2w059xsoDdZITmpjYJuPrx89qEjuCFxUuVNCDqHBWjhCb+YzTY8UBItd27VjAxU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EN8nWxDw; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786458822; c=relaxed/simple;
+	bh=souBD1zXcD3502IpHWBQS+Z7c2GdHUFCg0StFugdYWM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=sX+B71tOxetXz6FlVL71jZ60QKuMpg80s8i3kwpyoVtYFTafzLVIIuUc4QW2onQARYwlttJTh9+mqa+/yGaFP8nR62LZFxJ0RKBlH4eYyBf7r0nYK31SdUfQt5mzQjVNckt//XXEVH2R/bwtU3DVk0wRgGnnC+eZVni54yhK+gQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OT3EtFaj; arc=none smtp.client-ip=209.85.215.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EN8nWxDw"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 791CD1F000E9;
-	Tue, 11 Aug 2026 14:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786458408;
-	bh=Jkaoy25yfeQmT1UwUUgywiq4xtGMPE2KHeNj2B4MqLQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=EN8nWxDwwq+3wP/wh8yscDbKWKUAMT+Zm5oyCRSqNlgTDwSzuQrIhVNIN2VVvsVMJ
-	 CAD1gY8ilgPze7S/NPztJO7JYV5VPRQh/Tnd8pv/I/TLVoPPfTYMLzeA6yaw4qxfKt
-	 fV8vCGQ0308ojkWpxAlc57KpXrqM4j7y1SgufUpD7rPig5WDfKgqErNoQz3ldVKrxv
-	 qUXKnK1PUTQ01bSRdgCg68lFEcz/iJFitIcXBNBILyvIC4WwqAhcQ2FdVHuOAW3p1F
-	 HqI00fwSHOh7/CErHWBgLiHVUwkjVqU1su49QwzO6dS3d37Aacs2DnpKzcbJVmOzVr
-	 HBQo0sHwdep9A==
-Message-ID: <a47b70d8-47e7-48e3-b0a2-331f38b665a7@kernel.org>
-Date: Tue, 11 Aug 2026 08:26:47 -0600
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OT3EtFaj"
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cbedf6e8a42so239913a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:33:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786458820; x=1787063620; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=wHiT8wO1O96VMhGw9PY7w1Kf2WhC1UcbMKtaZdcKQc8=;
+        b=OT3EtFajZv5pw+LfUNeiZgnB+EO8Uh0tkYhSTPOfDCbIHQXQjsejJR5XtPxTquM1S4
+         wHYcGzxXGhSQvVVS+5tIwwBpvN3zXqurZWBUe9jihCrnJwRYiApAv64LW/zpLlUn0xsm
+         hkpqABC/1zx0Apfpb6Bdqh8y/QY+DP0kd0CoLyd8HWPwz2AdLCoIxlyjFiD3VQAZrdYJ
+         KumgTUGJTHdaas15SdVjcNmu+qUvYibqSntOCpF95z3sPAFuPS/3sKEg8JGbK3XxjOke
+         bpSlgCvfZl8s0BxGNezTKIhkZBBNG1X0HV3y9qfQhFFj6MXGNUVSvCPgsZl6+vSpEm5a
+         kfRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786458820; x=1787063620;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wHiT8wO1O96VMhGw9PY7w1Kf2WhC1UcbMKtaZdcKQc8=;
+        b=G5BsOvf+kvqgbvGCcfjde/S+9vqTJp3aC7tAwGeKpzgLAnowRg2ZV1H42rlksXZJ2/
+         frMGE+BBSMywjB+5AMcAdJXVryzgIsy8AfqXRg5s4aiGvQ7oxL057ftQolt0CjCdKgdi
+         quwt2QOSh5Tvz3FYFFOYwmg7x/c1NJ/kiCxwLVAnPkWOYiFMgF/GT/3fFMyltgnAV6Gq
+         wqRFIy2zbgUdCH89Ww7LxOyu1xIKqF1Q9T9hxlf2g2CpkGOXUddg3e7ElLL9SoYJuQjH
+         m57fIUD3fEXlsnBFJxVJ9iQiLYScGBP+/z88lwu2tAElftSicXB+2Mbt77N19wvSp00X
+         jEKw==
+X-Forwarded-Encrypted: i=1; AHgh+Ro+uV2OK9CKiGhsNVAopl4DM1iqz7S/pas0u2zb5m+8PlTLJVjdDT5MkeY55AnWES2SsptOMQYsJbnGj0BCJYY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyjQrELDCcxMX+zqeNrOeZXq1YXLGy340OuAyjXn9HeeuGuAjN8
+	7iyh3exwPrBg/kSpaZyxIbFwxzK/t7EpXcbfD1mm8lSLCu6KfUgyjMY+MFCrZVyLp5CnCrNkXF7
+	IrcFC4Q==
+X-Received: from pgmo14.prod.google.com ([2002:a63:5d4e:0:b0:cbe:7df7:35b0])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9f10:b0:3bf:77d7:667d
+ with SMTP id adf61e73a8af0-3cc2babdf84mr4904619637.28.1786458819619; Tue, 11
+ Aug 2026 07:33:39 -0700 (PDT)
+Date: Tue, 11 Aug 2026 07:33:39 -0700
+In-Reply-To: <ansuqrD2KwFuLWbV@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 2/2] selftests: drv-net: let ethtool stats settle
- before reading
-Content-Language: en-US
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, andrew@lunn.ch, shuah@kernel.org,
- idosch@nvidia.com, ioana.ciornei@nxp.com, petrm@nvidia.com,
- linux-kselftest@vger.kernel.org
-References: <20260808163653.2460381-1-kuba@kernel.org>
- <20260808163653.2460381-2-kuba@kernel.org>
-From: David Ahern <dsahern@kernel.org>
-In-Reply-To: <20260808163653.2460381-2-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-18-dwmw2@infradead.org>
+ <anoOz2rZ02KFk1l-@google.com> <acd9b32617f75d188c370a464a922af0d650d4f5.camel@infradead.org>
+ <ano6-gIZtqMfipiD@google.com> <bb9a12cc663130eb2caa8e839d0f6ca53d722d1c.camel@infradead.org>
+ <ansuqrD2KwFuLWbV@google.com>
+Message-ID: <ansywxh0VX5rtfWc@google.com>
+Subject: Re: [PATCH v7 17/36] KVM: x86: Allow KVM master clock mode when TSCs
+ are offset from each other
+From: Sean Christopherson <seanjc@google.com>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
+	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
+	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
+	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
+	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/8/26 10:36 AM, Jakub Kicinski wrote:
-> Some devices refresh the statistics exposed via ethtool only
-> periodically, every stats-block-usecs (as reported by ethtool -c).
-> ethtool_std_stats and ethtool_rmon sample the counters immediately
-> after generating traffic, so on such devices they can read stale
-> values and fail with a delta short of the packets just sent.
-> 
-> Add a hw_stats_settle() helper which sleeps for 1.25x the configured
-> stats-block-usecs (defaulting to 20ms when the device reports no, or
-> a zero, period). Use it for ethtool std stats and RMON.
-> The 1.25x/20msec heuristic matches what the Python tests do.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: andrew@lunn.ch
-> CC: shuah@kernel.org
-> CC: dsahern@kernel.org
-> CC: idosch@nvidia.com
-> CC: ioana.ciornei@nxp.com
-> CC: petrm@nvidia.com
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  .../selftests/drivers/net/hw/ethtool_rmon.sh      |  2 ++
->  .../selftests/drivers/net/hw/ethtool_std_stats.sh |  2 ++
->  tools/testing/selftests/net/forwarding/lib.sh     | 15 +++++++++++++++
->  3 files changed, 19 insertions(+)
-> 
+On Tue, Aug 11, 2026, Sean Christopherson wrote:
+> On Mon, Aug 10, 2026, David Woodhouse wrote:
+> > On Mon, 2026-08-10 at 13:56 -0700, Sean Christopherson wrote:
+> > > =C2=A0
+> > > > > To allow different offsets, KVM would need to track a per-vCPU of=
+fset to the
+> > > > > master clock and apply that in kvm_guest_time_update() (and maybe=
+ other places?).
+> > > > > Which is doable, but it's not clear to me why we'd want to suppor=
+t that (though
+> > > > > I haven't fully processed the back half ot his series, so it's ve=
+ry possible I'm
+> > > > > missing something obvious).
+> > > >=20
+> > > > Because I want to reduce the number of cases where we have to fall =
+back
+> > > > to non-masterclock mode. Especially the ones which are driven by
+> > > > *guests* rather than weird choices on the VMM's part.
+> > >=20
+> > > But why though?=C2=A0 What is the harm to the host or guest?=C2=A0 E.=
+g. does it make it more
+> > > difficult to accurately migrate the VM?=C2=A0 I'm not opposed to allo=
+wing master-clock
+> > > mode with diverging offsets, just trying to understand why it matters=
+.
+> >=20
+> > Accurate migration without masterclock is hard, yes. The
+> > KVM_SET_CLOCK_GUEST thing relies on it (because the principle is that
+> > you get the *TSC* right, then the KVM clock is just a fixed
+> > mathematical function of that).
+> >=20
+> > That *shouldn't* be difficult with offsets between vCPUs. Just use the
+> > TSC of vCPU0 as the reference for KVM_SET_CLOCK_GUEST and let the
+> > others just have their offset from that.
+>=20
+> Yeah, my only (quite mild) concern is that we would introduce fragility b=
+y adding
+> yet another variable that needs to be accounted for, but AFAICT it's lite=
+rally
+> just the tsc_timestamp in the shared data structure that consumes the per=
+-vCPU
+> offset.
 
+Actually, why are KVM_{G,S}ET_CLOCK_GUEST vCPU-scoped?  Per the documentati=
+on,
+the API "Sets the KVM clock (for the whole VM) in terms of the vCPU TSC".  =
+If
+the APIs are VM-scoped instead of vCPU-scoped, then KVM can simply save/res=
+tore
+what's in the per-VM masterclock state, no?
 
-Reviewed-by: David Ahern <dsahern@kernel.org>
-
+That would also help address my concerns about sanity checking the TSC freq=
+uency
+against the kvmclock frequency, as the APIs are much more blatantly about s=
+aving
+and restoring masterclock state.  For whatever reason, it feels more natura=
+l for
+me to say that KVM_SET_CLOCK_GUEST will fail if the target frequency doesn'=
+t
+(fuzzily?) match the frequency at which the masterclock is already configur=
+ed.
+Probably because use_master_clock directly gates that information?  Whereas=
+ the
+vCPU's frequency is independently configured but obviously influences maste=
+rclock
+mode.
