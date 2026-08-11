@@ -1,117 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC21B2F8E91;
-	Tue, 11 Aug 2026 20:08:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786478920; cv=none; b=SgwWJGmpkc8rfltaY68kXuowNaOh1GBB2Ifbcic5tzqQAy5CYrkPq42fgQaX0u5yXZTj6yXeWLyPFNENko9gAUSGWiuxnvr0reNcpC4Fu/hjRScwhYS9CImAAYuJ9m0Lj6e6nyDKNqKP8Rh0wkdAL5Ca09iejSZ0x1WVFmrENkk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786478920; c=relaxed/simple;
-	bh=SInW6aPtiXmfT1CA7VtmXzt8BbA3T2FQBK1qPozb2GA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=ahiB3T8bANXbgjzULdp9kocbXnec9QkM/R4rcFkSMUVF0ZibJRygV9cYmKrkYsiuIyz/XVBA/NqO/1DWFeZuaxCHpomhqRmh8LP0QrXU1LXjX++5H17Eq4FEj2KPog24nQ0sRhB93nH/6XnZ3GUfdL3PQH3xl3xVmIKfhLUKjPM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=MVsx4Y86; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96FCE22D792
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 20:22:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786479727; cv=pass; b=szCpEx3+Pea78iFykt32bXMwyiaU121luMsuXRax5RzuT2oT+nEjE+8vDacpuRC+vraoeq9zmn6QFoGemWcbU92GSBi3GMRRmq2lYEQU1i/of0bggIq9KwvpEBvXH4Lqm2KF6LlKRqC5uFh1EwyQbDx54Y3YaR7N/b4HcJKcHEU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786479727; c=relaxed/simple;
+	bh=LwlZbfcpBG0k3WExAq1eKzEN2yqfaK1u31zlbPwH7vg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LZu9Zlgg2Bfy+A3rQB0ikbX/9zyf8cdtm0mxI8miXJu5Lpd7d0PPq1/zC2fyHv0Ue0rlWLrmd0OUKUMZVK9ckk/7DoiJ9y6Lz6KiD5Ael93DRf1xQLJobbGb+CSOrX4fvOZmAUe7TqiWCA31gdNmnITwy9tzTD4jSmWfZgZUAG4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=wQkj0U7W; arc=pass smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="MVsx4Y86"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 384501F00A3A;
-	Tue, 11 Aug 2026 20:08:33 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="wQkj0U7W"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3811f512167so177263a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 13:22:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786479726; cv=none;
+        d=google.com; s=arc-20260327;
+        b=D6d4V2pjEz8ZQNBBTXe38E2gizLxYpa/lHPWhDfrcRXZqmF3HBSgebf1ONIARuzjK0
+         jXCsQuvrl1NBxY/2vAjU5ZrYYGDCt304Tld/lgVmy74dTTQ1fK4GehYQuBqZtoqyuSYt
+         K2TaGfbPNAy7Zaj2NYqIGCmkibyWZoZjGzkAp1vJQKJgV5c3PgGNHB+sZsWy1hXVGkzw
+         g1vAv3DGK03zDKEhvST8k6MmiF4qLlP0Lw2WRQXoUzi795HtPLd/4Xup6qUrpewAAWJP
+         pW5hCCd+OODgbJbGAIBUpm6tOrxpkfGi3DMbgPaPMLodPkVhdN5lBG50tmZylfM1VZHn
+         /apw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=LwlZbfcpBG0k3WExAq1eKzEN2yqfaK1u31zlbPwH7vg=;
+        fh=OcLddaHvNJpd5xYdt4uJFQ/2zgwKTICtx6s7464l+Ew=;
+        b=R2HBSZW83en/Gc4w5B3d+FUEptrsY2QSB3S6mp3hy2JEDZmapqiIq4LL+/x2WsIVJi
+         PU1M5keIR9+MNdUKH/O9zh7UepVgQxmLWmcgymnWlahJQCC+854TDsgur93DNhPXUW+a
+         APY1CcjVV2r3GhcBZVnbrtYMHFi49oQa94GnpknzpHY9NlBLH94uNRnxeKZ/VDdGyV8K
+         4XBazUSNaYms1muRQdQWx5RhDvLiyZR7fwCgvC2jT8ZKBmiFbnJK7lLUm8tcH6wPMyzK
+         exzz4Ok2U/qf1jSseItGfi9eadSxFLTWBx0hlW5dpy5cuwJIa1JtfRY1TgsjKhE6Xmj7
+         HljQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1786478915;
-	bh=ay4Sx1aFee/8WOMMoH+smEVqfxFPpuKMRZQpbR6u3yw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=MVsx4Y86Lda8QCjyAeakFZeNbk1U1nnbpjqsIPtBxUMubFHCaQYUz20Z8mA0RiRLA
-	 VCd+fPtrTR+NcFIxYVzfhh214iv37GZnIs3sWMgVPEcj8F9bTxcMlXmXihxTs0oG+8
-	 fLgI8mKfy36hIx1mSwWptiKfVBg1ORNZHfRMBLR4=
-Date: Tue, 11 Aug 2026 13:08:32 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, "Liam R. Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport
- <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
- <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato
- <pfalcato@suse.de>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan
- Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
- <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo
- <harry@kernel.org>, Lance Yang <lance.yang@linux.dev>, Kees Cook
- <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, Ryan
- Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song
- <baohua@kernel.org>, Usama Arif <usama.arif@linux.dev>, Matthew Brost
- <matthew.brost@intel.com>, Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim
- <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, Gregory Price
- <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, Alistair
- Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin
- <xu.xin16@zte.com.cn>, Chengming Zhou <chengming.zhou@linux.dev>, Arnd
- Bergmann <arnd@arndb.de>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank
- <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer
- <gerald.schaefer@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>, Vasily
- Gorbik <gor@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Alex
- Deucher <alexander.deucher@amd.com>, Christian =?ISO-8859-1?Q?K=F6nig?=
- <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, Simona Vetter
- <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann
- <tzimmermann@suse.de>, Boris Brezillon <boris.brezillon@collabora.com>,
- Steven Price <steven.price@arm.com>, Liviu Dudau <liviu.dudau@arm.com>,
- Huang Rui <ray.huang@amd.com>, Matthew Auld <matthew.auld@intel.com>,
- Thomas =?ISO-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, Masami Hiramatsu
- <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, Peter Zijlstra
- <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de
- Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, James
- Clark <james.clark@linaro.org>, Jason Gunthorpe <jgg@ziepe.ca>, John
- Hubbard <jhubbard@nvidia.com>, Muchun Song <muchun.song@linux.dev>, Oscar
- Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, Kairui Song
- <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
- <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, Youngjun Park
- <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kvm@vger.kernel.org, linux-s390@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 16/20] tools/testing/selftests/mm: test anonymous
- page offset merge behaviour
-Message-Id: <20260811130832.3f18d4326a5ebe6eb18cfb5f@linux-foundation.org>
-In-Reply-To: <antWw3a0iEv4l1Yd@gremlin>
-References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
-	<20260806-b4-scalable-cow-virt-pgoff-v4-16-ab318a350404@kernel.org>
-	<cf70ce8f-cdde-43ec-a50e-796d4e390f3f@kernel.org>
-	<antWw3a0iEv4l1Yd@gremlin>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        d=google.com; s=20251104; t=1786479726; x=1787084526; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=LwlZbfcpBG0k3WExAq1eKzEN2yqfaK1u31zlbPwH7vg=;
+        b=wQkj0U7WAgRoDZDEIFtucXHVhNgZqhB3WyHT8XYRZsPeRubF91T9w69SY+dOg9e+CP
+         hzdx8ECsdR2qEiBmX3jRyGFl0oIGavvoQNVn/KTzh54vg0XlbdDBdtHjCOnyQviGb+Ob
+         HTsNgGB/a8ZH/c2vEy5P8Spz1Hb5EycAUPfjBujLBKafScuXiEh79W+3NJh5RK+fSWee
+         xA+pSDlFcFwzPma6L4+1tY3DILUa/TcPHG3lXz0eOYBcgx48rEal50zSmO2gK+j/Y8e+
+         Bj4Mi2w+qy6K0uZuhVC30+Qrkw9wqimH0sr7QPXtYC14Li3kVLiM2EKofBCrMTGbUuyb
+         JJxw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786479726; x=1787084526;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LwlZbfcpBG0k3WExAq1eKzEN2yqfaK1u31zlbPwH7vg=;
+        b=N/iGy6jcN30DbFNPUCGpaXXmfQE5eH9RwcSsH16Y+SBgX9BSTYOD6gxB0IWTMsllj4
+         4a8ThaRHgcw1KmRUF02Jj8aSMUR2V7HnjLMrHoghy/cBfNlrh8qXLtmFoYXYsOUH64uy
+         dASQOgM55FG40bjiY/p16OGFr3uBlH65SsefsjI4CvOkjcui8R15iRBWspr3sYKcZQEn
+         sOcNm17AyhJt6rI62JgywrPteY240g8vf37tyBn6nBlsnByrnOSYcrq+EAFWGTlN0FaA
+         A2IHDLnNXjt1UPca687FbCEST8MNsCg1bkLj/wKyxRFZmyLzJNJPeMka47fIQhCP8okN
+         7U7A==
+X-Forwarded-Encrypted: i=1; AHgh+RqX3o9ygrpy7Op/AmQM0YIhSZvbqUngXtFXaRz07o40680nphC7+0XOKzR/xSCyhfVwwrad5Rfd8zZYKy6AXeo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyDDWICAQQymHJNcdYFVP0NcC2Ff2JTGTKUmFYI6kYYg0yPfjG
+	IqvJQiU1LaeTujOZ97SEf874pn28DYvAULdb++I0ZbY6Np9fHIkJWgnB+u3bxd0ooQpXqaornJq
+	zQI5B99IOAyiv9qf0SOsMmF/IpGaVKJUxrR8IebWQnsMRrouR/IRjet+W
+X-Gm-Gg: AR+sD10rKTqex7ChfOIVFxmRb8jYoMBcLD/0mtkAnjavpbqV79MtbngSmkn1ZbeDeYq
+	XFSXGeh9K2wlCYg+NEJSQi1go7WOCdY0NDVEi8bo4lV8lA2RLZjQPfgC0SSExtxd6m61lxl0DYf
+	FVwUQsatz1hVGSERoJWW/PY5FEk6X3fLuwQxrqXbmOao9zqOIyJoHxiXe90g+HzD4qq1jnuVHYl
+	lHilSQKrwMj5yMF2pbgNQFUWA/SmmgdG/a1N8obH7Enx4JAqpQlYTuPVEb+PJkW89bdI2jEWXwv
+	FgQwaXR8MvrvsLNrEOfUmEQ7rnziLHo40c8FKwu1P4XC
+X-Received: by 2002:a17:90b:5483:b0:38e:8300:af51 with SMTP id
+ 98e67ed59e1d1-392ec3a9001mr7606224a91.8.1786479725107; Tue, 11 Aug 2026
+ 13:22:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+References: <20260706183154.2660394-1-dmatlack@google.com> <CALzav=f3KaNQd2NgCTxU=VSXWujV+qjyQuNJp_hy1-U36RMPpg@mail.gmail.com>
+ <202607150902.F17F8DE5@keescook>
+In-Reply-To: <202607150902.F17F8DE5@keescook>
+From: David Matlack <dmatlack@google.com>
+Date: Tue, 11 Aug 2026 13:21:37 -0700
+X-Gm-Features: AUfX_mxVBsjnbB1DrMel3A258ig-TIae0_jrT2t6gBnEIP59zFKlPTNtWimYS90
+Message-ID: <CALzav=eV_VBDqwko0Qp3kALK0fW5Ad_SHOdn+Gune8Nps0Opyg@mail.gmail.com>
+Subject: Re: [PATCH v3] selftests: harness: Mark test fixture objects __maybe_unused
+To: Kees Cook <kees@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	llvm@lists.linux.dev, Andy Lutomirski <luto@amacapital.net>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
+	Shuah Khan <shuah@kernel.org>, Will Drewry <wad@chromium.org>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, Aaron Lewis <aaronlewis@google.com>, 
+	Alex Williamson <alex@shazbot.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 11 Aug 2026 18:07:36 +0100 "Lorenzo Stoakes (ARM)" <ljs@kernel.org> wrote:
+On Wed, Jul 15, 2026 at 9:03=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> On Tue, Jul 14, 2026 at 09:24:36AM -0700, David Matlack wrote:
+> > On Mon, Jul 6, 2026 at 11:32=E2=80=AFAM David Matlack <dmatlack@google.=
+com> wrote:
+> > >
+> > > Mark _##fixture_name##_##test_name##_object __maybe_unused since it m=
+ay
+> > > not ever be read. This pointer is only read in XFAIL_ADD(), which tes=
+ts
+> > > are not required to use.
+> > >
+> > > clang made a change to -Wunused-but-set-variable (split out into its =
+own
+> > > subwarning, -Wunused-but-set-global) that causes this warning to be
+> > > emitted for various selftests and can be upgraded to an error in
+> > > selftest that set -Werror.
+> > >
+> > > VFIO selftests have been broken since commit ff556bd98348 ("vfio:
+> > > selftests: Add -Wall and -Werror to the Makefile"), and the net
+> > > selftests builds have been noisy due to -Wall.
+> > >
+> > > Fixes: 24cf65a62266 ("selftests/harness: Share _metadata between fork=
+ed processes")
+> > > Reported-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > Reported-by: Aaron Lewis <aaronlewis@google.com>
+> > > Reviewed-by: Alex Williamson <alex@shazbot.org>
+> > > Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
+> > > Signed-off-by: David Matlack <dmatlack@google.com>
+> >
+> > Kees and Shuah, is it ok if Alex takes this through the VFIO tree? [1]
+> > This fixes a bug exposed by recent VFIO selftests commit ff556bd98348
+> > ("vfio: selftests: Add -Wall and -Werror to the Makefile").
+> >
+> > [1] https://lore.kernel.org/linux-kselftest/20260630165244.0d013bbc@sha=
+zbot.org/
+>
+> Yeah, please do. This has ample review. :)
 
-> > "Fault in" is imprecise, as a read-fault won't do. "Trigger a CoW fault." might
-> > be better.
-> 
-> Andrew - could you fix up? Thanks :)
-
-np.
-
---- a/tools/testing/selftests/mm/merge.c~tools-testing-selftests-mm-test-anonymous-page-offset-merge-behaviour-fix
-+++ a/tools/testing/selftests/mm/merge.c
-@@ -1324,7 +1324,7 @@ TEST_F(merge, anon_and_page_offset_misma
- 	ASSERT_NE(ptr, MAP_FAILED);
- 
- 	/*
--	 * Map another separately, and fault in, at page offset 5:
-+	 * Map another separately and trigger a CoW fault, at page offset 5:
- 	 *
- 	 * |-----------|           |---------|
- 	 * | unfaulted |           | faulted |
-_
-
+Thanks. Alex, can you pick this one up for 7.2 if there's still time,
+or for 7.3 otherwise?
