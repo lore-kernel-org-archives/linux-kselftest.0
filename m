@@ -1,137 +1,138 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9873943FD2C
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 19:07:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786475278; cv=pass; b=TuUKPBUiL4hRLc8LRZDKPMkzTXWJAQkGKG+QA2Cddkbbmotd2w2tsfPTAlfjdMgl7BW9yaW9QlOyF++Tm19zOBEcFsTrjEnjy/mHtl8FbLpeczzb0HYlNjkXzpQlA8ESUbIm4U+YwRCp/5Ime+tPKoCUHbNSyA+eWwMNJcDSMqM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786475278; c=relaxed/simple;
-	bh=C1hreM4FHEoohH+eGJumQkjd/LtpSUCRmMU2uj8Ja0M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MLCFYu0vWggTlkAn7ZB5cLXnbnXUjlGQ6x/VRbx3MiQ4k2G9MmCB4UW7VLoMcRysWFm99vfMj3MotHt9QaY5W0P1lnXzT96p4UoSJoZlYmtZ/RaITLVlh97LOjEpdz7YojpNp9JiIzBfgN33YS3ow1DzUefMasKHevbmatBXQMs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=f52Q6cZ+; arc=pass smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13C463EFFD1
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 19:14:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786475693; cv=none; b=Z2//cJhWerbiVZA5jYP1zRIPTfWY4lFRtlyIzvA2wv/fk7d2UhvuxCNvOKlPGnEY2Oh7D53ADsqMSJhAGuaip755Dr71OmrEvdIXVTnqafpik9CUM1VinUxmQmASUK9YheLxt/ka+7r+TCS1VQ6L+ApZoOjmDCWQDiBQMo4OC4c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786475693; c=relaxed/simple;
+	bh=G5bqmNmbGt50A9O+l2Ln94Y3ZioxR+98H1NAiNMKX38=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=XOS0oQjhRq7qc1td7P/XnvlGmrFWxzPPpnJq28O/MJAobYP1fvmqz+LXn+AiPBPViQFNVH5oPbONDDBTsHcMUggdmfjpAyER0hxdiMJ2IfT2Sr4Do6PS7vQYD6rFRDLbAdLVJRPecOdQFxYpz34p4jlMuXVqJy2QINTlbB16Kro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9hcWzba; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="f52Q6cZ+"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cacef7d299so22825ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 12:07:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786475274; cv=none;
-        d=google.com; s=arc-20260327;
-        b=r9Qf6QfZfKfDEZE/p8TsXgoj5RLIWZsCapZ5SD9ZXvSA9aqyrRvKSb/yibTN+VNWCn
-         HV6fw+cD/xwVpoWE3WTE1TJkhq81gcKNB6TlWlVfPVUZpiP5k0JJy073LBBSKm/9HqNq
-         gAlUarGMgV34LNFeDNfJ1AneElIpKFahHXnDye5gdLDsHDM7voLUGr4y3RELPWHmTWWQ
-         AJaTBKH4P8OypvsD47+VCiSDY5GNVQ1IZthiOzjvGFpEJELgl2bRDIr2dtpuaWddsc5+
-         vZJ3sR4ONhc6+9d6K94gSDb3tJi+WUrWTtbjUlKWsFNUjwDcR5XU44kIXwqVM1H1aJcD
-         992g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=C1hreM4FHEoohH+eGJumQkjd/LtpSUCRmMU2uj8Ja0M=;
-        fh=yT78FJUJ8Wrw+AJGsqNk5XJU15qOMfomo+cBydpaZ+w=;
-        b=geuWx/5+lgYyRh4ThjX0UJ3/lXYZVvrIyNrCn4vtcQOZj+Fvx9F0zRR3yYX97k7ka8
-         Ac3DQs0NjkHr4lQ3iB7hWuX3VIVM4443zjR+4uek2AlzmSTH0dLltvVyMN1dnBpqQ/aK
-         jeRPbPVaOWJLJo/3dy7CWO0kLjEO5JDebdaqBNfRkUrm3B0l1VgZdy+ghw2uhLKUc4me
-         vGuxjXcX6Umrkxh61OzPy18XAs36+Y0IeBOSPWH+bUPMLj0iz8CO5ZcBIUqrqMUftQRW
-         YJtIMIEC6JrXXWwXDRNcV1JmTtf+xIBmQImMPyKYuyZURQDl51A7rfcqHjrByEzXvRZu
-         lSsA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786475274; x=1787080074; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=C1hreM4FHEoohH+eGJumQkjd/LtpSUCRmMU2uj8Ja0M=;
-        b=f52Q6cZ+pga+sW7FR+YhQgyATx0vGbkY9yFhTJof/GW8VCujYo3OQ9f1omJuccegHZ
-         52Xm451BQfwvRnU0k3mpvbRtGgHaFXM+4HbiLD3StuwkwSUaI8DncAz6CmS/M5cY0EnE
-         pzN7hcYfAyqCYNfokleRmnMie27iOCqIUFo0/MA516Xb9bYOaM9ZB5xlc0Thf1BDkR6M
-         Xv4oiQnymXumR4l903+9cQwKiMxhrRjz690VdOWgq91JHYAjiqWs0dvcGCGTW7aMxRX+
-         thvfs1XxLMGjiEO/QYgoIPuftMRmLVpN8u47OIM6PO2DkJzXde6jgxlMrY0YqfwJviGW
-         A+cw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786475274; x=1787080074;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=C1hreM4FHEoohH+eGJumQkjd/LtpSUCRmMU2uj8Ja0M=;
-        b=WDXmC2fH70Sk8PV674cWgcP2Pvlyn6iDct9mrv71OAaiwwsN0Cf2urViqSgvRwgwC4
-         JmV0yvYMjtyEde7zS1DV5bdxcUE+UAnbZohK0hNuYeQXzBThX4WHMGJClS6iD/eWRcz/
-         8XmyZHGOoWRKj7F1WeyW1qqfQHpZgns4764U6seq2ZLQQRfgabm7j4MkKSWdkRtqQabQ
-         yUkeEC1I+fPSoim0fz6I9T3sCGu2A9exgXjfz24N4DbcCgP3BxRGK9E2m2CdxCqB7LMI
-         u/VmYyOuE0ulpchsLERhnFxh8YTrbGKbidST4/zY8/vIPS1ghPOK+G++nRirUf1mcYlP
-         wysQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpX+aDS7T9kOi4HTbB21if/wpX76wV1UYBt66K++Lf2ZbYYBjQDKd16AcXc6oSVlRgCQXIU7O6TyMpiS1dI654=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx768KruUwCXlIbpIcHc58aNR37pNfxfz410o+V7Nx/yeUd6oxo
-	zFWkruvHksCgIu4bpjsGLTaLmZz2/VafFzwbO+9n7v4PQe5JXZjg6kLsxP1fnPJ7RtHN03n6rie
-	7wUwy72TCI89pIuoP7tk4BiLEYFMWFmYPtosW4qBi
-X-Gm-Gg: AR+sD12DdNS89ELZX2GY93xuJF1oYcCfCpxWPAzfNs4zq1Q29YOaUZKewmdGABrYq/v
-	tamfTGy1zpgvzmaBEkpbj+B2DuUQyaDvwj1XCZuoS3EbSsUGGjglC0Pf5gufaa1nSuYy+y2Bwob
-	J4LBb5Z4DzLYH7X2S8z1aGX2oz+2tfIp2df4+kmNTllJCwORtHPz6QAkMSiu3nEfeRc2lGk8xa5
-	Ym1v3TZn/IAmDubEUFWiu6QAWfW3DAYZ1UVH5WWbtB8Krwd5b/uCdF5+I2tYD0o+s0Lg0LzH0iK
-	7/Fh12nSbBVo+pafYQL425pInefZ+prU9UYtNsDMKbTWAR/K1Bd7OycDRwY3a+0iAB1yLIFrMQk
-	AMvc8kP8eekYOV+QDaxYzdjA3SBpYgXA=
-X-Received: by 2002:a17:903:1843:b0:2bf:3579:cdaa with SMTP id
- d9443c01a7336-2d33a99905amr481575ad.10.1786475273937; Tue, 11 Aug 2026
- 12:07:53 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9hcWzba"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BD3F1F00A3A;
+	Tue, 11 Aug 2026 19:14:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786475691;
+	bh=yd2AqEC6qdcdBbah5fNDSAWTlSK5qf5bTdQ4yFD8b/I=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject;
+	b=T9hcWzbaGlEzQt+xrHk0R6bTr8E81Slf2aJv1AbXbFL27NJAs5Irwdbw+XMNnxIup
+	 NxoHSCFBPjk+d6urKUPn4tRldLN6CAOA9+byOy1Pkwxh9aFdHzaeoa4BUAysyZ5b3o
+	 h587llS3CbvOfrPcNg7lhHmefFvXTiw5U1FMncLH4ROXT4v1FPq+qtVmY9d+iVEIJc
+	 F9VsO7LMbwCsBwbTy41JDhNbXkgMBBEAMUR7lVHiZWBwhBYIvrtCsP6VdJnybv6awu
+	 QCZDnuzkPR7VOquaXCOUz4mlxDOg9/BEsFw/QDYVfUGO6O0bOtGfMlNwNvOMl/ZEAf
+	 lZkwB9iGkmpHA==
+Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 593FEF40066;
+	Tue, 11 Aug 2026 15:14:50 -0400 (EDT)
+Received: from phl-imap-15 ([10.202.2.104])
+  by phl-compute-10.internal (MEProxy); Tue, 11 Aug 2026 15:14:50 -0400
+X-ME-Sender: <xms:qnR7arSPO_Dw1KaC_qTQ4bE5pZO0BQQO6r5ock0nemQ994omNTlDzg>
+    <xme:qnR7anm79jl_LY386t_ShWNL28UfUcixiwjVYgtVDuSQJ-XcGV_eDbvJE23sKyUip
+    j0i74Xs4o1dCgt-XsugnzUadMMHLshPE_4Txs95jxse94xEZpKmKQ>
+X-ME-Proxy-Cause: dmFkZTEXD6jQm04/NalG491FM3LmpXaIuseq+c+vIIL8ck81U3z4Ztt9qeBDlMZ1VlLTfI
+    nmh/M19xvY//gDy0xLKJFjoOVrCRdIPm1Vm+UOsLB25U1P6eYHIx+QH9nGrL6mzQgwqHBu
+    xE1RUYvtYG4e/P1MZn1hAaiy8wyrNhm6O4H1YyMw2HaEUE7eZ8KxARHb5iGS5mbBaN/WQd
+    sUvnS1puV8e8UN7rh0bD4q73MbtM9w7e7i8pdQr7L5Ubn4/kXDdUERh45IZrmLwt5m8v3b
+    iSHWWRZfl0LMfmEGFUo9LLUzA15A4dUVxmlDOLqWFY3MyNmO/ScVBnngl7U6wwCmvlq4V1
+    QEUBJs0wr0l4cIEO5Ng9nN+NQ3WRcfg9UsUUoo18qoqUCtxBC0PZdhqWhdyKrbdTGgKhLB
+    WZLuXpd6V4VJrgqYsMgtFxgvoKPj2zgFF3O6fueCHPVdzxFH/kpFU8AQagpWdKHCEzbrSl
+    ta5Z0lZpOumpBcPFWrVnj8ck1Mi08hf39tam8WUAbM1MCtOoUzUeSpEIM4hvXRklSqK6pK
+    zlnbR+mlymi07Kyq6CYnEZtpmz++lpD+6fnFI8JiasvM+7SAOf09OGVtFSaBihFwDySLol
+    yAzUcoTdIbwVgP2b+XmtsHmmJCfnwJ1pmtzlHzcrlQW7Hs3tnw7n3+rFSksA
+X-ME-Proxy: <xmx:qnR7avRP4zIqeSmJ7eHLOXiRaS5OW6qYLVPWuJZf49djkKouRyPhwA>
+    <xmx:qnR7agB7RFbe6tmuLi_G2X4XpW-0sM_xIKBVYb90-JA-tnfi3eTQwA>
+    <xmx:qnR7anpTCcA1-I2PDpofbhJ6b9YRivh95Tx1bPJYWqbpDMIzCM8e_g>
+    <xmx:qnR7amj-QWK5sjfnJ-G-jutQxI2Q6Zm1oZ78ajA42si0RTPhhOeg8g>
+    <xmx:qnR7aswK1wveI8ZZEMkYSfyWAmoFH_nT2mLOmdbjfIKLzhtEIOh_KuMK>
+Feedback-ID: ifa6e4810:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 30BCE780362; Tue, 11 Aug 2026 15:14:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org>
-In-Reply-To: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org>
-From: Jann Horn <jannh@google.com>
-Date: Tue, 11 Aug 2026 21:07:16 +0200
-X-Gm-Features: AUfX_mwl8D17qLmpn2j9POaLRIWa5xMeaCP1oLEBxMsBs01SgCKLca4ifFR7LFM
-Message-ID: <CAG48ez3QwUopEyfB0tEc84A57g3GZdnptazJW+htiTi2e0Gc=A@mail.gmail.com>
-Subject: Re: [PATCH 00/11] coredump: allow to create sparse coredumps on the
- coredump socket
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Omar Sandoval <osandov@osandov.com>, Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AuefP2vVSn_o
+Date: Tue, 11 Aug 2026 15:14:33 -0400
+From: "Chuck Lever" <cel@kernel.org>
+To: "Jeff Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
+ "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
+ "Tom Talpey" <tom@talpey.com>, "Trond Myklebust" <trondmy@kernel.org>,
+ "Anna Schumaker" <anna@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+ "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
+ "J. Bruce Fields" <bfields@fieldses.org>, "Shuah Khan" <shuah@kernel.org>
+Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, "Trond Myklebust" <trondmy@gmail.com>,
+ linux-kselftest@vger.kernel.org
+Message-Id: <59d69859-6a41-40e6-957c-23159313956f@app.fastmail.com>
+In-Reply-To: <20260811-nfsd-nl-hang-v2-8-c0c92b3953c3@kernel.org>
+References: <20260811-nfsd-nl-hang-v2-0-c0c92b3953c3@kernel.org>
+ <20260811-nfsd-nl-hang-v2-8-c0c92b3953c3@kernel.org>
+Subject: Re: [PATCH v2 8/8] selftests/nfsd: add a per-netns rpcbind stub and the
+ listener round-trips
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 11, 2026 at 5:27=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
-> A server that raises COREDUMP_HEADER in coredump_ack->mask doesn't get
-> the coredump as a plain byte stream but as a sequence of frames. Each
-> one a struct coredump_frame_header followed by what it describes. A data
-> frame carries its bytes. If a server also raises COREDUMP_SPARSE, zero
-> frames are sent for unpopulated mappings. They only indicate how many
-> zero bytes need to be written and to not include data. Reassembling the
-> frames gives back the same coredump. A debugger and everything else
-> still see an ordinary core file and nothing outside the coredump server
-> has to learn anything.
 
-Hmm...
 
-I think what you're doing is probably the easiest way to do this in
-practice. I guess some design alternatives would be:
+On Tue, Aug 11, 2026, at 8:03 AM, Jeff Layton wrote:
+> Creating a listener registers with rpcbind: svc_xprt_create_from_sa() passes
+> flags of 0, so pmap_register is true in svc_setup_socket(), and
+> nfsd_version3 is enabled by default and does not set vs_rpcb_optnl, so a
+> registration failure aborts listener creation. A fresh netns has no rpcbind,
+> and reaching the host's is not an option -- svc_rpcb_setup() opens by
+> calling svc_unregister(), which would clear the host's nfsd entries.
 
-1. (overengineered, not generically useful enough): If the transport
-was a pipe (which already has the concept of different types of pipe
-buffers) instead of a unix domain socket, we could introduce a special
-representation for zero-filled pipe buffers and some API for receiving
-zeroed holes through lseek(pipefd, 0, SEEK_DATA), but that's probably
-not sufficiently useful for stuff other than core dumping to be worth
-the effort.
-2. (somewhat overengineered) With some refactoring, we could maybe do
-something like /proc/kcore and create a seekable virtual coredump file
-that we send over the socket via SCM_RIGHTS?
-3. We could leave the userspace memory dump out of the core dump data,
-and let userspace take care of filling out the memory contents using
-/proc/$pid/pagemap and /proc/$pid/mem? That would also avoid task
-switches and SKB allocations, and probably reduce the number of data
-copies involved in this by 1.
+>  /* --------------------------- fixture --------------------------- */
+> 
+>  FIXTURE(nfsd_listener) {
+> -	int placeholder;
+> +	pid_t rpcbd;
+>  };
+> 
+>  FIXTURE_SETUP(nfsd_listener)
+> @@ -369,14 +665,35 @@ FIXTURE_SETUP(nfsd_listener)
+>  	nfsd_family = genl_resolve_nfsd();
+>  	if (nfsd_family < 0)
+>  		SKIP(return, "nfsd genl family not found (modprobe nfsd?)");
+> +
+> +	if (rpcb_stats_alloc() < 0)
+> +		SKIP(return, "mmap(rpcbind stub counters): %s", strerror(errno));
+> +
+> +	self->rpcbd = rpcb_stub_start(RPCB_STUB_ACCEPT);
+> +	if (self->rpcbd < 0)
+> +		SKIP(return, "cannot start the rpcbind stub: %s",
+> +		     strerror(errno));
+>  }
+> 
+>  FIXTURE_TEARDOWN(nfsd_listener)
+>  {
+> +	if (self->rpcbd > 0) {
+> +		kill(self->rpcbd, SIGKILL);
+> +		waitpid(self->rpcbd, NULL, 0);
+> +	}
+> +	if (rpcb_stats) {
+> +		munmap((void *)rpcb_stats, sizeof(*rpcb_stats));
+> +		rpcb_stats = NULL;
+> +	}
+>  }
+
+The fixture appears to leak the network namespace for the tests that
+finish with a listener still up. Would something along these lines in
+FIXTURE_TEARDOWN() cover it?
+
+	/* A live listener pins the netns; drop any serv the test made. */
+	if (listener_set(NULL, 0) == -EBUSY)
+		threads_set(0);
+
+
+-- 
+Chuck Lever
