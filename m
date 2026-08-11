@@ -1,150 +1,99 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF50D449B04
-	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:33:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E73EB42FCD4
+	for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 14:35:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786458822; cv=none; b=sPdsAE90q380jhLLITfiwpv7MP3NkuKRg2OpRpPaYBs94OD/JEkN5B/t0gIzbS0NdDOb3z6OhQqcqqgIuqN7URdz3vbDEhScT/HCgsxsMRyxTI0TgN4LS7jDlJpSZX8RW00Dm0kU4KbmkFYixQOt5P3bHMMzgF+3wplkUVSNN0k=
+	t=1786458958; cv=none; b=Mke3UQY1mmkzdSTYHMDy9Q1klcscUIqLREKZQW8vYWELOKKnI8DbCrzjoWPFZ0hs4WMGFIFH7zT4TQXqNDI2wPM9w9sq0TvkgIkGq5NSM8eyCl/piORJbL3EUFqroXy/kEev6j8wyyhNt5kcjB5QWUiaUD0uitq0uToitxc19PM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786458822; c=relaxed/simple;
-	bh=souBD1zXcD3502IpHWBQS+Z7c2GdHUFCg0StFugdYWM=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sX+B71tOxetXz6FlVL71jZ60QKuMpg80s8i3kwpyoVtYFTafzLVIIuUc4QW2onQARYwlttJTh9+mqa+/yGaFP8nR62LZFxJ0RKBlH4eYyBf7r0nYK31SdUfQt5mzQjVNckt//XXEVH2R/bwtU3DVk0wRgGnnC+eZVni54yhK+gQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OT3EtFaj; arc=none smtp.client-ip=209.85.215.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786458958; c=relaxed/simple;
+	bh=DEDUOb+TiRrLK8YeC/7fFq7vsbrZrBwxkC3fk1wCwyU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R7CSJ2Alk93LML27ULYT2dwn9BasSWj+0vvPLyLROkbhYB19YzeJJydeHYhvPEG+OLEMjl6GZW739GnBLbmKxXu+NEKNl0+rYLE7CbitqU3ozpqIIJ0R0TCbUExRQvzfbIiFJSaqDs08e4nZA7ZsVJhtUdHkHl/ZWA7DN8ZcF/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLSflrFr; arc=none smtp.client-ip=209.85.128.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OT3EtFaj"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cbedf6e8a42so239913a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:33:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLSflrFr"
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso23846385e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 07:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786458820; x=1787063620; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=wHiT8wO1O96VMhGw9PY7w1Kf2WhC1UcbMKtaZdcKQc8=;
-        b=OT3EtFajZv5pw+LfUNeiZgnB+EO8Uh0tkYhSTPOfDCbIHQXQjsejJR5XtPxTquM1S4
-         wHYcGzxXGhSQvVVS+5tIwwBpvN3zXqurZWBUe9jihCrnJwRYiApAv64LW/zpLlUn0xsm
-         hkpqABC/1zx0Apfpb6Bdqh8y/QY+DP0kd0CoLyd8HWPwz2AdLCoIxlyjFiD3VQAZrdYJ
-         KumgTUGJTHdaas15SdVjcNmu+qUvYibqSntOCpF95z3sPAFuPS/3sKEg8JGbK3XxjOke
-         bpSlgCvfZl8s0BxGNezTKIhkZBBNG1X0HV3y9qfQhFFj6MXGNUVSvCPgsZl6+vSpEm5a
-         kfRg==
+        d=gmail.com; s=20251104; t=1786458955; x=1787063755; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nyOgrpKJkHA8gAiY75lnj2+ioe7jla8qo9VP71q6SwU=;
+        b=MLSflrFrvWqtC/DBLzv+U1PZiDOaUAlYRpgJu2J9tYiCGXCdQ+J0TISy54WZ9KGhlu
+         9Re6qoOuNuVTUbV6jEtXy4O3pQliZ/xHfc9IM047D5ZD3dTVtWmvJ467ay5cUnVDqgkc
+         cIxccfUbf5Rkp+gAlwQfqwvFq0w8R1DgMyixosDkrH0j/rvbEiVwHbKPtyz+TUk1X1Z8
+         9ith216bgtshsyjQjdbSI/9KSKJ/8Q0vseJQFTeMVrmLPRACYaVIKKh95Lo5QXvcTs7Z
+         KMH+9/gUrWqycoNtedkBXdw8kTPPnN42bGhb4eyCep9nKvM7RQyvpMTXj2RnJrI9O9wl
+         O8jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786458820; x=1787063620;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=wHiT8wO1O96VMhGw9PY7w1Kf2WhC1UcbMKtaZdcKQc8=;
-        b=G5BsOvf+kvqgbvGCcfjde/S+9vqTJp3aC7tAwGeKpzgLAnowRg2ZV1H42rlksXZJ2/
-         frMGE+BBSMywjB+5AMcAdJXVryzgIsy8AfqXRg5s4aiGvQ7oxL057ftQolt0CjCdKgdi
-         quwt2QOSh5Tvz3FYFFOYwmg7x/c1NJ/kiCxwLVAnPkWOYiFMgF/GT/3fFMyltgnAV6Gq
-         wqRFIy2zbgUdCH89Ww7LxOyu1xIKqF1Q9T9hxlf2g2CpkGOXUddg3e7ElLL9SoYJuQjH
-         m57fIUD3fEXlsnBFJxVJ9iQiLYScGBP+/z88lwu2tAElftSicXB+2Mbt77N19wvSp00X
-         jEKw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro+uV2OK9CKiGhsNVAopl4DM1iqz7S/pas0u2zb5m+8PlTLJVjdDT5MkeY55AnWES2SsptOMQYsJbnGj0BCJYY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjQrELDCcxMX+zqeNrOeZXq1YXLGy340OuAyjXn9HeeuGuAjN8
-	7iyh3exwPrBg/kSpaZyxIbFwxzK/t7EpXcbfD1mm8lSLCu6KfUgyjMY+MFCrZVyLp5CnCrNkXF7
-	IrcFC4Q==
-X-Received: from pgmo14.prod.google.com ([2002:a63:5d4e:0:b0:cbe:7df7:35b0])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:9f10:b0:3bf:77d7:667d
- with SMTP id adf61e73a8af0-3cc2babdf84mr4904619637.28.1786458819619; Tue, 11
- Aug 2026 07:33:39 -0700 (PDT)
-Date: Tue, 11 Aug 2026 07:33:39 -0700
-In-Reply-To: <ansuqrD2KwFuLWbV@google.com>
+        d=1e100.net; s=20251104; t=1786458955; x=1787063755;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nyOgrpKJkHA8gAiY75lnj2+ioe7jla8qo9VP71q6SwU=;
+        b=kjHEHdpqVlHJ0HyQ3PScTcWr1B+jPMKftuu/PsfUDU6nHWbzVqBIxsKNF6vYllVpeY
+         3opMLlK3M9qH1s4FRKMe+gW5cyH1crkswt+obE0U9kuWiSSw7qKjpE/maFHpL4hS8itS
+         EC7d92h1McRdQCvxv6O3cN1v4QWlqDmL1uZml7HzCwmSOaHGhJOuWWyrlEo4cWA2Vnur
+         esPkeuX0V56lovUEMXFBT5pifUYExa1iqm8A4DDBb3mqmdhgQxH90CyoACk6DZKu0oC2
+         Ez/qMbSHu2aNg8Y4jY7GuhqHLQ5DEmRxeuLtUJQFDyTw6aC30lxEGgsSt3oktH1mQAHb
+         biqA==
+X-Forwarded-Encrypted: i=1; AHgh+RogFTbMczZfY/q2eeSuLb+Jwax0zvoOEDZDiUiJX7TkjVlEhMLzKWd8WiFJZzxfLwEpcq3v0xNCWvGW6vGzwAo=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywfuf3BGp+P8NijtJqZ5Sk/uzd4MP2MOYvC2BFfBdRFERxPHleR
+	ZjxmCIdORDG5BaATBBrZBHYHNwCeTi9TSX7KpltSQ4oJxVz14tUJnElb
+X-Gm-Gg: AR+sD127haTZ9+HSDxZhruyLTT6LwJVAkRwXaxlxiG0H7hsuj+3dkAEtqoWyYKUva1R
+	KvA7l0J2QcaSpAg/ZHzTwiRZuHpg3hEjxfYVKC2H1dYWQxURzOVFZTeNe/7KLTsazBAFnmZnVzG
+	LdNkgvTHvTFlRiBRXHcy28k9vtwwNaKSNu0qxCiz0y1Id66EjfNuxRVzi9udc1Y5sC6aRz+gHn9
+	idZ4e7V4guZskdZlkeeii6Y2nhJ7G72Zuu8RZTJO9rpiq1+6RYpNTCziNK4WehyHIC78gRHzeGv
+	7hGDFdGdS1Bu+Cg/WVwKLZHb3998YUnon9M0B6VBG/0RKWiEzNA2bxm1DV1miCco+JfoPcQII4F
+	BXEFCgJT45sX50PHkwMGcoHi0/6PlqWqIQXpb8x1ocHgozTHxd7Q2aCYRFT6VJQ7StV5/qb4yEK
+	Bcqzdt59TLd0xn7xEU358Nx93myoCYyNwQuRlRyW0qf8Z4/mBOTuHgKK7+fBTSA+igWdD7Xt2U
+X-Received: by 2002:a05:600c:3495:b0:495:4811:7998 with SMTP id 5b1f17b1804b1-4997848412bmr75446575e9.17.1786458954997;
+        Tue, 11 Aug 2026 07:35:54 -0700 (PDT)
+Received: from localhost.localdomain ([45.249.68.153])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499788a5be9sm74296965e9.4.2026.08.11.07.35.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Aug 2026 07:35:54 -0700 (PDT)
+From: Joyeta Modak <joyetamdk@gmail.com>
+To: kees@kernel.org,
+	shuah@kernel.org
+Cc: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Joyeta Modak <joyetamdk@gmail.com>
+Subject: [PATCH] selftests/exec: add missing SPDX-License-Identifier tag
+Date: Tue, 11 Aug 2026 20:05:43 +0530
+Message-ID: <20260811143543.45989-1-joyetamdk@gmail.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728144954.355376-1-dwmw2@infradead.org> <20260728144954.355376-18-dwmw2@infradead.org>
- <anoOz2rZ02KFk1l-@google.com> <acd9b32617f75d188c370a464a922af0d650d4f5.camel@infradead.org>
- <ano6-gIZtqMfipiD@google.com> <bb9a12cc663130eb2caa8e839d0f6ca53d722d1c.camel@infradead.org>
- <ansuqrD2KwFuLWbV@google.com>
-Message-ID: <ansywxh0VX5rtfWc@google.com>
-Subject: Re: [PATCH v7 17/36] KVM: x86: Allow KVM master clock mode when TSCs
- are offset from each other
-From: Sean Christopherson <seanjc@google.com>
-To: David Woodhouse <dwmw2@infradead.org>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross <jgross@suse.com>, 
-	Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul Durrant <paul@xen.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Sascha Bischoff <Sascha.Bischoff@arm.com>, 
-	Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, 
-	Dongli Zhang <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Tue, Aug 11, 2026, Sean Christopherson wrote:
-> On Mon, Aug 10, 2026, David Woodhouse wrote:
-> > On Mon, 2026-08-10 at 13:56 -0700, Sean Christopherson wrote:
-> > > =C2=A0
-> > > > > To allow different offsets, KVM would need to track a per-vCPU of=
-fset to the
-> > > > > master clock and apply that in kvm_guest_time_update() (and maybe=
- other places?).
-> > > > > Which is doable, but it's not clear to me why we'd want to suppor=
-t that (though
-> > > > > I haven't fully processed the back half ot his series, so it's ve=
-ry possible I'm
-> > > > > missing something obvious).
-> > > >=20
-> > > > Because I want to reduce the number of cases where we have to fall =
-back
-> > > > to non-masterclock mode. Especially the ones which are driven by
-> > > > *guests* rather than weird choices on the VMM's part.
-> > >=20
-> > > But why though?=C2=A0 What is the harm to the host or guest?=C2=A0 E.=
-g. does it make it more
-> > > difficult to accurately migrate the VM?=C2=A0 I'm not opposed to allo=
-wing master-clock
-> > > mode with diverging offsets, just trying to understand why it matters=
-.
-> >=20
-> > Accurate migration without masterclock is hard, yes. The
-> > KVM_SET_CLOCK_GUEST thing relies on it (because the principle is that
-> > you get the *TSC* right, then the KVM clock is just a fixed
-> > mathematical function of that).
-> >=20
-> > That *shouldn't* be difficult with offsets between vCPUs. Just use the
-> > TSC of vCPU0 as the reference for KVM_SET_CLOCK_GUEST and let the
-> > others just have their offset from that.
->=20
-> Yeah, my only (quite mild) concern is that we would introduce fragility b=
-y adding
-> yet another variable that needs to be accounted for, but AFAICT it's lite=
-rally
-> just the tsc_timestamp in the shared data structure that consumes the per=
--vCPU
-> offset.
+Add the missing SPDX-License-Identifier tag to
+recursion-depth.c . The file uses the ISC License
+ as indicated by the existing license text in the
+ file header.
 
-Actually, why are KVM_{G,S}ET_CLOCK_GUEST vCPU-scoped?  Per the documentati=
-on,
-the API "Sets the KVM clock (for the whole VM) in terms of the vCPU TSC".  =
-If
-the APIs are VM-scoped instead of vCPU-scoped, then KVM can simply save/res=
-tore
-what's in the per-VM masterclock state, no?
+Signed-off-by: Joyeta Modak <joyetamdk@gmail.com>
+---
+ tools/testing/selftests/exec/recursion-depth.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-That would also help address my concerns about sanity checking the TSC freq=
-uency
-against the kvmclock frequency, as the APIs are much more blatantly about s=
-aving
-and restoring masterclock state.  For whatever reason, it feels more natura=
-l for
-me to say that KVM_SET_CLOCK_GUEST will fail if the target frequency doesn'=
-t
-(fuzzily?) match the frequency at which the masterclock is already configur=
-ed.
-Probably because use_master_clock directly gates that information?  Whereas=
- the
-vCPU's frequency is independently configured but obviously influences maste=
-rclock
-mode.
+diff --git a/tools/testing/selftests/exec/recursion-depth.c b/tools/testing/selftests/exec/recursion-depth.c
+index 7b5c4f6d1928..a6c42a9b22d7 100644
+--- a/tools/testing/selftests/exec/recursion-depth.c
++++ b/tools/testing/selftests/exec/recursion-depth.c
+@@ -1,3 +1,4 @@
++// SPDX-License-Identifier: ISC
+ /*
+  * Copyright (c) 2019 Alexey Dobriyan <adobriyan@gmail.com>
+  *
+-- 
+2.53.0
+
