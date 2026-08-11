@@ -1,86 +1,86 @@
 Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F95234D90C;
-	Tue, 11 Aug 2026 16:58:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FACF4334C5;
+	Tue, 11 Aug 2026 16:59:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786467534; cv=none; b=ljGxNnub/OjMhbdxG5tU5kXGuJULMUQyyj7cglI3PoSY0EY/jMbpVXcKpeffMsefNZRvWVaayrWjG/5jifsoS+lboNAbvnQTgxogmTZC6uNN94brjMi/UXS6e0jVF//97U1X6+r18f4PdQ5SIUeLKXBJsbwb41Is6p82ftLQ3pM=
+	t=1786467582; cv=none; b=HV79wpOho57OF6H045rhYis3StCy08WLtIaINZdk5aRnpu23yllnwMez960PLgpfwJSnErYVFOK5Ip/DMEEEdNJIgzTttUQJGyGc8MLKFEhyqKszmgKXiQ+7m8zAOyLBbdDZeYfKmLl6/QL2GzZ8lmZVo//j7ewAgnNS9lFu5YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786467534; c=relaxed/simple;
-	bh=gMqlF/D6+JFVkHUqdhJ/c7btsZHh8yXgKeSwMrQ3zRU=;
+	s=arc-20240116; t=1786467582; c=relaxed/simple;
+	bh=K7l1mTcciEUKmuGrFplGbiYlE0ZmLe/blxu/UC/UHog=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MgmsAsTUhSjKI4uCgp9GDzoXs2mUabGC4gU+gKmZIY4MSZdJULfqbRfuNhQvW7ABLAf5sILaC9Js2eVN5YelXgiuLk1sVjk70j/e96MdHe597UBABIzgFdXIk+w4IQjm8IdRjHdLyPLVb7KIftAuPmMeiPUrZoJkQiF4+DZHajQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=hSQFwMB+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Gts6PYdY; arc=none smtp.client-ip=103.168.172.141
+	 Content-Type:Content-Disposition:In-Reply-To; b=osyeGEZ+Y9zJzGJsf8UfYWi+8m9ELx6wkghUeiolSmwA8ljMewJyeAxSnXPhCvLhqkvw/EFqTVqe4TofC3qKnkdBlyAvfFK3v/wgwqupSUz3+2lifM68Ly6zq8kJp4KS4mGdiF8FGb790EKkigiT86d2wil09QrAzWW1JSJ+9AA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=e5CiQphU; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=aTysU3L2; arc=none smtp.client-ip=103.168.172.141
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="hSQFwMB+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Gts6PYdY"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.phl.internal (Postfix) with ESMTP id 25FB31380437;
-	Tue, 11 Aug 2026 12:58:51 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Tue, 11 Aug 2026 12:58:51 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="e5CiQphU";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="aTysU3L2"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.phl.internal (Postfix) with ESMTP id 530C01380437;
+	Tue, 11 Aug 2026 12:59:40 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-03.internal (MEProxy); Tue, 11 Aug 2026 12:59:40 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-type:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786467531; x=
-	1786474731; bh=TjyAvX7Mugue+C5cYh+R1a7/5p4l8Irr+ax7oHoUcio=; b=h
-	SQFwMB+XetV9+hyyHHxogEKB2YDwOPjRDNI52tI2w9feqalcTr+bd1BTZ1sKa4xr
-	gGF+EbMb614itLTZR7PNJMNVVog+FIL5bN65sU2N+VbAzEIgaJSJ/5HMvHhFaypi
-	RuM2kzzFKlB3YZjsYuARHTQUQHusi3SkT6AWc8Boji4E0IIWPWJ+90ZEHcj/UM21
-	KsYgsxk6iDjjTB8h19N459e+aYJJMt++4ljEoQxjkTf9MIhseLXYNO1saFwHHEFW
-	ahLuTOf2uFXS1NyJlLwC0T6EIn5iigzG8+Sr+b4Uy9Vcb2YkF4hb/0nuqe6eUJug
-	zstTBrBulAfPRws80dqww==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786467580; x=
+	1786474780; bh=a/IPx4KtYlUFdbmjZIHL+vVayMdCY5hwV0MPIJboBbg=; b=e
+	5CiQphUz8BkmYjXYETqskSStaJPNv8tvT/ODXWdlx6QfdB1TP3xMcRLsnTVVoufD
+	gol6hCqLPTjLnmzbeQcLELABeQomiW6YdYeLHvuaRtircZs8ruwz3bcP8x6aPODi
+	lz+jAgoF1Z446UKM3lUwGgwWNRgc+T/Y5/pOVhEX5qI7oy28lIYEb3LpYMQ3/22F
+	yIjHoIlbhA5VNT6lPbT2PHY3O5vinSwP219jHPKzpZNrhQG+gyewYld80Kf6ibB/
+	T+xacI53DsWHraPzFu+e+fNyI/24Bm2I6CSocn/bjhudlLVh543ngN86zcAkVGU5
+	4WIDIhqYGc40OEsbyADzw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-type:content-type:date:date
 	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
 	:message-id:mime-version:references:reply-to:subject:subject:to
 	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1786467531; x=1786474731; bh=TjyAvX7Mugue+C5cYh+R1a7/5p4l8Irr+ax
-	7oHoUcio=; b=Gts6PYdYpzbZm+JHlw4zdQRDReNiMeaypzlpXJ7DISg8QYcr41q
-	/7xkSl0T82xmcaWXOq79yORI5DJBL0YCbNu803OYoPQO3/WoykwcJiFgRVOO0zvX
-	xdJvKSxUSbVOG9aYeOKjEZKUDgdFpWP8HuGuNzIqjN8lt83P/O3Q+9bGkJbcxyAy
-	bOk31cyOpsCi2CVM7PXITBBuUG7FA8igyNEq2MHoleRD+mRtuSvfpyT+YHspYgMY
-	KBFnz2XBx+wYzP5BabvbwVt1HskfUTNCOLEyBJ7rHUbbXKajrzOAsT84CD+VJERn
-	s/iaEV0DBlM1PqS+6YKIi+SKOo7xVujNkHw==
-X-ME-Sender: <xms:ylR7agnVyLXt57mfNJTAqkJUVRgSEZtjj0VSTBC6_pF3zvYwmqqrVA>
-    <xme:ylR7atdV6iRwGP556xrHjmG8zmONPqURMAYY7h3qZpqnw21P_hHQpbBvKwDicVa83
-    CAjMhwarW5i7abFupQotQMcxv7vSq37h9bkTjZP4S47uPT6ksvmTF0>
-X-ME-Received: <xmr:ylR7akN8kCwbLJyXMylgfSEiHFj84_8l_yR5EmUP9E-Nf3g3H-MN7s3GuZc>
-X-ME-Proxy-Cause: dmFkZTGw/dvbcaEj2HngP33VDAg9eCbiq0lwbqHTn2QAHQczq+P2RKDp+L8ud0Spkr0mhk
-    3uDL/BCZgN9VBSnXxgqgZmjprKpgFZCp9D7x5ua2QdXa8Y3zq2jFdoTz+wMcpgHeI+dZMv
-    SH3nFGwlFziDUIaHYaLWqOBy0TSFxRiM+s9hg1mDYkmth4uP8oXNyv6Xr7cFS7ZMYoupr+
-    JjHmtkfeO0jrGgEmm5N1yLT5ZvMVq5j3TaMJMixbHC3ieE50Rn1Tzv6oyFX+2ZghkjdR60
-    h2pwdEs6Y2LSL3tQnMz/EVeo4YapSMlo4GYY0Y44Ov9KhB6d1btj8zbKNkgL/98kdsDhGK
-    D9atn1Her8TmYPe+HvKEbXY9gJdp+hFiEy997w9uyjKgg108vLs/nEPVEm7oeI+Cud0fVv
-    2uLCiuBNEGs9i+C+6gyKxbBxh0jpKynfpA0PZHJ7SLVbotgrX6StpXKMu6/j2GVfriPnmR
-    TilxE+3Ojf+x17pITfhU9f+KyC0dJHpk2oemh1NHBYYNUT1fMK5BzB3i4L4Ji13rD96OfW
-    NobxrnpwSmEkA/7i/yfqzT2KE4YqdAVn+BDGgZaJBPBYyMMjBoqCGKB9OOjKHn3oxI++1O
-    3AiTfaFLnGJzkzZi9A9GjXD6CNsgRQpR2HzCjSqvmKFys3rZxggvsj0uFXiw
-X-ME-Proxy: <xmx:ylR7agMuyidBzdKUldr4igDduleH70rXOyrDW3rWnWvhXvl9XawgNA>
-    <xmx:ylR7at6YfL_eTGP9rvVq5nQgu1IxIhGjY0I9NuGwqQ-WsFIUn5tBGg>
-    <xmx:ylR7asam06tmpINrcvxWcvE4IgplarF_0SIgGJng6doHA_gaRupRDg>
-    <xmx:ylR7atF0lHg9u-3aYD32lFFRjKhvAnSfStaB3KF6mSwgr3RO-fiXYg>
-    <xmx:y1R7akL3f04RQ37VXqAHBMwA5ZZZQG_hpcbyQggrqITDtd4YK2ykpBZV>
+	1786467580; x=1786474780; bh=a/IPx4KtYlUFdbmjZIHL+vVayMdCY5hwV0M
+	PIJboBbg=; b=aTysU3L2mtfRzQDtQsFHQjeGlLucbkOLenYjx1Mf3D5YD4OOmlQ
+	yECQIG2pd3rTY7L9zY2ve7KvzT3A73wIQhSD8nu94UIdCv+MWI14CnZdRsA8uy+B
+	YWSQkdUWd/bWA176oJ6n8F/ZKZW0LhQDroAKkZVjuIaWQqpu+IAIRp/0kK+lRFN/
+	ZVDbKZQfzalZP4nqtSr1z5EbaLdnQBjzqm+I79PiWBTeYPWiQm3CGOjOD43ep2GA
+	GSQ3fj5AH+/Q5sEOlWcSF/hZqSWYG8u+DFqU1h7qi2/ahBcnbgSWDUgx5dwfeT1c
+	KFMoIQ9w/1cLTk1cfqVODqLZdnjelg9y7/A==
+X-ME-Sender: <xms:_FR7an5SoV9M-_P6FikbkEqXCHkS-KEpco9_qu0ICTZollMUdSoYSg>
+    <xme:_FR7al4ZbE9UxO9Hs0x5YraRl9jCTK8NhxyQ_pKL0T-70cHGPgIZU6QAZzaJPch9R
+    uPFP-r0gleSE4LmdICTsdyBScE1CUjRmLVGZRMHnWI9uSvlMyBWPg>
+X-ME-Received: <xmr:_FR7aoJUVo0GRDy5wvyAfD8tXYOR7L9gXNPHK4BCDGXBOuledr2bVm5HR5o>
+X-ME-Proxy-Cause: dmFkZTFJB1O9zKJAg+fSg1tJ5bwBvVvABgj+vqmdhVx2D/MjfMXbwCFNKEbltsl8EEvEtG
+    4thUp46lahlnREv9JgiK4QfbzG2pgttOEFqRUWh5mvKTEqsyv2D+4VlCuUKMQ/M7pyzPnU
+    16IJYDjoXjq3+RPwxxLgh+AJBuNtME7bv4mQr5qaYllb7ykwd7fbeInQAqB4rIEC+3FeHY
+    DV0SyexRRlvueW+vvKp24X9E6FOo47n0o0yI1M6QPP5Eun05sKXRPhrzy7P/g2pa1ezVEg
+    VGlu267qK3l6duQTkkKjr8N+pskDWpTe+JopNqUrrJWllBpfrrg1hV/yz3CwqXXdMpEznF
+    sQLaRe5uKf794ipICvZMteBuhmrMmfuhKr3QmVS/S2pXj2/FLMynLeShDS4aMln1w9EP0A
+    pqvemdcoe4NzmD80VXDmYAtHDB0gfcRqKF6zsbDQVpM21JnEYSk1ydLXNVsMVav3GBIywi
+    hQPnqaWFPEVLFxE1ukh/MfwZ49XADNiBFgicP+T/lGnJIqigoOGUyXasVesxWJhDCVUUJX
+    LFoV4iyAeSWgJJ5H3bwDYapWuPihvRYAuoavv5svgiDBC8o4yT+GY+Vb+1vxHFbtrsCp8q
+    GAQdhmxTnIdreJewmmPQSq71P9t4/nBMtAGyJloOFgCGvscFN96znGh4XR+g
+X-ME-Proxy: <xmx:_FR7avEW04U0sNOB2QgnMzM1ospr1vsnsablPob81dailu1cW5IlhA>
+    <xmx:_FR7at1mcIf2N0MVGWQtVENK2mhtgNwatXTGeRdPC2-sTfcbcIt9IA>
+    <xmx:_FR7apzoGtZWKzvap_N_VJaFkYxbpMJQZmPqUU552ri0nUctduZbqA>
+    <xmx:_FR7avFEmlPXpgXINeHsfcTH1K3Gyq0CXwak_cX75t8NSSB5OHt1zQ>
+    <xmx:_FR7auXAGyTGy5DdbS3r_1xgiY9tAOZfnJ0zceQCJxF9wVk8hORK3Gf9>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 11 Aug 2026 12:58:49 -0400 (EDT)
-Date: Tue, 11 Aug 2026 17:58:48 +0100
+ 11 Aug 2026 12:59:39 -0400 (EDT)
+Date: Tue, 11 Aug 2026 17:59:38 +0100
 From: Kiryl Shutsemau <kirill@shutemov.name>
-To: Alexander Gordeev <agordeev@linux.ibm.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
 Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
 	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
 	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
 	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
 	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
-	usama.anjum@arm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
 	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v2 00/17] selftests/mm: improve khugepaged coverage
-Message-ID: <antUso_Mfdh3EiHk@thinkstation>
+Message-ID: <antU5wZkq4eoLhXg@thinkstation>
 References: <20260807113647.3744609-1-kirill@shutemov.name>
- <f9e0fe38-47de-4577-b638-1142d4ffbe6c-agordeev@linux.ibm.com>
+ <e1364571-376a-40c1-937c-40f68b06b09d@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,30 +89,23 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f9e0fe38-47de-4577-b638-1142d4ffbe6c-agordeev@linux.ibm.com>
+In-Reply-To: <e1364571-376a-40c1-937c-40f68b06b09d@arm.com>
 
-On Mon, Aug 10, 2026 at 02:58:43PM +0200, Alexander Gordeev wrote:
-> On Fri, Aug 07, 2026 at 12:36:30PM +0100, Kiryl Shutsemau wrote:
+On Tue, Aug 11, 2026 at 12:40:51PM +0100, Muhammad Usama Anjum wrote:
+> > Tested on mm-new (8086604be973), with KASAN, lockdep, DEBUG_VM and
+> > page_table_check, in 16G guests:
+> > 
+> >   x86-64 4K     190 pass, 1 skip, 0 fail
+> >   arm64 64K     228 pass, 5 skip, 0 fail
+> > 
+> > The skips are structural: mixed sources declines at the smallest order, and
+> > at 64K collapse_compound_extreme and the shmem components skip as above.
+> I've tested them on arm64 vm and more tests are passing instead of getting
+> skipped. Hence:
 > 
-> Hi Kiryl,
-> 
-> ...
-> >  - Dropped the swap-skip patch, an equivalent has landed
-> >    (Alexander Gordeev).
-> 
-> And dropped [1] following David feedback [2]. Would you pursue the proper fix?
+> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 
-Yes.  v3 will handle the failure rather than predict it.
-
-is_swap_enabled() already skips these cases when no swap is active, so what
-is left is swap that exists but cannot take what the case asks for.  The
-series already has swapout_range(), which reissues MADV_PAGEOUT for up to two
-seconds and reports whether the count arrived; I will make the two cases skip
-when it does not.  That covers swap too small, swap full, a memcg limit and a
-folio still under writeback, without reading /proc/meminfo for any of them.
-
-An error from madvise() itself stays a hard failure -- that is the kernel
-refusing, not the machine being short of swap.
+Thanks!
 
 -- 
   Kiryl Shutsemau / Kirill A. Shutemov
