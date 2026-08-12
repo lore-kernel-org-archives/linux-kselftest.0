@@ -1,36 +1,34 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AA43358AD;
-	Wed, 12 Aug 2026 18:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F6793254BD;
+	Wed, 12 Aug 2026 19:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786560936; cv=none; b=bKpfsnGqa2N+BUsV9rLFfr9bfPZlpTDHPYFZaTXbWwQJqvuOqb+mQaZy1+QlA4ZGjgwTPYrbHbXburvsdwhv3JeCTvLUeUAP9XeMbTByxBCfW9z5yvDgUL9iZCU6K+vCsJIwJkCTPFNJXt1JXfcs7zfxjrjydeOxFJKg/P0S+OU=
+	t=1786561997; cv=none; b=KYHGT3Ni8zWQ5EvFihgy9wvljOmlpGyzCCudoNgJSo35KPgIj4X5SGcFy0hn2uraIJNatyeh5ueA4xXi3UUZ6SdiBGKT9jsTsewDqsFBI8HufGxgqXmCVIGZfLzV/t+rzNk2G0MuOrTaLSXE11VmDgWTVX2JNgOL1wlw9dBISRY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786560936; c=relaxed/simple;
-	bh=W4ulawhkUgOPVRsw0eqSiE5dQsYxoH3ysOVT2KAo7W4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=D8UjLYGca/MgKhATXMp1qdispx0/qsNYgJdzrts6BtN7I1WKht/K1Ctzbjkbw9CZANknjok4Rtr5FA4PAPxtKNQP8f7fppOZi7gyVyTwye8k189bS6mfR87bIvt2MMEvVNcWenYxbWRqmVR1+zsSwZiqOHfWiWvhz6ws3qqWCRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SnSb7qCt; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786561997; c=relaxed/simple;
+	bh=P9VJrBopoZp5PQ66NlOfu6c1Iv9m73xGHHVVYMsJOJY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T6Cq5VyE/tmiGNgtEVG9clvIyUXY0me54bjpDEz6Yh8K3q/UzsvQv47sQAb8AOHNnTbTp08vkvLnwkCzoqHr/n5/0/lVWmjLPZAOLZqXpYWiyz+Pwvb8p9pBgG1gPWCp6FQwtEvclzJxZ/RiD/LDU7BkYNPSLrYWHqKv05o/boo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hDfqPmXk; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SnSb7qCt"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DBABAC2BCB3;
-	Wed, 12 Aug 2026 18:55:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786560935;
-	bh=W4ulawhkUgOPVRsw0eqSiE5dQsYxoH3ysOVT2KAo7W4=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=SnSb7qCtNBp/p9Z7aa2cB8L7K+8eImYNpMD4U6mJvw466uHbYQuDIR+mwvXvlRxJN
-	 SBne4RHh1zZoMOdodc66Tc9vc4O0csrurUGYjeah3x0GNvJHqZ66tZzZTvmyf0egGr
-	 +eRJRV8Y3EvKgqmE3hgkB6o4fO3FiNIma4zCR2CjxoBCeGQAW5sVmeUy8O3wioeGdJ
-	 QKN5fgehRTkA5PwRxlTZvvnCWdOZOHxXJIOF4gRgKIGtAByg7lpNMbYeo0gsqEtRW5
-	 RRjAz5NtNc6vT8tTuoJq61iptuGWBssdWWWJro2wXf2W4NGw5eCUOTA7tytCqxwVhe
-	 2HPdmiO7n5g0A==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B7946C5B572;
-	Wed, 12 Aug 2026 18:55:35 +0000 (UTC)
-From: Thomas Maarseveen via B4 Relay <devnull+maarseveent.gmail.com@kernel.org>
-Date: Wed, 12 Aug 2026 20:55:33 +0200
-Subject: [PATCH] lib/tests: add KUnit tests for errseq
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hDfqPmXk"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 981AD1F000E9;
+	Wed, 12 Aug 2026 19:13:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786561994;
+	bh=G86RgIuIO5wO5m8mgD/HwTdVjjZCLFEF53JQAlqEHKM=;
+	h=From:Subject:Date:To:Cc;
+	b=hDfqPmXk1Py9ZM541OKPBymHisDtmQ7yV3U+I4sDAuFHMd7k2ideVY3uBLiWpAdHA
+	 3d6L9itmKCTQN1+Sr5cdVmYFZ8IvMybu1HU9n9uS1LgCXMfQbiui71bwedJ3p0fGqf
+	 DZblB3ZGE49zzpRbyjgK20Bcto1me7R2iKutJF1aikEng5+2Gu2hOa3BVLeBGFyK71
+	 hW7g7Uggwbtja9tsaAoSpkg0ftzZ49gk60iw4wAx9xMQM6FUslTHM/TDdWaFP/nd7S
+	 La55AFrWBJ4/hJWOW+jd50QmCxl68tVdmIHPy8U9izjsnd8ca90EKgucPQGiIRlWG0
+	 o5pzzcVoDH6iQ==
+From: Mark Brown <broonie@kernel.org>
+Subject: [PATCH v19 00/14] KVM: arm64: Provide guest support for GCS
+Date: Wed, 12 Aug 2026 20:11:59 +0100
+Message-Id: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,373 +36,267 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260812-errseq-kunit-v1-1-312be4c3aa0d@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAKTBfGoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDC0Mj3dSiouLUQt3s0rzMEl3DNENjI4u0pOTUVEMloJaCotS0zAqwcdG
- xtbUAKW6Nol4AAAA=
-X-Change-ID: 20260812-errseq-kunit-1f1328fbcee1
-To: Jeff Layton <jlayton@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: David Gow <david@davidgow.net>, kunit-dev@googlegroups.com, 
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAH/FfGoC/23TS27bMBAG4KsEWlcFZzh8ZdV7FF3wMbSFNnYgB
+ UKLwHcvmaAWWRpeifDH4Qx/vk8brwtv0/PT+7TyvmzL9VI+wH15muLZX048L6ksTChQivKb/fq
+ iaT7FbWYJ4INI1qCbyv+D33gOq7/EcxVvL6919XXlvPz+KPH9R/k+L9vbdf3zUXGHuvq5twHd7
+ L3DLOaQlTbZyRC8/vaT1wv/+npdT1PdZseGIrUUC00RIySiiBwGKhsqoaWy0JhSdtlZkZwdKB3
+ UCtNSKlTbmL0sRxbaDVQ1FLGlqlDHGSykpCXSQPWdghCupbpQY1mpxN5TSgM1B4W+qikUBUSyM
+ iRj1EDtP0oCu4vfbR2TyxyN0UZyHqg7qEbVUleoyFoSaRdsFgMFcVgrutsBUWfsHGNICE6MNwv
+ Q4L5dqIkiCBYcGY5h7Bewxd2YoWaKsHRcMEntR3wPFZU76o9dU4WIwdjyVph5xNTibl5Qc6VKo
+ ERMWjh80PM9WKocW3S4JkuxlJQ82GDHZIE+sIN+YDVbmqRixVGa9KDyPVz6/4cE5rOyi15AAHr
+ Qsz2w7eMFNV852UgiK59s/wxvt9tf2A2907cEAAA=
+X-Change-ID: 20230303-arm64-gcs-e311ab0d8729
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
+ Oliver Upton <oupton@kernel.org>
+Cc: Peter Maydell <peter.maydell@linaro.org>, 
+ Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, 
+ linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
  linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Thomas Maarseveen <maarseveent@gmail.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786560934; l=12227;
- i=maarseveent@gmail.com; h=from:subject:message-id;
- bh=75Gy+F6zO2ftuiONJL1i57FaWWxelXMazNNz9c9HTcE=;
- b=D3wWDYAP/ia9jR8ztxB7ULzlFLamK8HQIynbT0zo/bFlNGyDLHf5ADqnA9WMCZwmMDMvJ7bie
- hbDuwGSmRqeA5Bt20o1e8cG/b1EfH2oSsFNKgClqd6hOTYC+EEvKake
-X-Developer-Key: i=maarseveent@gmail.com; a=ed25519;
- pk=W1QNGKhOCOEXIAdTN0UwzNPpvcxVx7vDfChmpEN0REw=
-X-Endpoint-Received: by B4 Relay for maarseveent@gmail.com/default with
- auth_id=943
-X-Original-From: Thomas Maarseveen <maarseveent@gmail.com>
-Reply-To: maarseveent@gmail.com
+ Mark Brown <broonie@kernel.org>, 
+ Thiago Jung Bauermann <thiago.bauermann@linaro.org>
+X-Mailer: b4 0.17-dev
+X-Developer-Signature: v=1; a=openpgp-sha256; l=10586; i=broonie@kernel.org;
+ h=from:subject:message-id; bh=P9VJrBopoZp5PQ66NlOfu6c1Iv9m73xGHHVVYMsJOJY=;
+ b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqfMW6QFiqT/afQK3bCbxWyawzaJ2CNDdNAsYL5
+ Xky7ywhPRGJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCanzFugAKCRAk1otyXVSH
+ 0OQpB/425mNQ+B/ZcO/l151FUK/SwTCbAEPWQ2LuhbQsDeX8JSSaVe3IT2ZVG/qKrgQ5LEi/MGl
+ +S/ds0VZv56n7ANcwKTtlI4dwuVf7RS9wDZFYRrpLbzUga8PmcogkThWG8mpSG1Gi6Wb/PDV9Zq
+ Lj/W1plt1a3o5YAQ3pmybqhiufYGKVezCJPkBvqF8i6MAcYE69Rcc/quBEaVrMGly1c8ojTqBYt
+ S/lsG9mIMl10+yb3f0HJK+SSpHwkWDCi1B1qx1yMC/5sipnQHpLpshBSgIcBY5nU/Wtx+tlzTmY
+ /fDcX3vHV2H9SJZd7XmvVYd39vLV/cWWlXfteKmS9biWK1FE
+X-Developer-Key: i=broonie@kernel.org; a=openpgp;
+ fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
 
-From: Thomas Maarseveen <maarseveent@gmail.com>
+The arm64 Guarded Control Stack (GCS) feature provides support for
+hardware protected stacks of return addresses, intended to provide
+hardening against return oriented programming (ROP) attacks and to make
+it easier to gather call stacks for applications such as profiling.
 
-The errseq_t infrastructure (lib/errseq.c) underpins writeback error
-reporting but has no regression tests. Its semantics are subtle enough
-to have needed fixing before: commit b4678df184b3 ("errseq: Always
-report a writeback error once") changed how unseen errors reach new
-samplers.
+When GCS is active a secondary stack called the Guarded Control Stack is
+maintained, protected with a memory attribute which means that it can
+only be written with specific GCS operations.  The current GCS pointer
+can not be directly written to by userspace.  When a BL is executed the
+value stored in LR is also pushed onto the GCS, and when a RET is
+executed the top of the GCS is popped and compared to LR with a fault
+being raised if the values do not match.  GCS operations may only be
+performed on GCS pages, a data abort is generated if they are not.
 
-Add a KUnit suite covering the documented single-threaded semantics:
+The combination of hardware enforcement and lack of extra instructions
+in the function entry and exit paths should result in something which
+has less overhead and is more difficult to attack than a purely software
+implementation like clang's shadow stacks.
 
- - a zeroed errseq_t is the "no error yet" epoch
- - errors are recorded, overwrite one another, and both ends of the
-   valid errno range round-trip exactly
- - an error nobody has seen samples as zero, so a check against a
-   fresh sample still reports it
- - errseq_check_and_advance() reports a given error exactly once per
-   cursor and leaves the cursor in place when nothing has changed
- - once an error has been seen, a fresh sample is current and a check
-   against it reports nothing
- - the same error recorded again after being seen is reported again,
-   even to a cursor that consumed the first occurrence while another
-   cursor marked the repeat as seen
- - independent cursors each observe each error
+This series implements support for managing GCS for KVM guests.
 
-The lockless behaviour of errseq_t under concurrent updates and the
-WARN path for invalid error values are deliberately out of scope.
-
-Tested with ./tools/testing/kunit/kunit.py run, with a kunitconfig
-enabling CONFIG_KUNIT=y and CONFIG_ERRSEQ_KUNIT_TEST=y; all 13 tests
-pass under ARCH=um.
-
-Signed-off-by: Thomas Maarseveen <maarseveent@gmail.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 ---
-Single patch adding the first KUnit suite for lib/errseq.c.
-(Cover not sent for a single-patch series; trailers below drive
-the recipients.)
----
- MAINTAINERS              |   1 +
- lib/Kconfig.debug        |  15 +++
- lib/tests/Makefile       |   1 +
- lib/tests/errseq_kunit.c | 237 +++++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 254 insertions(+)
+Changes in v19:
+- Fix accessor for GCSCR_EL2 in emulation.
+- Correct locate_direct_register() for EL0 registers.
+- Don't check for GCS without S1PIE when restoring vEL2.
+- Move barriers to align better with nearby dsbs.
+- Link to v18: https://patch.msgid.link/20260803-arm64-gcs-v18-0-fd8c40f5ad88@kernel.org
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8014b9f8253edf15231df215d1b14063a54a55ec..70de54372c4f8f12b2431e693cb3b0b5ec5fdfc9 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9624,6 +9624,7 @@ M:	Jeff Layton <jlayton@kernel.org>
- S:	Maintained
- F:	include/linux/errseq.h
- F:	lib/errseq.c
-+F:	lib/tests/errseq_kunit.c
- 
- ESD CAN NETWORK DRIVERS
- M:	Stefan Mätje <stefan.maetje@esd.eu>
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 1244dcac2294ad99fda37fa6767c9e76f16a4d14..3f1a7103328678926dd82620349957fdede32ee4 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -2826,6 +2826,21 @@ config SYSCTL_KUNIT_TEST
- 
- 	  If unsure, say N.
- 
-+config ERRSEQ_KUNIT_TEST
-+	tristate "KUnit test for errseq" if !KUNIT_ALL_TESTS
-+	depends on KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This builds the errseq KUnit test suite.
-+	  It tests the documented semantics of the errseq_t error-tracking
-+	  infrastructure (lib/errseq.c), which underpins writeback error
-+	  reporting.
-+
-+	  For more information on KUnit and unit tests in general please refer
-+	  to the KUnit documentation in Documentation/dev-tools/kunit/.
-+
-+	  If unsure, say N.
-+
- config KFIFO_KUNIT_TEST
- 	tristate "KUnit Test for the generic kernel FIFO implementation" if !KUNIT_ALL_TESTS
- 	depends on KUNIT
-diff --git a/lib/tests/Makefile b/lib/tests/Makefile
-index 4ead57602eac468e1b9b8148593dc8c41ddc5779..a1e69b2c4318ae03f7834ba41414caf986997f02 100644
---- a/lib/tests/Makefile
-+++ b/lib/tests/Makefile
-@@ -13,6 +13,7 @@ obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) += blackhole_dev_kunit.o
- obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
- obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
- obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
-+obj-$(CONFIG_ERRSEQ_KUNIT_TEST) += errseq_kunit.o
- obj-$(CONFIG_FFS_KUNIT_TEST) += ffs_kunit.o
- CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
- CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
-diff --git a/lib/tests/errseq_kunit.c b/lib/tests/errseq_kunit.c
-new file mode 100644
-index 0000000000000000000000000000000000000000..8f39ebc4a2488e564efe216883008b0d96a75fe6
---- /dev/null
-+++ b/lib/tests/errseq_kunit.c
-@@ -0,0 +1,237 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * KUnit tests for the errseq_t error-tracking infrastructure.
-+ *
-+ * These exercise the documented single-threaded semantics of the errseq
-+ * API (see Documentation/core-api/errseq.rst and lib/errseq.c): error
-+ * recording and overwriting, the "seen" handoff between errseq_sample()
-+ * and errseq_check_and_advance(), and the re-reporting of an error that
-+ * is recorded again after it has been seen.
-+ *
-+ * The lockless properties of errseq_t under concurrent updates are
-+ * outside the scope of these deterministic tests, as is the WARN path
-+ * for invalid error values.
-+ */
-+#include <kunit/test.h>
-+
-+#include <linux/err.h>
-+#include <linux/errno.h>
-+#include <linux/errseq.h>
-+
-+/*
-+ * A zeroed errseq_t is the "no error has ever occurred" epoch: it
-+ * samples as zero and no check against it reports anything.
-+ */
-+static void errseq_test_zero_epoch_reports_no_error(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = 0;
-+
-+	KUNIT_EXPECT_EQ(test, errseq_sample(&eseq), 0);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), 0);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
-+	KUNIT_EXPECT_EQ(test, since, 0);
-+}
-+
-+static void errseq_test_set_records_error(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+
-+	/* errseq_set() returns the previous value; the epoch is zero. */
-+	KUNIT_EXPECT_EQ(test, errseq_set(&eseq, -EIO), 0);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), -EIO);
-+}
-+
-+/* Any error set always overwrites an existing error. */
-+static void errseq_test_set_overwrites_error(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+
-+	errseq_set(&eseq, -EIO);
-+	errseq_set(&eseq, -ENOSPC);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), -ENOSPC);
-+}
-+
-+/* Both ends of the valid error range are recorded exactly. */
-+static void errseq_test_errno_range_extremes(struct kunit *test)
-+{
-+	errseq_t lo = 0;
-+	errseq_t hi = 0;
-+
-+	errseq_set(&lo, -1);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&lo, 0), -1);
-+
-+	errseq_set(&hi, -MAX_ERRNO);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&hi, 0), -MAX_ERRNO);
-+}
-+
-+/*
-+ * An error nobody has seen yet samples as zero, so that a check against
-+ * the sample still reports it (see commit b4678df184b3 ("errseq: Always
-+ * report a writeback error once")).
-+ */
-+static void errseq_test_sample_of_unseen_error_is_zero(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_sample(&eseq), 0);
-+}
-+
-+static void errseq_test_new_sampler_sees_unseen_error(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since;
-+
-+	errseq_set(&eseq, -EIO);
-+	since = errseq_sample(&eseq);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, since), -EIO);
-+}
-+
-+/* A given error is reported exactly once per advancing cursor. */
-+static void errseq_test_check_and_advance_reports_once(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = errseq_sample(&eseq);
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
-+}
-+
-+/*
-+ * Once an error has been seen, a fresh sample is non-zero and checking
-+ * against it reports nothing: handled errors do not reach new samplers.
-+ */
-+static void errseq_test_sample_after_seen_is_current(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = 0;
-+	errseq_t sample;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+
-+	sample = errseq_sample(&eseq);
-+	KUNIT_EXPECT_NE(test, sample, 0);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, sample), 0);
-+}
-+
-+static void errseq_test_new_error_after_advance(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = 0;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+
-+	errseq_set(&eseq, -ENOSPC);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -ENOSPC);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
-+}
-+
-+/*
-+ * Recording the same error again after it has been seen must bump the
-+ * sequence, so cursors that consumed the first occurrence see the
-+ * second one too.
-+ */
-+static void errseq_test_same_error_reported_again_after_seen(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = 0;
-+	errseq_t seen_cursor;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+
-+	seen_cursor = since;
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, since), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+	/* The repeat must advance the sequence, not just re-toggle "seen". */
-+	KUNIT_EXPECT_NE(test, since, seen_cursor);
-+}
-+
-+/*
-+ * A cursor that consumed an error must still observe a repeat of that
-+ * error even when another cursor has already marked the repeat seen:
-+ * recording over a seen value must advance the sequence.
-+ */
-+static void errseq_test_repeat_error_visible_to_all_cursors(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t cursor_a = 0;
-+	errseq_t cursor_b = 0;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), -EIO);
-+
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, cursor_a), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), 0);
-+}
-+
-+/* An advance with no new error reports nothing and leaves the cursor put. */
-+static void errseq_test_advance_stable_when_unchanged(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t since = 0;
-+	errseq_t cursor;
-+
-+	errseq_set(&eseq, -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
-+
-+	cursor = since;
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
-+	KUNIT_EXPECT_EQ(test, since, cursor);
-+}
-+
-+/*
-+ * Cursors are independent: one subscriber consuming an error does not
-+ * consume it for another, and each subscriber sees each error once.
-+ */
-+static void errseq_test_two_subscribers_independent(struct kunit *test)
-+{
-+	errseq_t eseq = 0;
-+	errseq_t cursor_a = errseq_sample(&eseq);
-+	errseq_t cursor_b = errseq_sample(&eseq);
-+
-+	errseq_set(&eseq, -EIO);
-+
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, cursor_b), -EIO);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), -EIO);
-+
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), 0);
-+	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), 0);
-+}
-+
-+static struct kunit_case errseq_test_cases[] = {
-+	KUNIT_CASE(errseq_test_zero_epoch_reports_no_error),
-+	KUNIT_CASE(errseq_test_set_records_error),
-+	KUNIT_CASE(errseq_test_set_overwrites_error),
-+	KUNIT_CASE(errseq_test_errno_range_extremes),
-+	KUNIT_CASE(errseq_test_sample_of_unseen_error_is_zero),
-+	KUNIT_CASE(errseq_test_new_sampler_sees_unseen_error),
-+	KUNIT_CASE(errseq_test_check_and_advance_reports_once),
-+	KUNIT_CASE(errseq_test_sample_after_seen_is_current),
-+	KUNIT_CASE(errseq_test_new_error_after_advance),
-+	KUNIT_CASE(errseq_test_same_error_reported_again_after_seen),
-+	KUNIT_CASE(errseq_test_repeat_error_visible_to_all_cursors),
-+	KUNIT_CASE(errseq_test_advance_stable_when_unchanged),
-+	KUNIT_CASE(errseq_test_two_subscribers_independent),
-+	{}
-+};
-+
-+static struct kunit_suite errseq_test_suite = {
-+	.name = "errseq",
-+	.test_cases = errseq_test_cases,
-+};
-+
-+kunit_test_suite(errseq_test_suite);
-+
-+MODULE_DESCRIPTION("KUnit tests for the errseq infrastructure");
-+MODULE_LICENSE("GPL");
+Changes in v18:
+- Reinject all GCS exceptions from nested guests.
+- Include GCSCRE0_EL1 and GCSPR_EL0 in the live CPU register accessors.
+- Sort el2_regs in get-reg-list.
+- Link to v17: https://patch.msgid.link/20260731-arm64-gcs-v17-0-5e39ca01b14e@kernel.org
+
+Changes in v17:
+- Rebase onto v7.2-rc4.
+- Fix mapping of HFGITR_EL2.nGCSEPP.
+- Implement a test for NV emulation around EXLOCK.
+- Fix NV exception emulation issues.
+- Add GCS[PC]R_EL1 to locate_direct_register().
+- Add barriers.
+- Add ID_AA64PFR1_EL1.GCS to set_id_regs.
+- Comment updates.
+- Link to v16: https://lore.kernel.org/r/20250912-arm64-gcs-v16-0-6435e5ec37db@kernel.org
+
+Changes in v16:
+- Rebase onto v6.17-rc3.
+- Also expose the feature to nested guests.
+- Implement emulation of EXLOCK when returning from nested guests.
+- Rename enter_exception_gcs() to compute_exlock().
+- Move all ID_AA64PFR1_EL1 handling to the final kernel patch.
+- Drop unneeded forwarding of GCS exceptions.
+- Commit and cover message updates.
+- Link to v15: https://lore.kernel.org/r/20250820-arm64-gcs-v15-0-5e334da18b84@kernel.org
+
+Changes in v15:
+- Rebase onto v6.17-rc1.
+- Link to v14: https://lore.kernel.org/r/20241005-arm64-gcs-v14-0-59060cd6092b@kernel.org
+
+Changes in v14:
+- Rebase onto arm64/for-next/gcs which includes all the non-KVM support.
+- Manage the fine grained traps for GCS instructions.
+- Manage PSTATE.EXLOCK when delivering exceptions to KVM guests.
+- Link to v13: https://lore.kernel.org/r/20241001-arm64-gcs-v13-0-222b78d87eee@kernel.org
+
+Changes in v13:
+- Rebase onto v6.12-rc1.
+- Allocate VM_HIGH_ARCH_6 since protection keys used all the existing
+  bits.
+- Implement mm_release() and free transparently allocated GCSs there.
+- Use bit 32 of AT_HWCAP for GCS due to AT_HWCAP2 being filled.
+- Since we now only set GCSCRE0_EL1 on change ensure that it is
+  initialised with GCSPR_EL0 accessible to EL0.
+- Fix OOM handling on thread copy.
+- Link to v12: https://lore.kernel.org/r/20240829-arm64-gcs-v12-0-42fec947436a@kernel.org
+
+Changes in v12:
+- Clarify and simplify the signal handling code so we work with the
+  register state.
+- When checking for write aborts to shadow stack pages ensure the fault
+  is a data abort.
+- Depend on !UPROBES.
+- Comment cleanups.
+- Link to v11: https://lore.kernel.org/r/20240822-arm64-gcs-v11-0-41b81947ecb5@kernel.org
+
+Changes in v11:
+- Remove the dependency on the addition of clone3() support for shadow
+  stacks, rebasing onto v6.11-rc3.
+- Make ID_AA64PFR1_EL1.GCS writeable in KVM.
+- Hide GCS registers when GCS is not enabled for KVM guests.
+- Require HCRX_EL2.GCSEn if booting at EL1.
+- Require that GCSCR_EL1 and GCSCRE0_EL1 be initialised regardless of
+  if we boot at EL2 or EL1.
+- Remove some stray use of bit 63 in signal cap tokens.
+- Warn if we see a GCS with VM_SHARED.
+- Remove rdundant check for VM_WRITE in fault handling.
+- Cleanups and clarifications in the ABI document.
+- Clean up and improve documentation of some sync placement.
+- Only set the EL0 GCS mode if it's actually changed.
+- Various minor fixes and tweaks.
+- Link to v10: https://lore.kernel.org/r/20240801-arm64-gcs-v10-0-699e2bd2190b@kernel.org
+
+Changes in v10:
+- Fix issues with THP.
+- Tighten up requirements for initialising GCSCR*.
+- Only generate GCS signal frames for threads using GCS.
+- Only context switch EL1 GCS registers if S1PIE is enabled.
+- Move context switch of GCSCRE0_EL1 to EL0 context switch.
+- Make GCS registers unconditionally visible to userspace.
+- Use FHU infrastructure.
+- Don't change writability of ID_AA64PFR1_EL1 for KVM.
+- Remove unused arguments from alloc_gcs().
+- Typo fixes.
+- Link to v9: https://lore.kernel.org/r/20240625-arm64-gcs-v9-0-0f634469b8f0@kernel.org
+
+Changes in v9:
+- Rebase onto v6.10-rc3.
+- Restructure and clarify memory management fault handling.
+- Fix up basic-gcs for the latest clone3() changes.
+- Convert to newly merged KVM ID register based feature configuration.
+- Fixes for NV traps.
+- Link to v8: https://lore.kernel.org/r/20240203-arm64-gcs-v8-0-c9fec77673ef@kernel.org
+
+Changes in v8:
+- Invalidate signal cap token on stack when consuming.
+- Typo and other trivial fixes.
+- Don't try to use process_vm_write() on GCS, it intentionally does not
+  work.
+- Fix leak of thread GCSs.
+- Rebase onto latest clone3() series.
+- Link to v7: https://lore.kernel.org/r/20231122-arm64-gcs-v7-0-201c483bd775@kernel.org
+
+Changes in v7:
+- Rebase onto v6.7-rc2 via the clone3() patch series.
+- Change the token used to cap the stack during signal handling to be
+  compatible with GCSPOPM.
+- Fix flags for new page types.
+- Fold in support for clone3().
+- Replace copy_to_user_gcs() with put_user_gcs().
+- Link to v6: https://lore.kernel.org/r/20231009-arm64-gcs-v6-0-78e55deaa4dd@kernel.org
+
+Changes in v6:
+- Rebase onto v6.6-rc3.
+- Add some more gcsb_dsync() barriers following spec clarifications.
+- Due to ongoing discussion around clone()/clone3() I've not updated
+  anything there, the behaviour is the same as on previous versions.
+- Link to v5: https://lore.kernel.org/r/20230822-arm64-gcs-v5-0-9ef181dd6324@kernel.org
+
+Changes in v5:
+- Don't map any permissions for user GCSs, we always use EL0 accessors
+  or use a separate mapping of the page.
+- Reduce the standard size of the GCS to RLIMIT_STACK/2.
+- Enforce a PAGE_SIZE alignment requirement on map_shadow_stack().
+- Clarifications and fixes to documentation.
+- More tests.
+- Link to v4: https://lore.kernel.org/r/20230807-arm64-gcs-v4-0-68cfa37f9069@kernel.org
+
+Changes in v4:
+- Implement flags for map_shadow_stack() allowing the cap and end of
+  stack marker to be enabled independently or not at all.
+- Relax size and alignment requirements for map_shadow_stack().
+- Add more blurb explaining the advantages of hardware enforcement.
+- Link to v3: https://lore.kernel.org/r/20230731-arm64-gcs-v3-0-cddf9f980d98@kernel.org
+
+Changes in v3:
+- Rebase onto v6.5-rc4.
+- Add a GCS barrier on context switch.
+- Add a GCS stress test.
+- Link to v2: https://lore.kernel.org/r/20230724-arm64-gcs-v2-0-dc2c1d44c2eb@kernel.org
+
+Changes in v2:
+- Rebase onto v6.5-rc3.
+- Rework prctl() interface to allow each bit to be locked independently.
+- map_shadow_stack() now places the cap token based on the size
+  requested by the caller not the actual space allocated.
+- Mode changes other than enable via ptrace are now supported.
+- Expand test coverage.
+- Various smaller fixes and adjustments.
+- Link to v1: https://lore.kernel.org/r/20230716-arm64-gcs-v1-0-bf567f93bba6@kernel.org
 
 ---
-base-commit: 3d6d817622b0a9721e3cc404df3469171582be13
-change-id: 20260812-errseq-kunit-1f1328fbcee1
+Mark Brown (14):
+      arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+      KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP
+      KVM: arm64: Manage GCS access and registers for guests
+      KVM: arm64: Ensure GCS memory effects are visible
+      KVM: arm64: Set PSTATE.EXLOCK when entering an exception
+      KVM: arm64: Validate GCS exception lock when emulating ERET
+      KVM: arm64: Forward GCS exceptions to nested guests
+      KVM: arm64: Enforce EXLOCK for SPSR and ELR
+      KVM: arm64: Allow GCS to be enabled for guests
+      KVM: selftests: arm64: Add GCS registers to get-reg-list
+      KVM: selftests: arm64: Add GCS to set_id_regs
+      KVM: selftests: arm64: Only restore SPSR_EL1 and ELR_EL1 if they change
+      tools: Synchronise the kernel esr.h
+      KVM: selftests: arm64: Add GCS EXLOCK exception emulation test
+
+ arch/arm64/include/asm/el2_setup.h                 |   5 +
+ arch/arm64/include/asm/kvm_emulate.h               |  11 +
+ arch/arm64/include/asm/kvm_host.h                  |  14 +
+ arch/arm64/include/asm/kvm_nested.h                |  39 +++
+ arch/arm64/include/asm/vncr_mapping.h              |   2 +
+ arch/arm64/include/uapi/asm/ptrace.h               |   1 +
+ arch/arm64/kvm/emulate-nested.c                    |   7 +-
+ arch/arm64/kvm/handle_exit.c                       |  18 +-
+ arch/arm64/kvm/hyp/exception.c                     |  37 +++
+ arch/arm64/kvm/hyp/include/hyp/sysreg-sr.h         |  31 ++
+ arch/arm64/kvm/hyp/nvhe/switch.c                   |  13 +
+ arch/arm64/kvm/hyp/vhe/switch.c                    |   4 +
+ arch/arm64/kvm/hyp/vhe/sysreg-sr.c                 |  24 ++
+ arch/arm64/kvm/nested.c                            |   3 +-
+ arch/arm64/kvm/sys_regs.c                          |  89 +++++-
+ tools/arch/arm64/include/asm/esr.h                 | 113 ++++++-
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ tools/testing/selftests/kvm/arm64/gcs_exceptions.c | 346 +++++++++++++++++++++
+ tools/testing/selftests/kvm/arm64/get-reg-list.c   |  12 +
+ tools/testing/selftests/kvm/arm64/set_id_regs.c    |   1 +
+ tools/testing/selftests/kvm/lib/arm64/handlers.S   |  10 +
+ 21 files changed, 757 insertions(+), 24 deletions(-)
+---
+base-commit: 1590cf0329716306e948a8fc29f1d3ee87d3989f
+change-id: 20230303-arm64-gcs-e311ab0d8729
 
 Best regards,
--- 
-Thomas Maarseveen <maarseveent@gmail.com>
-
+--  
+Mark Brown <broonie@kernel.org>
 
