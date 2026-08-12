@@ -1,113 +1,178 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6572B1922F5;
-	Wed, 12 Aug 2026 02:33:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786502021; cv=none; b=XOAnGfYK4gM1X/9sf6ZkbKWJlE5CLKtBT19nNQ28tCLFYAfoT5xSbykkGs30d9K2i3Ygv5gKX17Wxsj47PbAHz+v5aBNXz0lYn15ieeQkoCvKr3Noum4SMqFksVxQ8MdFH8traF1uZEB0tB8aaf1xKPSQ5oZHGN37rB0PQ2zVao=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786502021; c=relaxed/simple;
-	bh=I1/vSJ9Qb76ZtUvTgRy1ooNxWqENw3nHX0V5zhE22bY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/ysdBT4K/2VaimEE+xIpPpO7Gu2J/SwsmB+eOvGtbv9DaOhLQoB4CrRNz0dTSwhqYCCiG/tO+DchTRnoJDzm2sSBGRnyKL1LDAaUnUCJz9uEq7t2kNN1UXJeQZ4sWhorex5njBRtSRMQGJ/ni/QZzNA0F8TMpbNqXkRXYtlfqs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=gm7GedII; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 640A237E30F
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 02:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786502327; cv=pass; b=t5q7gedupUUSY+Sp9LX0SnOVJsD9NQUn0gftRuCoLIsvjHSaUr0usCT2atrip/Z5kO68HV+akPbtioyppp8a6sQ8fI3RVVV9ElkvByUyziBLJq9gSByrd9upQ9RC1I2CAWx2xus4TqFUJBZAzccTQv7gbkgqvgIiT9jrf5+ElnM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786502327; c=relaxed/simple;
+	bh=paVKL8uujOZXf9sEomzLIUC31zXEINH59NqUPFZaing=;
+	h=In-Reply-To:From:Mime-Version:References:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=isQZJm2SP1OOowb1PvjlIhTddxzcuhlp7GdP0vlCpFkOYQXdyqlG41VDe5rn70OX2c8p2wTwuspIqMYanJSWYMaFonbAgtQOCf7wyXqZFivXtZWrPySZbEBAg+9wDBvRHu94G4CJd4WbHzpDNKKrG7gl5cTwInyocohk8uIx8r8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=HfGYohGV; arc=pass smtp.client-ip=209.85.208.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="gm7GedII"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 826121516;
-	Tue, 11 Aug 2026 19:33:33 -0700 (PDT)
-Received: from localhost (a085714.arm.com [10.164.19.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C591E3F86F;
-	Tue, 11 Aug 2026 19:33:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1786502017; bh=I1/vSJ9Qb76ZtUvTgRy1ooNxWqENw3nHX0V5zhE22bY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gm7GedIIorUPLyBhPS5niPq93LLVW9k5r2o7AlI1nh61cX3lx3MAKeWKcLIi+UvjN
-	 BBUqgn/lI8amZCy1Sr65v8R2dQdUU5qqNYIn7npIAZww206VT0z2W8yu8ZODZsqbYe
-	 snbDPrvByhfGPQW1mF3X4RcYLevGcg2uTRARDVLY=
-Date: Wed, 12 Aug 2026 08:03:34 +0530
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Wilson Felipe Pereira <wfelipe@google.com>, 
-	Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Chengming Zhou <chengming.zhou@linux.dev>, linux-mm@kvack.org, 
-	cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/cgroup: test_zswap: skip
- test_no_kmem_bypass if debugfs is unavailable
-Message-ID: <253tvq2rhxl4yedcacabve4x333rajpcqvqwlot56ddtvpgrl5@5ifjgjkfgza5>
-References: <20260811051434.3805648-1-wfelipe@google.com>
- <20260811190611.c72f19ada3912791a81a7a90@linux-foundation.org>
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="HfGYohGV"
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-39fa5e3a428so4144391fa.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 19:38:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786502323; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lex772piGjW5fnnZTVMdtY2v/IQUqwFu5IMxfTQBjUoYmRCm5IIe0S+UGKCaGAvGa1
+         D0ngInEEWkJLjo5a2DsZ3YZTvc+24uvDTsnNPWnpR1olEbFUWlT1S+RIe0eBbIAciCTA
+         MeQvRdEiFder52e11pVzOWIbro36HBKHvig2K+ObV7X1n7MV4Ipkq81CUzhb8bw9oCQ3
+         KGjfkwizwMCBSl+LniYMBzMEOPikXTglO7NKRH3geqnP7fIO++YUWsVO5ifDvADVD+Tp
+         PMf49SRmbtUCAq0ldOXmQ0MBpYyXVGXtBa28NfcN2fi44Rmd5NCd25CLnhaNGbU+n2ke
+         NSmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:references:mime-version:from
+         :in-reply-to:user-agent:dkim-signature;
+        bh=xsPbH6RVpEmtv3mDSTBrJpAsPxSPG2QtDyPYl702kZM=;
+        fh=QhJ11uQGgp7mbsCd59L3sFXIndKIE44Ky6ARlVShxdM=;
+        b=aHoH/nizh48BFGMsnLjWocQdTlU/YXb4MZfwocehE7B8NNL33ISqyuXJSv7bC2qj+y
+         5HUZNUbNiV6Is93WwViMJlIhxBFf0NODl33GouaeIpPMiZ3O2lQqNAbqF+DreU3VEHxC
+         h1I/0uc1HmqPHgDeIm9Kb/WQr9Ad1L6RP0EZhNfu1xi0NsMlmYnksfkEESeV8yAMILjI
+         vhCwvBOTEqYKdEBpUvfRegEDL80hRegJ4+z6OtSGHECd3W1p65jj/HlAfZN+M1p+t9rb
+         aenR4NAjS9Z6wOZNDrox4KFJgRcSSk3PkDTYCMO2ft4oYjBJtBAXqmpsub3vKAauuLPp
+         1S8g==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1786502323; x=1787107123; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:references:mime-version
+         :from:in-reply-to:user-agent:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xsPbH6RVpEmtv3mDSTBrJpAsPxSPG2QtDyPYl702kZM=;
+        b=HfGYohGViMWIwQtCooPbT8zz4/NDB0YxADTu+MzceqOX4uV+bc4eA44d8uPTxAy/f9
+         4Qofe1tVBQgcbrjH6Su4fWJOflIjZcDezCr0hyFkHWJXAPepQyAQQ7AFfGj2aV1ykKX7
+         F3qnRDXtETqvDuADJCq0RrwJfAyrV4fZKw6KCtyyyJK0FKKOsBBmz96AkEyjnPwENAcK
+         bogbd7CmUfQNkniuwWngftAAbIpjoD9c2BwZ3YVUG/l6fK92lYiVftajQZZp1tJ9vbvO
+         eGD8bMHO8KpdhHvvpUUufcCRtVwS4McYyMA6X7mZSCruTXf38yRYnTk48+6+dAy9EGLk
+         b7WQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786502323; x=1787107123;
+        h=content-type:cc:to:subject:message-id:date:references:mime-version
+         :from:in-reply-to:user-agent:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=xsPbH6RVpEmtv3mDSTBrJpAsPxSPG2QtDyPYl702kZM=;
+        b=Vn/QZaJhy5JlKb4R+s7nILWtPNs01WVTIzyvXO3hOU//kUh8kqy6SpyqBcYtXpZxW3
+         XOobiCnAyXeuGo4mQKIgOWXwQPusYH/MuUJ7hilwWU/3qfYUaJxAXQuY64XEd/27GnEg
+         Vt+pYjfao98o4rVxNjYa40TPoYVjcffi97FRvRLg75faFMtz8shAih3dqPMiX/ZaBrE3
+         Q7Ec8KISMc39kaL/Y9Rd3PIKuiI4zd+Q9KP0/uT/UAL0ffRo8Jw1AHAgTLJVrXQQubWu
+         zJ48FHsrAYVosgtZk9ufiXGaD7xvnC9LyOPrCMBSoL4ronCF9VqfErQYkBz7pNQGdJ3T
+         zBJw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp8HMGk7BKh18fOKF9075nlTwMg/YkhnZoyTkibuTuKmmzg4f7rr+2leB1YARUy4gwazbBfzKDkaIMjhRF7icQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxfNH4hdG0w8P0b3x0i05x1H6OtiGWGBI4K6P7bOms3bR2Of9td
+	Bf2KIku/BpawXs1c9QHyywrX4YuWu0ZgQJ/Yq3MSpXJyujopc5iee7yeG/jF6Bwvp6vnNpm/Lw9
+	a52+W5dPwOfHWDJK+8FRqd53ijJyinIfYPLu94W9wfg==
+X-Gm-Gg: AR+sD113j8NVThHOVfD4bVNQ3xrAl9J6Jmin2ckjn/yBVm96aNKwT27BquqgdRWDmMi
+	i7k7YRlwmGuOvLDvPSg69a3EHLCuRN6YewViJuTv6mEmSgH/M5py+Qzjd+7CkbQu05hrbgN0R67
+	8A3Fc7eUO/ulZsqepMD4cxpDC37eI3lvtF4u/chriRK9385F40KdxTe5xX3rbbHgPXIKUQN16tT
+	yCyrcvllpPwDhOn3YUGkleAOZJoaCML9ekMHj9tidWZZ64ASdM7x+GCs9/r6CvXhquUxizMdXJd
+	bW7X/UTzyxNfaYSDyvOOMATJVKeENxxbUoJPeKyRxr8=
+X-Received: by 2002:a05:651c:b21:b0:39c:753a:853f with SMTP id
+ 38308e7fff4ca-3a10d18f514mr1416711fa.3.1786502323254; Tue, 11 Aug 2026
+ 19:38:43 -0700 (PDT)
+Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
+ Tue, 11 Aug 2026 19:38:42 -0700
+Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
+ Tue, 11 Aug 2026 19:38:42 -0700
+User-Agent: Mozilla Thunderbird
+In-Reply-To: <andiub47zsUsL4qh@x1>
+From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260811190611.c72f19ada3912791a81a7a90@linux-foundation.org>
+Mime-Version: 1.0
+X-Original-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
+ <20260714130657.46963-6-zhangzhanpeng.jasper@bytedance.com> <andiub47zsUsL4qh@x1>
+Date: Tue, 11 Aug 2026 19:38:42 -0700
+X-Gm-Features: AUfX_mzVF_qtHGnSgVqubj7FrTSqgmuPuhnXiNhwESKsg66sjHqWMZRBEXVi9Ls
+Message-ID: <CACnXVnd14LEAOfakzpasXnteaVfZo3nsH1a4fEjvHNOQ8bMeXg@mail.gmail.com>
+Subject: Re: [RFC PATCH 5/7] iommu/riscv: Expose global QoS IDs in sysfs
+To: Drew Fustini <fustini@kernel.org>
+Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com, 
+	reinette.chatre@intel.com, tomasz.jeznach@linux.dev, will@kernel.org, 
+	robin.murphy@arm.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr, 
+	Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com, corbet@lwn.net, 
+	shuah@kernel.org, jgg@ziepe.ca, kevin.tian@intel.com, cuiyunhui@bytedance.com, 
+	yuanzhu@bytedance.com, iommu@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Aug 11, 2026 at 07:06:11PM -0700, Andrew Morton wrote:
-> On Tue, 11 Aug 2026 05:14:11 +0000 Wilson Felipe Pereira <wfelipe@google.com> wrote:
-> 
-> > test_no_kmem_bypass() needs to read
-> > /sys/kernel/debug/zswap/stored_pages via get_zswap_stored_pages() to
-> > verify that compressed pages are charged to the memcg.
-> > 
-> > When running in an environment where debugfs is not mounted or
-> > CONFIG_DEBUG_FS is disabled, get_zswap_stored_pages() fails, causing the
-> > loop to terminate early and report a false negative (KSFT_FAIL).
-> > 
-> > Selftests should not fail if debugfs is unavailable, and it should print
-> > a message when it is skipped.
-> > 
-> > While I'm here, also add a warning message if the test is being skipped
-> > due to totalram size and make the check for totalram more readable.
-> > 
-> > ...
-> >
-> > --- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-> > +++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-> >
-> > ...
-> >
-> > @@ -570,8 +571,16 @@ static int test_no_kmem_bypass(const char *root)
-> >  	/* Read sys info and compute test values accordingly */
-> >  	if (sysinfo(&sys_info) != 0)
-> >  		return KSFT_FAIL;
-> > -	if (sys_info.totalram > 5000000000)
-> > +	if (sys_info.totalram > GB(4)) {
-> > +		ksft_print_msg(
-> > +			"requires less than 4GB total ram, sys_info.totalram: %.1fGB\n",
-> > +			(double)sys_info.totalram / GB(1));
-> >  		return KSFT_SKIP;
-> > +	}
-> > +	if (access(PATH_ZSWAP_STORED_PAGES, R_OK)) {
-> > +		ksft_print_msg("mount debugfs at /sys/kernel/debug\n");
-> 
-> Super nittynit: "mount debugfs at /sys/kernel/debug" sounds like a
-> progress message.  "I just mounted debugfs at ...".  I think the below is
-> more clear?
-> 
-> --- a/tools/testing/selftests/cgroup/test_zswap.c~selftests-cgroup-test_zswap-skip-test_no_kmem_bypass-if-debugfs-is-unavailable-fix
-> +++ a/tools/testing/selftests/cgroup/test_zswap.c
-> @@ -578,7 +578,7 @@ static int test_no_kmem_bypass(const cha
->  		return KSFT_SKIP;
->  	}
->  	if (access(PATH_ZSWAP_STORED_PAGES, R_OK)) {
-> -		ksft_print_msg("mount debugfs at /sys/kernel/debug\n");
-> +		ksft_print_msg("debugfs not mounted at /sys/kernel/debug\n");
+Hi Drew,
 
-This is definitely more accurate.
+On 8/9/26 1:09 AM, Drew Fustini wrote:
+> On Tue, Jul 14, 2026 at 09:06:55PM +0800, Zhanpeng Zhang wrote:
+>> The RISC-V IOMMU QoS extension provides iommu_qosid as a per-IOMMU
+>> global default tag. It is used for IOMMU-originated DDT, CQ, FQ, PQ, and
+>> MSI accesses, and for device-originated requests when DDTP is in BARE
+>> mode.
+>>
+>> Initialize iommu_qosid to RCID 0 and MCID 0 when the hardware advertises
+>> QOSID support. Preserve reserved and WPRI bits with read-modify-write,
+>> and use register readback to reject values which the WARL fields do not
+>> retain.
+>>
+>> Add a qosid attribute to the RISC-V IOMMU class device. Reading returns
+>> the current RCID and MCID values. Writing the documented
+>> 'rcid=<rcid> mcid=<mcid>' form updates both fields while preserving the
+>> other register bits.
+>>
+>> Keep this interface separate from resctrl group QoS. The sysfs attribute
+>> controls the IOMMU-wide default, while resctrl device assignment programs
+>> per-device DC.ta in translated modes.
+>>
+>> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+>> ---
+>>   .../ABI/testing/sysfs-class-iommu-riscv-iommu |  27 +++
+>>   MAINTAINERS                                   |  10 ++
+>>   drivers/iommu/riscv/iommu.c                   | 159 +++++++++++++++++-
+>>   drivers/iommu/riscv/iommu.h                   |   9 +-
+>>   4 files changed, 202 insertions(+), 3 deletions(-)
+>>   create mode 100644 Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+>>
+>> diff --git a/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu b/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+>> new file mode 100644
+>> index 000000000000..b0cd68997f17
+>> --- /dev/null
+>> +++ b/Documentation/ABI/testing/sysfs-class-iommu-riscv-iommu
+>> @@ -0,0 +1,27 @@
+>> +What:		/sys/class/iommu/<iommu>/qosid
+>> +Date:		June 2026
+>> +KernelVersion:	6.18
+>> +Contact:	Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+>> +Description:
+>> +		The RISC-V IOMMU global default QoS IDs for this IOMMU.
+>> +		The file is present only when the IOMMU reports the QOSID
+>> +		capability.
+>> +
+>> +		Reading the file returns the RCID and MCID fields from the
+>> +		iommu_qosid register:
+>> +
+>> +		  rcid=<rcid> mcid=<mcid>
+>> +
+>> +		Writing the file updates the RCID and MCID fields while
+>> +		preserving reserved/WPRI bits:
+>> +
+>> +		  rcid=<rcid> mcid=<mcid>
+>
+> I think it might fit sysfs better if the rcid and mcid are separate
+> files in that directory. Is there a reason you combine them into one
+> file?
+>
+> Thanks,
+> Drew
 
->  		return KSFT_SKIP;
->  	}
->  	values = mmap(0, sizeof(struct no_kmem_bypass_child_args), PROT_READ |
-> _
-> 
+Agreed. There is actually no particular need to update the two fields
+together; combining them was mostly a habit on my part... I will split
+the interface into qosid/rcid and qosid/mcid in v2.
 
-I assume you would change this while applying the patch.
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Thanks,
+Zhanpeng
