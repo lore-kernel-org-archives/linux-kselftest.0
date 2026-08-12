@@ -1,35 +1,35 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1641946F496;
-	Wed, 12 Aug 2026 14:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14C7F46D2A9;
+	Wed, 12 Aug 2026 14:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786546590; cv=none; b=rCVeaCIkpKafwhNNLUCe1F4aqyP2dpnBLteJWkweIlBYgsvb2/HroCuClH2M9IFZxeROY8EGzhfxw0buL2JWHuxhWgy77jnoFLwvqtRPCITXCcd3m3f7RH2f3DQH4qOH5o5mgSMF27hdgr8CEaMf8BKfdxLlGY2G8HEdaJ+0dfs=
+	t=1786546594; cv=none; b=qgIT/bMJ7u4j2gWkS4PFQSfviym/H2dTtnyLzFvqydPTf/oTfxy78wpSoGWiSoZbpA8fdjZyq5APwhzTRAdfvOezz4avnUk72WOFSVtuebWhAaMGj3CxGCNAEBnMg1lpMS89dhLqsHkBP3ah8X11hLXp6T6+DA0aUgiIW8UPlRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786546590; c=relaxed/simple;
-	bh=cuNOESNy/WTkiZBwkZbo/pzBIRAdYpOMb4gpizZ/7Nk=;
+	s=arc-20240116; t=1786546594; c=relaxed/simple;
+	bh=nKeL6zR0FvSkwqt1XKsxG9dC4ZW7w7ssB4opyx4q8S4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ptwwGVTBCscuJpUAKHVSzLvbaCVgaSEkLaWHfJayLqjgHMXT4sYuWbC08ztABdV0Lrsr6TeESBpZEJXbXNgSd+Mggbe0hzCO1KIW/Mre6ehMOjyeVfXtrspf2KnBPKDbujwkST3LG4mvUfnkyfK4+4iUAbSXLmceMsoJI3tyOZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gMoYA6lF; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=PagXulZs237U2wBPrAWLdMBOtr8uxxlOZ1EfckfM7/3aG3RdfC0/fQJVXyaxOUpbbyYoEGN7zEIY5U/Mah78Tnz/qSAd8H+/grSedipBzHH2BSMQ3DjE4vZ8/kAYFHQ0wJEQ3Wb8l8FSbEFREMTX82U3DgskSjMOejoEUhbcZew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLBujH1n; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gMoYA6lF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9291F00A3D;
-	Wed, 12 Aug 2026 14:56:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLBujH1n"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 501F31F00AC4;
+	Wed, 12 Aug 2026 14:56:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786546577;
-	bh=eDfXtKVcaOGNG9KazWljQpgi3UNwtob5VzSegX5vxac=;
+	s=k20260515; t=1786546582;
+	bh=YcxL9EIjig3QodKUmDaete2bH5tnLyqpAVf3cFMscWE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=gMoYA6lFUa62lq/OcsusmYBlCcTvvwUcLI1djq3sXenXY7ZpPVkXDm48t6eAdF3Ph
-	 nRHP2bgiOSzjN7XD4tENgZtWWd7ghkuxbh5e5iZL4LazaNpW05O0P4opyIJek2AbKO
-	 ScFn3BZv0Z6iRXKPcZ/outI52Snfy3MdSE6MQ3UNE+P+yVTsKjzD9j/ALXQBXSVu4h
-	 x4T5b5EFBFCtpO0vqOarZZLN8c6z6lKQKokJQ06VQPKSUtiFE4+hnKO0XIKTRoU14l
-	 8Yjh0tQAzyxLI6EcpVErTYGydq6c9UXYSfK+Zm3WGF75AuDrpCU3DOA5mXJ6kuovYO
-	 LIH1O9O5qoSXA==
+	b=GLBujH1nVNFdokgBLe2Mx/5WB/hV1FHF4E6kWuUAw4Kf/k7IkOAlJ271xOn/gpG6r
+	 0EiXpRU5tUvo3Kfu3Ge9ToAUBEeIRBev3B2CPslZBGhhhSghnw0Q1O+GhYV0vvInPT
+	 A4cNVoZ9OoUMjKwVGSOuiTUtZD2eJmCkiqdXeztkKqE7UfJH+EVJ044Ir/3IlG4jiB
+	 WUxzHpgUuANfOOJO+L/FAEMhHox+lQOTCsLMPmOyiV9RYYrwS88Qqmo9xwX88See0D
+	 LGdLcVyOQBB2VJPE93rp3sW1Bq3ktgWbcJsKJIrVcaYqvCPmhh3ZZbKKbfXzjzls2L
+	 Jei8O7n1VvbnA==
 From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
-Date: Wed, 12 Aug 2026 16:55:43 +0200
-Subject: [PATCH net-next 08/11] selftests: mptcp: simult_flow: test name in
- pcap file
+Date: Wed, 12 Aug 2026 16:55:45 +0200
+Subject: [PATCH net-next 10/11] selftests: mptcp: fix const qualifier
+ warnings in strchr usage
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,7 +38,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-net-next-mptcp-misc-feat-7-3-v1-8-1905a818f6cb@kernel.org>
+Message-Id: <20260812-net-next-mptcp-misc-feat-7-3-v1-10-1905a818f6cb@kernel.org>
 References: <20260812-net-next-mptcp-misc-feat-7-3-v1-0-1905a818f6cb@kernel.org>
 In-Reply-To: <20260812-net-next-mptcp-misc-feat-7-3-v1-0-1905a818f6cb@kernel.org>
 To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
@@ -47,73 +47,74 @@ To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
  Simon Horman <horms@kernel.org>
 Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
  linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+ Geliang Tang <geliang@kernel.org>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1888; i=matttbe@kernel.org;
- h=from:subject:message-id; bh=cuNOESNy/WTkiZBwkZbo/pzBIRAdYpOMb4gpizZ/7Nk=;
- b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLJqOssbpuZ7PA2Wdb9muv5dyIr6GKlJEqvkZj1m/dXCz
- 7luw0rhjlIWBjEuBlkxRRbptsj8mc+reEu8/Cxg5rAygQxh4OIUgIkUxzMy3M+7y/B4jVV7sSp3
- vPPpq8snvV17RKeFd8JJw8x6ka+JPxn+cM407Ly5ZQfjr3tn7hz9r1h75pUSy5FVSzUylsm+4ry
- /kA8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2244; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=4LSthEUfeknPiuCGNZFRTmg5QwSZ53sxQ5j6RTKzcBY=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLJqOiuVNzlLODkXCvzQlQzcY3d6z/81umuZTYVEvxgfl
+ WV03MjSUcrCIMbFICumyCLdFpk/83kVb4mXnwXMHFYmkCEMXJwCMJHL4gx/eC90np5h2fv3RtAC
+ Jp6qzPhqoWqGY/v+9X2dv2bnaXVHb0aGXnYFH+l5L87P0GhLaXz5/eW6hsasibsW6c3JUTKIZpz
+ HDQA=
 X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
  fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-To be able to easily find out which pcap was produced by which test, the
-selftest name is now added to the pcap file, similar to the other tests.
+From: Geliang Tang <tanggeliang@kylinos.cn>
 
-While at it, print the prefix name to be able to find which capture
-files have been produced by which test after several runs. This prefix
-was not printed anywhere before.
+In mptcp_connect.c, strchr() returns a pointer to a character within
+the input string, which is declared as const char *. Assigning this
+return value to a non-const char * discards the const qualifier,
+triggering compiler warnings:
 
-Reviewed-by: Mat Martineau <martineau@kernel.org>
+ make: Entering directory 'tools/testing/selftests/net/mptcp'
+   CC       mptcp_connect
+ mptcp_connect.c: In function 'parse_cmsg_types':
+ mptcp_connect.c:1267:22: warning: initialization discards 'const'
+	qualifier from pointer target type [-Wdiscarded-qualifiers]
+  1267 |         char *next = strchr(type, ',');
+       |                      ^~~~~~
+ mptcp_connect.c: In function 'parse_setsock_options':
+ mptcp_connect.c:1295:22: warning: initialization discards 'const'
+	qualifier from pointer target type [-Wdiscarded-qualifiers]
+  1295 |         char *next = strchr(name, ',');
+       |                      ^~~~~~
+ make: Leaving directory 'tools/testing/selftests/net/mptcp'
+
+Fix these warnings by declaring the 'next' variable as const char *,
+as it is only used for read-only parsing.
+
+Signed-off-by: Geliang Tang <tanggeliang@kylinos.cn>
+Reviewed-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
 ---
 To: Shuah Khan <shuah@kernel.org>
 Cc: linux-kselftest@vger.kernel.org
 ---
- tools/testing/selftests/net/mptcp/simult_flows.sh | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ tools/testing/selftests/net/mptcp/mptcp_connect.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/net/mptcp/simult_flows.sh b/tools/testing/selftests/net/mptcp/simult_flows.sh
-index 7b9aabe10170..d723261bdc62 100755
---- a/tools/testing/selftests/net/mptcp/simult_flows.sh
-+++ b/tools/testing/selftests/net/mptcp/simult_flows.sh
-@@ -24,6 +24,7 @@ small=""
- sout=""
- cout=""
- capout=""
-+capprefix=""
- size=0
+diff --git a/tools/testing/selftests/net/mptcp/mptcp_connect.c b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+index cbe573c4ab3a..ea4cb6c1bd5e 100644
+--- a/tools/testing/selftests/net/mptcp/mptcp_connect.c
++++ b/tools/testing/selftests/net/mptcp/mptcp_connect.c
+@@ -1264,7 +1264,7 @@ static void apply_cmsg_types(int fd, const struct cfg_cmsg_types *cmsg)
  
- usage() {
-@@ -70,6 +71,11 @@ setup()
+ static void parse_cmsg_types(const char *type)
+ {
+-	char *next = strchr(type, ',');
++	const char *next = strchr(type, ',');
+ 	unsigned int len = 0;
  
- 	mptcp_lib_ns_init ns1 ns2 ns3
+ 	cfg_cmsg_types.cmsg_enabled = 1;
+@@ -1292,7 +1292,7 @@ static void parse_cmsg_types(const char *type)
  
-+	if $capture; then
-+		capprefix="simult_flows-${ns1:4}"
-+		mptcp_lib_pr_info "pcap will have this prefix: ${capprefix}-"
-+	fi
-+
- 	ip link add ns1eth1 netns "$ns1" type veth peer name ns2eth1 netns "$ns2"
- 	ip link add ns1eth2 netns "$ns1" type veth peer name ns2eth2 netns "$ns2"
- 	ip link add ns2eth3 netns "$ns2" type veth peer name ns3eth1 netns "$ns3"
-@@ -136,14 +142,13 @@ do_transfer()
+ static void parse_setsock_options(const char *name)
+ {
+-	char *next = strchr(name, ',');
++	const char *next = strchr(name, ',');
+ 	unsigned int len = 0;
  
- 	if $capture; then
- 		local capuser
--		local rndh="${ns1:4}"
- 		if [ -z $SUDO_USER ] ; then
- 			capuser=""
- 		else
- 			capuser="-Z $SUDO_USER"
- 		fi
- 
--		local capfile="${rndh}-${port}"
-+		local capfile="${capprefix}-${port}"
- 		local capopt="-i any -s 65535 -B 32768 ${capuser}"
- 
- 		ip netns exec ${ns3}  tcpdump ${capopt} -w "${capfile}-listener.pcap"  >> "${capout}" 2>&1 &
+ 	if (next) {
 
 -- 
 2.53.0
