@@ -1,266 +1,307 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from CY7PR03CU001.outbound.protection.outlook.com (mail-westcentralusazon11010050.outbound.protection.outlook.com [40.93.198.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973B033E34B;
-	Wed, 12 Aug 2026 06:15:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786515349; cv=none; b=XK+7EYkM1HO7u2+0WfB+YQqzQGTzFfgyQ2EzeRWbWKG+/ZF+oAX4fG25kN2+iiCRgHSBlPMbjDzW1J6GMht3JYonxm6gvKtmd90Cfd6eL91jqKsocoomf4XQVpn0r+wf9af2t9etU9hRWEmegZhG4DUWkc3vbJqLTFF4FmGpuDc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786515349; c=relaxed/simple;
-	bh=0Ce85bV5lT5lMzieQ5ba5sEhxcRoCubiNNv0bA4qfXk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YFRKNDgiv1EYfxNGUpO43/V812dOMEC0jFNp1X8QmLAzJKQr/JMi/huFwBL95VCcGn9kx+6gx/RrD8f26v3iHIk2B1S3G5Z6HsvDxs96XnJrcQPaM2f/xM3yDb1nF37T0c0EktiJEoWHLxf50KOGcFNmkkga6RxgCe5gopwT9QI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:102c2356-60fb-4d33-8beb-edca2ad902b1,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:c4e4363d59d2d4125f9f078fc1ff61bd,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|136|850|865|898,TC:nil,Content
-	:0|15|50,EDM:-3|-100,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 3bd2dc94961511f1aa26b74ffac11d73-20260812
-X-User: jiangfeng@kylinos.cn
-Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1487058221; Wed, 12 Aug 2026 14:15:36 +0800
-From: Feng Jiang <jiangfeng@kylinos.cn>
-Date: Wed, 12 Aug 2026 06:15:32 +0000
-Subject: [bpf-next PATCH 1/2] bpf, riscv: Add BPF stack arguments support
- for RV64 JIT
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F65431E858;
+	Wed, 12 Aug 2026 06:33:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.198.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786516430; cv=fail; b=Q7gAg+6aHzvSWk/4j8Fmnh2d0sB/xxVdUrMHZg1bFV6i4Iz1STdPVMnXncEttDdwRKkO59u2AG/pVUvmDSFPSTbJkXdrDUBhfwgZXuUPC69mnmubPpkM8v8qkg9Qc5dlUCXCOy02FIwumx3pbpeaPH8S74n0Q26MyPFwQnbRWFM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786516430; c=relaxed/simple;
+	bh=wzEHJUx+YbEuq/RI8rF9INu1RHt0gQwLSDW7o16e4Pw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=E8YrT0g8vAXT3QBaDalRWxBMp+Ry+cM3JQi7Eqy563dKrnxkLYVvKnTG0v6TrmZaIH0Hsp2zi4U96R8PpJYcUn8ChCLXZpSP8tp8F/putQ+h5Cw/hsUv5k81fu3YPRLiM5BsFvmQ+GykBoTE5cvO5vwV9oZVMCXiKwsfS/QRAcE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Yr4yewez; arc=fail smtp.client-ip=40.93.198.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Yr4yewez"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=K4v8DHzl1k3CwVhK+FV4zDBZnBhZsLFOqL1d5GYXY6Up4oosyUVGSFLgTFMgvO03/ttKZUzxu7DKC4suKowbENh8+wyKcAvx+ZHHxrAxjjf3dWpjp8fmb4iIC7T/9Cw5nwE/ccedMeQDmzFqkbKWfXDzFYE3rW9Xq1xTD19B53Z+MBvd3xfmTpjh8AWetQ08p7lwI4nqElgYBWwVa7L5+K+zYyVVGWGiSqIGJlIuDlbJCJ5WDMb+fvtFANNQzsxuSbewltttuIxvzTUUHSNBZ/MetaSZSo/xzyjEL8hHk+TehmkFdU5STKP4l1ce4+J4Vzvbejlyf2ZIJ9Z5kW6omg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sSL4avIfqWEiLYqVbIS+A9O39Fd/inVCJxK8XPe12ZM=;
+ b=eBYqQNEGngKR7XEOt64K87oVHCflpPCcnntEmRQAN7HJ4Srlkmquid8Pqvr9XPg58sE/VNRc1Q3LhRi5mBHMGJRojHddPuuNGlse7duaw8qWk3cYEDWyOoYO/rrBtimtPUFX5L9zX9CqcJlS+XP16DKsXw/UanqS512yADBsvYw9o6EvPHSfHqI6klKADUh0HcDUwxKu4qfu8+zFAEtEEJz8xVvkAVZhhQtcee1W+GUgFOdfRuyJNk3ZjmPYZvs2E27xJh23fL461T9ZsCcUNwvKJtXdIsFPBZwFslKjZOoZiSygL9+7wV7rH1ac6KCGw2lMHZSeHzGwqzWcUeL7ew==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sSL4avIfqWEiLYqVbIS+A9O39Fd/inVCJxK8XPe12ZM=;
+ b=Yr4yewez4yLeDCTtf9fFrBRp2GS1f2FUiiZdhHqty82ot13jKFlV3iLnW/EDoCBIO2s2YTHRFa9gBqXzSVA0fKmZohHWPsXSH/wrx1C9mFYOYHmbJvAQrCgpRe2buQaslWeh61y8RT6VHpn0lFg+8Hxz66XlTPUueG6qTTiBncg=
+Received: from CH2PR14CA0021.namprd14.prod.outlook.com (2603:10b6:610:60::31)
+ by DM6PR12MB4153.namprd12.prod.outlook.com (2603:10b6:5:212::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Wed, 12 Aug
+ 2026 06:33:42 +0000
+Received: from CH2PEPF0000013E.namprd02.prod.outlook.com
+ (2603:10b6:610:60:cafe::9f) by CH2PR14CA0021.outlook.office365.com
+ (2603:10b6:610:60::31) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.13 via Frontend Transport; Wed,
+ 12 Aug 2026 06:33:42 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=satlexmb07.amd.com; pr=C
+Received: from satlexmb07.amd.com (165.204.84.17) by
+ CH2PEPF0000013E.mail.protection.outlook.com (10.167.244.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.315.6 via Frontend Transport; Wed, 12 Aug 2026 06:33:41 +0000
+Received: from gomati.amd.com (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 12 Aug
+ 2026 01:33:30 -0500
+From: Nikunj A Dadhania <nikunj@amd.com>
+To: <rppt@kernel.org>
+CC: <akpm@linux-foundation.org>, <anton.ivanov@cambridgegreys.com>,
+	<bp@alien8.de>, <brendan.higgins@linux.dev>, <da.gomez@samsung.com>,
+	<danielt@kernel.org>, <dave.hansen@linux.intel.com>, <davidgow@google.com>,
+	<dianders@chromium.org>, <hpa@zytor.com>, <jason.wessel@windriver.com>,
+	<jikos@kernel.org>, <joe.lawrence@redhat.com>, <johannes@sipsolutions.net>,
+	<jpoimboe@kernel.org>, <kgdb-bugreport@lists.sourceforge.net>,
+	<kirill.shutemov@linux.intel.com>, <kunit-dev@googlegroups.com>,
+	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-mm@kvack.org>, <linux-modules@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-um@lists.infradead.org>,
+	<live-patching@vger.kernel.org>, <lorenzo.stoakes@oracle.com>,
+	<luto@kernel.org>, <mark.rutland@arm.com>, <mbenes@suse.cz>,
+	<mcgrof@kernel.org>, <mhiramat@kernel.org>, <mingo@redhat.com>,
+	<peterz@infradead.org>, <petr.pavlu@suse.com>, <pmladek@suse.com>,
+	<richard@nod.at>, <rmoar@google.com>, <rostedt@goodmis.org>,
+	<samitolvanen@google.com>, <shuah@kernel.org>, <song@kernel.org>,
+	<tglx@linutronix.de>, <x86@kernel.org>, <nikunj@amd.com>, <bharata@amd.com>,
+	<ananth.narayan@amd.com>
+Subject: Re: [PATCH v3 9/9] x86: re-enable EXECMEM_ROX support
+Date: Wed, 12 Aug 2026 06:33:15 +0000
+Message-ID: <20260812063316.21371-1-nikunj@amd.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250126074733.1384926-10-rppt@kernel.org>
+References: <20250126074733.1384926-10-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-bpf-riscv-stack-args-v1-1-67b246806e59@kylinos.cn>
-References: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-In-Reply-To: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, 
- Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
- =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
- Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nick Desaulniers <ndesaulniers@google.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
-X-Mailer: b4 0.14.3
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: satlexmb07.amd.com (10.181.42.216) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH2PEPF0000013E:EE_|DM6PR12MB4153:EE_
+X-MS-Office365-Filtering-Correlation-Id: 842669da-6194-4e7d-18d7-08def83ba6ce
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|23010399003|376014|7416014|36860700016|1800799024|82310400026|6133799003|13003099007|10067099003|11063799006|56012099006|22082099003|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	edAdbBq3sYu2i6EcRZAxvWon9AX1MKUnUGDUj7lF9rd985mGTzQVlbziAjGTUS2lgJlqxV0/AW8soW9ZQQX4xN7KnFdjbVTwoqP968YxzuHSq8ZtZCBqdZTs/W5NNIOWWiG4X8QFnThF60+EU2X4iGtqjZumqaIGE+z14o06Ab3LU/4NfHe+omATazyVzsjwv7fO6cnI1mkIDqU9Qu/Gph5TjmX/gHoNvl7szLT5hqWkR7xJ7hpyAFAAJg0Fkz9s1r6ONuP+7Jnwr/nXyXSc/s8Ov5XbhrpOZlDNNuuo4REwoa+87YDWqqI4s0nShvgFvCtdOrnXoRFmMt/WJ6fjc/M3dlHfYiDNSHlUt1mvOPelziSDSU3sOF+SUyB1eNdneDCYONB/afxx7RNaoSmNabn6ENUCVIgGWqievUdjLsndatFUIxpBnwdk8F8VTsZggmfaPJmLytnWgJWNutDFAkoDYypbVLXv1fefSlOFPF7oMah5NinKAFG46g6cLunR/igmwwq7SMbPKDWTZtKiz0cySxvgAmDWKSukPB0ytPOQDtPc+93IHwRFsKP/gU8TiMgkavvSNjKOCRPoVwg+SENLhUlNnGQeYCYMHND+ZIwZgnRYiRXltKb2S+HoHUsu5utwr6uWRqoDVOoEn0twMdyMoR0OOfpQ9uNGOYYjzFSxUOuO5MDcyeCYyHQcRgfpcb0exZh/Yj4dd011v+9T0A==
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(36860700016)(1800799024)(82310400026)(6133799003)(13003099007)(10067099003)(11063799006)(56012099006)(22082099003)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Zn4SHCgRSEbaCHZYcQplgOm2z8XYtvyI9sMkXh42XxJH9iM3TX2xJFQBkx5ZX1vmHhFt3P8TopFK9t2NsiEejXDRWS0P/IaAk5cf5IIse/5yBAzJtNhxuHy2dbxPl3Xbn6emjxySA/TiRtBk/wYHXsyuJju8cfmKmHvSGsLBcwDeDMFko51PK/D6A5pIYIe/qku5ujgsKtzW6kdH21/fL35e1K5MClj77DKim3Dk/omwhFgLQdwhp/c1Z+QGFq3MsdRQWAUarpaJRE1Wut/kWdp/uEd61/JVogrxNvRAE5pHy8buVug/M0CwMxp45EHXqMSVagZ/aTfdoL2GS003nYbaZcyQg8FHO+Nynac0LICXBvkF6PBRpwmsuGnxw3WBTWV5/MPjN3mrXwsxZQcJp+nD/ZURvJNgf9YQv8iL9qYsBrVHgAPpB4ltgwc0frtL
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2026 06:33:41.7925
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 842669da-6194-4e7d-18d7-08def83ba6ce
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH2PEPF0000013E.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4153
 
-Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
-and kfuncs can receive more than 5 arguments via the stack
-(BPF_REG_PARAMS / r11).
+Hi,
 
-For BPF-to-BPF calls the caller writes outgoing arguments at the
-bottom of its frame (SP-relative). The callee reads them with
-FP-relative loads. Its FP is set to the caller SP in the prologue,
-so the offsets match.
+A kernel BUG in __text_poke() is observed inside a Ubuntu 26.04 guest 
+(v7.0.0.28 and also with upstream v7.2-4c5). Host is running on v7.2-rc5.
 
-The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
-SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
-area into A5-A7 and copy any remaining arguments down so argument 9
-lands at SP+0.
+SETUP
+-----
 
-A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
-live before a call, TCC is backed up on the stack, and A7 is unused
-by the JIT.
+512 QEMU Q35 guests (2 vCPUs, 1G RAM each) boot concurrently across 200
+iterations. The crash is seen during module loading in early boot.
+2-7 guests out of ~100,000 boot attempts crash with the kernel BUG.
 
-Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
-iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
-corrupts callee-saved registers.
+Reproduced on:
+  - AMD EPYC, QEMU Q35 guests
+  - Intel Icelake, QEMU Q35 guests
 
-Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
----
- arch/riscv/net/bpf_jit.h        |  1 +
- arch/riscv/net/bpf_jit_comp64.c | 75 +++++++++++++++++++++++++++++++++++++++--
- arch/riscv/net/bpf_jit_core.c   |  4 +++
- 3 files changed, 77 insertions(+), 3 deletions(-)
+Apparently it was seen once in the non-guest Ubuntu 26.04 environment as well
+https://discourse.ubuntu.com/t/failed-boot-one-time-on-ubuntu-unity-26-04-educational-mission/85300
 
-diff --git a/arch/riscv/net/bpf_jit.h b/arch/riscv/net/bpf_jit.h
-index 419b9d795f2a..9eb4e149505d 100644
---- a/arch/riscv/net/bpf_jit.h
-+++ b/arch/riscv/net/bpf_jit.h
-@@ -82,6 +82,7 @@ struct rv_jit_context {
- 	unsigned long flags;
- 	int stack_size;
- 	int tcc_offset;
-+	u16 stack_arg_size;
- 	u64 arena_vm_start;
- 	u64 user_vm_start;
- };
-diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
-index 6b9972b07c1b..b3f4bf9e1e7f 100644
---- a/arch/riscv/net/bpf_jit_comp64.c
-+++ b/arch/riscv/net/bpf_jit_comp64.c
-@@ -1815,18 +1815,39 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 
- 		if (insn->src_reg == BPF_PSEUDO_KFUNC_CALL) {
- 			const struct btf_func_model *fm;
--			int idx;
-+			int idx, nargs;
- 
- 			fm = bpf_jit_find_kfunc_model(ctx->prog, insn);
- 			if (!fm)
- 				return -EINVAL;
- 
--			for (idx = 0; idx < fm->nr_args; idx++) {
-+			nargs = min_t(int, fm->nr_args, MAX_BPF_FUNC_REG_ARGS);
-+			for (idx = 0; idx < nargs; idx++) {
- 				u8 reg = bpf_to_rv_reg(BPF_REG_1 + idx, ctx);
- 
- 				if (fm->arg_size[idx] == sizeof(int))
- 					emit_sextw(reg, reg, ctx);
- 			}
-+
-+			/* BPF stack args -> RISC-V ABI: args 6-8 in A5-A7, 9+ at SP+0 */
-+			if (fm->nr_args > MAX_BPF_FUNC_REG_ARGS) {
-+				int n_stack = fm->nr_args - MAX_BPF_FUNC_REG_ARGS;
-+				int n_reg = min_t(int, n_stack,
-+						  RV_MAX_REG_ARGS - MAX_BPF_FUNC_REG_ARGS);
-+
-+				for (idx = 0; idx < n_reg; idx++) {
-+					int sz = fm->arg_size[MAX_BPF_FUNC_REG_ARGS + idx];
-+
-+					emit_ld(RV_REG_A5 + idx, idx * 8, RV_REG_SP, ctx);
-+					if (sz == sizeof(int))
-+						emit_sextw(RV_REG_A5 + idx, RV_REG_A5 + idx, ctx);
-+				}
-+
-+				for (idx = 0; idx < n_stack - n_reg; idx++) {
-+					emit_ld(RV_REG_T1, (n_reg + idx) * 8, RV_REG_SP, ctx);
-+					emit_sd(RV_REG_SP, idx * 8, RV_REG_T1, ctx);
-+				}
-+			}
- 		}
- 
- 		/* restore TCC to RV_REG_TCC before bpf2bpf call */
-@@ -1891,6 +1912,21 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_LDX | BPF_MEM | BPF_H:
- 	case BPF_LDX | BPF_MEM | BPF_W:
- 	case BPF_LDX | BPF_MEM | BPF_DW:
-+		if (insn->src_reg == BPF_REG_PARAMS) {
-+			int idx = off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
-+				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
-+			}
-+			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
-+				return 1;
-+			break;
-+		}
-+		fallthrough;
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_B:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_H:
- 	case BPF_LDX | BPF_PROBE_MEM | BPF_W:
-@@ -1938,6 +1974,20 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_ST | BPF_MEM | BPF_H:
- 	case BPF_ST | BPF_MEM | BPF_W:
- 	case BPF_ST | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			emit_imm(RV_REG_T1, imm, ctx);
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, RV_REG_T1, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T2, idx * 8, ctx);
-+				emit_add(RV_REG_T2, RV_REG_SP, RV_REG_T2, ctx);
-+				emit_stx_insn(RV_REG_T2, 0, RV_REG_T1, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* ST | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = imm */
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_ST | BPF_PROBE_MEM32 | BPF_H:
-@@ -1960,6 +2010,19 @@ int bpf_jit_emit_insn(const struct bpf_insn *insn, struct rv_jit_context *ctx,
- 	case BPF_STX | BPF_MEM | BPF_H:
- 	case BPF_STX | BPF_MEM | BPF_W:
- 	case BPF_STX | BPF_MEM | BPF_DW:
-+		if (insn->dst_reg == BPF_REG_PARAMS) {
-+			int idx = -off / 8 - 1;
-+
-+			if (is_12b_int(idx * 8)) {
-+				emit_stx_insn(RV_REG_SP, idx * 8, rs, BPF_SIZE(code), ctx);
-+			} else {
-+				emit_imm(RV_REG_T1, idx * 8, ctx);
-+				emit_add(RV_REG_T1, RV_REG_SP, RV_REG_T1, ctx);
-+				emit_stx_insn(RV_REG_T1, 0, rs, BPF_SIZE(code), ctx);
-+			}
-+			break;
-+		}
-+		fallthrough;
- 	/* STX | PROBE_MEM32: *(size *)(dst + RV_REG_ARENA + off) = src */
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_B:
- 	case BPF_STX | BPF_PROBE_MEM32 | BPF_H:
-@@ -2036,6 +2099,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 
- 	stack_adjust = round_up(stack_adjust, STACK_ALIGN);
- 	stack_adjust += bpf_stack_adjust;
-+	stack_adjust += ctx->stack_arg_size;
- 
- 	store_offset = stack_adjust - 8;
- 
-@@ -2093,7 +2157,7 @@ void bpf_jit_build_prologue(struct rv_jit_context *ctx, bool is_subprog)
- 	emit_addi(RV_REG_FP, RV_REG_SP, stack_adjust, ctx);
- 
- 	if (bpf_stack_adjust)
--		emit_addi(RV_REG_S5, RV_REG_SP, bpf_stack_adjust, ctx);
-+		emit_addi(RV_REG_S5, RV_REG_SP, ctx->stack_arg_size + bpf_stack_adjust, ctx);
- 
- 	ctx->stack_size = stack_adjust;
- 
-@@ -2171,3 +2235,8 @@ bool bpf_jit_supports_timed_may_goto(void)
- {
- 	return true;
- }
-+
-+bool bpf_jit_supports_stack_args(void)
-+{
-+	return true;
-+}
-diff --git a/arch/riscv/net/bpf_jit_core.c b/arch/riscv/net/bpf_jit_core.c
-index cbfcd287ea16..844a0f3e0fa9 100644
---- a/arch/riscv/net/bpf_jit_core.c
-+++ b/arch/riscv/net/bpf_jit_core.c
-@@ -72,6 +72,10 @@ struct bpf_prog *bpf_int_jit_compile(struct bpf_verifier_env *env, struct bpf_pr
- 	ctx->arena_vm_start = bpf_arena_get_kern_vm_start(prog->aux->arena);
- 	ctx->user_vm_start = bpf_arena_get_user_vm_start(prog->aux->arena);
- 	ctx->prog = prog;
-+
-+	ctx->stack_arg_size = round_up(bpf_out_stack_arg_cnt(env, prog) *
-+				       sizeof(u64), STACK_ALIGN);
-+
- 	ctx->offset = kvzalloc_objs(int, prog->len);
- 	if (!ctx->offset)
- 		goto out_offset;
+SYMPTOMS
+--------
 
--- 
-2.53.0
+Either of the below two crash signatures is observed:
 
+Signature 1 — BUG_ON(!pages[0]) in __text_poke():
+
+  kernel BUG at arch/x86/kernel/alternative.c:2564!
+  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+  CPU: 0 UID: 0 PID: 741 Comm: (udev-worker) Not tainted 7.0.0-28-generic #28-Ubuntu PREEMPT(lazy)
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
+  RIP: 0010:__text_poke+0x2a4/0x400
+  Call Trace:
+   <TASK>
+   smp_text_poke_batch_finish+0x25f/0x5b0
+   smp_text_poke_single+0x13/0x30
+   __static_call_transform+0x10e/0x210
+   arch_static_call_transform+0x5c/0xc0
+   __static_call_init+0x154/0x300
+   static_call_module_notify+0x144/0x170
+   notifier_call_chain+0x62/0xf0
+   blocking_notifier_call_chain_robust+0x62/0xc0
+   load_module+0x5ef/0x960
+  Modules linked in: ppdev(+) kvm(+) irqbypass ...
+
+Signature 2 — BUG_ON(memcmp()) in __text_poke():
+
+  kernel BUG at arch/x86/kernel/alternative.c:2632!
+  Oops: invalid opcode: 0000 [#1] SMP NOPTI
+  CPU: 0 UID: 0 PID: 742 Comm: (udev-worker) Not tainted 7.0.0-28-generic #28-Ubuntu PREEMPT(lazy)
+  Hardware name: QEMU Standard PC (Q35 + ICH9, 2009)
+  RIP: 0010:__text_poke+0x380/0x400
+  Call Trace:
+   <TASK>
+   smp_text_poke_batch_finish+0x323/0x5b0
+   smp_text_poke_single+0x13/0x30
+   __static_call_transform+0x10e/0x210
+   arch_static_call_transform+0x5c/0xc0
+   __static_call_init+0x154/0x300
+   static_call_module_notify+0x144/0x170
+   notifier_call_chain+0x62/0xf0
+   blocking_notifier_call_chain_robust+0x62/0xc0
+   load_module+0x5ef/0x960
+  Modules linked in: kvm(+) irqbypass ...
+
+INSTRUMENTATION
+---------------
+
+The following instrumentation was applied to capture the page table state at
+the moment of failure:
+
+  In mm/vmalloc.c::vmalloc_to_page()
+
+    ptep = pte_offset_kernel(pmd, addr);
+    pte = ptep_get(ptep);
+    if (pte_present(pte))
+        page = pte_page(pte);
+    else
+        pr_err("vmalloc_to_page: pte_not_present for addr=%lx "
+               "PGD=%lx P4D=%lx PUD=%lx PMD=%lx PTE=%lx\n",
+               addr, pgd_val(*pgd), p4d_val(*p4d), pud_val(*pud),
+               pmd_val(*pmd), pte_val(pte));
+
+  In arch/x86/kernel/alternative.c::__text_poke()
+
+    /* BUG 1: pages[0] NULL */
+    if (!pages[0] || ...) {
+        pr_err("%s: vmalloc_to_page failed for addr=%pK pages[0]=%pK pages[1]=%pK cross=%d\n", ...);
+        BUG();
+    }
+
+    ...
+
+    /* BUG 2: memcmp mismatch */
+    if (memcmp(addr, src, len)) {
+        struct page *page_now = vmalloc_to_page(addr);
+        pr_err("%s: memcmp failed at addr=%pK len=%zu\n", __func__, addr, len);
+        pr_err("%s: expected (src): %*ph\n", __func__, (int)len, src);
+        pr_err("%s: found    (dst): %*ph\n", __func__, (int)len, (u8 *)addr);
+        pr_err("%s: pfn at poke time (vmalloc_to_page): %lx\n", __func__, page_to_pfn(pages[0]));
+        pr_err("%s: pfn at readback time (vmalloc_to_page): %lx\n", __func__, page_to_pfn(page_now));
+        text_poke_dump_pagetable((unsigned long)addr); /* reads CR3 */
+        BUG();
+    }
+
+Signature 1 — vmalloc_to_page() returned NULL:
+
+  vmalloc_to_page: pte_not_present for addr=ffffffffc0697979 PGD=28242067 P4D=28243067 PUD=28245067 PMD=3be001a1 PTE=0
+  SMP alternatives: __text_poke: vmalloc_to_page failed for addr=ffffffffc0697979 pages[0]=0000000000000000 pages[1]=0000000000000000 cross=0
+
+  PMD was not a leaf, and the code reached a point to check pte_present() and
+  finds the PTE to be not present. But in the dump in else case, pmd_val(*pmd)
+  shows that it is a PMD leaf (PSE bit set).
+
+Signature 2 — vmalloc_to_page() returned a wrong page:
+
+  SMP alternatives: __text_poke: memcmp failed at addr=ffffffffc06fc4bd len=1
+  SMP alternatives: __text_poke: expected (src): cc
+  SMP alternatives: __text_poke: found    (dst): e8
+  SMP alternatives: __text_poke: pfn at poke time (vmalloc_to_page): 3884a
+  SMP alternatives: __text_poke: pfn at readback time (vmalloc_to_page): 52fc
+  SMP alternatives: __text_poke: page table dump for addr:
+    PGD 1ba42067  P4D 1ba43067  PUD 1ba45067  PMD 52001a1
+
+  vmalloc_to_page() returned pfn=0x3884a when pages[0] was queried. The write
+  of 0xcc landed there. When vmalloc_to_page() was called again during the
+  memcmp readback in the instrumentation code, the vmap mapping resolved through
+  PMD=52001a1 to a different pfn=0x52fc, which contains 0xe8 (existing
+  instruction bytes). This is silent memory corruption — 0xcc was written to
+  the wrong physical page (pfn=0x3884a).
+
+BISECTION
+---------
+
+The following experiments all ran 200 iterations of 512 concurrent guest boots
+with zero crashes.
+
+  1. Remove "select ARCH_HAS_EXECMEM_ROX" from arch/x86/Kconfig
+
+  2. Boot with "nohugevmalloc"
+
+  3. Remove VM_ALLOW_HUGE_VMAP from vm_flags in execmem_cache_populate()
+
+       - unsigned long vm_flags = VM_ALLOW_HUGE_VMAP;
+       + unsigned long vm_flags = 0;
+
+  4. Remove CPA_COLLAPSE from set_memory_rox()
+
+       return change_page_attr_set_clr(&addr, numpages, __pgprot(0), clr, 0,
+  -                                    CPA_COLLAPSE, NULL);
+  +                                    0, NULL);
+
+     Without CPA_COLLAPSE, set_memory_rox() changes 4K PTE permissions
+     in-place and the PMD stays permanently as a PTE-page pointer after
+     the first split — no re-collapse, no future race window. This
+     confirms that CPA_COLLAPSE is a necessary part of the race sequence.
+
+  5. Hold pgd_lock around vmalloc_to_page() in __text_poke()
+
+         if (!core_kernel_text((unsigned long)addr)) {
+     +           spin_lock(&pgd_lock);
+                 pages[0] = vmalloc_to_page(addr);
+                 if (cross_page_boundary)
+                         pages[1] = vmalloc_to_page(addr + PAGE_SIZE);
+     +           spin_unlock(&pgd_lock);
+         } else {
+
+     __split_large_page() holds pgd_lock while installing the new PMD
+     and populating all 512 4K PTEs. Holding pgd_lock around
+     vmalloc_to_page() prevents CPA from modifying the PMD concurrently
+     with the page table walk. This confirms the race is precisely
+     between vmalloc_to_page() reading the PMD/PTE and
+     __split_large_page() modifying it under pgd_lock.
+
+     Note: this is a diagnostic experiment, not a production fix.
+
+The experiments point to a race between vmalloc_to_page() in
+__text_poke() and __split_large_page() modifying the shared PMD under
+pgd_lock. __split_large_page() holds pgd_lock while modifying the
+PMD; vmalloc_to_page() holds no lock and can observe the PMD in an
+intermediate state.
+
+What would be the correct fix for this issue?
+
+Happy to test any proposed fix or run further experiments.
+
+Regards,
+Nikunj
