@@ -1,150 +1,238 @@
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269BD3DA7D2
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 21:41:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 571CF40801E;
+	Wed, 12 Aug 2026 21:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786570896; cv=none; b=drkC6i4gZHj+BWG9m3iK7T8urezKLA2qBM0j/+6gsozbWeHA0CUA4QIBLry2e6mGwzSFnLHs3cCUMKc+jPexn4QDxAX1wNOHt0GeLNyr478Z2xYlWnX3sDbsCDHlwjzREXKYDyzl4eqCAIL4V/6/4lUfNaFi0OfFn1JkgD44hzU=
+	t=1786571625; cv=none; b=bkgYARdG5dNs/rEP+UfoUCmf2GTo1JU7YFM2aGQYT2lXygAVASncc5nVhFpv8tGzIL6NfX/MMmGJStnwF1379pKfW8AWulmzuGEjozwf7mPpZMDAHrmOYPzWYr1gXlPC83TRFw+1rmlyhJcvmIPuvAp77+YR+PRfUeAirO07m10=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786570896; c=relaxed/simple;
-	bh=Myn0f5PoONuBeSnhGPwFLjCEATkMK/fQIXssiOVSNy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oBfqk4082aDT/lDo58v9xrX4eB4t56ftGaiwCOCV8NzQGGOeV9VlEHVjRAQKNI95K0yS8UnIXTEjWJiwN2UeRk+9p4u/KbJHO30IcadbqhkX9Tz+neglupK2NS/wByERNvR9VBGSVPXB/e4Tqfo4XWMyWeH4I4pynOc4YKTwk7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=choYcLMz; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1786571625; c=relaxed/simple;
+	bh=zoOEOQ43+sDxWy+UnOrNn2U9dUnrZIIC52tkbdcIiuY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=mMcG0vAz0Itg0Ld07aoICQSsSbD2KTLExaFc92QeWnvu3WBUnf004y+y+TqPjwRHwSfVpMZFHWaecXBCqib/2r8f2wRgfLOxQQraQ4PeHduTgT17vJD3Q3VwGMTzgpIcANI5IF1AJG09W/AR2PQAbQSwm0lGzlZlqsqwM+uD2IA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IXsVTdQ5; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="choYcLMz"
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so299779a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 14:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786570893; x=1787175693; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=NPvoXejEXMCOLtks/4P44XseBHeJ9j+rFY5G6V1i118=;
-        b=choYcLMzzYt+EkneTOegz0/c40LRIGJvd4bO/SM6+11qBRjCZHyFmO+vsdAOFxsS1w
-         EiFXkb4eR8TjF0JQdMn3RBqgg/nXvx0gBedu1SzsFJcl4U6vYEWZrfNp0A8MWJF8Fx2/
-         U/UEgb/kTjJEUR07MFRmoWAoNe5HDnLansO0wH3tlYyq/revCNq39mFPtxb0TpoqM9vH
-         AYgxFm1KNabjVNnER7ZHZyUWclO/RwYCg7CeFztB5IgHuTbR+T3tUVfm1rzd+UDr7OXz
-         v5dMxhIf8DGqcZlN39Hv939A46x5dcPthyVGFAW/Zn2jBSNQUufxPVWtYQkniVf/Dpus
-         kAiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786570893; x=1787175693;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=NPvoXejEXMCOLtks/4P44XseBHeJ9j+rFY5G6V1i118=;
-        b=D3jv4vVzVDd0vxfUn4xjBYBdbtpQeoD+GACWETTdYyDkwsTEP8fDsYj24xTYLP2st3
-         RcP6JRlJA80fwaZACRq49UepkJHstqUcWmfwuokwQ55Kw3EP1HBMhlaFcny6Kl3aMMMx
-         yLqnG2GXg4Y9bonxbfDoh6TtKOZVZ/oFS7CZgdRJp5XQvmZMeAO7egwOTvWYDNDzm4bq
-         8V7geE11mi4s/+WNLyZGwzoLomg8MCl4mZoowOP2+GuKD9tQArXtI/x04YNXV88fVt3z
-         Dq4JAgEThCx0mt9EVp6w1mF2j/x6GKUt8T/3f9nZuXiXDafEqomnXMYnUABbpMMvLATI
-         BrHA==
-X-Forwarded-Encrypted: i=1; AHgh+Rp+tN03QLTJwAavbna8RmfWe4zwfyAVEJJEiSlAOjEMUHufbsV4ja0HwmiYvYqBfFox+v7KE81XHQne+DAEajc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz34m9/dqhneVe04XrapIhm4Fnl70urX4BfaZCEiY70fXUNJHRq
-	BF8zAdSPR4SBHJ6Or106RtYY2LTobak/YSytAsTvkcHfK79GYpNCJsJ85emlSIx+6w==
-X-Gm-Gg: AR+sD10YgLpX6mbtpnIbEBw1puIdXMPAgNkF9fj8FRiv6ZQ7q1tVOzC2n7HhkFOeTCs
-	pNOCJEG1Cjzso/6lPiMsX6SSj1dIzUNtb+uZro33sHkxWw4XlhWUyzkPtwAKSJsTM03M484JkLM
-	ae1qw4m9aff+yn2OpRitEFTT+UUG5QLwaDi8ani6NltmPviSjQ3PaBnBB9YADQAJwdgWA3EYn90
-	dJ76F5tkmZxAV/PyCDYbEhZxK08hwInYxK+xUccnL/5nnNJDYQ0++FC0Gg1GQKEw1xVfge83kmM
-	M0ha7XpmQZfHdX0AGh6+1A1jD3gRszNw7goKAWn7SPSHe3yN/jn8As/qXCcAhrvUvxNrVZKc16Y
-	VnxDMcY9KfRBAGa3+xGmOThNPTxWxjBiop2KHnSQtG9U1TUicgbzMzOhTLlXlPFqyzWLQf8P5fB
-	j5xbFZ+Y1rJCA08f8p0sNFnivFK/OIqmKNM/61zveSeeCJMYq5o5h5QBkoy6SQVJaWPKuvP3Ldq
-	uyjRqY0jVfhsmhKl9/WXKVphaJbkg==
-X-Received: by 2002:a17:90b:274c:b0:36b:de66:92c3 with SMTP id 98e67ed59e1d1-3931f583a5amr478962a91.10.1786570892837;
-        Wed, 12 Aug 2026 14:41:32 -0700 (PDT)
-Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931ced0781sm878738a91.11.2026.08.12.14.41.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 14:41:32 -0700 (PDT)
-Date: Wed, 12 Aug 2026 21:41:28 +0000
-From: David Matlack <dmatlack@google.com>
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
-	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
-	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
-	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
-	patches@lists.linux.dev
-Subject: Re: [PATCH v4 08/10] vfio: selftests: Add mlx5 driver - HW init and
- command interface
-Message-ID: <anzoiALsjiWrsZtl@google.com>
-References: <0-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
- <8-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IXsVTdQ5"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 987811F000E9;
+	Wed, 12 Aug 2026 21:53:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786571623;
+	bh=6nEU+aeRluycxdNo/6s4mZZKrJ1RxjlgPtIHRp6CvKk=;
+	h=Date:Subject:Cc:To:From:References:In-Reply-To;
+	b=IXsVTdQ5zQUuKR4Iw6ZK3MQhGzcBbD5D+BmAgP90RIhowNF15Qvl/daAVQJt8uLyy
+	 rIkJAZ6sNBkDjUGtU3cI/VGEiGebXer+9cErer6IqhdmgixYvy4Hz1W7Q7pabBrv8x
+	 YQXaZcdMYk+oUEFaZT6hbmwff+KV39BTSqdgf6+R+2uOUvAmAbz9PrPAOS6WKy0Fa1
+	 O6EgPhBJzHIifIXXh8zwYLZJluIm96rhQ3IQSP1gu3YzsVqWyoQ5I/w3Dm6bN1SHUD
+	 PeamQtayFym7qz9Jcw3jlL3cOB+eq9PY/6eF6heTF+y3ojTLfgHj8GMUmuJum26dfp
+	 gSeZSwkGxdiXg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 12 Aug 2026 23:53:34 +0200
+Message-Id: <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org>
+Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc
+ abstractions
+Cc: "Alvin Sun" <alvin.sun@linux.dev>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Boqun Feng" <boqun@kernel.org>, "Gary Guo" <gary@garyguo.net>,
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, "Benno Lossin"
+ <lossin@kernel.org>, "Andreas Hindborg" <a.hindborg@kernel.org>, "Alice
+ Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>, "Luis
+ Chamberlain" <mcgrof@kernel.org>, "Petr Pavlu" <petr.pavlu@suse.com>,
+ "Daniel Gomez" <da.gomez@kernel.org>, "Sami Tolvanen"
+ <samitolvanen@google.com>, "Aaron Tomlin" <atomlin@atomlin.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, "Rafael J. Wysocki"
+ <rafael@kernel.org>, "David Airlie" <airlied@gmail.com>, "Simona Vetter"
+ <simona@ffwll.ch>, "Daniel Almeida" <daniel.almeida@collabora.com>, "Arnd
+ Bergmann" <arnd@arndb.de>, "Brendan Higgins" <brendan.higgins@linux.dev>,
+ "David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>, "Breno
+ Leitao" <leitao@debian.org>, "Jens Axboe" <axboe@kernel.dk>, "Dave Ertman"
+ <david.m.ertman@intel.com>, "Leon Romanovsky" <leon@kernel.org>, "Igor
+ Korotin" <igor.korotin@linux.dev>, "FUJITA Tomonori"
+ <fujita.tomonori@gmail.com>, "Bjorn Helgaas" <bhelgaas@google.com>,
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?utf-8?q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>, "Todd Kjos"
+ <tkjos@android.com>, "Christian Brauner" <brauner@kernel.org>, "Carlos
+ Llamas" <cmllamas@google.com>, <rust-for-linux@vger.kernel.org>,
+ <linux-modules@vger.kernel.org>, <driver-core@lists.linux.dev>,
+ <dri-devel@lists.freedesktop.org>, <nova-gpu@lists.linux.dev>,
+ <linux-kselftest@vger.kernel.org>, <kunit-dev@googlegroups.com>,
+ <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <netdev@vger.kernel.org>, <linux-pci@vger.kernel.org>
+To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Mark Brown"
+ <broonie@kernel.org>
+From: "Danilo Krummrich" <dakr@kernel.org>
+References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
+ <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
+In-Reply-To: <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
 
-On 2026-08-12 11:59 AM, Jason Gunthorpe wrote:
+(Cc: Mark)
 
-> diff --git a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
-> new file mode 100644
-> index 00000000000000..a2506ec8a19523
-> --- /dev/null
-> +++ b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
-> @@ -0,0 +1,108 @@
-> +/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
-> +/*
-> + * mlx5 VFIO selftest driver - HW definitions
-> + *
-> + * Typed wrappers, constants, and helpers for programming mlx5 hardware
-> + * via the VFIO selftest framework.  Most HW constants and all MLX5_SET/GET
-> + * macros come from the kernel headers (mlx5_ifc.h, mlx5_ifc_macros.h).
-> + */
-> +#ifndef SELFTESTS_VFIO_MLX5_HW_H
-> +#define SELFTESTS_VFIO_MLX5_HW_H
-> +
-> +#include <linux/io.h>
-> +#include <linux/build_bug.h>
-> +#include <vdso/bits.h>
-> +
-> +#include "mlx5_ifc.h"
-> +#include "mlx5_ifc_macros.h"
+On Wed Aug 12, 2026 at 6:33 PM CEST, Miguel Ojeda wrote:
+> On Tue, Aug 11, 2026 at 8:41=E2=80=AFAM Alvin Sun <alvin.sun@linux.dev> w=
+rote:
+>>
+>> The series moves `THIS_MODULE` into the `ModuleMetadata` as a const, thr=
+eads it
+>> through `#[vtable]` to set `fops.owner` in DRM/miscdevice, and updates c=
+onfigfs
+>> and rnull to use `this_module::<LocalModule>()`.
+>
+> Applied to `rust-next` -- thanks everyone!
 
-I'm getting a compiler warning here when building with clang which is
-getting upgraded to error from -Werror.
+This series has a semantic conflict with both the driver-core and the drm-r=
+ust
+tree:
 
-  /usr/local/google/home/dmatlack/kernel/trees/review/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_ifc.h:2706:50: error: field 'menu'
-  with variable sized type 'struct mlx5_ifc_resource_dump_menu_segment_bits' not at the end of a struct or class is a GNU
-        extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
-         2706 |         struct mlx5_ifc_resource_dump_menu_segment_bits menu;
-               |                                                         ^
-           1 error generated.
-           make: *** [lib/libvfio.mk:36:
+@Mark: When you merge driver-core-next after rust-next (which I think is th=
+e
+case) then you need to include the diff in [1] into the merge.
 
-I assume the mlx5 header needs to be fixed... But we can also work
-around it in VFIO selftests if that turns out to be a can of worms:
+In drm-rust-next the build fails with:
 
-diff --git a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
-index 2c451e411ec1..b9fad2b722a0 100644
---- a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
-+++ b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
-@@ -13,9 +13,18 @@
- #include <linux/build_bug.h>
- #include <vdso/bits.h>
+	error[E0425]: cannot find type `LocalModule` in the crate root
+	   --> rust/kernel/drm/gem/shmem.rs:628:5
+	    |
+	628 |     #[vtable]
+	    |     ^^^^^^^^^ not found in the crate root
+	    |
+	    =3D note: this error originates in the attribute macro `vtable` (in Ni=
+ghtly builds, run with -Z macro-backtrace for more info)
 
-+#ifdef __clang__
-+#pragma clang diagnostic push
-+#pragma clang diagnostic ignored "-Wgnu-variable-sized-type-not-at-end"
-+#endif
+which is because the kunit test in rust/kernel/drm/gem/shmem.rs uses the
+#[vtable] macro.
+
+This should be fixed up with a patch on top of this series in rust-next.
+
+I came up with to potential solutions [2] and [3]. I think with the new bui=
+ld
+system we want [3], but I'm not entirely sure this works correctly with the
+current build system in all cases (at least it did survive my tests).
+
+Alternatively, we could just open-code a dummy module as in [2] for now.
+
+[1] driver-core-next merge fixup
+
+diff --git a/rust/kernel/serdev.rs b/rust/kernel/serdev.rs
+index a4927452016e..17ca504b7f8d 100644
+--- a/rust/kernel/serdev.rs
++++ b/rust/kernel/serdev.rs
+@@ -87,7 +87,7 @@ unsafe fn register(
+         }
+
+         // SAFETY: `sdrv` is guaranteed to be a valid `DriverType`.
+-        to_result(unsafe { bindings::__serdev_device_driver_register(sdrv.=
+get(), module.0) })
++        to_result(unsafe { bindings::__serdev_device_driver_register(sdrv.=
+get(), module.as_ptr()) })
+     }
+
+     unsafe fn unregister(sdrv: &Opaque<Self::DriverType>) {
+
+[2] Open-coded dummy module
+
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index c04e6c5aa7e0..274924cfcc05 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -157,6 +157,15 @@
+ /// Prefix to appear before log messages printed from within the `kernel` =
+crate.
+ const __LOG_PREFIX: &[u8] =3D b"rust_kernel\0";
+
++/// Dummy module type for `#[vtable]` impl blocks within the kernel crate =
+(e.g. kunit tests).
++struct LocalModule;
 +
- #include "mlx5_ifc.h"
- #include "mlx5_ifc_macros.h"
-
-+#ifdef __clang__
-+#pragma clang diagnostic pop
-+#endif
++impl ModuleMetadata for LocalModule {
++    const NAME: &'static str::CStr =3D c"rust_kernel";
++    // SAFETY: `try_module_get`/`module_put` handle null module pointers g=
+racefully.
++    const THIS_MODULE: ThisModule =3D unsafe { ThisModule::from_ptr(core::=
+ptr::null_mut()) };
++}
 +
- /*
-  * Typed HW object wrappers for driver region arrays.
-  *
+ #[cfg(not(testlib))]
+ #[panic_handler]
+ fn panic(info: &core::panic::PanicInfo<'_>) -> ! {
 
+[3] Allow module!() for kernel crate
+
+diff --git a/rust/Makefile b/rust/Makefile
+index 48adcd9b7851..4f6bf1b4d194 100644
+--- a/rust/Makefile
++++ b/rust/Makefile
+@@ -279,6 +279,7 @@ rustdoc-pin_init: $(src)/pin-init/src/lib.rs rustdoc-pi=
+n_init_internal \
+        +$(call if_changed,rustdoc)
+
+ rustdoc-kernel: private is-kernel-object :=3D y
++rustdoc-kernel: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/lib.rs
+ rustdoc-kernel: private rustc_target_flags =3D --extern ffi --extern pin_i=
+nit \
+     --extern build_error --extern macros \
+     --extern bindings --extern uapi \
+@@ -351,6 +352,7 @@ rusttestlib-pin_init: $(src)/pin-init/src/lib.rs rustte=
+stlib-macros \
+     rusttestlib-pin_init_internal $(obj)/$(libpin_init_internal_name) FORC=
+E
+        +$(call if_changed,rustc_test_library)
+
++rusttestlib-kernel: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/li=
+b.rs
+ rusttestlib-kernel: private rustc_target_flags =3D --extern ffi \
+     --extern build_error --extern macros --extern pin_init \
+     --extern bindings --extern uapi \
+@@ -386,6 +388,7 @@ quiet_cmd_rustdoc_test_kernel =3D RUSTDOC TK $<
+        rm -rf $(objtree)/$(obj)/test/doctests/kernel; \
+        mkdir -p $(objtree)/$(obj)/test/doctests/kernel; \
+        $(rustc_target_envs) \
++       RUST_MODFILE=3Dkernel/lib.rs \
+        OBJTREE=3D$(abspath $(objtree)) \
+        $(RUSTDOC) --test $(filter-out --remap-path-scope=3D%,$(rust_flags)=
+) \
+                -L$(objtree)/$(obj) --extern ffi --extern pin_init \
+@@ -788,6 +791,7 @@ $(obj)/uapi.o: $(src)/uapi/lib.rs \
+     $(obj)/uapi/uapi_generated.rs FORCE
+        +$(call if_changed_rule,rustc_library)
+
++$(obj)/kernel.o: private rustc_target_envs =3D RUST_MODFILE=3Dkernel/lib.r=
+s
+ $(obj)/kernel.o: private rustc_target_flags =3D --extern ffi --extern pin_=
+init \
+     --extern build_error --extern macros --extern bindings --extern uapi \
+     --extern zerocopy --extern zerocopy_derive
+diff --git a/rust/kernel/lib.rs b/rust/kernel/lib.rs
+index c04e6c5aa7e0..7df9159788ad 100644
+--- a/rust/kernel/lib.rs
++++ b/rust/kernel/lib.rs
+@@ -154,8 +154,21 @@
+ };
+ pub use uapi;
+
+-/// Prefix to appear before log messages printed from within the `kernel` =
+crate.
+-const __LOG_PREFIX: &[u8] =3D b"rust_kernel\0";
++struct KernelCrateModule;
++
++impl Module for KernelCrateModule {
++    fn init(_module: &'static ThisModule) -> error::Result<Self> {
++        Ok(Self)
++    }
++}
++
++macros::module! {
++    type: KernelCrateModule,
++    name: "rust_kernel",
++    authors: ["Rust for Linux Contributors"],
++    description: "The kernel crate",
++    license: "GPL",
++}
+
+ #[cfg(not(testlib))]
+ #[panic_handler]
