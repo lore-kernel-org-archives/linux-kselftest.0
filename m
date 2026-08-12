@@ -1,363 +1,201 @@
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20861471263
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 17:26:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786555590; cv=pass; b=CPLzZWgROizw9cXWx9i8HbEWxVIrPqhb1VaV1zI6Woy/5srX0u1NX+K3uxFCrHBC5DWBI4GMmrGim4rtPFAulH2Mq4VmiPv3cAIzyYpkoNgOYfQ7s+IcvEXCmLb/fmunM+laAdGEfEOkDGzW6/J0ZdAa6AMzqGgpwWt9HnTLzXI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786555590; c=relaxed/simple;
-	bh=ta2r+MXrofiKskIPBz8zMDvkxB3jNjdiEPLMmGX+1zk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P1DhfG88rBSaadp9hpDe/d7GsWcDvwtRtdYuEdqua5SB1KPtryRmPtyy05T3hfGSSmeaGjRYzjBMXc1B7lgKiU6Ov5+OiH6Dgwe5DjDGUp2NzuGIsDpgrq4IWxj7UfPQf/Nk9xwNrQVmi7kK15oRdgbSwp/ODXIN6Xlb+0LVmD4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b=aA07fkBC; arc=pass smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A35D2335081;
+	Wed, 12 Aug 2026 17:27:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786555660; cv=none; b=gxSUbbtRSb8CDJw+KKtoqXpSqfgu9mGqgC/axhCMJyz20BJfi5pFIYLfuVepPP28wm1RoYbFeqmuSA+z9hMx2TWnmSBVAISzbdlFQExP2pIId5vf4zih+QyXaCfUp0PveBnwSiFbYdZntijQDR5cX3Xtt8ofg2J0A/Al4Md0jKo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786555660; c=relaxed/simple;
+	bh=WJPLHXt8itB/Cw880Ar8NhbyTTeEUpwQxfJvdcAm5iw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=aQLbsfilyYZC0e2GXaHUA/kOpqQ5DOi25CmNiRT5VYWMuyZ9izBUbuviAelx7dcZMBkjU1pRFgGw6Nebs+xOkm4oNRJr/gszpFeZq2KhFRSnZYWaZ64GsIpui8Q+Y0xJLpDYXsDxH4xNq7r4d4ODVNzN8oUcZfItC5NTmK1imuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jwSvUCMl; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault.org header.i=@brainfault.org header.b="aA07fkBC"
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-49558ce01afso9822385e9.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 10:26:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786555586; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Qoix4nBOFwoguxb4vUPmGyYGDmnU818vSdSfYPHU2DVqg+utpPHggl1MWh+Zf3++Wu
-         Y9iPFm1rQ3F46jI2kKJw6ZbGdn3G2yDqIMsz+oiHg8WwSWGimaH6Id8cccp5zjdEgCfm
-         ZQ2g6/24iwob4vcuT5aAbeGEDjOdcTxhlCtO4nX1qR234Hy4y3hgILvOIAzF+cVou3Zg
-         yhpSzMLelhNR+uIvyrQMkAOzLp7tj+A8PUka/+kw7jR8meLPiGSQO/Iu5Lro0OjtT3ub
-         h/5vjDM42ZRsCvIb5f77JD684KpsDq5ApbE+4Ss8bNRm3URxUYb+8kBSbb0ZrhJcmzbY
-         3sMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=dA6y6PhGE/45uAcglqNuchK/GS3YEtQSFjGCxv/WTsQ=;
-        fh=+8v+jJP9+xU9bAAxvfILRYe1mKQLoW7IOeoashP9eZA=;
-        b=AJsCAj9QWzSDwTleYpaYhhamxK355wLu2WQhzl/il62NcFIJfSXbJUVtV5QTBACRmc
-         K2A6gw2QX+OJK4TS3lR5L4IUfBcSCmGHKTbTncxKOoAnn+DoFlbDwh1ZhPEv3kREyNsB
-         UBgym/TXIupVm4nAq7Gd5SPjRIZlubQw27gLi5PVp1x5vImIwZg4nDO11qEZpw/DiHE1
-         alTJ7ygEfBnMtQhiYpPwVd82f/G1MHx9MT8W+AMSbGwnFio2bPESNT/QdAMGEoWzktVN
-         FoB6b3EwEcOVISg2QS5sckjQ1IQGkrI4iHEGMcw4tLaJp3xiOdQ84bLaymZr/WwYu5pm
-         r1aw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault.org; s=google; t=1786555586; x=1787160386; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=dA6y6PhGE/45uAcglqNuchK/GS3YEtQSFjGCxv/WTsQ=;
-        b=aA07fkBCdLY1QhnKT2SxEA6QJa4QCITbLh57ciSCQlDfab75KWOlQgERdymg4gykHM
-         j4ml1wq2EfBQ4YZR38L5kFFT8kD3dYkqkYzXx7m3meLdsYis6RNQkkqRMLMFwrcN36oM
-         ts9eGSMgK3AWioDsFoVl389Jw8OfJRBA630Shhvob/8NmPc4ZKcMsatWJAj8/RGgVN1r
-         zxwA+g6OHT0DixwTCd2Kv/F9TKaUB3MVulM6bM56Y994/su8VTvmP+HixmlIh9au2O7t
-         LjUT+ldpzp5n6UexocVUWRFUx3jVSVaUNlpJ/pqBxpi/P1MPR8ZOEOdvWbWxBWcHeccJ
-         v4oQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786555586; x=1787160386;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dA6y6PhGE/45uAcglqNuchK/GS3YEtQSFjGCxv/WTsQ=;
-        b=g2RKc2oWluf6jMZZ8yOHs8jQJgjcMReKf1M0LfhsowtAX42Sx2xEaAo8rTZ8LTBuTj
-         suVDS8fUBzfj4zAfFFEfWuNSKqr8Wn6fwmIMrvqmg2fNn1+eJQmqFrQlMA0/Zt1YebDG
-         glSNJjjL46LYH1rhbCxosT8EknzCrozL25Cu7HDpbZG1hGi0V8TIzZnX20HVXuumL/B2
-         4i7WbRz/A9gUGGBcaXeOqWW1vVWdfSN6UyLPNtDVWr8tnfeKEotihnxgiVExuOl7dzFh
-         5Bp/c5WNmCFAbyT4n2t/u6Udl97ubabR152hCIuLeAtG2VB56GaTOZSHzklm6YFOfTKD
-         +/LA==
-X-Forwarded-Encrypted: i=1; AHgh+RodKIMdgOErkQFPaGKm4x5Rd65Q+cKKrm8SlJiAEjrUO7wXqCDAFrbWwy+2oYGs0503uOSDidzHOJHUw5flIAg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM4S3mvZdzIx7eycb95uW8t+/9wAxnZVB6dANoK3m/9gBAXTQe
-	3K0snvKoaIaNQ4EU4fHq5i3QXsvmOhOWauaNBTl8ugDxb5wJ2RMHXEKensvmVJkUvx0zd7gA1ic
-	MPljOfirQdHvOJHwgf4P1N3FTLz8cdeOHXLQtn3maaA==
-X-Gm-Gg: AR+sD12/HleWQo1/uGBVWOOzpdqOAFAC9vLhT2YbTm8Xnb0GjB22U1BUuqlnb+As5sK
-	h/0VM0K73ztTAGc4zYixnrZYfsYZ6mqqFSlImRZeR6toTP+OvcGdjk+SVOm555v/dKCJHxC8Dgw
-	Uxana40TMJw8ZPkwdDiumsGI5S/C+Dyv0VMEPY1IGJKGg34scDCG6cqxo0KK7ZTVsduc5+P1NJJ
-	KLvGj6b0D/lMgidpOdRc0iq3OAsxAdVsq6BOUseRp2t2rvZz74pQLFk28bIq89Jq01XMl9Cmccz
-	p1PCJizTXVWTC7OYHygxeYnZGphxKaIKkmuUU3WgUhn5HDIR+uibRriqN5SUjAc4KqODRtQfjvQ
-	lNnRmhJj49rriG+pho4tvqDpXtv0KWocWngPHaBLN0pu7n671Q1dXNPDT+XuQknZ2
-X-Received: by 2002:a05:600c:3b19:b0:493:e983:806e with SMTP id
- 5b1f17b1804b1-4997c0f7575mr91001305e9.3.1786555586180; Wed, 12 Aug 2026
- 10:26:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jwSvUCMl"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786555659; x=1818091659;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=WJPLHXt8itB/Cw880Ar8NhbyTTeEUpwQxfJvdcAm5iw=;
+  b=jwSvUCMlc5rI50YMMFht4yNKyz9ajttHHpXEoFQOMPE4k48kCMtzqw90
+   VR7vDM1q37HJvMkkJiiaHds5/++lu2VhNe95kF8vpjjFLWKc+ZFDDBVN7
+   hyhqACzDxM9XnD5qozg5VUHOcmSc0tjmka12CWrmKWlXkKN5VXo2DYxO+
+   xm5+M/chtEhX+jkovg4pWRyPVgUMct49Wa+jf2qF9W+08FA80/KL3Ypw4
+   AUK5achkseH0292SvcjE+YfOa9x/+OlWKVM24nzNLp6bPxaEteVyFvkLH
+   vU4rgLTMe/yuCzWPZaXbbz6XfDrxo4Cmka7iEB8/oI636XlRjaKUd4pQ8
+   A==;
+X-CSE-ConnectionGUID: ruaDc2OURxK5B2R1YDNySw==
+X-CSE-MsgGUID: EJ5pb0DUTROI4ndXYoRCkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="90996220"
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="90996220"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 10:27:38 -0700
+X-CSE-ConnectionGUID: e4SWaOEVTd+gRiS5EYjQbg==
+X-CSE-MsgGUID: Auz9Ud84QUGgNeZ3b4NBoA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="261936541"
+Received: from soc-cp83kr3.clients.intel.com (HELO [10.122.185.5]) ([10.122.185.5])
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 10:27:36 -0700
+Message-ID: <16296d40-67f3-4e50-923c-5b26fc122121@intel.com>
+Date: Wed, 12 Aug 2026 12:27:35 -0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260722073344.771230-1-jinrui@haiwei.tech> <034CA48A67574B32+20260811085036.2862645-1-jinrui@haiwei.tech>
-In-Reply-To: <034CA48A67574B32+20260811085036.2862645-1-jinrui@haiwei.tech>
-From: Anup Patel <anup@brainfault.org>
-Date: Wed, 12 Aug 2026 22:56:14 +0530
-X-Gm-Features: AUfX_mxTb8kd-0mF-_iQMqEbcxOgkLvwD2fPyWg4u1ceODY3a_3MOM_LK6jBndc
-Message-ID: <CAAhSdy0K5H23AC9X_OA-cj6wppcw7fWPEHQZFzkTR+Rjnv6jBw@mail.gmail.com>
-Subject: Re: [PATCH v9] KVM: selftests: riscv: Add lazy V extension enablement
- for guests
-To: JinRui <jinrui@haiwei.tech>
-Cc: pbonzini@redhat.com, shuah@kernel.org, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, atish.patra@linux.dev, 
-	alex@ghiti.fr, sashiko-bot@kernel.org, kvm@vger.kernel.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 14/21] KVM: arm64: Apply dynamic guest counter
+ reservations
+To: Colton Lewis <coltonlewis@google.com>, kvm@vger.kernel.org
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>,
+ Russell King <linux@armlinux.org.uk>,
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ Mingwei Zhang <mizhang@google.com>, Joey Gouly <joey.gouly@arm.com>,
+ Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu
+ <yuzenghui@huawei.com>, Mark Rutland <mark.rutland@arm.com>,
+ Shuah Khan <shuah@kernel.org>,
+ Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+ James Clark <james.clark@linaro.org>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260612192909.1153907-1-coltonlewis@google.com>
+ <20260612192909.1153907-15-coltonlewis@google.com>
+Content-Language: en-US
+From: "Chen, Zide" <zide.chen@intel.com>
+In-Reply-To: <20260612192909.1153907-15-coltonlewis@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 11, 2026 at 2:21=E2=80=AFPM JinRui <jinrui@haiwei.tech> wrote:
->
-> From: jinrui <jinrui@haiwei.tech>
->
-> When the cross-compiler defaults to an -march that includes the V
-> (vector) extension, -O2 auto-vectorization generates vector
-> instructions (e.g. vsetvli, vadd.vv) in Guest binary code. If the
-> Guest executes a vector instruction while sstatus.VS is Off, an
-> EXC_INST_ILLEGAL (scause=3D2) is raised. KVM's hedeleg delegates this
-> exception to the Guest, but the selftest has no way to handle it as a
-> bare-metal program, causing all Guest tests to fail.
->
-> In contrast, a real OS kernel handles this via riscv_v_first_use_handler(=
-),
-> which detects the vector instruction, sets sstatus.VS to Initial, and
-> srets to re-execute.
->
-> Fix this with four changes in processor.c:
->
-> 1. Delete the now-unused guest_unexp_trap() handler, which is replaced
->    by the full exception vector table.
->
-> 2. In vm_arch_vcpu_add(), notify KVM that the Guest is allowed to use
->    the V extension via __vcpu_set_reg(V, 1) (best-effort, silently
->    ignores errors on hardware without V). Also replace the raw stvec
->    handler with the full exception vector table, which provides
->    save_context/restore_context for safe lazy enablement.
->
-> 3. In route_exception(), add a lazy V enablement check that runs
->    before any test-registered handler. When the cause is a non-IRQ
->    EXC_INST_ILLEGAL and sstatus.VS is Off, set VS to Initial and
->    return so the faulting instruction is re-executed via sret.
->    Track the epc per-vCPU via a flexible array member to avoid
->    infinite loops on hardware without V and eliminate races between
->    concurrent vCPUs.
->
-> 4. Make vm_init_vector_tables() idempotent by checking vm->handlers
->    before allocation, so tests that manually call it (ebreak_test,
->    arch_timer, sbi_pmu_test) do not leak memory.
->
-> The check runs before test-registered EXC_INST_ILLEGAL handlers
-> (e.g. sbi_pmu_test) to ensure V enablement takes priority.
->
-> Tested on a riscv64 host with KVM enabled: all 20 KVM selftest
-> binaries pass (arch_timer, ebreak_test, steal_time, get-reg-list,
-> sbi_pmu_test, etc.).
->
-> Signed-off-by: jinrui <jinrui@haiwei.tech>
+
+
+On 6/12/2026 2:29 PM, Colton Lewis wrote:
+> Apply dynamic guest counter reservations by checking if the requested
+> guest mask collides with any events the host has scheduled and calling
+> pmu_perf_resched_update() with a hook that updates the mask of
+> available counters in between schedule out and schedule in.
+> 
+> Signed-off-by: Colton Lewis <coltonlewis@google.com>
 > ---
-> Changes in v9:
-> - Size the per-vCPU epc array by KVM_CAP_MAX_VCPU_ID instead of
->   KVM_CAP_MAX_VCPUS, since vcpu_id may be sparse and exceed the vCPU
->   count (found by sashiko-bot review).
->
->  .../selftests/kvm/lib/riscv/processor.c       | 115 +++++++++++++++---
->  1 file changed, 100 insertions(+), 15 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/te=
-sting/selftests/kvm/lib/riscv/processor.c
-> index ded5429f3..05e20ef40 100644
-> --- a/tools/testing/selftests/kvm/lib/riscv/processor.c
-> +++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
-> @@ -17,6 +17,13 @@
->
->  static gva_t exception_handlers;
->
-> +struct handlers {
-> +       exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS=
-];
-> +       bool v_available;
-> +       unsigned int v_epc_capacity;
-> +       unsigned long v_epc[];
-> +};
-> +
->  bool __vcpu_has_ext(struct kvm_vcpu *vcpu, u64 ext)
->  {
->         unsigned long value =3D 0;
-> @@ -298,13 +305,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *v=
-cpu, u8 indent)
->                 core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
+>  arch/arm64/kvm/pmu-direct.c  | 69 +++++++++++++++++++++++++++++++++++-
+>  include/linux/perf/arm_pmu.h |  1 +
+>  2 files changed, 69 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
+> index 49f1feb5d280c..044f011c9c84b 100644
+> --- a/arch/arm64/kvm/pmu-direct.c
+> +++ b/arch/arm64/kvm/pmu-direct.c
+> @@ -87,6 +87,73 @@ u64 kvm_pmu_direct_pmcr_read(struct kvm_vcpu *vcpu)
+>  		ARMV8_PMU_PMCR_N);
 >  }
->
-> -static void __aligned(16) guest_unexp_trap(void)
-> -{
-> -       sbi_ecall(KVM_RISCV_SELFTESTS_SBI_EXT,
-> -                 KVM_RISCV_SELFTESTS_SBI_UNEXP,
-> -                 0, 0, 0, 0, 0, 0);
-> -}
+>  
+> +/* Callback to update counter mask between perf scheduling */
+> +static void kvm_pmu_update_mask(struct pmu *pmu, void *data)
+> +{
+> +	struct arm_pmu *arm_pmu = to_arm_pmu(pmu);
+> +	unsigned long *new_mask = data;
+> +
+> +	bitmap_copy(arm_pmu->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
+> +}
+> +
+> +/**
+> + * kvm_pmu_set_guest_counters() - Handle dynamic counter reservations
+> + * @cpu_pmu: struct arm_pmu to potentially modify
+> + * @guest_mask: new guest mask for the pmu
+> + *
+> + * Check if guest counters will interfere with current host events and
+> + * call into perf_pmu_resched_update if a reschedule is required.
+> + */
+> +static void kvm_pmu_set_guest_counters(struct arm_pmu *cpu_pmu, u64 guest_mask)
+> +{
+> +	struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
+> +	DECLARE_BITMAP(guest_bitmap, ARMPMU_MAX_HWEVENTS);
+> +	DECLARE_BITMAP(new_mask, ARMPMU_MAX_HWEVENTS);
+> +	bool need_resched = false;
+> +
+> +	bitmap_from_arr64(guest_bitmap, &guest_mask, ARMPMU_MAX_HWEVENTS);
+> +	bitmap_copy(new_mask, cpu_pmu->hw_cntr_impl, ARMPMU_MAX_HWEVENTS);
+> +
+> +	if (guest_mask) {
+> +		/* Subtract guest counters from available host mask */
+> +		bitmap_andnot(new_mask, new_mask, guest_bitmap, ARMPMU_MAX_HWEVENTS);
+> +
+> +		/* Did we collide with an active host event? */
+> +		if (bitmap_intersects(cpuc->used_mask, guest_bitmap, ARMPMU_MAX_HWEVENTS)) {
+> +			int idx;
+> +
+> +			need_resched = true;
+> +			cpuc->host_squeezed = true;
+> +
+> +			/* Look for pinned events that are about to be preempted */
+> +			for_each_set_bit(idx, guest_bitmap, ARMPMU_MAX_HWEVENTS) {
+> +				if (test_bit(idx, cpuc->used_mask) && cpuc->events[idx] &&
+> +				    cpuc->events[idx]->attr.pinned) {
+> +					pr_warn_once("perf: Pinned host event squeezed out by KVM guest PMU partition\n");
+> +					break;
+> +				}
+> +			}
+> +		}
+> +	} else {
+> +		/*
+> +		 * Restoring to hw_cntr_impl.
+> +		 * Only resched if we previously squeezed an event.
+> +		 */
+> +		if (cpuc->host_squeezed) {
+> +			need_resched = true;
+> +			cpuc->host_squeezed = false;
+> +		}
+> +	}
+> +
+> +	if (need_resched) {
+> +		/* Collision: run full perf reschedule */
+> +		perf_pmu_resched_update(&cpu_pmu->pmu, kvm_pmu_update_mask, new_mask);
+> +	} else {
+> +		/* Host was never using guest counters anyway */
+> +		bitmap_copy(cpu_pmu->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
+> +	}
+> +}
+> +
+>  /**
+>   * kvm_pmu_host_counter_mask() - Compute bitmask of host-reserved counters
+>   * @pmu: Pointer to arm_pmu struct
+> @@ -209,6 +276,7 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu)
+>  
+>  	pmu = vcpu->kvm->arch.arm_pmu;
+>  	guest_counters = kvm_pmu_guest_counter_mask(pmu);
+> +	kvm_pmu_set_guest_counters(pmu, guest_counters);
+>  	kvm_pmu_apply_event_filter(vcpu);
+>  
+>  	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
+> @@ -317,7 +385,6 @@ void kvm_pmu_put(struct kvm_vcpu *vcpu)
+>  	/* Stop guest counters and disable interrupts in hardware. */
+>  	write_sysreg(mask, pmcntenclr_el0);
+>  	write_sysreg(mask, pmintenclr_el1);
 > -
->  void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
->  {
->         vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_=
-code);
-> @@ -348,8 +348,33 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm,=
- u32 vcpu_id)
->         /* Setup sscratch for guest_get_vcpuid() */
->         vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(sscratch), vcpu_id);
->
-> -       /* Setup default exception vector of guest */
-> -       vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(stvec), (unsigned long)g=
-uest_unexp_trap);
-> +       /*
-> +        * Enable the V (vector) extension in KVM so that the compiler ca=
-n
-> +        * safely generate vector instructions (e.g. via -O2 auto-
-> +        * vectorization). Silently ignore errors; the test will still wo=
-rk
-> +        * without V.
-> +        */
-> +       __vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(KVM_RISCV_ISA_EXT_V), 1);
-> +
-> +       /*
-> +        * Use the full exception vector table (which provides lazy V
-> +        * extension enablement for EXC_INST_ILLEGAL in route_exception)
-> +        * as the default exception handler. vm_init_vector_tables() is
-> +        * idempotent; tests that call it again will get a no-op.
-> +        */
-> +       vm_init_vector_tables(vm);
-> +       vcpu_init_vector_tables(vcpu);
-> +
-> +       /*
-> +        * Record V extension availability in the handlers struct so that
-> +        * route_exception() (called from Guest context) can check it
-> +        * without relying on a host-side global variable.
-> +        */
-> +       {
-> +               struct handlers *h =3D addr_gva2hva(vm, vm->handlers);
-> +
-> +               h->v_available =3D __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA=
-_EXT_V);
-> +       }
->
->         return vcpu;
->  }
-> @@ -408,19 +433,17 @@ void assert_on_unhandled_exception(struct kvm_vcpu =
-*vcpu)
->         struct ucall uc;
->
->         if (get_ucall(vcpu, &uc) =3D=3D UCALL_UNHANDLED) {
-> +               vcpu_dump(stderr, vcpu, 2);
->                 TEST_FAIL("Unexpected exception (vector:0x%lx, ec:0x%lx)"=
-,
->                         uc.args[0], uc.args[1]);
->         }
->  }
->
-> -struct handlers {
-> -       exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS=
-];
-> -};
-> -
->  void route_exception(struct pt_regs *regs)
->  {
->         struct handlers *handlers =3D (struct handlers *)exception_handle=
-rs;
-> -       int vector =3D 0, ec;
-> +       int vector =3D 0;
-> +       unsigned long ec;
->
->         ec =3D regs->cause & ~CAUSE_IRQ_FLAG;
->         if (ec >=3D NR_EXCEPTIONS)
-> @@ -432,6 +455,46 @@ void route_exception(struct pt_regs *regs)
->                 ec =3D 0;
->         }
->
-> +       /*
-> +        * Handle V (vector) extension lazy enablement before any
-> +        * registered handler. The compiler's default march may include
-> +        * V, and auto-vectorization generates vector instructions that
-> +        * trigger EXC_INST_ILLEGAL when VS (Vector Status) in sstatus
-> +        * is Off. Enable VS to Initial and re-execute the faulting
-> +        * instruction, mimicking what a real OS kernel does.
-> +        *
-> +        * This check runs before any test-registered handler, so tests
-> +        * that install their own EXC_INST_ILLEGAL handler (e.g.
-> +        * sbi_pmu_test) are not affected.
-> +        */
-> +       if (!(regs->cause & CAUSE_IRQ_FLAG) && ec =3D=3D EXC_INST_ILLEGAL=
-) {
-> +               /*
-> +                * If KVM supports the V extension for this Guest and VS
-> +                * (Vector Status) is Off in the saved sstatus, set it to
-> +                * Initial and re-execute the faulting instruction.
-> +                *
-> +                * Use regs->status (saved at exception entry) rather tha=
-n
-> +                * reading the live CSR to avoid a TOCTOU race.
-> +                *
-> +                * Track the epc per-vCPU to avoid an infinite loop when
-> +                * V is disabled or the hardware rejects the VS change.
-> +                * Using a per-vCPU array avoids races between concurrent
-> +                * vCPUs that would occur with a single shared (epc, vcpu=
-)
-> +                * pair.
-> +                */
-> +               if (handlers && handlers->v_available && !(regs->status &=
- SR_VS)) {
+>  	kvm_pmu_set_guest_counters(pmu, 0);
 
-Treating all illegal exceptions as V instruction traps is not the right the=
- way.
-We may have genuinely unexpected traps for which guest_unexp_trap()
-should be called.
+I must have missed something.
 
-> +                       unsigned int vcpu_id;
-> +
-> +                       asm volatile("csrr %0, sscratch" : "=3Dr" (vcpu_i=
-d));
-> +                       if (vcpu_id < handlers->v_epc_capacity &&
-> +                           handlers->v_epc[vcpu_id] !=3D regs->epc) {
-> +                               handlers->v_epc[vcpu_id] =3D regs->epc;
-> +                               regs->status |=3D SR_VS_INITIAL;
-> +                               return;
-> +                       }
-> +               }
-> +       }
-> +
->         if (handlers && handlers->exception_handlers[vector][ec])
->                 return handlers->exception_handlers[vector][ec](regs);
->
-> @@ -448,9 +511,31 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
->
->  void vm_init_vector_tables(struct kvm_vm *vm)
->  {
-> -       vm->handlers =3D __vm_alloc(vm, sizeof(struct handlers), vm->page=
-_size,
-> +       unsigned int max_vcpu_id;
-> +       size_t size;
-> +
-> +       if (vm->handlers)
-> +               return;
-> +
-> +       max_vcpu_id =3D kvm_check_cap(KVM_CAP_MAX_VCPU_ID);
-> +       if (max_vcpu_id =3D=3D 0)
-> +               max_vcpu_id =3D 512;
-> +
-> +       /*
-> +        * vcpu_id may be sparse and ranges from 0 to KVM_CAP_MAX_VCPU_ID
-> +        * (which can be much larger than KVM_CAP_MAX_VCPUS), so size the
-> +        * per-vCPU epc array accordingly.
-> +        */
-> +       size =3D sizeof(struct handlers) + (max_vcpu_id + 1) * sizeof(uns=
-igned long);
-> +       vm->handlers =3D __vm_alloc(vm, size, vm->page_size,
->                                   MEM_REGION_DATA);
->
-> +       {
-> +               struct handlers *h =3D addr_gva2hva(vm, vm->handlers);
-> +
-> +               h->v_epc_capacity =3D max_vcpu_id + 1;
-> +       }
-> +
->         *(gva_t *)addr_gva2hva(vm, (gva_t)(&exception_handlers)) =3D vm->=
-handlers;
+Here, vcpu->kvm->arch.arm_pmu->cntr_mask is restored to cntr_mask_impl.
+Is this same struct shared with the perf driver
+(to_arm_pmu(event->pmu)), and shared across other vCPUs as well?
+
+If so, if another pCPU still has a PMU-partition-enabled vcpu loaded
+with guest-owned counters (MDCR_EL2.HPMN is set), could a host event be
+scheduled onto one of those guest-owned counters, conflicting with the
+guest?
+
+>  	preempt_enable();
 >  }
->
-> --
-> 2.53.0
->
 
-Regards,
-Anup
+
