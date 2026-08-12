@@ -1,108 +1,88 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6B142AFB7;
-	Wed, 12 Aug 2026 14:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3F037880B;
+	Wed, 12 Aug 2026 14:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786545937; cv=none; b=hprjMbByWnZZ2nkLfHdI3cjg/ofbbkbtkwjtqriYUCfdOJ+l9FyJ8u+E/rt8pziIDNgfr16dYnRjpa1rkq4Bd/HHb4tlVI8431/Nn8Vj/BHTEtDyPknQqcSvQhBLTPjOt/0liiO6zmrJUoD68a/VMZOdp+MDLCxkPXDFi6U0H/s=
+	t=1786546002; cv=none; b=ImoScV96O960/kdrzWUnmCaTRI0rsbHmDt66xct4BBMi3jNFFRz5fuqDsHUjpcASSwEnbf4ooSQ77KMeYBeYsn9GH2npgOZAaQMwq1so+DMFJMFOdJR4hqaZ1D6SP3j646ekh+qsEKCgwDLMQN3tqa/02CIW5sB2oxbiIa8Gh58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786545937; c=relaxed/simple;
-	bh=NTt6XuQCIdW9JqzPhjnzJ2cSiGZnTtzcKnBNpeNrVqQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VRpTmHBaMNE53BrhGErQ2uui7MerfdZKf+8e6nd+eWAX7ngLUuiLsmpF12+aUqdq1STa77xkJeWb8CKHeshbsM2BtGY0iWW5/mvnG854ebiSVl+aKqZELZhnWs82GLgs59cbLZBtEqo1dLdqyDBubtZKkN6hNyE/oslFgAHJqc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQSmYCYe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786546002; c=relaxed/simple;
+	bh=N4H/nJwHNuBHjUBnBHV42PpdwFwk+iDNDfBpK8ku+ro=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qtBXsZX+1m6j0v70G9rXYgcH8WxtoG0iVxx27uTZdfmk0HkWS9wnpyWQz6Eaj7YzJfF27OmxsPSOL3u5BojC3UjknmmBsMdFgjDYa0XtmBCzG5xMXpMfTjHVLm/I02enQayUIgrHQcvuhjORz3qAhRfCIWmKgzzAUx1w0RJX3EM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gaSj1BT7; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQSmYCYe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76EC81F000E9;
-	Wed, 12 Aug 2026 14:45:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gaSj1BT7"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E081F000E9;
+	Wed, 12 Aug 2026 14:46:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786545935;
-	bh=ItXHwCR4UWoF+igD+cDz15jgqe0Ig5RlQA7lP5b3bLQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=OQSmYCYehQ6ZN6Blgyq9sQtPmZ6bVHugKUvV7ANM7DbiMG2p8tzn+I5SuulKF+Y1T
-	 RQpfZBOXkQyJzVPonepamFw1Wb6t3Gn/VzPLvhBhoJw4qxwNfQX+GFrS20augdNDmB
-	 +C2hwXAmSAv2eDGQ77kOqgGUVrPpHW5rOzdKkb00MsWzSgtBbchQ/62th4o7fBCs8u
-	 oB13BKwUPqY7a/Gy/FsVVB96NjI6mzbfGDGCoVyXw+feW3re0pp7MU0v24TNSi3/9D
-	 z4utoMxIZdHjEh1yOuW81EtAA4kNq44DsYj1iVHzT2qTO/3v3eOCx1Iif9+WxUUHmo
-	 A5rPTWxgP8iow==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wuACz-0000000EyOP-0InF;
-	Wed, 12 Aug 2026 14:45:33 +0000
-Date: Wed, 12 Aug 2026 15:45:32 +0100
-Message-ID: <86h5kz1joz.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
+	s=k20260515; t=1786546001;
+	bh=kmSRdXbDxC5n1fJ3eK/gMJjVKqziFhOwGBO5vuQoRgk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=gaSj1BT7QxKuMtbp1QTQ29Z2m70mOEdqmCvsBkiMou7WyYKucciI8E4D0HzMQq6Uj
+	 p8s2uInxnHPfr+wLZFoDeuOkbY1rs7+dy1+KmYFVsRpVZYAbY25SLz1mz5ZPonyFCv
+	 lX/S8U1mTU9e6cc4NJCdoE3gwtiXduOMuOMDOb7yXUSarlWrWcw68OKYd8QI67q53z
+	 Zm+1LTQopJPSjltBg0jG1UWJ51gwAVpx/HyEvtN+3OeaqL/zlm7kNhedgQerrRX4m9
+	 aLIHK0LJzRbosqtGIyYDtlf3pO8fjOuo71f+OE1MQiIrhGLVfsm2hm2574BHbqFdrz
+	 OSRVzqTJipJIA==
+From: SJ Park <sj@kernel.org>
+To: Wilson Felipe Pereira <wfelipe@google.com>
+Cc: SJ Park <sj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
 	Shuah Khan <shuah@kernel.org>,
-	Eric Auger <eric.auger@redhat.com>,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?q?=20Michal=20Koutn=C3=BD=20?= <mkoutny@suse.com>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	linux-mm@kvack.org,
+	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 2/2] KVM: arm64: selftests: Test VGICv3 redistributor region retry
-In-Reply-To: <1cf282aec3fff31e89bdb98f636b7027afcf129a.1786344511.git.kmehltretter@gmail.com>
-References: <cover.1786344511.git.kmehltretter@gmail.com>
-	<1cf282aec3fff31e89bdb98f636b7027afcf129a.1786344511.git.kmehltretter@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+Subject: Re: [PATCH v3] selftests/cgroup: test_zswap: skip test_no_kmem_bypass if debugfs is unavailable
+Date: Wed, 12 Aug 2026 07:46:32 -0700
+Message-ID: <20260812144633.125604-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260812050848.848882-1-wfelipe@google.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kmehltretter@gmail.com, oupton@kernel.org, kvmarm@lists.linux.dev, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, shuah@kernel.org, eric.auger@redhat.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Mon, 10 Aug 2026 07:52:17 +0100,
-Karl Mehltretter <kmehltretter@gmail.com> wrote:
+On Wed, 12 Aug 2026 05:07:55 +0000 Wilson Felipe Pereira <wfelipe@google.com> wrote:
+
+> test_no_kmem_bypass() needs to read
+> /sys/kernel/debug/zswap/stored_pages via get_zswap_stored_pages() to
+> verify that compressed pages are charged to the memcg.
 > 
-> The existing redistributor-region test already adds valid partial
-> regions, rejects a later region that collides with the distributor, and
-> retries with a valid region. Its guest code does not access a
-> redistributor, so it misses redistributor MMIO bus entries lost by the
-> failed rollback.
+> When running in an environment where debugfs is not mounted or
+> CONFIG_DEBUG_FS is disabled, get_zswap_stored_pages() fails, causing the
+> loop to terminate early and report a false negative (KSFT_FAIL).
 > 
-> Run a guest that reads GICR_TYPER from the second redistributor in the
-> original region and verifies its processor number. Put the test layout
+> Selftests should not fail if debugfs is unavailable, and it should print
+> a message when it is skipped.
+> 
+> While I'm here, also add a warning message if the test is being skipped
+> due to totalram size and make the check for totalram more readable.
 
-What does test layout mean here?
-
-> outside the default guest memory slot so an absent iodev results in a
-> KVM_EXIT_MMIO instead of an ordinary RAM access.
-
-I really hope that accessing an iodev *never* results in RAM
-access. That'd be... unproductive, at the very least.
+Looks good to me!
 
 > 
-> Allow the common VGIC setup helper to select the guest entry point so the
-> retry case can reuse the normal test setup.
+> Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
+> Acked-by: Yosry Ahmed <yosry@kernel.org>
+> Acked-by: Nhat Pham <nphamcs@gmail.com>
+> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-[...]
+Reviewed-by: SJ Park <sj@kernel.org>
 
-This really need to be split. One patch to change the testing
-infrastructure, another one for whatever new test you want to add.
 
 Thanks,
+SJ
 
-	M.
-
--- 
-Without deviation from the norm, progress is not possible.
+[...]
