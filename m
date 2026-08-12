@@ -1,2626 +1,487 @@
-Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010063.outbound.protection.outlook.com [52.101.69.63])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D68A8314B95;
-	Wed, 12 Aug 2026 18:04:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.63
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786557857; cv=fail; b=sfle6CiR6RamNjoJnVY+mag+P0CWaSZuvHp6TloXz5wLhPA4sXqK6ROwYdI36uZHhh+8QeiT0gkom/Q9Sn1aEbFCVY1dEeTHVHFETiKUitwEZtkwfgy2umelKGsHs+ACwE+SyLvhc906kH7ZgiPtwIvov0i/FFRXWWeK9PHU1vQ=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786557857; c=relaxed/simple;
-	bh=O/xm7Dj0KyHCNCyYtqmptowmwe6iGdDK/dv6ZMIfBAw=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=OKYtIGZlLS3dC2uXqPDI1rINF5MaXODiKxqmL0ryHQqNw7rDUxWMR/7Q/uth95BIU1fSX5QL12R94bO+Cbv3iBz65qcj7a5x1a/qOMAmRJBz4ePmLmDBLOkBIo8OVTgbJU8uvP/Vg08/YpEr6OCMHdkOPi5vTMuYmzbkjackqxA=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BPMOe1lF; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=BPMOe1lF; arc=fail smtp.client-ip=52.101.69.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9CBE31F9A0;
+	Wed, 12 Aug 2026 18:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786557959; cv=none; b=j32r43n3Jt5KuuAZoM+9U3RXa6epDJMtFgWmbV7t9ARXFH2xnjEiHghyhVcPHXe83cDCpUsCiJmrCaYZSWN+vE88DgkvcVccHZg5Dg67DS3UhbNFIu/RZ110xoxgMhF43QmNhVyn5/QaSnifM09yrBoJ7S0HdU/QDdYEtsnGqGQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786557959; c=relaxed/simple;
+	bh=fpWWl6otK0Jr8fEmKlJ/t9Di1A0mUb+q5hOQ7VG8RQ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ArtWjbwUu50G2s4oCzLpDkFTY2EaihguBC7ZT3NZ33FlAqkTGy9Y7XwDjzhqdCjsqvtf9pUOOkTbwEc9EATMnAGLtwEkI3dITftfq/AubrBPvircs5T5l3s1ppOXzozC88gNC6SLPneG+GyPbJiOPQWAZA6tcZbALG3JWlkTXHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iMlFlWiO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BPMOe1lF";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="BPMOe1lF"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=joA70AsCRkKCql/AnU1CBSwAjsbMc/oh0lx8FhZpvkGvCoQjLTNUGYQ9cZcU4SptZQWTf3hMaUeJNaN9u9r+LPW9ine3FnJwIzjWD+D8tMNWoobrX1Knqq+g01/u1RjgTMF7Yyp37Nhnv/uvDXVmjLXLb7AR55LRUmu79LOMnp1euoB8XH9PNfEk/+ChAnnDQK/O+XfCjtMFujf2GNvTnhy3kcqGW0AYxSNKZ54ZeDxKK64rqF9M17TYONBuuVZkRE6M0oZ3VE0y0cxfVxP4tLJ3fwYZc7wZQWUXa94WIaumicohEPKCEnr86SH+HbJlXklskKrkAtPpR7dbAgi0Aw==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
- b=tceXR6UTJ4GmZs+7Cpff9BTnC9qD3oczadQmVevylmqvLAWm4BJSrE32bzRo8hKxL1pchESNYFVsuJuHM+pv1d489ab3meI6FsocoVTsf9qEU48GcaA4by0l02ML6WcV2LeL4RxXKc15hf/4QR3cKIMxcUctAhbMyiu+QxUNcxWeq6Tjbh2wI3Mr3WXmXaoJ0M8QrRHUsrMcPggu/oAy6Z9kFyc1Ku+asfc6t7N8/RVi/ZbZpIRCiCLbQYwM18sN9Nlm8fsH8+LdiMEFsPSZ+EBpYmGdvbSBY4D8Kme9hhGN+6cURtM0wx0KbafH8U3o0kQa5HiYnXm/e66bMAk4yw==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=zytor.com smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
- b=BPMOe1lF6tX//sCkI9Me0loNVjZBmi3mxCXyExeF5eZwP3veUd/nUiYCk0SvlyGe7CzMaUuRPV0ET3amjMi86Vo3SRp6HBA4ZoVE6jvOQu7O+9R+GbEZEQmN+9MJyEZbeFvWL/dSUtASxl8GnxoJN9DXBbN4vUhnh9wkSjjEfjQ=
-Received: from AM9P195CA0027.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:21f::32)
- by DU5PR08MB10399.eurprd08.prod.outlook.com (2603:10a6:10:520::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.11; Wed, 12 Aug
- 2026 18:04:00 +0000
-Received: from AM4PEPF00027A64.eurprd04.prod.outlook.com
- (2603:10a6:20b:21f:cafe::57) by AM9P195CA0027.outlook.office365.com
- (2603:10a6:20b:21f::32) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.13 via Frontend Transport; Wed,
- 12 Aug 2026 18:04:00 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AM4PEPF00027A64.mail.protection.outlook.com (10.167.16.75) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.6
- via Frontend Transport; Wed, 12 Aug 2026 18:03:59 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=WVfPDgaKhGQlaY8yO2lK2w9+Bee8+z46k8rgJM0RWRY36S86PxD5OrvNZiyXnUvMv2o3IAeAjuPQw1tNUgfXCf7PGyBEd2qm/oQPYRpZYTNNEcXxlSl1mWALqD2bs1SO4+A4JURRTzJV8rth2Osl9mTkuCAAfFXM/BZr5WGcKakyEf1l77anDikG10MOnk4yOYrsJbTswNk+icvnZ+FxwJOtroS9OjIpLzZDiropAEx7Uc1+aSeot1W6aTyxMdOi2dUhe4qe2uAYetloxVqA3o6xFMUgZMJKKIMPCHo07W0ez0q+MCWl5qmnU15RhKL2DjVrAI+dP0NyVdsHGQtQ4g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
- b=m68/4fLC6Vp81UfaC/n50cYDFv1UYO8nCPZIF4yrbmeXqXSUC0KXqv4OOoY4rNjmD1WaigDmjDYkm/W8z1eOojwPWhqmGD588bBo/LSMfw7lIoysMPkHJ4MGD8FymgJc/c27+PEs3UKWF4wMaBjKOmLUHS+IJ+fhlmrwxOirUfUjz0FQcbLlm7srADgaPvVsiKjNNnsXaV0Q/TaPhC6l7BZpq2h/BZ13s6AoP+mHgqXaAq2Fbc6g/8sJBWz/I0zgqjGEUMXRpsjtN3584/3nJReo2Tava85tR5HTj6Fmq2HNPK8NAw2fKH0mGaO/KAiWk4EBzyzRuzLsBxtnq2CUgA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=pv7qGV++GXHWyXHG3fRsyy1Hv7/uvBsba1r+FvdOrO0=;
- b=BPMOe1lF6tX//sCkI9Me0loNVjZBmi3mxCXyExeF5eZwP3veUd/nUiYCk0SvlyGe7CzMaUuRPV0ET3amjMi86Vo3SRp6HBA4ZoVE6jvOQu7O+9R+GbEZEQmN+9MJyEZbeFvWL/dSUtASxl8GnxoJN9DXBbN4vUhnh9wkSjjEfjQ=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from PAWPR08MB9829.eurprd08.prod.outlook.com (2603:10a6:102:2e6::10)
- by AS4PR08MB7758.eurprd08.prod.outlook.com (2603:10a6:20b:515::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.11; Wed, 12 Aug
- 2026 18:03:27 +0000
-Received: from PAWPR08MB9829.eurprd08.prod.outlook.com
- ([fe80::5cca:dab9:827e:c7bc]) by PAWPR08MB9829.eurprd08.prod.outlook.com
- ([fe80::5cca:dab9:827e:c7bc%5]) with mapi id 15.21.0315.008; Wed, 12 Aug 2026
- 18:03:26 +0000
-Message-ID: <c5d5c26c-eaa3-4fd3-891b-808b6efe3c25@arm.com>
-Date: Wed, 12 Aug 2026 13:03:20 -0500
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] selftests/x86: add generic prctl shadow stack test
-To: "H. Peter Anvin" <hpa@zytor.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, Ingo Molnar <mingo@redhat.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <pjw@kernel.org>,
- rick.p.edgecombe@intel.com, Shuah Khan <shuah@kernel.org>,
- Thomas Gleixner <tglx@kernel.org>, x86@kernel.org
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20260812171940.1046116-1-bill.roberts@arm.com>
- <20260812171940.1046116-2-bill.roberts@arm.com>
-Content-Language: en-US
-From: Bill Roberts <bill.roberts@arm.com>
-In-Reply-To: <20260812171940.1046116-2-bill.roberts@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR11CA0066.namprd11.prod.outlook.com
- (2603:10b6:806:d2::11) To PAWPR08MB9829.eurprd08.prod.outlook.com
- (2603:10a6:102:2e6::10)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iMlFlWiO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6721F000E9;
+	Wed, 12 Aug 2026 18:05:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786557957;
+	bh=3/7RbMilH1SQLqxI0qjfmo29u73H3ZEX1a3tHj6F58Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=iMlFlWiOG7V80XsD8e/VPQUn7ardDYHVj/V2qqphOmG39UXaBzt+ciuEjM4pCq13c
+	 KkdlhOQZbPus0Qg5akVir+wkEmhoBp1Hd/oKIZxUK/WGgcsVsln0Js4gnpuKa0qJWt
+	 6j56sic26KIoSFTWpI22QnWLIJNewo9nZzjBRmwRJ0/6N1WF5OweJ9xiHBijuYvlta
+	 FCRXonsxANMAsLRKJtPHb/mgnvzXYTHBJmyC1CwkGwghANvBFNJonhU3iMY2juLEgY
+	 XSseaGY0jujdVRI9hdZXlfIru2Ia50ODO2wMl9h3qKe8x8Kh4Jkz9AJpqD65tVKPkE
+	 Bk/WOaiwH/quA==
+Date: Wed, 12 Aug 2026 19:05:21 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Huang Rui <ray.huang@amd.com>, 
+	Matthew Auld <matthew.auld@intel.com>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 17/20] mm/vma: only permit MAP_PRIVATE /dev/zero to be
+ mapped anonymous
+Message-ID: <anyst_4LGm6bpWdq@lucifer>
+References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
+ <20260806-b4-scalable-cow-virt-pgoff-v4-17-ab318a350404@kernel.org>
+ <c7930f14-5978-4709-bac2-54950c988883@kernel.org>
+ <ant1xwiG3djtoXoe@lucifer>
+ <14a06774-4157-4629-8327-b1a6bae24ab7@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	PAWPR08MB9829:EE_|AS4PR08MB7758:EE_|AM4PEPF00027A64:EE_|DU5PR08MB10399:EE_
-X-MS-Office365-Filtering-Correlation-Id: 2383e70d-e473-4684-d2d3-08def89c15cc
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|11063799006|56012099006|10067099003|6133799003|22082099003|18002099003|3023799007|4143699003|921020;
-X-Microsoft-Antispam-Message-Info-Original:
- FyerMpnfmTa+Dzql5WJwaVy2krAo9u0M9j5O9NajYU5pazGSy2f9ENrUwTiAgQKPkmqZYO+5IeqRhwYViPfmA4Wikbc5kan4vWlOFUBALlhiKiyEFgIa4ghR1WjUoHqCQkrVYHcC3w1+LRfTvMOLdCNVBGrDivaFUWkw+UiXhwQIYedE1qG/eL7DvHH7+ngSLAUXOTiyywhRJUibumf1TWjhzRJPOdaEVBbb9fzp5MUeQy6COdH5RZwePKWvNionxmfBnCn2s2X60IpZoiGP655RforKfBU9A4ZIrc0iNlEbVHleU8NgSCidthpraerpX+9zHLFeHWRe2/vGH6z6XdLAiv1GazAkfY9HLOrL92wt6DLdDdufw9WJyErNonRqD4XavS+U6Mn55dtwOQbaBzCifrUIsM+cbqKKVuUE+KcpECeqJhJlcHsXusti75XCYyeIsxAc1XJC8MyNWiGwWAUuoaBQZwVr4zGsETiRzb3TFC34I7a6QBOEKOFpVeotjco04zAqlqDMifvEHVTdF+Ap+tCDC1KflpJjBFX1b57eXIAoidaAxOSZF3nhLNA01QSwceF3OQU0PokFQE013pczdrA9BsZz2CcAsUoH3vCxz5aNoG5iP2nEwRi0QZu0qYgJ339Uz9YInn6pAWT8X2MFq47mFGmoGq45lZYRwONI5g8jnQ9SmwLGMVM4Bts9SkI42tjdHld6hYO/D3Gn7Q==
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAWPR08MB9829.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(11063799006)(56012099006)(10067099003)(6133799003)(22082099003)(18002099003)(3023799007)(4143699003)(921020);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- bWesGscY0jsUbX0IJCAip9pxvEDD7GMNn2xwJepZ3L55egtCe7AX2KMn8Bq/PzJtgBmiCWvmLt3/82dDvhbR+munk5YLBUj9RF4NCPQyjD81YqDYLGN7sPmd1hspZxt25AkMVVDmwyD88fBMZGHGAo9INUoF8nhg1SaqBkofgASwoPcGzyGgZX3MKAjHpUxF9o7+OHliWC4v28O1J2ThMl7i8t5/P0RVZQBAslHy3D1Od1e8iRNVXjUunVa9jeeu/f7IMXrOxfvi+7iCgb+hhmcSLzj2GsygjkC/m3J6aBojxGhHw6Bi0FPPZZ3lh4OsD/MdDVIDHaIizCh5BMeM2Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR08MB7758
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AM4PEPF00027A64.eurprd04.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	78512980-66ad-409d-f647-08def89c01ff
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|36860700016|35042699022|82310400026|14060799003|921020|6133799003|3023799007|10067099003|56012099006|11063799006|4143699003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	Kci2ElpRTJp9wC25iTDwYFOk2P6p4r30ifeRFxkUSfNw5a4DHXOpR0e9Iegl7z9FAw3SV7Y9aHhRCxua4B5f8wBYAY1Ocf4I4uhwd+/O2cbFGKE7ItX338Awm0f/nxAtU74eDKzUoUq4gnxPqUtQCB8vVvPCUntq9m8uKU8ZiXE7yW3XijBqU0sj5fTiawS/OXoFVfHA72gqsy43q6D6b8omukrn1pzQ/b9jiYvWqsGmPdHl9qqt3co2G0Dn4R3hppvoLCGf3GlJvJwrFOs8eu1Meii0ACrrcKoTHrM2vWtKXu9K2LFsHNuZKcO696Dlzn7ZhW1h8YHEU34xIVtM/pAbpKzsG5iGtc1DlBSGG/toq4o/jF/uRSNpzjf9XAcuBSULtPZqHm4kBja3rqDARDnLzTVZY/UV6CpD1DWoxi7ROafezTPALWhlNconOptZ8UiaqmETp9WKABBgQXIbcEBoNplomOwr105yUs0CwNy3d9a/MHI3XC9yfFN74fIOjMndUCvoVpGVPBJrj9VF/R1CVGxKHCYdO+UrjoujO2L056gdzyWfqh/v7gqLBRCTyUMfpU6LADHiM+aI2AHsnnIN93g8wdaFFvOF6lzUA4+mgu5ps5uNb28W5aUmxcYngjFS/3Xj11gx0lkjwxfLboetVGnACH7FdkFQEn8xPe2F0/jp5ftYOso0n628SMECoC3iA+cKzGYyeTg941k4EWbmQmHpCtEmHVKiprzS+FO4/N7nP9Yah1NCQnBGaHTo
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(36860700016)(35042699022)(82310400026)(14060799003)(921020)(6133799003)(3023799007)(10067099003)(56012099006)(11063799006)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	xt8R4xyrXXUiI/ljd1rQmV5p/snWJ3PQu0IK292octjic4mffA1Xqje6P1GcObxMdDP8qDzY9bAwuhqD/JVLYuMAw6L0XPygYj3JesIbw73dBrNevOCX70JhrY5BpYtSAgcEJRThJ/mTSj3SrmqVjAvZHcFH229IvoYlOdReQVbov7KtaTi2iV90RuWdEy3cHt7AgxAtJmlbovGfzZSQkLmWXJh9l8At1gsYh6J6/A4/uGb61fdWWhh+u4mWMM5hTDSS7KmRbi2lvocBzU3AFwsE9nY/E3notkTgZjJdQnZ+3vMPU/UKtWGQoSRzRjtKMzbustWwFK+Ns9lJnFvVCGAEZCfF9wxpiHmFPsT5+eN9cYZ7qRJIz/sJzDn8k4H6vjJf5z0LM++xAUrYwuYJ1rgkUORAP0TwhfEoEklhbp1jks6jiIPFgRGvc+wRFK6X
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2026 18:03:59.6561
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 2383e70d-e473-4684-d2d3-08def89c15cc
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AM4PEPF00027A64.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU5PR08MB10399
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <14a06774-4157-4629-8327-b1a6bae24ab7@kernel.org>
 
-On 8/12/26 12:19 PM, Bill Roberts wrote:
-> Run the same test suite for arch_prctl, against prctl, to ensure
-> consisteny and correctness between the interfaces.
+TL;DR - either we need to find a way to uniquely identify it (keep my approach
+or move it to core mm) or we should drop this patch.
+
+Given we're late in the cycle + you stringly objective to my approach I think
+maybe best to drop it and respin?
+
+Can do a follow up to add unique identification later, somehow.
+
+The key change of 'make anon-assigned file-backed MAP_PRIVATE mappings not
+special snowflakes' will still be achieved in the other patches (but have to
+rework them a little obviously).
+
+On Wed, Aug 12, 2026 at 07:15:05PM +0200, David Hildenbrand (Arm) wrote:
+> >>
+> >> My brain is a bit slow after digging through this series.
+> >>
+> >> We identify shmem, for example, through shmem_vm_ops/shmem_anon_vm_ops.
+> >>
+> >> So naturally I am wondering: couldn't we do something similar to identify that?
+> >> Like, checking for zero_fops?
+> >
+> > We don't assign vm_ops for a MAP_PRIVATE-/dev/zero mapping. So that won't work.
+> >
+> > We could expose zero->f_ops but then it's literally in drivers/char/ and that's
+> > just weird to expose in mm.h or whatever.
 >
-> Signed-off-by: Bill Roberts <bill.roberts@arm.com>
+> Thinking out loud: could we use a dummy (empty) vm_ops?
+>
+> We'd place it in mm.h (zero_vm_ops) and just use it in drivers/char/.
+
+The entire purpose of this patch is to _uniquely identify_ MAP_PRIVATE-mapped
+/dev/zero and only permit this to make a mapping anonymous.
+
+As per the commit message: 'mm/vma: only permit MAP_PRIVATE /dev/zero to be
+mapped anonymous'
+
+MAP_PRIVATE-/dev/zero to anon is a historical abberation. This is why it is a
+unique case where semantics don't make sense.
+
+Doing things by semantics makes sense if the semantics are a _class_ of
+thing. This is not a class of thing it is a one of one.
+
+Yes the method used is ugly, but the alternatives (I can think of) are:
+
+1. (your proposal) allow any in-tree non-module mmap_prepare() driver to map
+   anonymous pages, creating an entirely new semantic for memory mapping.
+
+   (this is currently something that is possible, unfortunately).
+
+   To be safe we would have to implement then a series of checks to prevent true
+   insanities, because doing that would permit broken madness like a PFN map
+   being treated as anon.
+
+   Once this stuff is out there as an API, even in-tree, even non-module, people
+   will abuse it because it'll go through some random tree and we'll have to
+   support it.
+
+   I mean we may as well just not make a change in this case other than maybe
+   preventing .mmap from being able to do this.
+
+2. My solution - ugly but uniquely identifies the single permitted situation
+   where this behaviour is desired.
+
+3. Export something from drivers/char/mem.c to mm - horrific for multiple
+   reasons, violates separation of concerns etc. etc.
+
+4. Move the driver code just for /dev/zero to mm - I thought a pretty horrible
+   idea, but maybe we could have some mm/ bit and some driver/char bit like
+   hugetlbfs or uffd? But I'm not sure there is a not-ugly way of doing this.
+   MAP_SHARED /dev/zero does shmem stuff so maybe could live there.
+
+Drivers not being able to get anon pages is a baked-in assumption in the kernel
+(excepting MAP_PRIVATE-/dev/zero).
+
+Anyway I don't want this to hold up the series so maybe I'll just drop the
+patch and we can retain the current broken mess.
+
+>
+> See below.
+>
+> >
+> > I'm giving a really minimal possible thing to export, which is the DEVZERO_MINOR
+> > number which avoids all kinds of weirdness like that. No driver stuff exported,
+> > just a number :) MEM_MAJOR is already available.
+> >
+> > So I think it's the least bad choice in this one, very very specific scenario.
+>
+> I'd hope we find something cleaner than the DEVZERO_MINOR thingy.
+
+I think your objection here again is mistaking this for a class of thing rather
+than a one-of-one.
+
+>
+> Something slightly cleaned up chloppedi-schlop on top of mm-unstable.
+>
+> vma tests seems to still work, but I haven't boot-tested this.
+
+Yeah I don't love it :)
+
+I mean this change eliminates the purpose of this patch, and we already handle
+the /dev/zero MAP_PRIVATE like this:
+
+static int mmap_zero_prepare(struct vm_area_desc *desc)
+{
+#ifndef CONFIG_MMU
+	return -ENOSYS;
+#endif
+	if (vma_desc_test(desc, VMA_SHARED_BIT))
+		return shmem_zero_setup_desc(desc);
+
+	/*
+	 * This is a highly unique situation where we mark a MAP_PRIVATE mapping
+	 * of /dev/zero anonymous, despite it not being.
+	 */
+	vma_desc_set_anonymous(desc);
+	return 0;
+}
+
+I'm not sure what the difference is between having to do
+vma_desc_set_anonymous() and this new vm_ops (which would then get cleared which
+is really weird).
+
+>
+>
+> From 3cdc1d205a8e10dedd99b21a5f4f3f570ba24469 Mon Sep 17 00:00:00 2001
+> From: "David Hildenbrand (Arm)" <david@kernel.org>
+> Date: Wed, 12 Aug 2026 19:13:32 +0200
+> Subject: [PATCH] tmp
+>
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 > ---
->   tools/testing/selftests/x86/Makefile          |    5 +-
->   tools/testing/selftests/x86/shadow_stack.c    | 1205 +++++++++++++++++
->   tools/testing/selftests/x86/shadow_stack.h    |   14 +
->   .../testing/selftests/x86/test_shadow_stack.c | 1167 +---------------
->   .../selftests/x86/test_shadow_stack_prctl.c   |   12 +
->   5 files changed, 1242 insertions(+), 1161 deletions(-)
->   create mode 100644 tools/testing/selftests/x86/shadow_stack.c
->   create mode 100644 tools/testing/selftests/x86/shadow_stack.h
->   create mode 100644 tools/testing/selftests/x86/test_shadow_stack_prctl.c
+>  drivers/char/mem.c              |  5 +++--
+>  include/linux/mm.h              |  4 +---
+>  mm/init-mm.c                    |  1 +
+>  mm/vma.c                        | 10 +--------
+>  mm/vma_internal.h               |  1 -
+>  tools/testing/vma/include/dup.h | 38 +--------------------------------
+>  tools/testing/vma/shared.c      |  1 +
+>  tools/testing/vma/tests/mmap.c  | 10 +++------
+>  8 files changed, 11 insertions(+), 59 deletions(-)
 >
-> diff --git a/tools/testing/selftests/x86/Makefile b/tools/testing/selftests/x86/Makefile
-> index 434065215d12..8748e2f4a915 100644
-> --- a/tools/testing/selftests/x86/Makefile
-> +++ b/tools/testing/selftests/x86/Makefile
-> @@ -19,7 +19,8 @@ TARGETS_C_32BIT_ONLY := entry_from_vm86 test_syscall_vdso unwind_vdso \
->   			test_FCMOV test_FCOMI test_FISTTP \
->   			vdso_restorer
->   TARGETS_C_64BIT_ONLY := fsgsbase sysret_rip syscall_numbering \
-> -			corrupt_xstate_header amx lam test_shadow_stack avx apx
-> +			corrupt_xstate_header amx lam test_shadow_stack avx apx \
-> +			test_shadow_stack_prctl
->   # Some selftests require 32bit support enabled also on 64bit systems
->   TARGETS_C_32BIT_NEEDED := ldt_gdt ptrace_syscall
->   
-> @@ -138,3 +139,5 @@ $(OUTPUT)/avx_64: CFLAGS += -mno-avx -mno-avx512f
->   $(OUTPUT)/amx_64: EXTRA_FILES += xstate.c
->   $(OUTPUT)/avx_64: EXTRA_FILES += xstate.c
->   $(OUTPUT)/apx_64: EXTRA_FILES += xstate.c
-> +$(OUTPUT)/test_shadow_stack_64: EXTRA_FILES += shadow_stack.c
-> +$(OUTPUT)/test_shadow_stack_prctl_64: EXTRA_FILES += shadow_stack.c
-> diff --git a/tools/testing/selftests/x86/shadow_stack.c b/tools/testing/selftests/x86/shadow_stack.c
-> new file mode 100644
-> index 000000000000..a375c4ff7a6a
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/shadow_stack.c
-> @@ -0,0 +1,1205 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#define _GNU_SOURCE
-> +
-> +#include <sys/syscall.h>
-> +#include <asm/mman.h>
-> +#include <sys/mman.h>
-> +#include <sys/stat.h>
-> +#include <sys/wait.h>
-> +#include <stdio.h>
-> +#include <stdlib.h>
-> +#include <fcntl.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include <errno.h>
-> +#include <stdbool.h>
-> +#include <x86intrin.h>
-> +#include <asm/prctl.h>
-> +#include <sys/prctl.h>
-> +#include <stdint.h>
-> +#include <signal.h>
-> +#include <pthread.h>
-> +#include <sys/ioctl.h>
-> +#include <linux/userfaultfd.h>
-> +#include <setjmp.h>
-> +#include <sys/ptrace.h>
-> +#include <sys/signal.h>
-> +#include <linux/elf.h>
-> +#include <linux/perf_event.h>
-> +
-> +#include "shadow_stack.h"
-> +
-> +/*
-> + * Define the ABI defines if needed, so people can run the tests
-> + * without building the headers.
-> + */
-> +#ifndef __NR_map_shadow_stack
-> +#define __NR_map_shadow_stack	453
-> +
-> +#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)
-> +
-> +#define ARCH_SHSTK_ENABLE	0x5001
-> +#define ARCH_SHSTK_DISABLE	0x5002
-> +#define ARCH_SHSTK_LOCK		0x5003
-> +#define ARCH_SHSTK_UNLOCK	0x5004
-> +#define ARCH_SHSTK_STATUS	0x5005
-> +
-> +#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
-> +#define ARCH_SHSTK_WRSS		(1ULL <<  1)
-> +
-> +#define NT_X86_SHSTK	0x204
-> +#endif
-> +
-> +#define SS_SIZE 0x200000
-> +#define PAGE_SIZE 0x1000
-> +
-> +void write_shstk(unsigned long *addr, unsigned long val)
-> +{
-> +	asm volatile("wrssq %[val], (%[addr])\n"
-> +		     : "=m" (addr)
-> +		     : [addr] "r" (addr), [val] "r" (val));
-> +}
-> +
-> +static inline unsigned long __attribute__((always_inline)) get_ssp(void)
-> +{
-> +	unsigned long ret = 0;
-> +
-> +	asm volatile("xor %0, %0; rdsspq %0" : "=r" (ret));
-> +	return ret;
-> +}
-> +
-> +/*
-> + * For use in inline enablement of shadow stack.
-> + *
-> + * The program can't return from the point where shadow stack gets enabled
-> + * because there will be no address on the shadow stack. So it can't use
-> + * syscall() for enablement, since it is a function.
-> + *
-> + * Based on code from nolibc.h. Keep a copy here because this can't pull in all
-> + * of nolibc.h.
-> + */
-> +#define ARCH_PRCTL(arg1, arg2)					\
-> +({								\
-> +	long _ret;						\
-> +	register long _num  asm("eax") = __NR_arch_prctl;	\
-> +	register long _arg1 asm("rdi") = (long)(arg1);		\
-> +	register long _arg2 asm("rsi") = (long)(arg2);		\
-> +								\
-> +	asm volatile (						\
-> +		"syscall\n"					\
-> +		: "=a"(_ret)					\
-> +		: "r"(_arg1), "r"(_arg2),			\
-> +		  "0"(_num)					\
-> +		: "rcx", "r11", "memory", "cc"			\
-> +	);							\
-> +	_ret;							\
-> +})
-> +
-> +#define PRCTL(option, arg2, arg3, arg4, arg5)             \
-> +({                                                        \
-> +	long _ret;                                        \
-> +	register long _num  asm("rax") = __NR_prctl;      \
-> +	register long _arg1 asm("rdi") = (long)(option);  \
-> +	register long _arg2 asm("rsi") = (long)(arg2);    \
-> +	register long _arg3 asm("rdx") = (long)(arg3);    \
-> +	register long _arg4 asm("r10") = (long)(arg4);    \
-> +	register long _arg5 asm("r8")  = (long)(arg5);    \
-> +							  \
-> +	asm volatile (                                    \
-> +		"syscall"                                 \
-> +		: "=a"(_ret)                              \
-> +		: "0"(_num),                              \
-> +		  "r"(_arg1), "r"(_arg2), "r"(_arg3),     \
-> +		  "r"(_arg4), "r"(_arg5)                  \
-> +		: "rcx", "r11", "memory", "cc"            \
-> +	);                                                \
-> +	_ret;                                             \
-> +})
-> +
-> +#define SHADOW_STACK_DISABLE(which_test)                           \
-> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?            \
-> +		ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK) : \
-> +		PRCTL(PR_SET_SHADOW_STACK_STATUS, 0, 0, 0, 0))
-> +
-> +#define SHADOW_STACK_ENABLE(which_test)                                             \
-> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?                             \
-> +		ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK) :                   \
-> +		PRCTL(PR_SET_SHADOW_STACK_STATUS, PR_SHADOW_STACK_ENABLE, 0, 0, 0))
-> +
-> +#define SHADOW_STACK_ENABLE_WRITE(which_test)                                   \
-> +	((which_test) == SHADOW_STACK_TEST_ARCH_PRCTL ?                          \
-> +		ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS) :                \
-> +		PRCTL(PR_SET_SHADOW_STACK_STATUS,                               \
-> +			PR_SHADOW_STACK_ENABLE|PR_SHADOW_STACK_WRITE, 0, 0, 0))
-> +
-> +void *create_shstk(void *addr)
-> +{
-> +	return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
-> +}
-> +
-> +void *create_normal_mem(void *addr)
-> +{
-> +	return mmap(addr, SS_SIZE, PROT_READ | PROT_WRITE,
-> +		    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-> +}
-> +
-> +void free_shstk(void *shstk)
-> +{
-> +	munmap(shstk, SS_SIZE);
-> +}
-> +
-> +int reset_shstk(void *shstk)
-> +{
-> +	return madvise(shstk, SS_SIZE, MADV_DONTNEED);
-> +}
-> +
-> +void try_shstk(unsigned long new_ssp)
-> +{
-> +	unsigned long ssp;
-> +
-> +	printf("[INFO]\tnew_ssp = %lx, *new_ssp = %lx\n",
-> +	       new_ssp, *((unsigned long *)new_ssp));
-> +
-> +	ssp = get_ssp();
-> +	printf("[INFO]\tchanging ssp from %lx to %lx\n", ssp, new_ssp);
-> +
-> +	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
-> +	asm volatile("saveprevssp");
-> +	printf("[INFO]\tssp is now %lx\n", get_ssp());
-> +
-> +	/* Switch back to original shadow stack */
-> +	ssp -= 8;
-> +	asm volatile("rstorssp (%0)\n":: "r" (ssp));
-> +	asm volatile("saveprevssp");
-> +}
-> +
-> +int test_shstk_pivot(void)
-> +{
-> +	void *shstk = create_shstk(0);
-> +
-> +	if (shstk == MAP_FAILED) {
-> +		printf("[FAIL]\tError creating shadow stack: %d\n", errno);
-> +		return 1;
-> +	}
-> +	try_shstk((unsigned long)shstk + SS_SIZE - 8);
-> +	free_shstk(shstk);
-> +
-> +	printf("[OK]\tShadow stack pivot\n");
-> +	return 0;
-> +}
-> +
-> +int test_shstk_faults(void)
-> +{
-> +	unsigned long *shstk = create_shstk(0);
-> +
-> +	/* Read shadow stack, test if it's zero to not get read optimized out */
-> +	if (*shstk != 0)
-> +		goto err;
-> +
-> +	/* Wrss memory that was already read. */
-> +	write_shstk(shstk, 1);
-> +	if (*shstk != 1)
-> +		goto err;
-> +
-> +	/* Page out memory, so we can wrss it again. */
-> +	if (reset_shstk((void *)shstk))
-> +		goto err;
-> +
-> +	write_shstk(shstk, 1);
-> +	if (*shstk != 1)
-> +		goto err;
-> +
-> +	printf("[OK]\tShadow stack faults\n");
-> +	return 0;
-> +
-> +err:
-> +	return 1;
-> +}
-> +
-> +unsigned long saved_ssp;
-> +unsigned long saved_ssp_val;
-> +volatile bool segv_triggered;
-> +
-> +void __attribute__((noinline)) violate_ss(void)
-> +{
-> +	saved_ssp = get_ssp();
-> +	saved_ssp_val = *(unsigned long *)saved_ssp;
-> +
-> +	/* Corrupt shadow stack */
-> +	printf("[INFO]\tCorrupting shadow stack\n");
-> +	write_shstk((void *)saved_ssp, 0);
-> +}
-> +
-> +void segv_handler(int signum, siginfo_t *si, void *uc)
-> +{
-> +	printf("[INFO]\tGenerated shadow stack violation successfully\n");
-> +
-> +	segv_triggered = true;
-> +
-> +	/* Fix shadow stack */
-> +	write_shstk((void *)saved_ssp, saved_ssp_val);
-> +}
-> +
-> +int test_shstk_violation(void)
-> +{
-> +	struct sigaction sa = {};
-> +
-> +	sa.sa_sigaction = segv_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	segv_triggered = false;
-> +
-> +	/* Make sure segv_triggered is set before violate_ss() */
-> +	asm volatile("" : : : "memory");
-> +
-> +	violate_ss();
-> +
-> +	signal(SIGSEGV, SIG_DFL);
-> +
-> +	printf("[OK]\tShadow stack violation test\n");
-> +
-> +	return !segv_triggered;
-> +}
-> +
-> +/* Gup test state */
-> +#define MAGIC_VAL 0x12345678
-> +bool is_shstk_access;
-> +void *shstk_ptr;
-> +int fd;
-> +
-> +void reset_test_shstk(void *addr)
-> +{
-> +	if (shstk_ptr)
-> +		free_shstk(shstk_ptr);
-> +	shstk_ptr = create_shstk(addr);
-> +}
-> +
-> +void test_access_fix_handler(int signum, siginfo_t *si, void *uc)
-> +{
-> +	printf("[INFO]\tViolation from %s\n", is_shstk_access ? "shstk access" : "normal write");
-> +
-> +	segv_triggered = true;
-> +
-> +	/* Fix shadow stack */
-> +	if (is_shstk_access) {
-> +		reset_test_shstk(shstk_ptr);
-> +		return;
-> +	}
-> +
-> +	free_shstk(shstk_ptr);
-> +	create_normal_mem(shstk_ptr);
-> +}
-> +
-> +bool test_shstk_access(void *ptr)
-> +{
-> +	is_shstk_access = true;
-> +	segv_triggered = false;
-> +	write_shstk(ptr, MAGIC_VAL);
-> +
-> +	asm volatile("" : : : "memory");
-> +
-> +	return segv_triggered;
-> +}
-> +
-> +bool test_write_access(void *ptr)
-> +{
-> +	is_shstk_access = false;
-> +	segv_triggered = false;
-> +	*(unsigned long *)ptr = MAGIC_VAL;
-> +
-> +	asm volatile("" : : : "memory");
-> +
-> +	return segv_triggered;
-> +}
-> +
-> +bool gup_write(void *ptr)
-> +{
-> +	unsigned long val;
-> +
-> +	lseek(fd, (unsigned long)ptr, SEEK_SET);
-> +	if (write(fd, &val, sizeof(val)) < 0)
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +bool gup_read(void *ptr)
-> +{
-> +	unsigned long val;
-> +
-> +	lseek(fd, (unsigned long)ptr, SEEK_SET);
-> +	if (read(fd, &val, sizeof(val)) < 0)
-> +		return 1;
-> +
-> +	return 0;
-> +}
-> +
-> +int test_gup(void)
-> +{
-> +	struct sigaction sa = {};
-> +	int status;
-> +	pid_t pid;
-> +
-> +	sa.sa_sigaction = test_access_fix_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	segv_triggered = false;
-> +
-> +	fd = open("/proc/self/mem", O_RDWR);
-> +	if (fd == -1)
-> +		return 1;
-> +
-> +	reset_test_shstk(0);
-> +	if (gup_read(shstk_ptr))
-> +		return 1;
-> +	if (test_shstk_access(shstk_ptr))
-> +		return 1;
-> +	printf("[INFO]\tGup read -> shstk access success\n");
-> +
-> +	reset_test_shstk(0);
-> +	if (gup_write(shstk_ptr))
-> +		return 1;
-> +	if (test_shstk_access(shstk_ptr))
-> +		return 1;
-> +	printf("[INFO]\tGup write -> shstk access success\n");
-> +
-> +	reset_test_shstk(0);
-> +	if (gup_read(shstk_ptr))
-> +		return 1;
-> +	if (!test_write_access(shstk_ptr))
-> +		return 1;
-> +	printf("[INFO]\tGup read -> write access success\n");
-> +
-> +	reset_test_shstk(0);
-> +	if (gup_write(shstk_ptr))
-> +		return 1;
-> +	if (!test_write_access(shstk_ptr))
-> +		return 1;
-> +	printf("[INFO]\tGup write -> write access success\n");
-> +
-> +	close(fd);
-> +
-> +	/* COW/gup test */
-> +	reset_test_shstk(0);
-> +	pid = fork();
-> +	if (!pid) {
-> +		fd = open("/proc/self/mem", O_RDWR);
-> +		if (fd == -1)
-> +			exit(1);
-> +
-> +		if (gup_write(shstk_ptr)) {
-> +			close(fd);
-> +			exit(1);
-> +		}
-> +		close(fd);
-> +		exit(0);
-> +	}
-> +	waitpid(pid, &status, 0);
-> +	if (WEXITSTATUS(status)) {
-> +		printf("[FAIL]\tWrite in child failed\n");
-> +		return 1;
-> +	}
-> +	if (*(unsigned long *)shstk_ptr == MAGIC_VAL) {
-> +		printf("[FAIL]\tWrite in child wrote through to shared memory\n");
-> +		return 1;
-> +	}
-> +
-> +	printf("[INFO]\tCow gup write -> write access success\n");
-> +
-> +	free_shstk(shstk_ptr);
-> +
-> +	signal(SIGSEGV, SIG_DFL);
-> +
-> +	printf("[OK]\tShadow gup test\n");
-> +
-> +	return 0;
-> +}
-> +
-> +int test_mprotect(void)
-> +{
-> +	struct sigaction sa = {};
-> +
-> +	sa.sa_sigaction = test_access_fix_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	segv_triggered = false;
-> +
-> +	/* mprotect a shadow stack as read only */
-> +	reset_test_shstk(0);
-> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-> +		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-> +		return 1;
-> +	}
-> +
-> +	/* try to wrss it and fail */
-> +	if (!test_shstk_access(shstk_ptr)) {
-> +		printf("[FAIL]\tShadow stack access to read-only memory succeeded\n");
-> +		return 1;
-> +	}
-> +
-> +	/*
-> +	 * The shadow stack was reset above to resolve the fault, make the new one
-> +	 * read-only.
-> +	 */
-> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-> +		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-> +		return 1;
-> +	}
-> +
-> +	/* then back to writable */
-> +	if (mprotect(shstk_ptr, SS_SIZE, PROT_WRITE | PROT_READ) < 0) {
-> +		printf("[FAIL]\tmprotect(PROT_WRITE) failed\n");
-> +		return 1;
-> +	}
-> +
-> +	/* then wrss to it and succeed */
-> +	if (test_shstk_access(shstk_ptr)) {
-> +		printf("[FAIL]\tShadow stack access to mprotect() writable memory failed\n");
-> +		return 1;
-> +	}
-> +
-> +	free_shstk(shstk_ptr);
-> +
-> +	signal(SIGSEGV, SIG_DFL);
-> +
-> +	printf("[OK]\tmprotect() test\n");
-> +
-> +	return 0;
-> +}
-> +
-> +char zero[4096];
-> +
-> +static void *uffd_thread(void *arg)
-> +{
-> +	struct uffdio_copy req;
-> +	int uffd = *(int *)arg;
-> +	struct uffd_msg msg;
-> +	int ret;
-> +
-> +	while (1) {
-> +		ret = read(uffd, &msg, sizeof(msg));
-> +		if (ret > 0)
-> +			break;
-> +		else if (errno == EAGAIN)
-> +			continue;
-> +		return (void *)1;
-> +	}
-> +
-> +	req.dst = msg.arg.pagefault.address;
-> +	req.src = (__u64)zero;
-> +	req.len = 4096;
-> +	req.mode = 0;
-> +
-> +	if (ioctl(uffd, UFFDIO_COPY, &req))
-> +		return (void *)1;
-> +
-> +	return (void *)0;
-> +}
-> +
-> +int test_userfaultfd(void)
-> +{
-> +	struct uffdio_register uffdio_register;
-> +	struct uffdio_api uffdio_api;
-> +	struct sigaction sa = {};
-> +	pthread_t thread;
-> +	void *res;
-> +	int uffd;
-> +
-> +	sa.sa_sigaction = test_access_fix_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-> +	if (uffd < 0) {
-> +		printf("[SKIP]\tUserfaultfd unavailable.\n");
-> +		return 0;
-> +	}
-> +
-> +	reset_test_shstk(0);
-> +
-> +	uffdio_api.api = UFFD_API;
-> +	uffdio_api.features = 0;
-> +	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
-> +		goto err;
-> +
-> +	uffdio_register.range.start = (__u64)shstk_ptr;
-> +	uffdio_register.range.len = 4096;
-> +	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-> +	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
-> +		goto err;
-> +
-> +	if (pthread_create(&thread, NULL, &uffd_thread, &uffd))
-> +		goto err;
-> +
-> +	reset_shstk(shstk_ptr);
-> +	test_shstk_access(shstk_ptr);
-> +
-> +	if (pthread_join(thread, &res))
-> +		goto err;
-> +
-> +	if (test_shstk_access(shstk_ptr))
-> +		goto err;
-> +
-> +	free_shstk(shstk_ptr);
-> +
-> +	signal(SIGSEGV, SIG_DFL);
-> +
-> +	if (!res)
-> +		printf("[OK]\tUserfaultfd test\n");
-> +	return !!res;
-> +err:
-> +	free_shstk(shstk_ptr);
-> +	close(uffd);
-> +	signal(SIGSEGV, SIG_DFL);
-> +	return 1;
-> +}
-> +
-> +/* Simple linked list for keeping track of mappings in test_guard_gap() */
-> +struct node {
-> +	struct node *next;
-> +	void *mapping;
-> +};
-> +
-> +/*
-> + * This tests whether mmap will place other mappings in a shadow stack's guard
-> + * gap. The steps are:
-> + *   1. Finds an empty place by mapping and unmapping something.
-> + *   2. Map a shadow stack in the middle of the known empty area.
-> + *   3. Map a bunch of PAGE_SIZE mappings. These will use the search down
-> + *      direction, filling any gaps until it encounters the shadow stack's
-> + *      guard gap.
-> + *   4. When a mapping lands below the shadow stack from step 2, then all
-> + *      of the above gaps are filled. The search down algorithm will have
-> + *      looked at the shadow stack gaps.
-> + *   5. See if it landed in the gap.
-> + */
-> +int test_guard_gap_other_gaps(void)
-> +{
-> +	void *free_area, *shstk, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
-> +	struct node *head = NULL, *cur;
-> +
-> +	free_area = mmap(0, SS_SIZE * 3, PROT_READ | PROT_WRITE,
-> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	munmap(free_area, SS_SIZE * 3);
-> +
-> +	shstk = create_shstk(free_area + SS_SIZE);
-> +	if (shstk == MAP_FAILED)
-> +		return 1;
-> +
-> +	while (test_map > shstk) {
-> +		test_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE,
-> +				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +		if (test_map == MAP_FAILED)
-> +			return 1;
-> +		cur = malloc(sizeof(*cur));
-> +		cur->mapping = test_map;
-> +
-> +		cur->next = head;
-> +		head = cur;
-> +	}
-> +
-> +	while (head) {
-> +		cur = head;
-> +		head = cur->next;
-> +		munmap(cur->mapping, PAGE_SIZE);
-> +		free(cur);
-> +	}
-> +
-> +	free_shstk(shstk);
-> +
-> +	if (shstk - test_map - PAGE_SIZE != PAGE_SIZE)
-> +		return 1;
-> +
-> +	printf("[OK]\tGuard gap test, other mapping's gaps\n");
-> +
-> +	return 0;
-> +}
-> +
-> +/* Tests respecting the guard gap of the mapping getting placed */
-> +int test_guard_gap_new_mappings_gaps(void)
-> +{
-> +	void *free_area, *shstk_start, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
-> +	struct node *head = NULL, *cur;
-> +	int ret = 0;
-> +
-> +	free_area = mmap(0, PAGE_SIZE * 4, PROT_READ | PROT_WRITE,
-> +			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	munmap(free_area, PAGE_SIZE * 4);
-> +
-> +	/* Test letting map_shadow_stack find a free space */
-> +	shstk_start = mmap(free_area, PAGE_SIZE, PROT_READ | PROT_WRITE,
-> +			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> +	if (shstk_start == MAP_FAILED || shstk_start != free_area)
-> +		return 1;
-> +
-> +	while (test_map > shstk_start) {
-> +		test_map = (void *)syscall(__NR_map_shadow_stack, 0, PAGE_SIZE, 0);
-> +		if (test_map == MAP_FAILED) {
-> +			printf("[INFO]\tmap_shadow_stack MAP_FAILED\n");
-> +			ret = 1;
-> +			break;
-> +		}
-> +
-> +		cur = malloc(sizeof(*cur));
-> +		cur->mapping = test_map;
-> +
-> +		cur->next = head;
-> +		head = cur;
-> +
-> +		if (test_map == free_area + PAGE_SIZE) {
-> +			printf("[INFO]\tNew mapping has other mapping in guard gap!\n");
-> +			ret = 1;
-> +			break;
-> +		}
-> +	}
-> +
-> +	while (head) {
-> +		cur = head;
-> +		head = cur->next;
-> +		munmap(cur->mapping, PAGE_SIZE);
-> +		free(cur);
-> +	}
-> +
-> +	munmap(shstk_start, PAGE_SIZE);
-> +
-> +	if (!ret)
-> +		printf("[OK]\tGuard gap test, placement mapping's gaps\n");
-> +
-> +	return ret;
-> +}
-> +
-> +/*
-> + * Too complicated to pull it out of the 32 bit header, but also get the
-> + * 64 bit one needed above. Just define a copy here.
-> + */
-> +#define __NR_compat_sigaction 67
-> +
-> +/*
-> + * Call 32 bit signal handler to get 32 bit signals ABI. Make sure
-> + * to push the registers that will get clobbered.
-> + */
-> +int sigaction32(int signum, const struct sigaction *restrict act,
-> +		struct sigaction *restrict oldact)
-> +{
-> +	register long syscall_reg asm("eax") = __NR_compat_sigaction;
-> +	register long signum_reg asm("ebx") = signum;
-> +	register long act_reg asm("ecx") = (long)act;
-> +	register long oldact_reg asm("edx") = (long)oldact;
-> +	int ret = 0;
-> +
-> +	asm volatile ("int $0x80;"
-> +		      : "=a"(ret), "=m"(oldact)
-> +		      : "r"(syscall_reg), "r"(signum_reg), "r"(act_reg),
-> +			"r"(oldact_reg)
-> +		      : "r8", "r9", "r10", "r11"
-> +		     );
-> +
-> +	return ret;
-> +}
-> +
-> +sigjmp_buf jmp_buffer;
-> +enum shadow_stack_test _which_test;
-> +void segv_gp_handler(int signum, siginfo_t *si, void *uc)
-> +{
-> +	segv_triggered = true;
-> +
-> +	/*
-> +	 * To work with old glibc, this can't rely on siglongjmp working with
-> +	 * shadow stack enabled, so disable shadow stack before siglongjmp().
-> +	 */
-> +	SHADOW_STACK_DISABLE(_which_test);
-> +	siglongjmp(jmp_buffer, -1);
-> +}
-> +
-> +/*
-> + * Transition to 32 bit mode and check that a #GP triggers a segfault.
-> + */
-> +int test_32bit(void)
-> +{
-> +	struct sigaction sa = {};
-> +	struct sigaction *sa32;
-> +
-> +	/* Create sigaction in 32 bit address range */
-> +	sa32 = mmap(0, 4096, PROT_READ | PROT_WRITE,
-> +		    MAP_32BIT | MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-> +	sa32->sa_flags = SA_SIGINFO;
-> +
-> +	sa.sa_sigaction = segv_gp_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +
-> +	segv_triggered = false;
-> +
-> +	/* Make sure segv_triggered is set before triggering the #GP */
-> +	asm volatile("" : : : "memory");
-> +
-> +	/*
-> +	 * Set handler to somewhere in 32 bit address space
-> +	 */
-> +	sa32->sa_handler = (void *)sa32;
-> +	if (sigaction32(SIGUSR1, sa32, NULL))
-> +		return 1;
-> +
-> +	if (!sigsetjmp(jmp_buffer, 1))
-> +		raise(SIGUSR1);
-> +
-> +	if (segv_triggered)
-> +		printf("[OK]\t32 bit test\n");
-> +
-> +	return !segv_triggered;
-> +}
-> +
-> +static int parse_uint_from_file(const char *file, const char *fmt)
-> +{
-> +	int err, ret;
-> +	FILE *f;
-> +
-> +	f = fopen(file, "re");
-> +	if (!f) {
-> +		err = -errno;
-> +		printf("failed to open '%s': %d\n", file, err);
-> +		return err;
-> +	}
-> +	err = fscanf(f, fmt, &ret);
-> +	if (err != 1) {
-> +		err = err == EOF ? -EIO : -errno;
-> +		printf("failed to parse '%s': %d\n", file, err);
-> +		fclose(f);
-> +		return err;
-> +	}
-> +	fclose(f);
-> +	return ret;
-> +}
-> +
-> +static int determine_uprobe_perf_type(void)
-> +{
-> +	const char *file = "/sys/bus/event_source/devices/uprobe/type";
-> +
-> +	return parse_uint_from_file(file, "%d\n");
-> +}
-> +
-> +static int determine_uprobe_retprobe_bit(void)
-> +{
-> +	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
-> +
-> +	return parse_uint_from_file(file, "config:%d\n");
-> +}
-> +
-> +static ssize_t get_uprobe_offset(const void *addr)
-> +{
-> +	size_t start, end, base;
-> +	char buf[256];
-> +	bool found = false;
-> +	FILE *f;
-> +
-> +	f = fopen("/proc/self/maps", "r");
-> +	if (!f)
-> +		return -errno;
-> +
-> +	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
-> +		if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
-> +			found = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	fclose(f);
-> +
-> +	if (!found)
-> +		return -ESRCH;
-> +
-> +	return (uintptr_t)addr - start + base;
-> +}
-> +
-> +static __attribute__((noinline)) void uretprobe_trigger(void)
-> +{
-> +	asm volatile ("");
-> +}
-> +
-> +/*
-> + * This test setups return uprobe, which is sensitive to shadow stack
-> + * (crashes without extra fix). After executing the uretprobe we fail
-> + * the test if we receive SIGSEGV, no crash means we're good.
-> + *
-> + * Helper functions above borrowed from bpf selftests.
-> + */
-> +static int test_uretprobe(enum shadow_stack_test which_test)
-> +{
-> +	const size_t attr_sz = sizeof(struct perf_event_attr);
-> +	const char *file = "/proc/self/exe";
-> +	int bit, fd = 0, type, err = 1;
-> +	struct perf_event_attr attr;
-> +	struct sigaction sa = {};
-> +	ssize_t offset;
-> +
-> +	type = determine_uprobe_perf_type();
-> +	if (type < 0) {
-> +		if (type == -ENOENT)
-> +			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
-> +		return 0;
-> +	}
-> +
-> +	offset = get_uprobe_offset(uretprobe_trigger);
-> +	if (offset < 0)
-> +		return 1;
-> +
-> +	bit = determine_uprobe_retprobe_bit();
-> +	if (bit < 0)
-> +		return 1;
-> +
-> +	sa.sa_sigaction = segv_gp_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	/* Setup return uprobe through perf event interface. */
-> +	memset(&attr, 0, attr_sz);
-> +	attr.size = attr_sz;
-> +	attr.type = type;
-> +	attr.config = 1 << bit;
-> +	attr.config1 = (__u64) (unsigned long) file;
-> +	attr.config2 = offset;
-> +
-> +	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
-> +		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
-> +	if (fd < 0)
-> +		goto out;
-> +
-> +	if (sigsetjmp(jmp_buffer, 1))
-> +		goto out;
-> +
-> +	SHADOW_STACK_ENABLE(which_test);
-> +
-> +	/*
-> +	 * This either segfaults and goes through sigsetjmp above
-> +	 * or succeeds and we're good.
-> +	 */
-> +	uretprobe_trigger();
-> +
-> +	printf("[OK]\tUretprobe test\n");
-> +	err = 0;
-> +
-> +out:
-> +	SHADOW_STACK_DISABLE(which_test);
-> +	signal(SIGSEGV, SIG_DFL);
-> +	if (fd)
-> +		close(fd);
-> +	return err;
-> +}
-> +
-> +/* Keep the CALL first so the function address is exactly the probed CALL. */
-> +extern void uprobe_call_trigger(void);
-> +asm (".pushsection .text\n"
-> +	".global uprobe_call_target\n"
-> +	".type uprobe_call_target, @function\n"
-> +	"uprobe_call_target:\n"
-> +	"	ret\n"
-> +	".size uprobe_call_target, .-uprobe_call_target\n"
-> +
-> +	".global uprobe_call_trigger\n"
-> +	".type uprobe_call_trigger, @function\n"
-> +	"uprobe_call_trigger:\n"
-> +	"	call uprobe_call_target\n"
-> +	"	ret\n"
-> +	".size uprobe_call_trigger, .-uprobe_call_trigger\n"
-> +	".popsection\n"
-> +);
-> +
-> +/* If CALL emulation misses the shadow stack update, this exits via SIGSEGV. */
-> +static int test_uprobe_call(enum shadow_stack_test which_test)
-> +{
-> +	const size_t attr_sz = sizeof(struct perf_event_attr);
-> +	const char *file = "/proc/self/exe";
-> +	int fd = -1, type, err = 1;
-> +	struct perf_event_attr attr;
-> +	struct sigaction sa = {};
-> +	ssize_t offset;
-> +
-> +	type = determine_uprobe_perf_type();
-> +	if (type < 0) {
-> +		if (type == -ENOENT)
-> +			printf("[SKIP]\tUprobe on CALL test, uprobes are not available\n");
-> +		return 0;
-> +	}
-> +
-> +	offset = get_uprobe_offset(uprobe_call_trigger);
-> +	if (offset < 0)
-> +		return 1;
-> +
-> +	sa.sa_sigaction = segv_gp_handler;
-> +	sa.sa_flags = SA_SIGINFO;
-> +	if (sigaction(SIGSEGV, &sa, NULL))
-> +		return 1;
-> +
-> +	/* Setup entry uprobe through perf event interface. */
-> +	memset(&attr, 0, attr_sz);
-> +	attr.size = attr_sz;
-> +	attr.type = type;
-> +	attr.config = 0;
-> +	attr.config1 = (__u64)(unsigned long)file;
-> +	attr.config2 = offset;
-> +
-> +	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
-> +		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
-> +	if (fd < 0)
-> +		goto out;
-> +
-> +	if (sigsetjmp(jmp_buffer, 1))
-> +		goto out;
-> +
-> +	if (SHADOW_STACK_ENABLE(which_test))
-> +		goto out;
-> +
-> +	/*
-> +	 * This either segfaults and goes through sigsetjmp above
-> +	 * or succeeds and we're good.
-> +	 */
-> +	uprobe_call_trigger();
-> +
-> +	printf("[OK]\tUprobe on CALL test\n");
-> +	err = 0;
-> +
-> +out:
-> +	SHADOW_STACK_DISABLE(which_test);
-> +	signal(SIGSEGV, SIG_DFL);
-> +	if (fd >= 0)
-> +		close(fd);
-> +	return err;
-> +}
-> +
-> +void segv_handler_ptrace(int signum, siginfo_t *si, void *uc)
-> +{
-> +	/* The SSP adjustment caused a segfault. */
-> +	exit(0);
-> +}
-> +
-> +int test_ptrace(void)
-> +{
-> +	unsigned long saved_ssp, ssp = 0;
-> +	struct sigaction sa = {};
-> +	struct iovec iov;
-> +	int status;
-> +	int pid;
-> +
-> +	iov.iov_base = &ssp;
-> +	iov.iov_len = sizeof(ssp);
-> +
-> +	pid = fork();
-> +	if (!pid) {
-> +		ssp = get_ssp();
-> +
-> +		sa.sa_sigaction = segv_handler_ptrace;
-> +		sa.sa_flags = SA_SIGINFO;
-> +		if (sigaction(SIGSEGV, &sa, NULL))
-> +			return 1;
-> +
-> +		ptrace(PTRACE_TRACEME, NULL, NULL, NULL);
-> +		/*
-> +		 * The parent will tweak the SSP and return from this function
-> +		 * will #CP.
-> +		 */
-> +		raise(SIGTRAP);
-> +
-> +		exit(1);
-> +	}
-> +
-> +	while (waitpid(pid, &status, 0) != -1 && WSTOPSIG(status) != SIGTRAP);
-> +
-> +	if (ptrace(PTRACE_GETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tFailed to PTRACE_GETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	if (!ssp) {
-> +		printf("[INFO]\tPtrace child SSP was 0\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	saved_ssp = ssp;
-> +
-> +	iov.iov_len = 0;
-> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tToo small size accepted via PTRACE_SETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	iov.iov_len = sizeof(ssp) + 1;
-> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tToo large size accepted via PTRACE_SETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	ssp += 1;
-> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tUnaligned SSP written via PTRACE_SETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	ssp = 0xFFFFFFFFFFFF0000;
-> +	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tKernel range SSP written via PTRACE_SETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	/*
-> +	 * Tweak the SSP so the child with #CP when it resumes and returns
-> +	 * from raise()
-> +	 */
-> +	ssp = saved_ssp + 8;
-> +	iov.iov_len = sizeof(ssp);
-> +	if (ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> +		printf("[INFO]\tFailed to PTRACE_SETREGS\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	if (ptrace(PTRACE_DETACH, pid, NULL, NULL)) {
-> +		printf("[INFO]\tFailed to PTRACE_DETACH\n");
-> +		goto out_kill;
-> +	}
-> +
-> +	waitpid(pid, &status, 0);
-> +	if (WEXITSTATUS(status))
-> +		return 1;
-> +
-> +	printf("[OK]\tPtrace test\n");
-> +	return 0;
-> +
-> +out_kill:
-> +	kill(pid, SIGKILL);
-> +	return 1;
-> +}
-> +
-> +#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
-> +int shadow_stack_run_tests(enum shadow_stack_test unused)
-> +{
-> +	printf("[SKIP]\tCompiler does not support CET.\n");
-> +	return 0;
-> +}
-> +#else
-> +int shadow_stack_run_tests(enum shadow_stack_test which_test)
-> +{
-> +	int ret = 0;
-> +
-> +	if (SHADOW_STACK_ENABLE(which_test)) {
-> +		printf("[SKIP]\tCould not enable Shadow stack\n");
-> +		return 1;
-> +	}
-> +
-> +	if (SHADOW_STACK_DISABLE(which_test)) {
-> +		ret = 1;
-> +		printf("[FAIL]\tDisabling shadow stack failed\n");
-> +	}
-> +
-> +	if (SHADOW_STACK_ENABLE(which_test)) {
-> +		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-> +		return 1;
-> +	}
-> +
-> +	if (SHADOW_STACK_ENABLE_WRITE(which_test)) {
-> +		printf("[SKIP]\tCould not enable WRSS\n");
-> +		ret = 1;
-> +		goto out;
-> +	}
-> +
-> +	/* Should have succeeded if here, but this is a test, so double check. */
-> +	if (!get_ssp()) {
-> +		printf("[FAIL]\tShadow stack disabled\n");
-> +		return 1;
-> +	}
-> +
-> +	if (test_shstk_pivot()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tShadow stack pivot\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_shstk_faults()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tShadow stack fault test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_shstk_violation()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tShadow stack violation test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_gup()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tShadow shadow stack gup\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_mprotect()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tShadow shadow mprotect test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_userfaultfd()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tUserfaultfd test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_guard_gap_other_gaps()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tGuard gap test, other mappings' gaps\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_guard_gap_new_mappings_gaps()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tGuard gap test, placement mapping's gaps\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_ptrace()) {
-> +		ret = 1;
-> +		printf("[FAIL]\tptrace test\n");
-> +	}
-> +
-> +	if (test_32bit()) {
-> +		ret = 1;
-> +		printf("[FAIL]\t32 bit test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_uretprobe(which_test)) {
-> +		ret = 1;
-> +		printf("[FAIL]\turetprobe test\n");
-> +		goto out;
-> +	}
-> +
-> +	if (test_uprobe_call(which_test)) {
-> +		ret = 1;
-> +		printf("[FAIL]\tuprobe on CALL test\n");
-> +		goto out;
-> +	}
-> +
-> +	return ret;
-> +
-> +out:
-> +	/*
-> +	 * Disable shadow stack before the function returns, or there will be a
-> +	 * shadow stack violation.
-> +	 */
-> +	if (SHADOW_STACK_DISABLE(which_test)) {
-> +		ret = 1;
-> +		printf("[FAIL]\tDisabling shadow stack failed\n");
-> +	}
-> +
-> +	return ret;
-> +}
-> +#endif
-> diff --git a/tools/testing/selftests/x86/shadow_stack.h b/tools/testing/selftests/x86/shadow_stack.h
-> new file mode 100644
-> index 000000000000..d36a44df7387
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/shadow_stack.h
-> @@ -0,0 +1,14 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#ifndef TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_
-> +#define TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_
-> +
-> +enum shadow_stack_test {
-> +	SHADOW_STACK_TEST_ARCH_PRCTL,
-> +	SHADOW_STACK_TEST_PRCTL,
-> +	SHADOW_STACK_TEST_COUNT,
-> +};
-> +
-> +int shadow_stack_run_tests(enum shadow_stack_test which_test);
-> +
-> +#endif /* TOOLS_TESTING_SELFTESTS_X86_SHADOW_STACK_H_ */
-> diff --git a/tools/testing/selftests/x86/test_shadow_stack.c b/tools/testing/selftests/x86/test_shadow_stack.c
-> index 3d6ca33edba4..d89c04623001 100644
-> --- a/tools/testing/selftests/x86/test_shadow_stack.c
-> +++ b/tools/testing/selftests/x86/test_shadow_stack.c
-> @@ -1,1174 +1,21 @@
->   // SPDX-License-Identifier: GPL-2.0
-> +
->   /*
->    * This program test's basic kernel shadow stack support. It enables shadow
->    * stack manual via the arch_prctl(), instead of relying on glibc. It's
->    * Makefile doesn't compile with shadow stack support, so it doesn't rely on
->    * any particular glibc. As a result it can't do any operations that require
->    * special glibc shadow stack support (longjmp(), swapcontext(), etc). Just
-> - * stick to the basics and hope the compiler doesn't do anything strange.
-> + * stick to the basics and hope the compiler doesn't do anything strange. It
-> + * uses the x86 specific interface for ARCH_PCTL, whereas
-> + * test_shadow_stack_prctl.c uses the generic PRCTL interface mixed with x86
-> + * specific code.
->    */
-> -
->   #define _GNU_SOURCE
->   
-> -#include <sys/syscall.h>
-> -#include <asm/mman.h>
-> -#include <sys/mman.h>
-> -#include <sys/stat.h>
-> -#include <sys/wait.h>
-> -#include <stdio.h>
-> -#include <stdlib.h>
-> -#include <fcntl.h>
-> -#include <unistd.h>
-> -#include <string.h>
-> -#include <errno.h>
-> -#include <stdbool.h>
-> -#include <x86intrin.h>
-> -#include <asm/prctl.h>
-> -#include <sys/prctl.h>
-> -#include <stdint.h>
-> -#include <signal.h>
-> -#include <pthread.h>
-> -#include <sys/ioctl.h>
-> -#include <linux/userfaultfd.h>
-> -#include <setjmp.h>
-> -#include <sys/ptrace.h>
-> -#include <sys/signal.h>
-> -#include <linux/elf.h>
-> -#include <linux/perf_event.h>
-> -
-> -/*
-> - * Define the ABI defines if needed, so people can run the tests
-> - * without building the headers.
-> - */
-> -#ifndef __NR_map_shadow_stack
-> -#define __NR_map_shadow_stack	453
-> -
-> -#define SHADOW_STACK_SET_TOKEN	(1ULL << 0)
-> -
-> -#define ARCH_SHSTK_ENABLE	0x5001
-> -#define ARCH_SHSTK_DISABLE	0x5002
-> -#define ARCH_SHSTK_LOCK		0x5003
-> -#define ARCH_SHSTK_UNLOCK	0x5004
-> -#define ARCH_SHSTK_STATUS	0x5005
-> -
-> -#define ARCH_SHSTK_SHSTK	(1ULL <<  0)
-> -#define ARCH_SHSTK_WRSS		(1ULL <<  1)
-> -
-> -#define NT_X86_SHSTK	0x204
-> -#endif
-> -
-> -#define SS_SIZE 0x200000
-> -#define PAGE_SIZE 0x1000
-> -
-> -#if (__GNUC__ < 8) || (__GNUC__ == 8 && __GNUC_MINOR__ < 5)
-> -int main(int argc, char *argv[])
-> -{
-> -	printf("[SKIP]\tCompiler does not support CET.\n");
-> -	return 0;
-> -}
-> -#else
-> -void write_shstk(unsigned long *addr, unsigned long val)
-> -{
-> -	asm volatile("wrssq %[val], (%[addr])\n"
-> -		     : "=m" (addr)
-> -		     : [addr] "r" (addr), [val] "r" (val));
-> -}
-> -
-> -static inline unsigned long __attribute__((always_inline)) get_ssp(void)
-> -{
-> -	unsigned long ret = 0;
-> -
-> -	asm volatile("xor %0, %0; rdsspq %0" : "=r" (ret));
-> -	return ret;
-> -}
-> -
-> -/*
-> - * For use in inline enablement of shadow stack.
-> - *
-> - * The program can't return from the point where shadow stack gets enabled
-> - * because there will be no address on the shadow stack. So it can't use
-> - * syscall() for enablement, since it is a function.
-> - *
-> - * Based on code from nolibc.h. Keep a copy here because this can't pull in all
-> - * of nolibc.h.
-> - */
-> -#define ARCH_PRCTL(arg1, arg2)					\
-> -({								\
-> -	long _ret;						\
-> -	register long _num  asm("eax") = __NR_arch_prctl;	\
-> -	register long _arg1 asm("rdi") = (long)(arg1);		\
-> -	register long _arg2 asm("rsi") = (long)(arg2);		\
-> -								\
-> -	asm volatile (						\
-> -		"syscall\n"					\
-> -		: "=a"(_ret)					\
-> -		: "r"(_arg1), "r"(_arg2),			\
-> -		  "0"(_num)					\
-> -		: "rcx", "r11", "memory", "cc"			\
-> -	);							\
-> -	_ret;							\
-> -})
-> -
-> -void *create_shstk(void *addr)
-> -{
-> -	return (void *)syscall(__NR_map_shadow_stack, addr, SS_SIZE, SHADOW_STACK_SET_TOKEN);
-> -}
-> -
-> -void *create_normal_mem(void *addr)
-> -{
-> -	return mmap(addr, SS_SIZE, PROT_READ | PROT_WRITE,
-> -		    MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-> -}
-> -
-> -void free_shstk(void *shstk)
-> -{
-> -	munmap(shstk, SS_SIZE);
-> -}
-> -
-> -int reset_shstk(void *shstk)
-> -{
-> -	return madvise(shstk, SS_SIZE, MADV_DONTNEED);
-> -}
-> -
-> -void try_shstk(unsigned long new_ssp)
-> -{
-> -	unsigned long ssp;
-> -
-> -	printf("[INFO]\tnew_ssp = %lx, *new_ssp = %lx\n",
-> -	       new_ssp, *((unsigned long *)new_ssp));
-> -
-> -	ssp = get_ssp();
-> -	printf("[INFO]\tchanging ssp from %lx to %lx\n", ssp, new_ssp);
-> -
-> -	asm volatile("rstorssp (%0)\n":: "r" (new_ssp));
-> -	asm volatile("saveprevssp");
-> -	printf("[INFO]\tssp is now %lx\n", get_ssp());
-> -
-> -	/* Switch back to original shadow stack */
-> -	ssp -= 8;
-> -	asm volatile("rstorssp (%0)\n":: "r" (ssp));
-> -	asm volatile("saveprevssp");
-> -}
-> -
-> -int test_shstk_pivot(void)
-> -{
-> -	void *shstk = create_shstk(0);
-> -
-> -	if (shstk == MAP_FAILED) {
-> -		printf("[FAIL]\tError creating shadow stack: %d\n", errno);
-> -		return 1;
-> -	}
-> -	try_shstk((unsigned long)shstk + SS_SIZE - 8);
-> -	free_shstk(shstk);
-> -
-> -	printf("[OK]\tShadow stack pivot\n");
-> -	return 0;
-> -}
-> -
-> -int test_shstk_faults(void)
-> -{
-> -	unsigned long *shstk = create_shstk(0);
-> -
-> -	/* Read shadow stack, test if it's zero to not get read optimized out */
-> -	if (*shstk != 0)
-> -		goto err;
-> -
-> -	/* Wrss memory that was already read. */
-> -	write_shstk(shstk, 1);
-> -	if (*shstk != 1)
-> -		goto err;
-> -
-> -	/* Page out memory, so we can wrss it again. */
-> -	if (reset_shstk((void *)shstk))
-> -		goto err;
-> -
-> -	write_shstk(shstk, 1);
-> -	if (*shstk != 1)
-> -		goto err;
-> -
-> -	printf("[OK]\tShadow stack faults\n");
-> -	return 0;
-> -
-> -err:
-> -	return 1;
-> -}
-> -
-> -unsigned long saved_ssp;
-> -unsigned long saved_ssp_val;
-> -volatile bool segv_triggered;
-> -
-> -void __attribute__((noinline)) violate_ss(void)
-> -{
-> -	saved_ssp = get_ssp();
-> -	saved_ssp_val = *(unsigned long *)saved_ssp;
-> -
-> -	/* Corrupt shadow stack */
-> -	printf("[INFO]\tCorrupting shadow stack\n");
-> -	write_shstk((void *)saved_ssp, 0);
-> -}
-> -
-> -void segv_handler(int signum, siginfo_t *si, void *uc)
-> -{
-> -	printf("[INFO]\tGenerated shadow stack violation successfully\n");
-> -
-> -	segv_triggered = true;
-> -
-> -	/* Fix shadow stack */
-> -	write_shstk((void *)saved_ssp, saved_ssp_val);
-> -}
-> -
-> -int test_shstk_violation(void)
-> -{
-> -	struct sigaction sa = {};
-> -
-> -	sa.sa_sigaction = segv_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	segv_triggered = false;
-> -
-> -	/* Make sure segv_triggered is set before violate_ss() */
-> -	asm volatile("" : : : "memory");
-> -
-> -	violate_ss();
-> -
-> -	signal(SIGSEGV, SIG_DFL);
-> -
-> -	printf("[OK]\tShadow stack violation test\n");
-> -
-> -	return !segv_triggered;
-> -}
-> -
-> -/* Gup test state */
-> -#define MAGIC_VAL 0x12345678
-> -bool is_shstk_access;
-> -void *shstk_ptr;
-> -int fd;
-> -
-> -void reset_test_shstk(void *addr)
-> -{
-> -	if (shstk_ptr)
-> -		free_shstk(shstk_ptr);
-> -	shstk_ptr = create_shstk(addr);
-> -}
-> -
-> -void test_access_fix_handler(int signum, siginfo_t *si, void *uc)
-> -{
-> -	printf("[INFO]\tViolation from %s\n", is_shstk_access ? "shstk access" : "normal write");
-> -
-> -	segv_triggered = true;
-> -
-> -	/* Fix shadow stack */
-> -	if (is_shstk_access) {
-> -		reset_test_shstk(shstk_ptr);
-> -		return;
-> -	}
-> -
-> -	free_shstk(shstk_ptr);
-> -	create_normal_mem(shstk_ptr);
-> -}
-> -
-> -bool test_shstk_access(void *ptr)
-> -{
-> -	is_shstk_access = true;
-> -	segv_triggered = false;
-> -	write_shstk(ptr, MAGIC_VAL);
-> -
-> -	asm volatile("" : : : "memory");
-> -
-> -	return segv_triggered;
-> -}
-> -
-> -bool test_write_access(void *ptr)
-> -{
-> -	is_shstk_access = false;
-> -	segv_triggered = false;
-> -	*(unsigned long *)ptr = MAGIC_VAL;
-> -
-> -	asm volatile("" : : : "memory");
-> -
-> -	return segv_triggered;
-> -}
-> -
-> -bool gup_write(void *ptr)
-> -{
-> -	unsigned long val;
-> -
-> -	lseek(fd, (unsigned long)ptr, SEEK_SET);
-> -	if (write(fd, &val, sizeof(val)) < 0)
-> -		return 1;
-> -
-> -	return 0;
-> -}
-> -
-> -bool gup_read(void *ptr)
-> -{
-> -	unsigned long val;
-> -
-> -	lseek(fd, (unsigned long)ptr, SEEK_SET);
-> -	if (read(fd, &val, sizeof(val)) < 0)
-> -		return 1;
-> -
-> -	return 0;
-> -}
-> -
-> -int test_gup(void)
-> -{
-> -	struct sigaction sa = {};
-> -	int status;
-> -	pid_t pid;
-> -
-> -	sa.sa_sigaction = test_access_fix_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	segv_triggered = false;
-> -
-> -	fd = open("/proc/self/mem", O_RDWR);
-> -	if (fd == -1)
-> -		return 1;
-> -
-> -	reset_test_shstk(0);
-> -	if (gup_read(shstk_ptr))
-> -		return 1;
-> -	if (test_shstk_access(shstk_ptr))
-> -		return 1;
-> -	printf("[INFO]\tGup read -> shstk access success\n");
-> -
-> -	reset_test_shstk(0);
-> -	if (gup_write(shstk_ptr))
-> -		return 1;
-> -	if (test_shstk_access(shstk_ptr))
-> -		return 1;
-> -	printf("[INFO]\tGup write -> shstk access success\n");
-> -
-> -	reset_test_shstk(0);
-> -	if (gup_read(shstk_ptr))
-> -		return 1;
-> -	if (!test_write_access(shstk_ptr))
-> -		return 1;
-> -	printf("[INFO]\tGup read -> write access success\n");
-> -
-> -	reset_test_shstk(0);
-> -	if (gup_write(shstk_ptr))
-> -		return 1;
-> -	if (!test_write_access(shstk_ptr))
-> -		return 1;
-> -	printf("[INFO]\tGup write -> write access success\n");
-> -
-> -	close(fd);
-> -
-> -	/* COW/gup test */
-> -	reset_test_shstk(0);
-> -	pid = fork();
-> -	if (!pid) {
-> -		fd = open("/proc/self/mem", O_RDWR);
-> -		if (fd == -1)
-> -			exit(1);
-> -
-> -		if (gup_write(shstk_ptr)) {
-> -			close(fd);
-> -			exit(1);
-> -		}
-> -		close(fd);
-> -		exit(0);
-> -	}
-> -	waitpid(pid, &status, 0);
-> -	if (WEXITSTATUS(status)) {
-> -		printf("[FAIL]\tWrite in child failed\n");
-> -		return 1;
-> -	}
-> -	if (*(unsigned long *)shstk_ptr == MAGIC_VAL) {
-> -		printf("[FAIL]\tWrite in child wrote through to shared memory\n");
-> -		return 1;
-> -	}
-> -
-> -	printf("[INFO]\tCow gup write -> write access success\n");
-> -
-> -	free_shstk(shstk_ptr);
-> -
-> -	signal(SIGSEGV, SIG_DFL);
-> -
-> -	printf("[OK]\tShadow gup test\n");
-> -
-> -	return 0;
-> -}
-> -
-> -int test_mprotect(void)
-> -{
-> -	struct sigaction sa = {};
-> -
-> -	sa.sa_sigaction = test_access_fix_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	segv_triggered = false;
-> -
-> -	/* mprotect a shadow stack as read only */
-> -	reset_test_shstk(0);
-> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-> -		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-> -		return 1;
-> -	}
-> -
-> -	/* try to wrss it and fail */
-> -	if (!test_shstk_access(shstk_ptr)) {
-> -		printf("[FAIL]\tShadow stack access to read-only memory succeeded\n");
-> -		return 1;
-> -	}
-> -
-> -	/*
-> -	 * The shadow stack was reset above to resolve the fault, make the new one
-> -	 * read-only.
-> -	 */
-> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_READ) < 0) {
-> -		printf("[FAIL]\tmprotect(PROT_READ) failed\n");
-> -		return 1;
-> -	}
-> -
-> -	/* then back to writable */
-> -	if (mprotect(shstk_ptr, SS_SIZE, PROT_WRITE | PROT_READ) < 0) {
-> -		printf("[FAIL]\tmprotect(PROT_WRITE) failed\n");
-> -		return 1;
-> -	}
-> -
-> -	/* then wrss to it and succeed */
-> -	if (test_shstk_access(shstk_ptr)) {
-> -		printf("[FAIL]\tShadow stack access to mprotect() writable memory failed\n");
-> -		return 1;
-> -	}
-> -
-> -	free_shstk(shstk_ptr);
-> -
-> -	signal(SIGSEGV, SIG_DFL);
-> -
-> -	printf("[OK]\tmprotect() test\n");
-> -
-> -	return 0;
-> -}
-> -
-> -char zero[4096];
-> -
-> -static void *uffd_thread(void *arg)
-> -{
-> -	struct uffdio_copy req;
-> -	int uffd = *(int *)arg;
-> -	struct uffd_msg msg;
-> -	int ret;
-> -
-> -	while (1) {
-> -		ret = read(uffd, &msg, sizeof(msg));
-> -		if (ret > 0)
-> -			break;
-> -		else if (errno == EAGAIN)
-> -			continue;
-> -		return (void *)1;
-> -	}
-> -
-> -	req.dst = msg.arg.pagefault.address;
-> -	req.src = (__u64)zero;
-> -	req.len = 4096;
-> -	req.mode = 0;
-> -
-> -	if (ioctl(uffd, UFFDIO_COPY, &req))
-> -		return (void *)1;
-> -
-> -	return (void *)0;
-> -}
-> -
-> -int test_userfaultfd(void)
-> -{
-> -	struct uffdio_register uffdio_register;
-> -	struct uffdio_api uffdio_api;
-> -	struct sigaction sa = {};
-> -	pthread_t thread;
-> -	void *res;
-> -	int uffd;
-> -
-> -	sa.sa_sigaction = test_access_fix_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	uffd = syscall(__NR_userfaultfd, O_CLOEXEC | O_NONBLOCK);
-> -	if (uffd < 0) {
-> -		printf("[SKIP]\tUserfaultfd unavailable.\n");
-> -		return 0;
-> -	}
-> -
-> -	reset_test_shstk(0);
-> -
-> -	uffdio_api.api = UFFD_API;
-> -	uffdio_api.features = 0;
-> -	if (ioctl(uffd, UFFDIO_API, &uffdio_api))
-> -		goto err;
-> -
-> -	uffdio_register.range.start = (__u64)shstk_ptr;
-> -	uffdio_register.range.len = 4096;
-> -	uffdio_register.mode = UFFDIO_REGISTER_MODE_MISSING;
-> -	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
-> -		goto err;
-> -
-> -	if (pthread_create(&thread, NULL, &uffd_thread, &uffd))
-> -		goto err;
-> -
-> -	reset_shstk(shstk_ptr);
-> -	test_shstk_access(shstk_ptr);
-> -
-> -	if (pthread_join(thread, &res))
-> -		goto err;
-> -
-> -	if (test_shstk_access(shstk_ptr))
-> -		goto err;
-> -
-> -	free_shstk(shstk_ptr);
-> -
-> -	signal(SIGSEGV, SIG_DFL);
-> -
-> -	if (!res)
-> -		printf("[OK]\tUserfaultfd test\n");
-> -	return !!res;
-> -err:
-> -	free_shstk(shstk_ptr);
-> -	close(uffd);
-> -	signal(SIGSEGV, SIG_DFL);
-> -	return 1;
-> -}
-> -
-> -/* Simple linked list for keeping track of mappings in test_guard_gap() */
-> -struct node {
-> -	struct node *next;
-> -	void *mapping;
+> diff --git a/drivers/char/mem.c b/drivers/char/mem.c
+> index dcfd896b733d8..147568c65c1be 100644
+> --- a/drivers/char/mem.c
+> +++ b/drivers/char/mem.c
+> @@ -506,7 +506,8 @@ static int mmap_zero_prepare(struct vm_area_desc *desc)
+>  	if (vma_desc_test(desc, VMA_SHARED_BIT))
+>  		return shmem_zero_setup_desc(desc);
+>
+> -	/* MAP_PRIVATE semantics are taken care for us by core mm. */
+> +	/* Indicate MAP_PRIVATE mappings, so core mm can do the right thing. */
+> +	desc->vm_ops = &zero_vm_ops;
+>  	return 0;
+>  }
+>
+> @@ -694,7 +695,7 @@ static const struct memdev {
+>  #ifdef CONFIG_DEVPORT
+>  	[4] = { "port", &port_fops, 0, 0 },
+>  #endif
+> -	[DEVZERO_MINOR] = { "zero", &zero_fops, FMODE_NOWAIT, 0666 },
+> +	[5] = { "zero", &zero_fops, FMODE_NOWAIT, 0666 },
+>  	[7] = { "full", &full_fops, 0, 0666 },
+>  	[8] = { "random", &random_fops, FMODE_NOWAIT, 0666 },
+>  	[9] = { "urandom", &urandom_fops, FMODE_NOWAIT, 0666 },
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index f940d20551d53..29f13cc6b52a2 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -740,9 +740,6 @@ static inline bool fault_flag_allow_retry_first(enum fault_flag flags)
+>  	{ FAULT_FLAG_INTERRUPTIBLE,	"INTERRUPTIBLE" }, \
+>  	{ FAULT_FLAG_VMA_LOCK,		"VMA_LOCK" }
+>
+> -/* /dev/zero minor device number. Special due to MAP_PRIVATE semantics. */
+> -#define DEVZERO_MINOR	5
+
+All of this to avoid this single #define...!
+
+> -
+>  /*
+>   * vm_fault is filled by the pagefault handler and passed to the vma's
+>   * ->fault function. The vma's ->fault is responsible for returning a bitmask
+> @@ -990,6 +987,7 @@ static inline void mm_flags_clear_all(struct mm_struct *mm)
+>  }
+>
+>  extern const struct vm_operations_struct vma_dummy_vm_ops;
+> +extern const struct vm_operations_struct zero_vm_ops;
+
+See below but this is really not a great place to put it. Now we invite people
+to invent new mad CoW schemes with anon pages... 'set a vm_ops that we clear' is
+not great semantically either.
+
+vma_dummy_vma_ops is set and then kept or overwritten with explicit meaning 'is
+non-anon but does no special vm_ops stuff'.
+
+>
+>  static inline void vma_init(struct vm_area_struct *vma, struct mm_struct *mm)
+>  {
+> diff --git a/mm/init-mm.c b/mm/init-mm.c
+> index 3e792aad76261..2030f8e47a98a 100644
+> --- a/mm/init-mm.c
+> +++ b/mm/init-mm.c
+> @@ -18,6 +18,7 @@
+>  #endif
+>
+>  const struct vm_operations_struct vma_dummy_vm_ops;
+> +const struct vm_operations_struct zero_vm_ops;
+
+Already this creates a brand new class of vm_ops.
+
+Other *_vm_ops have meaning in belonging to a specific mapping (hugetlb, etc.)
+but they are _defined in the relevant files_ though maybe have extern vars I guess.
+
+But this one is set once _then cleared_ by the core mm mmap code.
+
+It's really weird and obscure and 'just so'.
+
+So I don't think it's the right method.
+
+>
+>  /*
+>   * For dynamically allocated mm_structs, there is a dynamically sized cpumask
+> diff --git a/mm/vma.c b/mm/vma.c
+> index e7c8b6cb8347e..4f9b78791daf9 100644
+> --- a/mm/vma.c
+> +++ b/mm/vma.c
+> @@ -2623,15 +2623,7 @@ static int __mmap_new_file_vma(struct mmap_state *map,
+>
+>  static bool map_is_dev_zero(const struct mmap_state *map)
+>  {
+> -	const struct file *file = map->file;
+> -	struct inode *inode;
+> -
+> -	if (!file)
+> -		return false;
+> -	inode = file_inode(file);
+> -	if (!S_ISCHR(inode->i_mode))
+> -		return false;
+> -	return imajor(inode) == MEM_MAJOR && iminor(inode) == DEVZERO_MINOR;
+> +	return map->vm_ops == &zero_vm_ops;
+
+Err no, the function name is completely wrong now. This just tells you somebody
+set a vm_ops you're about to remove (badly named too!)
+
+>  }
+>
+>  static void map_set_anon(struct mmap_state *map)
+> diff --git a/mm/vma_internal.h b/mm/vma_internal.h
+> index 385c0ab137774..4d300e7bbaf4c 100644
+> --- a/mm/vma_internal.h
+> +++ b/mm/vma_internal.h
+> @@ -23,7 +23,6 @@
+>  #include <linux/ksm.h>
+>  #include <linux/khugepaged.h>
+>  #include <linux/list.h>
+> -#include <linux/major.h>
+
+Again all this to avoid simple include...
+
+>  #include <linux/maple_tree.h>
+>  #include <linux/mempolicy.h>
+>  #include <linux/mm.h>
+> diff --git a/tools/testing/vma/include/dup.h b/tools/testing/vma/include/dup.h
+> index 41203b1c2323d..8457fabf53452 100644
+> --- a/tools/testing/vma/include/dup.h
+> +++ b/tools/testing/vma/include/dup.h
+> @@ -7,6 +7,7 @@ struct vm_area_struct;
+>  static inline void vma_start_write(struct vm_area_struct *vma);
+>
+>  extern const struct vm_operations_struct vma_dummy_vm_ops;
+> +extern const struct vm_operations_struct zero_vm_ops;
+>  extern unsigned long stack_guard_gap;
+>  extern const struct vm_operations_struct vma_dummy_vm_ops;
+>  extern unsigned long rlimit(unsigned int limit);
+> @@ -15,21 +16,6 @@ struct task_struct *get_current(void);
+>  #define MMF_HAS_MDWE	28
+>  #define current get_current()
+>
+> -#define MINORBITS	20
+> -#define MINORMASK	((1U << MINORBITS) - 1)
+> -
+> -#define MAJOR(dev)	((unsigned int) ((dev) >> MINORBITS))
+> -#define MINOR(dev)	((unsigned int) ((dev) & MINORMASK))
+> -#define MKDEV(ma, mi)	(((ma) << MINORBITS) | (mi))
+> -
+> -#define S_IFMT  00170000
+> -#define S_IFCHR  0020000
+> -
+> -#define S_ISCHR(m)	(((m) & S_IFMT) == S_IFCHR)
+> -
+> -#define MEM_MAJOR		1
+> -#define DEVZERO_MINOR	5
+> -
+>  /*
+>   * Define the task command name length as enum, then it can be visible to
+>   * BPF programs.
+> @@ -38,8 +24,6 @@ enum {
+>  	TASK_COMM_LEN = 16,
+>  };
+>
+> -typedef unsigned short		umode_t;
+> -
+>  /* PARTIALLY implemented types. */
+>  struct mm_struct {
+>  	struct maple_tree mm_mt;
+> @@ -62,10 +46,6 @@ struct address_space {
+>  	unsigned long		flags;
+>  	atomic_t		i_mmap_writable;
+>  };
+> -struct inode {
+> -	umode_t			i_mode;
+> -	dev_t			i_rdev;
 > -};
+>  struct file_operations {
+>  	int (*mmap)(struct file *, struct vm_area_struct *);
+>  	int (*mmap_prepare)(struct vm_area_desc *);
+> @@ -73,7 +53,6 @@ struct file_operations {
+>  struct file {
+>  	struct address_space	*f_mapping;
+>  	const struct file_operations	*f_op;
+> -	struct inode			*f_inode;
+>  };
+>  struct anon_vma_chain {
+>  	struct anon_vma *anon_vma;
+> @@ -1665,18 +1644,3 @@ static inline pgoff_t linear_anon_page_index(const struct vm_area_struct *vma,
+>
+>  	return pgoff;
+>  }
 > -
-> -/*
-> - * This tests whether mmap will place other mappings in a shadow stack's guard
-> - * gap. The steps are:
-> - *   1. Finds an empty place by mapping and unmapping something.
-> - *   2. Map a shadow stack in the middle of the known empty area.
-> - *   3. Map a bunch of PAGE_SIZE mappings. These will use the search down
-> - *      direction, filling any gaps until it encounters the shadow stack's
-> - *      guard gap.
-> - *   4. When a mapping lands below the shadow stack from step 2, then all
-> - *      of the above gaps are filled. The search down algorithm will have
-> - *      looked at the shadow stack gaps.
-> - *   5. See if it landed in the gap.
-> - */
-> -int test_guard_gap_other_gaps(void)
+> -static inline struct inode *file_inode(const struct file *f)
 > -{
-> -	void *free_area, *shstk, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
-> -	struct node *head = NULL, *cur;
-> -
-> -	free_area = mmap(0, SS_SIZE * 3, PROT_READ | PROT_WRITE,
-> -			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -	munmap(free_area, SS_SIZE * 3);
-> -
-> -	shstk = create_shstk(free_area + SS_SIZE);
-> -	if (shstk == MAP_FAILED)
-> -		return 1;
-> -
-> -	while (test_map > shstk) {
-> -		test_map = mmap(0, PAGE_SIZE, PROT_READ | PROT_WRITE,
-> -				MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -		if (test_map == MAP_FAILED)
-> -			return 1;
-> -		cur = malloc(sizeof(*cur));
-> -		cur->mapping = test_map;
-> -
-> -		cur->next = head;
-> -		head = cur;
-> -	}
-> -
-> -	while (head) {
-> -		cur = head;
-> -		head = cur->next;
-> -		munmap(cur->mapping, PAGE_SIZE);
-> -		free(cur);
-> -	}
-> -
-> -	free_shstk(shstk);
-> -
-> -	if (shstk - test_map - PAGE_SIZE != PAGE_SIZE)
-> -		return 1;
-> -
-> -	printf("[OK]\tGuard gap test, other mapping's gaps\n");
-> -
-> -	return 0;
+> -	return f->f_inode;
 > -}
 > -
-> -/* Tests respecting the guard gap of the mapping getting placed */
-> -int test_guard_gap_new_mappings_gaps(void)
+> -static inline unsigned iminor(const struct inode *inode)
 > -{
-> -	void *free_area, *shstk_start, *test_map = (void *)0xFFFFFFFFFFFFFFFF;
-> -	struct node *head = NULL, *cur;
-> -	int ret = 0;
-> -
-> -	free_area = mmap(0, PAGE_SIZE * 4, PROT_READ | PROT_WRITE,
-> -			 MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -	munmap(free_area, PAGE_SIZE * 4);
-> -
-> -	/* Test letting map_shadow_stack find a free space */
-> -	shstk_start = mmap(free_area, PAGE_SIZE, PROT_READ | PROT_WRITE,
-> -			   MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-> -	if (shstk_start == MAP_FAILED || shstk_start != free_area)
-> -		return 1;
-> -
-> -	while (test_map > shstk_start) {
-> -		test_map = (void *)syscall(__NR_map_shadow_stack, 0, PAGE_SIZE, 0);
-> -		if (test_map == MAP_FAILED) {
-> -			printf("[INFO]\tmap_shadow_stack MAP_FAILED\n");
-> -			ret = 1;
-> -			break;
-> -		}
-> -
-> -		cur = malloc(sizeof(*cur));
-> -		cur->mapping = test_map;
-> -
-> -		cur->next = head;
-> -		head = cur;
-> -
-> -		if (test_map == free_area + PAGE_SIZE) {
-> -			printf("[INFO]\tNew mapping has other mapping in guard gap!\n");
-> -			ret = 1;
-> -			break;
-> -		}
-> -	}
-> -
-> -	while (head) {
-> -		cur = head;
-> -		head = cur->next;
-> -		munmap(cur->mapping, PAGE_SIZE);
-> -		free(cur);
-> -	}
-> -
-> -	munmap(shstk_start, PAGE_SIZE);
-> -
-> -	if (!ret)
-> -		printf("[OK]\tGuard gap test, placement mapping's gaps\n");
-> -
-> -	return ret;
+> -	return MINOR(inode->i_rdev);
 > -}
 > -
-> -/*
-> - * Too complicated to pull it out of the 32 bit header, but also get the
-> - * 64 bit one needed above. Just define a copy here.
-> - */
-> -#define __NR_compat_sigaction 67
-> -
-> -/*
-> - * Call 32 bit signal handler to get 32 bit signals ABI. Make sure
-> - * to push the registers that will get clobbered.
-> - */
-> -int sigaction32(int signum, const struct sigaction *restrict act,
-> -		struct sigaction *restrict oldact)
+> -static inline unsigned imajor(const struct inode *inode)
 > -{
-> -	register long syscall_reg asm("eax") = __NR_compat_sigaction;
-> -	register long signum_reg asm("ebx") = signum;
-> -	register long act_reg asm("ecx") = (long)act;
-> -	register long oldact_reg asm("edx") = (long)oldact;
-> -	int ret = 0;
-> -
-> -	asm volatile ("int $0x80;"
-> -		      : "=a"(ret), "=m"(oldact)
-> -		      : "r"(syscall_reg), "r"(signum_reg), "r"(act_reg),
-> -			"r"(oldact_reg)
-> -		      : "r8", "r9", "r10", "r11"
-> -		     );
-> -
-> -	return ret;
+> -	return MAJOR(inode->i_rdev);
 > -}
-> -
-> -sigjmp_buf jmp_buffer;
-> -
-> -void segv_gp_handler(int signum, siginfo_t *si, void *uc)
-> -{
-> -	segv_triggered = true;
-> -
-> -	/*
-> -	 * To work with old glibc, this can't rely on siglongjmp working with
-> -	 * shadow stack enabled, so disable shadow stack before siglongjmp().
-> -	 */
-> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-> -	siglongjmp(jmp_buffer, -1);
-> -}
-> -
-> -/*
-> - * Transition to 32 bit mode and check that a #GP triggers a segfault.
-> - */
-> -int test_32bit(void)
-> -{
-> -	struct sigaction sa = {};
-> -	struct sigaction *sa32;
-> -
-> -	/* Create sigaction in 32 bit address range */
-> -	sa32 = mmap(0, 4096, PROT_READ | PROT_WRITE,
-> -		    MAP_32BIT | MAP_PRIVATE | MAP_ANONYMOUS, 0, 0);
-> -	sa32->sa_flags = SA_SIGINFO;
-> -
-> -	sa.sa_sigaction = segv_gp_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -
-> -	segv_triggered = false;
-> -
-> -	/* Make sure segv_triggered is set before triggering the #GP */
-> -	asm volatile("" : : : "memory");
-> -
-> -	/*
-> -	 * Set handler to somewhere in 32 bit address space
-> -	 */
-> -	sa32->sa_handler = (void *)sa32;
-> -	if (sigaction32(SIGUSR1, sa32, NULL))
-> -		return 1;
-> -
-> -	if (!sigsetjmp(jmp_buffer, 1))
-> -		raise(SIGUSR1);
-> -
-> -	if (segv_triggered)
-> -		printf("[OK]\t32 bit test\n");
-> -
-> -	return !segv_triggered;
-> -}
-> -
-> -static int parse_uint_from_file(const char *file, const char *fmt)
-> -{
-> -	int err, ret;
-> -	FILE *f;
-> -
-> -	f = fopen(file, "re");
-> -	if (!f) {
-> -		err = -errno;
-> -		printf("failed to open '%s': %d\n", file, err);
-> -		return err;
-> -	}
-> -	err = fscanf(f, fmt, &ret);
-> -	if (err != 1) {
-> -		err = err == EOF ? -EIO : -errno;
-> -		printf("failed to parse '%s': %d\n", file, err);
-> -		fclose(f);
-> -		return err;
-> -	}
-> -	fclose(f);
-> -	return ret;
-> -}
-> -
-> -static int determine_uprobe_perf_type(void)
-> -{
-> -	const char *file = "/sys/bus/event_source/devices/uprobe/type";
-> -
-> -	return parse_uint_from_file(file, "%d\n");
-> -}
-> -
-> -static int determine_uprobe_retprobe_bit(void)
-> -{
-> -	const char *file = "/sys/bus/event_source/devices/uprobe/format/retprobe";
-> -
-> -	return parse_uint_from_file(file, "config:%d\n");
-> -}
-> -
-> -static ssize_t get_uprobe_offset(const void *addr)
-> -{
-> -	size_t start, end, base;
-> -	char buf[256];
-> -	bool found = false;
-> -	FILE *f;
-> -
-> -	f = fopen("/proc/self/maps", "r");
-> -	if (!f)
-> -		return -errno;
-> -
-> -	while (fscanf(f, "%zx-%zx %s %zx %*[^\n]\n", &start, &end, buf, &base) == 4) {
-> -		if (buf[2] == 'x' && (uintptr_t)addr >= start && (uintptr_t)addr < end) {
-> -			found = true;
-> -			break;
-> -		}
-> -	}
-> -
-> -	fclose(f);
-> -
-> -	if (!found)
-> -		return -ESRCH;
-> -
-> -	return (uintptr_t)addr - start + base;
-> -}
-> -
-> -static __attribute__((noinline)) void uretprobe_trigger(void)
-> -{
-> -	asm volatile ("");
-> -}
-> -
-> -/*
-> - * This test setups return uprobe, which is sensitive to shadow stack
-> - * (crashes without extra fix). After executing the uretprobe we fail
-> - * the test if we receive SIGSEGV, no crash means we're good.
-> - *
-> - * Helper functions above borrowed from bpf selftests.
-> - */
-> -static int test_uretprobe(void)
-> -{
-> -	const size_t attr_sz = sizeof(struct perf_event_attr);
-> -	const char *file = "/proc/self/exe";
-> -	int bit, fd = 0, type, err = 1;
-> -	struct perf_event_attr attr;
-> -	struct sigaction sa = {};
-> -	ssize_t offset;
-> -
-> -	type = determine_uprobe_perf_type();
-> -	if (type < 0) {
-> -		if (type == -ENOENT)
-> -			printf("[SKIP]\tUretprobe test, uprobes are not available\n");
-> -		return 0;
-> -	}
-> -
-> -	offset = get_uprobe_offset(uretprobe_trigger);
-> -	if (offset < 0)
-> -		return 1;
-> -
-> -	bit = determine_uprobe_retprobe_bit();
-> -	if (bit < 0)
-> -		return 1;
-> -
-> -	sa.sa_sigaction = segv_gp_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	/* Setup return uprobe through perf event interface. */
-> -	memset(&attr, 0, attr_sz);
-> -	attr.size = attr_sz;
-> -	attr.type = type;
-> -	attr.config = 1 << bit;
-> -	attr.config1 = (__u64) (unsigned long) file;
-> -	attr.config2 = offset;
-> -
-> -	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
-> -		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
-> -	if (fd < 0)
-> -		goto out;
-> -
-> -	if (sigsetjmp(jmp_buffer, 1))
-> -		goto out;
-> -
-> -	ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK);
-> -
-> -	/*
-> -	 * This either segfaults and goes through sigsetjmp above
-> -	 * or succeeds and we're good.
-> -	 */
-> -	uretprobe_trigger();
-> -
-> -	printf("[OK]\tUretprobe test\n");
-> -	err = 0;
-> -
-> -out:
-> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-> -	signal(SIGSEGV, SIG_DFL);
-> -	if (fd)
-> -		close(fd);
-> -	return err;
-> -}
-> -
-> -/* Keep the CALL first so the function address is exactly the probed CALL. */
-> -extern void uprobe_call_trigger(void);
-> -asm (".pushsection .text\n"
-> -	".global uprobe_call_target\n"
-> -	".type uprobe_call_target, @function\n"
-> -	"uprobe_call_target:\n"
-> -	"	ret\n"
-> -	".size uprobe_call_target, .-uprobe_call_target\n"
-> -
-> -	".global uprobe_call_trigger\n"
-> -	".type uprobe_call_trigger, @function\n"
-> -	"uprobe_call_trigger:\n"
-> -	"	call uprobe_call_target\n"
-> -	"	ret\n"
-> -	".size uprobe_call_trigger, .-uprobe_call_trigger\n"
-> -	".popsection\n"
-> -);
-> -
-> -/* If CALL emulation misses the shadow stack update, this exits via SIGSEGV. */
-> -static int test_uprobe_call(void)
-> -{
-> -	const size_t attr_sz = sizeof(struct perf_event_attr);
-> -	const char *file = "/proc/self/exe";
-> -	int fd = -1, type, err = 1;
-> -	struct perf_event_attr attr;
-> -	struct sigaction sa = {};
-> -	ssize_t offset;
-> -
-> -	type = determine_uprobe_perf_type();
-> -	if (type < 0) {
-> -		if (type == -ENOENT)
-> -			printf("[SKIP]\tUprobe on CALL test, uprobes are not available\n");
-> -		return 0;
-> -	}
-> -
-> -	offset = get_uprobe_offset(uprobe_call_trigger);
-> -	if (offset < 0)
-> -		return 1;
-> -
-> -	sa.sa_sigaction = segv_gp_handler;
-> -	sa.sa_flags = SA_SIGINFO;
-> -	if (sigaction(SIGSEGV, &sa, NULL))
-> -		return 1;
-> -
-> -	/* Setup entry uprobe through perf event interface. */
-> -	memset(&attr, 0, attr_sz);
-> -	attr.size = attr_sz;
-> -	attr.type = type;
-> -	attr.config = 0;
-> -	attr.config1 = (__u64)(unsigned long)file;
-> -	attr.config2 = offset;
-> -
-> -	fd = syscall(__NR_perf_event_open, &attr, 0 /* pid */, -1 /* cpu */,
-> -		     -1 /* group_fd */, PERF_FLAG_FD_CLOEXEC);
-> -	if (fd < 0)
-> -		goto out;
-> -
-> -	if (sigsetjmp(jmp_buffer, 1))
-> -		goto out;
-> -
-> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK))
-> -		goto out;
-> -
-> -	/*
-> -	 * This either segfaults and goes through sigsetjmp above
-> -	 * or succeeds and we're good.
-> -	 */
-> -	uprobe_call_trigger();
-> -
-> -	printf("[OK]\tUprobe on CALL test\n");
-> -	err = 0;
-> -
-> -out:
-> -	ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK);
-> -	signal(SIGSEGV, SIG_DFL);
-> -	if (fd >= 0)
-> -		close(fd);
-> -	return err;
-> -}
-> -
-> -void segv_handler_ptrace(int signum, siginfo_t *si, void *uc)
-> -{
-> -	/* The SSP adjustment caused a segfault. */
-> -	exit(0);
-> -}
-> -
-> -int test_ptrace(void)
-> -{
-> -	unsigned long saved_ssp, ssp = 0;
-> -	struct sigaction sa= {};
-> -	struct iovec iov;
-> -	int status;
-> -	int pid;
-> -
-> -	iov.iov_base = &ssp;
-> -	iov.iov_len = sizeof(ssp);
-> -
-> -	pid = fork();
-> -	if (!pid) {
-> -		ssp = get_ssp();
-> -
-> -		sa.sa_sigaction = segv_handler_ptrace;
-> -		sa.sa_flags = SA_SIGINFO;
-> -		if (sigaction(SIGSEGV, &sa, NULL))
-> -			return 1;
-> -
-> -		ptrace(PTRACE_TRACEME, NULL, NULL, NULL);
-> -		/*
-> -		 * The parent will tweak the SSP and return from this function
-> -		 * will #CP.
-> -		 */
-> -		raise(SIGTRAP);
-> -
-> -		exit(1);
-> -	}
-> -
-> -	while (waitpid(pid, &status, 0) != -1 && WSTOPSIG(status) != SIGTRAP);
-> -
-> -	if (ptrace(PTRACE_GETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tFailed to PTRACE_GETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	if (!ssp) {
-> -		printf("[INFO]\tPtrace child SSP was 0\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	saved_ssp = ssp;
-> -
-> -	iov.iov_len = 0;
-> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tToo small size accepted via PTRACE_SETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	iov.iov_len = sizeof(ssp) + 1;
-> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tToo large size accepted via PTRACE_SETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	ssp += 1;
-> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tUnaligned SSP written via PTRACE_SETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	ssp = 0xFFFFFFFFFFFF0000;
-> -	if (!ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tKernel range SSP written via PTRACE_SETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	/*
-> -	 * Tweak the SSP so the child with #CP when it resumes and returns
-> -	 * from raise()
-> -	 */
-> -	ssp = saved_ssp + 8;
-> -	iov.iov_len = sizeof(ssp);
-> -	if (ptrace(PTRACE_SETREGSET, pid, NT_X86_SHSTK, &iov)) {
-> -		printf("[INFO]\tFailed to PTRACE_SETREGS\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	if (ptrace(PTRACE_DETACH, pid, NULL, NULL)) {
-> -		printf("[INFO]\tFailed to PTRACE_DETACH\n");
-> -		goto out_kill;
-> -	}
-> -
-> -	waitpid(pid, &status, 0);
-> -	if (WEXITSTATUS(status))
-> -		return 1;
-> -
-> -	printf("[OK]\tPtrace test\n");
-> -	return 0;
-> -
-> -out_kill:
-> -	kill(pid, SIGKILL);
-> -	return 1;
-> -}
-> +#include "shadow_stack.h"
->   
->   int main(int argc, char *argv[])
->   {
-> -	int ret = 0;
-> -
-> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
-> -		printf("[SKIP]\tCould not enable Shadow stack\n");
-> -		return 1;
-> -	}
-> -
-> -	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-> -		ret = 1;
-> -		printf("[FAIL]\tDisabling shadow stack failed\n");
-> -	}
-> -
-> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_SHSTK)) {
-> -		printf("[SKIP]\tCould not re-enable Shadow stack\n");
-> -		return 1;
-> -	}
-> -
-> -	if (ARCH_PRCTL(ARCH_SHSTK_ENABLE, ARCH_SHSTK_WRSS)) {
-> -		printf("[SKIP]\tCould not enable WRSS\n");
-> -		ret = 1;
-> -		goto out;
-> -	}
-> -
-> -	/* Should have succeeded if here, but this is a test, so double check. */
-> -	if (!get_ssp()) {
-> -		printf("[FAIL]\tShadow stack disabled\n");
-> -		return 1;
-> -	}
-> -
-> -	if (test_shstk_pivot()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tShadow stack pivot\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_shstk_faults()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tShadow stack fault test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_shstk_violation()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tShadow stack violation test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_gup()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tShadow shadow stack gup\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_mprotect()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tShadow shadow mprotect test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_userfaultfd()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tUserfaultfd test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_guard_gap_other_gaps()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tGuard gap test, other mappings' gaps\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_guard_gap_new_mappings_gaps()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tGuard gap test, placement mapping's gaps\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_ptrace()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tptrace test\n");
-> -	}
-> -
-> -	if (test_32bit()) {
-> -		ret = 1;
-> -		printf("[FAIL]\t32 bit test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_uretprobe()) {
-> -		ret = 1;
-> -		printf("[FAIL]\turetprobe test\n");
-> -		goto out;
-> -	}
-> -
-> -	if (test_uprobe_call()) {
-> -		ret = 1;
-> -		printf("[FAIL]\tuprobe on CALL test\n");
-> -		goto out;
-> -	}
-> -
-> -	return ret;
-> -
-> -out:
-> -	/*
-> -	 * Disable shadow stack before the function returns, or there will be a
-> -	 * shadow stack violation.
-> -	 */
-> -	if (ARCH_PRCTL(ARCH_SHSTK_DISABLE, ARCH_SHSTK_SHSTK)) {
-> -		ret = 1;
-> -		printf("[FAIL]\tDisabling shadow stack failed\n");
-> -	}
-> -
-> -	return ret;
-> +	return shadow_stack_run_tests(SHADOW_STACK_TEST_ARCH_PRCTL);
->   }
-> -#endif
-> diff --git a/tools/testing/selftests/x86/test_shadow_stack_prctl.c b/tools/testing/selftests/x86/test_shadow_stack_prctl.c
-> new file mode 100644
-> index 000000000000..4641a3b1ca03
-> --- /dev/null
-> +++ b/tools/testing/selftests/x86/test_shadow_stack_prctl.c
-> @@ -0,0 +1,12 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Same as test_shadow_stack.c but uses the PRCTL interface
-> + * instead of ARCH_PRCTL.
-> + */
-> +#include "shadow_stack.h"
-> +
-> +int main(int argc, char *argv[])
-> +{
-> +	return shadow_stack_run_tests(SHADOW_STACK_TEST_PRCTL);
-> +}
+> diff --git a/tools/testing/vma/shared.c b/tools/testing/vma/shared.c
+> index 4a39c9d504896..46d8d2e96bd71 100644
+> --- a/tools/testing/vma/shared.c
+> +++ b/tools/testing/vma/shared.c
+> @@ -9,6 +9,7 @@ unsigned long dac_mmap_min_addr = CONFIG_DEFAULT_MMAP_MIN_ADDR;
+>  unsigned long stack_guard_gap = 256UL<<PAGE_SHIFT;
+>
+>  const struct vm_operations_struct vma_dummy_vm_ops;
+> +const struct vm_operations_struct zero_vm_ops;
+>  struct anon_vma dummy_anon_vma;
+>  struct task_struct __current;
+>
+> diff --git a/tools/testing/vma/tests/mmap.c b/tools/testing/vma/tests/mmap.c
+> index ebe01362e530c..a63069d34a5a8 100644
+> --- a/tools/testing/vma/tests/mmap.c
+> +++ b/tools/testing/vma/tests/mmap.c
+> @@ -45,8 +45,9 @@ static bool test_mmap_region_basic(void)
+>  	return true;
+>  }
+>
+> -static int dummy_mmap_prepare(struct vm_area_desc *desc)
+> +static int zero_mmap_prepare(struct vm_area_desc *desc)
+>  {
+> +	desc->vm_ops = &zero_vm_ops;
+>  	return 0;
+>  }
+>
+> @@ -55,14 +56,9 @@ static bool test_pure_anon_dev_zero(void)
+>  	const vma_flags_t vma_flags = mk_vma_flags(VMA_READ_BIT, VMA_WRITE_BIT,
+>  			VMA_MAYREAD_BIT, VMA_MAYWRITE_BIT);
+>  	const struct file_operations f_op = {
+> -		.mmap_prepare = dummy_mmap_prepare,
+> -	};
+> -	struct inode inode = {
+> -		.i_mode = S_IFCHR,
+> -		.i_rdev = MKDEV(MEM_MAJOR, DEVZERO_MINOR),
+> +		.mmap_prepare = zero_mmap_prepare,
+>  	};
+>  	struct file file = {
+> -		.f_inode = &inode,
+>  		.f_op = &f_op,
+>  	};
+>  	struct mm_struct mm = {};
+> --
+> 2.43.0
 >
 >
-> Nack'ing my own patch, Sashiko found a few useful things to fix.
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
