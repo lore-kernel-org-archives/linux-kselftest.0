@@ -1,34 +1,34 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D66CA263F4A;
-	Wed, 12 Aug 2026 01:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A963372B50;
+	Wed, 12 Aug 2026 01:41:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786498278; cv=none; b=hfwZnjHIYMYW7T5UMg71as/O4JD/I5bBypeleARxGd3KJ0cCwo+NM5mu0Z9UC0o4BcEcWC5GAnEax16qg6ocTRCeoI+wQo1E89BF/SnfwDuQdZkIGSjAKWxS6CW6GCXnRwNuRwlJiqG+RTjH+wp7iXCRDPbWy5OdkpVU7jYPkQY=
+	t=1786498890; cv=none; b=OacwZ5+1UiDnEHzP5SmaEZg4usaoM7gyGExertzimmwQrMdW1oS/a0ubGntNkGsyEEzPEErQFJqCzaU4gAbWUwoHBlNolLch82VJvVv9zDepJDBUwgDgGJJShiVpkdjeLCo9HGa9Kwy5r9j4yqgTC1fB0uJ+tsSz8qbbj1AokuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786498278; c=relaxed/simple;
-	bh=QgcAzhDRN66EaPsaaFD9Mg1Vd6L1RYe3kqE760yk8Ok=;
+	s=arc-20240116; t=1786498890; c=relaxed/simple;
+	bh=/QFNZ3rYIvJdrIk9tqWZAH3M5OrCXJdh1vp1XT4ydMg=;
 	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=P2QfbXyu5XBbAl1KrABzRaVQo3oAZOBJrc/9axqfNAEwHprppU/er/OCCsfYLHwfNVKnofNxoXDAgubtElRSsOT3/5BQ+w9Gi6rflvSbuS0xdob6MUfQDtHR3ftF/qov64hIm0ZBATz0fXvvY5VSVv3UETrd1DIn6y14dt5exg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kQ/g6IlZ; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:To:Cc; b=DK1/XCwxjdo8rvTAI6ULJ5kIeHkxYAc+ElZfYhzTAOZBtMptrGNTfsCKiDwD4y12K/nNHxNa93fJrulwFvU9uNOUqrWPJWgpSG54TN3CLun+ZmwoOijBGSKhwIUoIRj8GgGfbnkLfxmUQSBJgSO1Uao0oxX4l61aPit3+15Z31w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f8tkZ6sw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kQ/g6IlZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 592831F000E9;
-	Wed, 12 Aug 2026 01:31:16 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f8tkZ6sw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18E9E1F000E9;
+	Wed, 12 Aug 2026 01:41:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786498276;
-	bh=dEcgLMceXilbaBz7ViJuMiSXMrTaYjxwjV+XhYroX/E=;
+	s=k20260515; t=1786498889;
+	bh=dwyfCgf0wh8bDzoxNJiM1CqBKVjN1uwC+r1tb2jnWt8=;
 	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=kQ/g6IlZ66I3LLW3kn/xzGwUzdyLyFrSQpwzedDASAsjNMusXtpH/XQnZ/JyM8yKi
-	 v/kqpeM0KwU1PUc6dhZrF2ylapZs0+BoR1DrjgpMbED42X5BgKsl8RiT4k2GZEX+nw
-	 ZJnFHtxwM6rxL/5nREK5golAGJvkVVALjye2oME77UxI5ytpITFUHlc3eYKwmxHfID
-	 BCDUwYByQsdnag16CaMynZiltfqC38HakpFTHWMjavYajOZQqA95ZZUnp7622I3vtX
-	 F2OlGQGsUTqE7CU+EZUi/g8e7qB/OuPndz7tdix8CGNkigxOQXRglXyax7fxUaHQoE
-	 UWl9tHBc2IFmg==
+	b=f8tkZ6swDCm3Csp2nd2XlX98uo95/nzLyfpLXlskYzCDtDuwxPmnTT4SUZNtp/ARa
+	 Lda/Nk1AVRngPeGXRvPLcGcE24uT0RCZu03kU2cIIt4Rto46V7iazGLSkrOdsGaaxU
+	 38Ky7rxm0PEkec7NLNzDEvOn58AqB75to4Vu3iKcCJlDKKeLtowQMkyRCsJOCjg0f5
+	 pZGnXLR7TQga82256IPrRA3by0NwpuhhUe4F7/zADAtQ4SrjpGngDwIDs5ScAR+/ry
+	 Pn/Qdfg7ExKaaOPzJWDB2MiA1ttu0XaAU0O9h0aLwFxGkKAWIMJKMV+5Q52427wHOY
+	 BrL0RtuLRWRkA==
 Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56A0F3809A3C;
-	Wed, 12 Aug 2026 01:30:33 +0000 (UTC)
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 197C93809A3C;
+	Wed, 12 Aug 2026 01:40:46 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,50 +37,39 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/5] net: selftests: adjustments to
- ipv6_flowlabel_mgr
+Subject: Re: [PATCH net-next v2] selftests: drv-net: hide the devlink
+ port_split
+ test
 From: patchwork-bot+netdevbpf@kernel.org
 Message-Id: 
- <178649823188.1227528.4185778051969675653.git-patchwork-notify@kernel.org>
-Date: Wed, 12 Aug 2026 01:30:31 +0000
-References: <20260807220942.421382-1-marcelomspessoto@gmail.com>
-In-Reply-To: <20260807220942.421382-1-marcelomspessoto@gmail.com>
-To: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
+ <178649884463.1230679.5255640578685529301.git-patchwork-notify@kernel.org>
+Date: Wed, 12 Aug 2026 01:40:44 +0000
+References: <20260811004645.1072124-1-kuba@kernel.org>
+In-Reply-To: <20260811004645.1072124-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, petrm@nvidia.com,
+ danieller@nvidia.com, shuah@kernel.org, linux-kselftest@vger.kernel.org
 
 Hello:
 
-This series was applied to netdev/net-next.git (main)
+This patch was applied to netdev/net-next.git (main)
 by Jakub Kicinski <kuba@kernel.org>:
 
-On Fri,  7 Aug 2026 19:09:37 -0300 you wrote:
-> The ipv6_flowlabel_mgr test file was lacking coverage for the
-> IPV6_FL_A_RENEW action, and the IPV6_FL_F_REMOTE and IPV6_FL_F_REFLECT
-> flags. The first two patches from this set aim to add a proper test
-> case for RENEW and REMOTE.
+On Mon, 10 Aug 2026 17:46:45 -0700 you wrote:
+> The devlink port_split test has limited applicability.
+> NICs (as opposed to switches) require at least a re-probe
+> to apply the split configuration.
 > 
-> The third patch was added to insert network namespace creation inside
-> the test suite, instead of relying on external wrapper scripts. This
-> change conforms to other net test implementations, such as
-> tools/testing/selftests/net/icmp_rfc4884.c, and it is important for
-> the fourth and fifth patches.
+> On top of that the test is not compatible with our driver env,
+> it just splits all ports on the system, not only what NETIF
+> points at.
 > 
 > [...]
 
 Here is the summary with links:
-  - [net-next,v3,1/5] selftests: net: test IPV6_FL_A_RENEW
-    https://git.kernel.org/netdev/net-next/c/bfad9937de98
-  - [net-next,v3,2/5] selftests: net: test IPV6_FL_F_REMOTE
-    https://git.kernel.org/netdev/net-next/c/39dd045c1514
-  - [net-next,v3,3/5] selftests: net: create own netns in ipv6_flowlabel_mgr
-    https://git.kernel.org/netdev/net-next/c/03df0d155ba1
-  - [net-next,v3,4/5] selftests: net: test IPV6_FL_F_REFLECT
-    https://git.kernel.org/netdev/net-next/c/b2690523a71f
-  - [net-next,v3,5/5] selftests: net: adopt harness for flow label mgr
-    https://git.kernel.org/netdev/net-next/c/b5d24f604506
+  - [net-next,v2] selftests: drv-net: hide the devlink port_split test
+    https://git.kernel.org/netdev/net-next/c/878b56de01e2
 
 You are awesome, thank you!
 -- 
