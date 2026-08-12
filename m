@@ -1,73 +1,73 @@
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from fhigh-b1-smtp.messagingengine.com (fhigh-b1-smtp.messagingengine.com [202.12.124.152])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7141A451997;
-	Wed, 12 Aug 2026 13:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAD845A299;
+	Wed, 12 Aug 2026 13:23:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.152
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786541018; cv=none; b=AYUkbR357PhSms+A38EEzRUfFkWNwvkmydXUiwfn2W0XP1YLvWA3JhkiyVHsNg2iQlB16GFLIiR1DbwgxTBl3k4eu2irwbNOcXUR8ycHml+UTjTdE58gPC01qPaYhGyAM4kzrp0WgpU/afx50/V51PCtT6Xeli9maGBm0nY/VRY=
+	t=1786541020; cv=none; b=pA15HrM8EQ5gEx1vTClFw34UXuqFeAPpXBlLE/vmFuuO+3mTeKTqLVqU5RQXW4v56eCrYwbjFWnjFGBfRrrWkAcNNtRcybEo/jNUTVLwqWq2Nc3OQmRwrNWydTNaTScq+U8r1sqa/IJEkMhkTw1uc2fF0djeRrOtG2gLjoTaw18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786541018; c=relaxed/simple;
-	bh=lskO5+k5+lVn83+SxQNXVwsxUEiml217LU9Qer+YkN4=;
+	s=arc-20240116; t=1786541020; c=relaxed/simple;
+	bh=Be7S6KcCLp+9jOhsTbJF/KzYvfOV6S6UuaSwquGZ03I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lkfxQQow1y3GiZEejYjJjJhnRb4V8cNJKDFi/ycXvxXow4h8OhxyRlbMhuvJFwLhE/9sR8Oj7+nsboYrSciRLfn4Ts3aiPbmDeu6hd/WJR+j06//A12X48Ps2HbhJmsc9A73yvL6l9adC8x7Wt1w9WYvt1J6GOg5nNY9IBohfS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Lw9IHymN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Th715Xjc; arc=none smtp.client-ip=202.12.124.150
+	 MIME-Version; b=HH8XPwctOkyRQ3R8n0TSgrPsklDD8lVzBP5lMkR9+F6Ulkwysu2uNLsvSBqKfRsW1gKyhj61yV6b8lIkMOwadMIuf2g6qSyjzof0HMkQuYlMVRxVLMI1usyLALuvwEmeRREniZe/3ukPd7SjA8Ty/x5KRlEo4ni52Gt8+tGu1a8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=VNboEGhm; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RIEyJqyS; arc=none smtp.client-ip=202.12.124.152
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Lw9IHymN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Th715Xjc"
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.stl.internal (Postfix) with ESMTP id 2811E1D00165;
-	Wed, 12 Aug 2026 09:23:35 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="VNboEGhm";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RIEyJqyS"
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id A6A447A0173;
+	Wed, 12 Aug 2026 09:23:37 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Wed, 12 Aug 2026 09:23:35 -0400
+  by phl-compute-01.internal (MEProxy); Wed, 12 Aug 2026 09:23:38 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786541015; x=
-	1786627415; bh=oeZs2UseJcgjssEuDoTxdhaLLmHeagTkQsJsYI528D8=; b=L
-	w9IHymNYFUdCX1n6pCnEqiO+w5U8ENtkxk1NsACctkKVOn8ROw2eWYZjIw9TOVwG
-	+dfYW0bzbX4DOXEusvKGcvRlhleMhuL+J+EOKTfHZeR7nAxTMqrwJEUh3iHz7Cqr
-	vzB02XkWuy0tWTjw/wsF2H5Szvv8gOfle8oALZICrMVXO0DwACv521Wmh07dYItv
-	D0lxxyl6TC2MlMaTMvCKBkX7OKSLYFVT2V1lGpuYx0rv/6Md5fj9l30eWzYqSAxx
-	FqGeeS/u0o61GEPdCTeF/+f4Tvu7K/kxDH7rDsGRmTbbVjslCB6NC80yo1ceXogC
-	omURnqsB7DfUeIfI9S/bQ==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786541017; x=
+	1786627417; bh=pS5GXvFi1fnnWCzMO/zMVeDQZR9m016msjFusJIgzZw=; b=V
+	NboEGhmK6Pla17ahIWFTw4i3XELykb3oHfqwW6OgeTb3LJu8CUt8hT0s9XQQTZAE
+	CdC6PAU88mu3k0sU4/5PmnaWZq+w9QWvCOK0UZ+MNRr9tUffrcbpSz07N52Bc0FE
+	SZ8kHK+7kWLXH2YbOdU6O+PBv1QTpsGhT7TQq5mOpMjS+0H3K9H+Nu4xD28OICUy
+	COVk1wcbfKNwmJZql9r9XkDs6ax+xM13Bir+8pzy1lx1mVnaERyeKDJNuVlAvULZ
+	DMvmjjZ7KmNTBu2M9pxyYxjW7FhtKDsqkPqOdyDA+42k4kKTdXiXg07m2DecEqlL
+	Cdq83SEHzYvkvrbNLYAFw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786541015; x=1786627415; bh=o
-	eZs2UseJcgjssEuDoTxdhaLLmHeagTkQsJsYI528D8=; b=Th715XjcVgT36pmDR
-	c/ZVhfKCOWpXTnv/BnxSATstrdYwEFdAJq1yGEnIFot48XQeKEO/sCHnhk010ml1
-	2D+d+6mZTqgwL4c3OLXV0vBSDz71OSBYNpfHeCYClROrksn2zImTokxuJ8EZdeg7
-	t49iuMGFYzNGS6bnQD8qtId2+bMGlrQ+slkRvP5SGCl7Lvdaj7gp/HGpAAglIyc0
-	Kxw6QUd1Es389lIu+9ygAqguUbPCuqdmkdivxU6RIgBkeuSoaHAcmminYicYo/ct
-	7pGVl1sy6fdH0hbBSp2NiWPbZqrTho2RN3h1ORytQFaozZUPZzRmzEWcnn7k2QnM
-	LAqNg==
-X-ME-Sender: <xms:1nN8ajYPdKTJEi86yCnYBrwNdfq2UMbgHafd-z_VUYtlZ3cE_5kgqQ>
-    <xme:1nN8amVFB_MynEx3GfxTARXFHK0UUhZ1Ca91ikEZtFYh6bl_Zja5RC2xRydE76Jv1
-    s0bHkr4-G0C177RAVayQp4I_Vj8n_yc6PzJhsVqftlTgDYQteMngYs>
-X-ME-Received: <xmr:1nN8aueJStoH0bZaba0MFDkU-YpfCSlpTyPUsmJTUOAzCmRac8fQQBGGQGc>
-X-ME-Proxy-Cause: dmFkZTGK88F9UMnXZ5YHCfZ+3CEyhDPNn2cwpG7gczg1QtUW3+KH6lRiOTrWgwtmC8SwM8
-    lS9N2AAOkbX57R9oIGEGX/Y22a2ZgCAGYteUW+bA41LZ08JSUTSnxLP4aLeGJ+l2igRpiI
-    z056Op0LI1NxVlka48nXFKSS8a/uwNZK+39708VFH13YHS1sNHrX5zvuU5299hb11Ao5H/
-    zQrZEfdZM4G7c0rNyXZ30syjB6Y8P8LTAhLTAHwdc8i3T8CZWzvPOusg5fBb0jumhRSeE4
-    e5clat+a+U2DXBe0wlr1aBcOwBQzkKo/UFV6TzMBSg5j9cF+ay7ufreZHSHrXPVD1XvofL
-    E3n9Xy4pBFhY5FAp8tzoG+gD4sN0Aj2N6U89gzjxC+Hl3rn8uf6IbEup57zqPScVTNeItr
-    VxEvT8CC31vyw7k0COC3c6WQDWNraJU38zlqU+WWaMZTjyYgjY7irO9mnzqjB3O39Cpa3X
-    pgZb7Ph8QvjQEphfAJrapAxRDrIyLYuqlIBDlodTDvE7ZbmhIcdkELCsoBCuskCn/fKo/b
-    xo+96fAwhS/eVvb3npy+RFRhX8jcWRVWhKXiQcvf92Wtn3CFIe0imOHRyiAbaV8tDUZ3aa
-    piBPrd8f7E/y1QqP9LO1KYqgb78c+3sRd9aYJdq/llNs9MNerhnjsOW1xKLQ
-X-ME-Proxy: <xmx:1nN8ajNScs5fLnlULNcJBKxmRFAoeqfL7IzW0TGStnNgChM5qYg2KA>
-    <xmx:1nN8amIkU2ydmiu3_0brJhJw-0-uMolYl4P9zQU32_thcaoKcQBbZQ>
-    <xmx:1nN8apmbt1dQ-hll8O87Oj6DeLyNUb6rxFNs4lhWn7TKaG4P4-B70Q>
-    <xmx:1nN8albc9b1ayPF2iim3XF_Lg5VrCgjetiwZKeWV0IpnfoQmpY-HEg>
-    <xmx:13N8au5WJJS0l0qaD3uu0sG4LDfX3IHAu4hM6lAN-xAOklrU6bv1yQzR>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786541017; x=1786627417; bh=p
+	S5GXvFi1fnnWCzMO/zMVeDQZR9m016msjFusJIgzZw=; b=RIEyJqySDJB3Cbkll
+	BW1kF8PFqZD2EzQEM5neL7nAOFvxYV/E9ilA8AEuZCrRv4TLnkRMWMQtJorifho6
+	b2hlURWa/H6xpDTXuvgEKtQr2WH5yzdYIXhDAFj/Py+IFOmtggnfYpmAmYPdk0lR
+	qDYhWXQYpTrZfJQvhr/o/wM22vUEhimghAGLB7Y01o7DoPYVNEtigDwYNwYoH3io
+	HYEJNA9b1prHfZ8d/4HmcmHFcXSJQ2teCRPdTa1aZ2P6QMAnrbqhtVKo32v+faxE
+	KV1ygVvb1L5Qhm4TIH53K63XiPhoI1QP6zw/CcQ/BlO5a41E3ttxIwpF+/6LKEC1
+	rHLVw==
+X-ME-Sender: <xms:2XN8agDFv2kkMl6bsL8joFhnrFlt4qCQmDXLzMonFQrQdMTby4kgaQ>
+    <xme:2XN8amcoz7uajMOdOynQWduYWUTRaI2eTcjhvbxXaGLcUOvTwW_gaUBpvdibVzsW9
+    xLWRzrIbWJMPAEgwChk3s3EhFFpsZEsEPzmbiUUUW1XTDWGp59uQJPw>
+X-ME-Received: <xmr:2XN8asH9Me_Qx8ktAVwJynKrhpkQk_vPXG9nzbVDLpzaA7XaF5kBRqjWwX0>
+X-ME-Proxy-Cause: dmFkZTFkdXlhB1yyyGZX3J7dnv16PFzu5W734vHfSlZD/y8c/c/hfyf9JcTqEblNR0Fovw
+    r+VLRtLwlZT2tYuTqMJsjjjBxJMgoAM7D6pmLt36lViB2yT50Uubj7I3KQF8rzeVMBK9wq
+    rm57aKmY5NwWN7q607eE1gnukbthccXm6lhrmbDGqX6XovHG8JRMLfqJj+jBW3X680r35h
+    P9o/w0aRWYBwLgRKYH9oTyb2lbiE5fXNRZyQYMHMmm7yuduJ70EU4YPdENzrqcZn4mtIUi
+    PPdmMfUKqzUyYVrtf6UgPYBrZU3VzLkrgoUPTsKVKEpiHQHdj45X731bFwNLlQpPGy3QFN
+    V7dgSNKYqlBiXdTHQIw/lw5HlTJhpNpUrF9ugBKaUaWKSH5j7b1IYg/YApSXWwvfWBfuhr
+    QAXox8IkePgY6WG5m4Oynz5vJSaOTxCdYVSLz9VnAkaKtkRO/FBY+OQ3RH210u/pRfffHq
+    w5bIr5qXPR2cA9VuUDzpQKZTnAgtC/nBo+NNBNXkcdlA94Bxo1TKm8bb7GlOnfSIqIBOaK
+    J4PtG3ednYkGlLmWVW0qLO319MeCqp/3M3mmL2oqfVzkWFmpPYaL8PhukIYOudoQ9MI0En
+    8bK9jL1xCgVmT/Wthen8UJ7B7wOIpYEHlydIpTC1Td5KcLGLtrRIiwlFfnFQ
+X-ME-Proxy: <xmx:2XN8agWCDIAgNyK-484kYDai7wVa3vrMyVY5yxEuyJ0E34ow_YpSCQ>
+    <xmx:2XN8aswsiMNPeQbzEf2oqtlVfghaaVHcnap93-EI0BebUITn2mKLOg>
+    <xmx:2XN8artsk8wYWIprdWGR2a030PqmARjSuwdE6HXtMY5bDNhcn93FIQ>
+    <xmx:2XN8atBzykQHw2b6S1aTku59c6Va2ElDMQ84Ti1l-xJ6kybvLX6Msw>
+    <xmx:2XN8aljNVfoWXa6BQ1tceti8DVu9CNmAVEvlIb1KVqQstwoCqfTCrnwo>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 12 Aug 2026 09:23:34 -0400 (EDT)
+ 12 Aug 2026 09:23:36 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -93,9 +93,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kas@kernel.org
-Subject: [PATCH v3 10/18] selftests/mm: add order-parameterized khugepaged collapse cases
-Date: Wed, 12 Aug 2026 14:22:56 +0100
-Message-ID: <20260812132304.199287-11-kirill@shutemov.name>
+Subject: [PATCH v3 11/18] selftests/mm: parameterize the mixed-source collapse case by source order
+Date: Wed, 12 Aug 2026 14:22:57 +0100
+Message-ID: <20260812132304.199287-12-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260812132304.199287-1-kirill@shutemov.name>
 References: <20260812132304.199287-1-kirill@shutemov.name>
@@ -109,297 +109,95 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The mthp_khugepaged context runs the generic cases at a sub-PMD order,
-which answers how many folios of that order a range ends up with.  It
-cannot say which window they are in, so "the populated window collapsed
-and its neighbour did not" and "one window collapsed twice" look alike.
+collapse_order_mixed_sources faults its region as order-2 folios and
+collapses them to the -c target.  Order 2 sits below the contpte threshold
+on both arm64 page-size configurations, so nothing in this suite unfolds a
+contpte source on purpose.
 
-Add four cases that check each aligned window on its own, with the
-folio-order helpers in vm_util:
+Let -s name the source order alongside -c, which was rejected before.  The
+case then faults at that order, keeping order 2 when -s is absent, and the
+source order has to be a supported mTHP order below the target.  Other
+cases are unaffected: they enable their source order locally.
 
-- collapse_order_single_window: only the populated window collapses;
-- collapse_order_partial_window: the default max_ptes_none lets a window
-  with one present PTE collapse;
-- collapse_order_max_ptes_none: with max_ptes_none=0 a full window
-  collapses and one missing a page does not;
-- collapse_order_mixed_sources: sources that are already large folios of
-  a smaller order collapse to the target.
-
-Each case faults its region before MADV_HUGEPAGE with only the target
-order enabled, so the sources are order 0 and the result can only come
-from khugepaged.  They wait for a full pass rather than for the result to
-appear: without a completed pass, "not collapsed" and "not scanned yet"
-are the same thing.
+"-s 5 -c 7" on arm64/64K then collapses contpte-mapped sources into a
+larger mTHP.
 
 Assisted-by: Claude-Code:claude-opus-5
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 230 ++++++++++++++++++++++++
- 1 file changed, 230 insertions(+)
+ tools/testing/selftests/mm/khugepaged.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 8458cd2ff0df..7889ea1cd322 100644
+index 7889ea1cd322..3099e7b720d9 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -31,6 +31,8 @@ static unsigned long page_size;
- static int hpage_pmd_nr;
- static int anon_order;
- static int collapse_order;
-+static int pagemap_fd = -1;
-+static int kpageflags_fd = -1;
- 
- #define PID_SMAPS "/proc/self/smaps"
- #define TEST_FILE "collapse_test_file"
-@@ -1250,6 +1252,216 @@ static void madvise_retracted_page_tables(struct collapse_context *c,
- 	ksft_test_result_report(exit_status, "%s\n", __func__);
- }
- 
-+/* Smallest order khugepaged will consider for mTHP collapse. */
-+#define MIN_MTHP_ORDER 2
-+
-+/*
-+ * Order-parameterized collapse cases for the mthp_khugepaged context.  What
-+ * they add over the generic cases run under that context is per-window
-+ * detection: which aligned window collapsed, and which of its neighbours did
-+ * not.  check_huge() answers how many folios of the order the range holds,
-+ * which cannot tell one window from another.
-+ *
-+ * The region is faulted before MADV_HUGEPAGE, and the target order is only
-+ * enabled for madvise, so the sources are always order 0 and the collapse
-+ * product can only have come from khugepaged.
-+ */
-+static size_t mthp_window_size(void)
-+{
-+	return page_size << collapse_order;
-+}
-+
-+static void mthp_push_target_order(void)
-+{
-+	struct thp_settings settings = *thp_current_settings();
-+	int i;
-+
-+	/*
-+	 * The target order, for madvise only, and nothing else enabled: the
-+	 * cases fault their region before MADV_HUGEPAGE, so the sources are
-+	 * order 0 whatever -s asked the fault path for.  That matters for the
-+	 * cases built around a hole -- a large source folio would fill it in
-+	 * and the window would collapse after all.
-+	 * collapse_order_mixed_sources enables the source order it wants on
-+	 * top of this.
-+	 */
-+	settings.thp_enabled = THP_NEVER;
-+	for (i = 0; i < NR_ORDERS; i++)
-+		settings.hugepages[i].enabled = THP_NEVER;
-+	settings.hugepages[collapse_order].enabled = THP_MADVISE;
-+	thp_push_settings(&settings);
-+}
-+
-+static bool window_collapsed(void *p, size_t len)
-+{
-+	return is_range_backed_by_folio_orders(p, len, collapse_order,
-+					       pagemap_fd, kpageflags_fd);
-+}
-+
-+/* No aligned window in [p, p + len) is backed at the target order. */
-+static bool window_not_collapsed(void *p, size_t len)
-+{
-+	size_t window = mthp_window_size();
-+	char *addr = p;
-+
-+	for (; len >= window; addr += window, len -= window) {
-+		if (window_collapsed(addr, window))
-+			return false;
-+	}
-+	return true;
-+}
-+
-+static bool khugepaged_wait_full_pass(void)
-+{
-+	/* Wait up to 30 seconds for the pass to complete. */
-+	return khugepaged_full_pass(30);
-+}
-+
-+static void collapse_order_single_window(struct collapse_context *c,
-+					 struct mem_ops *ops)
-+{
-+	size_t window = mthp_window_size();
-+	void *p;
-+
-+	mthp_push_target_order();
-+
-+	p = ops->setup_area(1);
-+	ops->fault(p, window, 2 * window);
-+	if (!window_not_collapsed(p, hpage_pmd_size))
-+		ksft_exit_fail_msg("Unexpected large folio after fault\n");
-+
-+	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse one fully populated window...");
-+	if (!khugepaged_wait_full_pass())
-+		fail("Timeout");
-+	else if (window_collapsed(p + window, window) &&
-+		 window_not_collapsed(p, window) &&
-+		 window_not_collapsed(p + 2 * window,
-+				      hpage_pmd_size - 2 * window))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	validate_memory(p, window, 2 * window);
-+	ops->cleanup_area(p, hpage_pmd_size);
-+	thp_pop_settings();
-+	ksft_test_result_report(exit_status, "%s\n", __func__);
-+}
-+
-+static void collapse_order_partial_window(struct collapse_context *c,
-+					  struct mem_ops *ops)
-+{
-+	void *p;
-+
-+	mthp_push_target_order();
-+
-+	p = ops->setup_area(1);
-+	ops->fault(p, 0, page_size);
-+	if (!window_not_collapsed(p, hpage_pmd_size))
-+		ksft_exit_fail_msg("Unexpected large folio after fault\n");
-+
-+	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse window with single PTE entry present...");
-+	if (!khugepaged_wait_full_pass())
-+		fail("Timeout");
-+	else if (window_collapsed(p, mthp_window_size()))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	validate_memory(p, 0, page_size);
-+	ops->cleanup_area(p, hpage_pmd_size);
-+	thp_pop_settings();
-+	ksft_test_result_report(exit_status, "%s\n", __func__);
-+}
-+
-+static void collapse_order_max_ptes_none(struct collapse_context *c,
-+					 struct mem_ops *ops)
-+{
-+	struct thp_settings settings;
-+	size_t window = mthp_window_size();
-+	void *p;
-+
-+	mthp_push_target_order();
-+	settings = *thp_current_settings();
-+	settings.khugepaged.max_ptes_none = 0;
-+	thp_push_settings(&settings);
-+
-+	p = ops->setup_area(1);
-+	ops->fault(p, 0, 2 * window - page_size);
-+	if (!window_not_collapsed(p, hpage_pmd_size))
-+		ksft_exit_fail_msg("Unexpected large folio after fault\n");
-+
-+	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse full window, not the one missing a page...");
-+	if (!khugepaged_wait_full_pass())
-+		fail("Timeout");
-+	else if (window_collapsed(p, window) &&
-+		 window_not_collapsed(p + window, window))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	validate_memory(p, 0, 2 * window - page_size);
-+	ops->cleanup_area(p, hpage_pmd_size);
-+	thp_pop_settings();
-+	thp_pop_settings();
-+	ksft_test_result_report(exit_status, "%s\n", __func__);
-+}
-+
-+static void collapse_order_mixed_sources(struct collapse_context *c,
-+					 struct mem_ops *ops)
-+{
-+	struct thp_settings settings;
-+	void *p;
-+
-+	if (collapse_order <= MIN_MTHP_ORDER) {
-+		ksft_test_result_skip("%s: no source order below target\n",
-+				      __func__);
-+		return;
-+	}
-+
-+	mthp_push_target_order();
-+
-+	/* Fault the whole region as order-MIN_MTHP_ORDER folios. */
-+	settings = *thp_current_settings();
-+	settings.hugepages[MIN_MTHP_ORDER].enabled = THP_ALWAYS;
-+	thp_push_settings(&settings);
-+	p = ops->setup_area(1);
-+	ops->fault(p, 0, hpage_pmd_size);
-+	thp_pop_settings();
-+
-+	/*
-+	 * The order is enabled, but the allocator can still fall back under
-+	 * fragmentation.  That leaves nothing to collapse from, which is the
-+	 * machine's answer rather than a reason to end the run.
-+	 */
-+	if (!is_range_backed_by_folio_orders(p, hpage_pmd_size, MIN_MTHP_ORDER,
-+					     pagemap_fd, kpageflags_fd)) {
-+		ksft_print_msg("No order-%d sources to collapse...",
-+			       MIN_MTHP_ORDER);
-+		skip("Skip");
-+		ops->cleanup_area(p, hpage_pmd_size);
-+		thp_pop_settings();
-+		ksft_test_result_report(exit_status, "%s\n", __func__);
-+		return;
-+	}
-+
-+	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
-+	ksft_print_msg("Collapse region backed by smaller large folios...");
-+	if (!khugepaged_wait_full_pass())
-+		fail("Timeout");
-+	else if (window_collapsed(p, hpage_pmd_size))
-+		success("OK");
-+	else
-+		fail("Fail");
-+
-+	validate_memory(p, 0, hpage_pmd_size);
-+	ops->cleanup_area(p, hpage_pmd_size);
-+	thp_pop_settings();
-+	ksft_test_result_report(exit_status, "%s\n", __func__);
-+}
-+
- static void usage(void)
+@@ -1412,10 +1412,13 @@ static void collapse_order_max_ptes_none(struct collapse_context *c,
+ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 					 struct mem_ops *ops)
  {
- 	fprintf(stderr, "\nUsage: ./khugepaged [OPTIONS] <test type> [dir]\n\n");
-@@ -1418,6 +1630,20 @@ int main(int argc, char **argv)
++	int source_order = anon_order ? anon_order : MIN_MTHP_ORDER;
+ 	struct thp_settings settings;
+ 	void *p;
  
- 	parse_test_type(argc, argv);
+-	if (collapse_order <= MIN_MTHP_ORDER) {
++	/* Sources must be a supported mTHP order strictly below the target. */
++	if (source_order >= collapse_order ||
++	    !(thp_supported_orders() & (1UL << source_order))) {
+ 		ksft_test_result_skip("%s: no source order below target\n",
+ 				      __func__);
+ 		return;
+@@ -1423,23 +1426,22 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
  
-+	if (mthp_khugepaged_context &&
-+	    !(thp_supported_orders() & (1UL << collapse_order)))
-+		ksft_exit_skip("Order %d is not a supported anon THP order\n",
-+			       collapse_order);
-+
-+	if (mthp_khugepaged_context) {
-+		pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-+		if (pagemap_fd < 0)
-+			ksft_exit_fail_perror("open(/proc/self/pagemap)");
-+		kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
-+		if (kpageflags_fd < 0)
-+			ksft_exit_fail_perror("open(/proc/kpageflags)");
-+	}
-+
- 	setbuf(stdout, NULL);
+ 	mthp_push_target_order();
+ 
+-	/* Fault the whole region as order-MIN_MTHP_ORDER folios. */
++	/* Fault the whole region as order-@source_order folios. */
+ 	settings = *thp_current_settings();
+-	settings.hugepages[MIN_MTHP_ORDER].enabled = THP_ALWAYS;
++	settings.hugepages[source_order].enabled = THP_ALWAYS;
+ 	thp_push_settings(&settings);
+ 	p = ops->setup_area(1);
+ 	ops->fault(p, 0, hpage_pmd_size);
+ 	thp_pop_settings();
  
  	/*
-@@ -1480,6 +1706,10 @@ int main(int argc, char **argv)
- 	TEST(collapse_empty, madvise_context, anon_ops);
+-	 * The order is enabled, but the allocator can still fall back under
+-	 * fragmentation.  That leaves nothing to collapse from, which is the
+-	 * machine's answer rather than a reason to end the run.
++	 * The order is enabled and supported, but the allocator can still fall
++	 * back under fragmentation.  That leaves nothing to collapse from,
++	 * which is the machine's answer rather than a reason to end the run.
+ 	 */
+-	if (!is_range_backed_by_folio_orders(p, hpage_pmd_size, MIN_MTHP_ORDER,
++	if (!is_range_backed_by_folio_orders(p, hpage_pmd_size, source_order,
+ 					     pagemap_fd, kpageflags_fd)) {
+-		ksft_print_msg("No order-%d sources to collapse...",
+-			       MIN_MTHP_ORDER);
++		ksft_print_msg("No order-%d sources to collapse...", source_order);
+ 		skip("Skip");
+ 		ops->cleanup_area(p, hpage_pmd_size);
+ 		thp_pop_settings();
+@@ -1448,7 +1450,8 @@ static void collapse_order_mixed_sources(struct collapse_context *c,
+ 	}
  
- 	TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
-+	TEST(collapse_order_single_window, mthp_khugepaged_context, anon_ops);
-+	TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
-+	TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
-+	TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
+ 	madvise(p, hpage_pmd_size, MADV_HUGEPAGE);
+-	ksft_print_msg("Collapse region backed by smaller large folios...");
++	ksft_print_msg("Collapse region backed by order-%d sources...",
++		       source_order);
+ 	if (!khugepaged_wait_full_pass())
+ 		fail("Timeout");
+ 	else if (window_collapsed(p, hpage_pmd_size))
+@@ -1479,6 +1482,8 @@ static void usage(void)
+ 	fprintf(stderr,	"\t\t-s: mTHP size, expressed as page order.\n");
+ 	fprintf(stderr,	"\t\t    Defaults to 0. Use this size for anon or shmem allocations.\n");
+ 	fprintf(stderr,	"\t\t-c: collapse order for mTHP collapse, expressed as page order.\n");
++	fprintf(stderr,	"\t\t    With -s, -s names the mTHP source order for the\n");
++	fprintf(stderr,	"\t\t    mixed-source case (source order below the target).\n");
+ 	exit(1);
+ }
  
- 	TEST(collapse_single_pte_entry, khugepaged_context, anon_ops);
- 	TEST(collapse_single_pte_entry, khugepaged_context, read_only_file_ops);
 -- 
 2.54.0
 
