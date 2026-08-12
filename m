@@ -1,139 +1,162 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188F23749EE;
-	Wed, 12 Aug 2026 08:17:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC97E3B14C2;
+	Wed, 12 Aug 2026 08:23:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786522667; cv=none; b=OQfkH1kIu5bEBzX4Bd2aw7zRpSgwQEn9/7s3EUaL4kmMTnJc03JzhnhPgbdmIEuzQFc/BaBrywKvCaCQtmT/YQNC5YmwiFbYyEsz/mWb0k9xhmqK7hJpzJLJWMWeRi8LiHUgsXE8jDbp4v4QLgZKM9YHB8MaIpMj4uJivUFRX2g=
+	t=1786523036; cv=none; b=sNuzP5zVIlnIu3lP6IWyR+/dH4PwcwTCz58SM1Bmm+gG0F1HbzQ9JP6CwAgJ3ihdF00QrNTv2N//ga1a5SqovSM7rcrl5wLDhhvMQ8w/y9Rf1+FQlGy1lc8cFBQ/D0yeH0/wDQMgzq1SY/MyHLPbiDdzZ80WrNsH+oJVWw6d1F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786522667; c=relaxed/simple;
-	bh=DqYxEwSH3H4xVoQgu3Tgg5wdeAVi8k/bBFLSrF/uUDw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=HQhh3SnZQvXDSSuc+fLuyheNka+aO303KHQcRXGILNAK11miozntLSBHMGP5kiZM+bLmQrpoQB5LrmKarPhyGlCAJPFVqJmef+6209sQEoOu3bCuGGbd/2yrH7+TnzrBQwEqnWSHCc1svE51FmSa3jzzOMKpaUSI+fJyy0LNZ8w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlrI6VGT; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786523036; c=relaxed/simple;
+	bh=W+jcq+2Wzamwh76nz0OcGlGI0ou5c5gwJ2B1PP/p9zc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=TirvHX9G45P1K+ny1Xl+XasBe/95vN9znAsCuxImeHOO8rSqSQB658p2L/70850kIFt5Bhou6tfCW/wdD7f+PjyJ8ePB+Mbd7Azv9zTZJO4UsnrKzQLtEU5VGSl8SrjpEGrSTP/4UcUGmTzujoksBupcY34QvA0ANaTBYIooGpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iwAyO77L; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlrI6VGT"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC57C1F00A3A;
-	Wed, 12 Aug 2026 08:17:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786522665;
-	bh=rUPKq19ute4e/df9ITifTzrOJePqrUKcOigGJrc6Xv4=;
-	h=From:Date:Subject:To:Cc;
-	b=jlrI6VGTznU6HDN4gGZLQRdHLaTVS+lRv3AYOoJ5HFdlC9BkzAFxkiVC/LXYs6Nf+
-	 qHSSZY+Bh8HwtwWJIbykKRfCx9lEPEslje6v7NYdIDwzItNMuy5xqy+ySQYq87K8Vx
-	 CJ03Xz+5+XRV8cV8WoYZZc1keHW5ojKGAA0vCl4cTN5juOP1PJln4L5z8ud362oPl4
-	 EdS7BXA2ALfdxXa1eQXW3IRQSKzw1Y0O9ZxS2v8hQCJnTIgUdZH6vV4dEaEsMl82pk
-	 MGbjU7GHrQu2NEyhR4q8CVu8mMC4vbQzdWTXGkY7KRAuingOuKed0NFV/nQuhO5Lxz
-	 +pSg/C4lSa+0w==
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-Date: Wed, 12 Aug 2026 11:17:40 +0300
-Subject: [PATCH v2] selftests/mm: thuge-gen: fix test_shmget() for
- PAGE_SIZE check
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iwAyO77L"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786523034; x=1818059034;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=W+jcq+2Wzamwh76nz0OcGlGI0ou5c5gwJ2B1PP/p9zc=;
+  b=iwAyO77Lo6lBb6+g4b2tI7LUg2VT6cotOs2bWrp4VmWDIAASSOMBrT5U
+   qIIRuv+/SQNvzUU4ihHx+QN4SjUC/jm9ZCNtdtCB2tA5/yFTdJVeiGZyh
+   xC48v+DpXl2gAZ3fEM0goc2rFtVeSyyY9rV0zci2ydjsglRLjtdaTnSNj
+   HLK7z3qVSICsRWxGL25m5oZN0eZ2LWj2ifw3CIeV2IfwiXX6zwPYIVcqS
+   ussQYa9GvThMdSsKLsPJNvthSMhyDMan40zsS1b4ijc6EEerosC0hNyoQ
+   42bMXuxtOzhcmIH6ZWnKlE4KRMoM/s66C9oL+c9QD7TX8P95O4do4R5Zq
+   w==;
+X-CSE-ConnectionGUID: ZueSlsXgTXap1rgwctY1NA==
+X-CSE-MsgGUID: nNxRgY5aSEeJgWHFQEABVg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11872"; a="97414832"
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="97414832"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 01:23:53 -0700
+X-CSE-ConnectionGUID: BVDpwXjLQ5mrX6YTBE6jjA==
+X-CSE-MsgGUID: wd0espIgTjCF/EZNhS5SlA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
+   d="scan'208";a="257380624"
+Received: from unknown (HELO [10.238.208.98]) ([10.238.208.98])
+  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 01:23:34 -0700
+Message-ID: <2f68b143-f3e1-48b7-8666-52072249e0be@intel.com>
+Date: Wed, 12 Aug 2026 16:23:31 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v10 04/41] KVM: Enumerate support for PRIVATE memory iff
+ kvm_arch_has_private_mem is defined
+To: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev,
+ binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com,
+ david@kernel.org, jmattson@google.com, jthoughton@google.com,
+ michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
+ qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
+ shivankg@amd.com, steven.price@arm.com, tabba@google.com,
+ willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
+ forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
+ aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
+ Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org,
+ linux-coco@lists.linux.dev
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-4-2fc18ee6d3ba@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260807-gmem-inplace-conversion-v10-4-2fc18ee6d3ba@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260812-selftests-thuge-gen-fix-v2-1-9adaa693e73b@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4WOQQ7CIBREr2JYi9LWVuvKe5gugH4KWsDwaaNpe
- nehHsD81ZuZP5mFIAQDSK67hQSYDRrvEpT7HZGauwGo6ROTkpUNu7CWIowqAkakUU/JHsBRZd6
- 05pLVqm4qdpYkfb8CJHlrvnc/xkk8QMZclxOCI1ARuJM6S9b6aI/W0slh5GKEnNEGow+fbd5c5
- K7/S+aCpmuLVp1E1Reluj0hOBgPPgykW9f1C6P/eDv1AAAA
-X-Change-ID: 20260809-selftests-thuge-gen-fix-5ac05f56307c
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>, 
- Lorenzo Stoakes <ljs@kernel.org>, Michal Hocko <mhocko@suse.com>, 
- Mike Rapoport <rppt@kernel.org>, Sarthak Sharma <sarthak.sharma@arm.com>, 
- Shuah Khan <shuah@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Vlastimil Babka <vbabka@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-X-Mailer: b4 0.17-dev
 
-Commit 49a4e7186b08 ("selftests/mm: thuge-gen: add setup of HugeTLB pages")
-changed thuge-gen test to use common functions for reading hugetlb
-attributes from sysfs, but it missed that the original read_free() function
-special cased PAGE_SIZE tests.
+On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Explicitly guard reporting support for KVM_MEMORY_ATTRIBUTE_PRIVATE based
+> on kvm_arch_has_private_mem being #defined in anticipation of tracking
+> PRIVATE vs. SHARED state per-guest_memfd, not per-VM (to allow in-place
+> conversion).
+> 
+> guest_memfd support for memory attributes is expected to be unconditional
+> to avoid yet more macros (all architectures that support guest_memfd are
+> expected to use per-gmem attributes at some point), at which point
+> enumerating support KVM_MEMORY_ATTRIBUTE_PRIVATE based solely on memory
+> attributes being supported by KVM at-large would result in a system-scope
+> check (NULL @kvm) over-reporting support on arm64.
+> 
+> Give architectures full control over overriding the default definition of
+> kvm_arch_has_private_mem() by removing the coupling with
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+> 
+> In a later patch, kvm_arch_has_private_mem() will be defined based on
+> whether architectural features are compiled in, and made orthogonal to
+> CONFIG_KVM_VM_MEMORY_ATTRIBUTES.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Reviewed-by: Fuad Tabba <tabba@google.com>
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Tested-by: Shivank Garg <shivankg@amd.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-For PAGE_SIZE tests, failure to read sysfs was ignored and read_free()
-returned 0.
+Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
 
-This allowed test_shmget() to essentially skip the check of how many huge
-pages was consumed when it ran with PAGE_SIZE.
-
-Commit 3199b0c09efa ("selftests/mm: fix read_file() return value check")
-fixed checks for read_file() return value and this exposed the issue in
-test_shmget() that checks the number of free hugetlb pages even for
-PAGE_SIZE test, tries to access
-
-/sys/kernel/mm/hugepages/hugepages-<PAGE_SIZE>/free_hugepages
-
-and obviously fails there.
-
-Gate the checks for free huge pages on size != getpagesize() and initialize
-before and after variables to values matching PAGE_SIZE test.
-
-Fixes: 49a4e7186b08 ("selftests/mm: thuge-gen: add setup of HugeTLB pages")
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
-v2 changes:
-* Correct the commit message
-
-v1: https://patch.msgid.link/20260809-selftests-thuge-gen-fix-v1-1-1919f4b3d12f@kernel.org
----
- tools/testing/selftests/mm/thuge-gen.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
-index 22b9c2f1c35d..50d0805b65db 100644
---- a/tools/testing/selftests/mm/thuge-gen.c
-+++ b/tools/testing/selftests/mm/thuge-gen.c
-@@ -71,12 +71,16 @@ void test_mmap(unsigned long size, unsigned flags)
- 
- void test_shmget(unsigned long size, unsigned flags)
- {
--	int id;
--	unsigned long before, after;
-+	/* values for PAGE_SIZE test */
-+	unsigned long before = NUM_PAGES;
-+	unsigned long after = 0;
- 	struct shm_info i;
- 	char *map;
-+	int id;
-+
-+	if (size != getpagesize())
-+		before = hugetlb_free_pages(size);
- 
--	before = hugetlb_free_pages(size);
- 	id = shmget(IPC_PRIVATE, size * NUM_PAGES, IPC_CREAT|0600|flags);
- 	if (id < 0) {
- 		if (errno == EPERM) {
-@@ -97,10 +101,11 @@ void test_shmget(unsigned long size, unsigned flags)
- 	shmctl(id, IPC_RMID, NULL);
- 
- 	memset(map, 0xff, size*NUM_PAGES);
--	after = hugetlb_free_pages(size);
-+	if (size != getpagesize())
-+		after = hugetlb_free_pages(size);
- 
- 	show(size);
--	ksft_test_result(size == getpagesize() || (before - after) == NUM_PAGES,
-+	ksft_test_result((before - after) == NUM_PAGES,
- 			 "%s: mmap %lu %x\n", __func__, size, flags);
- 	if (shmdt(map))
- 		ksft_exit_fail_msg("%s: shmdt: %s\n", __func__, strerror(errno));
-
----
-base-commit: 17e5919bdca144d4e67337f53bf57d7811f62192
-change-id: 20260809-selftests-thuge-gen-fix-5ac05f56307c
-
---
-Sincerely yours,
-Mike.
+> ---
+>   include/linux/kvm_host.h | 2 +-
+>   virt/kvm/kvm_main.c      | 2 ++
+>   2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 3e86cdd00e59b..e3666d0b40b74 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -722,7 +722,7 @@ static inline int kvm_arch_vcpu_memslots_id(struct kvm_vcpu *vcpu)
+>   }
+>   #endif
+>   
+> -#ifndef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#ifndef kvm_arch_has_private_mem
+>   static inline bool kvm_arch_has_private_mem(struct kvm *kvm)
+>   {
+>   	return false;
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index e3a77d1e6d8ae..560ff05e95959 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2422,8 +2422,10 @@ static int kvm_vm_ioctl_clear_dirty_log(struct kvm *kvm,
+>   #ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+>   static u64 kvm_supported_mem_attributes(struct kvm *kvm)
+>   {
+> +#ifdef kvm_arch_has_private_mem
+>   	if (!kvm || kvm_arch_has_private_mem(kvm))
+>   		return KVM_MEMORY_ATTRIBUTE_PRIVATE;
+> +#endif
+>   
+>   	return 0;
+>   }
+> 
 
