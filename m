@@ -1,180 +1,77 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out-180.mta0.migadu.com (out-180.mta0.migadu.com [91.218.175.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5591E2877E8;
-	Wed, 12 Aug 2026 00:44:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C42363C59
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 01:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786495452; cv=none; b=om+nW1yjzC5mSKJd22DcaI2PvavszgxY5bMRtNzy58uNHRK/atqKwWZ2JsgHIuJKk9Z1+TYV042ZsS/em8ZwLX9p5dzQr9tZxcQSWOLh2wNxRUMBxy8GS74tapGHyEtKYwBKnt6KA43CIZfU+1h3/kerPwlYIkyK9ImUp90Dz/A=
+	t=1786496888; cv=none; b=hc0FIygHAJAXG8MUIaIsAMtoVm4R91dCyoW0iN85L1IPkTBqlIhDtlrbfHymeNB9mEEyLW/Jij1lQXs9GES+HO/LgC07OK+GIkykUVcucZvBPOOWmWVSCD4/PmbgemUeFzNcwggjC0sZkFHFwnKsloc4zMsuzpgTbihXuDgJYYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786495452; c=relaxed/simple;
-	bh=oj155J8WdN24CH7OTppEnli8Za/z6mHS1JU++3ERia4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NOSPAy7HUBU9+pi9gZ+y6nk8RTDZMyEF9cXNccWAUUUZRU/hAuDnDYomjkmG3uZXmMxZgul2w+Tf8cxkfcR2JlSEIGAQhqxs5qZjU8t9S/5Hanpe77kJfMQILK5ZFZ8p+YLK/1cDA6JZlTyNyBTPK1SxY+3zsImMK2BI95Sw+h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nebqLtJ+; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786496888; c=relaxed/simple;
+	bh=M8fbbsP0hIKLRkOmMm0hqgAyWvxRX5hrSQ/luFu7/48=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kTPBi8W62RfqPxUSCmLjBYcjrW+P+jYufp0HNpmDzqysB2g/epQa8/wO2x3hHa0zGT506PGEjEoOQsnZBph+N6jKqQZ7JydFzJqRzW4UGv4I3LZzi1g7HZy9pfJaoNd+nYHsm6v0mBYClTEu+l8MrL5A/QeKHJma/FjmA1F3p9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Ep8S3WPB; arc=none smtp.client-ip=91.218.175.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nebqLtJ+"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43FD01F000E9;
-	Wed, 12 Aug 2026 00:44:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786495451;
-	bh=bCWjy227zq95PX7LUF27D+H8lsveDD20rzvQ0kh5R1E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nebqLtJ+DftQC/tN738fe9tNVd0j18/lSiL2k5GJ/9cKiyaEoRIdE03fDFSJDO8un
-	 E1jhjOFEK61koPdEeEuRt/OTYOuUh9c9idCxE8jjTjSr9Y8HZxiicYTZPgUf6FWwrm
-	 Lsel3A4mDvTVT6ZM9yU33d8vKObtw685jzMLX1PneAZaZ4RiofxaRJsB8VI2K0oAYe
-	 OGWvDb9LCi1AsVsGnomLMqMFdAPgHgiR9vBJTOuBkVYBGbPeoCc1wVtF6DSyvzBI5b
-	 0rjxjMwRvAggi6wEi+qpIT+S8jIFwY5LFCURyJt3FfZVGi3PmyiJthSUH9bjG8KElg
-	 0/wPZjHyEL2hg==
-From: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>
-Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH v3 4/4] selftests/ftrace: Add persistent ring buffer testcases
-Date: Wed, 12 Aug 2026 09:44:06 +0900
-Message-ID: <178649544683.438282.14573895196260214231.stgit@devnote2>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <178649540853.438282.4271870161169100680.stgit@devnote2>
-References: <178649540853.438282.4271870161169100680.stgit@devnote2>
-User-Agent: StGit/0.19
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Ep8S3WPB"
+Date: Tue, 11 Aug 2026 18:07:47 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786496874;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ZtDHm16tZ1AeI1JlccbZ5sxenZSs5J6HVIBDth4k+zI=;
+	b=Ep8S3WPBKYvaqNZuQfSI9AJk8Mnjjnn/rtkrv7oROgDfuQ2WHBIrQRC2CtcvBDD1WdJn4l
+	NbZWgXeuxT5GZ3+evpkisjMCmgeDZJuYLwxERo0Mo/ad56gL6JnlOT6DnxHPLj21G9SGsw
+	OVVmALVE9+iUPxSofv9BFXRVYk+Fffw=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Shakeel Butt <shakeel.butt@linux.dev>
+To: Tejun Heo <tj@kernel.org>
+Cc: Ziyang Men <ziyang.meme@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
+	Josef Bacik <josef@toxicpanda.com>, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, JP Kobryn <inwardvessel@gmail.com>, 
+	Mykola Lysenko <mykolal@meta.com>, kernel-team@meta.com, linux-block@vger.kernel.org, 
+	bpf@vger.kernel.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] block: add BPF kfuncs to read blkcg io.stat
+Message-ID: <anvCwytP6-9z0tEF@linux.dev>
+References: <20260807193732.4073299-1-ziyang.meme@gmail.com>
+ <20260807193732.4073299-2-ziyang.meme@gmail.com>
+ <anot9w6mg9538RWm@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <anot9w6mg9538RWm@slm.duckdns.org>
+X-Migadu-Flow: FLOW_OUT
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Mon, Aug 10, 2026 at 10:00:55AM -1000, Tejun Heo wrote:
+> Hello,
+> 
+> On Fri, Aug 07, 2026 at 12:37:31PM -0700, Ziyang Men wrote:
+> > +__bpf_kfunc struct blkcg *bpf_get_root_blkcg(void)
+> > +__bpf_kfunc struct blkcg *bpf_get_blkcg(struct cgroup_subsys_state *css)
+> > +__bpf_kfunc void bpf_put_blkcg(struct blkcg *blkcg)
+> > +__bpf_kfunc void bpf_blkcg_flush_stats(struct blkcg *blkcg)
+> 
+> I wonder whether making the above deal with css's would make more sense so
+> that we don't end up with per-subsystem iterators. If casting to per-subsys
+> type is necessary, we can provide RCU protected cast kfucns.
+> 
 
-Add test cases for persistent ring buffer (reserve_mem= combined
-with trace_instance=) and backup instance (trace_instance=backup=boot_map).
-
-These test cases verify:
- - persistent-01-reserve-mem: Memory reservation via reserve_mem=
-   and trace_instance=boot_map@trace. Verifies trace data retention in
-   the boot_map instance across guest crash/reboot via sysrq-trigger.
- - persistent-02-backup-instance: Backup instance creation via
-   trace_instance=backup=boot_map. Verifies that previous boot trace
-   log is preserved in the backup instance on the subsequent boot.
-
-These test cases specify '# REBOOT: 1' to enable multi-boot guest
-crash/reboot testing with doubled QEMU timeout.
-
-Assisted-by: Antigravity:gemini-3.6-flash
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
-Changes in v2:
- - Increase reserve_mem alignment to 32M (reserve_mem=12M:32M:trace) to
-   ensure stable physical memory placement across KASLR reboots.
----
- .../cmdlines/persistent-01-reserve-mem.cmdline     |    1 +
- .../cmdlines/persistent-02-backup-instance.cmdline |    1 +
- .../boottime/tests/persistent-01-reserve-mem.sh    |   28 ++++++++++++++
- .../tests/persistent-02-backup-instance.sh         |   40 ++++++++++++++++++++
- 4 files changed, 70 insertions(+)
- create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline
- create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline
- create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh
- create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh
-
-diff --git a/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline b/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline
-new file mode 100644
-index 000000000000..c69eeb27deb6
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline
-@@ -0,0 +1 @@
-+reserve_mem=12M:32M:trace trace_instance=boot_map@trace
-diff --git a/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline b/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline
-new file mode 100644
-index 000000000000..43217c986ca1
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline
-@@ -0,0 +1 @@
-+reserve_mem=12M:32M:trace trace_instance=boot_map@trace trace_instance=backup=boot_map
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh b/tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh
-new file mode 100644
-index 000000000000..49abaf518481
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh
-@@ -0,0 +1,28 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2026, Google LLC.
-+# Check persistent ring buffer across guest crash/reboot
-+# REBOOT: 1
-+TRACEDIR="/sys/kernel/tracing"
-+
-+if [ ! -f "$TRACEDIR/instances/boot_map/trace" ]; then
-+	echo "FAIL: persistent trace instance boot_map/trace file missing"
-+	exit 1
-+fi
-+
-+# Check if Boot 1 marker was already written
-+if grep -q "BOOT1_MARKER" "$TRACEDIR/instances/boot_map/trace" 2>/dev/null; then
-+	# Second boot: verify persistent ring buffer content from first boot
-+	echo "PASS: persistent-01-reserve-mem"
-+	exit 0
-+fi
-+
-+# First boot: write marker to persistent buffer and trigger kernel crash/reboot
-+echo "BOOT1_MARKER" > "$TRACEDIR/instances/boot_map/trace_marker"
-+sync
-+
-+# Trigger reboot to restart into second boot
-+echo b > /proc/sysrq-trigger 2>/dev/null || echo c > /proc/sysrq-trigger 2>/dev/null || true
-+sleep 5
-+echo "FAIL: reboot trigger failed on first boot"
-+exit 1
-diff --git a/tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh b/tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh
-new file mode 100644
-index 000000000000..0b2a2f03ce4f
---- /dev/null
-+++ b/tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh
-@@ -0,0 +1,40 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0
-+# Copyright (C) 2026, Google LLC.
-+# Check persistent backup instance across guest crash/reboot
-+# REBOOT: 1
-+TRACEDIR="/sys/kernel/tracing"
-+
-+# Ensure both boot_map/trace and backup/trace files exist
-+if [ ! -f "$TRACEDIR/instances/boot_map/trace" ]; then
-+	echo "FAIL: boot_map/trace file missing"
-+	exit 1
-+fi
-+
-+if [ ! -f "$TRACEDIR/instances/backup/trace" ]; then
-+	echo "FAIL: backup/trace file missing"
-+	exit 1
-+fi
-+
-+# Check if BOOT1_MARKER is in boot_map/trace (indicates second boot)
-+if grep -q "BOOT1_MARKER" "$TRACEDIR/instances/boot_map/trace" 2>/dev/null; then
-+	# Second boot: verify BOOT1_MARKER was copied into backup/trace from Boot 1
-+	if grep -q "BOOT1_MARKER" "$TRACEDIR/instances/backup/trace" 2>/dev/null; then
-+		echo "PASS: persistent-02-backup-instance"
-+		exit 0
-+	else
-+		echo "FAIL: BOOT1_MARKER found in boot_map/trace" \
-+			"but missing from backup/trace on second boot"
-+		exit 1
-+	fi
-+fi
-+
-+# First boot: write BOOT1_MARKER to boot_map and reboot via sysrq-trigger
-+echo "BOOT1_MARKER" > "$TRACEDIR/instances/boot_map/trace_marker"
-+sync
-+
-+# Trigger reboot to restart into second boot
-+echo b > /proc/sysrq-trigger 2>/dev/null || echo c > /proc/sysrq-trigger 2>/dev/null || true
-+sleep 5
-+echo "FAIL: reboot trigger failed on first boot"
-+exit 1
-
+Hi Tejun, (sorry for asking dumb questions) is the concern you have is that with
+the current approach, we will have get_root/get/put kfuncs for each subsystem or
+something else? Also how will the current approach leads to per-subsystem
+iterators?
