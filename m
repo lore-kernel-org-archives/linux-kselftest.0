@@ -1,146 +1,150 @@
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8041400962
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 21:34:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 269BD3DA7D2
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 21:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786570497; cv=none; b=peLyMpsTR9HI0G+xrr432x3EprycFFV5qvVXu5DBuGejtV35eSRsTiP3Ew47ZkSxR1eUyCkAYF/4OKmvGG3epNK0GfYkx3uLnuV6AjTNWv9YxdsHFQONWMTJOEm3bMjz0K1Yasfd/XRO7DABXNEsXatAtNlyvLUej/ozzgM8oxI=
+	t=1786570896; cv=none; b=drkC6i4gZHj+BWG9m3iK7T8urezKLA2qBM0j/+6gsozbWeHA0CUA4QIBLry2e6mGwzSFnLHs3cCUMKc+jPexn4QDxAX1wNOHt0GeLNyr478Z2xYlWnX3sDbsCDHlwjzREXKYDyzl4eqCAIL4V/6/4lUfNaFi0OfFn1JkgD44hzU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786570497; c=relaxed/simple;
-	bh=X3O7nIG4wEV6N4TWtjouy4sS5Qwyj/jG9sAoPW345WA=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=uMDCKGnkqYebfoquSOM3Z4wqdj9nD+mDk8gqbFO0Q5oJJ1oGlSqKkeyH/oo5Ml0/4btdRd4RpI1XHaiGY7/LvHGSB43FgcWjAZQt9IFMSzv5LWH1LCrtONRFT76EJsotptmEK4nw6I3pzWd9RXGHnQBUZSfQO5VbuU5dhrGqxIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ElxqveAH; arc=none smtp.client-ip=209.85.214.198
+	s=arc-20240116; t=1786570896; c=relaxed/simple;
+	bh=Myn0f5PoONuBeSnhGPwFLjCEATkMK/fQIXssiOVSNy0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oBfqk4082aDT/lDo58v9xrX4eB4t56ftGaiwCOCV8NzQGGOeV9VlEHVjRAQKNI95K0yS8UnIXTEjWJiwN2UeRk+9p4u/KbJHO30IcadbqhkX9Tz+neglupK2NS/wByERNvR9VBGSVPXB/e4Tqfo4XWMyWeH4I4pynOc4YKTwk7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=choYcLMz; arc=none smtp.client-ip=209.85.216.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ElxqveAH"
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2cc640dfde3so19635115ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 14:34:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="choYcLMz"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so299779a91.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 14:41:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786570495; x=1787175295; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Gd+C2m5glZwGB8A6MFkRhDf1k0GKC1mWi3Ys+MVAnsc=;
-        b=ElxqveAHerXwwd/yz01nOgBAGErcIWy6ElPd0UotdX7+nTuNpxqR9/cRftLeRSmAX6
-         IukYRUx3MKylTF/zs0w0EGnLhdFj+XYoCVp0vB61tzi/nmYfnNZqO9/ZG6O+npgx2d4B
-         3kbjMgccK5B+MHADAalHWpeRLpLtGpod26MWLUfZGqIbSWzp6uKRR/ZWIFamQnq8mB2G
-         HAO7PvoUDymyhN6FXb+nBgn3KnwMDtYOvOm57Gz7tE623p0PkClyAgUjcNMyfSViDhVE
-         1SCco1tNa+lSQzzkYakPB2H0pE6nAPAj3kkzWRxiCj5GUGiMAOKKYRlP0y/5SyVjBpA7
-         54eQ==
+        d=google.com; s=20251104; t=1786570893; x=1787175693; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=NPvoXejEXMCOLtks/4P44XseBHeJ9j+rFY5G6V1i118=;
+        b=choYcLMzzYt+EkneTOegz0/c40LRIGJvd4bO/SM6+11qBRjCZHyFmO+vsdAOFxsS1w
+         EiFXkb4eR8TjF0JQdMn3RBqgg/nXvx0gBedu1SzsFJcl4U6vYEWZrfNp0A8MWJF8Fx2/
+         U/UEgb/kTjJEUR07MFRmoWAoNe5HDnLansO0wH3tlYyq/revCNq39mFPtxb0TpoqM9vH
+         AYgxFm1KNabjVNnER7ZHZyUWclO/RwYCg7CeFztB5IgHuTbR+T3tUVfm1rzd+UDr7OXz
+         v5dMxhIf8DGqcZlN39Hv939A46x5dcPthyVGFAW/Zn2jBSNQUufxPVWtYQkniVf/Dpus
+         kAiQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786570495; x=1787175295;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Gd+C2m5glZwGB8A6MFkRhDf1k0GKC1mWi3Ys+MVAnsc=;
-        b=bfPDDPDSzC16axiRLQoXS9gAnkomwko5C0y8atuHcA1uTnjrdd99PA6R3bxI0HiDSS
-         4QF7zcsPoHYbsJDmR84b8R8fF2eamCPgad3rJ9Xu7oWjfpO3Ve1RiTp+8XzcJe8cC7Jr
-         PRvB71qmyDbafSP2q8XCuOTj87vbrzjge4IIl5V8/U8yjDqlmWf7xnxAwPL1NqKlPaJ7
-         cXuCL4VOKvLXvx1DQqGWryZUGC3fZ/Me3xpsBnutEc0mxdIZ7noaVb3ZQHRRu8u4D9Ne
-         4PmpKHTnNA7QyGFb+16G4Rdwzjtb7YtDaYKfB8LriEMOe6Ogizo7v3oTmhPbgk8u4nT2
-         okfQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro4kC4NbAMBqWbbhuQWNR56wyY3OFtc8E9zhlgFcsjzvwLC59dFmydeh0CCAs694erK9R+xKK2y+G4jpAzc4fc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQUFILXGRrhvXybPUmILRAdVKPIKwu/1CZkhUisdUs7o5vKH/m
-	OqMoPVFgrxEjbLF4Qf7o90GshqIFB9i2jEf9ABaAa1XsJBFo1rNYaQwmrxvr6oo3QWMS9xn+rDm
-	vcD4RLQ==
-X-Received: from plblf13.prod.google.com ([2002:a17:902:fb4d:b0:2ca:eea9:9845])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d990:b0:2cf:9344:b80c
- with SMTP id d9443c01a7336-2d37ebb2b42mr10699005ad.18.1786570494619; Wed, 12
- Aug 2026 14:34:54 -0700 (PDT)
-Date: Wed, 12 Aug 2026 14:34:53 -0700
-In-Reply-To: <69c86172-9175-46cc-895e-9ecd449332cd@kernel.org>
+        d=1e100.net; s=20251104; t=1786570893; x=1787175693;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=NPvoXejEXMCOLtks/4P44XseBHeJ9j+rFY5G6V1i118=;
+        b=D3jv4vVzVDd0vxfUn4xjBYBdbtpQeoD+GACWETTdYyDkwsTEP8fDsYj24xTYLP2st3
+         RcP6JRlJA80fwaZACRq49UepkJHstqUcWmfwuokwQ55Kw3EP1HBMhlaFcny6Kl3aMMMx
+         yLqnG2GXg4Y9bonxbfDoh6TtKOZVZ/oFS7CZgdRJp5XQvmZMeAO7egwOTvWYDNDzm4bq
+         8V7geE11mi4s/+WNLyZGwzoLomg8MCl4mZoowOP2+GuKD9tQArXtI/x04YNXV88fVt3z
+         Dq4JAgEThCx0mt9EVp6w1mF2j/x6GKUt8T/3f9nZuXiXDafEqomnXMYnUABbpMMvLATI
+         BrHA==
+X-Forwarded-Encrypted: i=1; AHgh+Rp+tN03QLTJwAavbna8RmfWe4zwfyAVEJJEiSlAOjEMUHufbsV4ja0HwmiYvYqBfFox+v7KE81XHQne+DAEajc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz34m9/dqhneVe04XrapIhm4Fnl70urX4BfaZCEiY70fXUNJHRq
+	BF8zAdSPR4SBHJ6Or106RtYY2LTobak/YSytAsTvkcHfK79GYpNCJsJ85emlSIx+6w==
+X-Gm-Gg: AR+sD10YgLpX6mbtpnIbEBw1puIdXMPAgNkF9fj8FRiv6ZQ7q1tVOzC2n7HhkFOeTCs
+	pNOCJEG1Cjzso/6lPiMsX6SSj1dIzUNtb+uZro33sHkxWw4XlhWUyzkPtwAKSJsTM03M484JkLM
+	ae1qw4m9aff+yn2OpRitEFTT+UUG5QLwaDi8ani6NltmPviSjQ3PaBnBB9YADQAJwdgWA3EYn90
+	dJ76F5tkmZxAV/PyCDYbEhZxK08hwInYxK+xUccnL/5nnNJDYQ0++FC0Gg1GQKEw1xVfge83kmM
+	M0ha7XpmQZfHdX0AGh6+1A1jD3gRszNw7goKAWn7SPSHe3yN/jn8As/qXCcAhrvUvxNrVZKc16Y
+	VnxDMcY9KfRBAGa3+xGmOThNPTxWxjBiop2KHnSQtG9U1TUicgbzMzOhTLlXlPFqyzWLQf8P5fB
+	j5xbFZ+Y1rJCA08f8p0sNFnivFK/OIqmKNM/61zveSeeCJMYq5o5h5QBkoy6SQVJaWPKuvP3Ldq
+	uyjRqY0jVfhsmhKl9/WXKVphaJbkg==
+X-Received: by 2002:a17:90b:274c:b0:36b:de66:92c3 with SMTP id 98e67ed59e1d1-3931f583a5amr478962a91.10.1786570892837;
+        Wed, 12 Aug 2026 14:41:32 -0700 (PDT)
+Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931ced0781sm878738a91.11.2026.08.12.14.41.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Aug 2026 14:41:32 -0700 (PDT)
+Date: Wed, 12 Aug 2026 21:41:28 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v4 08/10] vfio: selftests: Add mlx5 driver - HW init and
+ command interface
+Message-ID: <anzoiALsjiWrsZtl@google.com>
+References: <0-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
+ <8-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-7-2fc18ee6d3ba@google.com>
- <ed483d25-d908-4248-b8c7-862dd35dc6d4@kernel.org> <annnrGR1noVuBkCc@google.com>
- <69c86172-9175-46cc-895e-9ecd449332cd@kernel.org>
-Message-ID: <anzm_YLft-J7pxiy@google.com>
-Subject: Re: [PATCH v10 07/41] KVM: guest_memfd: Stub in ability to enable
- in-place shared<=>private conversion
-From: Sean Christopherson <seanjc@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <8-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
 
-On Wed, Aug 12, 2026, David Hildenbrand (Arm) wrote:
-> On 8/10/26 17:01, Sean Christopherson wrote:
-> > On Mon, Aug 10, 2026, David Hildenbrand (Arm) wrote:
-> >> On 8/7/26 23:52, Ackerley Tng via B4 Relay wrote:
-> >>> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> >>> index 65fbce46b63f4..9477ecebbbced 100644
-> >>> --- a/include/linux/kvm_host.h
-> >>> +++ b/include/linux/kvm_host.h
-> >>> @@ -2580,6 +2580,8 @@ static inline bool kvm_vm_mem_is_private(struct kvm *kvm, gfn_t gfn)
-> >>>  #endif  /* CONFIG_KVM_VM_MEMORY_ATTRIBUTES */
-> >>>  
-> >>>  #ifdef kvm_arch_has_private_mem
-> >>> +extern bool gmem_in_place_conversion;
-> >>
-> >> Is there a "supports/has/enable" in there? And should we call it "kvm_gmem" for
-> >> completeness?
-> > 
-> > It's kinda stupid and definitely more than a bit inconsistent, but overall I think
-> > I actually like "gmem_in_place_conversion" the best.
-> > 
-> > gmem_has_in_place_conversion and gmem_supports_in_place_conversion are misleading
-> > because it's not just that guest_memfd has/supports in-place conversion, it's that
-> > that KVM is tracking PRIVATE in guest_memfd and so in-place conversion is the only
-> > option.
-> > 
-> > On the other hand, while gmem_in_place_conversion_enabled is better, it's not
-> > quite accurate either because userspace isn't strictly required to do in-place
-> > conversion.
-> > 
-> > As for a kvm_ prefix, IMO gmem_ is sufficient for a namespace, and not having kvm_
-> > is consistent with most module params in KVM.
-> 
-> Maybe we should have a helper function instead of accessing the module parameter
-> directly, then the gmem_in_place_conversion could just stay file-local and
-> kvm_gmem_in_place_conversion() would be used by other code that wants to obtain
-> the value.
-> 
-> Instead of the
-> 
-> #define mem_in_place_conversion false
-> 
-> We'd have
-> 
-> #define kvm_gmem_in_place_conversion()	false
-> 
-> just a thought ...
+On 2026-08-12 11:59 AM, Jason Gunthorpe wrote:
 
-FWIW, I'd rather prefix kvm_ than add a wrapper to get a boolean.
+> diff --git a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
+> new file mode 100644
+> index 00000000000000..a2506ec8a19523
+> --- /dev/null
+> +++ b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
+> @@ -0,0 +1,108 @@
+> +/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
+> +/*
+> + * mlx5 VFIO selftest driver - HW definitions
+> + *
+> + * Typed wrappers, constants, and helpers for programming mlx5 hardware
+> + * via the VFIO selftest framework.  Most HW constants and all MLX5_SET/GET
+> + * macros come from the kernel headers (mlx5_ifc.h, mlx5_ifc_macros.h).
+> + */
+> +#ifndef SELFTESTS_VFIO_MLX5_HW_H
+> +#define SELFTESTS_VFIO_MLX5_HW_H
+> +
+> +#include <linux/io.h>
+> +#include <linux/build_bug.h>
+> +#include <vdso/bits.h>
+> +
+> +#include "mlx5_ifc.h"
+> +#include "mlx5_ifc_macros.h"
+
+I'm getting a compiler warning here when building with clang which is
+getting upgraded to error from -Werror.
+
+  /usr/local/google/home/dmatlack/kernel/trees/review/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_ifc.h:2706:50: error: field 'menu'
+  with variable sized type 'struct mlx5_ifc_resource_dump_menu_segment_bits' not at the end of a struct or class is a GNU
+        extension [-Werror,-Wgnu-variable-sized-type-not-at-end]
+         2706 |         struct mlx5_ifc_resource_dump_menu_segment_bits menu;
+               |                                                         ^
+           1 error generated.
+           make: *** [lib/libvfio.mk:36:
+
+I assume the mlx5 header needs to be fixed... But we can also work
+around it in VFIO selftests if that turns out to be a can of worms:
+
+diff --git a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
+index 2c451e411ec1..b9fad2b722a0 100644
+--- a/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
++++ b/tools/testing/selftests/vfio/lib/drivers/mlx5/mlx5_hw.h
+@@ -13,9 +13,18 @@
+ #include <linux/build_bug.h>
+ #include <vdso/bits.h>
+
++#ifdef __clang__
++#pragma clang diagnostic push
++#pragma clang diagnostic ignored "-Wgnu-variable-sized-type-not-at-end"
++#endif
++
+ #include "mlx5_ifc.h"
+ #include "mlx5_ifc_macros.h"
+
++#ifdef __clang__
++#pragma clang diagnostic pop
++#endif
++
+ /*
+  * Typed HW object wrappers for driver region arrays.
+  *
+
