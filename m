@@ -1,93 +1,76 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE524052B9;
-	Wed, 12 Aug 2026 09:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E8E38425A;
+	Wed, 12 Aug 2026 09:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786526592; cv=none; b=eD9mgCqssTJ6AStTGot9AfUQSCXreRfblvUB4UnXiYXiAeIz5eV0OB5JequEnNBAFIYjJvZ2B7drCv+nI6yWENvEhuTg1UtW9d2pb6z/OdJWDGEPIfG5OqI1UHiDf6XIFpGTDPxfo9TGFUbtKiwfOh7jRZE/XgqEl3pXOY3DSkE=
+	t=1786527611; cv=none; b=Nl8y9QOeibUFn6En5TWfgS9+8Vbmh3ycdWshXT6ptmypkX/NsMi5DIJnjGutQ7IIHYMsDBfjAV6Le43QPxb+3OB6rl1gdkjKHed9N9BKDx+uj0ZeHJUG+mzZNbEQA9N4stdBF9X+OTp/1dFwVRkeYjRsN8cfrihbNIV9eAMpm4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786526592; c=relaxed/simple;
-	bh=L3nmNn+E6VxPzB8IRO9dvxmo5dUgB+VDjaKQkUj65W8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=RFsd3IBVlYRaexJyvFZWtzV796/SaxnoF8psNED/YXTB993dXIK2xSkenRZEkH+xjxg0flaM+Y4sizecpPC/EiOtTId0owEkyP6vHRmOdmXoHcGuneD1htqexrS39lb6KIwDYuqcZbJXeM6y+UblwHeKa614EFZi7eCloQrY/Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UUv8ClAe; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786527611; c=relaxed/simple;
+	bh=ev4glunJmddrTbzF7PCDcRN30WkcDAddJrAQqh48rWk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Oc1RDjWeqcCfdZGw5KnhkuIBL/82skTno3PkeVbBuFJctYBkB7wvms/KDATsAIBKa8KHA53ET2DqFMV0XYkRclYwRmr9X78S9eiaEvJTYZkNNqNltis5buSQIXqtlsl56cjjkcpnSk+3HeD7mnBcNGWhpvGxmLFpyygU4+yMYDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=g5NrxuZj; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UUv8ClAe"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB341F00A3A;
-	Wed, 12 Aug 2026 09:23:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786526590;
-	bh=Vo4CjjJSBvposNw5hRn/JM84sD+qeFuxfOBnCtUreS8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=UUv8ClAe2mTyv4LLejjPS2VnVh8aBBmfGdqVdLR1f0u28NFJSAearsh70uk6tszwx
-	 1Le4WK5R4FDowAba7C80gMdjPJLV7jyHxk2F7d6LSEMkQKqMxVnokSCnoeepfoY0N0
-	 ylejpIsKWQCWF3geoVFqTzdRUqTiDdd89NZ/EqWclwvoXQT4eciibSKWjgu6WbsznJ
-	 4KFz8p3cGT4of94acq4Axf0Fk69kZId1+INJjRty0g5yLQQcPm1AuF0/iMOMuJzsDc
-	 DHSbwj3PY8OzUlYPrqsqMCVlW0BJDLtoQM3z9XGru4ocqj4Vo6xiPBTWCHscqBcQpo
-	 P/ib3vjpJQEEw==
-Content-Type: multipart/mixed; boundary="===============1147786569287872982=="
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="g5NrxuZj"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3A6351596;
+	Wed, 12 Aug 2026 02:40:05 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 006FC3F632;
+	Wed, 12 Aug 2026 02:40:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786527609; bh=ev4glunJmddrTbzF7PCDcRN30WkcDAddJrAQqh48rWk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g5NrxuZjQB9klOoODQiv4fCwQUmouyRDYnWJYKgnQvLAZQvGQOHbZuEoc9wMKuLTI
+	 fe7n3tELw0qqiEZ5cnlxStDf+6caqQnLspdbRG1hoDuQIzrsgEY2wLf8/h9SPuVGZ+
+	 wJLWh0JpvefPu/DqptOFEqpeS6i8LJSjr3L/qwCc=
+Date: Wed, 12 Aug 2026 10:40:04 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Breno Leitao <leitao@debian.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	workflows@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 4/4] selftests: mm: test kmemleak's N-consecutive-scan
+ leak confirmation
+Message-ID: <anw_dDAEPUMvuVJL@arm.com>
+References: <20260713-catalin_pto-v1-0-5b93b1131089@debian.org>
+ <20260713-catalin_pto-v1-4-5b93b1131089@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <544a8c2ce4a5a02b0223715d012a2ce8a15bab2c2c53ad76c9645a83048b0d87@mail.kernel.org>
-In-Reply-To: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
-References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT processes
-From: bot+bpf-ci@kernel.org
-To: bochaolucky@gmail.com,andrii@kernel.org,eddyz87@gmail.com
-Cc: ihor.solodrai@linux.dev,jiayuan.chen@linux.dev,lorenzo@kernel.org,ast@kernel.org,daniel@iogearbox.net,davem@davemloft.net,kuba@kernel.org,hawk@kernel.org,john.fastabend@gmail.com,sdf@fomichev.me,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,bpf@vger.kernel.org,netdev@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,bochaolucky@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 12 Aug 2026 09:23:09 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260713-catalin_pto-v1-4-5b93b1131089@debian.org>
 
---===============1147786569287872982==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Jul 13, 2026 at 04:48:07AM -0700, Breno Leitao wrote:
+> Add a functional test for the min_unref_scans kmemleak module parameter.
+> Using samples/kmemleak's helper module it checks that min_unref_scans=1
+> reports an orphan on the first scan, min_unref_scans=2 reports nothing on
+> the first scan but does on the second, and that the parameter reads back
+> what was written.
+> 
+> It counts only the helper module's own orphans (matched by their
+> [kmemleak_test] backtrace, with the module kept loaded so the symbols
+> resolve) so unrelated leaks already present on the system do not perturb
+> the result. The test skips when run as non-root, without
+> CONFIG_DEBUG_KMEMLEAK / CONFIG_SAMPLE_KMEMLEAK, on a kernel without the
+> parameter, or when the helper yields no detectable orphan.
+> 
+> Signed-off-by: Breno Leitao <leitao@debian.org>
 
-> diff --git a/tools/testing/selftests/bpf/test_xdp_features.sh b/tools/testing/selftests/bpf/test_xdp_features.sh
-> index 0aa71c4455c0..35ce0d4e2418 100755
-> --- a/tools/testing/selftests/bpf/test_xdp_features.sh
-> +++ b/tools/testing/selftests/bpf/test_xdp_features.sh
-
-[ ... ]
-
-> +terminate_dut_server() {
-> +	[ -z "$dut_pid" ] && return
-> +
-> +	# Use the shell job instead of a PID which may have been reused.
-> +	if [ "$(jobs -pr %% 2> /dev/null)" = "$dut_pid" ]; then
-> +		kill -KILL %% 2> /dev/null || true
-> +	fi
-> +
-> +	wait "$dut_pid" 2> /dev/null || true
-> +	dut_pid=""
-> +}
-> +
->  cleanup() {
-> -	ip link del v1 2> /dev/null
-> -	ip netns del ${NS} 2> /dev/null
-> -	[ "$(pidof xdp_features)" = "" ] || kill $(pidof xdp_features) 2> /dev/null
-> +	terminate_dut_server
-> +	ip link del v1 2> /dev/null || true
-> +	ip netns del "${NS}" 2> /dev/null || true
->  }
-
-Jiayuan Chen asked about removing the pidof dependency in v1: "It looks like
-part of the motivation here is dropping the pidof dependency? I don't think
-that's worth optimizing. Selftests already require a bunch of tools from
-non-essential packages (ip, ss and ethtool in this very script)". Does the
-removal of pidof serve another purpose beyond reducing dependencies, such as
-fixing the concurrent test interference described in the commit message? If
-the primary goal is fixing the race condition rather than removing a
-dependency, it might be worth clarifying the motivation.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31579454720
---===============1147786569287872982==--
+Reviewed-by: Catalin Marinas <catalin.marinas@arm.com>
