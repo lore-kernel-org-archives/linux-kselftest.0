@@ -1,181 +1,225 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB4C1DA62E;
-	Wed, 12 Aug 2026 18:30:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.17
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786559450; cv=fail; b=g3nNyNUxEooxIw37CMuVhl9Dq+XCRbYjyaFO76QdSIMTA29pf3ZEbPjkvdXUF/QFw+/o/EfqA1C0olXbMjriiU9k8ITp0xFrChPPAD3mDwkMUXQ9L38LqARDGcqaDCBGs4GJh9zuRO0Yz977FzLCnURzF+q/+DmD/kAGUlVKmOc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786559450; c=relaxed/simple;
-	bh=nS3gp/kbM6sLiYmmQDjdsOu6R+pZyLa3CO4hmxZDRno=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=bgcxgIomuNL2AhGaIqrLcYSFJGlUpYtVcR8ds7X/NTaVFqfvQ+kYamAKtET+2pY+omZMOBPy1Nw81gSmxP7kCR6rDlpJyFGH47O4Za+Ic+tzkGPuHsAL26YLXxpOWRHf8ztd4e8vJsIfHM9bdT4QjOFWici8ZJj3QaCPqUfZ//A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ROlxraSK; arc=fail smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33362D2487
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 18:46:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.122
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786560420; cv=none; b=aW2/tnAhXcbFBJanzAvWr4LK7xXjuPt5kK7EoRih+YpcaYK107L0yLCah/DybvdTdmkil3a8g9teHnukvrhSt6x2EXAHOYaMuJbTSKA/24PcSaR0ogD8GTXKDfEETWFDEiyUfkSTei40Lq2m18UODvc/UkFV/uk1HZUcieYJqaA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786560420; c=relaxed/simple;
+	bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ipi7s5FzFhbFiCoiPiREG2l/cMSjDiCv8SSfswAmTol/dqYXD/azATw6YX6p4MbbZd2uau0R/w6mfW1FmnyIcSguKNccnFaqFSwahA+MqdISDYx2azWnoTlWTynDDfwJJgduWWrtep9C0u2EfcZrHBbsikMcnJpx9vowrpnniQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qGXtY5V0; arc=none smtp.client-ip=95.215.58.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ROlxraSK"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786559448; x=1818095448;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=nS3gp/kbM6sLiYmmQDjdsOu6R+pZyLa3CO4hmxZDRno=;
-  b=ROlxraSK6VM53vUIPAVU4IMuPzxgaFSWupxwIz6VsyZJOnWeIGOIElPa
-   qZYPqxZzywNycW/NAdgzxiTJTnqH/T9JtVN6M7VFofEp/A2C3TsOq41Ie
-   F2U2U8OWuoiRdWmbJLey0ruhxLOGyiHdBu7DH1k/14AIYwIxieykl4efZ
-   wtmVNSI+DHVWmRqUfzyYBlcYl/Po87rLQDiR5PPj8HMxUPE2CA35dpJyN
-   Wzo0/W7+JsezlPWfEr+ml4uJMfD3/PXL6x9ydlFbdeVsQGpELw8Agcczq
-   SaMOOhnhUhbEWt0lYzH2uob3usNuOj8nmr1xzpBoiSuACE2noNM0YE/CL
-   Q==;
-X-CSE-ConnectionGUID: waITuAD8RQGc7/baGDJO0A==
-X-CSE-MsgGUID: IUQO5g5/S+iKbh7DaNdnbg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="87004297"
-X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
-   d="scan'208";a="87004297"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 11:30:39 -0700
-X-CSE-ConnectionGUID: bsGOieQPRumRtHOZY3EWdQ==
-X-CSE-MsgGUID: KyKMx2TFQ6ChZtQY6bIp7w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,219,1779174000"; 
-   d="scan'208";a="259887869"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 11:30:35 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 12 Aug 2026 11:30:34 -0700
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Wed, 12 Aug 2026 11:30:34 -0700
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (40.93.195.69)
- by edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 12 Aug 2026 11:30:34 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YvUz06JfEduoCJyPlt7W+FIfxlv8eVYDLUP9WyD02yYcQW1TQwbxRli9Wb9HoDgsYY5oytYStKhyOaG4Ea+Zo3KMcMT0F9eZ5xDfDQC8S/MKGvXfgyosURg/nBR29gvMfZFcCoajvZE6f5ok/bMPqUySmGNPlDNErwqJ33XEBC7mchyvyfetJIrz9R9hY+/G6rKVKTKo6yBNigTYTBMmwP7RwQBzAXBhu7qxn15YLnt3T9v34UhJKIU18QgN0BU7HfGAe6Rv5owZl5IkSEt14iiCPrAUpO3DCiQoj16xby1T6Y9m0ZKrzNV44+k1fuFTSPfQsFpY5/wEGnF7KRrk7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=nS3gp/kbM6sLiYmmQDjdsOu6R+pZyLa3CO4hmxZDRno=;
- b=zNmImYxxCd+HmK478wKCgzGECSBXhcEvU3rmy1Gec1PSado3jeWUJGLFQI+qErYNktF/1J4WFwlLZIMQu9Mw9j50a8R+v29PKtUd4RId64wEVnkdGS6tSnd05S+imglYne4PpqxB+nd9UVYjo0KcxclWC9C7NwY/1sErnrn1jrucU5WBQyLAJb6qnFCvELTzzAFqpzxgtANV9sZqeKxciCKZm/rQh3Y5Xqe/UaFBfNUJ2m3PYMPtavqOwqCUSKHj88l/HxQoAR5A1TZhpoNtv+snXpDKkSefmbNQ0xb74pzT+F7/ZUnwgbRA+mqUx0ZHNAv//ZJpEZH+5KX2uzaIHw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com (2603:10b6:510:1b5::20)
- by DS4PPF2D9C959A2.namprd11.prod.outlook.com (2603:10b6:f:fc02::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Wed, 12 Aug
- 2026 18:30:31 +0000
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4]) by PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4%4]) with mapi id 15.21.0315.014; Wed, 12 Aug 2026
- 18:30:31 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "x86@kernel.org" <x86@kernel.org>, "bp@alien8.de" <bp@alien8.de>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "pjw@kernel.org"
-	<pjw@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>, "aou@eecs.berkeley.edu"
-	<aou@eecs.berkeley.edu>, "mingo@redhat.com" <mingo@redhat.com>,
-	"alex@ghiti.fr" <alex@ghiti.fr>, "palmer@dabbelt.com" <palmer@dabbelt.com>,
-	"bill.roberts@arm.com" <bill.roberts@arm.com>, "shuah@kernel.org"
-	<shuah@kernel.org>, "tglx@kernel.org" <tglx@kernel.org>
-CC: "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>
-Subject: Re: [PATCH v2 2/2] selftests/x86: add generic prctl shadow stack test
-Thread-Topic: [PATCH v2 2/2] selftests/x86: add generic prctl shadow stack
- test
-Thread-Index: AQHdKn7SE+Xr2vVKf0C3DnrhuX9GuraatLkAgAAIkIA=
-Date: Wed, 12 Aug 2026 18:30:31 +0000
-Message-ID: <ca8465e2e006d31a4fc728707cb679f25a3fa7f2.camel@intel.com>
-References: <20260812171940.1046116-1-bill.roberts@arm.com>
-	 <20260812171940.1046116-2-bill.roberts@arm.com>
-	 <c5d5c26c-eaa3-4fd3-891b-808b6efe3c25@arm.com>
-In-Reply-To: <c5d5c26c-eaa3-4fd3-891b-808b6efe3c25@arm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.52.3-0ubuntu1.1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB6771:EE_|DS4PPF2D9C959A2:EE_
-x-ms-office365-filtering-correlation-id: 06206fbb-53f6-4d0a-5008-08def89fcab1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|23010399003|376014|7416014|18002099003|22082099003|56012099006|38070700021|11063799006|4143699003|10067099003|921020;
-x-microsoft-antispam-message-info: uHrbMCiRL4w8G9L+LlFgZJbP9fRJC+Let4HU40Ysl7N9+O7dj7zA0MT8WaBgLFCcMvpU+7xP1EiA0OBjOWEcESe5YdOBGr8ruPPeVqGBRMDdpG7Aq+h8p1YXVx56LPrnFWUoAIJ/Rrdltaz7gJaSOUgUINOQILoTpPIWfL3gY69OuD8619eHwRV5audVUcDJKs2WkIHUUfopEQ2+A4gvlorZjYgxWrj9Q6G3wmULe83Ul/K7npcO8DMWvw7wM31f2hDLPX5r3dt5zZYvfQ/iJ1mPKXEL/EruMw0EcYzjqmATED53YchtAff3+8F8zpjrfDQZeqmuvIhQSu2tJKMMgm0t2Ahz+g5Xcqab4zX1tbnEX9HdwoKVsgfXj2rXKw9oO19L6F8S5ceMji/tL089et/oNFuxacUIjPj4ILbqrg6hLOe8UyQ1Veqr/ayMI4Ns9GuhSlii6GD+oWZO+yjpyj5PrijgBqFIL8NXhTJ8ft/4XQBayagih23NOG/wNf968LKKVL3I6im2Tk/AWkM6F62d33wjJ1/eTLvtHo6UEBgeIqEYLuNY8PmjO1A5d/qWIFqm/puRKbJ1ST+sPYzpLXdGP6+e/6AcEldFJn1nXyylUxsE7UEwR5m3yevTsdANYFYV62JdbUBxrDhVZjegZKtutwsP85Uk7bSHNmP+P+oqoONQjq0KR2NRbTqiVXMQlp23fytwVOKsC9dgPVVOBnTxiebgZhIZlem+VtiTGTg3YGkbAKHPX7um8U7gSsFb
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(23010399003)(376014)(7416014)(18002099003)(22082099003)(56012099006)(38070700021)(11063799006)(4143699003)(10067099003)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?azZIN3hWaC91bHV5Zm1TYXl3cGo2OEMvZ0ZIamNRWXlKdDNBNnlzYVd0cndu?=
- =?utf-8?B?SDMxNDVMK09peklseUpaVjVrYnhKRS9GSlJOd1pqbEJVUE5uZWE1MDhWdDRu?=
- =?utf-8?B?ZHlTb0h2TE9wdjlObG05YnVCYUdGZXZ5dHdZYlhXdW85a3haR25qMVRSOFhS?=
- =?utf-8?B?TGM2OTFGWkkxYkFBS0RFN2xxQkhrY1pUQ1NCZVBQbnNmajJrT2s0YVVDRWc0?=
- =?utf-8?B?bmxaRElPcFZDcUdWZkRUWlJxYTBKTlJid0xUc1JDTFRCNCs1NkJ6N2VJSUxL?=
- =?utf-8?B?ZWgzWGlWa3EzaTdwazh6eEMyWlgxbC9aV0ZzZ2k0eDFvb2pRS2FrRmh2VlZm?=
- =?utf-8?B?cTlHeUoxMTZ5aGMyRldZUVJOcTBsQW5uNXJkVFk3b0xvR1FPdS9MUG9GNUVJ?=
- =?utf-8?B?ekpVZW1mRDNYZjk5ekZwZDBXN1c1YnYvZzFab3ZrUmJKWnpIMDYyWWpPczdi?=
- =?utf-8?B?M2l5RmY3bm1XRlRsaFJxajFFT1lMcUpOVFhmMFBwdVkwVXJWZFEvNjdKWVB1?=
- =?utf-8?B?SXF1MEZiQlFidktrVVR4Z2I1Q1RtUmNEVndkZmpxTFV4Y2dZUmcyVzFoZTBy?=
- =?utf-8?B?VTZEcnJHZGl4UG5QMUdWSnZvczJRbFlOeDRUWnpFVCtLSmluU1FmeTU3azNQ?=
- =?utf-8?B?MVJBTGFpYUdRNXJ2c2JmQlJ5bXV0bGNLSXVDUVZSQ3ZwNEhucjBjNVBpMDF5?=
- =?utf-8?B?czZUcGtyajk0WFI4VHMvNUtxWnoyTWRBWVlQbk5vQndUVUxITGZjU0NOVytQ?=
- =?utf-8?B?QW5tWFlhRHk3QnFzWHNqbUhzMlRzSjBHQXZraS9CU1JaQ2dwVHFLLzRqaGNo?=
- =?utf-8?B?OHJ4ZTNWN0k2OE5mZ2g4ZXpSRU1TTW5MaUQ2M3ZZREtpVEYzaWh2ZVQyMHhI?=
- =?utf-8?B?QnNvNG1JN2lOd1VzY2pldjZVZm5tajFobmt6bnhnSHpoRlp0R2V0V1ZJNktr?=
- =?utf-8?B?a0crZEdjTEt0cEZRQVlsRmprZTFQUTZHS2VraW5Oa01ma1FBbkY5bTdiV0xk?=
- =?utf-8?B?OUo1RG05b0RkM3hHbzFuczdWK290NkZveU9zcHJWcFc3MEdOZkV1blI2bDhT?=
- =?utf-8?B?SFViUDFZS3JtSW54WnNMOGMxL1hTZXlhZFk2aDFoVTVTSGR5L0p4c0VZZXhn?=
- =?utf-8?B?dktlR0ZHUy9Id3dTSWg1VGF4ajh0dythTTJReFFxMkNlUWQ5T1FuZWFqZ3NM?=
- =?utf-8?B?YmYxaFJwODBSTTZRV1NvWlZ3N3N1MmJyNXFpc2xSOS9KQWRWOC9MVy9EVHFQ?=
- =?utf-8?B?VzhMUERnRURJOVhPaFJjQjFvZnM2OUtpMkxxdkJMalQ3bXlianZ2N1FIcG5T?=
- =?utf-8?B?UExXSys3ejZCU2hiaVVQZ0NlWUJrT1hvMU8zYWM5aHI2ZWJYc1NVMmQvMlZ5?=
- =?utf-8?B?aVVKU3dUT2hvZEt4RHFOWjg3S09kbGpPTVFsc2VsVDRQT0c0N2xJS2JYTHlS?=
- =?utf-8?B?OWtPZlBhZGcwVjl6QUhJSlUxczlhdkNBR2dnMFFwSVc2Q0I2SmVKNGsyNU1z?=
- =?utf-8?B?b05NbmNGU1hFVU9YTnIrTmdEL0FtdnNWUFQzbmY4cEdxSTBVdFBYSVg1Wmth?=
- =?utf-8?B?NzF5RjBPVThEOXh1bnVaTmswSXNvN0hKTjZ1SVcwOUNwVC9tcEU1QW9Nb3N5?=
- =?utf-8?B?RXM2dWRjTTBoVnh4ZjlEOWx2Z3greFlqa2p2d3A2TXhkNkNEMjlzWGw1TzRL?=
- =?utf-8?B?aGFyZjJ5V3I5VTRqNGd0VkQyQndvdXJHRXJUWEtZUTM2MG9ZU1I2c2g0NDBH?=
- =?utf-8?B?VlBHWUZrN2NRUDE0bjVpY0JNdzJzZGpNYjVIWjJQekJRbERvTmtGMHppZm9F?=
- =?utf-8?B?a1FhL0MzMUxiTUJNL3VJOTlkbjJTWlZNZ2VhMWVsS3FCZXZUVTlpcm5LYTRY?=
- =?utf-8?B?RDJubFFIOFVYSzIwb0RyaVRQcnB4K0lQL2NSSHZJS0dBR2JZNGRBamUydGFT?=
- =?utf-8?B?YmlxVHZ3YlVhbTlJSUJTRXk1K1IyQTFkRjE2Y1RpdHNJVE5hdFhzOWk3Qkdv?=
- =?utf-8?B?K2xlRVhuRnJ6OVRqcGZCNStFSjJKVkg0eHRaNElLYnQxc3B2bnF0enZpSG5h?=
- =?utf-8?B?UnQzeEdselkvenNJUVZMbjV5ZFc1SXdrSTYvU1FUYmJadFFPVWRienJockg1?=
- =?utf-8?B?bkJISTcyOU1RMnFjZUpiMDExSTNDdmZybHl3SVh2RmhDVWdubFBwQUZKRlNr?=
- =?utf-8?B?Y1BRK3dnbDBFK1VqSDlodGVRQnlGWnR4S0tVNXMwam5Xdm1YNmVyYk5kVWRM?=
- =?utf-8?B?TnVyd3VIdnM2VUF2RHduRGliRG8waVY5TUtoVmJQd0dRYWpVK2Z1RFVXTFow?=
- =?utf-8?B?cEVJYU5kMHY1d3VkRTMxRnFJSVFSbFFXSjExU010T003TlhEUWZXeExzZkFS?=
- =?utf-8?Q?bYf3gYZdEMKDcClg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <3514039914F55B41A35576693E9C47F6@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qGXtY5V0"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786560416; v=1; x=1787165216;
+ b=qGXtY5V03+kL2GO/xvRC8kZXN1mr+bb49dXYbjXCK7lDXgvl5afZsAVggc+nba6BBsMql2lo
+ ZZSUi85wk9UwqDoCTPURy+FtYU1ACx3LjHIHBrMCVPKRAmXtCy93iMSMf62tYqTnYUaoqhDQSYH
+ 9dwAhWYjUPauO5LOcoRMaUGs=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [IPV6:2a03:83e0:125c:1:c4d4:5d0:c3b3:cab6] (2620:10d:c090:500::5:f7a3)
+	by smtp.migadu.com with ESMTPS id 20a21b4d86a645e6;
+	Wed, 12 Aug 2026 18:46:38 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
+Date: Wed, 12 Aug 2026 11:46:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: PSDPrmYIfysYRz6dkRL+XeEwt9bs+AnAiX4bl1LJ2eQlk8Mn/74DHLU/OFAUhMAFw9QAJwmS92lkVinq1IEOEkP3evyM1o3HTo0F01sQKajoCr0jBkww699gZl1pAhyCIP9l+yDNIF1uchvR2rpuHhWJka9y+LY5X1ExlXo3WHnQge1ZTbyZ/RqTjx85a8OjESusdy+iksRbK6yRhDSKGwqX2tEVUdMidWlvhwIhuD9sBEPW7f6IVE4db1A4cDQpyjRS8fxBT7fPkggGnvE73vPWStYUX/1MUzIn6ExnrEZUO/c9FxgjkJ7emSp6GNIXJz6gmuDvk478WDtUcQvTyA==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06206fbb-53f6-4d0a-5008-08def89fcab1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Aug 2026 18:30:31.6705
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: /3QifaX+enRTLu1bOOr32WYObdTNWx9iJSBFXHGQCh8cN2RhfLFzVzEAJm5s3x9msIP714o7tbayCX9UCI8Gz7GxIrgTb0jMpCUo3k8ftgM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPF2D9C959A2
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that is
+ still in progress
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
+ <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
+ <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
+ <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-T24gV2VkLCAyMDI2LTA4LTEyIGF0IDEzOjAzIC0wNTAwLCBCaWxsIFJvYmVydHMgd3JvdGU6DQo+
-ID4gK30NCj4gPiANCj4gPiANCj4gPiBOYWNrJ2luZyBteSBvd24gcGF0Y2gsIFNhc2hpa28gZm91
-bmQgYSBmZXcgdXNlZnVsIHRoaW5ncyB0byBmaXguDQoNClBsZWFzZSB0cmltIHRoZSBtYWlscy4g
-VGhhdCB3YXMgYSBsb3Qgb2YgcXVvdGUgdG8gc2VhcmNoIHRocm91Z2guDQo=
+On 8/11/26 9:25 AM, Alexis Lothoré wrote:
+> On Tue Aug 11, 2026 at 5:05 PM CEST, Jiayuan Chen wrote:
+>>
+>> On 8/11/26 10:26 PM, Alexis Lothoré (eBPF Foundation) wrote:
+>>> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+>>> following logs:
+>>>
+>>>    (network_helpers.c:309: errno: Operation now in progress) \
+>>>      Failed to connect to server
+>>>    send_and_test_data:FAIL:connect to server unexpected error: -115
+>>>
+>>> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+>>> socket (see settimeo() in client_socket()), allowing connect() to return
+>>> an error and to set errno to EINPROGRESS instead of blocking until
+>>> connection result is known. Increasing the timeout value for those tests
+>>> is likely not a good solution (and it has already been done by commit
+>>> 2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
+>>> they involve subtests that expect the connection to fail, and so
+>>> increasing the timeout value would increase overall test execution
+>>> duration again (not only the connection, but any socket operation).
+>>>
+>>> Another solution, as documented in man 2 connect, is to poll the socket
+>>> for POLLOUT once connect has returned EINPROGRESS, and to get the actual
+>>> connection result through getsockopt: this allows to keep the overall
+>>> timeout values low for the general traffic, while letting a chance to
+>>> the connection to succeed even if CI runners are loaded.
+>>>
+>>> When connect() returns EINPROGRESS, poll the socket for POLLOUT and
+>>> check the connection result via getsockopt(SO_ERROR). This new handling
+>>> conforms to the configured timeout: the polling loop will only run for
+>>> the amount of time still available, accounting for the time used by the
+>>> initial connect() call.
+>>
+>>
+>> So IIUC this patch doesn't actually fix the flakiness: connect() on a 
+>> blocking socket only
+>> returns EINPROGRESS after SO_SNDTIMEO is fully consumed, so remaining_ms 
+>> is always ~0 and the
+>> overall time budget is still 1s, same as before. Am I missing something?
+> 
+> Hmmm, I have been assuming that this EINPROGRESS could be returned
+> _before_ the configured timeout depletion, but I may have been mistaken,
+> it indeed happens only  the socket is O_NONBLOCK, which is not the case
+> here. So indeed, it does not fix anything for the blocking case, as the
+> budget is already depleted when getting EINPROGRESS...
+> 
+> I added this budget mechanism to follow up on Ihor's suggestion, so I
+> either got it wrong, or it can not work.
+
+Hi Alexis,
+
+Looks like my suggestion was bad, sorry. Jiayuan is right. I didn't
+realize what -EINPROGRESS actually means here.
+
+See __inet_stream_connect() in net/ipv4/af_inet.c:697
+
+	err = -EINPROGRESS;
+	...
+	timeo = sock_sndtimeo(sk, flags & O_NONBLOCK);
+	...
+	if (!timeo || !inet_wait_for_connect(sk, timeo, writebias))
+		goto out;
+
+-EINPROGRESS is a default that reaches userspace only when the wait
+expires. Every other exit sets a different error code. So on a
+blocking socket -EINPROGRESS does not mean "connection started", it
+means "waited the whole budget, gave up in SYN_SENT". On a nonblocking
+socket it means the opposite, and man 2 connect seems to only document
+the nonblocking case.
+
+> An intermediate solution could
+> be to exceptionally raise the budget by 1s when getting EINPROGRESS.
+
+I believe you're right that the flakiness can be addressed with bigger
+timeout, which is why v2 fixed it for you. But +1s may not be enough.
+
+IIUC the way the helpers are written cause -EINPROGRESS instead of
+-ETIMEDOUT. If SO_SNDTIMEO is not set before connect(), the kernel
+reports plain ETIMEDOUT, but it is set in settimeo().
+
+I vibe-coded a userspace repro: loopback listener with a full accept
+queue drained at t=1500ms, so the handshake completes at ~2040ms.
+Caller asks for timeout_ms=1000, like tc_tunnel:
+
+  mainline (blocking)                     budget 1000   FAIL at 1016ms
+  v3 (blocking + leftover poll)           budget 1000   FAIL at 1015ms # my suggestion
+  O_NONBLOCK + poll(timeout_ms)           budget 1000   FAIL at 1001ms # Jiayuan's suggestion
+  O_NONBLOCK + poll(3500)                 budget 3500   OK   at 2031ms
+  blocking, SO_SNDTIMEO raised to 3500    budget 3500   OK   at 2040ms
+  v2 (blocking 1000 + fixed 3000 grace)   budget 4046   OK   at 2067ms
+
+Everything that gave the handshake more than ~2040ms passed. Blocking
+vs nonblocking makes no difference, poll() vs no poll() makes no
+difference. We just need to increase the budget for connect().
+
+I don't think swtiching to O_NONBLOCK makes sense. Apparently, it was
+nonblocking in the past, see 99126abec5e5 ("bpf: selftests: A few
+improvements to network_helpers.c")
+
+So I think we can introduce a separate connect() budget, similar to
+your v2. And then use opts->timeout_ms for everything after. Something
+like this:
+
+	#define CONNECT_TIMEOUT_MS	5000
+
+	static int connect_timeout_ms(const struct network_helper_opts *opts)
+	{
+		/* don't shorten what the caller asked for: tc_redirect
+		 * and xdp_synproxy pass 10000
+		 */
+		return MAX(opts->timeout_ms, CONNECT_TIMEOUT_MS);
+	}
+
+and in connect_to_addr():
+
+	fd = client_socket(addr->ss_family, type, opts);
+	if (fd < 0) {
+		log_err("Failed to create client socket");
+		return -1;
+	}
+
+	/* SO_SNDTIMEO is a ceiling, not a sleep: a wider handshake
+	 * budget costs nothing on connections that succeed.
+	 */
+	if (settimeo(fd, connect_timeout_ms(opts)))
+		goto close;
+
+	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+		log_err("Failed to connect to server");
+		goto close;
+	}
+
+	if (settimeo(fd, opts->timeout_ms))	/* data I/O budget */
+		goto close;
+
+	return fd;
+
+close:
+	save_errno_close(fd);
+	return -1;
+
+This is simpler than poll() and retry loops.
+
+
+An entirely different alternative that Eduard brought up in an
+off-list discussion, is to drop all the timeout machinery from
+network_helpers.c altogether, and rely solely on the test_progs
+watchdog to kill the subtest processes: d9d4d127e813 ("selftests/bpf:
+watchdog timer for test_progs")
+
+I am not convinced it's a good idea, because I don't know what will
+happen with all the tc_* tests if there is no connection timeouts. If
+you're interested, you could try it and see.
+
+
+> That potentially brings back part of the issues he has been mentioning
+> with selftests duration possibly increasing by a non negligeable amount,
+> but maybe 1s is a better compromise, compared to my initial 3s proposal
+> ?
+> 
+
