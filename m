@@ -1,41 +1,41 @@
-Received: from out-188.mta1.migadu.com (out-188.mta1.migadu.com [95.215.58.188])
+Received: from out-186.mta1.migadu.com (mta1.migadu.com [37.59.57.117])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28E2F37F31D
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 04:05:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 817DA38887E
+	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 04:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=37.59.57.117
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786507505; cv=none; b=hvv0tETXbeU9rSsdjo2BMxkaYRcNMYLQfPR0Nx3t7v3NWtgsfwZOSWTxFo25jKZft8VbQtGIcMoLOhgcpHYz0utpB1V9q8LCp9rNkj9eWxdxoqUO4BnWAcpNrSRjELxH9L4DdcVlVCq+3F5DQFxYb87MppB/5z3glg3Vwh+cVyY=
+	t=1786507635; cv=none; b=dbOPNXniMi55njgW10b81W7w9ckWbPPXLKwUygA3syu14PpSxp7nfuvElC2B8ZK7RcKo0uG5FdxHn37ZtuSm9XQwp/rccr0yADMK/Nhkc6ljyCpESR+xZGBP4Y4nN6a/xqgKpI28OFl3e/wsgZC7jdL6VxyOcSx04b9JoCfXiWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786507505; c=relaxed/simple;
-	bh=/YZeZwwFa5TpuUOSd/UoIZuT/s/ltTcBxeK9N3tzamw=;
+	s=arc-20240116; t=1786507635; c=relaxed/simple;
+	bh=jEfwf6pY2c/ehx5EqOVxqtxCTc31f1emrXYEoOLX5/U=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FUQOXk9HzSTzQzbqju3reYVMadI7ZeCY1HMPEOlL5dV36rcr6zRb2n6BRq9YX3UMI4VTza4S2gwTu5yRyl7C36wLrJN7j49ZiZVHF6JWvnkQ0fKxgI2y+O1X5gR4kyonmdubFv030Ed25KVeZYRsTZMCA+dh19URYNu85P72BlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X7QxQXIj; arc=none smtp.client-ip=95.215.58.188
+	 In-Reply-To:Content-Type; b=NKq3E7rN/nXBEX1r6BtR4wdZ7u+Ej5zVpb1CcOCNvnWEQX2ZxubsH3xZpQVPXlAXuhiSqieGHSpryMrvtKWYROOZjlOehdZrhADvHgFSGKe5zHDdAJmENFmUPXS05oBmIQn1nKBs/zAP6fhIklMqxwVgPnicQoiHbz+wgQu7SEU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=iGjc0MJJ; arc=none smtp.client-ip=37.59.57.117
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X7QxQXIj"
-Message-ID: <11079006-dc15-4474-bd35-a8386b42d34f@linux.dev>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="iGjc0MJJ"
+Message-ID: <90e79390-569b-4ff9-8828-f7eb839cef6f@linux.dev>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1786507500;
+	t=1786507631;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+DcwB1fUEJ4620xXoPomLg/qv9ihwgzgXsYTlPEqa/8=;
-	b=X7QxQXIj7DgxQVB/lhL7xRYIFBynStEzLeTq9JKpbKlfNHkhr/Rm/eCTNYVyCmuoD1L7o1
-	6S4l+w5mj9I46Z2Um/DHfWuyLHI2FZ/kNyITdJgWLP7y8kc8h8HCvlRu0ceK4NZX5gdGp5
-	fMQwzyVEk6u1hMEl6CegmrKCNr7gixQ=
-Date: Wed, 12 Aug 2026 12:04:32 +0800
+	bh=puo0fp38rYZgwJqTaTvd8UMYu3clFBbGtdCSz6QQqZ0=;
+	b=iGjc0MJJKdKhd0HiIWTPDl31V+PiXhwq7hwqy+ioQPvScVH+uZseDgvQ9itZAeRRn1Fd44
+	n/1da9Ya4YI480prq6uv6s0JGxFiHLs8uwYW55O7nyYc/QvDXVj2PiiA5CWJ99ASqtzWe/
+	ON9eb3IKHw5LmBhvKJzexLguu4r6xkA=
+Date: Wed, 12 Aug 2026 12:06:39 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH bpf-next 06/13] bpf: Add tracing_multi link fdinfo support
- for bpf progs
+Subject: Re: [PATCH bpf-next 10/13] selftests/bpf: Add tracing_multi bpf prog
+ cookie test
 To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
 Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
@@ -47,125 +47,112 @@ Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
  pulehui@huawei.com, tanjingguo@huawei.com, malin89@huawei.com,
  linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260809150111.45000-7-leon.hwang@linux.dev>
- <f227b719d241d4cc87954725d9ddaab8377c9991c7b6b03aaef4aa5d098fcca7@mail.kernel.org>
+References: <20260809150111.45000-11-leon.hwang@linux.dev>
+ <64e207da37d7fd430e941082680bc7d32ee40ef7098bc40c5bf2c9d318c37e5c@mail.kernel.org>
 Content-Language: en-US
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <f227b719d241d4cc87954725d9ddaab8377c9991c7b6b03aaef4aa5d098fcca7@mail.kernel.org>
+In-Reply-To: <64e207da37d7fd430e941082680bc7d32ee40ef7098bc40c5bf2c9d318c37e5c@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Migadu-Flow: FLOW_OUT
 
 On 10/8/26 00:20, bot+bpf-ci@kernel.org wrote:
->> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->> index a805a5b73303f..80928401830c7 100644
->> --- a/kernel/trace/bpf_trace.c
->> +++ b/kernel/trace/bpf_trace.c
->> @@ -3759,26 +3759,46 @@ static int bpf_tracing_multi_link_fill_link_info(const struct bpf_link *link,
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+>> index 5cf11707eaf89..070266a864d4f 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/tracing_multi.c
+>> @@ -304,9 +304,12 @@ static int run_bpf_target(struct bpf_program *prog, __u32 retval, const char *na
+>>  	return 0;
 >>  }
 >>
->>  #ifdef CONFIG_PROC_FS
->> +static const char *bpf_prog_func_name(struct bpf_prog *prog, u32 btf_id)
+>> -static void test_link_api_bpf_prog(void)
+>> +static void __test_link_api_bpf_prog(bool test_cookies)
+>>  {
+>>  	const char *funcs[] = { "target_1", "target_2" };
+>> +	__u64 fentry_cookies[] = { 0xfeed01, 0xfeed01 };
+>> +	__u64 fexit_cookies[] = { 0xfeed02, 0xfeed02 };
+>> +	__u64 fsession_cookies[] = { 0xfeed03, 0xfeed03 };
+> 
+> A subsystem pattern flags this as potentially concerning: every per-target
+> cookie array holds the same value twice. The test on the BPF side compares
+> against a single scalar global set from element [0]:
+> 
+>   skel->bss->fentry_cookie = fentry_cookies[0];
+> 
+> and in progs/tracing_multi_bpf.c:
+> 
+>   if (!test_cookies || bpf_get_attach_cookie(ctx) == fentry_cookie)
+>           test_result_fentry++;
+> 
+> Since cookie[0] == cookie[1] for all three arrays, the test cannot
+> distinguish a correct cookie-to-target mapping from a permuted one. The
+> assertions (test_result_fentry == 2, etc.) succeed as long as some
+> correct-looking cookie value is delivered on both invocations, but swapping
+> the cookies of target_1 and target_2 in the kernel is invisible.
+> 
+> That matters because the kernel path this commit exercises is exactly a
+> permutation: bpf_tracing_multi_attach() calls check_dup_keys() which calls
+> keys_swap_r() in kernel/trace/bpf_trace.c to reorder the cookies, ids, and
+> progs arrays to follow the sorted trampoline keys:
+> 
+>   id_a    = ids + (key_a - keys);
+>   if (data->progs) { ... swap(*prog_a, *prog_b); }
+>   if (cookies) { cookie_a = cookies + (id_a - ids); ... swap(*cookie_a, *cookie_b); }
+> 
+> An indexing mistake in that swap could desynchronise cookies from progs/ids,
+> yet the test would still pass. Since fds[]/ids[] come from BPF prog FDs, the
+> sort order is not the array order the caller supplied.
+> 
+> The neighbouring test for kernel-function targets in this same file already
+> does this correctly: bpf_fentry_test_cookies[] uses ten distinct values
+> deliberately out of order (8, 9, 7, 5, 4, 2, 3, 1, 10, 6) and
+> progs/tracing_multi_check.c checks the cookie per-IP with something like:
+> 
+>   err |= test_cookies ? cookie != 8 : 0;
+> 
+> under `ip == &bpf_fentry_test1`.
+> 
+> Can the test use distinct cookies and a bpf_get_func_ip()-based per-target
+> expectation so it is sensitive to cookie mis-association?
+> 
+
+Will update the cookies with different values.
+
+>>  	LIBBPF_OPTS(bpf_tracing_multi_opts, opts);
+>>  	struct tracing_multi_bpf *skel = NULL;
+>>  	int fds[ARRAY_SIZE(funcs)];
+> 
+> [ ... ]
+> 
+>> @@ -356,6 +367,16 @@ static void test_link_api_bpf_prog(void)
+>>  	tracing_multi_bpf__destroy(skel);
+>>  }
+>>
+>> +static void test_link_api_bpf_prog(void)
 >> +{
->> +	const struct btf *btf = prog->aux->btf;
->> +	const struct btf_type *t;
->> +
->> +	t = btf_type_by_id(btf, btf_id);
->> +	if (!t || !btf_type_is_func(t))
->> +		return "";
->> +
->> +	return btf_name_by_offset(btf, t->name_off);
+>> +	__test_link_api_bpf_prog(false);
 >> +}
 >> +
->>  static void bpf_tracing_multi_show_fdinfo(const struct bpf_link *link,
->>  					  struct seq_file *seq)
->>  {
->>  	struct bpf_tracing_multi_link *tr_link =
->>  		container_of(link, struct bpf_tracing_multi_link, link);
->>  	bool has_cookies = !!tr_link->cookies;
->> +	bool has_progs = !!tr_link->progs;
->>
->>  	seq_printf(seq, "attach_type:\t%u\n", tr_link->link.attach_type);
->>  	seq_printf(seq, "cnt:\t%u\n", tr_link->nodes_cnt);
->>
->> -	seq_printf(seq, "%s\t %s\t %s\t %s\n", "obj-id", "btf-id", "cookie", "func");
->> +	seq_printf(seq, "%s\t %s\t %s\t %s\n", has_progs ? "prog-id" : "obj-id", "btf-id", "cookie",
->> +		   "func");
->>  	for (int i = 0; i < tr_link->nodes_cnt; i++) {
->>  		struct bpf_tracing_multi_node *mnode = &tr_link->nodes[i];
->> +		u64 cookie = has_cookies ? tr_link->cookies[i] : 0;
->>  		u32 btf_id, obj_id;
->>
->>  		bpf_trampoline_unpack_key(mnode->trampoline->key, &obj_id, &btf_id);
->> +		btf_id = has_progs ? (u32) mnode->trampoline->key : btf_id;
->                         ^^^^
+>> +static void test_cookies_bpf_prog(void)
+>> +{
+>> +	__test_link_api_bpf_prog(true);
+>> +}
 > 
-> This isn't a bug, but since bpf_trampoline_unpack_key() only masks off
-> bit 31, which is never set for prog targets, does this re-assignment
-> change anything, or could the unpacked value be used directly?
-> 
-> bpf_trampoline_unpack_key() already sets btf_id = key & 0x7FFFFFFF, and
-> bit 31 is only set by the !tgt_prog branch of bpf_trampoline_compute_key()
-> (the kernel-BTF case).
-> 
-> In the has_progs case the key was built as:
-> 
->     ((u64)tgt_prog->aux->id << 32) | ids[i]
-> 
-> and ids[i] must be a valid BTF type id (<= BTF_MAX_TYPE, 0xfffff) or
-> bpf_check_attach_target() would have rejected the attach, so (u32)key
-> and the unpacked btf_id are always equal here.
+> This isn't a bug, but would calling __test_link_api_bpf_prog(false) and
+> __test_link_api_bpf_prog(true) straight from the two subtest arms read more
+> consistently? The neighbouring test_link_api_ids() is dispatched directly as
+> test_link_api_ids(false) and test_link_api_ids(true) just a dozen lines
+> down, without wrapper functions.
 > 
 
-Good catch.
-
-Will drop this line.
-
->> +		if (has_progs)
->> +			seq_printf(seq, "%u\t %u\t %llu\t %s\n",
->> +				   obj_id, btf_id, cookie,
->> +				   bpf_prog_func_name(tr_link->progs[i], btf_id));
->> +		else
->> +			seq_printf(seq, "%u\t %u\t %llu\t %pS\n",
->> +				   obj_id, btf_id, cookie,
->> +				   (void *) mnode->trampoline->ip);
->>
->>  		cond_resched();
->>  	}
-> 
-> The commit message shows the sample fdinfo output but doesn't say much
-> about the implementation or why this change is needed. In particular:
-> 
->> Show the target bpf prog info in the fdinfo.
->>
->> $ cat /proc/self/fdinfo/13
->> pos:    0
->> flags:  02000000
->> mnt_id: 18
->> ino:    1045
->> link_type:      tracing_multi
->> link_id:        9
->> prog_tag:       9a7f9e3ab6f138ab
->> prog_id:        25
->> attach_type:    61
->> cnt:    2
->> prog-id  btf-id  cookie  func
->> 21       4       16706819        target_1
->> 22       5       16706819        target_2
-> 
-> This isn't a bug, but could the changelog say why the trampoline ip is
-> not usable as the func column for prog targets (tr->ip is 0 for JIT'd
-> prog addresses), rather than mostly showing the resulting output? It
-> also doesn't mention that the first column header changes from "obj-id"
-> to "prog-id" for prog-target links.
-> 
-
-Hmm, will describe the change in the commit msg.
+Okay, will drop these two wrappers.
 
 Thanks,
 Leon
 
+> [ ... ]
+> 
 > 
 > ---
 > AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
