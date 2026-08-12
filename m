@@ -1,169 +1,136 @@
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58521370D77
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 02:58:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786503500; cv=pass; b=J1MCNJUuaQDAuk0xPDNlSiuHmoeTePqGRYF/xAfg5s8R+LtzSAtdxU6Qor3qpGGY1IjgZBBWoSEPQzfI+nzoV0xamN985khtrBM74/i235fAs5tnuolM/FIjl+GTSBAqvstEhjn6oXwGEZOD4GBEi1BfxKaDC7p2Y2xzwO91Bio=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786503500; c=relaxed/simple;
-	bh=1GXEgKb8AtQjGH3gyVhgQKefT0eOIVlPpWz4VPRvhEg=;
-	h=From:References:Mime-Version:In-Reply-To:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Zf2Du3Jmx2AbFFvPZJEuoDLTLJdTdiUYFRDJ7JI2keffZSJT+EBUuaHh58XBmzBiahG/ZHuUW8lgXW+gKwr2BoSs6E+LxPH19ucdcnrdn/OOln8838AIuD+cGiYhXrgd5Jvy174am0zxghC8FUpSkCRfugbFBbFmBuTYJFkA/dA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=kUjSJ2Of; arc=pass smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29A2F21D591;
+	Wed, 12 Aug 2026 03:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786504392; cv=none; b=a8pb/G5kwjV0p0pf4OuA8H1menBtgMr0d7sNdohjlyTTmmCM5Qs75n8jfey7STfsWdP6XVAhmsril+ylxClT76+pZoLEbcUNjUrsuWannAsSvP8m4DCH4eZiWawNrVsG9hivgodLR3hQvsb73vXs8EKmOJgRQt1rJnhKU3iQ6Ok=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786504392; c=relaxed/simple;
+	bh=AkKijx+yhl0VzD/BsT+PyE6ekz5n9cwWuOOi+c1ujAc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U4MeesotSY88uQbejb2iJz3R/nfLrstmukCfpZDuxml9XIpoFx+/sl04h9VQDL5p/l7eEDe5jQgfWNKCxRq8VfutKdn4w5kpDw0Sr5/o8kRvE9bTAkSu+5yLW8J7KsoHam4g909ndgPmbnrbbmsQ/BEJCkHdgxchc4l3ZxA+Aw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TnMfDSKr; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="kUjSJ2Of"
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5b011edaf7dso431961e87.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 11 Aug 2026 19:58:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786503495; cv=none;
-        d=google.com; s=arc-20260327;
-        b=eHT65aQb31cjMR2CbK4RA5jxL8xLYH5/y8vgnO9RRylfgQ75PQZTjJuvByki6tXqG3
-         3HqM6+NyC4QSNImrZsh2B+kInvFDMSCE6jnnFiLZmoI89GBZRN4LoWiOk6I62M1IByOd
-         SiW8ip6WQC8bvjGi0iElwwL+3S814zSKXlMsJ24DHDkuEh+pMKSGEgFZLPXys0lHnic6
-         KuANmY9G/RVLHWjo+MKT1qc2vKiqOKVasfauwbyAlTD/v1PuzOsYaVzpN4JBBhBJ7wvH
-         QsZTCfH1GLzLv87hwJR4P1W0lFDJJnv+nRTyysabfKI9jo6ekKFF+lrY/anP78RR+n51
-         +6WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:user-agent:in-reply-to:mime-version
-         :references:from:dkim-signature;
-        bh=i7nGgYKvE3Q27EURwBk0VQlh8/ubhEqw0Zh7p9xqrfQ=;
-        fh=TuH0iZXIjEfHBeRXiDpT0gLmBirJMt/qDwbyEzUiBo8=;
-        b=eRkg2Ibfc5R8NCXRV/kvwbuxorGk3sbBYBgC9sDm/oY99aa6m7uoT1jNx4wy7vu/In
-         1422BaM0VIjzBiToxxv8XYIyzQNGZxw/18X0cW3NvFu8Z/qhJHhfma8yFGn8WP2M4Zrw
-         kOpvcLl2B4NKhs//PdmTkwC0gsomHfn8BrQ2vL4wUtrd1wvk9xamfi8X9vgnHivE2D1x
-         6D2Uh23/8yWt6sZsykTbeOs4SPTHSh0s6JKPVgUkuoBxrbOMj3feKr0ktNreCApUQBra
-         wMCtJ99qlmNVfSHERyau1/8nj4patuEHvXeRABpD+pM4MK6cQdcuu4xWNhRaClre56I2
-         B1BA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1786503495; x=1787108295; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:user-agent:in-reply-to
-         :mime-version:references:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=i7nGgYKvE3Q27EURwBk0VQlh8/ubhEqw0Zh7p9xqrfQ=;
-        b=kUjSJ2OfziBFDCsEZO+vtkwbZkLfm6Go9ptw3q0gbUrS2jO6eQuk7B8ON23qPcBcV0
-         6U2IluZ661geys8adRY8YBZViERQj7V7bflmb1HlIjnpGeq5tXgYaihifvFi9ODR4evI
-         IzL+UpbnO7izLzGKNWgS0S3NI46jsycIqZvy7ETtkQGapJt1fN6HJ9Nvmh54f4F6NxTp
-         5dPKx0lgbk8oeVLhUcApCs1vizHBvEgSn1P8RqF3PhuzyqjkekLegYZWdsmPsOYXG9xn
-         2ng5M6kmTzCKjvpxhPhidICWo2cl5blg+3juaq0Z+pESltOgs8/+ccsSYRAQfXb6cLHR
-         yUBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786503495; x=1787108295;
-        h=content-type:cc:to:subject:message-id:date:user-agent:in-reply-to
-         :mime-version:references:from:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=i7nGgYKvE3Q27EURwBk0VQlh8/ubhEqw0Zh7p9xqrfQ=;
-        b=q7Si7XNrEjlLOEfi+Dua655XzNzjdxouztI+Iq23ySugHQfYXqDtcqUtrc4bG3EIM/
-         ykmbV/8NQvrLDhcCz5g5n4dGXsUAZ43bXiz9BwV5Q0uX7k0CzIRyBpe/CKMbvR0UwAq9
-         kxLTCpioMdu4wJETfmRf4I+epIEc6xgOhDALRWmsJWTPWtpKWmQgE3TsFbgrLNrv7koH
-         8w8k4ZFbzYybOoGOMQD/E067rG9Mn+Cc6jkDQC0Wj7xHG+LMmDpQZXQhKqGH41eZLlG/
-         HehIFQkXN4fhZp1QX8+VJCGR8VMg5ENUCvbGqCoo+2aDhNxQavKSXiQz+ne+y7kYXjEy
-         YLUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RofjoITV+c039mSw998hHbqR2q7UyHMBs68RSMkg5+cY4av6LW8ZicH1x5sqpff2tlb6fSCOS31VC+PhChGaAw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+rC0tcInJdYJX9je5cPfTDlj0x6KU+oNgwyb2cHLJFZfh9Ioy
-	4RCvUEP07C2BCrLYDvEgUtRZMmAoLHOm9cJi3xTlcmt0ofrNaMn4NouMdOENyMtB4JQTKS1L9nL
-	c1h+uz4yDno8KzN5K+LhwjK0q+NP388oYSA3AB3jsUQ==
-X-Gm-Gg: AR+sD10NxF2Rw8XlCbeK9TKPcXxIOmOtOFYEubYHb44OMWi8lpHmVY9FBAmGY4igZWW
-	/NbCy42ogHmby9Pi3RRXZZ9TTIB90iPQRpZLgRIXehBB9ZHsIOHTR1ipnHommAXe0NIBnH3xUr2
-	zaRBD6y0+5iAK5dspmBEUmKnjZsQpYFviknTi9Ex1/NQguzoYlzAUPq7WYoZWW+F28JpN9bfve1
-	qJYFMvwNZ5XmWBTnL1EJTUqnUI71MRi84grwubbJW87lJbrcG/bFgyYPX7oBlkSIin9+QfUkcFu
-	fhbpA/y97ExNoH3IAGJpOJ7FjjY3sP1NxpXFaDXa7H969djEsP3MkWE7
-X-Received: by 2002:a05:6512:6883:10b0:5ae:ba47:e7bb with SMTP id
- 2adb3069b0e04-5b44e327b7emr127630e87.36.1786503495339; Tue, 11 Aug 2026
- 19:58:15 -0700 (PDT)
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 11 Aug 2026 19:58:14 -0700
-Received: from 44278815321 named unknown by gmailapi.google.com with HTTPREST;
- Tue, 11 Aug 2026 19:58:14 -0700
-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
-References: <20260714130657.46963-1-zhangzhanpeng.jasper@bytedance.com>
- <20260714130657.46963-4-zhangzhanpeng.jasper@bytedance.com> <anvYGuNF3MC//Q94@x1>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TnMfDSKr"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786504390; x=1818040390;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AkKijx+yhl0VzD/BsT+PyE6ekz5n9cwWuOOi+c1ujAc=;
+  b=TnMfDSKr548TJGD8PuteND1I/uTXa4UjUYFZJ6ippm3R/scduuHmxGV/
+   8mOjngGXt6eJBCGlV+lhkcWWnJV9v8GkezVEmaZZ6xSEmF9nmNZz846Vc
+   tBcy3I9O/M6FNw6ndxKMjX9gjizdYNYxYfKDeojb4q6BzP6SfhuzJb/kn
+   /kz0Q9vl4C/NMQRUe0yh5G3ELUrRBezN/jmlZ7AxnbQv0L/HdFLr7fhB2
+   J4VaYO0W+d8Ubfy/83KhcehJk53CB+Rxb5hGBjOTaY4ovOzrwrcVrFgg0
+   srz6SNtb0rs7GoxsHFi35fEgc0/boKLs02fecsG+IxeyBb0HdDIVMM5XK
+   A==;
+X-CSE-ConnectionGUID: 7uqvdKkjQiy7DozZi3KQRQ==
+X-CSE-MsgGUID: m3+IpmOySNqDDaCL1bjM1w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11872"; a="87069595"
+X-IronPort-AV: E=Sophos;i="6.25,218,1779174000"; 
+   d="scan'208";a="87069595"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2026 20:13:09 -0700
+X-CSE-ConnectionGUID: +2b0w5VQSvqkwpgU/D8G6w==
+X-CSE-MsgGUID: /572NDDhT8KJyc2EdBGfOg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,218,1779174000"; 
+   d="scan'208";a="267358694"
+Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
+  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Aug 2026 20:12:55 -0700
+Message-ID: <06f8fbe4-80b3-4d5b-a8cd-2144087e3dbe@linux.intel.com>
+Date: Wed, 12 Aug 2026 11:12:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-In-Reply-To: <anvYGuNF3MC//Q94@x1>
-X-Original-From: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
+MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Date: Tue, 11 Aug 2026 19:58:14 -0700
-X-Gm-Features: AUfX_mxvwZ83pSWvPns7jRPE3EZ4ROM6a0cFBGgGRZzehYP0r9bHWpi6TB0BXXM
-Message-ID: <CACnXVnfHZ0icevM8B3rVCiU_qxm41W+duRkPRS8HP45P05abYA@mail.gmail.com>
-Subject: Re: [RFC PATCH 3/7] resctrl: Add a devices file for external
- requester assignment
-To: Drew Fustini <fustini@kernel.org>
-Cc: joro@8bytes.org, palmer@dabbelt.com, tony.luck@intel.com, 
-	reinette.chatre@intel.com, tomasz.jeznach@linux.dev, will@kernel.org, 
-	robin.murphy@arm.com, pjw@kernel.org, aou@eecs.berkeley.edu, alex@ghiti.fr, 
-	Dave.Martin@arm.com, james.morse@arm.com, babu.moger@amd.com, corbet@lwn.net, 
-	shuah@kernel.org, jgg@ziepe.ca, kevin.tian@intel.com, cuiyunhui@bytedance.com, 
-	yuanzhu@bytedance.com, iommu@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Subject: Re: [PATCH v10 01/41] KVM: guest_memfd: Use kvm_mem_is_private() when
+ populating guest_memfd memory
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
+ chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
+ jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
+ pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
+ rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
+ tabba@google.com, willy@infradead.org, wyihan@google.com,
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
+ Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
+ <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+ Masami Hiramatsu <mhiramat@kernel.org>,
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
+ Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, linux-coco@lists.linux.dev,
+ Xiaoyao Li <xiaoyao.li@intel.com>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-1-2fc18ee6d3ba@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260807-gmem-inplace-conversion-v10-1-2fc18ee6d3ba@google.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Drew,
+On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Using kvm_mem_is_private() when populating guest_memfd instead of using an
 
-On 8/12/26 10:19 AM, Drew Fustini wrote:
-> On Tue, Jul 14, 2026 at 09:06:53PM +0800, Zhanpeng Zhang wrote:
->> Do not overload the resctrl tasks file with architecture-specific
->> non-PID tokens. The tasks ABI remains a list of task IDs, while the new
->> devices file carries external requesters assigned to a resctrl group.
->>
->> Add architecture hooks for assigning and showing those external
->> objects, and reject group removal, reparenting, or pseudo-lock setup
->> while devices are still assigned. The teardown path performs a
->> best-effort reset to the default group.
->>
->> The devices file is an assignment interface only. It does not describe
->> a new resource schema or domain; resource allocation and monitoring
->> policy remain described by the existing schemata and info files.
->>
->> Signed-off-by: Zhanpeng Zhang <zhangzhanpeng.jasper@bytedance.com>
->> ---
->>   Documentation/filesystems/resctrl.rst |  26 ++++
->>   arch/Kconfig                          |   6 +
->>   fs/resctrl/rdtgroup.c                 | 206 +++++++++++++++++++++++++-
->>   include/linux/resctrl.h               |  45 ++++++
->>   4 files changed, 280 insertions(+), 3 deletions(-)
-> [..]
->> diff --git a/fs/resctrl/rdtgroup.c b/fs/resctrl/rdtgroup.c
->> index af2cbab14497..2e424c911049 100644
->> --- a/fs/resctrl/rdtgroup.c
->> +++ b/fs/resctrl/rdtgroup.c
-> [..]
->> @@ -2067,6 +2236,16 @@ static struct rftype res_common_files[] = {
->>   		.seq_show	= rdtgroup_tasks_show,
->>   		.fflags		= RFTYPE_BASE,
->>   	},
->> +#ifdef CONFIG_ARCH_HAS_RESCTRL_DEVICES
->> +	{
->> +		.name		= "devices",
->> +		.mode		= 0644,
->> +		.kf_ops		= &rdtgroup_kf_single_ops,
->> +		.write		= rdtgroup_devices_write,
->> +		.seq_show	= rdtgroup_devices_show,
->> +		.fflags		= RFTYPE_BASE,
->
-> Once CONFIG_ARCH_HAS_RESCTRL_DEVICES is built in, the file shows up in
-> every resctrl group directory, even on hardware whose IOMMU does not
-> implement QOSID. I think it would be better to make fflags zero so
-> rdtgroup_add_files() skips it, and enable it at runtime from
-> resctrl_init().
->
-> Thanks,
-> Drew
+Nit:
+Using -> Use?
+> open coded equivalent.  In addition to simplifying the populate code *now*,
+> this avoids the need to provide a range-based gmem lookup API in the future
+> as well.
+> 
+> No functional change intended.
+> 
+> Suggested-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-Good point. The build-time architecture capability is not sufficient to
-expose the file. I will look for an appropriate runtime mechanism to
-control whether the file is exposed.
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-Thank you for the careful review. I really appreciate it.
+> ---
+>  virt/kvm/guest_memfd.c | 4 +---
+>  1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index b596486d184ca..a11cf6dc785da 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -811,9 +811,7 @@ static long __kvm_gmem_populate(struct kvm *kvm, struct kvm_memory_slot *slot,
+>  
+>  	folio_unlock(folio);
+>  
+> -	if (!kvm_range_has_memory_attributes(kvm, gfn, gfn + 1,
+> -					     KVM_MEMORY_ATTRIBUTE_PRIVATE,
+> -					     KVM_MEMORY_ATTRIBUTE_PRIVATE)) {
+> +	if (!kvm_mem_is_private(kvm, gfn)) {
+>  		ret = -EINVAL;
+>  		goto out_put_folio;
+>  	}
+> 
 
-Thanks,
-Zhanpeng
