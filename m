@@ -1,88 +1,138 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D3F037880B;
-	Wed, 12 Aug 2026 14:46:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 693623FD96E;
+	Wed, 12 Aug 2026 14:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786546002; cv=none; b=ImoScV96O960/kdrzWUnmCaTRI0rsbHmDt66xct4BBMi3jNFFRz5fuqDsHUjpcASSwEnbf4ooSQ77KMeYBeYsn9GH2npgOZAaQMwq1so+DMFJMFOdJR4hqaZ1D6SP3j646ekh+qsEKCgwDLMQN3tqa/02CIW5sB2oxbiIa8Gh58=
+	t=1786546570; cv=none; b=uV8Q7fMKTFxokV8A8/NeqTw1Rbw84wtXOynqqy2iliziSETfmH642oQpB3aAkAUdOwwcwpf/8CNgTenxEMlMDY4I2IavLmM1uMX0YzPRYqsuhOJmtFajR259RRdzN2dWWc8pmRqqFxoJbBDwhkTERlH/E3wJpkqZzds0f8x0+CQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786546002; c=relaxed/simple;
-	bh=N4H/nJwHNuBHjUBnBHV42PpdwFwk+iDNDfBpK8ku+ro=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qtBXsZX+1m6j0v70G9rXYgcH8WxtoG0iVxx27uTZdfmk0HkWS9wnpyWQz6Eaj7YzJfF27OmxsPSOL3u5BojC3UjknmmBsMdFgjDYa0XtmBCzG5xMXpMfTjHVLm/I02enQayUIgrHQcvuhjORz3qAhRfCIWmKgzzAUx1w0RJX3EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gaSj1BT7; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786546570; c=relaxed/simple;
+	bh=Rnb6ZAP/we5Dfpv1iauF0xj3H8QBRP5MNFuriepJ7a0=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ooXmOaWQA3fy4C0KzcdX3xjQeljDmeSZi3Nw1QziDUMs6zMduifChoe0fRUsg5GBNp42YxSzR7gRhmzBoFnRHWTs/mG7+NDoHegT8cb5Mf6vfLiV2FPJvoql8ty4dorcyjF0y/gKnTtGdmGqqiNJcC8Roi+lKroaynOsvA+Z9Uk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WDLue4Ne; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gaSj1BT7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E081F000E9;
-	Wed, 12 Aug 2026 14:46:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WDLue4Ne"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 519451F00A3A;
+	Wed, 12 Aug 2026 14:55:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786546001;
-	bh=kmSRdXbDxC5n1fJ3eK/gMJjVKqziFhOwGBO5vuQoRgk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=gaSj1BT7QxKuMtbp1QTQ29Z2m70mOEdqmCvsBkiMou7WyYKucciI8E4D0HzMQq6Uj
-	 p8s2uInxnHPfr+wLZFoDeuOkbY1rs7+dy1+KmYFVsRpVZYAbY25SLz1mz5ZPonyFCv
-	 lX/S8U1mTU9e6cc4NJCdoE3gwtiXduOMuOMDOb7yXUSarlWrWcw68OKYd8QI67q53z
-	 Zm+1LTQopJPSjltBg0jG1UWJ51gwAVpx/HyEvtN+3OeaqL/zlm7kNhedgQerrRX4m9
-	 aLIHK0LJzRbosqtGIyYDtlf3pO8fjOuo71f+OE1MQiIrhGLVfsm2hm2574BHbqFdrz
-	 OSRVzqTJipJIA==
-From: SJ Park <sj@kernel.org>
-To: Wilson Felipe Pereira <wfelipe@google.com>
-Cc: SJ Park <sj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry@kernel.org>,
-	Nhat Pham <nphamcs@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Anshuman Khandual <anshuman.khandual@arm.com>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?=20Michal=20Koutn=C3=BD=20?= <mkoutny@suse.com>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	linux-mm@kvack.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/cgroup: test_zswap: skip test_no_kmem_bypass if debugfs is unavailable
-Date: Wed, 12 Aug 2026 07:46:32 -0700
-Message-ID: <20260812144633.125604-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260812050848.848882-1-wfelipe@google.com>
-References: 
+	s=k20260515; t=1786546557;
+	bh=PE3ckqAzJuLdyX7hrN6QogEst9yy454JJ106p3AyeTE=;
+	h=From:Subject:Date:To:Cc;
+	b=WDLue4NeSrHVW1tkDGnCMGXhRN6X7/4ofiJXlUAoYM1LNNRjapvIpdvUvNcrJCw0u
+	 Yo2mc5RRZy3p3IYPz0p1Co6ZNlgym1lLEk9tN5AoF6KYHe6lsfkBXALZJQXvSSEd1y
+	 U1yYaEnOu3dPN0HnsLtO6JOpLK2flPV2UgDeAgEt4E/TT4h1GR18DcDWNVrd8+F3GL
+	 KVArsyfbrrrvcaco9GRQSRBLJILEj+fhALmhiAVsrt+084iaWbMj9vrfBr+6C9n1K/
+	 go82qOw8OZUD59I1zegOWrZ/OimhwllbTqgprA4A5MLKw0Y9xPvDnxEbJPwGc2Hgw6
+	 7HmkLvezzrzHw==
+From: "Matthieu Baerts (NGI0)" <matttbe@kernel.org>
+Subject: [PATCH net-next 00/11] mptcp: misc. features for v7.3
+Date: Wed, 12 Aug 2026 16:55:35 +0200
+Message-Id: <20260812-net-next-mptcp-misc-feat-7-3-v1-0-1905a818f6cb@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWMQQrCMBBFr1Jm7UASaSpeRVykyVRHaAyZUQqld
+ zdWXPzF4/PeCkKVSeDcrVDpzcLP3MAeOoj3kG+EnBqDM86bkzWYSdsWxbloLDizRJwoKA54xNF
+ 4nyy51A8BWqJUmnjZ8xf4m3D9PfIaHxT1W4dt+wClI/NKigAAAA==
+X-Change-ID: 20260810-net-next-mptcp-misc-feat-7-3-b066d1e2d57a
+To: Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>
+Cc: netdev@vger.kernel.org, mptcp@lists.linux.dev, 
+ linux-kernel@vger.kernel.org, "Matthieu Baerts (NGI0)" <matttbe@kernel.org>, 
+ Tao Cui <cuitao@kylinos.cn>, Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ linux-trace-kernel@vger.kernel.org, 
+ Kalpan Jani <kalpan.jani@mpiricsoftware.com>, 
+ Shardul Bankar <shardul.b@mpiricsoftware.com>, 
+ Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org, 
+ Jiangshan Yi <yijiangshan@kylinos.cn>, Geliang Tang <geliang@kernel.org>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2905; i=matttbe@kernel.org;
+ h=from:subject:message-id; bh=Rnb6ZAP/we5Dfpv1iauF0xj3H8QBRP5MNFuriepJ7a0=;
+ b=owGbwMvMwCVWo/Th0Gd3rumMp9WSGLJqOov4ootaeUyEDCxbLy88oBh+We2Wo3m234yD2bfvt
+ lwMeN/QUcrCIMbFICumyCLdFpk/83kVb4mXnwXMHFYmkCEMXJwCMBFxL0aGX/nTT10J1X0QdF50
+ rVVY7fMf5S3f3VZa3DA35dPILHtgyMgwY+nJc7/XapboV+Z9/PFbYEay7NlT1wwV59pfqOqaLGv
+ MAgA=
+X-Developer-Key: i=matttbe@kernel.org; a=openpgp;
+ fpr=E8CB85F76877057A6E27F77AF6B7824F4269A073
 
-On Wed, 12 Aug 2026 05:07:55 +0000 Wilson Felipe Pereira <wfelipe@google.com> wrote:
+This series contains a few independent new features, and small fixes for
+net-next:
 
-> test_no_kmem_bypass() needs to read
-> /sys/kernel/debug/zswap/stored_pages via get_zswap_stored_pages() to
-> verify that compressed pages are charged to the memcg.
-> 
-> When running in an environment where debugfs is not mounted or
-> CONFIG_DEBUG_FS is disabled, get_zswap_stored_pages() fails, causing the
-> loop to terminate early and report a false negative (KSFT_FAIL).
-> 
-> Selftests should not fail if debugfs is unavailable, and it should print
-> a message when it is skipped.
-> 
-> While I'm here, also add a warning message if the test is being skipped
-> due to totalram size and make the check for totalram more readable.
+- Patch 1: Add WARN_ON_ONCE guards around extra_subflows to catch issues
+  with this counter, similar to what is done with other PM counters.
 
-Looks good to me!
+- Patches 2-3: Follow-up patches to remove data_ack field from struct
+  mptcp_ext -- now unused after recent fixes -- and makes a userspace PM
+  helper static.
 
-> 
-> Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
-> Acked-by: Yosry Ahmed <yosry@kernel.org>
-> Acked-by: Nhat Pham <nphamcs@gmail.com>
-> Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+- Patch 4: Honour tcp_rto_{min_us,max_ms} sysctls for MPTCP-level
+  retransmit timers like with DATA_FIN's and fallback timeout.
 
-Reviewed-by: SJ Park <sj@kernel.org>
+- Patches 5-6: Add per-event MIB counters for MPTCP_RST_EMPTCP resets to
+  help to spot such situations in production.
 
+- Patches 7-9: Small pcap-related improvements in the selftests.
 
-Thanks,
-SJ
+- Patch 10: Fix compiler warning in the selftests.
 
-[...]
+- Patch 11: Avoid a buffer overflow when misusing the mptcp_diag tool
+  from the selftests.
+
+Signed-off-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+---
+Geliang Tang (2):
+      mptcp: remove unused data_ack from struct mptcp_ext
+      selftests: mptcp: fix const qualifier warnings in strchr usage
+
+Jiangshan Yi (1):
+      selftests: mptcp: diag: fix stack buffer overflow in get_subflow_info()
+
+Kalpan Jani (1):
+      mptcp: honour configured min/max RTO in retransmit paths
+
+Matthieu Baerts (NGI0) (4):
+      mptcp: pm: userspace: make remove_addr_entry static
+      selftests: mptcp: connect: test name in pcap file
+      selftests: mptcp: simult_flow: test name in pcap file
+      selftests: mptcp: pcap: drop most of the payload
+
+Shardul Bankar (2):
+      mptcp: add per-event MIB counters for MPTCP_RST_EMPTCP resets
+      selftests: mptcp: check per-event MPTCP_RST_EMPTCP counters
+
+Tao Cui (1):
+      mptcp: pm: add WARN_ON_ONCE guards on extra_subflows underflow
+
+ include/net/mptcp.h                                |  4 -
+ include/trace/events/mptcp.h                       |  6 +-
+ net/mptcp/mib.c                                    |  7 ++
+ net/mptcp/mib.h                                    |  7 ++
+ net/mptcp/pm.c                                     |  3 +-
+ net/mptcp/pm_userspace.c                           |  7 +-
+ net/mptcp/protocol.c                               | 23 +++++-
+ net/mptcp/protocol.h                               |  5 +-
+ net/mptcp/subflow.c                                | 10 +++
+ tools/testing/selftests/net/mptcp/mptcp_connect.c  |  4 +-
+ tools/testing/selftests/net/mptcp/mptcp_connect.sh |  8 +-
+ tools/testing/selftests/net/mptcp/mptcp_diag.c     |  3 +-
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 95 +++++++++++++++++++++-
+ tools/testing/selftests/net/mptcp/simult_flows.sh  | 11 ++-
+ 14 files changed, 163 insertions(+), 30 deletions(-)
+---
+base-commit: ac155a26750a595703e7dadff84735456d75a479
+change-id: 20260810-net-next-mptcp-misc-feat-7-3-b066d1e2d57a
+
+Best regards,
+--  
+Matthieu Baerts (NGI0) <matttbe@kernel.org>
+
