@@ -1,225 +1,410 @@
-Received: from mta1.migadu.com (out-122.mta1.migadu.com [95.215.58.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A33362D2487
-	for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 18:46:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.122
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AA43358AD;
+	Wed, 12 Aug 2026 18:55:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786560420; cv=none; b=aW2/tnAhXcbFBJanzAvWr4LK7xXjuPt5kK7EoRih+YpcaYK107L0yLCah/DybvdTdmkil3a8g9teHnukvrhSt6x2EXAHOYaMuJbTSKA/24PcSaR0ogD8GTXKDfEETWFDEiyUfkSTei40Lq2m18UODvc/UkFV/uk1HZUcieYJqaA=
+	t=1786560936; cv=none; b=bKpfsnGqa2N+BUsV9rLFfr9bfPZlpTDHPYFZaTXbWwQJqvuOqb+mQaZy1+QlA4ZGjgwTPYrbHbXburvsdwhv3JeCTvLUeUAP9XeMbTByxBCfW9z5yvDgUL9iZCU6K+vCsJIwJkCTPFNJXt1JXfcs7zfxjrjydeOxFJKg/P0S+OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786560420; c=relaxed/simple;
-	bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ipi7s5FzFhbFiCoiPiREG2l/cMSjDiCv8SSfswAmTol/dqYXD/azATw6YX6p4MbbZd2uau0R/w6mfW1FmnyIcSguKNccnFaqFSwahA+MqdISDYx2azWnoTlWTynDDfwJJgduWWrtep9C0u2EfcZrHBbsikMcnJpx9vowrpnniQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qGXtY5V0; arc=none smtp.client-ip=95.215.58.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786560936; c=relaxed/simple;
+	bh=W4ulawhkUgOPVRsw0eqSiE5dQsYxoH3ysOVT2KAo7W4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=D8UjLYGca/MgKhATXMp1qdispx0/qsNYgJdzrts6BtN7I1WKht/K1Ctzbjkbw9CZANknjok4Rtr5FA4PAPxtKNQP8f7fppOZi7gyVyTwye8k189bS6mfR87bIvt2MMEvVNcWenYxbWRqmVR1+zsSwZiqOHfWiWvhz6ws3qqWCRQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SnSb7qCt; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qGXtY5V0"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=P15uc+v2QH+iKpzpb5A5Mh7dmRI8QIJxQCb9OSawzdk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786560416; v=1; x=1787165216;
- b=qGXtY5V03+kL2GO/xvRC8kZXN1mr+bb49dXYbjXCK7lDXgvl5afZsAVggc+nba6BBsMql2lo
- ZZSUi85wk9UwqDoCTPURy+FtYU1ACx3LjHIHBrMCVPKRAmXtCy93iMSMf62tYqTnYUaoqhDQSYH
- 9dwAhWYjUPauO5LOcoRMaUGs=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [IPV6:2a03:83e0:125c:1:c4d4:5d0:c3b3:cab6] (2620:10d:c090:500::5:f7a3)
-	by smtp.migadu.com with ESMTPS id 20a21b4d86a645e6;
-	Wed, 12 Aug 2026 18:46:38 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <d92da576-4930-4b10-b8bd-ea1158ec08bc@linux.dev>
-Date: Wed, 12 Aug 2026 11:46:32 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SnSb7qCt"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DBABAC2BCB3;
+	Wed, 12 Aug 2026 18:55:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1786560935;
+	bh=W4ulawhkUgOPVRsw0eqSiE5dQsYxoH3ysOVT2KAo7W4=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=SnSb7qCtNBp/p9Z7aa2cB8L7K+8eImYNpMD4U6mJvw466uHbYQuDIR+mwvXvlRxJN
+	 SBne4RHh1zZoMOdodc66Tc9vc4O0csrurUGYjeah3x0GNvJHqZ66tZzZTvmyf0egGr
+	 +eRJRV8Y3EvKgqmE3hgkB6o4fO3FiNIma4zCR2CjxoBCeGQAW5sVmeUy8O3wioeGdJ
+	 QKN5fgehRTkA5PwRxlTZvvnCWdOZOHxXJIOF4gRgKIGtAByg7lpNMbYeo0gsqEtRW5
+	 RRjAz5NtNc6vT8tTuoJq61iptuGWBssdWWWJro2wXf2W4NGw5eCUOTA7tytCqxwVhe
+	 2HPdmiO7n5g0A==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id B7946C5B572;
+	Wed, 12 Aug 2026 18:55:35 +0000 (UTC)
+From: Thomas Maarseveen via B4 Relay <devnull+maarseveent.gmail.com@kernel.org>
+Date: Wed, 12 Aug 2026 20:55:33 +0200
+Subject: [PATCH] lib/tests: add KUnit tests for errseq
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 1/2] selftests/bpf: keep polling connection that is
- still in progress
-To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
- Jiayuan Chen <jiayuan.chen@linux.dev>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com>
- <20260811-tc_tunnel_flaky-v3-1-876f4e0bc603@bootlin.com>
- <75ec8417-4be5-4e7a-86c9-70a83b793580@linux.dev>
- <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DKM96LSV880C.1QEALTH06N0GI@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+Message-Id: <20260812-errseq-kunit-v1-1-312be4c3aa0d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKTBfGoC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDC0Mj3dSiouLUQt3s0rzMEl3DNENjI4u0pOTUVEMloJaCotS0zAqwcdG
+ xtbUAKW6Nol4AAAA=
+X-Change-ID: 20260812-errseq-kunit-1f1328fbcee1
+To: Jeff Layton <jlayton@kernel.org>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: David Gow <david@davidgow.net>, kunit-dev@googlegroups.com, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Thomas Maarseveen <maarseveent@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786560934; l=12227;
+ i=maarseveent@gmail.com; h=from:subject:message-id;
+ bh=75Gy+F6zO2ftuiONJL1i57FaWWxelXMazNNz9c9HTcE=;
+ b=D3wWDYAP/ia9jR8ztxB7ULzlFLamK8HQIynbT0zo/bFlNGyDLHf5ADqnA9WMCZwmMDMvJ7bie
+ hbDuwGSmRqeA5Bt20o1e8cG/b1EfH2oSsFNKgClqd6hOTYC+EEvKake
+X-Developer-Key: i=maarseveent@gmail.com; a=ed25519;
+ pk=W1QNGKhOCOEXIAdTN0UwzNPpvcxVx7vDfChmpEN0REw=
+X-Endpoint-Received: by B4 Relay for maarseveent@gmail.com/default with
+ auth_id=943
+X-Original-From: Thomas Maarseveen <maarseveent@gmail.com>
+Reply-To: maarseveent@gmail.com
 
-On 8/11/26 9:25 AM, Alexis Lothoré wrote:
-> On Tue Aug 11, 2026 at 5:05 PM CEST, Jiayuan Chen wrote:
->>
->> On 8/11/26 10:26 PM, Alexis Lothoré (eBPF Foundation) wrote:
->>> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
->>> following logs:
->>>
->>>    (network_helpers.c:309: errno: Operation now in progress) \
->>>      Failed to connect to server
->>>    send_and_test_data:FAIL:connect to server unexpected error: -115
->>>
->>> This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
->>> socket (see settimeo() in client_socket()), allowing connect() to return
->>> an error and to set errno to EINPROGRESS instead of blocking until
->>> connection result is known. Increasing the timeout value for those tests
->>> is likely not a good solution (and it has already been done by commit
->>> 2790db208b44 ("selftests/bpf: Improve tc_tunnel test reliability")):
->>> they involve subtests that expect the connection to fail, and so
->>> increasing the timeout value would increase overall test execution
->>> duration again (not only the connection, but any socket operation).
->>>
->>> Another solution, as documented in man 2 connect, is to poll the socket
->>> for POLLOUT once connect has returned EINPROGRESS, and to get the actual
->>> connection result through getsockopt: this allows to keep the overall
->>> timeout values low for the general traffic, while letting a chance to
->>> the connection to succeed even if CI runners are loaded.
->>>
->>> When connect() returns EINPROGRESS, poll the socket for POLLOUT and
->>> check the connection result via getsockopt(SO_ERROR). This new handling
->>> conforms to the configured timeout: the polling loop will only run for
->>> the amount of time still available, accounting for the time used by the
->>> initial connect() call.
->>
->>
->> So IIUC this patch doesn't actually fix the flakiness: connect() on a 
->> blocking socket only
->> returns EINPROGRESS after SO_SNDTIMEO is fully consumed, so remaining_ms 
->> is always ~0 and the
->> overall time budget is still 1s, same as before. Am I missing something?
-> 
-> Hmmm, I have been assuming that this EINPROGRESS could be returned
-> _before_ the configured timeout depletion, but I may have been mistaken,
-> it indeed happens only  the socket is O_NONBLOCK, which is not the case
-> here. So indeed, it does not fix anything for the blocking case, as the
-> budget is already depleted when getting EINPROGRESS...
-> 
-> I added this budget mechanism to follow up on Ihor's suggestion, so I
-> either got it wrong, or it can not work.
+From: Thomas Maarseveen <maarseveent@gmail.com>
 
-Hi Alexis,
+The errseq_t infrastructure (lib/errseq.c) underpins writeback error
+reporting but has no regression tests. Its semantics are subtle enough
+to have needed fixing before: commit b4678df184b3 ("errseq: Always
+report a writeback error once") changed how unseen errors reach new
+samplers.
 
-Looks like my suggestion was bad, sorry. Jiayuan is right. I didn't
-realize what -EINPROGRESS actually means here.
+Add a KUnit suite covering the documented single-threaded semantics:
 
-See __inet_stream_connect() in net/ipv4/af_inet.c:697
+ - a zeroed errseq_t is the "no error yet" epoch
+ - errors are recorded, overwrite one another, and both ends of the
+   valid errno range round-trip exactly
+ - an error nobody has seen samples as zero, so a check against a
+   fresh sample still reports it
+ - errseq_check_and_advance() reports a given error exactly once per
+   cursor and leaves the cursor in place when nothing has changed
+ - once an error has been seen, a fresh sample is current and a check
+   against it reports nothing
+ - the same error recorded again after being seen is reported again,
+   even to a cursor that consumed the first occurrence while another
+   cursor marked the repeat as seen
+ - independent cursors each observe each error
 
-	err = -EINPROGRESS;
-	...
-	timeo = sock_sndtimeo(sk, flags & O_NONBLOCK);
-	...
-	if (!timeo || !inet_wait_for_connect(sk, timeo, writebias))
-		goto out;
+The lockless behaviour of errseq_t under concurrent updates and the
+WARN path for invalid error values are deliberately out of scope.
 
--EINPROGRESS is a default that reaches userspace only when the wait
-expires. Every other exit sets a different error code. So on a
-blocking socket -EINPROGRESS does not mean "connection started", it
-means "waited the whole budget, gave up in SYN_SENT". On a nonblocking
-socket it means the opposite, and man 2 connect seems to only document
-the nonblocking case.
+Tested with ./tools/testing/kunit/kunit.py run, with a kunitconfig
+enabling CONFIG_KUNIT=y and CONFIG_ERRSEQ_KUNIT_TEST=y; all 13 tests
+pass under ARCH=um.
 
-> An intermediate solution could
-> be to exceptionally raise the budget by 1s when getting EINPROGRESS.
+Signed-off-by: Thomas Maarseveen <maarseveent@gmail.com>
+---
+Single patch adding the first KUnit suite for lib/errseq.c.
+(Cover not sent for a single-patch series; trailers below drive
+the recipients.)
+---
+ MAINTAINERS              |   1 +
+ lib/Kconfig.debug        |  15 +++
+ lib/tests/Makefile       |   1 +
+ lib/tests/errseq_kunit.c | 237 +++++++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 254 insertions(+)
 
-I believe you're right that the flakiness can be addressed with bigger
-timeout, which is why v2 fixed it for you. But +1s may not be enough.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 8014b9f8253edf15231df215d1b14063a54a55ec..70de54372c4f8f12b2431e693cb3b0b5ec5fdfc9 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9624,6 +9624,7 @@ M:	Jeff Layton <jlayton@kernel.org>
+ S:	Maintained
+ F:	include/linux/errseq.h
+ F:	lib/errseq.c
++F:	lib/tests/errseq_kunit.c
+ 
+ ESD CAN NETWORK DRIVERS
+ M:	Stefan Mätje <stefan.maetje@esd.eu>
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1244dcac2294ad99fda37fa6767c9e76f16a4d14..3f1a7103328678926dd82620349957fdede32ee4 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2826,6 +2826,21 @@ config SYSCTL_KUNIT_TEST
+ 
+ 	  If unsure, say N.
+ 
++config ERRSEQ_KUNIT_TEST
++	tristate "KUnit test for errseq" if !KUNIT_ALL_TESTS
++	depends on KUNIT
++	default KUNIT_ALL_TESTS
++	help
++	  This builds the errseq KUnit test suite.
++	  It tests the documented semantics of the errseq_t error-tracking
++	  infrastructure (lib/errseq.c), which underpins writeback error
++	  reporting.
++
++	  For more information on KUnit and unit tests in general please refer
++	  to the KUnit documentation in Documentation/dev-tools/kunit/.
++
++	  If unsure, say N.
++
+ config KFIFO_KUNIT_TEST
+ 	tristate "KUnit Test for the generic kernel FIFO implementation" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+index 4ead57602eac468e1b9b8148593dc8c41ddc5779..a1e69b2c4318ae03f7834ba41414caf986997f02 100644
+--- a/lib/tests/Makefile
++++ b/lib/tests/Makefile
+@@ -13,6 +13,7 @@ obj-$(CONFIG_BLACKHOLE_DEV_KUNIT_TEST) += blackhole_dev_kunit.o
+ obj-$(CONFIG_CHECKSUM_KUNIT) += checksum_kunit.o
+ obj-$(CONFIG_CMDLINE_KUNIT_TEST) += cmdline_kunit.o
+ obj-$(CONFIG_CPUMASK_KUNIT_TEST) += cpumask_kunit.o
++obj-$(CONFIG_ERRSEQ_KUNIT_TEST) += errseq_kunit.o
+ obj-$(CONFIG_FFS_KUNIT_TEST) += ffs_kunit.o
+ CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
+ CFLAGS_fortify_kunit.o += $(call cc-disable-warning, stringop-overread)
+diff --git a/lib/tests/errseq_kunit.c b/lib/tests/errseq_kunit.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..8f39ebc4a2488e564efe216883008b0d96a75fe6
+--- /dev/null
++++ b/lib/tests/errseq_kunit.c
+@@ -0,0 +1,237 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * KUnit tests for the errseq_t error-tracking infrastructure.
++ *
++ * These exercise the documented single-threaded semantics of the errseq
++ * API (see Documentation/core-api/errseq.rst and lib/errseq.c): error
++ * recording and overwriting, the "seen" handoff between errseq_sample()
++ * and errseq_check_and_advance(), and the re-reporting of an error that
++ * is recorded again after it has been seen.
++ *
++ * The lockless properties of errseq_t under concurrent updates are
++ * outside the scope of these deterministic tests, as is the WARN path
++ * for invalid error values.
++ */
++#include <kunit/test.h>
++
++#include <linux/err.h>
++#include <linux/errno.h>
++#include <linux/errseq.h>
++
++/*
++ * A zeroed errseq_t is the "no error has ever occurred" epoch: it
++ * samples as zero and no check against it reports anything.
++ */
++static void errseq_test_zero_epoch_reports_no_error(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = 0;
++
++	KUNIT_EXPECT_EQ(test, errseq_sample(&eseq), 0);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), 0);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
++	KUNIT_EXPECT_EQ(test, since, 0);
++}
++
++static void errseq_test_set_records_error(struct kunit *test)
++{
++	errseq_t eseq = 0;
++
++	/* errseq_set() returns the previous value; the epoch is zero. */
++	KUNIT_EXPECT_EQ(test, errseq_set(&eseq, -EIO), 0);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), -EIO);
++}
++
++/* Any error set always overwrites an existing error. */
++static void errseq_test_set_overwrites_error(struct kunit *test)
++{
++	errseq_t eseq = 0;
++
++	errseq_set(&eseq, -EIO);
++	errseq_set(&eseq, -ENOSPC);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, 0), -ENOSPC);
++}
++
++/* Both ends of the valid error range are recorded exactly. */
++static void errseq_test_errno_range_extremes(struct kunit *test)
++{
++	errseq_t lo = 0;
++	errseq_t hi = 0;
++
++	errseq_set(&lo, -1);
++	KUNIT_EXPECT_EQ(test, errseq_check(&lo, 0), -1);
++
++	errseq_set(&hi, -MAX_ERRNO);
++	KUNIT_EXPECT_EQ(test, errseq_check(&hi, 0), -MAX_ERRNO);
++}
++
++/*
++ * An error nobody has seen yet samples as zero, so that a check against
++ * the sample still reports it (see commit b4678df184b3 ("errseq: Always
++ * report a writeback error once")).
++ */
++static void errseq_test_sample_of_unseen_error_is_zero(struct kunit *test)
++{
++	errseq_t eseq = 0;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_sample(&eseq), 0);
++}
++
++static void errseq_test_new_sampler_sees_unseen_error(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since;
++
++	errseq_set(&eseq, -EIO);
++	since = errseq_sample(&eseq);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, since), -EIO);
++}
++
++/* A given error is reported exactly once per advancing cursor. */
++static void errseq_test_check_and_advance_reports_once(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = errseq_sample(&eseq);
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
++}
++
++/*
++ * Once an error has been seen, a fresh sample is non-zero and checking
++ * against it reports nothing: handled errors do not reach new samplers.
++ */
++static void errseq_test_sample_after_seen_is_current(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = 0;
++	errseq_t sample;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++
++	sample = errseq_sample(&eseq);
++	KUNIT_EXPECT_NE(test, sample, 0);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, sample), 0);
++}
++
++static void errseq_test_new_error_after_advance(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = 0;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++
++	errseq_set(&eseq, -ENOSPC);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -ENOSPC);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
++}
++
++/*
++ * Recording the same error again after it has been seen must bump the
++ * sequence, so cursors that consumed the first occurrence see the
++ * second one too.
++ */
++static void errseq_test_same_error_reported_again_after_seen(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = 0;
++	errseq_t seen_cursor;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++
++	seen_cursor = since;
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, since), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++	/* The repeat must advance the sequence, not just re-toggle "seen". */
++	KUNIT_EXPECT_NE(test, since, seen_cursor);
++}
++
++/*
++ * A cursor that consumed an error must still observe a repeat of that
++ * error even when another cursor has already marked the repeat seen:
++ * recording over a seen value must advance the sequence.
++ */
++static void errseq_test_repeat_error_visible_to_all_cursors(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t cursor_a = 0;
++	errseq_t cursor_b = 0;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), -EIO);
++
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, cursor_a), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), 0);
++}
++
++/* An advance with no new error reports nothing and leaves the cursor put. */
++static void errseq_test_advance_stable_when_unchanged(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t since = 0;
++	errseq_t cursor;
++
++	errseq_set(&eseq, -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), -EIO);
++
++	cursor = since;
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &since), 0);
++	KUNIT_EXPECT_EQ(test, since, cursor);
++}
++
++/*
++ * Cursors are independent: one subscriber consuming an error does not
++ * consume it for another, and each subscriber sees each error once.
++ */
++static void errseq_test_two_subscribers_independent(struct kunit *test)
++{
++	errseq_t eseq = 0;
++	errseq_t cursor_a = errseq_sample(&eseq);
++	errseq_t cursor_b = errseq_sample(&eseq);
++
++	errseq_set(&eseq, -EIO);
++
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check(&eseq, cursor_b), -EIO);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), -EIO);
++
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_a), 0);
++	KUNIT_EXPECT_EQ(test, errseq_check_and_advance(&eseq, &cursor_b), 0);
++}
++
++static struct kunit_case errseq_test_cases[] = {
++	KUNIT_CASE(errseq_test_zero_epoch_reports_no_error),
++	KUNIT_CASE(errseq_test_set_records_error),
++	KUNIT_CASE(errseq_test_set_overwrites_error),
++	KUNIT_CASE(errseq_test_errno_range_extremes),
++	KUNIT_CASE(errseq_test_sample_of_unseen_error_is_zero),
++	KUNIT_CASE(errseq_test_new_sampler_sees_unseen_error),
++	KUNIT_CASE(errseq_test_check_and_advance_reports_once),
++	KUNIT_CASE(errseq_test_sample_after_seen_is_current),
++	KUNIT_CASE(errseq_test_new_error_after_advance),
++	KUNIT_CASE(errseq_test_same_error_reported_again_after_seen),
++	KUNIT_CASE(errseq_test_repeat_error_visible_to_all_cursors),
++	KUNIT_CASE(errseq_test_advance_stable_when_unchanged),
++	KUNIT_CASE(errseq_test_two_subscribers_independent),
++	{}
++};
++
++static struct kunit_suite errseq_test_suite = {
++	.name = "errseq",
++	.test_cases = errseq_test_cases,
++};
++
++kunit_test_suite(errseq_test_suite);
++
++MODULE_DESCRIPTION("KUnit tests for the errseq infrastructure");
++MODULE_LICENSE("GPL");
 
-IIUC the way the helpers are written cause -EINPROGRESS instead of
--ETIMEDOUT. If SO_SNDTIMEO is not set before connect(), the kernel
-reports plain ETIMEDOUT, but it is set in settimeo().
+---
+base-commit: 3d6d817622b0a9721e3cc404df3469171582be13
+change-id: 20260812-errseq-kunit-1f1328fbcee1
 
-I vibe-coded a userspace repro: loopback listener with a full accept
-queue drained at t=1500ms, so the handshake completes at ~2040ms.
-Caller asks for timeout_ms=1000, like tc_tunnel:
+Best regards,
+-- 
+Thomas Maarseveen <maarseveent@gmail.com>
 
-  mainline (blocking)                     budget 1000   FAIL at 1016ms
-  v3 (blocking + leftover poll)           budget 1000   FAIL at 1015ms # my suggestion
-  O_NONBLOCK + poll(timeout_ms)           budget 1000   FAIL at 1001ms # Jiayuan's suggestion
-  O_NONBLOCK + poll(3500)                 budget 3500   OK   at 2031ms
-  blocking, SO_SNDTIMEO raised to 3500    budget 3500   OK   at 2040ms
-  v2 (blocking 1000 + fixed 3000 grace)   budget 4046   OK   at 2067ms
-
-Everything that gave the handshake more than ~2040ms passed. Blocking
-vs nonblocking makes no difference, poll() vs no poll() makes no
-difference. We just need to increase the budget for connect().
-
-I don't think swtiching to O_NONBLOCK makes sense. Apparently, it was
-nonblocking in the past, see 99126abec5e5 ("bpf: selftests: A few
-improvements to network_helpers.c")
-
-So I think we can introduce a separate connect() budget, similar to
-your v2. And then use opts->timeout_ms for everything after. Something
-like this:
-
-	#define CONNECT_TIMEOUT_MS	5000
-
-	static int connect_timeout_ms(const struct network_helper_opts *opts)
-	{
-		/* don't shorten what the caller asked for: tc_redirect
-		 * and xdp_synproxy pass 10000
-		 */
-		return MAX(opts->timeout_ms, CONNECT_TIMEOUT_MS);
-	}
-
-and in connect_to_addr():
-
-	fd = client_socket(addr->ss_family, type, opts);
-	if (fd < 0) {
-		log_err("Failed to create client socket");
-		return -1;
-	}
-
-	/* SO_SNDTIMEO is a ceiling, not a sleep: a wider handshake
-	 * budget costs nothing on connections that succeed.
-	 */
-	if (settimeo(fd, connect_timeout_ms(opts)))
-		goto close;
-
-	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-		log_err("Failed to connect to server");
-		goto close;
-	}
-
-	if (settimeo(fd, opts->timeout_ms))	/* data I/O budget */
-		goto close;
-
-	return fd;
-
-close:
-	save_errno_close(fd);
-	return -1;
-
-This is simpler than poll() and retry loops.
-
-
-An entirely different alternative that Eduard brought up in an
-off-list discussion, is to drop all the timeout machinery from
-network_helpers.c altogether, and rely solely on the test_progs
-watchdog to kill the subtest processes: d9d4d127e813 ("selftests/bpf:
-watchdog timer for test_progs")
-
-I am not convinced it's a good idea, because I don't know what will
-happen with all the tc_* tests if there is no connection timeouts. If
-you're interested, you could try it and see.
-
-
-> That potentially brings back part of the issues he has been mentioning
-> with selftests duration possibly increasing by a non negligeable amount,
-> but maybe 1s is a better compromise, compared to my initial 3s proposal
-> ?
-> 
 
