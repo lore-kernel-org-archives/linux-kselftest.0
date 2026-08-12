@@ -1,192 +1,110 @@
-Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010044.outbound.protection.outlook.com [52.101.84.44])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64E9B31355C;
-	Wed, 12 Aug 2026 05:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.44
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786512962; cv=fail; b=XE9V3oe4qk1311nCooMSd4oNgmB3IHe2p6/yWZ2a1QTuKKHxzaTu+/X7gU8fs0gznRA/t1vqnws0kD9GW9JvrZortuJcFwwwqBUQsJOWnrJ09sgQfm24ZJIfC4CteYVDixEDqV2KGTklVletaMiUJUq+vXREmB7FHfYhg2rl8BI=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786512962; c=relaxed/simple;
-	bh=SvSniyGISCpHidNUa5XauH5N93vY9rQMy4rDNFqihmY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=XDXCmJyMtt7q+qfYuuq4X33ckUkdsp7Dl/VxT9JC15d+pkOkU9Q8EYWYIZgjkyE/5rvLZrBtU12BrMNuQ4L9aDQpBYQXd+1e23pZWoc1gnW5lEE1C1g7Oaxtsgwvf931qCvRgD/Q+uZatc5SS4bf4QLoVWixgTWlgA3RXjJu5Jw=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GLwwzmkM; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=GLwwzmkM; arc=fail smtp.client-ip=52.101.84.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GLwwzmkM";
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="GLwwzmkM"
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=WUVK98Gz8JDexSMDkPV793ya2HIT3i8nbFbOIpUotceqe9RKa4EdwGlVg1zUeMxle2P+ZGStWNA5fFmYsaVvr3FFjjXL+PPZm4/t7dPhnW+I4pCHZWxfAFs+V2nzRzH98fW2rWEkLqYdav/kuwvf9BANwIAU3MgbDRIABZ7171M9iGBfFKBY/mPxnmZ/nnAac6IQ38fOFEKr1MsJQv1pOeNl0xTuI3kWXuBrC1m0IgGNjxGdBtxVaRgtxK6rdxg0p74Edhn++jsUPhv+maC6z15y9KxgrPmMY19cRROpP0z8BqD1AhBLCcSGcBSA2XDGHpqKu6/g41fe39fLebZwkg==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dlidU8puFBodwuJvyJaBj0gilBCPJI/rAdjKP2RePvQ=;
- b=wpCV7Wupizy7gqlvT6c6fd6Jl9gtulAqRXL3fUoU7mkipttdTSkxchQH1f8H4qQmYylP4mi8cdaUXmxontjTMPjGkHk8gSfntT7xcTyEv1HUMlkahY3S1cxsmaKYqROWr6xMYD0BU1FDMCeAssG1Ek3jMIYSkFP/UFw03SxhovkoWXa3gP/+o0j65ZGaJExE0mv+HAJaXAMYDnh46PMQg6FgZ0yRx8H6qSRtGxkwehDSpH3dyqg4Mj7nJLd4SFAfw6uzK/tfgCUt33uA7fMnuAaJjX8O3yIl8/Y5jj/jDIzQJB7So4noHRDYAQbk7xvD4UOoXf0YXx2ygHhAiRWdug==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
- (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
- (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
- spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dlidU8puFBodwuJvyJaBj0gilBCPJI/rAdjKP2RePvQ=;
- b=GLwwzmkMWWfhK8S3MywvYJPPoBuYwKmXuourZegUOVnr4FMvl3h5HdiifVZeO7W+mSig1rqx/WQJfrQlnt7Ou7s59mpwx1lnMHa2smcld3aKGPrS5jCqvgYb+Q22EeHBopS4wSBubon41uIR0WY3XTVpNYzDa+1qsAFpyWJ2oW4=
-Received: from AM0PR10CA0060.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:150::40)
- by AS8PR08MB6552.eurprd08.prod.outlook.com (2603:10a6:20b:31c::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.13; Wed, 12 Aug
- 2026 05:35:54 +0000
-Received: from AMS1EPF00000094.eurprd05.prod.outlook.com
- (2603:10a6:20b:150:cafe::47) by AM0PR10CA0060.outlook.office365.com
- (2603:10a6:20b:150::40) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.13 via Frontend Transport; Wed,
- 12 Aug 2026 05:35:54 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=arm.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
- client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
-Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
- AMS1EPF00000094.mail.protection.outlook.com (10.167.242.91) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.6
- via Frontend Transport; Wed, 12 Aug 2026 05:35:53 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jJm1hQy2ej1aPm+qd9XfEO9V1yYlNHngsYXmhdLGVFzHi2GHVUwatnsw+tybrFYx7C6XXRBkE9dML7Jkxr6q04avrQHMn+Hd0vPIYBcw+pzpe0cCMWR90llyZHQWdO9YWAYSB41SA+QS+OmubOVlrCj83oIyW9wOdEekUQC6d10eqqjIubF4xeYaWKvniAgFWCaR2D4k8d4cXW2icmTIq3L0jiwL5kds1rHVghHHWTnzUo7cqnGdGVaj80A01cHMI4/wPcpfjyTLKzPW7oUYWcuIdAiO7Fvf0k+4ikBdW9rMru0J0U+l0XGkBcy0HE89T6aXbFVl4uC+S4P7t/m6xg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dlidU8puFBodwuJvyJaBj0gilBCPJI/rAdjKP2RePvQ=;
- b=fgRSoJKqdUDxiRXleV9wyybDVBJVciqh8MOoWC6QCtGX4Zqoox5ZCFQqyFCdS6Y/wcW6MT3JTI2c1H6XSCAsH2St4HFvziQVNiQQwNhBoMCYGgchhTLG3ltHYErY3xViDLZ8VxRHZL5e77l04+gdpyZ6x6Y7KlaBmkdFj/DUzn0ZZdFts6WgRAenYZWA1LeOFdDO6TXJ+ia90I2GtqaxKso3yrMT0ciZj9XPFP7mKvFqf43DJBw1z7R0qqQ3rPqvoLV1VjoaxcxO0pmbCt6YQfvmNukeTK3IpRMGG34SR7uShip0w7ln/1oTm6c2K2TQMq4+lh1wnUOoyEeohLSr7w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dlidU8puFBodwuJvyJaBj0gilBCPJI/rAdjKP2RePvQ=;
- b=GLwwzmkMWWfhK8S3MywvYJPPoBuYwKmXuourZegUOVnr4FMvl3h5HdiifVZeO7W+mSig1rqx/WQJfrQlnt7Ou7s59mpwx1lnMHa2smcld3aKGPrS5jCqvgYb+Q22EeHBopS4wSBubon41uIR0WY3XTVpNYzDa+1qsAFpyWJ2oW4=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
- by DBAPR08MB5592.eurprd08.prod.outlook.com (2603:10a6:10:1a8::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Wed, 12 Aug
- 2026 05:35:19 +0000
-Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
- ([fe80::f1e:73f2:57df:4047%6]) with mapi id 15.21.0315.008; Wed, 12 Aug 2026
- 05:35:19 +0000
-Message-ID: <11e2f110-21b6-4436-92e2-b998d4d45de5@arm.com>
-Date: Wed, 12 Aug 2026 11:05:12 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: thuge-gen: fix test_shmget() for PAGE_SIZE
- check
-To: "Mike Rapoport (Microsoft)" <rppt@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Vlastimil Babka <vbabka@kernel.org>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org
-References: <20260809-selftests-thuge-gen-fix-v1-1-1919f4b3d12f@kernel.org>
-Content-Language: en-US
-From: Sarthak Sharma <sarthak.sharma@arm.com>
-In-Reply-To: <20260809-selftests-thuge-gen-fix-v1-1-1919f4b3d12f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MA5PR01CA0176.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:a01:1a9::16) To DU0PR08MB9203.eurprd08.prod.outlook.com
- (2603:10a6:10:417::12)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6165E2DF6F4;
+	Wed, 12 Aug 2026 06:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786515344; cv=none; b=pwAsiQPnmwrM9AkpTn5Yl4C0tfcUzQ1R7JFsu7JXbVeVRiNpur8tGhFtpqj2kvE8MRUJtjRee/SDtJtqlnsopn8Lo9Cxcp1N/SH8RIy/LhYywp2cwh3fl064KMRKsW3kdyMKKVS5dG9CQtDKWJxq28apwzZM+wUsHV7mOVS5p1A=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786515344; c=relaxed/simple;
+	bh=lqtHT0NdKLLh/mOtyz+SeHw6zoHreun7AuUu0dvs35k=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OAPoPxV5lWH9ru2hZPNc7L1Jh7p3eqhCYdaUbBDI/y72yKqkZjTdAdKB8ZdIw/Ee2mx4K7Mkcs/L2+xc17gC7YYHgMw+D6GBgyg8Xbx8/mFJdZH0sfBrb5jCRSzBPIND9XFqQoFaHoLjqT8YKmPVaCstHHce+gR2gEJoA5ChUH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 3b19a6b6961511f1aa26b74ffac11d73-20260812
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:cc0e9d0c-cbe1-4a00-ae79-da92e2574f2b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:e0b1da1e1504cbe08f4fc76ed1ab7f4e,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
+	50,EDM:-3|-100,IP:nil,URL:1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,
+	OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 3b19a6b6961511f1aa26b74ffac11d73-20260812
+X-User: jiangfeng@kylinos.cn
+Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 338694543; Wed, 12 Aug 2026 14:15:35 +0800
+From: Feng Jiang <jiangfeng@kylinos.cn>
+Subject: [bpf-next PATCH 0/2] bpf, riscv: Add BPF stack arguments support
+ for RV64 JIT
+Date: Wed, 12 Aug 2026 06:15:31 +0000
+Message-Id: <20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR08MB9203:EE_|DBAPR08MB5592:EE_|AMS1EPF00000094:EE_|AS8PR08MB6552:EE_
-X-MS-Office365-Filtering-Correlation-Id: c0672974-8df1-47a6-0cbd-08def83393c7
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|23010399003|11063799006|56012099006|10067099003|6133799003|17002099007|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info-Original:
- k5rAViUxukr0xE5Of55APcDjUzRnc12LCWQ8/udH4rmcSiY8jhpXsLkep35Xc5kDYheq27b8ln3v2hBbXL1co8QySXFl9t9UIa0bh50ULN+SOcRThO32rQIqTgMe8yypF18xRBo379OSshiKoc/JNOeRdFBQdRynZvuiGg77Y+r/bQrpRErb6KCxFKz6CxWorqkjUNSYFXjVeUTmP2uyGTA2AhR9mCu//BKG78rb5FJNvsO5HNBC6OTTI11MWWDeyt0dQdrhVSBnlZgjeJYIrrWSxrfQbWNKbBn741nzv24aAOF9VYpIpdZV2wyQkDRAc7RvPO3XAF4dyYn8Ue2ucpYkNRqWlZk3m7OcoNGAQ31UF1hOASxcdwzAqf1oCjicahA8CLU5fsnDzq9dRmS1ahnKQfwDDnA+Uz7tq75RLBgFLoOF8P5hSwdGbbiuunlzirHEXPZ/VeHJNm3QInBEH/iw7r2I+bAaD+aWbw9e0++Nsuc9oZ5e1v8bfZpktxtRpUo8gxdLnUo+eIPDZq2zFtzyOM0rq+ltZ39q86Os26h2SRXXiDBe/FTTv56yOKdGuCSpFmjLFrHupTUs0kKxEkU3bXF3rbWHwGAK7b/bcH88I2o7Uur1am24cCgNm6VKF59Mm+dmQXWGEYwfxRad1F083nb0eHN3OTQVSJWEX00=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(23010399003)(11063799006)(56012099006)(10067099003)(6133799003)(17002099007)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-Exchange-RoutingPolicyChecked:
- NNV6Eee3ZJ8DV0AVTtBmGuOoWmNXHDY/nfK7iw+weDfGqFC9CL/M4aRy3o/M2BpADkIf+mYF97eR5nSAR+3rKAydgL8No4JH6uVPn+8+CZRJEjEy7bzQX5B8cHqjQwmdYW3QUB6axivrPuCwPlGmkQNdX2PbFARCXaWn2j8Z1fDlXpUMK5mgtrV2Tei5txnqlJsvCEpMqEF5iqW6EgCCqAyjI5tJzqfV9bPm4XQKqIJmiYXUc0uhgNK4mBzgfYrRansBainfAxRnbypGz+2pxhB+TvZwACH0In12imK6EQxhlWuQ3WEMSKZaKcod19bFO7B6B4sp01gxhunErM5Ugg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBAPR08MB5592
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- AMS1EPF00000094.eurprd05.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	bfc9da56-4308-47fc-eceb-08def8337f19
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|82310400026|23010399003|35042699022|1800799024|7416014|376014|14060799003|10067099003|11063799006|6133799003|56012099006|13003099007|17002099007|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	gWyFqg8mA5joLLMWCeCWR/ktiOXksrJdo/ILXSrlQc5TF5dk8rrq5VgDOcZp3adgXEiuAjuJZAtm4c2eUid7lbNRC5AsjM63ckV7NFO7Auqo0A1WOjFktg20Kg4GE3AZ7ISCJ2ItS35cyGhkrc39UaC6W4FIktOJkFVh/VRogthcLvVeQxVfchXH1+oGA+rgR0pemP+3lkszlItc6h8ni+wTMUVWbMl8toMzvREcjKTe4mpZEWRroUScEb6FidVAmyhd2A2hjEhljGV+9dsyyJkGywX02Wza7Z0IC3xbSaNTI5i/CNfqSVOPeVgejhPN3a+2/CH2pV8l5Rqzu/cp+0z0/k3JQa4LZE8PHxMSxnSGHZ0ZCg+mj1NExGnOylK9c7e636UX3N+wf7vfuLnNJ8ukO59yfDabfgEnUt2TCYlfX787ccEJQHWoCiS++ENA7GAuKC171tsPgYVrw3apw2s/Nb1eKF2sN4M0rPglM2/8RQq4YUFlTBtwrFJN8/fwDxUpf28bUMzDgXjk7cHrkKEa+XVl9Vn9NEhwz9cMVbjhlI7TvMgM/nqyxs8j8GR9QVQ9oolwp9NnLBrPXXM0WW4gfBzBS8s24SPB8nY+DMRnWiM202BDO7JARIF3ngYLnKKy27VdZquCSlIWj4V/WGpSb6djYHvnJT8VAZJFOU8krhiIyOB2TMuwA48DA0yPecYAGVTvYpdWmISvxpN84Q==
-X-Forefront-Antispam-Report:
-	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(82310400026)(23010399003)(35042699022)(1800799024)(7416014)(376014)(14060799003)(10067099003)(11063799006)(6133799003)(56012099006)(13003099007)(17002099007)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	OydCL5AfBnZm1JR5BBLOUJ9et8qnXCOqr18hfsO5RrttRv3iSN1WDzO76baCfU0Bdn8m4EQwtorzK4IlCOMytGGv2VfQJK80VW2HGC4ZNQWD1T1raK+OhETUhp0TN951zH1T9CfGkvdLBREN9sQ/gEIawZko567bVUakmcizkcG2qBVC9ZvdIDWFjeAp2IVw1boJFLuzZxl6LwsH9WKJRlNARyGTonLKxZviF3OsoB3Qx7oQp4+y5AaM3kU1VQa0T2NtZxg3mxrLvjL3xwu+NSh87RrbbBj3ZF79q2xf5+O1kw25VrnmCAVItWXAmPDk0o2IXNjVHu8RsuswtfTwqlkkH6Zl6LoRa4RQfa/G5kcnvcRwns0gGAKQj2lISpKLdTHxyzymxxmfQJwsS8DRi866pgXSbC3WA5HLt6YCJI+ZMmjuh8zI6FcfU7U/S9tL
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Aug 2026 05:35:53.8597
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c0672974-8df1-47a6-0cbd-08def83393c7
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	AMS1EPF00000094.eurprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB6552
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAIMPfGoC/x3MSwqFMAxA0a1IxgZqH9bPVuQNao0ahCqJiCDu3
+ erwDs69QEmYFNrsAqGDldeYosgzCLOPEyEPqcEa60xla+y3EYU1HKi7Dwt6mRTdrzSDcc4X1EC
+ im9DI57ft4BWRzh3+9/0ApXbOk3AAAAA=
+X-Change-ID: 20260728-bpf-riscv-stack-args-6350d066a1e9
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-Hi Mike!
+Port the BPF stack argument feature (BPF_REG_PARAMS / r11) to the
+RV64 JIT, matching what x86 and arm64 already do.
 
-On 8/9/26 1:33 PM, Mike Rapoport (Microsoft) wrote:
-> Commit 49a4e7186b08 ("selftests/mm: thuge-gen: add setup of HugeTLB pages")
-> changed thuge-gen test to use common functions for reading hugetlb
-> attributes from sysfs, but it missed that the original read_free() function
-> special cased PAGE_SIZE tests.
-> 
-> For PAGE_SIZE tests, failure to read sysfs was ignored and read_free()
-> returned 0.>
-> This allowed test_shmget() to essentially skip the check of how many huge
-> pages was consumed when it ran with PAGE_SIZE.
-> 
-> Commit 3199b0c09efa ("selftests/mm: fix read_file() return value check")
-> fixed the common read_file() to actually return error on failure and this
+BPF-to-BPF calls keep all extra arguments on the stack.  For kfunc
+calls, the JIT loads arguments 6-8 into A5-A7 at the call site to
+satisfy the RISC-V C calling convention.
 
-This commit does not make read_file return an error, it just fixes a
-"read_file() < 0" check, which can never happen since currently
-read_file() never returns a negative number.
+Tested on riscv64 QEMU with LLVM main [1]; BPF-to-BPF and kfunc
+selftests pass.
 
-The patch from my series, "selftests/mm: make file helpers return
-errors" [1], is the one that changes read_file() to return a negative
-errno on failure. It also exposed the same test_shmget() issue and
-caused the CI failure [2]. I also debugged the failure and traced it to
-test_shmget() [3].
+[1] https://github.com/llvm/llvm-project/pull/189060
 
-I was planning to fix this in my next revision, but I will drop that
-change now. :)
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+---
+Feng Jiang (2):
+      bpf, riscv: Add BPF stack arguments support for RV64 JIT
+      selftests/bpf: Enable stack argument tests for riscv
 
-Rest the change looks good, so:
+ arch/riscv/net/bpf_jit.h                           |  1 +
+ arch/riscv/net/bpf_jit_comp64.c                    | 75 +++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_core.c                      |  4 ++
+ .../selftests/bpf/progs/btf__stack_arg_precision.c |  2 +-
+ .../bpf/progs/btf__verifier_stack_arg_order.c      |  2 +-
+ tools/testing/selftests/bpf/progs/exceptions.c     |  2 +-
+ tools/testing/selftests/bpf/progs/stack_arg.c      |  2 +-
+ .../testing/selftests/bpf/progs/stack_arg_kfunc.c  |  2 +-
+ .../selftests/bpf/progs/stack_arg_precision.c      |  2 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c       |  2 +-
+ .../selftests/bpf/progs/verifier_stack_arg_order.c |  2 +-
+ 11 files changed, 85 insertions(+), 11 deletions(-)
+---
+base-commit: d114bb98936770c501c958bf2bc5fb6b7c0bad7b
+change-id: 20260728-bpf-riscv-stack-args-6350d066a1e9
 
-Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+Best regards,
+-- 
+Feng Jiang <jiangfeng@kylinos.cn>
 
-[1]
-https://lore.kernel.org/all/20260730140825.238130-2-sarthak.sharma@arm.com/
-[2]
-https://github.com/linux-mm/linux-mm/actions/runs/30553882784/job/90909219578
-
-[3]
-https://lore.kernel.org/all/9eb7852a-c14f-4bbc-86dc-4775f882fe27@arm.com/
