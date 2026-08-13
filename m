@@ -1,142 +1,223 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B2233F8B4
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 03:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 728B5343896
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 03:26:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786590484; cv=none; b=S2dS9iPnlzE0BzSYSLwL7GLW1dxKGKhprU/W1xrq930jGOLbyf0IZzmVbXBnsMAadq69XXePPkN91Y0QTzCLbwXm0ccqFutGs1d37nxTt0U6c7N25z1vzuQr2bGP3lKRBEMY7epN8ck9l4GJfPz70d+9cRhelJR/Fh7XkxBAIq4=
+	t=1786591592; cv=none; b=CJI2gBHZnsWxQQLO0wqXkQnCZsSPWBXLVzqqURqLtnd1bFqXVqZzylVlTZV8CPocb/wesmPCa4m8Vm3ie2kNJCJ6YQtzV7ziNacDh5DmIsUzjudfExaVZSKIqNgObWzd9e7Igh91reU3bmQPC6fDugBV/5+Hta6Z9fx2IjBB/NY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786590484; c=relaxed/simple;
-	bh=mTfz//S02D+E9NcyVZC2mIxi+/sJfzplMtuwvDmQTqY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GhNMHEQHCCWxr5h1B2MXBXlkArvfKrfG5e3ZRcIaee4hwwuhZ7MLvfTCM6JGapME0wRrdTNmIVrfT/AYDotxi2HZBn0mwrhM34Xo+FffiMLUkL8O7KFJstGF8KfJIzkcz+sQFfya2h6G1MySaPNPNTkMCoxPUFeY2LpBgDEk3ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/1E7ZtX; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1786591592; c=relaxed/simple;
+	bh=X0pHP4S2OsRNcX4/HbKprcP2h56QDiwvZLsJATuwvS4=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=gMLT8nbNbcluAkKcrHzrb6E85zjBO1SdTCJe0Xe9HGfnzUJBRDy3GEWxQjweVTsxTPtrK+Kh+/Z0rEjpbUVyi4GDJDpLDfOMAcxJGH3zqTg/NcazlFokaceeWYZ/ifOmYvLLtxDlZyzz4431UZmMveg7Y0uuFIXc8s5UvJ6R0Ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OyGzc+CZ; arc=none smtp.client-ip=74.125.225.137
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/1E7ZtX"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2ce87c7e3bbso22974865ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 20:08:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OyGzc+CZ"
+Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so6598075e9.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 20:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786590482; x=1787195282; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SXT+TFtZILC9kput4/TKXz12rDzU5NmQQ01pk2ZkiiM=;
-        b=c/1E7ZtXhTxAU7LBzJ/jc6CV3MntOLb6efK1YKAxvzqWzCJ9gsngiwiQML9eJ/UUlK
-         +IBYINDtt4Z5KVmB1WToHAjrHomB1I5W3QTS/4p0FiYVIpOjrktGWHywE+VnHiAHztzI
-         RP9WBOpWUba3p2oiakG+R5NVEicONAR8SNQ78V8IsXpHjVtZXnjPBVHNjaxiGxYmiefA
-         WAT2o6rkU7VR90YhvYWMNY0VzBlQWay7Gu47rKmQz2NnM7ADDT1DuCKnWzDQSSXUUGY1
-         VgYTu/id6m+GDBSigDfQYXK7RhuOVkt8qn5u99o0OB9XVrhlnp99i4OXrzfd+zSZlIet
-         KbtQ==
+        d=gmail.com; s=20251104; t=1786591589; x=1787196389; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=glE18fTWGFGOtieGZ/t9cUibr9Ip5396IdYy4itNJLM=;
+        b=OyGzc+CZYyaigbVJVAELJ3hPfH3bFkcydqDPyzVpDTLspUl9dMB92tfymlwohqKazP
+         Ug4Yd+yHsVtYxlyNDZHc5WvTq8zmOtRitcivDH++cQDCss766gKdtsbTOExoUDZ+Gp2i
+         Mus2HK92AsvmSLPg0i0A1PEhW6M5oJnqFfO/pSc6E68EoWe8mNaQPiyfRMgEeXWYbHoA
+         JfZAkzOb3JMI9H+VUUvKNWw63ss7uMtCTNMu4vxzwDvCweoJFD0Wn5s2wUGn7idjv9Vk
+         BWWwX2VqK/c+Jyv/qvVUWxj38c5KILmrhF4Q2QiqbyQDZMn9oWY4TsvgO+9wqT7lDTbz
+         KD6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786590482; x=1787195282;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=SXT+TFtZILC9kput4/TKXz12rDzU5NmQQ01pk2ZkiiM=;
-        b=Fqr2f9Cb0Zwvdo+0hkdhx4qoMHhT1Bwoiq6fSa0DgJGTKS3KFMFQ/N2zt1HGXJWCx0
-         4De2bREjneuR83NeUtpz/SK0mNbxsceGF3DDage+fl7n/5wIIuZQE3vPScejzpfGgdu5
-         YphNwyxoU4mUuOM5jijlYk5xm171O4bMLjV7tZxXE+b7RyjoPC/EAsYceP/8VdezTk5j
-         sT0bDAtd9rv+bYQuJsoAfdJURWX1y3ZZefry6L5KeJywCzEl8DoLY9iL0iNwkvjTy56N
-         ylkOq+xK0Lk0G5b8R5Tl0GPNjvZ6Eg3MXBjEaa5D73sdYlnkY8CpvRFWu8bEd0bq/2uf
-         4wOA==
-X-Forwarded-Encrypted: i=1; AHgh+RoKo/K2Bd2EL5ybUaM1k6e3U6835SMtIjihq4JzbngcIIOrsBeIBf4UC6dQXFD/KMpwdhIh5TkARObxUsCrptk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXYzrLBlmOt3Ll98LIzeIXtJw47bgVMIGApQ1fiUphpFFgSjML
-	bWQ0wa+Ak0nbJHBvuMBObH6XetoqUkSToMJGP7ufdBj1Kq8TWcPK5HO1
-X-Gm-Gg: AR+sD10mHIjIj5L9t9t9znz5XbVfpbD62HD8mUrfhiRROLgP/Vxfk7bJRp+3cdCqHN6
-	Do9D+/2fogA2iQ2hW5I+1M690O6LTnJdVC2/x5iD7+6pYHjNYN7GfM8ME6Tg0dqWDnIPA0/q/Zu
-	JGaictW42sY6HM3qxAqpPD33KmqYBInu5f91fRC2vXWC3W2n1h1puVZFqId4a9z1/FCHsaCFr1w
-	w6cZIQQDqcR70R8/+1YzMhRJDxIhOJJ/Cjo13uMUzRcaUd8eC3fGl3tlxaOgvxdsdk0kXZUOz4g
-	xu49iiTBFm1JLVW+i+gN80eccBtpSyg1ob9jxpgrnzqFftfjWExexdVjh9T0GgKcNQTV/h2iID2
-	QowsM5pAmAvI53g71hYqxjOqlaBRAkZdXoIQTDeO+EOhtMQnJ659FU1VjOde06JQYCJhW+LRvpH
-	AwamNDWFALu4+yf0fSQYIVi5mbDCjplwD6Z2mQ4Lvg4fSmRVyEGMGR5GLQHa8Q8PpDJvrKvobL+
-	Kxg7P8vvNOwW/GI+w==
-X-Received: by 2002:a05:6a21:7002:b0:3cb:eca6:ce5 with SMTP id adf61e73a8af0-3cc5539af60mr3994167637.24.1786590482312;
-        Wed, 12 Aug 2026 20:08:02 -0700 (PDT)
-Received: from sdklog.tvstore.opera.com ([2804:1b3:a8c0:46f0:6d62:6c3f:1af0:ff3c])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-31ebf731f95sm2249048eec.15.2026.08.12.20.07.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 20:08:01 -0700 (PDT)
-From: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	=?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-actions@lists.infradead.org
-Cc: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
-Subject: [PATCH net-next] selftests: net: separate ipv6_flowlabel_mgr test
-Date: Thu, 13 Aug 2026 00:07:05 -0300
-Message-ID: <20260813030708.37609-1-marcelomspessoto@gmail.com>
-X-Mailer: git-send-email 2.55.0
+        d=1e100.net; s=20251104; t=1786591589; x=1787196389;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=glE18fTWGFGOtieGZ/t9cUibr9Ip5396IdYy4itNJLM=;
+        b=eqMgIuO63dQRNmC948QyjfXPeYB1124Jr6UiaU1NZPzsSXb4RZ9HOqiXofdp3c1uSn
+         17U0ctKnKrIrAIOFEi01zXe++zIXSOn4/E3DApK817lhtoYNpEjDrSolLMRVglE61cXB
+         toneyBmbJXM+KcCApCeGpG7RcE9fNw6SU8nygRbB/Z+eI9P9DAMXdX7MZ/R+kko9KSMs
+         ABZDHCbbd48MYHwppJvTkLz0m/ykDg4v8482TBVDgfWB+Ni0wvhuX03FJlRBb4OdCIgV
+         U6GNoIN+nUBE6itum/ZHM/iKC9npBSw1wGTtwZFu3/Lfy47J0fDWSluIo8mAHoQos+g1
+         jN9Q==
+X-Forwarded-Encrypted: i=1; AHgh+RpyX3e1oYl2mmM/U8oxvohgwJ/ntaZuHWmYd0TizJMLK7BJkKvv+lRgK3xArDxDDej19QMRRFwnWjtIdIoCsd8=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yylv+w5BdYbIsXwG2FNVZDa+kqB9prwltp5p3fv4cDAzsV19pk/
+	Upikzg+MXMuiTjzSNhNeTImmDaDKRKqx5c4tenS7PWp7Irur49S0NxFj
+X-Gm-Gg: AR+sD12wJnkwbFP3QQz9htEAgmcDYgu9/bgQ19nz9eCb27GDro0dv4lm6kZLLaNcO+b
+	5J1es/6DKwahsSjm8gg8P5pjQbMQE/3lr6ilucdzwyvXJchtmhYP7bRyOtfn3OgfQT0NW7Us5Vi
+	BW6wXDVWuooXUrA3gDguYLKlhPpQ4WwVPF6eknZ4JGRrEWckFiMsv7xO/sUE/Ip7O3AO3sa29Zl
+	nBplfkR+sVikwtSgfaFua6eUvpbxdKVRGTedo+J46UYjJtfpB6STH9b+A0sQRaaC6vA+xjd4JCO
+	pfyHNGf/Q8bblncNa1DzqjkA6bdHHSSTDkiWgMABGFInfJxaJQ/URe3SP8qrPBSzaisWS6nfyZg
+	i2n9GJwffnAAEJEZXZirWQwwLrOD53nC/8otcVwXcQnjKCTRnWOQSHm3kXw3f3YoVP6DyiY+UMS
+	drIbr1YDzFnRGYFs9l8nnoOiV3bmO1g36pbXczXD4f+IS74x0Zq6VQeJxfYGelSVSbwu0b6a1++
+	KFlSIpBZuLqM3bHhljfqZLTicja11W8lNvKDGhPHt3hIz6NbsIsFnVatWddaXHrEfxwNRWvC4yf
+	xntosDDDUh/t/OVfnGJwwnAFTzDqtiRq5y4QFg==
+X-Received: by 2002:adf:e008:0:10b0:481:5167:d526 with SMTP id ffacd0b85a97d-48159c8d9f8mr2408652f8f.6.1786591588609;
+        Wed, 12 Aug 2026 20:26:28 -0700 (PDT)
+Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815a569ab3sm2609540f8f.11.2026.08.12.20.26.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Aug 2026 20:26:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Thu, 13 Aug 2026 05:26:26 +0200
+Message-Id: <DKNHV09PBQZP.IRQL20BY574I@gmail.com>
+Cc: "Hui Zhu" <zhuhui@kylinos.cn>
+Subject: Re: [PATCH bpf-next 2/4] bpf: add bpf_thread_wq kthread-backed
+ workqueue with cgroup placement
+From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
+To: "Hui Zhu" <hui.zhu@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
+ "Michal Hocko" <mhocko@kernel.org>, "Roman Gushchin"
+ <roman.gushchin@linux.dev>, "Shakeel Butt" <shakeel.butt@linux.dev>,
+ "Muchun Song" <muchun.song@linux.dev>, "JP Kobryn"
+ <inwardvessel@gmail.com>, "Andrew Morton" <akpm@linux-foundation.org>,
+ "Shuah Khan" <shuah@kernel.org>, <davem@davemloft.net>, "Jakub Kicinski"
+ <kuba@kernel.org>, "Jesper Dangaard Brouer" <hawk@kernel.org>, "Stanislav
+ Fomichev" <sdf@fomichev.me>, "KP Singh" <kpsingh@kernel.org>, "Tao Chen"
+ <chen.dylane@linux.dev>, "Mykyta Yatsenko" <yatsenko@meta.com>, "Leon
+ Hwang" <leon.hwang@linux.dev>, "Anton Protopopov"
+ <a.s.protopopov@gmail.com>, "Amery Hung" <ameryhung@gmail.com>, "Tobias
+ Klauser" <tklauser@distanz.ch>, "Eyal Birger" <eyal.birger@gmail.com>,
+ "Rong Tao" <rongtao@cestc.cn>, "Hao Luo" <haoluo@google.com>, "Peter
+ Zijlstra" <peterz@infradead.org>, "Miguel Ojeda" <ojeda@kernel.org>,
+ "Nathan Chancellor" <nathan@kernel.org>, "Kees Cook" <kees@kernel.org>,
+ "Tejun Heo" <tj@kernel.org>, "Jeff Xu" <jeffxu@chromium.org>,
+ <mkoutny@suse.com>, "Jan Hendrik Farr" <kernel@jfarr.cc>, "Christian
+ Brauner" <brauner@kernel.org>, "Randy Dunlap" <rdunlap@infradead.org>,
+ "Brian Gerst" <brgerst@gmail.com>, "Masahiro Yamada"
+ <masahiroy@kernel.org>, "Willem de Bruijn" <willemb@google.com>, "Jason
+ Xing" <kerneljasonxing@gmail.com>, "Paul Chaignon"
+ <paul.chaignon@gmail.com>, "Lance Yang" <lance.yang@linux.dev>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Emil Tsalapatis" <emil@etsalapatis.com>,
+ "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Barry Song"
+ <baohua@kernel.org>, "Geliang Tang" <geliang@kernel.org>,
+ <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+ <cgroups@vger.kernel.org>, <linux-mm@kvack.org>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>
+X-Mailer: aerc 0.21.0
+References: <cover.1786086076.git.zhuhui@kylinos.cn>
+ <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
+In-Reply-To: <cfb06f2626062fa60efbbd9d34089819b1a34522.1786086076.git.zhuhui@kylinos.cn>
 
-The ipv6_flowlabel_mgr used to be a component of a broader overall
-flow label test, defined in the ipv6_flowlabel.sh file. This wrapper
-script called tests defined on ipv6_flowlabel.c and
-ipv6_flowlabel_mgr.c files, using predefined parameters and enforcing
-the in_netns.sh helper to set network namespaces for each test env.
+On Fri Aug 7, 2026 at 9:01 AM CEST, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+>
+> Introduce bpf_thread_wq, a new BPF embedded map field similar to
+> bpf_wq but backed by a dedicated kthread_worker instead of a system
+> workqueue. The worker kthread can be attached to a specific cgroup at
+> init time so BPF-deferred callbacks run under the resource limits of
+> the target cgroup.
+>
+> Three kfuncs are exposed:
+>   bpf_thread_wq_init(twq, map, cgroup_id, flags)   [KF_SLEEPABLE]
+>   bpf_thread_wq_set_callback(twq, cb, flags, aux)
+>   bpf_thread_wq_start(twq, flags)
+>
+> bpf_thread_wq_init() is registered only for BPF_PROG_TYPE_SYSCALL
+> programs. It creates a kthread worker and may attach it to a cgroup;
+> those paths can sleep and acquire kthread and cgroup locks. Restricting
+> init to syscall programs prevents it from running in BPF contexts that
+> may already hold locks which could deadlock with those paths.
+>
+> bpf_thread_wq intentionally avoids the bpf_async infrastructure used by
+> bpf_timer and bpf_wq. That infrastructure drives cleanup from irq_work
+> in hardirq context, while bpf_thread_wq cancellation and final teardown
+> may need to sleep through kthread_cancel_work_sync(),
+> kthread_destroy_worker() and a final cgroup_put().
+> bpf_thread_wq_cancel_and_free() therefore cancels work synchronously and
+> drops the context reference; the last put waits for tasks-trace RCU
+> readers and then schedules process-context work to run bpf_prog_put(),
+> cgroup_put(), kthread_destroy_worker() and kfree().
+>
+> Add BTF/map support for bpf_thread_wq fields, map teardown hooks,
+> verifier handling for the callback kfunc, and cgroup_kthread_attach() to
+> move the worker into the requested cgroup.
+>
+> Supported map types are BPF_MAP_TYPE_HASH, BPF_MAP_TYPE_LRU_HASH, and
+> BPF_MAP_TYPE_ARRAY, consistent with bpf_wq and bpf_task_work.
+>
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
 
-However, the ipv6_flowlabel_mgr.c was drastically changed recently.
-These modifications led to the mgr tests becoming a self contained and
-independent test suite, enforcing netns creation by itself and
-not relying on the ipv6_flowlabel.sh wrapper for proper test execution
-anymore. Therefore, remove the mgr tests from the wrapper and update
-the Makefile to handle it as a standalone test program instead.
+Hi Hui,
 
-Signed-off-by: Marcelo Mendes Spessoto Junior <marcelomspessoto@gmail.com>
----
- tools/testing/selftests/net/Makefile          | 2 +-
- tools/testing/selftests/net/ipv6_flowlabel.sh | 3 ---
- 2 files changed, 1 insertion(+), 4 deletions(-)
+Thanks for sharing the patches. I think Sashiko and Mykyta already pointed =
+out a
+couple of issues with the current implementation, but I would like to comme=
+nt on
+the higher-level approach.
 
-diff --git a/tools/testing/selftests/net/Makefile b/tools/testing/selftests/net/Makefile
-index ab890e6f79dd..0f5c178bc224 100644
---- a/tools/testing/selftests/net/Makefile
-+++ b/tools/testing/selftests/net/Makefile
-@@ -150,7 +150,6 @@ TEST_GEN_FILES := \
- 	ip_local_port_range \
- 	ipsec \
- 	ipv6_flowlabel \
--	ipv6_flowlabel_mgr \
- 	msg_zerocopy \
- 	nettest \
- 	psock_fanout \
-@@ -183,6 +182,7 @@ TEST_GEN_PROGS := \
- 	epoll_busy_poll \
- 	getsockopt_iter \
- 	icmp_rfc4884 \
-+	ipv6_flowlabel_mgr \
- 	ipv6_fragmentation \
- 	proc_net_pktgen \
- 	reuseaddr_conflict \
-diff --git a/tools/testing/selftests/net/ipv6_flowlabel.sh b/tools/testing/selftests/net/ipv6_flowlabel.sh
-index 2eeda39bf64c..5d1b5464c54c 100755
---- a/tools/testing/selftests/net/ipv6_flowlabel.sh
-+++ b/tools/testing/selftests/net/ipv6_flowlabel.sh
-@@ -7,9 +7,6 @@
- 
- set -e
- 
--echo "TEST management"
--./ipv6_flowlabel_mgr
--
- echo "TEST datapath"
- ./in_netns.sh \
-   sh -c 'sysctl -q -w net.ipv6.auto_flowlabels=0 && ./ipv6_flowlabel -l 1'
--- 
-2.55.0
+If I understood the past discussions and current set correctly, the reason =
+for
+your choice to move from bpf_wq to bpf_thread_wq was primarily to enable co=
+rrect
+CPU accounting of the work done by threads to specific cgroups.
 
+I think this is a step in the right direction, but looking at the bigger
+picture, I feel we need a more flexible solution.
+
+In practice, users deciding to do async reclaim through such a BPF interfac=
+e
+would want to scale and compact the number of threads doing reclaim-related=
+ work
+dynamically, based on available idle resources, but also application-specif=
+ic
+metrics, and I do not think the bpf_thread_wq abstraction provides enough
+flexibility in managing work scheduling related aspects precisely.
+
+What we probably should expose is the ability for programs to manage their =
+own
+wait queues and subscribe kthreads managed by BPF programs dynamically to t=
+hem.
+User-defined policies can dictate how many threads remain active, whether t=
+hey
+busy poll, and when they go to sleep, completely under the program's contro=
+l.
+
+Looking beyond this particular example, there are cases where work is stash=
+ed in
+queues, and threads draw items from the pool and process them. In such case=
+s
+having flexibility in deciding the mapping between threads and queues is al=
+so
+important. We want to thus allow management of the work item queues from th=
+e
+program itself, and not hide it behind the API to offer the desired level o=
+f
+control.  The order in which items are ranked in individual queues, and the
+order in which queues are processed horizontally by threads is also a desir=
+able
+property.
+
+Correctly associating the BPF-managed kthread to a cgroup should still be
+possible in a manner similar to what you did in this set. But the amount of
+control programs can exert over how work is scheduled and the level of
+concurrency will be much higher if we disaggregate and generalize each part=
+ of
+the picture (wait queues, kthreads, and work item queues, which can be
+implemented in BPF itself).
+
+I am not aware of ways to back charge time spent to remote cgroups, but if
+desired we could also explore that option when a single thread does work on
+behalf of multiple cgroups. It is something to be explored.
+
+I've been working on related patches, and will post RFC set for bpf_kthread=
+ and
+bpf_waitq management in due time.  Until then I recommend that you continue
+experimenting with the existing async execution primitives for now.
+
+> [...]
