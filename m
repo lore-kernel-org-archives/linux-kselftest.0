@@ -1,193 +1,119 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1922642F702;
-	Thu, 13 Aug 2026 06:56:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680C42C0296;
+	Thu, 13 Aug 2026 07:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786604191; cv=none; b=UPfU/keSsThGkaShUdtA294MKFnxuhjvECinhjk/FZCVNm3Be1n22zFl819MWKAefMNzq073MgXBJQ3FP3k7VXMhfeD3NEUHMwnLxZWJml3m0wt+HlSR+LZ5VEVzZFgqtqGVyvGN4Pmx9CrGr5aMcFgNK6DPino9m13WsSv602w=
+	t=1786605552; cv=none; b=NaG9dkxMf8lxv6Xds9we0Xno6Ba2ER7sku9j/80s99AnSn0I+a9NATVuWxCBXsjTGL5zOnxwOqNNIQWUf9TH7ZhFl6JSlykiS2PatpD1HmVB3F8va/B7i+CU7RUkUojDu/x2S650XEfwB1xq5jy7Dk1bn0IcuErXQYBMRmbHCN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786604191; c=relaxed/simple;
-	bh=EiRUT7eibLcdH0tOQiOYhPqjIQxyxShzLvniKf9KyN0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lrErwSUz+inmbBN7aQytfeOC/+3GPPHFB4vW7spnYexe3qCCZNp9P8sWI4CmYXU0XX4eS/w3htRCyXuqLMMUn4bDgyeSxccMO9Gq7F8x5wPkIi+vPpT5VqC2EQQDzCfJoQ75g1WjmOnP7pu2dPUo57NtN/bsbIkrAPYMOJ0Ia8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DcUSMufw; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DcUSMufw"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786604190; x=1818140190;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=EiRUT7eibLcdH0tOQiOYhPqjIQxyxShzLvniKf9KyN0=;
-  b=DcUSMufwNz+PqSYYqon6wSY5/VjfeChHGQXmwYoKYBh8Gq/gJ7yjtmBu
-   Rv4sdZFiAz4zJSUdftQx8GwX1aqM/GDbvtgp8x4f+vf4pMLn2MQoGj6ng
-   WzQtELWbFYyhH23sAENDUh8rbBMidu3fV61vuFCmqKsdG2OLrOKZ0EUSy
-   R2HYLu3xF01GugRrqv/sW17Xg23h5lrNiJLY0L4WdeQx8rK2twPXv5WFg
-   eKDFQXY0EnLBL3TrIFKQiZiX8Yl1xhVzLjMrtyLrapazUXwo2TXx5moZy
-   R9U/KyitPKRoWuXYZevkGtx9g1TF0/zsF3GPmrz/FvD7Fwwa6vLnxyLaz
-   A==;
-X-CSE-ConnectionGUID: GhMaEBwOTG+85KdnOVhNkw==
-X-CSE-MsgGUID: YMbghMO9ShyDNeycten64g==
-X-IronPort-AV: E=McAfee;i="6800,10657,11873"; a="86290007"
-X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
-   d="scan'208";a="86290007"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:56:28 -0700
-X-CSE-ConnectionGUID: G3H/IDqNR/ShOWEVvKkhtw==
-X-CSE-MsgGUID: hHyHwXdWQJSEvzpnZYeIQg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,220,1779174000"; 
-   d="scan'208";a="265841672"
-Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2026 23:56:14 -0700
-Message-ID: <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com>
-Date: Thu, 13 Aug 2026 14:56:12 +0800
+	s=arc-20240116; t=1786605552; c=relaxed/simple;
+	bh=EC2zwG7oxy7+WlUSa2EaNA8dq4681GIh0Wx7RdB1omo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jhJCdvTwIsn4MfP6Bmc7P0y4WzBBtMkerWVdKc1iSdAko4AliLtLdf4QXI/0P4+sp+K3UH4pFfkLhDf/LrnG5A4lTzdsfgRXDJIBROeAZmYc6ra3rwUuyacUiCl/Hh3GByPH9p6IkWtX/zMktEQV3QcFNRB4nMxfmCvp8ifA7lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 42fea39a96e711f1aa26b74ffac11d73-20260813
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:dd3d0fa6-05d4-4335-91f5-8acd60f9a65b,IP:0,U
+	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:0
+X-CID-META: VersionHash:e7bac3a,CLOUDID:7e3bd00aa8c0169534ba9e0b3707b2b6,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|136|850|865|898,TC:nil,Content:0|15|
+	50,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL
+	:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_ULS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 42fea39a96e711f1aa26b74ffac11d73-20260813
+X-User: jiangfeng@kylinos.cn
+Received: from [127.0.0.1] [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <jiangfeng@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1969336531; Thu, 13 Aug 2026 15:19:03 +0800
+From: Feng Jiang <jiangfeng@kylinos.cn>
+Subject: [PATCH bpf-next v2 0/2] bpf, riscv: Add BPF stack arguments
+ support for RV64 JIT
+Date: Thu, 13 Aug 2026 07:18:41 +0000
+Message-Id: <20260813-bpf-riscv-stack-args-v2-0-efea8f9b3fe1@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
- callback for to-shared conversion
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev,
- Fuad Tabba <fuad.tabba@linux.dev>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIANFvfWoC/22NQQ6CMBBFr0Jm7Zi2SgFX3sOwKHWABlNIhzQQw
+ t2tXbt8+XnvH8AUHDE8igMCRcdu9gnUpQA7Gj8QundiUEJpUakau6XH4NhG5NXYCU0YGPWtFG+
+ htZHUQFKXQL3bcvYFP8PTtkKbltHxOoc9/0WZ95yupfqfjhIF6qpTd10LTWXznPaP8zNfrYf2P
+ M8vaECiVsMAAAA=
+X-Change-ID: 20260728-bpf-riscv-stack-args-6350d066a1e9
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, 
+ Luke Nelson <luke.r.nels@gmail.com>, Xi Wang <xi.wang@gmail.com>, 
+ =?utf-8?q?Bj=C3=B6rn_T=C3=B6pel?= <bjorn@kernel.org>, 
+ Pu Lehui <pulehui@huawei.com>, Puranjay Mohan <puranjay@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Shuah Khan <shuah@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ llvm@lists.linux.dev, Feng Jiang <jiangfeng@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> When memory in guest_memfd is converted from private to shared, the
-> platform-specific state associated with the guest-private pages must be
-> invalidated or cleaned up.
-> 
-> Iterate over the folios in the affected range and call the
-> kvm_arch_gmem_make_shared() hook for each PFN range. This allows
-> architectures to update hardware metadata or encryption states to
-> transition pages to the shared state.
-> 
-> Invoke this helper after indicating to KVM's mmu code that an invalidation
-> is in progress to stop in-flight page faults from succeeding.
-> 
-> Omit support for calling the arch hook to make private, since SNP, the only
-> implementer of the arch make-private hook today, would actually prefer
-> making private only just before faulting memory into the NPTs.
-> 
-> Calling the make-private arch hook would require iterating both bindings
-> and the filemap to find the intersection of bindings and allocated
-> folios. On top of that, SNP would need to figure out whether to actually
-> make private based on whether the memory is about the be faulted, or
-                                                     ^
-the -> to?
+Port the BPF stack argument feature (BPF_REG_PARAMS / r11) to the
+RV64 JIT, matching what x86 and arm64 already do.
 
-> whether it is a conversion.
-> 
+BPF-to-BPF calls keep all extra arguments on the stack.  For kfunc
+calls, the JIT loads arguments 6-8 into A5-A7 at the call site to
+satisfy the RISC-V C calling convention.
 
-[...]
+Tested on riscv64 QEMU with LLVM main [1]; BPF-to-BPF and kfunc
+selftests pass.
 
->  
-> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
-> +{
-> +	struct folio_batch fbatch;
-> +	pgoff_t next = start;
-> +	int i;
-> +
-> +	folio_batch_init(&fbatch);
-> +	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
-> +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-> +			struct folio *folio = fbatch.folios[i];
-> +			pgoff_t start_index, end_index;
-> +			kvm_pfn_t start_pfn;
-> +			kvm_pfn_t nr_pages;
-> +
-> +			start_index = max(start, folio->index);
-> +			end_index = min(end, folio_next_index(folio));
-> +			/*
-> +			 * end_index is either in folio or points to
-> +			 * the first page of the next folio. Hence,
-> +			 * all pages in range [start_index, end_index)
-> +			 * are contiguous.
-> +			 */
-> +			start_pfn = folio_file_pfn(folio, start_index);
-> +			nr_pages = end_index - start_index;
-> +
-> +			kvm_arch_gmem_make_shared(start_pfn, nr_pages);
-> +		}
-> +
-> +		folio_batch_release(&fbatch);
-> +		cond_resched();
-> +	}
-> +}
-> +#else
-> +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end) {}
-> +#endif
-> +
->  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
->  				     size_t nr_pages, uint64_t attrs,
->  				     pgoff_t *err_index)
-> @@ -599,7 +636,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
->  
->  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
->  	kvm_gmem_invalidate_start(inode, start, end, filter);
-> +
-> +	if (!to_private)
-> +		kvm_gmem_make_shared(inode, start, end);
+[1] https://github.com/llvm/llvm-project/pull/189060
 
-If both KVM_AMD_SEV and KVM_INTEL_TDX are enabled, HAVE_KVM_ARCH_GMEM_CONVERT
-will be enabled and the logic in kvm_gmem_make_shared() introduces unnecessary
-overhead for TDX.
-Not sure about CSPs, but in a standard distribution kernel, it's very likely
-that both are enabled, right？ Should kvm_gmem_make_shared() do some
-optimization or the overhead is relative small in the conversion to shared
-path so that the optimization is not worth it? 
+Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
+---
+Changes in v2:
+- Sign-extend 32-bit kfunc arguments passed on the stack (args 9+),
+  matching the register path and the RISC-V psABI. (Sashiko)
+- Restrict the riscv selftest guard to __riscv_xlen == 64 so the
+  tests are not enabled on RV32. (Sashiko)
+- Link to v1: https://lore.kernel.org/r/20260812-bpf-riscv-stack-args-v1-0-67b246806e59@kylinos.cn
 
+---
+Feng Jiang (2):
+      bpf, riscv: Add BPF stack arguments support for RV64 JIT
+      selftests/bpf: Enable stack argument tests for RV64
 
-> +
->  	mas_store_prealloc(&mas, xa_mk_value(attrs));
-> +
->  	kvm_gmem_invalidate_end(inode, start, end);
->  out:
->  	filemap_invalidate_unlock(mapping);
-> 
+ arch/riscv/net/bpf_jit.h                           |  1 +
+ arch/riscv/net/bpf_jit_comp64.c                    | 79 +++++++++++++++++++++-
+ arch/riscv/net/bpf_jit_core.c                      |  4 ++
+ .../selftests/bpf/progs/btf__stack_arg_precision.c |  3 +-
+ .../bpf/progs/btf__verifier_stack_arg_order.c      |  3 +-
+ tools/testing/selftests/bpf/progs/exceptions.c     |  5 +-
+ tools/testing/selftests/bpf/progs/stack_arg.c      |  3 +-
+ .../testing/selftests/bpf/progs/stack_arg_kfunc.c  |  3 +-
+ .../selftests/bpf/progs/stack_arg_precision.c      |  3 +-
+ .../selftests/bpf/progs/verifier_stack_arg.c       |  3 +-
+ .../selftests/bpf/progs/verifier_stack_arg_order.c |  3 +-
+ 11 files changed, 98 insertions(+), 12 deletions(-)
+---
+base-commit: d114bb98936770c501c958bf2bc5fb6b7c0bad7b
+change-id: 20260728-bpf-riscv-stack-args-6350d066a1e9
+
+Best regards,
+-- 
+Feng Jiang <jiangfeng@kylinos.cn>
 
