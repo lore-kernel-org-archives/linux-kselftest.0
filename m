@@ -1,85 +1,50 @@
-Received: from DM1PR04CU001.outbound.protection.outlook.com (mail-centralusazon11010055.outbound.protection.outlook.com [52.101.61.55])
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB63A3909B8;
-	Thu, 13 Aug 2026 09:42:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.61.55
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786614143; cv=fail; b=GNp9Yd6ZErWdIQMw131DZvKL9GHwGqOHXqE6MDZyhFuBOOCzelK7AML5V1fl70yank5trEzEIJ8raxwUHYW8dvjZCaANLUddjCmjyH/OxBwSRXvzSE6Nvuop8QDc8ML8kYvnNWBlXMi0ShKSl88Erh2V7r7ucEeSz6/KNdClWeI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786614143; c=relaxed/simple;
-	bh=y25IVD47qzk1Q7r+gU24x9WO89IZWdXPmHpd0stnTS0=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uMq/ke9n1TmEeWQmdWlejJWGHL27TExJplJ1eHAfUaWY3xjt3X5BUErwPFZZzUUHQwYMHFexPU+/+2+SDe4ztFFwZ2iNEZzlfwUan/9XaqYbR9kNhXRFx7GYaEHGDjQQeM+52IJwp40vs366pn7q/B9ef3vE9DbXom2pvvVhmvg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=SqvhHAjz; arc=fail smtp.client-ip=52.101.61.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="SqvhHAjz"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=mtoz9lo0E0bMPfaaQAhSzFDQwFJj3ZS89f6hExBNFzLtKUmXmM2P3Mq4paHaAe9IYDs3aGPAWd48lj+bqTNKz3SWkEp+XOJ943syB6fCbLnv7els7AZ1CosVjIvpCFzzokLbT4Q/P6bGQIjbE1R1lNGH5yBjZCWc+gK669UTj5Jb30RHPmULgEQai+iPm6ae+rIvmKDA8TJ2gdoxOFz5GpiHlp4V+2AQ110iTZXPRWDEDhKmhJxA44y1KxQLnqrxEvb9sQoeWeb1V77nYID05wiIku+FxWuwv1LzchXfmgBuakofA17Bfh5NwKs6o02X9rf8EXtSIJ6ZxkFtohPh9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iq+m0PWDfvVC0TQBd4rkZ1QYOWM/lYTtaIlTTyCE/iQ=;
- b=UoD9NOkDSe4HoyTvzq8Q6zmYeSEJa2LCoNnFxjhJoO/AarwPDcAs+GRX1pUOEetkO4aZ104V/nUNMRKJrsmQJTY9EZG4jnLC6HQw3eyHLo8kvcQxkwEuxQaNUclUzEiTNj6MI1Lu4nYLRJlCuHKsBZeXQgJjM+ja3hvIHJ2zyjRJJsGAyxi7OTLaYbqccft+/YzNHRlMuHtVNDoKR65ROCDacXPpaenQM4EGvo03qhHwwoECwUUR2YZOl7LLlu0QH+res6pmsU3gDoT9Heh7EKpWmJMLbMGtJJwZd6TMGKq4S1j5qoa/Bo4vlEgl3fuD5tzz4v9P7zlplEWaCC8UTA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=shazbot.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=iq+m0PWDfvVC0TQBd4rkZ1QYOWM/lYTtaIlTTyCE/iQ=;
- b=SqvhHAjz5OCD4FOgWNaFo/9rfS5sisOkshJdx0k75wKPc8HEB4L7HFzU6QEC1OJaaXQh+S3F8cixKt6A6fnrcDpEbZYi1zgQM5IzN+OI1JCCD4/gWFZL7WgGh0n/oVP3BULfPg30uw3KCOyz/DR9+f9rfjIg0uvrqA0Tx8l7zTnNOLL9x/RQl4gAu8FmwNhthUaXc4vX2/xhZ4o9lD7Ou/eQsmhnh3NYjZOr6moZG4O3JWFEf0bGDWxTKFgT8z7IDXCu6xytJjI9PkXd4hSTGRUqeq2id0qwYnYkvVtdJBc4SSq0PDWd4NyPjHB+hWquVSZNqr31zQcKmBStAEjXuA==
-Received: from MW4PR03CA0296.namprd03.prod.outlook.com (2603:10b6:303:b5::31)
- by MN6PR12MB8565.namprd12.prod.outlook.com (2603:10b6:208:47d::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Thu, 13 Aug
- 2026 09:40:52 +0000
-Received: from MWH0EPF000C6185.namprd02.prod.outlook.com
- (2603:10b6:303:b5:cafe::24) by MW4PR03CA0296.outlook.office365.com
- (2603:10b6:303:b5::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.14 via Frontend Transport; Thu,
- 13 Aug 2026 09:40:51 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000C6185.mail.protection.outlook.com (10.167.249.117) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.339.3 via Frontend Transport; Thu, 13 Aug 2026 09:40:51 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Thu, 13 Aug
- 2026 02:40:31 -0700
-Received: from nvidia-4028GR-scsim.nvidia.com (10.126.230.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 13 Aug 2026 02:40:22 -0700
-From: <mhonap@nvidia.com>
-To: <alex@shazbot.org>, <jgg@ziepe.ca>, <ankita@nvidia.com>,
-	<jic23@kernel.org>, <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
-	<smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
-	<dave@stgolabs.net>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
-	<yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
-	<bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
-	<gustavoars@kernel.org>
-CC: <cjia@nvidia.com>, <kjaju@nvidia.com>, <vsethi@nvidia.com>,
-	<zhiw@nvidia.com>, <mhonap@nvidia.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Subject: [PATCH v4 21/27] vfio/cxl: Describe the CXL device and decoder geometry to userspace
-Date: Thu, 13 Aug 2026 15:06:25 +0530
-Message-ID: <20260813093631.2288172-22-mhonap@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260813093631.2288172-1-mhonap@nvidia.com>
-References: <20260813093631.2288172-1-mhonap@nvidia.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098FB353EDF;
+	Thu, 13 Aug 2026 09:56:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.243.244.52
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786615008; cv=none; b=Oh+coyQqoYtB83LSTHHvP1M1sFE4mA3VTw3ZpsQY09Twl1oPkep6FahuBYVSB3QVfkpkr0BYC3TrbY9bo+qjiIlmtqKI2Yg3CxJBqcdbXcWpkJc9DFaYaAd0AP18gfppv47ZSopPsvt7uZBXXIfeyxEDYnBieZWlFdmj5T4hsPo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786615008; c=relaxed/simple;
+	bh=UIcKos7kRtXCUP0MPnOTjPlCFzvG2NJu8oDkvOG86vM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=n/AQKTbLNwh+5y4BaX3PmQtOqthY1BWF6FyXhT3WvqG/pnQ1x9B55br7rCQZlec+2Uy4iGBrJ4fhNRhXBZBO7NLZxmG9TmP68Zj7uMeWPf/vC9ulvzZFvzm6rxs4zrcTuqt3ph199s+xZdkSO7jp1ICWvKPiDhNDrjDiaQggYGQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=54.243.244.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=haiwei.tech
+X-QQ-mid: zesmtpgz7t1786614980t0a4c8aa1
+X-QQ-Originating-IP: YI18fi8haOXgFIrcSxG0og0EAUmOcw8WGDWMzEE4JSI=
+Received: from rsl ( [183.242.33.186])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 13 Aug 2026 17:56:17 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 10837892026488473328
+EX-QQ-RecipientCnt: 15
+From: JinRui <jinrui@haiwei.tech>
+To: anup@brainfault.org,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu
+Cc: atish.patra@linux.dev,
+	alex@ghiti.fr,
+	sashiko-bot@kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jinrui@haiwei.tech
+Subject: [PATCH v12] KVM: selftests: riscv: Add lazy V extension enablement for guests
+Date: Thu, 13 Aug 2026 09:56:15 +0000
+Message-ID: <7C0512E558D1614D+20260813095615.3843757-1-jinrui@haiwei.tech>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <EF5308EB97ADC8DE+20260813093751.3817371-1-jinrui@haiwei.tech>
+References: <EF5308EB97ADC8DE+20260813093751.3817371-1-jinrui@haiwei.tech>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,131 +52,249 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C6185:EE_|MN6PR12MB8565:EE_
-X-MS-Office365-Filtering-Correlation-Id: 288d6048-6571-4997-ada4-08def91ef6a4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|7416014|376014|23010399003|82310400026|1800799024|56012099006|10067099003|6133799003|18002099003|22082099003|11063799006|921020;
-X-Microsoft-Antispam-Message-Info:
-	MRxJjrNi7QP/4w4X4Ktvyq3XnnZ8PhSNLXMBSVPB0UDq9zgKUfPLK6HcVw3JCeHssvnLL6edsn78z2jw9pzUbGkeSEiiJtdXFUQMEysUCimyMjlW8Z2ValtkVdmNFwoumnMhRdpv81pPacJ7pXDWIp4rSD7Og5lmI1fYohdgy8SBvkeq2Jzv2vRp8aD7Y//1xHJRLB/7eRIMgFmsj0ovC/6KCS/8DPuVxJ6m7ls7W6/EGP0sfJtDxrdMOuw7WM+nWs7GhN94dQQj/GlWf5Bx5wK2upQFiJt76EW6SnVGwFr3tSD4Lzrv0RK4AJp1M9VFR9DYWbnS9247T4L0DmwU/UP+GNHQ/PPw5zvlcU2lBLfkQeNfCAXXdlq51cZzLilWe2Ex/nl4cU7pjGbWbeTYcG6hSRf/ns5+atrfgL13mW5UnLWL8UmsWTyiuMT7jHaFUNTMXs2qJ/frnKpxt95qE29FAgrURmhsmrqn3TDplSkyYGujWxQR2QGEWsh51HWX0skXYtwbihHenkdSNUVU+C31tqNd3+qs8ktar2m6gfKJsxwCdWz6SQBqQdJ/oeIfAogmvePbgxZZHfrybcK71ec8SF4/yLc96OBQh1T92n20YqNSk1uW9G3v2a2hmCAI4Ez8/cyJD/9uTrwyPXAa57RccM7JgOJTVGZkZRKLm/cUBVqQYl4ZiMyrytpzMbVy9TNzs28ltSa/g3NQkJ2YdCeeXDZ9j12DgsMWME899bVfMpU7pJEpE+qYsg4Gh590
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(23010399003)(82310400026)(1800799024)(56012099006)(10067099003)(6133799003)(18002099003)(22082099003)(11063799006)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	iPu3nM4VuvfKCwdv9Q77a20fCThL1Xgqqyr1Zg0YjP/VTVhxwh3oQSfUK8N93XzkyTUSVKt5WX1OplvEk5dFqFjXOElFvxmEskrmKQJHKbGFjd9QcG+0wMiM6TOXnzZIWrYrzFzbwqG9//0gIyZ430c5xKTwTjna63aXQHxaOTqmdR9P4tecmf97kfjrqLDpwNU1YNako8DXvWMaa3LHe+bd7BcOCmvZMsj8u1O7urBhJlhUjouMk2r/kIdFzOMp5KlDAb4suWcEtJd1uIsLQPNSDZMmzKCx7EMTguBq22u7wsMFel2TwdwDN/N/VO309Wi7Sl0EdxNSA8v/w7gneG1AotxOpx1cpi3JvZs3A9B01em8KWgyhLRf1XIdpqfHESyRD860LKB4H6GQYPIBHoFSRVDvNc+u5coA+8kvLbyQG2TuremZbjO2ZWNK8Ny4
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2026 09:40:51.4093
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 288d6048-6571-4997-ada4-08def91ef6a4
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000C6185.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8565
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpgz:haiwei.tech:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: MiUxkXieYO8R8L0HWg0nLFaiiMKuv3+zyMXLXWzQsu01wqF3s3/E0eGi
+	Xly3oO9llSFooyGv+atUP86DwwOcn8vTbBULIn9oN4kjVRbbdqYSwN0VgNLZllzDByDn9/r
+	4YDh2kG9ToA1gIqWWUkPqEKJV1PegAp9EghorlUf1ldT2SphZZQlUQ26eOVeQf7sA8UO/N5
+	UJ9Qq0DvQ9MeeDZ8jB72nKNxbvREuP0PgdFU8gXLLJgzYUqJTJMiMvDpm7nOvjVy1NN+Ug1
+	aulwfyXyR2921FL+w2xPkEn/UhjkR+cALFi1gFJ9zRNL8cxk8pmSjl68A2i+V8SLI7sWtaY
+	5TTExmThqT5MAzIs/CSeqnu4tEXlaDOT5x4BMcQFA9ABzN2VhyjqcvRMaJIOAoU8/7+jY/u
+	I33QlByi+QB91FOn6NzYF+ThDTmOr/KZ6xv0aa5jerEvTu4cQT3mFemKVR+FQyP1BpQK5+X
+	sEALXQ1BKyBTIM+q+T5pgVmhT67q/SUIZmWoZXLhPhCYJLQ9chb3jzGikV8NGbuIivcPadP
+	FGYFDFual+4i+CI2V60fMteYqeJFmQ4OK+XO4/MH2rX1CVStFIo0hjcScZblzvBZsCcV7Vs
+	SlvQuiVoiu4E3LmEfmvShDDwXDOGckGRtDOMN/LEHXaTqmkuBcZ/EQKlg5HtIB//KP2iFTg
+	oRsRBEY3f8AkA7fYeaYhC1ujtA/vNX3tyrm/3zAzleUvMxJr4FZmZUK6eykfYcn0wKdXOGC
+	d3UxoM7hyUYn3bF5rWTMnvOY9pk8EfxeohOphVtkfus+jrRugRuHSdMRwR8x3aEGo/QQmPJ
+	bLEb7IGg8OiamzVhTFQkkCr3LWYj/29/C1sueAoXzrjJlrdQ0i3oG+3NtuSRtfpw3AtA//q
+	0UUgigp3z+Pt2MJ9bNEzJEDRtpBc+VaUMKU2KXyOCl0R16VYjCXqvBlsyEDKigRoopTr+WX
+	MvD0zWz5ElI9pO6waSp1l4pO4fv63srrH7gIE/q73cTT2GJwL4o07Wo5Q0fYkWy6c57AxUx
+	kHxKdexLOq2kWQQSwbEFy0ivyQyggH8wdyt5B5DMpmmb2ekmz5dMYuflrbkBjcCjtHIv3Na
+	A==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
+X-QQ-RECHKSPAM: 0
 
-From: Manish Honap <mhonap@nvidia.com>
+From: jinrui <jinrui@haiwei.tech>
 
-Advertise the assignment with a device-info flag so a VMM can tell a
-CXL Type-2 device apart from a plain vfio-pci one. On the trapped
-component region, add a capability carrying the BAR and offset of the
-HDM decoder registers so the VMM can place the window where the guest
-expects to find it.
+When the cross-compiler defaults to an -march that includes the V
+(vector) extension, -O2 auto-vectorization generates vector instructions
+(e.g. vsetvli, vadd.vv) in guest code. Executing such an instruction with
+sstatus.VS Off raises EXC_INST_ILLEGAL (scause=2); KVM's hedeleg forwards
+it to the guest, but the bare-metal selftest cannot handle it, so all
+guest tests fail. A real kernel handles this via
+riscv_v_first_use_handler(), which enables V and re-executes the
+instruction.
 
-Signed-off-by: Manish Honap <mhonap@nvidia.com>
+Fix it in processor.c:
+
+1. Delete the now-unused guest_unexp_trap() handler, replaced by the full
+   exception vector table.
+
+2. In vm_arch_vcpu_add(), advertise V to KVM via __vcpu_set_reg(V, 1)
+   (best-effort, errors ignored on hardware without V) and install the
+   full exception vector table instead of a raw stvec handler.
+
+3. In route_exception(), decode the faulting instruction (stval) with
+   insn_is_vector() and, when it is a vector instruction while sstatus.VS
+   is Off, set VS to Initial and sret to re-execute it, before any
+   test-registered handler. Genuinely illegal instructions still reach
+   the unexpected-exception path.
+
+4. Make vm_init_vector_tables() idempotent by checking vm->handlers
+   before allocating, so tests that call it directly (ebreak_test,
+   arch_timer, sbi_pmu_test) do not leak memory.
+
+Tested on a riscv64 host with KVM enabled.
+
+Signed-off-by: jinrui <jinrui@haiwei.tech>
 ---
- drivers/vfio/pci/cxl/vfio_cxl_core.c | 16 ++++++++++++++++
- drivers/vfio/pci/vfio_pci_core.c     |  3 +++
- include/uapi/linux/vfio.h            | 18 ++++++++++++++++++
- 3 files changed, 37 insertions(+)
+Changes in v12:
+- Read a 16-bit halfword first and only load the full 32-bit instruction
+  when it is not compressed, avoiding an unaligned or cross-page access in
+  the stval fallback (Sashiko review).
 
-diff --git a/drivers/vfio/pci/cxl/vfio_cxl_core.c b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-index ec938813bd91..0fb5ed5d86b7 100644
---- a/drivers/vfio/pci/cxl/vfio_cxl_core.c
-+++ b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-@@ -381,9 +381,25 @@ static ssize_t vfio_cxl_comp_rw(struct vfio_pci_core_device *vdev,
- 	return count;
- }
+ .../selftests/kvm/include/riscv/processor.h   |  13 +++
+ .../selftests/kvm/lib/riscv/processor.c       | 100 +++++++++++++++---
+ 2 files changed, 100 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+index e3acf2ae9881..685baefebdb1 100644
+--- a/tools/testing/selftests/kvm/include/riscv/processor.h
++++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+@@ -25,6 +25,19 @@
+ #define GET_RM(insn)            (((insn) & INSN_MASK_FUNCT3) >> INSN_SHIFT_FUNCT3)
+ #define GET_CSR_NUM(insn)       (((insn) & INSN_CSR_MASK) >> INSN_CSR_SHIFT)
  
-+static int vfio_cxl_comp_add_capability(struct vfio_pci_core_device *vdev,
-+					struct vfio_pci_region *region,
-+					struct vfio_info_cap *caps)
-+{
-+	struct cxl_hdm_info *hdm = vdev->pdev->hdm;
-+	struct vfio_region_info_cap_cxl_comp_regs cap = {
-+		.header.id = VFIO_REGION_INFO_CAP_CXL_COMP_REGS,
-+		.header.version = 1,
-+		.bar = hdm->hdm_bar,
-+		.offset = hdm->hdm_offset,
-+	};
++/* Vector (V) instruction decoding, matching arch/riscv/include/asm/insn.h */
++#define RV_INSN_OPCODE_MASK	0x7f
++#define RVG_OPCODE_SYSTEM	0x73
++#define RVV_OPCODE_VECTOR	0x57
++#define RVV_OPCODE_VL		0x07
++#define RVV_OPCODE_VS		0x27
++#define RVV_VL_VS_WIDTH_8	0
++#define RVV_VL_VS_WIDTH_16	5
++#define RVV_VL_VS_WIDTH_32	6
++#define RVV_VL_VS_WIDTH_64	7
++#define RVV_EXTRACT_VL_VS_WIDTH(insn)	(((insn) >> 12) & 0x7)
++#define RVG_EXTRACT_SYSTEM_CSR(insn)	(((insn) >> 20) & 0xfff)
 +
-+	return vfio_info_add_capability(caps, &cap.header, sizeof(cap));
-+}
-+
- static const struct vfio_pci_regops vfio_cxl_comp_regops = {
- 	.rw = vfio_cxl_comp_rw,
- 	.release = vfio_cxl_region_release,
-+	.add_capability = vfio_cxl_comp_add_capability,
- };
+ static inline u64 __kvm_reg_id(u64 type, u64 subtype, u64 idx, u64 size)
+ {
+ 	return KVM_REG_RISCV | type | subtype | idx | size;
+diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+index ded5429f3448..e677137d5e44 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/processor.c
++++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+@@ -17,6 +17,11 @@
  
- static void vfio_cxl_release_hpa(void *data)
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 6f6ebcce86a1..77f8f39dd670 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -1192,6 +1192,9 @@ static int vfio_pci_ioctl_get_info(struct vfio_pci_core_device *vdev,
- 	if (vdev->reset_works)
- 		info.flags |= VFIO_DEVICE_FLAGS_RESET;
+ static gva_t exception_handlers;
  
-+	if (vdev->cxl_ops)
-+		info.flags |= VFIO_DEVICE_FLAGS_CXL;
-+
- 	info.num_regions = VFIO_PCI_NUM_REGIONS + vdev->num_regions;
- 	info.num_irqs = VFIO_PCI_NUM_IRQS;
- 
-diff --git a/include/uapi/linux/vfio.h b/include/uapi/linux/vfio.h
-index d5b8106625bf..df88535ede5f 100644
---- a/include/uapi/linux/vfio.h
-+++ b/include/uapi/linux/vfio.h
-@@ -215,6 +215,7 @@ struct vfio_device_info {
- #define VFIO_DEVICE_FLAGS_FSL_MC (1 << 6)	/* vfio-fsl-mc device */
- #define VFIO_DEVICE_FLAGS_CAPS	(1 << 7)	/* Info supports caps */
- #define VFIO_DEVICE_FLAGS_CDX	(1 << 8)	/* vfio-cdx device */
-+#define VFIO_DEVICE_FLAGS_CXL	(1 << 9)	/* vfio-cxl device */
- 	__u32	num_regions;	/* Max region index + 1 */
- 	__u32	num_irqs;	/* Max IRQ index + 1 */
- 	__u32   cap_offset;	/* Offset within info struct of first cap */
-@@ -505,6 +506,23 @@ struct vfio_region_info_cap_nvlink2_lnkspd {
- 	__u32 __pad;
- };
- 
-+/*
-+ * Geometry of a CXL Type-2 device's HDM decoder registers, so a VMM can place
-+ * the trapped component register window where the guest expects it. The trapped
-+ * region spans the whole HDM decoder block (every decoder), not just decoder 0:
-+ * a VMM reads the decoder count and each decoder's committed base from the block
-+ * itself. Additional trapped component capabilities, such as CXL RAS, are
-+ * exposed as their own region subtypes rather than by extending this cap.
-+ */
-+#define VFIO_REGION_INFO_CAP_CXL_COMP_REGS	6
-+
-+struct vfio_region_info_cap_cxl_comp_regs {
-+	struct vfio_info_cap_header header;
-+	__u32 bar;
-+	__u32 __resv;	/* reserved, must be zero; versioning anchor for flags */
-+	__aligned_u64 offset;
++struct handlers {
++	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
++	bool v_available;
 +};
 +
- /**
-  * VFIO_DEVICE_GET_IRQ_INFO - _IOWR(VFIO_TYPE, VFIO_BASE + 9,
-  *				    struct vfio_irq_info)
+ bool __vcpu_has_ext(struct kvm_vcpu *vcpu, u64 ext)
+ {
+ 	unsigned long value = 0;
+@@ -298,13 +303,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, u8 indent)
+ 		core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
+ }
+ 
+-static void __aligned(16) guest_unexp_trap(void)
+-{
+-	sbi_ecall(KVM_RISCV_SELFTESTS_SBI_EXT,
+-		  KVM_RISCV_SELFTESTS_SBI_UNEXP,
+-		  0, 0, 0, 0, 0, 0);
+-}
+-
+ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+ {
+ 	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_code);
+@@ -348,8 +346,26 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+ 	/* Setup sscratch for guest_get_vcpuid() */
+ 	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(sscratch), vcpu_id);
+ 
+-	/* Setup default exception vector of guest */
+-	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(stvec), (unsigned long)guest_unexp_trap);
++	/*
++	 * Advertise V to KVM so -O2 auto-vectorization in guest code is valid;
++	 * ignore errors since the tests work without V too. Use the full
++	 * exception vector table (which lazily enables V in route_exception())
++	 * as the default handler; vm_init_vector_tables() is idempotent.
++	 */
++	__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(KVM_RISCV_ISA_EXT_V), 1);
++	vm_init_vector_tables(vm);
++	vcpu_init_vector_tables(vcpu);
++
++	/*
++	 * Record V availability for route_exception(), which runs in guest
++	 * context. V is enabled uniformly for every vCPU, so this is a
++	 * VM-wide property.
++	 */
++	{
++		struct handlers *h = addr_gva2hva(vm, vm->handlers);
++
++		h->v_available = __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA_EXT_V);
++	}
+ 
+ 	return vcpu;
+ }
+@@ -408,19 +424,43 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+ 	struct ucall uc;
+ 
+ 	if (get_ucall(vcpu, &uc) == UCALL_UNHANDLED) {
++		vcpu_dump(stderr, vcpu, 2);
+ 		TEST_FAIL("Unexpected exception (vector:0x%lx, ec:0x%lx)",
+ 			uc.args[0], uc.args[1]);
+ 	}
+ }
+ 
+-struct handlers {
+-	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
+-};
++static bool insn_is_vector(u32 insn)
++{
++	u32 opcode = insn & RV_INSN_OPCODE_MASK;
++	u32 width, csr;
++
++	/* All V-related instructions are 4-byte, i.e. not compressed. */
++	if ((insn & 0x3) != 0x3)
++		return false;
++
++	switch (opcode) {
++	case RVV_OPCODE_VECTOR:
++		return true;
++	case RVV_OPCODE_VL:
++	case RVV_OPCODE_VS:
++		width = RVV_EXTRACT_VL_VS_WIDTH(insn);
++		return width == RVV_VL_VS_WIDTH_8 || width == RVV_VL_VS_WIDTH_16 ||
++		       width == RVV_VL_VS_WIDTH_32 || width == RVV_VL_VS_WIDTH_64;
++	case RVG_OPCODE_SYSTEM:
++		csr = RVG_EXTRACT_SYSTEM_CSR(insn);
++		return (csr >= CSR_VSTART && csr <= CSR_VCSR) ||
++		       (csr >= CSR_VL && csr <= CSR_VLENB);
++	}
++
++	return false;
++}
+ 
+ void route_exception(struct pt_regs *regs)
+ {
+ 	struct handlers *handlers = (struct handlers *)exception_handlers;
+-	int vector = 0, ec;
++	int vector = 0;
++	unsigned long ec;
+ 
+ 	ec = regs->cause & ~CAUSE_IRQ_FLAG;
+ 	if (ec >= NR_EXCEPTIONS)
+@@ -432,6 +472,37 @@ void route_exception(struct pt_regs *regs)
+ 		ec = 0;
+ 	}
+ 
++	/*
++	 * Lazily enable V on the first vector instruction: if the faulting
++	 * instruction decodes as vector while VS is off, set VS to Initial
++	 * and re-execute it, like the kernel's riscv_v_first_use_handler().
++	 * Genuinely illegal instructions continue to the unexpected-exception
++	 * path.
++	 */
++	if (!(regs->cause & CAUSE_IRQ_FLAG) && ec == EXC_INST_ILLEGAL &&
++	    handlers && handlers->v_available && !(regs->status & SR_VS)) {
++		u32 insn = (u32)regs->badaddr;
++
++		/*
++		 * stval is not guaranteed to hold the faulting instruction.
++		 * Vector instructions are always 32-bit, so read a 16-bit
++		 * halfword first and only load the full 32-bit instruction when
++		 * it is not compressed; this avoids an unaligned or cross-page
++		 * access on a compressed instruction.
++		 */
++		if (!insn) {
++			u16 half = *(u16 *)regs->epc;
++
++			if ((half & 0x3) == 0x3)
++				insn = *(u32 *)regs->epc;
++		}
++
++		if (insn_is_vector(insn)) {
++			regs->status |= SR_VS_INITIAL;
++			return;
++		}
++	}
++
+ 	if (handlers && handlers->exception_handlers[vector][ec])
+ 		return handlers->exception_handlers[vector][ec](regs);
+ 
+@@ -448,6 +519,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
+ 
+ void vm_init_vector_tables(struct kvm_vm *vm)
+ {
++	if (vm->handlers)
++		return;
++
+ 	vm->handlers = __vm_alloc(vm, sizeof(struct handlers), vm->page_size,
+ 				  MEM_REGION_DATA);
+ 
 -- 
-2.25.1
-
+2.53.0
