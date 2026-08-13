@@ -1,179 +1,138 @@
-Received: from mta1.migadu.com (out-14.mta1.migadu.com [95.215.58.14])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A800C3E5A31
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:25:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D49E48D87A
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:40:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786634729; cv=none; b=fAeWqJyt/wP9H6+yqW2qqY54vY6yXtqJGAnuchZLKmmnhmbgKesvfH6DT4wmI5YC0QmKOMl1NZqcnfKGvdyRy5tAUz1zzMlN3m3ZyKSynXM7aUaYENqMM6B2C3xCE4FVLFG8waYXlOCaPMntC4eO+BrhwKHMchbT65G2FqqhILs=
+	t=1786635642; cv=none; b=YH2IOAf17aWF/W74cTPdTigrFE35VNd+047ulr8M1/bfVvMKj7XWfa5iyWLtYtcU5NVP+dR21wR4tazc3KFo1dYcIkvZrM8GEKJCVPAXWzoBOgaW0OHg48AVaDWPx+odmPQdr4fNC5Kv8rLYdSworoFvjsZzcu1pvC7jbbSqeGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786634729; c=relaxed/simple;
-	bh=RsqbY0RCU8Ls/knpKMfiJGL0HaQv4wOyuSTzrYc79yg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TLDtW6nuqCqE/1LvjRn5w597JbyaaXhh2oofisDgKgFmYHDrFP1iNvMU6UVwvbbLryPkUWQCNfMX1A39GSV2+IUonBprihPk5ctaygPV65kt9TMadWlndqWm9VcfCVKlrS39/u4XPq9kDvtxPEeujt9MpGO8IN5ze/QyjqSYFH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ookBvmUR; arc=none smtp.client-ip=95.215.58.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786635642; c=relaxed/simple;
+	bh=WtqsLzrgSjg/xVRfW9WfYBYpQ3bP/9ChUav4NHg7yVg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ih0N7nYyqPliGHoD01YDN8tyaiN44KhlwD4CxjfcGvtCoksnJzcPOHXgputrH1wuybOWWzmslzqYgtlokQbGcgddftQnXRMabhuh5BrIm9MwbUeSSkw3sumkTdIAlzC/K0gPEuOOOo9k4DL2FGIpS/13Le7WLr28znOliT5T6vM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dF8Cx924; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ookBvmUR"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=RsqbY0RCU8Ls/knpKMfiJGL0HaQv4wOyuSTzrYc79yg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786634725; v=1; x=1787239525;
- b=ookBvmURlKNcUxFFgiP/izZmaZnAiKgfVwLlaidDbfgo1h3vhuYMXDJz5XyfdCeoZB2PMNsT
- cjKRKynyx52wSZTRepe+5od4IjbLbO2lh3VMzfmhQkIW2VZcHvrSZ2MZcKygNovAqHT1R3SFDbq
- SLaysfAvI7jhjL5yxLeD0Nys=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from .linux.dev (117.20.149.103)
-	by smtp.migadu.com with ESMTPS id 3e806838460a431b;
-	Thu, 13 Aug 2026 15:25:25 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	kernel-patches-bot@fb.com,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Subject: [PATCH bpf-next v12 10/10] selftests/bpf: Verify bpf_iter for global percpu data
-Date: Thu, 13 Aug 2026 23:23:23 +0800
-Message-ID: <20260813152324.97937-11-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260813152324.97937-1-leon.hwang@linux.dev>
-References: <20260813152324.97937-1-leon.hwang@linux.dev>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dF8Cx924"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2caced6038eso15229745ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 08:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786635637; x=1787240437; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=AcZvN96x3R8L9Ww6tvDjLJoxtHOJUhdmG67qkMsuoE8=;
+        b=dF8Cx924z63s7ot0bcNk24y7I0YPDSgB9NNaJVzHc9+3Yt/JGlCfFcrjl5hDlLMxTt
+         4MaEDpK12ekLLATLF+cwf3ufcrM029EuFcouefRhyELSWlu7wH6mDorsVx0fyKzD1NDS
+         LGD1Rj5ARKXA0ZtgpswP3jq3CN1QHKO38uyVtYfnr0GHaAlPvgJ11BoL71E1NFVq1LuX
+         7Qsi3yfCb3BPFwq+ZvxYOfzLVs6xDhks+uZtJKfEVVGuzn+W/57XaORu3wOspuM2F9cn
+         AMKxPhm7UYvvFASH+Wh2uWcq2oT74ZkNKGOAsz22bnmreYWkD7FnSH1W20QMhFCBLUGJ
+         x5bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786635637; x=1787240437;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=AcZvN96x3R8L9Ww6tvDjLJoxtHOJUhdmG67qkMsuoE8=;
+        b=HRaXDXHWgSWsdUm/D43umNo6JgPV/Y9yZISj4aJnL54ez6832Xo0jVOsYinKaAHUHX
+         NjV0OjTnQyxdGPz2YN5iupjzrEgsnOXa7FM5jgbVyKm6eahq5MAenrW1PEz6jMgb+hL6
+         qHFkM5/W6bg9XzZWOWgw/h3EySTpIeh8SnbFTBcLXTCGopypqssH+Ycqhc8w/xZlcFJx
+         jsfG/KwzLqHs5X88e4ecS6CGciqC5YA8kb2FFS6PQ9EPyiUcCla15YXVcrmqVH4mh8Zi
+         ibDRLnX/c863TTiVwYVSlo7JubpK0RojGO9y0bXrI0YAgRdnFzQak68AtG8xXbtZZTtX
+         gGIw==
+X-Forwarded-Encrypted: i=1; AHgh+RrqFgIlVCz7eEFyM70cp1vPwoQ/EFMrwdI/sA48pSrqpEulsTSVmQ+v4gETnnbIV8oGRujjz6BftNT5iWdmqcY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSfPkbeI864ddDxvraXKWO6u8f6E+OKoTjXX8qY5r0mhAiWqMG
+	ZZMNa8VP6qnQGmhxzZAI4nUyknf+k0EsEhFlmnlfsQoheP53Y3eksUXsQH/yuJIZ7w==
+X-Gm-Gg: AR+sD11Y4u0hE33bNsFOZe53rdjfbgIa88dAYOnldRMsJ5+0Mm4KAbjPhlwF8CS3vg3
+	IdRQxZXPr7v0kxxjWrb5oPtsSkY/NnamX2vwEhcWfieNZPvQncmDr/8Nm0UHgEwEHymFUhgRxpg
+	MPDPjOlL0RBNbe5440UvyQ4WilQzjO4XbpBSi+YpOvwUBHg4gl8epTINjm2mk2DWqQsONJxxJlQ
+	OeMDrP49tB4bjiPIKBAE5v/Yjn2BBscbYktWGfGenOx1u/RbVUFWN+rogM182J/4BXZ96atTfJA
+	IgTIxFUhekoMXdNlDvpTrlu1qa4OQoWHOCYNQBGFwg9318GahAc3CNCPsRnN2U3FRYXTd+Ol/98
+	pcgk9LBCumqTqvYo3nb9XBKWyiquDPCrlFHoldaI61EaXH3wMLSjcdzPtUPpwsgMQLQTof/cnQK
+	cio+tyRFKyDNUGCt2N1T+rwzjcfmHbRswYwBLyrXNvXV/cs0Ny7gcvFjG1LSruu4rYZbGYUsB9a
+	AnXW8GbbxHwBN0pVRLyQsenOK7tyZEZ+nGD6+y1
+X-Received: by 2002:a17:902:f64e:b0:2cf:70d2:da7c with SMTP id d9443c01a7336-2d37f77fdfemr84524235ad.12.1786635636542;
+        Thu, 13 Aug 2026 08:40:36 -0700 (PDT)
+Received: from google.com (132.200.185.35.bc.googleusercontent.com. [35.185.200.132])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d37c2000bbsm12399845ad.7.2026.08.13.08.40.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2026 08:40:35 -0700 (PDT)
+Date: Thu, 13 Aug 2026 15:40:32 +0000
+From: David Matlack <dmatlack@google.com>
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Alex Williamson <alex@shazbot.org>, kvm@vger.kernel.org,
+	Leon Romanovsky <leon@kernel.org>, linux-kselftest@vger.kernel.org,
+	linux-rdma@vger.kernel.org, Mark Bloch <mbloch@nvidia.com>,
+	netdev@vger.kernel.org, Saeed Mahameed <saeedm@nvidia.com>,
+	Shuah Khan <shuah@kernel.org>, Tariq Toukan <tariqt@nvidia.com>,
+	patches@lists.linux.dev
+Subject: Re: [PATCH v4 08/10] vfio: selftests: Add mlx5 driver - HW init and
+ command interface
+Message-ID: <an3lcKmhXbRnDpRL@google.com>
+References: <0-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
+ <8-v4-021df3fb5a3f+98e-mlx5st_jgg@nvidia.com>
+ <anzoiALsjiWrsZtl@google.com>
+ <20260812233207.GB730363@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260812233207.GB730363@nvidia.com>
 
-Add a test to verify that it is OK to iter the percpu_array map used for
-global percpu data.
+On 2026-08-12 08:32 PM, Jason Gunthorpe wrote:
+> On Wed, Aug 12, 2026 at 09:41:28PM +0000, David Matlack wrote:
+> > On 2026-08-12 11:59 AM, Jason Gunthorpe wrote:
+> > > @@ -0,0 +1,108 @@
+> > > +/* SPDX-License-Identifier: GPL-2.0 OR Linux-OpenIB */
+> > > +/*
+> > > + * mlx5 VFIO selftest driver - HW definitions
+> > > + *
+> > > + * Typed wrappers, constants, and helpers for programming mlx5 hardware
+> > > + * via the VFIO selftest framework.  Most HW constants and all MLX5_SET/GET
+> > > + * macros come from the kernel headers (mlx5_ifc.h, mlx5_ifc_macros.h).
+> > > + */
+> > > +#ifndef SELFTESTS_VFIO_MLX5_HW_H
+> > > +#define SELFTESTS_VFIO_MLX5_HW_H
+> > > +
+> > > +#include <linux/io.h>
+> > > +#include <linux/build_bug.h>
+> > > +#include <vdso/bits.h>
+> > > +
+> > > +#include "mlx5_ifc.h"
+> > > +#include "mlx5_ifc_macros.h"
+> > 
+> > I'm getting a compiler warning here when building with clang which is
+> > getting upgraded to error from -Werror.
+> 
+> I don't get that. My builds have -Wno-gnu-variable-sized-type-not-at-end
+> which comes from here:
+> 
+> tools/testing/selftests/lib.mk:
+> 
+> # gcc defaults to silence (off) for the following warnings, but clang defaults
+> # to the opposite. The warnings are not useful for the kernel itself, which is
+> # why they have remained disabled in gcc for the main kernel build. And it is
+> # only due to including kernel data structures in the selftests, that we get the
+> # warnings from clang. Therefore, disable the warnings for clang builds.
+> CFLAGS += -Wno-address-of-packed-member
+> CFLAGS += -Wno-gnu-variable-sized-type-not-at-end
+> 
+> Why doesn't yours? Are you building it correctly?
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- .../bpf/prog_tests/global_data_init.c         | 52 +++++++++++++++++++
- .../bpf/progs/test_global_percpu_data.c       | 25 +++++++++
- 2 files changed, 77 insertions(+)
+Ah I see the problem. I was building with this command:
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index d308ca3b3045..7d6bda909295 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -327,6 +327,56 @@ static void test_global_percpu_data_verifier_log(void)
- 	RUN_TESTS(test_global_percpu_data);
- }
- 
-+static void test_global_percpu_data_iter(void)
-+{
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	struct test_global_percpu_data *skel;
-+	union bpf_iter_link_info linfo = {};
-+	struct bpf_link *link = NULL;
-+	int fd, num_cpus, len, err;
-+	char buf[16];
-+
-+	num_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(num_cpus, 0, "libbpf_num_possible_cpus"))
-+		return;
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	skel->rodata->num_cpus = num_cpus;
-+	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
-+	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
-+	skel->percpu->struct_data.nums[6] = 0xc0de;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	linfo.map.map_fd = bpf_map__fd(skel->maps.percpu);
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+	link = bpf_program__attach_iter(skel->progs.dump_percpu_data, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto out;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_GE(fd, 0, "bpf_iter_create"))
-+		goto out;
-+
-+	while ((len = read(fd, buf, sizeof(buf))) > 0)
-+		do { } while (0);
-+	ASSERT_EQ(len, 0, "read iter");
-+	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
-+	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+
-+	close(fd);
-+out:
-+	bpf_link__destroy(link);
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- void test_global_percpu_data(void)
- {
- 	if (!feat_supported(NULL, FEAT_PERCPU_DATA)) {
-@@ -343,4 +393,6 @@ void test_global_percpu_data(void)
- 	if (test__start_subtest("rdonly_direct_write"))
- 		test_global_percpu_data_rdonly_direct_write();
- 	test_global_percpu_data_verifier_log();
-+	if (test__start_subtest("iter"))
-+		test_global_percpu_data_iter();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index d086e9417f9f..71ff8d1bf49e 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -61,4 +61,29 @@ int verifier_snprintf(void *ctx)
- 	return 0;
- }
- 
-+volatile const __u32 num_cpus = 0;
-+volatile const int offsetof_num;
-+volatile const int elem_sz;
-+__u32 percpu_data_sum = 0;
-+bool run_iter = false;
-+
-+SEC("iter/bpf_map_elem")
-+__auxiliary
-+int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
-+{
-+	void *pptr = ctx->value;
-+	int i;
-+
-+	if (!pptr)
-+		return 0;
-+
-+	run_iter = true;
-+
-+	for (i = 0; i < num_cpus; i++) {
-+		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		pptr += elem_sz;
-+	}
-+	return 0;
-+}
-+
- char _license[] SEC("license") = "GPL";
--- 
-2.55.0
+  make CC=clang -C tools/testing/selftests/vfio
 
+But the correct way to build selftests with clang is to use:
+
+  make LLVM=1 -C tools/testing/selftests/vfio
+
+LLVM=1 triggers the conditional logic to add
+-Wno-gnu-variable-sized-type-not-at-end to CFLAGS and the build works.
