@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2BB743F0B5;
-	Thu, 13 Aug 2026 10:21:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66112352036;
+	Thu, 13 Aug 2026 10:26:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786616485; cv=none; b=ds7b8wA2XvHR6Aj6YiyvuYsqBF0x7130VrzxKri5gPKa1H2PwF0DmZbWPmr3kcfbqPlPj2RXfCqJc+wjn/15wNrG/OcYhQhPI8P8CBAEmd95WMyjYKe7PFi93tvCcYFk1ouifeD+hUcVuwa9/C5EYqtR/g3avGFRIOF6BAlDUXw=
+	t=1786616792; cv=none; b=K5yU7jqo977mYbmBjcRdSWfPdlNLg/v3Rs7kua13BerQ3knf2MOqgpg7Dbzx4Y/nFD3yu3KwDM9VBgAHdjjEOKhfxhM+A1fiZ1Tp3oa6qc4woqHW8XJ7ReovHLG783biGktCTPJcmQ3hcS968YZ0V58ZI/yjSzP23Wh718bTSbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786616485; c=relaxed/simple;
-	bh=EDMu5K9MEy4MskmvIUG1yfw3eQ7E7QpquIOwOWRanEU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JOooiN7/Mge1sBUyDyNblej+Kni2OWkxFFEIAvJM6LIALIN48tJ6AQtzUoMZnrwch3Bb2LP9ZK4x8eP9tx9azsMzl/F5AxWeu9WRLHj8hSAI3uymilVJt4xeq88X70cz2sapWGiYV9go19KesBZDFqyA6eVjuFTGSCGBVeXwxcI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MAS9ggXE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786616792; c=relaxed/simple;
+	bh=zSZNEePlCX/Z8XMWcPF6r06R2yxVBnyHOroZ3gvJGDA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=kpIFcZMWQPWw7PjyW25gT3EBeO8t689DaxfQCSoK4advVDaBE++bi5lI8EfZFBFVQd/+Oms8CxOugSUbeE0exoATQMa6SVFo1fkifQKCW8sJh5S5FhPe/kuU739aMDxAZLV1zSv1p0TDLcPhHd7RPwxybxzZcSxyLsUqktcl8Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=co3Dplmu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MAS9ggXE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 669481F000E9;
-	Thu, 13 Aug 2026 10:21:04 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="co3Dplmu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C67591F000E9;
+	Thu, 13 Aug 2026 10:26:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786616469;
-	bh=SbuxHmqDbr/TDoLiKVstYcqIhkRii7nKMWvnVw3gtYk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=MAS9ggXEUpw/Dqk1MOhvGtPckZ0uZJR5ZZ78AaYcCnRZuxCBshpraw9TKluwbOkhz
-	 FsX5ZSPNzGP9TK9jC5R78hb8VhPfK9+16hVNKHV0AJfLjdve1teJvZNi4pgRWl+rHd
-	 CzDREZT6t7dEMDDj/945tHNmQetmIBFRsJaH+5TAf1PlOw4wqia4ci2fU0LtvEHB8j
-	 Mq/dxut0XI36GEVu3ZQMKCshK3k105UF73M1Il1DzHbVLedPsdhhD4t3AERFjxajNy
-	 C+B7634Zmvcok95MdsJF6rANEdD94ykeb4RFG4JU/kiOHrVJFAGI6A5WRcEQ2ub7hK
-	 TfeAyJ+BKT+WQ==
-Message-ID: <6b7ccd6d-c332-40fe-a1c1-65ca11a4faf3@kernel.org>
-Date: Thu, 13 Aug 2026 12:21:02 +0200
+	s=k20260515; t=1786616789;
+	bh=63X3AIgj8JfsQGRG7V0b/K2oGLZA2KXTTSoU5TCUlQI=;
+	h=Date:Subject:To:References:From:In-Reply-To;
+	b=co3DplmuaRys2xtTZIEKEfc0GJMr8C8nVg1x4NKVUUTK+N7gBxkjAfqzR66N+NQRs
+	 jkC+bJug7TAzMdGPWu1UidDM9zqzdcLXxBynRZUjhKUqLVTVOkuiwTjLNBHnmbpMfK
+	 5pz7qvVJGJ2Y/JBy+w4qh9cYekzjneCZ3koLz1lYBfZzw1xzQzTDkIjjSIkVPWhAgW
+	 ol0kLRz9uf+2Hwjz0LUCr1jclUYG2sd4fNT9w7rnL1blBdGW8alSXQ0x7bnk6+Y/d9
+	 SuRNmIITngVHYwsSJMInZ5y8XRcao3PS+iZOx3MJSjG2Rts1hD9vbd4LjJ/iuJPfz7
+	 RFr5M4UwCtWZQ==
+Message-ID: <e372f10c-f964-4cd0-9a48-c31702968153@kernel.org>
+Date: Thu, 13 Aug 2026 12:26:21 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/5] selftests/mm: skip guard hole-punch test if
- MADV_REMOVE is unsupported
+Subject: Re: [PATCH v3 3/5] selftests/mm: skip khugepaged swap tests without
+ swap
 To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
  "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
@@ -48,10 +48,10 @@ To: Muhammad Usama Anjum <usama.anjum@arm.com>,
  Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
  Miaohe Lin <linmiaohe@huawei.com>, Naoya Horiguchi
  <nao.horiguchi@gmail.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc: Sarthak Sharma <sarthak.sharma@arm.com>
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Kiryl Shutsemau <kas@kernel.org>
 References: <20260727095225.372655-1-usama.anjum@arm.com>
- <20260727095225.372655-3-usama.anjum@arm.com>
+ <20260727095225.372655-4-usama.anjum@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -98,29 +98,44 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260727095225.372655-3-usama.anjum@arm.com>
+In-Reply-To: <20260727095225.372655-4-usama.anjum@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 7/27/26 11:52, Muhammad Usama Anjum wrote:
-> The hole_punch case verifies that guard regions survive MADV_REMOVE and
-> that the backing range is punched out.  MADV_REMOVE delegates the hole
-> punch to the backing filesystem, which may reject the operation with
-> EOPNOTSUPP.
+> collapse_swapin_single_pte and collapse_max_ptes_swap require
+> MADV_PAGEOUT to replace anonymous pages with swap entries. On swapless
+> systems there is no backing store with which to create those entries,
+> so check_swap() reports missing setup rather than broken khugepaged
+> behavior.
 > 
-> That result means the test cannot establish the state whose guard
-> semantics it intends to validate.  Treating the missing filesystem
-> capability as a guard-region failure creates a false regression.
+> Swapless configurations are common on Android and other constrained
+> test devices. Failing these cases obscures actionable results from the
+> rest of the khugepaged suite.
 > 
-> Unmap the range and skip only when MADV_REMOVE fails with EOPNOTSUPP.
-> Preserve the assertion for all other errors so failures on supported
-> configurations remain visible.
+> Check /proc/swaps before either swap-dependent case and skip when no
+> active swap area exists. With swap present, retain the existing
+> MADV_PAGEOUT and swap-entry assertions unchanged.
 > 
-> Tested-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Print each existing swapout diagnostic before the prerequisite check
+> so skip() completes a KTAP diagnostic line instead of emitting an
+> unprefixed message.
+> 
 > Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Didn't I reject a similar patch recently? :)
+
+Ah, yes, actually two similar ones:
+
+https://lore.kernel.org/all/9d0d98ea-05bd-43c0-bb36-68aea62cbde8@kernel.org/
+https://lore.kernel.org/all/20260715133418.170386-1-jaeyeon.lee.dev@gmail.com/
+
+And I think what Kiryl proposes is actually the right thing to do:
+
+https://lore.kernel.org/all/20260812132304.199287-6-kirill@shutemov.name/
+
+So let's drop this patch.
 
 -- 
 Cheers,
