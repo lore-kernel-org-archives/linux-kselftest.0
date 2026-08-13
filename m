@@ -1,180 +1,174 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D138E3E8C74
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:21:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 073463F483D;
+	Thu, 13 Aug 2026 22:26:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786659663; cv=none; b=fU+YfuVrGhlECfRjZ4sD0YHC0+BXXo8yTPtUVXGj0BvrZKV3OcH+iVJSt9/n9eR+Elc8gtojGG6VTLhB3GPGva0yvbD9lVqVTQQ9rmyH79sREGdIPY1H9iuEuMRvDXpgxaCWugd12VtG+YwQKDZNFL/VHg/ybiwRPBemA8muC9w=
+	t=1786659998; cv=none; b=i8uiBtfIEqZtWkLqTLr2p1s/ibcGrxLahD7XWFyofYx6B4Ia6y/RyWIjgrDhEWWno3ZjCDm3E1C1evsCNErCqLre8kz4tXbayIS1xiKNREabwTx6nkbW03U7XT04GuGSfYF/hiIPdSWoTEvKjgpKEnmBFl0OUxrOPGha3XqoNh0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786659663; c=relaxed/simple;
-	bh=iZKErpQzI4tDZrpeIQNh/+s3N3EqpIhdMpaciqwacI4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZTXyaGjG8Jt3hjPMmg1tgxW1aXM+Y87wEK/PzvyeFh7gQeg0ZE0Sv2hWp3tVg/sixvJOYbs4KWJD//eLUSepb/l3tJKYqUMONDM6baM+MF6AjfkY9IcsKjY3PCE7Js3w2IVorOp3dWTGM7ZQiTWc1IRjBtZglssiLmI7/t5hJrg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ne1bpUXx; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786659998; c=relaxed/simple;
+	bh=JpUVWn8UsZxzQeUqXmGo+2AOroUYvmVBFTXLwnNbOhA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=aNDGmnOIuEz/TkpaNdlaDnLvSCYr5jRLRpkSCByNrSP5PZ54T889ltu1WMGbTks8r7WjKoNB+1TdLo73oLtZTZS9J7FhJoQsDTMXBeAfOe2Ecu1ROLEEHvSgaF/HHC7Mo+OJL7YaORDliKcpO0HAlcze0KK+ane+4U6sWeyUejg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CGkpXLTc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ne1bpUXx"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2caed617615so5863965ad.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:21:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786659660; x=1787264460; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=WepUfyZKcLY19XSoHXGt/PunK9EJ0crkwO9xBirgo0M=;
-        b=ne1bpUXxSASuDEsrVklR3a5dq4AWtodLM6o1q0F+XIZU+26vOQCkXGSS+k5jYw/Xij
-         3DM06NnUJqiX+QoDR0PLJLvrEdoEFb5d0Gc7Ig4RN51DZZxDWWXNkjcKsNGUeIjjJ5HK
-         3o7IzN6Kv7nKdUBOUF8CwtP0FlVdcx0+d9VFNQhivjXaW11JvK2phYCzZt4qVIzOFRjU
-         MXcb9iQhUTB8608gAIiT2rrPKPJ4dlwiM+j+SY12zm6oL9SNHfqtlA7zTT7w5Y52xqsZ
-         N+AiGZxMMXyw3BC7aQ3Od4kGHPV6stzzL/GdFXnSCDzMaH2jnXyyWp0kplOX+Eiu1sQp
-         8tTQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786659660; x=1787264460;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=WepUfyZKcLY19XSoHXGt/PunK9EJ0crkwO9xBirgo0M=;
-        b=Iq/LIQfPWzqJ43to3GGPowDsIufTg/fuM4xidcqvS2dXaLagd2kkXN1mz0RKaTsJOC
-         pXl4F+27YROd1PV3Zt2F6OmkezOCGShVeBS2IjfZIRviJKn1UM7MWP2IA0cUysP1v6OD
-         4KPNwh9IqGqMMYVcj/d1dcx4suU+rgafdTL+gnInu90a340bpcZbGIBuikKgauASYB+T
-         1QRHrMwFK0OjnLRzgO5aKNfVdF8KheJQvvE6h/XQ32jOGkOTR/a74cmAexbWIgLZ78Ui
-         9eh3Kqk4CSgt6gIwwmhBXDoE8nJHP6uSupXltXSwrjwA4dJ2obLCzlYkagQxOoeKruG+
-         Doiw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5vtTnG7NJDJ7d1Jf0HjFl41ialamgfJ/nWoXApB1oTSFopIqJ+BVj92+0ASv/aVHpW+9/v2z0H7FwP0pgU0k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXG4jewcN7619VUTHkBfC+r6Db5G3CiTGNU2k5zq08yzSPoe4L
-	v2DDNuXRjfPdoWTX8iq5uPSMYgEyNePjbjevFtR7vqT0fmmLek/lZfclgEb7cFA7
-X-Gm-Gg: AR+sD12oYEIEb/DPv0QUJFlC9V2Drlvpuhz5DS2etWGqQdWZpXJJW4bVFWO01dHz1ph
-	MMt78m1uwN7LS07aB1MHFe4wh1H+OZaul2teM4oNATacZhwKY7rt7wcdR4IN8g+ENumv9KxwCIA
-	eghMvkVErYqkQSvC9NtoFjnIUnp+JnrwazkHhsFFXUoi9CMRmp3UeVuJBt4/urQUbwCNws6vjeu
-	ub/b9yau0tK1j+Uo5e28Cj5FTxFW/CDOgjromjFCiK44MEhZNPVzkObjBUtlbmdaIjmrOr/zdVV
-	hRCVEIbwpZRwBF4xLXgIO4hX8hYOZ3asIaJBjhFiNNNfga146UyU5BzNsCTY174u84PwMLnvbJH
-	b4PA9Ap/ffRTpLCT3q/sHUuihNXZjo2DAfsg8O9vqoV2vbGTi2NlcAygRTtJF7+uvS1ZmU1qmAg
-	BJGarMEYOpa8Ia6ioVrxLRMEGKa3OReiMMiTVV4R+jUASU1opAK4YjExUAsyPag4cBN7Qls90Y4
-	tee/p7QVgxxBHiUQ+UwPox6PIRMH7LGbNqiCLCQoekteA==
-X-Received: by 2002:a05:6a21:a0c:b0:3c9:1c1f:f516 with SMTP id adf61e73a8af0-3cc71fa84fbmr1010869637.19.1786659659729;
-        Thu, 13 Aug 2026 15:20:59 -0700 (PDT)
-Received: from ?IPv6:2a03:83e0:115c:1:2cae:4c28:2903:b6f9? ([2620:10d:c090:500::7:1c5e])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141387ac9b1sm2272210c88.2.2026.08.13.15.20.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 15:20:58 -0700 (PDT)
-Message-ID: <7d608380ec448046a6783c96583cd493ca639a15.camel@gmail.com>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover mixed arena and
- map-value atomics
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
-	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
-	 <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi
-	 <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
-	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
-	 <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
-	 <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Thu, 13 Aug 2026 15:20:56 -0700
-In-Reply-To: <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
-References: 
-	<20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn>
-	 <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.1 (3.60.1-1.fc44) 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CGkpXLTc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68A431F00A3A;
+	Thu, 13 Aug 2026 22:26:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786659996;
+	bh=COjYU0sEfdGhoYwtqy3AekC66nLkRTjlQ8/+x3QCqBQ=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=CGkpXLTc0D7iAQ7Zmr42so6SXR4CEjcu1yBqIKuAVUfUNvnL9eQaMJ9diaaEg26dI
+	 DN2nK/OhfRZpenEdIiVSiwpkFIdueVtExvn8UFDUexYGHYvglqF3yc+DHTwI2SLcxt
+	 xBsd3peWVbfPI0MOiGO7XNrFjE40SLcQO0OUJKtXQAp6T2kau9YsBElmdXdROl1JKV
+	 rntB/yL5s93SUcO36UV54zU4Pj0t5E/sbsX9DDo7Ek1NDkFHUePzR1zc48Yuxly+nP
+	 HJd24wvvV4BV5sCCjXtPEuVSvHgwJSRNLcP7TSJ1YUEIdEonJb+ACxLVHJmBaLCqy2
+	 2CP9CLa8Hj4yg==
+Content-Type: multipart/mixed; boundary="===============0727513438879644745=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Message-Id: <54f3845022121f32320c644ae2ad998cc047bc5513756bf65febfb21d528c253@mail.kernel.org>
+In-Reply-To: <20260813211533.290256-3-dingning04@gmail.com>
+References: <20260813211533.290256-3-dingning04@gmail.com>
+Subject: Re: [PATCH bpf-next v4 2/4] selftests/bpf: Test refcount_acquire return nullability
+From: bot+bpf-ci@kernel.org
+To: dingning04@gmail.com,bpf@vger.kernel.org
+Cc: memxor@gmail.com,greg@kroah.com,dingning04@gmail.com,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,utilityemal77@gmail.com,chengkaitao@kylinos.cn,vmalik@redhat.com,leon.hwang@linux.dev,chenyy23@mails.tsinghua.edu.cn,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 22:26:35 +0000 (UTC)
 
-On Thu, 2026-08-13 at 12:01 +0000, Yiyang Chen wrote:
-> Add a verifier test with one atomic RMW instruction reached through
-> PTR_TO_ARENA and PTR_TO_MAP_VALUE paths. The verifier must reject the
-> shared instruction with the existing incompatible-pointer diagnostic.
->=20
-> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> ---
->  tools/testing/selftests/bpf/progs/verifier_arena.c | 44 ++++++++++++++++=
-++++++
->  1 file changed, 44 insertions(+)
->=20
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
-esting/selftests/bpf/progs/verifier_arena.c
-> index b241bbcf54a8a..2e43da188194b 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -25,6 +25,15 @@ struct {
->  	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
->  } arena SEC(".maps");
-> =20
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} atomic_map SEC(".maps");
+--===============0727513438879644745==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Please use existing arena map.
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> index 61906f48025cc..fd35093285c0d 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
 
-> +
-> +static __u64 arena_atomic_target SEC(".addr_space.1");
+[ ... ]
 
-The bot is right, verifier_arena tests are failing.
-Did you test this patch before sending?
-
->  SEC("socket")
->  __success __retval(0)
->  int basic_alloc1_nosleep(void *ctx)
-> @@ -637,6 +646,41 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
-> =20
->  #endif
-> =20
-> +SEC("socket")
-> +__description("arena and map value atomic at the same instruction")
-> +__failure __msg("same insn cannot be used with different pointers")
-> +__arch_x86_64
-> +__load_if_JITed()
-> +__naked void mixed_arena_map_value_atomic(void)
+> @@ -832,6 +848,51 @@ long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+>  	return 0;
+>  }
+>
+> +SEC("tc")
+> +__success
+> +long refcount_acquire_owning_input_no_null_check(void *ctx)
 > +{
-> +	asm volatile ("					\
-> +	r1 =3D 0;					\
-> +	*(u32 *)(r10 - 4) =3D r1;			\
-> +	r2 =3D r10;					\
-> +	r2 +=3D -4;					\
-> +	r1 =3D %[atomic_map] ll;				\
-> +	call %[bpf_map_lookup_elem];			\
-> +	if r0 =3D=3D 0 goto 1f;				\
-> +	r6 =3D r0;					\
-> +	r7 =3D %[arena_atomic_target] ll;			\
-> +	.byte 0xbf; .byte 0x77; .short 1; .long 1;	\
-
-Please use __imm_insn, see examples in the test suite.
-
-> +	call %[bpf_get_prandom_u32];			\
-> +	if w0 !=3D 0 goto 2f;				\
-> +	r8 =3D r6;					\
-> +	goto 3f;					\
-> +2:	r8 =3D r7;					\
-> +3:	r9 =3D 1;					\
-> +	lock *(u64 *)(r8 + 0) +=3D r9;			\
-> +1:	r0 =3D 0;					\
-> +	exit;						\
-> +"	:
-> +	: __imm_addr(atomic_map),
-> +	  __imm_addr(arena_atomic_target),
-
-You can conjure an arena pointer as in non_arena_ptr_add_to_arena_ptr()
-w/o the need for the variable.
-
-> +	  __imm(bpf_map_lookup_elem),
-> +	  __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
+> +	struct node_refcount_only *n, *m;
+> +
+> +	n = bpf_obj_new(typeof(*n));
+> +	if (!n)
+> +		return 1;
+> +
+> +	m = bpf_refcount_acquire(n);
+> +	bpf_obj_drop(m);
+> +	bpf_obj_drop(n);
+> +
+> +	return 0;
 > +}
 > +
->  static __noinline
->  u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
->  {
+> +SEC("tc")
+> +__success
+> +long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n, *m;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	m = bpf_refcount_acquire(n);
+> +	bpf_rcu_read_unlock();
 
-pw-bot: cr.
+This isn't a bug, but since SEC("tc") programs are already treated as
+being in an RCU critical section (in_rcu_cs() returns true for
+non-sleepable programs), would a sleepable program type make the
+bpf_rcu_read_lock()/unlock() section here actually load-bearing, or
+could the pair simply be dropped?
+
+> +
+> +	if (!m)
+> +		return 3;
+> +	bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+>  static long __stash_map_empty_xchg(struct node_data *n, int idx)
+>  {
+>  	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index 024ef2aae2008..acd3e81a39168 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+
+[ ... ]
+
+> @@ -80,6 +96,37 @@ long refcount_acquire_maybe_null(void *ctx)
+>  	return 0;
+>  }
+>
+> +SEC("?tc")
+> +__failure __msg("Possibly NULL pointer passed to trusted R1")
+> +long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *tmp, *n, *m;
+> +	int idx = 0;
+> +
+> +	tmp = bpf_obj_new(typeof(*tmp));
+> +	if (!tmp)
+> +		return 3;
+> +	bpf_obj_drop(tmp);
+
+This isn't a bug, but is the bpf_obj_new()/bpf_obj_drop() pair at the
+start needed to force a complete BTF type for struct node_refcount_only,
+or is it leftover setup? A one-line comment would keep someone from
+removing it later.
+
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	m = bpf_refcount_acquire(n);
+> +	bpf_rcu_read_unlock();
+> +
+> +	bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+>  SEC("?tc")
+>  __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
+>  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31745514567
+--===============0727513438879644745==--
