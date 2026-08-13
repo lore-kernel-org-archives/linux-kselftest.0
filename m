@@ -1,140 +1,245 @@
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E531345749
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 18:04:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDF4C3E0081;
+	Thu, 13 Aug 2026 18:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786644243; cv=none; b=RQQeHrg5PFJR9AnwRKtN0dHPLWnVaCoAmUlRTD0vhQ/yQx89RMGooV1wuGHUGrSW6gLQ4cK5hlEIM7XZAXDaaiAgXLR1iwlvmH81WWM3jqnbFe7z5kheQNPO8lvMvBZ76L+L03C0JhS/Ve4H0CMEs7iJKyy3P7h1w4K9q+oNCzg=
+	t=1786644798; cv=none; b=sam5Mi5QdiAGXoXotHPW66sR7v0mLuMlyl6pkVH0Nd8zXKXk500KFhn47hVphuSsgDTk53b536nkGjDQOdW2LZs5lURXSH7TNMt4iwDR79zrCciNfX0ELT560rQZZOTULaxfAK8ZglRqaJPfmgpxhxc1NGAoZxoTiGRq7YIrGG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786644243; c=relaxed/simple;
-	bh=NtvaBNSVoK7oKWXFv49lETLnLBGunHM+uU1K7pNhXYI=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hLEZXsHdhvRfvvwtyQeMqswqnICdE+dBNN0euyN6kS3zEVtZroxnPqqFberqeO/ENNPYuGFx5P+oZ5ZnrH1E4Azn2DrcVhNctZa1neLCWJkBY4OjNXjSaKfGqYAAMWgO1jaykQqODF7u4Crje3XsuQPmCnRDddaG1q29MAnMV5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SXyskpls; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786644798; c=relaxed/simple;
+	bh=m1bGvj6UOubdng2fWNx+INIIJr6MJ9Bx14ljarArOwU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MvYYQzUlKC4lNUYUzAB7pyGi7GlF800z1QiV0XFkIMZCWYOUNnOPv4wtxcbSs2hYmPV1TIq7gF8rKZd231QOcWBzZFQ4snDFEjkLY1TI3bjHprffesKLw+C1/SRJ3ydyqvQ7eYnDzb2B7x3BMrtSz51VLqyyN/f4+vypBPXvmSQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=beP1j7Nn; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SXyskpls"
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-47de008b020so40610f8f.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 11:04:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786644240; x=1787249040; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=zr5I5FYVqXv9F6tHOsf6hEzeaNxXhC/qXHtmdMQmKGg=;
-        b=SXyskpls04g62dMGJtIB7/xhakVUQiN9nB9D7eqYhwWy4lFK/77gjw7B+vXL8poQVT
-         EviYGYlOOhP2nB9KvC+kRDxVFhUnGf4dHqtLMKyELd9bWRuvgzQ67CGdpgb4iJHOM/Ln
-         1yka1frWsL6JAbGdi9xSEcs8A1tHcO8c4jG40AhAtr8mEkn4VhO+Y0lEKo0C+AHBIRvU
-         V7lAlRdZBJh2RdN8N8p0rhR6NiqKhUTh9vSiEBlI2E7vvmFSCe2yRS0j6BN6LnIiT3Ne
-         twXCQS9mvJtTRNlvTpQrzr5n7k5yE1yun4JW88NAv8B97wvsi1szsOab0ZeUJC11KGZx
-         hBdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786644240; x=1787249040;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :content-type:mime-version:references:message-id:subject:cc:to:date
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=zr5I5FYVqXv9F6tHOsf6hEzeaNxXhC/qXHtmdMQmKGg=;
-        b=NjGctTDplGmQrJ/rtpE4ZcB37JxpbaGTVCZJZfVhE/5gFDHN5l/6NAXq//9ieb1PHb
-         r9ZjaTwYfjaR3KxLNsujZDgSvwOFTqJbkMsuTH2K6uYXF97YX9CHYsWbvFRAY76m4x/R
-         RNj7Ie5LWkXl0mZO1YoabBQQNqw8EPwN/OexEsexPXbSHjD8L9pRqobRx0AdnnUPfwYT
-         slOWtA7igvA3ZbpYDOzGTbSl5B7Dw01RzcyiFGJ5Ykr69+p5Mit5DYZzY7SEUbOPbcMY
-         N3vTMX7sXYl+vyBbAB/MImsGn2SiUBjgGmU4x7/nJxEvnknd6atAgmZzJXB4JdXMEOl/
-         IZbw==
-X-Forwarded-Encrypted: i=1; AHgh+RohfXG5V8XN5hzLFCvfSagL2nLZAmWvjoGbygqD/7NnxX9Ie01oWzq+pcf5d5VlnTupropwthaKsCOkZ/ZFm2I=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzx0PTS+z3d8mKY71Gdy644JA/vcIcEd4cYO7nmvvkYmOiEmyLu
-	O+GGWMmoVe9berE1f8QKdmKUIYq3sasg1xpvwRhzKk+Q7WGj+CU9nuq1
-X-Gm-Gg: AR+sD10hsIEI1a7Hc6yA/iO0AlbbpTdbyQOzfGEo5IzW06K6ySOV6fJh7TACJ9huLZa
-	urnSPpqYxBLOXtRzZPjj1VfhWWhauKJGgtgJK7P+JRaO4zqJKYX85RVooPrDRWoiujcRH1OO4v/
-	kV9UFoeGDu1GFhq+hJnOBQnoWOhvMbvJuzo5/YgpMe24BS9zymkJAYUIFZlppCZ/GRAVhX+l0wt
-	7wTQgR47wsIrJigepWxbuErx/C8/wQ34jWf+7K7NeadCwiIIKQ5f7MZKxQFwcV4RCBEEPwbvZsU
-	R9E1iBk5TebB15+5M02gmIGIRgUOyyWeqsWQJJKI2+OHOCYdTWv3eR++i1Ak8BcFPQBMhzh8IxQ
-	biIhlAexUbyXBflLUvBcdbkc+uMnyW168IQfUXMIm4ufOMvfyB1JyGkHRG/u5GLQ/R8pa8kZFM7
-	OGv6x7uC34hORhfLLx82+YJir3SrZ/Wxb6S2wQ8yFQLI7+Ss8=
-X-Received: by 2002:a05:6000:61d:b0:481:5a46:dbef with SMTP id ffacd0b85a97d-4815a4e72admr11372177f8f.5.1786644240265;
-        Thu, 13 Aug 2026 11:04:00 -0700 (PDT)
-Received: from krava ([176.74.159.170])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4815f2cc811sm1004573f8f.33.2026.08.13.11.03.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 11:03:59 -0700 (PDT)
-From: Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date: Thu, 13 Aug 2026 20:03:57 +0200
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: Leon Hwang <leon.hwang@linux.dev>, bpf@vger.kernel.org,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH bpf-next] selftests/bpf: Move tracing_multi_bench_attach
- to bench
-Message-ID: <an4HDVUea-8zgdUM@krava>
-References: <20260804154813.90795-1-leon.hwang@linux.dev>
- <CAEf4BzbJCB0KUZMkeRPfYSjMQ3Q3eoFKUZS3px1mBBhxtEqYdQ@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="beP1j7Nn"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DF99A1AC1;
+	Thu, 13 Aug 2026 11:13:10 -0700 (PDT)
+Received: from a081061.arm.com (unknown [10.163.171.218])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id F0E8A3F66F;
+	Thu, 13 Aug 2026 11:13:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786644794; bh=m1bGvj6UOubdng2fWNx+INIIJr6MJ9Bx14ljarArOwU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=beP1j7NnNYbW1T+TK0ZhpzJW+uBg/JNQpUbIZ4QR20EMSLzqX3iJ7UCCXHhLriOAN
+	 0rBSRyaEklbpDBz+puBDl9ZHqL0kJH0EZka45AfFmDx8WlnPtltB0bECJUdyaaXMgc
+	 V6s9eDjGIKpA+dCL0+P7oBTYTQmmLjmhEg41C+Vk=
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Nico Pache <npache@redhat.com>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Leon Romanovsky <leon@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Mark Brown <broonie@kernel.org>,
+	Anshuman Khandual <anshuman.khandual@arm.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Sarthak Sharma <sarthak.sharma@arm.com>
+Subject: [PATCH v7 0/6] selftests/mm: separate GUP microbenchmarking from functional testing
+Date: Thu, 13 Aug 2026 23:42:24 +0530
+Message-ID: <20260813181230.483746-1-sarthak.sharma@arm.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEf4BzbJCB0KUZMkeRPfYSjMQ3Q3eoFKUZS3px1mBBhxtEqYdQ@mail.gmail.com>
 
-On Tue, Aug 04, 2026 at 03:40:30PM -0700, Andrii Nakryiko wrote:
-> On Tue, Aug 4, 2026 at 8:48 AM Leon Hwang <leon.hwang@linux.dev> wrote:
-> >
-> > In CI, the tracing_multi_bench_attach test could cost >10s, which should
-> > be avoided in daily CI running.
-> >
-> >  ./test_progs -t tracing_multi_bench_attach -v
-> >  WATCHDOG: test case tracing_multi_bench_attach executes for 10 seconds...
-> >  serial_test_tracing_multi_bench_attach: found 40163 functions
-> >  serial_test_tracing_multi_bench_attach: attached in   9.367s
-> >  serial_test_tracing_multi_bench_attach: detached in   1.798s
-> >  #546     tracing_multi_bench_attach:OK
-> >
-> > Since it is for benchmark attachment of tracing_multi link, move it to
-> > the generic bench framework.
-> >
-> >  ./bench tracing-multi-attach
-> >  Setting up benchmark 'tracing-multi-attach'...
-> >  tracing-multi-attach: found 40166 functions
-> >  tracing-multi-attach: attached in   9.278s
-> >  tracing-multi-attach: detached in   1.836s
-> >
-> > Assisted-by: Codex:gpt-5.6-sol
-> > Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
-> > ---
-> >  tools/testing/selftests/bpf/Makefile          |   2 +
-> >  tools/testing/selftests/bpf/bench.c           |   2 +
-> >  .../bpf/benchs/bench_tracing_multi_attach.c   | 177 ++++++++++++++++++
-> >  .../selftests/bpf/prog_tests/tracing_multi.c  | 125 -------------
-> >  4 files changed, 181 insertions(+), 125 deletions(-)
-> >  create mode 100644 tools/testing/selftests/bpf/benchs/bench_tracing_multi_attach.c
-> >
-> 
-> Jiri, are you ok with not exercising this logic regularly?
-> 
-> but also hm, is 10 seconds expected?
+gup_test.c currently serves two separate purposes: benchmarking
+(GUP_FAST_BENCHMARK, PIN_FAST_BENCHMARK and PIN_LONGTERM_BENCHMARK) and
+functional testing (GUP_BASIC_TEST, PIN_BASIC_TEST and
+DUMP_USER_PAGES_TEST). Keeping both in one program makes the functional
+tests harder to run and report individually, while run_vmtests.sh has to
+invoke the program repeatedly with different options.
 
-sorry for late reply, I overlooked this one
+Separate these roles into tools/mm/gup_bench for benchmarking and
+tools/testing/selftests/mm/gup for functional testing. Move the shared
+file and hugepage helpers to tools/lib/mm/ so both programs can use them
+without duplicating the implementation.
 
-the 'commited result' is around 1.2s.. will check
+Patch 1 makes read_file(), write_file(), read_num(), write_num() and
+write_num_ignore_einval() return errors to their callers instead of
+exiting. It also makes read_num() reject negative and malformed values
+and updates the existing callers to handle failures.
 
-      serial_test_tracing_multi_bench_attach: found 51186 functions
-      serial_test_tracing_multi_bench_attach: attached in   1.295s
-      serial_test_tracing_multi_bench_attach: detached in   0.243s
+Patch 2 moves these file helpers from vm_util.c to tools/lib/mm/. It keeps
+them available to the mm selftests through vm_util.h and adjusts the
+selftests build accordingly.
 
-thanks,
-jirka
+Patch 3 moves hugepage_settings.[ch] from selftests/mm to tools/lib/mm/.
+It also removes its kselftest dependency while preserving TAP-compatible
+diagnostics for selftest users.
+
+Patch 4 moves the existing gup_test implementation from selftests/mm to
+tools/mm as gup_bench. This keeps the code movement separate from the
+subsequent changes and makes it easier to review.
+
+Patch 5 removes the functional test modes and kselftest dependency from
+gup_bench. When run without arguments, it performs one GUP_FAST benchmark
+using the existing defaults instead of running the whole matrix. Other
+benchmark configurations can be selected through command-line options.
+
+Patch 6 adds a new harness-based GUP selftest. It covers THP, non-THP and
+HugeTLB mappings across private/shared and read/write variants. For each
+variant, it tests get_user_pages(), get_user_pages_fast(),
+pin_user_pages(), pin_user_pages_fast(), long-term pinning and both dump
+modes using four batch sizes. It also preserves the existing sparse dump
+coverage for pages 0, 19 and 0x1000. The HugeTLB variants share a one-time
+setup of 128 default-sized huge pages.
+
+---
+I think Sashiko might complain about some "what if the user inputs this
+and that" scenarios in patch 5, but I intentionally am not covering those
+now, agreeing with Mike's point that a user will be wise enough to input
+sane values to run a benchmark. Those checks increase churn and make the
+patch harder to review.
+
+Changes in v7:
+- Rebase onto mm-unstable
+- Address feedback from Mike and Sashiko
+- Make read_file() return 0 on success and tighten read_num() parsing
+- Move write_num_ignore_einval() with the shared file helpers
+- Keep the existing gup_bench argument parsing and avoid unrelated checks
+- Set up 128 HugeTLB pages once for all HugeTLB selftest variants
+
+Changes in v6:
+- Rebase onto v7.2-rc5
+- Address feedback from David, Mark, John, Dev and Sashiko
+- Keep the shared file helpers silent and let callers report errors
+- Move the existing gup_test into tools/mm before changing its behaviour
+- Report ioctl failures from gup_bench worker threads
+- Remove the default benchmark matrix and run one default benchmark instead
+- Add the new harness-based functional selftest in a separate final patch
+- Drop the unrelated thp_swap_allocator_test .gitignore change
+
+Changes in v5:
+- Rebase onto v7.2-rc3
+- Address feedback from Mike, John, Dev and Sashiko
+- Make file helper diagnostics TAP-compatible
+- Validate read_num() input and propagate errors while restoring shared
+  memory limits
+- Preserve build bisectability for the x86 protection_keys test
+- Preserve HugeTLB diagnostics using TAP-compatible printf() output
+- Validate the remaining numeric arguments accepted by gup_bench
+
+Changes in v4:
+- Address review feedback from Mike and Sashiko
+- Add a preparatory patch so shared file helpers return errors instead of exiting
+- Reduce include churn by keeping shared helpers exposed through vm_util.h
+- Preserve HugeTLB diagnostics and restore HugeTLB state more carefully
+- Fix selftests/mm build details after moving helpers to tools/lib/mm
+- Tighten gup_bench argument handling and gup_test setup/sparse-dump coverage
+
+Changes in v3:
+- Address v2 feedback from Sashiko
+- Add shared file_utils helpers under tools/lib/mm
+- Move hugepage_settings out of selftests and into tools/lib/mm
+- Convert gup_bench to use the shared tools/lib/mm helpers
+- Guard against invalid thread counts in gup_bench
+- Handle thread-array allocation failure cleanly in gup_bench
+- Restore HugeTLB settings on setup failure in gup_test
+- Add sparse DUMP_USER_PAGES_TEST coverage for pages 0, 19 and 0x1000
+
+Changes in v2:
+- Address v1 feedback from Sashiko
+- Add fast and long-term GUP/PUP coverage
+- Sweep nr_pages_per_call over 1, 512, 123 and all pages
+- Call madvise(MADV_NOHUGEPAGE) in non-THP variants
+- Use 256 MB for HugeTLB fixtures
+- Restore HugeTLB settings from fixture teardown
+- Report nr_pages_per_call for each iteration
+- Update the pin_user_pages unit-testing documentation
+
+Previous versions:
+v6: lore.kernel.org/all/20260730140825.238130-1-sarthak.sharma@arm.com/
+v5: lore.kernel.org/all/20260716123226.197736-1-sarthak.sharma@arm.com/
+v4: lore.kernel.org/all/20260527142432.230127-1-sarthak.sharma@arm.com/
+v3: lore.kernel.org/all/20260521111801.173019-1-sarthak.sharma@arm.com/
+v2: lore.kernel.org/all/20260519120506.184512-1-sarthak.sharma@arm.com/
+v1: lore.kernel.org/all/20260515084840.174652-1-sarthak.sharma@arm.com/
+
+---
+Sarthak Sharma (6):
+  selftests/mm: make file helpers return errors
+  tools/lib/mm: add shared file helpers
+  tools/lib/mm: move hugepage_settings out of selftests
+  tools/mm: move gup_test from selftests/mm to tools/mm
+  tools/mm: make gup_bench a benchmark only tool
+  selftests/mm: add a GUP selftest
+
+ Documentation/core-api/pin_user_pages.rst     |  14 +-
+ MAINTAINERS                                   |   4 +-
+ tools/lib/mm/file_utils.c                     | 104 ++++++
+ tools/lib/mm/file_utils.h                     |  13 +
+ .../selftests => lib}/mm/hugepage_settings.c  | 109 +++++-
+ .../selftests => lib}/mm/hugepage_settings.h  |   0
+ tools/mm/.gitignore                           |   1 +
+ tools/mm/Makefile                             |  11 +-
+ .../mm/gup_test.c => mm/gup_bench.c}          | 194 +++++------
+ tools/testing/selftests/mm/Makefile           |  15 +-
+ tools/testing/selftests/mm/compaction_test.c  |   2 +-
+ tools/testing/selftests/mm/cow.c              |   1 -
+ .../selftests/mm/folio_split_race_test.c      |   1 -
+ tools/testing/selftests/mm/guard-regions.c    |   1 -
+ tools/testing/selftests/mm/gup.c              | 329 ++++++++++++++++++
+ tools/testing/selftests/mm/gup_longterm.c     |   1 -
+ tools/testing/selftests/mm/hmm-tests.c        |   6 +-
+ tools/testing/selftests/mm/hugetlb-madvise.c  |   1 -
+ tools/testing/selftests/mm/hugetlb-mmap.c     |   1 -
+ tools/testing/selftests/mm/hugetlb-mremap.c   |   1 -
+ tools/testing/selftests/mm/hugetlb-shm.c      |   1 -
+ .../selftests/mm/hugetlb-soft-offline.c       |   2 +-
+ tools/testing/selftests/mm/hugetlb_dio.c      |   1 -
+ .../selftests/mm/hugetlb_fault_after_madv.c   |   1 -
+ .../selftests/mm/hugetlb_madv_vs_map.c        |   1 -
+ tools/testing/selftests/mm/khugepaged.c       |  15 +-
+ tools/testing/selftests/mm/ksm_tests.c        |   1 -
+ tools/testing/selftests/mm/migration.c        |   2 +-
+ tools/testing/selftests/mm/pagemap_ioctl.c    |   1 -
+ .../testing/selftests/mm/prctl_thp_disable.c  |   1 -
+ tools/testing/selftests/mm/protection_keys.c  |   2 +-
+ tools/testing/selftests/mm/run_vmtests.sh     |  37 +-
+ tools/testing/selftests/mm/soft-dirty.c       |   1 -
+ .../selftests/mm/split_huge_page_test.c       |   6 +-
+ tools/testing/selftests/mm/thuge-gen.c        |   1 -
+ tools/testing/selftests/mm/transhuge-stress.c |   1 -
+ tools/testing/selftests/mm/uffd-common.h      |   1 -
+ tools/testing/selftests/mm/uffd-wp-mremap.c   |   2 +-
+ .../selftests/mm/va_high_addr_switch.c        |   1 -
+ tools/testing/selftests/mm/vm_util.c          | 121 ++-----
+ tools/testing/selftests/mm/vm_util.h          |   8 +-
+ 41 files changed, 710 insertions(+), 306 deletions(-)
+ create mode 100644 tools/lib/mm/file_utils.c
+ create mode 100644 tools/lib/mm/file_utils.h
+ rename tools/{testing/selftests => lib}/mm/hugepage_settings.c (87%)
+ rename tools/{testing/selftests => lib}/mm/hugepage_settings.h (100%)
+ rename tools/{testing/selftests/mm/gup_test.c => mm/gup_bench.c} (50%)
+ create mode 100644 tools/testing/selftests/mm/gup.c
+
+
+base-commit: f9ca2fa9ef7e9b39ec79a0596929d1a1f8704c5f
+-- 
+2.39.5
+
