@@ -1,140 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0829423C503;
-	Thu, 13 Aug 2026 13:03:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A805047D46B;
+	Thu, 13 Aug 2026 13:12:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786626230; cv=none; b=Z/kOPkeYVkE62xQTB1GPUPPHPjp7rpRDxroKD2VyL0j4tBcen4Eafu0Qtz6Ilb9jBAgVo9iPxMm0TX7tn5DmLQt6IENs4FwMhCg2h+0G8xRT8GRBaAOScITOIKkjvl1k9bqor9Z9UbFiqG31f+7JQlzZ3wfQqBNSd4/40JkeKHc=
+	t=1786626748; cv=none; b=OFBe81dy35akoK0I2vNJDDXJrRVYC2Ga8VZi4uQdpmgrukfAS5OYntzMLQtb/hOVz0OjGoR5QTdMkcc53ATNCUxai04f1tDAqUmIx9aut+zishxPkTvluQuxTpJjbDrRBuT8nURBo1gEmg+RJnlRTNaS1E4HzCMGW1wjkoofunk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786626230; c=relaxed/simple;
-	bh=6ORYWnM2SBD4IBFf6qQI+ewTnNn7bui1JvzQZH0Qs/s=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=IyDvUFI4aaXuEKiRB8I4z1dAtBebYAuMwYsgTYU2WvCSIcJfvhL0RyFf/iKtIIdfXFbSl6D14uBomW60BNPngHbzvnRzuy8O5Bf8EE3tdACsPkHFT+U5XOyHLCw1qn36cmCY1TxVcvzgp+DTaldfl9oav12e7NMoMPWjWWyOzwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TsXy12n8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786626748; c=relaxed/simple;
+	bh=n67e92akAaeYMhCPJCCKn+4fuFBLbUJkN/6jajwe2m8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=gRSIETw9IrJ9vz6b42sNwij+JasvgSAItNbPyXvvhXpa5xMaC/wbezfPdA5oQIDQKO4nubHrILQ5uFcF/6WZxNGaTakxbJR+gm3snB1Ybfrvd13NuvI9sk7E57qqZ+PWpbuIrwmEIftAXxnNFBx1BNQtBuYV21VUgHbnu4xrjMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HlwRILKR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TsXy12n8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE5C1F000E9;
-	Thu, 13 Aug 2026 13:03:47 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HlwRILKR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41F821F000E9;
+	Thu, 13 Aug 2026 13:12:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786626228;
-	bh=P0OGuaH0JVdoC2cGMG7GW3KuyxiLcFMMXqedj2+YFBw=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TsXy12n8nUyA7bafCg+2/K/8fgg0bRiW0RH1RI9fAvDm1rQpO34WvpJK46XBZFusO
-	 iB8kipfTGs1/A3zc69eEnZOPN4Z5SJKAIebmHuVayK6iQMfrBkNhTYLoDsPdFzKYMn
-	 m8ABr/lJP7WLVwyKWYREcDUevG/krnD8qnF8QbS5+ziU80SHnTVen9I4nMYqu0CaG8
-	 ZLRCpe1yEFYZsAeYzxdu13pk/G0Qdu8KmTqWSaCKlKdHahlBmFJXjH/sj+IteQYLbW
-	 84++D6zIf3vmjwq4pw5jdYoHzwUPXgYbredIe3T43ttE70wynAU4r6l30IpuZp7Hoc
-	 wQIeJGDu4yn4A==
-Content-Type: multipart/mixed; boundary="===============6269391384148361866=="
+	s=k20260515; t=1786626747;
+	bh=wUTerx84b7KLBWJwyknigTnBFqCAjupeE2IoPPpdlas=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=HlwRILKRsK5V270vFNgGGSQJJjfXF8erHmd5vQzrrHW8uFbPIxWlI1mftK2VZQE4o
+	 1C+R17iZIcSBKwI+UTXE2IWYOYWaBDSsyHwxanwL9CW7/C1mDET2+NPBjdeq9ZPOgf
+	 GWmTU+Qkp9Bj4dOcevVp9egsmUIN92IpaUfyArwobjsQOhcWwz6UV/LnRKm2WTJH55
+	 W2ajMns/06LwfmxpdQG/IW4k/oe5dwBfy8k658brtcD057sJ9blTY3l/SmWORrZxeX
+	 axphqYDp3z9eMAYnHzojbPF7UFm1W++Y3Cs62XVk8LAlJ7Y5EYQCXbQzaIM92LbVIn
+	 raGQ8JIN20tMw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 5690C380CFE8;
+	Thu, 13 Aug 2026 13:11:43 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <97e15f09784afbb9da860fcfca52669fae313b681f6d15e729033cbbd30379c2@mail.kernel.org>
-In-Reply-To: <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
-References: <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
-Subject: Re: [PATCH bpf-next 2/2] selftests/bpf: Cover mixed arena and map-value atomics
-From: bot+bpf-ci@kernel.org
-To: chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,chenyy23@mails.tsinghua.edu.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 13:03:47 +0000 (UTC)
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v3 0/2] netconsole: replace target_list_lock by
+ RCU on userdata hot path
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178662670188.2423866.14579955056749406829.git-patchwork-notify@kernel.org>
+Date: Thu, 13 Aug 2026 13:11:41 +0000
+References: <20260810-netcons-userdata-rcu-v3-0-f65557f769ce@debian.org>
+In-Reply-To: <20260810-netcons-userdata-rcu-v3-0-f65557f769ce@debian.org>
+To: Breno Leitao <leitao@debian.org>
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ gustavold@gmail.com, asantostc@gmail.com, kernel-team@meta.com
 
---===============6269391384148361866==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Hello:
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> index b241bbcf54a8a..2e43da188194b 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> @@ -25,6 +25,15 @@ struct {
->  	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
->  } arena SEC(".maps");
->
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARRAY);
-> +	__uint(max_entries, 1);
-> +	__type(key, __u32);
-> +	__type(value, __u64);
-> +} atomic_map SEC(".maps");
-> +
-> +static __u64 arena_atomic_target SEC(".addr_space.1");
-                  ^^^^^^^^^^^^^^^^^^^^
+This series was applied to netdev/net-next.git (main)
+by Paolo Abeni <pabeni@redhat.com>:
 
-Does this arena global permanently consume one of the arena's two pages
-and break the existing allocation tests in this file?
+On Mon, 10 Aug 2026 02:36:10 -0700 you wrote:
+> I would like to move netconsole to use RCU on the hot path for
+> a while instead of target_list_lock. My goal is to have no lock on the
+> tx side at all and eventually drop CON_NBCON_ATOMIC_UNSAFE, if that is
+> possible [1].
+> 
+> Start removing target_list_lock on certain parts of the code. This patch
+> transforms the userdata array into a RCU-protected pointer, and uses the
+> dynamic mutex as the write lock.
+> 
+> [...]
 
-The arena is declared with max_entries = 2 (two pages). When libbpf loads
-the object, it places .addr_space.1 globals at the end of the arena:
+Here is the summary with links:
+  - [net-next,v3,1/2] netconsole: publish the userdata payload with RCU
+    https://git.kernel.org/netdev/net-next/c/a9560343d4e9
+  - [net-next,v3,2/2] selftests: netconsole: add a userdata torture test
+    https://git.kernel.org/netdev/net-next/c/3d2452c2fb2f
 
-  obj->arena_data_off = bpf_map_mmap_sz(arena_map) -
-                        roundup(arena_data_sz, PAGE_SIZE)
-                      = 2*4096 - 4096 = 4096
-
-Then it copies the globals with:
-
-  memcpy(map->mmaped + obj->arena_data_off, obj->arena_data,
-         obj->arena_data_sz)
-
-That user-space write faults page 1. In arena_vm_fault(), the kernel calls:
-
-  range_tree_clear(&arena->rt, vmf->pgoff, 1)
-
-marking page 1 as allocated and unavailable to bpf_arena_alloc_pages().
-
-This happens during bpf_object__load() for every subtest since test_loader
-reopens and reloads the object each time. So every subtest now has 1 free
-page instead of 2.
-
-Looking at the existing tests that should fail:
-
-  basic_alloc1_nosleep() / basic_alloc1(): second
-  bpf_arena_alloc_pages(&arena, NULL, 1, ...) returns NULL -> return 2
-
-  basic_alloc2_nosleep() / basic_alloc2():
-  bpf_arena_alloc_pages(&arena, NULL, 2, ...) cannot find 2 contiguous
-  free pages -> return 1
-
-  basic_alloc3_nosleep() / basic_alloc3(): allocates
-  ar->map.max_entries (== 2) pages -> NULL -> return 1
-
-  basic_reserve1_nosleep() / basic_reserve1():
-  bpf_arena_reserve_pages() on the second page hits is_range_tree_set()
-  == -ESRCH -> arena_reserve_pages() returns -EBUSY -> return 2
-
-  free_scalar_below_arena(): second alloc returns NULL -> return 2
-
-All nine of these are annotated __success __retval(0) but would now
-return non-zero.
-
-verifier_arena_globals1.c is the existing precedent: it sizes the arena
-large and reserves a dedicated 16-page region for globals, and its
-check_reserve1() asserts that bpf_arena_reserve_pages() over the globals
-region fails because libbpf already mapped them in.
-
-The new test doesn't need an arena global at all. The idiomatic way to get
-a PTR_TO_ARENA in a __naked test is to call bpf_arena_alloc_pages() and
-use addr_space_cast(), as verifier_ldsx.c and compute_live_registers.c do.
-That links the arena to the program without adding arena data.
-
-Alternatively, could the arena's max_entries be grown and the page-count
-expectations of the existing tests updated?
-
-> +
->  SEC("socket")
->  __success __retval(0)
->  int basic_alloc1_nosleep(void *ctx)
-
-[ ... ]
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31699396501
---===============6269391384148361866==--
