@@ -1,107 +1,74 @@
-Received: from mta1.migadu.com (out-222.mta1.migadu.com [95.215.58.222])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCCD48167B
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A357339769A;
+	Thu, 13 Aug 2026 15:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786633283; cv=none; b=NWcKaXVTwBs5A7oa30NcwBChoEYcxqD5LgMUjpkohMMj86XNt5Y/bakrGrE42nDkjIhapuwHqSrwToHwZTHrir6jcYi8vH5IySLjySADSWVQRDlvKt/osA37a9Bnhh8jm4QQVooVEfUApsa00gRNlel0cXPizHXrwNHA14i+fv8=
+	t=1786633424; cv=none; b=l4ARRK1ElwmODtqOzN4qnq+1gsYkXyLzSKLjK7emE+3IH6hseCqW0moOGbQgX7HP8I1ZKB9j3a3CC3lUEw7LgfAfll63HnNhe68YwYWJFrXkMXvcaDJuRczCgmtsf55YQuJVll/sLlcvqG8AaxjUvGpA7wOj6tZwQK9Qrxr6TRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786633283; c=relaxed/simple;
-	bh=kjQCGgpsYPUeNoy8VC501KK4ntDE5I7q0H01tiCcS7k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LIGErkQuCtLY7VYOBk5CKEcvUtxIKkbKeU1760EPPUPpgwi6biSWr5oV3p0v/22h0OOsBe551uDnU6EGhNpvBG5Fqp/NmGVv3rSeXcjH6LjJ1Wr7mzFYIVLrv89wvehz5V1OSGD69MhUt/KXjh+2A0dAotuoJU1lgo1b9hefGoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=FRWg1qrQ; arc=none smtp.client-ip=95.215.58.222
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786633424; c=relaxed/simple;
+	bh=XjmwO9J5Lm/AR36fDQ4r6IPdoCMG7WDSvMSGyLUQCG8=;
+	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
+	 References:Date:Message-Id; b=jdhGVRCWhMCwa5JOtQuwsd7lofDfxQHI38UoeWgvBWh8u9m97ABWZqQcCgDvXwmeiOkXQB8UV3KlMVUiIdIa/5uGsVLmhml4R5ktnx++L7Q3oYSqK5BbKYqjn14SwjmVlA1LJJWiB01kFbPDZTJiCgHMTHPHYG8ZDvCUDpQn/cA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EPsbo6tI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="FRWg1qrQ"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=kjQCGgpsYPUeNoy8VC501KK4ntDE5I7q0H01tiCcS7k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786633279; v=1; x=1787238079;
- b=FRWg1qrQbMdFehBrMjXWDKeV4ZCuuQZwLfP7te3UtNqvAjQLLjzW9NGc6V02dXTgWGddCO1P
- yl9hGgVObKrZayOw5lRH916CdhRC1cHgF4cuiE9lw5dsPTjRN8rJ+2Z65ox8RT+H3VkmgF+NYwX
- dCef9F5jdRN53LWT7nOFMpkw=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [172.20.10.7] (117.20.149.103)
-	by smtp.migadu.com with ESMTPS id bb8ba90ab4d9734f;
-	Thu, 13 Aug 2026 15:01:08 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <e3ff24e6-f0e0-415a-acfa-4f541796d109@linux.dev>
-Date: Thu, 13 Aug 2026 23:00:56 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EPsbo6tI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BD661F00A3A;
+	Thu, 13 Aug 2026 15:03:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786633423;
+	bh=B9mjz28DJjf5IdgDz36zYYN/GhLK0GgAYHY7eTWpXMQ=;
+	h=Subject:From:To:Cc:In-Reply-To:References:Date;
+	b=EPsbo6tIF7dBPYwKkM2aXPv+v+2K4/ex5ijZ50LyFQVUvEPJWbIpmCFBoMJ7CLgh5
+	 klf/sTHwBL95we9BVDtWR5/KhuoerfAjIH745M1jtC1HrdLiIoTehrEzZW2Ix0isdy
+	 o0Z1My6PhRrocoJWBOg8NnoJnSqThYMQHPL8KaUK+SHNrSVHef6yJiEZ0b7aFgFUR/
+	 ruk09dkfzrNQi0wErGmvVZRg9tWxsglt8VZ+/lmS4zBMxkV76t6AZO4ljC1LDfiyKy
+	 RAoh2ax6KbWnl1wcs1jQiYJ8AgXW3Nsj4caH+BtDsrgqC920XjSWjYOo9JZfnG+LTT
+	 bL9C0Yk14tO7A==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf] bpf: fix percpu map update indexing with sparse CPU
- IDs
-To: Hui Su <sh_def@163.com>, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
- haoluo@google.com, jolsa@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, sashiko-bot@kernel.org
-References: <20260813120250.796934-4-sh_def@163.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <20260813120250.796934-4-sh_def@163.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v3 01/18] selftests/mm: raise the khugepaged test-case
+ cap
+From: Mike Rapoport <rppt@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+ nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+ dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
+ liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
+ shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+ vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
+ agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kas@kernel.org
+In-Reply-To: <20260812132304.199287-2-kirill@shutemov.name>
+References: <20260812132304.199287-1-kirill@shutemov.name>
+ <20260812132304.199287-2-kirill@shutemov.name>
+Date: Thu, 13 Aug 2026 18:03:34 +0300
+Message-Id: <178663341429.2230969.5576178581449703816.b4-review@b4>
+X-Mailer: b4 0.17-dev
 
-Hi Hui,
-
-Thanks for the further fixes.
-
-On 2026/8/13 20:02, Hui Su wrote:
-> Per-CPU array, hash, and cgroup storage map updates without BPF_F_CPU
-> or BPF_F_ALL_CPUS use a value buffer whose per-CPU slots are packed in
-> possible-CPU order. The buffer is sized as:
+On Wed, 12 Aug 2026 14:22:47 +0100, Kiryl Shutsemau <kirill@shutemov.name> wrote:
+> TEST() ends the run with "MAX_TEST_CASES is too small" when the table
+> fills, and the table holds 64.  A full invocation -- every context crossed
+> with every memory type, which needs a directory for the file and shmem ones
+> -- already registers 63, so the next case added anywhere aborts the whole
+> suite before a single test runs.
 > 
->   round_up(value_size, 8) * num_possible_cpus()
+> Raise it to 256.  The table is a static array of small structs, so the room
+> costs nothing worth counting, and the cases added after this have somewhere
+> to go.
 > 
-> The update paths iterate over possible CPUs, but use the logical CPU ID
-> to calculate the source offset:
-> 
->   value + size * cpu
-> 
-> This only works when possible CPU IDs are contiguous starting at zero.
-> 
-> For example, with a possible CPU mask of 0,2-3, the buffer contains
-> three slots corresponding to CPUs 0, 2, and 3. CPU2 is therefore
-> expected to use slot 1 and CPU3 slot 2. Instead, the current code uses
-> slots 2 and 3 respectively, causing incorrect per-CPU values and an
-> out-of-bounds read from the update buffer for CPU3.
-> 
-> The corresponding lookup paths already use a dense offset while
-> iterating over possible CPUs. Do the same for the array, hash, and
-> cgroup storage update paths, advancing the source offset once for each
-> possible CPU. BPF_F_ALL_CPUS continues to use the same value for every
-> CPU.
-> 
-> Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+> [...]
 
-The ci bot got the point about the missing Fixes:
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Fixes: c6936161fd55 ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags
-support for percpu_hash and lru_percpu_hash maps")
-Fixes: 47c79f05aa0d ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags
-support for percpu_cgroup_storage maps")
+-- 
+Sincerely yours,
+Mike.
 
-> Reported-by: sashiko-bot@kernel.org
-
-This Reported-by is unnecessary, because Sashiko would review most LKML
-patches.
-
-> Signed-off-by: Hui Su <sh_def@163.com>
-
-Acked-by: Leon Hwang <leon.hwang@linux.dev>
-
-Thanks,
-Leon
-
-> ---
