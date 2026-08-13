@@ -1,129 +1,162 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0974836403C
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658679; cv=pass; b=MJVdaioIUV4KaLKwrTc9BNt7TofrvvIEtNuI0xqKU0JxQ09wC3cc46aYjLodRkaPjXB1Es+k55sbEwy4wOAi++1AKS9sG/ENP2RFPlO4Iqpiy2c4q2NrvTBagpMGDQ0Q5Xq/AhBx87qDwgQ/Vu3utg0dVGYf1LyBIKXm8mhe0xU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658679; c=relaxed/simple;
-	bh=+nJVwpFMXbMjPE1ueHu/52hziTr3b56pfhCEr1u4jas=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HJJImz94b6dWN3hHKmtf9lJ2WH8SjK7o7unFuYUYFpC/IBBlvAMBEkdnEIWn+6HNkBKzj4bFEtiMMolVkr8q+pMLQnVhbOgo5glUcizPeDe53uKpL71FL2xacYHsEs3WEj5vDcMkmbYWr/XtUyOfoZerpVwXkkEKTwpqP++13RA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uodc3msm; arc=pass smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C43C108F
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:08:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786658934; cv=none; b=Iv488O3l6ynoOxW29qodqb6ZxbUH8E/WtQWOoe5ZJIYyxkJ0AE1EcvVUDDN7U+Pyv5rGT90SGnKcm87Ep+FszYiyx6MrnRSURz+iqNwnm+DAW2ePbjf25Im7ZBqeye6ADDa3X7XK4quGatyxHtVvVURmfTAicvDoASprScR3McU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786658934; c=relaxed/simple;
+	bh=KiztK1JbpO5JZhhPbKHjeFsloeqjBsAvtQBBDIoVGKs=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EpwPZ8MAqbHYJyWvLKUAOPzBssqAo0uFM4FRiYUsBUXguP08oAwPwLZ9Voc44NlXoI/lxx4L/H/d6/m0Vu4WqmZv/1WYKQVIKiUQKrX7StscZid4S0HZC2BYk0OszXfml1YIpHK3ggOKRfZ3wzDNAbXLVV8LPzll+a/beMf/h7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O77IikC1; arc=none smtp.client-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uodc3msm"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca7c1176317so274101a12.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:04:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786658677; cv=none;
-        d=google.com; s=arc-20260327;
-        b=UECf79ioCGjIaau7/llCig4bSLqbEeU/1Xit6XOy3W7V5dKKuGJYcY2s7AgniMV+NF
-         69qBzydEVFTJ3xd9ti9JejHLqZppqhKwjKxwtUm9rXp+idkFuStmDqjrGWcQC/+koqRr
-         uy/dmFuXxdTmbAtPkge992eyXOtIyIPhc17o5Oqqis4UynKkw6ymusBtDECR5ocs99Gz
-         i+HfxzIxEaDuyrSj/fTPM5DH3yAOQxqFXaghOuDGT4vhACYzFBUno+GiUGGh+eDkQkMm
-         2If4qzpjxH2bCxrsnwRhtG1xQuE0/cCi/t+eZM8FFRcvkc4fh//uSH7WCmxCpmqxSOpp
-         7CCw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        fh=ColD3Y6PEsfKVSLwOHCdIAeX9BJLTFub2nJBpnt/ZfQ=;
-        b=kLZjJrm5G00UFAYykYv+a9okEve2aePunOZJ7ZmaYvTPTh/49cAx134SbCg2JiX1bk
-         DSztaCoqKwTMEROzx8C+qBTfH1YvWuqbTp1hbHkQ1dSoUFPZNk9K5+UhKtyswmr1R/T+
-         6F2Qjib7Nubie/bravAn2FN8jiaMSYmkC9bKe+j8H6OiM4kXOXcR4XfgLX64UmMaC80x
-         h0UZkdtBRipMiHsM7e16Q+eIBd0QO2H0h2+GqwNkldtEMoZjMGbTIdgAFtt9BGJ9QwnI
-         ksff7CDqP7SfpFRVi7mfPTEN11cCggAnhimlg3h5nq6OB7Fsgbg+mIuXJpMQKWYHw8h8
-         Hxyw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O77IikC1"
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cb7049fa552so221928a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:08:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786658677; x=1787263477; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        b=Uodc3msm0IhpYSQj8VX5kovwarQak0zWiB/9IgNLNosdzdKvi2WrB3Uf2GCxS1QiYa
-         7E8ILtr8/gBU/JI+kHVgNqEAyqnog40JFkEEx6EIc0tKMCffuR2s3Ppec0SV0Foyi3C/
-         hK4oaTIlwjpd7QZWvfuAF7jLYQU+A3GG5tuYDdP47Xic5giy8V4n1H83fDpp9VxD2smc
-         I5QMchWfUqLNQy4pIKZNo3yQRKxPblIxt8Nl0+md+xDjdNRyifsH+4Vw8VtWPCUWG1Zq
-         zVCfVtQ+vlA04FQ0G4y+ctnOuX6HegjNDgeCyWCcbBpblgUhzSYSgnbHgZkvjSteiP3q
-         WY5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658677; x=1787263477;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1786658930; x=1787263730; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
-        b=K5DQt03YsqOiSBXXdPHFwZ8XfCxHF9bE5URb+D6Jd1m2YeJ5yqybT5sRLkz0H2oTHG
-         M4RlFtSs/UBvFmiBJq4uVSk8UmZYepgPUwTgXoXdqnVbnkhZVp5Yx2Qu6oD4/2GbI66Q
-         di3nDQXUENrnbwu/hWbEEgMbKolW5CCsUUQnkz26HEFQvd8mKYEgvV5/QyZjkC9YXpJk
-         xIrE0yTL9k4xAP7eQT8oZtAucCXFxNePOjjCt8RMRPPz/MhqaZ2qa8ZWcIo5fgbHReo/
-         WvI0C+QjNe+z47pTrIgLH6GfWW+0PS0aKDvec4QmJ+80jdmtVqKHowa08nwO7cQOONTX
-         RLDw==
-X-Forwarded-Encrypted: i=1; AHgh+RoDwIwJcH8E4LhNQVrUsDfRUiIWbqLsWoOgeRA2h28eo0jVY2lL9YJyTYFZ/pe3w6jlfrlczRiuI17B32JGh+0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwnLbsAnFvTAYw+evxB1RVLauUy27HQ2RWOOP/8lfWCLnGKLaKj
-	fb8E8yUzmiiICYFYWy14ZFWZIl2goEODUcYY2Ko50Jt9ZzVpmwtNVAkkMIGNo+qGAEQXGXUJ9Nf
-	oI8nBKzmTwkpk9b0CvsjuT1bZo5k8xEg=
-X-Gm-Gg: AR+sD11M5K1R3BkJRqUm2QMbXDX/UgF5QXhrYUPRDbMw7JB3B4atPNRYCk7vasSOqF0
-	cFVWuLHlPlbibbnFZScxPw0jozEaaO7htZjTXnBfw1126jhBS7UXi0MNWLrh+kOGOXuNPhUMmTT
-	t/h0XKd8aUHrEk9YwX4IvFnylZvbMTLsVtQSc/zDygO2wYXxCW7yVHYqTts3YL/4UC6elw2Mtpq
-	xEWbMMepnY/O0M5xB9NSQf63nbgNwN33fV/bJ/rvvWSUnl287r7QB9eFruulO8HR6RXSwKrdk8/
-	FTxN0LtREhwMJz06m8GbgnogRjFneSV4MJ25+97kWCb7JMq2Oz0v8dT4PpPTrRHIvMvzcybJN7H
-	svAZaVyF2fX6BOBfYDrHPWFtWDZ1fK2/jg1/NbKjeHg==
-X-Received: by 2002:a05:6a21:33a2:b0:3c4:3321:4fe8 with SMTP id
- adf61e73a8af0-3cc71be2ba0mr896598637.14.1786658676974; Thu, 13 Aug 2026
- 15:04:36 -0700 (PDT)
+        bh=N/3XZWjnKAuEX+EJn/U2x2ZdOkAMPrJlBbo8McfTGik=;
+        b=O77IikC1sR3xbQiMdywHmVt9JDOGw8IV08kS1LlwG8tzdQFj+o2dEb5UtJfGTjdWMh
+         pgDMHr1drHwz1I8R/nduFxDD3mpZjyZ++TGcDlZyZcxBYFUDrjwowv1eTOikIInNxZK2
+         C+BVoq7Rs9oMQv2z+nf3MxU/4RS2i6u6Pxm9pG6jOBNP7zkUxOTEtpiMBbclB7Exjwtk
+         eLzyLlr0iUpPg+Uj/+ovfahhebV2/xui++RgIUBhZHyjnJ5MUZcEkEyf4t1dIX/Vg0C+
+         Pyjk4KGvxS80cFbaFhV6oQ01WJyWy0A5Tvo9HpI6vkZFozu109yY7U7GGivUD5HBvXEP
+         IHdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786658930; x=1787263730;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=N/3XZWjnKAuEX+EJn/U2x2ZdOkAMPrJlBbo8McfTGik=;
+        b=QXOiSNMBZyjb2mKXrQbM+FtYvJjoaH/FbEKn3R1R1WU6tjf3QCaFHAR6WMoxaYr3kf
+         MRO1MoF50V2H6l6cfXWDC0JaeFP42IfuIfrkHzkgTCaBPycZPWqf6tjo+PQZOlG13OAi
+         FgQ1Y7FdOLLr58vXvxJvF1SJIzxMKrmj2OPjUstO4qI6yHOmk9BYXETBi3myurgYqrq1
+         Vk0+4Y1KP2hUA2t0Stockf3KKUgsfU1LGeAX8zeNynMcXfiak9F+Lnpy5n30k2jwMncx
+         W0vm7AFc630THRUdIlc/XgIZ4rDg3MUjlLeIlCi4RNI2lWoEkxq7NfKhEaNxArJ7HGRf
+         w4VA==
+X-Forwarded-Encrypted: i=1; AHgh+RruAzKHt2r+X2nfGbIkBobfn3Zo9wFSSRN+reWfl+xRA0iupIIUbScfhxzucSlIcD4zDxQCrN4NXGnN7bfhh3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxUKyzw0/7w+nxLA7mzJIn0L2+5Q+xxHXhGVuGlEI32E+Km4ln
+	KqT/3PQbhWZshqgjwQWIZuE2pY5qfmOkczSEYMzhHzuKxkUGWbF+LBfj7CdPgXbWXRaWuGG3ulX
+	eQjI7Xw==
+X-Received: from pgcd20.prod.google.com ([2002:a05:6a02:4c54:b0:c9e:41e5:2eec])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a21:b0:3b5:489c:7bb5
+ with SMTP id adf61e73a8af0-3cc71d1e1c7mr839682637.28.1786658929498; Thu, 13
+ Aug 2026 15:08:49 -0700 (PDT)
+Date: Thu, 13 Aug 2026 15:08:48 -0700
+In-Reply-To: <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260810055709.729203-1-chenguang.zhao@linux.dev>
-In-Reply-To: <20260810055709.729203-1-chenguang.zhao@linux.dev>
-From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Thu, 13 Aug 2026 15:04:22 -0700
-X-Gm-Features: AUfX_mySmBbuOKMkZzyA6luWIOwiLVFTaBzYxN1T4Y0G-POAuGd72b9d5snmCP4
-Message-ID: <CAEf4BzY9YaeT4CssCe13uAWXYHXs6HervsCo0Puc0osfr8=yVw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] selftests/bpf: Add kptr-xchg benchmark
-To: Chenguang Zhao <chenguang.zhao@linux.dev>
-Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
-	memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev, song@kernel.org, 
-	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
-	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	chenguang.zhao@liux.dev, Chenguang Zhao <zhaochenguang@kylinos.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
+ <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com> <an3o4h-E8mj6CUaM@google.com>
+ <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
+Message-ID: <an5AcEG9mqDgnBYk@google.com>
+Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Binbin Wu <binbin.wu@linux.intel.com>, aik@amd.com, andrew.jones@linux.dev, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Fuad Tabba <fuad.tabba@linux.dev>
+Content-Type: text/plain; charset="us-ascii"
 
-On Sun, Aug 9, 2026 at 10:57=E2=80=AFPM Chenguang Zhao <chenguang.zhao@linu=
-x.dev> wrote:
->
-> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
->
-> Add a microbenchmark that repeatedly calls bpf_kptr_xchg() from an
-> fentry program. Architectures that advertise bpf_jit_supports_ptr_xchg()
-> inline the helper to BPF_XCHG; others keep the helper call. This bench
-> makes it easy to compare the two paths under the same workload.
+On Thu, Aug 13, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Thu, Aug 13, 2026, Binbin Wu wrote:
+> >> On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
+> >> > +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> >> > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
+> >> > +{
+> >> > +	struct folio_batch fbatch;
+> >> > +	pgoff_t next = start;
+> >> > +	int i;
+> >> > +
+> >> > +	folio_batch_init(&fbatch);
+> >> > +	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
+> >> > +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+> >> > +			struct folio *folio = fbatch.folios[i];
+> >> > +			pgoff_t start_index, end_index;
+> >> > +			kvm_pfn_t start_pfn;
+> >> > +			kvm_pfn_t nr_pages;
+> >> > +
+> >> > +			start_index = max(start, folio->index);
+> >> > +			end_index = min(end, folio_next_index(folio));
+> >> > +			/*
+> >> > +			 * end_index is either in folio or points to
+> >> > +			 * the first page of the next folio. Hence,
+> >> > +			 * all pages in range [start_index, end_index)
+> >> > +			 * are contiguous.
+> >> > +			 */
+> >> > +			start_pfn = folio_file_pfn(folio, start_index);
+> >> > +			nr_pages = end_index - start_index;
+> >> > +
+> >> > +			kvm_arch_gmem_make_shared(start_pfn, nr_pages);
+> >> > +		}
+> >> > +
+> >> > +		folio_batch_release(&fbatch);
+> >> > +		cond_resched();
+> >> > +	}
+> >> > +}
+> >> > +#else
+> >> > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end) {}
+> >> > +#endif
+> >> > +
+> >> >  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> >> >  				     size_t nr_pages, uint64_t attrs,
+> >> >  				     pgoff_t *err_index)
+> >> > @@ -599,7 +636,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> >> >
+> >> >  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
+> >> >  	kvm_gmem_invalidate_start(inode, start, end, filter);
+> >> > +
+> >> > +	if (!to_private)
+> 
+> Should I make this condition
+> 
+> 	if (!to_private && kvm_x86_ops.gmem_make_shared)
+> 
+> instead?
+> 
+> Will that help?
 
-but do we need a permanent benchmark for this? Is there any valid risk
-of regressing performance here? Unless there is a good reason to have
-this benchmark readily available for everyone to periodically run or
-something, I'm inclined to reject new benchmarks and minimize amount
-of code maintenance burden for something like this, sorry.
-
-pw-bot: cr
-
->
-> Usage:
->   sudo ./bench -d 30 -w 5 -p 1 kptr-xchg --nr_loops 256
->
-> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
-> ---
-> Example results on LoongArch64 (helper vs inlined):
->
-
-[...]
+No, because that's bleeding x86 details into common code, which defeats the purpose
+of arch hooks.  That's why I think it's worth analyzing the cost: if it's in the
+noise, leave it alone.  If it's meaningful, figure out a not-too-gross way to skip
+the entire thing if kvm_arch_gmem_make_shared() is a glorified nop in the end.
