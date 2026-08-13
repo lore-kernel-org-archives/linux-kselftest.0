@@ -1,155 +1,171 @@
-Received: from tsinghua.edu.cn (smtp46.tsinghua.edu.cn [101.6.4.70])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C51FF416852;
-	Thu, 13 Aug 2026 12:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.6.4.70
+Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DA93332601;
+	Thu, 13 Aug 2026 12:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786622794; cv=none; b=LyX14F4X7dy8O+3IUx9FMQzuVo99aOUOHI2amX1CDs9PcFosIij8Tg9BiKYkQF5zBih0bpDAmaJwtyoyGURpwuGnMzi/ODiN2BcNBvYgbqr+EQPXPY2hpUpqvNCFIhz+gbn2cku0kbqlGlhnLv8oFXM61llhd/EuAY8T7D6mAy8=
+	t=1786622935; cv=none; b=XZwLYStd5jYtJjXKGvtH3r5XvVMy7R6wX5oGWsHtPyxKdMb2QaDlyvky54HXCBt6rNqpP2rEDbZnRziNqJw+vSjEdGJKZmy/nhZ//hADL/hl8o68cCKBSz3l9tF1MNMBXVLClRxU0Z1iVTZ/EnKKCJZzeEq1sjr+Lsz7l1FUErM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786622794; c=relaxed/simple;
-	bh=olDO4MoiCEtiR0uFNeRK/O6KsrYTRFrgyDMjbSvo1T4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ngSs6EHB9SVD6ouEPbO6kblX912urZyx0uxox0zB1jKpL+Vl7Wj4W2hy8MR8VM9iErvMrTbE/jkFuLh/E3Eje9FGAoduTx0iUVR0FsRj47jpV61SVB6AFPwo3A71+zsdBTZ1rWcruaTvYj3O9tXoFl468Fa+/p/fSlQhYPHfzQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=Y75g8JKR; arc=none smtp.client-ip=101.6.4.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
+	s=arc-20240116; t=1786622935; c=relaxed/simple;
+	bh=y6EEHl+w8lpxa4lAmwUMWF6GyorO7UQOtTXZYbA005o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=iODUFyDEqLwmKIjU6Tvtjfk/CPcw0FXUHhQZVBEQ1icjnxdvhokE7cSNtVgNXWXNu9pLFiUxJSLNAHEv3+FvfHOy7b7apPgT5XstMHJC5AdnPkufk0ZfsidLxsAvEhBG44/gsWqgNV+j06HohNABrIS47ACN2mbqfJ6sMwH6dnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=RE147qHt; arc=none smtp.client-ip=220.197.31.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="Y75g8JKR"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
-	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
-	References:In-Reply-To:To:Cc; bh=zMY4svxhvDYYbHsdLL+c3C46FNIu/6K
-	FTsVb2L65vKQ=; b=Y75g8JKRtHZKRgRcolU/q43eapRXnYCxf6omdhDE2FzvXIl
-	kKH/zw5XcG1qNAeKGAqOB6H7stVPZDOdl9T8JahyrmywVgFiYNjrxX94Bw/cGLXa
-	RyjIozn3Sr8iORl3HAkw+0KV7r4gb4GnlkN8Vn6WZpZztvQ6xUwJTCuMzIWk=
-Received: from [172.17.0.4] (unknown [101.6.30.195])
-	by web2 (Coremail) with SMTP id yQQGZQCXlLYLsn1qPyv_AA--.41218S4;
-	Thu, 13 Aug 2026 20:01:23 +0800 (CST)
-From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-Date: Thu, 13 Aug 2026 12:01:04 +0000
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Cover mixed arena and
- map-value atomics
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="RE147qHt"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=Eo
+	lNU0nzB1S5Hraj4SzJwbg+Yw0AcJphFmyGyN/FzhE=; b=RE147qHt1FnAI6ikQa
+	iKjoocx9SNuxscAZOf7Ad1k9U0p0Thu5SQ0FQvRM9/bqRq/lfu45nLxakplFfPIH
+	lfKWgaARmSWXArCr0BDGJYD47wr4PgSEnm46G+KRTGhfZO4DxtG8O+Usk2S5kNKA
+	akfOdp0KsT8GuU80KnY66Xt38=
+Received: from localhost (unknown [])
+	by gzsmtp5 (Coremail) with SMTP id QCgvCgDngBmWs31qhis5MA--.17457S2;
+	Thu, 13 Aug 2026 20:07:52 +0800 (CST)
+From: Hui Su <sh_def@163.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@google.com,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Hui Su <sh_def@163.com>,
+	sashiko-bot@kernel.org
+Subject: [PATCH bpf] bpf: fix percpu map update indexing with sparse CPU IDs
+Date: Thu, 13 Aug 2026 20:02:53 +0800
+Message-ID: <20260813120250.796934-4-sh_def@163.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260813-bpf-next-038-mixed-atomic-v1-v1-2-e79aadb46a8a@mails.tsinghua.edu.cn>
-References: <20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn>
-In-Reply-To: <20260813-bpf-next-038-mixed-atomic-v1-v1-0-e79aadb46a8a@mails.tsinghua.edu.cn>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Emil Tsalapatis <emil@etsalapatis.com>, 
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1786622482; l=2205;
- i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
- bh=olDO4MoiCEtiR0uFNeRK/O6KsrYTRFrgyDMjbSvo1T4=;
- b=uA1Vvj/z8/7Z6pEkYOaav/8dUVzhuujMR9NEXVNUHoysYGgrMR6kauzIK/vZeTvchFatpHOWF
- euQUkxljW84C0irqrb61Sl1cnaF9KHJ19FeWxcYe+67RDQoO6q3LU9N
-X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
- pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
-X-CM-TRANSID:yQQGZQCXlLYLsn1qPyv_AA--.41218S4
-X-Coremail-Antispam: 1UD129KBjvJXoW7tF4fZF1rZr4xXry5Jw1xGrg_yoW8uFyfpr
-	97CasxJFWrXF1Uu3s3Jay8uFyakrs2vryUAw48J34xZF1UJr97XFs7KFy3Jr13Cr1fuw4F
-	kF1Iva4UWw4UAFDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUU9C1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
-	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4
-	x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl
-	84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24VAvwVAKI4IrM2AIxVAIcx
-	kEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6x8ErcxFaVAv8VW8
-	Ww4UJr1UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6I
-	AqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_GFv_Wrylc2xS
-	Y4AK67AK6ryUMxAIw28IcxkI7VAKI48JMxAIw28IcVCjz48v1sIEY20_GrWkJr1UJwCFx2
-	IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-	6r106r1rMI8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-	AKxVW8JVW5JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F4UJwCI42IY6xAIw20EY4v2
-	0xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxV
-	W8Jr0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x0JUG_M-UUUUU=
-X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:QCgvCgDngBmWs31qhis5MA--.17457S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxJw15tr1kZrW3AF4kJF1rtFb_yoWrXrW7pa
+	95Ka4jvr47Xr4Fv3yrK34xuFZ5Gwn8Xr17Ka98GryFyr42qwn2qr1DKFy3XFW5KwsFqr4a
+	yFnYvrZ0qay8ZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRwSdgUUUUU=
+X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwhgNbGp9s5gpFQAA37
 
-Add a verifier test with one atomic RMW instruction reached through
-PTR_TO_ARENA and PTR_TO_MAP_VALUE paths. The verifier must reject the
-shared instruction with the existing incompatible-pointer diagnostic.
+Per-CPU array, hash, and cgroup storage map updates without BPF_F_CPU
+or BPF_F_ALL_CPUS use a value buffer whose per-CPU slots are packed in
+possible-CPU order. The buffer is sized as:
 
-Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+  round_up(value_size, 8) * num_possible_cpus()
+
+The update paths iterate over possible CPUs, but use the logical CPU ID
+to calculate the source offset:
+
+  value + size * cpu
+
+This only works when possible CPU IDs are contiguous starting at zero.
+
+For example, with a possible CPU mask of 0,2-3, the buffer contains
+three slots corresponding to CPUs 0, 2, and 3. CPU2 is therefore
+expected to use slot 1 and CPU3 slot 2. Instead, the current code uses
+slots 2 and 3 respectively, causing incorrect per-CPU values and an
+out-of-bounds read from the update buffer for CPU3.
+
+The corresponding lookup paths already use a dense offset while
+iterating over possible CPUs. Do the same for the array, hash, and
+cgroup storage update paths, advancing the source offset once for each
+possible CPU. BPF_F_ALL_CPUS continues to use the same value for every
+CPU.
+
+Fixes: 8eb76cb03f0f ("bpf: Add BPF_F_CPU and BPF_F_ALL_CPUS flags support for percpu_array maps")
+Reported-by: sashiko-bot@kernel.org
+Signed-off-by: Hui Su <sh_def@163.com>
 ---
- tools/testing/selftests/bpf/progs/verifier_arena.c | 44 ++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+ kernel/bpf/arraymap.c      | 5 +++--
+ kernel/bpf/hashtab.c       | 4 +++-
+ kernel/bpf/local_storage.c | 5 +++--
+ 3 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
-index b241bbcf54a8a..2e43da188194b 100644
---- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-@@ -25,6 +25,15 @@ struct {
- 	__ulong(map_extra, ARENA_VM_START); /* start of mmap() region */
- } arena SEC(".maps");
+diff --git a/kernel/bpf/arraymap.c b/kernel/bpf/arraymap.c
+index 248b4818178c..cc3f8c25a28b 100644
+--- a/kernel/bpf/arraymap.c
++++ b/kernel/bpf/arraymap.c
+@@ -405,7 +405,7 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	void __percpu *pptr;
+ 	void *ptr, *val;
+ 	u32 size;
+-	int cpu;
++	int cpu, off = 0;
  
-+struct {
-+	__uint(type, BPF_MAP_TYPE_ARRAY);
-+	__uint(max_entries, 1);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} atomic_map SEC(".maps");
-+
-+static __u64 arena_atomic_target SEC(".addr_space.1");
-+
- SEC("socket")
- __success __retval(0)
- int basic_alloc1_nosleep(void *ctx)
-@@ -637,6 +646,41 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+ 	if (unlikely((map_flags & BPF_F_LOCK) || (u32)map_flags > BPF_F_ALL_CPUS))
+ 		/* unknown flags */
+@@ -437,9 +437,10 @@ int bpf_percpu_array_update(struct bpf_map *map, void *key, void *value,
+ 	}
+ 	for_each_possible_cpu(cpu) {
+ 		ptr = per_cpu_ptr(pptr, cpu);
+-		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 		copy_map_value(map, ptr, val);
+ 		bpf_obj_cancel_fields(map, ptr);
++		off += size;
+ 	}
+ unlock:
+ 	rcu_read_unlock();
+diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
+index 9f394e1aa2e8..298b16ac4cc0 100644
+--- a/kernel/bpf/hashtab.c
++++ b/kernel/bpf/hashtab.c
+@@ -1026,6 +1026,7 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
+ 	} else {
+ 		u32 size = round_up(htab->map.value_size, 8);
+ 		void *val;
++		int off = 0;
+ 		int cpu;
  
- #endif
+ 		if (map_flags & BPF_F_CPU) {
+@@ -1038,9 +1039,10 @@ static void pcpu_copy_value(struct bpf_htab *htab, void __percpu *pptr,
  
-+SEC("socket")
-+__description("arena and map value atomic at the same instruction")
-+__failure __msg("same insn cannot be used with different pointers")
-+__arch_x86_64
-+__load_if_JITed()
-+__naked void mixed_arena_map_value_atomic(void)
-+{
-+	asm volatile ("					\
-+	r1 = 0;					\
-+	*(u32 *)(r10 - 4) = r1;			\
-+	r2 = r10;					\
-+	r2 += -4;					\
-+	r1 = %[atomic_map] ll;				\
-+	call %[bpf_map_lookup_elem];			\
-+	if r0 == 0 goto 1f;				\
-+	r6 = r0;					\
-+	r7 = %[arena_atomic_target] ll;			\
-+	.byte 0xbf; .byte 0x77; .short 1; .long 1;	\
-+	call %[bpf_get_prandom_u32];			\
-+	if w0 != 0 goto 2f;				\
-+	r8 = r6;					\
-+	goto 3f;					\
-+2:	r8 = r7;					\
-+3:	r9 = 1;					\
-+	lock *(u64 *)(r8 + 0) += r9;			\
-+1:	r0 = 0;					\
-+	exit;						\
-+"	:
-+	: __imm_addr(atomic_map),
-+	  __imm_addr(arena_atomic_target),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm(bpf_get_prandom_u32)
-+	: __clobber_all);
-+}
-+
- static __noinline
- u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
- {
-
+ 		for_each_possible_cpu(cpu) {
+ 			ptr = per_cpu_ptr(pptr, cpu);
+-			val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++			val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 			copy_map_value(&htab->map, ptr, val);
+ 			bpf_obj_cancel_fields(&htab->map, ptr);
++			off += size;
+ 		}
+ 	}
+ }
+diff --git a/kernel/bpf/local_storage.c b/kernel/bpf/local_storage.c
+index 23267213a17f..83cd527a2542 100644
+--- a/kernel/bpf/local_storage.c
++++ b/kernel/bpf/local_storage.c
+@@ -220,7 +220,7 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *_map, void *key,
+ 	struct bpf_cgroup_storage *storage;
+ 	void *val;
+ 	u32 size;
+-	int cpu;
++	int cpu, off = 0;
+ 
+ 	if ((u32)map_flags & ~(BPF_ANY | BPF_EXIST | BPF_F_CPU | BPF_F_ALL_CPUS))
+ 		return -EINVAL;
+@@ -245,8 +245,9 @@ int bpf_percpu_cgroup_storage_update(struct bpf_map *_map, void *key,
+ 	}
+ 	size = round_up(_map->value_size, 8);
+ 	for_each_possible_cpu(cpu) {
+-		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
++		val = (map_flags & BPF_F_ALL_CPUS) ? value : value + off;
+ 		copy_map_value(_map, per_cpu_ptr(storage->percpu_buf, cpu), val);
++		off += size;
+ 	}
+ unlock:
+ 	rcu_read_unlock();
 -- 
-2.43.0
+2.54.0
 
