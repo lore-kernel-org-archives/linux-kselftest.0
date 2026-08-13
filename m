@@ -1,188 +1,111 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECA16442FC2;
-	Thu, 13 Aug 2026 12:18:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A442442FC2;
+	Thu, 13 Aug 2026 12:24:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786623531; cv=none; b=HUX64TR4/n8IDh3dLKKaBls2KbUd6LaSddw85tOzP+dBJUgmdOxo7Xz1IHYmlN91E14JOwACnBT87ORLOjeP57MCQ0+OEO5k0D/XMBuJWobLD7AhppAnETPQAe/TjeoPeIIWCDCdq17/r81KHaj3CLJCUGiCSwx0Bb9oTyLtofI=
+	t=1786623889; cv=none; b=EmmrWch/KMkzNueYkw3vmt6QD61Pel1EOhSM4U2HqAJ2xEa3usPS6GjSSQ+cG0hU0Fyaone3Gsts4JCELEguQ0fzDdIQXXghx6MG8s5h/OxVsyE3wEYQxtFSuEt8e5nDtftpPvrEV42sDh1luXGKdh6FKc6aV2zSEL7rSzTulRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786623531; c=relaxed/simple;
-	bh=bx1auWMjtQ6lK77Ub+fPqi3tw5TQNFTmgBgtSoVMeRE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=KymYpLe8e84czeeITg8/sgs/NzXcV1eJgYi3de1G755yyeM3ELkwCyT52+8btN3Aq9dkHr3kslb1WUOaCdrkQqSLOzzy6mpfM0IxkuaTIcdz10AKdYq4t9AjgDfC7QoCR/bKXDeYqpxhFOj8FTXqKRloWRMwDtmhEmPfGNqGpDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LYpj97qf; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786623889; c=relaxed/simple;
+	bh=tq2KkDyi1Hfg2VIZ+QyMwBlh4u8Im7y2AmoCbDmrp0Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hEPnGzbajGQsUPjf6wSXLa5Ua/P/Yszm3MAxEy2eINtf3DskcNC/hXJpkO59QzjbH5TNa4tAGKFSleOTdU4seHOGOTTIKJ6e9oz1inOiu3Mx/VeE6jQkYUaA4cUDE8cB5fOwkfOlb46l/5p6ezNewzW6M5N3/AnR6AhKS0Yue/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=F/+2YXEQ; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LYpj97qf"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A813C2BCF5;
-	Thu, 13 Aug 2026 12:18:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786623530;
-	bh=bx1auWMjtQ6lK77Ub+fPqi3tw5TQNFTmgBgtSoVMeRE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=LYpj97qfq8/4uunncx8KuPwgfOXjs0rw8uGLRmuA0F2V3UcGUpxgxD4AKwel7bz1d
-	 DMtFMIyBQBIl+0Pfn+WkV3cwPWGM2uCVrKUlLLSmo4ROy1rXWkLyyh7ZJSLbjfTBm9
-	 tJDRiGXg/UH0cBGqHA+r1tIk2ZYAke6omkHZ3TiwqukEjbXq0r0Ezp+YFnTKsH/kad
-	 Xnilsn2tzu8BwXKEfEEdXE3PN1U3bEf31Hhgb4X8letqE2utERAgGDdLTPUW/fa7sX
-	 ek38L6kKMGFSakv9HEHup+yqs8rJ5hy9OLhXJRHj7NwxCi1vnKpB0+MN8CzQy96WwW
-	 e1sL7uNXBh+8w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 7D3D6C5DF69;
-	Thu, 13 Aug 2026 12:18:50 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Thu, 13 Aug 2026 14:18:40 +0200
-Subject: [PATCH 4/4] sysctl: Add 0013 to test partially updated vectors
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="F/+2YXEQ"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=W2I649bESmcra41uNs5eBViEJk8ehpau83UJfS+F/0o=; t=1786623886;
+	x=1787228686; b=F/+2YXEQvmPzM1U0d82GGPkbKcuUSylDBPlG4TmOFXan8t9fYVPEGZmED6m41
+	L/P8Ss/zVRuRGOM8Ba8aYgqw0QQMQmw2OJHd8uOHda84phQMZ5DsO9wvHkLk2Wws+hXKSwIJPEHHb
+	E12EBjRuiuu/Sw7u3lApxYUYR3jhs5uFzOYi0cTiEKM6YpPw9WOu0UxWbsmwCV3DaurXKuTX6DpkG
+	yFpzUQ8BXho3bCUfl24MYHSlakWanMX7oMh9woZTlVf4+Za8Wu+tSwiHqXtFAVrxOZVZ8aiAa699d
+	rjeRJoyiZ0h/DgxsnbfvcxkGlJ9hhrc34ZWJpZZD95f7n5D0HA==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.99)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1wuUUD-00000000eS7-14Sl; Thu, 13 Aug 2026 14:24:41 +0200
+Received: from p5dc558fe.dip0.t-ipconnect.de ([93.197.88.254] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.99)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1wuUUC-00000000Xot-40E1; Thu, 13 Aug 2026 14:24:41 +0200
+Message-ID: <f5f5e9a6eed1955f4ad8f01b810562979290bcc4.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 2/2] x86: Start removing X86_X32_ABI
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, "H. Peter
+ Anvin" <hpa@zytor.com>, "Maciej W. Rozycki" <macro@orcam.me.uk>, Bill
+ Wendling <morbo@google.com>,  Borislav Petkov	 <bp@alien8.de>, Dave Hansen
+ <dave.hansen@linux.intel.com>, Ingo Molnar	 <mingo@redhat.com>, Jonathan
+ Corbet <corbet@lwn.net>, Justin Stitt	 <justinstitt@google.com>, Nathan
+ Chancellor <nathan@kernel.org>, Neal Gompa	 <neal@gompa.dev>, Nick
+ Desaulniers <ndesaulniers@google.com>, Richard Purdie	
+ <richard.purdie@linuxfoundation.org>, Sam James <sam@gentoo.org>, Shuah
+ Khan	 <shuah@kernel.org>, Thomas Gleixner <tglx@kernel.org>, Thomas
+ =?ISO-8859-1?Q?Wei=DFschuh?=	 <linux@weissschuh.net>, Tomas Glozar
+ <tglozar@kernel.org>, Willy Tarreau	 <w@1wt.eu>, x86@kernel.org, Arnd
+ Bergmann <arnd@arndb.de>
+Date: Thu, 13 Aug 2026 14:24:39 +0200
+In-Reply-To: <20260813121111.bVf9xHsk@linutronix.de>
+References: <20260813-x32_removal-v3-0-e8f96cd15478@linutronix.de>
+	 <20260813-x32_removal-v3-2-e8f96cd15478@linutronix.de>
+	 <53d827d6481818bf0ba1fbf0b29aa5e750243b7b.camel@physik.fu-berlin.de>
+	 <20260813121111.bVf9xHsk@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260813-lklm-partial_ctlvec-v1-4-df9e51c13704@kernel.org>
-References: <20260813-lklm-partial_ctlvec-v1-0-df9e51c13704@kernel.org>
-In-Reply-To: <20260813-lklm-partial_ctlvec-v1-0-df9e51c13704@kernel.org>
-To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- linux-mm@kvack.org
-Cc: Jianlin Shi <shijianlin11@foxmail.com>, akpm@linux-foundation.org, 
- vbabka@kernel.org, hannes@cmpxchg.org, surenb@google.com, mhocko@suse.com, 
- jackmanb@google.com, ziy@nvidia.com, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3132;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=bx1auWMjtQ6lK77Ub+fPqi3tw5TQNFTmgBgtSoVMeRE=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGp9tigf0HZ/SOSipnWglbugNlaMER9isn8Ln
- HKjGsYXnp8SHIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJqfbYoAAoJELqXzVK3
- lkFPa8gL+wVFctfUarU/BECGG+yem97ZpueVfSLV32B2PJJKmFL7c6BeArL3+nFK66TgrYUfEDI
- 794BeoxGMD2zXrMWvkrt+ynKROFyKvwTTEiUXIy/2RLYaYWMfIHBlDpFhIlgxYOk+JRBGtZ9lCT
- jKEGmr8rUvShwgJ79bMF4GiJ2DyCL+FcGIA4ZZVAsYkaYocp3ryyn25z6J1zzanLyqnGBayYCW7
- 4RmOuwTSD6qkmUE5kh9XezhlQhbYW639iHxhLnDmGS4tQ/nIiLrXIVTUdK5L7mVI8ikNwgz+Kz7
- /r4G32tJLbnV0q3aDiA4L7tBUUWlWO9/0vAtXw52FtmR5APUyDHPRntB9K9XN/IV5EZFxiSIhNe
- QhRZ/0aJjRBQf9lgKmyd2kTFs7VHY1gLNnJW0URRuJeCryne0K3vqm+zKpnwFs59ZLD8wPftoYZ
- MaG77XNioStWHAwaTevL7oRdTTv+C+DNryBbdYAxsSZcc0CC+0oew2BnXWGTWrnjwlzthSD8Vs4
- +k=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-Add coverage for partially updated sysctl vectors with test 0013. It
-makes sure that the sysctl vector is unchanged when one of the elements
-is not valid.
+Hi Sebastian,
 
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- tools/testing/selftests/sysctl/sysctl.sh | 57 ++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+On Thu, 2026-08-13 at 14:11 +0200, Sebastian Andrzej Siewior wrote:
+> On 2026-08-13 13:07:53 [+0200], John Paul Adrian Glaubitz wrote:
+> > Hi Sebastian,
+> Hi Adrian,
+>=20
+> > On Thu, 2026-08-13 at 13:04 +0200, Sebastian Andrzej Siewior wrote:
+> > > Since there is practically no real use for x32, start removing it by
+> > > removing the symbol first, not allowing to enable it. Should nothing
+> > > happening by the end of the year, it will removed after the last LTS
+> > > kernel this year.
+> >=20
+> > Wouldn't that mean that x32 won't be usable in the upcoming LTS kernel
+> > then? Why not do it the same way it was done for ia64, wait for the nex=
+t
+> > LTS release, then remove it.
+>=20
+> The idea is to revert the (two) commit(s).
 
-diff --git a/tools/testing/selftests/sysctl/sysctl.sh b/tools/testing/selftests/sysctl/sysctl.sh
-index b2d8bd9026a721e96c26be20069f7f87b06a5cf7..fdf3d2fb0a2ad23a525d3205577a06d7d97576b7 100755
---- a/tools/testing/selftests/sysctl/sysctl.sh
-+++ b/tools/testing/selftests/sysctl/sysctl.sh
-@@ -4,6 +4,7 @@
- 
- # This performs a series tests against the proc sysctl interface.
- 
-+# shellcheck disable=SC2317
- # Kselftest framework requirement - SKIP code is 4.
- ksft_skip=4
- 
-@@ -37,6 +38,7 @@ ALL_TESTS="$ALL_TESTS 0009:1:1:unregister_error:0"
- ALL_TESTS="$ALL_TESTS 0010:1:1:mnt/mnt_error:0"
- ALL_TESTS="$ALL_TESTS 0011:1:1:empty_add:0"
- ALL_TESTS="$ALL_TESTS 0012:1:1:u8_valid:0"
-+ALL_TESTS="$ALL_TESTS 0013:1:1:int_0003:1"
- 
- function allow_user_defaults()
- {
-@@ -196,6 +198,18 @@ verify_diff_w()
- 	return $?
- }
- 
-+# Verify that an erroneous ($2) update fails and does not change TARGET
-+verify_no_partial_update()
-+{
-+	TEST_STR="$1"
-+	echo -n "$TEST_STR" > "$TARGET"
-+
-+	if echo -n "$2" > "$TARGET" 2> /dev/null; then
-+		return 1
-+	fi
-+	verify_diff_w "${TARGET}"
-+}
-+
- test_rc()
- {
- 	if [[ $rc != 0 ]]; then
-@@ -501,6 +515,40 @@ run_limit_digit_int_array()
- 	test_rc
- }
- 
-+# You used an int array and one of the elements is not acceptable
-+run_int_array_no_partial_update()
-+{
-+	echo -n "Testing invalid array element does not partially update ... "
-+        # Expect failure because of 3rd element (abc).
-+	if ! verify_no_partial_update "1 2 3 4" "10 20 abc 40"; then
-+		echo "FAIL" >&2
-+		rc=1
-+	else
-+		echo "OK"
-+	fi
-+	test_rc
-+
-+	echo -n "Testing out of range array element does not partially update ... "
-+        # Expect failure because of 3rd element (greater than int)
-+	if ! verify_no_partial_update "1 2 3 4" "10 20 $((INT_MAX + 1)) 40"; then
-+		echo "FAIL" >&2
-+		rc=1
-+	else
-+		echo "OK"
-+	fi
-+	test_rc
-+
-+	echo -n "Testing invalid first array element does not update ... "
-+        # Expect failure of 1st element
-+	if ! verify_no_partial_update "1 2 3 4" "abc 20 30 40"; then
-+		echo "FAIL" >&2
-+		rc=1
-+	else
-+		echo "OK"
-+	fi
-+	test_rc
-+}
-+
- # You are using an unsigned int
- run_limit_digit_uint()
- {
-@@ -880,6 +928,14 @@ sysctl_test_0012()
- 	return 0
- }
- 
-+sysctl_test_0013()
-+{
-+	TARGET="${SYSCTL}/$(get_test_target 0013)"
-+	reset_vals
-+
-+	run_int_array_no_partial_update
-+}
-+
- list_tests()
- {
- 	echo "Test ID list:"
-@@ -900,6 +956,7 @@ list_tests()
- 	echo "0010 x $(get_test_count 0010) - tests sysct mount point"
- 	echo "0011 x $(get_test_count 0011) - tests empty directories"
- 	echo "0012 x $(get_test_count 0012) - tests range check for u8 proc_handler"
-+	echo "0013 x $(get_test_count 0013) - tests partially update vectors on error"
- }
- 
- usage()
+But that imply that anyone concerned would have to respond in a timely mann=
+er
+which is not really something I would expect.
 
--- 
-2.50.1
+My suggestion would be to leave the complete x32 support fully intact until
+the next LTS release so that anyone using that LTS release will know that x=
+32
+will be fully working.
 
+Adrian
 
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
