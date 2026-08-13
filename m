@@ -1,162 +1,291 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 393C43C108F
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:08:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 400F4361976;
+	Thu, 13 Aug 2026 22:10:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658934; cv=none; b=Iv488O3l6ynoOxW29qodqb6ZxbUH8E/WtQWOoe5ZJIYyxkJ0AE1EcvVUDDN7U+Pyv5rGT90SGnKcm87Ep+FszYiyx6MrnRSURz+iqNwnm+DAW2ePbjf25Im7ZBqeye6ADDa3X7XK4quGatyxHtVvVURmfTAicvDoASprScR3McU=
+	t=1786659038; cv=none; b=CjzPrTklJP+YOy06+kg69oC8aSxO+ujxwCWQ+IrmZ4fvprZOwnBbLUWMnxlA40wZKqbMxC5HtPC33BKvgnwlOhkKj0EmiyDX2WEDvhafFHkzKyPEkgTUJ7Cx1Y6oyJcMieLpOj/cxq951UZrww931o1Ki+gu8nx+MNdLzjG4tQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658934; c=relaxed/simple;
-	bh=KiztK1JbpO5JZhhPbKHjeFsloeqjBsAvtQBBDIoVGKs=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=EpwPZ8MAqbHYJyWvLKUAOPzBssqAo0uFM4FRiYUsBUXguP08oAwPwLZ9Voc44NlXoI/lxx4L/H/d6/m0Vu4WqmZv/1WYKQVIKiUQKrX7StscZid4S0HZC2BYk0OszXfml1YIpHK3ggOKRfZ3wzDNAbXLVV8LPzll+a/beMf/h7k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=O77IikC1; arc=none smtp.client-ip=209.85.215.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786659038; c=relaxed/simple;
+	bh=POXpIRD4wmUHvq5EVRhrrHK7dmS6cVVMl3iHwixvm9E=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CmWiqufMSS5vFfS/QcYhKytnt4kWNS13/OL6grMyeEhCgw3L3okeRW8W99aPCPZ6IhXwBTHeI65uz+S3yogQnKDTMqH2QnlhdTjGMq1Igin6tsDUqSweTNVzRmij5b9VeKOanNZJ9IV+xlJC+S12XvvLMShFI0WAb9pjMBApJEQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJb6r5cU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="O77IikC1"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cb7049fa552so221928a12.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:08:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786658930; x=1787263730; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=N/3XZWjnKAuEX+EJn/U2x2ZdOkAMPrJlBbo8McfTGik=;
-        b=O77IikC1sR3xbQiMdywHmVt9JDOGw8IV08kS1LlwG8tzdQFj+o2dEb5UtJfGTjdWMh
-         pgDMHr1drHwz1I8R/nduFxDD3mpZjyZ++TGcDlZyZcxBYFUDrjwowv1eTOikIInNxZK2
-         C+BVoq7Rs9oMQv2z+nf3MxU/4RS2i6u6Pxm9pG6jOBNP7zkUxOTEtpiMBbclB7Exjwtk
-         eLzyLlr0iUpPg+Uj/+ovfahhebV2/xui++RgIUBhZHyjnJ5MUZcEkEyf4t1dIX/Vg0C+
-         Pyjk4KGvxS80cFbaFhV6oQ01WJyWy0A5Tvo9HpI6vkZFozu109yY7U7GGivUD5HBvXEP
-         IHdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658930; x=1787263730;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=N/3XZWjnKAuEX+EJn/U2x2ZdOkAMPrJlBbo8McfTGik=;
-        b=QXOiSNMBZyjb2mKXrQbM+FtYvJjoaH/FbEKn3R1R1WU6tjf3QCaFHAR6WMoxaYr3kf
-         MRO1MoF50V2H6l6cfXWDC0JaeFP42IfuIfrkHzkgTCaBPycZPWqf6tjo+PQZOlG13OAi
-         FgQ1Y7FdOLLr58vXvxJvF1SJIzxMKrmj2OPjUstO4qI6yHOmk9BYXETBi3myurgYqrq1
-         Vk0+4Y1KP2hUA2t0Stockf3KKUgsfU1LGeAX8zeNynMcXfiak9F+Lnpy5n30k2jwMncx
-         W0vm7AFc630THRUdIlc/XgIZ4rDg3MUjlLeIlCi4RNI2lWoEkxq7NfKhEaNxArJ7HGRf
-         w4VA==
-X-Forwarded-Encrypted: i=1; AHgh+RruAzKHt2r+X2nfGbIkBobfn3Zo9wFSSRN+reWfl+xRA0iupIIUbScfhxzucSlIcD4zDxQCrN4NXGnN7bfhh3Q=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxUKyzw0/7w+nxLA7mzJIn0L2+5Q+xxHXhGVuGlEI32E+Km4ln
-	KqT/3PQbhWZshqgjwQWIZuE2pY5qfmOkczSEYMzhHzuKxkUGWbF+LBfj7CdPgXbWXRaWuGG3ulX
-	eQjI7Xw==
-X-Received: from pgcd20.prod.google.com ([2002:a05:6a02:4c54:b0:c9e:41e5:2eec])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:6a21:b0:3b5:489c:7bb5
- with SMTP id adf61e73a8af0-3cc71d1e1c7mr839682637.28.1786658929498; Thu, 13
- Aug 2026 15:08:49 -0700 (PDT)
-Date: Thu, 13 Aug 2026 15:08:48 -0700
-In-Reply-To: <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJb6r5cU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D3FF1F00A3A;
+	Thu, 13 Aug 2026 22:10:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786659036;
+	bh=hkxTWcvChsvj61vzegcnkZFzyTe5mjr4qA5ydcOUnVw=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=VJb6r5cU0mo/3v5El5LCFZ9lSbzo3+KVvsMSboRjZ72wTWz1xHi2aOYMEUFoxnQUe
+	 fh8ozXcly17ElnUpNSzfZxfrEpivWW7OaOBxDJyWPWuFrB+oA0Xr/wAKGUWsbP0wkp
+	 UJFkyq72XHBvZxfGgYhI5ZlnUjKfi8Xv667Bc1hrQvK+7pjEA8Ptb9yFsQc7pZJ15e
+	 pirHLwhIl8H06gH2pguWzuCYIUtUeI9vAU7kEMJMcBGcg/kn6/3X0shKmmej10QxQq
+	 DpVHrug6Oyb6qa7evmrC8nR2iSLZi684H4Z0ROiuPnL5QsTkblzimhbeC7Jw6oDtOw
+	 tpJ+4ngjEpbzA==
+Content-Type: multipart/mixed; boundary="===============8004572713851048476=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
- <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com> <an3o4h-E8mj6CUaM@google.com>
- <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
-Message-ID: <an5AcEG9mqDgnBYk@google.com>
-Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
- callback for to-shared conversion
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: Binbin Wu <binbin.wu@linux.intel.com>, aik@amd.com, andrew.jones@linux.dev, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev, Fuad Tabba <fuad.tabba@linux.dev>
+MIME-Version: 1.0
+Message-Id: <244c96861c2f5eedf2fec73ffb1dcff7c7eec570a426361b5fc93000f19850dd@mail.kernel.org>
+In-Reply-To: <20260813211533.290256-5-dingning04@gmail.com>
+References: <20260813211533.290256-5-dingning04@gmail.com>
+Subject: Re: [PATCH bpf-next v4 4/4] selftests/bpf: Test untrusted allocated-object pointers
+From: bot+bpf-ci@kernel.org
+To: dingning04@gmail.com,bpf@vger.kernel.org
+Cc: memxor@gmail.com,greg@kroah.com,dingning04@gmail.com,sashiko-bot@kernel.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,chengkaitao@kylinos.cn,vmalik@redhat.com,utilityemal77@gmail.com,leon.hwang@linux.dev,chenyy23@mails.tsinghua.edu.cn,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 22:10:35 +0000 (UTC)
+
+--===============8004572713851048476==
 Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 13, 2026, Ackerley Tng wrote:
-> Sean Christopherson <seanjc@google.com> writes:
-> 
-> > On Thu, Aug 13, 2026, Binbin Wu wrote:
-> >> On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
-> >> > +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> >> > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
-> >> > +{
-> >> > +	struct folio_batch fbatch;
-> >> > +	pgoff_t next = start;
-> >> > +	int i;
-> >> > +
-> >> > +	folio_batch_init(&fbatch);
-> >> > +	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
-> >> > +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-> >> > +			struct folio *folio = fbatch.folios[i];
-> >> > +			pgoff_t start_index, end_index;
-> >> > +			kvm_pfn_t start_pfn;
-> >> > +			kvm_pfn_t nr_pages;
-> >> > +
-> >> > +			start_index = max(start, folio->index);
-> >> > +			end_index = min(end, folio_next_index(folio));
-> >> > +			/*
-> >> > +			 * end_index is either in folio or points to
-> >> > +			 * the first page of the next folio. Hence,
-> >> > +			 * all pages in range [start_index, end_index)
-> >> > +			 * are contiguous.
-> >> > +			 */
-> >> > +			start_pfn = folio_file_pfn(folio, start_index);
-> >> > +			nr_pages = end_index - start_index;
-> >> > +
-> >> > +			kvm_arch_gmem_make_shared(start_pfn, nr_pages);
-> >> > +		}
-> >> > +
-> >> > +		folio_batch_release(&fbatch);
-> >> > +		cond_resched();
-> >> > +	}
-> >> > +}
-> >> > +#else
-> >> > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end) {}
-> >> > +#endif
-> >> > +
-> >> >  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> >> >  				     size_t nr_pages, uint64_t attrs,
-> >> >  				     pgoff_t *err_index)
-> >> > @@ -599,7 +636,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> >> >
-> >> >  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
-> >> >  	kvm_gmem_invalidate_start(inode, start, end, filter);
-> >> > +
-> >> > +	if (!to_private)
-> 
-> Should I make this condition
-> 
-> 	if (!to_private && kvm_x86_ops.gmem_make_shared)
-> 
-> instead?
-> 
-> Will that help?
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> index fd35093285c0d..383c5b1b7111f 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
+> @@ -893,6 +893,106 @@ long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
+>  	return 0;
+>  }
+>
+> +SEC("?syscall")
+> +__success
+> +long map_kptr_read_after_rcu_unlock(void *ctx)
 
-No, because that's bleeding x86 details into common code, which defeats the purpose
-of arch hooks.  That's why I think it's worth analyzing the cost: if it's in the
-noise, leave it alone.  If it's meaningful, figure out a not-too-gross way to skip
-the entire thing if kvm_arch_gmem_make_shared() is a glorified nop in the end.
+A reviewer noted in v3 that the tests use TC programs with implicit RCU
+protection, causing pointers not to become untrusted as intended, and
+specifically suggested: "The right fix might be to use fentry.s for these
+tests to trigger untrusted marking of pointers."
+
+v4 uses SEC("?syscall") instead. While syscall programs are sleepable and
+may trigger untrusted marking, does this section annotation achieve the
+same behavior Kumar recommended fentry.s for? The deviation from the
+specific suggestion wasn't discussed in the v4 thread.
+
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	return n->key;
+> +}
+> +
+> +SEC("?syscall")
+> +__failure __msg("is neither owning or non-owning ref")
+> +long refcount_acquire_graph_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n, *m;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	m = bpf_refcount_acquire(n);
+> +	if (m)
+> +		bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+> +SEC("?syscall")
+> +__failure __msg("only read is supported")
+> +long graph_map_kptr_write_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	n->key = 1;
+> +	return 0;
+> +}
+
+Does this test actually verify the fix? The "only read is supported"
+rejection comes from the PTR_UNTRUSTED check in check_ptr_to_btf_access():
+
+    if (atype != BPF_READ && (type_flag(reg->type) & PTR_UNTRUSTED)) {
+            verbose(env, "only read is supported\n");
+            return -EACCES;
+    }
+
+This check is unchanged in the pre-series tree and rejects writes through
+any PTR_UNTRUSTED register for both object layouts. A kernel missing the
+series fix would still fail this test with the same message, so the test
+wouldn't catch a revert.
+
+> +
+> +SEC("?syscall")
+> +__success
+> +long graph_map_kptr_read_after_spin_unlock(void *ctx)
+> +{
+> +	struct map_value *mapval;
+> +	struct node_data *n;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> +	if (!mapval)
+> +		return 0;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 0;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	bpf_spin_lock(&lock);
+> +	bpf_spin_unlock(&lock);
+> +
+> +	return n->key;
+> +}
+
+Is __success correct for this read? After bpf_rcu_read_unlock() in a
+sleepable program, the pointer gains PTR_UNTRUSTED but keeps NON_OWN_REF
+because the fix excludes PTR_UNTRUSTED from type_is_ptr_alloc_obj().
+
+At the load, the type is PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED |
+NON_OWN_REF. The bpf_convert_ctx_accesses() switch in
+kernel/bpf/fixups.c lists these BPF_PROBE_MEM cases:
+
+    case PTR_TO_BTF_ID | PTR_UNTRUSTED:
+    case PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED:
+
+but not the NON_OWN_REF variant, so the switch falls through and the load
+stays a plain BPF_MEM access with no exception-table entry.
+
+The object is freed via bpf_mem_free_rcu(), so in a sleepable syscall
+program that has left the RCU critical section, a grace period can elapse
+and the page can be returned to the allocator before the load executes,
+causing an unprotected fault.
+
+Pre-series, invalidate_non_owning_refs() at bpf_spin_unlock() killed this
+register because type_is_non_owning_ref() was true. Now that
+type_is_ptr_alloc_obj() excludes PTR_UNTRUSTED, type_is_non_owning_ref()
+returns false and the stale register survives.
+
+The sibling test map_kptr_read_after_rcu_unlock (node_refcount_only, no
+graph node, hence no NON_OWN_REF) does match a BPF_PROBE_MEM case and gets
+the probe rewrite. Should either fixups.c gain a NON_OWN_REF case and this
+test document the probe path, or should NON_OWN_REF be stripped in
+invalidate_rcu_protected_refs()?
+
+> +
+>  static long __stash_map_empty_xchg(struct node_data *n, int idx)
+>  {
+>  	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
+> diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> index acd3e81a39168..0cc4cbd0c81b1 100644
+> --- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> +++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
+> @@ -127,6 +127,33 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
+>  	return 0;
+>  }
+>
+> +SEC("?syscall")
+> +__failure __msg("is neither owning or non-owning ref")
+> +long refcount_acquire_after_rcu_unlock(void *ctx)
+> +{
+> +	struct map_value_refcount_only *mapval;
+> +	struct node_refcount_only *n, *m;
+> +	int idx = 0;
+> +
+> +	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
+> +	if (!mapval)
+> +		return 1;
+> +
+> +	bpf_rcu_read_lock();
+> +	n = mapval->node;
+> +	if (!n) {
+> +		bpf_rcu_read_unlock();
+> +		return 2;
+> +	}
+> +	bpf_rcu_read_unlock();
+> +
+> +	m = bpf_refcount_acquire(n);
+> +	if (m)
+> +		bpf_obj_drop(m);
+> +
+> +	return 0;
+> +}
+> +
+>  SEC("?tc")
+>  __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
+>  long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
+
+The commit message states:
+
+> The verifier previously allowed pointers used after RCU protection ended
+> to reach bpf_refcount_acquire() and, for one object layout, a direct write.
+> If the object was freed and reused, these operations could access stale
+> memory.
+>
+> Add tests that keep BPF_PROBE_MEM reads accepted but reject reference
+> acquisition and direct writes after RCU protection ends. Cover both tested
+> object layouts.
+
+Is the description fully accurate?
+
+The "direct write" was never allowed for any object layout. The
+PTR_UNTRUSTED check in check_ptr_to_btf_access() predates the series and
+rejects writes through any PTR_UNTRUSTED register for both node_data and
+node_refcount_only.
+
+The claim "keep BPF_PROBE_MEM reads accepted ... Cover both tested object
+layouts" is only true for node_refcount_only (map_kptr_read_after_rcu_unlock).
+The node_data read (graph_map_kptr_read_after_spin_unlock) ends up with
+PTR_TO_BTF_ID | MEM_ALLOC | PTR_UNTRUSTED | NON_OWN_REF, a combination
+missing from bpf_convert_ctx_accesses() in kernel/bpf/fixups.c, so it
+stays a plain BPF_MEM load without probe rewrite.
+
+The genuinely new coverage is the two bpf_refcount_acquire() tests. Would
+it be more accurate to scope the description to those plus the
+refcount-only read?
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31745514567
+--===============8004572713851048476==--
