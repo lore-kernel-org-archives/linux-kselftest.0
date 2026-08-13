@@ -1,40 +1,36 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-135.mta0.migadu.com [91.218.175.135])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A445B425CEE;
-	Thu, 13 Aug 2026 11:35:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6305D369D76
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 11:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786620947; cv=none; b=VRsj4ZN8lOsnTXkLGP761DtLq+lYMXZPPwDiCpvaPbsKnr6qrUYB/50bChV/x1tSUc5H3x6rOuLcxn8BTer1By6N6RJs6/shPQbryVe1MsR5pNoWgfahgYEmONgj6iNhNRzc9O8X+pkynj3BS22x288rfpjCLnsKD+aKg5yWN+A=
+	t=1786621975; cv=none; b=GIfgUu9zN/PKPGq3HOUZuLPhdr0gzFHgpv+PccfqPxqjk6bhfcFOyZIKLYJXEt/ONtK+OA70AVzPS3CokAixLJxjxpUcqRnfTlCNI1nB1ECRYOb6x64CaMOlLGLF006LvGFqaWQ+Q/sc/ASEzId75NXy5QE9/K2A55RoYKzgi54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786620947; c=relaxed/simple;
-	bh=5Tvx6RpoaacNlQMdAJr4JipUiAyB1qM7luaNfU2qjdI=;
+	s=arc-20240116; t=1786621975; c=relaxed/simple;
+	bh=R2f0PJtuTSVROgAmYKIuGCx86gpNuYMzhmVycIrzC/0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Dbo/gQM2w/efY1umdhuuXzFXV0Q424VupJ8u1mpkxRBlAiycYQmUq4argZv2R50pbx6TKhYboeL5w4dHKCwzIBCXc/oJv7Wm2fpaoZuA4Nn6oJXBnMFgLrgHk6ABlZN6KrKq62OrCXO6Ko4vEEzb0LjbJ7rHUNpTkSdhTwoUDyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:34152572-762d-4210-a9b3-dafca5525e8a,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:e7bac3a,CLOUDID:13b49416b906cdcebb694eea30640219,BulkI
-	D:nil,BulkQuantity:0,Recheck:0,SF:80|81|82|83|102|136|865|898,TC:nil,Conte
-	nt:0|15|50,EDM:-3|-100,IP:nil,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,BEC
-	:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 1a63a56a970b11f1aa26b74ffac11d73-20260813
-X-User: jiangfeng@kylinos.cn
-Received: from [10.42.12.56] [(10.44.16.150)] by mailgw.kylinos.cn
-	(envelope-from <jiangfeng@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 193053877; Thu, 13 Aug 2026 19:35:36 +0800
-Message-ID: <8e9a0272-b503-4ac6-9af3-8e5683f6b8b5@kylinos.cn>
-Date: Thu, 13 Aug 2026 19:35:33 +0800
+	 In-Reply-To:Content-Type; b=PDdkJhZMaIh5IZUqnuK00TwX3i4nZH/hxYlHCh8t8XCNhzNj8aKJP3eqm0Kzc4X6VVlJ0ujhK8Iq5YpY9rggZs7tDXtRMEaRlnKFSFzjC1Sl7VRqrBmITXeNsjajswADv8J99L7H/IvcmzhuWWp+GueQMtA8hsgQ+7Pgzczo1oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=v5dajzEO; arc=none smtp.client-ip=91.218.175.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="v5dajzEO"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=R2f0PJtuTSVROgAmYKIuGCx86gpNuYMzhmVycIrzC/0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786621968; v=1; x=1787226768;
+ b=v5dajzEOuRcEgeiui5YhD1V1V/h7nQn+JmKxQay283veMuechwY8E/SlUIcY6nMSMi2JasVw
+ dUdKk1NdBmSGHmatmh/jprRVJYMV0tZnzmt4LOTA6gwqxm2/1ldDATsfaOPOEud/NrCI/yOW5XV
+ NhVCFYxPhc1yDp/G14jel6j4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [192.168.200.2] (2a11:3:200::10a9)
+	by smtp.migadu.com with ESMTPS id dd9de6576435b65a;
+	Thu, 13 Aug 2026 11:52:38 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <cfb5912c-514d-4a3c-b056-a1e8d2d4469f@linux.dev>
+Date: Thu, 13 Aug 2026 19:51:04 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -42,79 +38,82 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 1/2] bpf, riscv: Add BPF stack arguments
- support for RV64 JIT
-To: bot+bpf-ci@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- luke.r.nels@gmail.com, xi.wang@gmail.com, bjorn@kernel.org,
- pulehui@huawei.com, puranjay@kernel.org, pjw@kernel.org, palmer@dabbelt.com,
- aou@eecs.berkeley.edu, alex@ghiti.fr, shuah@kernel.org, nathan@kernel.org,
- ndesaulniers@google.com, morbo@google.com, justinstitt@google.com
-Cc: bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- llvm@lists.linux.dev, martin.lau@kernel.org, clm@meta.com
-References: <20260813-bpf-riscv-stack-args-v2-1-efea8f9b3fe1@kylinos.cn>
- <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
-Content-Language: en-US
-From: Feng Jiang <jiangfeng@kylinos.cn>
-In-Reply-To: <b9781ebbc70ad4c748f4c08d94bbe6994b4e0fde867a8bf252b5d0f08a985dee@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc
+ abstractions
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Danilo Krummrich <dakr@kernel.org>, Gary Guo <gary@garyguo.net>,
+ Mark Brown <broonie@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
+ Boqun Feng <boqun@kernel.org>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Luis Chamberlain <mcgrof@kernel.org>,
+ Petr Pavlu <petr.pavlu@suse.com>, Daniel Gomez <da.gomez@kernel.org>,
+ Sami Tolvanen <samitolvanen@google.com>, Aaron Tomlin <atomlin@atomlin.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>,
+ Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann
+ <arnd@arndb.de>, Brendan Higgins <brendan.higgins@linux.dev>,
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>,
+ Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>,
+ Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>,
+ Igor Korotin <igor.korotin@linux.dev>,
+ FUJITA Tomonori <fujita.tomonori@gmail.com>,
+ Bjorn Helgaas <bhelgaas@google.com>,
+ =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
+ =?UTF-8?Q?Arve_Hj=C3=B8nnev=C3=A5g?= <arve@android.com>,
+ Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>,
+ Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org,
+ linux-modules@vger.kernel.org, driver-core@lists.linux.dev,
+ dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org
+References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
+ <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
+ <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org>
+ <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
+ <CANiq72=SP_nT7Z6NSH-GT51-8hJ8qLUa07Cs+SarSFTO9Z7vUw@mail.gmail.com>
+From: Alvin Sun <alvin.sun@linux.dev>
+In-Reply-To: <CANiq72=SP_nT7Z6NSH-GT51-8hJ8qLUa07Cs+SarSFTO9Z7vUw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2026/8/13 16:25, bot+bpf-ci@kernel.org wrote:
->>     bpf, riscv: Add BPF stack arguments support for RV64 JIT
->>
->>     Add bpf_jit_supports_stack_args() for the RV64 JIT so BPF subprograms
->>     and kfuncs can receive more than 5 arguments via the stack
->>     (BPF_REG_PARAMS / r11).
->>
->>     For BPF-to-BPF calls the caller writes outgoing arguments at the
->>     bottom of its frame (SP-relative). The callee reads them with
->>     FP-relative loads. Its FP is set to the caller SP in the prologue,
->>     so the offsets match.
->>
->>     The RISC-V ABI puts arguments 6-8 in A5-A7 and arguments 9+ at
->>     SP+0. Before each kfunc call, load arguments 6-8 from the outgoing
->>     area into A5-A7 and copy any remaining arguments down so argument 9
->>     lands at SP+0.
->>
->>     A5 (BPF_REG_0), A6 (TCC) and A7 are safe to clobber here: R0 is not
->>     live before a call, TCC is backed up on the stack, and A7 is unused
->>     by the JIT.
->>
->>     Limit the existing kfunc sign-extension loop to MAX_BPF_FUNC_REG_ARGS
->>     iterations; otherwise idx >= 5 resolves to S1-S5 (BPF_R6-FP) and
->>     corrupts callee-saved registers.
->>
->>     Signed-off-by: Feng Jiang <jiangfeng@kylinos.cn>
-> 
-> This looks like a bug fix for stack argument support. The commit message
-> describes how the sign-extension loop was limited to prevent corruption
-> of callee-saved registers S1-S5 when idx >= 5. This fixes an issue
-> introduced by commit 443574b03387 ("riscv, bpf: Fix kfunc parameters
-> incompatibility between bpf and riscv abi"), which added the
-> sign-extension loop without limiting it to MAX_BPF_FUNC_REG_ARGS.
-> 
-> Should this include:
-> 
->   Fixes: 443574b03387 ("riscv, bpf: Fix kfunc parameters incompatibility between bpf and riscv abi")
-> 
 
-No Fixes: tag. When 443574b03387 added the loop, the verifier still
-unconditionally rejected kfuncs with more than 5 args, so fm->nr_args
-was always <= 5 and the loop never touched S1-S5. The corruption is
-only reachable once this series enables stack arguments, so bounding
-the loop is part of the feature, not a fix for a triggerable bug.
+On 8/13/26 17:32, Miguel Ojeda wrote:
+> On Thu, Aug 13, 2026 at 1:57 AM Gary Guo <gary@garyguo.net> wrote:
+>> IMO this is the correct way, also consistent with
+>>
+>> https://lore.kernel.org/rust-for-linux/20260811-fix-fops-owner-v10-3-7e71776f9dbe@linux.dev/
+>>
+>> It might make sense to add this to rust-next.
+> Yeah, it is also consistent (in the sense of adding a fallback) with
+> the other fix I added when applying the series for the `macros`
+> doctest; and the `kernel` crate is not an actual module yet.
+>
+> I guess yet another solution would be to have an even more local
+> fallback, but that would be too local in my opinion, i.e. we will want
+> to use it elsewhere sooner or later.
+>
+> So I could fold [2] into commit 98f256e27262, but a commit on top is
+> fine, I will reference that commit from the new one instead.
+>
+> Ok, done -- Danilo, I took your diff and converted it into a proper
+> commit, please double-check you are OK with the Signed-off-by:
+>
+>    ec6fcf8a175a ("rust: kernel: add `LocalModule` fallback for
+> `#[vtable]` `impl`s")
 
-> 
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-> 
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/3167782391
--- 
-With Best Regards,
-Feng Jiang
+I was just looking at the difference between the doctest and in-crate
+`#[kunit_tests]` test paths — thanks for taking care of this.
 
+I'll look into [3] once the new build system lands.
+
+Best regards,
+Alvin
+
+>
+> Thanks!
+>
+> Cheers,
+> Miguel
