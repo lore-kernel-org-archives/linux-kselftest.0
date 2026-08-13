@@ -1,189 +1,129 @@
-Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A791E3D88E3
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658431; cv=none; b=Ltf+xdwsB2l3SFqOelMjy0+y4+6HfMPuh2k7/vM9ZkxTkGOe+oR1Nvf2Ayb1nWE6TXOHkDNvPsV4XcZ5Z2lhxnZ+1MoWmXqhfoYYM71WY6KpTGiAxPhZh3pixrulZZkwoPtymJIJBJQ4Oo1j1JIkZptyDchMBeWut0/Bh8ckKDY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658431; c=relaxed/simple;
-	bh=f4RXPk+DjT/+LqiMjRSNWPZkwaS0NXEvZjl+IFDH2qA=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CLYjPPwxgHYKj4N6j30OWv3Lodg2T0a3aFtQ1rK0rohoFvQetVetseV62fm0peoI5SGtlXH9pJL598yUu405Th5DOHYOQ9HJumF/qqeeg7jbrQW+EprTWoF3Ch2/XvhZDMFmkcTI/kJKJXfFbxL7j4CeXk88HJNtZ+fcXeFmfmQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=JtK5PzfS; arc=none smtp.client-ip=209.85.210.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0974836403C
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:04:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786658679; cv=pass; b=MJVdaioIUV4KaLKwrTc9BNt7TofrvvIEtNuI0xqKU0JxQ09wC3cc46aYjLodRkaPjXB1Es+k55sbEwy4wOAi++1AKS9sG/ENP2RFPlO4Iqpiy2c4q2NrvTBagpMGDQ0Q5Xq/AhBx87qDwgQ/Vu3utg0dVGYf1LyBIKXm8mhe0xU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786658679; c=relaxed/simple;
+	bh=+nJVwpFMXbMjPE1ueHu/52hziTr3b56pfhCEr1u4jas=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HJJImz94b6dWN3hHKmtf9lJ2WH8SjK7o7unFuYUYFpC/IBBlvAMBEkdnEIWn+6HNkBKzj4bFEtiMMolVkr8q+pMLQnVhbOgo5glUcizPeDe53uKpL71FL2xacYHsEs3WEj5vDcMkmbYWr/XtUyOfoZerpVwXkkEKTwpqP++13RA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Uodc3msm; arc=pass smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="JtK5PzfS"
-Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7ea9c6ea7deso277836a34.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:29 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Uodc3msm"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca7c1176317so274101a12.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:04:37 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786658677; cv=none;
+        d=google.com; s=arc-20260327;
+        b=UECf79ioCGjIaau7/llCig4bSLqbEeU/1Xit6XOy3W7V5dKKuGJYcY2s7AgniMV+NF
+         69qBzydEVFTJ3xd9ti9JejHLqZppqhKwjKxwtUm9rXp+idkFuStmDqjrGWcQC/+koqRr
+         uy/dmFuXxdTmbAtPkge992eyXOtIyIPhc17o5Oqqis4UynKkw6ymusBtDECR5ocs99Gz
+         i+HfxzIxEaDuyrSj/fTPM5DH3yAOQxqFXaghOuDGT4vhACYzFBUno+GiUGGh+eDkQkMm
+         2If4qzpjxH2bCxrsnwRhtG1xQuE0/cCi/t+eZM8FFRcvkc4fh//uSH7WCmxCpmqxSOpp
+         7CCw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        fh=ColD3Y6PEsfKVSLwOHCdIAeX9BJLTFub2nJBpnt/ZfQ=;
+        b=kLZjJrm5G00UFAYykYv+a9okEve2aePunOZJ7ZmaYvTPTh/49cAx134SbCg2JiX1bk
+         DSztaCoqKwTMEROzx8C+qBTfH1YvWuqbTp1hbHkQ1dSoUFPZNk9K5+UhKtyswmr1R/T+
+         6F2Qjib7Nubie/bravAn2FN8jiaMSYmkC9bKe+j8H6OiM4kXOXcR4XfgLX64UmMaC80x
+         h0UZkdtBRipMiHsM7e16Q+eIBd0QO2H0h2+GqwNkldtEMoZjMGbTIdgAFtt9BGJ9QwnI
+         ksff7CDqP7SfpFRVi7mfPTEN11cCggAnhimlg3h5nq6OB7Fsgbg+mIuXJpMQKWYHw8h8
+         Hxyw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786658677; x=1787263477; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        b=Uodc3msm0IhpYSQj8VX5kovwarQak0zWiB/9IgNLNosdzdKvi2WrB3Uf2GCxS1QiYa
+         7E8ILtr8/gBU/JI+kHVgNqEAyqnog40JFkEEx6EIc0tKMCffuR2s3Ppec0SV0Foyi3C/
+         hK4oaTIlwjpd7QZWvfuAF7jLYQU+A3GG5tuYDdP47Xic5giy8V4n1H83fDpp9VxD2smc
+         I5QMchWfUqLNQy4pIKZNo3yQRKxPblIxt8Nl0+md+xDjdNRyifsH+4Vw8VtWPCUWG1Zq
+         zVCfVtQ+vlA04FQ0G4y+ctnOuX6HegjNDgeCyWCcbBpblgUhzSYSgnbHgZkvjSteiP3q
+         WY5g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658428; x=1787263228;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
+        d=1e100.net; s=20251104; t=1786658677; x=1787263477;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Ob0Z3C3rB+WUj6cs9SnhoedQYgo3LMIap3aBNXhslKg=;
-        b=ZmHVPKDdza/WDpfdb8suaajHNQw+BrWm+0/eDLs552lymRnBlR7ILuRg5d1bKypSjO
-         8vT0jk4dDPY6vepRXJ4QliFnNudzXaLQnlKzcm3eOTm+u79lLi8ECh6B9pndqhbfrWUT
-         5v25yk+9NALrxmXLi99TVDWyXrziIZsPxDJ3ZGWwkcw4hf+v041Qci9G61wSXJvd+CcZ
-         RZMB3Xxa1KMe18DqslPavld3I3nVeE6tddHFEmC8AjbVcP5+X7SfeR0V2UwzVeDvCgXo
-         MGZSNjC1aCgVuOXZ9PB56ARAmG4fDWJXa9MDYMo3k67GR1Gk8eya0RNFle4tpENfDQ5I
-         nzkQ==
-X-Gm-Message-State: AOJu0Yxi1XHf0WY00exlBnpKW+9pDJSCWnbEDau/wGXvaa3F9UvN86Fg
-	7HIAGabyJktk0uMf0l6fCqJHeDqPAANN8tPkDSk4HonJsL5rWuZdV590
-X-Gm-Gg: AR+sD11pvZkMdQfmt0/a0moc5X8N8tz1Htsc7NJ/6ZKnX/plShDRfKwxCs8mzhdUvi7
-	Qy9orjWsjJJb4bB6/VcDnc8j9NM4bUZqEYWJl5tzWgzBTg19gt7P3CxUobk+vi2AZQxlyxDymaw
-	u6JWnDf1CUjS3y8aCotDIdJnOsKysUClNAAdeUP9UfuYGzkiCeuQLmfm0H/scWT2gkl82+vq0v9
-	sBvTB/4UMKUadKcjFy2apd2yG+77UXA3KW32RLjqiLPZdqFd6ZODa5uFzYOhXfsNi61+wB2p4+X
-	yXFP0ECgidlFzxvpEnK5Yk5B4BR/ozjFf85qSHOJ70ml7+DsFIlDjLko1sAuPkVebmmsh9fQ6/D
-	GlHhavk9HSOCyOj8izshvQlsJKdpvGtybm3BR3tbVlzaocXdAQ17uZJ/wXI8Kzj4387vJKEy8NE
-	nJWsbScMCjP+lkgXMDzk+GET/QAuEKxPBXEtLG5dgbGe+2VBz1PpZKcBNV+H+aRieEFyn8FcCjy
-	LcDm4ojXJk1mlRc4p0wGPh2Qom9Yz1lQ7J5zz3iKXKkFBCW/NIdnGHNBYV3hhKoDA==
-X-Received: by 2002:a05:6830:67d9:b0:7d7:58b0:7685 with SMTP id 46e09a7af769-7f3de65011cmr878478a34.13.1786658428265;
-        Thu, 13 Aug 2026 15:00:28 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f3c9e23b6fsm3274625a34.25.2026.08.13.15.00.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 15:00:27 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5317760B53;
-	Thu, 13 Aug 2026 22:00:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786658426;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=Ob0Z3C3rB+WUj6cs9SnhoedQYgo3LMIap3aBNXhslKg=;
-	b=JtK5PzfSxlggPYxG39CS2LwWmcY09hVT4nbQof9gQDYdmoNozyxS4r0XphDaFEtqcK+F61
-	/qygU/Bfq68LermI/jAGU2xtwdtwHs5ME/KML8AEdm74DzKTOi1Z/V6F8w2xYY2IK9Bs3t
-	3ajDRnNc2abldtcaS2yMF9zRgjlzWAktDda88RHS8dzepr3uQjJSj/mm0zSylciqOvPwYH
-	OvSdSBlJV6GAlPkKu324q/92ghC1JCZrdBm4AOoKwPAWYPD7wkVVXz9o2HxT02UAUj/rE6
-	XwX99eBKRhVZ8oYYzJTZBmB8Rra4HnJPH+Axl8DfjIhdB6IppZgsyUxV8KcP4w==
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Thu, 13 Aug 2026 19:00:05 -0300
-Subject: [PATCH 7.1.y 4/4] selftests/bpf: Adapt sockmap update error
- handling
+        bh=XBjlbb9xfnyRrsn87ZRRTDGluqDs+J3ckgA2mWnKvPI=;
+        b=K5DQt03YsqOiSBXXdPHFwZ8XfCxHF9bE5URb+D6Jd1m2YeJ5yqybT5sRLkz0H2oTHG
+         M4RlFtSs/UBvFmiBJq4uVSk8UmZYepgPUwTgXoXdqnVbnkhZVp5Yx2Qu6oD4/2GbI66Q
+         di3nDQXUENrnbwu/hWbEEgMbKolW5CCsUUQnkz26HEFQvd8mKYEgvV5/QyZjkC9YXpJk
+         xIrE0yTL9k4xAP7eQT8oZtAucCXFxNePOjjCt8RMRPPz/MhqaZ2qa8ZWcIo5fgbHReo/
+         WvI0C+QjNe+z47pTrIgLH6GfWW+0PS0aKDvec4QmJ+80jdmtVqKHowa08nwO7cQOONTX
+         RLDw==
+X-Forwarded-Encrypted: i=1; AHgh+RoDwIwJcH8E4LhNQVrUsDfRUiIWbqLsWoOgeRA2h28eo0jVY2lL9YJyTYFZ/pe3w6jlfrlczRiuI17B32JGh+0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwnLbsAnFvTAYw+evxB1RVLauUy27HQ2RWOOP/8lfWCLnGKLaKj
+	fb8E8yUzmiiICYFYWy14ZFWZIl2goEODUcYY2Ko50Jt9ZzVpmwtNVAkkMIGNo+qGAEQXGXUJ9Nf
+	oI8nBKzmTwkpk9b0CvsjuT1bZo5k8xEg=
+X-Gm-Gg: AR+sD11M5K1R3BkJRqUm2QMbXDX/UgF5QXhrYUPRDbMw7JB3B4atPNRYCk7vasSOqF0
+	cFVWuLHlPlbibbnFZScxPw0jozEaaO7htZjTXnBfw1126jhBS7UXi0MNWLrh+kOGOXuNPhUMmTT
+	t/h0XKd8aUHrEk9YwX4IvFnylZvbMTLsVtQSc/zDygO2wYXxCW7yVHYqTts3YL/4UC6elw2Mtpq
+	xEWbMMepnY/O0M5xB9NSQf63nbgNwN33fV/bJ/rvvWSUnl287r7QB9eFruulO8HR6RXSwKrdk8/
+	FTxN0LtREhwMJz06m8GbgnogRjFneSV4MJ25+97kWCb7JMq2Oz0v8dT4PpPTrRHIvMvzcybJN7H
+	svAZaVyF2fX6BOBfYDrHPWFtWDZ1fK2/jg1/NbKjeHg==
+X-Received: by 2002:a05:6a21:33a2:b0:3c4:3321:4fe8 with SMTP id
+ adf61e73a8af0-3cc71be2ba0mr896598637.14.1786658676974; Thu, 13 Aug 2026
+ 15:04:36 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-4-cd5c51e7dcec@marliere.net>
-References: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
-In-Reply-To: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, 
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
- Shuah Khan <shuah@kernel.org>, sashal@kernel.org, 
- gregkh@linuxfoundation.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>, 
- Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>, 
- Jakub Sitnicki <jakub@cloudflare.com>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=2951;
- i=ricardo@marliere.net; h=from:subject:message-id;
- bh=daM25mJqeCkkst7bMwP8EsNfCCYMsTYMH8Ejt4bMwIU=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QJxktk0EEhkgQmlas4sb6c2fSVPWUAA2GpVOf+mstP82e2srCamrmcX9/VOLrESp6J2JxDg/k1p
- tmbSAugWULQ8=
-X-Developer-Key: i=ricardo@marliere.net; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260810055709.729203-1-chenguang.zhao@linux.dev>
+In-Reply-To: <20260810055709.729203-1-chenguang.zhao@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Thu, 13 Aug 2026 15:04:22 -0700
+X-Gm-Features: AUfX_mySmBbuOKMkZzyA6luWIOwiLVFTaBzYxN1T4Y0G-POAuGd72b9d5snmCP4
+Message-ID: <CAEf4BzY9YaeT4CssCe13uAWXYHXs6HervsCo0Puc0osfr8=yVw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next] selftests/bpf: Add kptr-xchg benchmark
+To: Chenguang Zhao <chenguang.zhao@linux.dev>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, 
+	memxor@gmail.com, shuah@kernel.org, martin.lau@linux.dev, song@kernel.org, 
+	yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com, 
+	ihor.solodrai@linux.dev, bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	chenguang.zhao@liux.dev, Chenguang Zhao <zhaochenguang@kylinos.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Michal Luczaj <mhal@rbox.co>
+On Sun, Aug 9, 2026 at 10:57=E2=80=AFPM Chenguang Zhao <chenguang.zhao@linu=
+x.dev> wrote:
+>
+> From: Chenguang Zhao <zhaochenguang@kylinos.cn>
+>
+> Add a microbenchmark that repeatedly calls bpf_kptr_xchg() from an
+> fentry program. Architectures that advertise bpf_jit_supports_ptr_xchg()
+> inline the helper to BPF_XCHG; others keep the helper call. This bench
+> makes it easy to compare the two paths under the same workload.
 
-[ Upstream commit 954b24d7601a93b6089cd75397370c51674d7893 ]
+but do we need a permanent benchmark for this? Is there any valid risk
+of regressing performance here? Unless there is a good reason to have
+this benchmark readily available for everyone to periodically run or
+something, I'm inclined to reject new benchmarks and minimize amount
+of code maintenance burden for something like this, sorry.
 
-Update sockmap_listen to accommodate the recent change in sockmap that
-rejects unbound UDP sockets.
+pw-bot: cr
 
-TCP: Reject unbound and bound (unless established or listening).
-UDP: Accept only bound sockets.
+>
+> Usage:
+>   sudo ./bench -d 30 -w 5 -p 1 kptr-xchg --nr_loops 256
+>
+> Signed-off-by: Chenguang Zhao <zhaochenguang@kylinos.cn>
+> ---
+> Example results on LoongArch64 (helper vs inlined):
+>
 
-While at it, migrate to ASSERT_* and enforce reverse xmas tree.
-
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/20260707-sockmap-lookup-udp-leak-v4-3-f878346f27ab@rbox.co
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
----
- .../selftests/bpf/prog_tests/sockmap_listen.c       | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-index cc0c68bab907..1c96a3cf4b97 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
-@@ -53,8 +53,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
- 			       int family, int sotype, int mapfd)
- {
- 	u32 key = 0;
--	u64 value;
- 	int err, s;
-+	u64 value;
- 
- 	s = xsocket(family, sotype, 0);
- 	if (s == -1)
-@@ -63,11 +63,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
- 	errno = 0;
- 	value = s;
- 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
--	if (sotype == SOCK_STREAM) {
--		if (!err || errno != EOPNOTSUPP)
--			FAIL_ERRNO("map_update: expected EOPNOTSUPP");
--	} else if (err)
--		FAIL_ERRNO("map_update: expected success");
-+	ASSERT_ERR(err, "map_update");
-+	ASSERT_EQ(errno, EOPNOTSUPP, "errno");
- 	xclose(s);
- }
- 
-@@ -77,8 +74,8 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
- 	struct sockaddr_storage addr;
- 	socklen_t len = 0;
- 	u32 key = 0;
--	u64 value;
- 	int err, s;
-+	u64 value;
- 
- 	init_addr_loopback(family, &addr, &len);
- 
-@@ -93,8 +90,12 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
- 	errno = 0;
- 	value = s;
- 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
--	if (!err || errno != EOPNOTSUPP)
--		FAIL_ERRNO("map_update: expected EOPNOTSUPP");
-+	if (sotype == SOCK_STREAM) {
-+		ASSERT_ERR(err, "map_update");
-+		ASSERT_EQ(errno, EOPNOTSUPP, "errno");
-+	} else {
-+		ASSERT_OK(err, "map_update");
-+	}
- close:
- 	xclose(s);
- }
-@@ -1289,7 +1290,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
- 		/* insert */
- 		TEST(test_insert_invalid),
- 		TEST(test_insert_opened),
--		TEST(test_insert_bound, SOCK_STREAM),
-+		TEST(test_insert_bound),
- 		TEST(test_insert),
- 		/* delete */
- 		TEST(test_delete_after_insert),
-
--- 
-2.55.0
-
+[...]
