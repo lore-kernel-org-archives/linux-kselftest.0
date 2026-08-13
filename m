@@ -1,198 +1,223 @@
-Received: from CY3PR05CU001.outbound.protection.outlook.com (mail-westcentralusazon11013049.outbound.protection.outlook.com [40.93.201.49])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB172441618;
-	Thu, 13 Aug 2026 09:38:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.201.49
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786613916; cv=fail; b=MfczqPCc0/VjgBOWDT43Lk4qW492RVbJ19yDcWxQa0Ds+oPeylZUh5GGK9/RAQunyIRgFuS6ShwPUHincOMRAsb0clo3nxNUaI9KWavlwKG6zbm/6YqFNFZOymdsJmHihk+QkwB+3bogrGbh/gA+Sq6RdHZ+v6YTxEeS6HX4HHU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786613916; c=relaxed/simple;
-	bh=AAh24ekMw4lumVWErPuVAry3beofQXTTvNFXLFYTZ0U=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=P0gaspMuw1RNBGfOEyF5X8l87aPv58WuDdFxE2AM/IabQvpmKUComeyqtciSCQPnQaaZV/Ly3lROUcztIX/HeWw+LoIU7sO4lhEaYpWwq0LzQJxFuZ87xU9C1AbUrEHyEe35RwsmNhsC+Dd/hostvkn7vk03uGA8lfpX9TT8pZM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=XNVYYQLf; arc=fail smtp.client-ip=40.93.201.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D491B442FDB;
+	Thu, 13 Aug 2026 09:38:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786613922; cv=none; b=HL9VfrhVkoYv6WhApZ9+DPobBz04tduQFMk5E/zEI38HYaqWacEIYYkQQDQIz0F28dNSfwMg0SWDhwjC/Xi1YabexZXT7ByKj/g6/PQw9KXH1lAj/ggJtor/efX7CLNkwq3Q8KBAVVfYmNRToeEdzP6UhEIjkM1uGzjmBUyXGAA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786613922; c=relaxed/simple;
+	bh=dvS9w+6WN3ViYUcsfJtmAv0+KKS3atxKxLIM+Lpp2hs=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=j3bCZyTynpZ5/H2/NyznP0srTspBQvYFnn1yftGeNVdYFsnFAYm5tvziUz3LyNoN7JoclYUpir/6sI8vVprnsttE4A0lJfBc8u3hpRdzC2kEdCOCqdv0bPKLpPW0U643F0ozmFElxXQpPQ7crvhxNbWa/BBzkjTFal4L4V6fUuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=F8uY7L+1; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="XNVYYQLf"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tehZfFsYFfBLX+fLJc4B5kmG8WbT/WbfPWAssWQI3o5bWFUVxPbW3ZsKlkYoZE7nD81EFHr3kUtBQW1WRtSIU3ZuCP5M7TNwZMKsA5qtO0GOZtbax/mQEBnpuJ1Dx2YM+HyuJqVOxsBaYCJUgCevzjWA2STtOilVKxs26k5vAzwdz2f/SnJEkB8XsXgwyKf2Wy9Odn1pyJbHAWuHvWEfAXgpTHuhr6K4APg0aaMAwF2qVBMgkMYo7qJQzkYSD8opbUB+8Lsoj2A0CiT/+wPDap+3AijbdelpxAHIOxmDRuIjNLU4CkESpg8iNWvgOdr153J4WRbfkC1qkHNOGccEDA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Dn9NTcpCvb4TTh1gUDOctdZOPQrJJbhmZox88/h6+7Q=;
- b=ncq5H0NfskTgsmRJBUSdvuaiAojP+CCGltXZ01d33UradxE93en/gvWANBJKU4TRJ7ISMXcPVLUAgtxQHnDLxPjuKZrN/coAlFnzUNUV90NS9mXlXfaSwPq/tfHOJrAXppVVsyw++ua76rYeC3uHqweRaSwBpBgb/My1+CF6EvlPRGG9W486zhlE/Fq/Vt20I7w8Bpgg3Cw9gjN2cjOm8+9G5ZmYluXyvaFRPfwow/txff9d0y6Ycb+AVwobrjAvP1NXxUqM63FccEV5AetTCq3gfh7sgYM2TgLhGbolh3/NBxvVOhamT0Mu9BAfL4zOoxhaPUN3pC6kAUPoedmrGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=shazbot.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Dn9NTcpCvb4TTh1gUDOctdZOPQrJJbhmZox88/h6+7Q=;
- b=XNVYYQLfyLBgTXuhQWPOEhvufTf45SrGUQB0YZbbQYDPvTlOiDui8geajc+SeUGMUxvFsO6AyDDfKVlGlgqEJz/RPrdoeug/9z+tSv/w1izgRo6FSnlPxHB33liivl5KWnWGKKz/8AMmPUGbP0rUJqlX8pLD4CpS/bF1YuCr9NGgq34U5SrjZSje6b7IwFr6hPuZ38RrzH21P560K9HUsQWB8cTrVEBkO91Eikw9K/RAMoJGvQI9zPsFKnSIFztwWIGMeWgsf5ieC97aKEjxNsk3yZldYanDQJJuB+jgh/2sUApcAoGxubXcYzI17xCSOH1pz1zYDIZEtMCd25veIA==
-Received: from MW4P220CA0014.NAMP220.PROD.OUTLOOK.COM (2603:10b6:303:115::19)
- by PH7PR12MB9176.namprd12.prod.outlook.com (2603:10b6:510:2e9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Thu, 13 Aug
- 2026 09:38:28 +0000
-Received: from MWH0EPF000C6186.namprd02.prod.outlook.com
- (2603:10b6:303:115:cafe::e) by MW4P220CA0014.outlook.office365.com
- (2603:10b6:303:115::19) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.11 via Frontend Transport; Thu,
- 13 Aug 2026 09:38:27 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- MWH0EPF000C6186.mail.protection.outlook.com (10.167.249.118) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.339.3 via Frontend Transport; Thu, 13 Aug 2026 09:38:27 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Thu, 13 Aug
- 2026 02:38:08 -0700
-Received: from nvidia-4028GR-scsim.nvidia.com (10.126.230.37) by
- rnnvmail201.nvidia.com (10.129.68.8) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.20; Thu, 13 Aug 2026 02:37:59 -0700
-From: <mhonap@nvidia.com>
-To: <alex@shazbot.org>, <jgg@ziepe.ca>, <ankita@nvidia.com>,
-	<jic23@kernel.org>, <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
-	<smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
-	<dave@stgolabs.net>, <alison.schofield@intel.com>,
-	<vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
-	<yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
-	<bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
-	<gustavoars@kernel.org>
-CC: <cjia@nvidia.com>, <kjaju@nvidia.com>, <vsethi@nvidia.com>,
-	<zhiw@nvidia.com>, <mhonap@nvidia.com>, <linux-doc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
-	<linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Subject: [PATCH v4 06/27] vfio/pci: Add CXL ops registration interface
-Date: Thu, 13 Aug 2026 15:06:10 +0530
-Message-ID: <20260813093631.2288172-7-mhonap@nvidia.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260813093631.2288172-1-mhonap@nvidia.com>
-References: <20260813093631.2288172-1-mhonap@nvidia.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="F8uY7L+1"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 0E9361A15EF;
+	Thu, 13 Aug 2026 09:38:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D65B9602B8;
+	Thu, 13 Aug 2026 09:38:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 272A411C4DC62;
+	Thu, 13 Aug 2026 11:38:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786613911; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=F6Oh1RXLncYd5Y0wyXBG7Blpj19WHQ9/KQ6xnWk45w8=;
+	b=F8uY7L+1kdhqmfUUhfec1LqTlgOMBdN2pyJR92oABOth4pkzjr9Bgv8OtOW0ciOVUMp2xN
+	VAhNpJe9Nu763Jt1h4V9+H5Wu1wNqcB8IF98KYoKdhD3z/5yS7FZfoKbMA9BwGYpdVGGKy
+	aUrk4VQEX0sYeKOM0OxO6zoj26P4TCs8lSbjbrsC2OPiZEkl1pYt91WJ6J0vWpPhOoecqe
+	SfFByoLAcRCbzWgT56E+8pIRBezoFnbVXGCvfopP8SzBmAwrzP1fvh5fL+ml40Lts2G6Yk
+	8SG9NsIJUlh9NBIqZI8JWUGe4PNhCyefUv7/63JuxNFq7KeQiCy/k+8yz7ZHXA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Date: Thu, 13 Aug 2026 11:38:23 +0200
+Subject: [PATCH bpf v4] selftests/bpf: allocate a larger timeout for
+ connection
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MWH0EPF000C6186:EE_|PH7PR12MB9176:EE_
-X-MS-Office365-Filtering-Correlation-Id: 007b4d0b-7938-49ab-5e3f-08def91ea0c8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|82310400026|36860700016|7416014|23010399003|376014|22082099003|18002099003|11063799006|56012099006|10067099003|921020;
-X-Microsoft-Antispam-Message-Info:
-	mTFbT14OHvV3puwWowH2E3hIybYzcVjUxGCTOJxIrqZ91W1AjD836kGAKAihURpeyWzCoknmkni6jCj2FJZYXs/HMdF/jX74sOWpw9QARGItOCI9rqZczCe8lJktG5Mazf0ZWogGlOACH+GJC0Z4xD72RHa4+L3JCiqr3O1BY/EGevUPeDegsZgx4oV7LyvHPdNrWceac58rdHPr/Ztmpzg79V7z9I0YKSCVqOYSDXAyaLvEBOWjNORGNI1Cl3xnsA92TNQGM7FNIL7bgB58aG+JMggqNsN4BlcIk6eALlpozuJr2Z+uO7c6ISPysn72xcfcKwaOrqwnZT2tuGo4Y0RwrskKxgRsL6b2xiI8llrwSYh8q0zi0gfV+4g1ZjVZf6lUHUND4P/BktzcbnRGJk4J7G7aeCNqdHGsBHVFXuYa1qAzvJtxOTUD7S4b959b5+l2H1W26V9I/NGnSeZC7qcZSUqiM/MfdHUGQQ2CnzPth4buGpbGwoLtkgbfEeXLZfk9jnVSc9CkaIusbOloMJFpTcsa5N3cWCwcTriCyinH8by2qf0NCuvbPNhUyca5MYSp9GigUAEZhg0pVAMOu/0msvHxtAPo1B9Iv5Xrz4ECSTE0yRf3xT/60BvZPdQ+GZ4u6MxGc8qz7XOBJRl6BYYq62G4Rveu9UNG4E7vzQ/QCz/z8r6qrzqcAW4a/CAgLx1O2y9ufdzuYr0amVsagL4Eegy2pP+huKz0fS09TYU10ZFaJYfOlynaaYdoc1fq
-X-Forefront-Antispam-Report:
-	CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(36860700016)(7416014)(23010399003)(376014)(22082099003)(18002099003)(11063799006)(56012099006)(10067099003)(921020);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	7vMcmSeEzWqaXbbPQeqMfx1U4J7URZWHdtombNUGD6MChs8YFNjaIXGzvC36sJQa8n/2DuXZBewYjRPU3GbHfe+AztdotlUs5XyP7HS1Y0lb7ILmoBgH3lOqVWcTL1CpkBOnj/plkcgy1r7Ir1umtr5xSeSwR6h5y5aZtltia5+RZf7IkOUoRe/eMVNvjoKqw2MHfUGVK8u74AdZlnF9VP+Isil4eqY64Gs+8B+io8lj2TOWZrC0z4SI0SE0I3HLSwyBda4yaSMTuCFXQC1Yb/01/B+QU2pxEIDkIgiNVKTRW8AbQXpDrw9S9FP+fL6cL5X4pzmZY8e4cjHlzmoY3hNKyB468gMVl+YL+hM5TKsI1k4c2IvBMt8COLeeXgmHV/rzdep0fAj/K2nWWg7kBn7faAkm3zGhxBZb+Z+mtkxGki1yvXa5Hx8w7LNnVdwV
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2026 09:38:27.3481
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 007b4d0b-7938-49ab-5e3f-08def91ea0c8
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	MWH0EPF000C6186.namprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB9176
+Message-Id: <20260813-tc_tunnel_flaky-v4-1-3534df3fe930@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XNTQ6CMBAF4KuYrq3pD1DqynsYY9oylSq2hFaiM
+ dxdwIUa4vJN3nzviSJ0DiLarp6og95FF/wYsvUKmVr5E2BXjRkxwgoiKMHJHNPNe2iOtlGXB2Y
+ CpKKS6opwNH61HVh3n8U90q1Fh/cx3vQZTJqsqVa7mEL3mHd7Opf/TvQUU5wxpXTOpVSZ3OkQU
+ uP8xoTr7PfsI5SELwU2CkUuNCtFZZXIlwL/EihdChwTXIrCZkC0KQj/FYZheAH+NKDDSwEAAA=
+ =
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-From: Manish Honap <mhonap@nvidia.com>
+Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+following logs:
 
-vfio-pci-core must stay free of any CXL header dependency, so CXL
-Type-2 handling lives in a separate vfio-cxl module that plugs in a set
-of callbacks. Add the registration interface: vfio-cxl registers a
-single struct vfio_cxl_ops at module_init, and vfio-pci-core stores it
-under a mutex.
+  (network_helpers.c:309: errno: Operation now in progress) \
+    Failed to connect to server
+  send_and_test_data:FAIL:connect to server unexpected error: -115
 
-The owner field lets a later patch pin vfio-cxl for the lifetime of each
-bound CXL device. No caller yet; the detection path is added next.
+This is due to SO_RCVTIMEO and SO_SNDTIMEO being set on the client
+socket (see settimeo() in client_socket()), allowing connect() to return
+an error and to set errno to EINPROGRESS instead of ETIMEDOUT.
+Increasing the timeout value for those tests is likely not a good
+solution (and it has already been done by commit 2790db208b44
+("selftests/bpf: Improve tc_tunnel test reliability")): some tests
+expect some data transfer to fail, and so the timeout value would
+increase overall test execution duration again (not only the connection,
+but any socket operation).
 
-Signed-off-by: Manish Honap <mhonap@nvidia.com>
+Another solution is to allocate a timeout budget specific to the
+connection: we can apply a larger timeout only for connections, and once
+the connection is established, set back the timeout configured through
+opts->timeout_ms; this would allow connection to succeed under heavy CI
+load, while keeping timeout reasonable for the rest of the test traffic.
+
+Set a larger SO_SNDTIMEO/SO_RCVTIMEO for the connection step, and reset
+it back to the timeout configured by the test once the connection has
+succeeded.
+
+Fixes: 99126abec5e5 ("bpf: selftests: A few improvements to network_helpers.c")
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 ---
- drivers/vfio/pci/vfio_pci_core.c | 27 +++++++++++++++++++++++++++
- include/linux/vfio_pci_core.h    | 10 ++++++++++
- 2 files changed, 37 insertions(+)
+Hello,
+this is the v4 of the series aiming to reduce the flakyness of
+tc_tunnel/tc_edt tests in CI. This revision takes a step back, based on
+Ihor's tests,  and drops the poll loop in favor of a bare, larger
+timeout value applied only for the connection step. The main downside
+of this new mechanism is a slight increase of the duration for tests
+expecting a connection failure. In my testing setup (x86-based Qemu on
+my work laptop), I observed a ~10s increase (on a ~5m18 base for the
+whole test_progs set).
+---
+Changes in v4:
+- dropped the polling loop in favor of a larger, connect-specific timeout
+- drop timeout configuration from tc_edt test
+- Link to v3: https://patch.msgid.link/20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com
 
-diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-index 3f11a9624b9c..88e68d43af9a 100644
---- a/drivers/vfio/pci/vfio_pci_core.c
-+++ b/drivers/vfio/pci/vfio_pci_core.c
-@@ -2670,6 +2670,33 @@ static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
- 	}
+Changes in v3:
+- set errno before logging errors
+- respect time budget set by
+- respect opts->timeout_ms when polling: only poll for the remaining
+  time not already consume by connect()
+- keep polling if poll returns with EINTR
+- reorder early returns and add intermediate variables to clarify code
+  flow
+- Link to v2: https://patch.msgid.link/20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com
+
+Changes in v2:
+- drop unneeded initialization
+- add back error message for immediate connection failure, and slightly
+  reword the async connection failure error message
+- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+---
+ tools/testing/selftests/bpf/network_helpers.c | 34 ++++++++++++++++++++++++---
+ 1 file changed, 31 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
+index db935a9d9fc1..89336201572f 100644
+--- a/tools/testing/selftests/bpf/network_helpers.c
++++ b/tools/testing/selftests/bpf/network_helpers.c
+@@ -49,6 +49,8 @@
+ 			errno = __save;					\
+ })
+ 
++#define CONNECT_MIN_TIMEOUT_MS	5000
++
+ struct ipv4_packet pkt_v4 = {
+ 	.eth.h_proto = __bpf_constant_htons(ETH_P_IP),
+ 	.iph.ihl = 5,
+@@ -291,6 +293,12 @@ int client_socket(int family, int type,
+ 	return -1;
  }
  
-+static const struct vfio_cxl_ops *vfio_pci_cxl_ops;
-+static DEFINE_MUTEX(vfio_pci_cxl_ops_lock);
-+
-+int vfio_pci_core_register_cxl_ops(const struct vfio_cxl_ops *ops)
++static int connect_timeout_ms(const struct network_helper_opts *opts)
 +{
-+	int ret = 0;
-+
-+	mutex_lock(&vfio_pci_cxl_ops_lock);
-+	if (vfio_pci_cxl_ops)
-+		ret = -EBUSY;
-+	else
-+		vfio_pci_cxl_ops = ops;
-+	mutex_unlock(&vfio_pci_cxl_ops_lock);
-+
-+	return ret;
++	/* Enforce a minimum connect timeout value */
++	return MAX(opts->timeout_ms, CONNECT_MIN_TIMEOUT_MS);
 +}
-+EXPORT_SYMBOL_GPL(vfio_pci_core_register_cxl_ops);
 +
-+void vfio_pci_core_unregister_cxl_ops(const struct vfio_cxl_ops *ops)
-+{
-+	mutex_lock(&vfio_pci_cxl_ops_lock);
-+	if (vfio_pci_cxl_ops == ops)
-+		vfio_pci_cxl_ops = NULL;
-+	mutex_unlock(&vfio_pci_cxl_ops_lock);
-+}
-+EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_cxl_ops);
-+
- static void vfio_pci_core_cleanup(void)
+ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t addrlen,
+ 		    const struct network_helper_opts *opts)
  {
- 	vfio_pci_uninit_perm_bits();
-diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
-index 9a1674c152aa..14753972e714 100644
---- a/include/linux/vfio_pci_core.h
-+++ b/include/linux/vfio_pci_core.h
-@@ -66,6 +66,16 @@ struct vfio_pci_device_ops {
- 			       size_t nr_ranges);
- };
+@@ -305,13 +313,33 @@ int connect_to_addr(int type, const struct sockaddr_storage *addr, socklen_t add
+ 		return -1;
+ 	}
  
-+struct vfio_cxl_ops {
-+	int	(*init_device)(struct vfio_pci_core_device *vdev);
-+	void	(*release_device)(struct vfio_pci_core_device *vdev);
-+	/* Pinned per bound CXL device so vfio-cxl cannot unload under usage */
-+	struct module *owner;
-+};
++	/* Override timeout configuration with a larger value for the
++	 * connection
++	 */
++	if (settimeo(fd, connect_timeout_ms(opts))) {
++		log_err("Failed to set connect timeout");
++		goto close;
++	}
 +
-+int vfio_pci_core_register_cxl_ops(const struct vfio_cxl_ops *ops);
-+void vfio_pci_core_unregister_cxl_ops(const struct vfio_cxl_ops *ops);
+ 	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+-		log_err("Failed to connect to server");
+-		save_errno_close(fd);
+-		return -1;
++		log_err("Failed to connect");
++		goto close;
++	}
 +
- #if IS_ENABLED(CONFIG_VFIO_PCI_DMABUF)
- int vfio_pci_core_fill_phys_vec(struct phys_vec *phys_vec,
- 				struct vfio_region_dma_range *dma_ranges,
--- 
-2.25.1
++	/* If the timeout configured by the test is different from the
++	 * connect timeout, restore it
++	 */
++	if (opts->timeout_ms != CONNECT_MIN_TIMEOUT_MS &&
++	    settimeo(fd, opts->timeout_ms)) {
++		log_err("Failed to set timeout for connected socket");
++		goto close;
+ 	}
+ 
+ 	return fd;
++
++close:
++	save_errno_close(fd);
++	return -1;
+ }
+ 
+ int connect_to_addr_str(int family, int type, const char *addr_str, __u16 port,
+
+---
+base-commit: 673b1f0272d7dedeec78dee2b47040481e4332ba
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
