@@ -1,184 +1,144 @@
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
+Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850C143FD1F
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 21:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786656245; cv=pass; b=EHr5UE3/zq3mGYQGJooltQ8ZcH4IjU6JYJQko2DLNkx8m8DKx/JKwDAb6Kaco59UFPbqCpGn63VyTD+CCnVksAYzzVuOAYZuqi0HoJd7SrZj1m8vbCmsERXXf0XDZptPAwJR9YYN2r2GUe0Cks4M2rsi2qw4BN5n5MdUQSMkYDs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786656245; c=relaxed/simple;
-	bh=qX1IR39uVwaDaiwu+D13suWfX2py7eKUr7A0OiCh9ro=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=abUTOZZww6QiVqmgP9Fjbak7IlRNiAT0F3ThNgEu6CcL5lNEssKL2wXTWRVi8deRsa7IFbo5bQ2gD+B6GTydfY4YjbddsRDcZkrE7G4CGPksJXcBJYtQkBbxgpyuMotvAe1iD3+LQIAROq3aPv9PYDUroeAbe5RJXvgzMq52GnI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmlSZbTm; arc=pass smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00F236403C
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786658421; cv=none; b=mLcWu7bFhpl40lB5Sm/cUVOm378jviHd6TPcZKy4EhOiCgAJqqnFKX/Otj7Q2yshVLF6KegTxb/wiGiGv9WCLdGvFy9p+KYNGireP5pAB4/rug8JAEO8bzLc3bjP2w+1LLUtNXQeyZLtWhbJcbEjcorCoJ1NPOENxk7piTteE+0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786658421; c=relaxed/simple;
+	bh=9/sQZpI1gQNflmGl2+wtCghsABNs0cTgc4HTGo/59bA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T9o5wGRn2DHwEXQ8tQ5PZYEltondGA2reo8HbRmyN4niwSlghyncmM2quArL6rCXXdKa64v49ZL8ddDzqDktme5wgqjTDmdCLRaoHMj/1qJq6oDZUvipwN60/a50t5afWJD8dVIt2aQq72FvySM4X5SfDWxJcRIhmuDe02u2OyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=JpdbzHlc; arc=none smtp.client-ip=209.85.160.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmlSZbTm"
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cca0c5799eso3911045ad.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 14:24:03 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786656243; cv=none;
-        d=google.com; s=arc-20260327;
-        b=Xm26OeBE8UaGlFe0ngUx6rdOafCjd7+g17Aibs57Mx4EKWAhV2GlpJjsc9OzhPs9+P
-         GcKmm502Vm98ubhiKcj2JbuNhiFirBSv5gQAguooJzQ7GEwlXXknHI5cyrbnTOldaZnv
-         X5IxsmdgKEwuowrd9079EK2IdPihi89M1t7faU37JPM3xgDnoDew4AqVG2OqauMREjgZ
-         ss1E0wrT5DKWK6j/8A7kM4G+whhVAuwdBo14dWthlRj5zcIMeARH5CMp9l62v7N6E0Ev
-         8sSuk1NRkn7+wljxp8JInleamjHsWYHNfV6K1LjRz5Cx/d69L+HJfPqBWKDNrD4gl934
-         rJwQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
-        fh=jpeAIv77Brk+v8HMbCTV7UUmW2rTeDbHRTD3CWpMtjA=;
-        b=pj1961QkZo1ixrqKWTDFTbUHnQhh9LsVLCkiN8ENXxcPu0ZaaFkSjVlGE+X0Tl3YuS
-         PA0UIjhZbn8FEUaYhb/oS40/193GPfPXDTuWHHWfHcr8h2d8FlP32qlT/ZY00HVU3en1
-         GH09lFKsOyfhCuPjYXLpNp6LdzKddMPH3qtQZ7e0x5hTV9BY4SLdYMOHC0BmDxrbc1/p
-         /sYViHWBbCRU7uH+apA8TTvbcU2H2YJrzRCvZs7SMg/CR+jd2yHZ8nCpSCC5eI5vlKY6
-         1Usl2CWoYgk5ol+vipCx9rDAvZSVpMbV3Zt3MXLd2YJTJAuIebG2QunuHShOz34glI+V
-         /g1A==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786656243; x=1787261043; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
-        b=hmlSZbTmcwlzQzA4RAjRnm1zAMk0yOyDyMiwa5V5oYk5WEKaIOXTCuTjW/Jlww969n
-         RaLdn6beYoaRoNFonZ+vIsG7xCCg850Rll5+UitkFZtfYQNfslPNDdeBtmwBg2rli2nU
-         MXkUnasQN7YFrsk8p/jha01pyz9cF+pDF2TJhhkTEpyyefnyQE3q1OOsiPiRx7shpwi7
-         kjJwqQkjUbmXB9amDQTCo1siV5u0ey8SE6OzW+nyNIZsLGZ6LXYqWXWz3tM1rOwqUHZo
-         66SZmjsv/sgA4jd5zAufZ8uZGxGdzR9I3b4fyErxjshJDf+8pU2H+m/XeDZ4NTnRVx4V
-         Ef3g==
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="JpdbzHlc"
+Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-451fd21113cso355764fac.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786656243; x=1787261043;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
-        b=sxILkxufU7wa+mXj1s4FRCleOjp8zhqzq2xoi4tfgo+zgoeyNCPz8DwC8FI3vAFKrm
-         LqTUB6Itz2DrRnESie3+b1KRzpDpVZkKhXI727xmomrUH8CkZ5+++4C1/1R1mZasSOrU
-         ouDZIXXJajkaPtvHkCBPxBjI6mv7f+kNFKgs7nTawMj++0lNxVjCmjPUBOe2oL60CuqT
-         Lr/tTNZIeSTKHLbZbcCSty5WJIPd8RoaxZ+L4iiUFcucQwYWNCSLGjtUeFOVPOELQ5xm
-         pfTW7UbZ0xYGS5f+LcPSsXDSM9HI5JJsayAI4uw+wyJY+dhg0zZLdlFkDhbpIbmBYdfn
-         D9/w==
-X-Forwarded-Encrypted: i=1; AHgh+Rqw8lpurD0Ey9u6sOjOJdeD6Hrh3X6ugwHanckAtxdzUfIVKvaWFGolwhpKR9uWDdwxo6fyGeWBMeqX10vwsi4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6LdXnynOdLzlEKfzKyA3ZWpvPoxPuBZKWpBEIj+T6R9Sioe8C
-	HiXARH+JjrMg7tBQfqM2/BopSV3DXuzOdBMfebDrJ831o9Qqw4thmCJ306Vv7ezh8hs2VyDttic
-	nGN/zELf+NeTIEv7kpT4wElTYe3etDXFXBFQoWmZ7
-X-Gm-Gg: AR+sD10t6mRGnGB+Qi0QjSPD+B9pwXfkEElBWNhRro3u/7G3aC3Eqn7kqis232FcExN
-	VU9mrNARoK2vUwJn8tpzWVaeuwhuyBgleDyKgmzHLZsz3TibibH8JZC8uWnk5W4kusY/1IsCM4j
-	t4IhJHi+IfhV52MCMtOrGMHXi3sdtr1r4eGtGraAopYAnfXhK+tbfmFWIXt8oDtdpIgIsM1RNST
-	xK325VrMY2ymX/FfcRI70kBPUH+g+Mfc9JmIROfiULma/UmCyYld95S9WTTN9CBXUaB6aCh+TIo
-	SUnLMK/a2mQ/UyFDwNxeaN9yqaDwZKzoKt0zkvFQAPwGxiSaXS4IvhhDVWiK9NbfFO0+SG8UviZ
-	XuXkTBqalheqBjTH5tJXGNIpxJue0zg==
-X-Received: by 2002:a05:6a21:a4a:b0:3cb:d156:d362 with SMTP id
- adf61e73a8af0-3cc7196e785mr831997637.3.1786656241969; Thu, 13 Aug 2026
- 14:24:01 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 13 Aug 2026 14:23:59 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 13 Aug 2026 14:23:59 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <82ded1ea-e0f6-48d9-8bcb-38a6bc5e9176@kernel.org>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-20-2fc18ee6d3ba@google.com> <82ded1ea-e0f6-48d9-8bcb-38a6bc5e9176@kernel.org>
+        d=1e100.net; s=20251104; t=1786658418; x=1787263218;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WZLDjUMvBFdgbs8ZTJktZdHjUGj8/OSXLCcY4tmjsIM=;
+        b=T2DPhy3uuSULlJcIkK/EvMFXktW9+qqGTsxFb+K3ClfqES2JSjU+TiT4TEo171iaeh
+         3TIcrxKFtI17RwxqhPigJQouSM5cBi3Wo1RJMbPBSeMb7I/zAs5yGUH0rfrgShWzg4IX
+         T+y+BsLjdLUlNqoS+RD5DvCeGSitQwq8WEnJ3d1g+MgBPOQ0/N2ZaNRaudM/aMgxZWaD
+         cSadKaElvbyGYYcAfXJj5EeLtmswSXwklx4evpOdCUvdu11yqTwFpDUWVqY6Tb8Pd+rg
+         qaT4TVvaeBPj1eu/ca5fVltI9/KeFz/qeogKq6Be+Y0Bct2sHRi4zfGGjRsmFfyM1+4r
+         LbPA==
+X-Gm-Message-State: AOJu0Yzf/xxuxuz1ogeaQV0CS6/R9c9iCt+JLhukUCrwpBWdv+coycYl
+	c4q+q29VoHILgHDYARsUPR4RTkeU7WwA3YzPZRDbDE6oIWRU5D98tTVF
+X-Gm-Gg: AR+sD12NFZ4szqn5FHJSf+1pIY8gpeHjMmcHBvsua8OPqlmncSHlVYB3yRMmZrlR2Sr
+	xDOBNotajuuEtV/NVKC/kCm0uxXBzI4i9kWhOFD5PuyyZ797rqHhZjTwbBrsLl7xwckBebHy7wp
+	qerdmYN7nuw33+EcSDEuFbKf/UbvOxDS8mENBKkNthTn2zZ/9mhuiWImhUTUfX0ybZo7HZS7xUi
+	8xWuuIoW9XBp2QbSTHTKMWahDtcN1c9vhlj1QIg/yV377pOj4xZuukDg+ZobB24b2x5TSmciM1J
+	0eEEtHBhGr7usTWiWmDP/97tSKELvup+nQ6P2nW1rOkPz7iEwKtnuM68tawvi6FjBGdyOg6jYeV
+	mAe5crWBp7qM2ryVqLtXe38RrxmNTWb6Xf8swwtlVY3Qv2RWwLhm7Na/YtS92vJ00twBGnGMGd9
+	mfMt38CbPfaZKDx0NjXIHcG4yK1KvYD+6m0h5fYr9aNAQ3x4g+lvaC5Luy+qx52JTPLIXgM5WpX
+	0rzZGNUb4GQXdIzGatZEIup1qasYqcLBAlioqy7KphtrfrysZEKH2EVjCc4EsKt0g==
+X-Received: by 2002:a05:6870:8a0f:b0:424:801:49fe with SMTP id 586e51a60fabf-45e91f35ed3mr729847fac.8.1786658418555;
+        Thu, 13 Aug 2026 15:00:18 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-45e8f8f23acsm761611fac.2.2026.08.13.15.00.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2026 15:00:17 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id DD26360CF1;
+	Thu, 13 Aug 2026 22:00:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1786658414;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=WZLDjUMvBFdgbs8ZTJktZdHjUGj8/OSXLCcY4tmjsIM=;
+	b=JpdbzHlcKwbLkHojBUzzeFmBtNAUjIxJO8KauGl8gUUHNRbijKCR1ZgSqrfSeSVbF0u/GP
+	vcttUaAuBwrzNQr5GsWIxKdDfr2HQDxOgQwpiMhXISY8S3xglgUhJ/UYdlDK9/ygPlqedx
+	hq5ZbMRN9IJiQRidJKNw2Gjt02mIOr/0/KeX0Eq8sizfkN1ewevaNeZHxibV0VIY3i3x9T
+	6Fxfl9JgoBsH5gGpp0aJOuGZCho7BLzy3l8Tvjj6SxGUqFThlMTT0cnngPHH9T6IVNjN7Y
+	pvV9wDmkfztlh6bp9Uj72DAHQiC4QeRp0AT9p3kQzqLRpACcsopcG1mrKf7wMw==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Subject: [PATCH 7.1.y 0/4] selftests: Fixes for BPF
+Date: Thu, 13 Aug 2026 19:00:01 -0300
+Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 13 Aug 2026 14:23:59 -0700
-X-Gm-Features: AUfX_mzbri1ixV_zlf2Jna8d8Me5Qvc_rxP8xrcIgsSaQjjAlnxnniHAuo3sYt0
-Message-ID: <CAEvNRgHpy52iynKfXeEkyCixhhu0_Hnu5jSNT8i+BNxvEoG7Cg@mail.gmail.com>
-Subject: Re: [PATCH v10 20/41] KVM: Let userspace disable per-VM mem
- attributes, enable per-gmem attributes
-To: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAGE+fmoC/yWMUQ6CMBAFr0L220WKCsSrGGPaskC1KU23GAjh7
+ hb5ezN5mRWYgiGGe7ZCoK9hM7oE4pSBHqTrCU2bGMqirIpGXLBGgQsy2S4SR0blO5xa/5r5g8V
+ V1424VUKSglTwgToz/+sPqHORL/A8NE/qTTru5f2oJBOqIJ0edsVRKktna9w0YxhtGj0eErbtB
+ 8H+M1a0AAAA
+X-Change-ID: 20260813-7-1-y-selftests-bpf-udp_xsk-04c781561aeb
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, sashal@kernel.org, 
+ gregkh@linuxfoundation.org
+Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ stable@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>, 
+ Maciej Fijalkowski <maciej.fijalkowski@intel.com>, 
+ Stanislav Fomichev <sdf@fomichev.me>, Jakub Kicinski <kuba@kernel.org>, 
+ Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>, 
+ Jakub Sitnicki <jakub@cloudflare.com>, 
+ Jason Xing <kerneljasonxing@gmail.com>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=1422;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=9/sQZpI1gQNflmGl2+wtCghsABNs0cTgc4HTGo/59bA=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QPBW41qmmEFf8qVQY8Nn5MQdGg3RdJsb2RcsgWh3OX1bTHQBhNFAoIkVu3V3wTnrAvyqG7UCybE
+ wzyZMy+wc8Ag=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-"David Hildenbrand (Arm)" <david@kernel.org> writes:
+Hi,
 
-> On 8/7/26 23:52, Ackerley Tng via B4 Relay wrote:
->> From: Ackerley Tng <ackerleytng@google.com>
->>
->>
->> [...snip...]
->>
->> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
->> index abb108886733a..2c3c22aeafa54 100644
->> --- a/arch/x86/kvm/Kconfig
->> +++ b/arch/x86/kvm/Kconfig
->> @@ -81,13 +81,21 @@ config KVM_WERROR
->>  	  If in doubt, say "N".
->>
->>  config KVM_VM_MEMORY_ATTRIBUTES
->> -	bool
->> +	bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
->> +	depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
->> +	help
->> +	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
->> +	  memory attributes.  Using per-VM attributes is deprecated in favor of
->> +	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
->> +	  CoCo VMs using a VMM that doesn't support guest_memfd memory
->> +	  attributes.
->> +
->> +	  If unsure, say N.
->
-> Hm, does that imply that a distribution that must support both, cannot ship a
-> single kernel?
->
+Please consider merging the following patches, found through openSUSE CI.
 
-Did you mean this as a documentation comment? Should the above read:
+[1/4] and [2/4] are for test_xsk.sh:
 
-	help
-	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
-	  memory attributes.  Using per-VM attributes is deprecated in favor of
-	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
-	  CoCo VMs using a VMM that doesn't support guest_memfd memory
--	  attributes.
-+	  attributes. Select this to defer selection of where PRIVATE vs. SHARED
-+	  attributes are tracked to KVM module load time, where
-+	  gmem_in_place_conversion can be specified as a module parameter.
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_xsk_sh.tap.txt
 
-	  If unsure, say N.
+and also test_progs (subtest ns_xsk_skb):
 
-I think we should do _without_ the above clarification since using VM
-memory attributes for shared/private status is intended to be
-deprecated.
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_progs.tap.txt#line-3186
 
-Is it fair to say distributions should not support both, and if they
-_must_ support both, they need to read code to figure this out?
+[3/4] and [4/4] are for test_progs (subtests sockmap_basic and
+sockmap_listen):
 
-> --
-> Cheers,
->
-> David
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_progs.tap.txt#line-4034
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_progs.tap.txt#line-4212
+
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+Maciej Fijalkowski (2):
+      selftests/xsk: fix too-many-frags multi-buffer Tx test
+      selftests/xsk: account reclaimed invalid Tx descriptors
+
+Michal Luczaj (2):
+      selftests/bpf: Ensure UDP sockets are bound
+      selftests/bpf: Adapt sockmap update error handling
+
+ .../selftests/bpf/prog_tests/sockmap_basic.c       |  6 +--
+ .../selftests/bpf/prog_tests/sockmap_listen.c      | 21 ++++-----
+ tools/testing/selftests/bpf/prog_tests/test_xsk.c  | 50 +++++++++++++---------
+ 3 files changed, 43 insertions(+), 34 deletions(-)
+---
+base-commit: e2466b32e02a49318b99520c40b397062c65c84c
+change-id: 20260813-7-1-y-selftests-bpf-udp_xsk-04c781561aeb
+
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+
