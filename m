@@ -1,151 +1,149 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADDE03B9618
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 09:32:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.182
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786613577; cv=pass; b=MxAyHxY06Y0MeK35bxdUgTdTeK69Xzdn1MwPqdgzBN9zNaDwo576+wQjDleZzxdkDRzGGk6ii5QHFfGK41Tyu9uOFVrnDnEOcWtW8qadyLhWFuI+y0JmoNg8wfR2pLxGSIzTjgmhjqP6Mw6ZZPpZ51tArV9+JX6f1lbDFseReEc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786613577; c=relaxed/simple;
-	bh=hxPH+ehBPzRCWk6w7xeKnqdyk50jcH5XyZCkn0NKK1U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=omtcjjLfBdfunTrjy72wuw5ala1mevCSAISm1jmhcenmyMVgn84w8Vm20l+/d7YFH2+yAmqrTQKCm4uct816HMej3YanPrmL1fnfxnmhp0DWcYwWL77x7Zih2ugyl5a7vwhQ7XTZIJdZ2pAsZ3ryaSfQT8XBBleXB1C2GCv7U4k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ki0S4C8W; arc=pass smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C35A39B947;
+	Thu, 13 Aug 2026 09:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786613687; cv=none; b=C8wkTEvJiovebDViKGW4fLng75Butd72uweCg3pUO0cLk7YpB17bDeyxVH5h3VBHRryImBUNpnB0rqyadC4XLgBMdsSphKLCEyJNu2vk8ucOa7/juMdOPt3YQmU0eVHnV/Z91dgiVgmN3HXAIaYTXaNlw257X0097Rpahl+4hjo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786613687; c=relaxed/simple;
+	bh=8GGJeMXZjenStr/KzvJ5bvXYBWbaVtnV9BN6Q25mvnc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uRmARe2gcehSxd8nflLUy88EEikRIVwXkl5HOaaN2EKz8bfbKSqL71YBT0qmpTFvhDQQC7bfuUj5+VQAQq/nvYBPXPXzCBCDsGyMqtPq+xY9yvZiVw8HbsKEZf9RKSe+TreIGdPMFOrlUGxkkn+Lx5CmDRwV6sBQ6hinuv1Ch84=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bUE5dJPA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ki0S4C8W"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2cf110997efso5122005ad.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 02:32:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786613575; cv=none;
-        d=google.com; s=arc-20260327;
-        b=IGE2WU68uCJpwd8obhc6t21XiRVK8XKo+pSd5yN1HJB94Gh81qVcEb/u+9KAZ/gCtY
-         42K+0mKOcAFUr4wfzVT+X1Z6OHnCqxVXR1j/2aVV3pw+X+5CJaccGhVcZ4ciBxQYhNep
-         T3AET9gAMnlE+8Ce/pXiTM9Map1bsAQWt8B9cscHp9TWLELZM9CvvkYZHA12vC+jRHet
-         unTK0cQZZ863en2Xkvj1CYixaYImeGNzH7ijwaU4c08Sywu9XbZ523ApbEyzsgH9RGB9
-         hvcIjqkpz/20xSt790J91zJWSH3A8p4zioN3+6NtSL12EryZ3+FwqVbpUMyxdNCbWT3v
-         b3GQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=IxnZHFdFswxuxe1B8yyzSCFANjk8+GYT1StreigHL/8=;
-        fh=B7VgsdSVSkW5Ya0yo9HOb03aqktcl5/PlavL4hmX54Q=;
-        b=IU5TnPWZDfHSEzh/MUaEOwcW+T4tdSpjIBQy2Xf2CamU94TF4zK0u6+EJVv9t3PQbH
-         C8LjrZ9W5DiQdePHaUQVpojqMf6lUB6JfdACkYw7P6kZl+ggwdGzJ5BACFaMfa8OyU/J
-         CMbv8UFnmDH3ehcMtAXK1btv4B80koYOZh+dNX2Gq2xLS3FW/eD3PD4mB/pnQI4rRDQC
-         pOF4VlgThu1pINwrrjxkNwEC29WzNnalAOM30wAvhcVN8T6D4t3EINvbMbcDjQdD4Oo6
-         UDJOQB+S5NfNxdt3XkfF0tr9/8XDSf3McanUbgRfLQVNBotBa9GFPcozYhUBnGs1E7nM
-         3U0w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786613575; x=1787218375; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=IxnZHFdFswxuxe1B8yyzSCFANjk8+GYT1StreigHL/8=;
-        b=Ki0S4C8WDWmasGaotvQ0nFof4wEoVQlo7An0ov6Gl0rUwXMSgg6XVEXZo6N2Goo3So
-         O3/FgHe2UfkWJy/r6cN/eGa9shVxGjV8+Bh0wg8UFrL+p1qKMHJ28Yi8H4mkSOrl47YM
-         3nAsY5Jw5yPDE6Tl6+UUx8L50Nw2GceIHZWxlSifOIY0qi81DPGXV1vCFZR4MyImM3S0
-         9XraUocr2791q7nmxmZZxmE2r7aJ7qIEatOVqrjx2Orojbo0aklqiZABVkTYQ5o/JT0+
-         DMg+Ns+B/w++Om6XoscYdrCTs/9WeCwcfWy+JqozQyENao+7695ruzUgy5KCSXK8V5Em
-         h96A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786613575; x=1787218375;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=IxnZHFdFswxuxe1B8yyzSCFANjk8+GYT1StreigHL/8=;
-        b=A+CsD6gZj/zukUrn8vKfneK71QuMl84PBDNDsGQzl+VOie8lKAdwJfNW03eW7ZMFfu
-         Im3MnBXCKkbuy519Msjvd5k/s+Fcs/OADl2Eg3y65Sic+2clcxourE8h26qFtz/9zBVr
-         QO2T3v2w5wRGK+Jh1ghYfpfQ2MXMEt7gJPQyqfZ+bt8oDQ5m++VJufrAfGkmX/Vz+qPm
-         qDQ6fqi8GH8MQhrXlKZ8kaDB4g8VNzyZZhRNnwwNW9P4sa/qFcH24JaclB1oNL2L4W8K
-         /fmBVLmqLp1QBkCcgHexTBx4nx0f18kWVkGpYJIy5O6i43OykKj9wqFlsStJXbJK12xX
-         VObQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoxSdaPVysn4rVitJGjNhwYwLcWsGycDJ8+Ap9yz43IBw8OTS8oXuf5hH0jBA4koFk7ovwtoP/OvkIaiZgEssE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZYRmxiT4K73VwVMAox+ZCT+S5mGDsSQ6i8QaxOvGD8Qkutcs7
-	gmeQbP9VLOhtRWt+5qWt/if/x5rVaO8XoLnUlqNOIB9gvMwUpuUP3ARFDzl7iGuvATlTSZXsAhN
-	O+NVIdvVN5xJqUrItZJLTtQiUasy3j9w=
-X-Gm-Gg: AR+sD10Xvqz7GLNK7+2SawGIzuthpJe+VLizXNL0f9OWeE4Gs2C5qOBUEj0QxwBYabm
-	bYYgb+wd/neHn9pM4Wz1k0K7apOfiC9c8M/gQ7xi1moPGtzQzasfTwb1u6CeMcI2TEBKYIOeanZ
-	GwaYD+khxdN6SWl2tG/APV+2ZanMHqCNwE0MRmBFIQU/ACwrTYATn+qd9YdOD10An6PIFtTUNE0
-	oEk6j8Coak2MZ5qPJ+I/j58bBR08+r0An+NCkT4zBHKNToRNMljmndCf7+nJu31BJulmsjN0qO1
-	1pSAgrG1Q0AjpJgoSjynuOhOPhUJOFHMlySWTnnZ06+p2VlM6Q3wxwlu3ayzbecBmYGwtJt5p3E
-	7JdQcjAZNlmmCltjb8+JkOTf86lvqf9loA3eHqauJ+C8ySFbHC60FDjhBP6N2Zg==
-X-Received: by 2002:a17:902:d4c1:b0:2d2:a952:2628 with SMTP id
- d9443c01a7336-2d389a366b2mr27617905ad.2.1786613574868; Thu, 13 Aug 2026
- 02:32:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bUE5dJPA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E2C21F00A3A;
+	Thu, 13 Aug 2026 09:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786613677;
+	bh=8GGJeMXZjenStr/KzvJ5bvXYBWbaVtnV9BN6Q25mvnc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=bUE5dJPAlkV0e3vT0h7pYlLJU5zXJxR2LXxBNspnyo1VD4QhHtGs98mt311XJsBdW
+	 NwB8Nq4PllboYzEJBi81NS4Znt7rwrq4KgMryMSE0C43kPgg4JZBe4YaD73IDj3Qhc
+	 hkISD3HoCeXW5N5BR+POiDBs1yZqmn+EUOSooN1tXl82a26xMjeWiPMpVvfYRQfG/x
+	 ZMtuu9DxIOMyxMhsNgoWAd1PzcOu+EcD2NUsikKPG7Mr3cJCZt6UfUjHm2RYLp+0Px
+	 1/SSm+fTyu/vmq45+SrPqFDYNWi/Yibqy+QbWRYX2IwQzUF1p8qhv0/ihpFi9UoHkc
+	 0QX0gdddlS7+w==
+Date: Thu, 13 Aug 2026 10:34:00 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
+	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
+	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
+	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
+	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
+	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
+	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
+	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Alex Deucher <alexander.deucher@amd.com>, 
+	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Huang Rui <ray.huang@amd.com>, 
+	Matthew Auld <matthew.auld@intel.com>, 
+	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
+	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
+	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
+	Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
+	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+	intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 18/20] mm/vma: make MAP_PRIVATE-mapped /dev/zero
+ mappings truly anonymous
+Message-ID: <an2PQD_pT-ZpSCvP@lucifer>
+References: <20260806-b4-scalable-cow-virt-pgoff-v4-0-ab318a350404@kernel.org>
+ <20260806-b4-scalable-cow-virt-pgoff-v4-18-ab318a350404@kernel.org>
+ <517ea018-d6a9-4c78-b0a6-4f002b3b72ca@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260811-fix-fops-owner-v10-0-7e71776f9dbe@linux.dev>
- <CANiq72=bhfofrbdf1qeA380-eWeKj5yXhC0NzaU_nbB9SpxYHA@mail.gmail.com>
- <DKNAS52KYWLD.M15VEC6U0F6R@kernel.org> <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
-In-Reply-To: <DKNDF3WD27GM.5VP6RBRXZBUS@garyguo.net>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Thu, 13 Aug 2026 11:32:42 +0200
-X-Gm-Features: AUfX_mwSjTSmX5g9cpyULDa32fuXt2Yd5-MIkCd-iXvVUBlQKiet4rzS7F5uPZo
-Message-ID: <CANiq72=SP_nT7Z6NSH-GT51-8hJ8qLUa07Cs+SarSFTO9Z7vUw@mail.gmail.com>
-Subject: Re: [PATCH v10 00/10] Fix missing fops.owner in Rust DRM/misc abstractions
-To: Gary Guo <gary@garyguo.net>
-Cc: Danilo Krummrich <dakr@kernel.org>, Mark Brown <broonie@kernel.org>, Alvin Sun <alvin.sun@linux.dev>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Luis Chamberlain <mcgrof@kernel.org>, Petr Pavlu <petr.pavlu@suse.com>, 
-	Daniel Gomez <da.gomez@kernel.org>, Sami Tolvanen <samitolvanen@google.com>, 
-	Aaron Tomlin <atomlin@atomlin.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Daniel Almeida <daniel.almeida@collabora.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, 
-	Rae Moar <raemoar63@gmail.com>, Breno Leitao <leitao@debian.org>, Jens Axboe <axboe@kernel.dk>, 
-	Dave Ertman <david.m.ertman@intel.com>, Leon Romanovsky <leon@kernel.org>, 
-	Igor Korotin <igor.korotin@linux.dev>, FUJITA Tomonori <fujita.tomonori@gmail.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	=?UTF-8?B?QXJ2ZSBIasO4bm5ldsOlZw==?= <arve@android.com>, 
-	Todd Kjos <tkjos@android.com>, Christian Brauner <brauner@kernel.org>, 
-	Carlos Llamas <cmllamas@google.com>, rust-for-linux@vger.kernel.org, 
-	linux-modules@vger.kernel.org, driver-core@lists.linux.dev, 
-	dri-devel@lists.freedesktop.org, nova-gpu@lists.linux.dev, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-block@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <517ea018-d6a9-4c78-b0a6-4f002b3b72ca@kernel.org>
 
-On Thu, Aug 13, 2026 at 1:57=E2=80=AFAM Gary Guo <gary@garyguo.net> wrote:
+On Thu, Aug 13, 2026 at 11:29:43AM +0200, David Hildenbrand (Arm) wrote:
+> On 8/6/26 22:21, Lorenzo Stoakes (ARM) wrote:
+> > When mapping /dev/zero with MAP_PRIVATE, one ends up with strange VMAs
+> > originating from Linux's distant past.
+> >
+> > These have vma->vm_file set but NULL vma->vm_ops, meaning they satisfy
+> > vma_is_anonymous() but otherwise resemble a file-backed VMA.
+> >
+> > The introduction of anonymous page offsets and their subsequent use as
+> > indexes for MAP_PRIVATE-file-backed mappings mean the rmap does the right
+> > thing with these but we are left with inconsistencies.
+> >
+> > The vma_start_pgoff(vma) == vma_start_anon_pgoff(vma) invariant is true for
+> > all other anonymous VMAs, but not these.
+> >
+> > These VMAs are also observable as files in /proc/<pid>/[maps, smaps,
+> > map_files] but otherwise behave like anonymous mappings.
+> >
+> > Therefore let's make these VMAs actually anonymous at mapping time which
+> > will activate the anonymous code path for mappings.
+> >
+> > This means we no longer have to account for this discrepancy anywhere and
+> > no longer have to think about these at all.
+> >
+> > This is user-observable, as MAP_PRIVATE-/dev/zero will no longer appear in
+> > procfs as a file-backed mapping, but the impact of this change should be
+> > low as likely nobody is relying upon this.
 >
-> IMO this is the correct way, also consistent with
+> As discussed off-list, it's best to discuss the impact with the wider community.
+> I'm afraid not many people made it to patch #18 in this series. :)
 >
-> https://lore.kernel.org/rust-for-linux/20260811-fix-fops-owner-v10-3-7e71=
-776f9dbe@linux.dev/
+> I don't expect this to actually break something, but we should be clear that
+> doing a mmap("/dev/zero") will no longer indicate that as a file mapping in /proc/.
 >
-> It might make sense to add this to rust-next.
+> You could mention that e.g., criu checks for "/dev/zero" mappings explicitly,
+> but will just keep doing the right thing once this is a proper anon mapping; we
+> expect similar use cases to do exactly that, and rather check for "/dev/zero"
+> only to conclude themselves "this is just an anon mapping".
+>
+> Doing some digging, AI raised that there is the potential of some workload
+> explicitly using "/dev/zero" to get an entry in map_files. I think that's
+> essentially what our selftests do that you have to modify. I cannot thing of a
+> good reason why someone would do that in their workload, and at least AI wasn't
+> able to easily identify any such users.
 
-Yeah, it is also consistent (in the sense of adding a fallback) with
-the other fix I added when applying the series for the `macros`
-doctest; and the `kernel` crate is not an actual module yet.
+I already fixed the self tests and yeah it's not very likely.
 
-I guess yet another solution would be to have an even more local
-fallback, but that would be too local in my opinion, i.e. we will want
-to use it elsewhere sooner or later.
+But as discussed off-list, let's defer the /dev/zero stuff to the next cycle and
+get the core of this series in first. It's clear there's more discussion to be
+had there :)
 
-So I could fold [2] into commit 98f256e27262, but a commit on top is
-fine, I will reference that commit from the new one instead.
+Will respin with the /dev/zero stuff peeled off!
 
-Ok, done -- Danilo, I took your diff and converted it into a proper
-commit, please double-check you are OK with the Signed-off-by:
+>
+> --
+> Cheers,
+>
+> David
 
-  ec6fcf8a175a ("rust: kernel: add `LocalModule` fallback for
-`#[vtable]` `impl`s")
-
-Thanks!
-
-Cheers,
-Miguel
+--
+Cheers, Lorenzo
