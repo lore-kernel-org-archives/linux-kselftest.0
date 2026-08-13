@@ -1,282 +1,113 @@
-Received: from TYPPR03CU001.outbound.protection.outlook.com (mail-japaneastazon11012020.outbound.protection.outlook.com [52.101.126.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303C035C68E;
-	Thu, 13 Aug 2026 03:26:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.126.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEADB27A91D
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 03:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.167.46
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786591599; cv=fail; b=d9UWqrGdpcO2Ggr6/hO55LQ8vK0aQSEDPFardPXMyMm5WOlkyRaZwh08ySYh2rV3Zn/6b8WmVRCPFKEHl9zPYzJG5EQ5S0Uzj2A3xl3Eh7GBByr9a1hmihmHlgbJU4gY/PBJFxPHPzx1LVQ720CXJ+Wvxe6QBmv2+tGeDI6NS9o=
+	t=1786592466; cv=pass; b=cNz8aH1ngnLYYZa9P5fu54VEiJeDZXjOVDzAnDK0FkOTAjvAaW6p7PBH3WVMpyEI9TT2i2imZPhCPGnQOCGmXSykhpeXlaUOPo2afReJ227zlvClmw3zFHX00wPd5IDleMTOL+il8cAVySoVxdKim5pG2/QkbaQPkMkUX6nYfSo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786591599; c=relaxed/simple;
-	bh=NS0MagrRpiEmmzJdotOcxDIXeZHb40YC3vtgreCzpME=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=YsDzJohEjUKuyv+3EUCeFcaDgav3mRxypuqC4BwNHQRW917rPQnbPqtD0xGMwaWm/ECVhgVA/f+PbegYnzPztXilA4dotFujRdNJhJPBme7ycymV59sX3X5NrmqX1518969j9sOPf7MlX3WUmUeo8g6V2SYvovDPuw/uNYXqroo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=f3v+IFKG; arc=fail smtp.client-ip=52.101.126.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	s=arc-20240116; t=1786592466; c=relaxed/simple;
+	bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qTRGCZwK09d2n+lJyCALsbnzWjgFpSbNSf8RaOxG6wD2TU5i1yJDVBt11dVt8+HjCeP/NMluYdQa3fxp0Ig7s8Rpumj3cdKlLc3LF50xniQ9cZfIoPPaC9bKeWCx7cGDTYzIBSQjaFOfMbaQFkqDdMYOr1lWSGbsm+ZllauVnWQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fzJe6LdD; arc=pass smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="f3v+IFKG"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=fGs81zECCwYLKUbdEB25odJMbFXbCgC8YCCo1OjQl7RzUVABjlhv9R4GjajYksbsGHZqT4m3pg4h1O3bVEfwQIIR3C4iubUbf0aeuF62ykKAq9BBFERDqWicUI3k2aByYknnW/cJ33ekkGG683ZdqKF4WiJEyBssfsFwFYki/mXsURsNownas/dTj+YMytxI3ftdNoR9fsDGsXugG5XjsaCObdSChtZQfgkZWQM4dj5k153ORhEiWv8M9kggC/ryfwF2LMr9CHM1sUOWFv9yod1SoWmudPHkqJFHJpTOYuTvmDXO3S5S16NWed0FpwZKE1odeoLXRcAejVpLQGfm4A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=386qve2AfUrBDjt4qmJfv5yn3csqEwPqEARmCc+ZfF4=;
- b=V6Lj7MAx/EHIIJUiFA9SQwgxBYwpGd0/zksCBveuD9E5M2kGljTL+21mXQr2Hb98uozCe/jP9hNpJl1/VkRGBN886tTq1lghr3zF1p91bjfqK/vU+W1GLPH4EK8QAIlh+QdEVwtCyeKW6E8AJiHxHlSX611SgdPlm4uESs+6+/c3ltMlbhLi4HKlZp7016WpF8MaN99g4wLXuzlsdjYJrQNHqSzGMPmQaVFjQLUE6fMUNz62xkLKZeZCwepDEfEMrx5Pla+7CDZkxZ4PQwbc/5iwAI5kKbMp6mFHUggDq8tEUST9tnXy9j1utKiqFXsoXlzEWjps74tiR4rg1W5vGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=386qve2AfUrBDjt4qmJfv5yn3csqEwPqEARmCc+ZfF4=;
- b=f3v+IFKGQCkzYa0sWS3fq0bmCKNDap18yVXWtrYqbWa7G+zWx6paqhms+j3ibVl6XcutWivrEMcH73YkTMJZdJK7m6C2aVHZfJN51Cwz04JjeDH7hI/eTMgtUUrJSCIcWL8ljDyp8puFP6D2qqpKRpBACrgaAL9//ShB4oQNmzJne3mhtT8euT8jbVxEbtyamKGbHXaIhEQfkXjvSTzQ3ibEifaaI2QhXOe+EYkjHu0BcpcS6smUgp31ym6XeXWBfHfC9ekxDYUOx6WoUUajGJkbYAd9QtkBEyKnkC7ZmljJcoIRO7gigdwXN4KjX88mw7smF/ZVC4Fp6KYDD4koQQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by SEZPR06MB7024.apcprd06.prod.outlook.com (2603:1096:101:1f1::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Thu, 13 Aug
- 2026 03:26:31 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0315.011; Thu, 13 Aug 2026
- 03:26:30 +0000
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-To: bpf@vger.kernel.org,
-	andrii@kernel.org,
-	alan.maguire@oracle.com
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	yatsenko@meta.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: [RFC PATCH bpf-next v2 2/2] selftests/bpf: add tests for selective kmod BTF loading
-Date: Thu, 13 Aug 2026 11:26:13 +0800
-Message-Id: <20260813032613.2755-3-zhaofuyu@vivo.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260813032613.2755-1-zhaofuyu@vivo.com>
-References: <20260813032613.2755-1-zhaofuyu@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR02CA0124.apcprd02.prod.outlook.com
- (2603:1096:4:188::9) To PUZPR06MB4742.apcprd06.prod.outlook.com
- (2603:1096:301:b5::13)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fzJe6LdD"
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5b14d1f9315so1656012e87.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 20:41:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786592463; cv=none;
+        d=google.com; s=arc-20260327;
+        b=oGO70RZYkD4usxxDUil6SkxkzFJy51JDzONioAoy8xVTDGoYmxAJa/2N1ilOSEotze
+         C1Nr53UBmmvCxj1cz4C5380v5ZUh6N11B8fdnAyWN/eKac6LCfhi0tw6WhfQd+qN3+X6
+         onDfot3Ps6qFFteqUZ0+zancVq8xDG6hyzkWjIjCWzOPFnbKSGUci0CTVVdgdMeWZFrl
+         kD/A+WHGPuoILYsDKK3Ulr9cEt4sLJ17rbrxvzBM/kCJ6E7MMTxre2C+x9eH/Nh+luOW
+         BZ2yf0MR/nx9rWcdrsHLl0lsEB0WQceua6JCXGiVNL4hccHBYuq5XgyzJ9QgpfE1EGqs
+         zSMQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        fh=xExRCByijPHKO1nayPjJs/wC6lN0g5nK86hlvswSG1g=;
+        b=Uy/rNV3W/cLqF75dGRwDIcPVnL+zCFwf//nSJ04+VGrcg3dc1zkzYC1YWz7V1KjrTU
+         1LkRoyQ3N8S318n7ha77T9SEE0rwZIapYXuzkG1sh7mrffstxE13jriPr0eV19RzBXEU
+         2O11psDky+Ql29clg6aUd3zRmuQPnsR4f6JaRCr6SIYt++YFXYgAaVIAnBQUK3+C8KNb
+         V26Qaz6GIzzjl6HWltmmJNDEqFmPsNfcNSeqjCPjX5cW2ldrGQS6/iptJdgzok2AqkP+
+         5ZSfXg8Bb7hr1F2ds/LPDT0j+JXOfOIGsgSz/1P+BdhaWpy/krqNFHH8/hpK1F8ggK0N
+         hhlQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786592463; x=1787197263; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        b=fzJe6LdDAHCuOOen4AkfHRsMy3EwDZfFW0QIGdze8sdEzctJHbmxFalbj80Y8dleWX
+         3UUmVust8DHJrCtnFWl1GnVC4d7POz9pyspy2EUGTixNoIlZWyk6Pv/iHNYU6nTr/cWp
+         29VhdtucWlR24q94AmhvclmBvl97Z5BI1KEd1tdzsxnvKu2LVn/K9GRi5qkhFDSIz/sP
+         9i9s3UVPeA7SK9vboCTKSNQ+oUxVidBp6CFwHbCBm3/bJrE4kKeryNRt+U4mtZQrFkLO
+         M6F24OmEcjYHZ9nugjXpwCx+TpzuOr6ErsRwmWoJnibtqt8umwWBD2eY1+tgWY4pIPc/
+         LREQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786592463; x=1787197263;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=KGNqgcuWPSyLSxhZ6HvJxhNYRieQ49SCRyUh0hq1fDw=;
+        b=BsAZRsGRJBRin71gYp6qGMdSE99dy2zeCXaNN9nxutsU6U8/E3e+FoB0e+XZvBsylh
+         VFS8QssZIcjV/vRwmz4OBZCWEk/G0kxo20EkghCCs71nCIoIs51TvjrLG8ISrf/L/J9A
+         pqPC569vOS+leLU+dnoM309+WIsFjbUkUXtTMPlyGpfjdZghUwSIUwvLlYmjVm+DArDu
+         YypLDmeXXuOnZsf9mysZyQdDkvILUFu4PGQEoTA/F5JQjwIB2ynmc6P+aml2KtjmMmY2
+         35Bx5Sc9U5/U49n6l1LGqZHrhIYKMJQRv35LTd/YpsB1HCsElOqY7UiRxco8mwwKjxlR
+         dN0Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rrtr/MYfKvPRaN8fKbu2wDDNa3qQ7gKHHVml/fJMEyARhERNSeAaONXDig34uTFm0HQI0FfIZuoQYWDJQk2cRk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxeeJMMnQAi55ieaJFrayIVy9p6PZraEIe9l7vvSx1a4Jk+QpCm
+	roh9GsRoSAQTIJF2zYXhJBujJcic3Zokg7tTfG2XVDScCNIr6z+JCfLjtj/TJFviWa2EJ71pYgA
+	Cat7Fbk79bwdk37UeXLZgjfL/Gmml6i0=
+X-Gm-Gg: AR+sD12Kq70QnqVPBcGg+tZplsepdv6egyz6LYr+OrvdLp7exLFO3GjAxOFGDM0h1MR
+	Jyg0+7abO9E4+wr7SjP7LBW3kiF7Vop8UgPAnLzABDtc6wmtzRM1Cw/ypq5g3nA5Z8aGycyPBCa
+	QSwZ7PlKoyUoRRkbD7aBQnBYd+Xpc45lmG/NWzVMrYmElTfaBLxG1IsqSQN3IXnEHpNm+6pdDZ2
+	ZqjLLmIbqcQFph4acvqo3d4JGJnU3+r2MYqNPi+gyQMT17pVcSGT/o+P5VgasRw16hTNeb4HbAY
+	BsI8pzwf1+Ig+XxgyLyl1QWuL/sbC+OC4XHwBaaUF3g=
+X-Received: by 2002:a05:6512:65c9:10b0:5aa:671d:9960 with SMTP id
+ 2adb3069b0e04-5b453f3a290mr198295e87.6.1786592462622; Wed, 12 Aug 2026
+ 20:41:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SEZPR06MB7024:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5c34f5ed-bc1a-4074-3dd8-08def8eaaaf2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|52116014|23010399003|366016|1800799024|22082099003|18002099003|56012099006|11063799006|10067099003|6133799003|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	G47s5VPfk4qhjAKWcES5fwgzgDEY7GzWbdMg5LMA9UUrLdM8Vwmz3HWu4rz4Vs3s7izcmA8scHMiqE+a+AZkw3NkYcJjfUw8zJ2xVJAbM2HZpf99I/4DQMn5EVgkoy/cKVCQFIX7mBKxiZnxU53q0JgMBAJNDsFdLnfnsNyVSIVP9tQ4hxOpQA3cWQDugxaIlO5diEanzaSw4WRcBzC3dQ6gapCMzW41wpxC2Z6KkCSXrhTuo5LO/OEa1A9OWYddmpKCSXQy7z1QeBodcb1C0Wa0KyS3DQOZhSSvyKFuVp8Cp6w4RdLTx74zzaOBav3UeuGUFU7jsWM8LU4fpBIoBfaXFP4cyvjDrm0K4Tz6Oeunndp/GlFEdVQkRHYouR8GDc7cvynVsUXMeDbewFruRZWNfcD97ipk1mOVDqwFrrO/Skyp2prxybd9EKRyBIMvGhMZlOZRrW35NOO8vUR9x6F5LWtHVXxYGPh8M70GWjNJ2IJiMuSBT/HQlHI2n1xcq+rzeUnjiXM4UnmKlrcwXlYKVSrN5NVjkuZqS8H9eyrtzbNHSff5jKulqiPTv1OFbAFnAatcMsqegNnA2K8JQhAw8AjT1pVdc2nlgQtLxyc+EgQ8n9qgmqbJehF4bBMUoisYg+utU45S7xNcN9DCqfRG28Rx1mhcKCU8WR1yJL6bLdheX+il/xD2rqVwwAI5sqdcMDTujtFp8oFaFr3Am6DWKyshlJv2GrZvmwBhU6s=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(23010399003)(366016)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006)(10067099003)(6133799003)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?TBho3Rmx/YnudhoPCFvFD8SkbkQG+BBpGgkaAx9laobR6YqDDyt0aAgGo7fE?=
- =?us-ascii?Q?NnldnHOFEvYNJFRg2Tb3ZuTGIzaljMUg3PCGV9mX6iHJOx/hjWG+8Q05UvId?=
- =?us-ascii?Q?MmAWpiCR2eYiKUQ5LlQlKYhk30qeuE/L4XsysR3tdmeCtPvpDqCaSZ1OmsxE?=
- =?us-ascii?Q?UZUEcer4i+fUwzCCUoLsIlPjdyV+iP+tINspx3I+ab3kIwqaDSpkhm7vIkW/?=
- =?us-ascii?Q?slyHus8D0jQ+TFLHrNG7Mnv52VXsvy6p/fwDv3Ku2d4bMHH3t+vOkDwldFOo?=
- =?us-ascii?Q?0nvuRpJyQybO2AmX/HGUsGCDd94xNYcM2ui1gOF8WVP9ianSvrffXyo2WU5P?=
- =?us-ascii?Q?yOgNHty66Y0G0V8VNfnOaG/oqVmks4t013zIV88BJXkLyLiKqwJYnblqjJ6G?=
- =?us-ascii?Q?bJOh99/63tJz+X50ei8i+lfuKnNYOSh3jlzRZsN0unGRFbGhJmXFB/iN8nJ6?=
- =?us-ascii?Q?f9b65ZrXM4YdKEXszI/Gw9FRR6OKxeHYH1bKKKfMzxAAygqJpuugaPTSiEtp?=
- =?us-ascii?Q?Uy3KOTO2/gjlmN/kIH3MrMGGEfVKW8cJvg/pd86Cr9wAaaiI9Qt54UAe+NRb?=
- =?us-ascii?Q?yanivLr9yPlEcNMnXJWfdLUDyaZ/RXCOeN3LF7XhyQVM4qHeyxS5/LlTllN5?=
- =?us-ascii?Q?Hl3AZpAQC397zQwh2sIB5FLOo+svDEC64ccfNREfKvJWfNbf5SkSEbjNQyvv?=
- =?us-ascii?Q?ofgnCf9TqA6woI9EPqQss4Utnt2yvT4mJk5rsIgBhQxLnyLgo8Vtj5Z1gYUQ?=
- =?us-ascii?Q?NTZFo8yIwOZwml+wdg8KAfr2HcyTJZOmt6UtFLOT8FhLaKRvNfN0ef0LCBPm?=
- =?us-ascii?Q?dyX4sQeS5XzMI2cjmjgJBRZYRQvUoi0+vmaLCpQCh0d7nLDOZPsoINebtgNC?=
- =?us-ascii?Q?SeG8UKUk0R2CVox487BY5Tr/7eTNHSI6IWNRbiZXIYFnDzGPkVfkiWC28j3h?=
- =?us-ascii?Q?BBMvXNIwzk2eTMjUICuKzmGiv5XVqGgxJ80zgtZYiQET1NIBpAi51DvaugTA?=
- =?us-ascii?Q?qDs6DR73QAnmSn9aMZrNVx7I4XtaPHrDFPhYXFP6x+8Q3Y2EdNlSsfskxrgK?=
- =?us-ascii?Q?aoKtq+4/SInoUcTbjPk4xwWR/6hdcOWrxpGmfFs3UJ/scbQ9jP6Hw9qi1v1+?=
- =?us-ascii?Q?tWdwJA+NNh9qT8Da+ReMgIXG+3c4dS9HsI6yl2RnY9YJE9d9ZXndLyozaghQ?=
- =?us-ascii?Q?sLc6i3xW1/5I/MSWMf1VtvXBfGXjwronyvb3s0+LS97uav2LeEix57++I2jp?=
- =?us-ascii?Q?O0BCuHNeJMRRgKXUgd7U/6TtVncYMVAE1VFm6Ma+vZLZBbxYpgsk5gZ7BhMD?=
- =?us-ascii?Q?TaRKVU7QgOsFW/4zfn4c8lApqO6TCEDPN5NnhWplLEo4JeW/f0N2gigY+g7Y?=
- =?us-ascii?Q?+9fy92hnXI4bstJc1lFiGDSJ+Et5tggWnNGr21SpmlnstK6f4WAMb2aWiBGx?=
- =?us-ascii?Q?esM2nVVgVU6uIgnPTCz672s6MOzaNtzzXMh0Hm0TuKDElfIMsr1KeTP9yR/K?=
- =?us-ascii?Q?rtoya2VaeQZcOp7sqwlmOP1juabYG4GqVZoF1S/IwYYqP4DJg66HfAP8XaJD?=
- =?us-ascii?Q?ugYOezW6kU5+I7m7BYa7nDkqVajs6KvuXEgioqFC24i0SU5L9aYqhFsEVOuV?=
- =?us-ascii?Q?joPTpmtCkAb/yK0qeVfo1BzIAxODfydhMSCd2XSBFeZKEbGrze32k/9V/khQ?=
- =?us-ascii?Q?ana96uhIjpFncc3MMfT9VzsvdOlrQvxDPe1tlSvivVO76Mr8A9DetPI2yIC+?=
- =?us-ascii?Q?1rvsilPjHw=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5c34f5ed-bc1a-4074-3dd8-08def8eaaaf2
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2026 03:26:30.9181
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8ppju4qQH45/3BgOwxacs2jCxFR0cXmD8YLM/6ROe3iGC93sl13Icp12GtCEzIkeicQLGHZxfKIfBIL64N9/rg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB7024
+References: <20260803112218.3361213-1-dingning04@gmail.com>
+ <20260803112218.3361213-5-dingning04@gmail.com> <DKNGPMSHGC89.1WT6CHDFCPRJR@gmail.com>
+In-Reply-To: <DKNGPMSHGC89.1WT6CHDFCPRJR@gmail.com>
+From: Ning Ding <dingning04@gmail.com>
+Date: Wed, 12 Aug 2026 20:40:51 -0700
+X-Gm-Features: AUfX_mzFUfYUhn8CtVXH-132owRD1GihhiMHZXa7_zmjDSR98AiJaHY2mSy0pJI
+Message-ID: <CAJP4iutYA3fcAb5V0Hmc_MDu1=Tk9NuRzDy+NuD9k4N3L8OoQg@mail.gmail.com>
+Subject: Re: [PATCH bpf v3 4/4] selftests/bpf: Test untrusted allocated-object pointers
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, greg@kroah.com, sashiko-bot@kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+	Viktor Malik <vmalik@redhat.com>, Justin Suess <utilityemal77@gmail.com>, 
+	Kaitao Cheng <chengkaitao@kylinos.cn>, Leon Hwang <leon.hwang@linux.dev>, 
+	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add test cases to verify the new ".kmod_btfs" section logic in libbpf.
-The added test cases cover three main scenarios:
+> Please respin and only send patches after you have tested them properly.
+>
+> The right fix might be to use fentry.s for these tests to trigger untrusted
+> marking of pointers. The fixes themselves do make sense.
+>
+> For the next version, target bpf-next and drop Cc: stable.
 
-  - Valid module: targeting an existing kernel module BTF to ensure
-    successful loading.
-  - Non-existent module: targeting a fake or missing module, verifying
-    that the process results in an expected failure.
-  - Duplicates and unneeded: providing a mix of repeated and extra
-    module names to ensure the parsing logic remains robust.
-
-Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
----
- .../selftests/bpf/prog_tests/kmod_btfs.c      | 52 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/kmod_btfs.c | 14 +++++
- .../selftests/bpf/progs/kmod_btfs_mix.c       | 15 ++++++
- .../selftests/bpf/progs/kmod_btfs_nonexist.c  | 18 +++++++
- 4 files changed, 99 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
- create mode 100644 tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
-new file mode 100644
-index 000000000000..d875fcce6681
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
-@@ -0,0 +1,52 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "kmod_btfs.skel.h"
-+#include "kmod_btfs_nonexist.skel.h"
-+#include "kmod_btfs_mix.skel.h"
-+
-+static void kmod_btfs_pass(void)
-+{
-+	struct kmod_btfs *kmod_btfs_skel;
-+
-+	kmod_btfs_skel = kmod_btfs__open_and_load();
-+	if (!ASSERT_OK_PTR(kmod_btfs_skel, "kmod_btfs__open_and_load"))
-+		return;
-+
-+	kmod_btfs__destroy(kmod_btfs_skel);
-+}
-+
-+static void kmod_btfs_nonexist(void)
-+{
-+	struct kmod_btfs_nonexist *kmod_btfs_nonexist_skel;
-+
-+	kmod_btfs_nonexist_skel = kmod_btfs_nonexist__open_and_load();
-+	ASSERT_NULL(kmod_btfs_nonexist_skel, "kmod_btfs_nonexist__open_and_load");
-+}
-+
-+static void kmod_btfs_mix(void)
-+{
-+	struct kmod_btfs_mix *kmod_btfs_mix_skel;
-+
-+	kmod_btfs_mix_skel = kmod_btfs_mix__open_and_load();
-+	if (!ASSERT_OK_PTR(kmod_btfs_mix_skel, "kmod_btfs_mix__open_and_load"))
-+		return;
-+
-+	kmod_btfs_mix__destroy(kmod_btfs_mix_skel);
-+}
-+
-+void test_kmod_btfs(void)
-+{
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (test__start_subtest("kmod_btfs_pass"))
-+		kmod_btfs_pass();
-+
-+	if (test__start_subtest("kmod_btfs_nonexist"))
-+		kmod_btfs_nonexist();
-+
-+	if (test__start_subtest("kmod_btfs_mix"))
-+		kmod_btfs_mix();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs.c b/tools/testing/selftests/bpf/progs/kmod_btfs.c
-new file mode 100644
-index 000000000000..8b986bc2e9ff
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kmod_btfs.c
-@@ -0,0 +1,14 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("fexit/bpf_testmod_loop_test")
-+int test_kmod_btfs(void *ctx)
-+{
-+	return 0;
-+}
-+
-+DEFINE_KMOD_BTFS(_needed_kmods) = { "bpf_testmod" };
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c b/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
-new file mode 100644
-index 000000000000..f445cf56ab16
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kmod_btfs_mix.c
-@@ -0,0 +1,15 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("fexit/bpf_testmod_loop_test")
-+int test_kmod_btfs_mix(void *ctx)
-+{
-+	return 0;
-+}
-+
-+/* mix of duplicated and unneeded modules */
-+DEFINE_KMOD_BTFS(_needed_kmods) = { "bpf_testmod", "bpf_testmod", "bpf_test_no_cfi" };
-+
-+char _license[] SEC("license") = "GPL";
-diff --git a/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
-new file mode 100644
-index 000000000000..1638361e5732
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/kmod_btfs_nonexist.c
-@@ -0,0 +1,18 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+
-+SEC("fexit/bpf_testmod_loop_test")
-+int test_kmod_btfs_nonexist(void *ctx)
-+{
-+	return 0;
-+}
-+
-+/*
-+ * This should fail to load, because .kmod_btfs does not contain
-+ * the needed module 'bpf_testmod'.
-+ */
-+DEFINE_KMOD_BTFS(_needed_kmods) = { "module_nonexist" };
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
-
+Ah I see, I forgot that tc programs are non-sleepable. Will apply the
+fixes soon, thanks!
