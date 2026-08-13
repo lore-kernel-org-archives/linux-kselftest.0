@@ -1,173 +1,119 @@
-Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011023.outbound.protection.outlook.com [40.107.208.23])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EFE361969;
-	Thu, 13 Aug 2026 08:05:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.23
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786608338; cv=fail; b=sAYySifXNUBKfetxGxD0/Mj84uFMgcLk2n0IPd6WW7qURBQjt/36l/a79mHXQEkQj1GzUyLzIUrdeqKhV6pQoQyDW1g+zjgKExAivJIA8QVUMHsxKrwglvgN0mlf+uGPWfglxbVyh8zGQ2AZwo6mjKuzlAbIeSkI+WfX0pk8gKM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786608338; c=relaxed/simple;
-	bh=v38aBFqrvu7YCyusv2NsxtG+Ak6/t1dIqlCmfrgywMI=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=o7JbFZ6tVAbuG1kmylIhri59gPdkvWNpl6QYcutK/j0eSB2RQbgLJMCKpNp8f0/YKnhoJT+9hyM3uZdRAiE2tDu5dXbiMjb9pRNrEVlm9qfV+js+ThbaYD7zdE7OVzF+ixy0cUGmmIDDAgSMx+rCF8v3JmoUUe7tY5EISmEKlkU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=jrc+DVm8; arc=fail smtp.client-ip=40.107.208.23
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFEC375F69;
+	Thu, 13 Aug 2026 08:11:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786608715; cv=none; b=Gk9yx0HUjMjhdTsEeP5uX1lI5eaKbLh9M3hvABX2mYGYJ0pejpa7crMLem8UQfc5vd+kT+MASVvBbFz9L95S4MQnHtlNqpL4J4ehHHKjKsk21vw98HIOQzm7CuJQgizIez3HDsz9G1IzihHCcOnaNG+T4EKkZWpW9CLvcAlK9l4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786608715; c=relaxed/simple;
+	bh=qttu4fYmUDRy3FTNeF98wM3nW+uEUBnjwzf+ufmYzfc=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=uOrQU/JxpCQVCpXhBSUHRE6nZ7PETK5divD3qSrTZyti/LbxSDCxExpb58uSfzH1mn2ZsYZj90CQS0JwWZ6NTdoLaIIg+iwAPzIIQ7FQ7dMF4a9WrLnn2JA3u9/o5FDamg2sZvH81ZSS7+xAQKW1MAWb7b6DwefEakzrzvT3/dI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kl1S1oS2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="jrc+DVm8"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Btqyy+TN3zIVSTsnhtqY41xTXsPR2pTUPpY2HNmPEDWuolFziTfWrErGdh4ClTsA1pTISxNEbjWrie0SLQZktRzfGoqnCQBKtQ/2O37OZmDaIst2a6YiwLkQFvuxU8N0xEZ0GP0cI/XNDVc7h51bWi0oC4Z8Li3MY+WccliE3K639E5VbgdNUw1t9YttuYggzo2Mcxom3y/P94b7FZnX27XYH46eqTo1jIIx/srfOIY5tE0feGxLgmfS6jacJp3YaXFFn3fs6IupKDUvkfFifTwQ82tAZ7dMbfpgBWBujiPc+Q4PTu9Y+sd1uH1lyLx1sVeSVDP3RSQXNWC2AJ/68g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=PHuqtOSiK/oFJTyqxyZbFMF04zwQZrzcuGRzmJA2Wvs=;
- b=nZUhVUgY1I55o1sjd/fcnKL3DlBOP0QbpUk3ktM3GSu6ERENIqVLE2XFyG6Zp5s+fre+maSPjXUpLFePa81Ne44YPhcF+tRZx7KPRATY9QwLgdxjT8tYkXCMDQOhedEeDmbkuEZFeqI3AHiDl+ifq09yhn2wYIEwFoTUME5JOKiN3aPWXE7VMkUHpHlsZr20ZlFsnwnDO1GcqP8BtcCfje4TD/VS6xi2oZV4Wpt0hY2Oeg+9Zz/6nabt/H0v52k/utgylsrmlODNJt9A1DDKFLUV3RPD6rY41PnByuHVd/CoSUVKQINQ7ndjX1QWHBVpeqWVuqldIPxfhWGrPC0tOQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=PHuqtOSiK/oFJTyqxyZbFMF04zwQZrzcuGRzmJA2Wvs=;
- b=jrc+DVm86jCcjNvI7yIZi684ils5WGY4481LZ9mosECaEa5k+F0g0a2kHGqdP0Wno1Ssrg1PGaRsVBYE8g3w61ZFMSu0Zvx2mn9cU/1vVUM5Q9a4l0huXhw7u2ZT8oz7K8r8G4WmmBBEbNGr+kzL045X3DPZ2/AV6ktuqpIHo1ioci+rX1H4oiIh7u7uwP5LRIqwY89mQZG3D4SVR7OV1FyNGj/8LNVQ/iyb94zB9xH6uXf9YA0EPCAADQvL3CoGmsaRQw/t5fogg0HEz6wThcp0Q5Bts35UTYriHS/CdHYm42mNnFYQ7d3ROCgCaH0nH0o6WfWhl4jiH0w8L/0S0g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from PH8SPRMB0023.namprd12.prod.outlook.com (2603:10b6:510:1cd::15)
- by DS0PR12MB6655.namprd12.prod.outlook.com (2603:10b6:8:d0::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Thu, 13 Aug
- 2026 08:04:20 +0000
-Received: from PH8SPRMB0023.namprd12.prod.outlook.com
- ([fe80::669e:f092:306a:7983]) by PH8SPRMB0023.namprd12.prod.outlook.com
- ([fe80::669e:f092:306a:7983%5]) with mapi id 15.21.0315.008; Thu, 13 Aug 2026
- 08:04:20 +0000
-Message-ID: <fdb9ff70-07d9-4966-a893-11dd7c338e66@nvidia.com>
-Date: Thu, 13 Aug 2026 11:04:15 +0300
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] selftests: drv-net: bump the timeout to 15min
-To: Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net
-Cc: netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
- andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
- linux-kselftest@vger.kernel.org, Tariq Toukan <tariqt@nvidia.com>,
- Dragos Tatulea <dtatulea@nvidia.com>
-References: <20260812171302.1888667-1-kuba@kernel.org>
-Content-Language: en-US
-From: Nimrod Oren <noren@nvidia.com>
-In-Reply-To: <20260812171302.1888667-1-kuba@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0169.namprd13.prod.outlook.com
- (2603:10b6:a03:2c7::24) To PH8SPRMB0023.namprd12.prod.outlook.com
- (2603:10b6:510:1cd::15)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kl1S1oS2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D03161F000E9;
+	Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786608701;
+	bh=oi6YfmylgiaRy6lZ9IbknTEinfCK3Vqt0CBXZSOgL1o=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kl1S1oS26DfJC0qlVQi5CkPWT3JiLVwo5SRTC3qlChKX0AJZT2yiN70mfw6bIa4IQ
+	 LXkPo2d96kO7zbiPPiVMdT9SR5iENs/SQqaFEqn5KmDoWtU8rXJx8AFq4fKBojnKN2
+	 nQEd8QX0eDrJ9QYSa7GCjQhTvE2WMx6r40VIlLW8JaV8Mp/0u0YupODNX+wJOYBHVs
+	 d3HJR4A5QjssDhqAzkA17r0ayG9Da3zc4/zupPDoK/zxJOSlvDuhZuCJj4FItSAzZ2
+	 X5yUtOl5do5VeWiCrG8JdSUAzRDRNqR32g9cfLaXSakYypL2fLM3LacRP59by0s0xy
+	 saBAtFnYGp7Ng==
+Content-Type: multipart/mixed; boundary="===============9171113939442554113=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH8SPRMB0023:EE_|DS0PR12MB6655:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5aba7024-2d1f-4e20-957e-08def9117ae7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|1800799024|376014|366016|6133799003|56012099006|5023799004|11063799006|10067099003|3023799007|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	qdL6MwCp75fhd9gBiTs2FUdcrIn7EUZDu04OWP+IQd98fEFQ1+f3HlxJMbsyLymM8yQd82eDDgOJVK+yM8tTS/ownAh0MqgwdYk/bANtP298qZlQfEl0iY7+Cv6E70XKlyKzfBpWfL5B7D0oxMI8rUwhvgr5OpXZ7Szu5SHbW/TqS1e/KHOMXG6QNWZmOjCXG7Gvn+u0juVnurHRNSkCqAYud/fFxc/nCdgfa+lMTmdsGeoeu74Y7WsYN3+VpDygwfRy/zWOmlwuXVNQed5RrunLDiA4H9XDWUPRfMxJ7eKK4IDnQrrZ2ikq4jP7VUHTLVIcrnWPhhJdiHrT18kmK0cZtFfNkfGpXFb7zOlHPbgSwKidCvyJ6IB8QO3w9LED7Xugle5KymZ4jna3kjIBunCJtJ29n31ynoNn6oLDgr9WTvHi8H736fHRkPcObA3buOi0PgseCpRHwQQHZdmCzL72Y67xf66WNRF23eNFlDrmUI56OCw7+QxQkW49qtItvpPYcNTxyK8j3qUVFDqvUrWbRpNVZhb2un8GSql7Ej9BS7XIBzYcmz3lFLNVMuh7GSxhoyz2bLqOViWSe3GWkONCP8BV8dpo0+Ga0EZ3+TTYBbOTdxpNGiRCZWAixggnmwQSTzqV3SDU4wDUcaqpYd8+zbD4blJ0U3UdgJLoLek=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8SPRMB0023.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(1800799024)(376014)(366016)(6133799003)(56012099006)(5023799004)(11063799006)(10067099003)(3023799007)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Qmk4b1N4RTB5NUZVaWV0d3ZSb3VuSWdsK0JlMGs2dXo2aWZ3ajRCc1hUbU5Y?=
- =?utf-8?B?QlBTNENBZ1hJWDZZWW9BYXR4L0R3R0FwK0xiS2dmNEhPY2haK3c1clpQSmFY?=
- =?utf-8?B?bFhORkRtV2tzOFExbXJDYTN1U0lGdkMzakNpVXBIVUhycDhQa08vZTRrcUQ0?=
- =?utf-8?B?UVVXakdzMGV2dmpNNkQwcUlTeDVzcDNuM2ZvVm5aY2NSclM0Ui9KRkR2SERq?=
- =?utf-8?B?eTVQYktISll3YkFqOS9mNC9sWm05SDNSMm1xWWxxZ0RySlhIUWNsMmVhajJa?=
- =?utf-8?B?YVlwTDhVeTl0RTFrVENqM2VibTFudkZYeHdPd2EyQXYzRUhNMDd5MFNyREFG?=
- =?utf-8?B?OW9tejlZTFloR01QUzE5N2JpZVdLK29mQnZHckErNXhGSFRLejdzSlpmK2F0?=
- =?utf-8?B?Y0ppNUF5MDgxb3NDWisrR1VvY1pENm43ZmYwVktQbFVObm8zQ0wvd3ZVNTNU?=
- =?utf-8?B?UWMyNzVzOGpaaEZWTE9ZSlhIaTN4NVFudDU0NTVXM2s3WXFyazMrZllaTTlZ?=
- =?utf-8?B?cHVFNk52Y0FMcGNVa1loWEZDeVJyR1hoQVhSNXA0WVZmRm9OMWJRcHJCTUgx?=
- =?utf-8?B?UCtwY3lUTHVvL1ZaUnNHUjFMMElNQ1plOEtmVFBnWDVveEs0VzNLbWpvVFFa?=
- =?utf-8?B?MTBIeUp2QXhRbmxLUVdneVk3YS85TU14UVRUSXIvTnd0U1NvSVZBaVRxam5B?=
- =?utf-8?B?QlRyeGxHd0E4SzdtU0daYTZUbG1Sa1BCUnVTcy94M2dqejc2bGk0U2N2aEh0?=
- =?utf-8?B?ejZYV0xCVGtmbEl3OVR0OERkVmJCTFAxQU51TENEYlZLZ1h4dVE5MHJRcFAv?=
- =?utf-8?B?cWoyOWlkV3A4Q2xja2s2aVlNTDBDR0g4SUk3dTQwWVg5K1FTRHVHaXkyQkMz?=
- =?utf-8?B?WVZRc1VwVEgzM3NoNWIvQjJ6QXgvbnpuZStBMXJGVjdxK3Ywd2ZyTWxoeDhn?=
- =?utf-8?B?dnlHdVJ6QzZodnJXeDV5djlnTnZOcGtpTGRValVaZ0V1M0wwQWc5VE5SUkc1?=
- =?utf-8?B?emNUTjJvZ041MVVJVTlrc0gxeE02bllOZjQ2c1orQkFSZ1FaNVVVanNHZERY?=
- =?utf-8?B?MEEvNTZSdWtTcEd5VStpRVBCcHNHR0xqUit2RkxLeVJaMFA3a3pWemhBcWh6?=
- =?utf-8?B?ckx2L29mMG1paVZ0c2JXTXFKR2o1azM1dHB5QkVETFZlV0dwU0RPR3NnYjdt?=
- =?utf-8?B?bUswZk5PVE9xd2lNdndLa1VKL2cxVW1TTTcrWUxNTk1XckNYaTBkMGhZcVhE?=
- =?utf-8?B?Uk5ZRW54NmFPbmhnWDhqcm5RS08rTmRLc08rZVpHSGZybkxqRjNMOWxHWHpm?=
- =?utf-8?B?eENUWW9ZTDcyYWhYc1dQeFpnRUpvdFlQSEZVRXNsOUk0TEp1OTZLa0ZhSWlL?=
- =?utf-8?B?SkV0UWxka1QzVmJUdXFRc0JNV3cxdXNCYVhlMWNaZGd6NGRDYnhxK0dOdm1L?=
- =?utf-8?B?Y1ZyN3RjTHJOWDRpWGJUUFBXU2lpV3MrNVJWWmIycWFyVHVhNUJaeXFpc1Zw?=
- =?utf-8?B?RlY1eENzODNqbGMya0QvL3pvdXNaNGtoQ0FnSFA0cEEwUHFQSFVHeDFteElT?=
- =?utf-8?B?VGNwdWN2YTZZcXZOdk5QQnNjVC9oTG52WFBJOUtDUUdiTGt3UFJyT3ZNNzRm?=
- =?utf-8?B?N3MzTDFZaWEzKzFjSEtwR2RIQ3lKQTJmRmEyZGUvMERWWTM3NFRmUGFLay9s?=
- =?utf-8?B?bWsyQzlsYVlwblVUY0dGNjdjWUpqZ1FScWVETW1zYTA0TURkcFljeFBSck9G?=
- =?utf-8?B?ZmoxK2tOVGp0M3c4TWxSYk5xdWRVU1VMY2pINFdRK1Q0K1l0SnprM0l0bm9x?=
- =?utf-8?B?R2pPZ0p1ZnJwZzIyV0tHa05TY1dpTEdsY3cvU1ppMld5azBDanNyaktuSE1t?=
- =?utf-8?B?VzdCSXNZclUwNTFONFNQSXcyYXIvVDlEVFJqWFdqanY2MTNJbHJGeTkwYm1m?=
- =?utf-8?B?UEJtZjlEVDkrdHRGZ3g2UmtsT1JBRE1telVVR1VvZzBZTzc2Y1c3WllZVE9T?=
- =?utf-8?B?RGI3N3JSUWg1RnN4NzNKeVZBZUJNOEhOSjdLdmljb3FwczN0L1NPa0ZwYk4x?=
- =?utf-8?B?K1FoUXhFUHo0dUorNXBlN3JlKzRNZElJdXlBNG5XUmNUNTlGZFQyWTErMkNv?=
- =?utf-8?B?RVNBdjBmVUREMW1hMExIVnF1dVN0dGpzc1hXN25ucDJuVlZhODJ4ek5NdmJM?=
- =?utf-8?B?L3hYRDF5RnVEMW9jeXVMQ2JqT1Q2WFFkc0FQMUVpdkx1dGt1SUREdk44K3I0?=
- =?utf-8?B?bVhNVGduNHY3MktsNU1kcisvbnlNUkNMQnVhalBqUDhhZERTWjBCQWhyQ3ZN?=
- =?utf-8?Q?YCEyD67U48Il9PqJVC?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5aba7024-2d1f-4e20-957e-08def9117ae7
-X-MS-Exchange-CrossTenant-AuthSource: PH8SPRMB0023.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Aug 2026 08:04:20.7017
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2jvyUHK/lloxhq6EJL7g4bZarMcaZFk4MyzIKcGuhqBlzfiOD2yLa5KzlqmS+5jB0JqQYmbAa/KPsD7y8tFTCw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB6655
+Message-Id: <1dfa8001d720a33be0d34916414f80a04349057cd35e62ba71a8d0ef8528db69@mail.kernel.org>
+In-Reply-To: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
+References: <20260813-bpf-riscv-stack-args-v2-2-efea8f9b3fe1@kylinos.cn>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Enable stack argument tests for RV64
+From: bot+bpf-ci@kernel.org
+To: jiangfeng@kylinos.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,shuah@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,jiangfeng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Thu, 13 Aug 2026 08:11:39 +0000 (UTC)
 
-On 12/08/2026 20:13, Jakub Kicinski wrote:
-> The GRO test takes extra time on NICs which support HW-GRO and LRO
-> (as it also runs the test cases against the NIC implementation).
-> gro.py takes 6min on bnxt and 10min on mlx5 with debug kernel builds.
+--===============9171113939442554113==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-10m works for xdp.py but it seems that it isn't enough for gro.py :(
+> diff --git a/tools/testing/selftests/bpf/progs/exceptions.c b/tools/testing/selftests/bpf/progs/exceptions.c
+> index c8d716fbd4191..bae20f0f247eb 100644
+> --- a/tools/testing/selftests/bpf/progs/exceptions.c
+> +++ b/tools/testing/selftests/bpf/progs/exceptions.c
+> @@ -379,8 +379,9 @@ int exception_bad_assert_range_with(struct __sk_buff *ctx)
+>  	return 1;
+>  }
+>
+> -#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64)) \
+> -	&& defined(__BPF_FEATURE_STACK_ARGUMENT)
+> +#if (defined(__TARGET_ARCH_x86) || defined(__TARGET_ARCH_arm64) || \
+> +	(defined(__TARGET_ARCH_riscv) && __riscv_xlen == 64)) && \
+> +	defined(__BPF_FEATURE_STACK_ARGUMENT)
+>
+>  const volatile bool has_stack_arg = true;
 
-    # ok 265 gro.test.lro_ipip_ip_ecn
-    not ok 1 selftests: drivers/net: gro.py # exit=130
-    # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+Can the code following this guard actually run on RV64?
 
-    NIPA RUNNER TIMEOUT 600 sec (graceful stop)
+The block enabled by this guard contains four bpf_throw()-based programs
+(exception_throw_stack_arg, exception_throw_after_stack_arg,
+exception_throw_subprog_stack_arg, exception_throw_subprog_after_stack_arg)
+plus the has_stack_arg flag. bpf_throw is only accepted by the verifier
+when the target JIT supports exceptions:
 
-https://netdev.bots.linux.dev/logs/hwksft/CX7-dbg/results/776322/test-outputs/0-gro-py/stdout
+kernel/bpf/verifier.c
+    if (!bpf_jit_supports_exceptions()) {
 
-> The delta between drivers is to some extent due to their defaults
-> (mlx5 sillily defaults to queue-per-thread, while bnxt follows
-> netif_get_num_default_rss_queues()).
-> 
-> At the end of the day the defaults don't matter much - on larger
-> machines all drivers will create more queues. We should bump
-> the timeout. Let's give ourselves a 50% margin over mlx5's needs
-> and set the timeout to 15min.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: noren@nvidia.com
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/settings b/tools/testing/selftests/drivers/net/settings
-> index eef533824a3c..e2206265f67c 100644
-> --- a/tools/testing/selftests/drivers/net/settings
-> +++ b/tools/testing/selftests/drivers/net/settings
-> @@ -1 +1 @@
-> -timeout=360
-> +timeout=900
+RISC-V implements neither bpf_jit_supports_exceptions() nor
+arch_bpf_stack_walk() (only arch/x86, arm64, s390 and powerpc do), so both
+fall back to the __weak definitions in kernel/bpf/core.c:
 
+    bool __weak bpf_jit_supports_exceptions(void) { return false; }
+    void __weak arch_bpf_stack_walk(...) { }
+
+Consequently exceptions.bpf.o cannot be loaded at all on RV64 - the rest
+of exceptions.c is full of bpf_throw() outside this guard - and the test
+is already excluded from RV64 runs:
+
+tools/testing/selftests/bpf/DENYLIST.riscv64
+    # riscv64 deny list for BPF CI and local vmtest
+    exceptions                     # JIT does not support exceptions
+
+prog_tests/exceptions.c only consumes has_stack_arg after
+exceptions__load() succeeds:
+
+    ret = exceptions__load(skel);
+    if (!ASSERT_OK(ret, "exceptions__load"))
+            goto done;
+    ...
+    if (skel->rodata->has_stack_arg) {
+            RUN_SUCCESS(exception_throw_stack_arg, 56);
+
+so on RV64 the flag is never read. The hunk therefore changes nothing
+observable on riscv64 and cannot have been validated there, which
+conflicts with the commit subject 'Enable the stack argument selftests for
+RV64'. The other seven hunks are genuinely effective; only this one is
+not.
+
+Either drop the exceptions.c hunk from this patch (and add it when the
+RV64 JIT gains arch_bpf_stack_walk()/bpf_jit_supports_exceptions()), or
+state in the changelog that it is deliberately pre-enabled for a future
+RV64 exception implementation and remains untested for now.
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31677823910
+--===============9171113939442554113==--
