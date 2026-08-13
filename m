@@ -1,185 +1,168 @@
-Received: from mail-wm2-f9.google.com (mail-wm2-f9.google.com [74.125.225.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-170.mta0.migadu.com (out-170.mta0.migadu.com [91.218.175.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4545D36B928
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 04:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.225.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CBF3446C7;
+	Thu, 13 Aug 2026 05:17:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786595939; cv=none; b=vAXhzIS2Azrcbra1D6sNybiFvTfka07g20p5iZ2zx8ByUO6fZ8EeKXQj01rP6sei03v2e8o6g8qaFGtzkwXGUg0TExjUW5NuaNcAy5YUfu17MyBP9ix90Yfft0RHT0gNg+Adeu5zMoNJI6p+n7p6Kj+y01rN5rNjYNXt9SqmCvo=
+	t=1786598226; cv=none; b=nKgXJMx4Meg/GuX5C/7r26ruyiGpfp3YFoz4/Q/PAu4HSRDYtQpjWZEwoasis6ogp02saT1CSJTHBTDwRCaC772RaT8HoOrTPo2NkV3NJEFjKcIru6kY+eJN1PMW3GGsQJJpiHFd6OF0pAlPOji9UyWv7SZ+gKyJA+6GkOz3YbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786595939; c=relaxed/simple;
-	bh=ZP+YmiMqjne+BIOHGU+qADJTqbtfWsS0k9JYL/OigHc=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=bhpTIeAeW1vl1+0Dk7NkgmlaAyWQxjFEHXpg1vBa7caa+k3WX/jwUVcbxy2jH1gDsQqil7ZXPcP4I8RffD4eTXLdk21R2h/EDXcd2rawPztb2Q+GEJU4q0wfX6RtgKcwFjPQ13xPy+6Uu/yTyeUpHMcCETumMjq2X9fuifXYWp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I8wH5v1i; arc=none smtp.client-ip=74.125.225.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786598226; c=relaxed/simple;
+	bh=XWFZK/e/7CsX4iMIsxwBsCGV+o44AZdAJ4gnsWag03o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GJsFzRXEyF7PSH6T+HeBc4zuuG8um/R/ntfUwZMdc+pa9mGxLAb2DVpozqSy/KS4CrhwJ6xhqiMx/jDWXYCXnl72lynhSxVhL6FT7rPFZju1A4xAG0Wi58SZrp8GMcForbkzPj8eH0FkcHiwqdBcrBZTNNy8aEXx23yHuDOiE4s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gGqHBHIi; arc=none smtp.client-ip=91.218.175.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I8wH5v1i"
-Received: by mail-wm2-f9.google.com with SMTP id 5b1f17b1804b1-49556ce3549so6781955e9.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 21:38:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786595935; x=1787200735; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=GAZ+x7z6BZhFTzywSoAUTFEoxQswSZuOueFTYMsV3yc=;
-        b=I8wH5v1ipf6jTzf73Skb6EHOHlwIuVrP9/aKf1nPZPfErp3694i96FbuBa4CaPgnG5
-         euuzpDWKP6LZt/vDumbKB4jYBPn+sNHH0a1K1fkPsQ/EYjm50Ij5lWaO3v8JW7CuNZp9
-         v6lqk7Cr+2XzGmxYTCXRM+2nr0YR+xfXLD1aKX2Q8HTqfubflWXi/YH/JqAHJiStN1K4
-         b6Ozvw+gOSvFyWwK3iZtONVF+fi19GJFuVjV2eHunCDqhjdpLqdc8quZtGnwhS8dWpQf
-         QT7KFwRHRI91ywlDV7DJcpIIRPlyf+tWJK9JN3cnLIBExVjl9R7bEHtop/eDAgF7Ndcs
-         wEJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786595935; x=1787200735;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GAZ+x7z6BZhFTzywSoAUTFEoxQswSZuOueFTYMsV3yc=;
-        b=P3l/iLfTStHemriH9l7qAhFm8zrhaQxToUtywUs7CWFv8NqzCprY3YQLbW/5Cd+phb
-         kQxjZHcMwfbAQEQr8sxABpJuJSYjjj6iFPG2F9IykNuMSTMpZRRhzLqXAxnPaxx68TXx
-         b9UIVVPfvoVlcBRYrFks9eS/sB9CI84lHlVMfQPVavpy76eCMnYw7TR1I4iSxuMnPMmd
-         JWfUHrlTPqUqlzhmewe/K4WWsMhdK3m1/0jtGLFyB80p+9Y7j1doL/ghy1GhliVx5Ki7
-         j/+zRuJoQclvb4lUt6kSpVlIsnHV7iKHQQW3gcIEXGTT3iQIcbWIgpu13xrg0D1ex35i
-         c7JQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rrp0fzEqxpXNigIx+10fk00sLKQHo4LoS0XrwMOGWFo5OODUJhSLtrRrJ0+IxFCn1AO91De8dKG7Tiyrt7ls4o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbiTozr6eN8LwNiHsrP1WyU3/1FcvBWEl/vr3TSoqXbkkMJFqa
-	+M+CZmCmZcPqxeiVsiCtZAukwh+H/jGCCbe181PTXfxIhlSaF8rKT7fk
-X-Gm-Gg: AR+sD13qYl2sJ7uI/bigjvAoyXKO1XgTw0WyrWIz8R6pEEx+LpcyIYpTiMn4TnLXJrm
-	rVnWqp48BIL7gJMk6x5IeeQ/hN4SmGsCvrjLHGm81hro8gH7SvTQlBXb7TanzoeJtFIJpVVxNeq
-	SO3pgkE+3bCfRK7li5HkWfh5wpXbdmZfPZowUFmorQkitYP+8E9KfJI/pXhL6/Md6uC0fpMjO0T
-	Ap2AkkT3/0COeik0Cvvg04/MQb7tpwx5IO/GhAEoqrSbu/7632Z2vHD+yqYvb82YHZw4gW5sZ+t
-	JUlgTlbRRqTWoZwIcGeDVdjkkffRhw31/dQWOiMs9UiUxdOvwco3pqo82bW9raDK69LUBrnbvSD
-	hKbllciQCd2Ch204RsJmJlknITjirrooPzYZpFAdz+cLJoM0x0YiwF6RnOtTEx1QqQ7bz1+G0WT
-	c4LNl/QEK9SgQwpcPMtuxfDgcIiOaGvu/o6gZKw9F4q4HLAU01Buz5y8IjkC2aIEeS+hu1WxmAO
-	mCrM/NOAWhS3oUeZry7aJUF2zEZo/cSs4hYDKz71CagKm7nNjGWsGrEgKLx5ZF5NRcyU3q05gQ9
-	rIlaPctjWbny00GjVgVqNRjvPOk=
-X-Received: by 2002:a05:600c:310e:b0:499:51f0:a9b2 with SMTP id 5b1f17b1804b1-499821881d3mr26179715e9.1.1786595935294;
-        Wed, 12 Aug 2026 21:38:55 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499820f5d26sm23033735e9.1.2026.08.12.21.38.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Aug 2026 21:38:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gGqHBHIi"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1786598214;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=EYcOFy8k9Qk2cCl/jWteAJqGPNJg4JpMyMzEqhTo0Is=;
+	b=gGqHBHIiKtMTOnIZQKKSlzGdfXL1nLGq1LypkigyAHxq6CRyoECql3nmpHnNLke/PIDUez
+	cZCnt3Zv2makSGMZowpH2FUZzPO3vr6pSPPGmyjr4Xn2ktZ7ckhObLyc2rt7pm1UD8rac+
+	E2mvjZy4vcGKUA+ub4h2kA7jz+RjtDE=
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org,
+	memxor@gmail.com
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Taegu Ha <hataegu0826@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH net-next v1] selftests/bpf: Fix insn count expectations in chained global subprogs test
+Date: Thu, 13 Aug 2026 13:16:29 +0800
+Message-ID: <20260813051635.121670-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 13 Aug 2026 06:38:54 +0200
-Message-Id: <DKNJEHJWIC8Y.2QH6JE3N590FS@gmail.com>
-Cc: "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu" <song@kernel.org>,
- "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa" <jolsa@kernel.org>,
- <bpf@vger.kernel.org>, <sched-ext@lists.linux.dev>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
- <kernel-dev@igalia.com>
-Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
- spinlock qnodes
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Changwoo Min" <changwoo@igalia.com>, "Alexei Starovoitov"
- <ast@kernel.org>, "Daniel Borkmann" <daniel@iogearbox.net>, "Andrii
- Nakryiko" <andrii@kernel.org>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>
-X-Mailer: aerc 0.21.0
-References: <20260803001807.646357-1-changwoo@igalia.com>
-In-Reply-To: <20260803001807.646357-1-changwoo@igalia.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
 
-On Mon Aug 3, 2026 at 2:18 AM CEST, Changwoo Min wrote:
-> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
-> every translation unit including it emits a copy. __weak makes them all
-> resolve to one instance, but bpftool gen object merges only the symbols
-> and concatenates each input's .addr_space.1 bytes, leaving the surplus
-> copies unreferenced in the linked object.
->
-> libarena links ten such units, so nine copies were dead weight (bytes):
->
->   object                             before       after
->   -----------------------------------------------------
->   .addr_space.1 in libarena.bpf.o    676200       86376
->   libarena.skel.h                   2100123      892371
->   libarena_asan.skel.h              2641124     1466477
->
-> Declare qnodes in the header and let each program define it once:
-> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
-> lock it guards.
->
-> Tested with test_progs -t arena_spin_lock and -t libarena.
->
-> Signed-off-by: Changwoo Min <changwoo@igalia.com>
-> ---
+The test asserts exact per-subprog insns_self/insns_total values and the
+aggregate processed count, but these depend on compiler codegen. The
+expected values match -mcpu=v3 output; under -mcpu=v4 clang emits a
+sign-extending load in global_good() instead of a load plus two shifts,
+so the subprog is verified in 3 insns instead of 5 and the test fails on
+the cpuv4 flavor.
 
-This seems ok to me. I don't have better ideas. Emil, any thoughts?
+Rewrite the involved subprogs as naked functions with hand-written
+instruction sequences using only v1 instructions, so the verified insn
+counts no longer depend on cpu version or compiler codegen.
 
->  .../selftests/bpf/libarena/include/bpf_arena_spin_lock.h   | 7 +------
->  tools/testing/selftests/bpf/libarena/src/common.bpf.c      | 7 +++++++
->  tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 7 +++++++
->  3 files changed, 15 insertions(+), 6 deletions(-)
->
-> diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_=
-lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> index ae6b72d15bb6..71d9db610263 100644
-> --- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> +++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-> @@ -103,12 +103,7 @@ struct arena_qnode {
->  #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
->  #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
->
-> -/*
-> - * The qnodes are marked __weak so we can define them in the header
-> - * while still ensuring all compilation units use the same struct
-> - * instance.
-> - */
-> -struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NO=
-DES];
-> +extern struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NO=
-DES];
->
->  static inline u32 encode_tail(int cpu, int idx)
->  {
-> diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tool=
-s/testing/selftests/bpf/libarena/src/common.bpf.c
-> index 50be57213dfb..06481f2a2892 100644
-> --- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-> +++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-> @@ -8,6 +8,13 @@ const volatile u32 zero =3D 0;
->
->  struct buddy __arena buddy;
->
-> +/*
-> + * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each p=
-rogram
-> + * linking the arena spinlock provides exactly one definition, so that t=
-he array
-> + * is emitted once rather than once per translation unit.
-> + */
-> +struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-> +
->  int arena_fls(__u64 word)
->  {
->  	if (!word)
-> diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/=
-testing/selftests/bpf/progs/arena_spin_lock.c
-> index cf7cda79c16c..92e75ec3844c 100644
-> --- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-> +++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-> @@ -23,6 +23,13 @@ int cs_count;
->  #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CA=
-ST)
->  arena_spinlock_t __arena lock;
->  int test_skip =3D 1;
-> +
-> +/*
-> + * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each p=
-rogram
-> + * linking the arena spinlock provides exactly one definition; libarena'=
-s lives
-> + * in libarena/src/common.bpf.c.
-> + */
-> +struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
->  #else
->  int test_skip =3D 2;
->  #endif
+Fixes: c2e6c7de8830 ("bpf: Show more useful info in stack depth stats")
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+---
+ .../bpf/progs/verifier_global_subprogs.c      | 56 +++++++++++++++----
+ 1 file changed, 45 insertions(+), 11 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+index 7b65eea97ebc..3352dc177ec1 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
++++ b/tools/testing/selftests/bpf/progs/verifier_global_subprogs.c
+@@ -25,9 +25,22 @@ __noinline long global_bad(void)
+ 	return arr[unkn_idx]; /* BOOM */
+ }
+ 
+-__noinline long global_good(void)
++/* Insn counts asserted in chained_global_func_calls_success() depend on
++ * the exact instruction sequences of this function and its callers, so
++ * they are written in inline asm to be independent of compiler codegen.
++ */
++__naked __noinline long global_good(void)
+ {
+-	return arr[0];
++	/* return (long)arr[0]; 5 insns (ld_imm64 counts as one) */
++	asm volatile (
++		"r1 = %[arr] ll;"
++		"r0 = *(u32 *)(r1 + 0);"
++		"r0 <<= 32;"
++		"r0 s>>= 32;"
++		"exit;"
++		:
++		: __imm_addr(arr)
++		: __clobber_all);
+ }
+ 
+ __noinline long global_calls_bad(void)
+@@ -35,9 +48,13 @@ __noinline long global_calls_bad(void)
+ 	return global_good() + global_bad() /* does BOOM indirectly */;
+ }
+ 
+-__noinline long global_calls_good_only(void)
++__naked __noinline long global_calls_good_only(void)
+ {
+-	return global_good();
++	/* return global_good(); 2 insns */
++	asm volatile (
++		"call global_good;"
++		"exit;"
++		::: __clobber_all);
+ }
+ 
+ __noinline long global_dead(void)
+@@ -56,13 +73,30 @@ __msg("subprog 0 (chained_global_func_calls_success) main insns_self 7 insns_tot
+ __msg("subprog {{[0-9]+}} (global_calls_good_only) global insns_self 2 insns_total 2 stack")
+ __msg("subprog {{[0-9]+}} (global_good) global insns_self 5 insns_total 5 stack")
+ __msg("processed 14 insns")
+-int chained_global_func_calls_success(void)
+-{
+-	int sum = 0;
+-
+-	if (call_dead_subprog)
+-		sum += global_dead();
+-	return global_calls_good_only() + sum;
++__naked int chained_global_func_calls_success(void)
++{
++	/* int sum = 0;
++	 * if (call_dead_subprog)
++	 *	sum += global_dead();
++	 * return global_calls_good_only() + sum;
++	 *
++	 * call_dead_subprog is known false, so 7 insns are processed:
++	 * the branch to l0 is always taken and global_dead() is dead code.
++	 */
++	asm volatile (
++		"r6 = 0;"
++		"r1 = %[call_dead_subprog] ll;"
++		"r1 = *(u8 *)(r1 + 0);"
++		"if r1 == 0 goto l0_%=;"
++		"call global_dead;"
++		"r6 = r0;"
++	"l0_%=:"
++		"call global_calls_good_only;"
++		"r0 += r6;"
++		"exit;"
++		:
++		: __imm_addr(call_dead_subprog)
++		: __clobber_all);
+ }
+ 
+ SEC("?raw_tp")
+-- 
+2.43.0
 
