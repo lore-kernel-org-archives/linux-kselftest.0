@@ -1,269 +1,184 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D2840F72C
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 21:16:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786655816; cv=none; b=OyAtxfSIaTNz2t21kugbCsAIuSGB19ipiiQSkA4o5kS9MRhp+0PBWmQaicdoC40kyiouW16uVtEHbtuOpZkdJsIrsuq2BV+/aBCgbi8rV9a7V+LvxJb9e/sqqyWSZ5hPlRNy6N2SnmTWAQT863z6l7N6yN2/6+pOCPEsN54g4p8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786655816; c=relaxed/simple;
-	bh=7l0xVe2LyVfkGorEBGaNMxELLWKDVGFFXB1DJ5Ano04=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=O7EFfqSxLxZLukg2McgsJ+wmAf+r2uJjnDBPJVBMK/Q5uxMNKJMpgBH/PfDdbpBIUs9kGvHTSD4o3crH0Z82Jb5rjachOBSCAcF3zv2U0oUDpcrko7+n6LmwvyYRe7sSOANEtd7CUxvIzeGiI5Cne68snAM/lld2h905NTgP0sU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lZ0Gfbs+; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 850C143FD1F
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 21:24:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.176
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786656245; cv=pass; b=EHr5UE3/zq3mGYQGJooltQ8ZcH4IjU6JYJQko2DLNkx8m8DKx/JKwDAb6Kaco59UFPbqCpGn63VyTD+CCnVksAYzzVuOAYZuqi0HoJd7SrZj1m8vbCmsERXXf0XDZptPAwJR9YYN2r2GUe0Cks4M2rsi2qw4BN5n5MdUQSMkYDs=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786656245; c=relaxed/simple;
+	bh=qX1IR39uVwaDaiwu+D13suWfX2py7eKUr7A0OiCh9ro=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=abUTOZZww6QiVqmgP9Fjbak7IlRNiAT0F3ThNgEu6CcL5lNEssKL2wXTWRVi8deRsa7IFbo5bQ2gD+B6GTydfY4YjbddsRDcZkrE7G4CGPksJXcBJYtQkBbxgpyuMotvAe1iD3+LQIAROq3aPv9PYDUroeAbe5RJXvgzMq52GnI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hmlSZbTm; arc=pass smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lZ0Gfbs+"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38fdeaed181so414228a91.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 14:16:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hmlSZbTm"
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2cca0c5799eso3911045ad.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 14:24:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786656243; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Xm26OeBE8UaGlFe0ngUx6rdOafCjd7+g17Aibs57Mx4EKWAhV2GlpJjsc9OzhPs9+P
+         GcKmm502Vm98ubhiKcj2JbuNhiFirBSv5gQAguooJzQ7GEwlXXknHI5cyrbnTOldaZnv
+         X5IxsmdgKEwuowrd9079EK2IdPihi89M1t7faU37JPM3xgDnoDew4AqVG2OqauMREjgZ
+         ss1E0wrT5DKWK6j/8A7kM4G+whhVAuwdBo14dWthlRj5zcIMeARH5CMp9l62v7N6E0Ev
+         8sSuk1NRkn7+wljxp8JInleamjHsWYHNfV6K1LjRz5Cx/d69L+HJfPqBWKDNrD4gl934
+         rJwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
+        fh=jpeAIv77Brk+v8HMbCTV7UUmW2rTeDbHRTD3CWpMtjA=;
+        b=pj1961QkZo1ixrqKWTDFTbUHnQhh9LsVLCkiN8ENXxcPu0ZaaFkSjVlGE+X0Tl3YuS
+         PA0UIjhZbn8FEUaYhb/oS40/193GPfPXDTuWHHWfHcr8h2d8FlP32qlT/ZY00HVU3en1
+         GH09lFKsOyfhCuPjYXLpNp6LdzKddMPH3qtQZ7e0x5hTV9BY4SLdYMOHC0BmDxrbc1/p
+         /sYViHWBbCRU7uH+apA8TTvbcU2H2YJrzRCvZs7SMg/CR+jd2yHZ8nCpSCC5eI5vlKY6
+         1Usl2CWoYgk5ol+vipCx9rDAvZSVpMbV3Zt3MXLd2YJTJAuIebG2QunuHShOz34glI+V
+         /g1A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786655807; x=1787260607; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=b35On+LZmzrHtmSn5bQB+gzqg4iokp+EtUtdHB8ERVI=;
-        b=lZ0Gfbs+VyMopqbFHQm6349hOuQtkCC3yGUpMrcJORx0SpfLTDjA88A6XL55pOlpMs
-         ZY+vfHEVHhDc/rS6C5KM4BOp1MCfTTc8VdeyTti8yVwi+O9PP4StUDcLYtxcOJL5tdR1
-         PmWZZzOFF+Vu5Weq/xsiyXw7aG11oeQGhHL1rGsltaRi2I+vVxbes+YRgsh9PQgfRD6T
-         Lg3bsyqOPZJtTxgu5QF/qtbqzaJxPfGzN+yN6gvbyHBkGo6xdsY+43IN0rLo8P5QoPu0
-         dPC9bNO2MCrtKBFEI6BbpOOO0AnZgVBpXPHRDmR9Cn3Oud1ckOVHfc8qMkoGaWwUg3oE
-         0EFA==
+        d=google.com; s=20251104; t=1786656243; x=1787261043; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
+        b=hmlSZbTmcwlzQzA4RAjRnm1zAMk0yOyDyMiwa5V5oYk5WEKaIOXTCuTjW/Jlww969n
+         RaLdn6beYoaRoNFonZ+vIsG7xCCg850Rll5+UitkFZtfYQNfslPNDdeBtmwBg2rli2nU
+         MXkUnasQN7YFrsk8p/jha01pyz9cF+pDF2TJhhkTEpyyefnyQE3q1OOsiPiRx7shpwi7
+         kjJwqQkjUbmXB9amDQTCo1siV5u0ey8SE6OzW+nyNIZsLGZ6LXYqWXWz3tM1rOwqUHZo
+         66SZmjsv/sgA4jd5zAufZ8uZGxGdzR9I3b4fyErxjshJDf+8pU2H+m/XeDZ4NTnRVx4V
+         Ef3g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786655807; x=1787260607;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=b35On+LZmzrHtmSn5bQB+gzqg4iokp+EtUtdHB8ERVI=;
-        b=HIMXDLNTkDhp2M1cAmCo0c39ayMZXlh01+ODlNRbCJZPX8ILi3jionH7SJovVDztxe
-         Y4Z12JzMk/FOlqC8yvaOu5sD0m553WR4ulOrQAKQCc6PDloHBkLwBQzcHM4hDnrQCNEv
-         SwQHPmUNnSw30d/3spek7+RBPwiht5R3dzwGjyUSb3V7zgquJikMBSzZVrCvYZ6A2lTu
-         Wo6Y6s4bwhHHjSErd3G+KJFW5y8KWD7RmpySLXJIjXrfS8mNF6cBPaXE6oVZoP8Sh4Kz
-         pENCS4uyD026mMIyb630RFojhXStF979z1KZNXcbEgeWJ/nLVvuZ9HK/kngJTE/Nfi0j
-         hShA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr8YVBb09i0qYp61U8H9TxrbrL+82rpDOstkIZV8aA5UNu6IFgItAaS5YONdnYozn9s7DyUDwq7pqd+U2VSYD0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxOxH0KkdhWbQcPhB4Y0N3cDFLPtpF4o3wGCv1frELPeHLYDWgy
-	VLno3SDCyZS9/Li6syKOaHjYepPrIqFAcx7aPnfHBDeSkb7T19ti4moO
-X-Gm-Gg: AR+sD12xv9Y5pKmosva7bSbYn9HzvvVNqm5lZppmmxImJWqz4lhjWdkzG3PckDPQUgp
-	P8u3KVH/whaNyuvfaSpI2g63r/unkR3J6MxDbCho5298cRQEIS3KKelxmnds3EFRjDuwZEHWWDE
-	AQb7W+3Nk5Z+OjCk+aOO1mvFwEUrB88W4LBdy3gF9eRHHu0IVBoBvYVXiVm3jmVGt/wntsmPXPR
-	b0Pn4TwUJFdilr/y2BG26WxM6LqEvjJkbqx572UNL5MEoomk7JhC/8i4ED+PgJfaPPvjxVCa9hG
-	9pUHwwQnS4K0BSrdQeskugymz+gHa4Hi6pk/C2SpkZ2gkvxfohdsco7YzsMUuto2pzZQTy+R7Si
-	vSE4LefPURHliPegKOq0KxdDJuHUSngNOT4CIFBmeW2m5xb5Bg0XPQmFfw9lRMh/WYL1OG8fF2B
-	fwuYzCCuypFGSnVyzSBv2C/pljak+INZ+sA718UzZ5sWEEU5KZWBsB/8oyG9fKHozhiFbciJcvd
-	+2YQGzFUjAyEUIP
-X-Received: by 2002:a17:90b:5807:b0:37f:ed7e:7e42 with SMTP id 98e67ed59e1d1-3933b958ad5mr945995a91.14.1786655806903;
-        Thu, 13 Aug 2026 14:16:46 -0700 (PDT)
-Received: from patterson.cs.ubc.ca (patterson.cs.ubc.ca. [198.162.52.65])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3933a03e288sm853985a91.17.2026.08.13.14.16.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 14:16:46 -0700 (PDT)
-From: Ning Ding <dingning04@gmail.com>
-To: bpf@vger.kernel.org
-Cc: memxor@gmail.com,
-	greg@kroah.com,
-	dingning04@gmail.com,
-	sashiko-bot@kernel.org,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Kaitao Cheng <chengkaitao@kylinos.cn>,
-	Viktor Malik <vmalik@redhat.com>,
-	Justin Suess <utilityemal77@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 4/4] selftests/bpf: Test untrusted allocated-object pointers
-Date: Thu, 13 Aug 2026 14:15:26 -0700
-Message-ID: <20260813211533.290256-5-dingning04@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260813211533.290256-1-dingning04@gmail.com>
-References: <20260813211533.290256-1-dingning04@gmail.com>
+        d=1e100.net; s=20251104; t=1786656243; x=1787261043;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=FJck1umI1gERxZKqi/mE4jPaeCUw7jHUSxZxlUOvdoM=;
+        b=sxILkxufU7wa+mXj1s4FRCleOjp8zhqzq2xoi4tfgo+zgoeyNCPz8DwC8FI3vAFKrm
+         LqTUB6Itz2DrRnESie3+b1KRzpDpVZkKhXI727xmomrUH8CkZ5+++4C1/1R1mZasSOrU
+         ouDZIXXJajkaPtvHkCBPxBjI6mv7f+kNFKgs7nTawMj++0lNxVjCmjPUBOe2oL60CuqT
+         Lr/tTNZIeSTKHLbZbcCSty5WJIPd8RoaxZ+L4iiUFcucQwYWNCSLGjtUeFOVPOELQ5xm
+         pfTW7UbZ0xYGS5f+LcPSsXDSM9HI5JJsayAI4uw+wyJY+dhg0zZLdlFkDhbpIbmBYdfn
+         D9/w==
+X-Forwarded-Encrypted: i=1; AHgh+Rqw8lpurD0Ey9u6sOjOJdeD6Hrh3X6ugwHanckAtxdzUfIVKvaWFGolwhpKR9uWDdwxo6fyGeWBMeqX10vwsi4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw6LdXnynOdLzlEKfzKyA3ZWpvPoxPuBZKWpBEIj+T6R9Sioe8C
+	HiXARH+JjrMg7tBQfqM2/BopSV3DXuzOdBMfebDrJ831o9Qqw4thmCJ306Vv7ezh8hs2VyDttic
+	nGN/zELf+NeTIEv7kpT4wElTYe3etDXFXBFQoWmZ7
+X-Gm-Gg: AR+sD10t6mRGnGB+Qi0QjSPD+B9pwXfkEElBWNhRro3u/7G3aC3Eqn7kqis232FcExN
+	VU9mrNARoK2vUwJn8tpzWVaeuwhuyBgleDyKgmzHLZsz3TibibH8JZC8uWnk5W4kusY/1IsCM4j
+	t4IhJHi+IfhV52MCMtOrGMHXi3sdtr1r4eGtGraAopYAnfXhK+tbfmFWIXt8oDtdpIgIsM1RNST
+	xK325VrMY2ymX/FfcRI70kBPUH+g+Mfc9JmIROfiULma/UmCyYld95S9WTTN9CBXUaB6aCh+TIo
+	SUnLMK/a2mQ/UyFDwNxeaN9yqaDwZKzoKt0zkvFQAPwGxiSaXS4IvhhDVWiK9NbfFO0+SG8UviZ
+	XuXkTBqalheqBjTH5tJXGNIpxJue0zg==
+X-Received: by 2002:a05:6a21:a4a:b0:3cb:d156:d362 with SMTP id
+ adf61e73a8af0-3cc7196e785mr831997637.3.1786656241969; Thu, 13 Aug 2026
+ 14:24:01 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 13 Aug 2026 14:23:59 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 13 Aug 2026 14:23:59 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <82ded1ea-e0f6-48d9-8bcb-38a6bc5e9176@kernel.org>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-20-2fc18ee6d3ba@google.com> <82ded1ea-e0f6-48d9-8bcb-38a6bc5e9176@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Thu, 13 Aug 2026 14:23:59 -0700
+X-Gm-Features: AUfX_mzbri1ixV_zlf2Jna8d8Me5Qvc_rxP8xrcIgsSaQjjAlnxnniHAuo3sYt0
+Message-ID: <CAEvNRgHpy52iynKfXeEkyCixhhu0_Hnu5jSNT8i+BNxvEoG7Cg@mail.gmail.com>
+Subject: Re: [PATCH v10 20/41] KVM: Let userspace disable per-VM mem
+ attributes, enable per-gmem attributes
+To: "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Xiaoyao Li <xiaoyao.li@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-The verifier previously allowed pointers used after RCU protection ended
-to reach bpf_refcount_acquire() and, for one object layout, a direct write.
-If the object was freed and reused, these operations could access stale
-memory.
+"David Hildenbrand (Arm)" <david@kernel.org> writes:
 
-Add tests that keep BPF_PROBE_MEM reads accepted but reject reference
-acquisition and direct writes after RCU protection ends. Cover both tested
-object layouts.
+> On 8/7/26 23:52, Ackerley Tng via B4 Relay wrote:
+>> From: Ackerley Tng <ackerleytng@google.com>
+>>
+>>
+>> [...snip...]
+>>
+>> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+>> index abb108886733a..2c3c22aeafa54 100644
+>> --- a/arch/x86/kvm/Kconfig
+>> +++ b/arch/x86/kvm/Kconfig
+>> @@ -81,13 +81,21 @@ config KVM_WERROR
+>>  	  If in doubt, say "N".
+>>
+>>  config KVM_VM_MEMORY_ATTRIBUTES
+>> -	bool
+>> +	bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
+>> +	depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
+>> +	help
+>> +	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
+>> +	  memory attributes.  Using per-VM attributes is deprecated in favor of
+>> +	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
+>> +	  CoCo VMs using a VMM that doesn't support guest_memfd memory
+>> +	  attributes.
+>> +
+>> +	  If unsure, say N.
+>
+> Hm, does that imply that a distribution that must support both, cannot ship a
+> single kernel?
+>
 
-Reported-by: sashiko-bot@kernel.org
-Link: https://lore.kernel.org/r/20260726021304.97ED91F000E9@smtp.kernel.org
-Assisted-by: Codex:gpt-5
-Signed-off-by: Ning Ding <dingning04@gmail.com>
----
- .../selftests/bpf/progs/refcounted_kptr.c     | 100 ++++++++++++++++++
- .../bpf/progs/refcounted_kptr_fail.c          |  27 +++++
- 2 files changed, 127 insertions(+)
+Did you mean this as a documentation comment? Should the above read:
 
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr.c b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-index fd35093285c0..383c5b1b7111 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr.c
-@@ -893,6 +893,106 @@ long refcount_acquire_rcu_map_kptr_null_checked(void *ctx)
- 	return 0;
- }
- 
-+SEC("?syscall")
-+__success
-+long map_kptr_read_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value_refcount_only *mapval;
-+	struct node_refcount_only *n;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	n = mapval->node;
-+	if (!n) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	return n->key;
-+}
-+
-+SEC("?syscall")
-+__failure __msg("is neither owning or non-owning ref")
-+long refcount_acquire_graph_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value *mapval;
-+	struct node_data *n, *m;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	n = mapval->node;
-+	if (!n) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	m = bpf_refcount_acquire(n);
-+	if (m)
-+		bpf_obj_drop(m);
-+
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__failure __msg("only read is supported")
-+long graph_map_kptr_write_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value *mapval;
-+	struct node_data *n;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
-+	if (!mapval)
-+		return 1;
-+
-+	bpf_rcu_read_lock();
-+	n = mapval->node;
-+	if (!n) {
-+		bpf_rcu_read_unlock();
-+		return 2;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	n->key = 1;
-+	return 0;
-+}
-+
-+SEC("?syscall")
-+__success
-+long graph_map_kptr_read_after_spin_unlock(void *ctx)
-+{
-+	struct map_value *mapval;
-+	struct node_data *n;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
-+	if (!mapval)
-+		return 0;
-+
-+	bpf_rcu_read_lock();
-+	n = mapval->node;
-+	if (!n) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	bpf_spin_lock(&lock);
-+	bpf_spin_unlock(&lock);
-+
-+	return n->key;
-+}
-+
- static long __stash_map_empty_xchg(struct node_data *n, int idx)
- {
- 	struct map_value *mapval = bpf_map_lookup_elem(&stashed_nodes, &idx);
-diff --git a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-index acd3e81a3916..0cc4cbd0c81b 100644
---- a/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-+++ b/tools/testing/selftests/bpf/progs/refcounted_kptr_fail.c
-@@ -127,6 +127,33 @@ long refcount_acquire_rcu_map_kptr_unchecked_drop(void *ctx)
- 	return 0;
- }
- 
-+SEC("?syscall")
-+__failure __msg("is neither owning or non-owning ref")
-+long refcount_acquire_after_rcu_unlock(void *ctx)
-+{
-+	struct map_value_refcount_only *mapval;
-+	struct node_refcount_only *n, *m;
-+	int idx = 0;
-+
-+	mapval = bpf_map_lookup_elem(&stashed_refcount_only, &idx);
-+	if (!mapval)
-+		return 1;
-+
-+	bpf_rcu_read_lock();
-+	n = mapval->node;
-+	if (!n) {
-+		bpf_rcu_read_unlock();
-+		return 2;
-+	}
-+	bpf_rcu_read_unlock();
-+
-+	m = bpf_refcount_acquire(n);
-+	if (m)
-+		bpf_obj_drop(m);
-+
-+	return 0;
-+}
-+
- SEC("?tc")
- __failure __msg("Unreleased reference id=3 alloc_insn={{[0-9]+}}")
- long rbtree_refcounted_node_ref_escapes_owning_input(void *ctx)
--- 
-2.43.0
+	help
+	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
+	  memory attributes.  Using per-VM attributes is deprecated in favor of
+	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
+	  CoCo VMs using a VMM that doesn't support guest_memfd memory
+-	  attributes.
++	  attributes. Select this to defer selection of where PRIVATE vs. SHARED
++	  attributes are tracked to KVM module load time, where
++	  gmem_in_place_conversion can be specified as a module parameter.
 
+	  If unsure, say N.
+
+I think we should do _without_ the above clarification since using VM
+memory attributes for shared/private status is intended to be
+deprecated.
+
+Is it fair to say distributions should not support both, and if they
+_must_ support both, they need to read code to figure this out?
+
+> --
+> Cheers,
+>
+> David
