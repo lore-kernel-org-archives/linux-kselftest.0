@@ -1,277 +1,299 @@
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11011037.outbound.protection.outlook.com [52.101.65.37])
+Received: from smtpbgeu1.qq.com (smtpbgeu1.qq.com [52.59.177.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37B03353A85;
-	Thu, 13 Aug 2026 10:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.65.37
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786616911; cv=fail; b=qaEaW713fk11j4PGd1mA6oONUHxVK8YnMDC/a6RXIk6jgSEPkPQh1GttiCTQyEu1E3SmvbRo95ywTTzNYsAV5UGB7LF0j7lv0kAnclLvi8y7wdEnf4iVj7++XWDoiOX+0fSRyIVc4Q1m6q08PGOcxho0dZk4aV3557xkhU280KU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786616911; c=relaxed/simple;
-	bh=CsDqonnBG6NPr9bZVerZkGLDF/klqViySvrSFlOEOLA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=du8XRGZg9FYVoITdIAzcf3BCFTTzYbjd+S/gcLfOxPt9o5pEWhTBRedF9CSmuVu647ntzF6uNZbeB68KT6hkRwuGAxf+LmOuF/LHFfBl7Y+nHPLbqrSstaQcPDDhKTjrYNlhyU+9ND7v/PAxAwpWQk7Ms7EHoSws1qVJuC2psA0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=BF1vD95T; arc=fail smtp.client-ip=52.101.65.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="BF1vD95T"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EsDoTVXkD8uWvFOXGnTpbMKUYhUiBO8dUChLQJE1Yol5PveVHn/verGS8/on/UNe2MF4XAv9iOrW3gC7j49Let8L2EYiSN4pwKBCPBopNa0FC1GtitfWYa3/+my3qR9RMoxrPUIvTvbWouX2c/qXeXxy+E9BP7ydjB/45s3/PWGddHaA0QH2iRvcP3OS/ZIAHfvoJwy9Lnu4wNkIhY4zFQj/EzTZe1ICop/dD6GxPsswvVlg1lo3HUneoKyZOVwP9RqhPcZslSiDyK1x7EEEy+HpREFipkhkjgOIJcu1385x4gJbtY5pBe+0QvyJqqWUtobZnbA6owqsacwYk65U9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mNKNVZ80cyCkp7gvQN+c0bc3dKQ4aYHBRlKQ7tA5Oss=;
- b=tV4/m0RQejxYUX+5JUbaO/hhtU8kV+X5GO/6y+de/AWnGbKChr+EFmGXpUDqs01PGieR3j+BrbptpQb0rfS/78wDDjmpCuCz/MD2ChqZ6cJiC95IH+FcRqajH8EYmqjIwyc0BNxmho9riT4XFZUMtkn3fRcU9tL4a4XrerciFyKzQAULAqtQ8GR5KzzNeYlTzkyV2kaSK97qBJLGf/vN5EZpbDYVqciALiIh+myRO3CmO7n7lly1tkDtcUB8rjHnnhgFfmmPc37MHHCD0+2DZFjL3sTPo/khNMrdKPSmpYDgogowxPWlPK01ZTEzLxm154rM4+YWZ4hsfE6RTK/Qfg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
- header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
- arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mNKNVZ80cyCkp7gvQN+c0bc3dKQ4aYHBRlKQ7tA5Oss=;
- b=BF1vD95T1m3Z7hdVtDX2KlNFbatPaC1z3R5dtyMwrNIuempFYmsofEJnZ+ecBDkFySknJcAkj1xjtrhu4pObFUSluBq6gpYQUycIZUGRzTODg1p7V47IC7qSN4N/1DRgD/+vcjAG0kb74W4L6crwbk0J7GJR7AF6ydUGZJzR1CFU084Znf+QE24VFJx5TPCR4unedQt6UCz9i47MNWByYbIDTlUryvXzqeENYuuvmzoLuVj4f5q+ilwTZNe90PpEsLy/gQbu9xUD/Mmr5L8dbKFNNVw6OozxR1Rds9E4UvQlIgv3lr50EzGfr++CddYPqy/qJXuaJ442GX8iP1I8+w==
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
- by DU0PR07MB8785.eurprd07.prod.outlook.com (2603:10a6:10:318::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.11; Thu, 13 Aug
- 2026 10:28:25 +0000
-Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
- ([fe80::f708:4bd3:9987:b9e5%2]) with mapi id 15.21.0339.001; Thu, 13 Aug 2026
- 10:28:25 +0000
-From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
-To: Jakub Kicinski <kuba@kernel.org>
-CC: "shaojijie@huawei.com" <shaojijie@huawei.com>, "shenjian15@huawei.com"
-	<shenjian15@huawei.com>, "linux-rdma@vger.kernel.org"
-	<linux-rdma@vger.kernel.org>, "eperezma@redhat.com" <eperezma@redhat.com>,
-	"jasowang@redhat.com" <jasowang@redhat.com>, "virtualization@lists.linux.dev"
-	<virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>,
-	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
-	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
-	<edumazet@google.com>, "linux-doc@vger.kernel.org"
-	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
-	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
-	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
-	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
-	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
-	"jhs@mojatatu.com" <jhs@mojatatu.com>, "stephen@networkplumber.org"
-	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
-	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
-	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
-	<andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
-	"ast@fiberby.net" <ast@fiberby.net>, "liuhangbin@gmail.com"
-	<liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-	"ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
-	<ncardwell@google.com>, "Koen De Schepper (Nokia)"
-	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
-	<g.white@cablelabs.com>, "ingemar.s.johansson@ericsson.com"
-	<ingemar.s.johansson@ericsson.com>, "mirja.kuehlewind@ericsson.com"
-	<mirja.kuehlewind@ericsson.com>, "cheshire@apple.com" <cheshire@apple.com>,
-	"rs.ietf@gmx.at" <rs.ietf@gmx.at>, "Jason_Livingood@comcast.com"
-	<Jason_Livingood@comcast.com>, "vidhi_goel@apple.com" <vidhi_goel@apple.com>,
-	Parav Pandit <parav@nvidia.com>, Willem de Bruijn <willemb@google.com>
-Subject: RE: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
- and SKB_GSO_TCP_ACCECN
-Thread-Topic: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
- and SKB_GSO_TCP_ACCECN
-Thread-Index: AQHdJFkmsZErp6HN50yIAT4nHZCuDbaZmsyAgACaoWCAANzxAIAAlzCg
-Date: Thu, 13 Aug 2026 10:28:25 +0000
-Message-ID:
- <PAXPR07MB7984E3E73868BF8966821C27A3DB2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
-	<20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
-	<20260811173017.3d18dfdc@kernel.org>
-	<PAXPR07MB79849A3F1724DBB2DA8EA20AA3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <20260812155430.6ec81eec@kernel.org>
-In-Reply-To: <20260812155430.6ec81eec@kernel.org>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|DU0PR07MB8785:EE_
-x-ms-office365-filtering-correlation-id: 0312e1d0-6910-43dd-2e18-08def9259b95
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|11063799006|5023799004|56012099006|10067099003|6133799003|22082099003|18002099003|4143699003|38070700021;
-x-microsoft-antispam-message-info:
- 5yAifvT0XhxnTfuth0fZw31T7ZQUzvB8gpoUfu0xfCnpGaLJRw+j7mWl1kL9DVs+j1gsb2AHihnc+zKvNftYJACpi/WiNK8Nkr2EnqBYz8MFWXM7oYI4b+aqb9Uj/+t+wj5ghTE3T2iFXErHfR7MEY6KmztIwU0NkWuoxcyQsb1KED4qKcx1SNYpfVPTdC8ebQyWUbM1z2cF38UcUeOyUIKHUdtEUNscH1FFMoZz/E/CXqF6xKd2cR3y0O1ILEXl654v73R8vNG1dfZNhQATNYlFMZSU10bZu+cw40JffeOkeo72JLI5IOkxfpx7qCtbrQzr1QUBGv5QvsswSP3Kh1vZ+pqZdPMwjkBcZfLkGsKTrA2SsOnYfBis8bLioONS8VhuAXE4IwU9mnyt0LQ5J41ZWRbMH/LKEvyblR7fshRsCCZqIu93fV+UQQ+K18awM4TbNFUr+WSA6lbJck6mO2PH/2nEqSjtWql9FE2mxm3w7TUkyO3aLn7g+st9ir+Ep1UDWbPhK4BIEcBLTh69H5h84+epnZkilR+cmgpL67r+ceDkHfUUF7ezGEoUcBl5kg6V68I+lmZhFUIffgvOVyjEwSHIWl04BnSWhgTlDZN1D/xyty8hL2EyLUzglGXPUjDao2SCnNnv121SGkhdtSoNQkJCpXfYlm5OqWe8GeQUXnghOHnhJcRRH0VwLvANNcGvuo238OGCd7Li++IuHkXvcS0i/B5i3hGva0/Nmnk=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(11063799006)(5023799004)(56012099006)(10067099003)(6133799003)(22082099003)(18002099003)(4143699003)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?UBjP1+Hke5HU/3Yt24TfOAyJAHi5mdBftiQWGbStHsiKMtgchgr3jY0N3Uq7?=
- =?us-ascii?Q?t4HjbgAH08DwyPaWb/FMTjTlGSn5UZv6t0vBnXy3+fG7aDBYfh2vi80svRBv?=
- =?us-ascii?Q?N90sho0rvEAVpl5BtreOWr1bHy6wumfIkglQ0EbpoOG7pQ86jEY1ibSBAMX6?=
- =?us-ascii?Q?og0FqN45CzNQ+PFT3Q8aeKWptS7uNwmwGwK/ZL4LmpxoMBTtd+8sZz9sfS59?=
- =?us-ascii?Q?7mP9psS4lBPQHIHo7XEGztmTCQzRJq7K6fMPTeiXXgBSNdDAHEuEWhsveE8d?=
- =?us-ascii?Q?ze6obhydR9l8A1ctH29MbQEa0cOqrTx7nM4JJKz8xjdRjlwKOIK0xQXIh9/2?=
- =?us-ascii?Q?WcXN/Uco9fDwUZ29dHTzlRWaIJesjWGgLK/gApStjcW/U4AJjK0ttIBgZF2b?=
- =?us-ascii?Q?X46uEYdOOFpIzw/UAjSugwP4c7nW0tsCSRJVykLxyF5b+1uImakuhRFphDrK?=
- =?us-ascii?Q?hilIcZ0a/V6Vw4LSJYrpoqR984qJKewNfy18JcCL/10W1waIf4fXXKib/zAk?=
- =?us-ascii?Q?rr3X8GpnNyFyml4GYJaudY9eZZhBwYLtfBy7i+zTzAxQqEQlX6lH2wHJS8Gp?=
- =?us-ascii?Q?ym50l/FzS+33B/h5OY7OqTTeDGzJMQ+9ESRTCSd2r4rAvi75Or4U+8VLQvBh?=
- =?us-ascii?Q?hk1PmP1KRqP9miJxUbzqCVxKJ4AOzqr/q6L+hhCKyM/Skqh5ZHqc80th2gKn?=
- =?us-ascii?Q?YgOcgWKBF8Kyt7i1vKMi1PbcHhuffH6nYiklfVu/6EoIOf8euRRcMwBIYleb?=
- =?us-ascii?Q?J+Xgg1xgLtJ9+cMURhAhXoH4zqc2MICPp1Id5Qs0AYFnJGZ5cypq9esETAyC?=
- =?us-ascii?Q?sjuW6X7SDmxkMTwHLf3O6VUK+a3aoDULGWSPQ5aRNKzkE2ttI2Txj2Ygf/xD?=
- =?us-ascii?Q?Q8nASHwUPRBJAaMqcqBsUPBIcB7D8KzYXSjx07z3vdZgLJLvF1OrbfmjEP30?=
- =?us-ascii?Q?2+/wvT14hSoo2CsJjg7aoT1R2khE1TPpB/y+cQnE07MTWrnI+/jVZ0m+xoDR?=
- =?us-ascii?Q?KOUmCG2TjI4ONURMdE1mHZy3TNnF3agslT2Prr4ejzGlIaibqjzaPbYQAF0g?=
- =?us-ascii?Q?LmAnw0bbSbBO6AH3ByrSATH6CvevIXidrrdCrBspS9+EzwGDaOeu10CpTP22?=
- =?us-ascii?Q?VOswxKu4PVEfNaX7mlwdeTM+/LnBneIblQVmVKoh4bXhTF90lKOCXkwwuXiE?=
- =?us-ascii?Q?dGjcx6aJa+fH6ZxOy2YiO9zkdsNe6l+ASP/s2DJtvTpU933jh5tZceFjIh+O?=
- =?us-ascii?Q?oPCiRxjDP6xdgWATn1/UUX4NV0O4m81KlvDQ3Zc0HB3OaBGqW1nNfZd0tFcF?=
- =?us-ascii?Q?yUZD7ISQPRX5QAuC7Gn4bxvw+e75Fe8vF13Kto/VfQLwTsZXIAO6qnxpBud3?=
- =?us-ascii?Q?nVMoqMiihb5CC5dvvWEMM56I3VwOE8MImRKqUBuJ+3PWDOicxgA3ycemZy7g?=
- =?us-ascii?Q?exIlLe3UK/Io90adZ48o6Gq7z49mVx/vSdguwX3EJZjwwveXc18IHmmc63sE?=
- =?us-ascii?Q?1csmKvEH2fDLqUdIhMfMjAeOJ2FZUX2TWgA9cpFqiLq3heCq+UDgggc30QcK?=
- =?us-ascii?Q?4URVaZJGk3dL4n7RE23ElOxaNgYhmNbGaq/tegs0zjT5ZUxJube37X9vw32X?=
- =?us-ascii?Q?0YIwAE/1S9N8SO/dG+KapAKMmtvWd/ggSKfyrxmrN66Xp5FTylt+HxUKuCjT?=
- =?us-ascii?Q?9XIwRUU4WZAcHGZ6Mme+i8rv9DSlt73r3Sw9H7VSB/yr0UqC2EDamca4DIhq?=
- =?us-ascii?Q?vj8mYe/AkBc8558EePqDH347QLBLeyo=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA08179A3;
+	Thu, 13 Aug 2026 10:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.59.177.22
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786617006; cv=none; b=K3QOFY/Uwo//U6KDrNut2Ig3dOl/Z7BUs6T+SRENZLV2lQF3E/S1OsrWjBLKOJMsymr/rfg4VRhUT8Y+1B5X7KmYoVSif6qOp9Q840v+rwJeuvmsadD3JUJ9HXbeAIsL8cdjp8LCHmK1H7XWxLX3MpiZUQr7nOJg63gaXjqblKs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786617006; c=relaxed/simple;
+	bh=1DKzdFjDfMDrwSVn4N7ApCrYVUkElr31gPQqPG8mR5o=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=nZCBmyrZ6DRVWqUDcERy7jgyf6Uuxw2NL4mvrCjDk1/hFZUAjNvAGg31BBoLG7dSKkPHm4Mprn0kvxLhq1Bgq/L2NicpSzulO9vCWwilwxyrIrgzZPVN9fp6nktrNeRqhAZJ+am+GzwvfEJm8d8blZXzbhcX9JOq3nTkF4PI9BY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech; spf=pass smtp.mailfrom=haiwei.tech; arc=none smtp.client-ip=52.59.177.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=haiwei.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=haiwei.tech
+X-QQ-mid: esmtpgz15t1786616975tae215c51
+X-QQ-Originating-IP: OZchcY0gz9zI06/R1UDHEGCx1nSeqfz4hgfoniqGDtE=
+Received: from rsl ( [183.242.33.186])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Thu, 13 Aug 2026 18:29:32 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 0
+X-BIZMAIL-ID: 11012683482226331164
+EX-QQ-RecipientCnt: 15
+From: JinRui <jinrui@haiwei.tech>
+To: anup@brainfault.org,
+	pbonzini@redhat.com,
+	shuah@kernel.org,
+	paul.walmsley@sifive.com,
+	palmer@dabbelt.com,
+	aou@eecs.berkeley.edu
+Cc: atish.patra@linux.dev,
+	alex@ghiti.fr,
+	sashiko-bot@kernel.org,
+	kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jinrui@haiwei.tech
+Subject: [PATCH v13] KVM: selftests: riscv: Add lazy V extension enablement for guests
+Date: Thu, 13 Aug 2026 10:29:30 +0000
+Message-ID: <20EA6EE00884FB87+20260813102930.3892251-1-jinrui@haiwei.tech>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <7C0512E558D1614D+20260813095615.3843757-1-jinrui@haiwei.tech>
+References: <7C0512E558D1614D+20260813095615.3843757-1-jinrui@haiwei.tech>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nokia-bell-labs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0312e1d0-6910-43dd-2e18-08def9259b95
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2026 10:28:25.2179
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: aGWAw3j0JfyfSYdZhfCoDH4ew3wmNtU7bK5SgApFzwDd1qZGRv24wJYUdRfH0WHWIuGJqdE8LzL7JT3koyYNq4S0isk7vmV8WoJtaTPJfXw4bAsCUJhEZTBpjywDL3BU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU0PR07MB8785
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: esmtpgz:haiwei.tech:qybglogicsvrgz:qybglogicsvrgz6b-0
+X-QQ-XMAILINFO: NUTmQvr4fRpIWwXiVhMdH6tPbmahSbtLqrDMHf+p1B2+/d6FzjJ4Hs2I
+	vn4ySuAq0FZH11L9OcutXYhIILY0NFvk+ujzM2hL7KDSDZovA6Y5BxXYmIExQWfrZ4rdBUT
+	e7SDCzoXB/bQ5ulupvgJx8xxqQBfF+fm9JfDmjFbRPWHUs2ydc93lPMpSP0uSRcG+/3GH/R
+	2lQzmUakgjEOah6ekpLiYgh526xgd21gIGPy+N+Fvl12Sq0eInFYyeMcacrDhGF+S/kfLjg
+	xj4IfGUXQC/SobJyHeO8VcVIDVHee8NwmcnbYNUZRRoTYkFAFQk4rU1osJoLDMA0btGI7H/
+	u9C7FDyKFt9CpCZ6CVmS+D42odoYX/J0JxPxsdUajAoEtZFB+FCrTYp3Zz9z/DK53x4LzfI
+	7IPA81vY2JMGg+EGVNbNeRAO+isi8294T4LK5av61dg57xITtgCCLZ/4YEoHnbGruCgt6V3
+	zgBSPmF7FZUYuejR0Ehbc5enRm1AvSY1ryuiw30Afpw6jm/PTBWyOWn46JC9pLptHCi1LIC
+	cWfK1IUKJ3C7+uMeaqvDJXgHcI4GuNJ/VeDBul4Kwot0rhp2uYCGJFLACoIPEHxv1R7OlRq
+	yWYJylSaCt4iDMfczXhzsyYXHCk80umSznfT7X7qhDBS/fcKks30Zee9mYccKy5XENxX6vH
+	POa/8MxFN6wTqNA+UEI1yp+rp4Td83QG6G08FQX2lTlpcpLSotKcGo1tEen5T6vRpZF7k87
+	f2f9mI8xKl1Ljm6VURv0DKJ41shzPGz1qUaKoD8J80nKw63CjD39974DS/cOM4QyPIOGCyo
+	OBSKWix0upk1F+6heN9y6MUd7wOKYwlaQJuPvNqDlY8cCTMP6uUvMSUctchgZj1gZZLRjD7
+	neN5tO3pcXll8Di6B5fYtkMKDw6AEAr0dSrYNPrqGo4edHK2i+w7WqDN1OOnxtr3cdr217S
+	G+aeqSXKsDJCT6N/J/6Ka6++ap2YNBRqYIynJ34irnQM1+wF+ShA3emdBsQ5G3xtsXQjkqf
+	LUK7MiwhfKdMZgBmfptZEFkVp3qnRYKWZP3gAKIAuCxtG5/powqJgcPJOQg/E8S6jQvfVlQ
+	XiLaLUrsO9nGPfkk/kGigJqg+rCi613WUGNH9Hf3xDI
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-RECHKSPAM: 0
 
-> On Wed, 12 Aug 2026 10:33:19 +0000 Chia-Yu Chang (Nokia) wrote:
-> > > > -     /* This indicates the tcp segment has CWR set. */
-> > > > +     /* For TX, this indicates that the first TCP segment has CWR =
-set, and
-> > > > +      * any subsequent segment in the same skb has CWR cleared. Th=
-is flag
-> > > > +      * must not be used in RX, because the connection to which th=
-e segment
-> > > > +      * belongs is not tracked to use RFC3168 or AccECN. Using RFC=
-3168 ECN
-> > > > +      * offload may clear CWR and corrupt ACE signal (CWR is part =
-of it).
-> > > > +      * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid CWR cor=
-ruption.
-> > > > +      */
-> > >
-> > > I still can't wrap my head around this TBH.
-> > >
-> > > SKB_GSO_TCP_ECN means RFC3168
-> > > SKB_GSO_TCP_ACCECN means AccECN
-> > >
-> > > If the HW can correctly detect cwr on first frame and then no cwr and=
- report that as ECN/RFC3168 - what's the problem? TSO will produce the exac=
-t expected segment sequence.
-> > >
-> > > Is the program that if we re-GRO that frame in SW we end up with
-> > > ECN+ACCECN on the same skb?
-> >
-> > Yes, this is the problem.
-> > The HW does not know whether the received packets belong to an RFC3168 =
-ECN flow or an AccECN flow on the RX path.
-> > For example, HW GRO may set SKB_GSO_TCP_ECN after observing that the fi=
-rst packet has CWR=3D1:
-> >
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > |     Packet id     | CWR flag |       Flag      | Flushed as SKB |
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > |         0         |     1    | SKB_GSO_TCP_ECN |        0       |
-> > |         1         |     0    |         -       |        0       |
-> > |         2         |     1    |         -       |        0       |
-> > |         3         |     1    |         -       |        1       |
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> >
-> > If the aggregated skb is forwarded through a device using GSO, e.g.,=20
-> > HW RX (GRO) -> veth TX (GSO), the SKB_GSO_TCP_ECN applies RFC3168=20
-> > semantics. This means that only the 1st segment keeps the CWR flag=20
-> > while all subsequent segments have CWR cleared:
-> >
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+
-> > |     Packet id     | CWR flag |
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+
-> > |         0         |     1    |
-> > |         1         |     0    |
-> > |         2         |     0    |
-> > |         3         |     0    |
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D+
-> >
-> > This behavior is ok for RFC3168, since CWR is expected to appear only=20
-> > once. However, for AccECN, CWR is part of the ACE signal and must be=20
-> > preserved across all segments.
->=20
-> But this would be obviously a buggy HW-GRO implementation.
-> The rules for HW-GRO RFC3168 are -- ignore CWR on first segment (host res=
-ponsible for populating SKB_GSO_TCP_ECN), and CWR _must be 0_ for all subse=
-quent segments.
->=20
-> > In the example above, the original CWR sequence was 1,0,1,1.
-> > But after re-segmentation it becomes: 1,0,0,0.
-> > This is why SKB_GSO_TCP_ECN should not be used in RX/GRO paths.
->=20
-> We have extensive gro tests under
-> tools/testing/selftests/drivers/net/gro.py
->=20
-> If you want to catch bad devices - add appropriate test cases there.
->
+From: jinrui <jinrui@haiwei.tech>
 
-I added a test case in patch 6f74bc8b6e8d related to the CWR flag.
-In that case, there are 5 packets with CWR values of 0, 1, 1, 0, and 0, and=
- packets are flushed after the 1st, 3rd, and 5th packets.
-The gro.py uses this case in tools/testing/selftests/net/lib/gro.c to verif=
-y CWR behavior.
-But indeed, that does not cover whether SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCE=
-CN shall be set during the GRO.
-So, a test might be added to verify the SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCE=
-CN flags (if there is another suggested way, please let me know)?
+When the cross-compiler defaults to an -march that includes the V
+(vector) extension, -O2 auto-vectorization generates vector instructions
+(e.g. vsetvli, vadd.vv) in guest code. Executing such an instruction with
+sstatus.VS Off raises EXC_INST_ILLEGAL (scause=2); KVM's hedeleg forwards
+it to the guest, but the bare-metal selftest cannot handle it, so all
+guest tests fail. A real kernel handles this via
+riscv_v_first_use_handler(), which enables V and re-executes the
+instruction.
 
-> The comment as stated seems to be misleading - there's nothing wrong with=
- using the flag if the device follows the RFC3168 semantics correctly.
->=20
-> And of course, adding a comment and hoping people will find it is much we=
-aker than adding tests.
->
-> Again, maybe I'm missing what _actually_ doesn't work here.
+Fix it in processor.c:
 
-Before adding an extra test, we need to clarify the definition and usages o=
-f these flags.
-At the TX path, in tcp_gso_segment() of net/ipv4/tcp_offload.c, the SKB_GSO=
-_TCP_ACCECN flag is used to preserve the CWR flags for AccECN flows.
-Otherwise, when without SKB_GSO_TCP_ACCECN (RFC3168 ECN or Non-ECN flows), =
-cwr will be cleared from the following packets.
+1. Delete the now-unused guest_unexp_trap() handler, replaced by the full
+   exception vector table.
 
-For the RX path, unfortunately I do not find a clear rule of when SKB_GSO_T=
-CP_ECN shall be set except in include/linux/skbuff.h.
-Plus, the device usually does not track packets belonging to RFC3168 ECN or=
- ACCECN flows.
-So, my previous thought is to always use SKB_GSO_TCP_ACCECN in the RX path =
-to avoid any potential CWR bleaching.
+2. In vm_arch_vcpu_add(), advertise V to KVM via __vcpu_set_reg(V, 1)
+   (best-effort, errors ignored on hardware without V) and install the
+   full exception vector table instead of a raw stvec handler.
 
-And FYI we will further include the related changes on the virtio-net after=
- we get an approval in the virtio-spec.
+3. In route_exception(), decode the faulting instruction (stval) with
+   insn_is_vector() and, when it is a vector instruction while sstatus.VS
+   is Off, set VS to Initial and sret to re-execute it, before any
+   test-registered handler. Genuinely illegal instructions still reach
+   the unexpected-exception path.
+
+4. Make vm_init_vector_tables() idempotent by checking vm->handlers
+   before allocating, so tests that call it directly (ebreak_test,
+   arch_timer, sbi_pmu_test) do not leak memory.
+
+Tested on a riscv64 host with KVM enabled.
+
+Signed-off-by: jinrui <jinrui@haiwei.tech>
+---
+Changes in v13:
+- Assemble the 32-bit instruction from two 16-bit halfword reads instead
+  of a single 32-bit load, since with IALIGN=16 a 32-bit instruction can
+  start on a 2-byte boundary (Sashiko review).
+
+ .../selftests/kvm/include/riscv/processor.h   | 13 +++
+ .../selftests/kvm/lib/riscv/processor.c       | 99 ++++++++++++++++---
+ 2 files changed, 99 insertions(+), 13 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/riscv/processor.h b/tools/testing/selftests/kvm/include/riscv/processor.h
+index e3acf2ae9881..685baefebdb1 100644
+--- a/tools/testing/selftests/kvm/include/riscv/processor.h
++++ b/tools/testing/selftests/kvm/include/riscv/processor.h
+@@ -25,6 +25,19 @@
+ #define GET_RM(insn)            (((insn) & INSN_MASK_FUNCT3) >> INSN_SHIFT_FUNCT3)
+ #define GET_CSR_NUM(insn)       (((insn) & INSN_CSR_MASK) >> INSN_CSR_SHIFT)
+ 
++/* Vector (V) instruction decoding, matching arch/riscv/include/asm/insn.h */
++#define RV_INSN_OPCODE_MASK	0x7f
++#define RVG_OPCODE_SYSTEM	0x73
++#define RVV_OPCODE_VECTOR	0x57
++#define RVV_OPCODE_VL		0x07
++#define RVV_OPCODE_VS		0x27
++#define RVV_VL_VS_WIDTH_8	0
++#define RVV_VL_VS_WIDTH_16	5
++#define RVV_VL_VS_WIDTH_32	6
++#define RVV_VL_VS_WIDTH_64	7
++#define RVV_EXTRACT_VL_VS_WIDTH(insn)	(((insn) >> 12) & 0x7)
++#define RVG_EXTRACT_SYSTEM_CSR(insn)	(((insn) >> 20) & 0xfff)
++
+ static inline u64 __kvm_reg_id(u64 type, u64 subtype, u64 idx, u64 size)
+ {
+ 	return KVM_REG_RISCV | type | subtype | idx | size;
+diff --git a/tools/testing/selftests/kvm/lib/riscv/processor.c b/tools/testing/selftests/kvm/lib/riscv/processor.c
+index ded5429f3448..d00ac997291c 100644
+--- a/tools/testing/selftests/kvm/lib/riscv/processor.c
++++ b/tools/testing/selftests/kvm/lib/riscv/processor.c
+@@ -17,6 +17,11 @@
+ 
+ static gva_t exception_handlers;
+ 
++struct handlers {
++	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
++	bool v_available;
++};
++
+ bool __vcpu_has_ext(struct kvm_vcpu *vcpu, u64 ext)
+ {
+ 	unsigned long value = 0;
+@@ -298,13 +303,6 @@ void vcpu_arch_dump(FILE *stream, struct kvm_vcpu *vcpu, u8 indent)
+ 		core.regs.t3, core.regs.t4, core.regs.t5, core.regs.t6);
+ }
+ 
+-static void __aligned(16) guest_unexp_trap(void)
+-{
+-	sbi_ecall(KVM_RISCV_SELFTESTS_SBI_EXT,
+-		  KVM_RISCV_SELFTESTS_SBI_UNEXP,
+-		  0, 0, 0, 0, 0, 0);
+-}
+-
+ void vcpu_arch_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code)
+ {
+ 	vcpu_set_reg(vcpu, RISCV_CORE_REG(regs.pc), (unsigned long)guest_code);
+@@ -348,8 +346,26 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+ 	/* Setup sscratch for guest_get_vcpuid() */
+ 	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(sscratch), vcpu_id);
+ 
+-	/* Setup default exception vector of guest */
+-	vcpu_set_reg(vcpu, RISCV_GENERAL_CSR_REG(stvec), (unsigned long)guest_unexp_trap);
++	/*
++	 * Advertise V to KVM so -O2 auto-vectorization in guest code is valid;
++	 * ignore errors since the tests work without V too. Use the full
++	 * exception vector table (which lazily enables V in route_exception())
++	 * as the default handler; vm_init_vector_tables() is idempotent.
++	 */
++	__vcpu_set_reg(vcpu, RISCV_ISA_EXT_REG(KVM_RISCV_ISA_EXT_V), 1);
++	vm_init_vector_tables(vm);
++	vcpu_init_vector_tables(vcpu);
++
++	/*
++	 * Record V availability for route_exception(), which runs in guest
++	 * context. V is enabled uniformly for every vCPU, so this is a
++	 * VM-wide property.
++	 */
++	{
++		struct handlers *h = addr_gva2hva(vm, vm->handlers);
++
++		h->v_available = __vcpu_has_isa_ext(vcpu, KVM_RISCV_ISA_EXT_V);
++	}
+ 
+ 	return vcpu;
+ }
+@@ -408,19 +424,43 @@ void assert_on_unhandled_exception(struct kvm_vcpu *vcpu)
+ 	struct ucall uc;
+ 
+ 	if (get_ucall(vcpu, &uc) == UCALL_UNHANDLED) {
++		vcpu_dump(stderr, vcpu, 2);
+ 		TEST_FAIL("Unexpected exception (vector:0x%lx, ec:0x%lx)",
+ 			uc.args[0], uc.args[1]);
+ 	}
+ }
+ 
+-struct handlers {
+-	exception_handler_fn exception_handlers[NR_VECTORS][NR_EXCEPTIONS];
+-};
++static bool insn_is_vector(u32 insn)
++{
++	u32 opcode = insn & RV_INSN_OPCODE_MASK;
++	u32 width, csr;
++
++	/* All V-related instructions are 4-byte, i.e. not compressed. */
++	if ((insn & 0x3) != 0x3)
++		return false;
++
++	switch (opcode) {
++	case RVV_OPCODE_VECTOR:
++		return true;
++	case RVV_OPCODE_VL:
++	case RVV_OPCODE_VS:
++		width = RVV_EXTRACT_VL_VS_WIDTH(insn);
++		return width == RVV_VL_VS_WIDTH_8 || width == RVV_VL_VS_WIDTH_16 ||
++		       width == RVV_VL_VS_WIDTH_32 || width == RVV_VL_VS_WIDTH_64;
++	case RVG_OPCODE_SYSTEM:
++		csr = RVG_EXTRACT_SYSTEM_CSR(insn);
++		return (csr >= CSR_VSTART && csr <= CSR_VCSR) ||
++		       (csr >= CSR_VL && csr <= CSR_VLENB);
++	}
++
++	return false;
++}
+ 
+ void route_exception(struct pt_regs *regs)
+ {
+ 	struct handlers *handlers = (struct handlers *)exception_handlers;
+-	int vector = 0, ec;
++	int vector = 0;
++	unsigned long ec;
+ 
+ 	ec = regs->cause & ~CAUSE_IRQ_FLAG;
+ 	if (ec >= NR_EXCEPTIONS)
+@@ -432,6 +472,36 @@ void route_exception(struct pt_regs *regs)
+ 		ec = 0;
+ 	}
+ 
++	/*
++	 * Lazily enable V on the first vector instruction: if the faulting
++	 * instruction decodes as vector while VS is off, set VS to Initial
++	 * and re-execute it, like the kernel's riscv_v_first_use_handler().
++	 * Genuinely illegal instructions continue to the unexpected-exception
++	 * path.
++	 */
++	if (!(regs->cause & CAUSE_IRQ_FLAG) && ec == EXC_INST_ILLEGAL &&
++	    handlers && handlers->v_available && !(regs->status & SR_VS)) {
++		u32 insn = (u32)regs->badaddr;
++
++		/*
++		 * stval is not guaranteed to hold the faulting instruction.
++		 * Vector instructions are always 32-bit, so check the first
++		 * 16-bit halfword and, for a 32-bit instruction, assemble it
++		 * from two halfwords to avoid an unaligned 32-bit access.
++		 */
++		if (!insn) {
++			u16 half = *(u16 *)regs->epc;
++
++			if ((half & 0x3) == 0x3)
++				insn = (u32)half | ((u32)*(u16 *)(regs->epc + 2) << 16);
++		}
++
++		if (insn_is_vector(insn)) {
++			regs->status |= SR_VS_INITIAL;
++			return;
++		}
++	}
++
+ 	if (handlers && handlers->exception_handlers[vector][ec])
+ 		return handlers->exception_handlers[vector][ec](regs);
+ 
+@@ -448,6 +518,9 @@ void vcpu_init_vector_tables(struct kvm_vcpu *vcpu)
+ 
+ void vm_init_vector_tables(struct kvm_vm *vm)
+ {
++	if (vm->handlers)
++		return;
++
+ 	vm->handlers = __vm_alloc(vm, sizeof(struct handlers), vm->page_size,
+ 				  MEM_REGION_DATA);
+ 
+-- 
+2.53.0
