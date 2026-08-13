@@ -1,85 +1,84 @@
-Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
+Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF955353A69
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 06:34:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 849E3415F0B
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 06:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786602854; cv=none; b=BP5y1LWYbTyBvIjorZQxwVejnIgXw5dD1y64DlipugMbcVDf2vS6JvAPTwe0C+wmZ9KTjY07BIcPsDa1CtAP4easDRkJLrfpaD2aDSS/AW5v8ZD3Lfi6LKXN5uxL3LQOhK4Va36U+An0shyf/2VxkUuIHyPHRLl5D5ZaqK8Wf9c=
+	t=1786602856; cv=none; b=tNy2+A7vn21KjGJvUU5j2AlEp6cM/sQ5WatXTpk0mh9CcWZAxD6S8ZfQtGiDcren0DdyfMwBadS+ZcOSTQWDqPqBorZAyl4EcrymqCikQvY4rnWg8rPSErCpTvEmZ1XbiLLdV3brS2lhZIRXbi4+klwRr0yEIkxB1GOZFRDDeYM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786602854; c=relaxed/simple;
-	bh=XY6mEq9nMRwoQvnuhdnTySRAhIH37n6ebI1jWdJPUF4=;
+	s=arc-20240116; t=1786602856; c=relaxed/simple;
+	bh=7rcLMD0keIGH8AyfP3hrT4YlSQpK9imUFB1Sz1AxRUw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=njvvVEVJ9bKwgHrnbvIqzNp2pznf3dQx1/TsH09U0Eja0cB8D6Ddbnrhl+T57jqeYACC1uCC+VsXMGvpmd5fFiVBHNmpy1nqKnGSAHkstDPy35aYuRqw1J53JIm+E1Fby67meDqqaWxHEmmPgRDin8ge4YcWWNvraR19VCFvkik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bCcqjJEr; arc=none smtp.client-ip=209.85.216.51
+	 MIME-Version; b=epaYRcpROE/1Vk9BMqm1oILaJjE2TYrMfpHFr+mlpXBLwSKQuzhYd/hrpKvMydV9qkyw8SkmvA7CAU0Y3qza4cs67OjtfDEelig5SVBiYLIBZUR4GtVNahLowBZbDkhPI40RR0XXVRUwcBOuFpjlrw1gGZ1ekCNpTMIvogYdOXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fQySS1Ie; arc=none smtp.client-ip=209.85.210.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bCcqjJEr"
-Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e7109321dso1550185a91.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 23:34:12 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fQySS1Ie"
+Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-848643382fcso1766739b3a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 12 Aug 2026 23:34:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786602852; x=1787207652; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786602854; x=1787207654; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Rl6igOnyCyLcIUIdrNjrR0vSvz5V+iB+/lHA2MvB5zU=;
-        b=bCcqjJErDmsyRFXKHkgbMon06QShlHjQzEBzlrpbOi7yIc8QNI1GcCoNJ0Fb+NYSwc
-         pT59DODpKhNtTqNWtL7QuPVviYIKzLLouK/JlesRUYUqcZcAG+01/JLtg55MaXWmJZNU
-         ND01Q+zZ1OqGlDu7qO/MVICmvYToWKwggEd4kPzmCzLUIaOVr5mlfKy/j/sZgC/WRWtB
-         X+nhDQk34FXijCkCP0q44Px8Q612in+HbzsJ8AzXJuHTmJUNtNPvdWaYzhBJPb9EfqX9
-         YGEIfTy3PsIY0aLMVzS6fXy3vj+lFInoKAPIPW/ACzgZ4wzBa1btaXlsXZpB0EFvB6aK
-         eGxg==
+        bh=70ar5JlTr4siaYWARGHSNLurtbvgFrnTr20To12QjOE=;
+        b=fQySS1IeljJ3IFOqvDqB3S2mKXkYwUtZTCRLQ6uUq6FPAgjUVYPkydOXDYAMphgW8h
+         /bC+m7XstHAg9DrXuIRvRqeWDUd6jUFp9cfJVNS0Y9sdVn8++tocPcqoC8slpbSmT2Oj
+         kidhm9sgXBlUvq/2v5E1XbZ5O4y+mUHNgmu/asOn8T0klgdnEk/b7b8fXoIMjDusYBJZ
+         M7tK7eVTbVatP75mdDVPFISSPJtBaFp65fyIqhaNUNiEYT0JOaXRkbOHq5nW5UyAMKyW
+         Og6PeSv9aH2aOskPfew6pbOtzW2b2YDdiUl0F73oWyy+LiLEv2yVVrRFUbgP6KbnteeV
+         D/jg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786602852; x=1787207652;
+        d=1e100.net; s=20251104; t=1786602854; x=1787207654;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Rl6igOnyCyLcIUIdrNjrR0vSvz5V+iB+/lHA2MvB5zU=;
-        b=RpznTQouZovBLzzXXD2LW7wJzw17Lvm7OX/FTbawjbLIqKMJgz1jsFKkt9MVFH4TVQ
-         +mVhaCx8zC4UKoEA8QRSMW125DQo61mWa6vAdChi/AM6y/4SKeGPVOvEnJalwwiMRB6C
-         uDSHiStEHYMIYAaVQIV26aK8P5qLtc/uO+V+yLf/WH6eUMeqgnboYuJH3vUZpp+yj+2w
-         rnrVirGuuU+t1VYqQP+kxlKrLwodH/tJhbUPtWRBhyfkAt6J/nu4uYJE61Knac6UCUvt
-         GOhn6RunAAIroToR9UShGVxTtVkgtzpQdW8ndUFgseR4+kMidVB3CHn8gqUwIt37yIqK
-         gYLQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrIcMnxt+0lAI1m3aC0jLXRFwSyIjaGMCuCLAT9sjTseFqoBE0bujgha6cB4XnAlbxj1bkvJXk7k28SWZ7HcZc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxACd6NK/Vxu6vgfCKpMwiuEuWly4d58uFPNg6FT5SdH9soPcGQ
-	x6Geh/CKYonpsL5pXnMMb2X74ZmfbwvyVywor6T3AqN+91Xf/o5GhQbu
-X-Gm-Gg: AR+sD12tX4a9qgs0i85Q5QhZTsknn6tDCnshMnUEqSn16g7rdIpQtjxQpG0fWW07dsu
-	LATZL3+NIuRRq55e0Qbf+xTOrFmgUXMiI/60rDnsOGrEmvny3rdiO1Mq1AT9XBmQW93zOa7ZZsE
-	LkU+M9LBIKQmn8In8NtHh3qtzrJ2DhvnbkWY41HJqgnbQTQe5FmXAFQaGHElM+XErgWqMe09jRB
-	JC4qOn1WTIPkNzcO4jSNJdrl7PhOsxAo0KlLAUvuNTSWoJm96+Tsx9Tj8ONunsGdwGlvg2O35Zg
-	2IjtSCJILftQR5HcVjTY7TIbVag8cMnuT7vHS/pgkZSAM0LhVxbbt/cq2cG+/KcmwcUDoAESsrj
-	qtl6LbMlPXfonuDqx/2jzmYvo5IMepolhZPwA/hLMfNZ/VrKcDRXB/LfIri0c61koZFFy4TrdF0
-	KHrd7e5vjwX1BUX2Puq8zZ4C9pwIaV/3ajKUF1f4li6JsB3IUv4QJGbdf82ofuhhRrooBfDpt2W
-	FQBHDEizKQ9RbiTy0KjaCdvt4xrhw0C9Z0KEj1qPF2xVyfdXOdxJJajk1LxIc4mKQ==
-X-Received: by 2002:a17:90b:52cf:b0:380:21b7:e727 with SMTP id 98e67ed59e1d1-3931e29780bmr3917272a91.14.1786602852144;
-        Wed, 12 Aug 2026 23:34:12 -0700 (PDT)
+        bh=70ar5JlTr4siaYWARGHSNLurtbvgFrnTr20To12QjOE=;
+        b=tBzf1GLERIBx8KBQAuvFmFQ3Xbm/O8hjEMpe7GtP4dz4EVLY1JHWuv22aIcoUxoEd6
+         EnCIQ463qe9aO+zM23/E3R0h7JXYdkqsp2FXry2E7oZHsSJd6pevUt566LBIN47kgxq4
+         SBFq+Rjw3vvKC/JjV1e1uI7JPhDXFoFBiHJLcnIH9wtTx3LG7Twf2+RkSQ3Uh49xACPi
+         JImBc6ZHUTAGU9EIw6QnVlgAeoIZV002TACBfJmjjJE484M32VC873aHnyaG71eo2HI7
+         e1LVGQS/Yi8JRj1UXL747O7I/vIkSJetn77ykblXhDkYDbxQ3fFpIDtvlr+9iFBkxyEi
+         YYBw==
+X-Forwarded-Encrypted: i=1; AHgh+RpPLXN2dUMudfTefPIICHoLtVOedxrZ4uWIietkbH/6qxT3miFuC5kP/2FbdA6H5YsCkF0fTJsaJbtx0Ravn4w=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSM2tWnl7tJY9yUIfePxM0FZ0wE1RHMKFUgCU7YhpsxP+owtfb
+	MWyrixlA1hOYknzRCKpcIjtxfOqH8g6w5y9+F1cF3RDSXs0XReMoUadu
+X-Gm-Gg: AR+sD11RyKp8vbCGP004z3qKUTeDee8ldV30YFmx+DmU6NYJQhG2E9vUzMBqQucxtV9
+	lQKYRhN+m4arsHw3KSz9hy5tQHlCsK0NEX1K9K0Pio/UYZUNBfg5WHxV5t5Zuc3pqJO/ReyJnq6
+	MlZV0G4j18zT1bUsQlmGDApR86nc/TIyjFHsFR7tUwUpa5p4aXkCiwfIeheiILclKhd512OIe66
+	Z2PXgx/c8TF1P6yk9XGmgGDR02ywM8SpunLgqDlD4+9zhPnBJHqExskD8vCbIrqE0DI/uO9QwPp
+	9+ueVq7iTfLTpP+OnWB6Wg9FmDTZZgFAVLGdxLZ5+WOO36SbO/r1YpkIZgbusx2d8L/YhbGPUIR
+	ezuB8hHq5+qZk4A4NM55qzdaNuRbbsSKQv0qqwKy/UFErvN5dLBkuGpzUwGEoxrxUglnItlNQ5V
+	P64UD8Gxk5TJIOhw2pNgIzCociPZdmS4r94Dh/9bebgzvabYp0rCwaZm+r8nGla7KJEOHAuz/mq
+	IAjKGq2p+Ldl5ECBmTsobkXRGZMtwRMjn+qcM1/ehl8vtokjHQMx1/v1tAjgibBMw==
+X-Received: by 2002:a05:6a00:e10:b0:84e:1a9d:d879 with SMTP id d2e1a72fcca58-84fc760d2b4mr3746110b3a.28.1786602853695;
+        Wed, 12 Aug 2026 23:34:13 -0700 (PDT)
 Received: from ikb-h07-29-noble.in.iijlab.net ([202.214.97.5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3931f44dcbbsm1650400a91.16.2026.08.12.23.34.11
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cbef710cc24sm493765a12.20.2026.08.12.23.34.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Aug 2026 23:34:11 -0700 (PDT)
+        Wed, 12 Aug 2026 23:34:13 -0700 (PDT)
 Received: by ikb-h07-29-noble.in.iijlab.net (Postfix, from userid 1010)
-	id A203E15B0431; Thu, 13 Aug 2026 15:34:10 +0900 (JST)
+	id 24DD715B0433; Thu, 13 Aug 2026 15:34:11 +0900 (JST)
 From: Hajime Tazaki <thehajime@gmail.com>
 To: linux-mm@kvack.org
 Cc: geert@linux-m68k.org,
 	daniel@thingy.jp,
 	Hajime Tazaki <thehajime@gmail.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
+	Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Mark Brown <broonie@kernel.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	"Ricardo B. Marliere" <rbm@suse.com>,
 	linux-kselftest@vger.kernel.org,
 	linux-um@lists.infradead.org
-Subject: [RFC PATCH 4/6] selftests: fix build errors on alpine linux
-Date: Thu, 13 Aug 2026 15:33:59 +0900
-Message-ID: <20260813063401.1786548-5-thehajime@gmail.com>
+Subject: [RFC PATCH 5/6] selftests: run tests on nommu architecture
+Date: Thu, 13 Aug 2026 15:34:00 +0900
+Message-ID: <20260813063401.1786548-6-thehajime@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260813063401.1786548-1-thehajime@gmail.com>
 References: <20260813063401.1786548-1-thehajime@gmail.com>
@@ -91,158 +90,139 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Some nommu architectures only work on Alpine Linux, which doesn't use
-glibc for the standard library.  It uses musl-libc and is implemented in
-a different way as glibc, resulting build failures.
+Architectures lacks MMU doesn't support fork(2) syscall and only
+vfork(2) is available with limitations.  Thus, we cannot run kselftest
+on nommu architecture as is.
 
-This commit fixes this issue by adding missing definitions. The fixes
-are now only covered to TARGETS=mm which was tested for the moment;
-future contributions are needed to fully build/execute tests on nommu
-platforms.
+This commit addresses this issue with the following changes:
+
+- on build stage, add -DCONFIG_NOMMU to CFLAGS when NOMMU=1 variable
+  added to the build/make argument.
+- on test run stage, avoid calling timeout command when NOMMU=1 variable
+  added to environmental variable, since timeout command uses fork
+  syscall which nommu platform doesn't support.
+- kselftest_harness.h warns if the file is include when building for
+  NOMMU platform, as there is no fork(2) syscall.
+- replace "cd -" use as it is not available a shell supported on nommu
+  (e.g., busybox hush), use cd "$OLDDIR" instead.
+- describe the difference of nommu tests in the document.
+
+So command line to build/execute tests for nommu should be like below:
+
+ $ make ARCH=um NOMMU=1 O=build kselftest
+ $ make ARCH=um NOMMU=1 -C tools/testing/selftests/mm run_tests
+ $ NOMMU=1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
 
 Cc: Shuah Khan <shuah@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>
+Cc: Will Drewry <wad@chromium.org>
+Cc: Mark Brown <broonie@kernel.org>
+Cc: Brendan Jackman <jackmanb@google.com>
+Cc: Hangbin Liu <liuhangbin@gmail.com>
+Cc: "Ricardo B. Marliere" <rbm@suse.com>
 Cc: linux-kselftest@vger.kernel.org
-Cc: linux-mm@kvack.org
 Cc: linux-um@lists.infradead.org
 Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
 ---
- tools/testing/selftests/kselftest.h      | 43 ++++++++++++++++++++++++
- tools/testing/selftests/lib.mk           |  2 +-
- tools/testing/selftests/mm/hugetlb_dio.c |  8 ++---
- tools/testing/selftests/mm/mdwe_test.c   |  4 +--
- 4 files changed, 50 insertions(+), 7 deletions(-)
+ Documentation/dev-tools/kselftest.rst       | 12 ++++++++++++
+ tools/testing/selftests/kselftest/runner.sh |  9 +++++++--
+ tools/testing/selftests/kselftest_harness.h |  4 ++++
+ tools/testing/selftests/lib.mk              |  8 ++++++++
+ 4 files changed, 31 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index ae18c491ae53..ac21bf3d802e 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -58,6 +58,7 @@
- #include <string.h>
- #include <stdio.h>
- #include <sys/utsname.h>
-+#include <stdint.h>
- #endif
+diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
+index 64c0ec7428a2..800b2b688aff 100644
+--- a/Documentation/dev-tools/kselftest.rst
++++ b/Documentation/dev-tools/kselftest.rst
+@@ -230,6 +230,18 @@ section::
  
- #ifndef ARRAY_SIZE
-@@ -81,6 +82,48 @@
- #endif
- #endif /* end arch */
+ .. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_node/gzip.html#auto_002dcompress
  
-+#if !defined(NOLIBC) && !defined(__GLIBC__)
-+#ifdef __LP64__
-+typedef int64_t __fsword_t;
-+#else
-+typedef int32_t __fsword_t;
-+#endif
++Build and test on nommu target
++==============================
 +
-+/*
-+ * for a workaround to avoid struct conflict under
-+ * musl-libc (<sys/prctl.h> v.s. <linux/prctl.h>)
-+ */
-+#include <sys/prctl.h>
-+#ifndef _LINUX_PRCTL_H
-+#define _LINUX_PRCTL_H
-+#endif
++If you (cross-)build kselftests for nommu targets, or run tests on nommu targets, use
++``NOMMU=1`` as a make variable/environment setting to tell build system to do the additional
++checks.  These nommu targets may differ in several ways, such as not supporting fork(2) or
++using musl or another libc.  Set this variable to apply the necessary build and test adjustments.
 +
-+#ifndef PR_SET_MDWE
-+#define PR_SET_MDWE 65
-+#endif
++  $ make ARCH=um NOMMU=1 O=build kselftest
++  $ make ARCH=um NOMMU=1 -C tools/testing/selftests/mm run_tests
++  $ NOMMU=1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
 +
-+#ifndef PR_MDWE_REFUSE_EXEC_GAIN
-+#define PR_MDWE_REFUSE_EXEC_GAIN (1UL << 0)
-+#endif
-+
-+#ifndef PR_MDWE_NO_INHERIT
-+#define PR_MDWE_NO_INHERIT (1UL << 1)
-+#endif
-+
-+#ifndef PR_GET_MDWE
-+#define PR_GET_MDWE 66
-+#endif
-+
-+#ifndef PR_SET_MEMORY_MERGE
-+#define PR_SET_MEMORY_MERGE 67
-+#endif
-+
-+#ifndef PR_GET_MEMORY_MERGE
-+#define PR_GET_MEMORY_MERGE 68
-+#endif
-+
-+#endif
-+
- /* define kselftest exit codes */
- #define KSFT_PASS  0
- #define KSFT_FAIL  1
+ Contributing new tests
+ ======================
+ 
+diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+index 311811dc55a0..7287d8290b6c 100644
+--- a/tools/testing/selftests/kselftest/runner.sh
++++ b/tools/testing/selftests/kselftest/runner.sh
+@@ -38,8 +38,12 @@ tap_prefix()
+ 
+ tap_timeout()
+ {
++	# nommu doesn't support timeout command (missing fork(2))
++	if [ "$NOMMU" = "1" ] ; then
++		echo "timeout isn't supported for nommu"
++		$1
+ 	# Make sure tests will time out if utility is available.
+-	if [ -x /usr/bin/timeout ] ; then
++	elif [ -x /usr/bin/timeout ] ; then
+ 		/usr/bin/timeout --foreground "$kselftest_timeout" \
+ 			/usr/bin/timeout "$kselftest_timeout" $1
+ 	else
+@@ -130,6 +134,7 @@ run_one()
+ 				return $KSFT_FAIL
+ 			fi
+ 		fi
++		OLDDIR=$(pwd)
+ 		cd `dirname $TEST` > /dev/null
+ 		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
+ 			tap_prefix >&4) 3>&1) |
+@@ -147,7 +152,7 @@ run_one()
+ 		*)
+ 			ktap_test_fail "$TEST_HDR_MSG # exit=$rc";;
+ 		esac
+-		cd - >/dev/null
++		cd "$OLDDIR" >/dev/null
+ 	fi
+ 
+ 	return $rc
+diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+index 261e4df94d9d..8eee7b14f824 100644
+--- a/tools/testing/selftests/kselftest_harness.h
++++ b/tools/testing/selftests/kselftest_harness.h
+@@ -1274,6 +1274,10 @@ static int test_harness_run(int argc, char **argv)
+ 	unsigned int count = 0;
+ 	unsigned int pass_count = 0;
+ 
++#ifdef CONFIG_NOMMU
++	ksft_print_msg("harness test doesn't support on NOMMU architecture (no fork(2)).\n");
++	return KSFT_SKIP;
++#endif /* CONFIG_NOMMU */
+ 	ret = test_harness_argv_check(argc, argv);
+ 	if (ret != KSFT_PASS)
+ 		return ret;
 diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-index f02cc8a2e4ae..2cc819006424 100644
+index 2cc819006424..4734b5ce613f 100644
 --- a/tools/testing/selftests/lib.mk
 +++ b/tools/testing/selftests/lib.mk
-@@ -197,7 +197,7 @@ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
- 	$(CLEAN)
+@@ -97,6 +97,14 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+ TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+ TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
  
- # Build with _GNU_SOURCE by default
--CFLAGS += -D_GNU_SOURCE=
-+CFLAGS += -D_GNU_SOURCE= -D_LARGEFILE64_SOURCE
- 
- # Additional include paths needed by kselftest.h and local headers
- CFLAGS += -I${top_srcdir}/tools/testing/selftests
-diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
-index fb4600570e13..aee6be530ccb 100644
---- a/tools/testing/selftests/mm/hugetlb_dio.c
-+++ b/tools/testing/selftests/mm/hugetlb_dio.c
-@@ -22,12 +22,9 @@
- #include "kselftest.h"
- #include "hugepage_settings.h"
- 
--#ifndef STATX_DIOALIGN
--#define STATX_DIOALIGN		0x00002000U
--#endif
--
- static int get_dio_alignment(int fd)
- {
-+#ifdef STATX_DIOALIGN
- 	struct statx stx;
- 	int ret;
- 
-@@ -43,6 +40,9 @@ static int get_dio_alignment(int fd)
- 		return 1;
- 
- 	return stx.stx_dio_offset_align;
-+#else
-+	return -1;
-+#endif
- }
- 
- static bool check_dio_alignment(unsigned int start_off,
-diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
-index 647779653da0..031c79ed067e 100644
---- a/tools/testing/selftests/mm/mdwe_test.c
-+++ b/tools/testing/selftests/mm/mdwe_test.c
-@@ -1,5 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
-+#include "kselftest_harness.h"
++# detect if users request NOMMU build or not
++# User can set NOMMU to 1 to build/test for NOMMU platforms
++NOMMU ?= 0
++ifeq ($(NOMMU),1)
++CFLAGS += -DCONFIG_NOMMU
++export NOMMU
++endif
 +
- #ifdef __aarch64__
- #include <asm/hwcap.h>
- #endif
-@@ -14,8 +16,6 @@
- #include <sys/wait.h>
- #include <unistd.h>
+ all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
+ 	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
  
--#include "kselftest_harness.h"
--
- #ifndef __aarch64__
- # define PROT_BTI	0
- #endif
 -- 
 2.43.0
 
