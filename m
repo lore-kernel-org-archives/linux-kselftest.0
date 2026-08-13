@@ -1,68 +1,68 @@
-Received: from mail-oa1-f45.google.com (mail-oa1-f45.google.com [209.85.160.45])
+Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E073836728F
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD6C3C872C
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658422; cv=none; b=LYykVMvhHn4wk9x5RuyKUDY4gkTSTpO9Am/99ggZx4xu81pzleXB+KmAUdYa4jpdVABWAq+DcmMiJthMN5L0p3JWiBOtZPDJA0HZlHA9hn3VpOQVCuYbrn1OR1L73Uld3TnvZLzrSSYdzC6Zlo9vqOpaSgfiBEKHIMoXCq+iQmE=
+	t=1786658426; cv=none; b=luh1P9IObVQwVE1WKUAESRoZTIbOUlvPKMsrz+lS4kwPCOPUU1PXkXhqRGgDMlzAraWl3SByUMGmkvd+OcFCSPVVsyxF/HVxbYnH/9vNrCJ/FsS1Fz6mfnVjPhO8MTsxxq/LrGZMFAeqfuT6P3nG3W6KkeRLgDHb2B+FtmYTIas=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658422; c=relaxed/simple;
-	bh=mQcwQ1R3q9+w4Pnja3TW8A8KynezeEz74V7YlDB0Y3M=;
+	s=arc-20240116; t=1786658426; c=relaxed/simple;
+	bh=a2OSmh0AZi98/xngiEgf0IyijyL097hKaFeEEPXrQJs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=jlQgAQ9BujklDmuE64lnVmBWUEAz+bQfPh8+aMeuZ2+ThuucevwYBZ65shKm8hvfQHyIN+1AKgtTI/1hacmB5mlQnXUXzrx4ac9WnwxzCLNhlZF0zwzay7ytJb+o3iNhPX7f+qv3S3PHp4LUH6NC8IEZT1uRssLm+Y4x9EnJSec=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=xEOmibtp; arc=none smtp.client-ip=209.85.160.45
+	 In-Reply-To:To:Cc; b=o3JGBYHPzQSVPxmsOGqY5lUtU5CkEU2aM3w/5Oxua6Ra89hJWEcxmDtYbccXsnUE8GBlJf5TBFzXB7x6cjDiS6VvA495B+pxm0aLPFRuXUZde3P087pkCtPAC3uFQzwio45R9A7TjE1HgkW2HtNnOl3bSep7jFID+x46vR/0QIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=ADzyFmNc; arc=none smtp.client-ip=209.85.160.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="xEOmibtp"
-Received: by mail-oa1-f45.google.com with SMTP id 586e51a60fabf-4560d6f82edso265995fac.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="ADzyFmNc"
+Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-448b69cfc6dso272646fac.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658420; x=1787263220;
+        d=1e100.net; s=20251104; t=1786658423; x=1787263223;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=gw0jk3x9bl4CaiARThWQ74qNptN5vIYZqM7SLnsCmZ8=;
-        b=cXKs9q1W+tPMMo0abTyX/EIj+ilJVd4tMIMj9Z0NlzSSHQ+cOp542ec5CNJwnTaajm
-         Dgu5W9bhWCY2I/vT6nTSFnGa4LAf1arApjt1ZckePqIsprcgS/VLQ1HYeG6GahTwGc2y
-         WsRrdsLRA/BGRS6G+XR37CNtDU75CyMbDcuu5UyT+c+QqRS2N037+osa9jMwgfQPQ3II
-         49G9ay8902vwpxTIzwJtA6QhY9hofU7JlkdD2D+Vg+xfCjfuTAksxWBqMT8HcwFVB4sW
-         AeM+ROxSJQR98cK/4ZjTkkM99+Pnt7PDcTMbH5+QvbCrbbWbs8NEC3/6bNbFlLeX8oP9
-         FcOg==
-X-Gm-Message-State: AOJu0YxAs3/a6/fpFyHB6VNMUiIKMtWzACgv4R77AcoT3fMkY4ZKCH6t
-	66w+VTN9EpNzTN7gNiSZBoiibk0cvMmI5hCWabGn/JIni14i9SqZeK2r
-X-Gm-Gg: AR+sD13r5r2yXF2zegwYkD6SE8TO00e6ac8c6tl1XUtKrvK85U4zoizoCDRu+uE375v
-	TITj74LrQ1Op4/60YeHXDqEq2MHeXiS/2wdk8TGyyGbttPzZ8l8UguOq3J0gkRNlMMNChWt+V0T
-	mbgwPQwLZT95BdCsrhZC6+EF72PnRGNvicxZ5/5m0KMofw5zfia4NvBqWJi27K5bKu9ldOsaiXn
-	KGWlW3zDGu/SleNBs4Zp5Z9FcX2jnc7MQnMU9O6636Xd8ImeejTSfGJevbiajNNPff5Yvor7iT5
-	fMDqsDJZaG2lKPaZVpsb3Ja+xonAoci/FwkakKcFB+vZ7FK0OXEBm9p6qP6P8g71SyDQZ6CUaOD
-	QwelLPw2jlJiNoWBlniKWRDff61bi9LjcvoPH9BXvkhr8TkgIx9GKVKQt1d8VYDNz6nLhR3TRb+
-	K5l9XcAC69WYE2GqEEoVwOLxJbfpNPeicbd4PpsYGnpAP4yrkVlssFBBAd3keG6tPwblSBbdPLB
-	IaxuOEphgJOlpNwacDuw5aPZxrD6CVfRuF0Q1ebU7IbvSLp6yAFTE7c+f+Gxr+XDQ==
-X-Received: by 2002:a05:6870:af0a:b0:459:fe2:ef54 with SMTP id 586e51a60fabf-45e91e603edmr1558193fac.1.1786658419871;
-        Thu, 13 Aug 2026 15:00:19 -0700 (PDT)
+        bh=7UPQuQnGTtX5sQqU130njMumgh3DmPJuNrxPRcf9XMc=;
+        b=Eu1AaAy2uPjtIOxYECprJP2vEld1q53Q3AF6U7YacEf+XIl6Sy808JMATnqE8o/FQ6
+         Vuq7TPTvbv/wqGRwS4CvbYOkT6vVbMpRyjWyigfnPMMSCOj8UyZauZuAueT8/RzChy4N
+         dmN5Tpg8Os1i/+W6/ZPoBRQz40FidwoJB9z+dae35BqETepJMLogO+MesEY6g1XaJ8nT
+         Zuzoynssh+2Lw3JP9LNDRxuFf7o4L2ZJX+DlbFWoYQXL9Fl8XZ2MH2DvZM6phfS6kB23
+         w4YVLvmOIQGNJq7EX+N3s2KlsdKl3bALibtxGVj0Jbt+pu/5iyRqNvz4KTY7ZhfbGqP3
+         E5oQ==
+X-Gm-Message-State: AOJu0Yxt9DYL7UcNLXkwulOXGAGCrNMmSHlwMub0QCX+aOd11Z77rfxb
+	/aWqt8x5qs//OI0I4cwJ+kv2FIX/xKp4YuvsP9+VMfyxsLBGejkMaX0S
+X-Gm-Gg: AR+sD122VANRRLj68PdgeK+jbouHQQLVjcbIt1KGRkr6ur3HIKRm5mBnj5ZdgUx+AB2
+	aFTUgserVFKqvT+Vd+bhCSm1PxoqlSlPgFUjoju6HpQS6bgBpRYu11DCJCInNQo++/VnCRUuvXS
+	LJJ2r1s/oMFqMReBzShsNDrsvKahMgvSOzbpYwlDPAQrgW2ATYftnM0yvcWiAfEt3S7M7eUqHiU
+	GtQj1yzw12kNr8INa1CK3iWoYlhk+KuDs72k6TxtNgW0Pnlr+gRa4Mv3BZ0pF8C1ZfK8eivBMg5
+	ht7UytF0el7y0OiEUP4IAjhbfA0Dj2LWUnYu0OsWSMgYGDUZOLjTAH1x7v6VHJdgqfBXogG5lp0
+	DpCNJlmvQX1zvyON7TV6DKbeiZjWXUR1/B+z6iS5c8tyPTYhbsg9TQ5CecsAOJzG2+oR3JG9lcw
+	+e4Np9U9hQ/iM2+z3Fh+I/SJ5izcZyK/sJBXyxtFJExn+XGNq3wbXww2of+RKbJpLszHepQlMdc
+	CeVQ9Rl0DWjBDCmR0UNqzud3NqiSitw24O9JDvVlP/SpVyxO3WvG1d5s2EZM01AGHeNlTghFZ6Q
+X-Received: by 2002:a05:6870:2105:b0:455:9a0a:f40f with SMTP id 586e51a60fabf-45e91f93983mr1226393fac.12.1786658423477;
+        Thu, 13 Aug 2026 15:00:23 -0700 (PDT)
 Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-45e8fecb5d3sm767767fac.16.2026.08.13.15.00.19
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-45e8f95c832sm759236fac.6.2026.08.13.15.00.21
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 15:00:19 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 71FBE616F5;
-	Thu, 13 Aug 2026 22:00:17 +0000 (UTC)
+        Thu, 13 Aug 2026 15:00:22 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9A78760CF1;
+	Thu, 13 Aug 2026 22:00:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786658418;
+	s=dkim; t=1786658421;
 	h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=gw0jk3x9bl4CaiARThWQ74qNptN5vIYZqM7SLnsCmZ8=;
-	b=xEOmibtpET6yaGoNK5uLJsjQDJA2I2uz1h19EanDFwiykdCRFCdrXPOfHxj5YeZs5lmjzv
-	m8cyCF1v1VWsYa+7ou/I0FHmGCk6vd/wFmblCBS2iZUT+N2oHMJFsndmPt3UoQKFzazbhT
-	ZWy7pMVM8gEj8y+1TtvAQsB4AkhPqVe1HaSQq7BXjKrWbSnLDwSdANk4xCWFDs4Pktso75
-	P+gh0a6YRgC3Dk0cvvFeO/H6tXX4VduMSWsFbfMQv1fH2mZ7OhZNn1mvtHbUSRdpjvl1qZ
-	PaatT8V1Lr+reRo7LT0vivh9lPf1lG9w9rw/ATk9T+gYkiszPqkRCHrLl2RZLQ==
+	bh=7UPQuQnGTtX5sQqU130njMumgh3DmPJuNrxPRcf9XMc=;
+	b=ADzyFmNc1V9KQJFce5Y6ag7d3bjgzbPr5Zdi2Ungq0pY0En7FCAThbyDbhCk6K3XeBwMJu
+	ewaiPa8bWiOGAG7HZ8duuEuLHFe33NeTp8YYHuY6oc/8fofk/BThhIiYcKXY10GqOiw11Y
+	3q7q1zYa32WHjfVbDt+JTvjwn7nx4SoNWt5+bRdGy7qIkPDVsv9oe+WFlPGZ00Yr1anztr
+	ws4svmtKZvGnXfNtQ8illn0+lA7g1wKFDq5e17QXiXmnhnXAtLRBbe3XtU0xWgvEN8KtuG
+	5Uqf/GUHzYoXxEeMNPAsOqvJm6zQ5hzmcKA94ti/YEuy3NGkxlxlCtUsBZnEJA==
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Thu, 13 Aug 2026 19:00:02 -0300
-Subject: [PATCH 7.1.y 1/4] selftests/xsk: fix too-many-frags multi-buffer
- Tx test
+Date: Thu, 13 Aug 2026 19:00:03 -0300
+Subject: [PATCH 7.1.y 2/4] selftests/xsk: account reclaimed invalid Tx
+ descriptors
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -71,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-1-cd5c51e7dcec@marliere.net>
+Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-2-cd5c51e7dcec@marliere.net>
 References: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 In-Reply-To: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -89,96 +89,138 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Stanislav Fomichev <sdf@fomichev.me>, Jakub Kicinski <kuba@kernel.org>, 
  Jason Xing <kerneljasonxing@gmail.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=3121;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=4693;
  i=ricardo@marliere.net; h=from:subject:message-id;
- bh=gKdhzmxSTTYP5JOO/AWbwaJnbrAMpVVoYH9yI484kK0=;
+ bh=sCYMhfyzr1Xo+Pf6SRgXbqzjNg1WSOhwWZ0r6MIssc4=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QFwLFJpIRUKR3XtAErPUIHJFDQFbQeJRaD11D1B0ee4BU8jxPLs6NQcaLR9XVLGoPmXaZsBcmAO
- vf7rDmDN2hwc=
+ QGVdMnAlvL87QEe5HaYz8ifHCEINS8j4kq7F6Q/zPaUdQsOoQZdHJXc2IQALAwWp5MPzxjRPhVb
+ eIvmDEKDC1wo=
 X-Developer-Key: i=ricardo@marliere.net; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 X-Last-TLS-Session-Version: TLSv1.3
 
 From: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 
-[ Upstream commit c5b1ca6a02886f00170ed91b757e244f23259e91 ]
+[ Upstream commit f49d99eaee7c32badc7ddfaecbb01ce4d037d695 ]
 
-The too-many-frags test describes a packet that is valid from the Tx
-ring ownership point of view, but invalid for transmission because it
-exceeds the supported number of fragments.
+Invalid Tx descriptors are now returned through the completion ring,
+regardless of whether they form a standalone packet or belong to an
+invalid multi-buffer packet.
 
-Keep the generated Tx descriptors valid so that __send_pkts() accounts
-them as outstanding descriptors that must be reclaimed through the CQ.
-Then mark the corresponding Rx packet invalid so the test still does
-not expect the oversized packet to appear on the receive side.
+The selftests previously counted only descriptors belonging to valid
+packets, with a special exception for some invalid multi-buffer packets
+in verbatim streams. This undercounts completion entries when a
+standalone invalid descriptor or another invalid packet is reclaimed by
+the kernel.
 
-Add a valid synchronization packet after the oversized packet so the
-test can verify that the Tx path drains the bad packet and resumes at
-the next packet boundary.
+Keep valid_pkts as the number of packets expected on the Rx side, but
+count every descriptor submitted to the Tx ring in valid_frags, as every
+such descriptor is now expected to be returned through the completion
+ring.
+
+Make fragment counting in verbatim mode follow the packet boundary
+instead of stopping at the first invalid fragment. Update custom stream
+generation so an invalid middle fragment terminates the generated Rx
+packet while Tx completion accounting still covers the complete invalid
+packet.
+
+Also add explicit end fragments after invalid middle descriptors. This
+exercises the kernel drain logic and verifies that subsequent valid
+packets are not interpreted as continuations of the invalid packet.
 
 Reviewed-by: Jason Xing <kernelxing@tencent.com>
 Signed-off-by: Maciej Fijalkowski <maciej.fijalkowski@intel.com>
 Acked-by: Stanislav Fomichev <sdf@fomichev.me>
-Link: https://patch.msgid.link/20260719135609.147823-6-maciej.fijalkowski@intel.com
+Link: https://patch.msgid.link/20260719135609.147823-7-maciej.fijalkowski@intel.com
 Signed-off-by: Jakub Kicinski <kuba@kernel.org>
 Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+
+[ rbm: in testapp_invalid_desc_mb() hunk, use umem_size instead of umem_sz
+]
 ---
- tools/testing/selftests/bpf/prog_tests/test_xsk.c | 24 ++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ tools/testing/selftests/bpf/prog_tests/test_xsk.c | 26 ++++++++++++-----------
+ 1 file changed, 14 insertions(+), 12 deletions(-)
 
 diff --git a/tools/testing/selftests/bpf/prog_tests/test_xsk.c b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-index 7950c504ed28..1c48a3b5ee73 100644
+index 1c48a3b5ee73..31bf8a3fcd66 100644
 --- a/tools/testing/selftests/bpf/prog_tests/test_xsk.c
 +++ b/tools/testing/selftests/bpf/prog_tests/test_xsk.c
-@@ -2229,7 +2229,7 @@ int testapp_too_many_frags(struct test_spec *test)
- 		max_frags += 1;
+@@ -414,14 +414,14 @@ static u32 pkt_nb_frags(u32 frame_size, struct pkt_stream *pkt_stream, struct pk
  	}
  
--	pkts = calloc(2 * max_frags + 2, sizeof(struct pkt));
-+	pkts = calloc(2 * max_frags + 3, sizeof(struct pkt));
- 	if (!pkts)
- 		return TEST_FAILURE;
+ 	/* Search for the end of the packet in verbatim mode */
+-	if (!pkt_continues(pkt->options) || !pkt->valid)
++	if (!pkt_continues(pkt->options))
+ 		return nb_frags;
  
-@@ -2247,24 +2247,30 @@ int testapp_too_many_frags(struct test_spec *test)
+ 	next_frag = pkt_stream->current_pkt_nb;
+ 	pkt++;
+ 	while (next_frag++ < pkt_stream->nb_pkts) {
+ 		nb_frags++;
+-		if (!pkt_continues(pkt->options) || !pkt->valid)
++		if (!pkt_continues(pkt->options))
+ 			break;
+ 		pkt++;
  	}
- 	pkts[max_frags].options = 0;
+@@ -652,11 +652,11 @@ static struct pkt_stream *__pkt_stream_generate_custom(struct ifobject *ifobj, s
+ 			if (!frame->valid || !pkt_continues(frame->options))
+ 				payload++;
+ 		} else {
+-			if (frame->valid)
++			if (frame->valid) {
+ 				len += frame->len;
+-			if (frame->valid && pkt_continues(frame->options))
+-				continue;
+-
++				if (pkt_continues(frame->options))
++					continue;
++			}
+ 			pkt->pkt_nb = pkt_nb;
+ 			pkt->len = len;
+ 			pkt->valid = frame->valid;
+@@ -1236,10 +1236,9 @@ static int __send_pkts(struct ifobject *ifobject, struct xsk_socket_info *xsk, b
+ 			}
+ 		}
  
--	/* An invalid packet with the max amount of frags but signals packet
--	 * continues on the last frag
--	 */
--	for (i = max_frags + 1; i < 2 * max_frags + 1; i++) {
-+	/* An invalid packet with the max + 1 amount of frags */
-+	for (i = max_frags + 1; i < 2 * max_frags + 2; i++) {
- 		pkts[i].len = MIN_PKT_SIZE;
- 		pkts[i].options = XDP_PKT_CONTD;
--		pkts[i].valid = false;
-+		pkts[i].valid = true;
+-		if (pkt && pkt->valid) {
++		if (pkt && pkt->valid)
+ 			valid_pkts++;
+-			valid_frags += nb_frags;
+-		}
++		valid_frags += nb_frags;
  	}
-+	pkts[2 * max_frags + 1].options = 0;
  
- 	/* Valid packet for synch */
--	pkts[2 * max_frags + 1].len = MIN_PKT_SIZE;
--	pkts[2 * max_frags + 1].valid = true;
-+	pkts[2 * max_frags + 2].len = MIN_PKT_SIZE;
-+	pkts[2 * max_frags + 2].valid = true;
+ 	pthread_mutex_lock(&pacing_mutex);
+@@ -2075,13 +2074,16 @@ int testapp_invalid_desc_mb(struct test_spec *test)
+ 		{0, 0, 0, false, 0},
+ 		/* Invalid address in the second frame */
+ 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+-		{umem_size, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
++		{umem_size * 2, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
++		{0, MIN_PKT_SIZE, 0, false, 0},
+ 		/* Invalid len in the middle */
+ 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+ 		{0, XSK_UMEM__INVALID_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
++		{0, MIN_PKT_SIZE, 0, false, 0},
+ 		/* Invalid options in the middle */
+ 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XDP_PKT_CONTD},
+ 		{0, XSK_UMEM__LARGE_FRAME_SIZE, 0, false, XSK_DESC__INVALID_OPTION},
++		{0, MIN_PKT_SIZE, 0, false, 0},
+ 		/* Transmit 2 frags, receive 3 */
+ 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, XDP_PKT_CONTD},
+ 		{0, XSK_UMEM__MAX_FRAME_SIZE, 0, true, 0},
+@@ -2093,8 +2095,8 @@ int testapp_invalid_desc_mb(struct test_spec *test)
  
--	if (pkt_stream_generate_custom(test, pkts, 2 * max_frags + 2)) {
-+	if (pkt_stream_generate_custom(test, pkts, 2 * max_frags + 3)) {
- 		free(pkts);
- 		return TEST_FAILURE;
+ 	if (umem->unaligned_mode) {
+ 		/* Crossing a chunk boundary allowed */
+-		pkts[12].valid = true;
+-		pkts[13].valid = true;
++		pkts[15].valid = true;
++		pkts[16].valid = true;
  	}
  
-+	/* The generated Tx stream must keep the too-big packet valid so that
-+	 * __send_pkts() accounts its descriptors in outstanding_tx. The Rx
-+	 * stream, however, must not expect this packet on the wire.
-+	 */
-+	test->ifobj_rx->xsk->pkt_stream->pkts[2].valid = false;
-+	test->ifobj_rx->xsk->pkt_stream->nb_valid_entries--;
-+
- 	ret = testapp_validate_traffic(test);
- 	free(pkts);
- 	return ret;
+ 	test->mtu = MAX_ETH_JUMBO_SIZE;
 
 -- 
 2.55.0
