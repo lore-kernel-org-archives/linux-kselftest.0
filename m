@@ -1,194 +1,218 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FD1381B0C;
-	Thu, 13 Aug 2026 22:47:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.13
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786661276; cv=fail; b=mHeRQ2vWrqEFkLjp2myKS2F6HIVCRQENqtoCxqevFgCjfUDaGlNjgzVb76kphXilkM0hd3DpAbl5iKOI6pgyRTEHF1K9sxw3cduixVMxLjeVzP+KS+p6NgeWBXiA8vRFb2U9ED4+M/KqiLqqtiDkCe6CvVexoZf2XUrwHSaZCnk=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786661276; c=relaxed/simple;
-	bh=Y84kfWMaGMaKZAuIwNFTzQ5gau78x+6U3jB+EFkBe8U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=uzXgS6mX4eWVtGp4AF11OKbIKPnSjEnpu0Cuqc+lmxMgIvmfyKdfGPyRB1ZN8vaRPsySPozB7R5AnUlBs3rI9QF9hxGoqq1kKOAFv9AUS6Ee6OSEVjVvr34dCTp6Q4+AyqGVhYNW+IvVeA+Tt95JRz83b8Vxh/OEONlgr7nwfQA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Vv/qrXh3; arc=fail smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F48436215D
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786661624; cv=none; b=ljx4+hhVmF95mUfhlRAdpu4ESzD7UF7XjGyHibHfW0Z6Z0XAxK9e+39UnIQTOj9VwJ4usaiZv8PHCtU9+JdSGsVEVR9BeISWZP/i0xlNa97PTslDsrvQun+cVyE/ePoNC25kpLq7mIcwjLUajjmDUof3lzJRz9vJviW0I0Uwq1M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786661624; c=relaxed/simple;
+	bh=TEkdEtWWelkeGOFWgyUwKKWPnFifo34zhVuv5pR/4NM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V9ZpR5mXfPHzFR40sWXHmIPYh6LGcPmHDz9rwTedwwXJOxxOEKk5kOyzmuM4QVcFIyg0CWlt+czJc36UGErAvFkHzRtJ8sFNVxXWy2BRVoJrhWCE2Ff6OY6Pnc/1H1kCHXXoi1Z0YPf5ZB8QXKLheCUmjjKBusr++cjzxR0YYm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=sJ/WxpvL; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Vv/qrXh3"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786661272; x=1818197272;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=Y84kfWMaGMaKZAuIwNFTzQ5gau78x+6U3jB+EFkBe8U=;
-  b=Vv/qrXh3RH93EoPCfTBqoepjd68sGyIHKFCB91hG9D321iH9D72DNFLb
-   GC/FOOjytFQT3xHuHLs1IzdNYyfdRq2KLM+cIb87aRdQGg5Ogy0EHFQuw
-   bnM89ugy/QrEaBVp7LWqzoUHwKU6/6G/v6Lv/i4Hztqlx2/WBs4wbAHXm
-   cldSIa6seN3DsKzGfD+5cG9bnp012P4aeLCv4u+AJcfqsI8mckFYKdOlQ
-   3fcDY4jcdRiYhEVmm5Lrqw4yhiqAxWkdcMZBWk7BN/u75YW+ByNKMmNoi
-   TTUaelD/XR+8xxCnfrivHMp087LSO9IArWKUZktilA1YyFjJqvnuj2wm/
-   A==;
-X-CSE-ConnectionGUID: LBrR0uLFS9yxAFF2SfiYpw==
-X-CSE-MsgGUID: wBrQe2lYSnWEp72YQDk3AQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11874"; a="89766190"
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="89766190"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 15:47:51 -0700
-X-CSE-ConnectionGUID: 7pysKfCBRDOnUysYJg133w==
-X-CSE-MsgGUID: VL/Ke8efSf+eOzambpW8Lw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="260268470"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 15:47:51 -0700
-Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 13 Aug 2026 15:47:50 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Thu, 13 Aug 2026 15:47:50 -0700
-Received: from CO1PR03CU002.outbound.protection.outlook.com (52.101.46.33) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Thu, 13 Aug 2026 15:47:50 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=XlFWIGltyfQ9Y8SWEYu6uvlA4ogWs/qXoKF1NQg4w9G2Z37JUrF3uGkfVoBTs53Wi3XbxUnqHEbf1iJC67LDlDwGAqw+5fwSV6IhSzzpdeI2fCI7ofw5eCJipPGI3XS4gPIw0kAZwx3DqQa0GU2ZErqTTcEGizItRsd59sK9z9ZzNYS3T1oeAQPrO2EAnkY7JHZk4gHcMrqGaxRF18hlzNJmXDxlznrOLIjwVDyMKZdDvrZ006C5RtSpsfsPcFinNAV7rSPHRyds6Gt81iPp/NrVjlCsKiaNIChs1nsegTYsD0cfLcLl7cN0MWz1C7o/Wesn3JQcVqnzFgHxjVhO/Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Y84kfWMaGMaKZAuIwNFTzQ5gau78x+6U3jB+EFkBe8U=;
- b=upERHph88CYKgaGDhGPXii9qyRf12Xbzzb8TiO2OiklCSzRAEqsCnG4TV4fDLvrAtmLKhzAugZgj36hb+tjnMs+DaQpLt/Le+3V3zdiyt5J+dU4yPM9I94wBgc7oDYqPCSezmAuQCvwxKGIBcynj8L3XbcFfKvqN+TvVDrqJtUWaZN6nXc3PpzYEwbZuhXO9HkM6DsnOS2Zd39/HxGwu8zJOFi81EbA0LEzO9P3sxq5pzkLx9E34vZ/4G9MD3AmOUscdbecWBUXPdJk5OMCO/6TGca11qSgg3tk+6rWn9PJj7abIoeP2WTcxX7nRDCd6pebbGmNl5vN4GYDeX9yc0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com (2603:10b6:510:1b5::20)
- by IA1PR11MB8864.namprd11.prod.outlook.com (2603:10b6:208:597::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Thu, 13 Aug
- 2026 22:47:41 +0000
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4]) by PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4%4]) with mapi id 15.21.0315.014; Thu, 13 Aug 2026
- 22:47:40 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "Aktas, Erdem" <erdemaktas@google.com>, "Li, Xiaoyao"
-	<xiaoyao.li@intel.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"afranji@google.com" <afranji@google.com>, "kas@kernel.org" <kas@kernel.org>,
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>,
-	"ira.weiny@intel.com" <ira.weiny@intel.com>, "pbonzini@redhat.com"
-	<pbonzini@redhat.com>, "Chatre, Reinette" <reinette.chatre@intel.com>,
-	"isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>, "seanjc@google.com"
-	<seanjc@google.com>, "pratikrajesh.sampat@amd.com"
-	<pratikrajesh.sampat@amd.com>, "oupton@kernel.org" <oupton@kernel.org>,
-	"wyihan@google.com" <wyihan@google.com>, "sagis@google.com"
-	<sagis@google.com>, "Gao, Chao" <chao.gao@intel.com>, "Wang, Roger"
-	<runanwang@google.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ajones@ventanamicro.com"
-	<ajones@ventanamicro.com>, "Qiang, Chenyi" <chenyi.qiang@intel.com>
-CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-coco@lists.linux.dev"
-	<linux-coco@lists.linux.dev>, "jmcrey@google.com" <jmcrey@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, "Hunter,
- Adrian" <adrian.hunter@intel.com>, "x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v14 00/22] TDX KVM selftests
-Thread-Topic: [PATCH v14 00/22] TDX KVM selftests
-Thread-Index: AQHdGi/fD3HeSKoX5UGSIW2nqtNBd7actxyA
-Date: Thu, 13 Aug 2026 22:47:40 +0000
-Message-ID: <5a44a6925715e1edbd379ac0ea5526ec990eb819.camel@intel.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
-In-Reply-To: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.44.4-0ubuntu2.1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB6771:EE_|IA1PR11MB8864:EE_
-x-ms-office365-filtering-correlation-id: a16dc4de-ca80-4556-997b-08def98ce199
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|366016|1800799024|23010399003|376014|7416014|56012099006|10067099003|18002099003|22082099003|11063799006|5023799004|921020|38070700021;
-x-microsoft-antispam-message-info: 87l//oVXP+pQhF5daJIrereNRMVLGLn22dPh5E23XumJhX0x1Tl3j6j+rTqZuQowHDEieWOTKKWynt0mso90d5X1n6LQzAR6C+3mS4y30uxS8VDXldaNGeivlYTKW0f+alk95+ri4G99Otvbtib9i/wkUJXw70E81RwLNuFQunOiBNnuhTUp6C3xRglAvbTpaoxXsIZ0QGMrGNcJukaIrOdfa06mRpWrxjDqIQ3GpNnsZkGbaodJ1x34SQ9qXCwgR4CO+6Qb3SLFeCjVJMAnnnQwP/RzqPfa3wP8pFQ+2C2I5C6+dONN1EUcSg5FcqCpkBC3KulmtO2Vrf7AACNpfQURV9AZ51M9bDh3Yc/aKuZWP/FMYu6bjVojMQeaarjvp3348jcwmmih/mKExLIxM3uy9944v7BK/aHqBEznj8RHo80XNOSM0ACAh6v9WTqSPZVGKZ8RQCV76ZmTCBSEEaI+pZxPssMV9vvrGLxDfhtT5TRybyrjnbghnHw+gK4Jj+19T9w7N5spfiulRydlyMoAFWMCmoWlF8BAvUFmEgPLKeaPp924KHwDu601m75d2q/wIx9ry2bt8tKbRvfDZ6/Wgrd+Ar45Al+nrlp65Hc66x7XEF54A2LKIS9Mcw94PYOgf0IM6ftw1bTe7ClGBc5+tz+mIOHvXhRXbWlgms45BjNBae0XQmt3Xz5S51rbrDSwJkXhbHBLMdpIWNbvQ+5u7cZnV5oTaOoUJ5OKunOAD0GevpHvVbGmJtQ88p1C
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(376014)(7416014)(56012099006)(10067099003)(18002099003)(22082099003)(11063799006)(5023799004)(921020)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NFFXbjhxSVRONVcrNmEyUTF1KzZ3MHpBcUdtWG1FQU9UQm1aRUZyVWxmclpt?=
- =?utf-8?B?aUgrZWk5SkF3T2YzMDZUdmUxK1YrUjRIb1VJcUVKSGdHZFdnYWNEQ3ZDS1Fs?=
- =?utf-8?B?TnVIdmJ4VTdqMXhXWHJYcWpEdUQ4S1VBSDUzbjdJdGMyWEY3TXEzUk5CZlY2?=
- =?utf-8?B?ejdydEhtSW4xZU02SEFuTjk5R1loRnZMQlpYZU1qOGNrNzJrMW9QdTRhVUNU?=
- =?utf-8?B?QkNPQ0VYS3NTU2xWd3d2YkphWHFrUjdtKzk1aXlIY05lcjJoNGtGbE1LVGkv?=
- =?utf-8?B?amxmdjZ0c3BubjF6a1lxdUwrczhNSHlDaFZUYncwOGNBTUlqMXFGRjVOWDdE?=
- =?utf-8?B?QVc3c2pBL1dTQkRTV0VEem5NR3k1RklhS3dXNm8yTmJWZzU3RyswMlBDSVV4?=
- =?utf-8?B?SVROb04zR0ZRRmlzWlNMaEg2c1dmb251QWp5WXpoRVdub0l4UEpEbWxXK0ll?=
- =?utf-8?B?VmUvQllISEZPcjN5Tk9uR2d3alV3ZGd3SWRvZll0SlMvbmExb2htYWtkWWx2?=
- =?utf-8?B?dXUvSXoxdjhibExZbUVMcUd2bkV4Q2VHK01RSFM0T1hyY0xuWkRsQ0p0aXNO?=
- =?utf-8?B?a25JaTUzTWNkQm1FSnNDYXA1b2dXenIxY05wY1NGSWlwK0pnN0hkTlFCVjRu?=
- =?utf-8?B?NTNZMldQZFNhUkRCaUJOR3NMenpoUTRZcU1leXRmZDRnTW5rb1N4VndXQVY2?=
- =?utf-8?B?TlRFa2pXRkM0VTRnbHRMdVlYZ29CMkYreGs2YTV6dFRvS2RYVjlzM1FKRWhz?=
- =?utf-8?B?SlFxNllkY3BjaHgzYmlyRWgxK3NrQXdnbG1LM0VMSlFkajMwQjc5dFZxUmUy?=
- =?utf-8?B?aFhBT3dZdEhQNTJBUzU3RVJsYXdzMis1R08yaEowTWxuWHlGdEc1TUVQbHNS?=
- =?utf-8?B?WVEyUmlaOVk3K1BldUZQZEhubzB4aVp2QXBBR0JtZmFqckp5b21zSTVmMHhr?=
- =?utf-8?B?VE1TS1pudEVzQkM1ellXUkszVkRzTjd3WlRWZWRJaGxCN2Vxc1V5b3pFQVY0?=
- =?utf-8?B?c2xRaEdOQ2VoeEVuN3pMNmFMRkM2bUUyaVJxOUFFbWRJTllIby91Q3UrSnJq?=
- =?utf-8?B?QnFxQ0l1YklyVmg1UWFJelRQczhrbmhTSGVvaGVodXUvbmpQRTFSNWFFQjJ6?=
- =?utf-8?B?R1A4bmZyMy9HdWRub3lGZzc1K2hkSkMxeFRyZE1JZ0FmVmk0Qlcwdm9zQy9L?=
- =?utf-8?B?YkRpVjdHMUxpZHhUNWJhVGJOaUhhUUN6Y0JjMlo5eXVIZXIxT0VacHNyT0xq?=
- =?utf-8?B?S25Gb3BpRUZzcytCZm5zT3hMTWI2Tk85NS85MmN3ak5DRzQ4RjFtckg2cmNj?=
- =?utf-8?B?U1BQYTVCS0pmeUdUNHhWb3F0WkNOZDI5K0FhQkNZa2c5cE96cUF1Zm1GMU1F?=
- =?utf-8?B?cEp0SW1NQ21wd055dFpQMWtCZlZ2UDF2OVJpZGcxVGNqeFhJck5tVEhHNzZK?=
- =?utf-8?B?N3JiL0JtQ1NiemZuN28xdVBwazFreWVRRkhOOENLVk9FYjhVWGs5OVo1d0xv?=
- =?utf-8?B?L3NpTnptbVY0Qm14a0NnS1N3MnJCNHJlTDlUQjU3UEp2Q2JNQlRlSDhYWnhQ?=
- =?utf-8?B?UFFxQ1kzeXlkeWdEREFMT3pxYmVQWVdCMlZXYTdYUlUrdXc1amhDNmpDRFNE?=
- =?utf-8?B?Z3RrZ2dlaHgrb256UER0SW1ROHpoMEVLT1JQbzBKWXNnQWtYaTBGYktRcnpt?=
- =?utf-8?B?SmxBTjV2ZzFlREVDUnV4d1AxRTViUmxJVHZJZk4vbEFVbjhRZ2lHMjlxYUF0?=
- =?utf-8?B?aXMyajAxL1pLYmZPV3N6MEk4ODNML3VyR3BtaUVuNWN4R0g2SzJ2dVJaUHhS?=
- =?utf-8?B?Sjc3cEpZZWFKdXdmQmsrenJJakdOcGkrdnFrbXB2U1dpRWlLbndQRnhhYU1w?=
- =?utf-8?B?MEtRbTdOaWRHWTd5VDR4SUJwRGtlS2QxOU9LQ3FaeXRXNlV0Mk1yTmwzNEw4?=
- =?utf-8?B?OFdRc1pSZXpSUVR6VEJCZEpCRjBwYmxKT09vejh2WS9DMyt5Z2N4cytUM2FR?=
- =?utf-8?B?R1Q2U0tiam5qc0NsUlJvY1RZQWxhVGVJQ3RvUWNLWWRaeDltbjVKMVcvUmcx?=
- =?utf-8?B?VlJ2SUtZeHgvQTAraWlSamZOZHRZTndZYWtXS0hmZVd1WVNkMHNQKzZmWkoy?=
- =?utf-8?B?Tm8rS1RCcHc4QmJLRWZFMmZvdWF0aUdIZkQ0RytaZWlRR01La0xYWmxqTHVM?=
- =?utf-8?B?MGhoU3RSZ3B4NllKckV5c0VqQnBaZTk3dURVWmJKZUo1SWluVHNjRU5UaFFJ?=
- =?utf-8?B?ZHJ3OFRSaCt3R2hocnpTQjloMmtPTU9EMXJJUTh5RDlodUtLU1Q2RHVXQlR3?=
- =?utf-8?B?ZTBYODAwUDhtYk8yNUcvWWZ6Znl2UDBUS3J6ak1hdVV4RUlFRFdaRkxjSGpi?=
- =?utf-8?Q?P9ksNeMfwVwWpSsg=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AA662DA27B332E4DA1558B95C938AB19@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="sJ/WxpvL"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2cf52d15d88so4290225ad.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786661622; x=1787266422; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QcZaXKSZ+vl5BQB5E9TRFwg6GdaSdB6v8ybUxPjYbic=;
+        b=sJ/WxpvLmc7xDihGq+PUE94XPAnTVynvzMI7HxmU6x2lEzm7ChTCVlFYrm9h5y1wuj
+         uiJseoJHx5mdDwb5GqFUP+iK86P7zyatrNYuFO0hLG4bWRZATxESi2YGeCiuvST2Ft6h
+         CcbfpbLMdjx+0I/TCFA0oy8hm9h+wbV3Xqmy1V5a1XxaktszTJAtH+DC/2hw1Ithx9fE
+         eu5xnLOzUfaxoTd6/IdSH+fjVxSPzIcMyLxNcRuiX/smEFE++iqnZ0H/1kqBO9XcAFRE
+         OsZv8J2MxzoDCyLg+42oBdmvE5Z9BF5mHu2oupLSanvH15aAfMjohFtqzbXGkhXmRB3z
+         oJ2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786661622; x=1787266422;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QcZaXKSZ+vl5BQB5E9TRFwg6GdaSdB6v8ybUxPjYbic=;
+        b=AT1XfqVapa9vg1tFHnWuk5/3wbZdamP5RW8LAaTLwOosREKtrpzvDXuv6tQsIr63Xt
+         8uW3U9lg3Ud9qu+Ubwv9r6uiQQ5sAk4+4B72wlLSmqol4Jqm4BRHI0mzd+SKv502j9dp
+         TJiuK44PIEppk6fsXfhYz9Vu0QT8Bpb/gJRSlUOByihCMG06gvI3Ci1blioevHArtuET
+         h/eDfrg6OWLS9+TPloZROUZv5jNTBCCStszPJoJ82QmKeakL0a4pSxMb5jPy293qf+Dh
+         g3X8ovGJDq01M8EKatG1Xh2QYMA+d3Ilr0jjDWUcG+2dCTazpuYWwO5EJ770bOLknsAm
+         GKBw==
+X-Forwarded-Encrypted: i=1; AHgh+RpjRfYob4RrfYtYcSdZzJYcuI75igfCoCSwkbkOeFLNW5Eg/ZiyhKSxAuOp8mcPdJ4MISgvVRlgfek2Yn+mTRg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHHlpMgtZPYsWNPqYyqPA7j2YIT5tdn0es4wU7Oo2rV5iDpG+Z
+	gKnLLEo5xklgz00VvokYMlTV2IuWnThZ0ijHkHha0G4hujjfMs3+ynsc
+X-Gm-Gg: AR+sD12x0T8b/uMl+rhN13GpNr9XSs8DDtwExLZHajvsenliQtrlFKnZMoHfcA0CTum
+	oZkfC92MAmV1Tc1U3Zj3z3LkL9r5xHTqxPL38A0JqzPKu7EYmauUSolOa01CNns8D9dKKvOMKnP
+	hGtzFLaSifFD3GDb4E4xRDo6bOrlj0syrITSB8oI67aabgLoxwRfgWJpNKfEG/JwC2uw3pNV3mo
+	VixK1Wb5/3Wtge4AiVdK7TJBDmuEN1QfU9uMIM5uYollAiF+4XqcIDJ5he+XFcIQwXp3l4tIHOo
+	aKgwgprrPBi8YE+aLBWh6Cjsk74+4RAJ192beJNXoQaSbzYebJq93rACIedfz1HGtvbaB9fJ9vQ
+	x7jXOa8wAkUDSIiyU0yecLSevCd409GzqJmMVNuk6+ahKYrViiQgxuIKMsxgT+p+6ENZ+93anRh
+	Te/CADGhBm0csjHZwsE+pXFntRejqykWJMPzdT1Itq4XJ/It2cf5NTNYty0/c+fl3xB86+UtXg
+X-Received: by 2002:a17:903:9cf:b0:2bf:27b2:4b80 with SMTP id d9443c01a7336-2d3b0d1302amr15512025ad.14.1786661622331;
+        Thu, 13 Aug 2026 15:53:42 -0700 (PDT)
+Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d3ae804b32sm2657265ad.35.2026.08.13.15.53.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Aug 2026 15:53:40 -0700 (PDT)
+From: Daehyeon Ko <4ncienth@gmail.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	linux-mm@kvack.org
+Cc: David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Daehyeon Ko <4ncienth@gmail.com>
+Subject: [PATCH] mm/secretmem: prevent uncharged mremap expansion after fork
+Date: Fri, 14 Aug 2026 07:53:28 +0900
+Message-ID: <20260813225328.2010303-1-4ncienth@gmail.com>
+X-Mailer: git-send-email 2.54.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: Dt56ju7XqDgeDL61IyKqO1AhcivV1dJ3amEL4OKI3NOsMndL1oU8rp+609hMZzV1QywUeTly0vTwzToUGfLzj7H1COZU0kvMTjJ/3+GsUCLbdnNRyb22rYtjxEdDdBqW84alLG4RjeH01ugUCsx2gkgUVGHVFz+LWUUpYL11dKIODeIx7uFooRpKw3f2qDLLpp7VqY3RQi8qMEzYnMibQotG6IR+Fk7M5Sprq2Hci/+1VyssH7tQEcV5qP+PAwHNdu+CAyvxor2QcCbLicjB055IVbLpBRWGUEUjgdxyppfr9aN5K9dj6A3OCowJ/0iXHcEB2zyyVU69G7hMJFlhnA==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a16dc4de-ca80-4556-997b-08def98ce199
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Aug 2026 22:47:40.8484
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: SosYROHYX2oEpRADt2hKGAs0y/hvrnhtZCwhxYbn2JhWvYVtZKD/S1r/KS4esSWBMVKszAMspbVHkAiMFtm0e35UmKGqqqRedY/ws5yCQmY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB8864
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-T24gV2VkLCAyMDI2LTA3LTIyIGF0IDIzOjEzICswMDAwLCBMaXNhIFdhbmcgd3JvdGU6DQo+IHYx
-NCByZXZpc2lvbiBmb3IgVERYIEtWTSBzZWxmdGVzdHMgYmFzZWQgb24ga3ZtL25leHQgYW5kIGd1
-ZXN0X21lbWZkOg0KPiBJbi1wbGFjZSBjb252ZXJzaW9uIHN1cHBvcnRbMV0uIFRoaXMgc2VyaWVz
-IG5lZWRzIHNvbWUgY2hhbmdlcyBmcm9tDQo+IGluLXBsYWNlIGNvbnZlcnNpb24gdjkuIEZvciBl
-YXNlIG9mIHRlc3RpbmcsIGFuIGV4dHJhIGhhY2sgY29tbWl0IGhhcw0KPiBiZWVuIGFkZGVkLiBU
-aGUgY29tcGxldGUgY29kZSBpcyBhdmFpbGFibGUgYXQ6DQo+IGh0dHBzOi8vZ2l0aHViLmNvbS9n
-b29nbGVwcm9ka2VybmVsL2xpbnV4LWNjL2NvbW1pdHMvdGR4LXNlbGZ0ZXN0cy12MTQNCg0KQXJl
-IHlvdSBhYmxlIHRvIGdldCBzYXNoaWtvIHJldmlldyBvbiB0aGlzPyBPciBkaWQgeW91IGludGVy
-bmFsbHkgc29tZWhvdz8gSXQNCnNlZW1zIHRoZSBwdWJsaWMgc2FzaGlrbyBjYW5ub3QgZmlndXJl
-IG91dCB0aGlzIHN0YWNrLg0K
+Secretmem mappings are charged against RLIMIT_MEMLOCK and marked
+VM_LOCKED because their pages are unevictable and removed from the direct
+map.
+
+dup_mmap() clears VM_LOCKED on the child copy, but mremap() uses that
+flag to decide whether an expansion needs a memlock limit check and
+accounting. An unprivileged child can therefore expand an inherited
+secretmem VMA past its limit and populate the added range.
+
+Add a VMA open callback that marks secretmem copies without VM_LOCKED as
+VM_DONTEXPAND. dup_mmap() invokes the callback after clearing VM_LOCKED,
+while the original charged mapping retains its existing ability to grow
+within the limit.
+
+Add a selftest that verifies expansion of an inherited secretmem VMA is
+rejected.
+
+Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daehyeon Ko <4ncienth@gmail.com>
+---
+ mm/secretmem.c                            | 11 +++++
+ tools/testing/selftests/mm/memfd_secret.c | 58 ++++++++++++++++++++++-
+ 2 files changed, 68 insertions(+), 1 deletion(-)
+
+diff --git a/mm/secretmem.c b/mm/secretmem.c
+index 4877c262cb1f6f..e5878ce91c768c 100644
+--- a/mm/secretmem.c
++++ b/mm/secretmem.c
+@@ -108,7 +108,18 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
+ 	return ret;
+ }
+ 
++static void secretmem_open(struct vm_area_struct *vma)
++{
++	/*
++	 * dup_mmap() clears VM_LOCKED before calling ->open().  Prevent an
++	 * inherited, uncharged mapping from being expanded by mremap().
++	 */
++	if (!vma_test(vma, VMA_LOCKED_BIT))
++		vma_set_flags(vma, VMA_DONTEXPAND_BIT);
++}
++
+ static const struct vm_operations_struct secretmem_vm_ops = {
++	.open = secretmem_open,
+ 	.fault = secretmem_fault,
+ };
+ 
+diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
+index aac4f795c327bd..3d33487eaaccf3 100644
+--- a/tools/testing/selftests/mm/memfd_secret.c
++++ b/tools/testing/selftests/mm/memfd_secret.c
+@@ -84,6 +84,61 @@ static void test_mlock_limit(int fd)
+ 	pass("mlock limit is respected\n");
+ }
+ 
++static void test_mremap_after_fork(void)
++{
++	void *mem, *remapped;
++	pid_t pid, waited;
++	int fd, status;
++
++	fd = memfd_secret(0);
++	if (fd < 0) {
++		fail("memfd_secret failed: %s\n", strerror(errno));
++		return;
++	}
++
++	if (ftruncate(fd, page_size * 2)) {
++		fail("ftruncate failed: %s\n", strerror(errno));
++		goto close_fd;
++	}
++
++	mem = mmap(NULL, page_size, prot, mode, fd, 0);
++	if (mem == MAP_FAILED) {
++		fail("unable to mmap secret memory: %s\n", strerror(errno));
++		goto close_fd;
++	}
++
++	pid = fork();
++	if (pid < 0) {
++		fail("fork failed: %s\n", strerror(errno));
++		goto unmap;
++	}
++
++	if (pid == 0) {
++		remapped = mremap(mem, page_size, page_size * 2,
++				  MREMAP_MAYMOVE);
++		if (remapped != MAP_FAILED) {
++			munmap(remapped, page_size * 2);
++			_exit(KSFT_FAIL);
++		}
++		_exit(errno == EFAULT ? KSFT_PASS : KSFT_FAIL);
++	}
++
++	do {
++		waited = waitpid(pid, &status, 0);
++	} while (waited < 0 && errno == EINTR);
++
++	if (waited == pid && WIFEXITED(status) &&
++	    WEXITSTATUS(status) == KSFT_PASS)
++		pass("mremap expansion after fork is blocked\n");
++	else
++		fail("mremap expansion after fork was not blocked\n");
++
++unmap:
++	munmap(mem, page_size);
++close_fd:
++	close(fd);
++}
++
+ static void test_vmsplice(int fd, const char *desc)
+ {
+ 	ssize_t transferred;
+@@ -297,7 +352,7 @@ static void prepare(void)
+ 				   strerror(errno));
+ }
+ 
+-#define NUM_TESTS 6
++#define NUM_TESTS 7
+ 
+ int main(int argc, char *argv[])
+ {
+@@ -320,6 +375,7 @@ int main(int argc, char *argv[])
+ 		ksft_exit_fail_msg("ftruncate failed: %s\n", strerror(errno));
+ 
+ 	test_mlock_limit(fd);
++	test_mremap_after_fork();
+ 	test_file_apis(fd);
+ 	/*
+ 	 * We have to run the first vmsplice test before any secretmem page was
+-- 
+2.54.0
+
