@@ -1,99 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AF3E44BC94;
-	Thu, 13 Aug 2026 10:52:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 457FB45D1A8;
+	Thu, 13 Aug 2026 11:04:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786618339; cv=none; b=goPM6tkK5Tf2IwuCSv9w1pTUBzRKeWcKdP4ufyDvHGl5Da9Y7JQknclmm/X68hU/JdsiqynA/zSZe2seFK1E45eMvIqOuDoRNdRZUTXCHOBZitzchg05rqqE0VUQQPDaRlcjk3rtpf0CftZPnqxAM+ZmkPTotx/lR+w7b/YBs7c=
+	t=1786619087; cv=none; b=KFM+VVy3Ks/PpWuJOL6gfxu5FXbgWrk97kiwz6qFEqS7jKcI75vGOucgVjsQa0o+x9Fzh3nu0lxNZYgnAjNUhMt2Pyi/jhcvwQaNdQE64spxiouuoZINIOFIbxm9fS5aOuBEIBTUbdtG84t4OZOfaRLKSzjI8Br4LKie8eWGEpo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786618339; c=relaxed/simple;
-	bh=UttZ6Wp6KMqrgbN7B6sX94VC3HGnq8cn0nShACQtaKU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=AYtqCHuo3sqJA+Als0UCn9CuDX7KSQJ7vEyyldMJBP+NEmRobvbAqxSd92cd9gXHwZ4ePwHorU5AYCW5unmAM2h4bB4w6YprQjT2DEjzpouVTB84AV3EiWtTP97hovki+JWaBGsjy7xoUnTWoYsWTfutd1lKN/KeIw6AEb4pNGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n3Y2c3v1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786619087; c=relaxed/simple;
+	bh=9YLfWUtDaIrZ7qEeMTha8XRK4xntfN19xyF1hXQegDM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=V44cPQUFrelyQzT76pmvc9AzcZ/4yDNHrBPaWEWM5mqnVwftPNf41y+uASCpIerFVNEZckTK6w73s17TFEuZtBZY/qUDl4ODnyaTWmUwU+IE4GaOQs4w+zsOmXUGD0K8SXISUwO04OpUwEQb5KdlLrmKIvDz0u1JzYVVlyCWB/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=a58TA44o; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zNfvu/uZ; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n3Y2c3v1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35DBF1F00A3F;
-	Thu, 13 Aug 2026 10:52:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786618325;
-	bh=E7ayrAOBXrbuMrR0LlHDpdW7AmE97Wlqq22AcpmieIo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=n3Y2c3v1OevdKDTTnew4iDDdS7n/HN9TwaGGwWQgWHmBfekiPTvMmJMkxHz2IyYUu
-	 NC+FMT8T68EjdU9Xw1D6NxBB/y4voza7PewOMHhjNnYUS6Wl9UKPiMNwfuVYANdm77
-	 e9f8KisoMm4pfy/oxQiXa4Mg4sG4+2147GfCFtIYdvBQn4FHJnZj92G97TP6VLkW04
-	 6KCFWEE5ZO7/7peE2FxqGtpPIUqJyXqy2yz6bS0sS+4bCM4qngbmOFBoSaW487aN7g
-	 Ks/v3zOTXWmmN2SRfOvrzcGyDFXqqcoVbYqMGXUMZJ6y9Q6Z1LfmZ/XRs7WCNSudXu
-	 W/rSoaD3+wShw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 56B7B380CFD6;
-	Thu, 13 Aug 2026 10:51:21 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="a58TA44o";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zNfvu/uZ"
+From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1786619081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jjpObbj2WfW43hEykvD0YZhHijZQsYldhHSw+YX23Bk=;
+	b=a58TA44oQ1b0NKdp2U3O+r+I1etNZXeNnZ5xwjEvCiaxuYsktzTd8+Xnd6/JPJnjseCWIP
+	oexHKKnAbdFl5D1c/5+RVbBEu/X9dIuzcC9KvmH6GuUf/5rO7iTUvLhiWvsLY2t5yY1qsU
+	gdIQrr1el71Kd2xGazpVQcxuT4c7e9XYnILLuVPd8D0Y0iE1L/qLRWFdTnrDrgaOq+bRNb
+	aBjQbH8oWSYqGowXBVGyBAIX+JVc2o0yayrbzxgj4E75mJTsLQR00y+f3wcryZXafPUX7q
+	Ba4rWV+S4EFu7Hi+B+YkWCDKAI4HLhJjjeckXX0CHdblmoJce+C0cykEsNtSsA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1786619081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=jjpObbj2WfW43hEykvD0YZhHijZQsYldhHSw+YX23Bk=;
+	b=zNfvu/uZu0EXARvxIQRbX5eYcms6yK8oqDPjfmgpk0muDeWbGDUyZoBIzSFGzxNpc7Nc6Q
+	GXDslDXi3zoDOUBw==
+To: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Bill Wendling <morbo@google.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Justin Stitt <justinstitt@google.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Neal Gompa <neal@gompa.dev>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Richard Purdie <richard.purdie@linuxfoundation.org>,
+	Sam James <sam@gentoo.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	=?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Tomas Glozar <tglozar@kernel.org>,
+	Willy Tarreau <w@1wt.eu>,
+	x86@kernel.org,
+	Arnd Bergmann <arnd@arndb.de>
+Subject: [PATCH v3 2/2] x86: Start removing X86_X32_ABI
+Date: Thu, 13 Aug 2026 13:04:33 +0200
+Message-ID: <20260813-x32_removal-v3-2-e8f96cd15478@linutronix.de>
+In-Reply-To: <20260813-x32_removal-v3-0-e8f96cd15478@linutronix.de>
+References: <20260813-x32_removal-v3-0-e8f96cd15478@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v6 00/10] ipv6: report why a route was deleted in
- RTM_DELROUTE
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178661827995.2370447.9301462762512450819.git-patchwork-notify@kernel.org>
-Date: Thu, 13 Aug 2026 10:51:19 +0000
-References: <20260808005642.26901-1-sigefriedhyy@gmail.com>
-In-Reply-To: <20260808005642.26901-1-sigefriedhyy@gmail.com>
-To: Yuyang Huang <sigefriedhyy@gmail.com>
-Cc: davem@davemloft.net, carges@cloudflare.com, daniel.zahka@gmail.com,
- dsahern@kernel.org, dw@davidwei.uk, dimitri.daskalakis1@gmail.com,
- donald.hunter@gmail.com, edumazet@google.com, idosch@nvidia.com,
- kuba@kernel.org, pabeni@redhat.com, shuah@kernel.org, horms@kernel.org,
- sdf@fomichev.me, willemb@google.com, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+The x32 ABI was introduced in v3.4 to leverage the additional registers
+which were available on x86_64 but not on i386 while keeping the smaller
+32bit pointers.
 
-This series was applied to netdev/net-next.git (main)
-by Paolo Abeni <pabeni@redhat.com>:
+This did not take off. The memory usage usually knows no limit and the
+better performance did not reach a point where certain workloads widely
+move to x32 and use it exclusively. In the meantime Debian introduced a
+patch to disable x32 by default (so it has to be enabled at boot time on
+the command line) because they are afraid of the increased attack
+surface. Fedora as far as I tell has X32 disabled (looking at 7.0-rc5
+rpm in rawhide).
 
-On Sat,  8 Aug 2026 09:56:32 +0900 you wrote:
-> When the kernel deletes an IPv6 route on its own, the RTM_DELROUTE
-> notification does not say why. User space cannot tell a route that
-> expired from one the router explicitly withdrew, yet the two call for
-> different reactions: an expired RA route means the router failed to
-> refresh it in time, which points at a misconfigured or unreliable
-> router and may warrant action such as disabling IPv6 on that network,
-> while a zero-lifetime withdrawal is normal, RFC-compliant operation.
-> 
-> [...]
+The syscall range >512 used by x32 can not be reused because on earlier
+kernels (before v5.4 with x32 enabled, see commit 6365b842aae4
+("x86/syscalls: Split the x32 syscalls into their own table") it is not
+obvious if the syscall is for x86-64 and not implemented or meant for
+x32.
+What can be removed are the special compat cases due to different
+alignment.
 
-Here is the summary with links:
-  - [net-next,v6,01/10] ipv6: add ip6_del_rt_reason()
-    https://git.kernel.org/netdev/net-next/c/cc17e386f8a5
-  - [net-next,v6,02/10] ipv6: propagate the route deletion reason to fib6_del_route()
-    https://git.kernel.org/netdev/net-next/c/352c6732ffb2
-  - [net-next,v6,03/10] ipv6: record the reason for kernel-initiated route deletions
-    https://git.kernel.org/netdev/net-next/c/e8636445b771
-  - [net-next,v6,04/10] ipv6: add a deletion reason argument to rt6_fill_node()
-    https://git.kernel.org/netdev/net-next/c/b0215102356b
-  - [net-next,v6,05/10] ipv6: expose the route deletion reason in RTM_DELROUTE
-    https://git.kernel.org/netdev/net-next/c/1e6a83af5914
-  - [net-next,v6,06/10] ipv6: add inet6_rt_del_notify()
-    https://git.kernel.org/netdev/net-next/c/09f19ce3de67
-  - [net-next,v6,07/10] netlink: specs: rt-route: add route notifications
-    https://git.kernel.org/netdev/net-next/c/bf517422fb26
-  - [net-next,v6,08/10] netlink: specs: rt-route: split out the request attribute list
-    https://git.kernel.org/netdev/net-next/c/8621a7ed80f0
-  - [net-next,v6,09/10] netlink: specs: rt-route: add the route deletion reason
-    https://git.kernel.org/netdev/net-next/c/b13ba4e82bfd
-  - [net-next,v6,10/10] selftests: net: verify RTA_DEL_REASON on route deletion
-    https://git.kernel.org/netdev/net-next/c/046d88326506
+Since there is practically no real use for x32, start removing it by
+removing the symbol first, not allowing to enable it. Should nothing
+happening by the end of the year, it will removed after the last LTS
+kernel this year.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Acked-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+---
+ arch/x86/Kconfig | 14 --------------
+ 1 file changed, 14 deletions(-)
 
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index bdad90f210e4b..f6fe55fdc928a 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -3097,20 +3097,6 @@ config IA32_EMULATION_DEFAULT_DISABLED
+ 	  processes and access to 32-bit syscalls. If unsure, leave it to its
+ 	  default value.
+=20
+-config X86_X32_ABI
+-	bool "x32 ABI for 64-bit mode"
+-	depends on X86_64
+-	# llvm-objcopy does not convert x86_64 .note.gnu.property or
+-	# compressed debug sections to x86_x32 properly:
+-	# https://github.com/ClangBuiltLinux/linux/issues/514
+-	# https://github.com/ClangBuiltLinux/linux/issues/1141
+-	depends on $(success,$(OBJCOPY) --version | head -n1 | grep -qv llvm)
+-	help
+-	  Include code to run binaries for the x32 native 32-bit ABI
+-	  for 64-bit processors.  An x32 process gets access to the
+-	  full 64-bit register file and wide data path while leaving
+-	  pointers at 32 bits for smaller memory footprint.
+-
+ config COMPAT_32
+ 	def_bool y
+ 	depends on IA32_EMULATION || X86_32
+
+--=20
+2.55.0
 
