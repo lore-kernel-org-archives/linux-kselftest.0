@@ -1,124 +1,79 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBDE374A11;
-	Thu, 13 Aug 2026 16:27:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8C538238C;
+	Thu, 13 Aug 2026 17:01:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786638421; cv=none; b=YZTUXfw9NktZvY9xVzcnQLT3c6S2CtdZkNP2dXQL37C8eEECcnfZE6N11kssvA2H2tCExNw8RtEc3hUtg7ZIZiA3kPQn/pjhopTIgqjDBJRDLZm9LihWAr+NbudgfzA3i9Ded88ceW+K02DTItVD7qyYM0kLpVT33JFKSVAHgzY=
+	t=1786640502; cv=none; b=Y0Y/cgKpfvkoXi14YoCN2WexqdbAzhXsm2W2C46KlhYaQGp4D4cU6s6KVSlDXIUdGN66LKKS8Pvkhh52ae2VRC2QuSdHYhIdyzB5Zr9QbYILi3qFnKMsuBWsKTA6RCRtYZF6hFwbgMTm48LuSCbb1da7M3LRH3uFfVNSTDja1yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786638421; c=relaxed/simple;
-	bh=+5iiwb/IqfhB0c5XVuKMEg8R6UG2DurfE0mqD/r2BlY=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=fLXhxoQSimzJnqgc/A1rZ+9Smhd02G4sVx0rgcVkcOJq1zcJfgIeOVlnEY2IkLTqP5G9uuAkve6RDOFo8xDOP1qvu6JiJ+ko8WplkXWq17iNkzQx8vfRmvZVocoPvlGI9TeLdC1B7nFdVHzU0JeyljzIu8WipjqsjFbSh/6CcLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dnfgSPHE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786640502; c=relaxed/simple;
+	bh=GePZ31TGPBJanc/JVQYvtBOijS6DiyBrW5H/YrR2scg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cjN34XWHBTK+R9f5jiScCN/v71q3hxNldrlxomSOI/R8jFFc8WAK1oYEbubAfnId8B40wSPzOpXQT8pyWTAOg0fY+wm+Xrrd7fs0x5mIbmCKl0K5Rmza8MPfj12jDAdmQp5HjJpdZ7gfCyKPsBHg6hUlTUwPvWFzafXelP6SIOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/or0qZX; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dnfgSPHE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12AF91F000E9;
-	Thu, 13 Aug 2026 16:26:59 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/or0qZX"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4231F000E9;
+	Thu, 13 Aug 2026 17:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786638420;
-	bh=FDwPBMmTjt/n1XIHuKyA87/9hlxKHgTWN8Vn9wykej4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=dnfgSPHE9LMP1JGthnqGt4uSLV52B3mtSKr7UFPxEs1vFI18b3LGkw+pge+UZg52z
-	 vKqTjvC9d/o3KtIMpC2YaqscCTbbL2VsK+v++XJFomq8YgFIf22rJfO4rmOuJlcdd1
-	 qKHQPw9tOoxIhq2dqxddBTRmJuyi6+yh+qdo2shvBCETJ6I7Mv1sDt4hDfhlOXRKSj
-	 AQqh8VwzzqDDvQV1ooaZFuR9vk96nytFbpP7Tv4Djqy3nxBMq+yUFoXNCPRwZI6mvJ
-	 vfHvwtIFf8k8sLuxgEV/wcr7yv8d3VtbNqb4CFaP0kllxkyxdoZQMa6MsfpEoSQ33K
-	 aZFWJNtfjz7DA==
-Content-Type: multipart/mixed; boundary="===============3118981536321115134=="
+	s=k20260515; t=1786640501;
+	bh=GePZ31TGPBJanc/JVQYvtBOijS6DiyBrW5H/YrR2scg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=d/or0qZXa3USfe9zrvVJrjFEARdxr0gpZ71KO8sVwrEtOsu3pq81xbLKSWI+xOKts
+	 GhhrWmYnocJkMYD+7Vg/chD7/b7z+Ztehs/lQ/+qWS6EtwfCw+Xw/fX24c5hVCpi23
+	 ngFbzWGMBIXBrFPa7g1GyOPJuVr6+tvWbja23c1ag5kHewrDXjBwFg/HC0IdHBXn+X
+	 m+kZWaH80PaUhfW8a51IItCI0AnzVBsqYyl78VsaQOXl9ZNBi+II9tSSp6oOpoejjv
+	 6QkimSGedGJKJtn3mkISPnsLErmjj5BCHiTAGFeygEOUpIRjToi/d18ayyBTYlopBE
+	 8SQ+zNWOiuZ8Q==
+Date: Thu, 13 Aug 2026 18:01:35 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Guodong Xu <guodong.xu@oss.qualcomm.com>
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Yixun Lan <dlan@kernel.org>,
+	Chen Wang <chen.wang@linux.dev>,
+	Inochi Amaoto <inochiama@gmail.com>, linux-doc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	devicetree@vger.kernel.org, spacemit@lists.linux.dev,
+	sophgo@lists.linux.dev, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v6 03/11] dt-bindings: riscv: Add Zic64b extension
+ description
+Message-ID: <20260813-volley-panning-c0589cd0ba22@spud>
+References: <20260812-rva23u64-hwprobe-v2-v6-0-c985af3256b8@oss.qualcomm.com>
+ <20260812-rva23u64-hwprobe-v2-v6-3-c985af3256b8@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <0ffc09de1b26ea2a7bf3015a63307a134259c376347b778b71706b9830dcd185@mail.kernel.org>
-In-Reply-To: <20260813152324.97937-8-leon.hwang@linux.dev>
-References: <20260813152324.97937-8-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v12 07/10] selftests/bpf: Add tests to verify global percpu data
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,martin.lau@linux.dev,eddyz87@gmail.com,memxor@gmail.com,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,john.fastabend@gmail.com,qmo@kernel.org,shuah@kernel.org,leon.hwang@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,kernel-patches-bot@fb.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Thu, 13 Aug 2026 16:26:59 +0000 (UTC)
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rXSRKR8H98tOltzT"
+Content-Disposition: inline
+In-Reply-To: <20260812-rva23u64-hwprobe-v2-v6-3-c985af3256b8@oss.qualcomm.com>
 
---===============3118981536321115134==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+--rXSRKR8H98tOltzT
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index 8466332d7406f..06d163a022dcc 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+pw-bot: not-applicable
 
-[ ... ]
+--rXSRKR8H98tOltzT
+Content-Type: application/pgp-signature; name=signature.asc
 
-> @@ -60,3 +63,188 @@ void test_global_data_init(void)
->  	free(newval);
->  	bpf_object__close(obj);
->  }
-> +
-> +static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_fd, int *runp)
-> +{
-> +	struct test_global_percpu_data__percpu *data = NULL;
-> +	int i, err, key = 0, num_online, run = 0;
-> +	__u64 args[2] = {0x1234ULL, 0x5678ULL};
-> +	size_t data_sz;
-> +	bool *online;
-> +	LIBBPF_OPTS(bpf_test_run_opts, topts,
-> +		    .ctx_in = args,
-> +		    .ctx_size_in = sizeof(args),
-> +		    .flags = BPF_F_TEST_RUN_ON_CPU,
-> +	);
+-----BEGIN PGP SIGNATURE-----
 
-This isn't a bug, but does the raw_tp ctx need to be passed here, given
-the program ignores it?
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCan34bwAKCRB4tDGHoIJi
+0jPmAQD3suLs4KD+gV95qtdRnqAAnSnqF0Dq1xP6Y9wXr7g1IQD/R6iza5bEduSZ
+fWorzbmQ9vqxCuCV8H/B0cqrBm979AA=
+=1OKO
+-----END PGP SIGNATURE-----
 
-[ ... ]
-
-> +static void test_global_percpu_data_init(void)
-> +{
-> +	struct test_global_percpu_data__percpu init_value = {};
-> +	struct test_global_percpu_data__percpu *init_data;
-> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
-> +	struct test_global_percpu_data *skel = NULL;
-> +	size_t init_data_sz;
-> +	struct bpf_map *map;
-> +	int prog_fd, err;
-
-[ ... ]
-
-> +	map = skel->maps.percpu;
-> +	if (!ASSERT_EQ(bpf_map__type(map), BPF_MAP_TYPE_PERCPU_ARRAY, "bpf_map__type"))
-> +		goto out;
-> +
-> +	init_value.data = 2;
-> +	init_value.nums[6] = -1;
-> +	init_value.struct_data.i = 2;
-> +	init_value.struct_data.nums[6] = -1;
-> +	err = bpf_map__set_initial_value(map, &init_value, sizeof(init_value));
-> +	if (!ASSERT_OK(err, "bpf_map__set_initial_value"))
-> +		goto out;
-> +
-> +	init_data = bpf_map__initial_value(map, &init_data_sz);
-> +	if (!ASSERT_OK_PTR(init_data, "bpf_map__initial_value"))
-> +		goto out;
-> +
-> +	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
-> +	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
-> +	ASSERT_EQ(init_data->struct_data.i, init_value.struct_data.i, "init_value struct_data.i");
-> +	ASSERT_EQ(init_data->struct_data.nums[6], init_value.struct_data.nums[6],
-> +		  "init_value struct_data.nums[6]");
-
-This isn't a bug, but should init_value.set be given a non-zero value,
-and nums[6] checked, so these assertions can actually distinguish a broken
-copy?
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31716447858
---===============3118981536321115134==--
+--rXSRKR8H98tOltzT--
