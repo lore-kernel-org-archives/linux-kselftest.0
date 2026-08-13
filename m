@@ -1,67 +1,68 @@
-Received: from mail-oi1-f181.google.com (mail-oi1-f181.google.com [209.85.167.181])
+Received: from mail-ot1-f48.google.com (mail-ot1-f48.google.com [209.85.210.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC3A395D9F
-	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A791E3D88E3
+	for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 22:00:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786658428; cv=none; b=UwfSPttlIs1ov0nnuim7UMuptvuV4EHMCz6pjMzTHWpmH6xfsqkEsKaf8jhlqZfLDiHcdKELuB2yHZlZv3v8eOK8mrFJ5GV580aaFYEiEWm5XyEkHkJ/EHVgweq2Lfw6jJmHax+NHVq/KbT7ik4k31k4oU5mTnGc2wUfeWmfdk4=
+	t=1786658431; cv=none; b=Ltf+xdwsB2l3SFqOelMjy0+y4+6HfMPuh2k7/vM9ZkxTkGOe+oR1Nvf2Ayb1nWE6TXOHkDNvPsV4XcZ5Z2lhxnZ+1MoWmXqhfoYYM71WY6KpTGiAxPhZh3pixrulZZkwoPtymJIJBJQ4Oo1j1JIkZptyDchMBeWut0/Bh8ckKDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786658428; c=relaxed/simple;
-	bh=RMeGTOEbM8dieI8j+EDh5WMW8HN23IZPs2MVxpaGdhM=;
+	s=arc-20240116; t=1786658431; c=relaxed/simple;
+	bh=f4RXPk+DjT/+LqiMjRSNWPZkwaS0NXEvZjl+IFDH2qA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kPfqrFPdODPUqSdbqAUqKYh29SkYSeOL10J+Mkhwh/VIzV2xCudZqmEZ5T6433nQLffeoGwRTUlYr3bKbmO68bKHRgjkD6fmVfFXRAmm97ZDvmCIaULExlqfo71liEFd/Yh4m6+WVp1COAem7ieW9RiMM/05j6juda09l8OhKBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=dwBQc+xE; arc=none smtp.client-ip=209.85.167.181
+	 In-Reply-To:To:Cc; b=CLYjPPwxgHYKj4N6j30OWv3Lodg2T0a3aFtQ1rK0rohoFvQetVetseV62fm0peoI5SGtlXH9pJL598yUu405Th5DOHYOQ9HJumF/qqeeg7jbrQW+EprTWoF3Ch2/XvhZDMFmkcTI/kJKJXfFbxL7j4CeXk88HJNtZ+fcXeFmfmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=JtK5PzfS; arc=none smtp.client-ip=209.85.210.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="dwBQc+xE"
-Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-4a416619cb2so204096b6e.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:26 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="JtK5PzfS"
+Received: by mail-ot1-f48.google.com with SMTP id 46e09a7af769-7ea9c6ea7deso277836a34.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 13 Aug 2026 15:00:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786658426; x=1787263226;
+        d=1e100.net; s=20251104; t=1786658428; x=1787263228;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=cPDr3ZJlS5GTxsyqliUMtwR1qFNPfxJRKflCt05bQVg=;
-        b=qkFx9tmmJFRDUQGno/3ePMSCYeDCYlIK216v+lUBSXdg23m0ltw2B9m+Tm9XIoXpo7
-         /Zgl3qdX6U4BglEMoxaWMH+jHJ91EqDFOlLNqQEFMnDrJu1yQbN6g4LHhgkG0D9yxP46
-         Hgg0QoZXoyk16zywYSEUQaHKObYuVl233UOjYxbEaLpm34jr2MoF0RSDZ/2kE5mNvGGa
-         YZvKuA7lGfdU3b21pFGMuwrGxil06C1pNgQU4D7I9TPnOE0s3Xjbbu59P+DSu0XmxG10
-         YcO0V1dhAc4N7/QjEGr3lEFDQY1Fi5JVNtUGqMRJB58s+FsmUktM25nqrDLPEYDaU3zu
-         49Fw==
-X-Gm-Message-State: AOJu0YyTU0zHHdSVlZ7bqDG98oGHWxPGZdEjpq0TZm+w3OBHoiAsRqM/
-	fpSAjTQcYMxANcJFjoIUAJejNcxvNxilmuQDsOA+cu9V6CLzzUyDWBti
-X-Gm-Gg: AR+sD10jm0zh8a2P51U87nHryZvowr5Sr5a3AbHWk+Oq75kx0Z/Orn7j/SLBjt5nxIz
-	X0i0LhLAhYEa/a8TdnCt/wwR+BCcWyzOBUYhYCucqos4ILau7cMrEY49hPzUEZLIeId0xCHOWhm
-	xx6a7Eu4YA68977JlCAlWBLuFcGpIS+1mWmSnuyJ2HpUR2QzogNIslLGwOrCc6fyr73GWglDIXv
-	XhH4vJW6LkJXpq70aocSKBripeHYJ6TtaHuBoZHbupNZoiBQKmMbTj8DPGNLMGXVg/0nQ03xY2+
-	V1bUUuO1vMDYBERFSxfCkgU9v5hc2mIPaJccg0K6p0/90cuIMEOMHyOpF1UbSTCmzfPdRCbOSpY
-	vYbAiJPtRzcsgd95LH9e7weN+G94+lIxqpxl+nCB3svm4R3AiLdHrRD4DrCkv/miCALY7RlocaY
-	iZHeyd0XmfsDNL9Is511/Kw6UJPUdVKkVWhZpqQWzqBjvQ08l1eF42DgpRRRljV/ypz6KCrWthZ
-	Mq1wiABQ0Gxqp/CiaWKyqMaiJqNMYxGvbbtux2YWyxvG8Be6hROWopR+5Ec2HrIMA==
-X-Received: by 2002:a05:6808:6808:b0:4a0:cf55:3cf0 with SMTP id 5614622812f47-4b24152d08fmr1116474b6e.9.1786658425531;
-        Thu, 13 Aug 2026 15:00:25 -0700 (PDT)
+        bh=Ob0Z3C3rB+WUj6cs9SnhoedQYgo3LMIap3aBNXhslKg=;
+        b=ZmHVPKDdza/WDpfdb8suaajHNQw+BrWm+0/eDLs552lymRnBlR7ILuRg5d1bKypSjO
+         8vT0jk4dDPY6vepRXJ4QliFnNudzXaLQnlKzcm3eOTm+u79lLi8ECh6B9pndqhbfrWUT
+         5v25yk+9NALrxmXLi99TVDWyXrziIZsPxDJ3ZGWwkcw4hf+v041Qci9G61wSXJvd+CcZ
+         RZMB3Xxa1KMe18DqslPavld3I3nVeE6tddHFEmC8AjbVcP5+X7SfeR0V2UwzVeDvCgXo
+         MGZSNjC1aCgVuOXZ9PB56ARAmG4fDWJXa9MDYMo3k67GR1Gk8eya0RNFle4tpENfDQ5I
+         nzkQ==
+X-Gm-Message-State: AOJu0Yxi1XHf0WY00exlBnpKW+9pDJSCWnbEDau/wGXvaa3F9UvN86Fg
+	7HIAGabyJktk0uMf0l6fCqJHeDqPAANN8tPkDSk4HonJsL5rWuZdV590
+X-Gm-Gg: AR+sD11pvZkMdQfmt0/a0moc5X8N8tz1Htsc7NJ/6ZKnX/plShDRfKwxCs8mzhdUvi7
+	Qy9orjWsjJJb4bB6/VcDnc8j9NM4bUZqEYWJl5tzWgzBTg19gt7P3CxUobk+vi2AZQxlyxDymaw
+	u6JWnDf1CUjS3y8aCotDIdJnOsKysUClNAAdeUP9UfuYGzkiCeuQLmfm0H/scWT2gkl82+vq0v9
+	sBvTB/4UMKUadKcjFy2apd2yG+77UXA3KW32RLjqiLPZdqFd6ZODa5uFzYOhXfsNi61+wB2p4+X
+	yXFP0ECgidlFzxvpEnK5Yk5B4BR/ozjFf85qSHOJ70ml7+DsFIlDjLko1sAuPkVebmmsh9fQ6/D
+	GlHhavk9HSOCyOj8izshvQlsJKdpvGtybm3BR3tbVlzaocXdAQ17uZJ/wXI8Kzj4387vJKEy8NE
+	nJWsbScMCjP+lkgXMDzk+GET/QAuEKxPBXEtLG5dgbGe+2VBz1PpZKcBNV+H+aRieEFyn8FcCjy
+	LcDm4ojXJk1mlRc4p0wGPh2Qom9Yz1lQ7J5zz3iKXKkFBCW/NIdnGHNBYV3hhKoDA==
+X-Received: by 2002:a05:6830:67d9:b0:7d7:58b0:7685 with SMTP id 46e09a7af769-7f3de65011cmr878478a34.13.1786658428265;
+        Thu, 13 Aug 2026 15:00:28 -0700 (PDT)
 Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b22cfb1ea5sm2686341b6e.16.2026.08.13.15.00.24
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f3c9e23b6fsm3274625a34.25.2026.08.13.15.00.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Aug 2026 15:00:25 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5D0C960B53;
-	Thu, 13 Aug 2026 22:00:23 +0000 (UTC)
+        Thu, 13 Aug 2026 15:00:27 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5317760B53;
+	Thu, 13 Aug 2026 22:00:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786658424;
+	s=dkim; t=1786658426;
 	h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=cPDr3ZJlS5GTxsyqliUMtwR1qFNPfxJRKflCt05bQVg=;
-	b=dwBQc+xEEO8Lem0UqHc7a+xb1HKh8t1Mon7PDhApH2sdDGzQNN5EesIsU0WgzfFujf1Nky
-	pnx5hVPZHEZgrrs3N7GJSbbA7gU75kXjCI7xUMVfauJS00bXrzQgG7dePjwTMzCIaTj7bp
-	2dkv7FWVj4R1UTzaqB/4lPAaFWQHSvclGoYwwO+Vzuv97FnFjowZe0RL3ID4zePydq+yW1
-	se69TfHUF7ruxldEqvJ+Sq6GhY7Lt+qXvNRUxLV7ByPMx2F+B40VpvIfOt9RiMvBE+ah0o
-	mrIctsR13Ahd8VURzv8kx6L80B09idparmt53RzLXnz1yFlpl7oKDLQuisAJWA==
+	bh=Ob0Z3C3rB+WUj6cs9SnhoedQYgo3LMIap3aBNXhslKg=;
+	b=JtK5PzfSxlggPYxG39CS2LwWmcY09hVT4nbQof9gQDYdmoNozyxS4r0XphDaFEtqcK+F61
+	/qygU/Bfq68LermI/jAGU2xtwdtwHs5ME/KML8AEdm74DzKTOi1Z/V6F8w2xYY2IK9Bs3t
+	3ajDRnNc2abldtcaS2yMF9zRgjlzWAktDda88RHS8dzepr3uQjJSj/mm0zSylciqOvPwYH
+	OvSdSBlJV6GAlPkKu324q/92ghC1JCZrdBm4AOoKwPAWYPD7wkVVXz9o2HxT02UAUj/rE6
+	XwX99eBKRhVZ8oYYzJTZBmB8Rra4HnJPH+Axl8DfjIhdB6IppZgsyUxV8KcP4w==
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Thu, 13 Aug 2026 19:00:04 -0300
-Subject: [PATCH 7.1.y 3/4] selftests/bpf: Ensure UDP sockets are bound
+Date: Thu, 13 Aug 2026 19:00:05 -0300
+Subject: [PATCH 7.1.y 4/4] selftests/bpf: Adapt sockmap update error
+ handling
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +71,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-3-cd5c51e7dcec@marliere.net>
+Message-Id: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-4-cd5c51e7dcec@marliere.net>
 References: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 In-Reply-To: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 To: Alexei Starovoitov <ast@kernel.org>, 
@@ -87,65 +88,101 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=1781;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786658405; l=2951;
  i=ricardo@marliere.net; h=from:subject:message-id;
- bh=e5SB35u/vSYta099gqNsW1ZXfGRvMi7KbdZiL0YQZvQ=;
+ bh=daM25mJqeCkkst7bMwP8EsNfCCYMsTYMH8Ejt4bMwIU=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QEyquNT6uZ2Fxa6C+zrowcs8rlT1fTP/cvbiH4TBJWGkEO3xPD/RHonB8/fso6lAWNK61MWpzww
- 2AlGkAzKf/A8=
+ QJxktk0EEhkgQmlas4sb6c2fSVPWUAA2GpVOf+mstP82e2srCamrmcX9/VOLrESp6J2JxDg/k1p
+ tmbSAugWULQ8=
 X-Developer-Key: i=ricardo@marliere.net; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 X-Last-TLS-Session-Version: TLSv1.3
 
 From: Michal Luczaj <mhal@rbox.co>
 
-[ Upstream commit 65f46946e951373275d793b35129a7c3ebeaaf51 ]
+[ Upstream commit 954b24d7601a93b6089cd75397370c51674d7893 ]
 
-Update sockmap_basic tests to bind sockets before they are used. This
-accommodates the recent change in sockmap that rejects unbound UDP sockets.
+Update sockmap_listen to accommodate the recent change in sockmap that
+rejects unbound UDP sockets.
+
+TCP: Reject unbound and bound (unless established or listening).
+UDP: Accept only bound sockets.
+
+While at it, migrate to ASSERT_* and enforce reverse xmas tree.
 
 Signed-off-by: Michal Luczaj <mhal@rbox.co>
 Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
 Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/20260707-sockmap-lookup-udp-leak-v4-1-f878346f27ab@rbox.co
+Link: https://lore.kernel.org/bpf/20260707-sockmap-lookup-udp-leak-v4-3-f878346f27ab@rbox.co
 Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../selftests/bpf/prog_tests/sockmap_listen.c       | 21 +++++++++++----------
+ 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index d2846579285f..b4019d1a5575 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -807,7 +807,7 @@ static void test_sockmap_many_socket(void)
- 		return;
- 	}
+diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+index cc0c68bab907..1c96a3cf4b97 100644
+--- a/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
++++ b/tools/testing/selftests/bpf/prog_tests/sockmap_listen.c
+@@ -53,8 +53,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+ 			       int family, int sotype, int mapfd)
+ {
+ 	u32 key = 0;
+-	u64 value;
+ 	int err, s;
++	u64 value;
  
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -876,7 +876,7 @@ static void test_sockmap_many_maps(void)
- 		return;
- 	}
+ 	s = xsocket(family, sotype, 0);
+ 	if (s == -1)
+@@ -63,11 +63,8 @@ static void test_insert_opened(struct test_sockmap_listen *skel __always_unused,
+ 	errno = 0;
+ 	value = s;
+ 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+-	if (sotype == SOCK_STREAM) {
+-		if (!err || errno != EOPNOTSUPP)
+-			FAIL_ERRNO("map_update: expected EOPNOTSUPP");
+-	} else if (err)
+-		FAIL_ERRNO("map_update: expected success");
++	ASSERT_ERR(err, "map_update");
++	ASSERT_EQ(errno, EOPNOTSUPP, "errno");
+ 	xclose(s);
+ }
  
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -947,7 +947,7 @@ static void test_sockmap_same_sock(void)
- 		return;
- 	}
+@@ -77,8 +74,8 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
+ 	struct sockaddr_storage addr;
+ 	socklen_t len = 0;
+ 	u32 key = 0;
+-	u64 value;
+ 	int err, s;
++	u64 value;
  
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
+ 	init_addr_loopback(family, &addr, &len);
+ 
+@@ -93,8 +90,12 @@ static void test_insert_bound(struct test_sockmap_listen *skel __always_unused,
+ 	errno = 0;
+ 	value = s;
+ 	err = bpf_map_update_elem(mapfd, &key, &value, BPF_NOEXIST);
+-	if (!err || errno != EOPNOTSUPP)
+-		FAIL_ERRNO("map_update: expected EOPNOTSUPP");
++	if (sotype == SOCK_STREAM) {
++		ASSERT_ERR(err, "map_update");
++		ASSERT_EQ(errno, EOPNOTSUPP, "errno");
++	} else {
++		ASSERT_OK(err, "map_update");
++	}
+ close:
+ 	xclose(s);
+ }
+@@ -1289,7 +1290,7 @@ static void test_ops(struct test_sockmap_listen *skel, struct bpf_map *map,
+ 		/* insert */
+ 		TEST(test_insert_invalid),
+ 		TEST(test_insert_opened),
+-		TEST(test_insert_bound, SOCK_STREAM),
++		TEST(test_insert_bound),
+ 		TEST(test_insert),
+ 		/* delete */
+ 		TEST(test_delete_after_insert),
 
 -- 
 2.55.0
