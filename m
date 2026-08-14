@@ -1,70 +1,69 @@
-Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B42492515;
-	Fri, 14 Aug 2026 17:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABE41490C0D;
+	Fri, 14 Aug 2026 17:39:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786728957; cv=none; b=QSdNo10z30C8wY1thiw8WbhKmYSpzCu17UWIefrGnGTQUb1ZM/PGF1XJ0G+9MWipT2JgSpxMLCxvP0oDveGTmWWRPdwh/H2USf2kKLxCYhTiuNCiyYJJIWGtfHBjYJ/H7Xagz3vJx8XwIeMOTJQ6GDmA4qFeULxOmRMpUh2v+bw=
+	t=1786729147; cv=none; b=Y/WrG8e8DbLEh73nkQkqX0BU73e+PQuYmCuTz2od+8S1ySgdKc7WAz45uMzJ1To8npp1zVdbfbNHzOXiaFZu4NMpgshWpVQ1IWz4XpyRqEfur2qYpP3zkITyfCxD1VdYj6E/r/Przom5IFwiM5a89+VpootntHYMSMQZPqqBud4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786728957; c=relaxed/simple;
-	bh=Rh7YmftQk3S0jxfjxrGMdKV//RENjflqpuDNP9eLxYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OGxvlu+qwG3osDfxeA9bqPyLgxCe1QUIEiJuL5hyGfKlXaf3t4NGhAiYv+ONyZNbhHSuoj2Hx8TmB1hT+DI0rSHX52RjR6mQMWDPEKJd26qWjLTgAYAewYoFqGyn4EOOtUmduDke0EfXK/dSPlE8bNr5xXqfmBCunCs7Fk3sF4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=VOlVyjHW; arc=none smtp.client-ip=216.40.44.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
+	s=arc-20240116; t=1786729147; c=relaxed/simple;
+	bh=n7dKlPcRbePGYLfKVe62w9G5TU4eYuYfA54xqufalcI=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:Content-Type:
+	 MIME-Version:Message-ID; b=F5Tk65R0eadOWpKf6yuAIwGRWuHfJDtCLjVBPNPVGxVtJjxsoZVn6UulfpX+2DUWb+gQo8+KE202Kk5xNjEnr3SNUFmpgNuht4tOMwIV5o+bodrG+fLosKsAl/Ti+icHy4MBWBMjsEOIft/blJGfUrj00Pfp8IoQd+R9Dy8umOM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cSbnbTTn; arc=none smtp.client-ip=117.135.210.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="VOlVyjHW"
-Received: from omf15.hostedemail.com (lb01a-stub [10.200.18.249])
-	by unirelay08.hostedemail.com (Postfix) with ESMTP id DC12B14016A;
-	Fri, 14 Aug 2026 17:35:53 +0000 (UTC)
-Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 3423E1A;
-	Fri, 14 Aug 2026 17:35:52 +0000 (UTC)
-Date: Fri, 14 Aug 2026 13:36:10 -0400
-From: Steven Rostedt <rostedt@goodmis.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc: Shuah Khan <skhan@linuxfoundation.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] selftests/ftrace: Add a boottime tracing test
- framework
-Message-ID: <20260814133610.32eb5da9@gandalf.local.home>
-In-Reply-To: <20260815010524.b361dc036dd2e997d23cc421@kernel.org>
-References: <178649540853.438282.4271870161169100680.stgit@devnote2>
-	<20260815010524.b361dc036dd2e997d23cc421@kernel.org>
-X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cSbnbTTn"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=Date:From:To:Subject:Content-Type:MIME-Version:
+	Message-ID; bh=n7dKlPcRbePGYLfKVe62w9G5TU4eYuYfA54xqufalcI=; b=c
+	SbnbTTnsP2xgyz5v9WBleWZMwkPrvJnhBMOxDh8wlYRZ2CFyyW+Unc/gJaGXLlP8
+	hZHQXSJy3vTU2dcbrtPhX3dX70wjRjani3HGaAidRuOTbrTKiQIWAbCFdojz52PC
+	dR+PIN/us0C9t5a4B34xmqTTrkFAKV6woaywrJzMTM=
+Received: from jiang_hh2019$163.com ( [180.168.188.67] ) by
+ ajax-webmail-wmsvr-40-145 (Coremail) ; Sat, 15 Aug 2026 01:38:11 +0800
+ (CST)
+Date: Sat, 15 Aug 2026 01:38:11 +0800 (CST)
+From: "Honghui  Jiang" <jiang_hh2019@163.com>
+To: "Mark Brown" <broonie@kernel.org>
+Cc: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>,
+	"Andy Shevchenko" <andy@kernel.org>,
+	"Serge Semin" <fancer.lancer@gmail.com>,
+	"Brendan Higgins" <brendan.higgins@linux.dev>,
+	"David Gow" <david@davidgow.net>, "Rae Moar" <raemoar63@gmail.com>,
+	linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH v2 4/4] spi: Add KUnit coverage for DMA mapping error
+ paths
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version 2023.4-cmXT build
+ 20260511(2e539873) Copyright (c) 2002-2026 www.mailtech.cn 163com
+In-Reply-To: <93950eda-ee8e-4a28-8e3c-707d64c956fe@sirena.org.uk>
+References: <20260814031419.43378-1-jiang_hh2019@163.com>
+ <20260814031419.43378-5-jiang_hh2019@163.com>
+ <an8JaNLIy4je-tiG@ashevche-desk.local>
+ <93950eda-ee8e-4a28-8e3c-707d64c956fe@sirena.org.uk>
+X-NTES-SC: AL_Qu2TBPuZtkgi5yieZekdmU8age42XMSzuP4u2YJTc+oGtQb1xiIDeHFhJ0nT+9KOOwygmzObcCp+7vhhT6J4ZdXpWznSrZNQGxBm9LBnqQ==
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Server: rspamout05
-X-Rspamd-Queue-Id: 3423E1A
-X-Stat-Signature: e3xy4kwfse6hoorbp6wbx9ea14gb9mo1
-X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
-X-Session-ID: U2FsdGVkX1+IlRGdQa8Sj4kzmsASPsiH5S/NInFQq9A=
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=t4FISVqsfs6nJtW26w8JkGUvUUjrOIuGS2r6809IyQw=; b=VOlVyjHWN7syomysvwK+A3S08FzrwqAsOnS3r3qejwp8WuxApyUy1QVFdNHPmjIPsB9S9HFL9zFoIdHJ5GkCLIl2QmHlJGFKChYaAeTBnisLdISp05TXpDMGi6dWtrHZqdiRQso0ihsh7Fxn4of29MviJOp6Umij0mkaW9EqEYc=
-X-HE-Tag: 1786728952-314789
-X-HE-Meta: U2FsdGVkX1+zbFzPf+U5hv/21sGfk/YDMA4skqQzfloJB86IYspdICqKMU9Hy+ynVgddXfa8E7w2hQVI4nBI9M5SIcTa9o48AMIJ5xg4e3XrORQo2SaXHVvekSCeSz37CcsaUeGK47OvSULBTu23YNVt7GatEpjZk56unMVV0M3RDyW6hHRll/uEc6AKdQzSefqdr3Paw8tUFdHSPguSAUHRDUxJiuq55xmXq6R0/YVYTD4EHP1jAGjdWhPnAmzCm1ogt73WErAyoMKUa/nTE0qnXz2QX+QM/6CjAOEq+AKxhm7OKT+nZnqMPTckx4+qFG/25Xq+mcAOpFm1y+mKRrDoIjTR90sd
+Message-ID: <53943105.8b50.1a0015a531c.Coremail.jiang_hh2019@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID:kSgvCgD3X6aEUn9q11MyAA--.18W
+X-CM-SenderInfo: xmld0whbkkjiirz6il2tof0z/xtbC0wQwcGp-UoS9ggAA3r
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 
-On Sat, 15 Aug 2026 01:05:24 +0900
-Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
-
-> Hi Steve,
-> 
-> Would you have any comment on this? I would like to pick this to probes/for-next
-> for ensuring boottime tracing works correctly.
-
-Hmm, it's a bit too close to the merge window for a good review of it. I'll
-be traveling next week and I'm trying to get all my pull requests ready
-before then. You sent v1 on Monday and v3 on Tuesday. Sounds to me a bit
-rushed when you have 3 versions during the -rc7 release week.
-
-This isn't a trivial feature. I think we should let it settle during the
-next merge cycle to do it properly.
-
--- Steve
+T24gRnJpLCBBdWcgMTQsIDIwMjYgYXQgMDE6NDk6NTBQTSArMDEwMCwgTWFyayBCcm93biB3cm90
+ZToKPiBPbiBGcmksIEF1ZyAxNCwgMjAyNiBhdCAwMzoyNzoxM1BNICswMzAwLCBBbmR5IFNoZXZj
+aGVua28gd3JvdGU6Cj4gPiBUaGlzIGlzIGEgc3RyYXkgY2hhbmdlLgo+Cj4gV2VsbCwgb25lIG9m
+IHRoZSBjb25maWcgY2hhbmdlcyBpcy4gIENsZWFybHkgc3BpIGlzIGNyaXRpY2FsIGVub3VnaCB0
+bwo+IGJlIHRlc3RlZCBieSBkZWZhdWx0ISAgOlAKCgpUaGFua3MsIGJvdGguIEknbGwgZHJvcCBD
+T05GSUdfU1BJPXkgZnJvbSBkZWZhdWx0LmNvbmZpZyBpbiB2MyBhbmQga2VlcAppdCBpbiBhbGxf
+dGVzdHMuY29uZmlnLg==
