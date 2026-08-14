@@ -1,112 +1,115 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4396D3ADBB4;
-	Fri, 14 Aug 2026 02:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 336EA329E55;
+	Fri, 14 Aug 2026 02:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786674639; cv=none; b=l1H7ujZl1B0U/D31GcFJF/82sRAOxk73C1fVLaRaPzTqqjOPe9Eu1CMMdlPMxF4avPxYD04yv4Y5Ay9sEZ4+buSFONp9c2x42xFxXri2XoyWrEQU3+fUBKKV+/HrMn+cIT5KJV1YlettsJ3o5PYCn/r9ZpLra6E+RbvAQJgjlmM=
+	t=1786674862; cv=none; b=lzmr543tzzNNT97ATYt6Q1c/XGM8LDOO9c5OuG0N4Xze9MNBKWCwqr7BDME3vEkL6xzGCkSqXeWmS2M3x9quzGsCpGwV1z3/OH0GXh5hdqSknNPkgoZ4v2+YUkAEFysjf0s8pEf+DvUTnzE23uiKpU8xybq13xQhTfO/M1+oSos=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786674639; c=relaxed/simple;
-	bh=e6EdqofycO1KcQ0vu4NOsmDsKE9B5d3of8XgzYF9JMw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZbHxJJoXgSbuVbnaLsm14znP3PkvIo27zi0dWr7FUa46Mzq72n1uV6/rdShQK00C6ekX/wZsS7k1DqhejOEYHjAU59bctpIXcuYkzJJEAyN1S+y18gz/l+SUL42aM8qzBV48jP+bViLHjTLvaiUyW2oepeohoGKgj2hmKB0zBeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IzmhRSxC; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1786674862; c=relaxed/simple;
+	bh=n4Z8wREb+0cMKs2TVCMwLuj4LFW3ThceB+OLCUEtjfE=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=CBYQHw90UcYOeSB7TURiSZUeO8vvCc61aEV+vBrjwkx3B/dWTA4zPbevByfEeEG2ETGxctbTanKFG2YWr5F60oaQH7CAIp5OX4IgcCPhyFqEAi5fEwNL+y+jraD1dFvnCLFlIJMS1DkLMaWDLlfMwSpAgQnUnF57VJ8KuhAMaK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UYwBlC7Z; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IzmhRSxC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786674637; x=1818210637;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=e6EdqofycO1KcQ0vu4NOsmDsKE9B5d3of8XgzYF9JMw=;
-  b=IzmhRSxChW6QHiKpcjNiT3D69yyuNn6FQ0NklhlUxDE9e1H8eiOz0X8U
-   gIU/vHaXbwLxQk9jvyTePu3m2UyveBEV/qv+dfqJHxfjnl8NYskUbGQ+q
-   Vhof2AfTFJIgsodV+txteGYXwQnpSc/2X+x1lS5SOMS0DPkzimyYEFWuI
-   oJ4ervAx0KrAs8akArf8gDLvyHh3dznXYHv5ude/FX3E6FanTAjVeiWjZ
-   MuHqQOMYT8zQxRBeh3rztH1xj4f9Uq0s3D1m/G0aef3LQDlkn3AkPWUKY
-   WaQ0mlzKrveSfLj6MWqUSHuc3MkKfUhXLvtw61tJTE5IRhMnfoYI01cC2
-   Q==;
-X-CSE-ConnectionGUID: F7gtXFTARm+r4Xtxt5/ngg==
-X-CSE-MsgGUID: c4PNDUDKS6G48j10Po18qQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11874"; a="104788820"
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="104788820"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 19:30:36 -0700
-X-CSE-ConnectionGUID: nQfL49GxQ+C30MTsQCAqig==
-X-CSE-MsgGUID: niK+s9aWSOSxaolKC/QZPA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="264700152"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by orviesa009-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 19:30:24 -0700
-Message-ID: <4862dd36-2f9a-4a7e-b9c8-e08e51e80b0a@linux.intel.com>
-Date: Fri, 14 Aug 2026 10:30:21 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UYwBlC7Z"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5729A1F000E9;
+	Fri, 14 Aug 2026 02:34:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786674860;
+	bh=vMOiCT3HOrxIzG/6rTdRGr6YHezqxK5beLhO4yCStvU=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=UYwBlC7ZGCznZ0vejJ6oE4YU0fGLzkzopHWflJRVXjHRmM59ie1AFxnszUw23hEJ1
+	 dBN1XxMGraOOclBiqOxzGPsTXmlcp6x3AI6skO4FvdbSBQwEbrneHV0QVIAfP+kUOj
+	 +e9Osj+eefT0mJlorbrKbXOPsJAXdHlz1Afq6CgY4MrKIEo2y2ofstCakyVWKrQPjx
+	 P5BJRTDT/YNrcgZL9iOsM88QsPDt3Kp4optS8ToSXt3evl7P1c1Pi2GIkrvZUJFb41
+	 +05wCNL5bnNwmk2VEIYr6pZLsWh24LAx/QzLcjEDNGus4fgfXGDhg8+I8g8JPDAX9L
+	 UQJwcBGwsydaQ==
+Content-Type: multipart/mixed; boundary="===============3453139535058796135=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 13/41] KVM: guest_memfd: Return early if range already
- has requested attributes
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-13-2fc18ee6d3ba@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260807-gmem-inplace-conversion-v10-13-2fc18ee6d3ba@google.com>
-Content-Type: text/plain; charset=UTF-8
+Message-Id: <a6a17714be50f30fda2b3dee849bbc7e72cd7b2322de92b6986a1626537b89ab@mail.kernel.org>
+In-Reply-To: <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
+References: <20260814-bpf-riscv-stack-args-v3-1-2160de56fea3@kylinos.cn>
+Subject: Re: [PATCH bpf-next v3 1/2] bpf, riscv: Add BPF stack arguments support for RV64 JIT
+From: bot+bpf-ci@kernel.org
+To: jiangfeng@kylinos.cn,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,luke.r.nels@gmail.com,xi.wang@gmail.com,bjorn@kernel.org,pulehui@huawei.com,puranjay@kernel.org,pjw@kernel.org,palmer@dabbelt.com,aou@eecs.berkeley.edu,alex@ghiti.fr,shuah@kernel.org,nathan@kernel.org,ndesaulniers@google.com,morbo@google.com,justinstitt@google.com
+Cc: bpf@vger.kernel.org,linux-riscv@lists.infradead.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,llvm@lists.linux.dev,jiangfeng@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Fri, 14 Aug 2026 02:34:19 +0000 (UTC)
+
+--===============3453139535058796135==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Provide function to check that a range has given attributes.
-> 
-> Optimize setting memory attributes by returning early if all pages in the
-> requested range already has the requested attributes.
+> diff --git a/arch/riscv/net/bpf_jit_comp64.c b/arch/riscv/net/bpf_jit_comp64.c
+> index 2504df1fa1118..62c84de22163f 100644
+> --- a/arch/riscv/net/bpf_jit_comp64.c
+> +++ b/arch/riscv/net/bpf_jit_comp64.c
 
-Nit:  has -> have
+[ ... ]
 
-> 
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> @@ -1891,6 +1916,21 @@ int bpf_jit_emit_insn
+>  	case BPF_LDX | BPF_MEM | BPF_H:
+>  	case BPF_LDX | BPF_MEM | BPF_W:
+>  	case BPF_LDX | BPF_MEM | BPF_DW:
+> +		if (insn->src_reg == BPF_REG_PARAMS) {
+> +			int idx = off / 8 - 1;
+> +
+> +			if (is_12b_int(idx * 8)) {
+> +				emit_ldx_insn(rd, idx * 8, RV_REG_FP, BPF_SIZE(code), false, ctx);
+> +			} else {
+> +				emit_imm(RV_REG_T1, idx * 8, ctx);
+> +				emit_add(RV_REG_T1, RV_REG_T1, RV_REG_FP, ctx);
+> +				emit_ldx_insn(rd, 0, RV_REG_T1, BPF_SIZE(code), false, ctx);
+> +			}
+> +			if (BPF_SIZE(code) != BPF_DW && insn_is_zext(&insn[1]))
+> +				return 1;
+> +			break;
+> +		}
+> +		fallthrough;
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+Does this new BPF-to-BPF stack argument convention work correctly with
+the existing RV64 trampoline code?
 
+The convention here reads incoming stack arguments from FP+0, FP+8, etc
+(callee FP == caller SP). But looking at store_args() in this same file,
+the trampoline appears to use the native RISC-V ABI instead:
+
+arch/riscv/net/bpf_jit_comp64.c:store_args() {
+    for (i = 0; i < nr_arg_slots; i++) {
+        if (i < RV_MAX_REG_ARGS)
+            emit_sd(RV_REG_FP, -args_off, RV_REG_A0 + i, ctx);
+        else
+            emit_ld(RV_REG_T1, 16 + (i - RV_MAX_REG_ARGS) * 8, RV_REG_FP, ctx);
+
+where RV_MAX_REG_ARGS is 8, so it expects arguments 6, 7, 8 in a5, a6, a7
+and arguments 9+ at FP+16.
+
+For a BPF subprogram using this new convention, arguments 6+ arrive in
+memory, not in a5-a7. When an fentry or fexit program attaches to such a
+subprogram, wouldn't it read unrelated register values instead of the real
+arguments?
+
+Both arm64 and x86-64 appear to avoid this by keeping their BPF stack
+argument convention identical to their native ABIs. arm64 uses
+`stack_arg_reg[] = { A64_R(5), A64_R(6), A64_R(7) }` and x86-64 keeps arg6
+in r9, so their trampolines work without changes.
+
+Can fentry/fexit attach to static BPF subprograms with more than 5
+arguments, or is there a verifier check that prevents this?
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31761418445
+--===============3453139535058796135==--
