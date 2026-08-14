@@ -1,243 +1,418 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFBF48AE04;
-	Fri, 14 Aug 2026 16:05:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21AE347CA83
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 16:06:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786723547; cv=none; b=AUF1fW8QwGHYz0RIxFrjCbgd6FILcvlqb+O8iPJ8EimSsYkCxzU5mQ4gy7H4SLQJexeCtQJq+aG5iYSiJVfkEZ1VWcjQIZS2HxN6C9RxyHbWp+AP959BrbdGBZwU9zH1F4jrQb6pSpiSkS7g3GAqyEzM4Gl4LnjKFvtw94XPX9g=
+	t=1786723613; cv=none; b=OQAaqdVkZzMEZLDkcmMVbSkbPuCPFA7icDWkYzBnzTcuYHt0j0+FDjMTxRU2JLeJFRTWFhI85FjVIaB6y7CA2SbN4wyeU4DrqxxilWszcly9FBjJlVhfCAv3x53CMhcIW4ofc3ZjE4p5DB/glno1oqJ74a9DaHqwNodb//BVKyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786723547; c=relaxed/simple;
-	bh=L8GsF73UnKkggtrCxHY/AZeQySCCSFf5WblsqBgisdc=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=b0OH4HmPldA6PBgXijy1lt6tyaXAUJACdBDMaOJfiu5j4zXP+ZQFz/BTvLXwVOT+epMN0m5T/9efdp6+/T5RJKu5hwS0woXOt2UuW55151p5Owr51dG8WhEvlurtat9eZdykTTPOBFWCTf79ds9PToWq6D7TyZa7OJNwaK+MEgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LrXPY0s1; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786723613; c=relaxed/simple;
+	bh=uLu76cWf7I+67dUkzFKAUCMO83fVj+kdvowibuGu+Zo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NEsHn3YhE3/ibrC/CWg7OzUjYUlIs+ZHjekHIZFB5pQdLxmUuFZSFY/SPI/8diaS6JyBlW2rSkzPozx5xO4xA8BWtgfSkx+yyHGbwQk+7mvYdMQn9BXWA3988sQKBnPD8P6DNQBeMz+JyEKFXBq2jCOnaHZzdEc4l989G5NiDWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=rPWn13Ab; arc=none smtp.client-ip=209.85.167.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LrXPY0s1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829ED1F000E9;
-	Fri, 14 Aug 2026 16:05:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786723528;
-	bh=Q5nalS8clh6zVc3SzWMnKZJ3lcpnCa5AuqNQUNumrEs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=LrXPY0s1PpQURSOt5GR9cvpVCHL1d/OFgWH0ZVda6JjzAv5hlMqFsOoOTMr0QetTa
-	 GhQMfrkVrtWh+tdlaYI+fyeUq4qAltEdxKXg1lf3GVUZGqZ0qlYt1kzMlwkADlEAjS
-	 FkHq5WcFV/A90mPRrgngDG4V0UiQ3Nw1ytH6bSRbAVa5E4ih3u6FmKw0QFQlq/EsTB
-	 WQltN3ZdHANAbwXrMxqMIAHEcoNU/QWLTNnIYsWvap/ltwJqzPdKRs8rD/HHMWzZPL
-	 uYQkgj4yQwq5uQhcXk8u11fLJH/viY3QIP3OxtyS2g7QcBH/4NuCXBJqC33Bc/H+i0
-	 DiaC43AyYbtJA==
-Date: Sat, 15 Aug 2026 01:05:24 +0900
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Steven Rostedt
- <rostedt@goodmis.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan
- <skhan@linuxfoundation.org>, Mathieu Desnoyers
- <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] selftests/ftrace: Add a boottime tracing test
- framework
-Message-Id: <20260815010524.b361dc036dd2e997d23cc421@kernel.org>
-In-Reply-To: <178649540853.438282.4271870161169100680.stgit@devnote2>
-References: <178649540853.438282.4271870161169100680.stgit@devnote2>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="rPWn13Ab"
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-49fa951b2c6so636402b6e.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 09:06:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1786723607; x=1787328407; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lXhmdMMiiCtGRS5IKPip21Q5vKDETRQdcSgDS2qOyrA=;
+        b=rPWn13AbfHAQriFF7WpiKmQvPZtZB/Gg3j4KDq4XkiEIhz4OYlGsN8UQNYy2LBkx8S
+         9aWiHz3fcGTtwjLHPPF2Dj/jAJgll4tFARIDvsmTQz9+XKTUd502OESpLopCO+0lsU7l
+         JCPyctUtIDxbRuiMkVxr10uDk2zk39xeQ5tteaicyseI34WlYZu/Af8UYcs/0sQbTiry
+         UlYmioGSFtqksDJ46T1H1y2WYAanx7qyy9W6QGnwWApO7J9Sj8wjFMLeKqmpg5X1CstJ
+         /kpoOaav4tasCV7k0lwFs3CBrGXkDIMmG5QergqhMEO+QcoMG77DRK63AHveUnH5gFFx
+         9q9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786723607; x=1787328407;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lXhmdMMiiCtGRS5IKPip21Q5vKDETRQdcSgDS2qOyrA=;
+        b=GLIF6H2CS5d3sGJmKCYqp4oakXUkhZhS9s4prBoyTBUesgTTyjt6rKRRz3rKN+Yma6
+         xjvwtAdZGu/cZu9MlIJ8AP94TxHsdPXmZJGuCV8qQAc2M+C/Cqy8Z8Uk9LJlD8/iyldR
+         +z+8NE9bz81w23qmZKAoc8bJMT+3r6RoWO+t+TRSuTAnqb0rq8otBSMirUiLhRiDBpgZ
+         BMk4JZnt3XFlUzPxzYDWo5gpl/p6u9+vL9/ULofbXZwAt/BttKAOx5aPAm2DFSpIC07f
+         7j4Uh2A6XbepLwpMjGUxNcJOE1DoHwE8Msrc7E8u27qgbGEYpMED9X3SZ76osGVnL0Kh
+         1mnw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq2VaodkZDgFQv+XiKgi9Jii+8cq8EE9RcpB5MWdjvWEiMh1vn04tbdv/yLtZYy8oq6tnVQFVcyqNyuvA38sDI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyhuEVRMUjyUz69z9DjQPhWyiTXzMq7UulDsujKtFRAdaDhRKMC
+	nIFc0KlppLsqn5gQzdL7FWiY/7l6zTdmA7opKtEiXjK7b0rkSw2KoGiYvEqoMMeO4YE=
+X-Gm-Gg: AR+sD11tDwNpRDLOxb/xeq8TcZoPsqMoB2g1LgjR3y9hl/fT4bCdAr3EsH/B8p01s/2
+	belqXKqryMBtHw0zldWCYyOBR+xzyVFbZTKx9Ogy6P873EA44WlhadA3Fu04QpleHROK8YqNvhu
+	U1fzqZk5uTYaYGmD3PDUiorcas9RqBDATnEUGz0NjSAWPV5Mwl6A1b3+24QnSoMHH2/1DZqHkEw
+	8z5DSC5Pt7rswNyOwvmjogSYf3CsrrQem7N0xaDSvYmMeVaMFsVr5BHQLUKrezEMogxEWT3bIWc
+	RmOmyZUrAcGu8SdgosLvBmzyXvHRV2qGlU99AWJiHUBBKLckbmTjzYe2oEi9sUNFkNWlEXKy/4b
+	r7bKpH/gVjEx7B4Nj5O5+t4LLZSK/+EUV2udXrlIUF6ttA3QqbHP4fk4EaSBBU93keErQ6N95h4
+	tfy4o6c8J2a19gTcmNWvTYGP1eiORVfo+mXUJF4Zjy3tP/2l1elR3ReN5Hn8hm8PLnKPlb/yFP9
+	m77aCQR6enDNOnaO5MZjy0NcSFMzfofPsZBPMzz3t+nlH1hwbvaCLhs
+X-Received: by 2002:a05:6809:2cc:20b0:4a4:ade8:a287 with SMTP id 5614622812f47-4b241ccc905mr4159320b6e.13.1786723607089;
+        Fri, 14 Aug 2026 09:06:47 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::4:a11e])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b24db65d1asm1179393b6e.14.2026.08.14.09.06.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Aug 2026 09:06:46 -0700 (PDT)
+Message-ID: <edf18414-5bec-4776-97cb-555230de0c13@davidwei.uk>
+Date: Fri, 14 Aug 2026 09:06:45 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 3/6] selftests: net: refactor server state
+ into struct thread_ctx
+To: Juanlu Herrero <juanlu@fastmail.com>, netdev@vger.kernel.org
+Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+ pabeni@redhat.com, shuah@kernel.org
+References: <20260814012348.46958-1-juanlu@fastmail.com>
+ <20260814012348.46958-4-juanlu@fastmail.com>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260814012348.46958-4-juanlu@fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Steve,
-
-Would you have any comment on this? I would like to pick this to probes/for-next
-for ensuring boottime tracing works correctly.
-
-Thank you,
-
-On Wed, 12 Aug 2026 09:43:28 +0900
-"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-
-> Hi,
+On 2026-08-13 18:23, Juanlu Herrero wrote:
+> Move server-side state (io_uring ring, zcrx area, refill ring, receive
+> tracking) from global variables into a local struct thread_ctx. This is
+> a pure refactor with no behavior change: run_server still allocates a
+> single context on the stack and runs single-threaded, using io_uring
+> accept and recvzc as before.
 > 
-> This is the v3 series of the boottime tracing test framework to selftests/ftrace.
-> This test builds initramfs from busybox binary and test scripts, and run it on
-> QEMU with modified cmdline and bootconfig.
+> This prepares the ground for the multithread server support in the
+> following commits, which spawns N worker threads each with their own
+> struct thread_ctx.
 > 
-> The previous version is here:
-> 
->  https://lore.kernel.org/all/178646245730.428104.4400499381224001727.stgit@devnote2/
-> 
-> In this version, I fixed some issues pointed by Sashiko[1] and add "# APPLETS:"
-> line support for test script. See below changelog for details.
-> 
-> [1] https://sashiko.dev/#/patchset/178646245730.428104.4400499381224001727.stgit%40devnote2
-> 
-> Changes in v3:
-> [1/4]
->  - Require file command and check kernel binary architecture via file -bL
->    instead of matching kernel path string in run_boottime_test.sh.
->  - Use 'cp -L' when copying BUSYBOX into initramfs to dereference
->    symbolic links.
->  - Use 'ln -sf' when creating BusyBox applet symlinks in initramfs.
->  - Add support for '# APPLETS: <applets>' header in test scripts to
->    dynamically create BusyBox applet symlinks in initramfs.
->  - Update boottime test README to document file command dependency and
->    '# APPLETS:' header syntax.
-> [3/4]
->  - Add '# APPLETS: awk' header to cmdline-03-trace-buf-size.sh to request
->    awk applet in initramfs.
-> 
-> Changes in v2:
-> [1/4]
->  - Add top-level boottime-ktap wrapper script and include it in
->    TEST_PROGS in Makefile.
->  - Define BUSYBOX_APPLETS as a global array variable including sleep
->    and sed.
->  - Require timeout tool in run_boottime_test.sh and README, and always
->    invoke QEMU under timeout command to prevent infinite execution loops.
->  - Add fallback sleep loop safeguard (sleep 100 || break) in guest
->    init script.
->  - Support multi-line .qemuopts files using read -r -d '' -a qemu_args.
-> [3/4]
->  - Fix buffer_size_kb parsing in cmdline-03-trace-buf-size.sh to handle
->    unexpanded buffer string output '1 (expanded: 2048)'.
->  - Use grep -qw in cmdline-04-trace-options.sh to match word options
->    and avoid matching disabled 'no<option>' entries.
-> [4/4]
->  - Increase reserve_mem alignment to 32M (reserve_mem=12M:32M:trace) to
->    ensure stable physical memory placement across KASLR reboots.
-> 
-> The new run_boottime_test.sh can run tests not only for boottime trace
-> but also other kernel cmdline tracing options, including persistent
-> ring buffer and its backup.
-> 
-> Overview
-> --------
-> The test runner (`run_boottime_test.sh`) constructs a lightweight initramfs
-> with busybox and a tracefs checker script from `tests/`, attaches optional
-> bootconfigs from `bootconfigs/` using the `bootconfig` tool, applies optional
-> command-line parameters from `cmdlines/`, boots the target kernel image under
-> QEMU, and reports results according to TAP version 13 format.
-> 
-> Here is an example usage of the test.
-> -----
-> $ ./tools/testing/selftests/ftrace/boottime/run_boottime_test.sh -k ${BUILD_PATH}/arch/x86/boot/bzImage
-> TAP version 13
-> 1..14
-> ok 1 01-kprobe
-> ok 2 02-synth
-> ok 3 03-eprobe
-> ok 4 04-fprobe
-> ok 5 05-tprobe
-> ok 6 06-instance
-> ok 7 cmdline-01-ftrace
-> ok 8 cmdline-02-trace-event
-> ok 9 cmdline-03-trace-buf-size
-> ok 10 cmdline-04-trace-options
-> ok 11 cmdline-05-trace-clock
-> ok 12 cmdline-06-trace-instance
-> ok 13 persistent-01-reserve-mem
-> ok 14 persistent-02-backup-instance
-> # Totals: pass:14 fail:0 xfail:0 xpass:0 skip:0 error:0
-> -----
-> 
-> Note that this requires QEMU, busybox and some other tools to run, see README
-> for more information. If those tools are not installed, this test will be
-> skipped.
-> 
-> Other discussion
-> ----------------
-> BTW, I found other similar shell scripts under kselftest for other subsystems.
-> I think we can make an integrated (standard) QEMU test framework in the
-> kselftest common directory and reuse it.
-> Also, maybe we can reconsider using ktest.pl to run these tests.
-> 
-> 
-> Thanks,
-> 
+> Assisted-by: Claude:claude-opus-4-8
+> Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
 > ---
-> base-commit: 29a86c5e6361caffa7e75e891169e813f82ff688
+>   .../selftests/drivers/net/hw/iou-zcrx.c       | 156 +++++++++---------
+>   1 file changed, 80 insertions(+), 76 deletions(-)
 > 
-> Masami Hiramatsu (Google) (4):
->       selftests/ftrace: Add generic boot tracing test framework
->       selftests/ftrace: Add boot-time tracing testcases
->       selftests/ftrace: Add kernel cmdline tracing testcases
->       selftests/ftrace: Add persistent ring buffer testcases
-> 
-> 
->  tools/testing/selftests/ftrace/Makefile            |    4 
->  tools/testing/selftests/ftrace/boottime-ktap       |    6 
->  tools/testing/selftests/ftrace/boottime/Makefile   |   10 
->  tools/testing/selftests/ftrace/boottime/README     |   74 ++++
->  .../ftrace/boottime/bootconfigs/01-kprobe.bconf    |    4 
->  .../ftrace/boottime/bootconfigs/02-synth.bconf     |    4 
->  .../ftrace/boottime/bootconfigs/03-eprobe.bconf    |    4 
->  .../ftrace/boottime/bootconfigs/04-fprobe.bconf    |    4 
->  .../ftrace/boottime/bootconfigs/05-tprobe.bconf    |    4 
->  .../ftrace/boottime/bootconfigs/06-instance.bconf  |    5 
->  .../boottime/cmdlines/cmdline-01-ftrace.cmdline    |    1 
->  .../cmdlines/cmdline-02-trace-event.cmdline        |    1 
->  .../cmdlines/cmdline-03-trace-buf-size.cmdline     |    1 
->  .../cmdlines/cmdline-04-trace-options.cmdline      |    1 
->  .../cmdlines/cmdline-05-trace-clock.cmdline        |    1 
->  .../cmdlines/cmdline-06-trace-instance.cmdline     |    1 
->  .../cmdlines/persistent-01-reserve-mem.cmdline     |    1 
->  .../cmdlines/persistent-02-backup-instance.cmdline |    1 
->  .../selftests/ftrace/boottime/run_boottime_test.sh |  403 ++++++++++++++++++++
->  .../selftests/ftrace/boottime/tests/01-kprobe.sh   |   25 +
->  .../selftests/ftrace/boottime/tests/02-synth.sh    |   25 +
->  .../selftests/ftrace/boottime/tests/03-eprobe.sh   |   25 +
->  .../selftests/ftrace/boottime/tests/04-fprobe.sh   |   25 +
->  .../selftests/ftrace/boottime/tests/05-tprobe.sh   |   25 +
->  .../selftests/ftrace/boottime/tests/06-instance.sh |   30 +
->  .../ftrace/boottime/tests/cmdline-01-ftrace.sh     |   19 +
->  .../boottime/tests/cmdline-02-trace-event.sh       |   26 +
->  .../boottime/tests/cmdline-03-trace-buf-size.sh    |   29 +
->  .../boottime/tests/cmdline-04-trace-options.sh     |   23 +
->  .../boottime/tests/cmdline-05-trace-clock.sh       |   19 +
->  .../boottime/tests/cmdline-06-trace-instance.sh    |   24 +
->  .../boottime/tests/persistent-01-reserve-mem.sh    |   28 +
->  .../tests/persistent-02-backup-instance.sh         |   40 ++
->  tools/testing/selftests/ftrace/config              |    6 
->  34 files changed, 897 insertions(+), 2 deletions(-)
->  create mode 100755 tools/testing/selftests/ftrace/boottime-ktap
->  create mode 100644 tools/testing/selftests/ftrace/boottime/Makefile
->  create mode 100644 tools/testing/selftests/ftrace/boottime/README
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-01-ftrace.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-02-trace-event.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-03-trace-buf-size.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-04-trace-options.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-05-trace-clock.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-06-trace-instance.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline
->  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline
->  create mode 100755 tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-01-ftrace.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-02-trace-event.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-03-trace-buf-size.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-04-trace-options.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-05-trace-clock.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-06-trace-instance.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh
->  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh
-> 
-> --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> index c6dbd0ad53681..9b62fd0703e61 100644
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> @@ -87,14 +87,18 @@ static unsigned int cfg_rx_buf_len;
+>   static bool cfg_dry_run;
+>   
+>   static char *payload;
+> -static void *area_ptr;
+> -static void *ring_ptr;
+> -static size_t ring_size;
+> -static struct io_uring_zcrx_rq rq_ring;
+> -static unsigned long area_token;
+> -static int connfd;
+> -static bool stop;
+> -static size_t received;
+> +
+> +struct thread_ctx {
+> +	struct io_uring		ring;
+> +	void			*area_ptr;
+> +	void			*ring_ptr;
+> +	size_t			ring_size;
+> +	struct io_uring_zcrx_rq	rq_ring;
+> +	unsigned long		area_token;
+> +	int			connfd;
+> +	bool			stop;
+> +	size_t			received;
+> +};
+>   
+>   static unsigned long gettimeofday_ms(void)
+>   {
+> @@ -138,7 +142,7 @@ static inline size_t get_refill_ring_size(unsigned int rq_entries)
+>   	return ALIGN_UP(size, page_size);
+>   }
+>   
+> -static void setup_zcrx(struct io_uring *ring)
+> +static void setup_zcrx(struct thread_ctx *ctx)
+>   {
+>   	unsigned int ifindex;
+>   	unsigned int rq_entries = 4096;
+> @@ -149,44 +153,44 @@ static void setup_zcrx(struct io_uring *ring)
+>   		error(1, 0, "bad interface name: %s", cfg_ifname);
+>   
+>   	if (cfg_rx_buf_len && cfg_rx_buf_len != page_size) {
+> -		area_ptr = mmap(NULL,
+> -				AREA_SIZE,
+> -				PROT_READ | PROT_WRITE,
+> -				MAP_ANONYMOUS | MAP_PRIVATE |
+> -				MAP_HUGETLB | MAP_HUGE_2MB,
+> -				-1,
+> -				0);
+> -		if (area_ptr == MAP_FAILED) {
+> +		ctx->area_ptr = mmap(NULL,
+> +				     AREA_SIZE,
+> +				     PROT_READ | PROT_WRITE,
+> +				     MAP_ANONYMOUS | MAP_PRIVATE |
+> +				     MAP_HUGETLB | MAP_HUGE_2MB,
+> +				     -1,
+> +				     0);
+> +		if (ctx->area_ptr == MAP_FAILED) {
+>   			printf("Can't allocate huge pages\n");
+>   			exit(SKIP_CODE);
+>   		}
+>   	} else {
+> -		area_ptr = mmap(NULL,
+> -				AREA_SIZE,
+> -				PROT_READ | PROT_WRITE,
+> -				MAP_ANONYMOUS | MAP_PRIVATE,
+> -				0,
+> -				0);
+> -		if (area_ptr == MAP_FAILED)
+> +		ctx->area_ptr = mmap(NULL,
+> +				     AREA_SIZE,
+> +				     PROT_READ | PROT_WRITE,
+> +				     MAP_ANONYMOUS | MAP_PRIVATE,
+> +				     0,
+> +				     0);
+> +		if (ctx->area_ptr == MAP_FAILED)
+>   			error(1, 0, "mmap(): zero copy area");
+>   	}
+>   
+> -	ring_size = get_refill_ring_size(rq_entries);
+> -	ring_ptr = mmap(NULL,
+> -			ring_size,
+> -			PROT_READ | PROT_WRITE,
+> -			MAP_ANONYMOUS | MAP_PRIVATE,
+> -			0,
+> -			0);
+> +	ctx->ring_size = get_refill_ring_size(rq_entries);
+> +	ctx->ring_ptr = mmap(NULL,
+> +			     ctx->ring_size,
+> +			     PROT_READ | PROT_WRITE,
+> +			     MAP_ANONYMOUS | MAP_PRIVATE,
+> +			     0,
+> +			     0);
+>   
+>   	struct io_uring_region_desc region_reg = {
+> -		.size = ring_size,
+> -		.user_addr = (__u64)(unsigned long)ring_ptr,
+> +		.size = ctx->ring_size,
+> +		.user_addr = (__u64)(unsigned long)ctx->ring_ptr,
+>   		.flags = IORING_MEM_REGION_TYPE_USER,
+>   	};
+>   
+>   	struct io_uring_zcrx_area_reg area_reg = {
+> -		.addr = (__u64)(unsigned long)area_ptr,
+> +		.addr = (__u64)(unsigned long)ctx->area_ptr,
+>   		.len = AREA_SIZE,
+>   		.flags = 0,
+>   	};
+> @@ -200,7 +204,7 @@ static void setup_zcrx(struct io_uring *ring)
+>   		.rx_buf_len = cfg_rx_buf_len,
+>   	};
+>   
+> -	ret = io_uring_register_ifq(ring, (void *)&reg);
+> +	ret = io_uring_register_ifq(&ctx->ring, (void *)&reg);
+>   	if (cfg_rx_buf_len && (ret == -EINVAL || ret == -EOPNOTSUPP ||
+>   			       ret == -ERANGE)) {
+>   		printf("Large chunks are not supported %i\n", ret);
+> @@ -209,64 +213,64 @@ static void setup_zcrx(struct io_uring *ring)
+>   		error(1, 0, "io_uring_register_ifq(): %d", ret);
+>   	}
+>   
+> -	rq_ring.khead = (unsigned int *)((char *)ring_ptr + reg.offsets.head);
+> -	rq_ring.ktail = (unsigned int *)((char *)ring_ptr + reg.offsets.tail);
+> -	rq_ring.rqes = (struct io_uring_zcrx_rqe *)((char *)ring_ptr + reg.offsets.rqes);
+> -	rq_ring.rq_tail = 0;
+> -	rq_ring.ring_entries = reg.rq_entries;
+> +	ctx->rq_ring.khead = (unsigned int *)((char *)ctx->ring_ptr + reg.offsets.head);
+> +	ctx->rq_ring.ktail = (unsigned int *)((char *)ctx->ring_ptr + reg.offsets.tail);
+> +	ctx->rq_ring.rqes = (struct io_uring_zcrx_rqe *)((char *)ctx->ring_ptr + reg.offsets.rqes);
+> +	ctx->rq_ring.rq_tail = 0;
+> +	ctx->rq_ring.ring_entries = reg.rq_entries;
+>   
+> -	area_token = area_reg.rq_area_token;
+> +	ctx->area_token = area_reg.rq_area_token;
+>   }
+>   
+> -static void add_accept(struct io_uring *ring, int sockfd)
+> +static void add_accept(struct thread_ctx *ctx, int sockfd)
+>   {
+>   	struct io_uring_sqe *sqe;
+>   
+> -	sqe = io_uring_get_sqe(ring);
+> +	sqe = io_uring_get_sqe(&ctx->ring);
+>   
+>   	io_uring_prep_accept(sqe, sockfd, NULL, NULL, 0);
+>   	sqe->user_data = 1;
+>   }
+>   
+> -static void add_recvzc(struct io_uring *ring, int sockfd)
+> +static void add_recvzc(struct thread_ctx *ctx, int sockfd)
+>   {
+>   	struct io_uring_sqe *sqe;
+>   
+> -	sqe = io_uring_get_sqe(ring);
+> +	sqe = io_uring_get_sqe(&ctx->ring);
+>   
+>   	io_uring_prep_rw(IORING_OP_RECV_ZC, sqe, sockfd, NULL, 0, 0);
+>   	sqe->ioprio |= IORING_RECV_MULTISHOT;
+>   	sqe->user_data = 2;
+>   }
+>   
+> -static void add_recvzc_oneshot(struct io_uring *ring, int sockfd, size_t len)
+> +static void add_recvzc_oneshot(struct thread_ctx *ctx, int sockfd, size_t len)
+>   {
+>   	struct io_uring_sqe *sqe;
+>   
+> -	sqe = io_uring_get_sqe(ring);
+> +	sqe = io_uring_get_sqe(&ctx->ring);
+>   
+>   	io_uring_prep_rw(IORING_OP_RECV_ZC, sqe, sockfd, NULL, len, 0);
+>   	sqe->ioprio |= IORING_RECV_MULTISHOT;
+>   	sqe->user_data = 2;
+>   }
+>   
+> -static void process_accept(struct io_uring *ring, struct io_uring_cqe *cqe)
+> +static void process_accept(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
+>   {
+>   	if (cqe->res < 0)
+>   		error(1, 0, "accept()");
+> -	if (connfd)
+> +	if (ctx->connfd)
+>   		error(1, 0, "Unexpected second connection");
+>   
+> -	connfd = cqe->res;
+> +	ctx->connfd = cqe->res;
+>   	if (cfg_oneshot)
+> -		add_recvzc_oneshot(ring, connfd, page_size);
+> +		add_recvzc_oneshot(ctx, ctx->connfd, page_size);
+>   	else
+> -		add_recvzc(ring, connfd);
+> +		add_recvzc(ctx, ctx->connfd);
+>   }
+>   
+> -static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+> +static void process_recvzc(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
+>   {
+> -	unsigned rq_mask = rq_ring.ring_entries - 1;
+> +	unsigned int rq_mask = ctx->rq_ring.ring_entries - 1;
+>   	struct io_uring_zcrx_cqe *rcqe;
+>   	struct io_uring_zcrx_rqe *rqe;
+>   	uint64_t mask;
+> @@ -275,7 +279,7 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+>   	int i;
+>   
+>   	if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs == 0) {
+> -		stop = true;
+> +		ctx->stop = true;
+>   		return;
+>   	}
+>   
+> @@ -284,56 +288,56 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+>   
+>   	if (cfg_oneshot) {
+>   		if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs) {
+> -			add_recvzc_oneshot(ring, connfd, page_size);
+> +			add_recvzc_oneshot(ctx, ctx->connfd, page_size);
+>   			cfg_oneshot_recvs--;
+>   		}
+>   	} else if (!(cqe->flags & IORING_CQE_F_MORE)) {
+> -		add_recvzc(ring, connfd);
+> +		add_recvzc(ctx, ctx->connfd);
+>   	}
+>   
+>   	rcqe = (struct io_uring_zcrx_cqe *)(cqe + 1);
+>   
+>   	n = cqe->res;
+>   	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
+> -	data = (char *)area_ptr + (rcqe->off & mask);
+> +	data = (char *)ctx->area_ptr + (rcqe->off & mask);
+>   
+>   	for (i = 0; i < n; i++) {
+> -		if (*(data + i) != payload[(received + i)])
+> +		if (*(data + i) != payload[(ctx->received + i)])
+>   			error(1, 0, "payload mismatch at %d", i);
+>   	}
+> -	received += n;
+> +	ctx->received += n;
+>   
+> -	rqe = &rq_ring.rqes[(rq_ring.rq_tail & rq_mask)];
+> -	rqe->off = (rcqe->off & ~IORING_ZCRX_AREA_MASK) | area_token;
+> +	rqe = &ctx->rq_ring.rqes[(ctx->rq_ring.rq_tail & rq_mask)];
+> +	rqe->off = (rcqe->off & ~IORING_ZCRX_AREA_MASK) | ctx->area_token;
+>   	rqe->len = cqe->res;
+> -	io_uring_smp_store_release(rq_ring.ktail, ++rq_ring.rq_tail);
+> +	io_uring_smp_store_release(ctx->rq_ring.ktail, ++ctx->rq_ring.rq_tail);
+>   }
+>   
+> -static void server_loop(struct io_uring *ring)
+> +static void server_loop(struct thread_ctx *ctx)
+>   {
+>   	struct io_uring_cqe *cqe;
+>   	unsigned int count = 0;
+>   	unsigned int head;
+>   	int i, ret;
+>   
+> -	io_uring_submit_and_wait(ring, 1);
+> +	io_uring_submit_and_wait(&ctx->ring, 1);
+>   
+> -	io_uring_for_each_cqe(ring, head, cqe) {
+> +	io_uring_for_each_cqe(&ctx->ring, head, cqe) {
+>   		if (cqe->user_data == 1)
+> -			process_accept(ring, cqe);
+> +			process_accept(ctx, cqe);
+>   		else if (cqe->user_data == 2)
+> -			process_recvzc(ring, cqe);
+> +			process_recvzc(ctx, cqe);
+>   		else
+>   			error(1, 0, "unknown cqe");
+>   		count++;
+>   	}
+> -	io_uring_cq_advance(ring, count);
+> +	io_uring_cq_advance(&ctx->ring, count);
+>   }
+>   
+>   static void run_server(void)
+>   {
+> +	struct thread_ctx ctx = {};
+>   	unsigned int flags = 0;
+> -	struct io_uring ring;
+>   	int fd, enable, ret;
+>   	uint64_t tstop;
+>   
+> @@ -356,22 +360,22 @@ static void run_server(void)
+>   	flags |= IORING_SETUP_SUBMIT_ALL;
+>   	flags |= IORING_SETUP_CQE32;
+>   
+> -	io_uring_queue_init(512, &ring, flags);
+> +	io_uring_queue_init(512, &ctx.ring, flags);
+>   
+> -	setup_zcrx(&ring);
+> +	setup_zcrx(&ctx);
+>   	if (cfg_dry_run)
+>   		return;
+>   
+>   	if (listen(fd, 1024) < 0)
+>   		error(1, 0, "listen()");
+>   
+> -	add_accept(&ring, fd);
+> +	add_accept(&ctx, fd);
+>   
+>   	tstop = gettimeofday_ms() + 5000;
+> -	while (!stop && gettimeofday_ms() < tstop)
+> -		server_loop(&ring);
+> +	while (!ctx.stop && gettimeofday_ms() < tstop)
+> +		server_loop(&ctx);
+>   
+> -	if (!stop)
+> +	if (!ctx.stop)
+>   		error(1, 0, "test failed\n");
+>   }
+>   
 
-
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Reviewed-by: David Wei <dw@davidwei.uk>
