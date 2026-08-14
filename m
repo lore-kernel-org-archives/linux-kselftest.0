@@ -1,213 +1,199 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E08456E14;
-	Fri, 14 Aug 2026 10:41:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D68448B9C;
+	Fri, 14 Aug 2026 11:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786704085; cv=none; b=JQsVtmem74zcXWdeDPJsI2tX/yzRH/47hRjXDr67xu7FPgdoLFaZfy/awIAjrE8VcINUJ6XrcB5lapIkgQb1oBl4VM+ARbI9LEvDQiEX+viJI1ZII9R9wRNq5LCqr/f6MUhfn1Xf46JJ7Qlic5syIbngx9YfWR0x4KZccSa4ItU=
+	t=1786705328; cv=none; b=EnI/bGipJWwCXqhY1lD3FeXzKmAPnW68Zf5DAt9i/IXkHD4JJ1jHXHfOu/FiB8qX4Lc31xqJBGf8Pa1WquXoy8mYPKcF40/jt7fTa8681x9nzjNaeHIOgSmmFdJoDkT4p5aCaNOKlmcHi/0209rdYZppokjaigngU5S+V6lyIv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786704085; c=relaxed/simple;
-	bh=CJlMe8eckMtRbFMo6OjTUfLXAWdcwp7d+38BdYAigIE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=j3FRUWEppm+3CTbWHUHTcYpA20CSOeEVo//v9cciQRVnODv4OT2mGBnu+1f6wVbbHeuxKaxOO3q8xtYjB2Ku5JR7m1ccAFXeNrteNnnJNB0Ag8ncSoLU4pk+V7Zh6b/ZSC2N+Z1rT8NIoSXQZXKrXRBcajVpVkpz5LB25WQzneU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eKK7b8HQ; arc=none smtp.client-ip=10.30.226.201
+	s=arc-20240116; t=1786705328; c=relaxed/simple;
+	bh=B58AR9SQxBsV/7KuARWZd24/yABrrClZf+v4qU7pT3Q=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=f2tmGrJWlM0gSkyowSvJi0U4coJA++WqTKQdMprMLiAWdufrdhtpUXn1fKwGmCPf6Z/wL3YLeH/bBZ91IUvvDxIx/RHHFos/qM/E8UwsnOwrXz9Q+BoBkI6kUO/o/kIoeXhLSFphmnzQ3uJ6njc7GfwX0Nbwo7CCcIjNQF8K4U8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAIzFiaq; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eKK7b8HQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPS id BC9EBC2BCF7;
-	Fri, 14 Aug 2026 10:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1786704083;
-	bh=CJlMe8eckMtRbFMo6OjTUfLXAWdcwp7d+38BdYAigIE=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=eKK7b8HQktyx7HHxZzmr9+dwYq8G83AG+MtacqM6wPAyyvVlvZ50/BTv1ASYdCBgc
-	 M4pdva1YgaBnVbRkuI+nBkfipPy9wJKzTaS7OmWzd1+FQTpWqbOjoZQW/rnyVZEe0J
-	 bnjZC8VHcm9IAJbtxBfLzT4wtEcf449pr5CmNo1KpZKkREQUcSg9r91atpIBL6lRDc
-	 rwb5zFOcLEsgNJFLT5yGynBMvYMwc3kFo5RIFPsiIiJ3PSVC3TpUo2TbdxH3tIHZfM
-	 Yl59Ff1n6D/oFNcosGzKX7dV50UqzPAC6zfHN+L+P4knGnnxWGgJJL2CePLyjPbVbR
-	 fyZqVEIkog3Zg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id A7F22C5DF6A;
-	Fri, 14 Aug 2026 10:41:23 +0000 (UTC)
-From: Joel Granados <joel.granados@kernel.org>
-Date: Fri, 14 Aug 2026 12:41:14 +0200
-Subject: [PATCH v2 3/4] sysctl: Disallow partial updates for erroneous
- sysctl vectors
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAIzFiaq"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76EC1F000E9;
+	Fri, 14 Aug 2026 11:01:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786705319;
+	bh=B58AR9SQxBsV/7KuARWZd24/yABrrClZf+v4qU7pT3Q=;
+	h=Subject:From:To:Cc:Date:In-Reply-To:References;
+	b=AAIzFiaq2dOHpKq0+Ggb5pBcRqHh26XNnXgCQt2n2JtPhVercUzKMgIHx4dMGL1x6
+	 /+anNoh/KgVuFBIeWu7xMDr+dBKNNhUfv5GqKCJek3KE8DTjverL/XVYSiCVZyKgSo
+	 mRE+pVPiktBslvFYTG+g3jIvsQTnxH2TcdcZVdiEk0ZShv3XynnquzrVHgmbpgnjHP
+	 spCljb/3R102e99PvHaakJug63nc7hOT08HhLUnrAWvt9nvFWfgUTrdXxKZ/+vOi6/
+	 Rwgu+1uIhnxphT3bc5PzyTE28C7NwOhKA/ul26RNdUTU5cR7jVY3MIYpuDf82yCc7F
+	 LPCdrau9EfPQQ==
+Message-ID: <a8f5840cf3f2cbf71de7a1f3957f70d9897adfa2.camel@kernel.org>
+Subject: Re: [PATCH v2 4/8] SUNRPC: undo partial rpcbind registrations when
+ svc_register() fails
+From: Jeff Layton <jlayton@kernel.org>
+To: Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, Olga
+ Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom
+ Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, Anna
+ Schumaker <anna@kernel.org>, "David S. Miller"	 <davem@davemloft.net>, Eric
+ Dumazet <edumazet@google.com>, Jakub Kicinski	 <kuba@kernel.org>, Paolo
+ Abeni <pabeni@redhat.com>, Simon Horman	 <horms@kernel.org>, "J. Bruce
+ Fields" <bfields@fieldses.org>, Shuah Khan	 <shuah@kernel.org>
+Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>, 
+	linux-kselftest@vger.kernel.org
+Date: Fri, 14 Aug 2026 07:01:55 -0400
+In-Reply-To: <572f0269-9bf4-4a80-8e9c-3c4614d45f7e@app.fastmail.com>
+References: <20260811-nfsd-nl-hang-v2-0-c0c92b3953c3@kernel.org>
+	 <20260811-nfsd-nl-hang-v2-4-c0c92b3953c3@kernel.org>
+	 <e1706a70-d9f8-423e-9462-2d77b2e444b1@app.fastmail.com>
+	 <26486c88075a0b1e3c1cb088fe97d39e0051b5d3.camel@kernel.org>
+	 <572f0269-9bf4-4a80-8e9c-3c4614d45f7e@app.fastmail.com>
+Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
+ keydata=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
+ QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260814-lklm-partial_ctlvec-v2-3-9df50d26e477@kernel.org>
-References: <20260814-lklm-partial_ctlvec-v2-0-9df50d26e477@kernel.org>
-In-Reply-To: <20260814-lklm-partial_ctlvec-v2-0-9df50d26e477@kernel.org>
-To: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Jianlin Shi <shijianlin11@foxmail.com>, akpm@linux-foundation.org, 
- vbabka@kernel.org, hannes@cmpxchg.org, surenb@google.com, mhocko@suse.com, 
- jackmanb@google.com, ziy@nvidia.com, linux-kernel@vger.kernel.org, 
- linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-mm@kvack.org, Joel Granados <joel.granados@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4178;
- i=joel.granados@kernel.org; h=from:subject:message-id;
- bh=CJlMe8eckMtRbFMo6OjTUfLXAWdcwp7d+38BdYAigIE=;
- b=owJ4nAHtARL+kA0DAAoBupfNUreWQU8ByyZiAGp+8NHUjrC7/UY5qTi0oMM3LIpSbQYbXCUtz
- uIVIOsjNamHHIkBswQAAQoAHRYhBK5HCVcl5jElzssnkLqXzVK3lkFPBQJqfvDRAAoJELqXzVK3
- lkFPMgUL/1+0vc9a7WaBT4uQrdf6jczPCFm0E/iBcZQPHgbAfV+CEAmg0uJf2GHtzgs9xmRKM6E
- HxBTtxcUx5A/LhJWwVQberzSHPAf1BaKBa5ymaidcfZNBCG0TEn5hVChTZqPHT8m5frNEYt4JQu
- Ao5xgFF2wgHM4ExTr5rB1xccWG8AF+FRZI+YcR747VuBx2BUd70cOmQeTrxSyoITjkOVzL9Ad6Y
- 0owmDRcqrx3GJRa8xcK0CCuw9nLGB53pQfkAJhBTkD+B9OKgf6CmgHLLJsUqreQzPsRJsxR7f2k
- PKXfYS7UZTBKMrKouFiXKAjAiX49LXafoFkwGzwrsFIfBeliqQPkw+YFHmxfbJnHvCawt37SPdM
- x1qVyHmVRqzyp73hHuxn3IGLUBsjURiyVRGNdAHyRMnwm+pnL1NoZI/vNGRUg3qVXKOo5C4Xcn7
- EOPhbwbV3bTl7u+SWBFdqsthVkyw0VGeOE2sGm6a/4+oG/3YeolYydFWmyZnrtKnghQE32o11K4
- 2M=
-X-Developer-Key: i=joel.granados@kernel.org; a=openpgp;
- fpr=F1F8E46D30F0F6C4A45FF4465895FAAC338C6E77
-X-Endpoint-Received: by B4 Relay for joel.granados@kernel.org/default with
- auth_id=239
 
-When updating the kernel sysctl vectors there is a chance that not all
-vector elements are updated due to erroneous input. Use a staging
-variable that holds a copy of the vector and commits to the actual
-table->data only when all input is successfully updated.
+On Wed, 2026-08-12 at 15:57 -0400, Chuck Lever wrote:
+>=20
+> On Wed, Aug 12, 2026, at 3:38 PM, Jeff Layton wrote:
+> > On Tue, 2026-08-11 at 15:19 -0400, Chuck Lever wrote:
+>=20
+> > > For an IPv4 listener, the port-zero callback falls back through
+> > > __svc_rpcb_register4() to rpcb_register(). PMAPPROC_UNSET ignores
+> > > its protocol argument, so unwinding a partially successful TCP
+> > > registration also removes the mappings for existing listeners on
+> > > other transports, I would think.
+> > >=20
+> > > It might be that the best the kernel can do here is tear everything
+> > > down if one registration fails.
+> > >=20
+> >=20
+> > What I was thinking for NFSv2/3 was to just have the listener set
+> > netlink call wait for registration to complete before returning to
+> > userland. That would mean we'd have to block even longer to try and
+> > unregister things if things fail.
+> >=20
+> > Alternate proposal: let's just declare rpcbind reg errors to be non-
+> > fatal: do a pr_warn() and just leave it up to the admin to sort it out
+> > if that happens instead of trying to fail the startup.
+> >=20
+> > The resulting situation for the server is no worse off (it's just
+> > running instead of being down), and I move that we're better off
+> > leaving it up to a human to clean up the mess instead of trying to fix
+> > things up from the kernel.
+>=20
+> I was thinking of this in terms of a declarative administrative UI:
+> If the kernel can't set the requested configuration, it should
+> fail back to the previous configuration. Maybe that's not possible.
+>=20
 
-The staging is only for vectors; cases where table->data points to a
-variable should not be staged as they will not be updated on input
-error. PROC_VEC_UINT is not included because UINT arrays are not
-allowed.
+It's possible, but difficult. The original /proc interfaces were never
+this clean, so making the underlying bits behave this way for the
+netlink interfaces, but not the legacy /proc ones will be hard.
 
-Replace first with nr_conv, incremented where first was cleared. first
-is exactly nr_conv == 0, and the counter doubles as the number of
-elements to publish.
+Also, today we don't take any steps to try and preserve the old
+listener table. That would have to be done here as well.
 
-Example of behavior that is being prevented:
+> On the other hand, what might be better is to handle the rpcbind
+> registration from user space instead of the kernel, after the
+> kernel listener is set up.
+>=20
 
-  # echo "4 4 1 7" > /proc/sys/kernel/printk
-  # echo "1 x" > /proc/sys/kernel/printk
-  -bash: echo: write error: Invalid argument
-  # cat /proc/sys/kernel/printk
-  1 4 1 7 <- incorrect
+That's possible I guess. We could send a new boolean down in the
+listener call that says "don't do any rpcbind registration" and then if
+the kernel indicates that it understands that message then userland
+could do the registration.
 
-It should be unchanged ("4 4 1 7") on error.
+That's a major undertaking though and I don't like fundamentally
+changing the interface here, particularly when we'll still have to cope
+with doing this from the kernel for legacy cases.
 
-Link: https://lore.kernel.org/all/tencent_A860C873956A52E26AD8D309A308A241BA08@qq.com/
-Signed-off-by: Joel Granados <joel.granados@kernel.org>
----
- kernel/sysctl.c | 65 +++++++++++++++++++++++++++++++++++++++++++++------------
- 1 file changed, 52 insertions(+), 13 deletions(-)
+I still think the best solution of all would be to just say
+"henceforth, rpcbind registration is non-fatal". That just leaves the
+kernel succeeding the listener set today when it would have failed
+before, but will still printk() an appropriate warning in that case, so
+the admin should be aware that rpcbind registration failed, even though
+the server is up.
 
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index 7e9024899be6d5971752dd5639ab4b806a899081..25577ffc2801267cc69df60a1064ada9efd4b97d 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -637,6 +637,26 @@ static int proc_vec_conv(enum proc_vec_type type, union proc_vec_conv conv,
- 	return -EINVAL;
- }
- 
-+static int commit_conv_vec(const enum proc_vec_type data_type, void *dst,
-+			    const void *src, size_t nr)
-+{
-+	size_t i;
-+
-+	switch (data_type) {
-+	case PROC_VEC_INT:
-+		for (i = 0; i < nr; i++)
-+			WRITE_ONCE(((int *)dst)[i], ((const int *)src)[i]);
-+		return 0;
-+
-+	case PROC_VEC_ULONG:
-+		for (i = 0; i < nr; i++)
-+			WRITE_ONCE(((ulong *)dst)[i], ((const ulong *)src)[i]);
-+		return 0;
-+	default:
-+		return -EINVAL;
-+	}
-+}
-+
- /**
-  * apply_conv_on_vec - Apply converter function on data vector
-  *
-@@ -663,22 +683,31 @@ static int apply_conv_on_vec(const union proc_vec_conv conv,
- 			     const size_t buf_nbyte, void *buf,
- 			     size_t *buf_left_final)
- {
--	int vec_left, first = 1, err = 0;
--	size_t buf_left;
--	char *data, *p;
-+	int vec_left, err = 0;
-+	size_t buf_left, nr_conv = 0;
-+	char *data, *data_stage = NULL, *p;
- 	bool is_unsigned = data_type == PROC_VEC_UINT || data_type == PROC_VEC_ULONG;
- 
--	data = table->data;
--	vec_left = table->maxlen / data_size;
- 	buf_left = buf_nbyte;
- 
-+	data = table->data;
- 	if (SYSCTL_USER_TO_KERN(conv_dir)) {
- 		if (buf_left > PAGE_SIZE - 1)
- 			buf_left = PAGE_SIZE - 1;
- 		p = buf;
-+
-+		if (table->maxlen > data_size) {
-+			data_stage = kmemdup(table->data, table->maxlen, GFP_KERNEL);
-+			if (!data_stage) {
-+				err = -ENOMEM;
-+				goto out;
-+			}
-+			data = data_stage;
-+		}
- 	}
- 
--	for (; buf_left && vec_left--; data += data_size, first = 0) {
-+	vec_left = table->maxlen / data_size;
-+	for (; buf_left && vec_left--; data += data_size, nr_conv++) {
- 		unsigned long lval;
- 		bool neg = false;
- 
-@@ -703,20 +732,30 @@ static int apply_conv_on_vec(const union proc_vec_conv conv,
- 				err = -EINVAL;
- 				break;
- 			}
--			if (!first)
-+			if (nr_conv)
- 				proc_put_char(&buf, &buf_left, '\t');
- 			proc_put_long(&buf, &buf_left, lval, neg);
- 		}
- 	}
- 
--	if (SYSCTL_KERN_TO_USER(conv_dir) && !first && buf_left && !err)
--		proc_put_char(&buf, &buf_left, '\n');
--	if (SYSCTL_USER_TO_KERN(conv_dir) && !err && buf_left)
--		proc_skip_spaces(&p, &buf_left);
--	if (SYSCTL_USER_TO_KERN(conv_dir) && first)
--		return err ? : -EINVAL;
-+	if (SYSCTL_USER_TO_KERN(conv_dir)) {
-+		if (!err && buf_left)
-+			proc_skip_spaces(&p, &buf_left);
-+		if (!nr_conv) {
-+			err = err ? : -EINVAL;
-+			goto out;
-+		}
-+		if (!err && data_stage)
-+			err = commit_conv_vec(data_type, table->data, data_stage, nr_conv);
-+	} else {
-+		if (nr_conv && buf_left && !err)
-+			proc_put_char(&buf, &buf_left, '\n');
-+	}
-+
- 	*buf_left_final = buf_left;
- 
-+out:
-+	kfree(data_stage);
- 	return err;
- }
- 
-
--- 
-2.50.1
-
-
+Right now, I'm really unclear on what sort of changes you want to see
+here as a final patchset. What would make this mergeable for you?
+--=20
+Jeff Layton <jlayton@kernel.org>
