@@ -1,73 +1,73 @@
-Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58B552F3C10;
-	Fri, 14 Aug 2026 01:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15423016F5;
+	Fri, 14 Aug 2026 01:23:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670638; cv=none; b=cIfxrwHjJJL+xhZii02kcEiyKxCjpH4cONEqehK/ZLzjyQ9kaDDfjbAaXTqbV5DjvLVHvKFFnlTOsiE5FkzSMpup3ReqbG8PoMlvRP8W25mxBHaIY+OeB56QtYL94/91oxcPosh5WAi4ivMM5ZJ1by755lsQhAzDOBDH7peCsMc=
+	t=1786670640; cv=none; b=mJY5lIoOdBpJSHOr9Cb+21X7rgjGgs9cIif+O1n7TP8gUSVzjF1fFzhbzLEIyGMoNkkUL8EHD7MVRtx7dLZj1F7zATE4e59ivX06k9R+EnVphBtImdAVOGeqBD909QNSAV/5IZdp67Z/q+2Ms65GCfifyI5PNIEuqmd9jFSRkoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670638; c=relaxed/simple;
-	bh=eWDj3kkPBFHQfyTEjMW902qILN3TU2T9Zq2jz1SA9nE=;
+	s=arc-20240116; t=1786670640; c=relaxed/simple;
+	bh=ZWPFvoRyrvnJsflPTlk63Xy5ZT27x7jwQlCWWZ/pct0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=heN1URvJAhIrKqBNsrHxoOsFOq59wc1pBZGQh/MPFVqRvtIJpuL1aaSIIGBOQLMYErrg+mm7w2EQibnz4SwI6d7BTDzDiY/vQGCh4Ehkn7KF0G9Ne45js4pvw18yPfwzDMOHOjSD0Dz/u0OSohrvFeuQ78vlk4+AvzQA79eskCQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=SmQL7wxZ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jAgHIWsW; arc=none smtp.client-ip=202.12.124.159
+	 MIME-Version; b=KoVtihGeCt52gFja5V9xWReQP4Oe0c9/50k/2FCMU6nCDz9LpfHvsv423u1sufs9zVxMPdNRtzpSOJtmqDExaaZCADoMnvC3GFue/++GmtxqOOpOSnntsb7iSVPqLY3my7dtgdow0rxZyieltsEesi2D154naNTBRd6e8mJM3tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=Ah95oiG9; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VYhk31xM; arc=none smtp.client-ip=202.12.124.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="SmQL7wxZ";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jAgHIWsW"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 2F8737A0119;
-	Thu, 13 Aug 2026 21:23:55 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="Ah95oiG9";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VYhk31xM"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id B0AB01D00367;
+	Thu, 13 Aug 2026 21:23:57 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 13 Aug 2026 21:23:55 -0400
+  by phl-compute-05.internal (MEProxy); Thu, 13 Aug 2026 21:23:58 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
 	cc:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1786670635; x=
-	1786757035; bh=q7pte3tk23ZD+tvkYa9GrmKRYW53b1N7+AJyYvzvjS4=; b=S
-	mQL7wxZSGDr4btt0W7XzJ6rUeImdb0t8r05ZUBCrFHgP+FbrKKEABjrSDsxVyp0y
-	atAv26dV/H0pYXsgKk9ZC5Tosg2y3VcnJA0cOAtRfd33lFV/zgsmG39SncoPUINw
-	Y8s54j8+McuRiJ/oOZ2/0WJFsjtE1ndL6y00xkXHXU3rFiNB99fSnIW0OsGltXkx
-	tJmCJFENY+Xxhq5KaC4kVnq42EyIZeNvmLnAqbONxPdEir5ozW/u4gXZMji4x7Jj
-	JKrzJUJRibeiJ/DUakqQK10ZYXtsE3i2eh4VIjCd34dnXxqAzfcMAxPgbNbRNvJq
-	QiMp2XYCEOtosUic3Rk2Q==
+	:reply-to:subject:subject:to:to; s=fm3; t=1786670637; x=
+	1786757037; bh=Pkr0bWo5PyfxNbPe7FMXAwo56pMSREqoXVUV6Z5Ur04=; b=A
+	h95oiG9Gn3BJthqnsl4nNyThJjhvjxjzErnr2N6MRXMo+HJ6so+YQN/gC58FtfZA
+	4BgVvSpdNm7LWXsf+SCV/JKAukZhzt746d3dadGiMr8cFQ3+kShU0jjNkWrcEXGD
+	yzcOpg/eBmKMT+G0MQL275NDLREKsD4Y3CWM6uYBtd1FSAWyqPoeUaCDy+agfrdf
+	7nsZv9qfmCon1Rhbd5SvyeHHbAuW40MX8SMa6AbmkAFFxVl4cIBE/iRTxSXL0cAI
+	63ZI5MS5hbAJA1N/HnT7sV7c5lLiOOG/9xF3ZvnlbjNQ2sf+4x6T8yMOHXAgm6ws
+	IukMMScFs+fJLIALKxk/A==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786670635; x=1786757035; bh=q
-	7pte3tk23ZD+tvkYa9GrmKRYW53b1N7+AJyYvzvjS4=; b=jAgHIWsW6xmWLjjw4
-	G3NjqQKvwCYDCFHvDJgC6Ruok+u1kNYrSAw+QAAWcfVCPPGrjTCl9pnQz6paxZPz
-	mkI16mhAKPGJfKYFGI7oI//GlF9qW7aQcljwMZTqAdeGz6XT+ylJOvWIikRSxsyY
-	bl2y/EKU2wN+QGbUFAODINzDZZQSU9ZqDXzVA+wbVhj3UzkireiiLhUUlkspIllH
-	3w314lW8169rY/fZez2ljKNLKvScrnY+ipCxLQmwJnp3hO7tegrd9+HaP86B51w3
-	i8rEuZk3AUWz/BqZghICs/ca5focp1+Q1gedDWZ6C+rZVfj2+A0c8fWnW3h3gT5/
-	lSYsQ==
-X-ME-Sender: <xms:Km5-an0aDBe_Deucq7mKL5yInTaJPBfvwdLbKY16AJ2plRvVfsUb9g>
-    <xme:Km5-auSloUOHeaGGa5BRMbVyo39qLlg9vj7C_VDPVUjxAvR4t-5Yg_bRvqF4MtntJ
-    H01ccL4pmb4N7G3rc3Z-ebv81-FhaJtij2DAlkV7bCuYsZvGbfwkmIi>
-X-ME-Received: <xmr:Km5-ajc8iTbjKd6_k65TDNqSRx_UTbfvC-x8-C2oy4oXjG3LHYvWW2u65DWYFgB4xpbCK4MdWPHz2ysMOZfauIKPFS7BdAA>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786670637; x=1786757037; bh=P
+	kr0bWo5PyfxNbPe7FMXAwo56pMSREqoXVUV6Z5Ur04=; b=VYhk31xMTTPvfLuWY
+	VX9mU3Tq1FuYj1u+EU49TzyCG6yiHOUwfyFvwE9GzKY3m4vo4SzORRp1oAS/06Es
+	VY8agWPd1qzeG1/pl2KvTAHXf1A0zMVUfvC07lV3rxQ2LJYBd+/pi8QWunP5I2/7
+	sYQnYn6sSn81B4TuRKqngf9A6OfnttbLvALmGos4m0P7htlz/8dCBRVLp/f2eOSe
+	hjWTcStPLn54Hf2qWeXV3jqQTQd0xqCh7+ImBh7s/u0/liZ0JJm3CBgHhKsVsL3L
+	lP1RiNSa41x0mWb9E/HWqlVgBAz6IGeFa7paC4R5VH44YdIbOJ3MCDPspqOOgDxY
+	eilBA==
+X-ME-Sender: <xms:LW5-avdhTkCiAQ3XzIEMmOXL16yMHUHDsNWiS5vqHFqisY7hcOO3HQ>
+    <xme:LW5-atawiRFTg-xiNlrGx4euEnCEG7Ly_knnhFJxDPUW-qRN1pOmTK5Faf601x9zr
+    0vezIlTclyA6hN1g2XSmoeK6FfchWRM4x9kVZ1AH1xH6VbWc80Mz_MF>
+X-ME-Received: <xmr:LW5-akFRQ09Dk1s-IKRrtv1mDH4bIW6DxecijUrI_SyBalboOJPjd7287RhkTpt3RztPnbHG-akoWprCbs5IcHUGy1nF3nk>
 X-ME-Proxy-Cause: dmFkZTGlnKkc0TwPTb5JNCkAi+5Y8WSjcjjDWnkOIL2wNpUcV13CZto/qOXRm0nqGz7tPy
     KJEebetoFzGPCWAi43zBJPWh3lU6UkLAyBFZ6j4oxxM9R/f/XZ4XCVK2pzL/y7LQGFZvpR
     D/CrmLT9KZ1KsmxXyRJ2t1g6Nt6RO09HBhWhLe5eSw/EkIsnwI9+bk4+c3v7X8vnF67GAZ
     x5aPFmOtLpYkgdaSPCL5jXIqRgeyslKNbDZfP9OeqYyBjk5QInrgyNovvVM3MvStCRC0Vf
-    KMYutq9dcLsVOl/YKHQj65USZyVlLayx+Z5CvgQ+ECO90Jd7U6/TgSqqZrFbLu3cB39nWP
-    gYleAIr8Fsng95jrIU6TUaHFCATJJLvhBzmxAQ/qL8zZtwKE+6K86PK568VH0lYFgbO0C6
-    X0Lp1mFT4nHGOQpCrqD4GfFtuVWcdWUyi/pJ5IRpjm4fTd9qvGDXBo0URff+DHfVZaoSu8
-    eV8ty4xIizH+kOaAY1xUinretF69uHjgXBaseGAFlONt1Lh9TEuCLhlTt0gPqOrHRwptUw
-    OzUdMJN9td/PikvDRe98MvMk0JN1C7Ta35E9x2/g7sCdhfy83V5AgusOqjItDqLQKtVQIp
-    8+MWpwc9SfUFsxdiwSs2wqE285H0Ud5IZriW4qFxtW5VDkQrJywcir4NsJ0w
-X-ME-Proxy: <xmx:Km5-aneTtBtgCLDDPS5lA0yQEQy03-KgQJR5XPPPa8iSs3Qq0ThdmA>
-    <xmx:Km5-al33YSOhtsB2-8g2ggERlMC2vWup9pPbnbm2uQxhQzeTYb-CmQ>
-    <xmx:Km5-an-zlLs4FRhRMYkrjuZ51_DvS2gg-9Xn999XvGKJTxzFb3np4A>
-    <xmx:Km5-ai6ic-LL-MARGFw67KDZrU734KF-yq2EB8OrpQlp7Ox9Rv8wgA>
-    <xmx:K25-aie0C6paCg6qsdKummp7Z0C1TyuThWyBjrP-vhClZnvXoAJYN9GC>
+    KMYutq9dcLsVOl/YKHQj65USZyVlLayx+Z5CvgQ+ECO90Jd7U6/TgSqqZrFbLu3cB39nEC
+    sxNJIkpMmke0wuhYG449bOnAHW1ebJYWYF8rkL8Vsjax/mVaMiep7yNNA2YgYebxAmkbaq
+    mHK0pzOVAzUxT3Y4mzta+ePdg209vpfgZvGofUvfo8wEVizcj269cPNRE4eQSEd8bupFtP
+    7ESmDFervYeFFStHCpdUaMcfi/Q1q3osPefsTvS3Kh8uvHjQvwFxTB3GX7wXSB5n7CHYvQ
+    kh/ElGM1FQjNsZ2nQCoNfKl6XOzk0hZTSsUyUwkn299M/jpJiR5piJTR9tiO0viBKg0gIy
+    87r2UcUpNjvU8Q65uwpMTiaeDkHrg4wxMhks8LlmczAFbdmn54RwaMUoIjOA
+X-ME-Proxy: <xmx:LW5-armEDuNGyGwDji_-wkAnClqakEpdYtv9jlnmEdWfuxZnZfo3gQ>
+    <xmx:LW5-anf8RnjxHAWXSBIfX0O3qKFWhK8KRDlzFitXpPUe3R1n5RNoCQ>
+    <xmx:LW5-apE7peOEnvpXBIAWQ6TQ9eymlkZ2mdssCFedUrYaYXzfgX8oyw>
+    <xmx:LW5-ati9Vdi4wvlbA4NBE8_35qSFplYolFTkk9LwaazpA-uzROsicQ>
+    <xmx:LW5-ask3ln_wFg2eaE3hayUg7I95Kc9OMGfrSNJs6d8mZ8412PD-huUE>
 Feedback-ID: i80b64ba7:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 13 Aug 2026 21:23:54 -0400 (EDT)
+ 13 Aug 2026 21:23:56 -0400 (EDT)
 From: Juanlu Herrero <juanlu@fastmail.com>
 To: netdev@vger.kernel.org,
 	dw@davidwei.uk
@@ -79,9 +79,9 @@ Cc: io-uring@vger.kernel.org,
 	pabeni@redhat.com,
 	shuah@kernel.org,
 	Juanlu Herrero <juanlu@fastmail.com>
-Subject: [PATCH net-next v5 1/6] selftests: net: fix get_refill_ring_size() to use its local variable
-Date: Thu, 13 Aug 2026 20:23:43 -0500
-Message-ID: <20260814012348.46958-2-juanlu@fastmail.com>
+Subject: [PATCH net-next v5 3/6] selftests: net: refactor server state into struct thread_ctx
+Date: Thu, 13 Aug 2026 20:23:45 -0500
+Message-ID: <20260814012348.46958-4-juanlu@fastmail.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260814012348.46958-1-juanlu@fastmail.com>
 References: <20260814012348.46958-1-juanlu@fastmail.com>
@@ -93,34 +93,335 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In preparation for multi-threaded rss selftests, fix
-get_refill_ring_size() to use its local `size` variable instead of
-assigning to the file-global `ring_size`.
+Move server-side state (io_uring ring, zcrx area, refill ring, receive
+tracking) from global variables into a local struct thread_ctx. This is
+a pure refactor with no behavior change: run_server still allocates a
+single context on the stack and runs single-threaded, using io_uring
+accept and recvzc as before.
+
+This prepares the ground for the multithread server support in the
+following commits, which spawns N worker threads each with their own
+struct thread_ctx.
 
 Assisted-by: Claude:claude-opus-4-8
 Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
 ---
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 156 +++++++++---------
+ 1 file changed, 80 insertions(+), 76 deletions(-)
 
 diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index f6a8fc5fac241..df6b622043438 100644
+index c6dbd0ad53681..9b62fd0703e61 100644
 --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
 +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -132,10 +132,10 @@ static inline size_t get_refill_ring_size(unsigned int rq_entries)
- {
- 	size_t size;
+@@ -87,14 +87,18 @@ static unsigned int cfg_rx_buf_len;
+ static bool cfg_dry_run;
  
--	ring_size = rq_entries * sizeof(struct io_uring_zcrx_rqe);
-+	size = rq_entries * sizeof(struct io_uring_zcrx_rqe);
- 	/* add space for the header (head/tail/etc.) */
--	ring_size += page_size;
--	return ALIGN_UP(ring_size, page_size);
-+	size += page_size;
-+	return ALIGN_UP(size, page_size);
+ static char *payload;
+-static void *area_ptr;
+-static void *ring_ptr;
+-static size_t ring_size;
+-static struct io_uring_zcrx_rq rq_ring;
+-static unsigned long area_token;
+-static int connfd;
+-static bool stop;
+-static size_t received;
++
++struct thread_ctx {
++	struct io_uring		ring;
++	void			*area_ptr;
++	void			*ring_ptr;
++	size_t			ring_size;
++	struct io_uring_zcrx_rq	rq_ring;
++	unsigned long		area_token;
++	int			connfd;
++	bool			stop;
++	size_t			received;
++};
+ 
+ static unsigned long gettimeofday_ms(void)
+ {
+@@ -138,7 +142,7 @@ static inline size_t get_refill_ring_size(unsigned int rq_entries)
+ 	return ALIGN_UP(size, page_size);
  }
  
- static void setup_zcrx(struct io_uring *ring)
+-static void setup_zcrx(struct io_uring *ring)
++static void setup_zcrx(struct thread_ctx *ctx)
+ {
+ 	unsigned int ifindex;
+ 	unsigned int rq_entries = 4096;
+@@ -149,44 +153,44 @@ static void setup_zcrx(struct io_uring *ring)
+ 		error(1, 0, "bad interface name: %s", cfg_ifname);
+ 
+ 	if (cfg_rx_buf_len && cfg_rx_buf_len != page_size) {
+-		area_ptr = mmap(NULL,
+-				AREA_SIZE,
+-				PROT_READ | PROT_WRITE,
+-				MAP_ANONYMOUS | MAP_PRIVATE |
+-				MAP_HUGETLB | MAP_HUGE_2MB,
+-				-1,
+-				0);
+-		if (area_ptr == MAP_FAILED) {
++		ctx->area_ptr = mmap(NULL,
++				     AREA_SIZE,
++				     PROT_READ | PROT_WRITE,
++				     MAP_ANONYMOUS | MAP_PRIVATE |
++				     MAP_HUGETLB | MAP_HUGE_2MB,
++				     -1,
++				     0);
++		if (ctx->area_ptr == MAP_FAILED) {
+ 			printf("Can't allocate huge pages\n");
+ 			exit(SKIP_CODE);
+ 		}
+ 	} else {
+-		area_ptr = mmap(NULL,
+-				AREA_SIZE,
+-				PROT_READ | PROT_WRITE,
+-				MAP_ANONYMOUS | MAP_PRIVATE,
+-				0,
+-				0);
+-		if (area_ptr == MAP_FAILED)
++		ctx->area_ptr = mmap(NULL,
++				     AREA_SIZE,
++				     PROT_READ | PROT_WRITE,
++				     MAP_ANONYMOUS | MAP_PRIVATE,
++				     0,
++				     0);
++		if (ctx->area_ptr == MAP_FAILED)
+ 			error(1, 0, "mmap(): zero copy area");
+ 	}
+ 
+-	ring_size = get_refill_ring_size(rq_entries);
+-	ring_ptr = mmap(NULL,
+-			ring_size,
+-			PROT_READ | PROT_WRITE,
+-			MAP_ANONYMOUS | MAP_PRIVATE,
+-			0,
+-			0);
++	ctx->ring_size = get_refill_ring_size(rq_entries);
++	ctx->ring_ptr = mmap(NULL,
++			     ctx->ring_size,
++			     PROT_READ | PROT_WRITE,
++			     MAP_ANONYMOUS | MAP_PRIVATE,
++			     0,
++			     0);
+ 
+ 	struct io_uring_region_desc region_reg = {
+-		.size = ring_size,
+-		.user_addr = (__u64)(unsigned long)ring_ptr,
++		.size = ctx->ring_size,
++		.user_addr = (__u64)(unsigned long)ctx->ring_ptr,
+ 		.flags = IORING_MEM_REGION_TYPE_USER,
+ 	};
+ 
+ 	struct io_uring_zcrx_area_reg area_reg = {
+-		.addr = (__u64)(unsigned long)area_ptr,
++		.addr = (__u64)(unsigned long)ctx->area_ptr,
+ 		.len = AREA_SIZE,
+ 		.flags = 0,
+ 	};
+@@ -200,7 +204,7 @@ static void setup_zcrx(struct io_uring *ring)
+ 		.rx_buf_len = cfg_rx_buf_len,
+ 	};
+ 
+-	ret = io_uring_register_ifq(ring, (void *)&reg);
++	ret = io_uring_register_ifq(&ctx->ring, (void *)&reg);
+ 	if (cfg_rx_buf_len && (ret == -EINVAL || ret == -EOPNOTSUPP ||
+ 			       ret == -ERANGE)) {
+ 		printf("Large chunks are not supported %i\n", ret);
+@@ -209,64 +213,64 @@ static void setup_zcrx(struct io_uring *ring)
+ 		error(1, 0, "io_uring_register_ifq(): %d", ret);
+ 	}
+ 
+-	rq_ring.khead = (unsigned int *)((char *)ring_ptr + reg.offsets.head);
+-	rq_ring.ktail = (unsigned int *)((char *)ring_ptr + reg.offsets.tail);
+-	rq_ring.rqes = (struct io_uring_zcrx_rqe *)((char *)ring_ptr + reg.offsets.rqes);
+-	rq_ring.rq_tail = 0;
+-	rq_ring.ring_entries = reg.rq_entries;
++	ctx->rq_ring.khead = (unsigned int *)((char *)ctx->ring_ptr + reg.offsets.head);
++	ctx->rq_ring.ktail = (unsigned int *)((char *)ctx->ring_ptr + reg.offsets.tail);
++	ctx->rq_ring.rqes = (struct io_uring_zcrx_rqe *)((char *)ctx->ring_ptr + reg.offsets.rqes);
++	ctx->rq_ring.rq_tail = 0;
++	ctx->rq_ring.ring_entries = reg.rq_entries;
+ 
+-	area_token = area_reg.rq_area_token;
++	ctx->area_token = area_reg.rq_area_token;
+ }
+ 
+-static void add_accept(struct io_uring *ring, int sockfd)
++static void add_accept(struct thread_ctx *ctx, int sockfd)
+ {
+ 	struct io_uring_sqe *sqe;
+ 
+-	sqe = io_uring_get_sqe(ring);
++	sqe = io_uring_get_sqe(&ctx->ring);
+ 
+ 	io_uring_prep_accept(sqe, sockfd, NULL, NULL, 0);
+ 	sqe->user_data = 1;
+ }
+ 
+-static void add_recvzc(struct io_uring *ring, int sockfd)
++static void add_recvzc(struct thread_ctx *ctx, int sockfd)
+ {
+ 	struct io_uring_sqe *sqe;
+ 
+-	sqe = io_uring_get_sqe(ring);
++	sqe = io_uring_get_sqe(&ctx->ring);
+ 
+ 	io_uring_prep_rw(IORING_OP_RECV_ZC, sqe, sockfd, NULL, 0, 0);
+ 	sqe->ioprio |= IORING_RECV_MULTISHOT;
+ 	sqe->user_data = 2;
+ }
+ 
+-static void add_recvzc_oneshot(struct io_uring *ring, int sockfd, size_t len)
++static void add_recvzc_oneshot(struct thread_ctx *ctx, int sockfd, size_t len)
+ {
+ 	struct io_uring_sqe *sqe;
+ 
+-	sqe = io_uring_get_sqe(ring);
++	sqe = io_uring_get_sqe(&ctx->ring);
+ 
+ 	io_uring_prep_rw(IORING_OP_RECV_ZC, sqe, sockfd, NULL, len, 0);
+ 	sqe->ioprio |= IORING_RECV_MULTISHOT;
+ 	sqe->user_data = 2;
+ }
+ 
+-static void process_accept(struct io_uring *ring, struct io_uring_cqe *cqe)
++static void process_accept(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
+ {
+ 	if (cqe->res < 0)
+ 		error(1, 0, "accept()");
+-	if (connfd)
++	if (ctx->connfd)
+ 		error(1, 0, "Unexpected second connection");
+ 
+-	connfd = cqe->res;
++	ctx->connfd = cqe->res;
+ 	if (cfg_oneshot)
+-		add_recvzc_oneshot(ring, connfd, page_size);
++		add_recvzc_oneshot(ctx, ctx->connfd, page_size);
+ 	else
+-		add_recvzc(ring, connfd);
++		add_recvzc(ctx, ctx->connfd);
+ }
+ 
+-static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
++static void process_recvzc(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
+ {
+-	unsigned rq_mask = rq_ring.ring_entries - 1;
++	unsigned int rq_mask = ctx->rq_ring.ring_entries - 1;
+ 	struct io_uring_zcrx_cqe *rcqe;
+ 	struct io_uring_zcrx_rqe *rqe;
+ 	uint64_t mask;
+@@ -275,7 +279,7 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+ 	int i;
+ 
+ 	if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs == 0) {
+-		stop = true;
++		ctx->stop = true;
+ 		return;
+ 	}
+ 
+@@ -284,56 +288,56 @@ static void process_recvzc(struct io_uring *ring, struct io_uring_cqe *cqe)
+ 
+ 	if (cfg_oneshot) {
+ 		if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs) {
+-			add_recvzc_oneshot(ring, connfd, page_size);
++			add_recvzc_oneshot(ctx, ctx->connfd, page_size);
+ 			cfg_oneshot_recvs--;
+ 		}
+ 	} else if (!(cqe->flags & IORING_CQE_F_MORE)) {
+-		add_recvzc(ring, connfd);
++		add_recvzc(ctx, ctx->connfd);
+ 	}
+ 
+ 	rcqe = (struct io_uring_zcrx_cqe *)(cqe + 1);
+ 
+ 	n = cqe->res;
+ 	mask = (1ULL << IORING_ZCRX_AREA_SHIFT) - 1;
+-	data = (char *)area_ptr + (rcqe->off & mask);
++	data = (char *)ctx->area_ptr + (rcqe->off & mask);
+ 
+ 	for (i = 0; i < n; i++) {
+-		if (*(data + i) != payload[(received + i)])
++		if (*(data + i) != payload[(ctx->received + i)])
+ 			error(1, 0, "payload mismatch at %d", i);
+ 	}
+-	received += n;
++	ctx->received += n;
+ 
+-	rqe = &rq_ring.rqes[(rq_ring.rq_tail & rq_mask)];
+-	rqe->off = (rcqe->off & ~IORING_ZCRX_AREA_MASK) | area_token;
++	rqe = &ctx->rq_ring.rqes[(ctx->rq_ring.rq_tail & rq_mask)];
++	rqe->off = (rcqe->off & ~IORING_ZCRX_AREA_MASK) | ctx->area_token;
+ 	rqe->len = cqe->res;
+-	io_uring_smp_store_release(rq_ring.ktail, ++rq_ring.rq_tail);
++	io_uring_smp_store_release(ctx->rq_ring.ktail, ++ctx->rq_ring.rq_tail);
+ }
+ 
+-static void server_loop(struct io_uring *ring)
++static void server_loop(struct thread_ctx *ctx)
+ {
+ 	struct io_uring_cqe *cqe;
+ 	unsigned int count = 0;
+ 	unsigned int head;
+ 	int i, ret;
+ 
+-	io_uring_submit_and_wait(ring, 1);
++	io_uring_submit_and_wait(&ctx->ring, 1);
+ 
+-	io_uring_for_each_cqe(ring, head, cqe) {
++	io_uring_for_each_cqe(&ctx->ring, head, cqe) {
+ 		if (cqe->user_data == 1)
+-			process_accept(ring, cqe);
++			process_accept(ctx, cqe);
+ 		else if (cqe->user_data == 2)
+-			process_recvzc(ring, cqe);
++			process_recvzc(ctx, cqe);
+ 		else
+ 			error(1, 0, "unknown cqe");
+ 		count++;
+ 	}
+-	io_uring_cq_advance(ring, count);
++	io_uring_cq_advance(&ctx->ring, count);
+ }
+ 
+ static void run_server(void)
+ {
++	struct thread_ctx ctx = {};
+ 	unsigned int flags = 0;
+-	struct io_uring ring;
+ 	int fd, enable, ret;
+ 	uint64_t tstop;
+ 
+@@ -356,22 +360,22 @@ static void run_server(void)
+ 	flags |= IORING_SETUP_SUBMIT_ALL;
+ 	flags |= IORING_SETUP_CQE32;
+ 
+-	io_uring_queue_init(512, &ring, flags);
++	io_uring_queue_init(512, &ctx.ring, flags);
+ 
+-	setup_zcrx(&ring);
++	setup_zcrx(&ctx);
+ 	if (cfg_dry_run)
+ 		return;
+ 
+ 	if (listen(fd, 1024) < 0)
+ 		error(1, 0, "listen()");
+ 
+-	add_accept(&ring, fd);
++	add_accept(&ctx, fd);
+ 
+ 	tstop = gettimeofday_ms() + 5000;
+-	while (!stop && gettimeofday_ms() < tstop)
+-		server_loop(&ring);
++	while (!ctx.stop && gettimeofday_ms() < tstop)
++		server_loop(&ctx);
+ 
+-	if (!stop)
++	if (!ctx.stop)
+ 		error(1, 0, "test failed\n");
+ }
+ 
 -- 
 2.53.0-Meta
 
