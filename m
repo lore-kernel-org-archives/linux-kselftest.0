@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A7B1A0BD0;
-	Fri, 14 Aug 2026 01:27:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A15D298CAB;
+	Fri, 14 Aug 2026 01:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670860; cv=none; b=GdeG+kWPSmBZ/pRA0Kfp6cas2XPdxkYGGTXteBxf8vZ/1rKUFWxZdx3bjkbHOV0ptqw2AFAAnYwJJeh4iRm2Od5yD3/zrGxtoz+GU0MWFkkt9wofCi5wsvB51imwEOj+kzEqGbEvff+iXaqm/H46vRCbM9jgimMXiSxfN3hoH7c=
+	t=1786670862; cv=none; b=dQDBUgqWgJMmPPi+t3fKA+1kV96I6pDd3fui7YRfZ9RZt31wIDrCa8iyRBjMsu7I/8pnPulPlBeFemycKHP5+CUtxJ/NG30fvI2ROT7nBFGE6AElUDd0g6G6Us87MymbiOSjiFPS4aImwj6Lpn2ZBV+dx2mRWCnRNMJB+JKQUkQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670860; c=relaxed/simple;
-	bh=9ht/Gs1Wi1jhOcU07V/4EiIyXLEVHPpB7193teXI8Hg=;
+	s=arc-20240116; t=1786670862; c=relaxed/simple;
+	bh=sjN7iYiIHtWKttB7hI44kZxqyj62IVm4YP4bJFZUS2s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vcy8zChANjsEZxfBEXol8fZXDglgmge/px8S0OSqk3RE59S6B+aehOi55ksjaRc3NVNj2POYlLJtpPUUW3V06NF6gEs4P5ISGf/3clkFvYftbl2dE1Un+6Yg0+IsYCNudy60dQI5WpetKcNxIJM1vIINv4OnkL5HpL34fEx6e8s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jXj+sOwv; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=ivmgccfoCeDf8LBSy+M1lON72q88O5bBHP2uQ1uA1flOR9hm+sCT/Kf2Q4JuU1GGMFUe1Hwp+bTMhOVGceUyDSzuevz2+dT8gD5uTfbjpL5HUhzi+XgV+zozByeBcNCRlmipwnxmhokMVqEL+jhUerCr0nPrFykqsZFVeJZkmNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UD2cenGu; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jXj+sOwv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34CAE1F000E9;
-	Fri, 14 Aug 2026 01:27:38 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UD2cenGu"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7082B1F00A3A;
+	Fri, 14 Aug 2026 01:27:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786670858;
-	bh=NKp5nj67sIIjXrFCnJ/FaG40rXKWNZFO3HsQurLj9Ww=;
+	s=k20260515; t=1786670859;
+	bh=XMT9ODI8CAgq9T5aUkHEupFIq5bist2KMZUqLNGDrAY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=jXj+sOwvOLxSr3K1vwlw4xkrtxrSJh0K9DNXHmiQkd6HJHZwsYZVBouv66k6dvVRf
-	 gRpLYDlNtCMAaA3T5akum3B8WwCOLuZhAZiO1Wj/QEBZdLCOwVM6GtTrOllEuifhtQ
-	 wcyU58X+yM2jVhFA8NkuZo+0D/1i+ayd2tXugEl8+lnPqzbL9IsBCIQJkAVB6PqEWg
-	 YE31AQRPaVh4oUWUu6LCeXLWJ6hZ+cHrvLyKBf6sLQKPdUxU07W+4HgOZwL/S+dHGc
-	 fQPhzDPxr0OKjAt5mpbDzSmCQn1nLEldGvqudhfiYigrw3WJfpZt3/h3veS07AWbXF
-	 ygfWHlwn3txiQ==
+	b=UD2cenGuHT4Q3J3Cvprv7dr/FAAgG5me4NfFUZ+g2K7Hy5BhVfrNs0DjCp/QnKTua
+	 ap5txr31uts/gxeZaMOGI03cAJlj5IZpYlgKbh0SxiJaaCY1jSQmS4t4xBCwjBxcBe
+	 WsIolvhFp0+l97e0MmWMSQoh7RDq5Emu2Qvs1AEa+Azq+pkrzciacs85TZIs6ImHZP
+	 VQeHUjpKncmQi8/JtcIOjshrpQma6HvSQHxk6vMzRoADUfFr00WhP4wNrDkr90iDBM
+	 Pr05YDe68bwDwfWBwRGuQdJsAkt4H+JUz/q6rKR6YRl7//2cx2aP9ud6BXs7XN72Ct
+	 z9UUI+edrGskw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: xiexinet@gmail.com
 Cc: Jakub Kicinski <kuba@kernel.org>,
@@ -43,12 +43,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	qingfang.deng@linux.dev,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v3 1/3] net: hsr: privatize interlink-bound skbs before address mutation
-Date: Thu, 13 Aug 2026 18:27:36 -0700
-Message-ID: <20260814012736.2805965-1-kuba@kernel.org>
+Subject: Re: [PATCH net v3 2/3] net: hsr: return private clones from the tagged-frame helpers
+Date: Thu, 13 Aug 2026 18:27:38 -0700
+Message-ID: <20260814012738.2806035-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260808004525.1551-2-xiexinet@gmail.com>
-References: <20260808004525.1551-2-xiexinet@gmail.com>
+In-Reply-To: <20260808004525.1551-3-xiexinet@gmail.com>
+References: <20260808004525.1551-3-xiexinet@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,103 +60,135 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
-net: hsr: privatize interlink-bound skbs before address mutation
+net: hsr: return private clones from the tagged-frame helpers
 
-This adds an skb_cow() call in hsr_xmit() for interlink egress when the
-frame either came in on the master port or is locally destined without
-being local-exclusive, dropping the egress if the copy fails. The stated
-goal is to stop hsr_deliver_master() and hsr_xmit() from writing
-different source addresses into shared data.
+This adds hsr_clone_private() (skb_clone() followed by skb_cow()) and uses
+it in hsr_create_tagged_frame() and prp_create_tagged_frame(), including
+both NETIF_F_HW_HSR_TAG_INS branches, so that per-egress path/LAN id writes
+land in private linear data. Tag and trailer pointers are reacquired after
+the copy.
 
 > diff --git a/net/hsr/hsr_forward.c b/net/hsr/hsr_forward.c
-> index 0774981a65c1..67aaf5a8622b 100644
+> index 67aaf5a8622b..efcbf3cf26f9 100644
 > --- a/net/hsr/hsr_forward.c
 > +++ b/net/hsr/hsr_forward.c
-> @@ -420,6 +420,22 @@ static void hsr_deliver_master(struct sk_buff *skb, struct net_device *dev,
->  static int hsr_xmit(struct sk_buff *skb, struct hsr_port *port,
->  		    struct hsr_frame_info *frame)
->  {
-> +	/* An interlink-bound skb from get_untagged_frame() can still alias
-> +	 * another live consumer: for master-originated frames the clone
-> +	 * shares the original TX skb (which taps or the TX path may still
-> +	 * hold); for ring frames the master also consumes them when they
-> +	 * are destined to the local node without being exclusive to it.
-> +	 * Privatize before any address mutation.
-> +	 */
-> +	if (port->type == HSR_PT_INTERLINK &&
-> +	    (frame->port_rcv->type == HSR_PT_MASTER ||
-> +	     (frame->is_local_dest && !frame->is_local_exclusive)) &&
-> +	    skb_cow(skb, 0)) {
-> +		frame->port_rcv->dev->stats.rx_dropped++;
-> +		kfree_skb(skb);
-> +		return NET_XMIT_DROP;
+> @@ -325,8 +325,29 @@ static struct sk_buff *hsr_fill_tag(struct sk_buff *skb,
+>  	return skb;
+>  }
+>  
+> -/* If the original frame was an HSR tagged frame, just clone it to be sent
+> - * unchanged. Otherwise, create a private frame especially tagged for 'port'.
+> +/* Clone an skb and make the clone's data private, so that per-egress
+> + * writes cannot corrupt the original skb or other clones of it.
+> + * Returns NULL on allocation failure.
+> + */
+> +static struct sk_buff *hsr_clone_private(struct sk_buff *skb)
+> +{
+> +	struct sk_buff *clone;
+> +
+> +	clone = skb_clone(skb, GFP_ATOMIC);
+> +	if (!clone)
+> +		return NULL;
+> +	if (skb_cow(clone, 0)) {
+> +		kfree_skb(clone);
+> +		return NULL;
 > +	}
 > +
+> +	return clone;
+> +}
+> +
+> +/* If the original frame was an HSR tagged frame, return a private clone
+> + * of it with the path id updated for 'port'. Otherwise, return a private
+> + * clone for hardware tag insertion, or create a private frame especially
+> + * tagged for 'port'.
+>   */
+>  struct sk_buff *hsr_create_tagged_frame(struct hsr_frame_info *frame,
+>  					struct hsr_port *port)
+> @@ -336,14 +357,18 @@ struct sk_buff *hsr_create_tagged_frame(struct hsr_frame_info *frame,
+>  	int movelen;
+>  
+>  	if (frame->skb_hsr) {
+> -		struct hsr_ethhdr *hsr_ethhdr =
+> -			(struct hsr_ethhdr *)skb_mac_header(frame->skb_hsr);
+> +		struct hsr_ethhdr *hsr_ethhdr;
+> +
+> +		skb = hsr_clone_private(frame->skb_hsr);
+> +		if (!skb)
+> +			return NULL;
+>  
+>  		/* set the lane id properly */
+> +		hsr_ethhdr = (struct hsr_ethhdr *)skb_mac_header(skb);
+>  		hsr_set_path_id(frame, hsr_ethhdr, port);
+> -		return skb_clone(frame->skb_hsr, GFP_ATOMIC);
+> +		return skb;
+>  	} else if (port->dev->features & NETIF_F_HW_HSR_TAG_INS) {
+> -		return skb_clone(frame->skb_std, GFP_ATOMIC);
+> +		return hsr_clone_private(frame->skb_std);
+>  	}
+>  
+>  	/* Create the new skb with enough headroom to fit the HSR tag */
 
-[Severity: Medium]
-Is the enumeration in this comment complete?  The unconditional interlink
-source-address rewrite is pre-existing and was not introduced by this
-patch, but the new guard and the commit message claim ("Other interlink
-traffic keeps its zero-copy behavior") assert that the uncovered cases are
-safe, and there looks to be one that isn't.
+[Severity: High]
+This isn't a bug introduced by this patch, but should the sibling
+get_untagged_frame() callbacks be privatized the same way?
 
-For an untagged ring frame, handle_std_frame() keeps the received skb:
+hsr_get_untagged_frame() and prp_get_untagged_frame() still end with:
 
-net/hsr/hsr_forward.c:handle_std_frame() {
-	frame->skb_hsr = NULL;
-	frame->skb_prp = NULL;
-	frame->skb_std = skb;
+	return skb_clone(frame->skb_std, GFP_ATOMIC);
+
+and their consumer writes into that still-shared linear data:
+
+net/hsr/hsr_forward.c:hsr_deliver_master() {
+	was_multicast_frame = (skb->pkt_type == PACKET_MULTICAST);
+	hsr_addr_subst_source(node_src, skb);
+	skb_pull(skb, ETH_HLEN);
 	...
 }
 
-and hsr_get_untagged_frame() hands the interlink a plain clone of that
-skb.  So the interlink egress skb shares the receive head with any clone
-already taken by a ptype_all tap, since __netif_receive_skb_core() runs
-the deliver_skb() loop over skb->dev->ptype_all before it dereferences
-skb->dev->rx_handler, and packet_rcv() then queues its skb_share_check()
-clone on sk_receive_queue where the bytes are copied to userspace only
-later.
+net/hsr/hsr_framereg.c:hsr_addr_subst_source() {
+	...
+	memcpy(&eth_hdr(skb)->h_source, node->macaddress_A, ETH_ALEN);
+}
 
-For a remote unicast frame addressed to a SAN behind the RedBox,
-check_local_dest() leaves frame->is_local_dest false (pkt_type is
-PACKET_OTHERHOST) and frame->port_rcv->type is SLAVE_A or SLAVE_B, so the
-new predicate is false, no copy happens, and the rewrite lower down in
-hsr_xmit() still touches the shared data:
+Since that clone shares data with frame->skb_std, can the substituted
+source address leak into the ring egress built later in the same
+hsr_forward_do() loop?  For an untagged frame frame->skb_hsr is NULL, so
+the slave iterations take either
 
-	if (port->type == HSR_PT_INTERLINK)
-		ether_addr_copy(eth_hdr(skb)->h_source,
-				port->hsr->macaddress_redbox);
+	skb = __pskb_copy(frame->skb_std,
+			  skb_headroom(frame->skb_std) + HSR_HLEN, GFP_ATOMIC);
 
-Would the tap consumer on the ring slave then read the RedBox MAC instead
-of the real source MAC?  Reaching this needs an HSR RedBox whose ring
-slave advertises NETIF_F_HW_HSR_TAG_RM, so that untagged ring ingress is
-forwarded rather than passed up:
+or, with NETIF_F_HW_HSR_TAG_INS, the new hsr_clone_private(frame->skb_std)
+above, both of which copy the already-mutated bytes.
 
-net/hsr/hsr_slave.c:hsr_handle_frame() {
-	if (!(port->dev->features & NETIF_F_HW_HSR_TAG_RM) &&
-	    port->type != HSR_PT_INTERLINK &&
-	    hsr->proto_ops->invalid_dan_ingress_frame &&
-	    hsr->proto_ops->invalid_dan_ingress_frame(protocol))
-		goto finish_pass;
+Port order looks like it puts master first: hsr_dev_finalize() calls
+hsr_add_port() for MASTER, then SLAVE_A/SLAVE_B (and INTERLINK), and
+hsr_add_port() uses list_add_tail_rcu().
+
+The substitution is only a no-op when node->macaddress_A already equals
+h_source.  hsr_get_node() also matches on macaddress_B:
+
+net/hsr/hsr_framereg.c:hsr_get_node() {
+	...
+		if (ether_addr_equal(node->macaddress_B, ethhdr->h_source)) {
 	...
 }
 
-At this patch alone the same case also mutates a real on-wire frame,
-because hsr_create_tagged_frame() and prp_create_tagged_frame() return a
-bare clone of frame->skb_std for NETIF_F_HW_HSR_TAG_INS devices:
+and hsr_handle_sup_frame() populates macaddress_B from a supervision
+frame's source, so macaddress_A and h_source can differ.
 
-	} else if (port->dev->features & NETIF_F_HW_HSR_TAG_INS) {
-		return skb_clone(frame->skb_std, GFP_ATOMIC);
-	}
+The comment this series added to hsr_xmit() states the rule:
 
-That second aliasing consumer is removed later in the series by "net: hsr:
-return private clones from the tagged-frame helpers", which switches those
-helpers to hsr_clone_private(), so only the tap aliasing remains at the
-end of the series.
+	/* An interlink-bound skb from get_untagged_frame() can still alias
+	 * another live consumer: ...
+	 * Privatize before any address mutation.
+	 */
 
-Since skb_cow(skb, 0) is a no-op for a non-cloned skb (__skb_cow() only
-calls pskb_expand_head() when skb_cloned() or extra headroom is needed),
-could the call be keyed on the actual sharing state, or simply made
-unconditional for HSR_PT_INTERLINK, instead of on the topology predicate?
--- 
-pw-bot: cr
+but the skb_cow() there is applied only for port->type == HSR_PT_INTERLINK,
+which leaves the master delivery path out.  Would it be simpler to make
+the get_untagged_frame() callbacks return private clones too, so the
+contract holds for every consumer?
+
+One more consumer of the same bytes: an AF_PACKET listener on the slave
+device gets its clone in packet_rcv() before hsr_handle_frame() runs, so
+does it also observe the rewritten h_source?
