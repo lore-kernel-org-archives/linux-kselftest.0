@@ -1,239 +1,212 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1384A3C98BA
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 14:34:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAEBD3C0610
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 14:49:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786718064; cv=none; b=dXIjgFldp6v/b+tbbl4qsnwT/IGRoAd8geTBqs1dxRg5Okdy8RtvvRx0krdRRS0NNd6GJ2nuuObKa8Gmubjerr21BDt57q6UK2OvqRv2+eyXHsEQiga4a/vNlS7dKV+OoPK6/ByvZgc5xYYuU+pf2PRuU1YTKQXM5wcF2P9YyKw=
+	t=1786718992; cv=none; b=QHuvJMJXfZ9jgTFqDZTuJN9yQhofd//bT5Y1F5GaYH3o+FQ+hcOfFeef7lUSVTutLUpz8S+6FsyWeP/NGxNXKLFiPS98KmyuXGi7nrvfrweEdCZZpdu9NIqUFfn/ByWuvkOQVdw+HP3UfLiz1Rg6SkjM0K5lVdh1aJzPyjNn8Wk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786718064; c=relaxed/simple;
-	bh=ZV2hwUqsEzo7eKFrhyjXU+qSr07aMVD/ZBebaPjGOtw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jIKs2inhqKWXNp2qa7AftjnHn5DpfCHrOm7V3u6rit7K88Jj8H788Djv1JvomObjmykXTkjaGwwL457AdcQdfaJvBObIMURudfgNrCs2dQM+G6/M2u5mR8NUA4jLCq5nSpp+3ZDhxncsxHCMWlqPIiWaYBpJAbdeKwMcbjQp2z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFFyRI8M; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786718992; c=relaxed/simple;
+	bh=uZIqwcHCpNuloVYJFSJBtdXYc1QBATJdoK+TQwPO66w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Tb3UHKr56M8UiE5fegQ5Fiy/KQZDraH9Hz1SuozlNuqqDu9ms/WSHo5RM09g7w7krnSw4TBV8Ftiwr2p1XM0kz6XhjKbZmqdzyKeQdNR/i4qul6ScX1rE3HS2q027FxvnokUOHUhA4YXo4y4uDo7Zzvw6GCvzWvWhZV8fyG0QC8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fPq7qtPj; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFFyRI8M"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88A81F000E9;
-	Fri, 14 Aug 2026 14:34:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786718060;
-	bh=WnUIBmU3KRDn2nbquHueUxXwAiL4Yfqk4FNKfUeSxKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=XFFyRI8MGAIAcpPAoAInDOVPA/wHhF23IygPCfI0YmHvJmF/4hjn8aySLVksV+b0o
-	 PzuIJbQi994J3Jej6AleO2PCYf8WOBu4+Bdfs5nv3SxzUEonxyx63Mx0rUM79DRQmG
-	 gSFZ2CuuI6A3W6Mik7tI0wejnc3cV0GPAxWTd24oV2IsFOoAS54g8oWSAGogpdIwNE
-	 GsJ3aluRWLI2fkBlrJn+wC9TYeslwjjbP9SxcAbUqfXOrK1QcUKE7EJBG4gzJnuWZX
-	 ehuVv9kRFtflPxiw5wVFKZseH0+NnbHBs8RLr0+vxPiEYccedVzJiV/0d7s81j9TJI
-	 5mRBU8XPzMp/w==
-Date: Fri, 14 Aug 2026 15:34:15 +0100
-From: Mark Brown <broonie@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
-	geert@linux-m68k.org, daniel@thingy.jp,
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
-	Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	"Ricardo B. Marliere" <rbm@suse.com>,
-	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
-Subject: Re: [RFC PATCH 5/6] selftests: run tests on nommu architecture
-Message-ID: <4355a510-2e00-41f7-9bb3-8f6b2d95503b@sirena.org.uk>
-References: <20260813063401.1786548-1-thehajime@gmail.com>
- <20260813063401.1786548-6-thehajime@gmail.com>
- <an8MlE22U3586R42@lucifer>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fPq7qtPj"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso1522916a91.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 07:49:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1786718990; x=1787323790; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ghTiZ6Z56GNViKfVdE8FdrADeUaJWs4M5g2nNXwrNUU=;
+        b=fPq7qtPjeuxOkTWGRT1lRT5sTIQJ0vzfbN7I32RPn0WbUgaUC/6sQ2RLdx7ZpCAz7P
+         HV8wG2jlqd+9XpGsqGj9Q0WTamg5pdOe6ybI79kprGG7F2w+diHz/ejfSfKZkhjUYt2v
+         chNnyRW3xXZGMvJs77W1kOsp1nMHjMiB7igV5kYZclDOjRyh08jIgt1shOy2QH40g67E
+         FzJm+wxzgJkj6oxf67HXG+kiYsq3KPgbW1Thwf1qvGvi/ylhKl9oEEaWTm3oAuM9d/wv
+         6MpTcHSauCc6q27cBju2iA2jMGl8lvQxdz2BDFckkewLgn39z1yytE/t3widmZWU6EZd
+         +ztg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786718990; x=1787323790;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ghTiZ6Z56GNViKfVdE8FdrADeUaJWs4M5g2nNXwrNUU=;
+        b=VFgQ2WT0y8u2nty+Ri8ZC8sjuv20QwK8WqUGZpswuGNbds1Mqz7+xJtqcg1EKSc1WG
+         rtoXvVJ3WmoF/XE7uX3r/nfGifayrX34tXNOv3iYnZj4V3jAK5dpXAo3SOha7lz7yujR
+         VE37QpUC394NxyFpcikDBDp6hX+lEO+LHBF9+/D0IP7qCP37hZ7uFQxK2YtmCMYPJ099
+         eCzyOOuKrUuiu5j0xCx8Jok34bnvglt8u0VU+kZdaYKRXzFZiFhoRW1lsiJCscK/sETm
+         O0oKP1MWVpnjOfsRVlyA205m1kAVN1UAI66fE+1Q8fyEbyrIytUiFt7pZefnunPSldYT
+         Cvnw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqg/+7SbSAkYDd8Y1KZpblCKQzrLeL1SfBLAuDwmdU3RdQJOetPb4Ki8324qxSjDN4cxxYLUQLd/52Uwq3AEWc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjRqYqRiQ6BNkYAAWJrJmXI8WYR2s795EyfnlUdU320UzJ04Ui
+	KeknJfrK2TVOMBO1g86UxdEEgwfQSlkoV7iy7ZXqrb0vkdCqq9G4R7fLuazFhyo9/fc=
+X-Gm-Gg: AR+sD11Wr0YVQ7c/MqRaAL3Dnvp68VXAwUILsPa4tYeFPZgZiOGQV3mBiOFEbCWtWYi
+	WbLsohIUe6OsDeY90xPAW0Twgn5CM5xxgzSVp7yrEDeVAVLxaXe4rlYotUjEJyMpkdnlRVh8uFF
+	IEjDPQtkQ3YlaQ9QQeNri8ka197x5ZGLBbgXZhX6z3P7G6UDBfN7ZbTtZOdfPRz1V0RFLvs7FT2
+	ARanCRv/r8CYTu4WZB0DxVUK3e9XFNqmFm9dJsQWEMhXq4GdiOQPHquZH31ZJKx4dijUtJZLJy6
+	B/IBYFGD1Icipv3Y7HiG4ECAfo0rgpWyDsa4hyUDNds3nvqGm1NoMD3WpKNsTUG8PnM4+FYa8WG
+	6Prwn/7cZDH9zTa6E56sNim4287HcSquHvaG5Ow0kSkWm89av7CBs5eCVQh6JG7N8RX0HMei7IW
+	5r0Onm9T+RL3Gl00poJt9u6D8V/XPaspyKSHdgVk06gpveW26HQXgKzRVX2jtP0huRN7alXzWUY
+	zKlcRa2xAN1NbT8lw==
+X-Received: by 2002:a17:90b:5745:b0:38e:49c0:75a7 with SMTP id 98e67ed59e1d1-3933b7a6986mr7990819a91.8.1786718989659;
+        Fri, 14 Aug 2026 07:49:49 -0700 (PDT)
+Received: from kernel.tail6741c6.ts.net ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3933b626d4esm1518950a91.2.2026.08.14.07.49.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2026 07:49:49 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
+To: corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	peterz@infradead.org,
+	mingo@redhat.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	mark.rutland@arm.com,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	james.clark@linaro.org,
+	kunwu.chan@gmail.com,
+	lianux.mm@gmail.com
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	sj@kernel.org
+Subject: [RFC PATCH 0/5] perf/core: add AUX buffer kernel-consumer API
+Date: Fri, 14 Aug 2026 22:49:16 +0800
+Message-ID: <20260814144927.489172-1-kunwu.chan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="p/oWFWIZW5lIg4+P"
-Content-Disposition: inline
-In-Reply-To: <an8MlE22U3586R42@lucifer>
-X-Cookie: Body by Nautilus, Brain by Mattel.
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+From: Kunwu Chan <kunwu.chan@gmail.com>
 
---p/oWFWIZW5lIg4+P
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+ARM SPE and other tracing PMUs write records directly to perf AUX
+buffers.  Unlike ordinary sampling PMUs, they do not necessarily
+generate a perf_event_overflow() callback for each record.  A kernel
+consumer therefore needs to own and drain an AUX buffer rather than
+rely on the overflow path.
 
-On Fri, Aug 14, 2026 at 01:50:50PM +0100, Lorenzo Stoakes (ARM) wrote:
+Userspace obtains AUX storage through perf_event_open() and mmap().
+Kernel events created by perf_event_create_kernel_counter() have no
+public interface for allocating that storage: rb_alloc_aux() is
+reached through perf_mmap().
 
-> So at this point you're not really running much of the selftests at all,
-> and are only happening to run those that don't do the very basic stuff
-> nommu can't deal with.
+This series adds a small perf-core API for that use case.  Patches 1-2
+add an in-kernel AUX owner, a setup/release pair, and producer-head,
+consumer-tail, and copy helpers without exposing perf's internal page
+array.  Patches 3-5 add KUnit tests, a userspace regression test, and
+a selftest orchestration script.  The first expected consumer is a
+DAMON ARM SPE backend, but this series is independent of DAMON and
+does not add consumer-specific policy to perf.
 
-> I think an audit of existing tests to figure out what works with nommu vs
-> what doesn't is really unreasonable again, given nobody tests or seemingly
-> uses these arches.
+The API follows the existing non-overwrite AUX protocol:
 
-> So this patch might beget more nommu carve outs and exceptions and
-> therefore nommu workload and maintenance, which isn't really sustainable.
+- setup validates the event, rejects non-power-of-two page counts and
+  negative watermark, allocates the ring buffer and AUX pages, and
+  attaches through perf's mmap-serialized lifecycle;
+- release stops writers, drops the event->rb reference, and detaches
+  only a buffer owned by this API;
+- head reads use smp_rmb() to pair with the producer's data-write
+  barrier;
+- tail updates use smp_rmb() before and smp_mb() after to order data
+  reads before releasing space;
+- copy validates the requested modular cursor interval against
+  [tail, head] before applying the ring mask and holds an AUX
+  reference while copying.
 
-> I know I complain about lack of testing on nommu, but at the same time I
-> don't think running arbitrary tests that happen to work on it and who kno=
-ws
-> if they are valid asserts anyway really fixes things.
+Testing
+=======
 
-> And given nobody really is doing testing, it's not really a great RoI
-> here...
+Based on commit 917d558b151c ("perf/x86: Optimize ACR handling in
+match_prev_assignment()") in the tip perf/core branch.
 
-Perhaps a good first step here is to start off with getting some public
-CI set up, then build up to getting things running cleanly.  That way
-there'll be visible ongoing coverage which will help motivate getting
-whatever changes integrated, and if the changes are done bit by bit
-there should be clearer explanations for why they make sense on nommu.
+Built and tested on arm64 (Kunpeng 920, ARM SPE present).  Each commit
+compiles independently.  Full Image build succeeds with
+CONFIG_PERF_AUX_KERNEL_KUNIT_TEST=y.
 
-You could perhaps use a skiplist to ignore tests that don't work yet so
-the CI starts off clean?
+KUnit (39 cases, dummy AUX PMU, zero hardware dependency):
+  pass:39 fail:0 skip:0
 
->=20
-> ...OTOH I suppose it's a minimal change we can largely ignore as long as
-> this doesn't lead to additional work/auditing from anybody but nommu
-> enthusiasts.
->=20
-> But I'm just not sure that will be the case :(
->=20
-> (I'm amazed we support a mode in linux that can't fork() in 2026 :)
->=20
->=20
-> > ---
-> >  Documentation/dev-tools/kselftest.rst       | 12 ++++++++++++
-> >  tools/testing/selftests/kselftest/runner.sh |  9 +++++++--
-> >  tools/testing/selftests/kselftest_harness.h |  4 ++++
-> >  tools/testing/selftests/lib.mk              |  8 ++++++++
-> >  4 files changed, 31 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-=
-tools/kselftest.rst
-> > index 64c0ec7428a2..800b2b688aff 100644
-> > --- a/Documentation/dev-tools/kselftest.rst
-> > +++ b/Documentation/dev-tools/kselftest.rst
-> > @@ -230,6 +230,18 @@ section::
-> >
-> >  .. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_=
-node/gzip.html#auto_002dcompress
-> >
-> > +Build and test on nommu target
-> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D
-> > +
-> > +If you (cross-)build kselftests for nommu targets, or run tests on nom=
-mu targets, use
-> > +``NOMMU=3D1`` as a make variable/environment setting to tell build sys=
-tem to do the additional
-> > +checks.  These nommu targets may differ in several ways, such as not s=
-upporting fork(2) or
-> > +using musl or another libc.  Set this variable to apply the necessary =
-build and test adjustments.
-> > +
-> > +  $ make ARCH=3Dum NOMMU=3D1 O=3Dbuild kselftest
-> > +  $ make ARCH=3Dum NOMMU=3D1 -C tools/testing/selftests/mm run_tests
-> > +  $ NOMMU=3D1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
-> > +
-> >  Contributing new tests
-> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> >
-> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testin=
-g/selftests/kselftest/runner.sh
-> > index 311811dc55a0..7287d8290b6c 100644
-> > --- a/tools/testing/selftests/kselftest/runner.sh
-> > +++ b/tools/testing/selftests/kselftest/runner.sh
-> > @@ -38,8 +38,12 @@ tap_prefix()
-> >
-> >  tap_timeout()
-> >  {
-> > +	# nommu doesn't support timeout command (missing fork(2))
-> > +	if [ "$NOMMU" =3D "1" ] ; then
-> > +		echo "timeout isn't supported for nommu"
-> > +		$1
-> >  	# Make sure tests will time out if utility is available.
-> > -	if [ -x /usr/bin/timeout ] ; then
-> > +	elif [ -x /usr/bin/timeout ] ; then
-> >  		/usr/bin/timeout --foreground "$kselftest_timeout" \
-> >  			/usr/bin/timeout "$kselftest_timeout" $1
-> >  	else
-> > @@ -130,6 +134,7 @@ run_one()
-> >  				return $KSFT_FAIL
-> >  			fi
-> >  		fi
-> > +		OLDDIR=3D$(pwd)
-> >  		cd `dirname $TEST` > /dev/null
-> >  		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
-> >  			tap_prefix >&4) 3>&1) |
-> > @@ -147,7 +152,7 @@ run_one()
-> >  		*)
-> >  			ktap_test_fail "$TEST_HDR_MSG # exit=3D$rc";;
-> >  		esac
-> > -		cd - >/dev/null
-> > +		cd "$OLDDIR" >/dev/null
-> >  	fi
-> >
-> >  	return $rc
-> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testin=
-g/selftests/kselftest_harness.h
-> > index 261e4df94d9d..8eee7b14f824 100644
-> > --- a/tools/testing/selftests/kselftest_harness.h
-> > +++ b/tools/testing/selftests/kselftest_harness.h
-> > @@ -1274,6 +1274,10 @@ static int test_harness_run(int argc, char **arg=
-v)
-> >  	unsigned int count =3D 0;
-> >  	unsigned int pass_count =3D 0;
-> >
-> > +#ifdef CONFIG_NOMMU
-> > +	ksft_print_msg("harness test doesn't support on NOMMU architecture (n=
-o fork(2)).\n");
-> > +	return KSFT_SKIP;
-> > +#endif /* CONFIG_NOMMU */
-> >  	ret =3D test_harness_argv_check(argc, argv);
-> >  	if (ret !=3D KSFT_PASS)
-> >  		return ret;
-> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
-ib.mk
-> > index 2cc819006424..4734b5ce613f 100644
-> > --- a/tools/testing/selftests/lib.mk
-> > +++ b/tools/testing/selftests/lib.mk
-> > @@ -97,6 +97,14 @@ TEST_GEN_PROGS :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_=
-GEN_PROGS))
-> >  TEST_GEN_PROGS_EXTENDED :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS=
-_EXTENDED))
-> >  TEST_GEN_FILES :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
-> >
-> > +# detect if users request NOMMU build or not
-> > +# User can set NOMMU to 1 to build/test for NOMMU platforms
-> > +NOMMU ?=3D 0
-> > +ifeq ($(NOMMU),1)
-> > +CFLAGS +=3D -DCONFIG_NOMMU
-> > +export NOMMU
-> > +endif
-> > +
-> >  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
-> >  	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
-> >
-> > --
-> > 2.43.0
-> >
->=20
-> --
-> Cheers, Lorenzo
+  The dummy PMU registered in suite_init provides ->setup_aux/->free_aux
+  callbacks; setup_aux pre-fills pages with 0xAB so copy tests verify
+  data correctness byte-by-byte.  Cases cover:
 
---p/oWFWIZW5lIg4+P
-Content-Type: application/pgp-signature; name="signature.asc"
+  - setup/release lifecycle (12): non-power-of-2 rejection, pow2
+    acceptance, double-setup -EBUSY, parent event rejection, negative
+    watermark, explicit watermark, writer admission/blocking, no-op
+    release, setup/release roundtrip, multi-cycle, double release
+  - accessor contract (20): head initial/advances/no-rb, copy full
+    window/wrap/zero-len/data-correctness, copy rejects
+    rewound/future/oversized/null/already-consumed/no-rb, tail_set
+    valid/future/within-window/behind-ring/noop/consume-all/no-rb
+  - multi-cycle produce->copy->tail_set (1)
+  - perf_aux_output_end size=0, buffer-full stops producer (2)
+  - two-event independence, release isolation (2)
+  - user/kernel coexistence (1): simulated aux_mmap_count=1 event
+    and aux_kernel_count=1 event on the same PMU, verify mutual
+    non-interference and release isolation
+  - concurrent release (1): two kthreads concurrently call
+    perf_event_release_aux() on the same event, verifying the
+    refcount_dec_and_mutex_lock serialisation and detach-block
+    event->rb guard correctly handle the race
 
------BEGIN PGP SIGNATURE-----
+Selftest script (9 sections):
+  94 passed, 0 failed, 2 skipped -- Overall: PASS
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmp/J2YACgkQJNaLcl1U
-h9BXcAf/UqWczLxiNOc/Hmk71YZaKMzdL3pklWPu2E6Huj9UoT5KdXtKzHCnqcjs
-bulah3Acd+ap+Xv0VTQ0HQuRbsJnyg/LsIm+xBAvllafk8FXZLWBajhZvmRsb6OG
-pWx/5Udoc45FuL0kXPIKn4IaweB4qQwFBCw7WqopDEkidW5mBveiFblf5lqbwWPN
-U502huc+u7ShUQfKX4M5axSWBTER0HYNQuyROAQMw3BYpARu6YOS16nng5h5adoQ
-zCGgx/XFAMcgHrJZVDlSDqpgDO1FTFYF3h4ROppqt2nYfP8XsnrNKZ2L9BJRotgi
-ttU2bzsTTwccgRjbgI+Z6HGG6OH12w==
-=4XkF
------END PGP SIGNATURE-----
+  Sections: build-time config, KUnit orchestration, userspace
+  regression, hardware perf record + dmesg, DAMON integration,
+  memory ordering static analysis, boundary validation, concurrency
+  safety, user/kernel AUX isolation.
 
---p/oWFWIZW5lIg4+P--
+Userspace C program:
+  9 PASS, 0 FAIL, 2 SKIP
+
+  The program follows the standard dual-mmap AUX protocol: mmap the
+  metadata/data ring at offset 0, set aux_offset/aux_size in the
+  metadata page, then mmap the AUX area at aux_offset.  When the AUX
+  area mmap fails (e.g. PMU does not support it), the test is SKIP
+  rather than FAIL.  ARM SPE single-event limitation is also SKIP.
+
+Kunwu Chan (3):
+  perf/core: add AUX buffer ownership for kernel events
+  perf/core: add AUX ring accessors for kernel consumers
+  selftests/perf_events: add AUX kernel API selftest script
+
+Lian Wang (2):
+  perf/core: add KUnit tests for AUX kernel-consumer API
+  selftests/perf_events: add userspace AUX regression test
+
+ .../userspace-api/perf_ring_buffer.rst        |   56 +-
+ include/linux/perf_event.h                    |   18 +
+ kernel/events/Makefile                        |    1 +
+ kernel/events/aux_kernel_test.c               | 1144 +++++++++++++++++
+ kernel/events/core.c                          |  139 ++
+ kernel/events/internal.h                      |    1 +
+ kernel/events/ring_buffer.c                   |  205 ++-
+ lib/Kconfig.debug                             |   15 +
+ tools/testing/selftests/perf_events/Makefile  |    2 +
+ .../selftests/perf_events/aux_kernel.sh       |  563 ++++++++
+ .../perf_events/aux_kernel_usermode.c         |  546 ++++++++
+ tools/testing/selftests/perf_events/config    |    2 +
+ 12 files changed, 2687 insertions(+), 5 deletions(-)
+ create mode 100644 kernel/events/aux_kernel_test.c
+ create mode 100755 tools/testing/selftests/perf_events/aux_kernel.sh
+ create mode 100644 tools/testing/selftests/perf_events/aux_kernel_usermode.c
+
+-- 
+2.43.0
+
