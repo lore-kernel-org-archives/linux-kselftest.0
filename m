@@ -1,146 +1,268 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-142.mta1.migadu.com [95.215.58.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC68306B3B;
-	Fri, 14 Aug 2026 23:07:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BF383A8735
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 23:19:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786748862; cv=none; b=etNzlIFio2eYp7eZgiO5R0d2bgYCrMJ/rixFxK8WVb8ERfXjdMX1ru9oiNtmgRC353zfq9smWa7CBKvAKB50mbirD4AVlrwzn35y+eZOn4YDlaIZ7c4Jzk6PEVZNz8DhatOyZFI0Pwxk1m/lNGULvFgvkY2aSBL7m5WpMdYXgC0=
+	t=1786749601; cv=none; b=FDt5rDDJTwNHrVggzyFMgd5TEHuErANs73xCVjfA9JKQt1uSlNx14prXvKpG0fmLwwO2v8RckWf68h0QK5oJAuV1IUSbqIp+gfhmpuM/9ZOA2df2PxYZhG8eGjN15eqyZByTJUMltkhQVVzo4lfznb6X6PBAPFIvVDpyIT4/qgk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786748862; c=relaxed/simple;
-	bh=jQ6Y6dcMSrpMjKg2pUFiZ7XSVpb7Ji+fdOVYlNkB+uE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gjM5WnkUQfuZVzlrr0T4ltgP14JKK2lmZZX/5g+lp7KivIgX/+tQVLMkk0+ylshgr83oHAErKTQ9Ex1xSRnMwaq+u4flZ9AZTHCYhwU7pxdE2NuFvuCa/hOq5/4Jz38PhfXBRkH8Y6h6mMj9GtoeX+Wec7qCA/+PRXRIVlCRXhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KREDyTY/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786749601; c=relaxed/simple;
+	bh=j+/4cpJAITHGx0R/XRXl53mx/NwWObpZuts3v/a8ADg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sldxGXxl9O4npmnb+ZRadk9ME6I6j0Vs3I/RBjlxSj7jhmGuOS0xW+aXZ/7vVTjsR3AdmljYF5d0VRUzTKkVSdvb2Q91WvyckZbyK8OMgBGX44IkmXpegnwzfAVxuv7qTDxCHmJCIO/e02wlN8yBojqwMVvIxPMjx8r3AuHhIi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i5GEyuyr; arc=none smtp.client-ip=95.215.58.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KREDyTY/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FC961F000E9;
-	Fri, 14 Aug 2026 23:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786748861;
-	bh=Rf8rFsByb/4KElgDc0YWPuNcgqqu3Ti02BSgkxOh9O8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=KREDyTY/6s9bebcbPqSDHbBV2v6Wc2lgKUo9R94XFgsl5YtMkwEdUUttdX90czi1U
-	 K/dMe13vM8dXkonj8mNS6BJevGa0qo1ilAaL8waLtP4ymHwVH4cFX6kfPwIRbfXOfp
-	 xjRP8YFyicoFIpRTwMqkyPKyOO2vz6KpV5NkRXniRttNPiNk1SYQ8KxZAN93xEWhp9
-	 Y6HQn5YU4+mG3xkJQEVDt8ahBcEFmBme7XADblbyCQIPsoXl0s1MKq5zfEyv8X7Dd3
-	 JQcgvUHGlh2FtQdxS/otG0rccVM92mDNPdDm91AHXcmL6my0FClQDOyER8GXk2IelU
-	 K4DnvABAUlL6w==
-Message-ID: <ea0ae140-86e9-4578-a24a-d50fc0b19c4a@kernel.org>
-Date: Sat, 15 Aug 2026 01:07:36 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i5GEyuyr"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=j+/4cpJAITHGx0R/XRXl53mx/NwWObpZuts3v/a8ADg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786749596; v=1; x=1787354396;
+ b=i5GEyuyrAKjQRW/90hcip5zjGsVPdl+cHHhQB7vf6LWmYJD/ALmhsQMXDiHsJ8e5i7HlsDN3
+ SFWwWGRNrprNjoy96/yF63bEXWylpIbOFIfxBWqGF0RMyatixPILJSKJELBok6OL+/5jysdXY2y
+ mwnXnog+ga6SH5WfrxV2D9gc=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::6:7be4)
+	by smtp.migadu.com with ESMTPS id d52ac6c6ebe5a4fb;
+	Fri, 14 Aug 2026 23:19:56 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Vineet Gupta <vineet.gupta@linux.dev>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com
+Cc: martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	john.fastabend@gmail.com,
+	shuah@kernel.org,
+	bpf@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Vineet Gupta <vineet.gupta@linux.dev>
+Subject: [RFC bpf-next 0/6] bpf: track scalar equality across the low 32 bits
+Date: Fri, 14 Aug 2026 16:19:39 -0700
+Message-ID: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 2/4] selftests: net: Lower threshold on debug
- kernels for big_tcp_tunnels.sh
-Content-Language: fr
-To: Alice Mikityanska <alice.kernel@fastmail.im>,
- Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, "David S. Miller"
- <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Alice Mikityanska <alice@isovalent.com>
-References: <20260814194124.3102581-1-alice.kernel@fastmail.im>
- <20260814194124.3102581-3-alice.kernel@fastmail.im>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
- YBNdx5Xl74NLSgx6y/1NiMQGuKeu+2BmtnkiGxBNanfXcnl4L4Lzz+iXBvvbtCbynnnqDDqU
- c7SPFMpMesgpcu1xFt0F6bcxE+0ojRtSCZ5HDElKlHJNYtD1uwY4UYVGWUGCF/+cY1YLmtfb
- WdNb/SFo+Mp0HItfBC12qtDIXYvbfNUGVnA5jXeWMEyYhSNktLnpDL2gBUCsdbkov5VjiOX7
- CRTkX0UgNWRjyFZwThaZADEvAOo12M5uSBk7h07yJ97gqvBtcx45IsJwfUJE4hy8qZqsA62A
- nTRflBvp647IXAiCcwWsEgE5AXKwA3aL6dcpVR17JXJ6nwHHnslVi8WesiqzUI9sbO/hXeXw
- TDSB+YhErbNOxvHqCzZEnGAAFf6ges26fRVyuU119AzO40sjdLV0l6LE7GshddyazWZf0iac
- nEhX9NKxGnuhMu5SXmo2poIQttJuYAvTVUNwQVEx/0yY5xmiuyqvXa+XT7NKJkOZSiAPlNt6
- VffjgOP62S7M9wDShUghN3F7CPOrrRsOHWO/l6I/qJdUMW+MHSFYPfYiFXoLUZyPvNVCYSgs
- 3oQaFhHapq1f345XBtfG3fOYp1K2wTXd4ThFraTLl8PHxCn4ywARAQABzSRNYXR0aGlldSBC
- YWVydHMgPG1hdHR0YmVAa2VybmVsLm9yZz7CwZEEEwEIADsCGwMFCwkIBwIGFQoJCAsCBBYC
- AwECHgECF4AWIQToy4X3aHcFem4n93r2t4JPQmmgcwUCZUDpDAIZAQAKCRD2t4JPQmmgcz33
- EACjROM3nj9FGclR5AlyPUbAq/txEX7E0EFQCDtdLPrjBcLAoaYJIQUV8IDCcPjZMJy2ADp7
- /zSwYba2rE2C9vRgjXZJNt21mySvKnnkPbNQGkNRl3TZAinO1Ddq3fp2c/GmYaW1NWFSfOmw
- MvB5CJaN0UK5l0/drnaA6Hxsu62V5UnpvxWgexqDuo0wfpEeP1PEqMNzyiVPvJ8bJxgM8qoC
- cpXLp1Rq/jq7pbUycY8GeYw2j+FVZJHlhL0w0Zm9CFHThHxRAm1tsIPc+oTorx7haXP+nN0J
- iqBXVAxLK2KxrHtMygim50xk2QpUotWYfZpRRv8dMygEPIB3f1Vi5JMwP4M47NZNdpqVkHrm
- jvcNuLfDgf/vqUvuXs2eA2/BkIHcOuAAbsvreX1WX1rTHmx5ud3OhsWQQRVL2rt+0p1DpROI
- 3Ob8F78W5rKr4HYvjX2Inpy3WahAm7FzUY184OyfPO/2zadKCqg8n01mWA9PXxs84bFEV2mP
- VzC5j6K8U3RNA6cb9bpE5bzXut6T2gxj6j+7TsgMQFhbyH/tZgpDjWvAiPZHb3sV29t8XaOF
- BwzqiI2AEkiWMySiHwCCMsIH9WUH7r7vpwROko89Tk+InpEbiphPjd7qAkyJ+tNIEWd1+MlX
- ZPtOaFLVHhLQ3PLFLkrU3+Yi3tXqpvLE3gO3LM7BTQRV4/npARAA5+u/Sx1n9anIqcgHpA7l
- 5SUCP1e/qF7n5DK8LiM10gYglgY0XHOBi0S7vHppH8hrtpizx+7t5DBdPJgVtR6SilyK0/mp
- 9nWHDhc9rwU3KmHYgFFsnX58eEmZxz2qsIY8juFor5r7kpcM5dRR9aB+HjlOOJJgyDxcJTwM
- 1ey4L/79P72wuXRhMibN14SX6TZzf+/XIOrM6TsULVJEIv1+NdczQbs6pBTpEK/G2apME7vf
- mjTsZU26Ezn+LDMX16lHTmIJi7Hlh7eifCGGM+g/AlDV6aWKFS+sBbwy+YoS0Zc3Yz8zrdbi
- Kzn3kbKd+99//mysSVsHaekQYyVvO0KD2KPKBs1S/ImrBb6XecqxGy/y/3HWHdngGEY2v2IP
- Qox7mAPznyKyXEfG+0rrVseZSEssKmY01IsgwwbmN9ZcqUKYNhjv67WMX7tNwiVbSrGLZoqf
- Xlgw4aAdnIMQyTW8nE6hH/Iwqay4S2str4HZtWwyWLitk7N+e+vxuK5qto4AxtB7VdimvKUs
- x6kQO5F3YWcC3vCXCgPwyV8133+fIR2L81R1L1q3swaEuh95vWj6iskxeNWSTyFAVKYYVskG
- V+OTtB71P1XCnb6AJCW9cKpC25+zxQqD2Zy0dK3u2RuKErajKBa/YWzuSaKAOkneFxG3LJIv
- Hl7iqPF+JDCjB5sAEQEAAcLBXwQYAQIACQUCVeP56QIbDAAKCRD2t4JPQmmgc5VnD/9YgbCr
- HR1FbMbm7td54UrYvZV/i7m3dIQNXK2e+Cbv5PXf19ce3XluaE+wA8D+vnIW5mbAAiojt3Mb
- 6p0WJS3QzbObzHNgAp3zy/L4lXwc6WW5vnpWAzqXFHP8D9PTpqvBALbXqL06smP47JqbyQxj
- Xf7D2rrPeIqbYmVY9da1KzMOVf3gReazYa89zZSdVkMojfWsbq05zwYU+SCWS3NiyF6QghbW
- voxbFwX1i/0xRwJiX9NNbRj1huVKQuS4W7rbWA87TrVQPXUAdkyd7FRYICNW+0gddysIwPoa
- KrLfx3Ba6Rpx0JznbrVOtXlihjl4KV8mtOPjYDY9u+8x412xXnlGl6AC4HLu2F3ECkamY4G6
- UxejX+E6vW6Xe4n7H+rEX5UFgPRdYkS1TA/X3nMen9bouxNsvIJv7C6adZmMHqu/2azX7S7I
- vrxxySzOw9GxjoVTuzWMKWpDGP8n71IFeOot8JuPZtJ8omz+DZel+WCNZMVdVNLPOd5frqOv
- mpz0VhFAlNTjU1Vy0CnuxX3AM51J8dpdNyG0S8rADh6C8AKCDOfUstpq28/6oTaQv7QZdge0
- JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260814194124.3102581-3-alice.kernel@fastmail.im>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Alice,
+The verifier's linked-scalar machinery tracks register equality only for the
+full 64 bits (optionally with a constant delta). There is no way to record
+"these two registers share just their low 32 bits", so a 32-bit mov from a
+source with unknown high bits has to drop the relationship entirely, and a
+later narrowing of the source never reaches the destination:
 
-On 14/08/2026 21:41, Alice Mikityanska wrote:
-> From: Alice Mikityanska <alice@isovalent.com>
-> 
-> CONFIG_DEBUG_NET kernels run slower and generate fewer BIG TCP packets,
-> making the test flaky on upstream CI runners. Lower the default
-> threshold for those kernels.
+|  r6 = ...                    /* full 64-bit unknown */
+|  w7 = w6                     /* 32-bit zero-extending mov          */
+|  if w6 != 0 goto .Lxx        /* not taken: r6's low 32 bits are 0  */
+|  if w7 == 0 goto .Lok   <-- not deduced today
 
-Thank you for looking at that!
+The same gap exists for the 32-bit sign extension and was the
+motivation for this patchset.
 
-> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
-> ---
->  tools/testing/selftests/net/big_tcp_tunnels.sh | 18 ++++++++++++++++--
->  1 file changed, 16 insertions(+), 2 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> index 9b7d0456bcc1..e27774eae20e 100755
-> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
-> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
-> @@ -17,11 +17,25 @@ CLIENT_IP6="2001:db8::1:2"
->  CLIENT_IP4_TUN="192.168.2.2"
->  CLIENT_IP6_TUN="2001:db8::2:2"
->  
-> -: "${PACKETS_THRESHOLD:=1000}"
-> -
->  # Kselftest framework requirement - SKIP code is 4.
->  ksft_skip=4
->  
-> +is_debug() {
-> +	local config="/proc/config.gz"
-> +	[ -f "$config" ] || config="/boot/config-$(uname -r)"
-> +	[ -f "$config" ] || return 1 # No config found; assume non-debug.
-> +	gzip -dcfq "$config" | grep -qx 'CONFIG_DEBUG_NET=y' || return 1
+|  0: (61) r2 = *(u32 *)(r1 +24)
+|  1: (bf) r0 = (s32)r2
+|  2: (56) if w2 != 0x0 goto pc+10       ; R2=0 (branch taken)
+|     ...
+| 12: (95) exit
 
-Are you sure it is CONFIG_DEBUG_NET that causes that? It shouldn't be
-that heavy.
+This matters more with bpf-gcc than clang: gcc emits far more sign extensions,
+and the resulting rejections are real which show up in three ways
 
-Do you not want to change the thresholds only for the -dbg runners using
-kernel/configs/debug.config? If yes, you should check if
-KSFT_MACHINE_SLOW == yes:
+ - callback exit codes rejected with "R0 ... should have been in [0, 1]"
 
-https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#dealing-with-slow-runners-in-performancelatency-tests
+ - the errno-or-zero return pattern (verify_pkcs7_sig and many lsm.s progs)
+   where a value clamped to [-4095, 0] is re-widened to [S32_MIN, S32_MAX]
 
-Cheers,
-Matt
+ - and loops whose induction variable is sign-extended each iteration failing
+   with "The sequence of 8193 jumps is too complex".
+
+This series adds a low-32-only equality link in two flavours: the high half
+is either zero (zero-extending mov) or the sign-extension of the low field
+(32-bit sign extension) and teaches sync_linked_regs() to rebuild the
+destination accordingly.
+
+  1-2  NFC prep. Turn ->precise into a u8 flags field, then move the existing
+       linked-scalar flags out of the top bits of ->id into it. ->id becomes a
+       plain 32-bit identifier with no masking anywhere, which collapses
+       check_scalar_ids() to a single check_ids(). Because ->flags sits past
+       every memcmp() window used for state comparison, patch 2 also adds
+       link_flags_match() and calls it from regs_exact(), restoring the
+       discrimination the compound-id key used to provide for free.
+  3-4  The zero-extending flavour, BPF_FLAG_SUBREG_ZEXT, plus tests.
+  5-6  The sign-extending flavour, BPF_FLAG_SUBREG_SEXT, plus tests.
+
+Sent as RFC mainly for the design questions below; the code is in shape.
+
+Notes and open questions
+========================
+- An earlier version detected loop headers to decide when forming an in-loop
+  link was safe, but using Eduard's in works SCEV loop-analysis. However the
+  conclusion was that was not the right problem/solution as the ensuing issue
+  could be triggered in current codebase (w/o this series with a little tweak
+  of the test: 
+
+- regsafe() now checks the low-32 link flavour *above* the explore_alu_limits
+  and !precise short-circuits, while the pre-existing BPF_FLAG_ADD_CONST check
+  sits below them. The argument for checking early applies to both. Moving the
+  ADD_CONST one makes regsafe() stricter on a path that predates this series --
+  a pruning change worth measuring separately -- so it is left alone and the
+  asymmetry is called out in a comment. Opinions welcome.
+
+- reconstruct_sext32() rebuilds var_off with tnum_range() over the low-32
+  signed bounds, so known bits that the range does not imply are lost. The
+  zero-extending arm keeps the base's exact low-32 tnum. Sound but asymmetric;
+  a follow-up could derive the tnum from tnum_subreg(src->var_off) instead.
+
+- Only the 32-bit sign extension forms a link. (s8)/(s16) do not, so the flag
+  alone carries the width and no extra field is needed. They are not seen in
+  codegen so far.
+
+Testing
+=======
+Baseline: bpf-next: 
+   2026-08-14 f2aaa6215910 riscv, bpf: Fix missing sign-ext for signed 1-byte and 2-byte kfunc args
+
+Full selftest runs with bpf-gcc and clang (-mcpu=v4). 
+
+ - clang: no regressions (no improvements either)
+
+ - bpf-gcc:
+
+   Before: Summary: 635/5362 PASSED, 7786 SKIPPED, 115/412 FAILED
+   After : Summary: 644/5439 PASSED, 8506 SKIPPED, 106/350 FAILED
+
+   The measurable pass improvements come with the sign-extension patch;
+   the zero-extension one is groundwork plus its own test.
+
+   + "... should have been in [0, 1],  [-4095, 0]" 
+     All 21 instances gone
+
+   + of "The sequence of 8193 jumps is too complex."
+     Down from 7 to 3
+
+   + One regression vs. baseline: iters/iter_obfuscate_counter:FAIL
+
+     It is now runaway to 1M, root-cause has been analysed and something
+     to do with with bpf-gcc's branch codegen and costing.
+
+For completeness, full diff of bpf-gcc run vs. bpf-next baseline
+
+1. Existing tests OK now
+
+> #25/1          bpf_ip_check_defrag/v4:OK
+> #25/2          bpf_ip_check_defrag/v6:OK
+> #25            bpf_ip_check_defrag:OK
+> #26/5          bpf_iter/task_tid:OK
+> #26/6          bpf_iter/task_pid:OK
+> #26/7          bpf_iter/task_pidfd:OK
+> #26/8          bpf_iter/task_sleepable:OK
+> #26/14         bpf_iter/tcp4:OK
+> #26/15         bpf_iter/tcp6:OK
+> #26/16         bpf_iter/udp4:OK
+> #26/17         bpf_iter/udp6:OK
+> #26/25         bpf_iter/bpf_hash_map:OK
+> #26/37         bpf_iter/ksym:OK
+> #26/38         bpf_iter/bpf_sockmap_map_iter_fd:OK
+> #36            bpf_sockmap_map_iter_fd:OK
+> #82/8          cgroup_xattr/read_cgroupfs_xattr:OK
+> #82            cgroup_xattr:OK
+> #112/2         dynptr/test_dynptr_data:OK
+> #112/3         dynptr/test_dynptr_copy:OK
+> #112/4         dynptr/test_dynptr_copy_xdp:OK
+> #112/5         dynptr/test_dynptr_memset_zero:OK
+> #112/6         dynptr/test_dynptr_memset_notzero:OK
+> #112/7         dynptr/test_dynptr_memset_zero_offset:OK
+> #112/8         dynptr/test_dynptr_memset_zero_adjusted:OK
+> #112/9         dynptr/test_dynptr_memset_overflow:OK
+> #112/10        dynptr/test_dynptr_memset_overflow_offset:OK
+> #112/11        dynptr/test_dynptr_memset_readonly:OK
+> #112/12        dynptr/test_dynptr_memset_xdp_chunks:OK
+> #112/13        dynptr/test_ringbuf:OK
+> #112/14        dynptr/test_skb_readonly:OK
+> #112/15        dynptr/test_dynptr_skb_data:OK
+> #112/16        dynptr/test_dynptr_skb_meta_data:OK
+> #112/17        dynptr/test_dynptr_skb_meta_flags:OK
+> #112/18        dynptr/test_adjust:OK
+> #112/19        dynptr/test_adjust_err:OK
+> #112/20        dynptr/test_zero_size_dynptr:OK
+> #112/21        dynptr/test_dynptr_is_null:OK
+> #112/22        dynptr/test_dynptr_is_rdonly:OK
+> #112/23        dynptr/test_dynptr_clone:OK
+> #112/25        dynptr/test_dynptr_skb_strcmp:OK
+> #112/27        dynptr/test_probe_read_user_dynptr:OK
+> #112/28        dynptr/test_probe_read_kernel_dynptr:OK
+> #112/29        dynptr/test_probe_read_user_str_dynptr:OK
+> #112/30        dynptr/test_probe_read_kernel_str_dynptr:OK
+> #112/31        dynptr/test_copy_from_user_dynptr:OK
+> #112/32        dynptr/test_copy_from_user_str_dynptr:OK
+> #112/33        dynptr/test_copy_from_user_task_dynptr:OK
+> #112/34        dynptr/test_copy_from_user_task_str_dynptr:OK
+> #117           exe_ctx:OK
+> #239/9         mem_rdonly_untrusted/mixed_mem_type:OK
+> #239           mem_rdonly_untrusted:OK
+> #418           setget_sockopt:OK
+> #441/7         sockmap_basic/sockmap copy:OK
+> #441/8         sockmap_basic/sockhash copy:OK
+> #441           sockmap_basic:OK
+> #605/16        verifier_global_ptr_args/anything_to_untrusted_mem:OK
+> #605           verifier_global_ptr_args:OK
+> #614/1         verifier_iterating_callbacks/unsafe_on_2nd_iter:OK
+> #721/1         verify_pkcs7_sig/pkcs7_sig_from_map:OK
+
+2. New tests added pass
+
+> #622/25        verifier_linked_scalars/subreg_eq_zext_mov_narrow:OK
+> #622/26        verifier_linked_scalars/zext_mov_keeps_add_const_src:OK
+> #622/27        verifier_linked_scalars/zext_dest_driven_does_not_narrow_base:OK
+> #622/28        verifier_linked_scalars/sext_linked_low_narrow_to_zero:OK
+> #622/29        verifier_linked_scalars/sext_linked_separate_dest_narrow_to_zero:OK
+> #622/30        verifier_linked_scalars/sext_narrow_branch_on_source:OK
+> #622/31        verifier_linked_scalars/sext_narrow_copied_back:OK
+> #622/32        verifier_linked_scalars/sext_narrow_inplace_pre_copy:OK
+> #622/33        verifier_linked_scalars/sext_narrow_spill_fill:OK
+> #622/34        verifier_linked_scalars/sext_resext_preserves_range:OK
+> #622/35        verifier_linked_scalars/sext_in_loop_converges:OK
+> #622/36        verifier_linked_scalars/sext_in_loop_separate_dest_index:OK
+> #622/37        verifier_linked_scalars/zext_mov_from_sext_src_zero_extends:OK
+> #622/38        verifier_linked_scalars/sext_mov_keeps_add_const_src:OK
+> #622/39        verifier_linked_scalars/sext_dest_driven_does_not_narrow_base:OK
+
+3. Regression
+
+< #171/47        iters/iter_obfuscate_counter:OK
+
+
+Vineet Gupta (6):
+  bpf: turn bpf_reg_state->precise into a flags field [NFC]
+  bpf: move the linked-scalar flags into bpf_reg_state->flags [NFC]
+  bpf: support low-32 subreg scalar linking for zero-extending movs
+  selftests/bpf: cover low-32 subreg-equal link for zero-extending movs
+  bpf: support low-32 subreg scalar linking for sign-extending movs
+  selftests/bpf: cover 32-bit sign-extension low-32 links
+
+ include/linux/bpf_verifier.h                  |  51 +-
+ kernel/bpf/backtrack.c                        |  22 +-
+ kernel/bpf/log.c                              |   6 +-
+ kernel/bpf/states.c                           | 106 +++-
+ kernel/bpf/verifier.c                         | 226 ++++++-
+ .../selftests/bpf/progs/verifier_bounds.c     |  10 +-
+ .../bpf/progs/verifier_linked_scalars.c       | 550 +++++++++++++++++-
+ .../selftests/bpf/progs/verifier_reg_equal.c  |  16 +-
+ 8 files changed, 890 insertions(+), 97 deletions(-)
+
 -- 
-Sponsored by the NGI0 Core fund.
+2.53.0-Meta
 
