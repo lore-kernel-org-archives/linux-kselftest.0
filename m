@@ -1,200 +1,243 @@
-Received: from mail-oo1-f51.google.com (mail-oo1-f51.google.com [209.85.161.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8093486B89
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 16:04:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BFBF48AE04;
+	Fri, 14 Aug 2026 16:05:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786723482; cv=none; b=OO9ZFPJ4QF8HyjO2/4eMBszDG//vRHQPWWGxfVS4BtDq6Wtt1FPUOalb0O4XSyLuKipIYEC0FGEjiK5uVH7zLk2fer+xkcvtRRJ/7DTp3RCOdm03LQDxaoTUtL9GkMLOmBEd6zRMPeKFl5gTOVbVYXJ8tpkw36RkJVWUUTxyPd4=
+	t=1786723547; cv=none; b=AUF1fW8QwGHYz0RIxFrjCbgd6FILcvlqb+O8iPJ8EimSsYkCxzU5mQ4gy7H4SLQJexeCtQJq+aG5iYSiJVfkEZ1VWcjQIZS2HxN6C9RxyHbWp+AP959BrbdGBZwU9zH1F4jrQb6pSpiSkS7g3GAqyEzM4Gl4LnjKFvtw94XPX9g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786723482; c=relaxed/simple;
-	bh=52qCRrZb2SMRCcmFeD6ZAbxvhqKc5jQN4x92ylGefnE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YliT/tLTwR3JdHhXx5W1DZZerri3BmEBhJ4NpAWhCIyNoVUOKkLheKrqhjNV08XIIBIBnflgo5ddBbanZ0HPa6uaSz2RvgEcYJK2d7FQKntvP+Jp8FyaPPd3o8VW0pkHK3q3NcIf7Rjs46Ap22ssUI4SCDMY91SaUf92GMPTyB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=RNqflWah; arc=none smtp.client-ip=209.85.161.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
+	s=arc-20240116; t=1786723547; c=relaxed/simple;
+	bh=L8GsF73UnKkggtrCxHY/AZeQySCCSFf5WblsqBgisdc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=b0OH4HmPldA6PBgXijy1lt6tyaXAUJACdBDMaOJfiu5j4zXP+ZQFz/BTvLXwVOT+epMN0m5T/9efdp6+/T5RJKu5hwS0woXOt2UuW55151p5Owr51dG8WhEvlurtat9eZdykTTPOBFWCTf79ds9PToWq6D7TyZa7OJNwaK+MEgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LrXPY0s1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="RNqflWah"
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-6acc2a10023so669393eaf.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 09:04:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1786723478; x=1787328278; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eZdEAU+RA4hG/xm/Q4y+B1YPvOJHTrAQedhhdFxab1c=;
-        b=RNqflWahBCsLWj3fGqUb+K1nVtQHHr9HkS9nM46NhzOtrQyR0qyOGvp8zeOtClpOJS
-         e29CEzcZ6WYvAXBfD2Q4qmam0srSrHzIo2pxywSrm5cCPU+8FX+kARdtBdJQ+SCNVh7p
-         uw+bFzySZAd3HWHshPgl+Jf/pyfMvZ/FN32SEWjpxeZCpSE34OyqQtjqVyJAgC4s0Qth
-         qO0K8VqxrIPxz0qCmjatWqLsjfj9MKQ9m3aVVkN7uywSLGvdUmE4ze3/85Bw7Cc5avub
-         C2JrBVEOK29yRU7Gse0dS2ATFVgSda+nTkZ71sgp08JZCiQ8urEZla9J+ZPQgQYILFUT
-         HPEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786723478; x=1787328278;
-        h=content-transfer-encoding:content-type:in-reply-to:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=eZdEAU+RA4hG/xm/Q4y+B1YPvOJHTrAQedhhdFxab1c=;
-        b=YdsII3Gw/rtsDVFAn2L7y+hW/GzmUPaQyPA0hpnhXB2RdKI5MtiPTeeK+bfc4RY5v4
-         aFByOvl09lyyt05rwCsuplbLlo6mpuGv56eUPS55VVISqsBZIGuX8RzASTjB0Wp40WLl
-         bQr7rna8m9i8IsAGOviJo/jwxuJcGdqG3zvmCq2OMHxP1VqbKdS8mVCl0tyZ8sYFHNJT
-         hun3mZ8o4ZG+xXuvdOuVvcP4+3rv4L1HYsLGJARBW33dtIPi5ndmBxUFifgyxK8BC5BT
-         QiOgiQdAcPTmO4g+hkRtoFVYahApxVo0b9IePQ0rZJ2V3utQrw7DVeQKvzb73P9tFNJF
-         eD8w==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3HZgDikzTBKj2Cd6FJLjO3PlDfET/dyTzBaj16JxQAg5fbyCnITmHO3M9vgaJw2ZQxogr0t4oSO2hBUHXna0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAvQt06EZyejXr+vh0elZsUm+0ORvy9fy2HV4Ntpibg1nPhCKy
-	tPth1SzHViUxuwZv5kexEZMdawdmjVbI93d4u6wgoaHT0H/kYNV1jAeNHgMuQCot3EI=
-X-Gm-Gg: AR+sD13V4+92M4OOFoDUdIu0UAru2H0YBe3+flS2C5YUQ945flVhDSl9xQ1hJX6Tthu
-	SmRFICww++vIgrtIm+quWDoBNmEy9JEemh6+MAMsSrzy/CUWv/v47YoPpnCbBYjUGVmgfb9LqIE
-	3z0J+h5A/EM/qJj7XmxvNO5Y+OIorvrnuOK04gJjdLgRGj+veSsALfsaRtyUrktIL428TjJ1QqU
-	WrD7QPR1qyMSH0PNABUriR1Jogs0fUTorIBRQiBb03WvTEW1Y2X19KefL8wVyXFo/J9HfP0ueNM
-	w/Okt5OrFCibWNtOjW3O+FInIKSSWO7/hb/vGKksLGzo8n6AP5dujEA4aXII9qRLnFLn64bqQey
-	Pi2RAhspNB1UzNCRbK6nGn3KYcwqQb5kV2jdlcbm5AVPu4+4BDhl/qh86KYCcGjq0AnzF5WJahX
-	mlyOFEPiRKAqoRQ1WkzXDuRLJcyOPTBUAdOCKQe783Hs/XcNlggiFJi4wyzp1rpdEHDGhC/YduM
-	OMCme56btyHvEyTT13rrbZvfpX+XMa8Os6E2oBCrGbFdxJzRPcBljST+0qk+2gvosSnXppX
-X-Received: by 2002:a05:6820:1513:b0:6b0:ac70:f741 with SMTP id 006d021491bc7-6b0d690bfc2mr5364333eaf.28.1786723478104;
-        Fri, 14 Aug 2026 09:04:38 -0700 (PDT)
-Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::4:a11e])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b0db240128sm2104198eaf.13.2026.08.14.09.04.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Aug 2026 09:04:37 -0700 (PDT)
-Message-ID: <7e1a7fab-ea77-4373-ba7d-a3ce5aa73ba1@davidwei.uk>
-Date: Fri, 14 Aug 2026 09:04:35 -0700
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LrXPY0s1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829ED1F000E9;
+	Fri, 14 Aug 2026 16:05:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786723528;
+	bh=Q5nalS8clh6zVc3SzWMnKZJ3lcpnCa5AuqNQUNumrEs=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=LrXPY0s1PpQURSOt5GR9cvpVCHL1d/OFgWH0ZVda6JjzAv5hlMqFsOoOTMr0QetTa
+	 GhQMfrkVrtWh+tdlaYI+fyeUq4qAltEdxKXg1lf3GVUZGqZ0qlYt1kzMlwkADlEAjS
+	 FkHq5WcFV/A90mPRrgngDG4V0UiQ3Nw1ytH6bSRbAVa5E4ih3u6FmKw0QFQlq/EsTB
+	 WQltN3ZdHANAbwXrMxqMIAHEcoNU/QWLTNnIYsWvap/ltwJqzPdKRs8rD/HHMWzZPL
+	 uYQkgj4yQwq5uQhcXk8u11fLJH/viY3QIP3OxtyS2g7QcBH/4NuCXBJqC33Bc/H+i0
+	 DiaC43AyYbtJA==
+Date: Sat, 15 Aug 2026 01:05:24 +0900
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>, Steven Rostedt
+ <rostedt@goodmis.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>, Shuah Khan
+ <skhan@linuxfoundation.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] selftests/ftrace: Add a boottime tracing test
+ framework
+Message-Id: <20260815010524.b361dc036dd2e997d23cc421@kernel.org>
+In-Reply-To: <178649540853.438282.4271870161169100680.stgit@devnote2>
+References: <178649540853.438282.4271870161169100680.stgit@devnote2>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v5 4/6] selftests: net: add multithread client
- support to iou-zcrx
-To: Juanlu Herrero <juanlu@fastmail.com>, netdev@vger.kernel.org
-Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
- pabeni@redhat.com, shuah@kernel.org
-References: <20260814012348.46958-1-juanlu@fastmail.com>
- <20260814012348.46958-5-juanlu@fastmail.com>
-Content-Language: en-US
-From: David Wei <dw@davidwei.uk>
-In-Reply-To: <20260814012348.46958-5-juanlu@fastmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On 2026-08-13 18:23, Juanlu Herrero wrote:
-> Add pthreads to the iou-zcrx client so that multiple connections can be
-> established simultaneously. Each client thread connects to the server
-> and sends its payload independently.
-> 
-> Introduce the -t option to control the number of threads (default 1),
-> preserving backwards compatibility with existing tests.
-> 
-> Assisted-by: Claude:claude-opus-4-8
-> Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
-> ---
->   .../testing/selftests/drivers/net/hw/Makefile |  2 +-
->   .../selftests/drivers/net/hw/iou-zcrx.c       | 35 +++++++++++++++++--
->   2 files changed, 33 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> index 78bb0169350b2..37023ba580de7 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> @@ -91,5 +91,5 @@ include ../../../net/ynl.mk
->   include ../../../net/bpf.mk
->   
->   ifeq ($(HAS_IOURING_ZCRX),y)
-> -$(OUTPUT)/iou-zcrx: LDLIBS += -luring
-> +$(OUTPUT)/iou-zcrx: LDLIBS += -luring -lpthread
->   endif
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> index 9b62fd0703e61..f793a6c04e412 100644
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> @@ -4,6 +4,7 @@
->   #include <error.h>
->   #include <fcntl.h>
->   #include <limits.h>
-> +#include <pthread.h>
->   #include <stdbool.h>
->   #include <stdint.h>
->   #include <stdio.h>
-> @@ -85,6 +86,7 @@ static int cfg_send_size = SEND_SIZE;
->   static struct sockaddr_in6 cfg_addr;
->   static unsigned int cfg_rx_buf_len;
->   static bool cfg_dry_run;
-> +static int cfg_num_threads = 1;
->   
->   static char *payload;
->   
-> @@ -379,7 +381,7 @@ static void run_server(void)
->   		error(1, 0, "test failed\n");
->   }
->   
-> -static void run_client(void)
-> +static void *client_worker(void *arg)
->   {
->   	ssize_t to_send = cfg_send_size;
->   	ssize_t sent = 0;
-> @@ -405,12 +407,36 @@ static void run_client(void)
->   	}
->   
->   	close(fd);
-> +	return NULL;
-> +}
-> +
-> +static void run_client(void)
-> +{
-> +	int total_conns = cfg_num_threads * cfg_num_threads;
-> +	pthread_t *threads;
-> +	int i, ret;
-> +
-> +	threads = calloc(total_conns, sizeof(*threads));
-> +	if (!threads)
-> +		error(1, 0, "calloc()");
-> +
-> +	for (i = 0; i < total_conns; i++) {
-> +		ret = pthread_create(&threads[i], NULL, client_worker, NULL);
-> +		if (ret)
-> +			error(1, ret, "pthread_create()");
-> +	}
-> +
-> +	for (i = 0; i < total_conns; i++)
-> +		pthread_join(threads[i], NULL);
-> +
-> +	free(threads);
->   }
->   
->   static void usage(const char *filepath)
->   {
->   	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
-> -		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
-> +		    "-l<payload_size> -i<ifname> -q<rxq_id> -t<num_threads>",
-> +		    filepath);
->   }
->   
->   static void parse_opts(int argc, char **argv)
-> @@ -428,7 +454,7 @@ static void parse_opts(int argc, char **argv)
->   		usage(argv[0]);
->   	cfg_payload_len = max_payload_len;
->   
-> -	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
-> +	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:dt:")) != -1) {
->   		switch (c) {
->   		case 's':
->   			if (cfg_client)
-> @@ -469,6 +495,9 @@ static void parse_opts(int argc, char **argv)
->   		case 'd':
->   			cfg_dry_run = true;
->   			break;
-> +		case 't':
-> +			cfg_num_threads = strtoul(optarg, NULL, 0);
-> +			break;
->   		}
->   	}
->   
+Hi Steve,
 
-Reviewed-by: David Wei <dw@davidwei.uk>
+Would you have any comment on this? I would like to pick this to probes/for-next
+for ensuring boottime tracing works correctly.
+
+Thank you,
+
+On Wed, 12 Aug 2026 09:43:28 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
+
+> Hi,
+> 
+> This is the v3 series of the boottime tracing test framework to selftests/ftrace.
+> This test builds initramfs from busybox binary and test scripts, and run it on
+> QEMU with modified cmdline and bootconfig.
+> 
+> The previous version is here:
+> 
+>  https://lore.kernel.org/all/178646245730.428104.4400499381224001727.stgit@devnote2/
+> 
+> In this version, I fixed some issues pointed by Sashiko[1] and add "# APPLETS:"
+> line support for test script. See below changelog for details.
+> 
+> [1] https://sashiko.dev/#/patchset/178646245730.428104.4400499381224001727.stgit%40devnote2
+> 
+> Changes in v3:
+> [1/4]
+>  - Require file command and check kernel binary architecture via file -bL
+>    instead of matching kernel path string in run_boottime_test.sh.
+>  - Use 'cp -L' when copying BUSYBOX into initramfs to dereference
+>    symbolic links.
+>  - Use 'ln -sf' when creating BusyBox applet symlinks in initramfs.
+>  - Add support for '# APPLETS: <applets>' header in test scripts to
+>    dynamically create BusyBox applet symlinks in initramfs.
+>  - Update boottime test README to document file command dependency and
+>    '# APPLETS:' header syntax.
+> [3/4]
+>  - Add '# APPLETS: awk' header to cmdline-03-trace-buf-size.sh to request
+>    awk applet in initramfs.
+> 
+> Changes in v2:
+> [1/4]
+>  - Add top-level boottime-ktap wrapper script and include it in
+>    TEST_PROGS in Makefile.
+>  - Define BUSYBOX_APPLETS as a global array variable including sleep
+>    and sed.
+>  - Require timeout tool in run_boottime_test.sh and README, and always
+>    invoke QEMU under timeout command to prevent infinite execution loops.
+>  - Add fallback sleep loop safeguard (sleep 100 || break) in guest
+>    init script.
+>  - Support multi-line .qemuopts files using read -r -d '' -a qemu_args.
+> [3/4]
+>  - Fix buffer_size_kb parsing in cmdline-03-trace-buf-size.sh to handle
+>    unexpanded buffer string output '1 (expanded: 2048)'.
+>  - Use grep -qw in cmdline-04-trace-options.sh to match word options
+>    and avoid matching disabled 'no<option>' entries.
+> [4/4]
+>  - Increase reserve_mem alignment to 32M (reserve_mem=12M:32M:trace) to
+>    ensure stable physical memory placement across KASLR reboots.
+> 
+> The new run_boottime_test.sh can run tests not only for boottime trace
+> but also other kernel cmdline tracing options, including persistent
+> ring buffer and its backup.
+> 
+> Overview
+> --------
+> The test runner (`run_boottime_test.sh`) constructs a lightweight initramfs
+> with busybox and a tracefs checker script from `tests/`, attaches optional
+> bootconfigs from `bootconfigs/` using the `bootconfig` tool, applies optional
+> command-line parameters from `cmdlines/`, boots the target kernel image under
+> QEMU, and reports results according to TAP version 13 format.
+> 
+> Here is an example usage of the test.
+> -----
+> $ ./tools/testing/selftests/ftrace/boottime/run_boottime_test.sh -k ${BUILD_PATH}/arch/x86/boot/bzImage
+> TAP version 13
+> 1..14
+> ok 1 01-kprobe
+> ok 2 02-synth
+> ok 3 03-eprobe
+> ok 4 04-fprobe
+> ok 5 05-tprobe
+> ok 6 06-instance
+> ok 7 cmdline-01-ftrace
+> ok 8 cmdline-02-trace-event
+> ok 9 cmdline-03-trace-buf-size
+> ok 10 cmdline-04-trace-options
+> ok 11 cmdline-05-trace-clock
+> ok 12 cmdline-06-trace-instance
+> ok 13 persistent-01-reserve-mem
+> ok 14 persistent-02-backup-instance
+> # Totals: pass:14 fail:0 xfail:0 xpass:0 skip:0 error:0
+> -----
+> 
+> Note that this requires QEMU, busybox and some other tools to run, see README
+> for more information. If those tools are not installed, this test will be
+> skipped.
+> 
+> Other discussion
+> ----------------
+> BTW, I found other similar shell scripts under kselftest for other subsystems.
+> I think we can make an integrated (standard) QEMU test framework in the
+> kselftest common directory and reuse it.
+> Also, maybe we can reconsider using ktest.pl to run these tests.
+> 
+> 
+> Thanks,
+> 
+> ---
+> base-commit: 29a86c5e6361caffa7e75e891169e813f82ff688
+> 
+> Masami Hiramatsu (Google) (4):
+>       selftests/ftrace: Add generic boot tracing test framework
+>       selftests/ftrace: Add boot-time tracing testcases
+>       selftests/ftrace: Add kernel cmdline tracing testcases
+>       selftests/ftrace: Add persistent ring buffer testcases
+> 
+> 
+>  tools/testing/selftests/ftrace/Makefile            |    4 
+>  tools/testing/selftests/ftrace/boottime-ktap       |    6 
+>  tools/testing/selftests/ftrace/boottime/Makefile   |   10 
+>  tools/testing/selftests/ftrace/boottime/README     |   74 ++++
+>  .../ftrace/boottime/bootconfigs/01-kprobe.bconf    |    4 
+>  .../ftrace/boottime/bootconfigs/02-synth.bconf     |    4 
+>  .../ftrace/boottime/bootconfigs/03-eprobe.bconf    |    4 
+>  .../ftrace/boottime/bootconfigs/04-fprobe.bconf    |    4 
+>  .../ftrace/boottime/bootconfigs/05-tprobe.bconf    |    4 
+>  .../ftrace/boottime/bootconfigs/06-instance.bconf  |    5 
+>  .../boottime/cmdlines/cmdline-01-ftrace.cmdline    |    1 
+>  .../cmdlines/cmdline-02-trace-event.cmdline        |    1 
+>  .../cmdlines/cmdline-03-trace-buf-size.cmdline     |    1 
+>  .../cmdlines/cmdline-04-trace-options.cmdline      |    1 
+>  .../cmdlines/cmdline-05-trace-clock.cmdline        |    1 
+>  .../cmdlines/cmdline-06-trace-instance.cmdline     |    1 
+>  .../cmdlines/persistent-01-reserve-mem.cmdline     |    1 
+>  .../cmdlines/persistent-02-backup-instance.cmdline |    1 
+>  .../selftests/ftrace/boottime/run_boottime_test.sh |  403 ++++++++++++++++++++
+>  .../selftests/ftrace/boottime/tests/01-kprobe.sh   |   25 +
+>  .../selftests/ftrace/boottime/tests/02-synth.sh    |   25 +
+>  .../selftests/ftrace/boottime/tests/03-eprobe.sh   |   25 +
+>  .../selftests/ftrace/boottime/tests/04-fprobe.sh   |   25 +
+>  .../selftests/ftrace/boottime/tests/05-tprobe.sh   |   25 +
+>  .../selftests/ftrace/boottime/tests/06-instance.sh |   30 +
+>  .../ftrace/boottime/tests/cmdline-01-ftrace.sh     |   19 +
+>  .../boottime/tests/cmdline-02-trace-event.sh       |   26 +
+>  .../boottime/tests/cmdline-03-trace-buf-size.sh    |   29 +
+>  .../boottime/tests/cmdline-04-trace-options.sh     |   23 +
+>  .../boottime/tests/cmdline-05-trace-clock.sh       |   19 +
+>  .../boottime/tests/cmdline-06-trace-instance.sh    |   24 +
+>  .../boottime/tests/persistent-01-reserve-mem.sh    |   28 +
+>  .../tests/persistent-02-backup-instance.sh         |   40 ++
+>  tools/testing/selftests/ftrace/config              |    6 
+>  34 files changed, 897 insertions(+), 2 deletions(-)
+>  create mode 100755 tools/testing/selftests/ftrace/boottime-ktap
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/Makefile
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/README
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/01-kprobe.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/02-synth.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/03-eprobe.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/04-fprobe.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/05-tprobe.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/bootconfigs/06-instance.bconf
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-01-ftrace.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-02-trace-event.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-03-trace-buf-size.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-04-trace-options.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-05-trace-clock.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/cmdline-06-trace-instance.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-01-reserve-mem.cmdline
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/cmdlines/persistent-02-backup-instance.cmdline
+>  create mode 100755 tools/testing/selftests/ftrace/boottime/run_boottime_test.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/01-kprobe.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/02-synth.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/03-eprobe.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/04-fprobe.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/05-tprobe.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/06-instance.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-01-ftrace.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-02-trace-event.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-03-trace-buf-size.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-04-trace-options.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-05-trace-clock.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/cmdline-06-trace-instance.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-01-reserve-mem.sh
+>  create mode 100644 tools/testing/selftests/ftrace/boottime/tests/persistent-02-backup-instance.sh
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
