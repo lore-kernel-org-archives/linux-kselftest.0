@@ -1,120 +1,122 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23AB946C844;
-	Fri, 14 Aug 2026 15:28:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 683E73DAABE
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 15:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786721323; cv=none; b=HWqKYAe26pKys1R4Pz64ktVV92VKqVsTwJjOAJzGrVK7ZUefiprGPCnEsUfVM69jqeHqCKN/skrU7kmtO5340BBY1aypiFUSHGf6ctb+ETvIlUYWy9y0I76ynhDRT3F4BzIT+7rozBE3pgTt9as4mJZWd3Jdp5H5zfgESasDJzQ=
+	t=1786722637; cv=none; b=N0kR1eji6gtjViZ47omJNcVHQzlHfNjl0/claZbubuKbYLlSMXLzhod1y0zoxm1lCp1zqjirHDaUz1FfVEL4Q+VUXVtNrPk0el5ZJRuA5ZmFosuHX90Jqjd0LXBitM9WrhccGrqwKVlATaUch09qxMm6PvExuqBDI33SiIy8UEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786721323; c=relaxed/simple;
-	bh=nM2KpLAD+dQ4Lc9S8GqnM/gjeb+efgIynIrAPZqM9Bk=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=aMJxCxELIlsbvOfrcQTyjEbCeZymLN1HRPiGIQ6MvOTro/4AvVG1s9sxmIDoDwUd+wu7AyaaE4q9KheGuCUs/6GmTV5sVVvwFC994J9oSZe44fQ0OntjIkmzBquz4d4UMEz++IVEqdGGCtLqHn2idUnRIhNIPY7slkzeOLCNO9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GLqgq6Fg; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786722637; c=relaxed/simple;
+	bh=fylv9N5GG8WON01Ni6+SzdlApu1Tt/sl3B5ACfe67+w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U6cg8u3k5MpjJFIfwl9h2zkyzE+YzD8I/cxLAlwfJBrrpgdnDPVXNSyXEXHO0NYVZbwaHtapxzvtZf9z+FRkwU3gQbluceVqUF0G3+cU8icrG8H69e9/Ji5SM6bBmSEJ9D9y/qGQqiEQ/ncpCTtE7wvALdqtG8xCY2FgtDzn7V4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk; spf=none smtp.mailfrom=davidwei.uk; dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b=zf0BWdEK; arc=none smtp.client-ip=209.85.210.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidwei.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=davidwei.uk
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GLqgq6Fg"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C4CE1F00A3A;
-	Fri, 14 Aug 2026 15:28:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786721321;
-	bh=KitOUslk+18qH3Fpmqr2kv9IYMnx8rgJ/awcl8hCp38=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=GLqgq6FgjleJZrv/0WD+jXDedrNVZ6uzo1BN4AjyGbxKeJBMXbxYtpLBLC5TaRnl0
-	 gOi7bTv3T7DolDqm7NaT8uyXcx4k4IkePEQNQA4E9rLAZRnXYqf6nNS1t4T3WsomHJ
-	 xSRaEpggt6SdBn+/NFIT4M9ii4lIXZSFDpnR1Ag16dfPGNSQwddGnSZ7tgdn9Ujv+h
-	 YVMIfIO+2V+EzbHU80c+qxTjg5Zc7BKX/Z15te/NHV4qMGdtthYzqDy6ovzqYRsSns
-	 I7BzQkb6wjlitagN09CuC3ZkJXDNn43AuTFHeMdxLFuwyXG7gtaTnujGGKyLxzkGU7
-	 ZkjfOFp06yP3w==
-Received: from phl-compute-10.internal (phl-compute-10.internal [10.202.2.50])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 55858F4006B;
-	Fri, 14 Aug 2026 11:28:40 -0400 (EDT)
-Received: from phl-imap-15 ([10.202.2.104])
-  by phl-compute-10.internal (MEProxy); Fri, 14 Aug 2026 11:28:40 -0400
-X-ME-Sender: <xms:KDR_agih36I9vX1bg8KhMnC9qpSpApSxNSt1N0lUuDrULj6NeclTRQ>
-    <xme:KDR_aj2U04JPrni11F1cOcFDR-ZZm4x9MmrqHNjwW81ijlkhptYcCakaWMFLYfMvo
-    62gJh4V907Af0FYuCLzEOa_XZs7DqqebBSOdWQUTT4vpkQWUI6Hfc4a>
-X-ME-Proxy-Cause: dmFkZTEGStmNNX26DAxDIcjkyicgJ1tisH3i7jCTFxIriRsENLcLDfFwm35RsshH3i7m24
-    9rNg7ApoXWaNiQrVA0Nbw6RBpIYzLVwv8O95ks12I8jLDG2yXWmRCPZukUox0O65+o2W7b
-    O+pQTdMu+6TXOmWt7k7NsAZHcenVbcd4afn/pi2im5yxTIMTTOWz+0JigG4tGQORGjmRgK
-    3k14CR2zxuERiDQjf8CuWF96H80skMEOFyNQULD7m9vB6ECO0MhXp1ESiZCAR7JD+3vsy0
-    rl0zIT6vn05s59S8W7vacK/RVSGq9w3iQqBCYitxdOcBm3P3dg9wmBjaMgHQ8nXf1A8PRi
-    TxQOwap/SQtHBe91A6+X+pjvtkxQXFmUpnlxuHI04XnRo/MN3Ivpehv8B7klgHbuB01sXP
-    Qkp3HSDV1AARXL2ocoHfETcYGThYRO3TFUuLWplhZPVnO93prYzNcR2d0VLN2AsOBrdRFg
-    Xr1HDLzpY3D9ctvIOKbx1v1ulcGtbeNJ/JhMFJBXltMBaRnKL7tuLpWr4LwmejeY5bLwuW
-    9NC8yDimzFST1RTvRUbaMMdZoVXNqrWVXA9jD7JT5B5QUjnx5gHqPRT0wFd56v9AJtHI33
-    fiy1zDQBwNkrQ8fhbArqjPBEBYOgVPJ52Lbo8tsbzneEmJOTo02qFOJv6S2g
-X-ME-Proxy: <xmx:KDR_aoRXc_F1yjO5AScwdica1xhpeuMS5wspOXn6ow2a91II2-tXLQ>
-    <xmx:KDR_aq7Py65iwuXISfcB5cAGFe78eIxGLpnaI7OmmRPlp7DIc8DbJA>
-    <xmx:KDR_aoyYl178X7ozW28irZzYWeG2ZuAM4NYseOzU3RnUin26oF2i3w>
-    <xmx:KDR_aiAE9rUg60aB-qv385KDa-W-8sjd63rtdzDLXjQhfxaQudgTsQ>
-    <xmx:KDR_aobQ9-pWhwctq5qs7FcakZ62r7kyRVOO83qUWgBLlgyDgWYq0ORY>
-Feedback-ID: ifa6e4810:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2E3897811F0; Fri, 14 Aug 2026 11:28:40 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	dkim=pass (2048-bit key) header.d=davidwei-uk.20251104.gappssmtp.com header.i=@davidwei-uk.20251104.gappssmtp.com header.b="zf0BWdEK"
+Received: by mail-ot1-f45.google.com with SMTP id 46e09a7af769-7eb29ed2bbdso600645a34.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 08:50:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=davidwei-uk.20251104.gappssmtp.com; s=20251104; t=1786722631; x=1787327431; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6UWw9B4B1zgG/vzwCp5+dWn0TyEBoX3jbzAzU/meOxQ=;
+        b=zf0BWdEKWohUmZqlM6WENFM9JEYKZCwoHQ401UYB397JJj6/YYKeEIub5DeiVL2gr/
+         +vK/AuedxQMlETT76QI7gwpJtC5NWuSmXT0AkEkDZSE1smdoVr7PxBo1E0PQmGAPg7EJ
+         8XOYG/tK9Ih71CzwMziU0AnAhlYs+SF6lLfYQbR7dqECNLXWUqxlOf+M04xckYHX4hLr
+         O0smXHtPXPsPpXNPAiRtQ+2XNyjABnwK5YSaxfzIwjMjKN+Jp2iWvLmXXYnX/2mP77CF
+         1SbEq5Zcs7cwdjC5HHAjx31szpYb2alBJMCAj+UZ2BPUQsObRahDMpnbQcsfLQq8hEKe
+         cyDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786722631; x=1787327431;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=6UWw9B4B1zgG/vzwCp5+dWn0TyEBoX3jbzAzU/meOxQ=;
+        b=tGFDBsXpo42VnHRPpNc4QnvqrJeqttYM/HWEVHbnua6HaW3BMmzEAxVYwL0nfHaeSr
+         K4SH3NIfGfD/LlL9vE1ed01PsMZOHJ1+vX4/Z0KAR6lIFndtbEPDdC/0l9G3IY7WXtFX
+         YIaZYaB6fdlYwChDvWMIax64GUHWynNdBIvMx+Vw1pJScveJc3iDvLzn/1QdP7JtHgzd
+         YnOvKhi1aogrgZyiLf7CkRCN4yX50lw8y2JqTS/8Bzkxg8D07lNHab4/dTmE8UiHwLQI
+         h6dyMzRorlAPmza0RbN+LBx2+/7EOcecXuTPO/gqyV5HstYNyeEzuOTeCrf2YEgvE5Ju
+         fB8A==
+X-Forwarded-Encrypted: i=1; AHgh+RpzgrocpydyAUcFheyYseZ5irY2/154mUUUXneuJ2lVUxwJDE3JWEv+R0nP8MJGD+d9uUfi0Fe8539hDoF0Yio=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzfsJKhBZSzsM/mxY7oetTjxG9DOsq1jN3kaXbj2MMMpcHvbO37
+	sOGEGoAn8Sj31I7euIXnjnzsDUGD8O3Pn0pYQ7yDsdmeuYHpbnojF+gO+fEoeoLKP94=
+X-Gm-Gg: AR+sD130wP9P4DLp2iCjA1GznNnzdzOAN168Mh/OlKppD8XnGfc1RLhzyqSgzZbEseF
+	KwcjHyrGVswhx/0yfAjlk99vqop7OUkb4+vGrQ/gNGjzBIvdTPBe0Dz/z8qA2iZqVdGC7eGYCnv
+	t7caPjDicp1zLQXA4lcX9pS5sbASi6yX3oxcc34Avq9YnJZ/tIhEVVNNwYkJGVH6TcEysxwm18f
+	r6J/Qc6dkYoyhZ3AUjdzG1StkcKLFqhW9KHXidcrCApAXF8GNL0iDGVnu9m3MHjdgTK/YcZWBH5
+	wdNXx8yCx7vPA411Yar21+vX4SZYf95ohGBmBmsgNLiUujRJh5Mkr77GiyvlI35H9T3qTK+L2jy
+	NSffFGc/kZLHE+vunGm3Kv3cPhLfxXzlMj1aw90GPNxNY9HNDc7a8wRu8v+9dHGavKFiGTdIjZx
+	RAw/etxEVXENFname9AuJ+B06xAPPvzlKWWyV4DVce8btPovSsJIv4AWAOrmjIIutsf1FTmaT7v
+	biUL3Nok6hCZuBF8lF2W54Nev+W7DkcQpCUjmoXwEEYiGqzgVbNk2vgcHSldQ==
+X-Received: by 2002:a05:6830:3692:b0:7e7:8dc0:3951 with SMTP id 46e09a7af769-7f3de51da19mr5494859a34.8.1786722631567;
+        Fri, 14 Aug 2026 08:50:31 -0700 (PDT)
+Received: from ?IPV6:2a03:83e0:1156:1:c8f:b917:4342:fa09? ([2620:10d:c090:500::4:a11e])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f3e849478esm1158487a34.6.2026.08.14.08.50.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 14 Aug 2026 08:50:31 -0700 (PDT)
+Message-ID: <34915029-869a-4a5a-9bde-060a9a6eec20@davidwei.uk>
+Date: Fri, 14 Aug 2026 08:50:29 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A4afRqWdro9F
-Date: Fri, 14 Aug 2026 11:28:20 -0400
-From: "Chuck Lever" <cel@kernel.org>
-To: "Jeff Layton" <jlayton@kernel.org>, NeilBrown <neil@brown.name>,
- "Olga Kornievskaia" <okorniev@redhat.com>, "Dai Ngo" <Dai.Ngo@oracle.com>,
- "Tom Talpey" <tom@talpey.com>, "Trond Myklebust" <trondmy@kernel.org>,
- "Anna Schumaker" <anna@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "J. Bruce Fields" <bfields@fieldses.org>, "Shuah Khan" <shuah@kernel.org>
-Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org, "Trond Myklebust" <trondmy@gmail.com>,
- linux-kselftest@vger.kernel.org
-Message-Id: <a33c928b-d579-47c5-8a54-714277398f05@app.fastmail.com>
-In-Reply-To: <a8f5840cf3f2cbf71de7a1f3957f70d9897adfa2.camel@kernel.org>
-References: <20260811-nfsd-nl-hang-v2-0-c0c92b3953c3@kernel.org>
- <20260811-nfsd-nl-hang-v2-4-c0c92b3953c3@kernel.org>
- <e1706a70-d9f8-423e-9462-2d77b2e444b1@app.fastmail.com>
- <26486c88075a0b1e3c1cb088fe97d39e0051b5d3.camel@kernel.org>
- <572f0269-9bf4-4a80-8e9c-3c4614d45f7e@app.fastmail.com>
- <a8f5840cf3f2cbf71de7a1f3957f70d9897adfa2.camel@kernel.org>
-Subject: Re: [PATCH v2 4/8] SUNRPC: undo partial rpcbind registrations when
- svc_register() fails
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next v5 5/6] selftests: net: add multithread server
+ support to iou-zcrx
+To: Juanlu Herrero <juanlu@fastmail.com>, netdev@vger.kernel.org
+Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com,
+ pabeni@redhat.com, shuah@kernel.org
+References: <20260814012348.46958-1-juanlu@fastmail.com>
+ <20260814012348.46958-6-juanlu@fastmail.com>
+Content-Language: en-US
+From: David Wei <dw@davidwei.uk>
+In-Reply-To: <20260814012348.46958-6-juanlu@fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
+On 2026-08-13 18:23, Juanlu Herrero wrote:
+> Run the iou-zcrx server as N worker threads, each owning one receive
+> queue with its own io_uring and zero-copy receive (zcrx) ifq, so the
+> test can exercise multi-queue zero-copy receive.
+> 
+> The main thread owns the listening socket, accepts connections, and
+> dispatches each to the worker owning the queue it landed on by matching
+> SO_INCOMING_NAPI_ID against per-queue NAPI IDs.
+> 
+> Assisted-by: Claude:claude-opus-4-8
+> Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
+> ---
+>   .../testing/selftests/drivers/net/hw/Makefile |   5 +-
+>   .../selftests/drivers/net/hw/iou-zcrx.c       | 262 +++++++++++++-----
+>   2 files changed, 195 insertions(+), 72 deletions(-)
+> 
+[...]
+> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> index f793a6c04e412..008d3f4b76263 100644
+> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
+[...]
+> @@ -289,12 +279,13 @@ static void process_recvzc(struct thread_ctx *ctx, struct io_uring_cqe *cqe)
+>   		error(1, 0, "recvzc(): %d", cqe->res);
+>   
+>   	if (cfg_oneshot) {
+> -		if (cqe->res == 0 && cqe->flags == 0 && cfg_oneshot_recvs) {
+> -			add_recvzc_oneshot(ctx, ctx->connfd, page_size);
+> -			cfg_oneshot_recvs--;
+> +		if (cqe->res == 0 && cqe->flags == 0 &&
+> +		    ctx->oneshot_recvs[conn_idx]) {
+> +			add_recvzc_oneshot(ctx, conn_idx, page_size);
+> +			ctx->oneshot_recvs[conn_idx]--;
 
-On Fri, Aug 14, 2026, at 7:01 AM, Jeff Layton wrote:
-> I still think the best solution of all would be to just say
-> "henceforth, rpcbind registration is non-fatal".
-
-Fair enough, let's go with that.
-
-
-> Right now, I'm really unclear on what sort of changes you want to see
-> here as a final patchset. What would make this mergeable for you?
-
-Sorry for the ambiguity. For the re-roll:
-
-- 1, 2, 3 and 5 don't need change.
-
-- Let's drop patch 4/8.
-
-- Make registration failure non-fatal for NFSv2 and NFSv3, as
-  proposed.
-  
-- Extend the extack in 6/8 to report a listener that came up without
-  registering. dmesg is the only channel write_ports() has. Perhaps
-  the netlink path can do better?
-
-- Fix the netns leak in 8/8.
-
-- Ensure that any test that asserts the unwind or the abort is moved
-  over to the new failure policy.
-
-HTH.
-
--- 
-Chuck Lever
+This needs an early return. Sorry the bug was pre-existing but I just
+noticed it.
