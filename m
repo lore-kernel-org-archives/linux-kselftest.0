@@ -1,377 +1,129 @@
-Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
+Received: from mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78E5040DB2A
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 13:34:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A64047606E
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 14:34:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.28
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786714447; cv=none; b=Z5PcGv7aHXoA0+GskCKOA/hVFB+sriD+ItZz8dRTEFxTIsgY51z16dtqm2jXiTrP1/HIiZhEBqLUZhG2Yg7rQfO5w6luQ3U935ZouL9jeJq/33ugD1J0z4NPQnKuQvowSpncHQ1cDSJ2c0GZFw7LygXc0GzM9hsrKZ66X1dNqpk=
+	t=1786718051; cv=none; b=jGPN/OilNSvCVA9MTrDKTzNj80K4rZ/OlkALsCS0CuG3cG+mMFnFHeDGdM/7s86nG83IrSh8+jHWNZexGTk43jNA+8BczvY+JeyKypOBQh4rKyyyCgM8a5aIdHUxHP9m1mL6OKGWJ71oUGrXmkVS0ixkT7U1CjxnnmaDZPgDjoE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786714447; c=relaxed/simple;
-	bh=KLPBe7MmMT+rRxR0SQnKlMKqxOvfblXjnlpnb8WUCTE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=fxakZQez8PR8pv7APF2AnyqRMWQYY/uSTqFs2Oq8TXFudv5Xrg2LJi7Mubb9k03AX1iZpFfRQGdeR52V4wWCryyvs84k+5IJ74Sonx1pXArab0lp2whhXjc61w2Hoz4BAUYtIEW3hBD081u8C/OBYgTJOxQi88WGTUzfLKQojEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Lqg5pwzs; arc=none smtp.client-ip=209.85.128.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786718051; c=relaxed/simple;
+	bh=N2fSHrh+s4f3l5jITqoZ/7jfazo8j7PveegFmreW3+Y=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=NcUOkbYyG9ghr8610kDez3oJrxWpUkq1/PBvMdQEtIsniG1pc9JWJUzoMyi80yZTW19Wx7xApraU45Acj/C/KQyYrvXalGoLGiD1rtWT/bUugyNkES4FoD8d1bAy77+k4Z0TsKvSalHH+TZ90K5T1ufg9w+D1T7ZmvUPia8aT3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i2mO4ihh; arc=none smtp.client-ip=91.218.175.28
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Lqg5pwzs"
-Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-8111c0c7561so12904797b3.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 06:34:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786714443; x=1787319243; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=OJqvMkGymJf5lK4k8ANoduG6M5FSqz82g4dX9Jup2y4=;
-        b=Lqg5pwzsnZxn34CloqKJwtpoirBRewCQGo/8tFN+WA+typhxYaqTk2xPT8X28ibUJS
-         vUxYV/EDjLLvcixo+2JX4VeoLk6GBuJTm7XjiVusDKbMcmlesVepCSKRl2r/NaEuJHPr
-         zPsuqVG2/3J4CWxEsJItAnewoc9FzI1daKgN1F5ILSaROVO2GsrrNxD64aQ6TUmwwXQA
-         Xalr/IufIdrsaR9IQ01ucF5iIwAd3BiVpLSBnhdOBZczAjvOJXSn7TuGZN0M8lLCoQCk
-         G3QYoFSltpJR1CxuE7z+lRxhElKbterjtISdT0eQ3c3WPwEVnpeQFfRliNCtuq0ae82s
-         zQuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786714443; x=1787319243;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=OJqvMkGymJf5lK4k8ANoduG6M5FSqz82g4dX9Jup2y4=;
-        b=LaqVCXwfTlaBXkr5IG+YJPpROhY+ROhRjDv+f1J2pFaVIGFf8c1ABt/VlFPRgtZxwo
-         JzfIlDY7zIKL82ZYNisStPGLboSRZwk5/mOR6tvvgl31KRVVKrR5jL96zoogFsvRDp5p
-         DlDw575oipj4sG4yiE8RqIsLZ9oZRdPvDtJOe3FqJeYeZrZ2JRVB2nLu/2CDPwdgkgAd
-         phLUy2PDWWVPi/SsUh1lX+oR2p/Vb0Zw3TJX7JRAeXO9ieUTYgPUo4gmwbRZzhogSo2/
-         dSPK3RdwYyFOdGvFKalUMs1FNVlgXuSKAlzkG2VoX7I0DfWavQN1Abcg8SCo0ZbR2Zln
-         yE9Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpYiIrOKTVqsJP/ps7r0A/QXLX/eD1GN2uxPeyXTWS+Ul560afY41GNq4bA9rNVPGM1CvrjtFlDzySf4r6sAjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxgiJC30umS9EI0O1/+oLTHc+OFSdYO1BI3/+MrxGhfBmk/BPmj
-	+FFRYI1fQ90oK1VPdl7LhR5TygD9dusuLfRzq2EVY3z8On4OOemuiTBt
-X-Gm-Gg: AR+sD120H5BDSd9ScvlUnSVskZQYn82lFczr5Q7qfVyZJ2kVz0N643j8/C+bMION3gZ
-	sbU7iZypCbzLPnJdFsOZFYikGAnNUBeZa1U3StYw/TqAG3BzklbOBzpUBbM1anAdtuf49a07jxT
-	zu4sFBDMZ7PLHD7YcHOg/6pxxaRzUFGda1XGpJxawymFgS9RZqC78R4iZJqxzrBBQcpjLtt3W3q
-	nefmNQJRZTtwSC4/86EUISt6kxLeYPi55y1HA877RiAVoiInZCUv3e7NCC/vG8vqkfuUg4YITMo
-	kca/79DoUtF+DEi+L0nECYTmgWmFdka50iBbdkBNlMRZPkFLYc9tkfbPZC/dbvu9yqNf9yxhSHK
-	b0bZ+C99B+068Yo4uN1keIK9XICpcGytGUrI4FB08WeygCD8yUZk6bzoy213sLoSSRgkiaV2wy0
-	EcY5bQU7FcBSb2aaGS2OXosCL7rsOBOZgxNd74xmq0F647qkhcAsTa00rSzblAto8XjXiv5Dvts
-	ax19YGxcOXt7EYki0OOGn4wygBMDhLC73Vn
-X-Received: by 2002:a05:690c:a6cc:b0:80b:9f4e:a70 with SMTP id 00721157ae682-837124de3b4mr18643737b3.26.1786714442899;
-        Fri, 14 Aug 2026 06:34:02 -0700 (PDT)
-Received: from gmail.com (250.4.48.34.bc.googleusercontent.com. [34.48.4.250])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-836bc689e3asm12934997b3.17.2026.08.14.06.34.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 06:34:01 -0700 (PDT)
-Date: Fri, 14 Aug 2026 09:34:01 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
- Mirja Kuehlewind <mirja.kuehlewind@ericsson.com>, 
- Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc: Jakub Kicinski <kuba@kernel.org>, 
- "shaojijie@huawei.com" <shaojijie@huawei.com>, 
- "shenjian15@huawei.com" <shenjian15@huawei.com>, 
- "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>, 
- "eperezma@redhat.com" <eperezma@redhat.com>, 
- "jasowang@redhat.com" <jasowang@redhat.com>, 
- "virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, 
- "mst@redhat.com" <mst@redhat.com>, 
- "xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>, 
- "pabeni@redhat.com" <pabeni@redhat.com>, 
- "edumazet@google.com" <edumazet@google.com>, 
- "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
- "corbet@lwn.net" <corbet@lwn.net>, 
- "horms@kernel.org" <horms@kernel.org>, 
- "dsahern@kernel.org" <dsahern@kernel.org>, 
- "kuniyu@google.com" <kuniyu@google.com>, 
- "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
- "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
- "dave.taht@gmail.com" <dave.taht@gmail.com>, 
- "jhs@mojatatu.com" <jhs@mojatatu.com>, 
- "stephen@networkplumber.org" <stephen@networkplumber.org>, 
- "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, 
- "jiri@resnulli.us" <jiri@resnulli.us>, 
- "davem@davemloft.net" <davem@davemloft.net>, 
- "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
- "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
- "ast@fiberby.net" <ast@fiberby.net>, 
- "liuhangbin@gmail.com" <liuhangbin@gmail.com>, 
- "shuah@kernel.org" <shuah@kernel.org>, 
- "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
- "ij@kernel.org" <ij@kernel.org>, 
- "ncardwell@google.com" <ncardwell@google.com>, 
- "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
- "g.white@cablelabs.com" <g.white@cablelabs.com>, 
- Ingemar Johansson S <ingemar.s.johansson@ericsson.com>, 
- "cheshire@apple.com" <cheshire@apple.com>, 
- "rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
- "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, 
- "vidhi_goel@apple.com" <vidhi_goel@apple.com>, 
- Parav Pandit <parav@nvidia.com>, 
- Willem de Bruijn <willemb@google.com>
-Message-ID: <willemdebruijn.kernel.c248a28f9c86@gmail.com>
-In-Reply-To: <PAXPR07MB7984ED42ED0849D3A9AB8C19A3DA2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
- <20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
- <20260811173017.3d18dfdc@kernel.org>
- <PAXPR07MB79849A3F1724DBB2DA8EA20AA3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <20260812155430.6ec81eec@kernel.org>
- <PAXPR07MB7984E3E73868BF8966821C27A3DB2@PAXPR07MB7984.eurprd07.prod.outlook.com>
- <CAF=yD-LQbndjPZiXcfA6fMp6msza_+YdzqqwyeUDVTdOCOHhDw@mail.gmail.com>
- <47BE8A8A-F80C-4C30-BC95-C85FEBFFB606@ericsson.com>
- <PAXPR07MB7984ED42ED0849D3A9AB8C19A3DA2@PAXPR07MB7984.eurprd07.prod.outlook.com>
-Subject: RE: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
- and SKB_GSO_TCP_ACCECN
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i2mO4ihh"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=N2fSHrh+s4f3l5jITqoZ/7jfazo8j7PveegFmreW3+Y=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786718043; v=1; x=1787322843;
+ b=i2mO4ihh7gPHV/Y6zMpNwRCrxstTq7C0u8hJ7NxFRUNq0CBeH92Cwl3lo05pZAuQ/LQGgzix
+ D9VjCK0e+XYn54wvZ36Tm37zWX/a3T9RORF/Nm9/urrUMSresn6QyrW9iBRckZIf35q6vBm30PR
+ MHLl4EKMcRfeWB3LCMHJgWdM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [192.168.1.116] (111.162.215.50)
+	by smtp.migadu.com with ESMTPS id b1e08f2e3df3c1de;
+	Fri, 14 Aug 2026 14:34:03 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ab235e0f-6823-4db0-ad5f-29926dac65c0@linux.dev>
+Date: Fri, 14 Aug 2026 22:33:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/cgroup: remove redundant chown in
+ test_cgcore_lesser_ns_open
+To: Shaojie Sun <sunshaojie@kylinos.cn>, Tejun Heo <tj@kernel.org>,
+ Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
+ <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+References: <20260813090914.690350-1-sunshaojie@kylinos.cn>
+ <20260814100002.1007394-1-sunshaojie@kylinos.cn>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <20260814100002.1007394-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Chia-Yu Chang (Nokia) wrote:
-> > From: Mirja Kuehlewind <mirja.kuehlewind@ericsson.com> =
 
-> > Sent: Friday, August 14, 2026 10:57 AM
-> > To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>; Chia-Yu Chang=
- (Nokia) <chia-yu.chang@nokia-bell-labs.com>
-> > Cc: Jakub Kicinski <kuba@kernel.org>; shaojijie@huawei.com; shenjian1=
-5@huawei.com; linux-rdma@vger.kernel.org; eperezma@redhat.com; jasowang@r=
-edhat.com; virtualization@lists.linux.dev; mst@redhat.com; xuanzhuo@linux=
-.alibaba.com; pabeni@redhat.com; edumazet@google.com; linux-doc@vger.kern=
-el.org; corbet@lwn.net; horms@kernel.org; dsahern@kernel.org; kuniyu@goog=
-le.com; bpf@vger.kernel.org; netdev@vger.kernel.org; dave.taht@gmail.com;=
- jhs@mojatatu.com; stephen@networkplumber.org; xiyou.wangcong@gmail.com; =
-jiri@resnulli.us; davem@davemloft.net; andrew+netdev@lunn.ch; donald.hunt=
-er@gmail.com; ast@fiberby.net; liuhangbin@gmail.com; shuah@kernel.org; li=
-nux-kselftest@vger.kernel.org; ij@kernel.org; ncardwell@google.com; Koen =
-De Schepper (Nokia) <koen.de_schepper@nokia-bell-labs.com>; g.white@cable=
-labs.com; Ingemar Johansson S <ingemar.s.johansson@ericsson.com>; cheshir=
-e@apple.com; rs.ietf@gmx.at; Jason_Livingood@comcast.com; vidhi_goel@appl=
-e.com; Parav Pandit <parav@nvidia.com>; Willem de Bruijn <willemb@google.=
-com>
-> > Subject: Re: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO=
-_TCP_ECN and SKB_GSO_TCP_ACCECN
-> > =
 
-> > Hi Willem,
-> > =
-
-> > The current function of is SKB_GSO_TCP_ECN wrong. Fixing this causes =
-the regression.
-> > =
-
-> > Mirja
-> > =
-
-> > =
-
-> > =
-
-> > From: Willem de Bruijn <mailto:willemdebruijn.kernel@gmail.com>
-> > Subject: Re: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO=
-_TCP_ECN and SKB_GSO_TCP_ACCECN
-> > =
-
-> > On Thu, Aug 13, 2026 at 6:33=E2=80=AFAM Chia-Yu Chang (Nokia)
-> > <mailto:chia-yu.chang@nokia-bell-labs.com> wrote:
-> > =
-
-> > > On Wed, 12 Aug 2026 10:33:19 +0000 Chia-Yu Chang (Nokia) wrote:
-> > > > > > -     /* This indicates the tcp segment has CWR set. */
-> > > > > > +     /* For TX, this indicates that the first TCP segment ha=
-s CWR set, and
-> > > > > > +      * any subsequent segment in the same skb has CWR clear=
-ed. This flag
-> > > > > > +      * must not be used in RX, because the connection to wh=
-ich the segment
-> > > > > > +      * belongs is not tracked to use RFC3168 or AccECN. Usi=
-ng RFC3168 ECN
-> > > > > > +      * offload may clear CWR and corrupt ACE signal (CWR is=
- part of it).
-> > > > > > +      * Instead, SKB_GSO_TCP_ACCECN shall be used to avoid C=
-WR corruption.
-> > > > > > +      */
-> > > > >
-> > > > > I still can't wrap my head around this TBH.
-> > > > >
-> > > > > SKB_GSO_TCP_ECN means RFC3168
-> > > > > SKB_GSO_TCP_ACCECN means AccECN
-> > > > >
-> > > > > If the HW can correctly detect cwr on first frame and then no c=
-wr and report that as ECN/RFC3168 - what's the problem? TSO will produce =
-the exact expected segment sequence.
-> > > > >
-> > > > > Is the program that if we re-GRO that frame in SW we end up wit=
-h
-> > > > > ECN+ACCECN on the same skb?
-> > > >
-> > > > Yes, this is the problem.
-> > > > The HW does not know whether the received packets belong to an RF=
-C3168 ECN flow or an AccECN flow on the RX path.
-> > > > For example, HW GRO may set SKB_GSO_TCP_ECN after observing that =
-the first packet has CWR=3D1:
-> > > >
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > > |     Packet id     | CWR flag |       Flag      | Flushed as SKB=
- |
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > > |         0         |     1    | SKB_GSO_TCP_ECN |        0      =
- |
-> > > > |         1         |     0    |         -       |        0      =
- |
-> > > > |         2         |     1    |         -       |        0      =
- |
-> > > > |         3         |     1    |         -       |        1      =
- |
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > >
-> > > > If the aggregated skb is forwarded through a device using GSO, e.=
-g.,
-> > > > HW RX (GRO) -> veth TX (GSO), the SKB_GSO_TCP_ECN applies RFC3168=
-
-> > > > semantics. This means that only the 1st segment keeps the CWR fla=
-g
-> > > > while all subsequent segments have CWR cleared:
-> > > >
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > > |     Packet id     | CWR flag |
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > > |         0         |     1    |
-> > > > |         1         |     0    |
-> > > > |         2         |     0    |
-> > > > |         3         |     0    |
-> > > > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D+
-> > > >
-> > > > This behavior is ok for RFC3168, since CWR is expected to appear =
-only
-> > > > once. However, for AccECN, CWR is part of the ACE signal and must=
- be
-> > > > preserved across all segments.
-> > >
-> > > But this would be obviously a buggy HW-GRO implementation.
-> > > The rules for HW-GRO RFC3168 are -- ignore CWR on first segment (ho=
-st responsible for populating SKB_GSO_TCP_ECN), and CWR _must be 0_ for a=
-ll subsequent segments.
-> > >
-> > > > In the example above, the original CWR sequence was 1,0,1,1.
-> > > > But after re-segmentation it becomes: 1,0,0,0.
-> > > > This is why SKB_GSO_TCP_ECN should not be used in RX/GRO paths.
-> > >
-> > > We have extensive gro tests under
-> > > tools/testing/selftests/drivers/net/gro.py
-> > >
-> > > If you want to catch bad devices - add appropriate test cases there=
-.
-> > >
-> > =
-
-> > I added a test case in patch 6f74bc8b6e8d related to the CWR flag.
-> > In that case, there are 5 packets with CWR values of 0, 1, 1, 0, and =
-0, and packets are flushed after the 1st, 3rd, and 5th packets.
-> > The gro.py uses this case in tools/testing/selftests/net/lib/gro.c to=
- verify CWR behavior.
-> > But indeed, that does not cover whether SKB_GSO_TCP_ECN or SKB_GSO_TC=
-P_ACCECN shall be set during the GRO.
-> > So, a test might be added to verify the SKB_GSO_TCP_ECN or SKB_GSO_TC=
-P_ACCECN flags (if there is another suggested way, please let me know)?
-> > =
-
-> > > The comment as stated seems to be misleading - there's nothing wron=
-g with using the flag if the device follows the RFC3168 semantics correct=
-ly.
-> > >
-> > > And of course, adding a comment and hoping people will find it is m=
-uch weaker than adding tests.
-> > >
-> > > Again, maybe I'm missing what _actually_ doesn't work here.
-> > =
-
-> > Before adding an extra test, we need to clarify the definition and us=
-ages of these flags.
-> > At the TX path, in tcp_gso_segment() of net/ipv4/tcp_offload.c, the S=
-KB_GSO_TCP_ACCECN flag is used to preserve the CWR flags for AccECN flows=
-.
-> > Otherwise, when without SKB_GSO_TCP_ACCECN (RFC3168 ECN or Non-ECN fl=
-ows), cwr will be cleared from the following packets.
-> > =
-
-> > For the RX path, unfortunately I do not find a clear rule of when SKB=
-_GSO_TCP_ECN shall be set except in include/linux/skbuff.h.
-> > Plus, the device usually does not track packets belonging to RFC3168 =
-ECN or ACCECN flows.
-> > So, my previous thought is to always use SKB_GSO_TCP_ACCECN in the RX=
- path to avoid any potential CWR bleaching.
-> > =
-
-> > This would be a case where AccECN support causes a regression for
-> > regular ECN handling, if that is no longer allowed to be coalesced.
-> > =
-
-> > Most HW-GRO hardware out there today likely only supports ECN. In
-> > which case they can set SKB_GSO_TCP_ECN fine.
-> > =
-
-> > If AccECN flows cannot be differentiated from ECN flows, on such
-> > devices, does the admin have to disable HW-GRO with ECN if they care
-> > about preserving AccECN signals?
-> > =
-
-> > What does SW GRO do here?
-> =
-
-> Hi Willem,
-> =
-
-> Current SW GRO sets SKB_GSO_TCP_ACCECN when the flushed skb carries CWR=
- in tcp_gro_complete():
-> if (th->cwr)
->     shinfo->gso_type |=3D SKB_GSO_TCP_ACCECN;
-
-And I suppose it follows correct AccECN rules for coalescing.
-
-That is a performance regression from RFC 3168 ECN, as it allows for
-less effective coalescing. I have no intuition how much it will
-differ in practice.
-
-> =
-
-> For HW GRO of a legacy device that implementing RFC3168 semantics, sett=
-ing SKB_GSO_TCP_ECN seems reasonable.
-> However, such a device would not be able to preserve ACCECN signaling a=
-cross the GRO/GSO.
-> In that case, if preserving AccECN signaling is required, disabling HW =
-GRO may indeed be necessary.
-
-Right. And there currently is no kernel API to disable only ECN
-coalescing. NETIF_F_GRO_HW enables or disables HW-GRO entirely.
-Or even to signal whether a HW-GRO implementation is AccECN
-capable.
-
-Disabling HW-GRO can be a huge efficiency regression. I suspect
-many users will prioritize the efficiency over preserving the AccECN
-signal.
-
-That said, some devices may have other ways to configure such
-finer details of their HW-GRO, even though not available through
-Ethtool.
-
-> And I still think the SKB_GSO_TCP_ECN comment could be clarified.
-> For example, by stating that "RX GRO implementations which need to pres=
-erve CWR information across re-segmentation should use SKB_GSO_TCP_ACCECN=
-."?
-> =
-
-> Thanks!
-> Chia-Yu
-
+在 2026/8/14 18:00, Shaojie Sun 写道:
+> test_cgcore_lesser_ns_open runs as root throughout and never changes its
+> euid, so chowning the two cgroup.procs files to a non-root uid has no
+> effect on the test.
+> 
+> The ENOENT the test expects comes from the cgroup namespace delegation
+> check in cgroup_procs_write_permission(): the source and destination
+> cgroups must both be descendants of the namespace root captured at open
+> time.  That check does not depend on file ownership.  In addition, the
+> permission check only examines the common ancestor's cgroup.procs file
+> (the test root here), which the chown calls do not touch.
+> 
+> Remove the redundant chown calls and the now unused test_euid and
+> cg_test_a_procs variables.
+> 
+> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+> ---
+> Changes in v2:
+> - Remove the now unused cg_test_a_procs variable, as suggested by
+>   sashiko-bot.
+> 
+>  tools/testing/selftests/cgroup/test_core.c | 11 ++---------
+>  1 file changed, 2 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+> index 88ca832d4fc1..5501be9912c0 100644
+> --- a/tools/testing/selftests/cgroup/test_core.c
+> +++ b/tools/testing/selftests/cgroup/test_core.c
+> @@ -795,10 +795,9 @@ static int lesser_ns_open_thread_fn(void *arg)
+>  static int test_cgcore_lesser_ns_open(const char *root)
+>  {
+>  	static char stack[65536];
+> -	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
+>  	int ret = KSFT_FAIL;
+>  	char *cg_test_a = NULL, *cg_test_b = NULL;
+> -	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
+> +	char *cg_test_b_procs = NULL;
+>  	int cg_test_b_procs_fd = -1;
+>  	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
+>  	pid_t pid;
+> @@ -813,10 +812,9 @@ static int test_cgcore_lesser_ns_open(const char *root)
+>  	if (!cg_test_a || !cg_test_b)
+>  		goto cleanup;
+>  
+> -	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
+>  	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
+>  
+> -	if (!cg_test_a_procs || !cg_test_b_procs)
+> +	if (!cg_test_b_procs)
+>  		goto cleanup;
+>  
+>  	if (cg_create(cg_test_a) || cg_create(cg_test_b))
+> @@ -825,10 +823,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
+>  	if (cg_enter_current(cg_test_b))
+>  		goto cleanup;
+>  
+> -	if (chown(cg_test_a_procs, test_euid, -1) ||
+> -	    chown(cg_test_b_procs, test_euid, -1))
+> -		goto cleanup;
+> -
+>  	targ.path = cg_test_b_procs;
+>  	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
+>  		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
+> @@ -863,7 +857,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
+>  	if (cg_test_a)
+>  		cg_destroy(cg_test_a);
+>  	free(cg_test_b_procs);
+> -	free(cg_test_a_procs);
+>  	free(cg_test_b);
+>  	free(cg_test_a);
+>  	return ret;
+Reviewed-by: Tao Cui <cuitao@kylinos.cn>
 
