@@ -1,43 +1,102 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f49.google.com (mail-yx1-f49.google.com [74.125.224.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6959746EC99
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 12:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 659AE46F48F
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 13:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786711873; cv=none; b=fcktasW61WWc7Lx3+hDEyZ9gy2R28Cx0IqssQe/D6MRx4+oy7kPiAjTBE/oFgxlcqcCImbLUhBJn0fSA2DU05dCXhXDZo1dk6J5zrXkA50BI6tQ8omEJs3gnXngeo/Ct4V2Hd1KyupjneL7KLS1w4MkpR6al/KpBCBbCULKeI1c=
+	t=1786714040; cv=none; b=mm01xvI+8oNcdpkv/1ztxxGnGhQGhP7iH13AVFmOnqVXIzthfYFHFbDDfzHjLkxN/5ckrX9PqsokTDxybjhywH3skn8gqz/w+cWq0F41B546EaY8UH34uvEQ9bKAzYhfC4mtu70DQU99zqByXCxKb+0TZtrnoO3kNL3VrVmHf8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786711873; c=relaxed/simple;
-	bh=xhTEl6Rq/8TNEzqY9+1VW1LzFeZBlMsNa2Fe7K+u5K4=;
+	s=arc-20240116; t=1786714040; c=relaxed/simple;
+	bh=CChEzwWKHqvAbDe82pqB+EpRVBOCxUp7FVLoHlKhGNU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HzucecWNhpX3CyrAdLOgISM10UWso8JM3Q60CUOhPjFus1MWGvxwJDQ7NmKxchFRjVUdtl0dZqpu0e1BqU8xcG/b9O3YIDyXRQy/+wxipQMYYtPK/K3YZhN2MosEn/9JtXjj+1SDQApGd6VXgwXZFMgdw+iHC6UerddNm1cHkEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SRUKVShK; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SSrO4lXU5pDOJt2946uaFyBE6h5FjYLaO6BHDZbQXoQTlq4x1jQzmnN7mI8a7RpmJ2Iw79c5Zdomz1rWTQBhai+Dk6PUqXq5rQqj6FAv7ocFM8/CoCusR1+MS7k1pyc6WZmlMW0agR4xlk3j4sTP6euNR4qZ4zQEkxTXA9qxaYo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=TCpeiH/x; arc=none smtp.client-ip=74.125.224.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SRUKVShK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59F271F000E9;
-	Fri, 14 Aug 2026 12:51:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786711869;
-	bh=Yp8F8xjPNWmB+RDW4xJTkvaQ+IS/CNpnMALNCGQ+iGw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=SRUKVShK72r41Ws8g4FF6a9lZMwbBJEIk0HbBDqZ0N+STbG4WW2td6mK2zyOx+ZqJ
-	 Mw4+Bw7svi7x4saObAoGV+T1A1eOyOzz4ItVk6Pxox+vyGuLwO6R/MKN0TZke5UUuj
-	 OJfMai0xJ4YKMTOwwhg8/vCqnk5yMPAB10U5IibX7bXDcZAtU86RXSU/6vsZBy+c/a
-	 na3v406UmuTXQzQt08BjZkitTPYP2X2lKoC/Z6y35BmGL68aGNnN424sAHWB9gMsZ8
-	 GQUgaMLvNK+b55nEUzFjwjOsnHuv3fr5UZtblxsxIl5tblc20bQJg7RzIDCo2L7YKW
-	 YRcsLTygUrLLg==
-Date: Fri, 14 Aug 2026 13:50:50 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Hajime Tazaki <thehajime@gmail.com>
-Cc: linux-mm@kvack.org, geert@linux-m68k.org, daniel@thingy.jp, 
-	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Mark Brown <broonie@kernel.org>, 
-	Brendan Jackman <jackmanb@google.com>, Hangbin Liu <liuhangbin@gmail.com>, 
-	"Ricardo B. Marliere" <rbm@suse.com>, linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
-Subject: Re: [RFC PATCH 5/6] selftests: run tests on nommu architecture
-Message-ID: <an8MlE22U3586R42@lucifer>
-References: <20260813063401.1786548-1-thehajime@gmail.com>
- <20260813063401.1786548-6-thehajime@gmail.com>
+	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="TCpeiH/x"
+Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-66c70d3abc7so1316041d50.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 06:27:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gourry.net; s=google; t=1786714037; x=1787318837; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=n4ArN/eG59F6/a+Z1l3n9inh5iDgTQHyg71JvETU2wM=;
+        b=TCpeiH/xCWeDcYJotQrUKR+96UF0MG/Njhh1rbUlHRGBrpdQAImKs6oRWI41Q8Eczj
+         +mTDkleatlsNeXhOUaGWaFyd3U50OBJvlvu77XCYcYzSq7ARn4Or8iIhiP8w6JBZAK8W
+         oAd1trrpj6Ef0CklV1H2zSfBzIviHXmk2sB71HcaujcqJrFDI2zHP23dmMR4YDojp+3v
+         GBSdAv+vPbaIHQHbjNZQzTtWNO8h2nh2HWBKxy6PVDPoHfw/brhOp2p2xqx48wXcX9eT
+         697sKEtDAhvD4AyqB7mtbV3UuRSbV7yerIPuq30uagL3Wo2jyOy2OULMcp8X/mprik3I
+         2+ug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786714037; x=1787318837;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=n4ArN/eG59F6/a+Z1l3n9inh5iDgTQHyg71JvETU2wM=;
+        b=kKPyANuc+QOa6/Qad1qQE/lAESoMa4MhfcG/JpgQD40kXp5SCnTXgHvn+3RmMfcf3m
+         G7IK5n6ZoK5i3v2youfJpHCznIQcdZedqsauV6UrhMOWn9VgH+vlEgmCy0kUm6xh1S0O
+         PGbaGYoB8lHY3qhO24urN3IxgaV0UTLYzZpgRIr7dWIVZD2YN1xr9HItfbXK2Smo3xDV
+         x7377fT60SBVrJcIWaGK6BpFh3+eZ8KujqUnaDma8/E08k6pkoyYvVhlTpoZ7mGr8b24
+         OxBoLpw91NVPpO4o04DaYhQK4tWvaLZ2L6s9hQ47w1iJMYkBnFv6XGOOgRJyrtQPsLlM
+         CAHw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr9G7fIErjFtOww52pU98DROSprmja63S9U0Q5entWnKYiMHNL20kJN7R3ia2QLc/59vEOmtqGvJc4QtL84rdw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGmesZ8QFIo4T18IV3EfJvzJrOMIdZIMH64MRZhJZbAKqXIMA4
+	M3Sp58PXOftr7nu3V8isf4DORaHMhodJ0g0vMkNuz6ER0tcyyLn4xskU3AyxY1p6ZMA=
+X-Gm-Gg: AR+sD12D9RxC85ErzREMzpI3IArewmtoKiY8utmU6KJCXeYAvR23osjgrzOmOBX2mP/
+	RicWuMyOHJjdO2biF5GXvgQVAG9fGDLpYLMPR/zPsCHxyIUJ46mt9e2vT041QlEMDNyEbD1hWoI
+	tQ5Qt1QAcxsFMgvtL8WxK4OBfy8FhOOkrRzT2nRDldV3mexDqdYV379xMZYiB0NDgMf9DnSJ5V6
+	FkX81nzrx7dxJEgOkmOFiVJzweA3iWQmj5g46Yd4FjglMIh9XE2BOfZHNt8eGh6fhDeem7l/pO+
+	UyVZIG1xU8K0hXlwPNG5ZaRzcGOb5Ak+ScVZRBW2ukuNIKqWL2hT7dozSJm3AcC0FAtEvZC4EQx
+	nmAvhjFCFJGur8J4MevaigJu6/9FHD9H0L8jO+fnmca0unCiljrELA+sMOX7q4U3nsJo+uVODOr
+	AR+VXeEvyaEVq0Wuawnup6B1T/94Xk1ieJOB8=
+X-Received: by 2002:a53:c584:0:b0:66a:3662:409f with SMTP id 956f58d0204a3-66c72ba0d10mr1917799d50.10.1786714036424;
+        Fri, 14 Aug 2026 06:27:16 -0700 (PDT)
+Received: from fedora ([2601:19e:8500:d3c0::28fe])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66c75c9d90bsm1010793d50.8.2026.08.14.06.27.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Aug 2026 06:27:15 -0700 (PDT)
+Date: Fri, 14 Aug 2026 09:27:09 -0400
+From: Gregory Price <gourry@gourry.net>
+To: Pankaj Gupta <pankaj.gupta.linux@gmail.com>
+Cc: linux-mm@kvack.org, Zhigang.Luo@amd.com, arun.george@samsung.com,
+	balbirs@nvidia.com, brendan.jackman@linux.dev, yuzenghui@huawei.com,
+	apopple@nvidia.com, alucerop@amd.com, matthew.brost@intel.com,
+	akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
+	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+	surenb@google.com, mhocko@suse.com, corbet@lwn.net,
+	skhan@linuxfoundation.org, gregkh@linuxfoundation.org,
+	rafael@kernel.org, dakr@kernel.org, djbw@kernel.org,
+	"Gupta, Pankaj" <pankaj.gupta@amd.com>, vishal.l.verma@intel.com,
+	dave.jiang@intel.com, alison.schofield@intel.com,
+	osandov@osandov.com, jannh@google.com, pfalcato@suse.de,
+	jackmanb@google.com, hannes@cmpxchg.org, ziy@nvidia.com,
+	pbonzini@redhat.com, osalvador@suse.de, joshua.hahnjy@gmail.com,
+	rakie.kim@sk.com, byungchul@sk.com, ying.huang@linux.alibaba.com,
+	kasong@tencent.com, qi.zheng@linux.dev, shakeel.butt@linux.dev,
+	baohua@kernel.org, axelrasmussen@google.com, yuanchu@google.com,
+	weixugc@google.com, yury.norov@gmail.com, linux@rasmusvillemoes.dk,
+	longman@redhat.com, ridong.chen@linux.dev, tj@kernel.org,
+	mkoutny@suse.com, sj@kernel.org, jgg@ziepe.ca, jhubbard@nvidia.com,
+	peterx@redhat.com, baolin.wang@linux.alibaba.com, npache@redhat.com,
+	ryan.roberts@arm.com, dev.jain@arm.com, lance.yang@linux.dev,
+	usama.arif@linux.dev, xu.xin16@zte.com.cn, chengming.zhou@linux.dev,
+	roman.gushchin@linux.dev, muchun.song@linux.dev,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	driver-core@lists.linux.dev, nvdimm@lists.linux.dev,
+	linux-cxl@vger.kernel.org, linux-debuggers@vger.kernel.org,
+	linux-fsdevel@vger.kernel.org, kvm@vger.kernel.org,
+	cgroups@vger.kernel.org, damon@lists.linux.dev,
+	linux-kselftest@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH v5 00/36] Private Memory NUMA Nodes
+Message-ID: <an8Xrb5Phmvs0xE4@fedora>
+References: <20260720193431.3841992-1-gourry@gourry.net>
+ <CAM9Jb+jpJ-Ui4qDHxsp2WiERiv8gmrQfKQ8Z0BmabefeQ6pg4A@mail.gmail.com>
+ <an0cAMh_m8ZhGIm2@fedora>
+ <CAM9Jb+jmxPdL-CdWQHYMT5G=qmjB6z2WFg+4K8Fod5n=2N6YCQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,189 +105,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260813063401.1786548-6-thehajime@gmail.com>
+In-Reply-To: <CAM9Jb+jmxPdL-CdWQHYMT5G=qmjB6z2WFg+4K8Fod5n=2N6YCQ@mail.gmail.com>
 
-On Thu, Aug 13, 2026 at 03:34:00PM +0900, Hajime Tazaki wrote:
-> Architectures lacks MMU doesn't support fork(2) syscall and only
-> vfork(2) is available with limitations.  Thus, we cannot run kselftest
-> on nommu architecture as is.
->
-> This commit addresses this issue with the following changes:
->
-> - on build stage, add -DCONFIG_NOMMU to CFLAGS when NOMMU=1 variable
->   added to the build/make argument.
-> - on test run stage, avoid calling timeout command when NOMMU=1 variable
->   added to environmental variable, since timeout command uses fork
->   syscall which nommu platform doesn't support.
-> - kselftest_harness.h warns if the file is include when building for
->   NOMMU platform, as there is no fork(2) syscall.
-> - replace "cd -" use as it is not available a shell supported on nommu
->   (e.g., busybox hush), use cd "$OLDDIR" instead.
-> - describe the difference of nommu tests in the document.
->
-> So command line to build/execute tests for nommu should be like below:
->
->  $ make ARCH=um NOMMU=1 O=build kselftest
->  $ make ARCH=um NOMMU=1 -C tools/testing/selftests/mm run_tests
->  $ NOMMU=1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
->
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Kees Cook <kees@kernel.org>
-> Cc: Andy Lutomirski <luto@amacapital.net>
-> Cc: Will Drewry <wad@chromium.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Brendan Jackman <jackmanb@google.com>
-> Cc: Hangbin Liu <liuhangbin@gmail.com>
-> Cc: "Ricardo B. Marliere" <rbm@suse.com>
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: linux-um@lists.infradead.org
-> Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+On Thu, Aug 13, 2026 at 10:55:13AM +0200, Pankaj Gupta wrote:
+> >
+> > A device driver could very well just call memory-hotplug directly,
+> > or its memory could be brought up as a private node via a boot
+> > paremeter (which I have sculpted for v7).  The former is preferred,
+> > but there's a bit of a chicken/egg scenario for bootstrapping.
+> 
+> I find this interesting as this appears to be evolving towards a vendor
+> agnostic framework for hotplugging memory directly to private nodes.
+> 
 
-Not really loving this as mentioned on the cover letter.
+Agnostic would depend on a common standard for such devices.  Otherwise,
+there is still a need for per-device drivers - but hopefully the
+interaction itself can be generalized.
 
-I'm sympathetic to making things work if it's not invasive, but now you've
-essentially asking new test authors be aware of this to some degree.
+> How you see this working? In particular, How would the kernel know which
+> memory ranges correspond to HBM or other device memory?
+> 
 
-And making the harness - which is the defacto way of writing tests - now
-simply not work there is a bit crazy.
+Device marks the region reserved at boot, driver hotplugs.
 
-I'd ideally like to see _all_ tests use the harness.
+or
 
-Also a bunch of the tests already do forking as part of the testing:
+Device marks the region normal, but boot param sets the node private.
 
-$ cd tools/testing/selftests/mm
-$ rg -l "fork\(" | wc -l
-17
-
-So at this point you're not really running much of the selftests at all,
-and are only happening to run those that don't do the very basic stuff
-nommu can't deal with.
-
-I think an audit of existing tests to figure out what works with nommu vs
-what doesn't is really unreasonable again, given nobody tests or seemingly
-uses these arches.
-
-So this patch might beget more nommu carve outs and exceptions and
-therefore nommu workload and maintenance, which isn't really sustainable.
-
-I know I complain about lack of testing on nommu, but at the same time I
-don't think running arbitrary tests that happen to work on it and who knows
-if they are valid asserts anyway really fixes things.
-
-And given nobody really is doing testing, it's not really a great RoI
-here...
-
-...OTOH I suppose it's a minimal change we can largely ignore as long as
-this doesn't lead to additional work/auditing from anybody but nommu
-enthusiasts.
-
-But I'm just not sure that will be the case :(
-
-(I'm amazed we support a mode in linux that can't fork() in 2026 :)
-
-
-> ---
->  Documentation/dev-tools/kselftest.rst       | 12 ++++++++++++
->  tools/testing/selftests/kselftest/runner.sh |  9 +++++++--
->  tools/testing/selftests/kselftest_harness.h |  4 ++++
->  tools/testing/selftests/lib.mk              |  8 ++++++++
->  4 files changed, 31 insertions(+), 2 deletions(-)
->
-> diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-tools/kselftest.rst
-> index 64c0ec7428a2..800b2b688aff 100644
-> --- a/Documentation/dev-tools/kselftest.rst
-> +++ b/Documentation/dev-tools/kselftest.rst
-> @@ -230,6 +230,18 @@ section::
->
->  .. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_node/gzip.html#auto_002dcompress
->
-> +Build and test on nommu target
-> +==============================
-> +
-> +If you (cross-)build kselftests for nommu targets, or run tests on nommu targets, use
-> +``NOMMU=1`` as a make variable/environment setting to tell build system to do the additional
-> +checks.  These nommu targets may differ in several ways, such as not supporting fork(2) or
-> +using musl or another libc.  Set this variable to apply the necessary build and test adjustments.
-> +
-> +  $ make ARCH=um NOMMU=1 O=build kselftest
-> +  $ make ARCH=um NOMMU=1 -C tools/testing/selftests/mm run_tests
-> +  $ NOMMU=1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
-> +
->  Contributing new tests
->  ======================
->
-> diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
-> index 311811dc55a0..7287d8290b6c 100644
-> --- a/tools/testing/selftests/kselftest/runner.sh
-> +++ b/tools/testing/selftests/kselftest/runner.sh
-> @@ -38,8 +38,12 @@ tap_prefix()
->
->  tap_timeout()
->  {
-> +	# nommu doesn't support timeout command (missing fork(2))
-> +	if [ "$NOMMU" = "1" ] ; then
-> +		echo "timeout isn't supported for nommu"
-> +		$1
->  	# Make sure tests will time out if utility is available.
-> -	if [ -x /usr/bin/timeout ] ; then
-> +	elif [ -x /usr/bin/timeout ] ; then
->  		/usr/bin/timeout --foreground "$kselftest_timeout" \
->  			/usr/bin/timeout "$kselftest_timeout" $1
->  	else
-> @@ -130,6 +134,7 @@ run_one()
->  				return $KSFT_FAIL
->  			fi
->  		fi
-> +		OLDDIR=$(pwd)
->  		cd `dirname $TEST` > /dev/null
->  		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
->  			tap_prefix >&4) 3>&1) |
-> @@ -147,7 +152,7 @@ run_one()
->  		*)
->  			ktap_test_fail "$TEST_HDR_MSG # exit=$rc";;
->  		esac
-> -		cd - >/dev/null
-> +		cd "$OLDDIR" >/dev/null
->  	fi
->
->  	return $rc
-> diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
-> index 261e4df94d9d..8eee7b14f824 100644
-> --- a/tools/testing/selftests/kselftest_harness.h
-> +++ b/tools/testing/selftests/kselftest_harness.h
-> @@ -1274,6 +1274,10 @@ static int test_harness_run(int argc, char **argv)
->  	unsigned int count = 0;
->  	unsigned int pass_count = 0;
->
-> +#ifdef CONFIG_NOMMU
-> +	ksft_print_msg("harness test doesn't support on NOMMU architecture (no fork(2)).\n");
-> +	return KSFT_SKIP;
-> +#endif /* CONFIG_NOMMU */
->  	ret = test_harness_argv_check(argc, argv);
->  	if (ret != KSFT_PASS)
->  		return ret;
-> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
-> index 2cc819006424..4734b5ce613f 100644
-> --- a/tools/testing/selftests/lib.mk
-> +++ b/tools/testing/selftests/lib.mk
-> @@ -97,6 +97,14 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
->  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
->  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
->
-> +# detect if users request NOMMU build or not
-> +# User can set NOMMU to 1 to build/test for NOMMU platforms
-> +NOMMU ?= 0
-> +ifeq ($(NOMMU),1)
-> +CFLAGS += -DCONFIG_NOMMU
-> +export NOMMU
-> +endif
-> +
->  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
->  	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
->
-> --
-> 2.43.0
+> Please also CC me when you post v7: pankaj.gupta@amd.com
 >
 
---
-Cheers, Lorenzo
+Sure
+
+~Gregory
