@@ -1,220 +1,176 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from DB3PR0202CU003.outbound.protection.outlook.com (mail-northeuropeazon11010017.outbound.protection.outlook.com [52.101.84.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB9033938B;
-	Fri, 14 Aug 2026 06:30:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786689046; cv=none; b=SXYALi1RyEFyMknmd52YvXXJDMn0BMnpT1tlgnFj9/xw7A9ZCpvELgav618Bx+V0kzlRB5mVvVqfBCuFE7UILLcqKfccDbmWlo8XKyvZwgNjKSYhTpFPaGpj3Tb1iEdmWUGia/7ZzF+kZ3lUNZtbo9YmlI4wMqmylyD3qOFKGa0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786689046; c=relaxed/simple;
-	bh=lvF7pJW1VM34mjkgORqlnrodCT6IZU0t2OrgLf/yWf8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tls+K1PHbNiKail8H61Et+lOl8G2MFg9DV4CCOrkfJtJ9fMZaZOHujXrclNp3w41fiOrKFyPGGqmXpOMlJORfxuuU/kvHQOjh+H7OqK27MrgSRRaJfYE7yzHufTsW/gbkQ4+OHqiLHj1VvQzIV5qrf6RIwI1zgHDMerSSlJ0a0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kQ7IW8DF; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 818E8364E9E;
+	Fri, 14 Aug 2026 06:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.84.17
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786689210; cv=fail; b=KYnsFuFPU2fgvGtzwZGuesekOOdqSJ3CVBhJlF1kKvy5g6Poy2jes15sKyib5PYzFr+CDk9mUmFpcrUDrSRmQ3fd+hQz6d0isaGNOpekt3R50K84RNrjYVRRrLuFSHz5KuMnHdAf4ICzNdiICHI4exAg9q2uSYGQS/dhwR/bY3E=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786689210; c=relaxed/simple;
+	bh=bqaU5lUUPtm1go/oGXFHkyYZR+dgBrA+5zhwqrxAQTM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=tJfxLFRZYga4Mi1NIfRxCdyVBJimILxozpy6K2Q0QqTZIHY3IK1gavBjnfxCZ6stXfCCv2QqBMG0oTQ2/e2jAeGinZFYJ66a+jrlVsmJ2Q3BjDce0IfwVGUhKcaW4Olh4R+kBHMljKrQv/rDcBph04yLE3mLmLIxmvbPQfVVu+M=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Umiqsr1a; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Umiqsr1a; arc=fail smtp.client-ip=52.101.84.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kQ7IW8DF"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786689044; x=1818225044;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=lvF7pJW1VM34mjkgORqlnrodCT6IZU0t2OrgLf/yWf8=;
-  b=kQ7IW8DFgLX/G6UnC204lEgH5RYrAe15GlpDH434/7r0wUnr74bD0f+u
-   J7Uf6VH2bnWYj6mX1SdLgg7GfvAGx6+HIWKJ+Q2Vo0yKM3I5ze9Gg2L1r
-   qzIRxy8kDD9sC4u4YdtpjWht0SFzDbQt8Q+6KjBgdZY+pHdUVlWh+jSBQ
-   HFfCeV0jVILNngbWGdm30ZHD55uEWQk8jXcBqf5mCv0E3Ex3IYzZGzv95
-   zobKO//Fkoihr42/m3deash/K7kC9tTYm3oqVJmnZPaTOFD3mDfyCXi6p
-   EmLSfQqOneABR/I2bJbI1SzFe53C+gy0CycHmwAAxu460UFgvNaqVZ0he
-   g==;
-X-CSE-ConnectionGUID: fCCMCUfeRqO027pG2/7MHg==
-X-CSE-MsgGUID: G4BjdzIITQGo5vX1VvWtnw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11874"; a="97858860"
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="97858860"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 23:30:41 -0700
-X-CSE-ConnectionGUID: Dbj20DsZSw+g4w0B3MfgWw==
-X-CSE-MsgGUID: TWw3KlovS5Ot+mNiNFDdEg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="288934258"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.124.245.162]) ([10.124.245.162])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Aug 2026 23:30:26 -0700
-Message-ID: <f41624da-8461-45cf-b555-241091faeb63@linux.intel.com>
-Date: Fri, 14 Aug 2026 14:30:23 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Umiqsr1a";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Umiqsr1a"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=tfORhsj2PjuqwVor1leTy2kFWTRehfFwkkwZTjjzgKs1F3AV5g8eUHeL7OjlrwkO9r5a7h1H4ZH6JTcSjjuG1ueZdVedTnUUBykHunOMfEpiw+/LJXskgi/QmERnef7Kp/Qif3gHgCQiPqTaIhjKpsOaTvUGSe+8W3ddAGy7fZMX/oQfc2lZU4OV7ROsXYW1bZiMZaOhGaAkiYsk+YnroSpZ14TmPxv+CGMjj86jfBYAwnb2oj0vsajBi7eiuxlbIrLxLjFRww0abmQ4OzHpxZYpt6ej8QgKHDhAU/VyPm+tA+lwVBWS6x89yMqdYyWcoRcHMmZhTS4ady4AKSn+kQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ggl5XSTpEqL5zSVeouhqOu0i7UaKfQIzJLRmktQjftk=;
+ b=PyuMrapTNUOurEjuiBrvWWXWEzoG46oCXN3aYprXKdIaDJaj8Mge70Eic4/G0jkMzWT+ihy3qGQ4NrFhnXH2NUoYfYgbkZmBojaZPMOJvsJMzMJSbotyXH4cdoKqHSvRdnWnDoZU/pUFWbShwdqVQ6klZy6dTCBGzGg/qrMgzaF+90Wh+FktXKbNNyQgjfnT7hOsCREsWhf5Kk1lfFf69NOrGgh6h7K81E/KWRaeY4T+LAl0lH+yB7cCt4rzJslTyAxk+gdLg0QTcowXc7sl/+VdcaXn1FxwnRFceRYoZ8t4N6NnFpad0wA7PU0Y1ZGg+SFccfREhembjO7YhPkxDA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kylinos.cn smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggl5XSTpEqL5zSVeouhqOu0i7UaKfQIzJLRmktQjftk=;
+ b=Umiqsr1apSj0ND2S1eu8B6ukFzhcWhz0zZ76WOT1vtF1zjpGhuI9U11hakHmpqn6nU+7d+7Xgecgd2wwSZgPw8NWpP1NMj2GsWCiYTEAhhm1liHypoItpPHVaheECHe5zQ5MmB60tV77e0zz3BUTETjyG5gAdaYuSTPettJyVTk=
+Received: from AS9P250CA0022.EURP250.PROD.OUTLOOK.COM (2603:10a6:20b:532::28)
+ by VI0PR08MB12010.eurprd08.prod.outlook.com (2603:10a6:800:343::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.14; Fri, 14 Aug
+ 2026 06:33:22 +0000
+Received: from AM3PEPF0000A78E.eurprd04.prod.outlook.com
+ (2603:10a6:20b:532:cafe::74) by AS9P250CA0022.outlook.office365.com
+ (2603:10a6:20b:532::28) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.16 via Frontend Transport; Fri,
+ 14 Aug 2026 06:33:22 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM3PEPF0000A78E.mail.protection.outlook.com (10.167.16.117) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
+ via Frontend Transport; Fri, 14 Aug 2026 06:33:21 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pqsNPbcXvWHABCwJs4Xnec/a7t+0HfI5DLjHCKM3yujQvBgfJUu1kJQw9oWU2Y8hqoXlI1g5LC7ps5LIZXUt/4sqc3Lh9p4lf3tX0ankc370R1N2rtJnoOOdD7CU5bQSIPVkiApfRdZgNQAAdrZ+vK838KnSxg7d1/j2eq8x0f1FuuTboMxCRzNyNNFpPh4x2SUE22bsMaZBFkB8/7EKYp0c0t+5J49oeuB7eQKPVaRlsXXuuHFqRELPjYOPTtWGXs73ThvU3rJsDm4aXz9QlaZ+2o4ezEfjMGx5AW5GWnE3VI+AwsX/3MluY8bOOIvXf3W5KjziMcnaViSI+wNWEw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ggl5XSTpEqL5zSVeouhqOu0i7UaKfQIzJLRmktQjftk=;
+ b=kTq2HnWQFFgoJ83TYp8YXTIo49iAWJ6aEZgU0uK8ecZx2Lhvc746y8gICO29Nf0IyiMOGiFQEHE4Tevre5+5EamyWBTYPy6/Sr8eDYhz9fWktzGdm0vNIv5IUpdprDbtxr3E/vKrEhx+5cQmK0ju3cHw0a/xIFPne2pe4Nm9Xa7T/8ygEjOtkyGPhv8e4jXjVML0r80pZajiQh9kKarFIQvdbtMvmqcDm742K+EjtFuDh3wC3P/oqVfrBbutC4nZEkF2OaupnwkEQw01g9IA6ZQzdPyeLvpb/U2f2H4DIvKPb/psyFUbC+gvkwiEnOKOxA7xrzs7a1K91hqz8qfYwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ggl5XSTpEqL5zSVeouhqOu0i7UaKfQIzJLRmktQjftk=;
+ b=Umiqsr1apSj0ND2S1eu8B6ukFzhcWhz0zZ76WOT1vtF1zjpGhuI9U11hakHmpqn6nU+7d+7Xgecgd2wwSZgPw8NWpP1NMj2GsWCiYTEAhhm1liHypoItpPHVaheECHe5zQ5MmB60tV77e0zz3BUTETjyG5gAdaYuSTPettJyVTk=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from AS2PR08MB9200.eurprd08.prod.outlook.com (2603:10a6:20b:59f::9)
+ by PAVPR08MB9881.eurprd08.prod.outlook.com (2603:10a6:102:32c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.15; Fri, 14 Aug
+ 2026 06:32:44 +0000
+Received: from AS2PR08MB9200.eurprd08.prod.outlook.com
+ ([fe80::e16d:9c1a:8c8a:377d]) by AS2PR08MB9200.eurprd08.prod.outlook.com
+ ([fe80::e16d:9c1a:8c8a:377d%5]) with mapi id 15.21.0315.014; Fri, 14 Aug 2026
+ 06:32:44 +0000
+Message-ID: <83c5375c-a374-4c51-b564-0b7ca4f4502d@arm.com>
+Date: Fri, 14 Aug 2026 12:00:22 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/3] selftests/mm: emit TAP header and use TAP skip in
+ mremap_test
+To: Song Hu <husong@kylinos.cn>, linux-mm@kvack.org, akpm@linux-foundation.org
+Cc: shuah@kernel.org, david@kernel.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ peterx@redhat.com, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260812120821.523860-1-husong@kylinos.cn>
+ <20260812120821.523860-3-husong@kylinos.cn>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20260812120821.523860-3-husong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5PR01CA0024.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:177::10) To AS2PR08MB9200.eurprd08.prod.outlook.com
+ (2603:10a6:20b:59f::9)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 20/41] KVM: Let userspace disable per-VM mem
- attributes, enable per-gmem attributes
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- tabba@google.com, willy@infradead.org, wyihan@google.com,
- yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org,
- suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev,
- Xiaoyao Li <xiaoyao.li@intel.com>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-20-2fc18ee6d3ba@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260807-gmem-inplace-conversion-v10-20-2fc18ee6d3ba@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-TrafficTypeDiagnostic:
+	AS2PR08MB9200:EE_|PAVPR08MB9881:EE_|AM3PEPF0000A78E:EE_|VI0PR08MB12010:EE_
+X-MS-Office365-Filtering-Correlation-Id: 18c713d9-0362-41b0-557f-08def9cdefb2
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|1800799024|23010399003|366016|376014|7416014|10067099003|56012099006|11063799006|3023799007|4143699003|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ PycbIXYWA+ufLJ6ijYdWVPar1GIbIOP6sgn9XZAsMREDqdbM3qO2uoiXe8lTtiFhl50sVlnDkoL/2kUbgnyyKaj6df2iYY4UfDs3yFvnKpUaPNcbarH2qc6y6kUGFbHIbgSKKQNcSDqWUVV8toILm2wFkaje+arqJh3tklL+9V3i3FkoA+Qo+v7vHN+WVLkqiIs7uwqTFlvpm+I8gCeYauFitRcdCj/2ZlgIlIvpF5jxv0Y05RFqyKWa3MKN86nPw9Z1oy2La+4BGNadIoytX/Tc4pOZlgOwy35ec7g6/G7SLrxfzxxdUWTBJpTRCw6I3YemWU1kkqobvxlvt7KjbEoonxZQpFXhhv3vQdHxDncsut/rcblrxC1jEz+gcQANcUA6KZd3tboY/ot0zfw45WP4jri7SDVWlorAFouLdHnZ9dPnwC985lLiubshJ/HW98BoJ+GydXg2uPuXnCdc/6ax94BpDLxe/y7p4/aZdWXEftvPyl5pg9mPI3QIIQgRxPtpjH1AuQgwsYCRmTR0/33Jg+d0n2k8EU/aDFLlidg3o5Sh6lVWj3LfpqotCVxPNfhAQa/q2L5iP+eCHvM+yXERw0gpWLs5JBTA/COm5J39ZFWytqsOWoQC9gHY1ke9ZJv2Q1u0uuXv/VD5mxJLXfkO4/vbBK1uuUnDRVvjQPA=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS2PR08MB9200.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(23010399003)(366016)(376014)(7416014)(10067099003)(56012099006)(11063799006)(3023799007)(4143699003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ tApLE1UlKqhZZFgTgA4urUNaXzfKa/vzGul79wcTPdWuG77iWXzgp356Cqfo6Opr1/POtziz/7CJTuCr48M1T7jbSqgHuJet9XkILiedW1ijlWk/Uk5KpuS+KUh9KdEqySLbrszn9KjCs5+Tq566SGFdEcvnxwgdNeAdVtd4Ad25hW933SM/wkk+yIYudOr7DIbmvkAPIACR5wTYkmjLDFwjkYp0n96Jms8naNfa0FiB4jppe5DzlWTFFV2sAmu8s7GHZib0X2WY8lGKx3/P44iBo8KsZMlniAFEg79MFAt7DDixVBYk/tmiE/XSU/3Hl+fUgzoC8tELgAY3AoTqMQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAVPR08MB9881
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM3PEPF0000A78E.eurprd04.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	f7be1385-6aba-4acf-86ec-08def9cdd925
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|14060799003|82310400026|35042699022|1800799024|376014|36860700016|23010399003|7416014|22082099003|18002099003|56012099006|3023799007|11063799006|10067099003|4143699003;
+X-Microsoft-Antispam-Message-Info:
+	5OX4K3c7AmywF/YXyULn+pU76mgaQL04vnEY93Mtt8ASKXOkSv8cUHI+CXvVJvnaR+3VRqj62mvMVfOGCtczu9GIstAGAPAtapHiyanTN4fJ8N8O/RMFhbD/sSP3JebSWAsNX4wl922AzzwEXycdXkfeCTExWkqa/kAqHCr3UMXXBf9hidFKP1BEHCFEVUGekIrMFJLMwMhjmlNtZ0pdl5PzAnnl4H5mmP8rwcbZvaU6ZwQbCkudbQR5DRitLjQvmhFQHZgY0Q4pV39cdvQ8HR//7OiLEqhHwwblOfDMSdJiR0SyfE8KaQ2vNywS2fVEZlG+9B/P30hnBR3latMTFr062V3uk20pC9cAmesKN7KZ3HsPbgkylGGAln228FsR+OYNPQ0ygybMJ7z1BagwTMf7SXkim7VWkPHX5rnQkW4p4WIl+wxXl9esgVnCZ8NNA0hmFzJA6jH8eEdP6RRjPWMJ5eBdfIFFrhF26scMwgf+yhkIupHj1z0BXd4etOKlsSPhL05GQwZU71dEfnWP3aI7nr4IeoNG3OB0x4Af1o9PsbZ8nyP8ZFJ1pRovDDLnCOQBOVeWgAGuWAcPFhNDO5kq0NvbZs09bKRcWso9oIhjupGWO9XfD2DTr0h/60jkLOqEa4bA4lKexSswuywkNVxNHjYGoUZL1/tjTPZ66hSRKT1xJNTVtkRy8fOApQ2aOhvX9fi8DmxelsdZ9KOG0Q==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(82310400026)(35042699022)(1800799024)(376014)(36860700016)(23010399003)(7416014)(22082099003)(18002099003)(56012099006)(3023799007)(11063799006)(10067099003)(4143699003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	x2aknqk7UFVP2QUxlfPULZuOoCm8GRA1/vpFDnnrR1JrFkgs2+qMRjf1nf2M4SRtuEN+5RsJSqi/MqDKuTNn8DynoQnTY1LYavSitzecRCO8mnAOE3ZvusnmEz0xl9vwWVy2n6m66R/mJu6GosNgIzw7LZXNBiHUDvDAORVhFC+fQLVXJP+NAPb9JFdXgg356FFjKMARpW+2F/C5jh1hkBO9KC8P2GbD4t2wEp0p5LryZpayvGvhFtZt4Gbek5ZfQhw7MXEV0kCdOrXv9ANa45adBR5j3fOxAuqQSXJNojUMWZKUMIqhY3pTLa4BUJupONgr3VjYtAmUgDLvu9PzgHlixZtI7mj6wTBfMqb3TzwmAdqELx9MT6qVmbnLYZRASdkvSgMdaeYgOaUiuIXLXtKYsP/aVrNQ7lQMjeKpTsOF2KybIg7vBT9lYtcqMZLN
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 06:33:21.7342
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 18c713d9-0362-41b0-557f-08def9cdefb2
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM3PEPF0000A78E.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB12010
 
-On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
-> 
-> Make gmem_in_place_conversion a module parameter so that userspace can
-> configure enable or disable the use of VM-level memory attributes. The
-> module parameter is only available if CONFIG_KVM_VM_MEMORY_ATTRIBUTES is
-> enabled.
-> 
-> To avoid inconsistencies in the way memory attributes are tracked in KVM
-> and guest_memfd, the vm_memory_attributes module_param is made
+Hi Song Hu!
 
-The description is stale, since there is no module_param called
-vm_memory_attributes?
-
-> read-only (0444).
+On 8/12/26 5:38 PM, Song Hu wrote:
+> mremap_test calls ksft_set_plan() without ksft_print_header(), and its
+> get_mmap_min_addr() skip path uses a bare exit(KSFT_SKIP) that prints no
+> TAP line, so its output is not valid KTAP.  Add the header and switch the
+> skip to ksft_exit_skip().
 > 
-> Since selecting CONFIG_KVM_VM_MEMORY_ATTRIBUTES disables in-place
-> conversion, 
-
-"selecting CONFIG_KVM_VM_MEMORY_ATTRIBUTES" doesn't necessarily disable
-in-place conversion, it also depends on the setting of
-gmem_in_place_conversion.
-To be accurate, maybe add "by default"?
-
-actually make CONFIG_KVM_VM_MEMORY_ATTRIBUTES selectable. Make
-> the config only selectable for (CoCo) VM types that might use
-> vm_memory_attributes.
-> 
-> Since memory attributes are trackable in guest_memfd, the concept of having
-> private memory is no longer dependent on
-> CONFIG_KVM_VM_MEMORY_ATTRIBUTES. Define kvm_arch_has_private_mem() based on
-> platform config, so that having private memory is dependent on (CoCo) VM
-> type.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> [Define module_param only if CONFIG_KVM_VM_MEMORY_ATTRIBUTES is enabled]
-> Suggested-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Song Hu <husong@kylinos.cn>
 > ---
->  arch/x86/include/asm/kvm_host.h |  4 +++-
->  arch/x86/kvm/Kconfig            | 14 ++++++++++----
->  virt/kvm/kvm_main.c             |  5 ++++-
->  3 files changed, 17 insertions(+), 6 deletions(-)
-> 
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 497da6aaf2942..bb2c1ade62cf9 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1851,7 +1851,9 @@ enum kvm_intr_type {
->  	((vcpu) && (vcpu)->arch.handling_intr_from_guest && \
->  	 (!!in_nmi() == ((vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)))
->  
-> -#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-> +#if defined(CONFIG_KVM_SW_PROTECTED_VM) ||	\
-> +    defined(CONFIG_KVM_INTEL_TDX) ||		\
-> +    defined(CONFIG_KVM_AMD_SEV)
->  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
->  #endif
->  
-> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-> index abb108886733a..2c3c22aeafa54 100644
-> --- a/arch/x86/kvm/Kconfig
-> +++ b/arch/x86/kvm/Kconfig
-> @@ -81,13 +81,21 @@ config KVM_WERROR
->  	  If in doubt, say "N".
->  
->  config KVM_VM_MEMORY_ATTRIBUTES
-> -	bool
-> +	bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
-> +	depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
-> +	help
-> +	  Enable support for tracking PRIVATE vs. SHARED memory using per-VM
-> +	  memory attributes.  Using per-VM attributes is deprecated in favor of
-> +	  tracking PRIVATE state in guest_memfd.  Select this if you need to run
-> +	  CoCo VMs using a VMM that doesn't support guest_memfd memory
-> +	  attributes.
-> +
-> +	  If unsure, say N.
->  
->  config KVM_SW_PROTECTED_VM
->  	bool "Enable support for KVM software-protected VMs"
->  	depends on EXPERT
->  	depends on KVM_X86 && X86_64
-> -	select KVM_VM_MEMORY_ATTRIBUTES
->  	help
->  	  Enable support for KVM software-protected VMs.  Currently, software-
->  	  protected VMs are purely a development and testing vehicle for
-> @@ -138,7 +146,6 @@ config KVM_INTEL_TDX
->  	bool "Intel Trust Domain Extensions (TDX) support"
->  	default y
->  	depends on INTEL_TDX_HOST
-> -	select KVM_VM_MEMORY_ATTRIBUTES
->  	select HAVE_KVM_ARCH_GMEM_POPULATE
->  	help
->  	  Provides support for launching Intel Trust Domain Extensions (TDX)
-> @@ -162,7 +169,6 @@ config KVM_AMD_SEV
->  	depends on KVM_AMD && X86_64
->  	depends on CRYPTO_DEV_SP_PSP && !(KVM_AMD=y && CRYPTO_DEV_CCP_DD=m)
->  	select ARCH_HAS_CC_PLATFORM
-> -	select KVM_VM_MEMORY_ATTRIBUTES
->  	select HAVE_KVM_ARCH_GMEM_CONVERT
->  	select HAVE_KVM_ARCH_GMEM_RECLAIM
->  	select HAVE_KVM_ARCH_GMEM_INVALIDATE
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index c8faf1cb82167..85dfc3f5af805 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -103,7 +103,10 @@ static bool __ro_after_init allow_unsafe_mappings;
->  module_param(allow_unsafe_mappings, bool, 0444);
->  
->  #ifdef kvm_arch_has_private_mem
-> -bool __ro_after_init gmem_in_place_conversion = false;
-> +bool __ro_after_init gmem_in_place_conversion = !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES);
-> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-> +module_param(gmem_in_place_conversion, bool, 0444);
-> +#endif
->  EXPORT_SYMBOL_FOR_KVM_INTERNAL(gmem_in_place_conversion);
->  #endif
->  
-> 
+
+While running the test, I saw that still some diagnostic lines are being
+printed without being prefixed with a #. This is because of some prints
+in the code of the format:
+
+ksft_*("...\n\t...")
+
+which is causing the part after the \n to not be prefixed with a #. If
+you are planning for a respin, maybe you can include this in the same
+patch so that the whole output becomes KTAP compliant :).
+
+Rest of your changes look good. Once Sashiko's point on this patch has
+been addressed, feel free to add
+
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
 
