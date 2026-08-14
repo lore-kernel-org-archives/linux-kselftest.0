@@ -1,84 +1,78 @@
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB61436605E
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 11:59:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C17A46A612
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 12:07:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786708769; cv=none; b=cci3pBlN9ohc6tBIKAELBiKwInZSqEBW5eXV12qrIuRXfrZltHoJCVPh2q5tRRU5sDERxektef6Zt6bAWrvBcdszt4aerIQxLo5k8cbWheBxskWjcMoluZNJcB9NG/oG7drj5qcalJ+nmAogHutZQa256X5vUJW8JzomInEujs4=
+	t=1786709253; cv=none; b=dU2hYI3+KI5jzRp4H+ldNBA/dH8HBb5j2r99RPcYDvhpsCYt2HbUo7ImvqX6mW4Xb2OZJLCLqfYtRB3f1weo0rl4XqyngokfP+mAhXh9uuurNHtHAjf9dqYTV8WEOKNwvSJQ+iPJU/sTPrqeeFSLwL5ORAONOr93ZsinaRRvnmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786708769; c=relaxed/simple;
-	bh=RYP0629y1UfrdGy8khiYA87mAohVFtVz0e44j8IUx4A=;
+	s=arc-20240116; t=1786709253; c=relaxed/simple;
+	bh=/dJOlPt9+aDTsVN8f7vGpfqLyyvD8u+8QGIo3/kyDhA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T+RwFHR330bUMxtnwWPpcaqlPyfrB0pxseTxYUr8qWnSNNtg6I1QdNjWhq6h3eC60AbwOLZV2cJIsrLDSOsk/weiwvNqjtZm3vA3gt+QDi0T0LpaKNNCh3IxvGhELukcdFexn4NVepOovPPvuHcPnO6rU7YnbnSjEOvZfqet87Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ISQvWDCo; arc=none smtp.client-ip=209.85.128.53
+	 Content-Type:Content-Disposition:In-Reply-To; b=os2aJAIclcRhBY7dlt3BUL4fVHzIj0t0RHJdb4CK+SO1PY7gLdPhPcKFAq3oVRk32J5rvni7zJv9JfbMTK3T3tOLVE8Ezk5Sl34QlmFGAiUpPBTF0PxNyBOs9FJh84mtQaXzGagdzcjtkfhBhmMPgZSlZQtWM4mhHQ5CF9w7Sb0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yv65DuZq; arc=none smtp.client-ip=209.85.216.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ISQvWDCo"
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4980dc26022so9905355e9.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 04:59:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yv65DuZq"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-381b831d535so1363258a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 05:07:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786708766; x=1787313566; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1786709250; x=1787314050; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=fBKI+DNHxLxbcSUrG16h2hjhLq0zAz6vhoA1K7SDvjQ=;
-        b=ISQvWDCopcZBxgzlavpJXGgb8lsUE6nedysj6dctfykXhK9dsRrTHPCcv09JC8yuus
-         HzYU+3Z4mnSNxBTDe9svg7xN9mW4pHpIUiLGQ0shbmaH4EJwxoYDQhr1HGwtWmNUoNKr
-         n71dQS6t4y79fCTkSJFZaVL4xV5v124e2NZtee9qL//r/I3HATPOdmGUe4PtN11wu6ap
-         O40mgQbmUG7VK6h6vNpNaXtXFav4xFzUOCF9rkiKj5iVfB2Xm28dWbYJIji4vHhxzyKP
-         E+JzKjEWgdTKufO9piZ33fEhKKbzk29O2ZCgxLJtuIx/PeVHuZb7SywYJPVPq7nH8wej
-         dxaA==
+        bh=Iqn1uiDWgSvKCjqu1BHEGLhPdwV2ZOubviHkY4jibc4=;
+        b=Yv65DuZqzTF3Q5YUPf/t2oKxrvrYuxu5WeTNudB+oBSW+rypUqURh9A4dL8NpnT/l4
+         HG7y4qZTN/yW24pvxmbaPnTYUXkyFl/nissI34jEXnxvOdRevGO6q8qX3L5WhoHiAVNb
+         XSvrr1h050cdWecd7OvcLnPO/8j7T9Bj8AtQ0QfKtjf6iWNqAjnThoM8Wkd18iFiixR1
+         Hky440EouYQX8CDkfnSZY06QUW+L0LW08ECDLshIWElQytAaoJs6MPFuwrmIr23GjOlv
+         oZI/II2qUoNMhEkXFepCWViiJQuK09/Gs0S/WXY2DVCIjAO72cu2LlXuzYxnA1cPPU/E
+         CnWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786708766; x=1787313566;
+        d=1e100.net; s=20251104; t=1786709250; x=1787314050;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=fBKI+DNHxLxbcSUrG16h2hjhLq0zAz6vhoA1K7SDvjQ=;
-        b=ntW3kfEk0nR7gqG+RIUBv4tH+LivSW2fPwUf5TYysMn4reYojv58eyjdAEgsuWST6H
-         8lm/pAKpLmVYtbW2PaQjevPLc0siyUOCTuoKZGrUqqHUnUqUiyR2vQ1eXjvwA6iSn4pM
-         xSdwlSLOZeI5GS8qkMlevm3pPt6eV3aOudWKgwdyqeSyeytZAVRAqZWkx+14sqH7Z99A
-         TnwNma47RC6Rwd956w5c5vLqM0/kjm2taeeoG4RPaVsygD3EgRX35gynemMOXgmjmhOU
-         AlrmoW3Kn0Q+Ge5Ov3VaWgQQ6zp1VDUK8nAnCch8IvvWcuEbMOamStBZEje841CpX3eZ
-         45tA==
-X-Forwarded-Encrypted: i=1; AHgh+RoZ4KaBxAbJWtDD7lAm07jcQNl/DOZS5D9W6RipG+7iveS/482lMBxBBUi8bJrJ3XLk2WYNa0M677Lik/Z7MM8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBcyPe7+FWOiwsLIZoE3B8e+49pilTIy3JeN8OqWu+8ntlYkJF
-	sgSi3PiHwqishLqVQTPkJZ20+HrZROj15o8QkEbdOvvFDSec7vckxTja
-X-Gm-Gg: AR+sD11ei0G1doGxKeG/f0e57FjR41SG4MsEaOPzNVz454CYJoA+5agrBwrs3EawRLh
-	rAyLUq1YBsHcNi0BTpgOVuAumFAs8iGi00hJGo63IYEFUxfLDBXz7bQRRcALqosjbYyoa+etFRo
-	oDwLEsz09VrtxORYdpaklM/5Ocu2HPQUGE4EzUNx4HXgBFk6CajSWbDK+0hFm40SkTpJm+Mi8tJ
-	lOmsfM2a2BMSepx3VHRWDLtAtoD47/AgVDxGw3iGvzK35Mpc93iwJ/eQ5ckW7t4aRWiD+mqHue6
-	E/1UPEMpdiZheSVuJN8MiuONc6WTcITU7hg3qGka2W393Z+6VG/fkBMZiXEgwGfte4cFwtq3yzl
-	Nt+raGcraJ0bjNx8n9m22GNY/sYAk0NtmUU7T+EZNTIG3JH8NBT6/5ToRnkvXF33NrXVQW604fq
-	hHnSywcuW4W6z2JEr1jmAl79XgF6gf0e5+sO7E/ig3HBBqeFB3KteyJEcDIO7kYhJjTyi9
-X-Received: by 2002:a05:600c:810a:b0:495:737a:7afe with SMTP id 5b1f17b1804b1-49987985df1mr66486105e9.15.1786708765976;
-        Fri, 14 Aug 2026 04:59:25 -0700 (PDT)
-Received: from mail.gmail.com ([2a04:ee41:4:b2de:1ac0:4dff:fe0f:3782])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49989af26eesm24779265e9.15.2026.08.14.04.59.24
+        bh=Iqn1uiDWgSvKCjqu1BHEGLhPdwV2ZOubviHkY4jibc4=;
+        b=mQBuL/RfJkAmUdbsUU1RnuoJQ+djq82p8cdin4/P9hYJAcFXtHHV5N1KnroJGOC1u5
+         HLkq39vMUdctEUyl2/rSqUXb6XQws06v0ORgOHJVA8F/SbzLSiXjjoesVeYMpVtht25j
+         KdIOEiG4PyTRS4AS7ocb4nFz0ckDBw1x9LTI6C97/yxnYf8Roi7ejK3vrdcDCb27V5G8
+         N+zsJ8z17WZASe/tR1HZwZYrEy0SNhchp2dQd9QnCxTqbkntNTg+lVpXbrqE0R9QO9rK
+         b8JSYm4yoORHtnOPt/NffEczuOyE25D7mxoA72FP7lDpoEA/7L20MPumjdtU90lPOLpv
+         kN6g==
+X-Forwarded-Encrypted: i=1; AHgh+Ro7d/cosebBr+mUVVCSSUVaY+9huQsaRQkXZ6AOTiz3RBL5Qo+koincuwddhUNp8EVxsf/yPx8QyvgLTesIKgQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwSA1HQPn6lC+djreMt3k/fB07XMjMs1j/wtoL9VS789IDtK6Wt
+	edjAoupRmZhfdXb1NJzagSA6PYi8/kAr/TkfZsk/Z8B+w6qDdt9qQFZG
+X-Gm-Gg: AR+sD11Ghjv6C6TjdNYQGeBHerydd+QqSiffQ+DwT5JKYoCxNZS/yIUl+LzGjJqg1Ir
+	WyqcgeQAf4k0YpPcZ6orUILi8gwkSqOt99HXoCBPmQSq4nQe99iGbCr223PrgIPbjdSQWqsQvZb
+	dAxPhHwgg+d6F63POme4vRMVo9TGCtdJNJWzveucB2lKFSIPFe7pBq5ulUGtMkefqvUNAK3Wu13
+	c3gINJ6n1tLUeeLBZhutRQAf6gcT/RXbryw92OzHeZ2+w59pO3BpccfV9+2j9LmfLYR2zLh54Kt
+	yU7QrZ35t0Pzs05FhCClB6e2aLZC8uwwrd3zWszWfVonFYkj3wvGr6z3TO8lzhyt6nxSAQFj6Na
+	Astewe4YKvy20ZGGQoCFcP8uK/PFoGfMUzfxlvbY5NFKeIMYSZlX1IGcLwJ9WKgiojpGMv705Rw
+	Embtiol9hkY+SBTS+vIV1G2k1QWJd9GNxtHJOnu7oYnD3SSL0s2IFijuc=
+X-Received: by 2002:a17:90b:520d:b0:38f:5801:cd76 with SMTP id 98e67ed59e1d1-3933b6d0171mr6355069a91.3.1786709249856;
+        Fri, 14 Aug 2026 05:07:29 -0700 (PDT)
+Received: from fedora ([203.175.12.241])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-394eb7539d3sm2629381a91.15.2026.08.14.05.07.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Aug 2026 04:59:25 -0700 (PDT)
-Date: Fri, 14 Aug 2026 12:09:49 +0000
-From: Anton Protopopov <a.s.protopopov@gmail.com>
-To: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-Cc: bpf@vger.kernel.org, John Fastabend <john.fastabend@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>, Shuah Khan <shuah@kernel.org>,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Add cross-subprog gotox
- target coverage
-Message-ID: <an8FjRFfjWlFa-Dy@mail.gmail.com>
-References: <20260628-f01-03-gotox-bpf-next-v3-0-b744432e1361@mails.tsinghua.edu.cn>
- <20260628-f01-03-gotox-bpf-next-v3-2-b744432e1361@mails.tsinghua.edu.cn>
- <akQPsxoMVYx8+9Ap@mail.gmail.com>
+        Fri, 14 Aug 2026 05:07:27 -0700 (PDT)
+Date: Fri, 14 Aug 2026 20:07:20 +0800
+From: Hangbin Liu <liuhangbin@gmail.com>
+To: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+	Andrea Mayer <andrea.mayer@uniroma2.it>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH net-next] selftests: net: move log_test to lib file and
+ remove duplicate code
+Message-ID: <an8E-JDiGdmWbQdt@fedora>
+References: <20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -87,127 +81,230 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <akQPsxoMVYx8+9Ap@mail.gmail.com>
+In-Reply-To: <20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn>
 
-On 26/06/30 06:49PM, Anton Protopopov wrote:
-> On 26/06/28 09:59PM, Nuoqi Gui wrote:
-> > Add a gotox regression test with two one-entry INSN_ARRAY maps. CFG can
-> > model a map whose target stays in the main subprog, while the verified path
-> > can load a different map whose target is the first instruction of another
-> > subprog.
-> > 
-> > That second target is outside the subprog that contains this gotox
-> > instruction, so program load must be rejected with -EINVAL.
-> > 
-> > Signed-off-by: Nuoqi Gui <gnq25@mails.tsinghua.edu.cn>
-> > ---
-> >  tools/testing/selftests/bpf/prog_tests/bpf_gotox.c | 73 ++++++++++++++++++++++
-> >  1 file changed, 73 insertions(+)
-> > 
-> > diff --git a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-> > index 73dc63882b7d..997724c61c8b 100644
-> > --- a/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-> > +++ b/tools/testing/selftests/bpf/prog_tests/bpf_gotox.c
-> > @@ -255,6 +255,30 @@ static int create_jt_map(__u32 max_entries)
-> >  			      key_size, value_size, max_entries, NULL);
-> >  }
-> >  
-> > +static int create_jt_map_with_target(__u32 target)
-> > +{
-> > +	struct bpf_insn_array_value val = { .orig_off = target };
-> > +	__u32 key = 0;
-> > +	int map_fd;
-> > +
-> > +	map_fd = create_jt_map(1);
-> > +	if (!ASSERT_GE(map_fd, 0, "create_jt_map"))
-> > +		return -1;
-> > +
-> > +	if (!ASSERT_EQ(bpf_map_update_elem(map_fd, &key, &val, 0),
-> > +		       0, "bpf_map_update_elem")) {
-> > +		close(map_fd);
-> > +		return -1;
-> > +	}
-> > +
-> > +	if (!ASSERT_EQ(bpf_map_freeze(map_fd), 0, "bpf_map_freeze")) {
-> > +		close(map_fd);
-> > +		return -1;
-> > +	}
-> > +
-> > +	return map_fd;
-> > +}
-> > +
-> >  static int prog_load(struct bpf_insn *insns, __u32 insn_cnt)
-> >  {
-> >  	return bpf_prog_load(BPF_PROG_TYPE_RAW_TRACEPOINT, NULL, "GPL", insns, insn_cnt, NULL);
-> > @@ -393,6 +417,52 @@ reject_offsets(struct bpf_insn *insns, __u32 insn_cnt, int off1, int off2, int o
-> >  		close(prog_fd);
-> >  }
-> >  
-> > +static void
-> > +check_cross_subprog_gotox_target(void)
-> > +{
-> > +	struct bpf_insn insns[] = {
-> > +		/* main subprog [0,14) */
-> > +		BPF_MOV64_REG(BPF_REG_6, BPF_REG_1),
-> > +		BPF_RAW_INSN(BPF_JMP | BPF_CALL, 0, BPF_PSEUDO_CALL, 0, 12),
-> > +		BPF_LDX_MEM(BPF_W, BPF_REG_7, BPF_REG_6, 0),
-> > +		BPF_JMP_IMM(BPF_JEQ, BPF_REG_7, 0, 4),
-> > +		BPF_LD_IMM64_RAW(BPF_REG_2, BPF_PSEUDO_MAP_VALUE, 0),
-> > +		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, 0),
-> > +		BPF_JMP_A(3),
-> > +		BPF_LD_IMM64_RAW(BPF_REG_2, BPF_PSEUDO_MAP_VALUE, 0),
-> > +		BPF_LDX_MEM(BPF_DW, BPF_REG_2, BPF_REG_2, 0),
-> > +		BPF_RAW_INSN(BPF_JMP | BPF_JA | BPF_X, BPF_REG_2, 0, 0, 0),
-> > +		BPF_MOV64_IMM(BPF_REG_0, 1),
-> > +		BPF_EXIT_INSN(),
-> > +
-> > +		/* static subprog [14,16) */
-> > +		BPF_MOV64_IMM(BPF_REG_0, 42),
-> > +		BPF_EXIT_INSN(),
-> > +	};
-> > +	int good_fd, bad_fd, prog_fd;
-> > +
-> > +	good_fd = create_jt_map_with_target(12);
-> > +	if (!ASSERT_GE(good_fd, 0, "create_good_jt_map"))
-> > +		return;
-> > +
-> > +	bad_fd = create_jt_map_with_target(14);
-> > +	if (!ASSERT_GE(bad_fd, 0, "create_bad_jt_map")) {
-> > +		close(good_fd);
-> > +		return;
-> > +	}
-> > +
-> > +	insns[4].imm = bad_fd;
-> > +	insns[8].imm = good_fd;
-> > +
-> > +	prog_fd = bpf_prog_load(BPF_PROG_TYPE_SOCKET_FILTER, NULL, "GPL",
-> > +				insns, ARRAY_SIZE(insns), NULL);
-> > +	if (!ASSERT_EQ(prog_fd, -EINVAL, "cross_subprog_gotox_prog_load"))
-> > +		close(prog_fd);
-> > +
-> > +	close(bad_fd);
-> > +	close(good_fd);
-> > +}
-> > +
-> >  /*
-> >   * Verify a bit more complex programs which include indirect jumps
-> >   * and with jump tables loaded with a non-zero offset
-> > @@ -541,5 +611,8 @@ void test_bpf_gotox(void)
-> >  	if (test__start_subtest("check-ldimm64-off-gotox-llvm"))
-> >  		__subtest(skel, check_ldimm64_off_gotox_llvm);
-> >  
-> > +	if (test__start_subtest("check-cross-subprog-gotox-target"))
-> > +		check_cross_subprog_gotox_target();
-> > +
-> >  	bpf_gotox__destroy(skel);
-> >  }
+On Thu, Aug 13, 2026 at 04:11:57PM +0800, Hangbin Liu wrote:
+> From: Hangbin Liu <liuhangbin@kylinos.cn>
 > 
-> LGTM now. Please add another selftests as was mentioned in the main patch.
+> When reviewing the test code, I saw many tests using the same or similar
+> log_test functions. We can move them to lib.sh to save effort. However,
+> due to historical reasons, we moved the log_test from the forwarding lib
+> first, which has different usage. So, rename the log_test in the net
+> folder to log_test_expected. Since renaming all the log_test functions
+> in the test cases would change too many lines, I just use a wrapper in
+> the old code.
 > 
-> Also, v3 lost the ack from Yonghong Song for this patch.
+> The fourth argument in icmp_redirect.sh is not needed, as the xfail issue
+> has already been fixed and it should always pass. But I still keep the
+> xfail logic in the log_test in lib.sh in case other tests need it.
+> 
+> Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+> ---
 
-Hi Nuoqi! Are you planning to follow up on this series?
+[...]
 
-> > -- 
-> > 2.34.1
-> > 
+> diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+> index 3d347126730a..16fe92775ae0 100755
+> --- a/tools/testing/selftests/net/fib_nexthops.sh
+> +++ b/tools/testing/selftests/net/fib_nexthops.sh
+> @@ -70,44 +70,7 @@ nsid=100
+>  
+>  log_test()
+>  {
+> -	local rc=$1
+> -	local expected=$2
+> -	local msg="$3"
+> -
+> -	if [ ${rc} -eq ${expected} ]; then
+> -		printf "TEST: %-60s  [ OK ]\n" "${msg}"
+> -		nsuccess=$((nsuccess+1))
+> -	else
+> -		if [[ $rc -eq $ksft_skip ]]; then
+> -			[[ $ret -eq 0 ]] && ret=$ksft_skip
+> -			nskip=$((nskip+1))
+> -			printf "TEST: %-60s  [SKIP]\n" "${msg}"
+> -		else
+> -			ret=1
+> -			nfail=$((nfail+1))
+> -			printf "TEST: %-60s  [FAIL]\n" "${msg}"
+> -		fi
+> -
+> -		if [ "$VERBOSE" = "1" ]; then
+> -			echo "    rc=$rc, expected $expected"
+> -		fi
+> -
+> -		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+> -		echo
+> -			echo "hit enter to continue, 'q' to quit"
+> -			read a
+> -			[ "$a" = "q" ] && exit 1
+> -		fi
+> -	fi
+> -
+> -	if [ "${PAUSE}" = "yes" ]; then
+> -		echo
+> -		echo "hit enter to continue, 'q' to quit"
+> -		read a
+> -		[ "$a" = "q" ] && exit 1
+> -	fi
+> -
+> -	[ "$VERBOSE" = "1" ] && echo
+> +	log_test_expected "$1" "$2" "$3"
+>  }
+>  
+>  run_cmd()
+
+[...]
+
+> diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
+> index b13c89a99ecb..0107af73aef4 100755
+> --- a/tools/testing/selftests/net/icmp_redirect.sh
+> +++ b/tools/testing/selftests/net/icmp_redirect.sh
+> @@ -61,28 +61,7 @@ log_section()
+>  
+>  log_test()
+>  {
+> -	local rc=$1
+> -	local expected=$2
+> -	local msg="$3"
+> -	local xfail=$4
+> -
+> -	if [ ${rc} -eq ${expected} ]; then
+> -		printf "TEST: %-60s  [ OK ]\n" "${msg}"
+> -		nsuccess=$((nsuccess+1))
+> -	elif [ ${rc} -eq ${xfail} ]; then
+> -		printf "TEST: %-60s  [XFAIL]\n" "${msg}"
+> -		nxfail=$((nxfail+1))
+> -	else
+> -		ret=1
+> -		nfail=$((nfail+1))
+> -		printf "TEST: %-60s  [FAIL]\n" "${msg}"
+> -		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
+> -			echo
+> -			echo "hit enter to continue, 'q' to quit"
+> -			read a
+> -			[ "$a" = "q" ] && exit 1
+> -		fi
+> -	fi
+> +	log_test_expected "$1" "$2" "$3"
+>  }
+
+[...]
+>  
+> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
+> index d46d2cec89e4..e02a6a91ff91 100644
+> --- a/tools/testing/selftests/net/lib.sh
+> +++ b/tools/testing/selftests/net/lib.sh
+> @@ -454,6 +454,44 @@ log_test_xfail()
+>  	RET=$ksft_xfail retmsg= log_test "$@"
+>  }
+>  
+> +# Log test result with expected return value
+> +log_test_expected()
+> +{
+> +	local rc=$1
+> +	local expected=$2
+> +	local msg="$3"
+> +
+> +	if [ "${rc}" -eq "${expected}" ]; then
+> +		nsuccess=$((nsuccess+1))
+> +		printf "TEST: %-60s  [ OK ]\n" "${msg}"
+> +	elif [ "${rc}" -eq "${ksft_skip}" ]; then
+> +		[[ "$ret" -eq 0 ]] && ret="$ksft_skip"
+> +		nskip=$((nskip+1))
+> +		printf "TEST: %-60s  [SKIP]\n" "${msg}"
+> +	elif [ "${rc}" -eq "${ksft_xfail}" ]; then
+> +		nxfail=$((nxfail+1))
+> +		printf "TEST: %-60s  [XFAIL]\n" "${msg}"
+> +	else
+> +		ret=$(ksft_exit_status_merge "$ret" "$ksft_fail")
+> +		nfail=$((nfail+1))
+> +		printf "TEST: %-60s  [FAIL]\n" "${msg}"
+> +		if [ "$VERBOSE" = "1" ]; then
+> +			echo "    rc=$rc, expected $expected"
+> +		fi
+> +
+> +		pause_on_fail
+> +	fi
+> +
+> +	if [ "${PAUSE}" = "yes" ]; then
+> +		echo
+> +		echo "hit enter to continue, 'q' to quit"
+> +		read -r a
+> +		[ "$a" = "q" ] && exit 1
+> +	fi
+> +
+> +	[ "$VERBOSE" = "1" ] && echo
+> +}
+> +
+
+Reply to sashiko's review.
+
+  """
+  fib_nexthops.sh has two unconditional hard-failure calls:
+  tools/testing/selftests/net/fib_nexthops.sh:ipv6_fcnal_runtime() {
+  	...
+  	else
+  		log_test 2 0 "Ping - multipath failed"
+  	fi
+  	...
+  }
+  """
+
+Correct, this need to be updated, otherwise the report will be xfail.
+
+  """
+  The same concern applies to ordinary positive checks written as
+  "log_test $? 0 ...".  iproute2 returns 2 for kernel-reported errors and ping
+  returns 2 for local errors such as "Network is unreachable", for example in
+  fcnal-test.sh:
+  	run_cmd ping -c1 -w1 -I br0 ${NSB_IP}
+  	log_test $? 0 "Bridge into VRF - IPv4 ping out"
+  and fcnal-test.sh decides its verdict from nfail alone:
+  	if [ $nfail -ne 0 ]; then
+  		exit 1 # KSFT_FAIL
+  Would it be safer to only take the SKIP/XFAIL arms when "expected" itself is
+  ksft_skip/ksft_xfail?
+  """
+
+If "expected" itself is ksft_skip/ksft_xfail, and we got the expected number,
+then the result should be PASS.
+
+
+  """
+  In the other direction, icmp_redirect.sh's checks are grep pipelines that
+  only produce 0 or 1, so after dropping the fourth argument its nxfail
+  counter and the "Tests xfailed" line can no longer be reached.
+  """
+
+We can remove the xfail count in icmp_redirect.sh testing
+
+
+> diff --git a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
+> index e9ed0d750996..9d2dc0faf741 100755
+> --- a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
+> +++ b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
+> @@ -72,39 +72,7 @@ PAUSE=no
+>  
+>  log_test()
+>  {
+
+[...]
+> -
+> -	[ "$VERBOSE" = "1" ] && echo
+> -	return 0
+> +	log_test_expected "$1" "$2" "$3"
+>  }
+>  
+
+  """
+  Is dropping this "return 0" safe here?
+  """
+
+Hmm, yes, we'd better add return 0 in log_test as the read may return 1 if
+it's not "q".
+
+I will update the patch.
+
+Thanks
+Hangbin
