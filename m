@@ -1,133 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310143E486
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 08:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 374EA453A25;
+	Fri, 14 Aug 2026 08:33:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786695988; cv=none; b=RHjuyws2ZPSPkILYMdslmI2q+ETjowt+xw4Y7HjycHZUEYLBCAoVuUk8JpTLJb/hFErhwSqmAYoHZRv4RE03QUqI3GNDflqLtOLUNK+17JKjskh0xz0jfb3j8NsCBKLPfMrJp5RUxKlTF/R6VOxhPBYcZw1inZM6FD/Xs2j746Y=
+	t=1786696395; cv=none; b=allO3iR9XO3ZDESC7QlqwcRt7ye2zqiIE1y2r/21SbRoygdjdN+i21rsRBh6Bc+jYAjB+o2dKVb3Pq012NMa9st3O7k+m1moGeoY0fsf7MiHH5iqoaZuSNmESkEC+P8IMnT86ikZ1cCjLtE3j3r0mNf40YGuAafZ3dWJTrcfD44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786695988; c=relaxed/simple;
-	bh=HzfuefgkK3WPcRfwY7Hz2vbYJ7GWlbeQ4YKi4tvt5RM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gPv09TRb2XC5Z2UPLLXenno0w1qqBrHBQS+1COO/tezHurZtbc+bYqa6HaIS/KPPUZfihv/6PW0NJ+SqSxtMQFiO+/rkDYtIHEY2W2HJopuIf4UbPbJwgCWgMTCIO3kN5LqAb67i5djYna86tQIXlebLQsUsb7lsXK1guiTJPgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMgOxtmN; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786696395; c=relaxed/simple;
+	bh=mNltrAyR9hZzHlJWXIBFJLDbWMrhnCpIF5u/lBabfts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jcqKe/2/vLmq1BE8kVbYmDzgRaux+KTtUc/RZcGJegzcPfjUAKYw0TvvcY+b7s+NYpneoROyUvRzNUz5kD2HlZ+W5PcJVvjAu7/JY4Lv/bHxtM/EtPNUzCSnzkWeQdkS91pmwo70cOMDoDrnXD7SZqYyIapEXJmWq+LmrDK/rK4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=C+xPeKkK; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMgOxtmN"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8692A1F00ACF
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 08:26:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786695976;
-	bh=+WNFzfxSWW15fOIdnEaHeTYbpQjdQsx6jTbj9dE4ksY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc;
-	b=SMgOxtmN8Vf5EkQdQSMB+lyU6zdP5E/rVzeaMaT5tG37DvvceG22rBwtS4b3YBjJP
-	 LHtiprxppMxk76P3Tqs4D2P3wkaJoyHFi9y3e8+bupmb/8bQHh0OKCECOJLmpMa6ES
-	 X2ZxouX3gnn7Ahe/4T/D86o/e9/V4HlxSBV8rGnm8XQQxx/9GgKKxaVF97SzsJNfUj
-	 gs8dlFaRo7VPgUqJWmlibmGcv1jTfIVtSk6ZmDdMsIfFszF5GC+uTcdNJ/OHcED9f/
-	 m/dz0wP+llgLEZCa7RYZ8APKi76J7sFVFVR+Z31p4fgNuL0bbNFOjkMSjwOq5MBuEq
-	 DGiLti1auW0Dg==
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a386a34603so1436631a12.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 01:26:16 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrS0P99R5LfN+SiJraodsQmO/zzChK3GXN7//bVroD/ST2wSY2P55krb8PRBc8OrfvQRgjKVLX1KDX28qf65+M=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsGstPIz6fCXV+6QJIQqbTJiEgCSEtyU0Li9zRYdac1+o0QMDW
-	KMjSNXq0XiocdbDuMwu1Q+4n+dJRnzmc3rfadT90zzUjcPeTquESTDxkG8VtC28E2idfWTtSV0+
-	i5hcIZMMtZaXdMfknormK+gde93VOkQI=
-X-Received: by 2002:a05:6402:324d:b0:6a1:332a:83c1 with SMTP id
- 4fb4d7f45d1cf-6a38aedabdamr1544094a12.6.1786695974968; Fri, 14 Aug 2026
- 01:26:14 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="C+xPeKkK"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786696392; x=1818232392;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mNltrAyR9hZzHlJWXIBFJLDbWMrhnCpIF5u/lBabfts=;
+  b=C+xPeKkKUtg5f5IPy0+hIZe8QRwy8l3PpfYLo97COR3OmSDpw6bQW1ZG
+   wZ3laMVfcm/oqYYutfTb/r5Qk/yTUaIWT3LOUKuG2wYMrsUs3+wDCssIU
+   ut72iv9ZgjKTeJxuOiNxxP6/4ByAkZVVf5KDlLU/MWwIFiZIKigzju2q5
+   luS5Ahbk0VcM4arO1fBEzTdi6JiX2kb55Yi54IvTX+cr2eTjBb9IuS6PX
+   81MaxOrqocspQzB3r81wALwq3Qast0NRnUvD2h/KQ1cKLe+gYtZQG9ddT
+   O2rq+z4DO9YtupCSKgc9uRMJjrTXbc0MRvep3ucX2O4te/fXF4HObCYT6
+   g==;
+X-CSE-ConnectionGUID: K9lKaSLkSsSFdz/GSPQVWg==
+X-CSE-MsgGUID: RQaFkWBBQZCrzBqCmL19Qw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11874"; a="87200435"
+X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
+   d="scan'208";a="87200435"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2026 01:33:07 -0700
+X-CSE-ConnectionGUID: JPzmKiCQQ+Gz5oN0oJ8dYw==
+X-CSE-MsgGUID: EHPMtIH9RMOCEe3sPv2Oxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
+   d="scan'208";a="266153841"
+Received: from unknown (HELO [10.238.208.98]) ([10.238.208.98])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2026 01:33:01 -0700
+Message-ID: <31ddbd64-eeb4-4008-87fb-ff57de93635d@intel.com>
+Date: Fri, 14 Aug 2026 16:32:59 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAAhV-H7+1bv6ULPO1+SZ5R=XFxNTh+54rqnYQUAW26kF83kiMg@mail.gmail.com>
- <20260813160307.15130-1-dongtai.guo@linux.dev>
-In-Reply-To: <20260813160307.15130-1-dongtai.guo@linux.dev>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 14 Aug 2026 16:26:41 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7XKFj93fSPcKAR9AR6Z4O28pC9va243hVccvPNOxH3qg@mail.gmail.com>
-X-Gm-Features: AUfX_mxWy0zifyMkCT_MNsH5vELQu4FCKCmOeWL2rt6IE_4N76SZIZUTr8aX0ys
-Message-ID: <CAAhV-H7XKFj93fSPcKAR9AR6Z4O28pC9va243hVccvPNOxH3qg@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] selftests/kho: add LoongArch vmtest support
-To: George Guo <dongtai.guo@linux.dev>
-Cc: rppt@kernel.org, pasha.tatashin@soleen.com, pratyush@kernel.org, 
-	shuah@kernel.org, ardb@kernel.org, guodongtai@kylinos.cn, kernel@xen0n.name, 
-	graf@amazon.com, liukexin@kylinos.cn, loongarch@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 15/22] KVM: selftests: Call KVM_TDX_INIT_VCPU when
+ creating a new TDX vcpu
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-15-15ad654a50db@google.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260722-tdx-selftests-v14-15-15ad654a50db@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 14, 2026 at 12:03=E2=80=AFAM George Guo <dongtai.guo@linux.dev>=
- wrote:
->
-> Hi Huacai,
->
-> On Sun, 9 Aug 2026 at 12:16, Huacai Chen <chenhuacai@kernel.org> wrote:
-> > You never answer me why in your test you should disable i8042 from V1
-> > until V4. In normal use we use a single kernel for both host and guest.
->
-> I owe you an apology: I did not actually understand your question. I
-> thought the commit message had already explained the reason (the
-> i8042_flush() panic), so I treated it as answered and never addressed
-> what you were really asking. Let me answer it directly now.
->
-> You are right that this is not just a selftest detail. i8042 is built on
-> every LoongArch kernel: arch/loongarch/Kconfig selects
-> ARCH_MIGHT_HAVE_PC_SERIO, and KEYBOARD_ATKBD and MOUSE_PS2 (both default
-> y) select SERIO_I8042 under it. So your "single kernel for host and
-> guest" point is correct -- a normal defconfig kernel has i8042 built in.
->
-> On the QEMU virtual machine there is no i8042, so PNP finds nothing and
-> i8042_pnp_init() falls back to probing the i8042 status and data
-> registers (I8042_STATUS_REG, I8042_DATA_REG) directly. On LoongArch those
-> registers are memory-mapped, and on the virtual machine they are not back=
-ed
-> by any device, so i8042_flush() takes a page fault and the kernel panics
-> before userspace. A normal LoongArch defconfig kernel booted as a QEMU
-> guest hits the same panic -- the "# CONFIG_SERIO_I8042 is not set" in
-> loongarch.conf is only a workaround to let the KHO selftest boot, not a
-> fix.
->
-> The real fix is separate from the KHO series: make i8042 bail out on
-> LoongArch when ACPI/PNP does not describe a controller, so the direct-por=
-t
-> fallback never runs. I have prepared that as a standalone patch -- the
-> relevant hunk is below -- and will send the full patch separately. The
-> selftest workaround can be dropped once it lands.
-You nearly answered nothing.
+On 7/23/2026 7:13 AM, Lisa Wang wrote:
+> From: Sagi Shahar <sagis@google.com>
+> 
+> TDX VMs need to issue the KVM_TDX_INIT_VCPU ioctl for each vcpu after
+> vcpu creation.
+> 
+> Since the cpuids for TD are managed by the TDX module, read the values
 
-Does your employer use different kernels for host and guest in KylinOS?
+Please use CPUIDs instead of cpuids.
 
-Huacai
+> virtualized for the TD using KVM_TDX_GET_CPUID and set them in kvm using
+> KVM_SET_CPUID2 so that kvm has an accurate view of the VM cpuid values.
 
->
-> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/=
-i8042-acpipnpio.h
-> --- a/drivers/input/serio/i8042-acpipnpio.h
-> +++ b/drivers/input/serio/i8042-acpipnpio.h
-> @@ -1633,8 +1633,14 @@ static int __init i8042_pnp_init(void)
->  #else
->                 pr_info("PNP: No PS/2 controller found.\n");
->  #if defined(__loongarch__)
-> -               if (acpi_disabled =3D=3D 0)
-> -                       return -ENODEV;
-> +               /*
-> +                * LoongArch legacy I/O ports are memory-mapped and are n=
-ot
-> +                * safely probeable when no controller is present: a dire=
-ct
-> +                * probe faults on the QEMU virtual machine and on any FD=
-T-based
-> +                * boot.  Do not fall back to probing them directly; if A=
-CPI/PNP
-> +                * did not describe a controller, assume there is none.
-> +                */
-> +               return -ENODEV;
->  #else
->                 if (x86_platform.legacy.i8042 !=3D
->                                 X86_LEGACY_I8042_EXPECTED_PRESENT)
->
-> Thanks,
-> George
+This does two things, and KVM_SET_CPUID2 isn't a hard requirement for 
+KVM_TDX_INIT_VCPU.  we'd better split it into two patches.
+
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>   .../selftests/kvm/include/x86/tdx/tdx_util.h       | 21 ++++++++++++++
+>   tools/testing/selftests/kvm/lib/x86/processor.c    | 33 ++++++++++++++++------
+>   2 files changed, 46 insertions(+), 8 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> index f5003cbaa106..07e7f5c90329 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -44,6 +44,27 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
+>   	}								\
+>   })
+>   
+> +#define __tdx_vcpu_ioctl(vcpu, cmd, _flags, arg)			\
+> +({									\
+> +	union {								\
+> +		struct kvm_tdx_cmd c;					\
+> +		unsigned long raw;					\
+> +	} tdx_cmd = { .c = {						\
+> +		.id = (cmd),						\
+> +		.flags = (u32)(_flags),					\
+> +		.data = (u64)(arg),					\
+> +	} };								\
+> +									\
+> +	__vcpu_ioctl(vcpu, KVM_MEMORY_ENCRYPT_OP, &tdx_cmd.raw);	\
+> +})
+> +
+> +#define tdx_vcpu_ioctl(vcpu, cmd, flags, arg)				\
+> +({									\
+> +	int ret = __tdx_vcpu_ioctl(vcpu, cmd, flags, arg);		\
+> +	TEST_ASSERT(!ret, "%s failed, errno: %d (%s)",			\
+> +		     #cmd, errno, strerror(errno));			\
+> +})
+
+It doesn't handle the tdx_cmd.c.hw_error for vcpu ioctl, but handle it 
+for vm ioctl, which looks inconsistent. This at least deserves a 
+justification in the changelog.
+
+>   void tdx_init_vm(struct kvm_vm *vm, u64 attributes);
+>   void tdx_vm_setup_boot_code_region(struct kvm_vm *vm);
+>   void tdx_vm_setup_boot_parameters_region(struct kvm_vm *vm, u32 nr_runnable_vcpus);
+> diff --git a/tools/testing/selftests/kvm/lib/x86/processor.c b/tools/testing/selftests/kvm/lib/x86/processor.c
+> index 8f8bb90fec35..f6a2aa6b86a4 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/processor.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/processor.c
+> @@ -838,6 +838,17 @@ gva_t kvm_allocate_vcpu_stack(struct kvm_vm *vm)
+>   	return stack_gva;
+>   }
+>   
+> +static void tdx_vcpu_init(struct kvm_vm *vm, struct kvm_vcpu *vcpu)
+> +{
+> +	struct kvm_cpuid2 *cpuid;
+> +
+> +	cpuid = allocate_kvm_cpuid2(MAX_NR_CPUID_ENTRIES);
+> +	tdx_vcpu_ioctl(vcpu, KVM_TDX_GET_CPUID, 0, cpuid);
+
+If I remember correctly, though KVM_TDX_GET_CPUID is a vcpu ioctl, the 
+data returned by KVM is retrived from TDX module and TDX module only 
+maintains the TD scope CPUID. So the CPUID returned here is TD scope, 
+for per-vcpu CPUIDs, e.g., x2apicid, we need to update them accordingly.
+
+This seems not a functional gap. I'm OK to leave it to the future, but 
+please leave a TODO comment for it.
+
+> +	vcpu_init_cpuid(vcpu, cpuid);
+> +	free(cpuid);
+> +	tdx_vcpu_ioctl(vcpu, KVM_TDX_INIT_VCPU, 0, NULL);
+> +}
+> +
+>   struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+>   {
+>   	struct kvm_mp_state mp_state;
+> @@ -845,15 +856,21 @@ struct kvm_vcpu *vm_arch_vcpu_add(struct kvm_vm *vm, u32 vcpu_id)
+>   	struct kvm_regs regs;
+>   
+>   	vcpu = __vm_vcpu_add(vm, vcpu_id);
+> -	vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> -	vcpu_init_sregs(vm, vcpu);
+> -	vcpu_init_xcrs(vm, vcpu);
+>   
+> -	/* Setup guest general purpose registers */
+> -	vcpu_regs_get(vcpu, &regs);
+> -	regs.rflags = regs.rflags | 0x2;
+> -	regs.rsp = kvm_allocate_vcpu_stack(vm);
+> -	vcpu_regs_set(vcpu, &regs);
+> +	if (is_tdx_vm(vm)) {
+> +		tdx_vcpu_init(vm, vcpu);
+> +	} else {
+> +		vcpu_init_cpuid(vcpu, kvm_get_supported_cpuid());
+> +
+> +		vcpu_init_sregs(vm, vcpu);
+> +		vcpu_init_xcrs(vm, vcpu);
+> +
+> +		/* Setup guest general purpose registers */
+> +		vcpu_regs_get(vcpu, &regs);
+> +		regs.rflags = regs.rflags | 0x2;
+> +		regs.rsp = kvm_allocate_vcpu_stack(vm);
+> +		vcpu_regs_set(vcpu, &regs);
+> +	}
+>   
+>   	/* Setup the MP state */
+>   	mp_state.mp_state = 0;
+> 
+
