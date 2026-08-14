@@ -1,309 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010053.outbound.protection.outlook.com [52.101.69.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0077471272;
-	Fri, 14 Aug 2026 17:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786728520; cv=none; b=rccHqIVbXE+9DQcb03xOxKnrVHUzDIl3sxy18zLYbqbx94ekef+ekn3YtdaTXciEA5El2ElM4j9x7zI2GZCETe2x9ToEHE3sSqSHNXNeArL/tp93+7U5gWRqioEF6Qfv26xHouXH6ZDnt2AWeeIjDvp0tbbBwRLAdiYTiEAVPhk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786728520; c=relaxed/simple;
-	bh=7ydO/+TeWUCwWo03dgVnvjgpq6oWZtizZ1V73IuDL3A=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gKdLONBILKZxnN8NPJ3ylzb5ZWL5hy6cdKDkuxknzTR/cVjdcYg3vLFJERiUKhzkmBKgONaVfBLplEwD5CoHBAkHLLf5UfMz3fh7Kgnoh92bMkPBJUd0oLUpVLGe4d3jiJZ8A3QxmhBh3GjFCzKfb5E0GkY4jCx1uF2J8cJY7q8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ro0BWIkx; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E7048EBF7;
+	Fri, 14 Aug 2026 17:30:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.53
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786728656; cv=fail; b=fKtGSk1tg2ginJ606eUPLRMjcs5gG9zy1I99nH4amYe4CWwCAFsGT6IjyKU90JPt/sfcYl5Sub8O8fjP/PjpYC0s0MuyRSjXApBHNfXLa2I4m4p/bw2SbV5Spe1cXKGPuFElbmT3KcmKZG9/Up2Q6k6/sZoqXlwY9HzS7xgzN+Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786728656; c=relaxed/simple;
+	bh=ZV6B+KrMFtNFfyQ/kwd8qJx/1MvHBXvx/GnO+HQnw7g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=E9xXvt2ExBI4/Vifc1QDTl2j7O4Rk02xlkUurTSD5uJg7SjoFHnAk2yWDlCVz1ty5q6YCdWFd1EAyPo/hHWi+iw7cwcjY8N7+zcov2yQ+myfqKVW7YnIN+zAR2plRJMOVo/yuN3RgOurE+RQU4LNnrXKYhCTn+zCY9WaBNxoKJE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=Bxpk/Rog; arc=fail smtp.client-ip=52.101.69.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ro0BWIkx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10C001F000E9;
-	Fri, 14 Aug 2026 17:28:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786728517;
-	bh=huQvDTnRpL3m6ulG6CgWUOiOoYsJwpw6a60z8DCcmao=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Ro0BWIkxXaMEFoVOLwIZucdP9aB4nXiKE+FgGO7GNQFEJ7qgSNISYJcOluP9f2sg2
-	 +LV7Bhu25ZwphsJjKb2GzcWtISq1afgyYrX+Q/gqcUj8xH0h8W2Pjruq4nd8MvpVVF
-	 Zvn9w5CxtqcfSlxDoJA3xTyRvEIgRgfQwRqKUxIJTAp8+xaidFs7qPOS5TV5357Wis
-	 vp7W7TAE+l8picpnDzLTX5kfYZibAlN3vuoN1tvBt7koliNUCQ4dKOmpLNuUDBwWOv
-	 djgcAlmcV8kjZr6rgFC4AUpoyFo5hdgkLCp3p0j3LE6x1blxePM7C+0wCjIMvJva7R
-	 PbzDGFm6gZFRw==
-From: Jakub Kicinski <kuba@kernel.org>
-To: liuhangbin@gmail.com
-Cc: Jakub Kicinski <kuba@kernel.org>,
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="Bxpk/Rog"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Z823Cbhniy1PK7+Yz5gxWdjEOxXHsIP0BoA+HHkB0Ox+m820m/S9W7zT3YvUPt2TRF1Gbe2GbNRwM4CGRfBxKAxgSkmCT0LnF0ZZli3n+pUfvTxrLOtvlnBxAaWdcJsG7IvXtrxRC0YQeDtxpB4aIReWW86J7dpZztStm1daniwI4Hh977VcxTZYMvaniY/nSrtd8sTuOTeNx8xoj/Ea+yq4wq/hSC4c0se8NoEF6yn6LujZCNKmdvKCOTDwBDeUqJu+qhERSINlGw1Oy1LF5thsgxc5CJVfliZ6EuIQl6XHrjhD095+8+0VM0SrfuQKw+x99Cf2O2Es4lnv+Zy/8Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=QW1K3o/DxTEJcZZNxTSXA79SY51ZfehKOe8fy8RaHI4=;
+ b=IYowF20RtIcb0/0mN5SordoZIFWoJ7kDbxzzHF4nYtuAWW8AxSxSfIBiMth20g5HtEsaM5a/bA5eEuUf0A/zu6JHkcl8NHWOiiHbN4BrwBB7WQeehP9SNFo9uaNRc06uKP+6lmhqXCRP+XH9LVVDgSu+03dWTXklHBBr08BRa/E1RG508qxcNJ75w+6MY8XTgTSgJpdab3dXP0u/bGATp1f8Uaju6QhN52Rsx9wdA/oX5CAvx+0nDwtr40eCgSmc7Ru99Lsl9ogv8owunkf3Nbe9uiyIwuej6DqAz0qCTeZ2iQnA51mES3rXH4o288bs3AiOZnnUvlglvDh/lYW8ig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.84) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=QW1K3o/DxTEJcZZNxTSXA79SY51ZfehKOe8fy8RaHI4=;
+ b=Bxpk/Rog/2HRzOqrYxO8SwP4Ns5uWR/XvW5svUQ8uHdOjiwC+ZCE4ZBX55cDcm6yeVg7S6e+h5Dt3xZial0fiabmUaaq1jVlWGycjcNqRCorpewNX6fxOQGBQ+iJRHrSBwJZk1RVMtKYh48zmVdlCP3PrfItz9aAarg1XYYdDoiO0f2H3PR1yrsMX5mBvfpZT9e2Skkn0W0WrG43lGuN1fd+cm5uZMeJ1QRhhQYthUfRmxDZ6ewMYALQKW3ng/1h1+lmnHYjqNgcmoAS7WOvfCBVthjgWG3QYcMmGnPa/kMQ51yfRjHehslC/407B1kPIwY1uVf5bAjZCk4VwKa4tg==
+Received: from AM0PR10CA0044.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:150::24)
+ by PR3PR07MB6971.eurprd07.prod.outlook.com (2603:10a6:102:5e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.5; Fri, 14 Aug
+ 2026 17:30:44 +0000
+Received: from AMS1EPF00000048.eurprd04.prod.outlook.com
+ (2603:10a6:20b:150:cafe::63) by AM0PR10CA0044.outlook.office365.com
+ (2603:10a6:20b:150::24) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.16 via Frontend Transport; Fri,
+ 14 Aug 2026 17:30:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.84)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.84 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.84; helo=fihe01smtplvp01.emea.nsn-net.net; pr=C
+Received: from fihe01smtplvp01.emea.nsn-net.net (131.228.2.84) by
+ AMS1EPF00000048.mail.protection.outlook.com (10.167.16.132) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
+ via Frontend Transport; Fri, 14 Aug 2026 17:30:44 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe01smtplvp01.emea.nsn-net.net (Postfix) with ESMTP id 74F9C8000096;
+	Fri, 14 Aug 2026 20:30:42 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	jiayuan.chen@linux.dev,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	linux-kselftest@vger.kernel.org,
+	shuah@kernel.org,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
 	davem@davemloft.net,
 	edumazet@google.com,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	shuah@kernel.org,
-	dsahern@kernel.org,
-	idosch@nvidia.com,
-	andrea.mayer@uniroma2.it,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	liuhangbin@kylinos.cn
-Subject: Re: [PATCH net-next] selftests: net: move log_test to lib file and remove duplicate code
-Date: Fri, 14 Aug 2026 10:28:35 -0700
-Message-ID: <20260814172836.3099522-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn>
-References: <20260813-self_log_test-v1-1-f88b1107842e@kylinos.cn>
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	kuniyu@google.com,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v7 net-next 0/2] Explicit TSO segment count
+Date: Fri, 14 Aug 2026 19:30:32 +0200
+Message-Id: <20260814173034.749151-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AMS1EPF00000048:EE_|PR3PR07MB6971:EE_
+X-MS-Office365-Filtering-Correlation-Id: a0ccf979-5b3f-4558-84be-08defa29c542
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|23010399003|82310400026|376014|36860700016|10067099003|56012099006|3023799007|18002099003|11063799006|921020;
+X-Microsoft-Antispam-Message-Info:
+	Fo11J2xnzz4XwY3CUMCWTGJgeJvgvRkAo6uWWBDci09OGnvrRafu0KCjhIc+Dzp4Tbk5F1aofVheu8xlEa3XNUGfEJgUq9hS0eFHMuocoeOYn2qNB2fDJ2xmhFjsW/9Ta39PHY6jhSQHK05intBDJfNa+ZrOpu1c+WM1mSrjt/o8mgmKSyoGAiA/6rn7IG/v3xT3ixVjWsKNBX+9pQSLRCQ1lD3nGxnUkp0GnU44Z7LjYiE8V7GMqdGeHc4mYLBOC6SDB8YtAjRpW8tpgjvDEU3z661f3itpyJbWUw5JTexMSzzdVDO2jjNopVZEEo4OEuNahPDomGmE1QyVtO58ZzfBXU9gUgRc8YIPQvcXNClNCVksoyDyTZx1Aylka9xG6R4uhRaB4cITIO9FVTxcsfyO1hhgUi9QO2jJ6b7IwY4OBdsJPO68nhfSQW53953pLdPYiwOiLL7UW5NZpA7MoF8A2W/D3mnhm7ui4LEGkTStU/OEHzj53Vz50l9wjto1O1Y6xXevEsfKtfNAsbkhWH+FnrfdKR3Q2nIS1zkwiu1amegnR6pvGPQZrtkgYo7nAEBF1DA4ce82XoqwYEu3iWd2pabPATab+k0ymbO6A5XkFeA0NMLaKCgK+Xx1ywU8yRfleuAIecrf+LHDMUvwVMWO9U1OWMDHOp74t98FKDwNAz3qMHhOV2z0CtDktqmVzMXfjHzDBFQMEcJiC4v8xrJtR/9dTkguuHD1GA66dlhqf0Jjpyva3XTOfVudmFFg
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.84;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe01smtplvp01.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(23010399003)(82310400026)(376014)(36860700016)(10067099003)(56012099006)(3023799007)(18002099003)(11063799006)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	cmTftJwmUPY4M8yOyM7DFuAEkx9eULXITI6Ip1FHMbmkY13h3/AqguyTWNBgY1EjfLN3XTyZTwVnZxgCM3PnWYRhDboDAW+oOH0jkfrRkOUjbw8QRBKLhg146TuupZY55KMsV1EjpynhChqEiZw2MkE0rU6Hu2Lo9MW5jfcbwObcNeVSBeatmvOWNjjuz9xdtdnt9Gf6UAwHOqw9NGUDsNKCCYw8Z/Da3Qe8MSw5LKf8mfYQtgyFAz/YUsWTbXDVgh3Z3tm1nsGwBtcnDXuewbz/PgUqvbGOfWrf8orMwdjBFNhjWpehEuhMdq4iYhyfYDlNbgw0htFTy2RHeUCJDEEI1qlpIxV7xuhfP+RjymenEf5vq0w2aKjLjbTJyvM8OQe8e/dgN+GrilsR4NtoI5Skup57iwJN6VuTzF4CKY7FB44dW9AIYTcksWiIxXmc
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 17:30:44.2591
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: a0ccf979-5b3f-4558-84be-08defa29c542
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.84];Helo=[fihe01smtplvp01.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AMS1EPF00000048.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB6971
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+
+Hello,
+
+Please find the v7 explicit tso segment count series.
+It replacece min_tso_segs() with tso_segs() CC callback and make
+tcp_tso_autosize() available to BPF congestion controls.
+
+Best regards,
+Chia-Yu
+
 ---
-selftests: net: move log_test to lib file and remove duplicate code
+Chia-Yu Chang (2):
+  tcp: Replace min_tso_segs() with tso_segs() CC callback
+  bpf: make tcp_tso_autosize() available to BPF congestion controls
 
-This moves the various open coded log_test() helpers from 33 net selftest
-scripts into a single log_test_expected() in tools/testing/selftests/net/lib.sh,
-leaving a thin log_test() wrapper in each script. The fourth (xfail)
-argument of icmp_redirect.sh's log_test() is dropped, while the xfail
-handling is kept in the new helper.
+ include/net/tcp.h                              | 12 ++++++++++--
+ net/ipv4/bpf_tcp_ca.c                          |  5 +++--
+ net/ipv4/tcp_bbr.c                             | 13 ++++++++++---
+ net/ipv4/tcp_output.c                          | 18 +++++++++---------
+ .../testing/selftests/bpf/progs/tcp_ca_kfunc.c | 16 ++++++++++++----
+ 5 files changed, 44 insertions(+), 20 deletions(-)
 
-A couple of questions about the new shared helper below.
-
-> diff --git a/tools/testing/selftests/net/drop_monitor_tests.sh b/tools/testing/selftests/net/drop_monitor_tests.sh
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
-> index 3d347126730a9..16fe92775ae0a 100755
-> --- a/tools/testing/selftests/net/fib_nexthops.sh
-> +++ b/tools/testing/selftests/net/fib_nexthops.sh
-> @@ -70,44 +70,7 @@ nsid=100
->  
->  log_test()
->  {
-> -	local rc=$1
-> -	local expected=$2
-> -	local msg="$3"
-> -
-> -	if [ ${rc} -eq ${expected} ]; then
-> -		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-> -		nsuccess=$((nsuccess+1))
-> -	else
-> -		if [[ $rc -eq $ksft_skip ]]; then
-> -			[[ $ret -eq 0 ]] && ret=$ksft_skip
-> -			nskip=$((nskip+1))
-> -			printf "TEST: %-60s  [SKIP]\n" "${msg}"
-> -		else
-> -			ret=1
-> -			nfail=$((nfail+1))
-> -			printf "TEST: %-60s  [FAIL]\n" "${msg}"
-> -		fi
-> -
-> -		if [ "$VERBOSE" = "1" ]; then
-> -			echo "    rc=$rc, expected $expected"
-> -		fi
-> -
-> -		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-> -		echo
-> -			echo "hit enter to continue, 'q' to quit"
-> -			read a
-> -			[ "$a" = "q" ] && exit 1
-> -		fi
-> -	fi
-> -
-> -	if [ "${PAUSE}" = "yes" ]; then
-> -		echo
-> -		echo "hit enter to continue, 'q' to quit"
-> -		read a
-> -		[ "$a" = "q" ] && exit 1
-> -	fi
-> -
-> -	[ "$VERBOSE" = "1" ] && echo
-> +	log_test_expected "$1" "$2" "$3"
->  }
->  
->  run_cmd()
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/icmp_redirect.sh b/tools/testing/selftests/net/icmp_redirect.sh
-> index b13c89a99ecba..0107af73aef4d 100755
-> --- a/tools/testing/selftests/net/icmp_redirect.sh
-> +++ b/tools/testing/selftests/net/icmp_redirect.sh
-> @@ -61,28 +61,7 @@ log_section()
->  
->  log_test()
->  {
-> -	local rc=$1
-> -	local expected=$2
-> -	local msg="$3"
-> -	local xfail=$4
-> -
-> -	if [ ${rc} -eq ${expected} ]; then
-> -		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-> -		nsuccess=$((nsuccess+1))
-> -	elif [ ${rc} -eq ${xfail} ]; then
-> -		printf "TEST: %-60s  [XFAIL]\n" "${msg}"
-> -		nxfail=$((nxfail+1))
-> -	else
-> -		ret=1
-> -		nfail=$((nfail+1))
-> -		printf "TEST: %-60s  [FAIL]\n" "${msg}"
-> -		if [ "${PAUSE_ON_FAIL}" = "yes" ]; then
-> -			echo
-> -			echo "hit enter to continue, 'q' to quit"
-> -			read a
-> -			[ "$a" = "q" ] && exit 1
-> -		fi
-> -	fi
-> +	log_test_expected "$1" "$2" "$3"
->  }
->  
->  log_debug()
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/lib.sh b/tools/testing/selftests/net/lib.sh
-> index d46d2cec89e45..e02a6a91ff913 100644
-> --- a/tools/testing/selftests/net/lib.sh
-> +++ b/tools/testing/selftests/net/lib.sh
-> @@ -454,6 +454,44 @@ log_test_xfail()
->  	RET=$ksft_xfail retmsg= log_test "$@"
->  }
->  
-> +# Log test result with expected return value
-> +log_test_expected()
-> +{
-> +	local rc=$1
-> +	local expected=$2
-> +	local msg="$3"
-> +
-> +	if [ "${rc}" -eq "${expected}" ]; then
-> +		nsuccess=$((nsuccess+1))
-> +		printf "TEST: %-60s  [ OK ]\n" "${msg}"
-> +	elif [ "${rc}" -eq "${ksft_skip}" ]; then
-> +		[[ "$ret" -eq 0 ]] && ret="$ksft_skip"
-> +		nskip=$((nskip+1))
-> +		printf "TEST: %-60s  [SKIP]\n" "${msg}"
-> +	elif [ "${rc}" -eq "${ksft_xfail}" ]; then
-> +		nxfail=$((nxfail+1))
-> +		printf "TEST: %-60s  [XFAIL]\n" "${msg}"
-
-[Severity: High]
-Can these two arms turn real failures into [XFAIL] or [SKIP]?
-
-The callers pass a raw exit status from ip, bridge, ping or grep, and the
-new arms only look at that raw value, never at "expected".  With
-ksft_xfail=2 and ksft_skip=4, any command that exits 2 or 4 is reclassified
-even when 0 was expected.
-
-fib_nexthops.sh has two unconditional hard-failure calls:
-
-tools/testing/selftests/net/fib_nexthops.sh:ipv6_fcnal_runtime() {
-	...
-	else
-		log_test 2 0 "Ping - multipath failed"
-	fi
-	...
-}
-
-and the same in ipv4_fcnal_runtime().  Before this patch these reached the
-FAIL arm (nfail++ and ret=1); now they hit the XFAIL arm, which touches
-neither nfail nor ret.  The summary in that script prints only
-nsuccess/nfail/nskip and it ends with "exit $ret", so does this failure now
-disappear from both the output and the exit status?
-
-The same concern applies to ordinary positive checks written as
-"log_test $? 0 ...".  iproute2 returns 2 for kernel-reported errors and ping
-returns 2 for local errors such as "Network is unreachable", for example in
-fcnal-test.sh:
-
-	run_cmd ping -c1 -w1 -I br0 ${NSB_IP}
-	log_test $? 0 "Bridge into VRF - IPv4 ping out"
-
-and fcnal-test.sh decides its verdict from nfail alone:
-
-	if [ $nfail -ne 0 ]; then
-		exit 1 # KSFT_FAIL
-
-Would it be safer to only take the SKIP/XFAIL arms when "expected" itself is
-ksft_skip/ksft_xfail?
-
-Two related observations: the SKIP arm also rewrites ret from 0 to
-ksft_skip, and the srv6 scripts then normalize that away in
-print_log_test_results():
-
-	if [ "${ret}" -ne 1 ]; then
-		ret=0
-	fi
-
-In the other direction, icmp_redirect.sh's checks are grep pipelines that
-only produce 0 or 1, so after dropping the fourth argument its nxfail
-counter and the "Tests xfailed" line can no longer be reached.
-
-> +	else
-> +		ret=$(ksft_exit_status_merge "$ret" "$ksft_fail")
-> +		nfail=$((nfail+1))
-> +		printf "TEST: %-60s  [FAIL]\n" "${msg}"
-> +		if [ "$VERBOSE" = "1" ]; then
-> +			echo "    rc=$rc, expected $expected"
-> +		fi
-> +
-> +		pause_on_fail
-> +	fi
-> +
-> +	if [ "${PAUSE}" = "yes" ]; then
-> +		echo
-> +		echo "hit enter to continue, 'q' to quit"
-> +		read -r a
-> +		[ "$a" = "q" ] && exit 1
-> +	fi
-> +
-> +	[ "$VERBOSE" = "1" ] && echo
-> +}
-> +
->  log_info()
->  {
->  	local msg=$1
-
-[ ... ]
-
-> diff --git a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-> index e9ed0d7509962..9d2dc0faf741d 100755
-> --- a/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-> +++ b/tools/testing/selftests/net/test_bridge_neigh_suppress.sh
-> @@ -72,39 +72,7 @@ PAUSE=no
->  
->  log_test()
->  {
-
-[ ... ]
-
-> -	[ "$VERBOSE" = "1" ] && echo
-> -	return 0
-> +	log_test_expected "$1" "$2" "$3"
->  }
-
-[Severity: Medium]
-Is dropping this "return 0" safe here?
-
-The last command of log_test_expected() in lib.sh is:
-
-	[ "$VERBOSE" = "1" ] && echo
-
-so with the default VERBOSE=0 the helper, and therefore this wrapper,
-returns 1.  In this script the test functions end with a
-"log_test $? 0 ..." call, and the driver loop merges their status into ret:
-
-	setup
-	$t
-	ret=$(ksft_exit_status_merge "$ret" $?)
-	cleanup
-
-with "exit $ret" at the end.  Since ksft_exit_status_merge 0 1 yields 1,
-does the script now exit 1 on every run while still printing
-"Tests failed:   0"?  The removed "return 0" looks like it existed for
-exactly this reason.
-
-[ ... ]
 -- 
-pw-bot: cr
+2.34.1
+
