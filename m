@@ -1,199 +1,108 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a3-smtp.messagingengine.com (flow-a3-smtp.messagingengine.com [103.168.172.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46D68448B9C;
-	Fri, 14 Aug 2026 11:02:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74D0F459AED;
+	Fri, 14 Aug 2026 11:26:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786705328; cv=none; b=EnI/bGipJWwCXqhY1lD3FeXzKmAPnW68Zf5DAt9i/IXkHD4JJ1jHXHfOu/FiB8qX4Lc31xqJBGf8Pa1WquXoy8mYPKcF40/jt7fTa8681x9nzjNaeHIOgSmmFdJoDkT4p5aCaNOKlmcHi/0209rdYZppokjaigngU5S+V6lyIv4=
+	t=1786706803; cv=none; b=X8ucoAwF+pGl+uKoC4KXtcsTR18/74fP7Y5YxDXEgzccxDep61j/uItpR8JjycCWSQZzw7BTChK7si/nigUPju50RypyHjC7SujpWNdHfKPhWPkvlr5/SivNuQxGnYtVZsHen4v2geXrY+mKFVttnfKjv38jVVIaQI+7GvtZINE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786705328; c=relaxed/simple;
-	bh=B58AR9SQxBsV/7KuARWZd24/yABrrClZf+v4qU7pT3Q=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f2tmGrJWlM0gSkyowSvJi0U4coJA++WqTKQdMprMLiAWdufrdhtpUXn1fKwGmCPf6Z/wL3YLeH/bBZ91IUvvDxIx/RHHFos/qM/E8UwsnOwrXz9Q+BoBkI6kUO/o/kIoeXhLSFphmnzQ3uJ6njc7GfwX0Nbwo7CCcIjNQF8K4U8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AAIzFiaq; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786706803; c=relaxed/simple;
+	bh=On09TkNON5CRVGsw+3uLKwqcnrWKc9bWgXNgQYo7WVg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eN40IdaeZ3MIXbx+O8UEHrlTxPD6XScThgVTjOnFDQYemeUncLVm0fiObar0gYjrhjcUMg672w9GqVI/+5hijIBZ/qyOd1qG6IKvtTlZVHyYlLzbOqPjX2nPU3nxyUPnHZ1MY7MPZRFEIfHviq4k8HVSyhwNZqIATkPUbQ3sZ6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=mF2dfDVt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jA1lc8n+; arc=none smtp.client-ip=103.168.172.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AAIzFiaq"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B76EC1F000E9;
-	Fri, 14 Aug 2026 11:01:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786705319;
-	bh=B58AR9SQxBsV/7KuARWZd24/yABrrClZf+v4qU7pT3Q=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=AAIzFiaq2dOHpKq0+Ggb5pBcRqHh26XNnXgCQt2n2JtPhVercUzKMgIHx4dMGL1x6
-	 /+anNoh/KgVuFBIeWu7xMDr+dBKNNhUfv5GqKCJek3KE8DTjverL/XVYSiCVZyKgSo
-	 mRE+pVPiktBslvFYTG+g3jIvsQTnxH2TcdcZVdiEk0ZShv3XynnquzrVHgmbpgnjHP
-	 spCljb/3R102e99PvHaakJug63nc7hOT08HhLUnrAWvt9nvFWfgUTrdXxKZ/+vOi6/
-	 Rwgu+1uIhnxphT3bc5PzyTE28C7NwOhKA/ul26RNdUTU5cR7jVY3MIYpuDf82yCc7F
-	 LPCdrau9EfPQQ==
-Message-ID: <a8f5840cf3f2cbf71de7a1f3957f70d9897adfa2.camel@kernel.org>
-Subject: Re: [PATCH v2 4/8] SUNRPC: undo partial rpcbind registrations when
- svc_register() fails
-From: Jeff Layton <jlayton@kernel.org>
-To: Chuck Lever <cel@kernel.org>, NeilBrown <neil@brown.name>, Olga
- Kornievskaia <okorniev@redhat.com>, Dai Ngo <Dai.Ngo@oracle.com>, Tom
- Talpey <tom@talpey.com>, Trond Myklebust <trondmy@kernel.org>, Anna
- Schumaker <anna@kernel.org>, "David S. Miller"	 <davem@davemloft.net>, Eric
- Dumazet <edumazet@google.com>, Jakub Kicinski	 <kuba@kernel.org>, Paolo
- Abeni <pabeni@redhat.com>, Simon Horman	 <horms@kernel.org>, "J. Bruce
- Fields" <bfields@fieldses.org>, Shuah Khan	 <shuah@kernel.org>
-Cc: linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, Trond Myklebust <trondmy@gmail.com>, 
-	linux-kselftest@vger.kernel.org
-Date: Fri, 14 Aug 2026 07:01:55 -0400
-In-Reply-To: <572f0269-9bf4-4a80-8e9c-3c4614d45f7e@app.fastmail.com>
-References: <20260811-nfsd-nl-hang-v2-0-c0c92b3953c3@kernel.org>
-	 <20260811-nfsd-nl-hang-v2-4-c0c92b3953c3@kernel.org>
-	 <e1706a70-d9f8-423e-9462-2d77b2e444b1@app.fastmail.com>
-	 <26486c88075a0b1e3c1cb088fe97d39e0051b5d3.camel@kernel.org>
-	 <572f0269-9bf4-4a80-8e9c-3c4614d45f7e@app.fastmail.com>
-Autocrypt: addr=jlayton@kernel.org; prefer-encrypt=mutual;
- keydata=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
- QZIQXVeAA+smfTT0tDrisj1U5x6ZB9b3nBg65kc=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="mF2dfDVt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jA1lc8n+"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.phl.internal (Postfix) with ESMTP id 258C013802D8;
+	Fri, 14 Aug 2026 07:26:37 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Fri, 14 Aug 2026 07:26:37 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1786706797; x=
+	1786713997; bh=1S9NCI2+tHYOR01YLEaMonDlYZYYqApipw0wF5z4uJA=; b=m
+	F2dfDVt5VsZvn/gKKd4vRJWJwz/dR2B9Al1pwaFrx1p6RpzZNz4x0/cw4hwy652k
+	hOgYj4nTDsTQ8SJYcjdqU7Xm8mMWLRMFQjnrffyde11JMqOo0DYgc+ZtkRj1bBYT
+	zw4wG3PTtowPyQGeE+0FnE4MXHGTlP7rf1jH4hD/IxpWDbQw3NgWx1qCale+A19M
+	5p3uxPeuV6KnB3uiy+XHWnd1SsZ03hz8QnzljnJLFyCNenn7RdjeizQucFy1bmmM
+	0HH4H21yCmPro0Y5Y5oN4fQtH/GiD8HzkSEtOXEQUX0NaJcu5iPcDTNGMtbf50U/
+	rk+4UOzo4ukuU1QuEiE3w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1786706797; x=1786713997; bh=1S9NCI2+tHYOR01YLEaMonDlYZYYqApipw0
+	wF5z4uJA=; b=jA1lc8n+hN/4w7a4SdbFPbD8q9J3bQ1hGwbiEHqXJKctHuORlXi
+	RGf6Z1fBofJn8u8Uh7omkOzx4mBudBClnZdeRYwuQX/A6jrI586OKVuDim3MOLnI
+	P1h9qdol6tWZxirMwPkec1PEKSE4UXIWm7XgQ132hP61Atrf0p/jBFCFkfs64dcL
+	XjKAE03Tz/Y28FE8mDyzOPlsLYtWEJkI9f+5VlV+Lxdwds7AF81YYp0Reiim9OIS
+	iOFszzce5j4RmEwDbTPZAGQH7JDdpetgUcfPKS8MMIJYj48+COfOHZbVfRlQtiHQ
+	+07BIB98s9RePak9zX/lgJWbUFF0cmvTaiQ==
+X-ME-Sender: <xms:bPt-avm1n6O7CR5cqF7oCwQAQ8P5W8t2W5qzDYcb1hw2iaxDvxwulA>
+    <xme:bPt-age8v_R6fhPAU9dUVxSslAHlCd3jxbB6VFPtLI3hTTs5r0aiSgWvKGQI84eOk
+    Wd3SMhEZ9eoByXs6YMajcsLeBN67yPsRks9ZHoNl-BT8lTVflsGAN8>
+X-ME-Received: <xmr:bPt-arMefDglRGnvG6hEePO2saIHcARy3JeYoFUH3W1zg2261YY8uCioWa8>
+X-ME-Proxy-Cause: dmFkZTEoA6e9DNf8/AIkBCVe3C4E+A4zolmZoi+9rifEJTLPQJhzWR0S3AmeiZGHug6S4b
+    ccnioTWyHa12kRYm5RXSa90Pq3oqFxXrvIKRfjcxMDtRlRosWwAxizIPcHnnoXqUSfiwbC
+    NhMN2gUmfXhomnpCyzpnlIM8G50+Jh9zxBXw8ktKseVExRb03bdQlcFRevvsL9GEeyZ7xs
+    8No9EKR34bblH8st1fNGRsr2qmWAJMomZO90nrkTl2DH7S+1eR2+5202NUvgy8kdQP5MII
+    gm47x3G8KsrdPEKhV7LqtzYV5moSYCVDWqrgPwskor9yrzsntXhYRM7MoZ3jWI3iym2FCs
+    VJhnvJd08pB9xJ21VqmoovnV62v21+vfJf1zuP6tZZ9q8WCKRnXvLldRo+jdJkGwN9SuA/
+    xRY7YZi7k4PwrxCRZEt84nbtINUKZZ55cp/Yh0CrF4ZJJuXvfmDi0+4/JER3WkOUM67OkZ
+    +lFSSvEltN2wvSBZbKd2dDtthvMAITr10LI04vUKYaV5vpQOxX+jGYF3Jh09UnZbW5oH/u
+    d9NcvImq1GwEDmAPk7kJ5IfoybsyrqnoteGVCFXR4d+X7j81Yg6eJu9IPu6ONvH/qtpV5b
+    NtEAVxQ+McQ9NcA9IkMxSGaaRoP6aRFLcLPVtDmO7OEeL4mtcQ4ASykyQMwA
+X-ME-Proxy: <xmx:bPt-arP3Ts6Thsx6FmRXWk30RwhVRiaDf8thZgD-0jdfLVPMkXeLnA>
+    <xmx:bPt-as6YeoGeAtDgTMc3O2gLp9gv-tN92fOqmHZA3NE4Ct5FkKaEAA>
+    <xmx:bPt-avY_K4pjy295JDQWY5op1Vu2yXXuU-zjesiGnacobbm4lnThPw>
+    <xmx:bPt-akHOwa-vX_exBnEzcNf4vRVEqa0vC4QR59xuM9Mv-cTBeKgfRA>
+    <xmx:bft-avLHiGK0gIMG-i0YU8R4JuFQtrSJ-IVVoiAERVq-P6b18n3knxTK>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 14 Aug 2026 07:26:35 -0400 (EDT)
+Date: Fri, 14 Aug 2026 12:26:34 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, 
+	usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
+	agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 05/18] selftests/mm: keep khugepaged out of the
+ swapout the swap cases set up
+Message-ID: <an77GjsF5Qip60ql@thinkstation>
+References: <20260812132304.199287-1-kirill@shutemov.name>
+ <20260812132304.199287-6-kirill@shutemov.name>
+ <178663341429.2230969.913958776768961527.b4-review@b4>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <178663341429.2230969.913958776768961527.b4-review@b4>
 
-On Wed, 2026-08-12 at 15:57 -0400, Chuck Lever wrote:
->=20
-> On Wed, Aug 12, 2026, at 3:38 PM, Jeff Layton wrote:
-> > On Tue, 2026-08-11 at 15:19 -0400, Chuck Lever wrote:
->=20
-> > > For an IPv4 listener, the port-zero callback falls back through
-> > > __svc_rpcb_register4() to rpcb_register(). PMAPPROC_UNSET ignores
-> > > its protocol argument, so unwinding a partially successful TCP
-> > > registration also removes the mappings for existing listeners on
-> > > other transports, I would think.
-> > >=20
-> > > It might be that the best the kernel can do here is tear everything
-> > > down if one registration fails.
-> > >=20
-> >=20
-> > What I was thinking for NFSv2/3 was to just have the listener set
-> > netlink call wait for registration to complete before returning to
-> > userland. That would mean we'd have to block even longer to try and
-> > unregister things if things fail.
-> >=20
-> > Alternate proposal: let's just declare rpcbind reg errors to be non-
-> > fatal: do a pr_warn() and just leave it up to the admin to sort it out
-> > if that happens instead of trying to fail the startup.
-> >=20
-> > The resulting situation for the server is no worse off (it's just
-> > running instead of being down), and I move that we're better off
-> > leaving it up to a human to clean up the mess instead of trying to fix
-> > things up from the kernel.
->=20
-> I was thinking of this in terms of a declarative administrative UI:
-> If the kernel can't set the requested configuration, it should
-> fail back to the previous configuration. Maybe that's not possible.
->=20
+On Thu, Aug 13, 2026 at 06:03:34PM +0300, Mike Rapoport wrote:
+> This commit message broke me, I'm going to skip the remaining patches
+> for now.
 
-It's possible, but difficult. The original /proc interfaces were never
-this clean, so making the underlying bits behave this way for the
-netlink interfaces, but not the legacy /proc ones will be hard.
+Something never changes. I cannot write coherent commit messages with or
+without LLMs.
 
-Also, today we don't take any steps to try and preserve the old
-listener table. That would have to be done here as well.
+Will try harder next time.
 
-> On the other hand, what might be better is to handle the rpcbind
-> registration from user space instead of the kernel, after the
-> kernel listener is set up.
->=20
+Sorry for wasting your time.
 
-That's possible I guess. We could send a new boolean down in the
-listener call that says "don't do any rpcbind registration" and then if
-the kernel indicates that it understands that message then userland
-could do the registration.
-
-That's a major undertaking though and I don't like fundamentally
-changing the interface here, particularly when we'll still have to cope
-with doing this from the kernel for legacy cases.
-
-I still think the best solution of all would be to just say
-"henceforth, rpcbind registration is non-fatal". That just leaves the
-kernel succeeding the listener set today when it would have failed
-before, but will still printk() an appropriate warning in that case, so
-the admin should be aware that rpcbind registration failed, even though
-the server is up.
-
-Right now, I'm really unclear on what sort of changes you want to see
-here as a final patchset. What would make this mergeable for you?
---=20
-Jeff Layton <jlayton@kernel.org>
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
