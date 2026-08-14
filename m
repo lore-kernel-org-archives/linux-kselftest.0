@@ -1,130 +1,70 @@
-Received: from mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay.hostedemail.com (smtprelay0014.hostedemail.com [216.40.44.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FD194854FD
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 17:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B42492515;
+	Fri, 14 Aug 2026 17:35:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=216.40.44.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786728791; cv=none; b=u/A8GM7z/nyhn7nFDoQtL2OL8J+RM481nd1zO18To7I2jKDnDSySKFpZWs/jrrK9ls/yhV6VPDO49NrAoiZSFRWSjBTDTp0vUrEp+Y5ynggtZx0S9HLSr/Qyym3DbRpqrlE35AmfQhTAGZD4s8ipDfnoX8X/7ajVi4eUC/SnsU8=
+	t=1786728957; cv=none; b=QSdNo10z30C8wY1thiw8WbhKmYSpzCu17UWIefrGnGTQUb1ZM/PGF1XJ0G+9MWipT2JgSpxMLCxvP0oDveGTmWWRPdwh/H2USf2kKLxCYhTiuNCiyYJJIWGtfHBjYJ/H7Xagz3vJx8XwIeMOTJQ6GDmA4qFeULxOmRMpUh2v+bw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786728791; c=relaxed/simple;
-	bh=X/Wf08dMIeGqoZzDfSAheCpZcEAqUr9lovxr1cZYSCE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ou+fVA99rwTyFj+XtZK0BoffGne0QIRdZkCLlEDWf9AUZlPBVlu1cpfUwP7W6YxcOSRYaXjUcbw89FPS8VlyldGUt3kudhdImQlaRndVWQUELa99MN9u3XjwKiK8pT2V0ZOYCnAnf4ddh5kSFFov0n1Kmq62iwaF6yo+DUPSJ90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YT8VHQUh; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786728957; c=relaxed/simple;
+	bh=Rh7YmftQk3S0jxfjxrGMdKV//RENjflqpuDNP9eLxYs=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=OGxvlu+qwG3osDfxeA9bqPyLgxCe1QUIEiJuL5hyGfKlXaf3t4NGhAiYv+ONyZNbhHSuoj2Hx8TmB1hT+DI0rSHX52RjR6mQMWDPEKJd26qWjLTgAYAewYoFqGyn4EOOtUmduDke0EfXK/dSPlE8bNr5xXqfmBCunCs7Fk3sF4k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org; spf=pass smtp.mailfrom=goodmis.org; dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b=VOlVyjHW; arc=none smtp.client-ip=216.40.44.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=goodmis.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goodmis.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YT8VHQUh"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=X/Wf08dMIeGqoZzDfSAheCpZcEAqUr9lovxr1cZYSCE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786728788; v=1; x=1787333588;
- b=YT8VHQUhLFvVy8m9XeNPpDFXwmp7uKNE/bXYfY6tI3tjkUITINU/0dkLRp8vxVdjuFU7MY0M
- xassRJii8s+2cfs5Kn7ON7Ss1uYZjtnuhjEC1gyEJ4s+1rOphpWTAw3hYT2UftBTHHDcT1wHiYs
- rMFmhDkdGbphy2PKVfvIWsyo=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from .linux.dev (117.20.149.103)
-	by smtp.migadu.com with ESMTPS id fcea059e5b30813f;
-	Fri, 14 Aug 2026 17:33:08 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Quentin Monnet <qmo@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next 5/5] selftests/bpf: Improve readability in iter test for percpu data
-Date: Sat, 15 Aug 2026 01:32:06 +0800
-Message-ID: <20260814173206.93082-6-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260814173206.93082-1-leon.hwang@linux.dev>
-References: <20260814173206.93082-1-leon.hwang@linux.dev>
+	dkim=pass (1024-bit key) header.d=goodmis.org header.i=@goodmis.org header.b="VOlVyjHW"
+Received: from omf15.hostedemail.com (lb01a-stub [10.200.18.249])
+	by unirelay08.hostedemail.com (Postfix) with ESMTP id DC12B14016A;
+	Fri, 14 Aug 2026 17:35:53 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: rostedt@goodmis.org) by omf15.hostedemail.com (Postfix) with ESMTPA id 3423E1A;
+	Fri, 14 Aug 2026 17:35:52 +0000 (UTC)
+Date: Fri, 14 Aug 2026 13:36:10 -0400
+From: Steven Rostedt <rostedt@goodmis.org>
+To: "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc: Shuah Khan <skhan@linuxfoundation.org>, Mathieu Desnoyers
+ <mathieu.desnoyers@efficios.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v3 0/4] selftests/ftrace: Add a boottime tracing test
+ framework
+Message-ID: <20260814133610.32eb5da9@gandalf.local.home>
+In-Reply-To: <20260815010524.b361dc036dd2e997d23cc421@kernel.org>
+References: <178649540853.438282.4271870161169100680.stgit@devnote2>
+	<20260815010524.b361dc036dd2e997d23cc421@kernel.org>
+X-Mailer: Claws Mail 3.20.0git84 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Rspamd-Server: rspamout05
+X-Rspamd-Queue-Id: 3423E1A
+X-Stat-Signature: e3xy4kwfse6hoorbp6wbx9ea14gb9mo1
+X-Session-Marker: 726F737465647440676F6F646D69732E6F7267
+X-Session-ID: U2FsdGVkX1+IlRGdQa8Sj4kzmsASPsiH5S/NInFQq9A=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=goodmis.org; h=date:from:to:cc:subject:message-id:in-reply-to:references:mime-version:content-type:content-transfer-encoding; s=dkim1; bh=t4FISVqsfs6nJtW26w8JkGUvUUjrOIuGS2r6809IyQw=; b=VOlVyjHWN7syomysvwK+A3S08FzrwqAsOnS3r3qejwp8WuxApyUy1QVFdNHPmjIPsB9S9HFL9zFoIdHJ5GkCLIl2QmHlJGFKChYaAeTBnisLdISp05TXpDMGi6dWtrHZqdiRQso0ihsh7Fxn4of29MviJOp6Umij0mkaW9EqEYc=
+X-HE-Tag: 1786728952-314789
+X-HE-Meta: U2FsdGVkX1+zbFzPf+U5hv/21sGfk/YDMA4skqQzfloJB86IYspdICqKMU9Hy+ynVgddXfa8E7w2hQVI4nBI9M5SIcTa9o48AMIJ5xg4e3XrORQo2SaXHVvekSCeSz37CcsaUeGK47OvSULBTu23YNVt7GatEpjZk56unMVV0M3RDyW6hHRll/uEc6AKdQzSefqdr3Paw8tUFdHSPguSAUHRDUxJiuq55xmXq6R0/YVYTD4EHP1jAGjdWhPnAmzCm1ogt73WErAyoMKUa/nTE0qnXz2QX+QM/6CjAOEq+AKxhm7OKT+nZnqMPTckx4+qFG/25Xq+mcAOpFm1y+mKRrDoIjTR90sd
 
-The original 'offsetof()' + offset is equal to the new 'offsetof()'. Use
-the new 'offsetof()' instead.
+On Sat, 15 Aug 2026 01:05:24 +0900
+Masami Hiramatsu (Google) <mhiramat@kernel.org> wrote:
 
-Rename two variables btw:
+> Hi Steve,
+> 
+> Would you have any comment on this? I would like to pick this to probes/for-next
+> for ensuring boottime tracing works correctly.
 
-* offsetof_num -> num_off
-* percpu_data_sum -> sum
+Hmm, it's a bit too close to the merge window for a good review of it. I'll
+be traveling next week and I'm trying to get all my pull requests ready
+before then. You sent v1 on Monday and v3 on Tuesday. Sounds to me a bit
+rushed when you have 3 versions during the -rc7 release week.
 
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
- tools/testing/selftests/bpf/prog_tests/global_data_init.c   | 6 +++---
- tools/testing/selftests/bpf/progs/test_global_percpu_data.c | 6 +++---
- 2 files changed, 6 insertions(+), 6 deletions(-)
+This isn't a trivial feature. I think we should let it settle during the
+next merge cycle to do it properly.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 2f0dbeb88934..c6d055b9457d 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -348,8 +348,8 @@ static void test_global_percpu_data_iter(void)
- 		return;
- 
- 	skel->rodata->num_cpus = num_cpus;
--	skel->rodata->offsetof_num = offsetof(struct test_global_percpu_data__percpu, struct_data);
--	skel->rodata->offsetof_num += sizeof(skel->percpu->struct_data) - sizeof(int);
-+	skel->rodata->num_off = offsetof(struct test_global_percpu_data__percpu,
-+					 struct_data.nums[6]);
- 	skel->rodata->elem_sz = roundup(sizeof(struct test_global_percpu_data__percpu), 8);
- 	skel->percpu->struct_data.nums[6] = 0xc0de;
- 
-@@ -372,7 +372,7 @@ static void test_global_percpu_data_iter(void)
- 		do { } while (0);
- 	ASSERT_EQ(len, 0, "read iter");
- 	ASSERT_TRUE(skel->bss->run_iter, "run_iter");
--	ASSERT_EQ(skel->bss->percpu_data_sum, 0xc0de * num_cpus, "percpu_data_sum");
-+	ASSERT_EQ(skel->bss->sum, 0xc0de * num_cpus, "sum");
- 
- 	close(fd);
- out:
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 12556590b647..175c44000753 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -64,9 +64,9 @@ int verifier_snprintf(void *ctx)
- }
- 
- volatile const __u32 num_cpus = 0;
--volatile const int offsetof_num;
-+volatile const int num_off;
- volatile const int elem_sz;
--__u32 percpu_data_sum = 0;
-+__u32 sum = 0;
- bool run_iter = false;
- 
- SEC("iter/bpf_map_elem")
-@@ -82,7 +82,7 @@ int dump_percpu_data(struct bpf_iter__bpf_map_elem *ctx)
- 	run_iter = true;
- 
- 	for (i = 0; i < num_cpus; i++) {
--		percpu_data_sum += *(int *) (pptr + offsetof_num);
-+		sum += *(int *) (pptr + num_off);
- 		pptr += elem_sz;
- 	}
- 	return 0;
--- 
-2.55.0
-
+-- Steve
