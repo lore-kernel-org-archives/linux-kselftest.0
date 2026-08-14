@@ -1,275 +1,133 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3A242980C;
-	Fri, 14 Aug 2026 08:22:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9310143E486
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 08:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786695741; cv=none; b=U5LOjWCEZ2JsGdGxZgCxTJl6YYgj7TcCr8rRjeWe07qy3k6SyXbHtOdSxN6EbaKBcAqIbcPk8qr8MVxClK4PK6ZPZaYXjd6kpl9qL8UOhGjeziOuWRNZKRslLvWjkEcl/ubFO3PprRTNzzVvjB75n5bS1ienyGiJU7ojU9f+NRg=
+	t=1786695988; cv=none; b=RHjuyws2ZPSPkILYMdslmI2q+ETjowt+xw4Y7HjycHZUEYLBCAoVuUk8JpTLJb/hFErhwSqmAYoHZRv4RE03QUqI3GNDflqLtOLUNK+17JKjskh0xz0jfb3j8NsCBKLPfMrJp5RUxKlTF/R6VOxhPBYcZw1inZM6FD/Xs2j746Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786695741; c=relaxed/simple;
-	bh=FBsZlgBQGZ+ZYRZ/YfO8ZoMaTCEuXFmELxcJ5Bio8kk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hgDBAeII/Dk3erBzjEgRRlR7vxRqcGe1RSWieyJb1cRIxbhwZpAIPGAkauQV5vAApIojdjWK5xnG7jtS5zeX0T68B2MBluH/g905f3SdK1joN646UgZT4LuvX9ObG/M2oQFtPOah1WDhgZxdYc73lnw5NNW7vqVuRnBp5Xi1xAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GGdB8HlR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786695988; c=relaxed/simple;
+	bh=HzfuefgkK3WPcRfwY7Hz2vbYJ7GWlbeQ4YKi4tvt5RM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gPv09TRb2XC5Z2UPLLXenno0w1qqBrHBQS+1COO/tezHurZtbc+bYqa6HaIS/KPPUZfihv/6PW0NJ+SqSxtMQFiO+/rkDYtIHEY2W2HJopuIf4UbPbJwgCWgMTCIO3kN5LqAb67i5djYna86tQIXlebLQsUsb7lsXK1guiTJPgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SMgOxtmN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GGdB8HlR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D746D1F000E9;
-	Fri, 14 Aug 2026 08:22:15 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SMgOxtmN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8692A1F00ACF
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 08:26:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786695738;
-	bh=EIsk+Wf4F0dnluT9f5h0Biozt4hmYjxe7upSyC3uPSI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=GGdB8HlRdNCLAI/kFaUg6q6hJdlaxu4wqup44Jfwh7ulG3dL4V+hKR2FQeEi4IhoZ
-	 aM6+r4s8zYekwBX0+DQlFpQpIbYVJFRhfapJ9Bj63/1pEGSNKhi6liFAdm3Z5q9uM7
-	 Y2bnBDJ0EV0k/tKGpsXFNZdsAX9iWoKdmjZWy3nWP6/UmVuejmROjAjj74ocXWYIvc
-	 W3QmWkHq6qFWC34U2v64st0h9CWFGP7xx2t1/42JebrcEgsTi2OB5F2Mawkry60k2U
-	 /exyBR6Ia9TlU2D5XBkOX9sSIAxkfMMVrRGwuKIze16rjcUQBrGO8kSKa+gFbY+alb
-	 5W18TnBeDEpYA==
-Date: Fri, 14 Aug 2026 09:21:59 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Daehyeon Ko <4ncienth@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org, David Hildenbrand <david@kernel.org>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm/secretmem: prevent uncharged mremap expansion after
- fork
-Message-ID: <an7Emqen9f7W801p@lucifer>
-References: <20260813225328.2010303-1-4ncienth@gmail.com>
+	s=k20260515; t=1786695976;
+	bh=+WNFzfxSWW15fOIdnEaHeTYbpQjdQsx6jTbj9dE4ksY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc;
+	b=SMgOxtmN8Vf5EkQdQSMB+lyU6zdP5E/rVzeaMaT5tG37DvvceG22rBwtS4b3YBjJP
+	 LHtiprxppMxk76P3Tqs4D2P3wkaJoyHFi9y3e8+bupmb/8bQHh0OKCECOJLmpMa6ES
+	 X2ZxouX3gnn7Ahe/4T/D86o/e9/V4HlxSBV8rGnm8XQQxx/9GgKKxaVF97SzsJNfUj
+	 gs8dlFaRo7VPgUqJWmlibmGcv1jTfIVtSk6ZmDdMsIfFszF5GC+uTcdNJ/OHcED9f/
+	 m/dz0wP+llgLEZCa7RYZ8APKi76J7sFVFVR+Z31p4fgNuL0bbNFOjkMSjwOq5MBuEq
+	 DGiLti1auW0Dg==
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-6a386a34603so1436631a12.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 01:26:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RrS0P99R5LfN+SiJraodsQmO/zzChK3GXN7//bVroD/ST2wSY2P55krb8PRBc8OrfvQRgjKVLX1KDX28qf65+M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsGstPIz6fCXV+6QJIQqbTJiEgCSEtyU0Li9zRYdac1+o0QMDW
+	KMjSNXq0XiocdbDuMwu1Q+4n+dJRnzmc3rfadT90zzUjcPeTquESTDxkG8VtC28E2idfWTtSV0+
+	i5hcIZMMtZaXdMfknormK+gde93VOkQI=
+X-Received: by 2002:a05:6402:324d:b0:6a1:332a:83c1 with SMTP id
+ 4fb4d7f45d1cf-6a38aedabdamr1544094a12.6.1786695974968; Fri, 14 Aug 2026
+ 01:26:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260813225328.2010303-1-4ncienth@gmail.com>
+References: <CAAhV-H7+1bv6ULPO1+SZ5R=XFxNTh+54rqnYQUAW26kF83kiMg@mail.gmail.com>
+ <20260813160307.15130-1-dongtai.guo@linux.dev>
+In-Reply-To: <20260813160307.15130-1-dongtai.guo@linux.dev>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 14 Aug 2026 16:26:41 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7XKFj93fSPcKAR9AR6Z4O28pC9va243hVccvPNOxH3qg@mail.gmail.com>
+X-Gm-Features: AUfX_mxWy0zifyMkCT_MNsH5vELQu4FCKCmOeWL2rt6IE_4N76SZIZUTr8aX0ys
+Message-ID: <CAAhV-H7XKFj93fSPcKAR9AR6Z4O28pC9va243hVccvPNOxH3qg@mail.gmail.com>
+Subject: Re: [PATCH v4 4/4] selftests/kho: add LoongArch vmtest support
+To: George Guo <dongtai.guo@linux.dev>
+Cc: rppt@kernel.org, pasha.tatashin@soleen.com, pratyush@kernel.org, 
+	shuah@kernel.org, ardb@kernel.org, guodongtai@kylinos.cn, kernel@xen0n.name, 
+	graf@amazon.com, liukexin@kylinos.cn, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, kexec@lists.infradead.org, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-efi@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-(I'm going to make an emacs macro to paste this now I think :)
+On Fri, Aug 14, 2026 at 12:03=E2=80=AFAM George Guo <dongtai.guo@linux.dev>=
+ wrote:
+>
+> Hi Huacai,
+>
+> On Sun, 9 Aug 2026 at 12:16, Huacai Chen <chenhuacai@kernel.org> wrote:
+> > You never answer me why in your test you should disable i8042 from V1
+> > until V4. In normal use we use a single kernel for both host and guest.
+>
+> I owe you an apology: I did not actually understand your question. I
+> thought the commit message had already explained the reason (the
+> i8042_flush() panic), so I treated it as answered and never addressed
+> what you were really asking. Let me answer it directly now.
+>
+> You are right that this is not just a selftest detail. i8042 is built on
+> every LoongArch kernel: arch/loongarch/Kconfig selects
+> ARCH_MIGHT_HAVE_PC_SERIO, and KEYBOARD_ATKBD and MOUSE_PS2 (both default
+> y) select SERIO_I8042 under it. So your "single kernel for host and
+> guest" point is correct -- a normal defconfig kernel has i8042 built in.
+>
+> On the QEMU virtual machine there is no i8042, so PNP finds nothing and
+> i8042_pnp_init() falls back to probing the i8042 status and data
+> registers (I8042_STATUS_REG, I8042_DATA_REG) directly. On LoongArch those
+> registers are memory-mapped, and on the virtual machine they are not back=
+ed
+> by any device, so i8042_flush() takes a page fault and the kernel panics
+> before userspace. A normal LoongArch defconfig kernel booted as a QEMU
+> guest hits the same panic -- the "# CONFIG_SERIO_I8042 is not set" in
+> loongarch.conf is only a workaround to let the KHO selftest boot, not a
+> fix.
+>
+> The real fix is separate from the KHO series: make i8042 bail out on
+> LoongArch when ACPI/PNP does not describe a controller, so the direct-por=
+t
+> fallback never runs. I have prepared that as a standalone patch -- the
+> relevant hunk is below -- and will send the full patch separately. The
+> selftest workaround can be dropped once it lands.
+You nearly answered nothing.
 
-Given it's 2026, you're a [relative?] newcomer to mm, and you've proposed a
-patch for a very specific part of AI I have to ask - is this AI-generated?
-If so please add an Assisted-by tag as per kernel procedure.
-See https://docs.kernel.org/process/coding-assistants.html
+Does your employer use different kernels for host and guest in KylinOS?
 
-On Fri, Aug 14, 2026 at 07:53:28AM +0900, Daehyeon Ko wrote:
-> Secretmem mappings are charged against RLIMIT_MEMLOCK and marked
-> VM_LOCKED because their pages are unevictable and removed from the direct
-> map.
-
-secretmem is weird in that it does mapping_set_unevictable() and _then_
-marks things with VMA_LOCKED_BIT.
-
-The description though is woefully incomplete - that should be called out.
-
-I'm not really confident you understand this however.
-
-Though 'charged' isn't really the right term here I'd say.
+Huacai
 
 >
-> dup_mmap() clears VM_LOCKED on the child copy, but mremap() uses that
-> flag to decide whether an expansion needs a memlock limit check and
-> accounting. An unprivileged child can therefore expand an inherited
-> secretmem VMA past its limit and populate the added range.
-
-'Unprivileged'? I mean where does privilege come into this? I don't see
-capacity checks or needing escalated privileges anywhere.
-
-And forking from a parent process can only be done by err, the parent
-process?
-
-And what does 'past its limit' mean? You mean the size of the file?
-
-Well, already:
-
-	if (((loff_t)vmf->pgoff << PAGE_SHIFT) >= i_size_read(inode))
-		return vmf_error(-EINVAL);
-
-Again you are lacking clarity and detail which speaks to a lack of
-understanding.
-
-You can already map a secretmem mapping of any size you like, but you'll
-just end up the part of the range as invalid.
-
-What I think you mean is only RLIMIT_LOCKED, and the fact that secretmem
-seeds its folios as unevictable and uses this as its only limit aside from
-memcg memory usage limits?
-
+> diff --git a/drivers/input/serio/i8042-acpipnpio.h b/drivers/input/serio/=
+i8042-acpipnpio.h
+> --- a/drivers/input/serio/i8042-acpipnpio.h
+> +++ b/drivers/input/serio/i8042-acpipnpio.h
+> @@ -1633,8 +1633,14 @@ static int __init i8042_pnp_init(void)
+>  #else
+>                 pr_info("PNP: No PS/2 controller found.\n");
+>  #if defined(__loongarch__)
+> -               if (acpi_disabled =3D=3D 0)
+> -                       return -ENODEV;
+> +               /*
+> +                * LoongArch legacy I/O ports are memory-mapped and are n=
+ot
+> +                * safely probeable when no controller is present: a dire=
+ct
+> +                * probe faults on the QEMU virtual machine and on any FD=
+T-based
+> +                * boot.  Do not fall back to probing them directly; if A=
+CPI/PNP
+> +                * did not describe a controller, assume there is none.
+> +                */
+> +               return -ENODEV;
+>  #else
+>                 if (x86_platform.legacy.i8042 !=3D
+>                                 X86_LEGACY_I8042_EXPECTED_PRESENT)
 >
-> Add a VMA open callback that marks secretmem copies without VM_LOCKED as
-> VM_DONTEXPAND. dup_mmap() invokes the callback after clearing VM_LOCKED,
-> while the original charged mapping retains its existing ability to grow
-> within the limit.
-
-Absolutely no to this. A complete abuse of the hook and an illegal
-operation.
-
->
-> Add a selftest that verifies expansion of an inherited secretmem VMA is
-> rejected.
->
-> Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Daehyeon Ko <4ncienth@gmail.com>
-
-This solution is a horrible hack that doesn't really make any sense at all.
-
-You can expand something here on mremap, but I don't see what that would
-get you.
-
-The range not part of the inode's size and accesses outside its range would
-SIGBUS.
-
-I think what the real problem here is:
-
-- Parent process gets some secretmem memory up to RLIMIT_LOCKED.
-- Fork -> child.
-- Parent exits.
-- Child now has 0 VmLocked pages, can grab more secretmem memory past that limit.
-- Rinse and repeat - can ignore RLIMIT_LOCKED for secretmem.
-
-The real charging, i.e. memcg, all still remains correct.
-
-Your patch doesn't fix this at all.
-
-To address this would require some specific core mm logic to actually
-ensure the range gets accounted by RLIMIT_LOCKED in the child, also.
-
-I'll go think about that a bit.
-
-
-> ---
->  mm/secretmem.c                            | 11 +++++
->  tools/testing/selftests/mm/memfd_secret.c | 58 ++++++++++++++++++++++-
->  2 files changed, 68 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/secretmem.c b/mm/secretmem.c
-> index 4877c262cb1f6f..e5878ce91c768c 100644
-> --- a/mm/secretmem.c
-> +++ b/mm/secretmem.c
-> @@ -108,7 +108,18 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
->  	return ret;
->  }
->
-> +static void secretmem_open(struct vm_area_struct *vma)
-> +{
-> +	/*
-> +	 * dup_mmap() clears VM_LOCKED before calling ->open().  Prevent an
-> +	 * inherited, uncharged mapping from being expanded by mremap().
-> +	 */
-> +	if (!vma_test(vma, VMA_LOCKED_BIT))
-> +		vma_set_flags(vma, VMA_DONTEXPAND_BIT);
-
-This is a completely illegal operation.
-
-You do not change a VMA from being functionally one thing to functionally
-another on fork, especially something that makes a VMA have 'special'
-properties like this.
-
-And yet again I am reminded what a terrible idea it is to _ever_ pass a VMA
-pointer to a hook anywhere.
-
-> +}
-> +
->  static const struct vm_operations_struct secretmem_vm_ops = {
-> +	.open = secretmem_open,
->  	.fault = secretmem_fault,
->  };
->
-> diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
-
-For future reference - keep test patches to another commit.
-
-
-
-> index aac4f795c327bd..3d33487eaaccf3 100644
-> --- a/tools/testing/selftests/mm/memfd_secret.c
-> +++ b/tools/testing/selftests/mm/memfd_secret.c
-> @@ -84,6 +84,61 @@ static void test_mlock_limit(int fd)
->  	pass("mlock limit is respected\n");
->  }
->
-> +static void test_mremap_after_fork(void)
-> +{
-> +	void *mem, *remapped;
-> +	pid_t pid, waited;
-> +	int fd, status;
-> +
-> +	fd = memfd_secret(0);
-> +	if (fd < 0) {
-> +		fail("memfd_secret failed: %s\n", strerror(errno));
-> +		return;
-> +	}
-> +
-> +	if (ftruncate(fd, page_size * 2)) {
-> +		fail("ftruncate failed: %s\n", strerror(errno));
-> +		goto close_fd;
-> +	}
-> +
-> +	mem = mmap(NULL, page_size, prot, mode, fd, 0);
-> +	if (mem == MAP_FAILED) {
-> +		fail("unable to mmap secret memory: %s\n", strerror(errno));
-> +		goto close_fd;
-> +	}
-> +
-> +	pid = fork();
-> +	if (pid < 0) {
-> +		fail("fork failed: %s\n", strerror(errno));
-> +		goto unmap;
-> +	}
-> +
-> +	if (pid == 0) {
-> +		remapped = mremap(mem, page_size, page_size * 2,
-> +				  MREMAP_MAYMOVE);
-> +		if (remapped != MAP_FAILED) {
-> +			munmap(remapped, page_size * 2);
-> +			_exit(KSFT_FAIL);
-> +		}
-> +		_exit(errno == EFAULT ? KSFT_PASS : KSFT_FAIL);
-> +	}
-> +
-> +	do {
-> +		waited = waitpid(pid, &status, 0);
-> +	} while (waited < 0 && errno == EINTR);
-> +
-> +	if (waited == pid && WIFEXITED(status) &&
-> +	    WEXITSTATUS(status) == KSFT_PASS)
-> +		pass("mremap expansion after fork is blocked\n");
-> +	else
-> +		fail("mremap expansion after fork was not blocked\n");
-> +
-> +unmap:
-> +	munmap(mem, page_size);
-> +close_fd:
-> +	close(fd);
-> +}
-> +
->  static void test_vmsplice(int fd, const char *desc)
->  {
->  	ssize_t transferred;
-> @@ -297,7 +352,7 @@ static void prepare(void)
->  				   strerror(errno));
->  }
->
-> -#define NUM_TESTS 6
-> +#define NUM_TESTS 7
->
->  int main(int argc, char *argv[])
->  {
-> @@ -320,6 +375,7 @@ int main(int argc, char *argv[])
->  		ksft_exit_fail_msg("ftruncate failed: %s\n", strerror(errno));
->
->  	test_mlock_limit(fd);
-> +	test_mremap_after_fork();
->  	test_file_apis(fd);
->  	/*
->  	 * We have to run the first vmsplice test before any secretmem page was
-> --
-> 2.54.0
->
-
---
-Cheers, Lorenzo
+> Thanks,
+> George
