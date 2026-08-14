@@ -1,78 +1,130 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from fhigh-b8-smtp.messagingengine.com (fhigh-b8-smtp.messagingengine.com [202.12.124.159])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A24D2931ED;
-	Fri, 14 Aug 2026 01:21:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A8E254AFF;
+	Fri, 14 Aug 2026 01:23:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.159
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786670474; cv=none; b=VGnsa+6wTbLogj3LMJEy+70SZ3y7Z/WCRsPQ007SbXXKNqKMwkumB1W8Es6E9+f466QYOwir5EPm7DKBA3DY3Mx9+bhxBzmo8gmOg86vQTdyrSOaAKmX0nCOqsi74DWgGGW3htvs/hwVv0keHAWxDhzfxyCSHAUJO1VjLGgUges=
+	t=1786670636; cv=none; b=gLRsoUvia99eDfXZZN4m3ae8SRL/XCCdTuUHtiP+RZj9R4NiJCjdVqi3KU1ci8TyMi54KbVrAC1yRmi2o2+i9eohRid8R0kMhhovOWMZs2nqH3WvPHHVH8JNStyx1TQ6yt4IzuEg4ZHulw8gFIByJk2UJmJqkGKNo968YlIl0mA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786670474; c=relaxed/simple;
-	bh=6MOFBcAQJtz1KEg++7AS+7cnBXyHvg/Mg13dg/EVhc0=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HSJS4A2ihK8o8P0rjnex8Y1wTahBpbwdj9kfCzUzppnCG/MDnn9g4zs0ShpvbE3PDxNQXSYecvfsGqrxZT6qsIs6y+DpXnLCGk13f2THvbfMAoBoZLrY1iyHhlod+Gfw1gUVGmNnIjCCTdHIj5eJm0VXsHk/W0Y14CsQjtEqH1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EoaDoWzx; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786670636; c=relaxed/simple;
+	bh=+zmeW9MT0lrfSPGlWuxHOU1VmCjQetEN/rUoTJiMmK4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sZqk1csQm/shyooYoICgjiS56k/rMWhUfVSCA/qpv/RgO5OgAZUadQ8sVMQ7+XNq2pp+y2Af0FydTBBLOQgSlac114Lb+7mH0dx29ran4HhKYytN9Go5lThBSsB4HhM0do3To6QifDwZbpOgNtVH0f/x74yOB5375VIR4BfR/2k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=h3DKAm9D; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=BhtN5Td6; arc=none smtp.client-ip=202.12.124.159
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EoaDoWzx"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 307021F00A3A;
-	Fri, 14 Aug 2026 01:21:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786670472;
-	bh=pGd/Nbzf0/woxXyoYCLtltZgiXfrqaFQ0VzYyGSlY9Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=EoaDoWzxXblj9tj2w4XsJDIbThDRImzmJQF+XQPKbxAzU6+sByK98iJBj1kp/7eFc
-	 4vGOBoEk5u34FzYu4qtlZqMwdiaV6bTTr1FtaRD/6UCbjasAvc1hXaMU7ox/PfmQvC
-	 JcSU46+3zd9vrdz+AbnVnJq3RC/7CNcUNFhGzKPYQreYN/dz2ov7WOT2OTnVGlIRhm
-	 VNlQ5mQladFHrkokfAihIDvNFP2cNo0EJTCq5JKrTJc1VQI0oh/RP8EPt3A568ab8j
-	 iY3PcIxYqyFwNeHY2KfE51d3w38p9LKG5DQUFN6I8eSbUkfcCQeXBh+NU+cwpGGShY
-	 OxmjLFQzTIlZw==
-Date: Thu, 13 Aug 2026 18:21:11 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Xin Xie <xiexinet@gmail.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, andrew+netdev@lunn.ch,
- shuah@kernel.org, kees@kernel.org, petr.wozniak@gmail.com,
- qingfang.deng@linux.dev, fmaurer@redhat.com, luka.gejak@linux.dev,
- bigeasy@linutronix.de, xiaoliang.yang_1@nxp.com, skhawaja@google.com,
- liuhangbin@gmail.com, stable@vger.kernel.org, sdf.kernel@gmail.com
-Subject: Re: [PATCH 1/4] net: hsr: fix packet drops caused by GRO
- superpackets
-Message-ID: <20260813182111.088aee3d@kernel.org>
-In-Reply-To: <20260809121455.1745-2-xiexinet@gmail.com>
-References: <20260809121455.1745-1-xiexinet@gmail.com>
-	<20260809121455.1745-2-xiexinet@gmail.com>
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="h3DKAm9D";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="BhtN5Td6"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id AB0857A03FD;
+	Thu, 13 Aug 2026 21:23:53 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Thu, 13 Aug 2026 21:23:53 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm3; t=1786670633; x=1786757033; bh=KrhbtMYFaxGVwuXnzMlWh
+	0sdoirPJyp1eBdn9qbz2HI=; b=h3DKAm9DGkMiwCUcTeLxXRJVMVa3WBB6IUNSz
+	v0XFPoBORwnJLNulQJ0cHc2jbkvGBMBeA2pg4qqwHy4fPctYnbkTfVS9wB7Rre+m
+	3JROaruJshp/spA23BEKIkpjU4sR2kJV5YhCyiMoLXoA9CxkJe/Y3yuC70BHsfcd
+	t2yhI3iMrWPhsXpIjn4OyIqmgsq7o67KmvHXXFQoUe+1LA8BAjwanW1K9BiDoHCV
+	x56hyL1pyQ1dI7sKKeK373598hFmZfLn+RXKaUAYoaUMJl3PPOFidgqyGuqDn6Qe
+	dnh1K+kUsE8z2Mb5EsTWOwBkLxtsbs/jHU3ahzy6LA3XCjvSA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1786670633; x=1786757033; bh=KrhbtMYFaxGVwuXnzMlWh0sdoirPJyp1eBd
+	n9qbz2HI=; b=BhtN5Td6OKTJ/YXqub1pYaMEbLOH6tI743ffObhe6+USFKtuec5
+	g8GPKJlquyNt6uBSWm3ejDooar8nrG/Q1p0IJ3PQYr/hztOkamyCuBTpwFpiImwC
+	0AEqdffIr8Ap4hYbTyb+YOSHGdVokVLsD95TI+TzLgCpmzbB6wTtzus74nKW3tka
+	hkMYLV20J4Jc0HxYz08f+x645yBB9wOSrGKf5PVUTkYIxSRJJcVQ2thZlU0rh81J
+	52qMIE0KiUtdhKp1amB4g8eBxbs1k4aIhZd0gTdz/rOy8o4Bm+0PXBZU33LhtjXf
+	WJ9qA68EXvbszhTonE+O1f2A1ksKNhYr8rQ==
+X-ME-Sender: <xms:KW5-ajGLWKHW44ZJCiue-KnllJKDzB0P3XyoDSI34MJRzPdtL2njZw>
+    <xme:KW5-aohaX9F8fs_qj12q0axooYJMC5lE42XwIABYG1bc1G0bYLgHagUHuTHt_R528
+    KfTeBgK2jj0O0fm1wArOTD74LvHmtXLoO3oDd9mWr8uDI0Wh6DPyPHL>
+X-ME-Received: <xmr:KW5-agt-yr8ZUe3JFvQGdxHvEdK9fUILvUABX_5XTfUB-6WlPaJ21Vckf5DYajDBaJh6w9PbwqaKG_rYFrK7xsfhMm-BW0U>
+X-ME-Proxy-Cause: dmFkZTF9Oum5zaWpSobsGjnHrZzXYENcktdJq7zh1+dARcDl8OcqaR+P1iz0bf7lSClaN+
+    b2DcXIKpxnAoRTM2CBHRM2hjzg57ch/9U/cItae80BmIVS+mDzfF1EQRzgxvJ8rMxucCbs
+    2s5GLGRRGaBA/mBCPnq9kZ/LGSdyb/1kvzmLC7jcVLJ1/j9bBbArhWRc2WAmMuhLDZadQq
+    JvoIzQuolGp36SGXYFjfsqaBZ0Hzc6q8vcGFsw5RB+7kiEtT2zjG6NBMBVuaHJ4iP8Lgqf
+    RCg6OeUwxsRy11g4tjvc6xrNmfT5b1E1S2BTz2+79brtIXZboPYnvBnoOwbkDjQyGLtunU
+    ScLNcZaBsn1n6WO3aNLHPPiI6k27VQu87tXbg5XOS7q3blej5tv9Z3muk2SRNzVBiUQXub
+    YDSneotab1DzZDQo0ZEW9N9i9l/bwqfs8lflpL29FwIu9uThDVGQd5nvkaJ6edqhdZdluz
+    NxBWDBnoIs7QFixFFcSnr/8xT2//QvqsQ1WuHyc3xe63M0eU5mEUD3bq8sV6NScHfqXDMs
+    5ePO7qkVXyYM6Y7Rk1tVNgGW1v89pCQjOU2VtI7uxqjNxkbSBhyyV+5mATdoqIaImw0v+b
+    lYGr3RfImWTSiXoQicEuqIJem0TNg2VTEvJTgYWdgae4waOSfwE/6nxI6Kxw
+X-ME-Proxy: <xmx:KW5-arsSErWAKtWNZowKl0oOEaPPLQMACWWcewdIbA4gMhycdempwg>
+    <xmx:KW5-alE_OLuscZzoFsn0htx-BCZJlxj06K99D_D8aScG1rPhejX5Jg>
+    <xmx:KW5-amOOZtMX4czn29_U32gfZ15PFLAepF8adCEi9QNwIe2XwaNVcw>
+    <xmx:KW5-akKtphM2Tj0s5CmHwVasuU2sEu5zHnJ4tYYk-qj-USgj48JjeQ>
+    <xmx:KW5-ajtBlE_XYcJ_O0ndnf0fjGzQUHijW6qpyZ1i5XvAa5puRWHWk0Ad>
+Feedback-ID: i80b64ba7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 13 Aug 2026 21:23:52 -0400 (EDT)
+From: Juanlu Herrero <juanlu@fastmail.com>
+To: netdev@vger.kernel.org,
+	dw@davidwei.uk
+Cc: io-uring@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kuba@kernel.org,
+	asml.silence@gmail.com,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	Juanlu Herrero <juanlu@fastmail.com>
+Subject: [PATCH net-next v5 0/6] selftests: net: multithreaded multiqueue iou-zcrx
+Date: Thu, 13 Aug 2026 20:23:42 -0500
+Message-ID: <20260814012348.46958-1-juanlu@fastmail.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sun,  9 Aug 2026 14:14:51 +0200 Xin Xie wrote:
-> HSR/PRP process each wire frame separately for tagging and duplicate
-> discard. GRO on a lower device hides multiple frames in one skb, which
-> cannot be forwarded with valid per-frame metadata.
-> 
-> Disable GRO and GRO_HW when a lower device is enslaved, matching the
-> existing LRO handling.
-> 
-> This is best effort because GRO may be re-enabled and some devices cannot
-> disable GRO_HW. The forward-entry segmentation fix handles plain,
-> trailer-free GSO skbs that still arrive; device-specific fixed-on GRO_HW
-> output is outside this guarantee.
+This series extends the iou-zcrx selftests to be multithreaded while
+preserving existing single-threaded tests.
 
-1) could you explain in more detail why GRO is breaking things?
-GRO shouldn't merge packets with different L2/L2.5 and packets
-with trailers?
+Patches 1 and 2 are prep fixes/cleanups. Patch 3 refactors the server's
+global state. Patches 4 and 5 add the multithreaded client and server.
+Finally, patch 6 adds the python side multithreaded test case.
 
-2) the code seems inspired by LRO but LRO also has
-NETIF_F_UPPER_DISABLES. This change looks rather incomplete.
-Calling it "best effort" seems like an excuse.
+Changes since v4:
+- In patch 4, make cfg_num_threads the default value and remove
+  CONNS_PER_THREAD and associated ternary (David)
+- Use reverse christmas tree for variables (Paolo, David)
+- Address race condition identified by Sashiko (Paolo)
+- use thread barriers to get rid of epoll in the main thread (David)
+- Make napi id matcher helper take a connfd as a param and return the
+  index directly (David)
 
-3) Clashiko has a number of other comments:
-https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260809121455.1745-1-xiexinet@gmail.com
+
+v4: https://lore.kernel.org/netdev/20260729221825.42773-1-juanlu@fastmail.com/
+v3: https://lore.kernel.org/netdev/20260722203950.58550-1-juanlu@fastmail.com/
+v2: https://lore.kernel.org/netdev/20260418094907.3cde57ca@kernel.org/
+v1: https://lore.kernel.org/netdev/20260408163816.2760-1-juanlu@fastmail.com/
+
+Juanlu Herrero (6):
+  selftests: net: fix get_refill_ring_size() to use its local variable
+  selftests: net: remove unused variable in process_recvzc()
+  selftests: net: refactor server state into struct thread_ctx
+  selftests: net: add multithread client support to iou-zcrx
+  selftests: net: add multithread server support to iou-zcrx
+  selftests: net: add rss_multiqueue test variant to iou-zcrx
+
+ .../testing/selftests/drivers/net/hw/Makefile |   7 +-
+ .../selftests/drivers/net/hw/iou-zcrx.c       | 406 ++++++++++++------
+ .../selftests/drivers/net/hw/iou-zcrx.py      |  50 ++-
+ 3 files changed, 332 insertions(+), 131 deletions(-)
+
+
+base-commit: 3da8c3c8b8fa99505624b65ef590482f48e766b6
 -- 
-pw-bot: cr
+2.53.0-Meta
+
