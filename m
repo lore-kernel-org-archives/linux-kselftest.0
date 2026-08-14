@@ -1,198 +1,169 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C447359A68;
-	Fri, 14 Aug 2026 15:15:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.21
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786720504; cv=fail; b=QE9zszq/aC3ODwYoZWc9kLWeZIiij6np287dH2I3KqorJtwNZroKc/9Zje431cVjRoAlNSG96G0ChRC0pRsMptCWPJTFmtlsr4xuiHgw+z2l1U1Ik/pKqhuJzKoW2zqeDWzwfA3qExatP09PtEvYoJAAZOlH2atJO5lq+pgRWTo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786720504; c=relaxed/simple;
-	bh=iKkgCATS2X3Ij7H5vJPOcUSQfO07hMWb4BiKUO39kQg=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=XszO49CEHAR+6/aXEs/1KjeZl0H/K8zBNXt7fC0RBYmgAR9j/TQyiXZeYoZu7FQaHJho1hKPVuMJLtZX/LgoS5IEcPz6/7BYFPr23jHHmo3V/BpBvjN6Q3LzkjubFCixNt+3OnTqzWlS/t9L+lgPQLnj7dszZ/h64POLz+jq5wo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kS3gMWNu; arc=fail smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284B235E94E;
+	Fri, 14 Aug 2026 15:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786721313; cv=none; b=pG9IdEYmZYtk/n6B4MkeCsfPl23I3BZhYoTbSEO6G7zHRKnhIVC5dClepAZqrrlevzRa7ivhFDKgFoRp0oyhpNnBOaPziH1U4N90d1LawhRvcBSnz1oyvxKMWKLfFbYvOaqAV0FLI7CXQPv9yLyVquWFLYv1MaklAWGYge1lftE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786721313; c=relaxed/simple;
+	bh=iwwl7tA9ewbSGRP4ccZNGQKabPl8czDoTI/an99LtVs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZcVL6DhDNHcGyp6gyIijAixtgzzbxwNIjyVhEqj/BWpzzkyxpbhA5VRdOQZjHW9feTAcWguRZbRaaVfFem/0V+wA0XsaFGIpuJzgbfZeKkrxT9JLZPNQz2Gi2TumpFxjuzN8xTU/xvl8i82AVo58qV/VuAun9r6OvRO/b1yZvV4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IOgTfaKe; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kS3gMWNu"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786720503; x=1818256503;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=iKkgCATS2X3Ij7H5vJPOcUSQfO07hMWb4BiKUO39kQg=;
-  b=kS3gMWNuc7EzGEPacfb1wVqsgLt0fNqXxYm9xRDdi9nViD8njXwhGuhQ
-   BD7vKBwCuqjtXXw4F4bzmheQmcpP8Ai1LopY6QaOuvmVpaz+sMYyMrhzm
-   1IW4ux7hLxNMFNHrfpwMAoYboWy9OqSxuaQlFEzClf5y37i8Ap8dyJ9sr
-   4mN8GGB9PQVEOMdUzAKFz6SLe02z7d/mteQ5ngcLXNGBEOvf9SjR/F4pj
-   kQ11NU3CwnJ6+TfoqsO11TGgBEER4DccC0HrypwUOo6SFSRQqTPazuOIu
-   pgyPahT85/ERm3WsPo8ioRTl9SrEU46FSxXrIkzHcomlsHUAk8RWnt6Jn
-   w==;
-X-CSE-ConnectionGUID: aO7qO2QlSKOYSOWg44NjZQ==
-X-CSE-MsgGUID: 9bkztgQGSVqkxnNIWhVosg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11875"; a="87160574"
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="87160574"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2026 08:14:59 -0700
-X-CSE-ConnectionGUID: WJHf8bJSS0aqU3rpN5sL9g==
-X-CSE-MsgGUID: CMJgcoBZRnWHEL8CoR3TMA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,222,1779174000"; 
-   d="scan'208";a="268104369"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Aug 2026 08:14:59 -0700
-Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 14 Aug 2026 08:14:58 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Fri, 14 Aug 2026 08:14:58 -0700
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.13) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Fri, 14 Aug 2026 08:14:57 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YDgseKprJCjaubz85VuWl0oJPBJMAaPDn72wH0DvanmezMRQg2R1SfcWH7lQttGsiLbwIYTfeksq/1JEZWCOt9pvNNGKzdWsNpLq/O2S+6TknNjHlx2ZNwXYtoF7vN+flYClrZHeChJY3HDRJMVWXLxJXSVzd006AVXsOMMtpEIVX8OWZcK5uxLod3r1RmVVdUejkm0/ICVeo4ZOIX8KtimEUxdHXxVH3+9eJcPu4PWBL3aGH6K4K4GjBQrZm9Cjjh7zTkg9fbUvLh7XVMwQ3CegsYJHFjG8tzr54mibbb0+T7oImfVCuC3em3Zx2rO1giWrKEu+qmh8YDUe5gT8MA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=iKkgCATS2X3Ij7H5vJPOcUSQfO07hMWb4BiKUO39kQg=;
- b=OY6B3nA31HyOooca3TLaI/zY3/ITvdA5iDX354RP7X+ZuL9plqu8lMLP8QfR2tYy9BZLU0gDyYGzp0SCKJrSajlxkGyTWPEOtSWzu8OSjOxYorlkFG9eq0tXWpA6YubMk1ZTjhJedZY4KqmXwQMTV+9kxouMGlV6RruHWgJFPkh4Z5QtJkYZ+3ObL88ZB9S9zPCDWFvrpD+1L4m+5xvwYbDFfuVrynQOYdnjNc/Fw9Smpr3XLo3WxGryJPHks/TNqT8QjGOieVaSeHe48+3LS5q+2suHuvC9yvdPCcemP14f38G5n48o8ihmp+droXWtMIiXO8Qy5dzXmbB9av95dA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com (2603:10b6:510:1b5::20)
- by DS4PPF2D9C959A2.namprd11.prod.outlook.com (2603:10b6:f:fc02::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.15; Fri, 14 Aug
- 2026 15:14:51 +0000
-Received: from PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4]) by PH7PR11MB6771.namprd11.prod.outlook.com
- ([fe80::effa:162e:c9c9:a1b4%4]) with mapi id 15.21.0315.014; Fri, 14 Aug 2026
- 15:14:51 +0000
-From: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To: "Aktas, Erdem" <erdemaktas@google.com>, "Li, Xiaoyao"
-	<xiaoyao.li@intel.com>, "shuah@kernel.org" <shuah@kernel.org>,
-	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-	"afranji@google.com" <afranji@google.com>, "kas@kernel.org" <kas@kernel.org>,
-	"Chatre, Reinette" <reinette.chatre@intel.com>, "seanjc@google.com"
-	<seanjc@google.com>, "ira.weiny@intel.com" <ira.weiny@intel.com>,
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>,
-	"isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-	"ackerleytng@google.com" <ackerleytng@google.com>,
-	"pratikrajesh.sampat@amd.com" <pratikrajesh.sampat@amd.com>,
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, "oupton@kernel.org"
-	<oupton@kernel.org>, "wyihan@google.com" <wyihan@google.com>,
-	"sagis@google.com" <sagis@google.com>, "Gao, Chao" <chao.gao@intel.com>,
-	"Wang, Roger" <runanwang@google.com>, "linux-kselftest@vger.kernel.org"
-	<linux-kselftest@vger.kernel.org>, "ajones@ventanamicro.com"
-	<ajones@ventanamicro.com>, "Qiang, Chenyi" <chenyi.qiang@intel.com>
-CC: "kvm@vger.kernel.org" <kvm@vger.kernel.org>, "linux-coco@lists.linux.dev"
-	<linux-coco@lists.linux.dev>, "jmcrey@google.com" <jmcrey@google.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"x86@kernel.org" <x86@kernel.org>
-Subject: Re: [PATCH v14 09/22] KVM: selftests: Expose functions to get default
- sregs values
-Thread-Topic: [PATCH v14 09/22] KVM: selftests: Expose functions to get
- default sregs values
-Thread-Index: AQHdGi/hxauQmPt6b0+OMtPNB7dFw7ac19uAgAAfQYCAANTKgA==
-Date: Fri, 14 Aug 2026 15:14:51 +0000
-Message-ID: <ed157f3d29d1830aa4664db565879c4da945fc48.camel@intel.com>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
-	 <20260722-tdx-selftests-v14-9-15ad654a50db@google.com>
-	 <b7f7ad93360d7e0fe59ab7f3b0ed6fa79375001f.camel@intel.com>
-	 <7782f61a-1384-4960-85c3-5613fbf27729@intel.com>
-In-Reply-To: <7782f61a-1384-4960-85c3-5613fbf27729@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-user-agent: Evolution 3.52.3-0ubuntu1.1 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PH7PR11MB6771:EE_|DS4PPF2D9C959A2:EE_
-x-ms-office365-filtering-correlation-id: 1de02cd6-6cf8-4748-9972-08defa16c9d2
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|23010399003|366016|1800799024|7416014|376014|10067099003|56012099006|4143699003|22082099003|18002099003|11063799006|921020|38070700021;
-x-microsoft-antispam-message-info: YpxuMnlo3kwk/S1N4lSw946N35rnDiSUqS5Dde3sOEm31x1vxDjU16iOiWRAaHE4rXoulKCUpv5Cyk74B8sDEosXEig4BZxFvWjVkWIle3d6uBvaBF/N72Flq0sOJl6m9jrwTIWLKjMJ5b2RYL/3J4CXboV4UKo50GFIiX9fJzjzAcOXVuEX9EQQ8J1zAg4EiygQef6ojpm3hBU55M1sGK6/dtvygiqwmHKJsQkPrmrZ7NyxvAb3iY63DKiY/RRAWm9Qvbf/rBSeASm7qc9bbIkVuAxYknwkYux+JA4NokfN4RND7xf8vhMWCgR9ZtNL9GGHiSuw+X8xGdloBuFN3HyC/7sQ8oQjIdEJzcX0l19HRikR5cSKbOAma+Lc0JTTtkx2o5h3qRaGoXJKNvfTPnNnoqDtWN4l82A7sOLXc5S1yWOBQCTXKlyOAALzEbiWhV/7HTw0AMs/ut82tT8HO7WZ6wEFCHzyLGtez6i2KJLMguILQVucnKz/IgH59wdWf6IGK0Gx7x5+eOugPZIjmR00JBXOpSirwRT2esfpShyQzLmusQERRhMCJCoLwhELIoalLheYkytnYm+0w5zwtHHvP57Tes9qpgcqUyixzvVA9HcucEn7wXw2slK/p5+gqDOnuUlQsTUS5c0H6lOQiaquRLmHvzJAjp2aRyiTJYkcaB1iWa5dRG+ufiJJHcXjmG66nzB1N5u3nsLmP7VOGFdw+H5QZClwjohjb9SkQtTEM/HUuG/a94ZwGZ111jYy
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR11MB6771.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(7416014)(376014)(10067099003)(56012099006)(4143699003)(22082099003)(18002099003)(11063799006)(921020)(38070700021);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?MEdXT2hGWlFsb1pwTHJlMDZpbFFjOHBQRzdHZVNKVDVOZnREUUdwSjBZV1My?=
- =?utf-8?B?bnVOb3FDZFNra1JyUk85RUkrVjlHdTlyMVcvVWkwbUhuQzB0RTRZU1l5TzVh?=
- =?utf-8?B?RW9CVkpORVhhbFNzYkszMVlYalRWQlJwb29ybGhMVFJ4MXUxMFJQV0ZjZ2hx?=
- =?utf-8?B?WFo4RUVpVnJxcmQ0Rk9lOU1kKzZGc3hvQ0l4YVFGTVBKWFBpUHlPSndRM2ZN?=
- =?utf-8?B?eitSb1U2VitnZHB0QWxPT3hRN0JYM2g3VlplYitybFZEVDkwQ0V3ZGZ6K29P?=
- =?utf-8?B?QncwTkdhWTVVUlNKZmRjb2JBN25BWjZtWTgzUWJIaklSalkvSWlxRkxXUWpr?=
- =?utf-8?B?RlBFUStGdWlVTkRvV3ZaV0tSU0RWdjgwTW12Q3Vob2VkNWp1MGQ3b21MRi9P?=
- =?utf-8?B?TklFWVpEcHQ5UDNPSFNqaWxvQlFnTjgxNEdPWDUzdklleGFOZVVZU0szWld1?=
- =?utf-8?B?YWsvWGhCZE9MMnk1SFBOWHBTMW5YaFc3T2pxbTR2RkRxT2JVMXVNRHJXdXRF?=
- =?utf-8?B?cGtMckRUNlc1RWZGNCs4d2l0SURpRjlrSWw5QUdCNVc4OUk1RlFQMXd5WTU5?=
- =?utf-8?B?NGZKZ253SmZQeWo5M0djTHRGN2NWNEpxRHF6M1VvTmxCd2dqYU9TUXVyR1pD?=
- =?utf-8?B?dVBzditYRUUyL3Z1WVMrQkd4LzFybEZIc0Z6cmdlVVFJUnVPZ3JmUEJJOGVs?=
- =?utf-8?B?enBxdCtzUGMrVG84akNmaFU5MU1JaGxxQWlyazFMSjJxQ3Ftbkp3Sy9wQ2JQ?=
- =?utf-8?B?ZXpJVjR1U3FxN0dacnI1SU5oSU0vNmI1VEsvR1RwZmU3TW5OTFUzcHNrK1Jn?=
- =?utf-8?B?QXlXcTRIY0ZCS3VtOXRmSkkra3lWNkN2VnJ0eXpGd1JHNHpwR2NITXZRTCtQ?=
- =?utf-8?B?eDZPdUE4MjN5Z3UyUjNjNHJKb0N4TDRqd0wxUDRCMlBVNUYyWERyb3dhVWhk?=
- =?utf-8?B?MlZyUC9URFMya3VGeEdVRXB2VHkrZWVsRHVhc05yMFNvNHZlbHZPNEthU0kr?=
- =?utf-8?B?ZWdtcHBreGtINFJHTk85QnhCeW11eWRjNlRyK1hjOG9zOW4xRldsQmMrRDZk?=
- =?utf-8?B?TmY1RC9VSDFPMTJ0bTZ5dGg0V1AvMHRoNTViVUwrREUzSzVSYXZFbXFabFJB?=
- =?utf-8?B?ajlTajBkU0dkM1ZPRFVTZjNtWkxmdVJGTUJPYXhYYlVDbWFmRWg3L2VCL1Np?=
- =?utf-8?B?ejJOdEYwWHBqVCsvckZqOGYwNWhBU2pGR2pjUExrbzlMSExab3JmaWZoVnFx?=
- =?utf-8?B?dU9iZkFQR0NXc3o5a1VXYmZWNklVOU5TNWRxOXlpK2pvbkVBSU11RVpoTzlH?=
- =?utf-8?B?QjRqU3hKcGhRVXQvNlE0elZ4Sm5Bam1rbFZ2SHpZblpxSDlIQjI4QlZqRkcr?=
- =?utf-8?B?cHVuWWs5dlJKblhTK2k5UFZGZXU4UXpiM2p4RkN4NXZYejk5SXNuNVlwZDlR?=
- =?utf-8?B?cGtFRkZqd1FNekJmVUpJK1BuRWNKaHZKQStKMjlKQXZZQzBtMHoxdS9HRzdl?=
- =?utf-8?B?SldKbUdCb3RHL3hsU0ZheHdwUG95YWhNMTBzcFgyYWhkelkzaTN0RkFvTjBK?=
- =?utf-8?B?dWQyZHdhZkFWQkZXcG1HT0ZQVHBQWDg0TDE2SDZPZEdxZDNyLzBqMzdnajhV?=
- =?utf-8?B?d2ZYZ1hNSE1nN3lKUVI5MTNMOUxoOFZxeWlwM2RWTnJiZ3hPaXJYS0FEVXV3?=
- =?utf-8?B?d0ZVQ2VxUU1ZU3V1cEVpMmFoSnh5VW1zdjFBbEZIOE1OZi80bE9SbnRCbTN1?=
- =?utf-8?B?RnduTCtES2JGc2s4c0VOcDJLQVdJdnRpcGNoRVNSSjdvVEI5dkVkUEx6eXNy?=
- =?utf-8?B?dXllc3VQL2JYTDg0UXBIUFZpWG1hSk0vYzBCUjhqMloxY2JHZEppWGtEaU95?=
- =?utf-8?B?SS83cE1GRk5EQTcwZ1BneWgzVnByWWUvZUlEUWFSTStxMnFZY3pyRjlkaHBq?=
- =?utf-8?B?czlhR0ZKWUthdEYzekczTXkyamhNbFpNY0hiemo1NFNzQUZiUnlONGFnSisv?=
- =?utf-8?B?S3RmbDZHTkJNZnQ3MmtYYnBsKzZLTDdkM0VwbVpvVGZXeFFFa0lxcUk3dDhj?=
- =?utf-8?B?bnVmVTcvdEVoZ3prbXl4ZGw4WVZtY0ttak1nd1ZuSWNHbEVmTjNHL3NNTWxq?=
- =?utf-8?B?VHBvc2F4ck9PZFk1SC9OdFRMazlXWWJaSFo1SDRsM2hSaHlEaWREU1ZGSHNH?=
- =?utf-8?B?eElab3pwNlQvbkwxQkI2dGFMenhjR1E0ZHEwSHRrdVZIWHhuWEVoQlBYUzNs?=
- =?utf-8?B?NUppekVFQlA4eDdhOXcwd0ZjaEZRVittemZDTzdwMDFqUytUN2EvaFM1clFh?=
- =?utf-8?B?MnZTVnZiM0pXaFhwaXZGNU0rTldUUktML2Y4Rm9PbEJlMlk5aGJnMkVZR0g4?=
- =?utf-8?Q?ACnH/Ug0+Je1Z6fI=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <53439F1A65A1944FBB7C57D4A718AA12@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IOgTfaKe"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7390C1F000E9;
+	Fri, 14 Aug 2026 15:28:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786721311;
+	bh=hfnvBXRVOTB7UT8A93hr18ROs6Wwefr9xY+1heqpBJs=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=IOgTfaKexlHmfyEydeEBLUvjl60WHSEyWt/VjxtmEpyqay1FoofA6G96R9QKQ8mf3
+	 8kMNHXq52CPyXTyTdBL15v6jkqdIjLybowkEjHtwArjmH1fYuVIA5ZZJIf4A/DHJTQ
+	 THmH6zUE04N2SSf0uSd+wrINct/KBc3GsJfcYPxJW8Xz2nIkcQDhU3rSiLYX0xc6aN
+	 Yzd4mlrzNf3DOziy1xWuTFsSq2U7IBUBqHnT/DhEPn/8m6Y88Hm1EQwTDi0NfUPfXT
+	 4qWMr36pZYY2UcuRNXsNajrV5nZCtQ3dWD4Dbw21ErQUxNezHa7XrHSPXFoBLqsHxL
+	 pMAmycp/38pcQ==
+Date: Fri, 14 Aug 2026 17:28:10 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Omar Sandoval <osandov@osandov.com>
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
+	Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Jacob Lalonde <jalalonde@fb.com>, 
+	Shuah Khan <shuah@kernel.org>, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 00/11] coredump: allow to create sparse coredumps on the
+ coredump socket
+Message-ID: <20260814-geflecht-sachdienlich-ergibt-c736999f80ff@brauner>
+References: <20260811-work-coredump-sparse-v1-0-cd3e8b1e356d@kernel.org>
+ <an36FFL9ALwCPhEe@telecaster>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Exchange-RoutingPolicyChecked: eewdsQi+xeCia54sytNCkpxv3epNMr5fN2cDccN1r7WC0GGkiq/Gv2KH8zuPER/HLHN5eppbWbxJEcaBmcnC3a/Ad1DCTnAMyStE2y+e2YRGzryBPisvk6X/smbGoEnZwtSUkk8WqgADXbGVdS1IQ66TOFv8DzeX1sVuYZAtbZtfZl0MHHuO4VNv1k/FuVdhtF2xtAqxukr3cwo+YXNQ7jPk67i8+1nCdZt0pCND0SYSH4+nFsO6fgIQi/B9oVvcp/19esGylJrpBRLpHXUGIm4XLC7njwnHfjv7bntJslRukWVtCBnaiKs4QeOjdIuvWlB7nsfdcdzBQuRl3Hgfxw==
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PH7PR11MB6771.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1de02cd6-6cf8-4748-9972-08defa16c9d2
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Aug 2026 15:14:51.5182
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0aGO74QsvDgehNju37FvlUXyxC9FNcUOr00k1BEl3jzwdxZWc1yS0gKXUQ48WglCkt+24MY5PUkU5+3V4WfsCENNu0SZ4v7hRzShei44lK8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS4PPF2D9C959A2
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <an36FFL9ALwCPhEe@telecaster>
 
-T24gRnJpLCAyMDI2LTA4LTE0IGF0IDEwOjM2ICswODAwLCBYaWFveWFvIExpIHdyb3RlOg0KPiA+
-IElzIHRoaXMgbmVjZXNzYXJ5IGZvciB0aGlzIHBhdGNoPyBJIHNlZSB3aHkgdG8gZXh0cmFjdA0K
-PiA+IGt2bV9nZXRfZGVmYXVsdF9pZHRfbGltaXQoKSBiZWNhdXNlIG5vdyBpdCdzIHVzZWQgdHdp
-Y2UuIEJ1dCB3aHkgZXh0cmFjdA0KPiA+IHRoaXMNCj4gPiBkZWZpbmUgdG9vPw0KPiANCj4ga3Zt
-X2dldF9kZWZhdWx0X2lkdF9saW1pdCgpIHVzZXMgTlVNX0lOVEVSUlVQVFMsIGFuZCANCj4ga3Zt
-X2dldF9kZWZhdWx0X2lkdF9saW1pdCgpIGlzIGV4dHJhY3RlZCBhcyBhIGhlbHBlciBmcm9tIC5j
-IGZpbGUgdG8gLmggDQo+IGZpbGUuIFNob3VsZG4ndCB0aGUgZGVmaW5lIG9mIE5VTV9JTlRFUlJV
-UFRTIGJlIG1vdmVkIHRvZ2V0aGVyPw0KDQpFcnIuIHllcy4gTXkgYmFkLiBUcnlpbmcgdG8gZG8g
-dG9vIG1hbnkgdGhpbmdzIGF0IG9uY2UuDQo=
+On Thu, Aug 13, 2026 at 10:08:36AM -0700, Omar Sandoval wrote:
+> On Tue, Aug 11, 2026 at 05:27:21PM +0200, Christian Brauner wrote:
+> > A coredump generated via the coredump socket ends up transferring
+> > zeroed data when a mapping contains holes. For a large process that
+> > maps a bunch of data that's wasting a ton of work.
+> > 
+> > Jacob ran into this and Josef has bitched^wcomplained about this to me
+> > before. I dislike the coredump_filter bit solution in [1] which stops
+> > each PT_LOAD at the last populated page.
+> > 
+> > The problem is real though. I don't think coredump_filter is where we
+> > need to solve this. That mask says which kinds of memory to include and
+> > it propagates across fork and exec, whereas what is being selected here
+> > is an encoding mechanism.
+> > 
+> > I also think that the usermodehelper - may it swiftly die - isn't really
+> > salvagable for this and it's not the future anyway. The coredump socket
+> > already has a handshake for stuff like this.
+> > 
+> > I always had an idea how this would look like but punted on it back
+> > then. So here it is.
+> > 
+> > A server that raises COREDUMP_HEADER in coredump_ack->mask doesn't get
+> > the coredump as a plain byte stream but as a sequence of frames. Each
+> > one a struct coredump_frame_header followed by what it describes. A data
+> > frame carries its bytes. If a server also raises COREDUMP_SPARSE, zero
+> > frames are sent for unpopulated mappings. They only indicate how many
+> > zero bytes need to be written and to not include data. Reassembling the
+> > frames gives back the same coredump. A debugger and everything else
+> > still see an ordinary core file and nothing outside the coredump server
+> > has to learn anything.
+> 
+> Hey, Christian,
+> 
+> I proposed pretty much this exact solution to Jacob, so thank you for
+> writing it :)
+> 
+> There are a couple of reasons we still wanted to explore the
+> coredump_filter solution:
+> 
+> 1. Our core dumper application is not really prepared to run as a daemon
+>    that listens on a socket, having been written to be a transient
+>    usermode helper. But thinking about it more, maybe that's something
+>    we could paper over with systemd socket activation?
+> 2. More importantly, we sometimes write core dumps to disk and sometimes
+>    upload them to blob storage. For the former, this approach of sending
+>    holes over the socket is great. For the latter, we'd now need to wrap
+>    the dump in some sort of container supporting sparseness that all
+>    consumers then need to reassemble. The coredump_filter approach
+>    doesn't require any changes in that pipeline.
+> 
+> To be transparent, I still prefer the sparse socket approach, but Jacob
+> has different contraints that I'd love to have addressed: it's a
+> trade-off of more work on the core dump server side and all of its
+> consumers vs. in the debug tooling side, which is mostly already there.
+
+Hey Omar,
+
+Good to hear from you.
+
+I think the coredump_filter solution is just the wrong approach. It is
+a hack and in a part of coredumping that is riddled with bolted on hacks
+already.
+
+And I don't think the argument that changing this in userspace is
+somehow not possible holds. It not being wanted is another thing.
+
+This is a new feature and as such it is our responsibility to expose it
+in a way that is correct, maintainable, and clean. I don't think that
+this is possible in the usermodehelper case without doing really hacky
+things.
+
+Plus, I really want usermodehelpers to go away. It really is a CVE
+machine. Most of the ~40 CVEs in the last 10+ years have been in the
+handlers. Mainly because the interface is really not nice and prone to
+security issues. They are spawned from a kthread with kernel level
+privileges that userspace then needs to drop. So really, changing
+userspace is a long-term self-service. :)
+
+And yes, there doesn't have to be anything long-running. They can just
+be socket activated.
+
+The pull request that's up against systemd splits this out into
+systemd-coredump though. So PID 1 itself can also be coredumped. That
+daemon is long-running but it's only job is to spawn workers on incoming
+connections and maintain backpressure. The listen fd is in the fdstore
+and so survives restarts.
+
+>    consumers then need to reassemble. The coredump_filter approach
+>    doesn't require any changes in that pipeline.
+
+We could add COREDUMP_TRAILING_ZERO or whatever so you get that
+truncated behavior over the socket from the earlier patch. While that
+will get rid of smuggling non-memory type bits into the filter and
+won't have the fork/exec inheritance bugs that the other patch has it
+still has other issues.
+
+It will always have to accept an O(hole / PAGE_SIZE) walk under the mmap
+write lock before ever writing a coredump. So a JVM starting with a 64
+gb heap reservation or a go program with a large reservation means
+millions of probes before the dump even starts. The selftest in this
+series dumpds with 256 MB. That amounts to 65536 probes. This seems just
+wrong when we know the holes when we emit the dump.
+
+For default 8 mb pthread stacks that are in a single anon vma 4 × 8 mb =
+32 mb == 8196 pages only 8 of the 8196 pages are resident. Most stacks
+grow down and glibc parks the tcb at the top. That in turn means every
+hole in a stack is a leading hole. The trailing zero hack cannot handle
+that at all wasting a bunch of space.
+
+For the blob storage thing you can just upload the header last. So
+stream the data as the records arrive and compute the corrected phdr
+table at the end. If you're using a temporary file or whatever it
+becomes even easier to rewrite the header.
