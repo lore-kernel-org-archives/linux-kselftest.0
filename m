@@ -1,33 +1,33 @@
-Received: from mta1.migadu.com (out-148.mta1.migadu.com [95.215.58.148])
+Received: from mta0.migadu.com (out-228.mta0.migadu.com [91.218.175.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FD9373BF3
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 23:20:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A3C33E171E
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 23:20:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786749606; cv=none; b=XUOX0JUCkW11IdZzMY6hjD33XvhZhmDuJr6ptZAvd0QBGEjE6uCYY0EleI4kBZnzQp9ym1JP5lOOynW2LODArqXDJKRl3G8HEI9qrVZI99FqiSNVgWumtEa+mD4juebdE2O6PM4v5e3FAmeEK3nNmdR1iK04qDYMQLGOX4WpcqM=
+	t=1786749612; cv=none; b=rTrQDof7rlt+qwJ/DXSlatoVZtIQkr9Ck5uo2fnvILnkrBQ6m1VSh6feljs8pVv65sbwo10uzq0hksacz6qr4A+s1zUWLTbORcckjYPlB6J8OWV4YY5lREvT5Sntc0jk27L2DZHndmamf+EhIJS6th99FbHgW3gJ17OpxFXGFn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786749606; c=relaxed/simple;
-	bh=jeRfA0YnR5WMkbNr7KUT+VYUIX8ePdKg2Lq5oDnizEk=;
+	s=arc-20240116; t=1786749612; c=relaxed/simple;
+	bh=83G2vJPKsA0PHnFZqh1qlVx++CFo11gZxgu88reMHsE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KnXCczdn68h+qglIuEhH6jp5LvbFMhCgmPFefd36zpmm8Dw/5fj8th+jV80MuGbFhpoXO0kKBz1Q5QJor6x2xNKYcSpHV7XEYUcEdE7Uoq2aYFNaTm+4P884JoE6C2xq+17099366NB26asPtabFOB2NpjYa1yBwTA0QuPDyhKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jwGr4BS5; arc=none smtp.client-ip=95.215.58.148
+	 MIME-Version; b=UtOdl45lEatxjqnkKew+yzoFcnt1V5tQfY0yfZiksOjgx4q34Qw+dw8E1PMva5x8HSwEAqWqaf9PYWiC8bbZ8tMDrkskEwrriDy2wMaIiBBhTwjQZzoofjLF1XgVLKJEEHfnSwKhNLeyCe3wBrgD5kBejSUsW66ntpFx9ZLlFB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Fi5YjXtx; arc=none smtp.client-ip=91.218.175.228
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jwGr4BS5"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Fi5YjXtx"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=jeRfA0YnR5WMkbNr7KUT+VYUIX8ePdKg2Lq5oDnizEk=;
+DKIM-Signature: a=rsa-sha256; bh=83G2vJPKsA0PHnFZqh1qlVx++CFo11gZxgu88reMHsE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786749602; v=1; x=1787354402;
- b=jwGr4BS515Fi0N6Dh5IN9M2EUk5qIS72d+rCu4SoS35pdgWq/T/HFszunkB0x+5TIgb50iH9
- /gTTBFjGiObedoWUQbexIQracEtc4/Jo3A8k+LLG/xmCtcfDTLtxr8DfowasikeKPkCDzYS+vXC
- uWVGrO9yd1X4v23f1dSNKNy0=
+ t=1786749606; v=1; x=1787354406;
+ b=Fi5YjXtx5GFUq2VAObg//TtsyuYz/fVmits/baBdggKaXK8hZLCdit+4HHtZGUs7PF4dH6sw
+ bQ2k7UjDW0CoWJXzp1D7wnisRIKXHu288wSsY0bx1kvmqZTO3XIng/dlkaZDguGPjU+xX4qTFao
+ EgXmgmvX3PhClFUNxX6HKmTg=
 X-Envelope-To: linux-kselftest@vger.kernel.org
 Received: from gvineet-fedora-PF5JGVFY.thefacebook.com (2620:10d:c090:500::6:7be4)
-	by smtp.migadu.com with ESMTPS id 194f4ff2d32dc14a;
-	Fri, 14 Aug 2026 23:19:59 +0000
+	by smtp.migadu.com with ESMTPS id 2f2552a5b17687f9;
+	Fri, 14 Aug 2026 23:20:06 +0000
 X-Migadu-Flow: FLOW_OUT
 From: Vineet Gupta <vineet.gupta@linux.dev>
 To: ast@kernel.org,
@@ -47,9 +47,9 @@ Cc: martin.lau@linux.dev,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Vineet Gupta <vineet.gupta@linux.dev>
-Subject: [RFC bpf-next 1/6] bpf: turn bpf_reg_state->precise into a flags field [NFC]
-Date: Fri, 14 Aug 2026 16:19:40 -0700
-Message-ID: <20260814231945.3884596-2-vineet.gupta@linux.dev>
+Subject: [RFC bpf-next 2/6] bpf: move the linked-scalar flags into bpf_reg_state->flags [NFC]
+Date: Fri, 14 Aug 2026 16:19:41 -0700
+Message-ID: <20260814231945.3884596-3-vineet.gupta@linux.dev>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260814231945.3884596-1-vineet.gupta@linux.dev>
 References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
@@ -61,268 +61,454 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_reg_state carries a single bool, ->precise. Other per-register boolean
-properties exist (and more are coming), so convert the bool into a u8,
-call it flags and give the property a name.
+bpf_reg_state->id is an overloaded container for:
+ - "id" corresponding to "linked" registers
+ - linkage type flags
 
-  -	bool precise;
-  +#define BPF_FLAG_PRECISE	(1U << 7)
-  +	u8 flags;
+This was fine so far, however new linkage types are coming so better to
+separate them:
+ - checking for "id" doesn't need masking out flags: this is both
+   cleaner and future-proof
+ - makes ->id full 32-bits
 
-Both occupy 1 byte at the same offset, so the struct layout is unchanged.
-->precise was the last field, after ->frameno, and ->flags takes exactly
-that slot, so the memcmp()/offsetof() based comparisons are unaffected:
-every one of them stops at offsetof(id), offsetof(var_off) or
-offsetof(frameno), i.e. at or before the field either way.
+The best part is no additional space needed as it piggybacks on the
+previous patch creating a flags field.
 
-That tail position is not an accident -- it is where fields live that are
-compared semantically rather than byte-wise. ->precise is never memcmp()ed;
-regsafe() tests it explicitly, and an imprecise old scalar is a wildcard:
+The cleanup of check_scalar_ids() alone is worth this:
 
-	if (!reg_is_precise(rold) && exact == NOT_EXACT)
-		return true;
+ - Its two-level "check the compound id, then check the base id" dance
+   existed only because the flag was part of the key. With a plain id there
+   is one key and a single check_ids() suffices; the flag and delta equality
+   that regsafe() already enforces cover the rest.
 
-PRECISE also takes bit 7 rather than bit 0, because it is the odd one out
-among the flags that will share this byte: the others describe how a register
-relates to its ->id set and are cleared as a group, while PRECISE belongs to
-the register alone and must survive that clearing. Growing the rest up from
-bit 0 keeps a clear-the-link-bits mask from reaching it by construction.
+However, ->flags now sits past the end of every memcmp() window used for
+state comparison (they stop at offsetof(id), offsetof(var_off) or
+offsetof(frameno)), and check_ids() only ever sees the plain ->id. While the
+flags lived in the top bits of ->id they were compared for free -- byte-wise
+by states_maybe_looping(), and as part of the compound key by regs_exact().
+Now they have to be compared explicitly, so add a helper and call it from
+both places that compare a scalar identity:
 
-Reads go through a helper, since they are the common case and read better.
-Set and clear stay open-coded as the usual reg->flags |= / &= ~ bit ops.
+	static bool link_flags_match(rold, rcur)
+	{
+		if (!rold->id)
+			return true;
+		return (rold->flags & BPF_FLAG_ADD_CONST) ==
+		       (rcur->flags & BPF_FLAG_ADD_CONST);
+	}
+
+regsafe() keeps its check in the same spot, now expressed via the helper, so
+its behaviour is unchanged. regs_exact() gains the check it lost; that is the
+one place this patch is not bit-identical to the old compound-key behaviour,
+but it restores the discrimination the compound key provided rather than
+adding new strictness. states_maybe_looping() is covered through
+states_equal(EXACT), which routes to regs_exact().
+
+The helper is the single point to extend when further link flavours are added.
+
+Two more places need care now that these flags share a byte with
+BPF_FLAG_PRECISE:
+
+- clear_scalar_id() and __mark_reg_known() clear only the ADD_CONST bits, not
+  the whole byte, so the precise marking survives as before.
+- sync_linked_regs() does "*reg = *known_reg" and then restores the fields
+  that identify reg rather than known_reg. Only the ADD_CONST bits belong to
+  that set (they used to live in ->id); BPF_FLAG_PRECISE must keep coming
+  from known_reg, as it did when it was a separate bool. So the save/restore
+  is masked to BPF_FLAG_ADD_CONST rather than covering ->flags wholesale.
 
 No functional change intended.
 
 Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
 Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
 ---
- include/linux/bpf_verifier.h | 18 ++++++++++++++++--
- kernel/bpf/backtrack.c       | 22 +++++++++++-----------
- kernel/bpf/log.c             |  2 +-
- kernel/bpf/states.c          | 10 +++++-----
- kernel/bpf/verifier.c        | 14 +++++++++-----
- 5 files changed, 42 insertions(+), 24 deletions(-)
+ include/linux/bpf_verifier.h                  | 18 +++---
+ kernel/bpf/log.c                              |  4 +-
+ kernel/bpf/states.c                           | 64 ++++++++++++-------
+ kernel/bpf/verifier.c                         | 27 ++++----
+ .../bpf/progs/verifier_linked_scalars.c       | 23 +++----
+ 5 files changed, 81 insertions(+), 55 deletions(-)
 
 diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
-index 27b43fda9b17..ebab483fc7f2 100644
+index ebab483fc7f2..2b03fdba9acf 100644
 --- a/include/linux/bpf_verifier.h
 +++ b/include/linux/bpf_verifier.h
-@@ -162,10 +162,24 @@ struct bpf_reg_state {
- 	 * pointing to bpf_func_state.
+@@ -136,16 +136,13 @@ struct bpf_reg_state {
+ 	 * to a specific instance of bpf_iter.
  	 */
- 	u32 frameno;
--	/* if (!precise && SCALAR_VALUE) min/max/tnum don't affect safety */
--	bool precise;
-+	/*
-+	 * Register state flags.
-+	 * BPF_FLAG_PRECISE: if unset, and this is a SCALAR_VALUE, then
-+	 * min/max/tnum don't affect safety.
+ 	/*
+-	 * Upper bit of ID is used to remember relationship between "linked"
+-	 * registers. Example:
++	 * ->id identifies a set of "linked" registers; how a given member
++	 * relates to the others is recorded in ->flags. Example:
+ 	 * r1 = r2;    both will have r1->id == r2->id == N
+-	 * r1 += 10;   r1->id == N | BPF_ADD_CONST and r1->delta == 10
++	 * r1 += 10;   r1 gets BPF_FLAG_ADD_CONST64 and r1->delta == 10
+ 	 * r3 = r2;    both will have r3->id == r2->id == N
+-	 * w3 += 10;   r3->id == N | BPF_ADD_CONST32 and r3->delta == 10
++	 * w3 += 10;   r3 gets BPF_FLAG_ADD_CONST32 and r3->delta == 10
+ 	 */
+-#define BPF_ADD_CONST64 (1U << 31)
+-#define BPF_ADD_CONST32 (1U << 30)
+-#define BPF_ADD_CONST (BPF_ADD_CONST64 | BPF_ADD_CONST32)
+ 	u32 id;
+ 	/*
+ 	 * Tracks the parent object this register was derived from.
+@@ -166,11 +163,16 @@ struct bpf_reg_state {
+ 	 * Register state flags.
+ 	 * BPF_FLAG_PRECISE: if unset, and this is a SCALAR_VALUE, then
+ 	 * min/max/tnum don't affect safety.
+-	 *
+ 	 * PRECISE is a property of this register alone, so it is placed at bit 7,
+ 	 * apart from the link flags, which grow up from bit 0 and are cleared as
+ 	 * a group -- a clear-the-link-bits mask can then never reach it.
 +	 *
-+	 * PRECISE is a property of this register alone, so it is placed at bit 7,
-+	 * apart from the link flags, which grow up from bit 0 and are cleared as
-+	 * a group -- a clear-the-link-bits mask can then never reach it.
-+	 */
-+#define BPF_FLAG_PRECISE	(1U << 7)
-+	u8 flags;
++	 * BPF_FLAG_ADD_CONST{32,64}: this register is (base + ->delta) within
++	 * its ->id set, computed with a 32- or 64-bit ALU add.
+ 	 */
++#define BPF_FLAG_ADD_CONST32	(1U << 0)
++#define BPF_FLAG_ADD_CONST64	(1U << 1)
++#define BPF_FLAG_ADD_CONST	(BPF_FLAG_ADD_CONST32 | BPF_FLAG_ADD_CONST64)
+ #define BPF_FLAG_PRECISE	(1U << 7)
+ 	u8 flags;
  };
- 
-+static inline bool reg_is_precise(const struct bpf_reg_state *reg)
-+{
-+	return reg->flags & BPF_FLAG_PRECISE;
-+}
-+
- static inline s64 reg_smin(const struct bpf_reg_state *reg)
- {
- 	return cnum64_smin(reg->r64);
-diff --git a/kernel/bpf/backtrack.c b/kernel/bpf/backtrack.c
-index a2b18a9f1694..400c69152ed2 100644
---- a/kernel/bpf/backtrack.c
-+++ b/kernel/bpf/backtrack.c
-@@ -675,9 +675,9 @@ void bpf_mark_all_scalars_precise(struct bpf_verifier_env *env,
- 			func = st->frame[i];
- 			for (j = 0; j < BPF_REG_FP; j++) {
- 				reg = &func->regs[j];
--				if (reg->type != SCALAR_VALUE || reg->precise)
-+				if (reg->type != SCALAR_VALUE || reg_is_precise(reg))
- 					continue;
--				reg->precise = true;
-+				reg->flags |= BPF_FLAG_PRECISE;
- 				if (env->log.level & BPF_LOG_LEVEL2) {
- 					verbose(env, "force_precise: frame%d: forcing r%d to be precise\n",
- 						i, j);
-@@ -687,9 +687,9 @@ void bpf_mark_all_scalars_precise(struct bpf_verifier_env *env,
- 				if (!bpf_is_spilled_reg(&func->stack[j]))
- 					continue;
- 				reg = &func->stack[j].spilled_ptr;
--				if (reg->type != SCALAR_VALUE || reg->precise)
-+				if (reg->type != SCALAR_VALUE || reg_is_precise(reg))
- 					continue;
--				reg->precise = true;
-+				reg->flags |= BPF_FLAG_PRECISE;
- 				if (env->log.level & BPF_LOG_LEVEL2) {
- 					verbose(env, "force_precise: frame%d: forcing fp%d to be precise\n",
- 						i, -(j + 1) * 8);
-@@ -851,7 +851,7 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 					reg = &st->frame[0]->regs[i];
- 					bt_clear_reg(bt, i);
- 					if (reg->type == SCALAR_VALUE) {
--						reg->precise = true;
-+						reg->flags |= BPF_FLAG_PRECISE;
- 						*changed = true;
- 					}
- 				}
-@@ -912,10 +912,10 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 					bt_clear_frame_reg(bt, fr, i);
- 					continue;
- 				}
--				if (reg->precise) {
-+				if (reg_is_precise(reg)) {
- 					bt_clear_frame_reg(bt, fr, i);
- 				} else {
--					reg->precise = true;
-+					reg->flags |= BPF_FLAG_PRECISE;
- 					*changed = true;
- 				}
- 			}
-@@ -932,10 +932,10 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 					continue;
- 				}
- 				reg = &func->stack[i].spilled_ptr;
--				if (reg->precise) {
-+				if (reg_is_precise(reg)) {
- 					bt_clear_frame_slot(bt, fr, i);
- 				} else {
--					reg->precise = true;
-+					reg->flags |= BPF_FLAG_PRECISE;
- 					*changed = true;
- 				}
- 			}
-@@ -943,10 +943,10 @@ int bpf_mark_chain_precision(struct bpf_verifier_env *env,
- 				if (!bt_is_frame_stack_arg_slot_set(bt, fr, i))
- 					continue;
- 				reg = &func->stack_arg_regs[i];
--				if (reg->type != SCALAR_VALUE || reg->precise) {
-+				if (reg->type != SCALAR_VALUE || reg_is_precise(reg)) {
- 					bt_clear_frame_stack_arg_slot(bt, fr, i);
- 				} else {
--					reg->precise = true;
-+					reg->flags |= BPF_FLAG_PRECISE;
- 					*changed = true;
- 				}
- 			}
 diff --git a/kernel/bpf/log.c b/kernel/bpf/log.c
-index b740fa73ee26..9a4445d492c9 100644
+index 9a4445d492c9..775b91f806ac 100644
 --- a/kernel/bpf/log.c
 +++ b/kernel/bpf/log.c
-@@ -640,7 +640,7 @@ static void print_reg_state(struct bpf_verifier_env *env,
- 	const char *sep = "";
- 
- 	t = reg->type;
--	if (t == SCALAR_VALUE && reg->precise)
-+	if (t == SCALAR_VALUE && reg_is_precise(reg))
- 		verbose(env, "P");
- 	if (t == SCALAR_VALUE && tnum_is_const(reg->var_off)) {
- 		verbose_snum(env, reg->var_off.value);
+@@ -662,8 +662,8 @@ static void print_reg_state(struct bpf_verifier_env *env,
+ 		verbose(env, "%s", btf_type_name(reg->btf, reg->btf_id));
+ 	verbose(env, "(");
+ 	if (reg->id)
+-		verbose_a("id=%d", reg->id & ~BPF_ADD_CONST);
+-	if (reg->id & BPF_ADD_CONST)
++		verbose_a("id=%d", reg->id);
++	if (reg->flags & BPF_FLAG_ADD_CONST)
+ 		verbose(env, "%+d", reg->delta);
+ 	if (reg->parent_id)
+ 		verbose_a("parent_id=%d", reg->parent_id);
 diff --git a/kernel/bpf/states.c b/kernel/bpf/states.c
-index 4e6aafad33bd..f7a0314fa106 100644
+index f7a0314fa106..d3105b9a9965 100644
 --- a/kernel/bpf/states.c
 +++ b/kernel/bpf/states.c
-@@ -548,7 +548,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
- 			return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
- 			       check_scalar_ids(rold->id, rcur->id, idmap);
- 		}
--		if (!rold->precise && exact == NOT_EXACT)
-+		if (!reg_is_precise(rold) && exact == NOT_EXACT)
- 			return true;
- 		/*
- 		 * Linked register tracking uses rold->id to detect relationships.
-@@ -1034,7 +1034,7 @@ static int propagate_precision(struct bpf_verifier_env *env,
- 		first = true;
- 		for (i = 0; i < BPF_REG_FP; i++, state_reg++) {
- 			if (state_reg->type != SCALAR_VALUE ||
--			    !state_reg->precise)
-+			    !reg_is_precise(state_reg))
- 				continue;
- 			if (env->log.level & BPF_LOG_LEVEL2) {
- 				if (first)
-@@ -1051,7 +1051,7 @@ static int propagate_precision(struct bpf_verifier_env *env,
- 				continue;
- 			state_reg = &state->stack[i].spilled_ptr;
- 			if (state_reg->type != SCALAR_VALUE ||
--			    !state_reg->precise)
-+			    !reg_is_precise(state_reg))
- 				continue;
- 			if (env->log.level & BPF_LOG_LEVEL2) {
- 				if (first)
-@@ -1223,7 +1223,7 @@ static void mark_all_scalars_imprecise(struct bpf_verifier_env *env, struct bpf_
- 			reg = &func->regs[j];
- 			if (reg->type != SCALAR_VALUE)
- 				continue;
--			reg->precise = false;
-+			reg->flags &= ~BPF_FLAG_PRECISE;
- 		}
- 		for (j = 0; j < func->allocated_stack / BPF_REG_SIZE; j++) {
- 			if (!bpf_is_spilled_reg(&func->stack[j]))
-@@ -1231,7 +1231,7 @@ static void mark_all_scalars_imprecise(struct bpf_verifier_env *env, struct bpf_
- 			reg = &func->stack[j].spilled_ptr;
- 			if (reg->type != SCALAR_VALUE)
- 				continue;
--			reg->precise = false;
-+			reg->flags &= ~BPF_FLAG_PRECISE;
- 		}
- 	}
+@@ -370,12 +370,12 @@ static bool check_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+  * to cur_id=0 and pass. With temp IDs: r6 maps X->temp1, r7 tries to map
+  * X->temp2, but X is already mapped to temp1, so the check fails correctly.
+  *
+- * When old_id has BPF_ADD_CONST set, the compound id (base | flag) and the
+- * base id (flag stripped) must both map consistently. Example: old has
+- * r2.id=A, r3.id=A|flag (r3 = r2 + delta), cur has r2.id=B, r3.id=C|flag
+- * (r3 derived from unrelated r4). Without the base check, idmap gets two
+- * independent entries A->B and A|flag->C|flag, missing that A->C conflicts
+- * with A->B. The base ID cross-check catches this.
++ * ->id is a plain identifier -- the ADD_CONST relationship lives in
++ * ->flags -- so there is no compound (base | flag) key to unpack here.
++ * Registers sharing a base id go through one idmap entry, which is what
++ * catches e.g. old r2.id=A, r3.id=A (r3 = r2 + delta) against cur r2.id=B,
++ * r3.id=C: A->B and A->C conflict. Matching ->flags and ->delta are checked
++ * by the caller in regsafe().
+  */
+ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ {
+@@ -384,15 +384,7 @@ static bool check_scalar_ids(u32 old_id, u32 cur_id, struct bpf_idmap *idmap)
+ 
+ 	cur_id = cur_id ? cur_id : ++idmap->tmp_id_gen;
+ 
+-	if (!check_ids(old_id, cur_id, idmap))
+-		return false;
+-	if (old_id & BPF_ADD_CONST) {
+-		old_id &= ~BPF_ADD_CONST;
+-		cur_id &= ~BPF_ADD_CONST;
+-		if (!check_ids(old_id, cur_id, idmap))
+-			return false;
+-	}
+-	return true;
++	return check_ids(old_id, cur_id, idmap);
  }
+ 
+ static void __clean_func_state(struct bpf_verifier_env *env,
+@@ -488,11 +480,32 @@ static int clean_verifier_state(struct bpf_verifier_env *env,
+ 	return 0;
+ }
+ 
++/*
++ * Do rold and rcur describe the same relationship to their ->id set?
++ *
++ * The link flags live in ->flags, which sits past the end of every memcmp()
++ * window used for state comparison, and check_ids() only ever sees the plain
++ * ->id. So unlike when these bits rode along in the top of ->id, they have to
++ * be compared explicitly everywhere ->id is.
++ *
++ * Only meaningful when rold carries an id: the flags are only ever set
++ * together with one, so rold->id == 0 implies none of them is set.
++ */
++static bool link_flags_match(const struct bpf_reg_state *rold,
++			     const struct bpf_reg_state *rcur)
++{
++	if (!rold->id)
++		return true;
++
++	return (rold->flags & BPF_FLAG_ADD_CONST) == (rcur->flags & BPF_FLAG_ADD_CONST);
++}
++
+ static bool regs_exact(const struct bpf_reg_state *rold,
+ 		       const struct bpf_reg_state *rcur,
+ 		       struct bpf_idmap *idmap)
+ {
+ 	return memcmp(rold, rcur, offsetof(struct bpf_reg_state, id)) == 0 &&
++	       link_flags_match(rold, rcur) &&
+ 	       check_ids(rold->id, rcur->id, idmap) &&
+ 	       check_ids(rold->parent_id, rcur->parent_id, idmap);
+ }
+@@ -554,7 +567,7 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 * Linked register tracking uses rold->id to detect relationships.
+ 		 * When rold->id == 0, the register is independent and any linking
+ 		 * in rcur only adds constraints. When rold->id != 0, we must verify
+-		 * id mapping and (for BPF_ADD_CONST) offset consistency.
++		 * id mapping and (for BPF_FLAG_ADD_CONST) offset consistency.
+ 		 *
+ 		 * +------------------+-----------+------------------+---------------+
+ 		 * |                  | rold->id  | rold + ADD_CONST | rold->id == 0 |
+@@ -590,17 +603,24 @@ static bool regsafe(struct bpf_verifier_env *env, struct bpf_reg_state *rold,
+ 		 */
+ 
+ 		/*
+-		 * ADD_CONST flags must match exactly: BPF_ADD_CONST32 and
+-		 * BPF_ADD_CONST64 have different linking semantics in
++		 * ADD_CONST flags must match exactly: BPF_FLAG_ADD_CONST32 and
++		 * BPF_FLAG_ADD_CONST64 have different linking semantics in
+ 		 * sync_linked_regs() (alu32 zero-extends, alu64 does not),
+ 		 * so pruning across different flag types is unsafe.
+ 		 */
+-		if (rold->id &&
+-		    (rold->id & BPF_ADD_CONST) != (rcur->id & BPF_ADD_CONST))
++		if (!link_flags_match(rold, rcur))
+ 			return false;
+ 
+-		/* Both have offset linkage: offsets must match */
+-		if ((rold->id & BPF_ADD_CONST) && rold->delta != rcur->delta)
++		/*
++		 * Both have offset linkage: offsets must match. The rold->id
++		 * test is redundant today -- BPF_FLAG_ADD_CONST is only ever set
++		 * together with an id -- but it used to be structural, because
++		 * the flag lived in the id itself. Keep it explicit so the
++		 * invariant does not rest on every ->id = 0 site remembering to
++		 * clear ->flags too.
++		 */
++		if (rold->id && (rold->flags & BPF_FLAG_ADD_CONST) &&
++		    rold->delta != rcur->delta)
+ 			return false;
+ 
+ 		if (!check_scalar_ids(rold->id, rcur->id, idmap))
 diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-index 6ac1afced20b..8925749d636e 100644
+index 8925749d636e..93e69116ca9e 100644
 --- a/kernel/bpf/verifier.c
 +++ b/kernel/bpf/verifier.c
-@@ -1830,7 +1830,9 @@ static void __mark_reg_const_zero(const struct bpf_verifier_env *env, struct bpf
- 	/* all scalars are assumed imprecise initially (unless unprivileged,
- 	 * in which case everything is forced to be precise)
- 	 */
--	reg->precise = !env->bpf_capable;
-+	reg->flags &= ~BPF_FLAG_PRECISE;
-+	if (!env->bpf_capable)
-+		reg->flags |= BPF_FLAG_PRECISE;
+@@ -1806,6 +1806,7 @@ static void __mark_reg_known(struct bpf_reg_state *reg, u64 imm)
+ 	       offsetof(struct bpf_reg_state, var_off) - sizeof(reg->type));
+ 	reg->id = 0;
+ 	reg->parent_id = 0;
++	reg->flags &= ~BPF_FLAG_ADD_CONST;
+ 	___mark_reg_known(reg, imm);
  }
  
- static void mark_reg_known_zero(struct bpf_verifier_env *env,
-@@ -2139,13 +2141,14 @@ void bpf_mark_reg_unknown_imprecise(struct bpf_reg_state *reg)
- }
- 
- /* Mark a register as having a completely unknown (scalar) value,
-- * initialize .precise as true when not bpf capable.
-+ * set BPF_FLAG_PRECISE when not bpf capable.
-  */
- static void __mark_reg_unknown(const struct bpf_verifier_env *env,
- 			       struct bpf_reg_state *reg)
+@@ -3308,6 +3309,7 @@ static void clear_scalar_id(struct bpf_reg_state *reg)
  {
- 	bpf_mark_reg_unknown_imprecise(reg);
--	reg->precise = !env->bpf_capable;
-+	if (!env->bpf_capable)
-+		reg->flags |= BPF_FLAG_PRECISE;
+ 	reg->id = 0;
+ 	reg->delta = 0;
++	reg->flags &= ~BPF_FLAG_ADD_CONST;
  }
  
- static void mark_reg_unknown(struct bpf_verifier_env *env,
-@@ -7506,7 +7509,8 @@ static void maybe_widen_reg(struct bpf_verifier_env *env,
+ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
+@@ -3320,7 +3322,7 @@ static void assign_scalar_id_before_mov(struct bpf_verifier_env *env,
+ 	 * rY->id has special linked register already.
+ 	 * Cleared it, since multiple rX += const are not supported.
+ 	 */
+-	if (src_reg->id & BPF_ADD_CONST)
++	if (src_reg->flags & BPF_FLAG_ADD_CONST)
+ 		clear_scalar_id(src_reg);
+ 	/*
+ 	 * Ensure that src_reg has a valid ID that will be copied to
+@@ -14950,7 +14952,7 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 			off = -off;
+ 		}
+ 
+-		if (dst_reg->id & BPF_ADD_CONST) {
++		if (dst_reg->flags & BPF_FLAG_ADD_CONST) {
+ 			/*
+ 			 * If the register already went through rX += val
+ 			 * we cannot accumulate another val into rx->off.
+@@ -14959,9 +14961,9 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
+ 			clear_scalar_id(dst_reg);
+ 		} else {
+ 			if (alu32)
+-				dst_reg->id |= BPF_ADD_CONST32;
++				dst_reg->flags |= BPF_FLAG_ADD_CONST32;
+ 			else
+-				dst_reg->id |= BPF_ADD_CONST64;
++				dst_reg->flags |= BPF_FLAG_ADD_CONST64;
+ 			dst_reg->delta = off;
+ 		}
+ 	} else {
+@@ -15886,7 +15888,7 @@ static void __collect_linked_regs(struct linked_regs *reg_set, struct bpf_reg_st
+ {
+ 	struct linked_reg *e;
+ 
+-	if (reg->type != SCALAR_VALUE || (reg->id & ~BPF_ADD_CONST) != id)
++	if (reg->type != SCALAR_VALUE || reg->id != id)
  		return;
- 	if (rold->type != rcur->type)
- 		return;
--	if (rold->precise || rcur->precise || scalars_exact_for_widen(rold, rcur))
-+	if (reg_is_precise(rold) || reg_is_precise(rcur) ||
-+	    scalars_exact_for_widen(rold, rcur))
- 		return;
- 	__mark_reg_unknown(env, rcur);
+ 
+ 	e = linked_regs_push(reg_set);
+@@ -15914,7 +15916,6 @@ static void collect_linked_regs(struct bpf_verifier_env *env,
+ 	u16 live_regs;
+ 	int i, j;
+ 
+-	id = id & ~BPF_ADD_CONST;
+ 	for (i = vstate->curframe; i >= 0; i--) {
+ 		live_regs = aux[bpf_frame_insn_idx(vstate, i)].live_regs_before;
+ 		func = vstate->frame[i];
+@@ -15950,18 +15951,19 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 				: &vstate->frame[e->frameno]->stack[e->spi].spilled_ptr;
+ 		if (reg->type != SCALAR_VALUE || reg == known_reg)
+ 			continue;
+-		if ((reg->id & ~BPF_ADD_CONST) != (known_reg->id & ~BPF_ADD_CONST))
++		if (reg->id != known_reg->id)
+ 			continue;
+ 		/*
+ 		 * Skip mixed 32/64-bit links: the delta relationship doesn't
+ 		 * hold across different ALU widths.
+ 		 */
+-		if (((reg->id ^ known_reg->id) & BPF_ADD_CONST) == BPF_ADD_CONST)
++		if (((reg->flags ^ known_reg->flags) & BPF_FLAG_ADD_CONST) == BPF_FLAG_ADD_CONST)
+ 			continue;
+-		if ((!(reg->id & BPF_ADD_CONST) && !(known_reg->id & BPF_ADD_CONST)) ||
++		if ((!(reg->flags & BPF_FLAG_ADD_CONST) && !(known_reg->flags & BPF_FLAG_ADD_CONST)) ||
+ 		    reg->delta == known_reg->delta) {
+ 			*reg = *known_reg;
+ 		} else {
++			u8 saved_add_const = reg->flags & BPF_FLAG_ADD_CONST;
+ 			s32 saved_off = reg->delta;
+ 			u32 saved_id = reg->id;
+ 
+@@ -15976,11 +15978,12 @@ static void sync_linked_regs(struct bpf_verifier_env *env, struct bpf_verifier_s
+ 			 */
+ 			reg->delta = saved_off;
+ 			reg->id = saved_id;
++			reg->flags = (reg->flags & ~BPF_FLAG_ADD_CONST) | saved_add_const;
+ 
+ 			scalar32_min_max_add(reg, &fake_reg);
+ 			scalar_min_max_add(reg, &fake_reg);
+ 			reg->var_off = tnum_add(reg->var_off, fake_reg.var_off);
+-			if ((reg->id | known_reg->id) & BPF_ADD_CONST32)
++			if ((reg->flags | known_reg->flags) & BPF_FLAG_ADD_CONST32)
+ 				zext_32_to_64(reg);
+ 			reg_bounds_sync(reg);
+ 		}
+@@ -17007,7 +17010,7 @@ void bpf_clear_singular_ids(struct bpf_verifier_env *env,
+ 			continue;
+ 		if (!reg->id)
+ 			continue;
+-		idset_cnt_inc(idset, reg->id & ~BPF_ADD_CONST);
++		idset_cnt_inc(idset, reg->id);
+ 	}));
+ 
+ 	bpf_for_each_reg_in_vstate(st, func, reg, ({
+@@ -17015,7 +17018,7 @@ void bpf_clear_singular_ids(struct bpf_verifier_env *env,
+ 			continue;
+ 		if (!reg->id)
+ 			continue;
+-		if (idset_cnt_get(idset, reg->id & ~BPF_ADD_CONST) == 1)
++		if (idset_cnt_get(idset, reg->id) == 1)
+ 			clear_scalar_id(reg);
+ 	}));
  }
-@@ -14876,7 +14880,7 @@ static int adjust_reg_min_max_vals(struct bpf_verifier_env *env,
- 				return err;
- 			return adjust_ptr_min_max_vals(env, insn,
- 						       dst_reg, src_reg);
--		} else if (dst_reg->precise) {
-+		} else if (reg_is_precise(dst_reg)) {
- 			/* if dst_reg is precise, src_reg should be precise as well */
- 			err = mark_chain_precision(env, insn->src_reg);
- 			if (err)
+diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+index d571fbfc86a3..c80747c16bcf 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
++++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+@@ -349,8 +349,9 @@ l0_%=:							\
+ }
+ 
+ /*
+- * Test that sync_linked_regs() checks reg->id (the linked target register)
+- * for BPF_ADD_CONST32 rather than known_reg->id (the branch register).
++ * Test that sync_linked_regs() consults reg->flags (the linked target
++ * register) for BPF_FLAG_ADD_CONST32, not just known_reg->flags (the branch
++ * register): the gate is (reg->flags | known_reg->flags).
+  */
+ SEC("socket")
+ __success
+@@ -360,7 +361,7 @@ __naked void scalars_alu32_zext_linked_reg(void)
+ 	call %[bpf_get_prandom_u32];				\
+ 	w6 = w0;		/* r6 in [0, 0xFFFFFFFF] */	\
+ 	r7 = r6;		/* linked: same id as r6 */	\
+-	w7 += 1;		/* alu32: r7.id |= BPF_ADD_CONST32 */ \
++	w7 += 1;		/* alu32: r7.flags |= BPF_FLAG_ADD_CONST32 */ \
+ 	r8 = 0xFFFFffff ll;					\
+ 	if r6 < r8 goto l0_%=;					\
+ 	/* r6 in [0xFFFFFFFF, 0xFFFFFFFF] */			\
+@@ -381,7 +382,7 @@ l0_%=:								\
+ 
+ /*
+  * Test that sync_linked_regs() skips propagation when one register used
+- * alu32 (BPF_ADD_CONST32) and the other used alu64 (BPF_ADD_CONST64).
++ * alu32 (BPF_FLAG_ADD_CONST32) and the other used alu64 (BPF_FLAG_ADD_CONST64).
+  * The delta relationship doesn't hold across different ALU widths.
+  */
+ SEC("socket")
+@@ -392,9 +393,9 @@ __naked void scalars_alu32_alu64_cross_type(void)
+ 	call %[bpf_get_prandom_u32];				\
+ 	w6 = w0;		/* r6 in [0, 0xFFFFFFFF] */	\
+ 	r7 = r6;		/* linked: same id as r6 */	\
+-	w7 += 1;		/* alu32: BPF_ADD_CONST32, delta = 1 */ \
++	w7 += 1;		/* alu32: BPF_FLAG_ADD_CONST32, delta = 1 */ \
+ 	r8 = r6;		/* linked: same id as r6 */	\
+-	r8 += 2;		/* alu64: BPF_ADD_CONST64, delta = 2 */ \
++	r8 += 2;		/* alu64: BPF_FLAG_ADD_CONST64, delta = 2 */ \
+ 	r9 = 0xFFFFffff ll;					\
+ 	if r7 < r9 goto l0_%=;					\
+ 	/* r7 = 0xFFFFFFFF */					\
+@@ -416,7 +417,7 @@ l0_%=:								\
+ /*
+  * Test that regsafe() prevents pruning when two paths reach the same program
+  * point with linked registers carrying different ADD_CONST flags (one
+- * BPF_ADD_CONST32 from alu32, another BPF_ADD_CONST64 from alu64).
++ * BPF_FLAG_ADD_CONST32 from alu32, another BPF_FLAG_ADD_CONST64 from alu64).
+  */
+ SEC("socket")
+ __failure __msg("div by zero")
+@@ -431,11 +432,11 @@ __naked void scalars_alu32_alu64_regsafe_pruning(void)
+ 	call %[bpf_get_prandom_u32];				\
+ 	if r0 > 0 goto l_pathb_%=;				\
+ 	/* Path A: alu32 */					\
+-	w7 += 1;		/* BPF_ADD_CONST32, delta = 1 */\
++	w7 += 1;		/* BPF_FLAG_ADD_CONST32, delta = 1 */\
+ 	goto l_merge_%=;					\
+ l_pathb_%=:							\
+ 	/* Path B: alu64 */					\
+-	r7 += 1;		/* BPF_ADD_CONST64, delta = 1 */\
++	r7 += 1;		/* BPF_FLAG_ADD_CONST64, delta = 1 */\
+ l_merge_%=:							\
+ 	/* Merge point: regsafe() compares path B against cached path A. */ \
+ 	/* Narrow r6 to trigger sync_linked_regs for r7 */	\
+@@ -593,7 +594,7 @@ l_exit_%=:							\
+ }
+ 
+ /*
+- * Test that stale delta from a cleared BPF_ADD_CONST does not leak
++ * Test that stale delta from a cleared BPF_FLAG_ADD_CONST does not leak
+  * through assign_scalar_id_before_mov() into a new id, causing
+  * sync_linked_regs() to compute an incorrect offset.
+  */
+@@ -648,7 +649,7 @@ l_exit_%=:							\
+ }
+ 
+ /*
+- * Test that regsafe() verifies base_id consistency for BPF_ADD_CONST
++ * Test that regsafe() verifies base_id consistency for BPF_FLAG_ADD_CONST
+  * linked scalars during state pruning.
+  *
+  * The false branch (explored first) links R3 to R2 via ADD_CONST.
 -- 
 2.53.0-Meta
 
