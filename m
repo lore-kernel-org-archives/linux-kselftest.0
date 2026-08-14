@@ -1,203 +1,136 @@
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F029374A17;
-	Fri, 14 Aug 2026 07:02:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4186A3E7625;
+	Fri, 14 Aug 2026 07:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786690951; cv=none; b=dVRgTWvEAu5RtHIcIP+bqwdpav9LV3zbK/QA/bqzNxLC2041BlkmTs08hHREJek7IoqseBkRUthBdkRB/jBRw7tZ1YuV/g9ojjfbiYgbQk2p7dmecksMBBiWvwnnDYE8wC9cxHWQRwHw7dSOM76JsEAJx/1CWhvVMD7jaO+2EDI=
+	t=1786691595; cv=none; b=nubi4IrW4DmR2/XeZoaSNGXHiQZkCT8MXEUBTWIf6yGz57BhlIwVZWS50XWqDQSBD/M3apmYDBijIKlUHrSfF+zbk0wCYL129QjA5p2zj3UWxbp73rQArlrGzYHvpOSabPIHcHzI4Xb1kUM/Lf1J96RYQ9iz/R2vJdbqA+WbsuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786690951; c=relaxed/simple;
-	bh=GALK1RxRiXQgyLss6FcjsjjkccYATFPtuqlET9PD8TY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HyKED0ulcoZRFC6O1kA080EduunXC1120WzfXBWWKWcpHurJydzt1HP6XXapL62GxrDYLbBGbbJLliXTKQiGGNqDinBAobfmvA0ITKxhA4sALqXFXoIGwnvKEYjLrNu1u0DKfMFBm+fEUbzltHIaoH+Djd6wRdTJ+uOx/vBX7cA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=casper.srs.infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=YFu7T01j; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=casper.srs.infradead.org
+	s=arc-20240116; t=1786691595; c=relaxed/simple;
+	bh=yqP4tSBZtLGvea0WQ/QK/61MC4Kyq0gUuWOtLvjgkNo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=d/91oqkbVqQ0zHYHJhhqIRfBlJXZT5fb+MUU1wsK6qt7gNnUjBuH5ChFqwH9rKh+R/2jE7Pnelkul6qaObKSpWvmLzxQw/JMLjAjoTAuhR4uIzjs9QCSNhvuFNNLpItHpejE/nt1bvep90UG8jGSxLXPTZu1khl4UU731MMVqPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BREEoX6s; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="YFu7T01j"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
-	In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=GALK1RxRiXQgyLss6FcjsjjkccYATFPtuqlET9PD8TY=; b=YFu7T01jc4h7HwAPbbwrSDM0bc
-	WcNQUwOsz0TxVSfzXGiQ2qZy4zksUd5M4j/juh5rqGI7A0dRFzJmBBo9Th4Q1yZ6+Mx5ksBuITnfs
-	NlBh6PqgWyhtjZvWEt2f6fi+xWQZIgJ47N4Vku1sYoaxoVX8x1Fyy2bs9HyCPD2b7C75HoHiw18jG
-	Ez38xozW6aHUO79EFj0kI9L4jeTsjUirMP/Hei6Mse7y9374JhEKZyAxP+wDmRbHaJkr/CJjvPrO+
-	1RUkdqLrz2Rv0MssrWlQ7VYfrMMRIIgwBi0sAZROHJ0tND7pOEVyWmr+LD7hFGA6lb9WzIY6SoWLa
-	W+h6tJWw==;
-Received: from [2001:8b0:10b:5:84af:4c52:575c:6551] (helo=u09cd745991455d.ant.amazon.com)
-	by casper.infradead.org with esmtpsa (Exim 4.99.1 #2 (Red Hat Linux))
-	id 1wulva-00000004mKe-3eC2;
-	Fri, 14 Aug 2026 07:02:07 +0000
-Message-ID: <c5c532e01309c8c73de2b0f393539b608c495f1f.camel@infradead.org>
-Subject: Re: [PATCH v7 17/36] KVM: x86: Allow KVM master clock mode when
- TSCs are offset from each other
-From: David Woodhouse <dwmw2@infradead.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>,  Borislav Petkov	 <bp@alien8.de>, Dave
- Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"	
- <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>, Juergen Gross	
- <jgross@suse.com>, Boris Ostrovsky <boris.ostrovsky@oracle.com>, Paul
- Durrant	 <paul@xen.org>, Jonathan Cameron <jic23@kernel.org>, Sascha
- Bischoff	 <Sascha.Bischoff@arm.com>, Marc Zyngier <maz@kernel.org>, Joey
- Gouly	 <joey.gouly@arm.com>, Jack Allister <jalliste@amazon.com>, Dongli
- Zhang	 <dongli.zhang@oracle.com>, joe.jin@oracle.com, kvm@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	xen-devel@lists.xenproject.org, linux-kselftest@vger.kernel.org
-Date: Fri, 14 Aug 2026 08:01:57 +0100
-In-Reply-To: <anusv0DloFhLMMoW@google.com>
-References: <ansywxh0VX5rtfWc@google.com>
-	 <e256fa4af96e916ba30019cbba501fa896025fb0.camel@infradead.org>
-	 <antQYJvRxJxOjtut@google.com>
-	 <f5dc701cf3319a7b3c8fd1497f26d051aa9fa3ba.camel@infradead.org>
-	 <antb01WqOrs-tztm@google.com>
-	 <6ab49538675d97f1f4bf01574b1b066aae0bc05c.camel@infradead.org>
-	 <ants4VjfAiblaWsl@google.com>
-	 <3dc73f745b6abfd1eb53e7d3fce2067eaa3b3c92.camel@infradead.org>
-	 <anuYNxD81OE3MrQw@google.com>
-	 <5efe7a3914a3610ee00a487379caff84af6aa731.camel@infradead.org>
-	 <anusv0DloFhLMMoW@google.com>
-Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
-	boundary="=-B3TdkSrYLCzPBl0c8lic"
-User-Agent: Evolution 3.60.3-0ubuntu1~ppa9~24.04 
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BREEoX6s"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 944F04E41220;
+	Fri, 14 Aug 2026 07:13:04 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5E7056046D;
+	Fri, 14 Aug 2026 07:13:04 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 418DB11C4E895;
+	Fri, 14 Aug 2026 09:12:55 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1786691579; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=UamOckhX2fid98x7el6hlfeD34U7Ll/vltEZg4yRc0U=;
+	b=BREEoX6sWj+t/i1mrq/BtGlEhT+qSkbHCTl+bDELDe8r+AWZcxwY5ZLVlXAwNNSt/4NRgY
+	zzu7qj4j9ySzjUE4Mh6F7OH4G7hIkZOnAj93zHut/A672EQIJQwaj5d9+N0Z3oFElzza4G
+	nE+DmDrWcIFd85YabaEySGCvmY9D9u1r5LdtAe2KAIkvqY1t1jDtnCwTxRVITFlScny0GU
+	LNzYO/tsjcNu5ehCs2+S/TKEKUsN6XL2fg7WgfO7AGfIWwv0VFiWKjAjbUVk4xaIDC/6nN
+	8/wulF4ufcyaPRh+wj7wT/N4Vh0SSeOf32Wp1yIR/A8H4v84khuL907NfE/GcQ==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf v5 0/2] selftest/bpf: make test_tc_tunnel and
+ test_tc_edt more robust to CI load
+Date: Fri, 14 Aug 2026 09:11:26 +0200
+Message-Id: <20260814-tc_tunnel_flaky-v5-0-5b93d030c42c@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/3XOwU4DIRAG4FdpOIsBBpbFk+9hTAPsYNEtNAvd2
+ DT77tL1YM3qcSb/fP9cScEpYiFPuyuZcI4l5tQG9bAj/mDTG9I4tJkIJjqmOaPV7+s5JRz3YbQ
+ fFyo0GssNdwMD0q5OE4b4uYovxJ0Cef1elrN7R19v1i12iKXm6bL2znwN/1sxc8qpFNY6BcZYa
+ Z5dznWM6dHn4+rP4kfoGWwF0YROaSd6PQSr1VaAO4HzrQCU0V53QSJzvmOwFeS98McPsv0ACuQ
+ QIKAB9ltYluULUnhjgY0BAAA=
+X-Change-ID: 20260710-tc_tunnel_flaky-27e9a191bd03
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
+Hello,
+this is the v5 of the series aiming to reduce the flakyness of
+tc_tunnel/tc_edt tests in CI. This revision just fixes multi-line
+comments style, not only for the updated helper but for the whole
+network_helpers.c file
 
---=-B3TdkSrYLCzPBl0c8lic
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+---
+Changes in v5:
+- reformat multi-line comments
+- collect Ihor's Acked-by
+- Link to v4: https://patch.msgid.link/20260813-tc_tunnel_flaky-v4-1-3534df3fe930@bootlin.com
 
-On Tue, 2026-08-11 at 16:14 -0700, Sean Christopherson wrote
-> I'm not totally opposed to a broader GET, but we should definitely get Pa=
-olo's
-> eyes on this sooner than later.
+Changes in v4:
+- dropped the polling loop in favor of a larger, connect-specific timeout
+- drop timeout configuration from tc_edt test
+- Link to v3: https://patch.msgid.link/20260811-tc_tunnel_flaky-v3-0-876f4e0bc603@bootlin.com
 
-We've been saying that for two years. Shall I bring a net and a whip to
-KVM Forum? Or Plumbers? :)
+Changes in v3:
+- set errno before logging errors
+- respect time budget set by
+- respect opts->timeout_ms when polling: only poll for the remaining
+  time not already consume by connect()
+- keep polling if poll returns with EINTR
+- reorder early returns and add intermediate variables to clarify code
+  flow
+- Link to v2: https://patch.msgid.link/20260803-tc_tunnel_flaky-v2-1-657b287dfa75@bootlin.com
 
---=-B3TdkSrYLCzPBl0c8lic
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Transfer-Encoding: base64
+Changes in v2:
+- drop unneeded initialization
+- add back error message for immediate connection failure, and slightly
+  reword the async connection failure error message
+- Link to v1: https://patch.msgid.link/20260710-tc_tunnel_flaky-v1-1-42aab5399a49@bootlin.com
 
-MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCE8Ew
-ggWvMIIEl6ADAgECAhANkOKMSmGXhF5eMl0rsRhvMA0GCSqGSIb3DQEBDAUAMGUxCzAJBgNVBAYT
-AlVTMRUwEwYDVQQKEwxEaWdpQ2VydCBJbmMxGTAXBgNVBAsTEHd3dy5kaWdpY2VydC5jb20xJDAi
-BgNVBAMTG0RpZ2lDZXJ0IEFzc3VyZWQgSUQgUm9vdCBHMjAeFw0yNDAzMTMwMDAwMDBaFw0zNDAz
-MTIyMzU5NTlaMGIxCzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UE
-AxMxRGlnaUNlcnQgQXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTCCAiIw
-DQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBAOfSIeC0vv1xPQ+dgSxbIIrkaru6skAWJYaGFzmv
-q4Kq+2wU2jxhcWlJg/JeP5jEkq/LM3pn5aaLao79j+XRmS7J1ZpJKUODJVoM4s9MQJhTMvo4qS5Z
-S64g6QR7Obkz3I1Lr3aWeSBmDDEyzue+NKtuWZ1Cxy3RdXo/w5HgRc3l2AercOM3Gt1XonTzEtTb
-Z/Hwc0Sn9Gz8RmGRK6Ka4hVDl8q/2l110KaV233Kh5etP0csXS8MIMdVRfRu3sc5hp13DG7lCKzK
-72a2GEpI8Wpl26G6I1/LMzz/98T+FqjTqxsdquk7Cj7m2vKGLW1BorpQH7WFGPdJQXJe1hfbfiZA
-CcVdCtl4nAacFacmsiArZBfX7AQGL7isvHUwwYFEtcApyGW4p2Lt+t8nvU0CANA6BHOpOz1xOP8W
-mAESbUriIjyuTUf3fJ9oDNCurVqhASMJCDaWI3lYX/QAoiAzt6akqbbZxo2ujW7mGGqc0KxqE2cs
-h2T79v7pC8aUtHBfwNrTR19GnZVxE0eQ7ViIQhR6mpSaUQFA9sG+cmD2G8TnCgYsLa0q8De6F61a
-CBevQGHNzrbZ3JAMneveYg/Jy1XxQHDRcvrMfWKe0jjcWbdKYlaGVPm5V1ILwYz7Yv5ewo3NUrxI
-GJiywe9qPhuJSDZs7VehTuI0FxGIsgKzVjgbAgMBAAGjggFcMIIBWDASBgNVHRMBAf8ECDAGAQH/
-AgEAMB0GA1UdDgQWBBT3m6JO05fF9DQPQw6Bhc6RkzKv+TAfBgNVHSMEGDAWgBTOw0q5mVXyuNtg
-v6l+vVa1lzan1jAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
-MHkGCCsGAQUFBwEBBG0wazAkBggrBgEFBQcwAYYYaHR0cDovL29jc3AuZGlnaWNlcnQuY29tMEMG
-CCsGAQUFBzAChjdodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkSURS
-b290RzIuY3J0MEUGA1UdHwQ+MDwwOqA4oDaGNGh0dHA6Ly9jcmwzLmRpZ2ljZXJ0LmNvbS9EaWdp
-Q2VydEFzc3VyZWRJRFJvb3RHMi5jcmwwEQYDVR0gBAowCDAGBgRVHSAAMA0GCSqGSIb3DQEBDAUA
-A4IBAQA+b8Uw53sDspdZgukU+qzLyyHkcjlxGGhHlP+zrmDLKm1wEFvCRS2pili3Hy67i8N4N5NU
-vw5Rg6kv3lxb9S9Rktxk43k+tvm68pl7OxQE55ZjVY87P0lUPGwEqOOwLLyH02ZQcsfq5p5LrOH9
-0JvmvZ1yy73HS+VpDAqOlytE0NSvTIRqFFkKQGQwfjvtql9YflujuNNvJztjBaHKYZsnNSg+J38o
-jYq4TP3pSg3UdVH0PncVjPQyqxC9xef5Xae92Kbkzol3x7Nel3A1bwAkalrDMspvTHvey6LfiBks
-FIqviTnoy7fgjaRAJgHS+RXx/cmuRd3rUAclSVVrYu8RMIIHAzCCBOugAwIBAgIQAzUotrsybJHx
-HTjKOIVdIDANBgkqhkiG9w0BAQsFADBiMQswCQYDVQQGEwJVUzEXMBUGA1UEChMORGlnaUNlcnQs
-IEluYy4xOjA4BgNVBAMTMURpZ2lDZXJ0IEFzc3VyZWQgRzIgU01JTUUgUlNBNDA5NiBTSEEzODQg
-MjAyNCBDQTEwHhcNMjYwNzE4MDAwMDAwWhcNMjgwMTA0MjM1OTU5WjAeMRwwGgYDVQQDDBNkd213
-MkBpbmZyYWRlYWQub3JnMIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEA2pYux73kdbYX
-sWF8f1u6DJP91qcqaZetsyfPkZk0B+MmXmAEv0kVes5n15V2mbDThOnpoPFly0UugQO9JYqLfrtD
-tKD5yL58fgrDB9Dw+LQikgrHafl6YSCds5AvUu/8hw2J6noKrcOLJpKlKn9Fl/4IB9Q3JIdLx5aa
-EtTqMalIPqHFOlgrJ7s+aua8xbB8YQ9ahqYBXWRJNv3P/2b1DYtdrz1oqZPE3CcB8Pc6Gf2a1Tcm
-6TAgtEx7Cf1BFcrsrMz7TWHmGQITieNb2r9UYWSc2Gp+GtYFNJCgT0JJXKUBIauPMKBLteYrL8Fo
-ff/uY44dC/mDWjdCP/5x0qelPQjlBvWdHL5zvBTOj06rJ0m3HNI/hnIcDh0Qu2j9reb9rLVcdym6
-bWmBM4uDEB8Zv9Ph0KTBFSy1IosyakuD1j1Os30EzjGfbi0EUXIvnOcYbTBAbM5UAzrxEHMhBvoX
-Pvnx+OyvjJmc9tWxTX6AcSz+m40esbT17URBeZS18afgieiikm5TynlUYP1LciR3hSgGVzvGXnKO
-02VDFR5itGWdRKZ2W5wIShNfWfhSa0D0K5UdIDt5Qc7sjzwK1Yb1sY5Tu0uA5mhIS82q1ov83uxB
-sFkriNnhGv/M1NCDVLBiOMsHu73qUM+yKmgKLwF9Hfn9WI25glbAMI4S5r3hYzcCAwEAAaOCAfcw
-ggHzMB8GA1UdIwQYMBaAFPebok7Tl8X0NA9DDoGFzpGTMq/5MB0GA1UdDgQWBBRcYhqbcGzn1jrT
-JOZaB8O7qllDpzAwBgNVHREEKTAngRNkd213MkBpbmZyYWRlYWQub3JngRBkYXZpZEB3b29kaG91
-LnNlMBQGA1UdIAQNMAswCQYHZ4EMAQUBAjAOBgNVHQ8BAf8EBAMCBeAwHQYDVR0lBBYwFAYIKwYB
-BQUHAwIGCCsGAQUFBwMEMIGpBgNVHR8EgaEwgZ4wTaBLoEmGR2h0dHA6Ly9jcmwzLmRpZ2ljZXJ0
-LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsME2gS6BJ
-hkdodHRwOi8vY3JsNC5kaWdpY2VydC5jb20vRGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZT
-SEEzODQyMDI0Q0ExLmNybDCBjQYIKwYBBQUHAQEEgYAwfjAkBggrBgEFBQcwAYYYaHR0cDovL29j
-c3AuZGlnaWNlcnQuY29tMFYGCCsGAQUFBzAChkpodHRwOi8vY2FjZXJ0cy5kaWdpY2VydC5jb20v
-RGlnaUNlcnRBc3N1cmVkRzJTTUlNRVJTQTQwOTZTSEEzODQyMDI0Q0ExLmNydDANBgkqhkiG9w0B
-AQsFAAOCAgEAocabrh1cPd5s3vY5rnlBVQSTc7zs2ZWs67dAIltR+05WELrYClVzzUhMs/LOJPlr
-EUo45UDDomXq38DxFepaPd9+iNLjXfn33EX/IG44j04lU/oF/Rg9VeQILkYLbCZ/x9wOjNHZc4SN
-ydY7Dhvf/sT5aBz88u7D5+azZJ7Qf1U57wYseCH1Mt0nDrtr5y19IJ8D9xJJ33RFL6vfpHZBBAQ8
-+3RqkKNxLoV2aFvQhxdhjNLDqTv3LjUIdicwPraN7JkxEu7CV2Lka7eRqJgkWL7SK0YmBjGpRafs
-+icP/ON5RCCKTTb6VlX8eTG2sJJfsFhvJNCCt6xexbWzWtIrfP7NvPBvwBB737AyEGBZkS5aNizT
-McURJGTv9UKvBh1LF/+tNhYtLvPCN7oecGzhCHht9jcwSkygTo3Y6YlK3QgOu+ncmiBbfeuwlLZ1
-LxbYvG6hgNqXv7u6YyADbYajAQJXJ2OQen39pm3Q/AQSyLYG+B8lDglWsM8tYXPlEdrYJcksGK6F
-nqIX6Bumn43rBooLJdiZp4WmfWdL2pxe+LxRDjprmqu1WprixDxULSTOKJZoqTlugs6y3Bc+if+s
-gHnBBtz9WQ6MtPHkh7zONDAFIKcBmv8OqPQCx0F3Wv3OEybwMpXx0OsKgK8wLldaX1pXcMuyDgTL
-Sqs0AV0OHUgwggcDMIIE66ADAgECAhADNSi2uzJskfEdOMo4hV0gMA0GCSqGSIb3DQEBCwUAMGIx
-CzAJBgNVBAYTAlVTMRcwFQYDVQQKEw5EaWdpQ2VydCwgSW5jLjE6MDgGA1UEAxMxRGlnaUNlcnQg
-QXNzdXJlZCBHMiBTTUlNRSBSU0E0MDk2IFNIQTM4NCAyMDI0IENBMTAeFw0yNjA3MTgwMDAwMDBa
-Fw0yODAxMDQyMzU5NTlaMB4xHDAaBgNVBAMME2R3bXcyQGluZnJhZGVhZC5vcmcwggIiMA0GCSqG
-SIb3DQEBAQUAA4ICDwAwggIKAoICAQDali7HveR1thexYXx/W7oMk/3Wpyppl62zJ8+RmTQH4yZe
-YAS/SRV6zmfXlXaZsNOE6emg8WXLRS6BA70liot+u0O0oPnIvnx+CsMH0PD4tCKSCsdp+XphIJ2z
-kC9S7/yHDYnqegqtw4smkqUqf0WX/ggH1Dckh0vHlpoS1OoxqUg+ocU6WCsnuz5q5rzFsHxhD1qG
-pgFdZEk2/c//ZvUNi12vPWipk8TcJwHw9zoZ/ZrVNybpMCC0THsJ/UEVyuyszPtNYeYZAhOJ41va
-v1RhZJzYan4a1gU0kKBPQklcpQEhq48woEu15isvwWh9/+5jjh0L+YNaN0I//nHSp6U9COUG9Z0c
-vnO8FM6PTqsnSbcc0j+GchwOHRC7aP2t5v2stVx3KbptaYEzi4MQHxm/0+HQpMEVLLUiizJqS4PW
-PU6zfQTOMZ9uLQRRci+c5xhtMEBszlQDOvEQcyEG+hc++fH47K+MmZz21bFNfoBxLP6bjR6xtPXt
-REF5lLXxp+CJ6KKSblPKeVRg/UtyJHeFKAZXO8Zeco7TZUMVHmK0ZZ1EpnZbnAhKE19Z+FJrQPQr
-lR0gO3lBzuyPPArVhvWxjlO7S4DmaEhLzarWi/ze7EGwWSuI2eEa/8zU0INUsGI4ywe7vepQz7Iq
-aAovAX0d+f1YjbmCVsAwjhLmveFjNwIDAQABo4IB9zCCAfMwHwYDVR0jBBgwFoAU95uiTtOXxfQ0
-D0MOgYXOkZMyr/kwHQYDVR0OBBYEFFxiGptwbOfWOtMk5loHw7uqWUOnMDAGA1UdEQQpMCeBE2R3
-bXcyQGluZnJhZGVhZC5vcmeBEGRhdmlkQHdvb2Rob3Uuc2UwFAYDVR0gBA0wCzAJBgdngQwBBQEC
-MA4GA1UdDwEB/wQEAwIF4DAdBgNVHSUEFjAUBggrBgEFBQcDAgYIKwYBBQUHAwQwgakGA1UdHwSB
-oTCBnjBNoEugSYZHaHR0cDovL2NybDMuZGlnaWNlcnQuY29tL0RpZ2lDZXJ0QXNzdXJlZEcyU01J
-TUVSU0E0MDk2U0hBMzg0MjAyNENBMS5jcmwwTaBLoEmGR2h0dHA6Ly9jcmw0LmRpZ2ljZXJ0LmNv
-bS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNBNDA5NlNIQTM4NDIwMjRDQTEuY3JsMIGNBggrBgEF
-BQcBAQSBgDB+MCQGCCsGAQUFBzABhhhodHRwOi8vb2NzcC5kaWdpY2VydC5jb20wVgYIKwYBBQUH
-MAKGSmh0dHA6Ly9jYWNlcnRzLmRpZ2ljZXJ0LmNvbS9EaWdpQ2VydEFzc3VyZWRHMlNNSU1FUlNB
-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
-tbgUZzrtp6FWHVrGjSnQPMcAAAAAAAA=
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Shuah Khan <shuah@kernel.org>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
 
+---
+Alexis Lothoré (eBPF Foundation) (2):
+      bpf/selftests: fix comment style in network_helpers.c
+      selftests/bpf: allocate a larger timeout for connection
 
---=-B3TdkSrYLCzPBl0c8lic--
+ tools/testing/selftests/bpf/network_helpers.c | 60 ++++++++++++++++++++++-----
+ 1 file changed, 49 insertions(+), 11 deletions(-)
+---
+base-commit: 114cb6aa1571c30770715a1756553b812865b1ba
+change-id: 20260710-tc_tunnel_flaky-27e9a191bd03
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
+
