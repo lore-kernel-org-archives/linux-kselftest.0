@@ -1,129 +1,239 @@
-Received: from mta0.migadu.com (out-28.mta0.migadu.com [91.218.175.28])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A64047606E
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 14:34:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1384A3C98BA
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 14:34:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786718051; cv=none; b=jGPN/OilNSvCVA9MTrDKTzNj80K4rZ/OlkALsCS0CuG3cG+mMFnFHeDGdM/7s86nG83IrSh8+jHWNZexGTk43jNA+8BczvY+JeyKypOBQh4rKyyyCgM8a5aIdHUxHP9m1mL6OKGWJ71oUGrXmkVS0ixkT7U1CjxnnmaDZPgDjoE=
+	t=1786718064; cv=none; b=dXIjgFldp6v/b+tbbl4qsnwT/IGRoAd8geTBqs1dxRg5Okdy8RtvvRx0krdRRS0NNd6GJ2nuuObKa8Gmubjerr21BDt57q6UK2OvqRv2+eyXHsEQiga4a/vNlS7dKV+OoPK6/ByvZgc5xYYuU+pf2PRuU1YTKQXM5wcF2P9YyKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786718051; c=relaxed/simple;
-	bh=N2fSHrh+s4f3l5jITqoZ/7jfazo8j7PveegFmreW3+Y=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=NcUOkbYyG9ghr8610kDez3oJrxWpUkq1/PBvMdQEtIsniG1pc9JWJUzoMyi80yZTW19Wx7xApraU45Acj/C/KQyYrvXalGoLGiD1rtWT/bUugyNkES4FoD8d1bAy77+k4Z0TsKvSalHH+TZ90K5T1ufg9w+D1T7ZmvUPia8aT3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=i2mO4ihh; arc=none smtp.client-ip=91.218.175.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1786718064; c=relaxed/simple;
+	bh=ZV2hwUqsEzo7eKFrhyjXU+qSr07aMVD/ZBebaPjGOtw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jIKs2inhqKWXNp2qa7AftjnHn5DpfCHrOm7V3u6rit7K88Jj8H788Djv1JvomObjmykXTkjaGwwL457AdcQdfaJvBObIMURudfgNrCs2dQM+G6/M2u5mR8NUA4jLCq5nSpp+3ZDhxncsxHCMWlqPIiWaYBpJAbdeKwMcbjQp2z8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFFyRI8M; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="i2mO4ihh"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=N2fSHrh+s4f3l5jITqoZ/7jfazo8j7PveegFmreW3+Y=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786718043; v=1; x=1787322843;
- b=i2mO4ihh7gPHV/Y6zMpNwRCrxstTq7C0u8hJ7NxFRUNq0CBeH92Cwl3lo05pZAuQ/LQGgzix
- D9VjCK0e+XYn54wvZ36Tm37zWX/a3T9RORF/Nm9/urrUMSresn6QyrW9iBRckZIf35q6vBm30PR
- MHLl4EKMcRfeWB3LCMHJgWdM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [192.168.1.116] (111.162.215.50)
-	by smtp.migadu.com with ESMTPS id b1e08f2e3df3c1de;
-	Fri, 14 Aug 2026 14:34:03 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ab235e0f-6823-4db0-ad5f-29926dac65c0@linux.dev>
-Date: Fri, 14 Aug 2026 22:33:50 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFFyRI8M"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C88A81F000E9;
+	Fri, 14 Aug 2026 14:34:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786718060;
+	bh=WnUIBmU3KRDn2nbquHueUxXwAiL4Yfqk4FNKfUeSxKw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=XFFyRI8MGAIAcpPAoAInDOVPA/wHhF23IygPCfI0YmHvJmF/4hjn8aySLVksV+b0o
+	 PzuIJbQi994J3Jej6AleO2PCYf8WOBu4+Bdfs5nv3SxzUEonxyx63Mx0rUM79DRQmG
+	 gSFZ2CuuI6A3W6Mik7tI0wejnc3cV0GPAxWTd24oV2IsFOoAS54g8oWSAGogpdIwNE
+	 GsJ3aluRWLI2fkBlrJn+wC9TYeslwjjbP9SxcAbUqfXOrK1QcUKE7EJBG4gzJnuWZX
+	 ehuVv9kRFtflPxiw5wVFKZseH0+NnbHBs8RLr0+vxPiEYccedVzJiV/0d7s81j9TJI
+	 5mRBU8XPzMp/w==
+Date: Fri, 14 Aug 2026 15:34:15 +0100
+From: Mark Brown <broonie@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
+	geert@linux-m68k.org, daniel@thingy.jp,
+	Shuah Khan <shuah@kernel.org>, Kees Cook <kees@kernel.org>,
+	Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Hangbin Liu <liuhangbin@gmail.com>,
+	"Ricardo B. Marliere" <rbm@suse.com>,
+	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
+Subject: Re: [RFC PATCH 5/6] selftests: run tests on nommu architecture
+Message-ID: <4355a510-2e00-41f7-9bb3-8f6b2d95503b@sirena.org.uk>
+References: <20260813063401.1786548-1-thehajime@gmail.com>
+ <20260813063401.1786548-6-thehajime@gmail.com>
+ <an8MlE22U3586R42@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cui.tao@linux.dev, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/cgroup: remove redundant chown in
- test_cgcore_lesser_ns_open
-To: Shaojie Sun <sunshaojie@kylinos.cn>, Tejun Heo <tj@kernel.org>,
- Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?=
- <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-References: <20260813090914.690350-1-sunshaojie@kylinos.cn>
- <20260814100002.1007394-1-sunshaojie@kylinos.cn>
-From: Tao Cui <cui.tao@linux.dev>
-In-Reply-To: <20260814100002.1007394-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="p/oWFWIZW5lIg4+P"
+Content-Disposition: inline
+In-Reply-To: <an8MlE22U3586R42@lucifer>
+X-Cookie: Body by Nautilus, Brain by Mattel.
 
 
+--p/oWFWIZW5lIg4+P
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-在 2026/8/14 18:00, Shaojie Sun 写道:
-> test_cgcore_lesser_ns_open runs as root throughout and never changes its
-> euid, so chowning the two cgroup.procs files to a non-root uid has no
-> effect on the test.
-> 
-> The ENOENT the test expects comes from the cgroup namespace delegation
-> check in cgroup_procs_write_permission(): the source and destination
-> cgroups must both be descendants of the namespace root captured at open
-> time.  That check does not depend on file ownership.  In addition, the
-> permission check only examines the common ancestor's cgroup.procs file
-> (the test root here), which the chown calls do not touch.
-> 
-> Remove the redundant chown calls and the now unused test_euid and
-> cg_test_a_procs variables.
-> 
-> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
-> ---
-> Changes in v2:
-> - Remove the now unused cg_test_a_procs variable, as suggested by
->   sashiko-bot.
-> 
->  tools/testing/selftests/cgroup/test_core.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-> index 88ca832d4fc1..5501be9912c0 100644
-> --- a/tools/testing/selftests/cgroup/test_core.c
-> +++ b/tools/testing/selftests/cgroup/test_core.c
-> @@ -795,10 +795,9 @@ static int lesser_ns_open_thread_fn(void *arg)
->  static int test_cgcore_lesser_ns_open(const char *root)
->  {
->  	static char stack[65536];
-> -	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
->  	int ret = KSFT_FAIL;
->  	char *cg_test_a = NULL, *cg_test_b = NULL;
-> -	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
-> +	char *cg_test_b_procs = NULL;
->  	int cg_test_b_procs_fd = -1;
->  	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
->  	pid_t pid;
-> @@ -813,10 +812,9 @@ static int test_cgcore_lesser_ns_open(const char *root)
->  	if (!cg_test_a || !cg_test_b)
->  		goto cleanup;
->  
-> -	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
->  	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
->  
-> -	if (!cg_test_a_procs || !cg_test_b_procs)
-> +	if (!cg_test_b_procs)
->  		goto cleanup;
->  
->  	if (cg_create(cg_test_a) || cg_create(cg_test_b))
-> @@ -825,10 +823,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
->  	if (cg_enter_current(cg_test_b))
->  		goto cleanup;
->  
-> -	if (chown(cg_test_a_procs, test_euid, -1) ||
-> -	    chown(cg_test_b_procs, test_euid, -1))
-> -		goto cleanup;
-> -
->  	targ.path = cg_test_b_procs;
->  	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
->  		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
-> @@ -863,7 +857,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
->  	if (cg_test_a)
->  		cg_destroy(cg_test_a);
->  	free(cg_test_b_procs);
-> -	free(cg_test_a_procs);
->  	free(cg_test_b);
->  	free(cg_test_a);
->  	return ret;
-Reviewed-by: Tao Cui <cuitao@kylinos.cn>
+On Fri, Aug 14, 2026 at 01:50:50PM +0100, Lorenzo Stoakes (ARM) wrote:
 
+> So at this point you're not really running much of the selftests at all,
+> and are only happening to run those that don't do the very basic stuff
+> nommu can't deal with.
+
+> I think an audit of existing tests to figure out what works with nommu vs
+> what doesn't is really unreasonable again, given nobody tests or seemingly
+> uses these arches.
+
+> So this patch might beget more nommu carve outs and exceptions and
+> therefore nommu workload and maintenance, which isn't really sustainable.
+
+> I know I complain about lack of testing on nommu, but at the same time I
+> don't think running arbitrary tests that happen to work on it and who kno=
+ws
+> if they are valid asserts anyway really fixes things.
+
+> And given nobody really is doing testing, it's not really a great RoI
+> here...
+
+Perhaps a good first step here is to start off with getting some public
+CI set up, then build up to getting things running cleanly.  That way
+there'll be visible ongoing coverage which will help motivate getting
+whatever changes integrated, and if the changes are done bit by bit
+there should be clearer explanations for why they make sense on nommu.
+
+You could perhaps use a skiplist to ignore tests that don't work yet so
+the CI starts off clean?
+
+>=20
+> ...OTOH I suppose it's a minimal change we can largely ignore as long as
+> this doesn't lead to additional work/auditing from anybody but nommu
+> enthusiasts.
+>=20
+> But I'm just not sure that will be the case :(
+>=20
+> (I'm amazed we support a mode in linux that can't fork() in 2026 :)
+>=20
+>=20
+> > ---
+> >  Documentation/dev-tools/kselftest.rst       | 12 ++++++++++++
+> >  tools/testing/selftests/kselftest/runner.sh |  9 +++++++--
+> >  tools/testing/selftests/kselftest_harness.h |  4 ++++
+> >  tools/testing/selftests/lib.mk              |  8 ++++++++
+> >  4 files changed, 31 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/Documentation/dev-tools/kselftest.rst b/Documentation/dev-=
+tools/kselftest.rst
+> > index 64c0ec7428a2..800b2b688aff 100644
+> > --- a/Documentation/dev-tools/kselftest.rst
+> > +++ b/Documentation/dev-tools/kselftest.rst
+> > @@ -230,6 +230,18 @@ section::
+> >
+> >  .. _tar's auto-compress: https://www.gnu.org/software/tar/manual/html_=
+node/gzip.html#auto_002dcompress
+> >
+> > +Build and test on nommu target
+> > +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D
+> > +
+> > +If you (cross-)build kselftests for nommu targets, or run tests on nom=
+mu targets, use
+> > +``NOMMU=3D1`` as a make variable/environment setting to tell build sys=
+tem to do the additional
+> > +checks.  These nommu targets may differ in several ways, such as not s=
+upporting fork(2) or
+> > +using musl or another libc.  Set this variable to apply the necessary =
+build and test adjustments.
+> > +
+> > +  $ make ARCH=3Dum NOMMU=3D1 O=3Dbuild kselftest
+> > +  $ make ARCH=3Dum NOMMU=3D1 -C tools/testing/selftests/mm run_tests
+> > +  $ NOMMU=3D1 /tmp/kselftest_install/run_kselftest.sh -s -c mm
+> > +
+> >  Contributing new tests
+> >  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >
+> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testin=
+g/selftests/kselftest/runner.sh
+> > index 311811dc55a0..7287d8290b6c 100644
+> > --- a/tools/testing/selftests/kselftest/runner.sh
+> > +++ b/tools/testing/selftests/kselftest/runner.sh
+> > @@ -38,8 +38,12 @@ tap_prefix()
+> >
+> >  tap_timeout()
+> >  {
+> > +	# nommu doesn't support timeout command (missing fork(2))
+> > +	if [ "$NOMMU" =3D "1" ] ; then
+> > +		echo "timeout isn't supported for nommu"
+> > +		$1
+> >  	# Make sure tests will time out if utility is available.
+> > -	if [ -x /usr/bin/timeout ] ; then
+> > +	elif [ -x /usr/bin/timeout ] ; then
+> >  		/usr/bin/timeout --foreground "$kselftest_timeout" \
+> >  			/usr/bin/timeout "$kselftest_timeout" $1
+> >  	else
+> > @@ -130,6 +134,7 @@ run_one()
+> >  				return $KSFT_FAIL
+> >  			fi
+> >  		fi
+> > +		OLDDIR=3D$(pwd)
+> >  		cd `dirname $TEST` > /dev/null
+> >  		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
+> >  			tap_prefix >&4) 3>&1) |
+> > @@ -147,7 +152,7 @@ run_one()
+> >  		*)
+> >  			ktap_test_fail "$TEST_HDR_MSG # exit=3D$rc";;
+> >  		esac
+> > -		cd - >/dev/null
+> > +		cd "$OLDDIR" >/dev/null
+> >  	fi
+> >
+> >  	return $rc
+> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testin=
+g/selftests/kselftest_harness.h
+> > index 261e4df94d9d..8eee7b14f824 100644
+> > --- a/tools/testing/selftests/kselftest_harness.h
+> > +++ b/tools/testing/selftests/kselftest_harness.h
+> > @@ -1274,6 +1274,10 @@ static int test_harness_run(int argc, char **arg=
+v)
+> >  	unsigned int count =3D 0;
+> >  	unsigned int pass_count =3D 0;
+> >
+> > +#ifdef CONFIG_NOMMU
+> > +	ksft_print_msg("harness test doesn't support on NOMMU architecture (n=
+o fork(2)).\n");
+> > +	return KSFT_SKIP;
+> > +#endif /* CONFIG_NOMMU */
+> >  	ret =3D test_harness_argv_check(argc, argv);
+> >  	if (ret !=3D KSFT_PASS)
+> >  		return ret;
+> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/l=
+ib.mk
+> > index 2cc819006424..4734b5ce613f 100644
+> > --- a/tools/testing/selftests/lib.mk
+> > +++ b/tools/testing/selftests/lib.mk
+> > @@ -97,6 +97,14 @@ TEST_GEN_PROGS :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_=
+GEN_PROGS))
+> >  TEST_GEN_PROGS_EXTENDED :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS=
+_EXTENDED))
+> >  TEST_GEN_FILES :=3D $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+> >
+> > +# detect if users request NOMMU build or not
+> > +# User can set NOMMU to 1 to build/test for NOMMU platforms
+> > +NOMMU ?=3D 0
+> > +ifeq ($(NOMMU),1)
+> > +CFLAGS +=3D -DCONFIG_NOMMU
+> > +export NOMMU
+> > +endif
+> > +
+> >  all: $(TEST_GEN_PROGS) $(TEST_GEN_PROGS_EXTENDED) $(TEST_GEN_FILES) \
+> >  	$(if $(TEST_GEN_MODS_DIR),gen_mods_dir)
+> >
+> > --
+> > 2.43.0
+> >
+>=20
+> --
+> Cheers, Lorenzo
+
+--p/oWFWIZW5lIg4+P
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmp/J2YACgkQJNaLcl1U
+h9BXcAf/UqWczLxiNOc/Hmk71YZaKMzdL3pklWPu2E6Huj9UoT5KdXtKzHCnqcjs
+bulah3Acd+ap+Xv0VTQ0HQuRbsJnyg/LsIm+xBAvllafk8FXZLWBajhZvmRsb6OG
+pWx/5Udoc45FuL0kXPIKn4IaweB4qQwFBCw7WqopDEkidW5mBveiFblf5lqbwWPN
+U502huc+u7ShUQfKX4M5axSWBTER0HYNQuyROAQMw3BYpARu6YOS16nng5h5adoQ
+zCGgx/XFAMcgHrJZVDlSDqpgDO1FTFYF3h4ROppqt2nYfP8XsnrNKZ2L9BJRotgi
+ttU2bzsTTwccgRjbgI+Z6HGG6OH12w==
+=4XkF
+-----END PGP SIGNATURE-----
+
+--p/oWFWIZW5lIg4+P--
