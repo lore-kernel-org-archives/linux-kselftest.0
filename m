@@ -1,145 +1,284 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from AM0PR02CU008.outbound.protection.outlook.com (mail-westeuropeazon11013044.outbound.protection.outlook.com [52.101.72.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D9A3672A0;
-	Fri, 14 Aug 2026 10:00:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786701645; cv=none; b=oW+UayllbWxv6QCz2z7i1C79lwzbKnYV6gvfAWt0KkV7WQ2FkBmVuoIDjeH388BFs5tJl4okcrmSoOSbFHpBO50D0WJfUbD1HwawmSI6Qxp/dLgV/mQk60UwxL2kFgIJq+w3jH2IMdiuHGChhKhFEuy6beFBpu/U2NnFJsY2dak=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786701645; c=relaxed/simple;
-	bh=61BfVamzKHgQdUYSAiqfAhDqJTjNb5s8eUQKFu8E5P4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HYhmVNo6zGkt4mT6lK/a9zb0fJe66zBCmZQlaKjRei/xtzQlTSs4FoY1WniayCSYoVbOYkMSN3naBLEntZ9dFfEB676MPq3IiTtW/ZQRk77Ng8BlXNHLR7nEY0KwXDlE5dX1M8i7ZJ7kK2xlN74Y0k6i3jvZ2bh3nZ52/Nv8X8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: f76a112c97c611f1aa26b74ffac11d73-20260814
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CHARSET
-	HR_CHARSET_NUM, HR_CTE_8B, HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD
-	HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN
-	HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS
-	HR_TO_CHARSET, HR_TO_CHARSET_NUM, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NAME
-	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-	ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.12,REQID:6facda73-7d98-427a-8386-a3930e161c6f,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.12,REQID:6facda73-7d98-427a-8386-a3930e161c6f,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:e7bac3a,CLOUDID:56aa920ffbc03c0e04e54e80fc69931a,BulkI
-	D:260814180027EH7NOZMQ,BulkQuantity:0,Recheck:0,SF:10|38|66|78|81|82|102|1
-	27|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
-	ulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
-	:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: f76a112c97c611f1aa26b74ffac11d73-20260814
-X-User: sunshaojie@kylinos.cn
-Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <sunshaojie@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 619974505; Fri, 14 Aug 2026 18:00:23 +0800
-From: Shaojie Sun <sunshaojie@kylinos.cn>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Shaojie Sun <sunshaojie@kylinos.cn>
-Subject: [PATCH v2] selftests/cgroup: remove redundant chown in test_cgcore_lesser_ns_open
-Date: Fri, 14 Aug 2026 18:00:02 +0800
-Message-Id: <20260814100002.1007394-1-sunshaojie@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260813090914.690350-1-sunshaojie@kylinos.cn>
-References: <20260813090914.690350-1-sunshaojie@kylinos.cn>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C47BD39021F;
+	Fri, 14 Aug 2026 10:01:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.72.44
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786701708; cv=fail; b=A1EbEuna7rxB0bSsBQdAPETU2Lfn5hxenX422/nn1+YaA6KSl9O6/A51VtXabdYmPPpgkMLdx5pgzGuqrkyX4C73Imot2Pv5iTENHvLVEO+Xjdxq/JScDw1Z00Tq4bD1lukp5oNhV9sQP/T7bhhkEwS68nf0G3NghaP9a4ljGmU=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786701708; c=relaxed/simple;
+	bh=q592rTYTVEu9e6oxmys04u1vawP+bBXKQl2XO+Gh3gA=;
+	h=Message-ID:Date:Cc:Subject:To:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=XtjPe6jvtr6DTjPVhrrwNJx+lToNEJZcG9PXG4WX6JEA9HPHK+jM36RbqTIpMud4V2qZePko7GNbw9Y6W9rlRLyhP3QTO9PjtHKZQVEy0I/ypPA4iSg4VBc2xbFNjTz7Dej0zpT7SvLzpnY4kefLY575EIILcmKh1v2IU/DgLTo=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VcD0AvbB; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=VcD0AvbB; arc=fail smtp.client-ip=52.101.72.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VcD0AvbB";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="VcD0AvbB"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=v/atSUU4Xpum7aLAYCn3nfVXyvWRGW2Kk9bDsP2kmq/sD1WWpdH2mH5hYbe0db82cppywfkclcfnrrpyti1X2KBKMKu2U7LaSIqt417rLl4uRyJ/59ZOe2JkAuPNFvNLyIt19fhSiJtGnpWhIbDvq+N25OC75yQWY6hYg0gEeSZuBU2M+ch6Mq9SVFDCQhRwNpJafVFFNZasmIHLSgCKb9zawVMzc4W+7U73KU2M5qjxTXBiF0pMp9GWdX0nQySlxcYPPkUOHnXHcIEjbFZGjF5CtyFgeyRJTEGk2tP7CoPhGFJzmZsveEr2z8PBYxPJop+Kw3sBKmkfMP7szEaWAg==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P342ho8n2BxRFWU9uQePKPO8YipOa44GuHloJ0IQzng=;
+ b=f7jET3/4flXAfn2yRN7BVO3s5FHcnOYdYnenxyyq7lRtaOFOGkOpQAptJDQ7icwnyZMzuYE+cXLIe0WRaziFdEqkBKgGGCYweJCHqa/M9qfKoYJtU2XoAoxNYBrCMCinrFC+hau0nD8DlrYaNZXqn1bp/MSfyGm40S3GWP1iLdyMKjl99mKvTmX7Lq5Duy8vemrcQP2SlbPL58P5hIcIa4B7lLi/2ZOulbnvdwk+fvpUYbtBPmgH9tloJezqm+1ZWiindye+Ym5Ltgu7Heo2asvJ6AQb6nAEX3lm+E15SqsQjPf+X0i7g7TJYa+UOYD2Jl8JMxVdWdml9fA5IJ8ymg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=shutemov.name smtp.mailfrom=arm.com;
+ dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
+ dkim=pass (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P342ho8n2BxRFWU9uQePKPO8YipOa44GuHloJ0IQzng=;
+ b=VcD0AvbBbTUteIDbcjL2NCYxe6YHgexp5jxUlVEEdVNoltzTKRY/t9+MXm8INsX3AuD+P+c4SAcwxLwvuPdkabVDq4XR3C2kn4oFJjF65Dk1E+U1shfIyF1yxy9kKjx/f62mpNt5ZbSN4OL43cBU4Wp+nT/q+C+AfP7y+F+GNjI=
+Received: from AS4P195CA0025.EURP195.PROD.OUTLOOK.COM (2603:10a6:20b:5d6::20)
+ by VI0PR08MB163015.eurprd08.prod.outlook.com (2603:10a6:800:367::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.15; Fri, 14 Aug
+ 2026 10:01:31 +0000
+Received: from AM1PEPF000252DB.eurprd07.prod.outlook.com
+ (2603:10a6:20b:5d6:cafe::19) by AS4P195CA0025.outlook.office365.com
+ (2603:10a6:20b:5d6::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.315.16 via Frontend Transport; Fri,
+ 14 Aug 2026 10:01:31 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ AM1PEPF000252DB.mail.protection.outlook.com (10.167.16.53) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
+ via Frontend Transport; Fri, 14 Aug 2026 10:01:30 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=x/bH4SK5oeiy4jFP2rT3AnBi0B6i0BCaMd9+9mQRDJ5uxlubBrW45LwsJRo4SZGXLrTmivpD4l1wZplDFztHwhXTPpZhRAabQtbcdkVSiz8QerpxkChHQdNLNQy8TnIPpJo2OnuTmIUAAJCcuPYrYlt3lYyRqDAratSJgVWKJxRcQ2Or8D3phXPiJ14A1JjFDTuGrYAOWqxwSmDRbor4/d/M/Tr2r5XUFECp1E5FiFXXqDl9ExAtFmrMw259O9gOWOvKVvjMuJ4q1pjB52Bsc9up9KbZ6gb7OxUmH+/dNcQsbd6i4ukL1oeavh273Ll7EgjLwg6fRGcN8yXevBOm5g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=P342ho8n2BxRFWU9uQePKPO8YipOa44GuHloJ0IQzng=;
+ b=IYu9DVh5uGmBrhgPdaQpwb8+bUxnaaQpCJetxkEVN5bNLcSLoAz9+pZB7aQfRgA/bMX+Odu/zyF1KBGA6Y1qzcTk5xcWTiIa1sPTF2lyca/dTuHNWvJPy+9vPyyGioWEaVMPy42PIjki5+y6IfJwxjOddBEP7tr8U7j7L9qud2ehgUFbWcqvznbELQCOgilu8QU53fcKO1JgSIMA0QCIkpsUcngLlNwE56OdiYoWVc8E44uFSe0JslpDVgRuYXSNPtN9xQgnBo+tW1oSYRX6lAOTcmMsIPb8bOrpCn61slQLyjlXQBWmm07Chk8S4fW6nErj1vR30iOLMKTo88eCNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=P342ho8n2BxRFWU9uQePKPO8YipOa44GuHloJ0IQzng=;
+ b=VcD0AvbBbTUteIDbcjL2NCYxe6YHgexp5jxUlVEEdVNoltzTKRY/t9+MXm8INsX3AuD+P+c4SAcwxLwvuPdkabVDq4XR3C2kn4oFJjF65Dk1E+U1shfIyF1yxy9kKjx/f62mpNt5ZbSN4OL43cBU4Wp+nT/q+C+AfP7y+F+GNjI=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from AM6PR08MB3414.eurprd08.prod.outlook.com (2603:10a6:20b:49::10)
+ by AS8PR08MB9018.eurprd08.prod.outlook.com (2603:10a6:20b:5b0::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.12; Fri, 14 Aug
+ 2026 10:00:57 +0000
+Received: from AM6PR08MB3414.eurprd08.prod.outlook.com
+ ([fe80::dde8:bf0b:1dc:2a2]) by AM6PR08MB3414.eurprd08.prod.outlook.com
+ ([fe80::dde8:bf0b:1dc:2a2%2]) with mapi id 15.21.0315.014; Fri, 14 Aug 2026
+ 10:00:56 +0000
+Message-ID: <7e109334-f3f8-40dd-8215-6c5184468d32@arm.com>
+Date: Fri, 14 Aug 2026 11:00:54 +0100
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, baolin.wang@linux.alibaba.com, baohua@kernel.org,
+ dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev,
+ liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com,
+ shuah@kernel.org, surenb@google.com, usama.arif@linux.dev,
+ vbabka@kernel.org, ziy@nvidia.com, agordeev@linux.ibm.com,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, kas@kernel.org
+Subject: Re: [PATCH v3 05/18] selftests/mm: keep khugepaged out of the swapout
+ the swap cases set up
+To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org,
+ david@kernel.org, ljs@kernel.org, nico.pache@linux.dev
+References: <20260812132304.199287-1-kirill@shutemov.name>
+ <20260812132304.199287-6-kirill@shutemov.name>
+From: Muhammad Usama Anjum <usama.anjum@arm.com>
+Content-Language: en-US
+In-Reply-To: <20260812132304.199287-6-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: LO4P123CA0522.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:272::8) To AM6PR08MB3414.eurprd08.prod.outlook.com
+ (2603:10a6:20b:49::10)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-TrafficTypeDiagnostic:
+	AM6PR08MB3414:EE_|AS8PR08MB9018:EE_|AM1PEPF000252DB:EE_|VI0PR08MB163015:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5d954588-2e32-4733-e65b-08def9eb03c1
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|23010399003|366016|1800799024|376014|7416014|6133799003|56012099006|11063799006|10067099003|4143699003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info-Original:
+ LZKbxbrfaU+N/1/gfDTo3/8hNHwBCd8BUyagHtWTrt/IxH6/J/+0NcdTRO/F1Ica3xFCF5oCzUGN5lUk9QVqiS3umVQdqxfNC8s6ljHXt+Oz6sFcXXs13g0IfN88wczAnDgXlHzZbiJf8a7L/Qwv8e9pua702plPPJnFiwEyuB5yJroDSHq7ozgLSF6jAgdcMivCJRaH+XV0wNwVGQs8+RSW2RFoKQMtyk/AzAd6hRoYPsK7BF0sIx90z6bVemidqPBCwcEcpcrXz6M2iyMUNWY5WX3FdMab9XTawkCOyT2RmIci2RuJc/iBf6QAD8yA4zZTIr851xRfRyHp4YQ/FcqSw50sN517lwhXusNIJduCNAOKmJ6JpUnnUFs2SCQP4JxeiXw1ZPs8riU+hyuRFRU3WJZLaihZngLR9oTy8cXRDuHvYoLZR7ubp0JsuSXjLk6Wd1R3bQ5vMUp8FIQhdgSt61TcXG5OFv0W3gthAD3ZGrJqxqDAm16ZsaM5a9/jVwsc9bUL5ogVaOd6DwuVgvRC0sR/UZfPhRFYIfLpUXUWcznm6KY10+T1GLyNP7VTtkdR6xcExIFITXn1Hg+LE80auSpyL4GGjqO8E/A6g8X54sN90H9GxC3TRAqBxw1cgXCiwaL/ZMm5R9E4qbYIPWlaBKmmyATqXPtDuH6mW6I=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR08MB3414.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(1800799024)(376014)(7416014)(6133799003)(56012099006)(11063799006)(10067099003)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ T78AIWT7mfg2b7gBffwIKbXQ26dNTZFvqGcyGRzgNSd2HO4OH7FW3vhRlPx3rw5arGBiy+775nVN7jPdqMFksDbrdGB9MEKR/UKFTB2+GFuyVygMbtN0irrGpEpVwMpv8I63T++Ur6Ey0zuUC68NT24SRIVQeawuM8OhAhySSdb+7B0zYN19z48gnts++8aw9RkgZ+nKYfJAqxZoMGz9/uwwlEfdjK9xCbkpTF1hmWqwPg8Ww2ilUCqZcrWHwYYmAbhPCqzsB748YgWZ5Yj8FaT75b2kZBoggcYaXhCVqDMTcR7DO0/5eDNpLZ7fnhIQXjn6IkJPaIsTKw9XoChVqg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR08MB9018
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ AM1PEPF000252DB.eurprd07.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	f052744e-ee4b-483e-ce82-08def9eaeed7
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|376014|14060799003|23010399003|7416014|1800799024|35042699022|36860700016|18002099003|22082099003|56012099006|6133799003|4143699003|11063799006|10067099003;
+X-Microsoft-Antispam-Message-Info:
+	IVnYmnE3x6ridmrrn5foeeCfs0Ai3pW7SZWayx1ZNNQaeEv9J2KlxKm11mjwA12p2j3N2sG07EySUmsaLu6Z3uya0XYD8I4l6hS3Jsm+JCv/gxzciYP4T5eu+iNonryCffk74RnViD+7+R7l9fDUx1E4w3ko1pC+fItRGaKVipMf71IL1z6okf4YYRZ403fFpP+6tRjTPfXVSMtXRjS3GxkxArjcLgbj5YXdDyydIqw+YA1lcpQCtKeCaYDb7kQIXr80QE7YJgCP8iLIrRvuwXeODS//hQXFUOz7e2syrGHB79lp14+oENuIIoUSMKZXiUECkp2SAFoZ8ZFdJ9NupbzgU/REXIw0dBRHg0T5qQP505XuiL2tfaDltdRu4ur+Wge3GUxv83fPY5qJ5flCtrCOkft+p1Z+Dgp1bHtBwteR2jxcge91zZfQiZ5zkTOX8VcNDWf9Svisj7alUnuLID1t1TW/1KBuSWQvTHPo/H2f3PbpZuYXOmNGqyVarw41xUqz9sb3hrL1ftm1gAuwpYV63E4cBSxgYog0qEicAzIaW81UjiImU0hmQeZ73lErsPufa0y0GDhaZCp3cTfJEyILCl+XmLVefS4zIrBVaOYbWHUpLLDm748R1KadJ57zk+73ZBA2PI0V9wOUAJV/FGQ87B6EA73T/vKEzY/doWz5b74NCw4f3lvA8N5MV/iTZejFEhgk8wVWgydeHsILqA==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(376014)(14060799003)(23010399003)(7416014)(1800799024)(35042699022)(36860700016)(18002099003)(22082099003)(56012099006)(6133799003)(4143699003)(11063799006)(10067099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	LVztdH4WmabOebpUqqW0LOpLxP4Yzl7WYXKS2d1+0ThnvrO8jMC8OXddJ7xsyF/wchJFdCUoXQ7Q0CJXDOosTsAVr2o50/P+hVQre3oNN/hbPDJjsKrOwH+MuguD7M09X+41+E5IEhr5L/QZLK8R6Jo3fAAdXjM+BDuwkXZ4NrJgLLPD4UzmmPXGApGzcQkrZd8/LQ0ujW2RvCGMCT+fvubQKC/QZMW/KQNULh2I5g9lVTWIRLW+/ZmzE21B/ZVY4pGYjILL+tQizYMhEBMy4dTxayEKnDtw9yx3tkp4AHQ3p0j+Whg75QTvnBbJPKLSY1SLEGfO5inAZKJdwLH4U9tMS/eBRKpm7RRUfCzfJhP7/TtJ+19qKusRYgm9dRBV0WHshAtu3ZOW5omT5l0rjfhFT1CaGQK8uEl1u+UMsviP1QsyvPsymArrdcNTeXBk
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Aug 2026 10:01:30.7783
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5d954588-2e32-4733-e65b-08def9eb03c1
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	AM1PEPF000252DB.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB163015
 
-test_cgcore_lesser_ns_open runs as root throughout and never changes its
-euid, so chowning the two cgroup.procs files to a non-root uid has no
-effect on the test.
+On 12/08/2026 2:22 pm, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> 
+> collapse_swapin_single_pte() and collapse_max_ptes_swap() page a range out
+> and then require smaps to report exactly the count they asked for.  Two
+> things keep it from arriving.  MADV_PAGEOUT is best effort, so the count
+> often turns up a moment late.  And wait_for_scan() leaves MADV_HUGEPAGE
+> behind, so khugepaged is still working on the range: collapsing one with up
+> to max_ptes_swap pages swapped out means reading them back in, and the
+> daemon empties the swap as fast as the case fills it.  On arm64 with 64K
+> pages, where max_ptes_swap is 1024 pages, that is 64M a step and the case
+> loses:
+> 
+>   # Swapout 1024 of 8192 pages... Fail
+>   not ok 10 collapse_max_ptes_swap
+> 
+> Ask again for up to two seconds, with the range held out of the daemon's
+> reach while asking.  The collapse each case runs next puts MADV_HUGEPAGE
+> back, so only the setup is affected.
+> 
+> If the pages still will not go, skip.  is_swap_enabled() covers a machine
+> with no swap; what is left -- swap too small, full, capped by a memcg, busy
+> with writeback -- is not the kernel under test refusing.  An error from
+> madvise() itself still ends the run.
+> 
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 53 +++++++++++++++++++------
+>  1 file changed, 41 insertions(+), 12 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index c049ac997def..8458cd2ff0df 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -241,6 +241,41 @@ static bool check_swap(void *addr, unsigned long size)
+>  	return swap;
+>  }
+>  
+> +/*
+> + * Page the range out and wait for the swap count to say so.
+> + *
+> + * Two things get in the way.  MADV_PAGEOUT is best effort:
+> + * shrink_folio_list() leaves a folio alone when it cannot reclaim it right
+> + * away, and one still under writeback from an earlier pageout is the common
+> + * case, so the count the caller asks for arrives a moment later.  And a range
+> + * an earlier collapse left MADV_HUGEPAGE is one khugepaged is still working
+> + * on: collapsing a range with up to max_ptes_swap pages swapped out means
+> + * reading those pages back in, so the daemon undoes the pageout as fast as it
+> + * is asked for.  Keep the range out of its reach; the collapse the caller runs
+> + * next puts MADV_HUGEPAGE back.
+> + *
+> + * Failing to get the pages out is the machine's answer, not the kernel's --
+> + * swap too small, swap full, a memcg cap, a folio still under writeback -- so
+> + * callers skip rather than fail.  An error from madvise() is different, and
+> + * ends the run here.
+> + */
+> +static bool swapout_range(void *p, unsigned long size)
+> +{
+> +	int i;
+> +
+> +	if (madvise(p, size, MADV_NOHUGEPAGE))
+> +		ksft_exit_fail_perror("madvise(MADV_NOHUGEPAGE)");
+> +
+> +	for (i = 0; i < 40; i++) {
+> +		if (madvise(p, size, MADV_PAGEOUT))
+> +			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+> +		if (check_swap(p, size))
+> +			return true;
+> +		usleep(50 * 1000);
+> +	}
+> +	return false;
+> +}
+> +
+>  static void *alloc_mapping(int nr)
+>  {
+>  	void *p;
+> @@ -855,12 +890,10 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
+>  	p = ops->setup_area(1);
+>  	ops->fault(p, 0, hpage_pmd_size);
+>  
+> -	if (madvise(p, page_size, MADV_PAGEOUT))
+> -		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+> -	if (check_swap(p, page_size)) {
+> +	if (swapout_range(p, page_size)) {
+>  		success("OK");
+>  	} else {
+> -		fail("Fail");
+> +		skip("Could not swap out");
+>  		goto out;
+>  	}
+>  
+> @@ -887,12 +920,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+>  	p = ops->setup_area(1);
+>  	ops->fault(p, 0, hpage_pmd_size);
+>  
+> -	if (madvise(p, (max_ptes_swap + 1) * page_size, MADV_PAGEOUT))
+> -		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+> -	if (check_swap(p, (max_ptes_swap + 1) * page_size)) {
+> +	if (swapout_range(p, (max_ptes_swap + 1) * page_size)) {
+>  		success("OK");
+>  	} else {
+> -		fail("Fail");
+> +		skip("Could not swap out");
+>  		goto out;
+>  	}
+>  
+> @@ -904,12 +935,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
+>  		ops->fault(p, 0, hpage_pmd_size);
+>  		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
+>  		       hpage_pmd_nr);
+> -		if (madvise(p, max_ptes_swap * page_size, MADV_PAGEOUT))
+> -			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
+> -		if (check_swap(p, max_ptes_swap * page_size)) {
+> +		if (swapout_range(p, max_ptes_swap * page_size)) {
+>  			success("OK");
+>  		} else {
+> -			fail("Fail");
+> +			skip("Could not swap out");
+>  			goto out;
+>  		}
+>  
 
-The ENOENT the test expects comes from the cgroup namespace delegation
-check in cgroup_procs_write_permission(): the source and destination
-cgroups must both be descendants of the namespace root captured at open
-time.  That check does not depend on file ownership.  In addition, the
-permission check only examines the common ancestor's cgroup.procs file
-(the test root here), which the chown calls do not touch.
+Reviewed-by: Muhammad Usama Anjum <usama.anju@arm.com>
+Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 
-Remove the redundant chown calls and the now unused test_euid and
-cg_test_a_procs variables.
-
-Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
----
-Changes in v2:
-- Remove the now unused cg_test_a_procs variable, as suggested by
-  sashiko-bot.
-
- tools/testing/selftests/cgroup/test_core.c | 11 ++---------
- 1 file changed, 2 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index 88ca832d4fc1..5501be9912c0 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -795,10 +795,9 @@ static int lesser_ns_open_thread_fn(void *arg)
- static int test_cgcore_lesser_ns_open(const char *root)
- {
- 	static char stack[65536];
--	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
- 	int ret = KSFT_FAIL;
- 	char *cg_test_a = NULL, *cg_test_b = NULL;
--	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
-+	char *cg_test_b_procs = NULL;
- 	int cg_test_b_procs_fd = -1;
- 	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
- 	pid_t pid;
-@@ -813,10 +812,9 @@ static int test_cgcore_lesser_ns_open(const char *root)
- 	if (!cg_test_a || !cg_test_b)
- 		goto cleanup;
- 
--	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
- 	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
- 
--	if (!cg_test_a_procs || !cg_test_b_procs)
-+	if (!cg_test_b_procs)
- 		goto cleanup;
- 
- 	if (cg_create(cg_test_a) || cg_create(cg_test_b))
-@@ -825,10 +823,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
- 	if (cg_enter_current(cg_test_b))
- 		goto cleanup;
- 
--	if (chown(cg_test_a_procs, test_euid, -1) ||
--	    chown(cg_test_b_procs, test_euid, -1))
--		goto cleanup;
--
- 	targ.path = cg_test_b_procs;
- 	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
- 		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
-@@ -863,7 +857,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
- 	if (cg_test_a)
- 		cg_destroy(cg_test_a);
- 	free(cg_test_b_procs);
--	free(cg_test_a_procs);
- 	free(cg_test_b);
- 	free(cg_test_a);
- 	return ret;
 -- 
-2.25.1
+Thanks,
+Usama
 
