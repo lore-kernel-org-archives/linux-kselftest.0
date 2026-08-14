@@ -1,131 +1,140 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pf1-f173.google.com (mail-pf1-f173.google.com [209.85.210.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856DE37A82C
-	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 20:27:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786739276; cv=none; b=RV4eeDzhaH7++iuzYbRbLHpgOJbZ7QA2asC+bNKvesm7jcwchgpDEKYEcwBJ2mv9KsbK8EqRDF5dTe3ojRmPiiJPF/8rCYhct72TmUYl1olPXgeREDINxYz2tS4qT1AANGUWt08Ppno8U+epLT7WjUKZmHWSoC2YE45F5Pf30ME=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786739276; c=relaxed/simple;
-	bh=HFXSVOgmCdmw3rAs3NeHiZ5PVmxyIWzkuC2DG3r9bQc=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Qy5B1997jLNpBWPEkJD7yMBlNZ+kasUBjoS0bdFQRjo8ohUkqNu/+04VRBHP9l+oVP4cNZ6FeNkRKMn72xzcz1JIXeyy2PCp2ZLvSO+/CsA8RHrcyjSDugxuwKqPaIvkxKYIwcPww/Re128IiRdidG+1sa8nH0MIbcHSs3xtz8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kr43rJDC; arc=none smtp.client-ip=209.85.215.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--almasrymina.bounces.google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91F7D33B6CC
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 20:32:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.173
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786739541; cv=pass; b=W9VxQXggYgKRxZ7EXdwQHea9ij6dJRZI+Jc87/h+q1IPMN5StFRTTrFgALOQnvAH9dE7PZFDmkY9UiLUcongqMjpGbLTTtGXNN0qvKAOdh49k1JOKzb9X9cQHjVjVBEEELLQymstH8ds9lK8tFdIr579WHFLQ7OX/t+DLsayYyw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786739541; c=relaxed/simple;
+	bh=fDtmrf85ZQe/ITC6s/lLzWWob18EB0B4ixC3+NydqBk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=N6NYIYRsx2QAYci7kFbYJ6bhRDkHpSaRPd/qWOVVv78cInTTylIpMwUcS6N9YwifaTE7iydjRxh/Ht1URZqJ/yUMiZvXmLB7ix3WkyS0fNk9U+eQskoF4jHi6J0zO6wReSHC+aWOV1/Ax6727jTI3yBEJuc309oOw8iQd6oNSrw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m/0d0e6T; arc=pass smtp.client-ip=209.85.210.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kr43rJDC"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cb5cc1e139bso1031524a12.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 13:27:55 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m/0d0e6T"
+Received: by mail-pf1-f173.google.com with SMTP id d2e1a72fcca58-8485bd28dd0so1487461b3a.2
+        for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 13:32:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786739539; cv=none;
+        d=google.com; s=arc-20260327;
+        b=p93GOvm/L0sv74aORz85sTp6h6gkj6ZZbEe8B9TBfxarkwLD7YU9nODxL93vGFMDMb
+         ACyUeAlShK+7EsYp0IBCB/8NgDD+SrrgCi+cAcM3BZH2a9Yy2EYlaNGA3D9l5w2AM1Wo
+         rP0UScPbPVzKXWczrPp1XoJ4pBUvYsB52ihGBAsTrOtkIidCs/8nKSqJ0U4oQDHpzHgd
+         NGGKHl/1H2YG9RNZGKFwrjOUWyok169kc0qDdzMmbRXMZb8EsdS6QcivhCHQ0NWRXdLY
+         Vg5hjqeNLKtJREpIDuiinMIRmJkskUlcn06Iq8j6CaANfTX9tazp+3WdyNXHBTIRAiwJ
+         c1gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=BfUaJhOj0W7UMR24l1krIbEd3jzyohfQdD0zU2FJI3c=;
+        fh=aMfjFW1ieq2eqEmKwrfHBTAU04gZKmKxiRay5Vs3iMw=;
+        b=ZtqOgXyBLGm2wUueKxThRGShM2/GunJhA8YjbD+UvdEPpPTnTFvFYlZm6lDbWWlyIW
+         dJdgpz2RNb3CPFOPNB3QIly2x+b+7Cdl8s6ZjBXhCfk4r3OISIn6QkTPj1eu9ygED3vQ
+         WUry4y52z5YhB7znUON6e5EOXH1wYPjocEKeF4Gv84T0Au7HBLLNF4B4zNCytZOFtZyd
+         51YaDT48pnT6OKWT+WDo3y8x5X05PSTvU148N9zh1uU7xVTi/WTsPspAgCJTb2vGMMeK
+         y0ii1jSTpKbWJHnIsQDmlVhZOaBEsuFQHS7fq1wgcI/XBBgrl+57mw6cRLh0Kv1J9Zwo
+         AuhA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786739275; x=1787344075; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UPJWlKjLv6ZDAjliELzzhodIr3XvyErgyPYy/hwtGcA=;
-        b=Kr43rJDC5eXIUi9SV0IMcFOocXgllX/ht+gOXq9asjegVngmv1/VPC1XbY3vZ2Y8M5
-         WhFICzvLszHUh+1bjrN2I6eExM/n/XcPnKU0YdGDlfSKkw5hdaC44MyVL2cxFKTe6niD
-         +52GwQE6pFByRyDRxuuQRfUSZgQRtX5QQraBtc+Pfa/B7NouepT+uyMvnUkpgul34BJo
-         vX3eyk/tetWa4T0rcuSIvYV/iCHFOZwzgJQt/egHKOCsVF5osY5CCkheWr7D8rftqbw8
-         s6Ukppsan5SCXVwzctPZyEg3ug7sGLQZENV/XsVXm7dJo8DgiX0EwkvCYez1/oeFOSgt
-         CFNg==
+        d=gmail.com; s=20251104; t=1786739539; x=1787344339; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=BfUaJhOj0W7UMR24l1krIbEd3jzyohfQdD0zU2FJI3c=;
+        b=m/0d0e6T906rYpeV0v+IyjhC+RftzpuIyW3LvLfsQhqLmEmEg8vIUdZfGpskD+q+vQ
+         0d6xMMrMjD6mkVMAAy+gGHyF6exTZ1t97hGyN+9K1hOpoEUCSxVib9QRe7v/ZIjWIfp8
+         cGf6mKVLMQKk2KRWWn8aervzTwalhvfOtklClSGT+1jNhCxxQorxUiMlOgcdNN4cQOes
+         ILPSMpna/U8AC/4eDUs4vXU9iECForP/kfv+53A5OXvp+b903jA/f4IRhXEWbPwB+36W
+         F8SQRphxBXLwsU+AvvlS5/dNqNacMv8tIOGmrKnDYCdOcedNGB6TEWG/O2H0rcw4rqra
+         THfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786739275; x=1787344075;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
+        d=1e100.net; s=20251104; t=1786739539; x=1787344339;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=UPJWlKjLv6ZDAjliELzzhodIr3XvyErgyPYy/hwtGcA=;
-        b=e/GJ/YepskU0TUiaGs6RzKV4lAXE+RiBq99rDHUJ1qOPq52Dh6nS3oqlkqxx+fVGcT
-         2o7pkhVOroo7FbnYOj4Upbd5Q25xDy6ORUdZaqd3chWO7q5Wh7WilqdbDXP1kgBlWaH4
-         YRb9gCWpM9xbJUP3/R+z6KIdke0Sh9TUOm7T0SUCMZoq9vR4l7iShWMcupCcdVbdsIAI
-         xjeJg5kZSS5+U3AobXFCGgGkNd8/RDof8FZZwr3CPDvPrBZg0bXX7hqjsjXJpQUNZFYH
-         kGWyjpXRZ3VVts/Qa44k8puUaUIlwrcToNd+X0WyJc/S/fO7WWq/0e/jyFW4eLbu8jEV
-         JwTw==
-X-Forwarded-Encrypted: i=1; AHgh+Rp8Ec1P8hh8EdydDmV3jN30LXhg4WoMI8GAzKEUQh818El+li8Aju3fa+8LtFLM1INShtdcCHgYa60JnPztj0E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAgR+4Gh0TWbGEBrSP5dd5AZtzQ9B0ILQNRPSUUUm0pwgmdB/z
-	eEpFXnyNOVPiad7W5j1RIUR7GyS0bsF2Oip8dWsZ1fJ9z5DJoTJkKCfPjljyzUJBAcPJ8Mk3f1v
-	jSObw5OEkyie8NI/Qjly6gjHQJQ==
-X-Received: from dys15.prod.google.com ([2002:a05:693c:800f:b0:30c:5c4a:b8b1])
- (user=almasrymina job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a20:728a:b0:3cc:51ff:c2e7 with SMTP id adf61e73a8af0-3cc71dd8814mr8340939637.10.1786739274588;
- Fri, 14 Aug 2026 13:27:54 -0700 (PDT)
-Date: Fri, 14 Aug 2026 20:27:32 +0000
+        bh=BfUaJhOj0W7UMR24l1krIbEd3jzyohfQdD0zU2FJI3c=;
+        b=JhbeLUoy7dHpakbGM7O4dWtA3TaOJItf/i1CyBLhiDZmNoNp8trhq6p6yxkZUTeqDc
+         TMxd8HdDRtXqeSStRCLAh2FywaLa0/A6r2wAs0DQkxHOl7IvseH/2NfExHLBQQu8kxll
+         i1AbqQHAN9UC+TppCYlH578qLCt+IpIdoYi0jvS1zh9eK/olhfB2iS+Klho6aiCvzA9R
+         QOXuGvHkOs6ETB7J50hMgerdVeXrffnVNmUjU33mes+rPpNUSO+8QYB3QuxtvLwqz1fp
+         fKiW+KkQwiI4GVmnKesU0ePfW9NCYgS0X9IQYyBBQ8XkfxcFPdWsPT5eEo9Iks28njHe
+         zy4A==
+X-Forwarded-Encrypted: i=1; AHgh+Rr9kVTJ5XPwOJW5GQOVh+sf0GRuwyId6Np00zQvu5to2H5lYTpBGlKUChfUnZSdy42L7/RmfstZ2066s9AGP4o=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4ioK59BOKFrx1RWxYakF+nGsd6NDQ9jx2QjZonwh5hxPjIFss
+	Et3Up2uWCv5L5lfE1T6JdRlNA/wx8ojYvVfPZ9+RiHxJH/qFFFKT2ji3hJQu0MwiLxPUzOjB+fu
+	THNHB2H3jV7R1/qgoLcTqZ8RuxL58jSY=
+X-Gm-Gg: AR+sD10PiTICzUZ+ld/FgZtyg8U+PxSWcZXY1ElsEYIQb0gpotQ2A8TEAxi3+7mWych
+	VM8+1Cj4BkvKOkai784L5PfHYwqZvNEDU3lyhW91FOav+6f7eO2VKnoURoYl7ITmxmIh9j3xuNE
+	0jKXYaFXN4cAITGiWbdVkaYHH9IFq151zJft3fdQv+bzj72I5UYAvE6ul4A0Qg38P7lYaCO65ZF
+	n0s4cCGqLQBzBKtb2DzHttKtOlMRRh4JRi3340gyf6WzyvB5y60QMrp4j3nr3H/E0LXbw+JABtq
+	tJnL0eJRHukh4wkRjMirTsSBYG6xpkNygDlXVZxhe2yzT0o2lY0sNzI1SkpGY3Xv5LtjO8LCWm6
+	p7QbyNZ6e5l6ezf25VMJBeaeuc9bng+K8rmn2
+X-Received: by 2002:a05:6a21:3a48:b0:3c3:704d:57c4 with SMTP id
+ adf61e73a8af0-3cc71b122bemr11130921637.12.1786739538897; Fri, 14 Aug 2026
+ 13:32:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.691.gc56d675ccc-goog
-Message-ID: <20260814202754.433725-1-almasrymina@google.com>
-Subject: [PATCH net-next v3] selftests: drv-net: devmem: fix 5-tuple flow steering
-From: Mina Almasry <almasrymina@google.com>
-To: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Cc: Mina Almasry <almasrymina@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Bobby Eshleman <bobbyeshleman@meta.com>, Stanislav Fomichev <sdf@fomichev.me>, 
-	Nikolay Aleksandrov <razor@blackwall.org>, Breno Leitao <leitao@debian.org>
+MIME-Version: 1.0
+References: <20260814173206.93082-1-leon.hwang@linux.dev> <20260814173206.93082-2-leon.hwang@linux.dev>
+In-Reply-To: <20260814173206.93082-2-leon.hwang@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 14 Aug 2026 13:32:06 -0700
+X-Gm-Features: AUfX_mwYlaWdU9szLoemEjEdcBeqvThVLjHorsYcgxr_XMe5uBLfK7uw4V91CdE
+Message-ID: <CAEf4BzZvEHCFaPuBDuxCF7-_TLPsJdyZV4WQid2N0RPrPv8NYw@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 1/5] bpf: Drop duplicate blank line in verifier
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-`check_rx` sets the `flow_steer=not hasattr(cfg, 'netns')` kwarg,
-which signals `ncdevmem` to attach the client IP as a param (enabling
-5-tuple flow steering) when running on the host. However,
-`check_rx_hds` currently omits this kwarg, forcing `ncdevmem` to only
-support 3-tuple flow steering.
+On Fri, Aug 14, 2026 at 10:32=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
+>
+> Drop a duplicate blank line in verifier for cleanup.
+>
+> No functional change intended.
+>
+> Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+> ---
+>  kernel/bpf/verifier.c | 1 -
+>  1 file changed, 1 deletion(-)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index 6ac1afced20b..81eae8f70acd 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -12113,7 +12113,6 @@ static int check_kfunc_args(struct bpf_verifier_e=
+nv *env, struct bpf_call_arg_me
+>                         ref_tname =3D btf_name_by_offset(btf, ref_t->name=
+_off);
+>                 }
+>
+> -
 
-If tests are run on a real NIC that requires 5-tuple steering (e.g.
-`gve`), `check_rx_hds` unconditionally fails because `ethtool` rejects
-the 3-tuple rule.
+seriously... just because AI tells you to do something, doesn't mean
+you have to do it. I'm not applying a patch that's removing a single
+empty line.
 
-Testing on `gve` with `devmem` enabled shows the failure is rectified
-when parity is restored to `check_rx_hds`.
 
-Test results before this change:
- # ./devmem.py
- ok 1 devmem.check_rx
- ok 2 devmem.check_tx
- ok 3 devmem.check_tx_chunks
- # Exception| CMD: /usr/src/kernel/tools/testing/selftests/drivers/net/hw/ncdevmem -l -f eth1 -s 192.168.1.89 -p 39105 -L
- # Exception|           Running: ethtool -N eth1 flow-type tcp4 dst-ip 192.168.1.89 dst-port 39105 queue 15
- # Exception|           rmgr: Cannot insert RX class rule: Invalid argument
- # Exception|           ncdevmem: Failed to configure flow steering
- not ok 4 devmem.check_rx_hds
-
-Test results after this change:
- # ./devmem.py
- ok 1 devmem.check_rx
- ok 2 devmem.check_tx
- ok 3 devmem.check_tx_chunks
- ok 4 devmem.check_rx_hds
-
-Signed-off-by: Mina Almasry <almasrymina@google.com>
----
-v3:
-- Sent as a standalone patch. Dropped Patch 2 (gracefully retry bind)
-  from the series as it is no longer needed.
-- Dropped the 'extras = [f"-c {cfg.addr}"]' addition to ncdevmem_tx
-  as it was unnecessary.
-v2: https://lore.kernel.org/all/20260803181852.491437-1-almasrymina@google.com/
----
- tools/testing/selftests/drivers/net/hw/devmem_lib.py | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/drivers/net/hw/devmem_lib.py b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-index 3554954a6691b..5a519713b2769 100644
---- a/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-+++ b/tools/testing/selftests/drivers/net/hw/devmem_lib.py
-@@ -306,7 +306,7 @@ def run_rx_hds(cfg):
-         port = rand_port()
- 
-         listen_cmd = ncdevmem_rx(cfg, port, verify=False,
--                                 fail_on_linear=True)
-+                                 fail_on_linear=True, flow_steer=not hasattr(cfg, 'netns'))
-         socat = socat_send(cfg, port, buf_size=size)
- 
-         with bkg(listen_cmd, exit_wait=True, ns=netns) as ncdevmem:
-
-base-commit: 9958e69b98930834a576e156f6458166d1db1c02
--- 
-2.55.0.691.gc56d675ccc-goog
-
+>                 if (bpf_register_is_null(reg) && type_may_be_null(kf_arg_=
+type))
+>                         continue;
+>
+> --
+> 2.55.0
+>
