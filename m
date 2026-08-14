@@ -1,82 +1,87 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0983D4582D1;
-	Fri, 14 Aug 2026 09:24:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FFFF35C6AC
+	for <linux-kselftest@vger.kernel.org>; Fri, 14 Aug 2026 09:34:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786699446; cv=none; b=TGyvzIYqVA8h/5JAZOh/f8+xYQQ1iffnUEEYDWLXlrRWMvo1+C7Lyn9ouVhghnrFi3gzG+nyjqy2/u9GNdv6LIIVXqVYMQFehqirpm8LymAAl7RjBDS6ZFErMN9xjJ28Y4+sVkmJgwjtvRwpSslb85UkhzvjsnIGrOH2xvI/VBY=
+	t=1786700075; cv=none; b=O5gw9D+G+UHtOqULFzK5aHBNfaTTFNURBb41675kFx/qfbdXF+dHVl7taioynw7x7hT/HbGKni9SlBLWHRJ95g6mzfU9QSjKpo9z7g0vF+no6Dwf8VKSW0l+QyrwjvmUoe1klDz/iVXH23EWnBLOKiIT1Z4tq6Cysi0lGY0Biwg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786699446; c=relaxed/simple;
-	bh=hCP8rIz3lnJ9kvOumW+BPvdDR4ObisLSOGE6XHmzeTQ=;
+	s=arc-20240116; t=1786700075; c=relaxed/simple;
+	bh=lMzUbEZh04TxJ0pwQ90XgaHCU7qNhHRSIA295v8I/Nw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Iqi1LqbGr/qjdXtptQnKUovI2JNFzGkTNawA0UdgzyiiPIEUc5Rvf2yapZi24HQdRux44UMIPwBkIaDQ3+RV48eBjxKQsGY8O/ZkOJbZcoCEffYRehXNLH/Ll0eksepTM/A/eToyMR6jJDRQ0bPYZ8GlBEC1r7DUHd+rA+luglE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d2N409Mu; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=SSmBX1A7hEOQcTvZ1yujDD41kEHelI7KtmdlEuV+x1fEsjYJ87t7/Dxx4i133hAz6dfdVtuquA68Xp/mYnwFGWymFi8y4zfkxHR7lPdixaC5kQsVl6FUYRXXWg3Nhlc0cw1No/yHCx6eK5Cd7zekjFFEc3uyhiH4TuqkhXbJbFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=hhF35gw/; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=vTQ+Ghzt; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=kRByEFa+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=xeRQuVjC; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d2N409Mu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04A751F000E9;
-	Fri, 14 Aug 2026 09:23:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786699444;
-	bh=7BDNiSD/TGPAFah4GBukgWpyeTa1R6d2YpvQnMgrjbU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=d2N409MuBnGGenXQIVTUhLYQy/xgOMSTJOVXxi9ZVjJ93EqI18/99Ynmo8/ZKzoUK
-	 hsU2f7sHDzJDqz23pQND4q5eUFP4xOc5wHLR4JtOjEMIjt7yU+L42ln5V22elUkK5h
-	 NhMaVB0Q+VtlV/t0hp3aZDk/OVtUcaooh9kDUP6wNcplIzQggyjJNuJDOsp2wKG1Wg
-	 q9CPiXCGqhAcX4caBqin5H8rmwYz1HQuJPTsdlnI0pt/t1BVNT6fQjv1VjY3LpdHe/
-	 n3V7nv21MsfuDy6elMFCQ1ja2ia9nGW0FWUNrdyZt6Ru6BTTlWvi6H5bCfl/HKDmU9
-	 cnWkXsSOPyDpA==
-Date: Fri, 14 Aug 2026 10:23:33 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, 
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>, Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>, 
-	Naoya Horiguchi <nao.horiguchi@gmail.com>, Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>, 
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>, 
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>, 
-	Usama Arif <usama.arif@linux.dev>, Matthew Brost <matthew.brost@intel.com>, 
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>, Byungchul Park <byungchul@sk.com>, 
-	Gregory Price <gourry@gourry.net>, Ying Huang <ying.huang@linux.alibaba.com>, 
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>, Xu Xin <xu.xin16@zte.com.cn>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda <imbrenda@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Gerald Schaefer <gerald.schaefer@linux.ibm.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Alex Deucher <alexander.deucher@amd.com>, 
-	Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>, David Airlie <airlied@gmail.com>, 
-	Simona Vetter <simona@ffwll.ch>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	Boris Brezillon <boris.brezillon@collabora.com>, Steven Price <steven.price@arm.com>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Huang Rui <ray.huang@amd.com>, 
-	Matthew Auld <matthew.auld@intel.com>, 
-	Thomas =?utf-8?Q?Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Oleg Nesterov <oleg@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>, 
-	Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>, James Clark <james.clark@linaro.org>, 
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
-	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>, 
-	Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, kvm@vger.kernel.org, 
-	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
-	intel-xe@lists.freedesktop.org, linux-perf-users@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, syzbot@syzkaller.appspotmail.com
-Subject: Re: [PATCH v5 00/16] mm/rmap: index MAP_PRIVATE file-backed folios
- by anonymous pgoff
-Message-ID: <an7eSrKUHUqPpVGv@lucifer>
-References: <20260813-b4-scalable-cow-virt-pgoff-v5-0-c21581c0c3c8@kernel.org>
- <20260813115346.2aaad419a351341a4f5f3ae0@linux-foundation.org>
- <an7SkamROquJ7If0@lucifer>
- <an7dekaY7IMMrzID@kernel.org>
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="hhF35gw/";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="vTQ+Ghzt";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="kRByEFa+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="xeRQuVjC"
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id DF7DC82E4F;
+	Fri, 14 Aug 2026 09:34:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1786700068; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cLUyFxQVLdSjfBmCWkDLy4B3Fcl8gZoDogFSRwHO4t4=;
+	b=hhF35gw/LYvLOC7bzOPZX7IAX7VCpsmamR8rPAxK4T9PEQeKITw8G9Gk/nhimMZKHzB9A/
+	YK+VqcA95PYvxi33jvnkplohRdY6j62ZXFmi4eSNC9zzHiLOxeRjinAIhZvySZvk6PzoGx
+	U8ckiR6gwAfxvMb8u34EmEtlyUhfSbo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1786700068;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cLUyFxQVLdSjfBmCWkDLy4B3Fcl8gZoDogFSRwHO4t4=;
+	b=vTQ+GhztcQ/SYxO3i4hqHl6/agTaIKB2p264q6D1J8JFym4w7q6xS64wAW1UcG/0akaZ50
+	tcYqZh6IgghUoDDw==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1786700063; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cLUyFxQVLdSjfBmCWkDLy4B3Fcl8gZoDogFSRwHO4t4=;
+	b=kRByEFa+u64c03zl4c9aZGcACEi89BLMiT0kj5hSqyelmNEeKzfOrT6xSIJeFiGn7THeHA
+	RIiL4BDbwL0X9guSRyLAPzlTNDPCU7++tfZZVetuTTKJVuZGonK8UEJV+udzKIVTQqc/VW
+	4kscmoaC3F0F3ZNohYOBVRo6J+ag0YE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1786700063;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cLUyFxQVLdSjfBmCWkDLy4B3Fcl8gZoDogFSRwHO4t4=;
+	b=xeRQuVjCrGpluq4gLB1As2xY/vI2RmDCzwDRwZU1ukp3fmj7DP+sKd4qYA7Z6kx6YwV7wW
+	bQghStLan0/QwwBw==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id DF8D1782EA;
+	Fri, 14 Aug 2026 09:34:22 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id Xf7UMh7hfmrabgAAD6G6ig
+	(envelope-from <pfalcato@suse.de>); Fri, 14 Aug 2026 09:34:22 +0000
+Date: Fri, 14 Aug 2026 10:34:21 +0100
+From: Pedro Falcato <pfalcato@suse.de>
+To: Hajime Tazaki <thehajime@gmail.com>
+Cc: linux-mm@kvack.org, geert@linux-m68k.org, daniel@thingy.jp, 
+	Shuah Khan <shuah@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
+Subject: Re: [RFC PATCH 4/6] selftests: fix build errors on alpine linux
+Message-ID: <an7eC0oBvfjB6g54@pedro-suse.lan>
+References: <20260813063401.1786548-1-thehajime@gmail.com>
+ <20260813063401.1786548-5-thehajime@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,50 +90,222 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <an7dekaY7IMMrzID@kernel.org>
+In-Reply-To: <20260813063401.1786548-5-thehajime@gmail.com>
+X-Spam-Score: -4.30
+X-Spam-Level: 
+X-Spam-Flag: NO
+X-Spamd-Result: default: False [-4.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	ARC_NA(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	RCVD_COUNT_TWO(0.00)[2];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,infradead.org:email,imap1.dmz-prg2.suse.org:helo]
 
-On Fri, Aug 14, 2026 at 12:18:50PM +0300, Mike Rapoport wrote:
-> On Fri, Aug 14, 2026 at 10:01:19AM +0100, Lorenzo Stoakes (ARM) wrote:
-> > On Thu, Aug 13, 2026 at 11:53:46AM -0700, Andrew Morton wrote:
-> > > You'll be mortified to hear that Sashiko wasn't able to find anything
-> > > to which to apply this.
-> >
-> > :))
-> >
-> > Well, when it's right it's useful, when it's wrong or suggesting unrelated
-> > what-nots it's less useful :>)
-> >
-> > I do locally put things through claude + Chris Mason's prompts a lot, I
-> > don't always invoke local sashiko as it's very slow and token-heavy or has
-> > been so far, but am planning to do that more also in future.
-> >
-> > >
-> > > Sashiko can be guided with a base-commit: tag but I'm not sure how to
-> > > tell it what tree/branch to try, or even if that's necessary.  Perhaps
-> > > someone can figure this out sometime.
-> >
-> > b4 gives a base commit, but I think because the trees are rebased it ends
-> > up being the incorrect one.
->
-> It's not only that the tree is rebased, but also that mm-unstable carries
-> the previous version of the patches.
+/me puts on his libc hat
 
-Yeah that's part of the issue, I can't rebase on mm-unstable as a result
-obviously.
+On Thu, Aug 13, 2026 at 03:33:59PM +0900, Hajime Tazaki wrote:
+> Some nommu architectures only work on Alpine Linux, which doesn't use
+> glibc for the standard library.  It uses musl-libc and is implemented in
+> a different way as glibc, resulting build failures.
+> 
+> This commit fixes this issue by adding missing definitions. The fixes
+> are now only covered to TARGETS=mm which was tested for the moment;
+> future contributions are needed to fully build/execute tests on nommu
+> platforms.
+> 
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: David Hildenbrand <david@kernel.org>
+> Cc: Lorenzo Stoakes <ljs@kernel.org>
+> Cc: "Liam R. Howlett" <liam@infradead.org>
+> Cc: Vlastimil Babka <vbabka@kernel.org>
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Suren Baghdasaryan <surenb@google.com>
+> Cc: Michal Hocko <mhocko@suse.com>
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-um@lists.infradead.org
+> Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+> ---
+>  tools/testing/selftests/kselftest.h      | 43 ++++++++++++++++++++++++
+>  tools/testing/selftests/lib.mk           |  2 +-
+>  tools/testing/selftests/mm/hugetlb_dio.c |  8 ++---
+>  tools/testing/selftests/mm/mdwe_test.c   |  4 +--
+>  4 files changed, 50 insertions(+), 7 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
+> index ae18c491ae53..ac21bf3d802e 100644
+> --- a/tools/testing/selftests/kselftest.h
+> +++ b/tools/testing/selftests/kselftest.h
+> @@ -58,6 +58,7 @@
+>  #include <string.h>
+>  #include <stdio.h>
+>  #include <sys/utsname.h>
+> +#include <stdint.h>
+>  #endif
+>  
+>  #ifndef ARRAY_SIZE
+> @@ -81,6 +82,48 @@
+>  #endif
+>  #endif /* end arch */
+>  
+> +#if !defined(NOLIBC) && !defined(__GLIBC__)
+> +#ifdef __LP64__
+> +typedef int64_t __fsword_t;
+> +#else
+> +typedef int32_t __fsword_t;
+> +#endif
 
-Is hard to know what is sensible to rebase on - if I rebase on base of my old
-version of the series in mm-unstable that'll probably be a bogus commit at some
-point due to other rebasing.
+The code should not be using __fsword_t. Per statfs(2):
 
->
-> > Not sure what the solution is!
-> >
-> > --
-> > Cheers, Lorenzo
->
-> --
-> Sincerely yours,
-> Mike.
+       The __fsword_t type used for various fields in the statfs
+       structure definition is a glibc internal type, not intended for
+       public use.  This leaves the programmer in a bit of a conundrum
+       when trying to copy or compare these fields to local variables in
+       a program.  Using unsigned int for such variables suffices on most
+       systems.
 
---
-Cheers, Lorenzo
+and indeed if you look at musl's statvfs definition:
+struct statvfs {
+	/* ... */
+	unsigned int f_type;
+	/* ... */
+};
+
+so it should be perfectly cromulent to use unsigned int here. Or use an
+actual usable interface :)
+
+> +
+> +/*
+> + * for a workaround to avoid struct conflict under
+> + * musl-libc (<sys/prctl.h> v.s. <linux/prctl.h>)
+> + */
+> +#include <sys/prctl.h>
+> +#ifndef _LINUX_PRCTL_H
+> +#define _LINUX_PRCTL_H
+> +#endif
+> +
+> +#ifndef PR_SET_MDWE
+> +#define PR_SET_MDWE 65
+> +#endif
+> +
+> +#ifndef PR_MDWE_REFUSE_EXEC_GAIN
+> +#define PR_MDWE_REFUSE_EXEC_GAIN (1UL << 0)
+> +#endif
+> +
+> +#ifndef PR_MDWE_NO_INHERIT
+> +#define PR_MDWE_NO_INHERIT (1UL << 1)
+> +#endif
+> +
+> +#ifndef PR_GET_MDWE
+> +#define PR_GET_MDWE 66
+> +#endif
+> +
+> +#ifndef PR_SET_MEMORY_MERGE
+> +#define PR_SET_MEMORY_MERGE 67
+> +#endif
+> +
+> +#ifndef PR_GET_MEMORY_MERGE
+> +#define PR_GET_MEMORY_MERGE 68
+> +#endif
+> +
+> +#endif
+
+This looks fine. It's the same old problem with musl and kernel headers.
+
+> +
+>  /* define kselftest exit codes */
+>  #define KSFT_PASS  0
+>  #define KSFT_FAIL  1
+> diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> index f02cc8a2e4ae..2cc819006424 100644
+> --- a/tools/testing/selftests/lib.mk
+> +++ b/tools/testing/selftests/lib.mk
+> @@ -197,7 +197,7 @@ clean: $(if $(TEST_GEN_MODS_DIR),clean_mods_dir)
+>  	$(CLEAN)
+>  
+>  # Build with _GNU_SOURCE by default
+> -CFLAGS += -D_GNU_SOURCE=
+> +CFLAGS += -D_GNU_SOURCE= -D_LARGEFILE64_SOURCE
+
+What needs this?
+
+>  
+>  # Additional include paths needed by kselftest.h and local headers
+>  CFLAGS += -I${top_srcdir}/tools/testing/selftests
+> diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+> index fb4600570e13..aee6be530ccb 100644
+> --- a/tools/testing/selftests/mm/hugetlb_dio.c
+> +++ b/tools/testing/selftests/mm/hugetlb_dio.c
+> @@ -22,12 +22,9 @@
+>  #include "kselftest.h"
+>  #include "hugepage_settings.h"
+>  
+> -#ifndef STATX_DIOALIGN
+> -#define STATX_DIOALIGN		0x00002000U
+> -#endif
+
+Why doesn't this fallback work?
+
+> -
+>  static int get_dio_alignment(int fd)
+>  {
+> +#ifdef STATX_DIOALIGN
+>  	struct statx stx;
+>  	int ret;
+>  
+> @@ -43,6 +40,9 @@ static int get_dio_alignment(int fd)
+>  		return 1;
+>  
+>  	return stx.stx_dio_offset_align;
+> +#else
+> +	return -1;
+> +#endif
+>  }
+>  
+>  static bool check_dio_alignment(unsigned int start_off,
+> diff --git a/tools/testing/selftests/mm/mdwe_test.c b/tools/testing/selftests/mm/mdwe_test.c
+> index 647779653da0..031c79ed067e 100644
+> --- a/tools/testing/selftests/mm/mdwe_test.c
+> +++ b/tools/testing/selftests/mm/mdwe_test.c
+> @@ -1,5 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0
+>  
+> +#include "kselftest_harness.h"
+> +
+>  #ifdef __aarch64__
+>  #include <asm/hwcap.h>
+>  #endif
+> @@ -14,8 +16,6 @@
+>  #include <sys/wait.h>
+>  #include <unistd.h>
+>  
+> -#include "kselftest_harness.h"
+> -
+>  #ifndef __aarch64__
+>  # define PROT_BTI	0
+>  #endif
+> -- 
+> 2.43.0
+> 
+> 
+
+Honestly, I'm surprised you needed so few hacks for this! But if I am to
+guess, there are certainly much more problematic selftests out there.
+
+-- 
+Pedro
