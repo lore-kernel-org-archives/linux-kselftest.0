@@ -1,173 +1,145 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BE93B27C3;
-	Fri, 14 Aug 2026 09:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D9A3672A0;
+	Fri, 14 Aug 2026 10:00:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786700760; cv=none; b=eQaeZ0QhkjVVlQALbkCcGM57+ZXHQ6eOPzJ3X6Ec9MB1TzK6qTXgO5axwVXxrKcFmwWjhnkM+NyufpT619g0dUIQ4+fyBQl7fxDjXu+ZUvlkH9Ay4QX5dYeVbizCkIve7lSN/1U/A0pdznFq+QyynkapfCfFMHrSbVaFd53tfg8=
+	t=1786701645; cv=none; b=oW+UayllbWxv6QCz2z7i1C79lwzbKnYV6gvfAWt0KkV7WQ2FkBmVuoIDjeH388BFs5tJl4okcrmSoOSbFHpBO50D0WJfUbD1HwawmSI6Qxp/dLgV/mQk60UwxL2kFgIJq+w3jH2IMdiuHGChhKhFEuy6beFBpu/U2NnFJsY2dak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786700760; c=relaxed/simple;
-	bh=yPneA5IEX3jYmiulL4/kXkWxC7UQdPIf5+i4X9r/HNM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pWD9uF9T7nwTl+7Wm61I0CnQwkO5moEbSJ3zrgXmlmJx2Jmr0AsKVyJ3GPxdGOfkecwJ4wKZh2Ii8RHVt3ERQ8ejYXgojOjFF+6d1Kz0mcNUmtmuhudB4V/MqIWKaD/q9vqc9H+8o9yHEpgWhC5oAzWZQuTW0kMZyEufknW25uU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y1eS4vcH; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y1eS4vcH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25E511F000E9;
-	Fri, 14 Aug 2026 09:45:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786700746;
-	bh=5HIwgrpO1fXJmlHwW1EBASxu2Cq7Szkx1H/G3rD/398=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Y1eS4vcHSMq+0bM/nbkCMNcnwAnFodiBa9e+itcKuVlj+6p1zLi+IiA5WuDkjYAIn
-	 JGpyjlk6a2Ol0t21YFqdfItFcmVwQxPSJaDWeVhtyEbiJNWokMYU/EUI38gTq4JIS4
-	 TsVfwKNpaRK0anYl2q2uFtRsX5aPJzgZdEl1t8ZwMqOl4rG7SM+frXo0RL/EM1S++N
-	 Sr4/yRe6OpOplXzFeyG3IqTVjQmhij5rCnGF0iyRtjfKyvWuhE4dkgUvf4vJGnOs+q
-	 3LQ/JgyfEqf+coYSTWKUIXUhoLnLGAUd1kHFdLzqa8r5jTnoEd+kLbjaCFzNe78lvi
-	 FLy5TqJ8Grvvg==
-Date: Fri, 14 Aug 2026 12:45:15 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jann Horn <jannh@google.com>,
-	Pedro Falcato <pfalcato@suse.de>,
-	"Matthew Wilcox (Oracle)" <willy@infradead.org>,
-	Jan Kara <jack@suse.cz>, Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Rik van Riel <riel@surriel.com>, Harry Yoo <harry@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>, Kees Cook <kees@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
-	Usama Arif <usama.arif@linux.dev>,
-	Matthew Brost <matthew.brost@intel.com>,
-	Joshua Hahn <joshua.hahnjy@gmail.com>, Rakie Kim <rakie.kim@sk.com>,
-	Byungchul Park <byungchul@sk.com>,
-	Gregory Price <gourry@gourry.net>,
-	Ying Huang <ying.huang@linux.alibaba.com>,
-	Alistair Popple <apopple@nvidia.com>, Peter Xu <peterx@redhat.com>,
-	Xu Xin <xu.xin16@zte.com.cn>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Alex Deucher <alexander.deucher@amd.com>,
-	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Steven Price <steven.price@arm.com>,
-	Liviu Dudau <liviu.dudau@arm.com>, Huang Rui <ray.huang@amd.com>,
-	Matthew Auld <matthew.auld@intel.com>,
-	Thomas =?iso-8859-1?Q?Hellstr=F6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	James Clark <james.clark@linaro.org>,
-	Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>, Chris Li <chrisl@kernel.org>,
-	Kairui Song <kasong@tencent.com>,
-	Kemeng Shi <shikemeng@huaweicloud.com>,
-	Nhat Pham <nphamcs@gmail.com>, Baoquan He <baoquan.he@linux.dev>,
-	Youngjun Park <youngjun.park@lge.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, kvm@vger.kernel.org,
-	linux-s390@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-	linux-perf-users@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	syzbot@syzkaller.appspotmail.com
-Subject: Re: [PATCH v5 00/16] mm/rmap: index MAP_PRIVATE file-backed folios
- by anonymous pgoff
-Message-ID: <an7jq2QI6CaTgFxK@kernel.org>
-References: <20260813-b4-scalable-cow-virt-pgoff-v5-0-c21581c0c3c8@kernel.org>
- <20260813115346.2aaad419a351341a4f5f3ae0@linux-foundation.org>
- <an7SkamROquJ7If0@lucifer>
- <an7dekaY7IMMrzID@kernel.org>
- <an7eSrKUHUqPpVGv@lucifer>
+	s=arc-20240116; t=1786701645; c=relaxed/simple;
+	bh=61BfVamzKHgQdUYSAiqfAhDqJTjNb5s8eUQKFu8E5P4=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=HYhmVNo6zGkt4mT6lK/a9zb0fJe66zBCmZQlaKjRei/xtzQlTSs4FoY1WniayCSYoVbOYkMSN3naBLEntZ9dFfEB676MPq3IiTtW/ZQRk77Ng8BlXNHLR7nEY0KwXDlE5dX1M8i7ZJ7kK2xlN74Y0k6i3jvZ2bh3nZ52/Nv8X8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: f76a112c97c611f1aa26b74ffac11d73-20260814
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CHARSET
+	HR_CHARSET_NUM, HR_CTE_8B, HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD
+	HR_DATE_ZONE, HR_FROM_NAME, HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN
+	HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS
+	HR_TO_CHARSET, HR_TO_CHARSET_NUM, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NAME
+	IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED, SA_EXISTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+	ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.12,REQID:6facda73-7d98-427a-8386-a3930e161c6f,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.12,REQID:6facda73-7d98-427a-8386-a3930e161c6f,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:e7bac3a,CLOUDID:56aa920ffbc03c0e04e54e80fc69931a,BulkI
+	D:260814180027EH7NOZMQ,BulkQuantity:0,Recheck:0,SF:10|38|66|78|81|82|102|1
+	27|850|865|898,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,B
+	ulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR
+	:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: f76a112c97c611f1aa26b74ffac11d73-20260814
+X-User: sunshaojie@kylinos.cn
+Received: from localhost.localdomain [(223.70.159.239)] by mailgw.kylinos.cn
+	(envelope-from <sunshaojie@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 619974505; Fri, 14 Aug 2026 18:00:23 +0800
+From: Shaojie Sun <sunshaojie@kylinos.cn>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Shaojie Sun <sunshaojie@kylinos.cn>
+Subject: [PATCH v2] selftests/cgroup: remove redundant chown in test_cgcore_lesser_ns_open
+Date: Fri, 14 Aug 2026 18:00:02 +0800
+Message-Id: <20260814100002.1007394-1-sunshaojie@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260813090914.690350-1-sunshaojie@kylinos.cn>
+References: <20260813090914.690350-1-sunshaojie@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <an7eSrKUHUqPpVGv@lucifer>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 14, 2026 at 10:23:33AM +0100, Lorenzo Stoakes (ARM) wrote:
-> On Fri, Aug 14, 2026 at 12:18:50PM +0300, Mike Rapoport wrote:
-> > On Fri, Aug 14, 2026 at 10:01:19AM +0100, Lorenzo Stoakes (ARM) wrote:
-> > > On Thu, Aug 13, 2026 at 11:53:46AM -0700, Andrew Morton wrote:
-> > > > You'll be mortified to hear that Sashiko wasn't able to find anything
-> > > > to which to apply this.
-> > >
-> > > :))
-> > >
-> > > Well, when it's right it's useful, when it's wrong or suggesting unrelated
-> > > what-nots it's less useful :>)
-> > >
-> > > I do locally put things through claude + Chris Mason's prompts a lot, I
-> > > don't always invoke local sashiko as it's very slow and token-heavy or has
-> > > been so far, but am planning to do that more also in future.
-> > >
-> > > >
-> > > > Sashiko can be guided with a base-commit: tag but I'm not sure how to
-> > > > tell it what tree/branch to try, or even if that's necessary.  Perhaps
-> > > > someone can figure this out sometime.
-> > >
-> > > b4 gives a base commit, but I think because the trees are rebased it ends
-> > > up being the incorrect one.
-> >
-> > It's not only that the tree is rebased, but also that mm-unstable carries
-> > the previous version of the patches.
-> 
-> Yeah that's part of the issue, I can't rebase on mm-unstable as a result
-> obviously.
-> 
-> Is hard to know what is sensible to rebase on - if I rebase on base of my old
-> version of the series in mm-unstable that'll probably be a bogus commit at some
-> point due to other rebasing.
+test_cgcore_lesser_ns_open runs as root throughout and never changes its
+euid, so chowning the two cgroup.procs files to a non-root uid has no
+effect on the test.
 
-If the work does not depend on other commits in mm-unstable, it's possible
-to base on -rcX. But often it's not the case.
+The ENOENT the test expects comes from the cgroup namespace delegation
+check in cgroup_procs_write_permission(): the source and destination
+cgroups must both be descendants of the namespace root captured at open
+time.  That check does not depend on file ownership.  In addition, the
+permission check only examines the common ancestor's cgroup.procs file
+(the test root here), which the chown calls do not touch.
 
-> > > Not sure what the solution is!
-> > >
-> > > --
-> > > Cheers, Lorenzo
-> >
-> > --
-> > Sincerely yours,
-> > Mike.
-> 
-> --
-> Cheers, Lorenzo
+Remove the redundant chown calls and the now unused test_euid and
+cg_test_a_procs variables.
 
+Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+---
+Changes in v2:
+- Remove the now unused cg_test_a_procs variable, as suggested by
+  sashiko-bot.
+
+ tools/testing/selftests/cgroup/test_core.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 88ca832d4fc1..5501be9912c0 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -795,10 +795,9 @@ static int lesser_ns_open_thread_fn(void *arg)
+ static int test_cgcore_lesser_ns_open(const char *root)
+ {
+ 	static char stack[65536];
+-	const uid_t test_euid = 65534;	/* usually nobody, any !root is fine */
+ 	int ret = KSFT_FAIL;
+ 	char *cg_test_a = NULL, *cg_test_b = NULL;
+-	char *cg_test_a_procs = NULL, *cg_test_b_procs = NULL;
++	char *cg_test_b_procs = NULL;
+ 	int cg_test_b_procs_fd = -1;
+ 	struct lesser_ns_open_thread_arg targ = { .fd = -1 };
+ 	pid_t pid;
+@@ -813,10 +812,9 @@ static int test_cgcore_lesser_ns_open(const char *root)
+ 	if (!cg_test_a || !cg_test_b)
+ 		goto cleanup;
+ 
+-	cg_test_a_procs = cg_name(cg_test_a, "cgroup.procs");
+ 	cg_test_b_procs = cg_name(cg_test_b, "cgroup.procs");
+ 
+-	if (!cg_test_a_procs || !cg_test_b_procs)
++	if (!cg_test_b_procs)
+ 		goto cleanup;
+ 
+ 	if (cg_create(cg_test_a) || cg_create(cg_test_b))
+@@ -825,10 +823,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
+ 	if (cg_enter_current(cg_test_b))
+ 		goto cleanup;
+ 
+-	if (chown(cg_test_a_procs, test_euid, -1) ||
+-	    chown(cg_test_b_procs, test_euid, -1))
+-		goto cleanup;
+-
+ 	targ.path = cg_test_b_procs;
+ 	pid = clone(lesser_ns_open_thread_fn, stack + sizeof(stack),
+ 		    CLONE_NEWCGROUP | CLONE_FILES | CLONE_VM | SIGCHLD,
+@@ -863,7 +857,6 @@ static int test_cgcore_lesser_ns_open(const char *root)
+ 	if (cg_test_a)
+ 		cg_destroy(cg_test_a);
+ 	free(cg_test_b_procs);
+-	free(cg_test_a_procs);
+ 	free(cg_test_b);
+ 	free(cg_test_a);
+ 	return ret;
 -- 
-Sincerely yours,
-Mike.
+2.25.1
+
