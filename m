@@ -1,32 +1,33 @@
-Received: from mta0.migadu.com (out-143.mta0.migadu.com [91.218.175.143])
+Received: from mta1.migadu.com (out-155.mta1.migadu.com [95.215.58.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9830233B96B
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 10:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.143
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E46DE30E0DC
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 10:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786789728; cv=none; b=T3fQDLgCCvUjiM6v/bEgiCO00lEe3qfhTTecH1vGuox/6cIgHZkJbFKpoim+JTECMFiO2jikS0GApCD45eF2upNPkGKiqAHJ0FrD/ILS3b/FyRl0ImahHiAUK/MJda8+Q4328KYUMMQNlm2wOTMUz7WkwGqvdAuioRDftNzBVQM=
+	t=1786789898; cv=none; b=qu6wSwsq+bljaqlrHy3nzCofhDXIRJTmUwoikEZNGWbNGmrzhf2UwQQpGkI0I7043Bg+MN3FiMTdLKpSr3nfgEcKo0GaRdzN5I5pUbZURvGuLz87z8Imiw0311c4L8jn3emch7JrdWA81D6Ak9JzuYoIqBKfseC1MM+cH3Qgq2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786789728; c=relaxed/simple;
-	bh=0xdUqTsvy+qUrlfku4ZIUWyJOcx0knAT5Kmtq4e0nOA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Di2/t23nCKgwHHGEpXYsnNj//fgtdcAOhtxBFlYYNLzPKYLxRzE9JuvoQvopCME9aJxqyyar9Iac/UFt3xPJ/DfZZ6JdUrmWnjv6FF4NBo88KW/5mLIzIHQ2xhQxmYAlw8sUYCRFQEo/sdKf+ZQ69Kd3oBt5PAA63+AfLJ0GELo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YOZ4afsK; arc=none smtp.client-ip=91.218.175.143
+	s=arc-20240116; t=1786789898; c=relaxed/simple;
+	bh=yH/agCXDCZtwBki0zGE0wtxh6FsJiZ2Vyl/5PTnHoLo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=uZjXUTKw35eBpvNdSeaeiJxW7hOnyW4X0Hszbqr5oqiEgrGBGlYAvFap07CcQpt8dcBJcH2O0bzsJQ9LAgGVcj2oCZeFZv34ZaJYyg7KKpxd6AemQUqjNZH/V+FTeMkRcwpn33Kp1DofiMY5CiatH/2Xks1XB6sySvg5gSLnvl0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ak9uo2Kv; arc=none smtp.client-ip=95.215.58.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YOZ4afsK"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ak9uo2Kv"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0xdUqTsvy+qUrlfku4ZIUWyJOcx0knAT5Kmtq4e0nOA=;
+DKIM-Signature: a=rsa-sha256; bh=yH/agCXDCZtwBki0zGE0wtxh6FsJiZ2Vyl/5PTnHoLo=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786789723; v=1; x=1787394523;
- b=YOZ4afsKxPNe1ujmq2/i6/adGvcyUtsaGstg3n8JaOrrb78iACU7oo1ti8IfQhhAT9tyaWXo
- 6VKYs380HDYMKd2qQBW0ozRcEBlV9PglYBuxM4/keVo5fxDN4yyJumn4yv2i8c2SwkIpxXwq3Z/
- A0EDz74MA9CF5y519RWqDY+8=
+ t=1786789893; v=1; x=1787394693;
+ b=ak9uo2Kv+7pS7iihnmYHi3OUnwxn5K3N3VqnD6BYy4/DDTLoMaJGj625C6OoPuVffZ4y1rUb
+ x4VmEzrUdNuWwfjMJVANdQoiqHM8x2Cj5NzEsqztVDabAPI3wLWk+UMW1FAB8RPvd9O7Bm2HfMs
+ W7pJWIPdWiLr/GRD3mHlGvXw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
 Received: from localhost.localdomain (2408:823d:2011:2c0:e810:54f9:f0a3:99d)
-	by smtp.migadu.com with ESMTPS id 18de2c252fa19764;
-	Sat, 15 Aug 2026 10:28:43 +0000
+	by smtp.migadu.com with ESMTPS id 2aea94ff0226619a;
+	Sat, 15 Aug 2026 10:31:32 +0000
 X-Migadu-Flow: FLOW_OUT
 From: Jinyu Tang <jinyu.tang@linux.dev>
 To: Anup Patel <anup@brainfault.org>,
@@ -48,12 +49,13 @@ Cc: kvm@vger.kernel.org,
 	Conor Dooley <conor.dooley@microchip.com>,
 	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
 	Nutty Liu <nutty.liu@hotmail.com>,
-	Jinyu Tang <tjytimi@163.com>,
-	Jinyu Tang <jinyu.tang@linux.dev>
-Subject: [PATCH v4 RESEND 0/5] KVM: riscv: Add KVM_PRE_FAULT_MEMORY support
-Date: Sat, 15 Aug 2026 06:28:28 -0400
-Message-ID: <20260815102833.864330-1-jinyu.tang@linux.dev>
+	Jinyu Tang <tjytimi@163.com>
+Subject: [PATCH v4 RESEND 1/5] KVM: riscv: Avoid overwriting G-stage tables with huge leaves
+Date: Sat, 15 Aug 2026 06:31:23 -0400
+Message-ID: <20260815103123.864738-1-jinyu.tang@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260815102833.864330-1-jinyu.tang@linux.dev>
+References: <20260815102833.864330-1-jinyu.tang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -62,56 +64,97 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add RISC-V support for the generic KVM_PRE_FAULT_MEMORY ioctl.
+RISC-V KVM can overwrite an existing G-stage table entry when
+installing a huge leaf mapping. If the target huge range already has a
+lower-level page table, kvm_riscv_gstage_set_pte() can replace the
+non-leaf entry with a leaf PTE and disconnect the lower-level page
+table.
 
-Patch 1 and patch 2 fix existing G-stage huge-page corner cases. They
-are included first because the prefault hook relies on the map path
-reporting the mapping that actually covers the requested GPA.
+Reject replacing a valid table entry with a leaf PTE. If huge-page
+installation hits such a conflict, fall back to a 4K mapping for the
+original faulting GPA in the MMU fault path, where the original GPA and
+HFN are still available.
 
-Patch 3 adds the RISC-V arch hook for KVM_PRE_FAULT_MEMORY. Patch 4 adds
-Sv57 indexing support to the RISC-V KVM selftest helpers, and patch 5
-enables the generic pre_fault_memory_test for RISC-V.
+Suggested-by: Sashiko <sashiko-bot@kernel.org>
+Fixes: 9d05c1fee837 ("RISC-V: KVM: Implement stage2 page table programming")
+Signed-off-by: Jinyu Tang <jinyu.tang@linux.dev>
+---
+ arch/riscv/kvm/gstage.c |  6 ++++++
+ arch/riscv/kvm/mmu.c    | 24 +++++++++++++++++++++++-
+ 2 files changed, 29 insertions(+), 1 deletion(-)
 
-Patch 1 folds the previously posted standalone G-stage table overwrite
-fix into this series:
-
-  https://lore.kernel.org/kvm-riscv/20260814105752.565325-1-jinyu.tang@linux.dev/T/#u
-
-Changes in v4 resend:
-- Resend the full series because the previous v4 send was interrupted
-  and the kvm-riscv list archive did not show a complete thread. No
-  code changes.
-
-Changes in v4:
-- Fold the standalone G-stage non-leaf overwrite fix into this series.
-- Avoid THP adjustment when the original faulting GPA already has an
-  existing 4K G-stage leaf.
-- Return an error for HWPOISON instead of reporting success without a
-  visible G-stage mapping. (Sashiko)
-
-Changes in v3:
-- Retry internally when the map path returns success without a visible
-  G-stage mapping, instead of exposing -EAGAIN. (Sashiko)
-
-Changes in v2:
-- Drop the per-test guest_modes_append_default() call from
-  pre_fault_memory_test.c. (Sean)
-
-Jinyu Tang (5):
-  KVM: riscv: Avoid overwriting G-stage tables with huge leaves
-  KVM: riscv: Avoid THP adjustment for existing 4K G-stage leaves
-  KVM: riscv: Implement KVM_PRE_FAULT_MEMORY
-  KVM: selftests: Add RISC-V Sv57 page table indexing
-  KVM: selftests: Enable pre_fault_memory_test for RISC-V
-
- arch/riscv/kvm/Kconfig                        |  1 +
- arch/riscv/kvm/gstage.c                       |  9 ++
- arch/riscv/kvm/mmu.c                          | 83 ++++++++++++++++++-
- arch/riscv/kvm/vm.c                           |  1 +
- tools/testing/selftests/kvm/Makefile.kvm      |  1 +
- .../selftests/kvm/include/riscv/processor.h   |  6 ++
- .../selftests/kvm/lib/riscv/processor.c       |  2 +
- 7 files changed, 100 insertions(+), 3 deletions(-)
-
+diff --git a/arch/riscv/kvm/gstage.c b/arch/riscv/kvm/gstage.c
+index e5002cb9cbef..54d45addf18f 100644
+--- a/arch/riscv/kvm/gstage.c
++++ b/arch/riscv/kvm/gstage.c
+@@ -174,6 +174,12 @@ int kvm_riscv_gstage_set_pte(struct kvm_gstage *gstage,
+ 
+ 	if (pte_val(*ptep) != pte_val(map->pte)) {
+ 		bool was_invalid = !pte_val(*ptep);
++
++		/* Avoid replacing an existing lower-level table with a leaf mapping. */
++		if (!gstage_pte_leaf(ptep) && !was_invalid &&
++		    gstage_pte_leaf(&map->pte))
++			return -EEXIST;
++
+ 		set_pte(ptep, map->pte);
+ 		if (gstage_pte_leaf(ptep) &&
+ 		    !(was_invalid && riscv_has_extension_unlikely(RISCV_ISA_EXT_SVVPTC)))
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index 6035b5ec9503..bfd6168ebe30 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -625,10 +625,11 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 		      struct kvm_gstage_mapping *out_map)
+ {
+ 	int ret;
+-	kvm_pfn_t hfn;
++	kvm_pfn_t fault_hfn, hfn;
+ 	bool is_hugetlb;
+ 	bool writable;
+ 	unsigned int vma_pageshift;
++	gpa_t fault_gpa = gpa;
+ 	gfn_t gfn = gpa >> PAGE_SHIFT;
+ 	struct vm_area_struct *vma;
+ 	struct kvm *kvm = vcpu->kvm;
+@@ -709,6 +710,7 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 	}
+ 	if (is_error_noslot_pfn(hfn))
+ 		return -EFAULT;
++	fault_hfn = hfn + ((fault_gpa >> PAGE_SHIFT) - gfn);
+ 
+ 	/*
+ 	 * If logging is active then we allow writable pages only
+@@ -734,9 +736,29 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 		mark_page_dirty_in_slot(kvm, memslot, gfn);
+ 		ret = kvm_riscv_gstage_map_page(&gstage, pcache, gpa, hfn << PAGE_SHIFT,
+ 						vma_pagesize, false, true, out_map);
++		if (ret == -EEXIST) {
++			/*
++			 * Retry at 4K granularity for the original faulting GPA
++			 * when a huge leaf cannot replace an existing table.
++			 */
++			ret = kvm_riscv_gstage_map_page(&gstage, pcache, fault_gpa,
++							fault_hfn << PAGE_SHIFT,
++							PAGE_SIZE, false, true,
++							out_map);
++		}
+ 	} else {
+ 		ret = kvm_riscv_gstage_map_page(&gstage, pcache, gpa, hfn << PAGE_SHIFT,
+ 						vma_pagesize, true, true, out_map);
++		if (ret == -EEXIST) {
++			/*
++			 * Retry at 4K granularity for the original faulting GPA
++			 * when a huge leaf cannot replace an existing table.
++			 */
++			ret = kvm_riscv_gstage_map_page(&gstage, pcache, fault_gpa,
++							fault_hfn << PAGE_SHIFT,
++							PAGE_SIZE, true, true,
++							out_map);
++		}
+ 	}
+ 
+ 	if (ret)
 -- 
 2.43.0
+
