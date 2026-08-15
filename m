@@ -1,73 +1,73 @@
 Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5B3352025;
-	Sat, 15 Aug 2026 01:59:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1613B348C76;
+	Sat, 15 Aug 2026 01:59:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786759176; cv=none; b=DhPlgSYgm3Ex+oeolOrvRU6YgLt+BcRHdLNmEa3IjY7Xs9zsWhKMTFYkby63dwgbBxd6TopNMggMSnRUOOGSVw7bJHDjJif9uxrlDH4cqYiFhUgZnLFbSPmfGug8LTyFrJ0YiHF69hevvavYVwqBoLVGi3s8l30zI24vOhS5C28=
+	t=1786759177; cv=none; b=mKQKifHI8bu2WjQ40mfodY3ivKWBDXLnn+AYI4bjun0TKm12JZQdNCsmyzUY+91VdSXp+EE7UJ1Ju5+lnFhzLbH1xMnOdc/75D8qhgqPTTFLAhmKvzAW1In6OJ0hPv2fR/Xuo9v7EHpB6IRf4u2t9xl5A3uCVeGFnAiEm8Kbk/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786759176; c=relaxed/simple;
-	bh=Z0Be8cjYUQX86SNs6Mf05Hfq+gYbxhcEviirMIwIP30=;
+	s=arc-20240116; t=1786759177; c=relaxed/simple;
+	bh=yyq3kmZ3rgY5a6X2MJJXYtvMV0TvBXhbBzmQioozSkk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=iOk6+4kFHDvdGfxrV0y/BWe+AJr3OOMtxg4Hd62EorVjUzGE6kWY7Rpl3YCQcbXCidJmq4xiSfIzQT/Mz9Mk9cCGUC+0G3F5ZIMaUuP/lhbhRT3AkKkztp7I7WevTxCdl87/hL7pB+rAkBcgNQUzl1hSQfyNXl/cK0HLhOYAhWo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=HZzCPkDE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Sa/gT1TL; arc=none smtp.client-ip=103.168.172.149
+	 MIME-Version; b=nlkuJ26CCSXTSknrNo9R8fr8BNRikMqpW17VLfCIlgOZmLif4+e1a1EZ+QlDzV3hwksnlM3jHZdckFz2WvQfx4Vq3YjrilpC/dPVva+I/Cm69DKRO0yjw3lv6PRRePDZZhPaNzij9KGk3ctw5F3dBo2btHFtKV8tTVB/sUWlowY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=wUEtkP4L; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=AyEkDJyG; arc=none smtp.client-ip=103.168.172.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="HZzCPkDE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Sa/gT1TL"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id BF4A1EC0222;
-	Fri, 14 Aug 2026 21:59:32 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="wUEtkP4L";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="AyEkDJyG"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 6EAF3EC0223;
+	Fri, 14 Aug 2026 21:59:34 -0400 (EDT)
 Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Fri, 14 Aug 2026 21:59:32 -0400
+  by phl-compute-04.internal (MEProxy); Fri, 14 Aug 2026 21:59:34 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786759172; x=
-	1786845572; bh=xu5XlzhsRnyO513iPV0tSkUMOqSCDM46ogGqM3hnkno=; b=H
-	ZzCPkDELIGrsL/SPZkH13po6ok3Xzu82j3gEVLFd4py9K0hQqhsH6tbb3v4s9uUt
-	USKjCa0InwtttB36LBy71X7RGJ/6iWdwahgP8rtEt2KvG9XCXfxbuoUdeNaesCsv
-	65WytTlI1SzNc0LC9j50V6LTwMAIaekKK4Y4ymiN4WDGI2Uk7ZfGIwQj2DdGvdqR
-	zzz6HE5GFV5ag1fk5kwW5t0OEMgKsT9VdyvZIej4/B/tICPoG2K4cdzEv8g8uQh+
-	HiNYcTF112LeOCpqidFJL0wX7nshUl2mV/GHtKheDjTVMTHrLsUurx++zV9tGEnh
-	X4i2nB6/7ZBMtpOM1I1+w==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786759174; x=
+	1786845574; bh=OE+z5Z9t7XAE9Lh7e4xto9pNkr14mTVu0K4BOrQwVeA=; b=w
+	UEtkP4LaohjkY96dUrM2/Gg8v1SXvE4oyJieVcO/3ihCC/2FVBAXlb9IK9Bv192m
+	8uzuj/jYsJxulejGiLNr0DoMsCs8KGQMBRB8g40buy4hLq6NEmRIzw1SFmniHJrS
+	bOXaXgn0hEvlZ84bqBZhAjOEh4kCHn7qcAABhBjLT4kW2hWJ06N26RBpsd/o/PW/
+	t69YZ+E3WYCgItp+vu6oer/AnnZTMH+LTkFXgc7r/uMV1dX4Ubt9QHkDwys3Nfs4
+	P0bMi8/u64OEMAStvvpzXk0LGbuR+Sy43ntYzKxUjFPRPa5hJ74XUlUxmBXZIwM6
+	O+/f3oet+Y6QB+2UzfAWg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786759172; x=1786845572; bh=x
-	u5XlzhsRnyO513iPV0tSkUMOqSCDM46ogGqM3hnkno=; b=Sa/gT1TLJH2prrjz6
-	jViLTzOr++s0aYqElJ4N7NepM5yMRkSpi6XX9qQCKXxitcOd9q07RjiGeynTXG9u
-	QgxGWcRAlpvROLZgl3QtuE8dHdP1VWcPxlS5KNWn8qOI4EZsrqNa7VHiNvsEfgQ4
-	stLgu8jrmAhfBiFklZKfhig3FzZfvFI92r5fHYilkDghoO2SISPqxXQhYZ+kL3Md
-	gF16sd1fEYug5UskwBAmbtEBhIqlRL7RMCAt5I/1Tt2SPVoEj1nAzN3FIVN+evOq
-	7iDCTcNoGcqfwzV+UwqvZC6DT/UgltfbfISeXM8+NoOTHwEZFQ4dhyEW6CW4tm+H
-	XtOuA==
-X-ME-Sender: <xms:BMh_aoS0ELGSJBIKz-3pApn4Kx3B8UKBVfvMcJr86NNr_Zt-k3hshg>
-    <xme:BMh_apu7JRa9dC3zi4DhwJX6_vdzzgajcDbS9zbsREz8DJRpx2C6TnuvyAFsgyr9X
-    IaIadlHNeJKg6qkpslb-VksI6_S38gcjNZzxYNuHGCR3s75YCOecXg>
-X-ME-Received: <xmr:BMh_auViP_omZTsnkTJoYAa11M1V4BGJDDhT-OBDMkQA18Yy2X-fVUXY3No>
-X-ME-Proxy-Cause: dmFkZTE4LsllL5mDr4jgINBzNWNyncOxykfAHbUnd5YNeufniPijDKZ2Q74nct+xKCifs1
-    H2Djkg7H/6yFeHnJG3ZaS3y0lvG0agappzf948+VnP0i9yBGlC75HydJdxE+VaLcaAo1iB
-    npgWdh437yabl0tcqFtMCkfLO+e8hKTIM1JoCtbRkD60i2JQs08ndCsfMPOXT8PgyeyXeh
-    uq46vXE/qDxxY4OZQldbm4iR2S+h71iOzjsUxq79Ie/EJboDCHFVxBfBy1NevQy7IuvBPJ
-    BK4YMBoSmlYE8wkBs5S3mRyvR8BaiOuvXRijp0iKeXpkOL2deb0peaX6b452jxbs1L3IHc
-    r6EiA8aJhaBPU/Y029rs+sLysD1ij4of89NgQURm/ilFRab3dDIN42+Xtstkr7g5Gok8lW
-    yOHfx0QBtVuzJJ/rRXeXzo4Q634fT0KPqQ08vCkS19rKppm+Sa7KTKZKI9TnlH7V6ZIPiv
-    1MYDx+dy4fSKd4WLXV0SFEtxM2wqzZ+UDXLR3CW8cb3ZiTkkqwZag+Z8850Xgw8JMQTvVE
-    FDWj7+OXg5E26baiBESDB5UmHEERvYLbIdWytfZa1VFSzsinRjay+Bh7TTtu1nK0hnAeki
-    /ebZk994hv1njGYI3bVVndIMsVEYk4Ys3MmNYuCuUtOfEnzrxswPkrSqE/NA
-X-ME-Proxy: <xmx:BMh_alnqzrLhJvURNPduEMMuVpP1DwGpaDOyAWcOatzAjDyoylVufA>
-    <xmx:BMh_apAQeg8jU_Lii_2C4V1PbTM7SZ5lGq388BpbMHAiQZWkAVbV9w>
-    <xmx:BMh_ai9_42V8YyKV8UXEvCUu9duMVHw1eymtcLdKau9Q1SD3rlZciA>
-    <xmx:BMh_ajSHZhc2HG8pUn4HVm4X7hD2XRQWJngo23ZxEdRQU7Ugrms77Q>
-    <xmx:BMh_ao3UwIs-UUDdg-0kurkqiWqDfqiIFHyDO1D_jgLWMVsToH9rWNVa>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786759174; x=1786845574; bh=O
+	E+z5Z9t7XAE9Lh7e4xto9pNkr14mTVu0K4BOrQwVeA=; b=AyEkDJyGf1lb0vT8i
+	u26VGfBvF2PeRMRwqY7FKd0mcxNsZVGFP11AIdffinftozZWOHOJE4F8iIV14zqv
+	iUvGyPjD0EJiPsEtrvP2NzINUIaBIfLZB+HmP1VD/Py3hGOhFJCr5lPO7SByagyW
+	mlR7bib4aJX5QibPO3vK0/24Xsek/zsX7BU/iQCvbcVHTN7K4nCT6QxtNUqxGk2p
+	9KxTM8gfBVLHVYPEKzf9OHJawb8fSzcq+KbiIoLKO/mpT4ursaEOPgENXDebj40e
+	MQ0C7QLRkKfHMnafK3TjFoJqbp0TKzMgWp2UuT7BecKeujq+1HsSBjho3xmaIiDc
+	K1x9A==
+X-ME-Sender: <xms:Bsh_apCj5imOw7h35lwKSOUh23S4jNuNK1n3CShZDNvFlQPSEuaXQg>
+    <xme:Bsh_ardLEYUvY_TUfR_Ry3FyHi81DRF7QsFiSnAta1CGf-REg5T4Bcp3Lp_Wpu04z
+    KV1wli2PKgqNDW9EsG3Uq2MtHuPFOAu0M5wc3boov0U6jPrsTAksA>
+X-ME-Received: <xmr:Bsh_atHm1PniLhswtsIW6CT7oelwA8WUR6QL6VLGo6S7_gxaAJXte59Xh3k>
+X-ME-Proxy-Cause: dmFkZTEHOB8klcfpaewZ3k5dhFGq+0NT52m0JgfrBhlsrZZ6/wIFkiWFy9BKVmBRzT/M60
+    afg3IBZlSt5ygR3bwXNIcW5ZM0yyzN/pf9UTr2aIVxu9PRgCvu2oUUNVujSBw7FeHwFBsc
+    cXVjrQP9UQmJU5OZxw2U7sN+BvQMOJwzXPSq8ovjEuIpT5m3q0hBt7II5b5sCGi7gkG3/G
+    fAkJjKG33ZxocRSbFLEDKzhP8eL3QUGAVXaSl2VxURMVZW4QVvv1Ki5M31XaRzn4+ok0bg
+    hGdz4SdlVbJh+GxMS7w8oKVQIiajy/o8Z9eSxaHEz+PVJrdtO9FMEbFO2si+6c9liGB/Ff
+    wTXUAXs77/qsjTCBHYxKGokLOK18ZP4RunQBJXnW9+ILE0Q8RXfNQjiO2b7MS7IStm3xGm
+    9ZTMP3wgI0RcearR/x3pfcMGh1sX409I5pLYM4jEiOqo50fkI/rrfVeQsURZyXI4FPNhfv
+    6HlOxn/FFx+/3Onfi4EM1QN2/WuBLFP908hXPCTSbsDyuE9vtDgUkEJaOMOcu7tO/57tBx
+    5VjfcRA6iqSAiym7JeLBedzNgZgvBks8ft3zse8ViQIoSeY82Brpm0EMkCQgHaAfpr+Kga
+    ar1+NqX/iZktB0Uc07Ogq4Na5lrgEbypKolD52EtT0mVHSZl2kffM2vXdC6g
+X-ME-Proxy: <xmx:Bsh_atUdjh-RAkPSfDjNcj0GW0A9OZUQ5LX7FOfQoDqfhHznYVE82Q>
+    <xmx:Bsh_alxkdCO-VTiaswKMLcxPLpXyRipYbdgemMhlkFjfb5CK1Ihgqw>
+    <xmx:Bsh_agt10vYBYyaBGITuK9iLEgRddWY0JmDZ1JzaUyGZ1pqV8Q8uwA>
+    <xmx:Bsh_auDd2Oy8piH8YHSEzvlpaFybvpxtBAER9WrhSwjGJGrxe4fj4g>
+    <xmx:Bsh_aug08D5X0yARbQiToWH5R58YK_SByBzFdU2VXNax7E6Fr_eh2q9Y>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Aug 2026 21:59:32 -0400 (EDT)
+ 14 Aug 2026 21:59:33 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -93,9 +93,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kas@kernel.org
-Subject: [PATCH v4 14/19] selftests/mm: run every supported collapse order by default
-Date: Sat, 15 Aug 2026 02:58:56 +0100
-Message-ID: <20260815015901.1236937-15-kirill@shutemov.name>
+Subject: [PATCH v4 15/19] selftests/mm: check that one khugepaged pass collapses one window
+Date: Sat, 15 Aug 2026 02:58:57 +0100
+Message-ID: <20260815015901.1236937-16-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260815015901.1236937-1-kirill@shutemov.name>
 References: <20260815015901.1236937-1-kirill@shutemov.name>
@@ -109,276 +109,337 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-The mTHP collapse cases only run when the caller names both the context
-and an order, so a plain ./khugepaged covers the PMD contexts on anon and
-nothing else.  run_vmtests.sh pinned order 4 and covered no other.
+The khugepaged cases drive the daemon through sysfs: a store to
+scan_sleep_millisecs wakes it, and full_scans advancing by two marks one
+pass that started after setup.  Every khugepaged result in the suite
+rests on that pair, and nothing checks it.
 
-Run the mTHP cases once per supported anon THP order below the PMD when
--c is absent, and pull that context into both the no-argument invocation
-and "all".  Around that:
+Add khugepaged_sync_check.  Each step:
 
-  - -c still pins one order, and now says what is wrong instead of
-    printing the usage text.  An order at or below the -s source order is
-    skipped: the sources would already be the size being asked for.
+  - prepare one aligned window
+  - record its source PFNs from pagemap
+  - run one khugepaged_full_pass() barrier
+  - require the window came out collapsed, with exactly one collapse
+    attempt attributed to it
 
-  - Both orders end up as array indices and shift counts, so -s and -c
-    are range-checked before they get there.
+The anon events carry no virtual address, so an attempt is matched by the
+source folio PFN and order that mm_collapse_huge_page_isolate() reports.
 
-  - The mTHP context has only anon cases, so a run that names a different
-    mem_type -- "all:shmem", say -- drops it again rather than refusing
-    to start.  Naming both explicitly still refuses.
+Reading the trace buffer takes four small helpers in vm_util: open an
+event subsystem's enable file, flip it, clear the buffer, and open it for
+reading.
 
-  - A case carries the order it was registered at, so a result names it:
+scan_sleep_millisecs is set to a minute, so a step that took a sleep
+instead of a wake would blow the budget.
 
-      # Run test: collapse_single_mthp (mthp_khugepaged:anon, order 6)
-
-On x86-64 with 4K pages that is orders 2 through 8, and ./khugepaged goes
-from 28 results to 77 in 21 seconds, so run_vmtests.sh can drop its
-pinned order-4 line.
+Passes 5/5 on x86-64 4K and arm64 64K.
 
 Assisted-by: Claude-Code:claude-opus-5
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c   | 105 +++++++++++++++++-----
- tools/testing/selftests/mm/run_vmtests.sh |   2 -
- 2 files changed, 85 insertions(+), 22 deletions(-)
+ tools/testing/selftests/mm/Makefile           |   1 +
+ .../selftests/mm/khugepaged_sync_check.c      | 196 ++++++++++++++++++
+ tools/testing/selftests/mm/run_vmtests.sh     |   2 +
+ tools/testing/selftests/mm/vm_util.c          |  41 ++++
+ tools/testing/selftests/mm/vm_util.h          |   4 +
+ 5 files changed, 244 insertions(+)
+ create mode 100644 tools/testing/selftests/mm/khugepaged_sync_check.c
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 856decd2950a..172e7307eeee 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -31,6 +31,9 @@ static unsigned long page_size;
- static int hpage_pmd_nr;
- static int anon_order;
- static int collapse_order;
-+static bool collapse_order_given;
-+static int collapse_orders[NR_ORDERS];
-+static int nr_collapse_orders;
- static int pagemap_fd = -1;
- static int kpageflags_fd = -1;
+diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+index 2093fcf6e915..b2d6e5c12934 100644
+--- a/tools/testing/selftests/mm/Makefile
++++ b/tools/testing/selftests/mm/Makefile
+@@ -105,6 +105,7 @@ TEST_GEN_FILES += merge
+ TEST_GEN_FILES += rmap
+ TEST_GEN_FILES += folio_split_race_test
+ TEST_GEN_FILES += folio_order_check
++TEST_GEN_FILES += khugepaged_sync_check
  
-@@ -1550,6 +1553,7 @@ static void usage(void)
- 	fprintf(stderr,	"\t\t-s: mTHP size, expressed as page order.\n");
- 	fprintf(stderr,	"\t\t    Defaults to 0. Use this size for anon or shmem allocations.\n");
- 	fprintf(stderr,	"\t\t-c: collapse order for mTHP collapse, expressed as page order.\n");
-+	fprintf(stderr,	"\t\t    Defaults to every supported order below the PMD.\n");
- 	fprintf(stderr,	"\t\t    With -s, -s names the mTHP source order for the\n");
- 	fprintf(stderr,	"\t\t    mixed-source case (source order below the target).\n");
- 	exit(1);
-@@ -1557,6 +1561,7 @@ static void usage(void)
- 
- static void parse_test_type(int argc, char **argv)
- {
-+	bool mthp_context_implied = false;
- 	int opt;
- 	char *buf;
- 	const char *token;
-@@ -1568,6 +1573,7 @@ static void parse_test_type(int argc, char **argv)
- 			break;
- 		case 'c':
- 			collapse_order = atoi(optarg);
-+			collapse_order_given = true;
- 			break;
- 		case 'h':
- 		default:
-@@ -1575,12 +1581,25 @@ static void parse_test_type(int argc, char **argv)
- 		}
- 	}
- 
-+	/*
-+	 * Both orders end up as array indices and shift counts, so neither
-+	 * can be negative, and a zero collapse order asks for base pages.
-+	 */
-+	if (anon_order < 0 || anon_order > hpage_pmd_order)
-+		ksft_exit_fail_msg("-s takes an order in 0..%d, not %d\n",
-+				   hpage_pmd_order, anon_order);
-+	if (collapse_order_given &&
-+	    (collapse_order <= 0 || collapse_order >= hpage_pmd_order))
-+		ksft_exit_fail_msg("-c takes an order in 1..%d, not %d\n",
-+				   hpage_pmd_order - 1, collapse_order);
+ ifneq ($(ARCH),arm64)
+ TEST_GEN_FILES += soft-dirty
+diff --git a/tools/testing/selftests/mm/khugepaged_sync_check.c b/tools/testing/selftests/mm/khugepaged_sync_check.c
+new file mode 100644
+index 000000000000..45001996b57a
+--- /dev/null
++++ b/tools/testing/selftests/mm/khugepaged_sync_check.c
+@@ -0,0 +1,196 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Synchronous khugepaged driving check.
++ *
++ * Race tests drive khugepaged through the existing sysfs controls: a
++ * store to scan_sleep_millisecs wakes the daemon, and full_scans
++ * advancing by two is a completion barrier for one full pass that
++ * started after setup (khugepaged_full_pass()). Verify the pair gives
++ * deterministic, attributable results: one barrier step over one
++ * prepared window produces exactly one collapse attempt on that
++ * window's source pages (mm_collapse_huge_page_isolate events filtered
++ * by source PFN and order) and the window is collapsed
++ * afterwards, repeatably.
++ *
++ * scan_sleep_millisecs is set to 60s to prove the wake path: without
++ * the wake, one barrier step would sleep multiples of that and blow
++ * the timeout. It also keeps the daemon from free-running between
++ * steps, per the khugepaged_full_pass() discipline.
++ */
++#define _GNU_SOURCE
++#include <fcntl.h>
++#include <stdio.h>
++#include <stdlib.h>
++#include <string.h>
++#include <sys/mman.h>
++#include <unistd.h>
 +
- 	argv += optind;
- 	argc -= optind;
- 
- 	if (argc == 0) {
--		/* Backwards compatibility */
-+		/* Everything that needs no argument of its own: anon, every context */
- 		khugepaged_context =  &__khugepaged_context;
-+		mthp_khugepaged_context =  &__mthp_khugepaged_context;
- 		madvise_context =  &__madvise_context;
- 		anon_ops = &__anon_ops;
- 		return;
-@@ -1591,13 +1610,19 @@ static void parse_test_type(int argc, char **argv)
- 
- 	if (!strcmp(token, "all")) {
- 		khugepaged_context =  &__khugepaged_context;
-+		mthp_khugepaged_context =  &__mthp_khugepaged_context;
- 		madvise_context =  &__madvise_context;
++#include "kselftest.h"
++#include "vm_util.h"
++#include "hugepage_settings.h"
 +
-+		/*
-+		 * "all" sweeps the mTHP context in, but it only has anon
-+		 * cases: step it aside for the other mem_types rather than
-+		 * refusing the whole run.
-+		 */
-+		mthp_context_implied = true;
- 	} else if (!strcmp(token, "khugepaged")) {
- 		khugepaged_context =  &__khugepaged_context;
- 	} else if (!strcmp(token, "mthp_khugepaged")) {
- 		mthp_khugepaged_context =  &__mthp_khugepaged_context;
--		if (collapse_order <= 0 || collapse_order >= hpage_pmd_order)
--			usage();
- 	} else if (!strcmp(token, "madvise")) {
- 		madvise_context =  &__madvise_context;
- 	} else {
-@@ -1613,20 +1638,20 @@ static void parse_test_type(int argc, char **argv)
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
- 		anon_ops = &__anon_ops;
- 		shmem_ops = &__shmem_ops;
--		if (mthp_khugepaged_context)
--			usage();
- 	} else if (!strcmp(buf, "anon")) {
- 		anon_ops = &__anon_ops;
- 	} else if (!strcmp(buf, "file")) {
- 		read_only_file_ops =  &__read_only_file_ops;
- 		read_write_file_read_ops =  &__read_write_file_read_ops;
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
--		if (mthp_khugepaged_context)
-+		if (mthp_khugepaged_context && !mthp_context_implied)
- 			usage();
-+		mthp_khugepaged_context = NULL;
- 	} else if (!strcmp(buf, "shmem")) {
- 		shmem_ops = &__shmem_ops;
--		if (mthp_khugepaged_context)
-+		if (mthp_khugepaged_context && !mthp_context_implied)
- 			usage();
-+		mthp_khugepaged_context = NULL;
- 	} else {
- 		usage();
- 	}
-@@ -1648,6 +1673,7 @@ struct test_case {
- 	struct mem_ops *ops;
- 	const char *desc;
- 	test_fn fn;
-+	int order;		/* mTHP contexts: the collapse order */
- };
- 
- #define MAX_TEST_CASES 256
-@@ -1663,6 +1689,7 @@ static int nr_test_cases;
- 			.ops	= o,					\
- 			.desc	= #t,					\
- 			.fn	= t,					\
-+			.order	= collapse_order,			\
- 		};							\
- 	}								\
- 	} while (0)
-@@ -1703,10 +1730,37 @@ int main(int argc, char **argv)
- 
- 	parse_test_type(argc, argv);
- 
--	if (mthp_khugepaged_context &&
--	    !(thp_supported_orders() & (1UL << collapse_order)))
--		ksft_exit_skip("Order %d is not a supported anon THP order\n",
--			       collapse_order);
-+	if (mthp_khugepaged_context) {
-+		unsigned long orders = thp_supported_orders();
++#define BASE_ADDR ((void *)(1UL << 30))
++#define TARGET_ORDER 2	/* smallest order khugepaged considers */
++#define NR_ITERATIONS 5
 +
-+		if (collapse_order_given) {
-+			/* -c pins one order; it has to be one we can build */
-+			if (!(orders & (1UL << collapse_order)))
-+				ksft_exit_skip("Order %d is not a supported anon THP order\n",
-+					       collapse_order);
-+			if (collapse_order <= anon_order)
-+				ksft_exit_skip("-c %d needs a source order below it, -s says %d\n",
-+					       collapse_order, anon_order);
-+			collapse_orders[nr_collapse_orders++] = collapse_order;
-+		} else {
-+			/*
-+			 * Otherwise every order a collapse could produce.  -s
-+			 * makes the fault path hand out folios of that order,
-+			 * so a target at or below it has nothing to collapse:
-+			 * the sources are already the size being asked for.
-+			 */
-+			int first = anon_order + 1;
++static int pagemap_fd;
++static int kpageflags_fd;
++static int trace_events_fd = -1;
++static unsigned long hpage_pmd_size;
 +
-+			if (first < MIN_MTHP_ORDER)
-+				first = MIN_MTHP_ORDER;
-+			for (int i = first; i < hpage_pmd_order; i++) {
-+				if (orders & (1UL << i))
-+					collapse_orders[nr_collapse_orders++] = i;
++/*
++ * Each step switches the events off again, but a helper can still give up
++ * on us in between (a failing sysfs write ends the test from inside
++ * thp_write_num()), and huge_memory events left on are the whole machine's
++ * problem, not this test's.
++ */
++static void trace_events_off(void)
++{
++	if (trace_events_fd >= 0)
++		tracing_events_enable(trace_events_fd, false);
++}
++
++/*
++ * Count collapse attempts attributable to our window: isolate events whose
++ * scan_pfn is one of the window's source PFNs, reported once per attempt.
++ */
++static int count_attributed(unsigned long *pfns, int nr_pfns,
++			    unsigned int order)
++{
++	char line[1024];
++	int count = 0;
++	FILE *fp;
++
++	fp = tracing_open_trace();
++	if (!fp)
++		ksft_exit_fail_msg("Cannot open trace buffer\n");
++
++	while (fgets(line, sizeof(line), fp)) {
++		unsigned long val;
++		unsigned int ord;
++		char *s, *o;
++		int i;
++
++		s = strstr(line, "mm_collapse_huge_page_isolate:");
++		if (!s)
++			continue;
++		if (sscanf(s, "mm_collapse_huge_page_isolate: scan_pfn=0x%lx",
++			   &val) != 1)
++			continue;
++		o = strstr(s, "order=");
++		if (!o || sscanf(o, "order=%u", &ord) != 1 || ord != order)
++			continue;
++		for (i = 0; i < nr_pfns; i++) {
++			if (val == pfns[i]) {
++				count++;
++				break;
 +			}
-+			if (!nr_collapse_orders)
-+				ksft_print_msg("mTHP cases skipped: no order above the source\n");
 +		}
 +	}
- 
- 	if (mthp_khugepaged_context) {
- 		pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-@@ -1760,7 +1814,17 @@ int main(int argc, char **argv)
- 	TEST(collapse_full, khugepaged_context, read_write_file_read_ops);
- 	TEST(collapse_full, khugepaged_context, read_write_file_write_ops);
- 	TEST(collapse_full, khugepaged_context, shmem_ops);
--	TEST(collapse_full, mthp_khugepaged_context, anon_ops);
-+	for (int i = 0; i < nr_collapse_orders; i++) {
-+		collapse_order = collapse_orders[i];
-+		TEST(collapse_full, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_empty, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_single_window, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
-+		TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
++	fclose(fp);
++	return count;
++}
++
++static void one_step(int iteration)
++{
++	const size_t window = getpagesize() << TARGET_ORDER;
++	const int nr_pages = 1 << TARGET_ORDER;
++	unsigned long pfns[1 << TARGET_ORDER];
++	bool collapsed, passed;
++	int attributed;
++	char *p;
++	int i;
++
++	p = mmap(BASE_ADDR, hpage_pmd_size, PROT_READ | PROT_WRITE,
++		 MAP_ANONYMOUS | MAP_PRIVATE | MAP_FIXED_NOREPLACE, -1, 0);
++	if (p != BASE_ADDR)
++		ksft_exit_fail_perror("mmap() window");
++
++	/* Prepare one window; record its source PFNs. */
++	for (i = 0; i < nr_pages; i++) {
++		p[i * getpagesize()] = i + 1;
++		pfns[i] = pagemap_get_pfn(pagemap_fd, p + i * getpagesize());
++		if (pfns[i] == -1UL)
++			ksft_exit_fail_msg("Source page not present\n");
 +	}
 +
- 	TEST(collapse_full, madvise_context, anon_ops);
- 	TEST(collapse_full, madvise_context, read_only_file_ops);
- 	TEST(collapse_full, madvise_context, read_write_file_read_ops);
-@@ -1768,15 +1832,8 @@ int main(int argc, char **argv)
- 	TEST(collapse_full, madvise_context, shmem_ops);
- 
- 	TEST(collapse_empty, khugepaged_context, anon_ops);
--	TEST(collapse_empty, mthp_khugepaged_context, anon_ops);
- 	TEST(collapse_empty, madvise_context, anon_ops);
- 
--	TEST(collapse_single_mthp, mthp_khugepaged_context, anon_ops);
--	TEST(collapse_order_single_window, mthp_khugepaged_context, anon_ops);
--	TEST(collapse_order_partial_window, mthp_khugepaged_context, anon_ops);
--	TEST(collapse_order_max_ptes_none, mthp_khugepaged_context, anon_ops);
--	TEST(collapse_order_mixed_sources, mthp_khugepaged_context, anon_ops);
--
- 	TEST(collapse_single_pte_entry, khugepaged_context, anon_ops);
- 	TEST(collapse_single_pte_entry, khugepaged_context, read_only_file_ops);
- 	TEST(collapse_single_pte_entry, khugepaged_context, read_write_file_read_ops);
-@@ -1849,7 +1906,15 @@ int main(int argc, char **argv)
- 	for (int i = 0; i < nr_test_cases; i++) {
- 		struct test_case *t = &test_cases[i];
- 
--		ksft_print_msg("\n# Run test: %s (%s:%s)\n", t->desc, t->ctx->name, t->ops->name);
-+		if (t->ctx == &__mthp_khugepaged_context) {
-+			collapse_order = t->order;
-+			ksft_print_msg("\n# Run test: %s (%s:%s, order %d)\n",
-+				       t->desc, t->ctx->name, t->ops->name,
-+				       t->order);
-+		} else {
-+			ksft_print_msg("\n# Run test: %s (%s:%s)\n", t->desc,
-+				       t->ctx->name, t->ops->name);
-+		}
- 		t->fn(t->ctx, t->ops);
- 	}
- 
++	/* Clear first: with the events still off there is nothing to undo. */
++	if (tracing_clear_trace())
++		ksft_exit_fail_msg("Cannot clear the trace buffer\n");
++	if (tracing_events_enable(trace_events_fd, true))
++		ksft_exit_fail_msg("Cannot enable huge_memory events\n");
++
++	if (madvise(p, hpage_pmd_size, MADV_HUGEPAGE))
++		ksft_exit_fail_perror("madvise(MADV_HUGEPAGE)");
++	/* Wait up to 120 seconds for the pass to complete. */
++	passed = khugepaged_full_pass(120);
++
++	/* Off before anything that can give up: the events are system-wide. */
++	if (tracing_events_enable(trace_events_fd, false))
++		ksft_exit_fail_msg("Cannot disable huge_memory events\n");
++	if (!passed)
++		ksft_exit_fail_msg("khugepaged did not complete a full pass\n");
++
++	collapsed = is_range_backed_by_folio_orders(p, window, TARGET_ORDER,
++						    pagemap_fd, kpageflags_fd);
++	attributed = count_attributed(pfns, nr_pages, TARGET_ORDER);
++
++	ksft_test_result(collapsed && attributed == 1,
++			 "step %d: window collapsed, %d attributed result(s)\n",
++			 iteration, attributed);
++
++	munmap(p, hpage_pmd_size);
++}
++
++int main(void)
++{
++	struct thp_settings settings;
++	int i;
++
++	ksft_print_header();
++
++	if (!thp_available())
++		ksft_exit_skip("Transparent Hugepages not available\n");
++	if (!(thp_supported_orders() & (1UL << TARGET_ORDER)))
++		ksft_exit_skip("Order %d is not a supported anon THP order\n",
++			       TARGET_ORDER);
++
++	hpage_pmd_size = read_pmd_pagesize();
++	if (!hpage_pmd_size)
++		ksft_exit_fail_msg("Reading PMD pagesize failed\n");
++	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
++	if (pagemap_fd < 0)
++		ksft_exit_fail_perror("open(/proc/self/pagemap)");
++	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
++	if (kpageflags_fd < 0)
++		ksft_exit_skip("open(\"/proc/kpageflags\") requires root\n");
++	trace_events_fd = tracing_events_open("huge_memory");
++	if (trace_events_fd < 0)
++		ksft_exit_skip("huge_memory events require tracefs and root\n");
++	atexit(trace_events_off);
++
++	ksft_set_plan(NR_ITERATIONS);
++
++	thp_save_settings();
++	thp_read_settings(&settings);
++	settings.thp_enabled = THP_MADVISE;
++	settings.thp_defrag = THP_DEFRAG_ALWAYS;
++	settings.khugepaged.defrag = 1;
++	settings.khugepaged.scan_sleep_millisecs = 60000;
++	settings.khugepaged.alloc_sleep_millisecs = 60000;
++	settings.khugepaged.max_ptes_none = (hpage_pmd_size / getpagesize()) - 1;
++	/* One wake must complete one full pass; see khugepaged_full_pass(). */
++	settings.khugepaged.pages_to_scan = 1UL << 24;
++	for (i = 0; i < NR_ORDERS; i++)
++		settings.hugepages[i].enabled = THP_NEVER;
++	settings.hugepages[TARGET_ORDER].enabled = THP_INHERIT;
++	/* Base of the settings stack; the bottom entry is never popped. */
++	thp_push_settings(&settings);
++
++	for (i = 0; i < NR_ITERATIONS; i++)
++		one_step(i);
++
++	thp_restore_settings();
++
++	ksft_finished();
++}
 diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 2652a7920b80..8bf898b71350 100755
+index 8bf898b71350..c0f69da3fd3b 100755
 --- a/tools/testing/selftests/mm/run_vmtests.sh
 +++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -412,8 +412,6 @@ CATEGORY="thp" run_test ./khugepaged all:shmem
+@@ -404,6 +404,8 @@ CATEGORY="cow" run_test ./cow
  
- CATEGORY="thp" run_test ./khugepaged -s 4 all:shmem
+ CATEGORY="thp" run_test ./folio_order_check
  
--CATEGORY="thp" run_test ./khugepaged -c 4 mthp_khugepaged:anon
--
- # Try to create XFS if not provided
- if [ -z "${SPLIT_HUGE_PAGE_TEST_XFS_PATH}" ]; then
-     if test_selected "thp"; then
++CATEGORY="thp" run_test ./khugepaged_sync_check
++
+ CATEGORY="thp" run_test ./khugepaged
+ 
+ CATEGORY="thp" run_test ./khugepaged -s 2
+diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+index c9bd6c92fa41..ee1334778391 100644
+--- a/tools/testing/selftests/mm/vm_util.c
++++ b/tools/testing/selftests/mm/vm_util.c
+@@ -598,6 +598,47 @@ bool is_range_backed_by_folio_orders(char *start, size_t len, int order,
+ 	return true;
+ }
+ 
++#define TRACEFS_ROOT "/sys/kernel/tracing"
++
++/*
++ * Open the enable file of one ftrace event subsystem (e.g. "huge_memory").
++ * Returns a descriptor for tracing_events_enable(), or -1 if tracefs or the
++ * subsystem is not there.  The events are system-wide state: whoever
++ * switches them on owns them until it switches them off, including on the
++ * paths where the test gives up.
++ */
++int tracing_events_open(const char *subsys)
++{
++	char path[256];
++
++	snprintf(path, sizeof(path), TRACEFS_ROOT "/events/%s/enable",
++		 subsys);
++	return open(path, O_WRONLY);
++}
++
++int tracing_events_enable(int fd, bool enable)
++{
++	if (pwrite(fd, enable ? "1" : "0", 1, 0) != 1)
++		return -1;
++	return 0;
++}
++
++/* Drop what the trace buffer holds so far. */
++int tracing_clear_trace(void)
++{
++	int fd = open(TRACEFS_ROOT "/trace", O_WRONLY | O_TRUNC);
++
++	if (fd < 0)
++		return -1;
++	close(fd);
++	return 0;
++}
++
++FILE *tracing_open_trace(void)
++{
++	return fopen(TRACEFS_ROOT "/trace", "r");
++}
++
+ /* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
+ int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
+ 			      bool miss, bool wp, bool minor, uint64_t *ioctls)
+diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+index ce05bce4670d..10c7be46e44c 100644
+--- a/tools/testing/selftests/mm/vm_util.h
++++ b/tools/testing/selftests/mm/vm_util.h
+@@ -119,6 +119,10 @@ int close_procmap(struct procmap_fd *procmap);
+ int write_sysfs(const char *file_path, unsigned long val);
+ int read_sysfs(const char *file_path, unsigned long *val);
+ bool softdirty_supported(void);
++int tracing_events_open(const char *subsys);
++int tracing_events_enable(int fd, bool enable);
++int tracing_clear_trace(void);
++FILE *tracing_open_trace(void);
+ 
+ static inline int open_self_procmap(struct procmap_fd *procmap_out)
+ {
 -- 
 2.54.0
 
