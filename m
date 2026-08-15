@@ -1,50 +1,50 @@
-Received: from out203-205-221-235.mail.qq.com (out203-205-221-235.mail.qq.com [203.205.221.235])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0022366806;
-	Sat, 15 Aug 2026 08:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.235
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F2B329898F;
+	Sat, 15 Aug 2026 08:20:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781983; cv=none; b=e18vzjRMoxq/gfq/QJzcafu7YwlsqyGb/CxZYwxX/ujZwr2naU8WcP/bfoEy3yo9Onx8f6qGLqECT9OAEtJYeD7M68drKTev9ZbQjFPq/42RRD/CB0KKJVQN/8E4i6J4MX/Et8Lf5HZKJGmZaA6VoIK3ZEJr3fe7+Oz7/XXUOic=
+	t=1786782049; cv=none; b=ahGKyOep+IVyNb+P+Sjssf+HhykgO+tVRcnlaYyItUoUdsnnQMScY7MNRjxFLNOaCGo6ujQGMrHdouKBTxJjxaq2Ku8+bR/8MTlVMHH6r2SLbacHqcOorcpeQ4WqNdBobCxkoW6MPbtzCg9pe5OFle4dXOCvtWGB7nvBl00Sfik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786781983; c=relaxed/simple;
-	bh=00BAyC9l2NDWsNEOuGALJvAkiG/r86tPbO3/OERtUx4=;
+	s=arc-20240116; t=1786782049; c=relaxed/simple;
+	bh=a1GnAG8NnIFdx6FfN86aHAU5R9ovP9mHGkN5YFoOdG0=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=Vh4SBKyp7hKuc2X8N877bovUnGZPq1liPhRuHsaxWc2su3VKEYQYwk9Mb1Zwq95TObdkMzjrIzxy6fFXT3AMPAml1hgKz8J6oLyf+cpc+70zKNTucGYkaBB6cpkfk/2a2uc7rxXu7dn1OD2hVIeIToTTmHHXAs8e55imUsBx3ok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=FycF1dey; arc=none smtp.client-ip=203.205.221.235
+	 MIME-Version; b=qPp0diaRKkD2LLAt02D+Fg13M7X8sS5LBNzkGHfs4GL1zngbUk8/QB0W88pcZlUQZRdBfPOtJk8XUv7RTqFmyf7vWJS3Zkz5mmVT6Hxo6jQ0OYXCzyjSq4uFrk36q1GWoxlwJwirec8VcFvJ5okXCxI31bNRR9SWhYzhUzjTKjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=qnOTkSWo; arc=none smtp.client-ip=43.163.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="FycF1dey"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="qnOTkSWo"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1786781974;
-	bh=mkPUMPo3G1CDGU17bWF0zBBqV9vQekXFKd3qbFyhYPI=;
+	s=s201512; t=1786782045;
+	bh=5v7A/+8jJBbS8atrNGVsc3xelBryd4ftLyYpZG8ujJE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=FycF1deywBgqcljvoV3C2swk24sSpy6BduTru123tH2G+dsCX3h3/XDgG/4cyxJ8e
-	 s0JpXyfjIgcmG0t+7xtLWgyJrIoLAxoMKkczQ6ri+XR76CGy85jFaw5H8lCs95FaP1
-	 APaM9EBg4VjtdZBYk8g1IJRizBv7uZEHW2VNLPvg=
+	b=qnOTkSWouusyneeuIggtAM/adW4XIBVuaYY3WIgHXeTsBVVoBz2eNq7wju+x5R6kY
+	 SYB5Wzu9R9aVnmYkSOUpAejTwcCnXUouGhK0PSkg9dBbyRQbUt8fzHQkt4o7iw9/Xl
+	 hHPgoZ1AHtVCDMn2rgGBeCoPtqaDV4YtT2u5amaA=
 Received: from localhost.localdomain ([180.153.160.8])
 	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
 	id 4D51223E; Sat, 15 Aug 2026 16:19:21 +0800
-X-QQ-mid: xmsmtpt1786781971tji7hr0d8
-Message-ID: <tencent_E2FD478B453F740591952AA7A502D4FCA609@qq.com>
-X-QQ-XMAILINFO: Mv+0OqVCSt4ET/vJpRXQWLjZwJSaXqhxHmAruZOuABqR37CXO9i4TsMY/gdwN4
-	 HQHSS1l39cgQeM6zHqoYtcjNiExOrSxFCdvD1VBwlexilrqCBOj32Jl46FU/2l13041/dNDhX4p+
-	 DD8zG/q+gVEeMAChAYbkO8DdpcQZ3zO0nf+UA7xyjLBMKOpXFW5IOlBhlNNoYVNiOGMfsBmYzGpg
-	 EhIOl0+semotNZthsmYeqj3+6oKfb1xAJNiRtwttFoHNaDFw2WCU/gW3Z7fO8o58IZsWWrz9gQ/4
-	 2fx85YCN14hGQCC3a2Gzlkt11l/V7OlNxoubMP1Terf89aTLRm2TGz3hy8RGyDya3PM4pJJk/kbz
-	 MvZu8Q7O4f3tjIvXKcRSSxHEWIGRfawcuUKjtZTbKzHmq/hU06yAKyAlotD2ldXk/wDT64U/EP9k
-	 nqEJUASuEwXe7OvaGJzw/LsdrT76OUFXb0y+fYmoYT+e+mze8jfwxpCvOEHunrV0m4oLZhbzz/Il
-	 otBhbXyG21TEj9kjAqPNdip9zW/fy07Y57Q+fgTJ2O0D1n3htV3MEo2aaXCDJajNlxIFZrGplXTE
-	 NR9k0ZA5NN/7AklHs/TAh9XDQx8Ho9niHC0MfRRy4G0OWlWLLHd9IWGw/NgeItbJjZONT4+YDi0d
-	 wjedRoIeaF4m12ovXKFxJO+oYeIJmmcUOmO9fvgs7fKgXqIpNsdt4gaHp8EvibQ6u3CRWS++kDxY
-	 3IAsVi8rxqvcbJ5NuIDq0vOGh07H9ODFciBaOP0yda78x+q8tIyapwrzSPLcvUenC3UFASkUIBjA
-	 adcSX1u31bZiJdkjDd4Rw7Z+ZOLX0hG5kQEZsxhJBSGYsz9yU63FYsoNI5ytVS/y/CNKOPq2EC6x
-	 wbqX/yWPpc99DFwh12TZQU/vQizecvGFBlAVZMnryyQ5zlLvoKoLgKPWUgtvsS10SAoroy2XXjoA
-	 qX2aPAX6wwvmAIOi1uKJ+1OlmWLkVO8ADuKwOmJOkXxd/Vn5QfUqlsumfxHENzIOZRDpmmKHFeFJ
-	 72o677VYf3+P/Cm5s/GRJ6MchJc/MqRzwl8Lr9U938ijqYcN5OHwFL2xm17zXkUJ4P+GOdneThNh
-	 keKp5AWrBDmN9chHg2STBQkJnSAg==
-X-QQ-XMRINFO: M/715EihBoGS47X28/vv4NpnfpeBLnr4Qg==
+X-QQ-mid: xmsmtpt1786781969tzvulxcpb
+Message-ID: <tencent_9B5B6A48CD61BA62744B144B970939A23205@qq.com>
+X-QQ-XMAILINFO: MqG4KXyEKpQy5v5qm3ZqCh22VvXJAfUEkKqj58E9U3EL9AAf5XxQ2mNMP5+vz7
+	 hzErVUuUv9ekzLhrqTc9snVRV/d0vrPZdBftvAFpLFdFNkQWk640+VLP7skdgrJY8ZIdXY4A5mJC
+	 neH2SVYFFDRdKQ0tODt972qEODdgewT9YWh+gKBxao0N1pXGQbTq8v8U0cq//qnswDCIo8JYVyP9
+	 cGNSj8SjWjpceqOu1ws0n6IOrXgHGPUGcwGULSynfZqvXuDLkHD+5pfMoE2AFI/vDe8Hv1RU6yWw
+	 YbZdG430g2b/r83GOYWlkD68ruFEwE1JCi+ln8EeMuCbM2p4h7+0eNE4bNoVEJWO0+WHCjjwbJ8v
+	 8wgEjV4G5cKQtxGxti/ExMMBZhfjZj/VvgnoTlliLHHc4+EWaW6S2cBaUgI0NIy2NHssTIqAvGE1
+	 5DNr0gzFYWmwsfet6/7eNSYMXI2fpdLZK780lhp8iEefJSVIfNwn/YbHXL0HkNAgkG2IGakn3XcY
+	 jsy+RhBSSVYkaUtfx3zwVd/7hZu4BAFQn4zeoBTr0F134YBUSwUBMnrgSv/tjLoZ3mGO6OaUePky
+	 oqjq/65Q2fO8VtFV/C6G+xOXrlu3vRkb9feOj/VQWvVZbzGa1EsiYXY5oh2MHMLkbs0+2fJaQCw/
+	 iku91lkvMD4Tna8fKNcdnAuNW7Nz5NvPLKoL93g772pzDZUW4U6K16gf585hPa7CIu6qWgFa9FTo
+	 ekitqnH0c8+00/WLX2GrknrOqFd2tO8gSgVHY7A67f3nlunnERd56og+Rd9NBRQmXsNPJfoBxSnC
+	 zKI+gQY6CbVLF6dhplNjA2kfoyAseK8i3WoRy/Y3nvmlJvJyFgDIdAwlIeBWKHkPBiG71ie8KFCq
+	 /+Yyay6DuQF+r72bxrl/4scRtFCZGqa/Yd1Yey7cMLlI1f7jF7HvqZ1ybuTcL57D1WM/VhKsZcIw
+	 U4SkQWKQKRqczrF98AoM2unJF5spYsBh0vi9wcqCZtLFspxZiKMASOkmhS8vqygkRQViXjtF+aYY
+	 o5sMAXanrnQs/8SpCQVKgwUgvTGQ1v64DwrULmhalpfPoRfjbiafgWKdOK8DIgTbDMAY7lF183tq
+	 1zUIAhdmDmx1hPr3s=
+X-QQ-XMRINFO: Nq+8W0+stu50tPAe92KXseR0ZZmBTk3gLg==
 From: Jianlin Shi <shijianlin11@foxmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -65,9 +65,9 @@ Cc: ast@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 5/5] selftests/bpf: cover stream capacity and partial read edge cases
-Date: Sat, 15 Aug 2026 16:19:20 +0800
-X-OQ-MSGID: <20260815081920.609936-6-shijianlin11@foxmail.com>
+Subject: [PATCH bpf-next v3 4/5] bpf: reject oversized bpf_stream_vprintk output with -E2BIG
+Date: Sat, 15 Aug 2026 16:19:19 +0800
+X-OQ-MSGID: <20260815081920.609936-5-shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260815081920.609936-1-shijianlin11@foxmail.com>
 References: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
@@ -80,133 +80,54 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add coverage for the stream fixes requested on the capacity rollback
-series:
+bstr_printf() returns the would-be length excluding the trailing NUL.
+When that value is >= MAX_BPRINTF_BUF the message was truncated, but
+bpf_stream_push_str() still tried to allocate with the inflated length
+and failed with -ENOMEM. The boundary case of exactly MAX_BPRINTF_BUF
+could also copy the trailing NUL into the stream element.
 
-- oversized bpf_stream_printk() returns -E2BIG and does not leak
-  capacity for a subsequent successful write;
-- bpf_prog_stream_read() returns the successfully copied prefix when
-  the userspace buffer straddles an unmapped page.
+Reject such lengths with -E2BIG before charging stream capacity, and
+tighten bpf_stream_elem_alloc() to accept only payloads strictly shorter
+than the bprintf buffer.
 
+Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
 Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
 ---
- .../testing/selftests/bpf/prog_tests/stream.c | 70 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/stream.c    | 12 ++++
- 2 files changed, 82 insertions(+)
+ kernel/bpf/stream.c | 13 +++++++++----
+ 1 file changed, 9 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/stream.c b/tools/testing/selftests/bpf/prog_tests/stream.c
-index c3cce5c292bd..3ae98e3c4909 100644
---- a/tools/testing/selftests/bpf/prog_tests/stream.c
-+++ b/tools/testing/selftests/bpf/prog_tests/stream.c
-@@ -58,6 +58,76 @@ void test_stream_syscall(void)
- 	stream__destroy(skel);
- }
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index c1077160074c..bd1e98fde4b0 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -22,11 +22,11 @@ static struct bpf_stream_elem *bpf_stream_elem_alloc(int len)
+ 	size_t alloc_size;
  
-+void test_stream_oversize(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct stream *skel;
-+	int ret, prog_fd;
-+	char buf[8] = {};
-+
-+	skel = stream__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.stream_oversize);
-+	ret = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_OK(ret, "oversize run");
-+	ASSERT_EQ(opts.retval, -E2BIG, "oversize retval");
-+
-+	/* Oversized push must not permanently consume capacity. */
-+	prog_fd = bpf_program__fd(skel->progs.stream_syscall);
-+	ret = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_OK(ret, "syscall run");
-+	ASSERT_OK(opts.retval, "syscall retval");
-+
-+	ret = bpf_prog_stream_read(prog_fd, BPF_STREAM_STDOUT, buf, sizeof(buf), NULL);
-+	ASSERT_EQ(ret, 3, "bytes after oversize");
-+	ASSERT_OK(memcmp(buf, "foo", 3), "payload after oversize");
-+
-+	stream__destroy(skel);
-+}
-+
-+void test_stream_partial_read(void)
-+{
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	struct stream *skel;
-+	int ret, prog_fd;
-+	long page_size;
-+	char *page, *buf;
-+	char rest[8] = {};
-+
-+	skel = stream__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "stream__open_and_load"))
-+		return;
-+
-+	prog_fd = bpf_program__fd(skel->progs.stream_syscall);
-+	ret = bpf_prog_test_run_opts(prog_fd, &opts);
-+	ASSERT_OK(ret, "ret");
-+	ASSERT_OK(opts.retval, "retval");
-+
-+	page_size = sysconf(_SC_PAGESIZE);
-+	page = mmap(NULL, page_size * 2, PROT_READ | PROT_WRITE,
-+		    MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (!ASSERT_NEQ(page, MAP_FAILED, "mmap")) {
-+		stream__destroy(skel);
-+		return;
+ 	/*
+-	 * Length denotes the amount of data to be written as part of stream element,
+-	 * thus includes '\0' byte. We're capped by how much bpf_bprintf_buffers can
+-	 * accomodate, therefore deny allocations that won't fit into them.
++	 * Length is the payload pushed into the stream, excluding the
++	 * trailing NUL of the bprintf buffer. Reject anything that cannot
++	 * fit without copying that NUL into the stream element.
+ 	 */
+-	if (len < 0 || len > max_len)
++	if (len < 0 || len >= max_len)
+ 		return NULL;
+ 
+ 	alloc_size = offsetof(struct bpf_stream_elem, str[len]);
+@@ -245,6 +245,11 @@ __bpf_kfunc int bpf_stream_vprintk(int stream_id, const char *fmt__str, const vo
+ 		return ret;
+ 
+ 	ret = bstr_printf(data.buf, MAX_BPRINTF_BUF, fmt__str, data.bin_args);
++	/* Truncation: reject before capacity charge (not -ENOMEM). */
++	if (ret >= MAX_BPRINTF_BUF) {
++		bpf_bprintf_cleanup(&data);
++		return -E2BIG;
 +	}
-+	/* Leave only the first page mapped so a straddling copy faults. */
-+	ASSERT_OK(munmap(page + page_size, page_size), "munmap second page");
-+
-+	buf = page + page_size - 1;
-+	ret = bpf_prog_stream_read(prog_fd, BPF_STREAM_STDOUT, buf, 3, NULL);
-+	ASSERT_EQ(ret, 1, "partial bytes");
-+	ASSERT_EQ(buf[0], 'f', "first byte");
-+
-+	ret = bpf_prog_stream_read(prog_fd, BPF_STREAM_STDOUT, rest, sizeof(rest), NULL);
-+	ASSERT_EQ(ret, 2, "remaining bytes");
-+	ASSERT_OK(memcmp(rest, "oo", 2), "remaining data");
-+
-+	munmap(page, page_size);
-+	stream__destroy(skel);
-+}
-+
- static void test_address(struct bpf_program *prog, unsigned long *fault_addr_p)
- {
- 	LIBBPF_OPTS(bpf_test_run_opts, opts);
-diff --git a/tools/testing/selftests/bpf/progs/stream.c b/tools/testing/selftests/bpf/progs/stream.c
-index 6f999ba951a3..6fab9b8b21a0 100644
---- a/tools/testing/selftests/bpf/progs/stream.c
-+++ b/tools/testing/selftests/bpf/progs/stream.c
-@@ -36,7 +36,12 @@ struct {
- } array SEC(".maps");
- 
- #define ENOSPC 28
-+#define E2BIG 7
- #define _STR "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-+#define _X64 "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-+/* 1024 bytes: truncated by bstr_printf, must return -E2BIG. */
-+#define _BIG_STR (_X64 _X64 _X64 _X64 _X64 _X64 _X64 _X64 \
-+		  _X64 _X64 _X64 _X64 _X64 _X64 _X64 _X64)
- 
- int size;
- u64 fault_addr;
-@@ -117,6 +122,13 @@ int stream_syscall(void *ctx)
- 	return 0;
- }
- 
-+SEC("syscall")
-+__success __retval(-E2BIG)
-+int stream_oversize(void *ctx)
-+{
-+	return bpf_stream_printk(BPF_STDOUT, _BIG_STR);
-+}
-+
- SEC("syscall")
- __arch_x86_64
- __arch_arm64
+ 	/* Exclude NULL byte during push. */
+ 	ret = bpf_stream_push_str(stream, data.buf, ret);
+ 	bpf_bprintf_cleanup(&data);
 -- 
 2.43.0
-
 
