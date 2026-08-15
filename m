@@ -1,67 +1,66 @@
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
+Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7399941A50E
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 12:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B39984192F7
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 12:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786798264; cv=none; b=U8ZIekDfPtAdiqgOEQl5jRwSeyWivN8AZCy9vq9GB//hOMobrExxoiO9gffDQv6oRgKjkFU/WGw2TbrYsmnfngelIorsGH4DX7PriMjHMzbpBV8gWmyBh90Scg9UL6ITftLoWNqNFWyC/DLe7bKXGTKVs3sBJxpaj/PIcqXq3YE=
+	t=1786798264; cv=none; b=kCyKkY4FXZMA6/EDq2hRa2xCefheRYJT95xLj5sTwAgtgyXXiH4eGS5o8bfszH3F0GsWkY5BokzncNLmoON/gC3MkWlSfJ1JU/x67NZ/fluAAeRZVfo/DViZ3mDO2IrlaASD/iCudtLBGbs+4aEHHkNNheLXq8YVjCLXkQUZwdg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786798264; c=relaxed/simple;
-	bh=T8L9myqLCbmafmVDMKPx7Vbsuh0v9IopeQ01K1Xli54=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QfWxJnmu3uCHwlBsq9iMl0JhprV3uvP9E2R4jV7XNbuZEinPxOb5An5xz7dVJrTMEBPqKPLZG4N0A5qgbvwwt8D6XRGJ5BLtjV/3G4UdAc9qg2C9MHiYHk+QyGFpJ3o+mVkcyJOih/5Vo+ZgK1yfpC3k8CIU/IDqdCesR9wd4+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=ZjfT4ObY; arc=none smtp.client-ip=209.85.210.50
+	bh=6cOcCYfCe568r+y9R2IJ7kM2MFz5Kt2mUcEn5bM2QCc=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HYFYBI5T5FysQfDR3iQBxdJXg05hbtIAQRFEz5UA2Y9II5D4SnYocSEsWBYKQJ0uNtyeBRY6Q02vb/0duL7N6gllakEpCe5RZXryES/b+VTjmhfXDXsjNqMiP7IJti1PcWWbVs4kwDr5P5xUCSb7dvd/UVnvpRzUApO/zCOnAhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=OWKX0MEx; arc=none smtp.client-ip=209.85.167.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="ZjfT4ObY"
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7ec49608332so1164276a34.3
-        for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 05:51:02 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="OWKX0MEx"
+Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-4a475409044so565997b6e.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 05:50:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786798261; x=1787403061;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :content-type:mime-version:subject:date:from:dkim-signature:x-gm-gg
+        d=1e100.net; s=20251104; t=1786798258; x=1787403058;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:dkim-signature:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=FgKVBrWkybUlNRGwgMsoJMUl4wNB/sV32q39f/BXyjo=;
-        b=sDZEsTlGvXspfL77obwVWb8w8n+F7ujbD8EKWUSunNxWOD3DmQ0juTXcKRMpwC07LD
-         MRBHGutS/Y8oXGvudfAHG1ukCWBT5kPAnLe0RY9fouj5RNY+LqQZmO9HFR5Qlwjj69K7
-         yfPUskrFAVpBd7Dk2zrXYJd76MHET3V9SymphTFMlHxELdmjXJRn5lWK+FeM2C0jMNZO
-         A6HirXZHJ4Q4eXvZmMeSB9N7zHzTWSo/PfVd/Wrpnb7Dj1m2GCKSOIeZjRsVgS87UPHk
-         2AKxWcEUWDuVk7UqZIql1FJuu65Nm6Wd6LlkVZMbLUiRckns0G9x7PPYyAzJLGgM5xkO
-         Yhdw==
-X-Gm-Message-State: AOJu0YwXCobRd5q5deZXLhttyIoQrGLY2YLgKxnZxr8aPK5itXguNg0H
-	ENgsEVbYytNPQAChKkle58x/UpRKpqf/+tkZhpVxgPd+VOb51s5/6WBp
-X-Gm-Gg: AR+sD12l0MJVk8L5TtVJEiKxHustuIWmo/u+GxnRcGjbSKwVuhkaF8D4X++2jEhJK2Z
-	e4t3dwngviNj/ITXMI/mGCDGvnGeLC8/GurmHvQm82jIBMNxNCkipZ9hq/TeR8Dg1b4IxCvhlmg
-	F8OlYSHP79RKGpkTd2hiqR94qaZSniZmX+Em/62hnN3PQMJp6KaulasZQ/nJ29dXVKLRZ4lN/0E
-	vbfn9RdhmN9Viaqq10s74Al3iyaOl5lDDLsSYHAtj3HpW9CrixGEND54Ekwh0RhYXDACR22T/SZ
-	JFiJtRuTJk4wtGXxBznJYO0kvJwuEbtBh3KZkv+cgui2geOKhMhEYHU4hAHhOwuGJjmRM8NPgxa
-	jy6VM9EseucQz2H6TgLPEjqzhq4uglCBCjlXqLiMPRSUTdCSzJsAuIRgDzqDBsZhSnD61uX0lM3
-	10umphAFxKeUP5fkLjZVAnzXaQr77ZLX9ZOX6120gi3eFh7+N/z2G/YLSq/hUV38MKz3eR96pPT
-	s6kAXS7N5gO99z5z2EZCLwTqLG1quTGYWT674QJnqz50fUbby7Pc39dHJzme6TW/A==
-X-Received: by 2002:a05:6830:2106:b0:7e9:d277:6e2e with SMTP id 46e09a7af769-7f3de4dc011mr11851338a34.7.1786798261295;
-        Sat, 15 Aug 2026 05:51:01 -0700 (PDT)
+        bh=EgXfO9Knh+lvJWXJYrcjIAPvKSCV55TJfVKEYesskuc=;
+        b=DytxrSUCh4qF5NbpOaodvyX5kkjgvPE3wGyZHeBujxtWFhuwWmXQBaz7xrIyNHpgBN
+         tHW6pe53Semvifdo3g4wc600/I5/L1jWGPR4ZKqwERKSXfiZ/Vsofzd7mI8Jkk183Ndc
+         0h+BwEYrx5mDApt3iEDPcv0bDsQNlhwMatXf6ZjGlr2avJWw80ZQBq0TVi5Ut4beLxl3
+         Mt/PAcUFCJ5GZ//vuSzdDkJpsfNZ7FJt6DDsAc9jixso1Xupg0MByDtAsf7Ie5GyK9xK
+         GgBdiWGOgscVpHqxTUfwTx576F5GYcgL7tL/2aiS7jx0bZt0p+F4ZBSlozhVtp8iHK8W
+         3naA==
+X-Gm-Message-State: AOJu0YyHIgcSrdIS8S8PAm/1XgQxcL9CdgTNcP9MZJdjc56uJFv3JT98
+	w9RPw15W6XRveYiwPdqzv/13D6Q+/UFhpb2kQdDxA9+o16Ih2yB37NGw
+X-Gm-Gg: AR+sD13K7pCu0mIt3uutxEE03qih11D19Oi8TOCicZkwwkAC4Srbu0GVW3zm3esp5sU
+	adInXAAMEwa7DGeoIneFid/Jn2VdVi7YxgBBXK6JgGLwUdG2zMTgxmfVI3QbFzZ53Lq6Czx1KrN
+	Q6MfUByakPmwLi4kxQ2mhQZFVjS1A1xe7Q6UM5fVCOPJDWj1t9wiqRpgOZsIkmjAwmivbxOuz2J
+	qbkXuQSx2x5A+E/cZj3tdF15LABK2U1zXZFSPwb0X6ge40cCrpHNdFXjBwJrI/QQQpd8um9QxfJ
+	HJRUdjsufQDTa+LWLYKqOrTIPiowymGNOd9vgN8oQuA3kk+uUZFhJwXVnga5mxVUFN2PQKwQlMe
+	+uBkvCZFttAKvbTMaXHklwzSNWLMF46hJa5op5mN0NuKJtaRCzFruIHnrK06rSPFe3dnzj/jpLC
+	Pj551DPhrfHDn3qC6Pgrd+UXwPhY0g+FSUldBgDf8uMuzFEe5UcXiUoy+sdjFsd7RTcmXyUMg4Q
+	jLUaqik7zvqhHvXh4JuGZZ0TXqXu15eJAO0soI7X4pwIFGQu7n5fBU/Dwax8PdYBw==
+X-Received: by 2002:a05:6808:5291:b0:479:f7e7:4a81 with SMTP id 5614622812f47-4b240662d51mr10556854b6e.0.1786798258407;
+        Sat, 15 Aug 2026 05:50:58 -0700 (PDT)
 Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f3e86a2271sm3958392a34.27.2026.08.15.05.50.59
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b24d92462dsm3339747b6e.5.2026.08.15.05.50.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Aug 2026 05:51:00 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1E6D16132E;
-	Sat, 15 Aug 2026 12:50:57 +0000 (UTC)
+        Sat, 15 Aug 2026 05:50:57 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8D06E60791;
+	Sat, 15 Aug 2026 12:50:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1786798259;
+	s=dkim; t=1786798255;
 	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=FgKVBrWkybUlNRGwgMsoJMUl4wNB/sV32q39f/BXyjo=;
-	b=ZjfT4ObYmNSBqzr44xNiYecAh48ZzZ5ZbQWieKjXVGTciQp0McJ/2AHJVbuRdVoXkRJ7ap
-	vBX8qNdPHKay4BOORgfLZL4O07Ssc7fBejLS1atNZSJNfaN/oUUy780Eqf1+JGMq7mZizz
-	RRUnV0XGqm0r0r+wgoNhiWyWCiIOyJQVgZKAnMxQ9y/sH2yy0zVfQsllHxKtSQ/i5oSsA1
-	WCJXT18EvJkiv13JQyVhpuMH8hPf6/1sPpuxtUDBZELJrxdKuONCAk8hr9ZaVStNYUICwQ
-	rMnnuwJcued3tzpACqfFmohWJ8y7JTQb9K1eE3Wq4l3S+30wsFsN+dXeAP5xNQ==
+	 content-transfer-encoding; bh=EgXfO9Knh+lvJWXJYrcjIAPvKSCV55TJfVKEYesskuc=;
+	b=OWKX0MExSwH4IWxKjefmJLS7Z+ebKcisYuIZUFksP9KDFvpQyZdXvKmCT7s70fwPaD/x5e
+	ZzKXPBWVcTDgxTQf3hUbSNrPSECfRqVTuWVRUBrhfBqFlvOmyF9wXNNFOknlVqXwpxcoc0
+	vPXyP31D+J/eovMFbwb5RS9/PWaCJXAVLR6oqUr4u2BJJYVhJqubJ+T/Y0XNIB4KWVljj3
+	SBS3ob6InQpmq1iqUeQi7PWcxNP6hb4ZoLXD+QFfSX78PPSxl5yBdKTa3Im+sW1Qdf8SGi
+	1dGX6hLR7fcfvCvF1qBf7h7kw8HnMvSR+ULSe4RNA13y3HkTpEtsz3dIwGC0Dg==
 From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Sat, 15 Aug 2026 09:50:38 -0300
-Subject: [PATCH 7.1.y v2 1/2] selftests/bpf: Ensure UDP sockets are bound
+Subject: [PATCH 7.1.y v2 0/2] selftests: Fixes for BPF
+Date: Sat, 15 Aug 2026 09:50:37 -0300
+Message-Id: <20260815-7-1-y-selftests-bpf-udp_xsk-v2-0-c227473a2300@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,9 +69,11 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260815-7-1-y-selftests-bpf-udp_xsk-v2-1-c227473a2300@marliere.net>
-References: <20260815-7-1-y-selftests-bpf-udp_xsk-v2-0-c227473a2300@marliere.net>
-In-Reply-To: <20260815-7-1-y-selftests-bpf-udp_xsk-v2-0-c227473a2300@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAJ1ggGoC/42OUQ6CMBBEr2L220WKIsYv72GIacsi1VpItxAI4
+ e4WvIB/My+Tl5mByRtiuO5m8DQYNq2LJdvvQDfSPQlNFTtkaXZOL+KIBQqckMnWgTgwqq7Gvuo
+ eI78xPeniIvKzkKQgGjpPtRk3+x2KRCQTlD/MvXqRDqt5HSrJhMpLp5sVcZDK0sEa14/oWxvDE
+ 39wXTeGQ+un7fMgNvlf9waBKeoq17mgotKkbx/prSFPiaMA5bIsX9AtiisQAQAA
+X-Change-ID: 20260813-7-1-y-selftests-bpf-udp_xsk-04c781561aeb
 To: Alexei Starovoitov <ast@kernel.org>, 
  Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
  Martin KaFai Lau <martin.lau@linux.dev>, 
@@ -87,66 +88,44 @@ Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
  Michal Luczaj <mhal@rbox.co>, Kuniyuki Iwashima <kuniyu@google.com>, 
  Jakub Sitnicki <jakub@cloudflare.com>
 X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1786798251; l=1781;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1786798251; l=1083;
  i=ricardo@marliere.net; h=from:subject:message-id;
- bh=GsJ6X/Uo1KEuhlD2ah/RZhTfW7ZY6s1IuXyLQAeSIF0=;
+ bh=6cOcCYfCe568r+y9R2IJ7kM2MFz5Kt2mUcEn5bM2QCc=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
  x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QNX6cy7X/C9MB+XeNhQOg/LuOOmDrLvOGvRdbh9iN5DlRhSsQzOPkibhcDIG3cu01q2Sdwo47Pm
- knvwGCeYtMgg=
+ QDSiAAq0PTwiz1KaExq0kBOGWY+YF8qBwe6m++BmJ+HndbpATbx5RonRWExaH2bx/42B6SQ3nec
+ 0FiobVJ6u6AI=
 X-Developer-Key: i=ricardo@marliere.net; a=openssh;
  fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
 X-Last-TLS-Session-Version: TLSv1.3
 
-From: Michal Luczaj <mhal@rbox.co>
+Hi,
 
-[ Upstream commit fe3ff273767ef22fe8a7cb3816f264927c190e50 ]
+Please consider merging the following patches, found through openSUSE CI,
+for test_progs (subtests sockmap_basic and sockmap_listen):
 
-Update sockmap_basic tests to bind sockets before they are used. This
-accommodates the recent change in sockmap that rejects unbound UDP sockets.
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_progs.tap.txt#line-4034
+https://openqa.opensuse.org/tests/6159071/logfile?filename=test_progs.tap.txt#line-4212
 
-Signed-off-by: Michal Luczaj <mhal@rbox.co>
-Reviewed-by: Kuniyuki Iwashima <kuniyu@google.com>
-Reviewed-by: Jakub Sitnicki <jakub@cloudflare.com>
-Link: https://lore.kernel.org/bpf/20260707-sockmap-lookup-udp-leak-v4-1-f878346f27ab@rbox.co
-Signed-off-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
 Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 ---
- tools/testing/selftests/bpf/prog_tests/sockmap_basic.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Changes in v2:
+- Corrected upstream refs
+- Link to v1: https://patch.msgid.link/20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-index d2846579285f..b4019d1a5575 100644
---- a/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-+++ b/tools/testing/selftests/bpf/prog_tests/sockmap_basic.c
-@@ -807,7 +807,7 @@ static void test_sockmap_many_socket(void)
- 		return;
- 	}
- 
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -876,7 +876,7 @@ static void test_sockmap_many_maps(void)
- 		return;
- 	}
- 
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
-@@ -947,7 +947,7 @@ static void test_sockmap_same_sock(void)
- 		return;
- 	}
- 
--	udp = xsocket(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK, 0);
-+	udp = socket_loopback(AF_INET, SOCK_DGRAM | SOCK_NONBLOCK);
- 	if (udp < 0) {
- 		close(dgram);
- 		close(tcp);
+---
+Michal Luczaj (2):
+      selftests/bpf: Ensure UDP sockets are bound
+      selftests/bpf: Adapt sockmap update error handling
 
--- 
-2.55.0
+ .../selftests/bpf/prog_tests/sockmap_basic.c        |  6 +++---
+ .../selftests/bpf/prog_tests/sockmap_listen.c       | 21 +++++++++++----------
+ 2 files changed, 14 insertions(+), 13 deletions(-)
+---
+base-commit: e2466b32e02a49318b99520c40b397062c65c84c
+change-id: 20260813-7-1-y-selftests-bpf-udp_xsk-04c781561aeb
+
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
 
