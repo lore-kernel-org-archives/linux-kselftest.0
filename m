@@ -1,76 +1,70 @@
-Received: from out203-205-221-173.mail.qq.com (out203-205-221-173.mail.qq.com [203.205.221.173])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE7BC3ACA7F;
-	Sat, 15 Aug 2026 08:20:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E193B47CA;
+	Sat, 15 Aug 2026 08:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786782059; cv=none; b=MlflKjYNu8a3v9TEvQpywveRKnSjiakT6y15/zZEjBxgiQRjjUQEAE033f6jgBbzRCin5O6BCWHvksXeQGxzgxxns6aY5XfLJx7NCcjdtPQWuMxuuQU1ld8xwIQE3T0R7NsqNyw5w5vb16Wcaw4z3k/Dj7XolBzQ1bJwfkbmjPc=
+	t=1786783380; cv=none; b=tvsBpeheApwMLiNDlVp6wJxtHy5IyKW3CoP7AKhAHk+FivHKiih2nod9qWjdsdcIOLIrHsB22WaDchnUNbDrpDbIvvPR6nx1UWwMFHSj9GQAKX2+5PdTglt7zqFO9PMehqhifZWjoGyQ8TR8PjkURIXObcSlWI7muViPVt723ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786782059; c=relaxed/simple;
-	bh=+fFWWSqLyu3PjQzehABQv02Lc+EqAjSd5SGZ0DROjfg=;
-	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=NFjQtUx8E+LWcMz+6IhPEF9+xk6Qxnm3iStfoWXPAvySZTRggV52NmumkUA2DG99zNW2W5uQO4oXNkhp1VicUlLewP8xosJmYTNAWnXpJexbObyf1KBUsSXuVg8Jgn4iFIkdEWCcmFJxXzWDITCiVKkHBoY4XTouhOj+Anc2Ifk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=ig55K4N2; arc=none smtp.client-ip=203.205.221.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="ig55K4N2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1786782049;
-	bh=69NCRqUGMyTGIEaRQMsQ7kuM06BspArxunj4qsVVe9w=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=ig55K4N2XSeOQFKAWtgNNm1bOHjG/oWyL/Ihv9Oy5nzYtM88nwJ/rFiFSGbP9TRpq
-	 TwAWM1HRd0mNRJh49zGSxaIAejtdejuc6UBzyGpkB3MBIeoJEl2GJgZh6B8j6FSw2T
-	 eflw3c3IZ1VAfz7A1b3sB6GFv1ReVIg5qPw0hP6Q=
-Received: from localhost.localdomain ([180.153.160.8])
-	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
-	id 4D51223E; Sat, 15 Aug 2026 16:19:21 +0800
-X-QQ-mid: xmsmtpt1786781965tp6230rqd
-Message-ID: <tencent_B9A612466A5F8D64DA61B448344B570F5905@qq.com>
-X-QQ-XMAILINFO: No7DFzN00JnR54N0psLWHIn2W26T010DFW5PLNA97pQzo/kUFJ8LJfxRiHgYCI
-	 BLMMNHgzswmtN3T36ICB93AswWCJYgKrSoLqvLvDAc8W0NUMa7UY7CfLS08oO+DSyatna6XCUWea
-	 ezy17V3qlFcZfyMxs2E2covb62zWaoJM7FkCs9YTtZPs9zNcHaac6EkI/bd2UTmfLxM1yWdMmVj5
-	 nYRMumgqF5s1etziOi4cs0DlSop8zUw1nROrb+eVatjBXtaVyLNi0vpRUSePeKuEu+dWehHQzGNK
-	 Uvqu9+1vc5vqY0JjX3vzkFgY9cQP2oSpsTO1KVPdb5moySlC6WtwrNGdsDtLkTVzloFn/F1ISKX9
-	 XH/EDueu5XGEcbByaz4M9qQIwNgOkQPt5jvbOoQFEWomE/FpewgcDVf6Rs1r/Rn+hML/X2ycqKpG
-	 RhXgb3CeZ2X4Pmjr2pRGpNeqQv1bkSf5uZK91U+ZjcCf5+nfKkUCcduJtJCRJKH3beOcd+l0K826
-	 AL4dfvKlM6ByL8LsaRZP2sJyt2O0AoC+K3zI5RqWmRECOlqbYrCqn/vtzqotV2wLa3aczy9qSCuY
-	 ZswMQN8muf/QXxb0Bs1szsrhHfHWkF6tXpIbK7BjSp0GWjqNBj1+TQeBSdzB8WJxUmKSpb4BYmrJ
-	 ZGaDBWPDtDVjyF2jmkIRqk/9YLhhSSmwovVUWXMME1XaiHKyc9SwRFKTKndoSvzT0epMwP+6kBzM
-	 gTnHMEjBlAUwXM8YcXLU2iliF4QzQ0XSEJGlks4mHkGptgMY40BTB0fsFAXJGjYtRjMf7JvoK+Yf
-	 CgciT+cV6UOBgjTZLKsojaOf4nZB6LLNVwQQnr8DI8FEp9saluJT4bPCbqnZ6zlRRoRMQ/1KT/EQ
-	 jC3jRgnoU8zgLvD5JOGq6LZG2+Sgi3QO/vTTCM0uhTK097TypE8N+QTYob1OC7XulNmxrxG2XzJB
-	 aePfe14iHyqn5CBXdvHxYGpQVj/e/buoKca6D0ygl5IRz+gNVdNlLuQkuGRALNjdBIXHAcQwheWW
-	 E7Vr3kedeRs0zI+Qe9UarysN4lZttyQzSmS8qiJemrVdjqyD6NjHqGsuUivw6dScrJkuaa4A==
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
-From: Jianlin Shi <shijianlin11@foxmail.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	john.fastabend@gmail.com,
-	kpsingh@kernel.org,
-	sdf@fomichev.me,
-	haoluo@google.com,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	memxor@gmail.com,
-	pulehui@huawei.com,
+	s=arc-20240116; t=1786783380; c=relaxed/simple;
+	bh=CR4ZCmIH8mWbCdNeug2Z6JezrN7luvPXBEiGhEFuMEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=q7MaXC3IMj1u0RTIvhgLfD1uNQ/jv2lWcZylGNOPwE8ikryTAPXMGmbCraKRgtGloC6YtmHyNCHpouxZztfiCqc1EltZSRI09vwd8mUQH1rnTs9mrtT1lJZ4e1znIVPOiXY4ubcxmRtwMLFo8fOVeCYfc5nEFp+h4c0scW8laNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 48f52586988511f19a56ed5b684f684d-20260815
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_LOWREP, SRC_LOWREP
+	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:04fcedad-7f20-4ed9-8ac9-20bac91f470a,IP:10,
+	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+	:release,TS:10
+X-CID-INFO: VERSION:1.3.19,REQID:04fcedad-7f20-4ed9-8ac9-20bac91f470a,IP:10,UR
+	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
+	elease,TS:10
+X-CID-META: VersionHash:7db8b62,CLOUDID:9018be5d7f14e2b336be6e5a91adc8ff,BulkI
+	D:260815164248ESVFLCWA,BulkQuantity:0,SF:17|19|38|66|78|102|127|865|898,TC
+	:nil,Content:0|15|50,EDM:-3,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil
+	,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR,TF_CID_SPAM_FAS
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 48f52586988511f19a56ed5b684f684d-20260815
+X-User: husong@kylinos.cn
+Received: from ctao-book.. [(111.162.215.50)] by mailgw.kylinos.cn
+	(envelope-from <husong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 1608222130; Sat, 15 Aug 2026 16:42:44 +0800
+From: Song Hu <husong@kylinos.cn>
+To: akpm@linux-foundation.org,
+	rppt@kernel.org,
+	usama.anjum@arm.com,
+	leitao@debian.org
+Cc: linux-mm@kvack.org,
 	shuah@kernel.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	peterx@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 2/5] bpf: fix stream capacity leak in staging path
-Date: Sat, 15 Aug 2026 16:19:17 +0800
-X-OQ-MSGID: <20260815081920.609936-3-shijianlin11@foxmail.com>
+	linux-kernel@vger.kernel.org,
+	Song Hu <husong@kylinos.cn>
+Subject: [PATCH v2] selftests/mm: emit KTAP output from ksft_kmemleak_dedup
+Date: Sat, 15 Aug 2026 16:42:31 +0800
+Message-ID: <20260815084231.3630742-1-husong@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260815081920.609936-1-shijianlin11@foxmail.com>
-References: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
- <20260815081920.609936-1-shijianlin11@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,49 +73,74 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_stream_stage_printk() increments ss->len before pushing the
-formatted string to the staging log. If element allocation fails,
-ss->len remains inflated and bpf_stream_stage_commit() permanently
-charges the stream capacity for data that was never queued.
+ksft_kmemleak_dedup.sh reports its result with raw "SKIP:"/"FAIL:"/"PASS:"
+echoes and bare exit codes instead of KTAP, so parse_kselftest.py cannot
+read it.  Convert it to the ktap_helpers.sh API, like its sibling
+ksft_kmemleak_confirm.sh.
 
-Only account the string length after a successful push, and use
-vscnprintf() so the staged length is the truncated payload without
-the trailing NUL.
+skip() and fail() emit ktap_test_skip()/ktap_test_fail() instead of
+ktap_skip_all()/ktap_exit_fail_msg(), and a single ktap_set_plan() at the
+top covers every path; ktap_finished() then prints the totals line and
+provides the exit code for skip/fail/pass alike.
 
-Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
-Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Breno Leitao <leitao@debian.org>
+Signed-off-by: Song Hu <husong@kylinos.cn>
 ---
- kernel/bpf/stream.c | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index 0b157ec4e38e..ef5a7b06ffcb 100644
---- a/kernel/bpf/stream.c
-+++ b/kernel/bpf/stream.c
-@@ -316,17 +316,19 @@ int bpf_stream_stage_printk(struct bpf_stream_stage *ss, const char *fmt, ...)
- {
- 	struct bpf_bprintf_buffers *buf;
- 	va_list args;
--	int ret;
-+	int len, ret;
+Changes in v2, per review feedback from Usama Anjum:
+- use ktap_test_skip() instead of ktap_skip_all(), and ktap_test_fail()
+  instead of ktap_exit_fail_msg()
+- move ktap_set_plan() to the very start so it covers all paths
+- call ktap_finished() on the skip and fail paths as well
+
+v1: https://lore.kernel.org/all/20260812132142.582390-1-husong@kylinos.cn/
+ .../selftests/mm/ksft_kmemleak_dedup.sh       | 21 ++++++++++++-------
+ 1 file changed, 14 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
+index d01950244490..fda6a9340e0e 100755
+--- a/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
++++ b/tools/testing/selftests/mm/ksft_kmemleak_dedup.sh
+@@ -19,24 +19,31 @@
+ #
+ # Author: Breno Leitao <leitao@debian.org>
  
- 	if (bpf_try_get_buffers(&buf))
- 		return -EBUSY;
+-ksft_skip=4
++# KTAP output helpers (ktap_test_pass, ktap_test_skip, ktap_test_fail, ...).
++DIR="$(dirname "$(readlink -f "$0")")"
++# shellcheck source=../kselftest/ktap_helpers.sh
++source "${DIR}"/../kselftest/ktap_helpers.sh
++
+ KMEMLEAK=/sys/kernel/debug/kmemleak
+ VERBOSE_PARAM=/sys/module/kmemleak/parameters/verbose
+ MODULE=kmemleak-test
  
- 	va_start(args, fmt);
--	ret = vsnprintf(buf->buf, ARRAY_SIZE(buf->buf), fmt, args);
-+	/* Cap to the written length, excluding the trailing NUL. */
-+	len = vscnprintf(buf->buf, ARRAY_SIZE(buf->buf), fmt, args);
- 	va_end(args);
--	ss->len += ret;
- 	/* Exclude NULL byte during push. */
--	ret = __bpf_stream_push_str(&ss->log, buf->buf, ret);
-+	ret = __bpf_stream_push_str(&ss->log, buf->buf, len);
-+	if (!ret)
-+		ss->len += len;
- 	bpf_put_buffers();
- 	return ret;
++ktap_print_header
++ktap_set_plan 1
++
+ skip() {
+-	echo "SKIP: $*"
+-	exit $ksft_skip
++	ktap_test_skip "$*"
++	ktap_finished
  }
+ 
+ fail() {
+-	echo "FAIL: $*"
+-	exit 1
++	ktap_test_fail "$*"
++	ktap_finished
+ }
+ 
+ pass() {
+-	echo "PASS: $*"
+-	exit 0
++	ktap_test_pass "$*"
++	ktap_finished
+ }
+ 
+ [ "$(id -u)" -eq 0 ] || skip "must run as root"
 -- 
 2.43.0
 
