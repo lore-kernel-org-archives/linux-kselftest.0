@@ -1,60 +1,63 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-194.mta0.migadu.com [91.218.175.194])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E080028E0F;
-	Sat, 15 Aug 2026 10:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841C038B131
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 10:04:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786788270; cv=none; b=AqRqctjaa1JTiZPyCu3uu/d/AsvT7AcRbbRd55M+LOaSFu2ovTOFI6Vi9cp8RkJLhliO9GAVzP1slCFzvKx9eYbpw+jlunyqLzfHDU5oTDWbvVdKptnk+6AYry9pgGZDIOOGDrBiiEh9TaPgWNtiyx2Vhvc5F5hWWfQ1+mrYeAQ=
+	t=1786788273; cv=none; b=b6jMhCqS9En9lvAahZWL+T+sMVMMYWWNVj32RS9bW2Tv2A1+L52zaTE5Ck2kcaRi7SRiP/GXnLqIFJXPhM9vnFw3GdWEQFpMjilzbQdKcnT1WyrW/wKQeAUwW2Me4K5Y5FIyhrmyDmf0lJJ1w0R5yi7XRkAlGyo4ZwwzaOVzBbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786788270; c=relaxed/simple;
-	bh=F6otjO3ubj9NG5NUsSl01uuqAKq08BS82QL6wQlVY2U=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=favy1EA/byF+zI+byL46q5ctm2iW5X+B1YOzVRDGSrV9/oJIlWo+fADNupin8B+PKZeYbcEAXwGU2CmDNMm4SA3ZwPOpM9Kc2NWI00hNejVMdng6mmXGHi/7Q7iP7ji8W0JH5pbPgUolDqRij4947xHofKiOTy7JNl7CJhq3zTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: abc39e30989011f19a56ed5b684f684d-20260815
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_UNTRUSTED, SRC_UNTRUSTED, IP_UNFAMILIAR, SRC_UNFAMILIAR, DN_TRUSTED
-	SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD_SPF, CIE_UNKNOWN
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:53b533c3-cbac-4ac3-9382-1c1de90dda92,IP:15,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:15
-X-CID-INFO: VERSION:1.3.19,REQID:53b533c3-cbac-4ac3-9382-1c1de90dda92,IP:15,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:15
-X-CID-META: VersionHash:7db8b62,CLOUDID:8b6579f7dfbb0eb419d94c65004d236d,BulkI
-	D:260815180419RSDGFHBV,BulkQuantity:0,SF:10|66|78|102|127|865|898,TC:nil,C
-	ontent:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,
-	COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: abc39e30989011f19a56ed5b684f684d-20260815
-X-User: yijiangshan@kylinos.cn
-Received: from lazy-pc.www.tendawifi.com [(118.251.48.97)] by mailgw.kylinos.cn
-	(envelope-from <yijiangshan@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 108675986; Sat, 15 Aug 2026 18:04:14 +0800
-From: Jiangshan Yi <yijiangshan@kylinos.cn>
-To: kees@kernel.org,
-	shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org,
+	s=arc-20240116; t=1786788273; c=relaxed/simple;
+	bh=Ibq8FmFzfS79pa12j1e6KYtVVh8objCmcS0oBVDNFx4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AyiMUdTn+FxGhNt8YJMz05YW2i7RsVWt3ah6SVt1MH/VR9uC2z2ye11mwnKZHSvOi2tOo9PXpnbIOEnq21PhMgg7IV6HlG+5OZ5oUEYIfkZqxDqzgc4sYwbjfXFuEuc7P40OCofakjHIpVbE6hhp7+JYuaWEIiCEciqAZwUkx+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=epaB+RCp; arc=none smtp.client-ip=91.218.175.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="epaB+RCp"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ibq8FmFzfS79pa12j1e6KYtVVh8objCmcS0oBVDNFx4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786788270; v=1; x=1787393070;
+ b=epaB+RCpKQ4KRswU1vwBeiAfaKT9TZPx/YPpQtpFb2WCv1wW+vrssC+maherE7+38w36J82J
+ DVQLqUmA9r61bPa7P3kGUqkJJOS2SM/wVVe9ihjpP7Rho4WDzhQ7djE3W6V49UMrmb0GDQjiAre
+ jXtv0tbQZNFs59E4kUFOgBlw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost.localdomain (2408:823d:2011:2c0:e810:54f9:f0a3:99d)
+	by smtp.migadu.com with ESMTPS id 55f3467a102004f0;
+	Sat, 15 Aug 2026 10:04:19 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Jinyu Tang <jinyu.tang@linux.dev>
+To: Anup Patel <anup@brainfault.org>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Atish Patra <atish.patra@linux.dev>
+Cc: kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
-	13667453960@163.com,
-	Jiangshan Yi <yijiangshan@kylinos.cn>
-Subject: [PATCH] selftests/lkdtm: Add missing crashtypes to tests.txt
-Date: Sat, 15 Aug 2026 18:04:06 +0800
-Message-Id: <20260815100406.785640-1-yijiangshan@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
+	linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Nutty Liu <nutty.liu@hotmail.com>,
+	Yifei Jiang <jiangyifei@huawei.com>,
+	Jinyu Tang <tjytimi@163.com>,
+	Jinyu Tang <jinyu.tang@linux.dev>
+Subject: [PATCH v4 2/5] KVM: riscv: Avoid THP adjustment for existing 4K G-stage leaves
+Date: Sat, 15 Aug 2026 06:04:08 -0400
+Message-ID: <20260815100411.861526-1-jinyu.tang@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260815095548.860018-1-jinyu.tang@linux.dev>
+References: <20260815095548.860018-1-jinyu.tang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,71 +66,61 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Several crashtypes were added to the LKDTM source code but their
-corresponding entries were not added to tests.txt, making them
-unreachable via the kselftest framework.
+When dirty logging is disabled after a G-stage PMD mapping has been
+split, the fault path may see a 4K G-stage leaf while the backing host
+page is still THP-backed. The existing kvm_riscv_gstage_map_page()
+comment says that this path should update the small leaf and leave huge
+mapping recovery to a later ioctl path.
 
-Add the following missing crashtype entries:
-  - OVERFLOW_SIGNED
-  - OVERFLOW_UNSIGNED
-  - EFI_RUNTIME_CRASH (conditionally compiled with CONFIG_EFI)
-  - KFENCE_READ_AFTER_FREE
-  - REFCOUNT_SUB_AND_TEST_ZERO
-  - USERCOPY_VMALLOC
-  - USERCOPY_FOLIO
+However, transparent_hugepage_adjust() runs before that G-stage lookup
+and rewrites the fault GPA to the PMD base. If the original fault is not
+at the PMD base, the lookup can find and update the wrong 4K leaf.
 
-REPORT_STACK is intentionally not added as it is handled separately
-by stack-entropy.sh.
+Check the original fault GPA in transparent_hugepage_adjust(). If it
+already has a 4K G-stage leaf, skip THP adjustment and keep handling the
+fault at PAGE_SIZE granularity.
 
-Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+Signed-off-by: Jinyu Tang <jinyu.tang@linux.dev>
 ---
- tools/testing/selftests/lkdtm/tests.txt | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/riscv/kvm/mmu.c | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/lkdtm/tests.txt b/tools/testing/selftests/lkdtm/tests.txt
-index bec57a0..6053dfa 100644
---- a/tools/testing/selftests/lkdtm/tests.txt
-+++ b/tools/testing/selftests/lkdtm/tests.txt
-@@ -13,6 +13,8 @@ EXCEPTION
- ARRAY_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
- FAM_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
- PTR_BOUNDS call trace:|UBSAN: array-index-out-of-bounds
-+OVERFLOW_SIGNED
-+OVERFLOW_UNSIGNED
- CORRUPT_LIST_ADD list_add corruption
- CORRUPT_LIST_DEL list_del corruption
- STACK_GUARD_PAGE_LEADING
-@@ -21,11 +23,13 @@ REPORT_STACK_CANARY repeat:2 ok: stack canaries differ
- UNSET_SMEP pinned CR4 bits changed:
- DOUBLE_FAULT
- CORRUPT_PAC
-+EFI_RUNTIME_CRASH
- UNALIGNED_LOAD_STORE_WRITE
- SLAB_LINEAR_OVERFLOW
- VMALLOC_LINEAR_OVERFLOW
- #WRITE_AFTER_FREE Corrupts memory on failure
- READ_AFTER_FREE call trace:|Memory correctly poisoned
-+KFENCE_READ_AFTER_FREE call trace:|Memory correctly poisoned
- #WRITE_BUDDY_AFTER_FREE Corrupts memory on failure
- READ_BUDDY_AFTER_FREE call trace:|Memory correctly poisoned
- SLAB_INIT_ON_ALLOC Memory appears initialized
-@@ -59,6 +63,7 @@ REFCOUNT_DEC_ZERO
- REFCOUNT_DEC_NEGATIVE Negative detected: saturated
- REFCOUNT_DEC_AND_TEST_NEGATIVE Negative detected: saturated
- REFCOUNT_SUB_AND_TEST_NEGATIVE Negative detected: saturated
-+REFCOUNT_SUB_AND_TEST_ZERO
- REFCOUNT_INC_ZERO
- REFCOUNT_ADD_ZERO
- REFCOUNT_INC_SATURATED Saturation detected: still saturated
-@@ -77,6 +82,8 @@ USERCOPY_SLAB_WHITELIST_FROM
- USERCOPY_STACK_FRAME_TO
- USERCOPY_STACK_FRAME_FROM
- USERCOPY_STACK_BEYOND
-+USERCOPY_VMALLOC
-+USERCOPY_FOLIO
- USERCOPY_KERNEL
- KSTACK_ERASE OK: the rest of the thread stack is properly erased
- CFI_FORWARD_PROTO
+diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
+index bfd6168ebe30..2fabcd409991 100644
+--- a/arch/riscv/kvm/mmu.c
++++ b/arch/riscv/kvm/mmu.c
+@@ -500,10 +500,21 @@ static int get_hva_mapping_size(struct kvm *kvm,
+ 
+ static unsigned long transparent_hugepage_adjust(struct kvm *kvm,
+ 						 struct kvm_memory_slot *memslot,
++						 struct kvm_gstage *gstage,
+ 						 unsigned long hva,
+ 						 kvm_pfn_t *hfnp, gpa_t *gpa)
+ {
+ 	kvm_pfn_t hfn = *hfnp;
++	u32 ptep_level;
++	pte_t *ptep;
++
++	/*
++	 * Keep the existing split G-stage leaf and update the original
++	 * faulting 4K page in the vCPU fault path.
++	 */
++	if (kvm_riscv_gstage_get_leaf(gstage, *gpa, &ptep, &ptep_level) &&
++	    !ptep_level)
++		return PAGE_SIZE;
+ 
+ 	/*
+ 	 * Make sure the adjustment is done only for THP pages. Also make
+@@ -730,7 +741,8 @@ int kvm_riscv_mmu_map(struct kvm_vcpu *vcpu, struct kvm_memory_slot *memslot,
+ 	 * so do not promote them through the THP helper.
+ 	 */
+ 	if (!logging && !is_hugetlb && vma_pagesize == PAGE_SIZE)
+-		vma_pagesize = transparent_hugepage_adjust(kvm, memslot, hva, &hfn, &gpa);
++		vma_pagesize = transparent_hugepage_adjust(kvm, memslot, &gstage,
++							   hva, &hfn, &gpa);
+ 
+ 	if (writable) {
+ 		mark_page_dirty_in_slot(kvm, memslot, gfn);
 -- 
-2.25.1
+2.43.0
 
