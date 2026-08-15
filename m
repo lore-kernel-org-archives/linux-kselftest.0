@@ -1,69 +1,79 @@
-Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08BC10F2;
-	Sat, 15 Aug 2026 02:32:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D4023D7C2;
+	Sat, 15 Aug 2026 02:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786761172; cv=none; b=B2c1InHYNQ3UY63AILThQiMywP/rL/AGJZxraHHNCAwa/iDaVbKTgIAg0ns1Gihc4nawG8Fp098j/eodVV6g6mvfnnxldT2Tc90/xsFTed5nyl9ipE58kEYQXMXBCX0lz+BQs1GMyiQPQigzW6T4xE4oP9XcPKBqqvCdUJ1eng0=
+	t=1786761230; cv=none; b=XDrFfcptru84a650xhzbPB8Z8/8ZkHYo+JPPIjmNk1vy+IAKCdosbpIdSVvkTV0Nern/yoweMoyF1JYKX+2B//ZovToMG0svRWq7YGhfYmDMksF8K70MNbGKcVMuZqKfb4SOlf0C3+xbJ6Sd3qbQjmsz+bwjp3XMHbfDSgSOZkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786761172; c=relaxed/simple;
-	bh=coBX8vE1oP3dXhBWhX8r/5fMm6jnvtpL3zOeEuBtyks=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SVgri1epUg8hYaqtp60ej4NvfaX8IgJqecW7Oe4Ye/0TPiXKlKtHErnCRmRaDpXN+ZOALNXhAIZIwC7MaaOA51JeOj4aVzvQGDy54A8Y14jQ4HL2Ls8Eafv1RTOtvqK71j0A0sQPO8Wl7ny3u8BSKJFalgN7gaeB9fU7pdTK74A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
-Received: by sphereful.davidgow.net (Postfix, from userid 119)
-	id 028081EA93C; Sat, 15 Aug 2026 10:32:42 +0800 (AWST)
-X-Spam-Level: 
-Received: from [IPV6:2001:8003:8802:7000::9c4] (unknown [IPv6:2001:8003:8802:7000::9c4])
-	by sphereful.davidgow.net (Postfix) with ESMTPSA id 9A92A1EA934;
-	Sat, 15 Aug 2026 10:32:39 +0800 (AWST)
-Message-ID: <f2f4be53-2cce-4517-9e37-518150b7764b@davidgow.net>
-Date: Sat, 15 Aug 2026 10:32:36 +0800
+	s=arc-20240116; t=1786761230; c=relaxed/simple;
+	bh=FjLWJiJ2ktzDYa4j6UcmQz/1w6b4Xwl/mQwSvP4Sj8I=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=oh9NqzsD1ycv78E5WPcdvk13vEAcd5Ygvm9HtoPqtvCSANFb4VKphzK9puYRSACGrOC20Gr70XqI6FSOglb8mt4vkfrKd2M+vjrA74hWVmmsZNwYW4yi6u92i7p7E4Dkx7F0o7xd5FD7s9B+7dHp85z9j7juLdidOMtVrEYFIxc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XCogrhHA; arc=none smtp.client-ip=100.103.45.18
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XCogrhHA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9996C1F00A3E;
+	Sat, 15 Aug 2026 02:33:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786761229;
+	bh=WZK+K+bCa7NZn2eJGUhA3eHDJyFYVSwRrE30vSY/0Qs=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=XCogrhHA6UM9ESNqhVVouhiASpZJmD2CKrx/y+ZCKNPa1Vfxgk6GAN+Iw20Y2kqo3
+	 Zvoht79Zkh4t1Aec3beeznlMBBKaYD72nM7VtZBcN4CiLMVcVCnvOUMFHN21JTzenV
+	 NebRGAtdCmm3ZWT18+4nc/1IFYaG0spjTKf0lM++PPG2y2PjZrhN/H1DWJs8wCiuhm
+	 i727ywAPvKB2IzCLJAsJ5UA6kUMxumlQnfLQ6USqi3xUakWbwcnjwWXAI0fOCPusNo
+	 jjDiE1lfVAy8v66qlGBJ2AecfQpJWJUsfwzQCmdwhHtTN75Cx0EeJ36SuiWDmbZ9Lo
+	 tYwbCiqCnX2mQ==
+From: Sasha Levin <sashal@kernel.org>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	gregkh@linuxfoundation.org
+Cc: Sasha Levin <sashal@kernel.org>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	=?utf-8?b?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Michal Luczaj <mhal@rbox.co>,
+	Kuniyuki Iwashima <kuniyu@google.com>,
+	Jakub Sitnicki <jakub@cloudflare.com>,
+	Jason Xing <kerneljasonxing@gmail.com>
+Subject: Re: [PATCH 7.1.y 0/4] selftests: Fixes for BPF
+Date: Fri, 14 Aug 2026 22:33:20 -0400
+Message-ID: <20260814193000.20@kernel.org>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
+References: <20260813-7-1-y-selftests-bpf-udp_xsk-v1-0-cd5c51e7dcec@marliere.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 4/4] spi: Add KUnit coverage for DMA mapping error
- paths
-To: Honghui Jiang <jiang_hh2019@163.com>, Mark Brown <broonie@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- Andy Shevchenko <andy@kernel.org>, Serge Semin <fancer.lancer@gmail.com>,
- Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
- linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-References: <20260814031419.43378-1-jiang_hh2019@163.com>
- <20260814031419.43378-5-jiang_hh2019@163.com>
- <an8JaNLIy4je-tiG@ashevche-desk.local>
- <93950eda-ee8e-4a28-8e3c-707d64c956fe@sirena.org.uk>
- <53943105.8b50.1a0015a531c.Coremail.jiang_hh2019@163.com>
-From: David Gow <david@davidgow.net>
-Content-Language: fr
-In-Reply-To: <53943105.8b50.1a0015a531c.Coremail.jiang_hh2019@163.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Le 15/08/2026 à 1:38 AM, Honghui Jiang a écrit :
-> On Fri, Aug 14, 2026 at 01:49:50PM +0100, Mark Brown wrote:
->> On Fri, Aug 14, 2026 at 03:27:13PM +0300, Andy Shevchenko wrote:
->>> This is a stray change.
->>
->> Well, one of the config changes is.  Clearly spi is critical enough to
->> be tested by default!  :P
-> 
-> 
-> Thanks, both. I'll drop CONFIG_SPI=y from default.config in v3 and keep
-> it in all_tests.config.
-> 
+> Please consider merging the following patches, found through openSUSE CI.
+>
+> [1/4] and [2/4] are for test_xsk.sh:
 
-Thanks: we want to keep the default config to only match things
-otherwise enabled in Kconfig (via CONFIG_KUNIT_ALL_TESTS=y).
-all_tests.config is the right place for this.
+Queued 1/4 and 2/4 for 7.1, thanks. I moved 2/4's [ rbm: ] note above the
+Signed-off-by block so git parses the trailers again; the diff is untouched.
 
-Cheers,
--- David
+3/4 and 4/4 need a v2 - the [ Upstream commit ] SHA in each of them is not a
+commit in any tree. I've replied on both patches with the correct ones.
+
+-- 
+Thanks,
+Sasha
