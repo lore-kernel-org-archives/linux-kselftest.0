@@ -1,53 +1,69 @@
-Received: from mta0.migadu.com (out-1.mta0.migadu.com [91.218.175.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53CCE3546C5
-	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 07:16:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67B429A31C;
+	Sat, 15 Aug 2026 08:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786778162; cv=none; b=aGO93QOYQqv4zXV3FKnIP2sdxYszP0f+vvG69+AgK9Qwvl5m/msIlqa6xEOIfKQFMVn0Wk1iPGXWC3CrjmP0SUpdK4/SVUrMEnA2BAc/lXxphVlDxDXPCDVmT2zXHcJs1Z4ZdT+DibM6S/FRg1Bl8UusPN+ciK0MbqfvW0Rul9I=
+	t=1786781280; cv=none; b=Qtnf1OPwrXcnasUzUAsGEza4445dP8RCwDWcBjOc05/wbeN6/nP+enp/dE1CFJcy8MSx6jDFSq5iEGuZgUiBtrN3LoHQRUxLWML28Dh5vtVBuWfe0J5huGsZQZKMJR85/i3fdGyigoabqtxrBbbjaPSygTfyc23yGXsC+/+AGiw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786778162; c=relaxed/simple;
-	bh=9CzrLhRoKq+qS18iCs8Ie0gpwrvllBmTQsF5jWCnFzk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CyzIQd8G4XbTXS32HkNFZBBCpSN20LeUD4aOu7hjQ+3SWBKoKZ9bXi+fgjJbKIa4JvRkPbdPZZJAPdPx1qlUtH9hzXG6R3/cQcrXQQW8kNwHucIcgBh/HTRNx0ewLSu3wtOcwAdG5KzeE94gbH6zgDr8MiVEEzS4soBfsNq21hI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PaaIScVy; arc=none smtp.client-ip=91.218.175.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PaaIScVy"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9CzrLhRoKq+qS18iCs8Ie0gpwrvllBmTQsF5jWCnFzk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786778158; v=1; x=1787382958;
- b=PaaIScVyQgaAmqm+RQU2TFGiOyAI1/XP8U+/Ewa9dK4Lb7Y0jfOpMo8Netk5R3BHexKiP8CU
- JKJEAgr2hIQiaP10+BQKQwDfbVc1wBWXF2zbEqa0pXvUUUmPfrWvSUc7gQ/+YZMwHjkuSYuRLgU
- WCi9W/q5Tg6K+w8+GNsSLZVE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.3)
-	by smtp.migadu.com with ESMTPS id b4549a7fe812b398;
-	Sat, 15 Aug 2026 07:15:48 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: netdev@vger.kernel.org
-Cc: Eric Dumazet <edumazet@google.com>,
-	Jiayuan Chen <jiayuan.chen@linux.dev>,
-	David Ahern <dsahern@kernel.org>,
-	Ido Schimmel <idosch@nvidia.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
+	s=arc-20240116; t=1786781280; c=relaxed/simple;
+	bh=pra/LCkmC8PddzQzsq7CRyI+BHi7XS86GmRHL6NaXXc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=L0ns7Lr6nfuE28DwKPPCP4nbqj7ZZi167fV7i8dINP3GKuPQ5YxhJRNLuB31McLQT5EbbjUb1AlN/NYH8Jql2Sx+JCHR6yK6O8D133rUYwBetxXXERIHQEB5EfKaTvzRS2qfSlwe4Kpg/9qzED1O4kWkgmcnE3Aq+qoZ/UPTI4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: 67a3f494988011f19a56ed5b684f684d-20260815
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
+	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
+	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
+	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_LOWREP, SRC_LOWREP
+	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
+	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
+	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:65757eeb-3e3d-4b3f-8a9e-09c0f46a2b13,IP:10,
+	URL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:35
+X-CID-INFO: VERSION:1.3.19,REQID:65757eeb-3e3d-4b3f-8a9e-09c0f46a2b13,IP:10,UR
+	L:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:35
+X-CID-META: VersionHash:7db8b62,CLOUDID:a0afd14ce99ee6cef1623ae023eb2c5c,BulkI
+	D:260815160751QEPPXWOZ,BulkQuantity:0,SF:17|19|38|66|78|102|127|865|898,TC
+	:nil,Content:0|15|50,EDM:5,IP:-2,URL:99|1,File:nil,RT:nil,Bulk:nil,QS:nil,
+	BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_ULS,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: 67a3f494988011f19a56ed5b684f684d-20260815
+X-User: husong@kylinos.cn
+Received: from ctao-book.. [(111.162.215.50)] by mailgw.kylinos.cn
+	(envelope-from <husong@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 9118596; Sat, 15 Aug 2026 16:07:48 +0800
+From: Song Hu <husong@kylinos.cn>
+To: akpm@linux-foundation.org,
+	rppt@kernel.org,
+	sarthak.sharma@arm.com
+Cc: linux-mm@kvack.org,
+	shuah@kernel.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	peterx@redhat.com,
+	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 2/2] selftests: net: packetdrill: add tests for advertised MSS with PMTU exceptions
-Date: Sat, 15 Aug 2026 15:15:08 +0800
-Message-ID: <20260815071532.301908-1-jiayuan.chen@linux.dev>
+	Song Hu <husong@kylinos.cn>
+Subject: [PATCH v2 0/3] selftests/mm: TAP output and global-state fixes
+Date: Sat, 15 Aug 2026 16:07:13 +0800
+Message-ID: <20260815080716.3596514-1-husong@kylinos.cn>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260815070413.294559-1-jiayuan.chen@linux.dev>
-References: <20260815070413.294559-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -56,168 +72,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Eric Dumazet <edumazet@google.com>
+uffd-wp-mremap and mremap_test never print the TAP header (and mremap_test
+skips with a bare exit(KSFT_SKIP) rather than a KTAP skip), so their output
+is not valid KTAP; hugetlb-soft-offline toggles enable_soft_offline during
+the run and leaves it disabled afterwards.
 
-Add packetdrill tests for IPv4 and IPv6 to verify that the advertised
-MSS in SYN-ACK is derived from the configured interface/route MTU,
-and is not shrunk by learned Path MTU exceptions from previous
-outbound connections.
+Tested on x86_64.
 
-Signed-off-by: Eric Dumazet <edumazet@google.com>
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Song Hu (3):
+  selftests/mm: emit TAP header in uffd-wp-mremap
+  selftests/mm: emit TAP header and use TAP skip in mremap_test
+  selftests/mm: restore enable_soft_offline in hugetlb-soft-offline
+
+ .../selftests/mm/hugetlb-soft-offline.c       | 35 ++++++----------
+ tools/testing/selftests/mm/mremap_test.c      | 41 +++++++++++--------
+ tools/testing/selftests/mm/uffd-wp-mremap.c   |  2 +
+ 3 files changed, 37 insertions(+), 41 deletions(-)
+
 ---
- .../net/packetdrill/tcp_advmss_pmtu_ipv4.pkt  | 67 +++++++++++++++++++
- .../net/packetdrill/tcp_advmss_pmtu_ipv6.pkt  | 67 +++++++++++++++++++
- 2 files changed, 134 insertions(+)
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
- create mode 100644 tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
 
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
-new file mode 100644
-index 000000000000..f2ef931b77a1
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv4.pkt
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Test that IPv4 advertised MSS in SYN-ACK is derived from the configured
-+// interface MTU (1500 -> MSS 1460), not the ICMP-learned Path MTU.
-+
-+--ip_version=ipv4
-+
-+`./defaults.sh
-+ethtool -K tun0 tso off
-+`
-+
-+//
-+// Connection 1: Learn PMTU exception (MTU 1200 -> MSS 1160)
-+//
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Send a full 1460-byte segment
-+   +0 write(4, ..., 1460) = 1460
-+   +0 > P. 1:1461(1460) ack 1
-+
-+// ICMP Fragmentation Needed arrives indicating next-hop MTU 1200
-+   +0 < icmp unreachable frag_needed mtu 1200 [1:1461(1460)]
-+
-+// Local host retransmits using the learned MTU 1200 (MSS = 1200 - 40 = 1160)
-+   +0 > . 1:1161(1160) ack 1
-+   +0 > P. 1161:1461(300) ack 1
-+   +0 < R 1:1(0) ack 1461 win 0
-+
-+// Close connection 1 and listener
-+   +0 close(4) = 0
-+   +0 close(3) = 0
-+
-+//
-+// Connection 2: New connection from the same peer
-+//
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-+
-+// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1160
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1200
-+   +0 write(4, ..., 1460) = 1460
-+   +0 > . 1:1161(1160) ack 1
-+   +0 > P. 1161:1461(300) ack 1
-+   +0 < . 1:1(0) ack 1461 win 257
-+
-+// Clean up
-+   +0 close(4) = 0
-+   +0 > F. 1461:1461(0) ack 1
-+   +0 < F. 1:1(0) ack 1462 win 257
-+   +0 > . 1462:1462(0) ack 2
-+   +0 close(3) = 0
-diff --git a/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
-new file mode 100644
-index 000000000000..c7638b11a815
---- /dev/null
-+++ b/tools/testing/selftests/net/packetdrill/tcp_advmss_pmtu_ipv6.pkt
-@@ -0,0 +1,67 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Test that IPv6 advertised MSS in SYN-ACK is derived from the configured
-+// interface MTU (1520 -> MSS 1460), not the ICMPv6-learned Path MTU.
-+
-+--ip_version=ipv6
-+
-+`./defaults.sh
-+ethtool -K tun0 tso off
-+`
-+
-+//
-+// Connection 1: Learn PMTU exception (MTU 1280 -> MSS 1220)
-+//
-+    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+  +.1 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Send a full 1460-byte segment
-+   +0 write(4, ..., 1460) = 1460
-+   +0 > P. 1:1461(1460) ack 1
-+
-+// ICMPv6 Packet Too Big arrives indicating next-hop MTU 1280
-+   +0 < icmp packet_too_big mtu 1280 [1:1461(1460)]
-+
-+// Local host retransmits using the learned MTU 1280 (MSS = 1280 - 40 - 20 = 1220)
-+   +0 > . 1:1221(1220) ack 1
-+   +0 > P. 1221:1461(240) ack 1
-+   +0 < R 1:1(0) ack 1461 win 0
-+
-+// Close connection 1 and listener
-+   +0 close(4) = 0
-+   +0 close(3) = 0
-+
-+//
-+// Connection 2: New connection from the same peer
-+//
-+   +0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
-+   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
-+   +0 bind(3, ..., ...) = 0
-+   +0 listen(3, 1) = 0
-+
-+   +0 < S 0:0(0) win 65535 <mss 1460,sackOK,nop,nop,nop,wscale 8>
-+
-+// Verify: SYN-ACK MUST advertise configured MSS 1460, NOT the learned PMTU MSS 1220
-+   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
-+   +0 < . 1:1(0) ack 1 win 257
-+   +0 accept(3, ..., ...) = 4
-+
-+// Verify: Outgoing transmit MSS is still constrained by the learned PMTU 1280
-+   +0 write(4, ..., 1460) = 1460
-+   +0 > . 1:1221(1220) ack 1
-+   +0 > P. 1221:1461(240) ack 1
-+   +0 < . 1:1(0) ack 1461 win 257
-+
-+// Clean up
-+   +0 close(4) = 0
-+   +0 > F. 1461:1461(0) ack 1
-+   +0 < F. 1:1(0) ack 1462 win 257
-+   +0 > . 1462:1462(0) ack 2
-+   +0 close(3) = 0
+Changes in v2, per review feedback from Mike Rapoport, Sarthak Sharma and
+the Sashiko AI review Andrew Morton pointed at:
+
+- mremap_test: save errno before fclose() in get_mmap_min_addr() so
+  strerror() reports the actual failure, and split the ksft_*() messages
+  embedding "\n\t" so continuation lines get the "# " prefix.
+
+- hugetlb-soft-offline: restore enable_soft_offline from an atexit()
+  handler so it also runs on early exits, and use read_num()/write_num()
+  from vm_util instead of the hand-rolled helpers.
+
+v1: https://lore.kernel.org/all/20260812120821.523860-1-husong@kylinos.cn/
+
 -- 
 2.43.0
 
