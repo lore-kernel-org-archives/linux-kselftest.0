@@ -1,73 +1,73 @@
 Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB43C34A791;
-	Sat, 15 Aug 2026 01:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 152F2349CD6;
+	Sat, 15 Aug 2026 01:59:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786759161; cv=none; b=sJi2ZPkUuJ5avLf6j8J8zCJW5fYgYVk/yiCpvOvnF0KFBcxvrmapG9/LmG+YsVl5x7FCNtqRWwLRDNGg1uGivKIhXeGuM14Ihu8gk3538Q+nzjmIkNEDguwfW8oidgY0VeE76EYCY4hZpuTKshEd0cw+WGLGBm0NBHBQbsg2hlU=
+	t=1786759161; cv=none; b=OQfRw1n0kbt/uW6AyaVqokuIx5tqOfgvh+/77wX2JPqOrifeKi/zGlw+d8MPPDJFQ6fvr2RivTvLN6UeU/n4qxfs1htlNTLkOHXWRH7i9u7ZRCOp0BnzZsKFXESZ8LHZVvN0uBIL8cgSKCjFHGbLW0TPcJzQ91kqpNFzMFksEfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786759161; c=relaxed/simple;
-	bh=+QBmOchJZd0Ibl2TQFvBSlNpZPNzygSRb6mv49lsJxY=;
+	bh=q0bgg9uaN4yIMca/bqK4goaQL7KGJcwOOLAjn1Yf5AM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fg4GmKwq+XQhYH3hBpE/5wl3rD4D4Vrsko9th7+iy1xYSgAdp0rXjDda7zHi5acJT9cFYxGUTlHAT5j4/T5lKdTW6nyd0lSMn5hCsWBrj3VJzOIBBtnwljkEs9S+KePc9OCC0/G4656SvRsEANdDD8hWmdbbaDV4CHYLCcIA4nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=v8K+fLOC; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=cA0akQKf; arc=none smtp.client-ip=103.168.172.149
+	 MIME-Version; b=Gz6x3NdOz7q/0eaBeVoZBfNRW1IECdWzicskRuy/150PjqBkWu+4sM/W3ecWHGEdR2O9LU6x/yvNCcl3R4IhEbnweswExV5jCl0dCjJBkfy7S10gFy3CuDyrytFK1TUWheLMyjuC/9XFt5/h9oo1rcCiioj9IGv+RO/zrZ4hSuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=CgdQW+Jc; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ku1e1ZdD; arc=none smtp.client-ip=103.168.172.149
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="v8K+fLOC";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="cA0akQKf"
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfout.phl.internal (Postfix) with ESMTP id 030B8EC0222;
-	Fri, 14 Aug 2026 21:59:17 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Fri, 14 Aug 2026 21:59:17 -0400
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="CgdQW+Jc";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ku1e1ZdD"
+Received: from phl-compute-09.internal (phl-compute-09.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 452B4EC0223;
+	Fri, 14 Aug 2026 21:59:19 -0400 (EDT)
+Received: from phl-frontend-04 ([10.202.2.163])
+  by phl-compute-09.internal (MEProxy); Fri, 14 Aug 2026 21:59:19 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
 	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
 	:from:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1786759156; x=
-	1786845556; bh=bljFEbJ6nOpcyGugcFKzpM9ttTNPFcr/ZQQGmFBGNGQ=; b=v
-	8K+fLOCozrKSLZYkHw5wvKkubbHtkGy4qBB01a/I2nfGUKJmpYOKaISYKiPm+AF5
-	GveDWj8JXLDbSfkHMYVogaB/ZIJQBHFexFkr1HikMZ+nvKFF7TrX8LLrTr+zkdEC
-	HcpOE5paeofRUkNPUG5ZZqrRjQPZYJ17vhbq2ljFrWFxt/ZjL+oVB50OeErSUmGc
-	PFC6vEjlcz5RUkAn/T2/AMkRF0ZqFbO9R4WGdQQUDy3eR2HdnIT2IoCzvuie+UDJ
-	JV58kBmZCKDI0W1a4PSdZ6y4sRdkRiuZFnGX97+ERsRmT0Mx65XSz+qjJlkE0Vd1
-	8vdYphfoc1J1xvAIG41sA==
+	:reply-to:subject:subject:to:to; s=fm1; t=1786759159; x=
+	1786845559; bh=LgG13P0WQQyCBdBYOJL0T47tEW0jH9jShvZjUp74c7I=; b=C
+	gdQW+JcxJmpuInkt1ol9tNRCxUZmZA25NEmIzkRIS8KKN4Yz342KBwmMj2w7GVO8
+	jomEzYytrPXUhNhKQMVvuJ3NeKxvFK13xpt/kgYIE29Skm3NaxRzNwuO16CWPjPu
+	S7UJ0E1joYJwL0Aj4AbekRoES+ZfNke4zfULB7Ghs3NcW4e6UJ2z3vcNKh6eZks6
+	08Qgt017uRZI+sRhiF8wSfLTrX6t2FZWJHvIyhhJcPhcslHKhoX9SE+a1nAWwd4w
+	8botglqSk/iDwjmIVRUWqxPJhFuLMQQGIIAy230mCI5wa8rWLA/+FIgsiJe1IfwG
+	Gg3s1SlXbi8kUe+m7wxIg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1786759156; x=1786845556; bh=b
-	ljFEbJ6nOpcyGugcFKzpM9ttTNPFcr/ZQQGmFBGNGQ=; b=cA0akQKfu38IBZl4w
-	gV9Ov1ersw8ZlDu4zmZ4150TVSoLkM7I9Qss1DGin13bmPtPcgX0K4P3SkH32+iQ
-	67hhkc4pjiXqWzT3UU9OwyYUb5K2TlKc9k3bwuylTpd9HLgHGRWbFT9rW0Gv5+MO
-	0Ohk8UGeuOxvXFzQmBQpkTfv7X4grVIVkABWcDoV4mOJnL5r4iA+7HxD/sxT4pMD
-	KZKJ2UfJDJkZa+bZMdOoW2xHX/GIAWkTVTywyanPRmZTHeyEBsA3efcM+noWn6ZL
-	vZ6Df63xwrM9u+UW4XKOpnw55mvDTZH6QRolpfoaZAyks+ulRZPqQk+shhFElEMk
-	n5LJQ==
-X-ME-Sender: <xms:9Md_amQnouJf3SFBt72totxHPPOcqNMwEKqmHZu-UyO6NrtlbemyTg>
-    <xme:9Md_avvkyAT-qkNdOSjVI-G7OYNj1Qv0Dm0gsxgj6eHiuhBxTnykp9APRfQr_IjpD
-    jUxyAqqgJ9RtBImFGzm9h8iKgNbPxtI3VXK9-hY_OwS5e52pOr0HqA>
-X-ME-Received: <xmr:9Md_asVAZJHxjODmiE_uJnuODqAek-RtZBOiQOQHSbtYV1a5qHfgjIe5L6A>
-X-ME-Proxy-Cause: dmFkZTEYpEQiBdLKlCaLp317TOYqYwO99jnuX4YrBujo3RuW+IIGXdYj4qE1ezcGRvbtOZ
-    hc7RfnfkdlTehb5Dkvk4VZTcyRAqm2CcEjaldkIQshIttrB2HSeWyAKQfsR+ykmymFv8qO
-    aC/+wh3joJiQccaWn5NjVrqLVVMYdoVO37A5ZL6SnR75seJlCquk1NTOiA0EvXHIVSJ25Q
-    iFONSccd/wEzNfQZlOvvQQf5bCKiGIALXd0Rd37Vcnrh56q8DfWwmvEu2ZgBGSMa525iaP
-    HkMF5MKO3LDiNiHXJVHjo5f/L4XJttiAOfdXhljkaHgZI649okv5M81/eeF8HfhCZr1USB
-    aFDwzaDkfOm7MheaHSu0LnQkdQIwPXvaU0CQJ6NRlHYca+Szys49+C+KYF4TupoV0LnHl9
-    4oZHEL3wpxshS9kAwizxlp8iJnvvqoORWaf4t/+w2sr70KqtTeuQNBxMGtA6+n0hV1Bbs4
-    kUiKpye1DmC2Z3IY+5BCqeqlSxHA96oGURes8rVJevUEfVEdY2gZ84ack6+02xHVk3wkKg
-    MCfp5WjQhdx+11zRGO7zRb+mvvFoOEu4JGm+agYo4SaH6Uz0HkHI9pRvk3F6fCs6OR2lTy
-    TGwbWLIoANh0cEv1dt6xM/N3WfoyEI1ftOiK+Z4robHef9T3VSKUsgOcnjsw
-X-ME-Proxy: <xmx:9Md_armiWPfJzwArAMQkEQnFO3c5soMJn_op_d2U9QTVMu_vioiJ2Q>
-    <xmx:9Md_anDRQzJhngG-6nQspCYRRoEvNiVRc6_XO_VaJQO65kqAIoToEg>
-    <xmx:9Md_ao_ek4ekg6lbfyx_jlh58EsUQF71TdztknfsfMzg9yCt5S1fzw>
-    <xmx:9Md_ahRjrxFotXqbIhKU_wK9J1ZhtSJbuJaFFpfVRyqvNXX735gUFQ>
-    <xmx:9Md_au1TrEb3Q34XFxg4hdz-ML_VsBeN2orE7WZR69bx2MglxaB9i0Xf>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1786759159; x=1786845559; bh=L
+	gG13P0WQQyCBdBYOJL0T47tEW0jH9jShvZjUp74c7I=; b=Ku1e1ZdDPyHtg2rcI
+	r2U/q7Hg+TiBVWuAW9EEfj9efA+oj1zwHGR+it846TTNXWG9mQE9PjHvQP0jC39r
+	zSoq7GotYkA+FzqNmrQqcuDAqzFdDhQvSaZ8G9ObFX8h2sDoHDefVQIxKm5H8Y1d
+	rtG0dGQrJUNygXM1X81xmtUsTsxM1h0iLqQApO/iZHvkBhtx1kmSy7hViFuwY5Ui
+	lSGb9nOweCEyOb6/vCnzB2ov+96yTqORv7Vmmk7viIziuc5vc6zCUEB/A2shzmCL
+	BwPFwbX5Udxs2ISIckSJMwLtbi3DRBPXrTBphyp3sfg6fuAQvZcEdpw0z95uMjBw
+	4r6vg==
+X-ME-Sender: <xms:9sd_aoMmzNHKpR3KIgvtjF-Ep9J8Z2ojFA9N-m_WbUiw-kcNMzGhbw>
+    <xme:9sd_ai5fdKey-Icw_BNF5NAlfZUk5HciJ2fv1trwqYpwt_mZKAuHR4My6afqJG6Yb
+    uYGC_E2_39Yk4_W83-j5GtFTLZ5q91slvvbAkTMEPqgxpO59mfjJV9b>
+X-ME-Received: <xmr:9sd_anwaNcXs-0jK5liElml7gwpEFZnCT2CK6vPrRw7y9tjS6w5p_3y8nn4>
+X-ME-Proxy-Cause: dmFkZTFkzjFsAsDS7jWvo8tVKWpCqxoPadMTBhe5gqM9L8x58RJwkgUd6ef20LiiZWkVJ2
+    5XQFhBj/83jOdOO/Ql8fjehU8OJYV5xIu11NhtpuSlnR0oerfSUAVFPgI11Kw5ramX9VWq
+    n08yQGhgo5srNyqhq1wQoX26nhsBi0/kG/kW3aJyoHPyWIE8LEdKOQSb0eQSt/HvnaOXE5
+    UcIyVyC42WtFkuUGaM3UI8X0We8hi8iW/Yy96suQXEqLNayQSzJTP+/kt+gGyLyNBuaXQP
+    ClJKWCE1EuRQ5KlZV/VIT/qKrfIiWHiKuiXCdDyNa4K7qcq8xZMDqhI/wNpN/ytfSmuiC9
+    ASDF64uDYYbJcKpkthtCvX+lL6hbpkE8rcBGht8D6sa5z3Wt/7XEw1SzEiJdE326cyseW0
+    C4UxUzzt/UaE7luBGDD7sTDLHv5DOkHTzgs1a1G23kMi0QipbeAo+uojtkKGEyV1ttU1E9
+    2GwrULNZCWkoidglMm4joCnVsrGWrN5jEtdvnnC7T+RL8Kbk0g5h1XcbA/vJJ6kuYy8+Z5
+    xtj/YfjsvJRrWkzRquVToRNe7Mj19b1w1lZ+y9a7DsIoR7l6OOPPWlQJWwhPyg2WbL+EyR
+    U4MTWsj3igdF1mDl5oVUQW12b2JHGbnAWyVl/npAQUdDcFRMPj/i1qntecmQ
+X-ME-Proxy: <xmx:9sd_aqS_kxE9i6az5uQab_w0lSvATkW3XHyNfFBpik-3teBjGuvqyw>
+    <xmx:9sd_an9DDuxqhVQ1Len7gljMBODwLB-li_-7S1iejOcrnAyi0iQk8g>
+    <xmx:9sd_avLoE63So8Jpq8E3DY2eHj2Z4PDhakZKr6FLjswcO4R_s1YOFw>
+    <xmx:9sd_ajvBzH8PHD1wcLkYqKCUfAMDXcmnyHjowzyheWQI0m5UUzOaag>
+    <xmx:98d_alAv27ZZQCZgCJcAyFsH5ZELwd5bFK6zQ4eCq6SRc_qSoVQ9w5bZ>
 Feedback-ID: ie3994620:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 14 Aug 2026 21:59:16 -0400 (EDT)
+ 14 Aug 2026 21:59:18 -0400 (EDT)
 From: Kiryl Shutsemau <kirill@shutemov.name>
 To: akpm@linux-foundation.org,
 	david@kernel.org,
@@ -93,9 +93,9 @@ Cc: baolin.wang@linux.alibaba.com,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	kas@kernel.org
-Subject: [PATCH v4 05/19] selftests/mm: make the swap cases' swapout reliable
-Date: Sat, 15 Aug 2026 02:58:47 +0100
-Message-ID: <20260815015901.1236937-6-kirill@shutemov.name>
+Subject: [PATCH v4 06/19] selftests/mm: stop khugepaged during the MADV_COLLAPSE cases
+Date: Sat, 15 Aug 2026 02:58:48 +0100
+Message-ID: <20260815015901.1236937-7-kirill@shutemov.name>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260815015901.1236937-1-kirill@shutemov.name>
 References: <20260815015901.1236937-1-kirill@shutemov.name>
@@ -109,128 +109,59 @@ Content-Transfer-Encoding: 8bit
 
 From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 
-collapse_swapin_single_pte() and collapse_max_ptes_swap() swap a range out
-and then require smaps to report exactly the count they asked for.  Two
-things keep that count from arriving.
+__madvise_collapse() turns THP off before each MADV_COLLAPSE, both to keep
+khugepaged out of the range and to prove MADV_COLLAPSE ignores the setting.
+It clears the global controls only, which is no longer enough.  A per-order
+control overrides them, and -s leaves the source order at "always", so
+khugepaged collapses the very range the case is working on.  The case then
+fails on a collapse that was interfered with rather than refused.
 
-MADV_PAGEOUT is best effort, so the count often turns up a moment late.
+Clear the per-order controls too.  Set them to "inherit", not "never".
+khugepaged honours the global never and stays out.  A forced shmem collapse
+takes the order it builds from these very controls, and still finds one.
 
-And wait_for_scan() leaves MADV_HUGEPAGE behind, so khugepaged is still
-working on the range.  Collapsing a range with up to max_ptes_swap pages
-swapped out means reading them back in, so the daemon empties the swap as
-fast as the case fills it.  On arm64 with 64K pages max_ptes_swap is 1024
-pages, which is 64M a step, and the case loses:
-
-    # Swapout 1024 of 8192 pages... Fail
-    not ok 10 collapse_max_ptes_swap
-
-Ask again for up to two seconds, with the range held out of the daemon's
-reach while asking.  The collapse each case runs next puts MADV_HUGEPAGE
-back, so only the setup is affected.
-
-If the pages still will not go, skip.  A machine with no swap, or swap too
-small, full, capped by a memcg or busy with writeback, is not the kernel
-under test refusing.  An error from madvise() itself still ends the run.
-
+Fixes: 9f0704eae8a4 ("selftests/mm/khugepaged: enlighten for multi-size THP")
 Assisted-by: Claude-Code:claude-opus-5
-Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 53 +++++++++++++++++++------
- 1 file changed, 41 insertions(+), 12 deletions(-)
+ tools/testing/selftests/mm/khugepaged.c | 13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
 diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index ec5c36a19d92..7eb9db0005a0 100644
+index 7eb9db0005a0..0008862e7cbc 100644
 --- a/tools/testing/selftests/mm/khugepaged.c
 +++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -219,6 +219,41 @@ static bool check_swap(void *addr, unsigned long size)
- 	return swap;
- }
- 
-+/*
-+ * Page the range out and wait for the swap count to say so.
-+ *
-+ * Two things get in the way.  MADV_PAGEOUT is best effort:
-+ * shrink_folio_list() leaves a folio alone when it cannot reclaim it right
-+ * away, and one still under writeback from an earlier pageout is the common
-+ * case, so the count the caller asks for arrives a moment later.  And a range
-+ * an earlier collapse left MADV_HUGEPAGE is one khugepaged is still working
-+ * on: collapsing a range with up to max_ptes_swap pages swapped out means
-+ * reading those pages back in, so the daemon undoes the pageout as fast as it
-+ * is asked for.  Keep the range out of its reach; the collapse the caller runs
-+ * next puts MADV_HUGEPAGE back.
-+ *
-+ * Failing to get the pages out is the machine's answer, not the kernel's --
-+ * swap too small, swap full, a memcg cap, a folio still under writeback -- so
-+ * callers skip rather than fail.  An error from madvise() is different, and
-+ * ends the run here.
-+ */
-+static bool swapout_range(void *p, unsigned long size)
-+{
-+	int i;
-+
-+	if (madvise(p, size, MADV_NOHUGEPAGE))
-+		ksft_exit_fail_perror("madvise(MADV_NOHUGEPAGE)");
-+
-+	for (i = 0; i < 40; i++) {
-+		if (madvise(p, size, MADV_PAGEOUT))
-+			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
-+		if (check_swap(p, size))
-+			return true;
-+		usleep(50 * 1000);
-+	}
-+	return false;
-+}
-+
- static void *alloc_mapping(int nr)
+@@ -550,8 +550,8 @@ static bool is_anon(struct mem_ops *ops)
+ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+ 			       struct mem_ops *ops, bool expect)
  {
- 	void *p;
-@@ -827,12 +862,10 @@ static void collapse_swapin_single_pte(struct collapse_context *c, struct mem_op
- 	ops->fault(p, 0, hpage_pmd_size);
+-	int ret;
+ 	struct thp_settings settings = *thp_current_settings();
++	int ret, i;
  
- 	ksft_print_msg("Swapout one page...");
--	if (madvise(p, page_size, MADV_PAGEOUT))
--		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--	if (check_swap(p, page_size)) {
-+	if (swapout_range(p, page_size)) {
- 		success("OK");
- 	} else {
--		fail("Fail");
-+		skip("Could not swap out");
- 		goto out;
- 	}
+ 	ksft_print_msg("%s...", msg);
  
-@@ -853,12 +886,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
- 	ops->fault(p, 0, hpage_pmd_size);
+@@ -564,9 +564,20 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+ 	/*
+ 	 * Prevent khugepaged interference and tests that MADV_COLLAPSE
+ 	 * ignores /sys/kernel/mm/transparent_hugepage/enabled
++	 *
++	 * The per-order controls have to go too, not just the global one: a
++	 * source order left at "always" -- which -s does -- lets khugepaged
++	 * collapse the very range the case is working on.  Set them to
++	 * "inherit", not "never".  khugepaged honours the global never and
++	 * stays out.  A forced shmem collapse takes the order it builds from
++	 * these very controls, and still finds one.
+ 	 */
+ 	settings.thp_enabled = THP_NEVER;
+ 	settings.shmem_enabled = SHMEM_NEVER;
++	for (i = 0; i < NR_ORDERS; i++) {
++		settings.hugepages[i].enabled = THP_INHERIT;
++		settings.shmem_hugepages[i].enabled = SHMEM_INHERIT;
++	}
+ 	thp_push_settings(&settings);
  
- 	ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap + 1, hpage_pmd_nr);
--	if (madvise(p, (max_ptes_swap + 1) * page_size, MADV_PAGEOUT))
--		ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--	if (check_swap(p, (max_ptes_swap + 1) * page_size)) {
-+	if (swapout_range(p, (max_ptes_swap + 1) * page_size)) {
- 		success("OK");
- 	} else {
--		fail("Fail");
-+		skip("Could not swap out");
- 		goto out;
- 	}
- 
-@@ -870,12 +901,10 @@ static void collapse_max_ptes_swap(struct collapse_context *c, struct mem_ops *o
- 		ops->fault(p, 0, hpage_pmd_size);
- 		ksft_print_msg("Swapout %d of %d pages...", max_ptes_swap,
- 		       hpage_pmd_nr);
--		if (madvise(p, max_ptes_swap * page_size, MADV_PAGEOUT))
--			ksft_exit_fail_perror("madvise(MADV_PAGEOUT)");
--		if (check_swap(p, max_ptes_swap * page_size)) {
-+		if (swapout_range(p, max_ptes_swap * page_size)) {
- 			success("OK");
- 		} else {
--			fail("Fail");
-+			skip("Could not swap out");
- 			goto out;
- 		}
- 
+ 	/* Clear VM_NOHUGEPAGE */
 -- 
 2.54.0
 
