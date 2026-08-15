@@ -1,73 +1,75 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2326B369D6F;
-	Sat, 15 Aug 2026 08:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FA929898F;
+	Sat, 15 Aug 2026 08:19:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781288; cv=none; b=QztBsgVaOhko9mZP3gqPg+0O9zbkhn0VYxRuoTnn+Wk7zRXYOEJqIsRm7LvfJzPw2ory4YgabVqi+3dAn/CP6EOaDWutA8G050PHe9WuCd58XcUf1gaex5EwjeIdmPubWRYLz8I4H9/olFF8CMjNBotaN9nKgUmGusZM/CrnugI=
+	t=1786781971; cv=none; b=Pj0hZjTPnBkfX4QauteTh32sPWGTGGtbWFyfL1Q6+iRLeRCgxvDqGapzyOOYPtmJeFPM7XYDUiv/x70D6V1SBSdLA0sYVeuKBRrAkodr85HPIaI0s2Jwa9R61fYWMfp0P3nKggbRQtEfwe6lltXzAxHZG+mFOeOdTEb4WJFHe7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786781288; c=relaxed/simple;
-	bh=zEKHtU6vY9HS3L1VRLqbHsnv5X+mE3x7h7J8bKESRhk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YfLncJMt018ueogJXtzeUPEc0tHJYgVF8F6inY0UU3eTdL9sQGiUlZ+xIG9d7kG7bhtNxIKBj9Beh7lhfXEBbkvXwrd9enOBVhszNx39QskY1vtDwHr5O/zqrEIsnLxkHdDVwY8sdkR9lIMsuN0TD1UzxjCaXCah6qRL2jmRGYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 6b9018d0988011f19a56ed5b684f684d-20260815
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_UNTRUSTED, SRC_UNTRUSTED, IP_LOWREP, SRC_LOWREP
-	DN_TRUSTED, SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED
-	SN_EXISTED, SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD
-	CIE_GOOD_SPF, GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:ddb5f0d2-0a7d-4394-bcbd-49de45807dca,IP:10,
-	URL:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTI
-	ON:release,TS:-10
-X-CID-INFO: VERSION:1.3.19,REQID:ddb5f0d2-0a7d-4394-bcbd-49de45807dca,IP:10,UR
-	L:0,TC:0,Content:0,EDM:-20,RT:0,SF:0,FILE:0,BULK:0,RULE:EDM_GE969F26,ACTIO
-	N:release,TS:-10
-X-CID-META: VersionHash:7db8b62,CLOUDID:10c0d73c66badb71245b2174fba588c3,BulkI
-	D:260815160800X5W5ZYME,BulkQuantity:0,SF:17|19|38|66|78|81|82|102|127|865|
-	898,TC:nil,Content:0|15|50,EDM:1|-100,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil
-	,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:
-	0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_AEC,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 6b9018d0988011f19a56ed5b684f684d-20260815
-X-User: husong@kylinos.cn
-Received: from ctao-book.. [(111.162.215.50)] by mailgw.kylinos.cn
-	(envelope-from <husong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 2070273122; Sat, 15 Aug 2026 16:07:55 +0800
-From: Song Hu <husong@kylinos.cn>
-To: akpm@linux-foundation.org,
-	rppt@kernel.org,
-	sarthak.sharma@arm.com
-Cc: linux-mm@kvack.org,
+	s=arc-20240116; t=1786781971; c=relaxed/simple;
+	bh=avNhH9r4Gfj54sTyp2Y77ITIrNRfgB8N1uQL2Dd52So=;
+	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
+	 MIME-Version; b=WT9Yoy2K3q89sfsmiHqvbh+QjmzNPLTjSMksih79aPpIxvWBIGIqhqNYna7+MGn2FchFF23O7fTOEnRdFt5SO+cp3Gw22WjWeSsJNZkWvMy7mWn+bPB1I+jnz/NMbaorAf+h/gxjMrXg2OkUW73iioesXrUySOVkOd9ePgIi+dc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=PNmMbJe6; arc=none smtp.client-ip=203.205.221.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="PNmMbJe6"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+	s=s201512; t=1786781965;
+	bh=rGVdAWBCMhVj9u39/OMHIMFCjpSZfc2/hW/u+SWZRdY=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=PNmMbJe6UMl3grqbZ9+buAj/TKk2a8iGlFAO8kEi6jdwX3Y0MBhXkE6ZM/UFbhlM5
+	 ti5EeKt3EAVKu2lWXaz8KxNck6YSg0ikIUXP/RxotjZYeEMuBfjjSxJhDV7DTxLzdy
+	 AmucBUhhMI6fMzirFH6cV5llciRBuKM/WznTIDWo=
+Received: from localhost.localdomain ([180.153.160.8])
+	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
+	id 4D51223E; Sat, 15 Aug 2026 16:19:21 +0800
+X-QQ-mid: xmsmtpt1786781961ts9kmeqzv
+Message-ID: <tencent_F41459F70D99BAB2588A4E4D60FA63D44A05@qq.com>
+X-QQ-XMAILINFO: OIJV+wUmQOUABXEhIRpLVEJoqpP48ZEXHemMKICFy84uHUog06uKf5c2yZ/KFS
+	 KGBlylBUBwZahQWHRNL3HFwTaUrxWnpBC0Pcs4mEo818nKu0ybiRskt+x5UDHKx6YSwtH5bzwj6c
+	 kGhCDDbkRM4H0UdxI/RsNfs2gpJkspdXV5isW8HvOeJ6Xu+l5Zw0A8gGZw8oavAqQ1m/bZFP05YE
+	 MpM3Ptf2QTPQSrJ4HNyEt9nNnRbBrvW5luNWfNmx9gkCoUs0WVPfp1aBs/lC4HAvWRn1p8h1+REe
+	 G0KK5MHC21tZ2R8R+VLoYIBEvOwhdb86baJ7TSCz/4rDsXAz18iBTB96Igr/xWFWpNJcCRW1h4f7
+	 1yVC0HfSUN4zy9J8fKDnxT13XZ9+nf1LRHFOeuJin9gOW6QinyxG51CslICgU8UUqrxxWKIkXeVK
+	 MbBVfpQ4MXjMoT8v0BHXSC/zrSwJvzvA2Mfn4sCs/uyjG7bjteGQb0kQhBl/ZiL9bGpwBXWxtXt1
+	 R0f7/4fpgB8khoA4kqRwActjDIj5PUhf3J72m7Zcn2gM5JvMVDf7LGqsOwN2Kw6JjXqfkrMJlZb1
+	 IiXnzapVfgSV0+yA0FcwHAJ1MjQ/B8Dx8cC3F60CE5xZYhrclEEgrmYs3VgPEXHZFnhqNqyzXrht
+	 WPf5rOLzfcsmcGto0Cnhw/Wf11R+eqD667LcpDz9xyDuBcK8HsjXhFAwDdKWq7Up3QvF59MNs+3L
+	 5F6a3oOW5y/V7NOSX6D++wcThDgparZocQQsQDqto6tBDNtzhJ+5Sog6c6/QKrd5j2WN9g58b6O1
+	 e7Bu5yMOn7ZEomwbK6e6LQ2/BXjb1XsXB7X3oQg2J4sZJxbnRnR6OqvZ3ykClPh6+rQcW11ACL6f
+	 G8fxkjgTgONi4Uf3njlNYk6K+YAyyokOeADF+P/lgfeWNnq6vVpxrGJD28Npm62iXiGhHAdWClwC
+	 zyAokY3DWlszNnmktCZSXA//ZhBt+B9A9PAiwKFVgIA3kBZY9GDIitRWyQdzpZfTmOoyuixTGhD+
+	 7w5ItZ/IqqTMa9IMPUciOHJhQRe7SB5yZgFcVLWfgh/FmHHUlrJprtmAjk+kI=
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+From: Jianlin Shi <shijianlin11@foxmail.com>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	john.fastabend@gmail.com,
+	kpsingh@kernel.org,
+	sdf@fomichev.me,
+	haoluo@google.com,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	memxor@gmail.com,
+	pulehui@huawei.com,
 	shuah@kernel.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	peterx@redhat.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Song Hu <husong@kylinos.cn>
-Subject: [PATCH v2 3/3] selftests/mm: restore enable_soft_offline in hugetlb-soft-offline
-Date: Sat, 15 Aug 2026 16:07:16 +0800
-Message-ID: <20260815080716.3596514-4-husong@kylinos.cn>
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/5] bpf: fix stream capacity, read, and oversize handling
+Date: Sat, 15 Aug 2026 16:19:15 +0800
+X-OQ-MSGID: <20260815081920.609936-1-shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260815080716.3596514-1-husong@kylinos.cn>
-References: <20260815080716.3596514-1-husong@kylinos.cn>
+In-Reply-To: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+References: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,97 +78,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-hugetlb-soft-offline toggles /proc/sys/vm/enable_soft_offline between 1
-and 0 (test_soft_offline_common(1) then (0)) and leaves it at 0 when it
-finishes, silently disabling soft offlining for the whole system after
-the run.
+v2 of the capacity-rollback fix was correct for bpf_stream_push_str(),
+but review asked to:
 
-Save the original value before the test and restore it from an atexit()
-handler, so the sysctl is also restored when the test exits early via
-ksft_exit_fail_msg(), as hugepage_restore_settings_atexit() in
-hugepage_settings.c already does.  Use read_num()/write_num() from
-vm_util instead of the hand-rolled popen()/fopen() helpers.
+1. refactor bpf_stream_release_capacity() to take a length;
+2. fix the staging-path capacity leak and use vscnprintf();
+3. return partial bpf_stream_read() progress on copy_to_user() fault;
+4. reject truncated bpf_stream_vprintk() output with -E2BIG before
+   charging capacity;
+5. add selftests for the oversize and straddling-buffer cases.
 
-Signed-off-by: Song Hu <husong@kylinos.cn>
----
- .../selftests/mm/hugetlb-soft-offline.c       | 35 +++++++------------
- 1 file changed, 12 insertions(+), 23 deletions(-)
+This series addresses those points.
 
-diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-index bc202e4ed2bd..86259921d54c 100644
---- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
-+++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-@@ -23,6 +23,7 @@
- #include <sys/types.h>
- 
- #include "kselftest.h"
-+#include "vm_util.h"
- #include "hugepage_settings.h"
- 
- #ifndef MADV_SOFT_OFFLINE
-@@ -31,6 +32,8 @@
- 
- #define EPREFIX " !!! "
- 
-+#define ENABLE_SOFT_OFFLINE_PATH "/proc/sys/vm/enable_soft_offline"
-+
- static int do_soft_offline(int fd, size_t len, int expect_errno)
- {
- 	char *filemap = NULL;
-@@ -77,26 +80,12 @@ static int do_soft_offline(int fd, size_t len, int expect_errno)
- 	return ret;
- }
- 
--static int set_enable_soft_offline(int value)
--{
--	char cmd[256] = {0};
--	FILE *cmdfile = NULL;
--
--	if (value != 0 && value != 1)
--		return -EINVAL;
--
--	sprintf(cmd, "echo %d > /proc/sys/vm/enable_soft_offline", value);
--	cmdfile = popen(cmd, "r");
--
--	if (cmdfile)
--		ksft_print_msg("enable_soft_offline => %d\n", value);
--	else {
--		ksft_perror(EPREFIX "failed to set enable_soft_offline");
--		return errno;
--	}
-+static unsigned long orig_enable_soft_offline = -1UL;
- 
--	pclose(cmdfile);
--	return 0;
-+static void restore_enable_soft_offline(void)
-+{
-+	if (orig_enable_soft_offline != -1UL)
-+		write_num(ENABLE_SOFT_OFFLINE_PATH, orig_enable_soft_offline);
- }
- 
- static int create_hugetlbfs_file(struct statfs *file_stat)
-@@ -145,10 +134,7 @@ static void test_soft_offline_common(int enable_soft_offline)
- 	hugepagesize_kb = file_stat.f_bsize / 1024;
- 	ksft_print_msg("Hugepagesize is %ldkB\n", hugepagesize_kb);
- 
--	if (set_enable_soft_offline(enable_soft_offline) != 0) {
--		close(fd);
--		ksft_exit_fail_msg("Failed to set enable_soft_offline\n");
--	}
-+	write_num(ENABLE_SOFT_OFFLINE_PATH, enable_soft_offline);
- 
- 	nr_hugepages_before = hugetlb_nr_default_pages();
- 
-@@ -192,6 +178,9 @@ int main(int argc, char **argv)
- 
- 	ksft_set_plan(2);
- 
-+	orig_enable_soft_offline = read_num(ENABLE_SOFT_OFFLINE_PATH);
-+	atexit(restore_enable_soft_offline);
-+
- 	test_soft_offline_common(1);
- 	test_soft_offline_common(0);
- 
+Tested locally:
+  stream_oversize and stream_partial_read (equivalent to
+  ./test_progs -t stream_oversize,stream_partial_read).
+
+v2: https://lore.kernel.org/bpf/tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com/
+v1: https://lore.kernel.org/bpf/tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com/
+
+Jianlin Shi (5):
+  bpf: roll back stream capacity when allocation fails
+  bpf: fix stream capacity leak in staging path
+  bpf: return partial progress from bpf_stream_read on fault
+  bpf: reject oversized bpf_stream_vprintk output with -E2BIG
+  selftests/bpf: cover stream capacity and partial read edge cases
+
+ kernel/bpf/stream.c                           | 54 ++++++++------
+ .../testing/selftests/bpf/prog_tests/stream.c | 70 +++++++++++++++++++
+ tools/testing/selftests/bpf/progs/stream.c    | 12 ++++
+ 3 files changed, 116 insertions(+), 20 deletions(-)
+
 -- 
 2.43.0
 
