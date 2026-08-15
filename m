@@ -1,59 +1,59 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-96.mta0.migadu.com [91.218.175.96])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0642238F646;
-	Sat, 15 Aug 2026 09:50:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A6C83890FC
+	for <linux-kselftest@vger.kernel.org>; Sat, 15 Aug 2026 09:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.96
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786787422; cv=none; b=nQVUg8+40p37EgFG2NvpjABoZlVHpMysJDRgrRoDxy8D86J3cB+Q7uEWVLMH4Elmls9PP+C7GBnh+OpS/84Ec2BiiCzIac9H4l55iNvn6XjdVl97EmajczH/83BjIoztrEn9rvxfAulJ8Ocsx0Ygud49dx/b7KzNWlZtS3poJBk=
+	t=1786787780; cv=none; b=BdEZQHigMN4022ulBdA03kMXXVsjiYK0I9Senvl0ULBWE8nczsVriaRWtW9hLVgsexoWAmGxJWk1tFY2brlaDrIG/G9wYOJQgS+Wlkeh9TYnaTIw+l3mpeO3c9X5Ye760rpEkg2VFM2iwcABr9hiMoAh3c5/g3swEBJ09xO+H3A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786787422; c=relaxed/simple;
-	bh=8EGLDao9vWCpKewWHWMDCqsktKbYQeq87WsXJtWPu/o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YRBI/+45WP8FM1zgc70w9LYSDIZYRz+FoYxIBxv1OOYkat52oHy6foOuRlRvQNjh6/CcrU21kHCJU22mu6D/9A/3yeAc/ISPMeg6pm9EQnp5rrqS1/fGdMNzCFSX+nK8mEsn42eUNoFlwxnrDCohYbOcXD7RiBNeOBsFC4qtaNY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: b2db85ae988e11f19a56ed5b684f684d-20260815
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NAME, HR_CC_NO_NAME, HR_CTE_8B
-	HR_CTT_MISS, HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME
-	IP_UNTRUSTED, SRC_UNTRUSTED, IP_LOWREP, SRC_LOWREP, DN_TRUSTED
-	SRC_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS, CIE_GOOD, CIE_GOOD_SPF
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:e8917608-1abc-4880-9884-773904c42db4,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:e8917608-1abc-4880-9884-773904c42db4,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:b53ad05cdc170d189b36e0498c92469f,BulkI
-	D:260815175010JPX1NQO9,BulkQuantity:0,SF:17|19|66|78|102|127|865|898,TC:ni
-	l,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:n
-	il,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: b2db85ae988e11f19a56ed5b684f684d-20260815
-X-User: husong@kylinos.cn
-Received: from ctao-book.. [(111.162.215.50)] by mailgw.kylinos.cn
-	(envelope-from <husong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
-	with ESMTP id 1010390645; Sat, 15 Aug 2026 17:50:07 +0800
-From: Song Hu <husong@kylinos.cn>
-To: minchan@kernel.org
-Cc: senozhatsky@chromium.org,
-	shuah@kernel.org,
+	s=arc-20240116; t=1786787780; c=relaxed/simple;
+	bh=7pNmrvIx4K6yCZeAF8BM/+9i5LH5byhcra2hCpPYFLk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HDqWiJRKoTquWxWR3m8+cuBBZO4jvWQeRoO8j0ZZYlelSX6WzZ/VLVdi2LSLrow3JK7HiMONldx7T8QW6K96RPOsuKFXPVihnoX4a7v6+CSSx9OhtAWmHIl31R6imHpHex9HpytvxGOmJZFE/1Z3YfgGMsqtEizSThI7NBGZWa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kCJ/0cKD; arc=none smtp.client-ip=91.218.175.96
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kCJ/0cKD"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7pNmrvIx4K6yCZeAF8BM/+9i5LH5byhcra2hCpPYFLk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786787776; v=1; x=1787392576;
+ b=kCJ/0cKDCnBBYmOC4pPwrRJxlcHF2XuCwQTuvYZJRg7xWgKDLT5D/l5k/C/LRlLL595D4+P7
+ F9725u9+kcFOipgJHeCtsnue+B1XdavkMctrkOTuPFkns0k5zVo2ce/nvRectnQqAigtRpSeCEo
+ M+9yJ3z64W3y8AYhQJY134ew=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost.localdomain (2408:823d:2011:2c0:e810:54f9:f0a3:99d)
+	by smtp.migadu.com with ESMTPS id 7ecf30df64708a6c;
+	Sat, 15 Aug 2026 09:56:15 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Jinyu Tang <jinyu.tang@linux.dev>
+To: Anup Patel <anup@brainfault.org>,
+	Anup Patel <apatel@ventanamicro.com>,
+	Atish Patra <atish.patra@linux.dev>
+Cc: kvm@vger.kernel.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Song Hu <husong@kylinos.cn>
-Subject: [PATCH] selftests/zram: emit KTAP output
-Date: Sat, 15 Aug 2026 17:49:03 +0800
-Message-ID: <20260815094903.3742931-1-husong@kylinos.cn>
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andrew Jones <andrew.jones@oss.qualcomm.com>,
+	Conor Dooley <conor.dooley@microchip.com>,
+	Yong-Xuan Wang <yongxuan.wang@sifive.com>,
+	Nutty Liu <nutty.liu@hotmail.com>,
+	Yifei Jiang <jiangyifei@huawei.com>,
+	Jinyu Tang <tjytimi@163.com>,
+	Jinyu Tang <jinyu.tang@linux.dev>
+Subject: [PATCH v4 0/5] KVM: riscv: Add KVM_PRE_FAULT_MEMORY support
+Date: Sat, 15 Aug 2026 05:55:43 -0400
+Message-ID: <20260815095548.860018-1-jinyu.tang@linux.dev>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -63,80 +63,51 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-zram.sh, the kselftest target, prints raw banners and runs zram01.sh
-and zram02.sh ignoring their exit status: both scripts always exit 0
-and report the result with a plain "[PASS]"/"[FAIL]" echo, so the
-harness always sees success no matter what the tests did.
+Add RISC-V support for the generic KVM_PRE_FAULT_MEMORY ioctl.
 
-Emit the TAP header and plan up front, report each sub-test from its
-exit code and fold its output into "#" diagnostics, and skip both
-sub-tests through the ktap helpers when not run as root.  zram01.sh
-and zram02.sh now exit non-zero on failure, and check_prereqs() prints
-a "1..0 # SKIP" line for standalone runs.  No test logic changes.
+Patch 1 and patch 2 fix existing G-stage huge-page corner cases. They
+are included first because the prefault hook relies on the map path
+reporting the mapping that actually covers the requested GPA.
 
-Tested on x86_64: both sub-tests pass as root, and are reported as
-SKIP with the plan and totals lines when not run as root.
+Patch 3 adds the RISC-V arch hook for KVM_PRE_FAULT_MEMORY. Patch 4 adds
+Sv57 indexing support to the RISC-V KVM selftest helpers, and patch 5
+enables the generic pre_fault_memory_test for RISC-V.
 
-Signed-off-by: Song Hu <husong@kylinos.cn>
----
- tools/testing/selftests/zram/zram.sh | 43 +++++++++++++++++++++-------
- 1 file changed, 32 insertions(+), 11 deletions(-)
+Patch 1 folds the previously posted standalone G-stage table overwrite
+fix into this series:
 
-diff --git a/tools/testing/selftests/zram/zram.sh b/tools/testing/selftests/zram/zram.sh
-index b0b91d9b0dc2..e39a84420d18 100755
---- a/tools/testing/selftests/zram/zram.sh
-+++ b/tools/testing/selftests/zram/zram.sh
-@@ -1,18 +1,39 @@
- #!/bin/bash
- # SPDX-License-Identifier: GPL-2.0
--TCID="zram.sh"
- 
--. ./zram_lib.sh
-+# KTAP output helpers (ktap_test_pass, ktap_test_fail, ...).
-+DIR="$(dirname "$(readlink -f "$0")")"
-+# shellcheck source=../kselftest/ktap_helpers.sh
-+source "${DIR}"/../kselftest/ktap_helpers.sh
- 
--run_zram () {
--echo "--------------------"
--echo "running zram tests"
--echo "--------------------"
--./zram01.sh
--echo ""
--./zram02.sh
-+ktap_print_header
-+ktap_set_plan 2
-+
-+if [ "$(id -u)" -ne 0 ]; then
-+	ktap_test_skip "zram01.sh: must be run as root"
-+	ktap_test_skip "zram02.sh: must be run as root"
-+	ktap_finished
-+fi
-+
-+# Run a sub-test, fold its output into "# " diagnostic lines and report its
-+# exit code as the KTAP result.
-+run_one()
-+{
-+	local script=$1
-+
-+	"${DIR}/$script" 2>&1 | sed 's/^/# /'
-+	local rc=${PIPESTATUS[0]}
-+
-+	if [ "$rc" -eq 0 ]; then
-+		ktap_test_pass "$script"
-+	elif [ "$rc" -eq "$KSFT_SKIP" ]; then
-+		ktap_test_skip "$script"
-+	else
-+		ktap_test_fail "$script"
-+	fi
- }
- 
--check_prereqs
-+run_one zram01.sh
-+run_one zram02.sh
- 
--run_zram
-+ktap_finished
+  https://lore.kernel.org/kvm-riscv/20260814105752.565325-1-jinyu.tang@linux.dev/T/#u
+
+Changes in v4:
+- Fold the standalone G-stage non-leaf overwrite fix into this series.
+- Avoid THP adjustment when the original faulting GPA already has an
+  existing 4K G-stage leaf.
+- Return an error for HWPOISON instead of reporting success without a
+  visible G-stage mapping. (Sashiko)
+
+Changes in v3:
+- Retry internally when the map path returns success without a visible
+  G-stage mapping, instead of exposing -EAGAIN. (Sashiko)
+
+Changes in v2:
+- Drop the per-test guest_modes_append_default() call from
+  pre_fault_memory_test.c. (Sean)
+
+Jinyu Tang (5):
+  KVM: riscv: Avoid overwriting G-stage tables with huge leaves
+  KVM: riscv: Avoid THP adjustment for existing 4K G-stage leaves
+  KVM: riscv: Implement KVM_PRE_FAULT_MEMORY
+  KVM: selftests: Add RISC-V Sv57 page table indexing
+  KVM: selftests: Enable pre_fault_memory_test for RISC-V
+
+ arch/riscv/kvm/Kconfig                        |  1 +
+ arch/riscv/kvm/gstage.c                       |  9 ++
+ arch/riscv/kvm/mmu.c                          | 83 ++++++++++++++++++-
+ arch/riscv/kvm/vm.c                           |  1 +
+ tools/testing/selftests/kvm/Makefile.kvm      |  1 +
+ .../selftests/kvm/include/riscv/processor.h   |  6 ++
+ .../selftests/kvm/lib/riscv/processor.c       |  2 +
+ 7 files changed, 100 insertions(+), 3 deletions(-)
+
 -- 
 2.43.0
-
