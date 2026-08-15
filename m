@@ -1,49 +1,49 @@
-Received: from out203-205-221-210.mail.qq.com (out203-205-221-210.mail.qq.com [203.205.221.210])
+Received: from xmbghk7.mail.qq.com (xmbghk7.mail.qq.com [43.163.128.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FA929898F;
-	Sat, 15 Aug 2026 08:19:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9505A37B010;
+	Sat, 15 Aug 2026 08:19:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.163.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786781971; cv=none; b=Pj0hZjTPnBkfX4QauteTh32sPWGTGGtbWFyfL1Q6+iRLeRCgxvDqGapzyOOYPtmJeFPM7XYDUiv/x70D6V1SBSdLA0sYVeuKBRrAkodr85HPIaI0s2Jwa9R61fYWMfp0P3nKggbRQtEfwe6lltXzAxHZG+mFOeOdTEb4WJFHe7k=
+	t=1786781977; cv=none; b=pzYOCSnmNqHrV07OQzoAiMzo/tUb5JuBwCcJe338i5MXcu+0Gtfnwb4XkmuyDqkVQM8lzN/9eQzPUymnleCwCNwXKgkyD7hmPUaTlAtk/huFY86VlikcISRL6i77xDSXhBWDZIH+QNmq3AFizjprD+S2SciBwfEyrwkZG8kys4c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786781971; c=relaxed/simple;
-	bh=avNhH9r4Gfj54sTyp2Y77ITIrNRfgB8N1uQL2Dd52So=;
+	s=arc-20240116; t=1786781977; c=relaxed/simple;
+	bh=Vs5g3khHkihyDw3hVq3jxsqeUqUvikKNdyu2c3lVEf8=;
 	h=Message-ID:From:To:Cc:Subject:Date:In-Reply-To:References:
-	 MIME-Version; b=WT9Yoy2K3q89sfsmiHqvbh+QjmzNPLTjSMksih79aPpIxvWBIGIqhqNYna7+MGn2FchFF23O7fTOEnRdFt5SO+cp3Gw22WjWeSsJNZkWvMy7mWn+bPB1I+jnz/NMbaorAf+h/gxjMrXg2OkUW73iioesXrUySOVkOd9ePgIi+dc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=PNmMbJe6; arc=none smtp.client-ip=203.205.221.210
+	 MIME-Version; b=o65VZ8t1A4KtIvTt7hWpR/F6jnItaFGwrIUm6EwExv2zN7f+ZXGQLGt+9bTlKKpkK21B1n/SPUyYXVa023D1Pe01IU2+7rvqAfzexAkqPY6Ggm1lJ7sJ2TByf0ENAeT8sPyLdVhSVAh/bcEtX1bsn+GhleoUvAyloMqMO7r4Ldo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=foxmail.com; dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b=uToQWy/E; arc=none smtp.client-ip=43.163.128.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="PNmMbJe6"
+	dkim=pass (1024-bit key) header.d=foxmail.com header.i=@foxmail.com header.b="uToQWy/E"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-	s=s201512; t=1786781965;
-	bh=rGVdAWBCMhVj9u39/OMHIMFCjpSZfc2/hW/u+SWZRdY=;
+	s=s201512; t=1786781971;
+	bh=PlTsX6f5WVGTG1fM/jy6eueWmXHqyeh0cZnGgAx93J8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=PNmMbJe6UMl3grqbZ9+buAj/TKk2a8iGlFAO8kEi6jdwX3Y0MBhXkE6ZM/UFbhlM5
-	 ti5EeKt3EAVKu2lWXaz8KxNck6YSg0ikIUXP/RxotjZYeEMuBfjjSxJhDV7DTxLzdy
-	 AmucBUhhMI6fMzirFH6cV5llciRBuKM/WznTIDWo=
+	b=uToQWy/Eg66hSn6Xm1GrJVPoHT5GTCKiZmGwKM1r5Gr9QcihGQPe5HTDS0oRgGEJR
+	 snhYyf8GVCJ5Hid8lw2TVowcprWNwddL1T9Sx7wsQ1v77TClzbF8piaJwnjcNXsa+V
+	 YFL5rvilZJOMVyjYyO3L1VaHPpeXuUL60dAWiLVA=
 Received: from localhost.localdomain ([180.153.160.8])
 	by newxmesmtplogicsvrsza63-0.qq.com (NewEsmtp) with SMTP
 	id 4D51223E; Sat, 15 Aug 2026 16:19:21 +0800
-X-QQ-mid: xmsmtpt1786781961ts9kmeqzv
-Message-ID: <tencent_F41459F70D99BAB2588A4E4D60FA63D44A05@qq.com>
-X-QQ-XMAILINFO: OIJV+wUmQOUABXEhIRpLVEJoqpP48ZEXHemMKICFy84uHUog06uKf5c2yZ/KFS
-	 KGBlylBUBwZahQWHRNL3HFwTaUrxWnpBC0Pcs4mEo818nKu0ybiRskt+x5UDHKx6YSwtH5bzwj6c
-	 kGhCDDbkRM4H0UdxI/RsNfs2gpJkspdXV5isW8HvOeJ6Xu+l5Zw0A8gGZw8oavAqQ1m/bZFP05YE
-	 MpM3Ptf2QTPQSrJ4HNyEt9nNnRbBrvW5luNWfNmx9gkCoUs0WVPfp1aBs/lC4HAvWRn1p8h1+REe
-	 G0KK5MHC21tZ2R8R+VLoYIBEvOwhdb86baJ7TSCz/4rDsXAz18iBTB96Igr/xWFWpNJcCRW1h4f7
-	 1yVC0HfSUN4zy9J8fKDnxT13XZ9+nf1LRHFOeuJin9gOW6QinyxG51CslICgU8UUqrxxWKIkXeVK
-	 MbBVfpQ4MXjMoT8v0BHXSC/zrSwJvzvA2Mfn4sCs/uyjG7bjteGQb0kQhBl/ZiL9bGpwBXWxtXt1
-	 R0f7/4fpgB8khoA4kqRwActjDIj5PUhf3J72m7Zcn2gM5JvMVDf7LGqsOwN2Kw6JjXqfkrMJlZb1
-	 IiXnzapVfgSV0+yA0FcwHAJ1MjQ/B8Dx8cC3F60CE5xZYhrclEEgrmYs3VgPEXHZFnhqNqyzXrht
-	 WPf5rOLzfcsmcGto0Cnhw/Wf11R+eqD667LcpDz9xyDuBcK8HsjXhFAwDdKWq7Up3QvF59MNs+3L
-	 5F6a3oOW5y/V7NOSX6D++wcThDgparZocQQsQDqto6tBDNtzhJ+5Sog6c6/QKrd5j2WN9g58b6O1
-	 e7Bu5yMOn7ZEomwbK6e6LQ2/BXjb1XsXB7X3oQg2J4sZJxbnRnR6OqvZ3ykClPh6+rQcW11ACL6f
-	 G8fxkjgTgONi4Uf3njlNYk6K+YAyyokOeADF+P/lgfeWNnq6vVpxrGJD28Npm62iXiGhHAdWClwC
-	 zyAokY3DWlszNnmktCZSXA//ZhBt+B9A9PAiwKFVgIA3kBZY9GDIitRWyQdzpZfTmOoyuixTGhD+
-	 7w5ItZ/IqqTMa9IMPUciOHJhQRe7SB5yZgFcVLWfgh/FmHHUlrJprtmAjk+kI=
-X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+X-QQ-mid: xmsmtpt1786781967tqvaa414q
+Message-ID: <tencent_69F268659554975ACE74F3E8A26880AE3D06@qq.com>
+X-QQ-XMAILINFO: M+LbSN6IdDJLwMTXSHc1lUOejiM+Czskb7bwz1/zK9izEkY96RyjEFNHuQiI4m
+	 9qRTH50Pmu4hHLpRgorb/65LaBIzp94kw8QQ7pwex2zB3Kq+vJA6YHZngLb2kFLT2+rkH0+9cCsC
+	 7/wsnWLcIWQXDsmNTDCY7M2Up4cDDr2bo69LsipLFKhFRgbU0m+FwjtSrj2jIzBRO5dBAcn32T2j
+	 KklZbIi1WescC620YWNvEznSDr1uyPrznqoO6f7FCvbtvqRnyIv9O4sHmc5P4fmZW8OanwawPgjt
+	 We+13AS2Cst5E+I85eTxqiReQFsskK70DBN8FVSgU2evENFbJRdLRNupHh96B3buwxUael/3Yi97
+	 ZPedRBHTTEpb4xWZWg8/Z1r3IZ1dr7nN0QQNDiR+u9COdeWS0sf/2wszCXBcJmEsXO/5r4WfSlGp
+	 yBe431ux4Vgm/AZSt//9OXe9GP0nVVhYyqLzRbRr7k573jM+9uzD+nCi7agyu8yXLX9B8RL0PCgN
+	 EA+/9vCjHDz43FMB6TJy4/vv5/ay7aK9Smuve8gYJJrrtetmLIwm+5uBydZEd5+yzpCY3MN73/Sv
+	 W4VNlMtLeJW8kwdoBBll01mE7sdANjDEPeXUhX+WapdaRWSW3x/hlIqZ+PgnfLJYWEBMOB892HUi
+	 ymU56mmAy0238wjkCWuUw35HQONlTBQxJtZKq2+vXGCwZvCKpYEqcnLXCftpSlNXauVqiMqcNC/M
+	 nFot91ZKiVE4EtcyR26cfKbi6CL0REwaOjVnSPrNgosw12pX58Tdi9xSLHsV7ghI+ESQJghnVWjF
+	 ww90Fcu+CAUWE5SSxJ2TmnAwJbUU5/seu+UcFAsB4w3JZlK2EdxwDy0IUHLYD0ylEwU3dPRYRoW7
+	 Ry2Rd6S8GZk1TWfmzH21xs9pGfli2BsRCP8REvbkaMm2rsTlhslzBcoeLLGZbbNysvxRZiLpAQeB
+	 NuIVsIn9vOSpHTKRYPWz92xsSlJxcLBFKfL73ttzHk1i1NM9ayxEDZf7dPxDsyepeKKcSK9kceyl
+	 /djIlgSpIkRpElZq2Ku6dkI9Fk3gqkvBXE4pZxzXfzf2X4vOz4WORUXxI2PwBcsuTZoHlqoA==
+X-QQ-XMRINFO: NI4Ajvh11aEjEMj13RCX7UuhPEoou2bs1g==
 From: Jianlin Shi <shijianlin11@foxmail.com>
 To: bpf@vger.kernel.org
 Cc: ast@kernel.org,
@@ -64,12 +64,13 @@ Cc: ast@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v3 0/5] bpf: fix stream capacity, read, and oversize handling
-Date: Sat, 15 Aug 2026 16:19:15 +0800
-X-OQ-MSGID: <20260815081920.609936-1-shijianlin11@foxmail.com>
+Subject: [PATCH bpf-next v3 3/5] bpf: return partial progress from bpf_stream_read on fault
+Date: Sat, 15 Aug 2026 16:19:18 +0800
+X-OQ-MSGID: <20260815081920.609936-4-shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+In-Reply-To: <20260815081920.609936-1-shijianlin11@foxmail.com>
 References: <tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com>
+ <20260815081920.609936-1-shijianlin11@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -78,37 +79,56 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v2 of the capacity-rollback fix was correct for bpf_stream_push_str(),
-but review asked to:
+bpf_stream_read() pops and frees stream elements after a successful
+copy_to_user(). If a later copy_to_user() fails, it currently restores
+only the current element's consumed_len and returns -EFAULT, hiding
+bytes already delivered to userspace and making the consumed data
+unrecoverable on retry.
 
-1. refactor bpf_stream_release_capacity() to take a length;
-2. fix the staging-path capacity leak and use vscnprintf();
-3. return partial bpf_stream_read() progress on copy_to_user() fault;
-4. reject truncated bpf_stream_vprintk() output with -E2BIG before
-   charging capacity;
-5. add selftests for the oversize and straddling-buffer cases.
+On a short copy, keep the successfully copied prefix of the current
+element and return the number of bytes copied. Return -EFAULT only when
+no bytes were copied for the call.
 
-This series addresses those points.
+Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
+Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+---
+ kernel/bpf/stream.c | 16 +++++++++-------
+ 1 file changed, 9 insertions(+), 7 deletions(-)
 
-Tested locally:
-  stream_oversize and stream_partial_read (equivalent to
-  ./test_progs -t stream_oversize,stream_partial_read).
-
-v2: https://lore.kernel.org/bpf/tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com/
-v1: https://lore.kernel.org/bpf/tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com/
-
-Jianlin Shi (5):
-  bpf: roll back stream capacity when allocation fails
-  bpf: fix stream capacity leak in staging path
-  bpf: return partial progress from bpf_stream_read on fault
-  bpf: reject oversized bpf_stream_vprintk output with -E2BIG
-  selftests/bpf: cover stream capacity and partial read edge cases
-
- kernel/bpf/stream.c                           | 54 ++++++++------
- .../testing/selftests/bpf/prog_tests/stream.c | 70 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/stream.c    | 12 ++++
- 3 files changed, 116 insertions(+), 20 deletions(-)
-
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index ef5a7b06ffcb..c1077160074c 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -167,6 +167,7 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
+ 
+ 	while (rem_len) {
+ 		int pos = len - rem_len;
++		int chunk, n;
+ 		bool cont;
+ 
+ 		node = bpf_stream_backlog_peek(stream);
+@@ -180,13 +181,14 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
+ 
+ 		cons_len = elem->consumed_len;
+ 		cont = bpf_stream_consume_elem(elem, &rem_len) == false;
+-
+-		ret = copy_to_user(buf + pos, elem->str + cons_len,
+-				   elem->consumed_len - cons_len);
+-		/* Restore in case of error. */
+-		if (ret) {
+-			ret = -EFAULT;
+-			elem->consumed_len = cons_len;
++		chunk = elem->consumed_len - cons_len;
++
++		n = copy_to_user(buf + pos, elem->str + cons_len, chunk);
++		if (n) {
++			/* Keep any successfully copied bytes; -EFAULT only if none. */
++			elem->consumed_len -= n;
++			rem_len += n;
++			ret = (len == rem_len) ? -EFAULT : 0;
+ 			break;
+ 		}
+ 
 -- 
 2.43.0
 
