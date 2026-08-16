@@ -1,100 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from oss.cyber.gouv.fr (oss.cyber.gouv.fr [51.159.188.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1D02AF00;
-	Sun, 16 Aug 2026 16:56:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CC0B2D877A;
+	Sun, 16 Aug 2026 20:46:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.159.188.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786899400; cv=none; b=FlWIPb3v1DQ17S6rAcz7dOw7VecBJXb+zdagpo0goUuDMwT+83tLZ/bWHxjVc9IlBO5vGvA/nVxUjcCUD1yCV7sASmOtyb4852e5/M5/UZV6bIGf77gvYXKlV90XhLBTY9c8IkjJwACVyQMG9LA08s0kjdckY2kjQs+Vi4pEHvs=
+	t=1786913166; cv=none; b=WFffT2agmFqkrC4E6OciUe8JOHIP7GLGxS04WbhOSb1kAmbwnUmgVbWbFL7FIn6jborIL+gRjdhge3Y/bXGYEfVm0zqKaDo28J2N8YlHLdX2yeuc8EG58TTmUg4vqfXNU8etwEXeuNuz9y5C2vSlltjR/RQJIjeR4Wkav25sL5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786899400; c=relaxed/simple;
-	bh=HlDOxnHuMMVHohuVwHAfqMLOmi81A8VTk4PlceL9JLU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lk5HrQTc0KKvnuNpngiH5YIOKbW8G0iPsbhyH59IzkpXm65F3L6E+u3d/y3075dtZJNu6x8jL+6pZx49HeBgi8rqA2kGgVoaVVAat41LfpRyrnqte1nuT1F+LsIIQLNjUm9MEJG7fDfsyaIVchW46a3hgBdsbHGN8bU8SzwfHu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MoTWVWmF; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786913166; c=relaxed/simple;
+	bh=+vbmDQjyHdvOJM0g9AkHaKvncDjH+6SOqUc0vnGD0GA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=huHfEgZgGEBIu6a0SgfvSVTeD1QgeuT7EGMW9hmuVLTj8CWk9tBumd7ccR1Q1EwX7OuytrWxPfRZDY80Rv3B+zCBqQpJOn4UYTE/YFSFEPkC9TvxhiqbEyLz4q4kLe60tmxk3CA6rI5dL6Cf6rz2dbfGQD/tWoC9XDtP4LpW+G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr; spf=pass smtp.mailfrom=oss.cyber.gouv.fr; dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b=BkcV2Geh; arc=none smtp.client-ip=51.159.188.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.cyber.gouv.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.cyber.gouv.fr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MoTWVWmF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF2391F000E9;
-	Sun, 16 Aug 2026 16:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786899399;
-	bh=E22bAb27mfMqnbRiG04AZdJeCfsHv2IcYh0cVnbi8Vk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=MoTWVWmF1j3YIqeKXe6Zcl3S0IhuZuEXW4jICpFS155i0lG9Qduxj7ysRpwX9Rgoa
-	 ED7J//lF0Bnks4pHOgZHXMMwA5nvtc2VY5nxlyHyT3QklK20SQAQTJuLmaZZaFsNBr
-	 aFrIdXvX/J8uhi3M6tdpTAqhNH4D+J5vLvfng/llZ69dSBB5V6OdohPrhwnc8jYF3i
-	 g4Zt4UEY3jah8KoVVRCUFF7NFE8BxjyNyHDgpodZcBjbgORLHg1iutERtC9A6sElQr
-	 AACpNqLU/y15qDx76bzdFvhg8CMvrYlKKZuTj0LsSE274QrxQzlEKKIyWufwrXs62J
-	 zoUQ/yrdU7xTg==
-From: SJ Park <sj@kernel.org>
-To: Kunwu Chan <kunwu.chan@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	will@kernel.org,
-	mark.rutland@arm.com,
-	akpm@linux-foundation.org,
-	shuah@kernel.org,
-	kunwu.chan@linux.dev,
+	dkim=pass (2048-bit key) header.d=oss.cyber.gouv.fr header.i=@oss.cyber.gouv.fr header.b="BkcV2Geh"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=oss.cyber.gouv.fr; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Z8PE2QwmRoYXLYZc03fkDtCQdTD7ol+eYcE4/BDCVwU=; b=BkcV2GehtrDP+W/+hdPrpyDbxb
+	dxlvt/Nyi1c8heVonYJPrcU/4E0ruXA1TyA/LwmkJ/RU6uVysZpAeBqj3/3Zoffv+Oo8oFvTFAn2S
+	AxlMSN5Aa6WsNH0vo/u5O4fKBZKWQqlqjHoeROuoVvTlqzowGZUbAwGXKme3NX4MddjRSf6q5zwWB
+	iIX1WXPPzgBEb9Y19xYTEZ7UDsAbqtwEFkez/p5oDH8Ut5mfhBuvcIaKY3TI54ls31mpUcCpdybJl
+	zZ7fFyFn8gfc0dJcUMUer6l1pGR5mztHzN6zO3xTp0NlVoFsSFQjNnVTqobsST3wR6flJBJAewSjf
+	p7pCgERw==;
+Received: from [151.115.150.205] (port=49152 helo=gepetto..)
+	by pf-012.whm.fr-par.scw.cloud with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.99.5)
+	(envelope-from <Jeremy.Jean@oss.cyber.gouv.fr>)
+	id 1wvhjw-0000000938B-1bOJ;
+	Sun, 16 Aug 2026 22:45:56 +0200
+From: =?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-perf-users@vger.kernel.org,
-	damon@lists.linux.dev,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 0/4] mm/damon/perf: add ARM SPE AUX backend
-Date: Sun, 16 Aug 2026 09:56:30 -0700
-Message-ID: <20260816165630.84808-1-sj@kernel.org>
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?J=C3=A9r=C3=A9my=20Jean?= <Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: [PATCH] bpf: reject stack-argument callback subprograms
+Date: Sun, 16 Aug 2026 20:45:02 +0000
+Message-ID: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260816142222.689624-1-kunwu.chan@linux.dev>
-References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - pf-012.whm.fr-par.scw.cloud
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - oss.cyber.gouv.fr
+X-Get-Message-Sender-Via: pf-012.whm.fr-par.scw.cloud: authenticated_id: jeremy.jean@oss.cyber.gouv.fr
+X-Authenticated-Sender: pf-012.whm.fr-par.scw.cloud: jeremy.jean@oss.cyber.gouv.fr
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-Hello Kunwu,
+Helper callbacks enter BPF subprograms through bpf_callback_t, whose
+runtime ABI supplies five arguments. BTF validation nevertheless permits
+static callback subprograms to declare more than five arguments when JIT
+stack arguments are supported.
 
-On Sun, 16 Aug 2026 22:22:17 +0800 Kunwu Chan <kunwu.chan@gmail.com> wrote:
+This lets verifier state for a callback use outgoing stack argument slots
+prepared at the helper call site. The helper does not pass those slots. On
+x86-64, callback loads of arguments seven and later therefore read the
+helper native frame instead of the synthetic values checked by the
+verifier. KASAN reports a slab OOB write.
 
-> From: Kunwu Chan <kunwu.chan@gmail.com>
-> 
-> This series adds an AUX trace-buffer backend to the DAMON perf
-> observability framework, enabling ARM SPE (Statistical Profiling
-> Extension) to deliver hardware-sampled access reports into DAMON's
-> existing SPSC report ring.
+Reject callback subprograms with incoming stack arguments when processing
+callback calls. Add a verifier regression test using bpf_loop() and a
+nine-argument callback.
 
-Awesome.  Thank you for making this.  This will make DAMON be more useful on
-ARM machines.
+Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+Assisted-by: Codex:gpt-5
+Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+---
+ kernel/bpf/verifier.c                         |  4 +++
+ .../selftests/bpf/progs/verifier_stack_arg.c  | 33 +++++++++++++++++++
+ 2 files changed, 37 insertions(+)
 
-> 
-> Patch 2 touches drivers/perf/arm_spe_pmu.c to expose the PMU matcher.
-> This change is tightly coupled with the DAMON AUX backend.  ARM SPE
-> PMU driver maintainers only need to review patch 2.
-> 
-> This series is based on the Ravi's hardware-sampled access reports 
-> branch [1], and depends on the perf AUX kernel-consumer RFC series [2].
-> The dependencies is not upstream yet, so this series remains RFC.
-
-Unfortunately I haven't had a time to thoroughly read the dependent patches.  I
-believe the basic idea of this patch series is aligned with the ongoing DAMON
-extension roadmap [1], though.  That is, this series is supposed to be a part
-of the milestone 3.  We are currently at the near end of milestone 1, and aim
-to complete milestone 2 by the time around next year's LSFMMBPF.
-
-I will hold review of this series for now, and take more time on making
-milestones 1 and 2 for thier planned delivery timeline.  Sorry for being a
-bottleneck of your work, and thanks in advance for your patience.
-
-Please feel free to let me know if you have specific parts that need my review
-right now, though.  Otherwise, please make sure this is aligned with the
-roadmap until we finish the milestone 2.  I do want ARM SPE support of DAMON.
-
-[1] https://lore.kernel.org/all/20260525225208.1179-1-sj@kernel.org/
-
-
-Thanks,
-SJ
-
-[...]
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index fdc5fbb1f78c..29aa4911c7f7 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -9285,6 +9285,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+ 	err = btf_check_subprog_call(env, subprog, caller->regs);
+ 	if (err == -EFAULT)
+ 		return err;
++	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
++		verbose(env, "callback subprog cannot have stack args\n");
++		return -EINVAL;
++	}
+ 
+ 	/* set_callee_state is used for direct subprog calls, but we are
+ 	 * interested in validating only BPF helpers that can call subprogs as
+diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+index 7e0ce5db28a0..5acc3b63ca84 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -27,6 +27,13 @@ static int subprog_7args(int a, int b, int c, int d, int e, int f, int g)
+ 	return a + b + c + d + e + f + g;
+ }
+ 
++__noinline __used
++static int callback_9args(__u32 index, void *ctx, long a3, long a4,
++			  long a5, long a6, long a7, long a8, long a9)
++{
++	return a9;
++}
++
+ __noinline __used
+ static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
+ {
+@@ -79,6 +86,32 @@ __naked void stack_arg_two_subprogs(void)
+ 	);
+ }
+ 
++SEC("tc")
++__description("stack_arg: callback with incoming stack args")
++__failure
++__msg("callback subprog cannot have stack args")
++__naked void stack_arg_callback_many_args(void)
++{
++	asm volatile (
++		"r6 = 0;"
++		"*(u64 *)(r11 - 32) = 0;"
++		"*(u64 *)(r11 - 24) = 0;"
++		"*(u64 *)(r11 - 16) = 0;"
++		"*(u64 *)(r11 - 8) = 0;"
++		"r1 = 1;"
++		"r2 = %[callback_9args];"
++		"r3 = 0;"
++		"r4 = 0;"
++		"call %[bpf_loop];"
++		"r0 = 0;"
++		"exit;"
++		:
++		: __imm_ptr(callback_9args),
++		  __imm(bpf_loop)
++		: __clobber_all
++	);
++}
++
+ SEC("tc")
+ __description("stack_arg: read from uninitialized stack arg slot")
+ __failure
+-- 
+2.47.3
