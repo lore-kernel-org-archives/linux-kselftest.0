@@ -1,116 +1,262 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE48E3A6B6F;
-	Sun, 16 Aug 2026 21:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786916572; cv=none; b=Qubu3WdkCbiuD32jYIpL4x4MjOPkR3Y8+EYB1G7rO6f7nwikuDMCq2TrOgykXG12j2qr+NenNHJ24/TdBmXbtV6TdyOQJTSmuH7Ymg++eAQ3fe92xUucaVu1HMXEVaYz28iz6L5kBl1jJZQRY5aNnKC9OoTMfCvGlCsrBcY3+VI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786916572; c=relaxed/simple;
-	bh=jai8Tr4CR5av01PtXLlgrvaG4GhQp3mS/FEevnhiW9Y=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sAnjbsffIE9/LieaaakCXkSU+m9kbEp0MWg+ftBfmVhEah6dEZGB6MeSmtoQ18e+lnwOZvD0L6DHX2LA5nI/pPVhMw9nIAciLyyzwFikL3nrN5PnwCr8wc07Ks/Qcijxh2BcClGSOIuvzSKFEzDYrl4OFb+WUqA0tynvXV9tMhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQ+spRqD; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1F13921DB
+	for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 22:46:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786920372; cv=pass; b=FFTC+4sQgnbYdldn1IrsHlSi1zcT9dIe7nLcsjSQqOsRzSb+eH9CjT9spaMryFk4+7XzvuLKKdMVgu/c4OtUOFiR2ijH790/3Kuzxt5Pt7GFEcFs8iETzRmSfTnhQtfYDC2zGlE17PEFSNSe/8UYSdgpKleF2f+y1HEyl6HgJs8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786920372; c=relaxed/simple;
+	bh=QkgiH3G3Af5xKaMywxZpXRusrZaexRQ9voIYx/ir3fc=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=btaNMP/+AUPuPCzg53vg3ntlyt0GGyXTqUkyqxNAdMxE4VBwFnA86vwGnBgX7hJd2rgIIWC0b/5ilJflqVBdmdZMisPij9egvx9heEtf98HMltKfEjklesetmQNdIbFbC60vQlvJgy351BtornBFIbKh6R1rOuHkpxY3DgX8cH4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Yip2+s4d; arc=pass smtp.client-ip=209.85.215.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQ+spRqD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0DE31F000E9;
-	Sun, 16 Aug 2026 21:42:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786916571;
-	bh=baamzSbf90gaukAI3rssXuoFlEPQKZMF8NRCk5r0CRA=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=IQ+spRqD+SqA8CeDtUni6RBXJVPOtRSaXzYtyEYCq4Js9f3Ju1nbjxBjcvCAwJTJ8
-	 eMnXZvtTmJvwHSsLrREIXu2howEoqkWwXMSVXJfHILmPIDOYJfgZV5nhmHvJsBd2Wz
-	 hV/101brsrx/6g/4gGtnZSXASqS311iQswYfuZb3rSPpblQmxiYC3UjMoXfo9mCfsU
-	 dnyZREJ1lzm1UGH/c8FQF07rSkmPxBHOJfZJIk1rIOfgqUz+4qnH9BlmrIj1kCd1wv
-	 gt2HHjiN5FmK6CQp1x2IYA/sQgsBmwrJTmFNEZ1NYFmD6IeiNpt/vnkCOTfS7TQe+1
-	 ew3w0ajcB8BEg==
-Content-Type: multipart/mixed; boundary="===============7404879943641751349=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Yip2+s4d"
+Received: by mail-pg1-f180.google.com with SMTP id 41be03b00d2f7-cbb7926836eso1809233a12.3
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 15:46:10 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1786920370; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XfWgzdE42/OgNHomHwoSSj51TwJpNGJwRL81RYFEGOiCkRrk0olz/PcKMOj1OnM4E6
+         bsAtFdwc/JJu7ezvl17nzxYC0FE90aBa7vvMm5QzAFvTTUUGetIJbyjZ+d/SmkgEkyJ8
+         UQo7kKcey47DsAeedqk4nXajZxn41GIjy7fznETn6QVzobEIrgrIAUffH36j88TuDWhN
+         OZ3wGHfSub0SrqOR+QV6S23H2ISCM5FWaBldVRRPymLwBZSpD5Uw4RqLfYyR/OKMXytq
+         IVfTHhYqixG46FbqYx8OfQDf3c3ptl3UiAyZk6x8W4AHcYlwQb3ye9/df8XzqcSzjvLR
+         wnPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=uRJG9crnjSHGaiMl0ul/ePIhOSVGvO5xGqUR928BxPs=;
+        fh=vnoLM8wfWxl4n+O/4Wi496usQZ3w0zBeylgceuomFrU=;
+        b=Jgnv3GeStO6cndvlsyW0mJhdJX5GUXBuuFPSQG23SXL5SIoAaiGGOJD4ttW9VTrp0B
+         pHmZWq4W4W2hqamdb5gBhR39Ha5Nfb0oLt7KPT71Oqt1XBbPmHml15i6aVtKQ+d9hZ+F
+         xrj5uCdX6Mws2iZ9dxtKeAloZehHnc2AF9MhYVfMsUZnO6Dn664qtwuMm6UxuyAb4dUP
+         /qGYvXz0Fb6OyeKoN4B6FYwDTuh45fJ9N+JCTlYm8Apu88lVOtakpFCwR2aOo8yybrQW
+         otgyIEZTaLUkEBioQFYQGb9Te1uuSOu/FOL6SoRXU21osQwpEnZuyewmcYn/IiCCkhMA
+         snNg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786920370; x=1787525170; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uRJG9crnjSHGaiMl0ul/ePIhOSVGvO5xGqUR928BxPs=;
+        b=Yip2+s4d8QHI3UIQsgsj9fUdJpouYlvOJuNu0cS/2t847N14HEwMGA9Jom6FuFcIqw
+         d24Aj1UUPuOACk/LeUuoifGHs6ulNjadyo98apS/To/NfWJCflV44+5rZ767en5qAQOA
+         ZJocIjrI+bfrQO7fpkVjvOJxzjxG/mHK4cNE2pkp0tYYXuQErtdM7nrL8TWDOrOCkt23
+         8ysimKO7wH7gDO450cBAKS+LZNtPvpCk1gocw0diG1q7UbeipMfG3KIilN8uJmRCObly
+         pijTaP3tqtM0SJ7HIFo6JhYF0eQA0iwQYf+76fULlznhRn8Zf+py9lMDweJshvbuE+QK
+         uFPQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786920370; x=1787525170;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uRJG9crnjSHGaiMl0ul/ePIhOSVGvO5xGqUR928BxPs=;
+        b=LNWJH0PO54owC38YlTeY8XGILWlApdugY9JMXZ7MNKKBkR7ZxQGvnqICDp9AvZApgs
+         DN8U2SvU8RQRmWPGNwfoP9B5mb7ibRxrtj1HqR2JiaY/KtWGnTWPQd8JWd5jRtu9mTwo
+         VYG4GKZonuRVnmJPrvCo0+3NZlIBNeUu6vWuU9aOLwNHD86S+hM7m/CoL+IpkJQq50nx
+         OIomfynhP0ZmJ643dHRGGFU+KS9qXiHm9QWGfwMAGcKNR+HdZr01QrTNi/m0U52P/GAF
+         99i+HP03F6eCuX4VnDSKgnvduubelHtQ5sSeMk3sbal9CuPVn6zEsUnoY7vhWPDZm3eC
+         8q4Q==
+X-Forwarded-Encrypted: i=1; AHgh+RrG2+Ote9o604uAsuQV9KO34tx1HmbqciSjASOy+ythJB2L1A6YrGTa1TtRUvOCUKEnJxAs4JNfnNvaMhstT9A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAvEdD/YirAZZmi6+pTRMEy0RsrUncpEcIDoH1cWzog2WTBoH9
+	HEH8dOoYoRL5/fn2+MuFY/zQ4v+aHFY1EhA0nfVoAnZKcf+jiYbRILm+SUtOJUXildW8oNKz87f
+	FCwYJuZdnwq1mtMLji+MbIWPi4OIwt7ZuG5Q02Eea
+X-Gm-Gg: AR+sD11kZJTbrPxSquYGXbLdGNxNhcxPDIawPXW7IiDEF1vg53KcST1PcHY1IAym0RN
+	WTDsU188tW1Q4URLpJyjOLDzzJ58dFJKui+noUGS8xNQXeQ/0P+DTjxw3DvXHHyvQDcIGmjIPUO
+	RVpSUko34qm4YvZ25Jt3kYhnRH5ZC8yLJE63lvtMbbXUhqpKPydgp0nUjHe82JZsiGm+UQsgTn9
+	klQSQavXka7YiGI0PJKSZv5fklY2jMB6GxZmPF+Una3kUTal+znZ4UUFqgnDEWM9hdEwgJoNi/g
+	mFE3f8ucTtzCyu3brc+DnLjguq+GWPx3U8J6mfrKHsmh4v9DrjKgLbnm8lpxwhv9shrpUaEHEN7
+	ogw==
+X-Received: by 2002:a05:6a20:748a:b0:3c3:a9e1:a819 with SMTP id
+ adf61e73a8af0-3cc71fb5781mr22866718637.24.1786920369447; Sun, 16 Aug 2026
+ 15:46:09 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 16 Aug 2026 15:46:08 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Sun, 16 Aug 2026 15:46:08 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <an8umm0qisEidt4n@google.com>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
+ <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com> <an3o4h-E8mj6CUaM@google.com>
+ <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
+ <an5AcEG9mqDgnBYk@google.com> <CAEvNRgE+05c9U8C=Zkm1S9hLw3Lw6YMmijZhEe7J4rYQAuNyEw@mail.gmail.com>
+ <an8umm0qisEidt4n@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <2940a10adc8aa9f733ead7d394caa6bf6bb2d85b0a0fcc63a3fdd6f6732f722f@mail.kernel.org>
-In-Reply-To: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
-References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
-Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
-From: bot+bpf-ci@kernel.org
-To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
-Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Sun, 16 Aug 2026 21:42:50 +0000 (UTC)
+Date: Sun, 16 Aug 2026 15:46:08 -0700
+X-Gm-Features: AcwNN1VMiHczbSFfHuHVB6i-2Pe7bEu3JF_t6lQmU1zbdAOxcIWciSwKVy8tMcE
+Message-ID: <CAEvNRgFNCDDSeuvbwj7pD_d18o1TBXo4TNR2dXHxpm18KPfR5A@mail.gmail.com>
+Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+To: Sean Christopherson <seanjc@google.com>
+Cc: Binbin Wu <binbin.wu@linux.intel.com>, aik@amd.com, andrew.jones@linux.dev, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Fuad Tabba <fuad.tabba@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 
---===============7404879943641751349==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+Sean Christopherson <seanjc@google.com> writes:
 
-> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
-> runtime ABI supplies five arguments. BTF validation nevertheless permits
-> static callback subprograms to declare more than five arguments when JIT
-> stack arguments are supported.
+> On Thu, Aug 13, 2026, Ackerley Tng wrote:
+>> Sean Christopherson <seanjc@google.com> writes:
+>> > That's why I think it's worth analyzing the cost: if it's in the
+>> > noise, leave it alone.  If it's meaningful, figure out a not-too-gross way to skip
+>> > the entire thing if kvm_arch_gmem_make_shared() is a glorified nop in the end.
+>>
+>> Is noise defined relative to the entire conversion process? Would this
+>> benchmark look like
+>>
+>> 1. Convert 4G to shared on TDX with CONFIG_AMD_SEV defined
+>> 2. Convert 4G to shared on TDX without CONFIG_AMD_SEV defined
+>>
+>> and then compare the difference in time taken?
 >
-> This lets verifier state for a callback use outgoing stack argument slots
-> prepared at the helper call site. The helper does not pass those slots. On
-> x86-64, callback loads of arguments seven and later therefore read the
-> helper native frame instead of the synthetic values checked by the
-> verifier. KASAN reports a slab OOB write.
+> That'd work, though I was envisioning something even simpler: use rdtsc() to
+> count the cycles it takes to iterate over various ranges of memory.  Do whatever
+> is easiest for you though.
 
-This isn't a bug, but would it be worth extending this paragraph to cover
-argument six as well?  The new check rejects everything above five args,
-and arch/x86/net/bpf_jit_comp.c documents that incoming arg 6 is read from
-R9, which similarly doesn't match the value the verifier believes the
-caller stored at r11-8.
+I made some changes to add rdtsc() for the conversion process as Sean
+suggested [1], and exercised conversion like this [2]:
 
-[ ... ]
+1. Initialize some memory as private
+2. Get the guest to fault them into Secure EPTs
+3. Converts the memory to shared <<== this is being benchmarked
+4. Converts memory back to private
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> index 7e0ce5db28a0..5acc3b63ca84 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
-> @@ -79,6 +86,32 @@ __naked void stack_arg_two_subprogs(void)
->  	);
->  }
->
-> +SEC("tc")
-> +__description("stack_arg: callback with incoming stack args")
-> +__failure
-> +__msg("callback subprog cannot have stack args")
-> +__naked void stack_arg_callback_many_args(void)
-> +{
-> +	asm volatile (
-> +		"r6 = 0;"
-> +		"*(u64 *)(r11 - 32) = 0;"
-> +		"*(u64 *)(r11 - 24) = 0;"
-> +		"*(u64 *)(r11 - 16) = 0;"
-> +		"*(u64 *)(r11 - 8) = 0;"
-> +		"r1 = 1;"
-> +		"r2 = %[callback_9args];"
-> +		"r3 = 0;"
-> +		"r4 = 0;"
-> +		"call %[bpf_loop];"
-> +		"r0 = 0;"
-> +		"exit;"
-> +		:
-> +		: __imm_ptr(callback_9args),
-> +		  __imm(bpf_loop)
-> +		: __clobber_all
-> +	);
-> +}
+I made it build the VM once and convert 5 times:
 
-This isn't a bug, but could the unused 'r6 = 0' be dropped?  It's written
-but never read, and the asm clobber list is __clobber_all.
+./gmem_benchmark_tdx_convert --iterations=5 --size=1g
 
-Also, would a one-line comment on the four r11 stores help the next
-reader?  They're what makes the outgoing stack-arg slots initialized so
-the new check is the one that fires.
+Here are the raw prints:
 
+[  396.403818] guest_memfd to_shared: nr_pages=1, make_shared=930
+cycles, total=39278 cycles
+[  396.412087] guest_memfd to_shared: nr_pages=1, make_shared=252
+cycles, total=28060 cycles
+[  396.420379] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=26952 cycles
+[  396.428643] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=27038 cycles
+[  396.436921] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=26980 cycles
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+[  400.338157] guest_memfd to_shared: nr_pages=1, make_shared=1072
+cycles, total=37236 cycles
+[  400.346509] guest_memfd to_shared: nr_pages=1, make_shared=316
+cycles, total=28338 cycles
+[  400.354805] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=27182 cycles
+[  400.363090] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=26972 cycles
+[  400.371349] guest_memfd to_shared: nr_pages=1, make_shared=176
+cycles, total=26886 cycles
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/31972309086
---===============7404879943641751349==--
+[  448.761474] guest_memfd to_shared: nr_pages=262144,
+make_shared=15041018 cycles, total=6616067680 cycles
+[  455.807988] guest_memfd to_shared: nr_pages=262144,
+make_shared=14937462 cycles, total=6608542680 cycles
+[  462.848856] guest_memfd to_shared: nr_pages=262144,
+make_shared=15138858 cycles, total=6599494898 cycles
+[  469.885694] guest_memfd to_shared: nr_pages=262144,
+make_shared=15721972 cycles, total=6610219850 cycles
+[  476.928399] guest_memfd to_shared: nr_pages=262144,
+make_shared=15000406 cycles, total=6615114540 cycles
+
+[  762.980690] guest_memfd to_shared: nr_pages=1048576,
+make_shared=61902982 cycles, total=26400884028 cycles
+[  791.022885] guest_memfd to_shared: nr_pages=1048576,
+make_shared=61746114 cycles, total=26401170984 cycles
+[  819.054580] guest_memfd to_shared: nr_pages=1048576,
+make_shared=61096794 cycles, total=26404409058 cycles
+[  847.120994] guest_memfd to_shared: nr_pages=1048576,
+make_shared=61446290 cycles, total=26447461896 cycles
+[  875.219750] guest_memfd to_shared: nr_pages=1048576,
+make_shared=61774646 cycles, total=26444608360 cycles
+
+And here's the above, tabulated:
+
+  nr_pages      make_shared            total    percentage
+----------  ---------------  ---------------  ------------
+         1              930            39278       2.3677%
+         1              252            28060       0.8981%
+         1              176            26952       0.6530%
+         1              176            27038       0.6509%
+         1              176            26980       0.6523%
+         1             1072            37236       2.8789%
+         1              316            28338       1.1151%
+         1              176            27182       0.6475%
+         1              176            26972       0.6525%
+         1              176            26886       0.6546%
+    262144         15041018       6616067680       0.2273%
+    262144         14937462       6608542680       0.2260%
+    262144         15138858       6599494898       0.2294%
+    262144         15721972       6610219850       0.2378%
+    262144         15000406       6615114540       0.2268%
+   1048576         61902982      26400884028       0.2345%
+   1048576         61746114      26401170984       0.2339%
+   1048576         61096794      26404409058       0.2314%
+   1048576         61446290      26447461896       0.2323%
+   1048576         61774646      26444608360       0.2336%
+
+Looks to me it is within noise.
+
+I also actually tried measuring the conversion time from userspace with
+CONFIG_AMD_SEV enabled and disabled. Converting a 1G-sized TD was faster
+by 0.2%, which is in line with the above table. Interestingly, when
+converting a 4G-sized TD, skipping kvm_gmem_make_shared() was _slower_
+over 2 runs. I don't have an explanation for that. I think the code was
+correct. (If it makes a difference, I skipped kvm_gmem_make_shared()
+using a custom guest_memfd creation time flag and skipped make_shared if
+the flag was set on the inode.)
+
+I thought adding a kvm_arch_has_gmem_make_shared(), defaulting it to
+false for all archs and having x86 override with
+!!kvm_x86_ops.gmem_make_shared is not too bad either:
+
++ doesn't leak anything, since the function being called is
+  kvm_arch_gmem_make_shared and the accompanying function is
+  kvm_arch_has_gmem_make_shared. Or maybe just a little, since all the
+  other ops don't have the accompanying _has_ function
++ it's a kernel-internal thing
++ not too many lines of code, not too complex
+
+Sean, let me know if you prefer to add kvm_arch_has_gmem_make_shared()
+and for my learning, what your considerations are regarding adding
+kvm_arch_has_gmem_make_shared() or not.
+
+[1] https://github.com/googleprodkernel/linux-cc/commit/3295072cfeb8920e48d9e80c98fd1695d4bbad99
+[2] https://github.com/googleprodkernel/linux-cc/commit/a644618f270f02c832fb7e8402fcae98bc91f4e5
