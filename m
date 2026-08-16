@@ -1,187 +1,120 @@
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BC1518C933;
-	Sun, 16 Aug 2026 05:42:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.165.32
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [13.75.44.102])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B0136A376;
+	Sun, 16 Aug 2026 10:56:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.75.44.102
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786858933; cv=none; b=L4mXJlGlrBEBAQiMDWCt1t+YZBQYpdI9DqGMS8/GiYgkwlRKU+GIvSin4pakyS2tk7yNF3+cECyEB9eZCy+yu5KU4cx+Pt5tYUBffj5UMWwVXP4lcc82lPoFQfK1ltSAnUmVWqfOut3BS/gAnPXgcU7HsIWW7C/uuaaImH3Fda4=
+	t=1786877822; cv=none; b=dkrPcpTsFeMcibyabdhtlxvX4s9bBivfSqtOosRKNonratwk1vBNHVGI6FLHEVsJtRw/K5VB7PSl/c4URc8GEo+wGKEZTubKx+sAn7xVfeVvtfjnyOaJq2qqiHijKYCyfdFXfiQtfGEi2tppNrR3L+cJMJltjtV3ENByqHaJAIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786858933; c=relaxed/simple;
-	bh=k6aanD4kl87vFIzOM9YpBe892YlmwR2hZh4pu48dqPU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=A015Bg7Pk1sEsF9DMCvyaHWpqzAegCrciIEJsvvhp5AeXGQ0u4ZUWXdtPYMq7hkQxnv25kqPiF0MYZwYtwi7fYLLETLQw0glJ4EOe3FqrnqoLSIk9pIXvgcRjlGlqj/cnP7tHL8AleTL9+CAbWno/rd4tCofNXQtzrJPvnLTGHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=AMdQU54a; arc=none smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+	s=arc-20240116; t=1786877822; c=relaxed/simple;
+	bh=DQ26j5KfDBjdkJdGIUsSNO9aYlVJwusBnVeo+Z7hxC8=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Bg6hVvIV3ppDgiOJgJX/e3QriB72JfPRVE8sTyaSmm0YfkbK8D4rvI2PJt8KJpT7XysMouVB6qSAL0yfwf4I0I4fO923xEse+0YTlBg8Xsb3J6HVEz3JVKLEMaMo6eBjPxzVNK/wUwfaofcF9X78UbEUTbZ8p1OV21XiIrL9GOo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn; dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b=oqwtBese; arc=none smtp.client-ip=13.75.44.102
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mails.tsinghua.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mails.tsinghua.edu.cn
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="AMdQU54a"
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67G5F1Ta1815786;
-	Sun, 16 Aug 2026 05:40:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=corp-2025-04-25; bh=U3pic
-	kv5tVeCDO59K2fiJcHyW63tAnxfs8LPzfOdtoI=; b=AMdQU54a7oWqbTdaZCnoq
-	9knFgopvtp4UgzxYuj81IQKGOxSn3iJ1ZcBNoOxUAVSvydxJRu5luYKl2Ont1/cC
-	66a0OiRKk6EZQuADMVlfJGh18aks3JscqJgmqz4MLf+Nkb5i3gOWa0gVQU0oxo2P
-	RcOTPToOJ3G1kxVJOfWRCVxk7lZUzpnUhHFl6qQOQKRjTOspVI/y2k4TVubU26r0
-	vedm3zzj5aG3+cBhGQ9IzYlSl6ITvdEquwhb4FZBzxd9+jXnyP/UeKqo6OF9YwAL
-	gxZb6ZSx5YGRt5JnqVHWFd5Ji5T7syyS44V+HUM3S/caub5QNcEfX3n7+fttNKu6
-	Q==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4g2g07gs62-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 16 Aug 2026 05:40:58 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67G5eAtY011059;
-	Sun, 16 Aug 2026 05:40:57 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4g2ejammck-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sun, 16 Aug 2026 05:40:57 +0000 (GMT)
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 67G5ereb012353;
-	Sun, 16 Aug 2026 05:40:56 GMT
-Received: from localhost.localdomain (ca-dev80.us.oracle.com [10.211.9.80])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTP id 4g2ejammbp-5;
-	Sun, 16 Aug 2026 05:40:56 +0000 (GMT)
-From: Dongli Zhang <dongli.zhang@oracle.com>
-To: kvm@vger.kernel.org, kvmarm@lists.linux.dev,
-        linux-kselftest@vger.kernel.org
-Cc: seanjc@google.com, pbonzini@redhat.com, maz@kernel.org, oupton@kernel.org,
-        fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com,
-        suzuki.poulose@arm.com, yuzenghui@huawei.com, dwmw2@infradead.org,
-        joe.jin@oracle.com
-Subject: [PATCH 4/4] KVM: selftests: Add arm64 coverage for steal time pid changes
-Date: Sat, 15 Aug 2026 22:33:05 -0700
-Message-ID: <20260816053630.527528-5-dongli.zhang@oracle.com>
-X-Mailer: git-send-email 2.43.5
-In-Reply-To: <20260816053630.527528-1-dongli.zhang@oracle.com>
-References: <20260816053630.527528-1-dongli.zhang@oracle.com>
+	dkim=pass (1024-bit key) header.d=mails.tsinghua.edu.cn header.i=@mails.tsinghua.edu.cn header.b="oqwtBese"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=mails.tsinghua.edu.cn; s=dkim; h=Received:From:Date:Subject:
+	MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:
+	References:In-Reply-To:To:Cc; bh=ZgJfDn5KQYjme6KfWIFnnNgLsyC3Z6a
+	FTYgMcP1BOnM=; b=oqwtBese1EQihmrYuDlHJdwhwC41H2xIue7Xsd00VPhNfnn
+	EOBlk5xhFhkaFs3V/L4GxvHehMqN1pYAVCxeYZEit44J8xDRzyE6a9xhde9Doi0y
+	vjYSKoTSxJF+CnBvIcCivIhD2+AwcQR3xnNQO+uq7GBtb9KRFfW0Qejs9tsM=
+Received: from [172.17.0.4] (unknown [101.6.30.195])
+	by web1 (Coremail) with SMTP id yAQGZQB3Gclkl4FqEsoEAg--.40530S3;
+	Sun, 16 Aug 2026 18:56:44 +0800 (CST)
+From: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Date: Sun, 16 Aug 2026 10:56:33 +0000
+Subject: [PATCH bpf-next v2 1/2] bpf: Check pointer type for all atomic RMW
+ paths
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-16_01,2026-08-12_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 suspectscore=0 bulkscore=0
- adultscore=0 malwarescore=0 mlxlogscore=999 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.19.0-2606160000 definitions=main-2608160039
-X-Proofpoint-GUID: qq1JtjJTPG1EyDjHFGSygFBLem78LP4I
-X-Authority-Analysis: v=2.4 cv=Hu9G3UTS c=1 sm=1 tr=0 ts=6a814d6a cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22
- a=EIcjfB9IiI4px24ztqRk:22 a=yPCof4ZbAAAA:8 a=Sb3boAvBcC-Fi6NWb5QA:9
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE2MDAzOSBTYWx0ZWRfX2r1SXnPWUKBH
- xOKWGO9NkMKr2XjxJDFDZQ1ma7DRuHB6+9G2K8ySSQWJyy+7ykvxkNFh6E6/gZ8N030TodPG2Bq
- iHpE3LEEEe9raJ48WRewMq+DldfgSSnhNssSdMcVWpEGfdMGga8B
-X-Proofpoint-ORIG-GUID: qq1JtjJTPG1EyDjHFGSygFBLem78LP4I
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE2MDAzOSBTYWx0ZWRfX20IvJoZGijSt
- v/i60LQUJm7lshNsJWHPjfweeCfYVRUatUwNqT0/ZTVpucTpkzYl1o9GLUkpNM0iRpqFO/JrQju
- PONgPUgeVTp9m9C2Tx8moA7HJoHswpdQaqeTja7YoOHHA2ai4gl9trWJXA8dMJ972lhknwoMjYY
- QLMCC1czo1jQccC5RKfb2XDgSa+LRAToQ2jU4kapNgXiUO3hts67jL3P9clp89eZWEUC5Vgvsa7
- mYbFBZePQDJ1WLOmVp4dDUsy2OQVpVcOiSZmKaYii5wCq7qHPu5i2MSHWJFRqPOqbPeAFmn2vF/
- ma57qiBV1fMab6qJvisU95blkQAli5sVdJfvcro1TbvnypxRch78/RUSf4tt2rbki5Mcmrdqv+Q
- S1Zaidg0raOo1Huq045HGFDbzAO5+e9AGYBgUKUOgIVHq+wHngA3TjSO87fYBQoFB7whJSKnPAy
- MTrydrCUcrpaji9oLjg==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260816-bpf-next-038-mixed-atomic-v1-v2-1-4644c1886dbc@mails.tsinghua.edu.cn>
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+In-Reply-To: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1786877805; l=1514;
+ i=chenyy23@mails.tsinghua.edu.cn; s=kernel; h=from:subject:message-id;
+ bh=DQ26j5KfDBjdkJdGIUsSNO9aYlVJwusBnVeo+Z7hxC8=;
+ b=7uk+GBhXfxI0d48fmH00zZR9L9LBHeYamKEb2pC/Wava5LMk19W1rCAKIUvVeeeR5krvZm8vm
+ J8o2YNzvxmTDQ80n7NCLKffoR+17RERCq+ztVwd0PIrEa6yci+qcqOf
+X-Developer-Key: i=chenyy23@mails.tsinghua.edu.cn; a=ed25519;
+ pk=+Q11PEDVzoU+87KHlIeNWKwv/GiutzE5094ej7opM+s=
+X-CM-TRANSID:yAQGZQB3Gclkl4FqEsoEAg--.40530S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7Kw43Cr1fAryUWF15tw13Arb_yoW8XF4xpr
+	4kGasFq3yvv347uwnrAF48Cry5KF4rtw47Gw1jvw1ftF17tFs0qFW8K3W3Za4Ykr40q342
+	yFWjvr9Y9a4UuFJanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUU9v1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l8cAvFVAK
+	0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2z4
+	x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26F4UJVW0owA2
+	z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4
+	CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E74AGY7Cv6cx26r4r
+	Kr1UJr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc
+	8vx2IErcIFxwACI402YVCY1x02628vn2kIc2xKxwCY1x0262kKe7AKxVW8ZVWrXwCY02Av
+	z4vE14v_Gw1l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VW8Ww4UJr1UMxC20s
+	026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+	JrI_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+	v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xva
+	j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JV
+	W8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1Z2-7UUUUU==
+X-CM-SenderInfo: xfkh05r1stqzpdlo2hxwvl0wxkxdhvlgxou0/
 
-The previous patch added the common steal_time_change_pid test with x86
-support. Add the arm64 support so the same test also covers arm64.
+Atomic RMW verification records an instruction pointer type only when the
+current destination is PTR_TO_ARENA. A second path can therefore reach the
+same instruction with an ordinary pointer without comparing it against the
+saved arena type.
 
-Use KVM_ARM_VCPU_PVTIME_IPA to enable the steal time shared page from
-userspace, and use the PV_TIME_ST SMCCC call in the guest to retrieve and
-read that page.
+The post-verification fixup uses the saved type to rewrite the instruction
+to BPF_PROBE_ATOMIC for every path. Record the actual destination type for
+all atomic RMW paths so the existing mismatch check rejects incompatible
+uses of one instruction.
 
-Assisted-by: Codex:GPT-5.5
-Signed-off-by: Dongli Zhang <dongli.zhang@oracle.com>
+Fixes: d503a04f8bc0 ("bpf: Add support for certain atomics in bpf_arena to x86 JIT")
+Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+Acked-by: Eduard Zingerman <eddyz87@gmail.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm      |  1 +
- .../selftests/kvm/steal_time_change_pid.c     | 54 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ kernel/bpf/verifier.c | 8 +++-----
+ 1 file changed, 3 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index c8ce17851561..b01a3403d602 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -199,6 +199,7 @@ TEST_GEN_PROGS_arm64 += guest_memfd_test
- TEST_GEN_PROGS_arm64 += mmu_stress_test
- TEST_GEN_PROGS_arm64 += rseq_test
- TEST_GEN_PROGS_arm64 += steal_time
-+TEST_GEN_PROGS_arm64 += steal_time_change_pid
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d17f14b35b79f..93463caf5c9ad 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -6739,11 +6739,9 @@ static int check_atomic_rmw(struct bpf_verifier_env *env,
+ 	if (err)
+ 		return err;
  
- TEST_GEN_PROGS_s390 = $(TEST_GEN_PROGS_COMMON)
- TEST_GEN_PROGS_s390 += s390/memop
-diff --git a/tools/testing/selftests/kvm/steal_time_change_pid.c b/tools/testing/selftests/kvm/steal_time_change_pid.c
-index 3c39594db398..12d4927d1c01 100644
---- a/tools/testing/selftests/kvm/steal_time_change_pid.c
-+++ b/tools/testing/selftests/kvm/steal_time_change_pid.c
-@@ -46,6 +46,60 @@ static void steal_time_enable(struct kvm_vcpu *vcpu)
- 		     (ulong)st_gva | KVM_MSR_ENABLED);
- }
- 
-+#elif defined(__aarch64__)
-+
-+#define STEAL_TIME_SIZE	((sizeof(struct st_time) + 63) & ~63)
-+
-+#define PV_TIME_ST	0xc5000021
-+
-+struct st_time {
-+	u32 rev;
-+	u32 attr;
-+	u64 st_time;
-+};
-+
-+static void guest_code(void)
-+{
-+	struct arm_smccc_res res;
-+	struct st_time *st;
-+
-+	do_smccc(PV_TIME_ST, 0, 0, 0, 0, 0, 0, 0, &res);
-+	GUEST_ASSERT_NE(res.a0, -1);
-+	GUEST_ASSERT_EQ(res.a0, (ulong)st_gva);
-+
-+	st = (struct st_time *)res.a0;
-+	WRITE_ONCE(guest_stolen_time, READ_ONCE(st->st_time));
-+	GUEST_SYNC(0);
-+
-+	WRITE_ONCE(guest_stolen_time, READ_ONCE(st->st_time));
-+	GUEST_SYNC(1);
-+
-+	WRITE_ONCE(guest_stolen_time, READ_ONCE(st->st_time));
-+	GUEST_DONE();
-+}
-+
-+static bool steal_time_supported(struct kvm_vcpu *vcpu)
-+{
-+	struct kvm_device_attr dev = {
-+		.group = KVM_ARM_VCPU_PVTIME_CTRL,
-+		.attr = KVM_ARM_VCPU_PVTIME_IPA,
-+	};
-+
-+	return !__vcpu_ioctl(vcpu, KVM_HAS_DEVICE_ATTR, &dev);
-+}
-+
-+static void steal_time_enable(struct kvm_vcpu *vcpu)
-+{
-+	u64 st_ipa = (ulong)st_gva;
-+	struct kvm_device_attr dev = {
-+		.group = KVM_ARM_VCPU_PVTIME_CTRL,
-+		.attr = KVM_ARM_VCPU_PVTIME_IPA,
-+		.addr = (u64)&st_ipa,
-+	};
-+
-+	vcpu_ioctl(vcpu, KVM_SET_DEVICE_ATTR, &dev);
-+}
-+
- #else
- #error "steal_time_change_pid is not implemented on this architecture"
- #endif
+-	if (is_arena_reg(env, insn->dst_reg)) {
+-		err = save_aux_ptr_type(env, PTR_TO_ARENA, false);
+-		if (err)
+-			return err;
+-	}
++	err = save_aux_ptr_type(env, dst_reg->type, false);
++	if (err)
++		return err;
+ 	/* Check whether we can write into the same memory. */
+ 	err = check_mem_access(env, env->insn_idx, dst_reg, argno_from_reg(insn->dst_reg), insn->off,
+ 			       BPF_SIZE(insn->code), BPF_WRITE, -1, true, false);
+
 -- 
-2.43.5
+2.43.0
 
