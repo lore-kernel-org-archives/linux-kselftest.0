@@ -1,270 +1,163 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2A83D3CF2
-	for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 23:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.48
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786922001; cv=pass; b=qwOGRxP2IFcs9XpF9OrWDbt3IM0RDJDw9WSvGvORssctHjam5aQdveG7KDlfHyMiQcuVW5SgQAUcgNHJg8A2scDzSWGfKKWpQkxUs9pex59nIEgvPj2vUC89IJi/cvol5VF6l57f/Q8K0j6PRCLBnj5LIcL37dIPvBxD4WnmsK8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786922001; c=relaxed/simple;
-	bh=4Q3/0/Vme3NViO+zbdqCGLReJBPhZGfXLLeXqh+3fvo=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pi+qcWfiW2AptP3XO4EKxyn2fel/Tkv6RZ0tJP25kZzJQ7u9YK8SHl8Uljw5Tpn6bbiaBBptpOqLMYWKjtJJYcwoGQEJanh5MjL5h/Jcz1l06vVZkA+rRIBGsUStUNouI4ierks2dMCj8zXbyFVAmy10Y/Bb5NIrqcuOQe+ffCA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=BZJQF4Dx; arc=pass smtp.client-ip=209.85.216.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D74EE28690
+	for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 23:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786922245; cv=none; b=tvs7vUDF4xA1C09ZgAlQayfl6AxGbPqG1LCmkdvxBEg3e2YbasfmS5tW1nhyV5bI1we6VG75sLqHWIJhTF0VAQRLYlZQEPBUf6/BQJELf8q2hk6N6Qyns35y1017sHHmNyYwCw9k7Y2v8xOWUYGiy7GSTQdiF3xcwFItUcPB+Bk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786922245; c=relaxed/simple;
+	bh=orlL/s+0UfGhO31zaJ/3W8YeQ3MSg7gTeXGZ5qRQ5EQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AGoxWAAiJ9jJMOMJwZrduQIl6WlIg9vrQPTLw/OyaVh/qLhjyH7amUu4y9j2iwvSsdI4hK3CDqxPoeEFIQjnQ9c2V2R/cnaz+tQc/oZCaq5s8l8mYoRl/xxGQnLBPatuD+N1Ov24g+n8zDv5RdEajAZ5B0O5ePbD5tzFEjX8/QQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FUDSP2hp; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="BZJQF4Dx"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-381c51fde6bso3407775a91.2
-        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 16:13:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786922000; cv=none;
-        d=google.com; s=arc-20260327;
-        b=ND1Zmriu0A74ZsRRx20mtDdL8xTRSQpr5o3v0ionVHCmfMya4m+yKq4vq1+OzW0duC
-         Qwho47Y4DZdvB2X29EQov0pkOTlAYQqbJHrvnwqOdllM5zuW8UVWkg+cPAQGcgTGd+s/
-         7FBA9CVeeI+SKoJhluy/qg3VOew8dsEwAPfrBqBTh47ylX4q5lrGQW1Mys9UUUTcZ/nt
-         hZSTFjO2QI/iwawe7Kvcyo5d3+LyUjLwZjBOo1QykimEFwZ42lzKsUeVCmdNXngCKlDt
-         P9ObpPfQq9EshiMDAiyXkScLHZeqJO4nrtDTK+NbbbxBExsf6r+VdimRG+bklngOt5XN
-         pIgg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=12JghCh0XcebURQOPBtQP8z7apq3lmuNj5BeBckCdP0=;
-        fh=NsXlVsIZm+7nuhwYNhgkzABQdZh+ouSctbWL0IGRPIs=;
-        b=AI7rXHBd19YuaUFo2l+2oN0Plh7qZRJIj4qbD9qauAoHmcV5K9vBZBuMdp0UWI0J5G
-         hgUzIeeVwMeFIp/BD+MHhedU30QsngFwQyUW38FlxVeSu0wWthZDIVV2de29ULsJQjVL
-         yMzqTFjt128kLXLYxAGSXDM1wZMjUG0hFsHpDGhJ2mt0nd6iEyfUk9kz/n4CRQcQuC+l
-         ASqR6T5QspKnZdOfWEqbPQdd8KXLm/hxt86K+9wzc7J69/etrHLS0zF41A6ucKScbudQ
-         t1BIUKo0/ssPTlT3ViFMzJ/eD/Tk3bcFYuwo2UThiQsPnhUyCrL0I+6KQDTBHqFy9eAp
-         WyIw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FUDSP2hp"
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-38a0c7e841fso3729443a91.2
+        for <linux-kselftest@vger.kernel.org>; Sun, 16 Aug 2026 16:17:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786922000; x=1787526800; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=12JghCh0XcebURQOPBtQP8z7apq3lmuNj5BeBckCdP0=;
-        b=BZJQF4DxoyZyQETHZwYmaDiSD01BfHN0202Ksg3ewbB353AOHxY4Y+hr/BR7+MFbts
-         Bc4+r2htQVyWxGMs8Yhw7eln9s395UZRL00IgIb0IvW36YPn87MvNnS7D+f6zOUIiHQe
-         +6UDOUitLkVNxAAJ5fYCilTUvMsHDw0Cjy4FTfOAEe7n/Y2duzC16NBo/DbjIJBPPDU2
-         3O/rMdqm3yX1U2yHAv46nHjZ9yPFOJthrRJzweYLSwRQBBsRRh3GHnWt9ORJBMHKKlvn
-         5w9Z0QiDv205u//3aADSFv6U7b5ME4vVv/mD7W3alGo+cE3fOXIT5EwGXdzcIKYd14Hi
-         BecA==
+        d=gmail.com; s=20251104; t=1786922243; x=1787527043; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=ucrgPcpj7nxeCtN9HT0N9KMvy3swFcYQyW8EFS22f1M=;
+        b=FUDSP2hpoLQjY0jKVSxpDZcv6rMboedMDhXXYKAlPUChWJb7xZ2nqq69JxMDTFF/GP
+         o26FLv5AtMmCsh+usjvPV1mAsz6BIspH5n1MzE44eWA3vvGd0vUAfBx1cavi0FFRsp4C
+         KPYHfn6nnZUbWv5Zi/9ABQNDYlEd1FG3ymyt6o87p2PWIhNUYzs9J+Dy9BxKztSSmQ8o
+         Rr/gWcHRwtumu8Knle6/sar7i5Z6B2Q/AYv4OM3HYVkYb9iaRHBbW1CcYnLWNiIvV9ox
+         VvZv8XKxi1X9O9JA5IadI+vIqCS3Z8/j8004Wes9Bc6q0UBCpNpZzhbaEsXTkVYPUCZs
+         N3wQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786922000; x=1787526800;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=12JghCh0XcebURQOPBtQP8z7apq3lmuNj5BeBckCdP0=;
-        b=ZgZHaA+YW9/OQBnv8TMUyHO+ZwMgH5jDoy7I0NHZhT/IB+MG7GiJ7CTLeRcmGbELKR
-         WVZcHIx3D8/RNqdVXd3SCIoWUnve+1wUgv8k6oxypsLfatz5BYugMBS3e4dVmtvuPwd5
-         nQl8GZjda35N7/m+NHsJcSCMA6FA8sgyTDOt/0wEOQ4NYOBOMUQf8ZVp1vOcMWZByR2r
-         EjDdR7h/BEa5hbXljeWclxu78wIdkGlRU/r1IY6vdU0VslEU3IoPiy2gPI/9RjFO9kll
-         3CWEtonjzAQyFo63W5n8LwjLY6W3x25QWybNOUSFeOpNHGLIQvfgIn02ZlBzM9agIKzh
-         xebg==
-X-Forwarded-Encrypted: i=1; AHgh+Rreh2K93W+h07rBlIjBnwq74uOLr9ubzt196wwKcvz7YhTC2TTWHFX9sXoMH5azOVzvmnpygO5bAIq3Eirwta4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzzJQRCil/pbGdYQ5jxDQfSxdfTLR8WYiAcNwk6Hf27Xk4hWDvT
-	nxJcajR6TlbtID82v6smQ+KPFrxapRBR4CAhEO4SwvK0OIiw4Nwl69K8VMP1ss0gLFDALEu/tWw
-	T0hN4YBfWXjQyHzq39rVGcNxuxjVbJvLtWRUuxs//
-X-Gm-Gg: AR+sD11qwKRR8wPJUWpOez1cNIfSFzVlbNrgB1Cr1D2P5hchstpLIlr7asRy7SNYNgm
-	h3rF/lW7fg+qmr4ijAP/BhUDeFOhpfghJCgAcoEwA2yxESCdBQpG2m7ZivVTxLW62r01LPaaOfh
-	j3TsaGgVLkmrSejdb/wkLkaJgi7/OfmZlUVyiN9z9tDRM63ZBt/Eu1YoLFDe7dvc/LAhZpxG3Df
-	QvIZDOWnDopBvfZEbuh7vBeu4f9cnCHaXzs28Ea+W9+DFBvfLn70DN9vCQvl9zPTWR/+az36uJd
-	Bf8824vZhRAgWw0oa/4JluUEIiSJQt/u6Csx/l7Mlda3e74VuETLQUbX1GyjqAdZtxCp1eeDeYH
-	UJA==
-X-Received: by 2002:a17:90b:4a4b:b0:38e:bfe:81e9 with SMTP id
- 98e67ed59e1d1-3933b6ea12fmr20468357a91.1.1786921998920; Sun, 16 Aug 2026
- 16:13:18 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 16 Aug 2026 16:13:17 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Sun, 16 Aug 2026 16:13:17 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <4c638fc5-5a74-43d0-b5bf-d7ef893cb994@kernel.org>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-11-2fc18ee6d3ba@google.com>
- <eb1b5763-37bc-4cb3-890c-1e619e5a8ae4@kernel.org> <CAEvNRgHyRdt7rp=5e5FMbTT=fXNfB=np7VWd_GdmJcPOQgps4g@mail.gmail.com>
- <anpQJvFw9s-XP3pW@google.com> <4c638fc5-5a74-43d0-b5bf-d7ef893cb994@kernel.org>
+        d=1e100.net; s=20251104; t=1786922243; x=1787527043;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ucrgPcpj7nxeCtN9HT0N9KMvy3swFcYQyW8EFS22f1M=;
+        b=ENpKrHq7XTrHzmfAEbAtZDr8IVfSuyrYW3RmjkE80NXVGHkm7ANTHRECefSn1As41r
+         MWSZHDfDIbXUNuT+WDzYfNiUC5XhbLyPJeXmuFpXw50LVEdHoMqxc/5JPcvCJkhrnQpP
+         gA8F1Q7FEcczs+6vIE0ybVyTmbdaQqieS1Qe1wNlDzwzEHAW2MSAtEgh+3vbOeTltTab
+         240ndMTstlSUS5PBmg/PLjcN6Af0uCEiiLiOnvnENyRxNdWIMH2jtvVY1Xo6i9fbuYKK
+         HhBRYpztwVMf9WjiuVQEDwXNaaa3VcPVfT5GcaabDT8agRpYb2ddCnAZKVClA9v+Q/G/
+         DgVw==
+X-Forwarded-Encrypted: i=1; AHgh+RqlMTWz5anikJeADqCt4jS9sSV6N990WFtcPTcP18t/U5DcGL3M5lnTQZwWTUlHz8EELWwwyZo02UML92y2/gc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbW36HBmPGBW21wfo0wJtfpoboY0I6ks+2oY2Xz7lPFlOlOCoX
+	c7NzU5PXh9gf5S8X2qQkiZcBVlyjEiF4CxQcPzVKq1IJ7v6lCdXZz3qr
+X-Gm-Gg: AR+sD10eB4wNaVNuPTdFche7ZUo1B95EPq9AEmf/ZymHPgvmOM4yx/1By4Of98Y2Ms5
+	oI223eGhsZfhBuskzmUKUSkRQJQ0uULtgAsUkBsMmnm1eoygXaBBMAfogIPnQqunEC7ybdHNYEs
+	AMlbZs6+uH3VLLKNNoxngHGYUn1bfcnWNewCNybyeysPti8/HwFSAoSymTrmCDc6hoKteedPuOH
+	ThlTKaUoXogNmDQ5GKoZKUOng0m6SWPGG09VmmRp+2K+67/O7BfezhxIR08LJxCTQfIofDo/u66
+	pdhCSceL5MFKsqe+suV6edXkcUft3rmGlquHozzzT7iDlKrce5v6AgzNMJ+WPkh3oXFS3Ty5MbH
+	AXHmqhYwcXQEiVJpRdbjToF5NZljHUfj3xk9kaDbNjOxGGr5cAj7Ph24p1w3uUbNIkPOwGS42IA
+	6iaT7le8YJLfy7UDZXZyivOwsfT3jlBWgK+e/uZe4XU914So8CquFEVhSVeqasNrSaDDMqowzTh
+	sEFTiXyh6fXAPn1
+X-Received: by 2002:a17:90b:2e90:b0:392:c80c:9202 with SMTP id 98e67ed59e1d1-3933b8a399dmr22513992a91.14.1786922243214;
+        Sun, 16 Aug 2026 16:17:23 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39531eca993sm2583640a91.14.2026.08.16.16.17.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Aug 2026 16:17:22 -0700 (PDT)
+Message-ID: <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
+ stack atomics
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov
+	 <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
+	 <john.fastabend@gmail.com>, Andrii Nakryiko <andrii@kernel.org>, Kumar
+ Kartikeya Dwivedi
+	 <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu
+	 <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa
+	 <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai
+	 <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Date: Sun, 16 Aug 2026 16:17:19 -0700
+In-Reply-To: <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+References: 
+	<20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+	 <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sun, 16 Aug 2026 16:13:17 -0700
-X-Gm-Features: AcwNN1X3sou7ibuklgbqVQOQa1awc-4sUeU5l1gDhhG2qaPtSC5Jq-Du8Zaqh3M
-Message-ID: <CAEvNRgGzqYQLC9ThxcHCQ7KJm7rRMvqzGoznCz1d4dxAkiLkxQ@mail.gmail.com>
-Subject: Re: [PATCH v10 11/41] KVM: guest_memfd: Ensure pages are not in use
- before conversion
-To: "David Hildenbrand (Arm)" <david@kernel.org>, Sean Christopherson <seanjc@google.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, jmattson@google.com, 
-	jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org, 
-	pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com, 
-	rientjes@google.com, shivankg@amd.com, steven.price@arm.com, tabba@google.com, 
-	willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com, 
-	forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com, 
-	aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
 
-"David Hildenbrand (Arm)" <david@kernel.org> writes:
+On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
+> Add a verifier test with one atomic RMW instruction reached through
+> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
+> shared instruction with the existing incompatible-pointer diagnostic.
+>=20
+> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+> ---
+> =C2=A0tools/testing/selftests/bpf/progs/verifier_arena.c | 39 +++++++++++=
++++++++++++
+> =C2=A01 file changed, 39 insertions(+)
+>=20
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/t=
+esting/selftests/bpf/progs/verifier_arena.c
+> index b241bbcf54a8a..b22bab33301ab 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+> =C2=A0
+> =C2=A0#endif
+> =C2=A0
+> +static const struct bpf_insn addr_space_cast_insn =3D {
+> +	.code =3D 0xbf,
+> +	.dst_reg =3D BPF_REG_7,
+> +	.src_reg =3D BPF_REG_7,
+> +	.off =3D 1,
+> +	.imm =3D 1,
+> +};
+> +
+> +SEC("socket")
+> +__description("arena and stack atomic at the same instruction")
+> +__failure __msg("same insn cannot be used with different pointers")
+> +__arch_x86_64
+> +__load_if_JITed()
+> +__naked void mixed_arena_stack_atomic(void)
+> +{
+> +	asm volatile ("					\
+> +	r1 =3D %[arena] ll;				\
+> +	r6 =3D r10;					\
+> +	r6 +=3D -8;					\
+> +	r9 =3D 0;					\
+> +	*(u64 *)(r6 + 0) =3D r9;			\
+> +	r7 =3D 8192;					\
+> +	.8byte %[addr_space_cast];			\
 
->> helps the reader understand what's being checked without having to look at the
->> details, and also helps communicate the ordering dependency without needing a
->> comment.
->>
->> There are definitely times where the usage of a function bleeds into its name,
->> but usually that's because the name and the usage are on and the same.  E.g.
->> get_user() describes both the usage and the "what".  And it's easy/possible to
->> go too far in the opposite direction, e.g. by giving a play-by-play of what a
->> function is doing, but that's why we have bikshedding sessions :-)
->
-> Note that the problem I have with kvm_gmem_is_safe_for_conversion() that it is
-> all about *conversion to private*, not *conversion to shared*. In that sense,
-> the function name is just confusing.
->
->>
->>> Perhaps a little ahead of its time,
->>
->> Ya.
->>
->>> but later with restructuring for huge pages, we also need no additional
->>> refcounts other than gmem's own so that restructuring is safe, hence this
->>> function name was meant to extend there as well.
->>
->> Given that I've read that at least five times and still don't understand the
->> nuance, I think it's safe (ha!) to say we'll need to revisit and review those
->> changes no matter what. :-)
->>
->>
->>> In this case "unexpected" (especially since the next patch adds checks
->>> for maybe dma pinned and unmapping), begs the question "unexpected in
->>> what way"?
->>
->> Ya, that's why I like "outstanding", it succinctly captures that one or more
->> references have been "loaned" but not yet "repaid".
->>
->>>>
->>>> I'd rather add a comment than have this filemap_get_folios_refcount.
->>
->> +1, the local variable just made me scratch my head.
->>
->>>>
->>>> /*
->>>>  * We expect one reference per folio-page in the pagecache and one
->>>>  * reference from filemap_get_folios().
->>
->> Nit, please no pronouns in KVM code.
->
-> Whatever floats KVM's boat :)
->
->>
->>>>  */
->>>> if (folio_ref_count(folio) != folio_nr_pages(folio) + 1)
->>>>
->>>
->>> This comment explains what's "unexpected". I can do this and switch it
->>> to kvm_gmem_mem_has_unexpected_refs() unless people have other
->>> suggestions.
->>>
->>> I wish there was a folio_pagecache_refs(folio) that
->>> folio_expected_ref_count() can share with this, and also
->>> folio_swapcache_refs(), to solidify the definition of refcounts taken by
->>> the pagecache.
->>
->> ...
->>
->>>>
->>>> I'd add a comment here for the "why are we unmapping".
->>>>
->>>
->>> Does this sound right:
->>>
->>> Unmap here to ensure that userspace page tables have no mappings, which
->>> also ensures refcounts from those mappings are dropped.
->>
->> How about:
->>
->> 		/*
->> 		 * Forcefully unmap the pages from all userspace page tables,
->> 		 * and then verify there are no outstanding references, e.g.
->> 		 * acquired via GUP or similar.  Tell userspace to try again if
->> 		 * there are oustanding references and hope that whatever has
->> 		 * pinned the page will put its reference "soon".
->> 		 */
->> 		unmap_mapping_pages(mapping, start, nr_pages, false);
->>
->>                 if (!kvm_gmem_is_safe_for_conversion(inode, start, nr_pages,
->>                                                      err_index)) {
->>                         mas_destroy(&mas);
->>                         r = -EAGAIN;
->>                         goto out;
->>                 }
->
->
-> Sounds good besides the function still not being clear about *which* kind of
-> conversion.
->
+I'm going to fix this to:
 
-Circling back to this since Binbin also had a comment about the comment!
+	r7 =3D addr_space_cast(r7, 0, 1);			\
 
-I'll drop the use of the const local variable and do
+as in the test case above.
+Waiting for CI [1].
 
-    if (folio_ref_count(folio) != folio_nr_pages(folio) + 1)
+[1] https://github.com/kernel-patches/bpf/pull/13325
 
-, and add a comment rephrased without the pronouns:
-
-    No references outstanding if guest_memfd sees 1 reference per
-    folio-page in the pagecache and 1 reference from
-    filemap_get_folios()
-
-, and then also take the comment and rename the function from
-kvm_gmem_is_safe_for_conversion to kvm_gmem_has_outstanding_references.
-
-	if (to_private) {
-		/*
-		 * Forcefully unmap the pages from all userspace page tables,
-		 * and then verify there are no outstanding references, e.g.
-		 * acquired via GUP or similar.	 Tell userspace to try again if
-		 * there are oustanding references and hope that whatever has
-		 * pinned the page will put its reference "soon".
-		 */
-		 unmap_mapping_pages(mapping, start, nr_pages, false);
-
-		 if (kvm_gmem_has_outstanding_references(inode, start, nr_pages,
-							 err_index)) {
-			mas_destroy(&mas);
-			r = -EAGAIN;
-			goto out;
-		 }
-	}
-
-I think renaming the function from kvm_gmem_is_safe_for_conversion to
-kvm_gmem_has_outstanding_references should be better since it doesn't
-really make a statement on what kind of conversion the outstanding
-references are for.
-
->
-> --
-> Cheers,
->
-> David
+> +	call %[bpf_get_prandom_u32];			\
+> +	if w0 !=3D 0 goto 1f;				\
+> +	r8 =3D r6;					\
+> +	goto 2f;					\
+> +1:	r8 =3D r7;					\
+> +2:	r9 =3D 1;					\
+> +	lock *(u64 *)(r8 + 0) +=3D r9;			\
+> +	r0 =3D 0;					\
+> +	exit;						\
+> +"	:
+> +	: __imm_addr(arena),
+> +	=C2=A0 __imm_insn(addr_space_cast, addr_space_cast_insn),
+> +	=C2=A0 __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+> +
+> =C2=A0static __noinline
+> =C2=A0u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+> =C2=A0{
