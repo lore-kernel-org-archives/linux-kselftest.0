@@ -1,151 +1,154 @@
-Received: from mail-ej2-f2.google.com (mail-ej2-f2.google.com [74.125.228.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a7-smtp.messagingengine.com (fhigh-a7-smtp.messagingengine.com [103.168.172.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D1E293F9287
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 18:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.228.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD308282F29;
+	Mon, 17 Aug 2026 18:28:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786989928; cv=none; b=dXu3fwCxwLU/P+868xE5GndHuA8rV5EfkIyz0kC/VRaybk5iaE1xiyUADart2NxZYyJRQqb09K/NW+d360r5HD8b1ryYm7PhQcGD5SDzCfDoebANtXEGcJMbDn14AuUoq+rsPKGQzqcUWlrpKjCiWpUVwWoEVTTJGsuYbNzsWsg=
+	t=1786991297; cv=none; b=XEApYpzbu8waT2OSmCA1CQFz8c+PrhnjH4FUWWI9sQtHfybBbUeorhYfm3n1K4VHY6Qr2hhbFBp8iZT2YpCzy7g/NyDQG5rvxCLE3vN/HuCx3Vu71MBpBe8JLP1BsXIIVsjZx4XGJd4doVIk7dNLCZ2R3I9R4lTtSCbTDp2neEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786989928; c=relaxed/simple;
-	bh=puxzEXMJ5f+iK1f5IpCcEBy0jnFex294QxePdLIuumU=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Cc:Subject:
-	 References:In-Reply-To; b=un4ONj23y02CecNS5K5bP05tnAcQ7b3VBy9IXdWH9uPssQW4WmndMw+SpAxWKhrzQHV9qSm6lIkZMjJVXM3ql3YuEeTrP2HCl83k2CpHSARqyYwRwcS1Px6o/jBc4uOHbOcVWSR8POTrDrn2hB39PIOuBEliudfo2iZkWpLSGY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EBIkbfdw; arc=none smtp.client-ip=74.125.228.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1786991297; c=relaxed/simple;
+	bh=P/DFX19iPVRyKIoWqb+hSGrRbqtj+239113PQo8H0e8=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=sTKJ0P+9w4cWOdipBKwmSdO/zH6gFufkNI5nk8afZ7P1RZwAnM3io9sBfrqkPJqUSNxgW9pBUXWftkn1HlcD+j5NZa1tGAikeOOdMjg/AL2qXax4HRNvRvIUP/Ww2Lz35M0lFUlpkk1/eN/bMYO/HES/tHmwnLUZPpICMygW48Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=RbNrK0zV; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=P5dXGfZU; arc=none smtp.client-ip=103.168.172.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EBIkbfdw"
-Received: by mail-ej2-f2.google.com with SMTP id a640c23a62f3a-c16060ba9ecso34088866b.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 11:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1786989925; x=1787594725; darn=vger.kernel.org;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=KYXKYw3ZJODb57Rt3eF8E0ND+mpiXq6EWIJdfMIbgcI=;
-        b=EBIkbfdwJBEFjyCFQO7Lq31lAYvDYdI/b8R+q/5YDBoDF1eWHN1rTZaqWWRdNQ/mbj
-         ZLTmt3HFWw38SgIpXpb9utrD2cV2A4HuciIjXQnH/4FhQEnE+8adoSyUshF/d1UdNpGs
-         QN4kZDZL5h5RAZpr82knu7dV1lx7Ero3385AkirS/yi0IvKPF9tXExcIkachu3bIDyRo
-         gx5pVA1aSczB0NmjQl/qzffoUibv2imLiB+nd2YQlXyQfOtDnnoUYC2cjAw9IvbML6pj
-         PBdbPlR51GqWWfGhISa8KnLPt9lMFYAQNgexX3RF/UKatjWw00Dc10VDZSAXbTnx26e5
-         3rCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786989925; x=1787594725;
-        h=in-reply-to:references:subject:cc:to:from:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KYXKYw3ZJODb57Rt3eF8E0ND+mpiXq6EWIJdfMIbgcI=;
-        b=qSxLPj3ijhlPgpOqDU4j34wrNtvrDLRdzZYpTSLyKDtPYlFzE4DO8wGi3spiFWS8d9
-         ZOjQT+WcuzXv372CrLok9xKWeUZTppcN6MUpxWTYPj9PJ3Kcf9kZm0HRMZjcNns1Bge9
-         LrnG/iLXc9KAtCN5stjwDRT48/wJ8/zDBFTkcay9fzo6vN0B83CLd3rBSIW/pw3TuXxH
-         oaQGLTMHB6h5XA9+ZW8CstMvube1hgsZRGn46ifOcMq8kxkzMAzbGHkf1nohsh5X5Q2/
-         MBD5hdIx4ZCvNiGccUs1JP2zYodCXFTPX3/dA1FWNrcOVjn0Z6kM0Q40fGbwFyyOYzHZ
-         +DUg==
-X-Forwarded-Encrypted: i=1; AHgh+RoNWl1VS+UtJo39nCBWhivARpWDME58/Y8ca5K9R12gUxqclOfrnVowXZN1YJ9cIDe3bp0wfQ9lOTxPAg21Fbc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywttqi7ecOj+oQ+zf/Nu0zYYVb2+2y5K7zaMj+IlrCL04MIG7yl
-	XM01tZZtZKVSRO+Sb40fI09atN9gHcl5HCmsij+4tgIJYfPH1hg2eS8d
-X-Gm-Gg: AR+sD10J4UD/lhJ7rPiztm3Q/qmqJtDIrMqgAurSv12v139lMMI32ttNYFDWLHW40Jt
-	/vM2HServsVdtFqsoV0TYAz6V0wQUIJGuekleNT7STD+ntj0gqZpNRUK4yHsLZ69zNonrTOFuZN
-	UgaYbpz4HBiC9HEPJRjcR+gyP/GzQUVbGN4xGGztpQXdulbPB5TBQpd91nonN34+s1RSooThho6
-	RyVbnSWrHMu5dkM4FgCwrIcrlI2hkloJDhmR1bGsebPuwdhWJNlIoMIjvcvcSLxDg4aSIqGchIK
-	b+FO/ENuwBwMrtY+7yp0ZqfrL/brL0hFuqfIDODDF2DSrwFFyXR3rKxP4oIzLNAMJB2/oETXhx4
-	ojTN7IhtSy9JkBjO51+8qQN0YzPRmtGxV6Qq8taR+l3dKN7+c+dw8cPEomzyL7xqz5z2bRk/UAO
-	Z6eOV0fuvxLY8zrQwSv5tuGmzd0256Rx40kqCEMR2F2a9LfbIYzvmejDbTRdcMx8p5aV84VUy5E
-	K/92W0tsDnXqud1omr2wbgw1ppnW9ktiHwKnWIur8dOCFDQ5OpT5VIwMOtbz0FQiHVSwop5+k9J
-	11Sv9sSdnT1/UbLOxUINKus+3A8=
-X-Received: by 2002:a17:907:3cd4:b0:c20:a243:9a52 with SMTP id a640c23a62f3a-c218ab5bfe4mr63468966b.0.1786989924403;
-        Mon, 17 Aug 2026 11:05:24 -0700 (PDT)
-Received: from localhost (nat-icclus-192-26-29-3.epfl.ch. [192.26.29.3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2187c83829sm34392966b.41.2026.08.17.11.05.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 17 Aug 2026 11:05:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="RbNrK0zV";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="P5dXGfZU"
+Received: from ams-compute-01.internal (ams-compute-01.internal [10.64.2.61])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A8ED31400133;
+	Mon, 17 Aug 2026 14:28:12 -0400 (EDT)
+Received: from ams-imap-19 ([10.64.2.39])
+  by ams-compute-01.internal (MEProxy); Mon, 17 Aug 2026 14:28:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1786991291;
+	 x=1787077691; bh=/SAYwrtE+2KL7VtJNGSqzqFNhlz+LUncJzqFy+7g+Jg=; b=
+	RbNrK0zV4TCrBt9IRu2fitwmB34hPbLUGxUs6HVmC9WORSjfkuZtJI5FvBViZg8P
+	QH5VypolrRKDMLasTFTTtNzaBGHX+lrw42zHtDLcn1ToFXsrYxS+3AM4EK6PZ53H
+	oHTUQ82ZKM980pdwLTX/Az763MW/3ujXDUh6Ph1HJcVFkHVul8H9bGD/DogWyivn
+	IayyZWoh1aZu48Trdcj/28SfMH4uQE3AKisWcM+hx690in4QTik+qpthj01p6IUW
+	fqLrV9BtaakwYZsVQcJRPVRh6ATf47lHiMEn0z2my/MhIFme+WvX64PxQb0gHtOF
+	Dn/s0qPJHz3YefCZ8jRLNw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1786991291; x=
+	1787077691; bh=/SAYwrtE+2KL7VtJNGSqzqFNhlz+LUncJzqFy+7g+Jg=; b=P
+	5dXGfZUe3oiJVfJnS5OKYHywTulIa8QpwacLVFqxtAet/32jN3K7w2yFN4XpySTQ
+	75VrBRW1zVQvyIIv2DH0uCiiy1qxABFu4ctcN6vgi/mkrcBu4phECs2lx/Aqcvm4
+	Y5t5jS2pTGaY5B4JWDvc6i5PJwWH1fd7cE4/X88heS3uyjfzX0MYEXwunreqwx2I
+	x46HIK+ieLnm6PXzEs3pbsQWDDTsSb7K0EdRoUREbbL/9ae/3amYrkOy7UNQkIVc
+	UjjEyXdhQD/eFTEMaXmlCLZNVCbHOGxi+i8UQzs961sT5FYMe42N/jzvJq9PrhBQ
+	JLdugkxFbMfTrCWZxPn3A==
+X-ME-Sender: <xms:tlKDalvV2qmb0daWLMy8gDCmZ1DDAYj4eWRUw52EBFgiHa6MCfZ-dw>
+    <xme:tlKDapRtT2MhE_zHJ7CvLAyf0WAmZxT2xYt2MOB1s7qAPRZRPobGZdh29tf7QI1E5
+    qJ216B2RO0vTJhJVCR8i0JlewsTmSAAomISU1Jz8u2MwgW_ikNZlAO2>
+X-ME-Proxy-Cause: dmFkZTGoHwIAF44WXvuXFCl5x/oBnnSU0PhOsIsRvg6+qgX8CVrda2ORO0+byBI+JPqrqq
+    uZbjiP7PO7h1gP2vgvRstmDTYXKL2eSjlJ0jjhb8xYoifD3z0mdEzEH5gIl0M5o6FhMIzT
+    DNDVIHDEn45wqNog5C7dLw0iKiABV3+YrMx5g+C3R9tsHJovZmL/bYi0ZxYEjhRYaDx23G
+    GwfPwSbFlubka8iXO2x+Hph7H6O/nOTF2r4J+N4lPePmDkuvfMX3P07oDINuLOWNgOU91D
+    8Ege6hRSh9d1U9+8NtHHroK1Ybc86gVMjoT+OsGvyY+KXQ2PbR7+w7g133hi5II68LY8YP
+    kaV2ahlmkoVNeBd08VKpfQ7yyG90eX4HLFD9lDEerr+HrQSa/Gnz7Bi3r285CTWfPTxcAk
+    bqFkYvfN9oHxp1Si3g+Sasbpp5p7Q2y/Nl8k2Up0hoKzgCcWxsOedRu1mRbTAe6i9ptBv4
+    IqLdKYGYPI67APf6peaGAbX9v1jAia4PDf2z55BOs34zh+s3lyYi9ySE2ywKnEYDA/woug
+    YNvWrObkMVGlIFLtuB0gNLeilOFUbpY7XLjXWUJ8xX97Q3QyrfUNV4p1gQKsXhdaBfxKDE
+    gd6pray/FT7qe2/+Cx0SI5n/WYovu3RoguTdE0g7R/goWIYChFwk+j28Y+dQ
+X-ME-Proxy: <xmx:uFKDammKLKeNBvvfbkt_UOLzZNG_Enbe6UBg4-PMtEXaJoLNeHK5mw>
+    <xmx:uFKDataDO3clweHSuLJW_Lg4eL5cul8umlT1z2NyFs2uVKq-zsz7MA>
+    <xmx:uFKDao_5jDzP_eomyjcc64Xi_m4Jt2mnBbecEespeveD69tJMZcO8Q>
+    <xmx:uFKDatE78cJcdOIqhFEJSKAuB6lF3cPmVqORzNsG_3MdlD61qiRCZQ>
+    <xmx:u1KDamgwcDJu0f6FW8Hdid2RnEuZrFcoDfFRN_0KLMzkZaly6PPq5CEt>
+Feedback-ID: i559e4809:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 089652F81645; Mon, 17 Aug 2026 14:28:06 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 17 Aug 2026 20:05:23 +0200
-Message-Id: <DKRF25OV39DP.2WZYYSKICG68H@gmail.com>
-From: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>
-To: "Emil Tsalapatis" <etsal@meta.com>, "Changwoo Min" <changwoo@igalia.com>
-Cc: "Daniel Borkmann" <daniel@iogearbox.net>, "Alexei Starovoitov"
- <ast@kernel.org>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Emil Tsalapatis"
- <emil@etsalapatis.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song
- Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri
- Olsa" <jolsa@kernel.org>, <bpf@vger.kernel.org>,
- <sched-ext@lists.linux.dev>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kernel-dev@igalia.com>
-Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
- spinlock qnodes
-X-Mailer: aerc 0.21.0
-References: <20260803001807.646357-1-changwoo@igalia.com>
- <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
- <75bbbff2-5ea5-493d-b543-ce40d968f3cb@igalia.com>
- <CAMe2y=Gm9K3cwsM7Sff3ZaKani3z4tVUQv9u1KzbetJF8OrW=g@mail.gmail.com>
-In-Reply-To: <CAMe2y=Gm9K3cwsM7Sff3ZaKani3z4tVUQv9u1KzbetJF8OrW=g@mail.gmail.com>
+MIME-Version: 1.0
+X-ThreadId: AvO3R8q6Da5c
+Date: Mon, 17 Aug 2026 21:27:45 +0300
+From: "Alice Mikityanska" <alice.kernel@fastmail.im>
+To: "Willem de Bruijn" <willemdebruijn.kernel@gmail.com>,
+ "David Ahern" <dsahern@kernel.org>, "Ido Schimmel" <idosch@nvidia.com>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>,
+ "Eric Dumazet" <edumazet@google.com>, "Simon Horman" <horms@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>,
+ "Hannes Frederic Sowa" <hannes@stressinduktion.org>,
+ "Vadim Fedorenko" <vadim.fedorenko@linux.dev>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Alice Mikityanska" <alice@isovalent.com>
+Message-Id: <6f5e403b-dc29-41e0-8cdc-ac17dba30bde@app.fastmail.com>
+In-Reply-To: <willemdebruijn.kernel.22c7d90c91d06@gmail.com>
+References: <20260813120351.2807829-1-alice.kernel@fastmail.im>
+ <20260813120351.2807829-3-alice.kernel@fastmail.im>
+ <willemdebruijn.kernel.22c7d90c91d06@gmail.com>
+Subject: Re: [PATCH net v2 2/2] net: ipv6: Clamp to IP6_MAX_MTU in
+ ip6_dst_mtu_maybe_forward
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Mon Aug 17, 2026 at 7:14 PM CEST, Emil Tsalapatis wrote:
-> On Mon, Aug 17, 2026 at 9:02=E2=80=AFAM Changwoo Min <changwoo@igalia.com=
-> wrote:
->>
->> >
->> Hi Daniel,
->>
->> On 8/17/26 6:05 PM, Daniel Borkmann wrote:
->> > On 8/3/26 2:18 AM, Changwoo Min wrote:
->> >> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
->> >> every translation unit including it emits a copy. __weak makes them a=
-ll
->> >> resolve to one instance, but bpftool gen object merges only the symbo=
-ls
->> >> and concatenates each input's .addr_space.1 bytes, leaving the surplu=
-s
->> >> copies unreferenced in the linked object.
->> >>
->> >> libarena links ten such units, so nine copies were dead weight (bytes=
-):
->> >>
->> >>    object                             before       after
->> >>    -----------------------------------------------------
->> >>    .addr_space.1 in libarena.bpf.o    676200       86376
->> >>    libarena.skel.h                   2100123      892371
->> >>    libarena_asan.skel.h              2641124     1466477
->> >>
->> >> Declare qnodes in the header and let each program define it once:
->> >> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
->> >> lock it guards.
->> >>
->> >> Tested with test_progs -t arena_spin_lock and -t libarena.
->> >>
->> >> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+On Thu, Aug 13, 2026, at 23:25, Willem de Bruijn wrote:
+> Alice Mikityanska wrote:
+>> From: Alice Mikityanska <alice@isovalent.com>
+>> 
+>> Commit 427faee167bc ("net: ipv6: introduce ip6_dst_mtu_maybe_forward")
+>> dropped the IP6_MAX_MTU clamp that used to be present in ip6_mtu(). A
+>> similar IPv4 commit ac6627a28dbf ("net: ipv4: Consolidate ipv4_mtu and
+>> ip_dst_mtu_maybe_forward") preserves the IP_MAX_MTU clamp.
+>> 
+>> Restore the upper bound in the IPv6 flow to avoid potential 16-bit
+>> overflows in forwarding paths.
+>> 
+>> Fixes: 427faee167bc ("net: ipv6: introduce ip6_dst_mtu_maybe_forward")
+>> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
+>> Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
 >
-> Hi Changwoo,
+> Reviewed-by: Willem de Bruijn <willemb@google.com>
 >
-> Sorry for the late reply, for the next version feel free to add:
+>> ---
+>>  include/net/ip6_route.h | 2 ++
+>>  1 file changed, 2 insertions(+)
+>> 
+>> diff --git a/include/net/ip6_route.h b/include/net/ip6_route.h
+>> index 09ffe0f13ce7..fb59a5885faa 100644
+>> --- a/include/net/ip6_route.h
+>> +++ b/include/net/ip6_route.h
+>> @@ -382,6 +382,8 @@ static inline unsigned int ip6_dst_mtu_maybe_forward(const struct dst_entry *dst
+>>  	rcu_read_unlock();
+>>  
+>>  out:
+>> +	mtu = min_t(unsigned int, mtu, IP6_MAX_MTU);
+>> +
+>>  	return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+>>  }
 >
-> Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+> It appears IPv4 only clamps device MTU, not route MTU:
 >
+>         mtu = dst_metric_raw(dst, RTAX_MTU);
+>         if (!mtu)
+>                 mtu = min(READ_ONCE(dst->dev->mtu), IP_MAX_MTU);
 
-Added the tag to v2 and applied, thanks.
+This is some old code from v5.14, it changed in commit ac6627a28dbf
+("net: ipv4: Consolidate ipv4_mtu and ip_dst_mtu_maybe_forward"), and
+IPv4 clamps MTU in both cases since then.
 
->> > This doesn't apply cleanly, could you respin against latest bpf-next?
->>
->> Sure. I will send the v2 rebased on the HEAD of the the bpf-next tree so=
-on.
->>
->> Regards.
->> Changwoo Min
->>
->> >
->> > Thanks,
->> > Daniel
->> >
->>
->>
+> I don't think that was necessarily intentional. Perhaps route MTU
+> itself is already bounds checked on configuration. The device MTU
+> min() was added after a syzbot report, in commit c780a049f9b.
 
+This commit merely adds READ_ONCE to the existing min.
+
+> Current IPv6 proposal is arguably more robust, covering both. There
+> just remains a difference between IPv4 and IPv6 code paths.
+
+So, looking at the fresh checkout, it seems that my patch covers the
+difference, right?
