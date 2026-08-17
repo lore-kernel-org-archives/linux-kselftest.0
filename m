@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36BCA3E6DD5;
-	Mon, 17 Aug 2026 09:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A223E714C;
+	Mon, 17 Aug 2026 09:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786959357; cv=none; b=ahYEXKxh0TWMsf0QMYf8KP3hfkNQAoSUosoyov2cxYmHpVrNSce2eImKkQ7EpxTLqVdnxN17dmvFilKZ/x6laYPbm7pHnRDb9hChTq3hzWWNpJbqMcCc1hEsZ7wnqqUiSiuhENpCFS2e9TADzd6zbFUiWYBQH3yYrRFlLrpDVgs=
+	t=1786959527; cv=none; b=DcQ8SGH5iPkEP87zus9Uwk7/KfJ1ClilSkmv8jKHZI7KoFmhSYlK5qAoQGAWFpioVLXbBk3vgUHA9BZSfV4XPivHMLTz4Ozkn56XlKTHDUFTVQDeldNygLBIVm/oOBRCBUCRdV/7WgYur4RJzCBJoWjBEr4m7RUB5CRdmBV5Pzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786959357; c=relaxed/simple;
-	bh=Sfplz7FOy4eoxhiy+GID2xWAyqH/lUklaot04xt32/U=;
+	s=arc-20240116; t=1786959527; c=relaxed/simple;
+	bh=d9/KtlCQD7Jf36Fg2yQWUhk48AogF4hKdnBARp4edds=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dz+JewWIOyBokhGpgvTTOq+D+I8TG11OD9L52v/YNkOuYjMWAhxxQaG8naYa1CvjOu+QeK8hwkkokvgZZ8VlWgbFseHhFP7JhxlGQKWvBmq8ljVxLsnKZWOYwlWz8tuqFQd+X+SaKfnLeYqIpNLg42DLuKVLNishVBUjHc7Iwzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fB7VdzDf; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=WgyD/KYXRmU7Dw0EInYMPlcE9PIK+Z+PRDSP+26rocsim+w/w0KMLD0q2qGnTmfRmA1WBcjRtI+9R20FMwC9AWLccvI1VajcBvq259lW3cZPcMenS4r4gOi9b5JxDrTo8aI1dEGdwO7MBvUzUZfmfkYK/qHbawi6KFmm9Jta2DY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l7HAdiIK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fB7VdzDf"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 136931F00A3A;
-	Mon, 17 Aug 2026 09:35:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l7HAdiIK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91C421F000E9;
+	Mon, 17 Aug 2026 09:38:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786959353;
-	bh=Bz/3Lps0oDNCceiyOyN1iEoGSjh9V2X4gBWJL4YBiBY=;
+	s=k20260515; t=1786959513;
+	bh=xIcOByI15ISSUolALc34LQo3MfpggLoUinkyzrtQlog=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=fB7VdzDfxUFWNJOJBtj0zSB+fzkrs4gDhweAih4gNcXBDzfc7LRpEhSD/71WcOwpu
-	 lAVZvpEC18aHG2GkrzHQFWIg3AwiBYQXX0daMk3rJm9ZsB3Z2exyxY7EIPKAWS7Ey+
-	 vPJOGzRrrwSQf+j79XHJzn+JqHcObtDns+9h4X5GTQU//plvjBAoKo5nv57WZNh7kM
-	 XZqr9EMsUzqaqkcz+oeXuXtOqb+LTWeFUISaaiIJtzUKE9dv3SbSCk4rzCUlssPVsE
-	 8zsN+JxXi/yshc+vKj8MgVhjfOwqtm9K0J/QAX9EwEx+dE224+h8BbrMbbq60xp6YQ
-	 G6/bqfoIF5jqw==
-Message-ID: <5abb555c-db95-4340-b27d-eeca2d8e68eb@kernel.org>
-Date: Mon, 17 Aug 2026 11:35:45 +0200
+	b=l7HAdiIKuNa0O7S9eaE+rKDLXSylVYjVJQzsH6i6i57xBqB7kFmHbCMJZJWVQZ1Yd
+	 iYFLWDkfNEp+dRnT+8P5VXnyqcVPDlce4ixxbPEG7+gNhM8zUJjLwXK6v0tdmHuEZU
+	 NKP3lanqe/fZwducPehwqiCsjLpUh07wOC75KCSnZqW3ez0zFxm4qHHhNjPR6Tiusq
+	 e8987HlKtdl3ditCtZwkaEx+3EEBI/Ui1b1NgEPy5ipKJNxKzqnzWbxBqVjy9H3Pvk
+	 9nTjeEYE+CNxetRVmnIE04cujHdyA+xNwPLUdbh8AszK+9EB1HwbAL44mmBk80HQiX
+	 KcKGbAdxm+FDA==
+Message-ID: <ec886196-37f5-471e-954c-2d0e1fcbe30e@kernel.org>
+Date: Mon, 17 Aug 2026 11:38:27 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,17 +35,14 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: khugepaged: consolidate error exits via
- kselftest helpers
-To: Hongfu Li <hongfu.li@linux.dev>, akpm@linux-foundation.org,
- ljs@kernel.org, ziy@nvidia.com, baolin.wang@linux.alibaba.com,
- liam@infradead.org, nico.pache@linux.dev, ryan.roberts@arm.com,
- dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
- usama.arif@linux.dev, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
-References: <20260817061955.45454-1-hongfu.li@linux.dev>
+Subject: Re: [PATCH v2] selftests/mm: emit KTAP output from
+ ksft_kmemleak_dedup
+To: Song Hu <husong@kylinos.cn>, akpm@linux-foundation.org, rppt@kernel.org,
+ usama.anjum@arm.com, leitao@debian.org
+Cc: linux-mm@kvack.org, shuah@kernel.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, surenb@google.com, mhocko@suse.com, peterx@redhat.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260815084231.3630742-1-husong@kylinos.cn>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -92,21 +89,27 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260817061955.45454-1-hongfu.li@linux.dev>
+In-Reply-To: <20260815084231.3630742-1-husong@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/17/26 08:19, Hongfu Li wrote:
-> From: Hongfu Li <lihongfu@kylinos.cn>
+On 8/15/26 10:42, Song Hu wrote:
+> ksft_kmemleak_dedup.sh reports its result with raw "SKIP:"/"FAIL:"/"PASS:"
+> echoes and bare exit codes instead of KTAP, so parse_kselftest.py cannot
+> read it.  Convert it to the ktap_helpers.sh API, like its sibling
+> ksft_kmemleak_confirm.sh.
 > 
-> Replace the perror()+exit(EXIT_FAILURE) pattern with
-> ksft_exit_fail_perror() so failures are reported through the
-> kselftest framework, consistent with the rest of the file.
+> skip() and fail() emit ktap_test_skip()/ktap_test_fail() instead of
+> ktap_skip_all()/ktap_exit_fail_msg(), and a single ktap_set_plan() at the
+> top covers every path; ktap_finished() then prints the totals line and
+> provides the exit code for skip/fail/pass alike.
 > 
-> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Breno Leitao <leitao@debian.org>
+> Signed-off-by: Song Hu <husong@kylinos.cn>
 > ---
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Reviewed-by: David Hildenbrand (Arm) <david@kernel.org>
 
 -- 
 Cheers,
