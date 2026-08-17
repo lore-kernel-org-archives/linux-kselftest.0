@@ -1,50 +1,46 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17A93BBFDD;
-	Mon, 17 Aug 2026 09:04:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5CC3C3F70;
+	Mon, 17 Aug 2026 09:05:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786957494; cv=none; b=Rs6pC2I2JWKZ9amIwGiWN99R3U6mTerXw1lb98lcbfxlHP9Xe46CdYB6qd71bHhCIVbip5QfSLBYYpYQjZjiXQXgnHz3L6S0LBEKwulnNGXzC92/OrDmhV/FlgWX9C2Wwqdk7yzFeNjtRp7qULbzEdKh5+KEdg5PM9vyiUB+XFQ=
+	t=1786957531; cv=none; b=KsziWBlqmwM9ahlvdtEhkujkioFeBOym7PACd7/fwRswbzHq+VzNNJUK/9rL3OgDt/x6zAyAj0ZQ16A8twEGUzEC0aG5xGwwklb8h7Y6NOzhiQ2MHbd7cOem8C+OxJ3TxzVEXTGCl+HCJc+ygl5DyhKhSzZimjW5h5LQuucnRGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786957494; c=relaxed/simple;
-	bh=grRcmryCx5B9VaG+tqH836/UCsBGAYQCLcV7qNzOAE0=;
+	s=arc-20240116; t=1786957531; c=relaxed/simple;
+	bh=NLdCGzhe94/PU970AOTLvbtcEi3iafICjwjvAZgTVns=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dr4RAhHCf00dLeGIm+zuKMKNBA5zsa8VeWvS8xwFE/IzKwLM8summ+Dj5tHp93Nic93rVREGcnDTD65mcuapnNBriTfUevm5EmAGaqu5q6PedPNsTjYcBPlVpfz5VX5ZYpSBJDp7kR8/GMeVF00idqECmT2oMObxQgfa0ni1pYI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QBO9cj3k; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type; b=fiYl3q/VQdvgmARP9jeGf8TVjy2n7B/Z2cd8oDwkP19PtHS79PEAzpJxZ4Xv5w1ijrjDp3NDFXYrBne4KytbRoarb5ZWdkAMrWBPPT4SHwbj/ALCrgFvOQz3WJ37h8iVwCNsyOgj689avYaohpktbumcC6Yp9JkG48NxUdlRtMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YauXxH7r; arc=none smtp.client-ip=213.133.104.62
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QBO9cj3k"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1786957492; x=1818493492;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=grRcmryCx5B9VaG+tqH836/UCsBGAYQCLcV7qNzOAE0=;
-  b=QBO9cj3kRmWRRCq89gOc7ZbE0S8lUbrM+F/FVtx3Hp8fmBKtFeWKgx4U
-   /uO+WCrgM/1Jon35lyd+t1JvNPBK29agZWeK6n/4Z02/o5Rl1t4nI45A2
-   UwgKJJqaAj75+fYL6hKHIecKsGwTHF1j0whrcZga0kHVEfKCwtIywcYj/
-   1nSukg5UYKiUIbsz/Boom3mVWm1dEvt3wPjfzw3CsoATW1SUg0cQdzvuv
-   RHco5qXpbvqJFKglfBx3Fdb3z+915TUcOE/4nay1IgFAQrxJ92k6Ega3H
-   cpLgb22dwr/eiWtmBJYIMICYIbd5DNi12ZUU1zd18QJCmfQkxDymupB4J
-   g==;
-X-CSE-ConnectionGUID: aMsBVEr1Tnek4L15aHUW5g==
-X-CSE-MsgGUID: b+loEf/DS2C5slTrOv/U6w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="87494399"
-X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
-   d="scan'208";a="87494399"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 02:04:51 -0700
-X-CSE-ConnectionGUID: ty8M4ZQjQYWHVPnpjcPnug==
-X-CSE-MsgGUID: 1nq4hi9VQYiov4qtqrFYwg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
-   d="scan'208";a="266836771"
-Received: from unknown (HELO [10.238.208.98]) ([10.238.208.98])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Aug 2026 02:04:44 -0700
-Message-ID: <178eb739-6bf5-4048-b4d9-276f9dc56cc2@intel.com>
-Date: Mon, 17 Aug 2026 17:04:41 +0800
+	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YauXxH7r"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
+	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
+	bh=Wg+oHCmEmcqVWg4e1GvP1q0Yfyaco5diy6ohQZmN4IQ=; b=YauXxH7ro0Yei4jbrWYnMu5fLE
+	NnTqTprxFVhMDCgP4ankOqAFrxO+IZUrWtsDLlZ83TmHAj3jrLo6mEIagvOyI9Uw7ypSgjKDUHBPT
+	h7xMVV9JreQ30j0w+eqaMRdwsI97T0HQt2g01qY8dWNJ8+dhm5kL5NAyvBSqQEBZbdCIfqh+wCaWe
+	6rM/phwjYRJDe/4cBVClUpyx2wXeNyLgQWKUJcVi9drhiqwzrJ3HyLRFPQpZZT4vbHVEAQMtY2wlu
+	D2S9CRPE9dVO7dHpOyO3k/kbgjLT5dNPH5sU7rf+jhfMyvPE/ZgR3nkIrIwnoWpm7VEvFG7anxIFB
+	gi6d3iKQ==;
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wvtHa-000GDo-0a;
+	Mon, 17 Aug 2026 11:05:26 +0200
+Received: from localhost ([127.0.0.1])
+	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <daniel@iogearbox.net>)
+	id 1wvtHZ-000EkP-2t;
+	Mon, 17 Aug 2026 11:05:25 +0200
+Message-ID: <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
+Date: Mon, 17 Aug 2026 11:05:24 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,126 +48,91 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 22/22] KVM: selftests: Add TDX lifecycle test
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-22-15ad654a50db@google.com>
+Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
+ spinlock qnodes
+To: Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
+References: <20260803001807.646357-1-changwoo@igalia.com>
 Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260722-tdx-selftests-v14-22-15ad654a50db@google.com>
+From: Daniel Borkmann <daniel@iogearbox.net>
+Autocrypt: addr=daniel@iogearbox.net; keydata=
+ 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
+In-Reply-To: <20260803001807.646357-1-changwoo@igalia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-On 7/23/2026 7:13 AM, Lisa Wang wrote:
-> From: Sagi Shahar <sagis@google.com>
+On 8/3/26 2:18 AM, Changwoo Min wrote:
+> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+> every translation unit including it emits a copy. __weak makes them all
+> resolve to one instance, but bpftool gen object merges only the symbols
+> and concatenates each input's .addr_space.1 bytes, leaving the surplus
+> copies unreferenced in the linked object.
 > 
-> Adding a test to verify TDX lifecycle by creating a simple TDX VM.
+> libarena links ten such units, so nine copies were dead weight (bytes):
 > 
-> Signed-off-by: Sagi Shahar <sagis@google.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
+>    object                             before       after
+>    -----------------------------------------------------
+>    .addr_space.1 in libarena.bpf.o    676200       86376
+>    libarena.skel.h                   2100123      892371
+>    libarena_asan.skel.h              2641124     1466477
+> 
+> Declare qnodes in the header and let each program define it once:
+> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
+> lock it guards.
+> 
+> Tested with test_progs -t arena_spin_lock and -t libarena.
+> 
+> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+This doesn't apply cleanly, could you respin against latest bpf-next?
 
-Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-
-> ---
->   tools/testing/selftests/kvm/Makefile.kvm           |  1 +
->   .../testing/selftests/kvm/include/x86/processor.h  |  1 +
->   .../selftests/kvm/include/x86/tdx/tdx_util.h       |  5 ++++
->   tools/testing/selftests/kvm/x86/tdx_vm_test.c      | 33 ++++++++++++++++++++++
->   4 files changed, 40 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-> index 28b33ed8c2e6..3561f9284e6f 100644
-> --- a/tools/testing/selftests/kvm/Makefile.kvm
-> +++ b/tools/testing/selftests/kvm/Makefile.kvm
-> @@ -167,6 +167,7 @@ TEST_GEN_PROGS_x86 += rseq_test
->   TEST_GEN_PROGS_x86 += steal_time
->   TEST_GEN_PROGS_x86 += system_counter_offset_test
->   TEST_GEN_PROGS_x86 += pre_fault_memory_test
-> +TEST_GEN_PROGS_x86 += x86/tdx_vm_test
->   
->   # Compiled outputs used by test targets
->   TEST_GEN_PROGS_EXTENDED_x86 += x86/nx_huge_pages_test
-> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
-> index ff3219edab44..fa112a1c1c84 100644
-> --- a/tools/testing/selftests/kvm/include/x86/processor.h
-> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
-> @@ -372,6 +372,7 @@ static inline unsigned int x86_model(unsigned int eax)
->   #define VM_SHAPE_SEV		VM_TYPE(KVM_X86_SEV_VM)
->   #define VM_SHAPE_SEV_ES		VM_TYPE(KVM_X86_SEV_ES_VM)
->   #define VM_SHAPE_SNP		VM_TYPE(KVM_X86_SNP_VM)
-> +#define VM_SHAPE_TDX		VM_TYPE(KVM_X86_TDX_VM)
->   
->   #define PHYSICAL_PAGE_MASK      GENMASK_ULL(51, 12)
->   
-> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> index 35f0b2b7ac40..9a882644a48d 100644
-> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
-> @@ -11,6 +11,11 @@ static inline bool is_tdx_vm(struct kvm_vm *vm)
->   	return vm->type == KVM_X86_TDX_VM;
->   }
->   
-> +static inline bool is_tdx_supported(void)
-> +{
-> +	return !!(kvm_check_cap(KVM_CAP_VM_TYPES) & BIT(KVM_X86_TDX_VM));
-> +}
-> +
->   /*
->    * TDX ioctls
->    * Use underscores to avoid collisions with struct member names.
-> diff --git a/tools/testing/selftests/kvm/x86/tdx_vm_test.c b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> new file mode 100644
-> index 000000000000..7cdcaf33b585
-> --- /dev/null
-> +++ b/tools/testing/selftests/kvm/x86/tdx_vm_test.c
-> @@ -0,0 +1,33 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +
-> +#include "processor.h"
-> +#include "kvm_util.h"
-> +#include "tdx/tdx_util.h"
-> +#include "ucall_common.h"
-> +#include "kselftest_harness.h"
-> +
-> +static void guest_code_lifecycle(void)
-> +{
-> +	GUEST_DONE();
-> +}
-> +
-> +TEST(verify_td_lifecycle)
-> +{
-> +	struct kvm_vcpu *vcpu;
-> +	struct kvm_vm *vm;
-> +	struct ucall uc;
-> +
-> +	vm = vm_create_shape_with_one_vcpu(VM_SHAPE_TDX, &vcpu,
-> +					   guest_code_lifecycle);
-> +
-> +	vcpu_run(vcpu);
-> +	TEST_ASSERT_EQ(get_ucall(vcpu, &uc), UCALL_DONE);
-> +
-> +	kvm_vm_free(vm);
-> +}
-> +
-> +int main(int argc, char **argv)
-> +{
-> +	TEST_REQUIRE(is_tdx_supported());
-> +	return test_harness_run(argc, argv);
-> +}
-> 
-
+Thanks,
+Daniel
