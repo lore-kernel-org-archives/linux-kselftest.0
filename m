@@ -1,206 +1,274 @@
-Received: from mail-oi1-f197.google.com (mail-oi1-f197.google.com [209.85.167.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E23F3D955F
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 22:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C835537CD53;
+	Mon, 17 Aug 2026 22:28:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787005493; cv=none; b=iaqoyPaaLaA06l3V5+ew4PruzpI0cJ2+N4prasrArHiGueFyrvjI/dDbRZ3TILJO1rW11+qJM6limHB8RKywNNuWDMInBtprAco+byEvTvQsXIplkDdXLYqfTrGkcDG7KRbZHbBmC6Ux88U8YXY89Hex37eqvj1Xj3SjxBJpFgM=
+	t=1787005721; cv=none; b=ZfT32ms81Ey8CqliYIpGzFqSojzGCjhjtzYouVBVhit5ulqM8TnI5VyVR3Ua708BpbO2c7cba/9azfsD/Q0A+BqVWbfwTVXgPJOZzIgxoo3e7nJ5UQhTSeFCXIgYYkj+KbOh4sGXC+Nve3RTOwwwmS5cQhaQ9dIJUmBtwAG9uV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787005493; c=relaxed/simple;
-	bh=X0XI1mBIwXiTsh/WI3BrAwfPGJazigDX28jJiz289Xw=;
-	h=Date:In-Reply-To:Mime-Version:Message-ID:Subject:From:To:Cc:
-	 Content-Type; b=Aj+h338dESnFeOJfqfMFY37r8TtTsvHaaQbZUpjvgy3XPdU7Zh/VmxGtahDS8LIhtwzq8gaDtnh5H2V30lXoJASaturX75ozKjA3l7HGG07HDLT657q7RtCBkD2K0+sgWi4oMmeWhOP5GDed58hVcu/k1VJZdcgX4GH87leFB50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kRnWyaLl; arc=none smtp.client-ip=209.85.167.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--coltonlewis.bounces.google.com
+	s=arc-20240116; t=1787005721; c=relaxed/simple;
+	bh=ci67Y3ydxnCm5PGsuyBo62VanLXVhMW/wP+2t4BovW8=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=BlLcYskLkTG7C/5iOh/0eE9LLqzD58HLaAUveaSSSxRGuqldXs6fELsjXRs5cAN5SXwQttXpwT1xzPFGGd4pzS7QET2INHuznlDH+iKahTLp5zVmhYdrVVvJFxKUW3CiNVfQLcr9abE4S0d0dx9HGEKw3BgLTh68OHBhqG0MaQE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tc5MJbtR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kRnWyaLl"
-Received: by mail-oi1-f197.google.com with SMTP id 5614622812f47-4a7de733fa9so5661268b6e.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 15:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787005489; x=1787610289; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=CRgSmV2/Mlq0/0RFaXlCT6VkbcpoQhhxjZNhjQH02WQ=;
-        b=kRnWyaLlRRUW6HDgq5kelT5ZjVtD/7232xzw1onckTa9atQE5NbQ+iig4VqMgme0S0
-         kLLt0qIIyhKmgOcvG7gUHsMnk706FaCGjTpFrIeNBZvr4bkNUyviP4fwQXVR3c01BBPN
-         OwT5UQJm8PWTwYb9pNx3beq3Ow0PktmkqNjC4o5mGb41oY2SzIrNwGzoPu4SXbP6+TAV
-         XOHcf7KVBGcfXZNpmfIcdHj85zWmm8gT26KUENyz2R7QEY614IgC5OXJbFn187r6f+PZ
-         m9dCqQkVjV78CHv8/ujXPVzmXOQuSB7H+uJqBPM87Pw/NqZJcVDQGaPSsJWqEWzKYXxO
-         YIJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787005489; x=1787610289;
-        h=content-type:cc:to:from:subject:message-id:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=CRgSmV2/Mlq0/0RFaXlCT6VkbcpoQhhxjZNhjQH02WQ=;
-        b=qFZhOHJusRm3VcKu+VYQJlQbndklUjXjd7L/HVh8IRL4+a3m9UgjMEbA6cG+6Tkp4g
-         z6btUbsj37q66w124YoJouMSxOngSmeiBLFa2jNJ3ZpazpwRTYlgQrdpwsGQ4244BYWY
-         AKEoFtmDiKj5E1hy3tFYM3r2ocFnveW84nNAjw9eXZVcOcrCMEnfsbn6Mb0Ua6JKpxaL
-         HTvHl3S1279+BD6Qw92ofxKbotAAw4RH4EmHgrAaRd90R30FPvUuKmlxgbQQFUy5Q8XK
-         XHnBWSu94LfGiZnOrSL5S9l469WDHaSepyw66+CUBTxuX3P7a1cRAYTvsy9QtJeDeEXs
-         TCMg==
-X-Forwarded-Encrypted: i=1; AHgh+RrDtr5QpTJYkwDvY8zCRrOSiWxK8f2lruCA7sHbs0B/kkdS6IlNkudYSyk2jcXBrKyxMrY3wEbNsLQFEpVO8Bw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3+Y0XGBNVjwjsZPaajNiRUmWPq95vWoBBVAAlk9wuAa5O3Y23
-	7kceDtIDqyYxq0IV+Y15cQaIZLWmkNF9RAdmyWUWbFauQ4nh8onkuMXu+nc9XvBoQbKHhRD3xK/
-	r4gfSey0At25iEcJ0WSTIfw9MKg==
-X-Received: from ilgj3.prod.google.com ([2002:a05:6e02:6343:b0:507:fa97:693c])
- (user=coltonlewis job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6808:17a1:b0:4aa:d5f:123e with SMTP id 5614622812f47-4b241726ef4mr26959054b6e.9.1787005489082;
- Mon, 17 Aug 2026 15:24:49 -0700 (PDT)
-Date: Mon, 17 Aug 2026 22:24:48 +0000
-In-Reply-To: <16296d40-67f3-4e50-923c-5b26fc122121@intel.com> (zide.chen@intel.com)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tc5MJbtR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50D2E1F000E9;
+	Mon, 17 Aug 2026 22:28:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787005719;
+	bh=2rlpVXbAykVwz9+AZePgXoC0/jk7LvitYt17kX7jkng=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=Tc5MJbtRKc2T56j8TPEFqHVRu+9t5joPOQMuHGYCOUv/tokp05C+FQbSK0O2eiBlg
+	 5IWqPpSe4xIud2+OHSRdawpNRCNCvNBHJp7PcMwoKpC0JwnKc8lvuCoOQOGsXVNj7z
+	 o6blYSDOu6r9haWoIUnjDGOL/v3SGNHEmK+69aWdV/hKTaFJnbeq8BW5cLdE9xasnB
+	 iMmzi6MU/RxDpX1W1xjSg0xBkwWi9IaSMXiIiwN8m6dNiYaEnMTqZ0S6E+bBhHIALM
+	 Iz6cly0aJwhEYsGx6XEbmxzjd5/AV/8PKEqxf44xOptR/1zJ2hMBg+5znIgTTSjPjy
+	 SNkKjVOAolC+w==
+Content-Type: multipart/mixed; boundary="===============7619779090411820820=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Message-ID: <gsntv798tmfj.fsf@coltonlewis-kvm.c.googlers.com>
-Subject: Re: [PATCH 14/21] KVM: arm64: Apply dynamic guest counter reservations
-From: Colton Lewis <coltonlewis@google.com>
-To: "Chen, Zide" <zide.chen@intel.com>
-Cc: kvm@vger.kernel.org, alexandru.elisei@arm.com, pbonzini@redhat.com, 
-	corbet@lwn.net, linux@armlinux.org.uk, catalin.marinas@arm.com, 
-	will@kernel.org, maz@kernel.org, oliver.upton@linux.dev, mizhang@google.com, 
-	joey.gouly@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, 
-	mark.rutland@arm.com, shuah@kernel.org, gankulkarni@os.amperecomputing.com, 
-	james.clark@linaro.org, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-perf-users@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"; format=flowed; delsp=yes
+MIME-Version: 1.0
+Message-Id: <d3d3e1072f16308c6a228f3d35b9d86abce127073644c32d41e6d05d5557b78b@mail.kernel.org>
+In-Reply-To: <20260817214205.723267-2-ziyang.meme@gmail.com>
+References: <20260817214205.723267-2-ziyang.meme@gmail.com>
+Subject: Re: [PATCH v2 1/2] block: add BPF kfuncs to read blkcg io.stat
+From: bot+bpf-ci@kernel.org
+To: ziyang.meme@gmail.com,kernel-team@meta.com,axboe@kernel.dk,tj@kernel.org,josef@toxicpanda.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com
+Cc: martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,roman.gushchin@linux.dev,shakeel.butt@linux.dev,inwardvessel@gmail.com,mykolal@meta.com,ziyang.meme@gmail.com,linux-block@vger.kernel.org,bpf@vger.kernel.org,cgroups@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 17 Aug 2026 22:28:38 +0000 (UTC)
 
-Hi Zide, thanks for the review.
+--===============7619779090411820820==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-"Chen, Zide" <zide.chen@intel.com> writes:
+> The behavior mirrows the blkcg_print_stat().
+>
+> The blkg device iterator take a RCU css.
+>
+> No kfuncs are added to read the blkcg counters since user can read it
+> using the BPF_CORE_READ.
 
-> On 6/12/2026 2:29 PM, Colton Lewis wrote:
->> Apply dynamic guest counter reservations by checking if the requested
->> guest mask collides with any events the host has scheduled and calling
->> pmu_perf_resched_update() with a hook that updates the mask of
->> available counters in between schedule out and schedule in.
+This isn't a bug, but there are a few rough spots in the changelog:
+"mirrows" should be "mirrors", "The blkg device iterator take a RCU css."
+reads as a fragment that restates the earlier sentence about the iterator
+taking the RCU-protected css, and "since user can read it" is missing an
+article before "user".
 
->> Signed-off-by: Colton Lewis <coltonlewis@google.com>
->> ---
->>   arch/arm64/kvm/pmu-direct.c  | 69 +++++++++++++++++++++++++++++++++++-
->>   include/linux/perf/arm_pmu.h |  1 +
->>   2 files changed, 69 insertions(+), 1 deletion(-)
+Could the changelog also say why a new flush kfunc is needed rather than
+reusing the existing css_rstat_flush() kfunc -- is the point specifically
+the root-cgroup blkcg_fill_root_iostats() path?
 
->> diff --git a/arch/arm64/kvm/pmu-direct.c b/arch/arm64/kvm/pmu-direct.c
->> index 49f1feb5d280c..044f011c9c84b 100644
->> --- a/arch/arm64/kvm/pmu-direct.c
->> +++ b/arch/arm64/kvm/pmu-direct.c
->> @@ -87,6 +87,73 @@ u64 kvm_pmu_direct_pmcr_read(struct kvm_vcpu *vcpu)
->>   		ARMV8_PMU_PMCR_N);
->>   }
+> diff --git a/block/Makefile b/block/Makefile
+> index e7bd320e3d69..572e49988c8e 100644
+> --- a/block/Makefile
+> +++ b/block/Makefile
+> @@ -17,6 +17,9 @@ obj-$(CONFIG_BLK_ERROR_INJECTION) += error-injection.o
+>  obj-$(CONFIG_BLK_DEV_BSG_COMMON) += bsg.o
+>  obj-$(CONFIG_BLK_DEV_BSGLIB)	+= bsg-lib.o
+>  obj-$(CONFIG_BLK_CGROUP)	+= blk-cgroup.o
+> +ifdef CONFIG_BPF_SYSCALL
+> +obj-$(CONFIG_BLK_CGROUP)	+= bpf_blkcg.o
+> +endif
+>  obj-$(CONFIG_BLK_CGROUP_RWSTAT)	+= blk-cgroup-rwstat.o
+>  obj-$(CONFIG_BLK_CGROUP_FC_APPID) += blk-cgroup-fc-appid.o
+>  obj-$(CONFIG_BLK_DEV_THROTTLING)	+= blk-throttle.o
 
->> +/* Callback to update counter mask between perf scheduling */
->> +static void kvm_pmu_update_mask(struct pmu *pmu, void *data)
->> +{
->> +	struct arm_pmu *arm_pmu = to_arm_pmu(pmu);
->> +	unsigned long *new_mask = data;
->> +
->> +	bitmap_copy(arm_pmu->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
->> +}
->> +
->> +/**
->> + * kvm_pmu_set_guest_counters() - Handle dynamic counter reservations
->> + * @cpu_pmu: struct arm_pmu to potentially modify
->> + * @guest_mask: new guest mask for the pmu
->> + *
->> + * Check if guest counters will interfere with current host events and
->> + * call into perf_pmu_resched_update if a reschedule is required.
->> + */
->> +static void kvm_pmu_set_guest_counters(struct arm_pmu *cpu_pmu, u64  
->> guest_mask)
->> +{
->> +	struct pmu_hw_events *cpuc = this_cpu_ptr(cpu_pmu->hw_events);
->> +	DECLARE_BITMAP(guest_bitmap, ARMPMU_MAX_HWEVENTS);
->> +	DECLARE_BITMAP(new_mask, ARMPMU_MAX_HWEVENTS);
->> +	bool need_resched = false;
->> +
->> +	bitmap_from_arr64(guest_bitmap, &guest_mask, ARMPMU_MAX_HWEVENTS);
->> +	bitmap_copy(new_mask, cpu_pmu->hw_cntr_impl, ARMPMU_MAX_HWEVENTS);
->> +
->> +	if (guest_mask) {
->> +		/* Subtract guest counters from available host mask */
->> +		bitmap_andnot(new_mask, new_mask, guest_bitmap, ARMPMU_MAX_HWEVENTS);
->> +
->> +		/* Did we collide with an active host event? */
->> +		if (bitmap_intersects(cpuc->used_mask, guest_bitmap,  
->> ARMPMU_MAX_HWEVENTS)) {
->> +			int idx;
->> +
->> +			need_resched = true;
->> +			cpuc->host_squeezed = true;
->> +
->> +			/* Look for pinned events that are about to be preempted */
->> +			for_each_set_bit(idx, guest_bitmap, ARMPMU_MAX_HWEVENTS) {
->> +				if (test_bit(idx, cpuc->used_mask) && cpuc->events[idx] &&
->> +				    cpuc->events[idx]->attr.pinned) {
->> +					pr_warn_once("perf: Pinned host event squeezed out by KVM guest  
->> PMU partition\n");
->> +					break;
->> +				}
->> +			}
->> +		}
->> +	} else {
->> +		/*
->> +		 * Restoring to hw_cntr_impl.
->> +		 * Only resched if we previously squeezed an event.
->> +		 */
->> +		if (cpuc->host_squeezed) {
->> +			need_resched = true;
->> +			cpuc->host_squeezed = false;
->> +		}
->> +	}
->> +
->> +	if (need_resched) {
->> +		/* Collision: run full perf reschedule */
->> +		perf_pmu_resched_update(&cpu_pmu->pmu, kvm_pmu_update_mask, new_mask);
->> +	} else {
->> +		/* Host was never using guest counters anyway */
->> +		bitmap_copy(cpu_pmu->cntr_mask, new_mask, ARMPMU_MAX_HWEVENTS);
->> +	}
->> +}
->> +
->>   /**
->>    * kvm_pmu_host_counter_mask() - Compute bitmask of host-reserved  
->> counters
->>    * @pmu: Pointer to arm_pmu struct
->> @@ -209,6 +276,7 @@ void kvm_pmu_load(struct kvm_vcpu *vcpu)
+[ ... ]
 
->>   	pmu = vcpu->kvm->arch.arm_pmu;
->>   	guest_counters = kvm_pmu_guest_counter_mask(pmu);
->> +	kvm_pmu_set_guest_counters(pmu, guest_counters);
->>   	kvm_pmu_apply_event_filter(vcpu);
+> diff --git a/block/bpf_blkcg.c b/block/bpf_blkcg.c
+> new file mode 100644
+> index 000000000000..25c809f5091c
+> --- /dev/null
+> +++ b/block/bpf_blkcg.c
+> @@ -0,0 +1,154 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Block I/O Controller-related BPF kfuncs and auxiliary code
+> + */
+> +
+> +#include "blk-cgroup.h"
+> +
+> +#include <linux/bpf.h>
+> +#include <linux/btf_ids.h>
+> +#include <linux/rculist.h>
+> +
+> +__bpf_kfunc_start_defs();
+> +
+> +/**
+> + * bpf_blkcg_flush_stats - Flush a block cgroup's io statistics
+> + * @cgrp: cgroup to flush
+> + *
+> + * Propagate I/O statistics up the cgroup tree. Root statistics come from
+> + * block devices and include all cgroups' I/O.
+> + */
+> +__bpf_kfunc void bpf_blkcg_flush_stats(struct cgroup *cgrp)
+> +{
+> +	struct cgroup_subsys_state *css;
+> +
+> +	/* Pin the css for the sleepable flush. */
+> +	rcu_read_lock();
+> +	css = cgroup_css(cgrp, &io_cgrp_subsys);
+> +	if (css && !css_tryget(css))
+> +		css = NULL;
+> +	rcu_read_unlock();
+> +
+> +	if (!css)
+> +		return;
+> +
+> +	if (!css->parent)
+> +		blkcg_fill_root_iostats();
+> +	else
+> +		css_rstat_flush(css);
+> +
+> +	css_put(css);
+> +}
 
->>   	for_each_set_bit(i, &guest_counters, ARMPMU_MAX_HWEVENTS) {
->> @@ -317,7 +385,6 @@ void kvm_pmu_put(struct kvm_vcpu *vcpu)
->>   	/* Stop guest counters and disable interrupts in hardware. */
->>   	write_sysreg(mask, pmcntenclr_el0);
->>   	write_sysreg(mask, pmintenclr_el1);
->> -
->>   	kvm_pmu_set_guest_counters(pmu, 0);
+This isn't a bug, but would it be simpler for bpf_blkcg_flush_stats() to
+take the io css directly, so the same handle feeds bpf_iter_blkg_new()?
+The two entry points in this file take different cgroup handles:
+bpf_blkcg_flush_stats() takes struct cgroup* and resolves the css
+internally with cgroup_css()/css_tryget(), while bpf_iter_blkg_new()
+below takes struct cgroup_subsys_state* directly. A program that wants to
+flush and then iterate therefore needs both handle types for the same
+cgroup. Taking struct cgroup_subsys_state* in both, as mm/bpf_memcontrol.c
+does for its memcg handles, would make them composable and would drop the
+cgroup_css() lookup.
 
-> I must have missed something.
+> +
+> +struct bpf_iter_blkg {
+> +	__u64 __opaque[2];
+> +} __aligned(8);
+> +
+> +struct bpf_iter_blkg_kern {
+> +	struct blkcg *blkcg;
+> +	struct blkcg_gq *pos;
+> +} __aligned(8);
+> +
+> +/**
+> + * bpf_iter_blkg_new - Start iterating a block cgroup's per-device blkgs
+> + * @it: iterator to initialize
+> + * @css: the io controller's css
+> + *
+> + * Each blkg holds one device's io.stat counters. Offline blkgs are skipped.
+> + * A blkg without a disk can be returned. Must run under RCU.
+> + *
+> + * Return: 0 on success, -EINVAL if @css is not the io controller's.
+> + */
+> +__bpf_kfunc int bpf_iter_blkg_new(struct bpf_iter_blkg *it,
+> +				  struct cgroup_subsys_state *css)
+> +{
+> +	struct bpf_iter_blkg_kern *kit = (void *)it;
+> +
+> +	BUILD_BUG_ON(sizeof(struct bpf_iter_blkg_kern) > sizeof(struct bpf_iter_blkg));
+> +	BUILD_BUG_ON(__alignof__(struct bpf_iter_blkg_kern) !=
+> +		     __alignof__(struct bpf_iter_blkg));
+> +
+> +	kit->pos = NULL;
+> +
+> +	if (css->ss != &io_cgrp_subsys) {
+> +		kit->blkcg = NULL;
+> +		return -EINVAL;
+> +	}
+> +
+> +	kit->blkcg = css_to_blkcg(css);
+> +	return 0;
+> +}
+> +
+> +/**
+> + * bpf_iter_blkg_next - Return the next online blkg of the iterated block cgroup
+> + * @it: iterator
+> + *
+> + * Return: the next online blkg, or NULL when the walk is done.
+> + */
+> +__bpf_kfunc struct blkcg_gq *bpf_iter_blkg_next(struct bpf_iter_blkg *it)
+> +{
+> +	struct bpf_iter_blkg_kern *kit = (void *)it;
+> +	struct blkcg_gq *blkg = kit->pos;
+> +	struct hlist_node *node;
+> +
+> +	if (!kit->blkcg)
+> +		return NULL;
+> +
+> +	if (!blkg)
+> +		node = rcu_dereference(hlist_first_rcu(&kit->blkcg->blkg_list));
+> +	else
+> +		node = rcu_dereference(hlist_next_rcu(&blkg->blkcg_node));
+> +
+> +	/* Skip offline blkgs, matching io.stat. */
+> +	while (node) {
+> +		blkg = hlist_entry(node, struct blkcg_gq, blkcg_node);
+> +		/* A race only changes whether this blkg is returned. */
+> +		if (data_race(blkg->online)) {
+> +			kit->pos = blkg;
+> +			return blkg;
+> +		}
+> +		node = rcu_dereference(hlist_next_rcu(&blkg->blkcg_node));
+> +	}
+> +
+> +	/* The iterator must keep returning NULL after completion. */
+> +	kit->pos = NULL;
+> +	kit->blkcg = NULL;
+> +	return NULL;
+> +}
+> +
+> +/**
+> + * bpf_iter_blkg_destroy - Tear down a blkg iterator
+> + * @it: iterator
+> + */
+> +__bpf_kfunc void bpf_iter_blkg_destroy(struct bpf_iter_blkg *it)
+> +{
+> +}
+> +
+> +__bpf_kfunc_end_defs();
+> +
+> +BTF_KFUNCS_START(bpf_blkcg_kfuncs)
+> +BTF_ID_FLAGS(func, bpf_blkcg_flush_stats, KF_SLEEPABLE)
+> +
+> +BTF_ID_FLAGS(func, bpf_iter_blkg_new,
+> +	     KF_ITER_NEW | KF_RCU | KF_RCU_PROTECTED)
+> +BTF_ID_FLAGS(func, bpf_iter_blkg_next, KF_ITER_NEXT | KF_RET_NULL)
+> +BTF_ID_FLAGS(func, bpf_iter_blkg_destroy, KF_ITER_DESTROY)
+> +BTF_KFUNCS_END(bpf_blkcg_kfuncs)
+> +
+> +static const struct btf_kfunc_id_set bpf_blkcg_kfunc_set = {
+> +	.owner		= THIS_MODULE,
+> +	.set		= &bpf_blkcg_kfuncs,
+> +};
+> +
+> +static int __init bpf_blkcg_init(void)
+> +{
+> +	int err;
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+> +					&bpf_blkcg_kfunc_set);
+> +	if (err)
+> +		pr_warn("error while registering bpf blkcg kfuncs: %d\n", err);
+> +
+> +	return err;
+> +}
+> +late_initcall(bpf_blkcg_init);
 
-> Here, vcpu->kvm->arch.arm_pmu->cntr_mask is restored to cntr_mask_impl.
-> Is this same struct shared with the perf driver
-> (to_arm_pmu(event->pmu)), and shared across other vCPUs as well?
+This isn't a bug, but could a selftest under tools/testing/selftests/bpf/
+be added alongside these kfuncs to lock down the RCU-protected iterator
+usage? Four new kfuncs are registered for BPF_PROG_TYPE_UNSPEC (all
+program types) with no accompanying selftest and no in-tree consumer, so
+nothing exercises the iterator's KF_RCU_PROTECTED contract, the
+offline-blkg skip, or the root-vs-non-root flush split. Comparable
+additions -- mm/bpf_memcontrol.c and the bpf_iter_css family -- landed
+with tests under tools/testing/selftests/bpf/, which is also what pins the
+intended usage pattern (bpf_rcu_read_lock() around new/next/destroy) for
+future readers.
 
-> If so, if another pCPU still has a PMU-partition-enabled vcpu loaded
-> with guest-owned counters (MDCR_EL2.HPMN is set), could a host event be
-> scheduled onto one of those guest-owned counters, conflicting with the
-> guest?
 
-You're correct that is shared more widely than appropriate and could
-cause such a conflict.
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-cntr_mask should be moved to the per-CPU struct pmu_hw_events inside
-struct arm_pmu.
-
->>   	preempt_enable();
->>   }
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32073368069
+--===============7619779090411820820==--
