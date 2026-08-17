@@ -1,186 +1,123 @@
-Received: from mx0b-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+Received: from ixit.cz (ixit.cz [84.42.129.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD8F456289
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 17:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.153.30
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786986913; cv=fail; b=IfRkrjtQZq91IRwpOcs2+7W8iI7ZTh4JcYpUaDMulni9xnoHMU3c+U9mYkjOBoqF7C8NMoYECc0L/1XbrTNExOV0OmZz6g8pm2XksJqvDdTjcEaTG3HOmGDxGb59qpRx+VFLlq0vNpfv+FyGpdrhyPbxUF1ZuY+7E3fGAIvHuJM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786986913; c=relaxed/simple;
-	bh=unEk75h4RazW61+CTbm2OkL2vcW2H4HQkbdjsMJg7J8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iseyDOYXk7WOq7e3Y/TWznoxX0EKCz2pVF5mgFNlWEb3nOyxgRhsBN2QlpqAaWpebNraOOjUnOU8nThm1l0/Re7BFT6v/sGgDo2dwPBPK2tAdYwYfeDavkZn/wY0sl+dev6izItibyDAFFiHEFVImhVfTBzLbQ7NrazkoZhfN5g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=dYHCFhF9; arc=fail smtp.client-ip=67.231.153.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44E7D26B2AD;
+	Mon, 17 Aug 2026 17:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.42.129.46
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1786987846; cv=none; b=o25qGqKfILdUKS2I409lgB9nH2rk+aTYkGbuDM9xZhhqJO7nUU3uwJmdDodiTjUjl8dt0WPJ5bekZPh39FFgc8ALgnABoiWHkQUiRZ8WocsD6sOwccO4ZYRW4+YNY1oCD+cvBIBce/DGZVmrkQ/17BWigRbvQwmXf8FBDcxG0KM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1786987846; c=relaxed/simple;
+	bh=cb6pVMksMHMPTDxo/kvrw5u1m/c9HHoY/lS+YN99ahk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tg3xncw+q2Js9mqz8Ji8vLwI5auoeHyypmrnj6qGBC+fI9ukpK/jmI4urA6HSixVJG+gMOqezslaYZc0PRb1ipj6yAnn2xBlQ7iVFCgWXKYKpS0f/xl5anpACywklk6fhrNU1PLm1MSjSUfiNISrZ9hG3Vct5Vof/OcT4XrBuU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz; spf=pass smtp.mailfrom=ixit.cz; dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b=CKzoZKPd; arc=none smtp.client-ip=84.42.129.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ixit.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ixit.cz
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="dYHCFhF9"
-Received: from pps.filterd (m0528004.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67HFYgKB490791
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 10:15:09 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	pps82601-s2048-2026-q3; bh=njvrH7x9GyJo7i1wnbi3Q46/eHKvNpCFfvtLC
-	nuO51Y=; b=dYHCFhF9ZhRPYIkTaIZmQc0ZglDsa4tQXTidjHGegc8Gw5Cpb3CC5
-	jZ4EuhP48kQfwBiMyKsfxMUgn43+xOFIUAhe62uOGQQS3MuGbjQyN9z0ujdg16Kn
-	b0QQWNAnd129mksesLlQ6reh6gJUneiPcWKWY6nhA92yfZohTJZVymfiZNk+FI49
-	0xb1/Cci7Kca6EYtez1nlz/oJlFCUHx/7eaxoJCLZmm0Ox+4amX8PpFd2XAn7MWX
-	IKu3bfuMqtfOxX+y1dWa8ae+IvocL++PENBgLG67Al4wzPJnPnRlLpzXKlxLm7gm
-	r7s8fUI/gYuAX69o4wWb0DSA3/kYuZM1w==
-Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com [209.85.167.199])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 4g39re739j-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 10:15:09 -0700 (PDT)
-Received: by mail-oi1-f199.google.com with SMTP id 5614622812f47-4b28deb7ee3so731258b6e.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 10:15:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1786986909; cv=none;
-        d=google.com; s=arc-20260327;
-        b=sIkx/PMIPy7YIv7TObwVq/qQrVgtCeziKAkb/a8fwIUa/n9z7tMhkAUgI3ojx8nuyi
-         pcfKUkdMuTlZwKzfJ8Zpl0IDiCfe/datw4IiGXXPXb8eUNpLirMlc/2fQkQ9vVj8nSeS
-         ixSvVZZo6GQpAXaFbIKTT8ffQISEaCxI0i2dS3935rmj7r7lc11bx3hBB1VNh9VgVXKD
-         3ceN0HNiRpR+7R8Ju0KgxBYtV81APg3TRTY+Lo2kL8CQS1XuL77k4L5XVN2YHBMnPeie
-         t4sy86W1bijBaxJQx0V3OAAGJE0f7RxWPZJPEByzuhKKbvVelStF6kwGOFjzcma91Q6p
-         TREA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version;
-        bh=KoTFa2IJT7Dn6m6sQQ51SO0r0kVa/rVmT5mp9uvRqLo=;
-        fh=CeMi5KgBevRF3DO7T+B5GxMC5x/YeutXUJLP06LHQ3M=;
-        b=LbV4lNahIafG1T7+taTVoZ63nJInqYp7uB2/pB+HoBgqV3X18lmZYqkm0DYi6rbZ3S
-         QOL9Lnn7A+RU/WRA2zEdRlglXxoo22JI09Icj87wyjkh4u2FnjsjBYMEF0ro+/5t+N7G
-         Wyc6POkjmFLTtWwAqq0hUmQWxFPLttSDvyvFUVA/oT0S4/2RSG7qNBYzQyTyK0bqvja5
-         J+gbHr6rqJndciF9w5gq3Zh1OSesNd7GV6DoM3VF4jG3yxuxYvuvif1BRLnsiQnkKz33
-         4+lNI8IPCj3XSL/umXOMwnn73+aJN38AMAY/svsLx6PM/GmBzgp9BL2tvLtXfuX66fxL
-         K0zA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786986909; x=1787591709;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=KoTFa2IJT7Dn6m6sQQ51SO0r0kVa/rVmT5mp9uvRqLo=;
-        b=YIZlJ2V/Poz1bJw0l1ckd5J20cp1X2uNyaDNdiXLvpy91mc1nVH/g/daW++uidNEvQ
-         C7QuBEeFAf3aMfsGGCV3bj/4xQjFbYT7Q3kyQ1jyI5m74Gd2MOE9S4wRMeRkUIFr3/2U
-         e9tDu7Ift/yFgOJzKh07ZiT8cEqdIqkR0BmVLpquY+rKCD9VMkCjKM2ZNRpwYoo6uI/l
-         OmvniNFKEkoocXJVG8ZflfgY1TfwFdccSr/ZCKtkE7vN8lwp53YM5x9wEuw9tZ483JWt
-         rJUWpFLUbKTfAZ5W8SyXytXcmSxGi40r5zRKAyEeKV1jiHCWftU3UzWA2xfNHQ2LSS6V
-         vM3g==
-X-Forwarded-Encrypted: i=1; AHgh+Rrf8doMu7qhyHTFkeEY1drW20pBm4YlvChbi+7DaD7x8MZ6lrD+f2aoqA1O+/oo7hfYgxF/7PjdezuEaMdrNVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz07FFUI64PmrL8/pw/JsihqdchkoYA21rk9UPFa1Owlar39Zu4
-	/olLMgyVUgh0xkt3o6Ah8/Xgw5ZoQM3toLr+K8YFnakY3O3du+LhhRuOLzo2UHZFGy6OM6+BIe4
-	2pMLUIAUeV8fV9ItV0F5nZqHJjdY5v3WsA+4jQ15/hOrZW6+Q4bF0AImi1ZOnvXFSw3eKvdpdCz
-	gbidXWb1ascopN0ZmkiPin8OrvKm3QgZVkkxgeXnvun189nA9qnAZwew==
-X-Gm-Gg: AR+sD110y92pd7ZzTWMtFD55xbujCpmBftV9Kfwvyo82+dkd9HioUukgPZa/DWPUr9o
-	pOsO3NprxxHW7iE7fkgd8A9/rV+B1pF8PVMIKCu3zWnSuHIUdNLhNHIiSU1i9oBaU7Sf/XS9C4M
-	vZ9YfL3kJ71SN3vR7r42DwI4ngmz4Q4CxzzJ8T71b4o5wsY62tRNOFMjvU/MtI35n910f+sV31s
-	6v3bAxMHR7E2KEY
-X-Received: by 2002:a05:6808:3502:b0:489:a387:1e29 with SMTP id 5614622812f47-4b297a4b8a8mr2209416b6e.20.1786986908716;
-        Mon, 17 Aug 2026 10:15:08 -0700 (PDT)
-X-Received: by 2002:a05:6808:3502:b0:489:a387:1e29 with SMTP id
- 5614622812f47-4b297a4b8a8mr2209358b6e.20.1786986908219; Mon, 17 Aug 2026
- 10:15:08 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ixit.cz header.i=@ixit.cz header.b="CKzoZKPd"
+Received: from [IPV6:2a02:830a:f787:8f00:d622:eaa3:3dd6:8f5e] (unknown [IPv6:2a02:830a:f787:8f00:d622:eaa3:3dd6:8f5e])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by ixit.cz (Postfix) with ESMTPSA id 94F655340C71;
+	Mon, 17 Aug 2026 19:30:42 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ixit.cz; s=dkim;
+	t=1786987842;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=dDlF5nqubTOYJbOyasb5Y1xe2nSm9uhNshmMbSKyQO0=;
+	b=CKzoZKPdRfplJP9TokbBbknVjte1vJbT9Boept5IuupB8dDTWDVxfNPgiBzBD0E8uZyY8B
+	SwL9OvySfnFEAszud7mbltdQz1E/Jrsv7/ZzD2t5CF8J4BxqPzvRYBv7KH9UxzZsGekT0z
+	jjP4P2hmjtxzfm0nYxqL64amIcOntnE=
+Message-ID: <ad9df9cc-625c-4650-8220-fd0eec734294@ixit.cz>
+Date: Mon, 17 Aug 2026 19:30:42 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260803001807.646357-1-changwoo@igalia.com> <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
- <75bbbff2-5ea5-493d-b543-ce40d968f3cb@igalia.com>
-In-Reply-To: <75bbbff2-5ea5-493d-b543-ce40d968f3cb@igalia.com>
-From: Emil Tsalapatis <etsal@meta.com>
-Date: Mon, 17 Aug 2026 10:14:57 -0700
-X-Gm-Features: AcwNN1WgYsoY-VjTAIHqOFfCfsXsbtxggdrhdfKy9FCfC4rkn4z_jRHt57GCGQ8
-Message-ID: <CAMe2y=Gm9K3cwsM7Sff3ZaKani3z4tVUQv9u1KzbetJF8OrW=g@mail.gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
- spinlock qnodes
-To: Changwoo Min <changwoo@igalia.com>
-Cc: Daniel Borkmann <daniel@iogearbox.net>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Eduard Zingerman <eddyz87@gmail.com>,
-        Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-        Shuah Khan <shuah@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-        Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, sched-ext@lists.linux.dev,
-        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-dev@igalia.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODE3MDEzMiBTYWx0ZWRfX6OrC4bNfGMSk
- 1e1A7BeIMfp0lrq47fSGasqyp7rR0IDjURiCg5PRgkswbpgg+/nq0Yym928Ni48hk47U1rmrHVI
- Ec1IUGupAcrxRbYG6YCwnb2QqTze/Rs=
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE3MDEzMiBTYWx0ZWRfX9JoYd0wP7mIn
- 8wlbV1FQTLtRmiT7Gpg962FC5PDIHgwV1wXJDmKe45iVO0a2SgCa0YuSgHz3O16jl6nKB748KiQ
- 7VMfXk2UsfIc2R5MMi7ctrkzX7q8lrUJ+soWOAg2/IJ1Dwz4ml4fnXenOSBS8iHl/JUkzhrUKwB
- iVTWHomD3TF4fO77vMerIiL9e8kYAuBOIxrCY83PJGtD/B87Ok8JZkASUo7Fu70b0vXVF6Die7B
- 12wDSaxiSCYKfP2uJH5t2xL/R6dtc5tZxVNqB51seeFnBdT/B/hAHGgvUMLXx9ieP8+JpSRaMS2
- uIF7yjCRyimlq66lbwwon48ggz3ZE29fQAlJHXV1556w5o0SJSrDyjHM+6xdD8sT0sL7XrR65Bo
- FaEqoGstzCF356mYKp3gSDFIkIskPbo8fZ8yOJCDvhyEC99J19IxZVi+ZukyNAhF6tCWMWQSrdm
- zWdon97iSR+aH4v5mAg==
-X-Proofpoint-ORIG-GUID: rYVDLs5UIcMuvMocc0AC9zIRN97m_cFk
-X-Proofpoint-GUID: rYVDLs5UIcMuvMocc0AC9zIRN97m_cFk
-X-Authority-Analysis: v=2.4 cv=acNRWxot c=1 sm=1 tr=0 ts=6a83419d cx=c_pps
- a=yymyAM/LQ7lj/HqAiIiKTw==:117 a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10
- a=VkNPw1HP01LnGYTKEx00:22 a=7x6HtfJdh03M6CCDgxCd:22 a=GbPsI2Ihf5RTnMjR_gZv:22
- a=V2sgnzSHAAAA:8 a=CWErhr8FAAAA:8 a=4OgE2WNpP8yww339eGMA:9 a=QEXdDO2ut3YA:10
- a=efpaJB4zofY2dbm2aIRb:22 a=Z31ocT7rh6aUJxSkT1EX:22 a=I-g_0vLIplkVOQ0FYkeP:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-17_02,2026-08-12_01,2025-10-01_01
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: nci: Fix wrong size of status variables in
+ nci_dev test
+To: Thomas Huth <thuth@redhat.com>, Bongsu Jeon <bongsu.jeon@samsung.com>
+Cc: Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, oe-linux-nfc@lists.linux.dev
+References: <20260710112300.512433-1-thuth@redhat.com>
+ <68b1d486-37a9-43d4-a02f-66fa4689d437@redhat.com>
+Content-Language: en-US
+From: David Heidelberg <david@ixit.cz>
+Autocrypt: addr=david@ixit.cz; keydata=
+ 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
+In-Reply-To: <68b1d486-37a9-43d4-a02f-66fa4689d437@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 17, 2026 at 9:02=E2=80=AFAM Changwoo Min <changwoo@igalia.com> =
-wrote:
->
-> >
-> Hi Daniel,
->
-> On 8/17/26 6:05 PM, Daniel Borkmann wrote:
-> > On 8/3/26 2:18 AM, Changwoo Min wrote:
-> >> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
-> >> every translation unit including it emits a copy. __weak makes them all
-> >> resolve to one instance, but bpftool gen object merges only the symbols
-> >> and concatenates each input's .addr_space.1 bytes, leaving the surplus
-> >> copies unreferenced in the linked object.
-> >>
-> >> libarena links ten such units, so nine copies were dead weight (bytes):
-> >>
-> >>    object                             before       after
-> >>    -----------------------------------------------------
-> >>    .addr_space.1 in libarena.bpf.o    676200       86376
-> >>    libarena.skel.h                   2100123      892371
-> >>    libarena_asan.skel.h              2641124     1466477
-> >>
-> >> Declare qnodes in the header and let each program define it once:
-> >> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
-> >> lock it guards.
-> >>
-> >> Tested with test_progs -t arena_spin_lock and -t libarena.
-> >>
-> >> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+On 13/08/2026 16:45, Thomas Huth wrote:
+> On 10/07/2026 13.23, Thomas Huth wrote:
+>> From: Thomas Huth <thuth@redhat.com>
 
-Hi Changwoo,
+[...]
 
-Sorry for the late reply, for the next version feel free to add:
+Hello Thomas,
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+sadly this one missed my inbox for some reason.
 
-> > This doesn't apply cleanly, could you respin against latest bpf-next?
->
-> Sure. I will send the v2 rebased on the HEAD of the the bpf-next tree soo=
-n.
->
-> Regards.
-> Changwoo Min
->
-> >
-> > Thanks,
-> > Daniel
-> >
->
->
+Could you please send v2 with added `Fixes: ` and `Cc: stable@vger.kernel.org` tags?
+
+Thanks
+David
+
+> 
+> Friendly ping!
+> 
+>   Thomas
+> 
+
+-- 
+David Heidelberg
+
