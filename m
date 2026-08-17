@@ -1,59 +1,150 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76BEC43F8C9;
-	Mon, 17 Aug 2026 15:41:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C439241D111;
+	Mon, 17 Aug 2026 15:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786981285; cv=none; b=Bsu7MjH6+SJu5jcafW5p7m3TN9tNLS/oRoP5ZZr0OzBDlc7uotFDlqZqSrL3tjBfAgnSvh0Aakxh+iooA5coOBIll2x9mvAQmjskKFGduQ+AsxYbx0yp90PhTOyF+MPhRSoAbkv6ob0O/PXGtKRtgjK8yLNU36LwFzksKv3lDFI=
+	t=1786981297; cv=none; b=pK72mzCl0NZGIzlRVPPQOIuVWC2fNy9mB48g0wDaPgweRK+tYDYoWqRdUBl4jdN0jgCAxp/S4GbywVQP6juVsC04dhuR+X55Qz/aX4tR+HpicwZLRitH+AGT1gIwuLnaiGD8yz9p2ikkEKLjiEaS+KgSTl+2k8WwKjYVMENoJXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786981285; c=relaxed/simple;
-	bh=3qYPThCtHH1kyCuyDgCTeYiyXbpv+pUU4fawM7RQa0c=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=t10tPq6Ac5M1PQ/e4RdSdkppb3u75xoyimPIaAUUSrB+1uD0NJaAeOcuttY9S5/8ESJoQUmZHsehas4LPlZUhcxNh+qNVcw9/f72uW6gGuGCyVGCrceva7V9cvfjvbM+uMBMeiATM6UGokUydu7H1gF87hzgBzxtovSPDgIMAbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XkAyF9dk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786981297; c=relaxed/simple;
+	bh=5HUYy/NWh82f6yiqf+xRP/nWbaerO9LUZNm0SRxGFPk=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Ap4HVKbxlzlSBVTWL4cielSbJF9Yr/bwFrpWelmWU/ksh35HAoxchJFIxJIp7eHEvDvcPQd0plefaOZ3Au1tmpFbWkO3Xt2VJCcGwaUegAKlB7VjzW/vC1JrEMOEyVYnWoxiFy5W5lUwneULmJEMBkNCfmflvjd96INuNeh3vJ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=TKkAfWtO; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XkAyF9dk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1CEC1F000E9;
-	Mon, 17 Aug 2026 15:41:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786981284;
-	bh=1nm8z1ScEuwdhcGe4VXXFM6xKV7SZ9R/OpCKnbX93Fc=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=XkAyF9dkN+pYMtyDNZ14DnU0azwUlCB5MdhbG3J+mIb7SJbFwatiQYtq2h+WzKeLp
-	 n7MnHHO8XnMHXAARETR31kQ+FvzhwTK6epSYkenWqQVwDHL5qW+0Zl9ivyCH01QfD1
-	 KT5lun1I9HeF4o6oqvcq9gwjdWzJDfKz0qFFG6QLFCleC/3vy2zzem5fJxPALKtB5d
-	 uGMme1TgEpPWnGC0i9PnR/5s5etJ3oEig5Ue4BwuEepZUcI/QkvrTe0hEwaajpZlV9
-	 iLey6Ih7+TmGVL6TLknTdxNcrHqgOFNli4+p9eFLg/CW9rK2Qr1nXU1X3bwPcunc6d
-	 pbieyEDgX2ghw==
-Date: Mon, 17 Aug 2026 08:41:23 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Lei Zhu <zhulei_szu@163.com>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kuniyu@google.com, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org
-Subject: Re: [PATCH net] selftests: af_unix: verify SCM_PIDFD pidfd in
- cmsg_check_dead()
-Message-ID: <20260817084123.75fbbf97@kernel.org>
-In-Reply-To: <20260817061121.239648-1-zhulei_szu@163.com>
-References: <20260817061121.239648-1-zhulei_szu@163.com>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="TKkAfWtO"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2B97F143D;
+	Mon, 17 Aug 2026 08:41:31 -0700 (PDT)
+Received: from [10.2.198.93] (e142334-100.cambridge.arm.com [10.2.198.93])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 338793F673;
+	Mon, 17 Aug 2026 08:41:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786981295; bh=5HUYy/NWh82f6yiqf+xRP/nWbaerO9LUZNm0SRxGFPk=;
+	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
+	b=TKkAfWtOltSWSxnTnHufmUnAl0SRlqrc2Q4b1aKibOPZ/oKswBZyi21DDUAVtYcIR
+	 W/dVCtxvdtwwVmh3Oa/owGE1d85PT5YKlvixIzD/iGXnSM5En8Do4TrqRjlFAfdke8
+	 73TyWn4NLReSv4KRKR6vlsrJt2nWMet3joi1y6wQ=
+Message-ID: <0b88055f-bd9e-48ea-8735-80931e80a9bd@arm.com>
+Date: Mon, 17 Aug 2026 16:41:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Cc: usama.anjum@arm.com, linux-mm@kvack.org, shuah@kernel.org,
+ david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
+ surenb@google.com, mhocko@suse.com, peterx@redhat.com,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/3] selftests/mm: restore enable_soft_offline in
+ hugetlb-soft-offline
+To: Song Hu <husong@kylinos.cn>, akpm@linux-foundation.org, rppt@kernel.org,
+ sarthak.sharma@arm.com
+References: <20260815080716.3596514-1-husong@kylinos.cn>
+ <20260815080716.3596514-4-husong@kylinos.cn>
+Content-Language: en-US
+From: Usama Anjum <usama.anjum@arm.com>
+In-Reply-To: <20260815080716.3596514-4-husong@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On Mon, 17 Aug 2026 14:11:21 +0800 Lei Zhu wrote:
-> The cmsg_check_dead() function receives an expected_pid parameter but never
-> actually verifies that the pidfd received via SCM_PIDFD corresponds to that
-> PID. It only checks the child's exit code via PIDFD_GET_INFO.
+On 15/08/2026 9:07 am, Song Hu wrote:
+> hugetlb-soft-offline toggles /proc/sys/vm/enable_soft_offline between 1
+> and 0 (test_soft_offline_common(1) then (0)) and leaves it at 0 when it
+> finishes, silently disabling soft offlining for the whole system after
+> the run.
+> 
+> Save the original value before the test and restore it from an atexit()
+> handler, so the sysctl is also restored when the test exits early via
+> ksft_exit_fail_msg(), as hugepage_restore_settings_atexit() in
+> hugepage_settings.c already does.  Use read_num()/write_num() from
+> vm_util instead of the hand-rolled popen()/fopen() helpers.
+> 
+> Signed-off-by: Song Hu <husong@kylinos.cn>
+> ---
+>  .../selftests/mm/hugetlb-soft-offline.c       | 35 +++++++------------
+>  1 file changed, 12 insertions(+), 23 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> index bc202e4ed2bd..86259921d54c 100644
+> --- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> +++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+> @@ -23,6 +23,7 @@
+>  #include <sys/types.h>
+>  
+>  #include "kselftest.h"
+> +#include "vm_util.h"
+>  #include "hugepage_settings.h"
+>  
+>  #ifndef MADV_SOFT_OFFLINE
+> @@ -31,6 +32,8 @@
+>  
+>  #define EPREFIX " !!! "
+>  
+> +#define ENABLE_SOFT_OFFLINE_PATH "/proc/sys/vm/enable_soft_offline"
+> +
+>  static int do_soft_offline(int fd, size_t len, int expect_errno)
+>  {
+>  	char *filemap = NULL;
+> @@ -77,26 +80,12 @@ static int do_soft_offline(int fd, size_t len, int expect_errno)
+>  	return ret;
+>  }
+>  
+> -static int set_enable_soft_offline(int value)
+> -{
+> -	char cmd[256] = {0};
+> -	FILE *cmdfile = NULL;
+> -
+> -	if (value != 0 && value != 1)
+> -		return -EINVAL;
+> -
+> -	sprintf(cmd, "echo %d > /proc/sys/vm/enable_soft_offline", value);
+> -	cmdfile = popen(cmd, "r");
+> -
+> -	if (cmdfile)
+> -		ksft_print_msg("enable_soft_offline => %d\n", value);
+> -	else {
+> -		ksft_perror(EPREFIX "failed to set enable_soft_offline");
+> -		return errno;
+> -	}
+> +static unsigned long orig_enable_soft_offline = -1UL;
+>  
+> -	pclose(cmdfile);
+> -	return 0;
+> +static void restore_enable_soft_offline(void)
+> +{
+> +	if (orig_enable_soft_offline != -1UL)
+> +		write_num(ENABLE_SOFT_OFFLINE_PATH, orig_enable_soft_offline);
+>  }
+>  
+>  static int create_hugetlbfs_file(struct statfs *file_stat)
+> @@ -145,10 +134,7 @@ static void test_soft_offline_common(int enable_soft_offline)
+>  	hugepagesize_kb = file_stat.f_bsize / 1024;
+>  	ksft_print_msg("Hugepagesize is %ldkB\n", hugepagesize_kb);
+>  
+> -	if (set_enable_soft_offline(enable_soft_offline) != 0) {
+> -		close(fd);
+> -		ksft_exit_fail_msg("Failed to set enable_soft_offline\n");
+> -	}
+> +	write_num(ENABLE_SOFT_OFFLINE_PATH, enable_soft_offline);
+>  
+>  	nr_hugepages_before = hugetlb_nr_default_pages();
+>  
+> @@ -192,6 +178,9 @@ int main(int argc, char **argv)
+>  
+>  	ksft_set_plan(2);
+>  
+> +	orig_enable_soft_offline = read_num(ENABLE_SOFT_OFFLINE_PATH);
+> +	atexit(restore_enable_soft_offline);
+> +
 
-this breaks the test:
+Seems good. Thanks for fixing.
 
-  (scm_pidfd.c:282: errno: None) wrong SCM_PIDFD -1 != <PID>
+Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 
-If you want to improve the test please repost this patch in 2 weeks
-after the merge window. This patch should not carry the Fixes tag.
+Thanks,
+Usama
