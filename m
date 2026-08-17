@@ -1,120 +1,156 @@
-Received: from mta0.migadu.com (out-12.mta0.migadu.com [91.218.175.12])
+Received: from mta0.migadu.com (out-19.mta0.migadu.com [91.218.175.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A729A3AEB39
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 06:20:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9988418A6D4
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 06:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786947620; cv=none; b=hmIUXFGzSr3K7EgpjNjK2G9CtI71WpeIIJyeFo8XLA4nShvaX06tq3Xwfs6YbDU6i6GPcA0sOIrW8CujlzmCudO0gx/HHneBfKxJcz8QLCpNPIX21IZw3eWfuj2c7x5blno0iD/tf6b9n4GTr4FcUyNbFI+xsinkIOjoe8SLQMU=
+	t=1786947636; cv=none; b=n15YDmQjjfJLTS2Lm4I31PrlbFaBtjU3AHlBq9KaAomwiBOfZtV6jAs549B4RbDZpg/3/fVcDSXDaAjeaJuJ+x1yQ+8eACKd8ICC4B63lCtzaXRQPBThCPrqKz/UdMHaGmc6PodKKIilQ1mpkFgxUjCP7HSqjiYsEBA3+ohXsQw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786947620; c=relaxed/simple;
-	bh=k9Hg/Aix5bXOJ45/B31jl2pbqakUepn4Yh5kPod+wDU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rIb+lHCg8/9ThVC+pz5LCMUVvebSGQbE1tFSy0nu0I9cJAVoA1UF/fIt7cU5AaFclTpA7EbwzB9eSSDWsvCCA1Qkbn7uoBYE6OY5jLu3+iCdWSnEb+BnECsHg783wJhVBuhI76hEnDW9dT4rC9rtwNxacLBRHHaCqV3+kjjMffU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZtJjXG26; arc=none smtp.client-ip=91.218.175.12
+	s=arc-20240116; t=1786947636; c=relaxed/simple;
+	bh=ZiXApMxhwMcnSZgjXgU+Hr+iwul/uOdUn6GAbgpB0KA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ry/Jla2Cfede+f7Vx+BlL6gPp8BJIT+m75dbXiWlt0wyt++wun5DNqlcRsau4JCjCnaQizGu8++S7XnPTmkL4kyfsaSHjg1nsiDygMmUjrOkwGJPwtBLijIXUGoBYk/5IU8Hkz1muSB53l3BW4uHTQIxs3CxGInoLFT1ZJAy188=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=qCCTTKZu; arc=none smtp.client-ip=91.218.175.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZtJjXG26"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="qCCTTKZu"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=k9Hg/Aix5bXOJ45/B31jl2pbqakUepn4Yh5kPod+wDU=;
+DKIM-Signature: a=rsa-sha256; bh=ZiXApMxhwMcnSZgjXgU+Hr+iwul/uOdUn6GAbgpB0KA=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786947616; v=1; x=1787552416;
- b=ZtJjXG26sMGVVKzxdBbJ8fIRgU3DCIobVeH8X8eRtvAr3xs+6Qcc7/0UNUEEGrUDB+INpLc8
- dfw1a55WGONBVbXZIikXTWcgFVc5ZyyX2BdOA4B4jfzF+9BkxXFb1KSGpoflcjlgee6aq1R1i+E
- wJCByBwYF43J/+WgSsUQCYI8=
+ t=1786947632; v=1; x=1787552432;
+ b=qCCTTKZusM0N8DOUBVyPZUwTVYhq94s6Xtw/3tibj+ECxCPsQy9mWzIFNqD2xCi5ELqmf/Ar
+ HytOTNQVi9ZOQETjJD4L+kymBlYIGjpLG5jgDzGdXCGT8Jb5EOgr+ubjcg9S/auP5xg5OSAM5EC
+ jKbILIa8wLqxmwEVIPhMIJwg=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id 5bb4235a9e59466b;
-	Mon, 17 Aug 2026 06:20:16 +0000
+Received: from [10.22.64.46] (122.11.166.8)
+	by smtp.migadu.com with ESMTPS id 154e3e38bfd820d7;
+	Mon, 17 Aug 2026 06:20:32 +0000
 X-Migadu-Flow: FLOW_OUT
-From: Hongfu Li <hongfu.li@linux.dev>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	ziy@nvidia.com,
-	baolin.wang@linux.alibaba.com,
-	liam@infradead.org,
-	nico.pache@linux.dev,
-	ryan.roberts@arm.com,
-	dev.jain@arm.com,
-	baohua@kernel.org,
-	lance.yang@linux.dev,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org
-Cc: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	hongfu.li@linux.dev,
-	Hongfu Li <lihongfu@kylinos.cn>
-Subject: [PATCH] selftests/mm: khugepaged: consolidate error exits via kselftest helpers
-Date: Mon, 17 Aug 2026 14:19:55 +0800
-Message-ID: <20260817061955.45454-1-hongfu.li@linux.dev>
-X-Mailer: git-send-email 2.54.0
+Message-ID: <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev>
+Date: Mon, 17 Aug 2026 14:20:17 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Quentin Monnet <qmo@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>,
+ Avinash Duduskar <avinash.duduskar@gmail.com>,
+ Anton Protopopov <a.s.protopopov@gmail.com>, Amery Hung
+ <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>,
+ Rong Tao <rongtao@cestc.cn>, Eyal Birger <eyal.birger@gmail.com>,
+ Pu Lehui <pulehui@huawei.com>, Jingguo Tan <tanjingguo@huawei.com>,
+ Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org,
+ linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260809150111.45000-1-leon.hwang@linux.dev>
+ <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Hongfu Li <lihongfu@kylinos.cn>
+On 15/8/26 04:14, Andrii Nakryiko wrote:
+> On Sun, Aug 9, 2026 at 8:01 AM Leon Hwang <leon.hwang@linux.dev> wrote:
+>>
+>> Similar to the tracing_multi link support for kernel functions [1], add
+>> support for bpf progs.
+>>
+>> When attaching to bpf progs, it must attaches to the target by text poke
+>> way.
+>>
+> 
+> Please spend a bit more human effort on justification for the change
+> and explaining your use case. In what case you'll be attaching to a
+> large amount of BPF programs such that attachment speed-up (if there
+> is any) matters.
 
-Replace the perror()+exit(EXIT_FAILURE) pattern with
-ksft_exit_fail_perror() so failures are reported through the
-kselftest framework, consistent with the rest of the file.
+Will update the cover letter with justification and my use case.
 
-Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
----
- tools/testing/selftests/mm/khugepaged.c | 20 +++++++-------------
- 1 file changed, 7 insertions(+), 13 deletions(-)
+Here's my use case:
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 0d6c71ed2fae..8d1b87f2195c 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -358,21 +358,15 @@ static void *file_setup_area_common(int nr_hpages, enum file_setup_ops setup)
- 		ksft_exit_fail_perror("open()");
- 
- 	size = nr_hpages * hpage_pmd_size;
--	if (ftruncate(fd, size)) {
--		perror("ftruncate()");
--		exit(EXIT_FAILURE);
--	}
-+	if (ftruncate(fd, size))
-+		ksft_exit_fail_perror("ftruncate()");
- 	p = mmap(BASE_ADDR, size, PROT_READ | PROT_WRITE,
- 		MAP_SHARED, fd, 0);
--	if (p != BASE_ADDR) {
--		perror("mmap()");
--		exit(EXIT_FAILURE);
--	}
-+	if (p != BASE_ADDR)
-+		ksft_exit_fail_perror("mmap()");
- 	fill_memory(p, 0, size);
--	if (msync(p, size, MS_SYNC)) {
--		perror("msync()");
--		exit(EXIT_FAILURE);
--	}
-+	if (msync(p, size, MS_SYNC))
-+		ksft_exit_fail_perror("msync()");
- 	close(fd);
- 	munmap(p, size);
- 	success("OK");
-@@ -447,7 +441,7 @@ static bool file_check_huge(void *addr, size_t len, int nr_hpages,
- 	case VMA_SHMEM:
- 		return check_huge_shmem(addr, len, nr_hpages, hpage_size);
- 	default:
--		exit(EXIT_FAILURE);
-+		ksft_exit_fail_msg("Unknown VMA type\n");
- 		return false;
- 	}
- }
--- 
-2.54.0
+I'm planning to enhance the function-graph feature of bpfsnoop [1]. It
+will trace all bpf progs, including their subprogs, to draw a full
+function call graph including bpf prog call sites.
+
+The attachment could speed-up when there are hundreds of targets. For
+example, on high CPU core count servers, it probably runs 200 tc-bpf
+progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
+Hence, there will be 1000 targets to trace for bpfsnoop's function-graph
+feature.
+
+With tracing_multi link support for bpf progs, bpfsnoop will be able to
+attach to all targets quickly.
+
+[1] https://github.com/bpfsnoop/bpfsnoop
+
+> 
+> Please do your homework. Generating code with AI is easy, reviewing
+
+Sure, will do my homework.
+
+> and making decisions about whether it's the right approach (and
+> ultimately supporting it long term) is still a human process, so let's
+> weigh that in.
+
+Will keep it in mind.
+
+Thanks,
+Leon
+
+> 
+>> [1] https://lore.kernel.org/bpf/20260606123955.345967-1-jolsa@kernel.org/
+>>
+>> Leon Hwang (13):
+>>   bpf: Initialize ftrace_managed in bpf_trampoline_get
+>>   bpf: Factor out update_fentry_multi helper
+>>   bpf: Drop unnecessary ftrace_location() in update_fentry_multi()
+>>   bpf: Add tracing_multi link support for bpf progs
+>>   libbpf: Add tracing_multi link support for bpf progs
+>>   bpf: Add tracing_multi link fdinfo support for bpf progs
+>>   bpf: Add tracing_multi link info support for bpf progs
+>>   selftests/bpf: Add tracing_multi bpf prog attach test
+>>   selftests/bpf: Add tracing_multi bpf prog attach failure tests
+>>   selftests/bpf: Add tracing_multi bpf prog cookie test
+>>   selftests/bpf: Add tracing_multi bpf prog rollback test
+>>   selftests/bpf: Add tracing_multi bpf prog link info test
+>>   selftests/bpf: Test tailcall with fentry.multi
+>>
+>>  include/linux/bpf.h                           |   3 +
+>>  include/uapi/linux/bpf.h                      |   6 +-
+>>  kernel/bpf/trampoline.c                       |  87 +++---
+>>  kernel/bpf/verifier.c                         |  22 +-
+>>  kernel/trace/bpf_trace.c                      | 212 ++++++++++++---
+>>  tools/bpf/bpftool/link.c                      |  59 +++-
+>>  tools/include/uapi/linux/bpf.h                |   6 +-
+>>  tools/lib/bpf/bpf.c                           |   1 +
+>>  tools/lib/bpf/bpf.h                           |   2 +
+>>  tools/lib/bpf/libbpf.c                        |  39 ++-
+>>  tools/lib/bpf/libbpf.h                        |   4 +-
+>>  tools/lib/bpf/libbpf_internal.h               |   1 +
+>>  .../selftests/bpf/prog_tests/fill_link_info.c | 170 ++++++++++--
+>>  .../selftests/bpf/prog_tests/tailcalls.c      |  62 +++++
+>>  .../selftests/bpf/prog_tests/tracing_multi.c  | 254 ++++++++++++++++++
+>>  .../selftests/bpf/progs/tracing_multi_bpf.c   |  61 +++++
+>>  16 files changed, 869 insertions(+), 120 deletions(-)
+>>  create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bpf.c
+>>
+>> --
+>> 2.55.0
 
