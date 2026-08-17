@@ -1,58 +1,35 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB383845A7
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 18:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E25E23D7DF;
+	Mon, 17 Aug 2026 19:00:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786992408; cv=none; b=kTKT+tzYD8pKf4NWJP1IJca6kVehUVPFep2MTt3e4oNRxwEkBLkyTvvlrWpisdsY0i0/B9SkyTKomjZpym0ZN/L0wGZy78/QfcKtFY4HnfuJ0HcJBo/JSEjxBLtbInZFbPNFt6Rgigo3wPfjosl4r0vsc9JNLXhFM6ThwHA8DW8=
+	t=1786993257; cv=none; b=E+ao+uqTzd2LKV3ww1MhqFdl3k8dNmBiFZyfMPfrcU7MJv9iS9+g2eQcEHhvkLQQvLxY9/jYQLqjMUU3aEQpP2ZKTHhDtGrusFW3+nL0cqJUznp8NeSdCb/zeYnXP58VvCWSpPX9+C+zSxwYwsGOfaOI9GOj295MjxBagt1rQOw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786992408; c=relaxed/simple;
-	bh=xVmHJlFrQrU+BNvTVmBFyd8+1yfvVnB4Cal9+GCRYxU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tQmPwzcYLNEsgpJ3v2jsCxUODlfLdr8Rot+gb3uRthFsUa+JZLnC1hE9EKHaTOwBrOzx01kMunUKiU3oAW8EyRlVd70esS767KJYyM9C+wjt1e+IovrPGQMDq4YvjxSL/gdEIKT5YD19F14ZlMbI6BWkDUUMvOnmW2y7ZCu1iJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=aSxVmLK4; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1786993257; c=relaxed/simple;
+	bh=5xqrS/DqHQjAddMiA1TXHoqKl01SknktJwq7pQc82L8=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DyXfrESeI9XvfAgMEJBo/qrX33NH1GV7uQnG5gjECvEDjFFBUPz7cCak9fPY2CvUVAUAZqNRIwcAQMB3X8k2pZMYoWza28TvKv6E0l8/7bFOA+0E9dlOKUqnRp/n4uHuO0CpOayfLsW5tbAFvqW4IFobWYBi/8CiSmKvir7mXh8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L2wW2PTN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="aSxVmLK4"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1786992405;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=4GlCflkteeelg4VY0ysidlGum1huGIUMb9+9VM+1VjQ=;
-	b=aSxVmLK4jR83k7DzKvVAMvTKMmOzGFY//IGdzHuSmsZWfAExD0Mo3jOmtfOVWvRXNHkVg0
-	fP5JJpdrwx53PB2KEPj4FW1x1OJlHKezm2Rvo3V9EAqeVzHwKGLaLwttJeDT/VS6IbvFf8
-	OReh3Dro2ib76155z42hfRCip7c5k9Y=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-62-MqdoLrTVN7SVLsg8DO9jFg-1; Mon,
- 17 Aug 2026 14:46:40 -0400
-X-MC-Unique: MqdoLrTVN7SVLsg8DO9jFg-1
-X-Mimecast-MFC-AGG-ID: MqdoLrTVN7SVLsg8DO9jFg_1786992398
-Received: from mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.95])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 8254E18007FB;
-	Mon, 17 Aug 2026 18:46:38 +0000 (UTC)
-Received: from thuth-p1g4.redhat.corp (headnet03.pony-001.prod.iad2.dc.redhat.com [10.2.32.114])
-	by mx-prod-int-10.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 68590423;
-	Mon, 17 Aug 2026 18:46:35 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: Bongsu Jeon <bongsu.jeon@samsung.com>,
-	David Heidelberg <david@ixit.cz>,
-	Shuah Khan <shuah@kernel.org>,
-	Jakub Kicinski <kuba@kernel.org>
-Cc: stable@vger.kernel.org,
-	oe-linux-nfc@lists.linux.dev,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] selftests: nci: Fix wrong size of status variables in nci_dev test
-Date: Mon, 17 Aug 2026 20:46:33 +0200
-Message-ID: <20260817184633.324615-1-thuth@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L2wW2PTN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A86081F00A3A;
+	Mon, 17 Aug 2026 19:00:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786993255;
+	bh=bznh0x54v18hIE4vPDAjTSnoqc+zwwjgGdRrNxOELG4=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=L2wW2PTNCqwSNtk/AFOjdVrRLUvNRKAmiAY+Db8gnd/xkdAAqlutj8051H81UkiQG
+	 6/FPJ328yX6R2G+mpCEEIyS51FqDM2c3K+RQopwrfAiiB+1qEp4BUehSlnBDJs1b0t
+	 rJPF9OqnoaAiF4XFOAUN/QTKJZbA3jCI9m2oJlkdJzdMENAJAgeH9dccTytOQYdfRJ
+	 ui84d9eVOGjCvNiYlwChIhVgsGElp9DUyRBkG0D9J6BXsJlMHdxDva9YQEFaIQWIJw
+	 EAdgQMAXFCOrJKNv0I8oqVipqMnoMVs8RxHcQWY4AiWeL6CZQUDqDbiGs7j3CkSfdx
+	 j2sKOOiuzhkGA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 198443926262;
+	Mon, 17 Aug 2026 19:00:09 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -60,90 +37,45 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.6 on 10.30.177.95
+Subject: Re: [PATCH v2] selftests/bpf: Remove duplicate copies of the arena
+ spinlock qnodes
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178699320761.1691257.15795041250819922475.git-patchwork-notify@kernel.org>
+Date: Mon, 17 Aug 2026 19:00:07 +0000
+References: <20260817160249.655916-1-changwoo@igalia.com>
+In-Reply-To: <20260817160249.655916-1-changwoo@igalia.com>
+To: Changwoo Min <changwoo@igalia.com>
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, shuah@kernel.org, emil@etsalapatis.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ jolsa@kernel.org, bpf@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
 
-pthread_join() stores the thread's return value (a "void *", i.e.
-8 bytes on 64 bit computers) into the address of "status", but the
-"status" variable is declared as "int" with only 4 bytes. The extra
-4 bytes clobber whatever is adjacent on the stack, which could
-silently corrupt other local variables. Use "intptr_t" to declare
-the "status" variables with the correct size.
+Hello:
 
-Fixes: f595cf1242f3d ("selftests: Add nci suite")
-Cc: stable@vger.kernel.org
-Signed-off-by: Thomas Huth <thuth@redhat.com>
----
- v2: Add "Fixes:" and "Cc: stable" tags
+This patch was applied to bpf/bpf-next.git (master)
+by Kumar Kartikeya Dwivedi <memxor@gmail.com>:
 
- tools/testing/selftests/nci/nci_dev.c | 13 +++++++------
- 1 file changed, 7 insertions(+), 6 deletions(-)
+On Tue, 18 Aug 2026 01:02:49 +0900 you wrote:
+> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+> every translation unit including it emits a copy. __weak makes them all
+> resolve to one instance, but bpftool gen object merges only the symbols
+> and concatenates each input's .addr_space.1 bytes, leaving the surplus
+> copies unreferenced in the linked object.
+> 
+> libarena links ten such units, so nine copies were dead weight (bytes):
+> 
+> [...]
 
-diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-index 312f84ee0444f..4e7a5856f7ea3 100644
---- a/tools/testing/selftests/nci/nci_dev.c
-+++ b/tools/testing/selftests/nci/nci_dev.c
-@@ -6,6 +6,7 @@
-  * Test code for nci
-  */
- 
-+#include <stdint.h>
- #include <stdlib.h>
- #include <errno.h>
- #include <string.h>
-@@ -404,7 +405,7 @@ FIXTURE_SETUP(NCI)
- 	struct msgtemplate msg;
- 	pthread_t thread_t;
- 	__u32 event_group;
--	int status;
-+	intptr_t status;
- 	int rc;
- 
- 	self->open_state = false;
-@@ -497,7 +498,7 @@ static void *virtual_deinit_v2(void *data)
- FIXTURE_TEARDOWN(NCI)
- {
- 	pthread_t thread_t;
--	int status;
-+	intptr_t status;
- 	int rc;
- 
- 	if (self->open_state) {
-@@ -585,7 +586,7 @@ int start_polling(int dev_idx, int proto, int virtual_fd, int sd, int fid, int p
- 	void *nla_start_poll_data[2] = {&dev_idx, &proto};
- 	int nla_start_poll_len[2] = {4, 4};
- 	pthread_t thread_t;
--	int status;
-+	intptr_t status;
- 	int rc;
- 
- 	rc = pthread_create(&thread_t, NULL, virtual_poll_start,
-@@ -605,7 +606,7 @@ int start_polling(int dev_idx, int proto, int virtual_fd, int sd, int fid, int p
- int stop_polling(int dev_idx, int virtual_fd, int sd, int fid, int pid)
- {
- 	pthread_t thread_t;
--	int status;
-+	intptr_t status;
- 	int rc;
- 
- 	rc = pthread_create(&thread_t, NULL, virtual_poll_stop,
-@@ -816,7 +817,7 @@ int disconnect_tag(int nfc_sock, int virtual_fd)
- {
- 	pthread_t thread_t;
- 	char buf[256];
--	int status;
-+	intptr_t status;
- 	int len;
- 
- 	send(nfc_sock, &nci_t4t_select_cmd3[3], sizeof(nci_t4t_select_cmd3) - 3, 0);
-@@ -860,7 +861,7 @@ TEST_F(NCI, deinit)
- {
- 	struct msgtemplate msg;
- 	pthread_t thread_t;
--	int status;
-+	intptr_t status;
- 	int rc;
- 
- 	rc = get_nci_devid(self->sd, self->fid, self->pid, self->dev_idex,
+Here is the summary with links:
+  - [v2] selftests/bpf: Remove duplicate copies of the arena spinlock qnodes
+    https://git.kernel.org/bpf/bpf-next/c/9d19ca5d0e8b
+
+You are awesome, thank you!
 -- 
-2.55.0
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
