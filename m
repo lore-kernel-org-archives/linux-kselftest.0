@@ -1,44 +1,43 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E4504B049B;
-	Mon, 17 Aug 2026 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0DBB43CEE1;
+	Mon, 17 Aug 2026 13:34:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786973082; cv=none; b=j6QJr58MQnV4SUNgXzzICLLJr6ZMEk21+LG6o38TcxgtJeOwFc22PwHcZua88ICuhc1aV2UUQvFVSiM0yzIjNFgSeE5c92tMSmrlg0YzC2h0WH5KbIgwLtP4I9Vg8qf0okRTbUX9jG+GqyeFUO5BSsIh2mNqL4Vzs8B9Wq4cmQw=
+	t=1786973676; cv=none; b=oGjdmYMe1H1oasCTB+dh1YuoiYhJ3iDs4jcmVRJzfvbdg/ok+doDuDPYivUf5t3L345v3/zhg8yG+lcqBaMHOvY4pkj7cVYvjREZsnoO6zFli/lGbBjIVA7rLw5RLmms9du+3OjL5EdORSHIPNH2rSMjNpxHCCrBcxLc/oMsyUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786973082; c=relaxed/simple;
-	bh=f1qGOe876wPJ5xU2Dfdh4M+KKQYxeSz2vJqM0CC8ND4=;
+	s=arc-20240116; t=1786973676; c=relaxed/simple;
+	bh=DE35HLqrw5s+Pl32CN1y+ua/nFvB3tTtjnBp0nLCQVg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OTdxyKsgykFYg9rLCBEryE6NZ+MvHlp6z7iP+ryQbh2BmhZzTBCwfcLPYvJTNlI9LgOVpNb1I6EaUp38fHlfVlitjyKnfCja0WBMNSI39uI8rESxqDLgxt+g+TTtShkQ1KZuW2tDoBVO5mZ+6aEieh8kNzmuNpbIz0tHoNQic+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NdAQ2Aks; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=PV4yKEC0FVwW/o4xGGwHrybQzgbpkuxL787KrPpQE6ruR3l5vgzTn0KzjHSPBALfGOB8sKm32qTNypXjeE7Yl6CfoWqLsmM4tnJ+mVncb7Jv/hweWiPXkNF2R0lI79bSVI0cU1UPMHB0KyAKqNMh8x6u8BKghisFTn8bgrsFy4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ms6QQQSo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NdAQ2Aks"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37D451F000E9;
-	Mon, 17 Aug 2026 13:24:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ms6QQQSo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E15F1F000E9;
+	Mon, 17 Aug 2026 13:34:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786973080;
-	bh=9x/I2XWbWYVR3+1LarRSMKDhXqXNMBOiaGB6WU1r3DM=;
+	s=k20260515; t=1786973665;
+	bh=DE35HLqrw5s+Pl32CN1y+ua/nFvB3tTtjnBp0nLCQVg=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=NdAQ2Akssez/QFq7vDGuffjMTVgOKwOKMnLnT2VAKtPvmg3Hiota8QE475KcxAlHX
-	 oJAB6/x1TZO537U7ykXiuoZRN+MAVmDSKqQ3eJZ/y6RH+PXcIinuRpP/WWJ1aK0fyb
-	 whbWwz8rUJaFjsfULlCaP0sKjE/5jeUbtqQ9dkxLuiQdy+dHeE52WJGYvP9OCE8Qm1
-	 f2443UmIYIdx+lGMBOV6z5YcBZk2jH8A46neza4dfJcumKHKTEI2MX44NjknJbKhkn
-	 tL2Lmn+ZMdyrgtfF6Yog99KREMCa6kml+dIKpCEtlHcsoNonc0gAACc/3bLlIs1LqI
-	 Ss6bciTfUOHig==
-Date: Mon, 17 Aug 2026 15:24:35 +0200
+	b=ms6QQQSoAYyFPE3lw6LWam82FOjo0LPAYlpaec+fO7bEgTQATQOom5O+c/5yb1gVH
+	 rSmnTvoS56YF4WWy9rcxi7tuZ7UAFYK/P6Kp+ktbOqFtG9x3QJoyvkNNtJguLajzIE
+	 XoSj0B22hOJwphJawL1XFF5OFatscng57XByMfnYHrUlaYOexvh1AhkIpiYSUUgcEu
+	 htRH4Jj64nNLOMuZ7tAbHDspuYP0Q9yGeJUXo2Ia0jssiPOjCKn81BMi+ckukT2gMp
+	 A3uf88fgSdZ7OqDncIlHD1i82mll1jyT7fNzxQamSDTLigk8S67dmvclcph7XSPqGq
+	 OqwX0l+azdOWA==
+Date: Mon, 17 Aug 2026 15:34:19 +0200
 From: Joel Granados <joel.granados@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kees Cook <kees@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jianlin Shi <shijianlin11@foxmail.com>, vbabka@kernel.org, hannes@cmpxchg.org, surenb@google.com, 
-	mhocko@suse.com, jackmanb@google.com, ziy@nvidia.com, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org
-Subject: Re: [PATCH v2 0/4] sysctl: Disallow partial updates of
- miss-formatted sysctl vectors
-Message-ID: <bhe5eoysjusfrfyv4o43lrac2tvy4bvdfzthxyp63cwg3u37kl@sh6kdfukuheu>
-References: <20260814-lklm-partial_ctlvec-v2-0-9df50d26e477@kernel.org>
- <20260814123602.ec6889355580da96958b79d6@linux-foundation.org>
+To: Bradley Morgan <include@grrlz.net>
+Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, jackmanb@google.com, 
+	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com, shijianlin11@foxmail.com, 
+	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, ziy@nvidia.com
+Subject: Re: [PATCH v2 1/4] sysctl: Split data conversion and file position
+ handling
+Message-ID: <7xr5rzlyafbbqrenxoijnuux4mt4unu3vkffcvyjaufm64bfgm@itqpdduljg56>
+References: <20260814-lklm-partial_ctlvec-v2-1-9df50d26e477@kernel.org>
+ <D5FE866D-5393-4E51-8302-E6236B0D059A@grrlz.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -46,101 +45,54 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6bqohl5pkbxvw5gn"
+	protocol="application/pgp-signature"; boundary="xhbipm257r2x7xs7"
 Content-Disposition: inline
-In-Reply-To: <20260814123602.ec6889355580da96958b79d6@linux-foundation.org>
+In-Reply-To: <D5FE866D-5393-4E51-8302-E6236B0D059A@grrlz.net>
 
 
---6bqohl5pkbxvw5gn
+--xhbipm257r2x7xs7
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 14, 2026 at 12:36:02PM -0700, Andrew Morton wrote:
-> On Fri, 14 Aug 2026 12:41:11 +0200 Joel Granados <joel.granados@kernel.or=
-g> wrote:
+On Sat, Aug 15, 2026 at 05:04:32PM +0100, Bradley Morgan wrote:
+> >Rename function to prov_vec (from do_proc_vec).
 >=20
-> > What?
-> > =3D=3D=3D=3D=3D
-> >=20
-> > Stage table->data when writing INT & ULONG ctl_tables. Commit staged
-> > data to kernel variable only when all the conversions have succeeded.
-> > This is applicable only to variables that represent a vector; paths
-> > pertaining to scalers are left unchanged. Notice that partial updates
+> s/prov_vec/proc_vec/, the diff renames it to proc_vec.
 >=20
-> "scalars"
+> Also the SIZE_MAX comment in proc_vec() only talks about the no
+> parsed element case, but after 3/4 a kmemdup failure leaves
+> left_nbyte unset too (it goes to out before buf_left_final gets
+> written). So the sentinel covers -ENOMEM as well, a line saying so
+> would help.
+>=20
+> The split itself is fine, so with the typo fixed:
 
-Will change in the cover letter (If/when I send the next version). It
-wont actually show up in upstream as this is just in the cover letter.
+This comment is more about why it is OK to use SIZE_MAX. The case where
+kmemdup fails falls into the "no elements parsed".
+
+Thx for the review.
 
 >=20
-> > can still happen if less than the size of the vector are passed and
-> > correctly formatted.
-> >=20
-> > This is the behavior we are protecting against:
-> >=20
-> >   # echo "4 4 1 7" > /proc/sys/kernel/printk
-> >   # echo "1 x" > /proc/sys/kernel/printk
-> >   -bash: echo: write error: Invalid argument
-> >   # cat /proc/sys/kernel/printk
-> >   1 4 1 7    <- the write failed, the first element changed anyway
->=20
-> I like the change.
->=20
-> > Why?
-> > =3D=3D=3D=3D
-> > Allowing a partial change to a vector after returning from an erroneous
-> > proc_handler is just plain wrong. This should be handled within sysctl
-> > to avoid users having to do it for themselves [1].=20
-> >=20
-> > Behavioral Changes
-> > =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> > 1. A failed write will not update the vector
-> > 2. Vector writes can now fail with -ENOMEM
->=20
-> Yeah, this improves Linux.
->=20
-> > Testing
-> > =3D=3D=3D=3D=3D=3D=3D
-> > This went through regular sysctl kunit and self test. Also is posted to
-> > 0-day.
-> >=20
-> > I always find it difficult to know who wants to receive this. Please let
-> > me know if you want to be removed from the Cc/To.
->=20
-> Sashiko said one thing:
-> 	https://sashiko.dev/#/patchset/20260814-lklm-partial_ctlvec-v2-0-9df50d2=
-6e477@kernel.org
+> Reviewed-by: Bradley Morgan <include@grrlz.net>
+> Thanks!
 
-The tests that keep on giving :).
-
-I'm already working on a replacement for the sysctl selftests and prefer
-to leave these as they are and address them in the new version if they
-persist.
-
-
-Thx for the feedback
-
-Best
-
-Joel
-
---6bqohl5pkbxvw5gn
+--xhbipm257r2x7xs7
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmqDC5IACgkQupfNUreW
-QU/qfgwAg3uPWRE3j+KU7ZyoYAEq0nH8bVJrKBDHKYp6XnQI2PFycst64AzCaT1X
-TDkuM/N0pKX0Ef+SwlzQkNCODa0bxzlj6SrFYNEoF/w1nvHzb9BqN3uN9Aaje9VY
-ychArGGWx2OecBzJyuyYpNuxGqiXT7A2uVyDrknaTtFqgEdIRJg+ZmC4Hk/bKQqI
-dHovH9ii3yNcnqjZaNQafdYIEIcNibLuBUyPHT3Vhv9J7aG+QaZufFlMhxGKDw4b
-wjKaGTxOLwfr9YMB6eM3cYTmxRO6LDEhVWETAAWweL0zwOO+dnSVNFXiByX71VW/
-gWY1gZpdm6Xaon5aNr2A1Ju/dAXQ6qjDIHhmuDjYjaH3iWnFmTXfIQHBxYac60m4
-JtM/Qo2Ju7Ru/fvMsud+B3myqyXwg6nD32+nViDeUbdvXhtGKv4lr6q6tfCYVR9Y
-hhAXg5c6S4HAu9H1GCivwjbd86chaFB8S9/naMKxJj+CIyfUjHSMs3WS5qITMZBj
-+C2hpnp4
-=zPyj
+iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmqDDdsACgkQupfNUreW
+QU9DGwwAicS0Z0OGIyVckHI7brK9mvqaOD7w4chOv8WkeTLatBjaqFGWXkHQj0gG
+M9VE1JaFkXvFbNf7PBvVN0+vFEZXhocsk9lapp35m/mVNCVIz5XW446pPHAKy03F
+mkQQNNGFG8Ppv+X2l7nwwIqsOONNnAcrHp3stEeHHeICw85IPrOInrKL+o/nFP7J
+J+Z9r6/JDm+u1PY0CYH9xOQjQZAlU9y5QiQrLoYCp6DYfWRVf5baQTIlhhWNxafU
+Oe0Qwu70jWAvAkHLCbG7XOF5IoF/y9k4b99/P9AWXcYaMagw1VhGS3375O1zPv0O
+m81C8Ef+y2IhRxMwoyphEr0aqKx/N5GQNjhkQQjGIj4MQh6KOxZYywmQ1+ONYXeR
+jfxeJtN5pk2ROnUlQ6HQb/g9PmvLjOkAgKoevZNZ/TD/WOScgHj/LyPCxY/SB4K3
+q9KQp6NeYVmSVI/mgOOI98EhUDIabAfsMqOnK0mAxwOm5PrVRWFwLRjd64kVfqXi
+5bSZC63m
+=ZNXh
 -----END PGP SIGNATURE-----
 
---6bqohl5pkbxvw5gn--
+--xhbipm257r2x7xs7--
