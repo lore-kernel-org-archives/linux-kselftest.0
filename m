@@ -1,319 +1,155 @@
-Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12C453BF682
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 21:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787001048; cv=pass; b=kGukc/QoMhRlXcbsZHlTDiDTbwPGxZUfkIETPRHz8k6FVdRWvsJUWZx22EB/kFxUpUtqRkF7Posg0i9+J7SmvcPqFQPC0jMJFVqTBEo0PQwpQxpEGAFPUXsyzIvlGIBaFIDhQHSPxHtWrv13m72BELyjfgSW7jBjoN+GdmVx/80=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787001048; c=relaxed/simple;
-	bh=QAx+8stP7eWiwXcVtZ6oQcPc/yneHJUDQ532rBo3tmo=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XRW30pVIUl+gHT31rgJ3KK3TELjBOtkx5Abtokf2pHkdMCmRi7zrH7jFSOOQ/+2gt23OMJxy7fFuul9+xpSupkVrZVqNpbAZpsH3KRLCYPCFSffmmEgT2+a4h45jNsBDEwZFop4pfUajGrv45UoJ8Namaq8ILjYMannvumI3oiE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=otx1ybqT; arc=pass smtp.client-ip=209.85.215.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB52C368D55;
+	Mon, 17 Aug 2026 21:24:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787001870; cv=none; b=dXdbQl1P7CWfAwuxFJZJIsL2w4IA/2U6Znt9qyMNd6LqtxRWZ7Z+d/H63k6aKmd+LXH7RXxKnxrcU3Af+iSbkMtwL6j6Oi2eqiispLXZqaK7eSqT4aR5mrbIDmkZHVD1PS7Ui3jrtzspf4QCTFJ4cy1DlDRpOgWBC2J05by1iFo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787001870; c=relaxed/simple;
+	bh=kbPccW+QV61y/fyCx4owudpniOJDfJuX2MuiNVfaQ5k=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=LrjTv1ymSzydlH3J9d9naIGm1hnINF+yxnIrmeXKtoqScmnJGcdS03FOfr/GKf3o+SwATpHG9sEjBD7r19ZC5u1vgOBmefP6CDm+Ig67zAMJ65lnD9Eo4I47Qk9boqCTs84NyuLDofQrrr4wKawr7Bf5VzTVrvIsJFCjYg9Qjz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kuJgv+9D; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="otx1ybqT"
-Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc11a30a259so2809184a12.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 14:10:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787001045; cv=none;
-        d=google.com; s=arc-20260327;
-        b=faKbLOMDttJY2Djjnu/p0jhVb/ywkW34QYlfTr0zXrwuSN7/3FNhtFyiT/2Q9ntm9t
-         ZMxr4ezE2ARFhuzWL+zUCaLC3bCVvG4MB/doKw/mRuc72oHMFshzdkV4mQ1/SPvHh8FX
-         0rQ9LV/D+hheRHKKEgCMflWlJpc9lMrrpzTTJNYYqBFbnAX8+v9mT8yA/o0PvSjT4VGS
-         +yTUItWqNNljhUX2Xv300wK2njLMj6DpeBt6cG365nGcHpZgosPCGgviAH9j2XNwFDqP
-         Fm220vcTCpGB3Etiqb3H9J1xD1GwUOThmwLsdAWrRnr/Bwepz7TY2IKOm2UTfahNnmDS
-         ijNw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=fXsAYGWxJyVowLSo+okTw01FCA+GPEAZRUERjwSXi8s=;
-        fh=+QjhvVxsgoJ0918nFJ/m305LzZknf1fYzggTCI5NjEs=;
-        b=JMbbAKaSlsAASeSu9vxIUTa89/n+byQ5hXjr5ve6Q4C/yRY9o+TczCym9rpcUr8Isv
-         hcVV+ZDjyGXrXuW/9/3fhI0qmiWZRPhygDe0JVicJlvc1mWBrs8cg+xy++zOsRQydDi5
-         wlQosJtWYZzyyib4wn7CciDVhCfhzmY3Q0dW7ztua27kotH9/ZZedh1O8Xj0E3jgZFWf
-         U+3lswaYqI+IcSwwO0YXoO47+pck3CTmdrmAKnV4qkN2M8cZ3B5EoiGYyFh5ecBqgqjv
-         9Ud7zcmKb309j7Wz+OqF7acUWi3IabDuvARugZmbjbGiRCg6gsa+/4MY/flqgYfX5RaI
-         jnWQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787001045; x=1787605845; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=fXsAYGWxJyVowLSo+okTw01FCA+GPEAZRUERjwSXi8s=;
-        b=otx1ybqTXmds0ypcCwGr28grUwyjC1BDIkhhdWe8vDVALIk+WzbBUG3A2hBmW/vwv8
-         BxaRr+/TpEKZsJr8HjbP7LwTY7oxk6MejbCeKrRBXT7e2Uo7Tq6oy38W3hoKyXeOu7Xg
-         fI7ydFHLmLPw7g0EefQ/3WfJiqCfMyvmBg4u207Jw1Yq663D3BoKx4VxwyN7N51Wz96r
-         O8YhNbWByqwcbBJH1StsiAFJ0oscfO+ykjvPlIWRHKE3TKXHuhUnIjAGUbzrbDtoRcQ0
-         cp9vnZ9Ezj+yn3DD1F+skvwtRQMLUoGny7Dq8qastdwMbRCg/gMNtWMOqcBX7s5o7lJz
-         h9XA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787001045; x=1787605845;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=fXsAYGWxJyVowLSo+okTw01FCA+GPEAZRUERjwSXi8s=;
-        b=QN64OHjqbBUyJ6qvmj36LhH2BjYdiUVZMk4Iz3NQPWAfEEWOL1Ee49g4B60qCWuym/
-         +S+XpeH9f+uJI8xfzMyu1emPop9rw6YlyVPuJmmmqJ9XwDG9niJLjOb2r6rFVafE+/Yx
-         UuUK845SmaW3hSaGbORdnzUzs3t/Jln1PDTpM1TwA6f+l4Spx43cDce+3sI+A9XJiRQu
-         f7CPYhWcIonkW5S4nW/mL+lDyxPf+L73p7o84wufbbYDJ4lL0yu/dwDNv9qMw2w8wlHT
-         6UWAqGwYAnenDDBdr/9yDICV2lYCLzbFwCogdb6efJNunxGH5RTu5DjT9BJ8daYbsc4N
-         4YGw==
-X-Forwarded-Encrypted: i=1; AHgh+RqNiOGhNUGmAU45nNIfADyvNAHRGAfp1myk/iapDv3JxMITeWyYQS3noQHsu7C3jkyB9SYXwbw/Yv6e0T5MTrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyah1g3+0nOergX/cJ7VnNTG+t2gq2oLt95HQXuD3/XP5ulpHTN
-	vmxuCtqK8CDEtovbFq5SufrAiPBcdstHV/Udo0voBksdVl0hvoo0WP1EGK2vLtmDcR9nyvEPGyP
-	ksO4shlnGn7jy4/v+FSokH6zrN/QLuVkUA9f9LBWo
-X-Gm-Gg: AR+sD1091tAG4+0XxvtZY/806RwnndvBjL2yRxuBgwwoeRrrLtuaH+jnajCPDDUSxg9
-	gmkhsoo2KcMeWDEhmZCsFMdQhev8HFHyaQzw+jk3GlYkTD8qxUXI7AhesJMCAEWjnsZMt77YupB
-	GrmFFUXdgxUik0SUD+JF5HQAlvM6SEhBDeRcR1m5mKL2NQCKUfi1nEdLxtKEnmPVL5vG+nPPIi1
-	bA2TzqJBSUtjKYKSO01qVBzl93EtdaKO+9SlxAMJS1M2HKYx3P38JLN4JtgrB7OquiXuqgy1I8G
-	7s3lNlvu1mpNtaMypl5q9sPynYHeUY4Y3gEw796XP4lu+XA98GlIVMVn/jtIM77b6IX94DHAxur
-	Y7A==
-X-Received: by 2002:a05:6a21:3398:b0:3bc:5284:5445 with SMTP id
- adf61e73a8af0-3cc71d53eacmr29096172637.21.1787001044531; Mon, 17 Aug 2026
- 14:10:44 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 17 Aug 2026 14:10:42 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 17 Aug 2026 14:10:41 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <aoNlZRb5SV7hyNuk@google.com>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
- <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com> <an3o4h-E8mj6CUaM@google.com>
- <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
- <an5AcEG9mqDgnBYk@google.com> <CAEvNRgE+05c9U8C=Zkm1S9hLw3Lw6YMmijZhEe7J4rYQAuNyEw@mail.gmail.com>
- <an8umm0qisEidt4n@google.com> <CAEvNRgFNCDDSeuvbwj7pD_d18o1TBXo4TNR2dXHxpm18KPfR5A@mail.gmail.com>
- <aoNlZRb5SV7hyNuk@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kuJgv+9D"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC9771F000E9;
+	Mon, 17 Aug 2026 21:24:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787001869;
+	bh=JPWFiiWpWuYqUJtssk/3YG6PQ6MgjeMs26B9Kg+RJr8=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=kuJgv+9DjVCx51oPPrLF8/aKD5jBXzbaWZixBYQV0AwIvMk3RV7NN48sZDqaiJPea
+	 sHic0fDkIx2L15xz/+P9b/N+qyQyKdXr50URnpQ6URjXppbk22SCtC3g13ITQoMbet
+	 GI7VwTGxA4IGW8tMS54PBiLIYEiL1Ik8l+gmi2w3X8fSoRSioQMntjo7vsncx8HT62
+	 uKnl6vnqJ+G2ZUfHS+aVWWQJ5wuonRpHgbfwimAh9aJKnXwsCik6kBu64rAX+GF8TZ
+	 lA0/KWXUaEkF6LWP57e0am2aEc316VgiGMPW27Lk7mLrJ4oyHgGxZ9kkxW3LyZjNpi
+	 23KMBdNvF9uqg==
+Content-Type: multipart/mixed; boundary="===============8274770517646471948=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 17 Aug 2026 14:10:41 -0700
-X-Gm-Features: AcwNN1XkDnEKM5GNqm9LOem-ACT2KBKH21AQXps-0CKMqEJi94nO9ANnicdLg5A
-Message-ID: <CAEvNRgEojt8Kpot9VaFUyVbVH5QVEdW-TgQUbVnpVCNzFtdVag@mail.gmail.com>
-Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
- callback for to-shared conversion
-To: Sean Christopherson <seanjc@google.com>
-Cc: Binbin Wu <binbin.wu@linux.intel.com>, aik@amd.com, andrew.jones@linux.dev, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev, Fuad Tabba <fuad.tabba@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
+Message-Id: <43ebb3103b9f3c2ab8e5323a70262d80679c84389aebdf9980ec99217ead1271@mail.kernel.org>
+In-Reply-To: <20260817204812.1637171-3-Jeremy.Jean@oss.cyber.gouv.fr>
+References: <20260817204812.1637171-3-Jeremy.Jean@oss.cyber.gouv.fr>
+Subject: Re: [PATCH v2 2/2] selftests/bpf: add callback stack-argument rejection test
+From: bot+bpf-ci@kernel.org
+To: Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,yonghong.song@linux.dev
+Cc: bpf@vger.kernel.org,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,Jeremy.Jean@oss.cyber.gouv.fr,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Mon, 17 Aug 2026 21:24:28 +0000 (UTC)
 
-Sean Christopherson <seanjc@google.com> writes:
+--===============8274770517646471948==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Sun, Aug 16, 2026, Ackerley Tng wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->>
->> > On Thu, Aug 13, 2026, Ackerley Tng wrote:
->> >> Sean Christopherson <seanjc@google.com> writes:
->> >> > That's why I think it's worth analyzing the cost: if it's in the
->> >> > noise, leave it alone.  If it's meaningful, figure out a not-too-gross way to skip
->> >> > the entire thing if kvm_arch_gmem_make_shared() is a glorified nop in the end.
->> >>
->> >> Is noise defined relative to the entire conversion process? Would this
->> >> benchmark look like
->> >>
->> >> 1. Convert 4G to shared on TDX with CONFIG_AMD_SEV defined
->> >> 2. Convert 4G to shared on TDX without CONFIG_AMD_SEV defined
->> >>
->> >> and then compare the difference in time taken?
->> >
->> > That'd work, though I was envisioning something even simpler: use rdtsc() to
->> > count the cycles it takes to iterate over various ranges of memory.  Do whatever
->> > is easiest for you though.
->>
->> I made some changes to add rdtsc() for the conversion process as Sean
->> suggested [1], and exercised conversion like this [2]:
->>
->> 1. Initialize some memory as private
->> 2. Get the guest to fault them into Secure EPTs
->> 3. Converts the memory to shared <<== this is being benchmarked
->> 4. Converts memory back to private
->>
->> I made it build the VM once and convert 5 times:
->>
->> ./gmem_benchmark_tdx_convert --iterations=5 --size=1g
->
-> ...
->
->> And here's the above, tabulated:
->>
->>   nr_pages      make_shared            total    percentage
->> ----------  ---------------  ---------------  ------------
->>          1              930            39278       2.3677%
->>          1              252            28060       0.8981%
->>          1              176            26952       0.6530%
->>          1              176            27038       0.6509%
->>          1              176            26980       0.6523%
->>          1             1072            37236       2.8789%
->>          1              316            28338       1.1151%
->>          1              176            27182       0.6475%
->>          1              176            26972       0.6525%
->>          1              176            26886       0.6546%
->>     262144         15041018       6616067680       0.2273%
->>     262144         14937462       6608542680       0.2260%
->>     262144         15138858       6599494898       0.2294%
->>     262144         15721972       6610219850       0.2378%
->>     262144         15000406       6615114540       0.2268%
->>    1048576         61902982      26400884028       0.2345%
->>    1048576         61746114      26401170984       0.2339%
->>    1048576         61096794      26404409058       0.2314%
->>    1048576         61446290      26447461896       0.2323%
->>    1048576         61774646      26444608360       0.2336%
->>
->> Looks to me it is within noise.
->>
->> I also actually tried measuring the conversion time from userspace with
->> CONFIG_AMD_SEV enabled and disabled. Converting a 1G-sized TD was faster
->> by 0.2%, which is in line with the above table. Interestingly, when
->> converting a 4G-sized TD, skipping kvm_gmem_make_shared() was _slower_
->> over 2 runs. I don't have an explanation for that.
->
-> Might be some cache/memory locality benefits?  Though with a conversion that big,
-> it could also be nothing more than bad luck.
->
->> I think the code was correct. (If it makes a difference, I skipped
->> kvm_gmem_make_shared() using a custom guest_memfd creation time flag and
->> skipped make_shared if the flag was set on the inode.)
->>
->> I thought adding a kvm_arch_has_gmem_make_shared(), defaulting it to
->
-> I would do kvm_arch_has_gmem_convert() for consistency with the Kconfigs, and
-> because the cost of the reclaim invocation is a non-issue.
->
->> false for all archs and having x86 override with
->> !!kvm_x86_ops.gmem_make_shared is not too bad either:
->> + doesn't leak anything, since the function being called is
->>   kvm_arch_gmem_make_shared and the accompanying function is
->>   kvm_arch_has_gmem_make_shared. Or maybe just a little, since all the
->>   other ops don't have the accompanying _has_ function
->> + it's a kernel-internal thing
->> + not too many lines of code, not too complex
->
-> It also provides a good excuse to kill off the #idfefs in guest_memfd.c.
-> Compile tested only, but I'm thinking this?
->
-> From: Sean Christopherson <seanjc@google.com>
-> Date: Mon, 17 Aug 2026 12:31:50 -0700
-> Subject: [PATCH] KVM: guest_memfd: Optimize away conversion overheads via
->  dead-code elimination
->
-> Add and use kvm_arch_has_gmem_convert() to guard guest_memfd's invocation
-> of arch hooks related to converting memory between private and shared, as
-> only one half of the x86 CoCo duo needs the runtime hooks (any pre-work is
-> pure overhead for TDX).  At this exact moment, the overhead is negligible,
-> but that will change when in-place conversion comes along, at which point
-> to-shared conversions will "need" to find all affected folios prior to
-> calling into arch code.  In quotes because very technically that work could
-> be pushed to arch code, but that would bleed guest_memfd details into arch
-> code and would be far worse than adding yet another kvm_arch_has... hook.
->
-> Opportunistically provide the kvm_arch_gmem_make_private() declaration, and
-> rely on dead-code elimination to eliminate the call to non-existent code
-> when CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT=n.
->
-> Reported-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Closes: https://lore.kernel.org/all/1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com
-> Suggested-by: Ackerley Tng <ackerleytng@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/include/asm/kvm_host.h | 3 +++
->  include/linux/kvm_host.h        | 3 ++-
->  virt/kvm/guest_memfd.c          | 5 ++---
->  3 files changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 283847619ff8..5d5a7723abb6 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1854,6 +1854,9 @@ enum kvm_intr_type {
->  #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
->  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
->  #endif
-> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> +#define kvm_arch_has_gmem_convert() (!!kvm_x86_ops.gmem_make_private)
-> +#endif
->
->  #define kvm_arch_has_readonly_mem(kvm) (!(kvm)->arch.has_protected_state)
->
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index 03bfc92864b6..e824ba59c60c 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -2599,9 +2599,10 @@ static inline int kvm_gmem_get_pfn(struct kvm *kvm,
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> index 7e0ce5db28a0..50b276fc2c3f 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> @@ -27,6 +27,13 @@ static int subprog_7args(int a, int b, int c, int d, int e, int f, int g)
+>  	return a + b + c + d + e + f + g;
 >  }
->  #endif /* CONFIG_KVM_GUEST_MEMFD */
 >
-> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
->  int kvm_arch_gmem_make_private(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->  			       kvm_pfn_t nr_pages);
-> +#ifndef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> +#define kvm_arch_has_gmem_convert() false
->  #endif
+> +__noinline __used
+> +static int callback_9args(__u32 index, void *ctx, long a3, long a4,
+> +			  long a5, long a6, long a7, long a8, long a9)
+> +{
+> +	return a9;
+> +}
+> +
+>  __noinline __used
+>  static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
+>  {
+> @@ -79,6 +86,31 @@ __naked void stack_arg_two_subprogs(void)
+>  	);
+>  }
 >
->  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index b596486d184c..39d94938b5f6 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -773,11 +773,10 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
->  		folio_mark_uptodate(folio);
->  	}
->
-> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> -	if (kvm_gmem_is_private_mem(file_inode(file), index))
-> +	if (kvm_arch_has_gmem_convert() &&
-> +	    kvm_gmem_is_private_mem(file_inode(file), index))
->  		r = kvm_arch_gmem_make_private(kvm, gfn, *pfn,
->  					       (kvm_pfn_t)1 << *max_order);
-> -#endif
->
->  	folio_unlock(folio);
->
->
-> base-commit: 1b731e5ded480bd1e5546aed35584238661ce72e
-> --
+> +SEC("tc")
+> +__description("stack_arg: callback with incoming stack args")
+> +__failure
+> +__naked void stack_arg_callback_many_args(void)
+> +{
+> +	asm volatile (
+> +		"r6 = 0;"
+> +		"*(u64 *)(r11 - 32) = 0;"
+> +		"*(u64 *)(r11 - 24) = 0;"
+> +		"*(u64 *)(r11 - 16) = 0;"
+> +		"*(u64 *)(r11 - 8) = 0;"
+> +		"r1 = 1;"
+> +		"r2 = %[callback_9args];"
+> +		"r3 = 0;"
+> +		"r4 = 0;"
+> +		"call %[bpf_loop];"
+> +		"r0 = 0;"
+> +		"exit;"
+> +		:
+> +		: __imm_ptr(callback_9args),
+> +		  __imm(bpf_loop)
+> +		: __clobber_common, "r6"
+> +	);
+> +}
 
-I'll inserted this as the first patch for v11.
+A subsystem pattern flags this as potentially concerning: the test
+appears to be rejected by a pre-existing verifier check even without
+the kernel change it is supposed to cover (9b1ccc65b120 "bpf: reject
+stack-argument callback subprograms"), so it may pass on both a fixed
+and an unfixed kernel.
 
-Then, the later patch "Call arch make_shared callback for to-shared
-conversion" is now:
+On a kernel WITHOUT 9b1ccc65b120:
 
-	if (!to_private && kvm_arch_has_gmem_convert())
-		kvm_gmem_make_shared(inode, start, end);
+The four `*(u64 *)(r11 - N) = 0` stores in func#0 go through
+check_stack_arg_write() which records `subprog->max_out_stack_arg_cnt = 4`
+for subprog 0. The only call in func#0 is the helper `bpf_loop`. Helper
+callback dispatch goes through push_callback_call(), which never updates
+`caller_info->stack_arg_cnt`. Only check_func_call() (pseudo-call to a
+real subprog) and check_kfunc_call() do that accounting. func#0's own
+arg_cnt is 1, so bpf_in_stack_arg_cnt(subprog 0) == 0 and
+subprog_info[0].stack_arg_cnt stays 0.
 
-kvm_gmem_make_shared()'s definition is still guarded by #ifdef
-CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT, and there's still a stub for
-kvm_gmem_make_shared() since kvm_gmem_make_shared() is defined and used
-in the same file and the optimizing out only happens later.
+At the end of a successful verification, bpf_check() calls
+bpf_fixup_call_args(), which computes for subprog 0:
+
+    outgoing = subprog->stack_arg_cnt - bpf_in_stack_arg_cnt(subprog) = 0 - 0 = 0;
+    if (subprog->max_out_stack_arg_cnt > outgoing)   /* 4 > 0 */
+            verbose(env, "func#%d writes %u stack arg slots, but calls only require %u\n", ...);
+            return -EINVAL;
+
+The program is refused with -EINVAL regardless of the new check.
+
+The four r11 stores are not optional: they are needed to get past
+check_outgoing_stack_args() which returns -EFAULT for uninitialized
+incoming callback slots, and push_callback_call() propagates -EFAULT.
+So any program shaped this way trips the pre-existing fixups check, and
+the shape that would actually load on a pre-patch kernel (and produce
+the KASAN OOB described in 9b1ccc65b120) additionally needs a
+same-frame pseudo-call to a >5-arg subprog so that
+subprog_info[0].stack_arg_cnt matches max_out_stack_arg_cnt.
+
+Additionally, discrimination is impossible as written: this is the only
+`__failure` case in the file with no `__msg()` (compare other failure
+cases in the file), and test_loader.c only asserts that
+bpf_object__load() returns any error. The new kernel check returns a
+bare -EINVAL with no verbose() output, so no __msg is even available.
+
+Could the test be strengthened to ensure it actually exercises the new
+check rather than a pre-existing one? For instance, by adding a
+same-frame pseudo-call to match stack_arg_cnt, or by adding a __msg()
+directive once the kernel patch includes a distinctive verbose() message?
+
+> +
+>  SEC("tc")
+>  __description("stack_arg: read from uninitialized stack arg slot")
+>  __failure
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32068993990
+--===============8274770517646471948==--
