@@ -1,123 +1,74 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D6E43A9627;
-	Mon, 17 Aug 2026 10:27:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5CE3264D6;
+	Mon, 17 Aug 2026 11:17:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786962427; cv=none; b=R9BxaF2z10b6ZTINBB/TNsDyct1mxSeqHpMqMePf2QOF3Z1dPU2O82QbvpmBA7lyo+hpdMvN9v/UWuUdT4nL7JARmEqXFIcMyppySnphNhlcVFmt8g5DUYZcU/p9X7HQdk0RTI6+a6+3MSg5ptqUfSO7uBlltl5FN0kV2LqwesY=
+	t=1786965451; cv=none; b=BtaMzT+QlfW9Eybpjoy75z3aEKTAatJDs0VeqmuiaauP6UU6aFS2hGs8zEPzaoahUkM+KzG+P3cjd1JFHJ6p8BiM4f30HYxkfbMmmL7LL1UVIrzzwCbtPSJgt3k7hT4uDdtRi8tvK3gu4O32bLkeFlrCslQkrGyBw2EliWSwOV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786962427; c=relaxed/simple;
-	bh=6asVjeYgrsRvpSFd4NODZyK/+aGlP6Tbbrh5c0GtcHo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=rbogsptmRcCEZOMtKCWkkcE0TldNK3sFZ+tLRvULufXhurq2W7T4PPtaHTtWEKNt7IH8khSVyjzcE79dWebaVvT/VqtAyJvsF9yQcK5n2530myoINaujdeOcMUtoj8Wscuys7gBmgOXL/cddC12wzlQDlBiS1GUda+dWXrWX2Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=l2JVTXmu; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786965451; c=relaxed/simple;
+	bh=Ihaz1lvEWL7Y8D1yiNDDGHVJcGEGy6cnTDk23qn6VkI=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PmyEOGmsr5++ZfG6J5k/8samWsd8Uu2ViOaNAjydEIJSbxeEczmvLIspRdIvUVB1WscRROIYFdd36IfXluRk4/sMiNRcYxnbB3HVIt8/ei9BuiIBnQ7iZHEPUcPom6nKj3BTZcwJv5wsI5WyrJ/zg7QvgmWsjcX3+kyylHiD19E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Y0B/COY/; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="l2JVTXmu"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=1M26PH9RZ7Rso30q/85Ralpwk9Ge6mES02l72QbVED4=; b=l2JVTXmuHFUWPj/BsRUPZRTpXR
-	IMLZunU5ZhHDsCTQNB+3wJnm/J2ySAGUl9cNkRMoVyc2WYO2RKC4rS+MZBXVtDCUhPiVrP8vtAkH/
-	W8nHr5uV5I6FxPBbsu18S9yvQegk0A6tpCvnjJD8t2/V3f+CLPWLMcub0xy4niSIRiNnHPt5sWo6a
-	ac1aOYRLVTlatwcXogJ5M29AipcSuzhtsr/85HHjgVVsAKcxRqZZnK5drb/HnMxabgLdLh3IHlb0d
-	4M6ajsy0N2xQ/jhSaIMpPeIvF9YEBsXGkXb9aTosJMpmSIbiw0qNExlrOUNHtSsD/1jE6rsvP8XUY
-	BEM60SSA==;
-Received: from sslproxy06.your-server.de ([78.46.172.3])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wvuYV-000723-16;
-	Mon, 17 Aug 2026 12:26:59 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy06.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wvuYU-000Gg6-0i;
-	Mon, 17 Aug 2026 12:26:58 +0200
-Message-ID: <0d0b440d-423f-4f31-8726-98ac755e7501@iogearbox.net>
-Date: Mon, 17 Aug 2026 12:26:58 +0200
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Y0B/COY/"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 442961655;
+	Mon, 17 Aug 2026 04:17:23 -0700 (PDT)
+Received: from e127648.cambridge.arm.com (e127648.arm.com [10.1.39.91])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id B62053F66F;
+	Mon, 17 Aug 2026 04:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1786965447; bh=Ihaz1lvEWL7Y8D1yiNDDGHVJcGEGy6cnTDk23qn6VkI=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Y0B/COY/oPRfw9bUrSkFf7ewwB6s6B3IZArI/ntGGbcSrH4dr/8pJ1Lup0WakkNI6
+	 CL5AAfqeINTfddxzAZjfieHrXynsK2jcb5G+eiC4jiAxjCXcYjNZwBxRLVGcWX9K2p
+	 Z+mQYmHAsJVfPcozLdgcKu2PTbou8MHDRHRUqMWw=
+From: Christian Loehle <christian.loehle@arm.com>
+To: Shuah Khan <shuah@kernel.org>,
+	linux-kselftest@vger.kernel.org
+Cc: Rama Krishna Katta <ramakrishna.katta@arm.com>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Gregory Price <gourry.memverge@gmail.com>,
+	Kees Cook <kees@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Andy Lutomirski <luto@kernel.org>,
+	Gabriel Krisman Bertazi <krisman@collabora.com>,
+	linux-kernel@vger.kernel.org,
+	Christian Loehle <christian.loehle@arm.com>
+Subject: [PATCH 0/3] selftests: Skip SUD tests when unsupported
+Date: Mon, 17 Aug 2026 12:16:08 +0100
+Message-Id: <cover.1786965107.git.christian.loehle@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
-To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <jeremy.jean@oss.cyber.gouv.fr>,
- Pu Lehui <pulehui@huawei.com>
-Cc: Yonghong Song <yonghong.song@linux.dev>,
- Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
- <8331116a-2a90-4342-a1d2-bd3a97bebb73@huawei.com>
- <ccea81b198d7a1a92ff4b4827465c9b0@oss.cyber.gouv.fr>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <ccea81b198d7a1a92ff4b4827465c9b0@oss.cyber.gouv.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
 
-Hi Jérémy,
+Syscall User Dispatch (SUD) is unavailable on architectures without
+generic syscall entry. Such architectures return -EINVAL for otherwise
+valid SUD prctl and ptrace requests, which the SUD selftests currently
+report as failures.
 
-On 8/17/26 12:04 PM, Jérémy Jean wrote:
-> On 2026-08-17 04:16, Pu Lehui wrote:
->> Just took a look at stack args feature. The limit looks good to me, but it would be better to split the fix and selftest into two separate patches.
-> 
-> Thanks for the feedback.
-> Do you want me to do the split, or will you do it?
-Please send a v2 with the split, so it can go through BPF CI again.
+Probe SUD with a valid disabled configuration and skip the affected tests
+when that probe returns EINVAL. Unexpected errors remain failures, and the
+existing coverage is unchanged on kernels that support SUD.
 
-Thanks,
-Daniel
+Christian Loehle (3):
+  selftests/ptrace: Skip get_set_sud if SUD is unsupported
+  selftests/syscall_user_dispatch: Skip tests if SUD is unsupported
+  selftests/syscall_user_dispatch: Skip benchmark if SUD is unsupported
+
+ tools/testing/selftests/ptrace/get_set_sud.c  |  8 +++++
+ .../syscall_user_dispatch/sud_benchmark.c     |  9 +++++
+ .../syscall_user_dispatch/sud_test.c          | 36 +++++++++++++++++++
+ 3 files changed, 53 insertions(+)
+
+
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+-- 
+2.34.1
