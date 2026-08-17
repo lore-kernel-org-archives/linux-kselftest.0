@@ -1,139 +1,186 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f199.google.com (mail-pf1-f199.google.com [209.85.210.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F3E344E678;
-	Mon, 17 Aug 2026 20:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0743E233944
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 20:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786997648; cv=none; b=ktjAchPv+59lZVvSffKJXVF5nt1W6l/U/tWwpK3VTOakTsxGxMv8725l9yg/gsTZwy8v7Eat3eE7urVABuNyRX7mtdPeqBe+6VCDBfdlLEdDVxtASwG6mRwqM/fhVewbxJWyJDty8FY1Qz4xr6K4YsSS9d7acXc1QKaj0r6SLRA=
+	t=1786997765; cv=none; b=uxMM6zdnZUasl8sPny03a8XtCevA6pgD7j2jKaSsydFANpxtpf6nHfMWukZHK3v7x5ebr/uZecepQAYUcnJs9JJNgMyg4bvrlHkCLGEhdkDyd1ziLZ0yPzAyx90ZDBuUEK5elbdlkmJC+aLase4hUCwmTyIkqtwI4G5oqMlfeXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786997648; c=relaxed/simple;
-	bh=MKAJTs4N20chRMx11ir24sEGxfvLBVvzTI4RLgwfzK8=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=E5a/VvVrFm75yeKslDqukiPC99lWBA3AWbTgCQp4ob/a+lH/laWsPlcakmcC+9iU2MlIX46RAowq6Trqc2vZqZWgw24z8/7P2ldAZr4atYepgRnd152AUoDSbFMnfcbPGiFfdRJlKNPdPzaEkiFqs8/Bb0DrV26gAqSN5Gvdg2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCtGvW0U; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786997765; c=relaxed/simple;
+	bh=96dbgiVKcPgmawUI6sGTdHoa9bVbE5/KNwSLUHv2lOM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=Za+x5O2v9NKuPcMFSIB8ENNpTWHzlOalZkNOLnC6G9mWwKsUFAU83GGjChWb3gfHBPXhRBQYxCjqGEIEEgpekiRhX6uIBGA2b1JTlVMiX8op546EG+cf6JGija3l1xDwD7ia12bm1C6jCXjiiNkI9I4MRvJSGn1sEFt0lfKfPMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mf+aBOiY; arc=none smtp.client-ip=209.85.210.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCtGvW0U"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3437C1F000E9;
-	Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786997647;
-	bh=sm5ecoGDsVrlrsmLrRZTgm/GCM0BDVcP6qlE+u0dDto=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=WCtGvW0UxYn14utiR4TdgB2fCAiK6EmTM/m/B5V2HpCDGwIIBDobjSqww27mX8v+W
-	 uG7Gwz2XUhx6H/we9vg9GGgKFKeXDgppQuEnH9jMCSrjuiWEfKoks7izsp7xb74kUS
-	 SlklJMJBsXoxc3/WG3da5jkFDEDDjpaOtPGLp3VhatmPkpbhk64z1UjX+GTVIwny9x
-	 KubfHxoPSy8W/kee0dlZ5j2neBvxePX7c/uoivNSxisp+zmFFWZTwlk0ZQGyUTTNxT
-	 ggsNb1YqHai2IlhPW0S7QStBXw1WUFrH8+gaUc1+DPxtMvAX0Q262X431qDVCol0IQ
-	 kJOXxFFWtrBVw==
-Content-Type: multipart/mixed; boundary="===============7027275377149721589=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mf+aBOiY"
+Received: by mail-pf1-f199.google.com with SMTP id d2e1a72fcca58-84e4ef9a74aso6966519b3a.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 13:16:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1786997763; x=1787602563; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=wIaLcIcx0/JCu0rIvBOyaVIEo2fmoa+vo14Zh85W4qc=;
+        b=mf+aBOiYPmmjMltamvf9UoIZifYnOcfy5V4LflDwOdezBFTVSds6OBc65o7bhxkH6j
+         8pjnycolfIxw7n3s+OR+a7hSf5/UjY+xSB5CYUhSXPvLWn4xupRRWexImdIUUXkGQXej
+         Ctpn+sGP63EVGY7tmV/VbU/6w9YgKpXf+28wNoiTYwRYPY2iCwHJrrkQzJfvqiVYQl/M
+         Gmikew0ncjQVrSrYn98gMKyMlMt/wcJvLWz5lZ5ABqVjRbs9YwBIhMJQIM+MZMEce6AH
+         mx4fq6mMrMrMTJfgJXO0RZMM1t0UFMbBnVXC3IssQVReiR0ulQs98SnMglIbrHwLlBmF
+         609w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1786997763; x=1787602563;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=wIaLcIcx0/JCu0rIvBOyaVIEo2fmoa+vo14Zh85W4qc=;
+        b=JZJ9OYHeZSH3XyKS896O1KKUZ0CIMBuHm6ICPT9c56+j0ks8ceEUdJLwuSj13ZrFhL
+         SluEnGOoUqSz+XXa+Wr7DPwmyWmc7TZ2VIyiohK41gRXFjZbYNGtonuT6CV2BfXwaVys
+         eBeB2R6EgUTcyK37y0BR5BLpKtkYarfP5FACT1l0rC1Wv/Zehqmc41BQmEDAy/c8zjM4
+         STgx/P6UyhOQ1Xd1En4Ta8Iu+XWxzay5QFLK/jLaOd/1IZFxJHyNi9pklQPZ8HLaItG5
+         zR587nnnblKBHP6x3884hTRAr8cZTZ5v3Cn5oYSpEj+VPY0abShxCEspewy2M9z5b6VJ
+         KnLQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqrMNBkDIvfbZvwESll6Dm+c0H4HzIMtu/THhH/uFMPTP3edx2IeW3zwTM/q7HLd6XFRrpuq4U/sKFGTegYiDM=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzy0YLdSKqtVQuX7jBKdhTGfMRnm3BwsVPGAoHl8tJKJQr337Bw
+	zbImLAV86f/tvINM2AdvkKw/MWTY//T72aoTZiOaN7M2UPEqIQMXvWN4OB8dGv2HonLgLmoNd+5
+	a/7HllQ==
+X-Received: from pfh39.prod.google.com ([2002:a05:6a00:12e7:b0:84e:24a3:b91c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3016:b0:848:5540:2377
+ with SMTP id d2e1a72fcca58-84fde13600amr27080475b3a.17.1786997762969; Mon, 17
+ Aug 2026 13:16:02 -0700 (PDT)
+Date: Mon, 17 Aug 2026 13:16:02 -0700
+In-Reply-To: <aoNlZRb5SV7hyNuk@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
-In-Reply-To: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
-References: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
-Subject: Re: [PATCH bpf v6] selftests/bpf: allocate a larger timeout for connection
-From: bot+bpf-ci@kernel.org
-To: alexis.lothore@bootlin.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org
-Cc: ebpf@linuxfoundation.org,bastien.curutchet@bootlin.com,thomas.petazzoni@bootlin.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ihor.solodrai@linux.dev,alexis.lothore@bootlin.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 17 Aug 2026 20:14:06 +0000 (UTC)
-
---===============7027275377149721589==
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-12-2fc18ee6d3ba@google.com>
+ <1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com> <an3o4h-E8mj6CUaM@google.com>
+ <CAEvNRgGpCVCGVjc9jCt9Yr+XypF=71h6eBahkXNkrXhfrtGY+g@mail.gmail.com>
+ <an5AcEG9mqDgnBYk@google.com> <CAEvNRgE+05c9U8C=Zkm1S9hLw3Lw6YMmijZhEe7J4rYQAuNyEw@mail.gmail.com>
+ <an8umm0qisEidt4n@google.com> <CAEvNRgFNCDDSeuvbwj7pD_d18o1TBXo4TNR2dXHxpm18KPfR5A@mail.gmail.com>
+ <aoNlZRb5SV7hyNuk@google.com>
+Message-ID: <aoNsAmLSKCuc4v4A@google.com>
+Subject: Re: [PATCH v10 12/41] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Binbin Wu <binbin.wu@linux.intel.com>, aik@amd.com, andrew.jones@linux.dev, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev, Fuad Tabba <fuad.tabba@linux.dev>
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testing/selftests/bpf/network_helpers.c
-> index b82f572641b7..1fda1fa7281c 100644
-> --- a/tools/testing/selftests/bpf/network_helpers.c
-> +++ b/tools/testing/selftests/bpf/network_helpers.c
+On Mon, Aug 17, 2026, Sean Christopherson wrote:
+> On Sun, Aug 16, 2026, Ackerley Tng wrote:
+> > Sean Christopherson <seanjc@google.com> writes:
+> > 
+> > > On Thu, Aug 13, 2026, Ackerley Tng wrote:
+> > >> Sean Christopherson <seanjc@google.com> writes:
+> > >> > That's why I think it's worth analyzing the cost: if it's in the
+> > >> > noise, leave it alone.  If it's meaningful, figure out a not-too-gross way to skip
+> > >> > the entire thing if kvm_arch_gmem_make_shared() is a glorified nop in the end.
+> > >>
+> > >> Is noise defined relative to the entire conversion process? Would this
+> > >> benchmark look like
+> > >>
+> > >> 1. Convert 4G to shared on TDX with CONFIG_AMD_SEV defined
+> > >> 2. Convert 4G to shared on TDX without CONFIG_AMD_SEV defined
+> > >>
+> > >> and then compare the difference in time taken?
+> > >
+> > > That'd work, though I was envisioning something even simpler: use rdtsc() to
+> > > count the cycles it takes to iterate over various ranges of memory.  Do whatever
+> > > is easiest for you though.
+> > 
+> > I made some changes to add rdtsc() for the conversion process as Sean
+> > suggested [1], and exercised conversion like this [2]:
+> > 
+> > 1. Initialize some memory as private
+> > 2. Get the guest to fault them into Secure EPTs
+> > 3. Converts the memory to shared <<== this is being benchmarked
+> > 4. Converts memory back to private
+> > 
+> > I made it build the VM once and convert 5 times:
+> > 
+> > ./gmem_benchmark_tdx_convert --iterations=5 --size=1g
+> 
+> ...
+> 
+> > And here's the above, tabulated:
+> > 
+> >   nr_pages      make_shared            total    percentage
+> > ----------  ---------------  ---------------  ------------
+> >          1              930            39278       2.3677%
+> >          1              252            28060       0.8981%
+> >          1              176            26952       0.6530%
+> >          1              176            27038       0.6509%
+> >          1              176            26980       0.6523%
+> >          1             1072            37236       2.8789%
+> >          1              316            28338       1.1151%
+> >          1              176            27182       0.6475%
+> >          1              176            26972       0.6525%
+> >          1              176            26886       0.6546%
+> >     262144         15041018       6616067680       0.2273%
+> >     262144         14937462       6608542680       0.2260%
+> >     262144         15138858       6599494898       0.2294%
+> >     262144         15721972       6610219850       0.2378%
+> >     262144         15000406       6615114540       0.2268%
+> >    1048576         61902982      26400884028       0.2345%
+> >    1048576         61746114      26401170984       0.2339%
+> >    1048576         61096794      26404409058       0.2314%
+> >    1048576         61446290      26447461896       0.2323%
+> >    1048576         61774646      26444608360       0.2336%
+> > 
+> > Looks to me it is within noise.
+> > 
+> > I also actually tried measuring the conversion time from userspace with
+> > CONFIG_AMD_SEV enabled and disabled. Converting a 1G-sized TD was faster
+> > by 0.2%, which is in line with the above table. Interestingly, when
+> > converting a 4G-sized TD, skipping kvm_gmem_make_shared() was _slower_
+> > over 2 runs. I don't have an explanation for that.
+> 
+> Might be some cache/memory locality benefits?  Though with a conversion that big,
+> it could also be nothing more than bad luck.
+> 
+> > I think the code was correct. (If it makes a difference, I skipped
+> > kvm_gmem_make_shared() using a custom guest_memfd creation time flag and
+> > skipped make_shared if the flag was set on the inode.)
+> > 
+> > I thought adding a kvm_arch_has_gmem_make_shared(), defaulting it to
+> 
+> I would do kvm_arch_has_gmem_convert() for consistency with the Kconfigs, and
+> because the cost of the reclaim invocation is a non-issue.
 
-[ ... ]
-
-> @@ -291,6 +293,37 @@ int client_socket(int family, int type,
->  	return -1;
->  }
->
-> +static int connect_with_timeout(int fd, const struct sockaddr_storage *addr,
-> +				socklen_t addrlen, int timeout_ms)
-> +{
-> +	int connect_timeout_ms = MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
-> +
-> +	/*
-> +	 * Override timeout configuration with a larger value for the
-> +	 * connection
-> +	 */
-> +	if (settimeo(fd, connect_timeout_ms)) {
-> +		log_err("Failed to set connect timeout");
-> +		return -1;
-> +	}
-> +
-> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
-> +		log_err("Failed to connect");
-> +		return -1;
-> +	}
-> +
-> +	/*
-> +	 * If the timeout configured by the test is different from the
-> +	 * connect timeout, restore it
-> +	 */
-
-This isn't a bug, but do the two block comments here add anything over
-the code they sit above? The first sits above settimeo(fd,
-connect_timeout_ms) where connect_timeout_ms was computed with MAX(...,
-CONNECT_MIN_TIMEOUT_MS) on the line before. The second transliterates
-the condition on the line below (timeout_ms != connect_timeout_ms means
-"restore it"). Could they be trimmed to a single line about why a larger
-connect budget is needed?
-
-> +	if (timeout_ms != connect_timeout_ms && settimeo(fd, timeout_ms)) {
-> +		log_err("Failed to set timeout for connected socket");
-> +		return -1;
-> +	}
-> +
-> +	return 0;
-> +}
-
-[ ... ]
-
-> @@ -376,20 +408,14 @@ int connect_fd_to_fd(int client_fd, int server_fd, int timeout_ms)
->  	struct sockaddr_storage addr;
->  	socklen_t len = sizeof(addr);
->
-> -	if (settimeo(client_fd, timeout_ms))
-> -		return -1;
-> -
->  	if (getsockname(server_fd, (struct sockaddr *)&addr, &len)) {
->  		log_err("Failed to get server addr");
->  		return -1;
->  	}
->
-> -	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
-> -		log_err("Failed to connect to server");
-> -		return -1;
-> -	}
-> -
-> -	return 0;
-> +	return connect_with_timeout(client_fd,
-> +				    &addr, len,
-> +				    timeout_ms);
-                            ^^^^
-
-This isn't a bug, but could this call fit on one line? With the leading
-tab it comes to about 71 columns as a single statement, well inside the
-80-column limit. Elsewhere the file only wraps arguments when the line
-doesn't fit.
-
->  }
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32062499118
---===============7027275377149721589==--
+Forgot to say "why" I think it's worth adding kvm_arch_has_gmem_convert(): it's
+a trivial change in the grand scheme, and I can see the ~1000 cycles of overhead
+being problematic in use cases that do many one-off conversions, e.g. for guests
+whose shared memory is scattered all over.
