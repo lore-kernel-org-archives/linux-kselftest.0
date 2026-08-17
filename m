@@ -1,33 +1,33 @@
 Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D118743DA31;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54958418A39;
 	Mon, 17 Aug 2026 14:11:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786975905; cv=none; b=GoO6jiyF6LJBElPeTXNOYK3FrTwpSdvHJrOpAI0V6c737u34IeJGuD2IcVGuyGHqbkUFx6kJ53THdinxx8TUWawlvWDDegBPqJ8nHjGJBIaAJMIaFp6rczJYGyEb1pUtOEQE+u+DRDj6azJf8fXXI1TToVLzo+7n79QJa6EZAyA=
+	t=1786975905; cv=none; b=sbrbVXP6XDA9/Up9muZe7mgXG8XJsJs32UQiA7M2HP65H8YkhvOPFqwMPp1g6mQcOstVUsDrZnQKhvPN6Xl6cQ6JTOKIVL9KhmZ/jPHRZFog4cCLiJVhmGrlz8WAc9qwM1qln6b5LdVtk8zmLfDyeoMxc81SUrTR+8ivRH7oab4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1786975905; c=relaxed/simple;
-	bh=2L5FYYP+P26CfeynEaGsZgzkZzLqEnRyMSkT7K4WK6s=;
+	bh=EdkVfWWVIBsnI7+jEPrkxyrlpgsSVb4/vxyDf63d/38=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=mEyTf98+uhiKnPB0RlgNS0XlpDN5XDTGnryvE6Qf7LVqKjtRS8rTyvEA8QpFEkFuq0s2SJI66fMkzVlIg5CVmSHMMzLMtv/mhD9pyJYbplGpsGiWKQ3sxsqoUWPOVR2qyL9zdNkIbk6hbJvrOh0i2kUioSpoHUWzd4KG3qf0s1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=YiOFIFxH; arc=none smtp.client-ip=213.97.179.56
+	 MIME-Version; b=AbWsyPMbiNHkxrzYUL+/t0DYowZSvyrbbylTvOdhhdlA8UxgnFOFcm9ePmcxpKxC550kuviO9U45ilyGaGhG0xYRH35G3ki3H4LlTF/FzOr2/KlT1yqlmSm4tZQZoSecGauiM/xniCu6xBIP7zL6kX8Hvod7EiAyagSAHb6oFkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=jteKXTfa; arc=none smtp.client-ip=213.97.179.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="YiOFIFxH"
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="jteKXTfa"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
 	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=tOMFOt5Jf/86iCoy9hzBOMyGjPBsBkQw+YVR+eCXoQo=; b=
-	YiOFIFxHeVo6pa8ha5Z+4G4JspvmvofxZyOrTwOkcXQ3eyTxNK0YHnxCYEE6cJ0vYAFT/y9JO74dd
-	ubsubtQWxae8ombD6QF8i9Ndl0ppVX32y681Ne7zXmILZj4eAJ3IcjBrlGVzb/OYMLtqiA9Fb30Bi
-	nUJfNs9rm7B5J+ry5ArMJ1f4/oGdzQiCdwkdi9IFnL3qF8DsS+BTbmZfoIbvTsenQvin1payUSZBZ
-	RvHBjWyJ6uu6ZavyHHTX1lyKUKOWzlKwpaXR+aYjv22zWTKL8QOvRg2VSJVV7brCc1NsaBHA+ZaEx
-	u84cinV34J57vUGMKimPHXpchscPHgceCQ==;
+	Cc:To:From:From:Reply-To; bh=WCMQDNc2nK8EKBHf0iDMqF+QAhCW7epGtgewEhDk/oM=; b=
+	jteKXTfaMS/U8iUzOp0ZHNoqRbmSYKrHprXknao0vnk25uwg39TmFse5inbEIetMl/FpKS/wZwMga
+	ZmoVoqR82q+t+mJW/Dl91rkRW9PQV2JGYgfw26lWYy02h3p8dlrt8lcJYIBNZHWXYG2gZAUab9N7J
+	a4vFE3vDhUTkZr8nsdIpMb41lIxMnELkfctY/0YrI6yPo/8owOTCuta8qfBmouUOQ0Jx3lI8px4Mq
+	1PX0+eCFyZZJJ44J3ESFr7lNWmkMUNLg4MTgIE5gh18Nl26D0TyZO+g2vQ82k5ayOb2m+sBaZXVkJ
+	BMW3FayjSGJXloICW5rIbSEMbWWvGCPb9w==;
 Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
 	by fanzine2.igalia.com with utf8esmtpsa 
 	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wvy3o-004Xxy-1b; Mon, 17 Aug 2026 16:11:32 +0200
+	id 1wvy3r-004Xyy-IU; Mon, 17 Aug 2026 16:11:35 +0200
 From: Luis Henriques <luis@igalia.com>
 To: Miklos Szeredi <miklos@szeredi.hu>,
 	Amir Goldstein <amir73il@gmail.com>,
@@ -40,9 +40,9 @@ Cc: fuse-devel@lists.linux.dev,
 	Matt Harvey <mharvey@jumptrading.com>,
 	kernel-dev@igalia.com,
 	Luis Henriques <luis@igalia.com>
-Subject: [RFC PATCH v2 1/8] Documentation: fuse: add document on caches being used by FUSE
-Date: Mon, 17 Aug 2026 15:11:49 +0100
-Message-ID: <20260817141156.6079-2-luis@igalia.com>
+Subject: [RFC PATCH v2 8/8] selftests/fuse: add fuse readdir caching test
+Date: Mon, 17 Aug 2026 15:11:56 +0100
+Message-ID: <20260817141156.6079-9-luis@igalia.com>
 In-Reply-To: <20260817141156.6079-1-luis@igalia.com>
 References: <20260817141156.6079-1-luis@igalia.com>
 Precedence: bulk
@@ -53,160 +53,364 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This new file aims at documenting the caches that are used by FUSE.  At
-the moment only symlink, attributes, ACLs and readdir caches are described.
+This new test will check the caching behaviour using combinations of two
+opendir flags: FOPEN_KEEP_CACHE and FOPEN_CACHE_DIR.
 
 Signed-off-by: Luis Henriques <luis@igalia.com>
 ---
- .../filesystems/fuse/fuse-caches.rst          | 142 ++++++++++++++++++
- 1 file changed, 142 insertions(+)
- create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   6 +-
+ .../fuse/fuse_readdir_cache_test.c            | 314 ++++++++++++++++++
+ 3 files changed, 320 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
 
-diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentation/filesystems/fuse/fuse-caches.rst
+diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
+index d5061752e2b0..7c9fc24a0b61 100644
+--- a/tools/testing/selftests/filesystems/fuse/.gitignore
++++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+@@ -3,3 +3,4 @@ fuse_mnt
+ fusectl_test
+ fuse_symlink_cache_test
+ fuse_acl_cache_test
++fuse_readdir_cache_test
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index 4091b1cc939e..6edcd25169de 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -2,7 +2,8 @@
+ 
+ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
+ 
+-TEST_GEN_PROGS := fusectl_test fuse_acl_cache_test fuse_symlink_cache_test
++TEST_GEN_PROGS := fusectl_test fuse_acl_cache_test fuse_symlink_cache_test \
++	fuse_readdir_cache_test
+ TEST_GEN_FILES := fuse_mnt
+ 
+ include ../../lib.mk
+@@ -25,3 +26,6 @@ $(OUTPUT)/fuse_acl_cache_test: LDLIBS += $(VAR_LDLIBS)
+ 
+ $(OUTPUT)/fuse_symlink_cache_test: CFLAGS += $(VAR_CFLAGS)
+ $(OUTPUT)/fuse_symlink_cache_test: LDLIBS += $(VAR_LDLIBS)
++
++$(OUTPUT)/fuse_readdir_cache_test: CFLAGS += $(VAR_CFLAGS)
++$(OUTPUT)/fuse_readdir_cache_test: LDLIBS += $(VAR_LDLIBS)
+diff --git a/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c b/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
 new file mode 100644
-index 000000000000..071febf45d00
+index 000000000000..181c08d9391a
 --- /dev/null
-+++ b/Documentation/filesystems/fuse/fuse-caches.rst
-@@ -0,0 +1,142 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/tools/testing/selftests/filesystems/fuse/fuse_readdir_cache_test.c
+@@ -0,0 +1,314 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Simple filesystem to test FUSE readdir cache
++ *
++ * It will simply perform readdir operations on a directory checking how many
++ * times a request is sent to user-space using all the possible caching
++ * combination setting (FOPEN_KEEP_CACHE and FOPEN_CACHE_DIR flags).
++ */
 +
-+===========
-+FUSE Caches
-+===========
++#define FUSE_USE_VERSION 31
 +
-+Introduction
-+============
++#include <stdio.h>
++#include <limits.h>
++#include <string.h>
++#include <pthread.h>
++#include <dirent.h>
++#include <fuse_lowlevel.h>
 +
-+This document summarises the different types of caches that are used in FUSE.
-+For each cache type, it attempts to document the rules that are followed to
-+insert, validate and invalidate data into the cache.
++#include "kselftest_harness.h"
 +
-+symlink caching
-+===============
++#define DIRNAME "mydir"
++#define FILENAME "myfile"
 +
-+Whenever there's a link resolution request, the VFS will call into
-+``fuse_get_link()`` which will then send a ``FUSE_READLINK`` request to the
-+user-space FUSE server. However, the server can ask the kernel to cache all
-+links resolutions by setting the ``FUSE_CACHE_SYMLINKS`` flag during the
-+``FUSE_INIT`` negotiation.
++#define DIR_INO 42
++#define FILE_INO 43
++#define DOT_INO 40
++#define DOTDOT_INO 41
 +
-+If this flag is set, FUSE will immediately call into the VFS
-+``__page_get_link()`` from the ``->get_link()`` inode operation. The first time
-+this is done for a specific link, it will end-up sending the ``FUSE_READLINK``
-+to user-space but the link contents will then be added into page-cache. The next
-+time the link needs to be resolved, it will use the link content that is already
-+cached, and will only fallback into sending the request to use-space if the
-+folio isn't up-to-date.
++#define TIMEOUT	86400.0f
 +
-+Attributes caching
-+==================
++#define FS_MOUNTPOINT "/tmp/readdir_cache_test_XXXXXX"
 +
-+Attributes obtained from user-space, for example when an inode is first
-+looked-up, are cached in the kernel. However, these attributes have a timeout
-+associated and once expired they are invalidated.
++struct test_state {
++	pthread_mutex_t lock;
++	bool cache_readdir;
++	bool keep_cache;
++	int readdir_counter;
++} test_state = {
++	.lock = PTHREAD_MUTEX_INITIALIZER,
++};
 +
-+Thus, the ``FUSE_GETATTR`` operation will be sent to user-space only if the
-+attributes aren't yet available, the attributes aren't valid (timeout), or if
-+there is an explicit request for doing so (for example, by using the
-+``AT_STATX_FORCE_SYNC`` flag in ``statx``). This may happen in the following
-+situations:
++static void fs_lookup(fuse_req_t req, fuse_ino_t parent, const char *name)
++{
++	struct fuse_entry_param e = {};
 +
-+#. An explicit request from VFS to get the attributes for an inode (through the
-+   ``->getattr()`` callback).
-+#. When an ``->llseek()`` is requested to FUSE with a type of request
-+   (``whence``):
++	if (parent != FUSE_ROOT_ID || strcmp(name, DIRNAME) != 0)
++		fuse_reply_err(req, ENOENT);
++	else {
++		if (!strcmp(name, DIRNAME)) {
++			e.ino = DIR_INO;
++			e.attr.st_mode = S_IFDIR | 0755;
++			e.attr.st_nlink = 1;
++		} else {
++			e.ino = FUSE_ROOT_ID;
++			e.attr.st_mode = S_IFDIR | 0755;
++			e.attr.st_nlink = 2;
++		}
++		e.attr.st_mtime = time(NULL);
++		e.attr_timeout = TIMEOUT;
++		e.entry_timeout = TIMEOUT;
++		fuse_reply_entry(req, &e);
++	}
++}
 +
-+   -  ``SEEK_{HOLE,DATA}`` and the user-space doesn't implement the
-+      ``FUSE_LSEEK`` operation (it has returned ``ENOSYS``), or
-+   -  ``SEEK_END``
++static int fill_stat(fuse_ino_t ino, struct stat *st)
++{
++	int ret = 0;
 +
-+#. When doing a buffered read past EOF or automatic page cache invalidation mode
-+   is enabled (``FUSE_AUTO_INVAL_DATA``).
-+#. When doing a buffered write with write-back cache enabled
-+   (``FUSE_CAP_WRITEBACK_CACHE``).
++	st->st_ino = ino;
++	st->st_mtime = time(NULL);
 +
-+ACL caching
-+===========
++	switch (ino) {
++	case FUSE_ROOT_ID:
++		st->st_mode = S_IFDIR | 0755;
++		st->st_nlink = 2;
++		break;
++	case DOT_INO:
++	case DOTDOT_INO:
++	case DIR_INO:
++		st->st_mode = S_IFDIR | 0755;
++		st->st_nlink = 1;
++		break;
++	case FILE_INO:
++		st->st_mode = S_IFREG | 0444;
++		st->st_nlink = 1;
++		break;
++	default:
++		ret = -1;
++		break;
++	}
 +
-+FUSE has allowed the usage of POSIX ACLs for a long time as they could be set
-+and accessed simply as extended attributes. However, it was only with the
-+addition of the ``FUSE_POSIX_ACL`` flag that ACLs started to be fully supported.
-+Without this flag, ACLs can still be set, but the VFS won't use them for
-+performing permission checks - that would be the user-space server's
-+responsibility.
++	return ret;
++}
 +
-+Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by the kernel.
-+In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be set to
-+``ACL_DONT_CACHE``.
++static void fs_getattr(fuse_req_t req, fuse_ino_t ino,
++		       struct fuse_file_info *fi)
++{
++	struct stat st = {};
 +
-+On the other hand, if ``FUSE_POSIX_ACL`` is set during ``FUSE_INIT``, when an
-+ACL is accessed the VFS layer will first check if it's already cached. If it is
-+not, FUSE ``->get_acl`` operation is called, which will eventually send a
-+user-space request. Future accesses to this inode ACL will then use the cached
-+data.
++	if (fill_stat(ino, &st) < 0)
++		fuse_reply_err(req, ENOENT);
++	else
++		fuse_reply_attr(req, &st, TIMEOUT);
++}
 +
-+Setting an ACL in an inode, however, won't cache it immediately. It will send
-+user-space a request with the new ACL, and the FUSE server may perform some
-+modifications before storing it.
++static void fs_opendir(fuse_req_t req, fuse_ino_t ino,
++		       struct fuse_file_info *fi)
++{
++	pthread_mutex_lock(&test_state.lock);
++	fi->keep_cache = test_state.keep_cache;
++	fi->cache_readdir = test_state.cache_readdir;
++	pthread_mutex_unlock(&test_state.lock);
++	fuse_reply_open(req, fi);
++}
 +
-+On the other hand, ACLs will be removed for the cache in the following
-+situations:
++static void fs_readdir(fuse_req_t req, fuse_ino_t ino, size_t size,
++		       off_t offset, struct fuse_file_info *fi)
++{
++	struct stat st = {};
++	char buf[1024];
++	char *pbuf;
++	size_t rem = size;
++	size_t sz;
++	int nextoff = 0;
 +
-+-  When setting an ACL in an inode and the user-space server has set the
-+   ``FUSE_POSIX_ACL`` flag, all previously cached ACLs for this inode will be
-+   invalidated.
-+-  When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` operation.
-+-  When ``->d_revalidate()`` is called for a dentry that requires a lookup (e.g.
-+   it has expired) and that lookup operation is successful.
-+-  When the VFS needs to check access rights for an inode (by calling
-+   ``->permission()``), attributes may need to be refreshed. If that happens,
-+   any cached ACLs for that inode will be invalidated.
-+-  After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is sent to
-+   user-space), the user-space server may have also updated the ACLs, so any
-+   cached ACLs for this inode are also invalidated.
-+-  While processing ``FUSE_READDIRPLUS`` and a new dentry is added (unless this
-+   dentry is already being looked up (``DCACHE_PAR_LOOKUP``))
-+-  In general, when there is the need to sent a ``FUSE_STATX`` or
-+   ``FUSE_GETATTR`` to user-space (e.g. because the attributes have expired).
-+   This may happen in the following cases:
++	if (ino != DIR_INO) {
++		fuse_reply_err(req, ENOTDIR);
++		return;
++	}
++	if (offset) {
++		fuse_reply_buf(req, NULL, 0);
++		return;
++	}
++	pbuf = buf;
++	fill_stat(DOT_INO, &st);
++	sz = fuse_add_direntry(req, pbuf, rem, ".", &st, nextoff++);
++	rem -= sz;
++	pbuf += sz;
++	fill_stat(DOTDOT_INO, &st);
++	sz = fuse_add_direntry(req, pbuf, rem, "..", &st, nextoff++);
++	rem -= sz;
++	pbuf += sz;
++	fill_stat(FILE_INO, &st);
++	sz = fuse_add_direntry(req, pbuf, rem, FILENAME, &st, nextoff++);
++	rem -= sz;
 +
-+   -  When doing an ``->llseek()`` on a file with ``SEEK_END``, ``SEEK_HOLE`` or
-+      ``SEEK_DATA``.
-+   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time (to
-+      automatically invalidate cached pages), and a buffered read
-+      (``->read_iter()``) past EOF is done on a non-passthrough file.
-+   -  When the ``FUSE_WRITEBACK_CACHE`` flag is set at ``INIT`` time, and a
-+      buffered write (``->write_iter()``) past EOF is done on a non-passthrough
-+      file.
-+   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time and the VFS
-+      needs to read a directory contents (``->iterate_shared()``) for a
-+      directory that is allowed to be cached.
++	fuse_reply_buf(req, buf, size - rem);
 +
-+readdir caching
-+===============
++	pthread_mutex_lock(&test_state.lock);
++	test_state.readdir_counter++;
++	pthread_mutex_unlock(&test_state.lock);
++}
 +
-+When opening a directory for doing a readdir, a ``FUSE_OPENDIR`` will be sent
-+and the user-space server will be responsible for setting the open flags related
-+with caching, namely ``FOPEN_KEEP_CACHE`` and ``FOPEN_CACHE_DIR``.
++static const struct fuse_lowlevel_ops fs_ops = {
++	.lookup		= fs_lookup,
++	.getattr	= fs_getattr,
++	.opendir	= fs_opendir,
++	.readdir	= fs_readdir,
++};
 +
-+If neither flags are set by the user-space FUSE server, then every ``readdir``
-+will result in a ``FUSE_READDIR`` (or ``FUSE_READDIRPLUS``) request being sent.
-+If ``FOPEN_CACHE_DIR`` is set by the server, then the result of a ``readdir``
-+will be cached by the kernel and reused. However, if ``FOPEN_KEEP_CACHE`` isn't
-+also set, the cache will be invalidated next time the directory is open.
++static void *run_daemon(void *arg)
++{
++	struct fuse_session *se = (struct fuse_session *)arg;
 +
-+The readdir cache will also expire and resetted in the following situations if:
++	fuse_session_loop(se);
 +
-+-  The inode ``mtime`` doesn't match the cache ``mtime``,
-+-  The inode ``iversion`` doesn't match the cache ``iversion``,
-+-  The FUSE connection ``epoch`` doesn't match the cache ``epoch``.
++	return NULL;
++}
 +
-+dentry caching
-+==============
++FIXTURE(readdir_cache)
++{
++	struct fuse_session *se;
++	char mountpoint[PATH_MAX];
++	pthread_t thread;
++};
 +
-+TBD
++FIXTURE_VARIANT(readdir_cache)
++{
++	bool cache_readdir;
++	bool keep_cache;
++};
++FIXTURE_VARIANT_ADD(readdir_cache, nocache)
++{
++	.cache_readdir = false,
++	.keep_cache = false,
++};
++FIXTURE_VARIANT_ADD(readdir_cache, cache_readdir)
++{
++	.cache_readdir = true,
++	.keep_cache = false,
++};
++FIXTURE_VARIANT_ADD(readdir_cache, keep_cache)
++{
++	.cache_readdir = false,
++	.keep_cache = true,
++};
++FIXTURE_VARIANT_ADD(readdir_cache, cache)
++{
++	.cache_readdir = true,
++	.keep_cache = true,
++};
 +
-+data caching
-+============
++FIXTURE_SETUP(readdir_cache)
++{
++	char *fuse_argv[] = { "fuse_readdir_cache_test", NULL };
++	struct fuse_args args = FUSE_ARGS_INIT(1, fuse_argv);
 +
-+TBD
++	pthread_mutex_lock(&test_state.lock);
++	test_state.readdir_counter = 0;
++	test_state.cache_readdir = variant->cache_readdir;
++	test_state.keep_cache = variant->keep_cache;
++	pthread_mutex_unlock(&test_state.lock);
++
++	strcpy(self->mountpoint, FS_MOUNTPOINT);
++	if (!mkdtemp(self->mountpoint))
++		SKIP(return, "mkdtemp: %s", strerror(errno));
++
++	self->se = fuse_session_new(&args, &fs_ops,
++				    sizeof(fs_ops), NULL);
++	if (!self->se) {
++		rmdir(self->mountpoint);
++		SKIP(return, "Failed to created FUSE session");
++	}
++	if (fuse_session_mount(self->se, self->mountpoint)) {
++		fuse_session_destroy(self->se);
++		rmdir(self->mountpoint);
++		SKIP(return, "Failed to mount FUSE session");
++	}
++	if (pthread_create(&self->thread, NULL, run_daemon, self->se)) {
++		fuse_session_unmount(self->se);
++		fuse_session_destroy(self->se);
++		rmdir(self->mountpoint);
++		SKIP(return, "pthread_create: %s", strerror(errno));
++	}
++
++	fuse_opt_free_args(&args);
++}
++
++FIXTURE_TEARDOWN(readdir_cache)
++{
++	fuse_session_exit(self->se);
++	fuse_session_unmount(self->se);
++	pthread_join(self->thread, NULL);
++	fuse_session_destroy(self->se);
++	rmdir(self->mountpoint);
++}
++
++TEST_F(readdir_cache, test_readdir_cache)
++{
++	struct dirent *dentry;
++	DIR *dir;
++	char pathname[PATH_MAX];
++	int total_counter, rewind_counter;
++	int dentrycount;
++
++	sprintf(pathname, "%s/%s", self->mountpoint, DIRNAME);
++
++	dir = opendir(pathname);
++	if (dir == NULL)
++		TH_LOG("opendir(): %s", strerror(errno));
++	ASSERT_NE(dir, NULL);
++
++	errno = 0;
++	dentrycount = 0;
++	while ((dentry = readdir(dir)))
++		dentrycount++;
++	ASSERT_EQ(errno, 0);
++	ASSERT_EQ(dentrycount, 3);
++
++	rewinddir(dir);
++	errno = 0;
++	dentrycount = 0;
++	while ((dentry = readdir(dir)))
++		dentrycount++;
++	ASSERT_EQ(errno, 0);
++	ASSERT_EQ(dentrycount, 3);
++
++	ASSERT_EQ(closedir(dir), 0);
++
++	pthread_mutex_lock(&test_state.lock);
++	rewind_counter = test_state.readdir_counter;
++	pthread_mutex_unlock(&test_state.lock);
++
++	dir = opendir(pathname);
++	if (dir == NULL)
++		TH_LOG("opendir(): %s", strerror(errno));
++	ASSERT_NE(dir, NULL);
++
++	errno = 0;
++	dentrycount = 0;
++	while ((dentry = readdir(dir)))
++		dentrycount++;
++	ASSERT_EQ(errno, 0);
++	ASSERT_EQ(dentrycount, 3);
++
++	ASSERT_EQ(closedir(dir), 0);
++
++	pthread_mutex_lock(&test_state.lock);
++	total_counter = test_state.readdir_counter;
++	pthread_mutex_unlock(&test_state.lock);
++
++	if (!variant->cache_readdir) {
++		ASSERT_EQ(rewind_counter, 2);
++		ASSERT_EQ(total_counter, 3);
++	} else if (!variant->keep_cache) {
++		ASSERT_EQ(rewind_counter, 1);
++		ASSERT_EQ(total_counter, 2);
++	} else {
++		ASSERT_EQ(rewind_counter, 1);
++		ASSERT_EQ(total_counter, 1);
++	}
++}
++
++TEST_HARNESS_MAIN
