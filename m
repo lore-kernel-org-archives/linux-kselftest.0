@@ -1,147 +1,86 @@
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C7B4433E82;
-	Mon, 17 Aug 2026 16:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F01F4477E5;
+	Mon, 17 Aug 2026 16:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786982589; cv=none; b=UvQS/9oepAX8F4NAdwwprYcP9vZ2WlFg0XCYNCx8Xjbk/J8hR1TCgqKPkiSHsnezxiG/xe3t5bjRbGA5sXKgeOmiZ1ElxDvao1GCD/UnIYuuZc/h2fufycDr2roY+TQH9YFlnazJWD6JWOlUol0kvTsPgKnZ31XPrCxySyclx88=
+	t=1786984825; cv=none; b=KA5Ln0nFZo1VjxssOzZ9MiEBA1zyDM1XsO5cnSVjKlsZLdYoipWqMXORZJbzSl8TEPbnTYfzGMwMCSLYZ4Q2+oZWyiVIFn6KiqbugIoLC+OgqyVzfPmpUZtXwhnbhTjeubxSrMgV+FLpHoMCOdam67fD4FWRcDs9mSK7uSwM8wc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786982589; c=relaxed/simple;
-	bh=3aKFzH9oggt3+/pGPn+oHLbAfh18UPoKUsQKH1ojzZg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Tcf7JUnqrdvqbpxTiB29okbIrZpWRPCvZvCNkz3fFhIZA4+1ZvlJiLFWK8NZ/Q4c+h83jyddkU4ztKlD6zaUO2KtoZXV2eBG5z8t627a+MRoEOG0Lb5jCKGf4eKlAcR7W5DzCzAQsOUXxH5hS3Hhr/rm0Y1O/ThpZzKvAaTw6qE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=GKqYkpcx; arc=none smtp.client-ip=213.97.179.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
+	s=arc-20240116; t=1786984825; c=relaxed/simple;
+	bh=L7h1Shd7QhHubIZwobHpD4CFDbFj/NllrvlP3pfcg4w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H36PHVdvAGT0PqqSWTHIs/jaw4kaEC02gMzmzoyyq3G/+m1y/ISc+8OGKXxjV51LCYOwe29s56mYqwiXGQUT+aFKY/NEj74nhyEFcVlFk1na/scqQMAjswt61UFf+bO4VTFEpkLY2rtuszjoi+Ju3KnUqq4LWNY8YCvJNBLXyNs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cDOTH9QO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="GKqYkpcx"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-	s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:
-	Cc:To:From:From:Reply-To; bh=ZZeH8P2ExX9NyJj55lAJONKXekD2M9PO9oUi+Q/nrD0=; b=
-	GKqYkpcx0Hq6ZwLYM9s1TjJtHXY5mMIwoWtqAUl0emqL/IiwzcS8lMaJlkNRl0mOiCwCcg3YHwWrJ
-	+hRgCORCr51bnkSYucTAzm01tkmJQC848uiUmGlNEax1ghb3QU5Qvge7V4RxjW0EPpweOn8kXVRIR
-	ZwkA3ad5TQNPzBXazagKjGTjh7CdFgRTJZM0xeEgXL8DH5p9JSnWlzA3sTFn/1NKYfHzNUGZmJGJn
-	e+fis/6QXlJFG+4EJhAywadTgl7j6UXktk1C+rMadw33RT2yuoOaiklzAHDi8omzzXYS5HaIYyrTs
-	ms2/eXOvEuM1Nk0X6Fk/khWTZrqlDhmP3w==;
-Received: from [58.29.145.179] (helo=localhost)
-	by fanzine2.igalia.com with esmtpsa 
-	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-	id 1wvznc-004jDG-TO; Mon, 17 Aug 2026 18:02:57 +0200
-From: Changwoo Min <changwoo@igalia.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	bpf@vger.kernel.org,
-	sched-ext@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	changwoo@igalia.com,
-	kernel-dev@igalia.com
-Subject: [PATCH v2] selftests/bpf: Remove duplicate copies of the arena spinlock qnodes
-Date: Tue, 18 Aug 2026 01:02:49 +0900
-Message-ID: <20260817160249.655916-1-changwoo@igalia.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cDOTH9QO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EB001F00A3D;
+	Mon, 17 Aug 2026 16:40:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786984820;
+	bh=0jT6S4YpgQH38JdW1g0o3Z2pQ+/PX/2D+lf/1VEYoUM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=cDOTH9QOP614hNdU2RzYQKCefqWgx4OS8MfOUYsoBt9GFSmPkuy1Y41Z3NBnfEg4Z
+	 j1JPK1rUG+dUR39kkDskXbp3DfbW6GMesGUpeUmClpdeHrz0qGgKP5um+Oi/Q76Yae
+	 0ClklYuvV1wXKhqhFcs+Am4ZCLHrkdgU7y7vmYdRuqgcp6zxIhFhvdIaohDKMvY1/n
+	 +Xvk0jf6apulJTeyJV+2oehd9tfUXhibM2lZrG+IA+Bno2CZtHfxsV4RQe9TAIYKb+
+	 i08W2vLBg3+wHtnz01DcqXPJnpVZ37pqpqYIZRGjnos0Cww8aILf9zgIM/9Kwv+WgO
+	 gRlI+vaXeQIhg==
+Date: Mon, 17 Aug 2026 17:40:02 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Song Hu <husong@kylinos.cn>
+Cc: akpm@linux-foundation.org, rppt@kernel.org, sarthak.sharma@arm.com, 
+	linux-mm@kvack.org, shuah@kernel.org, david@kernel.org, liam@infradead.org, 
+	vbabka@kernel.org, surenb@google.com, mhocko@suse.com, peterx@redhat.com, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/3] selftests/mm: emit TAP header in uffd-wp-mremap
+Message-ID: <aoM5S9kq3aPEiMT3@lucifer>
+References: <20260815080716.3596514-1-husong@kylinos.cn>
+ <20260815080716.3596514-2-husong@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260815080716.3596514-2-husong@kylinos.cn>
 
-bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
-every translation unit including it emits a copy. __weak makes them all
-resolve to one instance, but bpftool gen object merges only the symbols
-and concatenates each input's .addr_space.1 bytes, leaving the surplus
-copies unreferenced in the linked object.
+On Sat, Aug 15, 2026 at 04:07:14PM +0800, Song Hu wrote:
+> uffd-wp-mremap calls ksft_set_plan() without ksft_print_header(), so its
+> output is not valid KTAP.  Add the header, like the sibling uffd tests
+> (uffd-stress, uffd-unit-tests).
+>
+> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> Signed-off-by: Song Hu <husong@kylinos.cn>
 
-libarena links ten such units, so nine copies were dead weight (bytes):
+This all seems to be yet another way of saying 'somebody didn't use the
+kselftest harness and so things went wrong' :)
 
-  object                             before       after
-  -----------------------------------------------------
-  .addr_space.1 in libarena.bpf.o    676200       86376
-  libarena.skel.h                   2100123      892371
-  libarena_asan.skel.h              2641124     1466477
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
-Declare qnodes in the header and let each program define it once:
-libarena in src/common.bpf.c, and the arena_spin_lock test beside the
-lock it guards.
+> ---
+>  tools/testing/selftests/mm/uffd-wp-mremap.c | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> index c973d6722720..572c2516e874 100644
+> --- a/tools/testing/selftests/mm/uffd-wp-mremap.c
+> +++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+> @@ -347,6 +347,8 @@ int main(int argc, char **argv)
+>  	struct thp_settings settings;
+>  	int i, j, plan = 0;
+>
+> +	ksft_print_header();
+> +
+>  	hugepage_save_settings(true, true);
+>
+>  	check_uffd_wp_feature_supported();
+> --
+> 2.43.0
+>
 
-Tested with test_progs -t arena_spin_lock and -t libarena.
-
-Signed-off-by: Changwoo Min <changwoo@igalia.com>
-Reviewed-by: Kumar Kartikeya Dwivedi <memxor@gmail.com>
----
-Change in v2:
-- Rebased the patch to HEAD of the bpf-next tree.
----
- .../selftests/bpf/libarena/include/bpf_arena_spin_lock.h   | 7 +------
- tools/testing/selftests/bpf/libarena/src/common.bpf.c      | 7 +++++++
- tools/testing/selftests/bpf/progs/arena_spin_lock.c        | 7 +++++++
- 3 files changed, 15 insertions(+), 6 deletions(-)
-
-diff --git a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-index ae6b72d15bb6..71d9db610263 100644
---- a/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-+++ b/tools/testing/selftests/bpf/libarena/include/bpf_arena_spin_lock.h
-@@ -103,12 +103,7 @@ struct arena_qnode {
- #define _Q_LOCKED_VAL		(1U << _Q_LOCKED_OFFSET)
- #define _Q_PENDING_VAL		(1U << _Q_PENDING_OFFSET)
- 
--/*
-- * The qnodes are marked __weak so we can define them in the header
-- * while still ensuring all compilation units use the same struct
-- * instance.
-- */
--struct arena_qnode __weak __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+extern struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- 
- static inline u32 encode_tail(int cpu, int idx)
- {
-diff --git a/tools/testing/selftests/bpf/libarena/src/common.bpf.c b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-index 569f0f64d518..41b1de3452fe 100644
---- a/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-+++ b/tools/testing/selftests/bpf/libarena/src/common.bpf.c
-@@ -7,6 +7,13 @@
- struct buddy __arena buddy;
- volatile u32 zero = 0;
- 
-+/*
-+ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
-+ * linking the arena spinlock provides exactly one definition, so that the array
-+ * is emitted once rather than once per translation unit.
-+ */
-+struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
-+
- int arena_fls(__u64 word)
- {
- 	if (!word)
-diff --git a/tools/testing/selftests/bpf/progs/arena_spin_lock.c b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-index cf7cda79c16c..92e75ec3844c 100644
---- a/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-+++ b/tools/testing/selftests/bpf/progs/arena_spin_lock.c
-@@ -23,6 +23,13 @@ int cs_count;
- #if defined(ENABLE_ATOMICS_TESTS) && defined(__BPF_FEATURE_ADDR_SPACE_CAST)
- arena_spinlock_t __arena lock;
- int test_skip = 1;
-+
-+/*
-+ * Storage for the queue nodes declared by bpf_arena_spin_lock.h. Each program
-+ * linking the arena spinlock provides exactly one definition; libarena's lives
-+ * in libarena/src/common.bpf.c.
-+ */
-+struct arena_qnode __arena __hidden qnodes[_Q_MAX_CPUS][_Q_MAX_NODES];
- #else
- int test_skip = 2;
- #endif
--- 
-2.55.0
-
+--
+Cheers, Lorenzo
