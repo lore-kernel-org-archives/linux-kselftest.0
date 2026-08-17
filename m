@@ -1,138 +1,97 @@
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E5CC3C3F70;
-	Mon, 17 Aug 2026 09:05:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.133.104.62
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E463285068;
+	Mon, 17 Aug 2026 09:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786957531; cv=none; b=KsziWBlqmwM9ahlvdtEhkujkioFeBOym7PACd7/fwRswbzHq+VzNNJUK/9rL3OgDt/x6zAyAj0ZQ16A8twEGUzEC0aG5xGwwklb8h7Y6NOzhiQ2MHbd7cOem8C+OxJ3TxzVEXTGCl+HCJc+ygl5DyhKhSzZimjW5h5LQuucnRGA=
+	t=1786957867; cv=none; b=L8jow5AoHX6ROuC9q7GQNl3V9h8paU9eTJidxWmhNnYAc74gLGKHxkAFtz9cGtq4wHHCl3AzeA5CG17wakI48jITfDn4q9QulNfBlNQ6kxDA/9EYskN1PMtKPvF0h7noR57MIaPIN7JXg0SWLuHRFcMfZO0SY/lLVnb7SxGjAvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786957531; c=relaxed/simple;
-	bh=NLdCGzhe94/PU970AOTLvbtcEi3iafICjwjvAZgTVns=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fiYl3q/VQdvgmARP9jeGf8TVjy2n7B/Z2cd8oDwkP19PtHS79PEAzpJxZ4Xv5w1ijrjDp3NDFXYrBne4KytbRoarb5ZWdkAMrWBPPT4SHwbj/ALCrgFvOQz3WJ37h8iVwCNsyOgj689avYaohpktbumcC6Yp9JkG48NxUdlRtMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net; spf=pass smtp.mailfrom=iogearbox.net; dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b=YauXxH7r; arc=none smtp.client-ip=213.133.104.62
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=iogearbox.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iogearbox.net
+	s=arc-20240116; t=1786957867; c=relaxed/simple;
+	bh=3PtwBHaoVE1AdiHnCIAi+yV7Nv0dKkEhmu/IEvrP1p0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mLegIckRa3DKSVm/jFRhzK6I6bkDeQl/T4Ao73W1a1F5ILoS47xPlToacEnxa6t43jddneRQmPF+mcVtMYfu3EH+oJMpYVHA1bFPQDOGvLL/VStOo67VHvQC7QKc/JvfbSvk3yox7EKtmJoRgQkDtxh4h+Xc55AiOB/As7zSJrs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=cTkGPi/E; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=iogearbox.net header.i=@iogearbox.net header.b="YauXxH7r"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=iogearbox.net; s=default2302; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=Wg+oHCmEmcqVWg4e1GvP1q0Yfyaco5diy6ohQZmN4IQ=; b=YauXxH7ro0Yei4jbrWYnMu5fLE
-	NnTqTprxFVhMDCgP4ankOqAFrxO+IZUrWtsDLlZ83TmHAj3jrLo6mEIagvOyI9Uw7ypSgjKDUHBPT
-	h7xMVV9JreQ30j0w+eqaMRdwsI97T0HQt2g01qY8dWNJ8+dhm5kL5NAyvBSqQEBZbdCIfqh+wCaWe
-	6rM/phwjYRJDe/4cBVClUpyx2wXeNyLgQWKUJcVi9drhiqwzrJ3HyLRFPQpZZT4vbHVEAQMtY2wlu
-	D2S9CRPE9dVO7dHpOyO3k/kbgjLT5dNPH5sU7rf+jhfMyvPE/ZgR3nkIrIwnoWpm7VEvFG7anxIFB
-	gi6d3iKQ==;
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-	by www62.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96.2)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wvtHa-000GDo-0a;
-	Mon, 17 Aug 2026 11:05:26 +0200
-Received: from localhost ([127.0.0.1])
-	by sslproxy02.your-server.de with esmtpsa  (TLS1.3) tls TLS_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <daniel@iogearbox.net>)
-	id 1wvtHZ-000EkP-2t;
-	Mon, 17 Aug 2026 11:05:25 +0200
-Message-ID: <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
-Date: Mon, 17 Aug 2026 11:05:24 +0200
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="cTkGPi/E"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Hl
+	mDL3tBEO2C94aJxBhvVsgsjTiyefcae9H4rAJukqk=; b=cTkGPi/EhasUlNj3Uq
+	1y1mcqQE6CxU4JnpBWyGuBgCk1LnBtgeBV+AVFawLiUShFcEhED8Q9NrwGx/Z9zr
+	LuXDsgKsabuFmUvlF0I7XEkFWdafjTYas/UMypt6T18is14673OPJPA4M5oeBA0N
+	ysa68BAD+urf+2HYEwe6ZGOlE=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-4 (Coremail) with SMTP id _____wD3nwL8z4JqwN1xQQ--.31345S2;
+	Mon, 17 Aug 2026 17:10:21 +0800 (CST)
+From: Qingshuang Fu <fffsqian@163.com>
+To: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	SeongJae Park <sjpark@amazon.de>
+Cc: netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Qingshuang Fu <fffsqian@163.com>
+Subject: [PATCH] selftests/net: fix kill() argument order in fin_ack_lat
+Date: Mon, 17 Aug 2026 17:10:17 +0800
+Message-Id: <20260817091017.281104-1-fffsqian@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
- spinlock qnodes
-To: Changwoo Min <changwoo@igalia.com>, Alexei Starovoitov <ast@kernel.org>,
- Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- bpf@vger.kernel.org, sched-ext@lists.linux.dev,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-dev@igalia.com
-References: <20260803001807.646357-1-changwoo@igalia.com>
-Content-Language: en-US
-From: Daniel Borkmann <daniel@iogearbox.net>
-Autocrypt: addr=daniel@iogearbox.net; keydata=
- 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
-In-Reply-To: <20260803001807.646357-1-changwoo@igalia.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: Clear (ClamAV 1.4.3/28095/Mon Aug 17 08:23:59 2026)
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3nwL8z4JqwN1xQQ--.31345S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw47Cr4UJry5try8uFyxGrg_yoW8WrWUpF
+	WfK39rCF1rGa12ya1jk3y8JFyxuF1kGw48Gr1j9r1UZ395JFykWrZIkF1jvwnIq39aq3W5
+	ZF1S9FWYka1UA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0piiID7UUUUU=
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6h1uOWqCz-2x+gAA3x
 
-On 8/3/26 2:18 AM, Changwoo Min wrote:
-> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
-> every translation unit including it emits a copy. __weak makes them all
-> resolve to one instance, but bpftool gen object merges only the symbols
-> and concatenates each input's .addr_space.1 bytes, leaving the surplus
-> copies unreferenced in the linked object.
-> 
-> libarena links ten such units, so nine copies were dead weight (bytes):
-> 
->    object                             before       after
->    -----------------------------------------------------
->    .addr_space.1 in libarena.bpf.o    676200       86376
->    libarena.skel.h                   2100123      892371
->    libarena_asan.skel.h              2641124     1466477
-> 
-> Declare qnodes in the header and let each program define it once:
-> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
-> lock it guards.
-> 
-> Tested with test_progs -t arena_spin_lock and -t libarena.
-> 
-> Signed-off-by: Changwoo Min <changwoo@igalia.com>
-This doesn't apply cleanly, could you respin against latest bpf-next?
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Thanks,
-Daniel
+sig_handler() passes its arguments to kill() in the wrong order: it
+sends signal number child_pid to PID SIGTERM (15) instead of sending
+SIGTERM to the client process.  The call therefore always fails
+(a pid is virtually never a valid signal number) and the client is
+never notified: when only the server process receives SIGTERM, the
+client keeps running its infinite connect loop as an orphan process.
+
+Swap the arguments so that the server forwards SIGTERM to the client.
+Also guard the call with child_pid > 0: the client inherits the
+handler and sees child_pid == 0, and a plain argument swap would make
+it call kill(0, SIGTERM), signaling the whole process group (including
+the invoking shell) instead of exiting quietly.
+
+Fixes: af8c8a450bf4 ("selftests: net: Add FIN_ACK processing order related latency spike test")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+ tools/testing/selftests/net/fin_ack_lat.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
+index 70187494b57a..f985e01354b4 100644
+--- a/tools/testing/selftests/net/fin_ack_lat.c
++++ b/tools/testing/selftests/net/fin_ack_lat.c
+@@ -103,7 +103,8 @@ static void server(int sock, struct sockaddr_in address)
+ 
+ static void sig_handler(int signum)
+ {
+-	kill(SIGTERM, child_pid);
++	if (child_pid > 0)
++		kill(child_pid, SIGTERM);
+ 	exit(0);
+ }
+ 
+
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+-- 
+2.25.1
+
