@@ -1,33 +1,36 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66FBC28BAB9;
-	Mon, 17 Aug 2026 15:44:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B72E2F8E8E;
+	Mon, 17 Aug 2026 16:00:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786981469; cv=none; b=m2DDwHtND+RxaSfIcpLf0WTksk7xhQYhrZCLEbjEjIEXS/SC4sd1egUtMbF28+/vmGOpdet55yeDYznOoM874ioNckDY399NbFSh+GB3QL+Y/WVMHx2OEMD77lX1QWCIcRKwfUkX3akEQp+maL+4n8GZrlCWfXuUyBhsuIXgb9w=
+	t=1786982431; cv=none; b=kc5hgMSHfohF1AcxXk/KheqbaAwBcWCkBdyb1kXO5OLf88HAbcf5jmgpKc8UC6HdRYS1tK1uVhrb2FY+YkAOR02YhlwauU+LSi1ZANmb73TvGf2ABJBJtezgcixEvQcTnavR+yHY3fRR6VscztV6V9t9IEQq0+HeuHZ2F4A16PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786981469; c=relaxed/simple;
-	bh=nfSNkX0Mke+jbuYO+dDTnHSDSi8qw+1krN9Fi8gRdtA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=fkf8hzwMn+MQnkipD/BNmzG2tdzgQ6zdnmahUnRBH05Bj/OKEdxW+g5zRUf1V2OYEuN8gQJc7s9ofPRXfuWgi0F55xyutP7F+aAuFo+1rlWO5uMT2LCrRZ2CA2l4RflZDf6Tzmlt7GJgz/mZDtK9PNqkMYd8JwO6rp48lzUK9tY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=lJ/lMFsB; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1786982431; c=relaxed/simple;
+	bh=1Z6VV8MoP9MNwtQiQnv/FHZJXS28oduvE3PmRXg0sNk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DHJ7rlr6QicrvSoewYGozPpzi5UT8PxzoODyZnXjz65QaFgbYe86wH/pUKkZaZSJDr4/ElINmbcUwVvZ5JNFLOsKiMBkcD+pw67wuB5qJz1BlbAvPjtRIKWJp8mOb2PdE1tfpq3mQ41y7DnBeJIJHhOAHMpfYPeSD/NejDFGFeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=jff6ffeV; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="lJ/lMFsB"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D6DF0143D;
-	Mon, 17 Aug 2026 08:44:22 -0700 (PDT)
-Received: from [10.2.198.93] (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F2B6C3F673;
-	Mon, 17 Aug 2026 08:44:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1786981466; bh=nfSNkX0Mke+jbuYO+dDTnHSDSi8qw+1krN9Fi8gRdtA=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=lJ/lMFsB1WLR5L52UGl94SU8+gVOnFH1mkky4gU5i0LkxwzmKaNj82r4985zJsXu3
-	 kZEgFfPcyQdegobmISFB0pAbSR/DyWhq5h5faGhr65fR6QAeXwk6yLxewOYN++IwvB
-	 B0YNCsJFyrV9UIJ0122mLWxtAzs6xZdmjGNpH9To=
-Message-ID: <7eb13c5f-127d-4abe-bcde-b4d5066510e2@arm.com>
-Date: Mon, 17 Aug 2026 16:44:23 +0100
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="jff6ffeV"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:From:Cc:To:Subject:
+	MIME-Version:Date:Message-ID:From:Reply-To;
+	bh=ijc0uxiB94i7xwerpdn1dVx/M5em0/qkIBO+7AK47yY=; b=jff6ffeVZVh3/872G6Kfa2wUmd
+	8ERjZHS0Zm4DT6vRmRcgy17WNtND0K0pXo3jFab+xN4DGYxoXDLosYdoWY00lY64HUuffEgZ+h3UT
+	4DcGaDT4WUq4GXdLoHtyI6U7b3Jx/MNW2unXpLEa8LRTyIYuasj/ZIE+ZcMsM1qZesUIE2Lakvl4q
+	IAWRn326Op5A1z70h+gvSnukPD5lDi6DWHt2isYdkIlHB4m3N4CjmRffijhWkhSyx/5mFCm34K1ca
+	+EkMx3122n32R2oJruYqX5785tWcGtdhRIbUpDMdUHHWmt8br99QzNpupSex9nTNho4q2HafojnSx
+	N3BpB/rQ==;
+Received: from [58.29.145.179] (helo=[192.168.8.203])
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+	id 1wvzkz-004ivR-6C; Mon, 17 Aug 2026 18:00:13 +0200
+Message-ID: <75bbbff2-5ea5-493d-b543-ce40d968f3cb@igalia.com>
+Date: Tue, 18 Aug 2026 01:00:04 +0900
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,146 +38,60 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: usama.anjum@arm.com, linux-mm@kvack.org, shuah@kernel.org,
- david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- surenb@google.com, mhocko@suse.com, peterx@redhat.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] selftests/mm: emit TAP header and use TAP skip in
- mremap_test
-To: Song Hu <husong@kylinos.cn>, akpm@linux-foundation.org, rppt@kernel.org,
- sarthak.sharma@arm.com
-References: <20260815080716.3596514-1-husong@kylinos.cn>
- <20260815080716.3596514-3-husong@kylinos.cn>
-From: Usama Anjum <usama.anjum@arm.com>
-Content-Language: en-US
-In-Reply-To: <20260815080716.3596514-3-husong@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH] selftests/bpf: Remove duplicate copies of the arena
+ spinlock qnodes
+To: Daniel Borkmann <daniel@iogearbox.net>,
+ Alexei Starovoitov <ast@kernel.org>, Andrii Nakryiko <andrii@kernel.org>,
+ Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Shuah Khan <shuah@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>
+Cc: Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ bpf@vger.kernel.org, sched-ext@lists.linux.dev,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kernel-dev@igalia.com
+References: <20260803001807.646357-1-changwoo@igalia.com>
+ <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
+From: Changwoo Min <changwoo@igalia.com>
+Content-Language: en-US, ko-KR, en-US-large, ko
+In-Reply-To: <c9f8616b-15df-4c5a-8184-bf4d63813afb@iogearbox.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 15/08/2026 9:07 am, Song Hu wrote:
-> mremap_test calls ksft_set_plan() without ksft_print_header(), and its
-> get_mmap_min_addr() skip path uses a bare exit(KSFT_SKIP) that prints no
-> TAP line, so its output is not valid KTAP.  Add the header and switch
-> the skip to ksft_exit_skip().
-> 
-> Also fix two more KTAP compliance issues spotted in review:
-> 
-> - get_mmap_min_addr() calls strerror(errno) after fclose(), which may
->   clobber errno; save errno before fclose() instead.
-> 
-> - Some ksft_*() messages embed "\n\t", so the text after each embedded
->   newline is printed without the "# " prefix.  Split those into separate
->   messages.
-> 
-> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> Signed-off-by: Song Hu <husong@kylinos.cn>
-> ---
->  tools/testing/selftests/mm/mremap_test.c | 41 +++++++++++++-----------
->  1 file changed, 23 insertions(+), 18 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-> index 131d9d6db867..28f151daabe4 100644
-> --- a/tools/testing/selftests/mm/mremap_test.c
-> +++ b/tools/testing/selftests/mm/mremap_test.c
-> @@ -111,18 +111,17 @@ static unsigned long long get_mmap_min_addr(void)
->  		return addr;
->  
->  	fp = fopen("/proc/sys/vm/mmap_min_addr", "r");
-> -	if (fp == NULL) {
-> -		ksft_print_msg("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
-> -			strerror(errno));
-> -		exit(KSFT_SKIP);
-> -	}
-> +	if (!fp)
-> +		ksft_exit_skip("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
-> +			       strerror(errno));
+Hi Daniel,
 
-The skip conditions are usually at the start of the test before we set
-the total number planned tests. If skip like this happens later, it
-still counts as failure. I found the following corresponding output
-with this patch:
+On 8/17/26 6:05 PM, Daniel Borkmann wrote:
+> On 8/3/26 2:18 AM, Changwoo Min wrote:
+>> bpf_arena_spin_lock.h defines its 64KB qnodes array in the header, so
+>> every translation unit including it emits a copy. __weak makes them all
+>> resolve to one instance, but bpftool gen object merges only the symbols
+>> and concatenates each input's .addr_space.1 bytes, leaving the surplus
+>> copies unreferenced in the linked object.
+>>
+>> libarena links ten such units, so nine copies were dead weight (bytes):
+>>
+>>    object                             before       after
+>>    -----------------------------------------------------
+>>    .addr_space.1 in libarena.bpf.o    676200       86376
+>>    libarena.skel.h                   2100123      892371
+>>    libarena_asan.skel.h              2641124     1466477
+>>
+>> Declare qnodes in the header and let each program define it once:
+>> libarena in src/common.bpf.c, and the arena_spin_lock test beside the
+>> lock it guards.
+>>
+>> Tested with test_progs -t arena_spin_lock and -t libarena.
+>>
+>> Signed-off-by: Changwoo Min <changwoo@igalia.com>
+> This doesn't apply cleanly, could you respin against latest bpf-next?
 
-TAP version 13
-# Test configs:
-# threshold_mb=4
-# pattern_seed=1786980558
-1..26
-ok 1 # SKIP Failed to read /proc/sys/vm/mmap_min_addr: Success
-# 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-# Planned tests != run tests (26 != 1)
-# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-MREMAP_FORCED_SKIP_RC=4
-### MREMAP FORCED READ-SKIP END
+Sure. I will send the v2 rebased on the HEAD of the the bpf-next tree soon.
 
->  
->  	n_matched = fscanf(fp, "%llu", &addr);
->  	if (n_matched != 1) {
-> -		ksft_print_msg("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
-> -			strerror(errno));
-> +		int err = errno;
-> +
->  		fclose(fp);
-> -		exit(KSFT_SKIP);
-> +		ksft_exit_skip("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
-> +			       strerror(err));
->  	}
->  
->  	fclose(fp);
-> @@ -1164,10 +1163,11 @@ static void run_mremap_test_case(struct test test_case, int *failures,
->  					    rand_addr);
->  
->  	if (remap_time < 0) {
-> -		if (test_case.expect_failure)
-> -			ksft_test_result_xfail("%s\n\tExpected mremap failure\n",
-> -					      test_case.name);
-> -		else {
-> +		if (test_case.expect_failure) {
-> +			ksft_print_msg("%s: expected mremap failure\n",
-> +				       test_case.name);
-> +			ksft_test_result_xfail("%s\n", test_case.name);
-> +		} else {
->  			ksft_test_result_fail("%s\n", test_case.name);
->  			*failures += 1;
->  		}
-> @@ -1177,11 +1177,13 @@ static void run_mremap_test_case(struct test test_case, int *failures,
->  		 * was faulted in.
->  		 */
->  		if (threshold_mb == VALIDATION_NO_THRESHOLD ||
-> -		    test_case.config.region_size <= threshold_mb * _1MB)
-> -			ksft_test_result_pass("%s\n\tmremap time: %12lldns\n",
-> -					      test_case.name, remap_time);
-> -		else
-> +		    test_case.config.region_size <= threshold_mb * _1MB) {
-> +			ksft_print_msg("%s: mremap time: %12lldns\n",
-> +				       test_case.name, remap_time);
->  			ksft_test_result_pass("%s\n", test_case.name);
-> +		} else {
-> +			ksft_test_result_pass("%s\n", test_case.name);
-> +		}
->  	}
->  }
->  
-> @@ -1250,13 +1252,16 @@ int main(int argc, char **argv)
->  	time_t t;
->  	FILE *maps_fp;
->  
-> +	ksft_print_header();
-> +
->  	pattern_seed = (unsigned int) time(&t);
->  
->  	if (parse_args(argc, argv, &threshold_mb, &pattern_seed) < 0)
->  		exit(EXIT_FAILURE);
->  
-> -	ksft_print_msg("Test configs:\n\tthreshold_mb=%u\n\tpattern_seed=%u\n\n",
-> -		       threshold_mb, pattern_seed);
-> +	ksft_print_msg("Test configs:\n");
-> +	ksft_print_msg("threshold_mb=%u\n", threshold_mb);
-> +	ksft_print_msg("pattern_seed=%u\n", pattern_seed);
->  
->  	/*
->  	 * set preallocated random array according to test configs; see the
+Regards.
+Changwoo Min
 
-Thanks,
-Usama
+> 
+> Thanks,
+> Daniel
+> 
 
