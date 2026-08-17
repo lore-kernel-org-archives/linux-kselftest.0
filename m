@@ -1,112 +1,125 @@
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE00313E2C;
-	Mon, 17 Aug 2026 07:24:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22A643B3C14;
+	Mon, 17 Aug 2026 08:04:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786951499; cv=none; b=JMsVz3xBC1e20ajJzK9HWmkewFKGY7JNg8744dFQ8zWKz1Lu3AJHCkqEbGM/foUofpl0QO44ozXlg1taGLKLWmgFbFaHEz3x+kvhkG8Zn88FIBqAijRB9lxEUzqpqdCwm8lmqpEwgPYpI8G7U+PwkAlpF7IcKeG9bEGwdLRWz3I=
+	t=1786953890; cv=none; b=kyJIn+k/AD+eoYR5uSuiAqEMJj6vszUUuHIiODi4TNB/mZcTcqL+5SrSEQdWm4lMK0kUDPGJIPoAIufpNiLQ5QIBa0kccLV/XY/d006ZEhLhC8FjSKyMdq1G1iND9qJi5Su1Xq0EfdPqyhzmuQmsubf1qEjEH8LIGnJ/hzSfPgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786951499; c=relaxed/simple;
-	bh=PmGRblFh0G4nuwTlyrUd4Qnsls2eNX1ArsX8/1eFWk4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=NVW23X2IL/uFJraPkVarqmlmSgHPiNX4yjnF17wzSGRIAYWMx/4pDzQGsgfnaZ1bHmHfqIlPaXiCSE7nfcFWlhmsdfSxqvXSFMIgpL0fME8lI3PLkl0gzscGovLZzS5XP2jpC6NE011w2dvLHEGufkdp33TMmRDJKCq8o8L+p+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=m5sqky96; arc=none smtp.client-ip=115.124.30.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1786953890; c=relaxed/simple;
+	bh=vysRNSYSTwolpYgu/f2kDU3j2KSjD484zo5IVWXfZIM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pdNkR0pQpWAQ2th3RzQwB3EImj7c30kdGkNVwdSC9UcvhFeMQSQpDma67Bt1JdLNiI01rGI8DhqnR5byxgQetilPa4Kb4qdjutG/CxoRj3O3asq8Mq1uUe7kjbdom3EoA7R3zfJPmpJI4YeyTjjLXeab/5J4OE2JlXLytbGn04E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jlsg3MZQ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="m5sqky96"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1786951485; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=kwE4cF+d5LagXyZRJGwhqf3uEfWaLKloLMjaXC2pVoA=;
-	b=m5sqky96yoDItCusgUU3HqEd7uYIcaf/89z0Ua8NX57D/tJE/ksLtMc5VtjbJYlAbTReCO0BMfhs0rd8xuf39JucBgSP8gaIMgd0SU7/BBoSxf8SXWSLn70cOr9IRiQsk/fd+OrNfuuZ2ElJA+hBVSEOttftU5flBpXUIJSp3P8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X946s0G_1786951473;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X946s0G_1786951473 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Mon, 17 Aug 2026 15:24:44 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next 0/2] bpf, riscv: Add support for signed arena loads
-Date: Mon, 17 Aug 2026 15:24:31 +0800
-Message-ID: <cover.1786708960.git.cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jlsg3MZQ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AE351F000E9;
+	Mon, 17 Aug 2026 08:04:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1786953886;
+	bh=/8YEgw0OcGhLggCgZu0df/8CubxvmgeZk0MDZaoHme4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=jlsg3MZQb936uD7sRHVGzRJsM4FPP06SzC3LJGqDw3Ziw3v0yU1MFVOvQeRHx3m8o
+	 2tS/8PUESGgMjjAPH43sdrcpv3blq0zwFE7Y9/Jwus9K5nh2OSeLV4CUWEWbjXRLLY
+	 uzLKcaBO52LJeRgop+GD7611SUufWlz9v8BtmwWELgHKrQ3CopYlUrafbxLptgRsXS
+	 ZcxocQSRRySex3jfHuDZLY/ig8HI2qtgXuVA2LIrKB17xKtWo08XOMKjeNz+eKD84x
+	 m+qvoZlHD469WMQh3awtCO952TARRFzZDrvSk2C/1IZ4CGLsOtVxFr5sbaGd4V851Y
+	 g9g+uW3thmbhQ==
+Date: Mon, 17 Aug 2026 09:04:24 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de, 
+	rostedt@goodmis.org, mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, 
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 57/57] MAINTAINERS: add an entry for collapse
+Message-ID: <aoLASuFkQ3rUrWa0@lucifer>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-58-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260816224609.308019-58-kirill@shutemov.name>
 
-Hi,
+On Sun, Aug 16, 2026 at 11:46:09PM +0100, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+> Collapse is now its own body of code: mm/collapse.c, a header stating what
+> it offers a caller, and its own tracepoint family.  It has two callers,
+> the khugepaged daemon and MADV_COLLAPSE, rather than living inside one of
+> them.
+>
+> Add a section for it, and move what belongs to it out of the THP entry:
+> khugepaged.c and its header, the trace header, the selftests, and
+> mm_slot.h.
+>
+> The selftests are matched as khugepaged*.c, which also covers the race and
+> sync-check harnesses the THP entry did not list.  mm_slot.h stays listed
+> under KSM as well, which is the other user of it.
+>
+> Assisted-by: Claude-Code:claude-opus-5
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
+>  MAINTAINERS | 19 ++++++++++++++-----
+>  1 file changed, 14 insertions(+), 5 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7c179b333e4e..4e4e5030b979 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16955,6 +16955,20 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	include/linux/balloon.h
+>  F:	mm/balloon.c
+>
+> +MEMORY MANAGEMENT - COLLAPSE
+> +M:	Kiryl Shutsemau <kas@kernel.org>
+> +L:	linux-mm@kvack.org
+> +S:	Maintained
+> +W:	http://www.linux-mm.org
+> +T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+> +F:	include/linux/khugepaged.h
+> +F:	include/trace/events/collapse.h
+> +F:	mm/collapse.c
+> +F:	mm/collapse.h
+> +F:	mm/khugepaged.c
+> +F:	mm/mm_slot.h
+> +F:	tools/testing/selftests/mm/khugepaged*.c
+> +
 
-Signed loads from arena memory are currently unsupported on riscv64:
-bpf_jit_supports_insn() rejects BPF_MEMSX loads when in_arena is set,
-so the verifier fails such programs with "sign extending loads from
-arena are not supported yet". The x86 and arm64 JITs gained support
-for them in v6.18 (a91ae3c89311, eab2a71f3a6a). Since compilers are
-free to generate signed loads into arena memory (e.g. GCC-14 was
-reported to do so), otherwise valid BPF programs fail to load on
-riscv64.
+I'll look through the series properly, but presumably this is a separation of
+the THP collapse logic, and therefore should have the same maintainers/reviewers
+as the rest of THP.
 
-This series adds BPF_PROBE_MEM32SX support to the RV64 JIT and
-enables the corresponding selftests on riscv64:
+>  MEMORY MANAGEMENT - CORE
+>  M:	Andrew Morton <akpm@linux-foundation.org>
+>  M:	David Hildenbrand <david@kernel.org>
+> @@ -17272,12 +17286,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm
+>  F:	Documentation/ABI/testing/sysfs-kernel-mm-transparent-hugepage
+>  F:	Documentation/admin-guide/mm/transhuge.rst
+>  F:	include/linux/huge_mm.h
+> -F:	include/linux/khugepaged.h
+> -F:	include/trace/events/collapse.h
+>  F:	mm/huge_memory.c
+> -F:	mm/khugepaged.c
+> -F:	mm/mm_slot.h
+> -F:	tools/testing/selftests/mm/khugepaged.c
+>  F:	tools/testing/selftests/mm/split_huge_page_test.c
+>  F:	tools/testing/selftests/mm/transhuge-stress.c
+>
+> --
+> 2.54.0
+>
 
-1 implements signed arena loads in the RV64 JIT. The verifier
-  already converts MEMSX loads from PTR_TO_ARENA to
-  BPF_PROBE_MEM32SX once bpf_jit_supports_insn() allows them, so
-  the JIT reuses the existing arena handling: the arena base
-  (RV_REG_ARENA) is added to the source register and the load is
-  emitted with sign extension (lb/lh/lw). BPF_PROBE_MEM32SX is also
-  added to the add_exception_handler() mode gate so faulting loads
-  register an exception table entry that clears the destination
-  register and resumes execution.
-
-2 enables the arena LDSX tests on riscv64: JIT disassembly
-  assertions are added to arena_ldsx_disasm, and
-  arena_ldsx_exception/s8/s16/s32 are now run on riscv64.
-
-The series was verified on riscv64 with QEMU (-M virt -cpu max): all
-five arena_ldsx tests pass, including the exception path (load from
-unallocated arena memory returns 0) and the sign-extension values
-(s8/s16/s32 tests return -1 as expected).
-
-Note: the __jited assertions in patch 2 were derived from the JIT
-register allocation (R0->a5, R1->a0, R8->s3, R9->s4, arena base in
-s7) and the emit_ldx() code paths; happy to adjust them if a
-disassembler output detail differs.
-
-Thanks,
-Pei
-
-Chen Pei (2):
-  bpf, riscv: Add support for signed arena loads
-  selftests/bpf: Enable arena LDSX tests for riscv64
-
- arch/riscv/net/bpf_jit_comp64.c                 | 15 +++++++++------
- .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
- 2 files changed, 26 insertions(+), 6 deletions(-)
-
--- 
-2.50.1
-
+--
+Cheers, Lorenzo
