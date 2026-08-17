@@ -1,259 +1,161 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3122B3B388F;
-	Mon, 17 Aug 2026 12:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F3F842089C;
+	Mon, 17 Aug 2026 13:03:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786971367; cv=none; b=f+PSKOR2o3nszT7ATMjOwwn1tqTVMPQhlIQkrqOZ+waijT/1wEgGfhOtsiDvzObOpwLMz0envqc6oKjDM2c1Ey+RA/iGjLbT3nACK+Q6txfmgAXI3fKnDp+/Uq9Q6IaOV3roHJnnfLFtU2itN264puWswPScHRwtvc3NoS53C/4=
+	t=1786971817; cv=none; b=g+mKuvATjVYunM9g1i0yFkCjhWRC+RjHCpdY2iiA9q2RWyXEIjCsQWjYYiaCCijK488lF4GMjxAQh2nHTndsycy28dRauhJZBr1QBJ3V8Q/UhsIPjo4qmKRh99MoUdqnt3HEJNYbiXFzP7MRS6FbLmiBMVcjLItdQyEY2Ht5ToQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786971367; c=relaxed/simple;
-	bh=0YmEdDR8h8yPwui8MHwOHRVyVOQLClg/PfZwZk9/+1E=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=K/HKjj4HRpsjZAd171/htV1LEo+B0CLdj/jTho04WIih/o/8pYjCsy2nDPbpjO1zWDJsuRTMVsddsZrCl5fKXEalMCVLFsnWQopwpnT2pTNVGP39QVFwtpftGyMkrp6oVEDqQH3ZOn40CYFp1YWho2x1XHMo1CY9mEHUDRfkapI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XKGMjeXU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1786971817; c=relaxed/simple;
+	bh=59lFG8bMcCuZkwJL2dErpHk8N5up4dLJioL0nMn7ung=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aTz6D2WGdqrdHeo7060b6u0S8PdKi3JUZB35mQX7XkM37yBxn1iTBo91y689D4LpYXeojvj7Ph9nu8j6de3GV+DpIEX6CaY2cUqmfSUAG6ZJ5W4gfCQP1opXqmfy4Q+U5iLe2zHK6GPNCaDrV+eNDtpwqznq8fdcHrPNt3/G/g8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=djdaUymF; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XKGMjeXU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D45F91F00A3A;
-	Mon, 17 Aug 2026 12:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1786971366;
-	bh=ky3uveSGPqFh3hdLloFreAs447xB4T1sIUwJzQwy+ZY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=XKGMjeXUthd6X8HmJdoe8HkeMdmWv+F6y3DQwtNQU9v6QBdrdlVN6XUlwycmHnJRh
-	 MINeB1fyexCteUKbHG0bRD1gDjPgD16neP52Uma2MiatHE/LaIQfwEfhkoA9l/sr8B
-	 RGVpg3xRKcpXjl/e5u0Mnx+P3/5Gw47cHpNfdsmill1dv7NqunnBWP62M9Ww5bb9Kb
-	 mgE6PK8+jD7CTVYPLAZLssLpVwg8og4hKXXujhZ6eds2mowBdNOgY7HMJfTqq8HR8L
-	 niAwhS0RcVg5YW0+Rwzt0JSNH0OsN4l9eKEwRkLbmE78RNvhrKMwFWa9aa4vWe/6Rs
-	 JqIk5aIzDwdmw==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wvwsl-0000000GHHS-2byO;
-	Mon, 17 Aug 2026 12:56:03 +0000
-Date: Mon, 17 Aug 2026 13:56:03 +0100
-Message-ID: <86pkzgzz18.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Like Xu <like.xu.linux@gmail.com>
-Cc: Jiaqi Yan <jiaqiyan@google.com>,
-	oupton@kernel.org,
-	sebott@redhat.com,
-	gshan@redhat.com,
-	yuzenghui@huawei.com,
-	rananta@google.com,
-	joey.gouly@arm.com,
-	suzuki.poulose@arm.com,
-	pbonzini@redhat.com,
-	shuah@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] KVM: selftests: Improve sea_to_user test
-In-Reply-To: <79ec6855-6764-407f-bf46-add1bdf36b69@gmail.com>
-References: <20260130192837.890688-1-jiaqiyan@google.com>
-	<86y0le9cvz.wl-maz@kernel.org>
-	<79ec6855-6764-407f-bf46-add1bdf36b69@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="djdaUymF"
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67GMeo3Y3198445;
+	Mon, 17 Aug 2026 13:03:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=corp-2025-04-25; bh=I0BsCGzxGUiRoAOV
+	ESs0gxE7Ojm20w31WXG8aCuPuM8=; b=djdaUymFMppR1/hUasRctLaTCHOTJDc+
+	tfodPidauYaudwlANRYmvX5K9V3LyrL0l2IetNSZfRFRTgHsDiEh2teXWo4RceiT
+	RFo6Reh+MUpFdjjKevPVayMI//kVEShV8iDHAQtIOwUE93U2APx2zkfMbawQ+sUz
+	4sfCeITPgwSaWbm7zC1yNtQMj8ogFACEY87+t6/L4HPi2OLCjK58Gu0eZh5fBCYY
+	5Xr3KyiB6Rf8RoZO9WA7eLoU3Mer1/vy8cqylHmxJ7lDQfIXMfrlO8XFBs6TCfhU
+	/Xoeir8+qR0QJflFhm1Is/hndhv+Cg7a/6WKmt2E9Y5EhzaYbN5xjA==
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.appoci.oracle.com [147.154.18.20])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4g2ehc2e8s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Aug 2026 13:03:21 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.7/8.18.1.7) with ESMTP id 67HD0hqH038697;
+	Mon, 17 Aug 2026 13:03:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 4g2ejpcmqx-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 17 Aug 2026 13:03:21 +0000 (GMT)
+Received: from iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.1.12) with ESMTP id 67HCsMb2021766;
+	Mon, 17 Aug 2026 13:03:20 GMT
+Received: from lab61.no.oracle.com (lab61.no.oracle.com [10.172.144.82])
+	by iadpaimrmta02.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 4g2ejpcmpq-1;
+	Mon, 17 Aug 2026 13:03:20 +0000 (GMT)
+From: =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+To: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun@kernel.org>, Waiman Long <longman@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org, John Stultz <jstultz@google.com>,
+        =?UTF-8?q?H=C3=A5kon=20Bugge?= <haakon.bugge@oracle.com>
+Subject: [PATCH 0/1] kernel/locking: Add mutual exclusion self-test
+Date: Mon, 17 Aug 2026 15:02:35 +0200
+Message-ID: <20260817130239.343594-1-haakon.bugge@oracle.com>
+X-Mailer: git-send-email 2.43.5
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: like.xu.linux@gmail.com, jiaqiyan@google.com, oupton@kernel.org, sebott@redhat.com, gshan@redhat.com, yuzenghui@huawei.com, rananta@google.com, joey.gouly@arm.com, suzuki.poulose@arm.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
+ definitions=2026-08-17_01,2026-08-12_01,2025-10-01_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=835
+ lowpriorityscore=0 malwarescore=0 bulkscore=0 suspectscore=0 adultscore=0
+ phishscore=0 mlxscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2606160000 definitions=main-2608170099
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODE3MDA5OSBTYWx0ZWRfX26xzoIDlzx6H
+ FNCuonRxF+r6kxZFZJjlWQl5Gz8K01vHjQqHtxe0ghVjXp8o4xP1o263CHiu9N9IAx5oolQh21m
+ LEaDyd1jTk5GC1bAf9okbM3RWxEGDKWCUTTVWrIzxQ8XqcnOlT1hGjKEa1jp17id/Wcp03U/v/r
+ ZPi33dvFwsa93mtaQ7acJAbk3IOqNOmibLIcOSTJc0CYkOe/V8eo+EfEuhNUEMTJa6pirAeb09v
+ hzp4zhOn3if0PtLgem8pnapSR1QCondc33+11MveTDJdkqA8TiCSh23RV0QO5bIUJAp8L2q+0D/
+ TVlpMgY5EXDOQjNnRFQ/ofVcebZJs3rCmi26bkWAIqNORU6gM/J85WPZamkeqFzjLd0xROy5U4V
+ HmxjEK3qhSopihJrexd1xtDgUXIhFtTv1mixwhV0UWDSdvafDqAjv8lY6h4/Ri02pprxxPCR/43
+ hCY8T174BwB/+nVxYqFObNesWOjzJCQ4bwtCKD9o=
+X-Proofpoint-Spam-Info: AW1haW4tMjYwODE3MDA5OSBTYWx0ZWRfX3n5IKBD1YH94
+ EOlBHHXb7QogXQ5M+fBPEctl8cLOUJkle52q7p55MgGZQiyWq1KxDsIFKnCD9/SRVEWWniKCKd5
+ qMShjj9Ds9OhXkcqgwXt3c4eqvag7rF5d4pkL1VNlvEsQFfqkw32
+X-Authority-Analysis: v=2.4 cv=fO0JG5ae c=1 sm=1 tr=0 ts=6a83069a b=1 cx=c_pps
+ a=e1sVV491RgrpLwSTMOnk8w==:117 a=e1sVV491RgrpLwSTMOnk8w==:17
+ a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=M51BFTxLslgA:10
+ a=VkNPw1HP01LnGYTKEx00:22 a=jiCTI4zE5U7BLdzWsZGv:22 a=x4eqshVgHu-cdnggieHk:22
+ a=R5gcnNxLHOFc8d1k_nsA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+ a=5yU3S35YU4bGjq-dph-N:22 a=Bho9c0fBagfJEIQBS7DQ:22 cc=ntf awl=host:13509
+X-Proofpoint-GUID: jGKzvH-CPcewXSy1Fvy2TDb72bPaQdQQ
+X-Proofpoint-ORIG-GUID: jGKzvH-CPcewXSy1Fvy2TDb72bPaQdQQ
 
-On Mon, 17 Aug 2026 13:34:53 +0100,
-Like Xu <like.xu.linux@gmail.com> wrote:
-> 
-> On 1/31/26 8:37 PM, Marc Zyngier wrote:
-> > On Fri, 30 Jan 2026 19:28:37 +0000,
-> > Jiaqi Yan <jiaqiyan@google.com> wrote:
-> >> 
-> >> Several improvments to the test for KVM_EXIT_ARM_SEA:
-> >> 
-> >> - Refactor run_vm to catch GUEST_FAIL, instead of causing confusing
-> >>    unhandled MMIO kvm exit.
-> >> 
-> >> - Sync far_invalid to guest.
-> >> 
-> >> - Exit test with KSFT_SKIP or KSFT_FAIL when should.
-> >> 
-> >> - Add comment about VM backing memory type.
-> >> 
-> >> Signed-off-by: Jiaqi Yan <jiaqiyan@google.com>
-> >> ---
-> >>   .../testing/selftests/kvm/arm64/sea_to_user.c | 94 +++++++++++--------
-> >>   1 file changed, 53 insertions(+), 41 deletions(-)
-> > 
-> > Overall, this test is still pretty broken.
-> > 
-> > For example, on my Altra box:
-> > 
-> > maz@filthy-habits:~$ ./sea_to_user
-> > Random seed: 0x6b8b4567
-> > # Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
-> > # Before EINJect: data=0xbaadcafe
-> > # EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad, einj_hpa=0xbad
-> > ok 1 # SKIP EINJ table not available in firmware
-> > 
-> > Well, not quite. EINJ *is* available, it is just that this test,
-> > contrary to *all* the other tests, requires some insanely high
-> > privileges. But the test is making stupid assumption.
-> > 
-> > But that's not all:
-> > 
-> > maz@filthy-habits:~$ sudo ./sea_to_user
-> > Random seed: 0x6b8b4567
-> > # Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
-> > # Before EINJect: data=0xbaadcafe
-> > # EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad, einj_hva=0xffff41234bad, einj_hpa=0x80041234bad
-> > # echo 0x10 > /sys/kernel/debug/apei/einj/error_type - done
-> > # echo 0x2 > /sys/kernel/debug/apei/einj/flags - done
-> > # echo 0x80041234bad > /sys/kernel/debug/apei/einj/param1 - done
-> > # echo 0xffffffffffffffff > /sys/kernel/debug/apei/einj/param2 - done
-> > # echo 0x1 > /sys/kernel/debug/apei/einj/notrigger - done
-> > sh: 1: echo: echo: I/O error
-> > Bail out! Failed to write EINJ entry: Success (0)
-> > # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:0 error:0
-> > 
-> > Failed? Or Success? Who knows...
-> > 
-> > But frankly, the whole "embedded shell script" is disgusting. What is
-> > wrong with driving the injection from the test itself, rather than
-> > this access()+popen()? popen() itself is a liability (see the man page
-> > for system()), and should never be used for this sort of things.
-> > 
-> >> 
-> >> diff --git a/tools/testing/selftests/kvm/arm64/sea_to_user.c b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> >> index 573dd790aeb8e..4a3511fa1f940 100644
-> >> --- a/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> >> +++ b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> >> @@ -12,6 +12,11 @@
-> >>    * including the notrigger feature. Otherwise the test will be skipped.
-> >>    * The under-test platform's APEI should be unable to claim SEA. Otherwise
-> >>    * the test will also be skipped.
-> >> + *
-> >> + * The VM backing memory is tied to HugeTLB 1G hugepage so far. Make sure
-> >> + * there are more than 4 1G hugepage on the system. They can be allocated
-> > 
-> > Why *more than*? Isn't that *at least* instead?
-> > 
-> >> + * at runtime by:
-> >> + *   echo 4 > /sys/kernel/mm/hugepages/hugepages-1048576kB/nr_hugepages
-> >>    */
-> > 
-> > Why can't you provide an adequate diagnostic instead of this stuff:
-> > 
-> > maz@filthy-habits:~$ ./sea_to_user
-> > Random seed: 0x6b8b4567
-> > ==== Test Assertion Failure ====
-> >    include/kvm_syscalls.h:58: mem != MAP_FAILED
-> >    pid=887 tid=887 errno=12 - Cannot allocate memory
-> >       1	0x0000000000405b4f: __kvm_mmap at kvm_syscalls.h:58 (discriminator 3)
-> >       2	 (inlined by) kvm_mmap at kvm_syscalls.h:65 (discriminator 3)
-> >       3	 (inlined by) vm_mem_add at kvm_util.c:1036 (discriminator 3)
-> >       4	0x0000000000402373: vm_create_with_sea_handler at sea_to_user.c:290
-> >       5	 (inlined by) main at sea_to_user.c:336
-> >       6	0x0000ffffb0dc229b: ?? ??:0
-> >       7	0x0000ffffb0dc237b: ?? ??:0
-> >       8	0x00000000004027ef: _start at ??:?
-> >    mmap() failed, rc: -1 errno: 12 (Cannot allocate memory)
-> > 
-> > What is preventing you from not requiring huge pages? And not
-> > requiring 4kB as the base page size?
-> > 
-> > Given how broken this is, I'm likely to disable this test until you
-> > fix it for real.
-> 
-> Pls help review the expect output:
-> 
-> # selftests: kvm: sea_to_user
-> # Random seed: 0x6b8b4567
-> # # Mapped 0x40000 pages: gva=0x80000000 to gpa=0xff80000000
-> # # Before EINJect: data=0xbaadcafe
-> # # EINJ_GVA=0x81234bad, einj_gpa=0xff81234bad,
-> einj_hva=0xffff41234bad, einj_hpa=0x2141234bad
-> # 1..0 # SKIP EINJ debugfs interface not available; run as root with
-> CONFIG_ACPI_APEI_EINJ and firmware EINJ support
-> ok 1 selftests: kvm: sea_to_user # SKIP
-> # 1 skipped test(s) detected.  Consider enabling relevant config
-> options to improve coverage.
-> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-> 
-> , and the diff behind:
-> 
-> diff --git a/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> index a23d74ed45035..7e86cbeb55291 100644
-> --- a/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> +++ b/tools/testing/selftests/kvm/arm64/sea_to_user.c
-> @@ -86,25 +86,32 @@ static u64 translate_hva_to_hpa(unsigned long hva)
-> 
->  static void write_einj_entry(const char *einj_path, u64 val)
->  {
-> -	char cmd[256] = {0};
-> -	FILE *cmdfile = NULL;
-> +	char buf[32];
-> +	int fd, len, ret;
-> 
-> -	sprintf(cmd, "echo %#lx > %s", val, einj_path);
-> -	cmdfile = popen(cmd, "r");
-> +	fd = open(einj_path, O_WRONLY);
-> +	if (fd < 0)
-> +		ksft_exit_fail_perror(einj_path);
-> 
-> -	if (pclose(cmdfile) == 0)
-> -		ksft_print_msg("echo %#lx > %s - done\n", val, einj_path);
-> -	else
-> -		ksft_exit_fail_perror("Failed to write EINJ entry");
-> +	len = snprintf(buf, sizeof(buf), "%#lx\n", val);
-> +	ret = write(fd, buf, len);
-> +	if (ret != len)
-> +		ksft_exit_fail_perror(einj_path);
-> +
-> +	close(fd);
-> +	ksft_print_msg("%#lx > %s - done\n", val, einj_path);
->  }
-> 
->  static void inject_uer(u64 hpa)
->  {
-> -	if (access("/sys/firmware/acpi/tables/EINJ", R_OK) == -1)
-> -		ksft_test_result_skip("EINJ table no available in firmware");
-> -
-> +	/*
-> +	 * Reading the ACPI EINJ table requires CAP_SYS_ADMIN, so a plain
-> +	 * access() check gives a false negative for unprivileged runs. Probe
-> +	 * the debugfs EINJ interface instead: it is only present when both
-> +	 * firmware and the kernel EINJ driver support error injection.
-> +	 */
->  	if (access(EINJ_ETYPE, R_OK | W_OK) == -1)
-> -		ksft_test_result_skip("EINJ module probably not loaded?");
-> +		ksft_exit_skip("EINJ debugfs interface not available;
-> run as root with CONFIG_ACPI_APEI_EINJ and firmware EINJ support\n");
-> 
->  	write_einj_entry(EINJ_ETYPE, ERROR_TYPE_MEMORY_UER);
->  	write_einj_entry(EINJ_FLAGS, MASK_MEMORY_UER);
+Hi,
 
-This seems better, although I still think the access() thing is
-wrong. We should catch errno after the open() and work out what when
-wrong. Also, the dependency on debugfs is really horrible.
+Please consider the following patch for the v7.3 merge window.
 
-Anyway, since this is an improvement, please post a standalone patch
-that can be reviewed/merged, and add separate patches to check for the
-huge pages.
+This patch adds a stress-based selftest for kernel locking and atomic
+synchronization primitives. The test runs concurrent workers against
+an array of counters while maintaining a simple invariant: every
+increment is paired with a decrement, so the sum of all counters must
+remain zero.
 
-Thanks,
+A common test interface allows the same workload to exercise a range
+of locking primitives, including spinlocks and rwlocks, as well as
+variants using atomic and bit operations without an explicit
+lock. After the workers complete, the module checks the invariant and
+reports a failure if the resulting sum is nonzero.
 
-	M.
+The test provides regression coverage for memory-ordering issues that
+may otherwise be difficult to reproduce. In particular, it can expose
+the regression fixed by commit 415d83249709 ("locking/atomic: Make
+test_and_*_bit() ordered on failure") on weakly ordered architectures
+such as ARM. It also includes a variant modeling the incorrect
+acquire/release ordering formerly used by RDS before commit
+1422f28826d2 ("rds: introduce acquire/release ordering in
+acquire/release_in_xmit()"). This variant fails on ARM systems.
 
--- 
-Without deviation from the norm, progress is not possible.
+The patch also adds a kselftest script that:
+
+* first runs an intentionally unsynchronized variant to verify that the
+  workload is capable of exposing lost updates;
+* obtains the available test variants from the module;
+* runs each non-broken variant; and
+* supports low, medium, and high effort levels for interactive and CI use.
+
+The module exposes parameters for selecting the test variant, run
+duration, number of elements, and data-structure padding. Varying the
+padding is useful because the reproducibility of some ordering
+failures depends on the relative placement of the tested state in
+memory.
+
+A successful run does not prove correctness, but the test provides a
+practical way to detect synchronization regressions and reproduce
+known classes of ordering bugs under load.
+
+If this commit gets accepted, I have the intention, subject to other
+work priorities, to expand on the locking primitives, and in
+particular add a double set of ww_mutexes for each counter and attempt
+to acquire both in a random order. Using both the Wound-Wait and
+Wait-Die variants.
+
+
+Thxs, Håkon
+
+
+Håkon Bugge (1):
+  kernel/locking: Add mutual exclusion self-test
+
+ kernel/locking/Makefile                    |   1 +
+ kernel/locking/mx_test.c                   | 707 +++++++++++++++++++++
+ lib/Kconfig.debug                          |   9 +
+ tools/testing/selftests/locking/Makefile   |   2 +-
+ tools/testing/selftests/locking/mx_test.sh | 181 ++++++
+ 5 files changed, 899 insertions(+), 1 deletion(-)
+ create mode 100644 kernel/locking/mx_test.c
+ create mode 100755 tools/testing/selftests/locking/mx_test.sh
+
+--
+2.43.5
+
