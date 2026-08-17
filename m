@@ -1,36 +1,50 @@
-Received: from mta1.migadu.com (out-103.mta1.migadu.com [95.215.58.103])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40B63AFCFD
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 06:28:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.103
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12C2620DE;
+	Mon, 17 Aug 2026 06:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786948110; cv=none; b=rWutGD7cAsTWTMIKPhF/AucbQKPtGiPP9Sc18qYOLUopa9foG3iiFbVpGJ5pgXMx89hrzs1zm1NAlDthOq7M5Xf9ejsVcwkPr+KQAJe2q3cNrvbaROXnJz7tOSlb/e6j0vUuAlAVf568P1aV3aQRJqdGL9yl9KiNwnbELQnYpXU=
+	t=1786949244; cv=none; b=bEnwA+dNGAPtzYIrq876GKRN2F+yeiIYQyfuOEolqaWGRM4nESUCcSC1plDeN/lecRrYHH8Ey0zFzmbwLsoJJxgu1MgMS2YyxUELekxTzkg36Grx9oiHhfkttkROQHG4r0fkmr7nxnM83d574o3t2acVSRkRUh9SnXjklc1ne+M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786948110; c=relaxed/simple;
-	bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
+	s=arc-20240116; t=1786949244; c=relaxed/simple;
+	bh=rBAt5JSF8N4gutaSGQQffiI9UN1FrxqHbJoLm3BcSRM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HpEVOrSjGZxRnzpJkKJGLhNZ9Gj7sckncQnpZh8P1mEyntBvgFObMXcE5kBXFjGEJKiV5wHTdtAygQwHIiL0SFiuN7gj2RUMPxsei1TI719Ezy38+KISB414dqPjg7+y6432l2xx5wVrZzQ2ZqfeSxs5D23XmFbIJeYwHWgM/30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RqPHJgqp; arc=none smtp.client-ip=95.215.58.103
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=O/Msv9vQveXKnnvCq5paCp+QLXbeywpE+wlzXxFWgR10+Fnp9YVwrSfDXOYZbxJsNpJjYfbsdWAdzXVMKoaWsQTI2INLi0Xf9MBlKJfg4C7gjVVTor8uyp6+c1cvJiWFce4UICdPPG2y36ddkoXZPxiu5gjZGag5BH4xa5mlfWw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Bwvvhwrb; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RqPHJgqp"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=fLCW866umXO4Gn7teaCvFnw/Ft7dtha1aZ8qqLg65vg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1786948107; v=1; x=1787552907;
- b=RqPHJgqpyTYrlrvwPYFMmKahDecyz3JhaxTJ8S+W7UbhD7TqhJFYv//F2e4PoPZW/cJqSUCN
- hTdg/AVxig0/baKk8IG2jealGgYy4mFuiXIML0VHcP+vwx7D0vyKjFc3VSeVRRKQD8QltQLX4Wl
- IvQRl0TUczYHPNdclJvGVcSU=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id 6a9a30d04e066ce2;
-	Mon, 17 Aug 2026 06:28:26 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <9de86d80-59f9-45cb-a684-42ec7d2831b9@linux.dev>
-Date: Mon, 17 Aug 2026 14:28:19 +0800
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Bwvvhwrb"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1786949242; x=1818485242;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=rBAt5JSF8N4gutaSGQQffiI9UN1FrxqHbJoLm3BcSRM=;
+  b=BwvvhwrbR+NaqTZms9+s3Kx+bUOukkt+LfLw3uXLvq8OifrhjpD0Ce9b
+   Yavf5SVOzlmYIzJuxJp0k5RlQk/BRVXLuNdXJDNTC99Xh3EkXkixACEzC
+   amsI8o2Ey6cPOlFGM9nbdlwm/65B7IK5swZMCju/6Z39b0/KzDsJkTBAN
+   bY6/MFOvZ5ZOe5KyOu4+OeG8Fm5g9+X1CwKQD3fmGVyL1uB2iZ3nD3Pgw
+   p7eUlwJlpVpuTT4anLw1JCa73YnLZiYDryzXpLhP1fClSEoq3D9GFVzi4
+   4Ureo+XekEuYlRPvXdeuERer3yzQdlwNdoY4j7WBdaplvIW2wUoHuyShS
+   Q==;
+X-CSE-ConnectionGUID: iGdbxk7PS/mr2J6EMbUD8Q==
+X-CSE-MsgGUID: JobiXEubQoKDDNaaeQVivQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11877"; a="91095439"
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="91095439"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2026 23:47:21 -0700
+X-CSE-ConnectionGUID: nH80rfgWSAuDqcgW6t+70w==
+X-CSE-MsgGUID: B0HsR4VgQoeru5UkUVXaGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,228,1779174000"; 
+   d="scan'208";a="261548300"
+Received: from unknown (HELO [10.238.208.98]) ([10.238.208.98])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Aug 2026 23:47:13 -0700
+Message-ID: <befe73e1-3287-440e-90de-6c62f6c19d47@intel.com>
+Date: Mon, 17 Aug 2026 14:47:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,95 +52,162 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 4/5] selftests/bpf: Avoid flaky resize value test
- for percpu data
-To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
-Cc: ast@kernel.org, daniel@iogearbox.net, john.fastabend@gmail.com,
- andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
- martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
- jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev,
- qmo@kernel.org, shuah@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260814173206.93082-5-leon.hwang@linux.dev>
- <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
+Subject: Re: [PATCH v14 18/22] KVM: selftests: Add helpers to init TDX memory
+ and finalize VM
+To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-18-15ad654a50db@google.com>
 Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <49f1c39a9af6f07357e66657ca1020e57684036626ef1f180a803f148f8eefe4@mail.kernel.org>
-Content-Type: text/plain; charset=UTF-8
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260722-tdx-selftests-v14-18-15ad654a50db@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 15/8/26 02:24, bot+bpf-ci@kernel.org wrote:
->> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> index 7d6bda909295..2f0dbeb88934 100644
->> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+On 7/23/2026 7:13 AM, Lisa Wang wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
 > 
-> [ ... ]
+> TDX protected memory needs to be measured and encrypted before it can be
+> used by the guest. Traverse the VM's memory regions and initialize all
+> the protected ranges by calling KVM_TDX_INIT_MEM_REGION.
 > 
->> @@ -126,11 +123,11 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
->>  static void test_global_percpu_data_init(void)
->>  {
->>  	struct test_global_percpu_data__percpu init_value = {};
->> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
->>  	struct test_global_percpu_data__percpu *init_data;
->> -	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
+> Once all the memory is initialized, the VM can be finalized by calling
+> KVM_TDX_FINALIZE_VM.
 > 
-> Does multiplying by 2 here break the test on 64K page systems?
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Co-developed-by: Erdem Aktas <erdemaktas@google.com>
+> Signed-off-by: Erdem Aktas <erdemaktas@google.com>
+> Co-developed-by: Sagi Shahar <sagis@google.com>
+> Signed-off-by: Sagi Shahar <sagis@google.com>
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Co-developed-by: Lisa Wang <wyihan@google.com>
+> Signed-off-by: Lisa Wang <wyihan@google.com>
+> ---
+>   .../selftests/kvm/include/x86/tdx/tdx_util.h       |  2 +
+>   tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c | 63 ++++++++++++++++++++++
+>   2 files changed, 65 insertions(+)
 > 
-> Per-CPU array value sizes are capped by the kernel:
-> 
->   /* percpu map value size is bound by PCPU_MIN_UNIT_SIZE */
->   if (percpu && round_up(attr->value_size, 8) > PCPU_MIN_UNIT_SIZE)
->           return -E2BIG;
-> 
-> in kernel/bpf/arraymap.c:array_map_alloc_check(), where PCPU_MIN_UNIT_SIZE
-> is defined as:
-> 
->   #define PCPU_MIN_UNIT_SIZE  PFN_ALIGN(32 << 10)
-> 
-> which equals max(32768, PAGE_SIZE).
-> 
-> The old code was safe by construction: desired_sz == PAGE_SIZE <=
-> PFN_ALIGN(32768) == PCPU_MIN_UNIT_SIZE. Doubling it breaks that:
-> 
->   PAGE_SIZE  4096 -> limit 32768, request   8192  OK
->   PAGE_SIZE 16384 -> limit 32768, request  32768  OK (exactly at limit)
->   PAGE_SIZE 65536 -> limit 65536, request 131072  -E2BIG
-> 
-> On kernels built with 64K pages (arm64 CONFIG_ARM64_64K_PAGES, ppc64)
-> bpf_map__set_value_size() still succeeds (it is purely userspace
-> bookkeeping), all four assertions that follow it pass, and then map
-> creation fails inside test_global_percpu_data__load():
-> 
->>  	err = test_global_percpu_data__load(skel);
->>  	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
->>  		goto out;
-> 
-> The "global_percpu_data/init" subtest fails, and test_percpu_data_on_cpus()
-> is never reached. That is a new failure introduced by this patch (with
-> desired_sz == PAGE_SIZE the same configuration created a 65536-byte per-CPU
-> value, which is exactly at the limit and accepted).
-> 
-> Note that the neighbouring resize test in global_map_resize.c deliberately
-> does not scale a per-CPU map by page size for this reason. At line 46 it
-> uses:
-> 
->   new_sz = sizeof(skel->data_percpu_arr->percpu_arr[0]) *
->            libbpf_num_possible_cpus();
-> 
-> A size that is independent of PAGE_SIZE would still force the mmap region
-> to move, which is what the new skel->percpu_arr reassignment and the
-> arr[0] == -1 check are there to exercise, without hitting the per-CPU
-> allocator bound.
-> 
+> diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> index 307e2c0bc9c9..35f0b2b7ac40 100644
+> --- a/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> +++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx_util.h
+> @@ -72,4 +72,6 @@ void tdx_vm_load_common_boot_parameters(struct kvm_vm *vm);
+>   void tdx_vcpu_load_boot_parameters(struct kvm_vm *vm, struct kvm_vcpu *vcpu);
+>   void tdx_vcpu_set_entry_point(struct kvm_vcpu *vcpu, void *guest_code);
+>   
+> +void tdx_vm_finalize(struct kvm_vm *vm);
+> +
+>   #endif /* SELFTESTS_TDX_TDX_UTIL_H */
+> diff --git a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> index be63d8652a02..831b0e5160df 100644
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/tdx_util.c
+> @@ -1,5 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0-only
+>   
+> +#include <linux/align.h>
+> +
+>   #include "processor.h"
+>   #include "tdx/td_boot.h"
+>   #include "tdx/tdx_util.h"
+> @@ -251,3 +253,64 @@ void tdx_init_vm(struct kvm_vm *vm, u64 attributes)
+>   
+>   	free(init_vm);
+>   }
+> +
+> +static void tdx_init_mem_region(struct kvm_vm *vm, void *source_pages,
+> +				u64 gpa, u64 size)
+> +{
+> +	u32 flags = KVM_TDX_MEASURE_MEMORY_REGION;
+> +	struct kvm_tdx_init_mem_region mem_region = {
+> +		.source_addr = (u64)source_pages,
+> +		.gpa = gpa,
+> +		.nr_pages = size / PAGE_SIZE,
+> +	};
+> +	struct kvm_vcpu *vcpu;
+> +
+> +	vcpu = list_first_entry_or_null(&vm->vcpus, struct kvm_vcpu, list);
+> +
+> +	TEST_ASSERT(size && IS_ALIGNED(size, PAGE_SIZE),
+> +		"Cannot add partial pages to the guest memory.\n");
+> +	TEST_ASSERT(IS_ALIGNED((u64)source_pages, PAGE_SIZE),
+> +		"Source memory buffer is not page aligned\n");
+> +	tdx_vcpu_ioctl(vcpu, KVM_TDX_INIT_MEM_REGION, flags, &mem_region);
+> +}
+> +
+> +static void tdx_load_private_memory(struct kvm_vm *vm)
+> +{
+> +	struct userspace_mem_region *region;
+> +	int ctr;
+> +
+> +	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
+> +		const struct sparsebit *protected_pages = region->protected_phy_pages;
+> +		const gpa_t gpa_base = region->region.guest_phys_addr;
+> +		const u64 hva_base = region->region.userspace_addr;
+> +		const sparsebit_idx_t lowest_page_in_region = gpa_base >> vm->page_shift;
+> +		void *source_pages = NULL;
+> +		sparsebit_idx_t i, j;
+> +
+> +		if (!sparsebit_any_set(protected_pages))
 
-To avoid breaking the test on 64K page systems, run the resize subtest
-only on 4K page systems.
+sparebit_any_set() doens't check if the input is NULL. So we need to 
+check it here.
 
-From maintenance view, I think it's better to add a dedicated subtest to
-test bpf_map__set_value_size() for percpu data. Then, it will be able to
-skip the subtest when sysconf(_SC_PAGE_SIZE) != 4K.
+> +			continue;
+> +
+> +		TEST_ASSERT(region->region.guest_memfd != -1,
+> +			    "TD private memory must be backed by guest_memfd");
+> +
+> +		sparsebit_for_each_set_range(protected_pages, i, j) {
+> +			const u64 size_to_load = (j - i + 1) * vm->page_size;
+> +			const u64 offset =
+> +				(i - lowest_page_in_region) * vm->page_size;
+> +			const u64 hva = hva_base + offset;
+> +			const u64 gpa = gpa_base + offset;
+> +
+> +			if (!kvm_has_gmem_attributes)
+> +				source_pages = (void *)hva;
+> +
 
-Thanks,
-Leon
+> +			vm_mem_set_private(vm, gpa, size_to_load);
+
+So vm_mem_set_private() has to be called at this late stage when run 
+with in-place gmem. But for non in-place gmem, we can actually call 
+vm_mem_set_private() in __vm_phy_pages_alloc().
+
+Calling vm_mem_set_private() here instead of in __vm_phy_pages_alloc() 
+looks like a trick to me. That is, we cannot set the page as private 
+when allocating a guest physical page as protected because if doing so, 
+we cannot write the initial content to it.
+
+This is the topic about how to implement the infras for in-place gmem, 
+not the issue of this series. Let me go read the selftest patches of 
+gmem in-place series and we can discuss there.
+
+> +			tdx_init_mem_region(vm, source_pages, gpa, size_to_load);
+> +		}
+> +	}
+> +}
+> +
+> +void tdx_vm_finalize(struct kvm_vm *vm)
+> +{
+> +	tdx_load_private_memory(vm);
+> +	tdx_vm_ioctl(vm, KVM_TDX_FINALIZE_VM, 0, NULL);
+> +}
+> 
 
