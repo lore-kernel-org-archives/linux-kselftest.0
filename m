@@ -1,132 +1,195 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+Received: from mta0.migadu.com (out-237.mta0.migadu.com [91.218.175.237])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D760A43F09A
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 14:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B33438013
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 14:46:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.237
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1786977454; cv=none; b=NlPudbqom6h5ud9mUamL+XVx5f7hVpymR6zDg9llvuTJOLfi7ih3NZYAnmtHL7xUq0rUvcb1XSim29O5V948PYUwwBMsePlzY4Fk2dtTzNeb/MXYU5FAXwEAalZYm2vBy4Vof4ZcF4Xdifh3yZ2wn4UW5QxoSquLCtS3NSuwub4=
+	t=1786977982; cv=none; b=IoEKqCyKnITAe7xKybc74n//FaApQ5FfxSrOLfLitb1DThyrRr0YKQxAERNqHNMCuLBIh38oz3GH6O6CNo/ptHME/3Ubx1ZrrERQHrjm8s70FfljlPyH9SC+NIIyswVHj/cxcFkAs7DTEn9JtKLqQrpRzxTCA3H0IZjuyZVPaes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1786977454; c=relaxed/simple;
-	bh=lerb0gKuqV7hyiHwD7tAixcPyrYjaXEE+RDGLUvUXEo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=VcUvlaWUlss4S9leLShbUjEhfNkuErCwWgzXfWlOhSnQjjDP4wjd3/KHGfvX9qtlfbvckuc/llr3yhHwuCA5b0VY9SZXG+PYPSHFrjpPjYp2estx2YOjGqcKiwOK5ltKBgMiHh4UH7pXQyzHyc5kL3P5CS9GL9lWkqqDrwF0NrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ts+1GB3A; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1786977982; c=relaxed/simple;
+	bh=7F0zooi2QVxzxthLrYZpvTOFobdXpnJ4oBoLO28N8uk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RatyaWOk22fdtq9oNGBcBfg2U4LKBfI5NLRVHzJHzAlOimmRwsxgMNbZ3GS3M15NSYmFZ53Qdn4id4uERznNnWeTuuEaH/XoaLkyXmmFT9Mx3SUaoglTDbRN8hdySl34mY7OCMFkSuDbi7pFHC2y6oUppQfhJFh7G0YGzTUgiXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YWm92I8z; arc=none smtp.client-ip=91.218.175.237
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ts+1GB3A"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2ccd1958e8fso55598305ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 07:37:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1786977451; x=1787582251; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=xbnAp7y/AgCt9+7CBSjoILDuat4y2Kbyd9OVnJGDiZs=;
-        b=ts+1GB3AGdgTNHtaG3eA7hS1Dy7WztPkLYICC+LAGAIhZAIWlkhcVYSptrESkFnBQR
-         aJVlcIdgRkFxM5f82E1Vq0PU9ceXSOtWn7NxQdN9Fvg9dnV1eZx1gFUDhSrfVKZIxviE
-         5tHEQCX8jnAv/PSg1grT3rb3CbiMVQOlXJtiTONQMT3W7XJhW6/1037x8REPOFtOknqR
-         IVu4P5c/BvAy984Ureu8X/GxP//iEei384gFFSsH4/oimp6MtM9WQrJoFW66e2NmR3Bv
-         LvAXjdZxXnMy7j+GZC0Cch8+DmOWf1+oZlZvxQ+gMmNmMTJ3+KHLVcOd+LNjbtI/GFux
-         xcdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1786977451; x=1787582251;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=xbnAp7y/AgCt9+7CBSjoILDuat4y2Kbyd9OVnJGDiZs=;
-        b=jkkr04SZAGr/HsuMKhX0Wuc0CR5XJrL2Sphoqgy1ThBX94v+/PKduF2d6VvM/hvzmj
-         axpHfa9vj3iWwlLXW8mTAcEL+plxwO/mBcE0/G/4K+rVDcaoTvziu0fCOTGy/SksVmRb
-         XcUdS4aP1lxRVU5Xxx2tHvzlXpUBiAMgP4TbX9TapzVlD00sR6lsN7G8zyPkTc9V5+iO
-         9Wfy3V7zr1V0yYRBbRXU1zi7QsOB9WISCkYidDDLKbZB3bKf7EvAvxb6warK6apPYd2b
-         d/AINlAL+QiR5hjFEX/gIUUgOc2UO9okCu/iMsi0PHF4dhcC/zzAbvuSUqwxM7XgvD/9
-         tngg==
-X-Forwarded-Encrypted: i=1; AHgh+RrcupPXmiJpZaEt1HZNqLNnRDsRkBVSa1S/QvGmKr1gQHfIb02j2teHo2Vo/N6CUjDgMDbUt89eCxnGmhxuIY0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwH4dVj/RTBoMTEyAx6aymY7+uLqhjdwf0l5TfdQ+9D4JNbUzJi
-	lSGdwL9SQusDpPRWQzz9RkekwFcBGLlGbTFEAYfcLf6QG94jDw3UoItB8DsO/Ga9NuOKdOhgsm1
-	XwVE3NA==
-X-Received: from plbmo3.prod.google.com ([2002:a17:903:a83:b0:2c7:702a:36a4])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:b0b:b0:2cf:9347:f445
- with SMTP id d9443c01a7336-2d3b0c7ae46mr283430775ad.10.1786977451095; Mon, 17
- Aug 2026 07:37:31 -0700 (PDT)
-Date: Mon, 17 Aug 2026 07:37:30 -0700
-In-Reply-To: <2vxzqzjz1x5f.fsf@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YWm92I8z"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7F0zooi2QVxzxthLrYZpvTOFobdXpnJ4oBoLO28N8uk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1786977978; v=1; x=1787582778;
+ b=YWm92I8z5U4aczwLH/uREkjYG6yN+9DnRk0ZXuZIfVclqhwEZ2SIFAz2PF/QhW50OnleEWNi
+ dXgwVaMhn9oJaZl2o60yNPAc8urOfG81T0e7+GjZTgAvgok81C/BoNCRj3P7S1soEoLj2EvniW2
+ H+3VeV7x8MWhQ9vY0jjZ0oU4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1151:15:1c5e:37e8:36:dd37] (2620:10d:c090:500::7:5604)
+	by smtp.migadu.com with ESMTPS id 733ad8e6f54186f1;
+	Mon, 17 Aug 2026 14:46:08 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <14a7e7c2-36f7-4aa2-9b20-cc54700a9f1b@linux.dev>
+Date: Mon, 17 Aug 2026 07:46:03 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-6-tarunsahu@google.com> <anphyjFv3FhF61iB@google.com>
- <2vxzpkzo51wg.fsf@kernel.org> <anssOQFNZ2LfihbU@google.com>
- <2vxzik5f311e.fsf@kernel.org> <anyObKiZIhfok5mk@google.com> <2vxzqzjz1x5f.fsf@kernel.org>
-Message-ID: <aoMcqp0gr06YXAPU@google.com>
-Subject: Re: [PATCH v4 05/11] KVM: LUO: Support VM preservation across live updates
-From: Sean Christopherson <seanjc@google.com>
-To: Pratyush Yadav <pratyush@kernel.org>
-Cc: Tarun Sahu <tarunsahu@google.com>, ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] bpf: reject stack-argument callback subprograms
+Content-Language: en-GB
+To: =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <20260816204501.493914-2-Jeremy.Jean@oss.cyber.gouv.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 15, 2026, Pratyush Yadav wrote:
-> On Wed, Aug 12 2026, Sean Christopherson wrote:
-> > On Wed, Aug 12, 2026, Pratyush Yadav wrote:
-> >> This is ABI between kernels. It needs to be stable-ish so you can move
-> >> from one kernel version to another. At the same time, unlike userspace
-> >> ABI, it can change.
-> >
-> > Uh, yeah, so KVM has been managing such immutable ABI for practically its entire
-> > existence.  KVM's save/restore uAPI has exactly what you're describing: serialization
-> > ABI that needs to be backwards and forwards compatible between different kernels
-> > in order to support both upgrade and rollback scenarios via live migration.
-> 
-> I think there is a slight difference between KVM's save/resture uAPI and
-> live update's ABI. With KVM's uAPI, you need to maintain strict
-> backwards compatibility because userspace reads what you output. So if
-> you change the layout, userspace will interpret it wrong and might
-> break.
-> 
-> With live update, the ABI never gets to userspace. It is used to talk
-> between kernels directly. So if you do break that, your userspace keeps
-> working fine, you just might not be able to live update to the
-> incompatible kernel.
-> 
-> So with live update, we don't need to keep backwards compatibility in
-> the ABI forever. Of course, it is good to minimize changes, but we have
-> more freedom to change it.
 
-Ah.  So this is the heart of the disconnect.  I very strongly disagree with the
-statement that live update doesn't need to support backwards compatibility.  I
-can totally believe that the folks working on live update are ok breaking backwards
-compatibility because their use cases are "fine" with such breakage.  And I can
-also believe live update as an upstream kernel feature being developed by those
-same folks is also ok with breaking backwards compatibility.
 
-But with my upstream KVM maintainer hat on, I am not ok with that.  I did not agree
-to support a world where KVM is allowed to break backwards compatibility, so long
-as it's done "carefully" or whatever.  If y'all want to deal with the resulting
-complexity, that's fine by me, but you'll be doing it without KVM.
+On 8/16/26 1:45 PM, Jérémy Jean wrote:
+> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
+> runtime ABI supplies five arguments. BTF validation nevertheless permits
+> static callback subprograms to declare more than five arguments when JIT
+> stack arguments are supported.
+>
+> This lets verifier state for a callback use outgoing stack argument slots
+> prepared at the helper call site. The helper does not pass those slots. On
+> x86-64, callback loads of arguments seven and later therefore read the
+> helper native frame instead of the synthetic values checked by the
+> verifier. KASAN reports a slab OOB write.
+>
+> Reject callback subprograms with incoming stack arguments when processing
+> callback calls. Add a verifier regression test using bpf_loop() and a
+> nine-argument callback.
+>
+> Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+> Assisted-by: Codex:gpt-5
+> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+> ---
+>   kernel/bpf/verifier.c                         |  4 +++
+>   .../selftests/bpf/progs/verifier_stack_arg.c  | 33 +++++++++++++++++++
+>   2 files changed, 37 insertions(+)
+>
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index fdc5fbb1f78c..29aa4911c7f7 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -9285,6 +9285,10 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>   	err = btf_check_subprog_call(env, subprog, caller->regs);
+>   	if (err == -EFAULT)
+>   		return err;
+> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog])) {
+> +		verbose(env, "callback subprog cannot have stack args\n");
+> +		return -EINVAL;
+> +	}
+>   
+>   	/* set_callee_state is used for direct subprog calls, but we are
+>   	 * interested in validating only BPF helpers that can call subprogs as
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> index 7e0ce5db28a0..5acc3b63ca84 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+> @@ -27,6 +27,13 @@ static int subprog_7args(int a, int b, int c, int d, int e, int f, int g)
+>   	return a + b + c + d + e + f + g;
+>   }
+>   
+> +__noinline __used
+> +static int callback_9args(__u32 index, void *ctx, long a3, long a4,
+> +			  long a5, long a6, long a7, long a8, long a9)
+> +{
+> +	return a9;
+> +}
+> +
+>   __noinline __used
+>   static long subprog_deref_arg6(long a, long b, long c, long d, long e, long *f)
+>   {
+> @@ -79,6 +86,32 @@ __naked void stack_arg_two_subprogs(void)
+>   	);
+>   }
+>   
+> +SEC("tc")
+> +__description("stack_arg: callback with incoming stack args")
+> +__failure
+> +__msg("callback subprog cannot have stack args")
+> +__naked void stack_arg_callback_many_args(void)
+> +{
+> +	asm volatile (
+> +		"r6 = 0;"
+> +		"*(u64 *)(r11 - 32) = 0;"
+> +		"*(u64 *)(r11 - 24) = 0;"
+> +		"*(u64 *)(r11 - 16) = 0;"
+> +		"*(u64 *)(r11 - 8) = 0;"
+> +		"r1 = 1;"
+> +		"r2 = %[callback_9args];"
+> +		"r3 = 0;"
+> +		"r4 = 0;"
+> +		"call %[bpf_loop];"
+> +		"r0 = 0;"
+> +		"exit;"
+> +		:
+> +		: __imm_ptr(callback_9args),
+> +		  __imm(bpf_loop)
+> +		: __clobber_all
+> +	);
+> +}
 
-I totally understand that exploratory work and initial development is best done
-in private and/or in a small working groups.  But decisions that will significantly
-impact multiple subsystems need to be made *with* those subystems.  I mean,
-obviously it's possible to make a decision in a small group and then "publish"
-the result later, but then as is happening here, the community and subsystem
-maintainers like me may refuse to play ball if they disagree.
+I build with latest bpf-next and selftest with llvm23 and I got a selftest build
+failure:
 
-To be very clear, for any KVM live update support that doesn't guarantee backwards
-compatibility (allowing that bugs happen), a very firm:
+progs/verifier_stack_arg.c:96:3: error: inline assembly requires more registers than available
+    96 |                 "r6 = 0;"
+       |                 ^
+   CLNG-BPF [test_progs] verifier_value_or_null.bpf.o
+1 error generated.
 
-NAK
+The reason probably due to '__imm_ptr(callback_9args)'. The following change can fix the build:
+
+index 5acc3b63ca84..f55a433b9202 100644
+--- a/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
++++ b/tools/testing/selftests/bpf/progs/verifier_stack_arg.c
+@@ -108,7 +108,7 @@ __naked void stack_arg_callback_many_args(void)
+                 :
+                 : __imm_ptr(callback_9args),
+                   __imm(bpf_loop)
+-               : __clobber_all
++               : __clobber_common, "r6"
+         );
+  }
+
+I then tested without your verifier.c change, I get the following test failure:
+
+     All error logs:
+     tester_init:PASS:tester_log_buf 0 nsec
+     process_subtest:PASS:obj_open_mem 0 nsec
+     process_subtest:PASS:specs_alloc 0 nsec
+     run_subtest:PASS:obj_open_mem 0 nsec
+     libbpf: prog 'stack_arg_callback_many_args': BPF program load failed: -EINVAL
+     libbpf: prog 'stack_arg_callback_many_args': failed to load: -EINVAL
+     libbpf: failed to load object 'verifier_stack_arg'
+     run_subtest:PASS:unexpected_load_success 0 nsec
+     validate_msgs:FAIL:979 expect_msg
+     VERIFIER LOG:
+     =============
+     func#0 writes 4 stack arg slots, but calls only require 0
+     processed 21 insns (limit 1000000) max_states_per_insn 1 total_states 2 peak_states 2 mark_read 0
+     =============
+     EXPECTED   SUBSTR: 'callback subprog cannot have stack args'
+     Summary: 1/18 PASSED, 0 SKIPPED, 1/1 FAILED
+
+I think the error message "func#0 writes 4 stack arg slots, but calls only require 0"
+is good enough. So the extra error message "callback subprog cannot have stack args"
+is not necessary in my opinion.
+
+> +
+>   SEC("tc")
+>   __description("stack_arg: read from uninitialized stack arg slot")
+>   __failure
+
