@@ -1,544 +1,261 @@
-Received: from mail-pg1-f178.google.com (mail-pg1-f178.google.com [209.85.215.178])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5213472F76
-	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 21:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.178
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787002947; cv=none; b=CrcYiqHAb6yxx5ffNZhnbaNAdFf83aaspmfoL2ePGW/t2pfRwo6vBdU+AJySnu5rDBnX2ShWuvipD1yRFyvtLA2kV3AaAAP1LkvpdCwnYxIfmLNyrMTTXetJkNJvMJ4iscggXLJS/bBTxAM8W5h81unC7F9kR2fJRGoGh5PjcRw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787002947; c=relaxed/simple;
-	bh=+BrwSqK/iZEWjOi5n/aAk9jdHYV1SOICLEzhhQHfrdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NI7khdPqo3BCn1ztUv6sj+YmZcurIm4I3HllbOcFlcY06slAg7WR+07hfZakduRAhC/htf+zoYS1oh71QJLibnuzr7atlb0bu0eEgZPgzmkjjX1aHz8BgtFhmqyAn6sXYAWIpGM9hDDG5BF8zlm1qsGSf2IuuHS6sc9AoLGyADw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WJpTGgkh; arc=none smtp.client-ip=209.85.215.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B7FC3A9629
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 21:47:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.44
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787003242; cv=pass; b=e+ZKcEMPksqmzGFYTuTpAvQr43JOOARo/042u1GQtzVt7xpxSwN8D8tSVdo8WiRB5rlF/Qj9lpHAyWSsziCcQswoa6XOqEUpc5F/zkMk5tvB1MlMRfqRU5s4yDu5JmmF4E8IaKEjLjw96sljVDSR3mhBQb/KhgJlmgWncqfWPqo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787003242; c=relaxed/simple;
+	bh=j6Qa8uIPND6iLrLwjaLqK1ckynXO6fLL8sTaD5Q9NIQ=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cStpibJbxRd7TF+ov6ADdHw2wfAtFuOXK8hyl7wXurpAY8O0jdKMH41eTOZGlKJCr70Z0julpB6F3EusW+lRXQPWENALmq8plwcfj1VmdnMfQrNhFcjOqbhfrlubAb24VKrW3OHKj/TAyijCxxgP1kb7uErgPcxNsLFePz0jlwY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Cr04oULF; arc=pass smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WJpTGgkh"
-Received: by mail-pg1-f178.google.com with SMTP id 41be03b00d2f7-cbedbaba5fdso2432275a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 14:42:24 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Cr04oULF"
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-38e69bdb0fcso3017075a91.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 14:47:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787003240; cv=none;
+        d=google.com; s=arc-20260327;
+        b=LAbH1VZRhf/CjJdJOvHkGGStHNoyz2Biy0ASfqlBy8tLcMhF3zlQd0FzqfRm5kEuzp
+         b4YrQ483hLL640xCDbEacQiAEZoSrmHImqaK3goC/ebKRbg7QQXhyzfINR1XaR5+q5Ez
+         XHedr1Uzh+7M8qrNd+nG47IHQ5KY7Kovuzz/gJCz6mKj4klMEdbWDqEucaNTVuokRC87
+         5YyjBm1n/xlTlkU8y1Mlpzll6iUS2+CFm8GZpRVXs4GBaSo6R/LEo8ztmebwbHkdH1cI
+         1dqqz/N+uQ+1GKUQKAjhskJNR/9FI1ZJQV7JJi7TRYueykYmhtg+2NB0qe4naApdf7L9
+         5u1w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=DxYBvhey30XUfJ4ax9nYh/jGztjdRvDgSMhAvB0aQsU=;
+        fh=7qF/P3+2Wa7yfxet2gTBPYtzZc9fSWK8F0grk/v7mLE=;
+        b=gdZYYEqU3Srh7bj/E6t64A9RJlyqy+MT0Ny+BkIsWhILzeXPhZJ2yxJOiU8XqCCBMh
+         acYmj3CeZALtSbUckviaU2dV+dIDlY1W87MomPBqm3hWGXVEVtyaufCsB/hwMmBHbI8E
+         yZPN8t9XasiClFuo+CP5bK8AAbdsM8au6b1xhg54PrAxTDlPj3xc14M5xN3Jq/rCR6bn
+         B7AzCqgS/3mgpOFbNF4yIpiuEznFJIRPPELc0TcKo+B6w8V5zJtjtUOZkwRBjsCWGDCY
+         3qJ6HwyK31mCncWz/h/DhDhjDzIGB3vdwq0ZNDeos/346bLvgxYZWTZH3ich3Hv3F8Vf
+         +9JQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787002944; x=1787607744; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Z8oHY1efdTZ0mrkkqnpEhOi9h4e/ZaN6Y4vux4nxnrw=;
-        b=WJpTGgkhDAn8mSHKKOrK8V5g+WWW6/bwkGhgTjq5Gb8jBGVDTncw2rtji2w0Qv3Fyf
-         uQ3f57E8lIJf30l39cXbSjdbbfXq9YnRjoJXu9CfeqOVB2wzoWlpzDyNF8hk+mZ/AX47
-         2G7dYkdllBvkTSSfeeWRpZByTdKcdPkRvWmyYNp9xdpyvXcv/hIkj7PmmOIZW4exYjLS
-         o7P5w4I4pZ7LlFkprFtawpu9qeB1WSxbChM1mttvtSx3XFtZmo5STVDbSLTMUj1kNmmx
-         4aXIUhLwxcFyveUTyGe+z37LEckyyxG52H5OXAhHDSLEE1QNZMRvKESk5jPDnCTU6dmh
-         hhEQ==
+        d=google.com; s=20251104; t=1787003240; x=1787608040; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=DxYBvhey30XUfJ4ax9nYh/jGztjdRvDgSMhAvB0aQsU=;
+        b=Cr04oULFAfy7blelK3JLlSkbEF8OCyB+21N3qbrSWGyWxu/INwo0tWauue5OOVUUvh
+         mrzuC+v2h5WeiEyVnxRe46tT2DY9zhxQ3ieYRDoT8pv95OrLlqrr3igIKpod7cH3jGJN
+         VdpMxW2O5or8BultgqnjORT4Y9Wwn8OdverkSdXory3lAKsjT6KDR2LRzE78W0csz43/
+         v+ANYb5ujnXb7pIP9pHBfsXKC5DFlm4vNSqXYSos7DDJY5pUppluaNvcY656yvdTG8jY
+         ndKhr10hDXdOJUpgQ+/FoTvziV+575YQCTujjK6YjDt4GBOPlTqP69gdqriLHGEbS9g5
+         u/EQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787002944; x=1787607744;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Z8oHY1efdTZ0mrkkqnpEhOi9h4e/ZaN6Y4vux4nxnrw=;
-        b=rIVqebuscEim8qkNW70ndd6Mazpgf6m3NQk8TBo55fbHRcdHKwhwyDgaOmssE0eqPE
-         JM84xS/pK3oKmxbsjF88GA0K859eGNXoZYb05eMb3nJq8UTYKZQUEQnyzRgfnXpE6Y6Y
-         m0E4zTd5IC3V/+/NU0X/LhIthzYj0V7Nd7CS7f/TaieOLzEoOiysi0BobszFBzWF/0Jq
-         LGGokrAW+lGa+c/97mZQkt/7t2T4lSFVi4ij6ffoFkX1ncfUKjKr6rtUwqP5JDo+RBmb
-         PctZcK9Wa0UkCGK9M3BKa4uVTcXO4I3jjzMFDKj2OGDI/A6Bz5FRcsX0Ulo822Zvns4L
-         HBng==
-X-Forwarded-Encrypted: i=1; AHgh+RqCb5ewVfom3xgvjDkJ3s+73CISnPEpMjTZHWprhAeJefMKvmKlsYF5zenDh/A02Phhy2XEEWon3KzdFtYzrPs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YySct3fNqzGcoTb5ZuNqCRD8rxh30Bb8KUhMJ+vh5F6bVqx94Fk
-	Ej5ufGt+PynAYmVPNbze/29rYje4tpL+3gvWF/AnObTGPpA7eBEX+HGT
-X-Gm-Gg: AR+sD13kYEKPvIYULp8rRwg7fDpIZkLijLPSvHdDml5zlyG+P+4esF8QLMijKTiRkBJ
-	L9fSULtHChA4MIc2SzzRgrW750FoE2YKAvjTdz1AFY1gtgMuldlMz1YvRv2XJ79d9B9JKP3U83S
-	rBZRtfR1VhPKpXpEAadcWhunMLnYG9l1BZFSMc5VMi9XVLdeY6WILKQq/3lDKyfSnzZOBll2zwH
-	65oGBm2MssRi79N4E+9uJ482USypRU129ZKFKvgjqn5a2QCBeJFOTvhZICQlQGlR5MJX38omYPR
-	1Quo1TiuN2ygfX0+worbdVFzoBMYMuP/WYi6Veq+jfWRK2fZcFsqv3vOoMwc5aGMGnKBJpbEzk2
-	E30HUzpBEkFUnPxAOhJE30g24OFN/B4317TbZf3bHgQRMjFG3myCgZQq2un5hjZgOOz8Lg1fj6J
-	o1qyK5Do3uEgIQHwcVSZyzteJL8CluW21O6ekN9/TFAXWdA6hSafF5L70=
-X-Received: by 2002:a05:6a21:9087:b0:3c3:9aff:7a67 with SMTP id adf61e73a8af0-3ccda66c136mr3576310637.17.1787002943840;
-        Mon, 17 Aug 2026 14:42:23 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:6b::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-326794c0c94sm18048820eec.9.2026.08.17.14.42.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 14:42:23 -0700 (PDT)
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: kernel-team@meta.com,
-	Jens Axboe <axboe@kernel.dk>,
-	Tejun Heo <tj@kernel.org>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	linux-block@vger.kernel.org,
-	bpf@vger.kernel.org,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] selftests/bpf: add test for blkcg io.stat BPF kfuncs
-Date: Mon, 17 Aug 2026 14:42:05 -0700
-Message-ID: <20260817214205.723267-3-ziyang.meme@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260817214205.723267-1-ziyang.meme@gmail.com>
-References: <20260817214205.723267-1-ziyang.meme@gmail.com>
+        d=1e100.net; s=20251104; t=1787003240; x=1787608040;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=DxYBvhey30XUfJ4ax9nYh/jGztjdRvDgSMhAvB0aQsU=;
+        b=foMAjcuGybWdyfBNTlkemYxYC1IVA3Lz+vUF+KSAUj3umfLjj+xvsdYgEV2rjcsreU
+         EdKkiZm8Y819416ll4BLoF28P17lfKIIo/BJwKioFk5SkGXsjiEl695aIfKft2C9f58i
+         en6nisgOInbMY4Bj66JO3222Ub8drWfQ3QKE7ivoA7JdXYHiV+DOpp7/KqZB4+jxG///
+         mQ+e7I8p/iXX+ShE+4FDCI3HRloGN4UjcBTdOTAkn3dZoPLA4cZthxIgXxhvDGFcwNn8
+         CTWz6xk7dHfvB3e6ZGGmkXkQP4T78r+tZCh399CUus4io0G9GpA6Ww2HLpcUrYBz8h7b
+         EkxA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr0T3GDXwYcm5MPvQyCADl5UNJtoz3ZGAcPdYXRWbqYvthz12IZwzOkKYK8bAcGYZj+tUz99mp5RxbLy1nOzjQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxRgvyDYzOB9bA/IFOp3+RAD4vVjjZz7qiU/0PLQC6YIxf4q8Ah
+	tSQMa2/FbW+m8KCQfR75XCQb8oD9qc+hFICjURDAHEq8lq3eh2eLVjcuuy5hjZBUIPU5I9T8tg3
+	3+FBttVx+xeW/WT6TWIIOulPtnBmxkWse+iyaRjF0
+X-Gm-Gg: AR+sD12ozpACDoYUlQUO3FLsMdqbR63ZDvUDUrt7jd0jW0kVn9U1KEoNGjtqAaHCdJx
+	SBJ9dVXnTPiI6RJfi5mutcV+6Rv6t2pca+pdIwZUILInpWBo+DrcE/1SaaOGd90RpU/btvW2/L2
+	H3S2x6ZCSVOZzM8F9ZSi3pSJ4WedYDMhMQyh7FclWeQ8g9O3ero55s03sGu4x0EIKAnLm28LqCv
+	n/GERiwpF/OCbbCoVswuYTdLB7PAX2rcWP6GmD01stGmzTUUqVJ/egJDTK5rs0LMiBRfQmFvNxl
+	MsPEeItrFHx3u3S9s9s60Rlm+seBaHuqORN+fhN3cdEZ8i7nxcprOtasoH2Aee9HCLYsRznIO8a
+	nRbFlrMYAAKwt
+X-Received: by 2002:a17:90b:4cc1:b0:37f:be6c:f3f2 with SMTP id
+ 98e67ed59e1d1-3933bd0dd0fmr33755002a91.2.1787003239624; Mon, 17 Aug 2026
+ 14:47:19 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 17 Aug 2026 14:47:17 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Mon, 17 Aug 2026 14:47:17 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aoNrFX9yLfsM7KQI@google.com>
+References: <CAEvNRgFzRj_=GVy8T4P8ehhQjYomYxkngzwtKBF0iEL0Cv6fuQ@mail.gmail.com>
+ <anp1I64K0KeyQuyo@yzhao56-desk.sh.intel.com> <CAEvNRgFWcndQKJE_q+ZATFZEMYd=6uRLygozLvg7L77bPX0cEQ@mail.gmail.com>
+ <anqqKH6kuwpvuwp9@yzhao56-desk.sh.intel.com> <CAEvNRgGWDY_fxbyBM-5sMdYMevMe0HzVP9kbC1cCGLE_dV=_Gw@mail.gmail.com>
+ <a71d4fccdffd1f6a12332ddd18fa812542ea2118.camel@intel.com>
+ <CAEvNRgHxda6XK_XqWaqqVnA7oW=Fhp_C5gF4vNcL+-HfwfXMqQ@mail.gmail.com>
+ <0c80b9b0e13e3ab2cbe4f9eaf4a02ebba25a7001.camel@intel.com>
+ <an5RJYTwlYeym--O@google.com> <aoKnmW9St5zCoTD3@yzhao56-desk.sh.intel.com> <aoNrFX9yLfsM7KQI@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 17 Aug 2026 14:47:17 -0700
+X-Gm-Features: AcwNN1VpUAMbtXtdgh721uPhtQzbHJAxofv-9Na5pJ24kSfJuEcCQlHEnwy5G0c
+Message-ID: <CAEvNRgH_=8YqKHb_OJfT583ZJ346cceRimd9YJ762Vv08uJGHQ@mail.gmail.com>
+Subject: Re: [PATCH v10 11/41] KVM: guest_memfd: Ensure pages are not in use
+ before conversion
+To: Sean Christopherson <seanjc@google.com>, Yan Zhao <yan.y.zhao@intel.com>
+Cc: Rick P Edgecombe <rick.p.edgecombe@intel.com>, "david@kernel.org" <david@kernel.org>, 
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>, "steven.price@arm.com" <steven.price@arm.com>, 
+	"peterx@redhat.com" <peterx@redhat.com>, "forkloop@google.com" <forkloop@google.com>, 
+	"tabba@google.com" <tabba@google.com>, 
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	Vishal Annapurve <vannapurve@google.com>, "willy@infradead.org" <willy@infradead.org>, 
+	"tglx@kernel.org" <tglx@kernel.org>, "wyihan@google.com" <wyihan@google.com>, 
+	"pratyush@kernel.org" <pratyush@kernel.org>, "aik@amd.com" <aik@amd.com>, 
+	"jmattson@google.com" <jmattson@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, 
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "rientjes@google.com" <rientjes@google.com>, 
+	"andrew.jones@linux.dev" <andrew.jones@linux.dev>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "chrisl@kernel.org" <chrisl@kernel.org>, 
+	"shakeel.butt@linux.dev" <shakeel.butt@linux.dev>, 
+	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"mhiramat@kernel.org" <mhiramat@kernel.org>, "baohua@kernel.org" <baohua@kernel.org>, 
+	"tarunsahu@google.com" <tarunsahu@google.com>, 
+	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
+	"jgg@ziepe.ca" <jgg@ziepe.ca>, "jthoughton@google.com" <jthoughton@google.com>, 
+	"yuanchu@google.com" <yuanchu@google.com>, "hpa@zytor.com" <hpa@zytor.com>, 
+	"shikemeng@huaweicloud.com" <shikemeng@huaweicloud.com>, "nphamcs@gmail.com" <nphamcs@gmail.com>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "shivankg@amd.com" <shivankg@amd.com>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "youngjun.park@lge.com" <youngjun.park@lge.com>, 
+	"kasong@tencent.com" <kasong@tencent.com>, "pankaj.gupta@amd.com" <pankaj.gupta@amd.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
+	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"vbabka@kernel.org" <vbabka@kernel.org>, "weixugc@google.com" <weixugc@google.com>, 
+	"michael.roth@amd.com" <michael.roth@amd.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "qperret@google.com" <qperret@google.com>, 
+	"brauner@kernel.org" <brauner@kernel.org>, "bp@alien8.de" <bp@alien8.de>, 
+	"baoquan.he@linux.dev" <baoquan.he@linux.dev>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "liam@infradead.org" <liam@infradead.org>, 
+	"axelrasmussen@google.com" <axelrasmussen@google.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"qi.zheng@linux.dev" <qi.zheng@linux.dev>, "linux-mm@kvack.org" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Add cgroup_iter_io to test the blkcg io.stat BPF kfuncs. The BPF program
-flushes the statistics, looks up the I/O css under RCU, walks its blkgs,
-and reads one device's counters with BPF_CORE_READ().
+Sean Christopherson <seanjc@google.com> writes:
 
-The test performs O_DIRECT I/O on a private loop device. It checks the
-device ID and counters against io.stat.
+> On Mon, Aug 17, 2026, Yan Zhao wrote:
+>> On Thu, Aug 13, 2026 at 04:20:05PM -0700, Sean Christopherson wrote:
+>> > On Thu, Aug 13, 2026, Rick P Edgecombe wrote:
+>> > > > > nicely so we actually just run an old branch's TDX selftests against newer
+>> > > > > kernels. So the branch is a bit of a pile, and not really suitable for sharing.
+>> > > > > We plan to clean it and upstream it when the path clears. So it would really
+>> > > > > help to get those basic ones upstream. We remain happy to help, so please let us
+>> > > > > know.
+>> > > >
+>> > > > I guess at this point I'm hoping y'all and Sean are okay that this
+>> > > > conversions series merges, and we let this stress test failure be
+>> > > > handled later. I'll be around to fix things :)
+>> > > >
+>> > > > I'd say the line of sight to fixing this would be when the KVM MMU only
+>> > > > gets PFNs (and no pages at all) from guest_memfd.
+>> > >
+>> > > Hmm, I think we shouldn't upstream a uABI that we don't have line of sight to
+>> > > making robust. So it would be good to settle this thread at least.
+>> >
+>> > This isn't uABI.  You're talking about hitting a race condition between one task
+>> Hmm. Perhaps it is not a uABI issue, since users are allowed to retry. However,
+>> it is hard to convince me that it makes sense to require users to retry a
+>> private-to-shared conversion before a GFN has ever been mapped, given that a
+>> retry is not required when the GFN is currently in use by the guest.
+>>
+>> > converting a page and another faulting in the same page.  An NMI, SMI, or IRQ at
+>> > just the right/wrong time, especially on a preemptible kernel, could lead to the
+>> > same test failures, even if KVM drops the refcount "immediately".
+>> Could you elaborate on how an NMI, SMI, or IRQ at just the right/wrong time
+>> could lead to the same test failures?
+>
+> Ah, sorry, my bad.  I was speed reading and missed that the key to your suggested
+> "*page = NULL" change was that the reference was put _before_
+> filemap_invalidate_unlock_shared(), i.e. before dropping
+> the invalidate lock and thus before __kvm_gmem_set_attributes() will walk the
+> folios to look for outstanding references.  I was thinking that putting the
+> reference right away was just shrinking the timing window, but putting the
+> reference while still holding the invalidate lock closes the window entirely.
+>
+> So, I take back what I said about this not being ABI, and about this not blocking
+> in-place conversion.  It most definitely affects ABI, and so needs to be addressed
+> before merging in-place conversion.
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
----
- tools/testing/selftests/bpf/cgroup_iter_io.h  |  17 ++
- tools/testing/selftests/bpf/config            |   1 +
- .../selftests/bpf/prog_tests/cgroup_iter_io.c | 277 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_io.c      |  99 +++++++
- 4 files changed, 394 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_io.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_io.c
+I thought back then when David suggested that conversion can return
+-EAGAIN, one of the core ABI benefits is that this leaves the door open
+for things to gradually improve. If we can improve stuff within the
+kernel, then the the kernel would just return fewer errors. This retains
+backward compatibility, since extra userspace code that handles errors
+can continue to exist, it just won't be used.
 
-diff --git a/tools/testing/selftests/bpf/cgroup_iter_io.h b/tools/testing/selftests/bpf/cgroup_iter_io.h
-new file mode 100644
-index 000000000000..f4bbaaccdf71
---- /dev/null
-+++ b/tools/testing/selftests/bpf/cgroup_iter_io.h
-@@ -0,0 +1,17 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#ifndef __CGROUP_ITER_IO_H
-+#define __CGROUP_ITER_IO_H
-+
-+struct io_query {
-+	/* one device's io.stat counters */
-+	__u64 rbytes;
-+	__u64 wbytes;
-+	__u64 rios;
-+	__u64 wios;
-+	__u64 dbytes;
-+	__u64 dios;
-+	__u64 dev;	/* dev_t of the device the counters belong to */
-+};
-+
-+#endif /* __CGROUP_ITER_IO_H */
-diff --git a/tools/testing/selftests/bpf/config b/tools/testing/selftests/bpf/config
-index ea7044f30adc..270e6bf9194d 100644
---- a/tools/testing/selftests/bpf/config
-+++ b/tools/testing/selftests/bpf/config
-@@ -1,3 +1,4 @@
-+CONFIG_BLK_CGROUP=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_BOOTPARAM_HARDLOCKUP_PANIC=y
- CONFIG_BOOTPARAM_SOFTLOCKUP_PANIC=1
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..5d27e5d28379
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_iter_io.c
-@@ -0,0 +1,277 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#define _GNU_SOURCE
-+#include <test_progs.h>
-+#include <bpf/libbpf.h>
-+#include <fcntl.h>
-+#include <linux/loop.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <sys/ioctl.h>
-+#include <sys/stat.h>
-+#include <sys/sysmacros.h>
-+#include <unistd.h>
-+#include "cgroup_helpers.h"
-+#include "cgroup_iter_io.h"
-+#include "cgroup_iter_io.skel.h"
-+
-+#define IO_SIZE (4 * 1024 * 1024)
-+
-+static int read_stats(struct bpf_link *link)
-+{
-+	int fd, ret = 0;
-+	ssize_t bytes;
-+
-+	fd = bpf_iter_create(bpf_link__fd(link));
-+	if (!ASSERT_OK_FD(fd, "bpf_iter_create"))
-+		return 1;
-+
-+	/* Results land in skel->data_query; the read itself returns no data. */
-+	bytes = read(fd, NULL, 0);
-+	if (!ASSERT_EQ(bytes, 0, "read fd"))
-+		ret = 1;
-+
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Set up a loop device for cgroup-charged I/O. */
-+static int loop_setup(char *loop_path, size_t sz, int *ctl_fd, int *loop_fd,
-+		      int *back_fd)
-+{
-+	char back_path[] = "/tmp/cgroup_iter_io.XXXXXX";
-+	int nr;
-+
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+
-+	*ctl_fd = open("/dev/loop-control", O_RDWR | O_CLOEXEC);
-+	if (*ctl_fd < 0)
-+		return -1;
-+
-+	nr = ioctl(*ctl_fd, LOOP_CTL_GET_FREE);
-+	if (nr < 0)
-+		goto err;
-+	snprintf(loop_path, sz, "/dev/loop%d", nr);
-+
-+	*back_fd = mkstemp(back_path);
-+	if (*back_fd < 0)
-+		goto err;
-+	unlink(back_path);
-+	if (ftruncate(*back_fd, (off_t)IO_SIZE * 4))
-+		goto err;
-+
-+	*loop_fd = open(loop_path, O_RDWR | O_CLOEXEC);
-+	if (*loop_fd < 0)
-+		goto err;
-+	if (ioctl(*loop_fd, LOOP_SET_FD, *back_fd))
-+		goto err;
-+
-+	return 0;
-+err:
-+	if (*loop_fd >= 0)
-+		close(*loop_fd);
-+	if (*back_fd >= 0)
-+		close(*back_fd);
-+	close(*ctl_fd);
-+	*ctl_fd = *loop_fd = *back_fd = -1;
-+	return -1;
-+}
-+
-+static void loop_teardown(const char *loop_path, int ctl_fd, int loop_fd,
-+			  int back_fd)
-+{
-+	int nr = -1;
-+
-+	if (loop_fd >= 0) {
-+		ioctl(loop_fd, LOOP_CLR_FD, 0);
-+		close(loop_fd);
-+	}
-+	if (back_fd >= 0)
-+		close(back_fd);
-+	if (ctl_fd >= 0) {
-+		if (sscanf(loop_path, "/dev/loop%d", &nr) == 1 && nr >= 0)
-+			ioctl(ctl_fd, LOOP_CTL_REMOVE, nr);
-+		close(ctl_fd);
-+	}
-+}
-+
-+/* O_DIRECT keeps I/O charged to the current cgroup. */
-+static int do_direct_io(const char *loop_path)
-+{
-+	void *buf;
-+	int fd, ret = -1;
-+
-+	fd = open(loop_path, O_RDWR | O_DIRECT | O_CLOEXEC);
-+	if (fd < 0)
-+		return -1;
-+	if (posix_memalign(&buf, 4096, IO_SIZE))
-+		goto out_fd;
-+	memset(buf, 0xab, IO_SIZE);
-+
-+	if (pwrite(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	fsync(fd);
-+	if (pread(fd, buf, IO_SIZE, 0) != IO_SIZE)
-+		goto out_buf;
-+	ret = 0;
-+out_buf:
-+	free(buf);
-+out_fd:
-+	close(fd);
-+	return ret;
-+}
-+
-+/* Read @dev's io.stat counters. @dev uses kernel dev_t encoding. */
-+static int parse_io_stat(int cgroup_fd, __u64 dev, struct io_query *out)
-+{
-+	unsigned int want_maj = dev >> 20, want_min = dev & ((1U << 20) - 1);
-+	char buf[4096], *line, *saveptr;
-+	int fd, n, ret = -1;
-+
-+	fd = openat(cgroup_fd, "io.stat", O_RDONLY);
-+	if (fd < 0)
-+		return -1;
-+	n = read(fd, buf, sizeof(buf) - 1);
-+	close(fd);
-+	if (n <= 0)
-+		return -1;
-+	buf[n] = '\0';
-+
-+	for (line = strtok_r(buf, "\n", &saveptr); line;
-+	     line = strtok_r(NULL, "\n", &saveptr)) {
-+		unsigned long long rb = 0, wb = 0, ri = 0, wi = 0, db = 0, di = 0;
-+		unsigned int maj, min;
-+
-+		/* Only the device id is required; missing counters stay zero. */
-+		if (sscanf(line,
-+			   "%u:%u rbytes=%llu wbytes=%llu rios=%llu wios=%llu dbytes=%llu dios=%llu",
-+			   &maj, &min, &rb, &wb, &ri, &wi, &db, &di) < 2)
-+			continue;
-+		if (maj != want_maj || min != want_min)
-+			continue;
-+
-+		out->rbytes = rb;
-+		out->wbytes = wb;
-+		out->rios = ri;
-+		out->wios = wi;
-+		out->dbytes = db;
-+		out->dios = di;
-+		ret = 0;
-+		break;
-+	}
-+	return ret;
-+}
-+
-+void test_cgroup_iter_io(void)
-+{
-+	char *cgroup_rel_path = "/cgroup_iter_io_test";
-+	int ctl_fd = -1, loop_fd = -1, back_fd = -1;
-+	struct cgroup_iter_io *skel = NULL;
-+	struct bpf_link *link = NULL;
-+	char loop_path[64];
-+	struct io_query *q;
-+	int cgroup_fd;
-+
-+	cgroup_fd = cgroup_setup_and_join(cgroup_rel_path);
-+	if (!ASSERT_OK_FD(cgroup_fd, "cgroup_setup_and_join"))
-+		return;
-+
-+	if (loop_setup(loop_path, sizeof(loop_path), &ctl_fd, &loop_fd, &back_fd)) {
-+		test__skip();	/* needs root + CONFIG_BLK_DEV_LOOP */
-+		goto cleanup_cgroup_fd;
-+	}
-+
-+	skel = cgroup_iter_io__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "cgroup_iter_io__open_and_load"))
-+		goto cleanup_loop;
-+
-+	/* Convert glibc st_rdev to kernel dev_t format. */
-+	{
-+		struct stat lst;
-+
-+		if (!ASSERT_OK(fstat(loop_fd, &lst), "fstat loop"))
-+			goto cleanup_skel;
-+		skel->data_query->target_dev =
-+			((__u64)major(lst.st_rdev) << 20) | minor(lst.st_rdev);
-+	}
-+
-+	DECLARE_LIBBPF_OPTS(bpf_iter_attach_opts, opts);
-+	union bpf_iter_link_info linfo = {
-+		.cgroup.cgroup_fd = cgroup_fd,
-+		.cgroup.order = BPF_CGROUP_ITER_SELF_ONLY,
-+	};
-+	opts.link_info = &linfo;
-+	opts.link_info_len = sizeof(linfo);
-+
-+	link = bpf_program__attach_iter(skel->progs.cgroup_io_query, &opts);
-+	if (!ASSERT_OK_PTR(link, "bpf_program__attach_iter"))
-+		goto cleanup_skel;
-+
-+	/* This process is in the test cgroup, so the loop I/O is charged here. */
-+	if (!ASSERT_OK(do_direct_io(loop_path), "do_direct_io"))
-+		goto cleanup_link;
-+
-+	if (!ASSERT_OK(read_stats(link), "read stats"))
-+		goto cleanup_link;
-+
-+	q = &skel->data_query->io_query;
-+	if (test__start_subtest("cgroup_iter_io__write")) {
-+		ASSERT_GT(q->wbytes, 0, "wbytes");
-+		ASSERT_GT(q->wios, 0, "wios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__read")) {
-+		ASSERT_GT(q->rbytes, 0, "rbytes");
-+		ASSERT_GT(q->rios, 0, "rios");
-+	}
-+	if (test__start_subtest("cgroup_iter_io__dev"))
-+		ASSERT_GT(q->dev, 0, "dev");
-+
-+	/* Compare with io.stat without I/O between the reads. */
-+	if (test__start_subtest("cgroup_iter_io__match")) {
-+		struct io_query filev = {};
-+
-+		if (ASSERT_OK(read_stats(link), "read stats") &&
-+		    ASSERT_OK(parse_io_stat(cgroup_fd, q->dev, &filev),
-+			      "parse io.stat")) {
-+			ASSERT_EQ(q->rbytes, filev.rbytes, "rbytes");
-+			ASSERT_EQ(q->wbytes, filev.wbytes, "wbytes");
-+			ASSERT_EQ(q->rios, filev.rios, "rios");
-+			ASSERT_EQ(q->wios, filev.wios, "wios");
-+			ASSERT_EQ(q->dbytes, filev.dbytes, "dbytes");
-+			ASSERT_EQ(q->dios, filev.dios, "dios");
-+		}
-+	}
-+
-+	/* Root statistics include this cgroup's I/O. */
-+	if (test__start_subtest("cgroup_iter_io__root")) {
-+		struct bpf_link *root_link;
-+		struct io_query *r;
-+
-+		skel->data_query->got_root_css = 0;
-+		root_link = bpf_program__attach_iter(skel->progs.cgroup_root_io_query,
-+						     &opts);
-+		if (ASSERT_OK_PTR(root_link, "attach root iter")) {
-+			if (ASSERT_OK(read_stats(root_link), "read root stats")) {
-+				r = &skel->data_query->root_query;
-+				ASSERT_EQ(skel->data_query->got_root_css, 1,
-+					  "got_root_css");
-+				ASSERT_EQ(r->dev, q->dev, "root dev");
-+				ASSERT_GE(r->wbytes, q->wbytes, "root wbytes");
-+				ASSERT_GE(r->wios, q->wios, "root wios");
-+				ASSERT_GE(r->rbytes, q->rbytes, "root rbytes");
-+				ASSERT_GE(r->rios, q->rios, "root rios");
-+			}
-+			bpf_link__destroy(root_link);
-+		}
-+	}
-+
-+cleanup_link:
-+	bpf_link__destroy(link);
-+cleanup_skel:
-+	cgroup_iter_io__destroy(skel);
-+cleanup_loop:
-+	loop_teardown(loop_path, ctl_fd, loop_fd, back_fd);
-+cleanup_cgroup_fd:
-+	close(cgroup_fd);
-+	cleanup_cgroup_environment();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/cgroup_iter_io.c b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-new file mode 100644
-index 000000000000..2cd538068987
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/cgroup_iter_io.c
-@@ -0,0 +1,99 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/* Copyright (c) 2025 Meta Platforms, Inc. and affiliates. */
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_core_read.h>
-+#include "bpf_experimental.h"
-+#include "cgroup_iter_io.h"
-+
-+char _license[] SEC("license") = "GPL";
-+
-+struct io_query io_query SEC(".data.query");
-+
-+struct io_query root_query SEC(".data.query");
-+
-+__u64 got_root_css SEC(".data.query");
-+
-+/* Device selected by userspace in kernel dev_t format. */
-+__u64 target_dev SEC(".data.query");
-+
-+/* Keep inline: RCU and open-coded iterators cannot cross a BPF call. */
-+static __always_inline int read_target_dev(struct cgroup *cgrp,
-+					   struct io_query *out)
-+{
-+	struct cgroup_subsys_state *css;
-+	struct blkcg_gq *pos;
-+	__u64 dev;
-+	int ssid;
-+
-+	/* The flush can sleep, so run it before the RCU section. */
-+	bpf_blkcg_flush_stats(cgrp);
-+
-+	bpf_rcu_read_lock();
-+	ssid = bpf_core_enum_value(enum cgroup_subsys_id, io_cgrp_id);
-+
-+	/*
-+	 * subsys[] is __rcu, so this read gives an RCU pointer the iterator
-+	 * accepts. BPF_CORE_READ() would return a plain value instead.
-+	 */
-+	css = cgrp->subsys[ssid];
-+	if (!css) {
-+		bpf_rcu_read_unlock();
-+		return 0;
-+	}
-+
-+	bpf_for_each(blkg, pos, css) {
-+		dev = BPF_CORE_READ(pos, q, disk, part0, bd_dev);
-+		if (dev != target_dev)
-+			continue;
-+
-+		out->dev = dev;
-+		out->rbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_READ]);
-+		out->wbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_WRITE]);
-+		out->rios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_READ]);
-+		out->wios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_WRITE]);
-+		out->dbytes = BPF_CORE_READ(pos, iostat.cur.bytes[BLKG_IOSTAT_DISCARD]);
-+		out->dios = BPF_CORE_READ(pos, iostat.cur.ios[BLKG_IOSTAT_DISCARD]);
-+		break;
-+	}
-+	bpf_rcu_read_unlock();
-+	return 1;
-+}
-+
-+SEC("iter.s/cgroup")
-+int cgroup_io_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *cgrp = ctx->cgroup;
-+
-+	if (!cgrp)
-+		return 1;
-+
-+	/* Start fresh so a device that is not found stays all-zero. */
-+	__builtin_memset(&io_query, 0, sizeof(io_query));
-+
-+	read_target_dev(cgrp, &io_query);
-+	return 0;
-+}
-+
-+SEC("iter.s/cgroup")
-+int cgroup_root_io_query(struct bpf_iter__cgroup *ctx)
-+{
-+	struct cgroup *root;
-+
-+	if (!ctx->cgroup)
-+		return 1;
-+
-+	__builtin_memset(&root_query, 0, sizeof(root_query));
-+
-+	/* The root cgroup always has id 1. */
-+	root = bpf_cgroup_from_id(1);
-+	if (!root)
-+		return 0;
-+
-+	/* Root counters include all cgroups' I/O. */
-+	if (read_target_dev(root, &root_query))
-+		got_root_css = 1;
-+
-+	bpf_cgroup_release(root);
-+	return 0;
-+}
--- 
-2.53.0-Meta
+> The only question is if we want to commit to
+> guaranteeing that conversion will succeed in this scenario, or if we want to take
+> the easy way out and formally document that conversion can fail with EAGAIN at any
+> time, even if userspace has never mmap()'d the memory in question.
+>
 
+I don't really think there's a need to commit to this, IIUC in
+principle, ignoring that on many paths of those guest_memfd may be
+excluded, refcounts can be taken even if there are no host userspace
+mappings. For one, memory failure handling doesn't care if there are
+mappings, the refcount will be taken for a short while and could cause
+this conversion failure.
+
+Here's the relevant part of the documentation added for conversions:
+
+  If this ioctl returns -EAGAIN, the offset of the page with unexpected
+  refcounts will be returned in `error_offset`. This can occur if there
+  are transient refcounts on the pages, taken by other parts of the
+  kernel.
+
+  Userspace is expected to figure out how to remove all known refcounts
+  on the shared pages, such as refcounts taken by get_user_pages(), and
+  try the ioctl again. A possible source of these long term refcounts is
+  if the guest_memfd memory was pinned in IOMMU page tables.
+
+> I'm leaning pretty strongly towards guaranteeing conversion will succeed.  We'll
+> still need to document the EAGAIN behavior, but IMO there's a massive difference
+> between conversion failing if there's a lingering reference acquired via a VMA,
+> conversion failing because a vCPU page fault raced with conversion.  E.g. being
+> able to assert success in a very curated test, as the stress test presumably does,
+> would be extremely valuable for helping detect/prevent edge case bugs.
+>
+> The argument against guaranteeing success is that we might make our future lives
+> harder, e.g. if it turns out there are legitimate, hard-to-solve edge cases.  But
+> I'm ok with that risk, as it seems highly unlikely to be problematic in practice,
+> and there is real benefit to guaranteeing success.
+>
+
+Is there really a need to commit to anything? This is already documented
+as "can fail", and it's orthogonal to whether the memory was mapped. The
+transient nature of refcounts on pages in general makes it hard to
+guarantee, and this stretches outside of KVM. I mean, anything could
+take a refcount on a page in future and we can't be auditing the entire
+kernel for no refcounts on guest_memfd pages ever.
+
+>> > As for in-place conversion, this is not a blocker.
+>> Sorry. I didn't intend to block in-place conversion.
+>
+> LOL, what we intend and what happens aren't always the same. :-)
+>
+
+I don't think we're ready to guarantee conversion success when
+guest_memfd pages are not mapped to userspace without dragging this out
+way further.
+
+I'm all for KVM not taking any references on guest_memfd, but I think
+eliminating KVM itself as a source of transient refcounts can be a
+series in itself. KVM not taking any references on guest_memfd memory is
+definitely welcome, it'll pave the way to using non-struct-page memory
+in guest_memfd.
+
+It'll come, can we not block on this please? If we find a way to
+strengthen the guarantee, wouldn't that be an iterative improvement?
+
+>> I encountered this issue during testing, so reported it.
+>
+> Thanks for doing so!  I'd *much* rather sort these issues out *before* merging
+> code, even if it means delaying the merge by a bit.
