@@ -1,184 +1,237 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6571D3C279B;
-	Mon, 17 Aug 2026 22:07:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF9E3DB300
+	for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 22:20:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787004473; cv=none; b=rHL9QvnWf1UhlgrzDtheaccVVeGtvrxNuTaZb45D9sJlm/tugEFz+wvPo33xpAZbl6h3mv0DRBOd0kUq1syvL8bobXqoOPM9G1w3iZPSglcY6hKPWqiIZolQg1boN/9e2Z1LAptIZx4NAmAQuL2MbVcR9JqoGg79+BT/QbVG9DU=
+	t=1787005258; cv=none; b=sMFNb3r4pQtWWYsOT8zjFtphfaSBTGJUEMKO8T6d93OKsKFVmxQWyyG2XdTjFJlZHB5TAa11NRPUk2INu0swAxAmJU8UHY89tT3fGmrVJzZQJrWCU5d0W35owq5AnkkSjX+dLgzfCSu1SOnVQA94k+mkYT0DdC6EIaHSH7z+j+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787004473; c=relaxed/simple;
-	bh=l2YUCWLI7OhQk6XpEGFmwp7rK3hYzpHyZpLRdGbdOjU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=niJsaJ7cguTNQrcxo+ACYFLrhdpZwxBZ7ioWqe/W0XDCJwPMo2tzpG2Bn3zrYByeShtPtmI53/Erc+D/sHxN/vm3nVcHTsUh9pDeVtVCXtTLn9SyaIEpQzGT6grAIdbonZJlntB717o1MyheHJVZuGijxTXu0Jd15vezDdnnbDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JgpSn8CY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787005258; c=relaxed/simple;
+	bh=HVO2gWIaxzA+bK6MQldJkeSZrAesQZSo8QAWoKoMJBg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=n20ngnFn8IMiKdAHnadutktc++ht6S19CjTRTvuuXmcQupTG7HXn+FkhDR9trpmOmG/cd6EKksjXo+rdP1bJIvQ1pEdg6lAV+czymJCMqXrsJQwXp5pSHQ7ItVgjkELEwX2rKFRzIFKgUz9m13u8B2kWl6tSaHSjCe2j5iWvF6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Agy9gbGf; arc=none smtp.client-ip=209.85.215.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JgpSn8CY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4E51F000E9;
-	Mon, 17 Aug 2026 22:07:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787004472;
-	bh=GmmIfh8c/8Lo9aj78fk3ufRovlVowXNbcmbUtWRPK7c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=JgpSn8CYUzY/jaGbrTvIb0JtGh7s3QwiHtz+c4j6WxH7ZWIZj3K6ylFkViMYpKV6D
-	 XHw7Ga0i6WWDQyfOgIDuLWDwivBNa0lwUiDEp1B92dT7I6sDVMT2TV2PXjD7UUmopK
-	 Tv4JkdWtBoUrYHook6fzy4avdseLFCY9/hbruZylwWTpP+/iIJMXIgA0eUR1b2noUF
-	 ow8hbbPPzPm8UvwDi/qz4lXZvStQ2zFERqsCK1LM7fdovzw/FMY/LNdl3bmlEuW761
-	 uVfBzrfW9OGaPPABCDQY81gw6K7EkYYofwrZQ5NSFs6GJEIj4AIvB9PCCy4ZS7lxlR
-	 26cy3SVZBS6ng==
-Date: Mon, 17 Aug 2026 17:07:50 -0500
-From: Rob Herring <robh@kernel.org>
-To: KobaK <kobak@nvidia.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Fenghua Yu <fenghuay@nvidia.com>, Tushar Dave <tdave@nvidia.com>,
-	Kai-Heng Feng <kaihengf@nvidia.com>, rupakr@nvidia.com,
-	mohammedk@nvidia.com
-Subject: Re: [RFC PATCH 1/3] arm64: add CPU prefetch and cache modulation
- sysfs interface
-Message-ID: <20260817220750.GB2274565-robh@kernel.org>
-References: <20260817022335.3-1-kobak@nvidia.com>
- <20260817022335.3-2-kobak@nvidia.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Agy9gbGf"
+Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cab048cdb3eso4533892a12.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 15:20:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787005256; x=1787610056; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=4QnMwcUHFkDNVo8ywONCXuoDqyMfQDcpXyu7v/SbVys=;
+        b=Agy9gbGfbCqaYdum/88WaBXR701ZG6wE3VoLdV+R0te4hPKhEzLN+mzvw3XGJFcF9M
+         5UMFU8S80FJizxl3OxHbvP1q0B09OL4KI7b6VF8lGVYREgZrwMXcltAD0tD528kfHWKI
+         eC5ROWe8WJJ4Yyu8oGeguwhyA3O+Ce8Mv05Oi9J+1WUa2XaZfNbSlHmesthDerGJXFih
+         5ZJFt7awxaYvWvxeX6KJDVczUgTgTY7WVn4PEXOjWnwmDqhVq8mnnrtY6/81KDV+UCf3
+         b/RjawCiqCjO61ctEPhtVnBoSC7NSN4wJRoujN0FYuIHx2lhOUuzZhOqk6nX9eGKmRKY
+         MfHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787005256; x=1787610056;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=4QnMwcUHFkDNVo8ywONCXuoDqyMfQDcpXyu7v/SbVys=;
+        b=AKFWJOiShUyRWf4GCzzPtK3aE40J+7od3tMEn7/57RpG6hWsEGgXViGMbrMFUBYIXj
+         290CRnfIYXRvi/d9S5ARXufZLjtiGnPF0Gzx+l4IMVs02PmyZ8pycVRcbVluubzBpnDl
+         RAI3BDIDldRqfiV+LM1ScaufROmavLFW7GTNkBDMk5LZ194KgUH35vOLLNBB43Z+gMsG
+         eSJi4Qd2WxQE6eqM06JrHB7HkU785dpFMCtztGC6T/mtHD9HYQdxxP1KbzeG7HrN9px+
+         xjlgzSfMAoAaLrHSvU9zcg+gd3zsp/4/RqWvK7lPquWxh65H1CrqxZA47cemK/ZM6Dix
+         qHIA==
+X-Forwarded-Encrypted: i=1; AHgh+RqIuEqOFULogqFbWHmMvR3G0WsOIouOthoV1cdiHqVFRM5sGyiwAS7Wa88xDfkYy5aCSmWqAZZ4zmq95w+x+RY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwzX7t3c8fJqypNAb5y2YjEzRyAFsdDT5RfUlUyQ+q5eQBeM8Lv
+	BnruG9z6jrvNbhvsOh2zpAKcuzPfvcP4wQr+cMjnRMA4GD+btjXFchUehWDisi6VB83wtqXvPSt
+	CT/5Mog==
+X-Received: from pfbfq10.prod.google.com ([2002:a05:6a00:60ca:b0:84a:3bc9:3bcd])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:1149:b0:847:7ffd:ce35
+ with SMTP id d2e1a72fcca58-851b87eaa83mr3450412b3a.8.1787005255291; Mon, 17
+ Aug 2026 15:20:55 -0700 (PDT)
+Date: Mon, 17 Aug 2026 15:20:54 -0700
+In-Reply-To: <CAEvNRgH_=8YqKHb_OJfT583ZJ346cceRimd9YJ762Vv08uJGHQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260817022335.3-2-kobak@nvidia.com>
+Mime-Version: 1.0
+References: <CAEvNRgFWcndQKJE_q+ZATFZEMYd=6uRLygozLvg7L77bPX0cEQ@mail.gmail.com>
+ <anqqKH6kuwpvuwp9@yzhao56-desk.sh.intel.com> <CAEvNRgGWDY_fxbyBM-5sMdYMevMe0HzVP9kbC1cCGLE_dV=_Gw@mail.gmail.com>
+ <a71d4fccdffd1f6a12332ddd18fa812542ea2118.camel@intel.com>
+ <CAEvNRgHxda6XK_XqWaqqVnA7oW=Fhp_C5gF4vNcL+-HfwfXMqQ@mail.gmail.com>
+ <0c80b9b0e13e3ab2cbe4f9eaf4a02ebba25a7001.camel@intel.com>
+ <an5RJYTwlYeym--O@google.com> <aoKnmW9St5zCoTD3@yzhao56-desk.sh.intel.com>
+ <aoNrFX9yLfsM7KQI@google.com> <CAEvNRgH_=8YqKHb_OJfT583ZJ346cceRimd9YJ762Vv08uJGHQ@mail.gmail.com>
+Message-ID: <aoOJRk5SXBzzT24K@google.com>
+Subject: Re: [PATCH v10 11/41] KVM: guest_memfd: Ensure pages are not in use
+ before conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Yan Zhao <yan.y.zhao@intel.com>, Rick P Edgecombe <rick.p.edgecombe@intel.com>, 
+	"david@kernel.org" <david@kernel.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"steven.price@arm.com" <steven.price@arm.com>, "peterx@redhat.com" <peterx@redhat.com>, 
+	"forkloop@google.com" <forkloop@google.com>, "tabba@google.com" <tabba@google.com>, 
+	"linux-trace-kernel@vger.kernel.org" <linux-trace-kernel@vger.kernel.org>, 
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>, "x86@kernel.org" <x86@kernel.org>, 
+	Vishal Annapurve <vannapurve@google.com>, "willy@infradead.org" <willy@infradead.org>, 
+	"tglx@kernel.org" <tglx@kernel.org>, "wyihan@google.com" <wyihan@google.com>, 
+	"pratyush@kernel.org" <pratyush@kernel.org>, "aik@amd.com" <aik@amd.com>, 
+	"jmattson@google.com" <jmattson@google.com>, "aneesh.kumar@kernel.org" <aneesh.kumar@kernel.org>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
+	"akpm@linux-foundation.org" <akpm@linux-foundation.org>, 
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "rientjes@google.com" <rientjes@google.com>, 
+	"andrew.jones@linux.dev" <andrew.jones@linux.dev>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, "chrisl@kernel.org" <chrisl@kernel.org>, 
+	"shakeel.butt@linux.dev" <shakeel.butt@linux.dev>, 
+	"mathieu.desnoyers@efficios.com" <mathieu.desnoyers@efficios.com>, "oupton@kernel.org" <oupton@kernel.org>, 
+	"mhiramat@kernel.org" <mhiramat@kernel.org>, "baohua@kernel.org" <baohua@kernel.org>, 
+	"tarunsahu@google.com" <tarunsahu@google.com>, 
+	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>, "jhubbard@nvidia.com" <jhubbard@nvidia.com>, 
+	"jgg@ziepe.ca" <jgg@ziepe.ca>, "jthoughton@google.com" <jthoughton@google.com>, 
+	"yuanchu@google.com" <yuanchu@google.com>, "hpa@zytor.com" <hpa@zytor.com>, 
+	"shikemeng@huaweicloud.com" <shikemeng@huaweicloud.com>, "nphamcs@gmail.com" <nphamcs@gmail.com>, 
+	"linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, "shivankg@amd.com" <shivankg@amd.com>, 
+	"shuah@kernel.org" <shuah@kernel.org>, "youngjun.park@lge.com" <youngjun.park@lge.com>, 
+	"kasong@tencent.com" <kasong@tencent.com>, "pankaj.gupta@amd.com" <pankaj.gupta@amd.com>, 
+	"suzuki.poulose@arm.com" <suzuki.poulose@arm.com>, 
+	"chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>, "pbonzini@redhat.com" <pbonzini@redhat.com>, 
+	"vbabka@kernel.org" <vbabka@kernel.org>, "weixugc@google.com" <weixugc@google.com>, 
+	"michael.roth@amd.com" <michael.roth@amd.com>, "rostedt@goodmis.org" <rostedt@goodmis.org>, 
+	"mingo@redhat.com" <mingo@redhat.com>, "qperret@google.com" <qperret@google.com>, 
+	"brauner@kernel.org" <brauner@kernel.org>, "bp@alien8.de" <bp@alien8.de>, 
+	"baoquan.he@linux.dev" <baoquan.he@linux.dev>, "corbet@lwn.net" <corbet@lwn.net>, 
+	"skhan@linuxfoundation.org" <skhan@linuxfoundation.org>, "liam@infradead.org" <liam@infradead.org>, 
+	"axelrasmussen@google.com" <axelrasmussen@google.com>, "kas@kernel.org" <kas@kernel.org>, 
+	"qi.zheng@linux.dev" <qi.zheng@linux.dev>, "linux-mm@kvack.org" <linux-mm@kvack.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Aug 17, 2026 at 10:23:33AM +0800, KobaK wrote:
-> From: Koba Ko <kobak@nvidia.com>
+On Mon, Aug 17, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> > On Mon, Aug 17, 2026, Yan Zhao wrote:
+> >> > converting a page and another faulting in the same page.  An NMI, SMI, or IRQ at
+> >> > just the right/wrong time, especially on a preemptible kernel, could lead to the
+> >> > same test failures, even if KVM drops the refcount "immediately".
+> >> Could you elaborate on how an NMI, SMI, or IRQ at just the right/wrong time
+> >> could lead to the same test failures?
+> >
+> > Ah, sorry, my bad.  I was speed reading and missed that the key to your suggested
+> > "*page = NULL" change was that the reference was put _before_
+> > filemap_invalidate_unlock_shared(), i.e. before dropping
+> > the invalidate lock and thus before __kvm_gmem_set_attributes() will walk the
+> > folios to look for outstanding references.  I was thinking that putting the
+> > reference right away was just shrinking the timing window, but putting the
+> > reference while still holding the invalidate lock closes the window entirely.
+> >
+> > So, I take back what I said about this not being ABI, and about this not blocking
+> > in-place conversion.  It most definitely affects ABI, and so needs to be addressed
+> > before merging in-place conversion.
 > 
-> Performance characterization on arm64 systems sometimes needs a way to
-> inspect and bracket selected implementation-defined prefetch and cache
-> controls without exposing raw register contents. Add an RFC-only arm64
-> cpumod interface that presents a small set of named, range-checked
-> per-CPU sysfs attributes under each CPU device.
-> 
-> Establish the Kconfig and Makefile plumbing, CPU profile detection for
-> Grace and Vera from the target CPU's MIDR, register-field descriptors,
-> per-CPU kobject and attribute helpers, locking, and target-CPU read/write
-> callbacks. Common attributes are exposed for all supported profiles,
-> while Grace- and Vera-specific fields are exposed only for the matching
-> profile. Place the option at the end of the top-level Kernel Features
-> menu because these implementation controls are not tied to an Arm
-> architecture revision.
-> 
-> Per-CPU cpumod sysfs state follows the CPU lifecycle. Module
-> initialization populates subtrees for every online CPU while holding
-> cpus_read_lock(), so initial enumeration and CPU hotplug state
-> registration are serialized against concurrent topology changes. Offline
-> CPUs are intentionally skipped during initial setup because target-CPU
-> MIDR detection requires an IPI-capable online CPU; a later online callback
-> creates their subtree.
-> 
-> Profile detection reads MIDR through a synchronous callback on the CPU
-> owning the sysfs subtree and returns nonzero only when that dispatch
-> fails, so no IPI error can be hidden. After a successful read, retain
-> CPUMOD_PROFILE_UNKNOWN as the unsupported-profile sentinel. Subtree
-> creation skips that profile during both initial online enumeration and
-> later CPUHP online callbacks without blocking module load or CPU hotplug.
-> Object and sysfs setup failures remain fatal and are propagated.
-> 
-> Keep the dynamically allocated kobject state in a private per-CPU pointer
-> instead of the CPU device's generic driver-data slot. The online callback
-> is idempotent when that pointer already records a subtree. The offline
-> callback clears the private pointer before dropping the kobject reference,
-> allowing the release callback to retain ownership of the final free.
-> 
-> Register the dynamic CPUHP state with
-> cpuhp_setup_state_nocalls_cpuslocked(). The nocalls form avoids replaying
-> startup callbacks for CPUs already initialized by the explicit online
-> enumeration. On init failure, release the CPU read lock, destroy all
-> subtrees created so far, and return the error. Module exit removes the
-> CPUHP state with the matching nocalls helper and tears down all remaining
-> per-CPU state across possible CPUs.
-> 
-> Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>
-> Reviewed-by: Tushar Dave <tdave@nvidia.com>
-> Reviewed-by: Kai-Heng Feng <kaihengf@nvidia.com>
-> Signed-off-by: Koba Ko <kobak@nvidia.com>
-> ---
->  arch/arm64/Kconfig                      |  17 +
->  arch/arm64/kernel/Makefile              |   1 +
->  arch/arm64/kernel/arm_cpumod.c          | 471 ++++++++++++++++++++++++
->  arch/arm64/kernel/arm_cpumod_internal.h | 113 ++++++
->  4 files changed, 602 insertions(+)
->  create mode 100644 arch/arm64/kernel/arm_cpumod.c
->  create mode 100644 arch/arm64/kernel/arm_cpumod_internal.h
-> 
-> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-> index b3afe0688919b..5e4ada4884b89 100644
-> --- a/arch/arm64/Kconfig
-> +++ b/arch/arm64/Kconfig
-> @@ -2417,6 +2417,23 @@ config ARM64_CONTPTE
->  	  bit, for any mappings that meet the size and alignment requirements.
->  	  This reduces TLB pressure and improves performance.
->  
-> +config ARM64_CPUMOD
-> +	tristate "Arm CPU prefetch modulation sysfs controls"
-> +	help
-> +	  Expose selected CPU implementation control register fields through
-> +	  per-CPU sysfs attributes for performance characterization.
-> +
-> +	  The exposed controls allow hardware prefetch and cache-management
-> +	  policy fields to be inspected and adjusted on CPUs where firmware
-> +	  permits EL1 access to the relevant implementation control registers.
-> +	  Systems where firmware traps or blocks these writes cannot use this
-> +	  interface.
-> +
-> +	  This interface is intended for controlled performance evaluation and
-> +	  should not be enabled by default on production systems.
-> +
-> +	  If unsure, say N.
-> +
->  endmenu # "Kernel Features"
->  
->  menu "Boot options"
-> diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-> index d2690c3ec5288..f180a52284e7d 100644
-> --- a/arch/arm64/kernel/Makefile
-> +++ b/arch/arm64/kernel/Makefile
-> @@ -69,6 +69,7 @@ obj-$(CONFIG_VMCORE_INFO)		+= vmcore_info.o
->  obj-$(CONFIG_ARM_SDE_INTERFACE)		+= sdei.o
->  obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
->  obj-$(CONFIG_ARM64_MPAM)		+= mpam.o
-> +obj-$(CONFIG_ARM64_CPUMOD)		+= arm_cpumod.o
->  obj-$(CONFIG_ARM64_MTE)			+= mte.o
->  obj-y					+= vdso-wrap.o
->  obj-$(CONFIG_COMPAT_VDSO)		+= vdso32-wrap.o
-> diff --git a/arch/arm64/kernel/arm_cpumod.c b/arch/arm64/kernel/arm_cpumod.c
-> new file mode 100644
-> index 0000000000000..9e64f2c8e7810
-> --- /dev/null
-> +++ b/arch/arm64/kernel/arm_cpumod.c
-> @@ -0,0 +1,471 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
+> I thought back then when David suggested that conversion can return
+> -EAGAIN, one of the core ABI benefits is that this leaves the door open
+> for things to gradually improve. If we can improve stuff within the
+> kernel, then the the kernel would just return fewer errors. This retains
+> backward compatibility, since extra userspace code that handles errors
+> can continue to exist, it just won't be used.
 
-Since the introduction of this...
+Ya, that's definitely one of my hesitations to trying to guarantee success in
+the kernel.
 
-> +/*
-> + * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-> + *
-> + * This program is free software; you can redistribute it and/or modify it
-> + * under the terms and conditions of the GNU General Public License,
-> + * version 2, as published by the Free Software Foundation.
-> + *
-> + * This program is distributed in the hope it will be useful, but WITHOUT
-> + * ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-> + * FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
-> + * more details.
+> > The only question is if we want to commit to
+> > guaranteeing that conversion will succeed in this scenario, or if we want to take
+> > the easy way out and formally document that conversion can fail with EAGAIN at any
+> > time, even if userspace has never mmap()'d the memory in question.
+> 
+> I don't really think there's a need to commit to this, IIUC in principle,
+> ignoring that on many paths of those guest_memfd may be excluded, refcounts
+> can be taken even if there are no host userspace mappings. For one, memory
+> failure handling doesn't care if there are mappings, the refcount will be
+> taken for a short while and could cause this conversion failure.
+> 
+> Here's the relevant part of the documentation added for conversions:
+> 
+>   If this ioctl returns -EAGAIN, the offset of the page with unexpected
+>   refcounts will be returned in `error_offset`. This can occur if there
+>   are transient refcounts on the pages, taken by other parts of the
+>   kernel.
+> 
+>   Userspace is expected to figure out how to remove all known refcounts
+>   on the shared pages, such as refcounts taken by get_user_pages(), and
+>   try the ioctl again. A possible source of these long term refcounts is
+>   if the guest_memfd memory was pinned in IOMMU page tables.
+>
+> > I'm leaning pretty strongly towards guaranteeing conversion will succeed.  We'll
+> > still need to document the EAGAIN behavior, but IMO there's a massive difference
+> > between conversion failing if there's a lingering reference acquired via a VMA,
+> > conversion failing because a vCPU page fault raced with conversion.  E.g. being
+> > able to assert success in a very curated test, as the stress test presumably does,
+> > would be extremely valuable for helping detect/prevent edge case bugs.
+> >
+> > The argument against guaranteeing success is that we might make our future lives
+> > harder, e.g. if it turns out there are legitimate, hard-to-solve edge cases.  But
+> > I'm ok with that risk, as it seems highly unlikely to be problematic in practice,
+> > and there is real benefit to guaranteeing success.
+> >
+> 
+> Is there really a need to commit to anything? This is already documented
+> as "can fail", and it's orthogonal to whether the memory was mapped.
 
-We stopped putting license text in.
+Yes, but the above docs also say "it's userspace's problem".  Which I generally
+agree with, but that's not a very good story when it comes to KVM itself taking
+transient references, because then the answer becomes "Stop running all vCPUs",
+which I don't like.  E.g. in a very pathological scenario, it's theoretically
+possible that conversion may never succeed.  That's what gives me pause.
 
-Before you go work on my comments, I'd wait for arm64 maintainers 
-comments. I doubt this whole thing will be accepted. In general, we 
-don't put in impdef interfaces to userspace.
+> The transient nature of refcounts on pages in general makes it hard to
+> guarantee, and this stretches outside of KVM. I mean, anything could take a
+> refcount on a page in future and we can't be auditing the entire kernel for
+> no refcounts on guest_memfd pages ever.
 
-Rob
+True, but at the same time, if there were never any VMAs then I would expect there
+to never be transient refcounts, modulo memory failure.  And it'd be easy enough
+to document the memory failure angle.
+
+> >> > As for in-place conversion, this is not a blocker.
+> >> Sorry. I didn't intend to block in-place conversion.
+> >
+> > LOL, what we intend and what happens aren't always the same. :-)
+> 
+> I don't think we're ready to guarantee conversion success when guest_memfd
+> pages are not mapped to userspace 
+
+Yeah, that was too strong of wording on my part.  The needle I was trying to
+thread was "conversion for this specific scenario, in a controlled environment,
+is guaranteed to succeed".
+
+> without dragging this out way further.
+>
+> I'm all for KVM not taking any references on guest_memfd, but I think
+> eliminating KVM itself as a source of transient refcounts can be a
+> series in itself.
+
+Yes, it would definitely be a separate mini-series.
+
+> KVM not taking any references on guest_memfd memory is definitely welcome,
+> it'll pave the way to using non-struct-page memory in guest_memfd.
+> 
+> It'll come, can we not block on this please?
+
+FWIW, it doesn't have to block initial merge, just the final release.  E.g. even
+if we decide that this is a blocking issue, we can still land the in-place
+conversion series, so long as it's not exposed to userspace in the final release
+of 7.4 (or whatever kernel) without fixing the transient refcount issue.
+
+> If we find a way to strengthen the guarantee, wouldn't that be an iterative
+> improvement?
+
+Yes, but we do need to draw a line in the sand.  E.g. if conversion failed 99%
+of the time because KVM was taking spurious references, I think we'd all agree
+that needs to be fixed before the code is released.
+
+I'm still leaning towards saying this one has to be fixed, because it would give
+us a solid baseline from which to start, and a way to enforce it going forward
+(Yan's stress test).  I could certinaly be convinced otherwise, though dropping
+the transiest reference seems straightforward enough that hopefully it's a moot
+point, i.e. we land both in 7.4 and don't actually have to make a decision.
