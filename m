@@ -1,158 +1,158 @@
-Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012009.outbound.protection.outlook.com [52.101.43.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f42.google.com (mail-yx1-f42.google.com [74.125.224.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DA13AA1B2;
-	Tue, 18 Aug 2026 02:10:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.9
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787019044; cv=fail; b=AzYY6c8fvdxK08EgHqd5mX4m7DasF9VVJUvS75WlZ3Vq797zu4sO/PppKcz+FgRz2QVFzkURLnObLpxJcz8WKeZS3dY2V0Y3CKLEd/cFneifwo1RWLjnBXJihPN2aK2h2vUj2QKcfTxsR6Ai0xKK8ZZGeV8YI9vnpl2qfgTNTa8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787019044; c=relaxed/simple;
-	bh=NOu4HhM9eghvwCkXHFrGPkmCyHvj8FPMa4j+GbW/DEo=;
-	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
-	 In-Reply-To:MIME-Version; b=UOlxWY1DLEroIMlA+1KQAXr2da+wqf+gkcl9S04lI/TF+4mDzLnfBYX3/ECU9DjdIP9/jgvyL1sP/Q05c7XFS3lHVFhaKR1RQGTxYytXt2nKq3HTVycwabFzXBgmbe0BigiVGRTO4allJk/WoqYFOBxRi6iDUitCT2t37NKBMgY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uRsteFZM; arc=fail smtp.client-ip=52.101.43.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71058388868
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 02:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787021815; cv=none; b=c1McJCguNfGw74Mmknd/qwnyMPM1bqYB2C2tkPHCqPAD7zGK9chw0KdT7UpeAQ8Y8g82u/DIvjIpTo2ZAAsoWUNlDJCqXuSUTfs3lR9REvnTx/gAn6nS9nSnVP69VeRsMrpNfCFcsiO/J4tphLlLJdsHz+T1pGtb+fbQ9K7tX+4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787021815; c=relaxed/simple;
+	bh=xn8I5437HVlUNED8Vn83WdHG4cuxInPU17DIb8Fv5ds=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=oDvQH2fnNSPT3G+t77RWOmVFdt4bPWcSgDK3yjloe3eN7cl+T0EiKH5qXP0u8I5sVZMZHk12DmeDM925jXcGqScCid3vfcd0yLABYWz3VgxqJmuNm8sITIP5E8vAEBt9N5ynNK8BGnzZw8taxlRcFG+aIWC53CSTTRWsM2BQw8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=f9xxAO3v; arc=none smtp.client-ip=74.125.224.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uRsteFZM"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=TqBE2pnyN7P50tUKRUznEgwXHTkd738bWOqNlRR+JrgSFK48vubZUT4RilCZhb9IUvYQXHzlSEEFKtjlCUi+D5KiafquYBN4BcUbEFm7vsFEWws97BX46qbxyhiRAtZ5PEc5YxTDfCwhpXIF3SX32BIwoMJ+pmaVPNpng70MPm0FGOF0ZNF8d9I7DIPCq8rRhtfsMo6mqh/nUDLQhY/4t95/+F2KWPDboUOu+qub2BFTQX//sEG5yGd2xGRlMaZBr63DG9TJpKskYjNKy9SOUsJPHd84hCIBrthhsq/Vo/PVGT5tiuUCFEV0+hMhYITpEcIlgrj1haoF0o/FEA2KRQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=2/Xq8bhfX9FBjR29vBvlhJuH2gdShXw1/Vb9mV/iH5c=;
- b=K6ikCzoX5wlJ9RGQGjxKQkeuCgwBclR528QGDHuEpbdirdjTBPTn3hoOOJtqYRg3Do/iX5xnyU5LHGyptZhX1kU6vJn/CGckxweylvbJBX8KRJrzjMr+fp+RBmjYi+LhVDsRZppJls/0wqLqo6+fbxCJOzm9suHZ9gO65CcJqDCsCrH4h6OvGzOJvi1mEniQ7kUWHN3baDdEejbhX1Ee+wscUmy4kDmFl5/1CnrwpyacwnrXxSPcWppUdwHyiAfKITOVstZnEgc2t1C0lHoQfId8+7HZ6AxO2wf0qeGuI84z+sCyWQXeAj+0Zv/f7hKvAd9c0uqJQDlg/AgJYTGeFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=2/Xq8bhfX9FBjR29vBvlhJuH2gdShXw1/Vb9mV/iH5c=;
- b=uRsteFZM6thbyLrIltpNqByr/pV6QT4F0u8yUCqJBhdn+NFH5t14AahcW1tn/8ABXAhxwcUXAHz2pKS/zDQL1BvCUcf7roLcnHQWyuT24/OgVU/PsNNaVZ/z0MuhI0GOOWQFAHEIOL49vfBF/7dXGzOVL0RurWxROboeH7tMy1gd4AljQNXUHUjpT9QSjrbb/eFvVN7KTcsK0uUzLVL1hDyG8KNLNbjl6an3KzWZ5e1AXu1p127OdBy0m/9fUGu+NDldoRS/ZeUx82kwHK+MuZQpFF/KtZDg83sDBsfUGJl+a4WKX2XGAE77BBPbFLuKmrKToIwxcgGzc4rEctq35w==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
- by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Tue, 18 Aug
- 2026 02:10:38 +0000
-Received: from IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
- ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0315.016; Tue, 18 Aug 2026
- 02:10:38 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 17 Aug 2026 22:10:37 -0400
-Message-Id: <DKRPDOBRL22H.3B54F0Q6F1AEX@nvidia.com>
-Cc: <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, "Hongfu Li" <lihongfu@kylinos.cn>
-To: "Hongfu Li" <hongfu.li@linux.dev>, <akpm@linux-foundation.org>,
- <david@kernel.org>, <ljs@kernel.org>, <baolin.wang@linux.alibaba.com>,
- <liam@infradead.org>, <nico.pache@linux.dev>, <ryan.roberts@arm.com>,
- <dev.jain@arm.com>, <baohua@kernel.org>, <lance.yang@linux.dev>,
- <usama.arif@linux.dev>, <vbabka@kernel.org>, <rppt@kernel.org>,
- <surenb@google.com>, <mhocko@suse.com>, <shuah@kernel.org>
-From: "Zi Yan" <ziy@nvidia.com>
-Subject: Re: [PATCH] selftests/mm: khugepaged: consolidate error exits via
- kselftest helpers
-X-Mailer: aerc 0.21.0
-References: <20260817061955.45454-1-hongfu.li@linux.dev>
-In-Reply-To: <20260817061955.45454-1-hongfu.li@linux.dev>
-X-ClientProxiedBy: MN0PR05CA0006.namprd05.prod.outlook.com
- (2603:10b6:208:52c::31) To IA0PR12MB8374.namprd12.prod.outlook.com
- (2603:10b6:208:40e::7)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="f9xxAO3v"
+Received: by mail-yx1-f42.google.com with SMTP id 956f58d0204a3-66c7264d87dso991110d50.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 19:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787021813; x=1787626613; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=meizaf4wwL1UKgIATopcY1BI8kyPxXyoEzfgjc7eSiE=;
+        b=f9xxAO3vwWTD8QT2Qa3q4nnuGDk9pRFLmVMFMp2RCL8AbHFoDQYbdGbbl6ujB38j9B
+         6Kui3Q//YfDQV0ZQJKrD0SRX037m3dk6VDwmkkcZwQ3TE9pPe+Rqx4yfrXZ8EiTgvudT
+         AefdslJR4GMXSru6WbwNC3fojaKuTNChB/mJqfM520cWeVN9QXZSk4Y3t1Eb/w14+wsu
+         4mixz1AMuwjXIKSwpyTrMc/xwKCpR1oNiL6LxdEkqxYdmL1A6oBnfT7p78qLmtT+Sgzs
+         Tfp8i9jDT+f0yQXA+qFXX8beHyVo5s+NXDzsxASa6sn+lrHU18WMOxbw1wZBXATfRliy
+         xhww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787021813; x=1787626613;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=meizaf4wwL1UKgIATopcY1BI8kyPxXyoEzfgjc7eSiE=;
+        b=hYuHe2+Nqibaf3J/5ItL+4IvGS1FF+GiLyrV++Vv1z3PoDuwSeW3/xAtv27lzSwxhn
+         uzKbMBjpdoIyehVXKi3WNTiupm7In//03fOp/iErs7kegtHPg2KU8IvBdh0OJfueaPBD
+         0F4RC5v6CFsnJ62nrBLR8tHvcE+jpOusuM+DvEJZYvi17+ERL4+fAyDgdG4mToJj4LqS
+         GqTqVbmPwNeTI2WdvWRWZ7jbmR8t2SKW6L/CmJwSSUFBwtGWbi8n9scatBO3Y3xeDYXr
+         /vbaz18F4f39F4pndePz/BNlv5cb4k8ZdMNuU0PfNjhvy+m4844CwSDB2Grhb2+qlHaE
+         69HA==
+X-Forwarded-Encrypted: i=1; AHgh+RqVqyMENv4t5JzXwoSkwR7Anpb4nxnMlw+epJKpJyt/MyY2s4HEoDoptWuGv0ChEcyPXKSIoN1jxXQXmZBWeWk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsUgjEb1UXQUdPED+0fnJCK8XfEEvu1e6z8quPjdYwcejA+poE
+	KemMMyK09MqOjFDT+NLrMDLzYXy63gjyYxxUS3Z12O/Ea5Cbxp+jzBpx
+X-Gm-Gg: AR+sD10phf8GlZBSbcnUwQ7Rf/jvvVrBZYnRTEtrAuweuyeSMBN5s/bHMv17bWK7K3Q
+	49tFuEYozg+l2rs3xrJ6e2lk1Q73Uvdd/UxS3N03/W8x5qH0rs/zj6PQHlxod8/551q4LFliJ3x
+	SIFq4IAYKsFI7DDsqGCJCDq/yfKuyxPNyl2bouDM+7fkerGjFVT62ToTVlnGjYTOBo1GyQOek9r
+	ttXZb+6KWZXNCflGOoKz4Mh+5i+zSoOH6u4/KS1yJxqbTvZHG8Yn9i+fMMdDKFvemPMvZQZTt4D
+	k6Mn3deOTfzBsNWCsb29FfXIsQ77f9Z7zC2lVDzMvt1JhsofaDpTX+WGYUSoNfLLucfPonlKIrt
+	3c8vr/NfcSNxxowYp9Fsq2hwyjBou3Ci5Py3WfjUbXHNAAGVInORPffRP7YQiSye6SnUNwWsCJN
+	NeKcbsBt8bLa9fAwEky2fdK9+B0TuhFWn9KdLECNgZDPvkCLRuf9PWow0CWZtJ//rACaWuv79s0
+	9wwTnYahvylXtd58m142ljYXv2UtZQf+dzDi6qT6g==
+X-Received: by 2002:a05:690e:e8c:b0:66b:32bb:740f with SMTP id 956f58d0204a3-66cbbc4d0edmr1507033d50.0.1787021813383;
+        Mon, 17 Aug 2026 19:56:53 -0700 (PDT)
+Received: from gmail.com (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-66cb47a6f08sm1695866d50.17.2026.08.17.19.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 19:56:52 -0700 (PDT)
+Date: Mon, 17 Aug 2026 22:56:52 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Alice Mikityanska <alice.kernel@fastmail.im>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>
+Cc: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, 
+ Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>, 
+ Hannes Frederic Sowa <hannes@stressinduktion.org>, 
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+ netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Alice Mikityanska <alice@isovalent.com>
+Message-ID: <willemdebruijn.kernel.13f661653b580@gmail.com>
+In-Reply-To: <6f5e403b-dc29-41e0-8cdc-ac17dba30bde@app.fastmail.com>
+References: <20260813120351.2807829-1-alice.kernel@fastmail.im>
+ <20260813120351.2807829-3-alice.kernel@fastmail.im>
+ <willemdebruijn.kernel.22c7d90c91d06@gmail.com>
+ <6f5e403b-dc29-41e0-8cdc-ac17dba30bde@app.fastmail.com>
+Subject: Re: [PATCH net v2 2/2] net: ipv6: Clamp to IP6_MAX_MTU in
+ ip6_dst_mtu_maybe_forward
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|BY5PR12MB4180:EE_
-X-MS-Office365-Filtering-Correlation-Id: e199c1ec-f26a-4ffe-4095-08defccde56d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|23010399003|22082099003|18002099003|921020|10067099003|11063799006|56012099006|6133799003;
-X-Microsoft-Antispam-Message-Info:
-	sa6L7iALuwvbVA8OGC4eL/9m0Urycj0HB5k+7zNo9IUe4MoJVOnzpXhQEHhvJmOxuI0JO3XAZsWK3GdBxx7kgjbjifgdV8Zz8vQPnqy//Fv8wtHnR4JLQeuEj3fT72CVAFEkVb9lzjAwqQXo9V8VjCPvugL7OXeWPAYnTkQKV9k17DhfB6hpvFdbws6auy34mR0gES/I8uILqj5Aq+P/ogFjm83qFp+pZYG9yMJ8PBZVOEQBJhsUE//g74T8NJygju5whpLeNQtyz/ic5dpBbnEuN2m8jqqVCZAsZSvipHjhXypIgywjka6RatFNpMNRAoLMT7c+JqFTt5F+F3EjisxSV0ZJwYMJfAASermhJBnVdZw9sZ0HbyJOxQGiDgBpPOUjwh2VJygDL5gU/tlD9r7g12hMgmrZOnbBU9gl8SH3loyM8Ad6lg8C4KtAJHE/cABruY4vP84JW5Thci27KG3EmahnbPktO5wqjvlhsOYXxYUuGR22vnXGOZQBKo2P2L+9dMc9rGHZ81J4lTHfak4a9Z+0bilAHX3A+YjigwYSVD3sD7NrxiM1ASEqUF2nVigIyp5m93AMAt4qp6DTkDSKBmI0eLUkYhOH0t+48ixlbGCX0hOVph5c/kAnNPsWsob8HEdiudhVRLa400chCSNJhiQZ2q2IDCfsmmHhuMmomFfvCcjOt3aVBrmVVWJ2od+Q74JF2Y4w4lyV7xcoZg==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(23010399003)(22082099003)(18002099003)(921020)(10067099003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MDdwa2p1eEtROXhEQ3lFUU5mVS9yRXRxMmRiRkUzcDZ0TXlPTmE0SnMrU1My?=
- =?utf-8?B?eEVudjZVenFnaFZJVGFxdnBCaDVKZmM2TE1qVGY0WnpxSXdCSWM0OWxUU0lK?=
- =?utf-8?B?ZTJsRnJPWStwZHJ0MWl3TXdiRWZ5RnJmTDJQN3BwUzJqbGx5N1UwVlpOakov?=
- =?utf-8?B?empQbFNEYVgvSjZqVDQrbFJDbjViTEhKV0E0dTMxdnlRbU9VNjNWa1hSYzJx?=
- =?utf-8?B?cU05SjU5Q3diM0VwREFRR2c0ZmxCZS9HSXFoZERUZllieTVmbW1mUjV2RlZR?=
- =?utf-8?B?YlZVejNSdWE1cVNxK2piK0ZFdS9aZ2pKbENXK2ZNNkRMd2gyRzBoY1JIdzUx?=
- =?utf-8?B?SHJGdU9vTUhBbm52ZldoUTArbkJqK0xENk54UXBGN1NWeTNmTFNwbWROei9Z?=
- =?utf-8?B?aVVnWkQ4ZGt1Uk5QSFQ3LzV5c1orSE1zSm1yd3c5Qms3M04vWFBVMUtpZUM3?=
- =?utf-8?B?czNNNUN1aHYvNzhUQ29nQ3NEY1Y3R3RFUUZGRmVTK08xcUdPS2lQVTdieDNX?=
- =?utf-8?B?b2VBQWdySTJERkc1dnB6dUlSaVhENmVSTFNwT2JyMWRlNWtvb3hrd1FZQmE1?=
- =?utf-8?B?MFJnNDFmNHlGdDUzTGQvQWxFUGNqdTI5Mm9IcU1nVytDd24rMHJUZHlJRERV?=
- =?utf-8?B?TjZHNE9KUjcweHdEQUNNUy96bElDT3oxa0JpM01aNWVnbXFMTUNlZnhtMldy?=
- =?utf-8?B?dFU2Mk40SWxZa212Y2RlZEFaNkFuYkJ5dHJuSjRCWFpRRk5lUnFkQlBwVFA5?=
- =?utf-8?B?TmJUNVF1bUx0aDh0K2w2eXU4VWtPeUw2eXFrZVdpa0swMDEyN0Exb1dyYlBx?=
- =?utf-8?B?Zjk4aXpvek05c3M2WVUyS2EwVXhwck01RFF6TXNGZmViU3NCNm1VdzJ4ak5C?=
- =?utf-8?B?SnF3YkxOdEgzRFZjRkIrbHRmY25hcnZJS2VJUG5zeEkvekpUSG1Wd3VjbnhD?=
- =?utf-8?B?UldZK0RHQjVLYnpERWQ5TXdCdjZRaFV6cTV2NE5hQ1pvUUREUlBYOHROSlV3?=
- =?utf-8?B?cVNCZG1wT1VrTmU2ODJOTytJRmorbXU5ME1hSlNKdWN3WGxrNXpZSkl0cjd6?=
- =?utf-8?B?ZkFyazRQTmYrRGdzS05GOGlPQ0FYdXI1aU9vdkd5bVJwVFFnbDdvSHhLU1FM?=
- =?utf-8?B?YVpweEY2NXR6VWpuVWpxbUh4T0N6bDgrZllhbFJkQ01ib1lJaFVxVFZybWtv?=
- =?utf-8?B?eCtOVG81NURtZlNLcmt0eDBjL05qWWxuVFRUbU1lL1JNc1RMeWZEQ2RZbE5l?=
- =?utf-8?B?d1BmbnF1cWc3dm9WWGpLZWErUzBzVUhmM0trRm9hSGc0Q1BaTmdLT2VyUHZh?=
- =?utf-8?B?YkFjdEV1TmpLeGhRZ0hqRjVVK0dub1BXL3J4QWJHT2ZPWWhMUjZIci9XcUJP?=
- =?utf-8?B?RnUzcVoxamE5b2NMd2RpMHl0VkFpTFVpUUdiVXFjdXR0dUdDd3JLZ25rRy9m?=
- =?utf-8?B?S2Z5MDg0QkJ6N1p1UFpIZmZQTnhaQncxVGJmT2JWbjFPZ1lxNWNDaWhFTk1j?=
- =?utf-8?B?TDB3RkJibWpVZVFNWXJzRXZMbGkxNVNSVUZibTVPM3RqQzhXU3Z6OTVYd2Ro?=
- =?utf-8?B?WnFISTFCYWY0aWdzazZha2t4Ly8yTGlNTXFtT1BpTStDb0VPYnpOeHN6dG9t?=
- =?utf-8?B?WEZYdXVtTmhzOWVVRTh4dVVJeHhGTGpLL2NiMEk0b0dSSGJFZklHK005K0Rt?=
- =?utf-8?B?c3AxM0JoWnBuWlhSeEpMdHd1MGh0OVlLSnhYMHFLRHdBcHFnT3AwL0ZGR0Rq?=
- =?utf-8?B?MU9JZHQ0clFjOFRpOFpsVHJlQU9qOEgzWm9odHhDMnp4dEZHK1ErZU8vbDJj?=
- =?utf-8?B?YkRFZ3BkclRPRzRIK2RtQ09qT0JWS1E0dE9xWk5BTTE2Vmc0MlZkSDdPbWdP?=
- =?utf-8?B?MGowcWlSRzNUeXVJZ3FIQXpON0ZSODVmRlZnWDhUUEFvS0VJUVcrdXZGcUxw?=
- =?utf-8?B?ZXRuRWt4cVBVOVBkL1R2bC9hQW5WRExUeS9wUlpSTUtTRlYxakhwdjYzRStv?=
- =?utf-8?B?djlKSll2WFNseElHa2tib3gyYXhTMmc2dFkyRk5rOElQZzA4bVFjWkd3YUJI?=
- =?utf-8?B?dHFrZ2l4S2o5cldDQXJnVmFyOWFQWHltYkp2UUlHQmkxUndyQjJKWWhuOHN5?=
- =?utf-8?B?TTFJQlBqOXBXVmdwNHk4N2RGcGpQWW85d243dTFvT2dsbFJmTHJNb09iL3Ba?=
- =?utf-8?B?YmdnQ2lpSnBYMUV5ajFVSlIrQjBnblhkbUFIWXNnUjBvVlBtNFFGUGllVUkz?=
- =?utf-8?B?K29FUElxUjI4M2pMQkdzNGFVYnVycjMySVl2QVVra3JRelN1ZXUyVVV2S2xF?=
- =?utf-8?Q?6v1EUTM/HKqLiWaL92?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e199c1ec-f26a-4ffe-4095-08defccde56d
-X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 02:10:38.2593
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LPMcFaxEJCZQRpJabaFSIz4k9eUCf6ru+BiRkqjlpSYvmsb9i23qSNG7ZgYOZpIz
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-On Mon Aug 17, 2026 at 2:19 AM EDT, Hongfu Li wrote:
-> From: Hongfu Li <lihongfu@kylinos.cn>
->
-> Replace the perror()+exit(EXIT_FAILURE) pattern with
-> ksft_exit_fail_perror() so failures are reported through the
-> kselftest framework, consistent with the rest of the file.
->
-> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
-> ---
->  tools/testing/selftests/mm/khugepaged.c | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
->
+Alice Mikityanska wrote:
+> On Thu, Aug 13, 2026, at 23:25, Willem de Bruijn wrote:
+> > Alice Mikityanska wrote:
+> >> From: Alice Mikityanska <alice@isovalent.com>
+> >> 
+> >> Commit 427faee167bc ("net: ipv6: introduce ip6_dst_mtu_maybe_forward")
+> >> dropped the IP6_MAX_MTU clamp that used to be present in ip6_mtu(). A
+> >> similar IPv4 commit ac6627a28dbf ("net: ipv4: Consolidate ipv4_mtu and
+> >> ip_dst_mtu_maybe_forward") preserves the IP_MAX_MTU clamp.
+> >> 
+> >> Restore the upper bound in the IPv6 flow to avoid potential 16-bit
+> >> overflows in forwarding paths.
+> >> 
+> >> Fixes: 427faee167bc ("net: ipv6: introduce ip6_dst_mtu_maybe_forward")
+> >> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
+> >> Suggested-by: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+> >
+> > Reviewed-by: Willem de Bruijn <willemb@google.com>
+> >
+> >> ---
+> >>  include/net/ip6_route.h | 2 ++
+> >>  1 file changed, 2 insertions(+)
+> >> 
+> >> diff --git a/include/net/ip6_route.h b/include/net/ip6_route.h
+> >> index 09ffe0f13ce7..fb59a5885faa 100644
+> >> --- a/include/net/ip6_route.h
+> >> +++ b/include/net/ip6_route.h
+> >> @@ -382,6 +382,8 @@ static inline unsigned int ip6_dst_mtu_maybe_forward(const struct dst_entry *dst
+> >>  	rcu_read_unlock();
+> >>  
+> >>  out:
+> >> +	mtu = min_t(unsigned int, mtu, IP6_MAX_MTU);
+> >> +
+> >>  	return mtu - lwtunnel_headroom(dst->lwtstate, mtu);
+> >>  }
+> >
+> > It appears IPv4 only clamps device MTU, not route MTU:
+> >
+> >         mtu = dst_metric_raw(dst, RTAX_MTU);
+> >         if (!mtu)
+> >                 mtu = min(READ_ONCE(dst->dev->mtu), IP_MAX_MTU);
+> 
+> This is some old code from v5.14, it changed in commit ac6627a28dbf
+> ("net: ipv4: Consolidate ipv4_mtu and ip_dst_mtu_maybe_forward"), and
+> IPv4 clamps MTU in both cases since then.
 
-Thanks.
+Oh indeed.
 
-Reviewed-by: Zi Yan <ziy@nvidia.com>
+> > I don't think that was necessarily intentional. Perhaps route MTU
+> > itself is already bounds checked on configuration. The device MTU
+> > min() was added after a syzbot report, in commit c780a049f9b.
+> 
+> This commit merely adds READ_ONCE to the existing min.
+> 
+> > Current IPv6 proposal is arguably more robust, covering both. There
+> > just remains a difference between IPv4 and IPv6 code paths.
+> 
+> So, looking at the fresh checkout, it seems that my patch covers the
+> difference, right?
 
-
-
---=20
-Best Regards,
-Yan, Zi
-
+Yes, agreed.
