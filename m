@@ -1,122 +1,149 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0775347D458;
-	Tue, 18 Aug 2026 16:39:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23CEB3B3C14;
+	Tue, 18 Aug 2026 17:09:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787071142; cv=none; b=sSu79oxTcoVMzX0Havfd3/RU2ANon17LviKXFtnYWgN7fpSSipAdOZG9CRvnE0NH8Af6JCW9bjZSQmpkSvwbA3cxAqsJWLB2zLq4U5mH4TxgaFNP84CXzxk7KrtXEQNbpt4js2f3H4nN5k3arBJKGfmloGpmpQkRQKoWF6XUds0=
+	t=1787073001; cv=none; b=Wq9AAq3e+3lnqXYV9o4ozVX9yH4OvZr3Yj92mLeCWSiInysWW8t0To7SZlxs9GL62r81CZ1BUqvhm6SFRY8VnZDzy5qow9SWb6fBDd+DH1qziBJO2vKP2pbWJBLTxiP0xfVo3u1gGUbU+/hoVCPPgrrcsI4iLhB4rZR5d2gwq2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787071142; c=relaxed/simple;
-	bh=2j8nQBa5xH+2m8seNPtH0y4nI8R/1+Ozw/mrb5mKBGc=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Oe8+C/1zSAkkCOZligE/juzSjhlKKDGLENM9GnBJDY38fogcLsJU6FjqpleZeFxGMlnUbGVn/LzfL8p74Wqy3GYo2LNnmclxAOvrT9iKC6Xm1LCq/Jldp+ous5agnRR/OxsUN9pjhfLfi1dBAzdrGxst+YOrc76lOZE579iOoLI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N8ExKLho; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787073001; c=relaxed/simple;
+	bh=Wu6aFJR5A0U4c4P3xpoIqH0gdFwUFovMFUDheFf0RRo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=S3gfHDFhuQYkbZnWu4yLVwKHa8VU+exgborja6BYwlWFHdYcOLIczXWsSSFz60z6s4Eot5htzmIasacZCtjx03OlkKA49JcMzDLlBo6dUS3vMjEiTAU1FgoYJjgDC8RzS00uuOPMvqOPNVZaubh8s93axaYa+xeHcN/6N0Bjvmg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=i9oH+HrR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N8ExKLho"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 041D81F000E9;
-	Tue, 18 Aug 2026 16:39:00 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="i9oH+HrR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 997F61F000E9;
+	Tue, 18 Aug 2026 17:09:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787071140;
-	bh=9aY7pWsW2ln4Sq/7zBgi/YnBHwhhaIP7hD5DnJyV+7Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=N8ExKLho+mq9M01Q606g8A7kw043Icah1lXdLeJug9+XeGJbb9uPhl353mpoYLn6D
-	 0n5JqjQaMs1GedUKrITaN/0oEJiy7XauEoZe9PP/VSN46EdfgzKwo+kKVTKSvSLrIo
-	 owvzdXZb6JapHsSbxiYEb+X1nNhYi/3cC+y0fF4Cr2BzQ03Pc8X+ji+rthvN7N+whD
-	 b7TL94nT20hIxAzqlZQg8ZwKT/QVYCvSvyogQg5Wky3t3bHvlMlsRsB7gEL23o9nAR
-	 cjzBHK8Pg9hhb3/dPlrIJ2YUOAt/c8ElXMVLmCCUFwxmi8NanIRs0PJnHIBwT7vFSo
-	 /EvrF9jGQr+3Q==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wwMq1-0000000Ghog-3A91;
-	Tue, 18 Aug 2026 16:38:57 +0000
-Date: Tue, 18 Aug 2026 17:38:57 +0100
-Message-ID: <865x175qou.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Steffen Eiden <seiden@linux.ibm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Zenghui Yu <yuzenghui@huawei.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Eric Auger <eric.auger@redhat.com>,
-	kvm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] KVM: arm64: vgic-v3: Roll back failed redistributor region setup
-In-Reply-To: <an1cYl928Fue-z3s@gmail.com>
-References: <cover.1786344511.git.kmehltretter@gmail.com>
-	<4e00fc25aa61ec52e6ef033a53588ce3f5550982.1786344511.git.kmehltretter@gmail.com>
-	<86tsp2139b.wl-maz@kernel.org>
-	<anotFcOP0kcQJwrA@gmail.com>
-	<86jypv1lxo.wl-maz@kernel.org>
-	<an1cYl928Fue-z3s@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20260515; t=1787072999;
+	bh=mxdbgQVht/54cchjqYkheAlWAnzQEAqcDdYfsPmVs6E=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=i9oH+HrR4ZkLLZwsxqREA+oADHZDxEtQsuGvE9vgVhHZrZa+QiBg88qjS4Jh5PUFb
+	 AsYtfq4SFgQbxkW5PvPpKO5mQtvQkoPT29zghABG8bxxfmh73hKMBSSZtHUX3KbVQH
+	 VbXPEbLHVj3CpB5gbtnKsbxG9MAHICIBv7Dxq48BEtRoM7tyXSABhPpSVBh0lVB+wk
+	 HIQxrymbMoC9g7cJW+OtUdbKllpcnD4RoC51TDYfIbzYGWt2JV+RH2Sl4AaNKk2//D
+	 5l14a4blYijmHZKxIXd797sgk9FXxIyrUH6T42zMqU9LTX6wYhrCYGAtm6MTGNMi+q
+	 E/6tHgGNSf54Q==
+Message-ID: <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
+Date: Tue, 18 Aug 2026 19:09:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kmehltretter@gmail.com, oupton@kernel.org, kvmarm@lists.linux.dev, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, shuah@kernel.org, eric.auger@redhat.com, kvm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
+To: Kiryl Shutsemau <kirill@shutemov.name>, akpm@linux-foundation.org,
+ ljs@kernel.org, nico.pache@linux.dev
+Cc: baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
+ hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
+ rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
+ usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
+ usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de,
+ rostedt@goodmis.org, mhiramat@kernel.org,
+ linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-2-kirill@shutemov.name>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <20260816224609.308019-2-kirill@shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 13 Aug 2026 06:57:48 +0100,
-Karl Mehltretter <kmehltretter@gmail.com> wrote:
+On 8/17/26 00:45, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
 > 
-> On Wed, Aug 12, 2026 at 02:57:07PM +0100, Marc Zyngier wrote:
-> > On Mon, 10 Aug 2026 22:22:37 +0100,
-> > Karl Mehltretter <kmehltretter@gmail.com> wrote:
-> > > Is this closer to what you had in mind?
-> > 
-> > No. I want *all* RDs to be gone on failure, and the next successful
-> > registration to result in all possible RDs to be matched against a
-> > vcpu if there are enough of them. Effectively an atomic behaviour from
-> > the PoV of userspace.
-> > 
-> > See the patch below for what I came up with.
-> > 
+> Callers that want the folio behind a present PTE spell it out as
+> page_folio(pte_page(pte)).
 > 
-> Understood. I believe your sketch needs two small adjustments:
+> Add pte_folio() as the folio companion to pte_page(), and convert the
+> callers in fs/proc/task_mmu.c and mm/hugetlb.c.
 > 
-> free_index must be incremented before kvm_io_bus_register_dev().
-> If registration fails, the current vCPU already has an RD assignment, but
-> there is otherwise no increment for the teardown path to undo.
+> Preparation for the anonymous collapse engine, which reads the folio
+> behind a PTE in several places.
 
-This probably is a separate patch. I don't think it has anything to do
-with the issue at hand.
+[...]
 
-> 
-> The garbage collection in vgic_v3_free_redist_region() should remain.
-> VM teardown frees the regions before unregistering the RD iodevs, so
-> removing it would leave rdreg pointers referring to freed regions.
+>  
+> +/**
+> + * pte_folio - Return the folio mapped by a present PTE.
+> + * @pte: A present page table entry.
+> + *
+> + * The folio companion to pte_page(); only meaningful for a present PTE
+> + * that maps a struct-page-backed folio.
+> + *
+> + * Return: The folio containing the page @pte maps.
+> + */
+> +static inline struct folio *pte_folio(pte_t pte)
+> +{
+> +	return page_folio(pte_page(pte));
+> +}
 
-Why is this more than just an ordering change? Probably also a
-separate patch.
+There is a reason why most code doesn't need that: because they should be using
+vm_normal_page() / vm_normal_folio(), or need the exact page and handle special
+ptes differently (see gup.c that uses pte_page()).
 
-> Does that look OK to you? If so, I could include both in v2.
-> I'll also split the selftest change and have it check only the
-> final state after the retry.
+And other code that uses pte_page() doesn't really operate on folios AFAIKs.
 
-Sure.
+That's also why you are only touching hugetlb code here.
 
-Thanks,
+IOW, there must be a pretty good reason for us to add a non-hugetlb helper when
+that looks like a good fit for common code when it's really only hugetlb that
+does weird things (and doesn't need the exact page!).
 
-	M.
+If we really *need* this helper, we should spell out clearly that it is very
+likely the wrong thing to use outside hugetlb code.
 
 -- 
-Without deviation from the norm, progress is not possible.
+Cheers,
+
+David
