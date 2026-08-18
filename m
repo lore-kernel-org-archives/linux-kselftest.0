@@ -1,47 +1,48 @@
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B78192F7F02;
-	Tue, 18 Aug 2026 07:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12DFD34572B;
+	Tue, 18 Aug 2026 07:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787037439; cv=none; b=bL1K8qPRCSB8Q6Eke7PaPJGjodimi8Fev0UWhJ5TzVP+HHXtxMdbU3xo41LGt4RGuSrKr6aIIAyMIkOnfRlmqiDy3ZBKvKPQMj6AipSva3naZj+LSXTut9RP9kIjHmsvGhmdge55np5hgy4NTWBiU6tPxaUpOcSOQXsSIcSyHWE=
+	t=1787037443; cv=none; b=N1Gt7mpK08tFs59UDzX1DxFzcyb3+MEUc/fl1ihq3pkzb7CuBegGHqL/IHy0O7IHGc416m2WgIb65RK0pNftz1YIn2SCyl/oYxSBr1N0xpN3J5/1QrteThv/aNOdfflDi3Ddjx+y7VtSB2F7UpcUrkQCJhMP1Rvs/lbMlpZ5J7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787037439; c=relaxed/simple;
-	bh=VXr3fp0F8dUjwOPp9sEZHfObw2m61CVOCJJ8c3RiWiQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=p89MtAZzCPVyzolUXo4U6sKW/Q0iCTAn3qnyIyvnXHIteJ4TbTBXCHOUW9XeB9fghjVS93c7kIlO6l9sVnhyF+sd7MiLCz38+ESpKX+/yE0e05ppykOQGGrom6LKn9pXyw6Ml60f5/3MboayETpqPaJ/7WfEPR4/2ohg6Tpivp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NOg/inTV; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1787037443; c=relaxed/simple;
+	bh=cpyskyAnrIvjKhOv4zt1c/g/OfoLxR5r2bmhbHql31c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=o+uG2uwBu4F3wsBk9O+6VaTPj9tHcxVcMjCcPOFKKfsfUpBp/DcYg0wHNpWUalWdnAC0P0nopKVJmzykG1z0m/xfznZWanDSVc3Rg41Ul4tDmN2D55n4stBlG6O0mJ+MzIZL8+Lyo6lGlZwEjwGB5aLOcQw4Pb0buzZ8XLh5bH0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DzouMxh/; arc=none smtp.client-ip=192.198.163.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NOg/inTV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DzouMxh/"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787037438; x=1818573438;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=VXr3fp0F8dUjwOPp9sEZHfObw2m61CVOCJJ8c3RiWiQ=;
-  b=NOg/inTVKVTC7cx3ubKreIbyBoz4XuGCMARJaB8/x5JnQ/Wcdfc6TTwx
-   3p0x4bp3W5WFt4mwoqgNPTA6IzBsIbOyuxiP0uMUzJhYy1JvDN1LNJOWG
-   AT4Ma6K2pbzDnsPSwR8ZKYWRFhJKXl4w0A655kVynGhwQMwNKVZsr6nFF
-   AcCMBS70ro4cI3h8hFx8fShEMq0QaWCrVjBoR0bzZOfaljTNP/dvJ4xvY
-   lZAaFOcwuOIABreiKSx8THdnMrUpk1F4Ie3TZfijyYKf8CnMaLpsY6cgj
-   tpiVxZJM2bLbz0mo7RT5yh5jENzeefKC3PptULTrGUOkZd+mIItpuGPrp
-   Q==;
-X-CSE-ConnectionGUID: Qc5eClZUQmWHxQSyVrDtAQ==
-X-CSE-MsgGUID: K3MCJzlaTOKOrDtLk7LW/w==
-X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="86482932"
+  t=1787037441; x=1818573441;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=cpyskyAnrIvjKhOv4zt1c/g/OfoLxR5r2bmhbHql31c=;
+  b=DzouMxh/zO4y6sbGp9MLieqwmXgdHkxL5/dg4Y8B2NRh7x9lyuinVudB
+   2OyCVx4DJywP+pmRHqWysKzBkDUc+UtYFvKGNJjL8tfamTuChRHZrdUET
+   l46o8E1HD+TrG02brdni9SxIVIxUXoDbayCjExNs97aFWzyTfbBV5TOKv
+   zfLUxAatNPQowMGkK7miJ4NQSs6IAn7p5bJnAvnSo3awF1QW8cmBajQHn
+   xTLANmOjothQSxRo9bEg6fgBTcnbRDW6an8rTWQ7s2H8wPMv/D3XAUz9m
+   iZGsSc5iL49frR89q0cKTWsgj0rfvhl1E0r0TuWZ9ZQV00B2Yhzp+8/KH
+   w==;
+X-CSE-ConnectionGUID: uecRfQ/xRGqTCTDElso1PQ==
+X-CSE-MsgGUID: g8MiuBWsTPWG1qUOJkxncA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="86482954"
 X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="86482932"
+   d="scan'208";a="86482954"
 Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:16 -0700
-X-CSE-ConnectionGUID: aLpf17x7S2SZddTzpDwYMg==
-X-CSE-MsgGUID: U0Qb6swbSVOJzepgKfvzdw==
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:21 -0700
+X-CSE-ConnectionGUID: +KmYAEHjQleMccxRE5yhDQ==
+X-CSE-MsgGUID: Sb6UeuJrQVqm9ON69hqmDw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="263410819"
+   d="scan'208";a="263410841"
 Received: from junjie-desk-dev.bj.intel.com ([10.238.152.71])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:12 -0700
+  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:16 -0700
 From: Junjie Cao <junjie.cao@intel.com>
 To: "David S. Miller" <davem@davemloft.net>,
 	Eric Dumazet <edumazet@google.com>,
@@ -62,10 +63,12 @@ Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
 	netdev@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 0/3] net/sched: taprio: fix software schedule livelocks
-Date: Tue, 18 Aug 2026 15:17:03 +0800
-Message-ID: <20260818071706.251035-1-junjie.cao@intel.com>
+Subject: [PATCH net 1/3] net/sched: taprio: catch up in bounded time when the schedule falls behind
+Date: Tue, 18 Aug 2026 15:17:04 +0800
+Message-ID: <20260818071706.251035-2-junjie.cao@intel.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260818071706.251035-1-junjie.cao@intel.com>
+References: <20260818071706.251035-1-junjie.cao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -74,45 +77,118 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-advance_sched() livelocks the owning CPU in two independent ways:
-schedules with entry intervals below the cost of servicing one hrtimer
-expiry pass validation, because virtual devices inflate the link speed
-behind the frame-length minimum, and a valid schedule that falls
-behind - delayed timer, starved CPU, stepped clock - replays its whole
-backlog one entry per expiry from hrtimer context.
+advance_sched() advances exactly one entry per hrtimer expiry. When the
+operational schedule falls behind - the timer was delayed, the CPU was
+starved, or the reference clock stepped forward - every elapsed entry
+is replayed back to back from hrtimer context with current_entry_lock
+held, and each replay rearms the timer with an expiry in the past. Once
+the backlog is large enough the CPU never leaves timer processing and
+RCU stalls follow. syzbot triggers this with schedules whose intervals
+are shorter than the cost of servicing one expiry, so the backlog only
+ever grows.
 
-Neither fix covers the other case. With only bounded catch-up, a 700ns
-single-entry schedule on veth is still admitted and sustains ~1M timer
-irqs/s on a release build. With only the interval floor, a stepped
-clock still replays the backlog. Clamping the next expiry into the
-future at runtime, as tested on one of the reproducer buckets in 2025
-[1], keeps the stall detector quiet but leaves the sub-microsecond
-schedule admitted, the CPU servicing an expiry every few microseconds
-for the lifetime of the qdisc, and the gates drifting off the
-configured timeline with every clamped expiry.
+Skip complete cycles arithmetically and walk at most one cycle of
+entries to land on the entry covering the current time. Gate close
+times and budgets are still only computed for the entry landed on. An
+admin schedule crossed by the jump is picked up by the existing
+should_change_schedules() check on the recomputed end time. The walk is
+capped at twice the entry count as a safeguard against degenerate
+intervals; leftover backlog is then handled by the next expiry as
+today.
 
-Patch 2 extends the patch generated by syzkaller's patching workflow
-[2] to exempt txtime-assist, which never arms the per-entry hrtimer.
-syzbot tested the series against the reproducers of all three known
-buckets on net.git; tags on patch 2.
+Fixes: 5a781ccbd19e ("tc: Add support for configuring the taprio scheduler")
+Signed-off-by: Junjie Cao <junjie.cao@intel.com>
+---
+ net/sched/sch_taprio.c | 56 +++++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 53 insertions(+), 3 deletions(-)
 
-[1] https://lore.kernel.org/all/20250729010657.3326-1-hdanton@sina.com/
-[2] https://lore.kernel.org/all/afe041f6-ef7d-4434-b2d0-096be49b5bcb@mail.kernel.org/
-
-
-Junjie Cao (2):
-  net/sched: taprio: catch up in bounded time when the schedule falls
-    behind
-  selftests/tc-testing: taprio: add case for the software minimum
-    interval
-
-Uladzislau Zhauniarovich (1):
-  net/sched: taprio: enforce a minimum interval for software schedules
-
- net/sched/sch_taprio.c                        | 80 +++++++++++++++++--
- .../tc-testing/tc-tests/qdiscs/taprio.json    | 22 +++++
- 2 files changed, 97 insertions(+), 5 deletions(-)
-
+diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
+index 299234a5f0fe..f3f90c5d2dca 100644
+--- a/net/sched/sch_taprio.c
++++ b/net/sched/sch_taprio.c
+@@ -915,6 +915,51 @@ static bool should_change_schedules(const struct sched_gate_list *admin,
+ 	return false;
+ }
+ 
++/* The operational schedule fell behind, e.g. because the timer was delayed
++ * or the reference clock stepped forward. Advancing one entry per timer
++ * expiry would replay the whole backlog from hrtimer context, so skip
++ * complete cycles arithmetically and walk the remaining entries to land on
++ * the entry covering the current time.
++ */
++static void taprio_catch_up(struct sched_gate_list *oper,
++			    struct sched_entry **next, ktime_t *next_start,
++			    ktime_t *end_time, ktime_t now)
++{
++	int budget = 2 * oper->num_entries + 1;
++	struct sched_entry *entry = *next;
++	ktime_t start = *next_start;
++	ktime_t end = *end_time;
++	s64 behind = ktime_sub(now, end);
++
++	if (oper->cycle_time > 0 && behind >= oper->cycle_time) {
++		s64 jump = div64_s64(behind, oper->cycle_time) * oper->cycle_time;
++
++		start = ktime_add_ns(start, jump);
++		end = ktime_add_ns(end, jump);
++		oper->cycle_end_time = ktime_add_ns(oper->cycle_end_time, jump);
++	}
++
++	while (ktime_before(end, now) && --budget) {
++		if (list_is_last(&entry->list, &oper->entries) ||
++		    ktime_compare(end, oper->cycle_end_time) == 0) {
++			entry = list_first_entry(&oper->entries,
++						 struct sched_entry, list);
++			oper->cycle_end_time = ktime_add_ns(oper->cycle_end_time,
++							    oper->cycle_time);
++		} else {
++			entry = list_next_entry(entry, list);
++		}
++
++		start = end;
++		end = ktime_add_ns(end, entry->interval);
++		end = min_t(ktime_t, end, oper->cycle_end_time);
++	}
++
++	*next = entry;
++	*next_start = start;
++	*end_time = end;
++}
++
+ static enum hrtimer_restart advance_sched(struct hrtimer *timer)
+ {
+ 	struct taprio_sched *q = container_of(timer, struct taprio_sched,
+@@ -924,7 +969,7 @@ static enum hrtimer_restart advance_sched(struct hrtimer *timer)
+ 	int num_tc = netdev_get_num_tc(dev);
+ 	struct sched_entry *entry, *next;
+ 	struct Qdisc *sch = q->root;
+-	ktime_t end_time;
++	ktime_t end_time, next_start, now;
+ 	int tc;
+ 
+ 	spin_lock(&q->current_entry_lock);
+@@ -960,14 +1005,19 @@ static enum hrtimer_restart advance_sched(struct hrtimer *timer)
+ 		next = list_next_entry(entry, list);
+ 	}
+ 
+-	end_time = ktime_add_ns(entry->end_time, next->interval);
++	next_start = entry->end_time;
++	end_time = ktime_add_ns(next_start, next->interval);
+ 	end_time = min_t(ktime_t, end_time, oper->cycle_end_time);
+ 
++	now = taprio_get_time(q);
++	if (unlikely(ktime_before(end_time, now)))
++		taprio_catch_up(oper, &next, &next_start, &end_time, now);
++
+ 	for (tc = 0; tc < num_tc; tc++) {
+ 		if (next->gate_duration[tc] == oper->cycle_time)
+ 			next->gate_close_time[tc] = KTIME_MAX;
+ 		else
+-			next->gate_close_time[tc] = ktime_add_ns(entry->end_time,
++			next->gate_close_time[tc] = ktime_add_ns(next_start,
+ 								 next->gate_duration[tc]);
+ 	}
+ 
 -- 
 2.43.0
 
