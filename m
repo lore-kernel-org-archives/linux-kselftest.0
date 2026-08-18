@@ -1,65 +1,65 @@
-Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585A420125F
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 06:11:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D45743E3176
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 06:11:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787033466; cv=none; b=B6c5Wu5ciPrbQKO6bCSb0s6fK7mmIU/s33uE16L2ihKDgTN6nIEK9uyslJui/c3q2Fz/gcmFdlOTDC6gUYY6lS2rupGOewPNZaBNgEgFYIati4mrmqWx3NCMVM4EZR0Xd1QRmpjYBEgd8pEvjfG5VqP7WQYilM6KrCXStDVclL8=
+	t=1787033473; cv=none; b=dDaxe7IpGKpJm30mTpnYUWfOTpcIGLSWB1kbFVCVLIOuWI6BqyUyZ8xDOdTRun4HbtcKnVmHz2OsAT5G1i++2dij4OsFmNLe9+hJm9+QKQZgia+JWTnMFIlzDyFrNjfhD3wblbEZKxvkyf3PDBvXmq3m3NsU3JGkib0wzR3Rfkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787033466; c=relaxed/simple;
-	bh=mZKFwQauANDJ1gHu+gg8RedjLenlA7e9YJ8y+FF2WoU=;
+	s=arc-20240116; t=1787033473; c=relaxed/simple;
+	bh=GCJfR6dFKIlj1FLeCSmVPQc4zronWrksr3AN1wVaOAU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k9nbFaom3XMUrwmOGG7zqvPgTBLFm4OOqYXABtGCzttJjIzDm28a+C8ZycGL4xcANtK5Z0zsvUpjmmbh83sFA6krXSaDubLfcFF05TFy40EbDQuWhyJXf1BBrv6zP0ZAU1E0mKx0+UeaDJGwDPLAUQ/r8KuPnGQIfsNlb2i40cE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M/fDfup6; arc=none smtp.client-ip=209.85.216.48
+	 MIME-Version:Content-Type; b=NNpioR0povs9pMIrKrn56kJLY44M+Oauugksr+0VuP/EUxHkIfji8CoFKwJvDGJw9clOLi8lNNk56FfMPlstE0jnspzD4oTFMy/jq2n4yaxpJ6qQ8m4p5FHJOM9vYI0mv3lwl/1vdtnHTT/SQBoW0e79w2D/dXAf5Ol4Lo3cJss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E/yIXIZP; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M/fDfup6"
-Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso6170359a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 23:11:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E/yIXIZP"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38de840f2f0so3543108a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 23:11:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787033465; x=1787638265; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787033471; x=1787638271; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=PFTkBKzl9DDztkv9Ak+eApuO538I5zXX6YMBdyPiC24=;
-        b=M/fDfup6yb5Ul3kWAVU5gN/854XlbjmxUj/vwLrIZ/S0C1NeLvdSG80xWbO6Vz0oAC
-         SjoR9flU7n/TN2phwHYB3lACBPlM3KS3Kwev4+lfpmlez+vZPg1853ZJryEaNh2qLltf
-         A1+pINquqFwjaLEEBDpmUN5/I5Zb95kZKnf4WYurJwed3qc6tgpBLgTl/bTf3UuBqR+m
-         L1MB8cvYYpS9d5uw8sUBX06r2Ky8Bl0lU8YLaoLgnrxo4cNk4M7dj78BTZaIcOqix4Wu
-         bwh2x6a4VZhD/qVfxBLtV1Kms88fiLPgUqmY0tGoF1tql9JFxo4nykvptKvMXs8i6rry
-         BiIg==
+        bh=7MnRAqJMoLRpsIrwycTnpOzFMIb3xRRTSx1mdIHCeG0=;
+        b=E/yIXIZP++4i7rNJXXZOJlg4ZFktD5ROTnLYPnsQAlwuFlPjEzuMzBtN1+SaEIpGnC
+         Ycqh+VqQWLeaT7wWp5cIc+M3fxqUpm6ULuRhF20UAk4QGBeQHJNTMT7x112xeETwOSwF
+         6QEmZLqxgrRdDivmVxdurHooaf3QeG8Q4K6nYxbTNM69C8HuywgaKcU4pWsc4iRQBRsI
+         IcR2i8vgMuHGVhdZYxpEPoWa7m+yi6FIqbNVt7af7/0X7y6yIP93cykCewM2q98kDCB/
+         9VzvRDkNCO39Dh6+xm3GWlWpjcMd05XD+0vDR7QroB+Mup35NFguTvJ/aBQNyKLBUg8f
+         iBCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787033465; x=1787638265;
+        d=1e100.net; s=20251104; t=1787033471; x=1787638271;
         h=content-transfer-encoding:content-type:mime-version:references
          :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=PFTkBKzl9DDztkv9Ak+eApuO538I5zXX6YMBdyPiC24=;
-        b=WPyyGK6DtjVm2e9I4RoOzx0GbZ7LX694hWEKhwn3XWMBlbNOgNKSxLGld3xpdSGz3M
-         IN2PLGqYkyIuUBjwwtPaqV/Pynjn7W73sVquL7vLU+m07OE8YHiSbELF1W3kILfpjbxI
-         e2Vnhe8VqbO+/Jw17hdu0GAO20neh1Nnq0dBNOSrDtPuUGMJOBrdelrQGITWZBSTRms1
-         s558QOsX5Z6aUpmz9Ky/J/qgtl4VLeqx9eYncHPhctEfXShtyCv2uz79OX4CaLS9Qt0N
-         9B6c3NhYM0LOGxOgT/77KVeAc3ewSuQP0HqzG+rEaDbH7LCz+djC0g3j6BxGCSDF4Fbs
-         hgzQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrEcjWEj6GmgQWL6t525pEx3PWVY8xYh299uOiFfYPEP9ZAnTKPfnCR+h+KfI3p9F65Tx/ifMwHAuQyQQCuK10=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyVoNYK+EW6O512wKpvTxWorxalNGiKwy2je3w51XxkHniqOyHC
-	Evaredg2xr7xkjU6walIxs6Oa+gjKynu4n7LW7MxiNvFsn84VfWeQKJJ
-X-Gm-Gg: AR+sD10EtCTGc5HJS0LcX6qlh58ucRsjfTK+yD/16QWuZ4RtkmA6By28szti8Ccf0PI
-	A3l5UyOkkp30kQvgbZm++9otqT49LG5ivY78w6MFAbvEIo7ffMgwl+EAdRKAdr4JRwTHUFEx73H
-	2aWZ2vnOqlAYNSd7CT6bXCv69oQ9vx/2V2TdZ9X8W2lI1g+xEBb74fCg/0tJtVQ0dpAnco4JtBw
-	49hN37rPqftQw4nMjI90K7/uYDdq7fzoKWANY72hK4nnASjk+9gMJuvCk3fH1Ca23mWJvbX4Y+r
-	zNtwxYraMgZPQDwg9PbCmZKR5qI903hF+XfdxGDWShYpZIe0AET0bi8pETzgIQ1Y7eEXzS8873E
-	gDLHNXtAnviZI9Y1S1j5ghQVTZGX4k5ycY0Fg4OQDRyaxYiqncdsHsNRU2yMAOCrWN9lKn9bKXp
-	krFl6tDLYWM2Pi99mxE4DW7TQQCVk5/NqJsTaqOTGC1Xr9WP0/O52mWZssS3b24mszC5gbffOYM
-	sBZS3w=
-X-Received: by 2002:a17:90a:ec83:b0:381:e74f:8a6a with SMTP id 98e67ed59e1d1-3933b8c1041mr33609337a91.16.1787033464444;
-        Mon, 17 Aug 2026 23:11:04 -0700 (PDT)
+        bh=7MnRAqJMoLRpsIrwycTnpOzFMIb3xRRTSx1mdIHCeG0=;
+        b=iKLuAa1rF4IefSNpEJtdGyuDzK2B2kYpchKcYAR18wucf+Bgpa2+dxCZobVDFrHjSv
+         vGjeJ5k6RyALk4qV2g3Vh4aUiaFc0HWkBtBHQ64ybughx2Sl49BPBR1Msh2QYi5sGGBN
+         /Boe4zPkcy/3ggRhaRn5de575qilcxVcY3v0rq0T4n1+1dr2JHWT6g8cvWnEvOtJDUFE
+         0Ks/mv63g95xw4UtKoKi4qyIJzl0PgqAtciay02wfepiKS6eIoyBv75XFabCSB5Y5gvj
+         ih5A7YmwMSUabimw9Uvsi7qf/ksj16rAi99QmTuZ8pk8xdrndlejLyw66M+yab5j8OhI
+         iR5Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rqrf7u3nFOjYyNb2X3QlkD7ClI7FBFPDi71FIRUS2IZ3/3DmAk7i7qAeEfAcu6c1jryWdM0Bqi6ZiOonyoNU3A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxgN586osHCGccRKBPYxxQdL6lDrXtg2HrszjgwAnSmSCBIKKp0
+	sKim5GelOhbEN+UhKvTDw5jD9Zhw04+KzG0Q8kBkvyMT5BhJfjvN7O4g
+X-Gm-Gg: AR+sD10s4/zl8nqITZ+Vl07bFi7NWQeOSzIAZHH5/rrJxb2adYs18g/I8egEYiYtLgW
+	f1xfg1SQXj90pzaFa9K0swrpGZAh/PQzdCk6m/VxAi77wsHBjQkUBPRvRNRfdldPxOmIb9/F2ra
+	xziLzT80U3EHjjt+7ZBT1P1Fm9tj0oHXrF9sfc5oAvYQbE2mNsxDt/e5RoWuOTQ0eQvoJxZpVwe
+	bKKG9vhbTY6358m+aNtTHmvYpjZ1yQyeYKRIowE0wwEUj9a1YTHp3KaUYvPNkPnlnA8mniBPV1d
+	grNa2GQ0v5mZvdrz6MBTa4JBCkz0Td1RNPDrMxIzUC0AknffkCBCdgAVOvPlptVIK7h4uPcclgY
+	nLJ3zMZaPlb4ETlY3rKJegenDMzevYahLUWFaq3JQwYoKBLYaopuIsM91AXA3kv4B2j81K3zZjz
+	NqO5XK7nSMMjUg+qHLoIzgrxHZwTF4XK6e3DeCWdTxdx78RkkvcmhbctPIcv/n9OqzIFc3sH+4R
+	ZflI34=
+X-Received: by 2002:a17:90b:1d45:b0:366:10f1:3d91 with SMTP id 98e67ed59e1d1-3933b7c3b71mr32119576a91.1.1787033470824;
+        Mon, 17 Aug 2026 23:11:10 -0700 (PDT)
 Received: from kernel.tail6741c6.ts.net ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d38bf94sm4633942a91.9.2026.08.17.23.10.58
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d38bf94sm4633942a91.9.2026.08.17.23.11.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 23:11:04 -0700 (PDT)
+        Mon, 17 Aug 2026 23:11:10 -0700 (PDT)
 From: Kunwu Chan <kunwu.chan@gmail.com>
 X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
 To: sj@kernel.org,
@@ -75,9 +75,9 @@ Cc: damon@lists.linux.dev,
 	shuah@kernel.org,
 	lianux.mm@gmail.com,
 	Kunwu Chan <kunwu.chan@gmail.com>
-Subject: [RFC PATCH 3/7] mm/damon/perf: add debugfs statistics interface
-Date: Tue, 18 Aug 2026 14:10:27 +0800
-Message-ID: <20260818061031.827057-4-kunwu.chan@linux.dev>
+Subject: [RFC PATCH 4/7] mm/damon: integrate observe API into vaddr overflow handlers and core drain
+Date: Tue, 18 Aug 2026 14:10:28 +0800
+Message-ID: <20260818061031.827057-5-kunwu.chan@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260818061031.827057-1-kunwu.chan@linux.dev>
 References: <20260818061031.827057-1-kunwu.chan@linux.dev>
@@ -90,191 +90,475 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Lian Wang <lianux.mm@gmail.com>
+From: Kunwu Chan <kunwu.chan@gmail.com>
 
-Expose the aggregated per-CPU counters and the global event-stage in a
-debug-only debugfs perf_stats file.  The format is explicitly unstable;
-tracepoints are the stable diagnostic interface.
+Wire the observe_*() calls into the DAMON hot paths: vaddr access-check
+overflow handlers report into the per-CPU ring, and the kdamond drain
+matches each report against the target whose tgid owns it.  The observe
+calls are pure side-effect statistics (no-ops under
+CONFIG_DAMON_PERF_OBSERVE=n), so the switch never changes DAMON matching
+semantics.  The vaddr teardown frees the per-event cpu_state array.
 
-Co-developed-by: Kunwu Chan <kunwu.chan@gmail.com>
-Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+Read ring->tail once with READ_ONCE in damon_report_access() and reuse
+the cached value for the peak-occupancy estimate, avoiding a torn read
+and a compiler reload on the producer side.
+
+Co-developed-by: Lian Wang <lianux.mm@gmail.com>
 Signed-off-by: Lian Wang <lianux.mm@gmail.com>
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
 ---
- mm/damon/perf/Makefile  |   2 +-
- mm/damon/perf/debugfs.c | 142 ++++++++++++++++++++++++++++++++++++++++
- mm/damon/perf/stats.c   |   2 +-
- 3 files changed, 144 insertions(+), 2 deletions(-)
- create mode 100644 mm/damon/perf/debugfs.c
+ mm/damon/core.c  | 129 +++++++++++++++++++++++++++++++++++++----------
+ mm/damon/vaddr.c | 104 +++++++++++++++++++++++++++++++++++---
+ 2 files changed, 199 insertions(+), 34 deletions(-)
 
-diff --git a/mm/damon/perf/Makefile b/mm/damon/perf/Makefile
-index 5c46d3da7ef8..150cbaa875fa 100644
---- a/mm/damon/perf/Makefile
-+++ b/mm/damon/perf/Makefile
-@@ -2,4 +2,4 @@
+diff --git a/mm/damon/core.c b/mm/damon/core.c
+index 609d627e2b33..377f07122fb0 100644
+--- a/mm/damon/core.c
++++ b/mm/damon/core.c
+@@ -21,6 +21,7 @@
  
- # Observability: per-CPU counters, tracepoints, debugfs perf_stats
- obj-$(CONFIG_DAMON_PERF_OBSERVE)	+= damon-perf.o
--damon-perf-objs			:= stats.o
-+damon-perf-objs			:= stats.o debugfs.o
-diff --git a/mm/damon/perf/debugfs.c b/mm/damon/perf/debugfs.c
-new file mode 100644
-index 000000000000..c54dd7644ac3
---- /dev/null
-+++ b/mm/damon/perf/debugfs.c
-@@ -0,0 +1,142 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * DAMON Perf Observability — debugfs Interface
-+ *
-+ * Exposes one file under /sys/kernel/debug/damon/:
-+ *
-+ *   perf_stats — per-CPU pipeline statistics in tabular form
-+ *
-+ * DEBUG ONLY — format may change without notice; do not parse in
-+ * scripts.  For stable diagnostics, use the tracepoints under
-+ *   /sys/kernel/debug/tracing/events/damon/
-+ */
-+
-+#include <linux/cpu.h>
-+#include <linux/cpumask.h>
-+#include <linux/debugfs.h>
-+#include <linux/seq_file.h>
-+
-+#include "perf.h"
-+
-+static struct dentry *damon_debugfs_dir;
-+
-+/*
-+ * perf_stats
-+ */
-+
-+static const char *state_name(int s)
-+{
-+	switch (s) {
-+	case DAMON_PERF_STATE_UNINIT:	return "UNINIT";
-+	case DAMON_PERF_STATE_CREATED:	return "CREATED";
-+	case DAMON_PERF_STATE_BOUND:	return "BOUND";
-+	case DAMON_PERF_STATE_ENABLED:	return "ENABLED";
-+	case DAMON_PERF_STATE_RUNNING:	return "RUNNING";
-+	case DAMON_PERF_STATE_ERROR:	return "ERROR";
-+	default:			return "?";
-+	}
-+}
-+
-+static int perf_stats_show(struct seq_file *m, void *v)
-+{
-+	struct damon_perf_stats agg, st;
-+	int cpu;
-+	bool first = true;
-+
-+	damon_perf_stats_aggregate(&agg);
-+
-+	seq_puts(m, "    --------------  ----------\n");
-+	seq_puts(m, "    Counter          Value\n");
-+	seq_puts(m, "    --------------  ----------\n");
-+
-+#define STAT_ROW(label, field) \
-+	seq_printf(m, "    %-12s   %8llu\n", label, agg.field)
-+
-+	STAT_ROW("callback",    callback);
-+	STAT_ROW("valid",       sample_valid);
-+	STAT_ROW("null",        sample_null);
-+	STAT_ROW("addr_zero",   sample_addr_zero);
-+	STAT_ROW("kernel",      sample_kernel);
-+	STAT_ROW("inv_phys",    sample_invalid_phys);
-+	STAT_ROW("enqueue",     enqueue);
-+	STAT_ROW("dequeue",     dequeue);
-+	STAT_ROW("overflow",    overflow);
-+	STAT_ROW("ring_peak",   ring_peak);
-+	STAT_ROW("match",       match);
-+	STAT_ROW("miss_tgid",   miss_tgid);
-+	STAT_ROW("miss_region", miss_region);
-+	STAT_ROW("miss_bound",  miss_boundary);
-+	STAT_ROW("update",      update);
-+
-+#undef STAT_ROW
-+
-+	seq_puts(m, "    --------------  ----------\n\n");
-+
-+	/* Per-CPU breakdown */
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu) {
-+		damon_perf_stats_snapshot(cpu, &st);
-+
-+		/* Skip truly idle CPUs */
-+		if (st.cpu_state == DAMON_PERF_STATE_UNINIT &&
-+		    !st.callback && !st.enqueue && !st.dequeue)
-+			continue;
-+
-+		if (first) {
-+			seq_puts(m, "  Per-CPU (non-zero / non-UNINIT):\n");
-+			first = false;
+ /* for damon_get_folio() used by node eligible memory metrics */
+ #include "ops-common.h"
++#include "perf/perf.h"
+ 
+ #define CREATE_TRACE_POINTS
+ #include <trace/events/damon.h>
+@@ -2243,24 +2244,41 @@ void damon_report_access(struct damon_access_report *report)
+ 	preempt_disable();
+ 	if (local_inc_return(this_cpu_ptr(&damon_report_ring_busy)) != 1) {
+ 		/* NMI nested on a process-context producer; drop. */
+-		trace_damon_perf_ring_overflow(smp_processor_id());
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++		damon_perf_observe_ring_overflow(smp_processor_id());
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ 		goto out;
+ 	}
+ 
+ 	ring = this_cpu_ptr(&damon_report_rings);
+ 	head = ring->head;
+ 	next = (head + 1) & DAMON_REPORT_RING_MASK;
++	{
++		unsigned int tail = READ_ONCE(ring->tail);
+ 
+-	if (next == READ_ONCE(ring->tail)) {
+-		trace_damon_perf_ring_overflow(smp_processor_id());
+-		goto out;
+-	}
++		if (next == tail) {
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++			damon_perf_observe_ring_overflow(smp_processor_id());
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
++			goto out;
 +		}
-+
-+		seq_printf(m, "  CPU%02d: st=%-7s cb=%llu enq=%llu deq=%llu ovf=%llu match=%llu tgid=%llu noreg=%llu bound=%llu upd=%llu\n",
-+			cpu, state_name(st.cpu_state),
-+			st.callback, st.enqueue, st.dequeue,
-+			st.overflow, st.match,
-+			st.miss_tgid, st.miss_region, st.miss_boundary,
-+			st.update);
+ 
+-	ring->entries[head] = *report;
+-	ring->entries[head].report_jiffies = jiffies;
+-	smp_wmb(); /* publish entry before head advance */
+-	WRITE_ONCE(ring->head, next);
+-	WRITE_ONCE(*this_cpu_ptr(&damon_ring_pending), 1);
++		ring->entries[head] = *report;
++		ring->entries[head].report_jiffies = jiffies;
++		smp_wmb(); /* publish entry before head advance */
++		WRITE_ONCE(ring->head, next);
++		WRITE_ONCE(*this_cpu_ptr(&damon_ring_pending), 1);
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++		damon_perf_observe_ring_enqueue();
++		/*
++		 * Track peak occupancy for health evaluation.
++		 * next is the new head; tail was read before enqueue
++		 * (may be slightly stale — acceptable for a peak estimate).
++		 */
++		damon_perf_observe_ring_peak(
++				(next - tail) & DAMON_REPORT_RING_MASK);
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
 +	}
-+	cpus_read_unlock();
-+
-+	return 0;
-+}
-+
-+static int perf_stats_open(struct inode *inode, struct file *file)
-+{
-+	return single_open(file, perf_stats_show, NULL);
-+}
-+
-+static const struct file_operations perf_stats_fops = {
-+	.open		= perf_stats_open,
-+	.read		= seq_read,
-+	.llseek		= seq_lseek,
-+	.release	= single_release,
-+};
-+
+ out:
+ 	local_dec(this_cpu_ptr(&damon_report_ring_busy));
+ 	preempt_enable();
+@@ -2276,6 +2294,9 @@ void damon_report_page_fault(struct vm_fault *vmf, bool huge_pmd)
+ 		.tid = current->pid,
+ 		.tgid = task_tgid_nr(current),
+ 		.is_write = vmf->flags & FAULT_FLAG_WRITE,
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++		.source = DAMON_REPORT_SRC_PAGE_FAULT,
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ 	};
+ 
+ 	if (huge_pmd)
+@@ -3917,8 +3938,16 @@ static bool damon_sample_filter_out(struct damon_access_report *report,
+ 	return !filter->allow;
+ }
+ 
+-static void kdamond_apply_access_report(struct damon_access_report *report,
+-		struct damon_target *t,
 +/*
-+ * Init / teardown
++ * Try to apply one access report to a target's region snapshot.
++ *
++ * Caller has already resolved tgid (for pid-based monitoring), so this
++ * function only does address-to-region matching.  Miss reasons for
++ * trace_damon_perf_report_missed use enum damon_report_miss_reason.
++ *
++ * Return: true if the report fell inside a known region, false otherwise.
 + */
++static bool kdamond_apply_access_report(struct damon_access_report *report,
+ 		struct damon_region **regions, unsigned int nr_regions,
+ 		struct damon_ctx *ctx)
+ {
+@@ -3926,13 +3955,7 @@ static void kdamond_apply_access_report(struct damon_access_report *report,
+ 	unsigned long addr;
+ 	int left, right, mid;
+ 
+-	if (damon_target_has_pid(ctx)) {
+-		if (pid_nr(t->pid) != report->tgid)
+-			return;
+-		addr = report->vaddr;
+-	} else {
+-		addr = report->paddr;
+-	}
++	addr = damon_target_has_pid(ctx) ? report->vaddr : report->paddr;
+ 
+ 	/* Binary search the snapshot for the region containing addr. */
+ 	left = 0;
+@@ -3951,17 +3974,27 @@ static void kdamond_apply_access_report(struct damon_access_report *report,
+ 		}
+ 	}
+ 
+-	if (!r)
+-		return;
++	if (!r) {
++		damon_perf_observe_miss(addr, report->cpu,
++				DAMON_REPORT_MISS_NOREGION);
++		return false;
++	}
+ 	/* Reject reports straddling a region boundary. */
+-	if (addr + report->size > r->ar.end)
+-		return;
++	if (addr + report->size > r->ar.end) {
++		damon_perf_observe_miss(addr, report->cpu,
++				DAMON_REPORT_MISS_BOUNDARY);
++		return false;
++	}
+ 	if (!r->access_reported) {
+ 		damon_update_region_access_rate(r, true, &ctx->attrs);
+ 		r->access_reported = true;
++		damon_perf_observe_update(report->cpu);
+ 	}
++	damon_perf_observe_match(addr, report->cpu);
++	return true;
+ }
+ 
 +
-+int damon_perf_debugfs_init(void)
-+{
-+	if (!debugfs_initialized())
-+		return -ENODEV;
+ static unsigned int kdamond_apply_zero_access_report(struct damon_ctx *ctx)
+ {
+ 	struct damon_target *t;
+@@ -4045,6 +4078,7 @@ static unsigned int kdamond_check_reported_accesses(struct damon_ctx *ctx)
+ 	struct damon_target_lookup *tbl;
+ 	unsigned int nr_targets = 0;
+ 	unsigned int i;
++	unsigned int total_reports = 0, matched_reports = 0;
+ 
+ 	tbl = damon_build_target_lookup(ctx, &nr_targets);
+ 	if (!tbl) {
+@@ -4077,6 +4111,10 @@ static unsigned int kdamond_check_reported_accesses(struct damon_ctx *ctx)
+ 		while (tail != head) {
+ 			struct damon_access_report *report =
+ 				&ring->entries[tail];
++			bool applied = false;
++
++			/* Count every entry removed from the ring */
++			damon_perf_observe_ring_dequeue(report->cpu);
+ 
+ 			if (time_before(report->report_jiffies,
+ 					jiffies - usecs_to_jiffies(
+@@ -4085,16 +4123,52 @@ static unsigned int kdamond_check_reported_accesses(struct damon_ctx *ctx)
+ 			if (damon_sample_filter_out(report,
+ 					&ctx->sample_control))
+ 				goto next;
+-			for (i = 0; i < nr_targets; i++)
+-				kdamond_apply_access_report(report,
+-						tbl[i].t,
++			/*
++			 * For pid-based monitoring, resolve tgid to the
++			 * single matching target before calling
++			 * kdamond_apply_access_report(), avoiding a
++			 * spurious miss tracepoint for every non-matching
++			 * target.
++			 */
++			if (damon_target_has_pid(ctx)) {
++				for (i = 0; i < nr_targets; i++) {
++					if (pid_nr(tbl[i].t->pid) ==
++							report->tgid) {
++						applied =
++					    kdamond_apply_access_report(
++							report,
++							tbl[i].regions,
++							tbl[i].nr_regions,
++							ctx);
++						break;
++					}
++				}
++				if (!applied && i == nr_targets)
++					damon_perf_observe_miss(
++						report->vaddr,
++						report->cpu,
++						DAMON_REPORT_MISS_TGID);
++			} else {
++				for (i = 0; i < nr_targets; i++)
++					applied |=
++					    kdamond_apply_access_report(
++						report,
+ 						tbl[i].regions,
+ 						tbl[i].nr_regions, ctx);
++			}
++			total_reports++;
++			if (applied)
++				matched_reports++;
++
+ next:
+ 			tail = (tail + 1) & DAMON_REPORT_RING_MASK;
+ 		}
+ 		WRITE_ONCE(ring->tail, tail);
+ 	}
++
++	if (total_reports)
++		damon_perf_observe_drain(total_reports, matched_reports);
++
+ 	/* For nr_accesses_bp, absence of access should also be reported. */
+ 	return kdamond_apply_zero_access_report(ctx);
+ }
+@@ -4158,8 +4232,9 @@ static int kdamond_fn(void *data)
+ 		ctx->passed_sample_intervals++;
+ 
+ 		if (!list_empty(&ctx->perf_events) ||
+-		    ctx->sample_control.primitives_enabled.page_fault)
++		    ctx->sample_control.primitives_enabled.page_fault) {
+ 			max_nr_accesses = kdamond_check_reported_accesses(ctx);
++		}
+ 		else if (ctx->ops.check_accesses)
+ 			max_nr_accesses = ctx->ops.check_accesses(ctx);
+ 		if (ctx->ops.apply_probes)
+diff --git a/mm/damon/vaddr.c b/mm/damon/vaddr.c
+index 73fcea91afa0..a68c7262d533 100644
+--- a/mm/damon/vaddr.c
++++ b/mm/damon/vaddr.c
+@@ -17,6 +17,8 @@
+ #include <linux/pagewalk.h>
+ #include <linux/sched/mm.h>
+ 
++#include "perf/perf.h"
++
+ #include "../internal.h"
+ #include "ops-common.h"
+ 
+@@ -975,13 +977,49 @@ static void damon_perf_overflow_vaddr(struct perf_event *perf_event,
+ 		struct perf_sample_data *data, struct pt_regs *regs)
+ {
+ 	struct damon_access_report report;
++	u64 data_src_val;
++	u64 period_val;
 +
 +	/*
-+	 * Create the "damon" directory first.  debugfs_create_dir() mounts
-+	 * debugfs via simple_pin_fs() before touching debugfs_mount, so it
-+	 * is safe to call during initcall time -- unlike debugfs_lookup(),
-+	 * which dereferences debugfs_mount unconditionally and crashes with
-+	 * a NULL mount.  If the directory already exists (created by another
-+	 * DAMON interface) debugfs_create_dir() returns -EEXIST; fall back
-+	 * to debugfs_lookup(), which is now safe because the mount exists.
++	 * Observe every hardware sample through the unified API.
++	 *
++	 * reason encodes why a sample was dropped at the handler level:
++	 *   0 = valid, queued to ring
++	 *   1 = data == NULL
++	 *   2 = addr == 0 (PMU did not populate data->addr)
++	 *   3 = kernel address (addr >= TASK_SIZE)
 +	 */
-+	damon_debugfs_dir = debugfs_create_dir("damon", NULL);
-+	if (damon_debugfs_dir == ERR_PTR(-EEXIST))
-+		damon_debugfs_dir = debugfs_lookup("damon", NULL);
-+	if (IS_ERR(damon_debugfs_dir))
-+		return PTR_ERR(damon_debugfs_dir);
-+
-+	debugfs_create_file("perf_stats", 0400, damon_debugfs_dir,
-+			NULL, &perf_stats_fops);
-+
-+	return 0;
-+}
-diff --git a/mm/damon/perf/stats.c b/mm/damon/perf/stats.c
-index a869f115bb26..ae5b0037a31d 100644
---- a/mm/damon/perf/stats.c
-+++ b/mm/damon/perf/stats.c
-@@ -291,5 +291,5 @@ void damon_perf_stats_aggregate(struct damon_perf_stats *dst)
++	if (!data) {
++		damon_perf_observe_sample(0, 0, 0,
++				smp_processor_id(), 1, 0,
++				perf_event->attr.sample_type);
++		return;
++	}
  
- int damon_perf_framework_init(void)
- {
--	return 0;
-+	return damon_perf_debugfs_init();
+-	if (!data || !data->addr)
++	data_src_val = data->data_src.val;
++	period_val = data->period;
++
++	if (!data->addr) {
++		damon_perf_observe_sample(0, data_src_val, period_val,
++				smp_processor_id(), 2,
++				data->sample_flags,
++				perf_event->attr.sample_type);
+ 		return;
++	}
+ 
+ 	/* Drop kernel-VA hits -- only user-space VAs land in damon vaddr regions. */
+-	if (data->addr >= TASK_SIZE)
++	if (data->addr >= TASK_SIZE) {
++		damon_perf_observe_sample(data->addr, data_src_val, period_val,
++				smp_processor_id(), 3,
++				data->sample_flags,
++				perf_event->attr.sample_type);
+ 		return;
++	}
++
++	damon_perf_observe_sample(data->addr, data_src_val, period_val,
++			smp_processor_id(), 0,
++			data->sample_flags,
++			perf_event->attr.sample_type);
+ 
+ 	report = (struct damon_access_report){
+ 		.vaddr = data->addr & PAGE_MASK,
+@@ -990,6 +1028,9 @@ static void damon_perf_overflow_vaddr(struct perf_event *perf_event,
+ 		.tid = current->pid,
+ 		.tgid = current->tgid,
+ 		.is_write = !!(data->data_src.mem_op & PERF_MEM_OP_STORE),
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++		.source = DAMON_REPORT_SRC_PERF_OVERFLOW,
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ 	};
+ 	damon_report_access(&report);
  }
+@@ -998,9 +1039,18 @@ static void damon_perf_overflow_paddr(struct perf_event *perf_event,
+ 		struct perf_sample_data *data, struct pt_regs *regs)
+ {
+ 	struct damon_access_report report;
++	u64 data_src_val;
++	u64 period_val;
+ 
+-	if (!data)
++	if (!data) {
++		damon_perf_observe_sample(0, 0, 0,
++				smp_processor_id(), 1, 0,
++				perf_event->attr.sample_type);
+ 		return;
++	}
++
++	data_src_val = data->data_src.val;
++	period_val = data->period;
+ 
+ 	/*
+ 	 * AMD IBS Op only populates data->phys_addr when
+@@ -1008,14 +1058,27 @@ static void damon_perf_overflow_paddr(struct perf_event *perf_event,
+ 	 * carries a stale value.  Gate on sample_flags rather than testing
+ 	 * phys_addr for zero (which would also drop legitimate page 0).
+ 	 */
+-	if (!(data->sample_flags & PERF_SAMPLE_PHYS_ADDR))
++	if (!(data->sample_flags & PERF_SAMPLE_PHYS_ADDR)) {
++		damon_perf_observe_sample(0, data_src_val,
++				period_val, smp_processor_id(), 4,
++				data->sample_flags,
++				perf_event->attr.sample_type);
+ 		return;
++	}
++
++	damon_perf_observe_sample(data->phys_addr, data_src_val, period_val,
++			smp_processor_id(), 0,
++			data->sample_flags,
++			perf_event->attr.sample_type);
+ 
+ 	report = (struct damon_access_report){
+ 		.paddr = data->phys_addr & PAGE_MASK,
+ 		.size = PAGE_SIZE,
+ 		.cpu = smp_processor_id(),
+ 		.is_write = !!(data->data_src.mem_op & PERF_MEM_OP_STORE),
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++		.source = DAMON_REPORT_SRC_PERF_OVERFLOW,
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ 	};
+ 	damon_report_access(&report);
+ }
+@@ -1070,6 +1133,8 @@ static int damon_perf_cpu_online(unsigned int cpu, struct hlist_node *node)
+ 	if (!perf)
+ 		return 0;
+ 
++	damon_perf_observe_event_created(event, cpu);
++
+ 	damon_perf_event_init_attr(event, &attr);
+ 
+ 	/*
+@@ -1092,14 +1157,20 @@ static int damon_perf_cpu_online(unsigned int cpu, struct hlist_node *node)
+ 		return 0;	/* never block CPU online */
+ 	}
+ 	*per_cpu_ptr(perf->event, cpu) = perf_event;
++
++	damon_perf_observe_event_bound(event, cpu, perf_event);
++
+ 	/*
+ 	 * Late-online CPU after the substrate is armed: events are created
+ 	 * with attr.disabled = 1 and would otherwise stay quiescent on this
+ 	 * CPU until the next arm walk.  Enable here so coverage matches the
+ 	 * already-online CPUs.
+ 	 */
+-	if (event->ctx && READ_ONCE(event->ctx->perf_events_active))
++	if (event->ctx && READ_ONCE(event->ctx->perf_events_active)) {
+ 		perf_event_enable(perf_event);
++		damon_perf_observe_event_enabled(event, cpu,
++				perf_event->state, perf_event->oncpu);
++	}
+ 	return 0;
+ }
+ 
+@@ -1115,6 +1186,7 @@ static int damon_perf_cpu_offline(unsigned int cpu, struct hlist_node *node)
+ 
+ 	perf_event = per_cpu(*perf->event, cpu);
+ 	if (perf_event) {
++		damon_perf_observe_event_destroyed(event, cpu);
+ 		perf_event_disable(perf_event);
+ 		perf_event_release_kernel(perf_event);
+ 		*per_cpu_ptr(perf->event, cpu) = NULL;
+@@ -1133,8 +1205,12 @@ void damon_perf_event_arm(struct damon_perf_event *event)
+ 
+ 	for_each_online_cpu(cpu) {
+ 		perf_event = *per_cpu_ptr(perf->event, cpu);
+-		if (perf_event)
++		if (perf_event) {
+ 			perf_event_enable(perf_event);
++			damon_perf_observe_event_enabled(event, cpu,
++					perf_event->state,
++					perf_event->oncpu);
++		}
+ 	}
+ }
+ 
+@@ -1149,8 +1225,11 @@ void damon_perf_event_disarm(struct damon_perf_event *event)
+ 
+ 	for_each_online_cpu(cpu) {
+ 		perf_event = *per_cpu_ptr(perf->event, cpu);
+-		if (perf_event)
++		if (perf_event) {
+ 			perf_event_disable(perf_event);
++			damon_perf_observe_event_disabled(event, cpu,
++					perf_event->state);
++		}
+ 	}
+ }
+ 
+@@ -1192,6 +1271,7 @@ int damon_perf_init(struct damon_ctx *ctx, struct damon_perf_event *event)
+ 	return 0;
+ 
+ free_event:
++	damon_perf_observe_event_free(event);
+ 	free_percpu(perf->event);
+ free_perf:
+ 	kfree(perf);
+@@ -1203,6 +1283,8 @@ void damon_perf_cleanup(struct damon_ctx *ctx, struct damon_perf_event *event)
+ {
+ 	struct damon_perf *perf = event->priv;
+ 
++	damon_perf_observe_event_free(event);
++
+ 	if (!perf)
+ 		return;
+ 
+@@ -1244,6 +1326,14 @@ static int __init damon_va_initcall(void)
+ 	if (err < 0)
+ 		return err;
+ 	damon_perf_cpuhp_state = err;
++
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++	err = damon_perf_framework_init();
++	if (err < 0)
++		pr_warn("damon-perf: framework init failed, observability unavailable: %d\n",
++			err);
++	/* Non-fatal: vaddr/fvaddr ops still register. */
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ #endif
+ 
+ 	err = damon_register_ops(&ops);
 -- 
 2.43.0
 
