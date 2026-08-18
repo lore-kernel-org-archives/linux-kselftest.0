@@ -1,280 +1,296 @@
-Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F27137DE8B
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 15:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874A637E5E1;
+	Tue, 18 Aug 2026 15:51:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.97.179.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787067138; cv=none; b=Gh2FlFoVSsUn3bwmjQbEoXa6n4Vo5zi88WhawSVT5fTcVrh6deYbQzg7dupJ5XwoKv8TZztvaRXaeuteIhEaJ/M8g1r24ZWQ/rp2GMjVKwhpdDNamKvc9ay96Reev0JI5ZMsGWVeLaS/Nlg7np+AUV+QGgx+yu6+21OcW9qhYlk=
+	t=1787068300; cv=none; b=KsiYsHYMQ/QblHXytijhwWHry+wShwP0IaEMDc9dVcSYYJ9iVCxexf8UWL24Ism3lT/QMBvnwakDAwCl6TKxP4nH7vp5a8lUhnI/4Rms38HIAnyHWoZVpD+WVHLnpzbL408aBh+4sAl6/R8LH8XaHSbatIRNFSAmX09vlvk/QDU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787067138; c=relaxed/simple;
-	bh=/f0b5nqYvRuYRrnGgcST9+/5ojWfBeBx/7ogSsZtBdM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MYV0P12q2vQBq0CZw68w7HUjnf2g8zv/Q132Fqqg+AWTeXqVmiuZpCh1anupYxgUO95hLy1O6ZWLVC9Wc8z8cglTky08hXv+uUiin2Ptdud013RyTV3zDenWa9oXvEtZzovElPqtZLYaBX7bRSlrcoUfFx08Se4EVYFnfl5mQyM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rD3dF5i+; arc=none smtp.client-ip=95.215.58.251
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787068300; c=relaxed/simple;
+	bh=+1d5v2CBuauM3/6F0bvwpIVvmbkSlfo+1sxjTJflsf8=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=pDNv5gFDJj/c5dBoUalSMOYKkW7Z9ARh8hPvFnVnKRhuN+QLyf5vDjWPRngOkMqTBV+D7TmjANiYk5uCjcO4v7K4Pa30i5u6rWwBhe3XjX9fSTdYNl2obEHIdDE8p0vl4nlk6Gl2ar9sU+nowTgYNh/BF6GwaYcuJo1sn7mzTr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com; spf=pass smtp.mailfrom=igalia.com; dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b=ZKFIgGjp; arc=none smtp.client-ip=213.97.179.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=igalia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=igalia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rD3dF5i+"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=/f0b5nqYvRuYRrnGgcST9+/5ojWfBeBx/7ogSsZtBdM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787067134; v=1; x=1787671934;
- b=rD3dF5i+d1XXkZUx5ciE56C+7Apl5g/Ls3zbpVL7WRjMkw4Qukkye2Y8ukXUFrLdA6aAKLc4
- yqK/2jpfTs1HxEwjRz51tDT+syAmEEBoLCxmV5ZgqtpSltb7S+uqWNvdju6eTWF7VlvZqOsOL7j
- 4ARO+m+FTRVGd6kG7/8Qz+3g=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from .linux.dev (117.20.149.64)
-	by smtp.migadu.com with ESMTPS id 07ad087d0c7f2357;
-	Tue, 18 Aug 2026 15:32:13 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Leon Hwang <leon.hwang@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test for percpu data
-Date: Tue, 18 Aug 2026 23:32:01 +0800
-Message-ID: <20260818153202.90714-1-leon.hwang@linux.dev>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=igalia.com header.i=@igalia.com header.b="ZKFIgGjp"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+	s=20170329; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:
+	Date:Subject:Cc:To:From:From:Reply-To;
+	bh=gnneXlT40axUwbDle1+CcSKqMvwTRcpMejLl2emjkXg=; b=ZKFIgGjpwRuv09TV3prDB9QbPE
+	2IDWxPL/hW9ThGHx2q5lygJ65nDYM7peN9R/anBwRJ6fLvUo8edkbVZP9TLHQ+u+cmrHspg5me8fY
+	zROSlA7nCig8JXzCyGL4ZshIMeegYbOVqpbr/TgdQM6QAHZ30Cf6pb4ziXINz/32iuygnLZYsRw9N
+	YwmlYMs/ixw8R+nSiVgjt7CQgx21qcf6cIs5/+2aHhEITltj0E6L+4w+ENxHwWHTVxDnlSX+kfOQ5
+	9fAVjNnD54LsJOb+0Z/haPlEypbW8fKcZ18p+yRKL7fXV2xj2W50fKalgGbB88S+YnAg8dVXRHYcc
+	KkIf7HLw==;
+Received: from bl21-120-122.dsl.telepac.pt ([2.82.120.122] helo=localhost)
+	by fanzine2.igalia.com with esmtpsa 
+	(Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
+	id 1wwM5z-005h07-PY; Tue, 18 Aug 2026 17:51:23 +0200
+From: Luis Henriques <luis@igalia.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>,  Chen Linxuan <me@black-desk.cn>,
+  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
+ <skhan@linuxfoundation.org>,  fuse-devel@lists.linux.dev,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,  Matt
+ Harvey <mharvey@jumptrading.com>,  kernel-dev@igalia.com
+Subject: Re: [RFC PATCH v2 1/8] Documentation: fuse: add document on caches
+ being used by FUSE
+In-Reply-To: <CAOQ4uxjsx-Atq3tGsUeakGNZYLVHayVXPne1E6gM0J9tZp+f6g@mail.gmail.com>
+	(Amir Goldstein's message of "Tue, 18 Aug 2026 14:40:15 +0200")
+References: <20260817141156.6079-1-luis@igalia.com>
+	<20260817141156.6079-2-luis@igalia.com>
+	<CAOQ4uxjsx-Atq3tGsUeakGNZYLVHayVXPne1E6gM0J9tZp+f6g@mail.gmail.com>
+Date: Tue, 18 Aug 2026 16:51:44 +0100
+Message-ID: <87mruje8a7.fsf@wotan.olymp>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The bpf_map__set_value_size() test for percpu data relies on the tail
-'cpu_id' field in the ".percpu" map. The test would fail, when 'cpu_id' is
-not the last field in the map.
+On Tue, Aug 18 2026, Amir Goldstein wrote:
 
-To avoid the flaky test, factor out a subtest to use a dedicated
-".percpu.arr" map that only has one field 'int arr[1]' to ensure that
-bpf_map__set_value_size() won't fail on 4K page systems.
+> On Mon, Aug 17, 2026 at 4:11=E2=80=AFPM Luis Henriques <luis@igalia.com> =
+wrote:
+>>
+>> This new file aims at documenting the caches that are used by FUSE.  At
+>> the moment only symlink, attributes, ACLs and readdir caches are describ=
+ed.
+>>
+>> Signed-off-by: Luis Henriques <luis@igalia.com>
+>> ---
+>>  .../filesystems/fuse/fuse-caches.rst          | 142 ++++++++++++++++++
+>>  1 file changed, 142 insertions(+)
+>>  create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+>>
+>> diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Documentat=
+ion/filesystems/fuse/fuse-caches.rst
+>> new file mode 100644
+>> index 000000000000..071febf45d00
+>> --- /dev/null
+>> +++ b/Documentation/filesystems/fuse/fuse-caches.rst
+>> @@ -0,0 +1,142 @@
+>> +.. SPDX-License-Identifier: GPL-2.0
+>> +
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +FUSE Caches
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +Introduction
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +This document summarises the different types of caches that are used in=
+ FUSE.
+>> +For each cache type, it attempts to document the rules that are followe=
+d to
+>> +insert, validate and invalidate data into the cache.
+>> +
+>> +symlink caching
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +Whenever there's a link resolution request, the VFS will call into
+>> +``fuse_get_link()`` which will then send a ``FUSE_READLINK`` request to=
+ the
+>> +user-space FUSE server. However, the server can ask the kernel to cache=
+ all
+>> +links resolutions by setting the ``FUSE_CACHE_SYMLINKS`` flag during the
+>> +``FUSE_INIT`` negotiation.
+>> +
+>> +If this flag is set, FUSE will immediately call into the VFS
+>> +``__page_get_link()`` from the ``->get_link()`` inode operation. The fi=
+rst time
+>> +this is done for a specific link, it will end-up sending the ``FUSE_REA=
+DLINK``
+>> +to user-space but the link contents will then be added into page-cache.=
+ The next
+>> +time the link needs to be resolved, it will use the link content that i=
+s already
+>> +cached, and will only fallback into sending the request to use-space if=
+ the
+>> +folio isn't up-to-date.
+>> +
+>> +Attributes caching
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +Attributes obtained from user-space, for example when an inode is first
+>> +looked-up, are cached in the kernel. However, these attributes have a t=
+imeout
+>> +associated and once expired they are invalidated.
+>> +
+>> +Thus, the ``FUSE_GETATTR`` operation will be sent to user-space only if=
+ the
+>> +attributes aren't yet available, the attributes aren't valid (timeout),=
+ or if
+>> +there is an explicit request for doing so (for example, by using the
+>> +``AT_STATX_FORCE_SYNC`` flag in ``statx``). This may happen in the foll=
+owing
+>> +situations:
+>
+> "This may happen" what may happen? I don't see it referring to anything.
 
-And, drop 'args' in test_percpu_data_on_cpus(), which isn't used in bpf
-prog side.
+Yeah, that sentence doesn't really make a lot of sense.  I'll rephrase.
 
-And, enhance the test to cover 'set' and 'nums[6]'.
+>> +
+>> +#. An explicit request from VFS to get the attributes for an inode (thr=
+ough the
+>> +   ``->getattr()`` callback).
+>> +#. When an ``->llseek()`` is requested to FUSE with a type of request
+>> +   (``whence``):
+>> +
+>> +   -  ``SEEK_{HOLE,DATA}`` and the user-space doesn't implement the
+>> +      ``FUSE_LSEEK`` operation (it has returned ``ENOSYS``), or
+>> +   -  ``SEEK_END``
+>> +
+>> +#. When doing a buffered read past EOF or automatic page cache invalida=
+tion mode
+>> +   is enabled (``FUSE_AUTO_INVAL_DATA``).
+>> +#. When doing a buffered write with write-back cache enabled
+>> +   (``FUSE_CAP_WRITEBACK_CACHE``).
+>
+> This list is incomplete and strange. it has post EOF write for
+> writeback which is the exception
+> and leaves out every non writeback write.
 
-Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
-Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
----
-v1 -> v2:
-* Factor out a subtest to test bpf_map__set_value_size().
-* Run the new subtest only on 4K page systems. (Sashiko)
-* v1: https://lore.kernel.org/bpf/20260814173206.93082-5-leon.hwang@linux.dev/
----
- .../bpf/prog_tests/global_data_init.c         | 86 ++++++++++++++-----
- .../bpf/progs/test_global_percpu_data.c       | 10 ++-
- 2 files changed, 70 insertions(+), 26 deletions(-)
+This list was meant to list the scenarios where the FUSE_GETATTR is sent
+(the "this may happen" above).  But I'll review the list again.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-index 5671c31085cd..2b69290bcc3e 100644
---- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-+++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-@@ -68,12 +68,9 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
- {
- 	struct test_global_percpu_data__percpu *data = NULL;
- 	int i, err, key = 0, num_online, run = 0;
--	__u64 args[2] = {0x1234ULL, 0x5678ULL};
- 	size_t data_sz;
- 	bool *online;
- 	LIBBPF_OPTS(bpf_test_run_opts, topts,
--		    .ctx_in = args,
--		    .ctx_size_in = sizeof(args),
- 		    .flags = BPF_F_TEST_RUN_ON_CPU,
- 	);
- 
-@@ -81,7 +78,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
- 	if (!ASSERT_OK(err, "parse_cpu_mask_file"))
- 		return;
- 
--	data_sz = map ? bpf_map__value_size(map) : sizeof(*data);
-+	data_sz = sizeof(*data);
- 	data = calloc(1, data_sz);
- 	if (!ASSERT_OK_PTR(data, "calloc percpu data"))
- 		goto out;
-@@ -109,7 +106,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
- 			break;
- 
- 		ASSERT_EQ(*runp, ++run, "run");
--		ASSERT_EQ(data->cpu_id[0], i, "cpu_id");
-+		ASSERT_EQ(data->cpu_id, i, "cpu_id");
- 		ASSERT_EQ(data->data, 1, "data");
- 		ASSERT_TRUE(data->set, "set");
- 		ASSERT_EQ(data->nums[6], 0xc0de, "nums[6]");
-@@ -127,7 +124,6 @@ static void test_global_percpu_data_init(void)
- {
- 	struct test_global_percpu_data__percpu init_value = {};
- 	struct test_global_percpu_data__percpu *init_data;
--	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
- 	struct test_global_percpu_data *skel = NULL;
- 	size_t init_data_sz;
- 	struct bpf_map *map;
-@@ -163,9 +159,11 @@ static void test_global_percpu_data_init(void)
- 	if (!ASSERT_EQ(bpf_map__type(map), BPF_MAP_TYPE_PERCPU_ARRAY, "bpf_map__type"))
- 		goto out;
- 
-+	init_value.set = 1;
- 	init_value.data = 2;
- 	init_value.nums[6] = -1;
- 	init_value.struct_data.i = 2;
-+	init_value.struct_data.set = 1;
- 	init_value.struct_data.nums[6] = -1;
- 	err = bpf_map__set_initial_value(map, &init_value, sizeof(init_value));
- 	if (!ASSERT_OK(err, "bpf_map__set_initial_value"))
-@@ -177,35 +175,24 @@ static void test_global_percpu_data_init(void)
- 
- 	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
- 	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
-+	ASSERT_EQ(init_data->nums[6], init_value.nums[6], "init_value nums[6]");
- 	ASSERT_EQ(init_data->struct_data.i, init_value.struct_data.i, "init_value struct_data.i");
-+	ASSERT_EQ(init_data->struct_data.set, init_value.struct_data.set,
-+		  "init_value struct_data.set");
- 	ASSERT_EQ(init_data->struct_data.nums[6], init_value.struct_data.nums[6],
- 		  "init_value struct_data.nums[6]");
- 	ASSERT_EQ(init_data_sz, sizeof(init_value), "init_value size");
- 	ASSERT_EQ((void *) init_data, (void *) skel->percpu, "skel->percpu eq init_data");
- 	ASSERT_EQ(skel->percpu->data, init_value.data, "skel->percpu->data");
- 	ASSERT_EQ(skel->percpu->set, init_value.set, "skel->percpu->set");
-+	ASSERT_EQ(skel->percpu->nums[6], init_value.nums[6], "skel->percpu->nums[6]");
- 	ASSERT_EQ(skel->percpu->struct_data.i, init_value.struct_data.i,
- 		  "skel->percpu->struct_data.i");
-+	ASSERT_EQ(skel->percpu->struct_data.set, init_value.struct_data.set,
-+		  "skel->percpu->struct_data.set");
- 	ASSERT_EQ(skel->percpu->struct_data.nums[6], init_value.struct_data.nums[6],
- 		  "skel->percpu->struct_data.nums[6]");
- 
--	ASSERT_GT(desired_sz, sizeof(init_value), "desired_sz");
--	err = bpf_map__set_value_size(map, desired_sz);
--	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
--		goto out;
--	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "percpu value size"))
--		goto out;
--	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "percpu BTF value type"))
--		goto out;
--
--	init_data = bpf_map__initial_value(map, &init_data_sz);
--	if (!ASSERT_OK_PTR(init_data, "resized bpf_map__initial_value"))
--		goto out;
--	if (!ASSERT_EQ(init_data_sz, desired_sz, "resized initial value size"))
--		goto out;
--	if (!ASSERT_EQ(init_data->data, init_value.data, "resized initial value data"))
--		goto out;
--
- 	err = test_global_percpu_data__load(skel);
- 	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
- 		goto out;
-@@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
- 	test_global_percpu_data_lskel__destroy(lskel);
- }
- 
-+#define PAGE_SIZE 4096
-+
-+static void test_global_percpu_data_map_resize(void)
-+{
-+	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
-+	struct test_global_percpu_data *skel;
-+	const int arr_value = -1;
-+	struct bpf_map *map;
-+	int err, prog_fd;
-+	size_t data_sz;
-+
-+	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = test_global_percpu_data__open();
-+	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-+		return;
-+
-+	map = skel->maps.percpu_arr;
-+	skel->percpu_arr->arr[0] = arr_value;
-+	err = bpf_map__set_value_size(map, desired_sz);
-+	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
-+		goto out;
-+	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
-+		goto out;
-+	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
-+		goto out;
-+
-+	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
-+	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
-+		goto out;
-+	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
-+		goto out;
-+	if (!ASSERT_EQ(skel->percpu_arr->arr[0], arr_value, "arr[0]"))
-+		goto out;
-+
-+	err = test_global_percpu_data__load(skel);
-+	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
-+		goto out;
-+
-+	map = skel->maps.percpu;
-+	prog_fd = bpf_program__fd(skel->progs.update_percpu_data);
-+	test_percpu_data_on_cpus(map, bpf_map__fd(map), prog_fd, &skel->bss->run);
-+	ASSERT_EQ(skel->bss->arr_sum, arr_value * skel->bss->run, "arr_sum");
-+
-+out:
-+	test_global_percpu_data__destroy(skel);
-+}
-+
- static int create_rdonly_percpu_array(void)
- {
- 	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
-@@ -388,6 +426,8 @@ void test_global_percpu_data(void)
- 		test_global_percpu_data_init();
- 	if (test__start_subtest("lskel"))
- 		test_global_percpu_data_lskel();
-+	if (test__start_subtest("map_resize"))
-+		test_global_percpu_data_map_resize();
- 	if (test__start_subtest("rdonly_direct_read"))
- 		test_global_percpu_data_rdonly_direct_read();
- 	if (test__start_subtest("rdonly_direct_write"))
-diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-index 5dc21b3b4cb5..2765cd46e9af 100644
---- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-+++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
-@@ -8,9 +8,12 @@ int loong SEC(".percpu.looooooooong");
- int data3 SEC(".data.percpu");
- int data2 SEC(".percpu.data");
- 
-+/* Used for testing bpf_map__set_value_size(). */
-+int arr[1] SEC(".percpu.arr");
-+int arr_sum;
-+
- int run;
--/* cpu_id as array to verify map value resizing. */
--int cpu_id[1] SEC(".percpu");
-+int cpu_id SEC(".percpu");
- int data SEC(".percpu") = -1;
- int nums[7] SEC(".percpu");
- bool set SEC(".percpu") = false;
-@@ -34,7 +37,8 @@ int update_percpu_data(void *ctx)
- 	data = 1;
- 	run++;
- 	set = true;
--	cpu_id[0] = bpf_get_smp_processor_id();
-+	cpu_id = bpf_get_smp_processor_id();
-+	arr_sum += arr[0];
- 	return 0;
- }
- 
--- 
-2.55.0
+> If you composed this list yourself I highly recommend an LLM for this task
+> if you used LLM I suggest a stronger model.
+>
+> Generally speaking, I find that today's robots are much better at writing=
+ these
+> sorts of docs than I am - as long as I sit at the helm and guide them
+> about where to expand on and where to keep it concise.
 
+Thank you for the suggestion (I did not use an LLM btw).  In fact, do you
+think this document is really useful, given that everyone will be running
+an LLM anyway?  (I've been asking this question myself...)
+
+>> +
+>> +ACL caching
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +FUSE has allowed the usage of POSIX ACLs for a long time as they could =
+be set
+>> +and accessed simply as extended attributes. However, it was only with t=
+he
+>> +addition of the ``FUSE_POSIX_ACL`` flag that ACLs started to be fully s=
+upported.
+>> +Without this flag, ACLs can still be set, but the VFS won't use them for
+>> +performing permission checks - that would be the user-space server's
+>> +responsibility.
+>> +
+>> +Also, without setting ``FUSE_POSIX_ACL``, ACLs will not be cached by th=
+e kernel.
+>> +In this case, new inodes ``i_acl`` and ``i_default_acl`` fields will be=
+ set to
+>> +``ACL_DONT_CACHE``.
+>> +
+>> +On the other hand, if ``FUSE_POSIX_ACL`` is set during ``FUSE_INIT``, w=
+hen an
+>> +ACL is accessed the VFS layer will first check if it's already cached. =
+If it is
+>> +not, FUSE ``->get_acl`` operation is called, which will eventually send=
+ a
+>> +user-space request. Future accesses to this inode ACL will then use the=
+ cached
+>> +data.
+>> +
+>> +Setting an ACL in an inode, however, won't cache it immediately. It wil=
+l send
+>> +user-space a request with the new ACL, and the FUSE server may perform =
+some
+>> +modifications before storing it.
+>
+> Do not encourage this by documenting it please.
+> It reinforces that this was by design, rather than an oversight which
+> we don't know.
+
+Eh! OK, I'll stop that sentence after the comma :-)
+
+>> +
+>> +On the other hand, ACLs will be removed for the cache in the following
+>> +situations:
+>> +
+>> +-  When setting an ACL in an inode and the user-space server has set the
+>> +   ``FUSE_POSIX_ACL`` flag, all previously cached ACLs for this inode w=
+ill be
+>> +   invalidated.
+>> +-  When invalidating an inode through the ``FUSE_NOTIFY_INVAL_INODE`` o=
+peration.
+>> +-  When ``->d_revalidate()`` is called for a dentry that requires a loo=
+kup (e.g.
+>> +   it has expired) and that lookup operation is successful.
+>> +-  When the VFS needs to check access rights for an inode (by calling
+>> +   ``->permission()``), attributes may need to be refreshed. If that ha=
+ppens,
+>> +   any cached ACLs for that inode will be invalidated.
+>> +-  After setting an inode attribute (i.e. operation ``FUSE_SETATTR`` is=
+ sent to
+>> +   user-space), the user-space server may have also updated the ACLs, s=
+o any
+>> +   cached ACLs for this inode are also invalidated.
+>> +-  While processing ``FUSE_READDIRPLUS`` and a new dentry is added (unl=
+ess this
+>> +   dentry is already being looked up (``DCACHE_PAR_LOOKUP``))
+>> +-  In general, when there is the need to sent a ``FUSE_STATX`` or
+>> +   ``FUSE_GETATTR`` to user-space (e.g. because the attributes have exp=
+ired).
+>> +   This may happen in the following cases:
+>> +
+>> +   -  When doing an ``->llseek()`` on a file with ``SEEK_END``, ``SEEK_=
+HOLE`` or
+>> +      ``SEEK_DATA``.
+>> +   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time (to
+>> +      automatically invalidate cached pages), and a buffered read
+>> +      (``->read_iter()``) past EOF is done on a non-passthrough file.
+>> +   -  When the ``FUSE_WRITEBACK_CACHE`` flag is set at ``INIT`` time, a=
+nd a
+>> +      buffered write (``->write_iter()``) past EOF is done on a non-pas=
+sthrough
+>> +      file.
+>> +   -  When the ``FUSE_AUTO_INVAL_DATA`` flag is set at ``INIT`` time an=
+d the VFS
+>> +      needs to read a directory contents (``->iterate_shared()``) for a
+>> +      directory that is allowed to be cached.
+>
+> No reason to repeat the reasons for attr cache invalidation that were
+> just listed above
+>
+>> +
+>> +readdir caching
+>> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>> +
+>> +When opening a directory for doing a readdir, a ``FUSE_OPENDIR`` will b=
+e sent
+>> +and the user-space server will be responsible for setting the open flag=
+s related
+>> +with caching, namely ``FOPEN_KEEP_CACHE`` and ``FOPEN_CACHE_DIR``.
+>> +
+>> +If neither flags are set by the user-space FUSE server, then every ``re=
+addir``
+>> +will result in a ``FUSE_READDIR`` (or ``FUSE_READDIRPLUS``) request bei=
+ng sent.
+>> +If ``FOPEN_CACHE_DIR`` is set by the server, then the result of a ``rea=
+ddir``
+>> +will be cached by the kernel and reused. However, if ``FOPEN_KEEP_CACHE=
+`` isn't
+>> +also set, the cache will be invalidated next time the directory is open.
+>
+> Confusing.
+> FOPEN_KEEP_CACHE is about keeping the cache on THIS open not on
+> some NEXT open.
+
+Right, that's true.  I just wanted to emphasise that the invalidation
+doesn't happen on a close, but on the next open.  But I'll rephrase,
+thanks.
+
+Cheers,
+--=20
+Lu=C3=ADs
