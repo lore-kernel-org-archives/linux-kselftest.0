@@ -1,203 +1,246 @@
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A5451D95A3
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 19:56:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787082988; cv=none; b=NCqDoGo+5lZIHsGZk9NEC1GBI3ogduTkKISDh+HaRi9LSR0WDuMgqM4fl0opMM4lHWs0fUwDfKGoslRMcZgjKg62M3lH/ubnb9pd5dlVrj0/BLC1blqIV9gVhCrThqDOs1t537RBqsE4/lL86aSZ/AVrmoY8dvkzNvwg4cRzQGY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787082988; c=relaxed/simple;
-	bh=8IH10OjJZB/mtZdH6fmGqFSUirbS+Exj18SWzs9jBGU=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=jdUwMlkJiiFMUlDoCBbztAAZgIDnyFOQTk4V3GlF0FZUbKKKLsRQx3DQQergH+tBuv1UfeIZUPJs5itdSgjJnk7ZITe68XRwkm4Ojjv++BIDKtDi58vvtYZR9UpEB843GOfuPR/dzDm4J18dV6LTx4FvsDlD9k1WJTwnPQnrDK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jF1OaZDj; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4D0379C3E
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 19:57:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787083078; cv=pass; b=OjBUMSEFm3Lo4AOGigNMBYOoluhpEQssslTUXv1JiZK2pujTkl1PCYpEnvkPMHZpakntnRNWvSk7nzvunpvt9xeShGRmhE7WaGA+FYLIDpx981iVODrmpGmaj9nQL1x2ZcPyXAGrqspFhJlwK5I4EtwJWaezaNzgaGXSwokPKhA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787083078; c=relaxed/simple;
+	bh=Szm3BHWLk691Tkb3wpX+u/chbB+Kd0H25f5yPjsHjDY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WSyjEfmbtvHFjWzKzvfRUKW3j9CtXIiWa5map0hAQ/L7gfbz8DiIfnG1UBTXByzwmw7UUdLlXiovn9ie9Pqu5NZJP0uH8cmlZWkXtHJd+E1dc8K4blfqkSklftgeD9z6CXl+ncHtyVILEmDTZBaSQPwCQ9E2dGFEutul+QNWKjA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=elQ8b6iO; arc=pass smtp.client-ip=209.85.208.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jF1OaZDj"
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-2cc891373e0so2687075ad.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 12:56:27 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="elQ8b6iO"
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6a10b20634fso487155a12.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 12:57:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787083074; cv=none;
+        d=google.com; s=arc-20260327;
+        b=l7zHo+Hdwn2rerRrPONxyc1ojZLF5/SJVN0xbb/VYK8JbBh1ZX0QCSFGWdadCLJikI
+         Qql5WHolvP+mmRQoArJJZ7dfE0fW1FhRDufNb9SyQEZPUPGTgv5RcGaBPCsbJSbRsJkX
+         if+4bfSAoWphYehurjaCPmVEuotVzW4kESV58hh4cpWIlNrCrUvd0XJO/p8KeRK3Qs1/
+         d49Ds2Nj7YXZzbz9S8Iwa+8IkFCA8TuMBk3Wj7Uk0KWzbRNcz/5SuQjCvTQ3t7jkJdqT
+         g4ds+6gHkw6pnqjx0A5viJAuH96FFAOy5kD4CUTTAvfXNi5DUBiiNgDw8trXy7onh09E
+         ntsw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=WSJnz51fcIZBid2gs89wxh+KscHIMubJ0sU5re+K3qI=;
+        fh=1gwkB3XKf6yTYI80Nct+uxiyZgRhXSjoGWQO1pjFLn8=;
+        b=eppnJ7Kl6eoaPwUfUT/3lJt9mNdPQXCOtRX0iCG7+DXSeCk86VDhYd4teMsJdpejtE
+         qSbyIiTgf2iz1Bje02yjP7/3oWFvOfcj/fEneScDYWYSHA8ytMbf3Lg+ow7sn+Qjytm3
+         EQsVXPuSRrLusbvtPXMz87gi9hledq9SG9GpTHwnG/pploNgon/o3XPT1oEPeBQupDIf
+         ICiy/r6GK7QbHc+EUwuYcXH2Yr9PYHvrHiOMw/L63CrsGv5XzKl0xPAbqaV1SVUTyi62
+         T8TsPzxYv5NM6GjxG/hyH8KKmXMEp/8X9gXin7ogEUYuZ6U+FFzCC2b/MN7s0b9ZpQJ+
+         Z8xA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787082987; x=1787687787; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=MwsjfYvjhLLXvhbkk9VLjuUHWqsTTdTeOI61TJBjUdk=;
-        b=jF1OaZDj00nwOzsynVGw6C4vixLhAM+FfIbShX9Bc/a3gULgU5+zI36nxCdunNd/qG
-         4w7KqOjCXtXqSQbUd6bLhuogGPX2n8ki7KRmmOtTTSuylcAs35PtnuGUY+RYijVjph2Z
-         WsgSiTB3wVBcClAodn16xvpwFGVrsDNvh+tLeWPXboXHb7PhMXbKStt4Elt8fk/O7TFB
-         tUvmlmRNdjKBvbnoNxSLoqVSq64NgXOigHArrcTiZh3SwBi8CPid76u0W/lsX2mkrXjp
-         JOjeKLSGJEVZhSnNuhCYFWtfn9RFLqFE/F3PMhBoWwr6KM+0tGLRCWTunWvO5VBpN9XJ
-         fYKA==
+        d=gmail.com; s=20251104; t=1787083074; x=1787687874; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=WSJnz51fcIZBid2gs89wxh+KscHIMubJ0sU5re+K3qI=;
+        b=elQ8b6iOkIjEjnUW6htJBf3n3m1XxKk13W6by6/hzGgLlhllHeEaa4HIYvuZrFYaGz
+         tiXsHVgpxE2FkEzliYnkIBbnFh9zjXZDY0UBf8ErVkxgUXJOc/CS9ROY6atoIEy2hD2t
+         Hp6l5D7spJJFbk3gqiT669pDywaJpvkQwHvrWig8ZR5Wa0uw1jeWou2PqdyYMyK9Ku0Q
+         4Y3eQSUnjfjakX2dRVx4N+vFqn3WYFaWVlybHezY0GIDLjdZCCFG+7yuniKijg0Qlslb
+         M+Yp7EHxtUT/Lg7E8v0welc35Usa91yOacZzQiVvPH3wnfA0KjZRBmNuBiRY1USmlhun
+         eRqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787082987; x=1787687787;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+        d=1e100.net; s=20251104; t=1787083074; x=1787687874;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=MwsjfYvjhLLXvhbkk9VLjuUHWqsTTdTeOI61TJBjUdk=;
-        b=Kh9gZBP4LuDEZ10z47WJXPMs2dlatKdvESzIfmDCL1FvNYHdKAAO5K3wFBQy4DmMON
-         kFaVxMLUAiW4fzDoDKFIgZxA8UGGM4x6tw8dJJ9aetbj9KF8yMMz7ZBGEaxECsdvErI8
-         PEAF1XgF87/6FlMRgLbRaNRBRP9KxpwVBZqw/n0njm29lJc3oW1KV47pUeu9uM4jOwcA
-         z7R4OlAEE5eFhVn9u/leXl/ddC55olkLA3vrCs3I5U6KpliAv6oVKP0D1XjebOj+1jTf
-         eAtVC0acsAXv8sAmOtvBcxZZ/J8aavbEsYq+oEZL34L5p8xJ7G9G2e9Ui3Xlj/+eJuhZ
-         MSug==
-X-Forwarded-Encrypted: i=1; AHgh+Roje+R3/Pi609TbuzuML2pLYWelgfXSsATQ9buH3uvMgd/0QQFpAWP0UeWSmdyFcTu121fHLUewFK15G23abX8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxYs9xFRZuaVnWStq7jCVn57Vzn/aT098pZ6IHf1SSmsf6L8AmJ
-	NGw0jtI2om0IkMru0pDJVVpZdVaJhCP8Z+StvfZF4ukKEzPy4UFbvHKY
-X-Gm-Gg: AR+sD131VwSyVx4Kp3rB3fu1JKc3qWyVNs+kJoFQHynmqbqEdYd+GJtu72qudOaG68V
-	wbeR0bUUeX2VnyTH7W0TFoSU62lIQlW3NxI10AhJu1aVQ5tZdda79DkGzrH6kY7i/L3id58xgtl
-	SDce+HLDL9hT2+yRzv2pB+mfO78jARoDjOWrqWcx/F5LHJ3vvkjEVO3CrTh2unXtNixX87zRuUx
-	sWIsO67Z+vYpNf1eg+9dw0CWiKc0r02tlSpe9Fynexj+UgDoP/vVK5CJ99xLs7PWMSFOzltIwnD
-	Q1By/+YrUFlq1RogVYe8dJ5kppn/4oBAa1EV0JBNn8Vw9GDBZo2j5OWsKZ5vJS/55UxBGHsd3Na
-	JSeFa5lkA4RiDvtMdhJahCT/L3PFIxhxKYR01u67/PGZ8ehfn+sisGMUHA2HTYHx0QjcWkyg2/h
-	r5DK4uHV0O0Tn34Lp/2ACRFscdQrnAi/AUUdV3/7casJJk7T302V6HlAAICRGB+OPzvSqJhZ2kM
-	fVRspu6csJnbj0ytTVtm81y/r/Ts17y
-X-Received: by 2002:a17:902:d483:b0:2d3:6fac:d67c with SMTP id d9443c01a7336-2d5f6cb7623mr3131945ad.10.1787082986700;
-        Tue, 18 Aug 2026 12:56:26 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d5bb519678sm21011025ad.31.2026.08.18.12.56.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 12:56:26 -0700 (PDT)
-Message-ID: <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
- stack atomics
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, Yiyang Chen	
- <chenyy23@mails.tsinghua.edu.cn>, Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, John Fastabend
- <john.fastabend@gmail.com>, Andrii Nakryiko	 <andrii@kernel.org>, Kumar
- Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau
- <martin.lau@linux.dev>, Song Liu <song@kernel.org>, Yonghong Song
- <yonghong.song@linux.dev>,  Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis
- <emil@etsalapatis.com>, Ihor Solodrai	 <ihor.solodrai@linux.dev>, Shuah
- Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Date: Tue, 18 Aug 2026 12:56:23 -0700
-In-Reply-To: <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
-References: 
-	<20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
-	 <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
-	 <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
-	 <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
-	 <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+        bh=WSJnz51fcIZBid2gs89wxh+KscHIMubJ0sU5re+K3qI=;
+        b=btrPcZlP3kHkibjfkdiJvJ3Wi4z3ESR36YdCos1JNaVenkFtiwCdVNIBWEErJVwODe
+         sVhflsgVHF5rqIqLqyGsQRIPpLhRr8Vv/I9O/49WD7kOARFdR3NfVnvyoZGmYQYP64uy
+         rvSKUw30hgu8zwR354gAxiq6IiXDudHnC6S4UHlKg4+qLm5/a6jb+plOWLNUQGj+8gzV
+         fPYf17LMIic4+PJYV7AiOZDitwRyRWNkEwgvT+0iBTHGLQLI3L3V1jr1msIueW80ESrX
+         Bbyx4/C3JhyGyAJS3I0UASBDrektAlF0Y3UeTwxCVCnYQXcqKke9A51AFHkoPk15iypS
+         RFpQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rom3jSVEaZr1QhbzfuIkEpGWEONFsInp6WAboTqdixn5PNLQU7lH9FjHf3ZaNqK0r9aqIwHIGOzjNwucyqliqs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjmbYlWvCQ0aKte59UqHpEvnjvHFIWC+Bz6brEASosdmg2Ccu0
+	yeBUMNtWZR+XtSPYFt0/odX5NK8I4iwywu43wAnmVunC5RcV1PjVP5maehGwnpIQilhoatsp+Zg
+	QJRKPS30Tm4saMsP6jWIUrO+hiyQj8qWW9Feb
+X-Gm-Gg: AR+sD11JTY0XWzg/qhn9vmwgGHAK+H4o3aZQyS9qspY68MJaDJeSqWl3A5qrbK40qiU
+	y36otrTtnl8XOBRAXJrESnOWH5tlc0Q5MIsurbxDpc+MsyHYkAy6n4pPSFbTqMfx20eNrfExsa+
+	QiRJZmNpQqJLN26GD4HJwdFbCbcjBDhaJgOX6fiI8KHbjhek/TWeKrRnZjq09DNNwD+vhQIwYPB
+	E2FpiL3TkdXmRQ/a3akwWfA9qREwX4rQ5ZjwKkoRxfGxRlC3Fk4WEIE8wPYl+LAUJ7P1GCgieIQ
+	YcD77zlethZiMwi+wF40q8ZPjV8BJiliXY1HYPCD40srRQ==
+X-Received: by 2002:a05:6402:3983:b0:698:ecf:d18a with SMTP id
+ 4fb4d7f45d1cf-6a3fb76aae4mr349028a12.9.1787083074119; Tue, 18 Aug 2026
+ 12:57:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20260817141156.6079-1-luis@igalia.com> <20260817141156.6079-2-luis@igalia.com>
+ <CAOQ4uxjsx-Atq3tGsUeakGNZYLVHayVXPne1E6gM0J9tZp+f6g@mail.gmail.com> <87mruje8a7.fsf@wotan.olymp>
+In-Reply-To: <87mruje8a7.fsf@wotan.olymp>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 18 Aug 2026 21:57:41 +0200
+X-Gm-Features: AcwNN1VmEJCZ2dfSdLunAIKvJi6pxYGeoutfft8jaBr1bHqfqj2oEFnFdnxoK3A
+Message-ID: <CAOQ4uxjnJ436FHZUZMKNx5C9gPKvD5c0n9ojcnxQBoUCuBTVqQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 1/8] Documentation: fuse: add document on caches
+ being used by FUSE
+To: Luis Henriques <luis@igalia.com>
+Cc: Miklos Szeredi <miklos@szeredi.hu>, Chen Linxuan <me@black-desk.cn>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, fuse-devel@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Matt Harvey <mharvey@jumptrading.com>, kernel-dev@igalia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 2026-08-18 at 12:35 -0700, Vineet Gupta wrote:
-> On 8/16/26 4:36 PM, Eduard Zingerman wrote:
-> > On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
-> > > On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
-> > > > Add a verifier test with one atomic RMW instruction reached through
-> > > > PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
-> > > > shared instruction with the existing incompatible-pointer diagnosti=
-c.
-> > > >=20
-> > > > Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
-> > > > ---
-> > > > =C2=A0=C2=A0tools/testing/selftests/bpf/progs/verifier_arena.c | 39=
- ++++++++++++++++++++++
-> > > > =C2=A0=C2=A01 file changed, 39 insertions(+)
-> > > >=20
-> > > > diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/t=
-ools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > index b241bbcf54a8a..b22bab33301ab 100644
-> > > > --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
-> > > > @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
-> > > > =C2=A0=20
-> > > > =C2=A0=C2=A0#endif
-> > > > =C2=A0=20
-> > > > +static const struct bpf_insn addr_space_cast_insn =3D {
-> > > > +	.code =3D 0xbf,
-> > > > +	.dst_reg =3D BPF_REG_7,
-> > > > +	.src_reg =3D BPF_REG_7,
-> > > > +	.off =3D 1,
-> > > > +	.imm =3D 1,
-> > > > +};
-> > > > +
-> > > > +SEC("socket")
-> > > > +__description("arena and stack atomic at the same instruction")
-> > > > +__failure __msg("same insn cannot be used with different pointers"=
-)
-> > > > +__arch_x86_64
-> > > > +__load_if_JITed()
-> > > > +__naked void mixed_arena_stack_atomic(void)
-> > > > +{
-> > > > +	asm volatile ("					\
-> > > > +	r1 =3D %[arena] ll;				\
-> > > > +	r6 =3D r10;					\
-> > > > +	r6 +=3D -8;					\
-> > > > +	r9 =3D 0;					\
-> > > > +	*(u64 *)(r6 + 0) =3D r9;			\
-> > > > +	r7 =3D 8192;					\
-> > > > +	.8byte %[addr_space_cast];			\
-> > > I'm going to fix this to:
-> > >=20
-> > > 	r7 =3D addr_space_cast(r7, 0, 1);			\
-> > >=20
-> > > as in the test case above.
-> > > Waiting for CI [1].
-> > >=20
-> > > [1] https://github.com/kernel-patches/bpf/pull/13325
-> >=20
-> > A...and it requires another exception for GCC-BPF:
-> > https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/conf=
-igs/DENYLIST.test_progs-bpf_gcc
-> >=20
-> > Ihor, it's a third time GCC-BPF strikes this weekend.
-> > What do people think about downgrading it to may-fail until the
-> > DENYLIST decreases to something reasonable?
->=20
-> While bpf-gcc is improving, slowly, we can in parallel do alittle better=
-=20
-> on test hygiene as well. In this case by correctly bracketing the tests=
-=20
-> with _BPF_FEATURE_XXX.
+On Tue, Aug 18, 2026 at 5:51=E2=80=AFPM Luis Henriques <luis@igalia.com> wr=
+ote:
+>
+> On Tue, Aug 18 2026, Amir Goldstein wrote:
+>
+> > On Mon, Aug 17, 2026 at 4:11=E2=80=AFPM Luis Henriques <luis@igalia.com=
+> wrote:
+> >>
+> >> This new file aims at documenting the caches that are used by FUSE.  A=
+t
+> >> the moment only symlink, attributes, ACLs and readdir caches are descr=
+ibed.
+> >>
+> >> Signed-off-by: Luis Henriques <luis@igalia.com>
+> >> ---
+> >>  .../filesystems/fuse/fuse-caches.rst          | 142 +++++++++++++++++=
++
+> >>  1 file changed, 142 insertions(+)
+> >>  create mode 100644 Documentation/filesystems/fuse/fuse-caches.rst
+> >>
+> >> diff --git a/Documentation/filesystems/fuse/fuse-caches.rst b/Document=
+ation/filesystems/fuse/fuse-caches.rst
+> >> new file mode 100644
+> >> index 000000000000..071febf45d00
+> >> --- /dev/null
+> >> +++ b/Documentation/filesystems/fuse/fuse-caches.rst
+> >> @@ -0,0 +1,142 @@
+> >> +.. SPDX-License-Identifier: GPL-2.0
+> >> +
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +FUSE Caches
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +Introduction
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +This document summarises the different types of caches that are used =
+in FUSE.
+> >> +For each cache type, it attempts to document the rules that are follo=
+wed to
+> >> +insert, validate and invalidate data into the cache.
+> >> +
+> >> +symlink caching
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +Whenever there's a link resolution request, the VFS will call into
+> >> +``fuse_get_link()`` which will then send a ``FUSE_READLINK`` request =
+to the
+> >> +user-space FUSE server. However, the server can ask the kernel to cac=
+he all
+> >> +links resolutions by setting the ``FUSE_CACHE_SYMLINKS`` flag during =
+the
+> >> +``FUSE_INIT`` negotiation.
+> >> +
+> >> +If this flag is set, FUSE will immediately call into the VFS
+> >> +``__page_get_link()`` from the ``->get_link()`` inode operation. The =
+first time
+> >> +this is done for a specific link, it will end-up sending the ``FUSE_R=
+EADLINK``
+> >> +to user-space but the link contents will then be added into page-cach=
+e. The next
+> >> +time the link needs to be resolved, it will use the link content that=
+ is already
+> >> +cached, and will only fallback into sending the request to use-space =
+if the
+> >> +folio isn't up-to-date.
+> >> +
+> >> +Attributes caching
+> >> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> >> +
+> >> +Attributes obtained from user-space, for example when an inode is fir=
+st
+> >> +looked-up, are cached in the kernel. However, these attributes have a=
+ timeout
+> >> +associated and once expired they are invalidated.
+> >> +
+> >> +Thus, the ``FUSE_GETATTR`` operation will be sent to user-space only =
+if the
+> >> +attributes aren't yet available, the attributes aren't valid (timeout=
+), or if
+> >> +there is an explicit request for doing so (for example, by using the
+> >> +``AT_STATX_FORCE_SYNC`` flag in ``statx``). This may happen in the fo=
+llowing
+> >> +situations:
+> >
+> > "This may happen" what may happen? I don't see it referring to anything=
+.
+>
+> Yeah, that sentence doesn't really make a lot of sense.  I'll rephrase.
+>
+> >> +
+> >> +#. An explicit request from VFS to get the attributes for an inode (t=
+hrough the
+> >> +   ``->getattr()`` callback).
+> >> +#. When an ``->llseek()`` is requested to FUSE with a type of request
+> >> +   (``whence``):
+> >> +
+> >> +   -  ``SEEK_{HOLE,DATA}`` and the user-space doesn't implement the
+> >> +      ``FUSE_LSEEK`` operation (it has returned ``ENOSYS``), or
+> >> +   -  ``SEEK_END``
+> >> +
+> >> +#. When doing a buffered read past EOF or automatic page cache invali=
+dation mode
+> >> +   is enabled (``FUSE_AUTO_INVAL_DATA``).
+> >> +#. When doing a buffered write with write-back cache enabled
+> >> +   (``FUSE_CAP_WRITEBACK_CACHE``).
+> >
+> > This list is incomplete and strange. it has post EOF write for
+> > writeback which is the exception
+> > and leaves out every non writeback write.
+>
+> This list was meant to list the scenarios where the FUSE_GETATTR is sent
+> (the "this may happen" above).  But I'll review the list again.
+>
+> > If you composed this list yourself I highly recommend an LLM for this t=
+ask
+> > if you used LLM I suggest a stronger model.
+> >
+> > Generally speaking, I find that today's robots are much better at writi=
+ng these
+> > sorts of docs than I am - as long as I sit at the helm and guide them
+> > about where to expand on and where to keep it concise.
+>
+> Thank you for the suggestion (I did not use an LLM btw).  In fact, do you
+> think this document is really useful, given that everyone will be running
+> an LLM anyway?  (I've been asking this question myself...)
+>
 
-Yes, that's what I ended up doing. Should have paid attention to the
-#if .. #endif bracket used by the textually preceding test.
-Sorry for lashing out.
+LLM is very good in collecting information and arranging it in nicely forma=
+tted
+structures, but you need to keep a very good eye on the output and you need
+to focus on it to make the document relevant to the prospective audience of
+human readers. Running LLM to document without a human on the helm
+you can get half truths and plain lies.
 
-> Co-incidently I have a series in works from an accidental discovery of=
-=20
-> llvm-only testing coverage (rely solely on __clang_version macro) which=
-=20
-> I'll follow up on the list shortly.
->=20
-> Thx,
-> -Vineet
->=20
->=20
-> >=20
-> > Anyway, I'll wrap-up with this patch-set in the evening.
-> >=20
-> > > > +	call %[bpf_get_prandom_u32];			\
-> > > > +	if w0 !=3D 0 goto 1f;				\
-> > > > +	r8 =3D r6;					\
-> > > > +	goto 2f;					\
-> > > > +1:	r8 =3D r7;					\
-> > > > +2:	r9 =3D 1;					\
-> > > > +	lock *(u64 *)(r8 + 0) +=3D r9;			\
-> > > > +	r0 =3D 0;					\
-> > > > +	exit;						\
-> > > > +"	:
-> > > > +	: __imm_addr(arena),
-> > > > +	=C2=A0 __imm_insn(addr_space_cast, addr_space_cast_insn),
-> > > > +	=C2=A0 __imm(bpf_get_prandom_u32)
-> > > > +	: __clobber_all);
-> > > > +}
-> > > > +
-> > > > =C2=A0=C2=A0static __noinline
-> > > > =C2=A0=C2=A0u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg=
-)
-> > > > =C2=A0=C2=A0{
+Also, for economic reasons, the way to work with LLM is to let it research =
+the
+code base and create nice reviable "brain dumps" that you OR the LLM can
+read later into context.
+
+Doing this research every time is neither cost effective nor reliable nor
+deterministic.
+
+Thanks,
+Amir.
