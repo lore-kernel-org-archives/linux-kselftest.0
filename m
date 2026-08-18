@@ -1,47 +1,47 @@
 Received: from BN1PR04CU002.outbound.protection.outlook.com (mail-eastus2azon11010024.outbound.protection.outlook.com [52.101.56.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EDA641A926;
-	Tue, 18 Aug 2026 15:23:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF7D4734C6;
+	Tue, 18 Aug 2026 15:23:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.56.24
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787066618; cv=fail; b=fLa1DxhVZertGz0vpjWRjogjQV6oPkZplfGOHuNI41qp1GthZfP5rmQs01Kw2J9QtZ/MSBIyFPl1m8Z/Z/6bPRKDHhwQzq7EdlXli6TKc3fkKHV0uDcwEwxCqGdS7CAi454x3b+E18+7BiOHV3Mp5R+3T6HSa9W0OiVc+ZalWVk=
+	t=1787066620; cv=fail; b=U8kM5kniHyrsJFu4U4BxzcUUl+QDGciiaggyHzcOAwdynIJ+OMfxPm8mTbQ9KPEo4rposXWIFoQEuhEs9z9HKuDEsm1p0oeiB0E8u7NtYweeDrAYS/VZ7FVU/Hi2BHep++fQ5VoP3E6H24IN48fPGQ/FpvhOkDVeyhIlNg8laOI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787066618; c=relaxed/simple;
-	bh=Ir693lEscT1RJguF1KuXkatfb3K7Dkr3N4Rur54jcEM=;
+	s=arc-20240116; t=1787066620; c=relaxed/simple;
+	bh=khKV1XIP1Rhj+6e9JUu9GvedBfGn+7x9oJhXO0KJtgM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tLRnTKXkKJO3qOzU7TrM3rew2Uqtr4ydiFI+H9GB5jHm5j/lgYyHwgSWhYQwO19OFGjHWiCA+daCB7dh0/b4ksLI655scArC/KPYjzLb+ZsPw08KXeexxYOjM5M1bm8zgrzqMYBodI5QdsU41vE50KsmqSVCHej3WVuadHpEx4U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Ocdbl17I; arc=fail smtp.client-ip=52.101.56.24
+	 Content-Type:MIME-Version; b=Kjt7udK7PkNUz8XNFEGD9QOXmQCOIquq1hEWqF42IwMDRsFQfJFtigdi1wXNRIscEDceiGIAW/O/ORT2XV8LqYnycUX8lEM4DLliXIdQQcedEO2+G3NhDjJxAKBzrxMmCAK9uf0vkNyI6xIW3SaoUWodoUlt0Pqs7331ueoD3DI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=Jwcq9eB0; arc=fail smtp.client-ip=52.101.56.24
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Ocdbl17I"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="Jwcq9eB0"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=N6TuGM+BoJyfKea3kgEWvDBfnJezKIir5usJ0f2QbRYmW/FvT/zJmR6SbpgBiannQz9Ry6AsXxDfVxIkkyPNwhcu7UGbdWBqJ+jik1si5ZzJvCtZrwp/XBEhZmAqhZqV3Gwuus6iAfxWlS3OWFh2Fy9zkvrAz0uR0dmZDS/UwfoQfoPjPhyBizmncb8wZ1SzVl6xS9rcG4XSVNmBim3+LmKR16y5kijUBCZxzwSWiXOG/vpOAJetIGw0pMbkTUuOOy2i1Z6vdHRrUmT5YNKdXl1OrAH8KxffQE83tOeKG29x819q2rdoH+0acOBtNLOa+GMuTW4nL9YSlUeDxUQdBg==
+ b=f9Hg12e7d6kBtryfbw7kqbvkLS/utLOJPQspd7e8RafYs6X9YYd19F3tIwkaHizdmMrcNHMSk1eI8gqxRgerSA9g7+IWh/EzHLBToQ5w7VFGKznMxdc8J85Ojq493zI+bGr0wJJ5JrdZGmTeQPRIkjS9G3cB8shKADXfQFxO9PaGXMhWeWOvfwbZrggCJi6mHFLcY41huY5217ECh1RFIoBzhSVd9Z7aT41eemLPZ7Oyf/nuIg8NxrWKCvlHP8s2pnPlMUEq5udA26laUwSjocfoOM7Zu2O8cQNchRwWOwsp/IkgYupPfoIvIh4eBudmdybIbhc8gHKnEcvWVLlfHg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IBczlLXuTc9ilNvWMAoRAx2kYpp3EwFVBxnfo5flV4o=;
- b=qAOjA6rEX+1yWmUxexr971uIm9OZl4auMGRmEqYvnOWy5xbLtMMfCS89vzuMXeRIXJtmUSn0nvf6Nf/O6SRGw0mwAXoUrftBf6ra6NStyIrc9I7ah+BaCTQ5/aELe9p0epO+nrA5lXar12/2xqu3qWMsDpvAgOzYjPunCw5y+rLMe4uJFeT147NsfeBgiN42REoohp228XabcOfFopEEk5l05RKQqh5tb5ZoSewWmwMJbuFpAFqBK/fk3OPxFRAPQFucoXWsYNF0oer8ohvix2LCDMrZrs4HuoQZNXNu8xpJ20tnGc5TyJkzQHMbcVPtLWd1LwanPpp0i3B2nvMY8g==
+ bh=V8s9SGzPqT3qBC80MuSQOZJGWd6x6ahQKeuz9iRPNzE=;
+ b=GIu/2zTnSFShrlsqAuTAOr5TBcpLjjJQ3LkEbssIrhHcEcK41ZtRJQ0zTQTQVban06yWY1H4xkV89jzx62ZaduwLxFRRRPrDqxOwF7J6X/b8WyHwdvYhym4/sEGVJ7Iq+3CO+dcOPEYfEVrI3OV5ZV9a+dXJj9qmMpvG3uDcL1RXwol4cMfyNLD7HahX8zA8mAMnQsQ2lQcJnyK7dEIJlnK5yDLpD2xS9kfapT/C9KCQgcjMDu8rbmyO9G8JWxgnY5G3/CjVH2Ftiya8ZfE33eI93LhzoIwfIxeemT2wQjtRNu+RViSWy10QNgY+VHNlFQBsOmb5M1g6TKbqwtbeNQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IBczlLXuTc9ilNvWMAoRAx2kYpp3EwFVBxnfo5flV4o=;
- b=Ocdbl17IEFYrP5GoH+6NndzOsLjEAMpur1kUBAsqp/wun4JgUvcLosMsvEZLoEE3oalRsvvy01IJrnATlJYGtY1cvRnJktpUiUdxFbwMbLnk9D7Gcw56B8Ura7RsKFBRU+rfmkf6KwCGQ7Nwu6fofDruNuNU4LTDq64ASt7odmHyqQ4rLVFyIk1fdFCIE6SiDTYUAgAret4ELYSSM6wFeAHtJNm3B5hFfcSF+AFwm7F++eKse+kYTg5vSlXzYY2eDZR0IG6YO4F4NEDs5YmkKbQqH3kbPZbgJhvj9u3Jo4uGcr/KS/4Zo/ywBvShMUbtxEB5yfPKV3kfNyb6vTZ2Vw==
+ bh=V8s9SGzPqT3qBC80MuSQOZJGWd6x6ahQKeuz9iRPNzE=;
+ b=Jwcq9eB0hdnEUVI34VbW/0nXCytqh4cYxR6GIwawq+4D5XnnCMQAiH3q4VxWOzYuIg5uAy+6psKPTnskiiBWdczjkW9Xas4Y/DgtksO4Jp8SfjZCIDsUquo/t6FEU9LPKBa8G3K078iCUAaAz4dM/vSROoPx42q+Gn2Gr33+ZRSSnGOkr9X6Q8C8gg0wJv0nrgsyJBXiT4+LT/A0k0Y0Lzc8PZktkypkxnHlU4oa64w2qst4yWa+2c4Kii05Kx/TDt4jWvZO3p6/EhTkvdVIqcPFoh8GHK9xsRon77KEb+rVyDYvyQeLHIEzwsY1AvyjoJ3GAdbxBfT2ILVMDQUvZA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from LV3PR12MB9356.namprd12.prod.outlook.com (2603:10b6:408:20c::21)
  by IA1PR12MB7661.namprd12.prod.outlook.com (2603:10b6:208:426::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Tue, 18 Aug
- 2026 15:23:28 +0000
+ 2026 15:23:30 +0000
 Received: from LV3PR12MB9356.namprd12.prod.outlook.com
  ([fe80::1c36:31b4:c420:6286]) by LV3PR12MB9356.namprd12.prod.outlook.com
  ([fe80::1c36:31b4:c420:6286%5]) with mapi id 15.21.0315.016; Tue, 18 Aug 2026
- 15:23:28 +0000
+ 15:23:30 +0000
 From: Yury Norov <ynorov@nvidia.com>
 To: Miguel Ojeda <ojeda@kernel.org>,
 	Danilo Krummrich <dakr@kernel.org>,
@@ -61,16 +61,16 @@ Cc: Yury Norov <ynorov@nvidia.com>,
 	kunit-dev@googlegroups.com,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] gpu: nova-core: add a KUnit test configuration option
-Date: Tue, 18 Aug 2026 11:23:23 -0400
-Message-ID: <20260818152324.587932-2-ynorov@nvidia.com>
+Subject: [PATCH 2/2] rust: kunit: move test configuration gating into macro
+Date: Tue, 18 Aug 2026 11:23:24 -0400
+Message-ID: <20260818152324.587932-3-ynorov@nvidia.com>
 X-Mailer: git-send-email 2.53.0
 In-Reply-To: <20260818152324.587932-1-ynorov@nvidia.com>
 References: <20260818152324.587932-1-ynorov@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BN9PR03CA0188.namprd03.prod.outlook.com
- (2603:10b6:408:f9::13) To LV3PR12MB9356.namprd12.prod.outlook.com
+X-ClientProxiedBy: BN1PR14CA0022.namprd14.prod.outlook.com
+ (2603:10b6:408:e3::27) To LV3PR12MB9356.namprd12.prod.outlook.com
  (2603:10b6:408:20c::21)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -80,104 +80,327 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV3PR12MB9356:EE_|IA1PR12MB7661:EE_
-X-MS-Office365-Filtering-Correlation-Id: e49d6df5-1394-4672-1651-08defd3ca7a0
+X-MS-Office365-Filtering-Correlation-Id: 4417dbbd-c3eb-40f7-d021-08defd3ca897
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|7416014|10067099003|56012099006|11063799006|18002099003|22082099003;
+	BCL:0;ARA:13230040|23010399003|366016|376014|1800799024|7416014|10067099003|56012099006|6133799003|11063799006|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	M7rRa8Y5p7GqH6io4+8pVWKYwNAeitiI6BBybbznYQ8p/kSYWSxraKHOsYFjW+kHjzxZDnjM3LpjCZnFWDkrFv8qAXJk9eaPbJ+OmBIRv1WTVqO8M7z8Y4Zyiq7LkTZiDJScJb563sv/YsQI4RE+6Ven7HPDQ313lmDagIMd4bGzWJOCBL6STl9CDZfjx+Gy94Pgml46vIIATbTUUCuWfWhm//JypuI7E8OI4WujdCNDi/ZWdJ7+bwcLSQqYdiTyj9oaRm6XOzFEi3EB5bidaN2TZsLXbEmyiH72VC5adu4E5RGzqr+pufiIYuekxcfzHUt7nk4mxv9c0o8Vyr41umuX39Nz7NmC9z8P9gDG8EHYCAkLPPUYXxR0ZEYwI+qdoRIDIML03d/IZP3UZp0WVKtvePUgyUsMYRNhF5HNko31vFAgQudCfCXqOOiFZBQNz6xOj4jXjxIAaEMYkVSPvUa747VONOjtayBqF9qNv07lLh8Hlns15aY+AvaXLYJLomdmz8S2jKrGkdfz3/jladSw9Z5kx9iQr+VmYF6PP2GnqNLD5kDwGtfeh/DNPbu1dO1fag8oK0fnmq9KYLOLnTcKt7hjkqkZhIyuBDU6EK6k/9Gwr+q4gGvl4kthO7zdt43rhNZixroYlp6vaNb75p1VRkVrLJqcVGzwH/5+CRo=
+	bUa8JJ1I3nHkZAUQHMATwaBkLra6YG3mJHuaDZk2HtQekyCjnvP1ZnHUHzGasjZcwvu4ExRGaTBt/pcZUV447nt5B3bmeZokdsqktA4rNFyYOzIC9S5g8ymBhiitFaXyNVLqLAuNNM7UcE72F3QdXfajS6Z7m6pkA+xPujY07C0xLhc72eVSysVV2UWZlnwy+9vCSUDbYdjqqSw8Y1YTPz7XVSdRjqH0mGF0IdPXE7FyY6oB72LdnLngq7HsrQqN1OOoYX4/Uhok8kOD27gPE0FUwNOwtLxxfemoGnnp8hfK7KIw4To4oOIM+kNImX5kjLgXBDTuwdRjoNP/IFopYAjKTRMMUazh9z1U/vCp50SU8TW0LiCtWg4md11pvazV+FEa1pRjMm0QzH520qx8cNciym2RlB6er71NJmF0o8OxJ28NvINRXLFKY0h4OlX84vNNeSCZU6V+0oNtly6ToGIYOWC3ODkGwZVIZtDxRmW2X2F+XHksWVSbm/cp36hp9MGyR0yxGEdunN/jiAQC2VX1CQ3t/6zZqzHPjZPTAhPMvxu7eDo0aOgHKZMSMF7eNK+s4+irlWbLEAZW1W/R6ytamiamAh9XhfhOKgOsTXCR/QFnaH72Ph8zmLLK1kCSZYQ+bPapygkdykjkSxEoK/nWOZuzeOxh8g6JZzzIOIk=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR12MB9356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(7416014)(10067099003)(56012099006)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR12MB9356.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(366016)(376014)(1800799024)(7416014)(10067099003)(56012099006)(6133799003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?7yYxcvmPy/49cyO1Elmkrha5pcaR4gdyKK3nacWOw+gTx0DM5MNU0IzWKWRp?=
- =?us-ascii?Q?V+2CnaTB6cKMEcexYOH7HK3MUb1U5j171hyWSTvf5oG1UW6D1HtC+9MKGk5Q?=
- =?us-ascii?Q?UW5WqU9tTNeXi/IEKb5iaLO+qAJB1lnn50PyUabnjAYqC9Dm3ay3EDysYOT+?=
- =?us-ascii?Q?iozI7CG+WNE9dCJtWo7/vIP6+u5rGqHrbzY/K203tTKR8stWgLFVXFV/zBM5?=
- =?us-ascii?Q?poov87G9HqGm34VBqlwXBruyhlU3TYj4kMloI2tvUitXgtEwn+hLuYH9lbMa?=
- =?us-ascii?Q?avlj0p+8StqnrJV9x5zNOrWBlOgKaYqcC3ueF0e2BniJCzIsMEWCKUSGU6Rf?=
- =?us-ascii?Q?llvQXLwB62Bi4hvm5CTTsmrIZKyKv1mTxJdKkvPkp6OgihpkmS4NGaEFRviK?=
- =?us-ascii?Q?A2vJX6jm8ZwrN4xcGxnUZlMxmVzEar2gsWU6zwhKh6K8rP4d9pXeX94fJViG?=
- =?us-ascii?Q?Qd403pLmwX0OW3lJOadeq38K/5fHyTz4ll6FEJvi0TWi8szOzRR4PqqMitM5?=
- =?us-ascii?Q?GFjYoUorTOdKhf9abBcKP9IuXapjVnFmr4Oz8jxP2nqpUwizTSqNqj31DRIP?=
- =?us-ascii?Q?xRHLzqGJ60gKYiGapaD1adOu5Ud11tGAzo3YlIrRDkB7X65pL5VNblnHCA+T?=
- =?us-ascii?Q?mW81GS1rHysdk2ktTFBIBx6zUeEMHObP4k+H/b4tKKiazF4mGG3MMHQUnCLY?=
- =?us-ascii?Q?dKK9EUArDBe6itDNPGN968NCYBE0SBiRKbWorsOugT326dqZAO0GrDKlpEdh?=
- =?us-ascii?Q?Cq1/tO52mzItmmoTs45ghamyPb/b9gbp92mfRRAvLB1ekxdKdyVyyKlo/YDQ?=
- =?us-ascii?Q?ventlLzu3md6H7dl3q2nMg7SeILyowEk01Kx3No1UzFFRzFWb0/VSt/pSNjL?=
- =?us-ascii?Q?Ta0CMQpm0oz7kbEtm3taf7mm294XL1KJwFj9xVgp+5LwsJGpY9PHSQEOt8IZ?=
- =?us-ascii?Q?CLQOznDlIRzZXTpva/8nx51sKnvUXB/dvYHPblDmovOx95ciSMhOobozQM5m?=
- =?us-ascii?Q?8yIhPBgQvji2pMbl89f0DZlsVAwnDO4kbQo8L0LhLY4uf+2dpU/sLDaFJuxv?=
- =?us-ascii?Q?HUCXO85CT9m0/ceVnPsdTZG+c9UGmMhVPY0+hPdFOjNOWQDtv+8PwAwGzYvN?=
- =?us-ascii?Q?FqdPbKjKRHB7eY8HDWfCjpPazkhHVOJ8MvRxIx1s3FIs9FGPHAqkAnbpgMin?=
- =?us-ascii?Q?FM9yxJnt3g+6lHiBzJC5U6sF4zITtPH6X5Qrlj5v+6Csy5cmQx9pDKlodUZX?=
- =?us-ascii?Q?AY7Ks83QBk0MDwHu/YZ94yACTjgWC6Rpumj4qk7/5GuCYwE2T+/z8q0XwMTf?=
- =?us-ascii?Q?tD/LSI+R5XYuuUlO/daO1UhckxPLIQEN6ZFOe/dsaFnni2OlqQuuieaWo5Fw?=
- =?us-ascii?Q?DUx0ojJM8nZ51CD1oYyfwuLiKfdhvL0/YLbiX0D1kgpicSsXpVC72IhT9t/X?=
- =?us-ascii?Q?L/T5Uy8sh4t95V9kELKUc8WaitpqQVQ8GVIf0wlDDWHRyAWJfYHcPTgFFR4/?=
- =?us-ascii?Q?oVBcnpCXLzcs7QqE5MFqGOq7SkNGKz918nwXUYRswmXKQ5w8xEF3crDLDByy?=
- =?us-ascii?Q?8B6lr1Uck7ed/26xPNava3MQgnDHQ/I1zWMAK3qGh/fAsGdLAhjb6qzI6ntj?=
- =?us-ascii?Q?05vAVuOHm/h/vHxHfPwmefjLwWOSqGW+7G4j7KXpKbozft6NtpLrqiCeX9D3?=
- =?us-ascii?Q?fHrgeJudS21ZXjw4Hw7QEqzpY68vNvfIFx97Lkvf9gbp6Sbt?=
+	=?us-ascii?Q?LJMXbLjA1Ms1w+dthCCQtgy5t5zbpIXBX+i7h2ZKc+8wl1VINkHclNLiKg7g?=
+ =?us-ascii?Q?pA/HMPRKOz5Pfdv3dSHCzA3QAMopfBu7Z8Hvcf4T17UdG0p3EZx+uQOzk77t?=
+ =?us-ascii?Q?NseuMd6vdyLf0BWWFVcV4azOB9yV52Rpj/4uG4+R6SdkTWELw/n1b76XwLvz?=
+ =?us-ascii?Q?FPp1PbJUurgiRAsglE399CVkg9s/DtAa2mhdIX4uDRlh0C5TBEQJVpdruh7l?=
+ =?us-ascii?Q?b1AVLOI912Q1d00hmMQNKEYMIexqr6KUXd8/fWlZUG1O2pjkTTDleDOhJAat?=
+ =?us-ascii?Q?WYhZZkTItALS3drraZ5WJyAf4GUe8yFLUPVM2LwKnCLBzOL99oNP8LWeIGMz?=
+ =?us-ascii?Q?7eLYOFJRsc9l9WP9PVpVqAIWl7rqNAFZG7A3pGv5lcCrfknEAeGBXGleTiUb?=
+ =?us-ascii?Q?SKtRWpiwZEVD1nbNrR5i5romIe5e5rUb0D1OZMQW5EoK3qIDvjDYvSrIAZZi?=
+ =?us-ascii?Q?vJgXEhP20MFcJuWoBpowdKvzwN3+hI1KkZkT1HScKF8ff+GEQC2QDegQUl2f?=
+ =?us-ascii?Q?r8TEisoa2WDYOZJcQaS+4gpKBvL8UtUT0ihHPlvoOfnkjGV5ipmgtY3p78Xd?=
+ =?us-ascii?Q?Vk23pOaYzuH9Oj/ymOu4lKFlLpYIq7IQYorArIsKO5I0OEDaInQR8ksL3KGg?=
+ =?us-ascii?Q?PdK/bQ/SQTwYjMZCRlI+RmgVen5gpp0Ywxik+cHlKIREtBwMiVy8RrfmFXFw?=
+ =?us-ascii?Q?g5WuLzEfkqBfkJnfO7HfnDvimuffJGU13d04MqaRWnd7tTeKLN6PoRweGDkq?=
+ =?us-ascii?Q?VesF6qXrZ/3ofOTtKg02GWXvCPehX4Cm9rJFX0Y3WK9gzoWZTCQcoXi20wxG?=
+ =?us-ascii?Q?OW+8k0LzRwuJMBrLZ3kOA3U3U5rqmT/nAbVZyPeZeeSbINeye4x7nmYGMFkb?=
+ =?us-ascii?Q?iMeX4TWm+O1kFiWRv+3W8R81DvU5Zv0TyPnWWOc0ggwFX3jtt2CtgaS2gWrm?=
+ =?us-ascii?Q?6lKXYbjKRGO/bAeKTm0iJWXqOo9W+/C9oqXDEYskouIVWs8yics1NAXbFIJ3?=
+ =?us-ascii?Q?Fd09QlIWtTb4HBLgywnMOpSusUZMSJ3Pdprs8H1UkUxZsgH0e5oIBYFhF2c4?=
+ =?us-ascii?Q?a7IvFDYHyoZoMydcA8h5CZSIYgLBCXlmmtM4uDckzMiWavwP9xAvvlWzmw7m?=
+ =?us-ascii?Q?7Xp0S8zdc1qUl+LSDUJaF03CKNrApSXvPncJCLAW1hPk8gVCfXNpVSJkAB8g?=
+ =?us-ascii?Q?7luIdt2nlRjecw+ow9RIaH/cikFjBVa5RHXMV4ljPoBBTQEVu1WODHTyrQ02?=
+ =?us-ascii?Q?EcFWcoanFvY7Ksg5qgrFqaqwPTLQjEu3jsaVJ6tiokTph663Zs1JuWalycoe?=
+ =?us-ascii?Q?mq2pPQSS/dGfBWkW4XB7gyUgmctXcInoaLC1cPXzMVcbZxU9qwLDecHlCUL7?=
+ =?us-ascii?Q?aEKf6A2RMU2yuduoDZOQ02ZgZw4SUgl6KBsM7vcZ+8xQ9x0RqjT97eaAREkX?=
+ =?us-ascii?Q?aCswWlPZGTyT/26kLGZew1JAFZn/Wi2FWiztik1A3bc3zzEnNeTmX7h1TlNH?=
+ =?us-ascii?Q?hvJGJuGvOySHJYkWEmdTE8Xv8nPl9gcaqCguyeqEXYEMIP7jK4cr/e4KgYIN?=
+ =?us-ascii?Q?+Ee4SNSwPbJR34X27ZbIEr5Xfo1FVwNAtIl9Ha2+3QfsVs2K/x+qWI5PbRbi?=
+ =?us-ascii?Q?uxoamw7bZlD9UGjqkVLh3e7Afe3Rk8P4HqQe7OA4fDQEHFTAbINnR9X7G67Y?=
+ =?us-ascii?Q?QLPZbRZ7M2a2bPwvswgwEWVS+9fy1WDLEUdr5O5SbubewQDm?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e49d6df5-1394-4672-1651-08defd3ca7a0
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4417dbbd-c3eb-40f7-d021-08defd3ca897
 X-MS-Exchange-CrossTenant-AuthSource: LV3PR12MB9356.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 15:23:28.7094
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 15:23:30.4731
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8aqE3ILvL45j3oPfinan5Ycmpuqmwh/2wZSOcrrxpTwKZLjXihz7I5iCzSJxwHXxZCLTL9BAD2cPl7r1wNy6Dg==
+X-MS-Exchange-CrossTenant-UserPrincipalName: tURl2vHipvi3qRtfCYxBgW1rVzdkrPcdarQAQnVdYzimSH4Q2Ybb3KX4eqBQ2IlXa39Xa4LBzzlfJ2kt4nHhFA==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7661
 
-The continuation-record KUnit tests are currently built whenever both
-Nova Core and KUnit are enabled, providing no way to select the tests
-independently.
+KUnit test modules currently need a separate cfg attribute in addition to
+the kunit_tests attribute. This makes every test suite repeat the same
+two-attribute pattern.
 
-Add CONFIG_NOVA_CORE_KUNIT_TEST and use it to guard the test suite.
-Follow the usual KUnit convention of enabling the option through
-CONFIG_KUNIT_ALL_TESTS.
+Declaring a KUnit test without a preceding `#[cfg]` attribute is also
+possible, causing it to be built whenever KUnit and its containing code are
+enabled.
+
+Require the controlling Kconfig symbol as the second kunit_tests argument
+and have the macro emit the cfg attribute itself. Update all existing users
+to the new form.
 
 Assisted-by: Codex:gpt-5.6-sol
 Signed-off-by: Yury Norov <ynorov@nvidia.com>
 ---
- drivers/gpu/nova-core/Kconfig                  | 12 ++++++++++++
- drivers/gpu/nova-core/gsp/cmdq/continuation.rs |  1 +
- 2 files changed, 13 insertions(+)
+ Documentation/rust/testing.rst                | 11 ++++---
+ .../gpu/nova-core/gsp/cmdq/continuation.rs    |  3 +-
+ rust/kernel/alloc/allocator.rs                |  3 +-
+ rust/kernel/alloc/kvec.rs                     |  3 +-
+ rust/kernel/bitfield.rs                       |  3 +-
+ rust/kernel/bitmap.rs                         |  3 +-
+ rust/kernel/kunit.rs                          |  3 +-
+ rust/kernel/str.rs                            |  3 +-
+ rust/kernel/sync/atomic/predefine.rs          |  3 +-
+ rust/macros/kunit.rs                          | 30 +++++++++++++++++--
+ rust/macros/lib.rs                            |  6 ++--
+ 11 files changed, 43 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/gpu/nova-core/Kconfig b/drivers/gpu/nova-core/Kconfig
-index f918f69e0599..d05c2c1d46d9 100644
---- a/drivers/gpu/nova-core/Kconfig
-+++ b/drivers/gpu/nova-core/Kconfig
-@@ -15,3 +15,15 @@ config NOVA_CORE
- 	  This driver is work in progress and may not be functional.
+diff --git a/Documentation/rust/testing.rst b/Documentation/rust/testing.rst
+index e3943aceceb9..767b111afd41 100644
+--- a/Documentation/rust/testing.rst
++++ b/Documentation/rust/testing.rst
+@@ -138,9 +138,10 @@ these are also fairly similar to what you would expect from userspace, and they
+ are also mapped to KUnit.
  
- 	  If M is selected, the module will be called nova-core.
-+
-+config NOVA_CORE_KUNIT_TEST
-+	bool "KUnit tests for Nova Core" if !KUNIT_ALL_TESTS
-+	depends on NOVA_CORE && KUNIT
-+	default KUNIT_ALL_TESTS
-+	help
-+	  This option enables KUnit tests for internal components of the Nova
-+	  Core driver. The tests currently do not require GPU hardware. These
-+	  are only for development and testing, not for regular kernel use
-+	  cases.
-+
-+	  If unsure, say N.
+ These tests are introduced by the ``kunit_tests`` procedural macro, which takes
+-the name of the test suite as an argument.
++the name of the test suite and its controlling Kconfig option as arguments. The
++Kconfig option is required, and the macro uses it to guard the test suite.
+ 
+-Each test suite should be guarded by a Kconfig option in
++Each test suite should have a Kconfig option, typically in
+ ``rust/kernel/Kconfig.test``.
+ 
+ For instance, assume we want to test the function ``f`` from the documentation
+@@ -148,8 +149,7 @@ tests section. We could write, in the same file where we have our function:
+ 
+ .. code-block:: rust
+ 
+-	#[cfg(CONFIG_RUST_MYMOD_KUNIT_TEST)]
+-	#[kunit_tests(rust_kernel_mymod)]
++	#[kunit_tests(rust_kernel_mymod, CONFIG_RUST_MYMOD_KUNIT_TEST)]
+ 	mod tests {
+ 	    use super::*;
+ 
+@@ -177,8 +177,7 @@ the unit type ``()``) or ``Result`` (i.e. any ``Result<T, E>``). For instance:
+ 
+ .. code-block:: rust
+ 
+-	#[cfg(CONFIG_RUST_MYMOD_KUNIT_TEST)]
+-	#[kunit_tests(rust_kernel_mymod)]
++	#[kunit_tests(rust_kernel_mymod, CONFIG_RUST_MYMOD_KUNIT_TEST)]
+ 	mod tests {
+ 	    use super::*;
+ 
 diff --git a/drivers/gpu/nova-core/gsp/cmdq/continuation.rs b/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
-index 05e904f18097..c0aa16c8fbf4 100644
+index c0aa16c8fbf4..2e4b21f2002f 100644
 --- a/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
 +++ b/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
-@@ -167,6 +167,7 @@ fn init_variable_payload(
+@@ -167,8 +167,7 @@ fn init_variable_payload(
      }
  }
  
-+#[cfg(CONFIG_NOVA_CORE_KUNIT_TEST)]
- #[kunit_tests(nova_core_gsp_continuation)]
+-#[cfg(CONFIG_NOVA_CORE_KUNIT_TEST)]
+-#[kunit_tests(nova_core_gsp_continuation)]
++#[kunit_tests(nova_core_gsp_continuation, CONFIG_NOVA_CORE_KUNIT_TEST)]
  mod tests {
      use super::*;
+ 
+diff --git a/rust/kernel/alloc/allocator.rs b/rust/kernel/alloc/allocator.rs
+index cd4203f27aed..b2c235801a3f 100644
+--- a/rust/kernel/alloc/allocator.rs
++++ b/rust/kernel/alloc/allocator.rs
+@@ -265,8 +265,7 @@ unsafe fn realloc(
+     }
+ }
+ 
+-#[cfg(CONFIG_RUST_ALLOCATOR_KUNIT_TEST)]
+-#[macros::kunit_tests(rust_allocator)]
++#[macros::kunit_tests(rust_allocator, CONFIG_RUST_ALLOCATOR_KUNIT_TEST)]
+ mod tests {
+     use super::*;
+     use core::mem::MaybeUninit;
+diff --git a/rust/kernel/alloc/kvec.rs b/rust/kernel/alloc/kvec.rs
+index f7af62835aa8..4b77425950d3 100644
+--- a/rust/kernel/alloc/kvec.rs
++++ b/rust/kernel/alloc/kvec.rs
+@@ -1508,8 +1508,7 @@ fn drop(&mut self) {
+     }
+ }
+ 
+-#[cfg(CONFIG_RUST_KVEC_KUNIT_TEST)]
+-#[macros::kunit_tests(rust_kvec)]
++#[macros::kunit_tests(rust_kvec, CONFIG_RUST_KVEC_KUNIT_TEST)]
+ mod tests {
+     use super::*;
+     use crate::prelude::*;
+diff --git a/rust/kernel/bitfield.rs b/rust/kernel/bitfield.rs
+index 35ede53f2b8e..8b329b6e4f8d 100644
+--- a/rust/kernel/bitfield.rs
++++ b/rust/kernel/bitfield.rs
+@@ -548,8 +548,7 @@ fn fmt(&self, f: &mut ::kernel::fmt::Formatter<'_>) -> ::kernel::fmt::Result {
+     };
+ }
+ 
+-#[cfg(CONFIG_RUST_BITFIELD_KUNIT_TEST)]
+-#[::kernel::macros::kunit_tests(rust_kernel_bitfield)]
++#[::kernel::macros::kunit_tests(rust_kernel_bitfield, CONFIG_RUST_BITFIELD_KUNIT_TEST)]
+ mod tests {
+     use core::convert::TryFrom;
+ 
+diff --git a/rust/kernel/bitmap.rs b/rust/kernel/bitmap.rs
+index b27e0ec80d64..c4195e00d895 100644
+--- a/rust/kernel/bitmap.rs
++++ b/rust/kernel/bitmap.rs
+@@ -499,8 +499,7 @@ pub fn next_zero_bit(&self, start: usize) -> Option<usize> {
+     }
+ }
+ 
+-#[cfg(CONFIG_RUST_BITMAP_KUNIT_TEST)]
+-#[macros::kunit_tests(rust_kernel_bitmap)]
++#[macros::kunit_tests(rust_kernel_bitmap, CONFIG_RUST_BITMAP_KUNIT_TEST)]
+ mod tests {
+     use super::*;
+     use kernel::alloc::flags::GFP_KERNEL;
+diff --git a/rust/kernel/kunit.rs b/rust/kernel/kunit.rs
+index 91eaff8c186a..52f2ccbfba49 100644
+--- a/rust/kernel/kunit.rs
++++ b/rust/kernel/kunit.rs
+@@ -330,8 +330,7 @@ pub fn in_kunit_test() -> bool {
+     !unsafe { bindings::kunit_get_current_test() }.is_null()
+ }
+ 
+-#[cfg(CONFIG_RUST_KUNIT_SELFTEST)]
+-#[kunit_tests(rust_kernel_kunit)]
++#[kunit_tests(rust_kernel_kunit, CONFIG_RUST_KUNIT_SELFTEST)]
+ mod tests {
+     use super::*;
+ 
+diff --git a/rust/kernel/str.rs b/rust/kernel/str.rs
+index b3caa9a1c898..404418504c13 100644
+--- a/rust/kernel/str.rs
++++ b/rust/kernel/str.rs
+@@ -428,8 +428,7 @@ macro_rules! c_str {
+     }};
+ }
+ 
+-#[cfg(CONFIG_RUST_STR_KUNIT_TEST)]
+-#[kunit_tests(rust_kernel_str)]
++#[kunit_tests(rust_kernel_str, CONFIG_RUST_STR_KUNIT_TEST)]
+ mod tests {
+     use super::*;
+ 
+diff --git a/rust/kernel/sync/atomic/predefine.rs b/rust/kernel/sync/atomic/predefine.rs
+index 3d63f40791fa..e92194b37de8 100644
+--- a/rust/kernel/sync/atomic/predefine.rs
++++ b/rust/kernel/sync/atomic/predefine.rs
+@@ -152,8 +152,7 @@ fn rhs_into_delta(rhs: usize) -> isize_atomic_repr {
+     }
+ }
+ 
+-#[cfg(CONFIG_RUST_ATOMICS_KUNIT_TEST)]
+-#[macros::kunit_tests(rust_atomics)]
++#[macros::kunit_tests(rust_atomics, CONFIG_RUST_ATOMICS_KUNIT_TEST)]
+ mod tests {
+     use super::super::*;
+ 
+diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
+index ae20ed6768f1..7c7ba30f58c0 100644
+--- a/rust/macros/kunit.rs
++++ b/rust/macros/kunit.rs
+@@ -13,6 +13,10 @@
+     ToTokens, //
+ };
+ use syn::{
++    parse::{
++        Parse,
++        ParseStream, //
++    },
+     parse_quote,
+     Error,
+     Ident,
+@@ -20,9 +24,28 @@
+     ItemMod,
+     LitCStr,
+     Result, //
++    Token,
+ };
+ 
+-pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<TokenStream> {
++pub(crate) struct KunitTestArgs {
++    test_suite: Ident,
++    config: Ident,
++}
++
++impl Parse for KunitTestArgs {
++    fn parse(input: ParseStream<'_>) -> Result<Self> {
++        let test_suite = input.parse()?;
++        input.parse::<Token![,]>()?;
++        let config = input.parse()?;
++
++        Ok(Self { test_suite, config })
++    }
++}
++
++pub(crate) fn kunit_tests(
++    KunitTestArgs { test_suite, config }: KunitTestArgs,
++    mut module: ItemMod,
++) -> Result<TokenStream> {
+     if test_suite.to_string().len() > 255 {
+         return Err(Error::new_spanned(
+             test_suite,
+@@ -34,7 +57,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
+     let Some((module_brace, module_items)) = module.content.take() else {
+         Err(Error::new_spanned(
+             module,
+-            "`#[kunit_tests(test_name)]` attribute should only be applied to inline modules",
++            "`#[kunit_tests(test_name, CONFIG_KUNIT_TEST)]` attribute should only be applied to inline modules",
+         ))?
+     };
+ 
+@@ -42,6 +65,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
+     module
+         .attrs
+         .insert(0, parse_quote!(#[cfg(CONFIG_KUNIT="y")]));
++    module.attrs.insert(0, parse_quote!(#[cfg(#config)]));
+ 
+     let mut processed_items = Vec::new();
+     let mut test_cases = Vec::new();
+@@ -51,7 +75,7 @@ pub(crate) fn kunit_tests(test_suite: Ident, mut module: ItemMod) -> Result<Toke
+     // The code generated for the following test module:
+     //
+     // ```
+-    // #[kunit_tests(kunit_test_suit_name)]
++    // #[kunit_tests(kunit_test_suite_name, CONFIG_KUNIT_TEST)]
+     // mod tests {
+     //     #[test]
+     //     fn foo() {
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index 4a48fabbc268..a660296d5dbd 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -464,14 +464,14 @@ pub fn paste(input: TokenStream) -> TokenStream {
+ 
+ /// Registers a KUnit test suite and its test cases using a user-space like syntax.
+ ///
+-/// This macro should be used on modules. If `CONFIG_KUNIT` (in `.config`) is `n`, the target module
+-/// is ignored.
++/// This macro should be used on modules. The second argument is the Kconfig symbol that controls
++/// the test suite. If it or `CONFIG_KUNIT` (in `.config`) is `n`, the target module is ignored.
+ ///
+ /// # Examples
+ ///
+ /// ```ignore
+ /// # use kernel::prelude::*;
+-/// #[kunit_tests(kunit_test_suit_name)]
++/// #[kunit_tests(kunit_test_suite_name, CONFIG_KUNIT_TEST)]
+ /// mod tests {
+ ///     #[test]
+ ///     fn foo() {
 -- 
 2.53.0
