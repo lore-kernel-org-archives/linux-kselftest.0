@@ -1,57 +1,56 @@
 Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DB9D47F2E7
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 16:33:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BA947DF9A
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 16:35:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.69
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787070805; cv=none; b=Lhg0Rkoza1Hv6DtTyBz62z+Fz6XE3ZkKLF0NnMFD06IsF9rtf1twPwa8d5mn5ixeFci6+cS1nn0WwNpJasPT9xwehnyKqvNLpEKwtzlK2aqRGXZ3u2baZweqYRfq7vk/i7Dx6MaG3QgDjROEZqAMT7gjLFm7AVBaO6RN68evKdY=
+	t=1787070938; cv=none; b=G5bBa57sbXnqYPgzlTtgcadn8NE/zK2k8p50vrtP4PrQIFEKeSHMVU3FYb3qmLq5lWBqe3mwQd2BHAUk5Z7ASEffVllQe8DLPURZMTfaBB0+kaGSsRao4ozcYQqkobR8y5eeoLONPHdluDqmCUWyFd0BcEW/m7VfN4Hu6XNojDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787070805; c=relaxed/simple;
-	bh=0igr8Zes/VrYG9fBE3Cru4sD9Bym8t8t+dDC8+h+gAE=;
+	s=arc-20240116; t=1787070938; c=relaxed/simple;
+	bh=TLUh2AgF2HUY0yaiHSHh3FpsIeZehsLzdw65S1KlsIQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=sPep6ohgEeLbX2/Me8fICg/58bgGYVeNDV/SR3ZuOBrbZIB0m/sCPF6WOkWYAN4Sik5o4EMLBfGKSCNaYnl9Yb+fG4egyZ0Hg5uazj/Ud5Mge8bisHuygdxOjHgXfYFrRG7FYYjQSMMsrpP2CT/ISv/JHXuFr4ZRZmczo7xOhzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y2CmzhOQ; arc=none smtp.client-ip=209.85.218.69
+	 To:Cc:Content-Type; b=Q05jaeDI3XcN8VoZicyjWFu43Qc2AL5dN8kqOz0ZN4znU3yAdw59b4DX3WrFj9IHcRJRaFcji8oPV2n0zDttrHYuVJtPDB/89DpyrZ4q+tbEqerduxEWT+5EWke2uDewjoQ0kfN9eu6OcuftZm02bX3pfgJPqZ4LOCsu2oGc4XI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ZCRCmOXi; arc=none smtp.client-ip=209.85.218.69
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y2CmzhOQ"
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c1686e23b9cso57183066b.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 09:33:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ZCRCmOXi"
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c1686e23b9cso57435166b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 09:35:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787070802; x=1787675602; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787070934; x=1787675734; darn=vger.kernel.org;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NYCxMBx4BOPF4yBl5aKpfQIqd2cMC8x5BNz4F0URw58=;
-        b=Y2CmzhOQUiBpcQdqp7SRGIDAIpVBtJP7x53ivlFZPPvsipZCsIiKakPMi5TtmYUbWB
-         W5dbbG/qcSqKmAewTxQua3qwspuJOOlM34loyMPQAB8YpHdgQh+Fo3Rq4+8tWYti1N+/
-         m0+SSoP6tsy8kpMREm+5HVJ5uYLbMgtX9BKEn9WhzKCs2fEjoQK69q/GACruN2sSdqj0
-         4PLBqlcyC2CtT5XMwPGS3jJ4HdNbwiEp3jT/QLAL6qg5exaRx5rDaIF5wYJRCe2bT+Zx
-         aT/3v4VX657/Cvcr7CHOfi58xcJ9Dw5r2UK1MQF5yqYaDbzJrFylXOp8JLkflQxHm8DE
-         d63A==
+        bh=Y4s3SdzysyF0cpwVmIOh8j6ah+K+701R9CGnrq6hKDk=;
+        b=ZCRCmOXiWxiyQQl6jJ33pftaIAua/fC/saaAXmbW4CrVFo9YP77aJJIAdxccp71ewh
+         KqNi1Ldoaxpky+HU/gLmaFu/vxQjZ8paO4CvZzVoqcgOEWfgrqptyZQjBy2zd/4FXoQb
+         dHHWoLfVUO+3RLaytjdMKoQM8V+64RIYG097D7d5rV89l5WTLgQJ+TxKiLGBpcGW4Yyn
+         KFtWMRSa6R2frTvcd792H5ozfP1wclmID0huAndeZ3XnsJZquDPRvewpH8xXkXJL04kX
+         AMPOHjiZ72ptp4YW69xEacc/ajOJcUBGPHCMUsYw1lrNqCKSSMs3/BFTL9V/NusDWH4b
+         +MpQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787070802; x=1787675602;
+        d=1e100.net; s=20251104; t=1787070934; x=1787675734;
         h=content-type:cc:to:from:subject:message-id:references:mime-version
          :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=NYCxMBx4BOPF4yBl5aKpfQIqd2cMC8x5BNz4F0URw58=;
-        b=ipNXgMDauMKyfW2Ss7l8s0VRibfmgqvQ+duLrguMSbe9cN3+HtuN5HOOqWlRKsLUoR
-         aLwaQJchWsVn1ZYtPZg7JIRhSkT3SaJb/X14ZjP9i4jyy3hMafdhE9RSuX88pFneJsPt
-         mhA4FDN6J/B0D1lTawJxFADOspcYcUkh2adc3907u4jRz6rsMW2Ko6+1sZKwpnTaaG5n
-         9qm+nr+OFG2I3gkugntoiMuXZOwwsVK1G/NNYZggGAF6b6i1FnGfC2N95vRSBc7zXn95
-         mOP5AmFBmvkzjWtFXg2WWsQt3+KTb7EWegYV7mauxh8Y66lcBlPpjNah0iiIwv4UrnLS
-         GINQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqBZDKQrY68Pqy/YQNVKoXxVzeZ1HNkRYx+tEMkCUNH8itjdmB/lkzs+xcHmDwwfawH0dlbksJ8+UgfpO2go2Y=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyhp22yBkQKvRE8316f3ms00tS0Q67BqotKkJPc0xzdMuFinyB4
-	qfbUxmNT143NM5jQHAvwzuudb+c3ejxFx9EuIn0dxVfNqFx062w72OjZ2mjj6U1+aXZu6v+BHCS
-	8YPxx4aU4j5fEPcWBsQ==
-X-Received: from edea16.prod.google.com ([2002:a05:6402:a190:b0:697:8356:d9d6])
+        bh=Y4s3SdzysyF0cpwVmIOh8j6ah+K+701R9CGnrq6hKDk=;
+        b=ZWGHsR4FRneGsQ9eovow+5/yd8G/E6sAxYBArrphtuZzovmwk5BZl6hSB+HFNssO4l
+         XOJ32w6xIml+WJiQDwtFJVbWXoXxezcq+IkyjAPE7eq6UduG0DPYrZITeXbOyNP98Yt9
+         Npzf9z+7OnOpAKWAYk2c1TjPFLb1j0zkfWzCyPCppPY5tSuTEvCKjUBIIffdKs93wFbs
+         Owt57wllfEgASkptDwCiHHjWYCD8HVpYngxtJik7DTYWhfI7UCPHy1Jw54jfsJPTDyUi
+         hBdh20Aas0x5MuFrZ5bmTTbHBle/wC77pVaHwrDip5jcfsxEVUQWQST46iXYrvK/Hbrl
+         rZVw==
+X-Gm-Message-State: AOJu0YxHzPGj6pVDhiQzCmPojxJbH08pHyiKJ+ui6fER4BwLVYShwgz8
+	nO9e4Wv2hSjECh0V4xlNmYtbKlRyNn5y/7uEqWsJQ7TuCnwBDLpiKiUX0PxvHDbPbyFb/Jj0sSb
+	JABw2vrFA/CciqdqV6A==
+X-Received: from ejcxb1.prod.google.com ([2002:a17:907:ba01:b0:c12:4f4d:9db6])
  (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6938:a091:10b0:c15:a487:3482 with SMTP id a640c23a62f3a-c2188a9df89mr438613166b.21.1787070802257;
- Tue, 18 Aug 2026 09:33:22 -0700 (PDT)
-Date: Tue, 18 Aug 2026 16:33:21 +0000
-In-Reply-To: <anpieno-RyRl54fp@google.com>
+ 2002:a17:907:94cf:b0:c16:101d:7afa with SMTP id a640c23a62f3a-c2188a83758mr569918666b.16.1787070934060;
+ Tue, 18 Aug 2026 09:35:34 -0700 (PDT)
+Date: Tue, 18 Aug 2026 16:35:33 +0000
+In-Reply-To: <9huzv79i6rff.fsf@tarunix.c.googlers.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,57 +58,80 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-8-tarunsahu@google.com> <anpieno-RyRl54fp@google.com>
-Message-ID: <9huzfr0bv166.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH v4 07/11] KVM: guest_memfd: Add support for freezing mappings
+ <20260728121138.1103610-12-tarunsahu@google.com> <CAEvNRgEbS06snhyHznPSqxnUrdudVEKUuOpPwnU+AJATWFBRBA@mail.gmail.com>
+ <9huzv79i6rff.fsf@tarunix.c.googlers.com>
+Message-ID: <9huzbjazv12i.fsf@tarunix.c.googlers.com>
+Subject: Re: [PATCH v4 11/11] KVM: selftests: Add guest_memfd_preservation_test
 From: tarunsahu@google.com
-To: Sean Christopherson <seanjc@google.com>
-Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
+To: Ackerley Tng <ackerleytng@google.com>, fuad.tabba@linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, seanjc@google.com, dmatlack@google.com, 
 	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
 	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>
+Cc: linux-kselftest@vger.kernel.org, andre.przywara@arm.com, 
+	michael.roth@amd.com, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	will@kernel.org, vannapurve@google.com, maz@kernel.org, fvdl@google.com, 
+	kvm@vger.kernel.org, oliver.upton@linux.dev, kvmarm@lists.linux.dev, 
+	alexandru.elisei@arm.com, skhawaja@google.com, aneesh.kumar@kernel.org, 
+	linux-doc@vger.kernel.org, David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, 
+	kexec@lists.infradead.org, suzuki.poulose@arm.com
 Content-Type: text/plain; charset="UTF-8"
 
-Sean Christopherson <seanjc@google.com> writes:
+Tarun Sahu <tarunsahu@google.com> writes:
 
-> On Tue, Jul 28, 2026, Tarun Sahu wrote:
->> +/**
->> + * kvm_gmem_freeze - Freeze or unfreeze a guest_memfd inode mapping.
->> + * @inode: The guest_memfd inode.
->> + * @freeze: True to freeze, false to unfreeze.
->> + *
->> + * This API is used strictly during the live update / preservation transition
->> + * window to prevent host userspace and guest-side faults from making any
->> + * mapping modifications (such as fallocate or page fault allocation)
->> + * to the guest_memfd page cache.
->> + *
->> + * Synchronization Strategy (Sleepable RCU):
->> + * To avoid high-contention VFS locks (like inode_lock or
->> + * filemap_invalidate_lock) on the vCPU page fault hot paths, this subsystem
->> + * implements a lightweight, system-wide Sleepable RCU (SRCU) mechanism
->> + * (`kvm_gmem_freeze_srcu`):
->> + *
->> + * Global vs. Per-Inode SRCU
->> + * ======================
->> + * A single system-wide global static `srcu_struct` is used instead of a
->> + * per-inode SRCU structure to completely prevent unprivileged users from
->> + * exhausting the host's per-CPU memory allocator. 
+> Ackerley Tng <ackerleytng@google.com> writes:
 >
-> This argument doesn't hold up given that each kvm structure has two SRCU structs.
+>> Tarun Sahu <tarunsahu@google.com> writes:
+>>
+>>> Add guest_memfd_preservation_test to verify that KVM VM state and guest
+>>> memory backed by guest_memfd are preserved across a kexec reboot via Live
+>>> Update Orchestrator (LUO).
+>>>
+>>> This test includes multiple tests
+>>> - (A) Test to preserve non-guest_memfd, non-memfd which must fail (/dev/null)
+>>> - (B) Test to preserve guest_memfd with no INIT_SHARED flag which must fail
+>>> - (C) Test to allocate the guest_memfd memory after preservation because
+>>>   preservation makes the guest_memfd frozen. Which must fail as well.
+>>> - (D) Test to verify guest_memfd with INIT_SHARED flag preservation across
+>>>   kexec: Below is the details of stages in this test.
+>>>
+>>
+>> I think we should split this into multiple patches, where each patch
+>> introduces 1 test.
+>
+> Got it. I will split them. I thought that this test already spawn a VM
+> and other test can just reuse the same VM.
 
-Ohh okay. I was very skeptic that per-cpu structure are not counted in
-cgroups and liveupdate is once in a while usecase So avoided making it
-per-cpu. But otherwise I am fine with going with per-cpu. Will take care
-of it in next revision.
+From upstream hypervisor liveupdate meeting, I realized you meant to be
+same file but saperate commits. Sound good to me. I will take care of that.
 
-Thanks
-~Tarun
-
+>
+>>
+>>>
+>>> [...snip...]
+>>>
+>>> +++ b/tools/testing/selftests/kvm/guest_memfd_preservation_test.c
+>>> @@ -0,0 +1,357 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright (C) 2026, Google LLC.
+>>> + *
+>>> + * Author: Tarun Sahu <tarunsahu@google.com>
+>>> + *
+>>> + * Test for VM and guest_memfd preservation across kexec (Live Update) via LUO.
+>>> + *
+>>> + * NOTE: This is a MANUAL test and is excluded from automated CI/testing
+>>> + * frameworks because Stage 1 daemonizes into the background to pin resources
+>>> + * and requires a human operator to manually trigger kexec before Stage 2
+>>> + * is executed. Running Stage 1 automatically would leak the background daemon
+>>> + * and cause CI runners to falsely interpret it as a passed test.
+>>> + *
+>>
+>> Usually there aren't many printfs in tests, but since this is a MANUAL
+>> test, maybe that's ok?
+>>
+>> Would like to know what Sean thinks of this, and printfs in general.
+>>
+>>>
+>>> [...snip...]
+>>>
