@@ -1,126 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from canpmsgout07.his.huawei.com (canpmsgout07.his.huawei.com [113.46.200.222])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE4F476CF7;
-	Tue, 18 Aug 2026 13:29:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D51D9472F7C;
+	Tue, 18 Aug 2026 13:32:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.222
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787059796; cv=none; b=t3b3cjNLFRToq+o0R3FdpeJpUFmmj+qUHqQdKSYL+12QiwFSXxb2Gx/VgYwG5k88JKZSMO5z7Bq2sbH070RDmvmp+3FoSJppW/dJQLPneH45S7Gm0BrJSFO2O4Z59+mpLSsI2zDx0bPmPjYhErGvKllcQmp1WDVfnMtHrs/Il7M=
+	t=1787059958; cv=none; b=VZhlRe21OzKTaSXVOzqKJM7XlNuizr4tHVn5AeEOgKtlG/BrLqo3k2TxNCbOk07F1dlPWtSiHr9nRVPs+/PaVsOSl7USh8xd46wI1Qv1B3melqMYCqEfaifuBu9TLctGL766LVkoxXpqavyZEqFVAui1o1WJF4zTPA42Mok3SBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787059796; c=relaxed/simple;
-	bh=NHZIcNNG/xqTVgyw+FQrrk73J8fNwBZRCpYtEERPZ8A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sKUZ79K35GsIxPRXIEJOIQtgLYGFdQ6EiX5cD7MDN24a1p0SZ12kyVq1peOOVMid5i/ITbq5pCSiUEsCxbAa05fA6wZ1o5zSeCnskI1WDGfbiZWe4F7hXi+s9vDdKgAMe9o20f2sc6+jirpJlEAmFTIohVgMC0DWOFIlAuwhSGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhKgXKmP; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787059958; c=relaxed/simple;
+	bh=zODo0YxaK8EvQyzyub97afGLMRh9681+5f+JksrYehQ=;
+	h=Message-ID:Date:MIME-Version:CC:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YPC2aVXTYUIXYxI6FlMjKYsVDi6WFijHrrSYTdaN7/EFEL+E8FPt9s37H9kmTIYrzgZnum/wtsXcXMHcCVzD03hB7KOOTTnX54JFK60eiAVl9R0Y9CfpbEbaS9hEsfeWXiBleL4dw9xlLNwxX/GvSRGCp/z+tRffGRHbGivXAfY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=loEDKz/q; arc=none smtp.client-ip=113.46.200.222
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhKgXKmP"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5166D1F000E9;
-	Tue, 18 Aug 2026 13:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787059794;
-	bh=N9rUv4TdujbZ6/XxkM7SFbymVzpaYaqLUiO3R4LX8BY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PhKgXKmPhaLMzw9XPrcieo79uQDMA03R6DrXspM/ddU2BF3zoc2D9RP3+9ywMsPGQ
-	 wgbkqFGoiAQS4Bidix2KKA2cys14vJbFcaiSIUKCkUML1UMpO/5y/g/te2G6JJtFtI
-	 mT3+joG7lapBBRFcihK8rH1bh4aPFQez1gd2GGavkSz9SNk6uaI/ya2inHaLpKI67N
-	 wCffB/E4eLIOmJ6rGpIIBdBkDKODZtzg6cpAY1pzZxTs0UrJLjNj4CVsInHkq+jgKk
-	 +YbqwHss5uhCtsh1MypAXf/TqiCkSc2CPJo4NnohNID/NThsTNhC8Zxx4g7DmwQm4x
-	 QARzujdhkA1EQ==
-Date: Tue, 18 Aug 2026 14:29:35 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Hemanth Selam <hemanth.selam@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Yury Khrustalev <yury.khrustalev@arm.com>, Kevin Brodsky <kevin.brodsky@arm.com>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
-Message-ID: <aoRcdLGWaNhUFIPU@lucifer>
-References: <20260818114945.1312987-1-hemanth.selam@gmail.com>
- <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org>
+	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="loEDKz/q"
+dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
+	c=relaxed/relaxed; q=dns/txt;
+	h=From;
+	bh=5Ao0mjFbvVNW/izzO3jvpj6rQ9rGRmC29qURkFZh6ME=;
+	b=loEDKz/qrpzbvC0Lh9UjT1BLiZqEz5h3Fgx0xNC6h/0utCONZfj9gJxFUI9wWKVaZTuJfmffK
+	7S3eS70EYvMPfFus94IwKTMYKXd5JQ8EdS5aR1dCPT/BmpIjoY3aJyPJvE1YRIqSzH+47+68a+4
+	LQhcHzRcKKboSqyIuM0NyTU=
+Received: from mail.maildlp.com (unknown [172.19.163.214])
+	by canpmsgout07.his.huawei.com (SkyGuard) with ESMTPS id 4hPVj20XhbzLlTg;
+	Tue, 18 Aug 2026 21:21:42 +0800 (CST)
+Received: from kwepemo500018.china.huawei.com (unknown [7.202.195.199])
+	by mail.maildlp.com (Postfix) with ESMTPS id C5D2A4056C;
+	Tue, 18 Aug 2026 21:32:22 +0800 (CST)
+Received: from [10.67.120.192] (10.67.120.192) by
+ kwepemo500018.china.huawei.com (7.202.195.199) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 18 Aug 2026 21:32:21 +0800
+Message-ID: <dd817755-eb4d-4ac2-b282-ac06f847270d@huawei.com>
+Date: Tue, 18 Aug 2026 21:32:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org>
+User-Agent: Mozilla Thunderbird
+CC: <shaojijie@huawei.com>
+Subject: Re: [PATCH v5 net-next 2/2] net: hns3: fix GSO_ECN flag setting in
+ the RX path
+To: <chia-yu.chang@nokia-bell-labs.com>, <shenjian15@huawei.com>,
+	<linux-rdma@vger.kernel.org>, <eperezma@redhat.com>, <jasowang@redhat.com>,
+	<virtualization@lists.linux.dev>, <mst@redhat.com>,
+	<xuanzhuo@linux.alibaba.com>, <pabeni@redhat.com>, <edumazet@google.com>,
+	<linux-doc@vger.kernel.org>, <corbet@lwn.net>, <horms@kernel.org>,
+	<dsahern@kernel.org>, <kuniyu@google.com>, <bpf@vger.kernel.org>,
+	<netdev@vger.kernel.org>, <dave.taht@gmail.com>, <jhs@mojatatu.com>,
+	<kuba@kernel.org>, <stephen@networkplumber.org>, <xiyou.wangcong@gmail.com>,
+	<jiri@resnulli.us>, <davem@davemloft.net>, <andrew+netdev@lunn.ch>,
+	<donald.hunter@gmail.com>, <ast@fiberby.net>, <liuhangbin@gmail.com>,
+	<shuah@kernel.org>, <linux-kselftest@vger.kernel.org>, <ij@kernel.org>,
+	<ncardwell@google.com>, <koen.de_schepper@nokia-bell-labs.com>,
+	<g.white@cablelabs.com>, <ingemar.s.johansson@ericsson.com>,
+	<mirja.kuehlewind@ericsson.com>, <cheshire@apple.com>, <rs.ietf@gmx.at>,
+	<Jason_Livingood@comcast.com>, <vidhi_goel@apple.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-3-chia-yu.chang@nokia-bell-labs.com>
+ <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
+From: Jijie Shao <shaojijie@huawei.com>
+In-Reply-To: <61721708-0d77-4f59-aa08-02562af282bb@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: kwepems100001.china.huawei.com (7.221.188.238) To
+ kwepemo500018.china.huawei.com (7.202.195.199)
 
-On Tue, Aug 18, 2026 at 03:11:50PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/18/26 13:49, Hemanth Selam wrote:
-> > pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
-> > already known, a stopgap from when the generic definition was still
-> > under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
-> > Add PKEY_UNRESTRICTED macro"), and pkey-helpers.h already includes
-> > <linux/mman.h>, so the guard is never taken.  Honour the FIXME and drop
-> > it.
-> >
-> > The mm selftests build against the headers of the kernel source, see
-> > Documentation/dev-tools/kselftest.rst.  Building them without "make
 
-This is incorrect. We explicitly do not have this requirement in mm selftests,
-and they're often built without having to do this step and tooling has been
-provided _explicitly_ to allow for that, which is why this kind of thing exists
-right now.
-
-> > headers", against system headers predating the macro, now fails to
-> > compile instead of quietly falling back.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
-> > ---
-> >  tools/testing/selftests/mm/pkey-helpers.h | 7 -------
-> >  1 file changed, 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-> > index 2c377f4e9df1..626c2e1655dc 100644
-> > --- a/tools/testing/selftests/mm/pkey-helpers.h
-> > +++ b/tools/testing/selftests/mm/pkey-helpers.h
-> > @@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
-> >  #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
-> >  #endif
-> >
-> > -/*
-> > - * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
-> > - */
-> > -#ifndef PKEY_UNRESTRICTED
-> > -#define PKEY_UNRESTRICTED 0x0
-> > -#endif
-> > -
-> >  #ifndef set_pkey_bits
-> >  static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
-> >  {
+on 2026/8/11 21:31, Jijie Shao wrote:
 >
-> tools/include/uapi/asm-generic/mman-common.h:#define PKEY_UNRESTRICTED  0x0
+> on 2026/8/5 5:35, chia-yu.chang@nokia-bell-labs.com wrote:
+>> From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+>>
+>> Currently, the hns3 Rx path sets the SKB_GSO_TCP_ECN flag when a TCP
+>> segment with the CWR flag set is received. This is incorrect because
+>> the hns3 hardware GRO resets the IP ToS byte to 0 during packet
+>> aggregation. Consequently, no valid ECN signals are carreid, meaning
+>> that it cannot support RFC3168 ECN or Accurate ECN protocols. Setting
+>> SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN under these conditions misleads
+>> the upper network stack.
+>>
+>> Fix this by removing the incorrect SKB_GSO_TCP_ECN flag assignment
+>> in hns3_gro_complete().
 >
-> So that looks good.
 >
-> But we seem to have the same ifdef also in
-> tools/testing/selftests/powerpc/include/pkeys.h.
+> Tested on hns3 HW (2x 100G, direct cable, openEuler 24.03, kernel 
+> 7.2.0-rc6).
 >
-> So likely that should be removed as well (after making sure that it compiles?)
-
-It will break people right now :) it might compile on one system but not
-another.
-
-There's been a bunch of discussion on this, often quite painful. See [0] and
-surrounding thread for some history on this...
-
-IOW - this isn't really costing us much so I'd prefer we kept this kind of
-thing.
-
+> tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets carry
+> tos 0x0, while non-aggregated packets keep their ToS/ECN marks — so the
+> zeroing is done by HW GRO, not the sender. Before patch, CWR packets had
+> SKB_GSO_TCP_ECN set (0x5 = SKB_GSO_TCPV4 | SKB_GSO_TCP_ECN). After patch,
+> all GRO events gso_type=0x1 (SKB_GSO_TCPV4 only), no 0x5 observed.
 >
-> --
-> Cheers,
->
-> David
+> Tested-by: Jijie Shao <shaojijie@huawei.com>
 
---
-Cheers, Lorenzo
 
-[0]:https://lore.kernel.org/all/5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com/
+I need to correct my earlier test report where I stated:
+
+   "tcpdump confirms HW GRO zeroes IP ToS: aggregated (>MTU) packets
+    carry tos 0x0, while non-aggregated packets keep their ToS/ECN
+    marks — so the zeroing is done by HW GRO, not the sender"
+
+This conclusion was wrong. I am withdrawing that Tested-by tag.
+
+Root cause of the error
+========================
+
+I mixed two test tools with different sender-side paths and incorrectly
+compared their results:
+
+1. The observation that "non-aggregated packets keep their ToS/ECN
+    marks" came from a Python script (scapy). Scapy constructs L2/L3
+    packets directly, bypassing the kernel TCP stack, so the ToS value
+    on the wire is exactly what the script sets — this says nothing
+    about whether a kernel-stack sender would clear ToS or not.
+
+2. The observation that "aggregated packets carry tos 0x0" came from
+    iperf3 with --tos. iperf3 goes through the kernel TCP stack, and I
+    did not set net.ipv4.tcp_ecn=1, so the kernel cleared the ECN bits
+    (low 2 bits of ToS) before the packets hit the wire. The tos=0x0 on
+    aggregated packets was already tos=0x0 on the wire at the sender
+    side — it was a TX-side kernel behavior, not HW GRO zeroing.
+
+I mistakenly used the scapy observation ("non-aggregated packets keep
+ToS") as evidence that "the sender didn't clear ToS", then concluded
+that iperf3's tos=0x0 must be caused by HW GRO. But these two
+observations came from different sender paths and cannot be compared
+this way. I only captured at the receiver side with no sender-side
+wire capture to compare against, so I wrongly attributed the TX-side
+clearing to HW GRO.
+
+New test with tesgine (direct packet construction)
+===================================================
+
+To eliminate the kernel TCP stack interference, I retested using
+tesgine, a packet generator that constructs TCP segments directly at
+L2/L3 with full control over the IP ToS byte. This bypasses the kernel
+TCP ECN state machine entirely, so the ToS value on the wire is exactly
+what was configured.
+
+Test setup:
+   - hns3 NIC, HW GRO on, software GRO off (ethtool -K <dev> gro off)
+   - tesgine sends 1460-byte TCP segments with controlled ToS values
+   - Capture at receiver post-GRO
+
+Four test cases were run, each verifying a different ToS boundary:
+
+Test 1: Non-ECT <-> ECT(0)
+   Sent:  4x tos=0x00 + 1x tos=0x02 + 4x tos=0x00 + 2x tos=0x02 + 1x tos=0x00
+   Got:   4 aggregated (tos=0x00) | 1 single (tos=0x02)
+        | 4 aggregated (tos=0x00) | 2 aggregated (tos=0x02)
+        | 1 single (tos=0x00)
+   => GRO segments at every ToS change, each group keeps its ToS.
+
+Test 2: ECT(0) <-> CE
+   Sent:  4x tos=0x02 + 1x tos=0x03 (CE) + 4x tos=0x02
+   Got:   4 aggregated (tos=0x02) | 1 single (tos=0x03 CE)
+        | 4 aggregated (tos=0x02)
+   => CE packet is delivered independently, CE mark preserved.
+
+Test 3: Non-ECT <-> CE
+   Sent:  4x tos=0x00 + 1x tos=0x03 (CE)
+   Got:   4 aggregated (tos=0x00) | 1 single (tos=0x03 CE)
+   => Same behavior: CE is segmented out, ToS preserved.
+
+Test 4: Pure DSCP change (ECN bits identical)
+   Sent:  4x tos=0x10 (DSCP4) + 4x tos=0xB8 (DSCP46)
+   Got:   4 aggregated (tos=0x10) | 4 aggregated (tos=0xB8)
+   => Even pure DSCP change (no ECN bit change) triggers segmentation.
+
+Conclusions from tesgine testing
+================================
+
+   1. HW GRO does NOT zero IP ToS. Each aggregate group retains the
+      head packet's ToS value (verified with 0x00/0x02/0x03/0x10/0xB8).
+
+   2. HW GRO segments flows by ToS boundaries. Any ToS change — whether
+      DSCP (bits 0-5) or ECN (bits 6-7) — terminates the current
+      aggregate group and starts a new one.
+
+   3. ECN signals are preserved: CE packets (tos=0x03) are delivered
+      independently with the CE mark intact, not merged into non-CE
+      aggregates.
+
+Impact on this patch
+====================
+
+The commit message states:
+
+   "the hns3 hardware GRO resets the IP ToS byte to 0 during packet
+    aggregation. Consequently, no valid ECN signals are carried"
+
+This factual claim is incorrect per the tesgine test results above.
+HW GRO preserves ToS and segments by ToS boundaries, so ECN signals
+are not lost during aggregation.
+
+The code change itself (removing the SKB_GSO_TCP_ECN assignment in
+hns3_gro_complete) may still be correct, but the justification should
+be based on the RX-path semantic argument from patch 1/2 (SKB_GSO_TCP_ECN
+is a TX-path flag; using it in RX can corrupt the ACE signal in AccECN
+forwarding scenarios), not on the ToS-zeroing claim. Or change to AccECN.
+
+I will re-verify and provide a new Tested-by once the commit message is
+updated. Sorry for the confusion caused by my earlier report.
+
+Test captures and methodology details available on request.
+
+Regards,
+Jijie Shao
+
+
