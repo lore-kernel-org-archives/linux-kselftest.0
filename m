@@ -1,50 +1,33 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C6413446B0;
-	Tue, 18 Aug 2026 08:18:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 580E5418347;
+	Tue, 18 Aug 2026 08:21:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787041086; cv=none; b=CGFkU7PjgLGuwqo6PgAHNx+4qoufbxAwm3ecXffULhkDeAEe09B9o6KSpaG/ee2I8vgAClF0srSYNqu1aG7t9QyhjX8YSVJF3afFH9UpT6OoJBcrw+SUsLylCbonHL0tCFIWmiSRT4bVQvBBUCagXGg88ZXhtegqe+lYe62Show=
+	t=1787041315; cv=none; b=lRTN3fc4XjDXjOlhz0bhqOD7z+c1l62cq2YWqaub66ktSIIyCfA44JIsWF8c/QBJfeS54Edv0JSoyym6waqE43VZXpPAM91pttOWfGd6itrRixBewD9lzStEQaesf5LctlrS53qloKCoURRQGVLIY+hjZFJzH7001Gbs7QD7nYI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787041086; c=relaxed/simple;
-	bh=fzBs/v2lX6bjtMxVASfa3Y/bIx0O7kOhrBTzv/t/o9Q=;
+	s=arc-20240116; t=1787041315; c=relaxed/simple;
+	bh=ug4oyjoJXZ814asZAd+bZ5S6z/9wfAKDszRUF6tyuGE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AoWKxWu35ZjG1Q4Rw/jTuOfoP8/OOnYwLi7zu5pvrZNWI/Mkta3bELDZbOTgizsLh0b/H1z/4wQJQk3fb/MIbYDrNap4Qwbpbeac64E6lwCmhoEIDyOuuNYUmhJfxS3axhuCKqJ1Src//Vpl7RoPnsLsxOJ/WS1JuGosucQV34Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QUzkCRBh; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 In-Reply-To:Content-Type; b=Ht49iJ7ckIriEhGsNZpKGxEJk3oI/OH9VHp19joQJbG+YHYdCFkrG/CslvhMDam5aG9168qKPHuWQ/GoTj8D+fxhmcaMwhuiolZ+xBLWcw9RhwgfKLsBpl2sciFHXh5xws0NI+C9M2t2H9d7Njo+cUCs3AJBSjNSFV3IfN1H/Uc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cv/zZt18; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QUzkCRBh"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787041085; x=1818577085;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=fzBs/v2lX6bjtMxVASfa3Y/bIx0O7kOhrBTzv/t/o9Q=;
-  b=QUzkCRBhF+vNSf0pvJ8JMQvRyf2CTA0yzdbo6glYMmNp4slobhqxYJSR
-   1ViOkRxvHz+TjGDennOxn3CRMMk28lc+/CfkxOv9Fji8hQ/XOGB1yTq88
-   QuBimZtk0ahqwN68zQm38VBeUUTqIJgZtRkO6qBNdKex5i31qktufQmnx
-   /46JaDPLjGONYIm5CZ4JqQAr7TGpIxty/yNcolQ/jYMXaBg75pWftD3Y5
-   IL5ryH861o6G9nZQcSG2Vc+1gv4JbSDf/xRdVZUwGiFZryeqbNAzWeosO
-   KOadQh9iS+5uv0oXZp1BUqGrC925flienCYc15GbUnZutmV0VNFRNNueR
-   w==;
-X-CSE-ConnectionGUID: E90ld30xS96aUGEXYOrUeQ==
-X-CSE-MsgGUID: aFR/hc7FSHm/qs+LODiJpg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="91208464"
-X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="91208464"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 01:18:05 -0700
-X-CSE-ConnectionGUID: GW7Uc7aNSUmptCHDM+hl0Q==
-X-CSE-MsgGUID: I4skbCsrQlWraST++Eojdw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="258946082"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.238.208.98]) ([10.238.208.98])
-  by fmviesa009-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 01:17:59 -0700
-Message-ID: <f7b3a63c-7a1d-445f-b062-4cea5343d266@intel.com>
-Date: Tue, 18 Aug 2026 16:17:55 +0800
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cv/zZt18"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B117F1F000E9;
+	Tue, 18 Aug 2026 08:21:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787041314;
+	bh=7aLY/2rHSc0H4xWV38Nj7mu6p4voUj76rve8wfVW5R4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=cv/zZt18oNDbdfW10lQ4W9vSXzpH5nZ1k4+9zsUHQ3CqiEXxZ06dotCXkyHQhy/CV
+	 Sq2IftAjlNy8UvUPBoJHUnHOIshmc8hILs2/Be9sOMqM1batzY7Zwn3HlQxq39zjsI
+	 aL61FcaJlbu+K8D2RhMZUaOK0SeL7EsiUbuQ/cWPRTDJjnYt7GAzEOb/NrDDKKpkSx
+	 BhIh1nJBpOd7fAcdjypwpS0jWL1M1r42CGIb8CpaLYgiKa/GJbGdAk2mVuZvRAq/SV
+	 5nd3d+raMBd1OfXPvNSR0hiwqkhnsGzlWO93BQQbVmrB28Ktw83ZCTYTsoU5iJw8/M
+	 I1HMJSfnFSevg==
+Message-ID: <ffa0c74d-415a-4a63-9843-7b9412359c46@kernel.org>
+Date: Tue, 18 Aug 2026 10:21:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,73 +35,76 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v14 13/22] KVM: selftests: Support guest_memfd in-place
- conversion
-To: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
- Ackerley Tng <ackerleytng@google.com>, Binbin Wu
- <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
- Chenyi Qiang <chenyi.qiang@intel.com>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
- Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
- linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
- "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Rick Edgecombe <rick.p.edgecombe@intel.com>,
- Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
- Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
-Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
- linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-13-15ad654a50db@google.com>
+Subject: Re: [PATCH] selftests/mm: Drop redundant open() in mprotect_tests()
+To: Hongfu Li <hongfu.li@linux.dev>, akpm@linux-foundation.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
+References: <20260817080616.52946-1-hongfu.li@linux.dev>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <20260722-tdx-selftests-v14-13-15ad654a50db@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260817080616.52946-1-hongfu.li@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 7/23/2026 7:13 AM, Lisa Wang wrote:
-> diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-> index 4a48c4b42095..e547ea341ff7 100644
-> --- a/tools/testing/selftests/kvm/lib/kvm_util.c
-> +++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-> @@ -484,8 +484,10 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
->   	u64 nr_pages = vm_nr_pages_required(shape.mode, nr_runnable_vcpus,
->   						 nr_extra_pages);
->   	struct userspace_mem_region *slot0;
-> +	u64 gmem_flags = 0;
->   	struct kvm_vm *vm;
-> -	int i, flags;
-> +	int flags = 0;
-> +	int i;
->   
->   	kvm_set_files_rlimit(nr_runnable_vcpus);
->   
-> @@ -495,14 +497,20 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
->   	vm = ____vm_create(shape);
->   
->   	/*
-> -	 * Force GUEST_MEMFD for the primary memory region if necessary, e.g.
-> -	 * for CoCo VMs that require GUEST_MEMFD backed private memory.
-> +	 * Force GUEST_MEMFD for the primary memory region if necessary, and
-> +	 * initialize it as shared if in-place conversion is support, so the
-> +	 * selftest framework can populate it exactly like other memory
-> +	 * providers.
->   	 */
-> -	flags = 0;
-> -	if (is_guest_memfd_required(shape))
-> +	if (is_guest_memfd_required(shape)) {
->   		flags |= KVM_MEM_GUEST_MEMFD;
-> +		if (kvm_has_gmem_attributes)
-> +			gmem_flags |= GUEST_MEMFD_FLAG_INIT_SHARED |
-> +				      GUEST_MEMFD_FLAG_MMAP;
-> +	}
->   
-> -	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags);
-> +	vm_mem_add(vm, VM_MEM_SRC_ANONYMOUS, 0, 0, nr_pages, flags,
-> +		   -1, 0, gmem_flags);
->   	for (i = 0; i < NR_MEM_REGIONS; i++)
->   		vm->memslots[i] = 0;
+On 8/17/26 10:06, Hongfu Li wrote:
+> From: Hongfu Li <lihongfu@kylinos.cn>
+> 
+> Remove duplicate open() for local pagemap_fd in mprotect_tests() that
+> shadows the global pagemap_fd already opened in main(). The local fd
+> is never used in the function.
+> 
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
 
-IMO, this diff belongs to the gmem in-place series.
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+-- 
+Cheers,
+
+David
