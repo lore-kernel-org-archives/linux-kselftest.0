@@ -1,436 +1,280 @@
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+Received: from mta1.migadu.com (out-251.mta1.migadu.com [95.215.58.251])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A76F470EAC
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 15:28:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.72
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F27137DE8B
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 15:32:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.251
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787066940; cv=none; b=JQbvNUFxVzxr5N7T76INrZ/jdyYwWlxpTiqnBhsrqTspJqezalh0qBZQ0sku0Qj96bSGOb72mq827QqXI9xexeCMdD5H8767+lDxZNHVTpv/tVLnrIBMvLZkQAsOTJeequby84VmQG0rD5iuI/W5zREbCvrrGoaCQSMbf9Ub0to=
+	t=1787067138; cv=none; b=Gh2FlFoVSsUn3bwmjQbEoXa6n4Vo5zi88WhawSVT5fTcVrh6deYbQzg7dupJ5XwoKv8TZztvaRXaeuteIhEaJ/M8g1r24ZWQ/rp2GMjVKwhpdDNamKvc9ay96Reev0JI5ZMsGWVeLaS/Nlg7np+AUV+QGgx+yu6+21OcW9qhYlk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787066940; c=relaxed/simple;
-	bh=WpotjfIgWZsgcEPpZdpCYdJlrUAim1GcgkLdwoPRpjo=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Cy51ZQk/GZaMy6w8KAiN2UkPNtlD7gqixIk005qFAs5wO678uNiPbvqGvSIxeutefGmQpUkqEnGrVKwF5qajNUKi1Sd9U3yOe8SuBg1Jc4b6iW7tGB5Ax5sN/moIvm6eGOv3LSoixr24vWcfP6ke25zg9T/35LiiNUPjZ04NGIk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nfhit0xG; arc=none smtp.client-ip=209.85.208.72
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1787067138; c=relaxed/simple;
+	bh=/f0b5nqYvRuYRrnGgcST9+/5ojWfBeBx/7ogSsZtBdM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=MYV0P12q2vQBq0CZw68w7HUjnf2g8zv/Q132Fqqg+AWTeXqVmiuZpCh1anupYxgUO95hLy1O6ZWLVC9Wc8z8cglTky08hXv+uUiin2Ptdud013RyTV3zDenWa9oXvEtZzovElPqtZLYaBX7bRSlrcoUfFx08Se4EVYFnfl5mQyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rD3dF5i+; arc=none smtp.client-ip=95.215.58.251
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nfhit0xG"
-Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-6a1b48b4528so5147643a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 08:28:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787066936; x=1787671736; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=MCqv9FjqzX9J6sE+mm4dR8DQFjLQZx0WW3HAG/YPlNE=;
-        b=nfhit0xGgmBwEiMOg5uPcOdMqnRuvyvQl/7a0kI8XWpp56ytyWJXSop//AH+uds05i
-         dvmNVzbcXivVgwqwmuO1G5bACRavC922RrkcwM+362ozLsEv/nKeahhLH8B76yjc2vvq
-         tzof8t3SVYnkmg82e83d+ZhPjSD4ayKfmdxJUcGJ0ewMkIHnwM2l9fyR5CAHfY95WfVx
-         E1ZquHZU007Uj2ckVYDEBebaWsYZMorf9KKs1oP+re+QDN2dvbQkuVGp3RssbvAtPTqz
-         6ilbEvk2I7C/djaQxdUZMnf76dFvTMFYAbKOr0+x+o9aTDjew1GNH9tf9A26+5JOxGMW
-         PjKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787066937; x=1787671737;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=MCqv9FjqzX9J6sE+mm4dR8DQFjLQZx0WW3HAG/YPlNE=;
-        b=g39FkrlWCEjO4IuStRJMLabfvJQBXU+QxEUioWBOXurTOdCya5Hn8t+A/M4HEpAYG6
-         rU5zIpR0wVXustAYDUphYuuOm7nikqmYH15RbJwk7a4/H4/wjUUHOLlqBmTqQsnRX3uU
-         MGS1r8liz7gG498M3eDYyqSa4GlV74R3U6fu9kxCqDjnPoFSttLf51YTS27yCfIwVd8R
-         xfOQKFGinGEdLtl7fwUzS3aNqsKf0BtLN6LUVEFM7HJF4dYkUGMskBgq4qey7RF2mwYE
-         fEfEviEqaOhVPsSvDmwQ3Hoc+SbrjPBp9xtWdGbe3Asv2CtXqMZlLPJPAUNknm9E0wIR
-         6dzg==
-X-Forwarded-Encrypted: i=1; AHgh+Rr90Kf5quUbTHwSGeaRDZGdwm1jMz2HVe+JAoq1QuoIT+h64ovHcQ2tIW5LrUFpcHGLgm2liBKBLcMt8SP05UE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMbYy0OEZFzJtnhZgW+FeFqvL907APXDjr6lOK8lds5TirD2qJ
-	z7UqK5+ylJQ/H7N5o8vtACyMFeJzcfxKUjNJMzxPhm0pkTODdJVFf6uvqNqm1EL7mlJgsVUyHP7
-	5JBDhLT8ei804VkAgYQ==
-X-Received: from edru23.prod.google.com ([2002:aa7:d557:0:b0:6a1:f3cf:4285])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:c1d6:b0:6a3:9e00:8ed2 with SMTP id 4fb4d7f45d1cf-6a39e008fb0mr9583691a12.16.1787066936333;
- Tue, 18 Aug 2026 08:28:56 -0700 (PDT)
-Date: Tue, 18 Aug 2026 15:28:55 +0000
-In-Reply-To: <2vxzqzjz1x5f.fsf@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rD3dF5i+"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/f0b5nqYvRuYRrnGgcST9+/5ojWfBeBx/7ogSsZtBdM=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787067134; v=1; x=1787671934;
+ b=rD3dF5i+d1XXkZUx5ciE56C+7Apl5g/Ls3zbpVL7WRjMkw4Qukkye2Y8ukXUFrLdA6aAKLc4
+ yqK/2jpfTs1HxEwjRz51tDT+syAmEEBoLCxmV5ZgqtpSltb7S+uqWNvdju6eTWF7VlvZqOsOL7j
+ 4ARO+m+FTRVGd6kG7/8Qz+3g=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from .linux.dev (117.20.149.64)
+	by smtp.migadu.com with ESMTPS id 07ad087d0c7f2357;
+	Tue, 18 Aug 2026 15:32:13 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Leon Hwang <leon.hwang@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Leon Hwang <leon.hwang@linux.dev>,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test for percpu data
+Date: Tue, 18 Aug 2026 23:32:01 +0800
+Message-ID: <20260818153202.90714-1-leon.hwang@linux.dev>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-6-tarunsahu@google.com> <anphyjFv3FhF61iB@google.com>
- <2vxzpkzo51wg.fsf@kernel.org> <anssOQFNZ2LfihbU@google.com>
- <2vxzik5f311e.fsf@kernel.org> <anyObKiZIhfok5mk@google.com> <2vxzqzjz1x5f.fsf@kernel.org>
-Message-ID: <9huzv797v45k.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH v4 05/11] KVM: LUO: Support VM preservation across live updates
-From: tarunsahu@google.com
-To: Pratyush Yadav <pratyush@kernel.org>, Sean Christopherson <seanjc@google.com>, loganodell@google.com
-Cc: Pratyush Yadav <pratyush@kernel.org>, ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Pratyush Yadav <pratyush@kernel.org> writes:
+The bpf_map__set_value_size() test for percpu data relies on the tail
+'cpu_id' field in the ".percpu" map. The test would fail, when 'cpu_id' is
+not the last field in the map.
 
-> On Wed, Aug 12 2026, Sean Christopherson wrote:
->
->> On Wed, Aug 12, 2026, Pratyush Yadav wrote:
->>> On Tue, Aug 11 2026, Sean Christopherson wrote:
-> [...]
->> But that's all beside the point.  What I'm saying is that SNP and TDX *must* use
->> guest_memfd, whereas guest_memfd is optional for all other VM types.  And so adding
->> LUO support for guest_memfd without even sketching out a plan for CoCo VMs feels
->> backwards.
->>
->> I'm not necessarily opposed to gradual guest_memfd support, but there needs to be
->> a clear plan of how all of this is going to fit together.  It doesn't need to be
->> perfect, and I'm sure we'll make mistakes along the way, but I want to at least
->> try not to paint ourselves into a corner, especially with respect to the ABI.
->
-> Right. I think landing shared guest_memfd is the first step. It is
-> simple enough and doesn't need to preserve the more complicated
-> architecture specific things like secure EPT, etc. The CoCo support
-> can build on top of this.
->
-> There is work underway already for an RFC of TDX live update, but Tarun
-> knows the details better than me so I'll let him fill in the details for
-> the next version of this series.
+To avoid the flaky test, factor out a subtest to use a dedicated
+".percpu.arr" map that only has one field 'int arr[1]' to ensure that
+bpf_map__set_value_size() won't fail on 4K page systems.
 
-Right, I am keeping things minimal for this version just addressing the
-non-cocovm guest_memfd to be preserved. On top of it, We will buidl
-support for the cocoVM preservation. And Sagi (sagis@google.com) is
-already working on it.
+And, drop 'args' in test_percpu_data_on_cpus(), which isn't used in bpf
+prog side.
 
-Why not implement both in the same series:
-1. This series focus on finalizing the design, How guest_memfd will be
-preserved, So Any user (Not now) but in future will use guest_memfd in
-non cocoVM case, This alone feature will be used.
+And, enhance the test to cover 'set' and 'nums[6]'.
 
-2. guest_memfd cocoVM preservation support will be built on top of
-in-place conversion series and I preferred not to complicate two topics
-in single series, Instead to develop gradually.
+Fixes: 4c9241bd731a ("selftests/bpf: Add tests to verify global percpu data")
+Signed-off-by: Leon Hwang <leon.hwang@linux.dev>
+---
+v1 -> v2:
+* Factor out a subtest to test bpf_map__set_value_size().
+* Run the new subtest only on 4K page systems. (Sashiko)
+* v1: https://lore.kernel.org/bpf/20260814173206.93082-5-leon.hwang@linux.dev/
+---
+ .../bpf/prog_tests/global_data_init.c         | 86 ++++++++++++++-----
+ .../bpf/progs/test_global_percpu_data.c       | 10 ++-
+ 2 files changed, 70 insertions(+), 26 deletions(-)
 
-I agree to your answer for have Borader Roadmap. I tried to answer in
-Cover-letter. Which I am re-stating it here:
+diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+index 5671c31085cd..2b69290bcc3e 100644
+--- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
++++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+@@ -68,12 +68,9 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ {
+ 	struct test_global_percpu_data__percpu *data = NULL;
+ 	int i, err, key = 0, num_online, run = 0;
+-	__u64 args[2] = {0x1234ULL, 0x5678ULL};
+ 	size_t data_sz;
+ 	bool *online;
+ 	LIBBPF_OPTS(bpf_test_run_opts, topts,
+-		    .ctx_in = args,
+-		    .ctx_size_in = sizeof(args),
+ 		    .flags = BPF_F_TEST_RUN_ON_CPU,
+ 	);
+ 
+@@ -81,7 +78,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ 	if (!ASSERT_OK(err, "parse_cpu_mask_file"))
+ 		return;
+ 
+-	data_sz = map ? bpf_map__value_size(map) : sizeof(*data);
++	data_sz = sizeof(*data);
+ 	data = calloc(1, data_sz);
+ 	if (!ASSERT_OK_PTR(data, "calloc percpu data"))
+ 		goto out;
+@@ -109,7 +106,7 @@ static void test_percpu_data_on_cpus(struct bpf_map *map, int map_fd, int prog_f
+ 			break;
+ 
+ 		ASSERT_EQ(*runp, ++run, "run");
+-		ASSERT_EQ(data->cpu_id[0], i, "cpu_id");
++		ASSERT_EQ(data->cpu_id, i, "cpu_id");
+ 		ASSERT_EQ(data->data, 1, "data");
+ 		ASSERT_TRUE(data->set, "set");
+ 		ASSERT_EQ(data->nums[6], 0xc0de, "nums[6]");
+@@ -127,7 +124,6 @@ static void test_global_percpu_data_init(void)
+ {
+ 	struct test_global_percpu_data__percpu init_value = {};
+ 	struct test_global_percpu_data__percpu *init_data;
+-	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE);
+ 	struct test_global_percpu_data *skel = NULL;
+ 	size_t init_data_sz;
+ 	struct bpf_map *map;
+@@ -163,9 +159,11 @@ static void test_global_percpu_data_init(void)
+ 	if (!ASSERT_EQ(bpf_map__type(map), BPF_MAP_TYPE_PERCPU_ARRAY, "bpf_map__type"))
+ 		goto out;
+ 
++	init_value.set = 1;
+ 	init_value.data = 2;
+ 	init_value.nums[6] = -1;
+ 	init_value.struct_data.i = 2;
++	init_value.struct_data.set = 1;
+ 	init_value.struct_data.nums[6] = -1;
+ 	err = bpf_map__set_initial_value(map, &init_value, sizeof(init_value));
+ 	if (!ASSERT_OK(err, "bpf_map__set_initial_value"))
+@@ -177,35 +175,24 @@ static void test_global_percpu_data_init(void)
+ 
+ 	ASSERT_EQ(init_data->data, init_value.data, "init_value data");
+ 	ASSERT_EQ(init_data->set, init_value.set, "init_value set");
++	ASSERT_EQ(init_data->nums[6], init_value.nums[6], "init_value nums[6]");
+ 	ASSERT_EQ(init_data->struct_data.i, init_value.struct_data.i, "init_value struct_data.i");
++	ASSERT_EQ(init_data->struct_data.set, init_value.struct_data.set,
++		  "init_value struct_data.set");
+ 	ASSERT_EQ(init_data->struct_data.nums[6], init_value.struct_data.nums[6],
+ 		  "init_value struct_data.nums[6]");
+ 	ASSERT_EQ(init_data_sz, sizeof(init_value), "init_value size");
+ 	ASSERT_EQ((void *) init_data, (void *) skel->percpu, "skel->percpu eq init_data");
+ 	ASSERT_EQ(skel->percpu->data, init_value.data, "skel->percpu->data");
+ 	ASSERT_EQ(skel->percpu->set, init_value.set, "skel->percpu->set");
++	ASSERT_EQ(skel->percpu->nums[6], init_value.nums[6], "skel->percpu->nums[6]");
+ 	ASSERT_EQ(skel->percpu->struct_data.i, init_value.struct_data.i,
+ 		  "skel->percpu->struct_data.i");
++	ASSERT_EQ(skel->percpu->struct_data.set, init_value.struct_data.set,
++		  "skel->percpu->struct_data.set");
+ 	ASSERT_EQ(skel->percpu->struct_data.nums[6], init_value.struct_data.nums[6],
+ 		  "skel->percpu->struct_data.nums[6]");
+ 
+-	ASSERT_GT(desired_sz, sizeof(init_value), "desired_sz");
+-	err = bpf_map__set_value_size(map, desired_sz);
+-	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+-		goto out;
+-	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "percpu value size"))
+-		goto out;
+-	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "percpu BTF value type"))
+-		goto out;
+-
+-	init_data = bpf_map__initial_value(map, &init_data_sz);
+-	if (!ASSERT_OK_PTR(init_data, "resized bpf_map__initial_value"))
+-		goto out;
+-	if (!ASSERT_EQ(init_data_sz, desired_sz, "resized initial value size"))
+-		goto out;
+-	if (!ASSERT_EQ(init_data->data, init_value.data, "resized initial value data"))
+-		goto out;
+-
+ 	err = test_global_percpu_data__load(skel);
+ 	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
+ 		goto out;
+@@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
+ 	test_global_percpu_data_lskel__destroy(lskel);
+ }
+ 
++#define PAGE_SIZE 4096
++
++static void test_global_percpu_data_map_resize(void)
++{
++	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
++	struct test_global_percpu_data *skel;
++	const int arr_value = -1;
++	struct bpf_map *map;
++	int err, prog_fd;
++	size_t data_sz;
++
++	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
++		test__skip();
++		return;
++	}
++
++	skel = test_global_percpu_data__open();
++	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
++		return;
++
++	map = skel->maps.percpu_arr;
++	skel->percpu_arr->arr[0] = arr_value;
++	err = bpf_map__set_value_size(map, desired_sz);
++	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
++		goto out;
++	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
++		goto out;
++	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
++		goto out;
++
++	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
++	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
++		goto out;
++	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
++		goto out;
++	if (!ASSERT_EQ(skel->percpu_arr->arr[0], arr_value, "arr[0]"))
++		goto out;
++
++	err = test_global_percpu_data__load(skel);
++	if (!ASSERT_OK(err, "test_global_percpu_data__load"))
++		goto out;
++
++	map = skel->maps.percpu;
++	prog_fd = bpf_program__fd(skel->progs.update_percpu_data);
++	test_percpu_data_on_cpus(map, bpf_map__fd(map), prog_fd, &skel->bss->run);
++	ASSERT_EQ(skel->bss->arr_sum, arr_value * skel->bss->run, "arr_sum");
++
++out:
++	test_global_percpu_data__destroy(skel);
++}
++
+ static int create_rdonly_percpu_array(void)
+ {
+ 	LIBBPF_OPTS(bpf_map_create_opts, map_opts,
+@@ -388,6 +426,8 @@ void test_global_percpu_data(void)
+ 		test_global_percpu_data_init();
+ 	if (test__start_subtest("lskel"))
+ 		test_global_percpu_data_lskel();
++	if (test__start_subtest("map_resize"))
++		test_global_percpu_data_map_resize();
+ 	if (test__start_subtest("rdonly_direct_read"))
+ 		test_global_percpu_data_rdonly_direct_read();
+ 	if (test__start_subtest("rdonly_direct_write"))
+diff --git a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+index 5dc21b3b4cb5..2765cd46e9af 100644
+--- a/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
++++ b/tools/testing/selftests/bpf/progs/test_global_percpu_data.c
+@@ -8,9 +8,12 @@ int loong SEC(".percpu.looooooooong");
+ int data3 SEC(".data.percpu");
+ int data2 SEC(".percpu.data");
+ 
++/* Used for testing bpf_map__set_value_size(). */
++int arr[1] SEC(".percpu.arr");
++int arr_sum;
++
+ int run;
+-/* cpu_id as array to verify map value resizing. */
+-int cpu_id[1] SEC(".percpu");
++int cpu_id SEC(".percpu");
+ int data SEC(".percpu") = -1;
+ int nums[7] SEC(".percpu");
+ bool set SEC(".percpu") = false;
+@@ -34,7 +37,8 @@ int update_percpu_data(void *ctx)
+ 	data = 1;
+ 	run++;
+ 	set = true;
+-	cpu_id[0] = bpf_get_smp_processor_id();
++	cpu_id = bpf_get_smp_processor_id();
++	arr_sum += arr[0];
+ 	return 0;
+ }
+ 
+-- 
+2.55.0
 
-This series support guest_memfd preservation for non-COCOVM only. cocoVM
-Support will be built on top of that. Which includes the following
-stages.
-non cocoVM guest_memfd preservation -> TDX preservation -> in-place
-convertable private guest_memfd preservation -> in-place convertable
-private guest_memfd preservation backed by hugetlb.
-
-End Goal is to support guest_memfd preservation on cocoVM backed by
-hugetlb.
-
-The question remains:
-Why we are preserving KVM and only vm_type there.
-
-I will try to answer this on the thread of VM preservation to not loose
-the context.
-
->
->>
->>> >> > E.g. the LUO APIs seem pretty straightforward; I assume the bulk of the complexity
->>> >> > is going to be in knowing what to save/restore, and how, which is much more about
->>> >> > KVM than it is about liveupdate.
->>> >> 
->>> >> I think it is fine if you want to take these changes through the KVM
->>> >> tree, but I would like live update maintainers to be listed as reviewers
->>> >> at least.
->>> >
->>> > Why not simply add a file pattern match to the LIVE UPDATE entry?
->>> >
->>> > diff --git MAINTAINERS MAINTAINERS
->>> > index 8014b9f8253e..2eb57b22c37f 100644
->>> > --- MAINTAINERS
->>> > +++ MAINTAINERS
->>> > @@ -15052,8 +15052,8 @@ F:      include/linux/liveupdate.h
->>> >  F:     include/uapi/linux/liveupdate.h
->>> >  F:     kernel/liveupdate/
->>> >  F:     lib/tests/liveupdate.c
->>> > -F:     mm/memfd_luo.c
->>> >  F:     tools/testing/selftests/liveupdate/
->>> > +N:     [^a-z]luo
->>> >  
->>> >  LLC (802.2)
->>> >  L:     netdev@vger.kernel.org
->>> 
->>> This would list us as maintainers of kvm_luo.c and the tree as liveupdate.git, 
->>
->> It would list both "LIVE UPDATE" and "KERNEL VIRTUAL MACHINE (KVM)", as KVM would
->> still cover the files via "F:	virt/kvm/*".  And my read of MAINTAINERS is that
->> N: and K: entries are "secondary" if the files/scope is covered by an F: entry.
->>
->> E.g. arch/x86/kvm/vmx/tdx.c is covered by "KERNEL VIRTUAL MACHINE FOR X86 (KVM/x86)"
->> via "F:	arch/x86/kvm/*/", and also by "X86 TRUST DOMAIN EXTENSIONS (TDX)" via
->> "N:	tdx" (or maybe "K:	\b(tdx)"?  I haven't bothered to check which one
->> triggers).  And while I don't think there was ever any formal discussion, AFAIK
->> everyone reads the situation as KVM still being the primary maintainer/tree for
->> that code.
->>
->>> both of which is something you're saying you _don't_ want.
->>
->> No, what I don't want is a dedicated "KVM LIVE UPDATE" entry, because I think most
->> people would read "F:     virt/kvm/kvm_luo.c" and "F:     virt/kvm/guest_memfd_luo.c"
->> as being more precise than KVM's "F:   virt/kvm/*" and thus would read things as
->> "KVM LIVE UPDATE" being the primary maintainer.
->>
->> In other words, I'm more than ok with LUO being looped in on KVM LUO changes and
->> having the authority to object to problematic changes, but I'm not ok with LUO
->> taking primary ownership of KVM code.
->
-> Sure, that sounds good to me.
->
->>
->> I realize there's more than a bit of nuance in my interpretation of N: and K:,
->> but again my experience with TDX is that so long as the maintainers are aligned
->> on expectations, it's a non-issue in practice.
->
-> Yep, as long as we agree among ourselves I don't think the red tape
-> around which entry has higher priority matters much.
-
-Agree!
->
->>
->>> >> At the same time, I also keep being (pleasantly)
->>> >> surprised at preservation being relatively simple. For example, the code
->>> >> to preserve a shmem file (via memfd) is roughly 600 lines, a big chunk
->>> >> of which is comments. The code of course has some limitations, but it is
->>> >> good enough for use in production.
->>> >> 
->>> >> For one, we care about ABI breakages and versioning. 
->>> >
->>> > Which is amusing to me because that implies KVM does not, and I would hazard to
->>> 
->>> No, it doesn't. What I'm saying is I care about changes to the _live
->>> update ABI_. Just like you probably care about changes to KVM ABI but
->>> not so much about BPF for example.
->>> 
->>> > guess that KVM has the biggest ABI surface of any subsystem in the kernel by a
->>> > country mile (though I'm probably wildly underestimating the effective ABI surface
->>> > of filesystems).
->>> >
->>> >> The serialized state is a part of live update ABI and changes to it should be
->>> >> ACKed by us. 
->>> >
->>> > Meh, "Don't break userspace" is a universal rule in the kernel, I genuinely don't
->>> > see why liveupdate needs special treatment.
->>> 
->>> Ironically enough, you miss my point. I'm not talking about userspace
->>> ABI. We all know not to break that. I am talking about live update
->>> _serialization ABI_. See the stuff under include/linux/kho/abi. This
->>> series also adds things there.
->>
->> No, I understand exactly what ABI you're talking about.
->>
->>> This is ABI between kernels. It needs to be stable-ish so you can move
->>> from one kernel version to another. At the same time, unlike userspace
->>> ABI, it can change.
->>
->> Uh, yeah, so KVM has been managing such immutable ABI for practically its entire
->> existence.  KVM's save/restore uAPI has exactly what you're describing: serialization
->> ABI that needs to be backwards and forwards compatible between different kernels
->> in order to support both upgrade and rollback scenarios via live migration.
->
-> I think there is a slight difference between KVM's save/resture uAPI and
-> live update's ABI. With KVM's uAPI, you need to maintain strict
-> backwards compatibility because userspace reads what you output. So if
-> you change the layout, userspace will interpret it wrong and might
-> break.
->
-> With live update, the ABI never gets to userspace. It is used to talk
-> between kernels directly. So if you do break that, your userspace keeps
-> working fine, you just might not be able to live update to the
-> incompatible kernel.
->
-> So with live update, we don't need to keep backwards compatibility in
-> the ABI forever. Of course, it is good to minimize changes, but we have
-> more freedom to change it.
->
-> The current idea is we change the ABI whenever needed. This is because
-> live update is still in development so we are likely to see a lot more
-> changes before we settle down into something that mostly works. At some
-> point, we want to start being more strict between incompatible ABI
-> changes. The current idea is that we would like to keep backwards
-> compatibility across LTS kernels. But none of that is set in stone yet.
->
-
-True, I also understand Sean's Concern. I will try to explain why
-bacward compatibility with padding does not solve the problem here.
-
-Kernel V1                        -> Kernel V2
-guest_memfd_luo ABI v1           -> guest_memfd_luo ABI v2
-
-(No Userspace involvement here: userspace only determine if the upcoming
-kernel V2 can support the V1 preserved files, if return true: liveupdate()
-elif: no_liveupdate())
-
-When Kernel V1, preserve the data, it has preserved based on ABI v1.
-then serializes it to make it transferable to next kernel via fdt.
-
-Now Kernel V2 boots up, and it needs to deserialize the data and restore
-the file which was preserved before. But this kernel V2 expect guest_memfd
-preservation ABI V2. These ABI V2 might be because of multiple reasons,
-for e.g.
-1. A new feature in guest_memfd_luo (preserving more flags, or the
-private/shared state of folios etc)
-
-2. A new feature in guest_memfd itself, guest_memfd kernel APIs
-(guest_memfd_create(..., new_args) or a new init call for guest_memfd after
-guest_memfd_create(), or an older field/flog is dropped). So new kernel
-should be able to retrieve old guest_memfd and populate in new
-guest_memfd for backward compatibility.
-
-Now, What will happen to these new fields or arguments that are needed,
-Kernel V2->guest_memfd_luo V2 will take care of setting them to default.
-
-Is setting them to default acceptable? Not always? So that is where the
-negotiation comes in picture:  Kernel V2 should know if it can support
-retrieving kernel V1 or otherwise userspace must not transition to V2 using
-liveupdate if V2 does not have compatibility with V1.
-
-Now to support this backward compatibility, the retrieval APIs and
-deserialization APIs in V2 kernel should be able to provide the
-deserialization/retrieval for V1 preserved data.
-
-Kernel V1 -> serialize data ---kexec ----> kernel V2 -> deserialization -> retrieve
-
-Now deserialization/retrival is aware of V1/V2 comptatibility then it
-can set the new fields, parse the preserved data of V1 into V2 (or
-directly give it to guest_memfd APIs with setting any new expected
-fields to default.)
-
-Now having a padding fields in kernel guest_memfd_luo ABIs does not help
-here. As support for deserialization and parsing from V1-> V2 in kernel
-V2 will determine if kernel V2 is backward compatible with V1. which can
-also take care of setting the extra needed fields in V2 to default
-value or remove the unwanted flags/fields not needed in kernel V2.
-
-
-Now Questions is, if there isa  need for rollback to previous kernel
-(V2 -> V1)?
-
-There are two options,
-1. kernel V2 is aware that it is going to get kexec to V1. then
-serialization function on preservation will serialize the
-data in guest_memfd_luo ABIs V1 compatible format.
-
-2. kernel V1 guest_memfd_luo ABIs had the padding in their ABIs
-structures which even if kernel V2 will set those field, will be ignored
-by kernel V1. This will not require saperate
-deserialization/preservation mechanism for guest_memfd_luo V1 in kernel
-V2. This will not work in every case, As there might be different
-parsers are in guest_memfd_luo V2 and V1. then serialized data preserved
-by guest_memfd_luo V2 can not be parsed by guest_memfd_luo V1 after kexec.
-
-So,
-
-Kernel V2 _must have_ to support backward compatibility with kernel V1:
-1. guest_memfd_luo V1 context aware deserialization/retrieval mechanism
-2. guest_memfd_luo V1 context aware serialization/preservation mechanism
-
-Kernel V1/V2 may have:
-1. padding (hard to determine, can have heuristically) to ease the job
-of deserialization/retrieval/serialization/preservation apis. But does
-not solve backward compatibility alone.
-
-
-Once we will keep updating the host, There will be a point when we are at
-V15 but we dont want V1 backward compatiblity anymore, So we drop the
-deserialization/retrieval/serialization/preservation for V1 from V15.
-
-Would love to hear your thoughts?
-
-Looping Logan (loganodell@google.com) for his insights on this as well.
-
-~Tarun
-
-
-> That's why I would like to have an explicit ACK from the live update
-> group for ABI changes. I would like to enforce these compatibility
-> windows.
->
->>
->> KVM also has immutable ABI between itself and guest kernels, including implicit
->> "ABI" in the form of not changing guest-visible behavior.
->>
->>> Today we don't have any rules and let you change things freely as long as you
->>> do a version bump. But at a later point, the plan is to add some stability
->>> requirements to the ABI so you can actually upgrade the kernel across major
->>> versions.
->>> 
->>> So at least for ABI changes, there should be an explicit ACK from the
->>> live update group.
->>
->> I don't entirely agree.  I get where you're coming from, and I 100% agree that
->> the more eyeballs on changes that may affect ABI, the better.
->>
->> Where I have problems with the above is that it doesn't account for the nuances
->> of save/restore across different kernels.  The literal format of the serialized
->> data is the most obvious form of ABI, but it's absolutely possible to change ABI
->> without changing the data format.
->>
->> E.g. say there's a flags field in some serialization structure, and flags X and Y
->> are mutually exclusive in current kernels.  If a future kernel relaxes that
->> restriction for whatever reason, then the effective ABI has been broken because
->> state created and saved on new kernels can't be restored on old kernels.  And
->> this is not a theoretical concern, KVM has run afoul of this a few times (though
->> thankfully very rarely).
->
-> That's a bug, and should be fixed.
->
-> I am talking here about intentional ABI changes. As I mentioned above we
-> _can_ change the ABI, we just need to be careful about it.
->
->>
->> I don't think it's reasonable to expect LUO maintainers to gain enough expertise
->> in each subsystem to be able to ensure changes are forwards and backwards
->> compatible.  The only way I see LUO being successful in the long term is to get
->> subsystem maintainers/contributors to understand *and buy-in* to the LUO model
->> and rules, so that each subsystem can largely be self-sustatining.  I.e. setting
->> yourselves up as literal gatekeepers will help prevent blatant breakage, but it's
->> less likely to help guard against more subtle breakage, and in my experience,
->> subtle breakage is by far harder to detect and more painful to deal with.
->
-> Outside of enforcing the ABI compatibility windows, I think this makes
-> sense.
->
-> In principle at least, though from my experience the maintainer appetite
-> to care about live update varies. The feeling I've got from MM for
-> example is more along the lines of "you break it, you buy it". Which is
-> also a valid model IMO. The person who wrote the live update code for a
-> subsystem is well equipped to understand these nuances.
->
->>
->> Somewhat of a side topic: in my experience, using monotonically increasing version
->> numbers is a horrible way to enumerate features/content.  So for me, allowing
->> KVM's LUO ABI to change with a verson bump is probably a non-starter.  I.e.
->> whatever gets merged needs to be more future-proof than "we'll deal with it later".
->
-> As I wrote above, the compatibility model for live update allows
-> breaking ABI with version bumps. Userspace keeps working fine, it only
-> restricts the set of kernels that you can go to. So the "we'll deal with
-> it later" is not as harmful because our choices here are not permanent.
->
-> Also, there is work underway to allow transitions between versions [0].
->
-> But still, I am not opposed to a more flexible guest_memfd ABI. I think
-> we can reserve some space for feature flags to let us add things in the
-> future.
->
-> [0] https://lore.kernel.org/kexec/20260731215224.831696-1-loganodell@google.com/
->
-> -- 
-> Regards,
-> Pratyush Yadav
