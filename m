@@ -1,41 +1,49 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E60627FB1C;
-	Tue, 18 Aug 2026 06:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE24A38330C;
+	Tue, 18 Aug 2026 07:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787035626; cv=none; b=e76LodTbSZEaz3a8GbTZhs6yUSic8y4y4lQTV1nLqnd9KA+TaY1OuyuuGTStn4zxxvazoZBJefUokJkyXxhCkvMKNxMRiJHSvmaOc3mIMldVJTSaerBD1PEn5PC0uJCUPHp7A9S+A7j2QH6SK2a0qVHWeinjVJPICI9Dxg4daxw=
+	t=1787036427; cv=none; b=f9HrC7PKTOVsjW45ABjliG06Q9IjNAJmoW32oV5zKCHEfsmXoeEl+/BaPFgrUMkH4+XvAe+f6nAuYGvXAF4aQtAjFYF1pdFGcTUx5K7Smf89ZF+0kpWxNegguM0XkxVVS/YzsJs0GvqpfPAvzwHqW3dWOhkIizmAMQkiNdMX2Jo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787035626; c=relaxed/simple;
-	bh=3Zdl+JzBl/JqXDZY6Efc0m/ZWyv2YZXvZZGVhQPbC6w=;
+	s=arc-20240116; t=1787036427; c=relaxed/simple;
+	bh=PmuTN/s+h++ZoAzx5tvxii0VeJnfTuCHvUfgMoKlZGs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G7vgYEX+1lGQEeOQ15nm5IH4UPoVUDEmFqYifclX+Q0pPIuVxzMu6zJYjZHaU8dxnqjAPi0XFSQacTrC5MG3htm6uVkOdKF+kZZejtMTzeU7HaMLdJ+ZqeZ4DmH3EF2ns2j1BeaS4u8ksXNi/dwgiQAn0fB87gN8uSJKCdHZ1Xk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=CTHVIv0U; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=G+ZK2VxGujJU4grHoneZmdxg9KYrZt1KYDpT50an4NR8ru72LsvyaJZVrI3wS5PCTINTzS1CAStKylXhO5e3M4jbsCPn4cKaMPMe2dKsO0uces9DttGBrgqnnMUWfG81DxbvhMwMic8LQPVk/zHnCo4JBDmyznnn1iY8qvZurd8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OE4I8Vjx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="CTHVIv0U"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5B2E2153B;
-	Mon, 17 Aug 2026 23:46:57 -0700 (PDT)
-Received: from localhost (a085714.arm.com [10.164.19.28])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6DC333F85F;
-	Mon, 17 Aug 2026 23:47:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787035621; bh=3Zdl+JzBl/JqXDZY6Efc0m/ZWyv2YZXvZZGVhQPbC6w=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=CTHVIv0U/vSSapBacgFU41CKb8IkCnpZ2DJDjzNcgunvVYqAzcJ2pDRsc5xebowoG
-	 Ey8RR8j+a1OMG+VysbcrCElXu8ahSrFla9uVaCR7UY+2WcW937FvHWotXfIoHqURoj
-	 OLC0x54W+TTyIjMJgw9uHmI0Fk+ngh3QzLIkTyqg=
-Date: Tue, 18 Aug 2026 12:16:57 +0530
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-To: Hongfu Li <hongfu.li@linux.dev>
-Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
-	liam@infradead.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com, 
-	mhocko@suse.com, shuah@kernel.org, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Hongfu Li <lihongfu@kylinos.cn>
-Subject: Re: [PATCH] selftests/mm: Drop redundant open() in mprotect_tests()
-Message-ID: <vgwwpyvb254quwnbpwbjc2nxzhmt66a5nuxqfpmkpr3y6gbybf@3p3ul7u6jbe5>
-References: <20260817080616.52946-1-hongfu.li@linux.dev>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OE4I8Vjx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E0FB1F000E9;
+	Tue, 18 Aug 2026 07:00:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787036426;
+	bh=eLkCtMfElj3TBbhOnqAE7roUGQ5xLxxaMf/iSBaGdec=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=OE4I8Vjx95n8znDxHW+u9FRfXy8EgQy3a3KN7JbsZ2DwzPrM2YozWbad13thW4cU2
+	 BMOgwcALvQQU7jmC/dcnWs3R/YgiONJji781fNCWIMjnQJD9C67DwIDetOVVeiV2IA
+	 bgnbB77DlSlkDpuqn1KBk1gb37XhKMb/1C3lsuGkBOeXCDpSTV4hAI3cE11F/vC/Ua
+	 o/y0NmcIo2JX8jLhixj+tl4Gxb5OUbA22RirFO28mWTzvZWamEg3mqvwihGjkjSUQ+
+	 AuWkIgg006Axbqy/5PskV9T30X6ileS9fKAFl78eTSVbm3OOz7/BAJd+pCZWEF81k8
+	 nRWr5HRJKQdfA==
+Date: Tue, 18 Aug 2026 08:00:04 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Daehyeon Ko <4ncienth@gmail.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Mike Rapoport <rppt@kernel.org>, David Hildenbrand <david@kernel.org>, 
+	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	"David S . Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
+	Jesper Dangaard Brouer <hawk@kernel.org>, John Fastabend <john.fastabend@gmail.com>, 
+	Stanislav Fomichev <sdf@fomichev.me>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
+	Hagen Paul Pfeifer <hagen@jauu.net>, Pedro Falcato <pfalcato@suse.de>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org, 
+	bpf@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] mm/secretmem: properly account locked pages
+Message-ID: <aoQBQWH1zWgC5f3A@lucifer>
+References: <20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org>
+ <20260818052006.2387242-1-4ncienth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,40 +52,45 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260817080616.52946-1-hongfu.li@linux.dev>
+In-Reply-To: <20260818052006.2387242-1-4ncienth@gmail.com>
 
-On Mon, Aug 17, 2026 at 04:06:16PM +0800, Hongfu Li wrote:
-> From: Hongfu Li <lihongfu@kylinos.cn>
-> 
-> Remove duplicate open() for local pagemap_fd in mprotect_tests() that
-> shadows the global pagemap_fd already opened in main(). The local fd
-> is never used in the function.
-> 
-> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+On Tue, Aug 18, 2026 at 02:20:06PM +0900, Daehyeon Ko wrote:
+> Thanks for the patch.
+>
+> I tested this v1 on its stated base with an x86_64 KASAN kernel. The supplied
+> selftest passed 6/6 in three boots. Additional fork/unmap and inherited-VMA
+> mremap tests also passed.
+>
+> One question: the inode stores the creator's user_struct, but the fault path
+> uses the current task's RLIMIT_MEMLOCK.
+>
+>   secretmem_init_inode_priv():
+>     state->user = get_uid(current_user());
+>   __secretmem_account_pages():
+>     page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
+>
+> With A limited to one page and B to four, A created the fd and passed it to B.
+> B faulted four pages, after which A got SIGBUS faulting one page on a new fd:
+>
+>   CROSS_PRINCIPAL receiver_pages=4 creator_fresh_page=0
+>
+> This seems to charge A's locked_vm using B's limit. Is that intended?
 
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+Yup, it's a per-process limit even if the accounting spans multiple
+processes.
 
-> ---
->  tools/testing/selftests/mm/pagemap_ioctl.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
-> index cfd1987339c1..eadc7159ca5b 100644
-> --- a/tools/testing/selftests/mm/pagemap_ioctl.c
-> +++ b/tools/testing/selftests/mm/pagemap_ioctl.c
-> @@ -1332,12 +1332,6 @@ int mprotect_tests(void)
->  	int ret;
->  	char *mem, *mem2;
->  	struct page_region vec;
-> -	int pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
-> -
-> -	if (pagemap_fd < 0) {
-> -		fprintf(stderr, "open() failed\n");
-> -		exit(1);
-> -	}
->  
->  	/* 1. Map two pages */
->  	mem = mmap(0, 2 * page_size, PROT_READ|PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
-> -- 
-> 2.54.0
-> 
+It'd be incredibly involved to track each resource individually and this is
+a trade-off.
+
+In practice people aren't typically varying the limits like this and in any
+case, the least surprising behaviour is to adhere to the current process's
+limit.
+
+And this is the same solution used everywhere else by io_uring, etc.
+
+>
+> Thanks,
+> Daehyeon
+
+--
+Cheers, Lorenzo
