@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4083A3C65E0;
-	Tue, 18 Aug 2026 10:29:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99013C65E0;
+	Tue, 18 Aug 2026 10:29:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787048990; cv=none; b=KhNlCamODPoDFKXL+TiZM68642BFis+HZYoVUXyTWaiNomWFYFUpEJkJwF9mmXTAPM/X4Rne3iNLg4RU1ZgSEnK0cV9GXzXVtiGxacjnTiKfAGGynlOaIpkGRB2uKSlRJFG73ny1TjQzRhm4QiJaSGI2jn78kyvIAi0/y340oRU=
+	t=1787048998; cv=none; b=jFHqZOf9OfcZcZJoe/otvnb2DK2l1zwh7+yH5dt2HzKcauYM14udnZElfvIC88o+45XOjsSWgyTju4LAXlmGGZgZhmVqyI99UUg7j5abDg8w+DdhZx5XAMSl+rhRlBtvJJiQD6+p9s1KxqDffnHyxovzItr13WfnPDl/SWo1E38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787048990; c=relaxed/simple;
-	bh=lFur1xwu0bq93OPnU1P6L/N2ZodSNHeRwhx5g4/WIv0=;
+	s=arc-20240116; t=1787048998; c=relaxed/simple;
+	bh=+PEINribgpDWpNHxXOZNeeb6KNomusmu0cKY3eK6Obs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Wgu33lmsr8m/WSsdXFwwqLq1F04NxbvlDcWD9Hom8xj06PpG87y9xQzTpX5+ecjMdC46/7U61x2KmJdI7MMQyQsK8BViWQVIFSfDMa/JCaD9b9Ht/zqLfMh3/U25BB7IP3w3KGKnIGtVe/ND4rGNCkLqesjp6LJ1lQ7yzj+UYJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=TaSOB0Ti; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=hDWCbm9PB7mbppVum834jP8kRhgolAUW/t5YYoU6BMQC0g47WeBou7VFQyEXYD8tQMwOOB6elefd5hQiukgIo2flyZqByBHfPaMOgFExzWukEzCdqkXb1HiAoByqftJhShSfp1pMoyhXTeL5lOlr+vXL6fF8CMitn1icNJ/jzMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=HgdIeAgw; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="TaSOB0Ti"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="HgdIeAgw"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=K3h4DTnkmd6MDd9gcOyc0AOSipMCo7CbeHAKFL3Cbf8=; b=TaSOB0TinomqWXohQLjoMIVaAT
-	XfFoC/h5/onNC3KfpAlFvS9oO3MH/7ggoSHqMvyW/P2y+wJDLl0attjmc7kfURZ3w80TQW6Mrl5fJ
-	FwlyZ3DqGDnrZDFuah+6h7n4CRNilmHM587diiOlYJrdOriSAoFGpQCJ8EiRx9T5g2SbcAhaYHlBr
-	uJpEXd97VKi58q7UpbrwDZP0k992RvNzeEUVaCRIvYd+erRU7MvIzys4V9rIykHNLhUMp7dDKAgut
-	LCmXkyIvdN3WR8E7VH6ACTor2H3RruFmx8E7qyE8XT7FvRc5jn3EA2X1ca+657CoOhHJ9UV1/VK9l
-	mMl69oHw==;
+	bh=tUdFNSHtPF7z4z8dWRcTnirk4pd4hwL1PbeqJshlGOg=; b=HgdIeAgwIe5zPYVsy2QFETJZHU
+	dahuMFVnIMRT0qYfbT778yxNn9IXcRga3WteAUu+2MyHE0d8xmicZQR3BufZW0GcBPWERxJwTUQgu
+	YA1ErGcLPWS+Ey07SLWaiNrYGTXqQkInk59qykcbD5fzBU+Drc+S9dCWKXIVPSNx5ry+2hEsY8sIU
+	3IbR9KKwLbgz/rkHRhfbeFCLFnglc05Ws0+1fqwCoUiP5eZkVhO6GQNAYftCEi6iQGut/+3vtd7DX
+	VywL9rGlmCRe4f6NwL7mjfFxg7CSHc406decnoQ5ETJ/rfmp05MwTrIgLT7wYYf2Fu02BTdsMonE4
+	v56OJUjQ==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wwH4k-008x5p-0D;
-	Tue, 18 Aug 2026 10:29:46 +0000
+	id 1wwH4p-008x63-2T;
+	Tue, 18 Aug 2026 10:29:52 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Tue, 18 Aug 2026 03:29:11 -0700
-Subject: [PATCH net-next RFC 1/6] netconsole: add a per-target message rate
- limit
+Date: Tue, 18 Aug 2026 03:29:12 -0700
+Subject: [PATCH net-next RFC 2/6] netconsole: allow configuring the rate
+ limit interval through configfs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260818-netcons_ratelimit-v1-1-8c5d2d17789c@debian.org>
+Message-Id: <20260818-netcons_ratelimit-v1-2-8c5d2d17789c@debian.org>
 References: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 In-Reply-To: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -58,128 +58,101 @@ Cc: paulmck@kernel.org, davej@codemonkey.org.uk, riel@surriel.com,
  linux-kselftest@vger.kernel.org, samuelcrossley@gmail.com, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3601; i=leitao@debian.org;
- h=from:subject:message-id; bh=lFur1xwu0bq93OPnU1P6L/N2ZodSNHeRwhx5g4/WIv0=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOk7lqInJ6/SEdpk07JgvNyAtu2HDHc6CJY
- RtG26IUZ8mJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
- beQDEACfT3t9G29wKGOAcu11M44gubUpf0yPHvIHrClcGBOc/+Uj6AhejCQ3ZWML7zGtTsd+4jk
- O8UJ27eCfDKs/0mkwONYbcBtpx0pg9IOm5ir+fdRduSTMhrItVTcIoW94FOSD1hjU5fme5hizsf
- JYjYGaDeg/OlxMt18L+mxYhK5E72RCEUNuSxAOxJiAUxmmxq5dDt/pGOKx0L6lyLBYoS3tAnx6f
- yOr4Bv5uN88vGEs2M5kf2yIPQ3AE5zYzSAWNt1CYtrPdjK0yLZ6lzXHy8kh1u95wYN4h462qTiV
- jAyyJje6fb1h+5RsLIekLwsF340j42eorLSzAS8rxCWizrdrMB87BKLn8OO4o0wEmt03avgWFku
- 1YRTlzSsRj1VNPGrr4ZgH71ukqXxmxCkBepC3wViTOPGbwInxoYDN7Y3rYo/QuJ1K5d9hKegwmY
- Ib7WTn52oPJO+D+jxmpxcYJRrMFwrM7QX+satn0P6ZFrFqWVf4CqLa4ejD14E7+7ZTtyTKAh3gq
- mFZ6bcoBbU2lmIU/HrD4vJ6brQ6xzrts42R9rxlR+7gM0MknXJwbg6AecQxB9wApB/slUPo0mzz
- euwkoU25drxS1LMGo4ZaYH7i1tMZ3ttaWJ+avfMBiwkMYUqEAM0bsVR8y+ZD6WEGkgkAuINdCoO
- vpZudD9F4p6rR+g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2387; i=leitao@debian.org;
+ h=from:subject:message-id; bh=+PEINribgpDWpNHxXOZNeeb6KNomusmu0cKY3eK6Obs=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOF00k5m+HLNyG3w2xrJQq9qVi5ltmb/KwG
+ L6Hc0BcdHuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
+ bYoTD/9nOI0f5ktqnNMRYwxxpQhLJX6YBuVvN3Je3ODL3Q9szQCW467wM4jbnIHiZ3czJWitxtg
+ l+ZkOf1pUNw/yULe9eGbk+mGlj4BFryF16vmItco3Cc+E4KLOWJEI6o+vMWrPBIr0qwSED7FMiH
+ TuAsKqdnopX+ovjjV5R3G2pn5x2LvVsiL6RnyrJ2JaNy8Ev9DXHX3A5p6ikcdXF8Unc/2RRk7O6
+ Uid5zdHnu3owcGcYbb4IBiPmSmrsOcQG6Kjy2eGJkjr77+LpguuITIW0xUo2PTOvlQDODlC8WJH
+ WQtmsaW71Lex66DacHnAFV4Ki8X4QolmM/QkoQm6NDpVjFxkGmDaIKXeutGCwTJFkjhRl/3vi3A
+ UTzd/m0tsL1xraRZWWNPn65u+3Pz9v/6ZgR0tqDq4/tModc2tG42bWVPW5vfFNnE/JdH5h4146b
+ 3IVulqJTp7ZQX9mYmvjXnwxU95F3EOHdb/PPi2ZyqKEslEz4bwFG/bncpeqPhjgnoXjFrLVAZH3
+ mPvU9/cOZ/Ar15PGZ8D77v/xXxa+O6v9XwEDKl0i370E0odzm6RxfTjHN5sEAp5C4tj8CIZAJw+
+ wzTmqq+Sw5a0nqgUmzeBhZzk8Q3n8JAUwhHuvYZa/r0MOckOPSvboLxjGsra8JKiSf6sJcL7A2e
+ +Sv6drdOoKMDAYw==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Give each target a token bucket and consult it once per message in
-netconsole_write().
+The per-target token bucket has no interface, so every target is still
+unlimited.
 
-The bucket is created with a zero interval, which struct ratelimit_state
-treats as unlimited, and nothing can set a nonzero one yet, so no target
-changes behaviour.
-
-Skip the bucket while oops_in_progress is set, so a limit configured for
-steady-state logging never truncates an oops, BUG() or panic().
-
-The configfs files that expose it come next.
-
-___ratelimit() only trylocks its own raw spinlock, so it is safe with
-target_list_lock held and interrupts disabled, and safe from NMI.
+Expose the interval as ratelimit_interval_ms through configfs. It
+defaults to zero, so a target stays unlimited until an administrator
+sets one.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ drivers/net/netconsole.c | 33 +++++++++++++++++++++++++++++++++
+ 1 file changed, 33 insertions(+)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index b358e5c367351..2ad514afa2b89 100644
+index 2ad514afa2b89..6f94495d0abc3 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -49,6 +49,7 @@
- #include <linux/rtnetlink.h>
- #include <linux/workqueue.h>
- #include <linux/delay.h>
-+#include <linux/ratelimit.h>
- 
- MODULE_AUTHOR("Matt Mackall <mpm@selenic.com>");
- MODULE_DESCRIPTION("Console driver for network interfaces");
-@@ -175,6 +176,7 @@ struct netcons_userdata {
-  * @sysdata:		Cached, formatted string of append
-  * @sysdata_fields:	Sysdata features enabled.
-  * @msgcounter:	Message sent counter.
-+ * @ratelimit:	Opaque structure to ratelimit messages
-  * @stats:	Packet send stats for the target. Used for debugging.
-  * @state:	State of the target.
-  *		Visible from userspace (read-write).
-@@ -219,6 +221,7 @@ struct netconsole_target {
- 	u32			sysdata_fields;
- 	/* protected by target_list_lock */
- 	u32			msgcounter;
-+	struct ratelimit_state	ratelimit;
- #endif
- 	struct netconsole_target_stats stats;
- 	enum target_state	state;
-@@ -282,6 +285,21 @@ static void dynamic_netconsole_mutex_unlock(void)
- 	mutex_unlock(&dynamic_netconsole_mutex);
+@@ -940,6 +940,14 @@ static ssize_t transmit_errors_show(struct config_item *item, char *buf)
+ 	return sysfs_emit(buf, "%llu\n", xmit_drop_count + enomem_count);
  }
  
-+static void netconsole_ratelimit_init(struct netconsole_target *nt)
++static ssize_t ratelimit_interval_ms_show(struct config_item *item, char *buf)
 +{
-+	ratelimit_state_init(&nt->ratelimit, 0, DEFAULT_RATELIMIT_BURST);
-+	ratelimit_set_flags(&nt->ratelimit, RATELIMIT_MSG_ON_RELEASE);
++	struct netconsole_target *nt = to_target(item);
++
++	return sysfs_emit(buf, "%u\n",
++			  jiffies_to_msecs(READ_ONCE(nt->ratelimit.interval)));
 +}
 +
-+static bool netconsole_ratelimited(struct netconsole_target *nt)
-+{
-+	/* A limit meant for steady-state logging must not eat a crash dump. */
-+	if (oops_in_progress)
-+		return false;
-+
-+	return !__ratelimit(&nt->ratelimit);
-+}
-+
- #else	/* !CONFIG_NETCONSOLE_DYNAMIC */
- 
- static int __init dynamic_netconsole_init(void)
-@@ -318,6 +336,15 @@ static void dynamic_netconsole_mutex_unlock(void)
+ /* configfs helper to display if cpu_nr sysdata feature is enabled */
+ static ssize_t sysdata_cpu_nr_enabled_show(struct config_item *item, char *buf)
  {
+@@ -1335,6 +1343,29 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
+ 	return ret;
  }
  
-+static void netconsole_ratelimit_init(struct netconsole_target *nt)
++static ssize_t ratelimit_interval_ms_store(struct config_item *item,
++					   const char *buf, size_t count)
 +{
++	struct netconsole_target *nt = to_target(item);
++	unsigned int interval;
++	unsigned long jifs;
++	ssize_t ret;
++
++	ret = kstrtouint(buf, 10, &interval);
++	if (ret)
++		return ret;
++
++	jifs = msecs_to_jiffies(interval);
++	if (jifs > INT_MAX)
++		return -ERANGE;
++
++	dynamic_netconsole_mutex_lock();
++	WRITE_ONCE(nt->ratelimit.interval, jifs);
++	dynamic_netconsole_mutex_unlock();
++
++	return count;
 +}
 +
-+static bool netconsole_ratelimited(struct netconsole_target *nt)
-+{
-+	return false;
-+}
-+
- #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
+ struct userdatum {
+ 	struct config_item item;
+ 	char value[MAX_EXTRADATA_VALUE_LEN];
+@@ -1699,6 +1730,7 @@ CONFIGFS_ATTR_RO(, local_mac);
+ CONFIGFS_ATTR(, remote_mac);
+ CONFIGFS_ATTR(, release);
+ CONFIGFS_ATTR_RO(, transmit_errors);
++CONFIGFS_ATTR(, ratelimit_interval_ms);
  
- /* Check if the target was bound by mac address. */
-@@ -686,6 +713,7 @@ static struct netconsole_target *alloc_and_init(void)
- 	nt->remote_port = 6666;
- 	eth_broadcast_addr(nt->remote_mac);
- 	nt->state = STATE_DISABLED;
-+	netconsole_ratelimit_init(nt);
- 	INIT_WORK(&nt->resume_wq, process_resume_target);
- 	/* Set up the skb pool primitives once; enabling only refills it. */
- 	skb_queue_head_init(&nt->skb_pool);
-@@ -2482,6 +2510,9 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
- 		    !netif_running(nt->np.dev))
- 			continue;
+ static struct configfs_attribute *netconsole_target_attrs[] = {
+ 	&attr_enabled,
+@@ -1712,6 +1744,7 @@ static struct configfs_attribute *netconsole_target_attrs[] = {
+ 	&attr_local_mac,
+ 	&attr_remote_mac,
+ 	&attr_transmit_errors,
++	&attr_ratelimit_interval_ms,
+ 	NULL,
+ };
  
-+		if (netconsole_ratelimited(nt))
-+			continue;
-+
- 		/* If nbcon_enter_unsafe() fails, just return given netconsole
- 		 * lost the ownership, and iterating over the targets will not
- 		 * be able to re-acquire.
 
 -- 
 2.53.0-Meta
