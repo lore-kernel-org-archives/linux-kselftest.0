@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D99013C65E0;
-	Tue, 18 Aug 2026 10:29:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 106883E0255;
+	Tue, 18 Aug 2026 10:29:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787048998; cv=none; b=jFHqZOf9OfcZcZJoe/otvnb2DK2l1zwh7+yH5dt2HzKcauYM14udnZElfvIC88o+45XOjsSWgyTju4LAXlmGGZgZhmVqyI99UUg7j5abDg8w+DdhZx5XAMSl+rhRlBtvJJiQD6+p9s1KxqDffnHyxovzItr13WfnPDl/SWo1E38=
+	t=1787049005; cv=none; b=MKHgg4kNQVdXZE6RyOvBwV8qKS03NGbqVVHM33i52ou7TxJAyGRR2I5nTNetcQDWVPgFf70Q9pkvLMYvfXU2TP2iWc+m84kC3LyUm3G19V/B8LDQNAg9XyS6RugjNd3DiyBsbA6/I/qp8qnwDRwu7jzZAN+ji2pQrXV8jHyCCFA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787048998; c=relaxed/simple;
-	bh=+PEINribgpDWpNHxXOZNeeb6KNomusmu0cKY3eK6Obs=;
+	s=arc-20240116; t=1787049005; c=relaxed/simple;
+	bh=R5iXd9olCf6Hc+oy9EHjUHxjp0R1Ga+f57pdI5oZ1H0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hDWCbm9PB7mbppVum834jP8kRhgolAUW/t5YYoU6BMQC0g47WeBou7VFQyEXYD8tQMwOOB6elefd5hQiukgIo2flyZqByBHfPaMOgFExzWukEzCdqkXb1HiAoByqftJhShSfp1pMoyhXTeL5lOlr+vXL6fF8CMitn1icNJ/jzMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=HgdIeAgw; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=G0undrTN87R2AUyVytrIkyUvd8aSpD8uRzFVK2p7oSrgXaOe9t50myNGgRAyPd4R6TG8hxcK/QQNmQJBMecwmzWtxze6g1ojRE6yKeL+zmFl3JmZk6iWOUdLORHQAwztysicC7tX5kkbe36cFU7LaTVleDvboDPxQeT2rBTAqeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=QupJKn5m; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="HgdIeAgw"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="QupJKn5m"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=tUdFNSHtPF7z4z8dWRcTnirk4pd4hwL1PbeqJshlGOg=; b=HgdIeAgwIe5zPYVsy2QFETJZHU
-	dahuMFVnIMRT0qYfbT778yxNn9IXcRga3WteAUu+2MyHE0d8xmicZQR3BufZW0GcBPWERxJwTUQgu
-	YA1ErGcLPWS+Ey07SLWaiNrYGTXqQkInk59qykcbD5fzBU+Drc+S9dCWKXIVPSNx5ry+2hEsY8sIU
-	3IbR9KKwLbgz/rkHRhfbeFCLFnglc05Ws0+1fqwCoUiP5eZkVhO6GQNAYftCEi6iQGut/+3vtd7DX
-	VywL9rGlmCRe4f6NwL7mjfFxg7CSHc406decnoQ5ETJ/rfmp05MwTrIgLT7wYYf2Fu02BTdsMonE4
-	v56OJUjQ==;
+	bh=sxZtfqnwWWtAmKIrsR5oLgR+/1CWbp+LHmOJL0bB/lA=; b=QupJKn5mQiqxcm1XTPIme3LTwL
+	K05HdkaoZkzP5GmDxyrSMph6G92qcD/q8zOVMBlVGXqutPJwaZKLkMQo6vO1mE0bJlRPqQ/E9Adt8
+	zJmtcdTDJ7xfo9oOuizJkvpsIhmz/irzP8wSbQAp6ytOtiQSc+KEfxALSfZWcSgZa7CyFLwl3pFAK
+	4nsMr9b3KDdJcRMuVrAEFIhi+u57qW18Z0mwGzZi0PKseWxKPcCRaVAFehP2MbqQ5OzCHE/7jkN3u
+	V+i+E+h3UYzLBp7+gddBpN2T/vQ3/U+1HAuwT4wjgvi8JvcpwjcYRHdQYN3hvkaPoa29B56Sz80JA
+	cJu2CASg==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wwH4p-008x63-2T;
-	Tue, 18 Aug 2026 10:29:52 +0000
+	id 1wwH4v-008x6O-1A;
+	Tue, 18 Aug 2026 10:29:57 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Tue, 18 Aug 2026 03:29:12 -0700
-Subject: [PATCH net-next RFC 2/6] netconsole: allow configuring the rate
- limit interval through configfs
+Date: Tue, 18 Aug 2026 03:29:13 -0700
+Subject: [PATCH net-next RFC 3/6] netconsole: allow configuring the rate
+ limit burst through configfs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260818-netcons_ratelimit-v1-2-8c5d2d17789c@debian.org>
+Message-Id: <20260818-netcons_ratelimit-v1-3-8c5d2d17789c@debian.org>
 References: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 In-Reply-To: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -58,77 +58,73 @@ Cc: paulmck@kernel.org, davej@codemonkey.org.uk, riel@surriel.com,
  linux-kselftest@vger.kernel.org, samuelcrossley@gmail.com, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2387; i=leitao@debian.org;
- h=from:subject:message-id; bh=+PEINribgpDWpNHxXOZNeeb6KNomusmu0cKY3eK6Obs=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOF00k5m+HLNyG3w2xrJQq9qVi5ltmb/KwG
- L6Hc0BcdHuJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
- bYoTD/9nOI0f5ktqnNMRYwxxpQhLJX6YBuVvN3Je3ODL3Q9szQCW467wM4jbnIHiZ3czJWitxtg
- l+ZkOf1pUNw/yULe9eGbk+mGlj4BFryF16vmItco3Cc+E4KLOWJEI6o+vMWrPBIr0qwSED7FMiH
- TuAsKqdnopX+ovjjV5R3G2pn5x2LvVsiL6RnyrJ2JaNy8Ev9DXHX3A5p6ikcdXF8Unc/2RRk7O6
- Uid5zdHnu3owcGcYbb4IBiPmSmrsOcQG6Kjy2eGJkjr77+LpguuITIW0xUo2PTOvlQDODlC8WJH
- WQtmsaW71Lex66DacHnAFV4Ki8X4QolmM/QkoQm6NDpVjFxkGmDaIKXeutGCwTJFkjhRl/3vi3A
- UTzd/m0tsL1xraRZWWNPn65u+3Pz9v/6ZgR0tqDq4/tModc2tG42bWVPW5vfFNnE/JdH5h4146b
- 3IVulqJTp7ZQX9mYmvjXnwxU95F3EOHdb/PPi2ZyqKEslEz4bwFG/bncpeqPhjgnoXjFrLVAZH3
- mPvU9/cOZ/Ar15PGZ8D77v/xXxa+O6v9XwEDKl0i370E0odzm6RxfTjHN5sEAp5C4tj8CIZAJw+
- wzTmqq+Sw5a0nqgUmzeBhZzk8Q3n8JAUwhHuvYZa/r0MOckOPSvboLxjGsra8JKiSf6sJcL7A2e
- +Sv6drdOoKMDAYw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2283; i=leitao@debian.org;
+ h=from:subject:message-id; bh=R5iXd9olCf6Hc+oy9EHjUHxjp0R1Ga+f57pdI5oZ1H0=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOdXIrnqoQGDGi6J1jK88hwtsE262RGDZbc
+ djkUf+qkv6JAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
+ bY6fD/4vUz5sKAVwFICoNyZyQEBHyzqRJRD0/q9sZdVn3gEN9E7ndgb0ldcxvvArnz4T/rkMDpx
+ BUqpjvX6XM7k4E2R7fPDRxK/GPTaoHEaReZYkfG8UmvZty0t4NDh1SyOCOAH3H9AkehhEpxYnMM
+ OW97ugy/bjMQQM+sLS43tIJ1ft1xrtyLNC3502iGUw47oEogo9BvffVVYuBLc8TwrTlNgjZBFbv
+ XxrAPI5WAJJhDGtpDx9Kx6FG65C0SQaAkRsx4PBQPnZGaHUhCo+HruRvT0BmbXvlEj+U1R8p5jO
+ ulCWHQgUJso3ohL1Uqc54IkN/zIXioo04KJsjdPGtoijECIubBGRHkSX4/NlksZey7t0Gp7VNJF
+ Mr802ouEXY64AERQwk9yPrzXeDNsBFMKhl9GgIgGb0Ag8hTYNUyy68GlSZMK4WB5u1sCIcprY0P
+ IMVgqa25T29OfKxLYp5cdeYFWE94S5XsTbLr0G7k7Sni3cka2z/mF67P1U0Nf3FPv4bGLIepavn
+ vCkYq0dcF6A5BwjJRTFnyPx3BeZiC6Wj/WlQ6UedzHSXUA2R1axUSm5qtCFKV3GCJ6D130krYvB
+ K47r5hwaTDvyq3n9GZOIJ9osE64a1l73Pz6UpdDkLWWxlo5QzPyQXcmO7T/qHBt2+apoAiqxNkF
+ OGbATfFBxtFnEUA==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-The per-target token bucket has no interface, so every target is still
-unlimited.
+A target that sets ratelimit_interval_ms runs with the ratelimit default
+of 10 messages per interval, which is either too coarse or too generous
+depending on how chatty the target is.
 
-Expose the interval as ratelimit_interval_ms through configfs. It
-defaults to zero, so a target stays unlimited until an administrator
-sets one.
+Expose it as ratelimit_burst through configfs.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 33 +++++++++++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+ drivers/net/netconsole.c | 30 ++++++++++++++++++++++++++++++
+ 1 file changed, 30 insertions(+)
 
 diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 2ad514afa2b89..6f94495d0abc3 100644
+index 6f94495d0abc3..6d60a5188bf13 100644
 --- a/drivers/net/netconsole.c
 +++ b/drivers/net/netconsole.c
-@@ -940,6 +940,14 @@ static ssize_t transmit_errors_show(struct config_item *item, char *buf)
- 	return sysfs_emit(buf, "%llu\n", xmit_drop_count + enomem_count);
+@@ -948,6 +948,13 @@ static ssize_t ratelimit_interval_ms_show(struct config_item *item, char *buf)
+ 			  jiffies_to_msecs(READ_ONCE(nt->ratelimit.interval)));
  }
  
-+static ssize_t ratelimit_interval_ms_show(struct config_item *item, char *buf)
++static ssize_t ratelimit_burst_show(struct config_item *item, char *buf)
 +{
 +	struct netconsole_target *nt = to_target(item);
 +
-+	return sysfs_emit(buf, "%u\n",
-+			  jiffies_to_msecs(READ_ONCE(nt->ratelimit.interval)));
++	return sysfs_emit(buf, "%d\n", READ_ONCE(nt->ratelimit.burst));
 +}
 +
  /* configfs helper to display if cpu_nr sysdata feature is enabled */
  static ssize_t sysdata_cpu_nr_enabled_show(struct config_item *item, char *buf)
  {
-@@ -1335,6 +1343,29 @@ static ssize_t remote_mac_store(struct config_item *item, const char *buf,
- 	return ret;
+@@ -1366,6 +1373,27 @@ static ssize_t ratelimit_interval_ms_store(struct config_item *item,
+ 	return count;
  }
  
-+static ssize_t ratelimit_interval_ms_store(struct config_item *item,
-+					   const char *buf, size_t count)
++static ssize_t ratelimit_burst_store(struct config_item *item, const char *buf,
++				     size_t count)
 +{
 +	struct netconsole_target *nt = to_target(item);
-+	unsigned int interval;
-+	unsigned long jifs;
++	unsigned int burst;
 +	ssize_t ret;
 +
-+	ret = kstrtouint(buf, 10, &interval);
++	ret = kstrtouint(buf, 10, &burst);
 +	if (ret)
 +		return ret;
 +
-+	jifs = msecs_to_jiffies(interval);
-+	if (jifs > INT_MAX)
++	if (burst > INT_MAX)
 +		return -ERANGE;
 +
 +	dynamic_netconsole_mutex_lock();
-+	WRITE_ONCE(nt->ratelimit.interval, jifs);
++	WRITE_ONCE(nt->ratelimit.burst, burst);
 +	dynamic_netconsole_mutex_unlock();
 +
 +	return count;
@@ -137,19 +133,19 @@ index 2ad514afa2b89..6f94495d0abc3 100644
  struct userdatum {
  	struct config_item item;
  	char value[MAX_EXTRADATA_VALUE_LEN];
-@@ -1699,6 +1730,7 @@ CONFIGFS_ATTR_RO(, local_mac);
- CONFIGFS_ATTR(, remote_mac);
+@@ -1731,6 +1759,7 @@ CONFIGFS_ATTR(, remote_mac);
  CONFIGFS_ATTR(, release);
  CONFIGFS_ATTR_RO(, transmit_errors);
-+CONFIGFS_ATTR(, ratelimit_interval_ms);
+ CONFIGFS_ATTR(, ratelimit_interval_ms);
++CONFIGFS_ATTR(, ratelimit_burst);
  
  static struct configfs_attribute *netconsole_target_attrs[] = {
  	&attr_enabled,
-@@ -1712,6 +1744,7 @@ static struct configfs_attribute *netconsole_target_attrs[] = {
- 	&attr_local_mac,
+@@ -1745,6 +1774,7 @@ static struct configfs_attribute *netconsole_target_attrs[] = {
  	&attr_remote_mac,
  	&attr_transmit_errors,
-+	&attr_ratelimit_interval_ms,
+ 	&attr_ratelimit_interval_ms,
++	&attr_ratelimit_burst,
  	NULL,
  };
  
