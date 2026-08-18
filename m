@@ -1,274 +1,310 @@
-Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64DED3E5A0E;
-	Tue, 18 Aug 2026 10:30:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45BB644C670;
+	Tue, 18 Aug 2026 10:30:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787049018; cv=none; b=TsraC/WV8P26Q/zNbrwpRx+WDSZxSBpfkRFVgOo++auIlRCk5T7gW+BhwQxVH/8QwAQIDvz1WC8/pZALJ1k9YDAcG6qeRLhF6C3g17SuePfKz00wrys+QTTn41e0Wdi9N1mwObUxwUOpJGaPdmw+aoWd0RO+A/skc2ZAhgMEF/A=
+	t=1787049029; cv=none; b=D4YU6x5PcxsdbAg+9ncmRypwoJzkGwIJwLlnjJMTitqXjaL9gRGsUwtFO9rT717OXPLVZpqd44pVgpCiExYrDRZCJxzq9ReSO79f3qPpvyUWBKDSXkhQkD2VSymIaylyAiz/UFZY2TrYsC+CiZh0w0e2z98N/HQ+aLlobVbT4Ns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787049018; c=relaxed/simple;
-	bh=+9MOoBeACdx26BYEWPAq/ZHeh7mKiNyWJP1qhkqZhJ0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZPZyX1y2/0QjFSKwXTqSWqwsQOI0HNL6TPmK/MntDwDdBy0+gKP/sfxK34VlwNUxMtmZwVX6EwGngOSm0s+dUHRQU+VoFir0YA+P3pBTJIDE3x48lSfqDyDGfyVCbcain674FamhJ99pF+KE8gq5U2mjyqNmKVCqvKbGXbQFmv8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=iTDCAimJ; arc=none smtp.client-ip=82.195.75.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
+	s=arc-20240116; t=1787049029; c=relaxed/simple;
+	bh=KkYrt4eBsmmtGpMK/EFXNxyETR7F3WVA7tg4vzsroUU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nY/ccG9gIZeHJxdZTDFv80kK04W/eRw5rXA2DkAwse3NcYj2IPPsGTf1RJva4ENJt4cNO0X/b5wrCE4INj+NOi/Y9uoa7W/KqnFTE3LeruEN0Rlc5X21muND0qyqpLCc0bWMKpwEXzYnjVw8LJM3P3JJPJWn5SajR9OHOqOYMsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nXOALRLg; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="iTDCAimJ"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
-	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
-	From:Reply-To:Content-ID:Content-Description;
-	bh=Z0bBxF8VnIEwXxGroB2RBoES/eXA6hsdail7v/CV2Po=; b=iTDCAimJieGfQs+Mu/oTarJg+T
-	/jR0jW2ga1i8IVipTHn9JPFt+gfTSSUN0sk4X26GoH2dFlvHtWVkNppH7+xPYVEiheZej+Qqe6mCZ
-	6KZpacCzc1N8XclcLHCUTjrkBgTEdPC1ZQvFPzEeh84aOzKyQDZPtPR4PoPIaWzaHBlaGK/N29f1P
-	POhkVs3HIz5SqDRgT9Oj7WqLjkbl5YYerr1sCYdFz3CZ6dtEOliXO6YwE1A4Txx5RMNl+nyjJMnXV
-	WX2C5sq24reVWThP7V4cnOMU/6/xS+vobclqp1TrVHfKcscU+ulZYZ54NBTMqaMY5vdQET4o2UPRw
-	j7VEjBzA==;
-Received: from authenticated-user
-	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.96)
-	(envelope-from <leitao@debian.org>)
-	id 1wwH5B-008x7a-1x;
-	Tue, 18 Aug 2026 10:30:14 +0000
-From: Breno Leitao <leitao@debian.org>
-Date: Tue, 18 Aug 2026 03:29:16 -0700
-Subject: [PATCH net-next RFC 6/6] selftests: netcons: test the per-target
- rate limit
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nXOALRLg"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9253E1F000E9;
+	Tue, 18 Aug 2026 10:30:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787049027;
+	bh=gFhmJcPos1AhWRORhzMLbjRopLVZZ4MU49Dk+N+uRMo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=nXOALRLgudDLqMVtGF70wtuuATsP+Nharszx6noAKLgW3XYTxcxa0XvnkPU/m+TD8
+	 vxGbfu0VLrD3QqjzylKJQoL6l5+Bx0Qhgs81NGBfWJCFPxHpHaFg4ooT6oM/C2H0+5
+	 qRTOZSyUx4JSta/8RFiDr0s87NbQ0+0j4JrfV08Zn8gnvqQoRqyasmSpFD9e9jTfoX
+	 TJqOYu+TmoxfLLQHzIU4hdTnw2cus6N9Y5UF1Hz5f5EG8K6Pw9h3GbdHkW9H10rAnJ
+	 CgixQGAhJnAloRIgZvyvjvx9n9wmJrKmiG2QbzI5SzriixPtalSG2P0girqkO6+wDm
+	 UG0jwJd3tEeeA==
+Date: Tue, 18 Aug 2026 11:30:06 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: Kiryl Shutsemau <kirill@shutemov.name>
+Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kas@kernel.org
+Subject: Re: [PATCH v4 09/19] selftests/mm: add folio-order detection
+ self-check
+Message-ID: <aoQzXhP0W0FVsvTp@lucifer>
+References: <20260815015901.1236937-1-kirill@shutemov.name>
+ <20260815015901.1236937-10-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260818-netcons_ratelimit-v1-6-8c5d2d17789c@debian.org>
-References: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
-In-Reply-To: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
-To: Andrew Lunn <andrew+netdev@lunn.ch>, 
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
- Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
- Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
-Cc: paulmck@kernel.org, davej@codemonkey.org.uk, riel@surriel.com, 
- gustavold@gmail.com, asantostc@gmail.com, netdev@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, samuelcrossley@gmail.com, 
- Breno Leitao <leitao@debian.org>, kernel-team@meta.com
-X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=6255; i=leitao@debian.org;
- h=from:subject:message-id; bh=+9MOoBeACdx26BYEWPAq/ZHeh7mKiNyWJP1qhkqZhJ0=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOky3Hoa0R4sv9+HXwWMjKOARiDoGcitDLA
- O1B1TLK2fGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
- bW1fD/wOkp0X2FsVMsxo0Tg425Tqnxwu/bKLAaeK+7l9QOVFu210kxx/Y0PdLrb85Sqw8h27bve
- J0cWap08ObcUzHW2vYLmzZ3E/oeOOOf8iwmE3ji58htVhf2MfeKeeS+ApXkJMd+Hz5IU7BdGnBi
- F2RDqfXsarbtUUpu6mpQX5RLbky3IG7lSeL5gmqXzIQs+4bnb44oWmcLsCCikhpBQC4yy/YOe1g
- B534BNmdO//9gBdxW98KEC3yExHygFiFZEKt//l5GqiSRK36oP0D63766ZoxgUV6aOri+weUxXp
- JK2JHcoqe3MN9ZMdJB47/3gr1SE/bMaB1e5dUV/47BXq6+rrCauZme4UUi7m3WIYa8nVUwf2AZH
- 2riULcTjivisZ34tRVHdOVbXBLtjAhvgkFLNdxe2xt3gVJ9PvnsVVsx8AxcBTvbqRixMfd279cW
- 82F26c0W62MfnTb5SCWMNfRJgY8dro+qo6x4yJO4/++4J5sL6bcuhcmH0suNfCPTHi9G31y3k9T
- Dlgeas5LR3m4G+BVldTtlVk3aDIbaqx9Y10bdl8C6z3sa11mobmHYLKTTRwneU/jvpfp/w0yQAN
- DevKhEsyfWghMwO1lJfq3SziP+8ldJ/pqe1SO8p4LG3YiTOIu6dtXFStmQ77rTso80RfXep0Thx
- iIqhuIjNHa2n2RQ==
-X-Developer-Key: i=leitao@debian.org; a=openpgp;
- fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
-X-Debian-User: leitao
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260815015901.1236937-10-kirill@shutemov.name>
 
-Check that a new target starts unlimited and that a configured burst caps
-what the target transmits. Dropping the interval back to zero has to
-restore unlimited delivery and report what was lost to the receiver.
+On Sat, Aug 15, 2026 at 02:58:51AM +0100, Kiryl Shutsemau wrote:
+> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+> The khugepaged mTHP tests detect collapse results with the vm_util
+> folio-order helpers rather than smaps AnonHugePages, which only sees PMD
+> mappings.  If those helpers are wrong, every case built on them is wrong
+> the same way, and nothing says so.
+>
+> Check them directly.  For every anon THP order the kernel supports, fault
+> memory in with only that order enabled.  Require the helpers to classify
+> the backing as exactly that order: not a neighbouring order, and 4K-backed
+> memory as order 0.
+>
+> Run it in the thp category, ahead of ./khugepaged, so a broken helper is
+> reported as itself rather than as a collapse failure.  Verified on x86-64
+> 4K (orders 0, 2-9) and arm64 64K (orders 0, 2-13).
+>
+> The test needs ALIGN(), which hmm-tests.c and migration.c each defined
+> privately.  Move it to vm_util.h and drop both copies.
 
-Only an upper bound is checked on the number of messages received.
-netconsole is best-effort UDP and unrelated kernel messages draw from the
-same bucket, so what arrives is not an exact count, while the cap is.
+Also:
 
-Signed-off-by: Breno Leitao <leitao@debian.org>
----
- .../selftests/drivers/net/netconsole/Makefile      |   1 +
- .../drivers/net/netconsole/netcons_ratelimit.sh    | 160 +++++++++++++++++++++
- 2 files changed, 161 insertions(+)
+uffd-unit-tests defines ALIGN_UP()...
 
-diff --git a/tools/testing/selftests/drivers/net/netconsole/Makefile b/tools/testing/selftests/drivers/net/netconsole/Makefile
-index f0674c0017fc4..04cce40f162e9 100644
---- a/tools/testing/selftests/drivers/net/netconsole/Makefile
-+++ b/tools/testing/selftests/drivers/net/netconsole/Makefile
-@@ -10,6 +10,7 @@ TEST_PROGS := \
- 	netcons_cmdline.sh \
- 	netcons_fragmented_msg.sh \
- 	netcons_overflow.sh \
-+	netcons_ratelimit.sh \
- 	netcons_resume.sh \
- 	netcons_sysdata.sh \
- 	netcons_torture.sh \
-diff --git a/tools/testing/selftests/drivers/net/netconsole/netcons_ratelimit.sh b/tools/testing/selftests/drivers/net/netconsole/netcons_ratelimit.sh
-new file mode 100755
-index 0000000000000..38dd1599fe57d
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/netconsole/netcons_ratelimit.sh
-@@ -0,0 +1,160 @@
-+#!/usr/bin/env bash
-+# SPDX-License-Identifier: GPL-2.0
-+
-+# This test exercises the per-target rate limit. It configures a small burst
-+# over an interval long enough that the bucket is never refilled, sends many
-+# more messages than the burst allows, and checks that the target stops
-+# transmitting once the bucket is empty.
-+#
-+# Clearing the interval has to restore unlimited delivery and tell the
-+# receiver how many messages it missed, which is verified last.
-+#
-+# Author: Breno Leitao <leitao@debian.org>
-+
-+set -euo pipefail
-+
-+SCRIPTDIR=$(dirname "$(readlink -e "${BASH_SOURCE[0]}")")
-+
-+source "${SCRIPTDIR}"/../lib/sh/lib_netcons.sh
-+
-+# Messages sent while the limit is in place, comfortably above BURST so that
-+# the bucket is drained
-+MSG_COUNT=50
-+BURST=5
-+# Long enough that the bucket is not refilled while the test runs
-+INTERVAL_MS=60000
-+# Default the target starts with, as documented in netconsole.rst
-+DEFAULT_BURST=10
-+# What the target sends once it can transmit again
-+DROP_NOTICE="messages dropped by rate limit"
-+
-+# The content of kmsg will be saved to the following file
-+OUTPUT_FILE="/tmp/${TARGET}"
-+
-+function count_msgs() {
-+	local FILE="${1}"
-+
-+	if [ ! -f "${FILE}" ]
-+	then
-+		echo 0
-+		return
-+	fi
-+
-+	# grep exits 1 on no match, which is a valid result here
-+	grep -c "${MSG}" "${FILE}" || true
-+}
-+
-+function send_msgs() {
-+	local COUNT="${1}"
-+	local I
-+
-+	for I in $(seq "${COUNT}")
-+	do
-+		echo "${MSG}: ${TARGET} ${I}" > /dev/kmsg
-+	done
-+}
-+
-+# A freshly created target has to be unlimited, otherwise every existing
-+# netconsole user would start dropping messages after an upgrade
-+function check_defaults() {
-+	local INTERVAL BURST_DEFAULT
-+
-+	INTERVAL=$(cat "${NETCONS_PATH}"/ratelimit_interval_ms)
-+	BURST_DEFAULT=$(cat "${NETCONS_PATH}"/ratelimit_burst)
-+
-+	if [ "${INTERVAL}" -ne 0 ] ||
-+	   [ "${BURST_DEFAULT}" -ne "${DEFAULT_BURST}" ]
-+	then
-+		echo "FAIL: unexpected rate limit defaults:" \
-+		     "interval=${INTERVAL} burst=${BURST_DEFAULT}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+function check_limited() {
-+	local RECEIVED
-+
-+	RECEIVED=$(count_msgs "${OUTPUT_FILE}")
-+
-+	# Unrelated kernel messages share the bucket, so fewer than BURST of
-+	# ours can get through, but never more
-+	if [ "${RECEIVED}" -gt "${BURST}" ]
-+	then
-+		echo "FAIL: received ${RECEIVED} messages with ratelimit_burst=${BURST}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+# The notice below travels ahead of the message that reopened the bucket, so
-+# waiting for the file to appear is not enough
-+function msg_received() {
-+	grep -q "${MSG}" "${OUTPUT_FILE}" 2> /dev/null
-+}
-+
-+# The messages lost above have to be reported to the receiver
-+function check_drops_reported() {
-+	if ! grep -q "${DROP_NOTICE}" "${OUTPUT_FILE}"
-+	then
-+		echo "FAIL: no rate limit notice in ${OUTPUT_FILE}" >&2
-+		cat "${OUTPUT_FILE}" >&2
-+		exit "${ksft_fail}"
-+	fi
-+}
-+
-+# ========== #
-+# Start here #
-+# ========== #
-+
-+modprobe netdevsim 2> /dev/null || true
-+modprobe netconsole 2> /dev/null || true
-+
-+# Check for basic system dependency and exit if not found
-+check_for_dependencies
-+# Remove the namespace, interfaces and netconsole target on exit
-+trap cleanup EXIT
-+
-+# Set current loglevel to KERN_INFO(6), and default to KERN_NOTICE(5)
-+echo "6 5" > /proc/sys/kernel/printk
-+# Create one namespace and two interfaces
-+set_network
-+# Create a dynamic target for netconsole
-+create_dynamic_target
-+
-+check_defaults
-+
-+# Set the burst before the interval, so that no message escapes while the
-+# target still carries the default burst
-+echo "${BURST}" > "${NETCONS_PATH}"/ratelimit_burst
-+echo "${INTERVAL_MS}" > "${NETCONS_PATH}"/ratelimit_interval_ms
-+
-+listen_port_and_save_to "${OUTPUT_FILE}" &
-+wait_for_port "${NAMESPACE}" "${PORT}" "ipv4"
-+send_msgs "${MSG_COUNT}"
-+# This half of the test is about messages that never arrive, so there is
-+# nothing to busywait on
-+sleep 1
-+pkill_socat
-+check_limited
-+rm -f "${OUTPUT_FILE}"
-+
-+# Dropping the interval back to zero has to make the target unlimited again
-+echo 0 > "${NETCONS_PATH}"/ratelimit_interval_ms
-+
-+listen_port_and_save_to "${OUTPUT_FILE}" &
-+wait_for_port "${NAMESPACE}" "${PORT}" "ipv4"
-+send_msgs 1
-+if ! busywait "${BUSYWAIT_TIMEOUT}" msg_received
-+then
-+	echo "FAIL: Timed out waiting (${BUSYWAIT_TIMEOUT} ms) for netconsole" \
-+	     "message in ${OUTPUT_FILE} after clearing the rate limit" >&2
-+	exit "${ksft_fail}"
-+fi
-+validate_msg "${OUTPUT_FILE}"
-+check_drops_reported
-+pkill_socat
-+rm -f "${OUTPUT_FILE}"
-+
-+trap - EXIT
-+cleanup
-+exit "${ksft_pass}"
+And really you probably want to match the kernel convention of ALIGN()
+defaulting to align-up (for some reason) and name this ALIGN_DOWN() to be
+consistent and avoid confusion BUT...
 
--- 
-2.53.0-Meta
+Since the tests already do this mistake I guess it's not so bad to share the
+define and propagate it for now I suppose.
 
+
+>
+> Assisted-by: Claude-Code:claude-opus-5
+> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> ---
+>  tools/testing/selftests/mm/Makefile           |   1 +
+>  .../testing/selftests/mm/folio_order_check.c  | 137 ++++++++++++++++++
+>  tools/testing/selftests/mm/hmm-tests.c        |   1 -
+>  tools/testing/selftests/mm/migration.c        |   1 -
+>  tools/testing/selftests/mm/run_vmtests.sh     |   2 +
+>  tools/testing/selftests/mm/vm_util.h          |   2 +
+>  6 files changed, 142 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/testing/selftests/mm/folio_order_check.c
+>
+> diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
+> index 2d5366196e30..2093fcf6e915 100644
+> --- a/tools/testing/selftests/mm/Makefile
+> +++ b/tools/testing/selftests/mm/Makefile
+> @@ -104,6 +104,7 @@ TEST_GEN_FILES += guard-regions
+>  TEST_GEN_FILES += merge
+>  TEST_GEN_FILES += rmap
+>  TEST_GEN_FILES += folio_split_race_test
+> +TEST_GEN_FILES += folio_order_check
+>
+>  ifneq ($(ARCH),arm64)
+>  TEST_GEN_FILES += soft-dirty
+> diff --git a/tools/testing/selftests/mm/folio_order_check.c b/tools/testing/selftests/mm/folio_order_check.c
+> new file mode 100644
+> index 000000000000..93030a42c3cc
+> --- /dev/null
+> +++ b/tools/testing/selftests/mm/folio_order_check.c
+> @@ -0,0 +1,137 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Self-check for the vm_util folio-order detection helpers,
+> + * is_backed_by_folio() and is_range_backed_by_folio_orders().
+> + *
+> + * For every anon THP order the kernel supports, fault memory in with only
+> + * that order enabled and verify the helpers report exactly that order:
+> + * not a neighbouring order, and plain 4K memory as order 0. The helpers
+> + * are what the khugepaged mTHP tests use to detect collapse results, so
+> + * they must agree with the kernel's own idea of the backing before any
+> + * collapse test relies on them.
+> + */
+> +#define _GNU_SOURCE
+> +#include <fcntl.h>
+> +#include <stdio.h>
+> +#include <stdlib.h>
+> +#include <sys/mman.h>
+> +#include <unistd.h>
+> +
+> +#include "kselftest.h"
+> +#include "vm_util.h"
+> +#include "hugepage_settings.h"
+> +
+> +static int pagemap_fd;
+> +static int kpageflags_fd;
+> +
+> +/* mmap an anon VMA of exactly @size bytes at a @size-aligned address. */
+> +static char *alloc_aligned(size_t size)
+> +{
+> +	size_t len = size * 2;
+> +	uintptr_t aligned;
+> +	char *p;
+> +
+> +	p = mmap(NULL, len, PROT_READ | PROT_WRITE,
+> +		 MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
+> +	if (p == MAP_FAILED)
+> +		ksft_exit_fail_perror("mmap()");
+> +
+> +	aligned = ALIGN((uintptr_t)p, size);
+> +	if (aligned != (uintptr_t)p)
+> +		munmap(p, aligned - (uintptr_t)p);
+> +	if (aligned + size != (uintptr_t)p + len)
+> +		munmap((char *)aligned + size,
+> +		       (uintptr_t)p + len - aligned - size);
+> +
+> +	return (char *)aligned;
+> +}
+> +
+> +/*
+> + * Enable only @order (order 0: nothing), fault one aligned window in and
+> + * check the helpers see exactly @order.
+> + */
+> +static void check_order(int order)
+> +{
+> +	struct thp_settings settings = *thp_current_settings();
+> +	size_t size = psize() << order;
+> +	bool ok = true;
+> +	char *p;
+> +	int i;
+> +
+> +	for (i = 0; i < NR_ORDERS; i++)
+> +		settings.hugepages[i].enabled = THP_NEVER;
+> +	if (order)
+> +		settings.hugepages[order].enabled = THP_ALWAYS;
+> +	thp_push_settings(&settings);
+> +
+> +	p = alloc_aligned(size);
+> +	*p = 1;
+> +
+> +	if (!is_range_backed_by_folio_orders(p, size, order,
+> +					     pagemap_fd, kpageflags_fd)) {
+> +		ksft_print_msg("order %d not detected after fault\n", order);
+> +		ok = false;
+> +	}
+> +
+> +	/* A lower order must be rejected: the folio is larger. */
+> +	if (order && is_range_backed_by_folio_orders(p, size, order - 1,
+> +						     pagemap_fd,
+> +						     kpageflags_fd)) {
+> +		ksft_print_msg("order %d also reported as order %d\n",
+> +			       order, order - 1);
+> +		ok = false;
+> +	}
+> +
+> +	/* Order 0 pages must not look like any large folio, and vice versa. */
+> +	if (order && is_range_backed_by_folio_orders(p, size, 0,
+> +						     pagemap_fd,
+> +						     kpageflags_fd)) {
+> +		ksft_print_msg("order %d also reported as order 0\n", order);
+> +		ok = false;
+> +	}
+> +
+> +	munmap(p, size);
+> +	thp_pop_settings();
+> +
+> +	ksft_test_result(ok, "order %d classified\n", order);
+> +}
+> +
+> +int main(void)
+> +{
+> +	struct thp_settings settings;
+> +	unsigned long orders;
+> +	int order;
+> +
+> +	ksft_print_header();
+> +
+> +	if (!thp_available())
+> +		ksft_exit_skip("Transparent Hugepages not available\n");
+> +
+> +	pagemap_fd = open("/proc/self/pagemap", O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_perror("open(/proc/self/pagemap)");
+> +	kpageflags_fd = open("/proc/kpageflags", O_RDONLY);
+> +	if (kpageflags_fd < 0)
+> +		ksft_exit_skip("open(\"/proc/kpageflags\") requires root\n");
+> +
+> +	orders = thp_supported_orders();
+> +	if (!orders)
+> +		ksft_exit_skip("No supported THP orders\n");
+> +
+> +	ksft_set_plan(__builtin_popcountl(orders) + 1);
+> +
+> +	thp_save_settings();
+> +	thp_read_settings(&settings);
+> +	/* Base of the settings stack; the bottom entry is never popped. */
+> +	thp_push_settings(&settings);
+> +
+> +	check_order(0);
+> +	for (order = 1; order < NR_ORDERS; order++) {
+> +		if (!(orders & (1UL << order)))
+> +			continue;
+> +		check_order(order);
+> +	}
+> +
+> +
+> +	ksft_finished();
+> +}
+> diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+> index e2642eca0d02..df426f9218e7 100644
+> --- a/tools/testing/selftests/mm/hmm-tests.c
+> +++ b/tools/testing/selftests/mm/hmm-tests.c
+> @@ -65,7 +65,6 @@ enum {
+>  #define HMM_PATH_MAX    64
+>  #define NTIMES		10
+>
+> -#define ALIGN(x, a) (((x) + (a - 1)) & (~((a) - 1)))
+>  /* Just the flags we need, copied from mm.h: */
+>
+>  #ifndef FOLL_WRITE
+> diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+> index f19d53c69576..fd35f8a7b5b8 100644
+> --- a/tools/testing/selftests/mm/migration.c
+> +++ b/tools/testing/selftests/mm/migration.c
+> @@ -20,7 +20,6 @@
+>
+>  #define TWOMEG		(2<<20)
+>  #define RUNTIME		(20)
+> -#define ALIGN(x, a)	(((x) + (a - 1)) & (~((a) - 1)))
+>
+>  HUGETLB_SETUP_DEFAULT_PAGES(1)
+>
+> diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
+> index d09f9f6a384e..2652a7920b80 100755
+> --- a/tools/testing/selftests/mm/run_vmtests.sh
+> +++ b/tools/testing/selftests/mm/run_vmtests.sh
+> @@ -402,6 +402,8 @@ CATEGORY="pfnmap" run_test ./pfnmap
+>  # COW tests
+>  CATEGORY="cow" run_test ./cow
+>
+> +CATEGORY="thp" run_test ./folio_order_check
+> +
+>  CATEGORY="thp" run_test ./khugepaged
+>
+>  CATEGORY="thp" run_test ./khugepaged -s 2
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 39dfb18dc10c..ce05bce4670d 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -10,6 +10,8 @@
+>  #include <linux/fs.h>
+>
+>  #define BIT_ULL(nr)                   (1ULL << (nr))
+> +#define ALIGN(x, a)                   (((x) + (a) - 1) & ~((a) - 1))
+> +
+>  #define PM_SOFT_DIRTY                 BIT_ULL(55)
+>  #define PM_MMAP_EXCLUSIVE             BIT_ULL(56)
+>  #define PM_UFFD_WP                    BIT_ULL(57)
+> --
+> 2.54.0
+>
+
+--
+Cheers, Lorenzo
