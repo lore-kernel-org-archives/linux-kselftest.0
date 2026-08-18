@@ -1,109 +1,136 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B1EB46EC60;
-	Tue, 18 Aug 2026 12:47:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8061472F7A
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 12:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787057226; cv=none; b=MTHyNaPAkjGidj+iNNQq8GUkx/+py6X9qx6I3xMqephJ4+/rYruuhtbpxFP1a/pdqT/R2C/zkU0vBV32k12tAc/07sAyKvuT3fNRwlrNXiNGU1QoK1PZeSByKhNLgz9wTQBbb4zrEKJAIw3JmbV2JXvruaXTdX5sfuGr+C0RyG0=
+	t=1787057387; cv=none; b=l4wkMc+BNzlCmCPCJsNpEZS/dgef/X8IwEsczAYd80bj8y3VSDxDdRYbxupWsD9lcDql1zYw7M9s2KHFDuJiDyfjYTW7XMwqFPzS4k1ktazEDLCB7Imfe3zjXbZMT2iYXQ9ZEd1HoYU8KX/Nh9q4bSgmLNqvnRudgAVxEQnehlw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787057226; c=relaxed/simple;
-	bh=iFtjPd1BVmXAbioi3JU56OCVjaF4nzNNaOm0GcnCP7o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n/Y4DjLdj6CNQ0lPudBqkEyVZIrqDy9u3ruFOPo3t47MSrVSwDPrfz5ZLAyv8Ql8CKYPDBcMHuwCsNOkcC41OY03OMQFAGkXupMS1Z7uegpH3dIL2zu0BF/3jaaNOmNWK77u34Ama/T5r6HBB3hHAMoYMqggGBfdeUF4qlOwczQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lOdVgCsd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787057387; c=relaxed/simple;
+	bh=Gq2r1FfeEGK0v5W9yu0Rt48rAmYvUZwtw+oK7zZ+amI=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=cLYJnSBlwmvAT+U9j0mi4SLVXGARg+aH5GKq0D/WYsn5jgs4I3FxcjXzbmIsYZPPSf2shGt3xRJbKm5vRM7EE2q3KI2iIneD/UJxd16B3FbIhKi0g3wYQN5L2RceoaBxLJwqt0RftgS4lbwH83vXai4FsQ5Lc2XH9X4KRFF3JLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=l6RIcNPs; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lOdVgCsd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D40951F000E9;
-	Tue, 18 Aug 2026 12:47:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787057224;
-	bh=iFtjPd1BVmXAbioi3JU56OCVjaF4nzNNaOm0GcnCP7o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=lOdVgCsd+iB0AFj6Ivg0q9ZtPJ8aP3+6a8hfErCZiUukHR0gibiRmW+VOaim5wuYc
-	 ZrF8AbL+O5sZ4bB4s9C59+22+KiJlWkQz83mH9R1NswhWnDgCke1RSZ84Gd03CQ+fc
-	 DPAGkRuqc0I5+U6pzLgFTL8VkFf/9QZSQGNG0UwzgrPDJfM9fm0KoSXI1zrrDfpYQQ
-	 SEvHYJeKicw+tZiiN2hSkSqAewsghXoKIbhAftK4pRYrOlI5XywkQubaJC/rGqQubL
-	 /CZpXzfUE7MBBL1eNNByOtRNOaQKqsnPStmYELMB11y+fU7O+0wI+KAop+n9ZaXKQx
-	 yf4REBnfSVKyg==
-Date: Tue, 18 Aug 2026 14:46:58 +0200
-From: Joel Granados <joel.granados@kernel.org>
-To: Bradley Morgan <include@grrlz.net>
-Cc: akpm@linux-foundation.org, hannes@cmpxchg.org, jackmanb@google.com, 
-	kees@kernel.org, linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, mhocko@suse.com, shijianlin11@foxmail.com, 
-	shuah@kernel.org, surenb@google.com, vbabka@kernel.org, ziy@nvidia.com
-Subject: Re: [PATCH v2 0/4] sysctl: Disallow partial updates of
- miss-formatted sysctl vectors
-Message-ID: <4hbx4orb23mruq4dsjolglzgsjue5g25bbmnbeu5w37x7em4rm@o4hp6nu54ye6>
-References: <20260814-lklm-partial_ctlvec-v2-0-9df50d26e477@kernel.org>
- <5F021629-DD85-4941-8263-3C4F51E9D6BD@grrlz.net>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="l6RIcNPs"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id BFDD94E412AC;
+	Tue, 18 Aug 2026 12:49:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8854660355;
+	Tue, 18 Aug 2026 12:49:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E1C5111C70324;
+	Tue, 18 Aug 2026 14:49:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787057377; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=zaPuVgk6vBQFQ2iyk57rrQKoeBKvURSjuf5b4I6ULVQ=;
+	b=l6RIcNPs1SQmIadkjYJzP2zpSgAveZwq5HUZxoHrNmnaiqAx4/xQwddSE11k8J42pMv9ac
+	40qhpa7c+Ty4UlBsGR/V6qpf6GJw2BE7qxPch5p2D+SB+Uac/pF3xCzKE5pWfbmfda2GtC
+	pvNPVRrC+3dlfV2DhtnyMREc6qw4AMLaRLp1QzaUg2JeDmzN3qX6CYwPxoeWjb+uu0r3S/
+	aUE6py5AwDBhAWiwNcI1Sb0aJnWemjSR8jLnTltgIhCbHFpIT1cZkZQGpb022QoI36zG10
+	1/Dwvu4VIuHOkzskahMsBBUfOuCRAvajIPpWPS2KNyo42BfiY5lEAneMAaeArA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="l4ylzp3pd5pjeqyl"
-Content-Disposition: inline
-In-Reply-To: <5F021629-DD85-4941-8263-3C4F51E9D6BD@grrlz.net>
-
-
---l4ylzp3pd5pjeqyl
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 18 Aug 2026 14:49:30 +0200
+Message-Id: <DKS2YUE3JPJO.1QKR47OVLV5UW@bootlin.com>
+Subject: Re: [PATCH bpf v6] selftests/bpf: allocate a larger timeout for
+ connection
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+ <ihor.solodrai@linux.dev>, <martin.lau@kernel.org>, <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <andrii@kernel.org>, <eddyz87@gmail.com>,
+ <memxor@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
+ <yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
+ <shuah@kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260817-tc_tunnel_flaky-v6-1-c02ccde847f2@bootlin.com>
+ <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
+In-Reply-To: <c7945c532eb31abc4d3fbbd0720d7a1f47eff936621cf8d11ecdfd9aeef27f93@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Sat, Aug 15, 2026 at 05:09:30PM +0100, Bradley Morgan wrote:
->=20
-> Copy it, only write back once every value converted. That's the
-> right way to do this. Went through the whole series against the
-> tree, notes in the patch replies.
-Your feedback was useful, but it was riddled with a *lot* of hand
-waving. Please be succinct and to the point. The previous paragraph is
-not needed.
+On Mon Aug 17, 2026 at 10:14 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/network_helpers.c b/tools/testi=
+ng/selftests/bpf/network_helpers.c
+>> index b82f572641b7..1fda1fa7281c 100644
+>> --- a/tools/testing/selftests/bpf/network_helpers.c
+>> +++ b/tools/testing/selftests/bpf/network_helpers.c
 
->=20
-> Some nits on the series:
-> - "miss-formatted" in the subject. mis-formatted, or just malformed.
-Note that this comment is missing the why. It is good to know why you
-want the change
+[...]
 
-> - akpm's scalars nit still applies.
-> - Sashiko saw something on this one (akpm linked it).
-In my opinion this is just noise. If you see that I have missed a
-comment, call me out on it. If you have additional information, answer
-to reviewers mail.=20
+>> +static int connect_with_timeout(int fd, const struct sockaddr_storage *=
+addr,
+>> +				socklen_t addrlen, int timeout_ms)
+>> +{
+>> +	int connect_timeout_ms =3D MAX(timeout_ms, CONNECT_MIN_TIMEOUT_MS);
+>> +
+>> +	/*
+>> +	 * Override timeout configuration with a larger value for the
+>> +	 * connection
+>> +	 */
+>> +	if (settimeo(fd, connect_timeout_ms)) {
+>> +		log_err("Failed to set connect timeout");
+>> +		return -1;
+>> +	}
+>> +
+>> +	if (connect(fd, (const struct sockaddr *)addr, addrlen)) {
+>> +		log_err("Failed to connect");
+>> +		return -1;
+>> +	}
+>> +
+>> +	/*
+>> +	 * If the timeout configured by the test is different from the
+>> +	 * connect timeout, restore it
+>> +	 */
+>
+> This isn't a bug, but do the two block comments here add anything over
+> the code they sit above? The first sits above settimeo(fd,
+> connect_timeout_ms) where connect_timeout_ms was computed with MAX(...,
+> CONNECT_MIN_TIMEOUT_MS) on the line before. The second transliterates
+> the condition on the line below (timeout_ms !=3D connect_timeout_ms means
+> "restore it"). Could they be trimmed to a single line about why a larger
+> connect budget is needed?
 
->=20
-> Otherwise fine by me, the split is clean.
->=20
->=20
-> Reviewed-by: Bradley Morgan <include@grrlz.net>
-> also
->=20
-> Tested-by: Bradley Morgan <include@grrlz.net> for the test
-How did you test? And what where your results?
+This is slowly turning into bikeshedding (and if the comment wasn't
+there, another LLM run could possibly request it to clarify the
+intent...) so I'll keep it as-is.
 
-Best
+[...]
 
---l4ylzp3pd5pjeqyl
-Content-Type: application/pgp-signature; name="signature.asc"
+>> -	if (connect(client_fd, (const struct sockaddr *)&addr, len)) {
+>> -		log_err("Failed to connect to server");
+>> -		return -1;
+>> -	}
+>> -
+>> -	return 0;
+>> +	return connect_with_timeout(client_fd,
+>> +				    &addr, len,
+>> +				    timeout_ms);
+>                             ^^^^
+>
+> This isn't a bug, but could this call fit on one line? With the leading
+> tab it comes to about 71 columns as a single statement, well inside the
+> 80-column limit. Elsewhere the file only wraps arguments when the line
+> doesn't fit.
 
------BEGIN PGP SIGNATURE-----
+True. Will be fixed.
 
-iQGzBAABCgAdFiEErkcJVyXmMSXOyyeQupfNUreWQU8FAmqEVDkACgkQupfNUreW
-QU+sdQwAiiR0nJg+0a4UBdZxBcSQ1BO7cn+hJgcmdVyUFr+plSJKAcYIJW4gWdJX
-2V2MSMvW2RSvPkucsQZJogIPsw7Uf/vSCwtyiy2sOCBPIGxd4KaMJRKunzrZGbSp
-BNqLfvKzm8VUWBCA9x0b28LIVuZLp28mDR8tv/+W+4Ah2GcaeDDRccCtZL3TjYV0
-ScfIr710yqRMkCUPil0qkEdU5LApmXvIEHz0N+HxksOGddsW4SPBmtmQ91ZNa7+v
-X9ldCz7evpB9n22vjGkMI3QXI8IeRB7lbWWDtvQZXeWypFPvyhgBXbmAi4HZqAjj
-dNcPj4rPVAR7saqHOm5uFbR5lMYolL3xApT9pZx31h7bDNrkKxn9CUosZ8yJ1L6b
-MOxxPxY2DAFU1T377mMnzF4cVrPAaCgAEP4lvzax4ictwZpMJ1n30HMghgmeb2R6
-IK2TdWDgavFQLBtUKOCPY0SawLS4ekWMsA0CeqDZoEoWPHtNgaz/jPLw5V8YHu+W
-zhJT4INO
-=x0ir
------END PGP SIGNATURE-----
+Alexis
 
---l4ylzp3pd5pjeqyl--
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
