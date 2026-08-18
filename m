@@ -1,63 +1,65 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BF23E3176
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 06:10:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D29D20125F
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 06:10:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787033448; cv=none; b=qWXRKDG8yqAyU5ix6AXmorpzsCY1nPTjbxaZ1MJQj5ilzv1T1m9SgJ1Pvo7cu29eJhDDHE8MQDWTQSIUCOSbY0Q2Ps26jzlFBWl0BKEqPgFzmXUxLMXZ7/ypg0Qx+xw2N3d6+OnhizBwSr9mC+WAuDsGFE0XuV9yX+PMVdCgpQU=
+	t=1787033454; cv=none; b=rDFO0llawaQ4ym0Nc9rfJKbv+C47IAW+NPaOhlDKqQR0SxRHp4CxLa5SYI5hS18x5RMkKS6RN2KwFMiK8iYhsk599M1h5Mx3atbka69Gi3Y838AQ+MIh5+HNpMapZGtCTxg64Y/dIxsb2Ca9AEhM9hU+W8jrZnbgUGSU3mXMRrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787033448; c=relaxed/simple;
-	bh=2FOLVCfC4ofTUJxtY8JQkfWysWQNWsICB/k6OH+f7kk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Tz0ilRkwY9YxK77PwWrVuqlZ2n641lkTDyoXBJ7nul+0ckpBal5fVq2zb6NQgHQCmPGS8YOGEkg01bxwyg/XxhjKj5j4K0E64WVDZafOewQyGV3VjR2mjENpb8RQkmJzZrKB11GyHRogW/uzelecL4dFed2rz8GuCA97LJ23Aso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfL9TtQ+; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1787033454; c=relaxed/simple;
+	bh=J+lH5aIxoKZrtLS3G91f/QlNeqCm03+jL/fZVbeUkqA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=J1wHnRSe1JXnSjgWr2vt19Sr/Sn8s62+L/KXvAPDHO4FnU1dOJ+yHiLxYGGL4+sOdz+huoIvALYcZPdcKjKeMgYnuqGdFG1cc911ZBIOamzC/A65smf9JXhisGsdkl1eDWXaBenG/uKr5mbZFYemOrDg5nc3TuLxzfq02sh/hFY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eatYc1Vw; arc=none smtp.client-ip=209.85.216.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfL9TtQ+"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so4766454a91.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 23:10:45 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eatYc1Vw"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e08baf860so4251830a91.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 23:10:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787033445; x=1787638245; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=03XrAgWUIfiSPQ5t3z3JrnXITobmfpDmBrpvKrXoXgU=;
-        b=hfL9TtQ+zmbBu9OdOlwnRvejnLMhOqh23BxNpIK1pD4ZCUdZ7df+5w+n1kuywlf+9T
-         RKP+Pln+sY+2IuZNrXGCTOfgr3EM8VXqYRaFe7o5HSVK0dADptCxlnOQw3uoWDjeXv1G
-         AtotfFWOr4RsQvCYpgBLvIYwrykjdqezm61It/PEtZVrrThzG4XiSYxzUEgUC1Q18X9T
-         zd2RHBRVJaCdKzko7e4pC95LhYZAz61++jt3ZUxGgenru2PWuIcP4mnHacgk71pWbOx+
-         x3G8fICz4L54nlPVNM2h/f2L043nwolxbOnHHwuvBlI4HAT02RmzOVQW/JK9+0VpCXOY
-         AkbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787033445; x=1787638245;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20251104; t=1787033452; x=1787638252; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=03XrAgWUIfiSPQ5t3z3JrnXITobmfpDmBrpvKrXoXgU=;
-        b=LWHXeBODxBaJNrGWMgbmE7WZ8RIDLAAnVRq58Vz9mMCAbtB8XXeYmTojTmNaatMulF
-         PIpwidx5IphKIRzc8q9S0ox/w9l4sl7g1vs9zNmPWSBIYAg9F56MeCAs/zohedp6PwyT
-         qPrE13z2msRd5sA9FUJacN3YK/B98QD1NtoJ+XUnxKyS6EXrKhaK7FQl+SW6OHeRWvHm
-         T1l9K2K2RDP2o3ZdJuZ+vg4vl3dTTRVvgxwbivaRLOXVx3hObzbEjT9QOpZuWJOjYPsk
-         B65TXbux7ccXd2QFsknGt9T55Z29mmdmdqbkwc1fbltfymAdLCOp9/euerXvp6fjvb3m
-         YfGg==
-X-Forwarded-Encrypted: i=1; AHgh+RqRfZv2acvfTPn+e0sghEaNwXjQKnICRuxv2DCNVXxzMm7rLquVGc+YaF6A3TDalpT646pgUSZ65Gv4PDklGLI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyB8pQD2576bzqQ/bWxWZ4XlvQPVy/fduSfHxcu/UwTP3elx/H4
-	RsAT94UcjbhIIs2Rc+iSl7VIdXXPz1Vx3pS6ffBrQ0a2lY3XHX8NaNIo
-X-Gm-Gg: AR+sD10NYpWvfP7i7pwD9/ajj9CFBz8wdBVVGKOfVYCfomhLUElQLD7Cx13ClCxPOn/
-	REre3zuO/3WKnMIn7W+pwCm62+YQRqiSQcQ0VRy6DoTMdqzhkgABuZif+8wN03Tm9Q1YMiDTBf0
-	Dt0bqgxe2yhpCIQQ4VYmHUvvcVCRRWrj6MH0uKj8lvKwgjzHddOKYpYAj2HzZi9qziIvcehsDF+
-	zDeBURO5jwfg+vZF7B5HIZKVkEjNAZDqJbmCh+b75BYHSt3b2SDFXf9LHMgSRTeK8Uvl2LZ9GMB
-	yqbWt4lo4brTuFPvV3SuorhvPPAOi1mXc5FcZ9V3L8YFdInTFQmweJJX29rzBmHDOm3HNxwpnlJ
-	i3F4ZHAfD34X8vOaNPd6htmN5zKtB0PrVE741p4ZjE1tzU88tU3uH675FTY7oTeh7Gfwv+zVH9K
-	dvTRyAi3oULIfk/JEvETpnNvoJ5LUbrZv1Q67869z4LgRd7qk4FXXN7ZAQHgI1AFwfh9E7HsCCN
-	xRDaL4=
-X-Received: by 2002:a17:90b:5707:b0:38f:5801:dc0e with SMTP id 98e67ed59e1d1-3933e61bee2mr33646076a91.15.1787033445097;
-        Mon, 17 Aug 2026 23:10:45 -0700 (PDT)
+        bh=A673oz0E/o2MwRaOE5XvkcWpC/QdFWh299uzrbmuC70=;
+        b=eatYc1Vw7M0ffV6mpH3kKhaZwUsBqmo9pKhWsoX0EpwQnq+Z4FpRF8rP7AxmzYuAcu
+         GP2civu9peg7SIcaBywnQv6w5PqqZUIBf/MmbYjSPjN6W/AhJ71UCBllDzYILTVASi9H
+         wjMq1nwMT9jqcQuzt7ch291bl5zOvcPL8EZGXD6CEYdpHPVMWnYvFtf+IXiElvnS/5Z/
+         hznZjQmMqXPP/1Ctk+oP1qbfFG0VQssKRaSqzlTpCCGAmGFxF0oUWyXGJVYW76jd1ivh
+         2Jsw83kEkcsiPSMs3LnOH4SfN9STZZmAKRNu/3AJ7OLOcsPW2ZZN0bGuB3JzqpXwO8pU
+         BW2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787033452; x=1787638252;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=A673oz0E/o2MwRaOE5XvkcWpC/QdFWh299uzrbmuC70=;
+        b=Ornz4IqKzRpQn/Mu6zCsLMwcx8BYK0jaXXnsHf2uhN4eF4JVCtO3cFM4eiCHJTfNGd
+         7JtgWOQ2zOZHVJYEv4fpXgqyMkHsBii1IsfF/yCcj5NnjIFXC603rJVc9IPLfiGEsJiZ
+         SXv1o7ZYtRVThUZt0MZhhJ2GOEKUfbwzTaRHxtt8RNg1/IwLGVH0lSeOxC5WgDhvRsSN
+         l9tkLHn+ojfQdVI78Uw5dqUtcygLVTvNofs+RxvX6oi6/0jeQ9C+uRfHoYBSRRkdO0a8
+         ivfrc8fm7UMNEXa3tXu4cbk4t/ctW/08J9edngkPgVNbbm3P+Na8m4oz8dWtjtTKgEKh
+         PQ8A==
+X-Forwarded-Encrypted: i=1; AHgh+RpgfwKqJMCu5pgOAVQCKDzRQ3RSmO78z/95SxJzKy/IMfnZecg/PjRJqfu4LjokHsZKEZPcLUMlzoCRVTAk2iU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy1VRz060ISvcaBg2wNzYkIyPMkNexGreT96XtzuwMhX8GDckle
+	iv1ddDnk+pWnh71emNqviXLBOeCkL3GV0C1khM45xdCaswwM1Gm+LE7D
+X-Gm-Gg: AR+sD13XaP4uEUBs1A9O25gWpyejGBAE74oHQHnrIUEpIDfITFIzPyV/CC56uqvdu4P
+	uHHyozVQRUleV9iK7htNIJqcEvDSLZ+S60pUTghFUH7dnDUSEEcOJpvEO7FqpPU1WDz5gEhfe0x
+	E+uOdU71bYdkEOpsJWJ8u8DZbUIxcPg2g9WLF42Nz37NDRc7NpRj2xjW5wTPFllASV4zcUDIi4l
+	fMlcCooIzCcHoeKmmbxEMLUgezHMbbZ5OqSxQ+14lNr7V+drFzNVEhLZarp4QX7xthrKE9qYD8o
+	2eKABpODo0w42BoF7H6dt+49y1stMSGCS1A2eWXYk0mk6VqldH0nF3/qbCRJM7pIiFHr7ZNryj3
+	m/+xPQb0LmWO1XVE16GiUEsl7e43QbIR6KuACM7gmPFXXATTrDrA9uFfyLjAmh+tpePHxgkuENK
+	K2aOKdedpFMI1M97GH/pGfc1hDkUh4gtHQnvWbg1wfRIWGOdpuXb19CjtKwfvgvGmXtlsDEh8vA
+	6IxcPgkBynlu26FzA==
+X-Received: by 2002:a17:90b:4f84:b0:38e:fea2:df53 with SMTP id 98e67ed59e1d1-3933bd186f4mr32421619a91.4.1787033451538;
+        Mon, 17 Aug 2026 23:10:51 -0700 (PDT)
 Received: from kernel.tail6741c6.ts.net ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d38bf94sm4633942a91.9.2026.08.17.23.10.39
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d38bf94sm4633942a91.9.2026.08.17.23.10.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 23:10:44 -0700 (PDT)
+        Mon, 17 Aug 2026 23:10:51 -0700 (PDT)
 From: Kunwu Chan <kunwu.chan@gmail.com>
 X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
 To: sj@kernel.org,
@@ -73,10 +75,12 @@ Cc: damon@lists.linux.dev,
 	shuah@kernel.org,
 	lianux.mm@gmail.com,
 	Kunwu Chan <kunwu.chan@gmail.com>
-Subject: [RFC PATCH 0/7] mm/damon/perf: observability framework for hardware-sampled access reports
-Date: Tue, 18 Aug 2026 14:10:24 +0800
-Message-ID: <20260818061031.827057-1-kunwu.chan@linux.dev>
+Subject: [RFC PATCH 1/7] mm/damon/perf: add observability framework with tracepoints and CONFIG switch
+Date: Tue, 18 Aug 2026 14:10:25 +0800
+Message-ID: <20260818061031.827057-2-kunwu.chan@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260818061031.827057-1-kunwu.chan@linux.dev>
+References: <20260818061031.827057-1-kunwu.chan@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -88,241 +92,528 @@ Content-Transfer-Encoding: 8bit
 
 From: Kunwu Chan <kunwu.chan@gmail.com>
 
-This series adds a unified observability framework to DAMON's
-hardware-sampled access report pipeline.  When a PMU backend delivers
-zero callbacks, the framework pinpoints the failing stage —
-was the event not created?  not enabled?  did the hardware produce
-no samples?  did the ring drop them?  did the drain fail to match? —
-without a single printk.  Every PMU backend (ARM SPE, AMD IBS,
-Intel PEBS, …) funnels through the same damon_perf_observe_*() API,
-which fans out to per-CPU pipeline counters, debugfs statistics,
-and tracepoints.
+Add the observe framework headers together with the compile-time switch
+that gates the whole feature: the three DAMON perf tracepoints this
+series adds (guarded with CONFIG_DAMON_PERF_OBSERVE so they are not
+registered when the switch is off; damon_perf_ring_overflow is provided
+by the base series), the observe API declarations with static-inline
+no-ops for disabled builds, the access-report contract (miss-reason
+enum, report-source enum, report source field, per-event cpu_state
+member), and the Kconfig and Makefile wiring.
 
-The framework does not contain any PMU driver.  It is pure
-observability infrastructure that sits alongside the existing
-DAMON software statistics (scheme stats, kdamond stats) and
-complements them for the hardware-sampling path.
+The sample tracepoint carries what the PMU actually populated
+(data->sample_flags), what was requested (perf_event->attr.
+sample_type), and the execution context (process/softirq/hardirq/NMI)
+in a single line, so PMU support gaps and context expectations (e.g.
+IBS overflow in NMI, SPE AUX drain in process context) are verifiable
+at a glance.
 
-Why this framework exists
--------------------------
-The framework was built to answer a concrete question during ARM SPE
-bring-up: what prevents SPE from delivering samples to DAMON?  The
-answer could be anywhere in the pipeline — the event wasn't created,
-the PMU wasn't enabled, the hardware produced no samples, the ring
-dropped them, or the drain failed to match — and without per-stage
-visibility, the only way to find out was to insert printks across the
-entire pipeline.
+Every following commit in this series builds with CONFIG_DAMON_PERF_OBSERVE
+both enabled and disabled.
 
-The framework instruments every stage with zero-overhead counters
-(when CONFIG_DAMON_PERF_OBSERVE=n) and optional tracepoints, so the
-failing stage is revealed at a glance.  It immediately diagnosed the
-ARM SPE gap: Layers 1-3 (event create/bind/enable) passed, but the
-PMU was not producing data — a PMU-level gap, not a DAMON pipeline
-bug.  This confirmed that SPE required an AUX buffer backend, which
-does not fit the perf_event_create_kernel_counter() API.
-
-During the subsequent ARM SPE AUX backend development [2] (which builds
-on the perf AUX kernel-consumer API [3]), the framework was used to
-verify each pipeline fix.  When the AUX backend was complete, the same
-framework confirmed a fully functional pipeline: Layers 1-7 all pass,
-real SPE hardware samples flow through the ring, match, and update
-stages.  The before/after results are shown in the Testing section.
-
-We are posting the framework now so that other PMU backends can reuse
-the same infrastructure instead of re-deriving it.
-
-How to use
-----------
-Compile with CONFIG_DAMON_PERF_OBSERVE=y.  After starting a kdamond
-with a perf event, the pipeline is visible at a glance:
-
-  # cat /sys/kernel/debug/damon/perf_stats
-      --------------  ----------
-      Counter          Value
-      --------------  ----------
-      callback          233
-      valid             233
-      ...
-      enqueue           233
-      dequeue           233
-      match              12
-      update              9
-
-For automated diagnosis, run the selftest:
-
-  # sudo ./damon_perf_obs_test.sh --pmu software --freq 1 --sample-freq 100
-
-For structured diagnostics, enable the tracepoints under
-/sys/kernel/debug/tracing/events/damon/.
-
-What the series adds
---------------------
-Patch 1 defines the three tracepoints (damon_perf_sample with 8 fields
-including sample_flags, sample_type, and execution context, plus
-damon_perf_report_missed and damon_perf_drain) with the CONFIG switch,
-the observe API declarations, no-op stubs, and the Kconfig / Makefile
-wiring.  (Reviewers: tracepoint folks — Steven, Masami, Mathieu.)
-
-Patch 2 implements the observe_*() core: per-CPU monotonic counters,
-event-lifecycle hooks with lazily-allocated per-event per-CPU state,
-NMI-safe sample classification with execution-context detection,
-ring enqueue/dequeue/peak, match/miss/update, and framework init.
-
-Patch 3 adds the debugfs perf_stats interface (debug-only, format
-unstable).
-
-Patch 4 wires the observe calls into the vaddr overflow handlers and
-the kdamond drain, integrating the framework into the hot path.
-Reads ring->tail once with READ_ONCE and reuses the cached value
-for the peak-occupancy estimate, avoiding a compiler reload and a
-torn read on the NMI producer side.
-
-Patch 5 adds the automated selftest with snapshot/delta accounting,
-per-CPU state-column checks, clean-session guard, and a PMU support
-verdict (FULLY INTEGRATED / PLUMBING-ONLY / UNUSABLE).
-(Reviewers: kselftest folks — Shuah.)
-
-Patch 6 documents the framework.
-
-Patch 7 adds CONFIG_DAMON_PERF_DEBUG as an optional Kconfig option for
-verbose pr_debug() output via damon_perf_dbg(), wired into every
-event-lifecycle hook, the drain summary, and the init paths.  Adds a
-pipeline health check to the selftest that diagnoses which stage is
-broken when callbacks are zero.
-
-Testing
-=======
-Tested on Kunpeng 920 (256 CPUs, ARM SPE, kernel 7.1.0-rc5-mm-new-damon+).
-
-KUnit: 35/35 PASSED (damon 29, damon-operations 5, damon-sysfs 1).
-
-The framework is PMU-agnostic.  Three configurations demonstrate this,
-with the ARM SPE case being the framework's core diagnostic value:
-
-**Software PMU** (page-fault sampling, exercises the full pipeline,
-no hardware required):
-
-  $ sudo ./damon_perf_obs_test.sh --pmu software --freq 1 --sample-freq 100
-  SUMMARY: 27 passed, 0 failed, 0 skipped (FULLY INTEGRATED)
-  callback=170, valid=170, enqueue=170, dequeue=170, match=6, update=3
-
-**CPU-clock** (address-less PMU, plumbing-only):
-
-  $ sudo ./damon_perf_obs_test.sh --pmu software --config 0 --freq 1 --sample-freq 100
-  SUMMARY: 22 passed, 0 failed, 3 skipped (PLUMBING-ONLY)
-  callback=1913, valid=0, addr_zero=1913, enqueue=0
-  Layers 1-4 pass; Ring/Match/Drain skipped as expected.
-
-**ARM SPE** (hardware trace).  This is the scenario that motivated the
-  framework: without an AUX buffer backend, SPE cannot deliver samples
-  through perf_event_create_kernel_counter(), and the framework
-  pinpoints the failure without a single printk:
-
-  $ sudo ./damon_perf_obs_test.sh --pmu arm_spe_0 --freq 0 --period 256
-
-  --- Layer 2-3: Enable & Run (via per-CPU state) ---
-    [PASS] Event Created (max per-CPU state >= CREATED)
-    [PASS] Event Bound (max per-CPU state >= BOUND)
-    [PASS] Event Enabled (max per-CPU state >= ENABLED)
-    [PASS] Perf event creation (no errors in dmesg delta)
-
-  --- Analysis ---
-    Pipeline diagnosis: PMU not producing data or AUX pipeline broken
-    [FAIL] Sampling — 0 callbacks — PMU is not delivering samples to DAMON
-    [SKIP] Event Running — no callbacks — state cannot advance past ENABLED
-    Ring: enqueue=0 dequeue=0 overflow=0
-
-  --- PMU support verdict ---
-    UNUSABLE: the PMU never delivered a sample to DAMON
-
-  SUMMARY: 19 passed, 1 failed, 5 skipped
-
-  Layers 1-3 pass — the per-CPU state advances to ENABLED — so the
-  kernel-side plumbing is intact.  The health check confirms
-  state >= ENABLED but enqueue=0, ruling out event-creation and enable
-  bugs.  The failure is isolated to Layer 4 (Sampling): the PMU itself
-  is not producing data.  This is the expected result for ARM SPE
-  without an AUX buffer backend, and the framework diagnoses it as a
-  PMU-level gap rather than a DAMON pipeline bug.
-
-  After the AUX backend is added [2] (which itself depends on the
-  perf AUX kernel-consumer API [3]), the same test script confirms a
-  fully functional pipeline, including real SPE hardware samples:
-
-  $ sudo ./damon_perf_obs_test.sh --pmu arm_spe_0 --freq 0 --period 256
-  SUMMARY: 27 passed, 0 failed, 0 skipped (FULLY INTEGRATED)
-  callback=47248, valid=47248, enqueue=15161, dequeue=15161,
-  overflow=32087, match=255, update=4
-  All 7 pipeline stages pass.  The AUX drain path delivers samples in
-  process context (context=0), and the ring overflow counter (32087)
-  shows the ring is sized for software PMU rates — a real-world
-  observation the framework provides without any additional
-  instrumentation.
-
-Known limitations
-=================
-- The debugfs perf_stats format is explicitly unstable and must not
-  be used by scripts.  Tracepoints and counters are the stable
-  diagnostic interface.
-- The global per-CPU lifecycle state is monotonic and never reset,
-  so a previous RUNNING event can mask a current event's failure.
-  Per-event per-CPU state is available for accurate tracking.
-- This series depends on Ravi's hardware-sampled access reports
-  branch [1] for the following facilities:
-    * Per-CPU SPSC report ring (damon_report_rings,
-      DAMON_REPORT_RING_MASK)
-    * damon_report_access() and damon_report_page_fault() as the
-      ring producer
-    * kdamond_check_reported_accesses() as the drain path
-    * damon_perf_event lifecycle (create/bind/enable/disable/free)
-  Without [1] this series cannot compile, so [1] must be merged
-  first.
-
-References
-==========
-Link [1]: https://github.com/damonitor/linux.git
-          branch: ravi_hw_sampled_access_reports_rfc_v1
-          commit: fd968106e5bf
-Link [2]: https://lore.kernel.org/all/20260816142222.689624-1-kunwu.chan@linux.dev/
-Link [3]: https://lore.kernel.org/all/20260814144927.489172-1-kunwu.chan@linux.dev/
-
-Base: fd968106e5bf ("mm/damon: add damos_node_eligible_mem_bp tracepoint")
-
-Kunwu Chan (4):
-  mm/damon/perf: add observability framework with tracepoints and CONFIG
-    switch
-  mm/damon/perf: implement observe API and per-CPU statistics engine
-  mm/damon: integrate observe API into vaddr overflow handlers and core
-    drain
-  selftests/damon: add automated layer-by-layer observability test
-
-Lian Wang (3):
-  mm/damon/perf: add debugfs statistics interface
-  Docs/mm/damon: document the perf observability framework
-  mm/damon/perf: add CONFIG_DAMON_PERF_DEBUG and pipeline health check
-
- Documentation/admin-guide/mm/damon/index.rst  |   1 +
- .../mm/damon/perf-observability.rst           | 210 +++++++
- include/linux/damon.h                         |  44 ++
- include/trace/events/damon.h                  | 120 ++++
- mm/damon/Kconfig                              |  33 +
- mm/damon/Makefile                             |   1 +
- mm/damon/core.c                               | 129 +++-
- mm/damon/perf/Makefile                        |   5 +
- mm/damon/perf/debugfs.c                       | 145 +++++
- mm/damon/perf/perf.h                          | 235 +++++++
- mm/damon/perf/stats.c                         | 308 ++++++++++
- mm/damon/vaddr.c                              | 104 +++-
- tools/testing/selftests/damon/Makefile        |   1 +
- .../selftests/damon/damon_perf_obs_test.sh    | 578 ++++++++++++++++++
- 14 files changed, 1880 insertions(+), 34 deletions(-)
- create mode 100644 Documentation/admin-guide/mm/damon/perf-observability.rst
+Co-developed-by: Lian Wang <lianux.mm@gmail.com>
+Signed-off-by: Lian Wang <lianux.mm@gmail.com>
+Signed-off-by: Kunwu Chan <kunwu.chan@gmail.com>
+---
+ include/linux/damon.h        |  44 +++++++
+ include/trace/events/damon.h | 120 ++++++++++++++++++
+ mm/damon/Kconfig             |  17 +++
+ mm/damon/Makefile            |   1 +
+ mm/damon/perf/Makefile       |   3 +
+ mm/damon/perf/perf.h         | 228 +++++++++++++++++++++++++++++++++++
+ 6 files changed, 413 insertions(+)
  create mode 100644 mm/damon/perf/Makefile
- create mode 100644 mm/damon/perf/debugfs.c
  create mode 100644 mm/damon/perf/perf.h
- create mode 100644 mm/damon/perf/stats.c
- create mode 100755 tools/testing/selftests/damon/damon_perf_obs_test.sh
 
+diff --git a/include/linux/damon.h b/include/linux/damon.h
+index 11f1c1071b9b..c191c065b0e4 100644
+--- a/include/linux/damon.h
++++ b/include/linux/damon.h
+@@ -116,6 +116,19 @@ struct damon_target {
+ 	bool obsolete;
+ };
+ 
++/**
++ * enum damon_report_source - Tells which subsystem produced an access report.
++ *
++ * Ring and matching counters aggregate all sources; this enum lets callers
++ * tag reports so that tracepoints and future per-source breakdowns can
++ * distinguish NMI overflow-handler samples from
++ * page-fault hints.
++ */
++enum damon_report_source {
++	DAMON_REPORT_SRC_PERF_OVERFLOW = 0,  /* overflow_handler (IBS, PEBS) */
++	DAMON_REPORT_SRC_PAGE_FAULT,         /* damon_report_page_fault() */
++};
++
+ /**
+  * struct damon_access_report - Represent single access report information.
+  * @paddr:		Start physical address of the accessed address range.
+@@ -125,6 +138,8 @@ struct damon_target {
+  * @tid:		The task id of the task that made the access.
+  * @tgid:		Thread group id of the task that made the access.
+  * @is_write:		Whether the access is write.
++ * @source:		Which subsystem produced this report
++ *			(enum damon_report_source).
+  *
+  * Any DAMON API callers that notified access events can report the information
+  * to DAMON using damon_report_access().  This struct contains the reporting
+@@ -138,10 +153,28 @@ struct damon_access_report {
+ 	pid_t tid;
+ 	pid_t tgid;
+ 	bool is_write;
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++	int source;
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ /* private: */
+ 	unsigned long report_jiffies;	/* when this report is made */
+ };
+ 
++/*
++ * Reason codes for trace_damon_perf_report_missed.
++ *
++ * DAMON_REPORT_MISS_TGID:       tgid mismatch (pid-based monitoring,
++ *                               missed at drain-loop level before the
++ *                               per-target iteration).
++ * DAMON_REPORT_MISS_NOREGION:   binary search found no containing region.
++ * DAMON_REPORT_MISS_BOUNDARY:   address + size straddles region boundary.
++ */
++enum damon_report_miss_reason {
++	DAMON_REPORT_MISS_TGID = 1,
++	DAMON_REPORT_MISS_NOREGION = 2,
++	DAMON_REPORT_MISS_BOUNDARY = 3,
++};
++
+ /**
+  * enum damos_action - Represents an action of a Data Access Monitoring-based
+  * Operation Scheme.
+@@ -1027,6 +1060,17 @@ struct damon_perf_event {
+ 	struct hlist_node hlist_node;
+ 	bool init_complete;
+ 	bool any_cpu_failed;
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++	/*
++	 * Per-CPU lifecycle state (enum damon_perf_event_state).
++	 * Allocated lazily on the first observe_event_created(),
++	 * freed on observe_event_destroyed().  Each event tracks
++	 * its own progression through CREATED->BOUND->ENABLED,
++	 * so destroying one event does not overwrite another"s
++	 * state on the same CPU.
++	 */
++	int __percpu *cpu_state;
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
+ 	struct damon_ctx *ctx;
+ };
+ 
+diff --git a/include/trace/events/damon.h b/include/trace/events/damon.h
+index 877627c9a1a1..c87fbeefb85a 100644
+--- a/include/trace/events/damon.h
++++ b/include/trace/events/damon.h
+@@ -91,6 +91,126 @@ TRACE_EVENT(damon_perf_ring_overflow,
+ 	TP_printk("cpu=%d", __entry->cpu)
+ );
+ 
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++/*
++ * Fires from NMI overflow handlers on every hardware sample received,
++ * before any DAMON-side filtering.  Records the raw address, full
++ * data_src (mem_op, mem_lvl, mem_snoop, mem_remote), period, and a
++ * reason code so userspace can distinguish:
++ *
++ *   0 = valid sample, queued to per-CPU ring
++ *   1 = data == NULL
++ *   2 = addr == 0 (PMU did not populate data->addr)
++ *   3 = kernel address (vaddr handler: addr >= TASK_SIZE)
++ *   4 = phys_addr not valid (paddr handler: !PERF_SAMPLE_PHYS_ADDR)
++ *
++ * data_src carries the raw union perf_mem_data_src value; use
++ * perf_mem__xxx macros to decode.
++ *
++ * sample_flags is what the PMU *actually* populated (from
++ * data->sample_flags); sample_type is what was *requested* (from
++ * perf_event->attr.sample_type).  Comparing them immediately
++ * reveals whether the PMU is providing the fields DAMON asked for
++ * — e.g. sample_type has PERF_SAMPLE_PHYS_ADDR but sample_flags
++ * does not → the PMU does not support physical-address sampling.
++ */
++TRACE_EVENT(damon_perf_sample,
++
++	TP_PROTO(unsigned long addr, u64 data_src, u64 period, int cpu,
++		u8 reason, u64 sample_flags, u64 sample_type,
++		u8 context),
++
++	TP_ARGS(addr, data_src, period, cpu, reason, sample_flags,
++		sample_type, context),
++
++	TP_STRUCT__entry(
++		__field(unsigned long, addr)
++		__field(u64, data_src)
++		__field(u64, period)
++		__field(int, cpu)
++		__field(u8, reason)
++		__field(u64, sample_flags)
++		__field(u64, sample_type)
++		__field(u8, context)
++	),
++
++	TP_fast_assign(
++		__entry->addr = addr;
++		__entry->data_src = data_src;
++		__entry->period = period;
++		__entry->cpu = cpu;
++		__entry->reason = reason;
++		__entry->sample_flags = sample_flags;
++		__entry->sample_type = sample_type;
++		__entry->context = context;
++	),
++
++	TP_printk("addr=0x%lx data_src=0x%llx period=%llu cpu=%d reason=%u context=%u sample_flags=0x%llx sample_type=0x%llx",
++		__entry->addr, __entry->data_src, __entry->period,
++		__entry->cpu, __entry->reason, __entry->context,
++		__entry->sample_flags, __entry->sample_type)
++);
++
++/*
++ * Fires when a report survived all ring/drain checks but could not be
++ * applied to any DAMON region.  Reasons correspond to
++ * enum damon_report_miss_reason:
++ *
++ *   DAMON_REPORT_MISS_TGID     (1): no target matched the report's tgid
++ *   DAMON_REPORT_MISS_NOREGION (2): binary search found no containing region
++ *   DAMON_REPORT_MISS_BOUNDARY (3): address + size straddles region boundary
++ *
++ * Note: tgid mismatches are now resolved in the drain loop *before*
++ * iterating targets, so there is at most one trace hit per report
++ * (rather than one per non-matching target as in earlier revisions).
++ */
++TRACE_EVENT(damon_perf_report_missed,
++
++	TP_PROTO(unsigned long addr, int cpu, int reason),
++
++	TP_ARGS(addr, cpu, reason),
++
++	TP_STRUCT__entry(
++		__field(unsigned long, addr)
++		__field(int, cpu)
++		__field(int, reason)
++	),
++
++	TP_fast_assign(
++		__entry->addr = addr;
++		__entry->cpu = cpu;
++		__entry->reason = reason;
++	),
++
++	TP_printk("addr=0x%lx cpu=%d reason=%d", __entry->addr,
++		__entry->cpu, __entry->reason)
++);
++
++/*
++ * Per-tick drain summary.  Fires from kdamond after draining the per-CPU
++ * SPSC ring, so users can observe total vs matched without polling dmesg
++ * or correlating individual miss tracepoints.
++ */
++TRACE_EVENT(damon_perf_drain,
++
++	TP_PROTO(unsigned int total, unsigned int matched),
++
++	TP_ARGS(total, matched),
++
++	TP_STRUCT__entry(
++		__field(unsigned int, total)
++		__field(unsigned int, matched)
++	),
++
++	TP_fast_assign(
++		__entry->total = total;
++		__entry->matched = matched;
++	),
++
++	TP_printk("total=%u matched=%u", __entry->total, __entry->matched)
++);
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
++
+ /* Per-tick DAMOS_QUOTA_NODE_ELIGIBLE_MEM_BP goal evaluation. */
+ TRACE_EVENT(damos_node_eligible_mem_bp,
+ 
+diff --git a/mm/damon/Kconfig b/mm/damon/Kconfig
+index ad629f0f31d8..9f811510760f 100644
+--- a/mm/damon/Kconfig
++++ b/mm/damon/Kconfig
+@@ -131,4 +131,21 @@ config DAMON_ACMA
+ 	  min/max memory for the system and maximum memory pressure stall time
+ 	  ratio.
+ 
++config DAMON_PERF_OBSERVE
++	bool "DAMON perf event observability framework"
++	depends on DAMON
++	depends on PERF_EVENTS
++	depends on DEBUG_FS
++	default n
++	help
++	  Enable per-CPU pipeline counters, tracepoints, and a
++	  debug-only debugfs perf_stats file for DAMON
++	  hardware-sampled access reports.  The debugfs format is
++	  unstable and must not be used by scripts; counters and
++	  tracepoints are the diagnostic interface.
++
++	  When disabled, all observe functions are compiled to
++	  static-inline no-ops with zero runtime overhead.
++
++	  If unsure, say N.
+ endmenu
+diff --git a/mm/damon/Makefile b/mm/damon/Makefile
+index 22494754f41e..04da39a9f56c 100644
+--- a/mm/damon/Makefile
++++ b/mm/damon/Makefile
+@@ -9,3 +9,4 @@ obj-$(CONFIG_DAMON_RECLAIM)	+= modules-common.o reclaim.o
+ obj-$(CONFIG_DAMON_LRU_SORT)	+= modules-common.o lru_sort.o
+ obj-$(CONFIG_DAMON_STAT)	+= modules-common.o stat.o
+ obj-$(CONFIG_DAMON_ACMA)	+= modules-common.o acma.o
++obj-$(CONFIG_DAMON)		+= perf/
+diff --git a/mm/damon/perf/Makefile b/mm/damon/perf/Makefile
+new file mode 100644
+index 000000000000..cc0d4f1d1d28
+--- /dev/null
++++ b/mm/damon/perf/Makefile
+@@ -0,0 +1,3 @@
++# SPDX-License-Identifier: GPL-2.0
++
++# Observability: per-CPU counters, tracepoints, debugfs perf_stats
+diff --git a/mm/damon/perf/perf.h b/mm/damon/perf/perf.h
+new file mode 100644
+index 000000000000..78e23d436336
+--- /dev/null
++++ b/mm/damon/perf/perf.h
+@@ -0,0 +1,228 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * DAMON Hardware-sampled Access Report Observability Framework
++ *
++ * Single entry-point for all hardware sampling backends (ARM SPE,
++ * AMD IBS, Intel PEBS, …).  Every event, sample, ring operation,
++ * match decision, and region update flows through the
++ * damon_perf_observe_*() API, which fans out to per-CPU counters
++ * and tracepoints.  When CONFIG_DAMON_PERF_OBSERVE=n, everything
++ * compiles to static-inline no-ops.
++ *
++ * Author: Kunwu Chan <kunwu.chan@gmail.com>
++ */
++
++#ifndef _DAMON_PERF_H
++#define _DAMON_PERF_H
++
++struct perf_event;
++#include <linux/types.h>
++
++struct damon_perf_event;
++
++/*
++ * Per-event state machine
++ *
++ * Each per-CPU damon_perf_event transitions through these states.
++ * State is tracked in a per-CPU integer (damon_perf_cpu_state).
++ */
++enum damon_perf_event_state {
++	DAMON_PERF_STATE_UNINIT = 0,
++	DAMON_PERF_STATE_CREATED,	/* struct allocated, cpuhp registered */
++	DAMON_PERF_STATE_BOUND,		/* perf_event_create_kernel_counter() ok */
++	DAMON_PERF_STATE_ENABLED,	/* perf_event_enable() called */
++	DAMON_PERF_STATE_RUNNING,	/* first overflow callback received */
++	DAMON_PERF_STATE_ERROR,		/* unrecoverable failure */
++};
++
++/*
++ * Per-CPU statistics
++ *
++ * All counters are monotonic, best-effort reads.  Userspace computes
++ * deltas between snapshots.  Stored per-CPU so the NMI fast path uses
++ * this_cpu_inc() with no locking.  Counter values are raw facts:
++ * interpretation (thresholds, verdicts) belongs in userspace.
++ *
++ * The kernel provides tracepoints under events/damon/ for structured,
++ * stable diagnostics.  The debugfs perf_stats file is DEBUG ONLY and
++ * its format may change without notice.
++ */
++struct damon_perf_stats {
++	/* Per-CPU event state (enum damon_perf_event_state) */
++	int cpu_state;
++
++	/* Sampling pipeline */
++	u64 callback;
++	u64 sample_valid;
++	u64 sample_null;
++	u64 sample_addr_zero;
++	u64 sample_kernel;
++	u64 sample_invalid_phys;
++
++	/* Ring */
++	u64 enqueue;
++	u64 dequeue;
++	u64 overflow;
++	u64 ring_peak;
++
++	/* Matching */
++	u64 match;
++	u64 miss_tgid;
++	u64 miss_region;
++	u64 miss_boundary;
++	u64 update;
++};
++
++#ifdef CONFIG_DAMON_PERF_OBSERVE
++
++/*
++ * damon_perf_observe_*() — Unified Observability API
++ *
++ * These are the ONLY hooks that hardware-sampling backends should
++ * call.  They are split into NMI-safe (sampling, ring-enqueue) and
++ * process-context (event lifecycle, drain, matching, update) groups.
++ *
++ * Counters always increment when CONFIG_DAMON_PERF_OBSERVE=y.
++ * Tracepoints are guarded by trace_*_enabled() and incur zero
++ * overhead when ftrace is not attached.
++ */
++
++/* Event lifecycle — process context (kdamond / cpuhp callbacks) */
++void damon_perf_observe_event_created(struct damon_perf_event *event,
++		int cpu);
++void damon_perf_observe_event_bound(struct damon_perf_event *event,
++		int cpu, struct perf_event *perf_event);
++void damon_perf_observe_event_enabled(struct damon_perf_event *event,
++		int cpu, int state, int oncpu);
++void damon_perf_observe_event_disabled(struct damon_perf_event *event,
++		int cpu, int state);
++void damon_perf_observe_event_destroyed(struct damon_perf_event *event,
++		int cpu);
++void damon_perf_observe_event_free(struct damon_perf_event *event);
++
++/*
++ * Sample observed — NMI-safe.
++ *
++ * @reason:  0 = valid (queued to ring)
++ *           1 = data NULL
++ *           2 = addr == 0 (PMU did not populate)
++ *           3 = kernel address (vaddr only)
++ *           4 = phys_addr not valid (paddr only)
++ */
++void damon_perf_observe_sample(unsigned long addr, u64 data_src,
++		u64 period, int cpu, u8 reason,
++		u64 sample_flags, u64 sample_type);
++
++/* Ring operations — enqueue/overflow are NMI-safe */
++void damon_perf_observe_ring_enqueue(void);
++void damon_perf_observe_ring_overflow(int cpu);
++void damon_perf_observe_ring_dequeue(int cpu);
++void damon_perf_observe_ring_peak(unsigned int occupancy);
++
++/* Matching — process context (kdamond drain loop) */
++void damon_perf_observe_match(unsigned long addr, int cpu);
++void damon_perf_observe_miss(unsigned long addr, int cpu, int reason);
++void damon_perf_observe_update(int cpu);
++void damon_perf_observe_drain(unsigned int total, unsigned int matched);
++
++/* Debugfs (debug-only, format unstable) */
++int damon_perf_debugfs_init(void);
++
++/* Per-CPU stats accessors (for debugfs) */
++void damon_perf_stats_snapshot(int cpu, struct damon_perf_stats *dst);
++void damon_perf_stats_aggregate(struct damon_perf_stats *dst);
++
++/* Subsystem init */
++int damon_perf_framework_init(void);
++
++#else /* !CONFIG_DAMON_PERF_OBSERVE */
++
++static inline void damon_perf_observe_event_created(struct damon_perf_event *e,
++						    int c)
++{
++}
++
++static inline void damon_perf_observe_event_bound(struct damon_perf_event *e,
++						  int c, struct perf_event *p)
++{
++}
++
++static inline void damon_perf_observe_event_enabled(struct damon_perf_event *e,
++						    int c, int s, int o)
++{
++}
++
++static inline void damon_perf_observe_event_disabled(struct damon_perf_event *e,
++						     int c, int s)
++{
++}
++
++static inline void damon_perf_observe_event_destroyed(struct damon_perf_event *e,
++						      int c)
++{
++}
++
++static inline void damon_perf_observe_event_free(struct damon_perf_event *e)
++{
++}
++
++static inline void damon_perf_observe_sample(unsigned long a, u64 d, u64 p,
++					     int c, u8 r, u64 f, u64 t)
++{
++}
++
++static inline void damon_perf_observe_ring_enqueue(void)
++{
++}
++
++static inline void damon_perf_observe_ring_overflow(int c)
++{
++}
++
++static inline void damon_perf_observe_ring_dequeue(int c)
++{
++}
++
++static inline void damon_perf_observe_ring_peak(unsigned int o)
++{
++}
++
++static inline void damon_perf_observe_match(unsigned long a, int c)
++{
++}
++
++static inline void damon_perf_observe_miss(unsigned long a, int c, int r)
++{
++}
++
++static inline void damon_perf_observe_update(int c)
++{
++}
++
++static inline void damon_perf_observe_drain(unsigned int t, unsigned int m)
++{
++}
++
++static inline int damon_perf_debugfs_init(void)
++{
++	return 0;
++}
++
++static inline void damon_perf_stats_snapshot(int c, struct damon_perf_stats *d)
++{
++	memset(d, 0, sizeof(*d));
++}
++
++static inline void damon_perf_stats_aggregate(struct damon_perf_stats *d)
++{
++	memset(d, 0, sizeof(*d));
++}
++
++static inline int damon_perf_framework_init(void)
++{
++	return 0;
++}
++
++#endif /* CONFIG_DAMON_PERF_OBSERVE */
++
++#endif /* _DAMON_PERF_H */
 -- 
 2.43.0
 
