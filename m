@@ -1,41 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B1C3E1CE4;
-	Tue, 18 Aug 2026 10:30:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0183C10A3;
+	Tue, 18 Aug 2026 10:30:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787049006; cv=none; b=PDK/E8E2aEujfZE00BhE7JyQpqATwgIqI2ybqFYAGYnyfUtyugvzgH1DFkRu87x9FAR4iI7gZXq8xTGGIpslsbig8wZFq/zEvX/RO2QMo9JgHMfb+1zfYPAIRYO2GCYMgjONqQiveK4bUAmPkHEzEGxmPg0EHD3DpiPDSJvTwNI=
+	t=1787049014; cv=none; b=cXwMfVtVZ+B8BW8Dyt81HweiBwGqSdOJC1zuXHoE6rSTmE+oZYYkbY4ATr5VR9Vcj2gQjDCmy+V6qj28rpDrioVtgob8O3gU+R4VvWpGqCr4n/Gyah17V2RF1jjmpbGSQfA7auvhm7V+etT+xOdarxMP8jii3c35viCMa2x4oLo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787049006; c=relaxed/simple;
-	bh=Q3qoIG28CpFJLddjjct+GSvPpQNH4vUDWBsW4OFZkcM=;
+	s=arc-20240116; t=1787049014; c=relaxed/simple;
+	bh=/etAJJtrfw3F/NjXwyUYeknccqYgvo1SAqIH9/lrHcc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MKlkSLo054pYI0StDplSbwrJAPxeen5OATCDbVyX4/cslI/mia82fRkfUp7/jadSp9VRUm8zRRDaWACkw1lvSe/MhmaSGdqYPhy3rdikkQy4bFMW57jb77ocqJpZBCBbKbaRZsEbCnXVw++7H3eB6Alp4xE7YsJ5hHNB4DbUOrU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=ZfyIyuXI; arc=none smtp.client-ip=82.195.75.108
+	 In-Reply-To:To:Cc; b=WobbeYeNnkaGeis5VvL1i7ZFeLeiqLWfNLzYrqEb6iktqeLYhEcmgD7UnSINo4U5minds69LDrjFClWDlPxbPnzcBBnRttK5xns9nblSipgWbBGzPdQwy60mkhWbaqzBO7Nq3NzK68EKnsE8oVpQTKpC6MO9P23BmwgI0czIuFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=V4hzDR0K; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="ZfyIyuXI"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="V4hzDR0K"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
 	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
 	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
 	From:Reply-To:Content-ID:Content-Description;
-	bh=Kz0Mz7z1sjUk0o6kQF/8M9atXJEj1KDEndjp7Pcq0Yc=; b=ZfyIyuXIwSZDs8kUqp8JduK1cP
-	uJc1q47Da0sQ976khbi41JAgEyrPQvXVRKiUCdcPEi4FyqlTwuXFIz2ko5NQVZA7zvZJ4Vh4dzVxI
-	iYVZj2KLZeZQ97UvokDGmlC0xeZw2hOoQKiZJVIkQCUMVJVI02UM75fEnf82ZFYsdF/oL4FzXPQKH
-	D+ATUpRQ6fjbgL9lpj9z6xlmmr04Xt7KlWDigTq6YEnGHkQ6SCcO6CDmTOMdhiRW9h70kUEkBQLd7
-	oiSqsQPK8JyT7xz7Ot1K7iYlQFoBVjzgFrIRv4Ay4SIMmLJgrE+PDzoeLfCBrwk80N2/3WAtpOurd
-	rdlRCGnQ==;
+	bh=G+RMJyYuWASkHXXd+GnjSoR1L1cHAANJPPpOAclyXA0=; b=V4hzDR0K6XlhG3kMrg9pxaO/BT
+	8Le83uoNbm9KxRBnoMbJs0d1cFDCGnuRudvkS5tZcLOYGni5gHdbt3NMGP8RNn1fXZ8B5QWUwbmuq
+	vj8zHvE6QP/qYByUujvNfgssu02/MnzlInQb22AN7w/3wEfE1hWzXfNiDkATU630dquh93phkp8Ew
+	qc9UupWqKh5Jrlh80Eodqdw7NDCgEY2iSQTg2tCNrWsxpVB64eH5To+hf2XysoAJBYdKh8sRdDNfb
+	SoobXuTLpGodDm8bK51pmWHzts0jnYYzJS/1GbOmNZ9nR0EKqFMFzBbxOxmusXXx9ZJQkFMXu6tyN
+	a2ddhGjA==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wwH50-008x6e-1x;
-	Tue, 18 Aug 2026 10:30:02 +0000
+	id 1wwH56-008x75-0d;
+	Tue, 18 Aug 2026 10:30:08 +0000
 From: Breno Leitao <leitao@debian.org>
-Date: Tue, 18 Aug 2026 03:29:14 -0700
-Subject: [PATCH net-next RFC 4/6] netconsole: tell the target when the rate
- limit drops messages
+Date: Tue, 18 Aug 2026 03:29:15 -0700
+Subject: [PATCH net-next RFC 5/6] docs: netconsole: document rate limit
+ feature
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260818-netcons_ratelimit-v1-4-8c5d2d17789c@debian.org>
+Message-Id: <20260818-netcons_ratelimit-v1-5-8c5d2d17789c@debian.org>
 References: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 In-Reply-To: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -58,154 +58,91 @@ Cc: paulmck@kernel.org, davej@codemonkey.org.uk, riel@surriel.com,
  linux-kselftest@vger.kernel.org, samuelcrossley@gmail.com, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4145; i=leitao@debian.org;
- h=from:subject:message-id; bh=Q3qoIG28CpFJLddjjct+GSvPpQNH4vUDWBsW4OFZkcM=;
- b=owEBbAKT/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOlUKu6MPD3GsyVRno8F+Qe+xhRy+jNAFFu
- MyVOqPaOOWJAjIEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
- bfTCD/ICSI7nWiauE3PkZgmF0FEPl5jR5YHMmGTxcpj3VFWIF3tztOqirA85zv3ZaphuUFF45vi
- QHRTE0Co0FYo2vwx4eIvCQQzeUOrIBCrfJnztQOrijhF+C1elOkiB6niouQggLXBrl3K7FLj8fK
- P1ygn/PXzkze06uQe73tVNqpXxF2gv3CGTM6ifXmDTUiTrWzI0IXuNKV8QZNpsOvu3qYgPxBRZ7
- YFvwBzX7h0FHU3s9vD5Dx2cbJ16F16u/2hexUtvV0pXyCSZa6Hy7EGkQs3lEOLMoTgHOPPcxugB
- NEKjLBAal8jtVciYFhuF4sSD0UO0kJ/IxRT7QJxW1WDlGySclZXCMLJF1d4+pYHAkfIZVSe3e1c
- eZT2nGVxJFFJIWo1XMW5oDSctc5M0WqygCA+lhR2KzDazWmsfzziZFYF0srr+cNlm7Q2s59n7V1
- eN2/zM7K6v0N27Yt/hpB54KBPUBYMU3SDfXV5C4EXEtS8nJqeOC1bLHmh7/i3tzp6Wl2gHtzw4N
- s29/Y3wTaCet2CesuDidmaErnc2e15tGQd+ZIcv6J3F0e8OQb1bg19UcQxszQd4wBXid8UVu7Jq
- RlMAyDXgk4fK5dYB1vY6eurBDQqMs4cIOXE3CRWbEDMnFxsbtcdccFlzUFi7DVebgRbg98uhJv9
- xo77yalCAVGlE
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2955; i=leitao@debian.org;
+ h=from:subject:message-id; bh=/etAJJtrfw3F/NjXwyUYeknccqYgvo1SAqIH9/lrHcc=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOB/LYnnchrr2D2Nu3MfytO8/okSB6+3QG8
+ jdb4J7VOiGJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
+ bYLpD/9Xm4BSlqPsFt1cz+DDb/2M/AXMv5GADWUCsGrqhOuG2yLeitTCOXdwVXKpana/eVlLWfR
+ WqOgIGT4sxznH5m1ef9F1HFDTnth45I/LZphmjJsXU+OKIC6qiLPn3eo2+pJctkM3jZ8NqHGBEs
+ QHRRXn9q6G1nNUgT67SdjZT61DwYFLJz13uHs3bTUh0xumvd1ZailNTjcekDInoW9uNjZssONxR
+ gFZVqLgbRCMqHpORHBm4ryZ3VONBu+2CjELHUQW4mOYDS0xIB2m7Ps+5q9Tbp8fcz271EysFzFM
+ Y9EGAlXuMb0oVRSgxZDZZCxrhtZYWYWSHnaVElTTwD9BP5vXpTNGJZ3N8LdzFvzhTIIc0H0vrVc
+ QqAO0RbptJ31EoABB2XKuX35m2eIuiJ6NVXm/Z4dkw3bpUz7qRHxmBXzFkJzK0kzC63MpuDC5g0
+ pj0L+99gHoLk9KkzKT2ck6Cl4VdcEEu+K4F4R3YC2ok/ID6BEG1y1o2TotnWFTUyoP/EhsNA0LR
+ e+sgX5pmIBbXJ0Dtwmd/OVnMis1sy6b6lf905PYPn2Vo5b7UG943mDbu7nBR8cb/mMwNXE1gLHz
+ 0arva3zR8WroRhqB8cMz2kLpB/C3G0v6RANfYS7L4unvxUL2FoEE/8Fw1OhPgCs8h4X+gzZcWk5
+ nLzEThFMrhDEpjg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-Keep the number of messages dropped since the last report on the target
-and send it to the receiver as soon as a message gets through again:
+Describe the per-target token bucket and the two configfs files that
+drive it: ratelimit_interval_ms and ratelimit_burst.
 
-  netconsole: 45 messages dropped by rate limit
-
-netconsole formats that record itself rather than calling printk(),
-which would feed the console it is currently servicing. Nothing here has
-a printk sequence number, so the extended header carries a zero.
-
-The timestamp comes from local_clock(), the same clock printk stamps its
-records with, but it is taken when the notice goes out rather than when
-the message was logged. It can therefore read a few microseconds later
-than the message it precedes.
-
-The notice rides on the next message the bucket lets through, so a
-target that goes quiet right after a burst of drops only reports them
-once the host logs again, and a target with ratelimit_burst set to zero
-never reports at all.
+Spell out the two properties that are not obvious from the file names.
+The limit is accounted per message rather than per packet, so a message
+split into several ncfrag packets is never truncated by the bucket
+running dry halfway through.
 
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
- drivers/net/netconsole.c | 53 +++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 52 insertions(+), 1 deletion(-)
+ Documentation/networking/netconsole.rst | 43 +++++++++++++++++++++++++++++++++
+ 1 file changed, 43 insertions(+)
 
-diff --git a/drivers/net/netconsole.c b/drivers/net/netconsole.c
-index 6d60a5188bf13..0af2e5b4335c0 100644
---- a/drivers/net/netconsole.c
-+++ b/drivers/net/netconsole.c
-@@ -50,6 +50,7 @@
- #include <linux/workqueue.h>
- #include <linux/delay.h>
- #include <linux/ratelimit.h>
-+#include <linux/sched/clock.h>
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index 4ab5d7b05cf10..7369cd89ae76c 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -177,6 +177,49 @@ You can modify these targets in runtime by creating the following targets::
+  cat cmdline1/remote_ip
+  10.0.0.3
  
- MODULE_AUTHOR("Matt Mackall <mpm@selenic.com>");
- MODULE_DESCRIPTION("Console driver for network interfaces");
-@@ -177,6 +178,7 @@ struct netcons_userdata {
-  * @sysdata_fields:	Sysdata features enabled.
-  * @msgcounter:	Message sent counter.
-  * @ratelimit:	Opaque structure to ratelimit messages
-+ * @pending_drops: Messages dropped since the last notice was sent.
-  * @stats:	Packet send stats for the target. Used for debugging.
-  * @state:	State of the target.
-  *		Visible from userspace (read-write).
-@@ -221,6 +223,7 @@ struct netconsole_target {
- 	u32			sysdata_fields;
- 	/* protected by target_list_lock */
- 	u32			msgcounter;
-+	u32			pending_drops;
- 	struct ratelimit_state	ratelimit;
- #endif
- 	struct netconsole_target_stats stats;
-@@ -297,7 +300,20 @@ static bool netconsole_ratelimited(struct netconsole_target *nt)
- 	if (oops_in_progress)
- 		return false;
++Rate limiting
++-------------
++
++Netconsole hands every console message to every enabled target, so a host that
++logs continuously can saturate the receiving agent. Each target carries a token
++bucket that drops messages once the configured rate is exceeded, controlled by
++two files in the target directory:
++
++        ===================== ================================================
++        ratelimit_interval_ms Length of the accounting interval, in
++                              milliseconds. Zero, the default, sends
++                              everything.
++        ratelimit_burst       Messages allowed per interval. Defaults to
++                              10; zero drops every message.
++        ===================== ================================================
++
++Unlike most target parameters, both knobs can be written while the target is
++enabled, which is when a flooding target most likely needs them.
++
++The limit is applied per message, not per packet, so a message big enough to be
++split into several `ncfrag` packets is either sent whole or not at all.
++
++Crash output bypasses the bucket. While an oops, BUG() or panic() is in
++progress every message is sent, whatever the limit says, so a small burst
++cannot cost you part of a crash dump.
++
++A drop leaves nothing on the wire, so the receiver is told what it missed as
++soon as a message gets through again::
++
++  netconsole: 45 messages dropped by rate limit
++
++The notice only travels with the next message the bucket allows. A host that
++goes quiet right after being limited reports the drops later, when it logs
++again, and a target with a `ratelimit_burst` of zero never reports them.
++
++netconsole generates the notice itself instead of logging it, so on an
++extended target the record carries a sequence number of zero.
++
++Capping a target at 500 messages a minute::
++
++  echo 60000 > ratelimit_interval_ms
++  echo 500 > ratelimit_burst
++
+ Append User Data
+ ----------------
  
--	return !__ratelimit(&nt->ratelimit);
-+	if (__ratelimit(&nt->ratelimit))
-+		return false;
-+
-+	nt->pending_drops++;
-+
-+	return true;
-+}
-+
-+static u32 netconsole_take_drops(struct netconsole_target *nt)
-+{
-+	u32 drops = nt->pending_drops;
-+
-+	nt->pending_drops = 0;
-+	return drops;
- }
- 
- #else	/* !CONFIG_NETCONSOLE_DYNAMIC */
-@@ -345,6 +361,11 @@ static bool netconsole_ratelimited(struct netconsole_target *nt)
- 	return false;
- }
- 
-+static u32 netconsole_take_drops(struct netconsole_target *nt)
-+{
-+	return 0;
-+}
-+
- #endif	/* CONFIG_NETCONSOLE_DYNAMIC */
- 
- /* Check if the target was bound by mac address. */
-@@ -2554,6 +2575,34 @@ static void send_msg_udp(struct netconsole_target *nt, const char *msg,
- 	}
- }
- 
-+static void send_ratelimit_notice(struct netconsole_target *nt, bool extended)
-+{
-+	int len = 0;
-+	u64 ts_usec;
-+	u32 drops;
-+
-+	drops = netconsole_take_drops(nt);
-+	if (!drops)
-+		return;
-+
-+	if (extended) {
-+		/* append the extended headers */
-+		if (nt->release)
-+			len = scnprintf(nt->buf, sizeof(nt->buf), "%s,",
-+					init_utsname()->release);
-+
-+		ts_usec = div_u64(local_clock(), NSEC_PER_USEC);
-+		len += scnprintf(nt->buf + len, sizeof(nt->buf) - len,
-+				 "%u,0,%llu,-;", LOGLEVEL_WARNING, ts_usec);
-+	}
-+
-+	len += scnprintf(nt->buf + len, sizeof(nt->buf) - len,
-+			 "netconsole: %u messages dropped by rate limit\n",
-+			 drops);
-+
-+	send_udp(nt, nt->buf, len);
-+}
-+
- /**
-  * netconsole_write - Generic function to send a msg to all targets
-  * @wctxt: nbcon write context
-@@ -2583,6 +2632,8 @@ static void netconsole_write(struct nbcon_write_context *wctxt, bool extended)
- 		if (!nbcon_enter_unsafe(wctxt))
- 			return;
- 
-+		send_ratelimit_notice(nt, extended);
-+
- 		if (extended)
- 			send_ext_msg_udp(nt, wctxt);
- 		else
 
 -- 
 2.53.0-Meta
