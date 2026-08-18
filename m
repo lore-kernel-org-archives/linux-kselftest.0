@@ -1,61 +1,63 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61D23221546
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 00:24:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028E421255A
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 00:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787012695; cv=none; b=MfoQNV5wThqWyBpAYKUusxc+7/1/FZEAQfItXxWIeaLz2k871FCck6H+sivlBb07Cs6Twd+Jo95XXwG6TsJt098AEIramMCGdG17z5NGt9N3UKHSKxbBGNsRmdu0AIsvV+hufuknqAOzGIuIp4ZVx2vc4IHjXYgGaRLKKooKGY0=
+	t=1787012698; cv=none; b=l5lqa0zPut+JtBUNch6YInui3I1IT7v7onhMES3PsZ2ociLU+xBEwc1vwkfTJRK6J/XUoyrn0ONcujl3dwv7HtCoXjo0skgFATxECCzKf1GW7kQpqd4hR19aCo2VVitHLQDl6U4Dx6ZHx1U5xYFPhuzh2leI7bhc0deCgQYBYx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787012695; c=relaxed/simple;
-	bh=qWRqvfmnNty80NoawIZpg8GiTpU1j9V039JR3Hleqg0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YHOnFXAbB/UgtkJ4Y2HTv6qWoilV1aI61h5ChmdqRbA6xn2tuu7tyP1S45Z2FRREt4CF9TXk+QsD37AIB/+X9S/eeaF1xEL+HAMv9qZ8Glh6nlQ2aJhAOKt3FEZIxeIbMiOJz6mVWh9Po/3+63QgNq500cY8ad5zzMFl2yB0DAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HXSrOccU; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1787012698; c=relaxed/simple;
+	bh=U0cdwRkNU8DDkTZBzpmBkqOIyFGgDUIy3LahHB12YmI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=P+znWEroGOOYHnLo/yBvVjo2/dfGrKleFHczWX6/UJ/Soemvuch9RV75mZ4dP2S+B9bHyjNzNbt1byiIaXi9eDgG6g32dSoiyUc0QfEjDrn9CXcdKh+jZwCsrlgm7yTr8SM0zgCQX9KFv3d4pSnH46cYeO378jwFbCx+jgAfucM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NvZ8/ci7; arc=none smtp.client-ip=209.85.215.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HXSrOccU"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-3900e39d935so3637652a91.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 17:24:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NvZ8/ci7"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso315120a12.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 17:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787012694; x=1787617494; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=XQzhuTEmSzFVRktqX1xn6ptqrzbe2xgge0zZzqfRxOc=;
-        b=HXSrOccUFFHs/y8UgtdBxzzK6rYbzWVrbVupWEqVQP7QD+L1+5JMUb4bDRJIznS0OJ
-         WW/yPAkPwh864IwLN3KS2ygMcnptY5b90KTyJjRf4mZeFKaIJU2pUWwDlmP515UKpxBC
-         j9qOFX/JP/cLIdAI2xLTCajl1IpfF/gU0q6cfGgWrYmr1Xhc+gB4al54DImdU2g19xy+
-         yh0yLJAR+LYlyoaq4RQrnJqheZFBt1527McScmewJpxrhdVXaqR5bKvLLsLggcX4pFNd
-         xErBq9eUsdnKsTQBe7AZSOkGey/+pCIHxhniibUG6u5lNRW+8WusdUn6dxCgLI1wSkmq
-         8siQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787012694; x=1787617494;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1787012695; x=1787617495; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=XQzhuTEmSzFVRktqX1xn6ptqrzbe2xgge0zZzqfRxOc=;
-        b=aK0tleGfIjVh43fNFQDBAg/XsEsg2J5DXtDyBdb3uPJC9bC9eIuM/nILBMc21AIndy
-         yHrCtVm1grYSpbNZzDpELNc+Zxy1lDEEkYYXdWJwVrElDPSopvGAiNpWgtCLNpLFZUA9
-         xLssGbS4XlLI7k7E1VmTgbHD6i+rWWCpED2eZc1mUs94zDmZk20Qm8ynkDQTD6tWbloG
-         59A54q2TyY0UUPKDxxMrbgCvkaUmlblMoNOWUnrJBd/rtKrfA7Qa8KWUfjnvAm/GTN0q
-         mDDdt6Tw0IvTQt/BFnq/b6G/+nxeeUm72Udd6wVsNb7Nmv+qhlYzxXAPnvJ+W8QKVOLh
-         1AGA==
-X-Forwarded-Encrypted: i=1; AHgh+RpbdZ3fQWg4g8bzqxuHFC+Zcg23zXNSgVZZe3i52VLPbMRPqeds/8bnGO3I2XauSc0TkvKkcR4D9oBJSEtyqZ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yym10BYTzzgSkc4q5JnNvXwY1QeCSbwJZkXZ9gaVwo+JXIZ092r
-	j6O7WEo1Rg4/7m1eqOo1JS8EP6h+/K8mqFkIs3U+Ae3HAPnY4/32k4fi
-X-Gm-Gg: AR+sD120TJmSlTJZikdtY+gV6pwJ+9KxV5jyb3s8+Jf9j03IMODiVwezb4KCD838lhr
-	ZQN5S6jWnZQQQ2+vOTWZdrCpuLoJFw37mkBolQ3kNbvayv2DiIXvKfQbtNRR/2sZabEp2W9YiRJ
-	SbwNtXNhfG6h1BViuiVlxQuZhXe2MQwa9ehcSrlcTbxLYF2yijWZkMm3ZlKHEoQc49sphP0JtzL
-	mp8mmPfKhD8opN684WEMJH+FI9iVwhLtGciIYxq/5CwDwLQAlnekqaSQzaEL/W/Lh2QHbTwvA6W
-	NYQsOx/8SYZwnkWeVTVmpK7VfaBDI0dl6/wnMpIJ+dTcpc8rs4ioeDDHkFya7D8FyuybpukXlZR
-	5XvO3cgTqHAbJF1Iy0tt6EFRTooXAhVHxMhGibzozAyFMNYCSZUsNtGmbf5iC10ayt7iUmJ+a9z
-	lQFpbuEb8aANeOOfJE0wvXBKC4ndzw4rqM+Yu3xwBLmh2qicv0Q9Z/huU=
-X-Received: by 2002:a17:90b:2c8d:b0:38f:caa2:5721 with SMTP id 98e67ed59e1d1-3933e62f4f8mr29637987a91.17.1787012693684;
-        Mon, 17 Aug 2026 17:24:53 -0700 (PDT)
-Received: from localhost ([2a03:2880:9ff:67::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-32678dcedf4sm10261905eec.5.2026.08.17.17.24.52
+        bh=Dqe2p//IXwPRRWOgvWYahO9x2ZMS0WvCKoSIYY1NM34=;
+        b=NvZ8/ci77f42Sts/5nli7p1aZJwGPjbZgu2OsgTl6nNAuL6Pyw2e4AgWk4NjM/1yXL
+         GqPR5cLT9qzjK26zo5txgSE5KUyK8E0266a6J0CVQYKEzn/r+hGVqBNHJ05erf6Z9J0R
+         nMaXROf83vhBLsykD+jkwIqWy1193VriXXQVkWgreSbLEFMXb+CmX9mvZPB9WQUNZF1j
+         Z2zPLC0JVxD4UITe3hhiZk9UnbgTQaRtPO82ZLZ0E9HhAWlbHrrGs4VhF25fcDidCbhp
+         UUlT1LgnZEYl0R0W1NlxhsKNx+A014xZ3n1ysQz2l1xYAOTrZUQPWpVS49CwIWCEfgTc
+         LqVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787012695; x=1787617495;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=Dqe2p//IXwPRRWOgvWYahO9x2ZMS0WvCKoSIYY1NM34=;
+        b=JEoRe88Xfk2pwspPGysUiLLLFzMYVaRx/1TVP8fl/90NLmk4lNY9QBSZABqD6R0EY7
+         DUDb9Eqw2avdx6bjQBJw3ofFkX56SujUDwqnspV6P96FYlWaXax0zlqJFSzVqruyuXIH
+         Qj9entNptX8W+0MgHNsr27bHArsPxF8uLluHJKcfEV4LJRz7LGH44zKqJenfXqDFgKuT
+         760qWwerYuA+kgBKi65MCm05rGObLjHW0dLMqLQg8UcY/VLZPeniCxtoGp4l1Wve2uX5
+         tqEGexKdIimuK3cHbGKT5OwH7T2m5VhzMaqemyKKiAx1nHAF6qukewWkOzJ+Dyhf7qZR
+         LwBg==
+X-Forwarded-Encrypted: i=1; AHgh+RrweBjqWpIIww7f0FUaVSfOCbWGig9DM4g3Qw+znp3Lc83/WAHc/osZnrKc5XBHSWAXVIvGkrd0SmUX04p8Ggk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpyRzbikXTCsXq80FckqEdvSfjsfHOZtztYWbrPiAHHc3LUEVH
+	585tGci0i5JNsxT2748hdkJaX4Jmi8Y0Un2JqypJ1EZkrIsA75/pYPHT
+X-Gm-Gg: AR+sD12/wJOzNre5TFWepLClgMfZTvgTHKeyB0/5m0R7hxx6pH9Z6gpOFmkCGn99DHy
+	CRAVbVZT5E8G0NH9Vlg9aC7Qf1gagAlQ8fqFmbqHiFWhtgzZ3Qoyitm9J/XQJak4hGIU5jjO8GE
+	OdTu8mOCnl4cVJKsLXw04raQYuiMeemg9sZ1baP68/dozpzPthyvI4/itiFMpavJD0FQ8Ao59T6
+	NMA3T/Zj1anP1VXXlN5TK3Tjdgbkc1XjUO6yt53LVDPjfRvQ3R+SxhIpn6W/Auxm58tKsoYpWAw
+	8pKDfsUovMNzUYmgq8vHh41RAmpi2dYqF2TJp9hXnP6T3MtEo5BVWcKgM1eaqLCMi7GxTWB5gGx
+	ZjjUsS8J/mp3YfnpfhKVaW5nJFKnoeJVToaYARdvpZ9fuCftYF1EQEzD4zwsRHw9iu7k8ZmWlkh
+	zW/34Ib2B14ZzUzwvYV3DnnTEvVNb9CNcqahp2HZBhqRVQIarG9rW+7aM=
+X-Received: by 2002:a17:90b:17ce:b0:38e:7e9b:5fbc with SMTP id 98e67ed59e1d1-3955f0e4554mr2145187a91.7.1787012695192;
+        Mon, 17 Aug 2026 17:24:55 -0700 (PDT)
+Received: from localhost ([2a03:2880:9ff:6b::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-32678dcedf4sm10262056eec.5.2026.08.17.17.24.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Aug 2026 17:24:53 -0700 (PDT)
+        Mon, 17 Aug 2026 17:24:54 -0700 (PDT)
 From: Ziyang Men <ziyang.meme@gmail.com>
 To: Tejun Heo <tj@kernel.org>,
 	Johannes Weiner <hannes@cmpxchg.org>,
@@ -85,10 +87,12 @@ Cc: Ingo Molnar <mingo@redhat.com>,
 	cgroups@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] cgroup: expose cpu.stat to BPF
-Date: Mon, 17 Aug 2026 17:24:48 -0700
-Message-ID: <20260818002450.3071325-1-ziyang.meme@gmail.com>
+Subject: [PATCH v2 1/2] cgroup: add BPF kfuncs to read a cpu cgroup's stats
+Date: Mon, 17 Aug 2026 17:24:49 -0700
+Message-ID: <20260818002450.3071325-2-ziyang.meme@gmail.com>
 X-Mailer: git-send-email 2.53.0
+In-Reply-To: <20260818002450.3071325-1-ziyang.meme@gmail.com>
+References: <20260818002450.3071325-1-ziyang.meme@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -97,13 +101,12 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-As the title suggests, this series adds bpf kfuncs for the cgroup CPU
-controller.
-
-Motivation:
 Collecting cgroup statistics is expensive: the existing
 method is to open and parse a cgroup file. memcg already has an
 efficient alternative through BPF; this series extends that idea to cpu.
+
+Expose the CPU controller's per-cgroup statistics to BPF, following
+the memory controller kfuncs in mm/bpf_memcontrol.c.
 
 Design:
 - Add bpf_css_flush_rstat() and bpf_cgroup_base_stat() to cgroup rstat.
@@ -118,34 +121,173 @@ Design:
   This use the convention that task_group embeds its css at offset zero,
   so no scheduler helper or scheduler source change is needed.
 
-===
-Changes since v1:
-- Make the rstat flush generic, move it to rstat.c, and take a css.
-- Return cgroup_base_stat directly instead of repacking its CPU times.
-- Replace the throttled-time aggregation kfunc with a checked RCU cast in
-  the CPU cgroup BPF code. The cast preserves the verifier type needed for
-  the BPF program to perform the per-CPU sum itself.
-- Remove the changes in the scheduler part.
-
-Tested on VM with v7.2-rc5. 
-
-Ziyang Men (2):
-  cgroup: add BPF kfuncs to read a cpu cgroup's stats
-  selftests/bpf: add cgroup_iter_cpu test for cpu cgroup kfuncs
-
- kernel/cgroup/Makefile                        |   2 +
- kernel/cgroup/bpf_cpu.c                       |  61 +++++
- kernel/cgroup/rstat.c                         |  59 +++-
- tools/testing/selftests/bpf/cgroup_iter_cpu.h |  22 ++
- tools/testing/selftests/bpf/config            |   3 +
- .../bpf/prog_tests/cgroup_iter_cpu.c          | 259 ++++++++++++++++++
- .../selftests/bpf/progs/cgroup_iter_cpu.c     | 113 ++++++++
- 7 files changed, 517 insertions(+), 2 deletions(-)
+Suggested-by: Shakeel Butt <shakeel.butt@linux.dev>
+Suggested-by: Tejun Heo <tj@kernel.org>
+Assisted-by: Claude:claude-opus-5
+Signed-off-by: Ziyang Men <ziyang.meme@gmail.com>
+---
+ kernel/cgroup/Makefile  |  2 ++
+ kernel/cgroup/bpf_cpu.c | 61 +++++++++++++++++++++++++++++++++++++++++
+ kernel/cgroup/rstat.c   | 59 +++++++++++++++++++++++++++++++++++++--
+ 3 files changed, 120 insertions(+), 2 deletions(-)
  create mode 100644 kernel/cgroup/bpf_cpu.c
- create mode 100644 tools/testing/selftests/bpf/cgroup_iter_cpu.h
- create mode 100644 tools/testing/selftests/bpf/prog_tests/cgroup_iter_cpu.c
- create mode 100644 tools/testing/selftests/bpf/progs/cgroup_iter_cpu.c
 
+diff --git a/kernel/cgroup/Makefile b/kernel/cgroup/Makefile
+index ede31601a363..0ba59b7eef48 100644
+--- a/kernel/cgroup/Makefile
++++ b/kernel/cgroup/Makefile
+@@ -1,6 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0
+ obj-y := cgroup.o rstat.o namespace.o cgroup-v1.o freezer.o
+ 
++obj-$(CONFIG_BPF_SYSCALL) += bpf_cpu.o
++
+ obj-$(CONFIG_CGROUP_FREEZER) += legacy_freezer.o
+ obj-$(CONFIG_CGROUP_PIDS) += pids.o
+ obj-$(CONFIG_CGROUP_RDMA) += rdma.o
+diff --git a/kernel/cgroup/bpf_cpu.c b/kernel/cgroup/bpf_cpu.c
+new file mode 100644
+index 000000000000..ac165d0b79ef
+--- /dev/null
++++ b/kernel/cgroup/bpf_cpu.c
+@@ -0,0 +1,61 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * CPU controller BPF kfuncs
++ *
++ * Author: Ziyang Men <ziyang.meme@gmail.com>
++ */
++
++#include <linux/bpf.h>
++#include <linux/btf_ids.h>
++#include <linux/cgroup.h>
++
++#ifdef CONFIG_CGROUP_SCHED
++struct task_group;
++
++__bpf_kfunc_start_defs();
++
++/**
++ * bpf_css_to_task_group - Cast a CPU controller css to its task group
++ * @css: CPU controller css
++ *
++ * Must be called under RCU.
++ * A C cast does not give the verifier a task_group pointer. This kfunc
++ * preserves the task_group and per-CPU types needed to read cfs_rq.
++ *
++ * Return: The task group, or NULL if @css belongs to another controller.
++ */
++__bpf_kfunc struct task_group *
++bpf_css_to_task_group(struct cgroup_subsys_state *css)
++{
++	if (css->ss != &cpu_cgrp_subsys)
++		return NULL;
++
++	/* task_group embeds css at offset zero. */
++	return (struct task_group *)css;
++}
++
++__bpf_kfunc_end_defs();
++
++BTF_KFUNCS_START(bpf_cpu_cgroup_kfunc_ids)
++BTF_ID_FLAGS(func, bpf_css_to_task_group,
++	     KF_RCU | KF_RCU_PROTECTED | KF_RET_NULL)
++BTF_KFUNCS_END(bpf_cpu_cgroup_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_cpu_cgroup_kfunc_set = {
++	.owner		= THIS_MODULE,
++	.set		= &bpf_cpu_cgroup_kfunc_ids,
++};
++
++static int __init bpf_cpu_cgroup_kfunc_init(void)
++{
++	int err;
++
++	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
++					&bpf_cpu_cgroup_kfunc_set);
++	if (err)
++		pr_warn("error while registering cpu cgroup kfuncs: %d\n", err);
++
++	return err;
++}
++late_initcall(bpf_cpu_cgroup_kfunc_init);
++#endif /* CONFIG_CGROUP_SCHED */
+diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
+index de816a43db9f..46c322c4858b 100644
+--- a/kernel/cgroup/rstat.c
++++ b/kernel/cgroup/rstat.c
+@@ -752,6 +752,54 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
+ 	cgroup_force_idle_show(seq, &bstat);
+ }
+ 
++#ifdef CONFIG_BPF_SYSCALL
++
++__bpf_kfunc_start_defs();
++
++/**
++ * bpf_css_flush_rstat - Flush a cgroup subsystem's rstat data
++ * @css: cgroup subsystem state to flush
++ */
++__bpf_kfunc void bpf_css_flush_rstat(struct cgroup_subsys_state *css)
++{
++	css_rstat_flush(css);
++}
++
++/**
++ * bpf_cgroup_base_stat - Read a cgroup's base statistics
++ * @cgrp: cgroup to read from
++ * @out: zero-initialized output in nanoseconds
++ *
++ * CPU time is adjusted as for cpu.stat.
++ */
++__bpf_kfunc void bpf_cgroup_base_stat(struct cgroup *cgrp,
++				      struct cgroup_base_stat *out)
++{
++	if (cgroup_parent(cgrp)) {
++		__css_rstat_lock(&cgrp->self, -1);
++		*out = cgrp->bstat;
++		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
++			       &out->cputime.utime, &out->cputime.stime);
++		__css_rstat_unlock(&cgrp->self, -1);
++	} else {
++		root_cgroup_cputime(out);
++	}
++}
++
++__bpf_kfunc_end_defs();
++
++BTF_KFUNCS_START(bpf_rstat_common_kfunc_ids)
++BTF_ID_FLAGS(func, bpf_css_flush_rstat, KF_SLEEPABLE)
++BTF_ID_FLAGS(func, bpf_cgroup_base_stat, KF_SLEEPABLE)
++BTF_KFUNCS_END(bpf_rstat_common_kfunc_ids)
++
++static const struct btf_kfunc_id_set bpf_rstat_common_kfunc_set = {
++	.owner		= THIS_MODULE,
++	.set		= &bpf_rstat_common_kfunc_ids,
++};
++
++#endif /* CONFIG_BPF_SYSCALL */
++
+ /* Add bpf kfuncs for css_rstat_updated() and css_rstat_flush() */
+ BTF_KFUNCS_START(bpf_rstat_kfunc_ids)
+ BTF_ID_FLAGS(func, css_rstat_updated)
+@@ -765,7 +813,14 @@ static const struct btf_kfunc_id_set bpf_rstat_kfunc_set = {
+ 
+ static int __init bpf_rstat_kfunc_init(void)
+ {
+-	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
+-					 &bpf_rstat_kfunc_set);
++	int ret;
++
++	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
++					&bpf_rstat_kfunc_set);
++#ifdef CONFIG_BPF_SYSCALL
++	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
++					       &bpf_rstat_common_kfunc_set);
++#endif
++	return ret;
+ }
+ late_initcall(bpf_rstat_kfunc_init);
 -- 
 2.53.0-Meta
 
