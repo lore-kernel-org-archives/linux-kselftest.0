@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30F69175A88;
-	Tue, 18 Aug 2026 14:15:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A87175A6C;
+	Tue, 18 Aug 2026 14:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787062539; cv=none; b=IQ/HOR2uMTMgoJwDVbd3VVPIsbKNgVNT4w+ac+7v7Ouz+9/vgGTPOI4XAM7+CApSvZARBn2EMjYNFjQTgcKbHuur+zFdNftRjT3Zc8PQU91bmClR5HaueFTAKzIladXQ5SMCNN6gXsd2LlY6/cXF2eEMPN5+haeKbwG/ukZdgxs=
+	t=1787062735; cv=none; b=Z2aBO8Mco05LP5jAyqfbKVSyYN8erLs2n504XjJ7NKuPYj7W0Tvq+jm9tkQGUSGTvxSy1dCOL1SA2TCDrnYapoQVxm+hKplZTra/Xc+c2JpUpftNvggWejssQgYbFTgbkVC/D61Ws0lO1W4xSL0MWqKL/Xtrk4KLX65J+4gJ0F4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787062539; c=relaxed/simple;
-	bh=3sc9jhutDQogoK0YLOwRMtxdYw3oTIlvs7NVL1reC+U=;
+	s=arc-20240116; t=1787062735; c=relaxed/simple;
+	bh=T5knXjWKuzLyN0a0+R3GAHfibbM7p5cC6aTT20PkX98=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PcvkZkwaVnP8JqVupmB2KWCo+9o7UTzjjivE9JAg8Wc3rNkE0u6W2yGpL1uUwG59qPBt6SyOGDwz7wUplzhkU2pBS5+m7iVlZJ0al7hZ8XPz9jps2HvxZ+uYp4J+yQU1tbxso6/AdWciXmdLsVyk47LKDl0Y6MgaPsK25UL1PHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J4txqm8P; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=ERuwBLq8SHIl1JkNOmOwMZSXc8hNEjD3H/Zf2dhltGVBMDHgVvDAag2MH1aTq8nH6SJs9oV9fSo2aLGPphkWg4xzDFPnVl6+yge7Aym2e1JzHY+2TEWlhtqfLX6k06cE13ztc5IiQRhxh5Um/gnGEQlMyGT0UVkNCHzWg+5CYYM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f0ZFoKv3; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J4txqm8P"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 528441F000E9;
-	Tue, 18 Aug 2026 14:15:29 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f0ZFoKv3"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5A4C1F00A3A;
+	Tue, 18 Aug 2026 14:18:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787062537;
-	bh=Qx7Q9Tkm+30Vy5GpQNpuwA2/ZGcx6zXr2iqGQrjyaow=;
+	s=k20260515; t=1787062733;
+	bh=IMSn+1Ss3wYwa1vpnK5ccBPCbTknsr5E2QPTcFjkQgA=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=J4txqm8PSDHPtAGQRTxTA5BirFk7+ogzhOIXx818dDoEykvFj2mrVFD5zdFYcfFJ0
-	 /jprkZRDFxQc8+QCcmNb0ApwCPKRCXrDv8FdOKGTuzZSBcmf10N4ZNE2LUmmbewdbR
-	 j4nU0aKvIRwA6/P+7rKRyvxb+WqvxxEYHHG++dyYmXrcmPJ4wvxfPuZA75WpgPVgxs
-	 f0B9a3AoNrZyoj+6NB3OnEml7VuMxDNvR+DUcxVjWZC/C0Sw9hEPBcvxjPfQATlp3A
-	 n0QvsdIbuzJrd8r8lo//noi6umHRcuvqsDdZ55Q9yQZXT5rNReYRnMfBHGHAV80cYT
-	 U4t5de0eRoHxA==
-Message-ID: <99138bda-55ba-4c58-9b79-b76e9daecdde@kernel.org>
-Date: Tue, 18 Aug 2026 16:15:27 +0200
+	b=f0ZFoKv3lUbiUUvWCcOSwjCL+h0rt0aw3qn1y+vs0ZbVZDVeGKbVsrZ3CRA4C7qey
+	 15UtPE6qsUYPZLPf5k1D8H39BgRZTtcIPgLYJDsCuh8OtrGkQeHIRavF1m/qiflsAX
+	 5x9aOOVLZvnQGqs4VqnrYKMNg+cIGQvcPodbBcy6hQqO9AO7V2lgq8yrk74bFOflc/
+	 5xjyLZz4CfHLgCYHyBJZOriGC7YoPS4qtAttPLu8NVsRPsdAPVc26xgqUSass3dvWM
+	 sxfg2uxL1/7gqDORl6ppI/qpavwYw2JshwoGojib4GrOtNC6yOv+IMLDXezu0ECo0m
+	 I98yuNWNl+UOg==
+Message-ID: <277db0f6-6161-4ff1-9540-7b1eb5f7924b@kernel.org>
+Date: Tue, 18 Aug 2026 16:18:47 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,22 +35,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-To: Kiryl Shutsemau <kirill@shutemov.name>,
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: akpm@linux-foundation.org, nico.pache@linux.dev,
- baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
- usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- jannh@google.com, willy@infradead.org, pfalcato@suse.de,
- rostedt@goodmis.org, mhiramat@kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <aoLAly-oL2OAa4n8@lucifer> <aoLkMUtmzRVuv2Hx@thinkstation>
+Subject: Re: [PATCH] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Hemanth Selam <hemanth.selam@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>,
+ Yury Khrustalev <yury.khrustalev@arm.com>,
+ Kevin Brodsky <kevin.brodsky@arm.com>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260818114945.1312987-1-hemanth.selam@gmail.com>
+ <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org> <aoRcdLGWaNhUFIPU@lucifer>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -97,54 +93,75 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aoLkMUtmzRVuv2Hx@thinkstation>
+In-Reply-To: <aoRcdLGWaNhUFIPU@lucifer>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/17/26 15:38, Kiryl Shutsemau wrote:
-> On Mon, Aug 17, 2026 at 09:52:13AM +0100, Lorenzo Stoakes (ARM) wrote:
->> We have a THP cabal meeting every couple of weeks where it would have been
->> useful for you to raise this first.
+On 8/18/26 15:29, Lorenzo Stoakes (ARM) wrote:
+> On Tue, Aug 18, 2026 at 03:11:50PM +0200, David Hildenbrand (Arm) wrote:
+>> On 8/18/26 13:49, Hemanth Selam wrote:
+>>> pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
+>>> already known, a stopgap from when the generic definition was still
+>>> under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
+>>> Add PKEY_UNRESTRICTED macro"), and pkey-helpers.h already includes
+>>> <linux/mman.h>, so the guard is never taken.  Honour the FIXME and drop
+>>> it.
+>>>
+>>> The mm selftests build against the headers of the kernel source, see
+>>> Documentation/dev-tools/kselftest.rst.  Building them without "make
 > 
-> Fair -- though my invite is on my old @linux.intel.com address.  Could
-> you forward it to kas@kernel.org?
+> This is incorrect. We explicitly do not have this requirement in mm selftests,
+> and they're often built without having to do this step and tooling has been
+> provided _explicitly_ to allow for that, which is why this kind of thing exists
+> right now.
 > 
->> In any case - this series is not something we'd consider at the moment,
->> even broken into parts.
+>>> headers", against system headers predating the macro, now fails to
+>>> compile instead of quietly falling back.
+>>>
+>>> No functional change intended.
+>>>
+>>> Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+>>> ---
+>>>  tools/testing/selftests/mm/pkey-helpers.h | 7 -------
+>>>  1 file changed, 7 deletions(-)
+>>>
+>>> diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+>>> index 2c377f4e9df1..626c2e1655dc 100644
+>>> --- a/tools/testing/selftests/mm/pkey-helpers.h
+>>> +++ b/tools/testing/selftests/mm/pkey-helpers.h
+>>> @@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
+>>>  #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+>>>  #endif
+>>>
+>>> -/*
+>>> - * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
+>>> - */
+>>> -#ifndef PKEY_UNRESTRICTED
+>>> -#define PKEY_UNRESTRICTED 0x0
+>>> -#endif
+>>> -
+>>>  #ifndef set_pkey_bits
+>>>  static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
+>>>  {
 >>
->> David and I have put THP into feature freeze - until the codebase is
->> subtantially improved we're not really interested in seeing significant
->> development.
+>> tools/include/uapi/asm-generic/mman-common.h:#define PKEY_UNRESTRICTED  0x0
 >>
->> The technical debt is substantial and has to be paid down first.
+>> So that looks good.
 >>
->> See [0] for a rough list of TODOs in this regard.
+>> But we seem to have the same ifdef also in
+>> tools/testing/selftests/powerpc/include/pkeys.h.
+>>
+>> So likely that should be removed as well (after making sure that it compiles?)
 > 
-> I read the TODO list and I'll pick from it -- though I notice the
-> technical debt section includes "Literally all of the code in
-> mm/huge_memory.c and mm/khugepaged.c", which I'd argue this series is a
-> fairly committed attempt at :)
-> 
-> One clean up I wanted to do is consolidate code by functionality, not by
-> the THP/non-THP split.  Move all page fault handler code into mm/fault.c,
-> unmap code into mm/zap.c, fork's copying into mm/fork.c -- mirroring
-> kernel/fork.c, so the mm half of a subsystem sits under the same name.
-> Large folios are an integral part of mm nowadays and I don't think we
-> benefit from keeping THP in a separate file.  It is also an opportunity to
-> shift away from mm/memory.c being a kitchen sink.
-> 
-> David and I talked about this at LSF/MM. 
+> It will break people right now :) it might compile on one system but not
+> another.
 
-Ah, I missed the context in my other reply. Lorenzo already had some patches at
-some point to split up mm/memory.c into better chunks that will also better help
-our subcomponent maintenance model.
+I thought once we have stuff in tools/include/uapi/asm-generic/ headers that it
+should work?
 
-I think the challenge is how to handle huge_memory.c, because ideally, we'd not
-have these stupid callbacks into huge_memory.c once we make PMDs just a
-first-class citizen.
+The dependency on "make headers" was the problematic bit IIUC.
 
-This is, unfortunately, also something that needs more thought, because we don't
-want to end up moving stuff back and forth.
+But this stuff is always confusing me ...
 
 -- 
 Cheers,
