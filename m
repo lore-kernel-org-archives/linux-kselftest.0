@@ -1,162 +1,126 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC2D472F7C;
-	Tue, 18 Aug 2026 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBE4F476CF7;
+	Tue, 18 Aug 2026 13:29:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787059484; cv=none; b=kjCa+UOhgX12kOGlry9uVE3wTCkgkPYBm2NWIC550pD/PzQNWBZEg4v0kfUkOzRQXQZ3JQVQJd9M4HMQMnoawANwfjaY/S2jg/ZKAOl68FcLIWPwjta8y0TaaFuMStAp19d2bFUNOI6DIW0IPFjgHLJ3uk9bEaA3PnP1xXYSCRM=
+	t=1787059796; cv=none; b=t3b3cjNLFRToq+o0R3FdpeJpUFmmj+qUHqQdKSYL+12QiwFSXxb2Gx/VgYwG5k88JKZSMO5z7Bq2sbH070RDmvmp+3FoSJppW/dJQLPneH45S7Gm0BrJSFO2O4Z59+mpLSsI2zDx0bPmPjYhErGvKllcQmp1WDVfnMtHrs/Il7M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787059484; c=relaxed/simple;
-	bh=0qeab45JSjlGLR/DCB210viV8qlg/swbTJ0ATdhPMMQ=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=UpgATd7Vz2CCzX5fCavsNgm+dd0ekdwFRJx/sgDzdLCWwNWWJV3renoIL6JnZpZNDO60v/1kP2zi5mGVBTxXTLPkU8yyFrvU3ugX7uGmC/uVtw05N1dMIhs2VT+x8LlyV8epi1RiyBR1+kd+nWNDBkbRMyGOVrleZs9B3eeQs8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IvVZYmEa; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787059796; c=relaxed/simple;
+	bh=NHZIcNNG/xqTVgyw+FQrrk73J8fNwBZRCpYtEERPZ8A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKUZ79K35GsIxPRXIEJOIQtgLYGFdQ6EiX5cD7MDN24a1p0SZ12kyVq1peOOVMid5i/ITbq5pCSiUEsCxbAa05fA6wZ1o5zSeCnskI1WDGfbiZWe4F7hXi+s9vDdKgAMe9o20f2sc6+jirpJlEAmFTIohVgMC0DWOFIlAuwhSGs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PhKgXKmP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IvVZYmEa"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B35DA1F000E9;
-	Tue, 18 Aug 2026 13:24:40 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PhKgXKmP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5166D1F000E9;
+	Tue, 18 Aug 2026 13:29:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787059480;
-	bh=S9IekfwPh1alq+9HUJBgkgWBggDNvqQ7KorXgNc8Ifs=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=IvVZYmEaJduqxhOqhcvQD6aUJ5moa6wleRg5iMNiAoqHR0kpyRYwkcmV8O1leHavm
-	 tHo0yzgUIPTgyAIVpWqsHXNG9EZFb4zHvmqhzqdt5beIrh5RM9ApemL/khZQ1K8R3L
-	 f2sOHxoQQU2gaX4cHv6EOcE8V3UvV6H8c/Kzruipq837mNNP4eoeqz3ijsfX0Hnz7t
-	 y0j8Ezkj9DAraCHbOofWu3l3nZQFIrdZCasEitIvw624qqSDw8HnFmRZzK8H2KsOfY
-	 ZzcTZ22iR7zh9TCiBnPo1jrzRK68HOpCUxOkDPLC06dwACN5kBeUUICKJ9XIFofHVb
-	 cybyTXnvLyBhA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wwJny-0000000Gdt3-10V2;
-	Tue, 18 Aug 2026 13:24:38 +0000
-Date: Tue, 18 Aug 2026 14:24:37 +0100
-Message-ID: <86cxvf5zoq.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Dongli Zhang <dongli.zhang@oracle.com>
-Cc: kvm@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	seanjc@google.com,
-	pbonzini@redhat.com,
-	oupton@kernel.org,
-	fuad.tabba@linux.dev,
-	joey.gouly@arm.com,
-	seiden@linux.ibm.com,
-	suzuki.poulose@arm.com,
-	yuzenghui@huawei.com,
-	dwmw2@infradead.org,
-	joe.jin@oracle.com
-Subject: Re: [PATCH 2/4] KVM: arm64: Reset last_steal on vCPU pid change
-In-Reply-To: <77baeb6c-1efa-45fb-8a86-46a6c76b5873@oracle.com>
-References: <20260816053630.527528-1-dongli.zhang@oracle.com>
-	<20260816053630.527528-3-dongli.zhang@oracle.com>
-	<86se4dyw7n.wl-maz@kernel.org>
-	<77baeb6c-1efa-45fb-8a86-46a6c76b5873@oracle.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=k20260515; t=1787059794;
+	bh=N9rUv4TdujbZ6/XxkM7SFbymVzpaYaqLUiO3R4LX8BY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=PhKgXKmPhaLMzw9XPrcieo79uQDMA03R6DrXspM/ddU2BF3zoc2D9RP3+9ywMsPGQ
+	 wgbkqFGoiAQS4Bidix2KKA2cys14vJbFcaiSIUKCkUML1UMpO/5y/g/te2G6JJtFtI
+	 mT3+joG7lapBBRFcihK8rH1bh4aPFQez1gd2GGavkSz9SNk6uaI/ya2inHaLpKI67N
+	 wCffB/E4eLIOmJ6rGpIIBdBkDKODZtzg6cpAY1pzZxTs0UrJLjNj4CVsInHkq+jgKk
+	 +YbqwHss5uhCtsh1MypAXf/TqiCkSc2CPJo4NnohNID/NThsTNhC8Zxx4g7DmwQm4x
+	 QARzujdhkA1EQ==
+Date: Tue, 18 Aug 2026 14:29:35 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Hemanth Selam <hemanth.selam@gmail.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
+	Yury Khrustalev <yury.khrustalev@arm.com>, Kevin Brodsky <kevin.brodsky@arm.com>, 
+	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
+Message-ID: <aoRcdLGWaNhUFIPU@lucifer>
+References: <20260818114945.1312987-1-hemanth.selam@gmail.com>
+ <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: dongli.zhang@oracle.com, kvm@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, seanjc@google.com, pbonzini@redhat.com, oupton@kernel.org, fuad.tabba@linux.dev, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, dwmw2@infradead.org, joe.jin@oracle.com
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org>
 
-On Mon, 17 Aug 2026 22:29:22 +0100,
-Dongli Zhang <dongli.zhang@oracle.com> wrote:
-> 
-> 
-> 
-> On Mon, Aug 17, 2026 1:42:20AM -0700, Marc Zyngier wrote:
-> > On Sun, 16 Aug 2026 06:33:03 +0100,
-> > Dongli Zhang <dongli.zhang@oracle.com> wrote:
+On Tue, Aug 18, 2026 at 03:11:50PM +0200, David Hildenbrand (Arm) wrote:
+> On 8/18/26 13:49, Hemanth Selam wrote:
+> > pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
+> > already known, a stopgap from when the generic definition was still
+> > under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
+> > Add PKEY_UNRESTRICTED macro"), and pkey-helpers.h already includes
+> > <linux/mman.h>, so the guard is never taken.  Honour the FIXME and drop
+> > it.
+> >
+> > The mm selftests build against the headers of the kernel source, see
+> > Documentation/dev-tools/kselftest.rst.  Building them without "make
 
-[...]
+This is incorrect. We explicitly do not have this requirement in mm selftests,
+and they're often built without having to do this step and tooling has been
+provided _explicitly_ to allow for that, which is why this kind of thing exists
+right now.
 
-> >> diff --git a/arch/arm64/kvm/pvtime.c b/arch/arm64/kvm/pvtime.c
-> >> index 4ceabaa4c30b..000bf49cc0fd 100644
-> >> --- a/arch/arm64/kvm/pvtime.c
-> >> +++ b/arch/arm64/kvm/pvtime.c
-> >> @@ -32,6 +32,11 @@ void kvm_update_stolen_time(struct kvm_vcpu *vcpu)
-> >>  	srcu_read_unlock(&kvm->srcu, idx);
-> >>  }
-> >>  
-> >> +void kvm_reset_stolen_time(struct kvm_vcpu *vcpu)
-> >> +{
-> >> +	vcpu->arch.steal.last_steal = current->sched_info.run_delay;
-> >> +}
-> >> +
-> >>  long kvm_hypercall_pv_features(struct kvm_vcpu *vcpu)
-> >>  {
-> >>  	u32 feature = smccc_get_arg1(vcpu);
-> > 
-> > Why isn't this common code? I really don't see the point in making
-> > this arch-specific code. I'd expect something like this (untested):
-> > 
-> > diff --git a/arch/arm64/include/asm/kvm_host.h b/arch/arm64/include/asm/kvm_host.h
-> > index ace5801a592f..3fb77360af01 100644
-> > --- a/arch/arm64/include/asm/kvm_host.h
-> > +++ b/arch/arm64/include/asm/kvm_host.h
-> > @@ -950,6 +950,8 @@ struct kvm_vcpu_arch {
-> >  	pid_t pid;
-> >  };
-> >  
-> > +#define kvm_arch_vcpu_last_steal(v)	(v)->arch.steal.last_steal
-> > +
-> >  /*
-> >   * Each 'flag' is composed of a comma-separated triplet:
-> >   *
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 45e784462ec6..117aeb49231a 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -4459,6 +4459,9 @@ static long kvm_vcpu_ioctl(struct file *filp,
-> >  			if (r)
-> >  				break;
-> >  
-> > +			if (IS_ENABLED(CONFIG_HAVE_PV_STEAL_CLOCK_GEN))
-> > +				kvm_arch_vcpu_last_steal(vcpu) = current->sched_info.run_delay;
-> > +
-> >  			newpid = get_task_pid(current, PIDTYPE_PID);
-> >  			write_lock(&vcpu->pid_lock);
-> >  			vcpu->pid = newpid;
-> > 
-> > where each architecture that implements steal time provides an
-> > accessor, and the core code is in charge of the adjustment.
-> > 
-> > It also makes sure that we don't leave any architecture behind.
-> > 
-> Or how about making it something like below?
-> 
-> if (IS_ENABLED(CONFIG_HAVE_PV_STEAL_CLOCK_GEN))
-> 	kvm_arch_vcpu_reset_last_steal(vcpu);
+> > headers", against system headers predating the macro, now fails to
+> > compile instead of quietly falling back.
+> >
+> > No functional change intended.
+> >
+> > Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+> > ---
+> >  tools/testing/selftests/mm/pkey-helpers.h | 7 -------
+> >  1 file changed, 7 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+> > index 2c377f4e9df1..626c2e1655dc 100644
+> > --- a/tools/testing/selftests/mm/pkey-helpers.h
+> > +++ b/tools/testing/selftests/mm/pkey-helpers.h
+> > @@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
+> >  #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+> >  #endif
+> >
+> > -/*
+> > - * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
+> > - */
+> > -#ifndef PKEY_UNRESTRICTED
+> > -#define PKEY_UNRESTRICTED 0x0
+> > -#endif
+> > -
+> >  #ifndef set_pkey_bits
+> >  static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
+> >  {
 >
-> That would still move the policy to common KVM code, while leaving the exact
-> arch state to the architecture implementation.
+> tools/include/uapi/asm-generic/mman-common.h:#define PKEY_UNRESTRICTED  0x0
+>
+> So that looks good.
+>
+> But we seem to have the same ifdef also in
+> tools/testing/selftests/powerpc/include/pkeys.h.
+>
+> So likely that should be removed as well (after making sure that it compiles?)
 
-I don't think architectures should have a say in this. Steal time, as
-a PV service, should not involve the architectures at all. After all,
-that's the whole point of a PV service: hypervisor-specific hacks that
-do not fit in the architectural envelope.
+It will break people right now :) it might compile on one system but not
+another.
 
-Bonus points if you move the last_steal field in the main vcpu
-structure instead of some arch-specific one.
+There's been a bunch of discussion on this, often quite painful. See [0] and
+surrounding thread for some history on this...
 
-> For x86, the hook can reset vcpu->arch.st.last_steal for regular KVM steal time.
-> If we also decide to cover Xen runstate in this series, the same x86 hook can
-> additionally reset vcpu->arch.xen.last_steal.
+IOW - this isn't really costing us much so I'd prefer we kept this kind of
+thing.
 
-For arch-specific stuff, there is the pid change hook already.
+>
+> --
+> Cheers,
+>
+> David
 
-	M.
+--
+Cheers, Lorenzo
 
--- 
-Without deviation from the norm, progress is not possible.
+[0]:https://lore.kernel.org/all/5b0b8e1e-6f50-4e18-bf46-39b00376c26e@nvidia.com/
