@@ -1,123 +1,182 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0732C38888F;
-	Tue, 18 Aug 2026 07:17:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 643EB38D3F7;
+	Tue, 18 Aug 2026 07:33:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787037451; cv=none; b=IFBpVB5mLV/d5LNFrDWD9Ed/J6H8Mo2EFsy/ozmS1HmnIUFnRjjTrV1D7mwneEfyy2a2sTtJUf2t6ZHyuAIjV8iU1rjrSYzlZYUXPcrhb1KpdqKBOWxT7QNYA1AOpk3OjvAzqrnhj5pC8XgIq/d/jNYjdJxTyy6fcgvct6K4lO0=
+	t=1787038431; cv=none; b=eQ460QZ8hbqxMzX641mwByJSH5/kYMTINZzU44yuACcmUVGx85r5dXhbb+DHqtbffW1q18kmuED6RjY7IpRoee3nLkiu0Lhn5bkPslUQqoa+lsc0s3CJvoSJeazopjmWUQKGjIT3n76T6qhgmpkxKR/QLmMISPDKbCXqawym96Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787037451; c=relaxed/simple;
-	bh=M789BWL3XBsXi/BePRZE8Fi0O3ch7shfN3/enE8S2pM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XBUcGPznrOs0w0PDn3f8eB1PWdqwPseMf45Lt9cgnXBkAkoQUgnrJfqYXzv/1c/UeiUR4XYB0yepuw3HcV01B/Clw0tEidmd7AK/3kY2e4BteTMn16HJmj4TsyhtsxJ0GCmc1Q37/sIrfaDd7Np6FxcudYRW4swT0xlOmGh/WgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D0FD10BP; arc=none smtp.client-ip=192.198.163.19
+	s=arc-20240116; t=1787038431; c=relaxed/simple;
+	bh=+Ez1C771ix9X3B8jwdeUYBhWqwriYoHlS+4Fq7dKDcc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Rfj4ZyPZdMsrblinefMJuNIbQsEDCytBHhgirhfTTMAWKyHt0aTIHIW+GpCIfTDqgnlQKfySbAacApXa7wKHFN+vJfOUf3+toDRuBhjrlMQvOc66Qw3VKJQaWGkiv3tqMsIts8spylhd1E97xWMXyxWXxl8gS2B8GH6jTMGiYrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BaNLCSM3; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D0FD10BP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BaNLCSM3"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787037449; x=1818573449;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M789BWL3XBsXi/BePRZE8Fi0O3ch7shfN3/enE8S2pM=;
-  b=D0FD10BPzePqQZiuL8+d1ZO3HWLS23ObBr+78SlTx2vChJJffqgbOumA
-   2+miqRbY29556sTZn8/1I/tGh8U7X+L4fD0xWsCLXqmQ9A827iBiiKarv
-   GiA5CqWWfUv5L9KvBXaXiXz7YbcEOM9COQaqOpBRxP0TTO3X4ImolY2tS
-   jWK2Joy3rRSCEO/quikEWB7/hYt1rlTdgfuBZ8Sk0RIvIrAiXGbtDNK6z
-   JZZHx4mvr1GKLR3bLwpInM0bL1vPGVCsON0glkLpI86ZMNFmQpUNCAvyM
-   zPsDat5ei9hd58lU8G9woQ5TKIj76HbRT/ULzauU92tBNUmjdqhwyY+MT
+  t=1787038430; x=1818574430;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=+Ez1C771ix9X3B8jwdeUYBhWqwriYoHlS+4Fq7dKDcc=;
+  b=BaNLCSM3uL6MWDHNbaFzR+gh6xcfv3ln0xmdJwJ253M/hBX1nIiBmTnI
+   pTR/mJeAvGzPe5dTHHtXp/wLh5I01TCpdFpECifwYy0yO2Yd8q7JZ4+gy
+   EJWObQ2octkXKnW6aqkPXeX/zhtpm1JV9+55KKK5gTt/rkf4n5sqYn/T0
+   GGUEgohJD1HgjM9/BpBwmhfSk9MWBS6brYVFilkuAyVIxTM53Xqxz8ahn
+   jnOXsv+o598UrWtKCEFXOBVeH842NCsKhSRrpaKMhiZnHBTzEiUzbM7QW
+   snTFbwvL+s3wLTjHYhq7I6jru53y4fjUn/XeZSTnyl+2EUT4JatoWGPuB
    g==;
-X-CSE-ConnectionGUID: 471HZEAHRm6j2HMI/5hGNA==
-X-CSE-MsgGUID: 03y4fNOtTlKkNwu5mfNBWQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="86482999"
+X-CSE-ConnectionGUID: 5BxGhGN1TGWjCX7g2gazbw==
+X-CSE-MsgGUID: XfygqeULR9GNt8A3DkN22A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11878"; a="87285058"
 X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="86482999"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:29 -0700
-X-CSE-ConnectionGUID: cYldwAqjRByOdf3QvPV5MQ==
-X-CSE-MsgGUID: NFqNirznSZesi3F4MWra6Q==
+   d="scan'208";a="87285058"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:33:49 -0700
+X-CSE-ConnectionGUID: hFEGvi6nSWyAs8kPKAIkcg==
+X-CSE-MsgGUID: 3fvu30GSSkeeLmpl6H/Txg==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,230,1779174000"; 
-   d="scan'208";a="263410861"
-Received: from junjie-desk-dev.bj.intel.com ([10.238.152.71])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:17:24 -0700
-From: Junjie Cao <junjie.cao@intel.com>
-To: "David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Vinicius Costa Gomes <vinicius.gomes@intel.com>
-Cc: Jamal Hadi Salim <jhs@mojatatu.com>,
-	Jiri Pirko <jiri@resnulli.us>,
-	Weiming Shi <bestswngs@gmail.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Simon Horman <horms@kernel.org>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>,
-	Hillf Danton <hdanton@sina.com>,
-	Uladzislau Zhauniarovich <uladzislau.zhauniarovich@gmail.com>,
-	syzbot+19d01f6082ec61dd45b2@syzkaller.appspotmail.com,
-	syzbot+8785aaf121cfb2141e0d@syzkaller.appspotmail.com,
-	syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com,
-	netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 3/3] selftests/tc-testing: taprio: add case for the software minimum interval
-Date: Tue, 18 Aug 2026 15:17:06 +0800
-Message-ID: <20260818071706.251035-4-junjie.cao@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260818071706.251035-1-junjie.cao@intel.com>
-References: <20260818071706.251035-1-junjie.cao@intel.com>
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.238.208.98]) ([10.238.208.98])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 00:33:42 -0700
+Message-ID: <e5cefe2e-5cde-45c5-8d28-e64b434a0c2e@intel.com>
+Date: Tue, 18 Aug 2026 15:33:40 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 18/22] KVM: selftests: Add helpers to init TDX memory
+ and finalize VM
+To: Ackerley Tng <ackerleytng@google.com>, Lisa Wang <wyihan@google.com>,
+ Andrew Jones <ajones@ventanamicro.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>
+Cc: Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-18-15ad654a50db@google.com>
+ <befe73e1-3287-440e-90de-6c62f6c19d47@intel.com>
+ <CAEvNRgH00s3NWUH8EGUZq3WWweboBcUaTZs_0Cye5D=3o0OALQ@mail.gmail.com>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <CAEvNRgH00s3NWUH8EGUZq3WWweboBcUaTZs_0Cye5D=3o0OALQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Entries below TAPRIO_MIN_SW_INTERVAL_NS must be rejected for software
-schedules.
+On 8/17/2026 9:52 PM, Ackerley Tng wrote:
+> Xiaoyao Li <xiaoyao.li@intel.com> writes:
+> 
+>>
+>> [...snip...]
+>>
+>>> +static void tdx_load_private_memory(struct kvm_vm *vm)
+>>> +{
+>>> +	struct userspace_mem_region *region;
+>>> +	int ctr;
+>>> +
+>>> +	hash_for_each(vm->regions.slot_hash, ctr, region, slot_node) {
+>>> +		const struct sparsebit *protected_pages = region->protected_phy_pages;
+>>> +		const gpa_t gpa_base = region->region.guest_phys_addr;
+>>> +		const u64 hva_base = region->region.userspace_addr;
+>>> +		const sparsebit_idx_t lowest_page_in_region = gpa_base >> vm->page_shift;
+>>> +		void *source_pages = NULL;
+>>> +		sparsebit_idx_t i, j;
+>>> +
+>>> +		if (!sparsebit_any_set(protected_pages))
+>>
+>> sparebit_any_set() doens't check if the input is NULL. So we need to
+>> check it here.
+>>
+>>> +			continue;
+>>> +
+>>> +		TEST_ASSERT(region->region.guest_memfd != -1,
+>>> +			    "TD private memory must be backed by guest_memfd");
+>>> +
+>>> +		sparsebit_for_each_set_range(protected_pages, i, j) {
+>>> +			const u64 size_to_load = (j - i + 1) * vm->page_size;
+>>> +			const u64 offset =
+>>> +				(i - lowest_page_in_region) * vm->page_size;
+>>> +			const u64 hva = hva_base + offset;
+>>> +			const u64 gpa = gpa_base + offset;
+>>> +
+>>> +			if (!kvm_has_gmem_attributes)
+>>> +				source_pages = (void *)hva;
+>>> +
+>>
+>>> +			vm_mem_set_private(vm, gpa, size_to_load);
+>>
+>> So vm_mem_set_private() has to be called at this late stage when run
+>> with in-place gmem. But for non in-place gmem, we can actually call
+>> vm_mem_set_private() in __vm_phy_pages_alloc().
+>>
+>> Calling vm_mem_set_private() here instead of in __vm_phy_pages_alloc()
+>> looks like a trick to me.
+> 
+> I thought this is fine because __vm_phy_pages_alloc() seems to be a
+> rather low-level function, where the responsibility of the function is
+> just to allocate (for find some physical pages). Calling
+> vm_mem_set_private() in there seems to be doing too much.
 
-Signed-off-by: Junjie Cao <junjie.cao@intel.com>
----
- .../tc-testing/tc-tests/qdiscs/taprio.json    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+__vm_phy_pages_alloc() takes a parameter @protected, which is used to 
+tell the allocated physical pages need to be protected(private) or not.
+It looks weird that a page is allocated as protected but actually it is 
+still shared.
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-index cd19d05925e4..3fe66839f8ae 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-@@ -154,6 +154,28 @@
-             "echo \"1\" > /sys/bus/netdevsim/del_device"
-         ]
-     },
-+    {
-+        "id": "f4b2",
-+        "name": "Add taprio Qdisc with software interval below the minimum",
-+        "category": [
-+            "qdisc",
-+            "taprio"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: taprio num_tc 2 queues 1@0 1@1 sched-entry S 01 50000 sched-entry S 02 50000 clockid CLOCK_TAI",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $ETH",
-+        "matchPattern": "qdisc taprio 1: root refcnt",
-+        "matchCount": "0",
-+        "teardown": [
-+            "echo \"1\" > /sys/bus/netdevsim/del_device"
-+        ]
-+    },
-     {
-         "id": "831f",
-         "name": "Add taprio Qdisc with too short cycle-time",
--- 
-2.43.0
+>> That is, we cannot set the page as private
+>> when allocating a guest physical page as protected because if doing so,
+>> we cannot write the initial content to it.
+>>
+> 
+> I think calling it here isn't a trick, it's a good way to reuse all the
+> existing code that builds up the guest image in place. In-place
+> conversion allows you to set stuff up in shared memory and then convert
+> everything when you're done and also populate the memory.
+
+This is based on the assumption of "in-place conversion". However the 
+TDX selftests should be able to run without "in-place conversion". There 
+is no hard dependency on it.
+
+I think this patch implements what patch 13[1] of this series says "For 
+CoCo VMs, pages that need to be private are explicitly set to private 
+before executing the VM."
+
+But all of this is for the case of "in-place conversion". When "in-place 
+conversion" is not supported/enabled by the kernel, 
+GUEST_MEMFD_FLAG_INIT_SHARED for Coco VMs is *not* allowed and all the 
+memory are private by default and no need to call vm_mem_set_private() 
+here at all.
+
+[1] 
+https://lore.kernel.org/all/20260722-tdx-selftests-v14-13-15ad654a50db@google.com/
+
+>> This is the topic about how to implement the infras for in-place gmem,
+>> not the issue of this series. Let me go read the selftest patches of
+>> gmem in-place series and we can discuss there.
+>>
+>>> +			tdx_init_mem_region(vm, source_pages, gpa, size_to_load);
+>>> +		}
+>>> +	}
+>>> +}
+>>> +
+>>> +void tdx_vm_finalize(struct kvm_vm *vm)
+>>> +{
+>>> +	tdx_load_private_memory(vm);
+>>> +	tdx_vm_ioctl(vm, KVM_TDX_FINALIZE_VM, 0, NULL);
+>>> +}
+>>>
 
