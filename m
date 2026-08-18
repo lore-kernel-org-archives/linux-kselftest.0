@@ -1,36 +1,68 @@
-Received: from mta0.migadu.com (out-208.mta0.migadu.com [91.218.175.208])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266D2346FA1
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 21:03:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA1EB34887B
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 21:03:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787087016; cv=none; b=Jzbi9jMYURxVU7kgZzsRXZi2C3TIwAlVlhpbfsQNx0KEcWY9dSplzKGOMJisxsv0hSas9BGEAFbT5UvbYlUuHrNsls1fY3UsXjciBULNKEMT1l1zCmOH6uppwuUm+of5rm7jWbVpwuoEYj+kt+i6z2yCMPLAqStk9byqGFHjfxA=
+	t=1787087031; cv=none; b=sCsDkYd18QafwG0L3nFgaEVt+S8vIszmKqDfcTca0lY7pd58PBQS2HRNEsJflSpes+aTVpGws5rj3r6Pa910BBNthojmBoGnWwm7aBEZF9aleBEbumoIZoI3xL53H0FYbhpkczuKjkaMDkqAmFW0hexpIpHUdQwUGZgZYP26W7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787087016; c=relaxed/simple;
-	bh=0AGz8ClWhv/8k8q18axKvNzjLqFvBGOkv5QBv+ymZqQ=;
+	s=arc-20240116; t=1787087031; c=relaxed/simple;
+	bh=VA+SIcF2JEQ1JJLvPSrWTikAbsMHIebPPodiINRMPV8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J9TNrPGjP1CeqNM1Mi2pXCRhtVz9guo2+126+hDC4N0gL5G0UlrN938HWTKf8lOft8s7QHhuRPZw7rh/grFb4B8iOnixmKLJNQN0Zd9z4wJJG3OKt4wL7+SKJXJGjz0BV4yTIhWPuZAAo/q1y4OBDIAyvv9D9ru5SlARHV4jqqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=m01nSxuI; arc=none smtp.client-ip=91.218.175.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 In-Reply-To:Content-Type; b=PcYZRZGx19NYtf2/GyuZSpW+d4/nvLpkhXolBQiNRm+0UHNFYxdWivL+vVZ2KFBjsAKPRXqugZLbcWDIjQCr8R1gLQ3F1tIJqOxWyEfyWmHiYeJgh0t37uG3J7RBGdJAGw34MAxQHADID9cqAEFWo9DSyL4ZwDG4UCATioyuT3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mBeClpjU; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="m01nSxuI"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=0AGz8ClWhv/8k8q18axKvNzjLqFvBGOkv5QBv+ymZqQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787087011; v=1; x=1787691811;
- b=m01nSxuIjPkWl9aySf3YUJoeN12QU3BxhmbCBRTTyz2ztOwgfZ42SRqhIEfm/q1+nrqhnOzN
- XaiA7J4T4rMmlkM4HHCeZs80URnf4XjwFwVbD4RDHbaAsVYti8L/VUxFxfuqYla8NySsD09emq5
- PLsE3Hhpa92CSz3uX8uVXQE4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1251:27:17dc:c6a5:7074:ce30] (2620:10d:c090:500::7:86e7)
-	by smtp.migadu.com with ESMTPS id b3773563f98e6be2;
-	Tue, 18 Aug 2026 21:03:31 +0000
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1f5fa9db-0051-403a-a2e9-44ee20592148@linux.dev>
-Date: Tue, 18 Aug 2026 14:03:21 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mBeClpjU"
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-495590dde14so3859925e9.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 14:03:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787087028; x=1787691828; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=87Tocz7iX4zZzqPz4Y1pLylVtSGOpYwXIbfhErO8dNY=;
+        b=mBeClpjUZzZGksKQ9xoJy7BBE1z10rGmAOMt5n8pzMLBvQ7KIKVMnFwg7A45ut143f
+         LI0kH6eZbru670VTIB5k1Tq3Ttc1LoODK38KHQ7DtHuMqlasgRuOV1nE58TknF9edUOq
+         wxvB9E9QOQB9BqrTVArZUmaQCZ5DpdenRMcx89K+0HOYxCcR2gOX5MnpbPxF0oNPzqKi
+         4hncVX7YuAhw25GVP33tD85knadvXerZJ3QXUhRP7KN+jbuHJUtejApxTvt54cJIf59l
+         SoHMtFIuqxvqIDpzZUJ6fLDUOatvHO+gVexqhccSIL8hK8Fe65y6XU8XdxTQRFc93Fsp
+         EaEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787087028; x=1787691828;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=87Tocz7iX4zZzqPz4Y1pLylVtSGOpYwXIbfhErO8dNY=;
+        b=h3jPwsVvyaibiJ8nSdr4RX8gLnwBrW8ElwTWqTqxeC4LYBSU0194f//B+SFrcl7Qn5
+         lbAvjQjCmqsXnN0rJUdFQYJEqKwuMFl98k5xVAT7oJ+COC1949kC9nCVHOoonw+o1vEm
+         gzSNjQQy0zCkZ95DEG20h9GCQI2AXhcuyM8VJ0tKGKSCZwD8sn6ckSfxuLAQE4adenpu
+         4mdZ3dD73rGo03R78ArMXu3S13uLLfpd6y0BtNIi1ZpJSvQtWUJW29tOOUWSveRSFvDu
+         xbSTnbkSdTD5sqZaT4IRuNwnMX8OlDKWiQyoxYN+UxSCqxy7zCbc8gVJ0HQN0bKUEX6G
+         xiiw==
+X-Forwarded-Encrypted: i=1; AHgh+RqdPZLTDUJeO7WHNj4+QpGjSslPgEFXJJLOQ9AgGCHLhh8wJXTtdClW0jc/YNp2rL8naz0+J9nLeVLS4VGQzlU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy26x+y2Q+twS7cJdPvq9MOZ6n/cG2nllNuYnRv6LS7n8ltGcDB
+	rFG4IaEbrwJfOUAGEhVR2z0U7skNl42j4JrT6wfNN7kwWQtcLMtCPoni
+X-Gm-Gg: AR+sD13CqE/77t4Ph/J6YdwKkfu9g89qA0z7rjQwgjuRoq6a3qyNOwfQACnRZNJDb4M
+	VSDX4scs+oxG1AChIszNTqtDeQ4u0TzLP8oWRIeRX8qIa2w9fCQrpMDuU9JKheKX0plUQmfFVxy
+	QpbaU1yXdEb5Y9gPJaAlgXlXP0cfGn4jbpYEBt9BpHUWISG4ibbNEyS5eyE2a6LlhN6LCPL0MA7
+	FLrhDkz4pxfSvf/cWNhrWW0bCXijk2IkdjFxPZ8xioC2cb5sHbMyCd7Opd4yxoLoZc+F0XVPOEU
+	hX6D/fiSSUF8ThrEUHU27N7PWfqa4HBW018+BD9cXooJ13YCDEhYpwdCezT0P4LJ94DbnszHVC1
+	/cxW6OcuVt53GgV/dSRjyGbv5WlJbin0GQZePpkAAIuTEV7Nq6I8T0shOvzSgEW50Rj48x28lSV
+	4cuys3bU8N1LCuACvCfFQ86NQib7KdSJiCw3fxqV6YQG0O85Oja6qSL3h/P8MfT6g7P1bxsEyVG
+	HjuZ2tKNgbd3WjPSzZy78/pnAu56SNQ1RUEz65PuzmRhpP85epQ1qVArXoHfYgejyw=
+X-Received: by 2002:a05:600c:348b:b0:499:5282:f8d1 with SMTP id 5b1f17b1804b1-499a8fcd890mr14141845e9.12.1787087027805;
+        Tue, 18 Aug 2026 14:03:47 -0700 (PDT)
+Received: from ?IPV6:2407:d000:508:2027:311e:5c97:f108:813a? ([2407:d000:508:2027:311e:5c97:f108:813a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499a9e09905sm2711825e9.4.2026.08.18.14.03.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 14:03:47 -0700 (PDT)
+Message-ID: <c9ee5f08-81c3-4c91-9189-002b260ea641@gmail.com>
+Date: Wed, 19 Aug 2026 02:03:43 +0500
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,99 +70,110 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
- stack atomics
-To: Eduard Zingerman <eddyz87@gmail.com>,
- Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org
-References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
- <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
- <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
- <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
- <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
- <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
-From: Vineet Gupta <vineet.gupta@linux.dev>
+Subject: Re: [PATCH v2] KVM: selftests: Replace ulong with unsigned long
+To: Sean Christopherson <seanjc@google.com>
+Cc: kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, David Matlack <dmatlack@google.com>
+References: <20260803170825.925561-4-hisamshar@gmail.com>
+ <20260817220457.554823-3-hisamshar@gmail.com> <aoOKMeua-cNeTxXT@google.com>
+ <8d069fe1-a5b6-4a86-9604-26aebe2dc243@gmail.com>
+ <aoSIBnFfy4osa6wt@google.com>
+ <c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com>
+ <aoSyYtxBpEaoBwGY@google.com>
 Content-Language: en-US
-In-Reply-To: <ba901e5268dc739711b9a5e1d9405be6953e35f1.camel@gmail.com>
+From: Hisam Mehboob <hisamshar@gmail.com>
+In-Reply-To: <aoSyYtxBpEaoBwGY@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/18/26 12:56 PM, Eduard Zingerman wrote:
-> On Tue, 2026-08-18 at 12:35 -0700, Vineet Gupta wrote:
->> On 8/16/26 4:36 PM, Eduard Zingerman wrote:
->>> On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
->>>> On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
->>>>> Add a verifier test with one atomic RMW instruction reached through
->>>>> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
->>>>> shared instruction with the existing incompatible-pointer diagnostic.
->>>>>
->>>>> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
->>>>> ---
->>>>>    tools/testing/selftests/bpf/progs/verifier_arena.c | 39 ++++++++++++++++++++++
->>>>>    1 file changed, 39 insertions(+)
->>>>>
->>>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> index b241bbcf54a8a..b22bab33301ab 100644
->>>>> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
->>>>> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
->>>>>    
->>>>>    #endif
->>>>>    
->>>>> +static const struct bpf_insn addr_space_cast_insn = {
->>>>> +	.code = 0xbf,
->>>>> +	.dst_reg = BPF_REG_7,
->>>>> +	.src_reg = BPF_REG_7,
->>>>> +	.off = 1,
->>>>> +	.imm = 1,
->>>>> +};
->>>>> +
->>>>> +SEC("socket")
->>>>> +__description("arena and stack atomic at the same instruction")
->>>>> +__failure __msg("same insn cannot be used with different pointers")
->>>>> +__arch_x86_64
->>>>> +__load_if_JITed()
->>>>> +__naked void mixed_arena_stack_atomic(void)
->>>>> +{
->>>>> +	asm volatile ("					\
->>>>> +	r1 = %[arena] ll;				\
->>>>> +	r6 = r10;					\
->>>>> +	r6 += -8;					\
->>>>> +	r9 = 0;					\
->>>>> +	*(u64 *)(r6 + 0) = r9;			\
->>>>> +	r7 = 8192;					\
->>>>> +	.8byte %[addr_space_cast];			\
->>>> I'm going to fix this to:
->>>>
->>>> 	r7 = addr_space_cast(r7, 0, 1);			\
->>>>
->>>> as in the test case above.
->>>> Waiting for CI [1].
->>>>
->>>> [1] https://github.com/kernel-patches/bpf/pull/13325
->>> A...and it requires another exception for GCC-BPF:
->>> https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc
->>>
->>> Ihor, it's a third time GCC-BPF strikes this weekend.
->>> What do people think about downgrading it to may-fail until the
->>> DENYLIST decreases to something reasonable?
->> While bpf-gcc is improving, slowly, we can in parallel do alittle better
->> on test hygiene as well. In this case by correctly bracketing the tests
->> with _BPF_FEATURE_XXX.
-> Yes, that's what I ended up doing. Should have paid attention to the
-> #if .. #endif bracket used by the textually preceding test.
-> Sorry for lashing out.
+On 8/19/26 00:28, Sean Christopherson wrote:
+> +David for the VFIO thing
+> 
+> On Tue, Aug 18, 2026, Hisam Mehboob wrote:
+>> On 8/18/26 21:27, Sean Christopherson wrote:
+>>
+>>> Oh, so on top of "https://github.com/kvm-x86/linux.git next", this *is* the last
+>>> blocker?  If so, then I'll grab this for 7.3.
+>>
+>> Not quite -- I tested kvm-x86/next + this patch with musl-gcc, and the
+>> build still fails. On top of the steal_time fix already in your tree,
+>> two more musl blockers remain, both from code that is only in
+>> kvm-x86/next so far:
+>>
+>> 1. hardware_disable_test.c, from 496779b54943 ("Pre-set threads affinity
+>>     in hardware disable test when possible"):
+>>
+>>       hardware_disable_test.c:75: error: implicit declaration of function
+>>       'pthread_attr_setaffinity_np'
+>>
+>>     The call sits under #ifdef _GNU_SOURCE, but lib.mk defines _GNU_SOURCE
+>>     unconditionally, so the path is always taken and musl (which lacks the
+>>     function) breaks.
+> 
+> Heh, Sashiko flagged that as problematic, and I was trying to figure out which
+> macro to key off of[*], but was (obviously) unsuccessful.  I don't suppose you
+> know the canonical way for checking for support of glibc-only functionality of
+> this nature?
+> 
+> [*] https://lore.kernel.org/all/am0KqJOD-FiC9BXs@google.com
+> 
 
-No worries and I can sympathize with frustrations when someone's s*it is 
-not together and others have to suffer
+__GLIBC__ is the pragmatic in-tree answer.
+_GNU_SOURCE is a request macro (input to the libc headers), not an
+availability indicator -- lib.mk defines it unconditionally, so it
+cannot detect anything. __USE_GNU works but is glibc-internal.
+__GLIBC__ is defined by glibc's <features.h>, which any libc header
+pulls in, and is the established idiom in selftests already:
+kvm/lib/assert.c uses "#ifdef __GLIBC__" for execinfo.h, as do
+bpf/test_progs.c and nolibc. musl deliberately provides no __MUSL__ --
+its FAQ's stance is "test for properties, don't assume them", which
+strictly implies a compile test (autoconf-style); with no configure
+step in selftests, __GLIBC__ is the established in-tree idiom. For
+hardware_disable_test.c that is s/_GNU_SOURCE/__GLIBC__/ in the three
+spots; build-tested with musl-gcc, passes.
 
--Vineet
+>>
+>> 2. The libvfio wiring from a262fc49e0aa ("Build and link
+>>     selftests/vfio/lib into KVM selftests"):
+>>
+>>       vfio_pci_device.c:25: fatal error: uuid/uuid.h: No such file or
+>> directory
+>>       sysfs.c:31: error: implicit declaration of function 'basename'
+>>
+>>     The former adds a hard libuuid dependency (its headers aren't visible
+>>     to musl-gcc here);
+> 
+> Can you elaborate on what you mean by "its headers aren't visible to musl-gcc"?
+
+musl-gcc searches only its own include directories
+(here: /usr/include/x86_64-linux-musl and gcc's internal dir) and
+deliberately not /usr/include, to avoid mixing glibc-oriented headers
+with musl. uuid/uuid.h comes from libuuid (util-linux) and is installed
+at /usr/include/uuid/uuid.h for the glibc toolchain, so glibc builds
+find it and musl builds cannot. I see 2f0c30d0d1 already limits the
+libvfio link to x86; the remaining gap on x86 is that libuuid is now a
+hard dependency of the KVM selftests build (libvfio.mk adds -luuid),
+and for musl-x86 the header is not visible at all without a
+musl-targeted libuuid install. A uuid.h compile check to skip the vfio
+pieces would keep it optional; otherwise the new dependency is probably
+worth documenting.
+
+> 
+>>     the latter because musl declares basename only in
+>>     <libgen.h>, while glibc exposes it via <string.h> under _GNU_SOURCE.
+> 
+> IIUC, sysfs.c just needs to explicitly include libgen.h?
+
+Yes, adding <libgen.h> suffices. One nuance: there are two
+flavors -- glibc under _GNU_SOURCE provides the GNU variant via
+<string.h> (char *basename(const char *), non-modifying), while
+<libgen.h> provides the POSIX variant (char *basename(char *), may
+modify) and takes precedence on glibc as well. Safe at this call site:
+rl_path is a writable buffer filled by readlink() (no trailing
+slashes), used once by sscanf(). Verified with compile tests on both
+libcs, and with <libgen.h> added, uuid/uuid.h is the only remaining
+musl failure in the whole build.
+
+>> The rseq __GNUC_PREREQ failure is already covered by my patch in
+>> linux-next. With the above sorted, the musl build passes.
+
