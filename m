@@ -1,197 +1,158 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from SJ2PR03CU001.outbound.protection.outlook.com (mail-westusazon11012009.outbound.protection.outlook.com [52.101.43.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1393876BE;
-	Tue, 18 Aug 2026 01:28:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787016533; cv=none; b=Bc+K62NmX2o7uxWwLx7Dnwag2f6CDO74tRAlSE4qmo4waHYKbVsp3tAWMELMWsMkF/stNUToihWtGxhiUVVg5sn5gu0vwsYU8nXoLGNl9Cfm73IQvtSWBiex7MTtMrtADZihTUgFW2TakXnhNRj5IZwggVTR7YCDYXFz1Us+qSo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787016533; c=relaxed/simple;
-	bh=MIYe/tBxJTutFbmxvaLWQOWz4uI5KD2EMGTQhS4BWeo=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=UdwtwTzZvLpAmSS71q325bc401sP6UVQimQP+4TMua/fCjWFYxjvB1JACq2DHwvbkCV5g86DePNjDaMtY1bUEq0fM0HLmc5eY4UFn3NwV2F2ZbVw5sIU4sNURkRFD3pvl8xSOLZt+bhmBkLT6Ac31xuTxSlDao0F3nBUFgVmQaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H1Czu4MR; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DA13AA1B2;
+	Tue, 18 Aug 2026 02:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.43.9
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787019044; cv=fail; b=AzYY6c8fvdxK08EgHqd5mX4m7DasF9VVJUvS75WlZ3Vq797zu4sO/PppKcz+FgRz2QVFzkURLnObLpxJcz8WKeZS3dY2V0Y3CKLEd/cFneifwo1RWLjnBXJihPN2aK2h2vUj2QKcfTxsR6Ai0xKK8ZZGeV8YI9vnpl2qfgTNTa8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787019044; c=relaxed/simple;
+	bh=NOu4HhM9eghvwCkXHFrGPkmCyHvj8FPMa4j+GbW/DEo=;
+	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
+	 In-Reply-To:MIME-Version; b=UOlxWY1DLEroIMlA+1KQAXr2da+wqf+gkcl9S04lI/TF+4mDzLnfBYX3/ECU9DjdIP9/jgvyL1sP/Q05c7XFS3lHVFhaKR1RQGTxYytXt2nKq3HTVycwabFzXBgmbe0BigiVGRTO4allJk/WoqYFOBxRi6iDUitCT2t37NKBMgY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uRsteFZM; arc=fail smtp.client-ip=52.101.43.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H1Czu4MR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 299941F00A3D;
-	Tue, 18 Aug 2026 01:28:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787016531;
-	bh=UvB2gcyD4YS68Qm6x4+zUnkUl5DDVmDfH9NQiYl9404=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=H1Czu4MRxO62iz9Vpt3yaVgqsOjgbfe7udGY8MH4XGjji8UKuBSSkzEElyBtZvuZs
-	 O1eye0IeGVnvFvKkXZArt7Ka750snGflMR+aQcXgTBpZKEqBSEHXSruj03Z4UKcioM
-	 9TH3JC8Vju+QBQLgIC7JW/YcIclM3D8VWo0XyBizCVWZcjBmVC2uVoBcYt8//6RqPS
-	 mLJSF6nkuoAoHANElLYqCIWc6/rray6MPxAmiFCzqcHoBwDwxwQIgHA2hgEZ4e/rzf
-	 IkhxQ5XxCvNAyTkit1XuussgqqJ2uWEiheaq3hFFvtVpVzGQK9taNKg73p3LLRwvLN
-	 M5+nGBL8i7GZA==
-Content-Type: multipart/mixed; boundary="===============5761274082629541537=="
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uRsteFZM"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=TqBE2pnyN7P50tUKRUznEgwXHTkd738bWOqNlRR+JrgSFK48vubZUT4RilCZhb9IUvYQXHzlSEEFKtjlCUi+D5KiafquYBN4BcUbEFm7vsFEWws97BX46qbxyhiRAtZ5PEc5YxTDfCwhpXIF3SX32BIwoMJ+pmaVPNpng70MPm0FGOF0ZNF8d9I7DIPCq8rRhtfsMo6mqh/nUDLQhY/4t95/+F2KWPDboUOu+qub2BFTQX//sEG5yGd2xGRlMaZBr63DG9TJpKskYjNKy9SOUsJPHd84hCIBrthhsq/Vo/PVGT5tiuUCFEV0+hMhYITpEcIlgrj1haoF0o/FEA2KRQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2/Xq8bhfX9FBjR29vBvlhJuH2gdShXw1/Vb9mV/iH5c=;
+ b=K6ikCzoX5wlJ9RGQGjxKQkeuCgwBclR528QGDHuEpbdirdjTBPTn3hoOOJtqYRg3Do/iX5xnyU5LHGyptZhX1kU6vJn/CGckxweylvbJBX8KRJrzjMr+fp+RBmjYi+LhVDsRZppJls/0wqLqo6+fbxCJOzm9suHZ9gO65CcJqDCsCrH4h6OvGzOJvi1mEniQ7kUWHN3baDdEejbhX1Ee+wscUmy4kDmFl5/1CnrwpyacwnrXxSPcWppUdwHyiAfKITOVstZnEgc2t1C0lHoQfId8+7HZ6AxO2wf0qeGuI84z+sCyWQXeAj+0Zv/f7hKvAd9c0uqJQDlg/AgJYTGeFg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2/Xq8bhfX9FBjR29vBvlhJuH2gdShXw1/Vb9mV/iH5c=;
+ b=uRsteFZM6thbyLrIltpNqByr/pV6QT4F0u8yUCqJBhdn+NFH5t14AahcW1tn/8ABXAhxwcUXAHz2pKS/zDQL1BvCUcf7roLcnHQWyuT24/OgVU/PsNNaVZ/z0MuhI0GOOWQFAHEIOL49vfBF/7dXGzOVL0RurWxROboeH7tMy1gd4AljQNXUHUjpT9QSjrbb/eFvVN7KTcsK0uUzLVL1hDyG8KNLNbjl6an3KzWZ5e1AXu1p127OdBy0m/9fUGu+NDldoRS/ZeUx82kwHK+MuZQpFF/KtZDg83sDBsfUGJl+a4WKX2XGAE77BBPbFLuKmrKToIwxcgGzc4rEctq35w==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by BY5PR12MB4180.namprd12.prod.outlook.com (2603:10b6:a03:213::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Tue, 18 Aug
+ 2026 02:10:38 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0315.016; Tue, 18 Aug 2026
+ 02:10:38 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 17 Aug 2026 22:10:37 -0400
+Message-Id: <DKRPDOBRL22H.3B54F0Q6F1AEX@nvidia.com>
+Cc: <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, "Hongfu Li" <lihongfu@kylinos.cn>
+To: "Hongfu Li" <hongfu.li@linux.dev>, <akpm@linux-foundation.org>,
+ <david@kernel.org>, <ljs@kernel.org>, <baolin.wang@linux.alibaba.com>,
+ <liam@infradead.org>, <nico.pache@linux.dev>, <ryan.roberts@arm.com>,
+ <dev.jain@arm.com>, <baohua@kernel.org>, <lance.yang@linux.dev>,
+ <usama.arif@linux.dev>, <vbabka@kernel.org>, <rppt@kernel.org>,
+ <surenb@google.com>, <mhocko@suse.com>, <shuah@kernel.org>
+From: "Zi Yan" <ziy@nvidia.com>
+Subject: Re: [PATCH] selftests/mm: khugepaged: consolidate error exits via
+ kselftest helpers
+X-Mailer: aerc 0.21.0
+References: <20260817061955.45454-1-hongfu.li@linux.dev>
+In-Reply-To: <20260817061955.45454-1-hongfu.li@linux.dev>
+X-ClientProxiedBy: MN0PR05CA0006.namprd05.prod.outlook.com
+ (2603:10b6:208:52c::31) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <893500b01a50d5fde5c0c79562e4429472e86ef0a88635b3f60ac608974a6dcf@mail.kernel.org>
-In-Reply-To: <20260818002450.3071325-2-ziyang.meme@gmail.com>
-References: <20260818002450.3071325-2-ziyang.meme@gmail.com>
-Subject: Re: [PATCH v2 1/2] cgroup: add BPF kfuncs to read a cpu cgroup's stats
-From: bot+bpf-ci@kernel.org
-To: ziyang.meme@gmail.com,tj@kernel.org,hannes@cmpxchg.org,mkoutny@suse.com,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org,kernel-team@meta.com
-Cc: mingo@redhat.com,peterz@infradead.org,vincent.guittot@linaro.org,bsegall@google.com,dietmar.eggemann@arm.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,roman.gushchin@linux.dev,shakeel.butt@linux.dev,inwardvessel@gmail.com,ziyang.meme@gmail.com,bpf@vger.kernel.org,cgroups@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Aug 2026 01:28:50 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|BY5PR12MB4180:EE_
+X-MS-Office365-Filtering-Correlation-Id: e199c1ec-f26a-4ffe-4095-08defccde56d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|7416014|376014|366016|23010399003|22082099003|18002099003|921020|10067099003|11063799006|56012099006|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	sa6L7iALuwvbVA8OGC4eL/9m0Urycj0HB5k+7zNo9IUe4MoJVOnzpXhQEHhvJmOxuI0JO3XAZsWK3GdBxx7kgjbjifgdV8Zz8vQPnqy//Fv8wtHnR4JLQeuEj3fT72CVAFEkVb9lzjAwqQXo9V8VjCPvugL7OXeWPAYnTkQKV9k17DhfB6hpvFdbws6auy34mR0gES/I8uILqj5Aq+P/ogFjm83qFp+pZYG9yMJ8PBZVOEQBJhsUE//g74T8NJygju5whpLeNQtyz/ic5dpBbnEuN2m8jqqVCZAsZSvipHjhXypIgywjka6RatFNpMNRAoLMT7c+JqFTt5F+F3EjisxSV0ZJwYMJfAASermhJBnVdZw9sZ0HbyJOxQGiDgBpPOUjwh2VJygDL5gU/tlD9r7g12hMgmrZOnbBU9gl8SH3loyM8Ad6lg8C4KtAJHE/cABruY4vP84JW5Thci27KG3EmahnbPktO5wqjvlhsOYXxYUuGR22vnXGOZQBKo2P2L+9dMc9rGHZ81J4lTHfak4a9Z+0bilAHX3A+YjigwYSVD3sD7NrxiM1ASEqUF2nVigIyp5m93AMAt4qp6DTkDSKBmI0eLUkYhOH0t+48ixlbGCX0hOVph5c/kAnNPsWsob8HEdiudhVRLa400chCSNJhiQZ2q2IDCfsmmHhuMmomFfvCcjOt3aVBrmVVWJ2od+Q74JF2Y4w4lyV7xcoZg==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(7416014)(376014)(366016)(23010399003)(22082099003)(18002099003)(921020)(10067099003)(11063799006)(56012099006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?MDdwa2p1eEtROXhEQ3lFUU5mVS9yRXRxMmRiRkUzcDZ0TXlPTmE0SnMrU1My?=
+ =?utf-8?B?eEVudjZVenFnaFZJVGFxdnBCaDVKZmM2TE1qVGY0WnpxSXdCSWM0OWxUU0lK?=
+ =?utf-8?B?ZTJsRnJPWStwZHJ0MWl3TXdiRWZ5RnJmTDJQN3BwUzJqbGx5N1UwVlpOakov?=
+ =?utf-8?B?empQbFNEYVgvSjZqVDQrbFJDbjViTEhKV0E0dTMxdnlRbU9VNjNWa1hSYzJx?=
+ =?utf-8?B?cU05SjU5Q3diM0VwREFRR2c0ZmxCZS9HSXFoZERUZllieTVmbW1mUjV2RlZR?=
+ =?utf-8?B?YlZVejNSdWE1cVNxK2piK0ZFdS9aZ2pKbENXK2ZNNkRMd2gyRzBoY1JIdzUx?=
+ =?utf-8?B?SHJGdU9vTUhBbm52ZldoUTArbkJqK0xENk54UXBGN1NWeTNmTFNwbWROei9Z?=
+ =?utf-8?B?aVVnWkQ4ZGt1Uk5QSFQ3LzV5c1orSE1zSm1yd3c5Qms3M04vWFBVMUtpZUM3?=
+ =?utf-8?B?czNNNUN1aHYvNzhUQ29nQ3NEY1Y3R3RFUUZGRmVTK08xcUdPS2lQVTdieDNX?=
+ =?utf-8?B?b2VBQWdySTJERkc1dnB6dUlSaVhENmVSTFNwT2JyMWRlNWtvb3hrd1FZQmE1?=
+ =?utf-8?B?MFJnNDFmNHlGdDUzTGQvQWxFUGNqdTI5Mm9IcU1nVytDd24rMHJUZHlJRERV?=
+ =?utf-8?B?TjZHNE9KUjcweHdEQUNNUy96bElDT3oxa0JpM01aNWVnbXFMTUNlZnhtMldy?=
+ =?utf-8?B?dFU2Mk40SWxZa212Y2RlZEFaNkFuYkJ5dHJuSjRCWFpRRk5lUnFkQlBwVFA5?=
+ =?utf-8?B?TmJUNVF1bUx0aDh0K2w2eXU4VWtPeUw2eXFrZVdpa0swMDEyN0Exb1dyYlBx?=
+ =?utf-8?B?Zjk4aXpvek05c3M2WVUyS2EwVXhwck01RFF6TXNGZmViU3NCNm1VdzJ4ak5C?=
+ =?utf-8?B?SnF3YkxOdEgzRFZjRkIrbHRmY25hcnZJS2VJUG5zeEkvekpUSG1Wd3VjbnhD?=
+ =?utf-8?B?UldZK0RHQjVLYnpERWQ5TXdCdjZRaFV6cTV2NE5hQ1pvUUREUlBYOHROSlV3?=
+ =?utf-8?B?cVNCZG1wT1VrTmU2ODJOTytJRmorbXU5ME1hSlNKdWN3WGxrNXpZSkl0cjd6?=
+ =?utf-8?B?ZkFyazRQTmYrRGdzS05GOGlPQ0FYdXI1aU9vdkd5bVJwVFFnbDdvSHhLU1FM?=
+ =?utf-8?B?YVpweEY2NXR6VWpuVWpxbUh4T0N6bDgrZllhbFJkQ01ib1lJaFVxVFZybWtv?=
+ =?utf-8?B?eCtOVG81NURtZlNLcmt0eDBjL05qWWxuVFRUbU1lL1JNc1RMeWZEQ2RZbE5l?=
+ =?utf-8?B?d1BmbnF1cWc3dm9WWGpLZWErUzBzVUhmM0trRm9hSGc0Q1BaTmdLT2VyUHZh?=
+ =?utf-8?B?YkFjdEV1TmpLeGhRZ0hqRjVVK0dub1BXL3J4QWJHT2ZPWWhMUjZIci9XcUJP?=
+ =?utf-8?B?RnUzcVoxamE5b2NMd2RpMHl0VkFpTFVpUUdiVXFjdXR0dUdDd3JLZ25rRy9m?=
+ =?utf-8?B?S2Z5MDg0QkJ6N1p1UFpIZmZQTnhaQncxVGJmT2JWbjFPZ1lxNWNDaWhFTk1j?=
+ =?utf-8?B?TDB3RkJibWpVZVFNWXJzRXZMbGkxNVNSVUZibTVPM3RqQzhXU3Z6OTVYd2Ro?=
+ =?utf-8?B?WnFISTFCYWY0aWdzazZha2t4Ly8yTGlNTXFtT1BpTStDb0VPYnpOeHN6dG9t?=
+ =?utf-8?B?WEZYdXVtTmhzOWVVRTh4dVVJeHhGTGpLL2NiMEk0b0dSSGJFZklHK005K0Rt?=
+ =?utf-8?B?c3AxM0JoWnBuWlhSeEpMdHd1MGh0OVlLSnhYMHFLRHdBcHFnT3AwL0ZGR0Rq?=
+ =?utf-8?B?MU9JZHQ0clFjOFRpOFpsVHJlQU9qOEgzWm9odHhDMnp4dEZHK1ErZU8vbDJj?=
+ =?utf-8?B?YkRFZ3BkclRPRzRIK2RtQ09qT0JWS1E0dE9xWk5BTTE2Vmc0MlZkSDdPbWdP?=
+ =?utf-8?B?MGowcWlSRzNUeXVJZ3FIQXpON0ZSODVmRlZnWDhUUEFvS0VJUVcrdXZGcUxw?=
+ =?utf-8?B?ZXRuRWt4cVBVOVBkL1R2bC9hQW5WRExUeS9wUlpSTUtTRlYxakhwdjYzRStv?=
+ =?utf-8?B?djlKSll2WFNseElHa2tib3gyYXhTMmc2dFkyRk5rOElQZzA4bVFjWkd3YUJI?=
+ =?utf-8?B?dHFrZ2l4S2o5cldDQXJnVmFyOWFQWHltYkp2UUlHQmkxUndyQjJKWWhuOHN5?=
+ =?utf-8?B?TTFJQlBqOXBXVmdwNHk4N2RGcGpQWW85d243dTFvT2dsbFJmTHJNb09iL3Ba?=
+ =?utf-8?B?YmdnQ2lpSnBYMUV5ajFVSlIrQjBnblhkbUFIWXNnUjBvVlBtNFFGUGllVUkz?=
+ =?utf-8?B?K29FUElxUjI4M2pMQkdzNGFVYnVycjMySVl2QVVra3JRelN1ZXUyVVV2S2xF?=
+ =?utf-8?Q?6v1EUTM/HKqLiWaL92?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e199c1ec-f26a-4ffe-4095-08defccde56d
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 02:10:38.2593
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LPMcFaxEJCZQRpJabaFSIz4k9eUCf6ru+BiRkqjlpSYvmsb9i23qSNG7ZgYOZpIz
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4180
 
---===============5761274082629541537==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-
->     cgroup: add BPF kfuncs to read a cpu cgroup's stats
+On Mon Aug 17, 2026 at 2:19 AM EDT, Hongfu Li wrote:
+> From: Hongfu Li <lihongfu@kylinos.cn>
 >
->     Collecting cgroup statistics is expensive: the existing
->     method is to open and parse a cgroup file. memcg already has an
->     efficient alternative through BPF; this series extends that idea to cpu.
+> Replace the perror()+exit(EXIT_FAILURE) pattern with
+> ksft_exit_fail_perror() so failures are reported through the
+> kselftest framework, consistent with the rest of the file.
 >
->     Expose the CPU controller's per-cgroup statistics to BPF, following
->     the memory controller kfuncs in mm/bpf_memcontrol.c.
+> Signed-off-by: Hongfu Li <lihongfu@kylinos.cn>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
 >
->     Design:
->     - Add bpf_css_flush_rstat() and bpf_cgroup_base_stat() to cgroup rstat.
->       The second kfunc returns the raw cgroup_base_stat after the
->       same cputime adjustment used by cpu.stat.
->     - Leave reading the CFS bandwidth counters to the BPF program. They are
->       plain fields of tg->cfs_bandwidth, so they need no kernel code.
->     - Add bpf_css_to_task_group(), which returns a checked RCU pointer of
->       the task_group*. This is usefule to compute the throttled time in bpf
->       side since the bpf_per_cpu_ptr() requires a verifier-known struct
->       task_group * and a pointer carrying the MEM_PERCPU property.
->       This use the convention that task_group embeds its css at offset zero,
->       so no scheduler helper or scheduler source change is needed.
 
-This isn't a bug, but there are language errors in the third Design
-bullet: "usefule" should be "useful", and "This use" should be "This
-uses". Also "in bpf side" is typically written as "on the BPF side" in
-kernel documentation.
+Thanks.
 
-> diff --git a/kernel/cgroup/Makefile b/kernel/cgroup/Makefile
-> index ede31601a363..0ba59b7eef48 100644
-> --- a/kernel/cgroup/Makefile
-> +++ b/kernel/cgroup/Makefile
-> @@ -1,6 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0
->  obj-y := cgroup.o rstat.o namespace.o cgroup-v1.o freezer.o
->
-> +obj-$(CONFIG_BPF_SYSCALL) += bpf_cpu.o
-> +
->  obj-$(CONFIG_CGROUP_FREEZER) += legacy_freezer.o
->  obj-$(CONFIG_CGROUP_PIDS) += pids.o
->  obj-$(CONFIG_CGROUP_RDMA) += rdma.o
-
-[ ... ]
-
-> diff --git a/kernel/cgroup/rstat.c b/kernel/cgroup/rstat.c
-> index de816a43db9f..46c322c4858b 100644
-> --- a/kernel/cgroup/rstat.c
-> +++ b/kernel/cgroup/rstat.c
-> @@ -752,6 +752,54 @@ void cgroup_base_stat_cputime_show(struct seq_file *seq)
->  	cgroup_force_idle_show(seq, &bstat);
->  }
->
-> +#ifdef CONFIG_BPF_SYSCALL
-> +
-> +__bpf_kfunc_start_defs();
-> +
-> +/**
-> + * bpf_css_flush_rstat - Flush a cgroup subsystem's rstat data
-> + * @css: cgroup subsystem state to flush
-> + */
-> +__bpf_kfunc void bpf_css_flush_rstat(struct cgroup_subsys_state *css)
-> +{
-> +	css_rstat_flush(css);
-> +}
-
-This isn't a bug, but is bpf_css_flush_rstat() needed?
-
-css_rstat_flush() is already marked __bpf_kfunc and registered with
-KF_SLEEPABLE at rstat.c:409 and :806. Adding
-'BTF_ID_FLAGS(func, css_rstat_flush, KF_SLEEPABLE)' to
-bpf_rstat_common_kfunc_ids below would expose the same operation to BPF
-without introducing a second name for it and without needing a wrapper.
-
-> +
-> +/**
-> + * bpf_cgroup_base_stat - Read a cgroup's base statistics
-> + * @cgrp: cgroup to read from
-> + * @out: zero-initialized output in nanoseconds
-> + *
-> + * CPU time is adjusted as for cpu.stat.
-> + */
-> +__bpf_kfunc void bpf_cgroup_base_stat(struct cgroup *cgrp,
-> +				      struct cgroup_base_stat *out)
-> +{
-> +	if (cgroup_parent(cgrp)) {
-> +		__css_rstat_lock(&cgrp->self, -1);
-> +		*out = cgrp->bstat;
-> +		cputime_adjust(&cgrp->bstat.cputime, &cgrp->prev_cputime,
-> +			       &out->cputime.utime, &out->cputime.stime);
-> +		__css_rstat_unlock(&cgrp->self, -1);
-> +	} else {
-> +		root_cgroup_cputime(out);
-> +	}
-> +}
-> +
-> +__bpf_kfunc_end_defs();
-> +
-> +BTF_KFUNCS_START(bpf_rstat_common_kfunc_ids)
-> +BTF_ID_FLAGS(func, bpf_css_flush_rstat, KF_SLEEPABLE)
-> +BTF_ID_FLAGS(func, bpf_cgroup_base_stat, KF_SLEEPABLE)
-> +BTF_KFUNCS_END(bpf_rstat_common_kfunc_ids)
-> +
-> +static const struct btf_kfunc_id_set bpf_rstat_common_kfunc_set = {
-> +	.owner		= THIS_MODULE,
-> +	.set		= &bpf_rstat_common_kfunc_ids,
-> +};
-> +
-> +#endif /* CONFIG_BPF_SYSCALL */
-> +
-
-[ ... ]
-
->  static int __init bpf_rstat_kfunc_init(void)
->  {
-> -	return register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> -					 &bpf_rstat_kfunc_set);
-> +	int ret;
-> +
-> +	ret = register_btf_kfunc_id_set(BPF_PROG_TYPE_TRACING,
-> +					&bpf_rstat_kfunc_set);
-> +#ifdef CONFIG_BPF_SYSCALL
-> +	ret = ret ?: register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
-> +					       &bpf_rstat_common_kfunc_set);
-> +#endif
-> +	return ret;
->  }
->  late_initcall(bpf_rstat_kfunc_init);
-
-This isn't a bug, but are these #ifdef CONFIG_BPF_SYSCALL guards
-necessary?
-
-The existing kfuncs in this file (css_rstat_flush at line 409,
-BTF_KFUNCS_START at 804, register_btf_kfunc_id_set at 818) have no
-guards, and rstat.o is obj-y, so they compile fine with
-CONFIG_BPF_SYSCALL=n via the no-op stubs in include/linux/btf.h:652.
-The cited precedent mm/bpf_memcontrol.c uses 'obj-$(CONFIG_MEMCG) +=
-bpf_memcontrol.o' with no preprocessor conditionals anywhere in the .c
-file. Documentation/process/coding-style.rst:1166-1175 asks to avoid
-preprocessor conditionals in .c files and prefer compiling out entire
-functions via header stubs. Would dropping the guards and using
-'obj-$(CONFIG_CGROUP_SCHED) += bpf_cpu.o' in the Makefile work here?
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32085852351
---===============5761274082629541537==--
+--=20
+Best Regards,
+Yan, Zi
+
