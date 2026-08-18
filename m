@@ -1,174 +1,134 @@
-Received: from LO3P265CU004.outbound.protection.outlook.com (mail-uksouthazon11020125.outbound.protection.outlook.com [52.101.196.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0588233A70E;
-	Tue, 18 Aug 2026 21:23:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.196.125
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787088238; cv=fail; b=Zm+01dG0+dFocc/JhhG88hI93z7NNP/zMMw9AKWkCxNjWCT7ZsbnYuV7XX35VDtl/XFOalJKVBxbefvhgMl9ssbx910BNV6v3jVVabZucTPCHe1v1ERuVmvCussaJlsDRzDbT2Tvr4DavPMg7QDwxNJzxtzTVCiC1vT1T7ggtyA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787088238; c=relaxed/simple;
-	bh=mSdIwN2iycaV6yrjsnwC6JkugG43W9nQ8BNBt5mJLvg=;
-	h=Content-Type:Date:Message-Id:Subject:From:To:Cc:References:
-	 In-Reply-To:MIME-Version; b=UOMldXgmbLtQ70s9itZ7avyISjLxUj7NUzzo4gua0wKo8YnUG9+MgmRoyKdS/brdsbcFEYp3ll+oLG8ZXybAwLrdPTKJfCbM5WJFFA3eNk5apjE40r97WiCl+Ax8iMHFzxLzwo596HBgvm3WaZtmyAg2xANKmHOchdc3zb39POI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=Vd79tbXq; arc=fail smtp.client-ip=52.101.196.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA6237C92A
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 21:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787089111; cv=none; b=Zh059oBxTtY1OabC6TeymE42u2Yh7d9NKeRdblUIX65P63o78TmnHyBXdB96FFrLMrrSdGDs9F1LVB+SzAakgh6sHRS9nkuL5z54snJ4mT7mJnIzns3ksJOBO4fFSOt9lVZx8uwnooM6fsQoeru7teQMO4+rdQYqKm4wXIi8ly0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787089111; c=relaxed/simple;
+	bh=GPinSQFO4keSd1Q5bC5YTK7Ezticd5+rWlEfu42Fe/E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pGNlRknPOo06jc9KagOVW7+IqPcS7TIMTxhDBcp4vpwk6m/SZRm66DBdeo0xlNNug8Q62kH3QhkBoZx3vLcYm/ZaIW0SR+z1+39s1DOTd6cHWWhAQDEWuVxEx5tGL3twkn7J+5+Heoy8W9Z+ZdI5oJdbxGsj2+KIkj2KpuZ27pg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DHqH2vfI; arc=none smtp.client-ip=209.85.216.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="Vd79tbXq"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=gAXziBKlVFywHzSVPNsjNNnVYF2BfjV5voEeHoK44aShHa5zCzeO5FcC0bII5kLWUcs0HLsfFfNJNcFpl+23XU3n9MQBmhiDnsE5rtVQFwteYYvnBKfYNKfnCN+tn4BJLfTOBfyn0AhNVY6pO9Hi8xc9HYdW8SMdXIC73Hq7J/aQDD7i5t+Kj4p5uDIKuKfMTZC/0DnUqjXKbROwm9Fvh/fw4onHYkDcbegojdGCIK7I7+6jSo9A2uSuhbTBwlkD/t9RAXnFXuwIQX2AKd0F1ZBrqM0KG1/YS2UkxAvJ7X3pBxl0CLU60O6AElq8uKCoHyC8vKVgeB6JwJyNjZ5CEA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mSdIwN2iycaV6yrjsnwC6JkugG43W9nQ8BNBt5mJLvg=;
- b=ysQrfCFH7Kp3fG1LmRVaqOkHgIWFWYQ+3dFnnMIACKVKVmWHDzDUgXjC3F679WUm5Y3U6MGxE01paWafiPMV20D6fdKbBMK1G1QFnPOGHJlCLQw0Fgz8VYbw5pbhHuCwstKvrFuyskeEKgdO9BFAB9vL5IVbRJLUfHiIHNTbwVUSTiDqn/R6HZqF/rDxLXMVYmcSz8WQGtCgCVbV5lKUPOpF268aqBUBTGwDb0Yj0gzrM/AwDJ/ycMBfj9oE1INpdjxVkaWxYcBzyzOkRRpb/svjQT8xIF02arqFpX28Ky1W7ySJb5GJ1GwgA90RGhKxHPGixPBc9eHBAzlLfUkuww==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mSdIwN2iycaV6yrjsnwC6JkugG43W9nQ8BNBt5mJLvg=;
- b=Vd79tbXqRc9pYOL+7fdLRiRDAbkiIynSwwNsHX7PwQ/FSq6wzX5ya1I8rUzQAfJxpaWL+vtEgU14fzRHspnd0bA0ua3DojGiiekoawppXzEZGXWotswuqbBUtCmHDKPAWMrEIuY8V1Te1EycAHTZaTcVHAXwmEyUr3aUSrkXgAQ=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
- by LO0P265MB6006.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:28d::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Tue, 18 Aug
- 2026 21:23:52 +0000
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1%4]) with mapi id 15.21.0339.007; Tue, 18 Aug 2026
- 21:23:52 +0000
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DHqH2vfI"
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-38fdeaed181so551880a91.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 14:38:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787089109; x=1787693909; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=5pr8D9dTko0nm5cpxv7gLu3MP5nFNJnzsxpSKuqHUmo=;
+        b=DHqH2vfI3CokoJHsnQ2zLyJc+J9LVADwT0fEANQxoIF4V2+R9fY24HG1QvTqD+SQv7
+         7yrs7/cpYTV1RcV4ORupXm5oq9+NODSsrstcGeuy86MrjBkEPKZ1xGE9jKAy6KjBumvn
+         j16Nl3Rlhd+27KFWoatYUulQNQJD9rymfk0cEOfHU0WVsBwKNa2PMwNmdD1P8KL+rJEP
+         cy+qr7AXdFf3/rOG4o7KExAMBatknXXDPNlUKEtQOPIoAvv/7v7RyKSNtZE598C2F2x3
+         OYH9XlgZR3Gc/YKfEdzZQ9E1RwuH+wog28obhfP2MGek1YtAAdXYlwnPZex6xd6HcUWr
+         Ep6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787089109; x=1787693909;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5pr8D9dTko0nm5cpxv7gLu3MP5nFNJnzsxpSKuqHUmo=;
+        b=Ag1zHb30aemQKwmdLXYV5cfk0pn9rSCwfLCmr1hYpRLViM1WYam2EFSF5XvauqId0l
+         DJn/bMhAEa7UhaiWSrn+blWhITmUJHtZ8gy+OagqWbRRLVcBD/zWatT0RFwIhLdzyEBs
+         j9qPXVR3gXXzDcANQGYEe30zoKxYMerwej3iYG9cTOZnwh0eGuO1jShEL0t00mWQWPeL
+         Ijvj53beksq7vPiQM8/2MXWt+d3VKYp60Pkmb4RJXt3jW3laClRMS7OJHO97FJFDJycn
+         /QXB9ipnqMRLqw4c+DElEfC+TV1nPSY+Sz6KH1qMlyeaG3b7N986CkZeUBHPj4j3ut4S
+         97xw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp9ycwA+L1KtU+QxGoOZNVVZESH1P1mPJTyKJyRa1Ms1HaqKa6ZPrpP/U0DmLfh2rFoVoxgUGrZGp9aMEd5Q1o=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrpHCbVHQ5TIXQoh3DGtGTW+4h9isH9TrUNd19Ur934c0HKqFT
+	J1eBzdeX2vq5ZLXZBZMGADBdUKmpFT87dBcjdSbKMWRpXObEACAI8kqS
+X-Gm-Gg: AR+sD10vc3X8Dbx97z000pkIzhGpEu/SbNQNSBB0dQubbNoDjUabuKuaRgmJ/vaTnl2
+	xtSiU8I8bBH0d9+Uvov98a9SOZOR0s9nWNSHMydxVcX9L1dR7fpGII8FwbPgDS5puwR5Hn8fJV/
+	gAtWRI1ccTCQjM5l1Vnoqq5x7wynH/hzAVJhPvLqQcBYhuuDKbne9xXbvd51W4S6LDB3AkfKg9r
+	ZtfzYMNePBwEUJRYS0yMOj7yEdNTV2GlGYaCj73DP/FTNe/7dygefJK2z8KNSllrqncWz5eqETU
+	8rPJud+9IScwz1a5qb7E0D4JIsPs0wPMt/owBeLANz9oT36gW/bnOvtTwwKVG7Y3ebs2Eai7TPg
+	HrZdLPPkdBzSQIkaRkPcqpHcDjgSdok9vEmNHgwZ8W4hnlT9NqhYEwb5vlycF67FqdvpeTCB4KI
+	+/SLzPvM8fVSbdWEStUFycHxOME+vQP6e+EQZ1PtJvj+QlrfiMqWYOG0dGRzJZiuyU2KMtHXOVM
+	h0lP4eRp5Zzi74xKblQ+hwyAr4=
+X-Received: by 2002:a17:90b:54c5:b0:38e:6aa7:68ad with SMTP id 98e67ed59e1d1-3957b1c5cc4mr1267082a91.5.1787089109181;
+        Tue, 18 Aug 2026 14:38:29 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fbba811sm122046a91.13.2026.08.18.14.38.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 14:38:28 -0700 (PDT)
+Message-ID: <17813f00c2c81cd2588672197cc6d4de619ca36b.camel@gmail.com>
+Subject: Re: [RFC bpf-next 1/6] bpf: turn bpf_reg_state->precise into a
+ flags field [NFC]
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 18 Aug 2026 14:38:25 -0700
+In-Reply-To: <20260814231945.3884596-2-vineet.gupta@linux.dev>
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+	 <20260814231945.3884596-2-vineet.gupta@linux.dev>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 18 Aug 2026 22:23:51 +0100
-Message-Id: <DKSDWO1NQKF3.25QCXPPUM27J4@garyguo.net>
-Subject: Re: [PATCH 0/2] rust: kunit: enforce test configurability
-From: "Gary Guo" <gary@garyguo.net>
-To: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "Yury Norov"
- <ynorov@nvidia.com>, "David Gow" <david@davidgow.net>
-Cc: "Miguel Ojeda" <ojeda@kernel.org>, "Danilo Krummrich" <dakr@kernel.org>,
- "Alexandre Courbot" <acourbot@nvidia.com>,
- <rust-for-linux@vger.kernel.org>, <nova-gpu@lists.linux.dev>, "Gary Guo"
- <gary@garyguo.net>, "John Hubbard" <jhubbard@nvidia.com>, "Alice Ryhl"
- <aliceryhl@google.com>, "Burak Emir" <burak.emir@gmail.com>, "Brendan
- Higgins" <brendan.higgins@linux.dev>, "Rae Moar" <raemoar63@gmail.com>,
- "Yury Norov" <yury.norov@gmail.com>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-X-Mailer: aerc 0.22.0
-References: <20260818152324.587932-1-ynorov@nvidia.com>
- <CANiq72m2M5Csh_9qQYa8MRmJZtciU3d4S3ht5FG-K+YwR4iAwQ@mail.gmail.com>
-In-Reply-To: <CANiq72m2M5Csh_9qQYa8MRmJZtciU3d4S3ht5FG-K+YwR4iAwQ@mail.gmail.com>
-X-ClientProxiedBy: LO4P265CA0008.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2ad::16) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4ab::19)
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|LO0P265MB6006:EE_
-X-MS-Office365-Filtering-Correlation-Id: 74f87081-37e0-4935-ac30-08defd6f0092
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|10070799003|1800799024|376014|7416014|366016|23010399003|22082099003|18002099003|10067099003|56012099006|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	1d8fxx/p8xQQtqep5JIfksoGqZJncOzyGK0eboj4pmkeiW8OpDKD1nLyo77+j4CcXCGKpplN0ii1XFfNIzzbDgevVUwyx1/W/UNcnCgF9rmkNTyHnZzvythOAGKD59h98bVe1mbTKlZ0WEZxB+uOwIxsFC4hKjvTAzmtLdb1a/VJJ+BGaC3H6AV+Txn76BEATIUXWtigv/1pwpKYWgft4g6h7ZbnwPDbw7xVASE5mDlDwSCMn3ov1fE8ks8Tm+jaJ0dlGCMc03Q5cbwrjw/qUD3UTnw9Z9PBamp6pT475c9Y/wZqP6N0uiksEts08lPWcsVqLOPDxJeLPhXAQWTdttSBvZoMK4Dv68mXxqnd4Ld4ch2x8yrz2IA3Pmf6JSyUY2aqbSI5Eyyy9K6gHVI6BVZSR4Z63KbRQUWCyJElylMOTnHSsdNb4xJyn3gjWLTRA83+3ykmpng8XNEkQraLX/7cfNYXrtGWDD5ks/mLY70rnWiIsrkQiCPS3Yal+dTDmvfwuum02ky3j2tuNr3K/B5rN19+bu2pFqtQZ152gTmEMHoaFE7E9zh3Iuz4s4WA3uOv9vA6N3/yHcDpPbXIYFaxJOInmn+P+Y1J+uSRkqJUnt8ZTSM0CtbChczW61VowUWjKdDLXPYOtLbQ6ONlFVGE+mKLk8XZvIz5pIRnnio=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(10070799003)(1800799024)(376014)(7416014)(366016)(23010399003)(22082099003)(18002099003)(10067099003)(56012099006)(4143699003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aWhsT2tMd1pZV1Y3SjNjWVVTV0hTNkZ0OU1xemNQVVRFMERlVlZrUURQUWs3?=
- =?utf-8?B?dGtHTnVQd3RKT3V4M3VtMDNWNmJXT0Zka25odUpSc1NRaERKc0JndHNCQlly?=
- =?utf-8?B?dEVzbC9FNW1WUVh5RWJ3NEkrMlBJdlRXaDVoU0llditIREdheStRcWdCQmZV?=
- =?utf-8?B?Z29icjNiNkh2eWVieDFxSHB5cnRSS0VCU3owN09OVnh4MEMyOUxNaWl0WDll?=
- =?utf-8?B?ZFlKS2VyQWlVdHdHcGdpbGJteWZPM3ZmUHZNZDd1d1lONSt2VWJrd0FQUS9C?=
- =?utf-8?B?WVJLV1dLTWkwNW1HdjFSWnpmMlg5M2I1NjRUZzFteWhDN3JoZCtnVGNtaU9r?=
- =?utf-8?B?NVRTbDlXSTFvMEx1WlV2bjZtNHNwdEZVSWJ0RmFrMmZ6cVlzQmhQT1RJVS9Y?=
- =?utf-8?B?WmRWZmR4TVFrRzZmQmRDblduZUlhYzlCZmpaM1JCNWlrSW1mVjMwSC9tRzVW?=
- =?utf-8?B?Z0JiVzIrWHpOOVpOaVZkbmhvTG0yNXdqc3lDM2sxckQxT2twcXRRb281Q0xF?=
- =?utf-8?B?Y0ZpSVA2dDJNVEo4bENEQWthczhmakFZa1EzSDYyUkRlL2IyT2hVNmpNYm00?=
- =?utf-8?B?Z25sWGZGZVduMlBkUlEybDF3TVZoTUFqZEwwTG1sMmNXbWpMVHk2d1BGd0dX?=
- =?utf-8?B?UzM5a0JibWE2QStoT096ZnM0aEJhRW9aTm90VVVhSU9vdGhnVWVqNi9mejdF?=
- =?utf-8?B?bFJwbUhiZm1SRHZPeGY1RExzR0lNQmlrWGxCWEI5eWJkc0FyeGs5c2JWeHVU?=
- =?utf-8?B?UVlXZVI2M3Jta2NEVEgyV01aOTVuNU5aTWJhK1FtM2FEaFQ1bUxCeGpqTDZY?=
- =?utf-8?B?enpDcmpnUnhtdmhKa05RSXJ6THBmMEdmdDRPOUZPODIzN0pvSHM2NXBhbFJj?=
- =?utf-8?B?c0ZBaXpySlRrRFE3MFNPRXMxOS9CQWl6NHE1c1JmQWFzc3NtT2h3eGEwbzBS?=
- =?utf-8?B?V1R5VVUzMGtNNGNvZ2N3Uzl5RXB6WHp6bW8zekZXRkUxSGdkNHJ0dUpTRG1E?=
- =?utf-8?B?LzFHc0doZWk3Ni9wTUJTZVFLSVp0azhRMzdmdm5STkZ3c2NjUzdGZUJqWGZU?=
- =?utf-8?B?RnRKUjhnRlBzbThTK1g0bm1PQXhmOFEyUDJ0MVkvZUQzekdxdlZOT3AycHVx?=
- =?utf-8?B?bEoyVGZLaE82TlFjQStRcTZlUjBxakdqUEJkTXFkVUNXYXliOTNSZ0t0SDV2?=
- =?utf-8?B?YVl1YStXYWdDdDExV3lWRkhMVTRGL0oyeENYWnRrdUNNVER5TStRWGlLOElV?=
- =?utf-8?B?OUowVyt5M2FJMFc5SUE0R1ZMOUx0WjRxZ205Ni80TFdqSFhOYkdaaFFrOHpD?=
- =?utf-8?B?dWV5RThRNjFXa3RaN0xPbE5IUlJlU0I4UGxUTzRIU3ltWEQzZisvalI0TW5K?=
- =?utf-8?B?emloemNUR3pJV2Ztam9TUm1wcFVFMCtuVkVUZzZXdTFPVkpqYnB5Nk5zZFdO?=
- =?utf-8?B?azdiUTM5V1BWVEpOVUZNTDZVVlJtdWoxeUtJa3VtZXNkUUJJQnVFNkFLOEVJ?=
- =?utf-8?B?dkx5SmhXVUxyN3lJR2E2OG56TUd6alZTR1BQYnRGMW1qRXRzaDRWRFg3bGpV?=
- =?utf-8?B?UzBhVmE0NGEyVWtvbnVac3BMTjh3ZW9GcVl6MzF5ZjNJK0Fkc29lZW5sQzY3?=
- =?utf-8?B?YU1sWU8wNDk2QkU0azlNNmF3S0VvYS9jRTJDeFdXZDdTQ29Qd0RiOURqdjhm?=
- =?utf-8?B?dDZEOTBHUHhIQ3BmMTVDNUtlOFoyK1dQdTJXMFg5NnVnTjB3cm5JV2FIem9p?=
- =?utf-8?B?QVdMRlQ0ZXNaQ2dReVIrWTR1WHdQMGsvMTJpc0hsZVRYbHB0ZFBveWFPTVlQ?=
- =?utf-8?B?NUM0T1JCdzFmV3NhZUhtQXpUeVBTUjN2aEo1a3lPTEdPeVNWQjZKVzdnL01H?=
- =?utf-8?B?WW9DS0JoTlJrMGlBN0dKM1ZZWXEwWENKbXk5TDhuRGdyQXRKcWRDWGxqaUxJ?=
- =?utf-8?B?bUdIYTUzbi9UcDQybDdpOGRGMlk2bUlDMG9XTmVHMkk3MjMxVWl5MEIvUzlT?=
- =?utf-8?B?SHZCemlZeXFJcUpTZjhLVFJ1ZGZiQzVhS1EvazJQMzc1dEFsVG5MdFh1WlVV?=
- =?utf-8?B?dWNEZlNlWlU1TTBodk1vOVM3SlZZT3VYNzZ5dHZZenRTd1ZwZ2hudU5GUE1E?=
- =?utf-8?B?dVEvcnBialgrWmQ4K2tWaTFNMDMyb290d0paUHVsWjgrRFpwNXBuQ21zUGtz?=
- =?utf-8?B?Zi9aamJBdHF0bm9CK2R0NzZGa0VOT0VHV2ViZ1hyVG5CTlFTM3dXdkNRd1hj?=
- =?utf-8?B?RldITlJyM1k1MHI3SHRMSXRBa1IzTjR0QWM3dFF0SXQ5QkhvWVhNam43UGhL?=
- =?utf-8?B?cDFRQUlYSHVoK3hraFpGR01JMG9qVFZpbExwZklPQVlLTm85RVkrUT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: 74f87081-37e0-4935-ac30-08defd6f0092
-X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 18 Aug 2026 21:23:52.6773
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: OTOwZ5IU93dSBusIz7N6/K8Pedr95wXc7kq6CjXEoAWxKNv5ay0tI3hywK1+xzcw18tKyzh49ejNap43eEAc8A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB6006
 
-On Tue Aug 18, 2026 at 9:44 PM BST, Miguel Ojeda wrote:
-> On Tue, Aug 18, 2026 at 5:23=E2=80=AFPM Yury Norov <ynorov@nvidia.com> wr=
-ote:
->>
->> Make every Rust KUnit test suite require the Kconfig option that control=
-s
->> it, and let the `kunit_tests` macro apply the corresponding `#[cfg]`
->> attribute.
->
-> If we are sure we always want at least one `cfg` guarding them, then
-> yeah, this makes sense (we could ask to write the `cfg` bit inside,
-> for "greppability", and for clarity / less ambiguity later on).
->
-> David: are there cases on KUnit where you would recommend/prefer
-> something different?
->
-> For instance, I could imagine a Rust `mod` for testing purposes
-> already gated by a `cfg` that is meant to contain many tests, and then
-> different suites inside that for control (possibly with extra `cfg`s,
-> but maybe none too for some).
+On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
+> bpf_reg_state carries a single bool, ->precise. Other per-register boolea=
+n
+> properties exist (and more are coming), so convert the bool into a u8,
+> call it flags and give the property a name.
+>=20
+> =C2=A0 -	bool precise;
+> =C2=A0 +#define BPF_FLAG_PRECISE	(1U << 7)
+> =C2=A0 +	u8 flags;
+>=20
+> Both occupy 1 byte at the same offset, so the struct layout is unchanged.
+> ->precise was the last field, after ->frameno, and ->flags takes exactly
+> that slot, so the memcmp()/offsetof() based comparisons are unaffected:
+> every one of them stops at offsetof(id), offsetof(var_off) or
+> offsetof(frameno), i.e. at or before the field either way.
+>=20
+> That tail position is not an accident -- it is where fields live that are
+> compared semantically rather than byte-wise. ->precise is never memcmp()e=
+d;
+> regsafe() tests it explicitly, and an imprecise old scalar is a wildcard:
+>=20
+> 	if (!reg_is_precise(rold) && exact =3D=3D NOT_EXACT)
+> 		return true;
+>=20
+> PRECISE also takes bit 7 rather than bit 0, because it is the odd one out
+> among the flags that will share this byte: the others describe how a regi=
+ster
+> relates to its ->id set and are cleared as a group, while PRECISE belongs=
+ to
+> the register alone and must survive that clearing. Growing the rest up fr=
+om
+> bit 0 keeps a clear-the-link-bits mask from reaching it by construction.
+>=20
+> Reads go through a helper, since they are the common case and read better=
+.
+> Set and clear stay open-coded as the usual reg->flags |=3D / &=3D ~ bit o=
+ps.
+>=20
+> No functional change intended.
+>=20
+> Suggested-by: Eduard Zingerman <eddyz87@gmail.com>
+> Signed-off-by: Vineet Gupta <vineet.gupta@linux.dev>
+> ---
 
-There might also be cases where we want some other conditional (like combin=
-ation
-of cfgs) to gate.
-
-I am okay with gating existing ones under new cfgs, but requiring one in ma=
-cro
-invocation itself sounds bit excessive, and also doesn't look nice :)
-
-If we decide on actually requiring one, a better option might me for me to
-implement a lint in klint to produce a warning that is suppressable if peop=
-le
-actually don't want to use cfgs.
-
-Best,
-Gary
+Sorry for the confusion, what I intended to suggest is usage of bitfields,
+instead of carving out bits from the 'id' field.
+Let me read the rest of the series to see how the flags look overall,
+but looking just at this patch I'd suggest bitfields.
