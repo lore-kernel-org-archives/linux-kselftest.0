@@ -1,128 +1,117 @@
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80AA947CA9F
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 16:11:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F4B46985C;
+	Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787069479; cv=none; b=jYeaoHjn7hkXctOVRvxU1dox+5SfX9VST2za1qMVESNrRbYwOMo2ZxW1aBrIg7XElpXYEs0htD2SZ/fLt7miq8DPvfXK3S8GWGnq1IfS2sl/PoANvCTBVdwChXzlUK/JII9dmKThvGA2gbQOeGjOyhc0NghEkUIgX8vn0AOfoeE=
+	t=1787069709; cv=none; b=WfR1jMNPealUzEGQSSq0G9sHpza8+3g7u25FyXG+yHkXY1l7ykQxdqkA35e6vGD/Lh9e0suQHNHuRQRLlBT67h7nFVhviD4m7MmQ894DKD8Y2EfSwo2ckDXbWjH9f8WVqslxG2eXFx/1MD+3vWk5+pYQ+olQ643HMmn9lsJw+VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787069479; c=relaxed/simple;
-	bh=wQ68heHkCupu6WSEgt5iLdHD+hbjTh1juZ0Wnx2wjUk=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=al+xOPiiPq6jJi0MkOIx0SD7b1Juc/BPcMZ434Amii0BqfEMFq+Klah/CTw1IrDqRHEAO587XT3oaCn0SH2oSNnRFmbO5JYJPtQ+91Fyvdpqs1iIdZbbfsmnrudwLib5U3/CanBXQidEmBdfOfEfoTOIs5hFajtUXy4mNzqnCuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=l+LvMm8s; arc=none smtp.client-ip=209.85.218.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--tarunsahu.bounces.google.com
+	s=arc-20240116; t=1787069709; c=relaxed/simple;
+	bh=75Rve+GoGOnr4CgPlvfbfzdSBbFcKHOV18VQDZ+ZPm0=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=TNpaI7A9P2nyXVMXIZk6EXlbRiHJtYUloo9wO87qz1cNHEKfB6Gt2Y9ws29JpeEVFiMFSVPv2unn64sUrh2t92XIP+UgXw8d4LHOqhmZjKxSk3rNv/s6MPI2iJJVfCxzC42zs5NI4AiE23JrzGplpMEEiHbFiXbid3w4OzjBTTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OVdz+ZaR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="l+LvMm8s"
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c20e5890680so381563666b.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 09:11:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787069475; x=1787674275; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gq4c916t8aM4R9/gOTYj07vE672c6Dn+UdOcLkpJL3k=;
-        b=l+LvMm8snBBsWECYIUzFC/FYZKd8BCHWXXdjW86FH+8zen02glu3JguuWDnQPCB2Vj
-         6JSbrezX0QkGQUe7DCHqb7lIHyJ6DreZ5OV5OsgVKckVwYwiQgHUkQRHFDTHjaBxfoEC
-         81KrXCr0adh8evguBiehgNFV4QaRWwogOo4v9jEyImzj+Dm9NH6PftFvkqkJbpNGR4Lf
-         4vM95YMYHA0ePcyiNZ+pPUaR3GMn+U2G+MAN12W0O4Qq9iVjLLpsmaJtp9ntOcZ+ooPg
-         sAJKrJRK09qJKgQtTrADZeeOXEwVc9DcrP4q8zO9K8J/ndw2VAAgoEk+TLA8A1fWS+gD
-         Dj/w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787069475; x=1787674275;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gq4c916t8aM4R9/gOTYj07vE672c6Dn+UdOcLkpJL3k=;
-        b=b3GzVT/B6cTCSVAlTC8q8cVYjo1L5sRY+v1bIBhx+UmMRI94NDGZ+KuCvzcC7pUeEO
-         XONTIttZ7kpUdcftpnsC1WN2UgWEiToZb9WgPKX2DfFniFeigPCi9XHcoQjvcPNIiE2I
-         DOmGVVtC32cNeFCT7DD2hbikVAz4BLymvo8xhEhb+EQtOwilibZpTLshe9/HEBn2G14A
-         WpddJCZe9JaoHazMGVIyxkyaCM9AyFEcHMT+gChls1awP7k4RotP3sbh2F+fmQuD2Efp
-         lGlsXXnti2augcvmeug0uWu8eKROdg9buoXAmw5QKdIVZxuwdoogwWeWspfEo7d8RnfX
-         IiOA==
-X-Forwarded-Encrypted: i=1; AHgh+RqQ6jpIoSNjUNVrvLUhO5tQSPHujLwiCqKhyeW9P/fTLvtYPXQ4/ealbgLbySStXtRfMp5fleQWDnhxNwT4H4o=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZ6ZsSIQcqBu2KsCllcOg7X9d/dFwKREHonZDlLjCnJ9n5cjta
-	LUkU9rhYYAEhX0vP1mqLjLPayMGKftpDVwoptPmyqrh7OJQ5UrPY5umL14TKNUG5lY/kIaJ8wdO
-	BlW1vq8OAE4NP3P3Baw==
-X-Received: from edrs9.prod.google.com ([2002:aa7:c549:0:b0:6a3:6b8a:8011])
- (user=tarunsahu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6402:434c:b0:69a:928:9405 with SMTP id 4fb4d7f45d1cf-6a38a8dbbefmr17632626a12.1.1787069474414;
- Tue, 18 Aug 2026 09:11:14 -0700 (PDT)
-Date: Tue, 18 Aug 2026 16:11:13 +0000
-In-Reply-To: <ans2Qvo0453cc_DD@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OVdz+ZaR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E91F000E9;
+	Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787069707;
+	bh=cLn5pPKmF+xvtehXhmEaSh/ZPFybb4A6pWHoR26dyo4=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=OVdz+ZaRUoEtyTJKVb/DpUAOBsQnV93IWIxJhFAgUFr/1ghtDruvRVOd3CjWbe5ZG
+	 IZJxoumHHmUveIwgnJ1WuSo6fZQNsLOaIJ01snkZoSywDhQJGcIMaKNAfom7Y1Itys
+	 U0Kk9yYmFDsyIeKtHEJm+QhIZnlWjyfTXQSFRkLeFStmP1RwXzIMBPR1NnG9VXA3WH
+	 ijfPV7HqreAQnFq5vUzfx70iCo+Tuo2pHJx91SWkgCeWooGEfNcUf8rJNKLIzxuxQJ
+	 5jTJ5qmDa1G/F418HVRJPhbLh6sbap3TdqtfD2YJLr/3tpH9Ohx87mFgyoylt7tn/3
+	 mqszAIy7HWcZw==
+Content-Type: multipart/mixed; boundary="===============8419694916487994497=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260728121138.1103610-1-tarunsahu@google.com>
- <20260728121138.1103610-2-tarunsahu@google.com> <anpXjM_lg_UTpl0q@google.com>
- <9huzqzk4zt3n.fsf@tarunix.c.googlers.com> <ans2Qvo0453cc_DD@google.com>
-Message-ID: <9huzlda3v272.fsf@tarunix.c.googlers.com>
-Subject: Re: [PATCH v4 01/11] liveupdate: Add LIVEUPDATE_GUEST_MEMFD config option
-From: tarunsahu@google.com
-To: Sean Christopherson <seanjc@google.com>
-Cc: ackerleytng@google.com, fuad.tabba@linux.dev, 
-	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
-	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, sagis@google.com, 
-	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
-	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
-	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
-	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
-	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
-	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
-	suzuki.poulose@arm.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Message-Id: <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
+In-Reply-To: <20260818153202.90714-1-leon.hwang@linux.dev>
+References: <20260818153202.90714-1-leon.hwang@linux.dev>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test for percpu data
+From: bot+bpf-ci@kernel.org
+To: leon.hwang@linux.dev,bpf@vger.kernel.org
+Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
+Date: Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
 
-Sean Christopherson <seanjc@google.com> writes:
+--===============8419694916487994497==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-> On Tue, Aug 11, 2026, tarunsahu@google.com wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->> 
->> > On Tue, Jul 28, 2026, Tarun Sahu wrote:
->> >> Introduce the LIVEUPDATE_GUEST_MEMFD Kconfig option. This option
->> >> enables live update support for KVM guest_memfd files, enabling
->> >> guest_memfd-backed memory preservation across kernel upgrades.
->> >> 
->> >> Currently this support only guest_memfd files that are full-shared
->> >> (INIT_SHARED and no support for private_mem).
->> >
->> > Why?  Specifically, why do we need/want a separate Kconfig for guest_memfd
->> > liveupdate versus KVM liveupdate?  I can _maybe_ see a KVM-wide Kconfig, but
->> > even that seems like a stretch given that (AFAIK) hypervisors are the one and
->> > only use-case for liveupdate.
->> 
->> LIVEUPDATE is used in many subsystem. It is possible to enable
->> liveupdate and kvm without enabling KVM_GUEST_MEMFD. So GUEST_MEMFD
->> preservation must depend on CONFIG_LIVEUPDATE and KVM_GUEST_MEMFD both.
->> LIVEUPDATE_GUEST_MEMFD Kconfig is wrapper on both of them. It need not
->> to be visible in menu, So I can make it hidden. WDYT?
->> 
->> Also, KVM VM_FILE preservation and GUEST_MEMFD preservation both depends
->> on LIVEUPDATE_GUEST_MEMFD in this patch series. [PATCH 05/11]*
->> Which is wrong. So I will update KVM VM_FILE preservation to depend only
->> on CONFIG_LIVEUPDATE.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> index 5671c31085cd..2b69290bcc3e 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+
+[ ... ]
+
+> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
+>  	test_global_percpu_data_lskel__destroy(lskel);
+>  }
 >
-> Or just handle it all in the makefile?  E.g.
->
-> diff --git virt/kvm/Makefile.kvm virt/kvm/Makefile.kvm
-> index d047d4cf58c9..e6f098498795 100644
-> --- virt/kvm/Makefile.kvm
-> +++ virt/kvm/Makefile.kvm
-> @@ -13,3 +13,8 @@ kvm-$(CONFIG_HAVE_KVM_IRQ_ROUTING) += $(KVM)/irqchip.o
->  kvm-$(CONFIG_HAVE_KVM_DIRTY_RING) += $(KVM)/dirty_ring.o
->  kvm-$(CONFIG_HAVE_KVM_PFNCACHE) += $(KVM)/pfncache.o
->  kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd.o
+> +#define PAGE_SIZE 4096
 > +
-> +ifdef CONFIG_LIVEUPDATE
-> +kvm-y += $(KVM)/kvm_luo.o
-> +kvm-$(CONFIG_KVM_GUEST_MEMFD) += $(KVM)/guest_memfd_luo.o
-> +endif
+> +static void test_global_percpu_data_map_resize(void)
+> +{
+> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
+> +	struct test_global_percpu_data *skel;
+> +	const int arr_value = -1;
+> +	struct bpf_map *map;
+> +	int err, prog_fd;
+> +	size_t data_sz;
+> +
+> +	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
+> +		test__skip();
+> +		return;
+> +	}
+> +
+> +	skel = test_global_percpu_data__open();
+> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+> +		return;
+> +
+> +	map = skel->maps.percpu_arr;
+> +	skel->percpu_arr->arr[0] = arr_value;
+> +	err = bpf_map__set_value_size(map, desired_sz);
 
-Sounds Good to me. Will take care of it. Thanks.
+This isn't a bug, but since the guard above already pins the page size to
+4096, would `const __u32 desired_sz = PAGE_SIZE * 2;` read more directly
+here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
+`#ifndef PAGE_SIZE` form used in sockopt.c?
 
+> +	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+> +		goto out;
+> +	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
+> +		goto out;
+> +	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
+> +		goto out;
+> +
+> +	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
+> +	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
+> +		goto out;
+> +	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
+> +		goto out;
+
+This isn't a bug, but would it read more consistently with
+test_global_percpu_data_init() to check ASSERT_OK_PTR(skel->percpu_arr)
+before ASSERT_EQ(data_sz, desired_sz)? The block this replaces checked
+pointer-then-size, and the surviving test_global_percpu_data_init() at the
+same file still does pointer-then-size.
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32156312094
+--===============8419694916487994497==--
