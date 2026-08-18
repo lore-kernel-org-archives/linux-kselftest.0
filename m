@@ -1,148 +1,328 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A953C33F595;
-	Tue, 18 Aug 2026 05:45:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2BF23E3176
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 06:10:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787031928; cv=none; b=QkyDt8GwTuczMuf++Unb3caqjmSOwox1qGZlFx8x2Hspigj/L5HJ665kO9NS7M2KcIm8xB9654R9OJgc+Y6bX2iMRYfxTKMI+QUZc951HxIkMAgMnqN6dYY20k0HIkrb9q6GLXlcZn1vCDpyypX4AJQ8qdsRPBhgPIVI5V0tiII=
+	t=1787033448; cv=none; b=qWXRKDG8yqAyU5ix6AXmorpzsCY1nPTjbxaZ1MJQj5ilzv1T1m9SgJ1Pvo7cu29eJhDDHE8MQDWTQSIUCOSbY0Q2Ps26jzlFBWl0BKEqPgFzmXUxLMXZ7/ypg0Qx+xw2N3d6+OnhizBwSr9mC+WAuDsGFE0XuV9yX+PMVdCgpQU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787031928; c=relaxed/simple;
-	bh=0YdLXqcmwD5dOxNMkitWveSmaFY6ooVbZfUwsaltpzs=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=n6+i0vk6MOKsH8T9HXampXuYzqCUedawOyTkt10ZL4lN3wqkgCt4tMxBAyc5Gfoca/GxmfztC+wKah+3jNRRUULXG61AtxJub6yWFwXHZArOmRmy7A/At4GV/u3m+hkmO4VmdXOj5NzEFFaGLFDsIaTWhTlaqTtBBxKSibZI+Es=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEwsWg+0; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787033448; c=relaxed/simple;
+	bh=2FOLVCfC4ofTUJxtY8JQkfWysWQNWsICB/k6OH+f7kk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Tz0ilRkwY9YxK77PwWrVuqlZ2n641lkTDyoXBJ7nul+0ckpBal5fVq2zb6NQgHQCmPGS8YOGEkg01bxwyg/XxhjKj5j4K0E64WVDZafOewQyGV3VjR2mjENpb8RQkmJzZrKB11GyHRogW/uzelecL4dFed2rz8GuCA97LJ23Aso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hfL9TtQ+; arc=none smtp.client-ip=209.85.216.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEwsWg+0"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 732D51F000E9;
-	Tue, 18 Aug 2026 05:45:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787031927;
-	bh=mtHYt05/dWW0H2RHmI5a47PvI9BCSxbqC/IwNWkMqMo=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=kEwsWg+0myLL36TRgxdYcE8cJLjJugBbc6Sizdaw0Gmf48yUb936HGSjg4OkAQqoV
-	 m0XRh4W6Nu1B1NGeK9hqvoJ8JCd9yxG3TNoXMoNDW5IcuSdiEx9d7XiDK7ro2rfd5k
-	 rU1pH36/4FImW24D/DMuchsHu8xkvT5rSGfn50T2G1pO3ejydSptN5NMRUJ4hEn+A/
-	 +noNJ0IiCnVpq3iAFAjWBuypwa8nEgew5vozbzQl2Zdqc+n7PQLddq+nwM/vnrky/U
-	 HyJXa+HfZ4vY2VuqLP3M2LGKkl5AJMRfv59/ZhM9tQNMNwytbJiB0pMyQkLd46+V20
-	 IVAX1csSurL1g==
-Content-Type: multipart/mixed; boundary="===============8162154980185016120=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hfL9TtQ+"
+Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-384930ca5e2so4766454a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 17 Aug 2026 23:10:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787033445; x=1787638245; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=03XrAgWUIfiSPQ5t3z3JrnXITobmfpDmBrpvKrXoXgU=;
+        b=hfL9TtQ+zmbBu9OdOlwnRvejnLMhOqh23BxNpIK1pD4ZCUdZ7df+5w+n1kuywlf+9T
+         RKP+Pln+sY+2IuZNrXGCTOfgr3EM8VXqYRaFe7o5HSVK0dADptCxlnOQw3uoWDjeXv1G
+         AtotfFWOr4RsQvCYpgBLvIYwrykjdqezm61It/PEtZVrrThzG4XiSYxzUEgUC1Q18X9T
+         zd2RHBRVJaCdKzko7e4pC95LhYZAz61++jt3ZUxGgenru2PWuIcP4mnHacgk71pWbOx+
+         x3G8fICz4L54nlPVNM2h/f2L043nwolxbOnHHwuvBlI4HAT02RmzOVQW/JK9+0VpCXOY
+         AkbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787033445; x=1787638245;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=03XrAgWUIfiSPQ5t3z3JrnXITobmfpDmBrpvKrXoXgU=;
+        b=LWHXeBODxBaJNrGWMgbmE7WZ8RIDLAAnVRq58Vz9mMCAbtB8XXeYmTojTmNaatMulF
+         PIpwidx5IphKIRzc8q9S0ox/w9l4sl7g1vs9zNmPWSBIYAg9F56MeCAs/zohedp6PwyT
+         qPrE13z2msRd5sA9FUJacN3YK/B98QD1NtoJ+XUnxKyS6EXrKhaK7FQl+SW6OHeRWvHm
+         T1l9K2K2RDP2o3ZdJuZ+vg4vl3dTTRVvgxwbivaRLOXVx3hObzbEjT9QOpZuWJOjYPsk
+         B65TXbux7ccXd2QFsknGt9T55Z29mmdmdqbkwc1fbltfymAdLCOp9/euerXvp6fjvb3m
+         YfGg==
+X-Forwarded-Encrypted: i=1; AHgh+RqRfZv2acvfTPn+e0sghEaNwXjQKnICRuxv2DCNVXxzMm7rLquVGc+YaF6A3TDalpT646pgUSZ65Gv4PDklGLI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyB8pQD2576bzqQ/bWxWZ4XlvQPVy/fduSfHxcu/UwTP3elx/H4
+	RsAT94UcjbhIIs2Rc+iSl7VIdXXPz1Vx3pS6ffBrQ0a2lY3XHX8NaNIo
+X-Gm-Gg: AR+sD10NYpWvfP7i7pwD9/ajj9CFBz8wdBVVGKOfVYCfomhLUElQLD7Cx13ClCxPOn/
+	REre3zuO/3WKnMIn7W+pwCm62+YQRqiSQcQ0VRy6DoTMdqzhkgABuZif+8wN03Tm9Q1YMiDTBf0
+	Dt0bqgxe2yhpCIQQ4VYmHUvvcVCRRWrj6MH0uKj8lvKwgjzHddOKYpYAj2HzZi9qziIvcehsDF+
+	zDeBURO5jwfg+vZF7B5HIZKVkEjNAZDqJbmCh+b75BYHSt3b2SDFXf9LHMgSRTeK8Uvl2LZ9GMB
+	yqbWt4lo4brTuFPvV3SuorhvPPAOi1mXc5FcZ9V3L8YFdInTFQmweJJX29rzBmHDOm3HNxwpnlJ
+	i3F4ZHAfD34X8vOaNPd6htmN5zKtB0PrVE741p4ZjE1tzU88tU3uH675FTY7oTeh7Gfwv+zVH9K
+	dvTRyAi3oULIfk/JEvETpnNvoJ5LUbrZv1Q67869z4LgRd7qk4FXXN7ZAQHgI1AFwfh9E7HsCCN
+	xRDaL4=
+X-Received: by 2002:a17:90b:5707:b0:38f:5801:dc0e with SMTP id 98e67ed59e1d1-3933e61bee2mr33646076a91.15.1787033445097;
+        Mon, 17 Aug 2026 23:10:45 -0700 (PDT)
+Received: from kernel.tail6741c6.ts.net ([116.128.244.169])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3954d38bf94sm4633942a91.9.2026.08.17.23.10.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 17 Aug 2026 23:10:44 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
+To: sj@kernel.org,
+	akpm@linux-foundation.org
+Cc: damon@lists.linux.dev,
+	linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	mathieu.desnoyers@efficios.com,
+	shuah@kernel.org,
+	lianux.mm@gmail.com,
+	Kunwu Chan <kunwu.chan@gmail.com>
+Subject: [RFC PATCH 0/7] mm/damon/perf: observability framework for hardware-sampled access reports
+Date: Tue, 18 Aug 2026 14:10:24 +0800
+Message-ID: <20260818061031.827057-1-kunwu.chan@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <1654cd0b38eec2c92914cda4356c25434187c9a5de5e8fdae901556f0479129b@mail.kernel.org>
-In-Reply-To: <ccf3ae66535ea8a7fd3442b7183c87c61f67b24c.1787027080.git.skb99@linux.ibm.com>
-References: <ccf3ae66535ea8a7fd3442b7183c87c61f67b24c.1787027080.git.skb99@linux.ibm.com>
-Subject: Re: [PATCH v12 2/8] powerpc/bpf: fix alignment of long branch trampoline address
-From: bot+bpf-ci@kernel.org
-To: skb99@linux.ibm.com,bpf@vger.kernel.org,linuxppc-dev@lists.ozlabs.org
-Cc: hbathini@linux.ibm.com,maddy@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,shuah@kernel.org,linux-kselftest@vger.kernel.org,stable@vger.kernel.org,venkat88@linux.ibm.com,yeswanth@linux.ibm.com,skb99@linux.ibm.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Aug 2026 05:45:26 +0000 (UTC)
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
---===============8162154980185016120==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+From: Kunwu Chan <kunwu.chan@gmail.com>
 
-> Ensure the dummy trampoline address field present between the OOL stub
-> and the long branch stub is 8-byte aligned, for memory compatibility
-> when content loaded to a register.
+This series adds a unified observability framework to DAMON's
+hardware-sampled access report pipeline.  When a PMU backend delivers
+zero callbacks, the framework pinpoints the failing stage —
+was the event not created?  not enabled?  did the hardware produce
+no samples?  did the ring drop them?  did the drain fail to match? —
+without a single printk.  Every PMU backend (ARM SPE, AMD IBS,
+Intel PEBS, …) funnels through the same damon_perf_observe_*() API,
+which fans out to per-CPU pipeline counters, debugfs statistics,
+and tracepoints.
 
-This isn't a bug, but could the changelog name the concrete failure mode?
-The actual mechanism is that bpf_arch_text_poke() patches this field via
-patch_ulong() which returns -EINVAL unless IS_ALIGNED(addr,
-sizeof(unsigned long)), so attaching a bpf trampoline whose target is out
-of branch range fails when the field lands at a 4-mod-8 address.
+The framework does not contain any PMU driver.  It is pure
+observability infrastructure that sits alongside the existing
+DAMON software statistics (scheme stats, kdamond stats) and
+complements them for the hardware-sampling path.
 
-The phrase "for memory compatibility when content loaded to a register" is
-vague - powerpc 'ld' does not require 8-byte alignment; the alignment
-requirement comes from patch_ulong().
+Why this framework exists
+-------------------------
+The framework was built to answer a concrete question during ARM SPE
+bring-up: what prevents SPE from delivering samples to DAMON?  The
+answer could be anywhere in the pipeline — the event wasn't created,
+the PMU wasn't enabled, the hardware produced no samples, the ring
+dropped them, or the drain failed to match — and without per-stage
+visibility, the only way to find out was to insert printks across the
+entire pipeline.
 
-> diff --git a/arch/powerpc/net/bpf_jit_comp.c b/arch/powerpc/net/bpf_jit_comp.c
-> index 8bee2674d4a9..caea53cde063 100644
-> --- a/arch/powerpc/net/bpf_jit_comp.c
-> +++ b/arch/powerpc/net/bpf_jit_comp.c
+The framework instruments every stage with zero-overhead counters
+(when CONFIG_DAMON_PERF_OBSERVE=n) and optional tracepoints, so the
+failing stage is revealed at a glance.  It immediately diagnosed the
+ARM SPE gap: Layers 1-3 (event create/bind/enable) passed, but the
+PMU was not producing data — a PMU-level gap, not a DAMON pipeline
+bug.  This confirmed that SPE required an AUX buffer backend, which
+does not fit the perf_event_create_kernel_counter() API.
 
-[ ... ]
+During the subsequent ARM SPE AUX backend development [2] (which builds
+on the perf AUX kernel-consumer API [3]), the framework was used to
+verify each pipeline fix.  When the AUX backend was complete, the same
+framework confirmed a fully functional pipeline: Layers 1-7 all pass,
+real SPE hardware samples flow through the ring, match, and update
+stages.  The before/after results are shown in the Testing section.
 
-> @@ -49,11 +49,39 @@ asm (
->  "	.popsection				;"
->  );
->
-> -void bpf_jit_build_fentry_stubs(u32 *image, struct codegen_context *ctx)
-> +void bpf_jit_build_fentry_stubs(u32 *image, u32 *fimage, struct codegen_context *ctx)
->  {
->  	int ool_stub_idx, long_branch_stub_idx;
-> +	int ool_stub_sz;
->
->  	/*
-> +	 * In the final pass, align the mis-aligned dummy_tramp_addr field
-> +	 * in the fimage. The alignment NOP must appear before OOL stub,
-> +	 * to make ool_stub_idx & long_branch_stub_idx constant from end.
-> +	 *
-> +	 * dummy_tramp_addr must be 8-byte aligned for load-register
-> +	 * compatibility. The fimage can be non 8-byte aligned, so final
-> +	 * alignment depends on start of fimage and the stub's instruction
-> +	 * count offset. The OOL stub size is 4 instructions (with
-> +	 * CONFIG_PPC_FTRACE_OUT_OF_LINE) or 3 instructions (without)
-> +	 * before dummy_tramp_addr.
-> +	 *
-> +	 * Emit a NOP here if (ctx->idx + ool_stub_sz) is odd, so that
-> +	 * dummy_tramp_addr lands at an even instruction offset (== 8-byte
-> +	 * aligned from an 8-byte aligned base).
-> +	 *
-> +	 * In pass=0 when image==NULL, conservatively account for space
-> +	 * required to accommodate alignment NOP. In case final pass skips
-> +	 * emitting alignment NOP, the image buffer have 4 spare bytes and
-> +	 * jited_len signifies correct program size.
-> +	 */
-> +
-> +	ool_stub_sz = IS_ENABLED(CONFIG_PPC_FTRACE_OUT_OF_LINE) ? 16 : 12;
-> +	if (!image || !IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL))
-> +		EMIT(PPC_RAW_NOP());
+We are posting the framework now so that other PMU backends can reuse
+the same infrastructure instead of re-deriving it.
 
-Does the new comment block accurately describe the code? Looking at the
-comment and the implementation:
+How to use
+----------
+Compile with CONFIG_DAMON_PERF_OBSERVE=y.  After starting a kdamond
+with a perf event, the pipeline is visible at a glance:
 
-(1) Unit mismatch: The comment says "Emit a NOP here if (ctx->idx +
-ool_stub_sz) is odd" but ctx->idx is an instruction index while ool_stub_sz
-is a byte count (16 or 12). The code actually tests:
+  # cat /sys/kernel/debug/damon/perf_stats
+      --------------  ----------
+      Counter          Value
+      --------------  ----------
+      callback          233
+      valid             233
+      ...
+      enqueue           233
+      dequeue           233
+      match              12
+      update              9
 
-    IS_ALIGNED((unsigned long)fimage + ctx->idx*4 + ool_stub_sz, SZL)
+For automated diagnosis, run the selftest:
 
-which properly multiplies ctx->idx by 4 to convert to bytes. The comment's
-stated parity expression doesn't match what the code performs.
+  # sudo ./damon_perf_obs_test.sh --pmu software --freq 1 --sample-freq 100
 
-(2) Alignment assumption contradiction: The comment states dummy_tramp_addr
-"lands at an even instruction offset (== 8-byte aligned from an 8-byte
-aligned base)", but the preceding sentence explicitly says "The fimage can
-be non 8-byte aligned". In fact, bpf_jit_binary_pack_alloc() is called
-with alignment 4 in bpf_int_jit_compile(), and the code correctly folds the
-real fimage address into the IS_ALIGNED() check rather than assuming an
-aligned base.
+For structured diagnostics, enable the tracepoints under
+/sys/kernel/debug/tracing/events/damon/.
 
-(3) "In the final pass" is inaccurate: the alignment decision is taken in
-every codegen pass where image != NULL. Looking at the loop in
-bpf_jit_comp.c starting around bpf_jit_build_prologue(), 2-3 such passes
-run, not just the final one.
+What the series adds
+--------------------
+Patch 1 defines the three tracepoints (damon_perf_sample with 8 fields
+including sample_flags, sample_type, and execution context, plus
+damon_perf_report_missed and damon_perf_drain) with the CONFIG switch,
+the observe API declarations, no-op stubs, and the Kconfig / Makefile
+wiring.  (Reviewers: tracepoint folks — Steven, Masami, Mathieu.)
 
-Also, "the image buffer have 4 spare bytes" is ungrammatical and
-understates the case: a fentry-stub block is also emitted mid-body by
-bpf_jit_emit_exit_insn()'s fallback path, so a program can contain several
-stub sites and therefore several spare NOP slots.
+Patch 2 implements the observe_*() core: per-CPU monotonic counters,
+event-lifecycle hooks with lazily-allocated per-event per-CPU state,
+NMI-safe sample classification with execution-context detection,
+ring enqueue/dequeue/peak, match/miss/update, and framework init.
 
-Note: the immediate follow-up commit 1525fbfebfe9 ("powerpc/bpf: Move out
-dummy_tramp_addr after Long branch stub") deletes exactly this wording and
-replaces the 16:12 constant with 44:40, which suggests the description was
-known to be confusing.
+Patch 3 adds the debugfs perf_stats interface (debug-only, format
+unstable).
 
+Patch 4 wires the observe calls into the vaddr overflow handlers and
+the kdamond drain, integrating the framework into the hot path.
+Reads ring->tail once with READ_ONCE and reuses the cached value
+for the peak-occupancy estimate, avoiding a compiler reload and a
+torn read on the NMI producer side.
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Patch 5 adds the automated selftest with snapshot/delta accounting,
+per-CPU state-column checks, clean-session guard, and a PMU support
+verdict (FULLY INTEGRATED / PLUMBING-ONLY / UNUSABLE).
+(Reviewers: kselftest folks — Shuah.)
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32100929603
---===============8162154980185016120==--
+Patch 6 documents the framework.
+
+Patch 7 adds CONFIG_DAMON_PERF_DEBUG as an optional Kconfig option for
+verbose pr_debug() output via damon_perf_dbg(), wired into every
+event-lifecycle hook, the drain summary, and the init paths.  Adds a
+pipeline health check to the selftest that diagnoses which stage is
+broken when callbacks are zero.
+
+Testing
+=======
+Tested on Kunpeng 920 (256 CPUs, ARM SPE, kernel 7.1.0-rc5-mm-new-damon+).
+
+KUnit: 35/35 PASSED (damon 29, damon-operations 5, damon-sysfs 1).
+
+The framework is PMU-agnostic.  Three configurations demonstrate this,
+with the ARM SPE case being the framework's core diagnostic value:
+
+**Software PMU** (page-fault sampling, exercises the full pipeline,
+no hardware required):
+
+  $ sudo ./damon_perf_obs_test.sh --pmu software --freq 1 --sample-freq 100
+  SUMMARY: 27 passed, 0 failed, 0 skipped (FULLY INTEGRATED)
+  callback=170, valid=170, enqueue=170, dequeue=170, match=6, update=3
+
+**CPU-clock** (address-less PMU, plumbing-only):
+
+  $ sudo ./damon_perf_obs_test.sh --pmu software --config 0 --freq 1 --sample-freq 100
+  SUMMARY: 22 passed, 0 failed, 3 skipped (PLUMBING-ONLY)
+  callback=1913, valid=0, addr_zero=1913, enqueue=0
+  Layers 1-4 pass; Ring/Match/Drain skipped as expected.
+
+**ARM SPE** (hardware trace).  This is the scenario that motivated the
+  framework: without an AUX buffer backend, SPE cannot deliver samples
+  through perf_event_create_kernel_counter(), and the framework
+  pinpoints the failure without a single printk:
+
+  $ sudo ./damon_perf_obs_test.sh --pmu arm_spe_0 --freq 0 --period 256
+
+  --- Layer 2-3: Enable & Run (via per-CPU state) ---
+    [PASS] Event Created (max per-CPU state >= CREATED)
+    [PASS] Event Bound (max per-CPU state >= BOUND)
+    [PASS] Event Enabled (max per-CPU state >= ENABLED)
+    [PASS] Perf event creation (no errors in dmesg delta)
+
+  --- Analysis ---
+    Pipeline diagnosis: PMU not producing data or AUX pipeline broken
+    [FAIL] Sampling — 0 callbacks — PMU is not delivering samples to DAMON
+    [SKIP] Event Running — no callbacks — state cannot advance past ENABLED
+    Ring: enqueue=0 dequeue=0 overflow=0
+
+  --- PMU support verdict ---
+    UNUSABLE: the PMU never delivered a sample to DAMON
+
+  SUMMARY: 19 passed, 1 failed, 5 skipped
+
+  Layers 1-3 pass — the per-CPU state advances to ENABLED — so the
+  kernel-side plumbing is intact.  The health check confirms
+  state >= ENABLED but enqueue=0, ruling out event-creation and enable
+  bugs.  The failure is isolated to Layer 4 (Sampling): the PMU itself
+  is not producing data.  This is the expected result for ARM SPE
+  without an AUX buffer backend, and the framework diagnoses it as a
+  PMU-level gap rather than a DAMON pipeline bug.
+
+  After the AUX backend is added [2] (which itself depends on the
+  perf AUX kernel-consumer API [3]), the same test script confirms a
+  fully functional pipeline, including real SPE hardware samples:
+
+  $ sudo ./damon_perf_obs_test.sh --pmu arm_spe_0 --freq 0 --period 256
+  SUMMARY: 27 passed, 0 failed, 0 skipped (FULLY INTEGRATED)
+  callback=47248, valid=47248, enqueue=15161, dequeue=15161,
+  overflow=32087, match=255, update=4
+  All 7 pipeline stages pass.  The AUX drain path delivers samples in
+  process context (context=0), and the ring overflow counter (32087)
+  shows the ring is sized for software PMU rates — a real-world
+  observation the framework provides without any additional
+  instrumentation.
+
+Known limitations
+=================
+- The debugfs perf_stats format is explicitly unstable and must not
+  be used by scripts.  Tracepoints and counters are the stable
+  diagnostic interface.
+- The global per-CPU lifecycle state is monotonic and never reset,
+  so a previous RUNNING event can mask a current event's failure.
+  Per-event per-CPU state is available for accurate tracking.
+- This series depends on Ravi's hardware-sampled access reports
+  branch [1] for the following facilities:
+    * Per-CPU SPSC report ring (damon_report_rings,
+      DAMON_REPORT_RING_MASK)
+    * damon_report_access() and damon_report_page_fault() as the
+      ring producer
+    * kdamond_check_reported_accesses() as the drain path
+    * damon_perf_event lifecycle (create/bind/enable/disable/free)
+  Without [1] this series cannot compile, so [1] must be merged
+  first.
+
+References
+==========
+Link [1]: https://github.com/damonitor/linux.git
+          branch: ravi_hw_sampled_access_reports_rfc_v1
+          commit: fd968106e5bf
+Link [2]: https://lore.kernel.org/all/20260816142222.689624-1-kunwu.chan@linux.dev/
+Link [3]: https://lore.kernel.org/all/20260814144927.489172-1-kunwu.chan@linux.dev/
+
+Base: fd968106e5bf ("mm/damon: add damos_node_eligible_mem_bp tracepoint")
+
+Kunwu Chan (4):
+  mm/damon/perf: add observability framework with tracepoints and CONFIG
+    switch
+  mm/damon/perf: implement observe API and per-CPU statistics engine
+  mm/damon: integrate observe API into vaddr overflow handlers and core
+    drain
+  selftests/damon: add automated layer-by-layer observability test
+
+Lian Wang (3):
+  mm/damon/perf: add debugfs statistics interface
+  Docs/mm/damon: document the perf observability framework
+  mm/damon/perf: add CONFIG_DAMON_PERF_DEBUG and pipeline health check
+
+ Documentation/admin-guide/mm/damon/index.rst  |   1 +
+ .../mm/damon/perf-observability.rst           | 210 +++++++
+ include/linux/damon.h                         |  44 ++
+ include/trace/events/damon.h                  | 120 ++++
+ mm/damon/Kconfig                              |  33 +
+ mm/damon/Makefile                             |   1 +
+ mm/damon/core.c                               | 129 +++-
+ mm/damon/perf/Makefile                        |   5 +
+ mm/damon/perf/debugfs.c                       | 145 +++++
+ mm/damon/perf/perf.h                          | 235 +++++++
+ mm/damon/perf/stats.c                         | 308 ++++++++++
+ mm/damon/vaddr.c                              | 104 +++-
+ tools/testing/selftests/damon/Makefile        |   1 +
+ .../selftests/damon/damon_perf_obs_test.sh    | 578 ++++++++++++++++++
+ 14 files changed, 1880 insertions(+), 34 deletions(-)
+ create mode 100644 Documentation/admin-guide/mm/damon/perf-observability.rst
+ create mode 100644 mm/damon/perf/Makefile
+ create mode 100644 mm/damon/perf/debugfs.c
+ create mode 100644 mm/damon/perf/perf.h
+ create mode 100644 mm/damon/perf/stats.c
+ create mode 100755 tools/testing/selftests/damon/damon_perf_obs_test.sh
+
+-- 
+2.43.0
+
