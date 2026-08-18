@@ -1,175 +1,165 @@
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AB2333BBD7
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 15:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A40747ACD5
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 16:02:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787068435; cv=none; b=dxapTSI4AZghp/mvngbEVqO6eo56epcpu8KTv68as+aFeP56zpzPArN7QvP/BdIdhd6SNDOe0rQDnjPFLNyKINiRI8WvJXKZ9ZOwH66XWsYhgXFJJZO1hEuZtM9NlahMAlqI32OYABcVscIN36jwrKxV2xvvrAwlzWW4ClbdpSc=
+	t=1787068940; cv=none; b=ZoC9pWwYxV1w0k0z2cbqrFFwHNfdInGgUVxDxyWL+3fBHRy4DhpI8hIw7Gb2Dj/GvLOjVJ3neFx1Q4lbqYsLnjTUi/7/rlApR4tUp+OcwtfFZ63frMNmjPlTRHK35tndglEDFulcJHE8bZ+QXRQUV58pdEtvsNoeCmSoMeGJSfk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787068435; c=relaxed/simple;
-	bh=y87poIV0uimI5CA2+kvKxO3w5k8C8v0mChPyfMiB3M0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uFLO98NkWw3uOiswQz1i+2WFyIWbaNLr+4ONpgbiSzGHa+ZzJJzoxeO2cKqplSZI3+egdmPyb1R7j2bmIKqSycPc+dFFXf2z5uzc5Tx/NxxOF7y81SNlKamQgkQBtrJp3nBhveZHeq1D107zE+OGJ9sT6jP5z+FTTpPcwhb5xY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JyBinMag; arc=none smtp.client-ip=209.85.210.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787068940; c=relaxed/simple;
+	bh=+Wcc8wz6m0+2T4ZtMRQJqeP7DGPsFLUeJ6j0YPPSbaw=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SbjnyPhO5u3it4b/vBQgkMDbm6KHmeartprqwhpueIS14U+Ll0aZ6dugTQ4Aza8YT0DAqljSjmpzhBlrFAH9gyjG1JXgkAEl8T2m53PAIasEngkIQ/aMymX8Rly3GV4lUQi3WhZ1ULD0/jOxYoXnh7WOofQae9bFWsXimLmxPks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=SRqZDkia; arc=none smtp.client-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JyBinMag"
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-84faf87d19dso103294b3a.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 08:53:54 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="SRqZDkia"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cb7049fa552so4398648a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 09:02:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787068434; x=1787673234; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/WUnCNNunR3sztjqINhBrxpcsDId+aB/tyOe8IO5J8Q=;
-        b=JyBinMagFHGby6OBDUUvGcFkz4a1kYHuu8BtCBoww+jj1Mq7eM5k7VOEG/kJ747Wrw
-         rgQX7eJqiE/QoG8/QM1B/PTEMcIGT4Ds7rmfmxawiamaTLeB8syzEQZMHg2DSp5KxOlp
-         9uaqKyWfeVB/kPVagLnCunbqqF+YOq6RughYnGfL9fRdgse5gdFJU3Lo4ZQdH+X0uX/n
-         Y1PccHWy2SULFucZ65djZGJMl1F/dpaOSohGMJg9XYTRydfSVX0aYeHoHzuk6BWtB4up
-         znuO8YQq6G8TYvFNAKsl9n8/f+c4BqTe12vQUGnZSexmGhyogk+0fBB9H56vi6IYG8od
-         Prew==
+        d=google.com; s=20251104; t=1787068938; x=1787673738; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hTu8rIIeaYeWexH+JKqzOvDmozZVoZIeVfoU7C4RXZA=;
+        b=SRqZDkiau703a3jeXK20i0TOINrAXQR/fFlqDyhj4bFwiqtPQaAMBojacmB1eUq7Ew
+         OL87mGDOXKx64X5VLeJ5xEP99Zvz5XVOyTMHVC2JGvJZ8owjUBvEBzADZrcEIWEh1bo9
+         KNBzylZhDVXqPbMuIeJvXGW98p0avh10A9/pUQzHEFazaFrTXqj0riHjZ2ZUhc8zSHPD
+         yatCpZfmG81JKGHqL3kOEeZObWR85WobCuOxhTh1iHg9xoUww+uuRg3Ps8FV5mlWG0OU
+         pWU6LoMKoiUfabs8+qzJF6JXC39G5LCl5GNN44O/CFXdJsK/ZXwTGOUuuYLhCXAt9nlx
+         JjGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787068434; x=1787673234;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1787068938; x=1787673738;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=/WUnCNNunR3sztjqINhBrxpcsDId+aB/tyOe8IO5J8Q=;
-        b=FSl+PPAnZr5j0RNx/wRycd+Bktl9Uaelh1lSArocS/D09GgoY3sUWv9vFcMZUK16YV
-         cDzh1ieE8a5Z5Kw2CVv+ViKdX2OxPbwulInZx5UeRc9IxEoGvvhntb5whV1MNhC3/d18
-         yZioI9qC9VxEzIRbvzx6Slo9+GhJ1By0nTsbxMF4L6MvcVBS/ahbQd0tB4cTbbAzokeG
-         JFn2LMg9gebvZPrJbv6meWp8w6sMJAE7zvG8qmw+fqFK0blyTe7pMxx6uRKMBKkwqM6e
-         qCu5j+onXoMSIF0SN7CuE9jXiVfqCMoAii8fPwXrI6wffZgiqI7+Uui/RRa08kf4dSjY
-         vr2w==
-X-Forwarded-Encrypted: i=1; AHgh+RpfPa1qH48PLuUriBHW703wuIkgYLARVqQdXlRlno0Z9lSW8FFCVU/Ciwr0EgR4ftroGIFpr+ECOaHg5ehK3NU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxTnqblRZf8YA2wr0DHTbQb94LlIW8vcRRmPHgSLHhU3YcRdwN1
-	8vxBJPmnbMV4xWEVhgjdH9TLcLViUBA/ZilO+bvPycSpyN5HN3PLCtO4
-X-Gm-Gg: AR+sD12YkKU1mUmd9jaMaDHGWII9gim0/z7theo4uSy7n5CwJczb/aD1Ls0cEAsf2KJ
-	KYd8A4xdIcvZuapzys2GCXl9EsBabf9ObJuKp3keixNXJiqVqeFZpiGyVKCvpGSrkVNQPH0MCaz
-	ca3dPoXNuzldku/LMGUaiRqCinWnBWPqb5S2FWVgglJmrzLBAlC8SkUFQAIcok9RH+5kxnPJ4WV
-	FdxPywxe3o8oP7voQ9lFPjyMLrr0Eo6BldQVitRxgY2utL9Vs3NBHYw2cJ4x6Z5z0eA4ndaz2a+
-	FcERmDDYwmr0fV4RDNShZqM4ogwLc/bVpY0oCTh2vO5kA9PzVmxxpe5ocJ635L6pMX39SAD+OzO
-	qUly8VE6GD1eBn9js6o3XnzKjzeZEp8w20tfmvifGJacaVqe6k7e/Ijj2/UNaLDmRWTkOSXsofM
-	O9vHwGix3uk/Cjv5bLRImVBo7jr12E/gEdWVPdE9VTScu8clOnbalt2gXcdDIIna3fftO5UxGvW
-	/ZN8Ew/MD0=
-X-Received: by 2002:a05:6a21:3a93:b0:3c4:1c9f:d81 with SMTP id adf61e73a8af0-3cc71c1b661mr46109570637.7.1787068433543;
-        Tue, 18 Aug 2026 08:53:53 -0700 (PDT)
-Received: from localhost.localdomain ([72.255.58.127])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3267c89768dsm15962300eec.26.2026.08.18.08.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 08:53:53 -0700 (PDT)
-From: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
-To: mathieu.desnoyers@efficios.com,
-	peterz@infradead.org,
-	paulmck@kernel.org,
-	boqun@kernel.org,
-	shuah@kernel.org
-Cc: broonie@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
-Subject: [PATCH] selftests/rseq: Fix circular dependencies in Makefile
-Date: Tue, 18 Aug 2026 15:53:37 +0000
-Message-ID: <20260818155337.4774-1-mahad.ibrahim.dev@gmail.com>
-X-Mailer: git-send-email 2.54.0
+        bh=hTu8rIIeaYeWexH+JKqzOvDmozZVoZIeVfoU7C4RXZA=;
+        b=VmgNM5O2v65/hweltswF02YQSfhR3Cbc/3uSbcRr7wlJuwmYEPpGVWjbSFmNwlBd18
+         fG4aKaNfGcJt9Hv/C5KPf1/IyaEZyzIWtMy869Aq/a5dt7IrHv6orPGhJbKnz0smgNUT
+         Kr3PJmysLgl9FCRDHbpM4sKAmhbXrtp7i6eo/kqNSK60oGqi/lf5DXmoP1/mVJv9YipW
+         RncpO63L3B9KaXSUibW6ZExXAcXqSiGL7NliV5SOmRtwRCCkkDTZA7hIjl6xp8wjc/xG
+         LS+mr+9I20b1zepa/1+JzPR9v0DzaHa5dodkV4Q2okLjiXe6TzdFvvziP8UNtGIoWNQ5
+         Qf+Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rp7az4xGsA08ZgXQ9DZFd3DRJbtcAGH2t1mvo4wm91hnTQSEw9zFTEk9Vsg4M8JwX9RHA/BnKUq50wFrellSes=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYziXmxxp84xzgE7dRQDklj3MPSYhwxofsawXxnUbUdeN0RLK2
+	03zB4Y4wPiP+3zMenjP+u0FJGDKZ4s57ArYjwDr03KoLFrA5Rs8HJOaK3e/piDv3ZJJ+ta06BjX
+	l6T58Ig==
+X-Received: from pgvc22.prod.google.com ([2002:a65:6196:0:b0:cbf:d9a:2fcf])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7f99:b0:3c3:9df0:2d66
+ with SMTP id adf61e73a8af0-3cc719fe453mr37508125637.6.1787068937949; Tue, 18
+ Aug 2026 09:02:17 -0700 (PDT)
+Date: Tue, 18 Aug 2026 09:02:17 -0700
+In-Reply-To: <2vxzy0e3zgqz.fsf@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260728121138.1103610-1-tarunsahu@google.com>
+ <20260728121138.1103610-6-tarunsahu@google.com> <anphyjFv3FhF61iB@google.com>
+ <2vxzpkzo51wg.fsf@kernel.org> <anssOQFNZ2LfihbU@google.com>
+ <2vxzik5f311e.fsf@kernel.org> <anyObKiZIhfok5mk@google.com>
+ <2vxzqzjz1x5f.fsf@kernel.org> <aoMcqp0gr06YXAPU@google.com> <2vxzy0e3zgqz.fsf@kernel.org>
+Message-ID: <aoSCCTTBn9D5hqzk@google.com>
+Subject: Re: [PATCH v4 05/11] KVM: LUO: Support VM preservation across live updates
+From: Sean Christopherson <seanjc@google.com>
+To: Pratyush Yadav <pratyush@kernel.org>
+Cc: Tarun Sahu <tarunsahu@google.com>, ackerleytng@google.com, fuad.tabba@linux.dev, 
+	Andrew Morton <akpm@linux-foundation.org>, dmatlack@google.com, 
+	Shuah Khan <skhan@linuxfoundation.org>, Jonathan Corbet <corbet@lwn.net>, david@redhat.com, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, sagis@google.com, 
+	Paolo Bonzini <pbonzini@redhat.com>, Mike Rapoport <rppt@kernel.org>, Alexander Graf <graf@amazon.com>, 
+	linux-kselftest@vger.kernel.org, andre.przywara@arm.com, michael.roth@amd.com, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, will@kernel.org, 
+	vannapurve@google.com, maz@kernel.org, fvdl@google.com, kvm@vger.kernel.org, 
+	oliver.upton@linux.dev, kvmarm@lists.linux.dev, alexandru.elisei@arm.com, 
+	skhawaja@google.com, aneesh.kumar@kernel.org, linux-doc@vger.kernel.org, 
+	David Hildenbrand <david@kernel.org>, yan.y.zhao@intel.com, kexec@lists.infradead.org, 
+	suzuki.poulose@arm.com
+Content-Type: text/plain; charset="us-ascii"
 
-TEST_GEN_PROGS_EXTENDED lists the binaries which are to be built but not
-run. However it is also listed as prerequisite for every generated binary
-to link against; all binaries only require librseq.so.
+On Tue, Aug 18, 2026, Pratyush Yadav wrote:
+> Hi Sean,
+> 
+> On Mon, Aug 17 2026, Sean Christopherson wrote:
+> 
+> > On Sat, Aug 15, 2026, Pratyush Yadav wrote:
+> >> On Wed, Aug 12 2026, Sean Christopherson wrote:
+> >> > On Wed, Aug 12, 2026, Pratyush Yadav wrote:
+> >> So with live update, we don't need to keep backwards compatibility in
+> >> the ABI forever. Of course, it is good to minimize changes, but we have
+> >> more freedom to change it.
+> >
+> > Ah.  So this is the heart of the disconnect.  I very strongly disagree with the
+> > statement that live update doesn't need to support backwards compatibility.  I
+> > can totally believe that the folks working on live update are ok breaking backwards
+> > compatibility because their use cases are "fine" with such breakage.  And I can
+> > also believe live update as an upstream kernel feature being developed by those
+> > same folks is also ok with breaking backwards compatibility.
+> >
+> > But with my upstream KVM maintainer hat on, I am not ok with that.  I did not agree
+> > to support a world where KVM is allowed to break backwards compatibility, so long
+> > as it's done "carefully" or whatever.  If y'all want to deal with the resulting
+> > complexity, that's fine by me, but you'll be doing it without KVM.
+> 
+> Let's step back a bit. I don't think backwards compatibility in the
+> _ABI_ is all that important in live update's context. What is important
+> is that our users are able to live update from kernel version X to Y.
+> The line format the kernel uses to describe its state is an
+> implementation detail. Our users never see it.
 
-This results in the following warnings:
+The rule is thou shalt not break userspace.  Whether or not the breakage is the
+result of an explicit ABI change is irrelevant.
 
-  make: Circular .../rseq/check_optimized <- .../rseq/check_optimized dependency dropped.
+> The high level idea is that when you need to make a change to the ABI so
+> the kernel can better describe the objects/resources/files it is
+> passing, you create a new version of the ABI and allow transitions from
+> older versions.
+> 
+> Say you make some changes and need an ABI version v5. You don't get rid
+> of v4. You keep it around. LUO core will facilitate picking the right
+> version for the next kernel. So it will be possible to seamlessly
+> upgrade your kernel that speaks v4 to a new kernel that speaks v4 and
+> v5. Now this kernel can start speaking v5 if its successor speaks v5
+> too. And so on for going to v6 and v7, etc.
+> 
+> After a "reasonable" time given for upgrades, you deprecate v4. v4 has
+> been around long enough and our users have had a chance to go to kernels
+> speaking newer versions. That's when you remove the code for v4 from the
+> kernel.
+> 
+> We can argue what "reasonable" means, but the core idea stays. 
+> 
+> It will still be possible to go back to v4 or earlier, but you'd need an
+> extra stop along the way. And of course, vendors can keep a wider
+> support matrix downstream if they see the need for it.
+> 
+> Does this idea of "backwards compatibility" sound acceptable to you, at
+> least at a high level?
 
-Such warnings are emitted 36 times in in-tree and out-of-tree builds.
+No.
 
-Additionally, the generation of a single binary pulls in all of
-TEST_GEN_PROGS_EXTENDED as they are listed as prerequisites for each
-other. However since Make drops all the prerequisites which form a cycle,
-the build succeeds, but results in unintended behavior. For example
-building a single binary like check_optimized compiles 9 binaries while
-only 2 are required.
+It's probably fine for Google and other large companies that tightly control their
+kernels and use cases, and have the resources to juggle the resulting complexity,
+e.g. have kernel engineers on staff to track feature and dependencies, coordinate
+and plan kernel upgrades, etc.
 
-Fix circular dependencies and unnecessary compilation of binaries in rseq
-Makefile by isolating librseq.so and headers into a single variable which
-is added as the prerequisite.
+It's not acceptable for upstream, where downstream consumers often run a distro
+kernel, have much more varied use cases, and don't always have a horde of kernel
+engineers on staff to help them thread the needle you describe above.  And if
+supporting live update as a general feature for all users of the kernel isn't
+being factored into design considerations, then that needs to change, otherwise
+this is all dead in the water.
 
-No warnings are emitted after the change, and building a single binary
-only compiles that binary and librseq.so. Verified in-tree and with
-OUTPUT= set to a separate directory.
-
-Fixes: cb48828f06af ("selftests/rseq: Don't run tests with runner scripts outside of the scripts")
-Signed-off-by: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
----
- tools/testing/selftests/rseq/Makefile | 28 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 16 deletions(-)
-
-diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
-index aba6317f6cb8..9c369e59bb2d 100644
---- a/tools/testing/selftests/rseq/Makefile
-+++ b/tools/testing/selftests/rseq/Makefile
-@@ -37,41 +37,37 @@ TEST_FILES := settings
- 
- include ../lib.mk
- 
-+RSEQ_DEPS := $(OUTPUT)/librseq.so rseq.h rseq-*.h
-+
- $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
- 	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
- 
--$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/%: %.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/param_test_benchmark: param_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/param_test_compare_twice: param_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/param_test_mm_cid: param_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(TEST_GEN_PROGS_EXTENDED) \
--					rseq.h rseq-*.h
-+$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/slice_test: slice_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/slice_test: slice_test.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
- 
--$(OUTPUT)/check_optimized: check_optimized.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
-+$(OUTPUT)/check_optimized: check_optimized.c $(RSEQ_DEPS)
- 	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
-
-base-commit: 0f23d56f17fdfc7db69d51f64c8b91bbab947aa9
--- 
-2.54.0
-
+I also don't see the point.  Maintaining a rigid save/restore ABI is annoying,
+but it's not _hard_ (or at least, not _that_ hard), especially if there's a set
+of well-documented best known practices that subsystems can follow, e.g. so that
+individual subsystems don't need to learn painful lessons first-hand.  I genuinely
+believe that maintaining the version hell you describe above would be more costly
+in the long run than simply committing to full backwards compatibility within a
+given subsystem.  I can imagine that enumerating what subsystems' information is
+in the payload will require a different scheme, but for a given subsystem, I don't
+see any reason to aim for anything less than full backwards compatibility.
