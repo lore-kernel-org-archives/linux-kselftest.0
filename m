@@ -1,121 +1,158 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
+Received: from mta0.migadu.com (out-212.mta0.migadu.com [91.218.175.212])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5A93351C2F
-	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 19:28:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E37B6364052
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 19:36:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.212
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787081317; cv=none; b=o8zFsR5/tuLqQIa4itr2QAiHqciWedu0eGvuNIIgDKoyv3vKBC/J55YCLyKC/i5auN+Z2BXDgGuiyK7GsIvIVwSNADJ+zTCUdvj63SOXpDXquF43oOlX/1U/KRwT7rPQBMZOGVn/s4oJ0uhhyvLJznwh9+OJQHCpYoBi02FwRlo=
+	t=1787081770; cv=none; b=Kya1ne82TYGuCb2NTCm+v46hZM1kU7mV7pN5cuit0JD6JX3YPjW7XoFAPbTSUj+FW+5NwWqZRyiUQH69RuinNC7atTv5OqkRPIh4MyJofsOcwOWw5dv8S9IXdh9HYQ5rRTrUC4pRGo7DDlS4U2qJvdCBe5iptlwJAQl58h7X9gM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787081317; c=relaxed/simple;
-	bh=pGvL+r9yd0UjdhtGaZSmH62uoyKHVNe7h32F5utFz+A=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=h8gow3si1fB/u1xAI5jFEhqUUhSR2bMk6xyzX85Fg5Xl9hmnKcoCAIwngTutnyS+4t+dbEShCY5mgZwZAf7O7IgCE1tVoxjA+mntcN3O020Uo+yhXXzM7xO2/aBc6WMO9qYFtIriwe4uy2p3uxHsmKzQ7nh8O7fh3lBG6TFO4LI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=u7LV1wIj; arc=none smtp.client-ip=209.85.210.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1787081770; c=relaxed/simple;
+	bh=kIKvNM7BPSkBXUN2eWH5O/FffUslGwSPxg0v8WZ5jtQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VhvkZyR4EJyJBVdudD1FvlIpTVL8iVU/8MRn4XXyH7kBt9r/9oxYzsJpOroBrzg0zrZGJsT1wUsY3ZlxxMeVlXDGIQ2W96DIvU/Y2YqSSamSUxuY+ZGBvOLELv911cAu5PXcTv4hdzf3mYt28Gy1fo4KjkOi20jY1OpYn112kQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=wjufIYRe; arc=none smtp.client-ip=91.218.175.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="u7LV1wIj"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-84e375d9736so246386b3a.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 12:28:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787081315; x=1787686115; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=toqDoqaZ7664JCi45UayITxDmXVJU8MQDeCDLsKOJnQ=;
-        b=u7LV1wIjiC283uldP9z9/GabJNzIi2gXAD5b0cnKdPjgaXuVP1U8WS5Mh5UEMowrLM
-         GejRsuAgVggLWPPhzeUDLj/JKqF4+VZI0Burqxv1m6vraCw4HnEWB8/pqCr/iTAFdHoq
-         Aer2EHgsPBvkQ9JwfpfJRakYhhmvJlYoY7b0ma2zAX8Tmxw/Th32HcwbSB1dL/uzDye7
-         Ql4Vj0mehOBx3G30VbidIGXMqeVRyRyrfqjqD098BlAwUyUd8cxbOyomwTAfIzWjyhSM
-         GOA8XddyHLq2O/EpksGZuy4sCTYUC6AV+pbjf+9mfcxXMOXfD/px9ordZHzfTUnS8bin
-         AMdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787081315; x=1787686115;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=toqDoqaZ7664JCi45UayITxDmXVJU8MQDeCDLsKOJnQ=;
-        b=IdYtNHjB8/2R7izZKaymiU65DnmabAIRfU8qFohW4c1kwecI87P1XAq89qnKZUA75a
-         mzCHsR0ibZ1GziDc5mp++LhjgA7Ve1EIsbBQXpZeBtcdtc7ApsH17Ab6lgRNvXOexZpt
-         CIU1TTn+qQpPAXkfdGTJPlGtbLklIQqwD0J2AuvuGwMjCnZkYY6gTrNNxd+02UXw2PeH
-         F1sMiLdFvEwPQEe/ibf/VBPGE8lJj8HGFHnsg78cVAmD7BgNWdk4odmlIdwC3BMOCQ7J
-         SS0jQvvu5N/W1A7KYkd6ocHoFfNuBnGUkF9h1Q/N0M7K8TYm0hsA0SEAJc4vLSir26HO
-         SGhw==
-X-Forwarded-Encrypted: i=1; AHgh+RpBi+23SDdtahe8uxThIdn+gqKC6GRtcWNpfBz3SG/JA3z4FVMbmyhM7J62jnebWIYfZ6Vl0dI/oNU0+xVQZgY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMb7MTI+q1XkgpsdbRSy8kNhxhkumY/w/aFR91khou32P5+rjb
-	pKIuF7zzaZhAOLa9VD0kw2Mf9RlX6H++AmNXUmzuoDBkwFUNWdAkx9jt+PnoWRFK1T1YN8OT/L+
-	8xr3uww==
-X-Received: from pfbko19.prod.google.com ([2002:a05:6a00:4613:b0:847:926b:dc17])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:a219:b0:84e:e741:174f
- with SMTP id d2e1a72fcca58-851cd76efe7mr982877b3a.7.1787081314954; Tue, 18
- Aug 2026 12:28:34 -0700 (PDT)
-Date: Tue, 18 Aug 2026 12:28:34 -0700
-In-Reply-To: <c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="wjufIYRe"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=kIKvNM7BPSkBXUN2eWH5O/FffUslGwSPxg0v8WZ5jtQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787081766; v=1; x=1787686566;
+ b=wjufIYReKApm19whovGAR48ngk1w3pYh+NeD/JsiUSfqlB6ZTUBRYXXfzt/Lu4V7l6s1mtu1
+ cWOlBolctSOmsWls0GgBKFQhSBkW4jS5x0Dj38sxH8rkzBz+8EpHaXora9t21A8dIJ3voggMoki
+ iumLcYnCrXbkOWtxhN1+gMIo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [IPV6:2a03:83e0:1251:27:17dc:c6a5:7074:ce30] (2620:10d:c090:500::7:86e7)
+	by smtp.migadu.com with ESMTPS id b107c2617882a1d3;
+	Tue, 18 Aug 2026 19:35:54 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ac19d435-4c92-42c8-9db1-2db1ab854c3c@linux.dev>
+Date: Tue, 18 Aug 2026 12:35:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260803170825.925561-4-hisamshar@gmail.com> <20260817220457.554823-3-hisamshar@gmail.com>
- <aoOKMeua-cNeTxXT@google.com> <8d069fe1-a5b6-4a86-9604-26aebe2dc243@gmail.com>
- <aoSIBnFfy4osa6wt@google.com> <c2f7e904-2646-4b01-864d-d185221c7f56@gmail.com>
-Message-ID: <aoSyYtxBpEaoBwGY@google.com>
-Subject: Re: [PATCH v2] KVM: selftests: Replace ulong with unsigned long
-From: Sean Christopherson <seanjc@google.com>
-To: Hisam Mehboob <hisamshar@gmail.com>
-Cc: kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
-	linux-kselftest@vger.kernel.org, David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2 2/2] selftests/bpf: Cover mixed arena and
+ stack atomics
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260816-bpf-next-038-mixed-atomic-v1-v2-0-4644c1886dbc@mails.tsinghua.edu.cn>
+ <20260816-bpf-next-038-mixed-atomic-v1-v2-2-4644c1886dbc@mails.tsinghua.edu.cn>
+ <cd62cd53be9bcea2d5b63fef8eece815f5095103.camel@gmail.com>
+ <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+From: Vineet Gupta <vineet.gupta@linux.dev>
+Content-Language: en-US
+In-Reply-To: <123a014b2b4ecd7d19cbdfe62c62d994e612b6f0.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-+David for the VFIO thing
+On 8/16/26 4:36 PM, Eduard Zingerman wrote:
+> On Sun, 2026-08-16 at 16:17 -0700, Eduard Zingerman wrote:
+>> On Sun, 2026-08-16 at 10:56 +0000, Yiyang Chen wrote:
+>>> Add a verifier test with one atomic RMW instruction reached through
+>>> PTR_TO_ARENA and PTR_TO_STACK paths. The verifier must reject the
+>>> shared instruction with the existing incompatible-pointer diagnostic.
+>>>
+>>> Signed-off-by: Yiyang Chen <chenyy23@mails.tsinghua.edu.cn>
+>>> ---
+>>>   tools/testing/selftests/bpf/progs/verifier_arena.c | 39 ++++++++++++++++++++++
+>>>   1 file changed, 39 insertions(+)
+>>>
+>>> diff --git a/tools/testing/selftests/bpf/progs/verifier_arena.c b/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> index b241bbcf54a8a..b22bab33301ab 100644
+>>> --- a/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> +++ b/tools/testing/selftests/bpf/progs/verifier_arena.c
+>>> @@ -637,6 +637,45 @@ int non_arena_ptr_add_to_arena_ptr(void *ctx)
+>>>   
+>>>   #endif
+>>>   
+>>> +static const struct bpf_insn addr_space_cast_insn = {
+>>> +	.code = 0xbf,
+>>> +	.dst_reg = BPF_REG_7,
+>>> +	.src_reg = BPF_REG_7,
+>>> +	.off = 1,
+>>> +	.imm = 1,
+>>> +};
+>>> +
+>>> +SEC("socket")
+>>> +__description("arena and stack atomic at the same instruction")
+>>> +__failure __msg("same insn cannot be used with different pointers")
+>>> +__arch_x86_64
+>>> +__load_if_JITed()
+>>> +__naked void mixed_arena_stack_atomic(void)
+>>> +{
+>>> +	asm volatile ("					\
+>>> +	r1 = %[arena] ll;				\
+>>> +	r6 = r10;					\
+>>> +	r6 += -8;					\
+>>> +	r9 = 0;					\
+>>> +	*(u64 *)(r6 + 0) = r9;			\
+>>> +	r7 = 8192;					\
+>>> +	.8byte %[addr_space_cast];			\
+>> I'm going to fix this to:
+>>
+>> 	r7 = addr_space_cast(r7, 0, 1);			\
+>>
+>> as in the test case above.
+>> Waiting for CI [1].
+>>
+>> [1] https://github.com/kernel-patches/bpf/pull/13325
+>
+> A...and it requires another exception for GCC-BPF:
+> https://github.com/kernel-patches/bpf/blob/bpf-next_base/ci/vmtest/configs/DENYLIST.test_progs-bpf_gcc
+>
+> Ihor, it's a third time GCC-BPF strikes this weekend.
+> What do people think about downgrading it to may-fail until the
+> DENYLIST decreases to something reasonable?
 
-On Tue, Aug 18, 2026, Hisam Mehboob wrote:
-> On 8/18/26 21:27, Sean Christopherson wrote:
-> 
-> > Oh, so on top of "https://github.com/kvm-x86/linux.git next", this *is* the last
-> > blocker?  If so, then I'll grab this for 7.3.
-> 
-> Not quite -- I tested kvm-x86/next + this patch with musl-gcc, and the
-> build still fails. On top of the steal_time fix already in your tree,
-> two more musl blockers remain, both from code that is only in
-> kvm-x86/next so far:
-> 
-> 1. hardware_disable_test.c, from 496779b54943 ("Pre-set threads affinity
->    in hardware disable test when possible"):
-> 
->      hardware_disable_test.c:75: error: implicit declaration of function
->      'pthread_attr_setaffinity_np'
-> 
->    The call sits under #ifdef _GNU_SOURCE, but lib.mk defines _GNU_SOURCE
->    unconditionally, so the path is always taken and musl (which lacks the
->    function) breaks.
+While bpf-gcc is improving, slowly, we can in parallel do alittle better 
+on test hygiene as well. In this case by correctly bracketing the tests 
+with _BPF_FEATURE_XXX.
 
-Heh, Sashiko flagged that as problematic, and I was trying to figure out which
-macro to key off of[*], but was (obviously) unsuccessful.  I don't suppose you
-know the canonical way for checking for support of glibc-only functionality of
-this nature?
+Co-incidently I have a series in works from an accidental discovery of 
+llvm-only testing coverage (rely solely on __clang_version macro) which 
+I'll follow up on the list shortly.
 
-[*] https://lore.kernel.org/all/am0KqJOD-FiC9BXs@google.com
+Thx,
+-Vineet
 
-> 
-> 2. The libvfio wiring from a262fc49e0aa ("Build and link
->    selftests/vfio/lib into KVM selftests"):
-> 
->      vfio_pci_device.c:25: fatal error: uuid/uuid.h: No such file or
-> directory
->      sysfs.c:31: error: implicit declaration of function 'basename'
-> 
->    The former adds a hard libuuid dependency (its headers aren't visible
->    to musl-gcc here);
 
-Can you elaborate on what you mean by "its headers aren't visible to musl-gcc"?
+>
+> Anyway, I'll wrap-up with this patch-set in the evening.
+>
+>>> +	call %[bpf_get_prandom_u32];			\
+>>> +	if w0 != 0 goto 1f;				\
+>>> +	r8 = r6;					\
+>>> +	goto 2f;					\
+>>> +1:	r8 = r7;					\
+>>> +2:	r9 = 1;					\
+>>> +	lock *(u64 *)(r8 + 0) += r9;			\
+>>> +	r0 = 0;					\
+>>> +	exit;						\
+>>> +"	:
+>>> +	: __imm_addr(arena),
+>>> +	  __imm_insn(addr_space_cast, addr_space_cast_insn),
+>>> +	  __imm(bpf_get_prandom_u32)
+>>> +	: __clobber_all);
+>>> +}
+>>> +
+>>>   static __noinline
+>>>   u32 __arena *check_arena_arg_nonglobal(u32 __arena *arg)
+>>>   {
 
->    the latter because musl declares basename only in
->    <libgen.h>, while glibc exposes it via <string.h> under _GNU_SOURCE.
-
-IIUC, sysfs.c just needs to explicitly include libgen.h?
-
-> The rseq __GNUC_PREREQ failure is already covered by my patch in
-> linux-next. With the above sorted, the musl build passes.
