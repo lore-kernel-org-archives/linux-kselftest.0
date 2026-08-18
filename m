@@ -1,117 +1,92 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54F4B46985C;
-	Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E715735DA61
+	for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 16:27:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787069709; cv=none; b=WfR1jMNPealUzEGQSSq0G9sHpza8+3g7u25FyXG+yHkXY1l7ykQxdqkA35e6vGD/Lh9e0suQHNHuRQRLlBT67h7nFVhviD4m7MmQ894DKD8Y2EfSwo2ckDXbWjH9f8WVqslxG2eXFx/1MD+3vWk5+pYQ+olQ643HMmn9lsJw+VY=
+	t=1787070473; cv=none; b=B9KQ0GRPiD6fbaXDPajhQF7zzkmLcqJyLpzddVr/d7jYc2F/YSr4kevGPtgx2PEQ27AiR50iB6uu+IVmieQc1XQGKKr/vmm+fUTPaU87lI1SGCRDxk70NsEbPPkunHJTx2Qug07I8BAtiE7uKwRc7r9ITg8nqwjWUvLBCJS/gKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787069709; c=relaxed/simple;
-	bh=75Rve+GoGOnr4CgPlvfbfzdSBbFcKHOV18VQDZ+ZPm0=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=TNpaI7A9P2nyXVMXIZk6EXlbRiHJtYUloo9wO87qz1cNHEKfB6Gt2Y9ws29JpeEVFiMFSVPv2unn64sUrh2t92XIP+UgXw8d4LHOqhmZjKxSk3rNv/s6MPI2iJJVfCxzC42zs5NI4AiE23JrzGplpMEEiHbFiXbid3w4OzjBTTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OVdz+ZaR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787070473; c=relaxed/simple;
+	bh=XiZDdwxdghUmr9SIr01cBJWYzhA9RXek8KYVaap4MN4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uiyoItOwihI61lxb93hunjn9I6O7YDYwhMacuFw0Onkn5GTUIrCZsY18bfCXd1g8h837Uuh7Kya/h/1lTT8NUQ7M6c6rrVJIIYGZPgLokpZ3cLvzRZWrbONvfbrxYkv7vNFc4HzzOiWwnYZkEUM57AyT7Iyqi9TOJE5epZdJRFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pIsd84Po; arc=none smtp.client-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OVdz+ZaR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 739E91F000E9;
-	Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787069707;
-	bh=cLn5pPKmF+xvtehXhmEaSh/ZPFybb4A6pWHoR26dyo4=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=OVdz+ZaRUoEtyTJKVb/DpUAOBsQnV93IWIxJhFAgUFr/1ghtDruvRVOd3CjWbe5ZG
-	 IZJxoumHHmUveIwgnJ1WuSo6fZQNsLOaIJ01snkZoSywDhQJGcIMaKNAfom7Y1Itys
-	 U0Kk9yYmFDsyIeKtHEJm+QhIZnlWjyfTXQSFRkLeFStmP1RwXzIMBPR1NnG9VXA3WH
-	 ijfPV7HqreAQnFq5vUzfx70iCo+Tuo2pHJx91SWkgCeWooGEfNcUf8rJNKLIzxuxQJ
-	 5jTJ5qmDa1G/F418HVRJPhbLh6sbap3TdqtfD2YJLr/3tpH9Ohx87mFgyoylt7tn/3
-	 mqszAIy7HWcZw==
-Content-Type: multipart/mixed; boundary="===============8419694916487994497=="
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pIsd84Po"
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2cccfa32670so268485ad.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 09:27:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787070471; x=1787675271; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=nmr600BUwpqEtuz+Dx2wuthgVpiG96H1E6Ankz5Sdqc=;
+        b=pIsd84PolIAWNBI2+z5NfC+FxoPTPBromw08HbgE5D8RPwqcFadVPQyeXFpuxhHh6t
+         Hno+DdmgbHkN9XHDq7G3FI2IJX4pOIc4g4uhfg7mSNHRXr7pNd5c9j8Qk7hdyDkOm80Z
+         ZCdnzrfWEa1hr4u9CT25zcgOzVO7qHcuCJDj5Dv9riPGwjAY/qjvkkseMhpQTbyvdcqC
+         Ay8w0C9YtBdllhYUbPEAqbP39Q2iZKEsU/GwGEknYQFhfqpEFbnt7WDzqY7maCBWGfiW
+         MUkxouFNpzSmNRA2s/V5x7Zk+0EegLWlCac6iDHf7GHa5RTxmbH27hTAbF2IpnWf90EQ
+         1K2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787070471; x=1787675271;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nmr600BUwpqEtuz+Dx2wuthgVpiG96H1E6Ankz5Sdqc=;
+        b=WzfKmmaeix3kc9lRwFjgOucYJETwh0MxXfp1aotCldp4E06tt4czYoyCF49MDLsPRv
+         bf2xPGnt09zD8gkFWNwK0rZbdpdVvsN5xVgj/TYWswYMTc6prNXiLmrQmUHq7kRgvg0E
+         aKgc/SvC5ic3AGnV56Rj6GJBcJI1xmLmu89+GU6r0O7DEjnvgczutAgv5qaDDsVuLo42
+         oj1C0lpqzUQlqrG4tNjDYfcNylV1KShxlchDaQak8v4s4lsA6KMZ4VoG4CqPyjkjgTm8
+         wG6OuJnQBDpd7PvE4IJNfRykFeJlTgpNADhf7tbU6R21Dr+zW4rnVqOlDCWlbB9WIqb8
+         3P7w==
+X-Forwarded-Encrypted: i=1; AHgh+RozzgKbaIfDUxvbgTssp5D4b5BJaFik7Pba88Wkr4PnSG/LIgBHVxdsjaqDVtzXWJ6qEHRfVy1mO/m/k6DirpM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYNOVwDwIs7t1UfcLjNDkVOe4Nbcg0pXl54mDFQUBXrah3UtQw
+	H87SRa606q87hy4DmXE6uTlFdEglQQKgEhh3xXQrEINbCi43IJ6kH0o4qzs46Y9JxGbWverAIWg
+	KYqJv8w==
+X-Received: from pldd1.prod.google.com ([2002:a17:902:c181:b0:2ce:fa2c:7de3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e943:b0:2d5:d9c2:bbe0
+ with SMTP id d9443c01a7336-2d5d9c2d7c1mr101010605ad.4.1787070471132; Tue, 18
+ Aug 2026 09:27:51 -0700 (PDT)
+Date: Tue, 18 Aug 2026 09:27:50 -0700
+In-Reply-To: <8d069fe1-a5b6-4a86-9604-26aebe2dc243@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Message-Id: <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
-In-Reply-To: <20260818153202.90714-1-leon.hwang@linux.dev>
-References: <20260818153202.90714-1-leon.hwang@linux.dev>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test for percpu data
-From: bot+bpf-ci@kernel.org
-To: leon.hwang@linux.dev,bpf@vger.kernel.org
-Cc: ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,leon.hwang@linux.dev,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Tue, 18 Aug 2026 16:15:07 +0000 (UTC)
-
---===============8419694916487994497==
+Mime-Version: 1.0
+References: <20260803170825.925561-4-hisamshar@gmail.com> <20260817220457.554823-3-hisamshar@gmail.com>
+ <aoOKMeua-cNeTxXT@google.com> <8d069fe1-a5b6-4a86-9604-26aebe2dc243@gmail.com>
+Message-ID: <aoSIBnFfy4osa6wt@google.com>
+Subject: Re: [PATCH v2] KVM: selftests: Replace ulong with unsigned long
+From: Sean Christopherson <seanjc@google.com>
+To: Hisam Mehboob <hisamshar@gmail.com>
+Cc: kvm@vger.kernel.org, pbonzini@redhat.com, shuah@kernel.org, 
+	linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> index 5671c31085cd..2b69290bcc3e 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+On Tue, Aug 18, 2026, Hisam Mehboob wrote:
+> On 8/18/26 03:24, Sean Christopherson wrote:
+> > On Tue, Aug 18, 2026, Hisam Mehboob wrote:
+> > > Gentle ping on this patch; it has been on the list since Aug 3 without
+> > > any comments.
+> > 
+> > Patience, please.  This is on my list of things to grab for 7.4.  You posted right
+> > at the end of a cycle, shortly before the merge window, and the code in question
+> > has existed for years, i.e. it didn't seem urgent enough to squeeze into 7.3.
+> > 
+> > If this is the very last thing needed to unblock musl builds of KVM selftests,
+> > than that changes things, but IIRC there are other "fix selftests builds with musl"
+> > patches floating around.
+> 
+> No, this isn't the last blocker. I verified with musl-gcc on x86_64:
+> with only this patch applied, the build still fails in steal_time.c on
+> pthread_attr_setaffinity_np() -- it also needs your task-pinning fix
+> ("KVM: selftests: Use KVM's task pinning APIs in steal_time", which I
+> resent). With both applied, the musl build passes.
 
-[ ... ]
-
-> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
->  	test_global_percpu_data_lskel__destroy(lskel);
->  }
->
-> +#define PAGE_SIZE 4096
-> +
-> +static void test_global_percpu_data_map_resize(void)
-> +{
-> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
-> +	struct test_global_percpu_data *skel;
-> +	const int arr_value = -1;
-> +	struct bpf_map *map;
-> +	int err, prog_fd;
-> +	size_t data_sz;
-> +
-> +	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
-> +		test__skip();
-> +		return;
-> +	}
-> +
-> +	skel = test_global_percpu_data__open();
-> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
-> +		return;
-> +
-> +	map = skel->maps.percpu_arr;
-> +	skel->percpu_arr->arr[0] = arr_value;
-> +	err = bpf_map__set_value_size(map, desired_sz);
-
-This isn't a bug, but since the guard above already pins the page size to
-4096, would `const __u32 desired_sz = PAGE_SIZE * 2;` read more directly
-here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
-`#ifndef PAGE_SIZE` form used in sockopt.c?
-
-> +	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
-> +		goto out;
-> +	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
-> +		goto out;
-> +	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
-> +		goto out;
-> +
-> +	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
-> +	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
-> +		goto out;
-> +	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
-> +		goto out;
-
-This isn't a bug, but would it read more consistently with
-test_global_percpu_data_init() to check ASSERT_OK_PTR(skel->percpu_arr)
-before ASSERT_EQ(data_sz, desired_sz)? The block this replaces checked
-pointer-then-size, and the surviving test_global_percpu_data_init() at the
-same file still does pointer-then-size.
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32156312094
---===============8419694916487994497==--
+Oh, so on top of "https://github.com/kvm-x86/linux.git next", this *is* the last
+blocker?  If so, then I'll grab this for 7.3.
