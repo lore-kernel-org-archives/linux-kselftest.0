@@ -1,185 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E38B3DAAAC;
-	Tue, 18 Aug 2026 10:25:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A2A379C23;
+	Tue, 18 Aug 2026 10:29:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787048753; cv=none; b=LKDcVVtB+BnslabaCi1uLkQz4QsnjZj+1wul8gIYgBQ/ULpACGNhjW+bBTComOFNA62luZwWW3lsZ9ucUzzmPpKqcnNEdr+0mK5bLELFl64BYNvk8BfH54GqezpBbY3fgzUuvp2QPHAlcWYA1KNJbkMwvt6WKsIJzXJK4WqoG2A=
+	t=1787048989; cv=none; b=KWHk863tYXuAdyDWPV431H6N0shhryL37fUaU1GFLUlf5Fe363Y6i822r/uVLtoI3SIwr3cEt8gkXRKKoo0L0J0COIb/e4hAHrTn56aUAt7tGSgQ+c4HW102keAaLRxdRfusk/z0m2a8Iky9udngIK1X/P6hESIWgxQ+9cJe2tM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787048753; c=relaxed/simple;
-	bh=H+7KrMZXmNJamgCTdpD3g3rAhaqNEBVgqDVjtH9VAWc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f+pWoQOiJv3FgMLfdOF/26IO0FyBbf2EF2PIlNvKXWCwaQN+Vj/O2w7qs0v79EnfwwrRREON/nU7PJHBuquG4aoEYmoGV/1Z8SRWNIJptdqgEBg00pYtQ4cOOPAbSe464CxrWn9BtjypYulSWwPPXAMqVjqsyPKPz7/m8JeRNQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iQGfEf4S; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787048989; c=relaxed/simple;
+	bh=NcXMhbxnhdJjpu9qU4Me9JanRh/TkL9U8EJdJW7KG5c=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T6CQvCYC/d4lmRl843/l6H6MurJdrgpw3sMiz2EQkBjfQTfzuEhoC8PBrV1UGv5oczcgi9icjDzArqdjWgB0tXhQSx6of80K7JDp979tbIPdh8jBfsORPujQ0ulMhrvFA+VqO67rcxjlMGoDqPSfZ01cKz+5ijTGpGxG40lVwzM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=t0ljEPB9; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iQGfEf4S"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E7A71F000E9;
-	Tue, 18 Aug 2026 10:25:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787048749;
-	bh=9venlAYI7bc+4UF3P+DsNZ7UbsjWk6/adcKmtx/yJEs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=iQGfEf4Sjm0ecEEdEi7v/xrseuBpYZHAmo+r1TVdH/Suu9l1kSwUkIpdROZ8L9Bba
-	 7Rtbzq39W022yjAIC+ffKOFr9Jgo5oN0JCCv3evZG6Pgnv+Gu/Z5n/+wLuNYpRzjp3
-	 HUuyxmJBiQCQENoSTw/vN61x5nNYf+HCAlXpZyl/2LI1yE7y/WqTWhU+WR8y7/Ooln
-	 n5w40LWFVGT2AQuHtpxwROQwqIhKsX+uirM48GMhGbvgdtniYn7fnLDmKEydrr0wP/
-	 XcoPdKamXHCfApYT5TfAJZoYe08HtZG1BtwhDh2sfJk8RYitTOOje0mNWb1ZQoVH5X
-	 hAS8Pl5ntln5w==
-Date: Tue, 18 Aug 2026 11:25:27 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, david@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kas@kernel.org
-Subject: Re: [PATCH v4 08/19] selftests/mm: add folio-order check for address
- ranges
-Message-ID: <aoQxLVg3IsTuA9NE@lucifer>
-References: <20260815015901.1236937-1-kirill@shutemov.name>
- <20260815015901.1236937-9-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="t0ljEPB9"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
+	Content-Description:In-Reply-To:References;
+	bh=nG+UO/T3C618sy0QM2BjHBC8fO/2QvZ9MjdkEruPCjA=; b=t0ljEPB9Kzfs2NtfwQlTw38Vsw
+	t8y821WHsvmFNpdq3ZWmWL8XDuN0ba5CGYDniVWKzjPXXlsLhPHXFWhroOHu2ga1SL9O2IM8pSipH
+	MtoLQN9jCYh3YDyA8xoNJG9gYlfBcqMND8b/yWAnMaygcySXcVbgPzGISMDNUUHt/fLte7/2NZbhH
+	dvtzNQWyED4kryZrIpx2Iol88jf69YhcKupqOTD/TnRArq1Htn+vcVKiprzD8NEwwghIKpDMjGXva
+	zwChtFL0gnvwEVHCRrsixPuQ35K+jh2JvdnBr3dHrPs449OH5y+PXmksEaWvHiaIc+J/+n9dLPamk
+	sAeAb/Gw==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wwH4e-008x5j-1E;
+	Tue, 18 Aug 2026 10:29:40 +0000
+From: Breno Leitao <leitao@debian.org>
+Subject: [PATCH net-next RFC 0/6] netconsole: Support messages
+ ratelimit-ing
+Date: Tue, 18 Aug 2026 03:29:10 -0700
+Message-Id: <20260818-netcons_ratelimit-v1-0-8c5d2d17789c@debian.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260815015901.1236937-9-kirill@shutemov.name>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPYzhGoC/x3MQQrCMBAF0KsMf91AGrXRbAUP4FZEYhx1QKeSD
+ FIovbvgO8Cb0bgKNySaUfkrTUZFor4jlGfWBzu5IRGCD4Pf9tEpWxm1XWo2fslbzA1hd/XrHFd
+ lE9ERPpXvMv3PE5TNKU9Gx8Me52X5ATZf+ztxAAAA
+X-Change-ID: 20260817-netcons_ratelimit-629b04a73c57
+To: Andrew Lunn <andrew+netdev@lunn.ch>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+ Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>
+Cc: paulmck@kernel.org, davej@codemonkey.org.uk, riel@surriel.com, 
+ gustavold@gmail.com, asantostc@gmail.com, netdev@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, samuelcrossley@gmail.com, 
+ Breno Leitao <leitao@debian.org>, kernel-team@meta.com
+X-Mailer: b4 0.16-dev-f8e9d
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3016; i=leitao@debian.org;
+ h=from:subject:message-id; bh=NcXMhbxnhdJjpu9qU4Me9JanRh/TkL9U8EJdJW7KG5c=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqhDQOD82f4VBDHqB7jgdKEa2El0ZjHb/dfAvxN
+ ja16QDqG6uJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCaoQ0DgAKCRA1o5Of/Hh3
+ bU7oD/9pqgMtJtJxWhVBMBZToblzWDCPnPG8qmxWNOm6sv0visVHMkdTNnb5MCvV3QkwwvkV7is
+ PGlW14KBIMSJHpTaFhLGoLEltYdPR6IxcdMlWYbjXRt/nrAidLoI/Wc7duCn41yAtlQWK/3ZexL
+ kpdR+FIqBVb6ArOrcl4Mc+We4X8QWGpTa0Ny4TElN+marFOdN1KBxqTm1pYNah2ePqR2N2Q/ADV
+ h6l4YOF1fhmtuvGpIPIIlzQH/mZ4jsgvPyIEg0vdV6n8WHVBqRcwX1p2BXklzPd0un+S2vN5R72
+ Vd1AhVXKiNadD1JOIlVKwgE56joWx/XeFSmXDjqnY0IHkNPU2gJ341IY/sCDQGwQKnBrlOi5lCa
+ hLS+gMBUmvushwe7oGESownkHz2rdPdp2DKb33efXwruev7wSYxrRZPHEMfQTvvLxOK9dHiUHHu
+ piO37k7E23qa2ThPRDY7iZ7Rd037bfb3g4PaTzMsnMoYAnUH7SgzCc8OAAElg0QJdRt9uPDfUJB
+ ioY1vWFOrKf0nxviXIXvTgHCmqpkyA30uJPhZvGqU1hmIgCnbzJQaugCHevmljAYx85yBONs4qP
+ h/ORaI7a6+sap6QdQ3kWx5DrL363pmajFCJNvKEKEm+OJ8pmg035Zo73Sw7zwfiMT/VgzoMaR/n
+ i4nw5DeIP2AVYzQ==
+X-Developer-Key: i=leitao@debian.org; a=openpgp;
+ fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
+X-Debian-User: leitao
 
-On Sat, Aug 15, 2026 at 02:58:50AM +0100, Kiryl Shutsemau wrote:
-> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->
-> An mTHP collapse test needs to know that a range is backed by folios of the
-> target order, and that they sit where a collapse would put them.  Nothing
-> answers that today: is_backed_by_folio() classifies the folio behind a
-> single page, and check_huge_anon() reads smaps AnonHugePages, which only
-> accounts PMD mappings.
->
-> Add is_range_backed_by_folio_orders().  For every order-aligned window of
-> the range it requires a present head PFN at its natural alignment and a
-> contiguous PFN run across the window.
->
-> A window backed by two smaller folios fails the contiguity check, and a
-> folio mapped off the window's alignment fails the head check.  The mTHP
-> cases need both to tell a collapsed window from the one beside it.
->
-> Assisted-by: Claude-Code:claude-opus-5
-> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> ---
->  tools/testing/selftests/mm/vm_util.c | 42 ++++++++++++++++++++++++++++
->  tools/testing/selftests/mm/vm_util.h |  2 ++
->  2 files changed, 44 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 5db1a7774f49..c9bd6c92fa41 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -556,6 +556,48 @@ bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
->  	return false;
->  }
->
-> +/*
-> + * Check whether every order-@order window of [start, len) maps exactly one
+netconsole hands every console message to every enabled target, with no
+bound on the rate.
 
-Strange to reference @order in a non-kdoc comment. And then to start referring
-to start and len without @? :)
+At Meta, a few hosts caused some DoS and netconsd was OOM killed in
+some regions, fed by 3 billion RCU messages from thousand hosts and by
+a swap fault that retries forever, which logged 6 million copies of one
+line on a single host in a few hours.
 
-And I'm not sure 'window' is really clear here as a term...
+Both floods are being fixed where they are printed, by Paula and me for RCU
+Tasks [1][2][3] and by me for swap faul fix [4], but that only ever
+covers the flood already found, not new issues that might be happening.
 
-> + * folio of that order, head to tail.  The address range must be naturally
-> + * aligned, each window's PFN run must be contiguous, and a window's first
-> + * PFN must be the folio head.
+Use the ratelimit in the kernel to ratelimit messages from netconsole.
 
-Also 'PFN run' is adding a new vague term.
+Give each target a token bucket, consulted once per message so that a
+message split into several ncfrag packets is sent whole or dropped
+whole.
 
-> + *
-> + * This is the check "did this range collapse into order-@order folios": a
-> + * window assembled from parts of several folios, or mapping a folio shifted
-> + * from its natural position, fails.
+It starts with a zero interval, which struct ratelimit_state treats as
+unlimited, so nothing changes until ratelimit_interval_ms and
+ratelimit_burst are written.
 
-I think you could simplify this to something like:
+What the bucket discards is reported on the wire, so the receiver sees
+"netconsole: 45 messages dropped by rate limit" rather than an
+unexplained gap. This is what is captured on netconsd, when this patch
+is applied:
 
-	Check that the buffer @start of @len bytes is mTHP-backed by @order
-	folios wholly contained within the range.
+	7.2.0-rc7-01460-g75848acaf136,13,628,252392647,-;netconsole selftest: netcons_AGujw 1
+	7.2.0-rc7-01460-g75848acaf136,13,629,252392782,-;netconsole selftest: netcons_AGujw 2
+	....
+	7.2.0-rc7-01460-g75848acaf136,4,0,254742176,-;netconsole: 45 messages dropped by rate limit
+	7.2.0-rc7-01460-g75848acaf136,13,678,254742125,-;netconsole selftest: netcons_AGujw 1
 
-	This requires that @buffer is aligned to @order and that every folio
-	is fully contained head-to-tail.
+Crash output is exempt. The bucket is skipped while oops_in_progress is
+set, so a limit configured for steady-state logging cannot cost a target
+part of an oops or a panic.
 
-	Returns: true if wholly mTHP backed, false otherwise.
+[1] https://lore.kernel.org/all/anw8Qw8lfeIykski@gmail.com/
+[2] https://lore.kernel.org/all/20260810-rcu_task_shrink_lruvec-v1-1-4d9f7d5251cb@debian.org/
+[3] https://lore.kernel.org/all/20260810-rcu_task_shrink_lruvec-v1-1-4d9f7d5251cb@debian.org/
+[4] https://lore.kernel.org/all/20260813-swap-v2-0-4a625ccabdae@debian.org/
 
-> + */
-> +bool is_range_backed_by_folio_orders(char *start, size_t len, int order,
+Signed-off-by: Breno Leitao <leitao@debian.org>
+---
+Breno Leitao (6):
+      netconsole: add a per-target message rate limit
+      netconsole: allow configuring the rate limit interval through configfs
+      netconsole: allow configuring the rate limit burst through configfs
+      netconsole: tell the target when the rate limit drops messages
+      docs: netconsole: document rate limit feature
+      selftests: netcons: test the per-target rate limit
 
-is_range_mthp_backed() seems a lot clearer?
+ Documentation/networking/netconsole.rst            |  43 ++++++
+ drivers/net/netconsole.c                           | 145 +++++++++++++++++++
+ .../selftests/drivers/net/netconsole/Makefile      |   1 +
+ .../drivers/net/netconsole/netcons_ratelimit.sh    | 160 +++++++++++++++++++++
+ 4 files changed, 349 insertions(+)
+---
+base-commit: e6a5d573d24cd375e09d24f136523cb3cc85c9d3
+change-id: 20260817-netcons_ratelimit-629b04a73c57
 
-> +				     int pagemap_fd, int kpageflags_fd)
-> +{
-> +	const unsigned long nr_pages = 1UL << order;
-> +	const size_t window = nr_pages * psize();
+Best regards,
+--  
+Breno Leitao <leitao@debian.org>
 
-folio_size seems clearer?
-
-> +	char *vaddr;
-> +
-> +	if ((uintptr_t)start % window || len % window)
-> +		return false;
-> +
-> +	for (vaddr = start; vaddr < start + len; vaddr += window) {
-> +		unsigned long pfn = pagemap_get_pfn(pagemap_fd, vaddr);
-
-NIT: can const-ify.
-
-> +		unsigned long i;
-> +
-> +		/* Not present, or not mapping the folio head. */
-
-'Or a tail page' maybe?
-
-> +		if (pfn == -1UL || pfn % nr_pages)
-> +			return false;
-> +
-> +		for (i = 1; i < nr_pages; i++) {
-> +			if (pagemap_get_pfn(pagemap_fd, vaddr + i * psize()) !=
-> +			    pfn + i)
-> +				return false;
-> +		}
-
-NIT: can drop the {}.
-
-> +
-> +		if (!is_backed_by_folio(vaddr, order, pagemap_fd,
-> +					kpageflags_fd))
-> +			return false;
-> +	}
-> +
-> +	return true;
-> +}
-> +
->  /* If `ioctls' non-NULL, the allowed ioctls will be returned into the var */
->  int uffd_register_with_ioctls(int uffd, void *addr, uint64_t len,
->  			      bool miss, bool wp, bool minor, uint64_t *ioctls)
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 56a28ce7d029..39dfb18dc10c 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -99,6 +99,8 @@ int gather_folio_orders(char *vaddr_start, size_t len,
->  		int pagemap_fd, int kpageflags_fd, int orders[], int nr_orders);
->  bool is_backed_by_folio(char *vaddr, int order, int pagemap_fd,
->  			int kpageflags_fd);
-> +bool is_range_backed_by_folio_orders(char *start, size_t len, int order,
-> +				     int pagemap_fd, int kpageflags_fd);
->
->  int uffd_register(int uffd, void *addr, uint64_t len,
->  		  bool miss, bool wp, bool minor);
-> --
-> 2.54.0
->
-
---
-Cheers, Lorenzo
