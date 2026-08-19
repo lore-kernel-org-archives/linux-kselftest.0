@@ -1,131 +1,305 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D772B3F7A98;
-	Wed, 19 Aug 2026 07:57:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CB34229C6
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 08:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787126252; cv=none; b=eMibsPyt8pmAnAvHUCzGaJdo28znGkB0PCEqt06ckOcabL4soD5NKTkKCSwvavgd9VbqX70gQp3JHQqPZrgr/c8u7RciAAB+bO8Wwxql6okfL9oUUe0UAagQAIBhVhraF+zD/7t95KXKLkaF44KnymMnTGezKzu+61qNI8DN19o=
+	t=1787128582; cv=none; b=AbPr9qJrZEF0Dsp3Q1f01OOPjQkzeFNOd6icW7GVds7qOqV8T7RzhAUPUn/Dygfq+cJ6xy7Zh2YsQcEiqW+ekqagQ6UXuNd9Nj1B7A65NvdH880sJgWtHiQ4sqessHaVZllqRXxrMu48l7ez6P2jnCbvY9qMx8NCv1aYxyWHTFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787126252; c=relaxed/simple;
-	bh=Yjb3HaYueYjDzLLbcVoLxBPz7PPNlF+jTqfxIZD2YBo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jyMNn9FkjZh1Vis2+JPF6LxHNFKw+r218yoJCm8PsnXN1z3fi08t3SFQp+qLPNFvvbU1bcfLF/szFBu1rpIacmf5U6aaMeUaZcK+t59IsftAasEUxzlZahqvpA/aqJhKWLRfof/5ivTi9Wec0nu+WNkbgfff1IgT5+aR8BsvD+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XclZTENh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787128582; c=relaxed/simple;
+	bh=3UXWrQt3nPal1M5oiy154T5Gr08VLE54jxv0n6xnO+8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pw0L9D//cYgoF3QLxbZOUlS1k6iX5kAGc4e6NEOgVY67eLvCqLUcyVkGueqfuNzOTNJ3Pk6/6IuMOSlwctuHSX0zR/vGAGzAhfd6riiSy5X95OvkrHIGXX6tcJQZq34m+AXTe/CXeGupTkAw2Wh6jjH65iLHShHC77J9SH6ad10=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OANRdORJ; arc=none smtp.client-ip=209.85.214.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XclZTENh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F67F1F000E9;
-	Wed, 19 Aug 2026 07:57:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787126242;
-	bh=MI6YQwP4SWJEe9zoMRqOZtzYnGrY3Rx8FpYxOJDFbeM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=XclZTENhz4WuwaHYEbQt4QCMy8qz6n8allqXp109CpNeGNQuRxbrm2KAesDgES/Gm
-	 HU8Qmct9zfEMFub3+Rc9FHj8GhivKIbgCpzmRKiLvOGbsTHTNOcDq6g2J9iCVolevJ
-	 iyowr83xc3X2mSv0NU3ksdaUJE1UfPwjAKXy2q8YU8mtrW2ujRFrL4r9epR28CTVZ9
-	 b7fDFWpRQLqqQriqnckobQ04hyOQs9j4R3Nrl7MOJipq8Jq5hb7HzhBQMKxGT8GfOO
-	 oIM0AfINe6xqwdqpbbx8l1E422TJwoW0FwuIUPB0uv/CDbqWIewiJM9+LlB4vKzf39
-	 TUy5KR9OXVhPw==
-Message-ID: <41da530d-c3fb-471a-90ba-ab4d9b58829f@kernel.org>
-Date: Wed, 19 Aug 2026 09:57:05 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OANRdORJ"
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ceab75934dso8477015ad.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 01:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787128580; x=1787733380; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=NjK48y+gInVL/DFMKlcFgreu40jMGHPWay1upkkwKro=;
+        b=OANRdORJEtwOwZBAlZjSKB3zK8qW6QKLbASy9A3Yd7FeiJESUIpG9OFKiz56I5Tr3S
+         u8rYZESD1j4sgvfXUzBuPRnGGp8P7yeVald3svwZGEeZEw3TgqatckQb/sylxXKyOfHs
+         Z5r7xL1byDE3ozBKzu5GzlSCb56x/3Wnixtoj0+P0rZ1szJD7eg21WFE0Gyz4slnPzMh
+         90GBsnRQfw1TdzaZ0xPpxrKyf0YoypujGsXQqC7gjmF3MQ7+SFRYhsfG5lCKBbPaU5h4
+         nNynvebsFHMlMxa9C2+/KedtFsCcKYHt4H7OPQCH83Fh++5uDG/sCwJ1o6Vg/nvA08r1
+         0Dlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787128580; x=1787733380;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=NjK48y+gInVL/DFMKlcFgreu40jMGHPWay1upkkwKro=;
+        b=XlA4aPRh8zT3lkp1Nj1i36w1uyoVbRgC6Z0ARQMPL8qEG6r+lT9JLBLw77Tc5Rf0qM
+         2wfBA+91T6sjLY+YFO2XiDROprBaNCTgX1mRtZl8Mtol9dYQs1G4WC+/aE3Ov8mUX2S+
+         aDgjscU8PcUQRexy8EMsvk6Ery0+KoQWu4tHgOnCeKLAaGVdxrJHG8Rrca5gI9Yf/gQR
+         WY6lLOr/dPx0BV1pscD9weXzE2jfP6FgDV1dG+0cAdrgvwJFjhpLFdshr7FhaRS6PD0W
+         LkzepJYUh98zXUIJPYg2TdKuvupZ+G9ZDTFP24qye3pa2DoNWFIVqwZeyv81uQbFrDJd
+         ezeA==
+X-Forwarded-Encrypted: i=1; AHgh+RrcLsnEFqPYaSqi+9koIK8jBJ18JdtzJ+O0Mt3XppqvkoduMcH3LmPjf8lvYnMx+JK3ivvTeiV7+2T5KHZl8R4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyA0cQ8nIRoegh+WT9vnRSywKPWhCuzDTw+T8aBRo+LCyrEgSue
+	FQ5eayBr1xo34R+6fx2LzBa9h2mGG95Yk2Kg7F5Ogrx6KYWTBSTSylxI
+X-Gm-Gg: AR+sD108/tB5zhJOenUghDlH+btSfFYXMFX5iW283/X6Lh1fCe3bi5AdgHcIJlGeuYB
+	zgvkf6d0Ldc+Qie2iaeAWXaeC3pqy0utr1dGFVFwCrSB9x+FIkRpiF9X3mBATDBhz3Wx4roZGqL
+	YIhGtBWLnylcKve7N8aRlAi2D5lPLZT+0sbFGe2MPn0AA9rq+RZJ3FJdPYkimjo4/ilPKgUZX56
+	+3mH0BMUsLETDrIWZcaXxfC8fkvIglhV0Hux1Fs6mJOQ7zvQV7nj18F5PDOZVuhPLoRejWHl7q0
+	jw0jf7sOYra44GCCh4MXxlexEM28wQVyUcgchDAmQmBqa2+4nIqcWGYmGJYt77R0AOJyzX8BBMF
+	Y7JzJocPxDTPWrHFg6k4fKVc9kPu9+dJ18tk49n+UNx44SGdDTnttkklxBNHRW+2Sh1dACrKQND
+	yVaS3S85fKO0s3erG0QP9BiY8E97Kt27roPXf2GqXzd+/cPGAdVr5VDLvITKtO8kJSoP/lNjLds
+	5x8UWFEc+I=
+X-Received: by 2002:a17:903:2bce:b0:2d5:ccb7:12c3 with SMTP id d9443c01a7336-2d5fd59f837mr58430075ad.2.1787128579467;
+        Wed, 19 Aug 2026 01:36:19 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf143775sm5089413eec.23.2026.08.19.01.36.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2026 01:36:19 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Koutny <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Guopeng Zhang <zhangguopeng@kylinos.cn>,
+	Sebastian Chlad <sebastian.chlad@suse.com>,
+	Waiman Long <longman@redhat.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	Hemanth Selam <hemanth.selam@gmail.com>
+Subject: [PATCH] selftests/cgroup: set the test plan after the setup checks
+Date: Wed, 19 Aug 2026 14:06:00 +0530
+Message-ID: <20260819083600.1351711-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
-To: Rik van Riel <riel@surriel.com>, Kiryl Shutsemau <kirill@shutemov.name>,
- akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev
-Cc: baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
- usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kas@kernel.org, jannh@google.com, willy@infradead.org, pfalcato@suse.de,
- rostedt@goodmis.org, mhiramat@kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-2-kirill@shutemov.name>
- <905d08d102e56a026a5ad69573c507d2d9becc37.camel@surriel.com>
- <c05f7bfb-c84b-4c36-8091-5ec7721a658b@kernel.org>
- <edcebef940c262a83421666de67e8a07ca93e85d.camel@surriel.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <edcebef940c262a83421666de67e8a07ca93e85d.camel@surriel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/18/26 22:04, Rik van Riel wrote:
-> On Tue, 2026-08-18 at 20:13 +0200, David Hildenbrand (Arm) wrote:
->> On 8/18/26 18:38, Rik van Riel wrote:
->>>
->>> Oh nice, this could clean up some things in the
->>> get_user_pages code too, when we get around to
->>> tech debt there.
->>
->> We really need the page in GUP code ...
-> 
-> Ugh, indeed. COW can create "holes" in the middle of
-> a large folio, so even __access_remote_vm() will
-> continue to need pages.
-> 
-> I guess we'll continue to look up both page and
-> folio in that code, then :/
-> 
+The cgroup tests announce their plan before checking whether cgroup v2 is
+available, so on a host without it they promise a number of results and
+then skip out after the first one:
 
-Yeah, and it will be more fun once we decouple pages from folios, because then a
-page_folio() will be allowed to fail.
+	TAP version 13
+	1..3
+	ok 1 # SKIP cgroup v2 isn't mounted
+	# Planned tests != run tests (3 != 1)
+	# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
 
-(more GUP work, including in GUP users, is required to support that)
+ksft_exit_skip() can only emit a well formed "1..0 # SKIP" line while no
+plan has been printed, as the comment above it in kselftest.h points out.
 
+Move ksft_set_plan() below the setup checks that can skip, so that a
+skipped run reports:
+
+	TAP version 13
+	1..0 # SKIP cgroup v2 isn't mounted
+
+Several of the tests skip more than once while setting up, for a missing
+or unwritable controller as well, so the plan goes after the last of
+them.  test_core joins its two setup paths at the post_v2_setup label and
+sets the plan there.
+
+Reporting each planned test as skipped instead would keep the plan where
+it is, but the setup failures here mean the whole test cannot run rather
+than its individual cases being skipped, which is what "1..0 # SKIP" is
+for.
+
+Fixes: 1dc830ee4c15 ("selftests/cgroup: conform test to KTAP format output")
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+---
+ tools/testing/selftests/cgroup/test_core.c       | 2 +-
+ tools/testing/selftests/cgroup/test_cpu.c        | 2 +-
+ tools/testing/selftests/cgroup/test_cpuset.c     | 2 +-
+ tools/testing/selftests/cgroup/test_freezer.c    | 2 +-
+ tools/testing/selftests/cgroup/test_kill.c       | 2 +-
+ tools/testing/selftests/cgroup/test_kmem.c       | 2 +-
+ tools/testing/selftests/cgroup/test_memcontrol.c | 2 +-
+ tools/testing/selftests/cgroup/test_pids.c       | 2 +-
+ tools/testing/selftests/cgroup/test_zswap.c      | 2 +-
+ 9 files changed, 9 insertions(+), 9 deletions(-)
+
+diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
+index 88ca832d4fc1..64f4962a4659 100644
+--- a/tools/testing/selftests/cgroup/test_core.c
++++ b/tools/testing/selftests/cgroup/test_core.c
+@@ -927,7 +927,6 @@ int main(int argc, char *argv[])
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), &nsdelegate)) {
+ 		if (setup_named_v1_root(root, sizeof(root), CG_NAMED_NAME))
+ 			ksft_exit_skip("cgroup v2 isn't mounted and could not setup named v1 hierarchy\n");
+@@ -940,6 +939,7 @@ int main(int argc, char *argv[])
+ 			ksft_exit_skip("Failed to set memory controller\n");
+ 
+ post_v2_setup:
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
+index 7a40d76b9548..8f96bfd19ab9 100644
+--- a/tools/testing/selftests/cgroup/test_cpu.c
++++ b/tools/testing/selftests/cgroup/test_cpu.c
+@@ -799,7 +799,6 @@ int main(int argc, char *argv[])
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -807,6 +806,7 @@ int main(int argc, char *argv[])
+ 		if (cg_write(root, "cgroup.subtree_control", "+cpu"))
+ 			ksft_exit_skip("Failed to set cpu controller\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
+index c5cf8b56ceb8..52ed8fba685a 100644
+--- a/tools/testing/selftests/cgroup/test_cpuset.c
++++ b/tools/testing/selftests/cgroup/test_cpuset.c
+@@ -250,7 +250,6 @@ int main(int argc, char *argv[])
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -258,6 +257,7 @@ int main(int argc, char *argv[])
+ 		if (cg_write(root, "cgroup.subtree_control", "+cpuset"))
+ 			ksft_exit_skip("Failed to set cpuset controller\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
+index 0569e93fa6b0..f28bb02e9783 100644
+--- a/tools/testing/selftests/cgroup/test_freezer.c
++++ b/tools/testing/selftests/cgroup/test_freezer.c
+@@ -1491,9 +1491,9 @@ int main(int argc, char *argv[])
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
+index f6cd23a8ecc7..99cafd9dc013 100644
+--- a/tools/testing/selftests/cgroup/test_kill.c
++++ b/tools/testing/selftests/cgroup/test_kill.c
+@@ -278,9 +278,9 @@ int main(int argc, char *argv[])
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
+index 1db0ba1226b9..cb47561b4b44 100644
+--- a/tools/testing/selftests/cgroup/test_kmem.c
++++ b/tools/testing/selftests/cgroup/test_kmem.c
+@@ -426,7 +426,6 @@ int main(int argc, char **argv)
+ 	int i;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -441,6 +440,7 @@ int main(int argc, char **argv)
+ 		if (cg_write(root, "cgroup.subtree_control", "+memory"))
+ 			ksft_exit_skip("Failed to set memory controller\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
+index 0ebf796f3cff..3a84d068fbf3 100644
+--- a/tools/testing/selftests/cgroup/test_memcontrol.c
++++ b/tools/testing/selftests/cgroup/test_memcontrol.c
+@@ -1798,7 +1798,6 @@ int main(int argc, char **argv)
+ 		page_size = BUF_SIZE;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -1823,6 +1822,7 @@ int main(int argc, char **argv)
+ 		ksft_exit_skip("Failed to query cgroup mount option\n");
+ 	has_localevents = proc_status;
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
+index 9a387c815d2c..710109b53dfe 100644
+--- a/tools/testing/selftests/cgroup/test_pids.c
++++ b/tools/testing/selftests/cgroup/test_pids.c
+@@ -148,7 +148,6 @@ int main(int argc, char **argv)
+ 	char root[PATH_MAX];
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -163,6 +162,7 @@ int main(int argc, char **argv)
+ 		if (cg_write(root, "cgroup.subtree_control", "+pids"))
+ 			ksft_exit_skip("Failed to set pids controller\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
+index 49b36ee79160..6e7b89315bbf 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -810,7 +810,6 @@ int main(int argc, char **argv)
+ 		page_size = BUF_SIZE;
+ 
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(tests));
+ 	if (cg_find_unified_root(root, sizeof(root), NULL))
+ 		ksft_exit_skip("cgroup v2 isn't mounted\n");
+ 
+@@ -827,6 +826,7 @@ int main(int argc, char **argv)
+ 		if (cg_write(root, "cgroup.subtree_control", "+memory"))
+ 			ksft_exit_skip("Failed to set memory controller\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(tests));
+ 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
+ 		switch (tests[i].fn(root)) {
+ 		case KSFT_PASS:
 -- 
-Cheers,
+2.43.7
 
-David
