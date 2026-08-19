@@ -1,158 +1,128 @@
-Received: from sender5-op-o15.zoho.com (sender5-op-o15.zoho.com [165.173.182.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-105.mta0.migadu.com [91.218.175.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF976367B90;
-	Wed, 19 Aug 2026 01:15:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=165.173.182.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787102147; cv=pass; b=qj8VgG0xH0UwjR4uB5pYgObcb3qKQSqEWa5yjV1q+lZA/8v8sL+nMDDeQzu8Co7NDlom3xJtLOrgqxXTuo96XQBTAqEZ8wrEH8YBaP1jqesTOV/EnHSw81JJUA2Ci/IxH34VCJilRunTsztCNUynhmvgYyBCwzG3jvkzyOLhgHI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787102147; c=relaxed/simple;
-	bh=iWF4sj6xmzNEKIMaQBKku5GRthkNL3Wi6iteaBUvH2g=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=qvN7VhPbTnovA9hkY1eOjuvGJ0yJfIIJRQF7FDtOZwL8iuAF0CqL2cE0Vdbipe5YeM//12fD0I9xtzXRFIHzros4wF/TOI/s1iknoqJ29Dt5C4jlnU5zfKLoZwu5c4GVSgj7ZNdFE5QnxNO8K4mNEyO18W6PRIB5gJUiQg/JEsQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=iq64qdYC; arc=pass smtp.client-ip=165.173.182.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44A1735F5E4
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 01:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.105
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787103863; cv=none; b=ptWhDDSt6xS0GlduLRIHoCNy6LLlS3T8cfS/JKTNLgiH2A9YEyNFv1v9QD9V93/HVljYs/vR2GWaAeT0HuKGqqIcUPZSmY70bCoc7v9nJYqfHlQVxuIyRSiFiDlHJZTU1DYmXvPxeAmVeoXIcRSLcbANu2tQI0zZYxZMZxb/Qwo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787103863; c=relaxed/simple;
+	bh=dz5A4sctYbARLpdNgcUYQ80SJTmDzvQs4bCQgtkuEcQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tTyNiaiOHvOQymfUXwfhEvNRdPzWq3BJ/eqJaL5x1FRJfqQVcNRZvUGVt9g5/4GaubN28tLVOO/ShZb/Rbuni92ND/wM3xjtF8QF/6UJI4Xb+o0oHghRl2m9hcc+QmYXCIZ+H3m7O/8XRDLHyJO49E+tVXUoGwdWIsgLelTORfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=My0gWCGh; arc=none smtp.client-ip=91.218.175.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="iq64qdYC"
-ARC-Seal: i=1; a=rsa-sha256; t=1787102084; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Vb7w8BxrWfF9lHwWUjEbzRIx6KBRsUigHB1BIq5oHipa4Sd5jus0nZuCNwSMN16h13U89lzH6ju4G911GghpembRCVMf6Yw1CT8w/E/crZljRwsXmE/Li+OUqGXnCiffP8k9tD//Lp24NVcZUbhP1N5p4BakadY5nnGnGkrKlP8=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1787102084; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=Q+1yMs/TAg44PdtgHr4whUenCDXTlH65MGNSP0QkUgg=; 
-	b=WzWWhEtFLhl2pB77v6E9NVuvONhpfr1iSWuWwttJmBuNvgr+2o5q3xLfDp00t9v7wxA6TtHtnvNzvU8dXWIOvWkefjmVNqix8VmBZHLHfLyjsAfPFlptN+Qb3+HpTwx+l+7OFJPjiKQdWKN6Hk7kagCTpAvX98Wc1+Uk45k0X3w=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=linux.beauty;
-	spf=pass  smtp.mailfrom=me@linux.beauty;
-	dmarc=pass header.from=<me@linux.beauty>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787102084;
-	s=zmail; d=linux.beauty; i=me@linux.beauty;
-	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=Q+1yMs/TAg44PdtgHr4whUenCDXTlH65MGNSP0QkUgg=;
-	b=iq64qdYCSRkOo6W1o0SCny2QBrEIZAAUw+Q6FRFTCwzUHg5s0qfJmEOfHSz1ivlZ
-	DnhE8UtxYhGyGliZxovvaGRIYEAuZhGP9XmhynpPXodH7YfeM+jsfwNR5IstCYJqeee
-	qfOU1FA7TEkwqMY9QjgL3LcezQkk/TXcXATx/tvM=
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1787102084308142.55088526691668; Tue, 18 Aug 2026 18:14:44 -0700 (PDT)
-Received: from mail.zoho.com by mx.zohomail.com
-	with SMTP id 1787102081175753.1506133241837; Tue, 18 Aug 2026 18:14:41 -0700 (PDT)
-Date: Wed, 19 Aug 2026 09:14:41 +0800
-From: Li Chen <me@linux.beauty>
-To: "Justin Suess" <utilityemal77@gmail.com>
-Cc: "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
-	"Gabriel Krisman Bertazi" <krisman@kernel.org>,
-	"Josh Triplett" <josh@joshtriplett.org>,
-	"Mateusz Guzik" <mjguzik@gmail.com>,
-	"Andy Lutomirski" <luto@kernel.org>,
-	"John Ericson" <mail@johnericson.me>,
-	"Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
-	"Arnd Bergmann" <arnd@arndb.de>, "Oleg Nesterov" <oleg@redhat.com>,
-	"Andrew Morton" <akpm@linux-foundation.org>,
-	"Paul Moore" <paul@paul-moore.com>, "Eric Paris" <eparis@redhat.com>,
-	=?UTF-8?Q?=22Micka=C3=ABl_Sala=C3=BCn=22?= <mic@digikod.net>,
-	=?UTF-8?Q?=22G=C3=BCnther_Noack=22?= <gnoack@google.com>,
-	"Alexander Viro" <viro@zeniv.linux.org.uk>,
-	"Jan Kara" <jack@suse.cz>, "linux-api" <linux-api@vger.kernel.org>,
-	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
-	"linux-kernel" <linux-kernel@vger.kernel.org>,
-	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
-	"linux-doc" <linux-doc@vger.kernel.org>,
-	"audit" <audit@vger.kernel.org>,
-	"linux-security-module" <linux-security-module@vger.kernel.org>,
-	"linux-arch" <linux-arch@vger.kernel.org>,
-	"linux-mm" <linux-mm@kvack.org>
-Message-ID: <1a01795b07a.1f456216580426.3401229391386650127@linux.beauty>
-In-Reply-To: <anJE8SfBLtkh6QSa@zenbox>
-References: <cover.1784204592.git.me@linux.beauty> <anJE8SfBLtkh6QSa@zenbox>
-Subject: Re: [RFC PATCH 00/24] pidfd: add a minimal process spawn builder
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="My0gWCGh"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dz5A4sctYbARLpdNgcUYQ80SJTmDzvQs4bCQgtkuEcQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787103858; v=1; x=1787708658;
+ b=My0gWCGhQqxEHEtunLhJGH5eYBanII+KbSnaQDoDu1WOlLvmRY1fkvK8EzUqHJDZ5pRPr8xI
+ ZQC/j/ecDsruByjByWorir7ffEEW450tspeBzA4jIWsYD8Yxc3x6vhDq41Fi00KW4SRXNUqMt0w
+ LkEQrxk97GW8T9RIzJDPfy48=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [10.22.64.46] (118.201.124.118)
+	by smtp.migadu.com with ESMTPS id 5369898abe028d4b;
+	Wed, 19 Aug 2026 01:44:18 +0000
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
+Date: Wed, 19 Aug 2026 09:44:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
+ for percpu data
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
+References: <20260818153202.90714-1-leon.hwang@linux.dev>
+ <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
+Content-Language: en-US
+From: Leon Hwang <leon.hwang@linux.dev>
+In-Reply-To: <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Justin,
+On 19/8/26 00:15, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+>> index 5671c31085cd..2b69290bcc3e 100644
+>> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+>> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
+> 
+> [ ... ]
+> 
+>> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
+>>  	test_global_percpu_data_lskel__destroy(lskel);
+>>  }
+>>
+>> +#define PAGE_SIZE 4096
+>> +
+>> +static void test_global_percpu_data_map_resize(void)
+>> +{
+>> +	const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
+>> +	struct test_global_percpu_data *skel;
+>> +	const int arr_value = -1;
+>> +	struct bpf_map *map;
+>> +	int err, prog_fd;
+>> +	size_t data_sz;
+>> +
+>> +	if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
+>> +		test__skip();
+>> +		return;
+>> +	}
+>> +
+>> +	skel = test_global_percpu_data__open();
+>> +	if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
+>> +		return;
+>> +
+>> +	map = skel->maps.percpu_arr;
+>> +	skel->percpu_arr->arr[0] = arr_value;
+>> +	err = bpf_map__set_value_size(map, desired_sz);
+> 
+> This isn't a bug, but since the guard above already pins the page size to
+> 4096, would `const __u32 desired_sz = PAGE_SIZE * 2;` read more directly
 
- ---- On Wed, 05 Aug 2026 04:25:25 +0800  Justin Suess <utilityemal77@gmail=
-.com> wrote ---=20
- > On Thu, Jul 16, 2026 at 10:31:26PM +0800, Li Chen wrote:
- > > Hi,
- > >=20
- > > This RFC follows feedback on my earlier spawn_template RFC [1]. That
- > > proposal made caching the primary interface; this one starts with gene=
-ral
- > > process construction. Christian suggested a pidfd/pidfs exec builder
- > > modeled after fsconfig(), with enough semantics for userspace to imple=
-ment
- > > posix_spawn() [2], and Kees agreed [3].
- > >=20
- > > This RFC is based on linux-next next-20260710 and depends on two pidfs
- > > fixes that I sent separately:
- > >=20
- > >   * pidfs: preserve thread pidfds reopened by file handle
- > >     https://lore.kernel.org/all/20260716052726.1032092-1-me@linux.beau=
-ty/
- > >   * pidfs: handle FS_IOC32_GETVERSION in compat ioctl
- > >     https://lore.kernel.org/all/20260716052822.1034228-1-me@linux.beau=
-ty/
- > >=20
- > > The initial implementation is source-based. The executable path can be
- > > provided with the final run request:
- > >=20
- > >     struct pidfd_spawn_run_args run =3D {
- > >         .path =3D (unsigned long)"/usr/bin/rg",
- > This should probably be an FD for the path.
- >=20
- > This way it prevents race conditions over multiple configuration steps.
+Will change to 'PAGE_SIZE * 2' if the next revision is needed.
 
-Thanks, that makes sense. Using an fd avoids the pathname race and pins
-the executable we actually want to run.
+> here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
+> `#ifndef PAGE_SIZE` form used in sockopt.c?
 
- > >         .argv =3D (unsigned long)argv,
- > >         .envp =3D (unsigned long)envp,
- > >     };
- > >=20
- > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
- > >     pidfd_spawn_run(fd, &run, sizeof(run));
- > >=20
- > > Alternatively, the path can be staged before the final run step:
- > >=20
- > >     struct pidfd_spawn_run_args run =3D {
- > >         .argv =3D (unsigned long)argv,
- > >         .envp =3D (unsigned long)envp,
- > >     };
- > >=20
- > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
- > >     pidfd_config(fd, PIDFD_CONFIG_SET_STRING,
- > >                  PIDFD_CONFIG_KEY_PATH, "/usr/bin/rg", 0);
- > Same here. Should probably be an FD to the binary instead.
- >=20
- > >     pidfd_spawn_run(fd, &run, sizeof(run));
- > I'm worried this pidfd_spawn_run just adds another varient to the existi=
-ng
- > myriad of exec* syscalls we already have. Would it be better to just hav=
-e this
- > work through execveat(fd, "", argv, envp, AT_EMPTY_PATH) instead?
- >=20
- > (i.e have execveat take a pidfd directly).
- >=20
- > Then you can get rid of pidfd_spawn_run which looks almost structurally
- > identical to execveat (with the argv and envp collapsed).
+No. PAGE_SIZE must be 4096 here.
 
-Thanks, but I'm less sure about using execveat() as the run operation, sinc=
-e it
-normally replaces the caller while the builder creates a new child and
-returns. A separate run operation still seems clearer to me.
+> 
+>> +	if (!ASSERT_OK(err, "bpf_map__set_value_size"))
+>> +		goto out;
+>> +	if (!ASSERT_EQ(bpf_map__value_size(map), desired_sz, "bpf_map__value_size"))
+>> +		goto out;
+>> +	if (!ASSERT_NEQ(bpf_map__btf_value_type_id(map), 0, "bpf_map__btf_value_type_id"))
+>> +		goto out;
+>> +
+>> +	skel->percpu_arr = bpf_map__initial_value(map, &data_sz);
+>> +	if (!ASSERT_EQ(data_sz, desired_sz, "data_sz"))
+>> +		goto out;
+>> +	if (!ASSERT_OK_PTR(skel->percpu_arr, "skel->percpu_arr"))
+>> +		goto out;
+> 
+> This isn't a bug, but would it read more consistently with
+> test_global_percpu_data_init() to check ASSERT_OK_PTR(skel->percpu_arr)
+> before ASSERT_EQ(data_sz, desired_sz)? The block this replaces checked
+> pointer-then-size, and the surviving test_global_percpu_data_init() at the
+> same file still does pointer-then-size.
 
-Regards,
-Li=E2=80=8B
+Unnecessary to keep consistent for their order. This is a really minor
+readability concern.
 
+Thanks,
+Leon
 
