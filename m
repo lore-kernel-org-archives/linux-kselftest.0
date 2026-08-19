@@ -1,142 +1,114 @@
-Received: from mta1.migadu.com (out-207.mta1.migadu.com [95.215.58.207])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22802E738C
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 12:59:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.207
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 209B83B841C;
+	Wed, 19 Aug 2026 13:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787144348; cv=none; b=rXIevKj/gwBvN4XobreFS6+D7YD6DeaVNDggwVuHFXUO8X8B/v18JPKnyXUviY/A3tgm176zYC6uI3N99yKiaO3kASpy/DkBLoM4ZvtRYKOmbhXEoAgpR//BQCBT0iXmySJWHANiaoqshhoHBSQ2BMehijdgt4YeAfrMgWAd34A=
+	t=1787146890; cv=none; b=LmVjhvpeFylSuA2X1JHZUNvm0GFriMEm1XTF84n1ISKdauzxzLc995eJz2vQ2vO/EotPb4El5ftwBFjnTh3mnS1YD+59KpwYFV21v1UKzD/4bXPZNOrEi8lNIVxlHvWNPV9ksRPUgnqXA1szyqU6jESAeNCxVeid4VPI8vUjIKs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787144348; c=relaxed/simple;
-	bh=YHHGpBQsh966A2uqbUVkWULPEk/gHXX6SwIBwmV9YFs=;
+	s=arc-20240116; t=1787146890; c=relaxed/simple;
+	bh=5zZhTKxCzKM4mOTcYyTygUsinMLtPISXJYiMB3dpemQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=czpoS30RN+TZq8xgysxuwHkHFy7OzUN8sfY/enxyqRl2hOSglWLSwIdKdfX/BYJVly4lKkAEZGCf3CjDfks0nWQLga9moCxWyNL42CAq/CInoXY8q2gx349UrunVOOBSkw5c/BxZ6Jv4zd/WndQIFzIn481ympI4F26CZJr0Nbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BLzGoBaW; arc=none smtp.client-ip=95.215.58.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 MIME-Version:Content-Type:Content-Disposition; b=sBzX7Vpa3OLx7UMvGF85cKPNAVFLUyAfkE3EXpShFRdHfl0KNV7834HlQR0brF6G/QJ/i9PxiH5etyj45SenmyW4dN/b/Cx0al587A7HNxP314hvXvbeROqKMDi/ZhXbIaLuLINHimIu+FfdeKOTKaUehIso2tb4u/2yu2brzFg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=pm1ISSmU; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BLzGoBaW"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=YHHGpBQsh966A2uqbUVkWULPEk/gHXX6SwIBwmV9YFs=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787144344; v=1; x=1787749144;
- b=BLzGoBaW+Vt7PXVh6C1JiL8aFLvxzIZ12BAiGX0r9zKaOfvXAIVUK13F9u3EPmjaIu8rb673
- V9XnKPX36Z5+NEEd9h8vZY9CdCoI07fNtt/AGBgkyp61t2YEJ0SlsaF2rnoAmmZSTrcPboL+ofc
- +ZQYAXSm+OC8JT9EtlNrdXV4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.2)
-	by smtp.migadu.com with ESMTPS id c005072b8a956614;
-	Wed, 19 Aug 2026 12:59:03 +0000
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="pm1ISSmU"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A702814BF;
+	Wed, 19 Aug 2026 06:41:22 -0700 (PDT)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 67AB33F763;
+	Wed, 19 Aug 2026 06:41:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787146886; bh=5zZhTKxCzKM4mOTcYyTygUsinMLtPISXJYiMB3dpemQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=pm1ISSmUxwi6hQfB/vEfIpFGQITFK4bY2I5SUuTQlrnb/Mel5xpsYmWxDrYT67diI
+	 IFg3h56TnXcrXw7IB5PrUI1pntS0CNdmpyGB9NkPAvB15n4H4CohGyldFleAyz9OhJ
+	 B85n3+AOP/8vRpt74YuK/EqoLpjcd3yoFBJVykno=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Paul Chaignon <paul.chaignon@gmail.com>,
-	Amery Hung <ameryhung@gmail.com>,
-	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
-	Daniel Wade <danjwade95@gmail.com>,
-	KaFai Wan <kafai.wan@linux.dev>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf 2/2] selftests/bpf: Add reg-invariants test for speculative pointer arithmetic
-Date: Wed, 19 Aug 2026 20:58:30 +0800
-Message-ID: <20260819125840.286434-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260819125840.286434-1-jiayuan.chen@linux.dev>
-References: <20260819125840.286434-1-jiayuan.chen@linux.dev>
+	Fuad Tabba <tabba@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v19 01/14] arm64/gcs: Ensure FGTs for EL1 GCS instructions are disabled
+Date: Wed, 19 Aug 2026 14:41:13 +0100
+Message-ID: <aoWyeTx8lYGfiwYc@LeoBrasDK>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260812-arm64-gcs-v19-1-9105afd828ac@kernel.org>
+References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org> <20260812-arm64-gcs-v19-1-9105afd828ac@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-An unprivileged socket filter does variable pointer arithmetic on a
-PTR_TO_MAP_VALUE whose offset collapses to a constant. The Spectre-v1
-speculative path used to snapshot the pointer with a const offset and an
-unbounded r32, which tripped reg_bounds_sanity_check() on the following
-register move.
+Hi Mark, 
 
-Mark the test __success_unpriv (the speculative path only runs
-unprivileged) and flag it BPF_F_TEST_REG_INVARIANTS so the invariant
-violation becomes a hard load failure. The unprivileged run fails without
-the verifier fix and passes with it:
+I will try my best to review this series, but I am new to this subject and 
+have just finished reading the Arm ARM chapter about this, so please be 
+patient with questions that may sound dumb or things that I got wrong.
 
-  verifier_bounds/spec_ptr_alu_const_offset @unpriv:FAIL   # without fix
-  verifier_bounds/spec_ptr_alu_const_offset @unpriv:OK     # with fix
+On Wed, Aug 12, 2026 at 08:12:00PM +0100, Mark Brown wrote:
+> The initial EL2 setup for GCS did not include disabling of EL1 usage of
+> GCS instructions, also disable these traps.
+> 
+> Fixes: ff5181d8a2a8 ("arm64/gcs: Provide basic EL2 setup to allow GCS usage at EL0 and EL1")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/include/asm/el2_setup.h | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
+> index aa8ec9df8024..d308c6e6757d 100644
+> --- a/arch/arm64/include/asm/el2_setup.h
+> +++ b/arch/arm64/include/asm/el2_setup.h
+> @@ -393,6 +393,11 @@
+>  	orr	x0, x0, #HFGRTR_EL2_nGCS_EL1_MASK
+>  	orr	x0, x0, #HFGRTR_EL2_nGCS_EL0_MASK
+>  
+> +	/* Disable traps of GCS instructions at EL1 */
+> +	orr	x2, x2, #HFGITR_EL2_nGCSEPP_MASK
+> +	orr	x2, x2, #HFGITR_EL2_nGCSSTR_EL1_MASK
+> +	orr	x2, x2, #HFGITR_EL2_nGCSPUSHM_EL1_MASK
+> +
 
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../selftests/bpf/progs/verifier_bounds.c     | 41 +++++++++++++++++++
- 1 file changed, 41 insertions(+)
+In the Arm ARM M.c, D24.2.70, we have that by setting the above bits we 
+will _not_ trap the following instructions to EL2:
+- GCSPUSHX, 
+- GCSPOPCX, 
+- GCSPUSHM, 
+- GCSSTR, 
+- GCSSTTR (when PSTATE.UAO=1 or HCSR_EL2.{NV,NV1} = {1,1}.)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-index 1a273e416fed..df8d5309657e 100644
---- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-@@ -2267,6 +2267,47 @@ __naked void deduce64_from_32_wrapping_32bit(void)
- 	: __clobber_all);
- }
- 
-+/*
-+ * Unprivileged variable pointer arithmetic on a PTR_TO_MAP_VALUE whose
-+ * offset collapses to a constant. The Spectre-v1 speculative path snapshots
-+ * the pointer while its r32 has just been blanked but its offset not yet
-+ * synced; the following register move used to trip reg_bounds_sanity_check()
-+ * ("const subreg tnum out of sync with range bounds"). With
-+ * BPF_F_TEST_REG_INVARIANTS that violation turns into a load failure, so the
-+ * unprivileged program must still load.
-+ */
-+SEC("socket")
-+__success __success_unpriv
-+__flag(BPF_F_TEST_REG_INVARIANTS)
-+__naked void spec_ptr_alu_const_offset(void)
-+{
-+	asm volatile ("							\
-+	call %[bpf_ktime_get_ns];					\
-+	*(u64*)(r10 - 16) = r0;						\
-+	r1 = 0;								\
-+	*(u64*)(r10 - 8) = r1;						\
-+	r2 = r10;							\
-+	r2 += -8;							\
-+	r1 = %[map_hash_8b] ll;						\
-+	call %[bpf_map_lookup_elem];					\
-+	if r0 == 0 goto l0_%=;						\
-+	r1 = *(u64*)(r10 - 16);						\
-+	r2 = 0x40000000;						\
-+	if r1 > r2 goto l0_%=;						\
-+	if r1 s> 1 goto l0_%=;		/* r1 in [0, 1] */		\
-+	r0 += r1;			/* ptr += bounded scalar */	\
-+	r9 = r0;			/* used to trip the warning */	\
-+	*(u8*)(r0 + 0) = r1;						\
-+l0_%=:	r0 = 0;								\
-+	exit;								\
-+	"
-+	:
-+	: __imm(bpf_ktime_get_ns),
-+	  __imm(bpf_map_lookup_elem),
-+	  __imm_addr(map_hash_8b)
-+	: __clobber_all);
-+}
-+
- /* Check that range_within() compares cnum ranges, not min/max projections. */
- SEC("socket")
- __failure __msg("div by zero")
--- 
-2.43.0
+Which I understand to be the way of us saying that EL2 will not interfere 
+on nor manage those instructions that let software change the entries of 
+GCS. Is that correct?
+
+As for the asm routine, x2 at this point have nBRBIALL and nBRBINJ already 
+set, and will be loaded to SYS_HFGITR_EL2 in the next block of 
+instructions.
+
+Did I get it right? Is there any missing detail here?
+
+Thanks!
+Leo
+
 
