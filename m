@@ -1,139 +1,121 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3D13C09EB;
-	Wed, 19 Aug 2026 11:20:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF3235DA7B;
+	Wed, 19 Aug 2026 12:09:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.97
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787138413; cv=none; b=ePw3w0PLih0AT5/nv9XFkdFfcZqQyfCHSpocbgQz0SRrNYAL0l+vCryGf5PU7mp5o8Rs29vFOVdteUkFltEidVNOSmKuJfQhWKZwXLjLDO4QqsYR5Au+H4q9qSXkChUuFXvIL6Uzjr4GQcPsIkt6Rlre/NfgSCbza2HjB6wxw0A=
+	t=1787141375; cv=none; b=Cpfo/jOYI15DZN1eOrG8hCTtBbUXEkOCXE0yEsMF63ETIB0E28dVovNHNYIew3ypbZf5PWJEB/+llkuUy7Fbr/6VtY6COjJMMZfaS4IgaO4gCPrftHwuRKkFiceCZSsNEo6QeJ6faA8vL3QofeOKMjRKlN8mPaVZ0YT333JCFPU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787138413; c=relaxed/simple;
-	bh=ToGrVowi+d7el6twxZrX7EqIPaNmRXjfryGU0ho0NF8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kvu1AgwF6m1b70tBW3E9MKEZ/WrdNCGhMd2CW5l2A9YQpVJhcOOvrnIqCyn14g/cx5O1g6dN4twerXszyNNYcM1nbvx/kYvEWMQFOwGwrd3PZEYJM/YXKJOoQMr6+2Kz3IpWTXX7281f5ud5g4kWoXcFlLK6Er/s+3Lr16qp90M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W053qxgM; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787141375; c=relaxed/simple;
+	bh=J71bAFzfJq93Oq11doXt66mxSi8uojrdzfe/qmFMiwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IAS48xZt6rgvXGa6EVHR4G3tPpJCPSZzaPPlNXjeQYvrHJptlW25rOXnMvl4N/tqnIcQVzqVouNkyAOxBiPAlV7casRP/0NXG71Ktj9LJUCX5mkpTW8ujd9ahSx5qkM2MtEHGvSwcxnS9MqnfStTWXX6M2OZTYLoOSo+AXBRXpE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=XQC7jCFh; arc=none smtp.client-ip=115.124.30.97
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W053qxgM"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B74581F000E9;
-	Wed, 19 Aug 2026 11:20:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787138412;
-	bh=9B3iuDG0EZ+sv35q9q6046bbaR4b4VDJyMvu92wejCQ=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=W053qxgMb/4xMc0l/wmuewPWrUSbL3626Y362fZDWclvsXwFoGEjsmZvFeXjGIzOi
-	 UdUSzPO3QBr0jmTQxwwWfg4+YYTHoST5Kux7H8ow9p8yJ7qf5DlKfnaVUH38bE/7n/
-	 lSNAdTfGQMoPGXDuum/jaTs1qiYFhJU+j/y2oNRLWKR096J83gyp/5vY/0vOvWAicA
-	 H07dj+f3lB6mepolvSLkyt6przTpE/NTpjAiMyE5HdevqJFLDnGqlpZjPZw9/kutJV
-	 pKkToDwVZRKFaZTGLVrM300IDHnHWa+TNkWBVuSDzrf6LXmTxm3I5pN0bBcrDyWNtg
-	 /IF5GOb5PaikQ==
-Message-ID: <0d8d10b6-0525-434c-b358-68df65937ce5@kernel.org>
-Date: Wed, 19 Aug 2026 13:20:07 +0200
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="XQC7jCFh"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1787141370; h=From:To:Subject:Date:Message-ID:MIME-Version;
+	bh=nsrQsrvNgsc1Q4hzl9K1PyRWt6ItnxGRc2gHDULbnBI=;
+	b=XQC7jCFhmnnYoC1darh3p7K7UfEYc4lwgtBDd8s51UMZpIW6aGJiF17nnEfxt5hHWA6FnYgE7JeN3L0hlVx4VbiNA38e1DN6y1EHZo3wbxBqvDOGxJISPExmHKd4EVSOR5odS82VfYTAHvjg1VdIukVD00JhjPGOokA3kipvoLI=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R311e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam011083073210;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0X9GeFT9_1787141365;
+Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X9GeFT9_1787141365 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Wed, 19 Aug 2026 20:09:29 +0800
+From: Chen Pei <cp0613@linux.alibaba.com>
+To: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	memxor@gmail.com,
+	bjorn@kernel.org,
+	puranjay@kernel.org
+Cc: ihor.solodrai@linux.dev,
+	eddyz87@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	pulehui@huawei.com,
+	pjw@kernel.org,
+	palmer@dabbelt.com,
+	shuah@kernel.org,
+	guoren@kernel.org,
+	bpf@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/2] bpf, riscv: Add support for signed arena loads
+Date: Wed, 19 Aug 2026 20:09:22 +0800
+Message-ID: <cover.1787140923.git.cp0613@linux.alibaba.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH] selftests/lib.mk: run_tests= print summary at the end
-Content-Language: fr
-To: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260625-sft-run-tests-print-totals-v1-1-bfe588266249@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Shuah,
+Hi,
 
-On 25/06/2026 18:22, Matthieu Baerts (NGI0) wrote:
-> When there are many tests and/or many log lines, it is difficult to
-> quickly find out how the different tests went when running:
-> 
->     make -C tools/testing/selftests run_tests
-> 
-> This run_tests target executes 'run_many' from runner.sh, which relies
-> on ktap_helpers.sh. At the end of the execution, the KTAP_CNT_* counters
-> have been populated, and the total can then be simply printed with the
-> ktap_print_totals helper.
-> 
-> Now a summary is printed at the end, e.g. here with the two last lines:
-> 
->     $ make -sC tools/testing/selftests TARGETS=(...) run_tests
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     ok 1 selftests: (...)
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     ok 2 selftests: (...) # SKIP
->     # timeout set to (...)
->     # selftests: (...)
->     (...)
->     not ok 3 selftests: (...)
->     # 1 skipped test(s) detected.  Consider enabling relevant config options to improve coverage.
->     # Totals: pass:1 fail:1 xfail:0 xpass:0 skip:1 error:0
-> 
-> This summary is printed, using '#' as prefix to be treated as a comment
-> in the TAP format. The summary is also printed when summary=1 is used to
-> redirect log lines in different files because it still looks useful when
-> there are many tests, not to have to check each line.
-> 
-> Note that this 'make' command will continue to exit without errors
-> (returned code is 0) when the tests can be executed. I guess it is
-> better not to change this behaviour to be able to continue detecting
-> kselftests failures.
-Gentle ping about this small addition? :)
+Signed loads from arena memory are currently unsupported on riscv64:
+bpf_jit_supports_insn() rejects BPF_MEMSX loads when in_arena is set,
+so the verifier fails such programs with "sign extending loads from
+arena are not supported yet". The x86 and arm64 JITs gained support
+for them in v6.18 (a91ae3c89311, eab2a71f3a6a). Since compilers are
+free to generate signed loads into arena memory (e.g. GCC-14 was
+reported to do so), otherwise valid BPF programs fail to load on
+riscv64.
 
-Cheers,
-Matt
+This series adds BPF_PROBE_MEM32SX support to the RV64 JIT and
+enables the corresponding selftests on riscv64:
+
+1 implements signed arena loads in the RV64 JIT. The verifier
+  already converts MEMSX loads from PTR_TO_ARENA to
+  BPF_PROBE_MEM32SX once bpf_jit_supports_insn() allows them, so
+  the JIT reuses the existing arena handling: the arena base
+  (RV_REG_ARENA) is added to the source register and the load is
+  emitted with sign extension (lb/lh/lw). BPF_PROBE_MEM32SX is also
+  added to the add_exception_handler() mode gate so faulting loads
+  register an exception table entry that clears the destination
+  register and resumes execution.
+
+2 enables the arena LDSX tests on riscv64: JIT disassembly
+  assertions are added to arena_ldsx_disasm, and
+  arena_ldsx_exception/s8/s16/s32 are now run on riscv64.
+
+The series was verified on riscv64 with QEMU (-M virt): all five
+arena_ldsx tests pass, including the exception path (load from
+unallocated arena memory returns 0) and the sign-extension values
+(s8/s16/s32 tests return -1 as expected). The arena_atomics test
+suite also loads and runs cleanly.
+
+Changes in v3:
+- Restore the pseudo-code form of the PROBE_MEM32SX case comment.
+
+Changes in v2:
+- Fix an extable entry overflow breaking the arena_atomics load.
+- Collect Reviewed-by on patch 2.
+
+Note: the __jited assertions in patch 2 were derived from the JIT
+register allocation (R0->a5, R1->a0, R8->s3, R9->s4, arena base in
+s7) and the emit_ldx() code paths; happy to adjust them if a
+disassembler output detail differs.
+
+Thanks,
+Pei
+
+Chen Pei (2):
+  bpf, riscv: Add support for signed arena loads
+  selftests/bpf: Enable arena LDSX tests for riscv64
+
+ arch/riscv/net/bpf_jit_comp64.c                 | 16 ++++++++++------
+ .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
+ 2 files changed, 27 insertions(+), 6 deletions(-)
+
 -- 
-Sponsored by the NGI0 Core fund.
+2.50.1
 
