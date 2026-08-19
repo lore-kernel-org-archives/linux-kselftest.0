@@ -1,66 +1,74 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 042C83CB551;
-	Wed, 19 Aug 2026 18:30:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96E1A36C0CD;
+	Wed, 19 Aug 2026 20:10:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787164218; cv=none; b=UiVQqG+RHZc9jUolCFmIAtgLQCI/yTrMMLpD9Yc/pLz5SGqbj+fiT8tgSp4H0ib6Txh40aqHav3yavJJfWfJiZSGGU4JgVqy4N45YdzXfSFfHYlZxfybEMLKfZMe+YU7iLxI5LnJHgeOLLpL4Jt8bUpDx+eAPchwjEoPi9+wYME=
+	t=1787170251; cv=none; b=CEB91YnHN2PeuNjzR1M4kMqTTucmoKbaBXpQqKzhEwhNvnpwAFW0NaG46BDCxK6cIG22W8VRDS/uAsmtb0Be1T6KcR6xapabmM/HS259PStv3qTuw9o27MATpeu9pjFuB8nCbycYT9MFB0BeZljPo5r5FTs2fuzPj+RQxobSWFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787164218; c=relaxed/simple;
-	bh=Yh5czg7XqOrKuSKdGs214u44mw7jx7akle+eYiEyb/0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JGvHY004oYKzp/lOlLB9YMcUHX3kumKxWIa/blSVQ4BYq9R0pp37Ttir2d5D11ZORcm/J4ODMVa6xatc0g9T0bgxaEuT28rS4dpYss6uOneCg0yrJDwdUd8sLAAEyjjS9VBapRwDUGadHZs1Ie+KMxpEVpdIEUpXK5Mcz7sMEdE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=hhpZ7r6E; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1787170251; c=relaxed/simple;
+	bh=tQX6Rnd7T2iA9CsgwyQtA2aMtObcAgpG1UiCZ6ND2UY=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=eh6MQ68048omb/l8oyoGeBLy0jq0yfEVdPWxa2QyAbZyUzNMNGUdyGJob3QQUu3hdXf+Elfi8xlezDR6IdWHss60ZS3UhJSkMBJv2pHl7dtvrbjFXPJIi09bf66A0aYSffIMWYtv0v3C3iWsL9fOFKGNHKQIbPloqhsGb/UYdqY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ROZMl7ND; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="hhpZ7r6E"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1787164213;
-	bh=Yh5czg7XqOrKuSKdGs214u44mw7jx7akle+eYiEyb/0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hhpZ7r6ENDtUfrDXpuuUf6TXQTBjpqXdezKCurJv9OkKE7Y3/SKOy/NY+gE6DQes/
-	 2zmN6nzBso7jtNbnO637OyqPXb3EQG6lycbmY4u14RmlEDsyTBasfDRY+IvDlwvVsN
-	 59T9TeKI50332E6ryVxqaT9VgN8fHrozPGA6enUU=
-Date: Wed, 19 Aug 2026 20:30:13 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Brian Cain <brian.cain@oss.qualcomm.com>
-Cc: Brian Cain <bcain@kernel.org>, Willy Tarreau <w@1wt.eu>, 
-	Shuah Khan <shuah@kernel.org>, linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 0/3] tools/nolibc: hexagon support
-Message-ID: <944f4ad4-6473-4058-b0da-25f9ed45cfae@t-8ch.de>
-References: <20260819-nolibc-hexagon-v1-0-6bc3be591f09@weissschuh.net>
- <9b5eb6f7-3d30-45c9-a00c-58d28db4c442@oss.qualcomm.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ROZMl7ND"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFCFB1F000E9;
+	Wed, 19 Aug 2026 20:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787170250;
+	bh=k/cnIJhFcOgw8OwlBThrel8zcpRLZAbDDGHjoie65A4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=ROZMl7NDZYXXkwBOLaGYhmKvoJ58W/CYqkZe4zWkEmEZ0ULoJW4fy4III5DeGHMm5
+	 jZw5Ev4EigfSLFkGZgd7Qt4o+uODj0xZi3rbM/Qrn48G2a3y+ZMc46YrXHhLf+kfAx
+	 0Z2nMTgwj0iK+lpG3JVtZmfMI7eahCFwcEq/AYgqF86dVU2pCxJgFtjNdaalm/ICgB
+	 8Ki3++itybeL+DAJC8em8oA1aLKzP91dpDDDs6QkLnGrBjgq8F9A6Au5+QH2c/UeV0
+	 0TQZFiJqvTK0G2rOIVMn7+oQ2AuYj8tAHMexNcatk52W5qBY0KIjeA4GVFNH/HLHuv
+	 MOXNG1WOTQIiA==
+Date: Wed, 19 Aug 2026 10:10:49 -1000
+Message-ID: <dc2411ec4acb17b8cf947a9cd213e78c@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Hemanth Selam <hemanth.selam@gmail.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Michal Koutny <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Guopeng Zhang <zhangguopeng@kylinos.cn>,
+	Sebastian Chlad <sebastian.chlad@suse.com>,
+	Waiman Long <longman@redhat.com>,
+	Michal Hocko <mhocko@kernel.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Nhat Pham <nphamcs@gmail.com>,
+	Sarthak Sharma <sarthak.sharma@arm.com>,
+	cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH] selftests/cgroup: set the test plan after the setup
+ checks
+In-Reply-To: <20260819083600.1351711-1-hemanth.selam@gmail.com>
+References: <20260819083600.1351711-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9b5eb6f7-3d30-45c9-a00c-58d28db4c442@oss.qualcomm.com>
 
-On 2026-08-19 09:18:08-0500, Brian Cain wrote:
-> 
-> On 8/19/2026 1:31 AM, Thomas Weißschuh wrote:
-> > Add support for the hexagon architecture.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> 
-> 
-> Thanks, Thomas!  I've got similar nolibc patches in my tree that I have been
-> sitting on - but I like yours better.
+On Wed, Aug 19, 2026 at 02:06:00PM +0530, Hemanth Selam wrote:
+> The cgroup tests announce their plan before checking whether cgroup v2 is
+> available, so on a host without it they promise a number of results and
+> then skip out after the first one:
+>
+> 	TAP version 13
+> 	1..3
+> 	ok 1 # SKIP cgroup v2 isn't mounted
+> 	# Planned tests != run tests (3 != 1)
+> 	# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
 
-Out of curiosity, are you using the hexagon nolibc actively or was it
-just for fun?
+Applied to cgroup/for-7.3-fixes.
 
-> Aside from the copy/paste error Willy identified, LGTM:
-> 
-> Reviewed-by: Brian Cain <brian.cain@oss.qualcomm.com>
+Thanks.
 
-Thanks!
+-- 
+tejun
