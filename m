@@ -1,135 +1,110 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CD833D1712;
-	Wed, 19 Aug 2026 08:53:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBD2A422E2E;
+	Wed, 19 Aug 2026 08:57:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787129617; cv=none; b=u3HAKtpWwxxHat9tuln7xDc6kh5uknliySjg82gAPvPhha18+MxXOaZKKst7j+t6Jlmvv9J+HHnOcAybmNRQS+6hVnBNfYWiRis99P5yej0kxvoJxcDWRNt0j/VF0UyOBRpHUdyDYTxiSx7PVFRCZr7PD0gT6LlMq2jEB45wDCE=
+	t=1787129865; cv=none; b=OfqZHSLCIqO6ys7alhxCme1L6Lfvaon+EKGg9zzMgZYa78oUJ/JFbSA0527mSn2dKeh97CoDfmy9DV+Kd2AAE3oNIyCf0GfhRBw2g6eU3WgjyZMMPJvGVIqWhAqhSa7C/bWqV1sL6VRvJlBDax7NZMCO67IL3RSIL8V5XSEmtkA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787129617; c=relaxed/simple;
-	bh=S0g4WFSLQ2qZFvCIQUCzd4WPm3qYSawkMr6Z+YG1OaI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FqSPfwjbVI6yGlM1ndva+DIMWIyOtCM/EFZtuEum7t+SwFUZaYlujsf1F5GSPapKIhEBYRExvkE0PX7uNKA67XXU+MvH2gH4/nABn07h9xZboYNeOQgxxrXiAnJY0LRs2uU/l0d9SGHc8Kgp2gJsHLVMON4j88pIjIJY9m9vp6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=Fi8A6jH5; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="Fi8A6jH5"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1787129605; h=From:To:Subject:Date:Message-ID:MIME-Version;
-	bh=ZCkwrG5UaWoJEzEsbaTN0x0VxiVzO2j77PibIF7G8XU=;
-	b=Fi8A6jH5QBLvC4i/+9h0Jfsdv4z9b977qkZwY2KESQmsntWpXXTGhMWmOn6KroQNJeHu1YTo5Elr+UyGUJDoEa81yAmzcwV8j3cpXbgVZganqsTIJPG+07nxYwrrAKOganQPVPcOCVO/KyG6Tz+AgAwYJuBct4awsOaNQUV3K9g=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=cp0613@linux.alibaba.com;NM=1;PH=DS;RN=22;SR=0;TI=SMTPD_---0X9G1g-1_1787129603;
-Received: from DESKTOP-S9E58SO.localdomain(mailfrom:cp0613@linux.alibaba.com fp:SMTPD_---0X9G1g-1_1787129603 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Wed, 19 Aug 2026 16:53:24 +0800
-From: Chen Pei <cp0613@linux.alibaba.com>
-To: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	memxor@gmail.com,
-	bjorn@kernel.org,
-	puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev,
-	eddyz87@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	pulehui@huawei.com,
-	pjw@kernel.org,
-	palmer@dabbelt.com,
-	shuah@kernel.org,
-	guoren@kernel.org,
-	bpf@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v2 2/2] selftests/bpf: Enable arena LDSX tests for riscv64
-Date: Wed, 19 Aug 2026 16:53:16 +0800
-Message-ID: <b31c252625e16db62b87b8301b79bf6cc7d7ffac.1787128322.git.cp0613@linux.alibaba.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1787128322.git.cp0613@linux.alibaba.com>
-References: <cover.1787128322.git.cp0613@linux.alibaba.com>
+	s=arc-20240116; t=1787129865; c=relaxed/simple;
+	bh=0pke4ue5ZnXMUycpgpAZZFwNMU7Mqv2qQAGK/9npows=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gl6+eC1Y4t0XsdC8wfkkP+Xs/xJGBkDr3ZvTkeba2tvAPVGMl12l46993p26qx1IKlgNYO5xNhbNlzzL9EbQ803dROzWqQ5F0a0YWc0ciB+BR1QbW3BtfJr09b35BMZzFLFh0z1QNPJJBITE+JnrewHua2/B5zjhTJqyj2NyIYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 924861EA9A5; Wed, 19 Aug 2026 16:57:33 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8802:7000::9c4] (unknown [IPv6:2001:8003:8802:7000::9c4])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id 4F9BD1EA998;
+	Wed, 19 Aug 2026 16:57:29 +0800 (AWST)
+Message-ID: <1f19d1ca-bd49-402f-b5e7-7b87681cc42a@davidgow.net>
+Date: Wed, 19 Aug 2026 16:57:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] gpu: nova-core: add a KUnit test configuration option
+To: Yury Norov <ynorov@nvidia.com>, Miguel Ojeda <ojeda@kernel.org>,
+ Danilo Krummrich <dakr@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
+ rust-for-linux@vger.kernel.org, nova-gpu@lists.linux.dev
+Cc: Gary Guo <gary@garyguo.net>, John Hubbard <jhubbard@nvidia.com>,
+ Alice Ryhl <aliceryhl@google.com>, Burak Emir <burak.emir@gmail.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Yury Norov <yury.norov@gmail.com>, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260818152324.587932-1-ynorov@nvidia.com>
+ <20260818152324.587932-2-ynorov@nvidia.com>
+From: David Gow <david@davidgow.net>
+Content-Language: fr
+In-Reply-To: <20260818152324.587932-2-ynorov@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Now that the riscv64 JIT supports signed arena loads
-(BPF_PROBE_MEM32SX), enable the arena LDSX tests on riscv64:
-add JIT disassembly assertions for arena_ldsx_disasm (arena base in
-s7, add into t2, sign-extending lw/lh/lb loads) and run
-arena_ldsx_exception and arena_ldsx_s8/s16/s32 on riscv64.
+Le 18/08/2026 à 11:23 PM, Yury Norov a écrit :
+> The continuation-record KUnit tests are currently built whenever both
+> Nova Core and KUnit are enabled, providing no way to select the tests
+> independently.
+> 
+> Add CONFIG_NOVA_CORE_KUNIT_TEST and use it to guard the test suite.
+> Follow the usual KUnit convention of enabling the option through
+> CONFIG_KUNIT_ALL_TESTS.
+> 
+> Assisted-by: Codex:gpt-5.6-sol
+> Signed-off-by: Yury Norov <ynorov@nvidia.com>
+> ---
 
-Reviewed-by: Pu Lehui <pulehui@huawei.com>
-Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
----
- .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
- 1 file changed, 17 insertions(+)
 
-diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-index 41340877dc9d..ed0a0f159bc1 100644
---- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-+++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-@@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
- __jited("ldrsh	x22, [x11, #0x18]")
- __jited("add	x11, x0, x28")
- __jited("ldrsb	x22, [x11, #0x20]")
-+__arch_riscv64
-+__jited("add	t2, a5, s7")
-+__jited("lw	s3, 0x10(t2)")
-+__jited("add	t2, a5, s7")
-+__jited("lh	s3, 0x18(t2)")
-+__jited("add	t2, a5, s7")
-+__jited("lb	s3, 0x20(t2)")
-+__jited("add	t2, a0, s7")
-+__jited("lw	s4, 0x10(t2)")
-+__jited("add	t2, a0, s7")
-+__jited("lh	s4, 0x18(t2)")
-+__jited("add	t2, a0, s7")
-+__jited("lb	s4, 0x20(t2)")
- __naked void arena_ldsx_disasm(void *ctx)
- {
- 	asm volatile (
-@@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
- __success __retval(0)
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
- __naked void arena_ldsx_exception(void *ctx)
- {
- 	asm volatile (
-@@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
- __naked void arena_ldsx_s8(void *ctx)
- {
- 	asm volatile (
-@@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
- __naked void arena_ldsx_s16(void *ctx)
- {
- 	asm volatile (
-@@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
- __success __retval(-1)
- __arch_x86_64
- __arch_arm64
-+__arch_riscv64
- __naked void arena_ldsx_s32(void *ctx)
- {
- 	asm volatile (
--- 
-2.50.1
+Thanks. I imagine this should go in via drm, rather than the KUnit tree.
+I'm not totally convinced by patch #2, but let's get this patch in
+regardless. Maybe it even should have a Fixes tag:
+
+Fixes: 0499a3826c2f ("gpu: nova-core: gsp: add tests for continuation records")
+Acked-by: David Gow <david@davidgow.net>
+
+Cheers,
+-- David
+
+>  drivers/gpu/nova-core/Kconfig                  | 12 ++++++++++++
+>  drivers/gpu/nova-core/gsp/cmdq/continuation.rs |  1 +
+>  2 files changed, 13 insertions(+)
+> 
+> diff --git a/drivers/gpu/nova-core/Kconfig b/drivers/gpu/nova-core/Kconfig
+> index f918f69e0599..d05c2c1d46d9 100644
+> --- a/drivers/gpu/nova-core/Kconfig
+> +++ b/drivers/gpu/nova-core/Kconfig
+> @@ -15,3 +15,15 @@ config NOVA_CORE
+>  	  This driver is work in progress and may not be functional.
+>  
+>  	  If M is selected, the module will be called nova-core.
+> +
+> +config NOVA_CORE_KUNIT_TEST
+> +	bool "KUnit tests for Nova Core" if !KUNIT_ALL_TESTS
+> +	depends on NOVA_CORE && KUNIT
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This option enables KUnit tests for internal components of the Nova
+> +	  Core driver. The tests currently do not require GPU hardware. These
+> +	  are only for development and testing, not for regular kernel use
+> +	  cases.
+> +
+> +	  If unsure, say N.
+> diff --git a/drivers/gpu/nova-core/gsp/cmdq/continuation.rs b/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
+> index 05e904f18097..c0aa16c8fbf4 100644
+> --- a/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
+> +++ b/drivers/gpu/nova-core/gsp/cmdq/continuation.rs
+> @@ -167,6 +167,7 @@ fn init_variable_payload(
+>      }
+>  }
+>  
+> +#[cfg(CONFIG_NOVA_CORE_KUNIT_TEST)]
+>  #[kunit_tests(nova_core_gsp_continuation)]
+>  mod tests {
+>      use super::*;
 
