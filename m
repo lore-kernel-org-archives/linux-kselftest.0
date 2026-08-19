@@ -1,108 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E28613B95F9;
-	Wed, 19 Aug 2026 14:21:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A34277CAD
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 14:34:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787149299; cv=none; b=oMyK8pgD7+t0Ld5LCEcB5odU+7AN/XoIr/oSFnTMc4k6NpjRETLaY8Ey4+kseqmswGnD0uEWffuS8MOMs8v5ZroDlwhMI9ciIIcwkZ6PoFBNqNi+tjHACx8+Ly9w3KBNAoaQTyjc2VcRlJjtarmYy0fj8vn0GOV+fhPFuJ56jdw=
+	t=1787150070; cv=none; b=syFQl/04uQK8idFDGeNHJcY9NsVskK+i4byHp3kZ5w6bT2iuvvDtEP9XAo2AOsDaD9Anz3+TFAF4YnrpvRLMDWgmCpo9c4hu5GErWUL5t+AOMNRf0QOGouS6BBTFRuZ7lCEipnDIclL1NXa619a9XnkF4IuM+RCfc1iJOX8nqlA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787149299; c=relaxed/simple;
-	bh=rhf197F+BiirB2/yG03+JJ4YBW52Y4RN03qbnq1bpEc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JCvHg47/VcgW54Y9pUlGp51ge2gy+Qw6vw82KrysyUCvsViQzHkeUg+b1uzUk3TzIKOaOZZpw1QuFNlN1e4GQZEKqiAjaKK1zoXKXlSBB5W6UH0RL9Ua8tNWT2qtfOCv4+IEcJ+/EYILgjafEmOpYRekFzHNfbkGIMU8l/Yy50Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VKohbjQt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787150070; c=relaxed/simple;
+	bh=HU+qPdUQS0BEZD7n5Bfk9KiA3akMlx3J74BeJkMhjxQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DQo8IZ49vkhlU4o649TaahQ2lsWVNGvz/6bWrFqvWgIQmIReCL5mNcLNKNxoFvU2yLH+7NCgrSiYLJamCttT4dmE54KO/YeKQ8y1tRQU5DeJPHeU8hhV6VoTh6BFgrhBsMSj25m/mXG8jNGI8zHPU3RZpL73EGUjUaJ738jwxYY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=afEOvWHH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VKohbjQt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690E41F00A3A;
-	Wed, 19 Aug 2026 14:21:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787149297;
-	bh=B7S1oNZ0d0Ppxea6fIUZHSrjDvjafdvBHWU+BL8Rgkg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VKohbjQtxpEmZPWdiGLLB53jtRq3gLpCe0pPm4oD94Sua26B3Kglmb6SVxKA6OG0f
-	 778AOfOYD+EQhg5rwoTH/Mh2Nr9oYXU2aUIo+9oCFZPbbhYMbmrKEG3seFXbcjFxPu
-	 n6x/OfeD3l9zX+ymmwzEuAau991rDSSAPuWarsTfX465Z+aQUOZkRYYDNejsSDq4IG
-	 1GtOYdTBOTmjNvmGcMllJnFhsmrM/hXjzjYnxj7beNukeo+njCDm03/PwRpWovpB/H
-	 huvDR/cmMtK4Wco3Hdy8DRXEjllzhs5g34Vlbder9j2EHOuiR+xEWNC8nJmUTyINFD
-	 8TmGj9ssUkynA==
-Date: Wed, 19 Aug 2026 15:21:31 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Leonardo Bras <leo.bras@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 01/14] arm64/gcs: Ensure FGTs for EL1 GCS
- instructions are disabled
-Message-ID: <a6fe8050-18f1-4013-8d6f-38ecc754c7e7@sirena.org.uk>
-References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
- <20260812-arm64-gcs-v19-1-9105afd828ac@kernel.org>
- <aoWyeTx8lYGfiwYc@LeoBrasDK>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="afEOvWHH"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787150067;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=nL5TdQYFTc+LhqgfFIL8+rQklS1IicuWMxunD/2jpt8=;
+	b=afEOvWHHUxlknve1cT26CgZI+tgDHFwd8HnGirLn/RwmBufrms7r3NNgOV+94Sg1ze3Wda
+	R72Q9RoZww7e4y4itg+lyEnbrgqJd5xaWB37sjiqVo4eAFKFR3zxQBSg4IwSO7RcWPGJ5a
+	r8TBs5VMaUIYzqGZdja5nvBwRZRyYCs=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-678-oY19yZ_SNtymbl_oIIFBfg-1; Wed,
+ 19 Aug 2026 10:34:21 -0400
+X-MC-Unique: oY19yZ_SNtymbl_oIIFBfg-1
+X-Mimecast-MFC-AGG-ID: oY19yZ_SNtymbl_oIIFBfg_1787150060
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 832251800D8D;
+	Wed, 19 Aug 2026 14:34:19 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A7506180034F;
+	Wed, 19 Aug 2026 14:34:17 +0000 (UTC)
+Message-ID: <e5433074-5d95-4991-96be-eb03e7173900@redhat.com>
+Date: Wed, 19 Aug 2026 10:34:16 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EpiKBYt0FrKwqKPC"
-Content-Disposition: inline
-In-Reply-To: <aoWyeTx8lYGfiwYc@LeoBrasDK>
-X-Cookie: Allow 6 to 8 weeks for delivery.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests: cgroup: simplify cpuset subtree permissions
+ test
+To: Shaojie Sun <sunshaojie@kylinos.cn>, Ridong Chen <ridong.chen@linux.dev>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260819103152.767771-1-sunshaojie@kylinos.cn>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260819103152.767771-1-sunshaojie@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
+On 8/19/26 6:31 AM, Shaojie Sun wrote:
+> Simplify test_cpuset_perms_subtree by removing unnecessary chown of
+> cgroup.procs files. The test verifies implicit migration triggered by
+> enabling/disabling the cpuset controller via cgroup.subtree_control.
+>
+> Implicit migration is handled internally by the kernel through
+> cgroup_update_dfl_csses() when subtree_control is modified, and does
+> not require cgroup.procs write permission. Only cgroup.subtree_control
+> permission is needed to trigger the controller state change.
+>
+> Remove the allocation and cleanup of parent_procs and child_procs
+> variables that are no longer needed.
+>
+> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
+> ---
+>   tools/testing/selftests/cgroup/test_cpuset.c | 16 +++-------------
+>   1 file changed, 3 insertions(+), 13 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
+> index c5cf8b56ceb8..b323addcc519 100644
+> --- a/tools/testing/selftests/cgroup/test_cpuset.c
+> +++ b/tools/testing/selftests/cgroup/test_cpuset.c
+> @@ -167,7 +167,7 @@ static int test_cpuset_perms_object_deny(const char *root)
+>   static int test_cpuset_perms_subtree(const char *root)
+>   {
+>   	char *parent = NULL, *child = NULL;
+> -	char *parent_procs = NULL, *parent_subctl = NULL, *child_procs = NULL;
+> +	char *parent_subctl = NULL;
+>   	const uid_t test_euid = TEST_UID;
+>   	int object_pid = 0;
+>   	int ret = KSFT_FAIL;
+> @@ -175,9 +175,6 @@ static int test_cpuset_perms_subtree(const char *root)
+>   	parent = cg_name(root, "cpuset_test_0");
+>   	if (!parent)
+>   		goto cleanup;
+> -	parent_procs = cg_name(parent, "cgroup.procs");
+> -	if (!parent_procs)
+> -		goto cleanup;
+>   	parent_subctl = cg_name(parent, "cgroup.subtree_control");
+>   	if (!parent_subctl)
+>   		goto cleanup;
+> @@ -187,16 +184,11 @@ static int test_cpuset_perms_subtree(const char *root)
+>   	child = cg_name(parent, "cpuset_test_1");
+>   	if (!child)
+>   		goto cleanup;
+> -	child_procs = cg_name(child, "cgroup.procs");
+> -	if (!child_procs)
+> -		goto cleanup;
+>   	if (cg_create(child))
+>   		goto cleanup;
+>   
+> -	/* Enable permissions as in a delegated subtree */
+> -	if (chown(parent_procs, test_euid, -1) ||
+> -	    chown(parent_subctl, test_euid, -1) ||
+> -	    chown(child_procs, test_euid, -1))
+> +	/* Grant minimal subtree_control permission to trigger implicit migration */
+> +	if (chown(parent_subctl, test_euid, -1))
+>   		goto cleanup;
+>   
+>   	/* Put a privileged child in the subtree and modify controller state
+> @@ -221,12 +213,10 @@ static int test_cpuset_perms_subtree(const char *root)
+>   	}
+>   
+>   	cg_destroy(child);
+> -	free(child_procs);
+>   	free(child);
+>   
+>   	cg_destroy(parent);
+>   	free(parent_subctl);
+> -	free(parent_procs);
+>   	free(parent);
+>   
+>   	return ret;
+Reviewed-by: Waiman Long <longman@redhat.com>
 
---EpiKBYt0FrKwqKPC
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-On Wed, Aug 19, 2026 at 02:41:13PM +0100, Leonardo Bras wrote:
-> On Wed, Aug 12, 2026 at 08:12:00PM +0100, Mark Brown wrote:
-
-> > +	/* Disable traps of GCS instructions at EL1 */
-> > +	orr	x2, x2, #HFGITR_EL2_nGCSEPP_MASK
-> > +	orr	x2, x2, #HFGITR_EL2_nGCSSTR_EL1_MASK
-> > +	orr	x2, x2, #HFGITR_EL2_nGCSPUSHM_EL1_MASK
-
-> Which I understand to be the way of us saying that EL2 will not interfere=
-=20
-> on nor manage those instructions that let software change the entries of=
-=20
-> GCS. Is that correct?
-
-Yes, the goal is to allow EL1 to manage things how it wants (there are
-controls for store and push in GCSCR_EL1 too).
-
-> As for the asm routine, x2 at this point have nBRBIALL and nBRBINJ alread=
-y=20
-> set, and will be loaded to SYS_HFGITR_EL2 in the next block of=20
-> instructions.
-
-> Did I get it right? Is there any missing detail here?
-
-That's the idea.
-
---EpiKBYt0FrKwqKPC
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqFu+sACgkQJNaLcl1U
-h9AZpQf+M2xlXf78cJhC8qd3kd3TCTXSK7OPaRFzCzopuFWugQZnO8gta1cvLRQm
-hu7hPMPgHfsLHkw07V5RQBBFC7hdozSVwrGK61A7mB9I+Qy36CoYWDiKWXZZW08s
-e5u09U7j1iikPNTOQlKmgWHyjo8HwS6CWHe2qBsGGfoIiOPE5TDj0cioyIsF4I0H
-hCaXKaxmqB5S+1dIkeVTNbJIt5uSG9DCdA5vMANOK3LFFnENrQqoT0D4aiXB4Et0
-/rigSzS3c/ubrD7/I6IFoiV6WoduU0gWqCG473s4ghVaY/3eWC+s7tQlXFDizf4q
-8GbMdi6CGWTzUEA8Gfls55jI8SWUag==
-=vEYu
------END PGP SIGNATURE-----
-
---EpiKBYt0FrKwqKPC--
