@@ -1,284 +1,146 @@
-Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFC43BE652;
-	Wed, 19 Aug 2026 17:09:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 552CB492531;
+	Wed, 19 Aug 2026 17:21:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787159359; cv=none; b=Di3xlsAH9FeU6NYZcWcfn2CcqcnJOjF26MtAI6O3GMECnRT23cv7ScqgmwcBbRChHz5eZWIY8bL5cdb9JJ+yNjG0+Gzte9m/oyqvsO4b6ejXe8kuqJLnETpqBRhYsCE9R6YfSFVZQUBFllUVTQKxqw1qupCIixVovHahK5R7rDs=
+	t=1787160103; cv=none; b=R+bIFFvrPkUW2tEmtpug996t3/MBtTFEy0yqGn+3FIv0NmwxWT0Yh1j4fxfMGcKbJcbW2WJ9xILqwvEQmVtP2ruQzWNv5DofJKGC6gIn5FxnWIX78JOqPaN/td+qYx9+L6fD3uqB29W61A5C2SLNGsQSGboVR5lS6XvsGvBL14E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787159359; c=relaxed/simple;
-	bh=GaTMdOcQwQGnDb/PPYF1UOE4PRaASulBBwReUYNtedY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AiM4BO6OpH/TayhLOWHFdhseeZCZmmX2zizM7rvcXdTWDoNtRW1kmIV0fVZtF2sScCiR7dSKhzEzfhzsiCqmPw2fV4oHf/8GghcIE6C/hZ/EPWN3VcPixLMR0ksmnZBUlthqz65CHzUtVXB4pZJ51OtuINriEVWYLx6fpE7d/Tk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=XkXQWv4m; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B56neHLq; arc=none smtp.client-ip=103.168.172.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1787160103; c=relaxed/simple;
+	bh=reyOikJeIgz8Wh2yKLyAJLiVo42x0TSWEUdhf5zTah8=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=OWA3kto9sGBJCaxpw9FVjRm4ROMsikaaYvQIWRuSmRX6vSlSFBuDEN0T2fJxscJ6+Y2J2TdDWw+s+zJYRJzHXW9pN7DnYmq85K3WgQFNkikPCk135RfktQcdbtO6GylTrBnKWZTVpJqaVt9/ZDEmelOmBhjtbd/lbDa6/+vr27c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=ZTbe2faa; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=MmG+8dvi; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="XkXQWv4m";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B56neHLq"
-Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
-	by mailflow.phl.internal (Postfix) with ESMTP id B412913801E1;
-	Wed, 19 Aug 2026 13:09:15 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-02.internal (MEProxy); Wed, 19 Aug 2026 13:09:15 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1787159355; x=
-	1787166555; bh=rngWsIbqp4UM0fSmr3ndBU+ttc5Nai8HRxYczVDElJk=; b=X
-	kXQWv4mldgxmebPhO5HInIrxwEyXD7vdckRHaKRDChcdEPNbk3qUOf9dnVbAxlMk
-	az0p914xNSD65d/CambQfN2m53NBgSIkHBnSKTXEIclH4UOt4ibk3DKjRnU5yycs
-	W7gDD2J/wOyvepAeEmZgp9k0q7alDQtUKYNLYKWaqLBHf+QG8jqy7cMnTfj+GAuu
-	7MQ1r1ZnLMcfU8hBJlRrigPUfjmRCFrQRm1vdhOQQL6UeeoG4NjPyKihvsxb0bkG
-	Phm8LO8GScuNqukHYN3lMaQr3SwfMpvPpHZKUKrOTPc05t8FaOh2Z2Kj0H+zOP5p
-	KsvUp92DdQ24UqVFIDM1Q==
+	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="ZTbe2faa";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="MmG+8dvi"
+Received: from ams-compute-01.internal (ams-compute-01.internal [10.64.2.61])
+	by mailfout.phl.internal (Postfix) with ESMTP id 4BD7AEC01F3;
+	Wed, 19 Aug 2026 13:21:19 -0400 (EDT)
+Received: from ams-imap-19 ([10.64.2.39])
+  by ams-compute-01.internal (MEProxy); Wed, 19 Aug 2026 13:21:20 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1787160078;
+	 x=1787246478; bh=Vpi4XMO26isCR+trSfji5hGrrTOXYenjAHeGvwnIgGk=; b=
+	ZTbe2faaguQ0j4pbJssm68Iehm+hM8aENI1FxotUzKjbAL4VbCz3NGXsvuBADfGV
+	8pTkRZqdVIBQ230/sPWC/3qjMECSCC7pAmEBshMo8/4eTs724DvoNN9IuZMg6bMp
+	t9z8+nWF8xBDQPPCUB42uWtmd87W8MCOF4gRW8iF1YRcIl9fPtSDEfqTiNmv8XRH
+	rkv8qMSvx1Eg28dBwprV0F/tNQOaoVf+b41RerqIVnXHVhJPafpuGlm1kivUN0rs
+	v1WMlCN2BT5ve24S4wGxG2IO61lwix7ahaa2NSXVm22IMXWj1e2f8SIQi6Y+0DMe
+	tbb0PciBNOQMU+Cq7cj/mQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787159355; x=1787166555; bh=rngWsIbqp4UM0fSmr3ndBU+ttc5Nai8HRxY
-	czVDElJk=; b=B56neHLq7er86+lmQ2V++BpiXFLH6WkSpfWF4TZ53vg1yUV4AW3
-	9SQBlGGfqGGcpFkq6dQTt6aFnKNJyxn/7BSYUTvQ/RvRsnElNoxGCBrhrEgXXGNx
-	qaLVSl81xjPChjmV16jkux7Sty6758SxBluBXpK3eOQc2e/ch2GoUONBIbKngSxX
-	VTFwZOhvh75/cYypXnDj/c3zTm6u3IU6xugzHtJSGDWIihvQp8e9exTT0PNm3hPS
-	AFDhWChONL8lNT/KUfGjOf6u9qK7vuwlLP89Lciv856uSXuvtWMdER5nTWhkOdt6
-	9bBIctLhJPJTTOE0ghgRBVHd3JpYVHw4FNw==
-X-ME-Sender: <xms:OuOFahdNPCaQTr9ES9HTrKEi-_OhwFcGJL2Y1JwhYpfj-YN4SSFw6g>
-    <xme:OuOFahgThiTOZcJOBYBmDOPIsCJPcyiNaEmsn_nBDnF1DRh1ms9OGeDMtwbdJHfre
-    WAo6GPgUePt_ZD9Nqo--RmJ2IR64gmxMOv77SrY4-0mt22qpyh0nvgT>
-X-ME-Received: <xmr:OuOFapTYCJl9yzGlAvik790RSVDJbcQrwMvOhgXHFHBDFlO5GI5Aj2H_MyY>
-X-ME-Proxy-Cause: dmFkZTF2hJnMxPlMk/jfavBtLUpTUzRd98wV0yj6Xt/Tg57fveFXbfrnoCBHAhwoJSnwvc
-    MtBG50RSMfmClpPI3x6CkcWZCyQvMgs1EZ/KW76Yapbv4d0vUdc6gFqdtYBxQZoYDkSqYD
-    2YcaHdEdQfhRcwKftYsqzXEfDtHBoWdxBFtT8n56HAZST46t7Dn270fSXfsHXaq5JKYPDD
-    JoKvC7wqN5tCFOmjr9104dGNuRhfDkdXo/k1uVDYnCrgfsZx1Du/6tDXbC34XfACrLwl8p
-    prfw7PeES/yEPXECxT/4GTheYyqLa/iux7yvt2JLPJJHC1s6Kbpk2oi4ksERMJCH47snQd
-    o5MgcUNJ9MgaGAfFhljde5JsdiLa7vnywvzsFsEsyh6/jENVfGHBB4NYMoCHdzyeFT8lW6
-    yYx1d6atj2GRUwmmZRZCOxWT0OhZjWhxDuT3G55syUAHSF2ICY/molwLA0RFftwTEOY5DZ
-    vg1rRhzPDm2Yibh8HWbghC4+BGr6CwebgdS5VlYpB58QAw8wmG5zI94Pi9k6Zwc8qPqzi4
-    pLEXAvi5grHrQtpdHqLnZkW8cxNCm4EgsEziTB0bvXmJoMSqnaJDLH4LM2KDB4EHumeg05
-    Oe+IYAPb9sqnI6CCz8ZB7kaLsW4wP+oI0J46P6EySsDJt/Gtpr2OyCnJpRuQ
-X-ME-Proxy: <xmx:OuOFalKbWCWCI4ZXnZ6o2x7NBHXHelXnP4ynvixvbIEXdrgu7mryRA>
-    <xmx:OuOFagQJaZaqTXceo5AM0IZ8hNjlHfdFY2va7llJmUBU9sg0iUsbxA>
-    <xmx:OuOFaiuBACucNMmEX4x_pO3FXL942oTmUfqnR8DAtclVKO7yjC8cgw>
-    <xmx:OuOFal-067q4FSkBuyRRGIfsvMUFjGtdxbPfuJaiDhQe6psxBq8www>
-    <xmx:O-OFas-OgkCIQ2NKZkmWqu2BlJxVNaFGk9Y2qaKYd5zBQIs3fM20His3>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 19 Aug 2026 13:09:13 -0400 (EDT)
-Date: Wed, 19 Aug 2026 18:09:12 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
-	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aoXRi3ngBhO54Akk@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <9f51ac27-24b2-495b-b397-84865f977d24@kernel.org>
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787160078; x=
+	1787246478; bh=Vpi4XMO26isCR+trSfji5hGrrTOXYenjAHeGvwnIgGk=; b=M
+	mG+8dviFMKu1Iic48ecXN8LWO7Fpv6efMXI6jw6eEjtmlBASPcUUJH0JEjovoNPF
+	fzcVBXMpFicKzvGDpRlRFcyyBCCZvEQdXvXsA6gytD5o0rkRmBQVHPdA9cHYBd7n
+	sfnSWl2Ddac/ba+vXxOyl7heqK+pn5qUgEEfob4SJq3nKmJTTmgpWjTX94G1aiSt
+	XD0JWKX8UxEbQU/tiKxSh+zP+d38bdRxQBpd+SZeHmV1QyGr24mgBJ/JWxF5BxNd
+	01grvihbZypsqvPYRJMLMEwYy4z8NixAbeV6FYP+H6ZyIuxxgjhAQGCVyyH5okg4
+	FMPGqu7As+vDumKUIlrwQ==
+X-ME-Sender: <xms:CuaFamzXYZUbxrA-k01utO_pD9nAjpabvEZb_E2wQJeDJzUbP7LPBw>
+    <xme:CuaFatGUUp0BwLoEpYgxs4Rpv7sdcuDWNOmXfPF6psq-ZullNak4J-pmgN-Wj1lEk
+    0PPs6ul4-pxlO7WNjIs3JHmKszWWUW59jwnUUo5DAt8lzYZ8EQDHcQK>
+X-ME-Proxy-Cause: dmFkZTEry2p1IRtHlwQ175BjwbyvRzdULnm39XDvG3GbYy2aDHzcMxZgqdYfskY8aa5RA/
+    6A3G0O38rbwaTCCx42jPHVvGUU+iF7Nr5GmvFEBmvjcJOsZu8wYn9KE2lfjQtKNSVWFdZF
+    9i/LxrCy7J6oSwGLRXWglSjfcVeqkAGCBK7/eKm+badBzkwqxWJNtqC+6RNpPUfYtW8zOu
+    6v8ZzbrhyD63HsrAJ1iHc7/fF3Fz+CBfYdC/9reZDYrcDeOW5/A0V49DkBt5FHevqwnDyv
+    s81ZAfeCDjUBymJCDj+Xm40fBUKrtfiqjvbM6rODr3AXsIPygTmauB/pgd8HQUQ9IfjFcy
+    F17QTGFJp+uaTpO3v5geP2+wJzmDP0EHxh/bt+PyFznOQSA2bdgSiDg5XZi4vI4pnngNEn
+    odaCxDwDs4kDgHTZ83/VC/226LotV1xQxXiniJTojmDM7mRuMLYLM5vIQuAYCMOFKlFvYt
+    p8UiJAAODCDwoP2wA5vogy9MDBVG65WcMk7Yodu4hKliE8rsNf7gD6/hVdEkb+2Bd4cqlw
+    kETgB9qLkhdtytpHiL8Rvw8GN8hOMaWZzm4BnyKxbMzBTiKEdVccIb0qJZ6Of0ypaGtetM
+    kACbufnuxSAMJEwF+aX9DVJ1hOJI+pYaUpxGhllkPsj/V1C+ve9ZOEndmNUA
+X-ME-Proxy: <xmx:DOaFaqf2WEGBzru_Ei5VpqAyS6W5X5kyh34h5ffMk-ZO4euOcPZxcg>
+    <xmx:DOaFaqOGcc1cOHe66rLBYqtV84_iavSasJx1wiUNA58XnfH731VBhg>
+    <xmx:DOaFamUuUYRE2Ra2LgJMTzWDN0pX5rySQ92GfQ-dzYmb1mvDawHJmQ>
+    <xmx:DOaFaqyPzWNDhVV5bk6rRGYBxZ2CigAQN2GYacXfV2DDqHiG9NAHHQ>
+    <xmx:DuaFasYQaB3m_Kob6ZKcjpLbVvqArSj7Acv6SFvhbzzc5FgEwnfgGckS>
+Feedback-ID: i559e4809:Fastmail
+Received: by mailuser.ams.internal (Postfix, from userid 501)
+	id 20B4B2F81644; Wed, 19 Aug 2026 13:21:14 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9f51ac27-24b2-495b-b397-84865f977d24@kernel.org>
+X-ThreadId: Ag8pyDs4WbsN
+Date: Wed, 19 Aug 2026 20:20:53 +0300
+From: "Alice Mikityanska" <alice.kernel@fastmail.im>
+To: "Matthieu Baerts" <matttbe@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>,
+ "Jakub Kicinski" <kuba@kernel.org>
+Cc: "Eric Dumazet" <edumazet@google.com>,
+ "David S. Miller" <davem@davemloft.net>, "Simon Horman" <horms@kernel.org>,
+ "Shuah Khan" <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, "Alice Mikityanska" <alice@isovalent.com>
+Message-Id: <d4634ee7-28b4-42cc-9a5e-3467b0b22397@app.fastmail.com>
+In-Reply-To: <ea0ae140-86e9-4578-a24a-d50fc0b19c4a@kernel.org>
+References: <20260814194124.3102581-1-alice.kernel@fastmail.im>
+ <20260814194124.3102581-3-alice.kernel@fastmail.im>
+ <ea0ae140-86e9-4578-a24a-d50fc0b19c4a@kernel.org>
+Subject: Re: [PATCH net-next 2/4] selftests: net: Lower threshold on debug kernels for
+ big_tcp_tunnels.sh
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Aug 18, 2026 at 03:55:55PM +0200, David Hildenbrand (Arm) wrote:
-> > This replaces khugepaged's anonymous collapse with an engine that
-> > can collapse sub-PMD ranges. It is built around migration entries and
-> > frozen folios instead of heavy locking and isolation, aiming for better
-> > scalability and less disruption to the workload being collapsed.
-> 
-> I recall us discussing something around using some PTE/PMD markers (e.g.,
-> migration entries) in the past.
-> 
-> One thing that needed care is handling concurrent MADV_DONTNEED + faultin after
-> dropping relevant locks.
+On Sat, Aug 15, 2026, at 02:07, Matthieu Baerts wrote:
+> Hi Alice,
+>
+> On 14/08/2026 21:41, Alice Mikityanska wrote:
+>> From: Alice Mikityanska <alice@isovalent.com>
+>> 
+>> CONFIG_DEBUG_NET kernels run slower and generate fewer BIG TCP packets,
+>> making the test flaky on upstream CI runners. Lower the default
+>> threshold for those kernels.
+>
+> Thank you for looking at that!
+>
+>> Signed-off-by: Alice Mikityanska <alice@isovalent.com>
+>> ---
+>>  tools/testing/selftests/net/big_tcp_tunnels.sh | 18 ++++++++++++++++--
+>>  1 file changed, 16 insertions(+), 2 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
+>> index 9b7d0456bcc1..e27774eae20e 100755
+>> --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
+>> +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
+>> @@ -17,11 +17,25 @@ CLIENT_IP6="2001:db8::1:2"
+>>  CLIENT_IP4_TUN="192.168.2.2"
+>>  CLIENT_IP6_TUN="2001:db8::2:2"
+>>  
+>> -: "${PACKETS_THRESHOLD:=1000}"
+>> -
+>>  # Kselftest framework requirement - SKIP code is 4.
+>>  ksft_skip=4
+>>  
+>> +is_debug() {
+>> +	local config="/proc/config.gz"
+>> +	[ -f "$config" ] || config="/boot/config-$(uname -r)"
+>> +	[ -f "$config" ] || return 1 # No config found; assume non-debug.
+>> +	gzip -dcfq "$config" | grep -qx 'CONFIG_DEBUG_NET=y' || return 1
+>
+> Are you sure it is CONFIG_DEBUG_NET that causes that? It shouldn't be
+> that heavy.
+>
+> Do you not want to change the thresholds only for the -dbg runners using
+> kernel/configs/debug.config? If yes, you should check if
+> KSFT_MACHINE_SLOW == yes:
 
-Handled at install time.
+Thanks for the suggestion! I'll switch to KSFT_MACHINE_SLOW.
 
-I drop the PTL after the freeze to allow allocation and copy, but sample
-the PTE values (see saved_ptes) at freeze time. If something changed
-under us by the time we install the new page table entries, we give up
-on that candidate and roll it back; the rest of the round still
-installs. We allow harmless transitions: zero page to none.
-
-> > Which is why hugepage_vma_revalidate() demands that the VMA span the
-> > whole PMD even for an mTHP order -- "we'd need to lock all VMAs in the
-> > PMD range to support this", as the comment there puts it.  A PMD-granular
-> > operation is only safe when one VMA owns the PMD, and that is exactly the
-> > restriction in the way.  The alignment is the symptom; the PMD is the
-> > design.
-> 
-> I disagree with "A PMD-granular operation is only safe when one VMA owns the
-> PMD". It's safe when all page table walkers can be stopped (see above).
-
-Fair, the sentence is too strong.  mmap_write_lock plus a VMA write lock on
-every VMA the PMD covers, plus their rmap locks, would make it safe.
-
-But the mechanism still clears the whole PMD, flushes, IPIs and
-repopulates it to collapse each 16-page window. That's very noisy to the
-workload.
-
-And I am not sure how to deal with rmap locking here.  Nothing in mm
-holds two unrelated anon_vma rwsems: vma_prepare() takes one for both VMAs
-it touches, because a merge requires them to share the anon_vma, and
-anon_vma_clone() takes one because "all anon_vma's share the same root".
-The lock ordering in mm/rmap.c has a single anon_vma->rwsem level, so a PMD
-spanning unrelated mappings would need an ordering rule that does not exist
-today.
-
-> > Between the two, nothing can reach a source, so the copy runs with no
-> > lock held at all -- and the address space is left alone while it does.
-> 
-> Right. Concurrent MADV_DONTNEED can zap migration PTEs and other faults even
-> re-fault fresh anon folios. So that must be detected before replacing migration
-> entries again I guess.
-
-Yes, that is the install-time check above.
-
-The copy itself is safe: a zap of a migration entry only clears the slot
-and adjusts rss -- see zap_nonpresent_ptes(), which neither puts the
-folio nor drops its rmap -- so a frozen, locked source cannot go away
-under the copy.
-
-The rollback does the rest: it leaves a foreign slot as found and drops
-the rmap the freeze kept, which is the half of the teardown the zapper
-could not do.
-
-> 
-> > 
-> > What that removes from every collapse path:
-> > 
-> >   mmap_write_lock              -> mmap_read
-> >   anon_vma_lock_write()        -> nothing: an rmap walk needs the folio
-> >                                   locked, and the engine holds that lock
-> >                                   from freeze to putback
-> >   tlb_remove_table_sync_one()  -> nothing: one ranged flush per round
-> >   LRU isolation                -> nothing: sources are inert in place
-> > 
-> 
-> Not sure how you handle PMD collapse. I recall problems with migration entries
-> on the PMD level for non-folio things (we discussed something along these lines
-> also in the past).
-
-There are no PMD-level migration entries here.
-
-The freeze is always at PTE level, so the pmd keeps pointing at the
-table until the last step, and the PMD leaf goes in as the terminal
-layer: verify, pmdp_collapse_flush(), deposit a fresh table, set the
-leaf, all in one section under the pmd lock with the pte ptl nested
-inside.
-
-A pmd-level walker sees the old table or the leaf and never pmd_none,
-and faults stay held at pte level by the migration entries throughout,
-which is what lets PMD collapse run under a VMA read lock like
-everything else.
-
-> 
-> > Working in windows rather than whole PMDs takes care of the other root.
-> > A sub-PMD window is collapsed under the page table lock, so a collapse
-> > disturbs only the window it collapses, and each candidate is validated
-> 
-> I recall us discussing that holding the PT lock for a longer collapse operation
-> (especially on 64k) is problematic. But I don't get all the details from your
-> description here.
-
-As I mentioned above, we drop the ptl after the freeze. And take it a
-second time for the install.  Allocation and the copy run in between with
-no lock held -- on 64K the copy at PMD order is 512M of it, which is why
-it cannot sit under either lock.
-
-> 
-> > at its own order -- a window need only fit its own VMA.  A PMD-order
-> > candidate still has to own the whole PMD, which is the old rule kept
-> > where it is still needed.
-> > 
-> > Candidates are carried through the passes a batch at a time rather than
-> > one window at a time, so a round pays for its flush and its lock
-> > acquisitions once.
-> 
-> Now I am starting to feel that there are too many changes packed in a single
-> series :)
-
-Batching is not an extra here, it is the only way collapse works at mTHP
-sizes.  What a round pays once -- lru_add_drain(), the mmu_notifier
-invalidate window, the two ptl acquisitions and the TLB flush -- would
-otherwise be paid per collapse.  A 2M PMD is 32 collapses at order-4, and
-a gigabyte collapsed into 64K mTHP is 16384 of them: the serialization
-would dominate, and the workload would feel every one.
-
-> > Reading the series
-> > ==================
-> > 
-> > 57 patches is a lot to land on a list.  They go in blocks:
-> > 
-> >   1-6    helpers and shared state: pte_folio(), pte_none_or_zero(),
-> >          mm/collapse.h, and the policy that replaces asking whether
-> >          khugepaged started a collapse
-> >   7-8    the engine's shape: entry points, a call-tree comment naming
-> >          every pass, and the scan filled in
-> >   9-23   the collapse half, top down: the round frame, then each pass
-> >          in turn, then selection and the retry store
-> 
-> I fail to parse this sentence.
-
-Bad wording.  The engine is introduced in a top-down manner:
-
-  - patch 7 adds the external interface and a comment naming every pass
-  - 8 the scan
-  - 9-11 how candidates become a round and which passes the round has
-  - 12-21 fill in one pass per patch in the order they run
-  - 22-23 add the cursor that picks the windows and the second chance
-    for the refused ones.
-
-I'll spell that out in the next iteration.
-
-> > So I wrote "perf bench mem usemem" for this.  It touches a region while
-> > khugepaged works on it and reports the workload's own latency
-> > percentiles and throughput, against per-size counters that can see
-> > sub-PMD folios.  The branch is above; it is unposted and not a
-> > dependency.
-> 
-> Something more realistic might be running some workload in a VM whereby the VM
-> is getting collapsed by khugepaged.
-
-Fair, I'll run that: a guest touching its memory while the host collapses
-the backing mapping, measured from inside the guest.
-
-> 
-> [...]
-> 
-> > There may be a way out -- a PMD migration entry over the table during
-> > the window, so the CPU never caches a walk to shoot down -- but that
-> > means teaching every pmd-level walker a new kind of entry, and I have
-> > not tried it.
-> 
-> I think we discussed that in the past and it's absolutely nasty.
-
-Let's leave this for now. I will give it a try when it gets its turn.
-
-> 
-> [...]
-> 
-> > Size
-> > ====
-> > 
-> > mm/ grows by 1915 lines net: 4475 added against 2560 deleted.
-> > 
-> That's quite a lot for something that reads like a cleanup at first.
-
-About half of that is comments. :)
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+> https://github.com/linux-netdev/nipa/wiki/How-to-run-netdev-selftests-CI-style#dealing-with-slow-runners-in-performancelatency-tests
+>
+> Cheers,
+> Matt
+> -- 
+> Sponsored by the NGI0 Core fund.
