@@ -1,334 +1,158 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sender5-op-o15.zoho.com (sender5-op-o15.zoho.com [165.173.182.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81A33563CD
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 00:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787100724; cv=none; b=CA15cb5qmCvpAMfTzPJdEJdSanFaxAGrMBSPawBVwrcj/DLSbWmmpkOLCq7BCT2/J16LD0/bey+IKZCfKTsz4JOopajd1tCly8gPZJtwRZ6+wJGzGFEg9iXsnRXFwLVeEFEAU+nQQC2/lP9fGSqFkHhxlu4nVjx7/mIt2LeJ+LQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787100724; c=relaxed/simple;
-	bh=drmmQM2zQ/3arwMjOC24nDokB5ci0sg/YNQXNeZP4ZY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=fWkaEmxtnlyH0gMhLg7dQnuW6iUCAtWFkBAdx1eoRATu2oaSuWLOOsJjtGkdL3jLkXROXI1UDhpQwIcqdddJP8MMZuzXo6xolmltHD7O+SBPp0ql3G73dHAfdd8rweAri0H1ilypZwUqy5nLeOpCF2ZCAXUHsrowX7qdr7p5Nrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=0byo8aul; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF976367B90;
+	Wed, 19 Aug 2026 01:15:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=165.173.182.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787102147; cv=pass; b=qj8VgG0xH0UwjR4uB5pYgObcb3qKQSqEWa5yjV1q+lZA/8v8sL+nMDDeQzu8Co7NDlom3xJtLOrgqxXTuo96XQBTAqEZ8wrEH8YBaP1jqesTOV/EnHSw81JJUA2Ci/IxH34VCJilRunTsztCNUynhmvgYyBCwzG3jvkzyOLhgHI=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787102147; c=relaxed/simple;
+	bh=iWF4sj6xmzNEKIMaQBKku5GRthkNL3Wi6iteaBUvH2g=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 MIME-Version:Content-Type; b=qvN7VhPbTnovA9hkY1eOjuvGJ0yJfIIJRQF7FDtOZwL8iuAF0CqL2cE0Vdbipe5YeM//12fD0I9xtzXRFIHzros4wF/TOI/s1iknoqJ29Dt5C4jlnU5zfKLoZwu5c4GVSgj7ZNdFE5QnxNO8K4mNEyO18W6PRIB5gJUiQg/JEsQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty; spf=pass smtp.mailfrom=linux.beauty; dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b=iq64qdYC; arc=pass smtp.client-ip=165.173.182.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.beauty
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.beauty
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="0byo8aul"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc61541f8cso18790705ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 17:51:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787100718; x=1787705518; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
-        b=0byo8aulb98gQBT1GOBiCV06WKlti9ylavZIfqFlVUYiR3UGz8TC9FH91UvGgX72W+
-         H3aC0Ibjqpblq+6vX35IlVtJXBkZdIWk7w4rNapu/PWWff2E2d6fktN1/6tuGJYCGYVQ
-         cYCyU3ggFdvLm3c/95U53vW83d+QUJF4FwOUkh4E7HK9+ORco9YWUwB4lr0Wn/8YW5Kh
-         kLPbwijCZC/+PhoTmZ7zsDkF8Af7wHZWmYVaGkAuxNE8HOaJl2M01mYALSOfZYGPr8az
-         ryjnZjS3E4x6Sx4seea06ooIH0+mQ5DTPgpJg8ah4ys22CuSKAoKTce3CXPfrkRKyBXl
-         SVFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787100718; x=1787705518;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
-        b=pUNFRPTTgD5qJn5619CG5YxGcmKOH8ObVn8GzfFU6+uEywwzF6Di1hRdXRKXv21glz
-         XJC0z7Ru+k80FmCWHFuZdQlVTDOzmH0AOSzZ9hSjCdYBU7mikRb8oBVLU8ECc37G3Asw
-         ccnSef5G4hwtzGIQqp2WVJ1F4yQUE9QNKwUfqAd2QZXPY4RyRvZrQb73WqwgRw2Ny+eK
-         rGZHE1cPiiJ0ycHdLyCHPU73bebRO1TZ6s+J+mnTolZAyLej+fMcZA33mzb+OALCn48X
-         j28DWdFKi7y/ajdGmg6LKVRHfe9IcRjBFxpm81xm7IKbtthIq1cYhEU68azbWHVzzXZn
-         2nPw==
-X-Forwarded-Encrypted: i=1; AHgh+RpyQQzqAagjJab7lDR+fWC7NEooe7tCj0bvUMEhQl7lGhNAwr5xjPukITTGYqzbQ7WiGMvQwUNN/k1tOIP238I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YygsCIZRwqOFKvwtmN1TAJQQH4+Jfl9QyTlaepPYw3rAOGd+QuH
-	BY8CQwlxgslyyv1O4cDCRX//wxEXcjHME4ASlab7pyN5XtmRYDq6h31mqZpGmjrBpKE=
-X-Gm-Gg: AR+sD10yFSgOvlYFx2UG51sE5CnIiOxGVg8gwLBoZJUKLo2cWydilkmtcARbvJsw6tv
-	OK3wzMXtRrEBgUhkBRLN4onX/vPjAYVaxvOSfArlhlfnNA6mbCHj6r5jPFJRa4nQIhuwy0TMc2g
-	DOCKfq1Cege1QY3QLkqv+A9Ta3lqxk1pJFI3G3cSbQbgHWLo110FkEYaMpwM5b7+tHDqoU56IDZ
-	4drjpDQVaLEm0QtbnZKC4bb3eCzoH1EwE7Cz/529T2ffGWVMOqJ6Kw143dUmryvbiQB+9aM07VI
-	HTOJC2WBc+vGJ6p/nq1KaB2JzsnWN5aTlH8yA6sLaKZHcLRShbKh97ZdlnbGQQLP4zmFGEV2SwZ
-	Qay+X2sA9ddI+CbVmeRW2pV0iYLL7nXwiUahzytt2BprLV/5SfNv38NRmZIduLW/9WiQh1TPa+V
-	Vh7mZx+5696RxrhOiXJ2VQRLa7C/Q38Yt8bkMtdLQofG0q/PhnHc0f+cGjZFhocWxmNliz9eugk
-	QiRRuW29KNiMWl4yg==
-X-Received: by 2002:a17:90b:4b91:b0:384:927f:3db9 with SMTP id 98e67ed59e1d1-3957f874e86mr1158483a91.1.1787100717529;
-        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb87174sm519704a91.12.2026.08.18.17.51.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.beauty header.i=me@linux.beauty header.b="iq64qdYC"
+ARC-Seal: i=1; a=rsa-sha256; t=1787102084; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Vb7w8BxrWfF9lHwWUjEbzRIx6KBRsUigHB1BIq5oHipa4Sd5jus0nZuCNwSMN16h13U89lzH6ju4G911GghpembRCVMf6Yw1CT8w/E/crZljRwsXmE/Li+OUqGXnCiffP8k9tD//Lp24NVcZUbhP1N5p4BakadY5nnGnGkrKlP8=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1787102084; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=Q+1yMs/TAg44PdtgHr4whUenCDXTlH65MGNSP0QkUgg=; 
+	b=WzWWhEtFLhl2pB77v6E9NVuvONhpfr1iSWuWwttJmBuNvgr+2o5q3xLfDp00t9v7wxA6TtHtnvNzvU8dXWIOvWkefjmVNqix8VmBZHLHfLyjsAfPFlptN+Qb3+HpTwx+l+7OFJPjiKQdWKN6Hk7kagCTpAvX98Wc1+Uk45k0X3w=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=linux.beauty;
+	spf=pass  smtp.mailfrom=me@linux.beauty;
+	dmarc=pass header.from=<me@linux.beauty>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1787102084;
+	s=zmail; d=linux.beauty; i=me@linux.beauty;
+	h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=Q+1yMs/TAg44PdtgHr4whUenCDXTlH65MGNSP0QkUgg=;
+	b=iq64qdYCSRkOo6W1o0SCny2QBrEIZAAUw+Q6FRFTCwzUHg5s0qfJmEOfHSz1ivlZ
+	DnhE8UtxYhGyGliZxovvaGRIYEAuZhGP9XmhynpPXodH7YfeM+jsfwNR5IstCYJqeee
+	qfOU1FA7TEkwqMY9QjgL3LcezQkk/TXcXATx/tvM=
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1787102084308142.55088526691668; Tue, 18 Aug 2026 18:14:44 -0700 (PDT)
+Received: from mail.zoho.com by mx.zohomail.com
+	with SMTP id 1787102081175753.1506133241837; Tue, 18 Aug 2026 18:14:41 -0700 (PDT)
+Date: Wed, 19 Aug 2026 09:14:41 +0800
+From: Li Chen <me@linux.beauty>
+To: "Justin Suess" <utilityemal77@gmail.com>
+Cc: "Christian Brauner" <brauner@kernel.org>, "Kees Cook" <kees@kernel.org>,
+	"Gabriel Krisman Bertazi" <krisman@kernel.org>,
+	"Josh Triplett" <josh@joshtriplett.org>,
+	"Mateusz Guzik" <mjguzik@gmail.com>,
+	"Andy Lutomirski" <luto@kernel.org>,
+	"John Ericson" <mail@johnericson.me>,
+	"Jonathan Corbet" <corbet@lwn.net>, "Shuah Khan" <shuah@kernel.org>,
+	"Arnd Bergmann" <arnd@arndb.de>, "Oleg Nesterov" <oleg@redhat.com>,
+	"Andrew Morton" <akpm@linux-foundation.org>,
+	"Paul Moore" <paul@paul-moore.com>, "Eric Paris" <eparis@redhat.com>,
+	=?UTF-8?Q?=22Micka=C3=ABl_Sala=C3=BCn=22?= <mic@digikod.net>,
+	=?UTF-8?Q?=22G=C3=BCnther_Noack=22?= <gnoack@google.com>,
+	"Alexander Viro" <viro@zeniv.linux.org.uk>,
+	"Jan Kara" <jack@suse.cz>, "linux-api" <linux-api@vger.kernel.org>,
+	"linux-fsdevel" <linux-fsdevel@vger.kernel.org>,
+	"linux-kernel" <linux-kernel@vger.kernel.org>,
+	"linux-kselftest" <linux-kselftest@vger.kernel.org>,
+	"linux-doc" <linux-doc@vger.kernel.org>,
+	"audit" <audit@vger.kernel.org>,
+	"linux-security-module" <linux-security-module@vger.kernel.org>,
+	"linux-arch" <linux-arch@vger.kernel.org>,
+	"linux-mm" <linux-mm@kvack.org>
+Message-ID: <1a01795b07a.1f456216580426.3401229391386650127@linux.beauty>
+In-Reply-To: <anJE8SfBLtkh6QSa@zenbox>
+References: <cover.1784204592.git.me@linux.beauty> <anJE8SfBLtkh6QSa@zenbox>
+Subject: Re: [RFC PATCH 00/24] pidfd: add a minimal process spawn builder
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 18 Aug 2026 20:51:55 -0400
-Message-Id: <DKSIBYZNN07W.12NSCHYUCJQPH@etsalapatis.com>
-Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
- <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
- Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
- <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
- <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
- Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
- <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Sebastian
- Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
- <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <linux-rt-devel@lists.linux.dev>
-Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Add a test for arena
- fault-in under memory.max
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260808140720.293604-1-jiayuan.chen@linux.dev>
- <20260808140720.293604-5-jiayuan.chen@linux.dev>
-In-Reply-To: <20260808140720.293604-5-jiayuan.chen@linux.dev>
+Importance: Medium
+User-Agent: Zoho Mail
+X-Mailer: Zoho Mail
 
-On Sat Aug 8, 2026 at 10:05 AM EDT, Jiayuan Chen wrote:
-> A child joins a memcg capped 64M above its post-load usage and faults an
-> arena in until it runs out of that budget.
->
-> With the fix the arena page comes from the sleepable allocator, so
-> hitting memory.max goes through the memcg OOM path and the child is
-> OOM-killed, which the test checks via memory.events "oom_kill".
->
-> Without the fix the test may still pass, because a concurrent blocking
-> allocation in the child (e.g. a COW fault on an inherited page) can hit
-> memory.max and OOM-kill it first. The goal is only that the fixed kernel
-> passes reliably.
->
->   # test_progs -v -t arena_memcg
->   serial_test_arena_memcg:PASS:child killed by signal
->   serial_test_arena_memcg:PASS:memcg oom_kill
->   #5       arena_memcg:OK
->
->   # dmesg (the OOM comes from the arena sleepable allocation)
->   test_progs invoked oom-killer: gfp_mask=3DGFP_KERNEL_ACCOUNT|__GFP_ZERO
->    arena_vm_fault+0x4bc/0xad0
->   Memory cgroup out of memory: Killed process 473 (test_progs)
->
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+Hi Justin,
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+ ---- On Wed, 05 Aug 2026 04:25:25 +0800  Justin Suess <utilityemal77@gmail=
+.com> wrote ---=20
+ > On Thu, Jul 16, 2026 at 10:31:26PM +0800, Li Chen wrote:
+ > > Hi,
+ > >=20
+ > > This RFC follows feedback on my earlier spawn_template RFC [1]. That
+ > > proposal made caching the primary interface; this one starts with gene=
+ral
+ > > process construction. Christian suggested a pidfd/pidfs exec builder
+ > > modeled after fsconfig(), with enough semantics for userspace to imple=
+ment
+ > > posix_spawn() [2], and Kees agreed [3].
+ > >=20
+ > > This RFC is based on linux-next next-20260710 and depends on two pidfs
+ > > fixes that I sent separately:
+ > >=20
+ > >   * pidfs: preserve thread pidfds reopened by file handle
+ > >     https://lore.kernel.org/all/20260716052726.1032092-1-me@linux.beau=
+ty/
+ > >   * pidfs: handle FS_IOC32_GETVERSION in compat ioctl
+ > >     https://lore.kernel.org/all/20260716052822.1034228-1-me@linux.beau=
+ty/
+ > >=20
+ > > The initial implementation is source-based. The executable path can be
+ > > provided with the final run request:
+ > >=20
+ > >     struct pidfd_spawn_run_args run =3D {
+ > >         .path =3D (unsigned long)"/usr/bin/rg",
+ > This should probably be an FD for the path.
+ >=20
+ > This way it prevents race conditions over multiple configuration steps.
 
-> ---
->  .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
->  .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
->  2 files changed, 180 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
->  create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
->
-> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools=
-/testing/selftests/bpf/prog_tests/arena_memcg.c
-> new file mode 100644
-> index 000000000000..af49d8b1b995
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
-> @@ -0,0 +1,156 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <test_progs.h>
-> +#include <fcntl.h>
-> +#include <signal.h>
-> +#include <sys/mman.h>
-> +#include <sys/wait.h>
-> +#include <unistd.h>
-> +#include <sys/user.h>
-> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
-> +#include <unistd.h>
-> +#define PAGE_SIZE getpagesize()
-> +#endif
-> +
-> +#include "cgroup_helpers.h"
-> +#include "arena_memcg.skel.h"
-> +
-> +#define CG_PATH		"/arena_memcg"
-> +
-> +/* Budget the arena gets on top of whatever is already charged after loa=
-d. */
-> +#define ARENA_BUDGET	(64 * 1024 * 1024)
-> +
-> +static void dump_memcg(int (*rd)(const char *, const char *, char *, siz=
-e_t))
-> +{
-> +	char buf[512];
-> +
-> +	/*
-> +	 * memory.current reads 0 once the child has left the cgroup, so it onl=
-y
-> +	 * carries information when dumped from the live child; memory.peak and
-> +	 * memory.events survive the child and tell the story either way.
-> +	 */
-> +	if (!rd(CG_PATH, "memory.current", buf, sizeof(buf)))
-> +		fprintf(stderr, "memory.current: %s", buf);
-> +	if (!rd(CG_PATH, "memory.max", buf, sizeof(buf)))
-> +		fprintf(stderr, "memory.max: %s", buf);
-> +	if (!rd(CG_PATH, "memory.peak", buf, sizeof(buf)))
-> +		fprintf(stderr, "memory.peak: %s", buf);
-> +	if (!rd(CG_PATH, "memory.events", buf, sizeof(buf)))
-> +		fprintf(stderr, "memory.events:\n%s", buf);
-> +	fflush(NULL); /* _exit() in the child would not flush stdio otherwise *=
-/
-> +}
-> +
-> +/* Read one key from a flat keyed cgroup file, e.g. "oom_kill" in memory=
-.events. */
-> +static long cg_read_key(const char *cg, const char *file, const char *ke=
-y)
-> +{
-> +	char buf[512], *p;
-> +
-> +	if (read_cgroup_file(cg, file, buf, sizeof(buf)))
-> +		return -1;
-> +	p =3D strstr(buf, key);
-> +	if (!p)
-> +		return -1;
-> +	return strtol(p + strlen(key), NULL, 10);
-> +}
-> +
-> +void serial_test_arena_memcg(void)
-> +{
-> +	int cgroup_fd =3D -1, status;
-> +	const long ps =3D PAGE_SIZE;
-> +	char buf[64];
-> +	pid_t pid;
-> +
-> +	if (setup_cgroup_environment())
-> +		return;
-> +
-> +	cgroup_fd =3D create_and_get_cgroup(CG_PATH);
-> +	if (!ASSERT_OK_FD(cgroup_fd, "create_and_get_cgroup"))
-> +		goto out;
-> +
-> +	/* No memory controller -> nothing to test. */
-> +	if (read_cgroup_file(CG_PATH, "memory.current", buf, sizeof(buf))) {
-> +		test__skip();
-> +		goto out;
-> +	}
-> +
-> +	pid =3D fork();
-> +	if (!ASSERT_GE(pid, 0, "fork"))
-> +		goto out;
-> +	if (pid =3D=3D 0) {
-> +		struct arena_memcg *cskel;
-> +		__u32 i, npages;
-> +		char *base;
-> +		size_t sz;
-> +		long cur;
-> +
-> +		/*
-> +		 * Do everything from the child: the arena vma is VM_DONTCOPY so
-> +		 * it would not survive fork(), only the child should be under the
-> +		 * limit so that a memcg OOM cannot pick test_progs, and a map is
-> +		 * charged to the memcg of the task that creates it - so join
-> +		 * before load. The cgroup work dir belongs to the parent that set
-> +		 * the environment up, so reach it with the _parent() helpers.
-> +		 * Errors are reported to the parent through the exit code, since
-> +		 * ASSERT_* in a forked child does not reach it.
-> +		 */
-> +		snprintf(buf, sizeof(buf), "%d", getpid());
-> +		if (write_cgroup_file_parent(CG_PATH, "cgroup.procs", buf))
-> +			_exit(2);
-> +
-> +		cskel =3D arena_memcg__open_and_load();
-> +		if (!cskel)
-> +			_exit(3);
-> +
-> +		base =3D bpf_map__initial_value(cskel->maps.arena, &sz);
-> +		if (!base)
-> +			_exit(4);
-> +		npages =3D bpf_map__max_entries(cskel->maps.arena);
-> +
-> +		/*
-> +		 * Cap only now, after load: everything but the fault-in is
-> +		 * charged, so the arena gets a fixed budget regardless of what
-> +		 * the load itself cost, and the load can never hit the limit.
-> +		 */
-> +		if (read_cgroup_file_parent(CG_PATH, "memory.current", buf, sizeof(buf=
-)))
-> +			_exit(5);
-> +		cur =3D strtol(buf, NULL, 10);
-> +		snprintf(buf, sizeof(buf), "%ld", cur + ARENA_BUDGET);
-> +		if (write_cgroup_file_parent(CG_PATH, "memory.max", buf))
-> +			_exit(6);
-> +
-> +		for (i =3D 0; i < npages; i++)
-> +			base[(size_t)i * ps] =3D 1;
-> +		/* Faulted everything without dying: no pressure built, dump why. */
-> +		dump_memcg(read_cgroup_file_parent);
-> +		_exit(0);
-> +	}
-> +
-> +	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
-> +		goto out;
-> +
-> +	/* A non-zero exit means the child failed to set up; the code says wher=
-e. */
-> +	if (WIFEXITED(status) && WEXITSTATUS(status)) {
-> +		ASSERT_OK(WEXITSTATUS(status), "child setup");
-> +		goto out;
-> +	}
-> +
-> +	/*
-> +	 * Faulting a valid arena address until memory.max is hit must not look
-> +	 * like an invalid access. Without the fix the fault path allocated wit=
-h
-> +	 * the non-blocking allocator, turned its -ENOMEM into VM_FAULT_SIGSEGV=
-,
-> +	 * and the child died with SIGSEGV on a valid address; now it is handle=
-d
-> +	 * by the memcg OOM path instead. A SIGKILL alone would not prove the
-> +	 * memcg OOM killer did it (a global OOM or an unrelated crash could al=
-so
-> +	 * kill the child), so check memory.events.oom_kill, which records the
-> +	 * memcg OOM and survives the child.
-> +	 */
-> +	if (!ASSERT_TRUE(WIFSIGNALED(status), "child killed by signal"))
-> +		goto out;
-> +	if (!ASSERT_GE(cg_read_key(CG_PATH, "memory.events", "oom_kill"), 1,
-> +		       "memcg oom_kill"))
-> +		dump_memcg(read_cgroup_file);
-> +out:
-> +	if (cgroup_fd >=3D 0)
-> +		close(cgroup_fd);
-> +	cleanup_cgroup_environment();
-> +}
-> diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/test=
-ing/selftests/bpf/progs/arena_memcg.c
-> new file mode 100644
-> index 000000000000..adecd9e8463e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
-> @@ -0,0 +1,24 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <vmlinux.h>
-> +#include <bpf/bpf_helpers.h>
-> +#include "bpf_arena_common.h"
-> +
-> +struct {
-> +	__uint(type, BPF_MAP_TYPE_ARENA);
-> +	__uint(map_flags, BPF_F_MMAPABLE);
-> +	__uint(max_entries, 100000); /* number of pages */
-> +#ifdef __TARGET_ARCH_arm64
-> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
-> +#else
-> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
-> +#endif
-> +} arena SEC(".maps");
-> +
-> +SEC("syscall")
-> +int noop(void *ctx)
-> +{
-> +	return 0;
-> +}
-> +
-> +char _license[] SEC("license") =3D "GPL";
+Thanks, that makes sense. Using an fd avoids the pathname race and pins
+the executable we actually want to run.
+
+ > >         .argv =3D (unsigned long)argv,
+ > >         .envp =3D (unsigned long)envp,
+ > >     };
+ > >=20
+ > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
+ > >     pidfd_spawn_run(fd, &run, sizeof(run));
+ > >=20
+ > > Alternatively, the path can be staged before the final run step:
+ > >=20
+ > >     struct pidfd_spawn_run_args run =3D {
+ > >         .argv =3D (unsigned long)argv,
+ > >         .envp =3D (unsigned long)envp,
+ > >     };
+ > >=20
+ > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
+ > >     pidfd_config(fd, PIDFD_CONFIG_SET_STRING,
+ > >                  PIDFD_CONFIG_KEY_PATH, "/usr/bin/rg", 0);
+ > Same here. Should probably be an FD to the binary instead.
+ >=20
+ > >     pidfd_spawn_run(fd, &run, sizeof(run));
+ > I'm worried this pidfd_spawn_run just adds another varient to the existi=
+ng
+ > myriad of exec* syscalls we already have. Would it be better to just hav=
+e this
+ > work through execveat(fd, "", argv, envp, AT_EMPTY_PATH) instead?
+ >=20
+ > (i.e have execveat take a pidfd directly).
+ >=20
+ > Then you can get rid of pidfd_spawn_run which looks almost structurally
+ > identical to execveat (with the argv and envp collapsed).
+
+Thanks, but I'm less sure about using execveat() as the run operation, sinc=
+e it
+normally replaces the caller while the builder creates a new child and
+returns. A separate run operation still seems clearer to me.
+
+Regards,
+Li=E2=80=8B
+
 
