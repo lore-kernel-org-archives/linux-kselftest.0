@@ -1,116 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61EAE2D6E6C;
-	Wed, 19 Aug 2026 13:49:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4E925C804;
+	Wed, 19 Aug 2026 13:55:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787147367; cv=none; b=eHJzk95NjtAX5BNFEEJzQ209oiMoapLKFxiznqLIujcFFYTrQzB2AUlzwGVUA+YMC4wGk30EpiELeI311ZxcnXvG20HqWsZq6gLXvaAyHcU0y0ciTRyE5i6xkxuEQ+BzAzZfwBkK7IcY/LkY5PG+QNDBTq8pqWE5tFdGRpItOck=
+	t=1787147731; cv=none; b=X38RKGfO0l+MIFVj6g51r0adRzjD4EXjtM3eym52cng7+2Y/qY8AZ7ftLuf2Rr29N4ngQleRBhtsyfyQalezdFomM6dItPSm7tkM8wf4ZJVGZoonBJ/yMKFeP9Vc12QeFAC+LGTcX6jd7Nke7ee9evhbcgPrYyDUkVLVD+87kqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787147367; c=relaxed/simple;
-	bh=76BV944DpjMrV2cm6y0p2iL6hov1/xND6aq7l9zyaQM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=XABEFoFPheyDg0t75biK1uZW1y3TZgiJ61O8GdzPG3tVAmT2InZObJddIUo61pEVjBR+1aAEtNQV0EgBwGlr3d+k3u/3TmEjE59mSyJR+yFPGBRnrbSVVpr5Q8xeUj3NzK3i1lWiVqpc3dJossMuwGHTq2WyN+R3CM7C0399hcU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nMqwjWY2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787147731; c=relaxed/simple;
+	bh=UuEKHUn7xr7WabqbuM3/XgJTz2Viqf/N0nxnnC3djV4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type:Content-Disposition; b=jf9JHUcWLTAXRbU5gBAcSNNJYtgAVvHZEiup5v2u2Duggybhg3XSHRLzQJFAkoKCe+KgVeIdHv8c2IDdHCL9/9uQiQ18lr4qjY9qDNeRq9dXj+UDsiHAjofe5yFh6vHev/JG2s4ic4AkrHr6zQTY28Bw+xiDthyjLWzvUJWo0BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=WEii9Sm6; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nMqwjWY2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D12511F000E9;
-	Wed, 19 Aug 2026 13:49:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787147366;
-	bh=VPA81AHa7U28kBdDorMiNhbrDcZ/6QGeu80LYazQYQ8=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=nMqwjWY2WAIIvSxljEL/rmYL87Q3XOGCLHG2mayKBDlCIk+ZNj/nMSDQ1Yb0QT4VB
-	 nohxnrYndrx4QGdMdP6vj34wfnq8D+35ScPag7sODXpTRzsRCrRZL1LIF0SkKg8kgH
-	 jjC8yaOl+cuFrGsidFvRZY6SAQK1ZqohJtVgjfHZfFGDW2v9MmeXDUsB0hnBdU8jSi
-	 Z6zlvW3hiMTrukWV2z030YzSF1y9M7ebUtdF5l2aq3GQXojy3aNki/Er7/xDg4CuyD
-	 kEhKuXisY2RQOhXXUqh4lEwRM5oZzHUC+1GyvRLOx5HLCjZ3Sg9rT/xQ8fWEbMO0Wg
-	 4z2T/fMYCc+cA==
-Content-Type: multipart/mixed; boundary="===============6076552742003848626=="
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="WEii9Sm6"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19A4F14BF;
+	Wed, 19 Aug 2026 06:55:24 -0700 (PDT)
+Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFD673F763;
+	Wed, 19 Aug 2026 06:55:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787147727; bh=UuEKHUn7xr7WabqbuM3/XgJTz2Viqf/N0nxnnC3djV4=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=WEii9Sm6ptsXldQBo3H7icR9c5y/Ww/U0WGgnltI09o1uRCn/3MaKwh+KBr83JDBe
+	 4xl5gYp+vubiL6q55Aaaajcsk/pGksWdp5Ca73IFFbI8/akhxPDnD8EbX9g+JhHfPu
+	 u+/pVIcUI2guZhZCGmbS1oDlEgMHk9q09jsSuMR4=
+From: Leonardo Bras <leo.bras@arm.com>
+To: Mark Brown <broonie@kernel.org>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Fuad Tabba <tabba@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v19 02/14] KVM: arm64: Fix FGT mapping for HFGITR_EL2.nGCSEPP
+Date: Wed, 19 Aug 2026 14:55:23 +0100
+Message-ID: <aoW1ywZGCvJaYQqN@LeoBrasDK>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260812-arm64-gcs-v19-2-9105afd828ac@kernel.org>
+References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org> <20260812-arm64-gcs-v19-2-9105afd828ac@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <6f1ad36389faad6328320aa25b4e8b0ff7bac66913d11273ee1f6ce43dbbbfbf@mail.kernel.org>
-In-Reply-To: <20260819125840.286434-2-jiayuan.chen@linux.dev>
-References: <20260819125840.286434-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add reg-invariants test for speculative pointer arithmetic
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,john.fastabend@gmail.com,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,paul.chaignon@gmail.com,ameryhung@gmail.com,shung-hsi.yu@suse.com,danjwade95@gmail.com,kafai.wan@linux.dev,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 19 Aug 2026 13:49:25 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
---===============6076552742003848626==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Aug 12, 2026 at 08:12:01PM +0100, Mark Brown wrote:
+> The encoding to trap mapping currently maps a FGT on OP_GCSPOPX to
+> HFGITR_EL2.nGCSEPP but as per DDI0601 2026-06 this FGT controls trapping
+> of GCSPUSHX and GCSPOPCX, and not the separate GCSPOPX instruction.
+> Update the mapping to reflect the architecture.
 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> index bc038ac2df98..91d4600aa677 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -2267,6 +2267,47 @@ __naked void deduce64_from_32_wrapping_32bit(void)
->  	: __clobber_all);
->  }
->
-> +/*
-> + * Unprivileged variable pointer arithmetic on a PTR_TO_MAP_VALUE whose
-> + * offset collapses to a constant. The Spectre-v1 speculative path snapshots
-> + * the pointer while its r32 has just been blanked but its offset not yet
-> + * synced; the following register move used to trip reg_bounds_sanity_check()
-> + * ("const subreg tnum out of sync with range bounds"). With
-> + * BPF_F_TEST_REG_INVARIANTS that violation turns into a load failure, so the
-> + * unprivileged program must still load.
-> + */
+That information seems to match the one in Arm ARM version M.c.
+nGCSEPP, bit [59]
+	When FEAT_GCS is implemented:
+	Trap execution of any of the following AArch64 instructions at EL1 to EL2:
+		• GCSPUSHX.
+		• GCSPOPCX.
 
-This isn't a bug, but would it read more clearly to say the base
-PTR_TO_MAP_VALUE has a constant offset that the speculative snapshot
-captures, rather than that the offset "collapses to a constant"? The
-addend itself has to stay variable for sanitize_ptr_alu() to simulate the
-path at all.
+It looks like GCSPOPX can fault if the record is not a valid entry, but 
+there seems to be no trap register bit for that.
 
-> +SEC("socket")
-> +__success __success_unpriv
-> +__flag(BPF_F_TEST_REG_INVARIANTS)
-> +__naked void spec_ptr_alu_const_offset(void)
-> +{
-> +	asm volatile ("							\
-> +	call %[bpf_ktime_get_ns];					\
-> +	*(u64*)(r10 - 16) = r0;						\
-> +	r1 = 0;								\
-> +	*(u64*)(r10 - 8) = r1;						\
-> +	r2 = r10;							\
-> +	r2 += -8;							\
-> +	r1 = %[map_hash_8b] ll;						\
-> +	call %[bpf_map_lookup_elem];					\
-> +	if r0 == 0 goto l0_%=;						\
-> +	r1 = *(u64*)(r10 - 16);						\
-> +	r2 = 0x40000000;						\
-> +	if r1 > r2 goto l0_%=;						\
-> +	if r1 s> 1 goto l0_%=;		/* r1 in [0, 1] */		\
-> +	r0 += r1;			/* ptr += bounded scalar */	\
-> +	r9 = r0;			/* used to trip the warning */	\
-> +	*(u8*)(r0 + 0) = r1;						\
-> +l0_%=:	r0 = 0;								\
-> +	exit;								\
-> +	"
-> +	:
-> +	: __imm(bpf_ktime_get_ns),
-> +	  __imm(bpf_map_lookup_elem),
-> +	  __imm_addr(map_hash_8b)
-> +	: __clobber_all);
-> +}
-> +
->  /* Check that range_within() compares cnum ranges, not min/max projections. */
->  SEC("socket")
->  __failure __msg("div by zero")
+Thanks!
+Leo, 
 
 
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32257333410
---===============6076552742003848626==--
+> 
+> Fixes: 863ac38984a82 ("KVM: arm64: Add missing HFGITR_EL2 FGT entries to nested virt")
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  arch/arm64/kvm/emulate-nested.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm64/kvm/emulate-nested.c b/arch/arm64/kvm/emulate-nested.c
+> index 3c82f392845d..b32742d9dd73 100644
+> --- a/arch/arm64/kvm/emulate-nested.c
+> +++ b/arch/arm64/kvm/emulate-nested.c
+> @@ -1432,7 +1432,7 @@ static const struct encoding_to_trap_config encoding_to_fgt[] __initconst = {
+>  	SR_FGT(OP_AT_S1E1A, 		HFGITR, ATS1E1A, 1),
+>  	SR_FGT(OP_COSP_RCTX, 		HFGITR, COSPRCTX, 1),
+>  	SR_FGT(OP_GCSPUSHX, 		HFGITR, nGCSEPP, 0),
+> -	SR_FGT(OP_GCSPOPX, 		HFGITR, nGCSEPP, 0),
+> +	SR_FGT(OP_GCSPOPCX, 		HFGITR, nGCSEPP, 0),
+>  	SR_FGT(OP_GCSPUSHM, 		HFGITR, nGCSPUSHM_EL1, 0),
+>  	SR_FGT(OP_BRB_IALL, 		HFGITR, nBRBIALL, 0),
+>  	SR_FGT(OP_BRB_INJ, 		HFGITR, nBRBINJ, 0),
+> 
+> -- 
+> 2.47.3
+> 
