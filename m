@@ -1,63 +1,68 @@
-Received: from mail-pj1-f71.google.com (mail-pj1-f71.google.com [209.85.216.71])
+Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E922F3C1F
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 07:05:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.71
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0AF2F3C1F
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 07:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.72
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787123146; cv=none; b=MOMyEwVxaKg1Bwjsa0gOCO3fL6YN6F34cwpYCNBKV0kXqORrXNgcbJrHMLyFqsQGHjIpCz9/vsoG3n1NSOh3DVAyypx2YXagZu+20YidVV7Lurea3y8hqjT6uINYczo0W9XfKO8ZgaArBp6OSofXpaJfNDR++8kQKxfVSyKE/G8=
+	t=1787123152; cv=none; b=cqlsMhAWm30fniIqaKV7ukauAQiPt19Bfg6R1IZkrPwWYALaO8yhjfD5T1Q8fhuYX65ekvnwZka2fQG8w0QvaCg0BGBaQKDYmXgzt83V99mpGwSpTB9sCn8Dn6/5ShO1mIkX2LQmhzuCWFS4g1eusWRsUcIWoyFfL4mZ3zCsczE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787123146; c=relaxed/simple;
-	bh=d2D/XwMx/SOv681vOnzK2+ESK7vhI/atSHzc4LbbiXM=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=c/q3Vz7Uy9GgXM/3MIxnSmCDQfNnIQUdCU6MF/HEpVUU5Y2h1tCg78sUaEwKZ0DVjd4uHqONAz1sSPU05O/SYkT8vRWtdtuRi0u8ilo3/Pvbx22S0cg9HFDVA81Lt7JfPF9VYmMM3ZO0HL91DGku4OnQNTZCRn3daBAKGNk7XlE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jasonmiu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qRlZD0Rt; arc=none smtp.client-ip=209.85.216.71
+	s=arc-20240116; t=1787123152; c=relaxed/simple;
+	bh=PqYctq9OkbGbad376jXZa8QYf/yrQA5UAlv/R/RffpI=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=DNdvQy/VvAyS5hWSBD6yBjgtt7kQRLhJYH7hV8+oDXxoD00B+xrSAI+xaReLYf73CDoVfsWYVEQGuWnx1HTuGza+DBP+8lH1lTYiIr+/XH3jFIfHHs1VjSJaFq6dxaF1xPvxWouhFgfZ3GbNQhDwptP2uk4cfMxx1JPQ8sbDhLY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--jasonmiu.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NGG8KOjE; arc=none smtp.client-ip=209.85.216.72
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--jasonmiu.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qRlZD0Rt"
-Received: by mail-pj1-f71.google.com with SMTP id 98e67ed59e1d1-38e25e4b41cso977831a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 00:05:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NGG8KOjE"
+Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-388cfc4848dso776576a91.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 00:05:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787123143; x=1787727943; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=/5Ut30PM1D32BzO4CJAfeJOZxs3sCO17fFGXnkufLgM=;
-        b=qRlZD0RtyJuWx4BSo2Fy8GMBPzVznLj6I9EcQm1YzDHy13m1K67dBVVj8oRFyINgw8
-         G+2s/s5bsT5xs1c8oOUCBiQAR/WhzC36mNz00sJNcr94eag1OsjDqVHx6WPf5KSL5hMX
-         6sPHAFz7msZwMqSk4v1fHeKTXGmWjE24YnifzoqcPIDpUGkMQvMhnGgp1dA/1R4ib/F+
-         7Hd1El1UB2c6J2vJev0CkB8+jI3zGnfkMXdgTcMNUTI93vVk0krPWR0wfGLfrDprdekM
-         4U5XTVFH8XouEay0IEcv/inqfK8VW4c1mABYKOM2AQlLhM2n3ukhNZXm2p1odSSDOJKZ
-         yp5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787123143; x=1787727943;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1787123149; x=1787727949; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=/5Ut30PM1D32BzO4CJAfeJOZxs3sCO17fFGXnkufLgM=;
-        b=deFkxLRJRGB+X5N9YumyuMhsk8hi1c2+8vSSRnmJY97EB/DIIbf5hOKzdAP44P+Ved
-         CJa24kb+5NSZIft/Sao77wcOkHShf1pXjs6Kwnb7waFtvdVt6LY63+CU2xe2ISC5/5X6
-         xXWYMBT86pw9R+ckXnK5puF7wM3494jlB3IxsBxN6xBCqWj/lJ24E4tVUhnKWsY2AsGr
-         Wsc8+IyZLOq2b3/t09IardS6H2ODVfByRFlJOYC/H2X7S4COB24UtzZVorEUVvIYNnlf
-         rw88oBuInKReVOCtzQ/g+XyzqBZQu7A68g17KPhNXDZLVz3x5z2ljMJf+OkdK7JmnQyJ
-         3eWQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq9VzHPESltekI3oPWnZRfBskzwfTKdEGXhSAi6BItYPeZtzJlEA/PxG6ay1YtzeYz9XhyOh2FKg106+NxZmJ4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwN7ePH1v0TyfBn0PZV4e7EvXEyosk2qoFu9ZCI1fmjUG90BWrR
-	+k7pNEhzlDUBJkw+544r5KWYPoLiJTmWGxGJH62QErVMAxbj69ziso1aCMPJ5QnvUFlF3jIoLjX
-	vu9P6F/FanV2BLw==
-X-Received: from dleg1.prod.google.com ([2002:a05:701b:4301:b0:13d:2ef5:67be])
+        bh=r13rbsEeTBQUt7C0+umCAD05cQ1RPgR2iUrqqxSlQbQ=;
+        b=NGG8KOjE1gfzjPuxH+IHtKVRCI95Rg5cXD0FlrBLDsilVxsyjyNlOvaF6nhC535uQI
+         tvLv6Whk8WrioYHUAmgt7umEcGeToRuAGCeP96pNm6ZYkdUxpZ5x5tujdbPj7niubnch
+         MGPKhyqlWBWP8/LxAB15QyzydbWuZvMYZI02J3gHx0l3g6xwUSBlabihK2h6+Pxz4YhL
+         GvVv94FzPmp/9K6kYejdMObBac16uzve3fEGrigQYHP+pmxE0TASys77YPm3oOJWJNkZ
+         0TVAIm6VsM5xz6skR1EECoAiKXByVKyLqwWAoN2r3qzsEtxHi+TtqA3JDbGYbeO5GPCV
+         w0gA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787123149; x=1787727949;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=r13rbsEeTBQUt7C0+umCAD05cQ1RPgR2iUrqqxSlQbQ=;
+        b=S1cjD3Jhxu7zNV0OlGS1ty11G7NV55ogJhEc/zxWMW4hoGfqoP9qXj7+hYr90kYiqp
+         kqjGNQpnnxSxis+9QiPLjv4zeQKnZFZcvJLHc15zbZI7t+YCVAcvBVravHRn4aeJRgvj
+         stzW5NpPmcQSXpyPLM64fPCydhsH65PbOYAgFttaEBCHthLZMsNOAzVxM1b2uTljPOYh
+         DuooCpruLi67lqJdzDe0pQyPx1k/V0sUL6XYBDdRbdAvzkX1ep0zn9e+GtsjvdUtbNWx
+         mTz7Eh+qpzUmn0n+/q1W6ie6ZOQck++7W+Xd15PU0fDHhhz1aiqydLNibXOhp0xALbJq
+         YY8Q==
+X-Forwarded-Encrypted: i=1; AHgh+RoOOSxTl8sfh7MgZkqSMxX6LGIipj+JbVqq5X7H1pyClmcl1w6B/7JLrxwCaYPXuvNQqduSHA6HNNWsHQnJ7O4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzA88XrKnomBA/jlfi0u25g0/7DbNOW95VqGpQAnLmb91E7ua7P
+	B+MpS8Vzv8NY0SAsFaT260IO4ALEIAMBbK4iynaRZgATWwMauStJ2k8VxJLKRU89Rgvggi4edM1
+	OjCr+AKtNJI6n3Q==
+X-Received: from dybhl1.prod.google.com ([2002:a05:7301:2701:b0:327:eee:4918])
  (user=jasonmiu job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:2d85:b0:385:393e:7124 with SMTP id 98e67ed59e1d1-3958127ae44mr4871724a91.14.1787123142847;
- Wed, 19 Aug 2026 00:05:42 -0700 (PDT)
-Date: Wed, 19 Aug 2026 00:05:35 -0700
+ 2002:a17:90b:4a46:b0:37f:e326:6557 with SMTP id 98e67ed59e1d1-3958083fc60mr4701528a91.4.1787123148550;
+ Wed, 19 Aug 2026 00:05:48 -0700 (PDT)
+Date: Wed, 19 Aug 2026 00:05:36 -0700
+In-Reply-To: <20260819070538.2404983-1-jasonmiu@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260819070538.2404983-1-jasonmiu@google.com>
 X-Mailer: git-send-email 2.55.0.737.g08866a6d13-goog
-Message-ID: <20260819070538.2404983-1-jasonmiu@google.com>
-Subject: [RFC PATCH 0/3] selftests: mm: introduce page allocation stall reproducer
+Message-ID: <20260819070538.2404983-2-jasonmiu@google.com>
+Subject: [PATCH 1/3] lib/test_mempress_timer: add module to generate kernel
+ allocation pressure
 From: Jason Miu <jasonmiu@google.com>
 To: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
 	Shuah Khan <shuah@kernel.org>, David Rientjes <rientjes@google.com>, 
@@ -69,117 +74,206 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett" <liam@infradead.org>,
 	linux-kselftest@vger.kernel.org, Jason Miu <jasonmiu@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Background
-==========
-Under severe system memory pressure, system unresponsiveness often 
-occurs due to page allocation stalls. In commit 94e0bcde055e ("mm, 
-page_alloc: reintroduce page allocation stall warning"), David Rientjes 
-introduced a warning mechanism to emit a kernel log when a page 
-allocation takes longer than 10 seconds. This log is used to correlate
-a frozen system with the system memory state at the time of failure.
+Update lib/Kconfig.debug and lib/Makefile to introduce
+test_mempress_timer, a kernel testing module designed to generate
+synthetic memory allocation pressure within SoftIRQ contexts.
 
-To further debug and analyze these allocation stalls, we need a 
-reproducible test case. This patch series introduces a new selftest 
-designed to artificially mimic the severe memory pressure scenarios 
-seen in production, allowing us to observe the resulting allocation 
-stalls.
+Bind independent timers to each online CPU to continuously execute
+atomic page allocations (GFP_ATOMIC | __GFP_NOWARN). Provide this
+workload generator to repeatedly emulate heavy kernel allocation demands.
 
-Patch Series Architecture
-=========================
-This selftest creates memory contention by saturating both userspace 
-and kernelspace:
+Add a configurable termination threshold (test_duration_secs) to prevent
+permanent test-node lockups, and provide batching control via the
+allocs_per_iteration module parameter.
 
-1. Kernelspace: A generic kernel module (test_mempress_timer.ko) binds
-   timers to every online CPU, continuously executing atomic page 
-   allocations (GFP_ATOMIC | __GFP_NOWARN) from a timer. This behavior
-   simulates a massive influx of networking allocations. However, such
-   stalls can be triggered by any mechanism that allocates below the 
-   per-zone min watermarks, which forces the page allocator to 
-   continuously loop when servicing user allocations.
-2. Userspace: A Python script creates a memory pressure scenario by 
-   spawning a primary memory hogger process to lock a percentage of 
-   system memory, driving the system to a low-watermark state. It 
-   simultaneously spawns concurrent worker processes that intentionally 
-   overcommit the remaining memory to churn anonymous pages.
-3. Orchestration: A Bash script constructs a loopback zswap device and
-   coordinates the execution of both workloads. The memory pressure 
-   situation is designed to last for 15 minutes by default.
-
-Experimental Results
-====================
-We executed this test on a bare-metal node with the following 
-specifications:
-- CPU: 224-core Intel(R) Xeon(R) Platinum 8481C (2 Sockets, 2 NUMA)
-- Memory: 503 GiB RAM
-
-Test parameters used in the orchestrator script:
-  ./page_alloc_stall.sh 80 64 2.5 50 memtoy/memtoy
-  
-- 80: Primary memory hogger limits memory by locking 80% of RAM.
-- 64: Spawns 64 concurrent memory worker processes.
-- 2.5: Workers overcommit the remaining freely available memory by 2.5x.
-- 50: Allocates 50 GiB for the synthetic loopback zswap device.
-- memtoy/memtoy: Path to the external binary used to allocate memory.
-
-During execution, we mimicked the memory pressure scenario observed on
-production systems. Under these conditions, we observed page allocation
-stalls occurring across various processes, highlighting the resulting 
-system unresponsiveness:
-
-  [ 7467.002149] watchdog: BUG: soft lockup - CPU#156 stuck for 21s!
-  ...
-  [ 7561.805279] cron: page allocation stall for 566 secs...
-  [ 7668.275609] systemd: page allocation stall for 673 secs...
-
-Test Execution
-==============
-This is submitted as an RFC. We are actively seeking feedback from the 
-community on this testing methodology and integration.
-
-The primary objective of this selftest is to establish a measurable 
-baseline for page allocator responsiveness. This baseline will be used 
-to validate upcoming improvements to the allocator, and will serve as 
-a permanent framework to prevent future regressions.
-
-To run the selftest:
-1. Compile the kernel with CONFIG_TEST_MEMPRESS_TIMER=m, 
-   CONFIG_MEMCG=y, and CONFIG_ZSWAP=y.
-2. Execute with default parameter values:
-   ./tools/testing/selftests/mm/page_alloc_stall.sh
-
-WARNING: This selftest is explicitly designed to exhaust system 
-resources and heavily saturate the CPU. The machine will become highly 
-unresponsive. If executed remotely, active SSH/network connections are 
-expected to drop.
-
-Credits and Dependencies
-========================
-This test depends on an external memory allocation tool, memtoy, 
-written by KOSAKI Motohiro (https://github.com/kosaki/memtoy), which we 
-utilize for handling the underlying anonymous mappings.
-
-We would like to extend our thankfulness to Shakeel Butt 
-<shakeel.butt@linux.dev> for graciously allowing us to reuse some of 
-his original ideas and module implementations in this test.
-
+Signed-off-by: Jason Miu <jasonmiu@google.com>
 ---
-
-Jason Miu (3):
-  lib/test_mempress_timer: add module to generate kernel allocation
-    pressure
-  selftests: mm: add script to induce userspace memory contention
-  selftests: mm: add script for memory allocation stall test
-
- lib/Kconfig.debug                             |  11 +
- lib/Makefile                                  |   1 +
- lib/test_mempress_timer.c                     | 140 +++++++++++
- .../testing/selftests/mm/page_alloc_stall.sh  |  80 ++++++
- .../selftests/mm/page_alloc_stall_pressure.py | 235 ++++++++++++++++++
- 5 files changed, 467 insertions(+)
+ lib/Kconfig.debug         |  11 +++
+ lib/Makefile              |   1 +
+ lib/test_mempress_timer.c | 140 ++++++++++++++++++++++++++++++++++++++
+ 3 files changed, 152 insertions(+)
  create mode 100644 lib/test_mempress_timer.c
- create mode 100644 tools/testing/selftests/mm/page_alloc_stall.sh
- create mode 100644 tools/testing/selftests/mm/page_alloc_stall_pressure.py
 
+diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+index 1244dcac2294..00d32012e476 100644
+--- a/lib/Kconfig.debug
++++ b/lib/Kconfig.debug
+@@ -2635,6 +2635,17 @@ config TEST_BITOPS
+ 
+ 	  If unsure, say N.
+ 
++config TEST_MEMPRESS_TIMER
++	tristate "Test module for memory pressure and allocation stall timing"
++	default n
++	help
++	  This builds the "test_mempress_timer" module that can be used to
++	  provoke and profile page allocation stalls and direct reclaim
++	  slowness. It periodically does a atomic page allocation to generate a
++	  memory pressure.
++
++	  If unsure, say N.
++
+ config TEST_VMALLOC
+ 	tristate "Test module for stress/performance analysis of vmalloc allocator"
+ 	default n
+diff --git a/lib/Makefile b/lib/Makefile
+index 7f75cc6edf94..0f35c2b78970 100644
+--- a/lib/Makefile
++++ b/lib/Makefile
+@@ -78,6 +78,7 @@ CFLAGS_test_ubsan.o += $(call cc-disable-warning, unused-but-set-variable)
+ UBSAN_SANITIZE_test_ubsan.o := y
+ obj-$(CONFIG_TEST_KSTRTOX) += test-kstrtox.o
+ obj-$(CONFIG_TEST_LKM) += test_module.o
++obj-$(CONFIG_TEST_MEMPRESS_TIMER) += test_mempress_timer.o
+ obj-$(CONFIG_TEST_VMALLOC) += test_vmalloc.o
+ obj-$(CONFIG_TEST_WORKQUEUE) += test_workqueue.o
+ obj-$(CONFIG_TEST_RHASHTABLE) += test_rhashtable.o
+diff --git a/lib/test_mempress_timer.c b/lib/test_mempress_timer.c
+new file mode 100644
+index 000000000000..a102ac4f6725
+--- /dev/null
++++ b/lib/test_mempress_timer.c
+@@ -0,0 +1,140 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * test_mempress_timer.c
++ *
++ * Simulates kernelspace memory allocation pressure via timers.
++ * This module binds individual timers to each online CPU to independently
++ * allocate and free physical pages concurrently. It serves as a workload
++ * generator to reproduce and measure page allocation stalls under system
++ * memory contention.
++ *
++ * Module Parameters:
++ *  - allocs_per_iteration: Number of atomic page allocations executed
++ *                          during each timer callback.
++ *                          Default: 1000
++ *  - test_duration_secs:   Total duration in seconds to run the pressure test
++ *                          before automatically disengaging.
++ *                          Default: 900 (15 minutes)
++ *
++ * Usage:
++ * insmod test_mempress_timer.ko test_duration_secs=900 allocs_per_iteration=1000
++ */
++
++#include <linux/gfp.h>
++#include <linux/mm.h>
++#include <linux/slab.h>
++#include <linux/module.h>
++#include <linux/timer.h>
++#include <linux/proc_fs.h>
++#include <linux/skbuff.h>
++#include <net/tcp.h>
++
++struct mempress_timer {
++	struct timer_list timer;
++	struct list_head list;
++	struct list_head page_list;
++	int cpu;
++};
++
++static LIST_HEAD(timers);
++static bool stop_timers;
++
++static unsigned long interval = 2;
++
++static unsigned long allocs_per_iteration = 1000;
++module_param(allocs_per_iteration, long, 0444);
++
++static unsigned long test_duration_secs = 900; /* 15 mins default */
++module_param(test_duration_secs, ulong, 0444);
++
++static unsigned long end_jiffies;
++
++static void alloc_pages_atomics(struct mempress_timer *test)
++{
++	int i;
++	struct page *page;
++
++	for (i = 0; i < allocs_per_iteration; i++) {
++		page = alloc_page(GFP_ATOMIC | __GFP_NOWARN);
++		if (!page) {
++			pr_warn("page allocation failure from cpu %d at iteration %d\n",
++				test->cpu, i);
++			break;
++		}
++		list_add(&page->lru, &test->page_list);
++	}
++}
++
++static void free_pages_atomics(struct mempress_timer *test)
++{
++	struct list_head *page;
++	struct list_head *iter;
++
++	list_for_each_safe(page, iter, &test->page_list)
++		__free_page(container_of(page, struct page, lru));
++	INIT_LIST_HEAD(&test->page_list);
++}
++
++static void atomic_timer_allocator(struct timer_list *timer)
++{
++	struct mempress_timer *test = timer_container_of(test, timer, timer);
++	bool is_expired = (test_duration_secs > 0 &&
++			   time_after(jiffies, end_jiffies));
++
++	if (list_empty(&test->page_list) && !is_expired)
++		alloc_pages_atomics(test);
++	else
++		free_pages_atomics(test);
++
++	if (!READ_ONCE(stop_timers) && !is_expired) {
++		test->timer.expires = jiffies + interval;
++		add_timer_on(&test->timer, test->cpu);
++	} else if (is_expired) {
++		pr_info_once("Duration (%lu secs) reached, stopping.\n", test_duration_secs);
++	}
++}
++
++static int __init mempress_timers_init(void)
++{
++	int cpu;
++	struct mempress_timer *test;
++
++	if (test_duration_secs > 0)
++		end_jiffies = jiffies + (test_duration_secs * HZ);
++
++	for_each_online_cpu(cpu) {
++		test = kzalloc(sizeof(*test), GFP_KERNEL | __GFP_NOFAIL);
++
++		timer_setup(&test->timer, atomic_timer_allocator, 0);
++		list_add(&test->list, &timers);
++		INIT_LIST_HEAD(&test->page_list);
++		test->cpu = cpu;
++
++		/* For start, use 90 seconds. */
++		test->timer.expires = jiffies + (90 * HZ);
++		add_timer_on(&test->timer, test->cpu);
++	}
++
++	return 0;
++}
++module_init(mempress_timers_init);
++
++static void mempress_timers_exit(void)
++{
++	struct mempress_timer *test, *n;
++
++	pr_crit("exiting\n");
++	stop_timers = true;
++
++	list_for_each_entry_safe(test, n, &timers, list) {
++		timer_delete_sync(&test->timer);
++		list_del(&test->list);
++		cond_resched();
++		free_pages_atomics(test);
++		kfree(test);
++	}
++}
++module_exit(mempress_timers_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_DESCRIPTION("Test memory pressure from timers");
 -- 
 2.55.0.691.gc56d675ccc-goog
 
