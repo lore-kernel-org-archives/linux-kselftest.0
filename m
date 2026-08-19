@@ -1,196 +1,166 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f170.google.com (mail-pg1-f170.google.com [209.85.215.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36861395AD8;
-	Wed, 19 Aug 2026 07:44:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787125489; cv=fail; b=Zyshh7eV/DmZpeRUiSEogmKfc7lfy3x3vG+ra2zEBF+oqdYQ4bJqK7051jyyUQPmf7+5XEIRWM3AG7hdk0Rm3CE1feumOAJmIUn2hH5gEF6RkWvR0UZMs40Ai9sJHISTUX51T2UjrmXcHO1u9JNSPMcMl6P3FLY3QiPw4EGTQPw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787125489; c=relaxed/simple;
-	bh=Qnjw0X4iC0Az0GIpuSw9FMMB2DhQdFujzoK2ogA75+w=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=cYogMxnG8P4KsxZ+kZ1tj12jrc7zprtYx+XgPhj4bLwiQXuvJA/MT5K5GWapC5I5TimAzPnftVHiI5ewiahlO51Ox4VtvdR+jL9P9FGB5gdd5MdnDiayXZlp1yXy0kZYkKIbUS+Pk6ee1BXZpg07prk/K7wmQEV/PaAAvI+9na0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JzJM8L1u; arc=fail smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 874FA3F1AAD
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 07:47:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.170
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787125647; cv=none; b=Zz9srtmNfEx8tRL+WwJQ22RityHVwi4yUTwMazZsyHk+uHqQ7ZhlSq2vNZt6xIjPVOb1cdbVwdTtuBeBJt3K3WqTK/SAKIzVeh3gKBAHvY1zA+37uCcfqlLmPl1nE1JJYomt/APwfR3/m8AZF4K3T6jV8AdmdSqSrjYV5qM9Xno=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787125647; c=relaxed/simple;
+	bh=gJ13UqWzZEDyerZ7/qjhoITgJwDdLZizvxVmEuBRsmU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pnraZZNMBl7NKI9I+umIDq9utMl/bLMMkJTTy9V3HBBgf69sV9IeeBoTKm3LzCR/TqQtYXnuF7bfyXURA1Cm+GL8bRJ54Pk9TrpsDYCeqoUVXMUiV1b7G11Df3kAAk+738+xiatTXeQ5qEh5TsXkVgxsnZZBhBEFNVbkIUDl4YQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KgREYWvD; arc=none smtp.client-ip=209.85.215.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JzJM8L1u"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787125486; x=1818661486;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Qnjw0X4iC0Az0GIpuSw9FMMB2DhQdFujzoK2ogA75+w=;
-  b=JzJM8L1updFDhAx6OjUVPFdEFmlJ8HtbXOcrTZjIP/YJSWmQDomTAm5f
-   Tj6+C1CoopBWJvaOqLK8IHVzmC1dJcaVeYekziV2DemYDjxcvygYkqdjx
-   MT9WdC4T4Q4fVAw91VkHDBnf77anLgITLEMJ4HH9mNLpMrfv/7iI3ShD6
-   hOxiLLvhxaKYDu/cVnBLkpBRhWO93PaQB3uHhlPVVyaZjklOOjsbFZ3Ky
-   FA95A7b8bMY3iNdlHOR8+yizrbn10a30BLN8TDcoBvpLmkGhXQZcpq/HF
-   CsSc6Uf2/wHZwoT29hupuiRHmSSL5GA+Bd2RRd3sp6/l9J1/+F/nY0PLN
-   A==;
-X-CSE-ConnectionGUID: msrm1X0nQcSGYrIC6/RGtQ==
-X-CSE-MsgGUID: u7Xc1NDATFeipyIaCMImuA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="105011837"
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="105011837"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 00:44:43 -0700
-X-CSE-ConnectionGUID: euOAV78GTIGqOPZXEgBo2g==
-X-CSE-MsgGUID: GuQ/sr+uQOeDt7NZ9H65jQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="259277775"
-Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 00:44:42 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 19 Aug 2026 00:44:42 -0700
-Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Wed, 19 Aug 2026 00:44:42 -0700
-Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.62) by
- edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Wed, 19 Aug 2026 00:44:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=RxtrxO6g4dIgC+vTIwR6CagAe0QgWQ7WfrefW6CWkcpEu7ANRgEdMr+b+J/4WfTkoxwMEQHqkXZr5/T9DFTzTKHpt9P5Y7CFQ65cJ7Pbo/6Lt0wuGzGW5H3OSeysn3XvN4MneaoNl+IrKnEHkS8UzSo3O8jXoUrY47zKHKQctf1upss5vL03nvd6LmwSxPsrmX6UTbbmAUGRCSVZ8PxXpQwmiYFqclw0nwlNNX0xBbZvMCW2Vw4QlByQSc4bIvKekEv6ZGu5ZdkwKvnQnYlJqa1mDqtMsArKiYHmrHxLKbqog4EC4k1aoVdqchCWyfR11B1qamOkQri3ZyXtOS9yKw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VmA84hhwMS/hzw5iXtS9yYlbmf3Arx/bUh8LfrJgcOE=;
- b=V5fAirit/o9eFMRV+T/p0RYQwSS9D4ezgDHH7+K+po8w0yfJqo1jqvYjIoHzIGQYQRrJD/eipv/Mjq6CfGqcsLD4tKHGV3odtq/4bHnJhnDtyQW58inZxEIiJvyT4P1kJxEvjFI8CmgoevR2ZP+9nTBU8pFvnGUHh98UGBYCNJOsX8xTujoLWCq71kWHtG9WbGU4QkHzG5ZmM6a/3aB4RxK+Hn9IxRUIBO7VUz4aRxqdpIfVKJHwSn+R/Hc9SOAzcdC04sz/ex7CCWZoYf6CjrVrWtJnOhDIs1x18s0noTXWNLtAIoJMR2GOGbprUBb4eLBDZfEJCXioyxNWruqbJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ0PR11MB5645.namprd11.prod.outlook.com (2603:10b6:a03:3b9::19)
- by PH3PPF957B3B2A8.namprd11.prod.outlook.com (2603:10b6:518:1::d39) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Wed, 19 Aug
- 2026 07:44:38 +0000
-Received: from SJ0PR11MB5645.namprd11.prod.outlook.com
- ([fe80::fb19:f933:8bb3:b42e]) by SJ0PR11MB5645.namprd11.prod.outlook.com
- ([fe80::fb19:f933:8bb3:b42e%4]) with mapi id 15.21.0339.007; Wed, 19 Aug 2026
- 07:44:38 +0000
-Date: Wed, 19 Aug 2026 00:44:33 -0700
-From: Peter Fang <peter.fang@intel.com>
-To: Lisa Wang <wyihan@google.com>
-CC: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng
-	<ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao
-	<chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, Ira Weiny
-	<ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, "Kiryl
- Shutsemau" <kas@kernel.org>, <linux-kselftest@vger.kernel.org>, Paolo Bonzini
-	<pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
-	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe
-	<rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, Ryan Afranji
-	<afranji@google.com>, Sagi Shahar <sagis@google.com>, Sean Christopherson
-	<seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li
-	<xiaoyao.li@intel.com>, Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds
-	<jmcrey@google.com>, <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <x86@kernel.org>
-Subject: Re: [PATCH v14 01/22] KVM: selftests: Add macros to simplify
- creating VM shapes for non-default types
-Message-ID: <20260819074433.GA3290799@pedri>
-References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
- <20260722-tdx-selftests-v14-1-15ad654a50db@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260722-tdx-selftests-v14-1-15ad654a50db@google.com>
-X-ClientProxiedBy: SJ0PR05CA0128.namprd05.prod.outlook.com
- (2603:10b6:a03:33d::13) To SJ0PR11MB5645.namprd11.prod.outlook.com
- (2603:10b6:a03:3b9::19)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KgREYWvD"
+Received: by mail-pg1-f170.google.com with SMTP id 41be03b00d2f7-cbee846deecso755741a12.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 00:47:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787125646; x=1787730446; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=CWkEyoxZps0PdiXw6wwCg4ciwx9ABuctTL6IGXUaTDg=;
+        b=KgREYWvDzrOBY7IhzEyYqBxOpnD4cuLwwrUzOBEcGL+ooncNXEe9NzAU7L62/SM84f
+         Usr8gCmLGsta+PndAhSQQEmx05JpMDZawc23u//eYE6PFJIIqxgrKk/zO8PLTi1gCwSo
+         3+uEi6Dx6Hb01DzSZcUnjEJxwKtFzghBN9f6uU+0yAN+M9kINbAYWLN+/yBTtTvVJ95+
+         iBI0xnJT0yO+t9Xv7zOqgdYwlbJ7nrUJYo+EJGHwRhkHiOlmmONeaYo+xCeNM7RLPStb
+         WBfMklzKbjAjlw4tz0hd9PZFOH6WNi7ScB9M1DtsFmF07iPhZL0JMVjCD73MS6qRRbYu
+         5xNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787125646; x=1787730446;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=CWkEyoxZps0PdiXw6wwCg4ciwx9ABuctTL6IGXUaTDg=;
+        b=UlLg+g7KeP8CVvJBjqynlqnQwfz/7bqqORWSkvgxuw04TlwSL0+oDqXVd9hFAb87eb
+         uxsOAxIbM/fobfvZ7jYUyBB3u5NYDpknYNQpy1t8pgbhyMwx0R5J+g2QMfdg9AUyitiW
+         3IfOCZYwumBS4/VJK8eqapMU7WsgCuRKyp5V16Z2Z+wi9v0iLV82DQlqG2Napw9ns90J
+         dD3rooxXqHhbH7SLV3D1+w/C9oBPwfJZyEk8OKG131klnLkvwCd6gE0VI7NgVLfyL7Vt
+         aCCNbMnk5ERNsbzvpRu/f0tpaL5axcxMENPJpZ5Webs9FWGQBwKR5shfuXhg19/kVMPf
+         a2nw==
+X-Forwarded-Encrypted: i=1; AHgh+RrYXe22tb4VQNxHhzo1rIS0AAMakdKGZij2ZxTSZ2XEUwJWOJDw2TgzhBxv0MPIFnz4UGcmXk82q/DuGT5xKCs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRJ4deZfHB14EVF5inxvR9/vGRMl+E6XYPDvrIFZjVkYkVQVwZ
+	ONIVn3E6fQYCdxGo40CdRawYTeMe9c7ZJU9pL/N0PfoKc/qdoE0MnJCak8PmjNiK
+X-Gm-Gg: AR+sD12AYI5MQsvJ98rSrCJ99wawYu421oT9DEqpdAK40LRjAK+PdIzJMviGh8rfhad
+	evM9rhz5OMC38GFAUdW9H+BX3HxiLt0y+frGA+AEQGPbKdA+QsQmiCMiTFqiUtQGzaqMZPnfmKp
+	Zr2YMKy+Rem++55wVCVJJMG9hA6meUaS9fDpHlQGpBM4dmARYkd5ywRlFYcR6jm++mtdKEs/q/8
+	wCdmIkcNMcjmW5WyjLa+eCjQ90CqHBHp30ifrXdBfYQc17hV3d2Tv0mKI10sRn4fiwG3wz9KXuK
+	pObx82D2aa0uwxrYoXOYZzTVr8fxlnlTP0L6rqbU0AjJ3LV6G5myTUQPomEM64jC40evpJbG+CH
+	jXF7VdU+tIgJHpMvmyHBahrJI3CmU2cS5RWfM2VKQZ/pRSQj3aeeaEdHKWAmjujcOsoIP8z1jzx
+	Za3SwUxhR3KOMmQQQrneVVhTLADu5u+wEtZXIQEhcXKJ6WrcfhS1wJantuw5oLUEAvNlZh6PoRf
+	VOjtQvapYM=
+X-Received: by 2002:a05:6300:4c:b0:3c3:88a5:83e4 with SMTP id adf61e73a8af0-3cd011b1b48mr6380483637.10.1787125645848;
+        Wed, 19 Aug 2026 00:47:25 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef77be3sm4151708eec.10.2026.08.19.00.47.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2026 00:47:25 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: David Hildenbrand <david@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Yury Khrustalev <yury.khrustalev@arm.com>,
+	Kevin Brodsky <kevin.brodsky@arm.com>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hemanth Selam <hemanth.selam@gmail.com>
+Subject: Re: [PATCH] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
+Date: Wed, 19 Aug 2026 13:17:09 +0530
+Message-ID: <20260819074709.1345730-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <aoRto6bT3Fv0jm7k@lucifer>
+References: <20260818114945.1312987-1-hemanth.selam@gmail.com> <9e533fcd-c80f-42df-847c-c15c4e3a1a70@kernel.org> <aoRcdLGWaNhUFIPU@lucifer> <277db0f6-6161-4ff1-9540-7b1eb5f7924b@kernel.org> <aoRto6bT3Fv0jm7k@lucifer>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR11MB5645:EE_|PH3PPF957B3B2A8:EE_
-X-MS-Office365-Filtering-Correlation-Id: 493987dc-1514-4a46-b709-08defdc5b87a
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|6133799003|56012099006|10067099003|4143699003|11063799006|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info: /YW+Y1kFOcNewDwt2uWyo9VW47sLcthenLfK1Iu9Uz/is1s+jJUwTiDkCzif2NW75KqUFppOyawEKPLZKm8Ggk+W6+Z6VPDEZUn45ZOAAjsIFf49AkZZ3r+Q4eA8+4TIpkVpP+Xfn+x70ABmFp1hH4pcCgG1gqxKoPZGC4SacGtlol4LalVl6RpPZsgJKWrrNXTTYd3GArA1byoL/tLqj5E3peLAlf+iAZrcnDK9dMqWGasOHtKNcnKXlYKWyAnvcwbEwUyoNvCug422KxFHtr3HInkS1QvOdlNfS2Q1j4T4ZP2Eg0R49VEANbtQtFp5mWtu52/bjScaInE7Vx7tke1kudrbVz6y3zW9n2Jx9gM7iygqpdoj8Wl5xRxHKnNxDnEF6EL2uHRmdsqckeGgmLbSCv9zQuz7DYW4v8WtI6ZGRZziNB7hEcYd/JVqfnukrWWCwflg1YOxBot6rDeCwb51ROUEKsJ/9NDtO+gbG7Elt/H5sMgfbOFtyYmqHm/KOLti9Cvwhl6z4D5ZEmt+8iriobcNqyH1eBR+k+8ev/9F04b/dsG/GJWxKQKHiz9QS9iNjeFdEkVdfmZ3b2ovY2yDU/aUAgxwUxCcJYiiPsG9KNupthJiiu2jqgnKCOXhgBdg/2epETbjOwoRjPBNLSJd8HLU+DONCqVsIv36g0Q=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5645.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(6133799003)(56012099006)(10067099003)(4143699003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T+t/j//iTAQF1X/kliuJgJVYKcMLehISYxaQFGrb0GJlBUM1o2jEYzNCw+1j?=
- =?us-ascii?Q?634DoYgN2VTk//eIC1+k+aQ4Z/rD9yVrzykM+A7n5D9qDGp71NhYDg4zL0hZ?=
- =?us-ascii?Q?Wyr2qbGGqM27LYi4h6MLWpeb2NfmihUnE13aKlK3CYXimb4kkR762acKOBEG?=
- =?us-ascii?Q?2AzgR1EvTERIuOlD0nqzSFnnVc4uA8E9+DAnJ5ttVRU9OIPDyCiyboTcOi0M?=
- =?us-ascii?Q?zxZVf5ggk8HFKj7/f92aoLAkBDfu2+BNJx8k6WKaP2DTO/jLuySVArEJXy+D?=
- =?us-ascii?Q?KOYUATBQEivTHLFdjdk6RnYc7M2/FIzEYaWjFlrNGDP5NEo8ujF1J3zohcU5?=
- =?us-ascii?Q?sgK8osMat/JooL4X5bIII7SWw6s5ppubtcZs4S/cEKG5iJlT6Uvd5gr75IsL?=
- =?us-ascii?Q?x8Uy/Po9UMQU2TVqhHQxq/WlRTsmFHY9DpaMx45gqnyusF/gIwIujYp+t348?=
- =?us-ascii?Q?gdEUDN4lv0nbjf1JsOd64l14/TPEWkSUPNvCbs5xf7XemNuOiDibBn2zX5vj?=
- =?us-ascii?Q?+bU50eqSacfNA5ULC3A6VXfXVvvNr7b/Q1Z9BEOyEUJoxMDUuAZ2tPxFGNjR?=
- =?us-ascii?Q?DanzGrEJdiGq94inMvha8w3JgKMcsCjc6PXRD2tRndvlhlddn7gRC6f6ymhI?=
- =?us-ascii?Q?FL9JymfaoR7ZA+fZz2SKTTFu9n3PfaHJ2Wjw14fTVVIO8WFQT28Q8BW0pjT9?=
- =?us-ascii?Q?cslYxiVFXqgCACCJRsPbouRifwM2zXtl7SsVN5X0xpTpJHAMIX08W3KANydf?=
- =?us-ascii?Q?8VCcqmo3kEbKrT5O5r+XVtsIPW0Yw2aPEYzde8USGf8hMURgJ6EPmDVbsqX3?=
- =?us-ascii?Q?x/O44SQ5R3JInF/LwzGAWYhGxu4NjGsfIkkmt/zHSDHW1x4UN5AjvcScs08h?=
- =?us-ascii?Q?tZ+QP9s7oEaSwVLCZ+WDz4ykRk/HcupE+yDT949kBqFeC2HZBfUfaEQVkm5S?=
- =?us-ascii?Q?cv5fxIqEt6/M4wVhd4TSeaCR2dwB3+soNvFAE1LUCVy6HPkahSQi75ViaeI7?=
- =?us-ascii?Q?ro/w/yCyQJX7a4TTQ/fex1WVS8BgXp0qWLUbT7Avu5ggdFThGSyCOAspygUx?=
- =?us-ascii?Q?kzJ3V9BkHwGP9qkaAi/naA0TAUjzr4sQiuqjyKaAS8Y7+aq1xp+YLLWTAigw?=
- =?us-ascii?Q?MdpJp7LAjNur1tTaEVQ2zLmO2a17P1OHS6ffJtCoHAoFN8J+zJBimcMuT2BF?=
- =?us-ascii?Q?6cP5Xk7/L3++EuihhYRk9zkhslRFR5HBcvDvuvBllkEuUXVI8r84KH/EfpB1?=
- =?us-ascii?Q?Yp4AfhS8TLQ7fKoyhNfbilJIh/auvZ0+/ULe9y/2IYMZ3ywZzNFhPheaFrig?=
- =?us-ascii?Q?s1YL4CXxxW14H+kJhidnYAFRWVNXzwHhJk3/OoxQWyGs0HLzbCTvMZg8gbJp?=
- =?us-ascii?Q?HcdMvEhye/hPb3J7lTgIe+CLdIowiFdiAF72hepIMHxdwpqUwNdFdee4xl8Z?=
- =?us-ascii?Q?roI7/WD7M5De0v6LFBGcwgDi1EXHV2gdp+QByj3Fv4F6gKa3X+B3kBge3FrY?=
- =?us-ascii?Q?jPMRjSmu5a+KCJmltzZmg1F2ljrEwfczy7oLIHM1x8yvgDK/0q02v9q16jQX?=
- =?us-ascii?Q?wJnS2Q77QIt5nSCvZmzK4AgjMSkWqGCaJssOnUwBv+4I7f43R9IJjoL0qJ5T?=
- =?us-ascii?Q?K752kbNADaX/xg+ClNQu1wqxINblWl4XfXtNu+DG3oJb228DpFf7CqsCMMbz?=
- =?us-ascii?Q?3BoaSzlLkO/MqpFadsMdE+Y1Zwr3LNPVPu7JyNvvv66HurrhlIDze1G9+gzY?=
- =?us-ascii?Q?Dpdg3KpzYg=3D=3D?=
-X-Exchange-RoutingPolicyChecked: VJcRC1BApz9OpPt3vTyZye4Iucvc2MqIeJYiyqSisvCkW1rYKeqZ5n1O5acFPB7zSNWX/YJCXqcq1ORlPdX/RYZeydctMglNRRtuPLeFVQT9l7UkHjKZMoyH4eKL/AUuVtiGyokimb2W2BqZnmWAphA3OrvB/hPcHoeTHA4NBoTisMCPR/nRCrzDKvQaYqHAVYxjX6baIwRhmXO1IEeVsZlgX7cAEVStmJdshl8ttmHqVMDnAjkZnZqk1/02i6Kq1D6KHObMa7R6NldHJlH8RNXmHczF2aRD6sN9Ftz9V5IIqlkjo4QR7UnfCEsZoawkR07Ehar3YjmsXKWiZhr/ng==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 493987dc-1514-4a46-b709-08defdc5b87a
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5645.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2026 07:44:38.0203
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nvmc+46ylHURmKonbkd+UC3OVUglKdKFfL5W7VFNGqTXJOt8PDLFZKBTTaDt9BKwusFsu37Oqu/MdKejD9jaDw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF957B3B2A8
-X-OriginatorOrg: intel.com
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 22, 2026 at 11:13:06PM +0000, Lisa Wang wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> Add VM_TYPE() and __VM_SHAPE() macros to create a vm_shape structure given
-> a type (and mode), and use the macros to define VM_SHAPE_{SEV,SEV_ES,SNP}
-> shapes for x86's SEV family of VM shapes.  Providing common infrastructure
-> will avoid having to copy+paste vm_sev_create_with_one_vcpu() for TDX.
-> 
-> Use the new SEV+ shapes and drop vm_sev_create_with_one_vcpu().
-> 
-> Opportunistically move the existing VM_SHAPE() (now __VM_SHAPE()) macro
-> below the definitions of VM_MODE_DEFAULT so that all of the SHAPE/TYPE
-> macros are bundled together.
-> 
-> No functional change intended.
-> 
-> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
-> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Tue, Aug 18, 2026 at 02:36:00PM +0000, Lorenzo Stoakes (ARM) wrote:
+> But it might be worth checking in this case to see whether the problem here
+> is in fact that we need PKEY_UNRESTRICTED defined over there?
+>
+> Hemanth - could you check please?
 
-Missing the submitter's SOB?
+Checked.  It is already defined over there:
 
-> ---
->  tools/testing/selftests/kvm/include/kvm_util.h     | 27 ++++++++-------
->  .../testing/selftests/kvm/include/x86/processor.h  |  4 +++
->  tools/testing/selftests/kvm/include/x86/sev.h      |  2 --
->  tools/testing/selftests/kvm/lib/x86/sev.c          | 16 ---------
->  tools/testing/selftests/kvm/x86/sev_smoke_test.c   | 40 +++++++++++-----------
->  5 files changed, 39 insertions(+), 50 deletions(-)
-> 
+  tools/include/uapi/asm-generic/mman-common.h:88:#define PKEY_UNRESTRICTED	0x0
+
+and it does reach the mm selftests without "make headers", through
+TOOLS_INCLUDES.  The path is not obvious, so for the record:
+
+  pkey-helpers.h
+    -> <linux/mman.h>           tools/include/uapi/linux/mman.h
+      -> <asm/mman.h>           /usr/include/asm/mman.h
+                                (tools/include/uapi/asm/mman.h does not exist)
+        -> <asm-generic/mman.h> tools/include/uapi/asm-generic/mman.h
+                                (-isystem puts it ahead of the system one)
+          -> <asm-generic/mman-common-tools.h>
+            -> <asm-generic/mman-common.h>	PKEY_UNRESTRICTED
+
+I built the pkey tests with KHDR_INCLUDES pointing at an empty directory,
+that is, as if "make headers" had never run.  They build, and cpp -dD
+says:
+
+  defined in: tools/include/uapi/asm-generic/mman-common.h
+
+Pointing TOOLS_INCLUDES at an empty directory as well is what breaks it:
+
+  pkey-helpers.h:188:30: error: 'PKEY_UNRESTRICTED' undeclared
+
+So that is where the definition comes from, and dropping the local
+#ifndef does not depend on "make headers" being run.
+
+The one thing worth being aware of is that the redirection into
+tools/include/uapi only happens because the system <asm/mman.h> includes
+<asm-generic/mman.h>.
+
+I had a look at the history you pointed at, thanks, that was the part I
+had wrong.  If I read it right this is exactly the mechanism from commit
+e076eaca5906 ("selftests: break the dependency upon local header
+files"), which added TOOLS_INCLUDES to the mm selftests so they build
+without "make headers".  So for this particular macro the value comes
+from the in-tree snapshot rather than from whatever the build host has
+installed, which is why it does not vary per system here.
+
+That said, if you would still rather keep the #ifndef as a matter of
+course, I have no objection to dropping the patch, the guard costs
+nothing.  I mainly wanted to answer the question with something
+measured rather than assumed.
+
+> This is incorrect. We explicitly do not have this requirement in mm selftests,
+> and they're often built without having to do this step and tooling has been
+> provided _explicitly_ to allow for that, which is why this kind of thing exists
+> right now.
+
+You are right, the commit message was wrong on that point.  v2 drops
+that paragraph and describes the above instead.
+
+On the powerpc header David mentioned, I would rather leave
+tools/testing/selftests/powerpc/include/pkeys.h alone.  It is not the
+same construct: it is an unconditional
+
+  #undef PKEY_UNRESTRICTED
+  #define PKEY_UNRESTRICTED	0x0
+
+next to other powerpc specific overrides such as PKEY_DISABLE_EXECUTE
+0x4, and that header only includes <sys/mman.h>, never <linux/mman.h>.
+A probe including just <sys/mman.h> does not find PKEY_UNRESTRICTED,
+with or without TOOLS_INCLUDES, so the definition there is load bearing
+and removing it would break the build.
+
+Thanks,
+Hemanth
