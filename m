@@ -1,249 +1,189 @@
-Received: from canpmsgout06.his.huawei.com (canpmsgout06.his.huawei.com [113.46.200.221])
+Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11013065.outbound.protection.outlook.com [40.107.162.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8692019F121;
-	Wed, 19 Aug 2026 03:41:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.221
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787110901; cv=none; b=pmWlIBEhz47vOKto0yLRIsGkCSCABeIMrmMakMzQQjaeZW808q8aWx/1YxP1qI+FIKo+huSHV8Y2TxuENDshTQ2UVJ3Do48lTStVgH4pnEndHdDRhHvJuB7Dgl2y0dtgnhqyAhy5ViTNulKICBGwMAx/Chy5XvJi1R+Tj5jHveQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787110901; c=relaxed/simple;
-	bh=VVdxYlVk3Z4rA00QLnrFa4FgdNSWCSlJ8XwxuC1/sPg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:CC:References:
-	 In-Reply-To:Content-Type; b=BEL4pk3+Y2OndYLfRUhVVpMVnQb4k7D1rU+KryrVtVrTjG88gZvrUpNPogOMYClTtiJCyjd1dKQl2+a+armsSK/pz/X6XPGxR0s92JAYI4+G/T99b+DL7kqu9xvaToFJQ8/ILMymNfLWHo6MO6ecNqfpiYL2/LVkWp6kpL6LRXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=rmBsn313; arc=none smtp.client-ip=113.46.200.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CBA1385D7C;
+	Wed, 19 Aug 2026 04:05:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.65
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787112330; cv=fail; b=pSGxhesYKezEr8N63DiK2TDD1349iDK2p5Y+g2LdXH1lNRZuENc2mKDw1t0viUVIES9Gg6qai3S59Bl6ds7keoEEWQRMlZrsPx1h41lgMsa4/hZOR7nVzGocfTUDz/QULaOa5uHKgsum98dy98h8/odNLdy3ZrvnGr9hYPW0wVI=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787112330; c=relaxed/simple;
+	bh=2gYItXMaY/m1iA7JzsAz3uGDOcWuXlVy/nEFbrJP9BY=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=nD98uKE66GOFv1NapN09eBQ/H5IoiHaCWiJ8NEYOsR62NVygjoCFuNJvjKcwtD9iGFhVCFcajuL1wTq+JiHJd6OwCRxs55hAfZfCCAX4zV90vVdBWR+KLkTTW2qgnAk8FAqk2X5VSaee4TTGvf3CJfFJdyLJgf/LmHaygxAMdJs=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ql5hFeoB; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ql5hFeoB; arc=fail smtp.client-ip=40.107.162.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="rmBsn313"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=ZrPuPOBmVfVWOOXrIVWVaTVmfGyieHoTBzLjPjrT0sc=;
-	b=rmBsn313FBwyQbzJfZoLYwOjhXeAfYylrm+hMl83g2lrxxHyLZKLaqyY0wCt9DYW3w9lz/iJ9
-	zJM/KGr9aQaPu4JzxbnTDbQ2pqP7eh2oXCNQo9wYJzyfhb+Dh4SAwhm5UeiEhcXH3RMciaW76X4
-	2BvS6zSvYOAQG8hMoJAXZfM=
-Received: from mail.maildlp.com (unknown [172.19.163.104])
-	by canpmsgout06.his.huawei.com (SkyGuard) with ESMTPS id 4hPsXn0RfHzRhVN;
-	Wed, 19 Aug 2026 11:30:49 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6248F4057F;
-	Wed, 19 Aug 2026 11:41:28 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Wed, 19 Aug
- 2026 11:41:27 +0800
-Message-ID: <4ba94268-cd39-438c-a788-a5b75cfd8813@huawei.com>
-Date: Wed, 19 Aug 2026 11:41:21 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ql5hFeoB";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ql5hFeoB"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=rqLZmcUDs+T/bYddx7TtKn420OMkH9zWBu5tpM7Lk1JcqdCLiz4MxKJIt0YgD5iJBOKGpiX7zenfw2JXYjOsMbF7v06J6S2dfIGY+J4GGI8nO3XtkxIMU3A2ez7NwQIA7sN5Li3Hkyf9K6oEfdn900kJuhkGIDaVedmrw8WBsmy8m8qwbG3vcxOudfwpVT9U6eHGJKTc5ZcP91NYkve0UErUEdYHz1+8Qkp0yNcTP8VgH2FPqpVz7pyXyehGdR+UmbIghAngAqGoBypnqx3vdalXy+kLFV/gz/O0nwFffNNi/QHPM33TM1mjOy5jLLsQQZktORKrzv2NNx/7oSwwuQ==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DXx8hWbYgeo5WeghKjbKiVctait/wTVV8zSCyxlgsVQ=;
+ b=FkNs6BMr1r/W2ErkCuasEKZ2+3KheKyV4Vxg0EIFuahlIjNFGq2UvyS/0dD4WChwFcnUBU5liF5fsJlXzO3d/Sr2cH3yZQjl5vCBtrOFtGMpfiQ7STczoLGfjQQbkbS5OFuu1o+ffT37HZG0OregagwsFPoRTUfgtHVMNBnMKO97a/8BRiPLjm5ZFbSow6Ygz53v6wSqx/WyhHU4RF9CRGlsOOr0mrkEogmKcwqsFtaYcFubO64vOELE9/o5xQUkFZBJXI7hZNcMeOdE6IaanjLQWBAmZLgHl6GE4m+KGQ/CLNT5HykLo6rekTaCnWhtPcWNBee38p2gWDB/9dFYzg==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=gmail.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DXx8hWbYgeo5WeghKjbKiVctait/wTVV8zSCyxlgsVQ=;
+ b=ql5hFeoBN2tkXdgHYNd+qqhnI0tcBxANlf16XcYazDCFuGtKo3lsXfIRPhbdK6IDICY4atJAiOk8abuhanJhCbYX6GVh7rEInZZU86o86B/MGCy9EFa59rr13ivhLDL05PkLiKXkXfsckr84PuEshR7xDDZEsrfJe3LkG7a2Xwo=
+Received: from DB9PR02CA0022.eurprd02.prod.outlook.com (2603:10a6:10:1d9::27)
+ by VI0PR08MB11478.eurprd08.prod.outlook.com (2603:10a6:800:2fd::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.315.17; Wed, 19 Aug
+ 2026 04:05:18 +0000
+Received: from DB1PEPF00050A00.eurprd03.prod.outlook.com
+ (2603:10a6:10:1d9:cafe::85) by DB9PR02CA0022.outlook.office365.com
+ (2603:10a6:10:1d9::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.8 via Frontend Transport; Wed, 19
+ Aug 2026 04:05:18 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DB1PEPF00050A00.mail.protection.outlook.com (10.167.242.42) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
+ via Frontend Transport; Wed, 19 Aug 2026 04:05:18 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SXWGcpggR4aEwO3/LG5CEpc086OlIG2e/UVivzVSLsFKtOATC3RryXAuGhj5ML1MPaUq7gRt7swfLLpZfMkT1PcUMMAZxEqpwQSI8dRvdqchw0Ci8QAkt7Ief+mOfVHt9B5sTQCWI//hjsOTxo1b8t1oKSjHkEXr5GcwH/m6iJc/KsPVpMUicWEVrCKwS3prUs5i8aP9ykXGvUtlNAcIC8iGl5aG+ipJ1hl/ldKArBSL7uhAU0sB3LnLd0X8lII5YDF/vJCEZOHHnE1RVdCFjrz6J5vyR4lBDPGiI5OedQQu9JYMONKPeZCNN1twsC9bAowr3nPX5urmZMrbnDQhsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DXx8hWbYgeo5WeghKjbKiVctait/wTVV8zSCyxlgsVQ=;
+ b=wrF0JzmRLO/43PYYnrPLbtJpsfuSHxm3HqB/2L6IWqbPGSZKg0M/KahUbT7xm+tA0ybkxV47rnJtqN4YUOO7gRGRapdZZzQw2srHWNBJavrUiNTXlCxqsQwDyu9nwavJG6l1Sm6W5rDj5UxU9522zg+QCJpghvdLwClgHWkoWBTVKqJxb0JWm0NypDPm9QlkXvZ8okbDT/d6B0Fu7H4HGu1xkXkYNZpN1sBSiaEmR3LKZAACQQKdEkYOvQXjCd9V7MV+KkMg3SrcDKrgnLILGTNIl1FxG7cAyhAccoI9cO4R8Ng2E9/CoZbDQyXoWbLI66rQk3vNIwuWsnksLrZ+WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DXx8hWbYgeo5WeghKjbKiVctait/wTVV8zSCyxlgsVQ=;
+ b=ql5hFeoBN2tkXdgHYNd+qqhnI0tcBxANlf16XcYazDCFuGtKo3lsXfIRPhbdK6IDICY4atJAiOk8abuhanJhCbYX6GVh7rEInZZU86o86B/MGCy9EFa59rr13ivhLDL05PkLiKXkXfsckr84PuEshR7xDDZEsrfJe3LkG7a2Xwo=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by AMBPR08MB11961.eurprd08.prod.outlook.com (2603:10a6:20b:777::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Wed, 19 Aug
+ 2026 04:04:46 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%6]) with mapi id 15.21.0339.007; Wed, 19 Aug 2026
+ 04:04:45 +0000
+Message-ID: <9efc3c26-61fd-4bf4-bc0a-cb3e4b6120cc@arm.com>
+Date: Wed, 19 Aug 2026 09:34:39 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: fix unchecked ftruncate return value in
+ soft-dirty test
+To: Anshuman <anshumantewari123@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260818133206.39503-1-anshumantewari123@gmail.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20260818133206.39503-1-anshumantewari123@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0355.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:219::15) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next 1/2] bpf, riscv: Add support for signed arena
- loads
-Content-Language: en-US
-From: Pu Lehui <pulehui@huawei.com>
-To: Chen Pei <cp0613@linux.alibaba.com>
-CC: <ast@kernel.org>, <daniel@iogearbox.net>, <andrii@kernel.org>,
-	<memxor@gmail.com>, <bjorn@kernel.org>, <puranjay@kernel.org>,
-	<eddyz87@gmail.com>, <martin.lau@linux.dev>, <song@kernel.org>,
-	<yonghong.song@linux.dev>, <jolsa@kernel.org>, <emil@etsalapatis.com>,
-	<pjw@kernel.org>, <palmer@dabbelt.com>, <shuah@kernel.org>,
-	<guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <cover.1786708960.git.cp0613@linux.alibaba.com>
- <3445fb0231f9c72496ae840e9dca675b15899433.1786708960.git.cp0613@linux.alibaba.com>
- <c5441b7e-3d20-4e4e-a225-7478f7fb9d6d@huawei.com>
-In-Reply-To: <c5441b7e-3d20-4e4e-a225-7478f7fb9d6d@huawei.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: kwepems200001.china.huawei.com (7.221.188.67) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|AMBPR08MB11961:EE_|DB1PEPF00050A00:EE_|VI0PR08MB11478:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f89db74-6cb5-4388-ca0f-08defda714b2
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|376014|1800799024|366016|23010399003|10067099003|56012099006|6133799003|18002099003|22082099003|11063799006;
+X-Microsoft-Antispam-Message-Info-Original:
+ KGaB8TqW5xSI0ay3OstdLGGzYyn6/nHbUMEHgkGneS5fQNJdVozN6cJLF64GtrR7mWjIbRUn3dMZP2zeETMe+1vqqv8He5/SX9A7mFnXTimzATRQ3/uXt0ykdysuKSWf8Mpajvt1ItAYppfY0cXYRfo4bBi6o9mKC6cSA58fHODrHSaPD9JqyNPfmMKboDmmRefE8CrMVwhxNsVBa32U3KC9q1czIJi4AeQqPxHjLysJyb4mgdQ0aUARmB9YPKYYX0mHXwQ+lUNBeuipANvq6ZY0QIDHaeDqbkYYkd7jipCPNUyf2UrQE522dU+oaOJkjclA/RCIlA3G5qdGQRORzvlPjW9a35HjP2TAT1t7+CTHVMovlW5iEi6YvN0FAM7Nz9qGV9FuV2vedqA7O4w0fdushC/MlZJ4mjc2haCTCs1MFEi6H3upHISSVtXkhj7yIiZw8pgSzL++yry0AAqMaOB0tsVgGYI2wB1FpK/wgNwmsB4t1bJWKGzRveEUZNE/Uv6VQwsC+bmIUmbj+/A3os5ooaXrycxsK9juAH+kEmY3ZywABp5O+QI00pjYJqs1IIyoO+tf4SL6HFDExhxQR1cqpVl+N5H63eCGXANPondDAgt5l3P9oU/wPNWUqwmruuiLjlvkBMToTQkKtQUxwLTEE9LSdIBeCjh25U1oFIw=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016)(23010399003)(10067099003)(56012099006)(6133799003)(18002099003)(22082099003)(11063799006);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ qrgkDPz5nZnuivK5CJ3zdg+GpNhtlCpjaPetoTrQv3D2h8x4mVS/+bMbTMi7fCz8SlDiFRGbnCdzBbIK6m1eNeaP2J/eDHDHJS5JSp9JvDWLDywbiO9boMcpc2+3WtoGpT6X2wO8xQnWLRb7ruTyYgMtnDxbNth8pLx6bPbeUD5Hd0vXojFKbbfWtLzLLhM3mSgbySHlCaij9bjpo2VKT/OUvL3CzgedSt0bE0kLpPob/jAO+QR3GkO6EX+dvoUeAPOVYEOIYqfRWR/6Yh9SQ+rovSwR+6xUg6XNPu4vY/plf31LbRvAvqeD+iFV3UXDwtpn+wQilOHac4d243vB7w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMBPR08MB11961
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB1PEPF00050A00.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	7a9b9072-f010-43fc-c637-08defda7011c
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|14060799003|36860700016|35042699022|23010399003|1800799024|376014|82310400026|10067099003|56012099006|6133799003|11063799006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	2DBrvZzF7Smue9wDcITY49r6TQYIxiXYdwfRHowxzFjvG4gCVQwdqyDXmLPcH/F7tq3CbbaD/1tXQCdTAvgwZWGicXoNt/lHGdPvpt1UlDFYF6cWO1q8Xo5+AJy0P5ghrfQaHNCTFsFoDTfxpFZ/kponypX80DOXUMv/lKEIpQv0VzaCB0iw1gzcxVZXDh6pjIqmHpMgQ8Cz+CkBM0NzY0VxDAGB2tQzhMghlt8bqEzXJUJsNXCqOQGuPx8v9bPGz2xRKI1ugf9BpkwvAmJnN45GPstdT6ja/oh2RoARDTApDMJ7siyNpY4iG0B8dKYZMmcbxMX+FgvreWcEIoj+WJJUsfM/bu1HoF1ZLMbogCilAweJtnGrJG5OWlshUAu9xsBCrW6tFeI9WpAqdcwP5OO0h3H2XVIHNjNWvVDlN6cLBU9JO4BZ0lI/AZlCCrZyo4kNgH9rQAXIs2Ok6nWjMhSShWWmcsz74KwgPGAzCjnD2jZlxHKtVGMn2GTLIM0qY7994ZdWupQiPaUbWsYqKjxPrN8TBs5Uay47NbrDl0XOC2AaSYxW5ZbLqxbhDZIRY/LS/vZsW8hFTg5hJkoQWgH2QQKyi2YlfMjdR6cjg2XTOo11Gz/nHjm+gZuAKQrQhwdxYTDxJAtZcfQe2Urt6PjSm5j26VpYZKYy8jyBGkKdnGSQwND6wA/fJqYfT9RzP15sTLZfYyQmrRNYARmS3g==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(36860700016)(35042699022)(23010399003)(1800799024)(376014)(82310400026)(10067099003)(56012099006)(6133799003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	bk23I28hhPxX7+IcefXu7rarAL1cLbFdpnwmimdEHxY4bjmueHgwt98kJ+2HNVPKDU6ongAoGKoyk0UZiV7yXf4RqLXaFNdTCK3GzPwXYUcsX1UQLzfP9hdTUyI1qWcfEFHIYZl5zRtiroOu6mMuE44+e1vChYRjTBtPEgsldGJHpaBQoGaGEQ8/9XCXW6boAZ2J6s+RzbmeARYsqPFlCNpdcf5P7vIBcBLm0d9rH/X6vSwNzRtJCdJ2jxy2/I9iH5C6lLTKI9/9BI/vJbJRNXErAgnQNBXTW1siLNfum7dNEMtNN4Id7eB7kJOH5gw6bd+7Cfu1kCZ053ogLSmL6dQRoC6QSWBLXVa+cQ19TIt6BBOFN9n2Xp2swd1Bh7OOH1qVNGTadFYo4QZk6cu+9lj6HB7gbglQRQwJbRSjpw83PzUVErlE7WO3/blxdA5X
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2026 04:05:18.0640
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f89db74-6cb5-4388-ca0f-08defda714b2
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF00050A00.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR08MB11478
 
-oops
 
-need to revert this reviewed-by
 
-On 2026/8/18 22:27, Pu Lehui wrote:
+On 8/18/26 7:02 PM, Anshuman wrote:
+> test_mprotect() calls ftruncate() to resize the backing file
+> before mmap()'ing it, but never checks the return value. If
+> ftruncate() fails, the file may remain shorter than the requested
+> mapping size. The subsequent mmap() with MAP_SHARED can still
+> succeed in this case, but the very next line writes directly into
+> the mapped memory (*map = 1), which can trigger SIGBUS if the
+> mapping extends beyond the actual file size.
 > 
+> Check the return value and fail cleanly with ksft_exit_fail_msg() if
+> ftruncate() fails, matching the error-handling style already used
+> for the mmap() call immediately below it.
 > 
-> On 2026/8/17 15:24, Chen Pei wrote:
->> Signed loads from arena memory are currently rejected on riscv64, as
->> bpf_jit_supports_insn() refuses BPF_MEMSX loads when in_arena is set,
->> while x86 and arm64 gained support for them in v6.18. Compilers such
->> as GCC-14 are free to generate signed loads into arena memory, which
->> breaks loading of otherwise valid BPF programs on riscv64.
->>
->> Implement BPF_PROBE_MEM32SX support in the RV64 JIT by reusing the
->> existing arena handling: the arena base (RV_REG_ARENA) is added to
->> the source register and the load is emitted with sign extension
->> (lb/lh/lw). Add BPF_PROBE_MEM32SX to the add_exception_handler()
->> mode gate so that faulting loads get an exception table entry which
->> clears the destination register and resumes execution.
->>
->> Verified by running the arena LDSX selftests (arena_ldsx_disasm,
->> arena_ldsx_exception, arena_ldsx_s8/s16/s32) on riscv64 QEMU, all
->> passing.
->>
->> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
->> ---
->>   arch/riscv/net/bpf_jit_comp64.c | 15 +++++++++------
->>   1 file changed, 9 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/riscv/net/bpf_jit_comp64.c 
->> b/arch/riscv/net/bpf_jit_comp64.c
->> index f9d5347ba966..5786f7dfc8a7 100644
->> --- a/arch/riscv/net/bpf_jit_comp64.c
->> +++ b/arch/riscv/net/bpf_jit_comp64.c
->> @@ -777,6 +777,7 @@ static int add_exception_handler(const struct 
->> bpf_insn *insn, int dst_reg,
->>       if (BPF_MODE(insn->code) != BPF_PROBE_MEM &&
->>           BPF_MODE(insn->code) != BPF_PROBE_MEMSX &&
->>           BPF_MODE(insn->code) != BPF_PROBE_MEM32 &&
->> +        BPF_MODE(insn->code) != BPF_PROBE_MEM32SX &&
->>           BPF_MODE(insn->code) != BPF_PROBE_ATOMIC)
->>           return 0;
->> @@ -1902,13 +1903,19 @@ int bpf_jit_emit_insn(const struct bpf_insn 
->> *insn, struct rv_jit_context *ctx,
->>       case BPF_LDX | BPF_PROBE_MEM32 | BPF_H:
->>       case BPF_LDX | BPF_PROBE_MEM32 | BPF_W:
->>       case BPF_LDX | BPF_PROBE_MEM32 | BPF_DW:
->> +    /* LDX | PROBE_MEM32SX: dst = *(signed size *)(src + RV_REG_ARENA 
->> + off) */
->> +    case BPF_LDX | BPF_PROBE_MEM32SX | BPF_B:
->> +    case BPF_LDX | BPF_PROBE_MEM32SX | BPF_H:
->> +    case BPF_LDX | BPF_PROBE_MEM32SX | BPF_W:
->>       {
->>           bool sign_ext;
->>           sign_ext = BPF_MODE(insn->code) == BPF_MEMSX ||
->> -               BPF_MODE(insn->code) == BPF_PROBE_MEMSX;
->> +               BPF_MODE(insn->code) == BPF_PROBE_MEMSX ||
->> +               BPF_MODE(insn->code) == BPF_PROBE_MEM32SX;
->> -        if (BPF_MODE(insn->code) == BPF_PROBE_MEM32) {
->> +        if (BPF_MODE(insn->code) == BPF_PROBE_MEM32 ||
->> +            BPF_MODE(insn->code) == BPF_PROBE_MEM32SX) {
->>               emit_add(RV_REG_T2, rs, RV_REG_ARENA, ctx);
->>               rs = RV_REG_T2;
->>           }
->> @@ -2126,10 +2133,6 @@ bool bpf_jit_supports_insn(struct bpf_insn 
->> *insn, bool in_arena)
->>               if (insn->imm == BPF_CMPXCHG)
->>                   return rv_ext_enabled(ZACAS);
->>               break;
->> -        case BPF_LDX | BPF_MEMSX | BPF_B:
->> -        case BPF_LDX | BPF_MEMSX | BPF_H:
->> -        case BPF_LDX | BPF_MEMSX | BPF_W:
->> -            return false;
->>           }
->>       }
+> Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+> ---
+
+Looks good to me.
+
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+
+>  tools/testing/selftests/mm/soft-dirty.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Reviewed-by: Pu Lehui <pulehui@huawei.com>
-> 
+> diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+> index fb1864a68..a52ef79dd 100644
+> --- a/tools/testing/selftests/mm/soft-dirty.c
+> +++ b/tools/testing/selftests/mm/soft-dirty.c
+> @@ -152,7 +152,8 @@ static void test_mprotect(int pagemap_fd, int pagesize, bool anon)
+>  			return;
+>  		}
+>  		unlink(fname);
+> -		ftruncate(test_fd, pagesize);
+> +		if (ftruncate(test_fd, pagesize) != 0)
+> +			ksft_exit_fail_msg("ftruncate failed\n");
+>  		map = mmap(NULL, pagesize, PROT_READ|PROT_WRITE,
+>  			   MAP_SHARED, test_fd, 0);
+>  		if (map == MAP_FAILED)
 
-Hi Chen Pei,
-
-It's happy for the verifier_ldsx, but it not happy for the other test, 
-pls take a look.
-
-[2026-08-19 11:33:11]  root@(none):/mnt/bpf# ./test_progs -a arena_atomics
-[2026-08-19 11:33:18]
-[2026-08-19 11:33:20]  [   34.529770] bpf_testmod: loading out-of-tree 
-module taints kernel.
-[2026-08-19 11:33:20]  [   34.530186] bpf_testmod: module verification 
-failed: signature and/or required key missing - tainting kernel
-[2026-08-19 11:33:21]  [   35.541256] ------------[ cut here ]------------
-[2026-08-19 11:33:21]  [   35.541573] WARNING: 
-arch/riscv/net/bpf_jit_comp64.c:915 at add_exception_handler+0xce/0xf0, 
-CPU#0: test_progs/122
-[2026-08-19 11:33:21]  [   35.544546] Modules linked in: bpf_testmod(OE)
-[2026-08-19 11:33:21]  [   35.545885] CPU: 0 UID: 0 PID: 122 Comm: 
-test_progs Tainted: G           OE 
-7.2.0-next-20260818-00007-gc29447b2149d #8 PREEMPTLAZY
-[2026-08-19 11:33:21]  [   35.546625] Tainted: [O]=OOT_MODULE, 
-[E]=UNSIGNED_MODULE
-[2026-08-19 11:33:21]  [   35.546892] Hardware name: riscv-virtio,qemu (DT)
-[2026-08-19 11:33:21]  [   35.547240] epc : add_exception_handler+0xce/0xf0
-[2026-08-19 11:33:21]  [   35.547538]  ra : bpf_jit_emit_insn+0x5a8/0x2d18
-[2026-08-19 11:33:21]  [   35.547799] epc : ffffffff8002571e ra : 
-ffffffff8002b3c8 sp : ff20000000eeb700
-[2026-08-19 11:33:21]  [   35.548128]  gp : ffffffff81db8ed0 tp : 
-ff60000083130d40 t0 : ffffffff8001e650
-[2026-08-19 11:33:21]  [   35.548454]  t1 : 0000000000000007 t2 : 
-0000000000000040 s0 : ff20000000eeb710
-[2026-08-19 11:33:21]  [   35.548785]  s1 : 00000000000000fb a0 : 
-0000000000000007 a1 : 000000000000000a
-[2026-08-19 11:33:21]  [   35.549114]  a2 : ff600000809549a0 a3 : 
-ffffffff78000790 a4 : ff60000080a8bc24
-[2026-08-19 11:33:21]  [   35.549439]  a5 : 0000000000000087 a6 : 
-ffffffff78000664 a7 : 0000000000000089
-[2026-08-19 11:33:21]  [   35.549765]  s2 : ff600000809549a0 s3 : 
-ff2000000017d1e8 s4 : 0000000000000000
-[2026-08-19 11:33:21]  [   35.550094]  s5 : 0000000000000001 s6 : 
-0000000000000001 s7 : 0000000000000031
-[2026-08-19 11:33:21]  [   35.550419]  s8 : ff60000084994800 s9 : 
-0000000000000000 s10: 0000000000000000
-[2026-08-19 11:33:21]  [   35.550737]  s11: 000000084290e9f4 t3 : 
-0000000000000000 t4 : 000000000000000b
-[2026-08-19 11:33:21]  [   35.551079]  t5 : 0000000000000008 t6 : 
-ff600000808fc3a0 ssp : 0000000000000000
-[2026-08-19 11:33:21]  [   35.551409] status: 0000000200000120 badaddr: 
-ffffffff8002571e cause: 0000000000000003
-[2026-08-19 11:33:21]  [   35.551882] [<ffffffff8002571e>] 
-add_exception_handler+0xce/0xf0
-[2026-08-19 11:33:21]  [   35.552318] [<ffffffff8002b3c8>] 
-bpf_jit_emit_insn+0x5a8/0x2d18
-[2026-08-19 11:33:21]  [   35.552602] [<ffffffff80024f1a>] 
-bpf_int_jit_compile+0x9a/0x480
-[2026-08-19 11:33:21]  [   35.552888] [<ffffffff801a3d0c>] 
-__bpf_prog_select_runtime+0x10c/0x1d8
-[2026-08-19 11:33:21]  [   35.553197] [<ffffffff801d54fa>] 
-bpf_check+0xaca/0x31b8
-[2026-08-19 11:33:21]  [   35.553459] [<ffffffff801a8436>] 
-bpf_prog_load+0x546/0xad0
-[2026-08-19 11:33:21]  [   35.553720] [<ffffffff801af850>] 
-__sys_bpf+0x1948/0x2c38
-[2026-08-19 11:33:21]  [   35.553974] [<ffffffff801b0b6a>] 
-__riscv_sys_bpf+0x2a/0x40
-[2026-08-19 11:33:21]  [   35.554238] [<ffffffff80a91872>] 
-do_trap_ecall_u+0x1ea/0x398
-[2026-08-19 11:33:21]  [   35.554528] [<ffffffff80aa088c>] 
-handle_exception+0x16c/0x178
-[2026-08-19 11:33:21]  [   35.555320] ---[ end trace 0000000000000000 ]---
-[2026-08-19 11:33:21]  serial_test_arena_atomics:PASS:arena atomics 
-skeleton open 0 nsec
-[2026-08-19 11:33:21]  libbpf: prog 'add': BPF program load failed: 
--ENOTSUPP
-[2026-08-19 11:33:21]  libbpf: prog 'add': -- BEGIN PROG LOAD LOG --
-[2026-08-19 11:33:21]  processed 37 insns (limit 1000000) 
-max_states_per_insn 0 total_states 1 peak_states 1 mark_read 0
-[2026-08-19 11:33:21]  -- END PROG LOAD LOG --
-[2026-08-19 11:33:21]  libbpf: prog 'add': failed to load: -ENOTSUPP
-[2026-08-19 11:33:21]  libbpf: failed to load object 'arena_atomics'
-[2026-08-19 11:33:21]  libbpf: failed to load BPF skeleton 
-'arena_atomics': -ENOTSUPP
-[2026-08-19 11:33:21]  serial_test_arena_atomics:FAIL:arena atomics 
-skeleton load unexpected error: -524 (errno 524)
-[2026-08-19 11:33:21]  #1       arena_atomics:FAIL
-[2026-08-19 11:33:21]
-[2026-08-19 11:33:21]  All error logs:
-[2026-08-19 11:33:21]  serial_test_arena_atomics:PASS:arena atomics 
-skeleton open 0 nsec
-[2026-08-19 11:33:21]  libbpf: prog 'add': BPF program load failed: 
--ENOTSUPP
-[2026-08-19 11:33:21]  libbpf: prog 'add': -- BEGIN PROG LOAD LOG --
-[2026-08-19 11:33:21]  processed 37 insns (limit 1000000) 
-max_states_per_insn 0 total_states 1 peak_states 1 mark_read 0
-[2026-08-19 11:33:21]  -- END PROG LOAD LOG --
-[2026-08-19 11:33:21]  libbpf: prog 'add': failed to load: -ENOTSUPP
-[2026-08-19 11:33:21]  libbpf: failed to load object 'arena_atomics'
-[2026-08-19 11:33:21]  libbpf: failed to load BPF skeleton 
-'arena_atomics': -ENOTSUPP
-[2026-08-19 11:33:21]  serial_test_arena_atomics:FAIL:arena atomics 
-skeleton load unexpected error: -524 (errno 524)
-[2026-08-19 11:33:21]  #1       arena_atomics:FAIL
-[2026-08-19 11:33:21]  Summary: 0/0 PASSED, 0 SKIPPED, 1/0 FAILED
-[2026-08-19 11:33:21]  root@(none):/mnt/bpf#
