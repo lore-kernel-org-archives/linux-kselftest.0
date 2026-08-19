@@ -1,74 +1,61 @@
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mta1.migadu.com (out-202.mta1.migadu.com [95.215.58.202])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044D03CF039
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 12:17:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669AD31F983
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 12:58:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787141853; cv=none; b=Y7g1X40de5cBYsew2ch73kVq1l8LTxVG504L1xBVNRWVLH2lanowpIQpJT1cHVwq/MACaRZavp+9v5cWzdsYqHnsRkP4p7tLoC8MR/3CPcuOt1m58dSAIV0lXg53HLRVVDO7QU8ZfwuQBbxkb6g7LokkCNaqFeK5iCDVc9HfEVw=
+	t=1787144338; cv=none; b=aEXf+dZKUExQh45IhAb/O4qePLjIc7ZYn/e5EW2w1ne432NJXe9fnB77FdY7XB/Gx5yD8ymKp2Pa+/o2yUp9lC5p+OHl+GabG7+wMrqargO35kJ0za/Y7Hse7jrp1/VD5OQw85Wx6jZA1gcR8Z1p+dhzUSnw6ZERM60on4uvDHw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787141853; c=relaxed/simple;
-	bh=QLVmhApoIdTSnG+xl7FWKcVJjdtidrk3TLZpK5AFcnc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=cI1GAKIreb6U0/3uFFXuALeTbsUmqByzRosh6ZbkQriTj9I5bobqlaYpoVa4G+HbmlCXuGgITByDql9Mfq3Ri3Yrvu2WNfQNXkwncR+SdYgqLAZSkwikvwARlJFHwsOYNGISNksbBv4ZEaMO/QM5zQSiqYadOdI8zicy3crJeLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=neXAdWA9; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787144338; c=relaxed/simple;
+	bh=nuEuCqtVQzUJQsbtXuvI4UvZUhxIcME75V6G2GfbE0I=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=to65yUIV9dM7hxbT5fvNXz4P1VkGguQrgZH4YJwOOilavpelQbL8ijXxMoLcu5AFfjB6IoBRJf1IIG822SH/vU1bcczS9aD+mk83xU/swiSDwh4v6pKWG1s7mXBKa1EmLcrF6JnHe+hHnx9WPtSd7CxGoTST4RbsL2PLWJP/KuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eFC82SHv; arc=none smtp.client-ip=95.215.58.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="neXAdWA9"
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-38e041ea211so1033094a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 05:17:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787141851; x=1787746651; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ky3eaerp2FIi8m89t9kDf7IwmRQ42625cuWkd+thIcA=;
-        b=neXAdWA90VIXjiTTtqCF+q3jMEY2JtTMlER0VWFbb6sOcswi7keb6W1hI68KgOu89K
-         wYEwPpJil8ThzAPobPk6P9hQskjp/BgjVGXG789RdESTOuN1qUYtYG0E/GQ31sZxbrE+
-         nQpiUMX9qAp+iqI/Ll23RE0LvbqbNBSPDIMx2E92Pn5EzZNqMBVKp5TRFscn513z0Xo6
-         eKr6eEo6ZcbQofmaTdNuw2I1h+v4x9pWpcnNTwJCyCCm8NAbZ0O4e0pixEN10Ve1xvzi
-         DDQDKvs+BLerOahbl06XEROHbhd7dqZps0O+sTfZyNGMH3BgM6KT/h2BndVSlID1o8wR
-         p3vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787141851; x=1787746651;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Ky3eaerp2FIi8m89t9kDf7IwmRQ42625cuWkd+thIcA=;
-        b=eW6lLNuCjziKfiJprxvQc0c4DDyT7jbDFRnesOn6to74UCEi6joCAhCqFG0L9JXJnr
-         WK9HrOrwXul8YzUj+yBSz7m13/5ffWcNNQl/HujuwcLszQ1Y3SJ//+ujIEWzA1+dZ7re
-         a0UCL/d7fVH501QluL0+uRNCT5Jwu2LQ1eLHCDwVRolS3ROLumVRXttDTj8xgawL5BPL
-         Fm6vXiAjz+2cg0QTfhap5NhRM6MgxZKyMUZsa0NYXtXTdft+efUWChH0VLvDrKa25fad
-         56DLNBghrTVgBbuT0w5p0kIbjjHIZ7H8zDAgRo/hGVFIi9MqDI87c9GRYIHyeoNJoLSG
-         0A1Q==
-X-Forwarded-Encrypted: i=1; AHgh+RpM7aZ1o1VfUYqrS1wTcdzj/3eVpnjXk8A4ShPcw7GW4N2n//uWobUC/Ps2ykd0TNETPPExamk4VQf433+spDs=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpIwu2uKtFf2lvZlM3fvcXC0S60fXd30LIj1+WAYx86OR509xN
-	4Ap6zRg08OUzgyxH2Ds8/TjYz2t4J4R2V3TyvFgjAB8ISVGjm8geEuyf
-X-Gm-Gg: AR+sD121fObFJxxZUvX2FsQhR1to7dBmYcJ8tLH9P5hcqUyDcTu3F2wVXuNh6SAxS7M
-	76TteYjT3Hjkh/UNlQjjKTWq5+Y5rVTXONuXdk9HbXUXTaurSY//vJBPxRSiUbTNB6h7Ts9VnLS
-	1are0BG/BNNjsCB8Bu8+U4lEIGBiv3HKWlQZYof+uroCezf9gkEyLHKOv8p4tugNKwVlmI+iqtX
-	2Ue9eGn+GPI3a8c4ZOwDRUbbvHpOzvjJVZapOjeIpmCM6JLWRXirqcWF5H8nRr8/uppuLWZlSjw
-	zrZgT6n/U90+W7hMCIM22M/uCFYXnTfMKPzzpuSrGF1sxmthVpXBqbrEE9nUqob3AwsLi6Nj4gg
-	Y9xMV869hcpAMF7JiNdTN285JL/S91n5oeYI7DITFX1nBWEnJotcqjfjk2YnNhgQT2VhXSjE432
-	lb7jqkNN9V+V3U3DPh80anDEFcZiJ8nY07SqHgKPoLGQ4KgshWHePZybrGJFFcKRugpBo=
-X-Received: by 2002:a17:90b:4d81:b0:37d:f206:a2ac with SMTP id 98e67ed59e1d1-39580a7c832mr8254013a91.7.1787141850868;
-        Wed, 19 Aug 2026 05:17:30 -0700 (PDT)
-Received: from Anshuman ([103.106.200.63])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1416ad6060asm12607295c88.6.2026.08.19.05.17.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 05:17:30 -0700 (PDT)
-From: Anshuman <anshumantewari123@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eFC82SHv"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nuEuCqtVQzUJQsbtXuvI4UvZUhxIcME75V6G2GfbE0I=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787144334; v=1; x=1787749134;
+ b=eFC82SHvBPVHPIgfIGH0II25GCrxjj0AWGe18QvXXplDy39cs/+lEjodfeQf9cUt3QB4kxqJ
+ EkVCpSJ5WgzK8ficgaHdqklcC86ld96uEhalDbLKfV8e7UgvhcmOiaeo/nrT6azL8Fk/ujqHDQr
+ E6epBYeU+gQUmaOt0VdqBIvU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost.localdomain (147.136.157.2)
+	by smtp.migadu.com with ESMTPS id 814b51ec32df0399;
+	Wed, 19 Aug 2026 12:58:53 +0000
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Hiker Cl <clhiker365@gmail.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Paul Chaignon <paul.chaignon@gmail.com>,
+	Amery Hung <ameryhung@gmail.com>,
+	Shung-Hsi Yu <shung-hsi.yu@suse.com>,
+	KaFai Wan <kafai.wan@linux.dev>,
+	Daniel Wade <danjwade95@gmail.com>,
 	linux-kernel@vger.kernel.org,
-	Anshuman <anshumantewari123@gmail.com>
-Subject: [PATCH] selftests/mm: check stat() return value in khugepaged get_finfo()
-Date: Wed, 19 Aug 2026 17:44:26 +0530
-Message-ID: <20260819121426.49500-1-anshumantewari123@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf 1/2] bpf: fix REG INVARIANTS VIOLATION on speculative pointer arithmetic
+Date: Wed, 19 Aug 2026 20:58:29 +0800
+Message-ID: <20260819125840.286434-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -77,41 +64,93 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-get_finfo() calls stat() to get metadata about the target directory,
-but never checks the return value. On failure, stat() returns -1 and
-leaves path_stat unmodified, so path_stat.st_mode may contain
-uninitialized stack data.
+Take the following unprivileged program as an example:
 
-The code then checks S_ISDIR(path_stat.st_mode) against this
-potentially garbage value. This can produce a misleading "Not a
-directory" error when the real problem is a nonexistent or
-inaccessible path, or, in the worst case, the check could pass by
-chance on garbage data and let the function continue using an
-invalid path_stat for the rest of its logic.
+	r0 = bpf_map_lookup_elem(...)	/* PTR_TO_MAP_VALUE, offset 0 */
+	...
+	14: r0 += r1			/* r1 is a bounded scalar */
+	15: r9 = r0
 
-Check the return value and fail with a clear error message if
-stat() fails, matching the error-handling style already used for
-statfs() and read_file() later in the same function.
+Loading it triggers a verifier warning from reg_bounds_sanity_check():
 
-Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+	verifier bug: REG INVARIANTS VIOLATION (alu): const subreg tnum out
+	of sync with range bounds r64={.base=0x0, .size=0x0}
+	r32={.base=0x0, .size=0xffffffff} var_off=(0x0, 0x0)
+
+What happens:
+
+1. Processing insn 14 (r0 += r1) in adjust_ptr_min_max_vals(), the new
+   offset is computed into dst_reg's var_off and 32/64-bit ranges.
+
+2. Because pointer registers do not track 32-bit subregister bounds,
+   __mark_reg32_unbounded() first sets r32 to the full range; r32 is
+   re-derived from the offset at the end of the function by
+   reg_bounds_sync().
+
+3. On the unprivileged path, sanitize_ptr_alu() is called and, via
+   sanitize_speculative_path() -> push_stack(), snapshots the current
+   register state and schedules the next instruction (insn 15) to be
+   verified directly as a speculative path.
+
+4. That snapshot is taken between step 2 and the final reg_bounds_sync():
+   at this point dst_reg's var_off still holds the (const) original
+   offset while r32 has just been blanked to the full range, i.e. the two
+   are out of sync. When the speculative path later verifies insn 15
+   (r9 = r0), the inconsistent state reaches reg_bounds_sanity_check() and
+   trips the warning.
+
+var_off and the 32-bit range must always be consistent. There are two
+ways to keep the snapshot consistent:
+
+  1. sync var_off and r32 before the snapshot so they match, or
+  2. leave r32 at its original (already consistent) value and blank it
+     only after the snapshot.
+
+The whole point of sanitize_ptr_alu() is to insert a harmless masking
+sequence that keeps the access in bounds under speculation, so the state
+it snapshots should faithfully represent that. Take approach 2: move
+__mark_reg32_unbounded() to after sanitize_ptr_alu(), so the speculative
+snapshot keeps the pointer's original, consistent r32. The non-speculative
+path is unchanged: r32 is still blanked before the offset is applied and
+re-derived by reg_bounds_sync().
+
+Fixes: 5f99f312bd3b ("bpf: add register bounds sanity checks and sanitization")
+Reported-by: Hiker Cl <clhiker365@gmail.com>
+Closes: https://lore.kernel.org/bpf/CAGM=xGB1fJ9kT8XTitVo74B0WGqgjkoUHdLwzytwV0AyqeVApw@mail.gmail.com/
+Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- tools/testing/selftests/mm/khugepaged.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ kernel/bpf/verifier.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 10e8dedcb..2240a9b4f 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -121,7 +121,8 @@ static void get_finfo(const char *dir)
- 	char *str, *end;
+diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+index d17f14b35b79..d79038a8da10 100644
+--- a/kernel/bpf/verifier.c
++++ b/kernel/bpf/verifier.c
+@@ -14558,9 +14558,6 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 		return -EINVAL;
+ 	}
  
- 	finfo.dir = dir;
--	stat(finfo.dir, &path_stat);
-+	if (stat(finfo.dir, &path_stat))
-+		ksft_exit_fail_perror("stat()");
- 	if (!S_ISDIR(path_stat.st_mode))
- 		ksft_exit_fail_msg("%s: Not a directory (%s)\n", __func__, finfo.dir);
- 	if (snprintf(finfo.path, sizeof(finfo.path), "%s/" TEST_FILE,
+-	/* pointer types do not carry 32-bit bounds at the moment. */
+-	__mark_reg32_unbounded(dst_reg);
+-
+ 	if (sanitize_needed(opcode)) {
+ 		ret = sanitize_ptr_alu(env, insn, ptr_reg, off_reg, dst_reg,
+ 				       &info, false);
+@@ -14568,6 +14565,14 @@ static int adjust_ptr_min_max_vals(struct bpf_verifier_env *env, struct bpf_insn
+ 			return sanitize_err(env, insn, ret);
+ 	}
+ 
++	/* Pointer types do not carry 32-bit bounds at the moment. Blank r32
++	 * only after sanitize_ptr_alu() may have snapshotted dst_reg into a
++	 * speculative path: otherwise that snapshot freezes a const offset
++	 * with an unbounded r32, which later trips reg_bounds_sanity_check().
++	 * reg_bounds_sync() below re-derives r32 from the updated offset.
++	 */
++	__mark_reg32_unbounded(dst_reg);
++
+ 	switch (opcode) {
+ 	case BPF_ADD:
+ 		/*
 -- 
-2.55.0
+2.43.0
 
