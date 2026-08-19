@@ -1,93 +1,161 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-4.mta0.migadu.com [91.218.175.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC5A53BBA04;
-	Wed, 19 Aug 2026 06:32:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3C1B3CF030
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 06:35:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787121123; cv=none; b=B9gnU5Y0+j2sW9C1zW0++vrSup64Kw27u8/KmM+qZp5toUIhq3zwub4hfKGuJFXIhH8GscZ1nuI+PjGnMv0Yu0rsHrDoOhWuK0nVHbXIYj483q/JHSH3WE0Q5OLyNzIi5T5wiLE4hvFzeMnMNivAwZnjraZ2k8zmh0x3hnSZMNU=
+	t=1787121360; cv=none; b=Z1PBbcXLD5z3H0ZdjVlW2gk3Ztb2cOOTH8a9/OYgBD0RomgGl27FNgNcGD88ut3ie+YhNxc2eLyfHOcN84yORHMG02hidUJOhKpjpVoYXab5HSmhlBJaMCaHArzX0qDTngP/K6NdnWqxi8SWPpOdvxiC/b3qkwFGCp7/FxsS+ww=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787121123; c=relaxed/simple;
-	bh=ALQgJA8GzlWNdWB83Ze5vhtNM5ea+XJx7aEj3bOV6oc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=td78JiqsgxEHsmNuWFyIiDOp5J1Uu/61yQ75W9HyOmjutYc/r9+HR28I7TTpHlOCkVZK/v2afG8reJVdL4y4mW/emcHNLsLa0gYpxl+vrCfzLQ1YezOOW3uPRZzUbFvSuJwD2Z2Lj205X0EQs5PrFPc2Gc8g7rNbukRMnVcaaOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=VhqNCtJx; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1787121360; c=relaxed/simple;
+	bh=Ru/OP1lG0ST1wZXA7RhW3VLfH8WpvYmZ6YLYeLoQvMo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDXtOO4EALZ59CcWRi4rvFzdREkrItHJvPBULq50yZsHXwjW2h2NSnHZq84BuYSWx1Qmx6tlYKwn6o7YuPQXQjHhTvlX43rk2XjiHpAD2+XYKLBW40vTOHu6qDYFhAYCZ265iRPw0MLzXl5e8pCiHZ4xiHHesiEhY8ACgLvoIDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tCGKGeUZ; arc=none smtp.client-ip=91.218.175.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="VhqNCtJx"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1787121118;
-	bh=ALQgJA8GzlWNdWB83Ze5vhtNM5ea+XJx7aEj3bOV6oc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=VhqNCtJxosEXzyDkWeNhz6BZWCnT7JNbTDPsj3ZQzPOmGL8YpN7mwowGqVrWu3woh
-	 zcDVj4lddiIVFnWuocg0Ryy9oCSZwdXLkB44C/QBM+xju/D5nAyI7lJsFxusclBWUU
-	 40I2HgbwERv14Vih/s67OcQl8KP4AbC77+g3+xeQ=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Wed, 19 Aug 2026 08:31:51 +0200
-Subject: [PATCH 1/3] tools/nolibc: split the architecture list into
- multiple lines
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tCGKGeUZ"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Ru/OP1lG0ST1wZXA7RhW3VLfH8WpvYmZ6YLYeLoQvMo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787121356; v=1; x=1787726156;
+ b=tCGKGeUZAIc9/dTmIsJSO3St8/r/1zzT+lXdqKSujyXo5txJx13fAMmOkehJPQG1BRm73N3r
+ fh55Ks+td0A4fcW/nsp2UQk64kPVCeDf5cIUWNmBL+SOyAvxh74ONb6Vq1npM0KMFTLX77ZDiRM
+ RVp+MifnSRgSpha3HUZ3RLMw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from teawater-KVM-Virtual-Machine (39.156.73.13)
+	by smtp.migadu.com with ESMTPS id 6237c860b5f0182a;
+	Wed, 19 Aug 2026 06:35:55 +0000
+X-Migadu-Flow: FLOW_OUT
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v3 0/2] bpf: BPF-driven proactive memcg reclaim
+Date: Wed, 19 Aug 2026 14:35:42 +0800
+Message-ID: <cover.1787120833.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260819-nolibc-hexagon-v1-1-6bc3be591f09@weissschuh.net>
-References: <20260819-nolibc-hexagon-v1-0-6bc3be591f09@weissschuh.net>
-In-Reply-To: <20260819-nolibc-hexagon-v1-0-6bc3be591f09@weissschuh.net>
-To: Brian Cain <bcain@kernel.org>, Willy Tarreau <w@1wt.eu>, 
- Shuah Khan <shuah@kernel.org>
-Cc: linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787121117; l=936;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=ALQgJA8GzlWNdWB83Ze5vhtNM5ea+XJx7aEj3bOV6oc=;
- b=mvICwTAr6jhekqOis35OBD+XVlEOwxnVNRGJc/qaeybGqqjjSTaxGnaa9YdxgsNHolC1E3fiA
- 0oXrx6HsIvOB+2vuGFq1PH85VXNO/vPMf7zY0+MX6xTMpDcR5YhQYsw
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-The list is getting long, split it up for easier additions.
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/Makefile | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+This series lets a BPF program decide when to trigger memcg reclaim
+and how aggressively to do it, based on whatever runtime signal it
+chooses to observe -- rather than reclaim only being triggered once a
+cgroup's usage crosses a fixed threshold. The core idea is a pair of
+new kfuncs, bpf_proactive_reclaim() and
+bpf_proactive_reclaim_swappiness(), which give BPF direct access to
+the proactive reclaim path so this decision can be made in BPF policy
+rather than hard-coded threshold logic.
 
-diff --git a/tools/include/nolibc/Makefile b/tools/include/nolibc/Makefile
-index 6d213d372bf8..b5897b3964f8 100644
---- a/tools/include/nolibc/Makefile
-+++ b/tools/include/nolibc/Makefile
-@@ -17,7 +17,22 @@ endif
- # it defaults to this nolibc directory.
- OUTPUT ?= $(CURDIR)/
- 
--architectures := alpha arm arm64 loongarch m68k mips openrisc parisc powerpc riscv s390 sh sparc x86
-+architectures := \
-+		alpha \
-+		arm \
-+		arm64 \
-+		loongarch \
-+		m68k \
-+		mips \
-+		openrisc \
-+		parisc \
-+		powerpc \
-+		riscv \
-+		s390 \
-+		sh \
-+		sparc \
-+		x86 \
-+
- arch_files := arch.h $(addsuffix .h, $(addprefix arch-, $(architectures)))
- all_files := \
- 		alloca.h \
+This was originally part of a larger series posted here [1].
+That series also adds a memcg BPF struct_ops (memcg_charged,
+memcg_uncharged, below_low, below_min) for synchronous, in-line memory
+protection decisions. That mechanism and this one solve different
+problems -- struct_ops hooks run inline on the charge/reclaim path,
+while the kfuncs here are for asynchronous, out-of-band reclaim
+decided independently by a BPF program -- so they are reviewed as
+separate series. This series carries only the async reclaim piece.
+
+Compared to v1, the kfunc interface has been reworked based on review
+feedback: instead of a thin wrapper around
+try_to_free_mem_cgroup_pages() exposing raw gfp/reclaim-option knobs,
+the series now provides use-case-driven kfuncs that perform one
+proactive reclaim pass with the same parameters memory.reclaim uses.
+The bpf_thread_wq patches from v1 (old patches 2-3) are dropped from
+this series: following the discussion in [2], the cgroup-aware
+workqueue is being superseded by a disaggregated set of async
+primitives (bpf_kthread/bpf_waitq) that will be developed separately
+(discussion in [3]), and the selftest now queues its reclaim work
+through bpf_wq.
+
+Patch 1 adds bpf_proactive_reclaim() and
+bpf_proactive_reclaim_swappiness(), sleepable kfuncs that perform one
+reclaim pass on a target memcg, like a write to memory.reclaim: swap
+is allowed, and the anon/file balance follows the cgroup's swappiness
+or an explicit override in [MIN_SWAPPINESS, MAX_SWAPPINESS] plus
+SWAPPINESS_ANON_ONLY. Both delegate to try_to_free_mem_cgroup_pages()
+with GFP_KERNEL and MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE,
+the same parameters user_proactive_reclaim() uses, and unlike
+memory.reclaim they do not retry until the requested size is reached.
+Both refuse to run when the caller already holds PF_MEMALLOC, since a
+nested try_to_free_mem_cgroup_pages() would clobber the outer
+reclaim's current->reclaim_state (e.g. MGLRU dereferences
+current->reclaim_state->mm_walk).
+
+Patch 2 (selftests/bpf: add memcg async reclaim test) ties the kfuncs
+into a worked example: it watches the WORKINGSET_REFAULT_FILE counter
+of a high-priority cgroup as a proxy for memory-pressure impact, and
+once it starts climbing, proactively reclaims pages from a
+low-priority cgroup via bpf_proactive_reclaim(), with the reclaim
+work queued asynchronously through bpf_wq. The test asserts that the
+monitored cgroup's workload finishes faster once async reclaim kicks
+in. This demonstrates the end-to-end use case: BPF observes pressure
+on the cgroup it wants to protect, and reclaims from the cgroup it
+wants to reclaim from, in one self-contained mechanism. Note that,
+without bpf_thread_wq, the CPU cost of the reclaim work is not yet
+attributed to a chosen cgroup; that part waits for the async
+primitives work mentioned above.
+
+Changelog:
+v3:
+According to the comments of bot+bpf-ci, add a shared helper
+bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
+and bpf_proactive_reclaim_swappiness.
+According to the comments of sashiko and bot+bpf-ci, fix the issues of
+selftests.
+v2:
+According to the comments of Shakeel Butt, replace
+bpf_try_to_free_mem_cgroup_pages() with
+bpf_proactive_reclaim(memcg, size) and
+bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
+According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
+and patch 3.
+Remove bpf_thread_wq code in patch 4.
+According to the comments of sashiko-bot, fix the issues of selftests.
+
+[1] https://sashiko.dev/#/message/cover.1779760876.git.zhuhui%40kylinos.cn
+[2] https://sashiko.dev/#/message/1b58d56976202f26818d31dbd0da2ecb2e2460f5%40linux.dev
+[3] https://sashiko.dev/#/message/DKNHV09PBQZP.IRQL20BY574I%40gmail.com
+
+Hui Zhu (2):
+  mm/bpf: Add bpf_proactive_reclaim kfuncs
+  selftests/bpf: add memcg async reclaim test
+
+ mm/bpf_memcontrol.c                           | 101 ++++
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 479 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 180 +++++++
+ 3 files changed, 760 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
 
 -- 
-2.55.0
+2.53.0
 
