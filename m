@@ -1,215 +1,334 @@
-Received: from LO2P265CU024.outbound.protection.outlook.com (mail-uksouthazon11021108.outbound.protection.outlook.com [52.101.95.108])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD3CE1A38F9;
-	Wed, 19 Aug 2026 00:41:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.95.108
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787100123; cv=fail; b=djwSyZs1LdNOzAOGI1T5n1BIGhz8XhRCzKDsltSyqbLZ7JxR5/Znz8gb1FJhYCcrIBNqGIZYND3rcgEUR/DT/tVomzK8v/nABLRr0jNVOPSq8AkmOhvRSXAfZ7/EXYwvyis87DX4d+Djeslw9f53Fvj/9/javry2x3bwuAuFRyE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787100123; c=relaxed/simple;
-	bh=Xnkk8MPgFKm/99Q7ThfxdeCL/s/GWqkQBZ82lnE9Cug=;
-	h=Content-Type:Date:Message-Id:Cc:Subject:From:To:References:
-	 In-Reply-To:MIME-Version; b=gtZHkBYkQT3k/qBhv9ARmkt0hG66CVU2YrSKsw1DfK7ccWCiv100HXuT1eCCjzpMBaB3alEGojlS1G2CXW/r2H06uCc+wAfFFot7lBfTAkM3PRkKd0P678vSIglHIxfU55Waf8V3+8TBwtIUpzYH0y0Lkr+Ef7n6f6sWu1bBZPU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net; spf=pass smtp.mailfrom=garyguo.net; dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b=GOW433kP; arc=fail smtp.client-ip=52.101.95.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=garyguo.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=garyguo.net
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81A33563CD
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 00:51:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787100724; cv=none; b=CA15cb5qmCvpAMfTzPJdEJdSanFaxAGrMBSPawBVwrcj/DLSbWmmpkOLCq7BCT2/J16LD0/bey+IKZCfKTsz4JOopajd1tCly8gPZJtwRZ6+wJGzGFEg9iXsnRXFwLVeEFEAU+nQQC2/lP9fGSqFkHhxlu4nVjx7/mIt2LeJ+LQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787100724; c=relaxed/simple;
+	bh=drmmQM2zQ/3arwMjOC24nDokB5ci0sg/YNQXNeZP4ZY=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
+	 References:In-Reply-To; b=fWkaEmxtnlyH0gMhLg7dQnuW6iUCAtWFkBAdx1eoRATu2oaSuWLOOsJjtGkdL3jLkXROXI1UDhpQwIcqdddJP8MMZuzXo6xolmltHD7O+SBPp0ql3G73dHAfdd8rweAri0H1ilypZwUqy5nLeOpCF2ZCAXUHsrowX7qdr7p5Nrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=0byo8aul; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=garyguo.net header.i=@garyguo.net header.b="GOW433kP"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=UPq+BrZ1lZd7r3pddYZVhvahk0DS2kIJSrg/viLrAI3Mxshxqvj/K5tzT2OVQBRN4rllOOMX0mTF62s1hxuiJt8t5MuO+93EYDeAHsIxPtoKsNRrLoUat9iTG5jDhwSdXBjjtF4WY7bxf4L/WsFgDtffZFk+6eXjF5Vi3tt2qeV5IDU+4BWZOdgiUv6r4l4bcllMEHITgT2GrfwAQJL3VqK2UIynRzCxz2w0NohZrpB56aW6VL8Sj8x9NmW07U9LokCOGp6LDiWjZ7dwKIvqm1s6suT9Kprojg/67z/zezzHgmQPx6tcMfKDU18jPxt385ZFhpyLmHXyg8l4/asBLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lxelTAwXkbGkCiJ+ciITLMhA6IJvkXi21Ntd9X8Eku4=;
- b=G3F4315tZT6l7hA9injNZfPIhdLVX5ESHyRNSQXX4tI2K6kmudt+wQehKXFODj4xyHdyEjqbxnBu8UCLxGRHlTRRXrNrKMdORlJhDBzjD9ncL3QFTLqBch3Bn/0E9kvTk/YNcN39xzxudflg2SfkYByFVSqtW5q1O9/pHTeWr/s0dBd2SOxdUinvmITaRUIni8TMI5/hJJn9MMyw5b/dbkXUjNShkYtLXPG6jnw26+N8wHnjR4tgVz1FYz2EDMZaSPHiG/HNCw0KAuq/ouRtwnBGensH4zKa2ezhB03kPeZ4TeBHUGFB+3c0AZgs4dgX3wv3DibC5oJ+zSQs4/CupA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lxelTAwXkbGkCiJ+ciITLMhA6IJvkXi21Ntd9X8Eku4=;
- b=GOW433kPWyqvwakcxAPeARXkHhHmUbj8gagQawPDnKNKNqqCnSii/gGrhyVf/HQQqrwIghgFRcNJ/7n8KHMZSn8nqy8d6D/CiqlcUbix3PMF7K0gLILQBh5bRJsWKVTsea9DyQtTRBnRZTrBz5FR7tbGvJq5JhVk0CilbTAAsaM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:4ab::19)
- by LO6P265MB6857.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:327::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Wed, 19 Aug
- 2026 00:41:53 +0000
-Received: from LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1]) by LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- ([fe80::f60b:1537:68d7:4fc1%4]) with mapi id 15.21.0339.007; Wed, 19 Aug 2026
- 00:41:52 +0000
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 19 Aug 2026 01:41:52 +0100
-Message-Id: <DKSI49OUJ0LX.TJAK5Q8L2FIS@garyguo.net>
-Cc: "Miguel Ojeda" <miguel.ojeda.sandonis@gmail.com>, "David Gow"
- <david@davidgow.net>, "Miguel Ojeda" <ojeda@kernel.org>, "Danilo Krummrich"
- <dakr@kernel.org>, "Alexandre Courbot" <acourbot@nvidia.com>,
- <rust-for-linux@vger.kernel.org>, <nova-gpu@lists.linux.dev>, "John
- Hubbard" <jhubbard@nvidia.com>, "Alice Ryhl" <aliceryhl@google.com>, "Burak
- Emir" <burak.emir@gmail.com>, "Brendan Higgins"
- <brendan.higgins@linux.dev>, "Rae Moar" <raemoar63@gmail.com>, "Yury Norov"
- <yury.norov@gmail.com>, <linux-kselftest@vger.kernel.org>,
- <kunit-dev@googlegroups.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] rust: kunit: enforce test configurability
-From: "Gary Guo" <gary@garyguo.net>
-To: "Yury Norov" <ynorov@nvidia.com>, "Gary Guo" <gary@garyguo.net>
-X-Mailer: aerc 0.22.0
-References: <20260818152324.587932-1-ynorov@nvidia.com>
- <CANiq72m2M5Csh_9qQYa8MRmJZtciU3d4S3ht5FG-K+YwR4iAwQ@mail.gmail.com>
- <DKSDWO1NQKF3.25QCXPPUM27J4@garyguo.net> <aoTjHtiSHJAuDQ7B@yury>
-In-Reply-To: <aoTjHtiSHJAuDQ7B@yury>
-X-ClientProxiedBy: LO4P123CA0652.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:296::13) To LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:4ab::19)
+	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="0byo8aul"
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2cc61541f8cso18790705ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 17:51:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1787100718; x=1787705518; darn=vger.kernel.org;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
+        b=0byo8aulb98gQBT1GOBiCV06WKlti9ylavZIfqFlVUYiR3UGz8TC9FH91UvGgX72W+
+         H3aC0Ibjqpblq+6vX35IlVtJXBkZdIWk7w4rNapu/PWWff2E2d6fktN1/6tuGJYCGYVQ
+         cYCyU3ggFdvLm3c/95U53vW83d+QUJF4FwOUkh4E7HK9+ORco9YWUwB4lr0Wn/8YW5Kh
+         kLPbwijCZC/+PhoTmZ7zsDkF8Af7wHZWmYVaGkAuxNE8HOaJl2M01mYALSOfZYGPr8az
+         ryjnZjS3E4x6Sx4seea06ooIH0+mQ5DTPgpJg8ah4ys22CuSKAoKTce3CXPfrkRKyBXl
+         SVFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787100718; x=1787705518;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-type:content-transfer-encoding:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=YqZ+lquUct7OgV0Kb+n4xKfmL/YvvXGtH+0T7/T1vGA=;
+        b=pUNFRPTTgD5qJn5619CG5YxGcmKOH8ObVn8GzfFU6+uEywwzF6Di1hRdXRKXv21glz
+         XJC0z7Ru+k80FmCWHFuZdQlVTDOzmH0AOSzZ9hSjCdYBU7mikRb8oBVLU8ECc37G3Asw
+         ccnSef5G4hwtzGIQqp2WVJ1F4yQUE9QNKwUfqAd2QZXPY4RyRvZrQb73WqwgRw2Ny+eK
+         rGZHE1cPiiJ0ycHdLyCHPU73bebRO1TZ6s+J+mnTolZAyLej+fMcZA33mzb+OALCn48X
+         j28DWdFKi7y/ajdGmg6LKVRHfe9IcRjBFxpm81xm7IKbtthIq1cYhEU68azbWHVzzXZn
+         2nPw==
+X-Forwarded-Encrypted: i=1; AHgh+RpyQQzqAagjJab7lDR+fWC7NEooe7tCj0bvUMEhQl7lGhNAwr5xjPukITTGYqzbQ7WiGMvQwUNN/k1tOIP238I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygsCIZRwqOFKvwtmN1TAJQQH4+Jfl9QyTlaepPYw3rAOGd+QuH
+	BY8CQwlxgslyyv1O4cDCRX//wxEXcjHME4ASlab7pyN5XtmRYDq6h31mqZpGmjrBpKE=
+X-Gm-Gg: AR+sD10yFSgOvlYFx2UG51sE5CnIiOxGVg8gwLBoZJUKLo2cWydilkmtcARbvJsw6tv
+	OK3wzMXtRrEBgUhkBRLN4onX/vPjAYVaxvOSfArlhlfnNA6mbCHj6r5jPFJRa4nQIhuwy0TMc2g
+	DOCKfq1Cege1QY3QLkqv+A9Ta3lqxk1pJFI3G3cSbQbgHWLo110FkEYaMpwM5b7+tHDqoU56IDZ
+	4drjpDQVaLEm0QtbnZKC4bb3eCzoH1EwE7Cz/529T2ffGWVMOqJ6Kw143dUmryvbiQB+9aM07VI
+	HTOJC2WBc+vGJ6p/nq1KaB2JzsnWN5aTlH8yA6sLaKZHcLRShbKh97ZdlnbGQQLP4zmFGEV2SwZ
+	Qay+X2sA9ddI+CbVmeRW2pV0iYLL7nXwiUahzytt2BprLV/5SfNv38NRmZIduLW/9WiQh1TPa+V
+	Vh7mZx+5696RxrhOiXJ2VQRLa7C/Q38Yt8bkMtdLQofG0q/PhnHc0f+cGjZFhocWxmNliz9eugk
+	QiRRuW29KNiMWl4yg==
+X-Received: by 2002:a17:90b:4b91:b0:384:927f:3db9 with SMTP id 98e67ed59e1d1-3957f874e86mr1158483a91.1.1787100717529;
+        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
+Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fb87174sm519704a91.12.2026.08.18.17.51.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Aug 2026 17:51:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LOAP265MB8560:EE_|LO6P265MB6857:EE_
-X-MS-Office365-Filtering-Correlation-Id: e8917f08-efb9-4e6f-7368-08defd8aa9ac
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|366016|1800799024|23010399003|10070799003|7416014|376014|56012099006|10067099003|6133799003|18002099003|22082099003|4143699003;
-X-Microsoft-Antispam-Message-Info:
-	3wdpo6V+kZyLMo0fCJnVIIczJJwUqxwfK5iMOsZNfsucRjC4Mh7aHwqEXWQ440R3pR5SuoQVzVMSMhQU5eqV1H47yJjZRD+TYWu7DBXp4bYeoL+8wO2/Fgzlut9YcFVMoOUAvi53DhG75UoGE/NTeiQp45ZOf5q7wBzq2QSqUudgeATC+/qbLaK3IRRoNyzHbyDO/jGn7lVUtQI5x98fXKpu72WhbUsO7/HWc/sHXzq6tX4C7ehlfdI/KgB3+KO6l3iGdtiKmIhMQnT9uZnJYXx8fis0h1Y+3HjFLdsc7xc1X/FAtLklYs9IRbduXBUyx+Tbaek4MqlTTCDhJYzSqmcsxkgvRzQZTYyG2Cd2btqxPdI+5j/SuZAV5HaATK7MfmrEuxRX+T6TU90SMaSNag+3xrDpo8AzW3PL4Oq7S7oq1eQPS4vw7APsFJ174acKaX6O5FqebMOkrzNzZcx/djC7qILp1soc3ga3KNw0rOw46Z69tnWWHC7qaEcbFllJCoXaz8DwoZ2Byf0rGKgb7j3yw8RQURl2byL9WPa5Z7fwsaX/v5bhrpdr2sAs7rA6oMe0Mqfe9pV1UkOALZ8WwGxdkccm+8+nW6ytthyHzTzndyNPUf5p+0nPQeR6+2RqCiaH1JEnfWc43PSSp2TEQi6IuOGxnDFT3aC3lCEYqCA=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(10070799003)(7416014)(376014)(56012099006)(10067099003)(6133799003)(18002099003)(22082099003)(4143699003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?L2dydkpkNWhKb0x5eGVldytpZytYbUVuck9JTHRWVnJiaTlaQ01za1pjYkZa?=
- =?utf-8?B?c0hyTEhQWUkzamt4aXR2M01SWWc0SlJpa0pBRVlhYVQvaXZVejlDSjdsalJM?=
- =?utf-8?B?NzBTbjNpa3NLUjA0U2lRV3FJWnBMLytlMHVvYitWYkFjYXprQlJqb25ZU1BO?=
- =?utf-8?B?L0NOb1plQ3FlTUZYL1JqUE9iZzh2eUh5MnBxamYzQlp0TjlNeTlEdm9iWDUr?=
- =?utf-8?B?T2VTcjhUdlRvdW4xM2VKczBBQkhCZjh2ODhZNzRsL3NzVGxSSXVGa1B1VFlI?=
- =?utf-8?B?cU10Qzc0SmNuZXoxOVc3VXpJWnRxS0UyRzFjTFZGS1Erd3ZrNGdVUTErTkIz?=
- =?utf-8?B?eGdpbHExMG1ka2V1TjR1bk10Mkp1Y0NkKzlnU0txN3VId1JXOVZaTytqdTJj?=
- =?utf-8?B?NW4yYWhpY09EcmwrRi9VYzdONGoxd0xUaXZGTGpLZ3ppRWxCZXg3MVd5dlJ0?=
- =?utf-8?B?MjNTaUJKL0g1UGhxUERtTW5WSmF3RkNpck4za3YvYkp0b3RUWTR0VmpyY3E5?=
- =?utf-8?B?VlZFakdRTG9zSFhKUWJtRlpTaTh3bmxMVU1yby9xaUxHRDVpQ0N4ZnQwSDEy?=
- =?utf-8?B?ZzMwb29RVm40WlN3M1REUXFuYVRvY0J3M0g4d3ltdVNkZWhqWWJnL0RCZ1VE?=
- =?utf-8?B?S2xNWmFTMjJxWGdYZjlKZFNXZ3kybXR0Q3gvWjh0VzM0bFRDUHVpczl6eFZS?=
- =?utf-8?B?WC9YdU1hSm8xbmcxVnRybE5VbEM4eFkwZ0pGMjBoNHNncWRhZXBaRk9BQU9Y?=
- =?utf-8?B?UlNxbllZM3VHUHpsZ0NjeVJvbGVTVDVrYVhuK29uTWFiNnNBOWExVGlDbGFj?=
- =?utf-8?B?cVFNNkJkR1FsUjdvTjhoSmx3Q0pKaytlbEc1YThkZ2FxRnNwaXp5TVgxMUdz?=
- =?utf-8?B?OStvbU9CVXZBSXpIcVVvSlA3clZ0RThxSEdMMXpCUU9vV3YwNjV0L2M1R2lF?=
- =?utf-8?B?VGRjRGJUNENyVnl4OFpzTXRvd2hIZW9BTEg0NHphVC9EM2pnb1llWmE3c0Nv?=
- =?utf-8?B?UkZzaGNXNktZbk8zaXArM2hmVjYyRFNwR2RmMnE0eTk2Z3FaZjZndnlrc0Zv?=
- =?utf-8?B?UmwzVGVPemY4cGt2TDdxOXRITXJEc0h0Qk1VbTh3c0cyeXpEK1Y2RGtIQklW?=
- =?utf-8?B?WnhrM1oyRkQyU3l1VWw1ZUtlTjg4Q1ZjWTlYN25MOVZYbHFVWkxYQ0MwL3JD?=
- =?utf-8?B?Z1JHWkl5OUZ6bVdEMUd1RGhzeE1FWDJwYm4wejZMbXE5N1hBNldwbjBJU1U3?=
- =?utf-8?B?NGVLaHo4S0prSFZ3MncwcUFBRUFZbTZUKytxaUdaQ3VZUXg0b2ZTcmE4eHJm?=
- =?utf-8?B?eDE2WmlyVWpEak5NS3MwNmVQYVZ0YW9BSXJ6c09WU0NMY2NvS1JRS2UzeS9V?=
- =?utf-8?B?Z1BpZWtydXp5Tzg1dWZXcHRDQnNzeFQ2KzlSdndoRjNvSUs5dE1UeG9RdGox?=
- =?utf-8?B?QWhiKzNCQ09qZmNORGRtUy9yU3hyVlQ1WmRaeGdQUG1BdEhNRmJjajhac01t?=
- =?utf-8?B?SFFZbWM3aFlJajdubjNHNExna2xVM0I5RU9tVklTL2h2Tnd0TitIT1gwRFJN?=
- =?utf-8?B?d0JUUHl4VW9NdGcrSURCbnJmTUY3SmZQUG9kazE0SXBHaGxvMkFkYlJnQm9W?=
- =?utf-8?B?YVRyYnZoYWpOQ1ozSzhuSTUzbWRVUTAwUWxRSk5QbjZWWWJFMjhzSGhoczNS?=
- =?utf-8?B?UXpOc0pNTFg0WWF3MW5mMkFDWjRuZHRvTjVaQlovVWN2N0JHNFdEdTRkS09V?=
- =?utf-8?B?WmZyRHBvbThqbmZPOFJkRXhOYk1yd2RDUGRVK1JGNmVFbWxuS0xEUUpEQXl1?=
- =?utf-8?B?QTU4QXlJTkozNStpdkNnSVJJU1pUS0tlOUlxc3pCR3ZRSjZaUVVzanVkaFFW?=
- =?utf-8?B?VFI0U1VlRkQ2amdoWUhKZGNaOHJmdDZLV1JkdWNFdURxUjdzaDhIOTh0ZkRw?=
- =?utf-8?B?cEo1NVZ0WUo5TTVSYUtOVkRWVTRaeXF0T1NlMExTSlF6aHVyNWZmMHJySktV?=
- =?utf-8?B?akhBSzIvNHQvOE5iSXhZblF1MCt2Y2kzb2hDdGxYTFdFK0NVSnVWYkRsdEZU?=
- =?utf-8?B?KzRMNnN3b0xOSHZnaUxJV0tQR0U2ZjdHUnQ3RUFPVTVHaFdRd0NQVElHYTQ1?=
- =?utf-8?B?Vkdkc29LeWhLNjBmckMvQXRSM096V1pCbzlvRzFjeXhRTFNnUXNGUG41dUwr?=
- =?utf-8?B?SERYZVgvRndLdnQwRTdBcUpNUTcrNm5zRThWNmFyY3RWbmJvbFpRR2FEYXRH?=
- =?utf-8?B?ZHFhcUxLQXlYVlU0NHhVZEZqUXBSOUJFdkJXNEJlQ2U5cWxKWWtRVURQUVlz?=
- =?utf-8?B?bVhLUmpKbHNOWW8zZE9ETEFCclNEUVQ2YlRnajFvUjBmcEx2MU1EQT09?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: e8917f08-efb9-4e6f-7368-08defd8aa9ac
-X-MS-Exchange-CrossTenant-AuthSource: LOAP265MB8560.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2026 00:41:52.8547
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: hXlO+Kx4zlxtWm7xnPPbfof0Db+zSvUy94h/V8eG8iCalRDRPkAKsapwAvwtd8030sgZd0haco7XcHeJc2338Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO6P265MB6857
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 18 Aug 2026 20:51:55 -0400
+Message-Id: <DKSIBYZNN07W.12NSCHYUCJQPH@etsalapatis.com>
+Cc: "Alexei Starovoitov" <ast@kernel.org>, "Daniel Borkmann"
+ <daniel@iogearbox.net>, "Andrii Nakryiko" <andrii@kernel.org>, "Eduard
+ Zingerman" <eddyz87@gmail.com>, "Kumar Kartikeya Dwivedi"
+ <memxor@gmail.com>, "Martin KaFai Lau" <martin.lau@linux.dev>, "Song Liu"
+ <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>, "Jiri Olsa"
+ <jolsa@kernel.org>, "Emil Tsalapatis" <emil@etsalapatis.com>, "Ihor
+ Solodrai" <ihor.solodrai@linux.dev>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Shuah Khan" <shuah@kernel.org>, "Sebastian
+ Andrzej Siewior" <bigeasy@linutronix.de>, "Clark Williams"
+ <clrkwllms@kernel.org>, "Steven Rostedt" <rostedt@goodmis.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-rt-devel@lists.linux.dev>
+Subject: Re: [PATCH bpf-next v3 4/4] selftests/bpf: Add a test for arena
+ fault-in under memory.max
+From: "Emil Tsalapatis" <emil@etsalapatis.com>
+To: "Jiayuan Chen" <jiayuan.chen@linux.dev>, <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260808140720.293604-1-jiayuan.chen@linux.dev>
+ <20260808140720.293604-5-jiayuan.chen@linux.dev>
+In-Reply-To: <20260808140720.293604-5-jiayuan.chen@linux.dev>
 
-On Tue Aug 18, 2026 at 11:56 PM BST, Yury Norov wrote:
-> On Tue, Aug 18, 2026 at 10:23:51PM +0100, Gary Guo wrote:
->> On Tue Aug 18, 2026 at 9:44 PM BST, Miguel Ojeda wrote:
->> > On Tue, Aug 18, 2026 at 5:23=E2=80=AFPM Yury Norov <ynorov@nvidia.com>=
- wrote:
->> >>
->> >> Make every Rust KUnit test suite require the Kconfig option that cont=
-rols
->> >> it, and let the `kunit_tests` macro apply the corresponding `#[cfg]`
->> >> attribute.
->> >
->> > If we are sure we always want at least one `cfg` guarding them, then
->> > yeah, this makes sense (we could ask to write the `cfg` bit inside,
->> > for "greppability", and for clarity / less ambiguity later on).
->> >
->> > David: are there cases on KUnit where you would recommend/prefer
->> > something different?
->> >
->> > For instance, I could imagine a Rust `mod` for testing purposes
->> > already gated by a `cfg` that is meant to contain many tests, and then
->> > different suites inside that for control (possibly with extra `cfg`s,
->> > but maybe none too for some).
->>=20
->> There might also be cases where we want some other conditional (like com=
-bination
->> of cfgs) to gate.
-> =20
-> But not a single current case. All the current tests are flat and
-> simple: every test has it's unique gate config. Do we need a more
-> complicated scheme? I doubt that.
+On Sat Aug 8, 2026 at 10:05 AM EDT, Jiayuan Chen wrote:
+> A child joins a memcg capped 64M above its post-load usage and faults an
+> arena in until it runs out of that budget.
+>
+> With the fix the arena page comes from the sleepable allocator, so
+> hitting memory.max goes through the memcg OOM path and the child is
+> OOM-killed, which the test checks via memory.events "oom_kill".
+>
+> Without the fix the test may still pass, because a concurrent blocking
+> allocation in the child (e.g. a COW fault on an inherited page) can hit
+> memory.max and OOM-kill it first. The goal is only that the fixed kernel
+> passes reliably.
+>
+>   # test_progs -v -t arena_memcg
+>   serial_test_arena_memcg:PASS:child killed by signal
+>   serial_test_arena_memcg:PASS:memcg oom_kill
+>   #5       arena_memcg:OK
+>
+>   # dmesg (the OOM comes from the arena sleepable allocation)
+>   test_progs invoked oom-killer: gfp_mask=3DGFP_KERNEL_ACCOUNT|__GFP_ZERO
+>    arena_vm_fault+0x4bc/0xad0
+>   Memory cgroup out of memory: Killed process 473 (test_progs)
+>
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-A common case in Rust crates is when some shared code exists when either of=
- two
-features are enabled, do
+Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
 
-    #[cfg(any(feature_a, feature_b))]
-
-sure, with Kconfig you can add new config and select based on that.
-
-I see this as an issue with composition. `#[cfg]` and `#[kunit_tests]` are =
-two
-orthogonal attributes so one shouldn't (and shouldn't need to) be absorbed =
-into
-another.
-
-For a crate, one might want to have multiple kunit test suites in a shared
-module. For that, you currently can do
-
-    #[cfg(CONFIG_THIS)]
-    mod tests;
-
-and have `#[kunit_tests]` insides the tests module freely. Your design woul=
-d not
-allow this (or would require a always-enabled feature to be passed in to ap=
-pease
-the macro). Also, for a leaf driver crate, all `#[kunit_tests]` would likel=
+> ---
+>  .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
+>  .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+>  2 files changed, 180 insertions(+)
+>  create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+>  create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/arena_memcg.c b/tools=
+/testing/selftests/bpf/prog_tests/arena_memcg.c
+> new file mode 100644
+> index 000000000000..af49d8b1b995
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+> @@ -0,0 +1,156 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <test_progs.h>
+> +#include <fcntl.h>
+> +#include <signal.h>
+> +#include <sys/mman.h>
+> +#include <sys/wait.h>
+> +#include <unistd.h>
+> +#include <sys/user.h>
+> +#ifndef PAGE_SIZE /* on some archs it comes in sys/user.h */
+> +#include <unistd.h>
+> +#define PAGE_SIZE getpagesize()
+> +#endif
+> +
+> +#include "cgroup_helpers.h"
+> +#include "arena_memcg.skel.h"
+> +
+> +#define CG_PATH		"/arena_memcg"
+> +
+> +/* Budget the arena gets on top of whatever is already charged after loa=
+d. */
+> +#define ARENA_BUDGET	(64 * 1024 * 1024)
+> +
+> +static void dump_memcg(int (*rd)(const char *, const char *, char *, siz=
+e_t))
+> +{
+> +	char buf[512];
+> +
+> +	/*
+> +	 * memory.current reads 0 once the child has left the cgroup, so it onl=
 y
-share a single config, so there's repetition as well.
+> +	 * carries information when dumped from the live child; memory.peak and
+> +	 * memory.events survive the child and tell the story either way.
+> +	 */
+> +	if (!rd(CG_PATH, "memory.current", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.current: %s", buf);
+> +	if (!rd(CG_PATH, "memory.max", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.max: %s", buf);
+> +	if (!rd(CG_PATH, "memory.peak", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.peak: %s", buf);
+> +	if (!rd(CG_PATH, "memory.events", buf, sizeof(buf)))
+> +		fprintf(stderr, "memory.events:\n%s", buf);
+> +	fflush(NULL); /* _exit() in the child would not flush stdio otherwise *=
+/
+> +}
+> +
+> +/* Read one key from a flat keyed cgroup file, e.g. "oom_kill" in memory=
+.events. */
+> +static long cg_read_key(const char *cg, const char *file, const char *ke=
+y)
+> +{
+> +	char buf[512], *p;
+> +
+> +	if (read_cgroup_file(cg, file, buf, sizeof(buf)))
+> +		return -1;
+> +	p =3D strstr(buf, key);
+> +	if (!p)
+> +		return -1;
+> +	return strtol(p + strlen(key), NULL, 10);
+> +}
+> +
+> +void serial_test_arena_memcg(void)
+> +{
+> +	int cgroup_fd =3D -1, status;
+> +	const long ps =3D PAGE_SIZE;
+> +	char buf[64];
+> +	pid_t pid;
+> +
+> +	if (setup_cgroup_environment())
+> +		return;
+> +
+> +	cgroup_fd =3D create_and_get_cgroup(CG_PATH);
+> +	if (!ASSERT_OK_FD(cgroup_fd, "create_and_get_cgroup"))
+> +		goto out;
+> +
+> +	/* No memory controller -> nothing to test. */
+> +	if (read_cgroup_file(CG_PATH, "memory.current", buf, sizeof(buf))) {
+> +		test__skip();
+> +		goto out;
+> +	}
+> +
+> +	pid =3D fork();
+> +	if (!ASSERT_GE(pid, 0, "fork"))
+> +		goto out;
+> +	if (pid =3D=3D 0) {
+> +		struct arena_memcg *cskel;
+> +		__u32 i, npages;
+> +		char *base;
+> +		size_t sz;
+> +		long cur;
+> +
+> +		/*
+> +		 * Do everything from the child: the arena vma is VM_DONTCOPY so
+> +		 * it would not survive fork(), only the child should be under the
+> +		 * limit so that a memcg OOM cannot pick test_progs, and a map is
+> +		 * charged to the memcg of the task that creates it - so join
+> +		 * before load. The cgroup work dir belongs to the parent that set
+> +		 * the environment up, so reach it with the _parent() helpers.
+> +		 * Errors are reported to the parent through the exit code, since
+> +		 * ASSERT_* in a forked child does not reach it.
+> +		 */
+> +		snprintf(buf, sizeof(buf), "%d", getpid());
+> +		if (write_cgroup_file_parent(CG_PATH, "cgroup.procs", buf))
+> +			_exit(2);
+> +
+> +		cskel =3D arena_memcg__open_and_load();
+> +		if (!cskel)
+> +			_exit(3);
+> +
+> +		base =3D bpf_map__initial_value(cskel->maps.arena, &sz);
+> +		if (!base)
+> +			_exit(4);
+> +		npages =3D bpf_map__max_entries(cskel->maps.arena);
+> +
+> +		/*
+> +		 * Cap only now, after load: everything but the fault-in is
+> +		 * charged, so the arena gets a fixed budget regardless of what
+> +		 * the load itself cost, and the load can never hit the limit.
+> +		 */
+> +		if (read_cgroup_file_parent(CG_PATH, "memory.current", buf, sizeof(buf=
+)))
+> +			_exit(5);
+> +		cur =3D strtol(buf, NULL, 10);
+> +		snprintf(buf, sizeof(buf), "%ld", cur + ARENA_BUDGET);
+> +		if (write_cgroup_file_parent(CG_PATH, "memory.max", buf))
+> +			_exit(6);
+> +
+> +		for (i =3D 0; i < npages; i++)
+> +			base[(size_t)i * ps] =3D 1;
+> +		/* Faulted everything without dying: no pressure built, dump why. */
+> +		dump_memcg(read_cgroup_file_parent);
+> +		_exit(0);
+> +	}
+> +
+> +	if (!ASSERT_EQ(waitpid(pid, &status, 0), pid, "waitpid"))
+> +		goto out;
+> +
+> +	/* A non-zero exit means the child failed to set up; the code says wher=
+e. */
+> +	if (WIFEXITED(status) && WEXITSTATUS(status)) {
+> +		ASSERT_OK(WEXITSTATUS(status), "child setup");
+> +		goto out;
+> +	}
+> +
+> +	/*
+> +	 * Faulting a valid arena address until memory.max is hit must not look
+> +	 * like an invalid access. Without the fix the fault path allocated wit=
+h
+> +	 * the non-blocking allocator, turned its -ENOMEM into VM_FAULT_SIGSEGV=
+,
+> +	 * and the child died with SIGSEGV on a valid address; now it is handle=
+d
+> +	 * by the memcg OOM path instead. A SIGKILL alone would not prove the
+> +	 * memcg OOM killer did it (a global OOM or an unrelated crash could al=
+so
+> +	 * kill the child), so check memory.events.oom_kill, which records the
+> +	 * memcg OOM and survives the child.
+> +	 */
+> +	if (!ASSERT_TRUE(WIFSIGNALED(status), "child killed by signal"))
+> +		goto out;
+> +	if (!ASSERT_GE(cg_read_key(CG_PATH, "memory.events", "oom_kill"), 1,
+> +		       "memcg oom_kill"))
+> +		dump_memcg(read_cgroup_file);
+> +out:
+> +	if (cgroup_fd >=3D 0)
+> +		close(cgroup_fd);
+> +	cleanup_cgroup_environment();
+> +}
+> diff --git a/tools/testing/selftests/bpf/progs/arena_memcg.c b/tools/test=
+ing/selftests/bpf/progs/arena_memcg.c
+> new file mode 100644
+> index 000000000000..adecd9e8463e
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/progs/arena_memcg.c
+> @@ -0,0 +1,24 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <vmlinux.h>
+> +#include <bpf/bpf_helpers.h>
+> +#include "bpf_arena_common.h"
+> +
+> +struct {
+> +	__uint(type, BPF_MAP_TYPE_ARENA);
+> +	__uint(map_flags, BPF_F_MMAPABLE);
+> +	__uint(max_entries, 100000); /* number of pages */
+> +#ifdef __TARGET_ARCH_arm64
+> +	__ulong(map_extra, 0x1ull << 32); /* start of mmap() region */
+> +#else
+> +	__ulong(map_extra, 0x1ull << 44); /* start of mmap() region */
+> +#endif
+> +} arena SEC(".maps");
+> +
+> +SEC("syscall")
+> +int noop(void *ctx)
+> +{
+> +	return 0;
+> +}
+> +
+> +char _license[] SEC("license") =3D "GPL";
 
-There's also an issue with doc tests. Unlike explicit kunit tests, the test
-suite is generated and you don't have to stick your attributes. Currently w=
-e
-have all abstractions in a single kernel crate, but when the new build syst=
-em
-for Rust lands, we would have each subsystem being their own crate, and
-obviously we would need a mechanism to control when doc tests are executed.
-
-A more reasonable approach IMO would be to specify provide a global gate to=
- all
-kunit tests within a crate. So, e.g. for Nova core, just add
-pass the Kconfig CONFIG_NOVA_CORE_KUNIT_TEST name to makefile and it'll gat=
-e all
-kunit tests within the crate.
-
-Best,
-Gary
