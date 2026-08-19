@@ -1,267 +1,135 @@
-Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EAC3C819B
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 05:05:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E4D26A1AC;
+	Wed, 19 Aug 2026 05:23:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787115937; cv=none; b=gifs9VeoJUVH78cQ7Hx+LiZzjU/LjrtmMYb8OF8wR3jfB+iulrVoomavS0FAZ5pKGRUbz8iNmYl14lpXBjt1bIaLmXVJ3vRPts6jJBL7mOqnZPPwhNcWeJbOkINDY7V60kH4SY2VdvDO6JFWFjPmUuMbwHb6CQbl4BPU4gGkUK4=
+	t=1787116990; cv=none; b=POYaMf5n54Dignb57Hb7sS44Ys3grq3WOtQVeZ0znTzPL6eEPN7r0TO+nkDF7p1jfA5CL6WKCmrwARBj1LMGoYxS5zd+kqK9sZtBdwZzcr8uIz7nyeAIFn4uB6n8gaJqGHdKv18aTLbrN17nIJEVY2/M8ZQpeQCmcb7E/3QDl0I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787115937; c=relaxed/simple;
-	bh=ESVl2l+jCjGfwzTUm5kjJLy66cWwvSgAKIr9oR5taao=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=OD5MyXQxNDvMs6yp7TKWXJxmchSK3mvo+ea1gjTJGGdjeXQpNIIZZp/XsfuGbSWYTSvBgNz0vpWuaEqFgsn2WBCpMduiKX0hZOEUBja9TEEqYCHalvltuSq+ciVxw1WDIDLD+iPSAZXjgUDkZTKQ8zrFknUa05JITaIqst4775w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeCg+rlF; arc=none smtp.client-ip=209.85.215.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787116990; c=relaxed/simple;
+	bh=PhzYe4H+ADcqvssQG6owupuUWnuD6VXj3nIh0yUaMRY=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
+	 MIME-Version:Content-Type; b=ii6jvN5kguaGNmnB4Y/nx9wmsibqsNM0/rvgmXL7pCJBeRq7h1X4W+ew9IfAth1QRh7cf+aXtI89QSRGQh8m9xJhi8EQSBrbeUZJUSzSSOFokAF/lVA6RGGc2K4FYgNdQrFQKiRs0EtwAKpudhHnN6fdUzjEI1G1iltQxO23DEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=Avb2z3RV; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeCg+rlF"
-Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cbb8b54fcf8so492487a12.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 22:05:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787115936; x=1787720736; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=UNb9D6xoKPP/4uKuy81gSrLLYpF2N2DZ3ii3QwO65zM=;
-        b=LeCg+rlFkaKuA7ez3c/YNMT/DkmdKaLXr3GwNXHeYDAN8uZRaqIayGpN9HsuLMvAli
-         8zvqPB4geM8CuI4fKVccWPmNk+LJ2bH9cLx+sPFHRAnisaedCfs6mb51zf03Uk/D08Vb
-         aYW18vWiCvlsYEnUS7uPIZZ/0WEq57kbzA+QfT8/HTkeRdaJ/qmnmgaszqsy81wD+pR+
-         q9xVQyHskJ+DcNAbJ8hst6Zzh1qAaBdIXxsALfFrit+wGhyYOdUiTSuM8JaK7h9Q5UTO
-         Fhj2sYOsr3qCRtEtlu2kIBNnfi3UmrfYS37iekpOtTY4KeJeGOQdiJPi6rhgjGrKyse9
-         lQ1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787115936; x=1787720736;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UNb9D6xoKPP/4uKuy81gSrLLYpF2N2DZ3ii3QwO65zM=;
-        b=bgZedaQyiNLvYdzpGo8VdM7kal4ivH2iztEM74Q6hhqKxlSrWhk5PD/wTwtYbL0gex
-         Ckk6hFET/MOTpV/vUScZfhjyTt2/yGfxExgwtUl5037fOGZYJtxaR9wHXaEYyY0HALhx
-         70yQu0mGaKQy5vlqY3YJv0+V12ry6TyZ5FooxpJ4imxyhNkbCTuIeIKQT0oGj2sNBlN3
-         NDv4RDZ1U/raF/jdb2kgkXMlnRztgJ8q0JmeifvUHNIs2B2HnJAGf61WAZTlsT2kjUMm
-         skZ0TddG8dzMZKdDm7uPKKuxhJ+q50A3MO539JJe3S/pzX2hLpD1HidoV2zJlt+PjjFA
-         GGDQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqiLfQd8m7vJZHBwA7JII0vPwgyU4ykaXSnt9sxYWzUwt1TRmxZnKJxY0m7k0C/kZXiOyZWmJqTmUhCbEJlAYs=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQleAmSR3bYOHglOWjAZ0IMPuQk/gDXA+9MvTnmN3hFqJg/JiF
-	22A4dgj13DyP2QYCc6B+NkPxa42DXwvP6aiCmlEisyQaljQqWPNg8NRR9ymYmFDrbGo=
-X-Gm-Gg: AR+sD13ZlMTDFIsjjnZ0Ej2f7Az7nIPccCptWA/K4FqXz81LQEq2dizQ9uufaNxakoB
-	WhTvwX9qC+e0AL/+/1CaddOHFyJ6FtEhBKH6bsb/bI6ZYTHCcHYzQWB87gEQNTsULSLcTEpSHFS
-	36dSZM+jrpaRbZHpvEtMaoDxI0+k+6XXVcrP97IJVudgClBaHH4TxfvhhEfMRQdt/on2nWiKkVY
-	NyhwIR05DcH/heoOn6deCp/AjhJvECeTBcsDvDCysknKk3J1ytlznFls0HnnikhPUb5aZfI/HEj
-	wLZ7+MPyBA4qSXd29VM+45u/6nA1yu9u08PAnfd8G/vAsDOChgyx2QYckfyQY0RCymvzvTJQXQz
-	uWjwEja91urr7sj8YfC/lUyQgxA7s3hOIN3mKcEoSs8Z98z9uoFg9jMjdlSEh+P17EGBDdJkotd
-	Ahg2Weuk+Acq/RAzid24FbRJ6B95luFCH+fR1QM0pljRNdC+yRKsQhSX5vuatNt9GQzq9kV0wKO
-	G9PKr5agMt9IZ0t
-X-Received: by 2002:a17:90b:4d83:b0:38d:dfd1:7c1 with SMTP id 98e67ed59e1d1-39580a91ad5mr3710120a91.2.1787115935585;
-        Tue, 18 Aug 2026 22:05:35 -0700 (PDT)
-Received: from [192.168.0.13] ([38.34.87.7])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fc82965sm390147a91.4.2026.08.18.22.05.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Aug 2026 22:05:35 -0700 (PDT)
-Message-ID: <54bed44859f9de519c56ed0fb9366160f625fce7.camel@gmail.com>
-Subject: Re: [RFC bpf-next 4/6] selftests/bpf: cover low-32 subreg-equal
- link for zero-extending movs
-From: Eduard Zingerman <eddyz87@gmail.com>
-To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
- daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
-Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
-	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
-	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Date: Tue, 18 Aug 2026 22:05:32 -0700
-In-Reply-To: <20260814231945.3884596-5-vineet.gupta@linux.dev>
-References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
-	 <20260814231945.3884596-5-vineet.gupta@linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2-10 
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="Avb2z3RV"
+Received: from ehlo.thunderbird.net (c-76-133-66-138.hsd1.ca.comcast.net [76.133.66.138])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 67J5L91C1131270
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Tue, 18 Aug 2026 22:21:10 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 67J5L91C1131270
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2026072801; t=1787116871;
+	bh=C7NV13mMxL9whWk83Do/17kcjOh0WDTLIUqX0IuoHQ0=;
+	h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+	b=Avb2z3RVjchOe3g7sK6yb6S2+7AYU6Ib1Emjr8I/UNZExgYt/s1r51JjkaWe3s/iJ
+	 zV+M20hOUyKoRYThBIOSk9Fmf9hXZG/2jleaql7IuWbcuipmTOh+kC4LeATiPE7Tkb
+	 fNC2JKwRTZmRl5AGBRWCpAF57SWPe5Mfpd8Y1a5p0gsvVE86GTAnsUPoxflELZmOIN
+	 x7NtAddui3q2GUZpxIpK4lBP5ElVaM11In2RtKkWmskK7zzqCyEZ98t9ARLQRG6xAk
+	 lmSpBcQRxo55u3L2gtUVpWhPNwAumV2tcWJxgJxJ/bpWxz7/DobcUNor32+xfEQXtz
+	 XjeyS2AkFSKEg==
+Date: Tue, 18 Aug 2026 22:21:03 -0700
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Sohil Mehta <sohil.mehta@intel.com>, Binbin Wu <binbin.wu@linux.intel.com>
+CC: kvm@vger.kernel.org, x86@kernel.org,
+        Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Shuah Khan <shuah@kernel.org>, Peter Zijlstra <peterz@infradead.org>,
+        "Chang S . Bae" <chang.seok.bae@intel.com>,
+        Kai Huang <kai.huang@intel.com>, Fuad Tabba <fuad.tabba@linux.dev>,
+        Chao Gao <chao.gao@intel.com>, Yosry Ahmed <yosry@kernel.org>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        David Matlack <dmatlack@google.com>,
+        Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+        Kishen Maloor <kishen.maloor@intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_v4_2/7=5D_KVM=3A_x86=3A_Use_linear=5F?=
+ =?US-ASCII?Q?read=5Fsystem=28=29_to_read_the_TSS_I/O_bitmap?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <2f8e907e-1c77-416d-90be-9428ce8242f6@intel.com>
+References: <20260806011536.4172258-1-sohil.mehta@intel.com> <20260806011536.4172258-3-sohil.mehta@intel.com> <41a327bd-cbbd-4530-9f30-9175c5840014@linux.intel.com> <2f8e907e-1c77-416d-90be-9428ce8242f6@intel.com>
+Message-ID: <CF354E4D-FF68-4DEE-A22B-62EDAD5B7B8D@zytor.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
-
-Nit: let's keep all tests for this feature under verifier_linked_scalars.c.
-
-...
-
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
-testing/selftests/bpf/progs/verifier_bounds.c
-> index 1a273e416fed..6169a61269b2 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
-> @@ -1516,7 +1516,15 @@ __naked void sub32_full_overflow(void)
-> =C2=A0SEC("socket")
-> =C2=A0__description("32-bit subtraction, partial overflow, result in unbo=
-unded u32 bounds")
-> =C2=A0__success __log_level(2)
-> -__msg("3: (1c) w3 -=3D w2 {{.*}} R3=3Dscalar(smin=3D0,smax=3Dumax=3D0xff=
-ffffff,var_off=3D(0x0; 0xffffffff))")
-> +/*
-> + * w3 =3D w0 forms a low-32 BPF_FLAG_SUBREG_ZEXT link, so R3 carries an =
-id here
-> + * where it did not before; the bounds are unchanged. The id is determin=
-istic
-> + * (raw asm, same bytecode in every flavour) so require it rather than m=
-aking
-> + * it optional -- otherwise the assertion would still pass if the link w=
-ere
-> + * dropped again. The delta suffix is left general: log.c prints ->delta
-> + * directly after the id with no separator when BPF_FLAG_ADD_CONST is se=
-t.
-> + */
-
-Please cleanup LLM generated comments. All that changed here is 'id' for R3=
-.
-Is it important for this specific test to match the exact regex?
-Given the intended purpose of the test I think that the above comment is no=
-t warranted.
-
-> +__msg("3: (1c) w3 -=3D w2 {{.*}} R3=3Dscalar(id=3D{{[0-9]+([+-][0-9]+)?}=
-},smin=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff))")
-> =C2=A0__retval(0)
-> =C2=A0__naked void sub32_partial_overflow(void)
-> =C2=A0{
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c =
-b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> index c80747c16bcf..2cc6f9e45aff 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
-> @@ -711,4 +711,119 @@ l_exit_%=3D:							\
-> =C2=A0	: __clobber_all);
-> =C2=A0}
+On August 18, 2026 10:03:03 PM PDT, Sohil Mehta <sohil=2Emehta@intel=2Ecom>=
+ wrote:
+>Thank you for reviewing the patch=2E
 >
-> +/*
-> + * A 32-bit zero-extending mov (w7 =3D w6) from a source with unknown hi=
-gh bits
-> + * shares only the low 32 bits (w7.lo =3D=3D w6.lo, w7.hi =3D=3D 0). A l=
-ater narrowing of
-> + * the source's low 32 bits must propagate to the destination via the
-> + * BPF_FLAG_SUBREG_ZEXT (low-32-only) link. This is the pattern bpf-gcc =
-emits when it
-> + * reuses "w0 =3D idx" for "return 0" on the idx=3D=3D0 path of a callba=
-ck.
-> + */
-> +SEC("socket")
-> +__success
-> +__naked void subreg_eq_zext_mov_narrow(void)
-> +{
-> +	asm volatile ("						\
-> +	call %[bpf_get_prandom_u32];				\
-> +	r6 =3D r0;		/* r6 =3D 64-bit unknown (helper ret is unbounded) */ \
-> +	call %[bpf_get_prandom_u32];				\
-> +	r0 <<=3D 32;		/* r0 =3D unknown high bits */	\
-> +	r6 |=3D r0;		/* still 64-bit unknown; makes it explicit */ \
+>On 8/18/2026 8:19 PM, Binbin Wu wrote:
+>> On 8/6/2026 9:15 AM, Sohil Mehta wrote:
+>>> TSS I/O permission bitmap reads are implicit supervisor accesses which
+>>> are subject to Linear Address Space Separation (LASS) enforcement=2E
+>>=20
+>> I am not sure about it=2E
+>>=20
+>> According to SDM vol 3a (253668-089US), Chapter "LINEAR-ADDRESS PRE-PRO=
+CESSING",
+>> section "MODE-BASED ACCESSES AND LINEAR-ADDRESS-SPACE PARTITIONING", it=
+ defines
+>> and limits "implicit supervisor-mode accesses" to the following operati=
+ons:
+>
+>The way I understand it, this list isn't exhaustive=2E The wording in
+>those sections, "Such accesses include the following=2E=2E" and "Examples=
+ of
+>such accesses include=2E=2E" suggests that this is not limiting=2E
+>
+>> - accesses to the global descriptor table (GDT) or local descriptor tab=
+le (LDT)
+>>   to load a segment descriptor
+>> - accesses to the interrupt descriptor table (IDT) when delivering an i=
+nterrupt
+>>   or exception
+>> - accesses to the task-state segment (TSS) as part of a task switch or =
+change of
+>>   CPL
+>> - accesses to a user posted-interrupt descriptor (UPID) during user-int=
+errupt
+>>   notification processing
+>>=20
+>
+>For example, this doesn't list the SENDUIPI instruction's access to the
+>UITT (IA32_UINTR_TT)=2E That one is an implicit supervisor-mode access to
+>a kernel address at CPL =3D 3=2E
+>
+>In section 5=2E6=2E1 (Determination of Access Rights), immediately follow=
+ing
+>the above examples the SDM says:  "All these accesses are called
+>implicit supervisor-mode accesses regardless of CPL=2E"
+>
+>> IIUC, the TSS I/O bitmap read during ordinary instruction execution
+>> (under CPL =3D 3) rather than during a task switch or CPL transition, I=
+ don't
+>> think they fall under the classification of implicit supervisor-mode ac=
+cesses=2E
+>>=20
+>AFAIU, the entire TSS struct (including the I/O bitmap portion) is
+>mapped at struct cpu_entry_area using CPU_ENTRY_AREA_BASE with
+>PAGE_KERNEL_RO permissions=2E So bit 63 will always be 1 and U/S =3D 0=2E
+>
+>Yes, the TSS I/O bitmap access happens at CPL =3D 3 but it still has to b=
+e
+>an implicit supervisor access=2E If it weren't, any user instruction
+>access to the I/O bitmap would always generate a fault (even without
+>LASS), right?
+>
+>
+>Sohil
+>
 
-Why the second bpf_get_prandom_u32() call is necessary?
-LLM got confused by the _u32() in the function name?
-
-> +	w7 =3D w6;		/* 32-bit zero-extend mov, wide src */	\
-> +	if w6 !=3D 0 goto l_out_%=3D;	/* w6 low =3D=3D 0 on fall-through */ \
-> +	/* w7 =3D zext32(w6 low) must be 0 here */		\
-
-All three comments above can be dropped. What should be commented on
-is that `w7 =3D w6' forms a link and `w6 !=3D 0` propagates ranges through
-this link.
-
-> +	if w7 =3D=3D 0 goto l_out_%=3D;	/* provably 0 iff linked */	\
-> +	r0 /=3D 0;		/* reached only if w7 not deduced 0 */	\
-> +l_out_%=3D:							\
-
-Nit: please prefer `2: goto 1f; 1: goto 2b;' style labels.
-
-> +	r0 =3D 0;							\
-> +	exit;							\
-> +"	:
-> +	: __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
-> +}
-> +
-> +/*
-> + * A 32-bit zero-extending mov (w7 =3D w5) whose SOURCE is a wide ADD_CO=
-NST-linked
-> + * register (r5 =3D base + K) must NOT disturb that source. Forming the =
-low-32
-> + * BPF_FLAG_SUBREG_ZEXT link on the destination would need assign_scalar=
-_id_before_mov()
-> + * on the source, which clears its base+delta link -- and a combined
-> + * subreg+delta link isn't modeled anyway (sync_linked_regs() skips it).=
- So for a
-> + * wide ADD_CONST src the mov leaves the source's link intact and just c=
-lears the
-> + * destination.
-> + *
-> + * Here r5 =3D r6 + 3 (ADD_CONST, wide). After the mov, narrowing the ba=
-se r6 must
-> + * still reach r5 through the preserved link: r6 in [0, 10] =3D> r5 in [=
-3, 13], so
-> + * the guarded div-by-zero is unreachable. Had the mov cleared r5's link=
- (calling
-> + * assign_scalar_id_before_mov() unconditionally), r5 would stay unbound=
-ed and the
-> + * div would be reachable (rejected).
-> + *
-> + * Note this is a no-regression guard rather than coverage of the new li=
-nk:
-> + * before this feature the wide-source path also left the source untouch=
-ed, so
-> + * the test passes either way. What it pins is the choice not to call
-> + * assign_scalar_id_before_mov() unconditionally.
-> + *
-> + * Written in asm so the bytecode is identical regardless of the host BP=
-F compiler.
-
-Please try to make the comments less verbose.
-
-> + */
-> +SEC("socket")
-> +__success
-> +__naked void zext_mov_keeps_add_const_src(void)
-> +{
-> +	asm volatile ("						\
-> +	call %[bpf_get_prandom_u32];				\
-> +	r6 =3D r0;		/* r6 low =3D unknown u32 */	\
-> +	call %[bpf_get_prandom_u32];				\
-> +	r0 <<=3D 32;						\
-> +	r6 |=3D r0;		/* r6 =3D full 64-bit unknown (base) */ \
-> +	r5 =3D r6;		/* r5, r6 linked (shared id) */	\
-> +	r5 +=3D 3;		/* r5 =3D base + 3: ADD_CONST, still wide */ \
-> +	w7 =3D w5;		/* 32-bit zext mov, wide ADD_CONST src */ \
-> +	if r6 > 10 goto l_out_%=3D;/* r6 in [0, 10] */		\
-> +	/* r5 =3D r6 + 3 must be in [3, 13] here (needs the kept link) */ \
-> +	if r5 > 13 goto l_err_%=3D;/* taken only if r5 not narrowed */ \
-> +	goto l_out_%=3D;						\
-> +l_err_%=3D:							\
-> +	r0 /=3D 0;		/* reachable iff r5's link was cleared */ \
-> +l_out_%=3D:							\
-> +	r0 =3D 0;							\
-> +	exit;							\
-> +"	:
-> +	: __imm(bpf_get_prandom_u32)
-> +	: __clobber_all);
-> +}
-
-...
-
-Given the changes in regsafe/check_alu_op/sync_linked_regs,
-I think the following cases are not covered:
-- regsafe: a state whose register carries BPF_FLAG_SUBREG_ZEXT must
-  not be deemed safe against one without it.
-- check_alu_op: a provably-u32 source takes the full-equality path and
-  must not be flagged ZEXT.
-- check_alu_op: a self-mov w6 =3D w6 must not generate a self-link and
-  should clear dst's id.
-- check_alu_op: a ZEXT-linked source must survive
-  assign_scalar_id_before_mov(), so a chain of 32-bit assignments
-  should preserve the id and the flag.
-- sync_linked_regs: no propagation when reg has ZEXT and known_reg has ADD_=
-CONST.
-- sync_linked_regs: no propagation when known_reg has ZEXT and reg has ADD_=
-CONST.
-- sync_linked_regs: low-32 reconstruction must still propagate when
-  both reg and known_reg have ZEXT.
+The I/O bitmap is most definitely an implicit supervisor access=2E
