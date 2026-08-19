@@ -1,144 +1,70 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A34277CAD
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 14:34:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 528D2220F2A;
+	Wed, 19 Aug 2026 14:43:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787150070; cv=none; b=syFQl/04uQK8idFDGeNHJcY9NsVskK+i4byHp3kZ5w6bT2iuvvDtEP9XAo2AOsDaD9Anz3+TFAF4YnrpvRLMDWgmCpo9c4hu5GErWUL5t+AOMNRf0QOGouS6BBTFRuZ7lCEipnDIclL1NXa619a9XnkF4IuM+RCfc1iJOX8nqlA=
+	t=1787150623; cv=none; b=SZY3HDXBCxxwvnzvFDU6HdexWmbOThwBjexVT/AAO45yI7dWfPu3peOp6XuIMhmNR3MVloznlJIaHFZBaApyPIXhgbJw4IydrYFgxw566kso2eGzoOqgpn41jRFc29J//BwgGFFlaNWTdU32Yk3TZeCsG8K6pb7UeKBYQLXnS0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787150070; c=relaxed/simple;
-	bh=HU+qPdUQS0BEZD7n5Bfk9KiA3akMlx3J74BeJkMhjxQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DQo8IZ49vkhlU4o649TaahQ2lsWVNGvz/6bWrFqvWgIQmIReCL5mNcLNKNxoFvU2yLH+7NCgrSiYLJamCttT4dmE54KO/YeKQ8y1tRQU5DeJPHeU8hhV6VoTh6BFgrhBsMSj25m/mXG8jNGI8zHPU3RZpL73EGUjUaJ738jwxYY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=afEOvWHH; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787150623; c=relaxed/simple;
+	bh=PUGHFrZyidiO88M5MdSV7cP4PPuJlUlXIcHKPUqpbQ4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QSZywEL/yFJnB3oNu2MutOVH1S9DdzWB5+xJHRAbZiW5jGZkconwTcC7H315yotapo7f0qd6UGZwxqUh+bLmLZLNUFk0xot4nI8E0AKtwll9fa+rH0zRwvEkqOBYBx4hXLjNldo1mZaGWTp3OE8yVbyPHyfE5q1RXrj+TDSN0qE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=tyC4IsKK; arc=none smtp.client-ip=82.195.75.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="afEOvWHH"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787150067;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=nL5TdQYFTc+LhqgfFIL8+rQklS1IicuWMxunD/2jpt8=;
-	b=afEOvWHHUxlknve1cT26CgZI+tgDHFwd8HnGirLn/RwmBufrms7r3NNgOV+94Sg1ze3Wda
-	R72Q9RoZww7e4y4itg+lyEnbrgqJd5xaWB37sjiqVo4eAFKFR3zxQBSg4IwSO7RcWPGJ5a
-	r8TBs5VMaUIYzqGZdja5nvBwRZRyYCs=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-678-oY19yZ_SNtymbl_oIIFBfg-1; Wed,
- 19 Aug 2026 10:34:21 -0400
-X-MC-Unique: oY19yZ_SNtymbl_oIIFBfg-1
-X-Mimecast-MFC-AGG-ID: oY19yZ_SNtymbl_oIIFBfg_1787150060
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 832251800D8D;
-	Wed, 19 Aug 2026 14:34:19 +0000 (UTC)
-Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A7506180034F;
-	Wed, 19 Aug 2026 14:34:17 +0000 (UTC)
-Message-ID: <e5433074-5d95-4991-96be-eb03e7173900@redhat.com>
-Date: Wed, 19 Aug 2026 10:34:16 -0400
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="tyC4IsKK"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+	s=smtpauto.stravinsky; h=X-Debian-User:In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=tk5X8IvcrQF7wqe0wB7W8SN6CM872QzkIcdcGmdDliM=; b=tyC4IsKKLfdCZX31ZzIcqL9D/F
+	n6IOfdQPUR4/O+LFSr6JSJyqBdNAGuM7fUpfrqjqmY9kGKMJxdKWnxUoNf3lsIWPTzjBVZkOZtlDJ
+	4sNFJBFWqsZylEbzM/QmpHMEfRNcAUuFzNn68L8jwxQQ3V7eQCh06kjI03+kcJfZlNLtq1K9Lm8hv
+	lkUo3U6xxl3zyR3g9TeUwm8x2lERthBB99QKW0O/fLdaK05y66xYaXcFvUY+uGjMUAJspdvXoz04U
+	XxNEfmnUVzna0iGHuOAChS6gg0MmAep7xKMHH0sw6P4dzR2CUipqeqdPkkpwnALM+q0C29aUqLIZo
+	cTfRnzbg==;
+Received: from authenticated-user
+	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+	(Exim 4.96)
+	(envelope-from <leitao@debian.org>)
+	id 1wwhVs-009rX7-30;
+	Wed, 19 Aug 2026 14:43:33 +0000
+Date: Wed, 19 Aug 2026 07:43:28 -0700
+From: Breno Leitao <leitao@debian.org>
+To: KobaK <kobak@nvidia.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Fenghua Yu <fenghuay@nvidia.com>, Tushar Dave <tdave@nvidia.com>, 
+	Kai-Heng Feng <kaihengf@nvidia.com>, rupakr@nvidia.com, mohammedk@nvidia.com
+Subject: Re: [RFC PATCH 1/3] arm64: add CPU prefetch and cache modulation
+ sysfs interface
+Message-ID: <aoXAdSY_EyPlOOnK@gmail.com>
+References: <20260817022335.3-1-kobak@nvidia.com>
+ <20260817022335.3-2-kobak@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests: cgroup: simplify cpuset subtree permissions
- test
-To: Shaojie Sun <sunshaojie@kylinos.cn>, Ridong Chen <ridong.chen@linux.dev>,
- Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- Shuah Khan <shuah@kernel.org>
-Cc: cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260819103152.767771-1-sunshaojie@kylinos.cn>
-Content-Language: en-US
-From: Waiman Long <longman@redhat.com>
-In-Reply-To: <20260819103152.767771-1-sunshaojie@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260817022335.3-2-kobak@nvidia.com>
+X-Debian-User: leitao
 
-On 8/19/26 6:31 AM, Shaojie Sun wrote:
-> Simplify test_cpuset_perms_subtree by removing unnecessary chown of
-> cgroup.procs files. The test verifies implicit migration triggered by
-> enabling/disabling the cpuset controller via cgroup.subtree_control.
->
-> Implicit migration is handled internally by the kernel through
-> cgroup_update_dfl_csses() when subtree_control is modified, and does
-> not require cgroup.procs write permission. Only cgroup.subtree_control
-> permission is needed to trigger the controller state change.
->
-> Remove the allocation and cleanup of parent_procs and child_procs
-> variables that are no longer needed.
->
-> Signed-off-by: Shaojie Sun <sunshaojie@kylinos.cn>
-> ---
->   tools/testing/selftests/cgroup/test_cpuset.c | 16 +++-------------
->   1 file changed, 3 insertions(+), 13 deletions(-)
->
-> diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-> index c5cf8b56ceb8..b323addcc519 100644
-> --- a/tools/testing/selftests/cgroup/test_cpuset.c
-> +++ b/tools/testing/selftests/cgroup/test_cpuset.c
-> @@ -167,7 +167,7 @@ static int test_cpuset_perms_object_deny(const char *root)
->   static int test_cpuset_perms_subtree(const char *root)
->   {
->   	char *parent = NULL, *child = NULL;
-> -	char *parent_procs = NULL, *parent_subctl = NULL, *child_procs = NULL;
-> +	char *parent_subctl = NULL;
->   	const uid_t test_euid = TEST_UID;
->   	int object_pid = 0;
->   	int ret = KSFT_FAIL;
-> @@ -175,9 +175,6 @@ static int test_cpuset_perms_subtree(const char *root)
->   	parent = cg_name(root, "cpuset_test_0");
->   	if (!parent)
->   		goto cleanup;
-> -	parent_procs = cg_name(parent, "cgroup.procs");
-> -	if (!parent_procs)
-> -		goto cleanup;
->   	parent_subctl = cg_name(parent, "cgroup.subtree_control");
->   	if (!parent_subctl)
->   		goto cleanup;
-> @@ -187,16 +184,11 @@ static int test_cpuset_perms_subtree(const char *root)
->   	child = cg_name(parent, "cpuset_test_1");
->   	if (!child)
->   		goto cleanup;
-> -	child_procs = cg_name(child, "cgroup.procs");
-> -	if (!child_procs)
-> -		goto cleanup;
->   	if (cg_create(child))
->   		goto cleanup;
->   
-> -	/* Enable permissions as in a delegated subtree */
-> -	if (chown(parent_procs, test_euid, -1) ||
-> -	    chown(parent_subctl, test_euid, -1) ||
-> -	    chown(child_procs, test_euid, -1))
-> +	/* Grant minimal subtree_control permission to trigger implicit migration */
-> +	if (chown(parent_subctl, test_euid, -1))
->   		goto cleanup;
->   
->   	/* Put a privileged child in the subtree and modify controller state
-> @@ -221,12 +213,10 @@ static int test_cpuset_perms_subtree(const char *root)
->   	}
->   
->   	cg_destroy(child);
-> -	free(child_procs);
->   	free(child);
->   
->   	cg_destroy(parent);
->   	free(parent_subctl);
-> -	free(parent_procs);
->   	free(parent);
->   
->   	return ret;
-Reviewed-by: Waiman Long <longman@redhat.com>
+On Mon, Aug 17, 2026 at 10:23:33AM +0800, KobaK wrote:
+> +static void cpumod_attr_read_remote(void *info)
+> +{
+> +	struct cpumod_attr_call *call = info;
+> +	u64 *value = cpumod_attr_value_ptr(call->subsys, call->attr);
+> +
+> +	*value = cpumod_attr_read_reg(call->attr);
+> +}
 
+Why do you need value in this case? Also, isn't cpumod_attr_read_reg()
+anmd returning to a variable that is never read?
