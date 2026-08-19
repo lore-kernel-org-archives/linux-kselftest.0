@@ -1,305 +1,109 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5CB34229C6
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 08:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1899E399036;
+	Wed, 19 Aug 2026 08:49:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787128582; cv=none; b=AbPr9qJrZEF0Dsp3Q1f01OOPjQkzeFNOd6icW7GVds7qOqV8T7RzhAUPUn/Dygfq+cJ6xy7Zh2YsQcEiqW+ekqagQ6UXuNd9Nj1B7A65NvdH880sJgWtHiQ4sqessHaVZllqRXxrMu48l7ez6P2jnCbvY9qMx8NCv1aYxyWHTFU=
+	t=1787129378; cv=none; b=ZMzfMtEZ3Y89ZtOTsWjoT0VbT/t+4bAHwKmQp1qWAUuMfkmSm5NRGYqTAhvahAeyxEl+nnOIH8RarpBEuqtPcStzbHJlNd6GEVo3zb6EYIOhKAnSyYtyUCeVnTMH+u4RTAeYKe/zzfwJZtOyKUF4DGzJ/o4lcWqF/HwJ1dd0QVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787128582; c=relaxed/simple;
-	bh=3UXWrQt3nPal1M5oiy154T5Gr08VLE54jxv0n6xnO+8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pw0L9D//cYgoF3QLxbZOUlS1k6iX5kAGc4e6NEOgVY67eLvCqLUcyVkGueqfuNzOTNJ3Pk6/6IuMOSlwctuHSX0zR/vGAGzAhfd6riiSy5X95OvkrHIGXX6tcJQZq34m+AXTe/CXeGupTkAw2Wh6jjH65iLHShHC77J9SH6ad10=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OANRdORJ; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787129378; c=relaxed/simple;
+	bh=wdrFtWLxs3g1usw6H8CnmFJaJEkUHw1DYhlLs5hjt8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AEHntt80o9YM6zpKTe5lHdfaPVD8QVKcoxbjGegazOSSHto3QTjN7rjmsa0ojms6+Ei5AfICrlrhGbxg6ijUOmsrQfeZrMf2z8VzWZBMkQ/bbuDNskJ1+83q52//9YzcdrtUmWPNcaP4FOrp8RR0dPhMMS+TxCJetVpxoIO3+b8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TR8fgkdM; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OANRdORJ"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2ceab75934dso8477015ad.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 01:36:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787128580; x=1787733380; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=NjK48y+gInVL/DFMKlcFgreu40jMGHPWay1upkkwKro=;
-        b=OANRdORJEtwOwZBAlZjSKB3zK8qW6QKLbASy9A3Yd7FeiJESUIpG9OFKiz56I5Tr3S
-         u8rYZESD1j4sgvfXUzBuPRnGGp8P7yeVald3svwZGEeZEw3TgqatckQb/sylxXKyOfHs
-         Z5r7xL1byDE3ozBKzu5GzlSCb56x/3Wnixtoj0+P0rZ1szJD7eg21WFE0Gyz4slnPzMh
-         90GBsnRQfw1TdzaZ0xPpxrKyf0YoypujGsXQqC7gjmF3MQ7+SFRYhsfG5lCKBbPaU5h4
-         nNynvebsFHMlMxa9C2+/KedtFsCcKYHt4H7OPQCH83Fh++5uDG/sCwJ1o6Vg/nvA08r1
-         0Dlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787128580; x=1787733380;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=NjK48y+gInVL/DFMKlcFgreu40jMGHPWay1upkkwKro=;
-        b=XlA4aPRh8zT3lkp1Nj1i36w1uyoVbRgC6Z0ARQMPL8qEG6r+lT9JLBLw77Tc5Rf0qM
-         2wfBA+91T6sjLY+YFO2XiDROprBaNCTgX1mRtZl8Mtol9dYQs1G4WC+/aE3Ov8mUX2S+
-         aDgjscU8PcUQRexy8EMsvk6Ery0+KoQWu4tHgOnCeKLAaGVdxrJHG8Rrca5gI9Yf/gQR
-         WY6lLOr/dPx0BV1pscD9weXzE2jfP6FgDV1dG+0cAdrgvwJFjhpLFdshr7FhaRS6PD0W
-         LkzepJYUh98zXUIJPYg2TdKuvupZ+G9ZDTFP24qye3pa2DoNWFIVqwZeyv81uQbFrDJd
-         ezeA==
-X-Forwarded-Encrypted: i=1; AHgh+RrcLsnEFqPYaSqi+9koIK8jBJ18JdtzJ+O0Mt3XppqvkoduMcH3LmPjf8lvYnMx+JK3ivvTeiV7+2T5KHZl8R4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyA0cQ8nIRoegh+WT9vnRSywKPWhCuzDTw+T8aBRo+LCyrEgSue
-	FQ5eayBr1xo34R+6fx2LzBa9h2mGG95Yk2Kg7F5Ogrx6KYWTBSTSylxI
-X-Gm-Gg: AR+sD108/tB5zhJOenUghDlH+btSfFYXMFX5iW283/X6Lh1fCe3bi5AdgHcIJlGeuYB
-	zgvkf6d0Ldc+Qie2iaeAWXaeC3pqy0utr1dGFVFwCrSB9x+FIkRpiF9X3mBATDBhz3Wx4roZGqL
-	YIhGtBWLnylcKve7N8aRlAi2D5lPLZT+0sbFGe2MPn0AA9rq+RZJ3FJdPYkimjo4/ilPKgUZX56
-	+3mH0BMUsLETDrIWZcaXxfC8fkvIglhV0Hux1Fs6mJOQ7zvQV7nj18F5PDOZVuhPLoRejWHl7q0
-	jw0jf7sOYra44GCCh4MXxlexEM28wQVyUcgchDAmQmBqa2+4nIqcWGYmGJYt77R0AOJyzX8BBMF
-	Y7JzJocPxDTPWrHFg6k4fKVc9kPu9+dJ18tk49n+UNx44SGdDTnttkklxBNHRW+2Sh1dACrKQND
-	yVaS3S85fKO0s3erG0QP9BiY8E97Kt27roPXf2GqXzd+/cPGAdVr5VDLvITKtO8kJSoP/lNjLds
-	5x8UWFEc+I=
-X-Received: by 2002:a17:903:2bce:b0:2d5:ccb7:12c3 with SMTP id d9443c01a7336-2d5fd59f837mr58430075ad.2.1787128579467;
-        Wed, 19 Aug 2026 01:36:19 -0700 (PDT)
-Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bf143775sm5089413eec.23.2026.08.19.01.36.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 01:36:19 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal Koutny <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Guopeng Zhang <zhangguopeng@kylinos.cn>,
-	Sebastian Chlad <sebastian.chlad@suse.com>,
-	Waiman Long <longman@redhat.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Yosry Ahmed <yosry@kernel.org>,
-	Nhat Pham <nphamcs@gmail.com>,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org,
-	Hemanth Selam <hemanth.selam@gmail.com>
-Subject: [PATCH] selftests/cgroup: set the test plan after the setup checks
-Date: Wed, 19 Aug 2026 14:06:00 +0530
-Message-ID: <20260819083600.1351711-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.43.7
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TR8fgkdM"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787129376; x=1818665376;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=wdrFtWLxs3g1usw6H8CnmFJaJEkUHw1DYhlLs5hjt8E=;
+  b=TR8fgkdMX7EJHqjz1R2kJ/VpD3pSS355Ua6wCjg0xcwDCs3bF1gr4FmN
+   SNzxrnJ6iwDTqqIW9XfL1PY/YogZW3HvlRpXpOh/xUhuegpYCWZjjGu6u
+   6XtrarjkYLtDPTdGmimpOQYUTA86z5gpKuLwBmlnxBMVBsgMZIsrH7A30
+   KXc7eQfRwszJHwZouktVdB2U+rncy473GQbfXHzvZq3ccEISk89ol2l6E
+   eBRYCrHNpBCGA5phSsH2P5fz5Zlx0G819DtbRlmre+/mKJadLXhTusrd5
+   bq8mw9F4pFWcQ7ehVSzA5+TbiGxkK8WDUf9cQ0hAuM8cCSGNvcYpbI7Wc
+   g==;
+X-CSE-ConnectionGUID: koTqZSLKQ0+dyKiZzriyBg==
+X-CSE-MsgGUID: m+pL+QdjTPWwkDHM1nt5hA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="86591694"
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="86591694"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 01:49:34 -0700
+X-CSE-ConnectionGUID: MWKbmFiVTHe1mvn+nY5/sw==
+X-CSE-MsgGUID: Jxs/nzajTX2WT9dx2a4Hkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="270697781"
+Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 01:49:29 -0700
+Message-ID: <029a0e0a-b311-43ec-b96a-395e239b6532@linux.intel.com>
+Date: Wed, 19 Aug 2026 16:49:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 4/7] KVM: VMX: Implement LASS violation check
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ "Chang S . Bae" <chang.seok.bae@intel.com>, Kai Huang <kai.huang@intel.com>,
+ Fuad Tabba <fuad.tabba@linux.dev>, Chao Gao <chao.gao@intel.com>,
+ Yosry Ahmed <yosry@kernel.org>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Matlack <dmatlack@google.com>,
+ Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+ Kishen Maloor <kishen.maloor@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260806011536.4172258-1-sohil.mehta@intel.com>
+ <20260806011536.4172258-5-sohil.mehta@intel.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260806011536.4172258-5-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-The cgroup tests announce their plan before checking whether cgroup v2 is
-available, so on a host without it they promise a number of results and
-then skip out after the first one:
+On 8/6/2026 9:15 AM, Sohil Mehta wrote:
+> From: Zeng Guang <guang.zeng@intel.com>
+> 
+> Add a VMX implementation of the is_lass_violation() hook to let KVM
+> detect Linear Address Space Separation (LASS) violations on linear
+> addresses generated during emulation. LASS uses bit 63 of the linear
+> address to determine which half of the address space is being targeted,
+> and reports a violation when that half doesn't match the current
+> privilege level.
+> 
+> Note, LASS takes effect only in IA-32e mode; it is ignored in legacy
+> mode. LASS enforcement for supervisor-mode data accesses additionally
+> requires SMAP to be enabled, and is suppressed for explicit accesses
+> when RFLAGS.AC=1.
+> 
+> Enforce LASS violations on emulated instruction fetches and data
+> accesses, including implicit supervisor accesses, so that the mode-based
+> protections are applied before paging. Also enforce LASS on the linear
+> addresses consumed by emulated VMX and SGX ENCLS instructions.
+> 
+> Linear addresses used for TLB invalidation (INVLPG, INVPCID, and
+> INVVPID) and branch targets are not subject to LASS enforcement.
+> 
+> Signed-off-by: Zeng Guang <guang.zeng@intel.com>
+> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-	TAP version 13
-	1..3
-	ok 1 # SKIP cgroup v2 isn't mounted
-	# Planned tests != run tests (3 != 1)
-	# Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-ksft_exit_skip() can only emit a well formed "1..0 # SKIP" line while no
-plan has been printed, as the comment above it in kselftest.h points out.
-
-Move ksft_set_plan() below the setup checks that can skip, so that a
-skipped run reports:
-
-	TAP version 13
-	1..0 # SKIP cgroup v2 isn't mounted
-
-Several of the tests skip more than once while setting up, for a missing
-or unwritable controller as well, so the plan goes after the last of
-them.  test_core joins its two setup paths at the post_v2_setup label and
-sets the plan there.
-
-Reporting each planned test as skipped instead would keep the plan where
-it is, but the setup failures here mean the whole test cannot run rather
-than its individual cases being skipped, which is what "1..0 # SKIP" is
-for.
-
-Fixes: 1dc830ee4c15 ("selftests/cgroup: conform test to KTAP format output")
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
----
- tools/testing/selftests/cgroup/test_core.c       | 2 +-
- tools/testing/selftests/cgroup/test_cpu.c        | 2 +-
- tools/testing/selftests/cgroup/test_cpuset.c     | 2 +-
- tools/testing/selftests/cgroup/test_freezer.c    | 2 +-
- tools/testing/selftests/cgroup/test_kill.c       | 2 +-
- tools/testing/selftests/cgroup/test_kmem.c       | 2 +-
- tools/testing/selftests/cgroup/test_memcontrol.c | 2 +-
- tools/testing/selftests/cgroup/test_pids.c       | 2 +-
- tools/testing/selftests/cgroup/test_zswap.c      | 2 +-
- 9 files changed, 9 insertions(+), 9 deletions(-)
-
-diff --git a/tools/testing/selftests/cgroup/test_core.c b/tools/testing/selftests/cgroup/test_core.c
-index 88ca832d4fc1..64f4962a4659 100644
---- a/tools/testing/selftests/cgroup/test_core.c
-+++ b/tools/testing/selftests/cgroup/test_core.c
-@@ -927,7 +927,6 @@ int main(int argc, char *argv[])
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), &nsdelegate)) {
- 		if (setup_named_v1_root(root, sizeof(root), CG_NAMED_NAME))
- 			ksft_exit_skip("cgroup v2 isn't mounted and could not setup named v1 hierarchy\n");
-@@ -940,6 +939,7 @@ int main(int argc, char *argv[])
- 			ksft_exit_skip("Failed to set memory controller\n");
- 
- post_v2_setup:
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_cpu.c b/tools/testing/selftests/cgroup/test_cpu.c
-index 7a40d76b9548..8f96bfd19ab9 100644
---- a/tools/testing/selftests/cgroup/test_cpu.c
-+++ b/tools/testing/selftests/cgroup/test_cpu.c
-@@ -799,7 +799,6 @@ int main(int argc, char *argv[])
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -807,6 +806,7 @@ int main(int argc, char *argv[])
- 		if (cg_write(root, "cgroup.subtree_control", "+cpu"))
- 			ksft_exit_skip("Failed to set cpu controller\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_cpuset.c b/tools/testing/selftests/cgroup/test_cpuset.c
-index c5cf8b56ceb8..52ed8fba685a 100644
---- a/tools/testing/selftests/cgroup/test_cpuset.c
-+++ b/tools/testing/selftests/cgroup/test_cpuset.c
-@@ -250,7 +250,6 @@ int main(int argc, char *argv[])
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -258,6 +257,7 @@ int main(int argc, char *argv[])
- 		if (cg_write(root, "cgroup.subtree_control", "+cpuset"))
- 			ksft_exit_skip("Failed to set cpuset controller\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_freezer.c b/tools/testing/selftests/cgroup/test_freezer.c
-index 0569e93fa6b0..f28bb02e9783 100644
---- a/tools/testing/selftests/cgroup/test_freezer.c
-+++ b/tools/testing/selftests/cgroup/test_freezer.c
-@@ -1491,9 +1491,9 @@ int main(int argc, char *argv[])
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
-index f6cd23a8ecc7..99cafd9dc013 100644
---- a/tools/testing/selftests/cgroup/test_kill.c
-+++ b/tools/testing/selftests/cgroup/test_kill.c
-@@ -278,9 +278,9 @@ int main(int argc, char *argv[])
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_kmem.c b/tools/testing/selftests/cgroup/test_kmem.c
-index 1db0ba1226b9..cb47561b4b44 100644
---- a/tools/testing/selftests/cgroup/test_kmem.c
-+++ b/tools/testing/selftests/cgroup/test_kmem.c
-@@ -426,7 +426,6 @@ int main(int argc, char **argv)
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -441,6 +440,7 @@ int main(int argc, char **argv)
- 		if (cg_write(root, "cgroup.subtree_control", "+memory"))
- 			ksft_exit_skip("Failed to set memory controller\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_memcontrol.c b/tools/testing/selftests/cgroup/test_memcontrol.c
-index 0ebf796f3cff..3a84d068fbf3 100644
---- a/tools/testing/selftests/cgroup/test_memcontrol.c
-+++ b/tools/testing/selftests/cgroup/test_memcontrol.c
-@@ -1798,7 +1798,6 @@ int main(int argc, char **argv)
- 		page_size = BUF_SIZE;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -1823,6 +1822,7 @@ int main(int argc, char **argv)
- 		ksft_exit_skip("Failed to query cgroup mount option\n");
- 	has_localevents = proc_status;
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_pids.c b/tools/testing/selftests/cgroup/test_pids.c
-index 9a387c815d2c..710109b53dfe 100644
---- a/tools/testing/selftests/cgroup/test_pids.c
-+++ b/tools/testing/selftests/cgroup/test_pids.c
-@@ -148,7 +148,6 @@ int main(int argc, char **argv)
- 	char root[PATH_MAX];
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -163,6 +162,7 @@ int main(int argc, char **argv)
- 		if (cg_write(root, "cgroup.subtree_control", "+pids"))
- 			ksft_exit_skip("Failed to set pids controller\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (int i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 49b36ee79160..6e7b89315bbf 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -810,7 +810,6 @@ int main(int argc, char **argv)
- 		page_size = BUF_SIZE;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(tests));
- 	if (cg_find_unified_root(root, sizeof(root), NULL))
- 		ksft_exit_skip("cgroup v2 isn't mounted\n");
- 
-@@ -827,6 +826,7 @@ int main(int argc, char **argv)
- 		if (cg_write(root, "cgroup.subtree_control", "+memory"))
- 			ksft_exit_skip("Failed to set memory controller\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(tests));
- 	for (i = 0; i < ARRAY_SIZE(tests); i++) {
- 		switch (tests[i].fn(root)) {
- 		case KSFT_PASS:
--- 
-2.43.7
 
