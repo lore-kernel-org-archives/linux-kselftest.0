@@ -1,387 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25DDA3ED132;
-	Wed, 19 Aug 2026 23:12:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6545B3EC699
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 23:59:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787181123; cv=none; b=NqDXk68jkdOOhpShzfgEV93+qG797zW17Y8OO2OhUqms95liPoVn+ctAvANfbly+OImFJXT9QdmrGi9xR4botob8XIh1OHCBMPahMyUQC09Aosh2/D1JEBaulB4eBIfIZl5/9UnqndaOVXuqXyG9c0H8oGg5cdd2rfR1BgoGfPI=
+	t=1787184000; cv=none; b=WJx7djjC10v3xIoVjf8QVaxDrMFR48Px1P4jQINl8A4bjFD7DSzBDKruwI2v5UMNWLKnZDdcKT7mfAuuIAxnNIICHCPSq5mQTT3PNHqyq20+D2S6T6aepHjJxgK2x/PXVHWa+OuV+U11fJmgQ3lm5/BMYy+YQdYgmHn1B1TQSFI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787181123; c=relaxed/simple;
-	bh=cXNV3PX4efu0YjQqQgjmqr8KTIFSZPBeMO3+YmoGrgY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=E84+7dueI00dl+c39brxkC2fYExGkQ5uc6C62+8tDfFPGiVX8omFKYNa3vu2X7Kmuw78WlFtnkvM55JQFG02dfT6iwLJ0v+YtqG4AIY0BDM8zUR43hRLNsLEHwOMnDj6WAJAqLTweNzZA8eY5wtm9Q8zvPIinlnIqpzj/IMgax0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M0iKfg6K; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787184000; c=relaxed/simple;
+	bh=NGp/aL9J6o0WYmHnohWsvAE5IdAJbRwI8aWJlovJsXQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=H0SxLMP+lf4MaQpeNnGuraLSSLuDtC2PrTjqBs8OFIETSnBy0Vf6ueanPISnCmPlUzRl148lwINaYbenNJN/SAkAiS9QGKJIMVCbybfni19Hyk6W9tm1930FfBC0JAYIh7hdMtvRXnk5FxcEIinP7JykZ+whwqs8mqUcqTSku9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UOo4Affm; arc=none smtp.client-ip=209.85.215.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M0iKfg6K"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D6DB71F00A3A;
-	Wed, 19 Aug 2026 23:11:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787181121;
-	bh=w4AvipAumrUj6tt8+b68TknDL7kakICVCGPDUl5T7kI=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=M0iKfg6K7/fZrJ2RzgV1D5gxg51lTem8oVA4Z4JFFPP9IEAXff8sYu/KFIVxpI6zZ
-	 TCV4EZputenm31sJqi7KB5oBGqaxirqg+6KJse21ypDt3a/Z7Oay+ASQJwo6GgViI9
-	 LFzd4IzQ4p3s/GGYraJABL4CgB8rX3Sp2dhF16f9FbTULCED5dbYgFQUGh5QajkRj+
-	 LOudzXiBBa2f8O0aCk3XGDuBEZrrqJiY6TV08wBttnbNiqhIsIyaYdtiEPFw0HeSxO
-	 hzbUOoGtLAiA2s9CYpVCjCpSnng68PFOqBEeAXjkOKivfuyBLAFEpos2goe6M7GNVf
-	 JfZnpMVB2PwNw==
-From: Christian Brauner <brauner@kernel.org>
-Date: Thu, 20 Aug 2026 01:09:39 +0200
-Subject: [PATCH v2 22/22] selftests/coredump: show how to inspect the task
- to decide how the coredump should be sent
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UOo4Affm"
+Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so906422a12.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 16:59:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787183999; x=1787788799; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=sLv4USOHSGhU+T0T1FSL7i8gQWx1GCa8Cf4zSXBJYXM=;
+        b=UOo4AffmBRNzbrzeIGhyS9M+DR3r68ADGTp0Ohq7tgP9DAdDWXa62tsUBF8f3vanYM
+         G1kni+ApT+WrhlibrZr5aJHzcww9D+Djuy6yXjK0/ZQHlN8Bvy9hmeRspLcS/mky+9aQ
+         Kq8qNuLX+LeRoA3wNntmNHgPaQn0S7AU4/osJv13dN8egm3wIFb5QdA2oB8o01+07EZ3
+         ujCa0smf3o0KdVsDDuuWcKKX0V5t8BVJPr18KfLQrwrVIEbzwpANKc4MXQFQbss/FOiv
+         i+mquYQeSYBMCDZHSSfqUDEryfW15Rxj0Mw4w0/huCdoK7khE/pZAjKB+q7iaUrp6jNR
+         8L4A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787183999; x=1787788799;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=sLv4USOHSGhU+T0T1FSL7i8gQWx1GCa8Cf4zSXBJYXM=;
+        b=Tjsh8hoROAucTPyBqoQXVwZ3uUDEXKtlkjMPrSI0BD3kjcb4ZN+NcMZGyoGDgv4T/B
+         GtyGKG7/5vgW++/rcjv8VgX2dhQN57DEh1wGPJIFy/gPLhNhH1hKkb+qWoL2CAX43yaz
+         5djhzzQkaRK+fMQ47mKAI/4sgbPCEAgD8wqkrO+tCsXUBTrcw6O7h4EThVevU0FMVIjF
+         GW/yF6u31e6sCemhuP0asscYhjIWinSIHG1kB1IaVTBfddxWwfezlxN+zincAktPXJyc
+         xFsvH88/reGn1wd0l1kEqTAOfDiE85p4By4yEzRITZr8MYOIr1uXF1t45Z06+bCK11iO
+         +hUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrDjMhfamxuOM+xoclroDGXKhntv1ueI+LtUVdy6/Op2NP0QpUHvV1HIJmeRRIlVtsId/f5+A91FFucDVoa9DU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBPCC0yXB63YgVBe+jsyFo4/YBK7XfURN3DuGVAkBX9xQpfsAg
+	m2bZi+A8dt/OFrPan3zZAWM8h8nmWrW6J9e6Umw3+vvKlzOP7qYMuuAs
+X-Gm-Gg: AR+sD12gI+ghLwgMfMW5dkvBRruEUw5fLc8z/Z+WjBYcZsod0fmK32GHd/6GmNAgUgl
+	mgj9k+vwMnjZEc1uXebMRSJZeusMnvzgyyIQnDnchsm18DO6jBa4iqDB5GYyGye889J/UJ5vDe6
+	hUTzLLEvdKgxHYIQtJYILFRBSqtyiaUbgh6/j8Bnzk1JBtK/9HFuCzASMRRBLQZq641TnT1Mduj
+	eQWOpNO0u8hzD9AnaK5d4JwSplOmo7Ti5R4a/n8J6SjXgEaQytjXD7L8ir83L6pG2R/JkvuRYmX
+	JUHZRPzgw+LnNBlox9n0e9yDc7V4W+vYqc7x6SAVUkS6UytNIa3jMgdb4xw8lgNilbN+fGATl7s
+	vxIRW3TDmeXrob7qlPrdjTR4R5bHYK66snZBw1XTGm2MTV11Y0tnwLdhJVATliDkgjQ1l4TXTEU
+	rRpi5/lRJhgHm11mY5Uo/6BC7vIEbuTOGr6VR40xu11/V7K9e5FU/ADVbj72CdDZZVnHcuJKDBg
+	xUO3NoF
+X-Received: by 2002:a05:6a20:734e:b0:3c3:954d:278d with SMTP id adf61e73a8af0-3cd010ff4b9mr13863807637.9.1787183998514;
+        Wed, 19 Aug 2026 16:59:58 -0700 (PDT)
+Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:66::])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef3ce17sm15822174eec.1.2026.08.19.16.59.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Aug 2026 16:59:58 -0700 (PDT)
+Date: Wed, 19 Aug 2026 16:59:55 -0700
+From: Ziyang Men <ziyang.meme@gmail.com>
+To: Tejun Heo <tj@kernel.org>
+Cc: kernel-team@meta.com, Jens Axboe <axboe@kernel.dk>,
+	Josef Bacik <josef@toxicpanda.com>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Mykola Lysenko <mykolal@meta.com>, linux-block@vger.kernel.org,
+	bpf@vger.kernel.org, cgroups@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] block: add BPF kfuncs to read blkcg io.stat
+Message-ID: <aoZDe0yvb49flaOs@devvm16600.scu0.facebook.com>
+References: <20260817214205.723267-1-ziyang.meme@gmail.com>
+ <20260817214205.723267-2-ziyang.meme@gmail.com>
+ <aoSUob1s8WBQ3buO@slm.duckdns.org>
+ <aoTdQeLZZuRirNHE@devvm16600.scu0.facebook.com>
+ <aoTf7u20mo9s6ADj@slm.duckdns.org>
+ <aoTkZhQDoaQKpPe3@devvm16600.scu0.facebook.com>
+ <aoYVh1ihBH-TWvi3@slm.duckdns.org>
+ <aoYsIYnoFDvjkzKp@devvm16600.scu0.facebook.com>
+ <aoYzjaXQNmm9bDcE@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260820-work-coredump-sparse-v2-22-ba32dd718c51@kernel.org>
-References: <20260820-work-coredump-sparse-v2-0-ba32dd718c51@kernel.org>
-In-Reply-To: <20260820-work-coredump-sparse-v2-0-ba32dd718c51@kernel.org>
-To: linux-fsdevel@vger.kernel.org
-Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
- Jann Horn <jannh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
- Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Omar Sandoval <osandov@osandov.com>, 
- Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
- linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
- linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
- "Christian Brauner (Amutable)" <brauner@kernel.org>
-X-Mailer: b4 0.17-dev-362b8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10058; i=brauner@kernel.org;
- h=from:subject:message-id; bh=cXNV3PX4efu0YjQqQgjmqr8KTIFSZPBeMO3+YmoGrgY=;
- b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWS1me8XZN58bv3up5t2NjtPtBVL8Try5xZvv+/3VOnti
- jzsZg6XOkpZGMS4GGTFFFkc2k3C5ZbzVGw2ytSAmcPKBDKEgYtTACbiJcnI8MLvUugpTYZHxas+
- iFRKHVPw/Ni8k1FcchK/7HkVlhCjvwz/lJdN6F9+MT5spYsTl3WCxeoHXCZeXxtSaryc7ndXvGX
- iAAA=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp;
- fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <aoYzjaXQNmm9bDcE@slm.duckdns.org>
 
-The kernel blocks in the coredump req until the coredump ack is sent by
-the coredump server. This allows the coredump server to decide how the
-kernel is supposed to send the coredump.
+Hi Tejun,
 
-Let's show how that can work:
+On Wed, Aug 19, 2026 at 12:51:57PM -1000, Tejun Heo wrote:
+>Hello,
+>
+>On Wed, Aug 19, 2026 at 03:20:17PM -0700, Ziyang Men wrote:
+>> Yes the css_rstat_flush() is exposed but currently it is marked as SLEEPABLE, so
+>> it doesn't accept a RCU_PROTECTED css we proposed. This is not a problem for cpu
+>> ones since &cgrp->self is a trusted pointer.
+>
+>Yeah, bummer, so we get ref on cgroups but the subsys pointers are RCU, so
+>that means those refs are only RCU protected. I guess we can't avoid a kfunc
+>to get acquire a subsys css from cgroup. I wish css_rstat_flush() didn't
+>schedule but it does need that cond_resched().
 
-- a task that has a large memory mapping gets sent as a sparse record
-  stream
+Yeah that would be a pity. I will add kfuncs bpf_cgroup_css() and
+bpf_css_release() to handle the reference for the css.
 
-- a task with a trivial memory mapping gets sent as a plain byte stream
+The bpf_blkcg_flush_stats() will be removed as well.
 
-Since the threads are parked in coredump_task_exit() with their mm
-around we can look at /proc/<pid>/statm to figure out what the task has
-mapped.
+Thanks,
+Ziyang
 
-Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
----
- .../coredump/coredump_socket_protocol_test.c       | 184 +++++++++++++++++++++
- .../selftests/coredump/coredump_test_helpers.c     |  58 +++++++
- .../selftests/coredump/coredump_test_helpers.h     |   7 +-
- 3 files changed, 248 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/coredump/coredump_socket_protocol_test.c b/tools/testing/selftests/coredump/coredump_socket_protocol_test.c
-index f33eaf2fa93d..daff908232a2 100644
---- a/tools/testing/selftests/coredump/coredump_socket_protocol_test.c
-+++ b/tools/testing/selftests/coredump/coredump_socket_protocol_test.c
-@@ -2136,4 +2136,188 @@ TEST_F(coredump, socket_request_sparse_without_records)
- 	check_conflicting_ack(_metadata, self, COREDUMP_KERNEL | COREDUMP_SPARSE);
- }
- 
-+/* What the server reports back about the coredump it decided to take. */
-+struct stream_choice {
-+	bool sparse;
-+	ssize_t received;
-+	off_t size;
-+	ssize_t vm_size;
-+};
-+
-+/*
-+ * The kernel blocks in the coredump request until the ack arrives, so a
-+ * coredump server gets to look at the task before it commits to a
-+ * stream. Take the record stream only for a task whose mappings are
-+ * worth it and the plain byte stream for everything else.
-+ */
-+static void check_stream_choice(struct __test_metadata *const _metadata,
-+				FIXTURE_DATA(coredump) *self, bool big,
-+				struct stream_choice *choice)
-+{
-+	int pidfd, status;
-+	pid_t pid, pid_coredump_server;
-+	struct pidfd_info info = {};
-+	int ipc_sockets[2];
-+	int pipefds[2];
-+	char c;
-+
-+	ASSERT_EQ(socketpair(AF_UNIX, SOCK_STREAM | SOCK_CLOEXEC, 0, ipc_sockets), 0);
-+	ASSERT_EQ(pipe(pipefds), 0);
-+	ASSERT_TRUE(set_core_pattern("@@/tmp/coredump.socket"));
-+
-+	pid_coredump_server = fork();
-+	ASSERT_GE(pid_coredump_server, 0);
-+	if (pid_coredump_server == 0) {
-+		int fd_server = -1, fd_coredump = -1, fd_peer_pidfd = -1;
-+		int fd_file = -1;
-+		int exit_code = EXIT_FAILURE;
-+		struct coredump_req req = {};
-+		struct stream_choice got = {};
-+		__u64 mask;
-+
-+		close(ipc_sockets[0]);
-+		close(pipefds[0]);
-+
-+		fd_server = create_and_listen_unix_socket("/tmp/coredump.socket");
-+		if (fd_server < 0)
-+			goto out;
-+
-+		if (write_nointr(ipc_sockets[1], "1", 1) < 0)
-+			goto out;
-+
-+		close(ipc_sockets[1]);
-+
-+		fd_coredump = accept4(fd_server, NULL, NULL, SOCK_CLOEXEC);
-+		if (fd_coredump < 0)
-+			goto out;
-+
-+		fd_peer_pidfd = get_peer_pidfd(fd_coredump);
-+		if (fd_peer_pidfd < 0)
-+			goto out;
-+
-+		/*
-+		 * The reassembled coredump is bigger than the mapping the
-+		 * child made, so keep it on the detached tmpfs and sparse.
-+		 */
-+		fd_file = open_coredump_tmpfile(self->fd_tmpfs_detached);
-+		if (fd_file < 0)
-+			goto out;
-+
-+		if (!read_coredump_req(fd_coredump, &req))
-+			goto out;
-+
-+		if (!check_coredump_req(&req))
-+			goto out;
-+
-+		/*
-+		 * Nothing is on the wire yet and the kernel is waiting for
-+		 * the ack, so there is all the time in the world to look at
-+		 * the task and decide what to ask it for.
-+		 */
-+		got.vm_size = peer_vm_size(fd_peer_pidfd);
-+		if (got.vm_size < 0)
-+			goto out;
-+		got.sparse = got.vm_size >= SPARSE_STREAM_THRESHOLD;
-+
-+		fprintf(stderr, "Peer maps %zd bytes, asking for %s\n",
-+			got.vm_size,
-+			got.sparse ? "a sparse record stream" : "a byte stream");
-+
-+		mask = COREDUMP_KERNEL | COREDUMP_WAIT;
-+		if (got.sparse)
-+			mask |= COREDUMP_RECORDS | COREDUMP_SPARSE;
-+
-+		if (!send_coredump_ack(fd_coredump, &req, mask, 0))
-+			goto out;
-+
-+		if (!read_marker(fd_coredump, COREDUMP_MARK_REQACK))
-+			goto out;
-+
-+		if (got.sparse) {
-+			got.received = recv_coredump_records(fd_coredump, fd_file,
-+							     &got.size, NULL, -1);
-+		} else {
-+			got.received = recv_coredump_bytes(fd_coredump, fd_file);
-+			got.size = got.received;
-+		}
-+		if (got.received < 0)
-+			goto out;
-+
-+		/* Either way a debugger has to see an ordinary core file. */
-+		if (!is_elf_core(fd_file))
-+			goto out;
-+
-+		if (write_nointr(pipefds[1], &got, sizeof(got)) != sizeof(got))
-+			goto out;
-+
-+		exit_code = EXIT_SUCCESS;
-+out:
-+		close(pipefds[1]);
-+		if (fd_file >= 0)
-+			close(fd_file);
-+		if (fd_peer_pidfd >= 0)
-+			close(fd_peer_pidfd);
-+		if (fd_coredump >= 0)
-+			close(fd_coredump);
-+		if (fd_server >= 0)
-+			close(fd_server);
-+		_exit(exit_code);
-+	}
-+	self->pid_coredump_server = pid_coredump_server;
-+
-+	EXPECT_EQ(close(ipc_sockets[1]), 0);
-+	EXPECT_EQ(close(pipefds[1]), 0);
-+	ASSERT_EQ(read_nointr(ipc_sockets[0], &c, 1), 1);
-+	EXPECT_EQ(close(ipc_sockets[0]), 0);
-+
-+	pid = fork();
-+	ASSERT_GE(pid, 0);
-+	if (pid == 0)
-+		crashing_child_sparse(big ? SPARSE_MAPPING_SIZE : PAGE_SIZE);
-+
-+	pidfd = sys_pidfd_open(pid, 0);
-+	ASSERT_GE(pidfd, 0);
-+
-+	waitpid(pid, &status, 0);
-+	ASSERT_TRUE(WIFSIGNALED(status));
-+	ASSERT_TRUE(WCOREDUMP(status));
-+
-+	ASSERT_EQ(read_nointr(pipefds[0], choice, sizeof(*choice)),
-+		  sizeof(*choice));
-+	EXPECT_EQ(close(pipefds[0]), 0);
-+
-+	ASSERT_TRUE(get_pidfd_info(pidfd, &info));
-+	ASSERT_GT((info.mask & PIDFD_INFO_COREDUMP), 0);
-+	ASSERT_GT((info.coredump_mask & PIDFD_COREDUMPED), 0);
-+
-+	wait_and_check_coredump_server(pid_coredump_server, _metadata, self);
-+}
-+
-+/* A task with little mapped isn't worth a record stream. */
-+TEST_F(coredump, socket_request_stream_choice_small)
-+{
-+	struct stream_choice choice = {};
-+
-+	check_stream_choice(_metadata, self, false, &choice);
-+
-+	ASSERT_LT(choice.vm_size, (ssize_t)SPARSE_STREAM_THRESHOLD);
-+	ASSERT_FALSE(choice.sparse);
-+	ASSERT_GT(choice.received, 0);
-+}
-+
-+/* A task sitting on a big mapping is. */
-+TEST_F(coredump, socket_request_stream_choice_large)
-+{
-+	struct stream_choice choice = {};
-+
-+	check_stream_choice(_metadata, self, true, &choice);
-+
-+	ASSERT_GE(choice.vm_size, (ssize_t)SPARSE_STREAM_THRESHOLD);
-+	ASSERT_TRUE(choice.sparse);
-+	ASSERT_GT(choice.size, (off_t)SPARSE_MAPPING_SIZE);
-+
-+	/* The holes didn't have to go over the socket. */
-+	ASSERT_LT(choice.received, choice.size / 8);
-+}
-+
- TEST_HARNESS_MAIN
-diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.c b/tools/testing/selftests/coredump/coredump_test_helpers.c
-index 9346b8f688e2..d7cc448eeaf4 100644
---- a/tools/testing/selftests/coredump/coredump_test_helpers.c
-+++ b/tools/testing/selftests/coredump/coredump_test_helpers.c
-@@ -1095,6 +1095,33 @@ int check_compact_coredump(int fd_object, int fd_reference)
- 	return ret;
- }
- 
-+/* Read a plain coredump byte stream to end-of-file. */
-+ssize_t recv_coredump_bytes(int fd_coredump, int fd_core_file)
-+{
-+	ssize_t received = 0;
-+
-+	for (;;) {
-+		char buffer[PAGE_SIZE];
-+		ssize_t ret = read_nointr(fd_coredump, buffer, sizeof(buffer));
-+
-+		if (ret < 0) {
-+			fprintf(stderr, "%s: read failed: %m\n", __func__);
-+			return -1;
-+		}
-+		if (ret == 0)
-+			break;
-+
-+		if (write_nointr(fd_core_file, buffer, ret) != ret) {
-+			fprintf(stderr, "%s: write failed: %m\n", __func__);
-+			return -1;
-+		}
-+		received += ret;
-+	}
-+
-+	fprintf(stderr, "Received %zd bytes of coredump\n", received);
-+	return received;
-+}
-+
- int create_detached_tmpfs(void)
- {
- 	int fd_context, fd_tmpfs;
-@@ -1190,6 +1217,37 @@ bool get_pidfd_info(int fd_peer_pidfd, struct pidfd_info *info)
- 	return true;
- }
- 
-+/*
-+ * How much the peer has mapped. The task is parked in the coredump
-+ * handshake, so its mm is still there to be looked at.
-+ */
-+ssize_t peer_vm_size(int fd_peer_pidfd)
-+{
-+	struct pidfd_info info = {};
-+	unsigned long pages;
-+	char path[64];
-+	FILE *f;
-+
-+	if (!get_pidfd_info(fd_peer_pidfd, &info))
-+		return -1;
-+
-+	snprintf(path, sizeof(path), "/proc/%d/statm", info.pid);
-+	f = fopen(path, "r");
-+	if (!f) {
-+		fprintf(stderr, "%s: %s: %m\n", __func__, path);
-+		return -1;
-+	}
-+
-+	if (fscanf(f, "%lu", &pages) != 1) {
-+		fprintf(stderr, "%s: %s: no size\n", __func__, path);
-+		fclose(f);
-+		return -1;
-+	}
-+	fclose(f);
-+
-+	return (ssize_t)pages * sysconf(_SC_PAGESIZE);
-+}
-+
- /* Protocol helper functions */
- 
- ssize_t recv_marker(int fd)
-diff --git a/tools/testing/selftests/coredump/coredump_test_helpers.h b/tools/testing/selftests/coredump/coredump_test_helpers.h
-index 00d695b67b3f..97ad5cfeae92 100644
---- a/tools/testing/selftests/coredump/coredump_test_helpers.h
-+++ b/tools/testing/selftests/coredump/coredump_test_helpers.h
-@@ -18,6 +18,9 @@
- /* Size of the mostly unpopulated mapping the sparse coredump test maps. */
- #define SPARSE_MAPPING_SIZE (256 * 1024 * 1024)
- 
-+/* A task mapping at least this much is worth a record stream. */
-+#define SPARSE_STREAM_THRESHOLD (SPARSE_MAPPING_SIZE / 2)
-+
- /* Shared helper function declarations */
- void *do_nothing(void *arg);
- void crashing_child(void);
-@@ -25,9 +28,11 @@ void crashing_child_sparse(size_t size);
- ssize_t recv_coredump_records(int fd_coredump, int fd_core_file,
- 			      off_t *coredump_size, bool *truncated,
- 			      int fd_peer_pidfd);
--bool is_elf_core(int fd);
- ssize_t recv_coredump_compact(int fd_coredump, int fd_object, int fd_reference,
- 			      off_t *coredump_size);
-+ssize_t recv_coredump_bytes(int fd_coredump, int fd_core_file);
-+ssize_t peer_vm_size(int fd_peer_pidfd);
-+bool is_elf_core(int fd);
- int check_compact_coredump(int fd_object, int fd_reference);
- int create_detached_tmpfs(void);
- int create_and_listen_unix_socket(const char *path);
-
--- 
-2.53.0
-
+>
+>Thanks.
+>
+>-- 
+>tejun
