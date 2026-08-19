@@ -1,225 +1,267 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE1FB27FD76;
-	Wed, 19 Aug 2026 05:03:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787115794; cv=fail; b=JeDY9lfgW4yHEA56pSVMmkEbNoNWLgr+VuDt9ZnNA8F0OIja1gBMae/UDR7kDA05z23yg4CSSBhJrdV+rQDVSoq/39C2X8Yu3amRDDtz6EaSD7d48fQqSrh0KjD6vZiOHA6qJAcQVo6qYRq6eEnrcWsaMk00ZFLLEJIAF+YVJ1w=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787115794; c=relaxed/simple;
-	bh=iNC7Qb259Z1EBK+a51UM9x6QzQW8pBULkS2CeQB621w=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=dQ1HGEtZ7q6tZ+Yf5q1dXKfk/KMtTFd4KqaOYLOVdBIVwakYN9ZoDFM2pmmUJwE5Fm+jomxOY/EYdsElhB7cpklFX9OttYJQRG14qhHHIX7ogbOu5QxlSvV19+UYGhS9uHvRDYuAoYGu7kQATde18o9U76rskrf3QqicOXZ1h+E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TW7KXvSG; arc=fail smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EAC3C819B
+	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 05:05:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787115937; cv=none; b=gifs9VeoJUVH78cQ7Hx+LiZzjU/LjrtmMYb8OF8wR3jfB+iulrVoomavS0FAZ5pKGRUbz8iNmYl14lpXBjt1bIaLmXVJ3vRPts6jJBL7mOqnZPPwhNcWeJbOkINDY7V60kH4SY2VdvDO6JFWFjPmUuMbwHb6CQbl4BPU4gGkUK4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787115937; c=relaxed/simple;
+	bh=ESVl2l+jCjGfwzTUm5kjJLy66cWwvSgAKIr9oR5taao=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=OD5MyXQxNDvMs6yp7TKWXJxmchSK3mvo+ea1gjTJGGdjeXQpNIIZZp/XsfuGbSWYTSvBgNz0vpWuaEqFgsn2WBCpMduiKX0hZOEUBja9TEEqYCHalvltuSq+ciVxw1WDIDLD+iPSAZXjgUDkZTKQ8zrFknUa05JITaIqst4775w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LeCg+rlF; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TW7KXvSG"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787115793; x=1818651793;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=iNC7Qb259Z1EBK+a51UM9x6QzQW8pBULkS2CeQB621w=;
-  b=TW7KXvSG/zFfUVpVu1X9Ndx3wtN71p1fNGHyS2gTfD8glFynaI1sf6U7
-   pcvfggQ4aQH+PXQJugLMZBXikxAORrr540ZDaT4blOnjsN0jDvA3lnD9n
-   6LyDw3+jR7EjjkgTx9SffWp8JGkQaulk3GjZyurPPu7nT3AnQ/ikj96Hp
-   qcCq+kA0wLEMcJjfUwWRB/aNr+b45gu2XkmZx9+QntoeM+Mis7g6llJ1p
-   rO1D6Nvz3DY9JIKQxNB+ppPChzMI7K9CH5z8zAiDyyiUygPLhig5hpYFP
-   RsSBQfZ+kOIhbSDQlXu2CWa2P4viNAHseErOR+MN0dk44WUbOVM0ae5zR
-   w==;
-X-CSE-ConnectionGUID: 7qUOI8uVTpKci8N32Wh3/Q==
-X-CSE-MsgGUID: DklHCgdQRTGJT/dGE7i6IQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="98978093"
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="98978093"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 22:03:11 -0700
-X-CSE-ConnectionGUID: cq9Tp05wQEGCGzFcKqyY9Q==
-X-CSE-MsgGUID: ybuWzuUwQRKcMhwffLqa8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
-   d="scan'208";a="267396416"
-Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
-  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Aug 2026 22:03:11 -0700
-Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
- fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 18 Aug 2026 22:03:10 -0700
-Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
- FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Tue, 18 Aug 2026 22:03:10 -0700
-Received: from CY3PR05CU001.outbound.protection.outlook.com (40.93.201.18) by
- edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 18 Aug 2026 22:03:10 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=YVA/bNlePwulUc3X5Dy/SxziTOiXWWcXcxgPfP0YbxPHx+Tti5gF6z2O0XvCHHVtNldV+SPZOX6NM6S8ydnYbETUFy3qK3ETOjxWLrSpreLkIgO8YOrBHUPOTOue6EG8oeM35XkIFywVmWIc8hnKw7ImgSMXrgArXtmn/9POnn36rgAS5/xBN7S5fDpfmbjM6XJWH6byxtLxRs8vOfiz3To4q2IQ2GYSj3yYJPS8RDAk7ttzqTY7Q4MHpQdJlLYjQ1caA3kqPdEoYsF+IVtUZfNTOj7EJuN0+p0d8WlqeE81mYV08L1XW7ZcnDlnEu8eWRdJoqypzMi49uRTysnM0g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Ecxfp+1qvG8vzZUfe2z+hm/yU4+le08w111PVXsfes=;
- b=Sxou7sOQu5ZOLSwOsN21PsqhInqGMXD6LBKF13h8nQbGJJgNlmPEqIyuiRAUcA2HpkJXO2InP26B6fMujw9dmguTmTqUUBnWb4qRp33CbDEBuVI+8n+u8JeG/CCTNOy0lr7++U17Fh40u5BUqPsN/nV3QNjpFiMm/t0yV9gRtBhGMoXNoJ3zERjwC3xXfu6PwLU35PNjrgEcbqFVoj+7T0xWkbDEeAx1I7NqPFi0Sre0wfG+e0VmKcfq1IGZ6D0JiQKeWRnblxIaGmJYXD5RXL8qpvN89KBTuhCDPTMrCudemXig8o5eM4T8vzPsLHjIluwJ+myJDPR+MV7md1TCdg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB7997.namprd11.prod.outlook.com (2603:10b6:8:125::14)
- by DM4PR11MB6407.namprd11.prod.outlook.com (2603:10b6:8:b4::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Wed, 19 Aug
- 2026 05:03:07 +0000
-Received: from DS0PR11MB7997.namprd11.prod.outlook.com
- ([fe80::24fa:827f:6c5b:6246]) by DS0PR11MB7997.namprd11.prod.outlook.com
- ([fe80::24fa:827f:6c5b:6246%5]) with mapi id 15.21.0339.007; Wed, 19 Aug 2026
- 05:03:07 +0000
-Message-ID: <2f8e907e-1c77-416d-90be-9428ce8242f6@intel.com>
-Date: Tue, 18 Aug 2026 22:03:03 -0700
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/7] KVM: x86: Use linear_read_system() to read the TSS
- I/O bitmap
-Content-Language: en-US
-To: Binbin Wu <binbin.wu@linux.intel.com>
-CC: <kvm@vger.kernel.org>, <x86@kernel.org>, Sean Christopherson
-	<seanjc@google.com>, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner
-	<tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
-	<hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, Peter Zijlstra
-	<peterz@infradead.org>, "Chang S . Bae" <chang.seok.bae@intel.com>, Kai Huang
-	<kai.huang@intel.com>, Fuad Tabba <fuad.tabba@linux.dev>, Chao Gao
-	<chao.gao@intel.com>, Yosry Ahmed <yosry@kernel.org>, Claudio Imbrenda
-	<imbrenda@linux.ibm.com>, David Matlack <dmatlack@google.com>,
-	Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>, Kishen Maloor
-	<kishen.maloor@intel.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>,
-	<linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20260806011536.4172258-1-sohil.mehta@intel.com>
- <20260806011536.4172258-3-sohil.mehta@intel.com>
- <41a327bd-cbbd-4530-9f30-9175c5840014@linux.intel.com>
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <41a327bd-cbbd-4530-9f30-9175c5840014@linux.intel.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LeCg+rlF"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-cbb8b54fcf8so492487a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 18 Aug 2026 22:05:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787115936; x=1787720736; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=UNb9D6xoKPP/4uKuy81gSrLLYpF2N2DZ3ii3QwO65zM=;
+        b=LeCg+rlFkaKuA7ez3c/YNMT/DkmdKaLXr3GwNXHeYDAN8uZRaqIayGpN9HsuLMvAli
+         8zvqPB4geM8CuI4fKVccWPmNk+LJ2bH9cLx+sPFHRAnisaedCfs6mb51zf03Uk/D08Vb
+         aYW18vWiCvlsYEnUS7uPIZZ/0WEq57kbzA+QfT8/HTkeRdaJ/qmnmgaszqsy81wD+pR+
+         q9xVQyHskJ+DcNAbJ8hst6Zzh1qAaBdIXxsALfFrit+wGhyYOdUiTSuM8JaK7h9Q5UTO
+         Fhj2sYOsr3qCRtEtlu2kIBNnfi3UmrfYS37iekpOtTY4KeJeGOQdiJPi6rhgjGrKyse9
+         lQ1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787115936; x=1787720736;
+        h=mime-version:user-agent:content-transfer-encoding:content-type
+         :references:in-reply-to:date:cc:to:from:subject:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=UNb9D6xoKPP/4uKuy81gSrLLYpF2N2DZ3ii3QwO65zM=;
+        b=bgZedaQyiNLvYdzpGo8VdM7kal4ivH2iztEM74Q6hhqKxlSrWhk5PD/wTwtYbL0gex
+         Ckk6hFET/MOTpV/vUScZfhjyTt2/yGfxExgwtUl5037fOGZYJtxaR9wHXaEYyY0HALhx
+         70yQu0mGaKQy5vlqY3YJv0+V12ry6TyZ5FooxpJ4imxyhNkbCTuIeIKQT0oGj2sNBlN3
+         NDv4RDZ1U/raF/jdb2kgkXMlnRztgJ8q0JmeifvUHNIs2B2HnJAGf61WAZTlsT2kjUMm
+         skZ0TddG8dzMZKdDm7uPKKuxhJ+q50A3MO539JJe3S/pzX2hLpD1HidoV2zJlt+PjjFA
+         GGDQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqiLfQd8m7vJZHBwA7JII0vPwgyU4ykaXSnt9sxYWzUwt1TRmxZnKJxY0m7k0C/kZXiOyZWmJqTmUhCbEJlAYs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwQleAmSR3bYOHglOWjAZ0IMPuQk/gDXA+9MvTnmN3hFqJg/JiF
+	22A4dgj13DyP2QYCc6B+NkPxa42DXwvP6aiCmlEisyQaljQqWPNg8NRR9ymYmFDrbGo=
+X-Gm-Gg: AR+sD13ZlMTDFIsjjnZ0Ej2f7Az7nIPccCptWA/K4FqXz81LQEq2dizQ9uufaNxakoB
+	WhTvwX9qC+e0AL/+/1CaddOHFyJ6FtEhBKH6bsb/bI6ZYTHCcHYzQWB87gEQNTsULSLcTEpSHFS
+	36dSZM+jrpaRbZHpvEtMaoDxI0+k+6XXVcrP97IJVudgClBaHH4TxfvhhEfMRQdt/on2nWiKkVY
+	NyhwIR05DcH/heoOn6deCp/AjhJvECeTBcsDvDCysknKk3J1ytlznFls0HnnikhPUb5aZfI/HEj
+	wLZ7+MPyBA4qSXd29VM+45u/6nA1yu9u08PAnfd8G/vAsDOChgyx2QYckfyQY0RCymvzvTJQXQz
+	uWjwEja91urr7sj8YfC/lUyQgxA7s3hOIN3mKcEoSs8Z98z9uoFg9jMjdlSEh+P17EGBDdJkotd
+	Ahg2Weuk+Acq/RAzid24FbRJ6B95luFCH+fR1QM0pljRNdC+yRKsQhSX5vuatNt9GQzq9kV0wKO
+	G9PKr5agMt9IZ0t
+X-Received: by 2002:a17:90b:4d83:b0:38d:dfd1:7c1 with SMTP id 98e67ed59e1d1-39580a91ad5mr3710120a91.2.1787115935585;
+        Tue, 18 Aug 2026 22:05:35 -0700 (PDT)
+Received: from [192.168.0.13] ([38.34.87.7])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3957fc82965sm390147a91.4.2026.08.18.22.05.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 18 Aug 2026 22:05:35 -0700 (PDT)
+Message-ID: <54bed44859f9de519c56ed0fb9366160f625fce7.camel@gmail.com>
+Subject: Re: [RFC bpf-next 4/6] selftests/bpf: cover low-32 subreg-equal
+ link for zero-extending movs
+From: Eduard Zingerman <eddyz87@gmail.com>
+To: Vineet Gupta <vineet.gupta@linux.dev>, ast@kernel.org,
+ daniel@iogearbox.net, 	andrii@kernel.org, memxor@gmail.com
+Cc: martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	john.fastabend@gmail.com, shuah@kernel.org, bpf@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Date: Tue, 18 Aug 2026 22:05:32 -0700
+In-Reply-To: <20260814231945.3884596-5-vineet.gupta@linux.dev>
+References: <20260814231945.3884596-1-vineet.gupta@linux.dev>
+	 <20260814231945.3884596-5-vineet.gupta@linux.dev>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR03CA0007.namprd03.prod.outlook.com
- (2603:10b6:a03:33a::12) To DS0PR11MB7997.namprd11.prod.outlook.com
- (2603:10b6:8:125::14)
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2-10 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB7997:EE_|DM4PR11MB6407:EE_
-X-MS-Office365-Filtering-Correlation-Id: a5cb5997-2a98-4cc7-62dc-08defdaf281d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|376014|7416014|366016|1800799024|18002099003|3023799007|22082099003|56012099006|11063799006|10067099003|4143699003;
-X-Microsoft-Antispam-Message-Info: 9D9fIi/N8wiv3NhfY+QX7J6tdDT0FvHuOsVBNalh9xcf2iHatPVyceaOFI2ub7gKDBi+FN1VNojZgJULMF6wUb7uqHKhT4xFShYc9RDpUCgxszXAfW9rSa5d7j2oTZgwjbbluPkm567mSiRBjeCtmkTG0Ki/kkauswe8g0u5r+et5lVs1Ha2ovr9HVBJdKKj0XnSdDbkGa8vj0jKOR3HOpAqtRWRs2qZ2CuQey1wkiISl0rwISsg1K8rHB09Xk2VZSxrnosIY7GjJ0d2l1jXsJBQaooJKHn2NmnECmdHK9FWLATvXs1xAxSWHKhU1mI+2+Y2ocIBhjeyzyXv+ejpEMAsO7Jh/uPAMTU/Tm7CZq7Mc7VBmxOhIM1dNZhpZvQsqVguAQy3KBs0t25XW6JI/bC43QwnNxg9Gvs+0yycVGh6ukdBhR+81BQjOJ3ZMGL98t1UA170L8SqxPNE/F48JddZT5Ar3LuWkcIe61Sm8zmdggcjQMNJEMUfm7vPjaVSRQEOl4aIDpNiVLIX+16u1jWDg3C6a9HFwWtDdBz5COSABKHrseVQJfOJ+KBDWKup7F/KoREzYLAOeFaY1/LwruT0afbr5SXSUgnJWei3lLaJDSWsquX/lrvqU3O6BRxJgSr5zeLzjrrh6V4n2B3W1PxR9iYUVemI4bYbieVCDgk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7997.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(7416014)(366016)(1800799024)(18002099003)(3023799007)(22082099003)(56012099006)(11063799006)(10067099003)(4143699003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?KzVxdldXN01MSWh5d25aMkU1SkdVV0JENGc0SXRiTVZXTXlyWVRWU2dDR2xV?=
- =?utf-8?B?eDlQQWFyTy9ubzBGaW5DVFRGV0dreTh1UHpxbjA5NENXTThkY3NkYWtTZ2hs?=
- =?utf-8?B?ZlhqbW9yQVVxRnZQV3lmUEljcHo1aXVzN0xRaFRJWmNVb0FGN283WTFjUlMw?=
- =?utf-8?B?UzZCbVJvMjBsSHRMUy9UVUljbnBqVzJZRllOVzkzRlFmMEZya1E3MVBIM096?=
- =?utf-8?B?YldqVnc3RGhCNmhaL0VpYU4rSU1xTVNhUVR1OHBnOC8wWkpVNFBxekZsQjln?=
- =?utf-8?B?NjNBSitJQ3o3UjA1Mis3UDZvcEs1K2x3VVk1cGdMR1BZRm1mVFREK2Z1T0pz?=
- =?utf-8?B?MWFGeXcrSTZTcGpjTWhQWm5mSzdUSHgwUk9Jbml5b0J6cXAwNnpmQWtrelZJ?=
- =?utf-8?B?UlpjekpUNkM5MUNBWFBNaXRCQ0pBcGVqQVI2SUpJNWFMbVB3aGplaXRpZW96?=
- =?utf-8?B?M25mVWh6akRGWEJ5TFZUN3NNUUxSalpZYXNxNkFQemMwaHkzamtnT0hmV29Q?=
- =?utf-8?B?aDRsdFdBNTl6VzJMbUxtcHNsZHN4ei8wRlg2eWZkTzBBQjAzRmd0dkNoYnB4?=
- =?utf-8?B?WkE2V3pzS0ZOYjR0SDQrMVNveklRQjErUVZXc2laZVQ1OWJ1UmRSOU5WVkdq?=
- =?utf-8?B?V01EL2RRY1dHNVQ4WStsZURDMnhveG1uQTlJRnZjR2xiaU1vL2hZaTFXemVv?=
- =?utf-8?B?dTlZKzc2cUlUaUswZEpFK2NvQ1FHak5hUTJjUDd3ZVFvZExoRmdENkdRMkY3?=
- =?utf-8?B?ajYwQW5oOGNTdEIyS0xuTTdFMWFyNzhyTVVUSDJScGZvYWVRczBLODBiblZw?=
- =?utf-8?B?aVBYNFFGV2QvUVBXSTkzbmlTQnlNcXZUTFVVbVkxay95UUhVclV4Ny9LcXFH?=
- =?utf-8?B?NGpPZGFQc3pvclpEblkrd0k2UDRHeFBkRXJoVU5JZ3kzakxaRjFPRTFlNXY0?=
- =?utf-8?B?YUxsMGJmN3hKM2NHTXUraWwzK0RLRWRTZVpiUnhqbXlrVEV3cFY5Nnh4anho?=
- =?utf-8?B?SFdnTy9kL0tSMVJyT0JjMHlQR2ZiNm1vZ3NDQUNGNm0yYkhXcktZTHhnM2ZV?=
- =?utf-8?B?d1N1dG9pMEFNOWlCVXhzdVdCZHFLS1IxVlpoQnBJV281Zy9hcmNJZENYSEEw?=
- =?utf-8?B?WkhoMkp5c0JPaTBDZ210WU1oOUV0TUZKdGVXL3BoTkczSmNSREQzUlUxK3M1?=
- =?utf-8?B?cjVnbzk5bGZmK21tRUVsSTJ4WVJOZTV4ZjJqMnNNcElsNkhpQVcvWWNPRmNs?=
- =?utf-8?B?RnZpbEFjakYrM1NZTllOT2RxVjV3dTRvM1R2UGY4UkFmbS9MdGtETUpSTWhE?=
- =?utf-8?B?U1hwVitVZmJxcktDczJSQ2R6eVhkenY5eisrSzFFUVdFR050Q09NNU43RUx3?=
- =?utf-8?B?WmlqTWRUMWVDNWo2R2xha2hvQVlDM1psR2pkR1pZTmFjb3ZvWTlUQVhFcXFo?=
- =?utf-8?B?bVgwUGRwYkNJZ296c0JFYllHQi9IK2c4QlZrR2xDUlZIbVU4aW9HYVNPNmR3?=
- =?utf-8?B?ZkxyZGxMNlFpeVR4aTc5bDJnbW5BRjlSVjRIcUR1N3I4NnAwSWlnUFAvNWxP?=
- =?utf-8?B?Yi9wVkhSR0FGcE95aUZ2eDdVM3p6Y0hDam82RkVDTDNwZXpOWFBONUtIcVk1?=
- =?utf-8?B?UmFFTE5DK0pvUzR5OEVSOEovM1RwN29mNnVHekdtSXYrNldUK3cxWmVrK09i?=
- =?utf-8?B?Zzk0bnFLRTh3RFMvUEh1YlNKM1gwbmg0OGhtS1k1U052MGwzRlFXdVovL05v?=
- =?utf-8?B?SEFjRUpkRlpqay9sd2M2T3R4VnVhWmlyTTg3UmdZSWk4cUs4NWpzQ0dEQ3dk?=
- =?utf-8?B?S0lZR21UR2ZEdXlCSENZZEJPSU1mV3FuUEsraW4wRzhlS3FkcUsva1pjZFFj?=
- =?utf-8?B?MWk4WEl5MEJxTEtjWTRROGM5RXdIb0xKYWh0VDJwTW5EYXRweVo3UjRmL3VS?=
- =?utf-8?B?c0x3ODdRWkxPejRpZysrR21VYndxQkYxcktDRzR6eTZsb29QTndsUXp3K0Uw?=
- =?utf-8?B?VktlVDNva0Z5SXBnWWNlUG1DdGRmRHIwN2NXSGxNaVJlOTQ0R2kyY3VxcXRW?=
- =?utf-8?B?M1VuakN6RFJ1WHZaVnZTVWcwNDZQRklDeW15YVdoMHZzVGJqNE9JWU5vTzZ6?=
- =?utf-8?B?cmFGdEFiempJczVXVlI3eWJWVXVqNkl3ZkxRUHlpczRNVE9xczBOdzhqRDY1?=
- =?utf-8?B?QzYzWE9MU0pWNm5TQ29kelJZRysvQ3VOSjdHWkNJdkcxQ09taFdPcUdiMWVs?=
- =?utf-8?B?NDVUZ09Va1BPYzFKV2NWcWNZdUdpYVA0b2hUVWVCOFFzdlhKTWFtNHFuQW9B?=
- =?utf-8?B?K3NHUUpNSU42dERka1BrVE5PQ2VVblcrcDl4VGtqcjNvQTJ2TUV1dz09?=
-X-Exchange-RoutingPolicyChecked: gFaW6X77eF1YqwXLTZfRUX/Iz+jH5sZDAQiWsNacSiBrz4Y1r0aSCU2/rNmn9LD5zgoP25vePvgwo618na+QSDZCWD0/P7zZenD2AHSOG5sP6FBHnwr+yOXdo0xfq6TaC2upzM9Upa0wlXZ1+2TRSJ4RlrP8cKQGyQ/6v0iOGSHJhVnbFtcjLeYb0iuu3stW86HsWMCw0+xWSr2JFsfn/BU8N0SWPiZptmxRoFD/lhGeqlBrvAFZZGGckL6GxtPoQ+qCgPVl50oSEv1vyZKNXanU9oY9SwGo+1jJVpO90rZAKEsKUsMgyfJN/0juXjF6hncW+WApLIuFtAhKnHNHWA==
-X-MS-Exchange-CrossTenant-Network-Message-Id: a5cb5997-2a98-4cc7-62dc-08defdaf281d
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7997.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2026 05:03:06.8691
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IqsR6gOzhkDy5XuNWoJ1SZDiPyxfck+cl4aeAeziSzlwdJyjs8YRPoq8q2lZBoPGQGcHpLkv04NkNaJT+QYfRA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6407
-X-OriginatorOrg: intel.com
 
-Thank you for reviewing the patch.
+On Fri, 2026-08-14 at 16:19 -0700, Vineet Gupta wrote:
 
-On 8/18/2026 8:19 PM, Binbin Wu wrote:
-> On 8/6/2026 9:15 AM, Sohil Mehta wrote:
->> TSS I/O permission bitmap reads are implicit supervisor accesses which
->> are subject to Linear Address Space Separation (LASS) enforcement.
-> 
-> I am not sure about it.
-> 
-> According to SDM vol 3a (253668-089US), Chapter "LINEAR-ADDRESS PRE-PROCESSING",
-> section "MODE-BASED ACCESSES AND LINEAR-ADDRESS-SPACE PARTITIONING", it defines
-> and limits "implicit supervisor-mode accesses" to the following operations:
+Nit: let's keep all tests for this feature under verifier_linked_scalars.c.
 
-The way I understand it, this list isn't exhaustive. The wording in
-those sections, "Such accesses include the following.." and "Examples of
-such accesses include.." suggests that this is not limiting.
+...
 
-> - accesses to the global descriptor table (GDT) or local descriptor table (LDT)
->   to load a segment descriptor
-> - accesses to the interrupt descriptor table (IDT) when delivering an interrupt
->   or exception
-> - accesses to the task-state segment (TSS) as part of a task switch or change of
->   CPL
-> - accesses to a user posted-interrupt descriptor (UPID) during user-interrupt
->   notification processing
-> 
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_bounds.c b/tools/=
+testing/selftests/bpf/progs/verifier_bounds.c
+> index 1a273e416fed..6169a61269b2 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_bounds.c
+> @@ -1516,7 +1516,15 @@ __naked void sub32_full_overflow(void)
+> =C2=A0SEC("socket")
+> =C2=A0__description("32-bit subtraction, partial overflow, result in unbo=
+unded u32 bounds")
+> =C2=A0__success __log_level(2)
+> -__msg("3: (1c) w3 -=3D w2 {{.*}} R3=3Dscalar(smin=3D0,smax=3Dumax=3D0xff=
+ffffff,var_off=3D(0x0; 0xffffffff))")
+> +/*
+> + * w3 =3D w0 forms a low-32 BPF_FLAG_SUBREG_ZEXT link, so R3 carries an =
+id here
+> + * where it did not before; the bounds are unchanged. The id is determin=
+istic
+> + * (raw asm, same bytecode in every flavour) so require it rather than m=
+aking
+> + * it optional -- otherwise the assertion would still pass if the link w=
+ere
+> + * dropped again. The delta suffix is left general: log.c prints ->delta
+> + * directly after the id with no separator when BPF_FLAG_ADD_CONST is se=
+t.
+> + */
 
-For example, this doesn't list the SENDUIPI instruction's access to the
-UITT (IA32_UINTR_TT). That one is an implicit supervisor-mode access to
-a kernel address at CPL = 3.
+Please cleanup LLM generated comments. All that changed here is 'id' for R3=
+.
+Is it important for this specific test to match the exact regex?
+Given the intended purpose of the test I think that the above comment is no=
+t warranted.
 
-In section 5.6.1 (Determination of Access Rights), immediately following
-the above examples the SDM says:  "All these accesses are called
-implicit supervisor-mode accesses regardless of CPL."
+> +__msg("3: (1c) w3 -=3D w2 {{.*}} R3=3Dscalar(id=3D{{[0-9]+([+-][0-9]+)?}=
+},smin=3D0,smax=3Dumax=3D0xffffffff,var_off=3D(0x0; 0xffffffff))")
+> =C2=A0__retval(0)
+> =C2=A0__naked void sub32_partial_overflow(void)
+> =C2=A0{
+> diff --git a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c =
+b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> index c80747c16bcf..2cc6f9e45aff 100644
+> --- a/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> +++ b/tools/testing/selftests/bpf/progs/verifier_linked_scalars.c
+> @@ -711,4 +711,119 @@ l_exit_%=3D:							\
+> =C2=A0	: __clobber_all);
+> =C2=A0}
+>
+> +/*
+> + * A 32-bit zero-extending mov (w7 =3D w6) from a source with unknown hi=
+gh bits
+> + * shares only the low 32 bits (w7.lo =3D=3D w6.lo, w7.hi =3D=3D 0). A l=
+ater narrowing of
+> + * the source's low 32 bits must propagate to the destination via the
+> + * BPF_FLAG_SUBREG_ZEXT (low-32-only) link. This is the pattern bpf-gcc =
+emits when it
+> + * reuses "w0 =3D idx" for "return 0" on the idx=3D=3D0 path of a callba=
+ck.
+> + */
+> +SEC("socket")
+> +__success
+> +__naked void subreg_eq_zext_mov_narrow(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;		/* r6 =3D 64-bit unknown (helper ret is unbounded) */ \
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;		/* r0 =3D unknown high bits */	\
+> +	r6 |=3D r0;		/* still 64-bit unknown; makes it explicit */ \
 
-> IIUC, the TSS I/O bitmap read during ordinary instruction execution
-> (under CPL = 3) rather than during a task switch or CPL transition, I don't
-> think they fall under the classification of implicit supervisor-mode accesses.
-> 
-AFAIU, the entire TSS struct (including the I/O bitmap portion) is
-mapped at struct cpu_entry_area using CPU_ENTRY_AREA_BASE with
-PAGE_KERNEL_RO permissions. So bit 63 will always be 1 and U/S = 0.
+Why the second bpf_get_prandom_u32() call is necessary?
+LLM got confused by the _u32() in the function name?
 
-Yes, the TSS I/O bitmap access happens at CPL = 3 but it still has to be
-an implicit supervisor access. If it weren't, any user instruction
-access to the I/O bitmap would always generate a fault (even without
-LASS), right?
+> +	w7 =3D w6;		/* 32-bit zero-extend mov, wide src */	\
+> +	if w6 !=3D 0 goto l_out_%=3D;	/* w6 low =3D=3D 0 on fall-through */ \
+> +	/* w7 =3D zext32(w6 low) must be 0 here */		\
 
+All three comments above can be dropped. What should be commented on
+is that `w7 =3D w6' forms a link and `w6 !=3D 0` propagates ranges through
+this link.
 
-Sohil
+> +	if w7 =3D=3D 0 goto l_out_%=3D;	/* provably 0 iff linked */	\
+> +	r0 /=3D 0;		/* reached only if w7 not deduced 0 */	\
+> +l_out_%=3D:							\
 
+Nit: please prefer `2: goto 1f; 1: goto 2b;' style labels.
+
+> +	r0 =3D 0;							\
+> +	exit;							\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+> +
+> +/*
+> + * A 32-bit zero-extending mov (w7 =3D w5) whose SOURCE is a wide ADD_CO=
+NST-linked
+> + * register (r5 =3D base + K) must NOT disturb that source. Forming the =
+low-32
+> + * BPF_FLAG_SUBREG_ZEXT link on the destination would need assign_scalar=
+_id_before_mov()
+> + * on the source, which clears its base+delta link -- and a combined
+> + * subreg+delta link isn't modeled anyway (sync_linked_regs() skips it).=
+ So for a
+> + * wide ADD_CONST src the mov leaves the source's link intact and just c=
+lears the
+> + * destination.
+> + *
+> + * Here r5 =3D r6 + 3 (ADD_CONST, wide). After the mov, narrowing the ba=
+se r6 must
+> + * still reach r5 through the preserved link: r6 in [0, 10] =3D> r5 in [=
+3, 13], so
+> + * the guarded div-by-zero is unreachable. Had the mov cleared r5's link=
+ (calling
+> + * assign_scalar_id_before_mov() unconditionally), r5 would stay unbound=
+ed and the
+> + * div would be reachable (rejected).
+> + *
+> + * Note this is a no-regression guard rather than coverage of the new li=
+nk:
+> + * before this feature the wide-source path also left the source untouch=
+ed, so
+> + * the test passes either way. What it pins is the choice not to call
+> + * assign_scalar_id_before_mov() unconditionally.
+> + *
+> + * Written in asm so the bytecode is identical regardless of the host BP=
+F compiler.
+
+Please try to make the comments less verbose.
+
+> + */
+> +SEC("socket")
+> +__success
+> +__naked void zext_mov_keeps_add_const_src(void)
+> +{
+> +	asm volatile ("						\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r6 =3D r0;		/* r6 low =3D unknown u32 */	\
+> +	call %[bpf_get_prandom_u32];				\
+> +	r0 <<=3D 32;						\
+> +	r6 |=3D r0;		/* r6 =3D full 64-bit unknown (base) */ \
+> +	r5 =3D r6;		/* r5, r6 linked (shared id) */	\
+> +	r5 +=3D 3;		/* r5 =3D base + 3: ADD_CONST, still wide */ \
+> +	w7 =3D w5;		/* 32-bit zext mov, wide ADD_CONST src */ \
+> +	if r6 > 10 goto l_out_%=3D;/* r6 in [0, 10] */		\
+> +	/* r5 =3D r6 + 3 must be in [3, 13] here (needs the kept link) */ \
+> +	if r5 > 13 goto l_err_%=3D;/* taken only if r5 not narrowed */ \
+> +	goto l_out_%=3D;						\
+> +l_err_%=3D:							\
+> +	r0 /=3D 0;		/* reachable iff r5's link was cleared */ \
+> +l_out_%=3D:							\
+> +	r0 =3D 0;							\
+> +	exit;							\
+> +"	:
+> +	: __imm(bpf_get_prandom_u32)
+> +	: __clobber_all);
+> +}
+
+...
+
+Given the changes in regsafe/check_alu_op/sync_linked_regs,
+I think the following cases are not covered:
+- regsafe: a state whose register carries BPF_FLAG_SUBREG_ZEXT must
+  not be deemed safe against one without it.
+- check_alu_op: a provably-u32 source takes the full-equality path and
+  must not be flagged ZEXT.
+- check_alu_op: a self-mov w6 =3D w6 must not generate a self-link and
+  should clear dst's id.
+- check_alu_op: a ZEXT-linked source must survive
+  assign_scalar_id_before_mov(), so a chain of 32-bit assignments
+  should preserve the id and the flag.
+- sync_linked_regs: no propagation when reg has ZEXT and known_reg has ADD_=
+CONST.
+- sync_linked_regs: no propagation when known_reg has ZEXT and reg has ADD_=
+CONST.
+- sync_linked_regs: low-32 reconstruction must still propagate when
+  both reg and known_reg have ZEXT.
