@@ -1,278 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4B603D649F;
-	Wed, 19 Aug 2026 07:16:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787123808; cv=none; b=Ofodi+2FCo4OzLgJG+lnUmiSLSWzHD3eZOcJSlsrWWrTXlU/j0bh0d8ipLURIP3QBSaWUNNZtWpnH7KQL/XvZ2I3KX34mSScjEKwshgpTffffv0u6h0JERGtmEsBDXPOMaTj1Z32hy0yk2miG8EJUqBdXKAfKx5VF9iG352BNJ4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787123808; c=relaxed/simple;
-	bh=LJe6G25CjBShw3ZQTcVh8/gPFLh8zcys6Z/FX3FE0hE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=Q0jn3VLV3iIAsW/V+yrpOPb+piqbexKdyLGeXpVkvZWOzfdYQNit3rtWkPKlb5rMxgDijJ81dK/nVVcj1ZoCiMl0u6jc20unlMdagI5etufUAFQBDnLmAUguuJezE6y93ZFzUIjvADmpBRqhTa6pJ0YSzgB/7ps0Yv9131AyzjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jimDSjAv; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36861395AD8;
+	Wed, 19 Aug 2026 07:44:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.10
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787125489; cv=fail; b=Zyshh7eV/DmZpeRUiSEogmKfc7lfy3x3vG+ra2zEBF+oqdYQ4bJqK7051jyyUQPmf7+5XEIRWM3AG7hdk0Rm3CE1feumOAJmIUn2hH5gEF6RkWvR0UZMs40Ai9sJHISTUX51T2UjrmXcHO1u9JNSPMcMl6P3FLY3QiPw4EGTQPw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787125489; c=relaxed/simple;
+	bh=Qnjw0X4iC0Az0GIpuSw9FMMB2DhQdFujzoK2ogA75+w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=cYogMxnG8P4KsxZ+kZ1tj12jrc7zprtYx+XgPhj4bLwiQXuvJA/MT5K5GWapC5I5TimAzPnftVHiI5ewiahlO51Ox4VtvdR+jL9P9FGB5gdd5MdnDiayXZlp1yXy0kZYkKIbUS+Pk6ee1BXZpg07prk/K7wmQEV/PaAAvI+9na0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JzJM8L1u; arc=fail smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jimDSjAv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 364661F00A3A;
-	Wed, 19 Aug 2026 07:16:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787123806;
-	bh=hELGPib/uH3jPFvdTEiadn+HQnK3QW+avnxHHcXWrcE=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=jimDSjAvJfZoTLMtIC0ThiUVmvCu8Vs72gsJczOMZPS0siLynXOz1CIRuMRugJXJk
-	 xX4XP352evKC8B9jSbOHdjlBpfuIUTGaa3gnxqKU3G35O9L92Mh4jIHbRvW0mrAYPf
-	 WHdp4ivAfDbKTJ/aZmyqscdNqtnq2yeixGL0pxhTsEpaFR7gjYgR5blkOwLFX8yEpo
-	 lNePHXGhZGwVSu8l932rl9ls+MC1R1ELISDQGOqkhGfhjqSB9JDm+vHKsZUYQVxy/f
-	 fAHk3JdLq1U+9OMgiVq6Ux4uCaYkLFiZ1qhbmzxo9eaafqokoYQxyZJao+oXkQaA4u
-	 ZA2exkXVQtpJA==
-Content-Type: multipart/mixed; boundary="===============5324425049345538991=="
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JzJM8L1u"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787125486; x=1818661486;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Qnjw0X4iC0Az0GIpuSw9FMMB2DhQdFujzoK2ogA75+w=;
+  b=JzJM8L1updFDhAx6OjUVPFdEFmlJ8HtbXOcrTZjIP/YJSWmQDomTAm5f
+   Tj6+C1CoopBWJvaOqLK8IHVzmC1dJcaVeYekziV2DemYDjxcvygYkqdjx
+   MT9WdC4T4Q4fVAw91VkHDBnf77anLgITLEMJ4HH9mNLpMrfv/7iI3ShD6
+   hOxiLLvhxaKYDu/cVnBLkpBRhWO93PaQB3uHhlPVVyaZjklOOjsbFZ3Ky
+   FA95A7b8bMY3iNdlHOR8+yizrbn10a30BLN8TDcoBvpLmkGhXQZcpq/HF
+   CsSc6Uf2/wHZwoT29hupuiRHmSSL5GA+Bd2RRd3sp6/l9J1/+F/nY0PLN
+   A==;
+X-CSE-ConnectionGUID: msrm1X0nQcSGYrIC6/RGtQ==
+X-CSE-MsgGUID: u7Xc1NDATFeipyIaCMImuA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11879"; a="105011837"
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="105011837"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 00:44:43 -0700
+X-CSE-ConnectionGUID: euOAV78GTIGqOPZXEgBo2g==
+X-CSE-MsgGUID: GuQ/sr+uQOeDt7NZ9H65jQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,231,1779174000"; 
+   d="scan'208";a="259277775"
+Received: from fmsmsx903.amr.corp.intel.com ([10.18.126.92])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 00:44:42 -0700
+Received: from FMSMSX903.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Wed, 19 Aug 2026 00:44:42 -0700
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX903.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45 via Frontend Transport; Wed, 19 Aug 2026 00:44:42 -0700
+Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.62) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Wed, 19 Aug 2026 00:44:41 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=RxtrxO6g4dIgC+vTIwR6CagAe0QgWQ7WfrefW6CWkcpEu7ANRgEdMr+b+J/4WfTkoxwMEQHqkXZr5/T9DFTzTKHpt9P5Y7CFQ65cJ7Pbo/6Lt0wuGzGW5H3OSeysn3XvN4MneaoNl+IrKnEHkS8UzSo3O8jXoUrY47zKHKQctf1upss5vL03nvd6LmwSxPsrmX6UTbbmAUGRCSVZ8PxXpQwmiYFqclw0nwlNNX0xBbZvMCW2Vw4QlByQSc4bIvKekEv6ZGu5ZdkwKvnQnYlJqa1mDqtMsArKiYHmrHxLKbqog4EC4k1aoVdqchCWyfR11B1qamOkQri3ZyXtOS9yKw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VmA84hhwMS/hzw5iXtS9yYlbmf3Arx/bUh8LfrJgcOE=;
+ b=V5fAirit/o9eFMRV+T/p0RYQwSS9D4ezgDHH7+K+po8w0yfJqo1jqvYjIoHzIGQYQRrJD/eipv/Mjq6CfGqcsLD4tKHGV3odtq/4bHnJhnDtyQW58inZxEIiJvyT4P1kJxEvjFI8CmgoevR2ZP+9nTBU8pFvnGUHh98UGBYCNJOsX8xTujoLWCq71kWHtG9WbGU4QkHzG5ZmM6a/3aB4RxK+Hn9IxRUIBO7VUz4aRxqdpIfVKJHwSn+R/Hc9SOAzcdC04sz/ex7CCWZoYf6CjrVrWtJnOhDIs1x18s0noTXWNLtAIoJMR2GOGbprUBb4eLBDZfEJCXioyxNWruqbJA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ0PR11MB5645.namprd11.prod.outlook.com (2603:10b6:a03:3b9::19)
+ by PH3PPF957B3B2A8.namprd11.prod.outlook.com (2603:10b6:518:1::d39) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Wed, 19 Aug
+ 2026 07:44:38 +0000
+Received: from SJ0PR11MB5645.namprd11.prod.outlook.com
+ ([fe80::fb19:f933:8bb3:b42e]) by SJ0PR11MB5645.namprd11.prod.outlook.com
+ ([fe80::fb19:f933:8bb3:b42e%4]) with mapi id 15.21.0339.007; Wed, 19 Aug 2026
+ 07:44:38 +0000
+Date: Wed, 19 Aug 2026 00:44:33 -0700
+From: Peter Fang <peter.fang@intel.com>
+To: Lisa Wang <wyihan@google.com>
+CC: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng
+	<ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao
+	<chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, Ira Weiny
+	<ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, "Kiryl
+ Shutsemau" <kas@kernel.org>, <linux-kselftest@vger.kernel.org>, Paolo Bonzini
+	<pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe
+	<rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, Ryan Afranji
+	<afranji@google.com>, Sagi Shahar <sagis@google.com>, Sean Christopherson
+	<seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li
+	<xiaoyao.li@intel.com>, Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds
+	<jmcrey@google.com>, <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <x86@kernel.org>
+Subject: Re: [PATCH v14 01/22] KVM: selftests: Add macros to simplify
+ creating VM shapes for non-default types
+Message-ID: <20260819074433.GA3290799@pedri>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-1-15ad654a50db@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260722-tdx-selftests-v14-1-15ad654a50db@google.com>
+X-ClientProxiedBy: SJ0PR05CA0128.namprd05.prod.outlook.com
+ (2603:10b6:a03:33d::13) To SJ0PR11MB5645.namprd11.prod.outlook.com
+ (2603:10b6:a03:3b9::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <5e8780b47d3ea4ea88bc54e5f3171e54adfb868a694d857d838ce28319598915@mail.kernel.org>
-In-Reply-To: <0a2355a169c0900427b6e3c0d73ca6ae1be56f13.1787120833.git.zhuhui@kylinos.cn>
-References: <0a2355a169c0900427b6e3c0d73ca6ae1be56f13.1787120833.git.zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v3 1/2] mm/bpf: Add bpf_proactive_reclaim kfuncs
-From: bot+bpf-ci@kernel.org
-To: hui.zhu@linux.dev,roman.gushchin@linux.dev,inwardvessel@gmail.com,shakeel.butt@linux.dev,akpm@linux-foundation.org,andrii@kernel.org,eddyz87@gmail.com,ihor.solodrai@linux.dev,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,shuah@kernel.org,baohua@kernel.org,geliang@kernel.org,linux-kernel@vger.kernel.org,bpf@vger.kernel.org,linux-mm@kvack.org,linux-kselftest@vger.kernel.org
-Cc: zhuhui@kylinos.cn,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Wed, 19 Aug 2026 07:16:46 +0000 (UTC)
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ0PR11MB5645:EE_|PH3PPF957B3B2A8:EE_
+X-MS-Office365-Filtering-Correlation-Id: 493987dc-1514-4a46-b709-08defdc5b87a
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|6133799003|56012099006|10067099003|4143699003|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: /YW+Y1kFOcNewDwt2uWyo9VW47sLcthenLfK1Iu9Uz/is1s+jJUwTiDkCzif2NW75KqUFppOyawEKPLZKm8Ggk+W6+Z6VPDEZUn45ZOAAjsIFf49AkZZ3r+Q4eA8+4TIpkVpP+Xfn+x70ABmFp1hH4pcCgG1gqxKoPZGC4SacGtlol4LalVl6RpPZsgJKWrrNXTTYd3GArA1byoL/tLqj5E3peLAlf+iAZrcnDK9dMqWGasOHtKNcnKXlYKWyAnvcwbEwUyoNvCug422KxFHtr3HInkS1QvOdlNfS2Q1j4T4ZP2Eg0R49VEANbtQtFp5mWtu52/bjScaInE7Vx7tke1kudrbVz6y3zW9n2Jx9gM7iygqpdoj8Wl5xRxHKnNxDnEF6EL2uHRmdsqckeGgmLbSCv9zQuz7DYW4v8WtI6ZGRZziNB7hEcYd/JVqfnukrWWCwflg1YOxBot6rDeCwb51ROUEKsJ/9NDtO+gbG7Elt/H5sMgfbOFtyYmqHm/KOLti9Cvwhl6z4D5ZEmt+8iriobcNqyH1eBR+k+8ev/9F04b/dsG/GJWxKQKHiz9QS9iNjeFdEkVdfmZ3b2ovY2yDU/aUAgxwUxCcJYiiPsG9KNupthJiiu2jqgnKCOXhgBdg/2epETbjOwoRjPBNLSJd8HLU+DONCqVsIv36g0Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR11MB5645.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(6133799003)(56012099006)(10067099003)(4143699003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?T+t/j//iTAQF1X/kliuJgJVYKcMLehISYxaQFGrb0GJlBUM1o2jEYzNCw+1j?=
+ =?us-ascii?Q?634DoYgN2VTk//eIC1+k+aQ4Z/rD9yVrzykM+A7n5D9qDGp71NhYDg4zL0hZ?=
+ =?us-ascii?Q?Wyr2qbGGqM27LYi4h6MLWpeb2NfmihUnE13aKlK3CYXimb4kkR762acKOBEG?=
+ =?us-ascii?Q?2AzgR1EvTERIuOlD0nqzSFnnVc4uA8E9+DAnJ5ttVRU9OIPDyCiyboTcOi0M?=
+ =?us-ascii?Q?zxZVf5ggk8HFKj7/f92aoLAkBDfu2+BNJx8k6WKaP2DTO/jLuySVArEJXy+D?=
+ =?us-ascii?Q?KOYUATBQEivTHLFdjdk6RnYc7M2/FIzEYaWjFlrNGDP5NEo8ujF1J3zohcU5?=
+ =?us-ascii?Q?sgK8osMat/JooL4X5bIII7SWw6s5ppubtcZs4S/cEKG5iJlT6Uvd5gr75IsL?=
+ =?us-ascii?Q?x8Uy/Po9UMQU2TVqhHQxq/WlRTsmFHY9DpaMx45gqnyusF/gIwIujYp+t348?=
+ =?us-ascii?Q?gdEUDN4lv0nbjf1JsOd64l14/TPEWkSUPNvCbs5xf7XemNuOiDibBn2zX5vj?=
+ =?us-ascii?Q?+bU50eqSacfNA5ULC3A6VXfXVvvNr7b/Q1Z9BEOyEUJoxMDUuAZ2tPxFGNjR?=
+ =?us-ascii?Q?DanzGrEJdiGq94inMvha8w3JgKMcsCjc6PXRD2tRndvlhlddn7gRC6f6ymhI?=
+ =?us-ascii?Q?FL9JymfaoR7ZA+fZz2SKTTFu9n3PfaHJ2Wjw14fTVVIO8WFQT28Q8BW0pjT9?=
+ =?us-ascii?Q?cslYxiVFXqgCACCJRsPbouRifwM2zXtl7SsVN5X0xpTpJHAMIX08W3KANydf?=
+ =?us-ascii?Q?8VCcqmo3kEbKrT5O5r+XVtsIPW0Yw2aPEYzde8USGf8hMURgJ6EPmDVbsqX3?=
+ =?us-ascii?Q?x/O44SQ5R3JInF/LwzGAWYhGxu4NjGsfIkkmt/zHSDHW1x4UN5AjvcScs08h?=
+ =?us-ascii?Q?tZ+QP9s7oEaSwVLCZ+WDz4ykRk/HcupE+yDT949kBqFeC2HZBfUfaEQVkm5S?=
+ =?us-ascii?Q?cv5fxIqEt6/M4wVhd4TSeaCR2dwB3+soNvFAE1LUCVy6HPkahSQi75ViaeI7?=
+ =?us-ascii?Q?ro/w/yCyQJX7a4TTQ/fex1WVS8BgXp0qWLUbT7Avu5ggdFThGSyCOAspygUx?=
+ =?us-ascii?Q?kzJ3V9BkHwGP9qkaAi/naA0TAUjzr4sQiuqjyKaAS8Y7+aq1xp+YLLWTAigw?=
+ =?us-ascii?Q?MdpJp7LAjNur1tTaEVQ2zLmO2a17P1OHS6ffJtCoHAoFN8J+zJBimcMuT2BF?=
+ =?us-ascii?Q?6cP5Xk7/L3++EuihhYRk9zkhslRFR5HBcvDvuvBllkEuUXVI8r84KH/EfpB1?=
+ =?us-ascii?Q?Yp4AfhS8TLQ7fKoyhNfbilJIh/auvZ0+/ULe9y/2IYMZ3ywZzNFhPheaFrig?=
+ =?us-ascii?Q?s1YL4CXxxW14H+kJhidnYAFRWVNXzwHhJk3/OoxQWyGs0HLzbCTvMZg8gbJp?=
+ =?us-ascii?Q?HcdMvEhye/hPb3J7lTgIe+CLdIowiFdiAF72hepIMHxdwpqUwNdFdee4xl8Z?=
+ =?us-ascii?Q?roI7/WD7M5De0v6LFBGcwgDi1EXHV2gdp+QByj3Fv4F6gKa3X+B3kBge3FrY?=
+ =?us-ascii?Q?jPMRjSmu5a+KCJmltzZmg1F2ljrEwfczy7oLIHM1x8yvgDK/0q02v9q16jQX?=
+ =?us-ascii?Q?wJnS2Q77QIt5nSCvZmzK4AgjMSkWqGCaJssOnUwBv+4I7f43R9IJjoL0qJ5T?=
+ =?us-ascii?Q?K752kbNADaX/xg+ClNQu1wqxINblWl4XfXtNu+DG3oJb228DpFf7CqsCMMbz?=
+ =?us-ascii?Q?3BoaSzlLkO/MqpFadsMdE+Y1Zwr3LNPVPu7JyNvvv66HurrhlIDze1G9+gzY?=
+ =?us-ascii?Q?Dpdg3KpzYg=3D=3D?=
+X-Exchange-RoutingPolicyChecked: VJcRC1BApz9OpPt3vTyZye4Iucvc2MqIeJYiyqSisvCkW1rYKeqZ5n1O5acFPB7zSNWX/YJCXqcq1ORlPdX/RYZeydctMglNRRtuPLeFVQT9l7UkHjKZMoyH4eKL/AUuVtiGyokimb2W2BqZnmWAphA3OrvB/hPcHoeTHA4NBoTisMCPR/nRCrzDKvQaYqHAVYxjX6baIwRhmXO1IEeVsZlgX7cAEVStmJdshl8ttmHqVMDnAjkZnZqk1/02i6Kq1D6KHObMa7R6NldHJlH8RNXmHczF2aRD6sN9Ftz9V5IIqlkjo4QR7UnfCEsZoawkR07Ehar3YjmsXKWiZhr/ng==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 493987dc-1514-4a46-b709-08defdc5b87a
+X-MS-Exchange-CrossTenant-AuthSource: SJ0PR11MB5645.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Aug 2026 07:44:38.0203
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: nvmc+46ylHURmKonbkd+UC3OVUglKdKFfL5W7VFNGqTXJOt8PDLFZKBTTaDt9BKwusFsu37Oqu/MdKejD9jaDw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH3PPF957B3B2A8
+X-OriginatorOrg: intel.com
 
---===============5324425049345538991==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Wed, Jul 22, 2026 at 11:13:06PM +0000, Lisa Wang wrote:
+> From: Sean Christopherson <seanjc@google.com>
+> 
+> Add VM_TYPE() and __VM_SHAPE() macros to create a vm_shape structure given
+> a type (and mode), and use the macros to define VM_SHAPE_{SEV,SEV_ES,SNP}
+> shapes for x86's SEV family of VM shapes.  Providing common infrastructure
+> will avoid having to copy+paste vm_sev_create_with_one_vcpu() for TDX.
+> 
+> Use the new SEV+ shapes and drop vm_sev_create_with_one_vcpu().
+> 
+> Opportunistically move the existing VM_SHAPE() (now __VM_SHAPE()) macro
+> below the definitions of VM_MODE_DEFAULT so that all of the SHAPE/TYPE
+> macros are bundled together.
+> 
+> No functional change intended.
+> 
+> Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Reviewed-by: Ira Weiny <ira.weiny@intel.com>
+> Reviewed-by: Xiaoyao Li <xiaoyao.li@intel.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d7647..b0a0d4c55dc4 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
-> @@ -6,6 +6,7 @@
->   */
->
->  #include <linux/memcontrol.h>
-> +#include <linux/swap.h>
->  #include <linux/bpf.h>
->
->  __bpf_kfunc_start_defs();
+Missing the submitter's SOB?
 
-[ ... ]
-
-> +/*
-> + * Reclaim must not recurse. try_to_free_mem_cgroup_pages() unconditionally
-> + * overwrites current->reclaim_state on entry and resets it to NULL on exit.
-> + * So invoking it from an in-flight reclaim would clobber the outer reclaim
-> + * state and corrupt its accounting.
-> + *
-> + * The guard is PF_MEMALLOC. Every reclaim entry point marks the current
-> + * task with it for the whole reclaim window: try_to_free_mem_cgroup_pages()
-> + * and __perform_reclaim() do so via memalloc_noreclaim_save(), and kswapd
-> + * keeps it set for its entire lifetime. A hook inside the reclaim path
-> + * (shrink_node, shrink_slab, ...) executes in the context of the
-> + * reclaiming task, where current->flags already carries the flag. The page
-> + * allocator, the memcg charging path and node_reclaim() rely on the same
-> + * flag to avoid reclaim recursion.
-> + *
-> + * In try_to_free_mem_cgroup_pages(), reclaim_state is set slightly before
-> + * PF_MEMALLOC, with only a tracepoint in between, which a sleepable BPF
-> + * program cannot attach to.
-> + * Also, PF_MEMALLOC is set in some non-reclaim contexts (e.g. direct compaction
-> + * and vmalloc), where the kfunc conservatively refuses to reclaim as well.
-> + */
-> +static bool bpf_in_reclaim_context(void)
-> +{
-> +	return current->flags & PF_MEMALLOC;
-> +}
-> +
-> +/*
-> + * Shared implementation of the proactive reclaim kfuncs: performs one
-> + * reclaim pass on @memcg with @nr_pages as the goal, allowing swap, and
-> + * @swappiness as the anon/file balance override (NULL to follow the
-> + * cgroup's own swappiness setting).
-> + */
-> +static unsigned long
-> +bpf_proactive_reclaim_pages(struct mem_cgroup *memcg, unsigned long nr_pages,
-> +			    int *swappiness)
-> +{
-> +	if (!nr_pages || unlikely(bpf_in_reclaim_context()))
-> +		return 0;
-> +
-> +	return try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
-> +					    MEMCG_RECLAIM_MAY_SWAP |
-> +					    MEMCG_RECLAIM_PROACTIVE,
-> +					    swappiness);
-> +}
-
-Does the PF_MEMALLOC-only guard fully close the recursion window?
-
-The comment states "In try_to_free_mem_cgroup_pages(), reclaim_state
-is set slightly before PF_MEMALLOC, with only a tracepoint in between,
-which a sleepable BPF program cannot attach to."
-
-The restriction on tracepoint attachment is accurate - sleepable BPF
-programs cannot attach to non-faultable tracepoints like
-mm_vmscan_memcg_reclaim_begin. But the tracepoint dispatcher itself is
-attachable:
-
-Looking at mm/vmscan.c:try_to_free_mem_cgroup_pages():
-
-    set_task_reclaim_state(current, &sc.reclaim_state);
-    trace_mm_vmscan_memcg_reclaim_begin(sc.gfp_mask, 0, memcg);
-    noreclaim_flag = memalloc_noreclaim_save();
-
-The trace_mm_vmscan_memcg_reclaim_begin() macro expands to a call to
-__traceiter_mm_vmscan_memcg_reclaim_begin(), which is a plain global
-function generated by __DEFINE_TRACE_EXT(). It carries no notrace
-attribute, mm/Makefile doesn't remove ftrace flags from vmscan.o, and
-it isn't in btf_id_deny, making it fentry-attachable.
-
-can_be_sleepable() in kernel/bpf/verifier.c returns true for
-BPF_TRACE_FENTRY, and check_attach_btf_id() applies no further
-restriction beyond btf_id_deny. So a sleepable fentry program on
-__traceiter_mm_vmscan_memcg_reclaim_begin would be accepted by the
-verifier.
-
-Since the kfuncs are registered for BPF_PROG_TYPE_UNSPEC, such a program
-can call bpf_proactive_reclaim().
-
-In that window, current->reclaim_state points to the outer reclaim's
-state but PF_MEMALLOC is still clear, so bpf_in_reclaim_context()
-returns false. The nested try_to_free_mem_cgroup_pages() would then:
-
-  - Trip the WARN_ON_ONCE(rs && task->reclaim_state) in
-    set_task_reclaim_state()
-
-  - On exit, execute set_task_reclaim_state(current, NULL), leaving
-    current->reclaim_state == NULL for the rest of the outer reclaim
-
-The outer reclaim continues and under MGLRU, shrink_lruvec() calls
-lru_gen_shrink_lruvec() which calls set_mm_walk() in mm/vmscan.c:
-
-    struct lru_gen_mm_walk *walk = current->reclaim_state->mm_walk;
-    ...
-    current->reclaim_state->mm_walk = walk;
-
-evict_folios() has the same pattern. Result: NULL pointer dereference.
-
-On the classic LRU path the outcome would be lost reclaim accounting in
-flush_reclaim_state(), plus the WARN_ON_ONCE on the outer exit.
-
-Would testing current->reclaim_state in addition to PF_MEMALLOC close
-this window?
-
-> +/**
-> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
-> + *                         cgroup
-> + * @memcg: the target memory cgroup to reclaim from
-> + * @size:  the amount of memory to reclaim, in bytes
-> + *
-> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
-> + * the memory.reclaim cgroup file: pages are reclaimed according to the
-> + * cgroup's own swappiness setting and swap is allowed. Note that,
-> + * unlike memory.reclaim, this does not retry until @size is reached;
-> + * callers can invoke it again if needed.
-> + *
-> + * Return:
-> + *   The number of pages actually reclaimed, or 0 if @size is smaller
-> + *   than a page or the calling task is already in a reclaim/freeing
-> + *   context (PF_MEMALLOC).
-> + */
-> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> +						unsigned long size)
-> +{
-> +	return bpf_proactive_reclaim_pages(memcg, size / PAGE_SIZE, NULL);
-> +}
-
-The kfunc takes @size in bytes but returns a count in pages
-(try_to_free_mem_cgroup_pages() returns nr_reclaimed in pages). Input
-and output use different units.
-
-Every other kfunc in this file normalizes to bytes:
-bpf_mem_cgroup_usage() returns page_counter_read(&memcg->memory) *
-PAGE_SIZE and is documented as "The current memory cgroup size in
-bytes"; bpf_mem_cgroup_page_state() documents "The output is in bytes."
-
-A natural BPF loop like:
-
-    usage = bpf_mem_cgroup_usage(memcg);
-    while (usage > target)
-            usage -= bpf_proactive_reclaim(memcg, usage - target);
-
-would be off by PAGE_SIZE. The kdoc does say "The number of pages
-actually reclaimed", but since this is UAPI-visible the unit asymmetry
-is worth resolving before it freezes. Would it make sense to return
-nr * PAGE_SIZE, or take @nr_pages instead?
-
-> +/**
-> + * bpf_proactive_reclaim_swappiness - proactively reclaim memory from a
-> + *                                    memory cgroup with an explicit
-> + *                                    swappiness
-> + * @memcg:      the target memory cgroup to reclaim from
-> + * @size:       the amount of memory to reclaim, in bytes
-> + * @swappiness: swappiness override for this reclaim pass
-> + *
-> + * Same as bpf_proactive_reclaim(), except that the anon/file reclaim
-> + * balance is controlled by @swappiness instead of the cgroup's
-> + * swappiness setting. Valid values are [MIN_SWAPPINESS, MAX_SWAPPINESS]
-> + * and SWAPPINESS_ANON_ONLY, which restricts reclaim to anon folios.
-> + *
-> + * Return:
-> + *   The number of pages actually reclaimed, or 0 if @size is smaller
-> + *   than a page, @swappiness is out of range, or the calling task is
-> + *   already in a reclaim/freeing context (PF_MEMALLOC).
-> + */
-> +__bpf_kfunc unsigned long
-> +bpf_proactive_reclaim_swappiness(struct mem_cgroup *memcg, unsigned long size,
-> +				 int swappiness)
-> +{
-> +	if (swappiness < MIN_SWAPPINESS || swappiness > SWAPPINESS_ANON_ONLY)
-> +		return 0;
-> +
-> +	return bpf_proactive_reclaim_pages(memcg, size / PAGE_SIZE,
-> +					   &swappiness);
-> +}
-
-An out-of-range @swappiness returns 0, the same value as a successful
-call that reclaimed nothing, and the same as a call refused due to
-PF_MEMALLOC context. A BPF program cannot distinguish a programming
-error from legitimate lack of progress.
-
-The sibling kfuncs in this file use a distinguishable sentinel for
-invalid parameters:
-
-    bpf_mem_cgroup_vm_events():   if (unlikely(!memcg_vm_event_item_valid(event)))
-                                      return (unsigned long)-1;
-
-    bpf_mem_cgroup_page_state():  if (unlikely(!memcg_stat_item_valid(idx)))
-                                      return (unsigned long)-1;
-
-The userspace equivalent also rejects rather than ignores:
-user_proactive_reclaim() returns -EINVAL for out-of-range swappiness in
-mm/vmscan.c. Would returning (unsigned long)-1 here match both this
-file's convention and the write(2) behaviour of memory.reclaim?
-
-> +__bpf_kfunc_end_defs();
->
->  BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-> @@ -172,6 +270,9 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
->  BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
->  BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
->
-> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
-> +BTF_ID_FLAGS(func, bpf_proactive_reclaim_swappiness, KF_SLEEPABLE)
-> +
->  BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
->
->  static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32224943030
---===============5324425049345538991==--
+> ---
+>  tools/testing/selftests/kvm/include/kvm_util.h     | 27 ++++++++-------
+>  .../testing/selftests/kvm/include/x86/processor.h  |  4 +++
+>  tools/testing/selftests/kvm/include/x86/sev.h      |  2 --
+>  tools/testing/selftests/kvm/lib/x86/sev.c          | 16 ---------
+>  tools/testing/selftests/kvm/x86/sev_smoke_test.c   | 40 +++++++++++-----------
+>  5 files changed, 39 insertions(+), 50 deletions(-)
+> 
