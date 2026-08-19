@@ -1,119 +1,284 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 487023A83AC;
-	Wed, 19 Aug 2026 16:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEFC43BE652;
+	Wed, 19 Aug 2026 17:09:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787157967; cv=none; b=bHLfZMVoJj5W6iHpztwjMWk40Id41L6udnh855kQM/eDMwOGa1B/7/hR8NTZE3fdsiDWoOe1HsgIPZ8cBFECHSA6WgJm3CmHiHOdUaFF55VBhVVWZ+E/owlzpW0xW18bLIkspsS1SYl4hrSsW+Hbgs1hT/dQn0/PdasfuM8PsaI=
+	t=1787159359; cv=none; b=Di3xlsAH9FeU6NYZcWcfn2CcqcnJOjF26MtAI6O3GMECnRT23cv7ScqgmwcBbRChHz5eZWIY8bL5cdb9JJ+yNjG0+Gzte9m/oyqvsO4b6ejXe8kuqJLnETpqBRhYsCE9R6YfSFVZQUBFllUVTQKxqw1qupCIixVovHahK5R7rDs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787157967; c=relaxed/simple;
-	bh=IUmhn09vg1A+FjwptisXhPlfmzytaS0bRtSkorh0bqo=;
+	s=arc-20240116; t=1787159359; c=relaxed/simple;
+	bh=GaTMdOcQwQGnDb/PPYF1UOE4PRaASulBBwReUYNtedY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LSLStfPEY8vhra5mjL+QMMgGMretPSls/mkR/OMF0v2IxdQrvpYCHhcYgJ0RJYFXjLclG+dwNsY7OarBGRHtlri8BBXnqubp4J0lDp30OPoS/KOVfs4ivpe/nCi9sjIgXyOFPbeQF+SjAaMLZROv9bTmi8tHGBz0cO8Zn6hrKkg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K6XU6SjJ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=AiM4BO6OpH/TayhLOWHFdhseeZCZmmX2zizM7rvcXdTWDoNtRW1kmIV0fVZtF2sScCiR7dSKhzEzfhzsiCqmPw2fV4oHf/8GghcIE6C/hZ/EPWN3VcPixLMR0ksmnZBUlthqz65CHzUtVXB4pZJ51OtuINriEVWYLx6fpE7d/Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=XkXQWv4m; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=B56neHLq; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K6XU6SjJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E283D1F000E9;
-	Wed, 19 Aug 2026 16:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787157965;
-	bh=CTifcNr4LKctsAM4SMxsssPmhWjX8dsPgZMHxI2Vljc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=K6XU6SjJEqZOn++A5CEJP1XEh70wIlhZncBG9/McLETQ44Tp/E87sg1NJeN8LIcKh
-	 9LeizfBbjQ8zIKz7RKZV11UFQCHHoO4HacbQizZKCuSMEKVGpbd8v0A00V3kN6lK0f
-	 abv2c69ZnzZJEKfi12TnYolNjiIST3Ufh01WpBqZMJMgyecK7g7ptBtjsfBwrtEv7x
-	 AI6dWb9WT5+1oAHiGSPHhzjRTCma4bd9chUUw7JHaixQ+9cBc/RlFHUnMfMepcz+4O
-	 r6OfY27+KR2uHulOubDC1tSeSl4C64mOaFrMd3OElL7t3llZjsnd53Lj8fTG8men/j
-	 i6eLfj0PLchMA==
-Date: Wed, 19 Aug 2026 17:46:00 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Leonardo Bras <leo.bras@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <48be9e5d-357a-4863-8682-8b3f34c69723@sirena.org.uk>
-References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
- <20260812-arm64-gcs-v19-3-9105afd828ac@kernel.org>
- <aoXamcdKoMynTkpX@LeoBrasDK>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="XkXQWv4m";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="B56neHLq"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailflow.phl.internal (Postfix) with ESMTP id B412913801E1;
+	Wed, 19 Aug 2026 13:09:15 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Wed, 19 Aug 2026 13:09:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1787159355; x=
+	1787166555; bh=rngWsIbqp4UM0fSmr3ndBU+ttc5Nai8HRxYczVDElJk=; b=X
+	kXQWv4mldgxmebPhO5HInIrxwEyXD7vdckRHaKRDChcdEPNbk3qUOf9dnVbAxlMk
+	az0p914xNSD65d/CambQfN2m53NBgSIkHBnSKTXEIclH4UOt4ibk3DKjRnU5yycs
+	W7gDD2J/wOyvepAeEmZgp9k0q7alDQtUKYNLYKWaqLBHf+QG8jqy7cMnTfj+GAuu
+	7MQ1r1ZnLMcfU8hBJlRrigPUfjmRCFrQRm1vdhOQQL6UeeoG4NjPyKihvsxb0bkG
+	Phm8LO8GScuNqukHYN3lMaQr3SwfMpvPpHZKUKrOTPc05t8FaOh2Z2Kj0H+zOP5p
+	KsvUp92DdQ24UqVFIDM1Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1787159355; x=1787166555; bh=rngWsIbqp4UM0fSmr3ndBU+ttc5Nai8HRxY
+	czVDElJk=; b=B56neHLq7er86+lmQ2V++BpiXFLH6WkSpfWF4TZ53vg1yUV4AW3
+	9SQBlGGfqGGcpFkq6dQTt6aFnKNJyxn/7BSYUTvQ/RvRsnElNoxGCBrhrEgXXGNx
+	qaLVSl81xjPChjmV16jkux7Sty6758SxBluBXpK3eOQc2e/ch2GoUONBIbKngSxX
+	VTFwZOhvh75/cYypXnDj/c3zTm6u3IU6xugzHtJSGDWIihvQp8e9exTT0PNm3hPS
+	AFDhWChONL8lNT/KUfGjOf6u9qK7vuwlLP89Lciv856uSXuvtWMdER5nTWhkOdt6
+	9bBIctLhJPJTTOE0ghgRBVHd3JpYVHw4FNw==
+X-ME-Sender: <xms:OuOFahdNPCaQTr9ES9HTrKEi-_OhwFcGJL2Y1JwhYpfj-YN4SSFw6g>
+    <xme:OuOFahgThiTOZcJOBYBmDOPIsCJPcyiNaEmsn_nBDnF1DRh1ms9OGeDMtwbdJHfre
+    WAo6GPgUePt_ZD9Nqo--RmJ2IR64gmxMOv77SrY4-0mt22qpyh0nvgT>
+X-ME-Received: <xmr:OuOFapTYCJl9yzGlAvik790RSVDJbcQrwMvOhgXHFHBDFlO5GI5Aj2H_MyY>
+X-ME-Proxy-Cause: dmFkZTF2hJnMxPlMk/jfavBtLUpTUzRd98wV0yj6Xt/Tg57fveFXbfrnoCBHAhwoJSnwvc
+    MtBG50RSMfmClpPI3x6CkcWZCyQvMgs1EZ/KW76Yapbv4d0vUdc6gFqdtYBxQZoYDkSqYD
+    2YcaHdEdQfhRcwKftYsqzXEfDtHBoWdxBFtT8n56HAZST46t7Dn270fSXfsHXaq5JKYPDD
+    JoKvC7wqN5tCFOmjr9104dGNuRhfDkdXo/k1uVDYnCrgfsZx1Du/6tDXbC34XfACrLwl8p
+    prfw7PeES/yEPXECxT/4GTheYyqLa/iux7yvt2JLPJJHC1s6Kbpk2oi4ksERMJCH47snQd
+    o5MgcUNJ9MgaGAfFhljde5JsdiLa7vnywvzsFsEsyh6/jENVfGHBB4NYMoCHdzyeFT8lW6
+    yYx1d6atj2GRUwmmZRZCOxWT0OhZjWhxDuT3G55syUAHSF2ICY/molwLA0RFftwTEOY5DZ
+    vg1rRhzPDm2Yibh8HWbghC4+BGr6CwebgdS5VlYpB58QAw8wmG5zI94Pi9k6Zwc8qPqzi4
+    pLEXAvi5grHrQtpdHqLnZkW8cxNCm4EgsEziTB0bvXmJoMSqnaJDLH4LM2KDB4EHumeg05
+    Oe+IYAPb9sqnI6CCz8ZB7kaLsW4wP+oI0J46P6EySsDJt/Gtpr2OyCnJpRuQ
+X-ME-Proxy: <xmx:OuOFalKbWCWCI4ZXnZ6o2x7NBHXHelXnP4ynvixvbIEXdrgu7mryRA>
+    <xmx:OuOFagQJaZaqTXceo5AM0IZ8hNjlHfdFY2va7llJmUBU9sg0iUsbxA>
+    <xmx:OuOFaiuBACucNMmEX4x_pO3FXL942oTmUfqnR8DAtclVKO7yjC8cgw>
+    <xmx:OuOFal-067q4FSkBuyRRGIfsvMUFjGtdxbPfuJaiDhQe6psxBq8www>
+    <xmx:O-OFas-OgkCIQ2NKZkmWqu2BlJxVNaFGk9Y2qaKYd5zBQIs3fM20His3>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 19 Aug 2026 13:09:13 -0400 (EDT)
+Date: Wed, 19 Aug 2026 18:09:12 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
+ primitives
+Message-ID: <aoXRi3ngBhO54Akk@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <9f51ac27-24b2-495b-b397-84865f977d24@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="bWH43D23LJDpXW5I"
-Content-Disposition: inline
-In-Reply-To: <aoXamcdKoMynTkpX@LeoBrasDK>
-X-Cookie: Allow 6 to 8 weeks for delivery.
-
-
---bWH43D23LJDpXW5I
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <9f51ac27-24b2-495b-b397-84865f977d24@kernel.org>
 
-On Wed, Aug 19, 2026 at 05:32:25PM +0100, Leonardo Bras wrote:
-> On Wed, Aug 12, 2026 at 08:12:02PM +0100, Mark Brown wrote:
+On Tue, Aug 18, 2026 at 03:55:55PM +0200, David Hildenbrand (Arm) wrote:
+> > This replaces khugepaged's anonymous collapse with an engine that
+> > can collapse sub-PMD ranges. It is built around migration entries and
+> > frozen folios instead of heavy locking and isolation, aiming for better
+> > scalability and less disruption to the workload being collapsed.
+> 
+> I recall us discussing something around using some PTE/PMD markers (e.g.,
+> migration entries) in the past.
+> 
+> One thing that needed care is handling concurrent MADV_DONTNEED + faultin after
+> dropping relevant locks.
 
-> > In order to allow guests to use GCS we also need to configure
-> > HCRX_EL2.GCSEn, if this is not set GCS instructions will be noops and
-> > CHKFEAT will report GCS as disabled.
+Handled at install time.
 
-> It is zero on reset, and keeping it in zero disables GCS in EL0&EL1, so=
-=20
-> unless we are in EL2&0 (HCR_EL2.{E2H, TGE} is {1, 1}), we need to enable =
-it=20
-> so EL1&0 (guests) can have access to it.
+I drop the PTL after the freeze to allow allocation and copy, but sample
+the PTE values (see saved_ptes) at freeze time. If something changed
+under us by the time we install the new page table entries, we give up
+on that candidate and roll it back; the rest of the round still
+installs. We allow harmless transitions: zero page to none.
 
-Right.
+> > Which is why hugepage_vma_revalidate() demands that the VMA span the
+> > whole PMD even for an mTHP order -- "we'd need to lock all VMAs in the
+> > PMD range to support this", as the comment there puts it.  A PMD-granular
+> > operation is only safe when one VMA owns the PMD, and that is exactly the
+> > restriction in the way.  The alignment is the symptom; the PMD is the
+> > design.
+> 
+> I disagree with "A PMD-granular operation is only safe when one VMA owns the
+> PMD". It's safe when all page table walkers can be stopped (see above).
 
-> > @@ -77,6 +80,8 @@ static void __sysreg_save_vel2_state(struct kvm_vcpu =
-*vcpu)
-> >  	__vcpu_assign_sys_reg(vcpu, SP_EL2,	 read_sysreg(sp_el1));
-> >  	__vcpu_assign_sys_reg(vcpu, ELR_EL2,	 read_sysreg_el1(SYS_ELR));
-> >  	__vcpu_assign_sys_reg(vcpu, SPSR_EL2,	 read_sysreg_el1(SYS_SPSR));
-> > +	if (ctxt_has_gcs(&vcpu->arch.ctxt))
-> > +		__vcpu_assign_sys_reg(vcpu, GCSPR_EL2, read_sysreg_el1(SYS_GCSPR));
+Fair, the sentence is too strong.  mmap_write_lock plus a VMA write lock on
+every VMA the PMD covers, plus their rmap locks, would make it safe.
 
-> Out of curiosity here,
-> Why does the saving of GCSCR_EL2 depends on ctxt_has_tcrx() (and E2H set)=
-,=20
-> and saving SYS_GCSPR does not? ...
+But the mechanism still clears the whole PMD, flushes, IPIs and
+repopulates it to collapse each 16-page window. That's very noisy to the
+workload.
 
-This is just because there isn't a preexisting ctxt_has_tcrx() check
-already there, FEAT_GCS architecturally depends on FEAT_TCRX and there
-was a request to make this explicit in the code to try to optimise
-things a bit.  The compiler should skip over both blocks at once if TCRX
-isn't there rather than having two separate tests or static branches.  I
-didn't add new checks where there were none since I expect that to be
-unhelpful for code generation, you'd get the reverse situation and emit
-two checks.
+And I am not sure how to deal with rmap locking here.  Nothing in mm
+holds two unrelated anon_vma rwsems: vma_prepare() takes one for both VMAs
+it touches, because a merge requires them to share the anon_vma, and
+anon_vma_clone() takes one because "all anon_vma's share the same root".
+The lock ordering in mm/rmap.c has a single anon_vma->rwsem level, so a PMD
+spanning unrelated mappings would need an ordering rule that does not exist
+today.
 
---bWH43D23LJDpXW5I
-Content-Type: application/pgp-signature; name="signature.asc"
+> > Between the two, nothing can reach a source, so the copy runs with no
+> > lock held at all -- and the address space is left alone while it does.
+> 
+> Right. Concurrent MADV_DONTNEED can zap migration PTEs and other faults even
+> re-fault fresh anon folios. So that must be detected before replacing migration
+> entries again I guess.
 
------BEGIN PGP SIGNATURE-----
+Yes, that is the install-time check above.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqF3ccACgkQJNaLcl1U
-h9CcQQf+IxvaF1y9eqa1wPv0kD6ec4r4UKmxZU1Sj6EfStbT+DJpeDDZmbR5wLHi
-UIbnCP1BlGVPGIw8QfCpH7x1W3Vk397dUmfHNuEv/HACcnIe7J+3TMA3I0bSD49i
-eY7wVTezjJGRBNMtLzFVT9Ed1mK7iZ3xeD2oU7ii0abLeBMmEwuQyvroT6nLqa6I
-hmtlWxH5Ps5ol3qaxoD+w12M6YlkXLucm5OgMZ+gpQM0JuQaxOb2UUxBb64PhcH2
-0cdjq7xLFg2kz8kdcitYNVmbE34x/2ZJfg4RSV0AT4B5D6Mst3zXJLI8gVcWjO7e
-hZdv8j5JdWYVkbXUdOYTVL0HppvTgw==
-=FnPL
------END PGP SIGNATURE-----
+The copy itself is safe: a zap of a migration entry only clears the slot
+and adjusts rss -- see zap_nonpresent_ptes(), which neither puts the
+folio nor drops its rmap -- so a frozen, locked source cannot go away
+under the copy.
 
---bWH43D23LJDpXW5I--
+The rollback does the rest: it leaves a foreign slot as found and drops
+the rmap the freeze kept, which is the half of the teardown the zapper
+could not do.
+
+> 
+> > 
+> > What that removes from every collapse path:
+> > 
+> >   mmap_write_lock              -> mmap_read
+> >   anon_vma_lock_write()        -> nothing: an rmap walk needs the folio
+> >                                   locked, and the engine holds that lock
+> >                                   from freeze to putback
+> >   tlb_remove_table_sync_one()  -> nothing: one ranged flush per round
+> >   LRU isolation                -> nothing: sources are inert in place
+> > 
+> 
+> Not sure how you handle PMD collapse. I recall problems with migration entries
+> on the PMD level for non-folio things (we discussed something along these lines
+> also in the past).
+
+There are no PMD-level migration entries here.
+
+The freeze is always at PTE level, so the pmd keeps pointing at the
+table until the last step, and the PMD leaf goes in as the terminal
+layer: verify, pmdp_collapse_flush(), deposit a fresh table, set the
+leaf, all in one section under the pmd lock with the pte ptl nested
+inside.
+
+A pmd-level walker sees the old table or the leaf and never pmd_none,
+and faults stay held at pte level by the migration entries throughout,
+which is what lets PMD collapse run under a VMA read lock like
+everything else.
+
+> 
+> > Working in windows rather than whole PMDs takes care of the other root.
+> > A sub-PMD window is collapsed under the page table lock, so a collapse
+> > disturbs only the window it collapses, and each candidate is validated
+> 
+> I recall us discussing that holding the PT lock for a longer collapse operation
+> (especially on 64k) is problematic. But I don't get all the details from your
+> description here.
+
+As I mentioned above, we drop the ptl after the freeze. And take it a
+second time for the install.  Allocation and the copy run in between with
+no lock held -- on 64K the copy at PMD order is 512M of it, which is why
+it cannot sit under either lock.
+
+> 
+> > at its own order -- a window need only fit its own VMA.  A PMD-order
+> > candidate still has to own the whole PMD, which is the old rule kept
+> > where it is still needed.
+> > 
+> > Candidates are carried through the passes a batch at a time rather than
+> > one window at a time, so a round pays for its flush and its lock
+> > acquisitions once.
+> 
+> Now I am starting to feel that there are too many changes packed in a single
+> series :)
+
+Batching is not an extra here, it is the only way collapse works at mTHP
+sizes.  What a round pays once -- lru_add_drain(), the mmu_notifier
+invalidate window, the two ptl acquisitions and the TLB flush -- would
+otherwise be paid per collapse.  A 2M PMD is 32 collapses at order-4, and
+a gigabyte collapsed into 64K mTHP is 16384 of them: the serialization
+would dominate, and the workload would feel every one.
+
+> > Reading the series
+> > ==================
+> > 
+> > 57 patches is a lot to land on a list.  They go in blocks:
+> > 
+> >   1-6    helpers and shared state: pte_folio(), pte_none_or_zero(),
+> >          mm/collapse.h, and the policy that replaces asking whether
+> >          khugepaged started a collapse
+> >   7-8    the engine's shape: entry points, a call-tree comment naming
+> >          every pass, and the scan filled in
+> >   9-23   the collapse half, top down: the round frame, then each pass
+> >          in turn, then selection and the retry store
+> 
+> I fail to parse this sentence.
+
+Bad wording.  The engine is introduced in a top-down manner:
+
+  - patch 7 adds the external interface and a comment naming every pass
+  - 8 the scan
+  - 9-11 how candidates become a round and which passes the round has
+  - 12-21 fill in one pass per patch in the order they run
+  - 22-23 add the cursor that picks the windows and the second chance
+    for the refused ones.
+
+I'll spell that out in the next iteration.
+
+> > So I wrote "perf bench mem usemem" for this.  It touches a region while
+> > khugepaged works on it and reports the workload's own latency
+> > percentiles and throughput, against per-size counters that can see
+> > sub-PMD folios.  The branch is above; it is unposted and not a
+> > dependency.
+> 
+> Something more realistic might be running some workload in a VM whereby the VM
+> is getting collapsed by khugepaged.
+
+Fair, I'll run that: a guest touching its memory while the host collapses
+the backing mapping, measured from inside the guest.
+
+> 
+> [...]
+> 
+> > There may be a way out -- a PMD migration entry over the table during
+> > the window, so the CPU never caches a walk to shoot down -- but that
+> > means teaching every pmd-level walker a new kind of entry, and I have
+> > not tried it.
+> 
+> I think we discussed that in the past and it's absolutely nasty.
+
+Let's leave this for now. I will give it a try when it gets its turn.
+
+> 
+> [...]
+> 
+> > Size
+> > ====
+> > 
+> > mm/ grows by 1915 lines net: 4475 added against 2560 deleted.
+> > 
+> That's quite a lot for something that reads like a cleanup at first.
+
+About half of that is comments. :)
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
