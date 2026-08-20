@@ -1,216 +1,189 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-213.mta0.migadu.com [91.218.175.213])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088C43AE18A;
-	Thu, 20 Aug 2026 06:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1DEF3AF644
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 06:12:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.213
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787205717; cv=none; b=k56H6lUrlWLScxWc7W3ISB815GQq6R4VDB+r2Qt/b20XR7R485fnasjOERy4MACjYiVN5/4cF9s6ure9MPMk/6xFVMwKP1zbfduCwMNcgy8EZ8fKikOtCQj+vWtYi7Ub/mocvOWfBKyD0VMCUi+0j4bHY96b+SiYvX+ZvZ6lnMs=
+	t=1787206374; cv=none; b=T0sYx2nvaiOb+nNc5ABHC/kBAyv6yI7d6lAlgtiIjEuxtlVxPfMdAqSJi2EFxltrJ1y4MwaJ/5OwNXyksWkiuxQU+M16thGFL9/wExDShRLKdHXJsOfHk4YQF6ZB5rDt81wfHCiM/vKGHLNBXjbwJxu//+bK123uGK2D0Oxwhu4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787205717; c=relaxed/simple;
-	bh=aChLoLYF4q5RF8gChg9lR6cBsqDXyCNpwMdOdsBpaSA=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=jxgTR6j/Q5/NJTqHQO7LfLd0wIZTGdZNwMF84GzQ1AhdikXhTvz4R8jvHEALWPRWHfu0lyCJMHXGrYeEfywQF7n2Fz+iIZH0wHzc3JFJ8soqGxvEtSpQJ6S7DrjX+qRPsFFd3mEGG6ZYe/azM3+BKxoIXRs573feUJBsjwJkYe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 9f46d1de9c5c11f19a56ed5b684f684d-20260820
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_MAILER_MTBG
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NAME, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED
-	DN_TRUSTED, SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED
-	SPF_NOPASS, DKIM_NOPASS, DMARC_NOPASS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:3c416136-d582-41b2-8861-65b0b7d07bf6,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:3c416136-d582-41b2-8861-65b0b7d07bf6,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:7d505ecffc03ec866331e12b37300df3,BulkI
-	D:2608180044547525HKYB,BulkQuantity:1,SF:17|19|38|64|66|78|80|81|82|83|102
-	|127|841|865|898,TC:nil,Content:0|15|52,EDM:-3,IP:-2,URL:0,File:nil,RT:nil
-	,Bulk:40,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BR
-	R:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 9f46d1de9c5c11f19a56ed5b684f684d-20260820
-X-User: husong@kylinos.cn
-Received: from [192.168.110.173] [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <husong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 1706420389; Thu, 20 Aug 2026 14:01:44 +0800
-Message-ID: <a6d9ce4b-3880-48af-8fa6-dfa7129c0464@kylinos.cn>
-Date: Thu, 20 Aug 2026 14:01:39 +0800
+	s=arc-20240116; t=1787206374; c=relaxed/simple;
+	bh=J3As6mLmBqXoLEZhAfPKlRCMlDdzNNR6LV3rcJ1y4vk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bP3HdTW3ZSzrEwyx5KJ6jJ6mHdKmeQx2PJdIauvdig3G4kFgI32Vj3ggXHRAopfC2AbXnu+Xpcm5P01iijHI5YiGgOjDQ7ZrrJBBzRYvHk76Aa9Y5b+ztbKIyAU5vlsOB/on+BH4nff36XznXe3SrXdiNRJ8Y10xELxpxgcuYxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KvjRkhf6; arc=none smtp.client-ip=91.218.175.213
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KvjRkhf6"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=J3As6mLmBqXoLEZhAfPKlRCMlDdzNNR6LV3rcJ1y4vk=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787206369; v=1; x=1787811169;
+ b=KvjRkhf63VLvI9p0thnW5KrSmoNym7K4ZHsBi7TXaDp6s1dxCcDI0uXiKtTvdRlAL8T/CWYJ
+ Otp0PAlh/DrKIr3cEDJNQsWHSpvQ91gt8CzUjARdXEx1uxBKQY0O0WD5mzxvksiHOwgNLJrpVSW
+ Ogn9OQjoPthNNoAdguHhixhE=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from teawater-KVM-Virtual-Machine (39.156.73.13)
+	by smtp.migadu.com with ESMTPS id 8044d5bea338e0fc;
+	Thu, 20 Aug 2026 06:12:48 +0000
+X-Mizu-Trace-ID: 8044d5bea338e0fc
+X-Migadu-Flow: FLOW_OUT
+From: "Hui Zhu" <hui.zhu@linux.dev>
+To: Roman Gushchin <roman.gushchin@linux.dev>,
+	JP Kobryn <inwardvessel@gmail.com>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Barry Song <baohua@kernel.org>,
+	Geliang Tang <geliang@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+Subject: [PATCH bpf-next v4 0/2] bpf: BPF-driven proactive memcg reclaim
+Date: Thu, 20 Aug 2026 14:12:25 +0800
+Message-ID: <cover.1787205002.git.zhuhui@kylinos.cn>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: husong@kylinos.cn, linux-mm@kvack.org, shuah@kernel.org,
- david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- surenb@google.com, mhocko@suse.com, peterx@redhat.com,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/3] selftests/mm: emit TAP header and use TAP skip in
- mremap_test
-To: Usama Anjum <usama.anjum@arm.com>, akpm@linux-foundation.org,
- rppt@kernel.org, sarthak.sharma@arm.com
-References: <20260815080716.3596514-1-husong@kylinos.cn>
- <20260815080716.3596514-3-husong@kylinos.cn>
- <1787017182354310.22.seg@mailgw.kylinos.cn>
-From: Song Hu <husong@kylinos.cn>
-In-Reply-To: <1787017182354310.22.seg@mailgw.kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hi, Usama
+From: Hui Zhu <zhuhui@kylinos.cn>
 
-在 2026/8/17 23:44, Usama Anjum 写道:
-> On 15/08/2026 9:07 am, Song Hu wrote:
->> mremap_test calls ksft_set_plan() without ksft_print_header(), and its
->> get_mmap_min_addr() skip path uses a bare exit(KSFT_SKIP) that prints no
->> TAP line, so its output is not valid KTAP.  Add the header and switch
->> the skip to ksft_exit_skip().
->>
->> Also fix two more KTAP compliance issues spotted in review:
->>
->> - get_mmap_min_addr() calls strerror(errno) after fclose(), which may
->>   clobber errno; save errno before fclose() instead.
->>
->> - Some ksft_*() messages embed "\n\t", so the text after each embedded
->>   newline is printed without the "# " prefix.  Split those into separate
->>   messages.
->>
->> Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
->> Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
->> Signed-off-by: Song Hu <husong@kylinos.cn>
->> ---
->>  tools/testing/selftests/mm/mremap_test.c | 41 +++++++++++++-----------
->>  1 file changed, 23 insertions(+), 18 deletions(-)
->>
->> diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
->> index 131d9d6db867..28f151daabe4 100644
->> --- a/tools/testing/selftests/mm/mremap_test.c
->> +++ b/tools/testing/selftests/mm/mremap_test.c
->> @@ -111,18 +111,17 @@ static unsigned long long get_mmap_min_addr(void)
->>  		return addr;
->>  
->>  	fp = fopen("/proc/sys/vm/mmap_min_addr", "r");
->> -	if (fp == NULL) {
->> -		ksft_print_msg("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
->> -			strerror(errno));
->> -		exit(KSFT_SKIP);
->> -	}
->> +	if (!fp)
->> +		ksft_exit_skip("Failed to open /proc/sys/vm/mmap_min_addr: %s\n",
->> +			       strerror(errno));
-> 
-> The skip conditions are usually at the start of the test before we set
-> the total number planned tests. If skip like this happens later, it
-> still counts as failure. I found the following corresponding output
-> with this patch:
-> 
-> TAP version 13
-> # Test configs:
-> # threshold_mb=4
-> # pattern_seed=1786980558
-> 1..26
-> ok 1 # SKIP Failed to read /proc/sys/vm/mmap_min_addr: Success
-> # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
-> # Planned tests != run tests (26 != 1)
-> # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
-> MREMAP_FORCED_SKIP_RC=4
-> ### MREMAP FORCED READ-SKIP END
-> 
+This series lets a BPF program decide when to trigger memcg reclaim
+and how aggressively to do it, based on whatever runtime signal it
+chooses to observe -- rather than reclaim only being triggered once a
+cgroup's usage crosses a fixed threshold. The core idea is a pair of
+new kfuncs, bpf_proactive_reclaim() and
+bpf_proactive_reclaim_swappiness(), which give BPF direct access to
+the proactive reclaim path so this decision can be made in BPF policy
+rather than hard-coded threshold logic.
 
-Right, get_mmap_min_addr() is first reached from deep inside
-run_mremap_test_case(), long after the plan is set.  v3 caches
-mmap_min_addr in main(), right after ksft_print_header() and before
-ksft_set_plan(), so the skip paths now run before the plan.  Reproducing
-your scenario by injecting a read failure on the sysctl (LD_PRELOAD
-fopen shim handing the test /dev/null for it):
+This was originally part of a larger series posted here [1].
+That series also adds a memcg BPF struct_ops (memcg_charged,
+memcg_uncharged, below_low, below_min) for synchronous, in-line memory
+protection decisions. That mechanism and this one solve different
+problems -- struct_ops hooks run inline on the charge/reclaim path,
+while the kfuncs here are for asynchronous, out-of-band reclaim
+decided independently by a BPF program -- so they are reviewed as
+separate series. This series carries only the async reclaim piece.
 
-	TAP version 13
-	1..0 # SKIP Failed to read /proc/sys/vm/mmap_min_addr: Success
+Compared to v1, the kfunc interface has been reworked based on review
+feedback: instead of a thin wrapper around
+try_to_free_mem_cgroup_pages() exposing raw gfp/reclaim-option knobs,
+the series now provides use-case-driven kfuncs that perform one
+proactive reclaim pass with the same parameters memory.reclaim uses.
+The bpf_thread_wq patches from v1 (old patches 2-3) are dropped from
+this series: following the discussion in [2], the cgroup-aware
+workqueue is being superseded by a disaggregated set of async
+primitives (bpf_kthread/bpf_waitq) that will be developed separately
+(discussion in [3]), and the selftest now queues its reclaim work
+through bpf_wq.
 
-Thanks,
-Song
+Patch 1 adds bpf_proactive_reclaim() and
+bpf_proactive_reclaim_swappiness(), sleepable kfuncs that perform one
+reclaim pass on a target memcg, like a write to memory.reclaim: swap
+is allowed, and the anon/file balance follows the cgroup's swappiness
+or an explicit override in [MIN_SWAPPINESS, MAX_SWAPPINESS] plus
+SWAPPINESS_ANON_ONLY. Both go through a shared helper,
+bpf_proactive_reclaim_pages(), which guards against reclaim recursion
+and calls try_to_free_mem_cgroup_pages() with GFP_KERNEL and
+MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE, the same parameters
+user_proactive_reclaim() uses, and unlike memory.reclaim they do not
+retry until the requested size is reached. Both refuse to run when
+the caller already holds PF_MEMALLOC or has a non-NULL
+current->reclaim_state, since a nested try_to_free_mem_cgroup_pages()
+would clobber the outer reclaim's current->reclaim_state (e.g. MGLRU
+dereferences current->reclaim_state->mm_walk); the reclaim_state
+check also closes the window where try_to_free_mem_cgroup_pages() has
+installed it but not yet set PF_MEMALLOC, reachable by a sleepable
+program attaching fentry to the generated trace iterator function.
+The size argument and the return value are both in bytes, matching
+the byte-based unit of bpf_mem_cgroup_usage() and
+bpf_mem_cgroup_page_state() so callers can mix them without manual
+page/byte conversions. An out-of-range swappiness is reported with
+(unsigned long)-1 rather than 0, since 0 cannot be told apart from a
+pass that reclaimed nothing.
 
->>  
->>  	n_matched = fscanf(fp, "%llu", &addr);
->>  	if (n_matched != 1) {
->> -		ksft_print_msg("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
->> -			strerror(errno));
->> +		int err = errno;
->> +
->>  		fclose(fp);
->> -		exit(KSFT_SKIP);
->> +		ksft_exit_skip("Failed to read /proc/sys/vm/mmap_min_addr: %s\n",
->> +			       strerror(err));
->>  	}
->>  
->>  	fclose(fp);
->> @@ -1164,10 +1163,11 @@ static void run_mremap_test_case(struct test test_case, int *failures,
->>  					    rand_addr);
->>  
->>  	if (remap_time < 0) {
->> -		if (test_case.expect_failure)
->> -			ksft_test_result_xfail("%s\n\tExpected mremap failure\n",
->> -					      test_case.name);
->> -		else {
->> +		if (test_case.expect_failure) {
->> +			ksft_print_msg("%s: expected mremap failure\n",
->> +				       test_case.name);
->> +			ksft_test_result_xfail("%s\n", test_case.name);
->> +		} else {
->>  			ksft_test_result_fail("%s\n", test_case.name);
->>  			*failures += 1;
->>  		}
->> @@ -1177,11 +1177,13 @@ static void run_mremap_test_case(struct test test_case, int *failures,
->>  		 * was faulted in.
->>  		 */
->>  		if (threshold_mb == VALIDATION_NO_THRESHOLD ||
->> -		    test_case.config.region_size <= threshold_mb * _1MB)
->> -			ksft_test_result_pass("%s\n\tmremap time: %12lldns\n",
->> -					      test_case.name, remap_time);
->> -		else
->> +		    test_case.config.region_size <= threshold_mb * _1MB) {
->> +			ksft_print_msg("%s: mremap time: %12lldns\n",
->> +				       test_case.name, remap_time);
->>  			ksft_test_result_pass("%s\n", test_case.name);
->> +		} else {
->> +			ksft_test_result_pass("%s\n", test_case.name);
->> +		}
->>  	}
->>  }
->>  
->> @@ -1250,13 +1252,16 @@ int main(int argc, char **argv)
->>  	time_t t;
->>  	FILE *maps_fp;
->>  
->> +	ksft_print_header();
->> +
->>  	pattern_seed = (unsigned int) time(&t);
->>  
->>  	if (parse_args(argc, argv, &threshold_mb, &pattern_seed) < 0)
->>  		exit(EXIT_FAILURE);
->>  
->> -	ksft_print_msg("Test configs:\n\tthreshold_mb=%u\n\tpattern_seed=%u\n\n",
->> -		       threshold_mb, pattern_seed);
->> +	ksft_print_msg("Test configs:\n");
->> +	ksft_print_msg("threshold_mb=%u\n", threshold_mb);
->> +	ksft_print_msg("pattern_seed=%u\n", pattern_seed);
->>  
->>  	/*
->>  	 * set preallocated random array according to test configs; see the
-> 
-> Thanks,
-> Usama
+Patch 2 (selftests/bpf: add memcg async reclaim test) ties the kfuncs
+into a worked example: it watches the WORKINGSET_REFAULT_FILE counter
+of a high-priority cgroup as a proxy for memory-pressure impact, and
+once it starts climbing, proactively reclaims memory from a
+low-priority cgroup via bpf_proactive_reclaim(), with the reclaim
+work queued asynchronously through bpf_wq. The test asserts that the
+monitored cgroup's workload finishes faster once async reclaim kicks
+in, and -- as timing alone cannot distinguish a working reclaim from
+a no-op one -- that the BPF program actually made reclaim calls and
+reclaimed bytes, via counters it exports through its .bss. This
+demonstrates the end-to-end use case: BPF observes pressure on the
+cgroup it wants to protect, and reclaims from the cgroup it wants to
+reclaim from, in one self-contained mechanism. Note that, without
+bpf_thread_wq, the CPU cost of the reclaim work is not yet attributed
+to a chosen cgroup; that part waits for the async primitives work
+mentioned above.
+
+Changelog:
+v4:
+According to the comments of bot+bpf-ci and sashiko, also check
+current->reclaim_state to close the fentry-on-trace-iter recursion
+window in bpf_in_reclaim_context.
+Return bytes instead of pages ( nr * PAGE_SIZE ) in
+bpf_proactive_reclaim_pages and bpf_proactive_reclaim_swappiness.
+Return (unsigned long)-1 on out-of-range swappiness (was 0).
+Kdoc of both kfuncs: updated Return descriptions; added FS-lock deadlock
+warning to bpf_proactive_reclaim.
+Fix potential child process leak in selftests.
+Use _exit() instead of exit() in forked children in selftests.
+Rename reclaimed_pages to reclaimed_bytes in selftests.
+Fix comments issues in selftests.
+v3:
+According to the comments of bot+bpf-ci, add a shared helper
+bpf_proactive_reclaim_pages() that is called by bpf_proactive_reclaim
+and bpf_proactive_reclaim_swappiness.
+According to the comments of sashiko and bot+bpf-ci, fix the issues of
+selftests.
+v2:
+According to the comments of Shakeel Butt, replace
+bpf_try_to_free_mem_cgroup_pages() with
+bpf_proactive_reclaim(memcg, size) and
+bpf_proactive_reclaim_swappiness(memcg, size, swappiness).
+According to the comments of Kumar Kartikeya Dwivedi, drop patch 2
+and patch 3.
+Remove bpf_thread_wq code in patch 4.
+According to the comments of sashiko-bot, fix the issues of selftests.
+
+[1] https://sashiko.dev/#/message/cover.1779760876.git.zhuhui%40kylinos.cn
+[2] https://sashiko.dev/#/message/1b58d56976202f26818d31dbd0da2ecb2e2460f5%40linux.dev
+[3] https://sashiko.dev/#/message/DKNHV09PBQZP.IRQL20BY574I%40gmail.com
+
+Hui Zhu (2):
+  mm/bpf: Add bpf_proactive_reclaim kfuncs
+  selftests/bpf: add memcg async reclaim test
+
+ mm/bpf_memcontrol.c                           | 118 +++++
+ .../bpf/prog_tests/memcg_async_reclaim.c      | 480 ++++++++++++++++++
+ .../selftests/bpf/progs/memcg_async_reclaim.c | 181 +++++++
+ 3 files changed, 779 insertions(+)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/memcg_async_reclaim.c
+ create mode 100644 tools/testing/selftests/bpf/progs/memcg_async_reclaim.c
+
+-- 
+2.53.0
 
