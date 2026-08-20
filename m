@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BE2E2EBB8D;
-	Thu, 20 Aug 2026 08:40:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20F923B8922;
+	Thu, 20 Aug 2026 08:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787215257; cv=none; b=Ho3zmwAL++1wYZAD9aymKRoWWqKmD5NA7durG/LobpcJBDEKq6ylHJZrGGsLrYSBHeUKXuL40gryvD+0yQ2lneZUkyWzEWSV4J5macADg7MfyK00GvY5GYnfbdcOxs91SqLKzsCrj9j5GvWgVzvR90ImW6pKtmYD+c+RNS5mb4E=
+	t=1787215263; cv=none; b=kJqfMY/LywnUxW/IP0vJFNlrHcLeqAkm0IQpsxzv0VfxzY5Mp1eYCWlBvMG3AGhzugaOSI5YME3NbTG4L6G1O2PGvarXd9SLK8Ms5Uoqb+LjRZHkrEQW2ZSGTM3tdaRntzeN+yk0wEp7Z1N04lCUt7g6NoCxywuFX0WGaNrUyjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787215257; c=relaxed/simple;
-	bh=zlEcv6yiOLdHir22+kkdgf6q2jJyPudv5uH94YWZkQo=;
+	s=arc-20240116; t=1787215263; c=relaxed/simple;
+	bh=EWf4RYVwK2I9D/8mQ51gmq1CIEh9zad3AqWrI7wCKM4=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=E13RiMaUDUsTYRrzfgLqY7fKhAFjlhf9kdvPB0ocbFIPETmOmYyz+JpXHwNIdSBznKfI21zaYoFqNXUQyCWA5vLow0ceC5IMYBt/5YMMUegMXZ1GQXZT1Z/nBmK9wmDGrSZlboI/Tt9JE9HZ8kHkhwwo7W70hotiifmsMY2DkwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ivA5gWwo; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=FrJT0qNiObamU2jK37hizt7g5xXBtVdDGaPi7yc2GoimJLwSjMuRfZmok/GUSsymk9az2vCb64f1Oh1SN9Qh2uxErtoeZg2tmZN5TERfLD9kMLhxrPJq6gijafrZxvMvstPzGBCdbMQDL00cIiG8JvaFCoRrNE5VeXd5wMlrXZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SqXc3BNJ; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ivA5gWwo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA301F000E9;
-	Thu, 20 Aug 2026 08:40:50 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SqXc3BNJ"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ECDB1F00A3D;
+	Thu, 20 Aug 2026 08:40:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787215256;
-	bh=gBdjBx1YsDTFwnZ3I58K5RxANHs66TKFjnUSFDktRdc=;
+	s=k20260515; t=1787215261;
+	bh=TH8icUmIsFqcx2XyjrrIGOwMDuLcmtY+UH0kZbaRyrM=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=ivA5gWwoA5e/8ObfYdUslPWKBktQN8We+u7eqmXGqWx6wV4i3FnezogcK8DARaDdD
-	 qvLOAaM1T7LfWWSXrpreNCWDD2U9MLDfdkHiAuRhQzzglatIj38K8m00QbYdLrUcWg
-	 nvAbMLQ2wDbCgb/Rgi9VI4F3aXWQOft3d6/xD68fThfOlyUAG3fc8A5qxpMZKAwbCw
-	 889CtZwTeWR2cxPrNTq075JIDkUA7HDYG1cajaZWy4unl8e5Ltrfkb8yt7MZDEJvC/
-	 XPccEyXGiUQuWgytEw0ZgcrYoH1O3ZzGWw9djkNFB6UeAlvYOVr/Cdf8QPpMKCaUTf
-	 yMBZJITjP6IYQ==
+	b=SqXc3BNJnZsXg3qq6Qf8ToulTCVa9Es0x+UV/0KzHsCmHQlYf4ZfBACOUq5rYZ/LX
+	 qNNWRDm4eC2uvdlqfzr0DDVu6FG6cKx2yTbrIxjvZ1zSBlTsrW8r1BzX9N+5O1jeif
+	 Bld8ATzn9dRJ6mdNhxsmUIA8tTHRp3M33rXKxIt9KZV6GYTWQ+LkeV5f6yOGxYnIdL
+	 MGafhU4SNKwZdgVwR6qb0GsycixlKNUP2wnK9EVDcY62mzfqhTXvJwEXp9nR63oysA
+	 FnTrDFXeYila7L4Rthwj+Mf0owS/1uIUdlCOQ5YtWOvxoBw3zpLo6bswTT4COd9odB
+	 sxRNNqN1mpSxA==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,8 +34,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v4 05/19] selftests/mm: make the swap cases' swapout
- reliable
+Subject: Re: [PATCH v4 06/19] selftests/mm: stop khugepaged during the
+ MADV_COLLAPSE cases
 From: Mike Rapoport <rppt@kernel.org>
 To: Kiryl Shutsemau <kirill@shutemov.name>
 Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
@@ -46,101 +46,60 @@ Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
  vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
  agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, kas@kernel.org
-In-Reply-To: <20260815015901.1236937-6-kirill@shutemov.name>
+In-Reply-To: <20260815015901.1236937-7-kirill@shutemov.name>
 References: <20260815015901.1236937-1-kirill@shutemov.name>
- <20260815015901.1236937-6-kirill@shutemov.name>
+ <20260815015901.1236937-7-kirill@shutemov.name>
 Date: Thu, 20 Aug 2026 11:40:35 +0300
-Message-Id: <178721523516.2799959.17614116166980239496.b4-review@b4>
+Message-Id: <178721523516.2799959.13966792702490563774.b4-review@b4>
 X-Mailer: b4 0.17-dev
 
-> collapse_swapin_single_pte() and collapse_max_ptes_swap() swap a range out
-> and then require smaps to report exactly the count they asked for.  Two
-> things keep that count from arriving.
+> __madvise_collapse() turns THP off before each MADV_COLLAPSE, both to keep
+> khugepaged out of the range and to prove MADV_COLLAPSE ignores the setting.
+> It clears the global controls only, which is no longer enough.  A per-order
+> control overrides them, and -s leaves the source order at "always", so
+
+Nit: description of '-s' would be nice :)
+
+> khugepaged collapses the very range the case is working on.  The case then
+> fails on a collapse that was interfered with rather than refused.
 > 
-> MADV_PAGEOUT is best effort, so the count often turns up a moment late.
+> Clear the per-order controls too.  Set them to "inherit", not "never".
+> khugepaged honours the global never and stays out.  A forced shmem collapse
+> takes the order it builds from these very controls, and still finds one.
 > 
-> And wait_for_scan() leaves MADV_HUGEPAGE behind, so khugepaged is still
-
-"... leaves range as eligible for collapsing, so khugepaged is still
-working on it."
-
-> working on the range.  Collapsing a range with up to max_ptes_swap pages
-> swapped out means reading them back in, so the daemon empties the swap as
-> fast as the case fills it.  On arm64 with 64K pages max_ptes_swap is 1024
-> pages, which is 64M a step, and the case loses:
-
-".. the case looses the race:"
-
-> 
->     # Swapout 1024 of 8192 pages... Fail
->     not ok 10 collapse_max_ptes_swap
-> 
-> Ask again for up to two seconds, with the range held out of the daemon's
-> reach while asking.  The collapse each case runs next puts MADV_HUGEPAGE
-> back, so only the setup is affected.
-
-"Retry several times for up to two seconds meanwhile holding the range
-out of the khugepaged reach. The collapse each case runs next restores
-MADV_NOHUGEPAGE, so only setup is affected"
-
-> 
-> If the pages still will not go, skip.  A machine with no swap, or swap too
-
-"If the pages still won't swap out, skip".
-
-> small, full, capped by a memcg or busy with writeback, is not the kernel
-> under test refusing.  An error from madvise() itself still ends the run.
-> 
+> Fixes: 9f0704eae8a4 ("selftests/mm/khugepaged: enlighten for multi-size THP")
 > Assisted-by: Claude-Code:claude-opus-5
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@arm.com>
-> Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 >
 > diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index b436b401e2ea..a3d14cc1a2bf 100644
+> index a3d14cc1a2bf..5aa92de93ec1 100644
 > --- a/tools/testing/selftests/mm/khugepaged.c
 > +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -241,6 +241,41 @@ static bool check_swap(void *addr, unsigned long size)
->  	return swap;
->  }
+> @@ -572,8 +572,8 @@ static bool is_anon(struct mem_ops *ops)
+>  static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  			       struct mem_ops *ops, bool expect)
+>  {
+> -	int ret;
+>  	struct thp_settings settings = *thp_current_settings();
+> +	int ret, i;
 >  
-> +/*
-> + * Page the range out and wait for the swap count to say so.
-> + *
-> + * Two things get in the way.  MADV_PAGEOUT is best effort:
-> + * shrink_folio_list() leaves a folio alone when it cannot reclaim it right
-> + * away, and one still under writeback from an earlier pageout is the common
-> + * case, so the count the caller asks for arrives a moment later.  And a range
-> + * an earlier collapse left MADV_HUGEPAGE is one khugepaged is still working
-> + * on: collapsing a range with up to max_ptes_swap pages swapped out means
-> + * reading those pages back in, so the daemon undoes the pageout as fast as it
-> + * is asked for.  Keep the range out of its reach; the collapse the caller runs
-> + * next puts MADV_HUGEPAGE back.
-> + *
-> + * Failing to get the pages out is the machine's answer, not the kernel's --
-> + * swap too small, swap full, a memcg cap, a folio still under writeback -- so
-> + * callers skip rather than fail.  An error from madvise() is different, and
-> + * ends the run here.
+>  	ksft_print_msg("%s...", msg);
+>  
+> @@ -586,9 +586,20 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  	/*
+>  	 * Prevent khugepaged interference and tests that MADV_COLLAPSE
+>  	 * ignores /sys/kernel/mm/transparent_hugepage/enabled
+> +	 *
+> +	 * The per-order controls have to go too, not just the global one: a
+> +	 * source order left at "always" -- which -s does -- lets khugepaged
+> +	 * collapse the very range the case is working on.  Set them to
+> +	 * "inherit", not "never".  khugepaged honours the global never and
+> +	 * stays out.  A forced shmem collapse takes the order it builds from
+> +	 * these very controls, and still finds one.
 
-I'd replace this cumbersome comment with
-
-> + */
-> +static bool swapout_range(void *p, unsigned long size)
-> +{
-> +	int i;
-> +
-
-	/* prevent khugepaged from swapping into this range */
-
-> +	if (madvise(p, size, MADV_NOHUGEPAGE))
-> +		ksft_exit_fail_perror("madvise(MADV_NOHUGEPAGE)");
-> +
-
-	/*
-	 * retry several times because MADV_PAGEOUT is best effort.
-	 * sleep between the retries to give a chance for outstanding
-	 * writebacks for pages being swapped out to finish.
-	 */
+From my experience LLMs tend to add lengthy comments that describe their
+actions in the moment. Adding to the prompt an instruction to make
+comments more concise and in the global context usually helps :)
 
 -- 
 Sincerely yours,
