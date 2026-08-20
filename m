@@ -1,60 +1,60 @@
-Received: from pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com [35.83.148.184])
+Received: from pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com [52.26.1.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 326B8442107;
-	Thu, 20 Aug 2026 12:36:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=35.83.148.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E359A442FBE;
+	Thu, 20 Aug 2026 12:36:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=52.26.1.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787229378; cv=none; b=N31/WHIf8jzFtG03RzI7tHvJRebb0BSiI54EGwJWgxI44vXsWFrMPEmiWnd/Gll+K/bEShS4ew7pLO3/1jyte3n/7NQWn7J9AYbAifbkqo2KX5QFaaRqR1bGpXBDAv3o9vPOwOgalQz1Tau/f7DmVBpVkCZaJ2AdQOt5JaulbEA=
+	t=1787229408; cv=none; b=PvBy6aOp08KFv93tCxhQUi8E+eWRmZG0HIo/rY+/zvzj1etJSshrjt0QUQ4Y8qsHb/86CrBUBgwJZvFYedq4J8s3t1DIr5N7ZbVFjLOALrrHs5UAcBaKqYnSy5MANFNnQfALAVoaFqD/0gKCfaN3bUaoR5qGKtL2HQLPKR2LTZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787229378; c=relaxed/simple;
-	bh=j9ZvZCwiEUWO4OekhUKTi601qeDSu0iQM2/HyyDMW8g=;
+	s=arc-20240116; t=1787229408; c=relaxed/simple;
+	bh=7jou5J1V5WhQ8JPJPMA+mGod2e8BORQN/EQKB8JEnpI=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lqA4NqubsTJt2vT3Aj8yBei8q0JMaV27mDRNLdQTCG/2L7vpk2yFQAU3aDuaMmnjNS70hLhg4NsWykTYPrbWwA81iWhwDEcW4yZSac3zIYg83v8h9sjqrnXabSkaTj1bEWSd30dobNZNrZCSSe1/fJYEgtirgelspKVXLCnulFk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=ifewejVC; arc=none smtp.client-ip=35.83.148.184
+	 MIME-Version:Content-Type; b=WZQR+Y3rsj6Qzzh7OkHEGTYMEFOqkBynjN+MRzhgyqJBDg/JkGY0GE3wXu6SKvybJckoZa/HnUrgcpDPuNls22TIi/OvmadRITQvSJrC5bV4XlSoK8ZB+Ldj3Z4UtkNExibuevrZdXPdG+8LSA6y0V2OEZ0gZ/C3PAQJgp21KpI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.com; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=iiMgND7e; arc=none smtp.client-ip=52.26.1.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="ifewejVC"
+	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="iiMgND7e"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1787229377; x=1818765377;
+  t=1787229406; x=1818765406;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=CP4CgN2KKeU8iTxhY+zaSLMyBlds3cHioUSm+sgVwrY=;
-  b=ifewejVCVPHsgHC/ruzD6853DYN/0HWySC2cOKvREZ8XjoljpOOkTrYA
-   O9ogq5XNWFDfuZ0CRv/XGb3e6RXrpUGuDLIheNaMXI6fasX/cx3KtEnNT
-   9ynYHbRwSi0Q3JDqDD+pgV10VD0ifcrwuUzdDqroC/Y812na5ytoOcTg+
-   oaiJAz4JPD8SbKkpQh6p8GNksQyv6Kdr6RMkLSPoAuqmegoeNs3pDcVRB
-   R9CHi/5NCHMwFNgSvWjhqcb+WEWTK9LGIDPsak1AcUNwUpDC20QkiLw0H
-   2U4pDeyGhaWcZx8LgHkDkoL5/Hp4IYB1Dn0/g2gE/9rShmnxNhM2kWMKI
-   Q==;
-X-CSE-ConnectionGUID: SVf3vkqUSeOCG6ngRgZZHg==
-X-CSE-MsgGUID: QGeJ5xffTaCPEomrTWKMEw==
+  bh=UY9++tBrj+ufFcnIOLtX0X/zdoGWUMqnOXF6hmcyc7k=;
+  b=iiMgND7e0VXoZ281b1+NTnf6Eubtd7ZeBkevND+7p6pYTGgYVTb1pGV4
+   b8q/7khWIGo+RR7qxkjBz/D24Sjw7O7dmZ6WuMPf+HfgqWstkJM1cFsxw
+   79iuGS7OO68wc+PhZFP4A7m4O85k66wP6qEa5BHu/OM02UpEV2frj9yaR
+   FIpCwp8jZGrpA+h9ESyo6H2rhN1WHQjPPu6+oZusEMGm9iKqX7PGiNLnA
+   urVIm6QlkWeQIR3z+cwQ4ZBHgwW5DZ8M0mXflImmytxKEcPKXqhh5bbYf
+   PBc8gGTeDIvMVwYv5iqMFMw1KPfplroHvavE19PqZnxUpK9nF8BaPdGbZ
+   g==;
+X-CSE-ConnectionGUID: tlmAiYpNR1+cvg+f+nOFww==
+X-CSE-MsgGUID: mNzGAZpjRa6WWi3jqhpcNg==
 X-IronPort-AV: E=Sophos;i="6.25,233,1779148800"; 
-   d="scan'208";a="26269914"
+   d="scan'208";a="26500342"
 Received: from ip-10-5-12-219.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.12.219])
-  by internal-pdx-out-014.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 12:36:16 +0000
-Received: from EX19MTAUWA001.ant.amazon.com [205.251.233.236:30407]
+  by internal-pdx-out-006.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2026 12:36:46 +0000
+Received: from EX19MTAUWC001.ant.amazon.com [205.251.233.105:17980]
  by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.0.76:2525] with esmtp (Farcaster)
- id f91f801b-8da2-4fb8-84b5-049a1bff1d7d; Thu, 20 Aug 2026 12:36:16 +0000 (UTC)
-X-Farcaster-Flow-ID: f91f801b-8da2-4fb8-84b5-049a1bff1d7d
+ id 0315e42b-0882-42b2-9177-9e2275a5badf; Thu, 20 Aug 2026 12:36:46 +0000 (UTC)
+X-Farcaster-Flow-ID: 0315e42b-0882-42b2-9177-9e2275a5badf
 Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWA001.ant.amazon.com (10.250.64.204) with Microsoft SMTP Server
+ EX19MTAUWC001.ant.amazon.com (10.250.64.174) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Thu, 20 Aug 2026 12:36:16 +0000
+ Thu, 20 Aug 2026 12:36:45 +0000
 Received: from dev-dsk-jamz-1e-e35f4cd9.us-east-1.amazon.com (10.189.35.140)
  by EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Thu, 20 Aug 2026 12:36:15 +0000
+ Thu, 20 Aug 2026 12:36:44 +0000
 From: Jimmy Zuber <jamz@amazon.com>
 To: <miklos@szeredi.hu>, <shuah@kernel.org>
 CC: <fuse-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
 	<linux-kselftest@vger.kernel.org>, <jack@suse.com>, <joannelkoong@gmail.com>,
 	<bfoster@redhat.com>
-Subject: [PATCH v3 1/2] fuse: zero the partial EOF page when extending a file
-Date: Thu, 20 Aug 2026 12:35:32 +0000
-Message-ID: <20260820123533.190470-2-jamz@amazon.com>
+Subject: [PATCH v3 2/2] selftests/fuse: test post-EOF page zeroing when a file is extended
+Date: Thu, 20 Aug 2026 12:35:33 +0000
+Message-ID: <20260820123533.190470-3-jamz@amazon.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20260820123533.190470-1-jamz@amazon.com>
 References: <20260820123533.190470-1-jamz@amazon.com>
@@ -66,166 +66,436 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: EX19D033UWC001.ant.amazon.com (10.13.139.218) To
+X-ClientProxiedBy: EX19D031UWA003.ant.amazon.com (10.13.139.47) To
  EX19D001UWA001.ant.amazon.com (10.13.138.214)
 
-Extending a fuse file past a non-page-aligned EOF does not zero the tail of
-the old last page.  When that page is cached and has been mmap-dirtied beyond
-the old EOF, the now in-bounds tail is served to later reads as stale data
-rather than zeros, which violates POSIX file-extension semantics.
+Add a regression test for the bug where extending a file left the tail of
+the old partial EOF page exposing stale mmap-dirtied data instead of zeros.
 
-Some file systems get this zeroing automatically at writeback time
-(block_write_full_folio() / iomap_writeback_handle_eof() zero the tail of the
-folio straddling i_size).  A non-writeback caching fuse file system uses neither
-path, so it has to zero the tail itself from the size-extending paths, like
-XFS (xfs_file_write_zero_eof()) and ext4 (ext4_block_zero_eof()) do.
-pagecache_isize_extended() cannot be reused: it is a no-op when
-i_blocksize() >= PAGE_SIZE, and would increase the work in that function
-for use cases that don't need it, if changed to support this situation.
+The test is a self-contained raw /dev/fuse server (no libfuse dependency)
+that runs without writeback_cache and returns FOPEN_KEEP_CACHE, the
+configuration in which the bug is visible.  Its backing data is always zero
+in the hole, so any non-zero byte a read sees is stale page-cache data.
+All offsets are relative to the runtime page size.  Four cases:
 
-Add fuse_zero_partial_eof_folio(), which zeroes the tail of the old EOF
-folio, and call it up front from the three paths that extend a file,
-mirroring xfs_file_write_zero_eof() and ext4_block_zero_eof():
+  - write_extend: pollute the post-EOF tail, extend past it by writing into
+    a later page, and verify the tail reads back as zero;
+  - ftruncate_extend: same, but extend via ftruncate();
+  - fallocate_extend: same, but extend via fallocate() at the old EOF;
+  - extend_into_eof_page_preserves_data: an extending write landing inside
+    the old EOF page must not be clobbered by the zeroing.
 
-  - a buffered write whose position is past the old EOF (fuse_perform_write(),
-    before the page cache is filled);
-  - a size-extending setattr/truncate (fuse_do_setattr());
-  - a size-extending fallocate (fuse_file_fallocate()).
-
-Zeroing [old EOF, write start) before the write, rather than after it, keeps
-the zeroed range disjoint from the written data, so a write that lands inside
-the old EOF folio is preserved without special-casing.
-
-writeback_cache connections are unaffected, as their writes go through
-iomap_file_buffered_write(), which zeroes post-EOF folios.  The bug is
-observable on a non-writeback_cache server that returns FOPEN_KEEP_CACHE on
-writable files (without FOPEN_DIRECT_IO), and is caught by the new
-write_extend_eof fuse selftest.
+Each case fails without the fix and passes with it.
 
 Signed-off-by: Jimmy Zuber <jamz@amazon.com>
 ---
- fs/fuse/dir.c    |  3 +++
- fs/fuse/file.c   | 56 ++++++++++++++++++++++++++++++++++++++++++++++++
- fs/fuse/fuse_i.h |  1 +
- 3 files changed, 60 insertions(+)
+ .../selftests/filesystems/fuse/.gitignore     |   1 +
+ .../selftests/filesystems/fuse/Makefile       |   3 +
+ .../filesystems/fuse/write_extend_eof_test.c  | 368 ++++++++++++++++++
+ 3 files changed, 372 insertions(+)
+ create mode 100644 tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
 
-diff --git a/fs/fuse/dir.c b/fs/fuse/dir.c
-index 795e92037ce7..f6614ccef186 100644
---- a/fs/fuse/dir.c
-+++ b/fs/fuse/dir.c
-@@ -2282,6 +2282,9 @@ int fuse_do_setattr(struct mnt_idmap *idmap, struct dentry *dentry,
- 	 */
- 	if ((is_truncate || !is_wb) &&
- 	    S_ISREG(inode->i_mode) && oldsize != outarg.attr.size) {
-+		if (outarg.attr.size > oldsize)
-+			fuse_zero_partial_eof_folio(inode, oldsize,
-+						    outarg.attr.size);
- 		truncate_pagecache(inode, outarg.attr.size);
- 		invalidate_inode_pages2(mapping);
- 	}
-diff --git a/fs/fuse/file.c b/fs/fuse/file.c
-index cb8da4c06d17..57630ad0af66 100644
---- a/fs/fuse/file.c
-+++ b/fs/fuse/file.c
-@@ -21,6 +21,8 @@
- #include <linux/splice.h>
- #include <linux/task_io_accounting_ops.h>
- #include <linux/iomap.h>
-+#include <linux/highmem.h>
-+#include <linux/rmap.h>
+diff --git a/tools/testing/selftests/filesystems/fuse/.gitignore b/tools/testing/selftests/filesystems/fuse/.gitignore
+index 3e72e742d08e..fb51603fe419 100644
+--- a/tools/testing/selftests/filesystems/fuse/.gitignore
++++ b/tools/testing/selftests/filesystems/fuse/.gitignore
+@@ -1,3 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ fuse_mnt
+ fusectl_test
++write_extend_eof_test
+diff --git a/tools/testing/selftests/filesystems/fuse/Makefile b/tools/testing/selftests/filesystems/fuse/Makefile
+index 612aad69a93a..0c2c613af0ac 100644
+--- a/tools/testing/selftests/filesystems/fuse/Makefile
++++ b/tools/testing/selftests/filesystems/fuse/Makefile
+@@ -3,10 +3,13 @@
+ CFLAGS += -Wall -O2 -g $(KHDR_INCLUDES)
  
- static int fuse_send_open(struct fuse_mount *fm, u64 nodeid,
- 			  unsigned int open_flags, int opcode,
-@@ -1200,6 +1202,43 @@ static ssize_t fuse_send_write(struct fuse_io_args *ia, loff_t pos,
- 	return err ?: ia->write.out.size;
- }
+ TEST_GEN_PROGS := fusectl_test
++TEST_GEN_PROGS += write_extend_eof_test
+ TEST_GEN_FILES := fuse_mnt
  
+ include ../../lib.mk
+ 
++$(OUTPUT)/write_extend_eof_test: LDLIBS += -lpthread
++
+ VAR_CFLAGS := $(shell pkg-config fuse --cflags 2>/dev/null)
+ ifeq ($(VAR_CFLAGS),)
+ VAR_CFLAGS := -D_FILE_OFFSET_BITS=64 -I/usr/include/fuse
+diff --git a/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c b/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
+new file mode 100644
+index 000000000000..ca6ce6eca382
+--- /dev/null
++++ b/tools/testing/selftests/filesystems/fuse/write_extend_eof_test.c
+@@ -0,0 +1,368 @@
++// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * A size-extending operation is about to turn [@from, @to) -- the range past a
-+ * non-folio-aligned old EOF at @from -- into a hole that must read back as
-+ * zero.  If the old last folio is cached and was dirtied beyond the old EOF
-+ * (e.g. mmap stores into the post-EOF region, which are undefined until the
-+ * file grows), zero that tail so it is not exposed as stale data instead of
-+ * zeros (xfstests generic/363).  Only the folio straddling @from can hold such
-+ * bytes, so a single folio is handled, as in pagecache_isize_extended().
++ * Regression test for the fuse write-extend partial-EOF-page zeroing bug.
 + *
-+ * Callers hold i_rwsem, serialising this against concurrent writes and
-+ * truncates; it must not run under fi->lock, as it locks the folio.
++ * A buffered write that extends i_size past a non-page-aligned EOF must zero
++ * the tail of the old last page.  If an application has mmap'd that page and
++ * stored into the post-EOF region (undefined until the file grows), the
++ * now-in-bounds tail must read back as zero, not as the stale stored bytes.
++ *
++ * The bug is exposed on a non-writeback_cache server that keeps the page cache
++ * across the write (FOPEN_KEEP_CACHE without FOPEN_DIRECT_IO).  This test is a
++ * raw /dev/fuse server in that mode; the backing data is always zero in the
++ * hole, so any non-zero byte a read sees is stale page-cache data.
++ *
++ * Requires root to mount fuse.
 + */
-+void fuse_zero_partial_eof_folio(struct inode *inode, loff_t from, loff_t to)
++#define _GNU_SOURCE
++#include <errno.h>
++#include <fcntl.h>
++#include <linux/falloc.h>
++#include <pthread.h>
++#include <stdint.h>
++#include <string.h>
++#include <unistd.h>
++#include <sys/mman.h>
++#include <sys/mount.h>
++#include <sys/stat.h>
++#include <sys/uio.h>
++#include <linux/fuse.h>
++
++#include "../../kselftest_harness.h"
++
++#define FUSE_ROOT_ID	1
++#define FILE_INO	2
++#define MAX_WRITE	(128 * 1024)
++#define BACKING_SIZE	(4 * 1024 * 1024)
++#define POLLUTE		0xee
++
++/* Server-side state, shared with the responder thread. */
++struct server {
++	int fd;
++	unsigned char backing[BACKING_SIZE];	/* authoritative bytes */
++	uint64_t size;
++};
++
++static void reply(int fd, uint64_t unique, int error, void *data, size_t len)
 +{
-+	struct folio *folio;
-+	size_t offset, end;
++	struct fuse_out_header oh = {
++		.len = sizeof(oh) + (data ? len : 0),
++		.error = error,
++		.unique = unique,
++	};
++	struct iovec iov[2] = { { &oh, sizeof(oh) }, { data, len } };
 +
-+	if (from >= to)
++	/* Errors here are teardown races (device closed on unmount); ignore. */
++	if (writev(fd, iov, data ? 2 : 1) < 0)
 +		return;
-+
-+	folio = filemap_lock_folio(inode->i_mapping, from >> PAGE_SHIFT);
-+	if (IS_ERR(folio))
-+		return;
-+
-+	if (folio_mkclean(folio))
-+		folio_mark_dirty(folio);
-+
-+	if (folio_test_dirty(folio)) {
-+		offset = offset_in_folio(folio, from);
-+		end = min_t(loff_t, to - folio_pos(folio), folio_size(folio));
-+		folio_zero_segment(folio, offset, end);
-+	}
-+
-+	folio_unlock(folio);
-+	folio_put(folio);
 +}
 +
- bool fuse_write_update_attr(struct inode *inode, loff_t pos, ssize_t written)
- {
- 	struct fuse_conn *fc = get_fuse_conn(inode);
-@@ -1368,9 +1407,19 @@ static ssize_t fuse_perform_write(struct kiocb *iocb, struct iov_iter *ii)
- 	struct fuse_conn *fc = get_fuse_conn(inode);
- 	struct fuse_inode *fi = get_fuse_inode(inode);
- 	loff_t pos = iocb->ki_pos;
-+	loff_t old_size = i_size_read(inode);
- 	int err = 0;
- 	ssize_t res = 0;
- 
-+	/*
-+	 * If the write starts past a non-aligned EOF, zero the old EOF folio's
-+	 * tail before filling the page cache, so [old_size, pos) reads as the
-+	 * hole it is.  The write below fills from @pos, disjoint from this
-+	 * range.
-+	 */
-+	if (pos > old_size)
-+		fuse_zero_partial_eof_folio(inode, old_size, pos);
++static void fill_attr(struct fuse_attr *a, uint64_t ino, uint32_t mode,
++		      uint64_t size)
++{
++	memset(a, 0, sizeof(*a));
++	a->ino = ino;
++	a->mode = mode;
++	a->nlink = 1;
++	a->size = size;
++	a->blksize = sysconf(_SC_PAGESIZE);
++}
 +
- 	if (inode->i_size < pos + iov_iter_count(ii))
- 		set_bit(FUSE_I_SIZE_UNSTABLE, &fi->state);
- 
-@@ -2913,6 +2962,13 @@ static long fuse_file_fallocate(struct file *file, int mode, loff_t offset,
- 
- 	/* we could have extended the file */
- 	if (!(mode & FALLOC_FL_KEEP_SIZE)) {
-+		/*
-+		 * fallocate writes no data, so the whole extension past the old
-+		 * EOF is a hole; zero the old EOF folio's tail before publishing
-+		 * the new size.
-+		 */
-+		fuse_zero_partial_eof_folio(inode, i_size_read(inode),
-+					    offset + length);
- 		if (fuse_write_update_attr(inode, offset + length, length))
- 			file_update_time(file);
- 	}
-diff --git a/fs/fuse/fuse_i.h b/fs/fuse/fuse_i.h
-index 85f738c53122..ee3b91b56fef 100644
---- a/fs/fuse/fuse_i.h
-+++ b/fs/fuse/fuse_i.h
-@@ -1183,6 +1183,7 @@ long fuse_ioctl_common(struct file *file, unsigned int cmd,
- __poll_t fuse_file_poll(struct file *file, poll_table *wait);
- 
- bool fuse_write_update_attr(struct inode *inode, loff_t pos, ssize_t written);
-+void fuse_zero_partial_eof_folio(struct inode *inode, loff_t from, loff_t to);
- 
- int fuse_flush_times(struct inode *inode, struct fuse_file *ff);
- int fuse_write_inode(struct inode *inode, struct writeback_control *wbc);
++static void *server_thread(void *arg)
++{
++	struct server *s = arg;
++	static char buf[MAX_WRITE + 4096];
++
++	for (;;) {
++		ssize_t n = read(s->fd, buf, sizeof(buf));
++		struct fuse_in_header *ih = (void *)buf;
++
++		if (n < 0) {
++			if (errno == EINTR || errno == EAGAIN)
++				continue;
++			return NULL;	/* device closed on unmount */
++		}
++		if (n < (ssize_t)sizeof(*ih))
++			continue;
++
++		switch (ih->opcode) {
++		case FUSE_INIT: {
++			struct fuse_init_in *in = (void *)(ih + 1);
++			struct fuse_init_out out = {0};
++
++			/* No FUSE_WRITEBACK_CACHE: the exposed configuration. */
++			out.major = FUSE_KERNEL_VERSION;
++			out.minor = FUSE_KERNEL_MINOR_VERSION;
++			out.max_readahead = in->max_readahead;
++			out.max_write = MAX_WRITE;
++			out.max_background = 16;
++			out.congestion_threshold = 12;
++			out.flags = FUSE_MAX_PAGES;
++			out.max_pages = MAX_WRITE / sysconf(_SC_PAGESIZE);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_GETATTR: {
++			struct fuse_attr_out out = {0};
++			int root = ih->nodeid == FUSE_ROOT_ID;
++
++			out.attr_valid = 3600;
++			fill_attr(&out.attr, ih->nodeid,
++				  root ? (S_IFDIR | 0755) : (S_IFREG | 0644),
++				  root ? 0 : s->size);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_LOOKUP: {
++			struct fuse_entry_out out = {0};
++
++			out.nodeid = FILE_INO;
++			out.attr_valid = 3600;
++			out.entry_valid = 3600;
++			fill_attr(&out.attr, FILE_INO, S_IFREG | 0644, s->size);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_OPEN:
++		case FUSE_OPENDIR: {
++			struct fuse_open_out out = {0};
++
++			/* Keep the cache across the write, but not direct I/O. */
++			out.open_flags = FOPEN_KEEP_CACHE;
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_READ: {
++			struct fuse_read_in *in = (void *)(ih + 1);
++			uint64_t off = in->offset;
++			uint32_t size = in->size;
++
++			if (off >= BACKING_SIZE)
++				size = 0;
++			else if (off + size > BACKING_SIZE)
++				size = BACKING_SIZE - off;
++			reply(s->fd, ih->unique, 0, s->backing + off, size);
++			break;
++		}
++		case FUSE_WRITE: {
++			struct fuse_write_in *in = (void *)(ih + 1);
++			struct fuse_write_out out = {0};
++			uint64_t off = in->offset;
++			uint32_t size = in->size;
++
++			if (off < BACKING_SIZE) {
++				uint32_t c = size;
++
++				if (off + c > BACKING_SIZE)
++					c = BACKING_SIZE - off;
++				memcpy(s->backing + off, in + 1, c);
++				if (off + c > s->size)
++					s->size = off + c;
++			}
++			out.size = size;
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_SETATTR: {
++			struct fuse_setattr_in *in = (void *)(ih + 1);
++			struct fuse_attr_out out = {0};
++
++			if ((in->valid & FATTR_SIZE) && in->size <= BACKING_SIZE) {
++				if (in->size > s->size)
++					memset(s->backing + s->size, 0,
++					       in->size - s->size);
++				s->size = in->size;
++			}
++			out.attr_valid = 3600;
++			fill_attr(&out.attr, ih->nodeid, S_IFREG | 0644, s->size);
++			reply(s->fd, ih->unique, 0, &out, sizeof(out));
++			break;
++		}
++		case FUSE_FALLOCATE: {
++			struct fuse_fallocate_in *in = (void *)(ih + 1);
++			uint64_t end = in->offset + in->length;
++
++			/* Only plain (size-extending) fallocate is used here. */
++			if (!(in->mode & FALLOC_FL_KEEP_SIZE) &&
++			    end <= BACKING_SIZE && end > s->size) {
++				memset(s->backing + s->size, 0, end - s->size);
++				s->size = end;
++			}
++			reply(s->fd, ih->unique, 0, NULL, 0);
++			break;
++		}
++		case FUSE_FLUSH:
++		case FUSE_RELEASE:
++		case FUSE_RELEASEDIR:
++		case FUSE_FSYNC:
++		case FUSE_ACCESS:
++			reply(s->fd, ih->unique, 0, NULL, 0);
++			break;
++		case FUSE_FORGET:
++			break;
++		default:
++			reply(s->fd, ih->unique, -EOPNOTSUPP, NULL, 0);
++			break;
++		}
++	}
++}
++
++FIXTURE(fuse)
++{
++	struct server *srv;
++	pthread_t thread;
++	char dir[64];
++	long page;		/* runtime page size */
++	off_t eof;		/* mid-page EOF, page-relative */
++	int fd;			/* open test file */
++	char *map;		/* mmap of the EOF page */
++	int mounted;
++};
++
++FIXTURE_SETUP(fuse)
++{
++	char opts[128];
++	pthread_t t;
++
++	if (geteuid() != 0)
++		SKIP(return, "need root to mount fuse");
++
++	self->page = sysconf(_SC_PAGESIZE);
++	self->fd = -1;
++	self->map = MAP_FAILED;
++
++	self->srv = mmap(NULL, sizeof(*self->srv), PROT_READ | PROT_WRITE,
++			 MAP_SHARED | MAP_ANONYMOUS, -1, 0);
++	ASSERT_NE(MAP_FAILED, self->srv);
++
++	self->srv->fd = open("/dev/fuse", O_RDWR);
++	ASSERT_GE(self->srv->fd, 0);
++
++	strcpy(self->dir, "/tmp/fuse_weof_XXXXXX");
++	ASSERT_NE(NULL, mkdtemp(self->dir));
++
++	snprintf(opts, sizeof(opts),
++		 "fd=%d,rootmode=40000,user_id=0,group_id=0",
++		 self->srv->fd);
++	ASSERT_EQ(0, mount("fuse", self->dir, "fuse", 0, opts));
++	self->mounted = 1;
++
++	ASSERT_EQ(0, pthread_create(&t, NULL, server_thread, self->srv));
++	self->thread = t;
++}
++
++FIXTURE_TEARDOWN(fuse)
++{
++	if (self->map != MAP_FAILED)
++		munmap(self->map, self->page);
++	if (self->fd >= 0)
++		close(self->fd);
++	if (self->mounted)
++		umount2(self->dir, MNT_DETACH);
++	if (self->srv && self->srv != MAP_FAILED) {
++		if (self->srv->fd > 0)
++			close(self->srv->fd);
++		munmap(self->srv, sizeof(*self->srv));
++	}
++	if (self->dir[0])
++		rmdir(self->dir);
++}
++
++/*
++ * Create the test file with a mid-page EOF and mmap-store POLLUTE into its
++ * post-EOF tail (a legal store, undefined until the file grows).  Leaves the
++ * file open and the EOF page mapped in the fixture for the caller to extend.
++ */
++static void pollute_eof_tail(struct __test_metadata *_metadata,
++			     FIXTURE_DATA(fuse) * self)
++{
++	off_t eof = 2 * self->page + self->page / 4;
++	char path[128];
++	char *buf;
++
++	snprintf(path, sizeof(path), "%s/file", self->dir);
++	self->fd = open(path, O_RDWR | O_CREAT | O_TRUNC, 0644);
++	ASSERT_GE(self->fd, 0);
++	self->eof = eof;
++
++	buf = malloc(eof);
++	ASSERT_NE(NULL, buf);
++	memset(buf, 'A', eof);
++	ASSERT_EQ(eof, pwrite(self->fd, buf, eof, 0));
++	free(buf);
++
++	self->map = mmap(NULL, self->page, PROT_READ | PROT_WRITE, MAP_SHARED,
++			 self->fd, eof & ~(self->page - 1));
++	ASSERT_NE(MAP_FAILED, self->map);
++	memset(self->map + (eof & (self->page - 1)), POLLUTE,
++	       self->page - (eof & (self->page - 1)));
++}
++
++/* Assert the old post-EOF tail [eof, end of its page) now reads back as zero. */
++static void assert_tail_zeroed(struct __test_metadata *_metadata,
++			       FIXTURE_DATA(fuse) * self)
++{
++	off_t base = self->eof & ~(self->page - 1);
++	char *tail = malloc(self->page);
++	int i;
++
++	ASSERT_NE(NULL, tail);
++	ASSERT_EQ(self->page, pread(self->fd, tail, self->page, base));
++	for (i = self->eof & (self->page - 1); i < self->page; i++)
++		ASSERT_EQ(0, tail[i]);
++	free(tail);
++}
++
++/* Basic: pollute the post-EOF tail, extend past it by a later write. */
++TEST_F(fuse, write_extend)
++{
++	pollute_eof_tail(_metadata, self);
++	ASSERT_EQ(4, pwrite(self->fd, "data", 4, 5 * self->page + self->page / 3));
++	assert_tail_zeroed(_metadata, self);
++}
++
++/* Extend via ftruncate() rather than a write. */
++TEST_F(fuse, ftruncate_extend)
++{
++	pollute_eof_tail(_metadata, self);
++	ASSERT_EQ(0, ftruncate(self->fd, 8 * self->page));
++	assert_tail_zeroed(_metadata, self);
++}
++
++/* Extend via fallocate() starting at the old EOF. */
++TEST_F(fuse, fallocate_extend)
++{
++	pollute_eof_tail(_metadata, self);
++	ASSERT_EQ(0, fallocate(self->fd, 0, self->eof, 4 * self->page));
++	assert_tail_zeroed(_metadata, self);
++}
++
++/* A write landing inside the old EOF page must not clobber its own data. */
++TEST_F(fuse, extend_into_eof_page_preserves_data)
++{
++	off_t base, wr;
++	char *buf, *rd;
++	int i;
++
++	pollute_eof_tail(_metadata, self);
++	base = self->eof & ~(self->page - 1);
++	wr = base + 3 * self->page / 4;		/* starts in the EOF page */
++
++	buf = malloc(2 * self->page);
++	ASSERT_NE(NULL, buf);
++	memset(buf, 'B', 2 * self->page);
++	ASSERT_EQ(2 * self->page, pwrite(self->fd, buf, 2 * self->page, wr));
++	free(buf);
++
++	rd = malloc(self->page);
++	ASSERT_NE(NULL, rd);
++	ASSERT_EQ(self->page, pread(self->fd, rd, self->page, base));
++	/* [eof, wr) is hole -> zero; [wr, page) is written data -> 'B'. */
++	for (i = self->eof & (self->page - 1); i < wr - base; i++)
++		ASSERT_EQ(0, rd[i]);
++	for (i = wr - base; i < self->page; i++)
++		ASSERT_EQ('B', rd[i]);
++	free(rd);
++}
++
++TEST_HARNESS_MAIN
 -- 
 2.50.1
 
