@@ -1,106 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8A3381B05;
-	Thu, 20 Aug 2026 15:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 612083806DC;
+	Thu, 20 Aug 2026 15:23:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787239181; cv=none; b=j9k75fSXLPiIK5GL+sjKCKh9tNYUaYdOTLCxp7iUB1Nf5wntQG/Hxib1KYh84WzxgAmAw1xDfvsRXOu6PiI6E1Cb3axkUCcV4Of0UVbFE4j/dUslSk1fd+Tu5+xBUAKCc1fWblaHX89GRVZ/pKQjkhbNmgQ8itqXJzKs6DdEwYY=
+	t=1787239422; cv=none; b=VWIHVqVg2M4L81znvHtT9pu2x9gxNBtYL35bWnE9Um6UoR30nRV25m8e9EP/LlYSEVhecJfydhJLIo5RXVBzQy8sHTzsAxubNVOSz+wRxvv2A05XigP4FqydluzUrgwdSkNZdVyX9cqzU4i4H7f/2T3wyrPRd3QVj3lebt/+ZI0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787239181; c=relaxed/simple;
-	bh=+hcUe+OUgSlQkV7v2P+3uKFo88JRgku5IL1veTqJYl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Yn0V6DC4iw8BgUhkYK3sZbVNzyL4OuRXmMcrQmLaRBzarENlqmBBOFV5qVyJyk5WdKNpDA7u5Ou8Wx160JeO6l9WC9hCiex71j5XpMEia8AUF5CfBozZOASfFxUYYDhc3ca8yCI7a7Zuxn1R6PBBn0sQj8ZDFhpiwRSamcNFRN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geE15Eku; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geE15Eku"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B6F1F00A3E;
-	Thu, 20 Aug 2026 15:19:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787239180;
-	bh=b5hJuXbQ5dC9VlpMlCqdUtrRiywrezf0F9uuzsr0IXY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=geE15EkuV/lUtNOdTTHxH/hk2Tx/U5yHSm4N+DvJTQKO7lsaHxcbqdJ3pHZZGFjua
-	 eHYu9z2Ly5eIzxpDcP94K9UAJ77+WLKUwFJHmCw88GzSupH/qU7RdI/DIjQNbOfQSw
-	 MPoj0D1LEyy3EJegmFooEDF6f6WUDywE0DP1M0BVv+8rakExSJxmxtFMc5p8SbAbop
-	 /wVHhD+XNspcBvtjMZeLR/1IvcECqXMjqNkSB971KzwsKg4kAEOR65oW7aZe5VnR6X
-	 4WD+4oQcegob3+47+3J3pPivtZEh6g0Anl20SduPm6WttyslrpTULRWMOdM7N6/vBJ
-	 N8s707BKUDl8A==
-Date: Thu, 20 Aug 2026 16:19:34 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Leonardo Bras <leo.bras@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <c4d3ef8c-b5da-4435-81e7-7f9ee88b988d@sirena.org.uk>
-References: <aoXamcdKoMynTkpX@LeoBrasDK>
- <48be9e5d-357a-4863-8682-8b3f34c69723@sirena.org.uk>
- <aobUGyq8nInJYkdA@LeoBrasDK>
- <97ad6e83-b22b-4881-b644-66fa99f68d64@sirena.org.uk>
- <aocOi3wjcliZqoe7@LeoBrasDK>
+	s=arc-20240116; t=1787239422; c=relaxed/simple;
+	bh=S7qRTZlqwXfNF7x+B6/znvCPtA0nlYOj1914c8i9drI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IV1z0+H6Lz0JNSa0HOyPeKo0IIRkry/NTXwt1aATbJ0ivFKLQ7E+i/yQw1PiGphLlbElGZvEZObmpiuYnup+jBJ7n1BwGYoBVnWPFc8Ny+dFCT8tNw6/FxzWPf8g2m7bE6DXJtx0KVIv60MfTSHlHl6DIoYoWmqlgwtkhdBAM4U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09C711F000E9;
+	Thu, 20 Aug 2026 15:23:38 +0000 (UTC)
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Xu Yang <xu.yang_2@nxp.com>
+Cc: driver-core@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert@linux-m68k.org>
+Subject: [PATCH] drivers: base: test: DRIVER_PE_KUNIT_TEST should not select OF
+Date: Thu, 20 Aug 2026 17:23:29 +0200
+Message-ID: <8dfb4afaf70b59cd33af9296464395470405187e.1787239268.git.geert@linux-m68k.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="VryGsj2zZuDPeMrP"
-Content-Disposition: inline
-In-Reply-To: <aocOi3wjcliZqoe7@LeoBrasDK>
-X-Cookie: Happiness is a hard disk.
+Content-Transfer-Encoding: 8bit
 
+Enabling a (modular) test should not silently enable additional kernel
+functionality, as that may increase the attack vector for a product.
 
---VryGsj2zZuDPeMrP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Fix this by skipping the new test when OF support is disabled instead of
+selecting OF support.
 
-On Thu, Aug 20, 2026 at 03:28:39PM +0100, Leonardo Bras wrote:
-> On Thu, Aug 20, 2026 at 03:07:14PM +0100, Mark Brown wrote:
+Note that when OF support is disabled, the compiler optimizes away the
+then unused reference to of_fwnode_ops in of_node_init(), so linking
+succeeds.
 
-> > I think what would help here would be to move to generating more of the
-> > save/restore sequences rather than open coding them, we could have lists
-> > of registers and then use data about the feature dependencies that the
-> > architecture has (hopefully it's already in the MRS, I didn't check) to
-> > generate these optimised feature checks rather than having to open code
-> > them.  Possibly even list features and generate some of the register
-> > lists, though that would need far more special case handling and it's
-> > *much* less clear if there could be a benefit.
+Fixes: 0e6f8ccd4618afdb ("device property: add test cases for fwnode_for_each_child_node()")
+Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+---
+ drivers/base/test/Kconfig               | 1 -
+ drivers/base/test/property-entry-test.c | 3 +++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-> Yeah, that would automatize the feature dependency for register loading,=
-=20
-> but maybe code would not be that clear on how it works? I have questionab=
-le=20
-> taste, though.
+diff --git a/drivers/base/test/Kconfig b/drivers/base/test/Kconfig
+index 542ce07530a1c5ea..1ecf0791241a1b2e 100644
+--- a/drivers/base/test/Kconfig
++++ b/drivers/base/test/Kconfig
+@@ -17,7 +17,6 @@ config DM_KUNIT_TEST
+ config DRIVER_PE_KUNIT_TEST
+ 	tristate "KUnit Tests for property entry API" if !KUNIT_ALL_TESTS
+ 	depends on KUNIT
+-	select OF
+ 	default KUNIT_ALL_TESTS
+ 
+ config DRIVER_SWNODE_KUNIT_TEST
+diff --git a/drivers/base/test/property-entry-test.c b/drivers/base/test/property-entry-test.c
+index 855e73b9b21f2810..89cdfc2f8498d8c8 100644
+--- a/drivers/base/test/property-entry-test.c
++++ b/drivers/base/test/property-entry-test.c
+@@ -523,6 +523,9 @@ static void pe_test_child_iteration(struct kunit *test)
+ 	struct fwnode_handle *child;
+ 	int error, i, num;
+ 
++	if (!IS_ENABLED(CONFIG_OF))
++		kunit_skip(test, "requires CONFIG_OF");
++
+ 	static const struct software_node node = { .name = "sw" };
+ 	static const struct software_node node1 = { .name = "sw-1", .parent = &node};
+ 	static const struct software_node node2 = { .name = "sw-2", .parent = &node};
+-- 
+2.43.0
 
-I was thinking of generating as part of the build process rather than as
-a one off so you'd not actually look at the code in the normal course of
-affairs.
-
---VryGsj2zZuDPeMrP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqHGwUACgkQJNaLcl1U
-h9ClIAf8C1PPh/jm0zRwE2TlZckmkQSd0+wAv9s16BA+buMf1y7Blt2cCUAx/+pm
-U3mobFvFSDF1COBWKajgd4TM0wmEbUYDYEd6bwxW38JUSWESaQNkEotcw/D+wCRG
-p16FUPjNexyrTzf1utNn/xnnDihxAxVkv5GaJtLvBISbIC+Sa+sw+PnIwTflkjYC
-CPJmsQEDCzRj+ibEU7rU6KTpUI7udB1A3s8uhnYVji5qsJlUZRVgyM4IbXTA37df
-n5ErCgi7ROl4Lzz53SFIvTdPwJntXuA96OSgfesk7LAJo+7Eq3KJggXX3OxSw6BS
-/F0eUbyIwjde7bxekGufQIE7j0rWnQ==
-=hyYp
------END PGP SIGNATURE-----
-
---VryGsj2zZuDPeMrP--
