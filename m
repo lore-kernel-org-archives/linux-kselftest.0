@@ -1,133 +1,112 @@
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6545B3EC699
-	for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 23:59:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BAF4086A;
+	Thu, 20 Aug 2026 00:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787184000; cv=none; b=WJx7djjC10v3xIoVjf8QVaxDrMFR48Px1P4jQINl8A4bjFD7DSzBDKruwI2v5UMNWLKnZDdcKT7mfAuuIAxnNIICHCPSq5mQTT3PNHqyq20+D2S6T6aepHjJxgK2x/PXVHWa+OuV+U11fJmgQ3lm5/BMYy+YQdYgmHn1B1TQSFI=
+	t=1787184848; cv=none; b=c7Q5Djx/48zA8yYz7ZTYsKVVkjMn721vYTVn1ssAH2Kta1RVuJ5Zxma/kW+9ZzRF+AxwiVlEQXv28SqopowvCPEf17LBi1l9V9PalEbIbN/QVMKr8bDV3oCtCBmkCuUqN3lB7BcWstNFb98x7DRPQLSOfnKplmVK6fjWCAOqg18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787184000; c=relaxed/simple;
-	bh=NGp/aL9J6o0WYmHnohWsvAE5IdAJbRwI8aWJlovJsXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H0SxLMP+lf4MaQpeNnGuraLSSLuDtC2PrTjqBs8OFIETSnBy0Vf6ueanPISnCmPlUzRl148lwINaYbenNJN/SAkAiS9QGKJIMVCbybfni19Hyk6W9tm1930FfBC0JAYIh7hdMtvRXnk5FxcEIinP7JykZ+whwqs8mqUcqTSku9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UOo4Affm; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787184848; c=relaxed/simple;
+	bh=hGpmloiCLdV24MFQD7/AXId11ujp9dU2vYxXpAaxRZc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=RBL8m4EWdmJw5Y4hAkEnEMLyK33A5yM3/0H9EBrzW3IOG5/LXcC7QXYlotkMrQB91qFq+TqYLTu+UIoga0WaZhWswpH9n1NF6Sh4GyljXfZb2Y8mj0h9B6Uqi9hrosrt7cgxruuIWfbKDgo0GX7c4osvRXILtZP/nK5Z5IvP8P4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAcEbQSR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UOo4Affm"
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-c9cf07d2df6so906422a12.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 16:59:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787183999; x=1787788799; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=sLv4USOHSGhU+T0T1FSL7i8gQWx1GCa8Cf4zSXBJYXM=;
-        b=UOo4AffmBRNzbrzeIGhyS9M+DR3r68ADGTp0Ohq7tgP9DAdDWXa62tsUBF8f3vanYM
-         G1kni+ApT+WrhlibrZr5aJHzcww9D+Djuy6yXjK0/ZQHlN8Bvy9hmeRspLcS/mky+9aQ
-         Kq8qNuLX+LeRoA3wNntmNHgPaQn0S7AU4/osJv13dN8egm3wIFb5QdA2oB8o01+07EZ3
-         ujCa0smf3o0KdVsDDuuWcKKX0V5t8BVJPr18KfLQrwrVIEbzwpANKc4MXQFQbss/FOiv
-         i+mquYQeSYBMCDZHSSfqUDEryfW15Rxj0Mw4w0/huCdoK7khE/pZAjKB+q7iaUrp6jNR
-         8L4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787183999; x=1787788799;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=sLv4USOHSGhU+T0T1FSL7i8gQWx1GCa8Cf4zSXBJYXM=;
-        b=Tjsh8hoROAucTPyBqoQXVwZ3uUDEXKtlkjMPrSI0BD3kjcb4ZN+NcMZGyoGDgv4T/B
-         GtyGKG7/5vgW++/rcjv8VgX2dhQN57DEh1wGPJIFy/gPLhNhH1hKkb+qWoL2CAX43yaz
-         5djhzzQkaRK+fMQ47mKAI/4sgbPCEAgD8wqkrO+tCsXUBTrcw6O7h4EThVevU0FMVIjF
-         GW/yF6u31e6sCemhuP0asscYhjIWinSIHG1kB1IaVTBfddxWwfezlxN+zincAktPXJyc
-         xFsvH88/reGn1wd0l1kEqTAOfDiE85p4By4yEzRITZr8MYOIr1uXF1t45Z06+bCK11iO
-         +hUQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrDjMhfamxuOM+xoclroDGXKhntv1ueI+LtUVdy6/Op2NP0QpUHvV1HIJmeRRIlVtsId/f5+A91FFucDVoa9DU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBPCC0yXB63YgVBe+jsyFo4/YBK7XfURN3DuGVAkBX9xQpfsAg
-	m2bZi+A8dt/OFrPan3zZAWM8h8nmWrW6J9e6Umw3+vvKlzOP7qYMuuAs
-X-Gm-Gg: AR+sD12gI+ghLwgMfMW5dkvBRruEUw5fLc8z/Z+WjBYcZsod0fmK32GHd/6GmNAgUgl
-	mgj9k+vwMnjZEc1uXebMRSJZeusMnvzgyyIQnDnchsm18DO6jBa4iqDB5GYyGye889J/UJ5vDe6
-	hUTzLLEvdKgxHYIQtJYILFRBSqtyiaUbgh6/j8Bnzk1JBtK/9HFuCzASMRRBLQZq641TnT1Mduj
-	eQWOpNO0u8hzD9AnaK5d4JwSplOmo7Ti5R4a/n8J6SjXgEaQytjXD7L8ir83L6pG2R/JkvuRYmX
-	JUHZRPzgw+LnNBlox9n0e9yDc7V4W+vYqc7x6SAVUkS6UytNIa3jMgdb4xw8lgNilbN+fGATl7s
-	vxIRW3TDmeXrob7qlPrdjTR4R5bHYK66snZBw1XTGm2MTV11Y0tnwLdhJVATliDkgjQ1l4TXTEU
-	rRpi5/lRJhgHm11mY5Uo/6BC7vIEbuTOGr6VR40xu11/V7K9e5FU/ADVbj72CdDZZVnHcuJKDBg
-	xUO3NoF
-X-Received: by 2002:a05:6a20:734e:b0:3c3:954d:278d with SMTP id adf61e73a8af0-3cd010ff4b9mr13863807637.9.1787183998514;
-        Wed, 19 Aug 2026 16:59:58 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:66::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327bef3ce17sm15822174eec.1.2026.08.19.16.59.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Aug 2026 16:59:58 -0700 (PDT)
-Date: Wed, 19 Aug 2026 16:59:55 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Tejun Heo <tj@kernel.org>
-Cc: kernel-team@meta.com, Jens Axboe <axboe@kernel.dk>,
-	Josef Bacik <josef@toxicpanda.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Shuah Khan <shuah@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>, linux-block@vger.kernel.org,
-	bpf@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] block: add BPF kfuncs to read blkcg io.stat
-Message-ID: <aoZDe0yvb49flaOs@devvm16600.scu0.facebook.com>
-References: <20260817214205.723267-1-ziyang.meme@gmail.com>
- <20260817214205.723267-2-ziyang.meme@gmail.com>
- <aoSUob1s8WBQ3buO@slm.duckdns.org>
- <aoTdQeLZZuRirNHE@devvm16600.scu0.facebook.com>
- <aoTf7u20mo9s6ADj@slm.duckdns.org>
- <aoTkZhQDoaQKpPe3@devvm16600.scu0.facebook.com>
- <aoYVh1ihBH-TWvi3@slm.duckdns.org>
- <aoYsIYnoFDvjkzKp@devvm16600.scu0.facebook.com>
- <aoYzjaXQNmm9bDcE@slm.duckdns.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAcEbQSR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39601F000E9;
+	Thu, 20 Aug 2026 00:14:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787184846;
+	bh=HrAZoFB2O4ijHVXZLxifKgZ8fU8/Rsiq/ZvJdgv6ZAw=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=aAcEbQSRvUAdr33zTA4FXccyAXg1kygJsd4ah3MBPqCNU7I+IgvLQhsrZY0AUSjvC
+	 4nlgQSrhQZlXPxhekgLQSirgnqyqvkBgyAg/f8tETcCmz3tSISyr60zD1MjjwzpPT/
+	 lFnei0Wp3GVXDjUGhk3F7IZO10YADXCYMu19p81phqAZ8eckNmxoTTTRjKj++er/oW
+	 hVrhyFBXowh9pJc6ftyOkd8H+yoRnwz5kU7RJwEzQe4nAjoIbq6DwTQqUbvtxAmK5q
+	 eS8NgTadFlgfiwsn/kRP06Owzd4gBBkKcgZgtVd85ktUAKGm/1XDi4oyKMLab3/hVn
+	 z9wBt5zOf/jxw==
+From: SJ Park <sj@kernel.org>
+To: Anshuman <anshumantewari123@gmail.com>
+Cc: SJ Park <sj@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>,
+	Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>,
+	Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>
+Subject: Re: [PATCH] selftests/mm: check stat() return value in khugepaged get_finfo()
+Date: Wed, 19 Aug 2026 17:13:55 -0700
+Message-ID: <20260820001356.87221-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260819121426.49500-1-anshumantewari123@gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <aoYzjaXQNmm9bDcE@slm.duckdns.org>
+Content-Transfer-Encoding: 8bit
 
-Hi Tejun,
+'get_maintainer.pl --nogit --nogit-fallback' suggests adding below recipients.
+I added them.
 
-On Wed, Aug 19, 2026 at 12:51:57PM -1000, Tejun Heo wrote:
->Hello,
->
->On Wed, Aug 19, 2026 at 03:20:17PM -0700, Ziyang Men wrote:
->> Yes the css_rstat_flush() is exposed but currently it is marked as SLEEPABLE, so
->> it doesn't accept a RCU_PROTECTED css we proposed. This is not a problem for cpu
->> ones since &cgrp->self is a trusted pointer.
->
->Yeah, bummer, so we get ref on cgroups but the subsys pointers are RCU, so
->that means those refs are only RCU protected. I guess we can't avoid a kfunc
->to get acquire a subsys css from cgroup. I wish css_rstat_flush() didn't
->schedule but it does need that cond_resched().
+- Zi Yan <ziy@nvidia.com>
+- Baolin Wang <baolin.wang@linux.alibaba.com>
+- "Liam R. Howlett" <liam@infradead.org>
+- Nico Pache <nico.pache@linux.dev>
+- Ryan Roberts <ryan.roberts@arm.com>
+- Dev Jain <dev.jain@arm.com>
+- Barry Song <baohua@kernel.org>
+- Lance Yang <lance.yang@linux.dev>
+- Usama Arif <usama.arif@linux.dev>
+- Vlastimil Babka <vbabka@kernel.org>
+- Mike Rapoport <rppt@kernel.org>
+- Suren Baghdasaryan <surenb@google.com>
+- Michal Hocko <mhocko@suse.com>
 
-Yeah that would be a pity. I will add kfuncs bpf_cgroup_css() and
-bpf_css_release() to handle the reference for the css.
+On Wed, 19 Aug 2026 17:44:26 +0530 Anshuman <anshumantewari123@gmail.com> wrote:
 
-The bpf_blkcg_flush_stats() will be removed as well.
+> get_finfo() calls stat() to get metadata about the target directory,
+> but never checks the return value. On failure, stat() returns -1 and
+> leaves path_stat unmodified, so path_stat.st_mode may contain
+> uninitialized stack data.
+> 
+> The code then checks S_ISDIR(path_stat.st_mode) against this
+> potentially garbage value. This can produce a misleading "Not a
+> directory" error when the real problem is a nonexistent or
+> inaccessible path, or, in the worst case, the check could pass by
+> chance on garbage data and let the function continue using an
+> invalid path_stat for the rest of its logic.
+> 
+> Check the return value and fail with a clear error message if
+> stat() fails, matching the error-handling style already used for
+> statfs() and read_file() later in the same function.
+
+Makes sense to me.
+
+> 
+> Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+
+Reviewed-by: SJ Park <sj@kernel.org>
+
 
 Thanks,
-Ziyang
+SJ
 
->
->Thanks.
->
->-- 
->tejun
+[...]
