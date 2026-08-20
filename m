@@ -1,120 +1,130 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9F9E3B05B2;
-	Thu, 20 Aug 2026 06:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F40EE3B0AD4;
+	Thu, 20 Aug 2026 06:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787207266; cv=none; b=i+bO2mXB1VWPFfd20Kg5swrKpiST1n+I6VHYTbHWdg10T8KRoe0RZF2Jo4+8lKllriweDE0YVDQyqJb3YH0r+fFXkabd7Bx0AyCMi0QScWZvmZ3axi769iT5/X51fUzBKJO7EWFBnUaX9YhWkkI0kMWsmAXCPdFfB37kx0gxWAs=
+	t=1787207783; cv=none; b=LG3hocuW7ZhUl6OgTDvgbqhETsc16dGQ1DWfmCov3A7rTJVVpIimA4R0EMKGfCNh6aN48glozBnSlu2rV2nllSTDx+MAMIKo8czzSNeWtFpKn3ibjyHQCDSbHN+rIYevJIUlgWurJ1aCt+MQ2w33QWl7ygYYjnCmcGiHyOejxl0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787207266; c=relaxed/simple;
-	bh=M789BWL3XBsXi/BePRZE8Fi0O3ch7shfN3/enE8S2pM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rytImvZQBIGtxkM7OkT5pcXisQQPhhaRU9DCaCCNkZ9qrvKcPqagnokMRctOUnR/h9/eA3EDFWKMJzQwn0fD2BxmbPWA+P9wy/Wl0wpVwvU+JGEL7un3T0RkdtkXe0cLL6aKZqLNZW1NJXsHijP4Ev7O82EcIeCjRpc33YHug/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VXdEo6HV; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787207783; c=relaxed/simple;
+	bh=bu2viIWiLrmgk/PG9G5rHnttUDD9cg27yQSbLWC1b+8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=nefJ7NdtPdsT+a0gSHLJStxfcgdJPpSYHfjaCoRSJkv0xX+jNPl9Br8tkaCyCKHwYPg5XVIOnVt/T1pptib/Z3nQ21uVIITl9D71MFlekrBWKXHGhsjUQ+Rc+e+z/hkzcJINOgiRxvm/I8QBYHdgx+dcWcxbDVidnsAWYICftUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Qf8+jp15; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VXdEo6HV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Qf8+jp15"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787207264; x=1818743264;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=M789BWL3XBsXi/BePRZE8Fi0O3ch7shfN3/enE8S2pM=;
-  b=VXdEo6HVAXyHP+WQvf7AWKo4RSjYo4lFEslRb7K98YkNQrE9mF7DdF1n
-   kCyymI9igfAZGGDfijcLZiU78BrVbSfidr2qbsgfR1sL87rireVBNgESv
-   wR4m7kXZw2Q9koEaDMyqMcGlZgw2XlRdG/+fii+Ws1ywoBctpP0Wl7dif
-   dceWyhWfkOcGq159NOGAH+jc/Q5VA4gM5EASac1Sezmc2tkgdNSLJb/zT
-   ozmvnCGlJOl2fdICq51gCYZN2h/gnN+A/FQD6ZLfBzMZ0tBj1DI52qI9W
-   fvCcUIlYmRvLRGQzKnMbpM7woqGOweESppGIVLEsjiptp+cG7BiRcF1qf
-   w==;
-X-CSE-ConnectionGUID: JbehQBotQL+YOMyetW+tqw==
-X-CSE-MsgGUID: csn/kkGKQSG4ihaNm1asMA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="110519187"
+  t=1787207780; x=1818743780;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=bu2viIWiLrmgk/PG9G5rHnttUDD9cg27yQSbLWC1b+8=;
+  b=Qf8+jp150E+ylkx09vPLoZfE391J41C48zRnZ5vN+uy2UTot50sBxRSZ
+   8fxNBB9FP4Z88eqZDXX+gNKK/nVzVUmddD15942tNog+rboImjHbs4xpE
+   m7pR2rcCSgRbou/7IQS0ubkbHQAguq9M3m8AMx9kKzSMlQzDg/M+0g6xe
+   j8ktFg4cOXvw3HuVsH3tvE9YxTu98Qjq4MzTtuWJt3fgX1A+uzwkZG/A2
+   Be2nlYYzGPyW4mGLw7N04eQFNd/zppZdlKxA2S3fBs/+vCD52j2ofD5vd
+   B8DHbhBhk2oFloh2axqhfjfqK1gRKwzYAthumcGhQIkX5XHnwWWimKL8b
+   g==;
+X-CSE-ConnectionGUID: L7tu2V76RYC8+m+81WpLeA==
+X-CSE-MsgGUID: NBWt75geTwOrOgk9zmAPJg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="99257312"
 X-IronPort-AV: E=Sophos;i="6.25,232,1779174000"; 
-   d="scan'208";a="110519187"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:44 -0700
-X-CSE-ConnectionGUID: LpbGi6eOSniS/8IG/dSY5Q==
-X-CSE-MsgGUID: zsNw2zOSRPeEY57cAEezTw==
+   d="scan'208";a="99257312"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:36:17 -0700
+X-CSE-ConnectionGUID: 4hpV9L85SHmdZsGb3xnJHA==
+X-CSE-MsgGUID: ewdbwCg+Qu24nyIqYcgR1A==
 X-ExtLoop1: 1
-Received: from junjie-desk-dev.bj.intel.com ([10.238.152.71])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:40 -0700
-From: Junjie Cao <junjie.cao@intel.com>
-To: netdev@vger.kernel.org
-Cc: "David S . Miller" <davem@davemloft.net>,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	horms@kernel.org,
-	jhs@mojatatu.com,
-	jiri@resnulli.us,
-	vinicius.gomes@intel.com,
-	shuah@kernel.org,
-	bestswngs@gmail.com,
-	uladzislau.zhauniarovich@gmail.com,
-	hdanton@sina.com,
-	syzbot+19d01f6082ec61dd45b2@syzkaller.appspotmail.com,
-	syzbot+8785aaf121cfb2141e0d@syzkaller.appspotmail.com,
-	syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 3/3] selftests/tc-testing: taprio: add case for the software minimum interval
-Date: Thu, 20 Aug 2026 14:27:15 +0800
-Message-ID: <20260820062715.278124-4-junjie.cao@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260820062715.278124-1-junjie.cao@intel.com>
-References: <20260820062715.278124-1-junjie.cao@intel.com>
+X-IronPort-AV: E=Sophos;i="6.25,232,1779174000"; 
+   d="scan'208";a="295789356"
+Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:36:13 -0700
+Message-ID: <e6f853c7-ec9f-4e1a-bf7a-3b97ff84d3aa@linux.intel.com>
+Date: Thu, 20 Aug 2026 14:36:10 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/7] selftests/x86: Add a userspace test for LASS
+ enforcement
+To: Sohil Mehta <sohil.mehta@intel.com>
+Cc: kvm@vger.kernel.org, x86@kernel.org,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, "H . Peter Anvin"
+ <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>,
+ Peter Zijlstra <peterz@infradead.org>,
+ "Chang S . Bae" <chang.seok.bae@intel.com>, Kai Huang <kai.huang@intel.com>,
+ Fuad Tabba <fuad.tabba@linux.dev>, Chao Gao <chao.gao@intel.com>,
+ Yosry Ahmed <yosry@kernel.org>, Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ David Matlack <dmatlack@google.com>,
+ Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
+ Kishen Maloor <kishen.maloor@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260806011536.4172258-1-sohil.mehta@intel.com>
+ <20260806011536.4172258-8-sohil.mehta@intel.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20260806011536.4172258-8-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Entries below TAPRIO_MIN_SW_INTERVAL_NS must be rejected for software
-schedules.
+On 8/6/2026 9:15 AM, Sohil Mehta wrote:
+> With LASS enabled, a user-mode access to a kernel address raises a #GP
+> instead of the #PF that SMAP/SMEP would produce. Nothing in the x86
+> selftests specifically tests for a LASS violation. The vsyscall selftest
+> exercises this flow but doesn't verify the resulting #GP.
+> 
+> Add a test that reads, writes and executes at a canonical kernel address
+> and verifies each one faults with a #GP and a null error code. For the
+> instruction fetch, also verify the fault is reported at the target,
+> since LASS does not check the target of a branch.
+> 
+> Skip the test unless /proc/cpuinfo reports the lass flag. The CPUID bit
+> alone does not say whether the kernel enabled LASS.
+> 
+> Assisted-by: Claude:claude-opus-5
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-Signed-off-by: Junjie Cao <junjie.cao@intel.com>
----
- .../tc-testing/tc-tests/qdiscs/taprio.json    | 22 +++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-index cd19d05925e4..3fe66839f8ae 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-@@ -154,6 +154,28 @@
-             "echo \"1\" > /sys/bus/netdevsim/del_device"
-         ]
-     },
-+    {
-+        "id": "f4b2",
-+        "name": "Add taprio Qdisc with software interval below the minimum",
-+        "category": [
-+            "qdisc",
-+            "taprio"
-+        ],
-+        "plugins": {
-+            "requires": "nsPlugin"
-+        },
-+        "setup": [
-+            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
-+        ],
-+        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: taprio num_tc 2 queues 1@0 1@1 sched-entry S 01 50000 sched-entry S 02 50000 clockid CLOCK_TAI",
-+        "expExitCode": "2",
-+        "verifyCmd": "$TC qdisc show dev $ETH",
-+        "matchPattern": "qdisc taprio 1: root refcnt",
-+        "matchCount": "0",
-+        "teardown": [
-+            "echo \"1\" > /sys/bus/netdevsim/del_device"
-+        ]
-+    },
-     {
-         "id": "831f",
-         "name": "Add taprio Qdisc with too short cycle-time",
--- 
-2.43.0
+[...]
+
+> +int main(void)
+> +{
+> +	ksft_print_header();
+> +
+> +	if (!is_lass_active())
+> +		ksft_exit_skip("LASS is not enabled\n");
+> +
+> +	ksft_set_plan(TOTAL_TESTS);
+> +
+> +	sethandler(SIGSEGV, fault_handler, 0);
+> +	/* Only to report a #SS; LASS shouldn't cause one here. */
+> +	sethandler(SIGBUS, fault_handler, 0);
+
+So the purpose is that if there is an unexpected #SS, fails the test instead of
+killing it, right?
+
+> +
+> +	ksft_print_msg("Accessing the kernel address 0x%lx from userspace\n",
+> +		       (unsigned long)KERNEL_ADDR);
+> +	test_kernel_read();
+> +	test_kernel_write();
+> +	test_kernel_fetch();
+> +
+> +	clearhandler(SIGBUS);
+> +	clearhandler(SIGSEGV);
+> +
+> +	ksft_finished();
+> +}
 
