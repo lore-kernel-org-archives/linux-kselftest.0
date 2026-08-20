@@ -1,46 +1,46 @@
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 837E63AFCF0;
-	Thu, 20 Aug 2026 06:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C11443AFD08;
+	Thu, 20 Aug 2026 06:27:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787207258; cv=none; b=Cy4MLX7bpnii/5kMctv2zY4eLU7CbpmmtMMspGIXOXTDVJO96j18J1fJfKDXuuoaF4c/QvoujsTgnfXitM6Ttn5kX0VK4iiJfHdkxDoWbXbaCjTAmuv1c1ZCbblzsrMt79aG0ReqUIQ7AScAjSGJ0L9sbpHuRqKh139KmDHpzWo=
+	t=1787207262; cv=none; b=O7dTubLtNAl3Nvy574P9gm8q3JILxX3Lp3R3XkXGlScDBGEbYWyPCUbQmIE0I19a/vQdYmxuzofCgfzaMiaTB11u13ap/WYnYK6DmRI2bQEke2uFr0FtyNs917exd/K8/wX/AwAdEts0ktlziXtnuiifbayXLlH657M+S9DdTDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787207258; c=relaxed/simple;
-	bh=N8Yp/SGc1CoGaxsZyq6L706tRBRe7Js0kKMGUstVYrA=;
+	s=arc-20240116; t=1787207262; c=relaxed/simple;
+	bh=JlgRoSocLBcoRDoXfT0tPUeQnHNFLvwtp1sPuoL7q9w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=he49NL81ojSydhhtCWfPqIR8xr1wrVmYksr4UNvyScLY264agtRBZiFTFxoFTgZlm12faLtFGcf8Ydspoeu8b+8ckexaqJ3U86dSLE14mZv5X7XPTYfUoFmjynewkSBMdarlHOsTd8UB5wlDkLGQVTTmsmL0wWqO7OoH1M8aGiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KfrpIR9u; arc=none smtp.client-ip=198.175.65.9
+	 MIME-Version; b=FNyyMvd6LXnE0Dq32PNsGFFaZGQ4KfdOP7cPVO4xanftK9RxqldpDsv4Lj++NfZwuI6S9HcgexTyBCCeLoND9z8FnUMPVuBwBHmuYuWYS4dMFlLrdoOjmb0AYmBiwTKroiimPZntce1C5FJB9qBH4Xokte2OMP8cwrg6apa1yK0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=N9EAgK9H; arc=none smtp.client-ip=198.175.65.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KfrpIR9u"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="N9EAgK9H"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787207256; x=1818743256;
+  t=1787207260; x=1818743260;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=N8Yp/SGc1CoGaxsZyq6L706tRBRe7Js0kKMGUstVYrA=;
-  b=KfrpIR9uqapTLq4Zl0mNblHrNcMexDFwAzsdqMC/R5Lm0cNxHOvyeJ25
-   i1NljRhL87t+bL+rh8Ag1bunTSYP4HXIfA1xEM4c67Fy8dFvGh0ewDYQn
-   6NuZVq6Som9JZ2B6HBzCR6YA9D59ydm0w9L5XkJQVM43CxDpDXm8K22Vh
-   3uPV89KE4rA0opeWV/mZQbY/lauhgGaI0Y6UOH3inkc4TnCFx8h9ZVSeC
-   Fdmzgx8rmF8TzLunHXVbjPJ9EwH8PGs5Gq4H5gzIYBCU3XnoiylcKCCXM
-   AWzHBEtYlsJcg74WHG0XgXTZNIq/SZ7lQps2V37vH7YPbGEqIp44HECB7
-   w==;
-X-CSE-ConnectionGUID: dYbA1JJvSFKrsv4JVqcLSA==
-X-CSE-MsgGUID: T3nnfiksTgiLVY24yYjwzw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="110519161"
+  bh=JlgRoSocLBcoRDoXfT0tPUeQnHNFLvwtp1sPuoL7q9w=;
+  b=N9EAgK9HXi4V47M9HUkfbt7Fxx79cqI8efxGrIZB2QlBCYFr/+WZMgX9
+   yN+KsJDmeD9/wkrObg6wmgQcfdrRM8rX6FCiKshzL49pmvoJzWMkw0FKW
+   EoQEQlJcKLJJUdRXXGbOc0EQ3Z2LMYbN1z4rcQHX9uBL6rl5CrSuDl1qI
+   oCBsIOKhLpkyesnjentASNd/vDYyBHFKipS2bSKJS1zQ8rE5yCeDpS+rl
+   6afwEYs94TDZZV0zroCsvh5eLaw6raYFrO3jfZBljKuy6eHeBSFCYCEY3
+   5aiexETAMEIW98n4hf8HxN3/TsrRweA1KpNROaL9ewyf8w1jkyJB00ZVM
+   Q==;
+X-CSE-ConnectionGUID: CkjoImA8RA+eBc87NSU6mg==
+X-CSE-MsgGUID: HaCtTT9jSp68t1sG9AeDpQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11880"; a="110519175"
 X-IronPort-AV: E=Sophos;i="6.25,232,1779174000"; 
-   d="scan'208";a="110519161"
+   d="scan'208";a="110519175"
 Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:36 -0700
-X-CSE-ConnectionGUID: m+KjWns0SmOwMVgRolHqkg==
-X-CSE-MsgGUID: MJCQ+hBwRjmijQmBvZ5svw==
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:40 -0700
+X-CSE-ConnectionGUID: wruokuFPSAKj2FoS5gzdPg==
+X-CSE-MsgGUID: R0Jix2JpTy23+0Asfuw0RQ==
 X-ExtLoop1: 1
 Received: from junjie-desk-dev.bj.intel.com ([10.238.152.71])
-  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:32 -0700
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Aug 2026 23:27:36 -0700
 From: Junjie Cao <junjie.cao@intel.com>
 To: netdev@vger.kernel.org
 Cc: "David S . Miller" <davem@davemloft.net>,
@@ -60,9 +60,9 @@ Cc: "David S . Miller" <davem@davemloft.net>,
 	syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 1/3] net/sched: taprio: catch up in bounded time when the schedule falls behind
-Date: Thu, 20 Aug 2026 14:27:13 +0800
-Message-ID: <20260820062715.278124-2-junjie.cao@intel.com>
+Subject: [PATCH net v2 2/3] net/sched: taprio: enforce a minimum interval for software schedules
+Date: Thu, 20 Aug 2026 14:27:14 +0800
+Message-ID: <20260820062715.278124-3-junjie.cao@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260820062715.278124-1-junjie.cao@intel.com>
 References: <20260820062715.278124-1-junjie.cao@intel.com>
@@ -74,118 +74,91 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-advance_sched() advances exactly one entry per hrtimer expiry. When the
-operational schedule falls behind - the timer was delayed, the CPU was
-starved, or the reference clock stepped forward - every elapsed entry
-is replayed back to back from hrtimer context with current_entry_lock
-held, and each replay rearms the timer with an expiry in the past. Once
-the backlog is large enough the CPU never leaves timer processing and
-RCU stalls follow. syzbot triggers this with schedules whose intervals
-are shorter than the cost of servicing one expiry, so the backlog only
-ever grows.
+From: Uladzislau Zhauniarovich <uladzislau.zhauniarovich@gmail.com>
 
-Skip complete cycles arithmetically and walk at most one cycle of
-entries to land on the entry covering the current time. Gate close
-times and budgets are still only computed for the entry landed on. An
-admin schedule crossed by the jump is picked up by the existing
-should_change_schedules() check on the recomputed end time. The walk is
-capped at twice the entry count as a safeguard against degenerate
-intervals; leftover backlog is then handled by the next expiry as
-today.
+The interval validation only requires an entry to cover the
+transmission of a minimum sized frame at link speed. Virtual devices
+inflate that budget: veth advertises 10Gb/s and bonding sums the
+speeds of its members, so length_to_duration(ETH_ZLEN) evaluates to a
+few tens of nanoseconds and schedules with nanosecond intervals pass
+validation. In software mode each entry expiry is an hrtimer callback
+costing on the order of 10us on a debug configuration and about a
+microsecond on a release build; intervals below that cost rearm the
+timer with an expiry already in the past, storming the CPU with back
+to back timer interrupts until RCU stalls.
 
-Fixes: 5a781ccbd19e ("tc: Add support for configuring the taprio scheduler")
+Require 100us per entry in software mode, leaving margin above the
+timer service cost. Offloaded and txtime-assist schedules never arm
+the per-entry hrtimer and keep the frame-length based minimum only.
+
+Fixes: b5b73b26b3ca ("taprio: Fix allowing too small intervals")
+Reported-by: syzbot+19d01f6082ec61dd45b2@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=19d01f6082ec61dd45b2
+Reported-by: syzbot+8785aaf121cfb2141e0d@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=8785aaf121cfb2141e0d
+Reported-by: syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=2642f347f7309b4880dc
+Tested-by: syzbot+19d01f6082ec61dd45b2@syzkaller.appspotmail.com
+Tested-by: syzbot+8785aaf121cfb2141e0d@syzkaller.appspotmail.com
+Tested-by: syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com
+Link: https://lore.kernel.org/all/afe041f6-ef7d-4434-b2d0-096be49b5bcb@mail.kernel.org/
+Signed-off-by: Uladzislau Zhauniarovich <uladzislau.zhauniarovich@gmail.com>
+[jc: exempt txtime-assist, use s64 to keep rejecting negative
+ cycle_time, rework commit message]
 Signed-off-by: Junjie Cao <junjie.cao@intel.com>
 ---
- net/sched/sch_taprio.c | 56 +++++++++++++++++++++++++++++++++++++++---
- 1 file changed, 53 insertions(+), 3 deletions(-)
+ net/sched/sch_taprio.c | 24 ++++++++++++++++++++++--
+ 1 file changed, 22 insertions(+), 2 deletions(-)
 
 diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-index 299234a5f0fe..0d566c934b2f 100644
+index 0d566c934b2f..91a7f7f17462 100644
 --- a/net/sched/sch_taprio.c
 +++ b/net/sched/sch_taprio.c
-@@ -915,6 +915,51 @@ static bool should_change_schedules(const struct sched_gate_list *admin,
- 	return false;
+@@ -259,6 +259,26 @@ static int length_to_duration(struct taprio_sched *q, int len)
+ 	return div_u64(len * atomic64_read(&q->picos_per_byte), PSEC_PER_NSEC);
  }
  
-+/* The operational schedule fell behind, e.g. because the timer was delayed
-+ * or the reference clock stepped forward. Advancing one entry per timer
-+ * expiry would replay the whole backlog from hrtimer context, so skip
-+ * complete cycles arithmetically and walk the remaining entries to land on
-+ * the entry covering the current time.
++/* Software schedules service one hrtimer expiry per entry; intervals
++ * shorter than the expiry service cost rearm the timer with an expiry
++ * already in the past and storm the CPU. 100us leaves margin above the
++ * measured cost on debug configurations.
 + */
-+static void taprio_catch_up(struct sched_gate_list *oper,
-+			    struct sched_entry **next, ktime_t *next_start,
-+			    ktime_t *end_time, ktime_t now)
++#define TAPRIO_MIN_SW_INTERVAL_NS	(100 * NSEC_PER_USEC)
++
++static s64 taprio_min_interval(struct taprio_sched *q)
 +{
-+	int budget = 2 * oper->num_entries + 1;
-+	struct sched_entry *entry = *next;
-+	ktime_t start = *next_start;
-+	ktime_t end = *end_time;
-+	s64 behind = ktime_sub(now, end);
++	s64 min_interval = length_to_duration(q, ETH_ZLEN);
 +
-+	if (oper->cycle_time > 0 && behind >= oper->cycle_time) {
-+		s64 jump = div64_s64(behind, oper->cycle_time) * oper->cycle_time;
++	/* Only pure software schedules arm the per-entry hrtimer. */
++	if (!FULL_OFFLOAD_IS_ENABLED(q->flags) &&
++	    !TXTIME_ASSIST_IS_ENABLED(q->flags))
++		min_interval = max_t(s64, min_interval,
++				     TAPRIO_MIN_SW_INTERVAL_NS);
 +
-+		start = ktime_add_ns(start, jump);
-+		end = ktime_add_ns(end, jump);
-+		oper->cycle_end_time = ktime_add_ns(oper->cycle_end_time, jump);
-+	}
-+
-+	while (ktime_before(end, now) && --budget) {
-+		if (list_is_last(&entry->list, &oper->entries) ||
-+		    ktime_compare(end, oper->cycle_end_time) == 0) {
-+			entry = list_first_entry(&oper->entries,
-+						 struct sched_entry, list);
-+			oper->cycle_end_time = ktime_add_ns(oper->cycle_end_time,
-+							    oper->cycle_time);
-+		} else {
-+			entry = list_next_entry(entry, list);
-+		}
-+
-+		start = end;
-+		end = ktime_add_ns(end, entry->interval);
-+		end = min_t(ktime_t, end, oper->cycle_end_time);
-+	}
-+
-+	*next = entry;
-+	*next_start = start;
-+	*end_time = end;
++	return min_interval;
 +}
 +
- static enum hrtimer_restart advance_sched(struct hrtimer *timer)
+ static int duration_to_length(struct taprio_sched *q, u64 duration)
  {
- 	struct taprio_sched *q = container_of(timer, struct taprio_sched,
-@@ -924,7 +969,7 @@ static enum hrtimer_restart advance_sched(struct hrtimer *timer)
- 	int num_tc = netdev_get_num_tc(dev);
- 	struct sched_entry *entry, *next;
- 	struct Qdisc *sch = q->root;
--	ktime_t end_time;
-+	ktime_t end_time, next_start, now;
- 	int tc;
+ 	return div_u64(duration * PSEC_PER_NSEC, atomic64_read(&q->picos_per_byte));
+@@ -1088,7 +1108,7 @@ static int fill_sched_entry(struct taprio_sched *q, struct nlattr **tb,
+ 			    struct sched_entry *entry,
+ 			    struct netlink_ext_ack *extack)
+ {
+-	int min_duration = length_to_duration(q, ETH_ZLEN);
++	s64 min_duration = taprio_min_interval(q);
+ 	u32 interval = 0;
  
- 	spin_lock(&q->current_entry_lock);
-@@ -960,14 +1005,19 @@ static enum hrtimer_restart advance_sched(struct hrtimer *timer)
- 		next = list_next_entry(entry, list);
+ 	if (tb[TCA_TAPRIO_SCHED_ENTRY_CMD])
+@@ -1216,7 +1236,7 @@ static int parse_taprio_schedule(struct taprio_sched *q, struct nlattr **tb,
+ 		new->cycle_time = cycle;
  	}
  
--	end_time = ktime_add_ns(entry->end_time, next->interval);
-+	next_start = entry->end_time;
-+	end_time = ktime_add_ns(next_start, next->interval);
- 	end_time = min_t(ktime_t, end_time, oper->cycle_end_time);
- 
-+	now = hrtimer_cb_get_time(timer);
-+	if (unlikely(ktime_before(end_time, now)))
-+		taprio_catch_up(oper, &next, &next_start, &end_time, now);
-+
- 	for (tc = 0; tc < num_tc; tc++) {
- 		if (next->gate_duration[tc] == oper->cycle_time)
- 			next->gate_close_time[tc] = KTIME_MAX;
- 		else
--			next->gate_close_time[tc] = ktime_add_ns(entry->end_time,
-+			next->gate_close_time[tc] = ktime_add_ns(next_start,
- 								 next->gate_duration[tc]);
+-	if (new->cycle_time < new->num_entries * length_to_duration(q, ETH_ZLEN)) {
++	if (new->cycle_time < (s64)new->num_entries * taprio_min_interval(q)) {
+ 		NL_SET_ERR_MSG(extack, "'cycle_time' is too small");
+ 		return -EINVAL;
  	}
- 
 -- 
 2.43.0
 
