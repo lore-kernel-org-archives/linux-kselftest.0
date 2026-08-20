@@ -1,146 +1,129 @@
-Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4490418A29;
-	Thu, 20 Aug 2026 10:53:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787223183; cv=none; b=ssLexdsRPg13MbLOSzi29la/SXbsQHcx9KbmDoI/A0M/mUwxc1Xt+73rzc4BupuXYy3Npk+ZusfjqxI+B3grMQabzIH04Lkln3O9zM5NsCyAKM3KYbIMW8hPrAU2jeQ6T8drtujjs6crXujvebGDbjbnQ5yx0gnQhLRfwk7plxA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787223183; c=relaxed/simple;
-	bh=1x3G83+lsmYYDnZXUUc21SyZAESIqwuRlkVLLvM6xzg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ws0X9sI5JP6pU5sEa65F6TO3TZtZofMbtcEgFkrkdsHqX4WoBbRbVxjckQOZgew2IOs/UF4PQRNAczCZDOyxtBpYdWP5+6VgJPXmZlzwMofUSwfvazfAE+UJPZCIAuq8cbptnv8HcLaL7FclNBqvfpSVfWqOWRIClGgceQXaMNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=lGwToSj8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=meE7wau4; arc=none smtp.client-ip=202.12.124.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE014195C0
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 10:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787223447; cv=pass; b=nDeof4LSQtDv7PaElFVRPc0L4h5rFc4qhD2NAb9b4Q0hFl4ktTDxwP520qDGhqC2U38BloFjyOcHy7y4qPF4upo7R+smiByIlp2c1rSo+Lp64d8g2ZAiksdNvsj7GF4KWM6ncaOKuq9ry/L8/24jejSrmX2VuwiHj708E9/eYTQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787223447; c=relaxed/simple;
+	bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=L8E5NMNjEy42///z1/zX3ZsIID7e5aov6iDU/95LYrpTtxGkRoXhoHl60+cxC9Ong7CzJbh7CpyNICHoljUwbiJtABHJWw+PFq8lcnpAhTBUg5NalEGbGHb+z1vU8BjbKql8VG6OsQU4bMvdDJ7Lj2J9vH0othqwJqBTtVL+ljs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vH+PWZ4k; arc=pass smtp.client-ip=209.85.222.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="lGwToSj8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="meE7wau4"
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id F2BE213000D7;
-	Thu, 20 Aug 2026 06:52:57 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-05.internal (MEProxy); Thu, 20 Aug 2026 06:52:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1787223177; x=
-	1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqIC54jHG7w=; b=l
-	GwToSj8vmRVt7iD8kNLWQM3v96QhNpGsPEAIsmLFJdObYyjPTBvrw7Ujk6VQKuDp
-	GCcFVbMUBnkDnKFediQ74DkjI0r5j9sygg69IGVprIeK/QZbukiszEh/8GT6zLyO
-	7qOQyfHwFR2vEffF+kH1h8xR3FHtjv+JzVnshE9icj3cLJNPFGGtBS+N4sCNnKE4
-	WCi+TVKbB0rs1hivSdibID+uGzDvlVf95YSq+EIS+1g1hDBgjK3hHbgyCgdpkFpo
-	WArd82fv+rxaxOBasx/YlltyJmaRk38eM43LSn0HQBY+0UdJNDJT40lEgZj8Gouv
-	IJwdIGvzlbFfbqpx/wLrQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787223177; x=1787230377; bh=1Hm6dRu/lDSOGHkykkLzQS7nEKTBeP5xgqI
-	C54jHG7w=; b=meE7wau4CKenl5UIRKtWlLbHB0nH5Rd4PKesazkis9U68OKk4Wn
-	EQ3Z5R2pmVJ69WzQ6nQ9nIAaTMAoQtgsAikt3XwO+xFU7SeCwmNQenIdOf/PYzEZ
-	MYw0IhPYRj0yRM/c9q3oK76xpF9/JNGoFWnHGCObkf63ugBBYvOx4tMXBVF1s+xF
-	SiMSy9RmN+erVgJS/RQLTd+rESLKHl5B3vHQVPab+tLGMYhqMgeLK6h3ItmyW3vD
-	5IfFWiPeyEbuUvX4ZHugoazneYVRXdqxx0ulsuh215HxrGproxrWmp5eUeOykS9V
-	5kzIC+7I33DzGtBFvmvVR+/ZFpwUMopnoeg==
-X-ME-Sender: <xms:iNyGat54BC7xFMs_8l708cxxc_QNa1N1KRy3lm3UYpbEGggUlgpZaA>
-    <xme:iNyGarViOayqVZ8tXexJEDUOBz4FGxvlpPQEw1SI7PiuPfT9vIONKpD6EAahfXlIc
-    ugsaYtQ096OKZWtsK4pFHHSpfMIZWGwSX6KgtfyIGdWztTaOIozpEE4>
-X-ME-Received: <xmr:iNyGal47XIR6C_PL9lYLPJXFMcpAeMSpoWverE2zKXbOXLBAvYBdNDx6pWk>
-X-ME-Proxy-Cause: dmFkZTFWRza+tZqbwe6AvSvswwNn1vm2ouOEl3sD29XdKlxSbeb7SJ+ft0N23ZfHAXdLoD
-    HmugP2x8o1qZZdYgJ6uNKnryUZdf9vJIX7yG1Wd0puBWlPtUU9+QdT2J4Dz6j/J8OsU9Lu
-    cHBdXN2icIfdMLZpxUxDYeqctOT72wTuhC9gb/P4RO5svqtLV3/dQMxW07EDCY/HgRS0R5
-    hIWhoRHy8caBmuUGk6MLMFA2fTWneQj91H7dazgLVy+nDRNY6KF3ioVB/SCkQrHtuzDw57
-    zzT/SzyH8GGH6dfj0mKV7WEwwBQIKCfmWOLYVVVdY2G5L5TUscUlN0MnsMmOT7XGn5nqZ3
-    qTusjp1bsmaQ7NxNYNGdouQ+Lzho5PCtqMOZXHY/7N8mFMRgD536Lix289uLH1lUZ5l7Bs
-    0EKkfid8uPYzb8PyS0LZ5AGD6stNkDOaYLtEQ+FU4ShSANtBwfDpn7DoszKmWH82qWAlZf
-    IibZn0VeyWcdksSZ6k5AMmFRba7hM1obgBOhf0ePHT8321pqVtXzXm7r6Ac9BoQcxbdoGX
-    DiQyx+zJJ8bPCAxR69l9MIPqGhG3bFnUFNk13wc1BQkNJDAjeLqZCWgh8a/ngZ29YtnBdz
-    5UGnWNG2Fm8ctlMT15phLBhY3M3l86Iw7muaQrld5L7QUvHK5Ib+j58n5HSQ
-X-ME-Proxy: <xmx:iNyGamLi7qP7Vxx2Urm__5VWE9vtQY2VDeeZD2Ww17JIYTyID0H14g>
-    <xmx:iNyGagjcASSknb_rBn_7XGrZaAw0RVIp9r9LgWWiYqMx7ZibjiT0gg>
-    <xmx:iNyGaoIaZZAMY58wc3AOrGX1JTsHPReoBCi33oNnA_pSv5mWAwG5lw>
-    <xmx:iNyGatEnM3ejngFdRo3f_F-khoayz0ka4TzC0oi5RkdtRfyGbUZ5QQ>
-    <xmx:idyGahzkie0eSCaUoBYs-yYze10njpQW-hnyNaeDBMfy-8AIxueySSoN>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Aug 2026 06:52:55 -0400 (EDT)
-Date: Thu, 20 Aug 2026 11:52:54 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
-	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 01/57] mm: add pte_folio()
-Message-ID: <aobZECx2aTUHP6n3@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-2-kirill@shutemov.name>
- <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vH+PWZ4k"
+Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-930c0f9c1b1so134421785a.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 03:57:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787223444; cv=none;
+        d=google.com; s=arc-20260327;
+        b=py9LeQZBzcx1+E0Rx1HwmMBxivfkuEVaG70SQL9s2Dox4yL5fAcklfsDoV+tf7PeSM
+         brWiWTzP5Ap2x4L6e2Zy2vWbpHWIV/geV/HoRP66pN/Cm7sl73KiwChoAwroKqYL5yza
+         OmX2zHcJK8R6nw4DfTCzI8doTHdK7YXKXJaV/pJ1tvQEOL9s1fPKsTURpmkUmIlagMJe
+         Y+Y/LpAGcXpiBTTCNqBOdJ+xOAaracFURs6QnlmBPrBJgQ5lctRvBEc+XSQRh1FYqo6R
+         6qPnsgBErUJK6QhakWonKKql+ofUf6mgm4FgMI+rejMJL0ov3edHrhzW2u3hI8qAnGjt
+         7xCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
+        fh=2C+m2iKRm6dDnzyNMtE9ME22prJSQ3rxbYIZ8b0B5v0=;
+        b=qLt6OrJoVY7rZQkdWOncY7DklFCmsiCvIZuOZRd2HsqNsB2AfR8b54FhgD2QtjRIOu
+         912qIE0n7UWBsNkxiyb0nmBTF5WPjN0StELzZqec+ea6ZJdp+nWhh4ByS9q5ShvJSF8Q
+         43KmblMvxVoKZDd5Dka5rZWecTX3QIN7vzrdC0mossOmmgWLPv2IILkda7u3r8m7HseO
+         qKzST+MwJP6YIANGbvjSvjAw32gmNzexkXBO5pd34LtD6eAG1RudY6pSS4jgg7iUnET1
+         RTz7sh8bpuaZDhf4ZnDsgIQNQOV9IKop4Bii+Rfx8S0Q9oALy93em/vsVyIDfMcGG3Yp
+         R5pQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787223444; x=1787828244; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
+        b=vH+PWZ4kRaCk7q+/hoUeJPvKKLzE9mCR/GBiwYww1gvDQuQNSm4o3JABuI6JK/3fOg
+         e9famN5/r17Dzglyxh57XsMbPhnYJag3eY+0EmkODlC/YPs5hbRf4WU+QVV5epNu79jl
+         lfdKu4p7v2OGld7/A+GszvGy/1o9rR45TTFXC8GKzFYOUhHhg2EYfqBk5cXyLR9W35S1
+         pHtjqs8wOwtr7Z9lPeREIEhwR2wdgjb0fkpWRvHw0SHxkyqDbYq350LefO/tdvZFBlnY
+         hHUiatk99FC2Dh3hWqI7R0zs4sxTOZ81FBHcqDzhq82VxDhQM9Mx4NkhccH//Kro6oIr
+         qq+A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787223444; x=1787828244;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
+        b=FGfjLf6zpIsM7hQVy9G7KM3IRpR9M9DWvH74eKVSjXb+gglsrD2Vl1BpqUbdCQbKJf
+         Zg+zaHPMrPDjkrEXiVi+X8bnGdb5JvSrBoFYfu9WKSW0qANx33Ugx3iKsiNPZUnFDKBj
+         zsGjr5iAuzSIKl16erRjJS/738omzZfD+hy87i6o+VKXLxNGw/CWMxB60FOZhLr3UGJY
+         L7neFyMT1x4Preaj/fzV00Gd65aEy+pDNpEMADAvShX8lFTg2Q6pG1bkonolGRTuq4OC
+         SiFQC2ZvTat5ugkdJ2Zwk0SGVO09KWBncee77Ni7+ekI+nbdvdzSqkE5EVhU8nAv3VxZ
+         idkw==
+X-Forwarded-Encrypted: i=1; AHgh+RrvJ4FQ/d8lWesE7wlO/R+d1aD1L/DeNtuHXTlMFbpfOWVB38bPagbjLQcJENLkJfFE+8mdU7bNrrMIlvNE4eI=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzVeSR/G5O05P4nn/UoNyh9Hun9LbkWtGKiMFkhJVQbvlNwPz/j
+	/voSu7jZkB5NuAYEHNbaPoVvoeEI9sOB5WuF7uFjo9jlXHW2h3t0PmH/fUPOWKTVAi9pFw0K4O5
+	92Es6IGxcBQF9fwqW19zCP1lIBZT6/ik9ym5Un8Fq
+X-Gm-Gg: AR+sD10euG0dvNPFdpLjGNHAjxI+KCIrG0Lznh/arOBg+JCVOaeeABVJCInIHBqHOhP
+	kBYOeAn31daHNXXfIbAj6jIO8jEF05hPLNCKXaqzdxjAzMOWs+Wn2nQE8S7lVF8zE1RzdIDrZwL
+	B/jcSyxSbYIEc1UTqDhUcy+TcQJjoBmtBSn4fiYJp8ijFROdfWnoUtT7t9hMpWeWpy00ULXROZi
+	rgo7vDnrZ7fEdAN7y0aiNf1cX+PSlBE08xWaADvMTQtQEJVxQTuZXA0zrhgyo3eLyiSYRJl2BHk
+	gtjyjoHyzxOzHUdrvRuNhV4tanElizr0/fH+9/pPJEhmlsc32Xibxl3212A8XU2GXtzIrMLRI6E
+	igPkPQint7pr8dBSlsHKu93b8gHIW5hhNITOHKaUGAIZJdu3cmpOoD+QQGQ==
+X-Received: by 2002:a05:620a:468e:b0:930:9091:f0ce with SMTP id
+ af79cd13be357-9371e302067mr1049789885a.22.1787223443592; Thu, 20 Aug 2026
+ 03:57:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7e40cdfe-67d2-4ddf-a048-f33b2d590371@kernel.org>
+References: <20260815070413.294559-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260815070413.294559-1-jiayuan.chen@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Thu, 20 Aug 2026 12:57:11 +0200
+X-Gm-Features: AcwNN1V-lDNNVkCSZufLYHUNnmdNTo3thCvZLBu1IvrTsUJT8e265xO6leh8BHk
+Message-ID: <CANn89iJ7hfewnOEjD5SSf_3n3iSQAHN8TPspBCyp_Pvy-ibbYw@mail.gmail.com>
+Subject: Re: [PATCH net v2 1/2] net: advertise TCP MSS from the configured
+ MTU, not the learned PMTU
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, stable@vger.kernel.org, 
+	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
+	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Aug 18, 2026 at 07:09:48PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/17/26 00:45, Kiryl Shutsemau wrote:
-> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > 
-> > Callers that want the folio behind a present PTE spell it out as
-> > page_folio(pte_page(pte)).
-> > 
-> > Add pte_folio() as the folio companion to pte_page(), and convert the
-> > callers in fs/proc/task_mmu.c and mm/hugetlb.c.
-> > 
-> > Preparation for the anonymous collapse engine, which reads the folio
-> > behind a PTE in several places.
-> 
-> [...]
-> 
-> >  
-> > +/**
-> > + * pte_folio - Return the folio mapped by a present PTE.
-> > + * @pte: A present page table entry.
-> > + *
-> > + * The folio companion to pte_page(); only meaningful for a present PTE
-> > + * that maps a struct-page-backed folio.
-> > + *
-> > + * Return: The folio containing the page @pte maps.
-> > + */
-> > +static inline struct folio *pte_folio(pte_t pte)
-> > +{
-> > +	return page_folio(pte_page(pte));
-> > +}
-> 
-> There is a reason why most code doesn't need that: because they should be using
-> vm_normal_page() / vm_normal_folio(), or need the exact page and handle special
-> ptes differently (see gup.c that uses pte_page()).
-> 
-> And other code that uses pte_page() doesn't really operate on folios AFAIKs.
+On Sat, Aug 15, 2026 at 9:04=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+> The MSS a host puts in its SYN tells the peer how big a segment it may
+> send us. Right now we can shrink it with a PMTU we learned on our own
+> send path, which is the wrong direction entirely.
+>
+> On asymmetric paths this bites - think DSR load balancers, where the
+> request side goes through a smaller-MTU overlay. We learn a small PMTU
+> going out, then advertise a small MSS, and the peer stays capped for the
+> whole connection even though its path back to us is wide. MSS only shows
+> up in the SYN and never grows back.
+>
+> On symmetric paths we lose nothing by dropping it either: the peer runs
+> its own PMTU discovery and usually already knows the real path MTU.
+>
+> So work out the advertised MSS from the configured route or device MTU
+> and ignore the learned PMTU. Our send side is unchanged, still clamped by
+> tcp_current_mss(). Add ip_dst_mtu_configured()/ip6_dst_mtu_configured()
+> and use them from the two default_advmss() paths.
+>
+> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> Fixes: 164a5e7ad531 ("ipv4: ipv4_default_advmss() should use route mtu")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 
-Fair.  pte_folio() does not fit the abstraction as it stands, so I will
-drop it.
-
-I thought that maybe we can rework vm_normal_*() to be a predicate on a
-page table entry, so if it returns true the caller can safely use
-pxx_folio(). It would be a cleaner interface in my opinion.
-
-vm_ops->find_normal_page() breaks the idea, though.  Xen (being the single
-user of the vm_op) wants the special bit to indicate a custom translation
-to the page here.  A bool cannot describe this.
-
-Ugh..
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Eric Dumazet <edumazet@google.com>
