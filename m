@@ -1,148 +1,106 @@
-Received: from mta0.migadu.com (out-98.mta0.migadu.com [91.218.175.98])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65B637E5D8
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 15:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.98
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E8A3381B05;
+	Thu, 20 Aug 2026 15:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787239181; cv=none; b=hVYakGtX6r/OELBYB/8rMv4Q4k3H7CpXcJB/FLXxvFZGpR9GZdC6kC95zK/FJBTbFRjRAbWiE3kpwMi+MSMN9IF6P+SWwkGFv7CAeQ2sqWTtqm9hu1YXNOPiMTiMrr+JQxyrIo0n/JrCDfR6/+gVqK7M0LL/vpKvixEIDXnQS4U=
+	t=1787239181; cv=none; b=j9k75fSXLPiIK5GL+sjKCKh9tNYUaYdOTLCxp7iUB1Nf5wntQG/Hxib1KYh84WzxgAmAw1xDfvsRXOu6PiI6E1Cb3axkUCcV4Of0UVbFE4j/dUslSk1fd+Tu5+xBUAKCc1fWblaHX89GRVZ/pKQjkhbNmgQ8itqXJzKs6DdEwYY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1787239181; c=relaxed/simple;
-	bh=WSLjuukuP088A+TfnYgfrcCLirvGwUx+/owRyhgaCZw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fCXTI+CvGxCrSZhqZnyWuNxc05UU3IKFYkARjDHtiWWgYYFevJ3O7ZDAoi+LZ6otw3HP9r9qGFAfxVfXQFTdIropbLVwTxfFinngYPFqYeDZvyvq1AXnLdAhVFvF/rzZwO3sgBMI1wl8NtKr1NGGSqrT893jHwH+VEE/u/YRHxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=bTCs73RA; arc=none smtp.client-ip=91.218.175.98
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	bh=+hcUe+OUgSlQkV7v2P+3uKFo88JRgku5IL1veTqJYl4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yn0V6DC4iw8BgUhkYK3sZbVNzyL4OuRXmMcrQmLaRBzarENlqmBBOFV5qVyJyk5WdKNpDA7u5Ou8Wx160JeO6l9WC9hCiex71j5XpMEia8AUF5CfBozZOASfFxUYYDhc3ca8yCI7a7Zuxn1R6PBBn0sQj8ZDFhpiwRSamcNFRN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=geE15Eku; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="bTCs73RA"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=WSLjuukuP088A+TfnYgfrcCLirvGwUx+/owRyhgaCZw=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787239174; v=1; x=1787843974;
- b=bTCs73RAAMVbMWSDx0j5S1re40fuAqMyN65aqQ9Uitg7OrL7MzwF+5wTCeINQydgqaizzFbZ
- yw/C6jWh8RB+GeaSgvR3H67vwlmmVWk7Pn88yMl0W0t8GYPh9omEhCB6YN/SPrlYN6tadbzR/Ay
- dyw4OES9h90bwxrGGdTYR41w=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [IPV6:2a03:83e0:1126:4:9d:a05e:5bd8:c200] (2620:10d:c092:500::4:2d0d)
-	by smtp.migadu.com with ESMTPS id a46be800631aa279;
-	Thu, 20 Aug 2026 15:19:24 +0000
-X-Mizu-Trace-ID: a46be800631aa279
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <99a4d606-a53e-447e-951d-e356a97d16e9@linux.dev>
-Date: Thu, 20 Aug 2026 16:19:18 +0100
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="geE15Eku"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 05B6F1F00A3E;
+	Thu, 20 Aug 2026 15:19:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787239180;
+	bh=b5hJuXbQ5dC9VlpMlCqdUtrRiywrezf0F9uuzsr0IXY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=geE15EkuV/lUtNOdTTHxH/hk2Tx/U5yHSm4N+DvJTQKO7lsaHxcbqdJ3pHZZGFjua
+	 eHYu9z2Ly5eIzxpDcP94K9UAJ77+WLKUwFJHmCw88GzSupH/qU7RdI/DIjQNbOfQSw
+	 MPoj0D1LEyy3EJegmFooEDF6f6WUDywE0DP1M0BVv+8rakExSJxmxtFMc5p8SbAbop
+	 /wVHhD+XNspcBvtjMZeLR/1IvcECqXMjqNkSB971KzwsKg4kAEOR65oW7aZe5VnR6X
+	 4WD+4oQcegob3+47+3J3pPivtZEh6g0Anl20SduPm6WttyslrpTULRWMOdM7N6/vBJ
+	 N8s707BKUDl8A==
+Date: Thu, 20 Aug 2026 16:19:34 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Leonardo Bras <leo.bras@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v19 03/14] KVM: arm64: Manage GCS access and registers
+ for guests
+Message-ID: <c4d3ef8c-b5da-4435-81e7-7f9ee88b988d@sirena.org.uk>
+References: <aoXamcdKoMynTkpX@LeoBrasDK>
+ <48be9e5d-357a-4863-8682-8b3f34c69723@sirena.org.uk>
+ <aobUGyq8nInJYkdA@LeoBrasDK>
+ <97ad6e83-b22b-4881-b644-66fa99f68d64@sirena.org.uk>
+ <aocOi3wjcliZqoe7@LeoBrasDK>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] futex: Avoid hash-bucket locking for mismatched waits
-To: Thomas Gleixner <tglx@kernel.org>, Dmitry Ilvokhin <d@ilvokhin.com>
-Cc: peterz@infradead.org, andrealmeid@igalia.com, dave@stgolabs.net,
- dvhart@infradead.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, mingo@redhat.com, shuah@kernel.org,
- shakeel.butt@linux.dev, hannes@cmpxchg.org, riel@surriel.com,
- kernel-team@meta.com
-References: <20260805132831.2852771-1-usama.arif@linux.dev>
- <87jyq2dji5.ffs@fw13> <f4eaec7c-39f7-4040-b668-946de9c70941@linux.dev>
- <87y0e8lmih.ffs@fw13> <87v79clmfu.ffs@fw13>
-Content-Language: en-US
-From: Usama Arif <usama.arif@linux.dev>
-In-Reply-To: <87v79clmfu.ffs@fw13>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="VryGsj2zZuDPeMrP"
+Content-Disposition: inline
+In-Reply-To: <aocOi3wjcliZqoe7@LeoBrasDK>
+X-Cookie: Happiness is a hard disk.
 
 
+--VryGsj2zZuDPeMrP
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 14/08/2026 17:02, Thomas Gleixner wrote:
-> On Fri, Aug 14 2026 at 18:01, Thomas Gleixner wrote:
->> On Mon, Aug 10 2026 at 13:17, Usama Arif wrote:
->>> On 07/08/2026 16:42, Thomas Gleixner wrote:
->>>> On Wed, Aug 05 2026 at 06:28, Usama Arif wrote:
->>>>> On Tue, 4 Aug 2026 17:07:59 +0000 Dmitry Ilvokhin <d@ilvokhin.com> wrote:
->>>>> The above data shows the significance of the patch.
->>>>> It provides a very meaningful improvement (22.4% of time spent in futex_q_lock()
->>>>> will be significantly optimized and will also deliver second-order effects)
->>>>> and has no measurable impact on latency in the matching path.
->>>>> IMHO, this patch is a free lunch.
->>>>
->>>> Not really free. The user space access is not exactly cheap either
->>>> because CLAC/STAC are memory fencing to meet the SMAP guarantees.
->>>
->>> My understanding from 86e6b1547b3d is that STAC/CLAC “end up serializing
->>> execution on older Zen,” while Zen 5’s AC renaming “improves performance
->>> of STAC/CLAC a lot a lot.”  Architecturally, they only change the AC bit.
->>> They are not memory-ordering instructions like LFENCE.
->>
->> It's not a memory ordering instruction, but it has to guarantee that the
->> AC change is effective when the subsequent permission check
->> happens. That's true for both STAC and CLAC.
->>
->> So it _cannot_ be free by definition and the penalty depends on the
->> micro architecture.
->>
->>> I am currently testing on Zen5 which could be why I didn't see any
->>> wall-time regression in futex_wait_timeout.c from [1].
->>
->> It's not relevant whether your ZEN5 works fine or not. We are not
->> optimizing for a particular machine.
->>
->> A trivial futex bouncing test case with two threads degrades on a ZEN3
->> by ~20% and when looking at it with perf top clearly the extra user
->> access stands out very prominently.
->>
->> The below variant does not expose that behavior and actually improves
->> the same test case by ~5% on that machine.
-> 
-> Bah. Included the broken version. Fixed one is below.
-> 
-> Thanks,
-> 
->         tglx
-> ---
->  kernel/futex/waitwake.c |   16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
-> 
-> --- a/kernel/futex/waitwake.c
-> +++ b/kernel/futex/waitwake.c
-> @@ -857,7 +857,21 @@ int futex_wait_setup(u32 __user *uaddr,
->  		CLASS(hbr, hbr)(&q->key);
->  		auto hb = hbr.hb;
->  
-> -		futex_q_lock(q, hb);
-> +		futex_hb_waiters_inc(hb);
-> +		q->lock_ptr = &hb->lock;
-> +
-> +		if (!spin_trylock(&hb->lock)) {
-> +			ret = get_user_inline(uval, uaddr);
-> +			if (ret) {
-> +				futex_hb_waiters_dec(hb);
-> +				return ret;
-> +			}
-> +			if (uval != val) {
-> +				futex_hb_waiters_dec(hb);
-> +				return -EWOULDBLOCK;
-> +			}
-> +			spin_lock(&hb->lock);
-> +		}
->  
->  		ret = futex_get_value_locked(&uval, uaddr);
->  
+On Thu, Aug 20, 2026 at 03:28:39PM +0100, Leonardo Bras wrote:
+> On Thu, Aug 20, 2026 at 03:07:14PM +0100, Mark Brown wrote:
 
-Hi Thomas,
+> > I think what would help here would be to move to generating more of the
+> > save/restore sequences rather than open coding them, we could have lists
+> > of registers and then use data about the feature dependencies that the
+> > architecture has (hopefully it's already in the MRS, I didn't check) to
+> > generate these optimised feature checks rather than having to open code
+> > them.  Possibly even list features and generate some of the register
+> > lists, though that would need far more special case handling and it's
+> > *much* less clear if there could be a benefit.
 
-Sorry for the late reply.
+> Yeah, that would automatize the feature dependency for register loading,=
+=20
+> but maybe code would not be that clear on how it works? I have questionab=
+le=20
+> taste, though.
 
-I like this approach; it makes the trade-off much better than my patch.
-When spin_trylock() succeeds, the matching path performs only the existing 
-single user access, rather than the two accesses in my version.
+I was thinking of generating as part of the build process rather than as
+a one off so you'd not actually look at the code in the normal course of
+affairs.
 
-Is it alright if I send v2 of the patch with your diff above? Or would you
-like to send it?
-Please let me know how you would like it attributed if I send it.
+--VryGsj2zZuDPeMrP
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks!
-Usama
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqHGwUACgkQJNaLcl1U
+h9ClIAf8C1PPh/jm0zRwE2TlZckmkQSd0+wAv9s16BA+buMf1y7Blt2cCUAx/+pm
+U3mobFvFSDF1COBWKajgd4TM0wmEbUYDYEd6bwxW38JUSWESaQNkEotcw/D+wCRG
+p16FUPjNexyrTzf1utNn/xnnDihxAxVkv5GaJtLvBISbIC+Sa+sw+PnIwTflkjYC
+CPJmsQEDCzRj+ibEU7rU6KTpUI7udB1A3s8uhnYVji5qsJlUZRVgyM4IbXTA37df
+n5ErCgi7ROl4Lzz53SFIvTdPwJntXuA96OSgfesk7LAJo+7Eq3KJggXX3OxSw6BS
+/F0eUbyIwjde7bxekGufQIE7j0rWnQ==
+=hyYp
+-----END PGP SIGNATURE-----
+
+--VryGsj2zZuDPeMrP--
