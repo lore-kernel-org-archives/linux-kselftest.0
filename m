@@ -1,112 +1,160 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47BAF4086A;
-	Thu, 20 Aug 2026 00:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8C481EE7C6
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 00:50:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787184848; cv=none; b=c7Q5Djx/48zA8yYz7ZTYsKVVkjMn721vYTVn1ssAH2Kta1RVuJ5Zxma/kW+9ZzRF+AxwiVlEQXv28SqopowvCPEf17LBi1l9V9PalEbIbN/QVMKr8bDV3oCtCBmkCuUqN3lB7BcWstNFb98x7DRPQLSOfnKplmVK6fjWCAOqg18=
+	t=1787187056; cv=none; b=De3MSCLQDvUw7oHJXs06khY7cyfOrkwRMctrjPb2eLPSd9rwNxRS4+e81AoLXg0JP8HNz24GIuFYnZwXgx4aWVErQj/cmpHic2MuO05l517gyQ9S3tSN5LZlBh9MftYz/1pDwazxcrW41zP7QyrRksUy03cgD4OlMgIKPAu+U+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787184848; c=relaxed/simple;
-	bh=hGpmloiCLdV24MFQD7/AXId11ujp9dU2vYxXpAaxRZc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RBL8m4EWdmJw5Y4hAkEnEMLyK33A5yM3/0H9EBrzW3IOG5/LXcC7QXYlotkMrQB91qFq+TqYLTu+UIoga0WaZhWswpH9n1NF6Sh4GyljXfZb2Y8mj0h9B6Uqi9hrosrt7cgxruuIWfbKDgo0GX7c4osvRXILtZP/nK5Z5IvP8P4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAcEbQSR; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787187056; c=relaxed/simple;
+	bh=TE/HKcGQjHB6nV6Ri5aq4h/uJG1E970OIzgK0+7AObE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=J/O94aXzZV9PimK+mGk/ZnJgk+7o7qqRdY1Ek83GGT14ELwQuKDuaxfeiqPjI1lah5T6EfJBDxUX+jAFnPULO2QPisDISN9QLvOeAmGPwN44iO7S8QlxmvUPF8rSerlLicunGFDuqWp+o2iIVb5HbKZjO35vxnQVtyVeA6ZRhdU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OkVdO9uY; arc=none smtp.client-ip=209.85.214.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAcEbQSR"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A39601F000E9;
-	Thu, 20 Aug 2026 00:14:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787184846;
-	bh=HrAZoFB2O4ijHVXZLxifKgZ8fU8/Rsiq/ZvJdgv6ZAw=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=aAcEbQSRvUAdr33zTA4FXccyAXg1kygJsd4ah3MBPqCNU7I+IgvLQhsrZY0AUSjvC
-	 4nlgQSrhQZlXPxhekgLQSirgnqyqvkBgyAg/f8tETcCmz3tSISyr60zD1MjjwzpPT/
-	 lFnei0Wp3GVXDjUGhk3F7IZO10YADXCYMu19p81phqAZ8eckNmxoTTTRjKj++er/oW
-	 hVrhyFBXowh9pJc6ftyOkd8H+yoRnwz5kU7RJwEzQe4nAjoIbq6DwTQqUbvtxAmK5q
-	 eS8NgTadFlgfiwsn/kRP06Owzd4gBBkKcgZgtVd85ktUAKGm/1XDi4oyKMLab3/hVn
-	 z9wBt5zOf/jxw==
-From: SJ Park <sj@kernel.org>
-To: Anshuman <anshumantewari123@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>
-Subject: Re: [PATCH] selftests/mm: check stat() return value in khugepaged get_finfo()
-Date: Wed, 19 Aug 2026 17:13:55 -0700
-Message-ID: <20260820001356.87221-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260819121426.49500-1-anshumantewari123@gmail.com>
-References: 
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OkVdO9uY"
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2cea6a46766so24704355ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 19 Aug 2026 17:50:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787187054; x=1787791854; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=WeiRdUabSD1784CoNk4W8kzu7y18u8HhbtUkTWVxO9k=;
+        b=OkVdO9uYnJB7WXn0GhsabkN5WWxIjhNz/cfyOALTaHD5jKWWOsg6CdTjzydtCNi6KK
+         OELLqjLttpnqXzjUikkhvn89klKceHcH2dRrknRN4/SLkivGMmeVZp7DkVKoyFZiW/8d
+         rlyfaIrGap4aY1GiJwumWw8m5ytQq6+fgrAukZUrcnHSJ5hWvsCnrNqRucw4onzjSMLV
+         lWRxVKO9+Y3sS4YCf6M9yf58Vb6vyExsG+AEMC0qUl28MbpdQNH9c/0mYcV3DpHxp2wU
+         dpMH4J04Kkxx7kutefnz2RI7wFdPkpo6Ft1Gcxd1d7YwbusypAayZmgNh2aJss2+/Un7
+         hgnQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787187054; x=1787791854;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WeiRdUabSD1784CoNk4W8kzu7y18u8HhbtUkTWVxO9k=;
+        b=Kde+5H1EBS4cPUAEik1OuUYQKgXupuDYabGEuNwn4kDhfbTHNae8FtoyWSA4LaZysO
+         Eg20MWcaTBiKyySpWIAK67irLFaptOLRfi6UZMzUZIlq0izysvH2E1zzS2vN30Gj88t+
+         Qvpw9fcGejlQphQncZzDt9mut4ecOby4Uc8TEiev7/KuHUdGUFiQLGgYSb8e8dWTHU46
+         SOh+oWaZIclFOhpdyUYViyimXzyoyl+dCVJbDgUtgBJ9glH7xVxVuLUig7SVuKStysGc
+         oQbmuOQSZYQb6W5+kFPbt9aiDxA3Fdg00XZQytTCwDnNQKb8IHQ/oAtzfEhEFCVnuD6t
+         TbTQ==
+X-Forwarded-Encrypted: i=1; AHgh+RpaNhWjhGsT9x+65KYcPUfJFoEgPsH2cseMOhLVDI9Bb6UMoW5NPjSJkvtKV+lYjqo33FRP0x6OFUxcxIeUm7M=@vger.kernel.org
+X-Gm-Message-State: AFuF++n2WXVlcBxjcCpi7aodEXN37TLVy9Q3wp1AX+znsANCiyZdyx/c
+	cOt7ndnqgzoTTAefybLPJ1uadtoZ04I/NakPDseZqO5wwfm1jvVZWNsGJzDP6yzt4DORM017psM
+	cqADjXQ==
+X-Received: from plbke14.prod.google.com ([2002:a17:903:340e:b0:2d0:de7f:1ccb])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f687:b0:2d3:2e86:647a
+ with SMTP id d9443c01a7336-2d5fd6b24camr145291955ad.5.1787187053833; Wed, 19
+ Aug 2026 17:50:53 -0700 (PDT)
+Date: Wed, 19 Aug 2026 17:50:53 -0700
+In-Reply-To: <CAEvNRgFd-6-QxR7w8SxPRa0UU+AAF7pDupLP8cPbQ9y3m=2QVw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-7-2fc18ee6d3ba@google.com>
+ <ed483d25-d908-4248-b8c7-862dd35dc6d4@kernel.org> <annnrGR1noVuBkCc@google.com>
+ <cc44c9d7-a6cd-40a5-9f68-4822fb9c9d0c@intel.com> <CAEvNRgFd-6-QxR7w8SxPRa0UU+AAF7pDupLP8cPbQ9y3m=2QVw@mail.gmail.com>
+Message-ID: <aoZPbZZx2UVGZ-D1@google.com>
+Subject: Re: [PATCH v10 07/41] KVM: guest_memfd: Stub in ability to enable
+ in-place shared<=>private conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Xiaoyao Li <xiaoyao.li@intel.com>, "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-'get_maintainer.pl --nogit --nogit-fallback' suggests adding below recipients.
-I added them.
-
-- Zi Yan <ziy@nvidia.com>
-- Baolin Wang <baolin.wang@linux.alibaba.com>
-- "Liam R. Howlett" <liam@infradead.org>
-- Nico Pache <nico.pache@linux.dev>
-- Ryan Roberts <ryan.roberts@arm.com>
-- Dev Jain <dev.jain@arm.com>
-- Barry Song <baohua@kernel.org>
-- Lance Yang <lance.yang@linux.dev>
-- Usama Arif <usama.arif@linux.dev>
-- Vlastimil Babka <vbabka@kernel.org>
-- Mike Rapoport <rppt@kernel.org>
-- Suren Baghdasaryan <surenb@google.com>
-- Michal Hocko <mhocko@suse.com>
-
-On Wed, 19 Aug 2026 17:44:26 +0530 Anshuman <anshumantewari123@gmail.com> wrote:
-
-> get_finfo() calls stat() to get metadata about the target directory,
-> but never checks the return value. On failure, stat() returns -1 and
-> leaves path_stat unmodified, so path_stat.st_mode may contain
-> uninitialized stack data.
+On Thu, Aug 13, 2026, Ackerley Tng wrote:
+> Xiaoyao Li <xiaoyao.li@intel.com> writes:
 > 
-> The code then checks S_ISDIR(path_stat.st_mode) against this
-> potentially garbage value. This can produce a misleading "Not a
-> directory" error when the real problem is a nonexistent or
-> inaccessible path, or, in the worst case, the check could pass by
-> chance on garbage data and let the function continue using an
-> invalid path_stat for the rest of its logic.
+> > On 8/10/2026 11:01 PM, Sean Christopherson wrote:
+> >>> As mentioned in v9, the name is confusing.
+> >>>
+> >>> 	kvm_gmem_mem_is_private
+> >>>
+> >>> ?
+> >> Ya, +1 to kvm_gmem_mem_is_private.
+> >
+> > So kvm_gmem_mem_is_private() calls kvm_gmem_is_private_mem()
+> > internallly. Ummmm.
 > 
-> Check the return value and fail with a clear error message if
-> stat() fails, matching the error-handling style already used for
-> statfs() and read_file() later in the same function.
-
-Makes sense to me.
-
+> How about
 > 
-> Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+>   kvm_gmem_mem_is_private(kvm, gfn)
+>   __gmem_mem_is_private(inode, index)  <== this is a static function
+>                                            anyway, though it calls
+>                                            kvm_gmem_get_attributes(inode, entry)
 
-Reviewed-by: SJ Park <sj@kernel.org>
+Hmm, what if we do:
 
+	kvm_gmem_is_private_gfn(kvm, gfn)
+	kvm_gmem_is_private_mem(inode, index)
+	
+And then to be consistent with the non-gmem code, slot in the rename you suggest
+below:
 
-Thanks,
-SJ
+  KVM: Rename memory attribute APIs to prepare for in-place gmem conversion
+  <rename kvm_mem_is_private() => kvm_is_private_gfn()>
+  KVM: Provide generic interface for checking memory private/shared status
 
-[...]
+I would also be a-ok with:
+
+	kvm_gmem_is_private_mem(kvm, gfn)
+	__kvm_gmem_is_private_mem(inode, index);
+
+along with a kvm_mem_is_private() => kvm_is_private_mem() rename, though the more
+I look at this, the more I prefer scoping the external API to a gfn.  Especially
+for the guest_memfd code, where KVM needs to query shared vs. private without a
+gfn.
+
+I don't love kvm_gmem_mem_is_private(), it looks like a typo (though as above, I
+do like it more than kvm_gmem_is_private()).
+
+> or
+> 
+>   kvm_gmem_gfn_is_private(kvm, gfn)
+>   kvm_gmem_is_private_mem(inode, index)
+> 
+>   (rename the vm stuff with the suffix gfn_is_private())
+> 
+> or (current, it is actually weird)
+> 
+>   kvm_gmem_mem_is_private(kvm, gfn)
+>   kvm_gmem_is_private_mem(inode, index)
+> 
+> or
+> 
+>   kvm_gmem_mem_is_private(kvm, gfn)
+>   kvm_gmem_index_is_private(inode, index)
