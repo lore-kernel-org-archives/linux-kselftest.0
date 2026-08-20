@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9E5F479895;
-	Thu, 20 Aug 2026 15:34:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9212047A878;
+	Thu, 20 Aug 2026 15:34:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787240057; cv=none; b=rp4eAT0cALx09sYpjdsM1o2BOO+DaQqyMr1R+5z9M6W18TJT5qkUKylgfBKh0rLSKJ8l6w5LEo8f9f1AvFMzyXGCLsG1xHYUYHD03jZfRAbVRz2AioV/EOrykj4+eJcF4kxHj4ZzEhRrFUDOEyKrXBcUpSFNqYfo8caey765PCQ=
+	t=1787240058; cv=none; b=Yd+htlsjCDLeBp5IOni6r/KBVBz2WgZDd53yvlSTL6WDO2wTMeTW3p9wH6JDCbs0gupJR69IzGb4xt4TjyNWwyoobt/JlVGtJlmXP0RsEpKKlsuVHKh9fpnunLS0S5Q1+2le61jkmN2c4X4crzOADkxEvkvPhYySeRQUyNE5rAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787240057; c=relaxed/simple;
-	bh=vre9auiptf+o+amdAV0uA/7EFkQAVeq7gsNLbAqiU8c=;
+	s=arc-20240116; t=1787240058; c=relaxed/simple;
+	bh=XiIMUAI3CQTSrJclmRgZXDewMHXUs7lMHRaU8Wfpa4M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TnvoqkI9QHp8rHnhrpOr+VwYfcxr49+NtHQ385xQMzaAMDYBIpVhfzGSrL/UMHd4LzVftUKoOalSVJ/elPhfSCTQn4LYhs5DaTFxUD7WH20/6g+nXMhGM44UvW49ND551R6jE0LZNjMqkuwFAK5GhyzlON5kMXCj7hXL/jO5fSU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=ILuiY8iG; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=R1YOjJlzq/5/d7cc42GSzeD4pdi+POEUyzOpqyrvhDVCZ8/Q6UOTb607B/upODBAWRoXpXxj7cKMpYxkFcwiT8WpE0Xea1ZVxZJ4BZdMJNBMFsCWg1giD+m/2QGYUusL1FHCypNCgt8JI25HbSnBDTPXnJRFxpPQvHhjY0YyxwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=sqPysWCE; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="ILuiY8iG"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="sqPysWCE"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2A13B153B;
-	Thu, 20 Aug 2026 08:34:11 -0700 (PDT)
-Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 2FBB53F763;
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 410CD1691;
 	Thu, 20 Aug 2026 08:34:13 -0700 (PDT)
+Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49D983F763;
+	Thu, 20 Aug 2026 08:34:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787240055; bh=vre9auiptf+o+amdAV0uA/7EFkQAVeq7gsNLbAqiU8c=;
+	t=1787240057; bh=XiIMUAI3CQTSrJclmRgZXDewMHXUs7lMHRaU8Wfpa4M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ILuiY8iGLLhfAIqBKU9UGmoQePaZW4vluIC1qsZoLQQaGLK1np9ZVli07H9RN+ojP
-	 S8hnGYPAty5WZzdm42RTrrzEhXRDmOkWppwJD666o3+vpKjnsZUGsqoVQD9371sizq
-	 ElOfDFmb9U2+2Ch12mQJBdb5ICdboTOWEt2lspcs=
+	b=sqPysWCE6zOjewZ/05h1yx2wTxbz/AhF4/2AV7LXJZCyUHIZoMggpYHP0HIEmZByQ
+	 LOBJJFFh1tfqbDGJlKaAOfH9AdLF9qo/WzeepKNsOikeIa5sNPA/Rd8sj5sBxh4Nl6
+	 e2KKrOVKxclOHwikMlkQh/hxVKZ4Kv6csgogmFYU=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -41,9 +41,9 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 3/4] selftest/arm64: Fix MTE prctl TAP plan
-Date: Thu, 20 Aug 2026 16:33:25 +0100
-Message-ID: <20260820153331.2448875-4-usama.anjum@arm.com>
+Subject: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
+Date: Thu, 20 Aug 2026 16:33:26 +0100
+Message-ID: <20260820153331.2448875-5-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20260820153331.2448875-1-usama.anjum@arm.com>
 References: <20260820153331.2448875-1-usama.anjum@arm.com>
@@ -55,34 +55,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The MTE prctl test emits one result from check_basic_read() followed by
-one result for each of the seven entries in mte_modes[]. However, the TAP
-plan only accounts for the array entries, producing:
+The arm64 selftest collection has no Kconfig fragment, so kernels built
+with the selftest requirements are not guaranteed to provide the support
+used by the MTE tests.
 
-  # Planned tests != run tests (7 != 8)
+Add a fragment covering the userspace MTE and tagged-address ABIs, KSM
+and its sysfs interface, explicit HugeTLB mappings and their proc/sysctl
+interfaces, and tmpfs-backed file mappings.
 
-Include the basic read check in the plan so that all eight emitted results
-are declared.
+Do not request NUMA solely for the optional KSM merge_across_nodes.
 
-Fixes: 1f488fb91378 ("kselftest/arm64/mte: Add MTE_STORE_ONLY testcases")
 Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 ---
- tools/testing/selftests/arm64/mte/check_prctl.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ tools/testing/selftests/arm64/mte/config | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+ create mode 100644 tools/testing/selftests/arm64/mte/config
 
-diff --git a/tools/testing/selftests/arm64/mte/check_prctl.c b/tools/testing/selftests/arm64/mte/check_prctl.c
-index f7f320defa7b9..d16a91117eef9 100644
---- a/tools/testing/selftests/arm64/mte/check_prctl.c
-+++ b/tools/testing/selftests/arm64/mte/check_prctl.c
-@@ -119,7 +119,7 @@ int main(void)
- 	int i;
- 
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(mte_modes));
-+	ksft_set_plan(ARRAY_SIZE(mte_modes) + 1);
- 
- 	check_basic_read();
- 	for (i = 0; i < ARRAY_SIZE(mte_modes); i++)
+diff --git a/tools/testing/selftests/arm64/mte/config b/tools/testing/selftests/arm64/mte/config
+new file mode 100644
+index 0000000000000..8587ce70c294a
+--- /dev/null
++++ b/tools/testing/selftests/arm64/mte/config
+@@ -0,0 +1,8 @@
++CONFIG_ARM64_MTE=y
++CONFIG_ARM64_TAGGED_ADDR_ABI=y
++CONFIG_HUGETLBFS=y
++CONFIG_KSM=y
++CONFIG_PROC_FS=y
++CONFIG_SYSCTL=y
++CONFIG_SYSFS=y
++CONFIG_TMPFS=y
 -- 
 2.47.3
 
