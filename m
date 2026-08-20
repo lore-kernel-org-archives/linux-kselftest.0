@@ -1,90 +1,88 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9212047A878;
-	Thu, 20 Aug 2026 15:34:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 523C6376A06;
+	Thu, 20 Aug 2026 15:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787240058; cv=none; b=Yd+htlsjCDLeBp5IOni6r/KBVBz2WgZDd53yvlSTL6WDO2wTMeTW3p9wH6JDCbs0gupJR69IzGb4xt4TjyNWwyoobt/JlVGtJlmXP0RsEpKKlsuVHKh9fpnunLS0S5Q1+2le61jkmN2c4X4crzOADkxEvkvPhYySeRQUyNE5rAw=
+	t=1787240314; cv=none; b=Fb8ba115HqOWmt1zm/Qzpv0shc/zw2y5UaUv+hYSS2iynqJkonyYJzDvH2YrSjDWYDndkpKqRjnsg2Mqc6nlJSKHKZtbO3kz5inprDvEZL9BsOkD45p4gdzm6XAGVYJkpV6MlL2J8LlmI2S2oxr03CitQuIOcUSsNySkUl4Xpog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787240058; c=relaxed/simple;
-	bh=XiIMUAI3CQTSrJclmRgZXDewMHXUs7lMHRaU8Wfpa4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R1YOjJlzq/5/d7cc42GSzeD4pdi+POEUyzOpqyrvhDVCZ8/Q6UOTb607B/upODBAWRoXpXxj7cKMpYxkFcwiT8WpE0Xea1ZVxZJ4BZdMJNBMFsCWg1giD+m/2QGYUusL1FHCypNCgt8JI25HbSnBDTPXnJRFxpPQvHhjY0YyxwU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=sqPysWCE; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787240314; c=relaxed/simple;
+	bh=nVSZXW3423ktU6z4XcoFB9p2nfzBOiAasYgVWaoOm6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PVSDayaOmFXNP7XWq0t7rUhRaeYWpvgDDIZ0oVIqOIvZ11ktZ+UWgKDUVQtolDb0mSd53uEUkjQ8HAFuUiLhtrFFwHE/Vzpe7RuQreZz2ftL4l9JQPeq3K5SCqVXf2CMj5pzd5kBeFcQmgT7wpKddxKHKSOpDR+p6PUH/IUyVVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VSZb22ew; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="sqPysWCE"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 410CD1691;
-	Thu, 20 Aug 2026 08:34:13 -0700 (PDT)
-Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 49D983F763;
-	Thu, 20 Aug 2026 08:34:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787240057; bh=XiIMUAI3CQTSrJclmRgZXDewMHXUs7lMHRaU8Wfpa4M=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=sqPysWCE6zOjewZ/05h1yx2wTxbz/AhF4/2AV7LXJZCyUHIZoMggpYHP0HIEmZByQ
-	 LOBJJFFh1tfqbDGJlKaAOfH9AdLF9qo/WzeepKNsOikeIa5sNPA/Rd8sj5sBxh4Nl6
-	 e2KKrOVKxclOHwikMlkQh/hxVKZ4Kv6csgogmFYU=
-From: Muhammad Usama Anjum <usama.anjum@arm.com>
-To: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VSZb22ew"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 718721F000E9;
+	Thu, 20 Aug 2026 15:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787240313;
+	bh=V9+n6yZ9yz0WzKubwizayKc87+tB4M0rtZcS+dSKvDk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=VSZb22ewuYnt6n/5ebQy0fRjxHwe+rIGyPv9K0kDUxUF/JtoJiwf8pRcEV+Dt2Jj6
+	 KAqa77aTLeQBSYdZ5FI0BY/pYKfeGecdOhbJ0Ss/DdcQ7fczVsFJQqoSPpT0ekoaa5
+	 09eMB9ce0G/s1r5J2Xg2E3UNPvPgkt7MEss23qWCUB7m4v0HtT4X6Zg46/F/oOEo16
+	 9PGVD/arRIdyu9IByaU7hV3ys4bcLn6g8ErrFXF2a+8epUPc3XiOdGiPRD/cDXdaUQ
+	 +DVL1YfcHQWRJ6rLVBzHp/PdtwMrQ9OKSEaUqXLiJo5du4uPiDSI3ym0wMVD+aG9Tu
+	 aF6Ujid77tW5w==
+Date: Thu, 20 Aug 2026 16:38:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
 	Andrey Konovalov <andreyknvl@gmail.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Amit Daniel Kachhap <amit.kachhap@arm.com>,
-	Mark Brown <broonie@kernel.org>,
 	Yeoreum Yun <yeoreum.yun@arm.com>,
-	linux-kernel@vger.kernel.org (open list),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
-	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
-Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
-Date: Thu, 20 Aug 2026 16:33:26 +0100
-Message-ID: <20260820153331.2448875-5-usama.anjum@arm.com>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260820153331.2448875-1-usama.anjum@arm.com>
+	open list <linux-kernel@vger.kernel.org>,
+	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
+Message-ID: <3c469ee4-cc64-4d79-8e78-deeff30c59a6@sirena.org.uk>
 References: <20260820153331.2448875-1-usama.anjum@arm.com>
+ <20260820153331.2448875-5-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="8094Vs83lBy8oqp0"
+Content-Disposition: inline
+In-Reply-To: <20260820153331.2448875-5-usama.anjum@arm.com>
+X-Cookie: Happiness is a hard disk.
 
-The arm64 selftest collection has no Kconfig fragment, so kernels built
-with the selftest requirements are not guaranteed to provide the support
-used by the MTE tests.
 
-Add a fragment covering the userspace MTE and tagged-address ABIs, KSM
-and its sysfs interface, explicit HugeTLB mappings and their proc/sysctl
-interfaces, and tmpfs-backed file mappings.
+--8094Vs83lBy8oqp0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Do not request NUMA solely for the optional KSM merge_across_nodes.
+On Thu, Aug 20, 2026 at 04:33:26PM +0100, Muhammad Usama Anjum wrote:
+> The arm64 selftest collection has no Kconfig fragment, so kernels built
+> with the selftest requirements are not guaranteed to provide the support
+> used by the MTE tests.
 
-Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
----
- tools/testing/selftests/arm64/mte/config | 8 ++++++++
- 1 file changed, 8 insertions(+)
- create mode 100644 tools/testing/selftests/arm64/mte/config
+>  tools/testing/selftests/arm64/mte/config | 8 ++++++++
 
-diff --git a/tools/testing/selftests/arm64/mte/config b/tools/testing/selftests/arm64/mte/config
-new file mode 100644
-index 0000000000000..8587ce70c294a
---- /dev/null
-+++ b/tools/testing/selftests/arm64/mte/config
-@@ -0,0 +1,8 @@
-+CONFIG_ARM64_MTE=y
-+CONFIG_ARM64_TAGGED_ADDR_ABI=y
-+CONFIG_HUGETLBFS=y
-+CONFIG_KSM=y
-+CONFIG_PROC_FS=y
-+CONFIG_SYSCTL=y
-+CONFIG_SYSFS=y
-+CONFIG_TMPFS=y
--- 
-2.47.3
+Is tooling going to pick this up or should this be at the arm64/ level?
 
+--8094Vs83lBy8oqp0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqHH3MACgkQJNaLcl1U
+h9A3ygf/fD/s3KwqoBJbnYpD4DV1b5+f0x52mtrtfy9QiCxQ1Tlo88eCciZJ6+Lb
+m/RBF8aH8ZahA7xj713OT9ZQAUuZbYaOTatyDFfTm91LGsRACFxy2jjDM5H7vVum
+HnzrmUMiudXte4z72/dSAT36uIV92pKUo0gndNnJd/3FEYa66oF+zerLrPMkaty9
+I90leHzz0APaEqWbpq1jYyazcXx4UkKWZ8j0kySS35dXLTB18C33AFVIT9H6sz5V
+b4ZzTa5JC7+r5whe3aQxYY6HQijv+kZtKnxziiFFd3luzjNITn8YTHzjdkBPGJAR
+QZsmcg5eY8J9A30YgJxjmCipU+BQsw==
+=NBXB
+-----END PGP SIGNATURE-----
+
+--8094Vs83lBy8oqp0--
