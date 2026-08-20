@@ -1,129 +1,152 @@
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BE014195C0
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 10:57:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.222.170
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787223447; cv=pass; b=nDeof4LSQtDv7PaElFVRPc0L4h5rFc4qhD2NAb9b4Q0hFl4ktTDxwP520qDGhqC2U38BloFjyOcHy7y4qPF4upo7R+smiByIlp2c1rSo+Lp64d8g2ZAiksdNvsj7GF4KWM6ncaOKuq9ry/L8/24jejSrmX2VuwiHj708E9/eYTQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787223447; c=relaxed/simple;
-	bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L8E5NMNjEy42///z1/zX3ZsIID7e5aov6iDU/95LYrpTtxGkRoXhoHl60+cxC9Ong7CzJbh7CpyNICHoljUwbiJtABHJWw+PFq8lcnpAhTBUg5NalEGbGHb+z1vU8BjbKql8VG6OsQU4bMvdDJ7Lj2J9vH0othqwJqBTtVL+ljs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vH+PWZ4k; arc=pass smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D40389111;
+	Thu, 20 Aug 2026 10:57:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787223476; cv=none; b=IiCpUo5Le/wrXHxf9eI1d+fag96tMMz4lEhJmjL+Zv14v5bWentYdNQTZyk547a26OZxdIPuqZappt45podxvSbYb0DdyHKBAN/gUumMQ4EojsdZtIYqwsJoIMQ900iP/65g5j0N8S0mRwxM8HkHxnUFer6+jOLZ8XncWazBi/Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787223476; c=relaxed/simple;
+	bh=LPCaldm1q4JDm8FZLdWWbyaeIP6P1AL+d9WYWPyUt9Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=TZbt/4F6bvXNM/VF+MnCpkqGB4gWZImwc5m/8z3xdXumUDNW29pUx5pgswQzt0ZOu3R2YYvkGoFt67dXlovyM1a72lqGizQK5WHqOUumqiC6hfsb/MRiM7ehX1bExOr9JmO9GTrnPTKdXDl0ls4fV6ve7ZPMHwYZBsdVkF6NDIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKEUBudo; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vH+PWZ4k"
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-930c0f9c1b1so134421785a.1
-        for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 03:57:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787223444; cv=none;
-        d=google.com; s=arc-20260327;
-        b=py9LeQZBzcx1+E0Rx1HwmMBxivfkuEVaG70SQL9s2Dox4yL5fAcklfsDoV+tf7PeSM
-         brWiWTzP5Ap2x4L6e2Zy2vWbpHWIV/geV/HoRP66pN/Cm7sl73KiwChoAwroKqYL5yza
-         OmX2zHcJK8R6nw4DfTCzI8doTHdK7YXKXJaV/pJ1tvQEOL9s1fPKsTURpmkUmIlagMJe
-         Y+Y/LpAGcXpiBTTCNqBOdJ+xOAaracFURs6QnlmBPrBJgQ5lctRvBEc+XSQRh1FYqo6R
-         6qPnsgBErUJK6QhakWonKKql+ofUf6mgm4FgMI+rejMJL0ov3edHrhzW2u3hI8qAnGjt
-         7xCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
-        fh=2C+m2iKRm6dDnzyNMtE9ME22prJSQ3rxbYIZ8b0B5v0=;
-        b=qLt6OrJoVY7rZQkdWOncY7DklFCmsiCvIZuOZRd2HsqNsB2AfR8b54FhgD2QtjRIOu
-         912qIE0n7UWBsNkxiyb0nmBTF5WPjN0StELzZqec+ea6ZJdp+nWhh4ByS9q5ShvJSF8Q
-         43KmblMvxVoKZDd5Dka5rZWecTX3QIN7vzrdC0mossOmmgWLPv2IILkda7u3r8m7HseO
-         qKzST+MwJP6YIANGbvjSvjAw32gmNzexkXBO5pd34LtD6eAG1RudY6pSS4jgg7iUnET1
-         RTz7sh8bpuaZDhf4ZnDsgIQNQOV9IKop4Bii+Rfx8S0Q9oALy93em/vsVyIDfMcGG3Yp
-         R5pQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787223444; x=1787828244; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
-        b=vH+PWZ4kRaCk7q+/hoUeJPvKKLzE9mCR/GBiwYww1gvDQuQNSm4o3JABuI6JK/3fOg
-         e9famN5/r17Dzglyxh57XsMbPhnYJag3eY+0EmkODlC/YPs5hbRf4WU+QVV5epNu79jl
-         lfdKu4p7v2OGld7/A+GszvGy/1o9rR45TTFXC8GKzFYOUhHhg2EYfqBk5cXyLR9W35S1
-         pHtjqs8wOwtr7Z9lPeREIEhwR2wdgjb0fkpWRvHw0SHxkyqDbYq350LefO/tdvZFBlnY
-         hHUiatk99FC2Dh3hWqI7R0zs4sxTOZ81FBHcqDzhq82VxDhQM9Mx4NkhccH//Kro6oIr
-         qq+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787223444; x=1787828244;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=9jYtyylx2W7dLCyVBh5w5flbhCU/+JBjP9aGJBwO6Iw=;
-        b=FGfjLf6zpIsM7hQVy9G7KM3IRpR9M9DWvH74eKVSjXb+gglsrD2Vl1BpqUbdCQbKJf
-         Zg+zaHPMrPDjkrEXiVi+X8bnGdb5JvSrBoFYfu9WKSW0qANx33Ugx3iKsiNPZUnFDKBj
-         zsGjr5iAuzSIKl16erRjJS/738omzZfD+hy87i6o+VKXLxNGw/CWMxB60FOZhLr3UGJY
-         L7neFyMT1x4Preaj/fzV00Gd65aEy+pDNpEMADAvShX8lFTg2Q6pG1bkonolGRTuq4OC
-         SiFQC2ZvTat5ugkdJ2Zwk0SGVO09KWBncee77Ni7+ekI+nbdvdzSqkE5EVhU8nAv3VxZ
-         idkw==
-X-Forwarded-Encrypted: i=1; AHgh+RrvJ4FQ/d8lWesE7wlO/R+d1aD1L/DeNtuHXTlMFbpfOWVB38bPagbjLQcJENLkJfFE+8mdU7bNrrMIlvNE4eI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzVeSR/G5O05P4nn/UoNyh9Hun9LbkWtGKiMFkhJVQbvlNwPz/j
-	/voSu7jZkB5NuAYEHNbaPoVvoeEI9sOB5WuF7uFjo9jlXHW2h3t0PmH/fUPOWKTVAi9pFw0K4O5
-	92Es6IGxcBQF9fwqW19zCP1lIBZT6/ik9ym5Un8Fq
-X-Gm-Gg: AR+sD10euG0dvNPFdpLjGNHAjxI+KCIrG0Lznh/arOBg+JCVOaeeABVJCInIHBqHOhP
-	kBYOeAn31daHNXXfIbAj6jIO8jEF05hPLNCKXaqzdxjAzMOWs+Wn2nQE8S7lVF8zE1RzdIDrZwL
-	B/jcSyxSbYIEc1UTqDhUcy+TcQJjoBmtBSn4fiYJp8ijFROdfWnoUtT7t9hMpWeWpy00ULXROZi
-	rgo7vDnrZ7fEdAN7y0aiNf1cX+PSlBE08xWaADvMTQtQEJVxQTuZXA0zrhgyo3eLyiSYRJl2BHk
-	gtjyjoHyzxOzHUdrvRuNhV4tanElizr0/fH+9/pPJEhmlsc32Xibxl3212A8XU2GXtzIrMLRI6E
-	igPkPQint7pr8dBSlsHKu93b8gHIW5hhNITOHKaUGAIZJdu3cmpOoD+QQGQ==
-X-Received: by 2002:a05:620a:468e:b0:930:9091:f0ce with SMTP id
- af79cd13be357-9371e302067mr1049789885a.22.1787223443592; Thu, 20 Aug 2026
- 03:57:23 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKEUBudo"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465FF1F000E9;
+	Thu, 20 Aug 2026 10:57:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787223474;
+	bh=SD5iTaJbc9q/M3QLf1krpo13nJxVMOZPGPuInSi7uu0=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=nKEUBudoL/z+PvJxHEUPgdsLzUwBgEvEOex5lRNUtYeHBuDpVPZtvxCIoj489g2bt
+	 aklW1DgzWo+yoEMQ0DUC9wXUOW/KdTnnuIWmQeTb6xnnv/ttEdUdC2Z9yMVrGA7Uh2
+	 GByTkM9vh8PYAgbN+MZ0UABSRW0j0jhN54oMj+ooPGmd246gHSr4kXF2bJNhezeE0Q
+	 QzyvElnOl6VvNNSoRpixQKJGZ3/4iRPzswM49zj3PjZRT6dtUEq4o3rJOg4oeP1uaw
+	 bQYRXznCZO7rpPJ2CW632BBnAUaKfMGZo9ZHq7z98e7jDvbeDXP/1zMyJ51HwN3L3y
+	 vJidVCcus+VJQ==
+From: Simon Horman <horms@kernel.org>
+To: fffsqian@163.com
+Cc: Simon Horman <horms@kernel.org>,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	sjpark@amazon.de,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	fuqingshuang@kylinos.cn
+Subject: Re: [PATCH] selftests/net: fix kill() argument order in fin_ack_lat
+Date: Thu, 20 Aug 2026 11:57:01 +0100
+Message-ID: <20260820105702.803812-1-horms@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260817091017.281104-1-fffsqian@163.com>
+References: <20260817091017.281104-1-fffsqian@163.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260815070413.294559-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260815070413.294559-1-jiayuan.chen@linux.dev>
-From: Eric Dumazet <edumazet@google.com>
-Date: Thu, 20 Aug 2026 12:57:11 +0200
-X-Gm-Features: AcwNN1V-lDNNVkCSZufLYHUNnmdNTo3thCvZLBu1IvrTsUJT8e265xO6leh8BHk
-Message-ID: <CANn89iJ7hfewnOEjD5SSf_3n3iSQAHN8TPspBCyp_Pvy-ibbYw@mail.gmail.com>
-Subject: Re: [PATCH net v2 1/2] net: advertise TCP MSS from the configured
- MTU, not the learned PMTU
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, stable@vger.kernel.org, 
-	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
-	"David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 15, 2026 at 9:04=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
-v> wrote:
->
-> The MSS a host puts in its SYN tells the peer how big a segment it may
-> send us. Right now we can shrink it with a PMTU we learned on our own
-> send path, which is the wrong direction entirely.
->
-> On asymmetric paths this bites - think DSR load balancers, where the
-> request side goes through a smaller-MTU overlay. We learn a small PMTU
-> going out, then advertise a small MSS, and the peer stays capped for the
-> whole connection even though its path back to us is wide. MSS only shows
-> up in the SYN and never grows back.
->
-> On symmetric paths we lose nothing by dropping it either: the peer runs
-> its own PMTU discovery and usually already knows the real path MTU.
->
-> So work out the advertised MSS from the configured route or device MTU
-> and ignore the learned PMTU. Our send side is unchanged, still clamped by
-> tcp_current_mss(). Add ip_dst_mtu_configured()/ip6_dst_mtu_configured()
-> and use them from the two default_advmss() paths.
->
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Fixes: 164a5e7ad531 ("ipv4: ipv4_default_advmss() should use route mtu")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+Full review at: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260817091017.281104-1-fffsqian@163.com?part=1
+---
+--- Patch [1]: [PATCH] selftests/net: fix kill() argument order in fin_ack_lat ---
+commit c8d7888fff6c43f1844cd283115315b6ce892cad
+Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+selftests/net: fix kill() argument order in fin_ack_lat
+
+The patch swaps the arguments of the kill() call in sig_handler() so the
+server forwards SIGTERM to the client instead of passing a pid as the
+signal number, and adds a child_pid > 0 guard so the client (which
+inherits the handler and sees child_pid == 0) does not signal the whole
+process group.
+
+> diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
+> index 70187494b57af..f985e01354b44 100644
+> --- a/tools/testing/selftests/net/fin_ack_lat.c
+> +++ b/tools/testing/selftests/net/fin_ack_lat.c
+> @@ -103,7 +103,8 @@ static void server(int sock, struct sockaddr_in address)
+>  
+>  static void sig_handler(int signum)
+>  {
+> -	kill(SIGTERM, child_pid);
+> +	if (child_pid > 0)
+> +		kill(child_pid, SIGTERM);
+>  	exit(0);
+>  }
+
+[Severity: Low]
+[Finding: main-2-1]
+[Sources: opus-5]
+Now that the forwarding actually works, can the wrapper script's cleanup
+path start failing?  Both processes carry the comm name fin_ack_lat
+because main() forks:
+
+  child_pid = fork();
+  if (!child_pid)
+          client(ntohs(laddr.sin_port));
+  else
+          server(sock, laddr);
+
+so pidof returns two pids in fin_ack_lat.sh:
+
+  set -e
+  ...
+  cleanup() {
+          kill $(pidof fin_ack_lat)
+          rm -f $tmpfile
+  }
+
+  trap cleanup EXIT
+
+If bash signals the server pid first, the server now runs sig_handler(),
+forwards SIGTERM to the client and exits.  The client then exits, is
+reparented to init and reaped.  If that completes before bash issues the
+second kill(2), the builtin gets ESRCH and returns non-zero.
+
+With set -e in effect, wouldn't that abort the EXIT trap, so the script
+exits non-zero even when do_test() saw zero spikes, and rm -f $tmpfile is
+skipped, leaving /tmp/fin_ack_latency.*.log behind?
+
+Before this change the forwarding call always failed with EINVAL, so the
+client was still alive when bash reached its pid and this window did not
+exist.  Would it make sense to make the wrapper tolerant, for example
+kill $(pidof fin_ack_lat) 2>/dev/null || true, or to kill only the server
+pid?
+
+[Severity: Medium]
+[Finding: gpt-5-6-sol-3-4]
+[Sources: gpt-5-6-sol, opus-5]
+This isn't a bug introduced by this patch, but the new child_pid > 0 guard
+is the only place the fork() failure sentinel is considered, and it handles
+it by doing nothing.  main() never checks fork() for failure:
+
+  child_pid = fork();
+  if (!child_pid)
+          client(ntohs(laddr.sin_port));
+  else
+          server(sock, laddr);
+
+On failure child_pid is -1, the !child_pid test is false, and the process
+falls into server()'s infinite accept() loop with no client ever
+connecting, so nothing is printed.
+
+fin_ack_lat.sh's do_test() only counts lines and treats an empty log as
+success:
+
+  NR_SPIKES=$(wc -l $tmpfile | awk '{print $1}')
+  if [ $NR_SPIKES -gt 0 ]
+
+so a fork() failure (EAGAIN/ENOMEM, RLIMIT_NPROC) is scored as a passing
+test.  Since this file already uses error() for every other syscall, would
+adding if (child_pid < 0) error(-1, errno, "fork"); be appropriate here?
+-- 
+pw-bot: changes-requested
