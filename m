@@ -1,138 +1,193 @@
-Received: from canpmsgout05.his.huawei.com (canpmsgout05.his.huawei.com [113.46.200.220])
+Received: from OSPPR02CU001.outbound.protection.outlook.com (mail-norwayeastazon11013055.outbound.protection.outlook.com [40.107.159.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5618312819;
-	Thu, 20 Aug 2026 04:12:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=113.46.200.220
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787199145; cv=none; b=j1DaNcM/gek7yRg0dIsIB66r7vZk2MHeybdfJ7TzZ6aKsctTM7aMoJibDiyaYaGoDEwbjG3PYDgiSpLQkkpkNXWXPvy/Di6Mln9GqbL88Fa42v7uFUDYHK7I60i0m9puESUn/ZIhtOGGJVTO809NTVpHUThtNuGYvXqlK+f2ZXw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787199145; c=relaxed/simple;
-	bh=V3ca0mlb/7KaViZBZMLIfqyopHMyAiDxQQ5RRvPTg6I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=uHzLTBXVd3qjP2s0fTs3WSBLgLm8LsVoMgRgoQ8suykkM3S/FJSuTDF65OXc0B6litWr+05IvZ595ihDdRpmhJi6xablOqXZevE3t6izJk+dhxEw/o4In4WE6LkQNlVjPzpMO3JEm0PIalmRGxy+jfFBPZvTljoDefdmGUlWk+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b=XEBX6BNp; arc=none smtp.client-ip=113.46.200.220
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21C9B373BEC;
+	Thu, 20 Aug 2026 04:15:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.159.55
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787199340; cv=fail; b=Xwtlla4DzPM8wGZwgu+QCLTEmDM9lrHG7sLatYGbhL83h9IBSD9DlWepOIoGizRhOm8RPFcpI5rCRi5xO6PmtB4VtiFVq6qGhSYTwl3qnZNDcBklA1RwQnsLjmM7ZKzfqX7VvAt0Mro7qz9IfKeeCmJeDgXfQ5HabvH4f1i6Jlw=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787199340; c=relaxed/simple;
+	bh=aWHt/IFj7im0dk379C+wJuHwToIWtQvI+Mnto1xmieM=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=l1THSlpd63bU9Xv87/2Ysdfx+VF6Dao0SaE75/jalYVWIpqtovpKIINwiNuI5117GVvh7jAN5OfyjKuWMAQhp0Zv8MTx0kmDT5wE7szGzAh+kDQOtG0OBqiU5gpepXORFSXJlOddrTFiUElwPfgAhgIGRUDMEwJrjRypcTwhPlY=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mJQgg37O; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=mJQgg37O; arc=fail smtp.client-ip=40.107.159.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=huawei.com header.i=@huawei.com header.b="XEBX6BNp"
-dkim-signature: v=1; a=rsa-sha256; d=huawei.com; s=dkim;
-	c=relaxed/relaxed; q=dns/txt;
-	h=From;
-	bh=C2UVYU8EnWG2+bWacBuEvh5oiuNPv4fmf2gWJFql9MI=;
-	b=XEBX6BNp6GkzfJ3nnaNPsv+uYf2n1fWJrMOsWXw+gnlzaDzZlGwAkYAQp0dJ9nko5djwQto/C
-	gaFzgPTKY3fwJaSjAD/1tD2LTGQgE7DuansFdTanUcq3MOFyK2VKKXfH48yjByVw4qWpdayOomb
-	8BZQuBfX1+bLOQCJ0XsTonQ=
-Received: from mail.maildlp.com (unknown [172.19.163.0])
-	by canpmsgout05.his.huawei.com (SkyGuard) with ESMTPS id 4hQVBD60Xrz12LDV;
-	Thu, 20 Aug 2026 12:01:56 +0800 (CST)
-Received: from kwepemf100007.china.huawei.com (unknown [7.202.181.221])
-	by mail.maildlp.com (Postfix) with ESMTPS id 7D46140561;
-	Thu, 20 Aug 2026 12:12:17 +0800 (CST)
-Received: from [10.67.110.68] (10.67.110.68) by kwepemf100007.china.huawei.com
- (7.202.181.221) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.36; Thu, 20 Aug
- 2026 12:12:16 +0800
-Message-ID: <0f57cace-5588-4f34-bd3e-1e737b8d0d7f@huawei.com>
-Date: Thu, 20 Aug 2026 12:12:15 +0800
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mJQgg37O";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="mJQgg37O"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=oIgtB+vnswzOsVt8i28grKkeIz2EK835trI8P4A9y+LNRfDuRkg8MAdHD17gPUlVfbsiK6Ff3kPObXPFeAkKLITROMB8JZTzHkxSymyfu8NQgrqmnKCb97b8mV7v3wbb0m7fIyvr7vN0zELyogOCJ+tIz1EbqQqjXqZgHpQM2zBw7kKe5KtA7khpXZw/V9u7P+m9l8MCkuZu6xLn9TVSzLwO0pLIq1S+EkGUp6vU6YFVRwCmfr1/BCzb15DBik1RoWY58nqmpK+HvZzzTJuNsjvsUV9rn1LT/ELKVnz72bg8de5drISZt13sPkDIb3ZdVPvOXZEdUbMSfphf4bBlDw==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SMfnL6RVmBcoUy4FBDpqZ4SkwUbKP7oNJfhx00mB77k=;
+ b=PZpdyluZqol09KDwMPcq4mRJGdFVwQqs8rfmigH/EF9x/eu6NMTl2aGRCJjcRLmDkOkKoInjkjJtK6Vjlh41unoy73pbUxN5JVqP0uB0oOtcjxtjv4IxGt5pFCs13b4z9qQJggFtvn2ZCZoZ2GZwNNTcLYdT8Kzf8c8pZd7fPYpWvZqFP1nmT95WS/F8BPJLMjfGVeH7i4TV8AiNM7eQh/0mGg+EgN2u+EBITcgEVzdOASxketKraLBVFF8CVlHSVBQ/cwMcXymvpQc9Q6nlYc6NxgKhcO4W2sJimC8UW8HOBUY863kf7LCFkSmNmdGbZfb0sgK9y+Ktalph6ULyuQ==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=gmail.com smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SMfnL6RVmBcoUy4FBDpqZ4SkwUbKP7oNJfhx00mB77k=;
+ b=mJQgg37O947FvY2pBUnziCXFZENTtCVnH+wPy3THe0XLpDWwdl/SOJrjnYdSFHltrygO5MMwvwKNR04day55LjIJi1srnjxl2QoASVlIS0WibZVrX4eAj4vfa/EPh7YW3nLFr4bs2rU7t9vTyUCQbphvka46KGQNEFMtFKZex+A=
+Received: from DB8P191CA0024.EURP191.PROD.OUTLOOK.COM (2603:10a6:10:130::34)
+ by PA4PR08MB6254.eurprd08.prod.outlook.com (2603:10a6:102:f3::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Thu, 20 Aug
+ 2026 04:15:28 +0000
+Received: from DB1PEPF000509FE.eurprd03.prod.outlook.com
+ (2603:10a6:10:130:cafe::60) by DB8P191CA0024.outlook.office365.com
+ (2603:10a6:10:130::34) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.8 via Frontend Transport; Thu, 20
+ Aug 2026 04:15:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DB1PEPF000509FE.mail.protection.outlook.com (10.167.242.40) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.3
+ via Frontend Transport; Thu, 20 Aug 2026 04:15:28 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Rn0r+QiYCngBAqib+rfV9kRcoaQkUL9vS8lLpto3hT1vOtEqdfoWjtZzVfr1ylgG8gInFMwkOApLRI13dHtkjEhIa2BsPJqpZs/7BXairyHX9iDfuGfhQCyl2ez8GRACA2BdMi1jrm7fMJeMXRnTuiZ8cg9oIdbiXlNPpKrjNtYrJ6AJ+ZY3+gfYdSa++iagHnyKpObRKszZGkl+wCupgxc5EboNqWLwhk5/qqum61M4tC1qkABDB50SQyCX7yo1QptEu194m1N7tkSs4AnLjzB4IesTQzqsrqIJiWbIKBt3jT6G6xQlVhOBTU2BXsSzE32/Xg7sLqBMhHWPtSIlng==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SMfnL6RVmBcoUy4FBDpqZ4SkwUbKP7oNJfhx00mB77k=;
+ b=bqFHTH+njSjJ4bUfo1pz/g7HxKaQyUOzSU+vF6sR1bTkKYksFo+7oanZV2WLlNIKOwH0W/r6xkhwLr+Ixs6TEi+Zx96XsXy3oAvdTDbQ80bYf+pEEuhMh2tQSJJ2QQWrPeV6SDJhpqYl+1VOE8rSAfKiDVU/dNgngKsP7jxfYx31UBb6Loqsm9/Ta9npsWOq/LOifn9fTk2LR+oOedD85DX3YbFzuaezk6gQGRTpt4mjSw8WdJ50Hbe/vS/AaRJ97urKKib8b7Qmw75Wka07dZgDJTPNwdvkm/5HjNsZHTALAH/JyGv/WP40X6Z9Z/ubXCt4sQKLQgID7WcT652PyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SMfnL6RVmBcoUy4FBDpqZ4SkwUbKP7oNJfhx00mB77k=;
+ b=mJQgg37O947FvY2pBUnziCXFZENTtCVnH+wPy3THe0XLpDWwdl/SOJrjnYdSFHltrygO5MMwvwKNR04day55LjIJi1srnjxl2QoASVlIS0WibZVrX4eAj4vfa/EPh7YW3nLFr4bs2rU7t9vTyUCQbphvka46KGQNEFMtFKZex+A=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by AS1PR08MB7513.eurprd08.prod.outlook.com (2603:10a6:20b:480::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Thu, 20 Aug
+ 2026 04:14:55 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%6]) with mapi id 15.21.0339.007; Thu, 20 Aug 2026
+ 04:14:55 +0000
+Message-ID: <8fdf8108-9ee2-4b30-9036-ad6066f3db5f@arm.com>
+Date: Thu, 20 Aug 2026 09:44:49 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: check stat() return value in khugepaged
+ get_finfo()
+To: Anshuman <anshumantewari123@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>
+Cc: Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260819121426.49500-1-anshumantewari123@gmail.com>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <20260819121426.49500-1-anshumantewari123@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5PR01CA0114.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:a01:1a7::17) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: Enable arena LDSX tests
- for riscv64
-Content-Language: en-US
-To: Chen Pei <cp0613@linux.alibaba.com>, <ast@kernel.org>,
-	<daniel@iogearbox.net>, <andrii@kernel.org>, <memxor@gmail.com>,
-	<bjorn@kernel.org>, <puranjay@kernel.org>
-CC: <ihor.solodrai@linux.dev>, <eddyz87@gmail.com>, <martin.lau@linux.dev>,
-	<song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
-	<emil@etsalapatis.com>, <pjw@kernel.org>, <palmer@dabbelt.com>,
-	<shuah@kernel.org>, <guoren@kernel.org>, <bpf@vger.kernel.org>,
-	<linux-riscv@lists.infradead.org>, <linux-kselftest@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-References: <cover.1787140923.git.cp0613@linux.alibaba.com>
- <1bab696ec36f196fa6ec74a0f056030b39730da7.1787140923.git.cp0613@linux.alibaba.com>
-From: Pu Lehui <pulehui@huawei.com>
-In-Reply-To: <1bab696ec36f196fa6ec74a0f056030b39730da7.1787140923.git.cp0613@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: kwepems100002.china.huawei.com (7.221.188.206) To
- kwepemf100007.china.huawei.com (7.202.181.221)
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|AS1PR08MB7513:EE_|DB1PEPF000509FE:EE_|PA4PR08MB6254:EE_
+X-MS-Office365-Filtering-Correlation-Id: ed3631a0-258e-4f32-2cd9-08defe71aac1
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|366016|1800799024|376014|23010399003|10067099003|56012099006|6133799003|22082099003|17002099007|18002099003|11063799006;
+X-Microsoft-Antispam-Message-Info-Original:
+ OKYOAJKarE8gJW1Or418p7QTCPvSXA/0Jwiy1NybfCH2DFB6X2Yf+2b1StSOmVvFp7ixrHY5oabbI9iap2QKDo3dy0+cIvHQWy7V/WH9b1GPjOOcpcZTWVUVv/b+EmMhn3veloNwPJqruBb5RpAPTwbeTOAyz2lcpxwXn/fS4csw9AoM4lWDfNSpue3eRyOiYTg5qbOJZxRTpXj+sD6RdQKAgYpyHkVAdtyWgnZ42dBgORijh18siQsnF70Tr+DirEuV4fUTvbgAjlZ9s/Uy5B7fxTe/YLqlnSO8ZO5Yml5idGSf8vTT8D5h+27iBnianPgbo1phXQwg5IDtz1cPx/Ym7FXGlSMhI+xJKvzxNMtJUXzRXoQjz1XWPP3J7wD1wrhPW5BviLjPMFHj9EbUydh4EG0RzSoDcps+5MglfzdGWWLmiigEgvPlmERD7QbKN0Wxpqd7Iw3uFiKuwxMpI2MWIuHPK74KiBmRpL15Pc/rTyDaaUKJ9gzoBLqym1wYzS48NAf9LpUhKoMC40Dcj1KePAVHhlUe6+PQdXMJySlpAk+3tiHdeDZx0hQKgxWeqDla0bgiZ8gye7h4c6WrxPnbI4QALaeDPHSCpdoQR6PXEMPOd1IO61Eu9ROGMYaXcKhplw6ZAtfC77S+72gIJHnC8Zcm834fxOXzuwR6L6g=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014)(23010399003)(10067099003)(56012099006)(6133799003)(22082099003)(17002099007)(18002099003)(11063799006);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ bq/UYyeJl+pLBFHxaLA/Ti0kfqaOjtw8TH7gUZdW/cl4KdWKuSHhegLz0uMGdgmAj6OmkbAvR1fET4OGfKj9OnrUG/XgIK7v55Mp1vr4WuX/1KWdnaAxqzRLVL0+L4qGlw7LRoa4JgU++fAOisx5C+OadpjddE5cPTNOBAYooscMLUOosZMzMpubTwWLKMM1j5HVcK/VfWpdrtTG/ymz95HaMAL4SRvUDtEdmDYf2OiK1hFtjdbi/+2IxSMorG7Dht3VU/6OAvSli2S4XT0KdMrnG1unU0pycNhmWr+Lgw5H4+GCK7z0TX01MRGSWlsZhsQYQBuZIOxYR/x52x8qTA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR08MB7513
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB1PEPF000509FE.eurprd03.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	43f8da14-5e36-478d-497f-08defe719708
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|14060799003|376014|1800799024|35042699022|82310400026|30052699003|23010399003|6133799003|10067099003|11063799006|56012099006|22082099003|17002099007|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	E3eHA+8/pWgn04vLL4TG4INrmOWnnQU4txTzmRp0mhaiuniuiHmKGl1Dt+mdjzpPAoKOHt2+jrIWUnIHeO079QCsYUykc17FfQ2h0hVsM1r7XYWwFPzltgGyoTzLupdLgwlS/bZghEiw0cGo1oWvW0czzV3IDuZT4juF6zB2QtMO8PAvRDfzFoa87MM9EbN8SHhoXwWiNtaVsMGqhj9dDGayFPuewwqRxr2GOtnbMAvxshK2BCN6U9o0yxzyjXpI//uUAVGmuZbvvyM8X6RsoUXYLxLT44lvrxNfd5ir9/VmDSaYnc2htPYtNQtUCZgZGiQCqeLqRQnPg97dFSSMpVxXKFbagcFPJEjzpvixyQfUUarwsNrpUF5Vn2vAx5e1BFwe+xAd4US44N4H5Hncr2J1D2SbIKegOTzw7wv/qPjWRWQ9Ifv8ynYzkk14opmpFWRDPEkOE2krZRrDPhK5mjO/sVBagwC0LMOXXfZpYsL6KsOqzwvCw6P5Pr/PNemq251VyMDhrrXNrCnA1RF2XZQRcaPYmcSvdZFa747EAEjg6biREU911Ma1n08hEATlamygGmBFJ/bZIFzFoJ3njuEINOm9OI9sR9HHVla9rps4pXifFGYfOZGsAg87dQgpYNp2Gh4cjXh/AAbgq3IepgTzQ6DcRp6Ue0ZXua0ofLLPubKOV6jXFd64KaHQqCNAVpButA5OUX35BcItpASXbw==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(14060799003)(376014)(1800799024)(35042699022)(82310400026)(30052699003)(23010399003)(6133799003)(10067099003)(11063799006)(56012099006)(22082099003)(17002099007)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	UHuUkeaJWB06WWfFuRYbOrrKlNeFNlAxagm1znWr9AXDkK6P6v/BORUd9eDAh2gv9ymOHb39csDoWEMjgGlQUDOa3n1qio0tdMujdseTfS688HzDUsvvtVX73ZWVglbrAUK9ag5SuQVnRdF3IKl+P62gTIa0Fk0YsVi9FfOhcNvUdHWuCN4nFei5TSulj94o1XrinAw+wTVusDBQ+OH0v9MswaWWKghrIRbD9ArQtH1LIeno0j6I+3erVFRuHfTAkpcAusatLUfNt6lNPiFYe2zNDEy/tcadOfRldwDNtbvHY3zaY4s9wCOPfDFo08S0R9rES8R6/uv+vqSb3j18o5qX2jrib/EktMmf5+rxpWavrPUayNVXtNZAo1MQuSEtBbDyqWz8EAwtvSmbAqiH2t/bLJZRSmBVFrhPP/WGZeMFAnwUTe2AhKxy1zwiQtyd
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Aug 2026 04:15:28.1713
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ed3631a0-258e-4f32-2cd9-08defe71aac1
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB1PEPF000509FE.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR08MB6254
 
 
 
-On 2026/8/19 20:09, Chen Pei wrote:
-> Now that the riscv64 JIT supports signed arena loads
-> (BPF_PROBE_MEM32SX), enable the arena LDSX tests on riscv64:
-> add JIT disassembly assertions for arena_ldsx_disasm (arena base in
-> s7, add into t2, sign-extending lw/lh/lb loads) and run
-> arena_ldsx_exception and arena_ldsx_s8/s16/s32 on riscv64.
+On 8/19/26 5:44 PM, Anshuman wrote:
+> get_finfo() calls stat() to get metadata about the target directory,
+> but never checks the return value. On failure, stat() returns -1 and
+> leaves path_stat unmodified, so path_stat.st_mode may contain
+> uninitialized stack data.
 > 
-> Reviewed-by: Pu Lehui <pulehui@huawei.com>
-> Signed-off-by: Chen Pei <cp0613@linux.alibaba.com>
+> The code then checks S_ISDIR(path_stat.st_mode) against this
+> potentially garbage value. This can produce a misleading "Not a
+> directory" error when the real problem is a nonexistent or
+> inaccessible path, or, in the worst case, the check could pass by
+> chance on garbage data and let the function continue using an
+> invalid path_stat for the rest of its logic.
+> 
+> Check the return value and fail with a clear error message if
+> stat() fails, matching the error-handling style already used for
+> statfs() and read_file() later in the same function.
+> 
+> Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+
+LGTM, so:
+
+Reviewed-by: Sarthak Sharma <sarthak.sharma@arm.com>
+
 > ---
->   .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
->   1 file changed, 17 insertions(+)
+>  tools/testing/selftests/mm/khugepaged.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> diff --git a/tools/testing/selftests/bpf/progs/verifier_ldsx.c b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> index 41340877dc9d..ed0a0f159bc1 100644
-> --- a/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> +++ b/tools/testing/selftests/bpf/progs/verifier_ldsx.c
-> @@ -286,6 +286,19 @@ __jited("add	x11, x0, x28")
->   __jited("ldrsh	x22, [x11, #0x18]")
->   __jited("add	x11, x0, x28")
->   __jited("ldrsb	x22, [x11, #0x20]")
-> +__arch_riscv64
-> +__jited("add	t2, a5, s7")
-> +__jited("lw	s3, 0x10(t2)")
-> +__jited("add	t2, a5, s7")
-> +__jited("lh	s3, 0x18(t2)")
-> +__jited("add	t2, a5, s7")
-> +__jited("lb	s3, 0x20(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lw	s4, 0x10(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lh	s4, 0x18(t2)")
-> +__jited("add	t2, a0, s7")
-> +__jited("lb	s4, 0x20(t2)")
->   __naked void arena_ldsx_disasm(void *ctx)
->   {
->   	asm volatile (
-> @@ -317,6 +330,7 @@ __description("Arena LDSX Exception")
->   __success __retval(0)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_exception(void *ctx)
->   {
->   	asm volatile (
-> @@ -338,6 +352,7 @@ __description("Arena LDSX, S8")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s8(void *ctx)
->   {
->   	asm volatile (
-> @@ -369,6 +384,7 @@ __description("Arena LDSX, S16")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s16(void *ctx)
->   {
->   	asm volatile (
-> @@ -400,6 +416,7 @@ __description("Arena LDSX, S32")
->   __success __retval(-1)
->   __arch_x86_64
->   __arch_arm64
-> +__arch_riscv64
->   __naked void arena_ldsx_s32(void *ctx)
->   {
->   	asm volatile (
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 10e8dedcb..2240a9b4f 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -121,7 +121,8 @@ static void get_finfo(const char *dir)
+>  	char *str, *end;
+>  
+>  	finfo.dir = dir;
+> -	stat(finfo.dir, &path_stat);
+> +	if (stat(finfo.dir, &path_stat))
+> +		ksft_exit_fail_perror("stat()");
+>  	if (!S_ISDIR(path_stat.st_mode))
+>  		ksft_exit_fail_msg("%s: Not a directory (%s)\n", __func__, finfo.dir);
+>  	if (snprintf(finfo.path, sizeof(finfo.path), "%s/" TEST_FILE,
 
-Tested-by: Pu Lehui <pulehui@huawei.com>
