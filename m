@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 585BC3DD84A;
-	Thu, 20 Aug 2026 08:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E4E3DDAFA;
+	Thu, 20 Aug 2026 08:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787215280; cv=none; b=hZFHwChjZb8IEd9T8oAm9r7Puc3O+RfcUeveoU0mgXQY37w8TsMM4u5+cI6VIo6W8xHxh+58jftiUY3EKU5ShXQhhlElxeMBMCpmSU56l9ralVFFb3kHsXMbll72ngJPqLO24bgVXs4pNXViT1gXHJjJwwUxqZ0V7ADee+feRXk=
+	t=1787215286; cv=none; b=WAyPc4sp/E6ul3J2vKnsQFrvntrhkjIQEBgRCy9agC2k4RhKXQomp/Ls0LhVONa3wIeidLVpWK8Pe5Be5culbpgZKR2l5sC6GAVycT5ySAfv2R3XnBvYK1uiD4o/PvTSz8VCMqlJVyNe9KteH22jMXP5JDFpWtJYPy3RavbWdUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787215280; c=relaxed/simple;
-	bh=amgcJVyBUGwGFNKSS32Fdcs/GPxDhnfIHKHS4FloFxA=;
+	s=arc-20240116; t=1787215286; c=relaxed/simple;
+	bh=CufGdtujt6KxcZGh+tZL/jWdaNulhvi0Qw9FMFFrVCQ=;
 	h=MIME-Version:Content-Type:Subject:From:To:Cc:In-Reply-To:
-	 References:Date:Message-Id; b=TLyo9EKks86YDXBfqa0irkEN/snHZIEfzl3yoQuDOPWTNVilAa/E+lXLELFFwJLOSi15WGflXa3c6TSqk2N0kZLHEUrXPjn1ej1W3L7NLjIM/tkJJVf3/rc/VpGuAVqHGbrs2rOAEAe49chfLkP7vgbVBMYYYK0tEYp30RuhF88=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQr0lUO6; arc=none smtp.client-ip=100.103.45.18
+	 References:Date:Message-Id; b=DXdKMe0yqKnkI8YfUUWHj3Q45+dIT0qn/uGfDjO3A2ufHR/KDtGSPUYFxcr3NGMnZESGUx0yjeCFHnvPxaRCUlthb2tOH2HJfmHBuQUb9zhU5piNYbBi96RZzC00AVTo4UDOwJqt77zbFXCOHfHqDGNKpKLXahyr+cRZ9YGFn5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O+fX4A+c; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQr0lUO6"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD0F61F00A3A;
-	Thu, 20 Aug 2026 08:41:13 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O+fX4A+c"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70F8D1F000E9;
+	Thu, 20 Aug 2026 08:41:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787215279;
-	bh=rmLT+lbLlZGhVRGS5nzuJP8BWMHxLCoiEFWXXq+9RLo=;
+	s=k20260515; t=1787215284;
+	bh=jNxWCi3yGoXYWUtnpfwteYPUr0j/rlA3LzUwoatWwKs=;
 	h=Subject:From:To:Cc:In-Reply-To:References:Date;
-	b=ZQr0lUO6N442CdC9SKRk+GDcbzgI7G5ymhvUKwkNE9eDkoUeGhGVZ3ozk593Qc5JZ
-	 tbMOAtksSDe/6wYNPCyexqwdL4rXNpxTerRSP00esMoKObjnMgdypwpeAkty0ZYPXA
-	 c5h/WynHG64CDgPQ9BIlVJyB4t6OvXL9Je/MzI/ygbbVkFauK8ucvwNv2ghMBCjiNL
-	 0RUle4n2Dx6uJn5fIBZzPFZjmfbvD3Ql5ToLKsOLC02UHPR8d/AAbsDjZMiDw4RkOZ
-	 oaszqYVVBAGB+NQjbqw08BnYcsLzQ0BeIUxQND+U4xxlodBdGZzpTGhzvXQyqevqIe
-	 2ESke7FepeemA==
+	b=O+fX4A+cfqy2cu5BO8P/JfVmsMImoss5n48YQ3xypQhyEM+oLIrHih8bInNvcCMZb
+	 GOemMbD1pzlmKwgBnjl+LWFjvX8wnRF4mzbXuWDTwI85BU4z/+sOn2pOrvvj5HeNpu
+	 MsayuynthssBO7r7ZQr7uoi0JpIaJJHq2LKZTLyH7sUq/nFes48yZNFEpze5a8/Jz4
+	 Kc0rw6JwHs8l0kV4fng9drAEgR+GIwQkU43S2YyqHzkZRDeVKUMxKBaN/SWxnU/5fq
+	 UCnpbmd+/aE+KqhTNS96PY18JprbZ8m9qOEAqDVs1lvSAxgOvTJm0tnoKH0Ez+tvB3
+	 rpWHnZ4zhfmUw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -34,8 +34,8 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Subject: Re: [PATCH v4 10/19] selftests/mm: add khugepaged completion
- barrier helper
+Subject: Re: [PATCH v4 11/19] selftests/mm: add order-parameterized
+ khugepaged collapse cases
 From: Mike Rapoport <rppt@kernel.org>
 To: Kiryl Shutsemau <kirill@shutemov.name>
 Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
@@ -46,67 +46,149 @@ Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org,
  vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, 
  agordeev@linux.ibm.com, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
  linux-kernel@vger.kernel.org, kas@kernel.org
-In-Reply-To: <20260815015901.1236937-11-kirill@shutemov.name>
+In-Reply-To: <20260815015901.1236937-12-kirill@shutemov.name>
 References: <20260815015901.1236937-1-kirill@shutemov.name>
- <20260815015901.1236937-11-kirill@shutemov.name>
+ <20260815015901.1236937-12-kirill@shutemov.name>
 Date: Thu, 20 Aug 2026 11:40:35 +0300
-Message-Id: <178721523517.2799959.9631834855392157058.b4-review@b4>
+Message-Id: <178721523517.2799959.18230284669032818374.b4-review@b4>
 X-Mailer: b4 0.17-dev
 
-> Race and functional tests need to drive khugepaged in step: set up a
-> layout, let one full scan pass over it, check the result.  The khugepaged
-> selftest already waits for full_scans to advance by two, but only makes
-
-"advance by two"?
-
-> progress if scan_sleep_millisecs happens to be short.
+> The mthp_khugepaged context runs the generic cases at a sub-PMD order,
+> which answers how many folios of that order a range ends up with.  It
+> cannot say which window they are in, so "the populated window collapsed
+> and its neighbour did not" and "one window collapsed twice" look alike.
 > 
-> Lift it into khugepaged_full_pass() and drive it through sysfs: any store
-
-Lift what?
-
-> to scan_sleep_millisecs wakes the daemon, so the barrier completes whatever
-> the scan cadence.  A store can be lost when the daemon is between scans, so
-> it keeps storing until the pass lands; a store to an awake daemon costs
-> nothing and queues no extra pass.
+> Add four cases that check each aligned window on its own, with the
+> folio-order helpers in vm_util:
 > 
-> One wake completes one pass only if the whole mm list fits in a scan batch,
-> so callers need a large pages_to_scan.
+> - collapse_order_single_window(): only the populated window collapses;
+> - collapse_order_partial_window(): the default max_ptes_none lets a window
+>   with one present PTE collapse;
+> - collapse_order_max_ptes_none(): with max_ptes_none=0 a full window
+>   collapses and one missing a page does not;
+> - collapse_order_mixed_sources(): sources that are already large folios of
+>   a smaller order collapse to the target.
 > 
-> Settings pushes must not start passes either.  A store to either sleep knob
-> wakes the daemon, so thp_write_settings() now writes a khugepaged knob only
-> when its value changes.  The other knobs do not wake, but writing them
-> uniformly costs nothing.  thp_update_num() is exported for tests that want
-> the same restraint.
-
-This very much elaborates on "what" and "how" and very little on "why".
-I'd change the balance.
-
+> Each case faults its region before MADV_HUGEPAGE with only the target
+> order enabled, so the sources are order 0 and the result can only come
+> from khugepaged.  They wait for a full pass rather than for the result to
+> appear: without a completed pass, "not collapsed" and "not scanned yet"
+> are the same thing.
+> 
 > Assisted-by: Claude-Code:claude-opus-5
 > Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
 >
-> diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/testing/selftests/mm/hugepage_settings.c
-> index d7917dce3aba..992efee17b71 100644
-> --- a/tools/testing/selftests/mm/hugepage_settings.c
-> +++ b/tools/testing/selftests/mm/hugepage_settings.c
-> @@ -183,6 +183,19 @@ void thp_read_settings(struct thp_settings *settings)
->  	}
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 5aa92de93ec1..56e364320145 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -31,6 +31,8 @@ static unsigned long page_size;
+>  static int hpage_pmd_nr;
+>  static int anon_order;
+>  static int collapse_order;
+> +static int pagemap_fd = -1;
+> +static int kpageflags_fd = -1;
+>  
+>  #define PID_SMAPS "/proc/self/smaps"
+>  #define TEST_FILE "collapse_test_file"
+> @@ -1261,6 +1263,216 @@ static void madvise_retracted_page_tables(struct collapse_context *c,
+>  	ksft_test_result_report(exit_status, "%s\n", __func__);
 >  }
 >  
+> +/* Smallest order khugepaged will consider for mTHP collapse. */
+> +#define MIN_MTHP_ORDER 2
+> +
 > +/*
-> + * Write only on change: a store to either sleep knob wakes khugepaged --
-> + * __sleep_millisecs_store() clears khugepaged_sleep_expire and wakes the
-> + * queue -- and settings pushes/pops must not start scan passes nobody
-> + * asked for; khugepaged_full_pass() is the only sanctioned wake.  The
-> + * other knobs do not wake, but writing them the same way costs nothing.
+> + * Order-parameterized collapse cases for the mthp_khugepaged context.  What
+> + * they add over the generic cases run under that context is per-window
+> + * detection: which aligned window collapsed, and which of its neighbours did
+> + * not.  check_huge() answers how many folios of the order the range holds,
+> + * which cannot tell one window from another.
+
+This comment again reads like in the context of the changes driven by
+the current prompt.
+
+> + *
+> + * The region is faulted before MADV_HUGEPAGE, and the target order is only
+> + * enabled for madvise, so the sources are always order 0 and the collapse
+> + * product can only have come from khugepaged.
 > + */
 
-Hmm, the function name already tells that it only writes on change.
-Do we need this long text along with it?
+Hmm, what claude tries to tell us here?
 
-Surely "khugepaged_full_pass() is ithe only sanctioned mode" is out of
-line for infrastrucure helper description.
+> +static size_t mthp_window_size(void)
+> +{
+> +	return page_size << collapse_order;
+> +}
+> +
+> +static void mthp_push_target_order(void)
+> +{
+> +	struct thp_settings settings = *thp_current_settings();
+> +	int i;
+> +
+> +	/*
+> +	 * The target order, for madvise only, and nothing else enabled: the
+> +	 * cases fault their region before MADV_HUGEPAGE, so the sources are
+> +	 * order 0 whatever -s asked the fault path for.  That matters for the
+> +	 * cases built around a hole -- a large source folio would fill it in
+> +	 * and the window would collapse after all.
+> +	 * collapse_order_mixed_sources enables the source order it wants on
+> +	 * top of this.
+> +	 */
+> +	settings.thp_enabled = THP_NEVER;
+> +	for (i = 0; i < NR_ORDERS; i++)
+> +		settings.hugepages[i].enabled = THP_NEVER;
+> +	settings.hugepages[collapse_order].enabled = THP_MADVISE;
+> +	thp_push_settings(&settings);
+> +}
+> +
+> +static bool window_collapsed(void *p, size_t len)
+> +{
+> +	return is_range_backed_by_folio_orders(p, len, collapse_order,
+> +					       pagemap_fd, kpageflags_fd);
+> +}
+> +
+> +/* No aligned window in [p, p + len) is backed at the target order. */
+> +static bool window_not_collapsed(void *p, size_t len)
+
+I'd expect window_not_collapsed to be !window_collapsed.
+Maybe we need to add some order notion to both of them, like
+exact_order, any_order or something like that?
+
+> +{
+> +	size_t window = mthp_window_size();
+> +	char *addr = p;
+> +
+> +	for (; len >= window; addr += window, len -= window) {
+> +		if (window_collapsed(addr, window))
+> +			return false;
+> +	}
+> +	return true;
+> +}
+> +
+> +static bool khugepaged_wait_full_pass(void)
+> +{
+> +	/* Wait up to 30 seconds for the pass to complete. */
+
+Isn't it clear from the call? And do we really need this wrapper?
+
+> +	return khugepaged_full_pass(30);
+> +}
+> +
+> +static void collapse_order_single_window(struct collapse_context *c,
+> +					 struct mem_ops *ops)
+> +{
+> +	size_t window = mthp_window_size();
+> +	void *p;
+> +
+> +	mthp_push_target_order();
+> +
+> +	p = ops->setup_area(1);
+> +	ops->fault(p, window, 2 * window);
+> +	if (!window_not_collapsed(p, hpage_pmd_size))
+
+!window_not_collapsed  reads weird
 
 -- 
 Sincerely yours,
