@@ -1,155 +1,384 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE367380FF6;
-	Thu, 20 Aug 2026 23:39:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CDA6261B8A;
+	Thu, 20 Aug 2026 23:49:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787269165; cv=none; b=MXs/jBUc0z0lFxRXnxsUleyubQOsrIhFfJ2rDbnhzfb9Q+xMf13lryQRN6YGPWqyPfvHBDQ+PeWItsyooS7CZHxV4+2bMUEEbu55eM35pMPsu2NJcr17HT/QnMsWUh7EydAoRMeYTZUHms9GO5/9X7pbGjMlJaN0O7dykWWB+fg=
+	t=1787269752; cv=none; b=nmGXQ2c0HaibqNavW/yEkCNB5VnpibOJ7Rn4VNNi9EiYd5SLX0PDwY03PvOAAE61d8GvLeBeqjsaJ4hyMhoKOZMxvTgU8M8Zeak8GhuoOkt76Xvr7IRfuT7HyG1Nxmt26vpAT3umFlOeadRxqjEzBA51/Dv8Xs2bQs/6vDD3sq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787269165; c=relaxed/simple;
-	bh=N9bzHgTPT7M5yE8AGOin8doDdx+BxPy1gflF77tWeWE=;
+	s=arc-20240116; t=1787269752; c=relaxed/simple;
+	bh=qRI+KTKFQ4F8nehuAlZqfDb3EpCIwGZwo7/Rl09nujA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SSb1W097QGz0EjCpwL0S5xKoH0gr+qpEVzN1n32mK/V00njuvPSA6oqVud54Y+vx0PdoYRrZwiCWvT1OnXXyJfqOmFsBRQCR+E/KkZ3XY1Nvw2RGt2yF+7poBYjMNd1K4gwymhFMY9WMvs/55Al+ZAHVQKeOFGCwQ0rRj/G91iA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=PjPN+x0c; arc=none smtp.client-ip=217.140.110.172
+	 Content-Type:Content-Disposition:In-Reply-To; b=TyXQALH2X1P65CUrGrETUTRPrIDd+bOoT82/+l95aibNM8osETvfVLBWLyOYQFhRI5AOSM/on18oZkVPdnpxT1sWXIwLub/4tGuoW/gvRqD6VGHaKC7JIhkVpxFfeNF0GI9ijg3AFldFDfxtfaxyFFsvGe+qW7X3FJla4zKHEm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Q4KjKSBF; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="PjPN+x0c"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Q4KjKSBF"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF9CB202C;
-	Thu, 20 Aug 2026 16:39:17 -0700 (PDT)
-Received: from thinkpad-e142931.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E8C753F763;
-	Thu, 20 Aug 2026 16:39:17 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C61D1202C;
+	Thu, 20 Aug 2026 16:49:05 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 005DF3F763;
+	Thu, 20 Aug 2026 16:49:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787269161; bh=N9bzHgTPT7M5yE8AGOin8doDdx+BxPy1gflF77tWeWE=;
+	t=1787269749; bh=qRI+KTKFQ4F8nehuAlZqfDb3EpCIwGZwo7/Rl09nujA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=PjPN+x0cxlDOswhIzxMCFYv/hiq2OPnMflZZyAmGlXpZI138ae27wQt0tkiIDbEsd
-	 qoymqmWY4oFuX5oDW+1M09I8WaO8CCjK4bVluvkOct9CuAx4+dFfNT+J9rB036STEV
-	 AWYWdESLhUmNcc5u9Ryl84d1s6h2vct2UnVunHWg=
-Date: Fri, 21 Aug 2026 00:39:08 +0100
-From: Wei-Lin Chang <weilin.chang@arm.com>
-To: Leonardo Bras <leo.bras@arm.com>, Mark Brown <broonie@kernel.org>
-Cc: Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Joey Gouly <joey.gouly@arm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>, 
-	Oliver Upton <oupton@kernel.org>, Peter Maydell <peter.maydell@linaro.org>, 
-	Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, 
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 03/14] KVM: arm64: Manage GCS access and registers
- for guests
-Message-ID: <hwz52absjxap7n6olwt3lmjakmtgxxaku5gcofsrcfa45zdygh@dqgylcillnud>
-References: <aoXamcdKoMynTkpX@LeoBrasDK>
- <48be9e5d-357a-4863-8682-8b3f34c69723@sirena.org.uk>
- <aobUGyq8nInJYkdA@LeoBrasDK>
- <97ad6e83-b22b-4881-b644-66fa99f68d64@sirena.org.uk>
- <aocOi3wjcliZqoe7@LeoBrasDK>
+	b=Q4KjKSBFI8/NvyN+EsqqfoB4bmp9e0hugRMo48Ct5x+oB+AJmMKIH9jvl8Qb8zVms
+	 LuflxOTPVM1TCbdscKm+hO676Kjr7oOUHpSXPOEbod6HS+4vev58Ae0mDSckzQPyp6
+	 lFwlfW46IFReFS1xtA4EM791DCM5BiNl8XL8Xm5s=
+Date: Fri, 21 Aug 2026 00:49:04 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: Re: [PATCH 2/2] kselftest: mm: replace usage of /proc/self/smaps for
+ check_huge_xxx() helper
+Message-ID: <aoeScKGG1SPcwLgb@e129823.arm.com>
+References: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
+ <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <aocOi3wjcliZqoe7@LeoBrasDK>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
 
-On Thu, Aug 20, 2026 at 03:28:39PM +0100, Leonardo Bras wrote:
-> On Thu, Aug 20, 2026 at 03:07:14PM +0100, Mark Brown wrote:
-> > On Thu, Aug 20, 2026 at 11:16:59AM +0100, Leonardo Bras wrote:
-> > > On Wed, Aug 19, 2026 at 05:46:00PM +0100, Mark Brown wrote:
-> > 
-> > > > This is just because there isn't a preexisting ctxt_has_tcrx() check
-> > > > already there, FEAT_GCS architecturally depends on FEAT_TCRX and there
-> > > > was a request to make this explicit in the code to try to optimise
-> > > > things a bit.  The compiler should skip over both blocks at once if TCRX
-> > > > isn't there rather than having two separate tests or static branches.  I
-> > > > didn't add new checks where there were none since I expect that to be
-> > > > unhelpful for code generation, you'd get the reverse situation and emit
-> > > > two checks.
-> > 
-> > > Humm, but then why saving GCSPR_EL2 does not depend on TCRX/E2H? Or maybe a 
-> > > better question, why are not GCSPR_EL2 and GCSCR_EL2 saved in the same 'if' 
-> > > clause under ctxt_has_tcrx() (and E2H set), if they are restored in the 
-> > > same 'if' clause?
-> > 
-> > > As you mentioned, GCS depends on TCRX, so it should be fine, but just by 
-> > > reading the code I see:
-> > > - GCSCR_EL2 :
-> > > 	Save if 	GCS=1, TCRX=1, E2H=1
-> > > 	Restore if 	GCS=1, TCRX=1
-> > > - GCSPR_EL2 :
-> > > 	Save if 	GCS=1,
-> > > 	Restore if	GCS=1, TCRX=1
-> > 
-> > > Which looks kind of confusing for the as a first time reader.
-> > 
-> > > Does it make sense?
-> > 
-> > I agree that the current situation is a bit hard to follow, I'd actually
-> > originally written things without the explict dependency because of that
-> > but Marc wanted the optimisation.
+On Thu, Aug 20, 2026 at 08:40:16PM +0100, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
 > 
-> Well, I am not against the explicit dependency thing, it just looks odd 
-> to me that some save/restore have a dependency and it's counterpart does 
-> not. As well as the dependencies for both registers being different.
-
-Hey I feel the question wasn't answered completely :)
-
-Here is the reason for the asymmetric save restore (besides the tcr2
-part):
-
-GCSCR
- If guest E2H == 1:
- - L1 accesses to GCSCR_EL2 and GCSCR_EL1 have the same intent -> they
-   both mean access the vCPU GCSCR_EL2.
- - L1 access to GCSCR_EL2 (e.g. msr GCSCR_EL2, x0) traps, KVM updates
-   both the in-memory vCPU GCSCR_EL2, and the hardware GCSCR_EL1 for the
-   the guest. In-memory copy stays up to date.
- - L1 access to GCSCR_EL1 does not trap -> in-memory vCPU GCSCR_EL2
-   becomes stale if it's a write.
- - From above, must save on exit.
-
- If guest E2H == 0:
- - Only L1 accesses to GCSCR_EL2 mean access the vCPU GCSCR_EL2.
- - L1 accesses to GCSCR_EL2 always traps.
- - In-memory vCPU GCSCR_EL2 always stay up to date.
- - From above, no need to save on exit.
-
-GCSPR
- - Regardless of the guest E2H value, hardware could write to the
-   hardware GCSPR_EL1, making the in-memory vCPU GCSPR_EL2 stale.
- - From above, must save on exit.
-
-Restore is trivial, vCPU GCSCR_EL2/GCSPR_EL2 must be written to the
-hardware EL1 registers because someone else could be using it.
-
-Quite a few other registers are saved only if guest E2H == 1 because of
-the same reason.
-
-Thanks,
-Wei-Lin Chang
-
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
 > 
-> >  There's similar things with other
-> > registers in the current code (eg, the PIE and POE registers are in the
-> > same situaton as GCSCR_EL2).  One thing I did miss here is some nesting
-> > inside the PIE checks for EL2, I'll update for that.
-> > 
+> This causes split_huge_page_test to fail because the check_huge_xxx()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
 > 
-> Awesome!
+> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> /proc/self/smaps to detect huge pages and change the meaning of
+> check_huge_xxx()'s nr_hpages argument:
 > 
-> > I think what would help here would be to move to generating more of the
-> > save/restore sequences rather than open coding them, we could have lists
-> > of registers and then use data about the feature dependencies that the
-> > architecture has (hopefully it's already in the MRS, I didn't check) to
-> > generate these optimised feature checks rather than having to open code
-> > them.  Possibly even list features and generate some of the register
-> > lists, though that would need far more special case handling and it's
-> > *much* less clear if there could be a benefit.
+>   - nr_hpages > 0: check all of pages in the range are huge page.
+>   - nr_hpages < 0: check all of pages in the range are not huge page.
+>   - nr_hpages == 0: invalid.
 > 
-> Yeah, that would automatize the feature dependency for register loading, 
-> but maybe code would not be that clear on how it works? I have questionable 
-> taste, though.
+> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c           |  26 ++---
+>  tools/testing/selftests/mm/split_huge_page_test.c |   6 +-
+>  tools/testing/selftests/mm/vm_util.c              | 135 ++++++++++++++++++----
+>  tools/testing/selftests/mm/vm_util.h              |   1 +
+>  4 files changed, 131 insertions(+), 37 deletions(-)
 > 
-> Thanks!
-> Leo
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 10e8dedcb087d..2e4665e6d5852 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -533,7 +533,7 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  	ret = madvise_collapse_retry(p, nr_hpages * hpage_pmd_size);
+>  	if (((bool)ret) == expect)
+>  		fail("Fail: Bad return value");
+> -	else if (!ops->check_huge(p, expect ? nr_hpages : 0))
+> +	else if (!ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
+>  		fail("Fail: check_huge()");
+>  	else
+>  		success("OK");
+> @@ -545,7 +545,7 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  			     struct mem_ops *ops, bool expect)
+>  {
+>  	/* Sanity check */
+> -	if (!ops->check_huge(p, 0))
+> +	if (!ops->check_huge(p, -nr_hpages))
+>  		ksft_exit_fail_msg("Unexpected huge page\n");
+>  	__madvise_collapse(msg, p, nr_hpages, ops, expect);
+>  }
+> @@ -558,7 +558,7 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
+>  	int timeout = 6; /* 3 seconds */
+>  
+>  	/* Sanity check */
+> -	if (!ops->check_huge(p, 0))
+> +	if (!ops->check_huge(p, -nr_hpages))
+>  		ksft_exit_fail_msg("Unexpected huge page\n");
+>  
+>  	madvise(p, nr_hpages * hpage_pmd_size, MADV_HUGEPAGE);
+> @@ -605,7 +605,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
+>  	if (ops != &__anon_ops)
+>  		ops->fault(p, 0, nr_hpages * hpage_pmd_size);
+>  
+> -	if (ops->check_huge(p, expect ? nr_hpages : 0))
+> +	if (ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -643,7 +643,7 @@ static void alloc_at_fault(void)
+>  
+>  	madvise(p, page_size, MADV_DONTNEED);
+>  	ksft_print_msg("Split huge PMD on MADV_DONTNEED...");
+> -	if (check_huge_anon(p, 0, hpage_pmd_size))
+> +	if (check_huge_anon(p, -1, hpage_pmd_size))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -815,7 +815,7 @@ static void collapse_single_pte_entry_compound(struct collapse_context *c, struc
+>  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+>  	ksft_print_msg("Split huge page leaving single PTE mapping compound page...");
+>  	madvise(p + page_size, hpage_pmd_size - page_size, MADV_DONTNEED);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -836,7 +836,7 @@ static void collapse_full_of_compound(struct collapse_context *c, struct mem_ops
+>  	ksft_print_msg("Split huge page leaving single PTE page table full of compound pages...");
+>  	madvise(p, page_size, MADV_NOHUGEPAGE);
+>  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -903,7 +903,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  
+>  	ksft_print_msg("Allocate small page...");
+>  	ops->fault(p, 0, page_size);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -911,7 +911,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  	ksft_print_msg("Share small page over fork()...");
+>  	if (!fork()) {
+>  		/* Do not touch settings on child exit */
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -929,7 +929,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  	exit_status = WEXITSTATUS(wstatus);
+>  
+>  	ksft_print_msg("Check if parent still has small page...");
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -955,7 +955,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+>  		ksft_print_msg("Split huge page PMD in child process...");
+>  		madvise(p, page_size, MADV_NOHUGEPAGE);
+>  		madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -1003,7 +1003,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>  		ksft_print_msg("Trigger CoW on page %d of %d...",
+>  				hpage_pmd_nr - max_ptes_shared - 1, hpage_pmd_nr);
+>  		ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared - 1) * page_size);
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -1016,7 +1016,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>  			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
+>  			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
+>  				    page_size);
+> -			if (ops->check_huge(p, 0))
+> +			if (ops->check_huge(p, -1))
+>  				success("OK");
+>  			else
+>  				fail("Fail");
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index 99b45e5518199..4fcd330cf0726 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -314,7 +314,7 @@ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hp
+>  		if (one_page[i] != (char)0)
+>  			ksft_exit_fail_msg("%ld byte corrupted\n", i);
+>  
+> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
+> +	if (!check_huge_anon(one_page, -nr_hpages, pmd_pagesize))
+>  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
+>  
+>  	rss_anon_after = rss_anon();
+> @@ -372,7 +372,7 @@ static void split_pmd_thp_to_order(int order)
+>  					   (pmd_order + 1)))
+>  		ksft_exit_fail_msg("Unexpected THP split\n");
+>  
+> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
+> +	if (!check_huge_anon(one_page, -4, pmd_pagesize))
+>  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
+>  
+>  	ksft_test_result_pass("Split huge pages to order %d successful\n", order);
+> @@ -746,7 +746,7 @@ static void split_thp_in_pagecache_to_order_at(size_t fd_size,
+>  		goto out;
+>  	}
+>  
+> -	if (!check_huge_file(addr, 0, pmd_pagesize)) {
+> +	if (!check_huge_file(addr, -(fd_size / pmd_pagesize), pmd_pagesize)) {
+>  		ksft_print_msg("Still FilePmdMapped not split\n");
+>  		err = EXIT_FAILURE;
+>  		goto out;
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 311fc5b4513eb..166d5d79289f3 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -14,6 +14,8 @@
+>  #define PMD_SIZE_FILE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+>  #define SMAP_FILE_PATH "/proc/self/smaps"
+>  #define STATUS_FILE_PATH "/proc/self/status"
+> +#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
+> +#define KPAGEFLAGS_FILE_PATH "/proc/kpageflags"
+>  #define MAX_LINE_LENGTH 500
+>  
+>  unsigned int __page_size;
+> @@ -229,37 +231,128 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+>  	return entry;
+>  }
+>  
+> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
+> -		  uint64_t hpage_size)
+> -{
+> -	char buffer[MAX_LINE_LENGTH];
+> -	uint64_t thp = -1;
+> -	char *entry;
+> -
+> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
+> -	if (!entry)
+> -		goto err_out;
+> -
+> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
+> -		ksft_exit_fail_msg("Reading smap error\n");
+> -
+> -err_out:
+> -	return thp == (nr_hpages * (hpage_size >> 10));
+> -}
+> -
+>  bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, nr = 0;
+> +	uint64_t categories;
+> +	bool expect_huge;
+> +
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = false;
+> +	} else
+> +		expect_huge = true;
+> +
+> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
+> +
+> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (categories & PAGE_IS_FILE)
+> +			continue;
+> +		nr++;
+> +	}
+> +
+> +	close(pagemap_fd);
+> +	return expect_huge ? nr == nr_hpages : nr == 0;
+>  }
+>  
+>  bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, kpf_fd, nr = 0;
+> +	unsigned long pfn;
+> +	uint64_t categories, kpf;
+> +	bool expect_huge;
+> +
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = false;
+> +	} else
+> +		expect_huge = true;
+> +
+> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
+> +
+> +	kpf_fd = open(KPAGEFLAGS_FILE_PATH, O_RDONLY);
+> +	if (kpf_fd < 0)
+> +		ksft_exit_fail_msg("open kpageflags: %s\n", strerror(errno));
+> +
+> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
+> +		pfn = pagemap_get_pfn(pagemap_fd, addr);
+> +		if (pfn == -1UL)
+> +			continue;
+> +		if (pageflags_get(pfn, kpf_fd, &kpf))
+> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (!(categories & PAGE_IS_FILE))
+> +			continue;
+> +		if (kpf & KPF_SWAPBACKED)
+> +			continue;
+> +		nr++;
+> +	}
+> +
+> +	close(pagemap_fd);
+> +	close(kpf_fd);
+> +
+> +	return expect_huge ? nr == nr_hpages : nr == 0;
+>  }
+>  
+>  bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, kpf_fd, nr = 0;
+> +	unsigned long pfn;
+> +	uint64_t categories, kpf;
+> +	bool expect_huge;
+> +
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = true;
+> +	} else
+> +		expect_huge = false;
+> +
+
+Oops... this part has mistaked compared with other function...
+I'll fix later...
+
+-- 
+Sincerely,
+Yeoreum Yun
