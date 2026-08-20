@@ -1,152 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D40389111;
-	Thu, 20 Aug 2026 10:57:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A558340D576;
+	Thu, 20 Aug 2026 11:03:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787223476; cv=none; b=IiCpUo5Le/wrXHxf9eI1d+fag96tMMz4lEhJmjL+Zv14v5bWentYdNQTZyk547a26OZxdIPuqZappt45podxvSbYb0DdyHKBAN/gUumMQ4EojsdZtIYqwsJoIMQ900iP/65g5j0N8S0mRwxM8HkHxnUFer6+jOLZ8XncWazBi/Y=
+	t=1787223804; cv=none; b=rCRS+c2Emh1hDv331T00bYKqCcw2Ni5jpdCrGdwiNi0I5UzDgN4td+cy6otVN/Ci2TdVUSagrIyhu6YnhPThdIWxLEEcy6bJ1K6gNLrWX74PVXWqUMOLo2Bpcb4qfu58ZFzudgKOlfxp++bV60cDpCGr7D/ljN2F9d6RMAoW1z4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787223476; c=relaxed/simple;
-	bh=LPCaldm1q4JDm8FZLdWWbyaeIP6P1AL+d9WYWPyUt9Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TZbt/4F6bvXNM/VF+MnCpkqGB4gWZImwc5m/8z3xdXumUDNW29pUx5pgswQzt0ZOu3R2YYvkGoFt67dXlovyM1a72lqGizQK5WHqOUumqiC6hfsb/MRiM7ehX1bExOr9JmO9GTrnPTKdXDl0ls4fV6ve7ZPMHwYZBsdVkF6NDIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nKEUBudo; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787223804; c=relaxed/simple;
+	bh=MshPta0iS4mZ0fKT4KHy6tm15BxxtVAwgEpW3rUAxA8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Er4NIwWOVfK9m6bHCRQaav6gpKNkXAMbRJYuSGvq200okQPwHNI90YJ3v7Zj2gk64+7UivqA5F6f0W2V02G26gZCpX5krXAktcpmoFsAovns38W2E+DCoa4eGVSo05ZVS7AS/ZPPCNg1iNxogunqwDogDnI/rsdMsUX+C9kO5hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=h4v6ksqI; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NyRnjdYU; arc=none smtp.client-ip=202.12.124.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nKEUBudo"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 465FF1F000E9;
-	Thu, 20 Aug 2026 10:57:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787223474;
-	bh=SD5iTaJbc9q/M3QLf1krpo13nJxVMOZPGPuInSi7uu0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=nKEUBudoL/z+PvJxHEUPgdsLzUwBgEvEOex5lRNUtYeHBuDpVPZtvxCIoj489g2bt
-	 aklW1DgzWo+yoEMQ0DUC9wXUOW/KdTnnuIWmQeTb6xnnv/ttEdUdC2Z9yMVrGA7Uh2
-	 GByTkM9vh8PYAgbN+MZ0UABSRW0j0jhN54oMj+ooPGmd246gHSr4kXF2bJNhezeE0Q
-	 QzyvElnOl6VvNNSoRpixQKJGZ3/4iRPzswM49zj3PjZRT6dtUEq4o3rJOg4oeP1uaw
-	 bQYRXznCZO7rpPJ2CW632BBnAUaKfMGZo9ZHq7z98e7jDvbeDXP/1zMyJ51HwN3L3y
-	 vJidVCcus+VJQ==
-From: Simon Horman <horms@kernel.org>
-To: fffsqian@163.com
-Cc: Simon Horman <horms@kernel.org>,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	shuah@kernel.org,
-	sjpark@amazon.de,
-	netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	fuqingshuang@kylinos.cn
-Subject: Re: [PATCH] selftests/net: fix kill() argument order in fin_ack_lat
-Date: Thu, 20 Aug 2026 11:57:01 +0100
-Message-ID: <20260820105702.803812-1-horms@kernel.org>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260817091017.281104-1-fffsqian@163.com>
-References: <20260817091017.281104-1-fffsqian@163.com>
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="h4v6ksqI";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NyRnjdYU"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.stl.internal (Postfix) with ESMTP id 475A81300412;
+	Thu, 20 Aug 2026 07:03:20 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Thu, 20 Aug 2026 07:03:21 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm1; t=1787223800; x=
+	1787231000; bh=Huxg0qnn8fJu2M90AV87+SuAfu8Ucyiqn+uzaPm0SrQ=; b=h
+	4v6ksqINBbc34I4HOLT3AbOu32/sKqYADiwHGzlD98l13WoAINBksGpyeoXXdD5f
+	UoqREfMddBIi975ert0Mr0i78QrK/e3xq7ECPR1JJuZBUY6pG1blQSfmtWDXavDV
+	1LEeanH6BTFYYsV/MFzYM2d6GD7CL214O4VUCGkEQQRwgh25GeZQPzGCVpJf9BFj
+	xRMrug9FwiWMvLy8W1nqPSlHBX2i92C8NQlJX35z6o3QydrSjCtIRT+eCsYyEYmN
+	Ip7k5Ri1LtzMcllkgVp6lZ29VyKIwr95MA5RNBuviG/P+AonvEY98qIp+ixk2t1k
+	YDYBHhJoKwzfuBSNfKtDw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1787223800; x=1787231000; bh=Huxg0qnn8fJu2M90AV87+SuAfu8Ucyiqn+u
+	zaPm0SrQ=; b=NyRnjdYUysVmvUR4O7aJctJHDmO840NF+AWUeFSZS+sNRLSS5me
+	oz0KWOjglgTalpUzbPZzKVK/mMRFZ5JVYsUW5sKc8ZCrrx5Eso8eDGVRLB1jSxSj
+	DmAQ0kHFZ/jJzkWTRLsnOODFagmetK2ZKkbLWCtnVQriDq1nB9tOQIIuehYSXM4U
+	rCYhTeVACwgvYa5spo+lakIKuRNkaQASaDZygF2TB0ItCbfwdx6v3xiTeK566iPR
+	kViOLi1IrVuxkou8bifuQOMm2kf9/dw/RN4SkfhzZSxy7AtJlNyPGxQNyQOxM1Lj
+	AH1rOcMYI4fgDfliD2GAB/FSFzL9CvUkA/w==
+X-ME-Sender: <xms:9t6GaocOyZ4Kcrw-dfXQvd3qt0Rn7dG1dtEEupg03sdidovPwIUm8A>
+    <xme:9t6GaqrxLtRyapyzx8x5aliQL-pUuuqZ_1ZVAYdZ4wEp8R_cnCC4TjLYh8U9s4BjA
+    epx9HZVQP4x4-IEQ-3ze9SC9Obm0E-FkbNM2-3aeZDuRbk1CwpAXLY>
+X-ME-Received: <xmr:9t6Gaq83NmZfRE5FXFHy56tn6PaN40rXnZyQzOQ_rLJj9QlTSY-GZg6djJc>
+X-ME-Proxy-Cause: dmFkZTGi6rYBThRI+gPyGqdk0gFejnshTs0jgIzYkHn1s57eIU7ysIOO/3U0Ycz+WDPRsG
+    Xg6Mi4zSwoYf+kByU9Z601ezWYRZ7CD5oBc3a8TT1GxISzvrIVbtQy07pVJjH6pMRKazKM
+    T5KmOo0T0kSDTIayR5gbXkxp/HgxutAVUB864oI+T4m9++yknzJUqkDAQxi5ZSDTnoe+PA
+    5sTANMdPYnapL/OG2KdEQdahdAUgDEnYurAINXjN7w1+/1He/I8pHReJNLNA+1mrtA7nh9
+    nApoJG+kju/satpHLA3UpprOXSmphHqB+XSj2l8+kJeLRXw6jQA2FjYZB1zzWUVtm4xmb4
+    kB0FhUDB+xl5IWAscGtOZYxq406x1djv4HpZ/5JsWMUiVQs96OfPkqP7yKWBEUf345lKr4
+    LjO4lpPzLKRDR/9Ft6wJYaBzdtr0VHuhPc09+qElWx7UTEi3oipPhURF+SNJpbux/wwdYX
+    BsY/QW08vXBu2VejLT6uNZqYpDCgZxqCHkvC4x3OYQMCsJoAEK8g5hihi2mGtNuVCVlc6Q
+    fTk0GKDiWw6jxYcFM8RMYeK7FV3KECjBemKaxPwQgfD4o590POwtB4foQvRiQwOXC/dcBR
+    Kw91DvwHqEHRZOFpia4ShePdJqP0IN++0iZI64Ou1VEw6j0yRbFXpue5udOw
+X-ME-Proxy: <xmx:9t6Gat8WHH_2XHJPtGOHMMmwD0oiKJVsMGaGWdtthGC2QIinKr7vSQ>
+    <xmx:9t6GakGDpdxRrNHyerT3FWlJFNQAE0hyiGtm-WfW0Csdx1O19cZVvA>
+    <xmx:9t6GaseD3MznHKp_gnNGiUzq72B66nmj32qekJgWwE_o1gyLK3bexg>
+    <xmx:9t6GajL4OmDCNkH7xMCXtvIO-G8bi9hyuMwdHoESCM5nhjci_uKgtg>
+    <xmx:-N6Gapksungxu3LqO7qD0bxG2JX_M0hlsf96JbCsppTXk_gujFucI2EO>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 20 Aug 2026 07:03:17 -0400 (EDT)
+Date: Thu, 20 Aug 2026 12:03:16 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 02/57] mm: add pte_none_or_zero()
+Message-ID: <aobe4JwweJ0DZV0X@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-3-kirill@shutemov.name>
+ <4e8e208c-3aa4-4060-b0a2-499bc76d19fa@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e8e208c-3aa4-4060-b0a2-499bc76d19fa@kernel.org>
 
-This is an AI-generated review of your patch. The human sending this
-email has considered the AI review valid, or at least plausible.
-Full review at: https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260817091017.281104-1-fffsqian@163.com?part=1
----
---- Patch [1]: [PATCH] selftests/net: fix kill() argument order in fin_ack_lat ---
-commit c8d7888fff6c43f1844cd283115315b6ce892cad
-Author: Qingshuang Fu <fuqingshuang@kylinos.cn>
+On Mon, Aug 17, 2026 at 07:57:29PM +0200, David Hildenbrand (Arm) wrote:
+> And let the callers still spell both cases out.
+> 
+> if (pte_none(pte) || pte_is_zero_page(pte))
+> 	/* Do something amazing */
 
-selftests/net: fix kill() argument order in fin_ack_lat
+Works for me.  I will drop pte_none_or_zero() and add pte_is_zero_page(),
+which lines up with is_zero_page() in mm.h.
 
-The patch swaps the arguments of the kill() call in sig_handler() so the
-server forwards SIGTERM to the client instead of passing a pid as the
-signal number, and adds a child_pid > 0 guard so the client (which
-inherits the handler and sees child_pid == 0) does not signal the whole
-process group.
-
-> diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
-> index 70187494b57af..f985e01354b44 100644
-> --- a/tools/testing/selftests/net/fin_ack_lat.c
-> +++ b/tools/testing/selftests/net/fin_ack_lat.c
-> @@ -103,7 +103,8 @@ static void server(int sock, struct sockaddr_in address)
->  
->  static void sig_handler(int signum)
->  {
-> -	kill(SIGTERM, child_pid);
-> +	if (child_pid > 0)
-> +		kill(child_pid, SIGTERM);
->  	exit(0);
->  }
-
-[Severity: Low]
-[Finding: main-2-1]
-[Sources: opus-5]
-Now that the forwarding actually works, can the wrapper script's cleanup
-path start failing?  Both processes carry the comm name fin_ack_lat
-because main() forks:
-
-  child_pid = fork();
-  if (!child_pid)
-          client(ntohs(laddr.sin_port));
-  else
-          server(sock, laddr);
-
-so pidof returns two pids in fin_ack_lat.sh:
-
-  set -e
-  ...
-  cleanup() {
-          kill $(pidof fin_ack_lat)
-          rm -f $tmpfile
-  }
-
-  trap cleanup EXIT
-
-If bash signals the server pid first, the server now runs sig_handler(),
-forwards SIGTERM to the client and exits.  The client then exits, is
-reparented to init and reaped.  If that completes before bash issues the
-second kill(2), the builtin gets ESRCH and returns non-zero.
-
-With set -e in effect, wouldn't that abort the EXIT trap, so the script
-exits non-zero even when do_test() saw zero spikes, and rm -f $tmpfile is
-skipped, leaving /tmp/fin_ack_latency.*.log behind?
-
-Before this change the forwarding call always failed with EINVAL, so the
-client was still alive when bash reached its pid and this window did not
-exist.  Would it make sense to make the wrapper tolerant, for example
-kill $(pidof fin_ack_lat) 2>/dev/null || true, or to kill only the server
-pid?
-
-[Severity: Medium]
-[Finding: gpt-5-6-sol-3-4]
-[Sources: gpt-5-6-sol, opus-5]
-This isn't a bug introduced by this patch, but the new child_pid > 0 guard
-is the only place the fork() failure sentinel is considered, and it handles
-it by doing nothing.  main() never checks fork() for failure:
-
-  child_pid = fork();
-  if (!child_pid)
-          client(ntohs(laddr.sin_port));
-  else
-          server(sock, laddr);
-
-On failure child_pid is -1, the !child_pid test is false, and the process
-falls into server()'s infinite accept() loop with no client ever
-connecting, so nothing is printed.
-
-fin_ack_lat.sh's do_test() only counts lines and treats an empty log as
-success:
-
-  NR_SPIKES=$(wc -l $tmpfile | awk '{print $1}')
-  if [ $NR_SPIKES -gt 0 ]
-
-so a fork() failure (EAGAIN/ENOMEM, RLIMIT_NPROC) is scored as a passing
-test.  Since this file already uses error() for every other syscall, would
-adding if (child_pid < 0) error(-1, errno, "fork"); be appropriate here?
 -- 
-pw-bot: changes-requested
+  Kiryl Shutsemau / Kirill A. Shutemov
