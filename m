@@ -1,138 +1,112 @@
-Received: from flow-b7-smtp.messagingengine.com (flow-b7-smtp.messagingengine.com [202.12.124.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD5473A1CEA;
-	Thu, 20 Aug 2026 11:11:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E3341A571;
+	Thu, 20 Aug 2026 11:30:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787224282; cv=none; b=oIGmgKWDEU+J5gxum38b6qTkRoFAWJ1pIERb4kB7D64E2DC0JAif/eyg2T2/ZF+ChJQvRjw57LDD+FBHlOy6gxv2z4hEJpmWW6SLyXVQqftV5vekxRciZzEWnSGig1BNqqpNc4scgnpH1OCOtD6fDnaQiX/KZHiDQhUnuyp/wIM=
+	t=1787225411; cv=none; b=hr5b6jg4LAMuAHYd6TSu4XcsMUI5xjAz3QM5usxRzeLSvT6BxyymkhebX/2euuSvNhQoWLOewrrpgrvA3WhQwDs/BmA+3PD6qr1I6ENmK/TqzHo0Fg6yv8HEIuADJ5xaUHQGGWw7JZ58v6z+UQ0j2Rsr4m1jDg+ZrnPyUxOxYLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787224282; c=relaxed/simple;
-	bh=Lb6GhQMq5eu79b3p7oVW449PP4Y18Dv/xsmYBHiZLYQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fxXLziaPr73k8HkMJpes/WYiSxdmXb/W4ly2ERXLMWqSxQGqgqUYhEZzYTrRquEEq4yu/8fXbVciEyyqutv+CN2nPfsv3yN2lF2FNznuNunGSDc4bRrDYfvQx99EpmVRQ6Jyb0wA5xmr+FbS1rCvwfWzJ81g5W7XqO1OSeHB5Rc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=KU1+i7z4; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PagUZJvm; arc=none smtp.client-ip=202.12.124.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
+	s=arc-20240116; t=1787225411; c=relaxed/simple;
+	bh=x/DK1djQrP4aArL2cm7yHVkhGnuwCsxaQs4emL4I4fk=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=M0XGFn7P2BzZqH14jbcBZzMuczCAOwFZk4QY/75v/HfjEZJy8bUx2+3MVFxadO6KNU/uw2l3ZgjJBunHQ77AOlBc44olLR2LEr5c9+GiqzimfM5GsIYYwa5sGBU/z7MxePTZebISAUEzkRuD3waFIN+2gvtIBE+BJijMDKetXUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Alv0Uksx; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="KU1+i7z4";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PagUZJvm"
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailflow.stl.internal (Postfix) with ESMTP id 701571300542;
-	Thu, 20 Aug 2026 07:11:18 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-04.internal (MEProxy); Thu, 20 Aug 2026 07:11:20 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-	 h=cc:cc:content-type:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm1; t=1787224278; x=
-	1787231478; bh=g9xsCX0WBUUnfBOKB0w7/8Sors9fi6e3DmVtM4E2/4M=; b=K
-	U1+i7z47jS/fBLaFTfoj6mmFdxh6iUw05H+jTqBZiQF5VD4GNTURHHD3Nsl3AkNf
-	q440lJTbNRyuHU70y+RTw/qwLg5QgQMHPOoY/YvYj12IhydCO98I1j9JUHshw+f1
-	FkwJSWWoZPKmbZOt3r3+2kdfxcNLPndbGwIpnOxfnZaOZyD/Iiptnx1f9/tY4bTC
-	K4JyAVplLEZ/dzLgQ9p+iJh8PF61P63//nMc6Yex0dW/J2L9shCsDDdzSdcwQu6o
-	VeppE28WnaHc/Q0tliWFkq5EVCcaiRlLYWP4Ka0roDg/h2eYZ3jCI/aMtPBdBb2a
-	RAIpRNXn0XXRz57GM4gFw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-	1787224278; x=1787231478; bh=g9xsCX0WBUUnfBOKB0w7/8Sors9fi6e3DmV
-	tM4E2/4M=; b=PagUZJvmqFmQep9zijjZCNDOkk2VTJM6cXWjSMGUp70gTevh8wI
-	GB8PSELsZV52BP+N+2MiA1+CrSaBHjmSIp9FoJhIfDvfaNCWCXQjrmVO4SDNdDlv
-	C5cxPXf8yUsQkFECN+CSS+/mN/RIfaxYNG/pVO5zPBXfTGnECOg16q9XnQ8i4me1
-	uu6ZOwuV5MVQYEs5ASUXCeBCiSeabZpGbXYv15iiVUzmdanVvJ2P6kVDS3WngoU+
-	/TBPIFKL83avXU5pC9goRqM/Wtgj4Hgy3tYRvtzh8Y6wxaxasQRXXpjeMAikscY+
-	CSQp4LpVHUWY67gM+Ulw2nTy9qNQFsMxhdA==
-X-ME-Sender: <xms:1eCGav41xO4Sr31Im6zqFiGb8CPE8fPWFzAt-JWQoVXuFUDjGCQZug>
-    <xme:1eCGalWpRxsb-fgWxZgOrusBw7BbpycYwxJzCN7TmkBqM0qWEZxNNTs6uFP3LjUIV
-    -BfEqx12170xLjX8fL8ohxJVjokCVRx7TXOP9EGSCygI9LNiRN55eFY>
-X-ME-Received: <xmr:1eCGan4NZHwQx_gMpmQaQAeBEfjA6FnShBBwBT3ZKH9EOY7qh-6mi84o-3g>
-X-ME-Proxy-Cause: dmFkZTE0kLAPelY3PhKKgfOZReZlwUXCE2P+0W3Lsq0wn1U8jgUAUWTZGyhI7tcRZnVTCb
-    PshjWZOgj5Oe8lG1fycLvPkM2WPvj3VvahId3o3ZrQfFqXv1hczkf19HxS/ojoQQHQMG4E
-    Td+uhh0fXapAah0ml84fpRB7tzK8Yw3eEnpDiyM09M80hT7656Wy1r8DPVWW5UkwozcDgc
-    veEgvxmSeLwe1C1/u6343GWpJWQcEESNTABMaj282WuViN7jYhRdvbjsZz6StVtV5sUpMo
-    5rWloeYRfSADBeGXkVLM+Kh/s+R0/bZngF+2STWRGn791FSVF1pf1ChlwkUilcOAiDxntZ
-    dxRzYJBEyyPadtn4QGMYxkODvUaEP9m6+Ecx0DINgUHxNK0Hhnacv6+Dz0MHehkbu39EVv
-    Zy9q4iPh0OAK5uFaGrzt4one4rabz38n2w1H2Cggve/3mOswlytYQCbdIdU64fiyBBAJvH
-    e0ioudfoJz65Rf6nSruDUGIce598LTvLwTJS1EcoTnUPXLRvVAoejecmJqFTmc+SAOLcu4
-    ipx+Nv7CcBi1uUzY6hjAZNdd+K5sAGPBh+uaSHgC+TjYE/snlo5SsVZWLZKjZOpbQitDhb
-    C+HLQ/XTGjJbkQRtYtnwLnpDeChP/3qcB9DG8JvHh5AzDUYACf/rzJnr+h/A
-X-ME-Proxy: <xmx:1eCGagIajLtMjAqLMf2TclkZP1geG1bLcWCE8vDugh2Fra-luva1rg>
-    <xmx:1eCGaihLbHlYtrTex95q2LSogmkbsSdStbhIHiG9tCjdGRTNZbecqw>
-    <xmx:1eCGaiIrDcCoQY4Bxe06GEatnevG7gW7nHu2ENb143y2hsKvegh_XQ>
-    <xmx:1eCGavH7MdRTj1hgvXaLbmlT9vQFZiclztw7QqjIHo1ho8dKIkht-A>
-    <xmx:1uCGaqVWpfH-32-MnAdGOVOn4Jg0MNG2WMsYrvrUzzR0lwx5d3TjZWMk>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 20 Aug 2026 07:11:16 -0400 (EDT)
-Date: Thu, 20 Aug 2026 12:11:15 +0100
-From: Kiryl Shutsemau <kirill@shutemov.name>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
-	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
-	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
-	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
-	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
-	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
- collapse state
-Message-ID: <aobglSY5L1KoIqxF@thinkstation>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-4-kirill@shutemov.name>
- <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Alv0Uksx"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E48F1F00A3D;
+	Thu, 20 Aug 2026 11:30:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787225410;
+	bh=yxMhTRLdavM3BDMahtX3m4KRGa90dfWMFnclmxcH/Kc=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=Alv0UksxLwqA1XA9KRzroRLJVP9RPkvI9b/GgKz8BqbAjhySnF/bFcPCihvnMghLL
+	 0aoeQMch6YxbIKM4dy/oVd0WKACWE/BE+50wazKP/MqO++M1rEDuyg2aHupZXprcBl
+	 OsaIwXZioOb5hiVLOoXu3xsoG8Ys+MOHzH7RwlSxYM206gEIGvr/f3MwQ5Ez7YbyCM
+	 HJw0Souj6735YZ/3knzR8wKA7HRgHmF9NmD0b4Sj434T9fSG9/mIajTdEUP+P7TeNo
+	 kjtBB11Z5n+E6zp6t0v0uSD7KC7A0ml2vYbB861QNnnNiJZBUQ3qgO6UfxBepzoe0U
+	 vWMyish1q5x/A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=lobster-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.98.2)
+	(envelope-from <maz@kernel.org>)
+	id 1wx0yG-0000000HGwR-10ar;
+	Thu, 20 Aug 2026 11:30:08 +0000
+Date: Thu, 20 Aug 2026 12:32:39 +0100
+Message-ID: <87y0e1ni20.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: Leonardo Bras <leo.bras@arm.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Fuad Tabba <tabba@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v19 04/14] KVM: arm64: Ensure GCS memory effects are visible
+In-Reply-To: <3cc4cccd-1a4a-487e-8ac6-9bbbc9713e58@sirena.org.uk>
+References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
+	<20260812-arm64-gcs-v19-4-9105afd828ac@kernel.org>
+	<aoXmfz5pPwRYRKTO@LeoBrasDK>
+	<3cc4cccd-1a4a-487e-8ac6-9bbbc9713e58@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, leo.bras@arm.com, catalin.marinas@arm.com, will@kernel.org, joey.gouly@arm.com, suzuki.poulose@arm.com, shuah@kernel.org, tabba@google.com, oupton@kernel.org, peter.maydell@linaro.org, yaoyuan@linux.alibaba.com, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-On Wed, Aug 19, 2026 at 04:19:41PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/17/26 00:45, Kiryl Shutsemau wrote:
-> > From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
-> > 
-> > Preparation for building the new collapse engine in its own file.  The
-> > engine and khugepaged.c need to agree on what a collapse result is and
-> > what state a scan carries.
-> > 
-> > Move enum scan_result and struct collapse_control into a new
-> > mm/collapse.h.
-> > 
-> > No functional change intended.
-> > 
-> > Assisted-by: Claude-Code:claude-opus-5
-> > Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
-> > ---
-> 
-> BTW, I'm wondering whether it would result in less churn (independent of the
-> other changes) to
-> 
-> a) Rename mm/khugeapged.c to mm/collapse.c
-> 
-> b) Move stuff into mm/collapse.h that a new ...
-> 
-> c) mm/khugapegd.c will need.
+On Wed, 19 Aug 2026 19:08:01 +0100,
+Mark Brown <broonie@kernel.org> wrote:
+>=20
+> On Wed, Aug 19, 2026 at 06:23:11PM +0100, Leonardo Bras wrote:
+>=20
+> > You state that we do _not_ use GCS in the hypervisor, nor in the host.
+> > I understand that we GCSB() when we exit the vcpu context, but why woul=
+d we=20
+> > need to GCSB() before getting back in?
+>=20
+> > If cpus will GCSB() on guest_exit, and host/hyp does not use GCS, there=
+=20
+> > should be no GCS pending operation at the entry point.
+>=20
+> That's there to ensure that updates written by another PE are seen,
+> following the same pattern as DDI0487 M.c K10.6.5 example K10-8 (or the
+> prior migration between PEs example, that has barriers due to the stack
+> switch operations rather than as distinct instructions).
 
-I went for a clean collapse.c on purpose: the engine is new code, and a
-new file keeps it readable while both mechanisms are in the tree, with 28
-as a plain delete from khugepaged.c.
+This makes no sense at all. The guest itself is in charge of its own
+coherency.
 
-Your shape is less churn, though, and it keeps blame: 29-35 move about
-1700 lines as add-and-delete today, and most of that would stay put, with
-only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
-khugepaged.c.
+=46rom the PoV of the hypervisor, this only needs to be guaranteed when
+a vcpu is migrated from one physical CPU to another, as this is
+invisible to the guest.
 
-If you prefer it that way, I can give it a try for v2.
+Given that this can only happen on in the interval between vcpu_put()
+and vcpu_load(), the sole location where this could make any sense is
+at vcpu_put() time. And even that can be relaxed in the NV case, where
+we transition between ELs rather than CPUs.
 
-The rename has to open the series, so it will collide with anything in
-flight that touches khugepaged.c.
+Hammering things in the run loop is both expensive and pointless.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+	M.
+
+--=20
+Jazz isn't dead. It just smells funny.
