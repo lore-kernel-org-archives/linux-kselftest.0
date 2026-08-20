@@ -1,34 +1,34 @@
-Received: from mta1.migadu.com (out-84.mta1.migadu.com [95.215.58.84])
+Received: from mta1.migadu.com (out-89.mta1.migadu.com [95.215.58.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 618314457C1
-	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 12:43:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E288A445AED
+	for <linux-kselftest@vger.kernel.org>; Thu, 20 Aug 2026 12:43:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787229798; cv=none; b=lhxl7Zv1YPJt0ReUx9Vq6rxxSehdsjwOjxsb5aOxjcgb0SmJIN6kxZCKjLamx/dSVIpovpIx6A1RCA/LRcwrZeJrVr6BKil6Sed9gQiNZRhboOWb2Q/aGxZBCNzSLTcymbLtNDGbIulKoarhaoscCWTIxighij5YQS1zjior+60=
+	t=1787229802; cv=none; b=kbkIH1xY9BoHfSgoAiCNpjnzlFiZ0671AyGs398NTWRoh2JH/wFCT2Wn6ab9trloypTrTC7B7dFCUfwgFIpQfyeSr5V+0UUpEpCV6kwcmZvSQ2sdI7Tez/UnAwjO4wjrM4t9Xo6to+9zJbHF+C8BR9H2KIdnP2b+RAugzIfEmoc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787229798; c=relaxed/simple;
-	bh=4Z9moWx34vFyk0X2XPUJ28g4vrAgCQXsNoQyMW+kKNQ=;
+	s=arc-20240116; t=1787229802; c=relaxed/simple;
+	bh=JuP+1kjQQwdTsfr92sjE4FlWTQ/bj9G+UnXL3bHY01k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QwDR9DNIPHU8JuL2BF2JazRy3DxWmivC8vu5Nf0aCEd4/E/BstrRXTxg5ZLACAdT+m6WUlFKrag/k/UAzmc816mDKmXt/r6cCMhdSalx0BU6fbvJws6bNnYa+XDviFTsbJ/HPxJ5Xk+Abe0uuwSmWqj1H81DilFYmCWqMeW91iM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=tDj1Eu8q; arc=none smtp.client-ip=95.215.58.84
+	 MIME-Version; b=TJ6jgdR6L37x1VsQV7BBR5OkQaLQx88uVACf2PhOtUilqEQn+VoskQa2jR/MGDw+9/LRZZ2X49ONxZTa0nl0+p5eBX/8ll2os+5Y4upb/TWS1UMo9N+q0z7iyM+9ReGY3sUJ/WzYer5ySrICyLsJZqk1IpdM1Edq7r1cUj/VGEs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=X2MRMAyU; arc=none smtp.client-ip=95.215.58.89
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="tDj1Eu8q"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="X2MRMAyU"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=4Z9moWx34vFyk0X2XPUJ28g4vrAgCQXsNoQyMW+kKNQ=;
+DKIM-Signature: a=rsa-sha256; bh=JuP+1kjQQwdTsfr92sjE4FlWTQ/bj9G+UnXL3bHY01k=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787229794; v=1; x=1787834594;
- b=tDj1Eu8qYLFLH/K5hi8oD7Lb7UaqCby8NwOqvguVJ5ledEvT6G3hnEEWG0G8UunnupbAjGlU
- V2Ka1dBjLYGKGVWxzVfMwG4ORYd4DuQ3FzQURyQLyHGpl/qdeGNS1aTt/BZLoAcAFCgsKkG1nCC
- Jj+KFNI04MyYG3LaCLe6RapA=
+ t=1787229798; v=1; x=1787834598;
+ b=X2MRMAyUchO3DxE95833DcS7ABQwg+1TD1kioknXAFzCmHuUtZT4nrs2zLh/vISNzK0Id5L9
+ ceWUF32/QExprEkaA94jc2MXo1Xwr3pVYIEYnC5VZ/GlmXuxiKM1nmzgjU8Z0W9+SQwLxg8ywdR
+ qmFX5DRPbW3vqw1rNHKfTrIc=
 X-Envelope-To: linux-kselftest@vger.kernel.org
 Received: from zgp.. (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id e1761e5fbda85615;
-	Thu, 20 Aug 2026 12:43:14 +0000
-X-Mizu-Trace-ID: e1761e5fbda85615
+	by smtp.migadu.com with ESMTPS id 37dffba7958dff60;
+	Thu, 20 Aug 2026 12:43:18 +0000
+X-Mizu-Trace-ID: 37dffba7958dff60
 X-Migadu-Flow: FLOW_OUT
 From: Guopeng Zhang <guopeng.zhang@linux.dev>
 To: longman@redhat.com,
@@ -41,9 +41,9 @@ Cc: ridong.chen@linux.dev,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH 13/17] selftests/cgroup: Test child invalidation after shrinking cpuset.cpus
-Date: Thu, 20 Aug 2026 20:41:58 +0800
-Message-ID: <20260820124202.517160-14-guopeng.zhang@linux.dev>
+Subject: [PATCH 14/17] cgroup/cpuset: Publish cpus_allowed before partition updates
+Date: Thu, 20 Aug 2026 20:41:59 +0800
+Message-ID: <20260820124202.517160-15-guopeng.zhang@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260820124202.517160-1-guopeng.zhang@linux.dev>
 References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
@@ -57,31 +57,47 @@ Content-Transfer-Encoding: 8bit
 
 From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 
-Shrink a parent CPU mask in root/root, root/isolated and isolated/root
-configurations. Check that the child becomes invalid and that effective
-and isolated CPU masks reflect the new ownership.
+update_cpumask() calls partition_cpus_change() before copying the new
+cpus_allowed mask. A remote partition update can propagate through an
+ancestor and revisit the cpuset while the old mask is still visible. The
+second visit then adds back CPUs that the first visit released, leaving
+them allocated after the cpuset is removed.
 
+Copy cpus_allowed before partition_cpus_change(). All checks and
+allocations that can fail have completed by this point, and cpuset_mutex
+remains held for the rest of the update, so the early copy needs no
+rollback. Keep effective_xcpus unchanged until afterward so the partition
+code can still calculate the old-to-new difference.
+
+Fixes: f62a5d39368e ("cgroup/cpuset: Remove remote_partition_check() & make update_cpumasks_hier() handle remote partition")
 Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
 ---
- tools/testing/selftests/cgroup/test_cpuset_prs.sh | 5 +++++
- 1 file changed, 5 insertions(+)
+ kernel/cgroup/cpuset.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index fb11a3ab0f35..7345e89e22b7 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -331,6 +331,11 @@ TEST_MATRIX=(
- 	" C0-3:X1-3:P2 C1-3:X2-3:P2 C2-3:X3:P2 \
- 				   .      .    C4:X     .      .     0 A1:1-3|A2:1-3|A3:2-3|XA2:|XA3: A1:P2|A2:P-2|A3:P-2 1-3"
+diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+index b3e749ede7d1..9e13fc962f41 100644
+--- a/kernel/cgroup/cpuset.c
++++ b/kernel/cgroup/cpuset.c
+@@ -2555,10 +2555,17 @@ static int update_cpumask(struct cpuset *cs, struct cpuset *trialcs,
+ 	 */
+ 	force = !cpumask_equal(cs->effective_xcpus, trialcs->effective_xcpus);
  
-+	# A child outside its parent's new CPU mask becomes invalid
-+	" C0-3:P1  C2-3:P1  .      .    C0-2     .      .      .     0 A1:0-2|A2:2 A1:P1|A2:P-1"
-+	" C0-3:P1  C2-3:P2  .      .    C0-2     .      .      .     0 A1:0-2|A2:2 A1:P1|A2:P-2 ."
-+	" C0-3:P2  C2-3:P1  .      .    C0-2     .      .      .     0 A1:0-2|A2:2 A1:P2|A2:P-1 0-2"
++	/*
++	 * remote_cpus_update() can propagate through an ancestor and revisit
++	 * this cpuset. Make sure that it sees the new configured CPU mask.
++	 */
++	spin_lock_irq(&callback_lock);
++	cpumask_copy(cs->cpus_allowed, trialcs->cpus_allowed);
++	spin_unlock_irq(&callback_lock);
 +
- 	# Direct invalidation returns child CPUs to the parent or its owner
- 	" C1-4:P2  C3-4:P1  .      . T:O1=0:O2=0:O4=0 . .      . \
- 					   0 A1:3|A2:3 A1:P2|A2:P-1 1-4"
+ 	partition_cpus_change(cs, trialcs, &tmp);
+ 
+ 	spin_lock_irq(&callback_lock);
+-	cpumask_copy(cs->cpus_allowed, trialcs->cpus_allowed);
+ 	cpumask_copy(cs->effective_xcpus, trialcs->effective_xcpus);
+ 	if ((old_prs > 0) && !is_partition_valid(cs))
+ 		reset_partition_data(cs);
 -- 
 2.43.0
 
