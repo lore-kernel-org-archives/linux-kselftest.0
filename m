@@ -1,84 +1,112 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C4803B71AE;
-	Thu, 20 Aug 2026 19:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0FE33BD629;
+	Thu, 20 Aug 2026 19:40:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787254282; cv=none; b=XSr9VETO/GFuPmWLPMrwuBku3ig0jdDxRgPQtIxrsekalU0LfDBqCE9eeT6NCaN53EJdI8civSaPB9QQ/BW9AtG0YZ7zHZoaWT2yrLLHWu3OFiIFd5rJeHmhY6almqUx3QBRtipYbsJsMmHNitDMU3ZHR4mJj+BTwX4p985ZT0g=
+	t=1787254840; cv=none; b=nnrE3p+fWrut/5xw+PgLXXwbB8VcWGfB7OZ/FN62xde9SLjwTcZtQKcTapf1BA2MQ6oElh7wylNSFtKITi8jrvMVJHQ9TBAiAwX44alD8rFufHSVP956Scbya2yCH5WYSrIhSLcxrmToYmJCCY5t8kFoax6t3FcD/TOBA9ACYi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787254282; c=relaxed/simple;
-	bh=YUGvMc7pkO/vfaAGafTbVxhlBCl+vepfR5sq9vuqHpY=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=suzKBcrgBSlmmRaxUluEWp3FQavFXV01Pdecbx0OJTnBPIt7fDeLliHtlY0Dsa9MmIHqEee97yMJWBjHZ3RzahfUp8UfDMvEoqCcwrsltG/BzuT2XwFnyh/wjhd/F3iNANWP3zN2Hb0T4axJ6JB0z0fAbuYRbw+F9P6aFETPrqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XYS70/QY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787254840; c=relaxed/simple;
+	bh=7pjEAmcXmpKnIzyuI0Xt2csvEi1hxzh7Ykp3uUVDmPM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=hAiTX8KXZWLzGBypX3P9BKeNTLLrqv5+h6+kLrXLs6wiGDH0uGw2NwkXquDzXDVzSePmRIvJdn9GGJ/usqjpotkjv+JekKGgRL6+ac69fe6JzOzTu00A+qi7bwDVTnF8Ks9gatXScKtv347Y7V/+W5Zo+65Nf0hiPKEk2suJ5iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=OIs7PUjl; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XYS70/QY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A25D51F000E9;
-	Thu, 20 Aug 2026 19:31:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787254277;
-	bh=G6hLzW/9WAL4cyybj1izKGx83+JCfFNjZLkKs8bw/5c=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc;
-	b=XYS70/QYkuhR+j4dwq1ah6p2h0aBr9pAwbFmI/pg0VOheNa+ylRKpMIVc8Qgd0jHo
-	 7WxcXkCbh21U/oyZYykcS7YkYVXe653IaHtvuOI9mWnxaFuPs9OYHP49Xb6aQo4Inl
-	 HmXwIMzpnfGp6bPTD2Ph59hoRbdhuzXYdFLpTfBmK9N90HcgBEmcQzj9huZr3T+iQ+
-	 kuq/OQv1829qZiHprK3AtZ/f/kCtKZB3R7cDIFyOGi+e567itjuvvIBf/dhOI7KgpM
-	 RS2UWdqU14Cxk9hvbyR5U7e2GxRws0+lhXJ592O4Wx37JiJ9Y7hMHiKP7LTywNq7fp
-	 cxHvQbdya89Og==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 199D83924459;
-	Thu, 20 Aug 2026 19:30:29 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="OIs7PUjl"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 94FBC202C;
+	Thu, 20 Aug 2026 12:40:32 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DFB3E3F763;
+	Thu, 20 Aug 2026 12:40:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787254836; bh=7pjEAmcXmpKnIzyuI0Xt2csvEi1hxzh7Ykp3uUVDmPM=;
+	h=From:Subject:Date:To:Cc:From;
+	b=OIs7PUjlgsvSxEm+4KOPIhXSUEtqz+Dveg3IA6WSTrV09DJzBRAmSh2p2jYzEhnwi
+	 ZHbtmhs10iUTaB4haVYZ/hbio7uyPa763254zj4Ui0JB3dxvFix8/Lmjh5Ue/O1sMo
+	 hpc/QnbTR2C0OWNI8H9BDVZZJi2DVUgYwEFooaH4=
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+Subject: [PATCH 0/2] kselftest: mm: fix some failure of
+ split_huge_page_test
+Date: Thu, 20 Aug 2026 20:40:14 +0100
+Message-Id: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net v2 1/2] net: advertise TCP MSS from the configured
- MTU,
- not the learned PMTU
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <178725422789.446762.4527576854549285289.git-patchwork-notify@kernel.org>
-Date: Thu, 20 Aug 2026 19:30:27 +0000
-References: <20260815070413.294559-1-jiayuan.chen@linux.dev>
-In-Reply-To: <20260815070413.294559-1-jiayuan.chen@linux.dev>
-To: Jiayuan Chen <jiayuan.chen@linux.dev>
-Cc: netdev@vger.kernel.org, stable@vger.kernel.org, dsahern@kernel.org,
- idosch@nvidia.com, davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
- pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+X-B4-Tracking: v=1; b=H4sIAB5Yh2oC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDCyMD3bTMivjigpzMEt00ExNLY8vUZBOTJAsloPqColSgJNis6NjaWgB
+ DAyKQWwAAAA==
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+ Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
+ Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1755; i=yeoreum.yun@arm.com;
+ h=from:subject:message-id; bh=7pjEAmcXmpKnIzyuI0Xt2csvEi1hxzh7Ykp3uUVDmPM=;
+ b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqh1gwm/jKRe0lLHpiBKW9B83UVm1ikv0xur6vY
+ zN6/CFlkFqJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCaodYMAAKCRBt1cPRWsUx
+ M27iC/44KXI87DFCucVPVj7t0kMHHMnV1u1Ador5n0t/pcbAdBlu4sxJ4lxoytEylySpm7nFeRr
+ Fe/qAcPr18DBZt530yAXyQqO/iQ9mAs66y0zhYhY+GMPaa/qvKBVjbMfkUgONkn/dz2F5DXvoiq
+ Jh1gQq0TcAJkeKZpGSheCauvaGJO0PAIv7Pdzr41qvyATk9zMWxb8ndjmfM3UKMOw3H2wdJChGq
+ ktET/ddQXL36nihkEwmzwUHnyGGSv/j7jnSqeaIyG35YbCb4D1TlYZi4o8P28DW4nfPA/EYxlzw
+ vJp4hdRGPzmpVYhlVE76m/AKKaj4PxexIDSGovO2SBfVa1rmFJLdCk7Ikcbm4mOaC+iIt+3xKhU
+ 6L7nJWLeaev20itWCB0ZZK7/vWbGlxIYFgRxzp+0ijbooqaMTBQnHODW/T/0mNqryXXWOPfGf9f
+ yG+bI94CnXx2g7jTJgrfXKcqcnOYyl8QKiNRWPwu8aevgxkTd+YoeoIoehEaeSmiu1IQs=
+X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
+ fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
 
-Hello:
+split_huge_page_test can fail for the following reasons:
 
-This series was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+  1. During the test, khugepaged may collapse previously split pages again,
+     causing intermittent failures.
 
-On Sat, 15 Aug 2026 15:03:36 +0800 you wrote:
-> The MSS a host puts in its SYN tells the peer how big a segment it may
-> send us. Right now we can shrink it with a PMTU we learned on our own
-> send path, which is the wrong direction entirely.
-> 
-> On asymmetric paths this bites - think DSR load balancers, where the
-> request side goes through a smaller-MTU overlay. We learn a small PMTU
-> going out, then advertise a small MSS, and the peer stays capped for the
-> whole connection even though its path back to us is wide. MSS only shows
-> up in the SYN and never grows back.
-> 
-> [...]
+  2. Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+     glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+     made by memalign(). The underlying VMA may start at a different address
+     from the aligned address returned by memalign(). Moreover, a subsequent
+     madvise(MADV_HUGEPAGE) call does not split the VMA because it already
+     has the same advice.
 
-Here is the summary with links:
-  - [net,v2,1/2] net: advertise TCP MSS from the configured MTU, not the learned PMTU
-    https://git.kernel.org/netdev/net/c/2640e6419594
-  - [net,v2,2/2] selftests: net: packetdrill: add tests for advertised MSS with PMTU exceptions
-    https://git.kernel.org/netdev/net/c/e5c8e301b497
+     This causes the test to fail because the check_huge_xxx() helpers
+     incorrectly require the address returned by memalign() to match the
+     VMA start address reported in /proc/self/smaps.
 
-You are awesome, thank you!
+Address these issues by applying MADV_NOHUGEPAGE after faulting in the
+huge page, preventing khugepaged from collapsing it again, and by replacing
+the use of /proc/self/smaps in the check_huge_xxx() helpers with
+/proc/self/pagemap and /proc/kpageflags.
+
+This patch based on v7.2
+
+---
+Yeoreum Yun (2):
+      kselftest: mm: prevent random failure of huge page split for khugepaged
+      kselftest: mm: replace usage of /proc/self/smaps for check_huge_xxx() helper
+
+ tools/testing/selftests/mm/khugepaged.c           |  26 ++---
+ tools/testing/selftests/mm/split_huge_page_test.c |  17 ++-
+ tools/testing/selftests/mm/vm_util.c              | 135 ++++++++++++++++++----
+ tools/testing/selftests/mm/vm_util.h              |   1 +
+ 4 files changed, 142 insertions(+), 37 deletions(-)
+---
+base-commit: 8d3ae59288f1e7d58d76558a6ee96d533bc5019f
+change-id: 20260820-fix_split-f44939ec44b8
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+Sincerely,
+Yeoreum Yun
 
