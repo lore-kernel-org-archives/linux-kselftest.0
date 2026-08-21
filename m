@@ -1,187 +1,135 @@
-Received: from SEYPR02CU001.outbound.protection.outlook.com (mail-koreacentralazon11013007.outbound.protection.outlook.com [40.107.44.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-120.mta0.migadu.com [91.218.175.120])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02D8361977;
-	Fri, 21 Aug 2026 03:51:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.44.7
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787284297; cv=fail; b=Ri6WOnCLC2by0aP4TEVcDC/lHGnOUVrc7Ymi1TmNufVrlVBS2poSGigHtDCv1m7fSt4cBv7NlF+1NKUlmMKkcCMu63eV5EbPDHvtUZiqvMdWyL2QI1G9pOApLzZVJ6qKwQEE8mkeQ9wPfD2CO4wQHhMdaILXfSTDg1zLtanA/kY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787284297; c=relaxed/simple;
-	bh=LTqg7+Sapzivfep4gOlQ78vvRG2a/8/5m1fQtnrQEmk=;
-	h=Message-ID:Date:From:Subject:To:Cc:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=if5L4AsreAWPXqSUPX5NLRd8JaXBRJF6RkJ2PuWvvq4k/CkKBgf7EQLs34zL5CURQhqV7gbiOrtHtf6CzZe0VZIYEKCwvtY6Nm+dRStK9O2Z1qgq+Vh1/uVwWtJEp67WLtdtFPNSOwtBxw7mzfuQ0Doi6m6Z9Kz2NmCPT4UsO9k=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=LHaK3gNY; arc=fail smtp.client-ip=40.107.44.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30B63F4854
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 05:03:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.120
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787288594; cv=none; b=dBXcjr0kGlkJ+d4KJvtyjsdXZCDxlKmOU4MViB2/5nmYrfEQg0mIKyTEowe4NT45kgRJoXQfr9Af17iVHelGy6Kmbj3uu2SohJtZzfn10q+AsXCL5IKelJ5bk8lyJycABUJ6gn41+FwUkzSbrLsvWyzOqy1flAbICHVIydnMpY8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787288594; c=relaxed/simple;
+	bh=8e3YUmUVq9LXBtfSpghJpybxCk6jcc9EbZkyE/Avoqw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mwN80dlK/inbSPR3ZQ0c7JZNxMJFS+ztX5rxE/DWHk1yQK74l0PKzsQuTWRMhpy1xGy8KX1zXAAkgaCb2wFZmYdOQjOwOqudemSNyN0ckC9jIl54aIbVujm5XtavtGfxikMqkxkAq4zhQWsjsISULkbflNIIiuBRWkL7dMge6/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CVHRQ3vO; arc=none smtp.client-ip=91.218.175.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="LHaK3gNY"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=rNW8pm2Q884SX8InJx3uJXbJqkQWEptkqOryuS3QRncTDeCsZ9AHH7YBK5AS96XkDVniF1C14kNUTrllptSIL0Tf6MwsM1Fv35w9VzsyKmfr7U2psg7r0D/LWvcBbU57raxsXiO1vqfXGkrPL1rbsNI6WW9nrmIUDuW11SluYCJsja2ZcTOkcg++r4GbAYumlJ5vPEQMa5Na9g1HSIBHSxxGB6pEgwGYiXH9thQ09Y8UEEyQxDjABEO8WWbSMHML9RYIRhxgdz+mB3TEu027OP+atoU9R/dveyTQYhD6aulkevnJSlCqI069WgcNnDuXI4dRJlZGVa+lSDigmhJT8A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aAs5y5XVXI6A0/RtOkDA0OzJbnLaWR/aRoNzrilx73k=;
- b=tqT3Q2/cShrH6NkcM/umQIWXWqxl8tR96LUcEhzPfIs6CkoJNQQwJU9pA8Dyb4sBWZV7jta1YTCGopIihlvnNlIiSK5HbLqEjMgskNkFwcyW/cAth7HuaTLSeGC2CWcfAxZZP0UA7LdQEufOd+wlkdKn0OREuZlIGmCLxRMV5VJd507k1JaQHxOST+u64iXXDFydkoohxnUEvqqeM3nvhBhazceQ8gnzp11tO1lMIIQFcUVT2T3ZVOCQRo5Z6axG5H3msIu8g6tCITmXRcRHvbevtFHZl2nC+lAMIC7BqCh0hDzhpSoD6R+3dmFbXSofI++QO1/hA4ecTsQLXdyipQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aAs5y5XVXI6A0/RtOkDA0OzJbnLaWR/aRoNzrilx73k=;
- b=LHaK3gNYbuqCTGFqV3YQzRbj4Im6pPktFkFRmwAcGH+aQIEVemm024XujXm4XbDtErcsxg0MSqJHnmXmxsH+PM7ZntYKhtdPnfCurycF2fG7kpdWE+vvVOZqScpHx6lc9iT2WHe1JABE9YfLUNA2Mc1iQlqJ0NxShtzaGxy1q+3lzd2it51H1b7jD9gYDew858oXMz1x+VSKE0K7dBdipUIaJcbGJI7ztdnxXpI7T5JYgty/QMB58FK1Dl0d0wFL5jAZiXWlcAr6Nz6O3XF5JBWvOVszbrM937gGOESUsKPW6nyU09+3ktAraYDBSZBwsEpYGqKAbiJHBbNptgR1dw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by SE1PPF3B12CE932.apcprd06.prod.outlook.com (2603:1096:108:1::410) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.8; Fri, 21 Aug
- 2026 03:51:30 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0339.008; Fri, 21 Aug 2026
- 03:51:30 +0000
-Message-ID: <d94fdb54-09b6-4d70-bfac-8483024e94ea@vivo.com>
-Date: Fri, 21 Aug 2026 11:51:25 +0800
-User-Agent: Mozilla Thunderbird
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: Re: [RFC PATCH bpf-next v3 2/2] selftests/bpf: add tests for
- selective kmod BTF loading
-To: Eduard Zingerman <eddyz87@gmail.com>, bpf@vger.kernel.org,
- andrii.nakryiko@gmail.com, alan.maguire@oracle.com
-Cc: andrii@kernel.org, ast@kernel.org, daniel@iogearbox.net,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, yatsenko@meta.com,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260819090426.267-1-zhaofuyu@vivo.com>
- <20260819090426.267-3-zhaofuyu@vivo.com>
- <67d62b1943b093ac1eb16c9cc1ff38e0d5eda72b.camel@gmail.com>
-In-Reply-To: <67d62b1943b093ac1eb16c9cc1ff38e0d5eda72b.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: TP0P295CA0001.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:2::10) To PUZPR06MB4742.apcprd06.prod.outlook.com
- (2603:1096:301:b5::13)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CVHRQ3vO"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=8e3YUmUVq9LXBtfSpghJpybxCk6jcc9EbZkyE/Avoqw=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787288588; v=1; x=1787893388;
+ b=CVHRQ3vOWNEAtdo5oJUYVIVGF27o4+zAO0Wk8C7oNAU3rlbQURzVB1dnIuNrMFRHFHdRC4cr
+ bRXoHS64j8qn0dbA3dov3tZrLb54EcsIRDMHN4HcV5LtXtibkoLb6D6XeUwhd8yZFPconHuA2IY
+ j17HuqlKWZVBhfs+tA7wUQ7Q=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost.localdomain (147.136.157.1)
+	by smtp.migadu.com with ESMTPS id 904cbd7780a28367;
+	Fri, 21 Aug 2026 05:03:08 +0000
+X-Mizu-Trace-ID: 904cbd7780a28367
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Clark Williams <clrkwllms@kernel.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-rt-devel@lists.linux.dev
+Subject: [PATCH bpf-next v4 0/4] bpf: arena: handle memory.max on fault-in with reclaim/OOM
+Date: Fri, 21 Aug 2026 13:01:19 +0800
+Message-ID: <20260821050250.35112-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SE1PPF3B12CE932:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5ca678a8-1ad5-426f-13f4-08deff377c44
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|56012099006|11063799006|10067099003|4143699003|6133799003|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	sZn+HQFkL1UHG3dVx57wSMO9hLe79GjxLQWuUAw/2in0M8ZvI1r5hfrJuitkU/HopA8O9syoCyD6lUiuj9LiOcw5JLieBjTh9BvTYH8/Ave3NRl9RTUsSWvPJFDWpI7z1FVktjletODl6SrJBQobrYLATzHokxGEPiBXoodIM0dTDAvMRi1+OiD1koQQkoitHt0idZR9kVl6yeXzQVTnZY4D4nVJSJHxZSDdyBGGLt99gi6+kFO70uvqH7MXVbtqDCGrhjnwhJk0BreUE39F7/NaC+3KcHXUWqFApiwmvgzm9AnGaYvbypfAOcJPXNOtdzaS7IjJj/a7mdNxN0GEYSpWfK5z3H7/lePB1T1tS9qemIR5fiSkLyfQMnfJyA1S/bSlDD56/Qn0qsL3pYPEoPk2KpcOvwpVbWHi92bsMdTts/sWcDUwMb+wn+apimEbZNbP2JYx+uNUvbkoqWd+RQs5DmaU/YS5fDmqlAfCxHmn+YCEnbfSlfMuSeiquTLT/G6X8FiBc59wYkOU+Lf8LNii2KA0NXMNmeUMPFmrBKg594rAaiNcyeQy8r4pyBlw8iyk8UwZzZ+//iEOh4QJluUvVfW27u0o7yHdMhgMH7mk8d8rIWGp6AWGGwXtDPCtljvVTpqF9G5BhlU0Wgq5grGm32Lvh2d2dwzSdOxi2vo=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(56012099006)(11063799006)(10067099003)(4143699003)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?dDV3WThqN0l0MEpaY2t1YlowVmtSN2NyOEpOS09mWGl0c0RJOVRGRlR2V2hL?=
- =?utf-8?B?ZHVFa3p6YVhZTG9WOEdWTkxKaGhnSUFtd1ZIanFtdG1TK1JwZ2xrRTduUXgy?=
- =?utf-8?B?VFcxY1YxQy9zTU02TFYrenRZT1NyeEdlRlhzcDV0RksvTjMrR0FVeW41TU9S?=
- =?utf-8?B?STNhQm5MSTMvbm1LVHFCMVU2RDkzZ0Q4U3BDS2wxRFdqRUJsSTdsd2dMMjRk?=
- =?utf-8?B?N0hkeHBBdDZvSThEUEJIaW15LytvejB3b1FqVVFkTGNRTWMyM24rYjY2cFdW?=
- =?utf-8?B?UjBoNXZDbUdOZVB4am0zRE91bmRuVWh1dU8zblpsUDd4d2IwakRzN1NsUjM2?=
- =?utf-8?B?U09OdS9vT29reHVEZEhDM0dGaVhLR2JaRC9KVzAyQnVhM2VWV0tiNVl1QndC?=
- =?utf-8?B?bWdxQTlXaHpxdStCU3lYSFJtQmYwWnNCYzJqT0o5S2JKSjNKeVhFZzJtdWlt?=
- =?utf-8?B?Yyt6TnUwclNITGFjeFV1L1Z1NjZNbEJBZFVabzNkQW1yNGcwbndkRi8vUmFI?=
- =?utf-8?B?UmRoc3lIYlpKK0orTklWQWJMKzVjbDRadnBhQ0xxUVZKVzUveGlHL05lZ2tO?=
- =?utf-8?B?QmxJa2hHWmhhTGNWTGZvM1lXa1F6TGlFRnRTWHVJdGtuaUJ6OWF2d1NIWXQy?=
- =?utf-8?B?ZXN5K0o2NWJMRHZFRDNRTGd2RVFMT1dUSlNaeEFxc251dHdPdEJZeDdndFRw?=
- =?utf-8?B?N3huZ1NHR3gwRUhqSnBLTlJtZC9uNlZqRzVkZC9VaFcvR2VmSVpKWmZTcnhB?=
- =?utf-8?B?Y1BWYkxMaUhvRVJ3MEwyWnc4aSt2VTJYUDFIc1NNclNFdHJFTWdUVlNHa05D?=
- =?utf-8?B?akFuNTVBd3BCZ0V5azU5d0R4NWNvd2JlRVFJbFF0eDZFT09sdFc5L0xOY1F4?=
- =?utf-8?B?VE1mVzlWUGpIRzVKZjBCT2VNK3E1Nm1xeTNRRm9FbVpnVUU1NG50ejBoeHBI?=
- =?utf-8?B?RFdBY21Xc2JpNFFMc3UyM2ZEZ0N0bnBucVBDdm5VOFVTd1JBcTFhVmQzZnQw?=
- =?utf-8?B?WWJHaTROeHJWcG1WYThzcXhCWlY5a3pJZUNzdCtUR1IvcFFKb0hObHRrUDdV?=
- =?utf-8?B?TzA1TzRGUXl1Y0RQamtvN1k4TVNqTDZEVyszR2IydmNYbDJFV1lKRk5wc0Zs?=
- =?utf-8?B?ZXdhVjFYMHVDYXE0dEE2ajdFTDMxeWZjMUJVTXc3L205dGtPOHlJelBqQzBa?=
- =?utf-8?B?K2FDYkVsTUZIVnNoUjE0TVlzZWFXYjBLU1hOZE1vWEZ2dFdJelVPZHRZMitE?=
- =?utf-8?B?QmpLbmloaUhSMklRQTVOcWJRMTZoWFZJeU9SWTFoeVR5WDA2THh1U0oxSUJF?=
- =?utf-8?B?OUtzUFViMjNBV3lQUnZzc1lycEtlc3EvUW84NE5LR0VTSEVuaENveDBRUWtx?=
- =?utf-8?B?aG9YdnNkZkl3Mk1nOHpZVytTMjRmSS9pNC9GRDJockwybE1MbGlTZkRxc0ZI?=
- =?utf-8?B?RTdvekIvNEJzM0FpZzcwVGNmQlo5MHI3NElJbHRKd0M0S3dEOGwyL0hhZCta?=
- =?utf-8?B?Ynh2WGxtTEs5ZWJ5M3NNeXk3NTI0QVdoTEQvcTZja2JwUzcxMkorRlZnNDNz?=
- =?utf-8?B?azlkZ3psVWFGdnp3cmpJeHpFbkZ3VE5Ga0NMbnJXMTRqajFmdko4OWxqQmNj?=
- =?utf-8?B?UDh0cXVuUHphNEsxN3BJV1pRQis0U20rZ0w2eEZyNmYzZVhxQ3BFUUJIK2hM?=
- =?utf-8?B?azJjeXdERC80VDhoK3ZKU09uZ1hxMGdqdUdLUkM3QUVRcDRHQjFlaGpiRGRS?=
- =?utf-8?B?VU1lUEJQckpRdW9HelkrTVQ4NUJCVG1ETURtUWprTmphYWxMMEJjbVR0VTI1?=
- =?utf-8?B?UWpJVHRzbU5mQndBT013bWRVZ1NxSncyeEpnOWN6SmRNTGFHT2VjWitmWEhC?=
- =?utf-8?B?MDBhcmkzZGhIbFhTWU94dmR6NXhLWWdZVW5TbCttVFplV3Y5OUMzTFlpbXYy?=
- =?utf-8?B?czRTQk5wclIvZG9WTG82aXhJRkE3TjRaS09SdHROeVJOUENieUxOeFk0ZWd5?=
- =?utf-8?B?Zyt4dlB5azE5V0N6VVpFTHp3NmdES3BRVC82TGlWMzhUYkZPYXAzVEp2OS9r?=
- =?utf-8?B?NDNDcEF6MzA4d1FVdjJZMWRrRDM4RG00YTNjb3Q1NlRZd0VwOUE2Y0dUcWov?=
- =?utf-8?B?OHF0SzRvRHl1cmtaZmh0RHB3bmZ3ZWllb3g1RFlYOVV2Y0NRZ3JEeVdNY05u?=
- =?utf-8?B?YytxdmYvR3RMR242U1BWVmljeHF2R0lBR3hxSGRPRGRxd2w2Q052YTIzTWlI?=
- =?utf-8?B?WVlyaDhTVFB2a2dZK2ViZ1ZWN3BiOGcwM3Y1L01BVVk2dDR4K29qdUpWM1ZR?=
- =?utf-8?B?MTNtRGZmS1ZmTzJXUm9xeFpNbUd5a1VKM1NSd2tkSnFSb1MxdHNkZz09?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5ca678a8-1ad5-426f-13f4-08deff377c44
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2026 03:51:30.7366
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8IYQBjvnEjqoT/ShEs80euPH0+N/CFBG9DJkDznl/5tEGYy3fjBsVN4/NtQOxxeNXQdUuC1nKGm/DS2Kbrn2+w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SE1PPF3B12CE932
+Content-Transfer-Encoding: 8bit
+
+Since commit e66fe1bc6d25 ("bpf: arena: Reintroduce memcg accounting"),
+arena pages are charged to the memcg of the process that created the arena.
+That accounting exposes two problems in the arena user page fault path.
+
+1. The fault-in allocation runs under arena->spinlock, so it can only use the
+   non-blocking allocator, which never reclaims. Once memory.current is at
+   memory.max the allocation simply fails. Reaching memory.max is completely
+   normal for a healthy application - e.g. reading a large file fills
+   memory.current with page cache - so the process ends up killed for no real
+   reason.
+
+2. That failure is turned into VM_FAULT_SIGSEGV, which is misleading: the
+   faulting address is a perfectly valid arena address. When we know it is an
+   out-of-memory condition we can return VM_FAULT_OOM and let the memcg OOM
+   path handle it properly.
+
+Preallocate the page outside the lock (patch 2), the way do_anonymous_page()
+does, so the allocation can sleep and go through reclaim and the OOM path.
+This needs a sleepable allocator (patch 1), because can_alloc_pages() is a
+conservative guess for BPF program context and always forces the non-blocking
+allocator under PREEMPT_RT. patch 3&4 adds a selftest that faults an arena in
+under a memory.max limit: without the fix the child gets SIGSEGV on a valid
+address, with it the child is killed by the memcg OOM killer.
 
 
+v3 -> v4:
+   - rebase bpf-next and fix conflict
+   - add Reviewed-by tag from Emil Tsalapatis
 
-On 8/21/2026 8:10 AM, Eduard Zingerman wrote:
-> On Wed, 2026-08-19 at 17:04 +0800, Fuyu Zhao wrote:
-> 
-> ...
-> 
->> +++ b/tools/testing/selftests/bpf/prog_tests/kmod_btfs.c
->> @@ -0,0 +1,196 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +#include <test_progs.h>
->> +#include "kmod_btfs.skel.h"
->> +
->> +static bool btf_skipped;
->> +static bool dup_ignored;
->> +
->> +static const char btf_skip_fmt[] =
->> +	"libbpf: skipping module BTF '%s', not in kmod_btf_names\n";
->> +static const char dup_ignore_fmt[] =
->> +	"libbpf: duplicate kmod BTF name '%s' ignored\n";
->> +
->> +static int libbpf_print_cb(enum libbpf_print_level level, const char *fmt,
->> +			   va_list args)
->> +{
->> +	if (!strcmp(fmt, btf_skip_fmt)) {
->> +		if (!strcmp(va_arg(args, char *), "bpf_test_no_cfi"))
->> +			btf_skipped = true;
->> +	} else if (!strcmp(fmt, dup_ignore_fmt)) {
->> +		if (!strcmp(va_arg(args, char *), "bpf_testmod"))
->> +			dup_ignored = true;
->> +	}
->> +
->> +	return 0;
->> +}
-> 
-> Idk what Andrii would say about this, but I'd rather add an internal
-> function akin to:
-> 
->   size_t bpf_object_btf_module_cnt(const struct bpf_object *obj);
-> 
-> in libbpf.c and expose it via libbpf_internal.h (*not* via API),
-> instead of intercepting log messages.
-> 
-> ...
+v2 -> v3:
+   - selftest: check the memcg OOM via memory.events "oom_kill" instead of
+     the exit signal; it only aims to pass on the fixed kernel, since the
+     unfixed SIGSEGV is racy.
 
-I think your suggestion is better. It also addresses the issue raised by
-the bot about potentially hiding other libbpf logs. I'll wait for Andrii's
-feedback on this.
+v1 -> v2:
+   - Rebase on the separate deadlock fix (found by the Sashiko AI review),
+     now applied to bpf-next.
+   - Honor the map's NUMA node on fault-in.
+   - Return VM_FAULT_SIGBUS for the non-recoverable faults (lock, range-tree
+     and page-table failures); a scratch-page hole stays VM_FAULT_SIGSEGV
+     only under BPF_F_SEGV_ON_FAULT. (Kumar Kartikeya Dwivedi)
+   - Add read_cgroup_file() to cgroup_helpers instead of open-coding the
+     /mnt/... path in the test. (Emil Tsalapatis)
+   - Dump the cgroup memory stats on test failure to ease debugging.
 
-Thanks,
-Fuyu
+v2:
+https://lore.kernel.org/bpf/20260805091720.139924-1-jiayuan.chen@linux.dev/
+v1:
+https://lore.kernel.org/bpf/20260727062521.376231-1-jiayuan.chen@linux.dev/
+
+Jiayuan Chen (4):
+  bpf: Add a sleepable page allocator for map memory
+  bpf: arena: allocate the fault-in page outside the lock
+  selftests/bpf: Add read_cgroup_file() to cgroup_helpers
+  selftests/bpf: Add a test for arena fault-in under memory.max
+
+ include/linux/bpf.h                           |   1 +
+ kernel/bpf/arena.c                            |  92 ++++++++---
+ kernel/bpf/syscall.c                          |  21 ++-
+ tools/testing/selftests/bpf/cgroup_helpers.c  |  67 ++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.h  |   4 +
+ .../selftests/bpf/prog_tests/arena_memcg.c    | 156 ++++++++++++++++++
+ .../testing/selftests/bpf/progs/arena_memcg.c |  24 +++
+ 7 files changed, 340 insertions(+), 25 deletions(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/arena_memcg.c
+ create mode 100644 tools/testing/selftests/bpf/progs/arena_memcg.c
+
+-- 
+2.43.0
 
