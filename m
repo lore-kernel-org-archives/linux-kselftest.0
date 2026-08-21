@@ -1,96 +1,101 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1BE3E0724;
-	Fri, 21 Aug 2026 08:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809533CF680;
+	Fri, 21 Aug 2026 09:02:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787302552; cv=none; b=VOQGPebjHI9AdKBPKF/4cQbNORM2RkF9rbsYmQ3tFSPT1PTkIpi4qX5zZ//V1TKpsvCKJZchCgPdths+DEB9Z6pULPcIlZ2CsjmF0Knpd5UqbYJR5nIitED5HpnJWdZ4XDjuwGk2+7/+sole18z2/ydDeL9aZy/6P/7qSpLh0f0=
+	t=1787302928; cv=none; b=EGVuRmcQaVEuOGOlCovX/Kw2oAZBPv1IshQycyF/hm/bHdtpOPoZe5P/tw/WWFpLPrVNiP5fkovVyX77TnKN1ef4Py+EFIsHFA+2oDlom+h7o3pMzz/I6Ab6VF+kk83r0oOW3TBHdNDckcOMwJUn9OMYnu1h3XRxWkvcbtARPIM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787302552; c=relaxed/simple;
-	bh=wcdTd5B/RaOOWV5qretAunfQFbsYHOpwzyHoWc18erI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=o0AvI2ixllTPlxkYgQEDqPZsRji0a18L8wOdBGgRHIZWgXFUDx9B5EeK/EbgQF5vyMk9W3pgRuLzER4+m9AfqHs6Rpz2HDo9neRMS1Ujx8/zqEKfPYaaT2KSDOIZbAKUThq+cgzXgTXn/P/zRYTkAp/pxT9AP6jKUsMR75SWEow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=TWdFNY3b; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="TWdFNY3b"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B9E71596;
-	Fri, 21 Aug 2026 01:55:45 -0700 (PDT)
-Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 085EB3F66F;
-	Fri, 21 Aug 2026 01:55:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787302548; bh=wcdTd5B/RaOOWV5qretAunfQFbsYHOpwzyHoWc18erI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TWdFNY3b68iy0MWDcR3xLM88mOwb4xQ08AlfOCA1myAiymVJh+Tw6lBpIILF/CvNR
-	 VSseBE1KnZG9LMpSHVGBtblrEpb18HK5IF3Ih1BHtw1ZxB00xBPKLFbHZ7TvhMCp9Y
-	 OEOZvff9FSOJmW4QdM0vtk6Ul7ejpOvX3sL+26fI=
-Date: Fri, 21 Aug 2026 09:55:44 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Amit Daniel Kachhap <amit.kachhap@arm.com>,
-	Mark Brown <broonie@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
-Message-ID: <aogSkJxWf9QndjuE@arm.com>
-References: <20260820153331.2448875-1-usama.anjum@arm.com>
- <20260820153331.2448875-5-usama.anjum@arm.com>
+	s=arc-20240116; t=1787302928; c=relaxed/simple;
+	bh=DF3hkVohXJwzXgxp9eTj2JgJHL12sbK+hXi2Wg/ZYx4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MwFMKxCWyJpJUTOzMQ1YdCKCn9UqvnPZuBoEm/NjfBVmlwzUdS7TD9533ZsZM2HbL7lMREFVuw01l8od3wGUHOk/pI3TlQCaW13Hsoxbc9ZHjhPhab8/fE3o6NtJf+BWysJictXY9wHjGRIXW7H4gBr0m1p4y6/WZaBA3N2NAWc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 4DD2B1EAA56; Fri, 21 Aug 2026 17:01:56 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id D09D61EAA47;
+	Fri, 21 Aug 2026 17:01:51 +0800 (AWST)
+Message-ID: <09b0ce81-0071-4df3-9f0e-a54269d04c97@davidgow.net>
+Date: Fri, 21 Aug 2026 17:01:47 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260820153331.2448875-5-usama.anjum@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/2] rust: kunit: add optional assertions to catch taint
+ and lockdep warnings
+To: Malte Wechter <maltewechter@gmail.com>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>,
+ Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?=
+ <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>,
+ Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>,
+ Daniel Almeida <daniel.almeida@collabora.com>,
+ Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot
+ <acourbot@nvidia.com>, =?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+References: <20260818-lockdep-kunit-v1-0-66ceb1a272e3@gmail.com>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260818-lockdep-kunit-v1-0-66ceb1a272e3@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 20, 2026 at 04:33:26PM +0100, Muhammad Usama Anjum wrote:
-> The arm64 selftest collection has no Kconfig fragment, so kernels built
-> with the selftest requirements are not guaranteed to provide the support
-> used by the MTE tests.
+Le 18/08/2026 à 23:20, Malte Wechter a écrit :
+> Add configs that enable extra assertions to be emitted to KUnit test
+> cases. This makes a subset of concurrency related warnings fail unit test
+> cases, and not stay as silent warnings.
 > 
-> Add a fragment covering the userspace MTE and tagged-address ABIs, KSM
-> and its sysfs interface, explicit HugeTLB mappings and their proc/sysctl
-> interfaces, and tmpfs-backed file mappings.
-> 
-> Do not request NUMA solely for the optional KSM merge_across_nodes.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+> Signed-off-by: Malte Wechter <maltewechter@gmail.com>
 > ---
->  tools/testing/selftests/arm64/mte/config | 8 ++++++++
->  1 file changed, 8 insertions(+)
->  create mode 100644 tools/testing/selftests/arm64/mte/config
+
+Hi Malte,
+
+Thanks for sending these in: I think they're worthwhile additions to KUnit.
+
+My preference, however, would be to have these features added to the 
+core KUnit implementation (in C), rather than specifically to the Rust 
+bindings. This way, tests written in both languages will be able to 
+benefit from them, rather than just tests written in Rust.
+
+The other option, which may be better, is to have the warning and/or 
+lockdep code fail the current test. This would have some slightly 
+different tradeoffs (for example, it would only trigger if the test 
+thread caused the issue), but would make it easier to integrate with 
+warning suppression[1], which allows tests to deliberately trigger and 
+expect warnings:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=85347718ab0dd7ede9c3e1dcff2d604c7073df05
+
+In that case, you'd want to look into the kunit_fail_current_test() 
+macro. KASAN also has a similar integration, so that KASAN failures will 
+fail tests:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c8c7016f50c85688d71feea2dba1bd955d5f5358
+
+Cheers,
+-- David
+
+> Malte Wechter (2):
+>        rust: kunit: add config to fail kunit tests if a lockdep warning is triggered
+>        rust: kunit: add config to fail kunit if TAINT_WARN is set
 > 
-> diff --git a/tools/testing/selftests/arm64/mte/config b/tools/testing/selftests/arm64/mte/config
-> new file mode 100644
-> index 0000000000000..8587ce70c294a
-> --- /dev/null
-> +++ b/tools/testing/selftests/arm64/mte/config
-> @@ -0,0 +1,8 @@
-> +CONFIG_ARM64_MTE=y
-> +CONFIG_ARM64_TAGGED_ADDR_ABI=y
-> +CONFIG_HUGETLBFS=y
-> +CONFIG_KSM=y
-> +CONFIG_PROC_FS=y
-> +CONFIG_SYSCTL=y
+>   lib/kunit/Kconfig    | 24 ++++++++++++++++++++++++
+>   rust/macros/kunit.rs | 21 +++++++++++++++++++++
+>   2 files changed, 45 insertions(+)
+> ---
+> base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+> change-id: 20260812-lockdep-kunit-9628f4bcad90
+> 
+> Best regards,
+> --
+> Malte Wechter <maltewechter@gmail.com>
+> 
 
-You may want CONFIG_PROC_SYSCTL.
-
-> +CONFIG_SYSFS=y
-> +CONFIG_TMPFS=y
-
-These are all covered by defconfig. Are these fragments still necessary?
-Or are they supposed to work on custom configs? If the latter EXPERT may
-be set, hence the PROC_SYSCTL above. You probably also need SHMEM.
-
--- 
-Catalin
