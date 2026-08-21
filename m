@@ -1,152 +1,281 @@
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FC5D37E5EF
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 20:14:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41C87370D71
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 20:42:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.41
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787343297; cv=pass; b=FGpjFgJUykQpJPGB3yYrn+cKTKWUKVdpbUqbj5aeZ/FoWIJtkaf1VZ+4JxugB/Ay7Id8nt+dBgyBGJyfE9OCG1VtASJo8bKdO9+7PkExhTipj0yreFJKMbd5I31Um0yfk5qoNaG0Bq/hvGGjgEJCxfTYHXVJndoLqGqAwMI573c=
+	t=1787344975; cv=pass; b=OIpAZfKotiGK6QPpPrVqOJmWRCS9LrrGhv08FZ0Vh25vBaVULWVX2Ir3O2INFggQJixf2cbesa7VKdJVB5ShWwau3/FtjEOlW067z9AZKF+zXxdpfeCxQWS1rDOgfg0dSuT8bZZnVaHGWFiq3aAdhcAtbeC0i73wnVHKLQT1zto=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787343297; c=relaxed/simple;
-	bh=T0pIspaluorHg++9gMtKSvKEaGqS0Ixlt3+2tHvNtV8=;
+	s=arc-20240116; t=1787344975; c=relaxed/simple;
+	bh=l6wuDhUu6BT/6ftVYfHdRxqOvwMTZ4xdVtf4Eo8iV5w=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iAhDW0Yk066kNvXV+TjbqZhznWFe38/HyBdw7o0UwmFtKgIhIFt76GNPS32E7JR+ngqYfoGMXM04ZvV8+aDJlzqMdtabd8ev/fUov3SmGFaNp2T/vVUOHzGdHQwXvmg9QZRPtfK1aYtGQnDzjccMOT86N9UeY15fcfri12NUPMQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayLdLvdC; arc=pass smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	 To:Cc:Content-Type; b=tLuSr3wlGr0pzJERgLu5978EFa+WNYn6/+sdLpCjC61PS9lx/RS/t5Sa7SxqlI1nYGXANgk9k1LurPLVFXeqsU5T8SIcQqDbZrJe42AuKQnaO/tBBNY0Sg/LfyowgrI9U8JOelxMWxE+XCJcyfweKR9pqS+rOWuDtB55BUP4eaY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=q30GhIwl; arc=pass smtp.client-ip=209.85.216.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayLdLvdC"
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2d560775ca2so12353575ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 13:14:55 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787343295; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="q30GhIwl"
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-38dc69c74b8so1523397a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 13:42:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787344973; cv=none;
         d=google.com; s=arc-20260327;
-        b=eZiHZ4gJVsYL7Hcxm2x+KLPpoOHu/NYC7p9QstY1VrZooysXHLnysH8toBJA/LGK30
-         XXrJZNSEsNvIS8+UTApXC85XJPRUUO/hE4xd9i1rVe946AaZlOex7FBOaFUXp0RzxR/B
-         4sq41qEm/53JoYe39D3GR0vwCMYevL/WLsNxMi8BDSsSQEkJPrDdXqY9Hiu5bOAWcIZe
-         24lLxKcihlYxqleRv9fdiFZA6wVsvWbKH7BJEtaJX2L6QMNVDh+4qPakFgrg7g1KhUfR
-         b6VbfUfrwJ+Jizt8aNJ/5tK3RYVoZjpphLCyySvUlIccumAUlATbujzdoMSF7WEsp4T1
-         gGGw==
+        b=QCSdIyRhIBxrJDGUYWVMk3nNrlvI7WHb/RTgMiC7HYSgM/Ql0IjeNdwqQt1DUy6s5T
+         bKYp7lCWxdTO5ZTujDIImU+Sx/hxNzMww+hI8WHfiVrVWOVV89rwljU2iD1rGP+SBDXf
+         lGIuoFPcuAyqp2sdUy4kKOq9nRwSoc0rQ0RDDFw0beHJDRfyLZREISyfKSbeYLBTfLJD
+         SRRXBvK3XYryYqM00w8NbS+LHM2TLlQeynCEjvEWqWd52Z7TcRWCV/c5NsoVandyj0RI
+         SPMDgCzcE18AD5QiZCXTa85p5bXohrJDhjCAhYVJxLUHRdY43a43Wij2jpq1n+Uk28An
+         WG9g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=T0pIspaluorHg++9gMtKSvKEaGqS0Ixlt3+2tHvNtV8=;
-        fh=P5iZaUt40vBzEiD/cB7i+kJyTUc4RTBvK7h3Z8clvEs=;
-        b=QzI7k344+QEYrTr8xCIETz6QNdCHV/Sj5zjN6yzksrMCvak6YzmBOMAxwXXGYmEt1e
-         TpUxKm7weo3HUKvBxryR9VcuJsDE2v5okY4Tv3ONFdQoL5HC+jMaWFI51GD1PspxX4oJ
-         IYjdpUqP6QDkEqvAMTNIBS4EsHwlXDQ6UYsKCNruMN5lYpBm6L7DZw3r9IGBQAkJ+ZlO
-         YdhuGABmyDi/Rnfx9k9OhWJMfRUN0eT3afJ2XZ86S6KkQCqy9zjLGY1qqloCQMZgOQDq
-         YeQi3mnesAa0PkKajqALrM0sdEQhk/eCaLv/uPxb0/hcOW9JmfB4lntJQj6/VTUm1uvI
-         OrBA==;
+        bh=/MgwZLkVTATvr2P/Jrbvpgoe3aItgTPy/yeekhEPd7Y=;
+        fh=4PAjfNLqeft+ZxujJ/Pum7UqsBN0s3EaPJ8bv5qjHZg=;
+        b=P5wy2HuUToI2kgPkSh6eS+2C8f/P4MO2A5AH70RAHH9tZfv6YfEKJlIxgybjqVko6p
+         CQeXAvNkYCKIHqY6Xwx/ayhXm2EMO+ylnlexRWWxFNfTGfb5Dkje6PsSqNiUB5r72Z9X
+         GnYAyLxXkQec2AG01dcKjKQdhc+Y9ACseN1Qcl5F4Ppy8ggeU1ggGpjlOvqIzAEVG95I
+         IIs0Zzzzru4xhmWLGAkQHSXMzrrUZhQt0Ed/8dawgS8GztpbuXW9y/zsROWLpK519Z26
+         VaJtlWIXnzVLslWjRs9BpQTnYcVBX2smB4o80OdCBd4rAj77CXGlzq3JYyyW7tlcdVuV
+         qDXg==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787343295; x=1787948095; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787344973; x=1787949773; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=T0pIspaluorHg++9gMtKSvKEaGqS0Ixlt3+2tHvNtV8=;
-        b=ayLdLvdCayWfwf4hVzlFA3xATXRdqXU/No7274Mrp0hddvMcdok1PzT6JJMX7kIsqF
-         enE9qio3wopCkw7ikotvprCMfk5vyN7D4/R3Ge8IoNwfNJzSBvOmMNFj4KDh9IEaXFfR
-         eDVqWNcSWrmgrsYSjIZdTD/d0SwhmNbPZM4HtJBMs326jEkYulofXONIQAI21ih4ScA+
-         /aVY/GocS+XcJKyaNSr7YcV9aRr9YR9mCoBozU48LSjmhtbXNqvlQvsORf2c62vef5c9
-         AteJnZX4vJvdFQj1tC5+NZ0XT+N2Qoo8o5+SmiawcGwhQnJSl1iNdK/bkLXfYgVEi5JU
-         sJLQ==
+        bh=/MgwZLkVTATvr2P/Jrbvpgoe3aItgTPy/yeekhEPd7Y=;
+        b=q30GhIwlbY7w0OhehkQYrSbT2/35LDJBtD0EzqjSbj/XyTNBn2bO0Pkf0hWLQBO+IP
+         S+y798HzyGf8r53lH2ANgGysLUu+uQA18pi1wbbVUH0b3ef51V/cGfvf/9vlot0tdS+P
+         QHneoscYzfIt+TE0tUI4MAwaBpbN8zymaHZBMsFLsRJ5wPc+wNnDfM1F9YDy+dFFGykg
+         RHYjr4xIPx23x4KWaGULmKh6OHfM7r0eV3kpKh9bTFCOW4WMiiiJGZ4GPvax0aPOEfc4
+         /QVfGLAvoHH2lHub6uW2IK7J/qKHYECxm5eb23ahGz2q/eUabJmfp6qQA/AuDhAtkTSl
+         dcQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787343295; x=1787948095;
+        d=1e100.net; s=20251104; t=1787344973; x=1787949773;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=T0pIspaluorHg++9gMtKSvKEaGqS0Ixlt3+2tHvNtV8=;
-        b=FNAtjAdGpaSYmdkci6rMJTutC+v6z1mV5zP4b19MjRy96zKQkMnCrLtW0aIHuaUpTB
-         KSu8qoqoYKLi8Crw5ggUKkn+5I2Xf7AVWJLuT1sMjUJ8ILOyhEym7P/bv5tvVSezkyx+
-         qG3qHEy6/xQGrvpr3kDlMEVq/ltEtm8OGftxgg2LkkgOrnlaWWW4EJ5m/sqKil/vh+qK
-         IvByuvL7cH6SBW0FnCIem9HQGW2VzPRhktpTr7B9lnLXN/+rnq66p/mjHZ6yBz6ZVRG6
-         FdsrPZBuCk3kU3BcEe7Sz1XNaEaIY8wVqikc2/2Fodo8JSnDPSM3ULP1CwMxzq6xeMuu
-         YqzA==
-X-Forwarded-Encrypted: i=1; AHgh+RpZOWREkzmbbJuvQSCsPizNKx31McMdSnGyE3f/hlyQjdVar2sSuxXtu7yd09Hd0n1zIhm80FJcfbBVwD5c9sI=@vger.kernel.org
-X-Gm-Message-State: AFuF++nFn8gZ21ePkVVcNkfP1dsSsy+t8IEHkgQYTxz63m8YZ3GD9aqu
-	QePbp2ge2Lfttp9ijW20ZiCXt5oc8ol+A8dzzojg8D15AQpdxIGFpvAV75tLFA7bZn/P8w83ALH
-	rwPDpceErdPmh35R2Jt+PzFTv+Ql2roA=
-X-Gm-Gg: AR+sD13YZEjZ7W4oaUSWqycuJwRJ0bLdag0KOSwy0UKqQ1oKOUcj3/HhP6Vuewk4SQ/
-	yw/PyUXopUCHGXK8Ue6R77Toortuob8bkIaXAULAMufpaEaHvgSRmac7Xmsoj98vNrHytC953sN
-	hWiO6K/Uls1JEoLTm/bgiCdyOaXZ3j4VhILiZPMh8jsgVRn/JPaNnTB1l8iELBiagHdiu6Rq6tB
-	pVaGJ2WNYlCngbgsioWgk9IqeAO5eYY+7W28gEBbWcXF27lP5AIi/wi5ffexadgpmUjH2MOpYjM
-	i9anX8P/nV26iI5uya2b6aEEojHVJkgR5shxeXJ+/LXr/c6Dxfd//gQYV4trCBaDSWrrg4IXJ8Q
-	tcIa1xyg0VBhp
-X-Received: by 2002:a17:903:a90:b0:2c0:a555:80d6 with SMTP id
- d9443c01a7336-2d670b60ceemr14987675ad.2.1787343295021; Fri, 21 Aug 2026
- 13:14:55 -0700 (PDT)
+        bh=/MgwZLkVTATvr2P/Jrbvpgoe3aItgTPy/yeekhEPd7Y=;
+        b=lPfaMz9KhyHT9GG3thNCDizo1hO+i5P/aAPkbAexq8JVOSVzN+j85+zJCyUXfiuzaT
+         /r+GJoitud2zvRKrKOrJtpwlkqeu7HN8ZBdflmgzS57ioxG7qdz3+ChLDocGgzskghNO
+         ZIAhnHO7Ss3T6+9PQ0gToWqPUDBN99/q6pi3aMYncQ+LoFusbAV2ovmrJiXsgzTKfsi7
+         C6JJprgmKFyFNkTz1zecvdyJRvlbnnq9sC/CDt479mFvPztHBKXpxhno0NF55zV/Y3oB
+         pLGo9m6Rn8SZH2jPPJ7ukgnWV4TR7T5yuAr5ry04tqi0jANBNKHAcZxl13E0JmQxTt0h
+         W/1Q==
+X-Forwarded-Encrypted: i=1; AHgh+RozzSzxJhOF7PV/Vhoz8aCyPclgHFo5ox2hJTOYD+z9Yr+lNjPfU4mZDEkkzsBV7Zih49p2N0mv1lVWMAN2Cas=@vger.kernel.org
+X-Gm-Message-State: AFuF++nXXibibeEaMCHgBJOZTsY1aZpQxsuMTqoCr4YqUYE/0ok+pfIU
+	3RPt6TFdbwcc1UBvuLVpue4L5/+A7LIGTy0Yj4iFascmjHM3hgrA01ckiefKx19bub9P4AZ5KSD
+	jWECRrIgt5Qv9Ii3ikc6D+k5NcNsIAAFCHQZiB7Y=
+X-Gm-Gg: AR+sD12+c8LY8dESx0Vls2U0TpioT/NUbSQCksidbYi4XqYv5eyoichcJAhDzR2XqdA
+	NC60lnGPbE8Xa+O8cCL2BdTKEJxjBZuizEDhyvvI2dxAcj2cjge09CMna6Nv5DgVK/ezG4T3vMQ
+	euyFso9fswpfuDhqnIG4rz7zh2qjCg4MrideYyWx5H9bj2N5jUiltyXsZXgFXPpU82jvVVGHRfN
+	g33vBa3yihfsvEbfOegCS5WDHSjfkGd333eNJ/BVkPFF8tnb7ItR//XIKTPTt19mAEwsW96iCMd
+	yLv/idSq5mpa/rFaM6JJ1FDosJ2izbxSTOVoZP96JHkw/0pAOwuMGHXeGG2Yo8AfnrC+2oQHowH
+	IdZ/8GMeqSHR7ZCrCMTLk7l721o5nNWfJWhYkpZTqjNLZneCigfQbn4nBS/zFvS0MeOLFIqfADD
+	QV
+X-Received: by 2002:a17:90b:3c50:b0:37c:607b:2cd9 with SMTP id
+ 98e67ed59e1d1-395dec98ad3mr2243333a91.0.1787344973108; Fri, 21 Aug 2026
+ 13:42:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260821114416.12255-1-anshumantewari123@gmail.com>
- <7bb2d581-924e-4a59-9955-b8afa2b51268@kernel.org> <CAJqi8kJf9EzfZWBo=1KpEzGiq+vGRz0J0mN+-NXAjrtq9HDrMg@mail.gmail.com>
- <e7c339b8-b936-40c7-b121-1a4c14838dd9@kernel.org>
-In-Reply-To: <e7c339b8-b936-40c7-b121-1a4c14838dd9@kernel.org>
-From: Anshuman Tewari <anshumantewari123@gmail.com>
-Date: Sat, 22 Aug 2026 01:44:43 +0530
-X-Gm-Features: AcwNN1WbQ5JWhMiF_GD66C2kxCGh-FyD5Ug_Cenhm9XuMXanDweiD-QtyfaJotY
-Message-ID: <CAJqi8kKaNsxBM86Hg4W09gLo2rj0+kc9dAvps48jmQCshUkxqQ@mail.gmail.com>
-Subject: Re: [PATCH] selftests/mm: check strdup() and fix buf leak in parse_test_type()
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R . Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+References: <20260817130239.343594-1-haakon.bugge@oracle.com> <20260817130239.343594-2-haakon.bugge@oracle.com>
+In-Reply-To: <20260817130239.343594-2-haakon.bugge@oracle.com>
+From: John Stultz <jstultz@google.com>
+Date: Fri, 21 Aug 2026 13:42:41 -0700
+X-Gm-Features: AcwNN1UHuEoWSQUmSf-BSuuwE8uuo4k_2z47UxfLCpiiytRmAv3YKUETWosN5E4
+Message-ID: <CANDhNCoPDZeXXGn-hKZ_jgE8gkELEaufDXDYWV=hqLWxtD6gJg@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+To: =?UTF-8?B?SMOla29uIEJ1Z2dl?= <haakon.bugge@oracle.com>
+Cc: linux-kernel@vger.kernel.org, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Sounds good, no objection from me =E2=80=94 happy to go with your version.
+On Mon, Aug 17, 2026 at 6:03=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@orac=
+le.com> wrote:
+> diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+> index cee1901d4cff8..240084b4abbb7 100644
+> --- a/kernel/locking/Makefile
+> +++ b/kernel/locking/Makefile
+> @@ -38,3 +38,4 @@ obj-$(CONFIG_QUEUED_RWLOCKS) +=3D qrwlock.o
+>  obj-$(CONFIG_LOCK_TORTURE_TEST) +=3D locktorture.o
+>  obj-$(CONFIG_WW_MUTEX_SELFTEST) +=3D test-ww_mutex.o
+>  obj-$(CONFIG_LOCK_EVENT_COUNTS) +=3D lock_events.o
+> +obj-$(CONFIG_MX_TEST) +=3D mx_test.o
 
-One small ask: since this fixes the issue from my original patch,
-could you add a Reported-by: Anshuman Tewari
-<anshumantewari123@gmail.com> when you post/apply it?
+Total bikeshed item, but both CONFIG_MX_TEST and mx_test are not very
+obvious names for someone looking at this make file.
 
-Thanks!
 
-On Fri, 21 Aug 2026 at 21:48, David Hildenbrand (Arm) <david@kernel.org> wr=
-ote:
->
-> On 8/21/26 18:09, Anshuman Tewari wrote:
-> > Thanks David, agreed =E2=80=94 strdup() is overkill here for a single-u=
-se
-> > parse, and dropping it is the right call.
-> >
-> > One small consideration on the approach: working on argv[0] in place
-> > means strsep() will overwrite the : separator with '\0', so the
-> > original string (e.g. "khugepaged:anon") ends up truncated after
-> > parsing. Nothing today reads argv[0] again afterward, so it's safe as
-> > things stand, but it does mean correctness quietly depends on that
-> > staying true =E2=80=94 a future change that logs argv[0], re-parses it,=
- or
-> > echoes it back in an error/usage message would get the mutated version
-> > instead of what the user actually typed.
-> >
-> > If we'd rather not rely on that invariant, an alternative that still
-> > avoids strdup()/free() entirely: copy the type argument into a small
-> > fixed-size stack buffer (with a bounds check against its length first)
-> > and run strsep() on that copy instead of on argv[0] directly. Same
-> > benefit as your version =E2=80=94 no allocation, nothing to free, no
-> > NULL-check needed =E2=80=94 but argv[0] itself stays untouched.
-> >
-> > Happy to write this up as a v2 if it seems worthwhile, or if you think
-> > relying on "nothing downstream needs argv[0]" is fine as-is, I'm okay
-> > going with your version too. Your call.
->
-> I don't think we have to worry about other such argv[0] users. If they ev=
-er
-> appear, basic testing would reveal them.
->
-> --
-> Cheers,
->
-> David
+> diff --git a/kernel/locking/mx_test.c b/kernel/locking/mx_test.c
+> new file mode 100644
+> index 0000000000000..71d9ddc48a44b
+> --- /dev/null
+> +++ b/kernel/locking/mx_test.c
+...
+> +static int __init mx_test_init(void)
+> +{
+> +       unsigned int threads =3D 4 * num_online_cpus();
+> +       enum mx_test test =3D MX_ILLEGAL;
+> +       char *mnemonic;
+> +       unsigned int i;
+> +       unsigned int p;
+> +       struct {
+> +               enum mx_test test;
+> +               char *mnemonic;
+> +       } mx_test_types[] =3D {
+> +               {
+> +                       .test =3D MX_BUSTED,
+> +                       .mnemonic =3D "busted",
+> +               },
+> +               {
+> +                       .test =3D MX_SPIN_LOCK,
+> +                       .mnemonic =3D "spin_lock",
+> +               },
+> +               {
+> +                       .test =3D MX_SPIN_LOCK_IRQ,
+> +                       .mnemonic =3D "spin_lock_irq",
+> +               },
+> +               {
+> +                       .test =3D MX_SPIN_LOCK_IRQSAVE,
+> +                       .mnemonic =3D "spin_lock_irqsave",
+> +               },
+> +               {
+> +                       .test =3D MX_RW_LOCK_W,
+> +                       .mnemonic =3D "write_lock",
+> +               },
+> +               {
+> +                       .test =3D MX_RW_LOCK_W_BH,
+> +                       .mnemonic =3D "write_lock_bh",
+> +               },
+> +               {
+> +                       .test =3D MX_RW_LOCK_TRW,
+> +                       .mnemonic =3D "read_trylock_write_lock",
+> +               },
+> +               {
+> +                       .test =3D MX_RW_LOCK_TRW_BH,
+> +                       .mnemonic =3D "read_trylock_write_lock_bh",
+> +               },
+> +               {
+> +                       .test =3D MX_MUTEX,
+> +                       .mnemonic =3D "mutex",
+> +               },
+> +               {
+> +                       .test =3D MX_ATOMIC_ADD,
+> +                       .mnemonic =3D "atomic_add",
+> +               },
+> +               {
+> +                       .test =3D MX_CMPXCHG,
+> +                       .mnemonic =3D "cmpxchg",
+> +               },
+> +               {
+> +                       .test =3D MX_RDS_BUSTED,
+> +                       .mnemonic =3D "rds_busted",
+> +               },
+> +               {
+> +                       .test =3D MX_TEST_AND_SET_BIT_LOCK,
+> +                       .mnemonic =3D "test_and_set_bit_lock",
+> +               },
+> +               {
+> +                       .test =3D MX_TEST_AND_SET_BIT_INNOV,
+> +                       .mnemonic =3D "test_and_set_bit_innov",
+> +               },
+> +               {
+> +                       .test =3D MX_TEST_AND_SET_BIT_PLAIN,
+> +                       .mnemonic =3D "test_and_set_bit_plain",
+> +               },
+> +               {
+> +                       .test =3D MX_TEST_AND_CLEAR_BIT_INNOV,
+> +                       .mnemonic =3D "test_and_clear_bit_innov",
+> +               },
+> +               {
+> +                       .test =3D MX_TEST_AND_CLEAR_BIT_PLAIN,
+> +                       .mnemonic =3D "test_and_clear_bit_plain",
+> +               },
+> +               {
+> +                       .test =3D MX_SINGLE_WW_MUTEX_WW,
+> +                       .mnemonic =3D "single_ww_mutex_wound_wait",
+> +               },
+> +               {
+> +                       .test =3D MX_SINGLE_WW_MUTEX_WD,
+> +                       .mnemonic =3D "single_ww_mutex_wait_die",
+> +               },
+> +       };
+> +
+> +       /* Select the test type */
+> +       for (i =3D 0; i < ARRAY_SIZE(mx_test_types); ++i)
+> +               if (!strcmp(mx_test, mx_test_types[i].mnemonic)) {
+> +                       test =3D mx_test_types[i].test;
+> +                       mnemonic =3D mx_test_types[i].mnemonic;
+> +                       break;
+> +               }
+> +
+> +       if (test =3D=3D MX_ILLEGAL) {
+> +               pr_err("mx_test: unknown test type %s\n", mx_test);
+> +               pr_notice("mx_test: legitimate test types:\n");
+> +               for (i =3D 0; i < ARRAY_SIZE(mx_test_types); ++i)
+> +                       pr_notice("mx_test_types:        %s\n", mx_test_t=
+ypes[i].mnemonic);
+> +               return -ENOPROTOOPT;
+> +       }
+> +
+> +       if ((mx_min_padding % 8) || (mx_max_padding % 8)) {
+> +               pr_err("mx_test: padding must be a multiple of 8 bytes\n"=
+);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (mx_min_padding > mx_max_padding) {
+> +               pr_err("mx_test: mx_min_padding must be less than equal t=
+o mx_max_padding\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (mx_max_padding > L1_CACHE_BYTES) {
+> +               pr_err("mx_test: mx_max_padding must be less than equal t=
+o L1_CACHE_BYTES (%d)\n",
+> +                      L1_CACHE_BYTES);
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (mx_nmbr_elems < 1) {
+> +               pr_err("Number of elements must be greater than equal to =
+one\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       if (mx_scnds_per_test > MAX_JIFFY_OFFSET / HZ) {
+> +               pr_err("mx_scnds_per_test too large\n");
+> +               return -EINVAL;
+> +       }
+> +
+> +       for (p =3D mx_min_padding; p <=3D mx_max_padding; p +=3D 8) {
+> +               int sts =3D run_test(test, mnemonic, threads,  p);
+> +
+> +               if (sts)
+> +                       return sts;
+> +       }
+> +
+> +       return 0;
+> +}
+
+Apologies, I've not had a chance to apply and try this yet.
+
+So this looks like the test has to be run via module load? I almost
+never use modules in my test environment, so its often nice to allow
+it to be built in and be triggered/re-triggered without having to
+unload/reload (assuming this is not something like locktorture which
+never finishes - and if that is the case, it might be good to
+integrate into the locktorture framework instead of adding a new one).
+Maybe something to consider?
+
+thanks
+-john
