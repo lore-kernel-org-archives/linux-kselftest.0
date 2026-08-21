@@ -1,115 +1,79 @@
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E329238AC7D
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 12:21:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4D33308F2A
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 12:27:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787314916; cv=none; b=A8n0/dgVoKA1BbT/ytUVu8pyhyXWb89070MHaJnDu/JmJBt95IFwZRDW48GF72E2niCORDN3GNoq3yU9xq/j1wnOX8/KHp4akX8JP/z17gWFpJcM8jEuJwN4cwczNnJML9mCyp4Wm4eH0V9/oX2Hy42QQ8mkL1jGciO/E8aIzPI=
+	t=1787315268; cv=none; b=Gec+z2UfrPT6+B6ZYDBump5JiIp83gCx0+Mt5GcGkl/etSmlRTO3SBtGLZZ3JJCE2q8pgHAwy+9kjKzI2xXWfiyDjpd0mup6ljIv9Id5TwXrWVGgUEZjtrjQAPIHc0s+A6w8IehCJCEmXbwf78hQBHQx+Rwo6//HUr3GP1Nnmgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787314916; c=relaxed/simple;
-	bh=vDG6VgGLB1ibhVtC5i7RLaGRct1dwqYniHcqmrujC5Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=claf9U0/S86NpneoNHE5W+eE04Nb+rzURsQa9pq2AMtSd2M7elPEl1s8OcP1TfL/VH10/YLbSuS6FHVMQCnHFiJLz8lH+iczpyRsl2bnIH2fWejDT9en3/CBXYOTsz+wBN7WI01UsWbDAbiMHGUlnwikTE2WDL7uiLP3WzomjEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=STcQjtVn; arc=none smtp.client-ip=209.85.208.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787315268; c=relaxed/simple;
+	bh=ghOsQH0i03fY2GUzhcx/Dmw646U50YyZQKib/BtHePM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=ZT6IzRzUSac9q4ezWF2Lv8EwvT1vg9wuUQl6l8jVid9w+YhZgHIBW9FdbIBcgyXBDbkr37aY5gDSqw1daxD7n7V7EjJ41VwB1rW8Omf8IoGzKp6E5RhdkPMmVhKqivYmQwx/rNys6uBmsrQtqd+A9gBP7J+iwg1DJBr7xAYiJyQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=dcXyJxcX; arc=none smtp.client-ip=209.85.214.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="STcQjtVn"
-Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-6a3819e8be8so1973360a12.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 05:21:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="dcXyJxcX"
+Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d02df2bf09so9395565ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 05:27:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787314907; x=1787919707; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=U+VklefX138oVd49VIDXjzUaX4u45OfIRfPWaoTXpLM=;
-        b=STcQjtVnhubjh6QKj0fJ3DoJXoGFqP58Oyz+IBpjarDCY90bWXYvALd2HP6wyqkew5
-         2VDBk/No1O8etONMCzYA5xQ1PQ6terYp/ALM0MlQgoYr5TMYAvHrtz5Cfb4bVriyre6f
-         CzHO3X4SteeSg2IbBKmZHNumLWDBiKOIOFZlNa5KqG68fDEE7pwnrHzk8eRJevbQU2qi
-         +IuOdG8cIzf3Vrl0cfEMP8FZOpb4B6fZvTLVzipuG6lXCRRC4zkKbW8Z+51Qb/UxKJDq
-         GWlu3fxxsWs80/a8k3UyrKF2uNaSote1eg4xJZtJ/W+a8FyhGN6Zt8DmNpNANJkpzS1Z
-         EyDw==
+        d=google.com; s=20251104; t=1787315263; x=1787920063; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=aaWe4JF4LkGOzfYb71LTLii7vw/bVDORz5LSIphD5nY=;
+        b=dcXyJxcXLg2dUWBnZlnJHED6vvS+2GROb6UoysPh+k1hbpQRjkuK8wwhtSzTqtkYMY
+         1ITAbDilGz3OrmOq7jE54PUNfvbxBAYg9KOn1UvOE+E4qzhU7zK6yKtYmNHRTpjE15Jb
+         HXpkw9jFe6vVQBkcQh933cSZv55e78uxwVFrBdzBVB1rB2QA/CtjMmV8audC4XFkwnji
+         gkyfas3d9tJJ+i0IwKxQFSWJErcximIJIwTOR6kV7iEAyeYT5GgfZP1hBWW1dH8PvpZK
+         riwGFrwFe/oAKRbzkha0wHUknPcn2OitNknxTAAqV0YuSg9dAjqJ/34iZ4v0OWjPe3cP
+         eadA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787314907; x=1787919707;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1787315263; x=1787920063;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=U+VklefX138oVd49VIDXjzUaX4u45OfIRfPWaoTXpLM=;
-        b=qkLpa5fgMADDjYY+VRTJsifxq+nmq5UJwJWpV2KFuZVy0WYSzDM5THMCPF7cIqNcO3
-         Jx8YpZcruovpfwkgJjSmMcG0GEMp3+oII7dAzgE5xg9wP6ILehpZ9bcQnHh1ob8igPD7
-         KCRzpF4gzBTYIOhCMNWHzHYIYRPCfpgDwbjE+wJYnLKCfsxZDhjzcsND+jqkajDEVXtH
-         Wf8TULuEPXBFL4/lw7xd3k403e8I8JYyvx+wnBm73p4UO+llj8K5D1eHcuScQ/qSvtYu
-         yWB/dkOfjmHSp5CzRz5i1PhTYESa7RDuXU1zEXa9Uoh2R8dRiilPtj2cg2CUwUTaEJJ7
-         slMA==
-X-Forwarded-Encrypted: i=1; AHgh+RrsQZX4q0KKLxeZPyNS4QoTxaXWTc9hY0jKEdTVr8lXfYEAHgI2jr6y+Dg3gfB5LpjU4l0G04vjSVdv9Igo9Bw=@vger.kernel.org
-X-Gm-Message-State: AFuF++mudPjnQmjPZeaUDSZ/Spg0lP4gJqkTLhbaayfWqHa9IfbqJ65x
-	u1wTzNSZIsL0e4zoRmV+hGUuR2bkdVEC/id9CVmlDmGUlaPltMH/ESEoSK85zlMiAyXuoQ==
-X-Gm-Gg: AR+sD10x7v3Y9BhGRk3Qv0dc1YTUszjUhEHUV+e9YDBderqMEzgbzqbinBdG1XNg6nF
-	wneDqZfFNfKva1QG8f8eyvYZKI5d5puj4p3hAtmqtCz8Qcmbja6OGFI5wAK6dXhYW7ogRGqt2sk
-	/ve0DdxFyq45QWmXDQPhUr+3hEh8eZA4KmU9JWWXybJbEY4dm+GJVdqYYNKPUQi5+t5PYn8g8mk
-	bZ8NvOtcdSS16TyZvKzqYP4d/m9WAK6jH049wrAXIoH4Krdf6REQPIBOyEHWFaGCKI3QEsIu967
-	bQQJT9bv1CV8uyMCHw46yqSdXIynB5VZjC/rPOeYOWV9uSPtGYVaWJ9WJvdHv6qBy/BU8r83hPD
-	OlwTUVNP81XadwCq+2vjC9GFThi/mOuGvcqPbGh+ejlnpEourhPd2j2PpJQ6eSZEvXg2hEXDquv
-	whlIWrQGOLIYVdpWrBEc6+s0yDyL70xQhn9d/gxJxo4WhLkSaz/h7krNLqM/BIeVCbzZaARLyrp
-	9M/NsVx7uQjC8VcZLmdjBA=
-X-Received: by 2002:a05:6402:23c1:b0:6a3:ec9f:7e3d with SMTP id 4fb4d7f45d1cf-6a4112fafdcmr9645391a12.6.1787314907216;
-        Fri, 21 Aug 2026 05:21:47 -0700 (PDT)
-Received: from hisam ([2407:d000:508:2027:f309:cd0f:ed5a:5b9])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a3ff177b1esm6473776a12.29.2026.08.21.05.21.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 05:21:46 -0700 (PDT)
-From: Hisam Mehboob <hisamshar@gmail.com>
-To: kvm@vger.kernel.org
-Cc: dmatlack@google.com,
-	alex@shazbot.org,
-	shuah@kernel.org,
-	seanjc@google.com,
-	jrhilke@google.com,
-	rananta@google.com,
-	vipinsh@google.com,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Hisam Mehboob <hisamshar@gmail.com>
-Subject: [PATCH] selftests/vfio: Include <libgen.h> for basename() on non-glibc builds
-Date: Fri, 21 Aug 2026 17:21:11 +0500
-Message-ID: <20260821122110.902382-2-hisamshar@gmail.com>
-X-Mailer: git-send-email 2.51.0
+        bh=aaWe4JF4LkGOzfYb71LTLii7vw/bVDORz5LSIphD5nY=;
+        b=bL/LYpHWNDz5K175xGuz+edPxG0QU3zZlWw43MhmJdsYiQ8uP8TXCWZXuXnGe6tzJ3
+         weUaj+8lKlT6LY8qPfxZbmLiFvmuYhcbOp+cVCD7DEDMsUY4jyczO32Jgw7BMN59z4OD
+         +WUQXFlBkxtmKYdBJDZ7uaXX2qllbzmoS6VTb0mRilRpzQTgSO4to7/Th6E9Y9fI+6kL
+         BbnL8y/AJMfayPvN/bKJ4+PZR/mvgtYZ7mmWG7a2ktzFCnUL/rUgUcinhAVRYZ6yWhqy
+         25qC1GaksWtGB8Th04OA6uy41lwdZThDdmRBRYPl9CKKx0bQWYTz+z7LCh9bZTzSXxNn
+         /lhQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqicnwX/FYxCqB2ysP3pRGBIiKXRaK/ChKksSAGJWU8nV40di/797rxr5fHZGsWxggnB8AXerFltyUJTBfyGD0=@vger.kernel.org
+X-Gm-Message-State: AFuF++nHyf0LCe6I3jS5i+2IQlM5YmOSRY4JcdkT94NFTxPa76gyG6Cm
+	L8T1W1rIKo8RUBz2phQLHDoQsSe3/kzLJWNlWxE+S5cUyUH31sghn9v2LQcljQpDUEiqdg+YX3i
+	ygD6GKw==
+X-Received: from plbke8.prod.google.com ([2002:a17:903:3408:b0:2cb:97d4:2e28])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:f78f:b0:2c9:9a2e:dab0
+ with SMTP id d9443c01a7336-2d64ad92e17mr120961765ad.3.1787315262558; Fri, 21
+ Aug 2026 05:27:42 -0700 (PDT)
+Date: Fri, 21 Aug 2026 12:27:42 +0000
+In-Reply-To: <20260821053808.1216172@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260808061934.400892-1-gokul02k@gmail.com> <20260821053808.1216172@gmail.com>
+Message-ID: <aohEPpTSkLjzv9fM@google.com>
+Subject: Re: [PATCH] KVM: selftests: Fix the bounds of the SEV debug dst
+ buffer check
+From: Sean Christopherson <seanjc@google.com>
+To: Gokul K <gokul02k@gmail.com>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	Shuah Khan <shuah@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-sysfs.c calls basename() but does not include its declaration.
-Glibc exposes basename() through <string.h> with _GNU_SOURCE, while
-musl declares it in <libgen.h>.
+On Fri, Aug 21, 2026, Gokul K wrote:
+> Gentle ping.
+> 
+> This one is independent of the other two selftests patches I have in flight,
+> so it can be applied or dropped on its own.
 
-With musl, this results in an implicit-function-declaration error and
-subsequent type-mismatch errors at the callers.
-
-Include <libgen.h> so the declaration is available on both glibc and
-musl. This is safe at both call sites: the arguments are local writable
-char[PATH_MAX] buffers filled by readlink_safe().
-
-Link: https://lore.kernel.org/kvm/CALzav=fs4bqMM7BXNPXqhtbqGzA+LW5fgx2-1Q5=sTN5+krYhw@mail.gmail.com/
-Fixes: a262fc49e0aa ("KVM: selftests: Build and link selftests/vfio/lib into KVM selftests")
-Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
----
- tools/testing/selftests/vfio/lib/sysfs.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/tools/testing/selftests/vfio/lib/sysfs.c b/tools/testing/selftests/vfio/lib/sysfs.c
-index 11415448b2e2..daf117a299a6 100644
---- a/tools/testing/selftests/vfio/lib/sysfs.c
-+++ b/tools/testing/selftests/vfio/lib/sysfs.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- #include <fcntl.h>
-+#include <libgen.h>
- #include <unistd.h>
- #include <stdlib.h>
- #include <string.h>
--- 
-2.51.0
-
+This is on my list of things to grab for 7.4.  We're in the middle of a merge
+window so I'm not applying anything at the moment (I start after rc2).
