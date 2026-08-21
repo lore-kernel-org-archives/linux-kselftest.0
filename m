@@ -1,30 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3899314A98;
-	Fri, 21 Aug 2026 14:16:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2948E4BC032;
+	Fri, 21 Aug 2026 14:16:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787321763; cv=none; b=qEdqAKM1PB3dFJqz6uCdc2M9wwxTkQLZyDYyeFW9jcT5MjWiPXtKl1D8IlCUhZ2N2O9XttbLnpNjt797PohNJ19lIkS470xjsZqqPh3eItEjdvVGdfJrsUyRAXlm9gFMJXIgrXUQ+Y9UE2L1kBagy8pVds4XEPLCQTLECD/HoDs=
+	t=1787321765; cv=none; b=YS9IL7PBqFn7cD4urGlYzQ8qo3+muxwdF1FPlsyhxjg5d6WQTx7R/9vmTPAt4Bt81yksCF5lScvzUjltyhdZEeDNcRWqxcO9pwTtaULtDN8jH7oKiG9b46jQ0Uv9TDGNvJIgOGf6nDdDB8JXukZyaicY1STl2Y9Un2/quU+/Z9o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787321763; c=relaxed/simple;
-	bh=+pFmLDKVHJtPYfEbsWpxCGIG9ybjUqOMcP0D8NbikrQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OGMi9fghNNJiMksaFnJdpVJHN6pCWomPof6418sWsattFojlwCqG4RAlhoRmf5vf78/jjpRmuN/pOtPNUJyAxopxY6tsaLWyR2CSYUSnL5/KTlCWdtWxdQTN+p2VYeXE37OW7l22iKXwfEs6arHHaEeUy6KJLs1gg46kNHJNZc4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=MmRdPhP2; arc=none smtp.client-ip=217.140.110.172
+	s=arc-20240116; t=1787321765; c=relaxed/simple;
+	bh=GkgEk4wxjMWjKEYIzr+cfZNkqDaG360hz+dtvjwvXSM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=Y2U1jC32rZfWcJySXnCLo6ScUniCguQS8JOFooqQt/BaHHUAnSALrkFinDjWuQBuRGQU7QkNPdY4L9BULyaG2f95uEgpun0rWnCeWcTfwibuRs7rc3DBZj53PDtcVf/Yq4Rwenv8noyQkDD8meBMsJqflPNbGzkso5S8xzLnvmI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=b1vFUYxh; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="MmRdPhP2"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="b1vFUYxh"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3F643153B;
-	Fri, 21 Aug 2026 07:15:57 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A92F722C8;
+	Fri, 21 Aug 2026 07:15:59 -0700 (PDT)
 Received: from e142334-100.cambridge.arm.com (e142334-100.cambridge.arm.com [10.2.198.93])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 024683F85F;
-	Fri, 21 Aug 2026 07:15:58 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 6D6EE3F85F;
+	Fri, 21 Aug 2026 07:16:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787321761; bh=+pFmLDKVHJtPYfEbsWpxCGIG9ybjUqOMcP0D8NbikrQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=MmRdPhP2qgnfJqVLfSdnX3MZd4HgMEv3NiENacNI1n8PClWuMJlL2Lv7iplzcGqi5
-	 87M//L1u32iGqho0O1JscPzPcw/BenPdzi1MbikWc+ZCi0X0BXcwz4cp2KgPuCScpx
-	 JdtONEn+rUU05OTmXDLL/wzBNFdYQvZwuCL67Rjc=
+	t=1787321763; bh=GkgEk4wxjMWjKEYIzr+cfZNkqDaG360hz+dtvjwvXSM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=b1vFUYxhNizbO0Ief3w0B/1HpfE0vGXsMMmU8mcpFtaSACD7vU+7JBBLOcNQwFi1v
+	 iQItNHweUyu5fTGH1wXyzpzyuYc+oDxtas9l1EKVFUSv5vMHk5yQzadcjIoFxUMyQ/
+	 7/IgeY0vNePWaH4IwO1SM0/mtPvzdrAd6nmBX01Y=
 From: Muhammad Usama Anjum <usama.anjum@arm.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -40,10 +41,12 @@ To: Catalin Marinas <catalin.marinas@arm.com>,
 	linux-arm-kernel@lists.infradead.org (moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)),
 	linux-kselftest@vger.kernel.org (open list:KERNEL SELFTEST FRAMEWORK)
 Cc: Muhammad Usama Anjum <usama.anjum@arm.com>
-Subject: [PATCH v2 0/5] selftest/arm64: Fix MTE test setup and TAP reporting
-Date: Fri, 21 Aug 2026 15:15:48 +0100
-Message-ID: <20260821141556.4065894-1-usama.anjum@arm.com>
+Subject: [PATCH v2 1/5] selftests/arm64: Print TAP header
+Date: Fri, 21 Aug 2026 15:15:49 +0100
+Message-ID: <20260821141556.4065894-2-usama.anjum@arm.com>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260821141556.4065894-1-usama.anjum@arm.com>
+References: <20260821141556.4065894-1-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -52,41 +55,38 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Running the mainline arm64 MTE selftests on a Pixel 8 exposed three
-independent reporting problems. Fix each issue independently, then
-add an arm64 Kconfig fragment covering the facilities used by the MTE
-tests.
+The GCR_EL1 context-switch test prints its TAP plan before forking 1,024
+child processes. When stdout is fully buffered, the plan remains in the
+stdio buffer. Each child inherits the pending "1..1" line and flushes its
+copy from exit(), producing repeated plan lines.
 
-Testing was performed on a Pixel 8 with an Android 6.1 kernel built with
-the new configuration. All nine static MTE binaries returned success.
+ksft_print_header() enables line buffering before printing the TAP
+header. Call it before the plan so the plan is flushed before the child
+processes are forked.
 
+Fixes: 29f080881601 ("kselftest/arm64: check GCR_EL1 after context switch")
+Reviewed-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
+---
 Changes since v1:
-- Add missing MTE TAP headers as an output-only cleanup and clarify why
-  line buffering prevents duplicate GCR_EL1 plan output.
-- Validate KSM privileges and optional sysfs access before setup.
-- Move and expand the arm64 config fragment, and standardize subjects on
-  the selftests/arm64 prefix.
+- Explain how line buffering prevents duplicate plan lines.
+- Use the selftests/arm64 subject prefix.
+---
+ tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Muhammad Usama Anjum (5):
-  selftests/arm64: Print TAP header
-  selftests/arm64: Print missing MTE TAP headers
-  selftests/arm64: Treat KSM merge_across_nodes as optional
-  selftests/arm64: Fix MTE prctl TAP plan
-  selftests/arm64: Add MTE test config fragment
-
- tools/testing/selftests/arm64/config          | 17 ++++++++++
- .../selftests/arm64/mte/check_buffer_fill.c   |  2 ++
- .../selftests/arm64/mte/check_child_memory.c  |  2 ++
- .../arm64/mte/check_gcr_el1_cswitch.c         |  1 +
- .../arm64/mte/check_hugetlb_options.c         |  2 ++
- .../selftests/arm64/mte/check_ksm_options.c   | 31 +++++++++++++++++--
- .../selftests/arm64/mte/check_mmap_options.c  |  2 ++
- .../testing/selftests/arm64/mte/check_prctl.c |  2 +-
- .../arm64/mte/check_tags_inclusion.c          |  2 ++
- .../selftests/arm64/mte/check_user_mem.c      |  2 ++
- 10 files changed, 59 insertions(+), 4 deletions(-)
- create mode 100644 tools/testing/selftests/arm64/config
-
+diff --git a/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c b/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
+index 325bca0de0f6e..d23f154d3288c 100644
+--- a/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
++++ b/tools/testing/selftests/arm64/mte/check_gcr_el1_cswitch.c
+@@ -131,6 +131,7 @@ int main(int argc, char *argv[])
+ 	if (err)
+ 		return err;
+ 
++	ksft_print_header();
+ 	ksft_set_plan(1);
+ 
+ 	evaluate_test(mte_gcr_fork_test(),
 -- 
 2.47.3
 
