@@ -1,128 +1,147 @@
-Received: from sg-3-111.ptr.tlmpb.com (sg-3-111.ptr.tlmpb.com [101.45.255.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C91E394785
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 10:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.45.255.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D70A45A288;
+	Fri, 21 Aug 2026 10:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787309033; cv=none; b=HtCNCOygA8pJhj0c+r9qo3zROxE4pmwNHEAlAj3y+wKKrXq9Dp4t7Xo91M/bRjvrid0xGzBFYw44c0qF0WUwhbImDu2r305OjigElrxVekpEDh4oLQ8/HpENFhd6G4y7pcJKwqyotPvfcHz60CFDigHbJa6iJwwmVx7xX0bC1TA=
+	t=1787309080; cv=none; b=Q4vN3LLO6jvK/gb8oVCVIBovA0z1wrRgB1XdqAjvxJRU1nqUFT+N/u8K15UWR10QYVUfeUkC/8omBKEVMfce444fpKjYGB5nr4plrGI+wR0jlJMXWx5BI31qe1oFjv3MzSbWlp4/A6D4B6qIy1zlVxCfH3VlymHsScVd0uofHoo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787309033; c=relaxed/simple;
-	bh=eb/FbkcQ1yOfds5otd9WzCnx2gHZinJnmqDUexxdOaQ=;
-	h=To:Cc:Message-Id:Subject:Mime-Version:From:Date:Content-Type; b=DBty9RbzrSjVJ9pjtfhBgP7gDPFt22asVTdNrPUAM8I6pBNH+8Mgu+Z9zUBwtdVAHhRCeQlhHRo7QS83/1n3UXJrt0uE0zpvdo7RkJpp1RYIOT9I6vn5T//OxpRW4enOhIB1mlXMk63k7UTctLIyEv06S1uNRLvg86wIPk1V/6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=CNRHJPdj; arc=none smtp.client-ip=101.45.255.111
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+	s=arc-20240116; t=1787309080; c=relaxed/simple;
+	bh=CnfL1nj9gT80ZwyvDs7PBgljaH1xw0anGnW9NKCM//M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Kz/fKP73KzQnwOyPh0R17cInrqFmkk2u48gHdh7oD5fo/7obNH7Tqf8EKUVdhWBW15gNUU/EpEOK/O5xKQG+myinpYL3sy/Em4wCHR1jEoRVMnO+Fk+Hj0Pk3UzDXckatqXcUKPJu6ruWBsVj9GZB2otRiionjGgfnCi2Mdwh38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZcYv/iN; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="CNRHJPdj"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
- s=2212171451; d=bytedance.com; t=1787308986; h=from:subject:
- mime-version:from:date:message-id:subject:to:cc:reply-to:content-type:
- mime-version:in-reply-to:message-id;
- bh=9z9/dVo62CkO35NnOydRcLhfvu3cyK6bVROTYKEbxeE=;
- b=CNRHJPdjlMKSLh0JtHEZo8Iv0bXHLt+42O3VuT6rgEzTp72rLl7oWZ9505HKqtpCwHFLia
- PslW3Dtz8wv4BmmGZstEIInCk8W003kedh/ruOHrmb1WGddsx7169SoohyUASe5RTywHr0
- T33xyHr4F2B1uwX51FDiHgp5XtUVBDW0cytAPfoqAuAr1iVkNMdwHPj7Z3BHO/lLzSg+Tz
- 4ARzScegD6wCZOl4Al4J8NgUCe0x8NMgw64Q13nveMsabZ2WpJT0Rmmwoj8Zj+iOhKqovc
- PxNyNmw8TFQMVwdYFJAcBlz8ZHlRW0U6SB85m5bz9AWsq/wxNLnuQvyTUpRNFw==
-To: "Thomas Gleixner" <tglx@kernel.org>, "Ingo Molnar" <mingo@redhat.com>, 
-	"Borislav Petkov" <bp@alien8.de>, 
-	"Dave Hansen" <dave.hansen@linux.intel.com>, <x86@kernel.org>, 
-	"Shuah Khan" <shuah@kernel.org>
-Cc: "H . Peter Anvin" <hpa@zytor.com>, "Andy Lutomirski" <luto@kernel.org>, 
-	"Kiryl Shutsemau" <kas@kernel.org>, <linux-kernel@vger.kernel.org>, 
-	<linux-kselftest@vger.kernel.org>, 
-	"Guixiong Wei" <weiguixiong@bytedance.com>
-X-Mailer: git-send-email 2.50.1
-Message-Id: <20260821104246.59955-2-weiguixiong@bytedance.com>
-Content-Transfer-Encoding: 7bit
-Subject: [PATCH] selftests/x86: Skip sysret_rip fall-through probes that hit the stack
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZcYv/iN"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BC2E1F000E9;
+	Fri, 21 Aug 2026 10:44:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787309078;
+	bh=OEV1uuB0ujnXPKaY+Wk+sXi2Lz9xQB5FZ/QqRMb9zEE=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=fZcYv/iNpqmmH+eXzN1nlKAbp1671QSKAZLHzfydCp+CXLyRzutsB18WhFHNCJKXq
+	 0w2cjHsawvgyRkYVvb+l3Nr7gofGMxxh8a4PAa0AtIucWl4l+mGuMsFuiML8kiu2i1
+	 6SxcUq9zyGgn5sUOf28BjtENDZVSngJRHwHIYmA0e0KRndnvXUXCPFskUoYc1nvPqO
+	 A1PdLfBTAnyQgRKrnl04YMB0b2ELcWkk7Rca7CAmOJze/P3hN1iGdertvDAlQT4Zj9
+	 Xb30GgCCk0QAzjqAJdrlfVLcZUE8U8qSeusK5dpdk/paoZI+YDjx/qThpyLnQBrjYF
+	 BW+ntHcWp9V7g==
+Date: Fri, 21 Aug 2026 11:44:32 +0100
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Jason Miu <jasonmiu@google.com>, Shuah Khan <shuah@kernel.org>, 
+	David Rientjes <rientjes@google.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Greg Thelen <gthelen@google.com>, linux-kernel@vger.kernel.org, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [RFC PATCH 0/3] selftests: mm: introduce page allocation stall
+ reproducer
+Message-ID: <aogrd9knfBUGH885@gremlin>
+References: <20260819070538.2404983-1-jasonmiu@google.com>
+ <20260820170348.48f04ed654dce5193ca3a532@linux-foundation.org>
+ <59525a3e-6003-4ab1-bd75-e0c7dcc8a257@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-X-Lms-Return-Path: <lba+26a882bb8+7c71a3+vger.kernel.org+weiguixiong@bytedance.com>
-From: "Guixiong Wei" <weiguixiong@bytedance.com>
-Date: Fri, 21 Aug 2026 18:42:47 +0800
-X-Original-From: Guixiong Wei <weiguixiong@bytedance.com>
-Content-Type: text/plain; charset=UTF-8
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <59525a3e-6003-4ab1-bd75-e0c7dcc8a257@kernel.org>
 
-test_syscall_fallthrough_to() relocates the syscall trampoline page to a
-target high address with mremap(MREMAP_MAYMOVE | MREMAP_FIXED).  Like
-MAP_FIXED, MREMAP_FIXED silently unmaps whatever already occupies the
-destination.
+On Fri, Aug 21, 2026 at 11:53:57AM +0200, David Hildenbrand (Arm) wrote:
+> On 8/21/26 02:03, Andrew Morton wrote:
+> > On Wed, 19 Aug 2026 00:05:35 -0700 Jason Miu <jasonmiu@google.com> wrote:
+> >
+> >> Background
+> >> ==========
+> >> Under severe system memory pressure, system unresponsiveness often
+> >> occurs due to page allocation stalls. In commit 94e0bcde055e ("mm,
+> >> page_alloc: reintroduce page allocation stall warning"), David Rientjes
+> >> introduced a warning mechanism to emit a kernel log when a page
+> >> allocation takes longer than 10 seconds. This log is used to correlate
+> >> a frozen system with the system memory state at the time of failure.
+> >>
+> >> To further debug and analyze these allocation stalls, we need a
+> >> reproducible test case. This patch series introduces a new selftest
+> >> designed to artificially mimic the severe memory pressure scenarios
+> >> seen in production, allowing us to observe the resulting allocation
+> >> stalls.
+> >
+> > Interesting.
+> >
+> >>  lib/Kconfig.debug                             |  11 +
+> >>  lib/Makefile                                  |   1 +
+> >>  lib/test_mempress_timer.c                     | 140 +++++++++++
+> >>  .../testing/selftests/mm/page_alloc_stall.sh  |  80 ++++++
+> >>  .../selftests/mm/page_alloc_stall_pressure.py | 235 ++++++++++++++++++
+> >>  5 files changed, 467 insertions(+)
+> >>  create mode 100644 lib/test_mempress_timer.c
+> >>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall.sh
+> >>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall_pressure.py
+> >
+> > Nothing fits very well, does it?
+> >
+>
+> Why are we mixing python and sh?
 
-The extra self-test at (1<<47) - 2*PAGE_SIZE remaps to 0x7fffffffd000,
-and the i==47 interesting case at (1<<47) - PAGE_SIZE remaps to
-0x7fffffffe000.  Both sit just below STACK_TOP_MAX (0x7ffffffff000).
-With ASLR enabled the stack is randomized elsewhere and these addresses
-are free, so the remap is harmless.  With ASLR disabled the stack lives
-at its fixed default location and overlaps them, so the remap unmaps the
-stack and the process dies with SIGSEGV (exit 139) before the test can
-observe anything.
+Oh HELL no.
 
-Probe the trampoline and fall-through pages with mincore() and skip any
-target whose destination is already in use.  With ASLR enabled -- the
-default -- the stack sits elsewhere, so every case still runs.  With
-ASLR disabled only the two cases that collide with the stack are
-skipped; the noncanonical cases that actually exercise the kernel's
-SYSRET handling live far above the stack and always run.
+Only C in the selftests please.
 
-Fixes: 660602140103 ("selftests/x86: Add a selftest for SYSRET to noncanonical addresses")
-Signed-off-by: Guixiong Wei <weiguixiong@bytedance.com>
----
- tools/testing/selftests/x86/sysret_rip.c | 28 ++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+And python is replete with 'getting it to run locally' issues. I have venv
+PTSD...
 
-diff --git a/tools/testing/selftests/x86/sysret_rip.c b/tools/testing/selftests/x86/sysret_rip.c
-index 2e423a335e1c..e4bd3ed881f4 100644
---- a/tools/testing/selftests/x86/sysret_rip.c
-+++ b/tools/testing/selftests/x86/sysret_rip.c
-@@ -94,6 +94,17 @@ static void sigsegv_for_fallthrough(int sig, siginfo_t *info, void *ctx_void)
- 	siglongjmp(jmpbuf, 1);
- }
- 
-+static bool address_is_mapped(unsigned long addr)
-+{
-+	unsigned char vec;
-+
-+	/*
-+	 * mincore() succeeds only when the whole range is mapped and fails
-+	 * with ENOMEM when the page is not mapped.
-+	 */
-+	return mincore((void *)addr, 4096, &vec) == 0;
-+}
-+
- static void test_syscall_fallthrough_to(unsigned long ip)
- {
- 	void *new_address = (void *)(ip - 4096);
-@@ -101,6 +112,23 @@ static void test_syscall_fallthrough_to(unsigned long ip)
- 
- 	printf("[RUN]\tTrying a SYSCALL that falls through to 0x%lx\n", ip);
- 
-+	/*
-+	 * MREMAP_FIXED, like MAP_FIXED, silently unmaps whatever already
-+	 * occupies the destination.  With ASLR disabled the stack lives at
-+	 * the top of the address space and overlaps the high addresses
-+	 * exercised here, so a blind remap would clobber the stack and take
-+	 * the test down with a SIGSEGV.  Skip any target whose trampoline or
-+	 * landing page is already in use; the noncanonical cases that
-+	 * actually probe the kernel sit far above the stack and are
-+	 * unaffected.
-+	 */
-+	if (address_is_mapped((unsigned long)new_address) ||
-+	    address_is_mapped(ip)) {
-+		printf("[SKIP]\t0x%lx: address space near the stack is in use (ASLR off?)\n",
-+		       ip);
-+		return;
-+	}
-+
- 	ret = mremap((void *)current_test_page_addr, 4096, 4096,
- 		     MREMAP_MAYMOVE | MREMAP_FIXED, new_address);
- 	if (ret == MAP_FAILED) {
+>
+> >
+> >
+> > selftests is for quick tests which are run by run_kselftest.sh.  You
+> > had to place it in selftests because there isn't anywhere obvious for
+> > it to live.
+> >
+> > So I suggest a brand new tools/testing/stresstests/mm.  If we create
+> > this, people will jump on it and start adding things which presently
+> > reside in their personal collections.
+>
+> There was recently a discussion around performance tests, and one thought was to
+> not carry these in the kernel tree at all.
+>
+> Stresstests, not sure.
+>
+> So agreed, that this shouldn't be an ordinary selftests (nothing we would want
+> to run autoamtically), but I am also not 100% sure about having performance /
+> stress tests in the kernel tree. It's all stuff we have to maintain and drag along.
 
-base-commit: f5bbbfec59b4e2fb7520a91de3df8a6174325d6a
--- 
-2.50.1 (Apple Git-155)
+Agreed. Separate please.
+
+Stress tests are just asking for flakes :) they are useful + important but
+something different.
+
+>
+> >
+> >
+> >
+> > I can't say I like "mempress".  Is "memory_pressure" too wordy?
+> >
+> >
+> >
+> > All of lib/test*.c shouldn't be in lib/.  lib/ is for library code!
+> > Again, we put them there because people are shy about doing mkdir.
+>
+> There were recent discussions where I raised the same. I would prefer if testing
+> kernel modules are somewhere in tools/testing/ if possible.
+
+Yes.
+
+>
+>
+> --
+> Cheers,
+>
+> David
+
+--
+Cheers, Lorenzo
