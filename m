@@ -1,60 +1,82 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08C673F9A0B;
-	Fri, 21 Aug 2026 19:14:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9146F40756E;
+	Fri, 21 Aug 2026 19:21:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787339693; cv=none; b=davGzg36A0ajtiSYu1ZICBgKF2iuwAwvhWMtcy3NqKTxO9RnBBAKCkKmvYBZpGhpI4nqNzEOAddwz7BZDUon7OT+GUIUKYnF8ct7hHS9Xp6qEllI6HAB4srXOJ8oqAGahSRPlOMz+O7OaO/6Syre/8zFN0OKia5IbIwyvrO3zIk=
+	t=1787340062; cv=none; b=RJ/fxtmceu9FRkz0mvM2yLsYpRw/wut7YKeyXr89C7fuquKH3MOLqwR7FjEeJLZ/jte2zL3oQSf+99vIdvPQE/DzUplmOezlgiBG0HtOigtTv0RORTnAbGnIxF+yJz31p3hf3Cgsisops3SkOwfHpSu6IaMFvyLT8Z2+KorOXnk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787339693; c=relaxed/simple;
-	bh=AHZ78J/jdqJKDRZZX0e5eRNA+CX3Mqn2fRrhkMhXnVY=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=Xcc9/0Gra6Ac7qF4YdFrDw+TZMak6EJJlqZ7vfxkxw4mTRpIF7Ole7dzFcnL2f87agcO0HY16faRUd4wuEatSK9LgIkgQMQR2T9ELFU1923IEqaqypHEo1UYSrxmtCyPjjfRwpSG5QuA/0omg0Cg27Y3dWNRDVnkQXmBi40mK04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXaZ/gSt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787340062; c=relaxed/simple;
+	bh=lffdFixketbHOpLXDDhckbcG8Psyd8M0taCpnN+N5LA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=ftZodXBV6BQBsefM0ZSNm8pxgJivwttVMqE1rxthKUOU2s+NYwdUX2ncQ9bkdlqzkME1eL3e8QhkEhwA4qEjV9M0Ka5txF9RqB7XLVz+08bUP5Lj93YiHk952rltm/GMlmTVaEDXkRj9cF4Ikp6EM3t1RTRpbjErZQR+0L/F59U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QipQ5Qc6; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXaZ/gSt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD8001F000E9;
-	Fri, 21 Aug 2026 19:14:46 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QipQ5Qc6"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18F451F000E9;
+	Fri, 21 Aug 2026 19:21:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787339686;
-	bh=AHZ78J/jdqJKDRZZX0e5eRNA+CX3Mqn2fRrhkMhXnVY=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=RXaZ/gStHdGcS4pps/13zxlpsYLmiX59pSek/ap95VIeGmzZC8vIzCxpIblqicyVa
-	 EUb7R9Es4XuM3WLfTKWPAJ+ho2ac2AJMmRD0LB/XprR0qErvRBOBNE+oF5HxQBp1ZT
-	 J0dvCJ6Oab3otKsri2V/VGX/5eSVSxzOprAET9KujjOKk0KEDQe/xHTskRI4S2QmFD
-	 ZWlLrQsK+ZoVQxWmj7yT6Q4v2xGyrIdj6tCxn1IdgNLE4gn4gidV8GkY4dFY9cIeFM
-	 vVdpsH5cI/mxrDnhtofdreKr9KUrwWWisOUZ6JEPjWvYabPQ+ZAeXPKC3jheTvi8Vk
-	 jBitfWypOFW4A==
-Date: Fri, 21 Aug 2026 09:14:46 -1000
-Message-ID: <85217eefcd770d6e4e0ffc6048e14a9a@kernel.org>
-From: Tejun Heo <tj@kernel.org>
-To: Hongfu Li <hongfu.li@linux.dev>
-Cc: hannes@cmpxchg.org,
- mhocko@kernel.org,
- roman.gushchin@linux.dev,
- shakeel.butt@linux.dev,
- muchun.song@linux.dev,
- mkoutny@suse.com,
- shuah@kernel.org,
- akpm@linux-foundation.org,
- cgroups@vger.kernel.org,
- linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org,
- Hongfu Li <lihongfu@kylinos.cn>
-Subject: Re: [PATCH] selftests/cgroup: Fix cg_run_in_subcgroups ignoring arg
- parameter
-In-Reply-To: <20260820070944.31451-1-hongfu.li@linux.dev>
-References: <20260820070944.31451-1-hongfu.li@linux.dev>
+	s=k20260515; t=1787340061;
+	bh=hoIKqY8QEm2dgJa6UzGuLGj/wMCd5D7LA6A3vEO1g2o=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=QipQ5Qc60GNTgSzkZq2xFHaqmDafQAv4uJyERYYy1FnOe5n7NR8WKR08mORSp/GMI
+	 AG1kmSQj+v6aesbn2rQFMK8AC8/zPfId402qHtHxlQwKBdRmBFH8Fnsuh2gvFVgrUK
+	 sUgLOK+ZVFE8eW75REGBW3PfJozO4LQdPTqjHo9azvbkhn+rNz6drgQgbpy43FqbCN
+	 ay/DTXQJE1JPXxTLRk/0ljgh98E/YCDMyF8ZtV5l+AcO7bPxozJZqHYz0TiOgFECpv
+	 vZAVoorZ7Z/PfgBH4xF3EyjZ/cikFxSot5PKPiWmhlf/jGEqS3anfMLAe5eJioFncf
+	 vRBiPQ6zKbaDg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D096A380CEC2;
+	Fri, 21 Aug 2026 19:20:11 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v7] selftests/bpf: allocate a larger timeout for
+ connection
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178734001048.1447337.676425481174448454.git-patchwork-notify@kernel.org>
+Date: Fri, 21 Aug 2026 19:20:10 +0000
+References: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
+In-Reply-To: <20260818-tc_tunnel_flaky-v7-1-aec161e74ef2@bootlin.com>
+To: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29_=3Calexis=2Elothore=40bo?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org,
+	=?utf-8?q?otlin=2Ecom=3E?=@aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org
+Cc: ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ shuah@kernel.org, ebpf@linuxfoundation.org, bastien.curutchet@bootlin.com,
+ thomas.petazzoni@bootlin.com, bpf@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ ihor.solodrai@linux.dev
 
-Applied to cgroup/for-7.3-fixes with Michal's Reviewed-by added.
+Hello:
 
-Thanks.
+This patch was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
---
-tejun
+On Tue, 18 Aug 2026 20:43:00 +0200 you wrote:
+> Some tests, like tc_tunnel or tc_edt, sporadically fail in CI with the
+> following logs:
+> 
+>   (network_helpers.c:309: errno: Operation now in progress) \
+>     Failed to connect to server
+>   send_and_test_data:FAIL:connect to server unexpected error: -115
+> 
+> [...]
+
+Here is the summary with links:
+  - [bpf,v7] selftests/bpf: allocate a larger timeout for connection
+    https://git.kernel.org/bpf/bpf-next/c/669e4fa76600
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
