@@ -1,120 +1,136 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.3])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-235.mta0.migadu.com [91.218.175.235])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 215073655E7;
-	Fri, 21 Aug 2026 03:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.3
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE60286D4D
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 03:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787282145; cv=none; b=Gjr1o3qZoFqFkGg/0D3Q1uFSnlBTaL1AjqLwqagB2EvXaEQV3Zv6OKZmw/O27d6CwWWkSfhVT8b4jOzxY/clw0N1ntdAgNwqZ0A5Fd/qjKK82N2Njz+2TiTTL8I1++Ixi/IpGODTu+jWRKPBxw6LVkLNWltK/Cgj3fwMYh7GcJY=
+	t=1787282266; cv=none; b=ISjJJ1kR0K00hE0rNSCAD5ovofg+MdGhmJhpIObW50k6km4/s8teGQSe1bHh8dSQf2gHb6xSaSnMBklOdlHdzDaydd1CJo17Q1mUxGE0qogeGZuUgk9Ai7ZxjTZfsKbiis5U+S9y8A5BrY8sZr+nLRUiF074YTkKu20IQuosQr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787282145; c=relaxed/simple;
-	bh=8IfjYuihBECdPsO9RqaIXo9GXHFXSpPhZCvj429h7wg=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JG8WaAbSCXzDCKx1OzIfazcglJI+5tE0uWRFSh38hnA7VGngrhAFZlNMhauLCf/gw0JdibGlV1RIyqThpFTKX7xk89/qB8nHeGH1VGK2Pj7bWz/zQtr403xzoXl0G6qnnR6lvw+HkJKehANBYyYQN1Ek8WqkRWmiZv9rZxV8Sqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=hSnSrRgz; arc=none smtp.client-ip=220.197.31.3
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1787282266; c=relaxed/simple;
+	bh=YzsViyV7hREnhdjE4oNJsni3zuIximevjl7gdibbQeg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EeIw0l5tCT0dVpnEX5oF3fDMoNyYfxDoyTslhhohtIBBz/vCBm6dqfgQ81E/zH9v0bczILirDOJV6TlWaJiAKMRGCt/O9Px9eAGQDOgOb0q2L0sKwCVQVRVkWWTvZUDloMlM9P4qWVKbRY5UFfsBQV+2JscgSSyt2tJM37WRNA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oTkBQyQF; arc=none smtp.client-ip=91.218.175.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="hSnSrRgz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=y6
-	k9Nq10QBHJG6u1InnsnOBXdpZO9DcjAmWPItGobNY=; b=hSnSrRgzzROrSn2TBP
-	sV9lPWeCBZ7lNSv5oWuo25bcQPtZelRT3t7Yj6ezxwdOak/USLHzu6TGtimrDoeV
-	dJj9E5I19ZwaIAnVCThVjKibSDAb7tQ05MlTgIb/6ysS5o1Zt+EGQ4M1FaxfCPIe
-	ZxJks7JGA1GYz6XSvM9uwmcHA=
-Received: from localhost.localdomain (unknown [])
-	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wD3H5Giwodq71VORA--.62832S2;
-	Fri, 21 Aug 2026 11:14:43 +0800 (CST)
-From: Qingshuang Fu <fffsqian@163.com>
-To: Andy Whitcroft <apw@canonical.com>,
-	Joe Perches <joe@perches.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	SeongJae Park <sjpark@amazon.de>
-Cc: netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Qingshuang Fu <fuqingshuang@kylinos.cn>,
-	Qingshuang Fu <fffsqian@163.com>
-Subject: [PATCH net v2 1/2] selftests/net: fix kill() argument order and wrapper cleanup in fin_ack_lat
-Date: Fri, 21 Aug 2026 11:14:41 +0800
-Message-Id: <20260821031442.1124777-1-fffsqian@163.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260821030922.1123754-1-fffsqian@163.com>
-References: <20260821030922.1123754-1-fffsqian@163.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oTkBQyQF"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=YzsViyV7hREnhdjE4oNJsni3zuIximevjl7gdibbQeg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787282259; v=1; x=1787887059;
+ b=oTkBQyQFt2MpJ7ujdkTYYSezyTBJQ2Tst5gB6e9VC4QJvNd/wxscuWU041T+5lO8KeT09Jvy
+ a+DkXCJn5VhKHh5ErkH8QavDgMnAdY2+rSYQlKBjjxfpfkai7mCeA3xMdxmfj7G95wlQ5libdx7
+ QxNBr1VwhC6YzH+G3ofE3Odw=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [192.168.109.140] (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id da191edad99e2e12;
+	Fri, 21 Aug 2026 03:17:39 +0000
+X-Mizu-Trace-ID: da191edad99e2e12
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <ab6c9042-f359-41b9-854c-c8a22bdce7f1@linux.dev>
+Date: Fri, 21 Aug 2026 11:17:32 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/17] cgroup/cpuset: Fix partition CPU ownership and
+ isolation accounting
+To: Ridong Chen <ridong.chen@linux.dev>, longman@redhat.com,
+ cgroups@vger.kernel.org
+Cc: tj@kernel.org, hannes@cmpxchg.org, mkoutny@suse.com, shuah@kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
+ <5a16ddf0-2b22-449d-84e8-1605c195ea41@linux.dev>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <5a16ddf0-2b22-449d-84e8-1605c195ea41@linux.dev>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:_____wD3H5Giwodq71VORA--.62832S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7uw47Cr4UJry5tw1rCFW8Xrb_yoW8Kr13pF
-	WfGasIkFy8Ja17t3W0k3yUXFyxXFs3Ww4xGr18Wry8Zas5JFy8WrZrK3WjqrnFq39Yg3WY
-	vr1IgFWF93WDA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pipVbPUUUUU=
-X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbC6QNVIGqHwqNbowAA3r
 
-From: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-sig_handler() passes its arguments to kill() in the wrong order: it sends
-signal number child_pid to PID SIGTERM (15) instead of sending SIGTERM
-to the client process.  The call therefore always fails and the signal
-is never forwarded: when only the server process receives SIGTERM, the
-client keeps running its infinite connect loop as an orphan process.
 
-Swap the arguments so that the server forwards SIGTERM to the client.
-Guard the call with child_pid > 0: the client inherits the handler and
-sees child_pid == 0, and a plain argument swap would make it call
-kill(0, SIGTERM), signaling the whole process group instead of exiting
-quietly.
+在 2026/8/21 10:48, Ridong Chen 写道:
+> 
+> 
+> On 8/20/2026 8:41 PM, Guopeng Zhang wrote:
+>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>
+>> update_prstate() uses effective_xcpus for isolation accounting and
+>> housekeeping checks when switching a partition between root and
+>> isolated. The mask also includes CPUs granted to valid child partitions.
+>> Such a type change can alter isolation accounting for child-owned CPUs
+>> or fail a housekeeping check because of a CPU the parent does not own.
+>>
+>> A rejected type change can leave CPUs assigned to the invalidated
+>> partition instead of returning them to the partition that owns the
+>> invalidated subtree. When cpuset.cpus changes, child validation can use
+>> the old parent mask, and a remote update can observe stale cpus_allowed
+>> when it revisits a cpuset. Direct and propagated invalidation can leave
+>> isolated_cpus reflecting the released partition's type instead of the
+>> type of the partition receiving its CPUs. Releasing an isolated
+>> partition can clear boot-isolated CPUs from isolated_cpus.
+>>
+>> Limit type-change checks and accounting to CPUs owned directly by the
+>> partition. Preserve boot-isolated CPUs when a partition is released,
+>> return CPUs after rejected type changes, validate children against the
+>> new parent mask, and publish cpus_allowed before a partition update can
+>> revisit the cpuset. Fix isolation accounting during direct and
+>> propagated invalidation.
+>>
+>> Patch 1 removes an invalid selftest comparison that makes
+>> test_cpuset_prs.sh fail when boot-time domain isolation is configured.
+>> Each kernel fix is followed by a focused selftest update.
+>>
+>> Guopeng Zhang (17):
+>>    selftests/cgroup: Drop invalid boot isolation comparison
+>>    cgroup/cpuset: Preserve boot-isolated CPUs on partition release
+>>    selftests/cgroup: Test boot-isolated CPU partition release
+>>    cgroup/cpuset: Limit type-change accounting to owned CPUs
+>>    selftests/cgroup: Test isolated CPU accounting on type changes
+>>    cgroup/cpuset: Validate type changes against owned CPUs
+>>    selftests/cgroup: Test type-change validation with child-owned CPUs
+>>    cgroup/cpuset: Release CPUs when a type change is rejected
+>>    selftests/cgroup: Test rejected partition type changes
+>>    cgroup/cpuset: Fix isolated accounting on direct child invalidation
+>>    selftests/cgroup: Test isolation accounting on direct child
+>>      invalidation
+>>    cgroup/cpuset: Invalidate children outside the new CPU mask
+>>    selftests/cgroup: Test child invalidation after shrinking cpuset.cpus
+>>    cgroup/cpuset: Publish cpus_allowed before partition updates
+>>    selftests/cgroup: Test shrinking cpuset.cpus in a remote partition
+>>    cgroup/cpuset: Fix isolated accounting on propagated invalidation
+>>    selftests/cgroup: Test isolation accounting on propagated invalidation
+>>
+>>   kernel/cgroup/cpuset.c                        | 162 ++++++++++--
+>>   .../selftests/cgroup/test_cpuset_prs.sh       | 231 +++++++++++++++++-
+>>   2 files changed, 361 insertions(+), 32 deletions(-)
+>>
+>>
+>> base-commit: 6a746cd265aed59107ebdaa9ce039bb832922969
+> 
+> Hi Guopeng,
+> 
+> This is a fairly large series, which may make the review process challenging. I would suggest splitting it into smaller, more focused patches. It would also be very helpful if you could provide a reproducer for each bug you are trying to fix, so that we can verify the issue and the fix more effectively.
+> 
 
-Now that the server actually terminates the client before the wrapper
-script's cleanup runs, kill() may fail with ESRCH for the already-exited
-client.  The script uses set -e, so make the kill tolerant to avoid
-aborting the EXIT trap and leaking temporary files.
+Hi Ridong,
 
-Fixes: af8c8a450bf4 ("selftests: net: Add FIN_ACK processing order related latency spike test")
-Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
----
- tools/testing/selftests/net/fin_ack_lat.c  | 3 ++-
- tools/testing/selftests/net/fin_ack_lat.sh | 2 +-
- 2 files changed, 3 insertions(+), 2 deletions(-)
+Thanks for the suggestion. The current series is indeed fairly large, which makes the individual issues harder to review.
 
-diff --git a/tools/testing/selftests/net/fin_ack_lat.c b/tools/testing/selftests/net/fin_ack_lat.c
-index 4117332eb1a9..98044e6f9f43 100644
---- a/tools/testing/selftests/net/fin_ack_lat.c
-+++ b/tools/testing/selftests/net/fin_ack_lat.c
-@@ -103,7 +103,8 @@ static void server(int sock, struct sockaddr_in address)
- 
- static void sig_handler(int signum)
- {
--	kill(SIGTERM, child_pid);
-+	if (child_pid > 0)
-+		kill(child_pid, SIGTERM);
- 	exit(0);
- }
- 
-diff --git a/tools/testing/selftests/net/fin_ack_lat.sh b/tools/testing/selftests/net/fin_ack_lat.sh
-index a3ff6e0b2c7a..a8aa2238ab5c 100755
---- a/tools/testing/selftests/net/fin_ack_lat.sh
-+++ b/tools/testing/selftests/net/fin_ack_lat.sh
-@@ -9,7 +9,7 @@ set -e
- tmpfile=$(mktemp /tmp/fin_ack_latency.XXXX.log)
- 
- cleanup() {
--	kill $(pidof fin_ack_lat)
-+	kill $(pidof fin_ack_lat) 2>/dev/null || true
- 	rm -f $tmpfile
- }
- 
+I initially kept these patches in one series because some of the later fixes depend on changes introduced by earlier patches. However, while preserving the necessary dependencies, I can group the fixes by issue, split them into several smaller, more focused series, and submit them separately.
 
-base-commit: 7f063b2f17eaba2a35e251aa53627f2a70d536e2
--- 
-2.25.1
+I will also add a reproducer to the changelog of each relevant patch, together with the actual behavior before the fix and the expected behavior.
+
+Sashiko has raised a few additional points that I am still reviewing. I will go through those first, and then reorganize and split the series for the next submission.
+
+Thanks,
+Guopeng
+
 
