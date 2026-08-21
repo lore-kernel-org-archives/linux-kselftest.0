@@ -1,171 +1,144 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011029.outbound.protection.outlook.com [52.101.125.29])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C073346983A;
-	Fri, 21 Aug 2026 09:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787306062; cv=none; b=tITuKm5aD/EGhBGb13cU4v9V0JpJR92NFXf7wjW253JASfxVygd136nBRgyFEdF238wJg7RtyzDu+nDKQgHqkq7oQmY6/z6eunVs8S230s/6DvM96YK9eYMqKyVkF/Uww3sCva7jffnz1C7/eriGuE7wrx4LlJ4p0QEv2f8A3sY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787306062; c=relaxed/simple;
-	bh=Nz9hokw3F6xiSwJBUm0t+qitUnWerwH3uRhk6Hodtis=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iU3aDtsUA4nML2qahLRIMFoWxihshF+8vftzWX0L2jWX7HTIRek7VkDAXT05+nJSTmO35MbMas29BFKPA0+WiFuV2NjN0ZAKdgSCj8xvW/rSrTEnq2emJUbuqAWt5TnLN9iBAQ3RVa0MXuyoiJ61dye+Oe13Nw7Go4Nf5M/PmzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVJrWNLC; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60F8A470128;
+	Fri, 21 Aug 2026 10:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.29
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787306787; cv=fail; b=UXJhCC/e6ZjE4mR6gNq3122r9StXxT60PMtFYMZU0EpdAaA5fH1r9PJlt9XhMtTtQkK2+NrwVJOS3QpoOyi3nJGilGZA0GL4Zk8Er9EmZ2b434BP3eOS2jYdewXO+1bxEuQ5VYf0uTbL0qv7WZt2qjxIH1RS3thvZcjC4JVML1w=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787306787; c=relaxed/simple;
+	bh=0OiZHusTYYUNWBQIj9QmLqZ8YblOijIpgmAVreELxq4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YsAPEe/l+3Ejm38zPq3plftsBwjBTVSoaadfHVTAFv/8jcs43YwU1js9g+vrVMyi92VGOQ2aoSBfDlsu23Vj02uwm6FhdUeT9Yzmvi7mK3bBYQCm/nSOnkQuC73s7F0bfNP3qJ+YkKgVn4+M30xviKpjnjGReeGQy0E5GjDRXrE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=evlX2uXN; arc=fail smtp.client-ip=52.101.125.29
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVJrWNLC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97B51F000E9;
-	Fri, 21 Aug 2026 09:53:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787306044;
-	bh=TjPLxJNysrCM3XRTjy0rjnsBt7BAmnyP4ZMFpEcN1Sw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SVJrWNLCMys4aydRPUHIVTuX7TEEsk2EQ1EQ4KNIWMxdspWLnKdBwX8GiAsWuIA+3
-	 xeetpygDIYQhcq5Cx/zuvud0+6wiM3d5sexk5Q/bK3+8Mml/0oCrHplnLlt0S8ybqi
-	 /v20kjxrlHkWTxETU19UioaRAE7YVc5VVJXmYwwOfl3DsT46cDmwqSH4k6xoBskYkV
-	 MM9QjlqvBNeACDehdIfoTTS8XLm8SOGTTMipmrUM3VLqcNI6GqRjHcn3oIa3Rck1Yj
-	 Bd7E7KVogJmt1BFhraC9rsxas26BHTa4+xJtYY3vX38LN7DVocCouQGFjByCEAwPGG
-	 fm5ZyV0GW0Mbg==
-Message-ID: <59525a3e-6003-4ab1-bd75-e0c7dcc8a257@kernel.org>
-Date: Fri, 21 Aug 2026 11:53:57 +0200
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="evlX2uXN"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NwmfAOu0xfLefCciXkQckJrLv4foHCzbZMy63G3vGhCN4QwiMumP/5Jn/c2re36nyeiK6JzyvR2hwmxntz7YqZs8eiXNCj6gvfi1Wx/MQag83O/3lQ3IOTTr+Fon4LhPuZcMGjwFQerS9RPWVMbODNsPhKcLrns/U6MOO4FV6ZY5CD/QhMqz7E4ZKHGE7zwstfeXjXV0PdHV2TCmrvthYmv8oR252I4R2cM5TpjIpxJdM64F+EsONz56z57XuzR/RzO05zxhBgKRSfUIPT8DZgjQLFuMRRayn9cE/cjs5CQH/I+OjktbqyOLo2epOiYk7cj2HqkMYQ/N9tdf068N6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qMdsfxCb6Ml7dIJ1rOl8YSZ57+N36Dp4sk9i7p5uaak=;
+ b=tOuu+hu5VbI4w8SkduxnnvdRP72ZPx2vJUJghktrpXVr3xBX9EKGWqsO5WAEX1nU7f8skaWRYmrg7ApC1PY+RmRwfveM8Yvrz74nT6ufUWaWlj/2SgCDBsvKrevhOm/bGHP2rMO9LmJ5wKCAvsrfXD/VVwGFhpbYPvM9L8ULfozsBxFzuw1BlL234dSBkPcFzIvQozx5Uf0WCQ9jfuuw+Xtp7+sk+LT8SLW73OOm+nQBYoKi5O2VBqUJ/bs91XlThfo6TVK0jA2l2bxrtFC3sb9TMUWU83RSIeky6eylG5tYJZioyoQyI3TU8HFIcsvVc0E7bfo443muiPXJ132Czw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 8.62.32.50) smtp.rcpttodomain=alien8.de smtp.mailfrom=renesas.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=renesas.com; dkim=none
+ (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qMdsfxCb6Ml7dIJ1rOl8YSZ57+N36Dp4sk9i7p5uaak=;
+ b=evlX2uXNYeQsOKddz6RVQBXs0vHOYSG8hlSMz8A4sysW/8DxaAmNmMbDkhnsisF8FBzy0PPk5iemLJbb7iKDSwQZrv+7KZSUzZ0WpKPg2Qw8FQArU35JryB7goZQ32tuf6MnmutU1nq87fKYEjXIKsWrF86PL5p0RpHN1qzuVto=
+Received: from OS3P301CA0001.JPNP301.PROD.OUTLOOK.COM (2603:1096:604:21d::18)
+ by OSCPR01MB13394.jpnprd01.prod.outlook.com (2603:1096:604:334::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.11; Fri, 21 Aug
+ 2026 10:06:08 +0000
+Received: from OS1PEPF0000D20F.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:604:21d:cafe::3f) by OS3P301CA0001.outlook.office365.com
+ (2603:1096:604:21d::18) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.11 via Frontend Transport; Fri,
+ 21 Aug 2026 10:06:08 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.62.32.50)
+ smtp.mailfrom=renesas.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=renesas.com;
+Received-SPF: Pass (protection.outlook.com: domain of renesas.com designates
+ 8.62.32.50 as permitted sender) receiver=protection.outlook.com;
+ client-ip=8.62.32.50; helo=ejcrelay004p.adwin.renesas.com; pr=E
+Received: from ejcrelay004p.adwin.renesas.com (8.62.32.50) by
+ OS1PEPF0000D20F.mail.protection.outlook.com (10.167.240.38) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
+ via Frontend Transport; Fri, 21 Aug 2026 10:06:07 +0000
+Received: from vm01.adwin.renesas.com (DEU-5CG20946WF.adwin.renesas.com [10.226.92.4])
+	by ejcrelay004p.adwin.renesas.com (Postfix) with ESMTP id 9C8953000164;
+	Fri, 21 Aug 2026 19:06:04 +0900 (JST)
+From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+To: luto@kernel.org,
+	tglx@kernel.org,
+	vincenzo.frascino@arm.com,
+	shuah@kernel.org,
+	thomas.weissschuh@linutronix.de,
+	bp@alien8.de
+Cc: linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Subject: [PATCH] selftests: vDSO: vdso_test_correctness: Include linux/types.h
+Date: Fri, 21 Aug 2026 10:06:01 +0000
+Message-ID: <20260821100602.77680-1-ovidiu.panait.rb@renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 0/3] selftests: mm: introduce page allocation stall
- reproducer
-To: Andrew Morton <akpm@linux-foundation.org>, Jason Miu <jasonmiu@google.com>
-Cc: Shuah Khan <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
- Shakeel Butt <shakeel.butt@linux.dev>, Lorenzo Stoakes <ljs@kernel.org>,
- "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka
- <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Greg Thelen <gthelen@google.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org
-References: <20260819070538.2404983-1-jasonmiu@google.com>
- <20260820170348.48f04ed654dce5193ca3a532@linux-foundation.org>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260820170348.48f04ed654dce5193ca3a532@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS1PEPF0000D20F:EE_|OSCPR01MB13394:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c85da27-cc40-4a4e-014f-08deff6bd1ad
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700016|82310400026|23010399003|18002099003|56012099006|10067099003|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info:
+	2EZPhH6EG8yoO8uz2iOAr3/WyvmS4u+0PzEnPCTA/4wyck8JdqrhHOixy1OJjzIwKL2h+n2YsWvOaBbXEDImMv88fx02sj69jHyIop8nza2pN/CGf/M1KHCRj4ZwrWE2+VuYP3w45iKpyr1CZ3m/FuX3v1+uzVCwSDxyEOfUIbPTLbm0Orw5G8PfffQ8AvOXKvH1zvHn0TJZVbjLdG7QmjI2b08YzwFsOWpENU7ya5baKNE5lKIA33bOgdfcDf29HA10EdjqN9fNU9mfUOilYkK/+DAG/T0lEWr5rHsXPcYqar3wIZ74L4GdwhdtSF9/9oDD2j5E58EwkLpcBb0r9jB/iXXD2ofaHlzZPkjpBzRp41RLcLh1qOX0yzMB9WGhD65Cqoemq5QPxTuTLPlK2s0ulbSGgSpKUuCZDSaxFY4ZxjVc1iW/okSFQs4CvONNl8TWIGsjI0bEDGkfJe0VabxDh3Mq3bLbMm+1omO4EsQKcH/emV6SEYdzhrEDQyaamJ3uxdjP0ztH2wk6JCNCJJab+pKydMIWeo4ElqrOkkcfqXUaFbhQVg14mC7Qp2XeKOPBB4QJeSMrrQX4qXNDeQtengeWk3XS9mFKseYxZLq+QLPrfLDhOzQFg606tLDD0OoYHUzbYDNJ9jUcW6wUPbDaQLf0gesf2gSWmTFg0/dQvrCf8lwki1XWeo8a24KCJjtXebCEg4RNt3qiq6WKIg==
+X-Forefront-Antispam-Report:
+	CIP:8.62.32.50;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ejcrelay004p.adwin.renesas.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700016)(82310400026)(23010399003)(18002099003)(56012099006)(10067099003)(11063799006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	+/xCBnD2oqqDYefaxL+JOY1EedWfrYJidCEvrYn3AYMSc+Wg+u61KKdm146rZ3lgH+3UZ/S5clztYRVsHBC7WYLIonQRK2UgQjCOVTxo6TuZA7lkQLQp7lCXRPM6+BPcIwugwcvLr1qZG7DQa+MUWUajkME6ttrCYoJRR/V/TBjC4BZzWQhC2Fbpq4HwbsgFJJGDapfv+2SF3BZYJHnU6c2IRgwPLda7lF1yz9xyWQmeUMjqySCY+mJ5vtAt448/OIGqybSosL6k2ta/Y+AOMCvtY220DGDNDGonOX23znLFIAGil2LiiAXiQBehVo2lTrQrkoW8oqI7giHKMJk5c3CGPD7OhtxJNuc+bUTUtFm/Lu0kjp2KRK0U0iGOVhaU4gqa43y34V7Y88tpQJP4LtiS/+kw8w14JTeBHZCLuObsrq+iNBb7shcPLye41ZAs
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2026 10:06:07.6906
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c85da27-cc40-4a4e-014f-08deff6bd1ad
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=53d82571-da19-47e4-9cb4-625a166a4a2a;Ip=[8.62.32.50];Helo=[ejcrelay004p.adwin.renesas.com]
+X-MS-Exchange-CrossTenant-AuthSource: OS1PEPF0000D20F.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OSCPR01MB13394
 
-On 8/21/26 02:03, Andrew Morton wrote:
-> On Wed, 19 Aug 2026 00:05:35 -0700 Jason Miu <jasonmiu@google.com> wrote:
-> 
->> Background
->> ==========
->> Under severe system memory pressure, system unresponsiveness often 
->> occurs due to page allocation stalls. In commit 94e0bcde055e ("mm, 
->> page_alloc: reintroduce page allocation stall warning"), David Rientjes 
->> introduced a warning mechanism to emit a kernel log when a page 
->> allocation takes longer than 10 seconds. This log is used to correlate
->> a frozen system with the system memory state at the time of failure.
->>
->> To further debug and analyze these allocation stalls, we need a 
->> reproducible test case. This patch series introduces a new selftest 
->> designed to artificially mimic the severe memory pressure scenarios 
->> seen in production, allowing us to observe the resulting allocation 
->> stalls.
-> 
-> Interesting.
-> 
->>  lib/Kconfig.debug                             |  11 +
->>  lib/Makefile                                  |   1 +
->>  lib/test_mempress_timer.c                     | 140 +++++++++++
->>  .../testing/selftests/mm/page_alloc_stall.sh  |  80 ++++++
->>  .../selftests/mm/page_alloc_stall_pressure.py | 235 ++++++++++++++++++
->>  5 files changed, 467 insertions(+)
->>  create mode 100644 lib/test_mempress_timer.c
->>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall.sh
->>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall_pressure.py
-> 
-> Nothing fits very well, does it?
-> 
+When cross compiling the vDSO tests with a Yocto Scarthgap SDK, the
+following build errors are encountered:
 
-Why are we mixing python and sh?
+make headers
+make -C tools/testing/selftests CC="${CC}" TARGETS="vDSO"
+  CC       vdso_test_correctness
+vdso_test_correctness.c:58:27: error: unknown type name
+‘__kernel_time_t’
+   58 | typedef time_t (*vtime_t)(__kernel_time_t *tloc);
+      |                           ^~~~~~~~~~~~~~~
+vdso_test_correctness.c:60:1: error: unknown type name ‘vtime_t’;
+did you mean ‘time_t’?
+   60 | vtime_t vdso_time;
+      | ^~~~~~~
+      | time_t
 
-> 
-> 
-> selftests is for quick tests which are run by run_kselftest.sh.  You
-> had to place it in selftests because there isn't anywhere obvious for
-> it to live.
-> 
-> So I suggest a brand new tools/testing/stresstests/mm.  If we create
-> this, people will jump on it and start adding things which presently
-> reside in their personal collections.
+The code uses __kernel_time_t without including the header that declares
+it. Fix this by including <linux/types.h>.
 
-There was recently a discussion around performance tests, and one thought was to
-not carry these in the kernel tree at all.
+Fixes: bed0053a6303 ("selftests: vDSO: vdso_test_correctness: Add a test for time()")
+Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+---
+ tools/testing/selftests/vDSO/vdso_test_correctness.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Stresstests, not sure.
-
-So agreed, that this shouldn't be an ordinary selftests (nothing we would want
-to run autoamtically), but I am also not 100% sure about having performance /
-stress tests in the kernel tree. It's all stuff we have to maintain and drag along.
-
-> 
-> 
-> 
-> I can't say I like "mempress".  Is "memory_pressure" too wordy?
-> 
-> 
-> 
-> All of lib/test*.c shouldn't be in lib/.  lib/ is for library code! 
-> Again, we put them there because people are shy about doing mkdir.
-
-There were recent discussions where I raised the same. I would prefer if testing
-kernel modules are somewhere in tools/testing/ if possible.
-
-
+diff --git a/tools/testing/selftests/vDSO/vdso_test_correctness.c b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+index 5c5a07dd1128..952ff5784a0b 100644
+--- a/tools/testing/selftests/vDSO/vdso_test_correctness.c
++++ b/tools/testing/selftests/vDSO/vdso_test_correctness.c
+@@ -18,6 +18,7 @@
+ #include <sched.h>
+ #include <stdbool.h>
+ #include <limits.h>
++#include <linux/types.h>
+ 
+ #include "parse_vdso.h"
+ #include "vdso_config.h"
 -- 
-Cheers,
+2.34.1
 
-David
