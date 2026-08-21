@@ -1,110 +1,96 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3A9F3CBE6E;
-	Fri, 21 Aug 2026 08:40:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA1BE3E0724;
+	Fri, 21 Aug 2026 08:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787301650; cv=none; b=ATmnaLk4kXg1f/MM3fWLJQjxZLUpdagGYKCFq4GiMo45HcUOPvrm2Wgl+gGyNE/kMGZPfHZBe/kv+/PkIoGjT9J34BLdCgErdjM0lVtsLnpAsIhMkKRl+XE235x+AIV5sOmmdQ8+GRNhTC+r896qHXPhGsYsTn/FPrcGACTon/I=
+	t=1787302552; cv=none; b=VOQGPebjHI9AdKBPKF/4cQbNORM2RkF9rbsYmQ3tFSPT1PTkIpi4qX5zZ//V1TKpsvCKJZchCgPdths+DEB9Z6pULPcIlZ2CsjmF0Knpd5UqbYJR5nIitED5HpnJWdZ4XDjuwGk2+7/+sole18z2/ydDeL9aZy/6P/7qSpLh0f0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787301650; c=relaxed/simple;
-	bh=HpefIG+FT8VpT7Y0l8OJWXKdCqTscdnRID2HClRhKY8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ITrMt0JGbHkHrihJGokMEY+wWErbUiuA/S70zl7vyfIC8Lm7sSaMvMSdrIKhvOWQstjtddHnM+frUWxaYfw4Z+ZM+ZzOd/Zn9cEMNSh0FR5c9CnNwDZ1EReeNf95a9olLyvIulwn4m94jEKDuejebW5VqjcqBG8x7M8H2xmXRnc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ffvtgKJO; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787302552; c=relaxed/simple;
+	bh=wcdTd5B/RaOOWV5qretAunfQFbsYHOpwzyHoWc18erI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o0AvI2ixllTPlxkYgQEDqPZsRji0a18L8wOdBGgRHIZWgXFUDx9B5EeK/EbgQF5vyMk9W3pgRuLzER4+m9AfqHs6Rpz2HDo9neRMS1Ujx8/zqEKfPYaaT2KSDOIZbAKUThq+cgzXgTXn/P/zRYTkAp/pxT9AP6jKUsMR75SWEow=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=TWdFNY3b; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ffvtgKJO"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A1041F000E9;
-	Fri, 21 Aug 2026 08:40:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787301648;
-	bh=QMsvJx/lIrFNR/YC7MmYVGxVjhg4uaQNS0Pwi12yOaw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=ffvtgKJOKu5JyhdmjyYzd9c7bxTQCkQinI+ns4DXQBNPqsbzHyPPHEz9kn+qQHWpy
-	 JknqHSPbysyTzmOKV1PN/QfIXtFbGI9Soh/F57TXKGQ+gjMh3ooonl7OlVpfUsppyG
-	 oSrILc0iUGh6OLDJRB7hBswwQ6hH3ENm8T4kfPWkJMTA2HjbNchxVvoAITWjJbpcUI
-	 OnwMoTBQAd3N2+YnPqIPV6b55axMDEDd+czfJ10KkUsflQlVTSYee6bY1C984c5SOP
-	 W73U871CMetGb809i1ZYHAQLhIB6JG9UYNEz2OiA54H+0AAnlSx3/mDnihCjxDKBHv
-	 4skbGPhLBtkNw==
-From: Andreas Hindborg <a.hindborg@kernel.org>
-To: Malte Wechter <maltewechter@gmail.com>, Brendan Higgins
- <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar
- <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng
- <boqun@kernel.org>, Gary Guo <gary@garyguo.net>, =?utf-8?Q?Bj=C3=B6rn?= Roy
- Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, Alice Ryhl
- <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, Danilo Krummrich
- <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, Tamir
- Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>,
- Onur =?utf-8?Q?=C3=96zkan?= <work@onurozkan.dev>
-Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
- linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, Malte
- Wechter <maltewechter@gmail.com>
-Subject: Re: [PATCH 1/2] rust: kunit: add config to fail kunit tests if a
- lockdep warning is triggered
-In-Reply-To: <20260818-lockdep-kunit-v1-1-66ceb1a272e3@gmail.com>
-References: <20260818-lockdep-kunit-v1-0-66ceb1a272e3@gmail.com>
- <KlwPuDCx8ODGiEj6fihohXeSRr0IugOMF_5AUBua9BBFek-TirtDWkZQwtZaxC3vS6ilOxJ3qW8t0kuY7BS8cA==@protonmail.internalid>
- <20260818-lockdep-kunit-v1-1-66ceb1a272e3@gmail.com>
-Date: Fri, 21 Aug 2026 10:40:38 +0200
-Message-ID: <878q5z988p.fsf@kernel.org>
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="TWdFNY3b"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B9E71596;
+	Fri, 21 Aug 2026 01:55:45 -0700 (PDT)
+Received: from arm.com (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 085EB3F66F;
+	Fri, 21 Aug 2026 01:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787302548; bh=wcdTd5B/RaOOWV5qretAunfQFbsYHOpwzyHoWc18erI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TWdFNY3b68iy0MWDcR3xLM88mOwb4xQ08AlfOCA1myAiymVJh+Tw6lBpIILF/CvNR
+	 VSseBE1KnZG9LMpSHVGBtblrEpb18HK5IF3Ih1BHtw1ZxB00xBPKLFbHZ7TvhMCp9Y
+	 OEOZvff9FSOJmW4QdM0vtk6Ul7ejpOvX3sL+26fI=
+Date: Fri, 21 Aug 2026 09:55:44 +0100
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Muhammad Usama Anjum <usama.anjum@arm.com>
+Cc: Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Amit Daniel Kachhap <amit.kachhap@arm.com>,
+	Mark Brown <broonie@kernel.org>, Yeoreum Yun <yeoreum.yun@arm.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
+Message-ID: <aogSkJxWf9QndjuE@arm.com>
+References: <20260820153331.2448875-1-usama.anjum@arm.com>
+ <20260820153331.2448875-5-usama.anjum@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260820153331.2448875-5-usama.anjum@arm.com>
 
-"Malte Wechter" <maltewechter@gmail.com> writes:
-
-> When running KUnit tests and a lockdep warning is triggered, the test is
-> still marked as passed based only on if test assertions are true.
-> Thus, add a Kconfig option CONFIG_RUST_LOCKDEP_KUNIT_DEBUG_LOCKS. When
-> this option selected, if lockdep triggers during a test, fail the test.
->
-> Signed-off-by: Malte Wechter <maltewechter@gmail.com>
+On Thu, Aug 20, 2026 at 04:33:26PM +0100, Muhammad Usama Anjum wrote:
+> The arm64 selftest collection has no Kconfig fragment, so kernels built
+> with the selftest requirements are not guaranteed to provide the support
+> used by the MTE tests.
+> 
+> Add a fragment covering the userspace MTE and tagged-address ABIs, KSM
+> and its sysfs interface, explicit HugeTLB mappings and their proc/sysctl
+> interfaces, and tmpfs-backed file mappings.
+> 
+> Do not request NUMA solely for the optional KSM merge_across_nodes.
+> 
+> Signed-off-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 > ---
->  lib/kunit/Kconfig    | 13 +++++++++++++
->  rust/macros/kunit.rs | 10 ++++++++++
->  2 files changed, 23 insertions(+)
->
-> diff --git a/lib/kunit/Kconfig b/lib/kunit/Kconfig
-> index 94ff8e4089bfb..30bac00c42ce1 100644
-> --- a/lib/kunit/Kconfig
-> +++ b/lib/kunit/Kconfig
-> @@ -142,4 +142,17 @@ config KUNIT_UML_PCI
->
->  	  If unsure, say N.
->
-> +config RUST_LOCKDEP_KUNIT_DEBUG_LOCKS
-> +	bool "Enable extra debug_locks assertion in Rust KUnit tests"
-> +	depends on RUST
-> +	depends on LOCKDEP
-> +	default n
-> +	help
-> +	  Adds an extra assertion to each Rust kunit test case that asserts
-> +	  that the debug_locks flag from `lockdep` is unchanged. This is useful
-> +	  when writing unit tests that could potentially trigger a lockdep warning,
-> +	  this makes it so the KUnit test does not succeed if the test assertions are
-> +	  true, but a lockdep warning is triggered.
-> +
-> +	  If unsure, say N.
->  endif # KUNIT
-> diff --git a/rust/macros/kunit.rs b/rust/macros/kunit.rs
-> index ae20ed6768f15..d1cd0349f86f0 100644
-> --- a/rust/macros/kunit.rs
-> +++ b/rust/macros/kunit.rs
-> @@ -144,9 +144,19 @@ macro_rules! assert_eq {
->                  // here to reduce the length of the assert message.
->                  #(#cfg_attrs)*
->                  {
-> +                    #[cfg(CONFIG_RUST_LOCKDEP_KUNIT_DEBUG_LOCKS)]
-> +                    let __debug_locks_snapshot = ::kernel::bindings::debug_locks;
+>  tools/testing/selftests/arm64/mte/config | 8 ++++++++
+>  1 file changed, 8 insertions(+)
+>  create mode 100644 tools/testing/selftests/arm64/mte/config
+> 
+> diff --git a/tools/testing/selftests/arm64/mte/config b/tools/testing/selftests/arm64/mte/config
+> new file mode 100644
+> index 0000000000000..8587ce70c294a
+> --- /dev/null
+> +++ b/tools/testing/selftests/arm64/mte/config
+> @@ -0,0 +1,8 @@
+> +CONFIG_ARM64_MTE=y
+> +CONFIG_ARM64_TAGGED_ADDR_ABI=y
+> +CONFIG_HUGETLBFS=y
+> +CONFIG_KSM=y
+> +CONFIG_PROC_FS=y
+> +CONFIG_SYSCTL=y
 
-Why the double underscore start?
+You may want CONFIG_PROC_SYSCTL.
 
+> +CONFIG_SYSFS=y
+> +CONFIG_TMPFS=y
 
-Best regards,
-Andreas Hindborg
+These are all covered by defconfig. Are these fragments still necessary?
+Or are they supposed to work on custom configs? If the latter EXPERT may
+be set, hence the PROC_SYSCTL above. You probably also need SHMEM.
 
+-- 
+Catalin
