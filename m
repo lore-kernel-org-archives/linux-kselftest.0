@@ -1,277 +1,212 @@
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011041.outbound.protection.outlook.com [40.107.74.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4028E38330B;
-	Fri, 21 Aug 2026 17:10:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5112B2FE05C
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 17:46:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.175
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787332252; cv=fail; b=lt9ZzPGpEDXSXYFVlN49t1fJiXO72+koxoZ+5eY8DFWP1RGkbz2UxdWtJGhYuIrbfKCanbArUjwrAyvs1LALbeVf8n9avoqg88Lx0XfBKIJgdOSRSk+p45MhkcPJQKJCgnszzX0ziJyBXjdwm5qUXJqReTD6a1wYyK+1tmoyHYk=
+	t=1787334392; cv=pass; b=rl6E+qAEBPItIX3NYWmQCraryNq69WNlhKROLFrr+vPVDv685QJVoq1RbtBAPVenggUikahGmMyKCuJzrQFj+7dqOpv1LhYhZpHIWiTfQh4r+FhjSeoKBq84PuuSli9HlUFzBgoHGz6f0GMATVm9Km3SA2NrOajwz5yc+ETZfa0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787332252; c=relaxed/simple;
-	bh=hK4bAaRZrfAIc1DAP0RBIhaIOfD/48fuPRkR4vsj2oA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=E3b0SsZ8ec33mcWf+s6ZjHfOItzqYp4NtX/nsiSyognv9DCk7rrQDslqCNJI8u5Qs3hmXumV7HazToU7GEqu9D+taav18TM9lk3AjqokCmXKP/ABgzBMzzUzvszQ+NvbJdeLSr6X1Y1G1KBGrq/V8Mj1H/xUOlNT3CzBq3QvAro=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=KUqMPliE; arc=fail smtp.client-ip=40.107.74.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
+	s=arc-20240116; t=1787334392; c=relaxed/simple;
+	bh=N1CqxOoc6U2kU5znDg7gBtNDaZLRUzOAxkKRKjyq/Tk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=sgQ1bnT4a/SghGQUaRz9OBtTUd5SMx52rMLL+4DYXf0rgfeL1YUO85LVunPnmtqyfTPynIY8/zMGuwJ83tGT1C5nwpdmP20qG5Jf2zxv6xh1x2ztwzKCHhRjuNsZbAM4H7u0N13bRUK90d1pWU2xjr8b3rp6soQs0PtGpr7/Vac=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GiCQMsy0; arc=pass smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="KUqMPliE"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e1EuAMWHf9N2PTAh7asJaI/RWOLjunp2ZmE3U0IkJT5OjlzdCO44Ry3O8bkrbM8hKMhzGtWJPN6JNsoONS22Af/5GyKM7/D+RkimNmkqSWNxdOY3WoXPGSUeQcZiZwhOfseIQLRCov2tKd2b59XtiWy6JW9P3Skq0B8JvrfjzPhWnkJ5AeTZUKWcV3XRjeqmrstjszZetsUWc+FRzKnJOjlW6rYuxoGvrrWuSZhlF8ywnMl8Q2VqHuX/FfOJVE/78hUqnmPnG2YLzsg1qNOKe4oLWE/pvSB8apR70Ed6R3lQm83QczV1GUn6qSR5FIccKuA1Kl2He5b0oIxMUstMAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=SRr0TzpF53PaZtIYcVOkvN9p2lYiIMAe1RKswjGZ/OM=;
- b=tsQKB2vUsadkO1yiPM69FmCT2alFh+x8pbJO9phOiXAaAqCAFqagbW2gEx7SrEJuEufAzGNECnx6TEZj/A7q3keIfVhSgsIvH3OFZOvtuHh1heL42SMzvKR9yjmIZ1Zd9bPr8SlU6c2+aomur//AsoVY7BOf36GO/zfh4oaEevbDBAYsPZlY1dNDIQG5wvgQq+17ekS1Z28WQ8oyoRowFWgcKjqilTlIH4ZQsAFBVMPfAlIWs+YyRNaoHH+ZBbVscgSvCfqk07FuCWTXhX4kdRchIqjwv4gDzje/XMjrcGZk0JAxnRXwnzVYfmL8lA1/gtFUQpWufI/QYl62NPAe6w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 8.62.32.50) smtp.rcpttodomain=bootlin.com smtp.mailfrom=renesas.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=renesas.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=SRr0TzpF53PaZtIYcVOkvN9p2lYiIMAe1RKswjGZ/OM=;
- b=KUqMPliENB5do6Uv8c5+pTXFAGRGeaHwtqShvuCR24sQWCHLFudIHaD9BJNhG5ryfQw4rZi1bFt11FMYwWqEsf9G+OuxYuBTNUWvIC3n9ZmnL5IhvDIBokPn9VXLCPojv65PammS+dPM2/N1lz15naRGkVZwdPOCWw/c6i7NJ64=
-Received: from TY4P286CA0140.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:37f::7)
- by OS7PR01MB17563.jpnprd01.prod.outlook.com (2603:1096:604:441::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.11; Fri, 21 Aug
- 2026 17:10:46 +0000
-Received: from TY2PEPF00005622.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:405:37f:cafe::f) by TY4P286CA0140.outlook.office365.com
- (2603:1096:405:37f::7) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.11 via Frontend Transport; Fri,
- 21 Aug 2026 17:10:46 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.62.32.50)
- smtp.mailfrom=renesas.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=renesas.com;
-Received-SPF: Pass (protection.outlook.com: domain of renesas.com designates
- 8.62.32.50 as permitted sender) receiver=protection.outlook.com;
- client-ip=8.62.32.50; helo=ejcrelay005p.adwin.renesas.com; pr=E
-Received: from ejcrelay005p.adwin.renesas.com (8.62.32.50) by
- TY2PEPF00005622.mail.protection.outlook.com (10.167.240.53) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
- via Frontend Transport; Fri, 21 Aug 2026 17:10:44 +0000
-Received: from vm01.adwin.renesas.com (DEU-5CG20946WF.adwin.renesas.com [10.226.92.76])
-	by ejcrelay005p.adwin.renesas.com (Postfix) with ESMTP id 4A11630001F6;
-	Sat, 22 Aug 2026 02:10:39 +0900 (JST)
-From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-To: maxime.chevallier@bootlin.com,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	mcoquelin.stm32@gmail.com,
-	alexandre.torgue@foss.st.com,
-	shuah@kernel.org,
-	joabreu@synopsys.com,
-	yi.fang.gan@intel.com,
-	jun.ann.lai@intel.com
-Cc: linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-kselftest@vger.kernel.org,
-	Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Subject: [PATCH net v2 6/6] selftests: drv-net: Add VLAN test
-Date: Fri, 21 Aug 2026 17:09:59 +0000
-Message-ID: <20260821170959.79708-7-ovidiu.panait.rb@renesas.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260821170959.79708-1-ovidiu.panait.rb@renesas.com>
-References: <20260821170959.79708-1-ovidiu.panait.rb@renesas.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GiCQMsy0"
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-ca88130e09aso790577a12.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 10:46:31 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787334391; cv=none;
+        d=google.com; s=arc-20260327;
+        b=XmMDzg/7ClavZz53d8A6nlJvv8i231gQhoDS8XzwHmWK/66ognB01SRT59EmCv6erF
+         oAXfivqu1VtSlHIkhJ2/pc/Gbal0ZBz6Txn43kEjJD9GoxG6zwCZwKG2zBFAftlv6GpJ
+         01P5tZ2U0oz5cwXUHzMXanHez7uW64q7v0rHHct+AXR129ZQPI5a9IZcESi2en0B+WSF
+         YRBITFJfEkpeMMh6Vv3KbRP3ZzXQfcGps03HIvK+9KWJl4w0MyQDcZ6NL0zy3ggMdd4o
+         28UEiQMWm5SdO92kuSgW+dnE/VkK+84MXgkOKkKN+/ZnyMlRiTotImropdxgcLMnRlKS
+         ncKg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=7dUZE8HJUuZFjgDPUW4CLHxeTqHrJZbnD3PitORWMx0=;
+        fh=thfe2tAnBcuum/8oEuARf+hdVcOl4+WUBalVeKvTBag=;
+        b=Uy8S1K8PFQVJnfrehPdS4IUliezgWnIIbzReUBxpZLbGG6iFjxQ+14BljIKK3JzLvr
+         r1IFZWx1dnAx1uUFSXclZKfJSY1ka5JDNERhk/f7yIUeT/l7H9qADkOYJKRFXdyq7oq0
+         mlCHreMESAwfu/dKUtzk07vQJ4UbIAqNxhDDw//U92DR2KLTYPEWU7mEpCXqJjNR/JXE
+         CK/14NBs9huQXE/ff6vPiIwRFcNPGdn/qfcxGbnsc+pU+TXEd199h5t7TWWMT1QxLSb3
+         1Pss9DnYRypVnHD6sJPXNGsn2Tm4UqxYfs10Fs1FR+X70P/FHboZGoocU9y12ExK3aDZ
+         5Y3w==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787334391; x=1787939191; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=7dUZE8HJUuZFjgDPUW4CLHxeTqHrJZbnD3PitORWMx0=;
+        b=GiCQMsy0WC1QiA/N/HrQL6hJSwG40uF0axRlVsRJt0VFtw6l1/4k7qrSdTfh2sXM2V
+         NIN8T5nsX8kBThuXAPpKbw0i7lhZhq634EH4KVM2oextFbY6tgc5T4nLiGH7uHfyVSuJ
+         4RBu6zM7/7S84OTYP8HeD6vn6LPmdi0FO3LmFod85xwD+SqOmBo/CGUiHjxFZSe/ibEg
+         thwLRvjGK0bm1rf6O0GI4XAr+Od37OzfEJcffA8/I6RRGHilWMobqq4hk/jTU+1hDy+i
+         /1WVy3/Sz+aOyMe9wG9H92C3wFyKlSYrFHgxtEoD2T3MWAW1j7H3zQLQZD4c8aDD51Ww
+         rAqw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787334391; x=1787939191;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=7dUZE8HJUuZFjgDPUW4CLHxeTqHrJZbnD3PitORWMx0=;
+        b=lSN0d/VX0U1aaSXi0cxSigYlxAhLsvutpE/6h8t3A/+onxlBD6DQsP6tylO/H+J0as
+         99RGwO77iCCiXchi4dVpAPvzYqNjMZK6f64oahafPVv3ENwwd875DhP9mFVtVoT1xGiY
+         cBbcQiOb/Nx9rY8yE7m8sA/+DXX/UX3HE0n8DskBM83cetjslBQe0NC8ds9o3HRaVjGd
+         wk7oyWSKx/3WbTlS4RWbd4wfpyxzxN4Iwxxa1xseC2p/DNcb/oKjgKyEj5ch7mGG5gvw
+         WEjwmFB2iBy2LpdqbtX4R9oF8tGZ/c335kodSW1QT2M9uIv3HItK5kbBVIH+KYP6Xucb
+         1gbg==
+X-Forwarded-Encrypted: i=1; AHgh+RpzOkd4ufqBCHG7ONNZCWpYluuflXkeV5PiSSCaGnqajV5zMw7cAw3LAGTznBpU0G2+um6wYdHVapFEtuYqBV8=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8G1nhUHNQuhqyvYGVNPTx3CytP3i+MKg3p1TmfrHv8ol0igvC
+	kFL28kGcANZ4onSHkYi1Q5EKOk6Vhe6rQ9N+e0M08Tdk5KIX4oHLk+Ii+GEmN+5Rdjfv2y3ZSik
+	X7mzpSSruo2tIpiIihAAWEZrg9KGve/4=
+X-Gm-Gg: AR+sD10Yz33+vugHezJV1s3g5jaOfe5oHr1D/1bzYeSYFn3Zp8Tis6/AJhLDxfsxIn5
+	BSPtKuPJiRtn7OncKMyL1079yWf3EmCP4Jv8wr4/YD4dhR4FIb1FqyWcc/9V161Vb4eXo1301w+
+	bpR4rl7j3SpltziH3DqTCYAONN6V7jsEWG/f7kJv3f3NK6ZlRhHvmb2EpBxTIMgLziknZos4GcE
+	LJ+VgUHf6fXr+vIG4rgnEx6IPRu1154nA1cxvzibsbYqwFxKCbLADIQBs7RQSm0fNGbPHSHXAG3
+	8C/SsxtcTcss99GJKWul/ZwanwyXq7QOV7qZBbSMGOu3n/kh48cmAPIS20KEKByfclsrmXBPTJ5
+	S8c2AmSpZYL0pxqtqtfL1cwkGNQ==
+X-Received: by 2002:a05:6a21:6010:b0:3c3:f371:1ea9 with SMTP id
+ adf61e73a8af0-3cd3009ca00mr15085565637.10.1787334390580; Fri, 21 Aug 2026
+ 10:46:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TY2PEPF00005622:EE_|OS7PR01MB17563:EE_
-Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 0b7da9a1-f421-4246-9ceb-08deffa72337
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|376014|7416014|82310400026|1800799024|23010399003|921020|6133799003|3023799007|56012099006|10067099003|11063799006|18002099003|22082099003;
-X-Microsoft-Antispam-Message-Info:
-	1MQhYnvDRZzYdeFXu1Z3GIV27Wl4VoYYEPafWEEGDtiUbCkhjXI1J9+mnNSq4i6wmWSHPS5UvysZaBK/r+bZivY5j0EfaFA689iCG+k9bGas+lJvES0SKpBUXUq8XmZ6+AW+D97vzPlnA8wn7MqXx6krCs/ewf+lo/W2j8RTYyMXrbCFEF2I5B7fjDVK64UYW/RQWaOerdNKsbZkEj3gY1jQjQCpl/rbDpdNNRYYt8NHqkNmeK5n4UlwJBHDXMXM5BC55l/FGHJIyVDxkjLS0SsUUSyd0yHfts0tbdlQdnrnFUJoYQAALUJOkvB5ZVxOaKfR8MQfLTbDWCJ0y4O7hNEqTz4npTpG4SwaXJ6dy2mUOEXd2PErkSF3Lssn6lcpdPS+bsl0Ut+/5I1DMyH0CsZQUB2dOYLk6mcFnjcmksmNGzTi47KMwHzID27C5n7vV3NkaAzBUTAkqJMBx87z4P2FUCsBQ6zV1PowDeD0NWTY0/iaDXprNe+lS8FBksd7KV5ANktlZl8++UKXa0CxX5UVsKj+KxrerhsecRAaIZL75l5r/ooeRX+WLddBLJ0I/7itVpumSVTLc4YdM5pHqIfHuFMExoo6032wm+nlmOVjwthFQ9dp2n4FA85H5F4+0S8Y/W4ec+GBEbmcgBzfs3+0M2t5zxnwN94yQb3AENEN0MHZY/vdbs6V0JyfbRNXSzhbsm7SOOlX00O6J6eqbpjiJMazoNeST9xyHdupqKbsBEPC8xksMQLO+APWQ5sw
-X-Forefront-Antispam-Report:
-	CIP:8.62.32.50;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ejcrelay005p.adwin.renesas.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(376014)(7416014)(82310400026)(1800799024)(23010399003)(921020)(6133799003)(3023799007)(56012099006)(10067099003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	eI4KyESr01/CxVTtydMA+pX2i5EIIH6tnAa3jeglh5dtB4e23b1BRnm+fkPcfGqed+wwId3ZmcZrfaU5bPzs8qhjqXpxZ0PEyyXowYgW7EZtjDlMCSvzD0uxiYyY/Nb6ct9IAKgzsthOwukU0tAJNQwbAEj7eFRqQbt2ncIlQnVIALeSmRxCM5em0zhs4ypI1QJpk/Zo67RoQ//hsVSLWUamTP5OsM6ZA3aOxhiiQFzMDFgmVP7wLfoDRtu+4tVo04Kjsq4njFLU8JxdJNbY9fFe3G2VhCYSQfFZIvR+9qF41IJVF8Xtoc0TEusqcribmX3AmIeRLNxpKesY3qRwtDi6DnI11wlwMr1caQqiGn9JNB3ovSOVnu+Q32l7sJgYG8id+FD8++og3zhJYNvOB3v8eOi+eh9+1XYNBufhuFEaBoIrxqD0YpvLHE/oppnl
-X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2026 17:10:44.8150
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0b7da9a1-f421-4246-9ceb-08deffa72337
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=53d82571-da19-47e4-9cb4-625a166a4a2a;Ip=[8.62.32.50];Helo=[ejcrelay005p.adwin.renesas.com]
-X-MS-Exchange-CrossTenant-AuthSource: TY2PEPF00005622.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS7PR01MB17563
+References: <20260809150111.45000-1-leon.hwang@linux.dev> <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
+ <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev>
+In-Reply-To: <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Fri, 21 Aug 2026 10:46:18 -0700
+X-Gm-Features: AcwNN1Xg-yG0Fv7ODt5_iE6N3PFD76zwe1BQccZKRb-mklj66Zkk_VDYn1pDVc8
+Message-ID: <CAEf4BzaXaLLqs6XXCG_02c7UcvNWfbGUAJTYosr22oaD4iokuQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
+ bpf progs
+To: Leon Hwang <leon.hwang@linux.dev>
+Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
+	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
+	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
+	Avinash Duduskar <avinash.duduskar@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
+	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>, Rong Tao <rongtao@cestc.cn>, 
+	Eyal Birger <eyal.birger@gmail.com>, Pu Lehui <pulehui@huawei.com>, 
+	Jingguo Tan <tanjingguo@huawei.com>, Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add a test that validates ping traffic over VLAN interfaces. It aims
-to catch drivers which mishandle hardware VLAN tag stripping, in
-particular QinQ.
+On Sun, Aug 16, 2026 at 11:20=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+wrote:
+>
+> On 15/8/26 04:14, Andrii Nakryiko wrote:
+> > On Sun, Aug 9, 2026 at 8:01=E2=80=AFAM Leon Hwang <leon.hwang@linux.dev=
+> wrote:
+> >>
+> >> Similar to the tracing_multi link support for kernel functions [1], ad=
+d
+> >> support for bpf progs.
+> >>
+> >> When attaching to bpf progs, it must attaches to the target by text po=
+ke
+> >> way.
+> >>
+> >
+> > Please spend a bit more human effort on justification for the change
+> > and explaining your use case. In what case you'll be attaching to a
+> > large amount of BPF programs such that attachment speed-up (if there
+> > is any) matters.
+>
+> Will update the cover letter with justification and my use case.
+>
+> Here's my use case:
+>
+> I'm planning to enhance the function-graph feature of bpfsnoop [1]. It
+> will trace all bpf progs, including their subprogs, to draw a full
+> function call graph including bpf prog call sites.
+>
 
-Three VLAN configurations are covered, each with hardware VLAN stripping
-enabled and disabled:
-- a single 802.1q VLAN interface
-- a single 802.1ad VLAN interface
-- an 802.1q VLAN stacked on top of an 802.1ad interface
+fair enough, interesting use case, definitely outline that in the next
+revision (and provide before/after attach time as well for such use
+case, please)
 
-NETIF=end1 LOCAL_V4=172.16.0.2 REMOTE_V4=172.16.0.3 \
-REMOTE_TYPE=ssh REMOTE_ARGS=root@172.16.0.3 \
-run_kselftest.sh -t drivers/net:vlan.py
-  TAP version 13
-  1..1
-  # timeout set to 360
-  # selftests: drivers/net: vlan.py
-  # # Interface: end0, driver: st_gmac
-  # TAP version 13
-  # 1..6
-  # ok 1 vlan.test.8021q_hw
-  # ok 2 vlan.test.8021q_sw
-  # ok 3 vlan.test.8021ad_hw
-  # ok 4 vlan.test.8021ad_sw
-  # ok 5 vlan.test.qinq_hw
-  # ok 6 vlan.test.qinq_sw
-  # # Totals: pass:6 fail:0 xfail:0 xpass:0 skip:0 error:0
-  ok 1 selftests: drivers/net: vlan.py
-  # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-
-Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
----
-v2 changes:
-- New patch.
-
- tools/testing/selftests/drivers/net/Makefile |   1 +
- tools/testing/selftests/drivers/net/vlan.py  | 100 +++++++++++++++++++
- 2 files changed, 101 insertions(+)
- create mode 100755 tools/testing/selftests/drivers/net/vlan.py
-
-diff --git a/tools/testing/selftests/drivers/net/Makefile b/tools/testing/selftests/drivers/net/Makefile
-index d5bf4cb638a8..56c1dc16f8e9 100644
---- a/tools/testing/selftests/drivers/net/Makefile
-+++ b/tools/testing/selftests/drivers/net/Makefile
-@@ -24,6 +24,7 @@ TEST_PROGS := \
- 	shaper.py \
- 	so_txtime.py \
- 	stats.py \
-+	vlan.py \
- 	xdp.py \
- # end of TEST_PROGS
- 
-diff --git a/tools/testing/selftests/drivers/net/vlan.py b/tools/testing/selftests/drivers/net/vlan.py
-new file mode 100755
-index 000000000000..82822a4b7bb5
---- /dev/null
-+++ b/tools/testing/selftests/drivers/net/vlan.py
-@@ -0,0 +1,100 @@
-+#!/usr/bin/env python3
-+# SPDX-License-Identifier: GPL-2.0
+> The attachment could speed-up when there are hundreds of targets. For
+> example, on high CPU core count servers, it probably runs 200 tc-bpf
+> progs as Kubernetes CNI, and each tc-bpf prog might have 4 subprogs.
+> Hence, there will be 1000 targets to trace for bpfsnoop's function-graph
+> feature.
+>
+> With tracing_multi link support for bpf progs, bpfsnoop will be able to
+> attach to all targets quickly.
+>
+> [1] https://github.com/bpfsnoop/bpfsnoop
+>
+> >
+> > Please do your homework. Generating code with AI is easy, reviewing
+>
+> Sure, will do my homework.
+>
+> > and making decisions about whether it's the right approach (and
+> > ultimately supporting it long term) is still a human process, so let's
+> > weigh that in.
+>
+> Will keep it in mind.
+>
+> Thanks,
+> Leon
+>
+> >
+> >> [1] https://lore.kernel.org/bpf/20260606123955.345967-1-jolsa@kernel.o=
+rg/
+> >>
+> >> Leon Hwang (13):
+> >>   bpf: Initialize ftrace_managed in bpf_trampoline_get
+> >>   bpf: Factor out update_fentry_multi helper
+> >>   bpf: Drop unnecessary ftrace_location() in update_fentry_multi()
+> >>   bpf: Add tracing_multi link support for bpf progs
+> >>   libbpf: Add tracing_multi link support for bpf progs
+> >>   bpf: Add tracing_multi link fdinfo support for bpf progs
+> >>   bpf: Add tracing_multi link info support for bpf progs
+> >>   selftests/bpf: Add tracing_multi bpf prog attach test
+> >>   selftests/bpf: Add tracing_multi bpf prog attach failure tests
+> >>   selftests/bpf: Add tracing_multi bpf prog cookie test
+> >>   selftests/bpf: Add tracing_multi bpf prog rollback test
+> >>   selftests/bpf: Add tracing_multi bpf prog link info test
+> >>   selftests/bpf: Test tailcall with fentry.multi
+> >>
+> >>  include/linux/bpf.h                           |   3 +
+> >>  include/uapi/linux/bpf.h                      |   6 +-
+> >>  kernel/bpf/trampoline.c                       |  87 +++---
+> >>  kernel/bpf/verifier.c                         |  22 +-
+> >>  kernel/trace/bpf_trace.c                      | 212 ++++++++++++---
+> >>  tools/bpf/bpftool/link.c                      |  59 +++-
+> >>  tools/include/uapi/linux/bpf.h                |   6 +-
+> >>  tools/lib/bpf/bpf.c                           |   1 +
+> >>  tools/lib/bpf/bpf.h                           |   2 +
+> >>  tools/lib/bpf/libbpf.c                        |  39 ++-
+> >>  tools/lib/bpf/libbpf.h                        |   4 +-
+> >>  tools/lib/bpf/libbpf_internal.h               |   1 +
+> >>  .../selftests/bpf/prog_tests/fill_link_info.c | 170 ++++++++++--
+> >>  .../selftests/bpf/prog_tests/tailcalls.c      |  62 +++++
+> >>  .../selftests/bpf/prog_tests/tracing_multi.c  | 254 +++++++++++++++++=
 +
-+"""
-+VLAN tests.
-+
-+Validates that ping traffic is sent and received correctly over 802.1q
-+and 802.1ad VLAN interfaces, with hardware VLAN stripping enabled and
-+disabled.
-+
-+Test cases:
-+  - 8021q_hw:  Traffic over a single 802.1q VLAN, HW stripping on
-+  - 8021q_sw:  Traffic over a single 802.1q VLAN, HW stripping off
-+  - 8021ad_hw: Traffic over a single 802.1ad VLAN, HW stripping on
-+  - 8021ad_sw: Traffic over a single 802.1ad VLAN, HW stripping off
-+  - qinq_hw:   Traffic over an 802.1q VLAN stacked on an 802.1ad VLAN,
-+               HW stripping on
-+  - qinq_sw:   Traffic over an 802.1q VLAN stacked on an 802.1ad VLAN,
-+               HW stripping off
-+"""
-+
-+import os
-+from lib.py import ksft_run, ksft_exit
-+from lib.py import NetDrvEpEnv
-+from lib.py import cmd, defer, ethtool, ip, set_ethtool_feat
-+from lib.py import ksft_variants, KsftNamedVariant
-+
-+OUTER_DEV = f"vlout{os.getpid()}"
-+INNER_DEV = f"vlin{os.getpid()}"
-+
-+OUTER_VID = 100
-+INNER_VID = 200
-+
-+LOCAL_IP = "198.51.100.1"
-+REMOTE_IP = "198.51.100.2"
-+
-+
-+def _vlan_add(base, name, proto, vid, host=None):
-+    """Create a VLAN device on top of base and bring it up."""
-+
-+    ip(f"link add link {base} name {name} type vlan proto {proto} id {vid}",
-+       host=host)
-+    defer(ip, f"link del {name}", host=host)
-+    ip(f"link set {name} up", host=host)
-+
-+
-+def _vlan_setup(base, addr, outer_proto, inner_proto, host=None):
-+    """Create VLAN interfaces on base and set an IP on the innermost one."""
-+
-+    _vlan_add(base, OUTER_DEV, outer_proto, OUTER_VID, host=host)
-+    if inner_proto:
-+        _vlan_add(OUTER_DEV, INNER_DEV, inner_proto, INNER_VID, host=host)
-+
-+    dev = INNER_DEV if inner_proto else OUTER_DEV
-+    ip(f"addr add {addr}/24 dev {dev}", host=host)
-+
-+
-+def _setup(cfg, outer_proto, inner_proto, hw_strip):
-+    """Configure VLAN stripping and create the VLAN interfaces."""
-+
-+    feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
-+    set_ethtool_feat(cfg.ifname, feat, {"rx-vlan-offload": hw_strip})
-+
-+    _vlan_setup(cfg.ifname, LOCAL_IP, outer_proto, inner_proto)
-+    _vlan_setup(cfg.remote_ifname, REMOTE_IP, outer_proto, inner_proto,
-+                host=cfg.remote)
-+
-+
-+def _vlan_variants():
-+    """Generator that yields the VLAN protocols and the stripping mode."""
-+
-+    yield KsftNamedVariant("8021q_hw", "802.1q", None, True)
-+    yield KsftNamedVariant("8021q_sw", "802.1q", None, False)
-+    yield KsftNamedVariant("8021ad_hw", "802.1ad", None, True)
-+    yield KsftNamedVariant("8021ad_sw", "802.1ad", None, False)
-+    yield KsftNamedVariant("qinq_hw", "802.1ad", "802.1q", True)
-+    yield KsftNamedVariant("qinq_sw", "802.1ad", "802.1q", False)
-+
-+
-+@ksft_variants(_vlan_variants())
-+def test(cfg, outer_proto, inner_proto, hw_strip):
-+    """Run a single VLAN test"""
-+
-+    cfg.require_ipver("4")
-+
-+    _setup(cfg, outer_proto, inner_proto, hw_strip)
-+
-+    cmd(f"ping -c 1 -W 5 {REMOTE_IP}")
-+
-+
-+def main() -> None:
-+    """ Ksft boiler plate main """
-+
-+    with NetDrvEpEnv(__file__) as cfg:
-+        ksft_run(cases=[test], args=(cfg, ))
-+    ksft_exit()
-+
-+
-+if __name__ == "__main__":
-+    main()
--- 
-2.34.1
-
+> >>  .../selftests/bpf/progs/tracing_multi_bpf.c   |  61 +++++
+> >>  16 files changed, 869 insertions(+), 120 deletions(-)
+> >>  create mode 100644 tools/testing/selftests/bpf/progs/tracing_multi_bp=
+f.c
+> >>
+> >> --
+> >> 2.55.0
+>
