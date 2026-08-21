@@ -1,86 +1,86 @@
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99E713E00A0
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 18:58:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5DB93E3DAF
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 18:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787338704; cv=none; b=EEEq4huZFn973tNw93YTyKwjgjQOu5ImBy5jmqeiaxqXVCT1gXZOU+nDd0hdhZhPn3PohzeHSbNOir7ogzocoGXYEFhOYR0ZQY6ypYRX/OHexSbS4+H1gUXydBDBISrCpjjaMlgfmoKPzthPSGGhv3tt5/Dx3UBIu3rt9QSYlks=
+	t=1787338712; cv=none; b=ljGSiA1pU7PiF4i1j+b1MxJ9d02ZUuMrLF8ozeKW1gwR2DS1reimT15/CwJAyCsrs9shHaLBjJ+mMhEDeLtP+wzVwNVm5Z0+QHLdsyskSga8GDY3/AEUYWbo2i+9eoP7oX1LXYAul8gJ9/JDP9TkWp+qDZBx/Cmwe6i5Ym0YJCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787338704; c=relaxed/simple;
-	bh=orQNNaUZmojI+/cs8egxOMQvuXgFqATETxJY+MjSr8w=;
+	s=arc-20240116; t=1787338712; c=relaxed/simple;
+	bh=bE3pWVKKdTpuMaQ8HVFIYEoYxc3fMC8VaZaqYRmtIio=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cImnj+Y0YSOASCUIjIpmIO3WtGX5S0CpxR2CYzlnj03/EQUiYHEiQmZETiC4vQjfxoVRVtOIRCz7NEpH3md+Yo00Ys1xjlylbqkl9rlo2oEErqyxX9he2arjHeueEXm7cxm15NrbhjerFhiNhnyKMhIvam0WVY+23eCaOBNizBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DKJg7AUH; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=LUTohYnG; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:To:Cc; b=IoeVgTFgtUhnkH5TrN/3hMp4g857kvgq9/ZVrGByex8WipxQR4ggLwf5slzTDUtV9IvzaUUPMkqP0BI8j4Zm0Fc1FWa9x+nBx/HgXS7ZYjkW09gMUvlcRVfkWLo3I0xUrqPy7mfpKX336r6jA8KEqtb3c3Bq6PQqc1tCvergDCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BT6paRB8; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=ADzPuKSH; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DKJg7AUH";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="LUTohYnG"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BT6paRB8";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="ADzPuKSH"
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787338698;
+	s=mimecast20190719; t=1787338709;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=s7YiByawknR2bKXyMMS9faTlbP3TdC6Smi6Eshk/hFk=;
-	b=DKJg7AUH3vZg8XvIEpRvW8lDImcbuNV1WC3Iyp7mMtG2GyTSylr3cDafwWlI9VcrZFIWsN
-	Ft4w90J3AdpzuCMy6syrvb5EeVJvPJkm5IGwRfrHu/ClX4ez3nkmtc0zNJ2Dsc4jpl6yUf
-	U4b6tQ6ZK6LXwEx0280e79FZT9r01Uw=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=W7KnOp/dzi6YYMtNTCErSrAxbzUuBVlszjrt1QEKyR0=;
+	b=BT6paRB8gMgp28ZMzlCJG6DYbZ7Vkz/dhoLKAjVIV6Pfoqsbd64ooGJafRQBRquj5xxQbd
+	4d42aGFhiEEuCG6Y2PQuWjkETn1qfLJwFaFlIuBCs/Jv71o1WHW9wp1icy88dpF8M3SdKL
+	jf1uR3uQnSgnz+v16iysdqrSwrTjLsc=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-267-pxEd-f30NNKFbxIhA2p46Q-1; Fri, 21 Aug 2026 14:58:16 -0400
-X-MC-Unique: pxEd-f30NNKFbxIhA2p46Q-1
-X-Mimecast-MFC-AGG-ID: pxEd-f30NNKFbxIhA2p46Q_1787338696
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-90c8d271ac9so7444416d6.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 11:58:16 -0700 (PDT)
+ us-mta-39-AwpoXonpM0ypKkm6Qw8l3g-1; Fri, 21 Aug 2026 14:58:05 -0400
+X-MC-Unique: AwpoXonpM0ypKkm6Qw8l3g-1
+X-Mimecast-MFC-AGG-ID: AwpoXonpM0ypKkm6Qw8l3g_1787338685
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-93494527488so218328385a.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 11:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787338696; x=1787943496; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1787338685; x=1787943485; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=s7YiByawknR2bKXyMMS9faTlbP3TdC6Smi6Eshk/hFk=;
-        b=LUTohYnGVgS0R5QUoInTii2VjCg/+5rXJisqABF9/1YrnGD85Q/ypeEsU814uU4dvf
-         0xrMkVBd02ZOz6f5jqxTqLVaJKSFY5dV5A0jzDqWAg7LwOeQEshximHrWaWQnYwujTOT
-         wPK6UC9/tOtftYm5RgUGOG9jsfr+Gxdrihfet9i1DYE2LMr8IHU6BFYDCstzUIL+P3DM
-         AtlL87lbWmGEIDHlfV+/dDaKp6GRo361CVlGFFYvsP7F4l8zzzCBcZ0iqgQHdiQDFbNt
-         oyCpepwwcpdG8UyOO7QR2ZcLzgxfXH523NmJyVbhLcc7OXBs98jlmdbw4MqsCD4XkAPb
-         v+0A==
+        bh=W7KnOp/dzi6YYMtNTCErSrAxbzUuBVlszjrt1QEKyR0=;
+        b=ADzPuKSHQH6pEXjFXHRaIBShK89x8kcJkNsdxqErDNLjymnJlwhaxZxXRuG/v0zsFZ
+         m7Kr9QM2WmVdubt2ebx1S1gOfXAdyh6Rc+8R60MkKEh+TzBaTMvaXjBVoh9yp2rUAWaT
+         3KYJMIBW+4+MCmEG70mWJxlXYo6pz5cuMcOnzbYtJaqBDD+sGhHiFZl03Tz2F1uyOG6v
+         fdbgMyVFEUoSe+5DemlDeZh3l08Z3BlIX4hwAZ17F9FHoFrBr5pSL18YDYs5SvHD8aXN
+         EyyiXfYsos2PzdbIVcPee/X4adSgDlKNQvUDxdwpSr1zGR5M5Abtph96+FUI4vp8h4f2
+         9eFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787338696; x=1787943496;
+        d=1e100.net; s=20251104; t=1787338685; x=1787943485;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=s7YiByawknR2bKXyMMS9faTlbP3TdC6Smi6Eshk/hFk=;
-        b=NPa+236LX14HUNLd8PDi4/qk7qF+kUG6j9dYAI5YQD7y/7M7FK1TwLTFiXhPMjcE9V
-         Pfat3lQdpHZ8mKZhqtPNgoX/eIObuXphR/MMHCi9Pd67A4rxIFD9NLSdW6da5emVYmAS
-         VNdv7zMHQvYs86nbNZKSK/oqesXPBIrzakCnYoGa5VI9YiHdHCtBDPKfEyoMoq7ilBje
-         saVXLasGNPDpn64Tlqu9qtz77WWVQgA14KvsL/2GpaLdQXu23cAOGABB9fzD2jGNwdge
-         yWHDxD/V/ilcWDiXPHbbQosZOIRdqA5Clb9in5R8X1KwnSOlmeRTyHp8lmRBNo6xdF6y
-         /Y5g==
-X-Forwarded-Encrypted: i=1; AHgh+RqeFu++QrXuAyTOfkzqiZVyz5d1/PVcywO4gTha/jeqK+ZudZ33KDyosIDlDlnoIQyYAZeZ0Pvff1Z9T5k1gXY=@vger.kernel.org
-X-Gm-Message-State: AFuF++lx1aTK3chmjMpodRsjnd/aM5nyZt/P1uB91JhUyXnLZbXpz8uS
-	sXFfhT5/8EHt/xRVWSOzZpdjnnXxJl5G+8dp5/9PazPtb8CID0pZgxu64M5YRr+P5a690Xmct6n
-	vUTcru/tGJfCa7Xs72T/qJdAuMr9MLT5eSDcqhcr4moYLIgOkuWXNbBcX3y1BVjr1yFGH3g==
-X-Gm-Gg: AR+sD13YE4b4S03MZyqCK51aVb3DsfmefahFkjmMqsKqzHraYjpriRIXL3rwmWhvG7v
-	2WQK/rNbIrOHnkZxkiNWjsLfjSmWwE/s103hmUv0sGsrxHXJh0U0qQ7xaAZ+FmSJy0CSEvHNz42
-	LyuQDImVeIjP8nl1K7q+QQOUHT3gAho1TOfSH72/rUGOwNlMgshKKtQykd0pE7rI3hkVDNbouEm
-	yxjJ+0FCY+PK+9BskhiO37btHIWoffYZNvsSVOFkCgXn9aVQK3x+8RbTSy7YOX3zjvZ1nyhRZ61
-	QpZXjDNSLABRNECGk2enBvQjPGRZqIKEq7NHCbo1F7nH4M0tzfkJc5rUfXuf4YP+6cpXskHYjly
-	3uIdBgTOztlsH9BpP9NrQ+ByHBN15+HZduSAwH+S/6S56
-X-Received: by 2002:a05:6214:3114:b0:8de:25f7:98bc with SMTP id 6a1803df08f44-90c8fa2ace7mr7854906d6.22.1787338695852;
-        Fri, 21 Aug 2026 11:58:15 -0700 (PDT)
-X-Received: by 2002:a05:6214:3114:b0:8de:25f7:98bc with SMTP id 6a1803df08f44-90c8fa2ace7mr7854186d6.22.1787338695297;
-        Fri, 21 Aug 2026 11:58:15 -0700 (PDT)
+        bh=W7KnOp/dzi6YYMtNTCErSrAxbzUuBVlszjrt1QEKyR0=;
+        b=VPBBRGzAnapCziZ8+FeOevFq2hRZk4ebKv3u1yX5784kB0cbq7soE5S/FVPY1ecE22
+         xoORXOgv/1RlBO10AN0zH1joNaMfTLheKDxB+1gdsktI+pBi6Q0T38SpzjUXMRrCSioH
+         UDZxptyxLg3JLSwt+lto1rA7zByQuSQyoBcoFqcO+KQ3V7hPmI0VpVNI12/mD+WIta2n
+         dS/vuHknsf9BUUWfwHbdbWe0fgRUpmIxhBBQZZ4tTi82Gp3tTEu/cRgnBUxgqJ/4Dli3
+         2H/OOq3j29gunH3N6ai52nuFY6c0a7Av2JfmmhTMIUABwT989nMMWKmkx2o/qNxTpl3V
+         l1+w==
+X-Forwarded-Encrypted: i=1; AHgh+RrXsZUFypA1jJb7+34J6fxX4JrrTyeIebutaL06p9DMUxPnCsyYLPW6Pkh2Jt929L8nGNdRvpVQ9Dq5rGZxLcg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mjaR9k8Y6ANPM88s0YGfOOeXwFwI+9EBYdrsVirdUXGT8ukD1y
+	IUuCyJG2XFA8oFSX0siDcWZk0x8beljY5+Zbo5BVAxTxDK9p1pDmrsWCB1I0AF08rG3iMt9yK7H
+	yrLvSTa+95ljdm7fXmve1uOqQjIu2w+uHFFesxzVRHAXdYkICr0TM4QCkQxF4KxR6IJaNnA==
+X-Gm-Gg: AR+sD10K4JG7GrtqIFI5Wc2qd+D0vMo0jITB9czRtg13/IZq2Gj+n36zVL5IZ/3B1td
+	3LoznMT6q/CO4N65r1FmEAvcg7FAbIh10BbUMOhXGUVqrNMHjvdxwPuZ9BOGshNmEzveAOPXLRr
+	fmgyneE9gY680MLrCV6xgwrri9o3CSfQbpA/wmWAKNCLiK1EZWtVw3ICA4QbIWsWi8rXbHKgL/k
+	+XmD2hL2AOpmZMiVrxnRQmcpMUyUz/TxAESpVPMJrv/RxUdX6SInhC+uYQwzoZwb3yzDy78AtcI
+	IqtIVWTeBQlRsW6XB0IdJJlffKp/C20JbA+D5TS8ed2gyHfhlO3zMtPuQgjHwoM9f9/i2a7r10u
+	jek55ZkIpYVHRvyUyDkJV2SU9LdGn+Jiayzw5ZlPvp26k
+X-Received: by 2002:a05:620a:601b:b0:930:a26a:fb2a with SMTP id af79cd13be357-937394324demr865129785a.2.1787338684946;
+        Fri, 21 Aug 2026 11:58:04 -0700 (PDT)
+X-Received: by 2002:a05:620a:601b:b0:930:a26a:fb2a with SMTP id af79cd13be357-937394324demr865124585a.2.1787338684435;
+        Fri, 21 Aug 2026 11:58:04 -0700 (PDT)
 Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c6b42455dsm51197756d6.37.2026.08.21.11.58.11
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9372fdf59f3sm385976385a.10.2026.08.21.11.58.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 11:58:11 -0700 (PDT)
+        Fri, 21 Aug 2026 11:58:03 -0700 (PDT)
 From: Eric Chanudet <echanude@redhat.com>
-Date: Fri, 21 Aug 2026 14:57:02 -0400
-Subject: [PATCH 10/11] selftests: cgroup: add memcg hugetlb_cma tests
+Date: Fri, 21 Aug 2026 14:56:58 -0400
+Subject: [PATCH 06/11] memcg: register per-area usage counters in cgroupfs
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -89,7 +89,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260821-cma-memcg-regions-v1-10-d21b165b8440@redhat.com>
+Message-Id: <20260821-cma-memcg-regions-v1-6-d21b165b8440@redhat.com>
 References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
 In-Reply-To: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -109,260 +109,144 @@ Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
  Albert Esteve <aesteve@redhat.com>, Eric Chanudet <echanude@redhat.com>
 X-Mailer: b4 0.14.3
 
-test_hugetlb_cma_charge gets a hugepage by incrementing nr_hugepages,
-confirms memory.cma.hugetlb0.current increased as expected, then
-releases it and checks the counter returns to its initial value.
+Expose memory.cma.<area>.{current,max} files under each non-root cgroup
+when cgroupfs memory_cma_accounting option is enabled.
 
-test_hugetlb_cma_limit sets memory.cma.hugetlb0.max to 0, tries to
-allocate a hugepage and verifies it fails.
+memory.cma.<area>.current reports the cgroup's CMA usage for that area.
+memory.cma.<area>.max is a read-write limit (default: max).
+
+Each CMA area gets a cftype template with its name set from the CMA
+area's name.
 
 Signed-off-by: Eric Chanudet <echanude@redhat.com>
 ---
- tools/testing/selftests/cgroup/test_cma_memcg.c | 209 ++++++++++++++++++++++++
- 1 file changed, 209 insertions(+)
+ Documentation/admin-guide/cgroup-v2.rst | 15 ++++++
+ mm/memcontrol.c                         | 89 +++++++++++++++++++++++++++++++++
+ 2 files changed, 104 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_cma_memcg.c b/tools/testing/selftests/cgroup/test_cma_memcg.c
-index b5b5ea140518..9bd41d9a6177 100644
---- a/tools/testing/selftests/cgroup/test_cma_memcg.c
-+++ b/tools/testing/selftests/cgroup/test_cma_memcg.c
-@@ -4,7 +4,9 @@
- #include <linux/limits.h>
- #include <sys/mman.h>
- #include <stdio.h>
-+#include <stdlib.h>
- #include <string.h>
-+#include <dirent.h>
- #include <fcntl.h>
- #include <linux/dma-heap.h>
- #include <sys/ioctl.h>
-@@ -15,6 +17,10 @@
- #define CMA_RESERVED_CURRENT	"memory.cma.reserved.current"
- #define CMA_RESERVED_MAX	"memory.cma.reserved.max"
+diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
+index 3dfc13f31a0c..39871a7a08a8 100644
+--- a/Documentation/admin-guide/cgroup-v2.rst
++++ b/Documentation/admin-guide/cgroup-v2.rst
+@@ -1928,6 +1928,21 @@ The following nested keys are defined.
+ 	This setting has no effect if zswap is disabled, and swapping
+ 	is allowed unless memory.swap.max is set to 0.
  
-+#define HUGETLB_CMA_CURRENT	"memory.cma.hugetlb0.current"
-+#define HUGETLB_CMA_MAX	"memory.cma.hugetlb0.max"
-+#define HUGEPAGES_DIR		"/sys/kernel/mm/hugepages"
++  memory.cma.<area>.current
++        A read-only single value file which exists on non-root cgroups. <area>
++        is the CMA area name (e.g. "reserved" for the default DMA CMA area).
 +
- static int cma_heap_alloc(int heap_fd, size_t size)
- {
- 	struct dma_heap_allocation_data data = {
-@@ -145,6 +151,207 @@ static int test_cma_limit(const char *root)
- 	return rc;
++        The total amount of CMA memory currently charged to the cgroup for the
++        given CMA area. Only accounted when memory_cma_accounting is enabled.
++
++  memory.cma.<area>.max
++        A read-write single value file which exists on non-root cgroups. The
++        default is "max".
++
++        CMA usage hard limit for the given area. If a cgroup's CMA usage for
++        this area exceeds this limit, the allocation will fail. Only enforced
++        when memory_cma_accounting is enabled.
++
+   memory.pressure
+ 	A read-only nested-keyed file.
+ 
+diff --git a/mm/memcontrol.c b/mm/memcontrol.c
+index 8eca00d30fc5..f28d610a59ce 100644
+--- a/mm/memcontrol.c
++++ b/mm/memcontrol.c
+@@ -6182,3 +6182,92 @@ void mem_cgroup_show_protected_memory(struct mem_cgroup *memcg)
+ 		K(atomic_long_read(&memcg->memory.children_min_usage)),
+ 		K(atomic_long_read(&memcg->memory.children_low_usage)));
  }
- 
-+static long find_largest_hugepage_size_kb(void)
++
++#ifdef CONFIG_CMA
++static int memory_cma_current_show(struct seq_file *m, void *v)
 +{
-+	DIR *dir;
-+	struct dirent *entry;
-+	long max_size = 0;
++	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
++	int idx = seq_cft(m)->private;
++	unsigned long cur = page_counter_read(&memcg->cma_counters[idx]);
 +
-+	dir = opendir(HUGEPAGES_DIR);
-+	if (!dir)
-+		return -1;
++	seq_printf(m, "%lu\n", cur * PAGE_SIZE);
 +
-+	while ((entry = readdir(dir)) != NULL) {
-+		long size;
-+
-+		if (sscanf(entry->d_name, "hugepages-%ldkB", &size) == 1) {
-+			if (size > max_size)
-+				max_size = size;
-+		}
-+	}
-+	closedir(dir);
-+
-+	return max_size > 0 ? max_size : -1;
++	return 0;
 +}
 +
-+static long read_sysfs_long(const char *path)
++static int memory_cma_max_show(struct seq_file *m, void *v)
 +{
-+	FILE *f;
-+	long val = -1;
++	struct mem_cgroup *memcg = mem_cgroup_from_seq(m);
++	int idx = seq_cft(m)->private;
++	unsigned long max = READ_ONCE(memcg->cma_counters[idx].max);
 +
-+	f = fopen(path, "r");
-+	if (!f)
-+		return -1;
-+	if (fscanf(f, "%ld", &val) != 1)
-+		val = -1;
-+	fclose(f);
-+	return val;
++	return seq_puts_memcg_tunable(m, max);
 +}
 +
-+static int write_sysfs_long(const char *path, long val)
++static ssize_t memory_cma_max_write(struct kernfs_open_file *of, char *buf,
++				    size_t nbytes, loff_t off)
 +{
-+	FILE *f;
++	struct mem_cgroup *memcg = mem_cgroup_from_css(of_css(of));
++	int idx = of_cft(of)->private;
++	unsigned long max;
 +	int rc;
 +
-+	f = fopen(path, "w");
-+	if (!f)
-+		return -1;
-+	rc = fprintf(f, "%ld", val);
-+	fclose(f);
-+	return rc < 0 ? -1 : 0;
++	buf = strstrip(buf);
++	rc = page_counter_memparse(buf, "max", &max);
++	if (rc)
++		return rc;
++
++	xchg(&memcg->cma_counters[idx].max, max);
++
++	return nbytes;
 +}
 +
-+static int test_hugetlb_cma_charge(const char *root)
++static struct cftype cma_dfl_tmpl[] = {
++	{
++		.name = "current",
++		.seq_show = memory_cma_current_show,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{
++		.name = "max",
++		.seq_show = memory_cma_max_show,
++		.write = memory_cma_max_write,
++		.flags = CFTYPE_NOT_ON_ROOT,
++	},
++	{ }
++};
++#define CMA_DFL_TMPL_SIZE	(ARRAY_SIZE(cma_dfl_tmpl) - 1)
++
++static struct cftype *cma_dfl_files;
++
++static int __init mem_cgroup_cma_init(void)
 +{
-+	int rc = KSFT_SKIP, in_cg = 0;
-+	long hpage_size_kb, hpage_size_bytes;
-+	long orig_nr = -1, new_nr, before, after;
-+	char nr_path[PATH_MAX];
-+	char *cg;
++	struct cftype *cft;
++	unsigned int i, j;
++	int count;
 +
-+	hpage_size_kb = find_largest_hugepage_size_kb();
-+	if (hpage_size_kb < 0) {
-+		ksft_print_msg("no hugepage size found\n");
-+		return KSFT_SKIP;
-+	}
-+	hpage_size_bytes = hpage_size_kb * 1024;
++	if (mem_cgroup_disabled() || !cma_area_count)
++		return 0;
 +
-+	snprintf(nr_path, sizeof(nr_path),
-+		 HUGEPAGES_DIR "/hugepages-%ldkB/nr_hugepages", hpage_size_kb);
++	count = cma_area_count * CMA_DFL_TMPL_SIZE;
++	cma_dfl_files = kcalloc(count + 1, sizeof(*cma_dfl_tmpl), GFP_KERNEL);
++	if (!cma_dfl_files)
++		return -ENOMEM;
 +
-+	cg = cg_name(root, "memcg_hugetlb_cma_charge");
-+	if (!cg)
-+		goto cleanup;
++	for (i = 0; i < cma_area_count; ++i)
++		for (j = 0; j < CMA_DFL_TMPL_SIZE; ++j) {
++			cft = &cma_dfl_files[i * CMA_DFL_TMPL_SIZE + j];
++			*cft = cma_dfl_tmpl[j];
++			snprintf(cft->name, MAX_CFTYPE_NAME, "cma.%s.%s",
++				 cma_get_name(&cma_areas[i]),
++				 cma_dfl_tmpl[j].name);
++			cft->private = i; /* cma area index for counters in callbacks. */
++			lockdep_register_key(&cft->lockdep_key);
++		}
 +
-+	if (cg_create(cg))
-+		goto cleanup;
++	WARN_ON(cgroup_add_dfl_cftypes(&memory_cgrp_subsys, cma_dfl_files));
 +
-+	if (cg_enter_current(cg))
-+		goto cleanup;
-+	in_cg = 1;
-+
-+	if (cg_read_long(cg, HUGETLB_CMA_CURRENT) < 0) {
-+		ksft_print_msg("hugetlb CMA counters not available\n");
-+		goto cleanup;
-+	}
-+
-+	orig_nr = read_sysfs_long(nr_path);
-+	if (orig_nr < 0) {
-+		ksft_print_msg("cannot read %s\n", nr_path);
-+		goto cleanup;
-+	}
-+
-+	before = cg_read_long(cg, HUGETLB_CMA_CURRENT);
-+
-+	if (write_sysfs_long(nr_path, orig_nr + 1)) {
-+		ksft_print_msg("cannot write %s\n", nr_path);
-+		goto cleanup;
-+	}
-+
-+	new_nr = read_sysfs_long(nr_path);
-+	if (new_nr <= orig_nr) {
-+		ksft_print_msg("failed to allocate a hugepage\n");
-+		goto cleanup;
-+	}
-+
-+	rc = KSFT_FAIL;
-+	after = cg_read_long(cg, HUGETLB_CMA_CURRENT);
-+
-+	if (after - before < hpage_size_bytes) {
-+		ksft_print_msg(
-+			"hugetlb CMA counter not charged: before=%ld after=%ld expected +%ld\n",
-+			before, after, hpage_size_bytes);
-+		goto cleanup;
-+	}
-+
-+	write_sysfs_long(nr_path, orig_nr);
-+
-+	after = cg_read_long(cg, HUGETLB_CMA_CURRENT);
-+	if (!values_close(before, after, 3)) {
-+		ksft_print_msg(
-+			"hugetlb CMA counter not uncharged: before=%ld after=%ld\n",
-+			before, after);
-+		goto cleanup;
-+	}
-+
-+	rc = KSFT_PASS;
-+
-+cleanup:
-+	if (orig_nr >= 0)
-+		write_sysfs_long(nr_path, orig_nr);
-+
-+	if (in_cg)
-+		cg_enter_current(root);
-+	cg_destroy(cg);
-+	free(cg);
-+
-+	return rc;
++	return 0;
 +}
-+
-+static int test_hugetlb_cma_limit(const char *root)
-+{
-+	int rc = KSFT_SKIP, in_cg = 0;
-+	long hpage_size_kb;
-+	long orig_nr, new_nr;
-+	char nr_path[PATH_MAX];
-+	char *cg;
-+
-+	hpage_size_kb = find_largest_hugepage_size_kb();
-+	if (hpage_size_kb < 0) {
-+		ksft_print_msg("no hugepage size found\n");
-+		return KSFT_SKIP;
-+	}
-+
-+	snprintf(nr_path, sizeof(nr_path),
-+		 HUGEPAGES_DIR "/hugepages-%ldkB/nr_hugepages", hpage_size_kb);
-+
-+	cg = cg_name(root, "memcg_hugetlb_cma_limit");
-+	if (!cg)
-+		goto cleanup;
-+
-+	if (cg_create(cg))
-+		goto cleanup;
-+
-+	if (cg_enter_current(cg))
-+		goto cleanup;
-+	in_cg = 1;
-+
-+	if (cg_read_long(cg, HUGETLB_CMA_MAX) < 0) {
-+		ksft_print_msg("hugetlb CMA counters not available\n");
-+		goto cleanup;
-+	}
-+
-+	if (cg_write(cg, HUGETLB_CMA_MAX, "0")) {
-+		ksft_print_msg("cannot set hugetlb CMA limit\n");
-+		goto cleanup;
-+	}
-+
-+	orig_nr = read_sysfs_long(nr_path);
-+	if (orig_nr < 0) {
-+		ksft_print_msg("cannot read %s\n", nr_path);
-+		goto cleanup;
-+	}
-+
-+	write_sysfs_long(nr_path, orig_nr + 1);
-+	new_nr = read_sysfs_long(nr_path);
-+
-+	rc = KSFT_FAIL;
-+	if (new_nr > orig_nr) {
-+		ksft_print_msg("hugetlb CMA limit not enforced\n");
-+		write_sysfs_long(nr_path, orig_nr);
-+	} else {
-+		rc = KSFT_PASS;
-+	}
-+
-+cleanup:
-+	if (in_cg)
-+		cg_enter_current(root);
-+	cg_destroy(cg);
-+	free(cg);
-+
-+	return rc;
-+}
-+
- #define T(x) { x, #x }
- struct cma_memcg_tests {
- 	int (*fn)(const char *root);
-@@ -152,6 +359,8 @@ struct cma_memcg_tests {
- } tests[] = {
- 	T(test_cma_charge),
- 	T(test_cma_limit),
-+	T(test_hugetlb_cma_charge),
-+	T(test_hugetlb_cma_limit),
- };
- #undef T
- 
++subsys_initcall(mem_cgroup_cma_init);
++#endif /* CONFIG_CMA */
 
 -- 
 2.53.0
