@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EFB4503F0;
-	Fri, 21 Aug 2026 09:35:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C073346983A;
+	Fri, 21 Aug 2026 09:54:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787304958; cv=none; b=sBwoHS82Z+18W3D+GOfVi4ZHuvlu1aTZ/HvJdJ1+Jg+DNrVFF39KKlGREZhNxPzK02ffau52dIUOumjn0pq5tBZ/EScIa0lgPrxbFK6d+ydIhg/sgFQubQYcnbc1moVDSzhA3HVf4euzeMaDPLa6eqbF9ouOEfT1g6zuQs9usQU=
+	t=1787306062; cv=none; b=tITuKm5aD/EGhBGb13cU4v9V0JpJR92NFXf7wjW253JASfxVygd136nBRgyFEdF238wJg7RtyzDu+nDKQgHqkq7oQmY6/z6eunVs8S230s/6DvM96YK9eYMqKyVkF/Uww3sCva7jffnz1C7/eriGuE7wrx4LlJ4p0QEv2f8A3sY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787304958; c=relaxed/simple;
-	bh=5ei7Hhiq08cL4gKBmf7/EX0lRKP+z4r1X75bHIbtE8E=;
+	s=arc-20240116; t=1787306062; c=relaxed/simple;
+	bh=Nz9hokw3F6xiSwJBUm0t+qitUnWerwH3uRhk6Hodtis=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iw62xgHK9Lc//cTcsAWPP/O+ZVznwpKwwwBDxuoHjrztNMo2M3IThEr3d78c1H9edmjG5UPTeRVXYCl1hoe5ODoJd10yE8hiVLay24HBqpSJE1RLRn5dbWJmK9iigqTmaCX4XmWpFVaqWSnrUvvlEIo6+M8GTA3i+HGeJFCd5TY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ybx2d0qc; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=iU3aDtsUA4nML2qahLRIMFoWxihshF+8vftzWX0L2jWX7HTIRek7VkDAXT05+nJSTmO35MbMas29BFKPA0+WiFuV2NjN0ZAKdgSCj8xvW/rSrTEnq2emJUbuqAWt5TnLN9iBAQ3RVa0MXuyoiJ61dye+Oe13Nw7Go4Nf5M/PmzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SVJrWNLC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ybx2d0qc"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763161F000E9;
-	Fri, 21 Aug 2026 09:35:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SVJrWNLC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D97B51F000E9;
+	Fri, 21 Aug 2026 09:53:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787304947;
-	bh=M2b7depORYOpe7iBmdnQUOKdXzN4AqhClHk74YTKfa0=;
+	s=k20260515; t=1787306044;
+	bh=TjPLxJNysrCM3XRTjy0rjnsBt7BAmnyP4ZMFpEcN1Sw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=Ybx2d0qcbjFy8oda/M9EkTCbTZVsfTq5k3Z+69THEtOtJUa9tgYLJHxB+NTx+rCmH
-	 PmgmuNlohvFVpv2pVfg9qQMHbcm1AjOsCSd8JlwL6/nM+wBNCkM0kuz62GeUI/NQYv
-	 7eIRLEOx9tTIlMqt+gfNmTW3Oji0qqheg/TdTTZSNBTZN0sEczGkGfKfJY+9DUrbJX
-	 vL3gqc+srQF5Phke/TrngURMjYrIUMEh1AJqj0/MZo2qMTrTT9rWseYZ6LrTXv9yAY
-	 Vf8fMSEY0d35qYvwPWVMt/F74FCTAEYxL2RLTYi4xJRFRntWGKmHHqA0yBlxKP+K55
-	 ElOafvaTr2uSQ==
-Message-ID: <774ee653-5f01-4a06-965f-fd3517743c08@kernel.org>
-Date: Fri, 21 Aug 2026 11:35:40 +0200
+	b=SVJrWNLCMys4aydRPUHIVTuX7TEEsk2EQ1EQ4KNIWMxdspWLnKdBwX8GiAsWuIA+3
+	 xeetpygDIYQhcq5Cx/zuvud0+6wiM3d5sexk5Q/bK3+8Mml/0oCrHplnLlt0S8ybqi
+	 /v20kjxrlHkWTxETU19UioaRAE7YVc5VVJXmYwwOfl3DsT46cDmwqSH4k6xoBskYkV
+	 MM9QjlqvBNeACDehdIfoTTS8XLm8SOGTTMipmrUM3VLqcNI6GqRjHcn3oIa3Rck1Yj
+	 Bd7E7KVogJmt1BFhraC9rsxas26BHTa4+xJtYY3vX38LN7DVocCouQGFjByCEAwPGG
+	 fm5ZyV0GW0Mbg==
+Message-ID: <59525a3e-6003-4ab1-bd75-e0c7dcc8a257@kernel.org>
+Date: Fri, 21 Aug 2026 11:53:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,24 +35,18 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] kselftest: mm: prevent random failure of huge page
- split for khugepaged
-To: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+Subject: Re: [RFC PATCH 0/3] selftests: mm: introduce page allocation stall
+ reproducer
+To: Andrew Morton <akpm@linux-foundation.org>, Jason Miu <jasonmiu@google.com>
+Cc: Shuah Khan <shuah@kernel.org>, David Rientjes <rientjes@google.com>,
+ Shakeel Butt <shakeel.butt@linux.dev>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
  Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
- <20260820-fix_split-v1-1-ab430c58c7cf@arm.com>
- <DKU173CETFYO.1RJA1CSOC5S99@nvidia.com> <aodwNr_zgOn55z3W@e129823.arm.com>
- <DKU60290OED0.12P9UF0Z97DND@nvidia.com> <aoeT20fPw57DtpGe@e129823.arm.com>
+ Greg Thelen <gthelen@google.com>, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20260819070538.2404983-1-jasonmiu@google.com>
+ <20260820170348.48f04ed654dce5193ca3a532@linux-foundation.org>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -99,42 +93,77 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aoeT20fPw57DtpGe@e129823.arm.com>
+In-Reply-To: <20260820170348.48f04ed654dce5193ca3a532@linux-foundation.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 8/21/26 01:55, Yeoreum Yun wrote:
-> On Thu, Aug 20, 2026 at 07:37:29PM -0400, Zi Yan wrote:
->> On Thu Aug 20, 2026 at 5:23 PM EDT, Yeoreum Yun wrote:
->>>
->>> Well, this also works with hugepage_save_settings() and write the
->>> khugepaged/scan_sleep_millisecs with the maximum integer.
->>>
->>> I don't have a strong opinion but since it seems more hackish way to
->>> change scan_sllep_millisecs, I use madvise() with MADV_NOHUGEPATE.
->>>
->>> Would it be better to change using APIs in hugepage_setting,h?
->>
->> No. I did not realize there is no way of stopping khugepaged completely.
->>
->> BTW, I am curious about your khugepaged config causing this issue.
->> IIRC, khugepaged scan interval is about minutes and
->> the time between madvise(MADV_HUGEPAGE) and the second
->> is_backed_by_folio() should not be that long.
+On 8/21/26 02:03, Andrew Morton wrote:
+> On Wed, 19 Aug 2026 00:05:35 -0700 Jason Miu <jasonmiu@google.com> wrote:
 > 
-> Yes. it's relly timing sensitive and I've failed to reproduce in the
-> real hardware. but in the emulation environment it often failed with 
-> the scan_sllep_millisecs as 10 seconds while the test running.
-> 
+>> Background
+>> ==========
+>> Under severe system memory pressure, system unresponsiveness often 
+>> occurs due to page allocation stalls. In commit 94e0bcde055e ("mm, 
+>> page_alloc: reintroduce page allocation stall warning"), David Rientjes 
+>> introduced a warning mechanism to emit a kernel log when a page 
+>> allocation takes longer than 10 seconds. This log is used to correlate
+>> a frozen system with the system memory state at the time of failure.
 >>
->> For your patch, maybe you want to check the return value of madvise() to
->> make sure it succeeds.
+>> To further debug and analyze these allocation stalls, we need a 
+>> reproducible test case. This patch series introduces a new selftest 
+>> designed to artificially mimic the severe memory pressure scenarios 
+>> seen in production, allowing us to observe the resulting allocation 
+>> stalls.
 > 
-> Yeap. but it seems enough just worning message for the madvise() with
-> MADV_NOHUGEPAGE.
+> Interesting.
+> 
+>>  lib/Kconfig.debug                             |  11 +
+>>  lib/Makefile                                  |   1 +
+>>  lib/test_mempress_timer.c                     | 140 +++++++++++
+>>  .../testing/selftests/mm/page_alloc_stall.sh  |  80 ++++++
+>>  .../selftests/mm/page_alloc_stall_pressure.py | 235 ++++++++++++++++++
+>>  5 files changed, 467 insertions(+)
+>>  create mode 100644 lib/test_mempress_timer.c
+>>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall.sh
+>>  create mode 100644 tools/testing/selftests/mm/page_alloc_stall_pressure.py
+> 
+> Nothing fits very well, does it?
+> 
 
-Yeah, I assume we can assume that we are running on a recent enough kernel that
-supports MADV_NOHUGEPAGE.
+Why are we mixing python and sh?
+
+> 
+> 
+> selftests is for quick tests which are run by run_kselftest.sh.  You
+> had to place it in selftests because there isn't anywhere obvious for
+> it to live.
+> 
+> So I suggest a brand new tools/testing/stresstests/mm.  If we create
+> this, people will jump on it and start adding things which presently
+> reside in their personal collections.
+
+There was recently a discussion around performance tests, and one thought was to
+not carry these in the kernel tree at all.
+
+Stresstests, not sure.
+
+So agreed, that this shouldn't be an ordinary selftests (nothing we would want
+to run autoamtically), but I am also not 100% sure about having performance /
+stress tests in the kernel tree. It's all stuff we have to maintain and drag along.
+
+> 
+> 
+> 
+> I can't say I like "mempress".  Is "memory_pressure" too wordy?
+> 
+> 
+> 
+> All of lib/test*.c shouldn't be in lib/.  lib/ is for library code! 
+> Again, we put them there because people are shy about doing mkdir.
+
+There were recent discussions where I raised the same. I would prefer if testing
+kernel modules are somewhere in tools/testing/ if possible.
+
 
 -- 
 Cheers,
