@@ -1,121 +1,142 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FAE845C719
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 09:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.180
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787303060; cv=pass; b=iU8dNHZijF9rwAsAnjCvi5V4Iixaseh3mXBfV8W7Ct3Xi1X5z9pNMLj3ukBmUKpa595WeKi7o9Dp/rT+XqVF+AHvgqSni4NL0wf4nubuMRdjJrd+lBGQ2jOFbLoWKpAuRcQV3Hz8MbksuMWQ4p0LLVD2NXXE0q5TMhj+sgMVWJ0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787303060; c=relaxed/simple;
-	bh=VvAKI03UsQIUGCtxyHLAe9+ky+jwzzuetRGdfGzlXsI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=oecSLERwI/KchXYo/UfAMZUP8LUkNlv21je5s6AqVWGV0oK1ThB9OUGIVq0MwIDZXoy+w+hCRs+SZ39DcIZxSNK+J1AXoR1XH+c9QajHFrYwP92etZJpO+9zstijPAJBhBxyfNMLYhKQWcO9aQ46z3tfL+vEo35fok8Yhf2SNVo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hEpjkFBb; arc=pass smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35EFB4503F0;
+	Fri, 21 Aug 2026 09:35:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787304958; cv=none; b=sBwoHS82Z+18W3D+GOfVi4ZHuvlu1aTZ/HvJdJ1+Jg+DNrVFF39KKlGREZhNxPzK02ffau52dIUOumjn0pq5tBZ/EScIa0lgPrxbFK6d+ydIhg/sgFQubQYcnbc1moVDSzhA3HVf4euzeMaDPLa6eqbF9ouOEfT1g6zuQs9usQU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787304958; c=relaxed/simple;
+	bh=5ei7Hhiq08cL4gKBmf7/EX0lRKP+z4r1X75bHIbtE8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Iw62xgHK9Lc//cTcsAWPP/O+ZVznwpKwwwBDxuoHjrztNMo2M3IThEr3d78c1H9edmjG5UPTeRVXYCl1hoe5ODoJd10yE8hiVLay24HBqpSJE1RLRn5dbWJmK9iigqTmaCX4XmWpFVaqWSnrUvvlEIo6+M8GTA3i+HGeJFCd5TY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ybx2d0qc; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hEpjkFBb"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d01548ac96so1251015ad.3
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 02:04:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787303047; cv=none;
-        d=google.com; s=arc-20260327;
-        b=lQjR+cKtBoLJ3CptSYw3xhvRKOcqbEb6pmKdtbBRAhxRzjMemVL7y8uqQd7vyX8c/J
-         vR9UlJMVMUIbk0tE0soClJm6a1vAIVQYs/+zdynxnbNlMUAxwelLdy5dlMEt7rbqjK25
-         a+nevYnW5J/IR4jPhgh5ui2VhREk/fedVJUpjBlRhIY9JDlasJO1ORjHPayJBHciHu1X
-         uREFt5ubj4T9+/C4tHlFXjKLXk2sAkiiOsGszoVtfK5d1nHx3xbpbmwJXlfIJ2RsMMjZ
-         D4ps76Oa5SyH5jsCSq9jvawlPU+FeLuh5Wv6BVwYvgjwUSr4r1xdiUxN6vJtxfR0/MHe
-         i8WA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=VvAKI03UsQIUGCtxyHLAe9+ky+jwzzuetRGdfGzlXsI=;
-        fh=IrjXGwklMWElvzB/82th1kJFLMYXQHxVpTJv1G4oFRw=;
-        b=Utk4dBoiGK261xiLghJQsZURF57wfQ3Kwg14SyzWIFOdGc69CA/CHtngVIhfobAT66
-         pC5w5idioE6GzQk15jNDrK7XHOTJ3q5xkSQH756SbK5aMQI8xi8aKwKe6+WM8X28towG
-         nnaneaz4ujbmvD8bOaAUmeQs0tDMltTgUiqFosrOeQ2120OY3QaWYWLs0TpYb8yIXqWQ
-         SbgRQfQ1bleMQN/HYBXRnfYKeWX6X0NTdjaoAkFoSPnMLCwp5QssSoMM4YjghhsThqHJ
-         MZFPrmMDmFo1WvaR80Ov4JGR+vcSaR9s4oK0dBcrHVXJIj89NUtiTxS/yWHlVdjbrFTa
-         tjWw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787303047; x=1787907847; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=VvAKI03UsQIUGCtxyHLAe9+ky+jwzzuetRGdfGzlXsI=;
-        b=hEpjkFBbFwiz1VLQFJHGJq3Pd2gbI7qY+KyHgUKtXXcifF3P86pXN0jOc+uftAP0tp
-         wUaJHkgYC7KN5R9kZD7jVYyUhcO1HLr4mzhBfrpksBg9eh8T7ct6vPy2X2j1FdfrqHBB
-         vkYrFTCDPCSaUb+1U0F4iVXMgtXfncdV1c/7SS2Z+Iun4UvQRCkcHIey4iL2Lz9PkIah
-         1h5FpL9u6qZf435mxJwLPXKn03MNoU4VVlQhqdqj5zwQNzUc68AXoJhXflVSyCb9P08i
-         dRG+UROBArOOhhucFaLNxNfj0NL5DXLRuP0JzH/6PwQqDvgO+DHdXlcFx8crcEkw0tiZ
-         huqw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787303047; x=1787907847;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=VvAKI03UsQIUGCtxyHLAe9+ky+jwzzuetRGdfGzlXsI=;
-        b=a9LKbhXMZamFGHOf/4vLyuZbtRGlIu22NWnEhjDdoZyvqWnPyEqyhwC9eggF8J86kx
-         PtK/K93Q3xOMi+a2N+N8Oby8sWzxfJiiu1SSYzmzueT6wJrGsMyDzNr+vCFVyzcbtBo3
-         8s3x0Oz5QbJTg0n9BgZNfkmwyXrGxl+GPRjgdXKOeDo2F6Q6X9z9i8zaDI82b6rgRfy+
-         pf5kN2VajQTab/JzAGMD04mysX7zw3L0hBS4Lw9ADlAtdgS1QMYUFo1TJUb/h/u4HFlV
-         FlKuL4Iadbj4dFXWVwt4u1tuLPA5BAYrGpMCdWXna/Y9FekBDASnd2CvuWGpf+g2e6Zo
-         cRjA==
-X-Forwarded-Encrypted: i=1; AHgh+Rons7U1+OLiU3jDht+UQJsxCvTl3sbA2nBSUqsWPS+F33UveqVCLKjHng8/6L5WmpX/XMbbne2EHPfITrnhKh4=@vger.kernel.org
-X-Gm-Message-State: AFuF++l98LoXpZJmZ0J/bO+muJ9B8mCurfcNDrqn984dCIFPmUtI9PUQ
-	ma0qzr3+KtIA+rm7wD2tVvyVtcxgoZAMh+XoJtfCbiSb5tte6E1o4ZMvUEIBKnpd8M1p5rXeZC0
-	Sbfx77dXKvEQSVBQJE1vr0GP2QimV5Yc=
-X-Gm-Gg: AR+sD11WZLRK4Qm+li1gULL4k9sCCPOKI7xXW7iiXn35FvlDqnwm2nNyaTysqb7akjG
-	mplcyB2ekXH1aiMwBzcuKg5HU5YW6E70SaKhpmZ3mCGWF41pNLtJIOKIJNMyURbFHc1fhy5aoDi
-	G156qx3ee1B02+4Ux3Tv262Eu5W1VcTKCeqCNLC7w8iRfN6BDFdyCTKUsXDnd6TzAcqiyn42feR
-	fkOWxu45T1QduoFygyjSS5+ZoWRpvv2QxqvqCKCn9TlVr184AID3bEkXdd2BbzHT1Pjz28xbEWd
-	9OXIOG0d8lp56gIs66wZTxsu3buhysk1XqOhcyt+h1nS1S+g/3wH2sQz6FIGmiZg8tCJddQQluh
-	ODeHJGVJXvay1jZnKtpdHcfs8W3BEXxuLFd7k1wANOB/cxw1ZWHwje8gqsQ3N
-X-Received: by 2002:a17:902:fc4e:b0:2d3:aecd:51f7 with SMTP id
- d9443c01a7336-2d64ae3a7c7mr46437205ad.1.1787303047375; Fri, 21 Aug 2026
- 02:04:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ybx2d0qc"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 763161F000E9;
+	Fri, 21 Aug 2026 09:35:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787304947;
+	bh=M2b7depORYOpe7iBmdnQUOKdXzN4AqhClHk74YTKfa0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Ybx2d0qcbjFy8oda/M9EkTCbTZVsfTq5k3Z+69THEtOtJUa9tgYLJHxB+NTx+rCmH
+	 PmgmuNlohvFVpv2pVfg9qQMHbcm1AjOsCSd8JlwL6/nM+wBNCkM0kuz62GeUI/NQYv
+	 7eIRLEOx9tTIlMqt+gfNmTW3Oji0qqheg/TdTTZSNBTZN0sEczGkGfKfJY+9DUrbJX
+	 vL3gqc+srQF5Phke/TrngURMjYrIUMEh1AJqj0/MZo2qMTrTT9rWseYZ6LrTXv9yAY
+	 Vf8fMSEY0d35qYvwPWVMt/F74FCTAEYxL2RLTYi4xJRFRntWGKmHHqA0yBlxKP+K55
+	 ElOafvaTr2uSQ==
+Message-ID: <774ee653-5f01-4a06-965f-fd3517743c08@kernel.org>
+Date: Fri, 21 Aug 2026 11:35:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260818-lockdep-kunit-v1-0-66ceb1a272e3@gmail.com> <09b0ce81-0071-4df3-9f0e-a54269d04c97@davidgow.net>
-In-Reply-To: <09b0ce81-0071-4df3-9f0e-a54269d04c97@davidgow.net>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 21 Aug 2026 11:03:54 +0200
-X-Gm-Features: AcwNN1UF5lPYb4KttGv9cNqT5y8KhQwyrbryO6q90CkquGDi1vnrY2BN0Tnc6-M
-Message-ID: <CANiq72nNVQzO9gUcj+Oh1xEBWJv1_YxKeYpNTdhoNaJyhvOtmg@mail.gmail.com>
-Subject: Re: [PATCH 0/2] rust: kunit: add optional assertions to catch taint
- and lockdep warnings
-To: David Gow <david@davidgow.net>
-Cc: Malte Wechter <maltewechter@gmail.com>, Brendan Higgins <brendan.higgins@linux.dev>, 
-	Rae Moar <raemoar63@gmail.com>, Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Danilo Krummrich <dakr@kernel.org>, Daniel Almeida <daniel.almeida@collabora.com>, 
-	Tamir Duberstein <tamird@kernel.org>, Alexandre Courbot <acourbot@nvidia.com>, 
-	=?UTF-8?Q?Onur_=C3=96zkan?= <work@onurozkan.dev>, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
-	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] kselftest: mm: prevent random failure of huge page
+ split for khugepaged
+To: Yeoreum Yun <yeoreum.yun@arm.com>, Zi Yan <ziy@nvidia.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+ Lorenzo Stoakes <ljs@kernel.org>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>,
+ linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
+ <20260820-fix_split-v1-1-ab430c58c7cf@arm.com>
+ <DKU173CETFYO.1RJA1CSOC5S99@nvidia.com> <aodwNr_zgOn55z3W@e129823.arm.com>
+ <DKU60290OED0.12P9UF0Z97DND@nvidia.com> <aoeT20fPw57DtpGe@e129823.arm.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aoeT20fPw57DtpGe@e129823.arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 21, 2026 at 11:01=E2=80=AFAM David Gow <david@davidgow.net> wro=
-te:
->
-> My preference, however, would be to have these features added to the
-> core KUnit implementation (in C), rather than specifically to the Rust
-> bindings. This way, tests written in both languages will be able to
-> benefit from them, rather than just tests written in Rust.
+On 8/21/26 01:55, Yeoreum Yun wrote:
+> On Thu, Aug 20, 2026 at 07:37:29PM -0400, Zi Yan wrote:
+>> On Thu Aug 20, 2026 at 5:23 PM EDT, Yeoreum Yun wrote:
+>>>
+>>> Well, this also works with hugepage_save_settings() and write the
+>>> khugepaged/scan_sleep_millisecs with the maximum integer.
+>>>
+>>> I don't have a strong opinion but since it seems more hackish way to
+>>> change scan_sllep_millisecs, I use madvise() with MADV_NOHUGEPATE.
+>>>
+>>> Would it be better to change using APIs in hugepage_setting,h?
+>>
+>> No. I did not realize there is no way of stopping khugepaged completely.
+>>
+>> BTW, I am curious about your khugepaged config causing this issue.
+>> IIRC, khugepaged scan interval is about minutes and
+>> the time between madvise(MADV_HUGEPAGE) and the second
+>> is_backed_by_folio() should not be that long.
+> 
+> Yes. it's relly timing sensitive and I've failed to reproduce in the
+> real hardware. but in the emulation environment it often failed with 
+> the scan_sllep_millisecs as 10 seconds while the test running.
+> 
+>>
+>> For your patch, maybe you want to check the return value of madvise() to
+>> make sure it succeeds.
+> 
+> Yeap. but it seems enough just worning message for the madvise() with
+> MADV_NOHUGEPAGE.
 
-Agreed, I was about to reply with that, i.e. if this is a feature that
-is worth having, then it sounded to me like it should be in core
-KUnit.
+Yeah, I assume we can assume that we are running on a recent enough kernel that
+supports MADV_NOHUGEPAGE.
 
+-- 
 Cheers,
-Miguel
+
+David
