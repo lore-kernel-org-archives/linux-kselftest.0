@@ -1,104 +1,105 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A5D41A55D;
-	Fri, 21 Aug 2026 22:52:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D6943B7753;
+	Fri, 21 Aug 2026 23:01:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787352770; cv=none; b=Vg3H33/nHOTkk0sbIl/YJtKCTEAT4fe/TxgA/q6BLquW6lgJco3bFd3ysyjZtCkl7H25Y7vS0ZqkYBqJd2HWoMnd6bVoU8L79EekgoUFKz37VbwBERwZIdQ36i0Ij/vyqGd2j75ZskLLD1Wfe3YSpA7LOlev6Q+/YefQEs7PYio=
+	t=1787353287; cv=none; b=IDaDrgK+/u5Bcgt4fL8OtQ7LwYqjogVYkbMrv8XcYcgR9B0ajWxCWucTdONyhRZrkQ3h5QZH8hOIDmqD4zpVAkST4IpRmQ5aK3T/wzbLeJtXJYCi3JT3Emb5ZYli4nUUgCNoxBUMfiPiVv32r1xWKVuAk79bxZs1nVxaFcIaSVU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787352770; c=relaxed/simple;
-	bh=lG8mPdBhWiq/eC41/suvMuaAb6VbSdXSz4lBncf/cPM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Io1rPViCPjGNum/eU/0PN4UACt0rB96VYhljV9uf3xItfo2QjL06atAWTp4GDOZinrB85EKutHUTCV7XEPDjznGnsudCE8LMB+eQJgdUAtwzNw9c6tuj1vCHHWFZmtuiLGMJU0wUIZZRP8NkEXpP3w0v9rntBsKz+zJXei/5CRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IMVs7/Bt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787353287; c=relaxed/simple;
+	bh=03VkZjfehRNlVo5fNmIMDZ/aWcfIjCbGXvZ2PtdSPuk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pf5GKnD4kox/Vc/HOu8ZjFp7/Ph6uLohlg+sUTc+TNG3bM9xoVqRFdP+s32DW73sUr277+6J249fSGByWHxfinBiR5Np/Jsqnd5osfcxH1rL30eoBJHPRI/TgPRGG1Q+Cr4UKwJQjUUbpaohR/gjL79iPchKacrcKRhBvT7itDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FYZDHLdv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IMVs7/Bt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 638DE1F000E9;
-	Fri, 21 Aug 2026 22:52:45 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FYZDHLdv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C34A41F000E9;
+	Fri, 21 Aug 2026 23:01:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787352769;
-	bh=uw3aIO7dfPZMuTtz/Y4xO/nSlzEQ/JOZRqZRSRn6Rew=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=IMVs7/BtFhANCEDGTU0i4iV9K/SI6q2/IqtRBA1E+ecjiQvwSDvfWjJS87b6A4xja
-	 6bgyZnB3MXpKRdtCtDvLsYizMzOMup/5XD6QuFX4TzK+Q0R/v71KJUPOpAcCqYrPjy
-	 ajIjvkW9KIderpnriAYRCULTq+xtN1sxHw2FG5Z6AAlabnygi5Q3r59A7qyL4qbQ9p
-	 dJYG/bfyu3U2GO0vnAw8fKdoctM1WFAWe65H8lOinzE1p4OezuYM5zr7OxsEyQwaWX
-	 RWo3AFPVDbsYsj+pya5XM3SIgF493PXggggRcth1Sl79lL9RIJjjvS3zPnwKy3m+o7
-	 fZBOjDz02sEOQ==
-Date: Fri, 21 Aug 2026 23:52:40 +0100
-From: Jonathan Cameron <jic23@kernel.org>
-To: <mhonap@nvidia.com>
-Cc: <alex@shazbot.org>, <jgg@ziepe.ca>, <ankita@nvidia.com>,
- <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
- <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <dave@stgolabs.net>, <alison.schofield@intel.com>,
- <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
- <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
- <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
- <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
- <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH v4 01/27] cxl: Fix resource.c include path and export
- cxl_restore_hdm_after_pci_reset
-Message-ID: <20260821235240.7926351d@jic23-huawei>
-In-Reply-To: <20260813093631.2288172-2-mhonap@nvidia.com>
-References: <20260813093631.2288172-1-mhonap@nvidia.com>
-	<20260813093631.2288172-2-mhonap@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	s=k20260515; t=1787353285;
+	bh=hzKschgZvZGUF+9ira6QlB794ZxUSF02QB3OINA6m74=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=FYZDHLdv2T49SIJc79K3OCHvMXN7BV0y4762ev5Ts0hcMOLFdsSlaquyA70X7Jgp8
+	 uQTnZz4XLTvX+bLUhUdn4IGb0wmorlxDuaAlgDLR6Wgok/c6LuvvvCnfCTarRc1LNV
+	 eLR8FQwjwvGzfPPE2O/+xQaiUCz8DtiIcgk2pD3Xmy1+36pPpLTpzHkgxFK3Eh3tzM
+	 Gbe/y5X2Vm4RkPrLuQT4LWaRjbUYRu9OYga5R9ve84gzepx+56HDJe2jc8TVT/Vt9T
+	 IEkhnfC5i5ck4OIWSj6/DUBF3Yn2EwKLUoQgJjzzJOOKcBbu0S6f3gtMiYl9qa3TJ6
+	 eDAio2HmeO2tw==
+Date: Sat, 22 Aug 2026 00:01:20 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Wei-Lin Chang <weilin.chang@arm.com>
+Cc: Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
+	Joey Gouly <joey.gouly@arm.com>,
+	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Peter Maydell <peter.maydell@linaro.org>,
+	Yao Yuan <yaoyuan@linux.alibaba.com>,
+	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v19 05/14] KVM: arm64: Set PSTATE.EXLOCK when entering an
+ exception
+Message-ID: <f46a292d-5d60-4117-a2db-c54e7acfd0f1@sirena.org.uk>
+References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
+ <20260812-arm64-gcs-v19-5-9105afd828ac@kernel.org>
+ <wu4y6mfg7avc32gg55vkxy565errbecy6kgckmthrjvuben2sc@xmrqciocdmgb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="47Ov55ow126IRHuo"
+Content-Disposition: inline
+In-Reply-To: <wu4y6mfg7avc32gg55vkxy565errbecy6kgckmthrjvuben2sc@xmrqciocdmgb>
+X-Cookie: Package sold by weight, not volume.
 
-On Thu, 13 Aug 2026 15:06:05 +0530
-<mhonap@nvidia.com> wrote:
 
-> From: Manish Honap <mhonap@nvidia.com>
-> 
-> The vfio-cxl Type-2 driver restores the endpoint HDM decoder after a
-> D3hot->D0 soft reset by calling cxl_restore_hdm_after_pci_reset(), so
-> export it to the CXL namespace. While here, correct the resource.c
-> include of the CXL PCI definitions from <cxlpci.h> to <cxl/pci.h>.
+--47Ov55ow126IRHuo
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Why?  + if this makes sense (I haven't checked) please make that
-a separate patch (for now) + make sure to call it out in review of
-Srirangan Madhavan series where this file comes from and which hasn't
-merged yet. I think it is in patch 5.
+On Fri, Aug 21, 2026 at 03:15:26PM +0100, Wei-Lin Chang wrote:
+> On Wed, Aug 12, 2026 at 08:12:04PM +0100, Mark Brown wrote:
 
-Jonathan
+> > +static unsigned long compute_exlock(struct kvm_vcpu *vcpu,
+> > +				    unsigned long mode,
+> > +				    unsigned long target_mode)
+> > +{
 
-> 
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
-> ---
->  drivers/cxl/core/resource.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cxl/core/resource.c b/drivers/cxl/core/resource.c
-> index daa5e7fa2509..492ffe8e3576 100644
-> --- a/drivers/cxl/core/resource.c
-> +++ b/drivers/cxl/core/resource.c
-> @@ -16,7 +16,7 @@
->  #include <linux/pci.h>
->  #include <linux/slab.h>
->  
-> -#include <cxlpci.h>
-> +#include <cxl/pci.h>
->  
->  #include "cxl.h"
->  #include "core.h"
-> @@ -850,6 +850,7 @@ int cxl_restore_hdm_after_pci_reset(struct pci_dev *pdev)
->  
->  	return cxl_reset_save_restored_state(pdev, command);
->  }
-> +EXPORT_SYMBOL_NS_GPL(cxl_restore_hdm_after_pci_reset, "CXL");
->  
->  static void cxl_hdm_range_context_init(struct cxl_hdm_range_context *ctx)
->  {
+> > +	/* When taking an exception to a higher EL EXLOCK is cleared. */
+> > +	if ((mode | PSR_MODE_THREAD_BIT) != target_mode)
+> > +		return 0;
 
+> This is essentially doing an EL comparison, which is also done in
+> kvm_check_illegal_exlock_return() later. Would it be clearer if we
+> follow the EL comparison pattern there? exlock_el_from_spsr() can have
+> more use too.
+
+Yeah, I wasn't super happy there - it's partly a question of what's to
+hand and already in use in each location.  The rest of this code is
+using mode.  I think given your valid concerns about the naming around
+parsing out the EL in kvm_check_illegal_exlock_return() it's easier to
+go the other way, make that code look more like this and hence sidestep
+the naming issue.
+
+--47Ov55ow126IRHuo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqI2L8ACgkQJNaLcl1U
+h9DSmwf/Ti0qrhR56sAQYWMszAac7N7dyJ3/ETOQS6tSsbmRY66niGgwbEcvnlmT
+iO/PPDo/y69zkAb/VJI+/SwgyfEdUgsZ1EaoiU6svLwuuGCs5EAVZuKgRbJgUy6K
+f5hqKyIKwydaHgcMm5lyGK830e1Wnd9Fs/huhmqm1L6/0XJzAo4qdXv8rwQRyAD/
+fIsWz2zBB2eOw8hrICNHcsj9HUlwGb9GXIHi6OkLZUFvCI3S67LRMJB6RSP04erl
+jZyM5Hm6qhCQoxlwVQvrrrnv7rrnUdbpsoHHAHymeTBfiRvEs5hPwv/elFOsaFGu
+qg/SXCg5sZWsIWQtuQ3IO69sfo5bMQ==
+=6Imv
+-----END PGP SIGNATURE-----
+
+--47Ov55ow126IRHuo--
