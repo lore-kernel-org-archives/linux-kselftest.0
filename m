@@ -1,140 +1,95 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 855543BF66B;
-	Fri, 21 Aug 2026 11:26:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDD2147126E;
+	Fri, 21 Aug 2026 11:38:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787311589; cv=none; b=P6/2BaNoAhew6GDiL6MvEOTMB+bY8/KNwOAh7FDirFVrr9bVXOOUNxuQC8XXxz6ef1fWAMTo4qGmDuGn5ZYsgEzxJCTNO/VagDXCEq1PTIbDREqqRV4ExD2gou2qi0HtXhxxQTKvGTuT4ywiigxdypTPtup7DpolnY+MenAMqnc=
+	t=1787312313; cv=none; b=r3qrrJll1VNMOTq8NnUbFha7NhTFsW+bBMdjtZcMVWwngwBICiMZAgefjZysDNx/W4MtA6Op4MVZd/8/tf1FxFw25fiKK81KTc8wiRc9bTAePf3DFt6559a2DI2HFVut8yok2CqI1gv4M/NwZuR/+y1/xLfJ4KTMUx3vJmGCWzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787311589; c=relaxed/simple;
-	bh=Bl+hTE7mLTOt5f/k2vBFWuhv1+9Osdu/Tt7Pkm/CsuM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=OJXRTc46/tzxhTPJnGGJPxi76M3J4qystkSZwEVN8pjtAEMfsalcYGMU+1sOUxDIDFBfWILcyL80XlgOu6vEipNn99tvdMMG4VhITQSEahQ+irM1H3ypmQ+niiAWWByKYeGGum1JSuEKHYTDsq/Ps1wmhPg0syJzuSxtpDAhEWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=SzGA+SkJ; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787312313; c=relaxed/simple;
+	bh=v5J7kWvIHTMkgcrjix2ChnFzYVTqkSnCmBN2gfPhZZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fF3Le70sisx0qQOacU3ydA8/lXED46o8RVfHn19/0GR+K9aNyAn4cK4CLW095DR/MmVCBhUWLkD/hrXIsJ4VIpSxsK4UjSWKO+mUdqRKsFDWChoD3ZvFv+JfhH5UiJxWxg6V8yDoCrLLP1KcZQH6zfFMvayoZX/EcqhJe+LNfT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f99L/XtG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="SzGA+SkJ"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 19B851596;
-	Fri, 21 Aug 2026 04:26:20 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4D6653F763;
-	Fri, 21 Aug 2026 04:26:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787311583; bh=Bl+hTE7mLTOt5f/k2vBFWuhv1+9Osdu/Tt7Pkm/CsuM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=SzGA+SkJNd0Je+3zKJAyGf1m9WfOuDAW1oZfaMXZJEigu/ojNzVCJHcA443IIKDEN
-	 94WQTAooNVv3FwPmJpVT6tSwVoUgDyIjAxV2ORk9c/0SHMm44bXbr01TpGfFClX2wk
-	 ZqwP8TnJllBLq1SWPM40aYbbwTiiNV4WFktXp/8Q=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Mark Brown <broonie@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f99L/XtG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A1A31F000E9;
+	Fri, 21 Aug 2026 11:38:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787312312;
+	bh=asK2sRf6C2Innf5tCA3rGjkT06bvSeIo+EwUdsCsHXk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=f99L/XtGP1f7TT+Wy3ciJQLYdr9tFWa+gdlKUQkowqFU40Xy+hJLr5eB68VxEPaG3
+	 7N2eSx1IlcMiHQwcrkjrPc2gDzQdP5il4f4zowsIzv/Vme6LvmgbcSNiHrb9arzwvT
+	 F5+0LVG5yrNeeCbHipkLJ/bTDaAiKPpXNJt6xqhLfzQNkbnQ3GlSknmwly+MdlW/8F
+	 phqlYPEX7T084ERpR2Pn/KeELDLomef1/Hw4MWjJmAFA6TJ6j4Sv3HIjtD+qwLfiK0
+	 j6oNjrVym0gYdWhgGXau1OGtWzlHYfjQVMsRbKf8SdaAkndZCfA13mNpe0C/zn73r8
+	 HXYNFYBnkVMzA==
+Date: Fri, 21 Aug 2026 12:38:27 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Muhammad Usama Anjum <usama.anjum@arm.com>,
+	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
 	Shuah Khan <shuah@kernel.org>,
-	Fuad Tabba <tabba@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 03/14] KVM: arm64: Manage GCS access and registers for guests
-Date: Fri, 21 Aug 2026 12:26:13 +0100
-Message-ID: <aog11Xfjf-tmA4PO@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <hwz52absjxap7n6olwt3lmjakmtgxxaku5gcofsrcfa45zdygh@dqgylcillnud>
-References: <aoXamcdKoMynTkpX@LeoBrasDK> <48be9e5d-357a-4863-8682-8b3f34c69723@sirena.org.uk> <aobUGyq8nInJYkdA@LeoBrasDK> <97ad6e83-b22b-4881-b644-66fa99f68d64@sirena.org.uk> <aocOi3wjcliZqoe7@LeoBrasDK> <hwz52absjxap7n6olwt3lmjakmtgxxaku5gcofsrcfa45zdygh@dqgylcillnud>
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Vincenzo Frascino <vincenzo.frascino@arm.com>,
+	Amit Daniel Kachhap <amit.kachhap@arm.com>,
+	Yeoreum Yun <yeoreum.yun@arm.com>,
+	open list <linux-kernel@vger.kernel.org>,
+	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
+Subject: Re: [PATCH 4/4] selftest/arm64: Add MTE test config fragment
+Message-ID: <1ea35531-7d69-4c57-af16-e887e852735c@sirena.org.uk>
+References: <20260820153331.2448875-1-usama.anjum@arm.com>
+ <20260820153331.2448875-5-usama.anjum@arm.com>
+ <aogSkJxWf9QndjuE@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Kw4Yk4XN3KV3U5E/"
+Content-Disposition: inline
+In-Reply-To: <aogSkJxWf9QndjuE@arm.com>
+X-Cookie: Package sold by weight, not volume.
+
+
+--Kw4Yk4XN3KV3U5E/
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 21, 2026 at 12:39:08AM +0100, Wei-Lin Chang wrote:
-> On Thu, Aug 20, 2026 at 03:28:39PM +0100, Leonardo Bras wrote:
-> > On Thu, Aug 20, 2026 at 03:07:14PM +0100, Mark Brown wrote:
-> > > On Thu, Aug 20, 2026 at 11:16:59AM +0100, Leonardo Bras wrote:
-> > > > On Wed, Aug 19, 2026 at 05:46:00PM +0100, Mark Brown wrote:
-> > > 
-> > > > > This is just because there isn't a preexisting ctxt_has_tcrx() check
-> > > > > already there, FEAT_GCS architecturally depends on FEAT_TCRX and there
-> > > > > was a request to make this explicit in the code to try to optimise
-> > > > > things a bit.  The compiler should skip over both blocks at once if TCRX
-> > > > > isn't there rather than having two separate tests or static branches.  I
-> > > > > didn't add new checks where there were none since I expect that to be
-> > > > > unhelpful for code generation, you'd get the reverse situation and emit
-> > > > > two checks.
-> > > 
-> > > > Humm, but then why saving GCSPR_EL2 does not depend on TCRX/E2H? Or maybe a 
-> > > > better question, why are not GCSPR_EL2 and GCSCR_EL2 saved in the same 'if' 
-> > > > clause under ctxt_has_tcrx() (and E2H set), if they are restored in the 
-> > > > same 'if' clause?
-> > > 
-> > > > As you mentioned, GCS depends on TCRX, so it should be fine, but just by 
-> > > > reading the code I see:
-> > > > - GCSCR_EL2 :
-> > > > 	Save if 	GCS=1, TCRX=1, E2H=1
-> > > > 	Restore if 	GCS=1, TCRX=1
-> > > > - GCSPR_EL2 :
-> > > > 	Save if 	GCS=1,
-> > > > 	Restore if	GCS=1, TCRX=1
-> > > 
-> > > > Which looks kind of confusing for the as a first time reader.
-> > > 
-> > > > Does it make sense?
-> > > 
-> > > I agree that the current situation is a bit hard to follow, I'd actually
-> > > originally written things without the explict dependency because of that
-> > > but Marc wanted the optimisation.
-> > 
-> > Well, I am not against the explicit dependency thing, it just looks odd 
-> > to me that some save/restore have a dependency and it's counterpart does 
-> > not. As well as the dependencies for both registers being different.
-> 
-> Hey I feel the question wasn't answered completely :)
-> 
-> Here is the reason for the asymmetric save restore (besides the tcr2
-> part):
-> 
-> GCSCR
->  If guest E2H == 1:
->  - L1 accesses to GCSCR_EL2 and GCSCR_EL1 have the same intent -> they
->    both mean access the vCPU GCSCR_EL2.
->  - L1 access to GCSCR_EL2 (e.g. msr GCSCR_EL2, x0) traps, KVM updates
->    both the in-memory vCPU GCSCR_EL2, and the hardware GCSCR_EL1 for the
->    the guest. In-memory copy stays up to date.
->  - L1 access to GCSCR_EL1 does not trap -> in-memory vCPU GCSCR_EL2
->    becomes stale if it's a write.
->  - From above, must save on exit.
-> 
->  If guest E2H == 0:
->  - Only L1 accesses to GCSCR_EL2 mean access the vCPU GCSCR_EL2.
->  - L1 accesses to GCSCR_EL2 always traps.
->  - In-memory vCPU GCSCR_EL2 always stay up to date.
->  - From above, no need to save on exit.
-> 
-> GCSPR
->  - Regardless of the guest E2H value, hardware could write to the
->    hardware GCSPR_EL1, making the in-memory vCPU GCSPR_EL2 stale.
->  - From above, must save on exit.
-> 
-> Restore is trivial, vCPU GCSCR_EL2/GCSPR_EL2 must be written to the
-> hardware EL1 registers because someone else could be using it.
-> 
-> Quite a few other registers are saved only if guest E2H == 1 because of
-> the same reason.
->
+On Fri, Aug 21, 2026 at 09:55:44AM +0100, Catalin Marinas wrote:
+> On Thu, Aug 20, 2026 at 04:33:26PM +0100, Muhammad Usama Anjum wrote:
 
-Ah, makes sense.
-Thanks Wei-Lin!
+> > +CONFIG_SYSFS=y
+> > +CONFIG_TMPFS=y
+
+> These are all covered by defconfig. Are these fragments still necessary?
+> Or are they supposed to work on custom configs? If the latter EXPERT may
+> be set, hence the PROC_SYSCTL above. You probably also need SHMEM.
+
+In theory, yes since people might not run defconfig and it's supposed to
+show what's needed for the tests.  In practice people don't usually
+bother, especially not for things like those which are going to be on in
+any reasonable config.
+
+--Kw4Yk4XN3KV3U5E/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqIOLIACgkQJNaLcl1U
+h9COAwf/T/9AZMQTnBsmw6u0/45ObTEmP024W7EPWkw2fMtMwk2Avr0iXoVMPnCW
+Rc3A1eeuN+qDeaM1ahCcAW8t1Kknh6ptUeRNyMHaoJqQXAZuEl2cf7vosm2s7NXm
+gxwnamyHYZtRr3l+T+vl4MmThq5gES7Yo33PvQHmuc7eV/+pVHMFWzP7fzZB7DhJ
+2YOdsXG3uqYA0fNNyW+0Vg8ST7hEyBdh5WaOz2QBe5FHnFiklsIVKA1JA9mXlhs+
+jZh17TPWHOezx1GCDv8E8BjeRzUO2fdDYcX6uIFBZoN7cZaKHb8461+gYOdbyHr5
+ERqSjHd9HRey5Gt85AiEv32nBDgoNg==
+=F2rd
+-----END PGP SIGNATURE-----
+
+--Kw4Yk4XN3KV3U5E/--
