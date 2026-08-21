@@ -1,89 +1,202 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F9E490BFA;
-	Fri, 21 Aug 2026 16:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787328489; cv=none; b=F+U8Lt+IVwMqYh4nQAkPYfoSRYwVOfBp2dBVWU/Xlriazxif1aZ+AgeNGXpAcugQ1QaFJPECi8eSV28pER2mg3mviPHv3ujVrbfYTm5I+QDiz1WJQlB42ZedvUL6Bslyiyc0CkfwTW4Hk96zys5gUgpVUiTkxowCyD7HyRzKnmY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787328489; c=relaxed/simple;
-	bh=quCDSpU6BUwBXwCDVKaB8dpg8Fz9dYPX75IFlT5fHZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XbYS5EiryoYaVkVg9SVWNqMO/UjSsflLDEH8EZT/hPNP7lh/jPs5KbpJRhXecgs9/BLRaEa1eCybS2urXmzKpNGebbfdoFZZDSvdoob1AKKs9KlYCjJzSWaUZQ1PfmNWUSLdaR0oNIrdgA7gTdwtuGYtjRUKdIU7do76UiLu+eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VoRsmmw7; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F89C492505
+	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 16:09:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.179
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787328589; cv=pass; b=Sav1bMzXWVM5lArzrtkiv/cPXypeGCgHEApcQ+zUirjPRRQwgaFvYPRwSWZ3KvhyLb4CsTi4yuMYp9Pm+zfjk25Svd1wtDOE6+UONfOzHRCvn5U9bLR0GMoTy/INVywnnWfg6DwZ7HY+EUFX/o3QSqEiCVeYQFVylMEnvXUGyoM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787328589; c=relaxed/simple;
+	bh=qlIGS/bfjSwjQyUgloEYDDpbbb2frDUVh7GrW+zhEfM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Cr12d5PH0pHI48xEuaN1d3AD/+F/JEjFOgV1rDqd8yLSYN+k1CjvOEKJbqsrPUcoHZYDzQ6oW+qjctBMrJ1u81+VHjeRlMW3BP8d2buHNio0UpVn60y5+A2AZjFSspmcKNmP15faRPFZHBfw/sAE7NodsT1Ptu4nzvDNc2Sl/AU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XJ8THTki; arc=pass smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VoRsmmw7"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8D851F000E9;
-	Fri, 21 Aug 2026 16:08:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787328483;
-	bh=quCDSpU6BUwBXwCDVKaB8dpg8Fz9dYPX75IFlT5fHZQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=VoRsmmw7Qyq8ye80DdDzNVQWPev2x6gZhwCwmujCXOLMOk6XK67XTqMb3vHNGE0yy
-	 fMQ4obri3qndrvzJDfZqlxubSoUwwd91U08FYVE/7hy1XMuUum4WivvVXk1JQp1bIk
-	 V7+V0+UjCBDD6i99FLk4pqBAX0ZrNgwZcofRBlAu38TFhvVsS3Hcw/lBScave0XNGX
-	 7f++itfKpoc2vbapYG6HXdFu+eAW952R7xAJonEvPsn+dcFyXmZ7fWSzaFv9UYuwrp
-	 n+DlcHaPoIXL2GtotjzL0Bk6aYUWAdalHFZYlrKmGJom32z0AgZlYGC046tUYh9jnM
-	 Shuv5XOlNphWg==
-Date: Fri, 21 Aug 2026 17:07:58 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Muhammad Usama Anjum <usama.anjum@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Amit Daniel Kachhap <amit.kachhap@arm.com>,
-	Yeoreum Yun <yeoreum.yun@arm.com>,
-	open list <linux-kernel@vger.kernel.org>,
-	"moderated list:ARM64 PORT (AARCH64 ARCHITECTURE)" <linux-arm-kernel@lists.infradead.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>
-Subject: Re: [PATCH v2 5/5] selftests/arm64: Add MTE test config fragment
-Message-ID: <7304e0e2-70a7-4953-93b1-dcf73b879a86@sirena.org.uk>
-References: <20260821141556.4065894-1-usama.anjum@arm.com>
- <20260821141556.4065894-6-usama.anjum@arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XJ8THTki"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d5655cc850so14969285ad.3
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 09:09:48 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787328587; cv=none;
+        d=google.com; s=arc-20260327;
+        b=cn5DWxpgmPqZpV4h9WNJK4fyPZGlQ2Ch7JhZyfrwsq+r+WNT44A8CwoHlMi9FQJ3bE
+         tZ6IoF8H2ZDx5F3g9/RXfAHbnmAuPGOuf+KZ6JyiRIecVQHR4QQ2py9st3SQ6Gz/iZW/
+         De6JJXc+gSLaiJemBQI3kXm/AxhO/NpXJg8VrUQPo2RpffDS2ax0G0SlNEjow89sqadm
+         F1a4IaW9qYMei/NNw87Xqd5JJlJKNpHveh6AdUhFVIpJI8WUXL1xSyTsuinJRbXBPR2Q
+         HJo/0qVoF/7+RZD2PQQQj9IVr4iQtGozypMMhgkbyeVd29dHFZVXQCque+V7mmiLH3Ek
+         LBpw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=Tazxm5NFBsMsYMGez4lAodAlGpJHR0dLcykvQtxWQkU=;
+        fh=1x+GXnBHrdZqBuHC51RhNRkHXxFPBEEkpi8JS71vw3I=;
+        b=b0713RZevQ8bqhWm+h/PvltzxhivD+QfM7QW9trj+lvYoobftCizZhC4D51Zwkq6Tp
+         c39EW2U0EBd+DlZEpovUSnmEeZtA9K6sLU32cqLme27YLZ2+oRULIz2FhHGkZgzOYvyT
+         3+7jkehguxw4GSEGXQBiGos8PgpZ7zuEGElUcXK8oPoA0dzCRfxjGCnICIsmRipUmcxw
+         rGQ8f6JRSftllGHdqPhZuvaXNAMtLgwZf7Kp6Serpu5zFfQ1Jh3ikrIsn58HIO+d6iDO
+         YoiMSav5rgB51HZFLllggqvHHW3mqGptqNn3hY/bQm1aad6mgXNVr3/lwyc61gmTleLt
+         1dkw==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787328587; x=1787933387; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Tazxm5NFBsMsYMGez4lAodAlGpJHR0dLcykvQtxWQkU=;
+        b=XJ8THTkibT081XVi9Al5zTVuZNJZ3cUveMMPvAHyjr5cbHrDoBprcPkursRGndae5E
+         xyeE5ySVs/XYGpeXUt4YtZzkaO+GX26Hj2bWPE/mw503DfQr/e2cIx7QwPGBdQ4rzle/
+         W/DE4tGb+XnHztor6LNNVx1uQy0NNxGtURfz1ogCDt/eqdCmpdZrFbNUKxb5TdC96iP0
+         RvuJGyNyizIWPIK0AFig1sK/3otNFb4fpy7CIR+tWleyElxWPQaZdXyU7FCeFJZOxYSd
+         POI4S5LfpgChQnloF+Udi8ShLAIhN3hzdmqOG3+T6n6prLpRTbDc4nknJOIOw5vxdceV
+         QQTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787328587; x=1787933387;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Tazxm5NFBsMsYMGez4lAodAlGpJHR0dLcykvQtxWQkU=;
+        b=m4nb3iboZGCvml9sI9MtacrqDBBCMEuPdoSs3tAek/zEtdwuSz+f5tECNyGCLIRTFO
+         wJlnx4UIZqk3x8xnreKWaEfOmv1kj3NlakTg9PRW6pqsFAjYLYFdpHzuSfTgXTCFLmX1
+         trS6Evqsmo8ZD1AMul6XUPNtx0OWviLLU0wFq7wNOMqDXSi9MJ+D6bTWl75GbVNZZ1Xf
+         aqyihryh/Tc6LbnPryOjBUwDj5c7VT4XghlXf4NC0PAU517oA+qtjAa6dEKRQ0PQXu3J
+         Fiz3FDUouQ7d3qg1ViP7TkeTCU9pLGwEYaLYW340XjAwfxX1OgO5gcPyD5Xfaz6gieLJ
+         3c3g==
+X-Forwarded-Encrypted: i=1; AHgh+RowB12kd5O6ylnoBqmFUMNoKouLKHUOL4A9Mqd13N4ID1mG1hmD5sEHQSND8bexFyrHm8qNZLTzAJ59B+yvFbg=@vger.kernel.org
+X-Gm-Message-State: AFuF++nswGfSGdsUjcH1lJ8Pe3YCAL2l5uf4zBXjqbPvVPnwOKqz7PEn
+	PZ4GpE75B7rpKzq0kphcSBlo35i6n5ymrVf+wzKq32sF7s0kGhbW54VixRaLBC8G2O/CPgaGmhb
+	24gDIpcoKtG/XJSGdD5LV6IDaccNCqII=
+X-Gm-Gg: AR+sD101MVM4lbQzr/rIxGbMnp7TUdOSTQbZzxs/gpbHiE1GSM8r9+iBFLGu2jIr/If
+	q47QwO5a+lel7dMXv7+TwJA3JESMgZ5W6LpzisdzNQItfkkHqQ51a7M318BnRMTpL2+/K+8Bvh7
+	vh93+r9X16fIg7aI8U1njYjTj0Ev2NZxMhO4bmq2is4aEEIrAysGkeQ3lesR6hu7MaZTPhCEqak
+	fn5rODhEt+UuQrh+IOnRUaPUXsDv+iZZTYEEC0UaIe1pFkbth7BDLU04DKisjF/rwTudbbijQUz
+	Ho9V/FfwT+f1J/yABZ+M+3adYHN4DBf5EsQcErRcwelz0ARQETyq1zaer0X3NZfx9MQufo84zKN
+	cqz0=
+X-Received: by 2002:a17:903:2c0c:b0:2cf:8131:75f4 with SMTP id
+ d9443c01a7336-2d64b036898mr149534745ad.11.1787328587312; Fri, 21 Aug 2026
+ 09:09:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6R45SNmXiGQnf5lN"
-Content-Disposition: inline
-In-Reply-To: <20260821141556.4065894-6-usama.anjum@arm.com>
-X-Cookie: Package sold by weight, not volume.
-
-
---6R45SNmXiGQnf5lN
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+References: <20260821114416.12255-1-anshumantewari123@gmail.com> <7bb2d581-924e-4a59-9955-b8afa2b51268@kernel.org>
+In-Reply-To: <7bb2d581-924e-4a59-9955-b8afa2b51268@kernel.org>
+From: Anshuman Tewari <anshumantewari123@gmail.com>
+Date: Fri, 21 Aug 2026 21:39:35 +0530
+X-Gm-Features: AcwNN1XKYZiaEhnwGrJCHIYlV_rZXplCdB7CN_bs-y4gxXJBSCqD5LOGANhLuA4
+Message-ID: <CAJqi8kJf9EzfZWBo=1KpEzGiq+vGRz0J0mN+-NXAjrtq9HDrMg@mail.gmail.com>
+Subject: Re: [PATCH] selftests/mm: check strdup() and fix buf leak in parse_test_type()
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R . Howlett" <liam@infradead.org>, 
+	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
+	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Aug 21, 2026 at 03:15:53PM +0100, Muhammad Usama Anjum wrote:
-> The arm64 selftest collection has no Kconfig fragment, so kernels built
-> with the selftest requirements are not guaranteed to provide the support
-> used by these tests.
->=20
-> Add a fragment covering all tests in arm64.
+Thanks David, agreed =E2=80=94 strdup() is overkill here for a single-use
+parse, and dropping it is the right call.
 
-Reviewed-by: Mark Brown <broonie@kernel.org>
+One small consideration on the approach: working on argv[0] in place
+means strsep() will overwrite the : separator with '\0', so the
+original string (e.g. "khugepaged:anon") ends up truncated after
+parsing. Nothing today reads argv[0] again afterward, so it's safe as
+things stand, but it does mean correctness quietly depends on that
+staying true =E2=80=94 a future change that logs argv[0], re-parses it, or
+echoes it back in an error/usage message would get the mutated version
+instead of what the user actually typed.
 
---6R45SNmXiGQnf5lN
-Content-Type: application/pgp-signature; name="signature.asc"
+If we'd rather not rely on that invariant, an alternative that still
+avoids strdup()/free() entirely: copy the type argument into a small
+fixed-size stack buffer (with a bounds check against its length first)
+and run strsep() on that copy instead of on argv[0] directly. Same
+benefit as your version =E2=80=94 no allocation, nothing to free, no
+NULL-check needed =E2=80=94 but argv[0] itself stays untouched.
 
------BEGIN PGP SIGNATURE-----
+Happy to write this up as a v2 if it seems worthwhile, or if you think
+relying on "nothing downstream needs argv[0]" is fine as-is, I'm okay
+going with your version too. Your call.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqId90ACgkQJNaLcl1U
-h9Dcmgf/QyTxw+YDeMZ55aWJgzR6bZ5u7TsuxAsv3Sg0nrV6C75YitWwJRgx7yVP
-RJ+8u2KmnwIKAavwNmziiyhVYMT6ysITLZo9fdoQF70xy3mVD+wQ/lBDcl7PCPS+
-Krc3IE1IvKRKSXv7OsLZ8hXQbgQeGBGtJa4EFKoQIr+yqPIVUIqoahBsbMNQHapm
-FM3t0c6QErfbXjEJBuMxQoHNRLiJxn2ANMpa8S0UZCQ6vmsbeMPLY0R79eevpvca
-DPEwy7IeDexNeXsHiW54C4dwPg548kQtO+sl4DvGy6v9ih9it5t4z70roj0Jf/ew
-nmg9/INV62xV0Ke1oKGo2mlUZ/nUYw==
-=TwVb
------END PGP SIGNATURE-----
 
---6R45SNmXiGQnf5lN--
+On Fri, 21 Aug 2026 at 19:49, David Hildenbrand (Arm) <david@kernel.org> wr=
+ote:
+>
+> On 8/21/26 13:44, Anshuman wrote:
+> > The return value of strdup() is never checked before being passed to
+> > strsep() and strcmp(). If strdup() fails and returns NULL, strsep()
+> > returns NULL as well, and the subsequent strcmp(NULL, "all") is
+> > undefined behavior, likely causing a crash.
+>
+> In practice this is extraordinarily unlikely to ever fail. :)
+>
+> So I don't think we would ever experience this.
+>
+> >
+> > Additionally, buf is never freed. strsep() advances the buf pointer
+> > past the first token, so by the time buf would normally be freed,
+> > the original pointer returned by strdup() has already been
+> > overwritten and is no longer available.
+>
+> Given that parse_test_type() is called only once, nobody cares.
+>
+> >
+> > Check strdup()'s return value and fail cleanly on allocation failure.
+> > Keep a separate pointer to the original allocation so it can be
+> > freed once buf is done being used, after all parsing has completed
+> > successfully.
+> >
+> > Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+> > ---
+>
+> [...]
+> That's too much churn for something that is irrelevant in practice and
+> makes the code more complicated.
+>
+> So the following is better I think:
+>
+> From 36d525409eb16f56e667b2f979f2c6ef112ff235 Mon Sep 17 00:00:00 2001
+> From: "David Hildenbrand (Arm)" <david@kernel.org>
+> Date: Fri, 21 Aug 2026 15:57:57 +0200
+> Subject: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
+>
+> We don't check str_dup() return value and never free it. While both
+> things are irrelevant in practice, let's just work on argv[0] directly
+> and avoid the str_dup().
+>
+> Nobody after us needs these parts of the argv[0] string.
+>
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> ---
+>  tools/testing/selftests/mm/khugepaged.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/tools/testing/selftests/mm/khugepaged.c
+> b/tools/testing/selftests/mm/khugepaged.c
+> index d3a53673e1f9..7520fc0483ac 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -1226,7 +1226,7 @@ static void parse_test_type(int argc, char **argv)
+>                 return;
+>         }
+>  -      buf =3D strdup(argv[0]);
+> +       buf =3D argv[0];
+>         token =3D strsep(&buf, ":");
+>         if (!strcmp(token, "all")) {
+> --
+> 2.43.0
+>
+>
+> --
+> Cheers,
+>
+> David
+>
