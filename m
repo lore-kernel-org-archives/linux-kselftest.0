@@ -1,173 +1,120 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7034749D6
-	for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 11:45:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 870D3376A19;
+	Fri, 21 Aug 2026 11:52:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787312728; cv=none; b=STGMneyaRnEqH6I2jx8LxoBuzTSS6Po5oMyXyVVPSQDCJXViLehI7IxDCqfzvmQ+KDGBpxrN4KuYM5wLEKc+BH2tAc6C9Ko8aoI2Rl+Pt0u1kPkXlFYagQTSfftvFmfYS4r0Ubb4PfGW0MfgNPGRlRW3TNt4T/jZxs8LyCjzZFk=
+	t=1787313144; cv=none; b=RpoYV7rZ9ML+7ekiWos2vX6/qwfkaATuOwQ6Hb+gH7ZPVzaAH7smbOznXcwtw/VtNDV/syEdrvXR818CqGY6sgCm/JRpw35Gd9X8Gz7ZQ8h4gHpWXF9y5TJ3wyAGuh7qjkobpdwzZXvIxAsi4sLGWhOE+vBOM1Sohnvy9biTnvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787312728; c=relaxed/simple;
-	bh=gmpADQjqRAeqL6GeAdarpZCon3lnJxV4Ps618bZVbQg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=otpuImeAs31uiTLMy03WDuwBD8s67ZCogl3a5lGb9cwZmFZU2AEOl2HhLTy6vKqwi/DbxWfF2IfV5m6kip3yfjLqryEJ+rc/p35rE57Gzya7WMCbXJdvjGjBxFk2XNCSOMDgOGtQT7TgYgD54xdgTa5f5f7wrjpxcBqgHPm1V9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lROOrJnq; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787313144; c=relaxed/simple;
+	bh=CHr7/siqtsybsuSIZJlmc8HwuFWlZjKE7BJt0/blPig=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lcr9p6zxmm0FSMvfq6HAfjS3jZD49w8vtdgOL493PDvrZCO6mRvPMzwKvXvnVXCtyZG6O7yQQ8bTleR/XF5r9MZhQ5Ql1fGM02mysuKQQQacISggK9aWqsUcONHat7RQcdydTdoFC2yapT1bBrts87ZOD7NICBnCu7ZCY//0ZbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N87+Z5et; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lROOrJnq"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2cc7ef7ec27so12258205ad.1
-        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 04:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787312725; x=1787917525; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JSy4cnyR4S+sHUGi7h02BTfopN89+3p/alRrTWBOPrA=;
-        b=lROOrJnqLHU9rOcJq1AiNJODelouTnuFrSCXR7s52JHkITQcm/l7z/LIvkA4YsBzT/
-         dRd9rmaoBiARLqkZMzkd6ipmskn5iMEXjqtgHBVHMivWMTexQzjE8fzcCV0nl833f71f
-         FwcdUFLWPeuRPoWuk+K+6dAjSdmPpORlsa5k1se3GCSedG0bPW+htn14wyL80UnxuoJV
-         xjpGPQlEfzGgnDljj/ubd6fgfLtMHj8aSkZUgnzuC8GemOCYyB1wV9IbgQl4MjC1fTXj
-         FHj+wxwULcW6BYe4yJXi4THul4uI+qOivovSW5WB1ES3yvmcFuGgloF51Xt1XMemoHfi
-         31Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787312725; x=1787917525;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JSy4cnyR4S+sHUGi7h02BTfopN89+3p/alRrTWBOPrA=;
-        b=qzoI+a4kREraZZMvFjSX2y6XBuFFOU++KtcJV8rseH5pFL+viRd6ooNJ9wv/nMv6+M
-         cbNq0ckYFDQOQJYj7ZIJrQIiTmEU+O6l4C93KI3GvLPf1kpxI2BGgIoSBAmrQouQoDxY
-         ELQsxs6txFtIvodTrHZpXitLLUVUP/eKa3r1yZ3t+Q0fDtSXzwUoz+Jju8c+Z07ler/y
-         SSeiPIsm98r/1ga/huixnw6BD7NQlbPQucBHX/AR4wRXt8aLmNDfqG7rgSn51ifHn52/
-         bA769QM2+Mpf28p68c0HaIDfoVF0ORdT9gypKFeycPDdRvAcFDfxXrDdqzIxGotkH8wH
-         MISA==
-X-Forwarded-Encrypted: i=1; AHgh+Rrn3Ty1pZvvwhKjZ8daD9RSZsXAvWDBiW9OrAYTgcSGwkc8qgxKo63qQRGizOOQeydwQq7Tqoc3R/BhDDbyKBA=@vger.kernel.org
-X-Gm-Message-State: AFuF++kMGv5XYqtykBDFCxMZkJZLaVrNWFxf7R8O5+Ya5TpbkTDr/zG/
-	dL1OuHOITfvS++bfdJvKadSrkvQ+kQNxi+1DqunfY8EQjvLK3NcG7N90
-X-Gm-Gg: AR+sD11LCa4PPkDCpGCmzl0m3EZ3xPxaPQ46tjIqyNhye2NX+dUOZwJNfsrQ9g3vZ+X
-	Ln5plEhYxnxHS55LbLSUqg14IKbO8GAmlEXWRgxbWiIdzkw1YjmRZbyoOiifX2vvaJ/sV4CQ7we
-	WJpbwKtJUgf93WCIHhIOw750A3gDcWcn1GgcK0jres5vDp8KoiiqGDBzgxIj/RHuxeo2skTV/gb
-	rHShXjtT1mGvvIIk9yIbppUpx/rlr6e7z4FIXFVXJ55de55sQIIMA5X5GNaYBGLBwHV9VqDo9hP
-	O3+OqPNNkEDUIIEhDAX14/srIo83Y4jItdzjgC00ZFLhUzBVGsLq9+C+bGDGNar5Ps76WVigeK6
-	3cPeZXwPb/NilNHwYA7XLPbhhyH3B67vYin2qbU8yQHXEmOwdpWz9ekAB0NkC/6zVSyCUxiDTWq
-	pqRlxujBFR5Ana24qLYHAUGTwN6ItbvVNe6f08MJjk2XutOHoCE6QoakRc08Kp0YPplBWhVG4/8
-	FVBKc1Otfkm/Qj7qsSLMDvX1lg=
-X-Received: by 2002:a17:902:fdb0:b0:2cc:6018:f030 with SMTP id d9443c01a7336-2d64b0b5652mr124872615ad.14.1787312724901;
-        Fri, 21 Aug 2026 04:45:24 -0700 (PDT)
-Received: from Anshuman ([103.161.223.14])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-327c946293dsm20771743eec.22.2026.08.21.04.45.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Aug 2026 04:45:24 -0700 (PDT)
-From: Anshuman <anshumantewari123@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>,
-	Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>,
-	Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>,
-	Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Anshuman <anshumantewari123@gmail.com>
-Subject: [PATCH] selftests/mm: check strdup() and fix buf leak in parse_test_type()
-Date: Fri, 21 Aug 2026 17:14:16 +0530
-Message-ID: <20260821114416.12255-1-anshumantewari123@gmail.com>
-X-Mailer: git-send-email 2.55.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N87+Z5et"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B8F41F000E9;
+	Fri, 21 Aug 2026 11:52:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787313143;
+	bh=rb7T7qQ245v3lAPAAQlownuvidcAdgxgItOpVQHp7Vc=;
+	h=From:Subject:Date:To:Cc;
+	b=N87+Z5et1fyU2ko/O1Cr71bw/e1K0Y7lpQCiWriodjuayeS/brKGIl1542vcGrf2Z
+	 xge0SPDDp1GQRsiBorLLtEdwFaStNffwCFw2LumAYgWUg5Mzoczk1KqWRChl/WM4Ri
+	 F7nT2FMjO4ukNidMdBUFSBpPogxm9NUCgtRcL7reZ1ilzpx6ku00PTiLZPQBUK90pD
+	 HitWCGTO62xHJaJFosV+UPcOk+Zr8uOAI77jkhDKJxuoBcRm5IDqSVDdPfDuaocAH7
+	 IIRuv87wFvfGEvqQP1CyLnVpNDExhYjEorWyBu+krI0/kRMa/VepjtBKni1PpZUBU0
+	 3hh+8ZYVXFSgg==
+From: Christian Brauner <brauner@kernel.org>
+Subject: [PATCH 0/6] coredump: select memory types per request
+Date: Fri, 21 Aug 2026 13:52:01 +0200
+Message-Id: <20260821-work-coredump-filter-v1-0-91f9a73ef03e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/zWNwQ6CMBBEf4Xs2UXaEKL+ivFQ2i2sYku2oCaEf
+ 5dKPL7JzLwFEglTgkuxgNCLE8ewgToUYHsTOkJ2G4OudFOdtMJ3lAfaKOTm54ieh4kElT/7qnb
+ katXANh2FPH9+t9fbzmlu72Sn/JUbrUmErZhg+xxF4Y4DmmE4ZkH5F5S7oMx1WNcvIfRFQK8AA
+ AA=
+X-Change-ID: 20260821-work-coredump-filter-1f9f04ded416
+To: linux-fsdevel@vger.kernel.org
+Cc: Jacob Lalonde <jalalonde@meta.com>, Josef Bacik <josef@toxicpanda.com>, 
+ Jann Horn <jannh@google.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+ Jan Kara <jack@suse.cz>, Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Omar Sandoval <osandov@osandov.com>, 
+ Jacob Lalonde <jalalonde@fb.com>, Shuah Khan <shuah@kernel.org>, 
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ "Christian Brauner (Amutable)" <brauner@kernel.org>
+X-Mailer: b4 0.17-dev-362b8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2728; i=brauner@kernel.org;
+ h=from:subject:message-id; bh=CHr7/siqtsybsuSIZJlmc8HwuFWlZjKE7BJt0/blPig=;
+ b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWR1WH/84HubVVHmBJtE9xLerU7/XEQL7/bYs6czXBFxW
+ aq6+FJ/RykLgxgXg6yYIotDu0m43HKeis1GmRowc1iZQIYwcHEKwEQ+HGH477Pw8fqop+wVjlsn
+ bN7mr/gu5QRj2sXG7JbMFf8OfxM7GsvwP27l7X3GebocW1vniZotDclou3m9Y+Xs6tXn3hSstfn
+ 4jA0A
+X-Developer-Key: i=brauner@kernel.org; a=openpgp;
+ fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 
-The return value of strdup() is never checked before being passed to
-strsep() and strcmp(). If strdup() fails and returns NULL, strsep()
-returns NULL as well, and the subsequent strcmp(NULL, "all") is
-undefined behavior, likely causing a crash.
+Currently /proc/<pid>/coredump_filter determines what types of memory
+are included in a coredump produced by <pid>. This is fairly static. The
+coredump server has no easy way to configure what memory to dump even
+though it can figure out all the necessary details to make an informed
+decision.
 
-Additionally, buf is never freed. strsep() advances the buf pointer
-past the first token, so by the time buf would normally be freed,
-the original pointer returned by strdup() has already been
-overwritten and is no longer available.
+Add a new COREDUMP_MEMORY_TYPES feature bit. If the coredump server
+raises it the kernel will dump memory types raised in the
+coredump_ack->memory_types member. Zero is valid and causes the creation
+of a coredump that just includes the program headers and notes but no
+memory apart from the mappings that are always dumped.
 
-Check strdup()'s return value and fail cleanly on allocation failure.
-Keep a separate pointer to the original allocation so it can be
-freed once buf is done being used, after all parsing has completed
-successfully.
+struct coredump_req gains @memory_types which is set to the default
+memory types that are included in the coredump. This can be overridden by
+raising bits in coredump_ack->memory_types. It also gains
+@memory_types_mask which contains a bitmask of all memory types the
+kernel knows about. A coredump server may only raise bits in
+coredump_ack->memory_types that are raised in
+coredump_req->memory_types_mask.
 
-Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+struct coredump_ack grows too. If COREDUMP_MEMORY_TYPES is raised in
+@mask the kernel dumps the memory types set in the @memory_types mask.
+Zero is valid and dumps no memory apart from the mappings that are
+always dumped. A coredump server wanting to add or drop memory types
+instead of outright replacing it should simply copy
+coredump_req->memory_types and then mask off or raise types as needed.
+
+@memory_types must be zero if COREDUMP_MEMORY_TYPES isn't raised.
+COREDUMP_MEMORY_TYPES requires COREDUMP_KERNEL and an ack of at least
+COREDUMP_ACK_SIZE_VER1 bytes.
+
+Signed-off-by: Christian Brauner (Amutable) <brauner@kernel.org>
 ---
- tools/testing/selftests/mm/khugepaged.c | 17 +++++++++++------
- 1 file changed, 11 insertions(+), 6 deletions(-)
+Christian Brauner (6):
+      coredump: select memory types to include
+      tools: sync coredump.h header
+      selftests/coredump: simplify the refusal tests
+      selftests/coredump: test COREDUMP_MEMORY_TYPES
+      selftests/coredump: improve coredump size negotiation tests
+      selftests/coredump: test failed handshakes
 
-diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-index 10e8dedcb..a84fb87bd 100644
---- a/tools/testing/selftests/mm/khugepaged.c
-+++ b/tools/testing/selftests/mm/khugepaged.c
-@@ -1110,6 +1110,7 @@ static void parse_test_type(int argc, char **argv)
- {
- 	int opt;
- 	char *buf;
-+	char *c;
- 	const char *token;
- 
- 	while ((opt = getopt(argc, argv, "s:h")) != -1) {
-@@ -1135,7 +1136,10 @@ static void parse_test_type(int argc, char **argv)
- 	}
- 
- 	buf = strdup(argv[0]);
--	token = strsep(&buf, ":");
-+	if (!buf)
-+		ksft_exit_fail_msg("Insufficient memory\n");
-+	c = buf;
-+	token = strsep(&c, ":");
- 
- 	if (!strcmp(token, "all")) {
- 		khugepaged_context =  &__khugepaged_context;
-@@ -1148,26 +1152,27 @@ static void parse_test_type(int argc, char **argv)
- 		usage();
- 	}
- 
--	if (!buf)
-+	if (!c)
- 		usage();
- 
--	if (!strcmp(buf, "all")) {
-+	if (!strcmp(c, "all")) {
- 		read_only_file_ops =  &__read_only_file_ops;
- 		read_write_file_read_ops =  &__read_write_file_read_ops;
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
- 		anon_ops = &__anon_ops;
- 		shmem_ops = &__shmem_ops;
--	} else if (!strcmp(buf, "anon")) {
-+	} else if (!strcmp(c, "anon")) {
- 		anon_ops = &__anon_ops;
--	} else if (!strcmp(buf, "file")) {
-+	} else if (!strcmp(c, "file")) {
- 		read_only_file_ops =  &__read_only_file_ops;
- 		read_write_file_read_ops =  &__read_write_file_read_ops;
- 		read_write_file_write_ops =  &__read_write_file_write_ops;
--	} else if (!strcmp(buf, "shmem")) {
-+	} else if (!strcmp(c, "shmem")) {
- 		shmem_ops = &__shmem_ops;
- 	} else {
- 		usage();
- 	}
-+	free(buf);
- 
- 	if (!read_only_file_ops && !read_write_file_read_ops &&
- 	    !read_write_file_write_ops)
--- 
-2.55.0
+ Documentation/filesystems/proc.rst                 |    4 +
+ fs/coredump.c                                      |  114 +-
+ include/linux/coredump.h                           |    4 +-
+ include/uapi/linux/coredump.h                      |   70 +-
+ tools/include/uapi/linux/coredump.h                |   70 +-
+ .../coredump/coredump_socket_protocol_test.c       | 1224 ++++++++++++--------
+ .../selftests/coredump/coredump_test_helpers.c     |  279 ++++-
+ .../selftests/coredump/coredump_test_helpers.h     |   26 +
+ 8 files changed, 1274 insertions(+), 517 deletions(-)
+---
+base-commit: 19f075830e5d874749f55d837fc4e8af98df0559
+change-id: 20260821-work-coredump-filter-1f9f04ded416
 
