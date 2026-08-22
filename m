@@ -1,280 +1,145 @@
-Received: from mta1.migadu.com (out-71.mta1.migadu.com [95.215.58.71])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C95CB2C11CA
-	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 03:19:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.71
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787368793; cv=none; b=KLdTh/GRN+G4NXmVY0PrrG4kygnN21a/Alwe1WIHpBTQllbWm3eabUtwNA+sU6ifFbWjRROyM1zay3mTzZ3mfwyL7+YbPVCbRJRBu2Jqw6bUZSrzXcBV8OAsyyLJU1JC7i5p8r73NmR4TGT44aPYscTn6Rzxn5NBwzCvG/UkR8o=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787368793; c=relaxed/simple;
-	bh=1lAj0RYynE1f5++3x9dW2tApKBrusbMFAf4fDQ7WuCY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KCpeMZ4UVAeaI81thdJItdhoIFS1OZPan5Z1DbvsAj+cWh3vc1sVcBaN6d6jaimpGq528jyMyumRaIUwomurNUz5ATk+ZOLyz8w8o9/t/xGgY/Np+eYazGCsCVLW+xZVNT7H7UhufXFv7KThhNk/nVg8wHg9R8asdkDFIUkM9FY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=mkUtfXZh; arc=none smtp.client-ip=95.215.58.71
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E2619D89E
+	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 03:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.52
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787370837; cv=pass; b=NVkqbRQNMxPC+X+UBXZ4mO/Xppx7/ug+Ij3HvL3B01rM2VD5VjsA1XOZQtb8xy/iE3iCZf3Ls39VinKt8yZoPChXmvKlpNRVJlGyTH0ZKWoaozlt0ScMeDKHz0zmQnrbz/4BSawhJANkqYrbZrkjBk9Lty72FeCk0K/7YhdqWqA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787370837; c=relaxed/simple;
+	bh=FBLlXD3nW2JnUX368mUZaO+/9xbIDSHvG6hWmeMOSIM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i84TsbENiPxOGbTmcgedgx40fBAN42K6zZ7Ft4f0G+OPTOeBwSoX1AoyQ2MhSVCoK6GXxpxM70mT/6j8xsGc3bEEa7gypKRGsx1zYBhk7wrhxOQ+mgdy4DRj54bFmrG8CfqOxfJ1H+Uqngwh/egB9LwtWRCPMUzp6No03vcchsk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=e4i7LYqJ; arc=pass smtp.client-ip=209.85.216.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="mkUtfXZh"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1lAj0RYynE1f5++3x9dW2tApKBrusbMFAf4fDQ7WuCY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787368787; v=1; x=1787973587;
- b=mkUtfXZhaaVaT8lOZ94knMA6LW5CpdLC1sPJUw/Jq/F8kICDU0bXQwG/NpbqD4imlrI4yzKG
- iWpRONDpFzH1aHXz1B6343tw1C6lo+bQeACAC/SLwxeNgUcT7rGsIFpM24YI/Wg5zuGeYnDUrVD
- MxWj0pYheacKF5a3k2ofo2ow=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost (2a03:2880:10ff:4c::)
-	by smtp.migadu.com with ESMTPS id 6c42c0bd215f903c;
-	Sat, 22 Aug 2026 03:19:47 +0000
-X-Mizu-Trace-ID: 6c42c0bd215f903c
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 21 Aug 2026 20:19:45 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
-Cc: Andrii Nakryiko <andrii.nakryiko@gmail.com>, 
-	Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <inwardvessel@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Martin KaFai Lau <martin.lau@linux.dev>, 
-	Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>, 
-	Jiri Olsa <jolsa@kernel.org>, Emil Tsalapatis <emil@etsalapatis.com>, 
-	Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v4 1/2] mm/bpf: Add bpf_proactive_reclaim kfuncs
-Message-ID: <aojJoHl2uSe1IsfA@linux.dev>
-References: <cover.1787205002.git.zhuhui@kylinos.cn>
- <e9b2a34418919f5c3ee2b80bcb4f9d80ce6ec422.1787205002.git.zhuhui@kylinos.cn>
- <CAEf4Bza0KYB+OHpa89K16+ptUQuQDJKyxxNCyDPcgQaO1mtxjg@mail.gmail.com>
- <DKUVJN7NQMAI.2JXLSBOGJTI1W@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="e4i7LYqJ"
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so1232931a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 21 Aug 2026 20:53:55 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787370835; cv=none;
+        d=google.com; s=arc-20260327;
+        b=I5IYP3EXm5ndDQTFy3WBvZ6dCn+Qoy4kgVaJaVvR31820C9zjsdsJ9qIHqW/Oh8hlJ
+         GebJJKK341YRLmx50A2zsnVzHCE6mUtcxy1sFvoXoaFP3ZRHfFRE4zmmxtjKYTB+yzpE
+         c49m8GOJ8xdJnZzLrOX9g3lIlwbu+Ahkxyou1aNIlH2dYpn3ChwFVpV17V8yHMvzOZk8
+         3yTzSoAC9liuhrvikdlVGxCa3N+eZ8ECLDDtsI/mQPIiEzfkObISxGWGmMAwG+tgjEQv
+         +9+O7/efRTc0ze06wILZ4d6it4ou/IwGE1qBbzeWFHjngpktXpySwKcfJx/3fsqzKvsF
+         38rA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=kG+MMYz+aA1z8JSTD2QnV706OsWOXs65jjB0XOhH9kw=;
+        fh=/VuT7iSkE5nE0iAVJ0f747BY9kNz6tTwzImm1kbDYac=;
+        b=StHAK4r4Mz/k8DpjHrAwFMPj3Qa4A8RkvttDMUB9yEPqI4PXda+GD8+4d0vU7/aUmi
+         IK/3rXGOcDeIyf619ZF3I0SHCav1s6l51rEhKx3Kn4e2+dRrcNfrcK0IUM1+A5smVpHU
+         Tk1EasBixqhO92p8zAVBtDClBoonffdDKWVtM1wgXiK7RoxpchSZBvjzYZLwQDqcU1tP
+         Q0GC0UdMjiI52FxQ1t6w//TH5P0xbgdWbPrnoC8ld0dksTE/Xg7ujwbHCndJ8rA/eyEN
+         rGPsifv8QzhqsMlDYpWefKTMkgKiwxjyg2K1GIWkbFdXv1hr3sUoCVUrDsO9PcEeAM4v
+         y2+A==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787370835; x=1787975635; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=kG+MMYz+aA1z8JSTD2QnV706OsWOXs65jjB0XOhH9kw=;
+        b=e4i7LYqJ6v4sP1QiqCWyq/bI785E2ChslQ7U0a2Eeigsv3Rm3V7TqG4waG/0fJceRv
+         Repd6kzS+GYiFVO7JCKkf64QDcNpoHbH3H/8NEAXuPJoQxb3oreD4exM4/5AvMqGWue/
+         z/uPm2hp3uKu9EfxxzkMVhHv99j0aALIcjQc8lE2HXKhNRqMIAoJLzw5080hz01IoDG9
+         eJqt5AnR0nHkOKtkLdEqmd6PKry7oC1kFJr5EssvUuE2ut9qu6pi+rKLUW4oY1wmX480
+         yUkP+XId6P1QqbLaUIo2lrtxs+lera94VXnsLFkGosY4Cz9glp7z93/OP81Nnlzu+SjN
+         CuDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787370835; x=1787975635;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=kG+MMYz+aA1z8JSTD2QnV706OsWOXs65jjB0XOhH9kw=;
+        b=M7ia5BNvt9zl2pC/18kDTPRoXV4ufzkftKR1kxGK1WyLw/wLuSbPd8Igcn1ap46Zyp
+         brImBI8/hTavnJ0CX6JsusYRr2CnSQtrJ8YrAkXKGG/3JfUDlDli9BrOBKe/bpRwgfn1
+         mSN2Slhd//hGL0BoRNbR8hWAq0EicciEPUxLPhn8QIpUFXfpOr5GJqjgvL8HBKPBpj81
+         3eFUTvUVn7KDWdCHkCnvv0La/DlhCCI8ONoTztDqOgXnx07/UNTjycP/0E2w/P98RBFP
+         cLDkuyuaRtxpEDNhuTk5Qs/nUvsJBmlpat7t+jxTdN12IReerkPkxy0BdcKMivIAaBvp
+         NuOQ==
+X-Forwarded-Encrypted: i=1; AHgh+RqX4l1y9XxtUjDQqQe/Lmuqj8fWquraPHtLjQHmM5sVKKVaKNjOT5NCM6A9BKLFtze9Zr2QPBKM05aw+UGXpPE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mKxLi7n9dsYQzW/QLYL6Bmr1RBK0taz6dDrjNInpbgyMcWUm3W
+	SyyWEEfEphDvfNPxUJ5T1vJi6MAPQD+FLcSLHTaHesGMCMHNAPeuq23dtrH10famwHUBBIcnH2y
+	/0kLBChTkiU971paOuy0EHv9S6UbO7h0=
+X-Gm-Gg: AR+sD12De95vdJqJeUe0kqnqdFXKMQiFBdJorYdqoe+imn5cVj6xiv4cSudl7mi8r0L
+	vA/zrB4RdbvBeSNFgcSfWQ64glVsD9qZWfCpede/loaBDgu66Xaa1vMLeM9D+HV8PUyAraJW2CY
+	qNo42I3VvHvpEL6yYPpcRDqp023Uhxxhy4g6Eq3R5w6GiB06hwAXtHJJj5pRYQT68r76gSsX1pH
+	/3XC7Fj3YD+v3tj6njivnTbHf4PeJSfgwhiW61BdLuBCMHNqFonSkuzHv6uRGFEUneEzl5gAzv2
+	czAoBXuCupUcTC4vcE2IXyVdcob1YeKP1CQNnDc2/7UAfxBuZp0UfCC63NySlvPs5ub7eLBsdYZ
+	vpiX4Nk+QJdZsPG8RieybK2m15dLd1xHnLY3DFOaCIactWpJcKXhs5khR6XC/D7EGfnEK4mUDyy
+	k1ZZF3Qe9QHQ==
+X-Received: by 2002:a17:90b:268b:b0:38e:42f5:d096 with SMTP id
+ 98e67ed59e1d1-395c4528324mr9786023a91.0.1787370835140; Fri, 21 Aug 2026
+ 20:53:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DKUVJN7NQMAI.2JXLSBOGJTI1W@gmail.com>
+References: <20260821153823.266343-1-rastislav.szabo@isovalent.com> <17fac875-ce43-43ec-9e9d-329a09d4f3eb@kernel.org>
+In-Reply-To: <17fac875-ce43-43ec-9e9d-329a09d4f3eb@kernel.org>
+From: Dmitry Safonov <0x7f454c46@gmail.com>
+Date: Sat, 22 Aug 2026 04:53:43 +0100
+X-Gm-Features: AcwNN1WLQWXrst0z8n6URjzDOc7pdhpqlp4tZ_xrj6_SYGttebBw04BtAfWe5IE
+Message-ID: <CAJwJo6ZBA5heLxJu_xsYFU8Vm-2SY8ONV3AZgDJse9oXAfqB=A@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] net/tcp: fix TCP-AO key deletion in VRFs
+To: David Ahern <dsahern@kernel.org>
+Cc: Rastislav Szabo <rastislav.szabo@isovalent.com>, netdev@vger.kernel.org, 
+	edumazet@google.com, davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com, 
+	shuah@kernel.org, dima@arista.com, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Aug 21, 2026 at 09:38:31PM +0200, Kumar Kartikeya Dwivedi wrote:
-> On Fri Aug 21, 2026 at 9:12 PM CEST, Andrii Nakryiko wrote:
-> > On Wed, Aug 19, 2026 at 11:12 PM Hui Zhu <hui.zhu@linux.dev> wrote:
-> >>
-> >> From: Hui Zhu <zhuhui@kylinos.cn>
-> >>
-> >> Expose memcg proactive reclaim to sleepable BPF programs:
-> >> unsigned long bpf_proactive_reclaim(memcg, size);
-> >> unsigned long bpf_proactive_reclaim_swappiness(memcg, size, swappiness);
-> >>
-> >> They perform one reclaim pass on @memcg, like a write to memory.reclaim:
-> >> swap is allowed, and the anon/file balance follows the cgroup's
-> >> swappiness or an explicit override in [MIN_SWAPPINESS, MAX_SWAPPINESS]
-> >> plus SWAPPINESS_ANON_ONLY. Both go through a shared helper,
-> >> bpf_proactive_reclaim_pages(), which guards against reclaim recursion
-> >> and calls try_to_free_mem_cgroup_pages() with GFP_KERNEL and
-> >> MEMCG_RECLAIM_MAY_SWAP | MEMCG_RECLAIM_PROACTIVE, the same parameters
-> >> user_proactive_reclaim() uses, and unlike memory.reclaim they do not
-> >> retry until @size is reached.
-> >>
-> >> Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
-> >> current->reclaim_state on entry and NULLs it on exit, so a nested call
-> >> from an in-flight reclaim would corrupt the outer reclaim state (e.g.
-> >> MGLRU dereferences current->reclaim_state->mm_walk). Both kfuncs
-> >> therefore refuse to reclaim when PF_MEMALLOC is set or
-> >> current->reclaim_state is non-NULL. The latter check also closes the
-> >> window in try_to_free_mem_cgroup_pages() where reclaim_state is already
-> >> installed but PF_MEMALLOC is not: only a tracepoint call sits in
-> >> between, and while a sleepable BPF program cannot attach to the
-> >> tracepoint itself, it can attach to the generated trace iterator
-> >> function (__traceiter_mm_vmscan_memcg_reclaim_begin) via fentry.
-> >>
-> >> The kfuncs take @size in bytes; the return value is normalized to bytes
-> >> as well, matching the byte-based unit of bpf_mem_cgroup_usage() and
-> >> bpf_mem_cgroup_page_state(), so callers can mix them without manual
-> >> page/byte conversions.
-> >>
-> >> An out-of-range @swappiness is reported with (unsigned long)-1 instead
-> >> of 0, following the convention of bpf_mem_cgroup_vm_events() and
-> >> bpf_mem_cgroup_page_state(), as 0 cannot be told apart from a
-> >> successful pass that reclaimed nothing.
-> >>
-> >> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> >> ---
-> >>  mm/bpf_memcontrol.c | 118 ++++++++++++++++++++++++++++++++++++++++++++
-> >>  1 file changed, 118 insertions(+)
-> >>
-> >> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> >> index 716df49d7647..dc51868b3acf 100644
-> >> --- a/mm/bpf_memcontrol.c
-> >> +++ b/mm/bpf_memcontrol.c
-> >> @@ -6,6 +6,7 @@
-> >>   */
-> >>
-> >>  #include <linux/memcontrol.h>
-> >> +#include <linux/swap.h>
-> >>  #include <linux/bpf.h>
-> >>
-> >>  __bpf_kfunc_start_defs();
-> >> @@ -159,6 +160,120 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
-> >>         mem_cgroup_flush_stats(memcg);
-> >>  }
-> >>
-> >> +/*
-> >> + * Reclaim must not recurse. try_to_free_mem_cgroup_pages() unconditionally
-> >> + * overwrites current->reclaim_state on entry and resets it to NULL on exit.
-> >> + * So invoking it from an in-flight reclaim would clobber the outer reclaim
-> >> + * state and corrupt its accounting.
-> >> + *
-> >> + * The guards are PF_MEMALLOC and current->reclaim_state. Every reclaim
-> >> + * entry point marks the current task with PF_MEMALLOC for the whole
-> >> + * reclaim window: try_to_free_mem_cgroup_pages() and __perform_reclaim()
-> >> + * do so via memalloc_noreclaim_save(), and kswapd keeps it set for its
-> >> + * entire lifetime. A hook inside the reclaim path (shrink_node,
-> >> + * shrink_slab, ...) executes in the context of the reclaiming task, where
-> >> + * current->flags already carries the flag. The page allocator, the memcg
-> >> + * charging path and node_reclaim() rely on the same flag to avoid reclaim
-> >> + * recursion.
-> >> + *
-> >> + * reclaim_state is checked in addition because it is set slightly before
-> >> + * PF_MEMALLOC in try_to_free_mem_cgroup_pages(), with only a tracepoint
-> >> + * call in between. A sleepable BPF program cannot attach to the tracepoint
-> >> + * itself, but it can attach to the generated trace iterator function
-> >> + * (__traceiter_mm_vmscan_memcg_reclaim_begin) via fentry, so PF_MEMALLOC
-> >> + * alone would leave that window open.
-> >> + *
-> >> + * Also, PF_MEMALLOC is set in some non-reclaim contexts (e.g. direct compaction
-> >> + * and vmalloc), where the kfunc conservatively refuses to reclaim as well.
-> >> + */
-> >> +static bool bpf_in_reclaim_context(void)
-> >> +{
-> >> +       return (current->flags & PF_MEMALLOC) || current->reclaim_state;
-> >> +}
-> >> +
-> >> +/*
-> >> + * Shared implementation of the proactive reclaim kfuncs: performs one
-> >> + * reclaim pass on @memcg with @nr_pages as the goal, allowing swap, and
-> >> + * @swappiness as the anon/file balance override (NULL to follow the
-> >> + * cgroup's own swappiness setting). Returns the reclaimed amount in
-> >> + * bytes, keeping the byte-based unit of the kfuncs' @size argument.
-> >> + */
-> >> +static unsigned long
-> >> +bpf_proactive_reclaim_pages(struct mem_cgroup *memcg, unsigned long nr_pages,
-> >> +                           int *swappiness)
-> >> +{
-> >> +       unsigned long nr_reclaimed;
-> >> +
-> >> +       if (!nr_pages || unlikely(bpf_in_reclaim_context()))
-> >> +               return 0;
-> >> +
-> >> +       nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, nr_pages, GFP_KERNEL,
-> >> +                                                   MEMCG_RECLAIM_MAY_SWAP |
-> >> +                                                   MEMCG_RECLAIM_PROACTIVE,
-> >> +                                                   swappiness);
-> >> +
-> >> +       return nr_reclaimed * PAGE_SIZE;
-> >> +}
-> >> +
-> >> +/**
-> >> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
-> >> + *                         cgroup
-> >> + * @memcg: the target memory cgroup to reclaim from
-> >> + * @size:  the amount of memory to reclaim, in bytes
-> >> + *
-> >> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
-> >> + * the memory.reclaim cgroup file: pages are reclaimed according to the
-> >> + * cgroup's own swappiness setting and swap is allowed. Note that,
-> >> + * unlike memory.reclaim, this does not retry until @size is reached;
-> >> + * callers can invoke it again if needed.
-> >> + *
-> >> + * The reclaim runs with GFP_KERNEL, so this function must not be called
-> >> + * from a context that holds a filesystem lock (e.g. an LSM hook invoked
-> >> + * with inode_lock held): the reclaim path may enter filesystem shrinkers
-> >> + * and deadlock trying to reacquire the lock. Contexts that set
-> >> + * PF_MEMALLOC_NOFS/NOIO are handled by the gfp context inheritance.
-> >> + *
-> >> + * Return:
-> >> + *   The amount of memory actually reclaimed, in bytes (rounded to full
-> >> + *   pages), or 0 if @size is smaller than a page or the calling task is
-> >> + *   already in a reclaim/freeing context (PF_MEMALLOC).
-> >> + */
-> >> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> >> +                                               unsigned long size)
-> >> +{
-> >> +       return bpf_proactive_reclaim_pages(memcg, size / PAGE_SIZE, NULL);
-> >> +}
-> >> +
-> >> +/**
-> >> + * bpf_proactive_reclaim_swappiness - proactively reclaim memory from a
-> >> + *                                    memory cgroup with an explicit
-> >> + *                                    swappiness
-> >> + * @memcg:      the target memory cgroup to reclaim from
-> >> + * @size:       the amount of memory to reclaim, in bytes
-> >> + * @swappiness: swappiness override for this reclaim pass
-> >> + *
-> >> + * Same as bpf_proactive_reclaim(), except that the anon/file reclaim
-> >> + * balance is controlled by @swappiness instead of the cgroup's
-> >> + * swappiness setting. Valid values are [MIN_SWAPPINESS, MAX_SWAPPINESS]
-> >> + * and SWAPPINESS_ANON_ONLY, which restricts reclaim to anon folios.
-> >> + *
-> >> + * Return:
-> >> + *   The amount of memory actually reclaimed, in bytes (rounded to full
-> >> + *   pages), (unsigned long)-1 if @swappiness is out of range, or 0 if
-> >> + *   @size is smaller than a page or the calling task is already in a
-> >> + *   reclaim/freeing context (PF_MEMALLOC).
-> >> + */
-> >> +__bpf_kfunc unsigned long
-> >> +bpf_proactive_reclaim_swappiness(struct mem_cgroup *memcg, unsigned long size,
-> >> +                                int swappiness)
-> >> +{
-> >> +       if (swappiness < MIN_SWAPPINESS || swappiness > SWAPPINESS_ANON_ONLY)
-> >> +               return (unsigned long)-1;
-> >> +
-> >> +       return bpf_proactive_reclaim_pages(memcg, size / PAGE_SIZE,
-> >> +                                          &swappiness);
-> >> +}
+On Fri, 21 Aug 2026 at 19:34, David Ahern <dsahern@kernel.org> wrote:
+>
+> On 8/21/26 9:38 AM, Rastislav Szabo wrote:
+> > TCP-AO keys with TCP_AO_KEYF_IFINDEX store the VRF L3 interface index in
+> > l3index. tcp_ao_del_cmd() validates the supplied ifindex, but does not
+> > assign it to its local l3index before matching keys.
 > >
-> > I haven't followed previous discussion, so I apologize if this was
-> > discussed, but if not, isn't it a bit an overkill to have second
-> > variant just to provide optional swappiness? Valid range of swappinees
-> > seems to be non-negative [0, 200], that special ANON is 201, so why
-> > can't we defined that <0 swappiness just means no swappiness was
-> > provided and get away with just one kfunc?
+> > As a result, deleting a key scoped to a non-default VRF always fails with
+> > ENOENT because it is matched against l3index 0.
 > >
-> 
-> I think my understanding of Shakeel's suggestion was that we only add one
-> bpf_proactive_reclaim() for now, if swappiness parameter is necessary we can
-> introduce the second API later. But given it seems Hui wants to add both, I
-> think it would make sense to do what Andrii said and just introduce one kfunc
-> with the swappiness parameter now.
-> 
-> But Hui, please wait for Shakeel to comment before respinning again.
+> > Fixes: 248411b8cb89 ("net/tcp: Wire up l3index to TCP-AO")
+> > Cc: stable@vger.kernel.org
+> > Signed-off-by: Rastislav Szabo <rastislav.szabo@isovalent.com>
+> > ---
+> >  net/ipv4/tcp_ao.c | 3 +++
+> >  1 file changed, 3 insertions(+)
+> >
+> > diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
+> > index 5094267447ae..26864621e6de 100644
+> > --- a/net/ipv4/tcp_ao.c
+> > +++ b/net/ipv4/tcp_ao.c
+> > @@ -1834,6 +1834,9 @@ static int tcp_ao_del_cmd(struct sock *sk, unsigned short int family,
+> >       if (cmd.ifindex && !(cmd.keyflags & TCP_AO_KEYF_IFINDEX))
+> >               return -EINVAL;
+> >
+> > +     if (cmd.keyflags & TCP_AO_KEYF_IFINDEX)
+> > +             l3index = cmd.ifindex;
+> > +
+> >       ao_info = setsockopt_ao_info(sk);
+> >       if (IS_ERR(ao_info))
+> >               return PTR_ERR(ao_info);
+> >
+> > base-commit: 746fc0787f616da418ffc04a110296fe95d53491
+>
+> Looks correct to me. Dmitry?
+>
+> Reviewed-by: David Ahern <dsahern@kernel.org>
+>
 
-Yes let's go with Andri's suggestion.
+Thanks, David,
 
-However Hui, don't respin the series. Let me go through it first. I am not happy
-with the amount of text and comments added to the patches.
+This is embarrassingly correct!
 
-> 
-> >> +
-> >>  __bpf_kfunc_end_defs();
-> >>
-> >>  BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-> >> @@ -172,6 +287,9 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
-> >>  BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
-> >>  BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
-> >>
-> >> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
-> >> +BTF_ID_FLAGS(func, bpf_proactive_reclaim_swappiness, KF_SLEEPABLE)
-> >> +
-> >>  BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
-> >>
-> >>  static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
-> >> --
-> >> 2.53.0
-> >>
-> 
+Acked-by: Dmitry Safonov <0x7f454c46@gmail.com>
+
+Thanks for the fix,
+             Dmitry
