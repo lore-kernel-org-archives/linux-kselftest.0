@@ -1,106 +1,167 @@
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-26.mta1.migadu.com [95.215.58.26])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0852E975E;
-	Sat, 22 Aug 2026 16:50:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.18.0.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77A392F39C2
+	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 18:27:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.26
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787417440; cv=none; b=XwMgjGcQUNIZBLqo9Q0Hbm7iAgbMYDhH+0xlVCj1SDM1C0gB+m6YowWnstRlmRoeW9Vh0xNzTLyHpw37dCiZ9CFbbOhCBBbqLbM8+Jc5hb+yYYl4YS+rZfcCnRqd7bZZFEMSHevN7GEgS+zNxQPx48NishQQxa5pdM7wRDej/Cg=
+	t=1787423272; cv=none; b=Yqrwu6cOJdIJdH1t08Wh+/mxr+QYwBEXo5b/bBUS9EZ0iaPxxwS7zFKWbn+eoSoz2UoSAGQjXU+Xv0Zr85qxrQcyY/26SzoZV76ynUePrDM9NrDVWpsdgSIly7OE1yJzK8qU6HdQeY9BGopBnC84GZUd9zcMu13ZfR3+414NY6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787417440; c=relaxed/simple;
-	bh=F/H70At36vqEAgxYft4pzZYGJt125sexAs1mQKFkzyI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=vGo9sqbaXPLc20M5hOG6M+7iJn7A/Y64qpV/hPtEg/B7JmyrseHy51nZNTzi4T0KK86iSOW8AVlWoE+a+2+x5WA5aWuve7rUC03WDgAgZzeP6cJvwh+7+GrxKcDeKnh+tsUlo+RxdA2Z2gpjT6hzMBd1GeT29R4FZJ5xyf2boyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=nefkom.net; arc=none smtp.client-ip=212.18.0.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nefkom.net
-Received: from mail-out.m-online.net (mail-out.m-online.net [212.18.0.10])
-	by mail-out.m-online.net (Postfix) with ESMTP id 4hS3820Pw1z1sMfJ;
-	Sat, 22 Aug 2026 18:50:26 +0200 (CEST)
-Received: from frontend03.mail.m-online.net (unknown [192.168.6.182])
-	by mail-out.m-online.net (Postfix) with ESMTP id 4hS38138ywz1sMfH;
-	Sat, 22 Aug 2026 18:50:25 +0200 (CEST)
-Received: from localhost (dynscan3.mnet-online.de [192.168.6.87])
-	by mail.m-online.net (Postfix) with ESMTP id 4hS3804KRnz1qqlZ;
-	Sat, 22 Aug 2026 18:50:24 +0200 (CEST)
-X-Virus-Scanned: amavis at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.6.182])
- by localhost (dynscan3.mail.m-online.net [192.168.6.87]) (amavis, port 10024)
- with ESMTP id Qz4Chty8sdOb; Sat, 22 Aug 2026 18:50:23 +0200 (CEST)
-X-Auth-Info: OL3cYjbU1r+qfm2QpDKq9gsFcdK7pEagtpeOPHg4Dj+AVcv3aYERNAi5TjJCOgP7
-Received: from igel.home (aftr-62-216-202-215.dynamic.mnet-online.de [62.216.202.215])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail.mnet-online.de (Postfix) with ESMTPSA;
-	Sat, 22 Aug 2026 18:50:23 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-	id 349732C0AF8; Sat, 22 Aug 2026 18:50:22 +0200 (CEST)
-From: Andreas Schwab <schwab@linux-m68k.org>
-To: Deepak Gupta <debug@rivosinc.com>
-Cc: "Eric W. Biederman" <ebiederm@xmission.com>,  Deepak Gupta via B4 Relay
- <devnull+debug.rivosinc.com@kernel.org>,  Thomas Gleixner
- <tglx@linutronix.de>,  Ingo Molnar <mingo@redhat.com>,  Borislav Petkov
- <bp@alien8.de>,  Dave Hansen <dave.hansen@linux.intel.com>,
-  x86@kernel.org,  "H. Peter Anvin" <hpa@zytor.com>,  Andrew Morton
- <akpm@linux-foundation.org>,  "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-  Vlastimil Babka <vbabka@suse.cz>,  Lorenzo Stoakes
- <lorenzo.stoakes@oracle.com>,  Paul Walmsley <paul.walmsley@sifive.com>,
-  Palmer Dabbelt <palmer@dabbelt.com>,  Albert Ou <aou@eecs.berkeley.edu>,
-  Conor Dooley <conor@kernel.org>,  Rob Herring <robh@kernel.org>,
-  Krzysztof Kozlowski <krzk+dt@kernel.org>,  Arnd Bergmann <arnd@arndb.de>,
-  Christian Brauner <brauner@kernel.org>,  Peter Zijlstra
- <peterz@infradead.org>,  Oleg Nesterov <oleg@redhat.com>,  Kees Cook
- <kees@kernel.org>,  Jonathan Corbet <corbet@lwn.net>,  Shuah Khan
- <shuah@kernel.org>,  Jann Horn <jannh@google.com>,  Conor Dooley
- <conor+dt@kernel.org>,  Miguel Ojeda <ojeda@kernel.org>,  Alex Gaynor
- <alex.gaynor@gmail.com>,  Boqun Feng <boqun.feng@gmail.com>,  Gary Guo
- <gary@garyguo.net>,  =?utf-8?Q?Bj=C3=B6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>,  Andreas
- Hindborg <a.hindborg@kernel.org>,  Alice Ryhl <aliceryhl@google.com>,
-  Trevor Gross <tmgross@umich.edu>,  Benno Lossin <lossin@kernel.org>,
-  linux-kernel@vger.kernel.org,  linux-fsdevel@vger.kernel.org,
-  linux-mm@kvack.org,  linux-riscv@lists.infradead.org,
-  devicetree@vger.kernel.org,  linux-arch@vger.kernel.org,
-  linux-doc@vger.kernel.org,  linux-kselftest@vger.kernel.org,
-  alistair.francis@wdc.com,  richard.henderson@linaro.org,
-  jim.shu@sifive.com,  andybnac@gmail.com,  kito.cheng@sifive.com,
-  charlie@rivosinc.com,  atishp@rivosinc.com,  evan@rivosinc.com,
-  cleger@rivosinc.com,  alexghiti@rivosinc.com,  samitolvanen@google.com,
-  broonie@kernel.org,  rick.p.edgecombe@intel.com,
-  rust-for-linux@vger.kernel.org,  Zong Li <zong.li@sifive.com>
-Subject: Re: [PATCH v23 06/28] riscv/mm : ensure PROT_WRITE leads to VM_READ
- | VM_WRITE
-In-Reply-To: <CAKC1njRapOxS6ibQdCuES1E3aAjsA+yGz4yZ1xJAZHU2vkAm_A@mail.gmail.com>
-References: <20251112-v5_user_cfi_series-v23-0-b55691eacf4f@rivosinc.com>
-	<20251112-v5_user_cfi_series-v23-6-b55691eacf4f@rivosinc.com>
-	<87jyslndo4.fsf@igel.home>
-	<CAKC1njS=AHu6uHrH4ae8VxcdEbhgiPXYCAoN3F_mnppBd3SwOA@mail.gmail.com>
-	<875x44o9hj.fsf@igel.home>
-	<CAKC1njSn_rtCj8ii876PNQTk0nsCTfWsb4DzdymufHVthh1Rkg@mail.gmail.com>
-	<871peqgp9v.fsf@igel.home>
-	<CAKC1njR+dTdvp+BmLGPtgd8dufiUwBtkQ9a-qinELT_Fmi13sQ@mail.gmail.com>
-	<87wlwif04z.fsf@igel.home>
-	<87tsrli6lt.fsf@email.froward.int.ebiederm.org>
-	<CAKC1njRapOxS6ibQdCuES1E3aAjsA+yGz4yZ1xJAZHU2vkAm_A@mail.gmail.com>
-Date: Sat, 22 Aug 2026 18:50:22 +0200
-Message-ID: <878q5y6qwh.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1787423272; c=relaxed/simple;
+	bh=thd4YQftP12yCx6TE0t6pWFFKHfj668R34Wjtwuo9W0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GVETyZ2K+5N/ti2QWnjtUrwTGZJhYMFJZuschkRHXsFyx7M0wBcHcaI2O90/SqaSaeMU1IRdkyXYS6H2BlVq6AMa0FuSnmj/XEMKuO9odZUsdmKTrPgoIObzLlpJliTzDHWK86V3pHPdVJpJmoBhdJNvzE3FveMKNHzu0skUcwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=DCHPaScs; arc=none smtp.client-ip=95.215.58.26
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="DCHPaScs"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=thd4YQftP12yCx6TE0t6pWFFKHfj668R34Wjtwuo9W0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787423266; v=1; x=1788028066;
+ b=DCHPaScs6DOQx+V2m8mbUSr9dlJIviUKbOXc3ai1IpniOgZRy0W1ao4w9Ut/j3HytNEOQqOm
+ KY7pPJrIRuEMYpPY5QdD30N3cw9iglpoOxP1RDxe927tedSDzo1zuf2WjY7OADhJ26znJdebj2v
+ TNXUeWmo3x6wgn/qSefvM33c=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [IPV6:2600:381:d619:d1ec:8d3:1358:3a33:c2e4] (2600:381:d619:d1ec:8d3:1358:3a33:c2e4)
+	by smtp.migadu.com with ESMTPS id 7035a39f906b7eac;
+	Sat, 22 Aug 2026 18:27:46 +0000
+X-Mizu-Trace-ID: 7035a39f906b7eac
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <e2a7e092-df3c-4f92-8f12-5eb371f004df@linux.dev>
+Date: Sat, 22 Aug 2026 11:27:38 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] bpf: reject stack-argument callback subprograms
+Content-Language: en-GB
+To: Eduard Zingerman <eddyz87@gmail.com>,
+ =?UTF-8?B?SsOpcsOpbXkgSmVhbg==?= <Jeremy.Jean@oss.cyber.gouv.fr>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Andrii Nakryiko <andrii@kernel.org>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260817204812.1637171-1-Jeremy.Jean@oss.cyber.gouv.fr>
+ <20260817204812.1637171-2-Jeremy.Jean@oss.cyber.gouv.fr>
+ <5d02cbe3-fd71-44e4-a6dd-706233ba248e@linux.dev>
+ <9f50810d45db0b60248f106d21b4a278f3ec2156.camel@gmail.com>
+From: Yonghong Song <yonghong.song@linux.dev>
+In-Reply-To: <9f50810d45db0b60248f106d21b4a278f3ec2156.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Jun 02 2026, Deepak Gupta wrote:
 
-> I'll send a patch. Thanks.
 
-Any news?  It's still broken in 7.2.
+On 8/20/26 3:32 PM, Eduard Zingerman wrote:
+> On Tue, 2026-08-18 at 08:23 -0700, Yonghong Song wrote:
+>> On 8/17/26 1:48 PM, Jérémy Jean wrote:
+>>> Helper callbacks enter BPF subprograms through bpf_callback_t, whose
+>>> runtime ABI supplies five arguments. BTF validation nevertheless permits
+>>> static callback subprograms to declare more than five arguments when JIT
+>>> stack arguments are supported.
+>>>
+>>> This lets verifier state for a callback use outgoing stack argument slots
+>>> prepared at the helper call site. The helper does not pass those slots. On
+>>> x86-64, callback loads of arguments seven and later therefore read the
+>>> helper native frame instead of the synthetic values checked by the
+>>> verifier. KASAN reports a slab OOB write.
+>>>
+>>> Reject callback subprograms with incoming stack arguments when processing
+>>> callback calls.
+>>>
+>>> Fixes: 0f6bd5e7a804 ("bpf: Support stack arguments for bpf functions")
+>>> Assisted-by: Codex:gpt-5
+>>> Signed-off-by: Jérémy Jean <Jeremy.Jean@oss.cyber.gouv.fr>
+>>> ---
+>>>    kernel/bpf/verifier.c | 2 ++
+>>>    1 file changed, 2 insertions(+)
+>>>
+>>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>>> index fdc5fbb1f78c..5fcefc0eaba0 100644
+>>> --- a/kernel/bpf/verifier.c
+>>> +++ b/kernel/bpf/verifier.c
+>>> @@ -9285,6 +9285,8 @@ static int push_callback_call(struct bpf_verifier_env *env, struct bpf_insn *ins
+>>>    	err = btf_check_subprog_call(env, subprog, caller->regs);
+>>>    	if (err == -EFAULT)
+>>>    		return err;
+>>> +	if (bpf_in_stack_arg_cnt(&env->subprog_info[subprog]))
+>>> +		return -EINVAL;
+>> This is not good as user will not know why it failed. Your v1 does have an error message.
+>>
+>> But this is not needed. Without above verifer.c change, user will get an error message:
+>>      func#0 writes 4 stack arg slots, but calls only require 0
+>>
+>> NACK, see my v1 comment: https://lore.kernel.org/bpf/14a7e7c2-36f7-4aa2-9b20-cc54700a9f1b@linux.dev/
+>>
+>>>    
+>>>    	/* set_callee_state is used for direct subprog calls, but we are
+>>>    	 * interested in validating only BPF helpers that can call subprogs as
+> Yonghong,
+>
+> this is a real bug. Here is an example of a program that exposes
+> unsafe behavior:
+>
+>      unsigned long arr[10];
+>      
+>      __noinline __used
+>      static int callback_9args(__u32 index, void *ctx, long a3, long a4,
+>                                long a5, long a6, long a7, long a8, long a9)
+>      {
+>              return arr[a9] % 2;    // verifier sees a9 as 0 and allows this memory access
+>      }
+>
+>      SEC("tc")
+>      __description("stack_arg: callback with incoming stack args")
+>      __failure
+>      __naked void stack_arg_callback_many_args(void)
+>      {
+>              asm volatile (
+>                      "r6 = 0;"
+>                      "*(u64 *)(r11 - 32) = 0;"
+>                      "*(u64 *)(r11 - 24) = 0;"
+>                      "*(u64 *)(r11 - 16) = 0;"
+>                      "*(u64 *)(r11 - 8) = 0;"
+>                      "r1 = 1;"
+>                      "r2 = %[callback_9args];"
+>                      "r3 = 0;"
+>                      "r4 = 0;"
+>                      "call %[bpf_loop];"
+>                      "r1 = 1;"
+>                      "r2 = 2;"
+>                      "r3 = 3;"
+>                      "r4 = 4;"
+>                      "r5 = 5;"
+>                      "*(u64 *)(r11 - 32) = 0;"
+>                      "*(u64 *)(r11 - 24) = 0;"
+>                      "*(u64 *)(r11 - 16) = 0;"
+>                      "*(u64 *)(r11 - 8) = 0;"
+>                      "call callback_9args;"   // this hides the callback call from the check in bpf_fixup_call_args()
+>                      "r0 = 0;"
+>                      "exit;"
+>                      :
+>                      : __imm_ptr(callback_9args),
+>                        __imm(bpf_loop)
+>                      : __clobber_common, "r6"
+>              );
+>      }
+>
+> Jérémy,
+>
+> Please update the test case as above, as your test case does not
+> really expose the bug. Also, I think that a better fix would be to
+> make stack arguments not-init in the callback frame. This way the
+> verifier would produce a proper error message.
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+Okay, I see. The key thing is the below:
+    "call callback_9args;"   // this hides the callback call from the check in bpf_fixup_call_args()
+
+So callback_9args appears twice, and bpf_fixup_call_args() only checks the second callback_9args(), right?
+
+
