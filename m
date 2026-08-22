@@ -1,73 +1,73 @@
 Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9893B8412;
-	Sat, 22 Aug 2026 12:03:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28BA13BBFA9;
+	Sat, 22 Aug 2026 12:03:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787400211; cv=none; b=K8pBZ2+8Ip2vpLgdNNRxWyxmSTZxFOlvJodpY1YYAKVcSe2fJdc1SgjqdeDbD461Ddz4oiAgoxqVF3X69S1I50K7MkA9RWkU+TCxD3Ac4h62vZVOd+/4Q2JN9ae7UNPAPqkBfV+AlJ3Ht4rwoTZ24WycH28Q8aIZax0wBH/4aIc=
+	t=1787400214; cv=none; b=PGbcUvsAanGVtZmN8xp2zASXDZPfkhHjBSK6+nXWy+5YW27w1x/xn63DIdqKclLLiASvAX3YEPSx2egrgwSkfaryJpftIC+7e5xfJ8TpZr7StLTBoZSj83lR5gF6BPVOmqh5KIFsZfUbV4v7BoDx8docGPLqeQ70ey4lorbbs7c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787400211; c=relaxed/simple;
-	bh=5N2XWcg4XrJRKxfDerqWZ2yhKCs+1mJbi01gjEU9YiY=;
+	s=arc-20240116; t=1787400214; c=relaxed/simple;
+	bh=oTr1zlHoxUQXXi4GXpBtWLtPwmufwOn2V7G3nCN6eUo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=CT1vtl5y5i6C9oMAHuxpRyuX4XFtfyDZE4ZXjf8r9ybMeahvK6RoE2XkNL+/f6pJI5JU0jS0dV9Tn1JjS+3fmX1LbCq/sn2VIUvoTvZQr/9iGxgN2yq5r6WR9U+yGjpM51qo+8SdlOIP4cNLwCkcYx/f7EAg8J4F3i8kFzL5s5o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=cw7JJXFr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=clnqFjiq; arc=none smtp.client-ip=202.12.124.158
+	 MIME-Version; b=oBtE9x/S+3hhldm0FO0g3zTIxZiZ0l1lCU4zHO3lsF9z7OK0U1ECnpxwF96IGDZ7NBdZyR32EucN5od28Tn66QnU1ye+BThPYZwRtJcxN+zyluEaZpVkHx6J48Rj/J2tulGb5Lo7F8VioDUw8QDGNY6+n6pN5FmyKGlcAS+cEpg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im; spf=pass smtp.mailfrom=fastmail.im; dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b=BLQCL9kX; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=W6c209sa; arc=none smtp.client-ip=202.12.124.158
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.im
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.im
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="cw7JJXFr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="clnqFjiq"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id E431F7A00B4;
-	Sat, 22 Aug 2026 08:03:28 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=fastmail.im header.i=@fastmail.im header.b="BLQCL9kX";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="W6c209sa"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 40D1D7A00B4;
+	Sat, 22 Aug 2026 08:03:32 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-01.internal (MEProxy); Sat, 22 Aug 2026 08:03:29 -0400
+  by phl-compute-03.internal (MEProxy); Sat, 22 Aug 2026 08:03:32 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.im; h=
 	cc:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1787400208; x=
-	1787486608; bh=qh2BcRf/1XD9eHqWIQBHxCfoJltrqePDcK3FNqa6zpg=; b=c
-	w7JJXFrWK/zICw3i8F0KEFUPVUxMxUkPyOLTVYyixvyrl6on0ctsIvERGFS1/J2P
-	a+ef2stsTTRGWDp9i25fMwi1wiCUTo+1TtPLKQ2oO2wahmZBMXJZIJN279gKp6P+
-	oyJtDHp4xhx9Mxf2KqntI/A09ZiAmCBTybU+8l50ZHRc0c1oTo/Vzr7Nu1TToh4B
-	YebG7Oagh6GgU8mkidClAOwQvVphi0Bw71z88LWeqhfluTomBgPgueQ2P0AQeACa
-	KvM8JjSqXPiGc7MW5SLZ2HeUeSu7u/Wunkcd/gtc75QfwbojdQHmn+wmWHwzrBeP
-	0FlfO5CkAWraFrwmhCBEA==
+	:reply-to:subject:subject:to:to; s=fm3; t=1787400212; x=
+	1787486612; bh=Hn0WydcGmA3b2mZC2+LRDL96s6FfT+VIfmk4r/xLkfw=; b=B
+	LQCL9kXl00p7X1LwLdRX9qO0SsckYOv+HljJGXoEGYHWPEakZ+SbxHR1UW/KIS//
+	lW4Zwvm4BggefFPR2zIsBt/MoTMC6xjV1nfoK/LAaGPzwYvsFFPFvM8Nu64bWdhV
+	Qjyn8n1o4qh7vbK96d74iLzJ0SgCwcz0OWCtzgkKsI1LonPq6s6FyQa9I7nq0vgm
+	jpPhmnBRa9Op8B13MQ8IAkDhuIs2jG71CoQTiCvqJvGQdHxctyZGHmOtcsGrBZu+
+	85skidQgApiZxQsPhIGb27b+mec6EL1WSWZBk2/eQrLgk77czGgu0tles7NqvNEe
+	CMj7J8bjv2uGjERk5tJpw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1787400208; x=1787486608; bh=q
-	h2BcRf/1XD9eHqWIQBHxCfoJltrqePDcK3FNqa6zpg=; b=clnqFjiqm1hCKo7sv
-	fztCh+q6MZiHFpWzZPM7dsF9XJxM0SulpIzzqIWmpgooWOfg5j+iKegNQLn5KIcN
-	OxpxjNDb/gAWUBDdgolj3jqS40Fxa6KQdLrOxoFU14gC1YmTlYD1l+7rVpwnqQ9M
-	owV3yMMoiW8MtS1cWXfBL2n/ks519fX+12RFUyBoexyDGJm8RUuVidOyAf98ev4B
-	Gi1vQWD/516FlYZrUZFnB6BslqXGAJoqiCRq+DMQUfm/jeGkGmuKKombf6/Szw97
-	B0ij0Q6TAukP75r/IZdJ3xOmfKa01SBr7Y3Oas2O+3ITefpvpZJD/J+2U6+w5egS
-	VbYYA==
-X-ME-Sender: <xms:EJCJamlRsuQ-_6o-iDVdLQfEht8fEEj-apANMFOYLSZnCwSDw3Rl-g>
-    <xme:EJCJasGFVRKotmgE3WlIvo5rYcw6juYMpz-3pkdRGZXfbcr82DtDC3zx070p_ETq4
-    t5hIyLRaDiiu5bJi3sQnjwIvl3j9gSgHm8SR5E_eYQ0UCgOXOri20M>
-X-ME-Received: <xmr:EJCJat-cz0cryMZ2DGFqknTz0Zd07pBsU6OBQTz9cespOSHNTHnLAh1yEzm65Q>
-X-ME-Proxy-Cause: dmFkZTFaX8wOrshvLU7J+PDxpoaAht0xCWfKNXQ/qJ3dE1uDwyLmT1zixuGol9FVIlMxyp
-    cFtQAuesbPUaE0ZxfYZB+K2zojBKYzXoU1STxlX76VvucFiM2Z3v8iVx6FWJ8v98GWSzv+
-    kXCbYSb5YfF0cTIkshGEtMW/bZ0GoeWSJcpB07HHug7750WgGAiaGLrlPTq5aiLUTILobB
-    r7dLoqKvPNyVUDO2Gml6UvBBTfnI9R8d8nBzycG+nRjYd+21x8sHtymqK7M4mggT7fBusu
-    fpBxzAgFc3gr0bsNq/VbINecjkJSHC+6ClR+PgSAp66Em81xHBYeZKY2lWKkyVIY3eIKR8
-    EocudIg9NYCG3TrryXOylycOwrOYOjp2R+iwE93Q4zAKdE8h20LufayPRHhx7Fzm+uW+NB
-    /+AIw4MeAGOhn8vQknMW2BnqBaV54PLvFSyfB4OeVXWs1PZt1ZLyWaIPMiNxw1GNrhE6BL
-    pD6v9ToPhH8kO2N5n+wTJ+5pe03Xyh0MM6wZ4V3wiAV5qd+9ei3BhBm2NwEJCk81tryGYi
-    UE1Brpz7mG1F1KNTCvCpSOmdk0umegUD0OugYgm1K8vgbSGvxXosKvehh/vNxLrPLhxDzO
-    vcEeZV3TEjqYUgduJr5ENu+rzzbpXMpNefenoNdTdRr19ebIiXxb5LSL0QkQ
-X-ME-Proxy: <xmx:EJCJatn3zhDeRovv7wZ4iQWTbvkYRvT3DZM92ZQjoLA9DdSwAugNLA>
-    <xmx:EJCJaoCYo5RhkYJN2_8WsdL-5YmRaSwpn7ny4DtfSfI9SM4Gv90aog>
-    <xmx:EJCJamVZ3JcLsq-60lGhYMbTfrV6bDVSdC51vpgFAxnGkNFBUrRpZA>
-    <xmx:EJCJam8HkGgd5i1Bmk6aRaI3zb3DCzMP54viG7UtPapeZD2mpA5koA>
-    <xmx:EJCJauCyz5C-Y_tqivHPM4yuehlr0LjvEbRoNzKpp-B_xmAGL3ko3qCd>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1787400212; x=1787486612; bh=H
+	n0WydcGmA3b2mZC2+LRDL96s6FfT+VIfmk4r/xLkfw=; b=W6c209sacT39Eu7We
+	pYTyS5+id5elR8eTk4BW9qqftIT+0b9zQllRMhQYFnoz0B0sq0HVQoJWAJqkVdsx
+	m7S5XSV+jLHwyy/MYF1439nMJ3wDhcwO8UHwMaCkuMsjcdI00cvfuMU7886susCY
+	Rrroa4MlPdqdOwVSnMOFAoV3YS07cnHuI9884JpQm9cHxYiQRkJEdSpWDDdyBexb
+	uNawLWaDSBE450jrQnuVJydPNL2KxkFcL1FvuWO2EwTDNAdhkTp0Wxkwt6Z9BwqU
+	x0W0omez4926TKZl5IGqghVa7TmAGdb29Sj86pNAlvGqw8CYe72Akeymchn9yoKS
+	EV0ag==
+X-ME-Sender: <xms:E5CJatU55m7mPvSfWalzyTzFyQqL9p_5cH3AFWrZlITR7ann6WTQPQ>
+    <xme:E5CJar2D0HjIKw_mTUyPlJDNm3hHv36oBM9m7e3v7v6bjcG_92Wv8exkJHKURPaD4
+    Rk-qkEOU1KezCVeEGSoP7GWP4piwq7KXOCzs09cVMV8iGPps2JjsBpV>
+X-ME-Received: <xmr:E5CJaisprhbXEXPLNkVzi-9acSAUVP3FWxr62R6lmwSwV7_7Tlw3v50FL7zHmg>
+X-ME-Proxy-Cause: dmFkZTGg+gnfyiS/t0GzAo9yUBBjMZ35coAZHemgLRoQ6FsfA0/o2Ma0c4XLrDNGgpGHJu
+    R9QOgavv5gnUAaq5PlAGR/Q1wvvqEnwtGdoO/if4P2aqgkbEdxx4escrJkOUa7yE5QoLR9
+    jlXbj/SlikNDiMSWFuPvh37QmJEAWZ8u1GsiBYdalb3xw+iu0VcTG2NCg7htlbr41FadCY
+    jVigAM/4qybxO0KDNZOg20UyC8h8jEYL23bpDcC2y6GrK+XSJ/O+NP4xuzYsYJ4f/VIgtN
+    dRqvAzjihBES2wKytVKbYrJO6cwXdEf6UlOFKNlHsS5Fsla1B7hshGIL5eXy6pcRianiJw
+    Mz6mrBdY2ovM1rRZACfqsF5B7VivVZt+E1aqVGPomWgO6xgZnu7rgr2RdUIpu0RX9QMnRK
+    cLC8Ohbukh9Bd/tiuD2EdMy0x14ZoFXqXbrLeJfOYyW+1tyHXiteyrHFiVDAQju5SNvSzI
+    xtZFcY06luP5jlsSPJ8SArwDoBGLwziKG8xeUFI0jtDticXluncH2RP03lq6vJ2a+opjpm
+    R/NJP/tN72fxEARF3aklRQwhpAVn1RsM0KUHomFtV3XvfpWwxusL7BbwrJ/IWIiygpfrkw
+    gflQvdIxtU5SutHyNl5a+Lqgki9zUUzxy6qGz7uEfh4Br1atqCt66F2Y4Zag
+X-ME-Proxy: <xmx:E5CJajX8rFXUWJH2klADbB1HjT285vvyDnAn23bipuL2HwOhR6tM8Q>
+    <xmx:E5CJaqwb5isgfdcnztiuRdjji09JGMAl5YUyjUfVFtMFHOkw8LGOSw>
+    <xmx:E5CJaiG7l9U4XiBmyelwC5FWzmAV1NclyFDi_jzbb3h0vDDdd7YiSA>
+    <xmx:E5CJanuMdywU0qzn1Z3Nu1NLaVUyTlWP4fGfQGQAVuaJEceG4Dz_Lg>
+    <xmx:FJCJapwl0fqC2Z_cboMdHWDh_RkO5WI8U_10PGD32VZtQlAZvfKkGguI>
 Feedback-ID: i559e4809:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 22 Aug 2026 08:03:28 -0400 (EDT)
+ 22 Aug 2026 08:03:31 -0400 (EDT)
 From: Alice Mikityanska <alice.kernel@fastmail.im>
 To: Matthieu Baerts <matttbe@kernel.org>,
 	Paolo Abeni <pabeni@redhat.com>,
@@ -80,9 +80,9 @@ Cc: Eric Dumazet <edumazet@google.com>,
 	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	Alice Mikityanska <alice@isovalent.com>
-Subject: [PATCH net v2 1/4] selftests: net: Wait for netserver to launch
-Date: Sat, 22 Aug 2026 15:03:05 +0300
-Message-ID: <20260822120308.1165200-2-alice.kernel@fastmail.im>
+Subject: [PATCH net v2 2/4] selftests: net: Lower threshold on debug kernels for big_tcp_tunnels.sh
+Date: Sat, 22 Aug 2026 15:03:06 +0300
+Message-ID: <20260822120308.1165200-3-alice.kernel@fastmail.im>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260822120308.1165200-1-alice.kernel@fastmail.im>
 References: <20260822120308.1165200-1-alice.kernel@fastmail.im>
@@ -96,36 +96,41 @@ Content-Transfer-Encoding: 8bit
 
 From: Alice Mikityanska <alice@isovalent.com>
 
-Use wait_local_port_listen after starting netserver in
-big_tcp_tunnels.sh to ensure it's listening when the test starts.
+Debug kernels on upstream CI runners run slower and generate fewer BIG
+TCP packets, making the test flaky on upstream CI runners. Lower the
+default threshold for those kernels.
 
 Fixes: 5cb53743e1ff ("selftests: net: Add a test for BIG TCP in UDP tunnels")
 Signed-off-by: Alice Mikityanska <alice@isovalent.com>
 ---
- tools/testing/selftests/net/big_tcp_tunnels.sh | 3 +++
- 1 file changed, 3 insertions(+)
+ tools/testing/selftests/net/big_tcp_tunnels.sh | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/tools/testing/selftests/net/big_tcp_tunnels.sh b/tools/testing/selftests/net/big_tcp_tunnels.sh
-index d6513ed8d4e8..9b7d0456bcc1 100755
+index 9b7d0456bcc1..e0b41f394ebb 100755
 --- a/tools/testing/selftests/net/big_tcp_tunnels.sh
 +++ b/tools/testing/selftests/net/big_tcp_tunnels.sh
-@@ -3,6 +3,8 @@
- #
- # Testing for IPv4 and IPv6 BIG TCP over VXLAN and GENEVE tunnels.
+@@ -17,11 +17,18 @@ CLIENT_IP6="2001:db8::1:2"
+ CLIENT_IP4_TUN="192.168.2.2"
+ CLIENT_IP6_TUN="2001:db8::2:2"
  
-+source "$(dirname "$0")/lib.sh"
+-: "${PACKETS_THRESHOLD:=1000}"
+-
+ # Kselftest framework requirement - SKIP code is 4.
+ ksft_skip=4
+ 
++if [ -z "$PACKETS_THRESHOLD" ]; then
++	if [ "$KSFT_MACHINE_SLOW" = yes ]; then
++		echo 'Debug kernel detected, lowering the default threshold'
++		PACKETS_THRESHOLD=100
++	else
++		PACKETS_THRESHOLD=1000
++	fi
++fi
 +
- SERVER_NS=$(mktemp -u server-XXXXXXXX)
- SERVER_IP4="192.168.1.1"
- SERVER_IP6="2001:db8::1:1"
-@@ -39,6 +41,7 @@ setup() {
- 		gro_max_size 196608 gro_ipv4_max_size 196608
- 
- 	ip netns exec "$SERVER_NS" netserver >/dev/null
-+	wait_local_port_listen "$SERVER_NS" 12865 tcp
- }
- 
- setup_tunnel() {
+ setup() {
+ 	ip netns add "$SERVER_NS"
+ 	ip netns add "$CLIENT_NS"
 -- 
 2.55.0
 
