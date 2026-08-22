@@ -1,62 +1,64 @@
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D66335F163
-	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 20:11:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E24A73515FB
+	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 20:11:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787429503; cv=none; b=FKJtk+Ljef3Z7nZFZYEm7o9FBa6WuYmnHLLq6pdEnY1fOKj+fQfylQXCPOG90k2K4k6uzjVEM9TJjXc7+N+LbY80PPDLpogmY6UmYYLAJ7dabAmTQ5h+pvwo/+4RTYoLowBIjZdIZQMuwTi1tHnu9ZfM07fTCPvbuAnfBcrnbu8=
+	t=1787429508; cv=none; b=VtXHmZKID+OOPIogtl1Vyy93TzVNdJ9Mcix2/LrlGBpCq6pyouHaFe6VQjCHFNwQ4t2ssPpc6QQw5iV4BklniknZTEAT+EK0RdMvG+UKd6Zgi9uM7n8XdYuJtitbfufFCqAnj96j7Y6ZD3iFHis/J4NrQimokPWoTZXmeP4BUpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787429503; c=relaxed/simple;
-	bh=gY8pFX7eDDeZz3RXVa7ARwOLkXBhrB1p6G3Gx3Zy2o0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nMjF7CJUgaNDwWAWYUd7O1964UeZn9NiSB+Fs4wXtjBjKyFtfPo7XOuL2tqUEOLWr+mGKMVZ/dRXrhsqDWbtzuEYYSSmwBUYx3dUnIaKvTo7QkuFeRo3wsoSN0LaHz5GbB2E35/1bv1eQhMk23Wqo7rDVVgu+BgFgt+PmaYf6Kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=HzRj1If/; arc=none smtp.client-ip=209.85.218.41
+	s=arc-20240116; t=1787429508; c=relaxed/simple;
+	bh=/PnBKtgvrHRV4JL6qZBj+ZWGP1Az2ZXAav1JQfVyl6Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZjSTlblzYoFE32oQ7+qn5H81me8u02R4duxsh5XFo/xMn5sjKBQtySeezZINe0ujt4n1liM+Y9rRqqRtKGSX1rcuZ/ftQLMsOTt0uG5lswwu+pKGHus8gfm8sOtBvoDA6lIV+r+UamACuKnw/Nz+toTR12ehP2rp5jLWF4jL9+o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com; spf=pass smtp.mailfrom=isovalent.com; dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b=esAhGC/3; arc=none smtp.client-ip=209.85.208.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=isovalent.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="HzRj1If/"
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-c247f6687dcso223622566b.2
-        for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 13:11:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=isovalent.com header.i=@isovalent.com header.b="esAhGC/3"
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-6a3e145e1bfso2873883a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 13:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1787429500; x=1788034300; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=yVtGEBOLfPUf9fsvzZfuQ+GouRuuY6QxJu3hiEIATS4=;
-        b=HzRj1If/WA4D0QKLfuosG/1pRewvCW0rfDBmX5T/egvaxIoKoHY2ZsEzb3eSxSm8co
-         O+4gyETdxElV1c6uDJM0tvQlSue6yYzKWYH2pDHu7co50Y0Wa7OwJDEXfyYvICaCy3ym
-         gPJ6ZyPQXEoFRsDtPVr0+YqMCHnuXqPtVq6XKmTzsLM+RsuZHmHxTf1BaCNuDEGcDklF
-         Aj/IhNrl10XkhCfldI2C7k13A16I23xT4GmqDnV1b2ntr0tsR4LNnF2ZRhkOuGP0Gubj
-         i81LAxCS1O4wGmH2AH+b9C7Ucv/lq7yCt2TxE+yY9WoDQ2DgFDPqOEAM/ol7y+aayxk3
-         LIcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787429500; x=1788034300;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=isovalent.com; s=google; t=1787429505; x=1788034305; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=yVtGEBOLfPUf9fsvzZfuQ+GouRuuY6QxJu3hiEIATS4=;
-        b=ST3walkILWPNSEuPPD9t+61JIJL2kmPVfY7tAmjPgPr87UaqCLTL2GMInUnMyHmMlv
-         BBngCQxOHOvRZNB0YgorBi6yPiUGNQxRD7JhvrejD8xheoQLxEZUcPBVH3633H741GlU
-         /BrkctODzukOcJy6JL/eHbYGbNCWK7aYm948M1KuEmDHqjozEXJHWB2NbVi1x78OvLoh
-         9NRUEtnJtJs1MuUdO04FF4J+MpTwTqs+u9aP+GqmkOH1qUiHW21PdrwoBzGYKlHyMHfq
-         r/eEarCYcLdYUhFc5jc81+EdXyV3IUqGaPujAKjo33H0EWJgGUjPEE8vxaGzNwS0qyx0
-         zYbQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rpr6vrpMT1k8DybWtj7tYlxd72JZy3W8ivsFH3Qez8xjfWh0BmRegpgzbJctIMOSmOjw/pKig/dLGd68a7Hq3c=@vger.kernel.org
-X-Gm-Message-State: AFuF++m0UeWiAr7krryeA0bSqZ9GgpNKjAzetFkGDAEfiHMk+4UnwW18
-	44a1UtNz5A8ZYi9xeafRlFuwpgwIWMvqdjEUkuJ0dnXYgWOcyFQqQ0iPDyWGG96YiZU=
-X-Gm-Gg: AR+sD13x0TfhTbnCT4apkyEeNfWvOA0CHdwfi5Qzxo0jBSE8koCRJmuoKk5Z6GUEqaa
-	5lRWVOpT5I61yO4yBEsL7dsIc8cyOmMhcc3vzTXGsluAtmIc08FNUCqC9fR0hHq39C7W2dt2gz3
-	dAVP79gpjUWa4oWr6qibG/V/GCvzfpxI3FvT4P3E8tKdJdL+SsyNPL1B/QOGZJMu0QijbSuVMkJ
-	NlvfPSMfbBbN4H0AhSELKSsJDJ8toAxHGMxPLloUcFalRQtqChQcqsHrpJLqb35Y0o9l7+1VpQf
-	4pYX90VUOWrS1cKXM2yzL5ters0XwWFco3ewC+NjPt0IjDS9qI4YWuBnUznnQuaS8B/jUm0mi/8
-	bk04Ux/XkmPi/SFmfF39+tC7dMlNn01xrWAjXpHG9arLaeapej/T8xII+Vhk49RCuL7ZQKhOaZU
-	IMRIaXPnvVyn+WCo+JCc5AC/yfgXSEGkHde+wnpfEIaDjvkpoS0YQ/po/vvQYIDTv9nFkC/ADWZ
-	21zmlfIKQWVjyUgnCHJfHPAq9oOcAZnmDCoh6znOBlfc6+qbYpKHnxwCFmtnA==
-X-Received: by 2002:a17:907:3f88:b0:c24:8e4b:2baa with SMTP id a640c23a62f3a-c248e4b347fmr961860666b.15.1787429500178;
-        Sat, 22 Aug 2026 13:11:40 -0700 (PDT)
+        bh=KzUPKMiG4VxZWjlyXNq686M66Aoo7Y803vMgcHVtz3g=;
+        b=esAhGC/3IQgjSSSNkwCJQLXGAef3bd89ZY6jTmuwcqBQeW1T7BZ3IRA4TE45/Nrngb
+         rDTwx3U5crni8PoOnm7NX/EZISsop5hKVaIHv5PTAJYKikCHeqUqirLXCciINIBodJmV
+         eESKLlF3MLHw6FfLUuIHhilIFP5EgsmEdoj2BYt6y5O5/oFGwXtV0BkvIDVopK3seHgC
+         iJJn4sRtg78hR1cl0ORDsW8EW3dCZPXVw1WbOXQHQQ3gP7eaagHGV+g9k6tCF5/N3roD
+         vv5gjrAQJYT9p5PStmlc/HTIH7REocOkrSl1iySurBLxpar4wlZxI0MTkXtO7QLW/lhA
+         2KhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787429505; x=1788034305;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KzUPKMiG4VxZWjlyXNq686M66Aoo7Y803vMgcHVtz3g=;
+        b=A9eQbg4WD55KEkn54Cik1yDCl+u0gCzYllGpIq15Nn3zxyiCOEdEena9JMOrPg+JzX
+         mBe8qedixxMfz1U1j+cxzUpxYhvda3LX90SkFt0q1Qe6UsZJU+HvtN88Yk63beftH4sK
+         ReyiAmXTEkjoNApdjB/3GR85SsBKula4db85sQVMGB5kMVUklHL7XFVJSbMVAOVLjcGm
+         06tSDoeFxF+HBn2zONVjVfI8+t9VjhFKVDSJRSevMm30hH2E4tDJWiRBzXQciKfTultn
+         qIWldB457X303fAqsHSvA23u24pNNcg8P9tK+BtnleE/gO15/peJuOyAg+ItVBfdh2OF
+         UoXg==
+X-Forwarded-Encrypted: i=1; AHgh+Rrnwo6lzvTPrqHtrVVBxbBvkxBQc0kyFnoa0vE2rVrKn5kgg/roaX+gGiWLSGBJnQXqVSbk4p0fgH9ZOdQ+Oic=@vger.kernel.org
+X-Gm-Message-State: AFuF++l95yTsJM3sP3ABmJQU0ZlwpAPtWrzhNuPXdjfjc+sL/Ti5Nt/o
+	74bdtN7HnvENxK/gt3huT7rRWgn1SqTubqr02h3C36KRB8yAhdSuAqRtTu40Os5/ImI=
+X-Gm-Gg: AR+sD128LxldHUwQmRxJotCzU+Awuehz7Z4+9Mjpp8rbQR0/n25r4uPMfO1RTY19z75
+	ln3Ks+udGHs/eOxd2wY4s5qn8My5190hm9ZYKpitshmEjgtfZck7Vs/eP7NQeDmuCkf571D6ym8
+	OGxDTdBOkCIAXmG8jsm0XDJMhpUBf0HJp0IN4RhaYwSBgrzmIS6pctkl7kN27lsnZqwIPtGt9eO
+	TMa2LnfGESOBBandz5j7GiRrcHXj1Ru8lSsfEUI2VzzObaeFL0sYKYZB5iZ98qqUAOI2BzQQVpa
+	kQ+2+b+M6N66wm4Mzw3rApczDLKnKHEyMLrBSRP5F+Nb+HQvtQEt9TEexnCcqeOnAR3Vh7ZQ5gh
+	iErYqEPmMV+xPF0/GCoIFwljE8Z0cEEdfyOmSwKN1ciaeOb3nYZqE3jWxuWR4SQUtJzjDJXRWVY
+	pR8ijbaNJb+RfGkMlyOuIaxItSpT9bGZPf6L+NWHh2Icv8E+KD4i3jNedqy7Td2ub8s9pbXpo22
+	ey/tvAUHDQYSVIsuhSyyxixIrwoZ2ZT1u0pIng7QqqEHVegBcwWAGOr
+X-Received: by 2002:a05:6938:a090:20b0:c21:2c32:e2e6 with SMTP id a640c23a62f3a-c246a60cfe4mr1222072766b.10.1787429504815;
+        Sat, 22 Aug 2026 13:11:44 -0700 (PDT)
 Received: from localhost.localdomain (chello089173060039.chello.sk. [89.173.60.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f99basm444347766b.37.2026.08.22.13.11.39
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f99basm444347766b.37.2026.08.22.13.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Aug 2026 13:11:39 -0700 (PDT)
+        Sat, 22 Aug 2026 13:11:44 -0700 (PDT)
 From: Rastislav Szabo <rastislav.szabo@isovalent.com>
 To: netdev@vger.kernel.org
 Cc: edumazet@google.com,
@@ -67,10 +69,12 @@ Cc: edumazet@google.com,
 	shuah@kernel.org,
 	dima@arista.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net v2 1/2] net/tcp: fix TCP-AO key deletion in VRFs
-Date: Sat, 22 Aug 2026 22:11:18 +0200
-Message-ID: <20260822201119.272269-1-rastislav.szabo@isovalent.com>
+Subject: [PATCH net v2 2/2] selftests: net: tcp_ao: test VRF-scoped key deletion
+Date: Sat, 22 Aug 2026 22:11:19 +0200
+Message-ID: <20260822201119.272269-2-rastislav.szabo@isovalent.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260822201119.272269-1-rastislav.szabo@isovalent.com>
+References: <20260822201119.272269-1-rastislav.szabo@isovalent.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,40 +83,240 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-TCP-AO keys with TCP_AO_KEYF_IFINDEX store the VRF L3 interface index in
-l3index. tcp_ao_del_cmd() validates the supplied ifindex, but does not
-assign it to its local l3index before matching keys.
+Verify that TCP_AO_DEL_KEY can remove a TCP-AO key scoped to a VRF.
 
-As a result, deleting a key scoped to a non-default VRF always fails with
-ENOENT because it is matched against l3index 0.
-
-Fixes: 248411b8cb89 ("net/tcp: Wire up l3index to TCP-AO")
-Cc: stable@vger.kernel.org
+Assisted-by: Codex:GPT-5
 Signed-off-by: Rastislav Szabo <rastislav.szabo@isovalent.com>
 Reviewed-by: David Ahern <dsahern@kernel.org>
-Acked-by: Dmitry Safonov <0x7f454c46@gmail.com>
+Acked-by: Dmitry Safonov <dima@arista.com>
 ---
 Changes in v2:
+- Put async on the same line as current_key in test_del_key().
 - Add review tags.
 
- net/ipv4/tcp_ao.c | 3 +++
- 1 file changed, 3 insertions(+)
+ .../selftests/net/tcp_ao/key-management.c     | 67 ++++++++++++-------
+ .../testing/selftests/net/tcp_ao/lib/aolib.h  |  6 +-
+ tools/testing/selftests/net/tcp_ao/lib/sock.c |  4 +-
+ 3 files changed, 51 insertions(+), 26 deletions(-)
 
-diff --git a/net/ipv4/tcp_ao.c b/net/ipv4/tcp_ao.c
-index 5094267447ae..26864621e6de 100644
---- a/net/ipv4/tcp_ao.c
-+++ b/net/ipv4/tcp_ao.c
-@@ -1834,6 +1834,9 @@ static int tcp_ao_del_cmd(struct sock *sk, unsigned short int family,
- 	if (cmd.ifindex && !(cmd.keyflags & TCP_AO_KEYF_IFINDEX))
- 		return -EINVAL;
+diff --git a/tools/testing/selftests/net/tcp_ao/key-management.c b/tools/testing/selftests/net/tcp_ao/key-management.c
+index d86bb380b79f..0451f92f4645 100644
+--- a/tools/testing/selftests/net/tcp_ao/key-management.c
++++ b/tools/testing/selftests/net/tcp_ao/key-management.c
+@@ -63,8 +63,8 @@ static int prepare_lsk(union tcp_addr *addr, uint8_t sndid, uint8_t rcvid)
+ 	return sk;
+ }
  
-+	if (cmd.keyflags & TCP_AO_KEYF_IFINDEX)
-+		l3index = cmd.ifindex;
+-static int test_del_key(int sk, uint8_t sndid, uint8_t rcvid, bool async,
+-			int current_key, int rnext_key)
++static int test_del_key(int sk, uint8_t sndid, uint8_t rcvid, int ifindex,
++			bool async, int current_key, int rnext_key)
+ {
+ 	struct tcp_ao_info_opt ao_info = {};
+ 	struct tcp_ao_getsockopt key = {};
+@@ -76,6 +76,10 @@ static int test_del_key(int sk, uint8_t sndid, uint8_t rcvid, bool async,
+ 	del.prefix = DEFAULT_TEST_PREFIX;
+ 	del.sndid = sndid;
+ 	del.rcvid = rcvid;
++	if (ifindex) {
++		del.keyflags = TCP_AO_KEYF_IFINDEX;
++		del.ifindex = ifindex;
++	}
+ 
+ 	if (current_key >= 0) {
+ 		del.set_current = 1;
+@@ -95,7 +99,8 @@ static int test_del_key(int sk, uint8_t sndid, uint8_t rcvid, bool async,
+ 
+ 	tcp_addr_to_sockaddr_in(&sockaddr, &this_ip_dest, 0);
+ 	err = test_get_one_ao(sk, &key, &sockaddr, sizeof(sockaddr),
+-			      DEFAULT_TEST_PREFIX, sndid, rcvid);
++			      DEFAULT_TEST_PREFIX, sndid, rcvid,
++			      del.keyflags, del.ifindex);
+ 	if (!err)
+ 		return -EEXIST;
+ 	if (err != -E2BIG)
+@@ -112,12 +117,12 @@ static int test_del_key(int sk, uint8_t sndid, uint8_t rcvid, bool async,
+ }
+ 
+ static void try_delete_key(char *tst_name, int sk, uint8_t sndid, uint8_t rcvid,
+-			   bool async, int current_key, int rnext_key,
++			   int ifindex, bool async, int current_key, int rnext_key,
+ 			   fault_t inj)
+ {
+ 	int err;
+ 
+-	err = test_del_key(sk, sndid, rcvid, async, current_key, rnext_key);
++	err = test_del_key(sk, sndid, rcvid, ifindex, async, current_key, rnext_key);
+ 	if ((err == -EBUSY && fault(BUSY)) || (err == -EINVAL && fault(CURRNEXT))) {
+ 		test_ok("%s: key deletion was prevented", tst_name);
+ 		return;
+@@ -236,15 +241,15 @@ static void check_closed_socket(void)
+ 	int sk;
+ 
+ 	sk = prepare_sk(&this_ip_dest, 200, 200);
+-	try_delete_key("closed socket, delete a key", sk, 200, 200, 0, -1, -1, 0);
+-	try_delete_key("closed socket, delete all keys", sk, 100, 100, 0, -1, -1, 0);
++	try_delete_key("closed socket, delete a key", sk, 200, 200, 0, 0, -1, -1, 0);
++	try_delete_key("closed socket, delete all keys", sk, 100, 100, 0, 0, -1, -1, 0);
+ 	close(sk);
+ 
+ 	sk = prepare_sk(&this_ip_dest, 200, 200);
+ 	if (test_set_key(sk, 100, 200))
+ 		test_error("failed to set current/rnext keys");
+-	try_delete_key("closed socket, delete current key", sk, 100, 100, 0, -1, -1, FAULT_BUSY);
+-	try_delete_key("closed socket, delete rnext key", sk, 200, 200, 0, -1, -1, FAULT_BUSY);
++	try_delete_key("closed socket, delete current key", sk, 100, 100, 0, 0, -1, -1, FAULT_BUSY);
++	try_delete_key("closed socket, delete rnext key", sk, 200, 200, 0, 0, -1, -1, FAULT_BUSY);
+ 	close(sk);
+ 
+ 	sk = prepare_sk(&this_ip_dest, 200, 200);
+@@ -254,10 +259,12 @@ static void check_closed_socket(void)
+ 	if (test_add_key(sk, "Glory to Ukraine!", this_ip_dest,
+ 			 DEFAULT_TEST_PREFIX, 12, 13))
+ 		test_error("test_add_key()");
+-	try_delete_key("closed socket, delete a key + set current/rnext", sk, 100, 100, 0, 10, 13, 0);
+-	try_delete_key("closed socket, force-delete current key", sk, 10, 11, 0, 200, -1, 0);
+-	try_delete_key("closed socket, force-delete rnext key", sk, 12, 13, 0, -1, 200, 0);
+-	try_delete_key("closed socket, delete current+rnext key", sk, 200, 200, 0, -1, -1, FAULT_BUSY);
++	try_delete_key("closed socket, delete a key + set current/rnext", sk,
++		       100, 100, 0, 0, 10, 13, 0);
++	try_delete_key("closed socket, force-delete current key", sk, 10, 11, 0, 0, 200, -1, 0);
++	try_delete_key("closed socket, force-delete rnext key", sk, 12, 13, 0, 0, -1, 200, 0);
++	try_delete_key("closed socket, delete current+rnext key", sk,
++		       200, 200, 0, 0, -1, -1, FAULT_BUSY);
+ 	close(sk);
+ 
+ 	sk = prepare_sk(&this_ip_dest, 200, 200);
+@@ -272,6 +279,18 @@ static void check_closed_socket(void)
+ 				  this_ip_dest, DEFAULT_TEST_PREFIX,
+ 				  false, true, 20, 10, 0);
+ 	close(sk);
 +
- 	ao_info = setsockopt_ao_info(sk);
- 	if (IS_ERR(ao_info))
- 		return PTR_ERR(ao_info);
-
-base-commit: 746fc0787f616da418ffc04a110296fe95d53491
++	if (!should_skip_test("closed socket, add + delete VRF-scoped key",
++			      KCONFIG_NET_VRF)) {
++		sk = prepare_sk(&this_ip_dest, 200, 200);
++		if (test_add_key_vrf(sk, SECOND_PASSWORD, TCP_AO_KEYF_IFINDEX,
++				     this_ip_dest, DEFAULT_TEST_PREFIX,
++				     test_vrf_ifindex, 201, 201))
++			test_error("test_add_key_vrf()");
++		try_delete_key("closed socket, add + delete VRF-scoped key", sk, 201, 201,
++			       test_vrf_ifindex, 0, -1, -1, 0);
++		close(sk);
++	}
+ }
+ 
+ static void assert_no_current_rnext(const char *tst_msg, int sk)
+@@ -322,8 +341,8 @@ static void check_listen_socket(void)
+ 	int sk, err;
+ 
+ 	sk = prepare_lsk(&this_ip_dest, 200, 200);
+-	try_delete_key("listen socket, delete a key", sk, 200, 200, 0, -1, -1, 0);
+-	try_delete_key("listen socket, delete all keys", sk, 100, 100, 0, -1, -1, 0);
++	try_delete_key("listen socket, delete a key", sk, 200, 200, 0, 0, -1, -1, 0);
++	try_delete_key("listen socket, delete all keys", sk, 100, 100, 0, 0, -1, -1, 0);
+ 	close(sk);
+ 
+ 	sk = prepare_lsk(&this_ip_dest, 200, 200);
+@@ -345,8 +364,10 @@ static void check_listen_socket(void)
+ 	if (listen(sk, 10))
+ 		test_error("listen()");
+ 	assert_no_current_rnext("listen() after current/rnext keys set", sk);
+-	try_delete_key("listen socket, delete current key from before listen()", sk, 100, 100, 0, -1, -1, FAULT_FIXME);
+-	try_delete_key("listen socket, delete rnext key from before listen()", sk, 200, 200, 0, -1, -1, FAULT_FIXME);
++	try_delete_key("listen socket, delete current key from before listen()", sk,
++		       100, 100, 0, 0, -1, -1, FAULT_FIXME);
++	try_delete_key("listen socket, delete rnext key from before listen()", sk,
++		       200, 200, 0, 0, -1, -1, FAULT_FIXME);
+ 	close(sk);
+ 
+ 	assert_no_tcp_repair();
+@@ -359,13 +380,13 @@ static void check_listen_socket(void)
+ 			 DEFAULT_TEST_PREFIX, 12, 13))
+ 		test_error("test_add_key()");
+ 	try_delete_key("listen socket, delete a key + set current/rnext", sk,
+-		       100, 100, 0, 10, 13, FAULT_CURRNEXT);
++		       100, 100, 0, 0, 10, 13, FAULT_CURRNEXT);
+ 	try_delete_key("listen socket, force-delete current key", sk,
+-		       10, 11, 0, 200, -1, FAULT_CURRNEXT);
++		       10, 11, 0, 0, 200, -1, FAULT_CURRNEXT);
+ 	try_delete_key("listen socket, force-delete rnext key", sk,
+-		       12, 13, 0, -1, 200, FAULT_CURRNEXT);
++		       12, 13, 0, 0, -1, 200, FAULT_CURRNEXT);
+ 	try_delete_key("listen socket, delete a key", sk,
+-		       200, 200, 0, -1, -1, 0);
++		       200, 200, 0, 0, -1, -1, 0);
+ 	close(sk);
+ 
+ 	sk = prepare_lsk(&this_ip_dest, 200, 200);
+@@ -1131,7 +1152,6 @@ static void check_established_socket(void)
+ {
+ 	unsigned int port = test_server_port;
+ 
+-	setup_vrfs();
+ 	try_client_run("client: Check current/rnext keys unset before connect()",
+ 		       port++, 20, -1, -1);
+ 	try_client_run("client: Check current/rnext keys set before connect()",
+@@ -1150,6 +1170,7 @@ static void *client_fn(void *arg)
+ {
+ 	if (inet_pton(TEST_FAMILY, TEST_WRONG_IP, &wrong_addr) != 1)
+ 		test_error("Can't convert ip address %s", TEST_WRONG_IP);
++	setup_vrfs();
+ 	check_closed_socket();
+ 	check_listen_socket();
+ 	check_established_socket();
+@@ -1158,6 +1179,6 @@ static void *client_fn(void *arg)
+ 
+ int main(int argc, char *argv[])
+ {
+-	test_init(121, server_fn, client_fn);
++	test_init(122, server_fn, client_fn);
+ 	return 0;
+ }
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/aolib.h b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+index ebb2899c12fe..53be1744237e 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/aolib.h
++++ b/tools/testing/selftests/net/tcp_ao/lib/aolib.h
+@@ -404,7 +404,8 @@ static inline int test_prepare_def_key(struct tcp_ao_add *ao,
+ 
+ extern int test_get_one_ao(int sk, struct tcp_ao_getsockopt *out,
+ 			   void *addr, size_t addr_sz,
+-			   uint8_t prefix, uint8_t sndid, uint8_t rcvid);
++			   uint8_t prefix, uint8_t sndid, uint8_t rcvid,
++			   uint8_t keyflags, int ifindex);
+ extern int test_get_ao_info(int sk, struct tcp_ao_info_opt *out);
+ extern int test_set_ao_info(int sk, struct tcp_ao_info_opt *in);
+ extern int test_cmp_getsockopt_setsockopt(const struct tcp_ao_add *a,
+@@ -418,7 +419,8 @@ static inline int test_verify_socket_key(int sk, struct tcp_ao_add *key)
+ 	int err;
+ 
+ 	err = test_get_one_ao(sk, &key2, &key->addr, sizeof(key->addr),
+-			      key->prefix, key->sndid, key->rcvid);
++			      key->prefix, key->sndid, key->rcvid,
++			      key->keyflags, key->ifindex);
+ 	if (err)
+ 		return err;
+ 
+diff --git a/tools/testing/selftests/net/tcp_ao/lib/sock.c b/tools/testing/selftests/net/tcp_ao/lib/sock.c
+index ef8e9031d47a..2e7b06a1a156 100644
+--- a/tools/testing/selftests/net/tcp_ao/lib/sock.c
++++ b/tools/testing/selftests/net/tcp_ao/lib/sock.c
+@@ -252,7 +252,7 @@ static int test_get_ao_keys_nr(int sk)
+ 
+ int test_get_one_ao(int sk, struct tcp_ao_getsockopt *out,
+ 		void *addr, size_t addr_sz, uint8_t prefix,
+-		uint8_t sndid, uint8_t rcvid)
++		uint8_t sndid, uint8_t rcvid, uint8_t keyflags, int ifindex)
+ {
+ 	struct tcp_ao_getsockopt tmp = {};
+ 	socklen_t tmp_sz = sizeof(tmp);
+@@ -262,6 +262,8 @@ int test_get_one_ao(int sk, struct tcp_ao_getsockopt *out,
+ 	tmp.prefix = prefix;
+ 	tmp.sndid  = sndid;
+ 	tmp.rcvid  = rcvid;
++	tmp.keyflags = keyflags;
++	tmp.ifindex = ifindex;
+ 	tmp.nkeys  = 1;
+ 
+ 	ret = getsockopt(sk, IPPROTO_TCP, TCP_AO_GET_KEYS, &tmp, &tmp_sz);
 -- 
 2.43.0
