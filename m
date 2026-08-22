@@ -1,44 +1,70 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA45B36B935;
-	Sat, 22 Aug 2026 08:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8CB3469FA
+	for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 09:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787388034; cv=none; b=qQGNR+jIAm8NJZOELpjtIcUT50uvCVTx5iHcECo4OxURhzQJFvqdOhzJ9hIPtflNhXbZICRLTtay+H5F6tWwZxbGj5NhXpCSEWGJ+nvGZjqmQdMeogKvq8YRJSD8ULXxt5MsfC1W0B0np8V1xM1QNy49XWwL7M/AtTOSfATUqK8=
+	t=1787392436; cv=none; b=YB+7g9jbaWVNuFr9OxFoT+fnDFvHCHhZlU0RqSkkvxukTd8B6V5ldQuBUAfggnFvM3wnr4yKnh+Yb0QCG7WwwbDjNWvmNTom2KiQToojrvIiNu0kSkZ/XNwn9CGw4NUbVMEPTSrgDe8vaRhW6u3bYLrL1bK/Q9ed/XQYGtPxZPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787388034; c=relaxed/simple;
-	bh=RIGayfiO2+lLMSnzf+4DCjdX0jqyzt4cOKs+zg5dHYs=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JbbJJ3mi9JRNUMNokvYKqVFi+Jk9u60V0U2zOldAyWhPOACcnCd0KTihz7Kzr5vdJkALMzjrnF5PQeSrLAZ0FKFEpzXxhOg2igvYuFnok3iVeQAypoFUTeIeb5SucWCTsKQAIFyrq8h7SousnrEefVLLFKknqxlEqvtz7AJO2rU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RCdeEWOl; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787392436; c=relaxed/simple;
+	bh=P/Ktk545jXRLZttOHRTppRjr9SjSkBeTUeBlg3rATSA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=cS94xZK5JYIF5EjiW8DTO0gS8cXBnuhgYU8FcxsuEQaT0CRcBWU2bLi8UbcswKd6Xh6KdcigRvqGKnhhou0t6o2+X4MgaEs/pjHtoGAG6vaFmkKZfvlap4tneM36RyyzXKAaRjbWC5bRayWFrShqjvRYsbK4ImyPjOzG+2/7oUk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QXjBU1xY; arc=none smtp.client-ip=209.85.208.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RCdeEWOl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D00A1F000E9;
-	Sat, 22 Aug 2026 08:40:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787388030;
-	bh=goS0hO9F9PB7GW9OY4RoUpd4niO++BgWcgqth7XojbQ=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=RCdeEWOl7vwP1easXifPNcEyw4TI9oZUWFv5A1RU6B3fxLxq9AvRr28vJjMKPpvO6
-	 OubQ97d9U7wPbWvXMmFxbcsaxDsoxlRleDvSeqq/70aPfuTgsgYa4aYB/GJ+Mk49Q+
-	 FO4kXaByqE1uzQ9vufOYXrdw2H9oAlouqVPFbgM0aVe0JEGo9ceAmy4qbk1VHlqSUC
-	 bgHU1ukKRmct/nKHNaYA/+zKxP+xHhkkfD/tWqKNB2VufWYdxm1WPbL9dcwB23chYz
-	 I91SPZ+39OlX3L28S0gNLQLsOa5prphUE8zHyuZKXobdb475E20IU08wi8M7E7FFdg
-	 g3OgOKAN9To4g==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1wxhHA-00000000EOp-2Ehu;
-	Sat, 22 Aug 2026 08:40:28 +0000
-Date: Sat, 22 Aug 2026 09:40:28 +0100
-Message-ID: <86tsom4kg3.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	kvmarm@lists.linux.dev,
-	Fuad Tabba <tabba@google.com>,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QXjBU1xY"
+Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-6a0a4aa99bdso3352644a12.1
+        for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 02:53:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787392433; x=1787997233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=KmdKERRlZ3s8gh9GxjWOTYWpaFpAZrnfexg7i/lEpyM=;
+        b=QXjBU1xYWJy37qjr2L7hTeeK1K2gV8ebfYaLbZBGNRF1bhaDrzTPtYRLBW4kOAeli2
+         FsNiMHlcbynGPhBBjGbUgAz6pBm0FYV1fQ1P573CDa2u5mZZjpaNgL19pPNso42e9Tkj
+         ia4gBUj2zvLO/p8q6A3DIz6hq3Jje5AotTvaJAP0Ifxaq2d68p2VhFeH4T6MYPbL4i8g
+         kNE1uCeFg9CW9v1jbSrioFBJ4uD/yyI7OvqcstABE6kLF8Oeld1d1GMjeDnj2zkYGH6V
+         6BdY2Usfu+1+6TQTABv5TwzIpooosn3GFiXzU1rCje2HIKuXKU+ijk44fOX+8sUy5i36
+         mwsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787392433; x=1787997233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=KmdKERRlZ3s8gh9GxjWOTYWpaFpAZrnfexg7i/lEpyM=;
+        b=Wgz6yE/+1kWhPfpCOCviKe85PvRM3NuJRPDgTIHKyIJaIBesSLbUko+gXH45wW1viU
+         7KIYtD6+4mkECfdlq8lMsN28m+IYcyGIbNQqDaAZcHqlqmgbnwzGxdlJmhhf82FNOhFv
+         MkNnRVtpOUjEntQCVkTHtqXB+tOZOQv9hXl6jXhHH9d0iaYGVDswvRU59CY4XOo0XHbe
+         OjlHLj4oTAi7r4PnRGDL+5lYVXtTbkkiMBMEeoxdU2hJyLikz3I7OKH+nz2kvzROEb86
+         yIz3KuibcYQXXPzhTtkpV+xgnVHDWCeufrIvkq3vZ+biDODhUKhBXbGMXltFX6cR41Ol
+         A0IA==
+X-Forwarded-Encrypted: i=1; AHgh+RrtqXVbBsSibSUW9eGVx8CofCXf1xk4qHYZF44Va+8i7sTSE7eQ87YkmY2EYiSQ3C4ZtH90FNZnt+o8sIJh2yU=@vger.kernel.org
+X-Gm-Message-State: AFuF++nGDavZ0duOxASKLh/dhEsVpKtA+9zMx2zCCVsStyNn6YTnrpq4
+	VMGFo6P+GxoODkC13d7SiX9jI0zPLW6+vQdqHO8fdFSLas38/yuU4fvk
+X-Gm-Gg: AR+sD13MhEIiVkPB0bxBWmaogQ03baWyXS3vnL4kxckciDbc89ILARSO9UpUT9Dy31x
+	+P7ee+rgVZz8fsUaChKV7Y/LYtpBLgg9acH6vEeUn+YXaVgEraHBD+tMqcZcK99why3whY0mppU
+	xELlmKNsR5KoajPZduMr5r7dHSyXQgmF70HNbNyT8VC5Vo1MEWO1yBvFMzbJrwUtxL+AZyBuRh6
+	vB1fBcwPvPrwa/I/Qnyh0KrJvMeW9FSOnx/SALw11NLlcNQaiMWqaMrLph9qSLZJHhwXnLd2HT3
+	PFsExBiRtm0DwJTysazrcdgMUnpIjJf4oPItRcUeuEe6voWd1JcA1LEVsW6DBcPYH/PUEh+caIB
+	ciIjFf2qhsQttjGUqvhEOG+YeoNWeP5AfgHLf3OWLbwQtNyf5nDrlnQyXnBMd1rPP1OWcOgMX7T
+	HiePw6dg7Y1zkAPZ0SbObzrIQVQdbGxShmnxJ/1cz7+HtzmRw4ipe0ogQC1qWLBy9fYn6qITw3p
+	cOSxTSgBdcPar2NmLDW09ygE1kZJu1mRCvxgotBwovPsT4+D2k3O9PqoJ1/btkOpeQJyWYv+RAb
+	Ysd9QbHHWG7pmZwc2Yz+OIi1S2Ue/2cD0W40NTZ8kb11msWkn55DVTXmvD5XhMmA3OM6FffX3cQ
+	M8c1ux3I+SrpGZ1s=
+X-Received: by 2002:a05:6402:24a1:b0:6a3:f74d:6a20 with SMTP id 4fb4d7f45d1cf-6a582b0c6aamr5531353a12.4.1787392432720;
+        Sat, 22 Aug 2026 02:53:52 -0700 (PDT)
+Received: from localhost.localdomain (dynamic-2a02-3100-a0f5-8c01-3de3-cd62-aa6f-2fb0.310.pool.telefonica.de. [2a02:3100:a0f5:8c01:3de3:cd62:aa6f:2fb0])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a3ff0c327asm11151586a12.8.2026.08.22.02.53.51
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Sat, 22 Aug 2026 02:53:52 -0700 (PDT)
+From: Karl Mehltretter <kmehltretter@gmail.com>
+To: Marc Zyngier <maz@kernel.org>,
+	Oliver Upton <oupton@kernel.org>,
+	kvmarm@lists.linux.dev
+Cc: Karl Mehltretter <kmehltretter@gmail.com>,
+	Fuad Tabba <fuad.tabba@linux.dev>,
 	Joey Gouly <joey.gouly@arm.com>,
 	Steffen Eiden <seiden@linux.ibm.com>,
 	Suzuki K Poulose <suzuki.poulose@arm.com>,
@@ -53,51 +79,85 @@ Cc: Oliver Upton <oupton@kernel.org>,
 	linux-kernel@vger.kernel.org,
 	kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] KVM: arm64: vgic-v3: Unregister redistributors before freeing regions
-In-Reply-To: <aoiiHw4hBHB7C5uL@gmail.com>
-References: <20260819224229.82948-1-kmehltretter@gmail.com>
-	<20260819224229.82948-4-kmehltretter@gmail.com>
-	<874igpp3qm.wl-maz@kernel.org>
-	<aoiiHw4hBHB7C5uL@gmail.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+Subject: [PATCH v3 0/5] KVM: arm64: fix VGICv3 redistributor rollback
+Date: Sat, 22 Aug 2026 11:53:41 +0200
+Message-Id: <20260822095346.53882-1-kmehltretter@gmail.com>
+X-Mailer: git-send-email 2.39.5 (Apple Git-154)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: kmehltretter@gmail.com, oupton@kernel.org, kvmarm@lists.linux.dev, tabba@google.com, joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org, pbonzini@redhat.com, shuah@kernel.org, eric.auger@redhat.com, christoffer.dall@arm.com, linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 21 Aug 2026 20:09:32 +0100,
-Karl Mehltretter <kmehltretter@gmail.com> wrote:
->=20
-> On Thu, Aug 20, 2026 at 09:58:57AM +0100, Marc Zyngier wrote:
-> > The other bit of interest is in __kvm_vgic_vcpu_destroy(), and its
-> > conditional removal of the RD iodevs. Can't we just get rid of this
-> > whole block altogether now that we have a saner failing path?
->=20
-> I tested removing that block.
-> It reintroduces the use-after-free fixed by ae8f8b376102
-> (=E2=80=9CKVM: arm64: Unregister redistributor for failed vCPU creation=
-=E2=80=9D).
+A failed REDIST_REGION write can remove redistributor iodevs from
+KVM_MMIO_BUS while leaving their cached vCPU assignments intact. A
+corrected retry then skips those redistributors.
 
-At the very least:
+Userspace should instead see a failed region update atomically: no prior
+redistributor assignment survives the failure, and the next successful
+update rebuilds all possible assignments in region-index order.
 
-		vgic_cpu->rd_iodev.base_addr =3D VGIC_ADDR_UNDEF;
+Patch 1 fixes a separate accounting bug when an individual MMIO-bus
+registration fails. It reserves the selected region slot before
+registration and undoes that known-latest assignment if registration fails.
 
-should be removed, as it serves no purpose anymore: all vcpus, valid
-or not, should now go through vgic_unregister_redist_iodev() which
-resets the value. It isn't massively useful on teardown anyway, so you
-might as well kill the extra one.
+Patch 2 implements the atomic failed-region behavior. It unregisters every
+redistributor iodev, clears every cached assignment, resets the region
+counters, and frees the newly inserted region. An in-flight vCPU can have
+an RD iodev before kvm_for_each_vcpu() can see it, so REDIST and
+REDIST_REGION writes are serialized with vCPU creation and return -EBUSY
+while the created_vcpus/online_vcpus counts differ.
 
-	M.
+Patch 3 is independent teardown cleanup. It separates MMIO-bus teardown
+from config-locked assignment cleanup, preserves the cleanup required
+before a late failed vCPU creation frees the vCPU, and removes the special
+conditional from the common vCPU destructor.
 
---=20
-Without deviation from the norm, progress is not possible.
+Patch 4 keeps the selftest helper aligned with vm_create_with_vcpus(), and
+patch 5 adds regression coverage for an overlapping region, retry, and
+final GICR_TYPER accesses to all four redistributors. The test exercises
+patch 2's final-state behavior; patch 1's MMIO-bus allocation failure is
+not fault-injected.
+
+Testing: built the patched kernel and the arm64 vgic_init selftest with
+GCC 13.3.0 in an arm64 Linux container. The selftest passed under QEMU
+11.0.2 TCG with -machine virt,virtualization=on,gic-version=3 and -cpu max.
+
+---
+Changes since v2:
+- Patch 1: limit free_index rollback to the immediate registration failure
+  under slots_lock instead of generic unregistration. (Sashiko)
+- Patch 2: reset all assignments and region counters after a failed region
+  update (Marc), and serialize REDIST and REDIST_REGION writes with vCPU
+  creation so rollback cannot miss an unpublished assignment.
+- Patch 3: add an already-locked unassignment primitive, move failed-vCPU
+  cleanup to kvm_vgic_vcpu_destroy(), and remove the redundant base_addr
+  reset. (Marc)
+- Patch 4: match vm_create_with_vcpus() by using void * for the guest-code
+  argument. (Sashiko)
+- Patch 5: document how the first three redistributors span regions 0
+  and 1; no functional change.
+
+Previous version:
+v2: https://lore.kernel.org/r/20260819224229.82948-1-kmehltretter@gmail.com
+
+Karl Mehltretter (5):
+  KVM: arm64: vgic-v3: Undo assignment on iodev registration failure
+  KVM: arm64: vgic-v3: Reset redistributors after failed region setup
+  KVM: arm64: vgic-v3: Separate redistributor teardown from unassignment
+  KVM: arm64: selftests: Pass guest code to vm_gic_create_with_vcpus()
+  KVM: arm64: selftests: Test VGICv3 redistributor region retry
+
+ arch/arm64/kvm/vgic/vgic-init.c               |  46 +++----
+ arch/arm64/kvm/vgic/vgic-kvm-device.c         |  20 +++
+ arch/arm64/kvm/vgic/vgic-mmio-v3.c            |  83 ++++++++-----
+ arch/arm64/kvm/vgic/vgic.h                    |   1 +
+ tools/testing/selftests/kvm/arm64/vgic_init.c | 116 ++++++++++++++++--
+ 5 files changed, 200 insertions(+), 66 deletions(-)
+
+
+base-commit: 57e7cf13ac26bf1a3dba6cfa601f7b2481811575
+-- 
+2.39.5 (Apple Git-154)
