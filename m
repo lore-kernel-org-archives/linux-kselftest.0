@@ -1,50 +1,50 @@
 Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF42E2EEE
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 14:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6285D242D7B
+	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 14:17:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787494668; cv=none; b=odzC1S8ie0Go+DUigT44HQli2H2VWxyP0bQUfP5V90s/C9owoU/SAuOF+DjJt1/h75oz0vFjMHyn4YA9Qdg9UGv/vfSrZJS97MLnlMFILICSuE6jfmi1iRAQaoHJijS7CJi5TuUTjMotXurzPlntIkVFTU1Y8fYJltTabPzRRXM=
+	t=1787494675; cv=none; b=VwaNHWnXlE3bvPWsNr20WM/lGGoTgr3aTjc1DAblgzupcc/yqJc/w5+Nfyd3+NgCqGT6B1cW6FoI2qBHpoEy4bzl2ztcrj5nIk9fuKJqXBLPehKJjtuFyIXrEWrSL55c3Xwy7hkXpZIDknmuynj8dGgEIVhjLf0lWncV+74zhRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787494668; c=relaxed/simple;
-	bh=VMT+7O4PRfRA8hkUYOH4H8KA2oOaKuJWcfiM+CybF68=;
+	s=arc-20240116; t=1787494675; c=relaxed/simple;
+	bh=TqMZ4MjNxmrd1cDxUtXOC6oUrOQ9f6GDMWyFj9PY888=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Vx/oejV4g/2QFr7345nFMq6eNJVc3l+C2P6IFKAuyP30Qu8To22TSy2WX1lDAJXgH6GxUFDdh1ceBf4G3LfbEkmL8lGBfel4DOjTkP0hSzc9BMC2DPbJ8w+FJ7YESLVyzr3v8D/nMAkguP70Z3x8n+ZlxAwB5BdfKRD0lrE8lvE=
+	 MIME-Version; b=euMaG+hn+y5v2yEpGWvORq6NZRQMRHoc1n0XnQhCDP3Ewqszckp6+IGWAdXu8DjtFL2LDyuht4LTiexFVKylep3bkibgSzigJOlddKFw8wvAnQeDCzkZlryl2bT1UJQjrBm+MnCrf4DD1oAmggMw5v4vbfgyjwWZSAEuYZC0Zuo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2d3a0a81329so31980995ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 07:17:45 -0700 (PDT)
+Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2d3a0a81329so31981565ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 07:17:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787494665; x=1788099465;
+        d=1e100.net; s=20251104; t=1787494672; x=1788099472;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pDaTtrBueWZK/iU1B8CemJY/aBytAH9QHxpofZQQz3Q=;
-        b=JxDam9XqM+Mq7CcS672KSYDEPt+aau5B7Yw6uDaEaTjQhJicE5HtAi67JmEp0StbCj
-         9cyliyoJxt2iIkzfFl0fJNkQTq7h2AeUAetIs8aIBDby5cWXtWeQAg+G1woMIZAiNFZ1
-         GcVGUX1f2lDxY1Borf8U/OvaGh4e0fa9ZlXifgGWUvFoMYR14R9KsCujtUf6oq87YprG
-         T/7Dfzjj0YYf9D7pmW8RpBnBtlT+hNBrIueoSS6ygl4Ldfl/WxX5fwnJCV6TQlMRLdfW
-         W9knpIypJqcpr2aAoVcuBwa5smb9/to19bixP9tvwAFikP9H7aqS9dN4CRAQDEVt6DoG
-         gvIw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3kj1o9RK5kPhdk8AjlQgRt4SPnlOVK9qlgeD3PYP1v0vqSg6LRlXVkyJMQ8w3VBqrjAu8pncIy8q6H6fUc60=@vger.kernel.org
-X-Gm-Message-State: AFuF++ky/DKmwEkjgF1V5SrgO0UxBM4UxqD0koagZExtagsJNEulOuvx
-	FFxfs4LhrHHjuCnpuH1vt3MS5dW12R6LLIJcV34YJqc+Ml0edLWJKqhg
-X-Gm-Gg: AR+sD12b1E+Sn/eGu1ckgp9IHnkHtvLGuhrYAJgfG6qTlLnbYo/YrUFob9mWZG5ghhN
-	zK4O8q+tO7YedXuJISf8oSwTE1Uu7ENWfshsyhFKCSIdGqmBp1PMtEk8YGABuv0s4B9vj0KTcHb
-	6sS65cqkdESClWChJnWtQpebXCo9HtMR9h2aM0crWpJZ8/0QMfG07f8bEXw3iflIu+LEiu7yP5Y
-	6ld1EIssWarbtJzBjJ2o7MMUvLWRmvnpAfDOUDnTLJi1temARdF1eKydbtW0MAdiluBKa7KGeiU
-	vJ7asXQAxZZF1ZRmxkg42h8wtAt5uvc+dIn/EuYHnZrkv4GYiyhh4XW4kSkkp+GarxtipM8TCSt
-	YoPymJsDTEoSptb3azbIYlLkCULrvUZ9FrUbY5OGtSnxQUXmyx//leUXKQTnRBgaX7HTJa86Xy2
-	fDf/k+IRmz3FiP0JcSNXrbVi8ldetFda4zd/5j7/shpBLat44wo/FBnXDnI5fyS+ViZmc1b1Meg
-	NeVvMA=
-X-Received: by 2002:a17:902:cf43:b0:2d0:cc92:f7ae with SMTP id d9443c01a7336-2d64ade9363mr383366805ad.3.1787494665150;
-        Sun, 23 Aug 2026 07:17:45 -0700 (PDT)
+        bh=jgScuoQtFaIIIFVlTJbHUDFalROzqYBQ3imuXJJ7d/U=;
+        b=dqvKaGKd5E/Ebjkaxy2bdy7RPIz/jgHQ2PGmdtSzUOAF/QrF5WNefr418I71AH3I0T
+         6aghhC/gNhsy55YgHe1bgp4JuEvwqwSVJBwT8fIy5dbluNNCcdHpIUUcTqSGObH1EpkU
+         BWtExk3GqqisqWe3ScSg8ciEhqSimpOy3cqvolw53vXbbWR2+qGAz7WiDnUCDiCfxbRW
+         2NvjcXDzA8OFSJ/uj5+Z17Hmy82haD8/yQmDEYbVk3cRiEiWhs2hfSWUEdIpKQNiDj5j
+         tFrqO4BzMEn6dZIaVMl5qrHskEPBnwlYDikzE1oHjsbCDEAAKbYWEpqufy+AQA7EKzXe
+         73xA==
+X-Forwarded-Encrypted: i=1; AHgh+RoDZb/BjOKJW5Rbc+jdnzyn4wy19uHDJf78fsd5JgtbmgnGm9hPHSQc2FqNlE7y3q5yjaro6V7CwRChV63I6TU=@vger.kernel.org
+X-Gm-Message-State: AFuF++kfh5TRgHmmG+3s1ooYF8eqzb97AusArWVu6NNBKoJ1x9h0gSm1
+	JZwFtjNKxmfk95syykPgO9eUb0bHTNp6g3XGLbWWzQ9MDyZqmx876JC5
+X-Gm-Gg: AR+sD100z50+/KbCYDjpZZCoa5IQGRS0P6rH3XVMhsrHg3lodEkVG0Qp3L64ZrXl/Az
+	YiOWgnAbRuJX1CNbL3oFkx6GDxEESUlH60SQO4uygorY0V66g51Xjr5YsB4C4VVGuZtSxY6GzDF
+	iHIypCsz3IRD8uUm7pWcS2ueZtZgDrWx4bqtYrFTydvw3jBKgmK0s2BYFAZt1rtYsXMNSAArisR
+	uDkwsjc9F6jynCqumQ61BIuBQPJJOcB+aK0vjGkcQOD8W9MGJVYfvvpeEz3kfQ9hwPp8m2XV29w
+	xQztbK7oUXza61/FeY62r6OixvNvS8ggJRDaFE4+95GMC5BqrCCP4/4ax1Z9VLEZyiHZY30O5S1
+	cCZ2dwbeww89AcWM+f8q5GTSiPQpbBZt0WcgArkLkGO5K/Nh5a5kHTwPxCgrzo7LQIeYyhB+Cg+
+	Gg40Cf3LLGAZwousZ8B+9xUMPqtptIQHh64xLYgmy6HFb6StrH2XsD7HAdXt2kl0LJWUcgJptfp
+	5q6BhvgoiTownOgLg==
+X-Received: by 2002:a17:902:da82:b0:2ca:61bc:317c with SMTP id d9443c01a7336-2d64b17b564mr336152235ad.13.1787494671665;
+        Sun, 23 Aug 2026 07:17:51 -0700 (PDT)
 Received: from localhost.localdomain ([180.153.160.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d676791d44sm9944575ad.24.2026.08.23.07.17.40
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d676791d44sm9944575ad.24.2026.08.23.07.17.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 07:17:44 -0700 (PDT)
+        Sun, 23 Aug 2026 07:17:51 -0700 (PDT)
 From: Jianlin Shi <shijianlin11@foxmail.com>
 To: bpf@vger.kernel.org,
 	memxor@gmail.com
@@ -65,9 +65,9 @@ Cc: ast@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 1/5] bpf: roll back stream capacity when allocation fails
-Date: Sun, 23 Aug 2026 22:17:24 +0800
-Message-ID: <c0ad7b18c59be6695fcc9e4e1200b2f4d5cbbea2.1787492521.git.shijianlin11@foxmail.com>
+Subject: [PATCH bpf-next v4 2/5] bpf: fix stream capacity leak in staging path
+Date: Sun, 23 Aug 2026 22:17:25 +0800
+Message-ID: <46898fb1ae482b2f8b1da459922b187378dfdc1d.1787492521.git.shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1787492521.git.shijianlin11@foxmail.com>
 References: <cover.1787492521.git.shijianlin11@foxmail.com>
@@ -79,63 +79,48 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-bpf_stream_push_str() accounts the string length before allocating a
-stream element. If the allocation fails, the length remains charged even
-though no element is queued and therefore cannot be released by a reader.
-Repeated failures can exhaust the stream capacity permanently until the
-BPF program is freed.
+bpf_stream_stage_printk() increments ss->len before pushing the
+formatted string to the staging log. If element allocation fails,
+ss->len remains inflated and bpf_stream_stage_commit() permanently
+charges the stream capacity for data that was never queued.
 
-Refactor bpf_stream_release_capacity() to take a length so the consume
-and release sides are symmetric, and use it to roll back the charge when
-creating the stream element fails.
+Only account the string length after a successful push, and use
+vscnprintf() so the staged length is the truncated payload without
+the trailing NUL.
 
 Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
 Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
 ---
- kernel/bpf/stream.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+ kernel/bpf/stream.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
-index be9ce98e9469..0b157ec4e38e 100644
+index 0b157ec4e38e..a36fc9338967 100644
 --- a/kernel/bpf/stream.c
 +++ b/kernel/bpf/stream.c
-@@ -68,10 +68,8 @@ static int bpf_stream_consume_capacity(struct bpf_stream *stream, int len)
- 	return 0;
- }
- 
--static void bpf_stream_release_capacity(struct bpf_stream *stream, struct bpf_stream_elem *elem)
-+static void bpf_stream_release_capacity(struct bpf_stream *stream, int len)
+@@ -316,17 +316,18 @@ int bpf_stream_stage_printk(struct bpf_stream_stage *ss, const char *fmt, ...)
  {
--	int len = elem->total_len;
--
- 	atomic_sub(len, &stream->capacity);
+ 	struct bpf_bprintf_buffers *buf;
+ 	va_list args;
+-	int ret;
++	int len, ret;
+ 
+ 	if (bpf_try_get_buffers(&buf))
+ 		return -EBUSY;
+ 
+ 	va_start(args, fmt);
+-	ret = vsnprintf(buf->buf, ARRAY_SIZE(buf->buf), fmt, args);
++	len = vscnprintf(buf->buf, ARRAY_SIZE(buf->buf), fmt, args);
+ 	va_end(args);
+-	ss->len += ret;
+ 	/* Exclude NULL byte during push. */
+-	ret = __bpf_stream_push_str(&ss->log, buf->buf, ret);
++	ret = __bpf_stream_push_str(&ss->log, buf->buf, len);
++	if (!ret)
++		ss->len += len;
+ 	bpf_put_buffers();
+ 	return ret;
  }
- 
-@@ -79,7 +77,14 @@ static int bpf_stream_push_str(struct bpf_stream *stream, const char *str, int l
- {
- 	int ret = bpf_stream_consume_capacity(stream, len);
- 
--	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
-+	if (ret)
-+		return ret;
-+
-+	ret = __bpf_stream_push_str(&stream->log, str, len);
-+	if (ret)
-+		bpf_stream_release_capacity(stream, len);
-+
-+	return ret;
- }
- 
- static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, struct bpf_prog_aux *aux)
-@@ -188,7 +193,7 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
- 		if (cont)
- 			continue;
- 		bpf_stream_backlog_pop(stream);
--		bpf_stream_release_capacity(stream, elem);
-+		bpf_stream_release_capacity(stream, elem->total_len);
- 		bpf_stream_free_elem(elem);
- 	}
- 
 -- 
 2.43.0
 
