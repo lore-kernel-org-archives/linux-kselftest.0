@@ -1,50 +1,50 @@
-Received: from mail-pj2-f2.google.com (mail-pj2-f2.google.com [74.125.227.130])
+Received: from mail-pj2-f10.google.com (mail-pj2-f10.google.com [74.125.227.138])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0EB6242D7B
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 14:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAEF42E2EEE
+	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 14:17:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.227.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787494662; cv=none; b=RjcV4rMT/S9b83RvUlhDm6uxg3BOlU0HzeZSa27KKCpt5zz7MEeFYzpr5to/w/YmOI3BTtqyRz2G1lFFhY+GAXCZBQLABTCw4YQyMOJ3u4eCUG5oHVnhrzrCjt2dL2jEoeCinu3PtzbBCM35Lz+jPWyp9dXooeOvTKDzX/CrNGg=
+	t=1787494668; cv=none; b=odzC1S8ie0Go+DUigT44HQli2H2VWxyP0bQUfP5V90s/C9owoU/SAuOF+DjJt1/h75oz0vFjMHyn4YA9Qdg9UGv/vfSrZJS97MLnlMFILICSuE6jfmi1iRAQaoHJijS7CJi5TuUTjMotXurzPlntIkVFTU1Y8fYJltTabPzRRXM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787494662; c=relaxed/simple;
-	bh=Vg7chm6Z3ZZ80kKMcLsPZtpP1r31vdvD6SHVm4f5dT8=;
+	s=arc-20240116; t=1787494668; c=relaxed/simple;
+	bh=VMT+7O4PRfRA8hkUYOH4H8KA2oOaKuJWcfiM+CybF68=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qOdTsmeflUQrGPzB3Th0QhjhS2x4HxyvMSaghLPOxaDw/aZ5AxYX0ew9/MhUnviigNYcQbO3peGjGwNZioKt9FxGtGydS/S0d3iObu6Bc4G1eP4Ff0bSMFBxVp8MFuUpjMgOYAtjz9Cqxg1vEH6veK8gVFePg44+py0EdKf0H2o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.130
+	 MIME-Version; b=Vx/oejV4g/2QFr7345nFMq6eNJVc3l+C2P6IFKAuyP30Qu8To22TSy2WX1lDAJXgH6GxUFDdh1ceBf4G3LfbEkmL8lGBfel4DOjTkP0hSzc9BMC2DPbJ8w+FJ7YESLVyzr3v8D/nMAkguP70Z3x8n+ZlxAwB5BdfKRD0lrE8lvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=74.125.227.138
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=foxmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj2-f2.google.com with SMTP id d9443c01a7336-2ccc2e84048so9727345ad.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 07:17:40 -0700 (PDT)
+Received: by mail-pj2-f10.google.com with SMTP id d9443c01a7336-2d3a0a81329so31980995ad.1
+        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 07:17:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787494660; x=1788099460;
+        d=1e100.net; s=20251104; t=1787494665; x=1788099465;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=iW9TZy5t7X8VGYLC2u3VxtI7rFgsxhmuA9rnPKoznsM=;
-        b=REM8J6cum7AfCBa2fIiaeB+a67KsKo0LArLT/tO0FKR+MXGR+GI6j1tmJ9pCuqxNfb
-         rL6SQU5orAUs+9KQbVe031TZaTK1haci8YzaCLEqFm1vgPe98OtUQ5fSzzemqOZ5TXzf
-         9dBD4ldqx8Q55CwsXSysNKSfkAeONpTheFwXxml05mxm9G1gXfwEbGeLaFn0r7sgC5EO
-         Fz1c+i1rqhdjDQh7mRb/4FwtopkV1ZqhtVPRGfw5MG2JXAMELRd/kgnZtapUL8aTsORE
-         xgdQPly+VatL1J9YEfBboPaCcRlESn6LhgAA+/dxrWc5grP2vyMOVeNP4SuV3atWCYna
-         20sQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpBIVgTqEt0nj9EVY99KWanb8lcrpRsNWnfgRD0wY6Rx4+CRpRx5lFHEd4ucOvuYUeHJ3Dh9i0KaJZI9kpSWfw=@vger.kernel.org
-X-Gm-Message-State: AFuF++npYy1qPhiCoCN1UWtedAnIQYVwGzTm3U63PQWP8+CNJHHI1NUN
-	TS/VYuQj56E3M3OQ9GadX7rk8KqrQ2lyuZ/h8RhQ7LmGzC2dl+tk+KZe
-X-Gm-Gg: AR+sD106dlWbWN8Mdz2bp7eNfcxAlSMV2yDc3pi4E6SMlVx4D1rQ9dpWwYaP+3Bz1Hn
-	FJh+uanoaC8d7egMTd6Udd8noQskqWpOqP9+ArNxMYDYHkiA7x6oMP7ilrsYEZdsRSGhcyD6prY
-	YGciFPZg/YcMR/SDGq6CL7qbWAOE8zrpZiYaWdZfRPz8gRMsqzPUCC4Z+0+X5WH1yIUpA9ruitK
-	IWN7oxBOem+I3lHXnLgi8xQbkbnLBcqT377bkSkSWSWchqY5Er5PVt3sSp3ANhfTsVCXSRtgZXq
-	XsqFEjAOmZJoKpL5uZjfcEGcFdbPJvONHtz7OY9niLWOnFbVWDcYaSCcWSiXHxRJNJ3ljb6Qzki
-	uudaxAFyk978iiz4ioRCZAcBv8eRuWs3bHHs6Jju8jgDxyHLacZOeFS5kvNQ94tL1ZNCnS5JzNC
-	EQhhB6Vw2nvYzs4KShBuQ5r5fPLNy0ZwqOVnCXHJQy0WtA0u0VoZ2LmNP0FAkNp1oAgzKkZ3wux
-	NrbgsMvnT8U8mtzfQ==
-X-Received: by 2002:a17:902:fc43:b0:2d5:2f49:b3f4 with SMTP id d9443c01a7336-2d64ad9562dmr313282145ad.2.1787494659721;
-        Sun, 23 Aug 2026 07:17:39 -0700 (PDT)
+        bh=pDaTtrBueWZK/iU1B8CemJY/aBytAH9QHxpofZQQz3Q=;
+        b=JxDam9XqM+Mq7CcS672KSYDEPt+aau5B7Yw6uDaEaTjQhJicE5HtAi67JmEp0StbCj
+         9cyliyoJxt2iIkzfFl0fJNkQTq7h2AeUAetIs8aIBDby5cWXtWeQAg+G1woMIZAiNFZ1
+         GcVGUX1f2lDxY1Borf8U/OvaGh4e0fa9ZlXifgGWUvFoMYR14R9KsCujtUf6oq87YprG
+         T/7Dfzjj0YYf9D7pmW8RpBnBtlT+hNBrIueoSS6ygl4Ldfl/WxX5fwnJCV6TQlMRLdfW
+         W9knpIypJqcpr2aAoVcuBwa5smb9/to19bixP9tvwAFikP9H7aqS9dN4CRAQDEVt6DoG
+         gvIw==
+X-Forwarded-Encrypted: i=1; AHgh+Rr3kj1o9RK5kPhdk8AjlQgRt4SPnlOVK9qlgeD3PYP1v0vqSg6LRlXVkyJMQ8w3VBqrjAu8pncIy8q6H6fUc60=@vger.kernel.org
+X-Gm-Message-State: AFuF++ky/DKmwEkjgF1V5SrgO0UxBM4UxqD0koagZExtagsJNEulOuvx
+	FFxfs4LhrHHjuCnpuH1vt3MS5dW12R6LLIJcV34YJqc+Ml0edLWJKqhg
+X-Gm-Gg: AR+sD12b1E+Sn/eGu1ckgp9IHnkHtvLGuhrYAJgfG6qTlLnbYo/YrUFob9mWZG5ghhN
+	zK4O8q+tO7YedXuJISf8oSwTE1Uu7ENWfshsyhFKCSIdGqmBp1PMtEk8YGABuv0s4B9vj0KTcHb
+	6sS65cqkdESClWChJnWtQpebXCo9HtMR9h2aM0crWpJZ8/0QMfG07f8bEXw3iflIu+LEiu7yP5Y
+	6ld1EIssWarbtJzBjJ2o7MMUvLWRmvnpAfDOUDnTLJi1temARdF1eKydbtW0MAdiluBKa7KGeiU
+	vJ7asXQAxZZF1ZRmxkg42h8wtAt5uvc+dIn/EuYHnZrkv4GYiyhh4XW4kSkkp+GarxtipM8TCSt
+	YoPymJsDTEoSptb3azbIYlLkCULrvUZ9FrUbY5OGtSnxQUXmyx//leUXKQTnRBgaX7HTJa86Xy2
+	fDf/k+IRmz3FiP0JcSNXrbVi8ldetFda4zd/5j7/shpBLat44wo/FBnXDnI5fyS+ViZmc1b1Meg
+	NeVvMA=
+X-Received: by 2002:a17:902:cf43:b0:2d0:cc92:f7ae with SMTP id d9443c01a7336-2d64ade9363mr383366805ad.3.1787494665150;
+        Sun, 23 Aug 2026 07:17:45 -0700 (PDT)
 Received: from localhost.localdomain ([180.153.160.8])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d676791d44sm9944575ad.24.2026.08.23.07.17.33
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d676791d44sm9944575ad.24.2026.08.23.07.17.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Aug 2026 07:17:39 -0700 (PDT)
+        Sun, 23 Aug 2026 07:17:44 -0700 (PDT)
 From: Jianlin Shi <shijianlin11@foxmail.com>
 To: bpf@vger.kernel.org,
 	memxor@gmail.com
@@ -65,12 +65,12 @@ Cc: ast@kernel.org,
 	shuah@kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH bpf-next v4 0/5] bpf: fix stream capacity, read, and oversize handling
-Date: Sun, 23 Aug 2026 22:17:23 +0800
-Message-ID: <cover.1787492521.git.shijianlin11@foxmail.com>
+Subject: [PATCH bpf-next v4 1/5] bpf: roll back stream capacity when allocation fails
+Date: Sun, 23 Aug 2026 22:17:24 +0800
+Message-ID: <c0ad7b18c59be6695fcc9e4e1200b2f4d5cbbea2.1787492521.git.shijianlin11@foxmail.com>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
-References: <tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com>
+In-Reply-To: <cover.1787492521.git.shijianlin11@foxmail.com>
+References: <cover.1787492521.git.shijianlin11@foxmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -79,49 +79,63 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-v3 addressed Kartikeya's review on v2 and the related Sashiko findings.
-v4 fixes the stream_oversize selftest to verify capacity rollback on the
-same BPF program stream, since streams live on prog->aux and are not
-shared across programs.
+bpf_stream_push_str() accounts the string length before allocating a
+stream element. If the allocation fails, the length remains charged even
+though no element is queued and therefore cannot be released by a reader.
+Repeated failures can exhaust the stream capacity permanently until the
+BPF program is freed.
 
-Tested locally:
-  stream_oversize and stream_partial_read (equivalent to
-  ./test_progs -t stream_oversize,stream_partial_read).
+Refactor bpf_stream_release_capacity() to take a length so the consume
+and release sides are symmetric, and use it to roll back the charge when
+creating the stream element fails.
 
-Changelog:
-v3 -> v4:
-  - In stream_oversize, perform the oversized bpf_stream_printk() and a
-    subsequent successful "foo" push in the same program; read that
-    program's stream in userspace instead of switching to stream_syscall.
-  - Drop a redundant vscnprintf() comment in bpf_stream_stage_printk().
+Fixes: 5ab154f1463a ("bpf: Introduce BPF standard streams")
+Signed-off-by: Jianlin Shi <shijianlin11@foxmail.com>
+---
+ kernel/bpf/stream.c | 15 ++++++++++-----
+ 1 file changed, 10 insertions(+), 5 deletions(-)
 
-v2 -> v3:
-  - Refactor bpf_stream_release_capacity() to take a length.
-  - Fix staging-path capacity leak; use vscnprintf().
-  - Return partial bpf_stream_read() progress on copy_to_user() fault.
-  - Reject truncated bpf_stream_vprintk() output with -E2BIG.
-  - Add selftests for oversize and straddling-buffer partial read.
-
-v1 -> v2:
-  - Retarget to bpf-next as suggested by Pu Lehui.
-
-Links:
-v3: https://lore.kernel.org/bpf/?q=%22PATCH+bpf-next+v3+0%2F5%22+fix+stream+capacity
-v2: https://lore.kernel.org/bpf/tencent_C919BB32458A4DAD645A68F441345B971E05@qq.com/
-v1: https://lore.kernel.org/bpf/tencent_E69EAE29327E25B3548A9AF3F4FA289A6806@qq.com/
-
-Jianlin Shi (5):
-  bpf: roll back stream capacity when allocation fails
-  bpf: fix stream capacity leak in staging path
-  bpf: return partial progress from bpf_stream_read on fault
-  bpf: reject oversized bpf_stream_vprintk output with -E2BIG
-  selftests/bpf: cover stream capacity and partial read edge cases
-
- kernel/bpf/stream.c                           | 53 +++++++++------
- .../testing/selftests/bpf/prog_tests/stream.c | 65 +++++++++++++++++++
- tools/testing/selftests/bpf/progs/stream.c    | 18 +++++
- 3 files changed, 116 insertions(+), 20 deletions(-)
-
+diff --git a/kernel/bpf/stream.c b/kernel/bpf/stream.c
+index be9ce98e9469..0b157ec4e38e 100644
+--- a/kernel/bpf/stream.c
++++ b/kernel/bpf/stream.c
+@@ -68,10 +68,8 @@ static int bpf_stream_consume_capacity(struct bpf_stream *stream, int len)
+ 	return 0;
+ }
+ 
+-static void bpf_stream_release_capacity(struct bpf_stream *stream, struct bpf_stream_elem *elem)
++static void bpf_stream_release_capacity(struct bpf_stream *stream, int len)
+ {
+-	int len = elem->total_len;
+-
+ 	atomic_sub(len, &stream->capacity);
+ }
+ 
+@@ -79,7 +77,14 @@ static int bpf_stream_push_str(struct bpf_stream *stream, const char *str, int l
+ {
+ 	int ret = bpf_stream_consume_capacity(stream, len);
+ 
+-	return ret ?: __bpf_stream_push_str(&stream->log, str, len);
++	if (ret)
++		return ret;
++
++	ret = __bpf_stream_push_str(&stream->log, str, len);
++	if (ret)
++		bpf_stream_release_capacity(stream, len);
++
++	return ret;
+ }
+ 
+ static struct bpf_stream *bpf_stream_get(enum bpf_stream_id stream_id, struct bpf_prog_aux *aux)
+@@ -188,7 +193,7 @@ static int bpf_stream_read(struct bpf_stream *stream, void __user *buf, int len)
+ 		if (cont)
+ 			continue;
+ 		bpf_stream_backlog_pop(stream);
+-		bpf_stream_release_capacity(stream, elem);
++		bpf_stream_release_capacity(stream, elem->total_len);
+ 		bpf_stream_free_elem(elem);
+ 	}
+ 
 -- 
 2.43.0
 
