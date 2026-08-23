@@ -1,63 +1,63 @@
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D4D37DAD7
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 02:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ABB1A681C
+	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 02:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787451002; cv=none; b=p1a7XeYea/xinpjkb5ILle4s8gGxYKi3Z6yDduStcIP61Fb0vOBmZvYZoqA/wF7ISvdiJf91l9wBt1IeN1sesumn9oL9zX0z1qqvlk7Usq4k0ykQzqD4DEWD5LrBiKqoDO9pgNqZNsD7Fj2Guu0JEBqndYHlxv3A8ywr/7cycfc=
+	t=1787451007; cv=none; b=OyR90t47G/1BpPbpkqrSeZCffHipuuyN44t2kbuQAB4DwFYeQ6aJWC1FZE1oPT3tr3egUalg7YMSYe1aVn8ggWXh3dblrufP0qkM2lsA7/McB5CzbFmhcL2/1rwFAK74hkuEsK0yXOHHWaY6Oou6rlnmm0CSaPO+B1CSyayF8TA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787451002; c=relaxed/simple;
-	bh=2Ty2mpcEhGgNSz5GN77057gLiDTsvFjbxF+GBfR/yuc=;
+	s=arc-20240116; t=1787451007; c=relaxed/simple;
+	bh=5ZPukh/6LctPDDPDNCfHtOkGcl/OJW8EN+TJ+HoVGXs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YyoTRH5Xu3aW2vCHpqvP2kXtMOk3jNexKU3OXOUJ56DwIWGxzWzxD39qrIC6ODMb7ttHuB900ikRGf5ayNzC9jkJiwzxzirVCQpjTwZPMe/wQWyW7v1l6g63Ya54p1uj45TQuzWgC6iJJPZIQI/6DDjtyiTqKGKc5SN4OGk1TY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M7YvbYXb; arc=none smtp.client-ip=209.85.216.47
+	 MIME-Version; b=IokTPrqZHxp1B9pdrwkpqJaNnGEAAPi1O+1s0dVJBlwHUWL8fCuVbwKDHDmBJQIkpWNJkEDQet6p+JS3hBYo1YXNFsq3UseqgCZpT8BChSkOnkZnQvdRDTgHy7VhSEGDe4Snsf7xMvyLA9iPe4QsWH/5N2nFuqGKPb8fzlQRs7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bOhzwPyO; arc=none smtp.client-ip=209.85.215.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M7YvbYXb"
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-38125cebfdaso3262758a91.1
-        for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 19:09:59 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bOhzwPyO"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-c999f162c9aso1643722a12.3
+        for <linux-kselftest@vger.kernel.org>; Sat, 22 Aug 2026 19:10:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787450998; x=1788055798; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787451002; x=1788055802; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=Ka7AUYqkvnad6cVVx0OUSmQE7kC7pkR2H7Mh+6aLu4I=;
-        b=M7YvbYXb01wsN0k4MON0ACZPg+L7J+GxWH43aEXWQo9++o683dSQAStvXF2sSsTawV
-         k/IuPJW1VHcjmZLmIdOPiZ7LDi+YaFv6QhlCCgzLm2IDQDE4bDALHinXzTQgz99ZWFwj
-         OvF2nRVU8cAIHka4ADj4LSWsnwI2Slyb/TUTg2yGzSBueZa0tqhXtcCKGMTricN1Hak3
-         VXDAKAda6A45z6A0T8qdUC8eXIWIxF1vWDp8iRDNHdA/jVtkPJ62SQQav11/TCQXrVFe
-         5oRj1oQvu+vgVzuV/+Ion95pCOnOnYaNX0kC6qFWBswH3MfyVTktEFVSDTk8LqVnuDOQ
-         TedQ==
+        bh=scTvdoEp04s2Y6O6t+Ud8V+kZB5jubb1ONRHy8MkK5E=;
+        b=bOhzwPyODkDmNwLMJtQXpJwvZDav/WnZVNOkk7Kbm5a653fSu2rzdN6CehhAFDe8yX
+         x8sbLjuArydxj2j8bFihcZSFK7YVyJISyHE66b7Mh+ADhKgWv9NDSfQW1dEqkJPTjy/d
+         3rb5Y2GC7N0WKho+vhA5Iku6hi8IX9DgnWzVuAnmwE+yUWW8w7I2zfbtgppGTEc1IP4B
+         vtlj6xc9ajAKzdimWJEWUakdsGWlhh5t8cbriWbgQEqnfIuwSCY5GcC2deGt30Er5LCM
+         ZDe2OPdFx/dNZwnX+S1E3VLyBKgPlblNejmpbSgaTpkEBplNxE4JIUMpe9lwl1grfA/m
+         JAFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787450998; x=1788055798;
+        d=1e100.net; s=20251104; t=1787451002; x=1788055802;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Ka7AUYqkvnad6cVVx0OUSmQE7kC7pkR2H7Mh+6aLu4I=;
-        b=klJn/vHmKShxuSHq79u++oFyFzVCk8EgC1ruWFX2z8K7FR/CQEaDjpJJ3psk7QKBA2
-         BoNt01SckgYoHrhVNERmOBPpfUw8tG9C5wgZX/RIDSBJZWux4A0H0F94kb1n/bZ9W3N+
-         Idto8rLsF/pDTL2t2DDMV6UeoBGMNF39p8/VK98pe3E3pBjVe1f6y+pbqp49TD6UrlaP
-         bR/ta/580OncaM6Kytb7I6GHrcstWQHsCkJx++LobuusqG/uUDPMEOhLkcm9VYqwRME1
-         0OesOS27vAF3sdp6NtyLDZzLxVhSjt2Kwvavo0jqlHeyYr0Tn6ApfuowtTwJMHy0Kuat
-         SENw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq8AWTAL3xJ82wf2kn17k4t8wpp2Y6QUh4BRDEmpTRVsKUQKytnCCFDojXhXt9p0cm/kukfq4e77PY9wQKT0hc=@vger.kernel.org
-X-Gm-Message-State: AFuF++mbVTcNp/JdFb6cepOSXu7w5mCchYbK4ieU0QRywNVI/KSN5+xn
-	FKCaDTiETwDNfGdJOc21Nxcixsh++J+V/wl1YZOr8Ih91gagXDEHIovM
-X-Gm-Gg: AR+sD105wn9qRIVFpffAECIObgXTFru8BKrlnmzygrhg8P/9vN26Gd431zjEVO+gRBI
-	6Y81L4tqnZU9FHVayIYAdexVmJ9RCQ4mUjqROhOf9hJwq5dr/gWyPT14PphnaOTHLlqbLKn4X1I
-	NA1/bLVRRBymyW3J+G2E1nfDV2Y0itXXHBdXvpubkNE13OiASTvHgRGtX6x0t4eWOwc9qtkh6Yt
-	KRRkx+UJDULPtSlOIgf6BxLV/7T++ajFPxWJDzvL5cyjOcmnwshmWjg9MqMeZsmwUd7LMW/fQlx
-	DD40og23/L6d0AQUuGY5gwPFL4HQ9Uz8Jj6lmN4+sL1pDkL5+7C0lJwWVBLn2807gHeMmpmlGsQ
-	r9C/pn9H3Hu628MmKqs6dXKyIn5iMJEbiozkIRPbjKZKDZgn7qCFGtsq8EqUKUHgn7GQfjY+8Jo
-	sXDJNnEK5yTxX9bLWLOSojUdpjAri/paQYLpVXaXSzLMEnMf53tDrJ
-X-Received: by 2002:a17:90b:1d49:b0:38e:70d5:b12d with SMTP id 98e67ed59e1d1-395c3566ba6mr33799117a91.6.1787450998171;
-        Sat, 22 Aug 2026 19:09:58 -0700 (PDT)
+        bh=scTvdoEp04s2Y6O6t+Ud8V+kZB5jubb1ONRHy8MkK5E=;
+        b=Sl20ABCZYmrp5HvGdHY4TVFzChnsaP6BvjaSWejFpgFiDEZVAW4cdphxcX6vyhEOW+
+         oFeZmddBo9VvC2gCNCwhiDXWLiX1S4qvuQN+54mlcJ8OavlXu28tnfDKrvjwo3oYGDPD
+         t7kmiafCEWkP2lnDBsj9k3gy8Mst8C7C0SSTKqeAr/i7SR/eMDX4+d3zAC7GQsFgiwgG
+         P/Xu0NlGhjVRaRJVXgK/KqZxSO9k6Xt5zJvUpzVm0llElAvi/KJ89sLOWRxrkhw6nrgx
+         0AAm3HMwI4jjRa6g+FtypjvtVv/gGWSP7kVvPtFlR5okkw9s89723+sWR3G3sH2iSIAK
+         Gntg==
+X-Forwarded-Encrypted: i=1; AHgh+RpScn6ZuOmgX5J1Ia9n+lD/I7I1h/zxONTLy05ZuPaz37e0O2FII65KpX5dAP1tmrtOS98D4WD3gAzt5BJ0wwY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kNIQvZ/VcKoevMZGnu/Fk3DaMoxQAYI9zHiidi+OLVqHHib6ip
+	HQdh+s4tlQEUlfIc8h75u8zxMrBXgZvf0aNIP+L+hYn59EPcsxXkWSIG
+X-Gm-Gg: AR+sD11L/vkuvyO14wAJm8DtQo3nQx74TW1LWqdpCsfENgW3GGqfPTPL2TaNzuLz5Gx
+	DG44i/12alL7CVXnqLNOxygNSSQkBsBHi8hJiuXefPBOxIsbvHT6cD1U+5/TKFsdiXe07XcQvKu
+	+i48A0uQBiH2353++gBIDeTZl1LwX4KPdmKG5Q7L0/vFCb92GFM4afXSg+7T+DumpAbEZZd7hR1
+	6UyvpAHykRa1Ov49oIobOCURozAf+bm7wGdNCVKjE97hy3GW8jYvUvudcYv/3rW8f7WWPTtvP2d
+	2dxe3h8/SFioNydgJtCfPxCl+yz7FLtStuGf70PiPiZyox8AWfpOjfEFEqmFq3K34oNt1udXLBF
+	uEDFl3gJv0eDKnblmYVAIpwjwcetQELPppp2x12tbntOAtUJxuzf0+D+Mi6DLdCyRoEiUwd8MQu
+	bHlCFggQ3O0truNlnHnNiuI9ItX1mG6dDfXFurn4g60yQzPdEo2yV7
+X-Received: by 2002:a17:90b:3985:b0:380:71eb:4014 with SMTP id 98e67ed59e1d1-395c357d3a3mr27931519a91.15.1787451002184;
+        Sat, 22 Aug 2026 19:10:02 -0700 (PDT)
 Received: from houminxi ([61.170.217.176])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141861732f8sm11371949c88.10.2026.08.22.19.09.54
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141861732f8sm11371949c88.10.2026.08.22.19.09.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 22 Aug 2026 19:09:57 -0700 (PDT)
+        Sat, 22 Aug 2026 19:10:01 -0700 (PDT)
 From: Minxi Hou <houminxi@gmail.com>
 To: netdev@vger.kernel.org
 Cc: aconole@redhat.com,
@@ -74,9 +74,9 @@ Cc: aconole@redhat.com,
 	shuah@kernel.org,
 	horms@kernel.org,
 	Minxi Hou <houminxi@gmail.com>
-Subject: [PATCH net-next 1/2] selftests/net/openvswitch: add SCTP flow key test over IPv6
-Date: Sat, 22 Aug 2026 22:09:41 -0400
-Message-ID: <20260823020942.3101898-2-houminxi@gmail.com>
+Subject: [PATCH net-next 2/2] selftests/net/openvswitch: add SCTP flow key test across conntrack NAT
+Date: Sat, 22 Aug 2026 22:09:42 -0400
+Message-ID: <20260823020942.3101898-3-houminxi@gmail.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260823020942.3101898-1-houminxi@gmail.com>
 References: <20260823020942.3101898-1-houminxi@gmail.com>
@@ -88,143 +88,135 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The merged SCTP test covers only IPv4. The IPv6 extraction path
-(parse_ipv6hdr walking extension headers, then the proto=132 branch in
-key_extract) and the v6 side of the SCTP netlink validation have no
-selftest coverage at all, so a regression there would ship silently.
+Conntrack NAT rewrites the packet between the first-pass and recirc
+passes, and OVS re-extracts L3/L4 on the recirculated skb via
+ovs_flow_key_update_l3l4(). Nothing in the suite exercises SCTP key
+extraction on that post-NAT path: the existing nat test drives TCP
+over nc, and the merged SCTP test has no conntrack in the path.
 
-Add test_sctp_connect_v6 mirroring the v4 test: NS/NA forwarding flows
-stand in for ARP, and ipv6(proto=132),sctp(dst=4443)/sctp(src=4443)
-flows gate the association in the same three phases (flows installed,
-flows removed, flows reinstalled). After the association succeeds the
-test also pushes a known payload across and verifies the listener
-received it, so a flow-key bug that matches handshake packets but
-breaks DATA chunks is caught too. Skips when the sctp module is
-missing, socat lacks SCTP support, or IPv6 is unavailable; an
-association or DATA failure with the flows installed fails the test.
+Add test_sctp_nat_connect_v4, reusing the nat4 fixture with the SCTP
+socket pair from the v4 SCTP test: untracked ipv4 traffic hits
+ct(commit,nat(...)),recirc, and the post-recirc flows match
+ct_state(+trk) with the extracted sctp(dst=4443)/sctp(src=4443) ports.
+A probe for the SCTP conntrack sysctl turns a kernel without working
+SCTP conntrack into a skip instead of an opaque timeout. After the
+association succeeds the test pushes a known payload across and
+verifies the listener received it, so a flow-key bug that matches
+handshake packets but breaks DATA chunks is caught too. If ct+nat is
+accepted but the association or DATA fails, the test fails.
 
 Signed-off-by: Minxi Hou <houminxi@gmail.com>
 ---
- .../selftests/net/openvswitch/openvswitch.sh  | 97 ++++++++++++++++++-
- 1 file changed, 96 insertions(+), 1 deletion(-)
+ .../selftests/net/openvswitch/openvswitch.sh  | 86 +++++++++++++++++++
+ 1 file changed, 86 insertions(+)
 
 diff --git a/tools/testing/selftests/net/openvswitch/openvswitch.sh b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-index a31f7fb6882d..06bd98d80a08 100755
+index 06bd98d80a08..d5acdca0a0ac 100755
 --- a/tools/testing/selftests/net/openvswitch/openvswitch.sh
 +++ b/tools/testing/selftests/net/openvswitch/openvswitch.sh
-@@ -33,7 +33,8 @@ tests="
- 	action_set				set: SET action rewrites fields
- 	trunc					trunc: output truncation
+@@ -35,6 +35,7 @@ tests="
  	icmpv6					icmpv6: ICMPv6 echo type match
--	sctp_connect_v4				sctp: SCTP flow key matching
-+	sctp_connect_v4			sctp: SCTP flow key matching
-+	sctp_connect_v6			sctp6: SCTP flow key matching over IPv6
+ 	sctp_connect_v4			sctp: SCTP flow key matching
+ 	sctp_connect_v6			sctp6: SCTP flow key matching over IPv6
++	sctp_nat_connect_v4		sctpnat4: SCTP flow key across conntrack NAT
  	psample					psample: Sampling packets with psample"
  
  info() {
-@@ -700,6 +701,100 @@ test_sctp_connect_v4() {
+@@ -1186,6 +1187,91 @@ test_nat_connect_v4 () {
  	return 0
  }
  
-+# sctp_connect_v6 test
-+# - sctp(dst=4443) matches client-to-server INIT
-+# - sctp(src=4443) matches server-to-client INIT-ACK
-+# - icmpv6 NS/NA flows forward neighbour discovery
-+# - remove flows and verify connection fails, reinstall and recover
-+test_sctp_connect_v6() {
-+	local t="test_sctp_connect_v6"
-+	local v6="eth_type(0x86dd),ipv6(proto=132)"
-+	local payload="SCTP6_DATA_OK"
++# sctp_nat_connect_v4 test
++#  - SCTP association crosses a ct(commit,nat(dst=...)) translation
++#  - post-recirc flows match ct_state(+trk) plus the extracted SCTP ports
++test_sctp_nat_connect_v4 () {
++	local t="test_sctp_nat_connect_v4"
++	local payload="SCTP_NAT_DATA_OK"
 +	local rxfile="${ovs_base}/${t}/sctp-rx.txt"
 +
 +	modprobe -q sctp 2>/dev/null || return "$ksft_skip"
 +	socat -V 2>&1 | grep -q "define WITH_SCTP" || return "$ksft_skip"
-+	[ -e /proc/sys/net/ipv6 ] || return "$ksft_skip"
++	# SCTP conntrack is compiled into nf_conntrack.ko, so check that
++	# loading it actually exposed the SCTP conntrack sysctls.
++	modprobe -q nf_conntrack 2>/dev/null || return "$ksft_skip"
++	[ -e /proc/sys/net/netfilter/nf_conntrack_sctp_timeout_established ] \
++	    || { info "no SCTP conntrack support - skipping"
++	         return "$ksft_skip"; }
 +
-+	sbx_add "$t" || return $?
-+	ovs_add_dp "$t" sctp6 || return 1
++	sbx_add "test_sctp_nat_connect_v4" || return $?
 +
++	ovs_add_dp "test_sctp_nat_connect_v4" sctpnat4 || return 1
 +	info "create namespaces"
 +	for ns in client server; do
-+		ovs_add_netns_and_veths "$t" "sctp6" "$ns" \
-+		    "${ns:0:1}0" "${ns:0:1}1" || return 1
++		ovs_add_netns_and_veths "test_sctp_nat_connect_v4" "sctpnat4" \
++		    "$ns" "${ns:0:1}0" "${ns:0:1}1" || return 1
 +	done
 +
-+	ip netns exec client ip addr add fd00::1/64 dev c1 nodad
++	ip netns exec client ip addr add 172.31.110.10/24 dev c1
 +	ip netns exec client ip link set c1 up
-+	ip netns exec server ip addr add fd00::2/64 dev s1 nodad
++	ip netns exec server ip addr add 172.31.110.20/24 dev s1
 +	ip netns exec server ip link set s1 up
 +
-+	# NS/NA forwarding
-+	ovs_add_flow "$t" sctp6 \
-+	    'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6()' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp6 \
-+	    'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6()' \
-+	    '1' || return 1
++	ip netns exec client ip route add default via 172.31.110.20
 +
-+	# SCTP port matching: dst for request, src for reply
-+	ovs_add_flow "$t" sctp6 \
-+	    "in_port(1),eth(),$v6,sctp(dst=4443)" \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp6 \
-+	    "in_port(2),eth(),$v6,sctp(src=4443)" \
-+	    '1' || return 1
++	# Check if the ct action can be configured.
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		'in_port(1),eth(),eth_type(0x0800),ipv4()' \
++		'ct(commit),recirc(0x1)' &> /dev/null
++	if [ $? == 1 ]; then
++		info "no support for ct action - skipping"
++		ovs_exit_sig
++		return $ksft_skip
++	fi
 +
-+	ovs_netns_spawn_daemon "$t" "server" \
-+	    socat -u -t 1 SCTP6-LISTEN:4443,fork \
-+	    OPEN:"$rxfile",creat,append
++	ovs_del_flows "test_sctp_nat_connect_v4" sctpnat4
++
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		'in_port(1),eth(),eth_type(0x0806),arp()' '2' || return 1
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		'in_port(2),eth(),eth_type(0x0806),arp()' '1' || return 1
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		"ct_state(-trk),in_port(1),eth(),eth_type(0x0800),ipv4(dst=192.168.0.20)" \
++		"ct(commit,nat(dst=172.31.110.20)),recirc(0x1)" || return 1
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		"ct_state(-trk),in_port(2),eth(),eth_type(0x0800),ipv4()" \
++		"ct(commit,nat),recirc(0x2)" || return 1
++
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		"recirc_id(0x1),ct_state(+trk-inv),in_port(1),eth(),eth_type(0x0800),ipv4(proto=132),sctp(dst=4443)" \
++		"2" || return 1
++	ovs_add_flow "test_sctp_nat_connect_v4" sctpnat4 \
++		"recirc_id(0x2),ct_state(+trk-inv),in_port(2),eth(),eth_type(0x0800),ipv4(proto=132),sctp(src=4443)" \
++		"1" || return 1
++
++	ovs_netns_spawn_daemon "test_sctp_nat_connect_v4" "server" \
++		socat -u -t 1 SCTP4-LISTEN:4443,fork \
++		OPEN:"$rxfile",creat,append
 +	ovs_wait sctp_eps_has server 4443 || return 1
 +
-+	info "verify SCTP association with port-keyed flows"
-+	ovs_sbx "$t" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null \
-+	    || return 1
++	info "verify SCTP association across NAT"
++	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
++	    </dev/null || return 1
 +
-+	info "verify SCTP DATA chunk crosses the datapath"
-+	ovs_sbx "$t" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" \
++	info "verify SCTP DATA chunk crosses NAT"
++	ovs_sbx "test_sctp_nat_connect_v4" ip netns exec client \
++	    timeout 3 socat -u STDIN "SCTP4-CONNECT:192.168.0.20:4443" \
 +	    <<< "$payload" || return 1
 +	grep -q "$payload" "$rxfile" 2>/dev/null \
 +	    || { info "server did not receive SCTP DATA payload"
 +	         return 1; }
 +
-+	ovs_del_flows "$t" sctp6
-+
-+	info "verify connection fails without flows"
-+	ovs_add_flow "$t" sctp6 \
-+	    'in_port(1),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6()' \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp6 \
-+	    'in_port(2),eth(),eth_type(0x86dd),ipv6(proto=58),icmpv6()' \
-+	    '1' || return 1
-+
-+	ovs_sbx "$t" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null \
-+	    >/dev/null 2>&1 \
-+	    && { info "connection should fail without flows"
-+	         return 1; }
-+
-+	info "reinstall flows and verify recovery"
-+	ovs_add_flow "$t" sctp6 \
-+	    "in_port(1),eth(),$v6,sctp(dst=4443)" \
-+	    '2' || return 1
-+	ovs_add_flow "$t" sctp6 \
-+	    "in_port(2),eth(),$v6,sctp(src=4443)" \
-+	    '1' || return 1
-+
-+	ovs_sbx "$t" ip netns exec client \
-+	    timeout 3 socat -u STDIN "SCTP6-CONNECT:[fd00::2]:4443" </dev/null \
-+	    || return 1
-+
++	info "done..."
 +	return 0
 +}
 +
- # psample test
- # - use psample to observe packets
- test_psample() {
+ # nat_related_v4 test
+ #  - client->server ip packets go via SNAT
+ #  - client solicits ICMP destination unreachable packet from server
 
 base-commit: 91ec2035134982b98fab0609a9fd8480e8217dc1
+prerequisite-patch-id: a3848bf8ef3803b528f964b8e866dd3622e5b154
 -- 
 2.55.0
 
