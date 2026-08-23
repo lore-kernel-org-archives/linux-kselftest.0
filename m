@@ -1,122 +1,159 @@
-Received: from mta0.migadu.com (out-138.mta0.migadu.com [91.218.175.138])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6042734E74D
-	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 15:39:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E33D52868AB
+	for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 18:10:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787499592; cv=none; b=b6HQRtQRG/aQaz5TfGXBYFgSNUZWs4kFn0y4kXP4yaBM9eeSvREE4tedUj+I6N71W7AJdM6UUM7yhuRj8ypssLQNIq9+1Q7ktlUvo9kJb1bEd7qGlj7PHsbvgciyPlJCoUqf5xq7ji34Nk/JjowFHTQTnEo0LAfdOV39B882NwQ=
+	t=1787508640; cv=none; b=GU+5lf+N+uM/kcLawjqyjrtRPcrBUuuHjPOgWHrsUqI6/Bua9POa3B0ybOQSUEVX0U1KPWzIUyN7QQNWenry3kH7sXLGuiIAXdZBieU5x4+92nrT/HyzOjZLQ+FdGI4wLNYX7/4nSn7zGSXS9JKPUrIqOLevBPxBy5dLwWwMEO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787499592; c=relaxed/simple;
-	bh=W0TlGb6F34q6Kl5UWG4lZXAn8pUN8AHkhRFYqa9i08k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uap4V4ZJ/AduSBAg51/dZAK2haxfhBhs0STtgCduocsPQzS0cSQPXrbb5TNPxigZJYKs2Om11BsWpR/EKa9gSgijwnQo4UlJGh1AhbUr7hF0rA1bBTHqHg1r9qnNuSZMZniYqucl1W2f1IL/3E88VuXWOezy/WR+4pCSIuFc1Xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=b/tRiIGP; arc=none smtp.client-ip=91.218.175.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787508640; c=relaxed/simple;
+	bh=fGYi03ob++A1OM/7GWgjQOyXpfe+tdTeHisTLkTszvA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OWjqoGtolIYnAjWAtiXl7Vax2YCa/nB6AsYkI5gGQDI7r3O930b1owvbgw9r8fZziDskzUJhPZqLs5KqSTzk0sdHDwb0cFE0nQxxepwmOXsd4TJBGGwt0GfDr8LhmP3TvDF9C4NnlXnaDqOzDLVOQthQDe2tmdCq8wY2IuUox78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=D2uJI3vi; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="b/tRiIGP"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=W0TlGb6F34q6Kl5UWG4lZXAn8pUN8AHkhRFYqa9i08k=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787499588; v=1; x=1788104388;
- b=b/tRiIGPdhOV0e2DLocmqNoU8j0p0drjU2CPlRJIZrzTerB20k9WOvIinMsw8wQdXq5vq8IG
- CzdgnLcwL0ha6AdSJL2+WHwsoFhqdt2HW5sJ1KrFUW48YJPOyECthSAOXsl4ag8QjNTlfnsjYJD
- FnYU1Voj6d3HjEZLvzov/oU4=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from mail-lf1-f49.google.com (209.85.167.49)
-	by smtp.migadu.com with ESMTPS id d1ed893fa5f15dd2;
-	Sun, 23 Aug 2026 15:39:48 +0000
-X-Mizu-Trace-ID: d1ed893fa5f15dd2
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5b2a8173142so5441e87.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 08:39:44 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AHgh+RrYxRuD0Nsi/jAIpmdfirYi8xGqy+kWmFaS4/XaW5t9Wg6NWqQusNq/wSpeaPG7jnlk69WKJvTDWr/hyyB0bu0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mRbsl/3W7UNEfjY3d5//mA1awv+QAaOkkSJVWUEGfMidbR9h4A
-	nGIVVLi7K7lDobTu7np3zJ6LQs66uMAqu8ZsblU5bjfH1VIVEJAXl7QZFulEcMRjqoeQUjk92jt
-	Fb5128Yu9XRP6K7+YffX11JCerz0LF2Zl8L7iEoRq
-X-Received: by 2002:a05:6512:1093:b0:5b1:571f:715f with SMTP id
- 2adb3069b0e04-5b48c2f784amr130059e87.3.1787499583194; Sun, 23 Aug 2026
- 08:39:43 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="D2uJI3vi"
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-38e3efab7e0so1934649a91.0
+        for <linux-kselftest@vger.kernel.org>; Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787508638; x=1788113438; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
+        b=D2uJI3vi3WxZnfPn3ZjqspNiEPNmrh2ZZu968RILNByB/ZdBrYk4hj4mg8QQLNsXDK
+         U3wTEWZhEa0q8dUDkNEwhN3DTFTW566uCCmBj8SZzrBTTns1b9olqxBH8cqtSFMICCug
+         iot+VBD9XV6cdqRNIT0DDlMkSubimRJ2EAmlrJ02UjGimDBky21PNf2clvYo3z+uW1IM
+         sVO9dNNNKd8A3kTVBmEyxHpzILkYP55Q4BNrfRalEeeNGhbM0+gH1D6+L7kBYOQi6nn3
+         s05ViAGYGlqElNTQet2bmTq/sw8Jcahy91xazSQct4OEykM+sSROcQ6l8P4vktcM73he
+         a5EA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787508638; x=1788113438;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=40bzyEpk4244+pXyR4A/V35aPJohFaRdnFjBwHWe5DM=;
+        b=dQFo5C7EZSxeLzxgmptYm9CglmFJTeekTvBsucdgmE+heqP+ygCHmKpOFmbBbeAx+z
+         Ytq9WckdF/xyM8XU79PP2qBXv2dKifybCdS4YSI571xbZ6Olfspc4BGbIn4Met4EpFvJ
+         9D0oQVOv8mricYG+xVr/nCFn0MJ9xu75O3ha9DZ19DezY+CW+1VQJvKhe9W1uMUr8YSv
+         Wcbf3WuDlow5gxOmh/uR0tF922S5MtKzPVUDNUZEzwZOARWmXUNNVl+Ic/ZsDZbiMUs5
+         MFTjGeaRVLGfqUCSWsgu6lzi0uG7tpZsketKQ/LCKStbxxIUrqaNpiwZNVIcRFHDUlK3
+         yiAA==
+X-Forwarded-Encrypted: i=1; AHgh+RoYoLBwZm6456J9ryHgv7+izQvdPCM8k+w8UPrqdC2K7PBnEV5tXkBwa5rAchfpRQMocvvJqLJ2WKpl3wXxBn0=@vger.kernel.org
+X-Gm-Message-State: AFuF++lAWj7XYSQynOB0rXrG5TPpsH/eu8wQT5wTNvJ1P4nqNNAyC2c8
+	0nXit7M1KZ6zPVsvENDQ/PDA6+hX+jpoM3gRY4YTPt5FErJgjBnAaIEM
+X-Gm-Gg: AR+sD10gwXRjXTAhdzPa3tYjJLGhizNMSNk5Rob1oCaUbSWdSNANRk4IBUEJ5XB7sGc
+	f5N/dmgNaE0CJKazLWTLbhfNB2wFrYA/3EF6oDtvo34KlA/i/QrMD91Ku7ezFh41oqx3fzltj5n
+	OXfXolsTGHP99CTrZiTr5RCA3DMlrCsefjYyov7bEGnrc8VDoUTd1KbLJgw3pqlW8KX4+Lir5ji
+	BLw216WXgLzu1e1mwoMwXETVwjvM2mFl8kwlXg1494G4Df0kWDJQcE2+frg/nJPw1lDDkmaz+fJ
+	X9p775PyPTLwLyteM5rOIr/ihb1EWKfx18ionH8nQGwmLXbstBqfR+6gUkp/WQIIgoIlfCQiCk6
+	RY2tqJH99tlvwDaKQB8A06X8Y9dnDzl6zwLdLj2xJu/9Iexc7pBVUlf4SZ9ueshy1hYgjroUq/j
+	NBdGoL2jNWve8b4qpT0kV/fHarVju9LEsau6dn/LSAJEDTP7bMpssOASMo764bPqNs5/erNxqu3
+	L7dqiTZ2CXKQYjwRGMH4OlM2ypcxsM=
+X-Received: by 2002:a17:90b:37c5:b0:38e:6d55:b1a6 with SMTP id 98e67ed59e1d1-395c4c35ac3mr18952438a91.3.1787508638219;
+        Sun, 23 Aug 2026 11:10:38 -0700 (PDT)
+Received: from skinsburskii (c-98-225-44-182.hsd1.wa.comcast.net. [98.225.44.182])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-395e49d8b1csm7092886a91.11.2026.08.23.11.10.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 23 Aug 2026 11:10:37 -0700 (PDT)
+Date: Sun, 23 Aug 2026 11:10:35 -0700
+From: Stanislav Kinsburskii <skinsburskii@gmail.com>
+To: Shuah Khan <shuah@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	Eric Paris <eparis@redhat.com>, Al Viro <viro@zeniv.linux.org.uk>,
+	Amy Griffis <amy.griffis@hp.com>
+Cc: Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	audit@vger.kernel.org
+Subject: Re: [PATCH 0/3] audit: Measure and reduce syscall filtering overhead
+Message-ID: <aos3m2wG3To3wCeo@skinsburskii>
+References: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260822095346.53882-1-kmehltretter@gmail.com>
-In-Reply-To: <20260822095346.53882-1-kmehltretter@gmail.com>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Sun, 23 Aug 2026 16:39:06 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTwcJ7zvw5bgqmt2-OiW7q01Vwm3rn1gTFn-39Lu4qDWJg@mail.gmail.com>
-X-Gm-Features: AcwNN1U6KyA3LCwgTCyTTj8u2ge9LgDR8EDiemOl63d62mt3Rz0sod8kkzdxcH4
-Message-ID: <CA+EHjTwcJ7zvw5bgqmt2-OiW7q01Vwm3rn1gTFn-39Lu4qDWJg@mail.gmail.com>
-Subject: Re: [PATCH v3 0/5] KVM: arm64: fix VGICv3 redistributor rollback
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, kvmarm@lists.linux.dev, 
-	Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Eric Auger <eric.auger@redhat.com>, Christoffer Dall <christoffer.dall@arm.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	kvm@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com>
 
-Hi Karl,
+On Thu, Aug 06, 2026 at 06:01:18PM -0700, Stanislav Kinsburskii wrote:
+> This series adds a repeatable microbenchmark for audit's fixed syscall
+> overhead and uses it to address two cases where audit continues doing work
+> which cannot produce a record.
+> 
 
-On Sat, 22 Aug 2026 at 10:53, Karl Mehltretter <kmehltretter@gmail.com> wrote:
-...
-> Testing: built the patched kernel and the arm64 vgic_init selftest with
-> GCC 13.3.0 in an arm64 Linux container. The selftest passed under QEMU
-> 11.0.2 TCG with -machine virt,virtualization=on,gic-version=3 and -cpu max.
+A gentle ping on this series.
 
-Applied this on kvmarm/next: protected and non-protected guest boots
-under pKVM, plus VHE and nVHE, and the vgic_init, vgic_irq and
-vgic_lpi_stress selftest. Also built the base with only patches 4-5
-and confirmed the new test fails without patches 1-3.
+Thanks,
+Stanislav
 
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
-Tested-by: Fuad Tabba <fuad.tabba@linux.dev>
-
-Cheers,
-/fuad
-
-
+> Patch 1 adds audit_bench, a manually run getpid(2) microbenchmark under
+> tools/testing/selftests/audit.  It leaves policy management to the caller
+> so the same workload can measure different rule configurations without
+> silently changing the system policy.
+> 
+> Patch 2 fixes audit_n_rules and audit_signals accounting when rules are
+> removed automatically with a watch or tree, or after an LSM rule update
+> fails.  These paths could leave the counters nonzero after the last
+> applicable rule had disappeared, causing every subsequent syscall to
+> allocate a non-dummy audit context.  It also centralizes rule accounting
+> so all rule removal paths share the same bookkeeping.
+> 
+> The median getpid latency in the same unpinned VM was:
+> 
+>                                   no rules   stale state   fixed
+>   automatically removed watch       38 ns       55 ns      38 ns
+>   automatically removed tree        38 ns       59 ns      38 ns
+> 
+> Patch 3 builds on those lifecycle helpers.  It maintains an aggregate mask
+> of the syscall numbers present in exit rules and checks that mask before
+> walking the exit filter list.  The mask is architecture-independent and
+> therefore conservative: overlapping syscall numbers may cause an
+> unnecessary scan, but cannot suppress a match.
+> 
+> For an unrelated getpid workload, the median latency scaled as follows:
+> 
+>   exit rules                         1       32      128      256
+>   before                            55 ns    71 ns   428 ns   791 ns
+>   after                             55 ns    55 ns    55 ns    55 ns
+> 
+> The aggregate mask is updated through the centralized accounting helpers.
+> Insertion sets the relevant bits before publishing the rule with
+> list_add_rcu(); removal unlinks the rule before clearing them.  This keeps
+> the lockless rejection test conservative during concurrent rule changes.
+> 
+> The series does not change the audit userspace ABI or rule matching
+> semantics.  The benchmark and complete reproduction procedures are
+> documented in the individual patches.
+> 
 > ---
-> Changes since v2:
-> - Patch 1: limit free_index rollback to the immediate registration failure
->   under slots_lock instead of generic unregistration. (Sashiko)
-> - Patch 2: reset all assignments and region counters after a failed region
->   update (Marc), and serialize REDIST and REDIST_REGION writes with vCPU
->   creation so rollback cannot miss an unpublished assignment.
-> - Patch 3: add an already-locked unassignment primitive, move failed-vCPU
->   cleanup to kvm_vgic_vcpu_destroy(), and remove the redundant base_addr
->   reset. (Marc)
-> - Patch 4: match vm_create_with_vcpus() by using void * for the guest-code
->   argument. (Sashiko)
-> - Patch 5: document how the first three redistributors span regions 0
->   and 1; no functional change.
->
-> Previous version:
-> v2: https://lore.kernel.org/r/20260819224229.82948-1-kmehltretter@gmail.com
->
-> Karl Mehltretter (5):
->   KVM: arm64: vgic-v3: Undo assignment on iodev registration failure
->   KVM: arm64: vgic-v3: Reset redistributors after failed region setup
->   KVM: arm64: vgic-v3: Separate redistributor teardown from unassignment
->   KVM: arm64: selftests: Pass guest code to vm_gic_create_with_vcpus()
->   KVM: arm64: selftests: Test VGICv3 redistributor region retry
->
->  arch/arm64/kvm/vgic/vgic-init.c               |  46 +++----
->  arch/arm64/kvm/vgic/vgic-kvm-device.c         |  20 +++
->  arch/arm64/kvm/vgic/vgic-mmio-v3.c            |  83 ++++++++-----
->  arch/arm64/kvm/vgic/vgic.h                    |   1 +
->  tools/testing/selftests/kvm/arm64/vgic_init.c | 116 ++++++++++++++++--
->  5 files changed, 200 insertions(+), 66 deletions(-)
->
->
-> base-commit: 57e7cf13ac26bf1a3dba6cfa601f7b2481811575
-> --
-> 2.39.5 (Apple Git-154)
+> Stanislav Kinsburskii (3):
+>       selftests/audit: Add syscall overhead benchmark
+>       audit: Fix filter rule accounting after automatic removal
+>       audit: Skip exit filtering for syscalls without rules
+> 
+>  MAINTAINERS                                 |   1 +
+>  kernel/audit.h                              |   7 +
+>  kernel/audit_tree.c                         |   1 +
+>  kernel/audit_watch.c                        |   2 +
+>  kernel/auditfilter.c                        | 140 +++++++++++------
+>  kernel/auditsc.c                            |  13 ++
+>  tools/testing/selftests/Makefile            |   1 +
+>  tools/testing/selftests/audit/.gitignore    |   2 +
+>  tools/testing/selftests/audit/Makefile      |   9 ++
+>  tools/testing/selftests/audit/README        |  30 ++++
+>  tools/testing/selftests/audit/audit_bench.c | 227 ++++++++++++++++++++++++++++
+>  11 files changed, 389 insertions(+), 44 deletions(-)
+> ---
+> base-commit: ea2bff00da89d7767d677bb68470130ba96f4928
+> change-id: 20260806-audit-96a1e71d38b1
+> 
+> Best regards,
+> -- 
+> Stanislav Kinsburskii <skinsburskii@gmail.com>
+> 
