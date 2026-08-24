@@ -1,110 +1,217 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-195.mta0.migadu.com [91.218.175.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32036403AF0;
-	Mon, 24 Aug 2026 11:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D08340DB53
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 11:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787569925; cv=none; b=SyL4DuBG8TlP8QuPtSwvjLLA5PBzGUmfuZD4vQFNeaqjDXdO48rtoan+Awlw+b4R5r7xVvZZdJsNcKk5k2ywZUEZ7q8bw37CYopaFgKibrNIuCR7DRWblMMGKUkh4Wn7NzYN+YWSJoCYy1xvEwjEmANug0Ok7byTj8UEkw56kcE=
+	t=1787570418; cv=none; b=G1nPa3L7iUeNm6j3oYfvPlw+kSHAHUUGd6/c02BWfrdf0VoQrNhl9iADG961aWUzb/0/efJtSjrBLueKKkmtSfDjl2VV5uuppsE7A6vUqgzmEnpw7smUfVhBjzfTEtwTkUXKivgfj21u6bmpqD4AzMrdaL88f+SekJLKS2fObz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787569925; c=relaxed/simple;
-	bh=m+morNN8RGBMipO5t+xTLWNLDa2XTQgVC0dfxL3TCxU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VVps+ouzwKttoDxxj8Bpz9Yr9yUpOwUSs1nK4+1bCH5utMkx07moj4y4Uwk6DnwEnqkxU4pRievRlQAg+VX1OUz25oOr+VE10vX97fpKDdCxOlhTmg+ZVlc+vDYH5c8ix9QQxuwuSsxsJuKu4KITZcL8EbNFcuPtQtZIejVJtiU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMLFr5yZ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787570418; c=relaxed/simple;
+	bh=YqtmwJj1TSTjAKuc+RN5KV+zNyJi4YEBO9daURTvoKI=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=jtrwfXZWFqwjFMKswF6gdK9mI/Js4rHitiLzzDN3tjqSlXaGqDbKpS9jsG/0FZr+Q27V0guy5h5UAu/Dfp2d7ZEBHWW9DkBBTUlsCZ7WqfqiFReCsnEYQlnXBhXC1hX89njrgKV7Lc7dGH6vb3m0fp3W3lzWkt3kO6ktusWX4+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cBxRjeXT; arc=none smtp.client-ip=91.218.175.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMLFr5yZ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9641E1F000E9;
-	Mon, 24 Aug 2026 11:12:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787569923;
-	bh=mx+rPoWvI9AkDoOzj5LLsBB5vj6AWlJD0KdPs8BiNks=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=AMLFr5yZzIs0z67GZnwj0OMggnSxwjtK/svgoRHvLnZJLflICjZ7c2H/0ZLr8XRBQ
-	 5peiDCre1Ou8Z17lQI6z7iqe4HP79Am7rOUrqCSkivt2tlw6V656d0fFf3inVa0ilc
-	 LREZ5spgc8ePqqERgIM4DGL+XM8vLXJBlXG7T9t2XLYv3UCSLqOzHVPmG7Aab4KDho
-	 pGz1SEWBqKdmf0x9ghpwGzEbRm5UTisGHBnqw+0ZmEMpGEaT2tebudhm35NtO/NbMN
-	 dcCnvz2BRnKAmLUzV4NpD/iZKt0SLlKiWMhpo5BFzjprSZTMUVGSp89AAcFK1kRU3W
-	 NSVohXySukHMw==
-Date: Mon, 24 Aug 2026 12:11:57 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Wei-Lin Chang <weilin.chang@arm.com>
-Cc: Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>, Fuad Tabba <tabba@google.com>,
-	Oliver Upton <oupton@kernel.org>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v19 06/14] KVM: arm64: Validate GCS exception lock when
- emulating ERET
-Message-ID: <e0decd21-bd0e-4eab-aa94-b9e97e7b4d7d@sirena.org.uk>
-References: <20260812-arm64-gcs-v19-0-9105afd828ac@kernel.org>
- <20260812-arm64-gcs-v19-6-9105afd828ac@kernel.org>
- <vdmz43ogvmwu4liilfqzdrgsf5v765bucl7mybhfdxj7yrywkd@5mssukdegdwg>
- <02b970b2-dbd9-490f-bfc0-be10708e0f9b@sirena.org.uk>
- <q3lxbu2palhkejnkvncs2iili6vvkcl7boftn4snf4fjy6fhvg@ehrwmqt6eh3m>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cBxRjeXT"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=YqtmwJj1TSTjAKuc+RN5KV+zNyJi4YEBO9daURTvoKI=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787570414; v=1; x=1788175214;
+ b=cBxRjeXTr4YoFroncha9ILGDO2EQVAsiq/XLTi7JFU0fh2h2l+dISPpK41qq2aJ9ayS+SWbb
+ bBR7d6CG5pmQ3bY+IE2bxmx/rtb/1Cw9FRHCDILGTd23CG6X+mPHKGlJZsZTrngfostncwh1tz8
+ 7qbQ7fd/GKe1jfnQ9on6DEM8=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id dbcc094937eb36f3;
+	Mon, 24 Aug 2026 11:20:13 +0000
+X-Mizu-Trace-ID: dbcc094937eb36f3
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	hughd@google.com,
+	liam@infradead.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	usama.arif@linux.dev,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kas@kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [RFC PATCH 12/57] mm/collapse: allocate a destination per candidate
+Date: Mon, 24 Aug 2026 19:20:05 +0800
+Message-Id: <20260824112005.63097-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <20260816224609.308019-13-kirill@shutemov.name>
+References: <20260816224609.308019-13-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="TdbCqlH/hxhqcRtu"
-Content-Disposition: inline
-In-Reply-To: <q3lxbu2palhkejnkvncs2iili6vvkcl7boftn4snf4fjy6fhvg@ehrwmqt6eh3m>
-X-Cookie: Accuracy, n.:
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
 
---TdbCqlH/hxhqcRtu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+On Sun, Aug 16, 2026 at 11:45:24PM +0100, Kiryl Shutsemau wrote:
+>From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+>Fill in the allocation, which happens on both sides of the freeze.
+>
+>A destination is a folio of the candidate's order, charged to the memcg,
+>with the memcg's deferred-split list entry taken up front while sleeping
+>is still allowed: the PMD-order install would otherwise need one under
+>the pmd lock.
+>
+>collapse_alloc() does all of that for one candidate with the gfp it is
+>handed, and counts nothing when it fails: what a miss means is up to the
+>caller.
+>
+>collapse_provision() is the caller inside the window.  The sources are
+>frozen by then and a faulter on any of them is waiting, so it asks
+>without __GFP_DIRECT_RECLAIM: reclaim entered there would be paid for by
+>that faulter.
+[...]
+>+/*
+>+ * Allocate one candidate's destination with @gfp: a folio of its order, charged,
+>+ * with the memcg's deferred-split list heads in place so the install cannot need
+>+ * to allocate under the pmd lock.  Those heads cost only the first collapse in a
+>+ * memcg.
+>+ *
+>+ * A failure counts nothing and changes nothing: what a miss means is the caller's
+>+ * policy.
+>+ */
+>+static enum scan_result collapse_alloc(struct mm_struct *mm,
+>+				       struct collapse_control *cc,
+>+				       struct collapse_candidate *cand,
+>+				       gfp_t gfp)
+>+{
+>+	struct folio *folio;
+>+
+>+	folio = __folio_alloc(gfp, cand->order, collapse_find_target_node(cc),
+>+			      &cc->alloc_nmask);
+>+	if (!folio)
+>+		return SCAN_ALLOC_HUGE_PAGE_FAIL;
+>+
+>+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
+>+	    folio_memcg_alloc_deferred(folio)) {
 
-On Sun, Aug 23, 2026 at 02:18:15PM +0100, Wei-Lin Chang wrote:
-> On Fri, Aug 21, 2026 at 11:19:30PM +0100, Mark Brown wrote:
+One small nit: folio_memcg_alloc_deferred() passes GFP_KERNEL to the
+deferred_split_lru allocation.
 
-> > As the comment mentions it's not quite that - ELFromSPSR() in the
-> > pseudocode has rather more going on in it that I'd managed to convince
-> > myself wasn't relevant in this specific context.  I didn't want to give
-> > it a name that would cause someone to think it did the full thing and
-> > trip them up using it in a different context where those things do
-> > matter.  I do agree that this results in awkward naming.
+At the full series tip, collapse_round() invokes it after
+collapse_freeze() and before collapse_putback(), while faults on the
+source migration entries wait:
 
-> Right sorry, I missed the pseudocode part. ELFromSPSR pseudocode is
-> doing more than what its name indicates...
+static void collapse_round(struct mm_struct *mm, unsigned long pmd_addr,
+			   struct collapse_control *cc)
+{
+...
+	collapse_freeze(vma, cc, pmd);
+	collapse_provision(mm, cc);
+...
+	collapse_putback(vma, cc);
+...
+}
 
-> If we want to stick with the pseudocode then what do you think about
-> el_from_spsr_nocheck/el_from_spsr_raw?
+collapse_provision() strips direct reclaim before calling
+collapse_alloc():
 
-Yeah, those names could help though given your other comment about this
-not looking the same as the code in exception.c I ended up changing it
-to this:
+static void collapse_provision(struct mm_struct *mm,
+			       struct collapse_control *cc)
+{
+	const gfp_t gfp = cc->policy.gfp & ~__GFP_DIRECT_RECLAIM;
+...
+		result = collapse_alloc(mm, cc, cand, gfp);
+...
+}
 
-        /* Check the EL only, ignore thread mode */
-        pstate = vcpu->arch.ctxt.regs.pstate;
-        cur_mode = (pstate & PSR_MODE_MASK) | PSR_MODE_THREAD_BIT;
-        target_mode = (spsr & PSR_MODE_MASK) | PSR_MODE_THREAD_BIT;
+collapse_alloc() uses that gfp for the charge, then calls
+folio_memcg_alloc_deferred():
 
-instead.
+static enum scan_result collapse_alloc(struct mm_struct *mm,
+				       struct collapse_control *cc,
+				       struct collapse_candidate *cand,
+				       gfp_t gfp)
+{
+...
+	if (unlikely(mem_cgroup_charge(folio, mm, gfp)) ||
+	    folio_memcg_alloc_deferred(folio)) {
+...
+	}
+...
+}
 
---TdbCqlH/hxhqcRtu
-Content-Type: application/pgp-signature; name="signature.asc"
+The helper substitutes GFP_KERNEL:
 
------BEGIN PGP SIGNATURE-----
+int folio_memcg_alloc_deferred(struct folio *folio)
+{
+...
+	return folio_memcg_list_lru_alloc(folio, &deferred_split_lru, GFP_KERNEL);
+}
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqMJv0ACgkQJNaLcl1U
-h9CjOQf/QMmd6D+ASrY8SyYNHelRK0EJIwW4oBSv0gXC6TA0EC73stA7cfWcDeY6
-U23YT5yN83tHNVoYDjoFrCutJf47NIZNcOJtQbUdTekGUcr5t/upVCOo2nrS5SJg
-syjCHDN8fK+T/qD6u3qWQSbJAe/K5lr67Olv4W9Oxg+qwAiMvb14NtuSQWu+RLwk
-hJpyPCK+UCYOB4XM3rEYX+6O2zkJa1SfhUHPdR+yGguBA7I4kAeimhpttufCkTTr
-UDY/P7qmfzE5jrgnh/NFDKWxClVFO6Rh+N/S+Qre6cY9PVPT8G1A3n9HGPxYPzdd
-n2Jqdfo3C3vbaigTCWrY2B4EwG8l5w==
-=YW/9
------END PGP SIGNATURE-----
+When this metadata has not been allocated for a memcg yet,
+folio_memcg_list_lru_alloc() can take its blocking slow branch:
 
---TdbCqlH/hxhqcRtu--
+int folio_memcg_list_lru_alloc(struct folio *folio, struct list_lru *lru,
+			       gfp_t gfp)
+{
+...
+	/* Fast path when list_lru heads already exist */
+	rcu_read_lock();
+	memcg = folio_memcg(folio);
+	res = memcg_list_lru_allocated(memcg, lru);
+	rcu_read_unlock();
+	if (likely(res))
+		return 0;
+
+	/* Allocation may block, pin the memcg */
+	memcg = get_mem_cgroup_from_folio(folio);
+	res = __memcg_list_lru_alloc(memcg, lru, gfp);
+...
+}
+
+GFP_KERNEL includes __GFP_DIRECT_RECLAIM:
+
+...
+#define __GFP_DIRECT_RECLAIM	((__force gfp_t)___GFP_DIRECT_RECLAIM) /* Caller can reclaim */
+#define __GFP_KSWAPD_RECLAIM	((__force gfp_t)___GFP_KSWAPD_RECLAIM) /* kswapd can wake */
+#define __GFP_RECLAIM ((__force gfp_t)(___GFP_DIRECT_RECLAIM|___GFP_KSWAPD_RECLAIM))
+
+...
+#define GFP_KERNEL	(__GFP_RECLAIM | __GFP_IO | __GFP_FS)
+
+This only affects calls that find the metadata missing; after it has been
+installed, later calls take the fast branch. Still, it bypasses the gfp
+with direct reclaim stripped for the freeze window. Could
+folio_memcg_alloc_deferred() take that gfp here?
+
+[...]
+
+Cheers, Lance
