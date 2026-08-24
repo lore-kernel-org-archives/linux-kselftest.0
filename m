@@ -1,55 +1,37 @@
-Received: from omta036.useast.a.cloudfilter.net (omta036.useast.a.cloudfilter.net [44.202.169.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-51.mta1.migadu.com [95.215.58.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0404B377AA4
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 04:13:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.202.169.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB07355F4E
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 04:54:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787544822; cv=none; b=NwInbPfIhuc93IHP42y2EiZq7HJP+FR+gvK+djCtFRaopHI3axHjU5t0AiwiG869rvetQig7KJEPxoW/riR5qkAjJoORzXWgd9/DWBgWyVlDPc6DgLIwT83NOgL3TUAigAAGlLv/5UHxSu1Zdu4hX1bXBCvqIEEwdqMIcCsdDvw=
+	t=1787547249; cv=none; b=EuCPPPaP2w8tcQvoIlafPJ6WcGRn+lvwmTTFIKKw0eohXa8UmJlVJsLJShK9wO+r6rmVJVVWQu1vq23BMO5LIyM48kJG7FoEsyDj8B4YOvhmhC7Q7Qie3zOujQrFE0nZZtf56nD4ijNZLDsYrRDuZ0cS6HZ77sLMrARDw7Il5dY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787544822; c=relaxed/simple;
-	bh=2435xp/9ahmNbyLQQVb83N0Lr+B9SCy1d+uEr0MAl6A=;
+	s=arc-20240116; t=1787547249; c=relaxed/simple;
+	bh=Wa6p04vZ+cxOCYibCFM/7mSGkBa99255cHiT5POOyto=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uXmu+kYM/Sbf5hXUxi9OOTUYK/i4Pge8vEj/3FWlwiMoAY+uGau4dh9EhrBCLcyZz2oFDGoGxT4dDan0xI29LTtK0t1zTJxBD1aUxcRMcEkf2eVvOQWyzevZqN9OiXT/p4bWeC9wa/g1nas0awr058SjUhXPlL/kV35nd+beZNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com; spf=pass smtp.mailfrom=embeddedor.com; dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b=jAGl1pjN; arc=none smtp.client-ip=44.202.169.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=embeddedor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=embeddedor.com
+	 In-Reply-To:Content-Type; b=p++YlvpgYVoILa5hR8wQ2+o6wcvSvq63wl047vbEtWtorcvDtAKvt1lFEeAHNDjhEC/FUMttpDNN/Yx8m+vZ8fMcs55aghkfFhYZbSAhpILHYUxFOIl1hGQA+IO3ivDE/bU2rsTwGonjy3PowrQu74K9AsW3KXnTg1FyBUcHSh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=u4O4WZjD; arc=none smtp.client-ip=95.215.58.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=embeddedor.com header.i=@embeddedor.com header.b="jAGl1pjN"
-Received: from eig-obgw-6007b.ext.cloudfilter.net ([10.0.30.166])
-	by cmsmtp with ESMTPS
-	id yKNTwsp89LvgbyM3ywPZhE; Mon, 24 Aug 2026 04:13:34 +0000
-Received: from gator4166.hostgator.com ([108.167.190.91])
-	by cmsmtp with ESMTPS
-	id yM3xwThmtHZlayM3ywJPvc; Mon, 24 Aug 2026 04:13:34 +0000
-X-Authority-Analysis: v=2.4 cv=RvbFLDmK c=1 sm=1 tr=0 ts=6a8bc4ee
- a=vY9Mjuda9oMEc2E4Cx1x2A==:117 a=vY9Mjuda9oMEc2E4Cx1x2A==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=7T7KSl7uo7wA:10 a=1XWaLZrsAAAA:8
- a=VwQbUJbxAAAA:8 a=Z4Rwk6OoAAAA:8 a=nzuXsxulAAAA:8 a=pGLkceISAAAA:8
- a=7ipKWUHlAAAA:8 a=vaJtXVxTAAAA:8 a=iox4zFpeAAAA:8 a=69EAbJreAAAA:8
- a=4RBUngkUAAAA:8 a=7fLVpWw6CxgmVm_BPEcA:9 a=QEXdDO2ut3YA:10
- a=HkZW87K1Qel5hWWM3VKY:22 a=Jn5cl5okm61iLnyvC_SE:22 a=gpc5p9EgBqZVLdJeV_V1:22
- a=WzC6qhA0u3u7Ye7llzcV:22 a=_sbA2Q-Kp09kWB8D3iXc:22 a=2aFnImwKRvkU0tJ3nQRT:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=embeddedor.com; s=default; h=Content-Transfer-Encoding:Content-Type:
-	In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=gj4LfR3NBw51e8QVdaIwPPt1n59fzXjAnZBVB9Yaggk=; b=jAGl1pjNgmwez7x3hhwtZlfx3k
-	7RlOP/wGqfxdI4A6xXRGz2bfBwSMwsMus8Jf7EngqITqpXWtg9sT23M1myxsjhHUAWO6Nro4Ha19r
-	jaNC2CWxuv6gDqqPHCDODD2Mf9NVzIJfpwyc3EvgMWXydK/RLkwByT7HC8/sIL27nPr6DnxxACfwe
-	+IY+XABFm3r4oI1oqUoBVRRt9kD3Q+ENKxsoINBySUP5y8F9/bRHMAaS6GXZiBeCvPpL6Z1WyKr6v
-	TyUGB4vP7YJhRsDg8/DkuBsaBxvOZ2NYWkgmtIPrbsXVmfh9ibE0brf9ftvhAvGUkst+lZi/cKQpg
-	tzRDE9Vg==;
-Received: from [59.16.68.142] (port=55006 helo=[192.168.0.146])
-	by gator4166.hostgator.com with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-	(Exim 4.99.5)
-	(envelope-from <gustavo@embeddedor.com>)
-	id 1wyM3s-00000000NgN-0uXx;
-	Sun, 23 Aug 2026 23:13:28 -0500
-Message-ID: <ecc6ab92-232b-4637-a626-12dfffd7b1a2@embeddedor.com>
-Date: Mon, 24 Aug 2026 13:12:35 -0600
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="u4O4WZjD"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Wa6p04vZ+cxOCYibCFM/7mSGkBa99255cHiT5POOyto=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787547245; v=1; x=1788152045;
+ b=u4O4WZjDUDVBJtqrADGe44A4A8BaqZa1KNdg8zgyJ1EQfOsas1UsqaYyfcORx7IuKFLj3JZj
+ NymdedXzglmN/onyYFBf6Q0xE0aua8+rapTIY2733fBUcTf3cmAT5WX7cYpM/QZe7GZErj3J0Ih
+ /aqa+FFUccHHP6oeCvAo9Avo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [10.54.25.56] (210.22.144.162)
+	by smtp.migadu.com with ESMTPS id e4231617cf9bb9b9;
+	Mon, 24 Aug 2026 04:54:04 +0000
+X-Mizu-Trace-ID: e4231617cf9bb9b9
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <195912a7-88db-408e-a6d4-6bcb29729998@linux.dev>
+Date: Mon, 24 Aug 2026 12:53:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,111 +39,335 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] stacktrace: Add __counted_by_ptr attribute to struct
- stack_trace
-To: Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org
-Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva"
- <gustavoars@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>, Ryota Sakamoto <sakamo.ryota@gmail.com>,
- Kuan-Wei Chiu <visitorckw@gmail.com>,
- Pasha Tatashin <pasha.tatashin@soleen.com>,
- Dmitry Antipov <dmantipov@yandex.ru>, Petr Mladek <pmladek@suse.com>,
- Kir Chou <note351@hotmail.com>, codemender-patching+linux@google.com,
- linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
-References: <20260823123549.1120133-1-morbo@google.com>
- <20260823123549.1120133-2-morbo@google.com>
-Content-Language: en-US
-From: "Gustavo A. R. Silva" <gustavo@embeddedor.com>
-In-Reply-To: <20260823123549.1120133-2-morbo@google.com>
+Subject: Re: [PATCH bpf v2 2/2] selftests/bpf: add xdp_shrink_frags
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, netdev@vger.kernel.org
+Cc: andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+ hawk@kernel.org, john.fastabend@gmail.com, sdf@fomichev.me,
+ horms@kernel.org, martin.lau@linux.dev, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, kuniyu@google.com,
+ liuhangbin@gmail.com, krikku@gmail.com, mkarsten@uwaterloo.ca,
+ toke@redhat.com, lorenzo.bianconi@oss.qualcomm.com,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, clm@meta.com
+References: <20260824030705.266049-2-jiayuan.chen@linux.dev>
+ <f9fd871da7b91ccb4eb3f6bf4901981fd6b25a5f1f4b931caa42be24b5b28aa3@mail.kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <f9fd871da7b91ccb4eb3f6bf4901981fd6b25a5f1f4b931caa42be24b5b28aa3@mail.kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - gator4166.hostgator.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - embeddedor.com
-X-BWhitelist: no
-X-Source-IP: 59.16.68.142
-X-Source-L: No
-X-Exim-ID: 1wyM3s-00000000NgN-0uXx
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: ([192.168.0.146]) [59.16.68.142]:55006
-X-Source-Auth: gustavo@embeddedor.com
-X-Email-Count: 2
-X-Org: HG=hgshared;ORG=hostgator;
-X-Source-Cap: Z3V6aWRpbmU7Z3V6aWRpbmU7Z2F0b3I0MTY2Lmhvc3RnYXRvci5jb20=
-X-Local-Domain: yes
-X-CMAE-Envelope: MS4xfDn3vDNJnTtxV7eNPQc5vXxEysFckw4pPlVrNqSmGufxvGivFXJN78IAzLRRlw+ppoum0S/pX9fRSVCEmrUXKTu6fKSvIeFFnGBdZEjHyGr8WOMJ9LZK
- vPkC+R+Jt7JNQZXXSd9UlASwu6NhBRKt2b6K/sXFMAjyRPLUz2OheoPqWYbQkQ5cxTi6ASJxzEYf7SgO0pmNIyATy8t72ItguT9or8nvL0avK1dc1XTD17iN
+Content-Transfer-Encoding: 8bit
 
 
+On 8/24/26 11:58 AM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+>> new file mode 100644
+>> index 000000000000..f3d8a84a6dc9
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
+>> @@ -0,0 +1,163 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include <test_progs.h>
+>> +#include <network_helpers.h>
+>> +#include <linux/if_tun.h>
+>> +#include <linux/if_ether.h>
+>> +#include <sys/uio.h>
+>> +#include <net/if.h>
+>> +#include <arpa/inet.h>
+>> +#include "xdp_shrink_frags.skel.h"
+>> +
+>> +/*
+>> + * A generic-XDP program that shrinks into the frags frees a page_pool frag.
+>> + * skb-backed XDP first cow's the nonlinear skb into page_pool memory
+>> + * (skb_cow_data_for_xdp() for generic XDP, skb_pp_cow_data() for veth), but
+>> + * the shared rxq is registered as MEM_TYPE_PAGE_SHARED, so a buggy kernel
+>> + * frees the frag with page_frag_free() -> "Bad page state ... page_pool leak".
+>> + */
+>> +
+>> +#define TAP_NAME	"xdp_shrink0"
+>> +#define TAP_NETNS	"xdp_shrink_tap"
+>> +
+>> +#define VETH_LOCAL	"xdp_shrinkA"
+>> +#define VETH_PEER	"xdp_shrinkB"
+>> +#define VETH_NETNS	"xdp_shrink_veth"
+>> +#define VETH_LOCAL_IP	"10.9.9.1"
+>> +#define VETH_PEER_IP	"10.9.9.2"
+>> +
+>> +static int create_tap_napi_frags(const char *ifname)
+>> +{
+>> +	struct ifreq ifr = {
+>> +		.ifr_flags = IFF_TAP | IFF_NO_PI | IFF_NAPI | IFF_NAPI_FRAGS,
+>> +	};
+>> +	int fd, err;
+>> +
+>> +	strscpy(ifr.ifr_name, ifname);
+>> +
+>> +	fd = open("/dev/net/tun", O_RDWR);
+>> +	if (fd < 0)
+>> +		return -1;
+> A subsystem pattern flags this as potentially concerning:
+> create_tap_napi_frags() collapses every failure into -1 and discards
+> errno, so the caller's ASSERT_GE(tap_fd, 0, "create_tap") becomes a hard
+> test failure with no diagnostic.
+>
+> Two concrete cases where this would happen: /dev/net/tun missing
+> (CONFIG_TUN not built or the node absent) gives ENOENT/ENODEV, and
+> TUNSETIFF with IFF_NAPI_FRAGS rejected with EPERM when CAP_NET_ADMIN is
+> not held in the initial user namespace. Both of these should skip the test
+> with a reason rather than fail it. At minimum, would keeping errno make the
+> failure diagnosable?
 
-On 8/23/26 06:35, Bill Wendling wrote:
-> For hardening and catching out-of-bounds accesses to the 'entries'
-> pointer field in 'struct stack_trace', associate it with its count
-> field 'max_entries' using the __counted_by_ptr attribute.
-> 
-> An analysis of the codebase reveals that 'struct stack_trace' is
-> instantiated and initialized across several entry points in
-> 'kernel/stacktrace.c'. In each execution path, 'trace.entries' is
-> assigned a buffer of size 'size', and 'trace.max_entries' is assigned
-> 'size' concurrently within the structure's initializer block. The
-> pointer is not accessed before the count is set.
-> 
-> Because 'trace.entries' is always assigned at the same time as
-> 'trace.max_entries' during initialization and is never reallocated
-> or accessed beforehand, there are no uninitialized access windows.
-> The 'max_entries' field accurately holds the exact element count
-> of the buffer allocated for the 'entries' pointer, ensuring that
-> compiler fortification and KASAN bounds checks using __counted_by_ptr
-> do not trigger false-positive bounds checks or runtime panics.
-> 
-> Assisted-by: Gemini Next
-> Signed-off-by: Bill Wendling <morbo@google.com>
 
-Reviewed-by: Gustavo A. R. Silva <gustavoars@kernel.org>
+flow_dissector.c's create_tap() (which this is modeled on) does exactly 
+the same and doesn't even close the fd on the ioctl failure.
 
-Thanks
--Gustavo
+so I'd rather keep the parity than diverge here.
 
+>
+>> +
+>> +	err = ioctl(fd, TUNSETIFF, &ifr);
+>> +	if (err) {
+>> +		close(fd);
+>> +		return -1;
+>> +	}
+>> +
+>> +	return fd;
+>> +}
+>> +
+>> +/*
+>> + * Similar to flow_dissector.c: writev() an IFF_NAPI_FRAGS tap to build a
+>> + * nonlinear skb (sized for 4K pages, like xdp_adjust_tail.c) that tun runs
+>> + * through do_xdp_generic().
+>> + */
+>> +static void test_tun(struct xdp_shrink_frags *skel)
+>> +{
+>> +	__u8 head[74], frag1[2048], frag2[2048];
+>> +	struct ethhdr *eth = (void *)head;
+>> +	int tap_fd = -1, ifindex, err;
+>> +	struct netns_obj *ns = NULL;
+>> +	struct iovec iov[3];
+>> +	ssize_t n;
+>> +
+>> +	ns = netns_new(TAP_NETNS, true);
+>> +	if (!ASSERT_OK_PTR(ns, "netns_new"))
+>> +		return;
+>> +
+>> +	tap_fd = create_tap_napi_frags(TAP_NAME);
+>> +	if (!ASSERT_GE(tap_fd, 0, "create_tap"))
+>> +		goto out;
+>> +
+>> +	SYS(out, "ip link set dev " TAP_NAME " up");
+>> +
+>> +	ifindex = if_nametoindex(TAP_NAME);
+>> +	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
+>> +		goto out;
+>> +
+>> +	skel->bss->shrink_ran = 0;
+>> +
+>> +	err = bpf_xdp_attach(ifindex, bpf_program__fd(skel->progs.xdp_shrink),
+>> +			     0, NULL);
+>> +	if (!ASSERT_OK(err, "bpf_xdp_attach"))
+>> +		goto out;
+>> +
+>> +	memset(head, 0, sizeof(head));
+>> +	memset(frag1, 0x41, sizeof(frag1));
+>> +	memset(frag2, 0x42, sizeof(frag2));
+>> +	eth->h_proto = htons(ETH_P_IP);
+>> +
+>> +	iov[0].iov_base = head;  iov[0].iov_len = sizeof(head);
+>> +	iov[1].iov_base = frag1; iov[1].iov_len = sizeof(frag1);
+>> +	iov[2].iov_base = frag2; iov[2].iov_len = sizeof(frag2);
+>> +
+>> +	n = writev(tap_fd, iov, ARRAY_SIZE(iov));
+>> +	ASSERT_EQ(n, sizeof(head) + sizeof(frag1) + sizeof(frag2), "writev");
+>> +
+>> +	usleep(100 * 1000);
+>> +	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
+> Does this test actually exercise the page_pool frag release it is written
+> for? The frame sizes (74 + 2048 + 2048 = 4170 bytes) are picked for 4K
+> pages, but skb_pp_cow_data() puts up to SKB_WITH_OVERHEAD(PAGE_SIZE -
+> headroom) bytes in the linear head.
+>
+> On 4K pages with XDP_PACKET_HEADROOM (256), that's ~3520 bytes in the
+> head, so the 4170-byte packet gets frags.
+>
+> But on 64K pages, the threshold becomes ~64960 bytes, so the entire
+> 4170-byte packet ends up linear and bpf_xdp_adjust_tail(-3000) never
+> reaches bpf_xdp_shrink_data() - it just moves data_end and returns 0.
+> shrink_ran still gets incremented, so the ASSERT_GT() passes whether or
+> not the fix from the preceding commit is applied.
+>
+> selftests/bpf ships config.ppc64el and config.aarch64, and the existing
+> xdp_adjust_tail.c that the sizing comments cite explicitly branches on
+> getpagesize() == 65536. Would gating on getpagesize() or asserting
+> something that only holds when a whole frag was released (packet length or
+> a frag count observed from the program) make the test discriminate a fixed
+> kernel from a buggy one on 64K-page systems?
+
+
+On 64K it just passes as a no-op and never false-fails, and the 
+analogous in-tree test test_xdp_adjust_frags_tail_shrink() also hardcodes 4K
+
+and runs unconditionally, so this keeps parity with it (and BPF CI runs 
+4K-page kernels anyway).
+
+>> +
+>> +	bpf_xdp_detach(ifindex, 0, NULL);
+> [ ... ]
+>
+>> +/*
+>> + * A large ping builds a nonlinear skb that veth cow's into its page_pool
+>> + * (sized for 4K pages, like xdp_adjust_tail.c) before running the program.
+>> + */
+>> +static void test_veth(struct xdp_shrink_frags *skel)
+>> +{
+>> +	int ifindex, err;
+>> +
+>> +	SYS(out, "ip netns add " VETH_NETNS);
+>> +	SYS(out_ns, "ip link add %s mtu 8000 type veth peer name %s mtu 8000",
+>> +	    VETH_LOCAL, VETH_PEER);
+> A subsystem pattern flags this as potentially concerning: test_veth
+> hand-rolls namespace management with `ip netns add` / `ip netns del`
+> instead of the shared netns_new()/netns_free() helpers that test_tun uses
+> 50 lines earlier in the same file.
+>
+> It also only puts the peer into a namespace - the local end xdp_shrinkA
+> and its address 10.9.9.1/24 are created in whatever namespace test_progs
+> is running in (normally the host), so the test mutates the caller's
+> network configuration. The cleanup is best-effort SYS_NOFAIL, leaving the
+> device and address behind if the process dies between setup and teardown.
+> Fixed device/netns names also mean two concurrent test_progs workers
+> collide.
+>
+> prog_tests/test_xdp_veth.c in the same directory keeps even the "local"
+> side inside a dedicated ns0 namespace for exactly this reason, and appends
+> the TID to the name. Would wrapping test_veth in netns_new() for a local
+> namespace and creating both ends inside it make the netns teardown remove
+> the veth pair, the address and the XDP program together?
+
+
+  Sounds reasonable. I'll wrap test_veth in netns_new() and create both 
+veth ends inside it, like test_tun does.
+
+
+>
+>> +	SYS(out_link, "ip link set " VETH_PEER " netns " VETH_NETNS);
+>> +	SYS(out_link, "ip addr add " VETH_LOCAL_IP "/24 dev " VETH_LOCAL);
+>> +	SYS(out_link, "ip link set " VETH_LOCAL " up");
+>> +	SYS(out_link, "ip -n " VETH_NETNS " addr add " VETH_PEER_IP "/24 dev " VETH_PEER);
+>> +	SYS(out_link, "ip -n " VETH_NETNS " link set " VETH_PEER " up");
+>> +
+>> +	ifindex = if_nametoindex(VETH_LOCAL);
+>> +	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
+>> +		goto out_link;
+>> +
+>> +	skel->bss->shrink_ran = 0;
+>> +
+>> +	err = bpf_xdp_attach(ifindex, bpf_program__fd(skel->progs.xdp_shrink),
+>> +			     0, NULL);
+>> +	if (!ASSERT_OK(err, "bpf_xdp_attach"))
+>> +		goto out_link;
+>> +
+>> +	SYS_NOFAIL("ip netns exec " VETH_NETNS
+>> +		   " ping -q -s 5000 -c 3 -W 1 " VETH_LOCAL_IP);
+>> +
+>> +	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
+> This test has the same page-size dependency as test_tun above. The `ping
+> -s 5000` produces ~5042 bytes on the wire, which is below the ~64960-byte
+> linear threshold on 64K-page kernels, so veth_convert_skb_to_xdp_buff()
+> sees nr_frags == 0 and bpf_xdp_adjust_tail() never enters
+> bpf_xdp_shrink_data().
+
+
+Same as the tun one: no false-fail on 64K, and CI is 4K.
+
+
+>> +
+>> +	bpf_xdp_detach(ifindex, 0, NULL);
+> [ ... ]
+>
+>> diff --git a/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+>> new file mode 100644
+>> index 000000000000..62e3791ac81d
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
+>> @@ -0,0 +1,23 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#include "vmlinux.h"
+>> +#include <bpf/bpf_helpers.h>
+>> +
+>> +int shrink_ran;
+>> +
+>> +SEC("xdp.frags")
+>> +int xdp_shrink(struct xdp_md *ctx)
+>> +{
+>> +	/*
+>> +	 * The program is loaded with BPF_F_XDP_HAS_FRAGS (xdp.frags), so a
+>> +	 * nonlinear skb entering generic XDP is cow'd into page_pool memory
+>> +	 * before we run. Shrinking the tail far enough releases at least one
+>> +	 * whole frag, which must be returned to its page_pool. Count only a
+>> +	 * successful shrink so a too-small frame (e.g. ARP) does not satisfy
+>> +	 * the test.
+>> +	 */
+> Does this comment accurately describe what the test guarantees? "Shrinking
+> the tail far enough releases at least one whole frag" only holds if the
+> cow'd skb has frags at all.
+>
+> skb_pp_cow_data() puts up to SKB_WITH_OVERHEAD(PAGE_SIZE - headroom) bytes
+> in the linear head:
+>
+> net/core/skbuff.c:skb_pp_cow_data() {
+>      max_head_size = SKB_WITH_OVERHEAD(PAGE_SIZE - headroom);
+>      size = min_t(u32, skb->len, max_head_size);
+>      ...
+>      for (i = 0; i < MAX_SKB_FRAGS && off < skb->len; i++)
+> }
+>
+> With PAGE_SIZE == 65536 and headroom == XDP_PACKET_HEADROOM (256),
+> max_head_size is ~64960 bytes. The test's frame sizes are 4170 bytes (tun)
+> and ~5042 bytes (veth), so on a 64K-page kernel there are zero frags and
+> bpf_xdp_adjust_tail() still returns 0 without calling bpf_xdp_shrink_data().
+
+
+On the 4K pages the test targets (like the other frags tests) it does 
+have frags,
+
+so the comment holds for what the test actually runs.
+
+
+> Two smaller mismatches in the same comment block and in the prog_tests
+> header comment:
+>    - This program is attached on both the generic-XDP (tun) and veth paths,
+>      but the comment only describes "a nonlinear skb entering generic XDP".
+
+The file header already says it covers both generic XDP and veth;
+
+the prog comment just uses the generic path as the example and the cow 
+behaviour is identical.
+
+>    - The prog_tests header says "skb_cow_data_for_xdp() for generic XDP,
+>      skb_pp_cow_data() for veth", which reads as two different mechanisms.
+>      But skb_cow_data_for_xdp() is just a wrapper that calls
+>      skb_pp_cow_data(), and the veth call site is
+>      veth_convert_skb_to_xdp_buff() - both paths end up in skb_pp_cow_data().
+
+
+Those are the actual call sites (generic goes through 
+skb_cow_data_for_xdp(), veth calls skb_pp_cow_data()
+
+directly from veth_convert_skb_to_xdp_buff()), so naming both is 
+accurate rather than two different mechanisms.
+
+>
+>> +	if (bpf_xdp_adjust_tail(ctx, -3000) == 0)
+>> +		__sync_fetch_and_add(&shrink_ran, 1);
+>> +	return XDP_PASS;
+>> +}
+>> +
+>> +char _license[] SEC("license") = "GPL";
 > ---
-> Cc: Kees Cook <kees@kernel.org>
-> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Brendan Higgins <brendan.higgins@linux.dev>
-> Cc: David Gow <david@davidgow.net>
-> Cc: Rae Moar <raemoar63@gmail.com>
-> Cc: Ryota Sakamoto <sakamo.ryota@gmail.com>
-> Cc: Kuan-Wei Chiu <visitorckw@gmail.com>
-> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
-> Cc: Dmitry Antipov <dmantipov@yandex.ru>
-> Cc: Petr Mladek <pmladek@suse.com>
-> Cc: Kir Chou <note351@hotmail.com>
-> Cc: codemender-patching+linux@google.com
-> Cc: linux-kernel@vger.kernel.org
-> Cc: linux-hardening@vger.kernel.org
-> Cc: linux-kselftest@vger.kernel.org
-> Cc: kunit-dev@googlegroups.com
-> Cc: linux-hardening@vger.kernel.org
-> ---
->   include/linux/stacktrace.h | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/stacktrace.h b/include/linux/stacktrace.h
-> index 97455880ac41..fbb0925d8864 100644
-> --- a/include/linux/stacktrace.h
-> +++ b/include/linux/stacktrace.h
-> @@ -81,7 +81,7 @@ unsigned int filter_irq_stacks(unsigned long *entries, unsigned int nr_entries);
->   /* Internal interfaces. Do not use in generic code */
->   struct stack_trace {
->   	unsigned int nr_entries, max_entries;
-> -	unsigned long *entries;
-> +	unsigned long *entries __counted_by_ptr(max_entries);
->   	unsigned int skip;	/* input argument: How many entries to skip */
->   };
->   
-
+> AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32686145995
