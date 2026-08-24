@@ -1,33 +1,37 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-141.mta0.migadu.com [91.218.175.141])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F06BD1A7264;
-	Mon, 24 Aug 2026 12:17:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 873E81A01BE
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 12:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.141
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787573835; cv=none; b=lHzLnit+azQeSRP0C2KXyjW0oa5JuZJp7E6e1HeNIL37/u9/BR7CkqdLhOxLxqDMn17P2p9x3TtBv4qigHao54HmPI/EmEjDVSFHB3s4+br8yehROTJTC/MmIYvTOBfwaB7lcWgZct55uD2x4+ngqPBIpjAD1sHp+9XKCRezY2c=
+	t=1787574001; cv=none; b=QUCsCpaGltI0OsL0XPLXted/2K5oKDiXY//xwhVpX/mX5dY1S/Js5SnnR5hG09/GTTDiORgV3s3KFiaFPJ12cVtnQA08dzURvMPVBSNKYoH9o4iG2s/uofHRl/AGugkfrJQrAx2/lw88G6zgpTVwSiQvO4hIwBKqfy+rNaqc9wU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787573835; c=relaxed/simple;
-	bh=5dpYqYzR5hpkg2iQBtqh8qx/SDXcXWfDGbxoyeWxE3w=;
+	s=arc-20240116; t=1787574001; c=relaxed/simple;
+	bh=NbaD03yilMmk0puKZ/RanUhxoZrnyNj20MyBlr5dU3c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cL3RJg3kh6Gh6CQrDBBAaQtFQ8PugVtxOaPfFnVQvPDjVBL7AEhSo7MwwMedi44GG+WlVXwW+h4NUUa+bi8C70ohdhtQhRc/+BsOPZ+03nuuomxcb9+OoNJIuUOtOfX6Lj2S9dVUr+lRyEoqxT/8wnNOAkfKdB1SZ1AxikGaQXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mW/hFf5G; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=hvImwJB8n3RUgYBxMiA072zYy0KKyLWIATpJOOhLurLzeIWYDY1ktrV6Cx3yZn/mr3jCEqeahSYSPbfPTARiFvvEuuSfQ7rjJpZ8PDXIkeueZ6/w3L4cFYe20AJhRJ6lzzScSCK9ceiwsyBTFH4k6Nvr77VMxVRMFvdkTRPDct0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=RiKtXVOw; arc=none smtp.client-ip=91.218.175.141
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mW/hFf5G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 594591F00A3A;
-	Mon, 24 Aug 2026 12:17:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787573833;
-	bh=I9G+2pR4S+ko3JJWwpOLkXez1wvJqD3jZzDSrEX5v8M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=mW/hFf5GQRaQ9wugKNZZrfdTcCRiHg95Gg5mArsWXJg+ZyTkK1fCiQsevUocW2+kk
-	 w98u41xT9vSlJ0tnn1GnY7HZ9rQMESvfWKfMHZFr2LUkwz+v+XlYn+i1IpUrCldS0I
-	 g8ZKkihlumtUH2TQjqznlLAWOtes98bfAzxMX5LJiM0nxrBsEtd3PGnUl6jXOY0bdv
-	 q6aPdnkeO+vy3Bjw89c0oDIUApCOi4iirPuNPSsJuUuAQlh6l2gD6aQQZ2nvBdHsiz
-	 fjrYFbh5HPIcvsh62m8kCUvV9SvJ07ajA/FfsKfP52LBp+M8G/CBgjkiXUNIg7KmG6
-	 skGXj7cd6v4Ug==
-Message-ID: <75738049-24f9-4056-98c8-b4075552ab78@kernel.org>
-Date: Mon, 24 Aug 2026 14:17:03 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="RiKtXVOw"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=NbaD03yilMmk0puKZ/RanUhxoZrnyNj20MyBlr5dU3c=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787573997; v=1; x=1788178797;
+ b=RiKtXVOwTGCl/j/yMMAEvlYjAB5a8EFG/Xd7waMsm1aa0Js+rLlQEuNLVh4DUQN9kzo9tlsW
+ il4lVvNlzNGci1S49uFIkoBszRWgtjTbqyBTN0ZVWAgAb7R/g82K3flHP710IpzgKa8HRDRczsE
+ Nqtq9Ei8NmHGg5p+LzloOjKY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [10.54.25.56] (222.72.143.228)
+	by smtp.migadu.com with ESMTPS id 9a9d63bd1232e71b;
+	Mon, 24 Aug 2026 12:19:57 +0000
+X-Mizu-Trace-ID: 9a9d63bd1232e71b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <01fd251d-1134-4251-9c11-79943e367ffe@linux.dev>
+Date: Mon, 24 Aug 2026 20:19:44 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,130 +39,132 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 1/6] selftests/mm: make file helpers return errors
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260813181230.483746-1-sarthak.sharma@arm.com>
- <20260813181230.483746-2-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260813181230.483746-2-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on
+ skb-backed XDP
+To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
+Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
+ syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
+ Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Jesper Dangaard Brouer <hawk@kernel.org>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko
+ <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
+ Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>,
+ Krishna Kumar <krikku@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260824030257.263179-1-jiayuan.chen@linux.dev>
+ <20260824030705.266049-1-jiayuan.chen@linux.dev> <aowdem3KQVfvocE7@lore-desk>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <aowdem3KQVfvocE7@lore-desk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 8/13/26 20:12, Sarthak Sharma wrote:
-> Change read_file(), write_file(), read_num(), write_num() and
-> write_num_ignore_einval() in vm_util.c to report failures to callers
-> instead of exiting from the helper.
-> 
-> Make read_file() return a negative errno on failure and 0 on success, so
-> callers can distinguish a successful read from an I/O error. Also make
-> read_num() reject negative and malformed values.
-> 
-> Keep write_num_ignore_einval() silent for -EINVAL while returning other
-> errors to its caller.
-> 
-> Update callers to print diagnostics and fail wherever required. Also add
-> a helper print_file_access_error() in hugepage_settings.c to print
-> TAP-compatible errors without a kselftest dependency. This prepares the
-> helpers to be moved to tools/lib/mm without a kselftest dependency.
-> 
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> ---
 
-[...]
-
-> -unsigned long read_num(const char *path)
-> +int read_num(const char *path, unsigned long *num)
->  {
-> +	unsigned long val;
-> +	int ret;
->  	char buf[21];
-> +	char *end;
->  
-> -	if (!read_file(path, buf, sizeof(buf)))
-> -		ksft_exit_fail_perror("read_file()");
-> +	if (!num)
-> +		return -EINVAL;
->  
-> -	return strtoul(buf, NULL, 10);
-> +	ret = read_file(path, buf, sizeof(buf));
-> +	if (ret)
-> +		return ret;
+On 8/24/26 6:31 PM, Lorenzo Bianconi wrote:
+>> bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
+>> xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
+>> cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED,
+>> so the page_pool page is freed with page_frag_free() and we hit
+>> "Bad page state ... page_pool leak".
+>>
+>> Both generic XDP and veth are affected. A non-linear skb is cow'd into
+>> page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
+>> XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
+>> page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
+>>
+>> We can't just fix rxq->mem.type in place:
+>> - generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
+>>    bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
+>>    parallel, so we must not write to it.
+>> - veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
+>>    teardown, and with GRO that reset runs without stopping in-flight NAPI,
+>>    so a type stashed there can be clobbered under a packet still in flight.
+>>
+>> Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not an
+>> option either: without recording it somewhere, both can only guess the
+>> frag's memory type, which quickly gets confusing.
+>>
+>> So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the two
+>> skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
+>> page_pool when it is set, otherwise it keeps falling back to
+>> xdp->rxq->mem.type unchanged. No other path changes behaviour.
+>>
+>> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
+>> Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
+> Hi Jiayuan Chen,
+>
+> thx for fixing it. Can we do something like the patch below instead?
+>
+> Regards,
+> Lorenzo
+>
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index 1d679e8fd649..4ed659b58141 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -433,16 +433,16 @@ EXPORT_SYMBOL_GPL(xdp_rxq_info_attach_page_pool);
+>   void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
+>   		  bool napi_direct, struct xdp_buff *xdp)
+>   {
+> +	netmem_ref head_netmem = netmem_compound_head(netmem);
+> +	if (netmem_is_pp(head_netmem))
+> +		mem_type = MEM_TYPE_PAGE_POOL;
 > +
-> +	if (buf[0] < '0' || buf[0] > '9')
-> +		return -EINVAL;
+>   	switch (mem_type) {
+>   	case MEM_TYPE_PAGE_POOL:
+> -		netmem = netmem_compound_head(netmem);
+>   		if (napi_direct && xdp_return_frame_no_direct())
+>   			napi_direct = false;
+> -		/* No need to check netmem_is_pp() as mem->type knows this a
+> -		 * page_pool page
+> -		 */
+> -		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
+> -					  napi_direct);
+> +		page_pool_put_full_netmem(netmem_get_pp(head_netmem),
+> +					  head_netmem, napi_direct);
+>   		break;
+>   	case MEM_TYPE_PAGE_SHARED:
+>   		page_frag_free(__netmem_address(netmem));
 
-This is to reject any negative or hexadecimal numbers I assume?
 
-(essentially anything that's not a valid number)
+Hi Lorenzo,
 
-Worth adding a comment.
+I tried this, but it regresses the bpf selftest with a page_pool ref 
+underflow (0 warns on master, 45 with the patch):
+
+     WARNING: include/net/page_pool/helpers.h:297 at 
+page_pool_alloc_frag_netmem
+     skb_pp_cow_data
+     veth_xdp_rcv_skb
 
 
-Apart from that LGTM
+On XDP_TX/XDP_REDIRECT veth has to take plain page refs via get_page() 
+(veth_xdp_get()) and then
+consume_skb(): the skb itself must be freed while the data pages stay 
+alive for the frame. consume_skb()
+already returns the skb's page_pool ref, so what the frame holds 
+afterwards is a plain page ref, to be
+dropped with page_frag_free().
 
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+netmem_is_pp() can't see that: it only says the page still belongs to a 
+pool (other users may still hold pool refs on the same page),
+not what kind of ref we're dropping. So __xdp_return() turns those 
+plain-ref drops into a second pool
+put and pp_ref goes negative.
 
--- 
-Cheers,
+That's why I kept the type in the xdp_buff and only override it in the 
+shrink path, where we know the
+frag ref is the cow'd page_pool one.
 
-David
+Regards,
+Jiayuan
+
