@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A68F6415F20;
-	Mon, 24 Aug 2026 12:28:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A7A140BCB6;
+	Mon, 24 Aug 2026 12:29:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574533; cv=none; b=pDMbBs4Lm4+Tt7IlyodKNG2A317zKlQ7KmCrz/aKBwE2VMzdoMSsPYOzwitMgs6cKH3KLQrYZNwtry/2A7gGwo6mgk/vgfRNM3b0370XBJj6pkrOE1C0HqcdQBIl488zpDskLkLSaOpJnmPr3PyiO4TXP2uPAw9Cx5q5r7J56tc=
+	t=1787574591; cv=none; b=tMrgdew6kyJ2QreOtl7DlXP+iDq4yo0M0SVdQL+Sp9M2CZQtTRmbWlkqiJA5kDcxGKFVMRsOJgksG6/GHr4NzGZfU/In3tR/YN3yga9DaBADyrlmV5UY8MObDr2wFWL6GTOisFs5jDWOdWC4Z8QblBdEASXprpxgT1ZC19iia/o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574533; c=relaxed/simple;
-	bh=X5rw01p3I1rWZQw8UlgLk6/i0l/x1O41CHn0vbzHLIg=;
+	s=arc-20240116; t=1787574591; c=relaxed/simple;
+	bh=l9a8S7gEXlFG1R050zF5SonY/mJ5vBbwO2LTGoBVF0k=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=KLY+T7/aA4nYszUbHAbPzGPY/VDkxnQr3P9IlpP38D8lNhhKH+RryZG7RU8gZvEqLCWyKLO/pEe2S+IkkD0y1d97ZTW1jnIA2xkkK8vNU0zBIap34tJjvLuXm1OWD2pGqtC+Cu6BtEf2RdGVXB9ifCe8ye/QlqPNXw9ZuFHWrTY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YUIXwQPF; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=n44lL8gJ8UpOeSj5gSvNZPalbven3s4rm9xPboH6g1c0RiVrokdjiDSTh0yNzxa3abrC556VF45uXYQlXwSvxSHkvGVcobdMew2EUYe2iH2HVZtYAvVuMar2A10Y/FdNFSk1nour/FVq9YmizJJlwTLPQmsZnFL/vJw+5gq9m4A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jqN0bgAv; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YUIXwQPF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76C941F000E9;
-	Mon, 24 Aug 2026 12:28:41 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jqN0bgAv"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A3111F000E9;
+	Mon, 24 Aug 2026 12:29:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787574529;
-	bh=oNv7ijS+WXVt3LXvoJCY8yKw7rjzIvyfrsdNOo8RgCo=;
+	s=k20260515; t=1787574587;
+	bh=5HIXWt6cHYsyYpDN3CnAjwEjdPOxdWvNmv8xtLz7Mp4=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=YUIXwQPFvhi9rTBqyyZKnxmp3a2AAz9PWJEcTYWWpuet1pTH/A6x1pvgG6luvAv/L
-	 EQpbyg5R5WgffgowgYMBeTua3i4AEyYOelkU3zRASsazScmOOWLIqQ7awKjId8Zilk
-	 Ab9psW+oMxa3lYtRkotonbX8QmYbTLfQ25ypscBvfQoPolne8tq4HgN1jMQl2+nbSc
-	 JwhHrhDgO5lVYcPur2JmJJgdMb5VMbnkcvA18bhwyeEKiKxlo9uL821XNXgCNbB2J4
-	 xplQOvfiL7+JVnpFAj4fGYlSco0kvy0UhbeRspvMixfdbyWAjmTgxshDDgQhJ3n/rR
-	 /wk44OJuk3Qrg==
-Message-ID: <e1c8c6f5-1b5a-4cad-a52a-f7eff00997c3@kernel.org>
-Date: Mon, 24 Aug 2026 14:28:39 +0200
+	b=jqN0bgAvWpo4FuZfnaVkmwwOy4A25MZ+xYiVkOk+9N1FXEUIWQVOhxKhZcmi0KFFp
+	 hH0W6yLSkhhS19gi8Yxl9oPe+L38z8k4/HHUMNqtU7bSq+OtqCtEuWnaZ/QseMqppS
+	 Qf7guI47CpnJFWQcvKPpb4Bo6xii81fnqM/7Rz1jXOPetvbGSiUUPzDkVv3KSysYB6
+	 EFK75vg6x4crFw7RMvKpVk2D80DMSwo41LFL/9Fd4YmY0e0h42siXPJMBhsrRyV/fv
+	 s1GTPpXEqNx3fTBngkHorvzYxI7be9lyFoMxj4zzYY08R+FDF+r92VDwL50SonhAGX
+	 H90yhLEXF2pPA==
+Message-ID: <e87ac26a-9712-4f6f-b144-b604b2aa643b@kernel.org>
+Date: Mon, 24 Aug 2026 14:29:37 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,25 +35,27 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
- collapse state
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev,
- baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com,
- hughd@google.com, lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com,
- rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com,
- usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com,
- usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- jannh@google.com, willy@infradead.org, pfalcato@suse.de,
- rostedt@goodmis.org, mhiramat@kernel.org,
- linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <20260816224609.308019-4-kirill@shutemov.name>
- <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
- <aobglSY5L1KoIqxF@thinkstation>
- <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
- <aow0Z6mrG2esKpRZ@thinkstation>
+Subject: Re: [PATCH v7 1/6] selftests/mm: make file helpers return errors
+To: Mark Brown <broonie@kernel.org>
+Cc: Sarthak Sharma <sarthak.sharma@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ "Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka
+ <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>, Nico Pache <npache@redhat.com>,
+ Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+ Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
+ Peter Xu <peterx@redhat.com>, Leon Romanovsky <leon@kernel.org>,
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260813181230.483746-1-sarthak.sharma@arm.com>
+ <20260813181230.483746-2-sarthak.sharma@arm.com>
+ <75738049-24f9-4056-98c8-b4075552ab78@kernel.org>
+ <e4f8031e-20ea-46d1-914d-005595243f31@sirena.org.uk>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -100,58 +102,22 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <aow0Z6mrG2esKpRZ@thinkstation>
+In-Reply-To: <e4f8031e-20ea-46d1-914d-005595243f31@sirena.org.uk>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 8/24/26 14:10, Kiryl Shutsemau wrote:
-> On Mon, Aug 24, 2026 at 01:47:54PM +0200, David Hildenbrand (Arm) wrote:
->> On 8/20/26 13:11, Kiryl Shutsemau wrote:
->>>
->>> I went for a clean collapse.c on purpose: the engine is new code, and a
->>> new file keeps it readable while both mechanisms are in the tree, with 28
->>> as a plain delete from khugepaged.c.
->>>
->>> Your shape is less churn, though, and it keeps blame: 29-35 move about
->>> 1700 lines as add-and-delete today, and most of that would stay put, with
->>> only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
->>> khugepaged.c.
->>>
->>> If you prefer it that way, I can give it a try for v2.
->>>
->>> The rename has to open the series, so it will collide with anything in
->>> flight that touches khugepaged.c.
->>>
->>
->> Kiryl, I have to ask, are you using AI to write your replies?
+On 8/24/26 14:27, Mark Brown wrote:
+> On Mon, Aug 24, 2026 at 02:17:03PM +0200, David Hildenbrand (Arm) wrote:
+>> On 8/13/26 20:12, Sarthak Sharma wrote:
 > 
-> Yes. I use it check my claims and fix my grammar.
+>>> +	if (buf[0] < '0' || buf[0] > '9')
+>>> +		return -EINVAL;
 > 
-> Why?
+>> This is to reject any negative or hexadecimal numbers I assume?
 > 
+> That won't reject hexidecimal - 0xNNNN matches the above.
 
-It doesn't read the way you would usually write. In a bad way.
-
-E.g., "Your shape", "has to open the series"
-
-Consider telling the LLM to not change your writing style and focus only on
-fixing grammar.
-
-Otherwise it will be very load bearing to read and we'll be sorry to have to
-gently push back against that.
-
-
-Imagine I would instead have written the following:
-
-The text does not read the way you would normally write, and the difference is
-noticeable in a way that makes it feel less natural.
-
-For example, phrases such as “Your shape” and “has to open the series” do not
-sound consistent with your usual writing style.
-
-It may be worth instructing the LLM to preserve your original tone and phrasing
-as much as possible, and to focus only on correcting grammar and obvious
-language issues.
+Ugh, yes (and stuff starting without 0x would not be detected consistently).
 
 -- 
 Cheers,
