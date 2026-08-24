@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451733E4C72;
-	Mon, 24 Aug 2026 12:32:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DED364195C8;
+	Mon, 24 Aug 2026 12:33:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787574768; cv=none; b=oGTm0cToMLI/MyV+gFaLIS5uKERxZONUnR/RFT4jX90qyC3q7WQJXG2jZmZZdTSzFUVIpwsJAbzg/WqrZk0F7X0ef/D/hmAEyIx9KziXS1whVVwkl9Fv8HoCqOmkNJa2VtP+8uQ7+vf9yvvt0NnWhpB1YGgpFByeg9yHiBrefpI=
+	t=1787574822; cv=none; b=DYXXYSYGvVapny6dPEFs7klsWLPmnqTKtV05PMIrMlgLPRRq1XyUPkDxGF/ZShQiRZDmqFFi6fJzFX8qRPSnU/ZYANFZSy1Nh97AdXK5TyaP/CQEapdnoSlwpa4teYl+nvrunWpz/s/Tskdepm5Tsn1U8nkjOdg8Uyoaqhcb4Cs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787574768; c=relaxed/simple;
-	bh=lm8JtATDWdBehZ+J5tkt6HtS+bYXXmBwUy/7UTKFY6Y=;
+	s=arc-20240116; t=1787574822; c=relaxed/simple;
+	bh=+lYwBuFfOP5nqqXZ2ZJY3xBMlPBULvKlmZmUUoQJnQo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qA7RMn3nwFqbYOrVPJkl7r6Nrm10HLD+M1RTibW3eKC1Yn1rBY+1cf2JENNc0eghKeOA0cyC5Yt+MZjMe0mpHTQ+j45cAyoUT9MSh8FWUkbFGHueGV4kyo4wuAkVcYphZqMKy7q1SLUbLWj2PaeCYVXItmZpB6+KEmFV6bjPdwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lamlZeId; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=uptVjYvfbTRdP9CrzRlglcwrLHFdGUFG7p1e3RR+2Prptltq8PC68rAFz2knBHryhKZ0kF5YiEyZZ+vDQxE3nuTqjg21DO/51PmSuyYOSn7igh2kbXcMgEQrv7E+gd4UVbGI1dzeBFZWDfSi2N4TQGhlZXXsnQZy6bpTAT6sQaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+tF29nw; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lamlZeId"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D73231F00A3A;
-	Mon, 24 Aug 2026 12:32:35 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+tF29nw"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEB5F1F000E9;
+	Mon, 24 Aug 2026 12:33:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787574764;
-	bh=zqlFWmE7mdoPXGZ20KnqQ/XM8s+nHIOBkClz/EjLnkA=;
+	s=k20260515; t=1787574820;
+	bh=8vpukjlWR+PMzdNZ1W3YPHPHq8x2wf/T1Pima1mpBR0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=lamlZeIden2T7H96cAGP3JYCXFRJHvO7TKYBqByTFY/tbx8hLgbafEj3FOa1hLCXo
-	 bvT47pEqO8NGGvRnREP0MZ5U9T9bw9WOSsLeWIiOOARHUkZ33tNMc2RlAuKTy9i7DV
-	 +4sUw0fKHTlEhyU5GrugvrVElTuIoxoFsnlj0eVC1caSA0h0aVd+a6BjvGupe9BBpK
-	 At97pfmODC5igqlEaRe9fpWFZw6fJ0irq6puf2fcqWrtOVyAU1YCnFuB3bCccZpPyp
-	 3dUPrV7ncUy623pmM/CqJ8KZyAetuzS9ge+y9RptHHG0wUe+Y//wNVnNWKG/YAwo3v
-	 ATZe41e10DA5g==
-Message-ID: <df35f58a-fe11-4cea-938a-f4b036a5bcc8@kernel.org>
-Date: Mon, 24 Aug 2026 14:32:33 +0200
+	b=F+tF29nwIuQv1aVvflAgq+bILiTSbnwQ8lYomNjhMzXw3jXHvugTukYJsgcrOFJCx
+	 2AQJYKCtezFme7T7wlnjVvZag3Xw1L9zQRdJ3fFmZgsrsi7YKnOrPxgVgU/BGK9QvW
+	 +seVY2QXqG0dr2y8oxlc+RcWo6i43OhGsD+SKPdQXzUebhZObFdDPJhawq5Ybyryrz
+	 w6ajQkl0YTSQCrHupD2b67JYx3Ogm5bgi+9Zp0NC8Le1g7AWyqeMzI5XeXz6gL/VjH
+	 0SHWAVYOt4iHvta6SQgBjLWxjQ0MEaHqB6y6H04BaNryNHj7VPUMaWYE/Lg/J835Vm
+	 uQsWWEgDlz6QA==
+Message-ID: <8aa0e0c6-bc6d-478d-981f-3e0d5907eb11@kernel.org>
+Date: Mon, 24 Aug 2026 14:33:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 3/6] tools/lib/mm: move hugepage_settings out of
- selftests
+Subject: Re: [PATCH v7 4/6] tools/mm: move gup_test from selftests/mm to
+ tools/mm
 To: Sarthak Sharma <sarthak.sharma@arm.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
@@ -54,7 +54,7 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
  linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
  linux-kernel@vger.kernel.org
 References: <20260813181230.483746-1-sarthak.sharma@arm.com>
- <20260813181230.483746-4-sarthak.sharma@arm.com>
+ <20260813181230.483746-5-sarthak.sharma@arm.com>
 From: "David Hildenbrand (Arm)" <david@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=david@kernel.org; keydata=
@@ -101,24 +101,27 @@ Autocrypt: addr=david@kernel.org; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <20260813181230.483746-4-sarthak.sharma@arm.com>
+In-Reply-To: <20260813181230.483746-5-sarthak.sharma@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 8/13/26 20:12, Sarthak Sharma wrote:
-> Move hugepage_settings.[ch] from tools/testing/selftests/mm/ to
-> tools/lib/mm/ so the THP and HugeTLB helpers can be shared more easily
-> between selftests and other tools.
+> Move tools/testing/selftests/mm/gup_test.c to tools/mm/gup_bench.c.
+> This is the first step in separating its benchmarking and
+> functional testing components. Later patches will make this a
+> purely benchmarking tool and introduce a new functional selftest
+> under selftests/mm.
 > 
-> Keep the helpers exposed to mm selftests through vm_util.h where possible,
-> and use direct <mm/hugepage_settings.h> includes for files that do not
-> include vm_util.h. Adjust the selftests/mm build to compile the moved
-> implementation from its new location.
+> Include hugepage_settings.h directly instead of vm_util.h and
+> use getpagesize() instead of psize().
 > 
-> Remove the remaining kselftest dependency by including file_utils.h
-> directly and using EXIT_FAILURE in the signal handler.
+> Adjust the Makefiles in both locations and add gup_bench to
+> tools/mm/.gitignore. Remove the gup_test invocations from
+> run_vmtests.sh and update MAINTAINERS.
 > 
+> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
 > Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+> ---
 
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
