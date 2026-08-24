@@ -1,159 +1,154 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F9742902E;
-	Mon, 24 Aug 2026 14:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1F20439F88
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 14:24:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787581331; cv=none; b=u4Z5KNbp+Dw2WfutCYDb/fAHp9XszqWBgsn8qKdQIo4KiOPhHOS7KQ3aUvkG6j0O/W9cPiEMcW/FXX9VzTYk9kkbH71km6pS5nVVrx3ip29B8+t8BbOfp3+LcRHYmpsU6A/Dumflq86r5jGyddQkKTij3MVK9+KhjvsXd74LImk=
+	t=1787581477; cv=none; b=sVn1NvqpPIJSdNuGBZm7kQSwrCAumVZYP97HN7B/QomyToDRkX7dI3fBTlguBbnV3DxeX+A2oKMcTpvuTbBDVzJ9zhSD6W5mRxuquYOJ67gvtdgXcOss4YdBgVMmLnX0BrNmez18jGPJCJniolOxQtEnilS8E/RaLPh6wjET1qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787581331; c=relaxed/simple;
-	bh=KJAluXXdqui4zkMtLXpfXyj5UR3ic0BTN3h4iuzhLM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAC099lvohUULlkp7q6BGApztrZko3lbxa2FuFj2+7vDETE6PACsPAc1CyFt2j95ecaOzJGzumYcN9zTLxIw9px9DmYC99xcm4OB/HSidUnkaRMtd7ekXbI6U0tTwapRMW7XmiUXJDbk1SKiyRI5eVwpOecC6wiKpSyU0cX4XXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KaO+iZO2; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787581477; c=relaxed/simple;
+	bh=TX3Z7I2p7NV3LmYclbuENrvarTcwjRfgJFZ2aJsDwPQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KO8iLYD5JFxCmkLToDJEEQ2nA2m4BbxAKPw0/BiRWMx/P7j/A/D+aaR9+pJPKFPtIx4e/ceJIDBvDB44DYh5iB48iv1mpVTLx7w+RAAttTvJkhkSkgJDEbpUHJ44aXG49sVRGBirXrs1tVbRpXdKWHQE4EZmxTDlkszJKY9Ggis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RiD72Fs2; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KaO+iZO2"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 142241F00A3A;
-	Mon, 24 Aug 2026 14:22:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787581330;
-	bh=5j5DWKJN3cdhmHqdN8rCpFWNLqVKoHQJspSwWStoi7I=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=KaO+iZO2NSk2Mb6Znp4wkLjU5Psq+sSLTkfTwe0+7WB9WPQgyt6fGHjYZV/zU3Ij4
-	 jlJwIh1FB4tUanbeYBsel3kuT6oDpApt/nGc2A/jpsx8No/76t7v8SkSIGmFPCQZHq
-	 x/stZ2CCZMEYIwBH2TMkf2I6Kb6U4Vb0qQpg+buiH2VOWmHgTwuJ7fLAW4vrSs/qqT
-	 FFfr9sG3A9qW1t2+BBLBIHX/wpRTS0+mcevOWj9fdts3KEZ9zaJXvQwRkTw4iabRz2
-	 MRD5fdodUOKKmoRUSt4jl6yvfX60M8VPs27KzmhOBhTfVgKE8xrxwTcZCVAJ/MhsjO
-	 FxmiBGAPOYNOw==
-Date: Mon, 24 Aug 2026 15:22:02 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	akpm@linux-foundation.org, nico.pache@linux.dev, baolin.wang@linux.alibaba.com, 
-	baohua@kernel.org, dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
-	liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, 
-	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
-	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aoxRs0mjyQnpO-IT@gremlin>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <aoLAly-oL2OAa4n8@lucifer>
- <aoLkMUtmzRVuv2Hx@thinkstation>
- <aoQ77EcD3M2kjeya@lucifer>
- <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
- <aoXn1B7cPnPq7uxd@thinkstation>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RiD72Fs2"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787581473;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MbAPYpkEoXBSzyw3HojdW/4tYJX+OVrYIn3bLjLrhRw=;
+	b=RiD72Fs2ayqogjG0iInOHAmV7y7GcVwIKAMl7+uyZgphDctAwdN06OmAT8C1T+b2xT5l/V
+	MFO+QT7dyItt9lnyLD/Si4YGT5GS5APexcQystV39YD+jwAcGhcemsvBd8GS+1cfx1E/xI
+	52yXYzhCQnl48S7/ahlPu5Kon3rqcu0=
+Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-375-23tL376nNnubWsFzcz8Iog-1; Mon,
+ 24 Aug 2026 10:24:26 -0400
+X-MC-Unique: 23tL376nNnubWsFzcz8Iog-1
+X-Mimecast-MFC-AGG-ID: 23tL376nNnubWsFzcz8Iog_1787581460
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 03EDA18601F1;
+	Mon, 24 Aug 2026 14:24:20 +0000 (UTC)
+Received: from [100.91.18.181] (headnet05.pony-001.prod.iad2.dc.redhat.com [10.2.32.117])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 1621830002EA;
+	Mon, 24 Aug 2026 14:24:17 +0000 (UTC)
+Message-ID: <e31d80e4-321e-4259-ba0b-392705a8fad8@redhat.com>
+Date: Mon, 24 Aug 2026 10:24:17 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aoXn1B7cPnPq7uxd@thinkstation>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/17] cgroup/cpuset: Limit type-change accounting to
+ owned CPUs
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, cgroups@vger.kernel.org
+Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
+ <20260820124202.517160-5-guopeng.zhang@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260820124202.517160-5-guopeng.zhang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On Wed, Aug 19, 2026 at 07:08:07PM +0100, Kiryl Shutsemau wrote:
-> On Tue, Aug 18, 2026 at 04:12:17PM +0200, David Hildenbrand (Arm) wrote:
-> > I think we all agree that there is a lot of room for improvement, but the big
-> > question is:
-> >
-> > (a) When does it stop being a cleanup and is a new feature in disguise that
-> >     makes the code more complicated and even harder to maintain.
-> >
-> > (b) Can it just naturally be made looking like a cleanup.
-> >
-> > Ideally, we'd get b), in small, nice-to-review chunks that incrementally improve
-> > the code without inflating it heavily or moving everything around.
+On 8/20/26 8:41 AM, Guopeng Zhang wrote:
+> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
 >
-> It is not a cleanup and I would rather not sell it as one.  It replaces a
-> mechanism, so judged as (b) it fails by construction.
+> effective_xcpus includes CPUs granted to valid child partitions. Passing
+> the whole mask to isolated_cpus_update() during a root-to-isolated or
+> isolated-to-root change applies the parent's new state to child-owned
+> CPUs as well.
 >
-> I believe the end result is much cleaner. But I might be biased. :)
+> Build a mask of CPUs owned by the partition by subtracting the
+> effective_xcpus of valid children. Use this mask when updating
+> isolated_cpus for a partition type change.
 >
-> > The current locking is nasty, so anything that moves us one step closer into
-> > something that is not only simpler but also more scalable is nice. I am a bit
-> > concerned with the churn in the series as is.
-> >
-> > After this series, mm/collapse.c itself is way larger than just mm/khugepaged.c
-> > originally, which raises some eyebrows.
+> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> ---
+>   kernel/cgroup/cpuset.c | 30 ++++++++++++++++++++++++++++--
+>   1 file changed, 28 insertions(+), 2 deletions(-)
 >
-> Line count is a poor proxy for simplicity or scalability.  What the
-> engine changes is the serialization model, and that is the part collapse
-> needs changed: the PMD granularity and the exclusion both come out of
-> the locking.
->
-> Incremental does not reach it, though.  The old mechanism is correct
-> because it holds mmap_write_lock, the anon_vma write lock and a reference
-> from the LRU; the engine is correct because the sources are frozen behind
-> migration entries.  There is no halfway state that is correct under both,
-> so the switch lands as one patch.
->
-> What can be incremental is everything around it: the engine goes in beside
-> the old mechanism, patch 25 points the anon path at it, and 28 removes what
-> it replaces.  Until 28 both are in the tree with only one of them
-> reachable, so the switch can be reverted on its own.
->
-> > We should also be aware that people are proposing file/shmem mTHP collapse, so
-> > ideally what we refactor would naturally unify some of these code paths.
-> >
-> > I am wondering whether shmem mTHP collapse should come first. (I'm hoping that
-> > shmem mTHP collapse can unify some of the anon+file collapse code in a nice way,
-> > to similarly just look like a cleanup while enabling a new scenario.
->
-> mTHP collapse as it stands has limited usability: PMD-aligned windows only,
-> and one VMA has to own the PMD.  Bolting file collapse onto the same
-> structure adds to the debt instead of paying it down.
->
-> It would fit the new design.  The frame -- scan, candidate selection, the
-> round and its passes -- has nothing anon-specific in it; what is
-> anon-specific sits in the freeze (folio_test_anon(), PageAnonExclusive())
-> and the unshare in the fault-in pass.  A file source would bring its own
-> check, freeze, copy and install.
->
-> I am not sure it should, though.
->
-> Do we want to find file collapse candidates by walking the virtual
-> address space at all?
->
-> collapse_file() already works on the mapping -- it builds the folio in
-> the page cache and then repairs every mapping through
-> retract_page_tables() -- so the VMA walk only picks which inode range to
-> try, and it reaches only what a registered mm maps right now.  Large
-> folios buy more than TLB reach: fewer page cache entries, cheaper
-> writeback, natural locking batch, etc.  Those apply whether the file is
-> mapped or not, and going at the inode directly would reach them.
->
-> > Agreed, I think we really should unify+cleanup the existing code first before
-> > doing more drastic changes.
-> >
-> > Having a series that throws all of khugepaged.c into a mixer and pours something
-> > new into collapse.c is ... concerning :)
->
-> The moving around is patches 29-35 and the tracing after them.  None of it
-> is needed for the engine: 1-28 add it, switch the anon path over and delete
-> the old mechanism, without moving anything else out of khugepaged.c.  If
-> the churn is the problem, v2 can stop there and the moves can come later as
-> their own series.
+> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+> index 2538faac9aba..468272baadb2 100644
+> --- a/kernel/cgroup/cpuset.c
+> +++ b/kernel/cgroup/cpuset.c
+> @@ -2155,6 +2155,30 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>   	rcu_read_unlock();
+>   }
+>   
+> +/*
+> + * Compute CPUs owned directly by a partition.
+> + *
+> + * effective_xcpus includes CPUs granted to valid child partitions. Exclude
+> + * those CPUs when changing only this partition's type.
+> + */
+> +static void compute_partition_owned_cpumask(struct cpuset *cs,
+> +					    struct cpumask *owned_cpus)
+> +{
+> +	struct cgroup_subsys_state *css;
+> +	struct cpuset *child;
+> +
+> +	lockdep_assert_held(&cpuset_mutex);
+> +	cpumask_copy(owned_cpus, cs->effective_xcpus);
+> +
+> +	rcu_read_lock();
+> +	cpuset_for_each_child(child, css, cs) {
+> +		if (is_partition_valid(child))
+> +			cpumask_andnot(owned_cpus, owned_cpus,
+> +				       child->effective_xcpus);
+> +	}
+> +	rcu_read_unlock();
+> +}
+> +
+>   /*
+>    * update_cpumasks_hier - Update effective cpumasks and tasks in the subtree
+>    * @cs:  the cpuset to consider
+> @@ -2990,8 +3014,10 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   	} else if (old_prs && new_prs) {
+>   		/*
+>   		 * A change in load balance state only, no change in cpumasks.
+> -		 * Need to update isolated_cpus.
+> +		 * Need to update isolated_cpus for CPUs owned by this partition,
+> +		 * excluding CPUs distributed to valid child partitions.
+>   		 */
+> +		compute_partition_owned_cpumask(cs, tmpmask.new_cpus);
+>   		if (((new_prs == PRS_ISOLATED) &&
+>   		     !isolated_cpus_can_update(cs->effective_xcpus, NULL)) ||
+>   		    prstate_housekeeping_conflict(new_prs, cs->effective_xcpus))
+> @@ -3030,7 +3056,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>   	if (!is_partition_valid(cs))
+>   		reset_partition_data(cs);
+>   	else if (isolcpus_updated)
+> -		isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
+> +		isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
+>   	spin_unlock_irq(&callback_lock);
+>   
+>   	/* Force update if switching back to member & update effective_xcpus */
 
-This whole reply seems AI-generated...
+Your use of tmpmask.new_cpus in isolated_cpus_update() can be 
+problematic. isolcpus_updated can be set when an isolated partition is 
+enabled or disabled. In both cases, tmpmask.new_cpus can be used 
+temporarily. So the content of this temporary cpumask may not be what we 
+want to pass into isolated_cpus_update(). I will suggest you only use 
+tmpmask.new_cpus if it is determined to be coming from partition state 
+transition instead of enabling/disabling of partition.
 
-You replying only to David twice in this sub-thread which isn't exactly giving
-me warm fuzzy feelings about the working-around-me concerns I raised here.
+Cheers,
+Longman
 
-So simple feedback - send a relatively small, no-functional-change series that
-improves THP code and lays foundations for future changes. After the merge
-window.
-
-Can you explicitly ack this please?
-
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
-
---
-Cheers, Lorenzo
