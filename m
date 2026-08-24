@@ -1,173 +1,196 @@
-Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9157125782D
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 21:48:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787608123; cv=pass; b=C7QJGqm0xLciE/Jko0qFJ9nQ8TC1Z0ejNTbXFDZ8vZdrlfdqa3Swnp+1OOdkhTvf1dIDUlqAHTOX80gzZJObVyvRqSn2sdcDvvrFZsrW8y7i7n3MwpGiF8li5WFSUo29aatbSHrmckyzUUWa77E1WVfjpG52szAQ767v1T8wzs8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787608123; c=relaxed/simple;
-	bh=eLMQbpU4Lf2Oco03hnjJLH7SndBPsL+91LpDFe8h9Z8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AroYW7t4eW2ulmXlY2qjzC3nwL0KNhBdlkSV9Mh5sutYIRNbO09TAxieAUwzhqy1FTfTJ5PXn0b2gy+zp7yHm9UuPWvB24Bj8BUCv2eGlvulGAKb7exe4WzsKhwWj5+EgpZgJm+SpMnqNjxLwo1xpU2JbJnx/6asFr9X+Ch0DEU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qESfhQqd; arc=pass smtp.client-ip=209.85.215.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 418C43932EF
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 21:58:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787608737; cv=none; b=g4iqWIU7XWSsN9tze8t6ZJ8hB+9PH3R3Qo18X4Zr76nGL/eaTahL/XrSssnPxau+KxEZElKXoPdbvvQnEsX5/WsAKemTEkZNZ3scKScq9OrH4DdOsOYeCLMXFNNcKEKsJGDjoT7nIG2xU11FOEx0+b9bwgtlgc74M0hG9YUro48=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787608737; c=relaxed/simple;
+	bh=wHIknkl3akbrXed1MMW7wu+rEQV0V9E6XtCSzIf/KQQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MYZptilNmTx2xYhK72yM6BrNkZpho7NVMHfwNNiCtfKua/OTt7TaEKY+0SyVJdCsU3+lUai2oY/T3cuMl+FpecL/OGj8UJtug7kBFXx+0egQQUy8fUbwwViZEzGEVqy6kSB46bsi30U5E4o7y+mEy4Io2YPycZ3kUPMkA19Dh64=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fzPMhn35; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Y6enUsSg; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qESfhQqd"
-Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc11a905ba5so2916542a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 14:48:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787608122; cv=none;
-        d=google.com; s=arc-20260327;
-        b=S3IwLalYi4dFUzTbMZrPzyImiaqa/t2QhXWeYuJo2ttToniFdChqxnKZvsGJ4JDFnf
-         PnUBWvuX5hg4y3mVxlQ5jxMppIPlIMl3rwJ2b67gOQKJQd47eO87ElAzTZLgB1TqwCjN
-         TqoeCPkMDk2EN6jHyWbXceNXMYohmF3/uUm1mbmLD2EsMfkZZbC/rETuk/hPe/OBLo4V
-         5laOdmaT9Sm4932wzGnoKBp4RVFC30/QtJGy+1DKlpJuK5eRo0Wd1ttMurZwWrsTsRty
-         dr2dG4fSzKlC7tPYWg9VCVqoKcWUFzA3eRys9x6yYnPXCXCT/w85ij5Ns9tKS7DAQpr+
-         PPZQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
-        fh=g3VLpC5KSW14sc6WrLO+VI+JELFuj9wNHxSxTTsR4zk=;
-        b=PjJGWsGcze+nvZ4kCfUejobe2cWfkuLTjZS7hmi92crP3sJ17IZfICB0N5aprnbr8L
-         +8KE+KioOUKWnbNLHpGECSVDC2RLp33DSYKaq/jqXzsgTjggXWksBkUEYI48858gjNAI
-         SHgOFAGruz+krlZ+RyVmyxB31yw2HC+gY6kzBTCU3poBIe2BVPEG/sGBetPKIm1pLffs
-         8FFptpVgoa2dvZN27Jf6/oIsu7TGeol+G+OLVuId+J8copYLIyPMqlsNZx8yj2hAj0zV
-         k9s9mk9ei8/PIrQd/WKeUQTCaWX0kYA/kwRPvrmxChbR4aQJDq3bu+yxzZYZFDQcrwxq
-         gkFA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fzPMhn35";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Y6enUsSg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787608734;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=KBpVXvNSIu/VB+Hjuc+28Xij0/FItj9lSc9IUEB2grs=;
+	b=fzPMhn35I2Lpz7VWka8VgkdWcAP0BGFHDdbkZWNmUBZ4LBtsxQrDGaz8a24ZRW+bQnWkkw
+	SS7xzPhSrltnGtLL4srexdOcoOuriGbjPEzg1JQlWZDDrVeLCWWXU55x8qwaB6mkwZoc6j
+	2Jy8PHq6inPu9R7zpbihw65KEocvXqU=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-624-8aWA0pVeOm2AWALDG6SUOw-1; Mon, 24 Aug 2026 17:58:53 -0400
+X-MC-Unique: 8aWA0pVeOm2AWALDG6SUOw-1
+X-Mimecast-MFC-AGG-ID: 8aWA0pVeOm2AWALDG6SUOw_1787608732
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-51c01ff996dso45156411cf.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 14:58:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787608122; x=1788212922; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+        d=redhat.com; s=google; t=1787608732; x=1788213532; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
-        b=qESfhQqdCTQZX6hlgHUpcrcUUIIglw6uHPLdp7/GALYuxWXYX3wL9B9z2OSrPmpGac
-         Rk7buXRwxjwzQM6CQZgDC/7y+1K4ewgDtZ1FaeLev8gp4dpU8PZW3pB7NScT5DY2MuCi
-         IzyyEi5Es6PHSpr4hFh6E09YZLK1qC8mpzwOtFs6IW+7y1ZXPNz4lLQ9CLeUwDo17Ud0
-         m5VStajJ+gd89kLsMpN08yCPjzeptCy/56nXiE44Z5zfmMu8xav+NphZI8f/bNw1ktif
-         KkAb3SW2/N7fca6kKObymPFUhx/aAmc3D6KJ7r/eFfeqHVmX8QHB5/MWP1GlR9msbYBK
-         Ftdg==
+        bh=KBpVXvNSIu/VB+Hjuc+28Xij0/FItj9lSc9IUEB2grs=;
+        b=Y6enUsSg5ZqJ2nfG48FYcL7DZ7e5ZppG4iEYZnYYQedg6maUa0kt0Gh0UNKeUA+EtT
+         i6CWWwJ/bP9Q0E96IMy+v7Bkij25+gCZwASv5C/uQKYtOQMb3AcyOSkV5Hk/i/fm/orj
+         VNdeSxRIaqPL0wrHw0e1Jk0ELpp6UNp+q+3M+HGWIn+7gInFJ4CAlMHvQDLjiL/hfOrR
+         vJB8bhi/TKiRsi/ORp+VHvsUJBGqHKBQ+5kMThMmQAwBLQVDERROKhbYwMwhBJtB5aVU
+         kBiXKXWIZh1zZ1t/KvRX79RhxNt5H4KJdrhsPEfsgpYy6oAGo3y7Sf7CiLH29F+XQ1q/
+         +75g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787608122; x=1788212922;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
+        d=1e100.net; s=20251104; t=1787608732; x=1788213532;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
-        b=Z9kJI3zqd7Lz9IT1zshLNyY6CYOhgs1uka52Do2k0dxPV2rj13dK+xql9pAiF7znM+
-         qEVi0Ftte9gjfwCUaT7ejFo/Ut3/f81bq+4cJvW+UbvPv0Ca9El37REsaRlmXqxPLhgS
-         j3PZ9pW0gJt6UXeHWXiWWMEJOXnXSsgp5IK+2w4Y2jCGsBovfy4UxTQ7m8PZKKkj1Jlo
-         tlMdQxJx56VECIKPh5GM+CRHPB9NX00ZwrQeNTxYcGQaEEfd2o2LMplf13lpw7D4HQY5
-         aBPtuyvB4qh4d7BhmFLisMhGDosLc7r5ykKnsan0E6I0tyMv7f78I9l0WhQnzsLWJSr1
-         lI/A==
-X-Forwarded-Encrypted: i=1; AHgh+Rpbcxug6RAn8P3u+OyACyv1myh9nQidlPGw6BlOy7u1a6yVBp5PgjaFg+kQUef7VCMikUpxKnpsrHLdumQnqQw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nWOe/kUG+bd1CVbht6he7Q6lXhh41vVn/EBFqLcRNRkA02mdKh
-	lYHdN1+HkNhTDC+/zxKEf5M+mmKdl3pV/ujYJ8s7dbqKmWvkC9aZ5MRgHjHXd/WIb+RI6Zxq+uJ
-	mW4labJ/65oVqKh6ZVCCX+eOiOL8Bp6Hq3BkbB1Y=
-X-Gm-Gg: AR+sD11vbZDQh1bRqwQGHrLlg9VXJeS8CPgL7W+dPvwNv4AEtPAnpKKwZohwOBbrLUg
-	QPHFwf5jnkGzioyx4ddcTis4Mk8TRYZg42H/85kggnQSUa0G8GN2mppRVHUT+8g5B78/QstvaCB
-	5z0bsPA57sb4YOMaHBOhJNbBCtDqQVr6hQ5dHSYKkrkascpc7ExKOFTi/cpyp8sxCAhIaheRAqD
-	DC423rsSUdmAbKkcEVG76ufP7m2OizOSZiUAp6QuebVCpIqtvsDWRq7EVxEs/eTf7yDfBwBbkss
-	xQFbOq/6PJP6vac3neHb7o7t5VBuwCO8CfQMxjyp3aJkjnbfgeYafA5lfyocXum50uPdcBHzA5J
-	sL0EbAqEJmpyWslxrIdXgExnfig0J66Yz9Qcgy14yZ4+NiiLO0DXAokomG7H3YPGxh/waXBT/
-X-Received: by 2002:a05:6a20:d52d:b0:3cd:602e:f8ab with SMTP id
- adf61e73a8af0-3cd90fbdaf4mr3772301637.4.1787608121518; Mon, 24 Aug 2026
- 14:48:41 -0700 (PDT)
+        bh=KBpVXvNSIu/VB+Hjuc+28Xij0/FItj9lSc9IUEB2grs=;
+        b=Igub+wJvnCLv09QMv2+wIChI5I1OfDzHKeBkOelkGB+jFeAe9of8zUnxWXjGfiQ3v8
+         vzx04hKXTvC31rSSPgoU+YdKZCgX7QIMZ1L/nSkscGmPqoMe3z6BBwpj5xuI2NTB3nfB
+         HT4YlnL4DhB/q+wXHe0MDlXvvscmmhXMpEpixKNqDg3XYqsU22ksrtmwixJpEzJJlNBM
+         y057ll/d/nhHF7YOK06esQDv3Ex6NH+h2J45qWU5VR8ZMK4f4gYMPUjz3QK2zvHxSfHs
+         /1k9w10W8BIhD4lbD1DSNQZwLeDfrC4dmVaGhMrpIqnac2zmnHIUGkylv7ruphHUK6m2
+         Kq2A==
+X-Forwarded-Encrypted: i=1; AHgh+RqNqxLqBXYGnIl7W/aLrfHX1zVx1edyFhdfEi53S96ba0YFz5H5l+Whz1MN8S47RYx7YI5OY/oh88Rb2GBoDBk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nRsWzG7wZr2NrEdJt7uZRWSBvBmlVqSKZkZw2yTchKCWSiX9oX
+	4tlWt6eRSNdm9SIwWTlHMHiNnjlroCGp9ZUbK/yqJVoryFsbye9pG0VV3CVjtbKAI4/eShFN4Aj
+	UoDW3jbzbdagk8kKm9p3cfN2OGDyAgsBj4NaelKPCc+geJXLodwoNGW/Ci7lknxcBL5tGwg==
+X-Gm-Gg: AR+sD13LOQ6gtxp/Mm2L/4yWALwI/g+ECrLEzvwRw67qMQf/f3D3tOeFu7qZGg4isoX
+	ewMkkbVxs6FYYxNaZSIjTgRj2Y+dHPnW/ITe+nCUZR/t/b1YWYgKYfl3/xUA7F8zJ6biwCnmlmx
+	zz6VKIRpsPwq6KLMkDul/vjFoeyHX/KWGZLJrjFducRDri88EAqoFRtwiqcouuTPhuSHvlyLY60
+	DS8aVlz+aTpnQwaC7xPlmTS+PbKqIzq/WCcqUQZXmew9sYioNZEkiejjuI9vXYDAA7sAdZPq9Vn
+	2vC+NLJdMIoPuSSD9IK96gGm/XePrw/ELUjFJDrKXIfmXieQx96QB0O4iTP8ZyBIdtczOHvzILz
+	AR+FECiRhHaKBybOFeuVIIEoTdXXYGKgkmXrzQL6y0gdN
+X-Received: by 2002:ac8:7f4e:0:b0:521:934c:bcf with SMTP id d75a77b69052e-52e2f17d066mr22919001cf.41.1787608732352;
+        Mon, 24 Aug 2026 14:58:52 -0700 (PDT)
+X-Received: by 2002:ac8:7f4e:0:b0:521:934c:bcf with SMTP id d75a77b69052e-52e2f17d066mr22918481cf.41.1787608731836;
+        Mon, 24 Aug 2026 14:58:51 -0700 (PDT)
+Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-52e099baf17sm55607001cf.12.2026.08.24.14.58.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 14:58:50 -0700 (PDT)
+Date: Mon, 24 Aug 2026 17:58:49 -0400
+From: Eric Chanudet <echanude@redhat.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>, 
+	Johannes Weiner <hannes@cmpxchg.org>, Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <aoy88hVQcA6Gkfuk@echanude-thinkpadx1carbongen13.rmtusma.csb>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aoqbCyX-32doBJwd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260817130239.343594-1-haakon.bugge@oracle.com>
- <20260817130239.343594-2-haakon.bugge@oracle.com> <CANDhNCoPDZeXXGn-hKZ_jgE8gkELEaufDXDYWV=hqLWxtD6gJg@mail.gmail.com>
- <2FB8E129-0EC5-4593-9853-D528854AAA4B@oracle.com>
-In-Reply-To: <2FB8E129-0EC5-4593-9853-D528854AAA4B@oracle.com>
-From: John Stultz <jstultz@google.com>
-Date: Mon, 24 Aug 2026 14:48:30 -0700
-X-Gm-Features: AcwNN1U8wtCkRfVcuG5Zc9ouATORyZ8dnDuSovIiH3uTIGQOXwcfNCd094kuSjE
-Message-ID: <CANDhNCq4k=-Ap-0DUwZTzTCZTTkic3X39vNEpNMi5dCzXLPOXw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
-To: Haakon Bugge <haakon.bugge@oracle.com>
-Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
-	Waiman Long <longman@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Shuah Khan <shuah@kernel.org>, 
-	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aoqbCyX-32doBJwd@kernel.org>
 
-On Mon, Aug 24, 2026 at 5:29=E2=80=AFAM Haakon Bugge <haakon.bugge@oracle.c=
-om> wrote:
-> > On 21 Aug 2026, at 22:42, John Stultz <jstultz@google.com> wrote:
-> >
-> > On Mon, Aug 17, 2026 at 6:03=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@=
-oracle.com> wrote:
-> > > diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
-> > > index cee1901d4cff8..240084b4abbb7 100644
-> > > --- a/kernel/locking/Makefile
-> > > +++ b/kernel/locking/Makefile
-> > > @@ -38,3 +38,4 @@ obj-$(CONFIG_QUEUED_RWLOCKS) +=3D qrwlock.o
-> > > obj-$(CONFIG_LOCK_TORTURE_TEST) +=3D locktorture.o
-> > > obj-$(CONFIG_WW_MUTEX_SELFTEST) +=3D test-ww_mutex.o
-> > > obj-$(CONFIG_LOCK_EVENT_COUNTS) +=3D lock_events.o
-> > > +obj-$(CONFIG_MX_TEST) +=3D mx_test.o
-> >
-> > Total bikeshed item, but both CONFIG_MX_TEST and mx_test are not very
-> > obvious names for someone looking at this make file.
->
-> I am terrible with names. It's short for Mutual eXclusion. Can of course
-> be spelled out if preferred.
->
-> [snip]
->
-> > Apologies, I've not had a chance to apply and try this yet.
->
-> NP.
->
-> > So this looks like the test has to be run via module load?
->
-> It can be run built-in as well, but then only the default test is run.
->
-> > I almost
-> > never use modules in my test environment, so its often nice to allow
-> > it to be built in and be triggered/re-triggered without having to
-> > unload/reload (assuming this is not something like locktorture which
-> > never finishes - and if that is the case, it might be good to
-> > integrate into the locktorture framework instead of adding a new one).
->
-> No, this selftest terminates.
->
-> The script, tools/testing/selftests/locking/mx_test.sh, is written to
-> be robust wrt. module load/unload failures. The reason I prefer to run
-> it as module, is the turn-around time. From an edit, it takes
-> literally only a second to compile the module out-of-tree, another
-> second to copy it to the *updates* on the test server.
+On Sun, Aug 23, 2026 at 10:02:35AM +0300, Mike Rapoport wrote:
+> Hi Eric,
+> 
+> On Fri, Aug 21, 2026 at 02:56:52PM -0400, Eric Chanudet wrote:
+> > CMA allocations are currently unaccounted for by cgroup memory
+> > controllers. As system resources, they should fall under memcg, but CMA
+> > areas partition the available space for different purposes and memcg
+> > doesn't have a good representation for that.
+> > 
+> > Add a memory_cma_accounting cgroupfs option in preparation for the
+> > following new behavior. Make it disabled by default since it will
+> > account for CMA allocations in memcg which may affect existing systems.
+> > 
+> > Provide CMA charge/uncharge functions to memcg that introduce a CMA area
+> > specific counter per CMA area. Charges are issued to memcg and to a page
+> > counter for the CMA area used. The allocation's folios are marked with
+> > the cgroup via commit_charge() (once for large folios, per-page for
+> > 0-order ones) so they can be later uncharged correctly.
+> > 
+> > Add the new memcg calls into the cma allocator under __cma_alloc_frozen,
+> > for both cma and hugetlb_cma allocations accounting.
+> > 
+> > Finally register the per-area usage counters in the cgroupfs. Each CMA
+> > area creates a memory.cma.<area>.{current,max} pair for reporting and
+> > limitation for each area.
+> > 
+> > Selftests and a vmtest script are added to this series for convenience.
+> > The tests are simple accounting and limit enforcement verification using
+> > the default reserved CMA area (cma=) and hugetlb_cma.
+> > 
+> > Signed-off-by: Eric Chanudet <echanude@redhat.com>
+> > ---
+> > Eric Chanudet (11):
+> >       mm/cma: drop const for struct page on release API
+> >       mm/cma: include linux/cma.h in cma.h
+> >       cgroup: add memory_cma_accounting mount option
+> >       memcg: add cma charge/uncharge functions for area counters
+> >       mm/cma: charge cma allocation to memcg per area counters
+> >       memcg: register per-area usage counters in cgroupfs
+> >       selftests: cgroup: add cma configs for cgroup selftest suite
+> >       selftests: cgroup: add memcg cma tests
+> >       selftests: cgroup: add a vmtest script for memcg
+> >       selftests: cgroup: add memcg hugetlb_cma tests
+> >       selftests: cgroup: amend vmtest-memcg to run the hugetlb cma tests
+> 
+> CI found issues:
+>  
+> https://github.com/linux-mm/linux-mm/actions/runs/32519133924
 
-Yeah, I can see the benefit in the case where you're testing on the
-machine you build with.  However, I've found in cases where you're
-building on a different machine then your testing with, modules can be
-more of a pain to work with.
+Indeed my apologies, I messed up CMA=n it needed a forward declaration
+and gating for mm/cma.h content included in mm/memcontrol.c.
 
-That's why I've added sysfs interfaces to some tests (test-ww_mutex,
-and my out of tree ksched_football), so this sort of
-module-load-time-testing can be repeatedly re-triggered in a static
-build config.
+I queued this up for a v2, with the other issues reported by Sashiko.
 
-> But if the community prefers that all the tests are run when the test
-> is built-in, the loop looping though the eligible tests can be moved
-> from the script to the C source instead.
+> 
+> >  Documentation/admin-guide/cgroup-v2.rst         |  35 +++
+> >  include/linux/cgroup-defs.h                     |   5 +
+> >  include/linux/cma.h                             |   4 +-
+> >  include/linux/memcontrol.h                      |  19 ++
+> >  kernel/cgroup/cgroup.c                          |  15 +-
+> >  mm/cma.c                                        |  14 +-
+> >  mm/cma.h                                        |   6 +
+> >  mm/cma_debug.c                                  |   1 -
+> >  mm/cma_sysfs.c                                  |   1 -
+> >  mm/memcontrol.c                                 | 205 ++++++++++++
+> >  tools/testing/selftests/cgroup/.gitignore       |   1 +
+> >  tools/testing/selftests/cgroup/Makefile         |   2 +
+> >  tools/testing/selftests/cgroup/config           |   5 +
+> >  tools/testing/selftests/cgroup/test_cma_memcg.c | 402 ++++++++++++++++++++++++
+> >  tools/testing/selftests/cgroup/vmtest-memcg.sh  | 197 ++++++++++++
+> >  15 files changed, 903 insertions(+), 9 deletions(-)
+> > ---
+> > base-commit: 98f21c54f99519329c18e2625b0ea6db14524d09
+> > change-id: 20260706-cma-memcg-regions-696cb5ef7998
+> > 
+> > Best regards,
+> > -- 
+> > Eric Chanudet <echanude@redhat.com>
+> > 
+> 
+> -- 
+> Sincerely yours,
+> Mike.
+> 
 
-I'm not sure if there's a clear community preference. Especially as
-some thought is probably needed as to the sysfs conventions, as
-littering /sys/kerenel/ with a bunch of test driver interfaces might
-not be a great long term solution.  But this was just something I
-wanted to raise, as I've found it useful, especially when issues only
-show up after many many iterations of the test.
+-- 
+Eric Chanudet
 
-thanks
--john
