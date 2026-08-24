@@ -1,76 +1,99 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8F5A537C118;
-	Mon, 24 Aug 2026 18:08:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D12A34C9A6;
+	Mon, 24 Aug 2026 18:20:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787594931; cv=none; b=kAqwhdXKE3f/blEfhh6sZWMz9o5mrJRNtc+emKGNZObuxT+EspnimXVP9aOwRwpzwnQi5qlr5rf06i15D4mhaiA6eo3ixG+wvjh3iewHPXiqHdA022/GzmW/1ro9oI4ywTpVUa66bA7F6x5+O38dPbW8At9zO6KDmJSgWQ/QKMQ=
+	t=1787595609; cv=none; b=ZiklLW41zj/CaKFgzHF3a9U45oU0g0sZztx3DLRLpndNyG2l3N+TGFIHpefu8dUpiRg4Dt8V6Y/evI+0vXibAkNV0sZ+rugL5jUaxv1zpAf2KGQ5mq1Lsvsfg/0uj8Dnnt0Wn9QiMJ1B77cxkh96Ew7l5GBwJwLcR4o31nKm0IU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787594931; c=relaxed/simple;
-	bh=nCbyD0xCwlGciz8TNKSnSu8zfJc3S1aAM9DU+Vfw/TU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=AuyElK+PHeapnRqZUmRzZph4Mtgp0rzVITinX+1Ln3Ki683M7ugaG5KoG064i85KrlcCwsNwcUQT7QKppGWXKPf4cof9LoaXlFMs/F7Fra2hUntK81b49kACZVx920GhHRl7Xp/fY/Aup2R1i84g9827Q0w/2xh+5BISuatjoso=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lItfKtJ8; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787595609; c=relaxed/simple;
+	bh=63M/tbP6bbcpyl1m/4/5k9VpWqncyIJUULELUyV5BZ4=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=OVBolJx4h1iDFbNjij0krxB7uzl1ysrhqcUVxdLJRinWR7LyYBUnNXVdgLFdUohSirIgAdypjyrWnMr7o584/Y5SswjVcKWWz25BCrMUqhWx0yfSGpnR4f13jK9Do0Z1SBR01bOwG5zoU3AtfP4FeSHaVvP2VUdFHAwOgTjAL+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=VVZ64v/a; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lItfKtJ8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41A281F000E9;
-	Mon, 24 Aug 2026 18:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787594930;
-	bh=3wa0Fwiet/V0RXNR0iS9UGgnBhQWF3AGWDwTdNxkCRM=;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="VVZ64v/a"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F4C61F000E9;
+	Mon, 24 Aug 2026 18:20:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux-foundation.org; s=korg; t=1787595607;
+	bh=d9vG0Y7mVhQecHl6eJllLIfmCJ9uIwopYVEZSC9phFc=;
 	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=lItfKtJ89RQ0gsi6u1JF8waAKxtGC4yz/uDv38U3j0WDh7u2LRKBzrbolc6BFMvEn
-	 D74JkBAtyQ8o7/8RmzVedTAlXCRWrBIB90XlOVhiytVtZK4/pNtum1Q8O3PJMKBvOn
-	 NZI0h/oNBxZL47bI0aDsKV0DbThwkFWAqR82ihR6D0EwxLaE3oxmy108dcdY3cI/N4
-	 KdoTLdZnMJUtK9Qgpg93hasEQcEOElzYnPOhEwKOhs6IGnzwz37quuIE23tk8Dmyrp
-	 s0tBP1yZdqL82l3+iblNL0Eeyve3QL7zP1biI45MHNmuKz9nX+50StI6J8vLO8HL7U
-	 oBKf1zj9mGqnw==
-Date: Mon, 24 Aug 2026 11:08:48 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: chia-yu.chang@nokia-bell-labs.com
-Cc: john.fastabend@gmail.com, jakub@cloudflare.com, jiayuan.chen@linux.dev,
- netdev@vger.kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, horms@kernel.org,
- dsahern@kernel.org, pabeni@redhat.com, jhs@mojatatu.com,
- stephen@networkplumber.org, davem@davemloft.net, edumazet@google.com,
- andrew+netdev@lunn.ch, donald.hunter@gmail.com, kuniyu@google.com,
- ij@kernel.org, ncardwell@google.com, koen.de_schepper@nokia-bell-labs.com,
- g.white@cablelabs.com, ingemar.s.johansson@ericsson.com,
- mirja.kuehlewind@ericsson.com, cheshire@apple.com, rs.ietf@gmx.at,
- Jason_Livingood@comcast.com, vidhi_goel@apple.com,
- Mike_Rudolph@comcast.com, Jeff_Howe@comcast.com, srichard@netapp.com
-Subject: Re: [PATCH v8 net-next 0/2] Explicit TSO segment count
-Message-ID: <20260824110848.480286c5@kernel.org>
-In-Reply-To: <20260824163139.990734-1-chia-yu.chang@nokia-bell-labs.com>
-References: <20260824163139.990734-1-chia-yu.chang@nokia-bell-labs.com>
+	b=VVZ64v/agVHINM1ozDQT0CA1zHGvcVogxWNYlkiMraLmMUQ7cUmdIm+ROAzgabF3b
+	 2/KF2/nNv4jM0vrotyW1o3yVBnC6uid7j/kfqRQhOoAA6Bl8o8GHryLslUZ5OtxIW2
+	 0jv1Cchrp/nhI+uNkibMC51b/J1Ym+S+O33Ei8yk=
+Date: Mon, 24 Aug 2026 11:20:05 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Kyle Meyer <kyle.meyer@hpe.com>
+Cc: Shuai Xue <xueshuai@linux.alibaba.com>, Liam.Howlett@oracle.com,
+ bp@alien8.de, corbet@lwn.net, david@redhat.com, hannes@cmpxchg.org,
+ jack@suse.cz, jane.chu@oracle.com, jiaqiyan@google.com,
+ joel.granados@kernel.org, laoar.shao@gmail.com, linmiaohe@huawei.com,
+ linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mm@kvack.org, lorenzo.stoakes@oracle.com, mclapinski@google.com,
+ mhocko@suse.com, nao.horiguchi@gmail.com, osalvador@suse.de,
+ rafael.j.wysocki@intel.com, rppt@kernel.org, russ.anderson@hpe.com,
+ shawn.fan@intel.com, shuah@kernel.org, surenb@google.com,
+ tony.luck@intel.com, vbabka@suse.cz
+Subject: Re: [PATCH v2] mm/memory-failure: Support disabling soft offline
+ for HugeTLB pages
+Message-Id: <20260824112005.856732bac3094b62a430d17c@linux-foundation.org>
+In-Reply-To: <aoyFK92azAlDAPuF@hpe.com>
+References: <aMiu_Uku6Y5ZbuhM@hpe.com>
+	<0d2fc2ab-333e-42a1-88a1-6bb85538cbb0@linux.alibaba.com>
+	<aoyFK92azAlDAPuF@hpe.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
-On Mon, 24 Aug 2026 18:31:37 +0200 chia-yu.chang@nokia-bell-labs.com
-wrote:
-> Subject: [PATCH v8 net-next 0/2] Explicit TSO segment count
+On Mon, 24 Aug 2026 12:53:47 -0500 Kyle Meyer <kyle.meyer@hpe.com> wrote:
 
-## Form letter - net-next-closed
+> On Thu, Aug 20, 2026 at 11:47:11AM +0800, Shuai Xue wrote:
+> > Hi Kyle,
+> 
+> Hi.
+>  
+> > Following up on this thread. The v2 patch once landed in akpm's mm
+> > tree (9ae6eefa4b6b "mm/memory-failure: support disabling soft
+> > offline for HugeTLB pages"), but that commit is now not reachable
+> > from any branch, and mainline as of v7.3-rc1 still only has the 0/1
+> > switch in /proc/sys/vm/enable_soft_offline.
+> 
+> Thanks for pointing this out.
+> 
+> Looks like this patch was added on 2025-09-16 [1] and dropped on 2025-11-11 [2].
+> 
+> [1] https://lore.kernel.org/all/20250916032512.AE588C4CEEB@smtp.kernel.org
+> [2] https://lore.kernel.org/all/20251111231818.52A60C16AAE@smtp.kernel.org
+> 
+> I must have missed the second email.
+> 
+> I don't remember discussing a v3. Can someone please remind me what we planned
+> to change or whether there was another reason it was dropped?
 
-net-next pull request for v7.3 has already been merged, and therefore
-the net-next tree is closed for new drivers, features, code refactoring
-and optimizations. We are currently accepting bug fixes only.
+I interpreted the (lengthy) review discussion to mean that a new
+version was to be sent out.
 
-Please repost when net-next reopens after Aug 31st.
+> > The underlying issue discussed here is still unresolved for us:
+> > firmware reporting per-rank corrected error thresholds via GHES
+> > triggers soft offline of huge pages, which neither addresses the
+> > failing rank nor is acceptable for workloads that rely on stable
+> > hugetlb physical layouts.
+> > 
+> > Do you still plan to send a v3, e.g. with the disable-bitmask
+> > layout Anshuman suggested upthread?
+> 
+> I wasn't planning on sending a v3 but I'm happy to revisit if needed.
 
-RFC patches sent for review only are obviously welcome at any time.
+That would be best at this stage - please review the changelog to see
+if additional details should be added to cover the considerations which
+were discussed.
 
-See: https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
--- 
-pw-bot: defer
-pv-bot: closed
