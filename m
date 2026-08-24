@@ -1,96 +1,60 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D33411A01;
-	Mon, 24 Aug 2026 17:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775424137BC;
+	Mon, 24 Aug 2026 17:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787590812; cv=none; b=Ot+lSSqT2pXSRIc6/spc+j4jYpS1l/l3TDgMjEB4HW35jx7cvzGSgNO5es0ZJ2dZJjm67DZV8dKoDqsbYbZ3KWNVZdK0De1zvXwA0QSbWYahYYIyRJcVc5oh/TpCKlT2cjsQvFkdUaBKTU9AzIhgA/dMiMJK5ADMJLwqi0ynXWU=
+	t=1787591054; cv=none; b=Q3hE+5qbcr3Ce4uFZMkmHQ1Y0A/wfGuSl1vT8dVV+oMsvBkH7RkIj3P6veLZ+8dOTN45UeEcM/z/VbS0juJtSv1BMEBbIZCIHOmQyE1G4Fzb77QTNk/EDhzavcXy1meHl/ARkZNFUTcuJw1QfabQ8hFXA7ZE49OKKykm45SE1ds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787590812; c=relaxed/simple;
-	bh=kovMxV3tDmufRXIQ1n34Oq30ILmOaW452JSuGb6TQz0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mdFlaaHTuLWZH5j3sZW5nLYIMMsIOn2jSf77c1SG399gK49MoQpSuE/ecytN5CxFI/VS3o7PbdcOx67Z2aMJkgXXW+yOacRLG7dFPofxmQ1ZWg4CbOqMK1ZxY0D765o5C1yQ2tZxREZycKp5je+trtnk8qZlfTXawKj/BCpbezM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJ9OvYKh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787591054; c=relaxed/simple;
+	bh=oFTtaWMnzMpOEE6im6x6ZjGyax/q6imHiGKpOOXG5kc=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References; b=Vlg2AZerWfQGDXWPHSh/Jmhk6qgMUcS8GHWZuTibVgyqXzr+I2x4i8fgw51yqBGKS9HQhBIcz5jtnjXQ5TYOEuoKPx3Z8M6W6a+gxYrdygIyDGYsp/lTXMb9YKP2RDkwLPHO5x8EunWk4XJU+c1LEVmsa7DZY9rw9lNfoUdpBsI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C+UX/xTY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJ9OvYKh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 771851F000E9;
-	Mon, 24 Aug 2026 17:00:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C+UX/xTY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B34B1F000E9;
+	Mon, 24 Aug 2026 17:04:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787590811;
-	bh=nct0GfFThXU+uRAh3/FXFDpq9aYkue9rlgNBVH3JitQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gJ9OvYKhhQq27htNgGOlt/P3H6X3YfPsxzL1b0quFovndKNySknU9vErizFoTX35D
-	 UavqVf5YhxWwSYt+4xbQeWMObpe3fgx8RQX6/0luwvoOS8iK8/zkSNQR4139rvqSgn
-	 L6VUwC/lcizYu+L0Hy4M/ZJta3h5hXKYZ5M/Iov83m84a2bcfW2ckhVXfj/xQx/QDF
-	 u89w8ZEOyYZGcXQhbofr78vKqpZrPE1e9OPogOnZxnNyIRxfJKm85NVP4OFCzsAKwV
-	 cCesI1wh9DSON+jHCRkNA3sKSk0vPLZOvlpP1N2TCJwNl+Gt3Myrm09ZjRm5JbrywH
-	 BiOJPA9+kyPbg==
-Date: Mon, 24 Aug 2026 18:00:04 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Kiryl Shutsemau <kirill@shutemov.name>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
-	akpm@linux-foundation.org, nico.pache@linux.dev, baolin.wang@linux.alibaba.com, 
-	baohua@kernel.org, dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, 
-	liam@infradead.org, mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, 
-	shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, 
-	ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, jannh@google.com, 
-	willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
-	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 00/57] mm/collapse: rebuild collapse on migration
- primitives
-Message-ID: <aox36P0DMLqYD7py@gremlin>
-References: <20260816224609.308019-1-kirill@shutemov.name>
- <aoLAly-oL2OAa4n8@lucifer>
- <aoLkMUtmzRVuv2Hx@thinkstation>
- <aoQ77EcD3M2kjeya@lucifer>
- <0153303d-f9d6-45ea-a276-fbf2e5625ef9@kernel.org>
- <aoXn1B7cPnPq7uxd@thinkstation>
- <aoxRs0mjyQnpO-IT@gremlin>
- <aoxcN7jrfbK_Ac8V@thinkstation>
+	s=k20260515; t=1787591053;
+	bh=EMpiPP0SDwY/vth3msJ1f8rYNf9dTRvfdYQQw89ig/U=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=C+UX/xTYjZNmjcsE1mqiCV/03S12fdwJyrJabUeGILuAo/0aCbpgUH251RB4gR0OE
+	 a6vQMDBsdQOoUz5aNT3iaIGJlRRZy40IVGjdvnq1uDdJS9K55muekehxN1oBhO39Mz
+	 AfPuV6zJvBndWVGG6Mg7Qw/3zk7ur0PUJLpVTMjDFqR9X0zd7kr27jsA66gaNvCU+M
+	 hvaDGRiOfp9DvQcWIrNOsZv1YCCJJSDcbnf3JmGFyDnuIzBmlOWP1DqBxJYFZO8SgJ
+	 EbUREdRhGyvNuL6YuWOuZb7xzjpsSGYhRADmfbH3hXgsWQ544OuHBIAbI6YR2LKWCI
+	 shKECZ7PvlC/Q==
+Date: Mon, 24 Aug 2026 07:04:12 -1000
+Message-ID: <147b518253c4b819164a9b36827a5c7f@kernel.org>
+From: Tejun Heo <tj@kernel.org>
+To: Guopeng Zhang <guopeng.zhang@linux.dev>
+Cc: Waiman Long <longman@redhat.com>, Ridong Chen <ridong.chen@linux.dev>,
+ Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ zhangguopeng@kylinos.cn
+Subject: Re: [PATCH v2 0/3] cgroup/cpuset: Preserve boot-isolated CPUs on
+ partition release
+In-Reply-To: <20260824020140.21130-1-guopeng.zhang@linux.dev>
+References: <20260824020140.21130-1-guopeng.zhang@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aoxcN7jrfbK_Ac8V@thinkstation>
 
-On Mon, Aug 24, 2026 at 03:59:50PM +0100, Kiryl Shutsemau wrote:
-> On Mon, Aug 24, 2026 at 03:22:02PM +0100, Lorenzo Stoakes (ARM) wrote:
-> > This whole reply seems AI-generated...
->
-> It is not.
->
-> I heard David's feedback. Will adjust accordingly.
->
-> >
-> > You replying only to David twice in this sub-thread which isn't exactly giving
-> > me warm fuzzy feelings about the working-around-me concerns I raised here.
-> >
-> > So simple feedback - send a relatively small, no-functional-change series that
-> > improves THP code and lays foundations for future changes. After the merge
-> > window.
-> >
-> > Can you explicitly ack this please?
->
-> Ack.
+Hello,
 
-Just to follow up - Kiryl and I spoke directly (much better medium than text :)
-and it's clear  that there's just been some miscommunication here.
+On Mon, Aug 24, 2026 at 10:01:37AM +0800, Guopeng Zhang wrote:
+> Guopeng Zhang (3):
+>   selftests/cgroup: Drop invalid boot isolation comparison
+>   cgroup/cpuset: Preserve boot-isolated CPUs on partition release
+>   selftests/cgroup: Add test for preserving boot-isolated CPUs
 
-So - in general all's good and we are it seems in violent _agreement_ about
-moving forwards (split out to reasonable foundational series that build upon one
-another -> eventual switch on).
+Applied 1-3 to cgroup/for-7.3-fixes with Waiman's review tags added.
 
-Let peace reign :)
-
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
+Thanks.
 
 --
-Cheers, Lorenzo
+tejun
