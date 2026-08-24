@@ -1,74 +1,79 @@
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2EE3839A9
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 18:28:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEA5353A73
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 18:29:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787596119; cv=none; b=eUtXr+JCHXYVGb3JydSv4AJ+ZIQKT47xRsT4KwVN5eeFbtNCk0BmEmyThomfoPa0xg6lPZH/8K/fJVsAiMHEQV1o8TlynNwAb9bvbwbdru+jMC0vh4Bghv7JdmBLBgv1e1U3fSt3wnCc26uE+2bnNMx8V5Og+6i8xOCZE9JmfDE=
+	t=1787596169; cv=none; b=L+xPK3eFoOsgwtoboPSVnxb/gfNQ9KJdHvkeM+ugV1eLsiCLGs1AsL4SYIR849AgsIcrQsxGIO/o2vvUn2UmGr323QVk7e3PJoIfQwlse/HSBKKtfI+8TmBtaZh4I+hdM2j9r4h0JVcGYgnwEkD+2pJ++7vMqmPNPqjtrDgGzMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787596119; c=relaxed/simple;
-	bh=pZjnpozCibRh6pCzcosABsooXGmIcTuw9UHZgaIG8sg=;
+	s=arc-20240116; t=1787596169; c=relaxed/simple;
+	bh=vneEVqbupcQabJxu8kWTwHb6ra6+uyN8D1N8WTAPuQc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MVHC2kWWvW3KA0c7UsfI3BmEdCFIF09Y3QLtzJdF7T1BpVS3mG5BFYV0gX+5A2WqmG/9LmcSbqavY3dtNKJuwBPZMyD3hqGDas8YPJbCjRwyWjxtHwg7SMZe1r6qqStPwgQHjIXzWyAI5tSAACvKsSrZ0bOhkJG0++jzw0MEHgI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BCWghTw1; arc=none smtp.client-ip=209.85.208.52
+	 Content-Type:Content-Disposition:In-Reply-To; b=fmVJNHSqDibmLqo7CkfikmM/YAB/BrF/bKxWHQH4b+2h1KH/lC+4dYXr/J/XX6+RxpYSra8EmvfT4kSQQucniUj9ShEw47QFJw895EUT59Cc+m75xR8zG9OGJZl05FMlrIHQHXy3OuzSmiS732YiCPba6Zd/+DpuSzyMUPc4VMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=TmS/iezu; arc=none smtp.client-ip=209.85.218.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BCWghTw1"
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-698ae09e356so5400459a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 11:28:36 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="TmS/iezu"
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-c1f758014b8so420715666b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 11:29:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787596115; x=1788200915; darn=vger.kernel.org;
+        d=suse.com; s=google; t=1787596166; x=1788200966; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=ObNoYDIeAcOEP6J++OHusySEsVrjzWAA0XAeggvzDpI=;
-        b=BCWghTw1lk6lvB/Mlw9mdrJfrWsyg4L6ppW6YKk4aGmABbDOBkfmJad/EInZ0Xg6Qp
-         bSeEIZn3Wt8sIWTEXjEh/NMvJhN9dpVbtUfuG99VEMKh/QKUw+ddiHPghxh1REBXxE55
-         Cc7lkl1IBJNHtX4mQYCt4hBy8wt979jWCMNrEuvhJ/v9Sw8uNQFl/ky/8+smdhTyfcrd
-         aodgNEWmbDZHqB51zM8LusZy+yFrDjefbhfgUo+mt7DFYlqs1hA1YWBpeyK2zCQKVuaB
-         ubt+CPZE7BV7GD9WdTlxhOEDNuJe8iLbgsqhSqOHqJr6NSGjeBX8eJ5aTQgZ5DNWEj4b
-         9y5Q==
+        bh=vneEVqbupcQabJxu8kWTwHb6ra6+uyN8D1N8WTAPuQc=;
+        b=TmS/iezuqyGJ/j874tAS+6xx3BTol9hlHLHxcO6OCLVGYlB5ScEFz8Q0wns6zojcZY
+         YHm4LSa2N+jG14Ie1ZEIiUFvQDyqCAauxnVVhEZyUl7TvkgoxedL0Mr6cXWy39PaCLC2
+         NI+LA5G+NyGJz0Ka47WmxX5JaL3cHF7TdTw0frDl60EbALTxC9pdJd6o0Fct5teoTQ8G
+         arn8uZmu/2EJyGDDTEyoS6m5+WeGcbhhFZ0MAY7kDnr6Oa7qFCg8Tj8XhZ69pq0PwKyF
+         Jci/imSEaRmRrQNzS8SCpXR92YNO5tyIAboLNlrSZ77wBSGcXzk6W1Oqgd4GJ237+wZK
+         M27w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787596115; x=1788200915;
+        d=1e100.net; s=20251104; t=1787596166; x=1788200966;
         h=in-reply-to:content-disposition:content-type:mime-version
          :references:message-id:subject:cc:to:from:date:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=ObNoYDIeAcOEP6J++OHusySEsVrjzWAA0XAeggvzDpI=;
-        b=Ks/UOFIXBPeYFaHvlAB77oT0E1SZScKmRKypU7Xrvj0TDRPx/Yy0RmVofkiKd1XRLM
-         oembS9rhBxhkJFL6xIPMDanM+ZqZOdn5fG3DanBcAVN6aiFnp88uuyAx6jnRKuskRYCe
-         1zeVDapwP11H9hU4q4T33LK8qZOycf/dgfPgRplfLGw7VK2lV7eAF8tLJ94oH8bjJuwz
-         /5hTmShQ/ZeVFDIdMLKb94RcYF7AKc10Oh3bkvQu6oXuDY4tlMyTdF+spmWapLof6fjn
-         M85rwV3cxL6GEwV0VNSc8vqvp4Q610R8AZIgxIMuZ89e0VOpV+MnEOBNwCpGiqrHHMp+
-         Uq+Q==
-X-Forwarded-Encrypted: i=1; AHgh+RoQf08L3ef4Bjh4RhuwrKcuzBv67HI5lJVwNEcW1+thHL65nu47F8uWbm9rTmTaF2hiFAJZczuLbW9jEsEY8aw=@vger.kernel.org
-X-Gm-Message-State: AFuF++kEIHpdA8FWpYhvwO/bcMhbRJJJkPSF7j+Bah9c7nwNoExqrLoD
-	t6UlI1KMjFpTMBrUMQs2IH3E5fQwGcLcbFyiipDKOMGntUnMBhn/7EL4aXv74JQOh20=
-X-Gm-Gg: AR+sD11CfBDUfnZG+Bh1KSjFOIlSpdvzlvIavSnrrk1gGVfpwS8sCz+YtEFq4Wi2OSJ
-	oLDorNW245tAKAwE2bdXXqv4VbLcCW1sooSuOREtmljtXh5UJXu/CohMcx8PZG2QoKXgd1gdEV0
-	MqpDAX+IUvcpqiftoV+CUFuD5XlC8psrSohK3jTSqXFTbaYXs99bIVPModz2gZWLASSfgPjWk4t
-	Oj3HTXnb+8BJAPqs9XW2rVWXv6QJf+oWFxvvtLxMa3o3PKcZYI+oJq8P+KL71wsetPDDYtk0AK5
-	2wth0vyd25M4wocKID6v5m9FjdjivByevYs3dw+e4J30lo5+oCUH0I6I7UC6Nsd16+7U6NVVyeZ
-	wVka0iVE5J92Mu9CJiog4FmD6FJWr6UpqYLEDmnJmEIyQlDIzFgsT59rDIijg67CbtEgh10wV+C
-	FbdUqAbmxH4rRTzUHUKn3mC0CCWyCr5Kvf+GfKsvxcgkLJBtsa93FvsA5zZMWI5Is=
-X-Received: by 2002:a05:6402:270c:b0:6a3:ee5c:8800 with SMTP id 4fb4d7f45d1cf-6a42f1ac2edmr27546601a12.8.1787596114730;
-        Mon, 24 Aug 2026 11:28:34 -0700 (PDT)
+        bh=vneEVqbupcQabJxu8kWTwHb6ra6+uyN8D1N8WTAPuQc=;
+        b=fHzO808+ZmNV4urUdVdUZzfwf0fvMUhyDH1pCemwUmRecCk9etYDFMiQLuglQY/NGl
+         MEgGCfUq7B32nWJMsw/15XzDZlRhSqofISvM/mhU8iyOS2A3EWXCGef5twA5mSi84yDA
+         X2xjhEDPow8YisWRwnhsRyudru1SXsGZK8M32t7V5f+wJfmN0R/XHFGUbHkiImGN+ks7
+         rXYH5Qbmmk9NvRCAuToOoLLJVkLOfKavkA49zPB8EzsBOyWO6UBqemu6ANowdFURtn+4
+         joP+HkDq7xLxpbehKJmGtVzqF9zcdcE4cNZhcFadAFfyRplm7asLFqS9UCV7vx0oKW8m
+         1GHg==
+X-Forwarded-Encrypted: i=1; AHgh+Rppnd9XyHFal5TQGuThkOPHuOAc0HL49gGAfDdwaI8GfcpG2oJ4NYAr2tv3jfef2CoQMSZITNR4FQEF0DP4K5I=@vger.kernel.org
+X-Gm-Message-State: AFuF++kq4kwAGaPAdOhVY7Y+oDHj7llxLsiYZt1R1so29Nr4GoHtxXKf
+	jLkURmTBQFw6yuMU2Qllxcm5xiLjYo95jC/jOMms5Hc1JhO1+ouzBu0Wi7YiPdhXjBE=
+X-Gm-Gg: AR+sD124O2VwPGqo2iJbC6035n2xEdT1H6g8Vm1Fav2B0Jadl6FKZGlvNEXCUMj/Mq1
+	4jALwYnzvmbBBal8Hv0MQVib+y7nAV8xHv8smC9ZfP/EV5+3iHgwsxHHUYJwiJFgGucrrGz//HE
+	m44u5ejKvnbjiGbH4k2Tmyjq6YkQu+Dd6AqGSqN0ju+Mg7T03y3djLIJuO4ehLqj4UtzyiTTWja
+	gZJaHKxj4Gh3MUi8VfjPPqjG334VPOiOp+IF9qwmfhT4PtJgQFC1uXlXOE9YRUF+DgasBBaTDkv
+	k95508meBT9/BHgFaB3YNdnhyx9HGkbzHMIPL7AIg+wwdoC5rA9LYvVgPGbUR52FJ7cgs8bcszz
+	HcZoLiu3CqE5tSPBDmU0B0dWd6uu5KtGYaY93d005sMZ2EB/jTkS5ZaoVeTdEbxz3SAYjJborxs
+	j4SRBoB0rW+3v/NgZ92KQm6ekLdWfqIZMBqdQnlVEHu5vU5r7ltGLNhJheJkrdaG8=
+X-Received: by 2002:a17:906:fe48:b0:c15:fc59:cdf3 with SMTP id a640c23a62f3a-c24b3ebee48mr1527958466b.12.1787596166247;
+        Mon, 24 Aug 2026 11:29:26 -0700 (PDT)
 Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-6a59e2ddad2sm9454950a12.30.2026.08.24.11.28.34
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24d8375776sm315993966b.31.2026.08.24.11.29.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 11:28:34 -0700 (PDT)
-Date: Mon, 24 Aug 2026 20:28:32 +0200
+        Mon, 24 Aug 2026 11:29:25 -0700 (PDT)
+Date: Mon, 24 Aug 2026 20:29:23 +0200
 From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Albert Esteve <aesteve@redhat.com>
-Cc: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH v5 1/4] cgroup: Add dmem_selftest module
-Message-ID: <aoyFYWYmocJkTeXk@localhost.localdomain>
-References: <20260706-kunit_cgroups-v5-0-6c42c8753468@redhat.com>
- <20260706-kunit_cgroups-v5-1-6c42c8753468@redhat.com>
+To: Jiri Pirko <jiri@resnulli.us>
+Cc: linux-rdma@vger.kernel.org, cgroups@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-s390@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	jgg@ziepe.ca, leon@kernel.org, parav@nvidia.com, mbloch@nvidia.com, 
+	cmeiohas@nvidia.com, roman.gushchin@linux.dev, bvanassche@acm.org, 
+	zyjzyj2000@gmail.com, shuah@kernel.org, tj@kernel.org, hannes@cmpxchg.org, 
+	alibuda@linux.alibaba.com, dust.li@linux.alibaba.com, sidraya@linux.ibm.com, 
+	wenjia@linux.ibm.com, yanjun.zhu@linux.dev, cui.tao@linux.dev
+Subject: Re: [PATCH rdma-next v3 08/14] RDMA/cgroup: Disambiguate devices
+ across net namespaces
+Message-ID: <aoyNXoZ4K2i_TNi-@localhost.localdomain>
+References: <20260716132316.1495242-1-jiri@resnulli.us>
+ <20260716132316.1495242-9-jiri@resnulli.us>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,108 +81,62 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="jo7e4siha6vyyr2l"
+	protocol="application/pgp-signature"; boundary="cxu7rzeeuvesxlev"
 Content-Disposition: inline
-In-Reply-To: <20260706-kunit_cgroups-v5-1-6c42c8753468@redhat.com>
+In-Reply-To: <20260716132316.1495242-9-jiri@resnulli.us>
 
 
---jo7e4siha6vyyr2l
+--cxu7rzeeuvesxlev
 Content-Type: text/plain; protected-headers=v1; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v5 1/4] cgroup: Add dmem_selftest module
+Subject: Re: [PATCH rdma-next v3 08/14] RDMA/cgroup: Disambiguate devices
+ across net namespaces
 MIME-Version: 1.0
 
-On Mon, Jul 06, 2026 at 02:06:40PM +0200, Albert Esteve <aesteve@redhat.com=
-> wrote:
-> Currently, dmem charging is driver-driven through direct
-> calls to dmem_cgroup_try_charge(), so cgroup selftests
-> do not have a generic way to trigger charge and uncharge
-> paths from userspace.
+Hello Jiri.
+
+On Thu, Jul 16, 2026 at 03:23:09PM +0200, Jiri Pirko <jiri@resnulli.us> wro=
+te:
+> From: Jiri Pirko <jiri@nvidia.com>
 >=20
-> This limits any selftest coverage to configuration/readout
-> checks unless a specific driver exposing charge hooks is
-> present in the test environment.
+> RDMA device names are unique only within a network namespace, but an
+> RDMA cgroup can account resources for devices from multiple namespaces.
+> Duplicate names therefore make cgroup output ambiguous and can cause
+> limit writes to select the wrong device.
 
-What about that
-drivers/gpu/drm/ttm/tests/ttm_resource_test.c
-?
+=46rom the cover letter:
+| A device in one network namespace therefore cannot use a name already
+| taken in another, even in exclusive netns mode (netns_mode=3D0) where
+| the two are otherwise isolated. Net devices have no such restriction -
+| their names only need to be unique within a network namespace.
 
->=20
-> Add kernel/cgroup/dmem_selftest.c as a helper module
-> (CONFIG_DMEM_SELFTEST) that registers a synthetic dmem region
-> (dmem_selftest) and exposes debugfs control files:
-> /sys/kernel/debug/dmem_selftest/charge
-> /sys/kernel/debug/dmem_selftest/uncharge
-
-Nit: I'd think about alloc and free (to denote meaning not how it's
-implemented).=20
+If this is modelled after net devices, why not make the visibility netns
+based?
+I.e. only list (write to) devices of the caller's netns.
 
 >=20
-> Writing a size to charge triggers dmem_cgroup_try_charge() for
-> the calling task's cgroup (the module calls kstrtou64()).
-> Writing to uncharge releases the outstanding charge via
-> dmem_cgroup_uncharge(). Only a single outstanding charge
-> is supported.
->=20
-> This provides a deterministic, driver-independent mechanism
-> for exercising dmem accounting paths in selftests.
->=20
-> Signed-off-by: Albert Esteve <aesteve@redhat.com>
-> ---
->  init/Kconfig                  |  12 +++
->  kernel/cgroup/Makefile        |   1 +
->  kernel/cgroup/dmem_selftest.c | 198 ++++++++++++++++++++++++++++++++++++=
-++++++
->  3 files changed, 211 insertions(+)
->=20
-> diff --git a/init/Kconfig b/init/Kconfig
-> index 5230d4879b1c8..6fab65d6b44ea 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -1267,6 +1267,18 @@ config CGROUP_DMEM
->  	  As an example, it allows you to restrict VRAM usage for applications
->  	  in the DRM subsystem.
-> =20
-> +config DMEM_SELFTEST
-> +	tristate "dmem cgroup selftest helper module"
-> +	depends on CGROUP_DMEM && DEBUG_FS
-> +	default n
-> +	help
-> +	  Builds a small loadable module that registers a dmem region named
-> +	  "dmem_selftest" and exposes debugfs files under
-> +	  /sys/kernel/debug/dmem_selftest/ so kselftests can trigger
-> +	  dmem charge/uncharge operations from userspace.
-> +
-> +	  Say N unless you run dmem selftests or develop the dmem controller.
+> Use the system-wide RDMA device index to distinguish duplicate names
+> while preserving the existing UAPI for unique names. Reject ambiguous
+> name-only writes with -ENOTUNIQ and expose a complete device view to
+> administrators.
 
-Could this be made w/out introduciton of a new Kconfig option? (E.g.
-what tools/testing/selftests/livepatch/test_modules/Makefile does)
+I admit, the administrators won't get the full view but that's no
+different from the netns devices situation.
 
-(Maybe reword to insmod if you choose building the test module as OOT.)
+Regards,
+Michal
 
-> +static int __init dmem_selftest_register(void)
-
-Just an idea to reduce the amount debugfs of boilerplage -- the testing
-args could be handled by module_param_cb().
-
-> +static int __init dmem_selftest_init(void)
-=2E..
-> +	add_taint(TAINT_TEST, LOCKDEP_STILL_OK);
-
-Great!
-
-
---jo7e4siha6vyyr2l
+--cxu7rzeeuvesxlev
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaoyNTBsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+AhBXgD9EFqHG2oc6c8RRXssBXkL
-BB8ufAhWQbaRdvcU6MVf4bMBAOTkkUnSkt63gDhS5BnZJH9A7urHiUZpvJb82kKJ
-rY8E
-=WvrM
+iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaoyNfxsUgAAAAAAEAA5t
+YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ag9cgEAmqyg7SX/4xxY6jGBQ6Ho
+ldb//2ddSquKpPFaT3oiD/8BAOPzNVL2AFncp/3gajGpePR8JfvA8gWP67r2kNjr
+koMD
+=6AcV
 -----END PGP SIGNATURE-----
 
---jo7e4siha6vyyr2l--
+--cxu7rzeeuvesxlev--
