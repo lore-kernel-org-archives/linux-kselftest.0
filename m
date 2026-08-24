@@ -1,159 +1,173 @@
-Received: from mail-qt1-f171.google.com (mail-qt1-f171.google.com [209.85.160.171])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D97C3839A9
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 20:49:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9157125782D
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 21:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.174
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787604591; cv=pass; b=Mi5nq0bIbFAh5sUc932O4z2y6HROMCrWRFEyKgVtpff2VMCkVu58WXi0EA9gao9FrWddgEnfRYW+VQygaKV8zxpzAy7EwI853yAuibOOOQBji2zX1j0uphS1KanaOnQDN68CuyZvi63YTNSbzjaAJQ2ZtYNhWNciRbux3E4WQq8=
+	t=1787608123; cv=pass; b=C7QJGqm0xLciE/Jko0qFJ9nQ8TC1Z0ejNTbXFDZ8vZdrlfdqa3Swnp+1OOdkhTvf1dIDUlqAHTOX80gzZJObVyvRqSn2sdcDvvrFZsrW8y7i7n3MwpGiF8li5WFSUo29aatbSHrmckyzUUWa77E1WVfjpG52szAQ767v1T8wzs8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787604591; c=relaxed/simple;
-	bh=8MTomgvndci6QL0zOaAHPeSzdW934vYd1zdRdj8UROQ=;
+	s=arc-20240116; t=1787608123; c=relaxed/simple;
+	bh=eLMQbpU4Lf2Oco03hnjJLH7SndBPsL+91LpDFe8h9Z8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=b5hIrkDnqyH0qtf30f9kwo0eyormJ849T8GBNNwqG2dIEKoMA4Kf3rTPUX8QjQBhB+E57bzCLhDyxioEUgJrDHed0TvlwTe7wD6kewwOJ4PROA6I940xSJVgN8qCxDoAoSCM0EddbC4ZOxDZ9trj81dyW+NzOrsQVne9FDzRvKU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=U91E2Egn; arc=pass smtp.client-ip=209.85.160.171
+	 To:Cc:Content-Type; b=AroYW7t4eW2ulmXlY2qjzC3nwL0KNhBdlkSV9Mh5sutYIRNbO09TAxieAUwzhqy1FTfTJ5PXn0b2gy+zp7yHm9UuPWvB24Bj8BUCv2eGlvulGAKb7exe4WzsKhwWj5+EgpZgJm+SpMnqNjxLwo1xpU2JbJnx/6asFr9X+Ch0DEU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qESfhQqd; arc=pass smtp.client-ip=209.85.215.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="U91E2Egn"
-Received: by mail-qt1-f171.google.com with SMTP id d75a77b69052e-51c01c79467so87731cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 13:49:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787604589; cv=none;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qESfhQqd"
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-cc11a905ba5so2916542a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 14:48:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787608122; cv=none;
         d=google.com; s=arc-20260327;
-        b=YbeJjiWrXd0gP6O5RgH2y1ka1WNkEEJgXA6oy9THJARshbiNCnINraWWGmG5YJqA6x
-         EmFsoSnn3DMYxW9I4LGAOxzIHAgK7ISxA3fJQzaHG0eb5y/VvsUX/4nUmw08eDo0Ec9L
-         01vmWtioV/zSqIS740PYdCRlkvXS683xxn9x/XLw9luDRijHT6nKa3wxvtukMBZXxGrC
-         z2qSSEXr/nF44Cj6R3xbLMcfC3e6imgcrPOTU51Jyu842YdjsHdPwnQTHWFFqQm7QfEQ
-         CnnmhtEC0EWYRsSuXv6ElrmrM5ymerJgnYljPiQ9ZW1oWwzklSc7keA23Mf82LnjlAB9
-         X60A==
+        b=S3IwLalYi4dFUzTbMZrPzyImiaqa/t2QhXWeYuJo2ttToniFdChqxnKZvsGJ4JDFnf
+         PnUBWvuX5hg4y3mVxlQ5jxMppIPlIMl3rwJ2b67gOQKJQd47eO87ElAzTZLgB1TqwCjN
+         TqoeCPkMDk2EN6jHyWbXceNXMYohmF3/uUm1mbmLD2EsMfkZZbC/rETuk/hPe/OBLo4V
+         5laOdmaT9Sm4932wzGnoKBp4RVFC30/QtJGy+1DKlpJuK5eRo0Wd1ttMurZwWrsTsRty
+         dr2dG4fSzKlC7tPYWg9VCVqoKcWUFzA3eRys9x6yYnPXCXCT/w85ij5Ns9tKS7DAQpr+
+         PPZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=Rnrc6rgXkO/4siYHOqsGt2EqzbzE5rWSn7kKau8RpvM=;
-        fh=42imFDd+ZmVNLNJpKwdI2Jcpo/W4TMxmo9frAW3rG90=;
-        b=WZ2RBfll1MzV3A9Bd8Mg0aKch0WR15XXP8iOVpEbYFF1IoqvY7r89tteRXn7W+fvaj
-         jPOUlR/GXrwkgeai9TicoGPtSTDwfxYM+dpbsPtKiOc7SWv/FB+Ve/U+Zgt8AoZFZ4k7
-         bTyScjbvcMBMINegSDAD3IF0X6CoN1qPQkRMJ72QeAVNE328NaozRuV3I9skcL8+XFrY
-         L7t2534adEHDyeolsde+2JFk0q3fk5TBMjPnnhmFY9tjeTLuU+1+abDTRDAIBeFEFUQ5
-         295vCXDQkVjPTtp+RYGtSIBaqLbiTZllnwRP863fozgzcCH0o7q8v+v83q2anmNIw6jZ
-         /gDg==;
+        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
+        fh=g3VLpC5KSW14sc6WrLO+VI+JELFuj9wNHxSxTTsR4zk=;
+        b=PjJGWsGcze+nvZ4kCfUejobe2cWfkuLTjZS7hmi92crP3sJ17IZfICB0N5aprnbr8L
+         +8KE+KioOUKWnbNLHpGECSVDC2RLp33DSYKaq/jqXzsgTjggXWksBkUEYI48858gjNAI
+         SHgOFAGruz+krlZ+RyVmyxB31yw2HC+gY6kzBTCU3poBIe2BVPEG/sGBetPKIm1pLffs
+         8FFptpVgoa2dvZN27Jf6/oIsu7TGeol+G+OLVuId+J8copYLIyPMqlsNZx8yj2hAj0zV
+         k9s9mk9ei8/PIrQd/WKeUQTCaWX0kYA/kwRPvrmxChbR4aQJDq3bu+yxzZYZFDQcrwxq
+         gkFA==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787604589; x=1788209389; darn=vger.kernel.org;
+        d=google.com; s=20251104; t=1787608122; x=1788212922; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=Rnrc6rgXkO/4siYHOqsGt2EqzbzE5rWSn7kKau8RpvM=;
-        b=U91E2EgnTOWq+oBcEShuBHdAA+asYkQFCr1Dz3NPt0y20dyqfvEUluMVnyfEVlStwV
-         4J1jwWWOxoTLEBWJv6x0gYU5E5DMw3AJjPZA5Z5EJhUpJ7/Jguwwswo6xT9FOUFg/kjn
-         T2B8Ic7oM1HhuJOgYWdgf3s2XOYYT71MCixIJyCleZdF87evh8ltez284txOS4acSJ+b
-         Iq+ygtGdYNtA3OgBqE2R9YGXh6YDMy3aF+RPX+wSLZHAWJTBezMBPSSycOXwZCX29woN
-         HU9Ct4Jarvyd28DPBLsHSJ8e6STzlU7VzhKEAO3Wz5GKvCmU4aE/aZGPOja8Bf5381vF
-         Mh5g==
+        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
+        b=qESfhQqdCTQZX6hlgHUpcrcUUIIglw6uHPLdp7/GALYuxWXYX3wL9B9z2OSrPmpGac
+         Rk7buXRwxjwzQM6CQZgDC/7y+1K4ewgDtZ1FaeLev8gp4dpU8PZW3pB7NScT5DY2MuCi
+         IzyyEi5Es6PHSpr4hFh6E09YZLK1qC8mpzwOtFs6IW+7y1ZXPNz4lLQ9CLeUwDo17Ud0
+         m5VStajJ+gd89kLsMpN08yCPjzeptCy/56nXiE44Z5zfmMu8xav+NphZI8f/bNw1ktif
+         KkAb3SW2/N7fca6kKObymPFUhx/aAmc3D6KJ7r/eFfeqHVmX8QHB5/MWP1GlR9msbYBK
+         Ftdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787604589; x=1788209389;
+        d=1e100.net; s=20251104; t=1787608122; x=1788212922;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=Rnrc6rgXkO/4siYHOqsGt2EqzbzE5rWSn7kKau8RpvM=;
-        b=giHBZKlBdIjUsBUnrV+rp7ZnZznIRVs/fcdcQsPocqcMFSoTSkr02r0jaxe+DFBQdr
-         ASTTk/t3v3tHTbqi9UptOcuK0s9EXFIgGW4GMqeq414KW0fsoStFJDIzNsMtZpzHyo0X
-         byp81rJAe/Wa+uLSIDJBVSK42Zsgbp/BVDtyRNn+XM1s6FqbpALvQkf/PKxPuuJGkFu8
-         fzZqfqUE0lYoWju3h3SQxWm9pwE8CVBfIG8StykKplXjwdnE6RtKqK9142K7zrv9eXMV
-         entj1cQKBHnfap32ZXq3KEA6fjYOxF1gya+o0pMPxpPdgvL2CLpGqNONhx5Ox9SKUkvb
-         e1EA==
-X-Forwarded-Encrypted: i=1; AHgh+Roaevzo11rmkTUsF2a9u5nxTbgxiqbOcGM5MTmPSdM9GsP9PRn3rmwOfdkFDeyjpfN2+M3QsRYfa8ptpLMBAII=@vger.kernel.org
-X-Gm-Message-State: AFuF++mOjgDyUuRgfRRrh/+Jz30dLrfXlvh834L2PKzyU+7TuDAx+CIW
-	SWHbhhDJwGBc704pmYhdcYxrYURrpIikrS5Tge7Z4t9VfOBW3Pya9LPywiwjhocVuBj09ySU1Xg
-	8Fw5jwbarbf8yuTVz1ngHDWuqYb/zNBv8k3KxXRsx
-X-Gm-Gg: AR+sD11VGOOhhKAlYXKf2XcXooGx8aXltjQNXsQWmgoeU5qGmdwqX7hNSLjDUKSCJGn
-	OOOXYISHw/1h2JEMQ+Z6Jt/32c3/D5JwxTwsJQA//FY3Guscqm3sKuehbDmKcK8l2anbDhtH2sP
-	k3ISnbeJPvjc/j+jcHeT7X3UWvOcCGoYomEcyJPJcfrUHk/FOr76IZfzBs60ha5I8gDfovWfDIz
-	VkkY805wd9JBmduB4mSMmCB7mNF1yyBL1OF5NOGooEFMvMbCJ94jx5m6qUUOmfYe2GwTdc70mbB
-	uk1ODcbVU2BpH9qmMvmq5nJ2pnh6JNSKpXbFz6NW6Y8=
-X-Received: by 2002:a05:622a:22a8:b0:517:5e32:2d14 with SMTP id
- d75a77b69052e-52e308039c6mr3439151cf.10.1787604588512; Mon, 24 Aug 2026
- 13:49:48 -0700 (PDT)
+        bh=NLWtcrxu1k5qOJ0bmcu7wDHHxh7XkDSRlD2ohwkIbD0=;
+        b=Z9kJI3zqd7Lz9IT1zshLNyY6CYOhgs1uka52Do2k0dxPV2rj13dK+xql9pAiF7znM+
+         qEVi0Ftte9gjfwCUaT7ejFo/Ut3/f81bq+4cJvW+UbvPv0Ca9El37REsaRlmXqxPLhgS
+         j3PZ9pW0gJt6UXeHWXiWWMEJOXnXSsgp5IK+2w4Y2jCGsBovfy4UxTQ7m8PZKKkj1Jlo
+         tlMdQxJx56VECIKPh5GM+CRHPB9NX00ZwrQeNTxYcGQaEEfd2o2LMplf13lpw7D4HQY5
+         aBPtuyvB4qh4d7BhmFLisMhGDosLc7r5ykKnsan0E6I0tyMv7f78I9l0WhQnzsLWJSr1
+         lI/A==
+X-Forwarded-Encrypted: i=1; AHgh+Rpbcxug6RAn8P3u+OyACyv1myh9nQidlPGw6BlOy7u1a6yVBp5PgjaFg+kQUef7VCMikUpxKnpsrHLdumQnqQw=@vger.kernel.org
+X-Gm-Message-State: AFuF++nWOe/kUG+bd1CVbht6he7Q6lXhh41vVn/EBFqLcRNRkA02mdKh
+	lYHdN1+HkNhTDC+/zxKEf5M+mmKdl3pV/ujYJ8s7dbqKmWvkC9aZ5MRgHjHXd/WIb+RI6Zxq+uJ
+	mW4labJ/65oVqKh6ZVCCX+eOiOL8Bp6Hq3BkbB1Y=
+X-Gm-Gg: AR+sD11vbZDQh1bRqwQGHrLlg9VXJeS8CPgL7W+dPvwNv4AEtPAnpKKwZohwOBbrLUg
+	QPHFwf5jnkGzioyx4ddcTis4Mk8TRYZg42H/85kggnQSUa0G8GN2mppRVHUT+8g5B78/QstvaCB
+	5z0bsPA57sb4YOMaHBOhJNbBCtDqQVr6hQ5dHSYKkrkascpc7ExKOFTi/cpyp8sxCAhIaheRAqD
+	DC423rsSUdmAbKkcEVG76ufP7m2OizOSZiUAp6QuebVCpIqtvsDWRq7EVxEs/eTf7yDfBwBbkss
+	xQFbOq/6PJP6vac3neHb7o7t5VBuwCO8CfQMxjyp3aJkjnbfgeYafA5lfyocXum50uPdcBHzA5J
+	sL0EbAqEJmpyWslxrIdXgExnfig0J66Yz9Qcgy14yZ4+NiiLO0DXAokomG7H3YPGxh/waXBT/
+X-Received: by 2002:a05:6a20:d52d:b0:3cd:602e:f8ab with SMTP id
+ adf61e73a8af0-3cd90fbdaf4mr3772301637.4.1787608121518; Mon, 24 Aug 2026
+ 14:48:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260808200312.6326-1-kmehltretter@gmail.com>
-In-Reply-To: <20260808200312.6326-1-kmehltretter@gmail.com>
-From: Suren Baghdasaryan <surenb@google.com>
-Date: Mon, 24 Aug 2026 13:49:37 -0700
-X-Gm-Features: AcwNN1U3QleQBnvzJTMW5EoRgp4utl8IsEYk7xBRzJCJAaM1F0xAu0phz7nBY1A
-Message-ID: <CAJuCfpGTneUdh6xvZoeds0xt0Y=dc_xgOCninwqSv=HzVnPvoQ@mail.gmail.com>
-Subject: Re: [PATCH v2] selftests/proc: make proc-maps-race work with READ_IMPLIES_EXEC
-To: Karl Mehltretter <kmehltretter@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, David Hildenbrand <david@redhat.com>, 
-	Vlastimil Babka <vbabka@suse.cz>, Jann Horn <jannh@google.com>, Alexey Dobriyan <adobriyan@gmail.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-fsdevel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20260817130239.343594-1-haakon.bugge@oracle.com>
+ <20260817130239.343594-2-haakon.bugge@oracle.com> <CANDhNCoPDZeXXGn-hKZ_jgE8gkELEaufDXDYWV=hqLWxtD6gJg@mail.gmail.com>
+ <2FB8E129-0EC5-4593-9853-D528854AAA4B@oracle.com>
+In-Reply-To: <2FB8E129-0EC5-4593-9853-D528854AAA4B@oracle.com>
+From: John Stultz <jstultz@google.com>
+Date: Mon, 24 Aug 2026 14:48:30 -0700
+X-Gm-Features: AcwNN1U8wtCkRfVcuG5Zc9ouATORyZ8dnDuSovIiH3uTIGQOXwcfNCd094kuSjE
+Message-ID: <CANDhNCq4k=-Ap-0DUwZTzTCZTTkic3X39vNEpNMi5dCzXLPOXw@mail.gmail.com>
+Subject: Re: [PATCH 1/1] kernel/locking: Add mutual exclusion self-test
+To: Haakon Bugge <haakon.bugge@oracle.com>
+Cc: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+	Waiman Long <longman@redhat.com>, Andrew Morton <akpm@linux-foundation.org>, 
+	Shuah Khan <shuah@kernel.org>, 
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Aug 8, 2026 at 1:04=E2=80=AFPM Karl Mehltretter <kmehltretter@gmail=
-.com> wrote:
+On Mon, Aug 24, 2026 at 5:29=E2=80=AFAM Haakon Bugge <haakon.bugge@oracle.c=
+om> wrote:
+> > On 21 Aug 2026, at 22:42, John Stultz <jstultz@google.com> wrote:
+> >
+> > On Mon, Aug 17, 2026 at 6:03=E2=80=AFAM H=C3=A5kon Bugge <haakon.bugge@=
+oracle.com> wrote:
+> > > diff --git a/kernel/locking/Makefile b/kernel/locking/Makefile
+> > > index cee1901d4cff8..240084b4abbb7 100644
+> > > --- a/kernel/locking/Makefile
+> > > +++ b/kernel/locking/Makefile
+> > > @@ -38,3 +38,4 @@ obj-$(CONFIG_QUEUED_RWLOCKS) +=3D qrwlock.o
+> > > obj-$(CONFIG_LOCK_TORTURE_TEST) +=3D locktorture.o
+> > > obj-$(CONFIG_WW_MUTEX_SELFTEST) +=3D test-ww_mutex.o
+> > > obj-$(CONFIG_LOCK_EVENT_COUNTS) +=3D lock_events.o
+> > > +obj-$(CONFIG_MX_TEST) +=3D mx_test.o
+> >
+> > Total bikeshed item, but both CONFIG_MX_TEST and mx_test are not very
+> > obvious names for someone looking at this make file.
 >
-> test_maps_tearing_from_split times out when READ_IMPLIES_EXEC is set.
-> This happens by default on pre-ARMv6 CPUs, which lack no-execute support.
+> I am terrible with names. It's short for Mutual eXclusion. Can of course
+> be spelled out if preferred.
 >
-> split_vma() re-maps the first page with mod_info->prot | PROT_EXEC to
-> make it differ from its neighbours.  With READ_IMPLIES_EXEC the original
-> mapping is already executable, so no split occurs and the test hangs
-> waiting for the modifier child.
+> [snip]
 >
-> Use PROT_NONE for the split mapping, which always differs from its
-> readable neighbours.
+> > Apologies, I've not had a chance to apply and try this yet.
 >
-> Fixes: beb69e817246 ("selftests/proc: add /proc/pid/maps tearing from vma=
- split test")
-> Assisted-by: Codex:gpt-5.6-terra
-> Signed-off-by: Karl Mehltretter <kmehltretter@gmail.com>
+> NP.
+>
+> > So this looks like the test has to be run via module load?
+>
+> It can be run built-in as well, but then only the default test is run.
+>
+> > I almost
+> > never use modules in my test environment, so its often nice to allow
+> > it to be built in and be triggered/re-triggered without having to
+> > unload/reload (assuming this is not something like locktorture which
+> > never finishes - and if that is the case, it might be good to
+> > integrate into the locktorture framework instead of adding a new one).
+>
+> No, this selftest terminates.
+>
+> The script, tools/testing/selftests/locking/mx_test.sh, is written to
+> be robust wrt. module load/unload failures. The reason I prefer to run
+> it as module, is the turn-around time. From an edit, it takes
+> literally only a second to compile the module out-of-tree, another
+> second to copy it to the *updates* on the test server.
 
-Sorry for missing both versions.
+Yeah, I can see the benefit in the case where you're testing on the
+machine you build with.  However, I've found in cases where you're
+building on a different machine then your testing with, modules can be
+more of a pain to work with.
 
-Acked-by: Suren Baghdasaryan <surenb@google.com>
+That's why I've added sysfs interfaces to some tests (test-ww_mutex,
+and my out of tree ksched_football), so this sort of
+module-load-time-testing can be repeatedly re-triggered in a static
+build config.
 
-> ---
-> Tested on:
-> - QEMU versatilepb/ARM926EJ-S: maps and smaps fail before, pass after
-> - QEMU realview-eb-mpcore/ARM11MPCore: maps and smaps pass before and aft=
-er
->
-> Changes since v1:
-> - v1 went out without any recipients in To: and received no reply in 19 d=
-ays.
-> - No functional change. reworked the commit message.
->
-> v1: https://lore.kernel.org/all/20260720061835.6290-1-kmehltretter@gmail.=
-com/
->
->  tools/testing/selftests/proc/proc-maps-race.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/proc/proc-maps-race.c b/tools/testin=
-g/selftests/proc/proc-maps-race.c
-> index 1026d8c400e1..415eccb70468 100644
-> --- a/tools/testing/selftests/proc/proc-maps-race.c
-> +++ b/tools/testing/selftests/proc/proc-maps-race.c
-> @@ -490,7 +490,8 @@ static bool query_addr_at(int maps_fd, void *addr,
->
->  static inline bool split_vma(FIXTURE_DATA(proc_maps_race) *self)
->  {
-> -       return mmap(self->mod_info->addr, self->page_size, self->mod_info=
-->prot | PROT_EXEC,
-> +       /* PROT_NONE differs from both readable neighbors. */
-> +       return mmap(self->mod_info->addr, self->page_size, PROT_NONE,
->                     MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0) !=3D =
-MAP_FAILED;
->  }
->
-> --
-> 2.53.0
+> But if the community prefers that all the tests are run when the test
+> is built-in, the loop looping though the eligible tests can be moved
+> from the script to the C source instead.
+
+I'm not sure if there's a clear community preference. Especially as
+some thought is probably needed as to the sysfs conventions, as
+littering /sys/kerenel/ with a bunch of test driver interfaces might
+not be a great long term solution.  But this was just something I
+wanted to raise, as I've found it useful, especially when issues only
+show up after many many iterations of the test.
+
+thanks
+-john
