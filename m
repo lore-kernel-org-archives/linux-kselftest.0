@@ -1,528 +1,541 @@
-Received: from mta1.migadu.com (out-228.mta1.migadu.com [95.215.58.228])
+Received: from mta0.migadu.com (out-103.mta0.migadu.com [91.218.175.103])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E4743769EB
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 08:39:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74B3A199EAD
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 08:49:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.103
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787560756; cv=none; b=nM7WDiEdhGTPeKfRfGyYVJ7xYagNSit7gU8amEAPQKTn6YNl8tMp8RXBVF4RhlWnk6dSiHcJJrU1BNB3lzljKuRZJtIvUWe028NPlbXxlnU50hOU0oNJfT//GeSog6FDaiyyqmHZgvLRBm//ae64VTCBmIEAuQjFKPwE3zqUY2M=
+	t=1787561348; cv=none; b=YwNn+cpcYn8wHYWPZDL809GdsWKGd7ImrLakkDyhrTWUV/g8quXHIWeVdHm+rMhr7L8aXg6onabZSQuekopiDztB4B9lPUuFn7ik/e1PcvevuNrbHTM+NYRC7XZVY+JbfDnWbt6S9hrwgkPiO+ktZjModNDJ2Rfy4d8kqOG9h2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787560756; c=relaxed/simple;
-	bh=1njyCI97mQgHujx4ZxP/EggIo2sx526M8cgC9mSdhy0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lpuYo0acuWgWhHnCxiFCaSUtIjsAgvYw6sHRXgtkNBr4eUrtFEUVjCW4Ljd/0zElG11VyS8RLINx7xPVkcwpvZhuGZY8wrq2Q4QNhCaF9o4cp+fKevu2Dw5mKMbDCTXyIWL+YqdyNKA6MrUoL47lDxT1nhRoOZ3Y0SMvN48Dxio=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Doxy8Ff/; arc=none smtp.client-ip=95.215.58.228
+	s=arc-20240116; t=1787561348; c=relaxed/simple;
+	bh=75Ksn/cs08wyOV7Q0Zudxrs8sQ4HVk2JeQdJPRNNbIE=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=uze7XzK/dgPziHRWPYxzYfk3w5bTLMcTpOekAR8nfhJRI+tETqFqON2ZlmP8oZHbZK9/DCBLg9jl7GoCa345eMFP7t/hSo7+eyL2d3eXMLxnlnUvLyXNQW69KU+1z6ZYxDCA3z8uA8PJy9WDwUxyxIauKNs72LcIj6TJNPCXWO4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=PCiU8Mft; arc=none smtp.client-ip=91.218.175.103
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Doxy8Ff/"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="PCiU8Mft"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=1njyCI97mQgHujx4ZxP/EggIo2sx526M8cgC9mSdhy0=;
+DKIM-Signature: a=rsa-sha256; bh=75Ksn/cs08wyOV7Q0Zudxrs8sQ4HVk2JeQdJPRNNbIE=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787560751; v=1; x=1788165551;
- b=Doxy8Ff/dKkJImOMLlf/srZ1ybW2gzK6bunjN3aIu6zecrR4JBqnEOmbf5kRaRvlB6uhdgZO
- SapxqFvE3cyNjTPZMxjUg7BQ6zUywHun537iQG5Iz3IKLUZiPwmqMe7ySjtM6605u/sZRXxjWcK
- coHQEt1puW5RxIBtGBmN3Hrk=
+ t=1787561342; v=1; x=1788166142;
+ b=PCiU8Mft/hS0gzWU03zqGpM0DC9EJvv+qDnXRDZAscuxRXwXlRCYS1IUM0fKJbxcdIsGOGdu
+ Mi/sJsC+85u/PldUXOQNDb3ja5exi8AeMOtKcExFVETuHC01dhW0r8jA4UbsfoNI0F/7EsmqGdn
+ qMEyqtJWjPQPEVIaCVITt+h8=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost (2602:fce1:44f:115e::)
-	by smtp.migadu.com with ESMTPS id 7d8e2a6175a77d65;
-	Mon, 24 Aug 2026 08:39:11 +0000
-X-Mizu-Trace-ID: 7d8e2a6175a77d65
+Received: from [192.168.110.173] (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id 285f800f49b92321;
+	Mon, 24 Aug 2026 08:49:02 +0000
+X-Mizu-Trace-ID: 285f800f49b92321
 X-Migadu-Flow: FLOW_OUT
-From: Lance Yang <lance.yang@linux.dev>
-To: kirill@shutemov.name
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	nico.pache@linux.dev,
-	baolin.wang@linux.alibaba.com,
-	baohua@kernel.org,
-	dev.jain@arm.com,
-	hughd@google.com,
-	liam@infradead.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	ziy@nvidia.com,
-	usama.anjum@arm.com,
-	agordeev@linux.ibm.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kas@kernel.org,
-	jannh@google.com,
-	willy@infradead.org,
-	pfalcato@suse.de,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org,
-	Lance Yang <lance.yang@linux.dev>
-Subject: Re: [RFC PATCH 08/57] mm/collapse: scan a table for what a collapse could use
-Date: Mon, 24 Aug 2026 16:39:03 +0800
-Message-Id: <20260824083903.52962-1-lance.yang@linux.dev>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
-In-Reply-To: <20260816224609.308019-9-kirill@shutemov.name>
-References: <20260816224609.308019-9-kirill@shutemov.name>
+Message-ID: <6fed7a10-0201-4ea9-803b-6d8b1b725106@linux.dev>
+Date: Mon, 24 Aug 2026 16:48:54 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Cc: cui.tao@linux.dev, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+ Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Ziyang Men <ziyang.meme@gmail.com>, Tao Cui <cuitao@kylinos.cn>
+Subject: Re: [PATCH v3] selftests/cgroup: add PSI pressure trigger and
+ validation tests
+To: Suren Baghdasaryan <surenb@google.com>
+References: <20260813133723.1663605-1-cui.tao@linux.dev>
+ <CAJuCfpGxK62YWGS+0Ht63h-CZtiY+WPkvqTnYw+4W4Yna0onmg@mail.gmail.com>
+From: Tao Cui <cui.tao@linux.dev>
+In-Reply-To: <CAJuCfpGxK62YWGS+0Ht63h-CZtiY+WPkvqTnYw+4W4Yna0onmg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+Hi, Suren
 
-On Sun, Aug 16, 2026 at 11:45:20PM +0100, Kiryl Shutsemau wrote:
->From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->
->Fill in the scan.  Walk the range and set a bit in cc->eligible_ptes for
->every PTE a collapse may take as a source: present, anonymous, not
->uffd-armed, on the LRU and unlocked.  The bit is set last, so a PTE that
->failed anything leaves it clear.
->
->The walk takes no page table lock.  What it produces is advice: the
->freeze settles every question the scan asks, by re-reading the table
->under the lock and freezing each source to the count it expects.  A racy
->read can only cost a candidate the freeze then refuses, or miss one the
->next pass finds.  What it buys is that a fault in the range does not wait
->for a walk of the whole table.
->
->pte_offset_map() holds rcu_read_lock() until pte_unmap(), which keeps the
->table from being freed underneath the walk.  mmap_lock keeps the VMA
->attached, without which free_pgtables() could free it without waiting for
->RCU at all.
->
->The verdict is two-sided, which is the point:
->
-> - A PTE that disqualifies only itself leaves the bitmap clear there and
->   drops the PMD order, since a PMD candidate needs the whole table.
->   Selection still gets the smaller windows that avoid it.
-> - What refuses the table as a unit -- a limit the whole range exceeds,
->   or sources spread across nodes too distant for one folio to serve --
->   leaves no order eligible at all.
->
->Limits on swapped-out and shared PTEs are stated per PMD and scaled to
->what was actually scanned, so a partial table is held to the same density
->as a whole one.
->
->A folio whose reference count its mappings do not account for -- a GUP
->pin, say -- is left to the freeze rather than refused here.
->folio_expected_ref_count() wants a folio that cannot change order while
->it is read.  This walk holds no page table lock and no folio lock, so a
->folio splitting underneath it would have its count read for the wrong
->size.  A reference of its own would not help: that stops a folio being
->freed, not split.
->
->Whether a range has to look used at all is the caller's policy, so only a
->caller that asks gathers the young/referenced evidence.
->
->Assisted-by: Claude-Code:claude-opus-5
->Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
->---
-> mm/collapse.c   | 239 +++++++++++++++++++++++++++++++++++++++++++++++-
-> mm/collapse.h   |   7 ++
-> mm/khugepaged.c |   8 +-
-> 3 files changed, 249 insertions(+), 5 deletions(-)
->
->diff --git a/mm/collapse.c b/mm/collapse.c
->index 0e6c3c68b44c..66931ef6a6d0 100644
->--- a/mm/collapse.c
->+++ b/mm/collapse.c
->@@ -86,6 +86,20 @@
->  * replaces, and is switched over once both halves are complete.
->  */
+在 2026/8/19 13:47, Suren Baghdasaryan 写道:
+> On Thu, Aug 13, 2026 at 6:37 AM Tao Cui <cui.tao@linux.dev> wrote:
+>>
+>> From: Tao Cui <cuitao@kylinos.cn>
+>>
+>> The cgroup selftests have no PSI coverage. Add test_psi.c: per-resource
+>> trigger smoke tests (one trigger per fd, IRQ full-only), a
+>> cgroup.pressure hide/show toggle test, and a CPU-pressure trigger test
+>> using over-subscription. Skips when PSI is disabled or a resource is
+>> absent.
+>>
+>> Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+>>
+>> ---
+>> Changes since v2 (Suren Baghdasaryan, Michal Koutny review):
+>> - Restructure the trigger test into per-resource cases (io, memory, cpu,
+>>   irq) so a failure points at the specific resource; irq is skipped when
+>>   /proc/pressure/irq is absent.
+>> - Spawn the CPU hogs with cg_run_nowait() instead of open-coding fork(),
+>>   and arm the trigger with a 2s window so unprivileged users can set it.
+>> - Address the remaining review comments on cleanup and robustness:
+>>   guard teardown with a "created" flag, use cg_read_strcmp() instead of
+>>   atoi(), report strerror() on errors, and fix the unused-parameter and
+>>   sign-compare nits.
+>>
+>> Changes since v1 (Michal Koutny, sashiko review):
+>> - Keep trigger tests smoke-level; switch the firing test from memory to
+>>   CPU pressure; drop churn_memory().
+>> - Keep the runner out of the cgroup; add PSI/IRQ skip-guards and a
+>>   .gitignore entry.
+>>
+>> Link: https://lore.kernel.org/all/20260724025826.504586-1-cui.tao@linux.dev/
+>> Link: https://lore.kernel.org/all/20260728083742.2359320-1-cui.tao@linux.dev/
+>> ---
+>>  tools/testing/selftests/cgroup/.gitignore |   1 +
+>>  tools/testing/selftests/cgroup/Makefile   |   2 +
+>>  tools/testing/selftests/cgroup/config     |   1 +
+>>  tools/testing/selftests/cgroup/test_psi.c | 296 ++++++++++++++++++++++
+>>  4 files changed, 300 insertions(+)
+>>  create mode 100644 tools/testing/selftests/cgroup/test_psi.c
+>>
+>> diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
+>> index 952e4448bf07..ce2b907c57ea 100644
+>> --- a/tools/testing/selftests/cgroup/.gitignore
+>> +++ b/tools/testing/selftests/cgroup/.gitignore
+>> @@ -8,5 +8,6 @@ test_kill
+>>  test_kmem
+>>  test_memcontrol
+>>  test_pids
+>> +test_psi
+>>  test_zswap
+>>  wait_inotify
+>> diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
+>> index e01584c2189a..a8c69e37332a 100644
+>> --- a/tools/testing/selftests/cgroup/Makefile
+>> +++ b/tools/testing/selftests/cgroup/Makefile
+>> @@ -16,6 +16,7 @@ TEST_GEN_PROGS += test_kill
+>>  TEST_GEN_PROGS += test_kmem
+>>  TEST_GEN_PROGS += test_memcontrol
+>>  TEST_GEN_PROGS += test_pids
+>> +TEST_GEN_PROGS += test_psi
+>>  TEST_GEN_PROGS += test_zswap
+>>
+>>  LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
+>> @@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
+>>  $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
+>>  $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
+>>  $(OUTPUT)/test_pids: $(LIBCGROUP_O)
+>> +$(OUTPUT)/test_psi: $(LIBCGROUP_O)
+>>  $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
+>> diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
+>> index 39f979690dd3..8a3ef479e83d 100644
+>> --- a/tools/testing/selftests/cgroup/config
+>> +++ b/tools/testing/selftests/cgroup/config
+>> @@ -4,3 +4,4 @@ CONFIG_CGROUP_FREEZER=y
+>>  CONFIG_CGROUP_SCHED=y
+>>  CONFIG_MEMCG=y
+>>  CONFIG_PAGE_COUNTER=y
+>> +CONFIG_PSI=y
+>> diff --git a/tools/testing/selftests/cgroup/test_psi.c b/tools/testing/selftests/cgroup/test_psi.c
+>> new file mode 100644
+>> index 000000000000..cfb412f61458
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/cgroup/test_psi.c
+>> @@ -0,0 +1,296 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +#define _GNU_SOURCE
+>> +#include <errno.h>
+>> +#include <fcntl.h>
+>> +#include <poll.h>
+>> +#include <stdbool.h>
+>> +#include <stdio.h>
+>> +#include <stdlib.h>
+>> +#include <string.h>
+>> +#include <unistd.h>
+>> +#include <linux/limits.h>
+>> +
+>> +#include "kselftest.h"
+>> +#include "cgroup_util.h"
+>> +
+>> +#define PSI_POLL_TIMEOUhas this check T_MS    5000
+>> +
+>> +/* PSI triggers are written with a trailing NUL the kernel parser expects. */
+>> +static ssize_t write_trigger(int fd, const char *trigger)
+>> +{
+>> +       return write(fd, trigger, strlen(trigger) + 1);
+>> +}
+>> +
+>> +static int pressure_open(const char *resource)
+>> +{
+>> +       char path[PATH_MAX];
+>> +       int fd;
+>> +
+>> +       snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
+>> +       fd = open(path, O_RDWR);
+>> +       if (fd < 0)
+>> +               ksft_print_msg("open %s: %s\n", path, strerror(errno));
+>> +       return fd;
+>> +}
+>> +
+>> +/*
+>> + * /proc/pressure/<resource> accepts exactly one trigger per file
+>> + * descriptor. For io, memory and cpu verify that a "some" trigger arms
+>> + * and that a second trigger on the same fd is rejected with EBUSY. For
+>> + * irq, which only tracks "full", verify that "some" is rejected and
+>> + * "full" arms. irq is optional -- it only exists with IRQ-time
+>> + * accounting -- so a missing /proc/pressure/irq is SKIP, not FAIL.
+>> + */
+>> +static int test_proc_trigger(const char *resource, bool full_only)
+>> +{
+>> +       int fd, ret = KSFT_FAIL;
+>> +
+>> +       fd = pressure_open(resource);
+>> +       if (fd < 0)
+>> +               return full_only ? KSFT_SKIP : KSFT_FAIL;
+>> +
+>> +       if (!full_only) {
+>> +               if (write_trigger(fd, "some 150000 2000000") <= 0) {
+>> +                       ksft_print_msg("%s: 'some' trigger rejected: %s\n",
+>> +                                      resource, strerror(errno));
+>> +                       goto out;
+>> +               }
+>> +               if (write_trigger(fd, "full 150000 2000000") != -1 ||
+>> +                   errno != EBUSY) {
+>> +                       ksft_print_msg("%s: second trigger not EBUSY\n",
+>> +                                      resource);
+>> +                       goto out;
+>> +               }
+>> +       } else {
+>> +               if (write_trigger(fd, "some 150000 2000000") != -1) {
+>> +                       ksft_print_msg("irq: 'some' trigger unexpectedly accepted\n");
+>> +                       goto out;
+>> +               }
+>> +               if (write_trigger(fd, "full 150000 2000000") <= 0) {
+>> +                       ksft_print_msg("irq: 'full' trigger rejected: %s\n",
+>> +                                      strerror(errno));
+>> +                       goto out;
+>> +               }
+>> +       }
+>> +
+>> +       ret = KSFT_PASS;
+>> +out:
+>> +       close(fd);
+>> +       return ret;
 > 
->+/*
->+ * Is @count past a limit stated per PMD, when only part of a table was scanned?
->+ * Scale the comparison to the table so a partial scan is held to the same
->+ * density as a whole one.
->+ */
->+static bool collapse_exceeds_limit(unsigned int count, unsigned int max_per_pmd,
->+				   unsigned long start, unsigned long end)
->+{
->+	const unsigned long nr_scanned = (end - start) >> PAGE_SHIFT;
->+
->+	return (unsigned long)count * HPAGE_PMD_NR >
->+	       (unsigned long)max_per_pmd * nr_scanned;
->+}
->+
-> /*
->  * Scan the PTEs between @start and @end and record what a collapse could use: a
->  * bit in cc->eligible_ptes for every PTE that may be a source.  Returns
->@@ -97,7 +111,230 @@ static enum scan_result collapse_scan_table(struct vm_area_struct *vma,
-> 					    unsigned long end,
-> 					    struct collapse_control *cc)
-> {
->-	return SCAN_SUCCEED;
->+	const unsigned long pmd_addr = start & HPAGE_PMD_MASK;
->+	unsigned int max_ptes_none, max_ptes_swap, max_ptes_shared;
->+	int none_or_zero = 0, shared = 0, referenced = 0, unmapped = 0;
->+	enum scan_result result, pmd_result = SCAN_SUCCEED;
->+	unsigned int first_offset;
->+	unsigned long addr;
->+	pte_t *pte;
->+	int i;
->+
->+	max_ptes_none = collapse_max_ptes_none(cc, vma, HPAGE_PMD_ORDER);
->+	max_ptes_swap = collapse_max_ptes_swap(cc, HPAGE_PMD_ORDER);
->+	max_ptes_shared = collapse_max_ptes_shared(cc, HPAGE_PMD_ORDER);
->+
->+	/*
->+	 * No page table lock: what this builds is advice, and the freeze settles
->+	 * every question it asks by re-reading the table under the lock and
->+	 * freezing each source to the count it expects.  A racy read can only
->+	 * cost a candidate that the freeze then refuses, or miss one that the
->+	 * next pass finds.  What it buys is that a fault in this range does not
->+	 * wait for a scan of the whole table.
->+	 *
->+	 * pte_offset_map() holds rcu_read_lock() until pte_unmap(), which is
->+	 * what keeps the table itself from being freed underneath the walk;
->+	 * mmap_lock keeps the VMA attached, without which free_pgtables() could
->+	 * free it without waiting for RCU at all.  Nothing below here sleeps.
->+	 */
->+	pte = pte_offset_map(pmd, start);
->+	if (!pte) {
->+		cc->progress++;
->+		result = SCAN_NO_PTE_TABLE;
->+		goto out_no_table;
->+	}
->+
->+	/*
->+	 * The bitmap and the selection offsets stay relative to the table:
->+	 * natural-alignment math needs the table-absolute position, not the
->+	 * position within an arbitrarily placed VMA.
->+	 */
->+	first_offset = (start - pmd_addr) >> PAGE_SHIFT;
->+	for (i = first_offset, addr = start; addr < end;
->+	     i++, addr += PAGE_SIZE) {
->+		pte_t pteval = ptep_get(pte + (i - first_offset));
-
-Hmm, ptep_get() does not look right for a lockless scan ...
-
-On arm64, a contiguous PTE sends ptep_get() to contpte_ptep_get():
-
-static inline pte_t ptep_get(pte_t *ptep)
-{
-...
-	if (likely(!pte_valid_cont(pte)))
-		return pte;
-
-	return contpte_ptep_get(ptep, pte);
-}
-
-contpte_ptep_get() explicitly assumes PTL is held and therefore has no
-consistency retry:
-
-pte_t contpte_ptep_get(pte_t *ptep, pte_t orig_pte)
-{
-	/*
-	 * Gather access/dirty bits, which may be populated in any of the ptes
-	 * of the contig range. We are guaranteed to be holding the PTL, so any
-	 * contiguous range cannot be unfolded or otherwise modified under our
-	 * feet.
-	 */
-...
-}
-
-The lockless accessor uses the matching implementation:
-
-static inline pte_t ptep_get_lockless(pte_t *ptep)
-{
-...
-	if (likely(!pte_valid_cont(pte)))
-		return pte;
-
-	return contpte_ptep_get_lockless(ptep);
-}
-
-pte_t contpte_ptep_get_lockless(pte_t *orig_ptep)
-{
-	/*
-	 * The ptep_get_lockless() API requires us to read and return *orig_ptep
-	 * so that it is self-consistent, without the PTL held, so we may be
-	 * racing with other threads modifying the pte. Usually a READ_ONCE()
-...
-	 * and we can't read all of those neighbouring ptes atomically, so any
-	 * contiguous range may be unfolded/modified/refolded under our feet.
-	 * Therefore we ensure we read a _consistent_ contpte range by checking
-	 * that all ptes in the range are valid and have CONT_PTE set, that all
-	 * pfns are contiguous and that all pgprots are the same (ignoring
-	 * access/dirty). If we find a pte that is not consistent, then we must
-	 * be racing with an update so start again. If the target pte does not
-...
-	 */
-...
-retry:
-	orig_pte = __ptep_get(orig_ptep);
-
-	if (!pte_valid_cont(orig_pte))
-		return orig_pte;
-...
-	for (i = 0; i < CONT_PTES; i++, ptep++, pfn++) {
-		pte = __ptep_get(ptep);
-
-		if (!contpte_is_consistent(pte, pfn, orig_prot))
-			goto retry;
-...
-}
-
-The later freeze can reject a stale candidate, but the earlier PTE read
-is still lockless. Should the read use ptep_get_lockless() so arm64 can
-retry if it finds an inconsistent PTE in the contpte range?
-
-Cheers, Lance
-
-
->+		struct folio *folio;
->+		struct page *page;
->+		int node;
->+
->+		cc->progress++;
->+
->+		if (pte_none_or_zero(pteval)) {
->+			if (++none_or_zero > max_ptes_none &&
->+			    pmd_result == SCAN_SUCCEED) {
->+				pmd_result = SCAN_EXCEED_NONE_PTE;
->+				count_vm_event(THP_SCAN_EXCEED_NONE_PTE);
->+				count_mthp_stat(HPAGE_PMD_ORDER,
->+						MTHP_STAT_COLLAPSE_EXCEED_NONE);
->+			}
->+			continue;
->+		}
->+		if (!pte_present(pteval)) {
->+			unmapped++;
->+			if (collapse_exceeds_limit(unmapped, max_ptes_swap,
->+						   start, end)) {
->+				result = SCAN_EXCEED_SWAP_PTE;
->+				count_vm_event(THP_SCAN_EXCEED_SWAP_PTE);
->+				count_mthp_stat(HPAGE_PMD_ORDER,
->+						MTHP_STAT_COLLAPSE_EXCEED_SWAP);
->+				goto out_table_refused;
->+			}
->+			/* Swap entries armed with uffd-wp are refused too */
->+			if (pte_swp_uffd_any(pteval) &&
->+			    pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PTE_UFFD;
->+			continue;
->+		}
->+		if (pte_uffd(pteval)) {
->+			/*
->+			 * The huge PMD could be marked write protected when any
->+			 * of the small ones is, but that could deliver
->+			 * userfaults outside the registered range.  Keep it
->+			 * simple and refuse the PTE.
->+			 */
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PTE_UFFD;
->+			continue;
->+		}
->+
->+		page = vm_normal_page(vma, addr, pteval);
->+		if (unlikely(!page) || unlikely(is_zone_device_page(page))) {
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PAGE_NULL;
->+			continue;
->+		}
->+		folio = page_folio(page);
->+
->+		/*
->+		 * A VM_DROPPABLE VMA keeps the lazyfree property across the
->+		 * collapse, so there is nothing to preserve by skipping.
->+		 */
->+		if (cc->policy.skip_lazyfree &&
->+		    !(vma->vm_flags & VM_DROPPABLE) &&
->+		    folio_test_lazyfree(folio) && !pte_dirty(pteval)) {
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PAGE_LAZYFREE;
->+			continue;
->+		}
->+
->+		if (!folio_test_anon(folio)) {
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PAGE_ANON;
->+			continue;
->+		}
->+
->+		/*
->+		 * A page counts as shared if any part of its folio is, which
->+		 * bounds the cost of CoW-breaking rather than the count of it:
->+		 * collapse_faultin() unshares on !PageAnonExclusive(), a broader
->+		 * test -- a page whose fork co-mapper has exited is
->+		 * single-mapped, so not counted here, yet stays non-exclusive
->+		 * until a write reuses it.  Those are the cheap ones, reused in
->+		 * place.  A page that has to be copied is one this test catches,
->+		 * so the limit does bound the copying it is there to bound.
->+		 */
->+		if (folio_maybe_mapped_shared(folio)) {
->+			shared++;
->+			if (collapse_exceeds_limit(shared, max_ptes_shared,
->+						   start, end)) {
->+				result = SCAN_EXCEED_SHARED_PTE;
->+				count_vm_event(THP_SCAN_EXCEED_SHARED_PTE);
->+				count_mthp_stat(HPAGE_PMD_ORDER,
->+						MTHP_STAT_COLLAPSE_EXCEED_SHARED);
->+				goto out_table_refused;
->+			}
->+		}
->+
->+		/*
->+		 * Which node the sources are on decides where the destination is
->+		 * allocated: the one with the most of them wins.
->+		 */
->+		node = folio_nid(folio);
->+		if (collapse_scan_abort(node, cc)) {
->+			result = SCAN_SCAN_ABORT;
->+			goto out_table_refused;
->+		}
->+		cc->node_load[node]++;
->+
->+		/*
->+		 * Usually a folio somebody else is already isolating, whose
->+		 * reference the freeze would refuse anyway.  Not exact: one
->+		 * still on a per-CPU add batch reads the same, and the freeze
->+		 * drains those before it starts.
->+		 */
->+		if (!folio_test_lru(folio)) {
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PAGE_LRU;
->+			continue;
->+		}
->+		if (folio_test_locked(folio)) {
->+			if (pmd_result == SCAN_SUCCEED)
->+				pmd_result = SCAN_PAGE_LOCK;
->+			continue;
->+		}
->+
->+		/*
->+		 * A folio whose reference count its mappings do not account for
->+		 * -- a GUP pin, say -- is refused by the freeze, not here.
->+		 * folio_expected_ref_count() wants a folio that cannot change
->+		 * order while it is read, and this walk holds no page table lock
->+		 * and no folio lock, so a folio splitting underneath it would
->+		 * have the count read for the wrong size.  A reference of our
->+		 * own would not help: it stops the folio being freed, not split.
->+		 *
->+		 * So leave it to the freeze, which reads the table under the
->+		 * lock and settles the question by freezing each source to the
->+		 * count it expects.  What it costs is a window selected here and
->+		 * refused there.
->+		 */
->+
->+		/*
->+		 * Every check passed: this PTE can be a collapse source.  The
->+		 * bit is set last, so a disqualified PTE leaves it clear.
->+		 */
->+		__set_bit(i, cc->eligible_ptes);
->+
->+		/*
->+		 * Whether a range has to look used at all is the caller's
->+		 * policy, so only a caller that asks gathers the evidence.
->+		 */
->+		if (cc->policy.require_referenced &&
->+		    (pte_young(pteval) || folio_test_young(folio) ||
->+		     folio_test_referenced(folio) ||
->+		     mmu_notifier_test_young(vma->vm_mm, addr)))
->+			referenced++;
->+	}
->+
->+	if (cc->policy.require_referenced &&
->+	    (!referenced || (unmapped && referenced < HPAGE_PMD_NR / 2)))
->+		result = SCAN_LACK_REFERENCED_PAGE;
->+	else
->+		result = pmd_result;
->+	pte_unmap(pte);
->+	goto out;
->+
->+out_table_refused:
->+	/*
->+	 * The table is refused as a unit -- a limit the whole range exceeds, or
->+	 * pages on nodes too distant for one folio to serve them all -- so no
->+	 * window inside it is eligible either.
->+	 */
->+	pte_unmap(pte);
->+out_no_table:
->+	cc->select_orders = 0;
->+out:
->+	/*
->+	 * A PMD candidate needs the whole table, so anything that disqualified a
->+	 * single PTE rules it out.  Smaller windows that avoid the offending
->+	 * PTEs are still collapsible, so drop just that order and leave the rest
->+	 * to selection -- dropping it also lowers the order selection roots its
->+	 * windows at.  MADV_COLLAPSE has no other order enabled, so it is left
->+	 * with none.
->+	 */
->+	if (result != SCAN_SUCCEED)
->+		cc->select_orders &= ~BIT(HPAGE_PMD_ORDER);
->+
->+	return result;
+> You don't really need "ret" variable. Just "return KSFT_FAIL;" here is enough.
+> 
+Done. The harness conversion took care of this one: the switch/case
+reporting is gone and the failure paths are just ASSERTs now.
+>> +}
+>> +
+>> +/*
+>> + * cgroup.pressure gates visibility of the per-resource *.pressure files
+>> + * inside a cgroup: writing 0 hides them, writing 1 shows them again.
+>> + * Drive one hide/show cycle and check that memory.pressure appears and
+>> + * disappears along with it.
+>> + */
+>> +static int test_cgroup_pressure_toggle(const char *root)
+>> +{
+>> +       char buf[BUF_SIZE];
+>> +       char *cg = NULL;
+>> +       int ret = KSFT_FAIL, created = 0;
+> 
+> Again, you don't need "ret" variable here.
+> 
+>> +
+>> +       cg = cg_name(root, "psi_toggle_test");
+>> +       if (!cg)
+>> +               goto cleanup;
+>> +       if (cg_create(cg)) {
+>> +               ksft_print_msg("cg_create: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +       created = 1;
+> 
+> Nope. The way we usually do the cleanup is by jumping to the
+> appropriate label instead of adding extra state flags. In this case
+> that would look something like this:
+> 
+>        cg = cg_name(root, "psi_toggle_test");
+>        if (!cg)
+>                return KSFT_FAIL;
+> 
+>        if (cg_create(cg)) {
+>                ksft_print_msg("cg_create: %s\n", strerror(errno));
+>                goto free_cg;
+>        }
+> 
+>        if (cg_write(cg, "cgroup.pressure", "0")) {
+>                ksft_print_msg("write cgroup.pressure=0: %s\n", strerror(errno));
+>                goto cleanup;
+>        }
+> ...
+>        return KSFT_PASS;
+> cleanup:
+>        cg_destroy(cg);
+> free_cg:
+>        free(cg);
+>        return KSFT_FAIL;
 > }
 > 
-> /* Everything a table is judged on starts empty for each table */
->diff --git a/mm/collapse.h b/mm/collapse.h
->index e2af4c47cb60..ad88b91d9a72 100644
->--- a/mm/collapse.h
->+++ b/mm/collapse.h
->@@ -130,5 +130,12 @@ unsigned long collapse_possible_orders(struct vm_area_struct *vma,
-> 		vm_flags_t vm_flags, enum tva_type tva_flags);
-> enum scan_result find_pmd_or_thp_or_none(struct mm_struct *mm,
-> 		unsigned long address, pmd_t **pmd);
->+bool collapse_scan_abort(int nid, struct collapse_control *cc);
->+unsigned int collapse_max_ptes_none(struct collapse_control *cc,
->+		struct vm_area_struct *vma, unsigned int order);
->+unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
->+		unsigned int order);
->+unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
->+		unsigned int order);
+You're right, that reads better. I ended up going one step further and
+moving the teardown into FIXTURE_TEARDOWN() instead: the cgroup is
+created inside the test and self->cg is NULL until then, so the
+teardown is a no-op for the tests that don't create one. That way
+there are no labels and no state flags left.
+
+>> +
+>> +       if (cg_write(cg, "cgroup.pressure", "0")) {
+>> +               ksft_print_msg("write cgroup.pressure=0: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +       if (cg_read_strcmp(cg, "cgroup.pressure", "0\n")) {
+>> +               ksft_print_msg("cgroup.pressure readback != 0\n");
+>> +               goto cleanup;
+>> +       }
+>> +       if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) >= 0) {
+>> +               ksft_print_msg("memory.pressure readable while hidden\n");
+>> +               goto cleanup;
+>> +       }
+>> +
+>> +       if (cg_write(cg, "cgroup.pressure", "1")) {
+>> +               ksft_print_msg("write cgroup.pressure=1: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +       if (cg_read_strcmp(cg, "cgroup.pressure", "1\n")) {
+>> +               ksft_print_msg("cgroup.pressure readback != 1\n");
+>> +               goto cleanup;
+>> +       }
+>> +       if (cg_read(cg, "memory.pressure", buf, sizeof(buf)) < 0) {
+>> +               ksft_print_msg("memory.pressure unreadable after enabling\n");
+>> +               goto cleanup;
+>> +       }
+>> +
+>> +       ret = KSFT_PASS;
+>> +cleanup:
+>> +       if (created)
+>> +               cg_destroy(cg);
+>> +       free(cg);
+>> +       return ret;
+>> +}
+>> +
+>> +/* A child that burns CPU forever; stopped by cg_killall() in the parent. */
+>> +static int hog_cpu(const char *cgroup, void *arg)
+>> +{
+>> +       for (;;)
+>> +               ;
 > 
-> #endif	/* __MM_COLLAPSE_H */
->diff --git a/mm/khugepaged.c b/mm/khugepaged.c
->index 26d25093260b..9823884a83c9 100644
->--- a/mm/khugepaged.c
->+++ b/mm/khugepaged.c
->@@ -305,7 +305,7 @@ struct attribute_group khugepaged_attr_group = {
->  *
->  * Return: Maximum number of empty/shared zeropage PTEs for the collapse operation
->  */
->-static unsigned int collapse_max_ptes_none(struct collapse_control *cc,
->+unsigned int collapse_max_ptes_none(struct collapse_control *cc,
-> 		struct vm_area_struct *vma, unsigned int order)
-> {
-> 	const unsigned int max_ptes_none = cc->policy.max_ptes_none;
->@@ -341,7 +341,7 @@ static unsigned int collapse_max_ptes_none(struct collapse_control *cc,
->  * Return: Maximum number of PTEs that map shared anonymous pages for the
->  * collapse operation
->  */
->-static unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
->+unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
-> 		unsigned int order)
-> {
-> 	/*
->@@ -362,7 +362,7 @@ static unsigned int collapse_max_ptes_shared(struct collapse_control *cc,
->  * Return: Maximum number of non-present PTEs or the maximum allowed non-present
->  * pagecache entries for the collapse operation.
->  */
->-static unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
->+unsigned int collapse_max_ptes_swap(struct collapse_control *cc,
-> 		unsigned int order)
-> {
-> 	/*
->@@ -934,7 +934,7 @@ static struct collapse_control khugepaged_collapse_control = {
-> 	.is_khugepaged = true,
-> };
+> This loop looks strange. Maybe:
 > 
->-static bool collapse_scan_abort(int nid, struct collapse_control *cc)
->+bool collapse_scan_abort(int nid, struct collapse_control *cc)
-> {
-> 	int i;
+>        for (;;) {}
 > 
->-- 
->2.54.0
->
->
+Fixed.
+>> +       return 0;
+>> +}
+>> +
+>> +/*
+>> + * Arm a "some" trigger on a cgroup's cpu.pressure, oversubscribe the
+>> + * cgroup with more spinning hogs than there are CPUs, and check that the
+>> + * trigger fires once the cgroup stalls on CPU.
+>> + */
+>> +static int test_cgroup_trigger_fire(const char *root)
+>> +{
+>> +       char *cg = NULL, *cpupress = NULL;
+>> +       int fd = -1, ret = KSFT_FAIL, created = 0, i;
+> 
+> Please define each variable on a separate line.
+> 
+Fixed.
+>> +       long ncpus;
+>> +
+>> +       cg = cg_name(root, "psi_trigger_test");
+>> +       if (!cg)
+>> +               goto cleanup;
+>> +       if (cg_create(cg)) {
+>> +               ksft_print_msg("cg_create: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +       created = 1;
+> 
+> Same as above. Jump to the appropriate label.
+> 
+>> +
+>> +       cpupress = cg_control(cg, "cpu.pressure");
+>> +       if (!cpupress)
+>> +               goto cleanup;
+>> +       fd = open(cpupress, O_RDWR);
+>> +       if (fd < 0) {
+>> +               ksft_print_msg("open cpu.pressure: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +
+>> +       /*
+>> +        * 1usec threshold over a 2s window: any CPU stall fires it. The 2s
+>> +        * window is the smallest unprivileged users are allowed to arm.
+>> +        */
+>> +       if (write_trigger(fd, "some 1 2000000") <= 0) {
+>> +               ksft_print_msg("arm trigger: %s\n", strerror(errno));
+>> +               goto cleanup;
+>> +       }
+>> +
+>> +       ncpus = sysconf(_SC_NPROCESSORS_ONLN);
+>> +       if (ncpus <= 0) {
+> 
+> I don't think this syscall will ever return 0, so you just need to
+> check for -1. Also reporting -1 in the error log isn't very
+> informative. Instead report strerror(errno).
+> 
+Agreed, now checks only for -1 and reports strerror(errno) via TH_LOG.
+
+>> +               ksft_print_msg("sysconf(_SC_NPROCESSORS_ONLN) returned %ld\n",
+>> +                              ncpus);
+>> +               goto cleanup;
+>> +       }
+>> +
+>> +       /* ncpus+1 hogs guarantee CPU contention inside the cgroup. */
+>> +       for (i = 0; i < ncpus + 1; i++) {
+>> +               if (cg_run_nowait(cg, hog_cpu, NULL) < 0) {
+>> +                       ksft_print_msg("spawn hog %d: %s\n", i, strerror(errno));
+>> +                       goto cleanup;
+>> +               }
+>> +       }
+>> +
+>> +       struct pollfd pfd = { .fd = fd, .events = POLLPRI };
+>> +
+>> +       switch (poll(&pfd, 1, PSI_POLL_TIMEOUT_MS)) {
+>> +       case -1:
+>> +               ksft_print_msg("poll: %s\n", strerror(errno));
+>> +               goto cleanup;
+> 
+> So, goto cleanup here but break everywhere else? Consistency would be
+> nice, so please use break here as well.
+> 
+The switch is gone along with the ret bookkeeping, so this is moot
+now: poll() collapsed into a single ASSERT_EQ(1, poll(...)).
+
+>> +       case 0:
+>> +               ksft_print_msg("trigger did not fire (could not induce CPU pressure)\n");
+>> +               ret = KSFT_SKIP;
+> 
+> This means your trigger timed out. Why is this treated as KSFT_SKIP
+> and not as KSFT_FAIL?
+
+Fair point, I agree. With ncpus+1 hogs and a 1usec threshold over a 2s
+window the cgroup must stall, so if the trigger doesn't fire something
+is actually broken. I made it a FAIL.
+> 
+>> +               break;
+>> +       default:
+>> +               if (pfd.revents & POLLPRI)
+>> +                       ret = KSFT_PASS;
+>> +               else
+>> +                       ksft_print_msg("poll returned 0x%x\n", pfd.revents);
+>> +               break;
+>> +       }
+>> +
+>> +cleanup:
+>> +       if (fd >= 0)
+>> +               close(fd);
+>> +       if (created) {
+>> +               cg_killall(cg);
+>> +               cg_destroy(cg);
+>> +       }
+>> +       free(cpupress);
+>> +       free(cg);
+>> +       return ret;
+>> +}
+>> +
+>> +struct psi_proc_test {
+>> +       const char *name;
+>> +       const char *resource;
+>> +       bool full_only;
+>> +};
+>> +static const struct psi_proc_test proc_tests[] = {
+>> +       { "proc_trigger_io",     "io",     false },
+>> +       { "proc_trigger_memory", "memory", false },
+>> +       { "proc_trigger_cpu",    "cpu",    false },
+>> +       { "proc_trigger_irq",    "irq",    true  },
+>> +};
+>> +
+>> +struct psi_cg_test {
+>> +       const char *name;
+>> +       int (*fn)(const char *root);
+>> +};
+>> +static const struct psi_cg_test cg_tests[] = {
+>> +       { "cgroup_pressure_toggle", test_cgroup_pressure_toggle },
+>> +       { "cgroup_trigger_fire",    test_cgroup_trigger_fire },
+>> +};
+>> +
+>> +int main(int argc, char **argv)
+>> +{
+>> +       char root[PATH_MAX];
+>> +       int psi_fd, i;
+>> +
+>> +       ksft_print_header();
+>> +       ksft_set_plan(ARRAY_SIZE(proc_tests) + ARRAY_SIZE(cg_tests));
+>> +
+>> +       if (cg_find_unified_root(root, sizeof(root), NULL))
+>> +               ksft_exit_skip("cgroup v2 isn't mounted\n");
+>> +
+>> +       /* PSI must be enabled (CONFIG_PSI=y, not disabled on the cmdline). */
+>> +       psi_fd = open("/proc/pressure/memory", O_RDONLY);
+>> +       if (psi_fd < 0)
+>> +               ksft_exit_skip("PSI unavailable (CONFIG_PSI=n or psi=0)\n");
+>> +       close(psi_fd);
+>> +
+>> +       for (i = 0; i < ARRAY_SIZE(proc_tests); i++) {
+>> +               switch (test_proc_trigger(proc_tests[i].resource,
+>> +                                         proc_tests[i].full_only)) {
+>> +               case KSFT_PASS:
+>> +                       ksft_test_result_pass("%s\n", proc_tests[i].name);
+>> +                       break;
+>> +               case KSFT_SKIP:
+>> +                       ksft_test_result_skip("%s\n", proc_tests[i].name);
+>> +                       break;
+>> +               default:
+>> +                       ksft_test_result_fail("%s\n", proc_tests[i].name);
+>> +                       break;
+>> +               }
+>> +       }
+>> +
+>> +       for (i = 0; i < ARRAY_SIZE(cg_tests); i++) {
+>> +               switch (cg_tests[i].fn(root)) {
+>> +               case KSFT_PASS:
+>> +                       ksft_test_result_pass("%s\n", cg_tests[i].name);
+>> +                       break;
+>> +               case KSFT_SKIP:
+>> +                       ksft_test_result_skip("%s\n", cg_tests[i].name);
+>> +                       break;
+>> +               default:
+>> +                       ksft_test_result_fail("%s\n", cg_tests[i].name);
+>> +                       break;
+>> +               }
+>> +       }
+> 
+> Please convert this to use
+> https://docs.kernel.org/dev-tools/kselftest.html#test-harness as I
+> suggested before. This code will look much simpler. Even if some other
+> tests are not using it, there is no reason for new tests not to take
+> advantage of the existing harness. You will find planty of examples
+> which use them.
+> 
+Converted, thanks for the pointer. Each case is a TEST_F(psi, ...) now;
+the cgroup v2 and PSI availability checks live in FIXTURE_SETUP() and
+SKIP there, and the hog killing and cgroup destruction live in
+FIXTURE_TEARDOWN(). It does make the code simpler, as you predicted.
+The hogs also set PR_SET_PDEATHSIG on themselves now, so an interrupted
+run doesn't leave orphans pinning every CPU.
+
+With that the file shrinks from 296 to 206 lines. I tested it on a few
+setups (PSI on and off, with and without /proc/pressure/irq): 6/6 pass
+where everything is available, clean skips otherwise.
+
+Thanks a lot for the review and for your patience with all the iterations.
+
+Thanks,
+Tao>> +
+>> +       ksft_finished();
+>> +}
+>> --
+>> 2.43.0
+>>
+
