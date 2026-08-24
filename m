@@ -1,287 +1,431 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E419A3EE1C7;
-	Mon, 24 Aug 2026 09:06:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787562377; cv=fail; b=VBRCMZSFxFsposrimaCuKg61Ds1de5C3NgnPLCHCF4bjDhW75+bOmOJGGbFwvQghYlvmkd+P5S8dVuLld+3FLA96OfAa9DoyZ2KRl+kCoqJweLK+EBPGd5CpJSwhNu6++D5iJCSJhBktv/fS73cPhwW5OEj3qbdXmPljpFgrABM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787562377; c=relaxed/simple;
-	bh=2rGITChiqjTVCYTle3vemLDR0BduuUlgb4jcsbW3RQU=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=IGE60xm4gQ1bt70eTGl+ZW8xFQqFqi5b72tzA2jdEWoiK5lq3fD5Qgp7cPuTLT/M+wDC8Pp5ZOKaAz8l45/e3UjWpcohPaFKXqzoR3xWgHsCRxXFj+GtGeFunl99CpER8l+Nh/F81LYWgG8215H6mNNaMT6ETx2GevHbY6IfR9g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I47SUvik; arc=fail smtp.client-ip=198.175.65.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96282F0673;
+	Mon, 24 Aug 2026 09:20:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787563223; cv=none; b=V801l+vWWPlihS48zFfnvf7wlGe0Samoc6wZpLlhdsgZtlEuY2ZIfw+P+M6n1SK+7hJDZ+FRQaDrEUxW3GmYRjwdnz2zQJvtLIIOGjBjZjml47ozFJZnMmfteg/a56ODtmmNRFeOmUoQK+dHg0itfeZTopZ9oTUHx2LFD+SCnNo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787563223; c=relaxed/simple;
+	bh=Rvtrha3WTwJfTW7AGl4KCnnuSmmFePp1BK56VobH9xE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CC2rteBZK1M3LqKyKcUW8W4hvTEC4cDlr/yB/bbS3LbFe760vwl6BXGHoHJ0xdX+ZMY1bF2V5dyQIr4qpIcTzPEeFN2vGtRQJrlMdl0LjUmNxEeKUJGOtGJUbabdRkYowz4v5oK+/EwCrMwYqjwUUEkP+al86EYnrQ9wDYmYINU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=e1eo9w/4; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I47SUvik"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787562376; x=1819098376;
-  h=date:from:to:cc:subject:message-id:reply-to:references:
-   in-reply-to:mime-version;
-  bh=2rGITChiqjTVCYTle3vemLDR0BduuUlgb4jcsbW3RQU=;
-  b=I47SUvikjX5xrwplxyrYUJvZe2uVWxIzDy7/XhwpliAUuUcQ2XV6jH03
-   KL7+Igpa1mp1P2gw9Gl1v2Y+s4gfsri5Sk5zp8/JnVbargaclCccLcBRh
-   RGOULSoHuivjYM9L0P42aheVsprRFu9C4lqMdJzPLlZ9WDjR76H1OTAL9
-   h3weLgM3mZMDNUAInGMtFUGK6d7GuDSa3rqkZ+tLPfqRccmSWlmWrlgkv
-   F+7ST/xf5mUQfLNFjfM8QZbO8CK0blrQgj5ZtHTXyiFIcBAsnm0gl5U58
-   DYIQ45DIG5PX8/LRQpw6PDPzRlUnjgzJAdq6otnelOJYevUfWtlD7ntvb
-   w==;
-X-CSE-ConnectionGUID: Y7CkhbpZS6WHtw3oRumDrg==
-X-CSE-MsgGUID: vP3iP8Y2RdGfAU7jUe601A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11884"; a="87773937"
-X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
-   d="scan'208";a="87773937"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 02:06:15 -0700
-X-CSE-ConnectionGUID: 1lnlxijqRAa3GxU6kc/OTg==
-X-CSE-MsgGUID: mQjPLqoWT4O6LtetdrIlFw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
-   d="scan'208";a="260799742"
-Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
-  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 02:06:13 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Mon, 24 Aug 2026 02:06:12 -0700
-Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Mon, 24 Aug 2026 02:06:12 -0700
-Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.64) by
- edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Mon, 24 Aug 2026 02:06:12 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=n6Hs4smu1Ax69Dq+N4mrcnJhnbBd6CpjRTVBPcn/E2FfkrlOyE4zAsW6UHJdfjxLbF2NROMs76NO6qkGuKbokGbFPKE1n7v2HRU+Eb17PtXOwL6KBJHT+NvpzR14ku/dp7VUAQJikTTCS+JbsE6PCLquv6FmU0KH+8s5rRj3QP/wh19NWuDY653BQ87q+xXK+LWN7Ldf/YVjNfX6ZJVWuWdfa/npSlH5rN9vkdcvKiuggSLgVbY7wmDTlTqacHwqfR1Ef06EKmAFFAoA5fcJmJ/CnqdGT8whU9qICozTyS1xhj+yLSbHJ2cyAyLxB9nhQaUk6mWlgyT8m8yHJgXe5A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/2LCvBnHaO9ANKU9V7yoMlHmoFHEgZJgIW+MbscRQtQ=;
- b=LpxduMO51rRhpQ2taOlucTzyItHR+8cqF7qkgr0P0nh8giul/a0Hk3HAVBsXxjn4VeRPnC7Wr0FuiVvdF1vKxB0PIsZqMOBDI3Y3RAngn46PASzlM1zilmc4w+HhY3sDzHSjShIhzHaPfVJKut1Z3nM2Qa5cPQ8M/8rv4wAu168a8IN99RXTWbmR0GmJmNcKGIBacB7YL+m0IQoQDDATzfb+pSZeevMiz62/KAoEq7x4rmgZDKJE9lCLXBTVhjBbLr90LqUakUjkdcDAbOyy0T3q+sNU1Fz9TtR3hc0N+oD7rwVwDNAyYlt9x0DFByfXhICugs3sa/DFLTD3MKehTg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DSVPR11MB9579.namprd11.prod.outlook.com (2603:10b6:8:383::17)
- by SA3PR11MB969295.namprd11.prod.outlook.com (2603:10b6:806:532::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Mon, 24 Aug
- 2026 09:06:09 +0000
-Received: from DSVPR11MB9579.namprd11.prod.outlook.com
- ([fe80::ab5f:5d0f:fb90:9d]) by DSVPR11MB9579.namprd11.prod.outlook.com
- ([fe80::ab5f:5d0f:fb90:9d%3]) with mapi id 15.21.0339.008; Mon, 24 Aug 2026
- 09:06:09 +0000
-Date: Mon, 24 Aug 2026 17:05:34 +0800
-From: Yan Zhao <yan.y.zhao@intel.com>
-To: <ackerleytng@google.com>
-CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
-	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
-	<jmattson@google.com>, <jthoughton@google.com>, <michael.roth@amd.com>,
-	<oupton@kernel.org>, <pankaj.gupta@amd.com>, <qperret@google.com>,
-	<rick.p.edgecombe@intel.com>, <rientjes@google.com>, <shivankg@amd.com>,
-	<steven.price@arm.com>, <tabba@google.com>, <willy@infradead.org>,
-	<wyihan@google.com>, <forkloop@google.com>, <pratyush@kernel.org>,
-	<suzuki.poulose@arm.com>, <aneesh.kumar@kernel.org>, <liam@infradead.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>,
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, "Borislav
- Petkov" <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
-	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt
-	<rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, "Mathieu
- Desnoyers" <mathieu.desnoyers@efficios.com>, Jonathan Corbet
-	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
-	<shuah@kernel.org>, "Vishal Annapurve" <vannapurve@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
-	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
-	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
-	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
-	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
-	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
-	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
-	<jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
-	<peterx@redhat.com>, <tarunsahu@google.com>, Vlastimil Babka
-	<vbabka@kernel.org>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-coco@lists.linux.dev>
-Subject: Re: [PATCH v10 18/41] KVM: TDX: Make source page optional for
- KVM_TDX_INIT_MEM_REGION
-Message-ID: <aowJXhCdxy9j2qJf@yzhao56-desk.sh.intel.com>
-Reply-To: Yan Zhao <yan.y.zhao@intel.com>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-18-2fc18ee6d3ba@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20260807-gmem-inplace-conversion-v10-18-2fc18ee6d3ba@google.com>
-X-ClientProxiedBy: KU0P306CA0086.MYSP306.PROD.OUTLOOK.COM
- (2603:1096:d10:2b::19) To DSVPR11MB9579.namprd11.prod.outlook.com
- (2603:10b6:8:383::17)
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="e1eo9w/4"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B333E1682;
+	Mon, 24 Aug 2026 02:20:10 -0700 (PDT)
+Received: from [10.164.19.33] (unknown [10.164.19.33])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48C8B3F66F;
+	Mon, 24 Aug 2026 02:20:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787563214; bh=Rvtrha3WTwJfTW7AGl4KCnnuSmmFePp1BK56VobH9xE=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=e1eo9w/4F3aeUbP3ylOLqmXreb1gqC5tm96XNjAdlcRRSjG12eqVCqr3IJnEbgJBj
+	 zpqIXpj9Frupixb9kRecyrH22PZUEnc5PVqJ3almuz0qWkOKQqxnSuLmKAYYEYVveq
+	 fuZWLqK8DRJc3Yn3nCJu/7Cp3uvr/WhmOfajoEPQ=
+Message-ID: <fcf8ad92-0617-4bf5-a94b-ba06c20581c3@arm.com>
+Date: Mon, 24 Aug 2026 14:50:06 +0530
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DSVPR11MB9579:EE_|SA3PR11MB969295:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9b829e63-a8f4-454f-50f5-08df01bef025
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|6133799003|10067099003|56012099006|11063799006|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info: r170g3lkWIWBFucUUog1uYF/rF/POjRR1gV7KkTPeCsXWgzMfpwbfERa3txFUGU+jFmtOf5baH2ItDXLWYjSed3UylbeXRJWhbJdnMKKPlwptIolPLrYW60O6CqzH07ucvp5BP2UWpb3yqOvXJ0Q1SW2VYPIcnC8Gs8cDhRHqlO3Hk11+WfN5P9DzX9s8BNg5YcerqNobZjkf0ATgTnurnDe2pfo1XXZcAy17Q6KfDb1tJHmJAZyrGSp0GikNW/xrjsOeNMQBXlJp9O9MAkBgNEu6K8f6pAl/R/nbfW9pt3LlAL0Q4w42adv/04wtKqfs6rcBDSV5G9Uy3fBrdg7pdpXvu27f4s9YHBZ8hznJMLH5moN3NZU/WIcak+iKED0WoYkfCO5Ggs/BKJQyRqGzxJHrWkIhOTpLziAOSCkDDn+MUNo9vfIHzrCynOmoo81EMKl3BzMqbs4M4TTUQ08pU9QxlMOaiWjeRwcmO8dek3EP2gBJ+eSHQRLuWwMJnaX/RKZ/WPp2qyXr3ktxblurMbwnfPTHf3UCgLieaUYjUZJnMOdEDKbGM1AExoK1Tf1wtEnHc2rfWmLj3dc97oqZzO8RHPPuY9JbaPRB924JJd5UhkpdMbQov28YnWri4oJLc3qBMP81F3qyTRqGoMpaohK0V66XKUX/n+XUlcUEs0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DSVPR11MB9579.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(6133799003)(10067099003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9mV0qOnl0DpKQIJS0wefrHaiVSzW30FQR7z6kh+C34dkbIpxQ/aCnS7+B3JU?=
- =?us-ascii?Q?ptrPqK+TF83+V2zORcx3eTxJ+0OCEHtdqcCD+HQs1HcP5fr4gs4BGZMLxY90?=
- =?us-ascii?Q?oZXN28Vhmm7Uh5mBxEEqmfgOGVf/ybu95JOJ1lRpEsE51vWnvebpF+nR3s4S?=
- =?us-ascii?Q?cNi4dFEhimvUqu1YsU/tdaQPYu3fHophoNj+Vq70lQqxMOloxoTBh22+9HiY?=
- =?us-ascii?Q?+iqeVkJqN1gbPnYptW4xUAhLGgh+X3+/sUGe4AI8YqAp1PO1IsUVnTpI4C6E?=
- =?us-ascii?Q?nlWsBgfgbQltcObud7WILR0hSTx4m5BJgQq4bZg6MghdSqjTKnk6FlvuBOBS?=
- =?us-ascii?Q?Cn8xTxWBwXZCAJFYQZhq4543cldSooiLUkba3j9AB7YrRBO6fnewCqTnfknH?=
- =?us-ascii?Q?z7AnLaQj4GJNfeUfeonszmIwp8M7vY4IGDL6uXmThEbwUBkXtpQBpfbQRLqn?=
- =?us-ascii?Q?3DZCLKDwTQTBJjWkaXA6zySxJ+vtDsgavuLjZRLadfRFapRsMNjmGqrw5mhl?=
- =?us-ascii?Q?DXke8h+o7rnfaHKjMgAouSR7vFMx3lkVqcT5OUyVw27yZTek+TTV9BOhudul?=
- =?us-ascii?Q?33paZMomyQgYk7az4d3EuJhkqNL5HEXWHsXd2TrgauukfCxfAkpwURbuFR8T?=
- =?us-ascii?Q?X3nkDjgbS41Qen/U5qPXitGqjfesrTVnoLRWz1y34mJu0FEK0IGupJVziEdd?=
- =?us-ascii?Q?g408eDEd+MNQ+85Otr4oCmsYjSbNCrMGlXKDcFATVdApdwYpr/l8IQ5K6eJU?=
- =?us-ascii?Q?jic+pM6XUMjNlgX4sjeS/KzUUjXvEes2R9C9UX7xLEA42U42cgyBGkjVulq1?=
- =?us-ascii?Q?KZmlkuJ6pl4fxiZk1ApqA97FFc7bq9csoDC8HSttRA6stkSlS4fs84VDuB5k?=
- =?us-ascii?Q?xTOfWMX4FRdCRAgInJSlucQq4xc2i2GkWbxl6jj+OpCs97HQs9DFHo0Ks5wb?=
- =?us-ascii?Q?/7OA2N+j7rvIWLm3ARzldS0NMZ9oYZP3nV/LAu96fhYaxvOQ76Y/U0MhydeO?=
- =?us-ascii?Q?j6YN5ZU1enZldG7OVCEtjkothskpej1zp7f5GjfR4GfByBmFWNY72EjQOM3O?=
- =?us-ascii?Q?yyTNp0TD3ZjEP2R/KPD+U9jEgE75Durf/Y304N2gUw+AaC3W8IWBirP/jcgx?=
- =?us-ascii?Q?s843mdqiET8OM+2nVFoAHQo+U5p/1efFrOXA6/F4fkY6yc01GI6diPcE0y6q?=
- =?us-ascii?Q?Mg5esPheUXk3KtR3I470+EyqPo1TrOLSxD0xwpPp1uhol1WfgRZXWFjkZWqA?=
- =?us-ascii?Q?O/RxwcdaLZ/2axkOMsrL8a0jz6W4XYCVbIV7OwreSrncCvC3ladLoSBIFNnN?=
- =?us-ascii?Q?9cmm9Ou9NHC/OmjKlbe7BO9QnHNx4URIKSBOJaUPyfuJ4A4rJ5XUTiVIK77f?=
- =?us-ascii?Q?Js2FBC8e72Rh9pTEvQZ/RvgzY+jl1aGwEHFvlE8ImtOZ/zh80ItbKxTAU6fI?=
- =?us-ascii?Q?hzWgz5R22A3yG5SRY59F49oW5RVHK4CEvH7lq04VSJ5NdERVjlkrKn1K9fYC?=
- =?us-ascii?Q?Ha6mOvLjz7vtOTPoF+U6F2pefr7nieXAz4/AuZ89/6mai5bCXQzHdUAc3Vz5?=
- =?us-ascii?Q?thUlTe69PtQoXWKvz3s5aJVwSj+2vbfAKSfZ3pJj5cBDNhGC+84nY+eXttUd?=
- =?us-ascii?Q?NM7KQ32v7YBbQ3H+A1H+PmM6jnFgyYraCCOYb20sOiar2dqtYWXEC7zhRL7O?=
- =?us-ascii?Q?7BL2hnM0LJtjzwhgr9HjlM2O0li7pmklA63mat1zbsN6SALYcqvmV7yjDkZs?=
- =?us-ascii?Q?miyDjRQWPA=3D=3D?=
-X-Exchange-RoutingPolicyChecked: I3Uxw5aIhiKjRl6mRa16fYOtCzIejqlFxz1OMmyH+NfwdrSfySdCEVXSclKCXfWd6aPxMOuto9PnGt80Iv6IF5hV2r7mgbE07+9HtlUgCObQXtmC+I1Fsv3uyCcsrm9ZuliKM343psx0C4QnvShuY4Tqr7jufryls7H4gZOJjRLfZ7rztIIPLjU4sT5nw5MnMbmYKdgpBbSzkbsrSSsaPTqdtMpX16lCJNZ7dWvedq35wx1zgnjRPqN0o5TkY7CCn1iHQZmTZ6d7VLykW2dub4ucxZGLUpHyjffrP4cRR8jUXpFdFVOsi48v++wOVGV6l55eagXeaOPFJxn/EHDZ0g==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9b829e63-a8f4-454f-50f5-08df01bef025
-X-MS-Exchange-CrossTenant-AuthSource: DSVPR11MB9579.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 09:06:09.6117
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4HShhGAl+T1VlVc/Sn5yBkRFT3WMDBPQuXMBb/0K9aQOLgUuSqz3euhFpFIVhjez/t0WsGxMPSPz2/t7BP58SA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB969295
-X-OriginatorOrg: intel.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] kselftest: mm: replace usage of /proc/self/smaps for
+ check_huge_xxx() helper
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
+ Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
+ <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
+Content-Language: en-US
+From: Dev Jain <dev.jain@arm.com>
+In-Reply-To: <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Aug 07, 2026 at 02:52:57PM -0700, Ackerley Tng via B4 Relay wrote:
-> From: Ackerley Tng <ackerleytng@google.com>
+
+
+On 21/08/26 1:10 am, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
 > 
-> Update tdx_gmem_post_populate() to handle cases where userspace requests
-> "no source page". To handle "no source page", populate (perform
-> TDH.MEM.PAGE.ADD) using memory in-place at the target PFN.
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+
+Replying to this because I saw my malloc commit pop up :)
+
+So IIUC the test is dependent on VMA boundaries. Therefore we shouldn't
+rely on a glibc function like memalign() which can do anything internally.
+
+I think in this case memalign is using one of the heaps, which reuses
+VMAs. Because I would expect mmap() to internally align the VMA start
+to 2M, as we handle this as a special case in kernel mmap code.
+
 > 
-> Allow "no source page" only when gmem_in_place_conversion is enabled,
-> because retroactively adding support for out-of-place conversion would mean
-> requiring a userspace update for a feature that's being deprecated.
+> This causes split_huge_page_test to fail because the check_huge_xxx()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
 > 
-> Also, KVM supporting "no source page" without in-place conversion would
-> effectively be an obscure zero-page optimization that relies on the page
-> being zeroed when it is allocated by guest_memfd.
+> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> /proc/self/smaps to detect huge pages and change the meaning of
+> check_huge_xxx()'s nr_hpages argument:
 > 
-> Rejecting "no source page" without in-place conversion scenario is valuable
-> for KVM developers since it helps newcomers understand what exactly is and
-> isn't possible.
+>   - nr_hpages > 0: check all of pages in the range are huge page.
+>   - nr_hpages < 0: check all of pages in the range are not huge page.
+>   - nr_hpages == 0: invalid.
 > 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  Documentation/virt/kvm/x86/intel-tdx.rst | 4 ++++
->  arch/x86/kvm/vmx/tdx.c                   | 8 +++++---
->  2 files changed, 9 insertions(+), 3 deletions(-)
+>  tools/testing/selftests/mm/khugepaged.c           |  26 ++---
+>  tools/testing/selftests/mm/split_huge_page_test.c |   6 +-
+>  tools/testing/selftests/mm/vm_util.c              | 135 ++++++++++++++++++----
+>  tools/testing/selftests/mm/vm_util.h              |   1 +
+>  4 files changed, 131 insertions(+), 37 deletions(-)
 > 
-> diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
-> index 6a222e9d09541..d8d9409120e61 100644
-> --- a/Documentation/virt/kvm/x86/intel-tdx.rst
-> +++ b/Documentation/virt/kvm/x86/intel-tdx.rst
-> @@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
->  Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
->  provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
+> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+> index 10e8dedcb087d..2e4665e6d5852 100644
+> --- a/tools/testing/selftests/mm/khugepaged.c
+> +++ b/tools/testing/selftests/mm/khugepaged.c
+> @@ -533,7 +533,7 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  	ret = madvise_collapse_retry(p, nr_hpages * hpage_pmd_size);
+>  	if (((bool)ret) == expect)
+>  		fail("Fail: Bad return value");
+> -	else if (!ops->check_huge(p, expect ? nr_hpages : 0))
+> +	else if (!ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
+>  		fail("Fail: check_huge()");
+>  	else
+>  		success("OK");
+> @@ -545,7 +545,7 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
+>  			     struct mem_ops *ops, bool expect)
+>  {
+>  	/* Sanity check */
+> -	if (!ops->check_huge(p, 0))
+> +	if (!ops->check_huge(p, -nr_hpages))
+>  		ksft_exit_fail_msg("Unexpected huge page\n");
+>  	__madvise_collapse(msg, p, nr_hpages, ops, expect);
+>  }
+> @@ -558,7 +558,7 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
+>  	int timeout = 6; /* 3 seconds */
 >  
-> +If guest_memfd in-place conversion is enabled, pass 0 for @source_addr
-> +to represent "no source page". A source page is required if in-place
-> +conversion is not enabled or not supported.
+>  	/* Sanity check */
+> -	if (!ops->check_huge(p, 0))
+> +	if (!ops->check_huge(p, -nr_hpages))
+>  		ksft_exit_fail_msg("Unexpected huge page\n");
+>  
+>  	madvise(p, nr_hpages * hpage_pmd_size, MADV_HUGEPAGE);
+> @@ -605,7 +605,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
+>  	if (ops != &__anon_ops)
+>  		ops->fault(p, 0, nr_hpages * hpage_pmd_size);
+>  
+> -	if (ops->check_huge(p, expect ? nr_hpages : 0))
+> +	if (ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -643,7 +643,7 @@ static void alloc_at_fault(void)
+>  
+>  	madvise(p, page_size, MADV_DONTNEED);
+>  	ksft_print_msg("Split huge PMD on MADV_DONTNEED...");
+> -	if (check_huge_anon(p, 0, hpage_pmd_size))
+> +	if (check_huge_anon(p, -1, hpage_pmd_size))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -815,7 +815,7 @@ static void collapse_single_pte_entry_compound(struct collapse_context *c, struc
+>  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+>  	ksft_print_msg("Split huge page leaving single PTE mapping compound page...");
+>  	madvise(p + page_size, hpage_pmd_size - page_size, MADV_DONTNEED);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -836,7 +836,7 @@ static void collapse_full_of_compound(struct collapse_context *c, struct mem_ops
+>  	ksft_print_msg("Split huge page leaving single PTE page table full of compound pages...");
+>  	madvise(p, page_size, MADV_NOHUGEPAGE);
+>  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -903,7 +903,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  
+>  	ksft_print_msg("Allocate small page...");
+>  	ops->fault(p, 0, page_size);
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -911,7 +911,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  	ksft_print_msg("Share small page over fork()...");
+>  	if (!fork()) {
+>  		/* Do not touch settings on child exit */
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -929,7 +929,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
+>  	exit_status = WEXITSTATUS(wstatus);
+>  
+>  	ksft_print_msg("Check if parent still has small page...");
+> -	if (ops->check_huge(p, 0))
+> +	if (ops->check_huge(p, -1))
+>  		success("OK");
+>  	else
+>  		fail("Fail");
+> @@ -955,7 +955,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
+>  		ksft_print_msg("Split huge page PMD in child process...");
+>  		madvise(p, page_size, MADV_NOHUGEPAGE);
+>  		madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -1003,7 +1003,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>  		ksft_print_msg("Trigger CoW on page %d of %d...",
+>  				hpage_pmd_nr - max_ptes_shared - 1, hpage_pmd_nr);
+>  		ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared - 1) * page_size);
+> -		if (ops->check_huge(p, 0))
+> +		if (ops->check_huge(p, -1))
+>  			success("OK");
+>  		else
+>  			fail("Fail");
+> @@ -1016,7 +1016,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
+>  			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
+>  			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
+>  				    page_size);
+> -			if (ops->check_huge(p, 0))
+> +			if (ops->check_huge(p, -1))
+>  				success("OK");
+>  			else
+>  				fail("Fail");
+> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+> index 99b45e5518199..4fcd330cf0726 100644
+> --- a/tools/testing/selftests/mm/split_huge_page_test.c
+> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
+> @@ -314,7 +314,7 @@ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hp
+>  		if (one_page[i] != (char)0)
+>  			ksft_exit_fail_msg("%ld byte corrupted\n", i);
+>  
+> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
+> +	if (!check_huge_anon(one_page, -nr_hpages, pmd_pagesize))
+>  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
+>  
+>  	rss_anon_after = rss_anon();
+> @@ -372,7 +372,7 @@ static void split_pmd_thp_to_order(int order)
+>  					   (pmd_order + 1)))
+>  		ksft_exit_fail_msg("Unexpected THP split\n");
+>  
+> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
+> +	if (!check_huge_anon(one_page, -4, pmd_pagesize))
+>  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
+>  
+>  	ksft_test_result_pass("Split huge pages to order %d successful\n", order);
+> @@ -746,7 +746,7 @@ static void split_thp_in_pagecache_to_order_at(size_t fd_size,
+>  		goto out;
+>  	}
+>  
+> -	if (!check_huge_file(addr, 0, pmd_pagesize)) {
+> +	if (!check_huge_file(addr, -(fd_size / pmd_pagesize), pmd_pagesize)) {
+>  		ksft_print_msg("Still FilePmdMapped not split\n");
+>  		err = EXIT_FAILURE;
+>  		goto out;
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 311fc5b4513eb..166d5d79289f3 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -14,6 +14,8 @@
+>  #define PMD_SIZE_FILE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
+>  #define SMAP_FILE_PATH "/proc/self/smaps"
+>  #define STATUS_FILE_PATH "/proc/self/status"
+> +#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
+> +#define KPAGEFLAGS_FILE_PATH "/proc/kpageflags"
+>  #define MAX_LINE_LENGTH 500
+>  
+>  unsigned int __page_size;
+> @@ -229,37 +231,128 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+>  	return entry;
+>  }
+>  
+> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
+> -		  uint64_t hpage_size)
+> -{
+> -	char buffer[MAX_LINE_LENGTH];
+> -	uint64_t thp = -1;
+> -	char *entry;
+> -
+> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
+> -	if (!entry)
+> -		goto err_out;
+> -
+> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
+> -		ksft_exit_fail_msg("Reading smap error\n");
+> -
+> -err_out:
+> -	return thp == (nr_hpages * (hpage_size >> 10));
+> -}
+> -
+>  bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, nr = 0;
+> +	uint64_t categories;
+> +	bool expect_huge;
 > +
->  Note, before calling this sub command, memory attribute of the range
->  [gpa, gpa + nr_pages] needs to be private.  Userspace can use
->  KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
-> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-> index b272c20586a74..7654a9f5fa128 100644
-> --- a/arch/x86/kvm/vmx/tdx.c
-> +++ b/arch/x86/kvm/vmx/tdx.c
-> @@ -3189,7 +3189,7 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
->  	if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
->  		return -EIO;
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = false;
+> +	} else
+> +		expect_huge = true;
+> +
+> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
+> +
+> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (categories & PAGE_IS_FILE)
+> +			continue;
+> +		nr++;
+> +	}
+> +
+> +	close(pagemap_fd);
+> +	return expect_huge ? nr == nr_hpages : nr == 0;
+>  }
 >  
-> -	kvm_tdx->page_add_src = src_page;
-> +	kvm_tdx->page_add_src = src_page ?: pfn_to_page(pfn);
->  	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
->  	kvm_tdx->page_add_src = NULL;
+>  bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, kpf_fd, nr = 0;
+> +	unsigned long pfn;
+> +	uint64_t categories, kpf;
+> +	bool expect_huge;
+> +
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = false;
+> +	} else
+> +		expect_huge = true;
+> +
+> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
+> +
+> +	kpf_fd = open(KPAGEFLAGS_FILE_PATH, O_RDONLY);
+> +	if (kpf_fd < 0)
+> +		ksft_exit_fail_msg("open kpageflags: %s\n", strerror(errno));
+> +
+> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
+> +		pfn = pagemap_get_pfn(pagemap_fd, addr);
+> +		if (pfn == -1UL)
+> +			continue;
+> +		if (pageflags_get(pfn, kpf_fd, &kpf))
+> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (!(categories & PAGE_IS_FILE))
+> +			continue;
+> +		if (kpf & KPF_SWAPBACKED)
+> +			continue;
+> +		nr++;
+> +	}
+> +
+> +	close(pagemap_fd);
+> +	close(kpf_fd);
+> +
+> +	return expect_huge ? nr == nr_hpages : nr == 0;
+>  }
 >  
-> @@ -3235,7 +3235,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
->  	if (copy_from_user(&region, u64_to_user_ptr(cmd->data), sizeof(region)))
->  		return -EFAULT;
+>  bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size)
+>  {
+> -	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> +	int i, pagemap_fd, kpf_fd, nr = 0;
+> +	unsigned long pfn;
+> +	uint64_t categories, kpf;
+> +	bool expect_huge;
+> +
+> +	if (nr_hpages == 0 || hpage_size == 0)
+> +		return false;
+> +
+> +	if (nr_hpages < 0) {
+> +		nr_hpages = -nr_hpages;
+> +		expect_huge = true;
+> +	} else
+> +		expect_huge = false;
+> +
+> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
+> +
+> +	kpf_fd = open(KPAGEFLAGS_FILE_PATH, O_RDONLY);
+> +	if (kpf_fd < 0)
+> +		ksft_exit_fail_msg("open kpageflags: %s\n", strerror(errno));
+> +
+> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
+> +		pfn = pagemap_get_pfn(pagemap_fd, addr);
+> +		if (pfn == -1UL)
+> +			continue;
+> +		if (pageflags_get(pfn, kpf_fd, &kpf))
+> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> +		if (!(categories & PAGE_IS_HUGE))
+> +			continue;
+> +		if (!(categories & PAGE_IS_FILE))
+> +			continue;
+> +		if (!(kpf & KPF_SWAPBACKED))
+> +			continue;
+> +		nr++;
+> +	}
+> +
+> +	close(pagemap_fd);
+> +	close(kpf_fd);
+> +
+> +	return expect_huge ? nr == nr_hpages : nr == 0;
+>  }
 >  
-> -	if (!PAGE_ALIGNED(region.source_addr) || !region.source_addr ||
-> +	if (!PAGE_ALIGNED(region.source_addr) ||
-> +	    (!gmem_in_place_conversion && !region.source_addr) ||
->  	    !PAGE_ALIGNED(region.gpa) || !region.nr_pages ||
->  	    region.gpa + (region.nr_pages << PAGE_SHIFT) <= region.gpa ||
->  	    !vt_is_tdx_private_gpa(kvm, region.gpa) ||
-> @@ -3266,7 +3267,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
->  			break;
->  		}
+>  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index ea8fc8fdf0eb0..0a1627f36efc3 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -18,6 +18,7 @@
+>  #define PM_SWAP                       BIT_ULL(62)
+>  #define PM_PRESENT                    BIT_ULL(63)
 >  
-> -		region.source_addr += PAGE_SIZE;
-> +		if (region.source_addr)
-> +			region.source_addr += PAGE_SIZE;
->  		region.gpa += PAGE_SIZE;
->  		region.nr_pages--;
-
-Tested the following scenarios:
-1.gmem_in_place_conversion == true,
-  (1) region.source_addr == NULL.
-      ==> TD launched successfully.
-
-  (2) region.source_addr != NULL,
-      region.source_addr is not from mmap() of the guest_memfd (double backends)
-      ==> TD launched successfully.
-
-  (3) region.source_addr != NULL,
-      region.source_addr is from mmap() of the guest_memfd (single backend),
-      GPA is private.
-      ==> Failed (-EFAULT).
-
-  (4) region.source_addr != NULL,
-      region.source_addr is from mmap() of the guest_memfd (single backend),
-      GPA is shared.
-      ==> Failed (-EINVAL).
-
-2. gmem_in_place_conversion == false,
-  (1) region.source_addr == NULL.
-      ==> Failed (-EINVAL).
-
-  (2) region.source_addr is not from mmap() of the guest_memfd.
-      ==> TD launched successfully.
- 
-
-So,
-Tested-by: Yan Zhao <yan.y.zhao@intel.com>
-Reviewed-by:  Yan Zhao <yan.y.zhao@intel.com>
+> +#define KPF_SWAPBACKED                BIT_ULL(14)
+>  #define KPF_COMPOUND_HEAD             BIT_ULL(15)
+>  #define KPF_COMPOUND_TAIL             BIT_ULL(16)
+>  #define KPF_HWPOISON                  BIT_ULL(19)
+> 
 
