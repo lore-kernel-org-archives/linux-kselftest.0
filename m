@@ -1,119 +1,91 @@
-Received: from mta0.migadu.com (out-11.mta0.migadu.com [91.218.175.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E85143749E3
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 05:02:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7AC3769F0;
+	Mon, 24 Aug 2026 06:41:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787547773; cv=none; b=KT+C1sQaAKc70lJqfYSigOZpzOBEPlwZeK6e32XpPLZnWXZlgEMmeebjwQeuk8IDTwzj40IHjS50nDHO9VgOaCoiNh4xAzejAaqXGkwg2ljDJX+22GjNTSzDWsi+InHJ4nR6HsfvcF8iK54D/fe1K+xP9BTAV7FHF7sEmeQ0Qko=
+	t=1787553670; cv=none; b=EXS54hmJaGj+120XdGO9VqbDCRXGW5HRtN9VK6s6Czp1qbRFyS3dodtSncIn3F0Bn7NUYOgDq4+Mg1r6cyy8NP/60gS3HuygKYv/2T2RxxqRbEtPx4qsGTJgYJpkjhoCBkWjjHZ6hRtbBLBeCpxoIfuXOnXdSULZBzO8va/MNMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787547773; c=relaxed/simple;
-	bh=k2MEm8TxX/ObvL3bEaNmqF4s53Uqj2jfcYNMEJ2RUKg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DVGfwPB2hGvh6NYYB4JoaJ8F9HlWqpH645+94Ts5COjFuaB9Yvl6QzsG4OxAvj4t5/dUoK+U2GKAA+k8rxsE2kGFfTjIRsjA0AgOOpLeEbyzpQBUu5oqOkkW36ttuqNe81t50nwM9Y+3AiKXvVGhAGFoEX+uU8+bLKgNZjmlajE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IafYWYgC; arc=none smtp.client-ip=91.218.175.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IafYWYgC"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=k2MEm8TxX/ObvL3bEaNmqF4s53Uqj2jfcYNMEJ2RUKg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787547769; v=1; x=1788152569;
- b=IafYWYgCJB3VPEdgRMhHTwpqY9o6ga2nEJRuFng4t/6LShhiwZshm5ScmIqfLf/3zglyMjc9
- wvJPH/8VInLsMvbj8ov/iHlduezotClnzFxjC7h/8wRWaWaEECCLbvdh4QzGrI2ww4FJ1ySk5K8
- XTUvKFpyzdm79SKMJYxhfwOc=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id 49d1502f963dc72a;
-	Mon, 24 Aug 2026 05:02:49 +0000
-X-Mizu-Trace-ID: 49d1502f963dc72a
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <90bbc900-21cd-4dfb-a058-13930378052f@linux.dev>
-Date: Mon, 24 Aug 2026 13:02:37 +0800
+	s=arc-20240116; t=1787553670; c=relaxed/simple;
+	bh=0q8C/sBZvT3gYGnxgQRmLqehElSdputVSzITVFBXaTM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=TNAFswCHO1XWZQp0t0lIE+u4rP23bC9vEBuY4kd2VbE4lQVy7Q9x/H8zeDl+bWe5oaO/72aPx1tyePitOOyxY1yrJxC3PG/M4u3rpRCjXyLPETo56kVWNqogOkpXQ64m39h33BBo1DpjNH91rd8pBoRekm2Uolr/c0r3+AgKZBk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: c1603f269f8611f19a56ed5b684f684d-20260824
+X-CTIC-Tags:
+	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
+	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
+	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
+	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
+	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
+	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
+	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
+	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.19,REQID:d6004999-4ff3-4401-8283-fd56e1256820,IP:15,
+	URL:0,TC:0,Content:-5,EDM:0,RT:1,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+	N:release,TS:11
+X-CID-INFO: VERSION:1.3.19,REQID:d6004999-4ff3-4401-8283-fd56e1256820,IP:15,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:1,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:11
+X-CID-META: VersionHash:7db8b62,CLOUDID:664ea2e1f5260cca0433da99c0c178d5,BulkI
+	D:2608241440596H0VOLEZ,BulkQuantity:0,SF:17|19|38|66|78|81|82|83|102|127|8
+	41|850|865|898|915,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:n
+	il,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
+	,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: c1603f269f8611f19a56ed5b684f684d-20260824
+X-User: wangyan01@kylinos.cn
+Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
+	(envelope-from <wangyan01@kylinos.cn>)
+	(Generic MTA)
+	with ESMTP id 2139166115; Mon, 24 Aug 2026 14:40:54 +0800
+From: Wang Yan <wangyan01@kylinos.cn>
+To: gnoack@google.com,
+	mic@digikod.net,
+	shuah@kernel.org
+Cc: lihaofeng@kylinos.cn,
+	wangyan01@kylinos.cn,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-security-module@vger.kernel.org
+Subject: Re: [PATCH] selftests/landlock: Fix snprintf truncation checks in test files
+Date: Mon, 24 Aug 2026 14:40:32 +0800
+Message-Id: <20260824064032.774597-1-wangyan01@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20260626070016.61049-1-wangyan01@kylinos.cn>
+References: <20260626070016.61049-1-wangyan01@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
- for percpu data
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260818153202.90714-1-leon.hwang@linux.dev>
- <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
- <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
- <CAEf4Bza6X9SZmnyqdZDFKJG5nWchuaEuFyC-MbuzQCuZ+dwq+w@mail.gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4Bza6X9SZmnyqdZDFKJG5nWchuaEuFyC-MbuzQCuZ+dwq+w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 22/8/26 01:58, Andrii Nakryiko wrote:
-> On Tue, Aug 18, 2026 at 6:44 PM Leon Hwang <leon.hwang@linux.dev> wrote:
->>
->> On 19/8/26 00:15, bot+bpf-ci@kernel.org wrote:
->>>> diff --git a/tools/testing/selftests/bpf/prog_tests/global_data_init.c b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>>> index 5671c31085cd..2b69290bcc3e 100644
->>>> --- a/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>>> +++ b/tools/testing/selftests/bpf/prog_tests/global_data_init.c
->>>
->>> [ ... ]
->>>
->>>> @@ -236,6 +223,57 @@ static void test_global_percpu_data_lskel(void)
->>>>      test_global_percpu_data_lskel__destroy(lskel);
->>>>  }
->>>>
->>>> +#define PAGE_SIZE 4096
->>>> +
->>>> +static void test_global_percpu_data_map_resize(void)
->>>> +{
->>>> +    const __u32 desired_sz = sysconf(_SC_PAGE_SIZE) * 2;
->>>> +    struct test_global_percpu_data *skel;
->>>> +    const int arr_value = -1;
->>>> +    struct bpf_map *map;
->>>> +    int err, prog_fd;
->>>> +    size_t data_sz;
->>>> +
->>>> +    if (sysconf(_SC_PAGE_SIZE) != PAGE_SIZE) {
->>>> +            test__skip();
->>>> +            return;
->>>> +    }
->>>> +
->>>> +    skel = test_global_percpu_data__open();
->>>> +    if (!ASSERT_OK_PTR(skel, "test_global_percpu_data__open"))
->>>> +            return;
->>>> +
->>>> +    map = skel->maps.percpu_arr;
->>>> +    skel->percpu_arr->arr[0] = arr_value;
->>>> +    err = bpf_map__set_value_size(map, desired_sz);
->>>
->>> This isn't a bug, but since the guard above already pins the page size to
->>> 4096, would `const __u32 desired_sz = PAGE_SIZE * 2;` read more directly
->>
->> Will change to 'PAGE_SIZE * 2' if the next revision is needed.
->>
->>> here - and is the unguarded `#define PAGE_SIZE 4096` preferable to the
->>> `#ifndef PAGE_SIZE` form used in sockopt.c?
->>
->> No. PAGE_SIZE must be 4096 here.
->>
-> 
-> can you please elaborate why do we care about specific PAGE_SIZE
-> value? it's a bit weird to guard test based on page size...
-> 
-It is to verify the mmap change in libbpf's bpf_map_mmap_resize() for
-percpu data map, like those subtests in global_map_resize.c.
+Hi maintainers and reviewers,
 
-Thanks,
-Leon
+I hope this email finds you well.
 
+I submitted this patch on June 26, 2026, and it has not received any
+review comments yet. I understand you are very busy, but I would
+greatly appreciate it if you could take a look when you have a moment.
+
+The patch fixes the remaining snprintf truncation checks in
+selftests/landlock test files (audit_test.c, net_test.c, ptrace_test.c)
+to match the already-merged fix in audit.h. It is a small and
+straightforward change.
+
+Please let me know if any adjustments are needed. I'm happy to update
+the patch based on your feedback.
+
+Thank you for your time and work!
+
+Best regards,
+Wang Yan
