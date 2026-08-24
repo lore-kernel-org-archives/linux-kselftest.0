@@ -1,297 +1,128 @@
-Received: from mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A4E737475C
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 03:07:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25D0421CA02
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 03:23:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787540879; cv=none; b=TTLYWut3XLEzEbS85uaqHr4Oi4o2bpe3q1FMMgLnNbkxTzF9l4gKJwLqb/j7bzDl64yULFXeyig20s6Nea2QlbOyOpP7EJ1AigghP8octToPnMF1efmWT7+tvzhcXHtdgrKT6jBm5lHnEFoOrhfw9h4KI85ibJJ3X4pqJe1+zio=
+	t=1787541823; cv=none; b=RsPwSGloTrkwaPU/vRyaV2sKCX1WT6ZNDrxGK5zwRbjBxe1P/vH3LhSu3cSUxY/wLqFdM2G5Y7zuF2hBTtTNeiMxQIJq1A3kbuRNjMnIlZZhPDJh52LD8uMDQ271ACgyBrrRtwbQeuoVcc8uhCv9su/Wl7OviwK85dcQEVaOLXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787540879; c=relaxed/simple;
-	bh=l7q9NfVO33RZqDNAKsacw9ostqtqL107XpOn/D3Gino=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FnKZIiECIN43YayHxbwV1CCAhl5jepO1JQKqnQPlUzKuSVK9QsJ7+e6vCDBIXBHGsn6b+y+w6T0DUt/hSvKXrmzzWYw5Bju4GsrxCsd6PIIut9fBLJEsNE9U+iXuRlwph6EqBBxJrR7nhfSC/0dT0UBlClPG9rDFwa4r7q+s/mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=IOGDx5Ub; arc=none smtp.client-ip=95.215.58.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787541823; c=relaxed/simple;
+	bh=zSzxzmyO/fbt5TXO5SH7GheeONpcTwtNS2YgN0J1KMU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZNuixNvboUf0Aky1lLrXeyN87EQ/uT2ZN0gdx0qKUvyIxcuJ+JAwUyYgde1pwhEhFVZrrR9cukVokeoCqEMV8TouYyzQtJqHD7fK4Hd01hnrDB1yshbF/4BQKYm/dzfizy0Z2wYjTw4sU0Dab1C4tijGFOrrjMKP1Aoa2vyb/Bc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=i8wDys3Y; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="IOGDx5Ub"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=l7q9NfVO33RZqDNAKsacw9ostqtqL107XpOn/D3Gino=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787540875; v=1; x=1788145675;
- b=IOGDx5UbkUc1UuEiDnbbKjG+65tX+P+a0Xp0/9CfDU3XUO5ioPCqS3G6gb/dxsWMTPb9Dekw
- DCV3LC8/wtaP995l4mMMQMYLcVAW96FqMxJaGwdYZUGFrFU4i6+IDEGgGF68LNwMGdQZkNPsbj5
- B3QXjjeeFPEF/oU6GfnnUs14=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.0)
-	by smtp.migadu.com with ESMTPS id ab67b601b70d2fa5;
-	Mon, 24 Aug 2026 03:07:54 +0000
-X-Mizu-Trace-ID: ab67b601b70d2fa5
-X-Migadu-Flow: FLOW_OUT
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-To: bpf@vger.kernel.org,
-	netdev@vger.kernel.org
-Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Paolo Abeni <pabeni@redhat.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Simon Horman <horms@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Kuniyuki Iwashima <kuniyu@google.com>,
-	Hangbin Liu <liuhangbin@gmail.com>,
-	Krishna Kumar <krikku@gmail.com>,
-	Martin Karsten <mkarsten@uwaterloo.ca>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
-	Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: add xdp_shrink_frags
-Date: Mon, 24 Aug 2026 11:06:44 +0800
-Message-ID: <20260824030705.266049-2-jiayuan.chen@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260824030705.266049-1-jiayuan.chen@linux.dev>
-References: <20260824030257.263179-1-jiayuan.chen@linux.dev>
- <20260824030705.266049-1-jiayuan.chen@linux.dev>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="i8wDys3Y"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787541820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=dx3iauYGB2wh5SOGuiI8wNYp9ILiPQCebTLiJWu4GvA=;
+	b=i8wDys3YxPwky1pOmR3bvd5FsAvmhbiJNKMm8OWMZpyAEC48Mnlm821jmUXZOH2MmZUuZ2
+	EE43OPlGETXJdTgFW0tz1aCNYzFlemnZM0Y9766fG4ejaJvw6VgXfTkmWi2V8jL/jaIFzN
+	mXrxuDrUGEaDzwDw11lQ5TpYV+ZA354=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-328-fkp6jIw4MDKbEi1xftEUbQ-1; Sun,
+ 23 Aug 2026 23:23:38 -0400
+X-MC-Unique: fkp6jIw4MDKbEi1xftEUbQ-1
+X-Mimecast-MFC-AGG-ID: fkp6jIw4MDKbEi1xftEUbQ_1787541816
+Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 04251195C24D;
+	Mon, 24 Aug 2026 03:23:36 +0000 (UTC)
+Received: from [100.91.18.181] (headnet04.pony-001.prod.iad2.dc.redhat.com [10.2.32.116])
+	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 09CB018005BB;
+	Mon, 24 Aug 2026 03:23:33 +0000 (UTC)
+Message-ID: <69a0e8e7-199f-4e99-aa21-0c888680a037@redhat.com>
+Date: Sun, 23 Aug 2026 23:23:32 -0400
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/3] selftests/cgroup: Drop invalid boot isolation
+ comparison
+To: Guopeng Zhang <guopeng.zhang@linux.dev>, Tejun Heo <tj@kernel.org>,
+ Ridong Chen <ridong.chen@linux.dev>
+Cc: Johannes Weiner <hannes@cmpxchg.org>, Michal Koutny <mkoutny@suse.com>,
+ Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260824020140.21130-1-guopeng.zhang@linux.dev>
+ <20260824020140.21130-2-guopeng.zhang@linux.dev>
+Content-Language: en-US
+From: Waiman Long <longman@redhat.com>
+In-Reply-To: <20260824020140.21130-2-guopeng.zhang@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
 
-Add a test that attaches an xdp.frags program which shrinks a whole frag
-away, so bpf_xdp_shrink_data() frees a page_pool frag.
+On 8/23/26 10:01 PM, Guopeng Zhang wrote:
+> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>
+> check_isolcpus() clears ISOLCPUS before rebuilding it from sched domain
+> data. Comparing that empty value with
+> /sys/devices/system/cpu/isolated makes the test fail whenever
+> isolcpus=domain is present.
+>
+> That sysfs file is generated from HK_TYPE_DOMAIN_BOOT and does not change
+> when cpuset updates HK_TYPE_DOMAIN. Re-reading it cannot validate dynamic
+> housekeeping updates. The cpuset.cpus.isolated and sched domain checks
+> already cover the two dynamic interfaces, so remove the invalid comparison.
+>
+> This can be reproduced on a kernel booted with isolcpus=domain,15:
+>
+>      # tools/testing/selftests/cgroup/test_cpuset_prs.sh
+>
+> The test fails its first state-matrix isolation check before the change and
+> continues past that check afterward.
+>
+> Fixes: 6df415aa46ec ("cgroup/cpuset: Defer housekeeping_update() calls from CPU hotplug to workqueue")
+> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+> ---
+>   tools/testing/selftests/cgroup/test_cpuset_prs.sh | 6 ------
+>   1 file changed, 6 deletions(-)
+>
+> diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> index da8f7b920178..fdb3185570d4 100755
+> --- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> +++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
+> @@ -797,7 +797,6 @@ check_isolcpus()
+>   	EXPECTED_ISOLCPUS=$1
+>   	ISCPUS=${CGROUP2}/cpuset.cpus.isolated
+>   	ISOLCPUS=$(cat $ISCPUS)
+> -	HKICPUS=$(cat /sys/devices/system/cpu/isolated)
+>   	LASTISOLCPU=
+>   	SCHED_DOMAINS=/sys/kernel/debug/sched/domains
+>   	if [[ $EXPECTED_ISOLCPUS = . ]]
+> @@ -835,11 +834,6 @@ check_isolcpus()
+>   	ISOLCPUS=
+>   	EXPECTED_ISOLCPUS=$EXPECTED_SDOMAIN
+>   
+> -	#
+> -	# The inverse of HK_TYPE_DOMAIN cpumask in $HKICPUS should match $ISOLCPUS
+> -	#
+> -	[[ "$ISOLCPUS" != "$HKICPUS" ]] && return 1
+> -
+>   	#
+>   	# Use the sched domain in debugfs to check isolated CPUs, if available
+>   	#
 
-test_tun triggers the page-type mismatch on the generic XDP path.
-test_veth triggers the same mismatch on the veth path.
+The /sys/devices/system/cpu/isolated had recently be changed to report 
+the boot time isolcpus=domain value. So the check is no longer valid and 
+should be removed. Of course the position of the check is also 
+problematic. So it should be removed.
 
-Both reproduce "Bad page state ... page_pool leak" on a buggy kernel.
-
-Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
----
- .../bpf/prog_tests/xdp_shrink_frags.c         | 163 ++++++++++++++++++
- .../selftests/bpf/progs/xdp_shrink_frags.c    |  23 +++
- 2 files changed, 186 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
- create mode 100644 tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
-new file mode 100644
-index 000000000000..f3d8a84a6dc9
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/xdp_shrink_frags.c
-@@ -0,0 +1,163 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include <network_helpers.h>
-+#include <linux/if_tun.h>
-+#include <linux/if_ether.h>
-+#include <sys/uio.h>
-+#include <net/if.h>
-+#include <arpa/inet.h>
-+#include "xdp_shrink_frags.skel.h"
-+
-+/*
-+ * A generic-XDP program that shrinks into the frags frees a page_pool frag.
-+ * skb-backed XDP first cow's the nonlinear skb into page_pool memory
-+ * (skb_cow_data_for_xdp() for generic XDP, skb_pp_cow_data() for veth), but
-+ * the shared rxq is registered as MEM_TYPE_PAGE_SHARED, so a buggy kernel
-+ * frees the frag with page_frag_free() -> "Bad page state ... page_pool leak".
-+ */
-+
-+#define TAP_NAME	"xdp_shrink0"
-+#define TAP_NETNS	"xdp_shrink_tap"
-+
-+#define VETH_LOCAL	"xdp_shrinkA"
-+#define VETH_PEER	"xdp_shrinkB"
-+#define VETH_NETNS	"xdp_shrink_veth"
-+#define VETH_LOCAL_IP	"10.9.9.1"
-+#define VETH_PEER_IP	"10.9.9.2"
-+
-+static int create_tap_napi_frags(const char *ifname)
-+{
-+	struct ifreq ifr = {
-+		.ifr_flags = IFF_TAP | IFF_NO_PI | IFF_NAPI | IFF_NAPI_FRAGS,
-+	};
-+	int fd, err;
-+
-+	strscpy(ifr.ifr_name, ifname);
-+
-+	fd = open("/dev/net/tun", O_RDWR);
-+	if (fd < 0)
-+		return -1;
-+
-+	err = ioctl(fd, TUNSETIFF, &ifr);
-+	if (err) {
-+		close(fd);
-+		return -1;
-+	}
-+
-+	return fd;
-+}
-+
-+/*
-+ * Similar to flow_dissector.c: writev() an IFF_NAPI_FRAGS tap to build a
-+ * nonlinear skb (sized for 4K pages, like xdp_adjust_tail.c) that tun runs
-+ * through do_xdp_generic().
-+ */
-+static void test_tun(struct xdp_shrink_frags *skel)
-+{
-+	__u8 head[74], frag1[2048], frag2[2048];
-+	struct ethhdr *eth = (void *)head;
-+	int tap_fd = -1, ifindex, err;
-+	struct netns_obj *ns = NULL;
-+	struct iovec iov[3];
-+	ssize_t n;
-+
-+	ns = netns_new(TAP_NETNS, true);
-+	if (!ASSERT_OK_PTR(ns, "netns_new"))
-+		return;
-+
-+	tap_fd = create_tap_napi_frags(TAP_NAME);
-+	if (!ASSERT_GE(tap_fd, 0, "create_tap"))
-+		goto out;
-+
-+	SYS(out, "ip link set dev " TAP_NAME " up");
-+
-+	ifindex = if_nametoindex(TAP_NAME);
-+	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
-+		goto out;
-+
-+	skel->bss->shrink_ran = 0;
-+
-+	err = bpf_xdp_attach(ifindex, bpf_program__fd(skel->progs.xdp_shrink),
-+			     0, NULL);
-+	if (!ASSERT_OK(err, "bpf_xdp_attach"))
-+		goto out;
-+
-+	memset(head, 0, sizeof(head));
-+	memset(frag1, 0x41, sizeof(frag1));
-+	memset(frag2, 0x42, sizeof(frag2));
-+	eth->h_proto = htons(ETH_P_IP);
-+
-+	iov[0].iov_base = head;  iov[0].iov_len = sizeof(head);
-+	iov[1].iov_base = frag1; iov[1].iov_len = sizeof(frag1);
-+	iov[2].iov_base = frag2; iov[2].iov_len = sizeof(frag2);
-+
-+	n = writev(tap_fd, iov, ARRAY_SIZE(iov));
-+	ASSERT_EQ(n, sizeof(head) + sizeof(frag1) + sizeof(frag2), "writev");
-+
-+	usleep(100 * 1000);
-+	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
-+
-+	bpf_xdp_detach(ifindex, 0, NULL);
-+out:
-+	if (tap_fd >= 0)
-+		close(tap_fd);
-+	netns_free(ns);
-+}
-+
-+/*
-+ * A large ping builds a nonlinear skb that veth cow's into its page_pool
-+ * (sized for 4K pages, like xdp_adjust_tail.c) before running the program.
-+ */
-+static void test_veth(struct xdp_shrink_frags *skel)
-+{
-+	int ifindex, err;
-+
-+	SYS(out, "ip netns add " VETH_NETNS);
-+	SYS(out_ns, "ip link add %s mtu 8000 type veth peer name %s mtu 8000",
-+	    VETH_LOCAL, VETH_PEER);
-+	SYS(out_link, "ip link set " VETH_PEER " netns " VETH_NETNS);
-+	SYS(out_link, "ip addr add " VETH_LOCAL_IP "/24 dev " VETH_LOCAL);
-+	SYS(out_link, "ip link set " VETH_LOCAL " up");
-+	SYS(out_link, "ip -n " VETH_NETNS " addr add " VETH_PEER_IP "/24 dev " VETH_PEER);
-+	SYS(out_link, "ip -n " VETH_NETNS " link set " VETH_PEER " up");
-+
-+	ifindex = if_nametoindex(VETH_LOCAL);
-+	if (!ASSERT_GT(ifindex, 0, "if_nametoindex"))
-+		goto out_link;
-+
-+	skel->bss->shrink_ran = 0;
-+
-+	err = bpf_xdp_attach(ifindex, bpf_program__fd(skel->progs.xdp_shrink),
-+			     0, NULL);
-+	if (!ASSERT_OK(err, "bpf_xdp_attach"))
-+		goto out_link;
-+
-+	SYS_NOFAIL("ip netns exec " VETH_NETNS
-+		   " ping -q -s 5000 -c 3 -W 1 " VETH_LOCAL_IP);
-+
-+	ASSERT_GT(skel->bss->shrink_ran, 0, "xdp_prog_ran");
-+
-+	bpf_xdp_detach(ifindex, 0, NULL);
-+out_link:
-+	SYS_NOFAIL("ip link del " VETH_LOCAL);
-+out_ns:
-+	SYS_NOFAIL("ip netns del " VETH_NETNS);
-+out:
-+	return;
-+}
-+
-+void test_xdp_shrink_frags(void)
-+{
-+	struct xdp_shrink_frags *skel;
-+
-+	skel = xdp_shrink_frags__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-+		return;
-+
-+	if (test__start_subtest("tun"))
-+		test_tun(skel);
-+	if (test__start_subtest("veth"))
-+		test_veth(skel);
-+
-+	xdp_shrink_frags__destroy(skel);
-+}
-diff --git a/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
-new file mode 100644
-index 000000000000..62e3791ac81d
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/xdp_shrink_frags.c
-@@ -0,0 +1,23 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include "vmlinux.h"
-+#include <bpf/bpf_helpers.h>
-+
-+int shrink_ran;
-+
-+SEC("xdp.frags")
-+int xdp_shrink(struct xdp_md *ctx)
-+{
-+	/*
-+	 * The program is loaded with BPF_F_XDP_HAS_FRAGS (xdp.frags), so a
-+	 * nonlinear skb entering generic XDP is cow'd into page_pool memory
-+	 * before we run. Shrinking the tail far enough releases at least one
-+	 * whole frag, which must be returned to its page_pool. Count only a
-+	 * successful shrink so a too-small frame (e.g. ARP) does not satisfy
-+	 * the test.
-+	 */
-+	if (bpf_xdp_adjust_tail(ctx, -3000) == 0)
-+		__sync_fetch_and_add(&shrink_ran, 1);
-+	return XDP_PASS;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.43.0
+Reviewed-by: Waiman Long <longman@redhat.com>
 
