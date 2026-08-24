@@ -1,431 +1,246 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C96282F0673;
-	Mon, 24 Aug 2026 09:20:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D0F836655D
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 09:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787563223; cv=none; b=V801l+vWWPlihS48zFfnvf7wlGe0Samoc6wZpLlhdsgZtlEuY2ZIfw+P+M6n1SK+7hJDZ+FRQaDrEUxW3GmYRjwdnz2zQJvtLIIOGjBjZjml47ozFJZnMmfteg/a56ODtmmNRFeOmUoQK+dHg0itfeZTopZ9oTUHx2LFD+SCnNo=
+	t=1787563470; cv=none; b=bFQxgQAnj4viPJcIjQU82UtBBOPSQrjD1xqDbnCTHX42QyDqd1bl4N81ynHe7K/aWniQOK98lOHmHpKX/CGb0fC0SXknTGX7CTHtRT0McpEvpKuqbZYN645OMHgsULKvMrbxxhlVLjhd8seoJtCsj3SWo9YE78zaqWaglN14hgE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787563223; c=relaxed/simple;
-	bh=Rvtrha3WTwJfTW7AGl4KCnnuSmmFePp1BK56VobH9xE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CC2rteBZK1M3LqKyKcUW8W4hvTEC4cDlr/yB/bbS3LbFe760vwl6BXGHoHJ0xdX+ZMY1bF2V5dyQIr4qpIcTzPEeFN2vGtRQJrlMdl0LjUmNxEeKUJGOtGJUbabdRkYowz4v5oK+/EwCrMwYqjwUUEkP+al86EYnrQ9wDYmYINU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=e1eo9w/4; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787563470; c=relaxed/simple;
+	bh=glIC1ZxSgnporKEqk0P9X3+qnWnniHR0mNk8u32ZWuo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M+lV6Nn3Dwv/mZ0r1UacHUlSijxX7lM3oHo7E6JVTmOzG4lIhi7V4zuCmw2h+CLIHXpifc2llR5jfymJiGcTDFWOWpgP7E/ooNdrQ5TiSAWYbJoCbOEE5fHl7o/35FVbpUGI64hXcpES6yUpeg2p2rHSa1H5222xb8PiyckpDRc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=ow4ynSHF; arc=none smtp.client-ip=185.125.188.122
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="e1eo9w/4"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B333E1682;
-	Mon, 24 Aug 2026 02:20:10 -0700 (PDT)
-Received: from [10.164.19.33] (unknown [10.164.19.33])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 48C8B3F66F;
-	Mon, 24 Aug 2026 02:20:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787563214; bh=Rvtrha3WTwJfTW7AGl4KCnnuSmmFePp1BK56VobH9xE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=e1eo9w/4F3aeUbP3ylOLqmXreb1gqC5tm96XNjAdlcRRSjG12eqVCqr3IJnEbgJBj
-	 zpqIXpj9Frupixb9kRecyrH22PZUEnc5PVqJ3almuz0qWkOKQqxnSuLmKAYYEYVveq
-	 fuZWLqK8DRJc3Yn3nCJu/7Cp3uvr/WhmOfajoEPQ=
-Message-ID: <fcf8ad92-0617-4bf5-a94b-ba06c20581c3@arm.com>
-Date: Mon, 24 Aug 2026 14:50:06 +0530
+	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="ow4ynSHF"
+Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com [209.85.218.71])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 96FF13F527
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 09:15:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20251003; t=1787562939;
+	bh=WQ+aRLKtwY9E9tSqjzNnQJgEiQ6M2utL7hS1aThd0J0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version;
+	b=ow4ynSHFHA01cku76veJZQpT2p8niTmov0Ll2KmpaZCeyx1JmMinev0Fa76l0tV/v
+	 jD0YZcOAd8+j0ERvRMfCP8kHoksVIm4mSmxEuNPrWy6lkpsrHtk9fIzaJeRdxDgGoo
+	 nJYcTuof3iWXzl/TDpfjKCd49uZ8iywSqCaByHw4Sb4WCm5+EmfxCyUwtEc5AuM9Pp
+	 8yrW3lL46f4qpCXfmiTTXPIWfn730Omeb3jy5Y9ZeZgg+M4z/VYhVncSx9S0zEgqGG
+	 6BBZBoUT85YE4JLMDxtXiksaxCbK/iG1RpfcU9wSR9D86GNIFyS6cWWKD95KQU/70Y
+	 BctdSeswsLWImMjhJR/I8QZHa/CkNyu3fJspu8sgl/+d5/1Lq7y08siv9O2wKuD4Uu
+	 NwU4wJ5LW4NqUQy+lbtBHRrHgJ4sDzvojWNAksXDx3nksnVJSpZU0qZULLNqJhi2/k
+	 7HBH0PiVjiiJFnXXRyMj/TUOIMO+PYXbJ14IMERjmMyHk8f0rrGvYyFNgu9XBEYzFS
+	 /h2ZJyyQV9o+DBzJc+y/gxSHhW/z0PbcCjk+ALufCFDmkSfIXTnfuGyurWaaa2/HnR
+	 eTEnnVQWhLKyiSnPPdZ5ooHdDpGi0LyG//kB+HqCN4d6ckJFQ9XvegqDk3ZV5h2I41
+	 v32MWCCu3oEGMD9bpyExhYJQ=
+Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-c2192261d79so373647066b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 02:15:39 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787562939; x=1788167739;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=WQ+aRLKtwY9E9tSqjzNnQJgEiQ6M2utL7hS1aThd0J0=;
+        b=aWS6slVWZWhIhw07aWcaprMRAeG54SfQCEM5gVFf9YqLJClQDQ6uj2VH1zSW5olCEr
+         sYpRrcbyuVfrCgmI9zOiXiXsPHAc62K1n2Vb1pJTMd9I6XZ99BKzTRgr1dp0rJyN53V6
+         wCpm48yZsSH9iMxWl+fhXw97e8tH/DOITgO5xfVxK352/ozewxFndK0kUGkWbAN8pAf6
+         Zn7YOKv0Lsn2ZIwshY8RApkqQABC7k+bQngruy5PCdwrwjMgrtF4D4Ml6f7y28PXEdPh
+         +B6/68HKUuNtZ8OBU6Pi3Br1HanCQEM11mgjJeXAvgvWG4+L9cBxclPcIzobCEi6kf7X
+         NHdA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1pljFfLJouHWKRgvUEqYqmRp3ons1t22CKkpkBtFAwJuLyg9kJHLwP6azlDcGbeqfRKNlMmuAS01iTlG9Dvc=@vger.kernel.org
+X-Gm-Message-State: AFuF++kc+q9oZ1+mG3LaI+zH6cbztd7lQ942C4VKv2v1cA60h483JD7R
+	Fy6cOfzSpNGS0wd2axRlkiiIMDE+l/12A1cKaXEmdDwjUOo8QRQH2iZ6RiIzmIGO3DR1e4acOwo
+	nRziFHbKglL0I5vlUmCTQGR0q1s72ZfwhPagxqZjMBzkVl9mRA0OKOo958njSeJrWeaOc0bkdJ5
+	AzOqHIaKS+UA==
+X-Gm-Gg: AR+sD12SjLR3AL1rTKN8HR0TaVHUrGN7xZU83jd3qLmQahpuVP02Z8jcVN3Od2R8FDK
+	IfKK3DQ9wpEn4z9fQj9iNk8Z3lcJp/THdpyazOJH5L+Z/WSm9DFpatoV47+cHj6XKRfQO7F2KeX
+	hhpxeVmmcUG4Azbk2s5ep4kYWiF9SaHW7r0m05FJeAOI+kF69QEiQhXyi/9bCcwxAIL+WRrQwhy
+	tt8Qw9nL1C7oMncgpvQBEjmfWdmselcKsRhreTsTGQgffQHB/0MlvQVLOZQdp5TrFgaIO78GIvd
+	ywpof2NIMCzU1THjH0X4Aw03/WDYHYKla240+dspDsNEabZyFt3bSECe9FA0Y6djXn1x2eM6CB1
+	M4fu7r2iO70pp4GI/WGVIjnOsTwvawkLk+gv44rV7HN2AY+zxvcAg1HXyMbOo38cuyLtTozQ=
+X-Received: by 2002:a17:907:d12:b0:c24:82b9:361c with SMTP id a640c23a62f3a-c2482b93766mr2664074966b.17.1787562939177;
+        Mon, 24 Aug 2026 02:15:39 -0700 (PDT)
+X-Received: by 2002:a17:907:d12:b0:c24:82b9:361c with SMTP id a640c23a62f3a-c2482b93766mr2664070766b.17.1787562938790;
+        Mon, 24 Aug 2026 02:15:38 -0700 (PDT)
+Received: from localhost (93-40-83-165.ip37.fastwebnet.it. [93.40.83.165])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c2495ee5295sm1198078766b.0.2026.08.24.02.15.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 02:15:38 -0700 (PDT)
+From: Alessio Faina <alessio.faina@canonical.com>
+To: andrea.mayer@uniroma2.it
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	shuah@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh if iproute2 too old
+Date: Mon, 24 Aug 2026 11:15:37 +0200
+Message-ID: <20260824091537.2305107-1-alessio.faina@canonical.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] kselftest: mm: replace usage of /proc/self/smaps for
- check_huge_xxx() helper
-To: Yeoreum Yun <yeoreum.yun@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260820-fix_split-v1-0-ab430c58c7cf@arm.com>
- <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
-Content-Language: en-US
-From: Dev Jain <dev.jain@arm.com>
-In-Reply-To: <20260820-fix_split-v1-2-ab430c58c7cf@arm.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
+the End.DT4/DT6/DX4/DX6 support are not available and the tests
+contained in the following 4 test files
+ - srv6_end_dt4_l3vpn_test.sh
+ - srv6_end_dt6_l3vpn_test.sh
+ - srv6_end_dx4_netfilter_test.sh
+ - srv6_end_dx6_netfilter_test.sh
+are failing in some kernel backports.
+This is the result of one those tests in an unsupported environment:
 
+\################################################################################
+\TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
+\################################################################################
+\
+\    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)       [FAIL]
+\
+\    TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)       [FAIL]
+\
+\    TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)       [FAIL]
+\
+\    TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)       [FAIL]
+\
 
-On 21/08/26 1:10 am, Yeoreum Yun wrote:
-> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> made by memalign().
-> 
-> The underlying VMA may start at a different address from the aligned
-> address returned by memalign(). Furthermore, a subsequent
-> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> already set.
+To amend this, check the current running iproute2 supports the required
+feature and, if not, just skip the entire test to avoid a failure.
 
-Replying to this because I saw my malloc commit pop up :)
+This is similar to what have been done for srv6_end_dt46_l3vpn_test.sh in
+https://patchwork.kernel.org/project/netdevbpf/patch/20260715122859.36177-1-alessio.faina@canonical.com/
 
-So IIUC the test is dependent on VMA boundaries. Therefore we shouldn't
-rely on a glibc function like memalign() which can do anything internally.
+Signed-off-by: Alessio Faina <alessio.faina@canonical.com>
+---
+ tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh      | 10 ++++++++++
+ tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh      | 10 ++++++++++
+ tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh  | 10 ++++++++++
+ tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh  | 10 ++++++++++
+ 4 files changed, 40 insertions(+)
 
-I think in this case memalign is using one of the heaps, which reuses
-VMAs. Because I would expect mmap() to internally align the VMA start
-to 2M, as we handle this as a special case in kernel mmap code.
-
-> 
-> This causes split_huge_page_test to fail because the check_huge_xxx()
-> helpers incorrectly require the address returned by memalign() to
-> match the VMA start address reported in /proc/self/smaps.
-> 
-> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> /proc/self/smaps to detect huge pages and change the meaning of
-> check_huge_xxx()'s nr_hpages argument:
-> 
->   - nr_hpages > 0: check all of pages in the range are huge page.
->   - nr_hpages < 0: check all of pages in the range are not huge page.
->   - nr_hpages == 0: invalid.
-> 
-> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->  tools/testing/selftests/mm/khugepaged.c           |  26 ++---
->  tools/testing/selftests/mm/split_huge_page_test.c |   6 +-
->  tools/testing/selftests/mm/vm_util.c              | 135 ++++++++++++++++++----
->  tools/testing/selftests/mm/vm_util.h              |   1 +
->  4 files changed, 131 insertions(+), 37 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 10e8dedcb087d..2e4665e6d5852 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -533,7 +533,7 @@ static void __madvise_collapse(const char *msg, char *p, int nr_hpages,
->  	ret = madvise_collapse_retry(p, nr_hpages * hpage_pmd_size);
->  	if (((bool)ret) == expect)
->  		fail("Fail: Bad return value");
-> -	else if (!ops->check_huge(p, expect ? nr_hpages : 0))
-> +	else if (!ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
->  		fail("Fail: check_huge()");
->  	else
->  		success("OK");
-> @@ -545,7 +545,7 @@ static void madvise_collapse(const char *msg, char *p, int nr_hpages,
->  			     struct mem_ops *ops, bool expect)
->  {
->  	/* Sanity check */
-> -	if (!ops->check_huge(p, 0))
-> +	if (!ops->check_huge(p, -nr_hpages))
->  		ksft_exit_fail_msg("Unexpected huge page\n");
->  	__madvise_collapse(msg, p, nr_hpages, ops, expect);
->  }
-> @@ -558,7 +558,7 @@ static bool wait_for_scan(const char *msg, char *p, int nr_hpages,
->  	int timeout = 6; /* 3 seconds */
->  
->  	/* Sanity check */
-> -	if (!ops->check_huge(p, 0))
-> +	if (!ops->check_huge(p, -nr_hpages))
->  		ksft_exit_fail_msg("Unexpected huge page\n");
->  
->  	madvise(p, nr_hpages * hpage_pmd_size, MADV_HUGEPAGE);
-> @@ -605,7 +605,7 @@ static void khugepaged_collapse(const char *msg, char *p, int nr_hpages,
->  	if (ops != &__anon_ops)
->  		ops->fault(p, 0, nr_hpages * hpage_pmd_size);
->  
-> -	if (ops->check_huge(p, expect ? nr_hpages : 0))
-> +	if (ops->check_huge(p, expect ? nr_hpages : -nr_hpages))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -643,7 +643,7 @@ static void alloc_at_fault(void)
->  
->  	madvise(p, page_size, MADV_DONTNEED);
->  	ksft_print_msg("Split huge PMD on MADV_DONTNEED...");
-> -	if (check_huge_anon(p, 0, hpage_pmd_size))
-> +	if (check_huge_anon(p, -1, hpage_pmd_size))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -815,7 +815,7 @@ static void collapse_single_pte_entry_compound(struct collapse_context *c, struc
->  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
->  	ksft_print_msg("Split huge page leaving single PTE mapping compound page...");
->  	madvise(p + page_size, hpage_pmd_size - page_size, MADV_DONTNEED);
-> -	if (ops->check_huge(p, 0))
-> +	if (ops->check_huge(p, -1))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -836,7 +836,7 @@ static void collapse_full_of_compound(struct collapse_context *c, struct mem_ops
->  	ksft_print_msg("Split huge page leaving single PTE page table full of compound pages...");
->  	madvise(p, page_size, MADV_NOHUGEPAGE);
->  	madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
-> -	if (ops->check_huge(p, 0))
-> +	if (ops->check_huge(p, -1))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -903,7 +903,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
->  
->  	ksft_print_msg("Allocate small page...");
->  	ops->fault(p, 0, page_size);
-> -	if (ops->check_huge(p, 0))
-> +	if (ops->check_huge(p, -1))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -911,7 +911,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
->  	ksft_print_msg("Share small page over fork()...");
->  	if (!fork()) {
->  		/* Do not touch settings on child exit */
-> -		if (ops->check_huge(p, 0))
-> +		if (ops->check_huge(p, -1))
->  			success("OK");
->  		else
->  			fail("Fail");
-> @@ -929,7 +929,7 @@ static void collapse_fork(struct collapse_context *c, struct mem_ops *ops)
->  	exit_status = WEXITSTATUS(wstatus);
->  
->  	ksft_print_msg("Check if parent still has small page...");
-> -	if (ops->check_huge(p, 0))
-> +	if (ops->check_huge(p, -1))
->  		success("OK");
->  	else
->  		fail("Fail");
-> @@ -955,7 +955,7 @@ static void collapse_fork_compound(struct collapse_context *c, struct mem_ops *o
->  		ksft_print_msg("Split huge page PMD in child process...");
->  		madvise(p, page_size, MADV_NOHUGEPAGE);
->  		madvise(p, hpage_pmd_size, MADV_NOHUGEPAGE);
-> -		if (ops->check_huge(p, 0))
-> +		if (ops->check_huge(p, -1))
->  			success("OK");
->  		else
->  			fail("Fail");
-> @@ -1003,7 +1003,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
->  		ksft_print_msg("Trigger CoW on page %d of %d...",
->  				hpage_pmd_nr - max_ptes_shared - 1, hpage_pmd_nr);
->  		ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared - 1) * page_size);
-> -		if (ops->check_huge(p, 0))
-> +		if (ops->check_huge(p, -1))
->  			success("OK");
->  		else
->  			fail("Fail");
-> @@ -1016,7 +1016,7 @@ static void collapse_max_ptes_shared(struct collapse_context *c, struct mem_ops
->  			       hpage_pmd_nr - max_ptes_shared, hpage_pmd_nr);
->  			ops->fault(p, 0, (hpage_pmd_nr - max_ptes_shared) *
->  				    page_size);
-> -			if (ops->check_huge(p, 0))
-> +			if (ops->check_huge(p, -1))
->  				success("OK");
->  			else
->  				fail("Fail");
-> diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
-> index 99b45e5518199..4fcd330cf0726 100644
-> --- a/tools/testing/selftests/mm/split_huge_page_test.c
-> +++ b/tools/testing/selftests/mm/split_huge_page_test.c
-> @@ -314,7 +314,7 @@ static void verify_rss_anon_split_huge_page_all_zeroes(char *one_page, int nr_hp
->  		if (one_page[i] != (char)0)
->  			ksft_exit_fail_msg("%ld byte corrupted\n", i);
->  
-> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
-> +	if (!check_huge_anon(one_page, -nr_hpages, pmd_pagesize))
->  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
->  
->  	rss_anon_after = rss_anon();
-> @@ -372,7 +372,7 @@ static void split_pmd_thp_to_order(int order)
->  					   (pmd_order + 1)))
->  		ksft_exit_fail_msg("Unexpected THP split\n");
->  
-> -	if (!check_huge_anon(one_page, 0, pmd_pagesize))
-> +	if (!check_huge_anon(one_page, -4, pmd_pagesize))
->  		ksft_exit_fail_msg("Still AnonHugePages not split\n");
->  
->  	ksft_test_result_pass("Split huge pages to order %d successful\n", order);
-> @@ -746,7 +746,7 @@ static void split_thp_in_pagecache_to_order_at(size_t fd_size,
->  		goto out;
->  	}
->  
-> -	if (!check_huge_file(addr, 0, pmd_pagesize)) {
-> +	if (!check_huge_file(addr, -(fd_size / pmd_pagesize), pmd_pagesize)) {
->  		ksft_print_msg("Still FilePmdMapped not split\n");
->  		err = EXIT_FAILURE;
->  		goto out;
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 311fc5b4513eb..166d5d79289f3 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -14,6 +14,8 @@
->  #define PMD_SIZE_FILE_PATH "/sys/kernel/mm/transparent_hugepage/hpage_pmd_size"
->  #define SMAP_FILE_PATH "/proc/self/smaps"
->  #define STATUS_FILE_PATH "/proc/self/status"
-> +#define PAGEMAP_FILE_PATH "/proc/self/pagemap"
-> +#define KPAGEFLAGS_FILE_PATH "/proc/kpageflags"
->  #define MAX_LINE_LENGTH 500
->  
->  unsigned int __page_size;
-> @@ -229,37 +231,128 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->  	return entry;
->  }
->  
-> -bool __check_huge(void *addr, char *pattern, int nr_hpages,
-> -		  uint64_t hpage_size)
-> -{
-> -	char buffer[MAX_LINE_LENGTH];
-> -	uint64_t thp = -1;
-> -	char *entry;
-> -
-> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> -	if (!entry)
-> -		goto err_out;
-> -
-> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> -		ksft_exit_fail_msg("Reading smap error\n");
-> -
-> -err_out:
-> -	return thp == (nr_hpages * (hpage_size >> 10));
-> -}
-> -
->  bool check_huge_anon(void *addr, int nr_hpages, uint64_t hpage_size)
->  {
-> -	return __check_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +	int i, pagemap_fd, nr = 0;
-> +	uint64_t categories;
-> +	bool expect_huge;
-> +
-> +	if (nr_hpages == 0 || hpage_size == 0)
-> +		return false;
-> +
-> +	if (nr_hpages < 0) {
-> +		nr_hpages = -nr_hpages;
-> +		expect_huge = false;
-> +	} else
-> +		expect_huge = true;
-> +
-> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
-> +
-> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
-> +		if (!(categories & PAGE_IS_HUGE))
-> +			continue;
-> +		if (categories & PAGE_IS_FILE)
-> +			continue;
-> +		nr++;
-> +	}
-> +
-> +	close(pagemap_fd);
-> +	return expect_huge ? nr == nr_hpages : nr == 0;
->  }
->  
->  bool check_huge_file(void *addr, int nr_hpages, uint64_t hpage_size)
->  {
-> -	return __check_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> +	int i, pagemap_fd, kpf_fd, nr = 0;
-> +	unsigned long pfn;
-> +	uint64_t categories, kpf;
-> +	bool expect_huge;
-> +
-> +	if (nr_hpages == 0 || hpage_size == 0)
-> +		return false;
-> +
-> +	if (nr_hpages < 0) {
-> +		nr_hpages = -nr_hpages;
-> +		expect_huge = false;
-> +	} else
-> +		expect_huge = true;
-> +
-> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
-> +
-> +	kpf_fd = open(KPAGEFLAGS_FILE_PATH, O_RDONLY);
-> +	if (kpf_fd < 0)
-> +		ksft_exit_fail_msg("open kpageflags: %s\n", strerror(errno));
-> +
-> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
-> +		pfn = pagemap_get_pfn(pagemap_fd, addr);
-> +		if (pfn == -1UL)
-> +			continue;
-> +		if (pageflags_get(pfn, kpf_fd, &kpf))
-> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> +		if (!(categories & PAGE_IS_HUGE))
-> +			continue;
-> +		if (!(categories & PAGE_IS_FILE))
-> +			continue;
-> +		if (kpf & KPF_SWAPBACKED)
-> +			continue;
-> +		nr++;
-> +	}
-> +
-> +	close(pagemap_fd);
-> +	close(kpf_fd);
-> +
-> +	return expect_huge ? nr == nr_hpages : nr == 0;
->  }
->  
->  bool check_huge_shmem(void *addr, int nr_hpages, uint64_t hpage_size)
->  {
-> -	return __check_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-> +	int i, pagemap_fd, kpf_fd, nr = 0;
-> +	unsigned long pfn;
-> +	uint64_t categories, kpf;
-> +	bool expect_huge;
-> +
-> +	if (nr_hpages == 0 || hpage_size == 0)
-> +		return false;
-> +
-> +	if (nr_hpages < 0) {
-> +		nr_hpages = -nr_hpages;
-> +		expect_huge = true;
-> +	} else
-> +		expect_huge = false;
-> +
-> +	pagemap_fd = open(PAGEMAP_FILE_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap: %s\n", strerror(errno));
-> +
-> +	kpf_fd = open(KPAGEFLAGS_FILE_PATH, O_RDONLY);
-> +	if (kpf_fd < 0)
-> +		ksft_exit_fail_msg("open kpageflags: %s\n", strerror(errno));
-> +
-> +	for (i = 0; i < nr_hpages; i++, addr += hpage_size) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, addr);
-> +		pfn = pagemap_get_pfn(pagemap_fd, addr);
-> +		if (pfn == -1UL)
-> +			continue;
-> +		if (pageflags_get(pfn, kpf_fd, &kpf))
-> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> +		if (!(categories & PAGE_IS_HUGE))
-> +			continue;
-> +		if (!(categories & PAGE_IS_FILE))
-> +			continue;
-> +		if (!(kpf & KPF_SWAPBACKED))
-> +			continue;
-> +		nr++;
-> +	}
-> +
-> +	close(pagemap_fd);
-> +	close(kpf_fd);
-> +
-> +	return expect_huge ? nr == nr_hpages : nr == 0;
->  }
->  
->  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index ea8fc8fdf0eb0..0a1627f36efc3 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -18,6 +18,7 @@
->  #define PM_SWAP                       BIT_ULL(62)
->  #define PM_PRESENT                    BIT_ULL(63)
->  
-> +#define KPF_SWAPBACKED                BIT_ULL(14)
->  #define KPF_COMPOUND_HEAD             BIT_ULL(15)
->  #define KPF_COMPOUND_TAIL             BIT_ULL(16)
->  #define KPF_HWPOISON                  BIT_ULL(19)
-> 
+diff --git a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+index a649dba3cb77..50e8c733cf9f 100755
+--- a/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt4_l3vpn_test.sh
+@@ -459,6 +459,14 @@ host_vpn_isolation_tests()
+ 	done
+ }
+ 
++test_iproute2_supp_or_ksft_skip()
++{
++	if ! ip route help 2>&1 | grep -qo "End.DT4"; then
++		echo "SKIP: Missing SRv6 End.DT4 support in iproute2"
++		exit "${ksft_skip}"
++	fi
++}
++
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+ 	exit $ksft_skip
+@@ -469,6 +477,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_iproute2_supp_or_ksft_skip
++
+ modprobe vrf &>/dev/null
+ if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
+         echo "SKIP: vrf sysctl does not exist"
+diff --git a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+index e408406d8489..9ed985559c6b 100755
+--- a/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dt6_l3vpn_test.sh
+@@ -469,6 +469,14 @@ host_vpn_isolation_tests()
+ 	done
+ }
+ 
++test_iproute2_supp_or_ksft_skip()
++{
++	if ! ip route help 2>&1 | grep -qo "End.DT6"; then
++		echo "SKIP: Missing SRv6 End.DT6 support in iproute2"
++		exit "${ksft_skip}"
++	fi
++}
++
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+ 	exit $ksft_skip
+@@ -479,6 +487,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_iproute2_supp_or_ksft_skip
++
+ modprobe vrf &>/dev/null
+ if [ ! -e /proc/sys/net/vrf/strict_mode ]; then
+         echo "SKIP: vrf sysctl does not exist"
+diff --git a/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh b/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
+index e23210aa547f..b0bc85db8353 100755
+--- a/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dx4_netfilter_test.sh
+@@ -311,6 +311,14 @@ router_netfilter_tests()
+ 	check_and_log_hs_connectivity 2 1 100
+ }
+ 
++test_iproute2_supp_or_ksft_skip()
++{
++	if ! ip route help 2>&1 | grep -qo "End.DX4"; then
++		echo "SKIP: Missing SRv6 End.DX4 support in iproute2"
++		exit "${ksft_skip}"
++	fi
++}
++
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+ 	exit $ksft_skip
+@@ -321,6 +329,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_iproute2_supp_or_ksft_skip
++
+ cleanup &>/dev/null
+ 
+ setup
+diff --git a/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh b/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
+index 9e69a2ed5bc3..9bfbc5bbbdeb 100755
+--- a/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
++++ b/tools/testing/selftests/net/srv6_end_dx6_netfilter_test.sh
+@@ -316,6 +316,14 @@ router_netfilter_tests()
+ 	check_and_log_hs_connectivity 2 1 100
+ }
+ 
++test_iproute2_supp_or_ksft_skip()
++{
++	if ! ip route help 2>&1 | grep -qo "End.DX6"; then
++		echo "SKIP: Missing SRv6 End.DX6 support in iproute2"
++		exit "${ksft_skip}"
++	fi
++}
++
+ if [ "$(id -u)" -ne 0 ];then
+ 	echo "SKIP: Need root privileges"
+ 	exit $ksft_skip
+@@ -326,6 +334,8 @@ if [ ! -x "$(command -v ip)" ]; then
+ 	exit $ksft_skip
+ fi
+ 
++test_iproute2_supp_or_ksft_skip
++
+ cleanup &>/dev/null
+ 
+ setup
+-- 
+2.43.0
 
