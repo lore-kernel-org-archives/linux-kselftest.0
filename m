@@ -1,31 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E092C27456;
-	Mon, 24 Aug 2026 18:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B18238758D;
+	Mon, 24 Aug 2026 18:53:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787597620; cv=none; b=SbScY086Kl1ww4CF5l3KwnLSo8wmr7YP8JTktkC3MuXT3BVfWxlDObA8U3R8x1H8iJLTiluG8k3ru7t/93bWph7o13AMBJZ+tONFN7yNhKoG+cAF/277T19itt5b/t8qT42esbhsQ44ps75S3RrCM1avLONvhVTQijl9BwVvqQQ=
+	t=1787597621; cv=none; b=bwPMNEe4B9Q6mlLE+GBDjCN/EVBCnwvmHZUZT2Ar4FpZDUVLSCN2Vfrw7SfGMOWF7tmw5j1wJ33A1mkEN064+Lcq96mT+GnWGUSKfU8Peb+9wWpgzfX6KFxqkc2LrwZwcZ13ci5jmFyGg0/RKZAeBAxbh0u+PVcgSOqMLqPdt34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787597620; c=relaxed/simple;
-	bh=BiR7/qVp/z2VE1S9SoocQNgRe6gQRd2fgiOvN6n4UC8=;
+	s=arc-20240116; t=1787597621; c=relaxed/simple;
+	bh=IIghnF4fpPkcMl/Bedeo6WE38G1vgp9ffPcJjLvlU8A=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=lIcQB/lSAVmkL+NVU9qwldkAJ2HuxtUZWnU7zT2MlWdDqxdNmuXkr+xG/tpwgxSGewdbGCcCkK1aPaf/B9FqMBjKFatJDMttLa2T6kBg99lDpKPlwaE8Vdc3AEt3YSBq9rVvWZBuIxstNc74KVqDgkreuKl2AvTjAMakkcF7w2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cCV1sPzW; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=aiDvoE7A4J1S643a3UfYyfKZ9oVR9gAzTstNvg88F1PfJZVi/ooAQqmAorDshF1F4Xwl4Z0GYgWwenMOMvftlp0e88LMLDnuZhTJ44zRvXJcavP22wX7dU78jCwxry7ikLPHgjODdSX25YijimMMZ0yUVP/jl5ZzAKbsNw4aKfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZNl9ztiO; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cCV1sPzW"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0227E1F00A3A;
-	Mon, 24 Aug 2026 18:53:37 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZNl9ztiO"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93CA71F000E9;
+	Mon, 24 Aug 2026 18:53:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787597618;
-	bh=LFJWf9uqGFgfwnsZcbYGQPuDLmvvkucGOYiMuCwCdtQ=;
+	s=k20260515; t=1787597620;
+	bh=1bpJD3GPuLPuC7xpOlTd/gvIIA5y75ZeRNm/K2390ho=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=cCV1sPzWFkv+uE9coelNetagY0mCa9M/gGRgh5a9zLyz2wzsN+idLnbjZGCl/ro7h
-	 Wl9DUvGBPdg46yKAmWCnWA2uy16BsjwSIDuMy5KYejtLNY/6FK7iN64qVrIuz+45ij
-	 psGFl9P10MyznJhHC8soA7zkL3FbwAntSu20A+xFswTyOPNQu4yfCEKBfojQU8bsIU
-	 UX6utyA+tXw7SCFBV3OACXzpxIY7MRSxrrS4qKe4mnvonGCIodtUO0R/U6a9g58Q5h
-	 9nMWq5m6GXu7H564WaBNS3PqE9xsOPRYFmbdQSODAOduvSyelwahiz1fKfKleVFHt2
-	 ysT7lNYntrJKg==
+	b=ZNl9ztiOTLIjc4iMuc/9Nm6EXB0+jQnQGcV5/TiKjRfAuH2p1JLGrWiYhFPVW0AW8
+	 jyUpnnB5STmY5416rFaf7A912EuelYKNXFWeoy7DXMpr3e1jCPPXuA0ccm7XHOXC7F
+	 NlX4qm2LxZ7qdvGnxbbWRoCw+6C1b6+xL0DXGhvbFTTR4JsSphtvW6xpz7IOr2GwNj
+	 ltv2OAkjKk86XYv/brTyJvwknYPgVvIgvbLJSpM8GQrpdncvASzENHjvMfly9ZGPqA
+	 Wp6w/pSuvmDbN4sVO4znhW8Da1p5lQmI+X9P5n/mvTUaFym1NL5OhlPniUhPPJOhJe
+	 ePVj5c0WhYxrw==
 From: Jakub Kicinski <kuba@kernel.org>
 To: junjie.cao@intel.com
 Cc: Jakub Kicinski <kuba@kernel.org>,
@@ -46,12 +46,12 @@ Cc: Jakub Kicinski <kuba@kernel.org>,
 	syzbot+2642f347f7309b4880dc@syzkaller.appspotmail.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v2 2/3] net/sched: taprio: enforce a minimum interval for software schedules
-Date: Mon, 24 Aug 2026 11:53:37 -0700
-Message-ID: <20260824185337.2704003-1-kuba@kernel.org>
+Subject: Re: [PATCH net v2 3/3] selftests/tc-testing: taprio: add case for the software minimum interval
+Date: Mon, 24 Aug 2026 11:53:38 -0700
+Message-ID: <20260824185339.2704038-1-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260820062715.278124-3-junjie.cao@intel.com>
-References: <20260820062715.278124-3-junjie.cao@intel.com>
+In-Reply-To: <20260820062715.278124-4-junjie.cao@intel.com>
+References: <20260820062715.278124-4-junjie.cao@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -63,121 +63,76 @@ Content-Transfer-Encoding: 8bit
 This is an AI-generated review of your patch. The human sending this
 email has considered the AI review valid, or at least plausible.
 ---
-net/sched: taprio: enforce a minimum interval for software schedules
+selftests/tc-testing: taprio: add case for the software minimum interval
 
-This adds taprio_min_interval() which raises the accepted minimum
-per-entry interval to 100us for schedules that are neither fully
-offloaded nor txtime-assisted, on the grounds that each entry expiry
-costs an hrtimer callback. The same minimum is applied to the
-cycle_time sanity check.
+This adds a tdc case (id f4b2) to tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
+which asserts that a pure software taprio schedule with 50000 ns entries is
+rejected, since the entries are below TAPRIO_MIN_SW_INTERVAL_NS.
 
-Link: https://lore.kernel.org/all/afe041f6-ef7d-4434-b2d0-096be49b5bcb@mail.kernel.org/
-
-> diff --git a/net/sched/sch_taprio.c b/net/sched/sch_taprio.c
-> index 0d566c934b2f3..91a7f7f17462b 100644
-> --- a/net/sched/sch_taprio.c
-> +++ b/net/sched/sch_taprio.c
-> @@ -259,6 +259,26 @@ static int length_to_duration(struct taprio_sched *q, int len)
->  	return div_u64(len * atomic64_read(&q->picos_per_byte), PSEC_PER_NSEC);
->  }
->  
-> +/* Software schedules service one hrtimer expiry per entry; intervals
-> + * shorter than the expiry service cost rearm the timer with an expiry
-> + * already in the past and storm the CPU. 100us leaves margin above the
-> + * measured cost on debug configurations.
-> + */
-> +#define TAPRIO_MIN_SW_INTERVAL_NS	(100 * NSEC_PER_USEC)
-> +
-> +static s64 taprio_min_interval(struct taprio_sched *q)
-> +{
-> +	s64 min_interval = length_to_duration(q, ETH_ZLEN);
-> +
-> +	/* Only pure software schedules arm the per-entry hrtimer. */
-> +	if (!FULL_OFFLOAD_IS_ENABLED(q->flags) &&
-> +	    !TXTIME_ASSIST_IS_ENABLED(q->flags))
-> +		min_interval = max_t(s64, min_interval,
-> +				     TAPRIO_MIN_SW_INTERVAL_NS);
-> +
-> +	return min_interval;
-> +}
-> +
-
-[Severity: High]
-Does this narrow the range of schedules that userspace can install on
-existing setups?
-
-Before this patch, fill_sched_entry() only required
-length_to_duration(q, ETH_ZLEN). At 1 Gb/s picos_per_byte is 8000, so the
-bound was 60 * 8 = 480ns; at 100 Mb/s it was about 4.8us. With
-taprio_min_interval() the bound for software mode becomes a flat 100000ns,
-and parse_taprio_schedule() additionally requires:
-
-	if (new->cycle_time < (s64)new->num_entries * taprio_min_interval(q)) {
-		NL_SET_ERR_MSG(extack, "'cycle_time' is too small");
-		return -EINVAL;
-	}
-
-So a 250us cycle split into 4 x 62.5us windows, or a 1ms cycle containing a
-20us guard window, is now rejected with -EINVAL by tc qdisc add/replace on a
-real NIC in software mode. Any 8-entry schedule with a cycle below 800us is
-rejected as well.
-
-The commit message says the hrtimer expiry costs "on the order of 10us on a
-debug configuration and about a microsecond on a release build", yet the
-constant is 100us for all configurations. Is a 100x margin over the
-release-build cost intended as a hard limit on PREEMPT_RT and production
-kernels, where sub-100us gating on isolated CPUs is the reason software
-taprio exists?
-
-Since the change carries a Fixes: tag it will be picked up for stable, so
-working 802.1Qbv configurations would stop loading after a stable update.
-Would it make sense to make the floor tunable (module parameter, sysctl or
-netlink attribute) and document it, rather than a compile-time constant?
-
-Was flooring the rearm interval at runtime in advance_sched() considered as
-an alternative, so that the schedule is still accepted but the timer is not
-rearmed in the past? As a mitigation for the reported stalls the constant is
-also only a constant factor: a CAP_NET_ADMIN user in a netns can still
-create many veth or bonding devices, each running a 100us cycle.
-
->  static int duration_to_length(struct taprio_sched *q, u64 duration)
->  {
->  	return div_u64(duration * PSEC_PER_NSEC, atomic64_read(&q->picos_per_byte));
-> @@ -1088,7 +1108,7 @@ static int fill_sched_entry(struct taprio_sched *q, struct nlattr **tb,
->  			    struct sched_entry *entry,
->  			    struct netlink_ext_ack *extack)
->  {
-> -	int min_duration = length_to_duration(q, ETH_ZLEN);
-> +	s64 min_duration = taprio_min_interval(q);
->  	u32 interval = 0;
->  
+> diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
+> index cd19d05925e40..3fe66839f8aed 100644
+> --- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
+> +++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
+> @@ -154,6 +154,28 @@
+>              "echo \"1\" > /sys/bus/netdevsim/del_device"
+>          ]
+>      },
+> +    {
+> +        "id": "f4b2",
+> +        "name": "Add taprio Qdisc with software interval below the minimum",
+> +        "category": [
+> +            "qdisc",
+> +            "taprio"
+> +        ],
+> +        "plugins": {
+> +            "requires": "nsPlugin"
+> +        },
+> +        "setup": [
+> +            "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
+> +        ],
+> +        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: taprio num_tc 2 queues 1@0 1@1 sched-entry S 01 50000 sched-entry S 02 50000 clockid CLOCK_TAI",
+> +        "expExitCode": "2",
 
 [Severity: Low]
-This isn't a bug, but the comment and the extack string further down in
-fill_sched_entry() no longer describe what is enforced:
+This isn't a bug, but should there also be a companion case that pins the
+other half of the rule?  The kernel rule this case targets is conditional in
+taprio_min_interval():
 
-	/* The interval should allow at least the minimum ethernet
-	 * frame to go out.
-	 */
-	if (interval < min_duration) {
-		NL_SET_ERR_MSG(extack, "Invalid interval for schedule entry");
-		return -EINVAL;
-	}
+net/sched/sch_taprio.c:taprio_min_interval() {
+	s64 min_interval = length_to_duration(q, ETH_ZLEN);
 
-For any link at 1 Gb/s or faster the ETH_ZLEN term is a few hundred
-nanoseconds, so the frame-length rule the comment names never wins and the
-rule actually applied is the 100us hrtimer-cost floor documented only at the
-taprio_min_interval() definition. Could the comment be updated, and could
-the extack message mention the minimum so a user whose 5us interval is
-rejected after an upgrade can tell why?
+	/* Only pure software schedules arm the per-entry hrtimer. */
+	if (!FULL_OFFLOAD_IS_ENABLED(q->flags) &&
+	    !TXTIME_ASSIST_IS_ENABLED(q->flags))
+		min_interval = max_t(s64, min_interval,
+				     TAPRIO_MIN_SW_INTERVAL_NS);
 
->  	if (tb[TCA_TAPRIO_SCHED_ENTRY_CMD])
-> @@ -1216,7 +1236,7 @@ static int parse_taprio_schedule(struct taprio_sched *q, struct nlattr **tb,
->  		new->cycle_time = cycle;
->  	}
->  
-> -	if (new->cycle_time < new->num_entries * length_to_duration(q, ETH_ZLEN)) {
-> +	if (new->cycle_time < (s64)new->num_entries * taprio_min_interval(q)) {
->  		NL_SET_ERR_MSG(extack, "'cycle_time' is too small");
->  		return -EINVAL;
->  	}
+	return min_interval;
+}
+
+The new f4b2 case only covers the branch being taken.  Reading the rest of
+taprio.json, no case appears able to flip that branch: the flags-carrying
+cases ba39, 9462, 8d92, d092, 8471, 0a85 and 3e1e all use 300000 ns
+intervals with "flags 0x1", and e8a1/6a83 use 20000000 ns with "flags 0x2",
+so they pass whether or not the 100 us floor is gated on the flags.
+
+Would that mean a change making the floor unconditional, and thus rejecting
+hardware-offloaded or txtime-assist schedules with sub-100 us gates, still
+leaves the whole taprio.json suite reporting PASS, including f4b2?
+
+A mirror case using "flags 0x1" with the same 50000 ns entries and
+expExitCode 0 would cover the exemption.  On netdevsim this looks feasible:
+netdevsim has no get_link_ksettings, so taprio_set_picos_per_byte() falls
+back to SPEED_10, giving picos_per_byte 800000 and
+length_to_duration(ETH_ZLEN) of 48000 ns, so 50000 ns entries and the
+derived 100000 ns cycle are above the unconditional floor.
+
+> +        "verifyCmd": "$TC qdisc show dev $ETH",
+> +        "matchPattern": "qdisc taprio 1: root refcnt",
+> +        "matchCount": "0",
+> +        "teardown": [
+> +            "echo \"1\" > /sys/bus/netdevsim/del_device"
+> +        ]
+> +    },
+
+[ ... ]
