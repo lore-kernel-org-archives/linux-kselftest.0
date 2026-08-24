@@ -1,139 +1,176 @@
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from AM0PR83CU005.outbound.protection.outlook.com (mail-westeuropeazon11010025.outbound.protection.outlook.com [52.101.69.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CD79463B88
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 16:27:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787588881; cv=none; b=q96SM2hz1zblymcYnlDgwKyDGj4wR6KeqzMQsEENeQ9qjstqI+rXhCJG4529/u4ukRKpvVwvGaVcaIHk4ExSd0D3S/NyWpeT51wpc+GW5PkbTZsW+AqkCiMkuaDSJ8mXHLLtWPymoSxLB6IGhOf97GhZaNbc5Si6+C32rMHeq5I=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787588881; c=relaxed/simple;
-	bh=mDHws/sZ8lLQ/1KdE+rARMYCh5XMOT8BgGpsfgO9eTI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gN/wI7zDhp/rvf15Q/9lQUltQuM7VEOelruaVJ5NQ3vL9wPz1I9QHdlRYNc6Z+sdCUnDjTfPZtPPPxTqVu/9dkchAsACfdYnc91u+vnK6pthfCfijVPBbWV/G+Xjp8qyIwS28mzg2SnPTgRnPlC879qFHoFcx4OCoqKpzBNMQts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lbsnn6ym; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E8C468C3D;
+	Mon, 24 Aug 2026 16:31:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.69.25
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787589111; cv=fail; b=ITUsQwA5SYuRQcmfEAH42iP7MsIHf+8mcG3DObvKK0Zt0BSETlTPql3zA9RaQ96pMdg+43c1KM7NQNvBFZSlm6bVI84LGyAU6f2RzXjl2LFTefQQ0ziG+QNKRgpd60Ush6pjGNPP7Ty6EIozK6RkrBJBKP0Ylhdf0DES3sO1k3k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787589111; c=relaxed/simple;
+	bh=D0vWe7BNS12uXu+D/Had0O6Rzq8u1Rd00LQV4sPfjYY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=LWcWT4R5WXIvqq6ZbKuYiAhwGdGpeIsLkxn/hCCDCWdH1ZvI+EzM3f9h6h7Hx1iHPVeOqlzKCR1ASqt1riNWrqnOWkaYSZh8yr7+iFppxWZxiCr4KuMgk4601KpRbJNFUH3gLWXax8B5vE3BrwP4mtPw0hpFDVV0aUds0DDZp64=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=k73onpR9; arc=fail smtp.client-ip=52.101.69.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lbsnn6ym"
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d58efc7356so41351955ad.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 09:27:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787588879; x=1788193679; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=sXZHhJ6DSOJ118FYJaNeGOw/BXFqZV/1rWGtWxFPkgw=;
-        b=lbsnn6ymIAr0yodRK1K3HOBZ3XGASs52oqaNEEdLQAFszf2yfPX/81P6HTewCrrryX
-         jHTNqb+BK4A8LFB7QVLHuIcnguGi2cfEjAdd5YCoXmB8bgGOk+KVM7UIxmIyetQDI72b
-         SdakLmFbz43u6QhSPwG5rMUHAGXwbqyAa30IT5kN73tgTjBud4Dpb/BzmbHhniKl9sRm
-         5Au+xu8umyItO0t43ueTsIQk/QZOq8JXU1xOuFlW7zGahnXl4eOsZxmUPFNVV37i+5N5
-         IA976wmGjgKDlLfW9NctzyaZe2/2I/cqHS3mBryBVrBB1Rp3sch6TGSef9OqMqElOett
-         RF2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787588879; x=1788193679;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=sXZHhJ6DSOJ118FYJaNeGOw/BXFqZV/1rWGtWxFPkgw=;
-        b=OvfWFg0JX3c1ExRBitw7SOTu4faNYJForHnGwbcFkc8A2TjWNB7IIQc5eo6q6bzlBa
-         tsRCJiANObAFYdP2EXqHz4hS+tddauvKD2tpp48GjiK64s3QLa+/WwVR2sositqChW2h
-         YwgUtg29akRCYW7t6ghqRpiYyCoolHXxuX6bDzhBJiSfpdGws6fdws9DOIyxK8jJ4oMk
-         2bXxnkHUOf72Ujo0ctIdovsGWt7lbuk+xRXbOG/NV/t+uZrDEkFwObrYk4HNhbav4d31
-         YKf+qO1KoWqGdZ/K0aoVNJ1ClK+P8vIG8bURlYy/Y67hxpNAvegtldEDe75Evfpf3nvT
-         r4zQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rp7Fzn9/P3Nto6Pr9yh2kYqHQx8gi3mV8RmMLQJKZKELa3Tv+dfWQb35EaquPJBCll3MUt+pShSvOUtp0QGIAY=@vger.kernel.org
-X-Gm-Message-State: AFuF++l8+6QKkLKRzzPpp4JcaEnLWcOA0Nj+i0dBoVivMmZiNSSGu0jL
-	ND9H11X6mtT5V8P4vzjrSNlEoWgvaEEE8mZMO3RGdZocImAmLbn6BXwL
-X-Gm-Gg: AR+sD10Lmzk6GIU5iCslmA2uzP57D1Cm3KrpeIbq75sjzyel0eObAlW1EJwSkVBJ0xq
-	Ez6xeEBYCmqgnBqeT32Q/nu0f6tYqvcrxYt7r8oiZdWkErmuJLZlR5AFBMlAZ0dwlFZ7TYx2c5m
-	YFsfXpiMCf1rFt9eFmO8u088hWHQBTVa186wL35fqg4hJtuo+Hj3yOiS4ynXyc40A/zy6hV333p
-	mziXl8bE4d1R8e/ldwaZU9R801AlBVMU06wNTdzfDm4x298beLPf4cfIz/ZP8nFAiyWEACcUJ2w
-	nqRyo051mXXlEC61xrodoe1U0RARS4wQAFGZLl8nuHT4VIQkQa/EETCk3dRCS2pnWK3auLHMos4
-	dMI8uA/Oz/wBmSKk+UOGIZOt9dklevSDfOhLJt2aI7Jm87GSvd0294aWXjfaK+cnl6FZ3Rx3uvi
-	apwOvcMw3CgC/bv/9KQHP4C8jRy+VSobE49hQNKurBZJ0zzE2XDbMlfCNPYS1ggwT+0JyYvZ19b
-	jAOJAfIAdG5wS8rOPfeW6ehE6Z2k0JR3qVw
-X-Received: by 2002:a17:903:350f:b0:2ca:e9dc:7357 with SMTP id d9443c01a7336-2d670d1ff53mr369558225ad.9.1787588878665;
-        Mon, 24 Aug 2026 09:27:58 -0700 (PDT)
-Received: from frank0988server (114-27-66-217.dynamic-ip.hinet.net. [114.27.66.217])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d6767a614asm19505405ad.31.2026.08.24.09.27.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 09:27:58 -0700 (PDT)
-From: Chun-Cheng Chang <frank0988855428@gmail.com>
-To: Shuah Khan <shuah@kernel.org>
-Cc: Akhilesh Patil <akhilesh@ee.iitb.ac.in>,
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="k73onpR9"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pZwpqOYkEUVzqEQOphhBkAofgoS/IR7oS67CTxYX1nLhUuxReIYPfX/sXGV0WxeDHpQUINPxTH/dtXIrF2rAZxduh925hyiUWAfPGTOE1/BxQVlq4gCZv50BpigeTBE9xfTDnpLhA6C6RG7cvjO7TMcQYiHUNVemDaxi/9trpTvXY6NZmO65a3UMZhZmEKhoRjlqZ9fjbesW1/zYDDAB13BZcvr2rMqPQSJRD97LXODvlXz9zVbfGfTK3GczGwslC0zBeff6Zva21XDLCDppHja31rtkbcKhROWcc7Cwug918Tw/yHLd2brED+JzCwwQNoc4gcmlDhYO92fPoXNayQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iMfgLW6zcdfUUR6v/CPw5TpN5mJqsE0iIUVTtRKhknA=;
+ b=YfYxT6Xie8itDPmWly+IL+Nw0AQC64AlwSfLcl4dXfLOVmEQ7mWeGw29ptWW/Ofnd4N/fmSYykGOB1+oy5CjXip2HxIhQM/Sh830xsPDkbSDj/4sHOuxIi1LJeh491teCzPp6bpmSMhKf+SVOfk2gYZmBXAVeDS+PSM+Q5+HP2pMlLCJPCZ9d5XiAXmDFU8ZWHgTE/vG0a47i2u4uP98D1IDmiqZzTIUXmDku0opdqYKMIOBdk/7ZSKYuy8wd1ZIlPhpX8+MxZliKtjYekBcexiQPFvmxLe0DG9P4aUEUBTBQtDU5nqwFXVM1hoVOvXEYA5aummdVsBIc26iZjCZxg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 131.228.2.85) smtp.rcpttodomain=apple.com smtp.mailfrom=nokia-bell-labs.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nokia-bell-labs.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iMfgLW6zcdfUUR6v/CPw5TpN5mJqsE0iIUVTtRKhknA=;
+ b=k73onpR9saYEeY9AtxCnIMekmJjWo5KVr10uEWcLRd8RvpzwUT+kfzTjJv0aPxS8OQRJvtBuUGFLcVMVMpTmNqdgrIOFnggyVgERom2GOg1WXL3bVMT7PSpUiiLRSiL2F3nvPILVfCehycPGrQaDKnP7DO+FEWi/on1RKZuNJfgUXEW+ehq6s73IG2FLESQkQcvnvfI0HsCzHRksbjqWzyIz9hup9nRu72i4WtI9rQwGUYVfHqWUKj+sNj/tg9eP8Fjt7f9xJk3I4ISsK+SiUH9s/P/eYqL90LVuDvixngVtVRGU9xX+InwJr3GBB6fENhfVouNSDWk5VA9izuu8vw==
+Received: from AS9PR06CA0280.eurprd06.prod.outlook.com (2603:10a6:20b:45a::17)
+ by FRRPR07MB12251.eurprd07.prod.outlook.com (2603:10a6:d10:1ce::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Mon, 24 Aug
+ 2026 16:31:43 +0000
+Received: from AM2PEPF0001C710.eurprd05.prod.outlook.com
+ (2603:10a6:20b:45a:cafe::44) by AS9PR06CA0280.outlook.office365.com
+ (2603:10a6:20b:45a::17) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.339.12 via Frontend Transport; Mon,
+ 24 Aug 2026 16:31:43 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 131.228.2.85)
+ smtp.mailfrom=nokia-bell-labs.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nokia-bell-labs.com;
+Received-SPF: Pass (protection.outlook.com: domain of nokia-bell-labs.com
+ designates 131.228.2.85 as permitted sender) receiver=protection.outlook.com;
+ client-ip=131.228.2.85; helo=fihe02smtplvp01.emea.nsn-net.net; pr=C
+Received: from fihe02smtplvp01.emea.nsn-net.net (131.228.2.85) by
+ AM2PEPF0001C710.mail.protection.outlook.com (10.167.16.180) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
+ via Frontend Transport; Mon, 24 Aug 2026 16:31:42 +0000
+Received: from sarah.nbl.nsn-rdnet.net (sarah.nbl.nsn-rdnet.net [10.0.73.150])
+	by fihe02smtplvp01.emea.nsn-net.net (Postfix) with ESMTP id 13AFA800009E;
+	Mon, 24 Aug 2026 19:31:41 +0300 (EEST)
+From: chia-yu.chang@nokia-bell-labs.com
+To: john.fastabend@gmail.com,
+	jakub@cloudflare.com,
+	jiayuan.chen@linux.dev,
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chun-Cheng Chang <frank0988855428@gmail.com>
-Subject: [PATCH] selftests/watchdog: fix WDIOC_GETSTATUS flag decoding
-Date: Mon, 24 Aug 2026 16:27:49 +0000
-Message-ID: <20260824162749.1859778-1-frank0988855428@gmail.com>
-X-Mailer: git-send-email 2.53.0
+	shuah@kernel.org,
+	horms@kernel.org,
+	dsahern@kernel.org,
+	pabeni@redhat.com,
+	jhs@mojatatu.com,
+	kuba@kernel.org,
+	stephen@networkplumber.org,
+	davem@davemloft.net,
+	edumazet@google.com,
+	andrew+netdev@lunn.ch,
+	donald.hunter@gmail.com,
+	kuniyu@google.com,
+	ij@kernel.org,
+	ncardwell@google.com,
+	koen.de_schepper@nokia-bell-labs.com,
+	g.white@cablelabs.com,
+	ingemar.s.johansson@ericsson.com,
+	mirja.kuehlewind@ericsson.com,
+	cheshire@apple.com,
+	rs.ietf@gmx.at,
+	Jason_Livingood@comcast.com,
+	vidhi_goel@apple.com,
+	Mike_Rudolph@comcast.com,
+	Jeff_Howe@comcast.com,
+	srichard@netapp.com
+Cc: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
+Subject: [PATCH v8 net-next 0/2] Explicit TSO segment count
+Date: Mon, 24 Aug 2026 18:31:37 +0200
+Message-Id: <20260824163139.990734-1-chia-yu.chang@nokia-bell-labs.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM2PEPF0001C710:EE_|FRRPR07MB12251:EE_
+X-MS-Office365-Filtering-Correlation-Id: ab4ebf24-4885-4ec3-8650-08df01fd2e92
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|23010399003|36860700016|82310400026|1800799024|921020|6133799003|10067099003|11063799006|56012099006|18002099003|3023799007;
+X-Microsoft-Antispam-Message-Info:
+	SpKz42wLnbJfAgMxffd++ILITGm5Cf47xWBmDPqaXXFk3PlRbB0BRz8hab6+8LLzVWwKQWnbIlVakGL4GgUivFq399vG2DQZu8taIJqqWx9ur0Tl4m1dSGdsavSWmlyG0omh+HmjbabGJZEn5LQCQLa6XInwE99fzTwzvXiiDMMLSFOnTGnJKB2J1aqt9PrKVDugIWEjPOvYDLxM21qFhA5xqECZ86HKjrHAzQ7jQeLOuBWCfmc7WvQokITBbaaYU8SeVJN25UNo3TuOOz8xMieEbJqIvWy6jRRubh51BgMy9OxRZ49vHEvo63OyogWpU9knDxYTTmWock8uOdK4LkCbmq+w9RbqS2rA3OFj0TynYJ0IMdPZ8BO5M99l57MK47LzP1fHFd6OMEPm4NrWysC+v/mGvpuYxi0C7eotF+zEEM0VRTnXoxgdw9QUKgyEDeDoTI/hZvThYdbCrd6pd3ITY3L8uMS1qtbzacLR5Hh1DeH20X0N9uRQWB7jOGC2D4Wdlu6CfJaZdUvWxq/O7uIToPKU55bJ7qq/qhlOjGU8CBPi48ta96xXOnynlfj7uWQ+H7CYzjFyfcvbTlKbWr5xqLOXRGBNo6NlA5WfBGshhx6klV9c4AzseDXqYiqMPah+F/7hjRDvQL7hjaQ4G3mGCHY/9fznZIycTlPn6n8p7r3f+eGWOTesn4Xxsv6k4lUIwX7J2yNxLiGjjWnpZZNlTl7VbLxh6YOFWOzEzn5Oel1Ejscu2NSzXtg2OIGj
+X-Forefront-Antispam-Report:
+	CIP:131.228.2.85;CTRY:FI;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:fihe02smtplvp01.emea.nsn-net.net;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(36860700016)(82310400026)(1800799024)(921020)(6133799003)(10067099003)(11063799006)(56012099006)(18002099003)(3023799007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	vRwgCOApOTMSYqRcUV6zuua6bTJmbVqSXrnd9wNKIRw1B1ohKKwn6zMHI1YYZqSoN9wxkSV/2Xu8nLllOJPs2UZPdXz+rxf+G8YbdP6DxaUmijy5a+DkO13/Qzmk8ZSXDTj3sUnL/mO7xFCpS2ZEdhX8bngPrnBHomuh9+kEzrwAF6xGm4DEcc46JQMplJ7G33sh3ea9+dM/wqD8Xryd7QZ+2xyu5KANRENWL+8MOReG8/UYRgZdZ7vuXa1jC6K1etDCCig7eZx6OzVF80AbFFe0J4Jk4yhdn1NUDb7yFoCvcXVchIy4SyhRPylHDBxq1WBVotinWQ4ZQwMrP1cFiXR6sgh9aiA5rE0szGmNBG9aq8ypTQyfKzEkDTyp1mrswDcpsh37ajSzc2bee2wsbWkspQMmwYdhvtXiOiVh3Gw2E3UjcWV6TDcT4QKepSZh
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 16:31:42.8934
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: ab4ebf24-4885-4ec3-8650-08df01fd2e92
+X-MS-Exchange-CrossTenant-Id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=5d471751-9675-428d-917b-70f44f9630b0;Ip=[131.228.2.85];Helo=[fihe02smtplvp01.emea.nsn-net.net]
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TreatMessagesAsInternal-AM2PEPF0001C710.eurprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: FRRPR07MB12251
 
-The wdiof_status table decodes WDIOC_GETSTATUS results and
-watchdog_info.options, both of which use WDIOF_* flags.
+From: Chia-Yu Chang <chia-yu.chang@nokia-bell-labs.com>
 
-It incorrectly contains WDIOS_* flags, which are only valid for
-WDIOC_SETOPTIONS. Since the values overlap, status bits can be
-reported as enable, disable, or temperature-panic operations.
+Hello,
 
-Replace the WDIOS_* entries with the missing WDIOF_* status flags
-and use WDIOF_UNKNOWN consistently.
+This series replaces the existing min_tso_segs() congestion control
+callback with a new tso_segs() callback that allows congestion control
+algorithms to provide an explicit TSO segment count for each data burst.
+ 
+To support BPF congestion controls, the series also exposes
+tcp_tso_autosize() as a BPF kfunc, allowing BPF implementations to
+reuse the kernel TSO autosizing logic while implementing custom
+tso_segs() callbacks.
+ 
+Changes since v7:
+- Deprecate bbr_min_tso_segs() kfunc instead of removing it
+- Add bbr_tso_segs() kfunc
+- Update tso_segs() callback documentation
+- Sanitize min_tso_segs in tcp_tso_autosize()
+- Return the sanitized min_tso_segs value when mss_now == 0
+- Update commit messages
+ 
+Thanks,
+Chia-Yu
 
-Fixes: ac7e8d3e4a7c ("selftests/watchdog: add support for WDIOC_GETSTATUS")
-Signed-off-by: Chun-Cheng Chang <frank0988855428@gmail.com>
 ---
- .../selftests/watchdog/watchdog-test.c        | 24 +++++++++++--------
- 1 file changed, 14 insertions(+), 10 deletions(-)
+Chia-Yu Chang (2):
+  tcp: Replace min_tso_segs() with tso_segs() CC callback
+  bpf: make tcp_tso_autosize() available to BPF congestion controls
 
-diff --git a/tools/testing/selftests/watchdog/watchdog-test.c b/tools/testing/selftests/watchdog/watchdog-test.c
-index 4f09c5db0c7f..3802649b2944 100644
---- a/tools/testing/selftests/watchdog/watchdog-test.c
-+++ b/tools/testing/selftests/watchdog/watchdog-test.c
-@@ -106,24 +106,28 @@ struct wdiof_status {
- 	const char *status_str;
- };
- 
--#define WDIOF_NUM_STATUS 8
-+#define WDIOF_NUM_STATUS 12
- 
- static const struct wdiof_status wdiof_status[WDIOF_NUM_STATUS] = {
--	{WDIOF_SETTIMEOUT,  "Set timeout (in seconds)"},
--	{WDIOF_MAGICCLOSE,  "Supports magic close char"},
--	{WDIOF_PRETIMEOUT,  "Pretimeout (in seconds), get/set"},
--	{WDIOF_ALARMONLY,  "Watchdog triggers a management or other external alarm not a reboot"},
--	{WDIOF_KEEPALIVEPING,  "Keep alive ping reply"},
--	{WDIOS_DISABLECARD,  "Turn off the watchdog timer"},
--	{WDIOS_ENABLECARD,  "Turn on the watchdog timer"},
--	{WDIOS_TEMPPANIC,  "Kernel panic on temperature trip"},
-+	{WDIOF_OVERHEAT, "Reset due to CPU overheat"},
-+	{WDIOF_FANFAULT, "Fan failed"},
-+	{WDIOF_EXTERN1, "External relay 1"},
-+	{WDIOF_EXTERN2, "External relay 2"},
-+	{WDIOF_POWERUNDER, "Power bad/power fault"},
-+	{WDIOF_CARDRESET, "Card previously reset the CPU"},
-+	{WDIOF_POWEROVER, "Power over voltage"},
-+	{WDIOF_SETTIMEOUT, "Set timeout (in seconds)"},
-+	{WDIOF_MAGICCLOSE, "Supports magic close char"},
-+	{WDIOF_PRETIMEOUT, "Pretimeout (in seconds), get/set"},
-+	{WDIOF_ALARMONLY, "Watchdog triggers a management or other external alarm not a reboot"},
-+	{WDIOF_KEEPALIVEPING, "Keep alive ping reply"},
- };
- 
- static void print_status(int flags)
- {
- 	int wdiof = 0;
- 
--	if (flags == WDIOS_UNKNOWN) {
-+	if (flags == WDIOF_UNKNOWN) {
- 		printf("Unknown status error from WDIOC_GETSTATUS\n");
- 		return;
- 	}
+ include/net/tcp.h                             | 15 ++++++++--
+ net/ipv4/bpf_tcp_ca.c                         |  5 ++--
+ net/ipv4/tcp_bbr.c                            | 12 ++++++--
+ net/ipv4/tcp_output.c                         | 28 ++++++++++++-------
+ .../selftests/bpf/progs/tcp_ca_kfunc.c        |  8 +++---
+ 5 files changed, 48 insertions(+), 20 deletions(-)
+
 -- 
-2.53.0
+2.34.1
 
