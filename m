@@ -1,156 +1,133 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from out28-169.mail.aliyun.com (out28-169.mail.aliyun.com [115.124.28.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F37FD368D79;
-	Mon, 24 Aug 2026 12:38:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 304FD4189DD;
+	Mon, 24 Aug 2026 12:40:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.28.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787575090; cv=none; b=RWq9yXdd7QcoGK2S7Awjy1Glw4Xz3ifwoPi2Alv07oREmVUp5DMfWVil+EXIg/lWZlbrM0PQ3iK4Znc5SOzPscZ2cWXY13AhdbjI1IqQ+aoAuGbFjhmUgKM3K1RZxGoPDoJsAwd0DTeH8vU27Wb4AG0bVxpJd5ZShEHuR9TLCMI=
+	t=1787575233; cv=none; b=rqX0TNTrNtfkBpViuNU7BLc8HdJpHlSRl5PKnK37JfKZvm/UVlAZ5+gz+SJHCqtho4SAAToQpch2MDrjpsO2ahqYg86k9M2mnp0FgKkOWp4/ip2VszcHGuAuXw/ybQC+HvWVqNTJ1Nw7UxT8yLeykXXxLuaufzUo2WYvi/iaWfE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787575090; c=relaxed/simple;
-	bh=8mAqcc3ir7PcKwU2jc+bF9EnuGTpwLLlfOQ4fs5HX/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ihnmsa5dLDHnph/cnQ2XnayhlKCciDxheVv8GRQnyLFlcHuejzbKXObUdpKfN9Xg1y3vbP7alKwTCwopNhrCFXOmdgUNsycIwrkDhfqTnYMBm6cA0c9xYzfSLq5nHOpmb7PiROa5ajkAW5ECT6pai2sOxyVsBQ0R4M17dhFHa6c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dVwXi/Me; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dVwXi/Me"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F32211F000E9;
-	Mon, 24 Aug 2026 12:38:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787575088;
-	bh=X8d4MJxLvYDEQndMVgXp8CoVUrqM1yJn/BvKkNr5Xyk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=dVwXi/Me8zOrF7K3foN9mE65PVGdyQ1Lgr+8+32xwxvaha8cJxPNCTjMIAAZVfiLX
-	 YHEfnbeJFbD1uweJ9gNTWd2Ub/xUVxHCZuhGL8g6Qn8VbciQTypFRtOAphKnW8SuyB
-	 cgso8N2hRX5yX50Dd1DWSEYiA78momtYHGD2bk1Bm6QqSA+e3KWFCS1bEG60MnPEvM
-	 1FHqBRJQI4kiGunR80bgtwQkDvhglBBdywKWm84i0fl3xRGVtUyU4FvHCXnRG2V0pj
-	 V4YX+qOKTpOmXHHzgjFihMprEAZIcuKWnEahhTA9cS8FE/ugJ60htTnqOkh3NAfjGF
-	 JY81Lwn7Hd5Kw==
-Message-ID: <c635db29-9067-4783-b706-92e81ba8ce88@kernel.org>
-Date: Mon, 24 Aug 2026 14:37:58 +0200
+	s=arc-20240116; t=1787575233; c=relaxed/simple;
+	bh=VvMNeTl43EAnzwqFM3KAQGlPL31aXcFp7ZMK+ulU33k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A+mdTQiu+gVx4Ox99Vnh2knw+MloDqOZif+ZwhQtsLwhQqbSPHEa2aBS20PpBJWINP/pTiXlB92qIuOgr8X12NVqehCs6F/PyyORB5hrk1qghJWyEPsl8qOFU2mwyvLwC0p2+eqqyeKI16p2i5ngdgu6ET5tP3xNGufk4wl3bm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net; spf=pass smtp.mailfrom=open-hieco.net; arc=none smtp.client-ip=115.124.28.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=open-hieco.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=open-hieco.net
+X-Alimail-AntiSpam:AC=CONTINUE;BC=0.07653359|-1;CH=green;DM=|CONTINUE|false|;DS=CONTINUE|ham_system_inform|0.0567326-0.000132363-0.943135;FP=16598417234024275939|0|0|0|0|-1|-1|-1;HT=maildocker-contentspam033032062159;MF=zhang_wei@open-hieco.net;NM=1;PH=DS;RN=9;RT=9;SR=0;TI=SMTPD_---.iw1ggoq_1787575224;
+Received: from localhost.localdomain(mailfrom:zhang_wei@open-hieco.net fp:SMTPD_---.iw1ggoq_1787575224 cluster:ay29)
+          by smtp.aliyun-inc.com;
+          Mon, 24 Aug 2026 20:40:25 +0800
+From: Tina Zhang <zhang_wei@open-hieco.net>
+To: Sean Christopherson <seanjc@google.com>,
+	Jim Mattson <jmattson@google.com>,
+	kvm@vger.kernel.org
+Cc: Paolo Bonzini <pbonzini@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	zhouyanjing@hygon.cn,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Tina Zhang <zhang_wei@open-hieco.net>
+Subject: [PATCH v5 1/8] KVM: x86: Add helper to provide intercept linear addresses
+Date: Mon, 24 Aug 2026 20:39:47 +0800
+Message-ID: <20260824123954.315112-2-zhang_wei@open-hieco.net>
+X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20260824123954.315112-1-zhang_wei@open-hieco.net>
+References: <20260824123954.315112-1-zhang_wei@open-hieco.net>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 5/6] tools/mm: make gup_bench a benchmark only tool
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260813181230.483746-1-sarthak.sharma@arm.com>
- <20260813181230.483746-6-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260813181230.483746-6-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/13/26 20:12, Sarthak Sharma wrote:
-> Remove the functional modes (GUP_BASIC_TEST, PIN_BASIC_TEST and
-> DUMP_USER_PAGES_TEST) from gup_bench. Drop the kselftest dependency
-> and use normal diagnostics and exit statuses.
-> 
-> When no arguments are supplied, run a single GUP_FAST_BENCHMARK
-> with the existing default values. Let users select other
-> configurations through command-line options. Report ioctl failures
-> and handle errors without relying on assert().
-> 
-> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
-> ---
+Add get_intercept_linear_addr() to compute the linear address for
+intercepts that report one, and pass the result through
+x86_instruction_info.
 
+Handle INVLPG as the initial user.  INVLPG's memory operand is decoded
+with NoAccess, and thus src_val does not contain the operand address.
+Compute the address from the decoded segment base and effective address
+in the emulator, where the operand state is available.
 
-[...]
+This allows intercept handlers to use the linear address directly
+without duplicating the emulator's address calculation.
 
->  	free(tid);
->  
-> -	ksft_exit_pass();
-> +	if (thread_error)
-> +		goto err_unmap;
-> +
-> +	munmap((void *)gup.addr, size);
-> +	close(gup_fd);
-> +	close(filed);
-> +	return 0;
-> +
-> +err_unmap:
-> +	munmap((void *)gup.addr, size);
-> +err_close_gup_fd:
-> +	close(gup_fd);
-> +err_close_filed:
-> +	close(filed);
-> +	return 1;
->  }
+Signed-off-by: Tina Zhang <zhang_wei@open-hieco.net>
+---
+ arch/x86/kvm/emulate.c     | 29 +++++++++++++++++++++--------
+ arch/x86/kvm/kvm_emulate.h |  1 +
+ 2 files changed, 22 insertions(+), 8 deletions(-)
 
-Why not have a "int ret = 1;" and just befor ethe err_unmap, do ret = 0;
+diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
+index 8071b372d233..a0e57b64cadd 100644
+--- a/arch/x86/kvm/emulate.c
++++ b/arch/x86/kvm/emulate.c
+@@ -410,6 +410,26 @@ static int em_salc(struct x86_emulate_ctxt *ctxt)
+ 	_fault ? X86EMUL_UNHANDLEABLE : X86EMUL_CONTINUE; \
+ })
+ 
++static unsigned long seg_base(struct x86_emulate_ctxt *ctxt, int seg)
++{
++	if (ctxt->mode == X86EMUL_MODE_PROT64 && seg < VCPU_SREG_FS)
++		return 0;
++
++	return ctxt->ops->get_cached_segment_base(ctxt, seg);
++}
++
++static u64 get_intercept_linear_addr(struct x86_emulate_ctxt *ctxt,
++				     enum x86_intercept intercept)
++{
++	u64 la;
++
++	if (intercept != x86_intercept_invlpg)
++		return 0;
++
++	la = seg_base(ctxt, ctxt->src.addr.mem.seg) + ctxt->src.addr.mem.ea;
++	return ctxt->mode == X86EMUL_MODE_PROT64 ? la : (u32)la;
++}
++
+ static int emulator_check_intercept(struct x86_emulate_ctxt *ctxt,
+ 				    enum x86_intercept intercept,
+ 				    enum x86_intercept_stage stage)
+@@ -427,6 +447,7 @@ static int emulator_check_intercept(struct x86_emulate_ctxt *ctxt,
+ 		.src_type   = ctxt->src.type,
+ 		.dst_type   = ctxt->dst.type,
+ 		.ad_bytes   = ctxt->ad_bytes,
++		.intercept_linear_addr = get_intercept_linear_addr(ctxt, intercept),
+ 		.rip	    = ctxt->eip,
+ 		.next_rip   = ctxt->_eip,
+ 	};
+@@ -520,14 +541,6 @@ static u32 desc_limit_scaled(struct desc_struct *desc)
+ 	return desc->g ? (limit << 12) | 0xfff : limit;
+ }
+ 
+-static unsigned long seg_base(struct x86_emulate_ctxt *ctxt, int seg)
+-{
+-	if (ctxt->mode == X86EMUL_MODE_PROT64 && seg < VCPU_SREG_FS)
+-		return 0;
+-
+-	return ctxt->ops->get_cached_segment_base(ctxt, seg);
+-}
+-
+ static int emulate_exception(struct x86_emulate_ctxt *ctxt, int vec,
+ 			     u32 error, bool valid)
+ {
+diff --git a/arch/x86/kvm/kvm_emulate.h b/arch/x86/kvm/kvm_emulate.h
+index 3e375af15c03..9eda648a1314 100644
+--- a/arch/x86/kvm/kvm_emulate.h
++++ b/arch/x86/kvm/kvm_emulate.h
+@@ -51,6 +51,7 @@ struct x86_instruction_info {
+ 	u8  src_type;		/* type of source operand		*/
+ 	u8  dst_type;		/* type of destination operand		*/
+ 	u8  ad_bytes;           /* size of src/dst address              */
++	u64 intercept_linear_addr;	/* arch-reported linear address, if any */
+ 	u64 rip;		/* rip of the instruction		*/
+ 	u64 next_rip;           /* rip following the instruction        */
+ };
 
-That way you avoid the duplicate exit code.
-
-
-Apart from that
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
+base-commit: 1b731e5ded480bd1e5546aed35584238661ce72e
 -- 
-Cheers,
+2.43.7
 
-David
