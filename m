@@ -1,159 +1,349 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-10.mta0.migadu.com [91.218.175.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AE8B41E6DC;
-	Mon, 24 Aug 2026 13:00:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24F4421A08
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 13:12:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787576460; cv=none; b=ZfrdGTpfBPEV3+7+QQPGYZhnCgg4Q9F5hkIAx/eRcJ6/mlKV8K2hp8U83Y7baKudxTk8quuejAU7E0VYM/FrNZXXL1Lv8ixZYPjdMVkcg6UJ9SzDkgyge0pN2XmBoqep6fXcA+QrQGwP5op60bpqocSaKsoqfBoOe5+4zpI6ABI=
+	t=1787577156; cv=none; b=nry6QUgNGotNvMtWj6PNOEzXFZywWJI2R+vwlVs1jZEjRzZXzr4/ThAcc1byR7DaHIPRXuU0aMs4CFcKZUb4AHfWQNHKP6GMf9fTszbTN9SEIprCdOGSCYquyuEhJqplE0WHdw0/N40fEmIolydG5m3g58+FVo4hJai/EzJjqxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787576460; c=relaxed/simple;
-	bh=cjZycRPL/V2dbn/KJVAq2IjbBb3ROMdxq79AnwSsbXA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eoNu3chsznUgR7W4WWh2xbbLCytZ8e30t4DWh0Cr7SzcWUzbA/v/YEW9MikwV6I5qv5G+HJS0B4FRYjxtHq2q3MpW0KhZdIElM3lC+5D8RkLKAbIvr7ga54IMva+67EodwS848YG0zSz0MsULL6yfBa66SnbkcLgZY4/FfEIp+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SPaqJoVX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787577156; c=relaxed/simple;
+	bh=/b5A6pKJXdJDFq/apoa26JYD1JiLS7wRusBfDVE9t8A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Y368UltrYHjK0SvAAhakPqpaENLb/3TWa8gCzGkt3tBDKToUh9GJ4TaPbF67yzNlWyKkcw1tiE80BzbVdk75utbSoVEqbbu44QrGqEvlHW4MpZ9M1k/yivYkpg9ZrVlWDtglW7Jbu9BxtJi/PDvwpSsw7uzrK1bS6gGBVa0w2OE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BOoEAsLQ; arc=none smtp.client-ip=91.218.175.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SPaqJoVX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01D9D1F00A3D;
-	Mon, 24 Aug 2026 13:00:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787576459;
-	bh=q36gRSoP99ff+fMOz6jfXIaZTDy+JL/ht/1iEGaa99g=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=SPaqJoVXqsHFY/xMI1dkbMXlu1/Q7FPUphBkZlD/TSukZg6RpW56PgrwFXhUEqcqg
-	 tD7j6Z954yRqGmvT9jzWfXVJuJaHnZYj6t6Qb2/os55Jxdf6IVv39A/6N4w2m5sat1
-	 HWgWW7pF70RVTo9H4gqxwi48p1TjbW9OJpSPFyg1YMkMPPVYsm4AE/Lh6QP1vSV/0B
-	 myp0lvAM2OzHIQi/nNJiBhGvfJEk1gOxfrIc/u5AiHcMz4rP5KR9cGk6sX1elmNz30
-	 Fwg0Q3/UAB0vGaRwA2tpMXmJjmcKy5zZ4DgK+xicCp3KcA97KHLndhx8tf3rkQFzot
-	 CyNbwdqpLIZ/Q==
-Message-ID: <8a99f753-0713-4194-8eb5-90da0724e647@kernel.org>
-Date: Mon, 24 Aug 2026 15:00:47 +0200
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BOoEAsLQ"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=/b5A6pKJXdJDFq/apoa26JYD1JiLS7wRusBfDVE9t8A=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787577152; v=1; x=1788181952;
+ b=BOoEAsLQzmYT5bu8nMEdHCRy4VSguhfQDyPBJVE08HYsAbcPlwtozpevsCGaw0BmAWqGImn7
+ AU0stAAd9jWj1TN8fShNItWqm8sIy0sP8mZ5iVm7oU3ymin3EQBGctmsWLcDkGNhQmhJT5R2prP
+ xdKZGsGtcsafYgphfDWmYcsU=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id c9d12fd6d0b2f922;
+	Mon, 24 Aug 2026 13:12:32 +0000
+X-Mizu-Trace-ID: c9d12fd6d0b2f922
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	hughd@google.com,
+	lance.yang@linux.dev,
+	liam@infradead.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	usama.arif@linux.dev,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	kas@kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind migration entries
+Date: Mon, 24 Aug 2026 21:12:24 +0800
+Message-Id: <20260824131224.73344-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <20260816224609.308019-17-kirill@shutemov.name>
+References: <20260816224609.308019-17-kirill@shutemov.name>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 5/5] mm: selftests: Add shmem into memory failure test
-To: Lisa Wang <wyihan@google.com>, Miaohe Lin <linmiaohe@huawei.com>,
- Naoya Horiguchi <nao.horiguchi@gmail.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
- Hugh Dickins <hughd@google.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
- linux-kselftest@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
- Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
- Rik van Riel <riel@redhat.com>, Yu Zhang <yu.c.zhang@linux.intel.com>,
- Lorenzo Stoakes <ljs@kernel.org>, "Liam R. Howlett" <liam@infradead.org>
-Cc: rientjes@google.com, seanjc@google.com, ackerleytng@google.com,
- vannapurve@google.com, michael.roth@amd.com, jiaqiyan@google.com,
- tabba@google.com, dave.hansen@linux.intel.com,
- Isaku Yamahata <isaku.yamahata@intel.com>, Xiaoyao Li <xiaoyao.li@intel.com>
-References: <20260823-memory-failure-mf-delayed-fix-v5-0-d97a5703e45a@google.com>
- <20260823-memory-failure-mf-delayed-fix-v5-5-d97a5703e45a@google.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260823-memory-failure-mf-delayed-fix-v5-5-d97a5703e45a@google.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-
-On 8/23/26 21:40, Lisa Wang wrote:
-> Add a shmem memory failure selftest to test the shmem memory failure is
-> correct after modifying shmem return value.
-> 
-> Specifically, test the expected behavior under various scenarios
-> combining page dirtiness (dirty vs clean) and failure types (hard vs
-> soft):
-> + Dirty + Hard: Trigger a SIGBUS on injection, and trigger another
->   SIGBUS when reading the page again.
-> + Dirty + Soft: No SIGBUS is triggered, and the original value can be
->   read successfully.
-> + Clean + Hard: No SIGBUS is triggered on injection, but trigger a
->   SIGBUS when trying to read the page again.
-> + Clean + Soft: No SIGBUS is triggered, and the page can be read
->   successfully.
-> 
-> Acked-by: Miaohe Lin <linmiaohe@huawei.com>
-> Signed-off-by: Lisa Wang <wyihan@google.com>
-> ---
->  tools/testing/selftests/mm/memory-failure.c | 118 +++++++++++++++++++++++++++-
->  1 file changed, 115 insertions(+), 3 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/memory-failure.c b/tools/testing/selftests/mm/memory-failure.c
-> index 1a5a32e22cce..5b26f0c44664 100644
-> --- a/tools/testing/selftests/mm/memory-failure.c
-> +++ b/tools/testing/selftests/mm/memory-failure.c
-> @@ -20,6 +20,10 @@
->  
->  #include "vm_util.h"
->  
-> +#ifndef fallthrough
-> +# define fallthrough __attribute__((__fallthrough__))
-> +#endif
-
-This doesn't belong into this test.
-
-rseq/rseq.c selftest already uses it.
-
-I think tools/testing/include/ already provides it.
-
-Maybe
-
-	#include <linux/compiler.h>
-
-does the trick?
+Content-Transfer-Encoding: 8bit
 
 
+On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
+>From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+>
+[...]
+>+static enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+>+		struct collapse_candidate *cand, pte_t *pte)
+>+{
+>+	const unsigned int nr_pages = candidate_nr_pages(cand);
+>+	unsigned int nr_saved = 0, nr_frozen = 0;
+>+	enum scan_result result;
+>+	struct folio *folio;
+>+	unsigned long addr;
+>+	unsigned int i;
+>+
+>+	for (i = 0, addr = cand->addr; i < nr_pages;) {
+>+		pte_t ptent = ptep_get(pte + i);
+>+		unsigned int nr, nr_max, k;
+>+		pte_t rep;
+>+
+>+		if (pte_none(ptent)) {
+>+			/* Hole: nothing to freeze; install verifies it stayed one */
+>+			cand->saved_ptes[i] = ptent;
+>+			nr_saved = ++i;
+>+			addr += PAGE_SIZE;
+>+			continue;
+>+		}
+>+		if (is_zero_pfn(pte_pfn(ptent))) {
+>+			/*
+>+			 * Clear the zeropage mapping now, covered by the round's
+>+			 * ranged flush: overwriting a live PTE at install would
+>+			 * be a valid->valid transition, breaking arm64's
+>+			 * break-before-make.  The zeropage has neither rmap nor
+>+			 * per-map references -- the saved value alone undoes it.
+>+			 */
+>+			cand->saved_ptes[i] =
+>+				ptep_get_and_clear(mm, addr, pte + i);
+>+			nr_saved = ++i;
+>+			addr += PAGE_SIZE;
+>+			continue;
+>+		}
+>+
+>+		folio = pte_folio(ptent);
+>+
+>+		/*
+>+		 * A folio revisited by a second span of this round is already
+>+		 * ours and frozen at its first span: folio_get() on a zero count
+>+		 * is a bug, and try-get fails cleanly.  Scrambled layouts
+>+		 * (mremap) construct this; nothing else can hold a folio frozen
+>+		 * while its PTE is live under our ptl, so it is not transient.
+>+		 */
+>+		if (!folio_try_get(folio)) {
+>+			result = SCAN_PAGE_COUNT;
+>+			goto unfreeze;
+>+		}
+>+		if (!folio_trylock(folio)) {
+>+			folio_put(folio);
+>+			result = SCAN_PAGE_LOCK;
+>+			goto unfreeze;
+>+		}
+>+
+>+		/*
+>+		 * Never freeze a folio under writeback.  PG_writeback holds no
+>+		 * reference of its own -- the swapcache reference keeps the folio
+>+		 * alive, and everything that would drop it waits for the flag --
+>+		 * so folio_end_writeback() plain folio_get()s a folio it may
+>+		 * assume is alive: a BUG on a frozen one, or with
+>+		 * CONFIG_DEBUG_VM off, a free under our copy.
+>+		 *
+>+		 * Unlike every other hazard here, the freeze does not catch it.
+>+		 * folio_expected_ref_count() counts the swapcache reference, so
+>+		 * the count is exactly right and the freeze succeeds.  Nor can
+>+		 * "is it in the swapcache" stand in for this test: that would
+>+		 * refuse the pages the fault-in pass just swapped in.
+>+		 *
+>+		 * Reachable even though writeback starts on an unmapped folio: a
+>+		 * re-fault from the swapcache maps it back before the bio
+>+		 * completes, and folio_free_swap() will not drop the cache entry
+>+		 * under writeback.  Testing once is enough -- writeback starts
+>+		 * only under the folio lock, which we hold from here through
+>+		 * putback.
+>+		 */
+>+		if (folio_test_writeback(folio)) {
+>+			folio_unlock(folio);
+>+			folio_put(folio);
+>+			result = SCAN_PAGE_DIRTY_OR_WRITEBACK;
+>+			goto unfreeze;
+>+		}
+>+
+>+		/* Each slot's own value: a span agrees on the PFN, not the rest */
+>+		cand->saved_ptes[i] = ptent;
+>+		nr_max = collapse_span_max(ptent, nr_pages - i);
+>+		for (nr = 1; nr < nr_max; nr++) {
+>+			pte_t tail = ptep_get(pte + i + nr);
+>+
+>+			if (!pte_present(tail) ||
+>+			    pte_pfn(tail) != pte_pfn(ptent) + nr)
+>+				break;
+>+			cand->saved_ptes[i + nr] = tail;
+>+		}
+>+
+>+		/*
+>+		 * The clear is the GUP-fast linearization point: a grab landing
+>+		 * before it elevates the refcount and the freeze below fails
+>+		 * (the candidate unfreezes); one landing after fails its PTE
+>+		 * re-read and retries.  Clear and store sit adjacent under one
+>+		 * uninterrupted ptl hold, batched per span
+>+		 * (get_and_clear_full_ptes() unfolds contpte), so the transient
+>+		 * none window is invisible to installers, which all take the ptl.
+>+		 */
+>+		rep = get_and_clear_full_ptes(mm, addr, pte + i, nr, 0);
+>+
+>+		/*
+>+		 * Dirty from the clear -- including any the hardware set since
+>+		 * the reads above -- goes to the folio, the way unmap does,
+>+		 * rather than onto PTEs that never had it.  Young needs no such
+>+		 * care: a migration entry drops it either way.
+>+		 */
+>+		if (pte_dirty(rep))
+>+			folio_mark_dirty(folio);
+>+
+>+		for (k = 0; k < nr; k++) {
+>+			pte_t saved = cand->saved_ptes[i + k];
+>+			swp_entry_t entry;
+>+			pte_t swp_pte;
+>+
+>+			entry = make_readable_migration_entry(pte_pfn(saved));
+>+			swp_pte = swp_entry_to_pte(entry);
+>+			if (pte_soft_dirty(saved))
+>+				swp_pte = pte_swp_mksoft_dirty(swp_pte);
+>+			set_pte_at(mm, addr + k * PAGE_SIZE, pte + i + k,
+>+				   swp_pte);
+>+		}
+>+		nr_saved = i + nr;
+>+
+>+		if (!folio_ref_freeze(folio,
+>+				      folio_expected_ref_count(folio) + 1)) {
+>+			result = SCAN_PAGE_COUNT;
+>+			goto unfreeze;
+>+		}
+>+		nr_frozen = nr_saved;
 
--- 
-Cheers,
+Just one thing I was wondering about ... can deferred_split_isolate()
+remove a source folio from deferred_split_lru while its refcount is
+frozen by collapse_freeze_candidate()?
 
-David
+Assume an earlier span belongs to an anonymous large folio on the
+deferred split queue, then a later span fails folio_trylock().
+collapse_freeze_candidate() continues after freezing each source folio
+and calls collapse_unfreeze_candidate() on a later failure:
+
+static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+		struct collapse_candidate *cand, pte_t *pte)
+{
+...
+	for (i = 0, addr = cand->addr; i < nr_pages;) {
+...
+		if (!folio_trylock(folio)) {
+			folio_put(folio);
+			result = SCAN_PAGE_LOCK;
+			goto unfreeze;
+		}
+...
+		nr_saved = i + nr;
+
+		if (!folio_ref_freeze(folio,
+				      folio_expected_ref_count(folio) + 1)) {
+			result = SCAN_PAGE_COUNT;
+			goto unfreeze;
+		}
+		nr_frozen = nr_saved;
+
+		i += nr;
+		addr += nr * PAGE_SIZE;
+	}
+
+...
+unfreeze:
+	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+	return result;
+}
+
+folio_ref_freeze() takes the source folio's refcount to zero:
+
+static inline int folio_ref_freeze(struct folio *folio, int count)
+{
+	return page_ref_freeze(&folio->page, count);
+}
+
+static inline int page_ref_freeze(struct page *page, int count)
+{
+	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+
+...
+	return ret;
+}
+
+While collapse_freeze_candidate() still holds the source folio lock,
+deferred_split_scan() can call deferred_split_isolate():
+
+static unsigned long deferred_split_scan(struct shrinker *shrink,
+		struct shrink_control *sc)
+{
+	LIST_HEAD(dispose);
+	struct folio *folio, *next;
+	int split = 0;
+	unsigned long isolated;
+
+	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
+					    deferred_split_isolate, &dispose);
+}
+
+static enum lru_status deferred_split_isolate(struct list_head *item,
+					      struct list_lru_one *lru,
+					      void *cb_arg)
+{
+	struct folio *folio = container_of(item, struct folio, _deferred_list);
+	struct list_head *freeable = cb_arg;
+
+	if (folio_try_get(folio)) {
+		list_lru_isolate_move(lru, item, freeable);
+		return LRU_REMOVED;
+	}
+
+	/*
+	 * We lost race with folio_put(). Read folio state before the
+	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+	 * locklessly, so once removed the folio can be freed any time.
+	 */
+	if (folio_test_partially_mapped(folio)) {
+		folio_clear_partially_mapped(folio);
+		mod_mthp_stat(folio_order(folio),
+			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+	}
+	list_lru_isolate(lru, item);
+	return LRU_REMOVED;
+}
+
+And folio_try_get() fails because the source folio has a frozen refcount.
+deferred_split_isolate() treats the failure as a race with folio_put(),
+clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
+accounting when set, then removes the folio from deferred_split_lru ...
+
+>+
+>+		i += nr;
+>+		addr += nr * PAGE_SIZE;
+>+	}
+>+
+>+	cand->state = CAND_FROZEN;
+>+	return SCAN_SUCCEED;
+>+
+>+unfreeze:
+>+	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+>+	return result;
+
+And collapse_unfreeze_candidate() restores the source PTEs and refcount,
+then unlocks and puts the source folio :)
+
+The source folio is not added back to the deferred split queue, so an
+underused or partially mapped folio can remain off the queue.
+
+Should collapse unqueue the source folio after folio_ref_freeze()
+succeeds, remember whether it was on the deferred split queue and whether
+PG_partially_mapped was set, then requeue it if
+collapse_unfreeze_candidate() restores the source folio?
+
+[...]
+
+Cheers, Lance
