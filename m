@@ -1,33 +1,29 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9733B36F8F7;
-	Mon, 24 Aug 2026 15:12:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF1A83264F9;
+	Mon, 24 Aug 2026 15:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787584361; cv=none; b=VLfXP12petee+LB7cVH+rs+yqnss4xgmc9laFmGB0br6T4OLIBiKtlxZtDeqRWnhfbKZAyso9fQIvRNAptrMkYmeGADlIwXjWoTdHbdVtFojVxgIJB9Az5PN7MD5iYQmRCu0TaJxZv+MM5wM0zADiM7pC0HYChNxx5KLiP5deAQ=
+	t=1787584446; cv=none; b=Yr2P3hLlJtFx6P6kASgWHFqR4doMkIQTPb2J1G1iISq+LKPiQmcIHec+HBIko5MT/RehzgDcx8TKFXXgyTg47UhDR8hRo3tYRO+UncGNJ3K6rjQpFIM6S3M8km1j1DdEN6/n0LHKwJVIF+ekyLu1BRjknj5qtRqJPJNOb1JTxiM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787584361; c=relaxed/simple;
-	bh=9wW+GCgN/Ukf+SGQy4tCr88gM63EiN7iHnQj3gpD7/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZmnohNePZlj1c7Hd8Ict8is5osGkzk0xnsh2jO1xIGHJnPQDFyf3wFfbAq8m3yluD4NM36LHu0+7dKDPke1jaQYlG7b69ZkEuR52pDhldxsT0C/SU0dt8ep6Xhb5ALq+pMM80rTNuzwAY51hsmAtBhHkNJ+uPUgVD85YFu5AGNc=
+	s=arc-20240116; t=1787584446; c=relaxed/simple;
+	bh=hSpT3nT9rLGatD6wsAtnzTQvhRM7DzjJw55A10hr2Lc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HF7WNoRsQq/iQVCnH9ep0ngUPD4Ygr4weP8jWVkOoMqehA8+OC0wT2HLUGp/9sOW7LeF4mU83jOhqLd3V9BGINBKTazrkMtWeND+guIj1eIubRr/LWd+qyywvIX8OfttKM3P8v4GRVCaG9Sp/Jrc8ix3j4szugRmVc/7HN8agyE=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B011F000E9;
-	Mon, 24 Aug 2026 15:12:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE0831F000E9;
+	Mon, 24 Aug 2026 15:14:03 +0000 (UTC)
 From: Geert Uytterhoeven <geert@linux-m68k.org>
-To: David Airlie <airlied@gmail.com>,
-	Simona Vetter <simona@ffwll.ch>,
-	Krzysztof Karas <krzysztof.karas@intel.com>,
-	Sebastian Brzezinka <sebastian.brzezinka@intel.com>,
-	Krzysztof Niemiec <krzysztof.niemiec@intel.com>,
-	Maarten Lankhorst <dev@lankhorst.se>,
-	Andi Shyti <andi.shyti@linux.intel.com>
-Cc: dri-devel@lists.freedesktop.org,
-	linux-kselftest@vger.kernel.org,
+To: Christoph Hellwig <hch@lst.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Geert Uytterhoeven <geert@linux-m68k.org>
-Subject: [PATCH] gpu: GPU_BUDDY_KUNIT_TEST should not select GPU_BUDDY
-Date: Mon, 24 Aug 2026 17:12:30 +0200
-Message-ID: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
+Subject: [PATCH] raid/kunit: Enable RAID6 PQ and XOR benchmarks if KUNIT_ALL_TESTS=m
+Date: Mon, 24 Aug 2026 17:14:01 +0200
+Message-ID: <64c6e0191bd8ccef0074ffbb09bd0584680d710b.1787584360.git.geert@linux-m68k.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -37,45 +33,36 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enabling a (modular) test should not silently enable additional kernel
-functionality, as that may increase the attack vector for a product.
+Enabling the (possibly long-running benchmarks) by default may cause a
+big delay in boot time in case of built-in tests.  However, they can
+still safely be enabled by default if all tests are modular, as they
+would only run when requested explicitly by the system administrator.
 
-Fix this by reverting the select to a dependency.  Make sure the GPU
-buddy allocator can be tested without enabling another driver that uses
-DRM_BUDDY by making GPU_BUDDY visible if KUNIT is enabled.
-
-The page based buddy allocator for GPU memory is only used by DRM.
-Hence add a dependency on DRM to GPU_BUDDY, to prevent asking the user
-about this code when configuring a kernel without DRM support.
-
-Fixes: 8fe3fc37564920ae ("gpu: Fix dependencies in CONFIG_GPU_BUDDY_KUNIT_TEST")
 Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 ---
- drivers/gpu/Kconfig | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ lib/raid/Kconfig | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/gpu/Kconfig b/drivers/gpu/Kconfig
-index 3bcf08260d73a782..d881ab6f7a006a3b 100644
---- a/drivers/gpu/Kconfig
-+++ b/drivers/gpu/Kconfig
-@@ -1,14 +1,15 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/lib/raid/Kconfig b/lib/raid/Kconfig
+index 01f007b2522cfc33..563a178aa930c420 100644
+--- a/lib/raid/Kconfig
++++ b/lib/raid/Kconfig
+@@ -32,6 +32,7 @@ config XOR_KUNIT_TEST
+ config XOR_BENCHMARK
+ 	bool "Benchmark for xor_gen"
+ 	depends on XOR_KUNIT_TEST
++	default y if KUNIT_ALL_TESTS=m
+ 	help
+ 	  Include benchmarks in the KUnit test suite for xor_gen.
  
- config GPU_BUDDY
--       bool
-+       bool "Page based buddy allocator for GPU memory" if KUNIT
-+       depends on DRM || COMPILE_TEST
-        help
-          A page based buddy allocator for GPU memory.
+@@ -63,6 +64,7 @@ config RAID6_PQ_KUNIT_TEST
+ config RAID6_PQ_KUNIT_BENCHMARK
+ 	bool "Benchmark for RAID6 PQ"
+ 	depends on RAID6_PQ_KUNIT_TEST
++	default y if KUNIT_ALL_TESTS=m
+ 	help
+ 	  Include benchmarks in the KUnit test suite for raid P/Q generation.
  
- config GPU_BUDDY_KUNIT_TEST
-        tristate "KUnit tests for GPU buddy allocator" if !KUNIT_ALL_TESTS
-        depends on KUNIT
--       select GPU_BUDDY
-+       depends on GPU_BUDDY
-        default KUNIT_ALL_TESTS
-        help
-          KUnit tests for the GPU buddy allocator.
 -- 
 2.43.0
 
