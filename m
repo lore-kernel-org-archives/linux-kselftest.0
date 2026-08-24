@@ -1,125 +1,125 @@
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F253E92B9
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 13:18:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABA217B50A;
+	Mon, 24 Aug 2026 13:21:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577540; cv=none; b=pYQjl1oWXzhDFp0ze14TPJtR3Ts52wBdk9megLY7K0uyTNMsdZ6za1ATTxSZCIFDsJGBLzF+601b5VaXNrje6o9Mo38/lPNZA5eSZ7eNYkbI+zOKWcptRjh9ZxqsTBwZrQxY3ejuAuIXT4+ginngxHaUpOyFTD8OpqJrtxT20YI=
+	t=1787577710; cv=none; b=EV9u4Y7TeYJPLn7wtcyfM0+jxZq+eQCOHxzz4sLuiuK9rbEKJWzUZdMquHs6xDhUhjtOgW78ZPa8m3cs+rwObsyy5ovhVlVTDl5XYMfOniKOEzHxNO63PtSY23gGLW2szD2/33Xd/09BcB+4XBApTcwL0Xa3pd+QFmB2ZN6ZFdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577540; c=relaxed/simple;
-	bh=8RHTXuRYUUKOJBcAw84Ji+ZmzZO1dHfvXXjiERNb6fU=;
+	s=arc-20240116; t=1787577710; c=relaxed/simple;
+	bh=Lw0JsDV0WTzHsR1mYq2sQkaCsFm2SnOuXntn3KxvQ10=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jUYVFL5WVsF09wKZaeoXuvOUpMMHSA3qBEHeK1zU1w3eDkBrNeCul21LXe2eirrj3y8dff+ds21D3GK5H5JFY956J+VBGr86yFXtr/wUnMf9djoIHMDgFHu15MoZ1EQJP4KrcweGAAOMcZFZDcYyoraf5e+u73FzN0ARbUFQ6Y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=HYA6NXXn; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=BEDk3HyBB0mmRXnnD0e8WcEm+cH6t5Mlhglz/IUrIUlR71PjVj0u059G7ZRRsLQSsmAC22XQv41Faq9ZRH1feU/h6/OYW/nAAT0JOpme1i5gRBm96kzD+RblmCsfY0CxFbE4/XrzCLdNNbI4TuKlwL11yyDyDsjSr2wGXN0FX/g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3kIUzMh; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="HYA6NXXn"
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-c15e592da74so481103166b.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 06:18:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1787577537; x=1788182337; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=8RHTXuRYUUKOJBcAw84Ji+ZmzZO1dHfvXXjiERNb6fU=;
-        b=HYA6NXXn3PEP73gl9xwOatTV4UNwR8HC3CjDK8MSZLjph6rsc73XvL1E+XYSzBcTHS
-         Yrutpl70LJzJJx0PghEGd6IJQBNfRj+bJ/G+EnbKN9kWRR1mAA+mKWe3rPh1UDanYxTu
-         ecaMIl9ehCR8ERg1UjQru/RzLHNX01/lMrfWR/Xx4v/UnaZr/RdsGrQGHroQly/aJ/hw
-         cBYv0JcTyQbv62/s5ZOBlvHs4oca1S282N4U+AM4BftCtmb00B+3KFxBrvAnGmWCG+85
-         eqR50CM74PHXanyzjiuywr8lI/5aOCB3Bqdk3pMFaly+oxbh6jycL0IL/FVgRsvGQgXe
-         uyTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787577537; x=1788182337;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=8RHTXuRYUUKOJBcAw84Ji+ZmzZO1dHfvXXjiERNb6fU=;
-        b=dg0ATiEz07sw8T8a8+afqx6JpPiZXUno1qcClVNmnmVrqhEN3QcNOPcaYRqMc4mCB/
-         gWvR4Hvk4trLppdHLtRooOjs2Y50O9rwBlC/rNNzTLkoi5RCIjiDd53maBhCZF8kIH6X
-         k7W9BziMvSansb0R+TksejL18EThm4jd4gErz/jlBgirRDi+dVPd2q8r6MVVwxkQ0Atk
-         5mBrK+mW2lvXeIlraNAgmqq7Ff+Bm9+FQxoxYTw4+2RqiiW6mHQ/ZejA4Ndils0VsITC
-         tioq/yWFYB8r2Xt1Bsex1myY3/37OVUNDVZVOTXwTqxgXsbkoIcoq7tMsipuFmAMhUyK
-         lxFA==
-X-Forwarded-Encrypted: i=1; AHgh+RpmmfLPE7GGmHMPuAnd+KH6gxswHpXEwU07EkYVKJnCoUU1d2Q6yi88ZXkdsMPKoKD9z4XDlTsS61nz3xB/Ehc=@vger.kernel.org
-X-Gm-Message-State: AFuF++k8vT1vaMWiyaXasZbw/p6ydXN4qByEFGSfX6Os8K5ncJvYO3Jn
-	IgwiomzPSmmd70fkecPEOqEYUlVq150j+iQibbDvym7dyKlwRhkHHbHPZeWs3+yv0+c=
-X-Gm-Gg: AR+sD111zQSPlm0UWmrEqeQyEanLDR7LXKipHpAVinJnCNZ56VsvjM5kF8t7j931Qv5
-	9A0OCAxv+CaVyfiGLlhd35qrYe3H8AW80Lvz4Ds4zadTVLf0pLh5IsLolNitYFEWD3Om9F40nVW
-	bknF6H0UYoAVr01N6bS/lJwCUlicGyyd/4L4Xl11fT9bHntbbMaMuFGiNGMpQtFRC86ms3prQg3
-	sSKBfYBBREuDEfHJrbjPkIyWoHZQB6DNVGzY1cOo0pC1rNBN2CvjEnK9BUJY0GXogT200oEbvfd
-	Mj1s6ua5Xfo4j6adTq9eBZgPyNsg/gTqdcJDFvkqYIRXq11bp9O2sFoiv9YY7lxuwHXQ5rhhJ2s
-	tznA5FyCDEWg+mQtHB3Zsa3Tekoh+2LdAU/sgVFC2qXWMHUKLLk/l/+27kyGisbZ04hmBSBm824
-	WBEO7qk4uO/4cXWmX8k5lwoWBmIC3bhGsrgfEB0YA7tI3FexO4YciIiKLlRi0ppQs=
-X-Received: by 2002:a17:907:72c3:b0:c20:2d38:e518 with SMTP id a640c23a62f3a-c249238c382mr2130827666b.2.1787577537181;
-        Mon, 24 Aug 2026 06:18:57 -0700 (PDT)
-Received: from localhost.localdomain ([2001:af0:8000:1409:193:86:92:181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24dfd91dd4sm20165366b.16.2026.08.24.06.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 06:18:56 -0700 (PDT)
-Date: Mon, 24 Aug 2026 15:18:54 +0200
-From: Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To: Eric Chanudet <echanude@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Michal Hocko <mhocko@kernel.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
-Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
- area counters
-Message-ID: <aoxEGzZ1eVzIU8xH@localhost.localdomain>
-References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3kIUzMh"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8431A1F000E9;
+	Mon, 24 Aug 2026 13:21:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787577709;
+	bh=C1JOhLm4zg8p33Eesvf4KAwYUKhywd17N8ZTmUOFlhU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To;
+	b=C3kIUzMhBQVJBfsXshHzLfqtoxocGaUhRkQoECbAKeJQlpCpUfZUYrgKN+hbK6Fmm
+	 vZ+AH6AecQm4ImUrVUYSpRNZ7vp6fEPBYgLlAwq6ojg0QZ8ExNDQ/BV5BMi0+PSfOS
+	 jnFW3wNpWO7dNuN4Z+5XMMJReiDd/893GjpZhJuhHBn6d5+l+XALb/h3/DysSKN75q
+	 cf7disUtAvAF8RdKux/E1FKxBTsU2c0cTsyEdfslqfP/riTetz4RZ8IJMw0HHxujLW
+	 aaB0xLOyX3AwIgIoHEIxVwXQl3pBUpttWNkd0G+TOdXoi+eK8lDcC16I2Syb/hHUXI
+	 TGqNKfKngLeig==
+Date: Mon, 24 Aug 2026 16:21:38 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Hagen Paul Pfeifer <hagen@jauu.net>, linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
+Message-ID: <aoxFYlkTvHMqdqf_@kernel.org>
+References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="4jd5dcmb4dfal7fx"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+In-Reply-To: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
 
+On Sat, Aug 22, 2026 at 08:14:02PM +0100, Lorenzo Stoakes (ARM) wrote:
+> secretmem has a relatively laissez-faire attitude to accounting the folios
+> it allocates.
+> 
+> The intention is that the memory is treated as if it were mlock()'d and
+> thus is limited by the RLIMIT_MEMLOCK limit if the CAP_IPC_LOCK capability
+> is not in place (which broadly allows unlimited ranges of mlock()'d
+> memory).
+> 
+> The lifecycle for memfd accounting against this limit is - account on map,
+> unaccount on unmap but the lifecycle of memfd folios is allocate on fault,
+> deallocate on inode eviction.
+> 
+> This mismatch is problematic because the folios are unevictable and remain
+> so until the inode is evicted (set using mapping_set_unevictable()).
+> 
+> This is problematic as it eliminates usual mlock() semantics - mapping
+> folios then unmapping them does not clear their unevictable state, since it
+> depends on AS_UNEVICTABLE, not PG_mlocked.
+> 
+> A user can therefore easily work around the RLIMIT_MEMLOCK limit - simply
+> map then unmap and VmLck no longer counts the secretmem range (or more
+> involved - fork which also achieves the same thing).
+> 
+> Worse - they are not accounted in the process's RSS even if mapped again,
+> meaning the OOM killer won't know to kill the process.
+> 
+> A user without the CAP_IPC_LOCK capability can therefore repeatedly
+> map/unmap (or map/fork) and consume all available system memory with
+> unevictable folios and cause system instability.
+> 
+> A secretmem fd can be passed between processes and over fork so a
+> per-process limit simply does not make sense.
+> 
+> So follow the precedent set by io_uring, perf, skbuff, iommufd and xdp -
+> track the number of locked pages in user_struct->locked_vm.
+> 
+> Since the scope tracked is actually inode lifetime, the RLIMIT_MEMLOCK
+> applies per-user not per-process. Also given the change in scope it doesn't
+> make sense to bypass for users with CAP_IPC_LOCK, so remove it.
+> 
+> There is simply no reason to carry on marking the mapping as mlock()'d
+> since it's misleading and the lifecycle is now correctly handled, so remove
+> this too.
+> 
+> Additionally, fix the selftest which checks the limit as this now must
+> assert SIGBUS on limit violation on fault-in.
+> 
+> __secretmem_account_pages() is more or less a duplicate of the code that
+> io_uring etc. use, but since this is a bug fix that needs backporting,
+> defer any de-duplication efforts to a follow-up.
+> 
+> Reported-by: Daehyeon Ko <4ncienth@gmail.com>
+> Closes: https://lore.kernel.org/linux-mm/20260813225328.2010303-1-4ncienth@gmail.com/
+> Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
---4jd5dcmb4dfal7fx
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
- area counters
-MIME-Version: 1.0
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 
-Hi Eric.
-
-On Fri, Aug 21, 2026 at 02:56:52PM -0400, Eric Chanudet <echanude@redhat.com> wrote:
-> Finally register the per-area usage counters in the cgroupfs. Each CMA
-> area creates a memory.cma.<area>.{current,max} pair for reporting and
-> limitation for each area.
-
-These areas quite resemble dmem regions.
-What is the relation to the previous dmem double-charging [1]?
-(Successor, alternative,...)
-
-Thanks,
-Michal
-
---4jd5dcmb4dfal7fx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iJEEABYKADkWIQRCE24Fn/AcRjnLivR+PQLnlNv4CAUCaoxEuhsUgAAAAAAEAA5t
-YW51MiwyLjUrMS4xMiwyLDIACgkQfj0C55Tb+Ai6WwEAt6IhJ1j5eKMrYIQuXx6H
-vcVhIKJYy4uCLIiKXOf6/zMA/jVVm1UxH8BKR0Myu49nuRzoWqbLCU9ie1WLGOPG
-nZIA
-=+xTm
------END PGP SIGNATURE-----
-
---4jd5dcmb4dfal7fx--
+-- 
+Sincerely yours,
+Mike.
