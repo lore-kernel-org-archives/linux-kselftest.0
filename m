@@ -1,112 +1,286 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9AB62F6565;
-	Mon, 24 Aug 2026 08:02:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E29F2BF3D7;
+	Mon, 24 Aug 2026 08:09:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787558524; cv=none; b=XAiXYVdAmrb3/LRJE+ZdBEAQscBUStC2vOc7rV3+iOIkwTJnofrda9ARaC0nftQZOYrN2iQ8xQzmmBHGkLVn3HG0oBc69weC9FvvoJUPxgwLggMVE1B9YMGOEh3qMWdN/RJnClftHtXHeHSgay6542A+UjrkpT8VrdPJ55CU7CA=
+	t=1787558986; cv=none; b=ZBclpMXiU/ZL8miXf6qbOfDPttgY7fCLEhwbBFsOSMpjZgxJrbzEqV24Yk9P/IT7nB70pF+6WXuvHXA0u76ctSTdH5QdWTOUA1+DONIFFFrl0SM+pC30xrCp0mcFesLbdg9PHP5x/70Y4batS9OImXPZBL56QrVcPmuWLEDGoYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787558524; c=relaxed/simple;
-	bh=VoBXE87JUfXW8yZhxrbhPbyHzAWbfh1pWd665o5dBAU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=nkCLmH7eR1dQjMn5obpf/HG2uo3K5IsJ26unROb9FgP8CW+xSbHtT3NQWg2/iMTiqfCZ+pb6cTDSmoUEK6YOk99g1VdzLxGaurpJ3VSXdj3em2DIfkjF8ecFD8foyOJVXq8k6y8JUKqT5nXTtHVATMvbpJU/8nBNPt74ZZwDw0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CEd+Pdgs; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787558986; c=relaxed/simple;
+	bh=+OVvpNdD2/P0iWdJMPfoBqJCWgOEdQeyrVOomD7StVQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uBinzXHzUHmOAuKnjbAXd64+nCieRMVZsifeEIfssYD6GPFHaad32dwV/WZHA93rFbI/8Wj8yHw5kk/5Ix6YKVP2GjRJ4im1MeVBL6pesW7e0VgqFms9dQqR/7Pb6kOUi6h7OScThbo/mrdTyN4y+cwP3fMxjKvdITeYRWQZnQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KVuGNOam; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CEd+Pdgs"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A8631F000E9;
-	Mon, 24 Aug 2026 08:02:01 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KVuGNOam"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93D2D1F000E9;
+	Mon, 24 Aug 2026 08:09:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787558523;
-	bh=rggObMi8VtDV90mfVALF/ehGty5IstfKx753qTSpWi0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=CEd+Pdgs0ROWpMvVKhgKT2UWGTXVVv2Q7aVcU0ztJT8i5Je9u+S6BMb3TC5WyGthq
-	 xi5tmLQxmGmWQ/Zgbf/JsU8Y2X9HWoKK+l1upZ9arqfb7GNB3+aB0JXbVvbKNU1sjt
-	 Fdwut01JQx9XhLp4KpG1xqBm6u/bCsd5bSa/NbdmKaashIH9PwvdXn24J6sVKUEos2
-	 GsCZuB7ChgBDMyEXELClPsSF4O0Ny45+a0WmyKWaQVZ1tHq7yBgBwWg0jmTJ6Z8Cj5
-	 HmkPaEQDZXMRPgMZkrWm4BM3bUIbtxla6NJFRgv5i+h/8nHIu2KMdso9bBJ5amqhcf
-	 LF9BPocv7Tv7w==
-Message-ID: <09288e9f-be8c-4219-bf7f-981777f9e38f@kernel.org>
-Date: Mon, 24 Aug 2026 10:01:57 +0200
+	s=k20260515; t=1787558984;
+	bh=1d8Hjv+x1QYhOu2D2hHNNxA/xzc/ePDob8OGXb0XKxI=;
+	h=From:To:Cc:Subject:Date;
+	b=KVuGNOamCY2IZ8prKX95MmHaWYs1CIOJXMazB/rz5/BeIgdtq2P1bdXTx6PNk5CnW
+	 SxgtuaHo28cp3a084iHgOeXFLNWHOQu1ultpCyKTWOc/Vg1mUBIDQsC6MAMll6sOXa
+	 lQ3meDp9IR+aUyaHwmIBc1EgYoWkAYUwc3Bx72fw9O8VkJpp9LCAQRVY5VcM+qLg46
+	 G3AjoHGFzVLNr54P6R66N/RdbSZGMdnYGsVUFlNz9RT+YqUwuzN/PfZXRDTwgkJH9a
+	 9BF0yfWmAdynRCI74V2+R+kVl8wugI6E2QpcCG2UuPplSBu5YiMEbfrr66fqmvRMB3
+	 GXYksXtu2wuXw==
+From: Konstantin Sinyuk <ksinyuk@kernel.org>
+To: dri-devel@lists.freedesktop.org
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Francois Dugast <francois.dugast@intel.com>,
+	David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Donald Hunter <donald.hunter@gmail.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Ilia Levi <ilia.levi@intel.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology infrastructure for scale-up accelerator interconnects
+Date: Mon, 24 Aug 2026 11:09:28 +0300
+Message-ID: <cover.1787552412.git.ksinyuk@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net v2 0/4] Improve stability of big_tcp_tunnels.sh
- selftest
-Content-Language: fr
-To: Alice Mikityanska <alice.kernel@fastmail.im>,
- Paolo Abeni <pabeni@redhat.com>, Jakub Kicinski <kuba@kernel.org>
-Cc: Eric Dumazet <edumazet@google.com>, "David S. Miller"
- <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
- Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
- netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- Alice Mikityanska <alice@isovalent.com>
-References: <20260822120308.1165200-1-alice.kernel@fastmail.im>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260822120308.1165200-1-alice.kernel@fastmail.im>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Alice,
+Modern GPUs and AI accelerators are increasingly connected through scale-up
+fabrics such as AMD xGMI today and emerging UALink systems [4]. Linux lacks
+common, vendor-neutral infrastructure for reporting which accelerators are
+directly connected, through which ports, and in what state.
 
-On 22/08/2026 14:03, Alice Mikityanska wrote:
-> From: Alice Mikityanska <alice@isovalent.com>
-> 
-> This series addresses flakiness of big_tcp_tunnels.sh discussed at:
-Thank you for this v2. It looks good to me:
+Vendors expose fragments through driver-specific interfaces such as amdgpu's
+xGMI sysfs [3] and AMD's UALink pod-configuration sysfs [6], while prior
+per-driver proposals such as XeLink never became shared infrastructure, so
+topology semantics remain per-driver.
 
-Acked-by: Matthieu Baerts (NGI0) <matttbe@kernel.org>
+Building on the LPC 2025 "Toward Mainline Linux Support for UALink" BoF
+[1], this RFC proposes DRM Fabric: vendor-neutral, protocol-agnostic DRM
+topology infrastructure for scale-up interconnects, using the model
 
-Cheers,
-Matt
+    fabric -> endpoint -> port -> peer
+
+A fabric groups the endpoints of one provider-defined interconnect
+instance. An endpoint is one accelerator attachment holding its physical
+ports. A port reports lane capability, operational state and optional
+counters. A peer is a typed value naming the directly adjacent accelerator
+or switch port, not a reference to a live kernel object; it may identify an
+accelerator managed by another OS or an opaque switch in another trust
+domain.
+
+The core records direct adjacency only, not end-to-end reachability or
+switch forwarding, which remain with the fabric controller. Vendor drivers
+retain hardware discovery, firmware interaction, memory semantics and the
+hardware-carried data path. DRM Fabric represents topology and control
+state of DRM-managed accelerators; it does not create a network device or
+own route computation, switch forwarding, transport, or congestion control.
+
+Generic Netlink fits this multi-object, event-driven model better than
+sysfs, which maps poorly onto dump enumeration and asynchronous
+notifications, and provides the YAML-described uAPI discipline introduced
+to DRM by DRM RAS [2]. Devlink was considered, but models devices and
+subordinate objects rather than a fabric spanning DRM devices.
+
+Patches 1-6 form a complete, separately tested read-only milestone that can
+be merged independently while provisioning remains under review. Providers
+publish objects, adjacency, operational state and optional port statistics
+through a small in-kernel API; userspace queries the live graph but cannot
+modify it.
+
+Patches 7-12 add privileged provisioning for software-defined fabrics.
+Userspace can create and delete empty fabrics, attach orphan endpoints
+registered without a fabric, request administrative state and manage peer
+adjacency, while the provider performs the hardware programming.
+Administrative state records control-plane intent, operational state
+remains provider-reported, and each port is managed either by its provider
+or by userspace. The mutation operations are fabric-new, fabric-del,
+endpoint-set, port-set, port-peer-new and port-peer-del.
+
+Provider callbacks may sleep or report state back into the core, so
+drm_fabric_lock is not held across them. Provisioning instead uses an outer
+mutation lock across validation, callback and commit. The complete locking,
+lifetime and failure contracts are documented in
+Documentation/gpu/drm-fabric.rst.
+
+Every operation is confined to the initial network namespace, and mutation
+additionally requires CAP_NET_ADMIN.
+
+drm_fabric_sim is a software-only provider modeled on netdevsim [5]. It
+registers linear, mesh and switch-facing topologies without accelerator
+hardware and gains provisioning callbacks and fault injection. Its debugfs
+interface is not ABI; the reviewed interface is the Generic Netlink family.
+
+The series defines no accelerator memory sharing, MMU programming, data
+transport, route computation, switch policy, key management, live
+migration, required userspace daemon or protocol-specific commands.
+
+No production provider is included. Shipping only the synthetic provider is
+deliberate, allowing the object model and uAPI to be reviewed before being
+tied to hardware. We used the public amdgpu xGMI implementation to shape
+the provider API, but that mapping has not been validated by AMD.
+
+Example queries using the in-tree YNL tool are:
+
+    $ ./tools/net/ynl/pyynl/cli.py \
+          --spec Documentation/netlink/specs/drm_fabric.yaml \
+          --dump fabric-get
+    $ ./tools/net/ynl/pyynl/cli.py \
+          --spec Documentation/netlink/specs/drm_fabric.yaml \
+          --dump endpoint-get --json '{"fabric-id": <id>}'
+    $ ./tools/net/ynl/pyynl/cli.py \
+          --spec Documentation/netlink/specs/drm_fabric.yaml \
+          --do port-get --json '{"endpoint-id": <id>, "port-index": 0}'
+
+Testing includes 12/12 per-commit W=1 builds, 43 passing KUnit tests and
+172 passing kselftest results across 14 programs. KASAN, UBSAN, lockdep,
+atomic-sleep and kmemleak validation completed without reports.
+
+The series is also available from the public review tree:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/ksinyuk/linux.git/tag/?h=drm-fabric-v1
+
+We are specifically requesting feedback on:
+
+  1. Is fabric -> endpoint -> port -> peer the right minimum common DRM
+     representation for accelerator interconnects?
+
+  2. Are the Generic Netlink semantics, including dump consistency,
+     notifications and optional port statistics, aligned with YNL
+     expectations?
+
+  3. Do the object model and provider API cover xGMI topology-management
+     requirements, or would any xGMI requirement force protocol-specific
+     uAPI or provider semantics? AMD's assessment would be especially
+     valuable.
+
+[1] LPC 2025 BoF, "Toward Mainline Linux Support for UALink":
+    https://lpc.events/event/19/contributions/2308/
+
+[2] Riana Tauro, "[PATCH v10 0/5] Introduce DRM_RAS using generic netlink
+    for RAS", 2026-03-04:
+    https://lore.kernel.org/dri-devel/20260304074412.464435-7-riana.tauro@intel.com
+
+[3] amdgpu xGMI topology:
+    drivers/gpu/drm/amd/amdgpu/amdgpu_xgmi.c
+
+[4] UALink specification:
+    https://ualinkconsortium.org/specification/
+
+[5] netdevsim:
+    Documentation/networking/devlink/netdevsim.rst
+
+[6] Alex Deucher, "[PATCH 00/95] Add UALink instrastructure series 1",
+    2026-08-21:
+    https://lore.kernel.org/amd-gfx/20260821193458.808626-1-alexander.deucher@amd.com/
+
+Ilia Levi (4):
+  drm/fabric: add core object model and provider API
+  drm/fabric: add query uAPI and generated headers
+  drm/fabric: add topology-provisioning core
+  drm/fabric: add provisioning netlink uAPI
+
+Konstantin Sinyuk (8):
+  drm/fabric: implement query netlink operations
+  drm/fabric: add read-only synthetic provider
+  drm/fabric: add object-model KUnit tests
+  drm/fabric: add YNL query and policy selftests
+  drm/fabric: implement mutation netlink operations
+  drm/fabric: make the synthetic provider writable
+  drm/fabric: add mutation KUnit tests
+  drm/fabric: add mutation netlink selftests
+
+ Documentation/gpu/drm-fabric.rst              |  479 +++
+ Documentation/gpu/index.rst                   |    1 +
+ Documentation/netlink/specs/drm_fabric.yaml   |  580 ++++
+ MAINTAINERS                                   |   14 +
+ drivers/gpu/drm/Kconfig                       |    1 +
+ drivers/gpu/drm/Makefile                      |    1 +
+ drivers/gpu/drm/fabric/.kunitconfig           |    5 +
+ drivers/gpu/drm/fabric/.kunitconfig.debug     |   16 +
+ drivers/gpu/drm/fabric/Kconfig                |   41 +
+ drivers/gpu/drm/fabric/Makefile               |    9 +
+ drivers/gpu/drm/fabric/drm_fabric.c           | 1045 +++++++
+ drivers/gpu/drm/fabric/drm_fabric_internal.h  |   66 +
+ drivers/gpu/drm/fabric/drm_fabric_netlink.c   | 1310 ++++++++
+ drivers/gpu/drm/fabric/drm_fabric_nl.c        |  231 ++
+ drivers/gpu/drm/fabric/drm_fabric_nl.h        |   66 +
+ drivers/gpu/drm/fabric/drm_fabric_sim.c       | 1044 +++++++
+ drivers/gpu/drm/fabric/drm_fabric_test.c      | 2635 +++++++++++++++++
+ include/drm/drm_fabric.h                      |  333 +++
+ include/uapi/drm/drm_fabric.h                 |  162 +
+ tools/testing/selftests/Makefile              |    1 +
+ .../selftests/drivers/gpu/drm_fabric/Makefile |   44 +
+ .../drivers/gpu/drm_fabric/README.rst         |  146 +
+ .../drivers/gpu/drm_fabric/cap_netadmin.py    |  314 ++
+ .../gpu/drm_fabric/check-spec-regen.sh        |  114 +
+ .../selftests/drivers/gpu/drm_fabric/config   |   13 +
+ .../drivers/gpu/drm_fabric/dump_intr_abi.py   |  361 +++
+ .../drivers/gpu/drm_fabric/dump_scale_abi.py  |  178 ++
+ .../drivers/gpu/drm_fabric/fabric_abi.py      |  553 ++++
+ .../drivers/gpu/drm_fabric/fault_abi.py       |  302 ++
+ .../gpu/drm_fabric/harness_reset_abi.py       |  113 +
+ .../drivers/gpu/drm_fabric/hotplug_abi.py     |  331 +++
+ .../drivers/gpu/drm_fabric/lib_drm_fabric.py  |  498 ++++
+ .../drivers/gpu/drm_fabric/netns_abi.py       |  294 ++
+ .../drivers/gpu/drm_fabric/nl_policy_probe.py |  651 ++++
+ .../drivers/gpu/drm_fabric/port_cursor_abi.py |  401 +++
+ .../gpu/drm_fabric/port_stats_cap_abi.py      |  374 +++
+ .../drm_fabric/provisioning_scenarios_abi.py  |  324 ++
+ .../selftests/drivers/gpu/drm_fabric/settings |    1 +
+ .../drivers/gpu/drm_fabric/switch_abi.py      |  137 +
+ 39 files changed, 13189 insertions(+)
+ create mode 100644 Documentation/gpu/drm-fabric.rst
+ create mode 100644 Documentation/netlink/specs/drm_fabric.yaml
+ create mode 100644 drivers/gpu/drm/fabric/.kunitconfig
+ create mode 100644 drivers/gpu/drm/fabric/.kunitconfig.debug
+ create mode 100644 drivers/gpu/drm/fabric/Kconfig
+ create mode 100644 drivers/gpu/drm/fabric/Makefile
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric.c
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_internal.h
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_netlink.c
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_nl.c
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_nl.h
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_sim.c
+ create mode 100644 drivers/gpu/drm/fabric/drm_fabric_test.c
+ create mode 100644 include/drm/drm_fabric.h
+ create mode 100644 include/uapi/drm/drm_fabric.h
+ create mode 100644 tools/testing/selftests/drivers/gpu/drm_fabric/Makefile
+ create mode 100644 tools/testing/selftests/drivers/gpu/drm_fabric/README.rst
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/cap_netadmin.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/check-spec-regen.sh
+ create mode 100644 tools/testing/selftests/drivers/gpu/drm_fabric/config
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/dump_intr_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/dump_scale_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/fabric_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/fault_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/harness_reset_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/hotplug_abi.py
+ create mode 100644 tools/testing/selftests/drivers/gpu/drm_fabric/lib_drm_fabric.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/netns_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/nl_policy_probe.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/port_cursor_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/port_stats_cap_abi.py
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/provisioning_scenarios_abi.py
+ create mode 100644 tools/testing/selftests/drivers/gpu/drm_fabric/settings
+ create mode 100755 tools/testing/selftests/drivers/gpu/drm_fabric/switch_abi.py
+
+
+base-commit: e3e05bddbe9fea67639d2a3551e7cf2d473b804c
 -- 
-Sponsored by the NGI0 Core fund.
+2.43.0
 
