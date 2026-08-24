@@ -1,91 +1,132 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7AC3769F0;
-	Mon, 24 Aug 2026 06:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A153B42D0;
+	Mon, 24 Aug 2026 06:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787553670; cv=none; b=EXS54hmJaGj+120XdGO9VqbDCRXGW5HRtN9VK6s6Czp1qbRFyS3dodtSncIn3F0Bn7NUYOgDq4+Mg1r6cyy8NP/60gS3HuygKYv/2T2RxxqRbEtPx4qsGTJgYJpkjhoCBkWjjHZ6hRtbBLBeCpxoIfuXOnXdSULZBzO8va/MNMU=
+	t=1787553715; cv=none; b=n4n1n6Tucs0kxjE0+uC3G87xQJ38A/wosMX2rg404qKXiyLxVYrlQ2LoXnrlX4KgMft0GfSz3Qw6dBxaLsd17qz3+1zH3PWmhaQDuJTMnXaQgTxjcBpNkeUoLSA0UJN2aZ/ihqXOc8VutWBAuj9xWSpZTlWFuiKNzqQwP73J6TM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787553670; c=relaxed/simple;
-	bh=0q8C/sBZvT3gYGnxgQRmLqehElSdputVSzITVFBXaTM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=TNAFswCHO1XWZQp0t0lIE+u4rP23bC9vEBuY4kd2VbE4lQVy7Q9x/H8zeDl+bWe5oaO/72aPx1tyePitOOyxY1yrJxC3PG/M4u3rpRCjXyLPETo56kVWNqogOkpXQ64m39h33BBo1DpjNH91rd8pBoRekm2Uolr/c0r3+AgKZBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: c1603f269f8611f19a56ed5b684f684d-20260824
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_MISS
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_DIGIT_LEN, HR_FROM_NAME
-	HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM, HR_SJ_PHRASE
-	HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT, HR_TO_DOMAIN_COUNT
-	HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED, SA_TRUSTED
-	SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS, DKIM_NOPASS
-	DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF, GTI_FG_BS
-	GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:d6004999-4ff3-4401-8283-fd56e1256820,IP:15,
-	URL:0,TC:0,Content:-5,EDM:0,RT:1,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:11
-X-CID-INFO: VERSION:1.3.19,REQID:d6004999-4ff3-4401-8283-fd56e1256820,IP:15,UR
-	L:0,TC:0,Content:-5,EDM:0,RT:1,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:11
-X-CID-META: VersionHash:7db8b62,CLOUDID:664ea2e1f5260cca0433da99c0c178d5,BulkI
-	D:2608241440596H0VOLEZ,BulkQuantity:0,SF:17|19|38|66|78|81|82|83|102|127|8
-	41|850|865|898|915,TC:nil,Content:0|15|50,EDM:-3,IP:-2,URL:0,File:nil,RT:n
-	il,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0
-	,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_FAS,TF_CID_SPAM_FSD,TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: c1603f269f8611f19a56ed5b684f684d-20260824
-X-User: wangyan01@kylinos.cn
-Received: from localhost.localdomain [(116.128.244.171)] by mailgw.kylinos.cn
-	(envelope-from <wangyan01@kylinos.cn>)
-	(Generic MTA)
-	with ESMTP id 2139166115; Mon, 24 Aug 2026 14:40:54 +0800
-From: Wang Yan <wangyan01@kylinos.cn>
-To: gnoack@google.com,
-	mic@digikod.net,
-	shuah@kernel.org
-Cc: lihaofeng@kylinos.cn,
-	wangyan01@kylinos.cn,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-security-module@vger.kernel.org
-Subject: Re: [PATCH] selftests/landlock: Fix snprintf truncation checks in test files
-Date: Mon, 24 Aug 2026 14:40:32 +0800
-Message-Id: <20260824064032.774597-1-wangyan01@kylinos.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20260626070016.61049-1-wangyan01@kylinos.cn>
-References: <20260626070016.61049-1-wangyan01@kylinos.cn>
+	s=arc-20240116; t=1787553715; c=relaxed/simple;
+	bh=3PCsfniQhFGRXBnuoNv1DWWS3GKspW+tp81RcRwQSuY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V+GmtMhU7TZSrIUdXe5x7WtoCIuP/uyc3oukbPaox6YcqF2tJ0W2+sy1cvQ0TgTgLnIYMD+0PhxwOkZFAccNbUWT4L05gNY9gyLDl6aZOlZ6gFMXLnK39Y3uJkxK5MDBAxcpdClCwsLwrzlUZDBKjyZJtjFY74n9+gMG2Mb8dCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EkBJD9vx; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LKP6WXjf; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EkBJD9vx";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LKP6WXjf"
+Date: Mon, 24 Aug 2026 08:41:46 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1787553711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GQ/oJDckZY1z/B4BbBXe5zypr99eyfD/LDs4CTbgQaQ=;
+	b=EkBJD9vxIAQQtzBVzwXUtzHzspL8Ya14rf73Vfa32EZ4fAgp1qHA8KzbhlVmJydW+Z8rZW
+	XnR4e/FclUN6W7ExQfFWycLs0dEix6dxCSTOht9P35S76Xw6B16U5vRVo9UN4a3rM0b7id
+	iIg4EJMp45HQAyCsurZc54/rfFwgB4J5S7X6ddz7hcfJb6ghNmxeCuYRTKalDXinHzcghX
+	bKYYxk87O/Agi74W6Ftu+ESA/mazXVuEAxeMfuX7Y/d8/9hD0NY+RJKsBvnMDczVRydaYC
+	o4cBgkgM3iGrUhEddjfgOI9/ZmFhiDgvet/NJBMg9KDLC+ufYyM0fxPtGIO65A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1787553711;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GQ/oJDckZY1z/B4BbBXe5zypr99eyfD/LDs4CTbgQaQ=;
+	b=LKP6WXjf5vfVYfkVZELvMZMvVHGu1L4rYbBy5VpNigFjlGjWqsxTq0qE/i2mFuLRh+TzYY
+	O5jfgwG1nggJ1VBw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Bill Wendling <morbo@google.com>
+Cc: linux-kernel@vger.kernel.org, Kees Cook <kees@kernel.org>, 
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+	Ryota Sakamoto <sakamo.ryota@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Dmitry Antipov <dmantipov@yandex.ru>, 
+	Petr Mladek <pmladek@suse.com>, Kir Chou <note351@hotmail.com>, 
+	codemender-patching+linux@google.com, linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH 2/2] lib/tests: Add KUnit test for struct stack_trace
+ __counted_by_ptr attribute
+Message-ID: <20260824083538-d0eff358-e1d4-4af6-9e61-d4d816783266@linutronix.de>
+References: <20260823123549.1120133-1-morbo@google.com>
+ <20260823123549.1120133-3-morbo@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260823123549.1120133-3-morbo@google.com>
 
-Hi maintainers and reviewers,
+On Sun, Aug 23, 2026 at 12:35:33PM +0000, Bill Wendling wrote:
+> Add a custom KUnit test suite 'stacktrace_counted_by' to verify that the
+> __counted_by_ptr annotation on the 'entries' field of 'struct stack_trace'
+> behaves correctly.
 
-I hope this email finds you well.
+The implementation of __counted_by_ptr should be tested by a dedicated unittest
+for that feature. And I am fairly sure that already exists. It should not be
+tested in random subsystems.
 
-I submitted this patch on June 26, 2026, and it has not received any
-review comments yet. I understand you are very busy, but I would
-greatly appreciate it if you could take a look when you have a moment.
+> The test verifies that 'max_entries' correctly limits and validates access
+> to 'entries' when CONFIG_ARCH_STACKWALK is not defined. If it is defined,
+> the test is cleanly skipped at runtime to prevent compile-time or runtime
+> failures due to 'struct stack_trace' being undefined on modern
+> architectures.
+> 
+> Assisted-by: Gemini Next
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <david@davidgow.net>
+> Cc: Rae Moar <raemoar63@gmail.com>
+> Cc: Ryota Sakamoto <sakamo.ryota@gmail.com>
+> Cc: Kuan-Wei Chiu <visitorckw@gmail.com>
+> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Cc: Dmitry Antipov <dmantipov@yandex.ru>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Kir Chou <note351@hotmail.com>
+> Cc: codemender-patching+linux@google.com
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: linux-hardening@vger.kernel.org
+> ---
+>  lib/Kconfig.debug            | 10 +++++++
+>  lib/kunit/.kunitconfig       |  1 +
+>  lib/tests/Makefile           |  1 +
+>  lib/tests/stacktrace_kunit.c | 51 ++++++++++++++++++++++++++++++++++++
+>  4 files changed, 63 insertions(+)
+>  create mode 100644 lib/tests/stacktrace_kunit.c
 
-The patch fixes the remaining snprintf truncation checks in
-selftests/landlock test files (audit_test.c, net_test.c, ptrace_test.c)
-to match the already-merged fix in audit.h. It is a small and
-straightforward change.
+(...)
 
-Please let me know if any adjustments are needed. I'm happy to update
-the patch based on your feedback.
+> diff --git a/lib/tests/stacktrace_kunit.c b/lib/tests/stacktrace_kunit.c
+> new file mode 100644
+> index 000000000000..7ec48edf84fe
+> --- /dev/null
+> +++ b/lib/tests/stacktrace_kunit.c
+> @@ -0,0 +1,51 @@
 
-Thank you for your time and work!
+(...)
 
-Best regards,
-Wang Yan
+> +}
+> +#else
+> +static void test_stack_trace_counted_by(struct kunit *test)
+> +{
+> +	kunit_skip(test, "CONFIG_ARCH_STACKWALK is enabled, struct stack_trace is not defined");
+
+If the test requires a specific kconfig symbol, then depend on it in kconfig.
+Putting all of the code behind a single, giant ifdef is pointless.
+
+> +}
+> +#endif
+
+(...)
