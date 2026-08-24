@@ -1,224 +1,149 @@
-Received: from mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-a2-smtp.messagingengine.com (flow-a2-smtp.messagingengine.com [103.168.172.137])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8BF1415F32
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 11:55:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A58EA31D375;
+	Mon, 24 Aug 2026 12:10:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.137
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787572556; cv=none; b=HpdHYM5s1fn4JWZQlnAmcMvA26D3HEbfiJBsX1zw0FOEq5+rcX2HD3H+IVN164Tmjkb/qSCQyF+JE5ZHppPf+PAqmeYLFEC66/QomcncDSkEHDpq/+sRQbFb3r6giIQa83SFG8DWcV1qDg3zRDjoYgP2+UYema4C8OAoOI6yLsQ=
+	t=1787573430; cv=none; b=G2xA6PgPVG/Mv4EAIMC4YV8RpLihtR6xfrhGoyLDJKEeaAijE+qsTnUXdhvNwRF/yLO24nPWCxQ5u91qqL62Q956vrRTWKF9I/k8OYXGpBNwtfzgwkv+W9rDdX45FLe/oMr56ZKL6XomTIUwo1q/mATHbrsHu64biqvn8E+QOLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787572556; c=relaxed/simple;
-	bh=9sA4HqESCZemC8Qy80NybOgOQNBjAON37oeRT7uodbM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hsgSU7vMKPjMhr3vW6OpTtb33BvnZVgQoPtK3yi9lhQ92fs1ah9xyWuxbHsm8euOSSjka2P9pQ/2oD4InFV86/xCk49Y7M6yntLqVZ6bW+U515krYy168iMBelixkNCGYAwfWWm9paAT4UVBWawQqBumv5wQOeVNUtvgDYJunHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=SA96H2QF; arc=none smtp.client-ip=95.215.58.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787573430; c=relaxed/simple;
+	bh=dLB84hXw8vFlf1kXJN55yunC1M7YnYe1ooNCC07hjJM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oHD1M8YPQ2RLfHMEMEAp4/nFAGEqkUCurWYS25UvK5juEGAgGLa7ZsA7jpOsX/GXY+uvFb5QXseI20g699uEtiTMvG8/v9mY9TG7b20bozo2BV+NH5qOldPSVxrhlItLCBBUYnKE0OIgTTNiiIn+W7Cd66+KqRGAamzhxiaFJ9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=Ixf8Oa9C; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OXgLEY2A; arc=none smtp.client-ip=103.168.172.137
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="SA96H2QF"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9sA4HqESCZemC8Qy80NybOgOQNBjAON37oeRT7uodbM=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787572551; v=1; x=1788177351;
- b=SA96H2QFlsi3Vnsxcj9H9z75s68IInql4r+HAGfkhu2f/naqg0/qOrWrJ7LOz9c5aEotXXEW
- 0zv1YJ6Urp3b8MBkMbmmxFoRYdFGkBV2EdKY2Z8mPqPQQnsh6TtAapccH61NJ3AiZR2KsKCr5Lf
- IjV28fnDKmQkyWnBpMUt8lvE=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [7.250.142.105] (139.159.170.87)
-	by smtp.migadu.com with ESMTPS id 90b5f181d21c03a6;
-	Mon, 24 Aug 2026 11:55:41 +0000
-X-Mizu-Trace-ID: 90b5f181d21c03a6
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <5da6d1ef-28c7-4aed-abd4-a0d74da7998c@linux.dev>
-Date: Mon, 24 Aug 2026 19:55:33 +0800
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="Ixf8Oa9C";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OXgLEY2A"
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailflow.phl.internal (Postfix) with ESMTP id B20B513801CB;
+	Mon, 24 Aug 2026 08:10:27 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Mon, 24 Aug 2026 08:10:27 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-type:content-type:date:date:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=fm2; t=1787573427; x=
+	1787580627; bh=+BetWuGtES6FYCL43UJL392AYum+pn8KC95eoabgl+4=; b=I
+	xf8Oa9CGDPitrXuxFpRTrNA/CUA4sLabnalrpbCnQQxYCTmD9GO+glAmL3vtkY6h
+	QLXiD3Hj1AHISvBlFKZLIBGppjLCqHHxa07bdE0OVsc9UdQfjLpRqtDgAIg2U77O
+	tnAjFSA8z7aiv1DX3PihtFYqDxukxvEiJRzMYdt/yqHRUHSNg34hpmIgnPsXgmLB
+	4X6AvQ2DhwD5CAJeBoj+qKjwVkvuo2Y2S5QQLu9t+MuFoGwS+3YMn8Wmf8eX/yoB
+	1dfdTWV5XJRG6HZYHyk440xfHYoDj0NQU8KajMbz+qkQHuQ4WGNutoAe4/XJ0KWj
+	VB4HeMYa8p5b4eUKrj8lw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-type:content-type:date:date
+	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+	:message-id:mime-version:references:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1787573427; x=1787580627; bh=+BetWuGtES6FYCL43UJL392AYum+pn8KC95
+	eoabgl+4=; b=OXgLEY2A9FwIshfHHebpmoL+yx5E+ITZcbpOPAGV+NYLBq6GmXf
+	tqbl6hT115nzi2LiraX2sQtMCAouB41P0K7ztgelcc30CIKxOKGVwAxPiXjRUNlJ
+	hhvQtHoZ7b82sTa+OQShJFcW883gdd+bBjt+z72BQSwjHyAG2F8t05MSpSyDfFTx
+	umE3vvEfytupD416/dNvaZNbpuhxdJZfuapJh3QE84YJp9eUWlceLyWw+qKvk0FO
+	pvi5rxXEPfCMZWk+emR3FuYO46O0DPHX2xehfDIi49yLMcoTfSQGpQuasd+IW+cS
+	jUsyRKtZHHukq9dy3yt4i6GTTeU2uI8eGoQ==
+X-ME-Sender: <xms:sTSMakFevnMHez-TsqKHTsGyWanYrCxBrd4Lk3gnXCC-4OprI7Za_Q>
+    <xme:sTSMatz_urE6iaOB-WyzJTICJtuu0FSjK67-8vMGykqbqeF5RseyorO3k10B-ziJp
+    uOA0wmzDAMsSmRUj1jE8uAGKOKiRAZAYbfgN0hqzmvQA6VM2b1kgHws>
+X-ME-Received: <xmr:sTSMavkusQFypit3V_l0slgntFw9tgm5BIRSseDwrXGQr2uX1oIjqPAgNAk>
+X-ME-Proxy-Cause: dmFkZTFGxilWmuF3Gl8ZPZwxYmOPn0BEaIq9i7rD4Dd/1XrTGUj4VjY7hNztkoxXS7e9ZX
+    YOYCvvo5OHvsSrHohvqkiiFE9sNB19lqguDTit2SqCzhTpIB4v7LIV83ME+lt1IbVb1ARD
+    e2/EdAAQDqfcEuYGEcfG4q+pt7q0fC/FZ/Vwcmo58WjowQAHZApEtHoFu5aD3C7z71y8Gz
+    zEBghY8bMP6bHVe/TUqSuv5AD/pO/LC3TsFeZXg8JGdhaszDVG/9i81PGz50gehDJn8PWC
+    NP7q7ABVVUq2eZhbZ330aHp8uM7GSMXzZSNR0JpPHXuEnVRObiMpWpE0UIl/UvwHR+Qxbi
+    LjgmsAooNDIMPFmX+m4464q6lesSjU7e/tnyt/a5TB9v/aGR+RPfNiUYCrz8UicH7kgOzK
+    rHR16IBtYq47Sxs1gjnHLNodrByJ2R8drPfrlc2ftPLOOr7rvKPQ4DdbZS+7xYh0Vgmnhy
+    2/0LjGGwEFpWBjeUFBtWudNveidd7/90j6jHovxDPLZQmyY1cg9CZb8dEfjrGJOgW7kIeE
+    H3WCMtKx4SHKzby3wyJshdKRJKNjd82g4Qd9I7RaJWq3NJRPfHEKV0uSmPFjBWLRJF3o4N
+    /YUfL4CmzBhuyh+mxcZu7/mHScQh79irYR2t9Svxs88/JmR08/JUxMStYqdA
+X-ME-Proxy: <xmx:sTSMamHd21CAaMomXAUVBo-FgA5wNjmNhqpK2QhqUJt_H1qk4uX0Iw>
+    <xmx:sTSMapvUfTPGmNUMJiknWiPNnSQ-SYLAuCW3ejG48vYb5PuKcs-jzw>
+    <xmx:sTSMahkDBiv3DzcXCA9aoXsj6BChh_cqnCHBtR1t1s90pYwIxkXnng>
+    <xmx:sTSMahza4TvNiccZORwLjRcEtq71ZdGd-U92dZ30euOc5yQZfOXlAQ>
+    <xmx:szSMahs7409M3gBwcHW-k22zOB_yMvq_Ys9rNUlTLNp4mIiedxwAMkWn>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 24 Aug 2026 08:10:24 -0400 (EDT)
+Date: Mon, 24 Aug 2026 13:10:23 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: akpm@linux-foundation.org, ljs@kernel.org, nico.pache@linux.dev, 
+	baolin.wang@linux.alibaba.com, baohua@kernel.org, dev.jain@arm.com, hughd@google.com, 
+	lance.yang@linux.dev, liam@infradead.org, mhocko@suse.com, rppt@kernel.org, 
+	ryan.roberts@arm.com, shuah@kernel.org, surenb@google.com, usama.arif@linux.dev, 
+	vbabka@kernel.org, ziy@nvidia.com, usama.anjum@arm.com, agordeev@linux.ibm.com, 
+	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	jannh@google.com, willy@infradead.org, pfalcato@suse.de, rostedt@goodmis.org, 
+	mhiramat@kernel.org, linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 03/57] mm/collapse: add collapse.h for the shared
+ collapse state
+Message-ID: <aow0Z6mrG2esKpRZ@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-4-kirill@shutemov.name>
+ <3113ac8b-c1ce-4577-9e93-449b70818918@kernel.org>
+ <aobglSY5L1KoIqxF@thinkstation>
+ <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: disable smart scan for ksm_tests
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
- xu.xin16@zte.com.cn, chengming.zhou@linux.dev, shr@devkernel.io,
- ljs@kernel.org, vbabka@kernel.org, rppt@kernel.org, surenb@google.com,
- mhocko@suse.com, shuah@kernel.org
-References: <20260823184314.45044-1-zenghui.yu@linux.dev>
- <24cdec9c-28b5-4e44-bb05-fef27ef09846@kernel.org>
-Content-Language: en-US
-From: Zenghui Yu <zenghui.yu@linux.dev>
-In-Reply-To: <24cdec9c-28b5-4e44-bb05-fef27ef09846@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <65433d1e-95ca-4434-828e-8f381d3384b1@kernel.org>
 
-Hi David,
-
-On 8/24/26 6:33 PM, David Hildenbrand (Arm) wrote:
-> On 8/23/26 20:43, Zenghui Yu wrote:
-> > From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-> >
-> > The "KSM NUMA merging" test allocates two identical pages on two NUMA nodes
-> > and verifies KSM will merge these two pages after 2 scans (see
-> > ksm_merge_pages()). But when smart scan is enabled, pages that have
-> > previously not been de-duplicated may get skipped for some scans. Verifying
-> > KSM behavior after only 2 scans may not be enough.
-> >
-> >  $ ./ksm_tests -N -d
-> >  TAP version 13
-> >  1..1
-> >  pages_shared      : 0
-> >  pages_sharing     : 0
-> >  max_page_sharing  : 256
-> >  full_scans        : 211
-> >  pages_unshared    : 1
-> >  pages_volatile    : 2
-> >  stable_node_chains: 0
-> >  stable_node_dups  : 0
-> >  general_profit    : -128
-> >  ksm_rmap_items 2
-> >  ksm_zero_pages 0
-> >  ksm_merging_pages 0
-> >  ksm_process_profit -128
-> >  ksm_merge_any: no
-> >  ksm_mergeable: yes
-> >  not ok 1 KSM NUMA merging
-> >  # Totals: pass:0 fail:1 xfail:0 xpass:0 skip:0 error:0
+On Mon, Aug 24, 2026 at 01:47:54PM +0200, David Hildenbrand (Arm) wrote:
+> On 8/20/26 13:11, Kiryl Shutsemau wrote:
+> > On Wed, Aug 19, 2026 at 04:19:41PM +0200, David Hildenbrand (Arm) wrote:
+> >> On 8/17/26 00:45, Kiryl Shutsemau wrote:
+> >>> From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
+> >>>
+> >>> Preparation for building the new collapse engine in its own file.  The
+> >>> engine and khugepaged.c need to agree on what a collapse result is and
+> >>> what state a scan carries.
+> >>>
+> >>> Move enum scan_result and struct collapse_control into a new
+> >>> mm/collapse.h.
+> >>>
+> >>> No functional change intended.
+> >>>
+> >>> Assisted-by: Claude-Code:claude-opus-5
+> >>> Signed-off-by: Kiryl Shutsemau (Meta) <kas@kernel.org>
+> >>> ---
+> >>
+> >> BTW, I'm wondering whether it would result in less churn (independent of the
+> >> other changes) to
+> >>
+> >> a) Rename mm/khugeapged.c to mm/collapse.c
+> >>
+> >> b) Move stuff into mm/collapse.h that a new ...
+> >>
+> >> c) mm/khugapegd.c will need.
+> > 
+> > I went for a clean collapse.c on purpose: the engine is new code, and a
+> > new file keeps it readable while both mechanisms are in the tree, with 28
+> > as a plain delete from khugepaged.c.
+> > 
+> > Your shape is less churn, though, and it keeps blame: 29-35 move about
+> > 1700 lines as add-and-delete today, and most of that would stay put, with
+> > only the daemon -- mm_slot, the scan loop, sysfs -- extracted into a new
+> > khugepaged.c.
+> > 
+> > If you prefer it that way, I can give it a try for v2.
+> > 
+> > The rename has to open the series, so it will collide with anything in
+> > flight that touches khugepaged.c.
+> > 
 > 
-> How did you reproduce this? Is this an actual test result?
+> Kiryl, I have to ask, are you using AI to write your replies?
 
-I reproduced this in a guest, using arm64's virtconfig. I don't think there
-is any particular configuration. This is an actual test result but this is
-not 100% reproducible.
+Yes. I use it check my claims and fix my grammar.
 
-> ~/linux/tools/testing/selftests/mm$ cat /sys/kernel/mm/ksm/smart_scan
-> 1
-> ~/linux/tools/testing/selftests/mm$ sudo ./ksm_tests -N -d
-> TAP version 13
-> 1..1
-> pages_shared      : 1
-> pages_sharing     : 1
-> max_page_sharing  : 256
-> full_scans        : 1283
-> pages_unshared    : 0
-> pages_volatile    : 0
-> stable_node_chains: 0
-> stable_node_dups  : 0
-> general_profit    : 3968
-> ksm_rmap_items 2
-> ksm_zero_pages 0
-> ksm_merging_pages 2
-> ksm_process_profit 8064
-> ksm_merge_any: no
-> ksm_mergeable: yes
-> ok 1 KSM NUMA merging
-> # Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
-> 
-> 
-> >
-> > This specific test fails because KSM started scanning the second page
-> > whilst the first page had already been scanned for 16 times
-> 
-> How is that supposed to happen? The sequence we have is:
-> 
-> numa1_map_ptr = numa_alloc_onnode(page_size, first_node);
-> numa2_map_ptr = numa_alloc_onnode(page_size, second_node);
-> ...
-> memset(numa1_map_ptr, '*', page_size);
-> memset(numa2_map_ptr, '*', page_size);
-> ...
-> if (ksm_merge_pages(merge_type, numa1_map_ptr, page_size, start_time, timeout) ...
-> 
-> KSM smart scan operates on rmap entries. rmap entries are per MM.
+Why?
 
-This is what I had for debugging:
-
-diff --git a/mm/ksm.c b/mm/ksm.c
-index 49d48d1e0998..aec2a292cba5 100644
---- a/mm/ksm.c
-+++ b/mm/ksm.c
-@@ -2495,6 +2495,8 @@ static bool should_skip_rmap_item(struct folio *folio,
- 	if (age != U8_MAX)
- 		rmap_item->age++;
-
-+	pr_info("addr=%lx age=%u r_skips=%u\n", rmap_item->address, age, rmap_item->remaining_skips);
-+
- 	/*
- 	 * Smaller ages are not skipped, they need to get a chance to go
- 	 * through the different phases of the KSM merging.
-@@ -2820,8 +2822,10 @@ static void ksm_do_scan(unsigned int scan_npages)
- 	while (scan_npages-- && likely(!freezing(current))) {
- 		cond_resched();
- 		rmap_item = scan_get_next_rmap_item(&page);
--		if (!rmap_item)
-+		if (!rmap_item) {
-+			pr_info("\n");
- 			return;
-+		}
- 		cmp_and_merge_page(page, rmap_item);
- 		put_page(page);
- 		ksm_pages_scanned++;
-
-$ dmesg
-[  309.111144] addr=7fff959d4000 age=0 r_skips=0
-
-[  309.111215] addr=7fff959d4000 age=1 r_skips=0
-
-[  309.111223] addr=7fff959d4101 age=2 r_skips=0
-
-[  309.111230] addr=7fff959d4102 age=3 r_skips=0
-
-[  309.111237] addr=7fff959d4103 age=4 r_skips=1
-
-[  309.111241] addr=7fff959d4000 age=5 r_skips=0
-
-[  309.111248] addr=7fff959d4105 age=6 r_skips=2
-
-[  309.111251] addr=7fff959d4000 age=7 r_skips=1
-
-[  309.111255] addr=7fff959d4000 age=8 r_skips=0
-
-[  309.111262] addr=7fff959d4108 age=9 r_skips=4
-
-[  309.111265] addr=7fff959d4000 age=10 r_skips=3
-
-[  309.111269] addr=7fff959d4000 age=11 r_skips=2
-
-[  309.111272] addr=7fff959d4000 age=12 r_skips=1
-
-[  309.111297] addr=7fff959ac000 age=0 r_skips=0
-[  309.111303] addr=7fff959d4000 age=13 r_skips=0	-> page 0's age is 13 greater that page 1's
-
-[  309.111311] addr=7fff959ac000 age=1 r_skips=0
-[  309.111316] addr=7fff959d410d age=14 r_skips=8
-
-[  309.111320] addr=7fff959ac10e age=2 r_skips=0
-[  309.111325] addr=7fff959d4000 age=15 r_skips=7
-
-[  309.111329] addr=7fff959ac10f age=3 r_skips=0
-[  309.111334] addr=7fff959d4000 age=16 r_skips=6
-
-[  309.111338] addr=7fff959ac110 age=4 r_skips=1
-[  309.111339] addr=7fff959d4000 age=17 r_skips=5
-
-[  309.111343] addr=7fff959ac000 age=5 r_skips=0
-[  309.111348] addr=7fff959d4000 age=18 r_skips=4
-
-[  309.111352] addr=7fff959ac112 age=6 r_skips=2
-[  309.111353] addr=7fff959d4000 age=19 r_skips=3
-
-[  309.111357] addr=7fff959ac000 age=7 r_skips=1
-[  309.111358] addr=7fff959d4000 age=20 r_skips=2
-
-[  309.111362] addr=7fff959ac000 age=8 r_skips=0
-[  309.111367] addr=7fff959d4000 age=21 r_skips=1
-
-[  309.111372] addr=7fff959ac115 age=9 r_skips=4
-[  309.111373] addr=7fff959d4000 age=22 r_skips=0	-> remaining_skips can not be 0 at the same time for both pages
-
-Not sure if I had misunderstood something.
-
-Thanks,
-Zenghui
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
