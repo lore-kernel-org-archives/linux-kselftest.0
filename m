@@ -1,159 +1,120 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA0AB3932D3
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 22:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D09D395AC5
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 22:30:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787609031; cv=none; b=sdTUkdcwSYVIYuQOGvVrKlay1B+sj7ogI/MOQn74RWUE1fBgxH92GSupaWhzRrMdg8AeMWue+lxgFO5EblhEfnkjHUAaRIVvcq/F+SyXHL/TKZCT/wNvSF6CJrn1N/Ur1MupMjKY2G0I3zVe6A7V9M79YLhfVYOHLl4wKkJwlYo=
+	t=1787610644; cv=none; b=nXEcgq9zDl81wTA+VYUP9PivUK2uVvf6p2AJiwIOmrgAs5W3OQSoS8koVLni9l6JuJlV3hOf8S4Wcrv8QOsIeNfDVyhsgZujI3/mduk1p8ScSbjVuc3QWQUich+JINtX4ZO81nVTd3plAAcKsE992/YXZr1dcHqJzo2Fm8IC+PQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787609031; c=relaxed/simple;
-	bh=XUlYpvur5uBDwUWOp+VgOQbpBxzGWFt/Fy1ep+LAqUA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SEwrUXKzrPaaUawSyNrbfuSI9JMYWtgxLFqd+h8isUdmIY6iVY7Rba6+ObDVir0OIClIc7Q1DM8AIMNxpu/ShsO1bvohyR6MwjAHcNTomNVQqFJSasTLIKnypgJNpdng8ZIw4mpxQO6K3Rop8wExQkJFOJ+VEgl2nRhN8B9vSvo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=gJhUjLaz; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=SKniA9nC; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787610644; c=relaxed/simple;
+	bh=46PX0FlkGlV536K0GKo1yzcpkUA04/z+e0JSVcYfBMQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HWjPj43GxcObTpTti9K/qBAdN9zXx6uqWPbDu4zzJ1wToVA/bBXne07AqwbtDVoefTzKHjtEgnK7lGxz63c0h002ROLyBkrHSCYcjDbPz6EA4NZMu/VruPVaflS/fGxJSjpzBvTq1FCcLxqeUbSSgTgalu64OoQ9nLUofFA+TwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hPzePrLU; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="gJhUjLaz";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="SKniA9nC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787609028;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=P6umSLzif7YwA3wBurX01NBnFBatASw3o1QKXhBN6wY=;
-	b=gJhUjLazEm01Rhsj48P+ZmdpjUJMLIxyfzHpZC0+dCeH5ZP/I4kKeXOYkRlh80A8OrAUVS
-	sGpZPSigzDAzk/jOD1JOjdOlFYqFpGOp8x2MOuFX+xQSigCsGoj5emChEq1tRKfUucGi5T
-	+db3vU3BmqxcCZHGKsvcCdT+MQARidA=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-kgeNp6tLOB-DkyOwZU2qYA-1; Mon, 24 Aug 2026 18:03:46 -0400
-X-MC-Unique: kgeNp6tLOB-DkyOwZU2qYA-1
-X-Mimecast-MFC-AGG-ID: kgeNp6tLOB-DkyOwZU2qYA_1787609025
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-52827090cc5so2513331cf.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 15:03:46 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hPzePrLU"
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4953de5be0aso25654885e9.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 15:30:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787609025; x=1788213825; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=P6umSLzif7YwA3wBurX01NBnFBatASw3o1QKXhBN6wY=;
-        b=SKniA9nCCYTBx3P3sxWLmiIYGmJM6YH3JvyOpTC4CWVp0fgPq4ei2nIzHBHvR2Bz63
-         +yTp0ONLi9X/CfnOCXVkUN1jovnK3vyeFdl9iwmNOlE8mgy7Tsgid386Z3/9J1Z35qIU
-         riLX9HfWPqYdjTQBGtewflFrZ6jWEAZmjiBcELvpTpYMWgPoZfQqJ4lhR/G1V9szp80Y
-         88eepWCaWE3axvzMSbP9B0FymOuan0/7a8awEp7K3tPIWB9OcDEVTwn9o5ocenz3rcjW
-         xTm+y52t7HKy2988uQii+YAVnbO6A+auNxlmCqlCKBowCUEeWlCsWQI7NRXv+KK/51oW
-         6ChA==
+        d=gmail.com; s=20251104; t=1787610640; x=1788215440; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=ji4BxHAWPOY00GQuR7X51Lc07RsBjSGz9WKxTKhJHKg=;
+        b=hPzePrLU+Llj9CkWIKV/PKcERUdcq3tq7MItUD+rrj2MSRzqxcG63SmoybwQf+QBA1
+         QZ00pG3BS4BBC29sREDeC2RI+JwJSWKXsWxehynzmXpG0zWBSRTB8LYK1u/nG8+XiNje
+         HpJrqgjYfA9mY1TjGEe49SbhRj2fZbeFcU5CSrRD/v0j/hBc8pCyvuF/AqrlLtGhWxpe
+         hXJ72xZINMzJoPO3pD/2rebImF/DCSD1ObgO7hEgNNTVdp2DHxveU2i7SCylmf09CcZ9
+         K5gLX5y6umy/At7A6qMFR66ZX+AWDmJh3bdZHkNzAL/vSyqKdTYGeZMCczPtVInYglyi
+         Urng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787609025; x=1788213825;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=P6umSLzif7YwA3wBurX01NBnFBatASw3o1QKXhBN6wY=;
-        b=SKvWAM4DG2TysPaSK3XYBtqP7ucsW9zupxKRtnWrOq5+mvOym8tF97OdtaScAU9IMN
-         OM8r8ZtwtLkLmWnf7ifsNCzrP+01ZmQJi4nO8m/jsRICpThxQ+WP+9act8HXfTc8OfcR
-         +D4pBf4OQfp+yNZZ9Llq6ohmLMrIw1QtdvsYSkOFnqF7q8kxcvsmCrGUvN3O3f+6PBmL
-         W1VoxzCkXaMsMMx1k74/e73aomb06gpZp/A92ovJFkDwaUCpLgMM/CC2ZIVBx9FAwgbS
-         9aR55JyBEboFcVlWsxwTM3WJ/zlEHnBlPFjA9zHhim08uGV5dYsFJMTxzImeDdpCGvNM
-         Dvww==
-X-Forwarded-Encrypted: i=1; AHgh+RoJcu1rzptqoviVzH/EE6obYBKc2kgERqeIq5hxa1s5gI8kfGNn+gla0h4qKM25Ft29IlSrv4bT18MDDQhnLqM=@vger.kernel.org
-X-Gm-Message-State: AFuF++m9rFihol/acNRoooJN0IlPexfiXRKxCi2jAISrAP/5Rcop4PM0
-	jcrYyxjxcA0CDROOI80ecpwmAo/IpshLWZJWx1HKMcFKgtK6H2jIznPjbsSaV3W/FLsRbM1sSRF
-	d5C+C4u/64w68B4qHmMvqJIX5NuEI9V9JpU+fDYM5x710hQLDJbxkNKQ+qZOSVCZLCUiWYg==
-X-Gm-Gg: AR+sD13xaM6aE9da6rQxC6w76LA8Qos1+yA/ThanBqxY+KoSvtCtWFlpmSZVkWhsP7P
-	xlHg/Vf/fG0z8Vc5tWvMTpvR2RUptYCoFF0s5Bp6SEy3lkA9MF2yAFty6Rk0Oa2ehij38VyyA59
-	hlRujBpKU6nCl5WKbcqRuU5pDvzoH0N1RxNYHoRzVTcQYl2N6O3qPT7TvDZLzDw3ezw+y1H0tE5
-	1IXbOEb6NXUDuzBYqDp21FwpqsMwklKhv9XefTRkMXbNubq4NbJvinS7RY6y4IpBqKjtmiGLc9X
-	Rm7Qp581ete766IPEcx/siy2B/Pyd8od9+t/f9rtQOaa9fPcW+4UkK0jz85i6iaBj4bV/6604+/
-	FZFDODXQsX1YrkK+Q8pCbjkfgRIUZyGCOjkGenGaiQz80
-X-Received: by 2002:ac8:59d1:0:b0:52e:125b:9444 with SMTP id d75a77b69052e-52e2ed0710dmr27174961cf.17.1787609025456;
-        Mon, 24 Aug 2026 15:03:45 -0700 (PDT)
-X-Received: by 2002:ac8:59d1:0:b0:52e:125b:9444 with SMTP id d75a77b69052e-52e2ed0710dmr27173851cf.17.1787609024921;
-        Mon, 24 Aug 2026 15:03:44 -0700 (PDT)
-Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90c93a81392sm71344616d6.42.2026.08.24.15.03.43
+        d=1e100.net; s=20251104; t=1787610640; x=1788215440;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ji4BxHAWPOY00GQuR7X51Lc07RsBjSGz9WKxTKhJHKg=;
+        b=Yx8z6o3CarT1EpxgPgtbQc2ExOQrttmhoMpsBIrouhol9uRhqnhuahXKwprpHeDLQ7
+         mSzudZ1qzUW4ERSKEJo696bHWh/CLjmwqIy+dkkCLha8nJuzuoP/Z6SjMLGHCfZyByCD
+         G1rc4jrCO2nXBwKftdT+u0TH+h4AeCUg+kiELkKrtSee0hCQFohHYQsKiQ1u+oqZCXvW
+         Co8zWTDWVlX/HJlcsZzO6Jmz+5KyAYCqStPj1iepfs5BLP16f+XlTNd9KmoRsHEqsD7b
+         DO6fSiswhodUq8lT6zzu506m8UsPds6uBucyW8DydEGdSQv3YL3NdJgqSopPX+9MkA0i
+         otPQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr938rNdiosLjOX+ETEaKuYZg7DL1WZ+O4B6omL5iLoGJT011z5pSC9Smq34xKEx4hdO3hzN/a5lAyNRKqvdZA=@vger.kernel.org
+X-Gm-Message-State: AFuF++muS9Il15QPs2mPhsJQE183075fE9Dw9PrW4LXFmJmYVh/hjKql
+	EVakveO4t+5C2uRGN5UddaAA/UnAnNG3noBQ5bRaC1+9hfeuq0uE6Zej
+X-Gm-Gg: AR+sD10H27VCfoKISSajmFWZET6vWXMB78QmDhE0pBC6Jikz/nogQpjiopeTA2UeXTO
+	L+IElPmN3VT2dzw93ApbeJYYzRv0E9Z5X9zkTzgClAPOA0g3RuZNzlHkcEUWKGS6j1ryQu5Asox
+	qHnaCBOxUKl7Hw9bKpdE52W7iJC2LEaHTdTljh6A67IuLEQN9rrjTvY4PiXvRDvC+mDnxHyWo/J
+	ar3uOSuCOMF/4pDVrNgk0rgD6wOeXK+uPZIuPLRZ6FTGoH8fozI8/Pi5Rci4PGMeOD+zkKGhUJX
+	Mzi9pKfi/BUN2zOrChJrkTEUw8xxetWnIAv98cEZCJIM/OEPrmo5XhhU9Kbi/CHs1H/iD17NqhT
+	OqaoqkcGm/m5Wfi8pDhohzxw3nDXUMechSAKsPYccaDz2/PANySLeXWzl7Wfffm6tkmTT7mZFHt
+	foVuUAeSPp9JctBTHel1tesj9OfneJbnHjumDOWiV3yZWxzD3lT85pdA0E+4psV0aHWI6HVYeU+
+	iEAqTQke2RE
+X-Received: by 2002:a05:600c:138e:b0:499:d366:f572 with SMTP id 5b1f17b1804b1-499d656bb71mr19576815e9.10.1787610640333;
+        Mon, 24 Aug 2026 15:30:40 -0700 (PDT)
+Received: from hisam ([2407:d000:508:2027:836a:630c:55cc:a9e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-499d63669e6sm9049155e9.13.2026.08.24.15.30.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 15:03:43 -0700 (PDT)
-Date: Mon, 24 Aug 2026 18:03:43 -0400
-From: Eric Chanudet <echanude@redhat.com>
-To: Maxime Ripard <mripard@redhat.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Michal Hocko <mhocko@kernel.org>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, cgroups@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Albert Esteve <aesteve@redhat.com>
-Subject: Re: [PATCH 03/11] cgroup: add memory_cma_accounting mount option
-Message-ID: <aoy5n82tN7PynPVf@echanude-thinkpadx1carbongen13.rmtusma.csb>
-References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
- <20260821-cma-memcg-regions-v1-3-d21b165b8440@redhat.com>
- <20260824-poised-meaty-shellfish-9a09d2@houat>
+        Mon, 24 Aug 2026 15:30:40 -0700 (PDT)
+From: Hisam Mehboob <hisamshar@gmail.com>
+To: kvm@vger.kernel.org
+Cc: dmatlack@google.com,
+	alex@shazbot.org,
+	shuah@kernel.org,
+	seanjc@google.com,
+	jrhilke@google.com,
+	rananta@google.com,
+	vipinsh@google.com,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Hisam Mehboob <hisamshar@gmail.com>
+Subject: [PATCH v2] vfio: selftests: Include <libgen.h> for basename() on non-glibc builds
+Date: Tue, 25 Aug 2026 03:28:47 +0500
+Message-ID: <20260824222845.459181-3-hisamshar@gmail.com>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260824-poised-meaty-shellfish-9a09d2@houat>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 24, 2026 at 09:02:30AM +0200, Maxime Ripard wrote:
-> On Fri, Aug 21, 2026 at 02:56:55PM -0400, Eric Chanudet wrote:
-> > Add a cgroup v2 mount option that will be used later in this series to
-> > enable CMA memory accounting under memcg.
-> > 
-> > The option is made opt-in as it will charge allocations to the cgroup's
-> > overall memory usage, which changes existing expectations.
-> > 
-> > Signed-off-by: Eric Chanudet <echanude@redhat.com>
-> > ---
-> >  Documentation/admin-guide/cgroup-v2.rst | 20 ++++++++++++++++++++
-> >  include/linux/cgroup-defs.h             |  5 +++++
-> >  kernel/cgroup/cgroup.c                  | 15 ++++++++++++++-
-> >  3 files changed, 39 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/Documentation/admin-guide/cgroup-v2.rst b/Documentation/admin-guide/cgroup-v2.rst
-> > index aed195a71cbf..3dfc13f31a0c 100644
-> > --- a/Documentation/admin-guide/cgroup-v2.rst
-> > +++ b/Documentation/admin-guide/cgroup-v2.rst
-> > @@ -246,6 +246,26 @@ cgroup v2 currently supports the following mount options.
-> >            will not be tracked by the memory controller (even if cgroup
-> >            v2 is remounted later on).
-> >  
-> > +  memory_cma_accounting
-> > +        Count CMA memory usage towards the cgroup's overall memory usage for
-> > +        the memory controller, and expose per-CMA-area usage counters. This
-> > +        behavior is opt-in, so as to not cause regression on existing setups.
-> > +
-> > +        A few caveats to keep in mind:
-> > +
-> > +        * CMA areas are reserved at boot time, memory is only charged to a
-> > +          cgroup when a CMA allocation is performed on its behalf.
-> > +        * CMA pages allocated while this option is not enabled will not be
-> > +          tracked by the memory controller, even if cgroup v2 is remounted
-> > +          later on with this option. Charges happen at allocation.
-> 
-> And what would happen if it's the other way around, ie mounted with this
-> option enabled, then remounted with the option disabled?
+sysfs.c calls basename() but does not include its declaration.
+Glibc exposes basename() through <string.h> with _GNU_SOURCE, while
+musl declares it in <libgen.h>.
 
-I meant for it to have no more charge issued until remounted with the
-option enabled. Pages that have been charged are uncharged when
-released, even if memory_cma_accounting is disabled after the charge is
-issued. In this version, it is broken[1].
+With musl, this results in an implicit-function-declaration error and
+subsequent type-mismatch errors at the callers.
 
-I extended the documentation line with the fix for a potential v2.
+Include <libgen.h> so the declaration is available on both glibc and
+musl. This is safe at both call sites: the arguments are local writable
+char[PATH_MAX] buffers filled by readlink_safe().
 
-[1]https://lore.kernel.org/sashiko-reviews/aoi_OHVZjsY9a9VV@echanude-thinkpadx1carbongen13.rmtusma.csb/
+Link: https://lore.kernel.org/kvm/CALzav=fs4bqMM7BXNPXqhtbqGzA+LW5fgx2-1Q5=sTN5+krYhw@mail.gmail.com/
+Fixes: a262fc49e0aa ("KVM: selftests: Build and link selftests/vfio/lib into KVM selftests")
+Reviewed-by: David Matlack <dmatlack@google.com>
+Signed-off-by: Hisam Mehboob <hisamshar@gmail.com>
+---
+v2:
+  - Changed subject prefix from "selftests/vfio:" to "vfio: selftests:"
+  - Added David's Reviewed-by tag.
 
+ tools/testing/selftests/vfio/lib/sysfs.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/vfio/lib/sysfs.c b/tools/testing/selftests/vfio/lib/sysfs.c
+index 11415448b2e2..daf117a299a6 100644
+--- a/tools/testing/selftests/vfio/lib/sysfs.c
++++ b/tools/testing/selftests/vfio/lib/sysfs.c
+@@ -1,5 +1,6 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ #include <fcntl.h>
++#include <libgen.h>
+ #include <unistd.h>
+ #include <stdlib.h>
+ #include <string.h>
 -- 
-Eric Chanudet
+2.51.0
 
