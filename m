@@ -1,109 +1,159 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9C4033A6E2;
-	Mon, 24 Aug 2026 13:31:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2323930D3FE
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 13:32:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787578319; cv=none; b=uQEN4kwO8dbJF8gcYC7J0Spy3QAXJc0wpG64QSmub5BnWsOQT2V1hztsMQuZNZiY6FJcbiedU/TpM1fhwseNnLr6Uuu8IOESpPcpoqG+eplrDcsJSgl7CpakuDdgppvBGrQrP0aYemZ1zj96SUDz6i8/JZLtf3LSkOrX0ix6AZM=
+	t=1787578361; cv=none; b=UbEqGkd8N12LZXFy1vpKUd/Sx9xGK/xrZA6x2IrKcxXpaPt0kbAyDotN3WrsX5caJp3Do7wEe8UHn78UThauFKqupqr0Uqa6I7dJpibM5L8rvZcaLglEyB8dS9vNHtDzyH5J6z5jhrfd3kxl/BkPtSiX3+Q5Jknok/APt7aVy/4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787578319; c=relaxed/simple;
-	bh=GNCGui7P2AnmzIfr9ZkhsD6RefuXjdvfS82HsheqZsM=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=sQrEuo6A0TRVlHL7/JU3ykvpAePwnCDkM1kA6+bG7vkICP8vCwO7UXwirycGKRrC+mJbuoHSBY1ofCZu4tO5WXYrO1yNUXe3bxcwJRtAiEXPx3kmebSVfxxYHYlgG8c3+EtKXDpN8aERWPDNjnLDy66FxJroxdZ7HRu0haN7EZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HamXLMwu; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787578361; c=relaxed/simple;
+	bh=/wYoKbWA/rb5RPFSav1i6crHP4PmpHlCGKtzSsdb670=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=GLjZSfcj81Kt6N38kxL7ALlWmQ03fortdp3MhWwJNLBazWp0srW/opo5AYrXvEG2QzOBDyc6G4SNy7ntt6TkYUZ+Ss35JaYFaBzgMZvkM50oykoyfOQmLiFgcC+BMqO/RF3iiH7gBzQ+xzPEIDPag9o7PQa17KiYWbukXfqoKWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TryS5n+4; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HamXLMwu"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B4B01F00A3A;
-	Mon, 24 Aug 2026 13:31:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787578312;
-	bh=OxKKi0/V2fk/sc/a1SKNBUlsnCLui6ACXsD+B8Vtw+U=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=HamXLMwur7SX02Ge2bLzY/iwZrndwDJFx0RlbP8TT9F4Vi47tCSuvukrjZDpQZ1LP
-	 7f09Xdm7br6FYqdjFFpZ7TO8EMiSiCv1r8sZi0tJL/3PMW8s6DEG/Gm3Ik4fBIVfHv
-	 Vw4KK9rQnUmBXefQSjc8DkoOY9oG5+A3Mo8VcY9JOwqu0BJF0c4uJ4AhZW9ImN3UjK
-	 xDb18Lshg5zKfi01mSwsgAXTWcCs1QPDwEX+b0CNIZAd3RBRCxRjrDr7dmdgA0ub/9
-	 bTlBEMrchJfbjEBXECuSFtHOhkZCNpoivwhogaXQvgK/eXX01vWJMFwwp2Nfddv+9l
-	 11OouhnNyIosw==
-Content-Type: multipart/mixed; boundary="===============2052238105983823877=="
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TryS5n+4"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c15d3cd51b2so522913866b.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 06:32:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787578354; x=1788183154; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=9jFDMZuaDQUMNyu/XaA5I+VmGrlffknt/pjl8VjQLdA=;
+        b=TryS5n+4WTwOaCtge3dJJJstpOc98EE4yWjq3bpBG09B/PVZP3/J3wBPzauymS9qsA
+         tiZSJM1UFN5V+0tZHZnlpYTVwyjneZe6FwD9R3lMGf+FCigXEIqFwclKaqPM569g4Yu6
+         C35bNbUeO7EObdy33K0EwiHsxwfkxWEY9+pKTo2Rz+dsnwZfqvIKeivJyE7W2mDaanwK
+         rsEakrcQwc4StGrwSzxCJmR+awjO5TDuSSdtyUW63B3tFKqLgzED4jwAorv9MPRw8O7E
+         rymFH0mCEz4EvhfDmwqw8AnlQhIYJ6q7iEycvQqwZN5s1VaWGV3xLg5+PdT/QiDUAgUO
+         L8zg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787578354; x=1788183154;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=9jFDMZuaDQUMNyu/XaA5I+VmGrlffknt/pjl8VjQLdA=;
+        b=EmaSqoJH5HBpYFMtw2p5tgkYMwHEtFy0KYYYgRRJ1tkLfHjG1cBTgpAn2dURRaDc2q
+         nDm2je8rYtcamUzfGFuhaoQ0Bq9Fl9TAlo1l8RLBwBgjb+w5c6y6mz0CKObSqIOdcWsO
+         yi6ETQOYG8+NrqXWL8P/SzrbkNsukqWbLK+T+k7hrzgr/131eo7TtxNH9ytAcDtHUMK5
+         clKJ+LpidzNJwJScVK6UPMHC0PU7Wzs7ab8meeNMirREt7AxaYLrHzwWd9TP8RJhaSOa
+         cMAp9vaf/M4e4GP7/qSQyis4Z8fc3ad/YHXEKjIA59CmXpU5iTNBL6ZJy09CMj8f2Jl5
+         /2SQ==
+X-Gm-Message-State: AFuF++kWStGg9OufZ/sVh/rwXjLIM3dcv200y3CjZ5jKthCRJmXlhNrK
+	9VE8NTRgH0ZQyJQYpvinX1knTs2vqPtqI2oEoIWNLvJBawUOTDV067yR
+X-Gm-Gg: AR+sD11F2Cki4gpq6eVohIqV29ARk73+3iavHZjVokarZ7TPo4yAp1eCylypXm7FHtI
+	vojEU4nEhoaC66GsqpMSs/hhkWnMORygrT0XIlOn93AaDtkmsRWq70jURoQr09LnCw6pxXetCCC
+	EjIgns2vCzd+9qx9wv3lbWxjzi46DlikqxusOn9+HKhGpjekjwwja6ShedLUnrVQzFNxYMz3BAH
+	9fKv21jo2WU3fjXGuIKzSPWJQPoznF8q5xDAGMfOB72cGfeXvgJZ5bRLcEuxshPvkZCNdYpT36N
+	pF/T0V6sOoTMSQ4rswS5kwtz1vD7r5rDE2dfZecNpQ1mVbz2jxvbot35fEMG0TdDmic3mEKIZXN
+	xGt5DpQiE8GZCq6ZjGNCCKQsPl90tZfVjxjgm00rL61f7n4LCTSAsCRKylmjt59OsBvC/BWU1y+
+	VLte1/NENVoNNn3Upk/th9JCGaYBlDseYPoDTGhDsC18ecmXeduS0DMeJdKPi2ukxdWpY9pIKUE
+	wOj1IGwTzVc5cyka7mGiRo4
+X-Received: by 2002:a17:907:a0c9:b0:c20:3402:bd35 with SMTP id a640c23a62f3a-c24925e3909mr1796510266b.12.1787578354028;
+        Mon, 24 Aug 2026 06:32:34 -0700 (PDT)
+Received: from [127.0.0.2] ([195.100.225.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f8f2asm1313492266b.36.2026.08.24.06.32.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 06:32:33 -0700 (PDT)
+From: Malte Wechter <maltewechter@gmail.com>
+Subject: [PATCH v2 0/2] kunit: add optional assertions to catch taint and
+ lockdep warnings
+Date: Mon, 24 Aug 2026 15:32:29 +0200
+Message-Id: <20260824-lockdep-kunit-v2-0-36a6fec9f72e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8b583f9deb409bec43e97f558b1e3197f2cd54ca4e5121eacada28b04749f812@mail.kernel.org>
-In-Reply-To: <20260824125310.1384-2-zhaofuyu@vivo.com>
-References: <20260824125310.1384-2-zhaofuyu@vivo.com>
-Subject: Re: [PATCH bpf-next v4 1/2] libbpf: support selective kernel module BTF loading via bpf_object_open_opts
-From: bot+bpf-ci@kernel.org
-To: zhaofuyu@vivo.com,bpf@vger.kernel.org,eddyz87@gmail.com,andrii.nakryiko@gmail.com,alan.maguire@oracle.com
-Cc: andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,zhaofuyu@vivo.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Mon, 24 Aug 2026 13:31:52 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAO1HjGoC/12Nyw6CMBBFf4XM2pp2NBVc8R+GRSkDjDxKWiAaw
+ r8LGDcuT3LuuQsE8kwB7tECnmYO7PoN8BSBrU1fkeBiY0CJWsYKRetsU9AgmqnnUSQa4/KaW1M
+ kErbN4Knk19F7ZF8OU/4kO+6R3ag5jM6/j8NZ7d6vHf+1ZyWk0NpSrgzekC5p1Rluz9Z1kK3r+
+ gHtL2wSvAAAAA==
+X-Change-ID: 20260812-lockdep-kunit-9628f4bcad90
+To: Brendan Higgins <brendan.higgins@linux.dev>, 
+ David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, 
+ Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun@kernel.org>, 
+ Gary Guo <gary@garyguo.net>, 
+ =?utf-8?q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+ Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
+ Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+ Danilo Krummrich <dakr@kernel.org>, 
+ Daniel Almeida <daniel.almeida@collabora.com>, 
+ Tamir Duberstein <tamird@kernel.org>, 
+ Alexandre Courbot <acourbot@nvidia.com>, 
+ =?utf-8?q?Onur_=C3=96zkan?= <work@onurozkan.dev>
+Cc: linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org, 
+ Malte Wechter <maltewechter@gmail.com>
+X-Mailer: b4 0.16-dev
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787578351; l=2380;
+ i=maltewechter@gmail.com; s=20260812; h=from:subject:message-id;
+ bh=/wYoKbWA/rb5RPFSav1i6crHP4PmpHlCGKtzSsdb670=;
+ b=Bo/DH7IPG8N81PqdvRSLkHlgp3Sr9uTslIVwWx/ZG1GyeQMkoYwK0XBxPGDX23QkYC+pp8U3B
+ v6pq3XARUk3Dco9UNncf/ZsyuFsSlRhQyrC44TAzvrJlbVSCDniE3Xd
+X-Developer-Key: i=maltewechter@gmail.com; a=ed25519;
+ pk=Ta/JQQMOW0Cbxp+yEwWqWFEyKFRyuQeSoYicwD7yvWI=
 
---===============2052238105983823877==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+this patch tries to expand KUnit by using existing kernel diagnostics to
+catch certain locking related bugs. Specifically this adds assertions for
+`debug_locks` from `lockdep` and the `TAINT_WARN` flag from `panic`.
+This tries to prevent bugs as: circular locking dependency and sleeping
+function called from invalid context. 
 
-> diff --git a/tools/lib/bpf/libbpf.h b/tools/lib/bpf/libbpf.h
-> index b965ad571540..838602319da8 100644
-> --- a/tools/lib/bpf/libbpf.h
-> +++ b/tools/lib/bpf/libbpf.h
+Add config CONFIG_KUNIT_EXTRA_ASSERTS that enables extra assertions
+to be emitted: First, before _any_ KUnit test suite is ran, this is to ensure
+that the extra assertions are triggered by a KUnit test and not prior.
+Secondly, assertions a made for each test case, failing them if the
+assertions fail, even if the KUnit test is marked as passed.
 
-[ ... ]
+Signed-off-by: Malte Wechter <maltewechter@gmail.com>
+---
+Changes in v2:
+- Implement changes directly in C KUnit instead of Rust KUnit wrapper
+- Remove rust specific configs and add general CONFIG_KUNIT_EXTRA_ASSERTS config
+- Link to v1: https://patch.msgid.link/20260818-lockdep-kunit-v1-0-66ceb1a272e3@gmail.com
 
-> @@ -224,10 +224,32 @@ struct bpf_object_open_opts {
->  	 * point (/sys/fs/bpf), in case this default behavior is undesirable.
->  	 */
->  	const char *bpf_token_path;
-> +	/*
-> +	 * Optional list of kernel module names whose BTFs should be loaded.
-> +	 * nr_btf_module_names specifies the number of entries in
-> +	 * btf_module_names.
-> +	 *
-> +	 * If btf_module_names is NULL, all module BTFs are loaded,
-> +	 * preserving the default behavior. Otherwise, only the BTFs of
-> +	 * the listed modules are loaded. A non-NULL btf_module_names
-> +	 * with nr_btf_module_names equal to zero means that no module
-> +	 * BTFs are loaded.
-> +	 *
-> +	 * The list must not contain duplicate entries; otherwise
-> +	 * -EINVAL is returned.
-> +	 *
-> +	 * This affects:
-> +	 * - BPF CO-RE relocations against types defined in modules;
-> +	 * - BTF-based resolution of function attach targets for
-> +	 *   fentry/fexit/fmod_ret/freplace/LSM programs;
-> +	 * - extern (ksym) resolution for kernel symbols defined in modules.
-                   ^^^^
-
-This isn't a bug, but would it be worth adding struct_ops kernel-type
-resolution to the "This affects:" list?
-
-find_struct_ops_kern_types() (tools/lib/bpf/libbpf.c:1049) looks up
-'bpf_struct_ops_<name>' via find_ksym_btf_id(), which falls back to
-obj->btf_modules[] after load_module_btfs().
-
-A struct_ops implementation whose kernel type lives in a module (e.g. a
-module-provided tcp_congestion_ops or sched_ext-style struct_ops) will
-therefore stop resolving once a filter that omits that module is supplied.
-
-> +	 */
-> +	const char **btf_module_names;
-> +	size_t nr_btf_module_names;
->
->  	size_t :0;
->  };
-> -#define bpf_object_open_opts__last_field bpf_token_path
-> +#define bpf_object_open_opts__last_field nr_btf_module_names
-
-
+To: Brendan Higgins <brendan.higgins@linux.dev>
+To: David Gow <david@davidgow.net>
+To: Rae Moar <raemoar63@gmail.com>
+To: Miguel Ojeda <ojeda@kernel.org>
+To: Boqun Feng <boqun@kernel.org>
+To: Gary Guo <gary@garyguo.net>
+To: Björn Roy Baron <bjorn3_gh@protonmail.com>
+To: Benno Lossin <lossin@kernel.org>
+To: Andreas Hindborg <a.hindborg@kernel.org>
+To: Alice Ryhl <aliceryhl@google.com>
+To: Trevor Gross <tmgross@umich.edu>
+To: Danilo Krummrich <dakr@kernel.org>
+To: Daniel Almeida <daniel.almeida@collabora.com>
+To: Tamir Duberstein <tamird@kernel.org>
+To: Alexandre Courbot <acourbot@nvidia.com>
+To: Onur Özkan <work@onurozkan.dev>
+Cc: linux-kselftest@vger.kernel.org
+Cc: kunit-dev@googlegroups.com
+Cc: linux-kernel@vger.kernel.org
+Cc: rust-for-linux@vger.kernel.org
 
 ---
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+Malte Wechter (2):
+      kunit: add extra assertions to KUnit test cases
+      kunit: add KUnit test to assert kernel state before KUnit suites are run
 
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/32730521630
---===============2052238105983823877==--
+ lib/kunit/Kconfig     | 12 ++++++++++++
+ lib/kunit/executor.c  |  8 +++++++-
+ lib/kunit/test.c      | 30 ++++++++++++++++++++++++++++++
+ lib/kunit/try-catch.c | 23 ++++++++++++++++++++++-
+ 4 files changed, 71 insertions(+), 2 deletions(-)
+---
+base-commit: 8cdeaa50eae8dad34885515f62559ee83e7e8dda
+change-id: 20260812-lockdep-kunit-9628f4bcad90
+
+Best regards,
+--  
+Malte Wechter <maltewechter@gmail.com>
+
