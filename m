@@ -1,55 +1,73 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ot1-f42.google.com (mail-ot1-f42.google.com [209.85.210.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CABA217B50A;
-	Mon, 24 Aug 2026 13:21:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 434DC2931F8
+	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 13:31:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787577710; cv=none; b=EV9u4Y7TeYJPLn7wtcyfM0+jxZq+eQCOHxzz4sLuiuK9rbEKJWzUZdMquHs6xDhUhjtOgW78ZPa8m3cs+rwObsyy5ovhVlVTDl5XYMfOniKOEzHxNO63PtSY23gGLW2szD2/33Xd/09BcB+4XBApTcwL0Xa3pd+QFmB2ZN6ZFdU=
+	t=1787578276; cv=none; b=ApBSispVFQXiiOkGJ+4fX3blLCFYQHh633mSXpIoP6AO5qdVuc1Ytyg45CPFOgdUALWW/JX44UyBUutUMkeZYXddwA8ypVtk+p1DUIsDxIrGGaqnxmnngxhNQ7MTB/DNAA3aLXrXeD7DEcx1rSmNGNxf08vQJ6V5Rngwkkgl0cU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787577710; c=relaxed/simple;
-	bh=Lw0JsDV0WTzHsR1mYq2sQkaCsFm2SnOuXntn3KxvQ10=;
+	s=arc-20240116; t=1787578276; c=relaxed/simple;
+	bh=uGg/m1YBOeJTowj4uybIy6jrf/stiCcAnS70kdk5Udc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BEDk3HyBB0mmRXnnD0e8WcEm+cH6t5Mlhglz/IUrIUlR71PjVj0u059G7ZRRsLQSsmAC22XQv41Faq9ZRH1feU/h6/OYW/nAAT0JOpme1i5gRBm96kzD+RblmCsfY0CxFbE4/XrzCLdNNbI4TuKlwL11yyDyDsjSr2wGXN0FX/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=C3kIUzMh; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=MWdiaTWV8104azCiwM1hUqmP9veQ0UYhK5AWn76hUeQoZbBbdcpkvk7iEMHoy9lmNsb64vOxdQA9diaL6q1PDD71bLoUpDuuoqCrsLwjh8pI2bfePdfVnqJnzUst6EShxsziynPV0xhSfgMBp3IclCJOjefePUDpo2WQf1xylFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IBeD2Ghu; arc=none smtp.client-ip=209.85.210.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="C3kIUzMh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8431A1F000E9;
-	Mon, 24 Aug 2026 13:21:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787577709;
-	bh=C1JOhLm4zg8p33Eesvf4KAwYUKhywd17N8ZTmUOFlhU=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=C3kIUzMhBQVJBfsXshHzLfqtoxocGaUhRkQoECbAKeJQlpCpUfZUYrgKN+hbK6Fmm
-	 vZ+AH6AecQm4ImUrVUYSpRNZ7vp6fEPBYgLlAwq6ojg0QZ8ExNDQ/BV5BMi0+PSfOS
-	 jnFW3wNpWO7dNuN4Z+5XMMJReiDd/893GjpZhJuhHBn6d5+l+XALb/h3/DysSKN75q
-	 cf7disUtAvAF8RdKux/E1FKxBTsU2c0cTsyEdfslqfP/riTetz4RZ8IJMw0HHxujLW
-	 aaB0xLOyX3AwIgIoHEIxVwXQl3pBUpttWNkd0G+TOdXoi+eK8lDcC16I2Syb/hHUXI
-	 TGqNKfKngLeig==
-Date: Mon, 24 Aug 2026 16:21:38 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	"David S. Miller" <davem@davemloft.net>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jesper Dangaard Brouer <hawk@kernel.org>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Hagen Paul Pfeifer <hagen@jauu.net>, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
-Message-ID: <aoxFYlkTvHMqdqf_@kernel.org>
-References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IBeD2Ghu"
+Received: by mail-ot1-f42.google.com with SMTP id 46e09a7af769-7f3ece23165so3631969a34.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 06:31:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787578272; x=1788183072; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=y60jwkQhoD4s3eswGlcI736vrGSva62DV1OEGb13gfY=;
+        b=IBeD2GhuMv+wZ4tp5hrIbamZda45IfxUCzStv5gTB+BxmKE+5dMkfIzmb5/qxTkyr0
+         djPAt7CQ1PcM0D/jdtwWpjtvYsgokGjb993nsYnBq8hUBZV2pLHz58GxyGWq7Dl3VaKO
+         XM9xFN0no+U/vcBceyEvunzz1Vrt8uZfid7xU3BLOp2rRQWeK72thoOtx3xQMwaYeWxC
+         08pY0brQSNH4qu7o6QZgJ72wY/WWQqx5bWgGIxfQC/dnuWYEVDsJXDc7BIW5wwPh7BzH
+         1uggRCVLgiis+2ed9gmjeHRLsrifJjkQTy4Wme7nt8aYo+DXGJbMfVe8laPXt+edroad
+         bJ9g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787578272; x=1788183072;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=y60jwkQhoD4s3eswGlcI736vrGSva62DV1OEGb13gfY=;
+        b=tHfelbY1JlF0srfvMDIFCMCqzHCYisug33CCyTHWFFjUGunkPxFS8m7qBlc1xjR14T
+         qC6J3p99B7AH713qR7uiJTMnekNow0P+dfdVnHLASPOwP6guNPSvNjL7gZgxS4eDPAQV
+         cGz0LvDIp1Q1fiXxwaImJ8qPDy/ptE09Qg4Kp7hx5aCNhZ+NQ6aadAPHIy24oJ9WAaCM
+         27+0eUPot94+3b8XRz8qxtij+8G0gCxLlJdbqmqROkZA6kHfm1JGAHzQMtdATumIAYfG
+         3yCafE4zLNQRarIgDXmmKIdqMwHErSI6g8z5i17WNnbGBWJq3pw29iMd2tvX+43EfVNu
+         HjDw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq/PgWuygtJCc9oiLv/mecX/maDPRXQ0lKGLHWsHXmcuSfhOu5GCMFoESkZzIIOuudSNidq0QYfJLW1lpLuZ/A=@vger.kernel.org
+X-Gm-Message-State: AFuF++mhaeGoi+O11R6c4W/WrN5/dHwy2XmRXshcGdvCa/D4tL4WDmCw
+	SpA1akbdO/SoonCRmhkXwNATx9U2IwKZrUTtZR91YBI33AbyDG30xRQa
+X-Gm-Gg: AR+sD11CPzSD6nGrQ3dRxc/TFsWFK/S9V4Lf5CL8hBd54o3sVRmT07QcOtRqh7JREVn
+	YNBfhJguzXRsvTYRQSjAkYJIILKtKlbShxWQ61xRGpbbVoaa2uOQ300ExM+wraVpYA5ms2p77D9
+	RfSxSaTnGMpKPheYjWIrSHhIS05R0QTMPGQZNUVdKfmGZ+E+l0JTIHq6iF+Qh6M7be/mi9/f/Ge
+	MCcomlji85AhhQrnKAtsPLwqFfMYHAdkALnR7VoqsiINdGU/EtjBOIJ1ocNfu0bbq6fQ9QrA2yH
+	MWfOvQQJTdGtFGx5EdP8rLWp6G2R/BaIhHIIviEPtv2EX7sovjZcCi3Jtz2hSROFlcxsumS1cyZ
+	EVZvf9/Qd/bRwDlkD77L641nVP+pWQVartWIYeDhuy0K7A4ub//iDdTR3M8wZSFkFAtU5WbqvT5
+	v+OLdvt98pxaK1S1actIArHlB3STFwADH+We2SjHALDSFKR5yRnoNHhNSEjDy/kIq/TtiWkFrg2
+	volpyRCl9hbh4d0RjV9Qfn+5EFdQ0oAQvYM0sD9ydBZuNpApFbOY4HuF30lZbuPR4XJvPkZOg==
+X-Received: by 2002:a05:6830:600d:b0:7df:5fc:3fd5 with SMTP id 46e09a7af769-7f461421249mr32340464a34.1.1787578272534;
+        Mon, 24 Aug 2026 06:31:12 -0700 (PDT)
+Received: from fedora-laptop ([172.245.82.59])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f48fcb4fa2sm4207470a34.25.2026.08.24.06.31.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 06:31:11 -0700 (PDT)
+Date: Mon, 24 Aug 2026 08:31:01 -0500
+From: Ming Lei <tom.leiming@gmail.com>
+To: Yang Xiuwei <yangxiuwei@kylinos.cn>
+Cc: axboe@kernel.dk, linux-block@vger.kernel.org, shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 0/2] ublk: fix force_abort leftover after quiesce recover
+Message-ID: <aoxHlXhGrrFDN8SE@fedora-laptop>
+References: <20260821103047.369522-1-yangxiuwei@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -58,68 +76,26 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+In-Reply-To: <20260821103047.369522-1-yangxiuwei@kylinos.cn>
 
-On Sat, Aug 22, 2026 at 08:14:02PM +0100, Lorenzo Stoakes (ARM) wrote:
-> secretmem has a relatively laissez-faire attitude to accounting the folios
-> it allocates.
+On Fri, Aug 21, 2026 at 06:30:45PM +0800, Yang Xiuwei wrote:
+> Hi,
 > 
-> The intention is that the memory is treated as if it were mlock()'d and
-> thus is limited by the RLIMIT_MEMLOCK limit if the CAP_IPC_LOCK capability
-> is not in place (which broadly allows unlimited ranges of mlock()'d
-> memory).
+> Quiesce on a batch device leaves ubq->force_abort set. Recovery does
+> not clear it, so batch fetch fails with -ENODEV and the device stays
+> QUIESCED.
 > 
-> The lifecycle for memfd accounting against this limit is - account on map,
-> unaccount on unmap but the lifecycle of memfd folios is allocate on fault,
-> deallocate on inode eviction.
+> Patch 1 clears force_abort in ublk_queue_reset_io_flags().
+> Patch 2 adds -b coverage to recover_03.
 > 
-> This mismatch is problematic because the folios are unevictable and remain
-> so until the inode is evicted (set using mapping_set_unevictable()).
+> Tested: recover_01, recover_03 (with and without -b).
 > 
-> This is problematic as it eliminates usual mlock() semantics - mapping
-> folios then unmapping them does not clear their unevictable state, since it
-> depends on AS_UNEVICTABLE, not PG_mlocked.
-> 
-> A user can therefore easily work around the RLIMIT_MEMLOCK limit - simply
-> map then unmap and VmLck no longer counts the secretmem range (or more
-> involved - fork which also achieves the same thing).
-> 
-> Worse - they are not accounted in the process's RSS even if mapped again,
-> meaning the OOM killer won't know to kill the process.
-> 
-> A user without the CAP_IPC_LOCK capability can therefore repeatedly
-> map/unmap (or map/fork) and consume all available system memory with
-> unevictable folios and cause system instability.
-> 
-> A secretmem fd can be passed between processes and over fork so a
-> per-process limit simply does not make sense.
-> 
-> So follow the precedent set by io_uring, perf, skbuff, iommufd and xdp -
-> track the number of locked pages in user_struct->locked_vm.
-> 
-> Since the scope tracked is actually inode lifetime, the RLIMIT_MEMLOCK
-> applies per-user not per-process. Also given the change in scope it doesn't
-> make sense to bypass for users with CAP_IPC_LOCK, so remove it.
-> 
-> There is simply no reason to carry on marking the mapping as mlock()'d
-> since it's misleading and the lifecycle is now correctly handled, so remove
-> this too.
-> 
-> Additionally, fix the selftest which checks the limit as this now must
-> assert SIGBUS on limit violation on fault-in.
-> 
-> __secretmem_account_pages() is more or less a duplicate of the code that
-> io_uring etc. use, but since this is a bug fix that needs backporting,
-> defer any de-duplication efforts to a follow-up.
-> 
-> Reported-by: Daehyeon Ko <4ncienth@gmail.com>
-> Closes: https://lore.kernel.org/linux-mm/20260813225328.2010303-1-4ncienth@gmail.com/
-> Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> Yang Xiuwei (2):
+>   ublk: clear force_abort in ublk_queue_reset_io_flags()
+>   selftests: ublk: add batch IO cases to recover_03
 
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Reviewed-by: Ming Lei <tom.leiming@gmail.com>
 
--- 
-Sincerely yours,
-Mike.
+
+Thanks,
+Ming
