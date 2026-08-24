@@ -1,361 +1,287 @@
-Received: from mta1.migadu.com (out-46.mta1.migadu.com [95.215.58.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 757E233343C
-	for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 08:59:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787561968; cv=none; b=W2jYMc0GUHYNCYxXfgepM8yymXL12Soow8zICHcZuoxfaDAATjYMkOQf3JZFH/9q+fJ2b6urRhVXlvxw+u60yPjKGN3BdthoESqeNJCUXxVhD9sCy9nOKHcGv6vORPxLqqopmh7u5V4O754ZI/TGb8uB8dXaMM4RiDzQd1TwsKk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787561968; c=relaxed/simple;
-	bh=v9Mz9IiugeMcpSwkMTt7bd+jUvOA+Fz24RK1+H/N/XQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rLjvAJ5pifgfMKLhWmGeWOty+41yV3zIHCqYWVCTlbYJle99bJrXLbaQX+0qsX5GcLq0VnHHuJhVBfSJE7sNayQ0pXgCRCwOP4OuaoB1d+7L3RHdTlkPLI/FeEZG2udkcG2hH+6ou4Vxclk+Ol7ufzbu642Dl1JxqVwqjWlNxgA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oYPiAJlu; arc=none smtp.client-ip=95.215.58.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E419A3EE1C7;
+	Mon, 24 Aug 2026 09:06:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787562377; cv=fail; b=VBRCMZSFxFsposrimaCuKg61Ds1de5C3NgnPLCHCF4bjDhW75+bOmOJGGbFwvQghYlvmkd+P5S8dVuLld+3FLA96OfAa9DoyZ2KRl+kCoqJweLK+EBPGd5CpJSwhNu6++D5iJCSJhBktv/fS73cPhwW5OEj3qbdXmPljpFgrABM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787562377; c=relaxed/simple;
+	bh=2rGITChiqjTVCYTle3vemLDR0BduuUlgb4jcsbW3RQU=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=IGE60xm4gQ1bt70eTGl+ZW8xFQqFqi5b72tzA2jdEWoiK5lq3fD5Qgp7cPuTLT/M+wDC8Pp5ZOKaAz8l45/e3UjWpcohPaFKXqzoR3xWgHsCRxXFj+GtGeFunl99CpER8l+Nh/F81LYWgG8215H6mNNaMT6ETx2GevHbY6IfR9g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=I47SUvik; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oYPiAJlu"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=v9Mz9IiugeMcpSwkMTt7bd+jUvOA+Fz24RK1+H/N/XQ=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787561963; v=1; x=1788166763;
- b=oYPiAJluJELoXb3uIQR2ERVFSV6cUPjC/9GaRN37RC3r4ozHQoLDEzrKdtuVy98MNueiToML
- YkT7XaUJU4nJ2dvqcfsoJckSQM14GRdXj9sJeeZScKNT0W7S8uzXyJSrhb66q8ezIhbQY8G8udr
- 99swrSGZV0LJVlXV4QfyFG/A=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from ctao-book.. (223.70.159.239)
-	by smtp.migadu.com with ESMTPS id f3e3724dbd18898d;
-	Mon, 24 Aug 2026 08:59:23 +0000
-X-Mizu-Trace-ID: f3e3724dbd18898d
-X-Migadu-Flow: FLOW_OUT
-From: Tao Cui <cui.tao@linux.dev>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: Michal Koutny <mkoutny@suse.com>,
-	Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Shuah Khan <shuah@kernel.org>,
-	cgroups@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ziyang Men <ziyang.meme@gmail.com>,
-	Tao Cui <cuitao@kylinos.cn>,
-	cui.tao@linux.dev
-Subject: [PATCH v4] selftests/cgroup: add PSI pressure trigger and validation tests
-Date: Mon, 24 Aug 2026 16:59:13 +0800
-Message-ID: <20260824085913.546741-1-cui.tao@linux.dev>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="I47SUvik"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787562376; x=1819098376;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=2rGITChiqjTVCYTle3vemLDR0BduuUlgb4jcsbW3RQU=;
+  b=I47SUvikjX5xrwplxyrYUJvZe2uVWxIzDy7/XhwpliAUuUcQ2XV6jH03
+   KL7+Igpa1mp1P2gw9Gl1v2Y+s4gfsri5Sk5zp8/JnVbargaclCccLcBRh
+   RGOULSoHuivjYM9L0P42aheVsprRFu9C4lqMdJzPLlZ9WDjR76H1OTAL9
+   h3weLgM3mZMDNUAInGMtFUGK6d7GuDSa3rqkZ+tLPfqRccmSWlmWrlgkv
+   F+7ST/xf5mUQfLNFjfM8QZbO8CK0blrQgj5ZtHTXyiFIcBAsnm0gl5U58
+   DYIQ45DIG5PX8/LRQpw6PDPzRlUnjgzJAdq6otnelOJYevUfWtlD7ntvb
+   w==;
+X-CSE-ConnectionGUID: Y7CkhbpZS6WHtw3oRumDrg==
+X-CSE-MsgGUID: vP3iP8Y2RdGfAU7jUe601A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11884"; a="87773937"
+X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
+   d="scan'208";a="87773937"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 02:06:15 -0700
+X-CSE-ConnectionGUID: 1lnlxijqRAa3GxU6kc/OTg==
+X-CSE-MsgGUID: mQjPLqoWT4O6LtetdrIlFw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,240,1779174000"; 
+   d="scan'208";a="260799742"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Aug 2026 02:06:13 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Mon, 24 Aug 2026 02:06:12 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45 via Frontend Transport; Mon, 24 Aug 2026 02:06:12 -0700
+Received: from CY7PR03CU001.outbound.protection.outlook.com (40.93.198.64) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Mon, 24 Aug 2026 02:06:12 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=n6Hs4smu1Ax69Dq+N4mrcnJhnbBd6CpjRTVBPcn/E2FfkrlOyE4zAsW6UHJdfjxLbF2NROMs76NO6qkGuKbokGbFPKE1n7v2HRU+Eb17PtXOwL6KBJHT+NvpzR14ku/dp7VUAQJikTTCS+JbsE6PCLquv6FmU0KH+8s5rRj3QP/wh19NWuDY653BQ87q+xXK+LWN7Ldf/YVjNfX6ZJVWuWdfa/npSlH5rN9vkdcvKiuggSLgVbY7wmDTlTqacHwqfR1Ef06EKmAFFAoA5fcJmJ/CnqdGT8whU9qICozTyS1xhj+yLSbHJ2cyAyLxB9nhQaUk6mWlgyT8m8yHJgXe5A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/2LCvBnHaO9ANKU9V7yoMlHmoFHEgZJgIW+MbscRQtQ=;
+ b=LpxduMO51rRhpQ2taOlucTzyItHR+8cqF7qkgr0P0nh8giul/a0Hk3HAVBsXxjn4VeRPnC7Wr0FuiVvdF1vKxB0PIsZqMOBDI3Y3RAngn46PASzlM1zilmc4w+HhY3sDzHSjShIhzHaPfVJKut1Z3nM2Qa5cPQ8M/8rv4wAu168a8IN99RXTWbmR0GmJmNcKGIBacB7YL+m0IQoQDDATzfb+pSZeevMiz62/KAoEq7x4rmgZDKJE9lCLXBTVhjBbLr90LqUakUjkdcDAbOyy0T3q+sNU1Fz9TtR3hc0N+oD7rwVwDNAyYlt9x0DFByfXhICugs3sa/DFLTD3MKehTg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DSVPR11MB9579.namprd11.prod.outlook.com (2603:10b6:8:383::17)
+ by SA3PR11MB969295.namprd11.prod.outlook.com (2603:10b6:806:532::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Mon, 24 Aug
+ 2026 09:06:09 +0000
+Received: from DSVPR11MB9579.namprd11.prod.outlook.com
+ ([fe80::ab5f:5d0f:fb90:9d]) by DSVPR11MB9579.namprd11.prod.outlook.com
+ ([fe80::ab5f:5d0f:fb90:9d%3]) with mapi id 15.21.0339.008; Mon, 24 Aug 2026
+ 09:06:09 +0000
+Date: Mon, 24 Aug 2026 17:05:34 +0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: <ackerleytng@google.com>
+CC: <aik@amd.com>, <andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>,
+	<brauner@kernel.org>, <chao.p.peng@linux.intel.com>, <david@kernel.org>,
+	<jmattson@google.com>, <jthoughton@google.com>, <michael.roth@amd.com>,
+	<oupton@kernel.org>, <pankaj.gupta@amd.com>, <qperret@google.com>,
+	<rick.p.edgecombe@intel.com>, <rientjes@google.com>, <shivankg@amd.com>,
+	<steven.price@arm.com>, <tabba@google.com>, <willy@infradead.org>,
+	<wyihan@google.com>, <forkloop@google.com>, <pratyush@kernel.org>,
+	<suzuki.poulose@arm.com>, <aneesh.kumar@kernel.org>, <liam@infradead.org>,
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>,
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, "Borislav
+ Petkov" <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+	<x86@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt
+	<rostedt@goodmis.org>, Masami Hiramatsu <mhiramat@kernel.org>, "Mathieu
+ Desnoyers" <mathieu.desnoyers@efficios.com>, Jonathan Corbet
+	<corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, Shuah Khan
+	<shuah@kernel.org>, "Vishal Annapurve" <vannapurve@google.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
+	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
+	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
+	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
+	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
+	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
+	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
+	<jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+	<peterx@redhat.com>, <tarunsahu@google.com>, Vlastimil Babka
+	<vbabka@kernel.org>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-coco@lists.linux.dev>
+Subject: Re: [PATCH v10 18/41] KVM: TDX: Make source page optional for
+ KVM_TDX_INIT_MEM_REGION
+Message-ID: <aowJXhCdxy9j2qJf@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-18-2fc18ee6d3ba@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260807-gmem-inplace-conversion-v10-18-2fc18ee6d3ba@google.com>
+X-ClientProxiedBy: KU0P306CA0086.MYSP306.PROD.OUTLOOK.COM
+ (2603:1096:d10:2b::19) To DSVPR11MB9579.namprd11.prod.outlook.com
+ (2603:10b6:8:383::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DSVPR11MB9579:EE_|SA3PR11MB969295:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9b829e63-a8f4-454f-50f5-08df01bef025
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|23010399003|366016|6133799003|10067099003|56012099006|11063799006|4143699003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: r170g3lkWIWBFucUUog1uYF/rF/POjRR1gV7KkTPeCsXWgzMfpwbfERa3txFUGU+jFmtOf5baH2ItDXLWYjSed3UylbeXRJWhbJdnMKKPlwptIolPLrYW60O6CqzH07ucvp5BP2UWpb3yqOvXJ0Q1SW2VYPIcnC8Gs8cDhRHqlO3Hk11+WfN5P9DzX9s8BNg5YcerqNobZjkf0ATgTnurnDe2pfo1XXZcAy17Q6KfDb1tJHmJAZyrGSp0GikNW/xrjsOeNMQBXlJp9O9MAkBgNEu6K8f6pAl/R/nbfW9pt3LlAL0Q4w42adv/04wtKqfs6rcBDSV5G9Uy3fBrdg7pdpXvu27f4s9YHBZ8hznJMLH5moN3NZU/WIcak+iKED0WoYkfCO5Ggs/BKJQyRqGzxJHrWkIhOTpLziAOSCkDDn+MUNo9vfIHzrCynOmoo81EMKl3BzMqbs4M4TTUQ08pU9QxlMOaiWjeRwcmO8dek3EP2gBJ+eSHQRLuWwMJnaX/RKZ/WPp2qyXr3ktxblurMbwnfPTHf3UCgLieaUYjUZJnMOdEDKbGM1AExoK1Tf1wtEnHc2rfWmLj3dc97oqZzO8RHPPuY9JbaPRB924JJd5UhkpdMbQov28YnWri4oJLc3qBMP81F3qyTRqGoMpaohK0V66XKUX/n+XUlcUEs0=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DSVPR11MB9579.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(23010399003)(366016)(6133799003)(10067099003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9mV0qOnl0DpKQIJS0wefrHaiVSzW30FQR7z6kh+C34dkbIpxQ/aCnS7+B3JU?=
+ =?us-ascii?Q?ptrPqK+TF83+V2zORcx3eTxJ+0OCEHtdqcCD+HQs1HcP5fr4gs4BGZMLxY90?=
+ =?us-ascii?Q?oZXN28Vhmm7Uh5mBxEEqmfgOGVf/ybu95JOJ1lRpEsE51vWnvebpF+nR3s4S?=
+ =?us-ascii?Q?cNi4dFEhimvUqu1YsU/tdaQPYu3fHophoNj+Vq70lQqxMOloxoTBh22+9HiY?=
+ =?us-ascii?Q?+iqeVkJqN1gbPnYptW4xUAhLGgh+X3+/sUGe4AI8YqAp1PO1IsUVnTpI4C6E?=
+ =?us-ascii?Q?nlWsBgfgbQltcObud7WILR0hSTx4m5BJgQq4bZg6MghdSqjTKnk6FlvuBOBS?=
+ =?us-ascii?Q?Cn8xTxWBwXZCAJFYQZhq4543cldSooiLUkba3j9AB7YrRBO6fnewCqTnfknH?=
+ =?us-ascii?Q?z7AnLaQj4GJNfeUfeonszmIwp8M7vY4IGDL6uXmThEbwUBkXtpQBpfbQRLqn?=
+ =?us-ascii?Q?3DZCLKDwTQTBJjWkaXA6zySxJ+vtDsgavuLjZRLadfRFapRsMNjmGqrw5mhl?=
+ =?us-ascii?Q?DXke8h+o7rnfaHKjMgAouSR7vFMx3lkVqcT5OUyVw27yZTek+TTV9BOhudul?=
+ =?us-ascii?Q?33paZMomyQgYk7az4d3EuJhkqNL5HEXWHsXd2TrgauukfCxfAkpwURbuFR8T?=
+ =?us-ascii?Q?X3nkDjgbS41Qen/U5qPXitGqjfesrTVnoLRWz1y34mJu0FEK0IGupJVziEdd?=
+ =?us-ascii?Q?g408eDEd+MNQ+85Otr4oCmsYjSbNCrMGlXKDcFATVdApdwYpr/l8IQ5K6eJU?=
+ =?us-ascii?Q?jic+pM6XUMjNlgX4sjeS/KzUUjXvEes2R9C9UX7xLEA42U42cgyBGkjVulq1?=
+ =?us-ascii?Q?KZmlkuJ6pl4fxiZk1ApqA97FFc7bq9csoDC8HSttRA6stkSlS4fs84VDuB5k?=
+ =?us-ascii?Q?xTOfWMX4FRdCRAgInJSlucQq4xc2i2GkWbxl6jj+OpCs97HQs9DFHo0Ks5wb?=
+ =?us-ascii?Q?/7OA2N+j7rvIWLm3ARzldS0NMZ9oYZP3nV/LAu96fhYaxvOQ76Y/U0MhydeO?=
+ =?us-ascii?Q?j6YN5ZU1enZldG7OVCEtjkothskpej1zp7f5GjfR4GfByBmFWNY72EjQOM3O?=
+ =?us-ascii?Q?yyTNp0TD3ZjEP2R/KPD+U9jEgE75Durf/Y304N2gUw+AaC3W8IWBirP/jcgx?=
+ =?us-ascii?Q?s843mdqiET8OM+2nVFoAHQo+U5p/1efFrOXA6/F4fkY6yc01GI6diPcE0y6q?=
+ =?us-ascii?Q?Mg5esPheUXk3KtR3I470+EyqPo1TrOLSxD0xwpPp1uhol1WfgRZXWFjkZWqA?=
+ =?us-ascii?Q?O/RxwcdaLZ/2axkOMsrL8a0jz6W4XYCVbIV7OwreSrncCvC3ladLoSBIFNnN?=
+ =?us-ascii?Q?9cmm9Ou9NHC/OmjKlbe7BO9QnHNx4URIKSBOJaUPyfuJ4A4rJ5XUTiVIK77f?=
+ =?us-ascii?Q?Js2FBC8e72Rh9pTEvQZ/RvgzY+jl1aGwEHFvlE8ImtOZ/zh80ItbKxTAU6fI?=
+ =?us-ascii?Q?hzWgz5R22A3yG5SRY59F49oW5RVHK4CEvH7lq04VSJ5NdERVjlkrKn1K9fYC?=
+ =?us-ascii?Q?Ha6mOvLjz7vtOTPoF+U6F2pefr7nieXAz4/AuZ89/6mai5bCXQzHdUAc3Vz5?=
+ =?us-ascii?Q?thUlTe69PtQoXWKvz3s5aJVwSj+2vbfAKSfZ3pJj5cBDNhGC+84nY+eXttUd?=
+ =?us-ascii?Q?NM7KQ32v7YBbQ3H+A1H+PmM6jnFgyYraCCOYb20sOiar2dqtYWXEC7zhRL7O?=
+ =?us-ascii?Q?7BL2hnM0LJtjzwhgr9HjlM2O0li7pmklA63mat1zbsN6SALYcqvmV7yjDkZs?=
+ =?us-ascii?Q?miyDjRQWPA=3D=3D?=
+X-Exchange-RoutingPolicyChecked: I3Uxw5aIhiKjRl6mRa16fYOtCzIejqlFxz1OMmyH+NfwdrSfySdCEVXSclKCXfWd6aPxMOuto9PnGt80Iv6IF5hV2r7mgbE07+9HtlUgCObQXtmC+I1Fsv3uyCcsrm9ZuliKM343psx0C4QnvShuY4Tqr7jufryls7H4gZOJjRLfZ7rztIIPLjU4sT5nw5MnMbmYKdgpBbSzkbsrSSsaPTqdtMpX16lCJNZ7dWvedq35wx1zgnjRPqN0o5TkY7CCn1iHQZmTZ6d7VLykW2dub4ucxZGLUpHyjffrP4cRR8jUXpFdFVOsi48v++wOVGV6l55eagXeaOPFJxn/EHDZ0g==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9b829e63-a8f4-454f-50f5-08df01bef025
+X-MS-Exchange-CrossTenant-AuthSource: DSVPR11MB9579.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Aug 2026 09:06:09.6117
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4HShhGAl+T1VlVc/Sn5yBkRFT3WMDBPQuXMBb/0K9aQOLgUuSqz3euhFpFIVhjez/t0WsGxMPSPz2/t7BP58SA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB969295
+X-OriginatorOrg: intel.com
 
-From: Tao Cui <cuitao@kylinos.cn>
+On Fri, Aug 07, 2026 at 02:52:57PM -0700, Ackerley Tng via B4 Relay wrote:
+> From: Ackerley Tng <ackerleytng@google.com>
+> 
+> Update tdx_gmem_post_populate() to handle cases where userspace requests
+> "no source page". To handle "no source page", populate (perform
+> TDH.MEM.PAGE.ADD) using memory in-place at the target PFN.
+> 
+> Allow "no source page" only when gmem_in_place_conversion is enabled,
+> because retroactively adding support for out-of-place conversion would mean
+> requiring a userspace update for a feature that's being deprecated.
+> 
+> Also, KVM supporting "no source page" without in-place conversion would
+> effectively be an obscure zero-page optimization that relies on the page
+> being zeroed when it is allocated by guest_memfd.
+> 
+> Rejecting "no source page" without in-place conversion scenario is valuable
+> for KVM developers since it helps newcomers understand what exactly is and
+> isn't possible.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Tested-by: Shivank Garg <shivankg@amd.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+> ---
+>  Documentation/virt/kvm/x86/intel-tdx.rst | 4 ++++
+>  arch/x86/kvm/vmx/tdx.c                   | 8 +++++---
+>  2 files changed, 9 insertions(+), 3 deletions(-)
+> 
+> diff --git a/Documentation/virt/kvm/x86/intel-tdx.rst b/Documentation/virt/kvm/x86/intel-tdx.rst
+> index 6a222e9d09541..d8d9409120e61 100644
+> --- a/Documentation/virt/kvm/x86/intel-tdx.rst
+> +++ b/Documentation/virt/kvm/x86/intel-tdx.rst
+> @@ -158,6 +158,10 @@ KVM_TDX_INIT_MEM_REGION
+>  Initialize @nr_pages TDX guest private memory starting from @gpa with userspace
+>  provided data from @source_addr. @source_addr must be PAGE_SIZE-aligned.
+>  
+> +If guest_memfd in-place conversion is enabled, pass 0 for @source_addr
+> +to represent "no source page". A source page is required if in-place
+> +conversion is not enabled or not supported.
+> +
+>  Note, before calling this sub command, memory attribute of the range
+>  [gpa, gpa + nr_pages] needs to be private.  Userspace can use
+>  KVM_SET_MEMORY_ATTRIBUTES to set the attribute.
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index b272c20586a74..7654a9f5fa128 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -3189,7 +3189,7 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+>  	if (KVM_BUG_ON(kvm_tdx->page_add_src, kvm))
+>  		return -EIO;
+>  
+> -	kvm_tdx->page_add_src = src_page;
+> +	kvm_tdx->page_add_src = src_page ?: pfn_to_page(pfn);
+>  	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
+>  	kvm_tdx->page_add_src = NULL;
+>  
+> @@ -3235,7 +3235,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
+>  	if (copy_from_user(&region, u64_to_user_ptr(cmd->data), sizeof(region)))
+>  		return -EFAULT;
+>  
+> -	if (!PAGE_ALIGNED(region.source_addr) || !region.source_addr ||
+> +	if (!PAGE_ALIGNED(region.source_addr) ||
+> +	    (!gmem_in_place_conversion && !region.source_addr) ||
+>  	    !PAGE_ALIGNED(region.gpa) || !region.nr_pages ||
+>  	    region.gpa + (region.nr_pages << PAGE_SHIFT) <= region.gpa ||
+>  	    !vt_is_tdx_private_gpa(kvm, region.gpa) ||
+> @@ -3266,7 +3267,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
+>  			break;
+>  		}
+>  
+> -		region.source_addr += PAGE_SIZE;
+> +		if (region.source_addr)
+> +			region.source_addr += PAGE_SIZE;
+>  		region.gpa += PAGE_SIZE;
+>  		region.nr_pages--;
 
-The cgroup selftests have no PSI coverage. Add test_psi.c: per-resource
-trigger smoke tests (one trigger per fd, IRQ full-only), a
-cgroup.pressure hide/show toggle test, and a CPU-pressure trigger test
-using over-subscription. Skips when PSI is disabled or a resource is
-absent.
+Tested the following scenarios:
+1.gmem_in_place_conversion == true,
+  (1) region.source_addr == NULL.
+      ==> TD launched successfully.
 
-Signed-off-by: Tao Cui <cuitao@kylinos.cn>
+  (2) region.source_addr != NULL,
+      region.source_addr is not from mmap() of the guest_memfd (double backends)
+      ==> TD launched successfully.
 
----
-Changes since v3 (Suren Baghdasaryan review):
-- Convert to the kselftest harness: each case is a TEST_F(psi, ...)
-  with the cgroup root/PSI availability checks in FIXTURE_SETUP() and
-  the teardown (kill hogs, destroy cgroup) in FIXTURE_TEARDOWN(),
-  which also removes the "ret"/"created" bookkeeping.
-- A trigger that does not fire within the poll timeout is now a FAIL
-  instead of a SKIP: ncpus+1 hogs with a 1usec threshold must stall,
-  so a timeout indicates a real problem.
-- Treat a poll() timeout and a poll() error uniformly via ASSERT.
-- Check sysconf(_SC_NPROCESSORS_ONLN) only for -1 and report
-  strerror(errno); declare variables one per line; for(;;) {}.
-- Make hog_cpu() die with the runner via PR_SET_PDEATHSIG so an
-  interrupted run does not leave orphaned hogs pinning every CPU.
+  (3) region.source_addr != NULL,
+      region.source_addr is from mmap() of the guest_memfd (single backend),
+      GPA is private.
+      ==> Failed (-EFAULT).
 
-Changes since v2 (Suren Baghdasaryan, Michal Koutny review):
-- Restructure the trigger test into per-resource cases (io, memory, cpu,
-  irq) so a failure points at the specific resource; irq is skipped when
-  /proc/pressure/irq is absent.
-- Spawn the CPU hogs with cg_run_nowait() instead of open-coding fork(),
-  and arm the trigger with a 2s window so unprivileged users can set it.
-- Address the remaining review comments on cleanup and robustness:
-  guard teardown with a "created" flag, use cg_read_strcmp() instead of
-  atoi(), report strerror() on errors, and fix the unused-parameter and
-  sign-compare nits.
+  (4) region.source_addr != NULL,
+      region.source_addr is from mmap() of the guest_memfd (single backend),
+      GPA is shared.
+      ==> Failed (-EINVAL).
 
-Changes since v1 (Michal Koutny, sashiko review):
-- Keep trigger tests smoke-level; switch the firing test from memory to
-  CPU pressure; drop churn_memory().
-- Keep the runner out of the cgroup; add PSI/IRQ skip-guards and a
-  .gitignore entry.
+2. gmem_in_place_conversion == false,
+  (1) region.source_addr == NULL.
+      ==> Failed (-EINVAL).
 
-v1: https://lore.kernel.org/all/20260724025826.504586-1-cui.tao@linux.dev/
-v2: https://lore.kernel.org/all/20260728083742.2359320-1-cui.tao@linux.dev/
-v3: https://lore.kernel.org/all/20260813133723.1663605-1-cui.tao@linux.dev/
----
- tools/testing/selftests/cgroup/.gitignore |   1 +
- tools/testing/selftests/cgroup/Makefile   |   2 +
- tools/testing/selftests/cgroup/config     |   1 +
- tools/testing/selftests/cgroup/test_psi.c | 206 ++++++++++++++++++++++
- 4 files changed, 210 insertions(+)
- create mode 100644 tools/testing/selftests/cgroup/test_psi.c
-
-diff --git a/tools/testing/selftests/cgroup/.gitignore b/tools/testing/selftests/cgroup/.gitignore
-index 952e4448bf07..ce2b907c57ea 100644
---- a/tools/testing/selftests/cgroup/.gitignore
-+++ b/tools/testing/selftests/cgroup/.gitignore
-@@ -8,5 +8,6 @@ test_kill
- test_kmem
- test_memcontrol
- test_pids
-+test_psi
- test_zswap
- wait_inotify
-diff --git a/tools/testing/selftests/cgroup/Makefile b/tools/testing/selftests/cgroup/Makefile
-index e01584c2189a..a8c69e37332a 100644
---- a/tools/testing/selftests/cgroup/Makefile
-+++ b/tools/testing/selftests/cgroup/Makefile
-@@ -16,6 +16,7 @@ TEST_GEN_PROGS += test_kill
- TEST_GEN_PROGS += test_kmem
- TEST_GEN_PROGS += test_memcontrol
- TEST_GEN_PROGS += test_pids
-+TEST_GEN_PROGS += test_psi
- TEST_GEN_PROGS += test_zswap
+  (2) region.source_addr is not from mmap() of the guest_memfd.
+      ==> TD launched successfully.
  
- LOCAL_HDRS += $(selfdir)/clone3/clone3_selftests.h $(selfdir)/pidfd/pidfd.h
-@@ -32,4 +33,5 @@ $(OUTPUT)/test_kill: $(LIBCGROUP_O)
- $(OUTPUT)/test_kmem: $(LIBCGROUP_O)
- $(OUTPUT)/test_memcontrol: $(LIBCGROUP_O)
- $(OUTPUT)/test_pids: $(LIBCGROUP_O)
-+$(OUTPUT)/test_psi: $(LIBCGROUP_O)
- $(OUTPUT)/test_zswap: $(LIBCGROUP_O)
-diff --git a/tools/testing/selftests/cgroup/config b/tools/testing/selftests/cgroup/config
-index 39f979690dd3..8a3ef479e83d 100644
---- a/tools/testing/selftests/cgroup/config
-+++ b/tools/testing/selftests/cgroup/config
-@@ -4,3 +4,4 @@ CONFIG_CGROUP_FREEZER=y
- CONFIG_CGROUP_SCHED=y
- CONFIG_MEMCG=y
- CONFIG_PAGE_COUNTER=y
-+CONFIG_PSI=y
-diff --git a/tools/testing/selftests/cgroup/test_psi.c b/tools/testing/selftests/cgroup/test_psi.c
-new file mode 100644
-index 000000000000..d5fab10f4fd4
---- /dev/null
-+++ b/tools/testing/selftests/cgroup/test_psi.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <poll.h>
-+#include <stdbool.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+#include <sys/prctl.h>
-+#include <linux/limits.h>
-+
-+#include "../kselftest_harness.h"
-+#include "cgroup_util.h"
-+
-+#define PSI_POLL_TIMEOUT_MS	5000
-+
-+/* PSI triggers are written with a trailing NUL the kernel parser expects. */
-+static ssize_t write_trigger(int fd, const char *trigger)
-+{
-+	return write(fd, trigger, strlen(trigger) + 1);
-+}
-+
-+static int pressure_open(const char *resource)
-+{
-+	char path[PATH_MAX];
-+	int fd;
-+
-+	snprintf(path, sizeof(path), "/proc/pressure/%s", resource);
-+	fd = open(path, O_RDWR);
-+	if (fd < 0)
-+		fprintf(stderr, "open %s: %s\n", path, strerror(errno));
-+	return fd;
-+}
-+
-+FIXTURE(psi)
-+{
-+	char root[PATH_MAX];
-+	char *cg;
-+};
-+
-+FIXTURE_SETUP(psi)
-+{
-+	int psi_fd;
-+
-+	self->cg = NULL;
-+
-+	if (cg_find_unified_root(self->root, sizeof(self->root), NULL))
-+		SKIP(return, "cgroup v2 isn't mounted");
-+
-+	/* PSI must be enabled (CONFIG_PSI=y, not disabled on the cmdline). */
-+	psi_fd = open("/proc/pressure/memory", O_RDONLY);
-+	if (psi_fd < 0)
-+		SKIP(return, "PSI unavailable (CONFIG_PSI=n or psi=0)");
-+	close(psi_fd);
-+}
-+
-+FIXTURE_TEARDOWN(psi)
-+{
-+	if (self->cg) {
-+		cg_killall(self->cg);
-+		cg_destroy(self->cg);
-+		free(self->cg);
-+	}
-+}
-+
-+/*
-+ * /proc/pressure/<resource> accepts exactly one trigger per file
-+ * descriptor. For io, memory and cpu verify that a "some" trigger arms
-+ * and that a second trigger on the same fd is rejected with EBUSY.
-+ */
-+TEST_F(psi, proc_trigger_io)
-+{
-+	int fd;
-+
-+	fd = pressure_open("io");
-+	ASSERT_GE(fd, 0);
-+	ASSERT_GT(write_trigger(fd, "some 150000 2000000"), 0);
-+	ASSERT_EQ(-1, write_trigger(fd, "full 150000 2000000"));
-+	ASSERT_EQ(EBUSY, errno);
-+	close(fd);
-+}
-+
-+TEST_F(psi, proc_trigger_memory)
-+{
-+	int fd;
-+
-+	fd = pressure_open("memory");
-+	ASSERT_GE(fd, 0);
-+	ASSERT_GT(write_trigger(fd, "some 150000 2000000"), 0);
-+	ASSERT_EQ(-1, write_trigger(fd, "full 150000 2000000"));
-+	ASSERT_EQ(EBUSY, errno);
-+	close(fd);
-+}
-+
-+TEST_F(psi, proc_trigger_cpu)
-+{
-+	int fd;
-+
-+	fd = pressure_open("cpu");
-+	ASSERT_GE(fd, 0);
-+	ASSERT_GT(write_trigger(fd, "some 150000 2000000"), 0);
-+	ASSERT_EQ(-1, write_trigger(fd, "full 150000 2000000"));
-+	ASSERT_EQ(EBUSY, errno);
-+	close(fd);
-+}
-+
-+/*
-+ * irq only tracks "full", so a "some" trigger must be rejected while a
-+ * "full" trigger arms. irq is optional -- it only exists with IRQ-time
-+ * accounting -- so a missing /proc/pressure/irq is SKIP, not FAIL.
-+ */
-+TEST_F(psi, proc_trigger_irq)
-+{
-+	int fd;
-+
-+	fd = pressure_open("irq");
-+	if (fd < 0)
-+		SKIP(return, "/proc/pressure/irq unavailable");
-+
-+	ASSERT_EQ(-1, write_trigger(fd, "some 150000 2000000"));
-+	ASSERT_GT(write_trigger(fd, "full 150000 2000000"), 0);
-+	close(fd);
-+}
-+
-+/*
-+ * cgroup.pressure gates visibility of the per-resource *.pressure files
-+ * inside a cgroup: writing 0 hides them, writing 1 shows them again.
-+ * Drive one hide/show cycle and check that memory.pressure appears and
-+ * disappears along with it.
-+ */
-+TEST_F(psi, cgroup_pressure_toggle)
-+{
-+	char buf[BUF_SIZE];
-+
-+	self->cg = cg_name(self->root, "psi_toggle_test");
-+	ASSERT_NE(NULL, self->cg);
-+	ASSERT_EQ(0, cg_create(self->cg));
-+
-+	ASSERT_EQ(0, cg_write(self->cg, "cgroup.pressure", "0"));
-+	ASSERT_EQ(0, cg_read_strcmp(self->cg, "cgroup.pressure", "0\n"));
-+	ASSERT_LT(cg_read(self->cg, "memory.pressure", buf, sizeof(buf)), 0);
-+
-+	ASSERT_EQ(0, cg_write(self->cg, "cgroup.pressure", "1"));
-+	ASSERT_EQ(0, cg_read_strcmp(self->cg, "cgroup.pressure", "1\n"));
-+	ASSERT_GE(cg_read(self->cg, "memory.pressure", buf, sizeof(buf)), 0);
-+}
-+
-+/*
-+ * A child that burns CPU forever; stopped by cg_killall() on teardown.
-+ * It also dies with the runner, so an interrupted run (e.g. Ctrl-C
-+ * during poll()) does not leave orphaned hogs pinning every CPU.
-+ */
-+static int hog_cpu(const char *cgroup, void *arg)
-+{
-+	prctl(PR_SET_PDEATHSIG, SIGKILL);
-+	for (;;) {}
-+	return 0;
-+}
-+
-+/*
-+ * Arm a "some" trigger on a cgroup's cpu.pressure, oversubscribe the
-+ * cgroup with more spinning hogs than there are CPUs, and check that the
-+ * trigger fires once the cgroup stalls on CPU.
-+ */
-+TEST_F(psi, cgroup_trigger_fire)
-+{
-+	char *cpupress;
-+	struct pollfd pfd = { .events = POLLPRI };
-+	long ncpus;
-+	int fd;
-+	int i;
-+
-+	self->cg = cg_name(self->root, "psi_trigger_test");
-+	ASSERT_NE(NULL, self->cg);
-+	ASSERT_EQ(0, cg_create(self->cg));
-+
-+	cpupress = cg_control(self->cg, "cpu.pressure");
-+	ASSERT_NE(NULL, cpupress);
-+	fd = open(cpupress, O_RDWR);
-+	free(cpupress);
-+	ASSERT_GE(fd, 0);
-+	pfd.fd = fd;
-+
-+	/*
-+	 * 1usec threshold over a 2s window: any CPU stall fires it. The 2s
-+	 * window is the smallest unprivileged users are allowed to arm.
-+	 */
-+	ASSERT_GT(write_trigger(fd, "some 1 2000000"), 0);
-+
-+	ncpus = sysconf(_SC_NPROCESSORS_ONLN);
-+	if (ncpus == -1)
-+		TH_LOG("sysconf(_SC_NPROCESSORS_ONLN): %s", strerror(errno));
-+	ASSERT_NE(-1, ncpus);
-+
-+	/* ncpus+1 hogs guarantee CPU contention inside the cgroup. */
-+	for (i = 0; i < ncpus + 1; i++)
-+		ASSERT_GE(cg_run_nowait(self->cg, hog_cpu, NULL), 0);
-+
-+	ASSERT_EQ(1, poll(&pfd, 1, PSI_POLL_TIMEOUT_MS));
-+	ASSERT_NE(0, pfd.revents & POLLPRI);
-+	close(fd);
-+}
-+
-+TEST_HARNESS_MAIN
--- 
-2.43.0
+
+So,
+Tested-by: Yan Zhao <yan.y.zhao@intel.com>
+Reviewed-by:  Yan Zhao <yan.y.zhao@intel.com>
 
