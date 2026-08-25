@@ -1,69 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93A30470122;
-	Tue, 25 Aug 2026 13:16:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 615D3471422
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 13:17:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787663802; cv=none; b=JW4omH45mv/8sLdClQAAuAT3Cqzc/K4hhuddfkmh2mYWDN3jUfLTOCJnCCyP6gF50T349YsriIaXvldSCh/mmUOK6UsuU1Wtly0uAamh5lRt+auGlHzPP0Sq8zpQ/zTHl7jSuGzcIB3/00Mp8cVyBKX6dE2Yv2duPdSkcBb63jo=
+	t=1787663823; cv=none; b=boif87s7YYTPzWcj9CToOumMDnhfJR3Qf7UyGxURsrXC8Syta13WRiOLDn4FnKI6dWRAyb19EFAQVuVZK/Zr3bpV8L4Wgy7G8rpMlkCSgpjJD88xPQiIu+DZgqEhkiVMKiX5tKJ22tP8lxoTbG/vfeKH31hbM/dpk5RSk3wkiIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787663802; c=relaxed/simple;
-	bh=nXaAjmZXz4Q8WOSTCgDCzj0qznFmSUJ5te3Hxv/34OE=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=sQtMzFk98/4EvTgdF9HB6qOO/bXZvtRDVX4coac3i1cBshG1FSJjQK5zt8/46XxvZ6WGOfncYdjp5GXgEYexmlz1GgB9B2z1K69kvW7/9l9aTWNHXalrwhAlf8tuXstYOzDngLk+Zv1FORojwF24a6ppREwj/OOdXdsX5zQlYMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W4kAZzFE; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787663823; c=relaxed/simple;
+	bh=BSwRnMlp3n1hal7k25J47rSepqHeT4zWv8jN7OwIqO4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gKHgUNpySBML+TWaat7iupBzPR6EHWcUp/43Sei+XEoml5AlWqmSO5jtlM4KBczAL23eq0Qx31FjaSWZR9MJd8ConBYPuUuHuAHJjw6c7CNsghy2TZxjwTOzg8OjcIhU4RwJ+hBI4q74BwtSma7LFspsS0Ws4bxpXbuCV2eQvNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=o8Ehru68; arc=none smtp.client-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W4kAZzFE"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C79AA1F00A3A;
-	Tue, 25 Aug 2026 13:16:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787663801;
-	bh=VwATnANXbcLF+RuGQE5pHvL6SYNDXCMexh01FqPSPsM=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date;
-	b=W4kAZzFEg8RkiZf7wEIeiOrOmda2BSn6E2xZTDNeGWK/yR3mwFM70EUJQYNGb3M70
-	 M8IFjTydpJIeOuRoEJpnSO/TS/nalmikigUGrTcuSsdcmOl46ZUn1cGFWKwNZJ5rv6
-	 u/LzTyd1gs1MgSti9JQ6KTi/D3hQ24UMIJWnGHjjvEx0MCxqfEwfJu52yaT8LLDkpO
-	 8jAYzvf0kVIt62p9+YBmcqv2nQEZRQAGuYxRdU1p9N4oLH99hpF78izUlQsro3wr4G
-	 QN7u7DPupReNbsoYsT+9BddbnOEWoLqvRg5UyN09x+w1tC3+eYhDPoQ+W6KQjyoWPM
-	 QQypLxFQ3+V/A==
-From: =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
-To: Chen Pei <cp0613@linux.alibaba.com>, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, memxor@gmail.com,
- puranjay@kernel.org
-Cc: ihor.solodrai@linux.dev, eddyz87@gmail.com, martin.lau@linux.dev,
- song@kernel.org, yonghong.song@linux.dev, jolsa@kernel.org,
- emil@etsalapatis.com, pulehui@huawei.com, pjw@kernel.org,
- palmer@dabbelt.com, shuah@kernel.org, guoren@kernel.org,
- bpf@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH bpf-next v3 0/2] bpf, riscv: Add support for signed
- arena loads
-In-Reply-To: <cover.1787140923.git.cp0613@linux.alibaba.com>
-References: <cover.1787140923.git.cp0613@linux.alibaba.com>
-Date: Tue, 25 Aug 2026 15:16:37 +0200
-Message-ID: <87se42tk5m.fsf@all.your.base.are.belong.to.us>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="o8Ehru68"
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-c89704da8c7so6899687a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 06:17:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787663821; x=1788268621; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1TY/LsmF/8fTytR1pzHURVENGerwNjh4wp6cPecJpZ4=;
+        b=o8Ehru68c2UsJBYydcj9Xh1LEgdA9Yi2DYlUpkIviU4wkeZudYK48jTGA0v164iMT0
+         YIE8St4d5qrNNkf+XbSIb+TjiRl/xtufQ1gQvS5TCiXu8coexflMbHQGX6chiwhTb+Ck
+         21yQD6SOS7QiXQv9SQh2ccy0/hOddLL8OVtzPRkzpm88LRHlWRfG532sKF/zS247PRkc
+         i9aZkdqNvkrG88WmSdBII4sMXiuah90cRxrdRr5+KQowFug1TW2V9ky0lWVLr1inXWJv
+         zTKSETfsQrB0OM8diINjDbwLa6JbcFlkLkKw0Cw4ewdrh+If22Zin/+5T4+G9XQOsFeI
+         zIuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787663821; x=1788268621;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=1TY/LsmF/8fTytR1pzHURVENGerwNjh4wp6cPecJpZ4=;
+        b=eNgOI2uw6gOVjykrV3FMCTz42rAzP2B5fxDBiqHRNrfgVH0RyxI9v9VgmzWrHhqS0Y
+         XULDKbquvsr5Otb7Yq3irdLvpxzG5JxdQYBK1NL3KqJ4jh58aYMewApkGCxmJ2NtLHsL
+         fbtOnZOYe4I3/sxIqKLJHazZhgrXvs+N/ybiVV+jM/2DCSZNlq1NjVwp9J/r1FGGOWjP
+         qawlsbYZeA2BpOMLzeD3AMmdybY8qLzKbZL/6vlpsmGFhCBD+OtfXxj3EVBdMT+9m4Au
+         jVlj1w7j8kVQRhcnLxI9zTKD5dgJEDlyUixeJodNiSqcMYn+yq4quCCx8W4RIZpvRL6/
+         G1Eg==
+X-Forwarded-Encrypted: i=1; AHgh+RrlXjIPeRhZ2d+M6mfFqS6gnEL9g3YmChukyxDU35q1Ll2PaMB2ruN400TosiTgyya9Anf5HDgZITNyk0fUP+I=@vger.kernel.org
+X-Gm-Message-State: AFuF++kNQZiZMO3wz8MfCc2M6Loq3NEoPZGSuJryI1Sx10e1qaC/ggAr
+	JHvdfbJI/7JNDVhpzWMmM77YFfF1aAuBkQdjHXQRwFTP923xsOS35cDCCH5YlMZb9cBVfpu/a2D
+	JlBJf3Q==
+X-Received: from pglx3.prod.google.com ([2002:a63:1703:0:b0:cc1:517a:d25])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:600c:b0:3b4:61f:1fec
+ with SMTP id adf61e73a8af0-3cd2fd8e339mr71904446637.2.1787663820348; Tue, 25
+ Aug 2026 06:17:00 -0700 (PDT)
+Date: Tue, 25 Aug 2026 06:16:58 -0700
+In-Reply-To: <5f7b62a1-957b-4a43-9a16-d06b3f916e84@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
+ <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org> <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
+ <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
+ <aoZZMQ3Uc8yQWPNA@google.com> <5f7b62a1-957b-4a43-9a16-d06b3f916e84@intel.com>
+Message-ID: <ao2Vyjzq9wdYzQPr@google.com>
+Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
+ private when invalidating
+From: Sean Christopherson <seanjc@google.com>
+To: Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: Ackerley Tng <ackerleytng@google.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
+	"David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-Chen Pei <cp0613@linux.alibaba.com> writes:
+On Tue, Aug 25, 2026, Xiaoyao Li wrote:
+> On 8/20/2026 9:32 AM, Sean Christopherson wrote:
+> > On Mon, Aug 10, 2026, Ackerley Tng wrote:
+> > > Sean, do you know if looking up attributes in gmem to feed the KVM MMU
+> > > the smallest set of pages to zap will improve performance significantly?
+> > > Or if there's any other reason to do this lookup (more complexity in
+> > > gmem)?
+> > 
+> > While working through this with Ackerley, I realized this patch is buggy.  When
+> > in-place conversion is NOT supported, then as evidenced by the current code,
+> > invalidations are guaranteed to only affect one of SHARED vs. PRIVATE.  And if
+> > we change that to zap both, we risk overzapping.  I.e. it's not just the cost of
+> > the extra MMU walk, it could also be a functional bug.
+> > 
+> > Specifically, if KVM zaps both when SHARED vs. PRIVATE is tracked per-VM, then a
+> > PUNCH_HOLE operation on a PRIVATE guest_memfd will incorrectly zap SHARED mappings
+> > that have nothing to do with that gmem instance (because they're mapped via a VMA,
+> > not a gmem fd).  And vice versa, a PUNCH_HOLE on a SHARED gmem (if userspace is
+> > using an INIT_SHARED gmem for the shared branch of a memslot) could invalidate the
+> > PRIVATE mappings (of a different gmem instance).
+> > 
+> > That latter case in particular would be a functional bug, as spuriously zapping
+> > PRIVATE SPTEs is fatal to TDX (destroys the memory contents).
 
-> Chen Pei (2):
->   bpf, riscv: Add support for signed arena loads
->   selftests/bpf: Enable arena LDSX tests for riscv64
->
->  arch/riscv/net/bpf_jit_comp64.c                 | 16 ++++++++++------
->  .../testing/selftests/bpf/progs/verifier_ldsx.c | 17 +++++++++++++++++
->  2 files changed, 27 insertions(+), 6 deletions(-)
+...
 
+> > Opportunistically rename the helper to capture that it returns the a filter
+> > for all gfns in anticipation of zapping only the previous mapping types on
+> > conversion.  
 
-Back from summer vacation! Apologies for the delay!
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-For the series:
+> > -static enum kvm_gfn_range_filter kvm_gmem_get_invalidate_filter(struct inode *inode)
+> > +static enum kvm_gfn_range_filter kvm_gmem_get_all_gfns_filter(struct inode *inode)
+> >   {
+> > +	if (gmem_in_place_conversion)
+> > +		return KVM_FILTER_SHARED | KVM_FILTER_PRIVATE;
+> 
+> If I understand correctly, above diff is dead code and will change according
+> to
+> 
+>   And then in the main in-place conversion patch, have the conversion
+>   flow to only zap tap the "previous" types (with prep work as needed).
 
-Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@kernel.org>
+No, my thought is to keep the newly named kvm_gmem_get_all_gfns_filter() as-is,
+continue using it flows where KVM needs to zap everything, e.g. PUNCH_HOLE, and
+have the to-PRIVATE conversion flow open code KVM_FILTER_SHARED.
