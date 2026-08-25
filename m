@@ -1,260 +1,117 @@
-Received: from mta0.migadu.com (out-79.mta0.migadu.com [91.218.175.79])
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 906B749362C
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 06:49:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.79
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67D563D47A3
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 07:40:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787640552; cv=none; b=C+glJVRKwylNs1c75MZC5jHQwzGkLmrokD8N96E6oV8b7s+5Q4PlqaDmcsKvIWxZUTUq21drzfV1KvJ5osebTx0zFwltWQPqJyid0LQyh07HVUoxeiQpSeaFWDaYeBTNpefEtJDgoKh4DJhNBBR81Yq1nSbuUHuCEiiYLXC6DHg=
+	t=1787643623; cv=none; b=Zn1Q/ESmS/X+482B8QesaS7vVGOzmR/rk6nRidlG8jp6uWLTLNwDiive69bbrR4W7ST4xh1ad68EeeqAIHp61cO7ptuEGcYS4vMmLrw9tsyfHLJSYp5lwsTsklLlkhlCFHTzq2wk8JS6+uh9b6+Zp/DFI+qTV/DftJpvuPfKMig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787640552; c=relaxed/simple;
-	bh=leFlssTWRx1UcgWYTfrxtqn2gdLNeOhJcAUCtbZrvfk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=D78zlOtmM8rKGdxBkc1INUionapGSTBSgUuEshe1wft5ZgxNCNur7l1Ll7nCrBiPA68VBMiNP8E9Dtbg0KwtJxbn/cVAGntn3fWjSDKy7WnqVZhGMYUPltxsyDZa5ylIegLdGjsg/1nkMKHOgiWsfXCQwpFs4Op+cnzZDbdiUQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HZAIV6r4; arc=none smtp.client-ip=91.218.175.79
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787643623; c=relaxed/simple;
+	bh=tZJHSLhita37GZE4qEiliq716XxjbQZxZLfaHUeBxsw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=je5riKG1212+aOPaP/hi5nMPhii9IaPkhzAQbKZwncGo+jSBgo4J/mZvDdeheA30kfGauZffmU0NIwL2btqjZL6E3gUC3XXi8Q3NCWJU2bGnI/JLzJJTFRu+JveWVAkM4AWBlJfji5jKCZXtbNwUawqGm4ahenLsZDhy3bfvzqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=EUYlOulW; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HZAIV6r4"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=leFlssTWRx1UcgWYTfrxtqn2gdLNeOhJcAUCtbZrvfk=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787640546; v=1; x=1788245346;
- b=HZAIV6r4+YpMCjokhMpK2yp7f008j33lP5mLnema0iFQhUpcdZGqtHRcBn1tM598Pqb+5YjV
- mIWw9Ts5TGIvZrNURrbYK0/lYtw3vs2D+EVKH/Shb87eEkSVnW/Vks23gSGA/8k2mpFEAGEyFnT
- 7efi3HjJVE3DJl9Lx69mSE5U=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost (2602:fce1:44f:115e::)
-	by smtp.migadu.com with ESMTPS id 47ae94857be340a8;
-	Tue, 25 Aug 2026 06:48:56 +0000
-X-Mizu-Trace-ID: 47ae94857be340a8
-X-Migadu-Flow: FLOW_OUT
-From: Lance Yang <lance.yang@linux.dev>
-To: kirill@shutemov.name
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	nico.pache@linux.dev,
-	baolin.wang@linux.alibaba.com,
-	baohua@kernel.org,
-	dev.jain@arm.com,
-	hughd@google.com,
-	lance.yang@linux.dev,
-	liam@infradead.org,
-	mhocko@suse.com,
-	rppt@kernel.org,
-	ryan.roberts@arm.com,
-	shuah@kernel.org,
-	surenb@google.com,
-	usama.arif@linux.dev,
-	vbabka@kernel.org,
-	ziy@nvidia.com,
-	usama.anjum@arm.com,
-	agordeev@linux.ibm.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kas@kernel.org,
-	jannh@google.com,
-	willy@infradead.org,
-	pfalcato@suse.de,
-	rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	bpf@vger.kernel.org
-Subject: Re: [RFC PATCH 18/57] mm/collapse: install the destinations at PTE level
-Date: Tue, 25 Aug 2026 14:48:51 +0800
-Message-Id: <20260825064851.87309-1-lance.yang@linux.dev>
-X-Mailer: git-send-email 2.39.3 (Apple Git-146)
-In-Reply-To: <20260816224609.308019-19-kirill@shutemov.name>
-References: <20260816224609.308019-19-kirill@shutemov.name>
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="EUYlOulW"
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-c15cf78d1a2so498267366b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 00:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1787643620; x=1788248420; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=HvIHRFnGldbLfSeUQWu0/lotI0W1auWfZBfJjbwacgc=;
+        b=EUYlOulWc6m7/itZjtlAZdJVn+dL8xlUxJTLw7r3HYQtKBe/qoCwuVfzCUfAJJyYE+
+         QoTK0OVCeHeepfYwKBYhoskukutgnL6jEf5+VvYjHWwIlt/7yx01uowAws5OH0iOmg2Z
+         FHZdUBD5LqCZ9uYnZEdTRz57vIURCexBIk+mGyZfJlKwl2OnlJ+xbWZX8K5ST/Q73Gk1
+         p57rt4BKJ663n/nykOGUC1QDRI+eouMZF0JljR6ZrATFfJ/UaE//8TMayDqtyx4/wJCf
+         Z3L5o21Ap+4XkltYyBKmVDS6AlqfGSEXSUpPwYJJDyYHnY6qzp7sVvlQjs0tE992lzqf
+         XbWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787643620; x=1788248420;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=HvIHRFnGldbLfSeUQWu0/lotI0W1auWfZBfJjbwacgc=;
+        b=Sfi0uOnSIou6JA+/PnZLo2ZZFhdfBbGQqT029vi8aeI1H3Bv743NiLnyHoSYB6aNXb
+         ve7Iu8981W2i6K3B0SOZDpvZerQcZFqqJBlUSLfqfXyhGk8nonxSlmeC/YmNsvOSZnsY
+         4kazOdT+ZLFBn9OKKa761hD8aZNVkI/SC/NxVVxvr667V0J+CHePx9yZdU+quO9wByV5
+         Cfk6M9ExXEaFLdzgAFJsbZFnyDWhTAY4lW6e8NqPSH/BfRkPduUWK/BSF2/rxsQrvbBo
+         DlDJkaHSe5rmu5Pwv4VPwwurc7UT3vosOnOqaDSMtKTHwngWUe7xwzN4fTQ7mw5f9t11
+         uHwg==
+X-Forwarded-Encrypted: i=1; AHgh+RqUIyDfE8cvMPcJ+Ehii6yZG8wLnbJZhWSx95FKKyaPEWFXCw6RZp6jioTXwpB7AtlXhNyx8uJvhVdA0iayRDQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++mBD7YoKm6XzJPlWEsaPVIJn+13bs0i+Bd6HRdYJNsBbQTE+RFw
+	3LvTaA7bEn/aMTOnlJH5fL71VtLr7pi7HWvs/Nw4PFNLPM8us8l1kiP5w4VJXD2tp/4=
+X-Gm-Gg: AR+sD11mS/bFWY6qxBgXzEryarhkiqrmS89OsNZFzr7wJr4xGOO18I53Ltm4xGY1eMh
+	TsQzCsVDRk/dDbP8cmMa25qWoj0Pdu6Op1snP2yXprxOMNpifpORzvDPkbkS4r37zsQE0U5gFVb
+	zno98QieeN9dvoh391NPQYgOvYOrhULu6KE0MNns3DBVql2DsTbOLjR+CmixayYYNpABIDOeq0c
+	pgmlDTxDAJ8QQcnrGA4RzIoD60G8ntlu1fxxqPrMLWaRakKxcarSkeoEWbzhuBNZ1/S6ZwZDc0t
+	PmEeR4jzZh0C38eN2tfpeNdkiWgmk2kl+kuQld8lKr3sT79tvV9u2gtNF2iYJhFSLxiIVyuTV67
+	7aNFrUyKPUJtdCsa842MM5uCCAHAWNZuwM1MZv8lXPe4tkmPMHczKIw/22l8NOmyfAlqW8Q21ZX
+	t9IdR95rGmh7BK/VPvcxydds0ZdzOoLSBbbWtINlf+x+DM8PURbbuk2ITqnUyyUv5rNZJZkdqHX
+	Q==
+X-Received: by 2002:a17:906:9f8e:b0:c24:b11a:46fc with SMTP id a640c23a62f3a-c24e5be5ae6mr443422266b.22.1787643619483;
+        Tue, 25 Aug 2026 00:40:19 -0700 (PDT)
+Received: from localhost (109-81-81-112.rct.o2.cz. [109.81.81.112])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c24966f6b48sm1685768466b.33.2026.08.25.00.40.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 00:40:18 -0700 (PDT)
+Date: Tue, 25 Aug 2026 09:40:17 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: Eric Chanudet <echanude@redhat.com>
+Cc: Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Maxime Ripard <mripard@redhat.com>,
+	Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <ao1G4V-MhsjL5Bms@tiehlicka>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aoqbCyX-32doBJwd@kernel.org>
+ <aoy88hVQcA6Gkfuk@echanude-thinkpadx1carbongen13.rmtusma.csb>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aoy88hVQcA6Gkfuk@echanude-thinkpadx1carbongen13.rmtusma.csb>
 
-
-On Sun, Aug 16, 2026 at 11:45:30PM +0100, Kiryl Shutsemau wrote:
->From: "Kiryl Shutsemau (Meta)" <kas@kernel.org>
->
+On Mon 24-08-26 17:58:49, Eric Chanudet wrote:
+> On Sun, Aug 23, 2026 at 10:02:35AM +0300, Mike Rapoport wrote:
 [...]
-> /* Publish each destination folio in place of the sources it replaces */
-> static void collapse_install(struct vm_area_struct *vma,
-> 			     struct collapse_control *cc, pmd_t *pmd)
-> {
->+	struct mm_struct *mm = vma->vm_mm;
->+	pte_t *pte, *table;
->+	spinlock_t *ptl;
->+	unsigned int i;
->+
->+	if (is_pmd_order(cc->candidates[0].order)) {
->+		/* A PMD candidate fills the slot pool: always alone */
->+		VM_WARN_ON_ONCE(cc->nr_candidates != 1);
->+		collapse_install_pmd(vma, cc, pmd);
->+		return;
->+	}
->+
->+	pte = pte_offset_map_lock(mm, pmd, cc->candidates[0].addr, &ptl);
->+	if (!pte) {
->+		/*
->+		 * Table gone under us (see collapse_abort_candidate() on @pte).
->+		 * Tear down every frozen candidate -- stranding them would leak
->+		 * frozen, locked sources.
->+		 */
->+		for (i = 0; i < cc->nr_candidates; i++) {
->+			struct collapse_candidate *cand = &cc->candidates[i];
->+
->+			if (cand->state != CAND_FROZEN)
->+				continue;
->+
->+			cand->result = SCAN_NO_PTE_TABLE;
->+			collapse_abort_candidate(vma, cand, NULL);
->+		}
->+		return;
->+	}
->+	table = pte - pte_index(cc->candidates[0].addr);
->+
->+	for (i = 0; i < cc->nr_candidates; i++) {
->+		struct collapse_candidate *cand = &cc->candidates[i];
->+		pte_t *cand_pte = table + pte_index(cand->addr);
->+		unsigned int nr_populated;
->+
->+		if (cand->state != CAND_FROZEN)
->+			continue;
->+
->+		if (cand->result != SCAN_SUCCEED) {
->+			/* Machine check during the copy */
->+			collapse_abort_candidate(vma, cand, cand_pte);
->+			continue;
->+		}
->+
->+		/* No destination: the provision pass could not spare one */
->+		if (!cand->new_folio) {
->+			collapse_abort_candidate(vma, cand, cand_pte);
->+			continue;
->+		}
->+
->+		if (!collapse_verify_candidate(cand, cand_pte, &nr_populated)) {
->+			cand->result = SCAN_PTE_NON_PRESENT;
->+			collapse_abort_candidate(vma, cand, cand_pte);
->+			continue;
->+		}
->+
->+		/*
->+		 * The smp_wmb() in __folio_mark_uptodate() orders the copied
->+		 * data before the set_ptes() that publishes it.
->+		 */
->+		__folio_mark_uptodate(cand->new_folio);
->+		map_anon_folio_pte_nopf(cand->new_folio, cand_pte, vma,
->+					cand->addr, /*uffd_wp=*/ false);
->+
->+		/* Slots with no source gain anon memory that no zap accounted */
->+		if (nr_populated)
->+			add_mm_counter(mm, MM_ANONPAGES, nr_populated);
-
-Well ... KSM zero-page accounting gets out of sync here.
-
-Say a saved zero PTE came from KSM. ksm_map_zero_page() has already
-bumped global + per-mm counters. ksm_might_unmap_zero_page() uses its|
-dirty bit to drop them again later:
-
-#define is_ksm_zero_pte(pte)	(is_zero_pfn(pte_pfn(pte)) && pte_dirty(pte))
-
-static inline void ksm_map_zero_page(struct mm_struct *mm)
-{
-	atomic_long_inc(&ksm_zero_pages);
-	atomic_long_inc(&mm->ksm_zero_pages);
-}
-
-static inline void ksm_might_unmap_zero_page(struct mm_struct *mm, pte_t pte)
-{
-	if (is_ksm_zero_pte(pte)) {
-		atomic_long_dec(&ksm_zero_pages);
-		atomic_long_dec(&mm->ksm_zero_pages);
-	}
-}
-
-Right, once a candidate reaches install, those counters stay valid only
-if collapse_abort_candidate() restores the saved PTE. A successful PTE
-install doesn't restore it. Neither does an abort after the slot was
-refilled or the PTE table disappeared. Patch #19 has the same
-successful-install case in collapse_install_pmd() ...
-
-I was thinking of something like this:
-
----8<---
-diff --git a/mm/collapse.c b/mm/collapse.c
-index 7c10888031f7..68b37e706341 100644
---- a/mm/collapse.c
-+++ b/mm/collapse.c
-@@ -8,6 +8,7 @@
- #include <linux/highmem.h>
- #include <linux/huge_mm.h>
- #include <linux/hugetlb.h>	/* x86 flush_tlb_range() uses hstate_vma() */
-+#include <linux/ksm.h>
- #include <linux/leafops.h>
- #include <linux/math64.h>
- #include <linux/memcontrol.h>
-@@ -1430,6 +1431,8 @@ static void collapse_abort_candidate(struct vm_area_struct *vma,
- 		if (is_zero_pfn(pte_pfn(saved))) {
- 			if (pte && pte_none(ptep_get(pte + i)))
- 				set_pte_at(mm, addr, pte + i, saved);
-+			else
-+				ksm_might_unmap_zero_page(mm, saved);
- 			continue;
- 		}
-
-@@ -1499,6 +1502,16 @@ static bool collapse_verify_candidate(struct collapse_candidate *cand,
- 	return true;
- }
-
-+static void collapse_unmap_zero_pages(struct mm_struct *mm,
-+				      struct collapse_candidate *cand)
-+{
-+	const unsigned int nr_pages = candidate_nr_pages(cand);
-+	unsigned int i;
-+
-+	for (i = 0; i < nr_pages; i++)
-+		ksm_might_unmap_zero_page(mm, cand->saved_ptes[i]);
-+}
-+
- /*
-  * The PMD terminal layer: verify, detach the table, deposit a fresh one and
-  * install the leaf, as one atomic section under the pmd lock.  A pmd_none window
-@@ -1616,6 +1629,7 @@ static void collapse_install_pmd(struct vm_area_struct *vma,
- 	/* Slots with no source gain anon memory that no zap accounted */
- 	if (nr_populated)
- 		add_mm_counter(mm, MM_ANONPAGES, nr_populated);
-+	collapse_unmap_zero_pages(mm, cand);
- 	cand->deposit = NULL;
- 	cand->new_folio = NULL;	/* ownership: the mapping */
- 	cand->state = CAND_INSTALLED;
-@@ -1708,6 +1722,7 @@ static void collapse_install(struct vm_area_struct *vma,
- 		/* Slots with no source gain anon memory that no zap accounted */
- 		if (nr_populated)
- 			add_mm_counter(mm, MM_ANONPAGES, nr_populated);
-+		collapse_unmap_zero_pages(mm, cand);
- 		cand->new_folio = NULL;	/* ownership: the mappings */
- 		cand->state = CAND_INSTALLED;
- 	}
----
-
-Cheers, Lance
-
->+		cand->new_folio = NULL;	/* ownership: the mappings */
->+		cand->state = CAND_INSTALLED;
->+	}
->+
->+	pte_unmap_unlock(pte, ptl);
-> }
+> > CI found issues:
+> >  
+> > https://github.com/linux-mm/linux-mm/actions/runs/32519133924
 > 
-> /*
->-- 
->2.54.0
->
->
+> Indeed my apologies, I messed up CMA=n it needed a forward declaration
+> and gating for mm/cma.h content included in mm/memcontrol.c.
+> 
+> I queued this up for a v2, with the other issues reported by Sashiko.
+
+Let's focus on the highlevel design and usecase disussion first before
+you start chasing specific implementation details.
+
+-- 
+Michal Hocko
+SUSE Labs
