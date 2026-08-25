@@ -1,134 +1,214 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011016.outbound.protection.outlook.com [52.101.70.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3663C3E5EDB;
-	Tue, 25 Aug 2026 08:43:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787647428; cv=none; b=YHUL4AJlBpq84S5tR8aNW+FU/zeuy1Q0INxVGQUXWOhKiQA6fd3IbXjE9BzWrtnWei0SCls0Slzn4ryzSNVH/fTmCBl1+fY4pynFznTDJeibMPAD/YCPNFtJVWiAPwFOh/gOl8c/kdzfZWFHcO83skEdzB4wiOVh8FSKjsxi6Vk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787647428; c=relaxed/simple;
-	bh=eSEf0NJ/FDzTZdK6KbIhOnTFJmviX53xcLE5mdfpiqM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gNT0hZvi/VUIVqhFLVWxqC8pcvEsJGw7FTKr3BW7YqmW/VOFkXx89qaMKG0DqONPrv8/VA2pFTk8/B54Li3JTF+PlzyCXLlceUbSgkGKJlEymF6H/fhGZo3x6FwDjMtH1qok0UVY07In2aQuye8AQSqt8Mq0xEkQNexwGrO+BfM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CAJSZ5UB; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1D503E4C73;
+	Tue, 25 Aug 2026 08:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.16
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787647490; cv=fail; b=pgkY0iEcEol8z2NN/cvIw+m3z9vnn9vKjV5uvnjBZFzuAJveLFWZ7smyiVMzd7RA4gYcAC/PlWXmbk1+mad5i9rhohNaE+Rop8e2pEon9dbxc2U8wrQBLeqGvYN6uAYhVlQUpnImdJbUraZ5ZuRo6lbe9zlRoQoGNumksrv6TO8=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787647490; c=relaxed/simple;
+	bh=BMkMJ1t4+pmIqqsN2U/WIFTu79XOZFTx/1/KJ2WUTLI=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=X3yWzoZSc2orZIE2vPPnyijHwBKcjllQM828tOH71JUpjCl2VPxq5OL4A05dcvf0mQOTrPJOUZF7C8Io8xsGupmZvywNxgVc4OlKZsNF7lqKV30i3NyAVC3ggssRuwHtAYo/u5nJ/RvoYAFGYW9/nJPgyPtoi/uPpJlc/tDVDbA=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cEyru5zH; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=cEyru5zH; arc=fail smtp.client-ip=52.101.70.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CAJSZ5UB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 521151F00A3A;
-	Tue, 25 Aug 2026 08:43:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787647426;
-	bh=WZC2dlrRslY57zHDt+VshR3khc8bqhpzVRl64eOUUiw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=CAJSZ5UBNLE8/NBP0SDCBYiXubYo2DLQjNcYn1387Re/HCw1TkNmH6crwy2yWmcjz
-	 GZj98GaQuHp7ZAJPOQkQ0NOG5us7c4z5zF+1BqxYagfH5n85y6xN9M5SzJGUX0C26R
-	 Y76UprMAdFfl/UUPAf23Mz73ZCB9dwooTe0++fOmn92fUycq5LiPpvU/MaFsg2T/8L
-	 OyaZNe8/ITGmUXmkbzsIJd8pXAUBQ35tiY2SqrbmWV/Y5W+eskAy7GfQiu5L94y6PL
-	 b8k2R5og6HQYQMJp7B3RM8JBw45y7nDiy7Th/2faq6vO8Aqwwd3Q1LA5el+xcyAth9
-	 I4x2a/+3cWPZQ==
-From: Benjamin Tissoires <bentiss@kernel.org>
-Date: Tue, 25 Aug 2026 10:43:18 +0200
-Subject: [PATCH 3/3] selftests/hid: prepare
- test_rdesc_fixup_get_data_overflow for the new verifier
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cEyru5zH";
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="cEyru5zH"
+ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
+ b=JCtdE+R4JJpdU+LP+jNNt/9GTQBGTLmm1uR0fDmeZnuyidmffVcTHVFAYc5SLoiOeLEunH7LShMycqtdUt2e78m9EO3NIo3Vp4iWgOKTnhabofpaHpH43st/vMyloN1uJ8E+Vyn0bA3U1yGDZDb5m3GztWxrtUUcNUgmv8zCnZ8N1tyXiXo6uGnGuVPUVGrlDY1eB8P9wRzz2KDlyUg4yFkPTEUO0k/LQZoNwpq0Bg67M8d2YhTJAqXGLqaEKxIhl0qMOUE+xCKqPMcHU3loBZeMhWjaSFM4lV/KGQEG53WOSd16Qnlk/t4vFk7YE0tnytAb+CLemEad3uppRUvTBA==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gh2hmec5w/ZCUmDkgz5CU6sucE01IDCplkoPoC+O5FU=;
+ b=ajZTncHrD8hFbV6wIslBa5P0yA+gW/Z+3A0C+wuN4Hs0LvdmHY53AAEVdRCOf0bZSY4FcmstKqX4g6Qa3a1nEbU8lZmtQ2ZH5EM1z2tylocaBIU5KrX1o91oZyJHCSOsRqrFVTNrZ7OXuOHk/NhvbHOvgyqw37v76YCL97NIEsa9uZjqtasgrjoQamAH+3flDTIWqXkib1pyDSxViR6LmNAVvcSloDmP3GMUJys7rN2xX4siQrGJJxbzv8JiMu0vaeizkG4c7fNYcTTne2dNDj4j3hxGRhh+EBOwRK6yrjlNWE1hIbgguzScHNJH+ZXMpfGLI84HD5IBxh8XrA1ldA==
+ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
+ 4.158.2.129) smtp.rcpttodomain=kernel.org smtp.mailfrom=arm.com; dmarc=pass
+ (p=none sp=none pct=100) action=none header.from=arm.com; dkim=pass
+ (signature was verified) header.d=arm.com; arc=pass (0 oda=1 ltdi=1
+ spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
+ dmarc=[1,1,header.from=arm.com])
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gh2hmec5w/ZCUmDkgz5CU6sucE01IDCplkoPoC+O5FU=;
+ b=cEyru5zH5fLsG75WP/ZcI8nB8aADaBY4A7KBQqna0kq7dyQWdSQNdNdatv9ImBGnIyGHbXO95TFOLfUO5sLZa8I0sazfoW97SLIIcKVKMGtNw3LbdofMOnZN+NaG1LcT8Mn8vrdMQTdpGLEqNpFFVFAcsP7aCvqmTtmYavxJjVc=
+Received: from DUZPR01CA0051.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:469::15) by PAWPR08MB11015.eurprd08.prod.outlook.com
+ (2603:10a6:102:471::21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
+ 2026 08:44:34 +0000
+Received: from DB5PEPF00014B9C.eurprd02.prod.outlook.com
+ (2603:10a6:10:469:cafe::6) by DUZPR01CA0051.outlook.office365.com
+ (2603:10a6:10:469::15) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.6 via Frontend Transport; Tue, 25
+ Aug 2026 08:44:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 4.158.2.129)
+ smtp.mailfrom=arm.com; dkim=pass (signature was verified)
+ header.d=arm.com;dmarc=pass action=none header.from=arm.com;
+Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
+ 4.158.2.129 as permitted sender) receiver=protection.outlook.com;
+ client-ip=4.158.2.129; helo=outbound-uk1.az.dlp.m.darktrace.com; pr=C
+Received: from outbound-uk1.az.dlp.m.darktrace.com (4.158.2.129) by
+ DB5PEPF00014B9C.mail.protection.outlook.com (10.167.8.170) with Microsoft
+ SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
+ via Frontend Transport; Tue, 25 Aug 2026 08:44:33 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BIzsfUAqkVoAgDlgJAQMpeuTu9174vULq/s3kbdhUGpS3FKBK8C2b5SPl+5I++UlLQT3PdolsEEnk4wqIRDwUueLRSriO3SafUslHBom+IeCCdjjalDmBR9DWpmJnrOepvsi2GUHjQuC6pzIwr4i7SZJyDC0K9ivMCIiKU6oVOa+p7dQnE4NlB2vXo7xBifey8iagPrq6Ewh9pT5sCMRx6c/QW1DrjRyltsUOB/Rk38BK6vnHscw92ZKl0q8Yydz5y43ofxaP50jGz6zshDJfXu4bUeF2rd788LTx8XYK8jKZfFnRowu5SKbSfldUs5U8Ya71QjpJBQYyUsuo8VR7g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Gh2hmec5w/ZCUmDkgz5CU6sucE01IDCplkoPoC+O5FU=;
+ b=JKrG7rupz09B1SHx5REifnOaTcpVyW7V7kL9sQi1UqH25V/6OrQjWzLeS1exEVUxC3rjUAcS9e4ZNsAnksFUMsdL89KglmoIr1QlcuPogscDBj6YWQI7xwjOCAe1W0f9d+PpE1sdFobiujZab/VQx0+uBc5L4l/7HBjSo2rIzXKQc2YCxBleGB9eRPhkRix56KRSKR2KWly3I94t9FmBasy8C++ADSow0A0m2I/HE+DgH/EOKa5iF8sxufk8/fujIWpj6FUGVVr7Joc8+2iYOopszSYjJm13lSTnYc1d0kNrJPMc0WPWe16lhYzkydaTQoTgtrcs0aKDRhmGMudmuw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
+ header.d=arm.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arm.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Gh2hmec5w/ZCUmDkgz5CU6sucE01IDCplkoPoC+O5FU=;
+ b=cEyru5zH5fLsG75WP/ZcI8nB8aADaBY4A7KBQqna0kq7dyQWdSQNdNdatv9ImBGnIyGHbXO95TFOLfUO5sLZa8I0sazfoW97SLIIcKVKMGtNw3LbdofMOnZN+NaG1LcT8Mn8vrdMQTdpGLEqNpFFVFAcsP7aCvqmTtmYavxJjVc=
+Authentication-Results-Original: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=arm.com;
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com (2603:10a6:10:417::12)
+ by AMDPR08MB999844.eurprd08.prod.outlook.com (2603:10a6:20b:750::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
+ 2026 08:44:00 +0000
+Received: from DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047]) by DU0PR08MB9203.eurprd08.prod.outlook.com
+ ([fe80::f1e:73f2:57df:4047%6]) with mapi id 15.21.0360.005; Tue, 25 Aug 2026
+ 08:44:00 +0000
+Message-ID: <1712e68f-f95f-4200-8079-d471cd486c72@arm.com>
+Date: Tue, 25 Aug 2026 14:13:51 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 5/6] tools/mm: make gup_bench a benchmark only tool
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
+ <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
+ John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
+ Leon Romanovsky <leon@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+ Shuah Khan <skhan@linuxfoundation.org>, Mark Brown <broonie@kernel.org>,
+ Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260813181230.483746-1-sarthak.sharma@arm.com>
+ <20260813181230.483746-6-sarthak.sharma@arm.com>
+ <c635db29-9067-4783-b706-92e81ba8ce88@kernel.org>
+Content-Language: en-US
+From: Sarthak Sharma <sarthak.sharma@arm.com>
+In-Reply-To: <c635db29-9067-4783-b706-92e81ba8ce88@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MA5P287CA0340.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:a01:21f::15) To DU0PR08MB9203.eurprd08.prod.outlook.com
+ (2603:10a6:10:417::12)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260825-wip-bpf-safe-v1-3-ab9e0e111c5c@kernel.org>
-References: <20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org>
-In-Reply-To: <20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org>
-To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>
-Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
- bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- Benjamin Tissoires <bentiss@kernel.org>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787647419; l=2813;
- i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
- bh=eSEf0NJ/FDzTZdK6KbIhOnTFJmviX53xcLE5mdfpiqM=;
- b=qoXOgQf22fImftlD6UPF3E9x+s7ffrNVxWAB0aOAstymIsKUz41rUcAZjwfwGOYnKMv3X1NKO
- 4DX7RHE1etqC7HGcZJLCe5rjEo72R7jCDA8G95FX9fqEYJigBjLjwDN
-X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
- pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
+X-MS-TrafficTypeDiagnostic:
+	DU0PR08MB9203:EE_|AMDPR08MB999844:EE_|DB5PEPF00014B9C:EE_|PAWPR08MB11015:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0c88af7b-ca50-437e-90c4-08df02851611
+x-checkrecipientrouted: true
+NoDisclaimer: true
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam-Untrusted:
+ BCL:0;ARA:13230040|23010399003|7416014|376014|366016|1800799024|10067099003|6133799003|18002099003|22082099003|4143699003|11063799006|56012099006;
+X-Microsoft-Antispam-Message-Info-Original:
+ Kxvti1E2Gh/DrxpnUmsA0mSKk25X+QMUNRazDjJPCyLDoRlDZYTQcbS72m1REtWng5RlD3hwMmPHiKFe8XkBZr5HkIDukR5yURFcKrE1gdNr4+zv6oeauMnSF5st31JSb7sf0nBOf/MyD9XLhdbH5WeMkB/RBugRFF7S/0birwu8cSudt+f6UnJrUHgpG6RQSRKdNWjr9h0Pl/BQfxwbwQsG3QMxUSvEOwHmUXFr4cEbEjWh+7Qdk8klThOR+r2/2KV5ZalHP86U3SRe+Cv89PQ9kIq/a8SVMkOEQwKQdxHYpKYf+m0jYDkmiBHGnYur8fBq7QRMtbetxDTx6dNRNfvOfENhVVQZrP7aJYkhnZ82GgbtwSelXw7n1mb8sjOCPsY4UXkw2UzmTOR5rZfJRQVC/6S3I94g/g7bkB5Vfe7pao/dIh81xRvSPGI5ViEeYe3t8GKXDrZD+LnAdQ5bvDcfHIF1WqSNNVH5XevYNlzBud+cI7eky/q3sXjMB0hxSIo2TxK8XibjtEuIcNWsXPg9Vkrkf4mnsCViOW4b1jZko97X0WnCOZWLMbxSrI1SmtbETccVW7XPZ1F/9jXALpPePqMsEgBYa+kIKs3Zkqrxdui/66lLlvkSrR5FxssBNvft4M6ZKpJ221x2qg4PJ0Vw4175zERWmjsyWhPjN5Y=
+X-Forefront-Antispam-Report-Untrusted:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR08MB9203.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(7416014)(376014)(366016)(1800799024)(10067099003)(6133799003)(18002099003)(22082099003)(4143699003)(11063799006)(56012099006);DIR:OUT;SFP:1101;
+X-Exchange-RoutingPolicyChecked:
+ TWFLYyHyErvHZ6r2NPo1tryza+8ZNVfj/ivVjVwB0RAKYyFCUgxJSAPhPjrzUf5DI87tySDSVbomi7TLM6ngAXkltHEMdwg/ydU2wn0TProF6/kVMAgib1tlj8nxcNAlTAi9Vw4B50CnSI+WBG7i5C0baASfEaTAGPIv4wIambE2FcOPmzRz2uPIZC1s53w/thbX5QWtBnKi08dUMgo6LZWTAIBR8tfuY1Xyk85RavVJwERDOeIlpgW4y9fhqVOWT7uJUkIQXE5TGmwrRsn4tfqSIvYcsyxwvfkS1wqrhV/I1GNhDstAtegwMNxWtcc344tWsrBTKITfL/zMBp7qYQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AMDPR08MB999844
+X-EOPAttributedMessage: 0
+X-MS-Exchange-Transport-CrossTenantHeadersStripped:
+ DB5PEPF00014B9C.eurprd02.prod.outlook.com
+X-MS-PublicTrafficType: Email
+X-MS-Office365-Filtering-Correlation-Id-Prvs:
+	1fe0c755-bc95-4f3f-bd6b-08df0285027b
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|14060799003|35042699022|82310400026|23010399003|36860700016|7416014|376014|1800799024|10067099003|4143699003|56012099006|11063799006|6133799003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	CXWToWZG1wYd0p8CUPJTHLwboBRmX3qZdSSZ1mfLSsr1LognAfTJdmEX+BPOj6WUlBmp4oqtoora5+5CIMpN2/dGySVPbo1/BUrXpYrFBbwjggQFKMnfh4OBYdbD5UpuTeC86DqtXYotM0iKupDWW/PpyMwQqsQFbpgVrtG//EJMXjowf/j7gzSixzPp1ZOeOFOfetCIizg9urnC+q0pH2sBFG3AWH23CEN4pi6RXMiEd7iKM8ugqTDnA5tsyG3nVL0WlssAj3QRA+WaDpqK82wz6wQucC6ORTUd5TDIvTbFcEFuTP5w8ZyYXs7bLrSL4oUKfTkhGwlol9T9mCv9iQ6cCo4EcGqN+mHb8MwsfjzwpBPUH5rLmipqfoCsosQbCYH/X0oLMCKJewzIpdYLLcRxND8QzfvOdlfydIdsZ57be+OIGg8Np0lOrdmUsPEU461cYei+07N2pkM6yJLrixi3MGdaPATVnH5mVBLI83hGVOShPIPeRsTpcAYYJKuFVeown46eCvDPWvTmwSMOgYReGrmlRi7as5mojqpbvCbsihyo6fF0LXcOfbZJifLRkAmzJf1DHPB/wE9bLpCRo6fkImwGwehivnb/v1S8gPuRmPVrOpR4q6rK2hgPaA9Uvjhv3baY3HQEE4iFIMy9ZCMwUyIFhi24u8pYRYGjd20kOUR1XDQhMejg6aYKu9lCBocgFE966HC+Cu/YsxwFPQ==
+X-Forefront-Antispam-Report:
+	CIP:4.158.2.129;CTRY:GB;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:outbound-uk1.az.dlp.m.darktrace.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(14060799003)(35042699022)(82310400026)(23010399003)(36860700016)(7416014)(376014)(1800799024)(10067099003)(4143699003)(56012099006)(11063799006)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	qwWNyDZiTNXKeHNESSn453lfRhpJJW6WI/04WfJPuyUqdyuZaM2R4bCSJnVsfXZ7HGFOVduJRrRpx85dgoGYBn+U5kIUi88rbub5FPtzMo3Nmzu/vHz9kQeCuAUMD68bplFgBPQa72BWgnbsKvWHTB9+jRAdMIfySdSnn4H6KxU+hx4k7b6TsHy0PPl3NSIzZN4bhAfaw/wPjpWz66/X+JRTqlZL58CJ1PIXCK204qWVNbjKvkRM7wKcRmrJAc3lvfuN5KVESses+kB0sljUDpF5KA6fxurHuWzEywQkxiMV8KtiJ2TtM5UDkCXXLBoRwvU9jeDYQvVLkvTDrgM9a60cyve1Rk+69ePwHkzDzRK9VYh3KIidebR4VraK6dpPxS38gFghM6evtVh6/71VaRQqwFFfVTkio+icPo3D5NokPAp1R/orhxKqGyMBuw6F
+X-OriginatorOrg: arm.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 08:44:33.3035
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c88af7b-ca50-437e-90c4-08df02851611
+X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[4.158.2.129];Helo=[outbound-uk1.az.dlp.m.darktrace.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DB5PEPF00014B9C.eurprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAWPR08MB11015
 
-The new verifier in the bpf-next branch is now capable of detecting the
-overflow that was triggered by test_rdesc_fixup_get_data_overflow.
-This is better in terms of UI, but now the test is failing and should be
-marked as expected to fail.
+Hi David!
 
-Add a new parameter to load_programs() when we expect the test to fail,
-and dynamically validate the test by checkcing if it loads (it should
-fail to load with new verifier), but if it still loads, HID-BPF should
-detect the overflow itself and return an error in hid_bpf_get_data().
+On 8/24/26 6:07 PM, David Hildenbrand (Arm) wrote:
+> On 8/13/26 20:12, Sarthak Sharma wrote:
+>> Remove the functional modes (GUP_BASIC_TEST, PIN_BASIC_TEST and
+>> DUMP_USER_PAGES_TEST) from gup_bench. Drop the kselftest dependency
+>> and use normal diagnostics and exit statuses.
+>>
+>> When no arguments are supplied, run a single GUP_FAST_BENCHMARK
+>> with the existing default values. Let users select other
+>> configurations through command-line options. Report ioctl failures
+>> and handle errors without relying on assert().
+>>
+>> Suggested-by: David Hildenbrand (Arm) <david@kernel.org>
+>> Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
+>> ---
+> 
+> 
+> [...]
+> 
+>>  	free(tid);
+>>  
+>> -	ksft_exit_pass();
+>> +	if (thread_error)
+>> +		goto err_unmap;
+>> +
+>> +	munmap((void *)gup.addr, size);
+>> +	close(gup_fd);
+>> +	close(filed);
+>> +	return 0;
+>> +
+>> +err_unmap:
+>> +	munmap((void *)gup.addr, size);
+>> +err_close_gup_fd:
+>> +	close(gup_fd);
+>> +err_close_filed:
+>> +	close(filed);
+>> +	return 1;
+>>  }
+> 
+> Why not have a "int ret = 1;" and just befor ethe err_unmap, do ret = 0;
+> 
+> That way you avoid the duplicate exit code.
 
-Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
----
- tools/testing/selftests/hid/hid_bpf.c | 25 +++++++++++++++++--------
- 1 file changed, 17 insertions(+), 8 deletions(-)
+Makes sense. Will make this change.
 
-diff --git a/tools/testing/selftests/hid/hid_bpf.c b/tools/testing/selftests/hid/hid_bpf.c
-index 069ebdbb4d1c..7ab86296ff23 100644
---- a/tools/testing/selftests/hid/hid_bpf.c
-+++ b/tools/testing/selftests/hid/hid_bpf.c
-@@ -67,14 +67,17 @@ struct test_program {
- 	int insert_head;
- };
- #define LOAD_PROGRAMS(progs) \
--	load_programs(progs, ARRAY_SIZE(progs), _metadata, self, variant)
-+	load_programs(progs, ARRAY_SIZE(progs), false, _metadata, self, variant)
-+#define LOAD_PROGRAMS_MAY_FAIL(progs) \
-+	load_programs(progs, ARRAY_SIZE(progs), true, _metadata, self, variant)
- #define LOAD_BPF \
--	load_programs(NULL, 0, _metadata, self, variant)
--static void load_programs(const struct test_program programs[],
--			  const size_t progs_count,
--			  struct __test_metadata *_metadata,
--			  FIXTURE_DATA(hid_bpf) * self,
--			  const FIXTURE_VARIANT(hid_bpf) * variant)
-+	load_programs(NULL, 0, false, _metadata, self, variant)
-+static int load_programs(const struct test_program programs[],
-+			 const size_t progs_count,
-+			 bool load_may_fail,
-+			 struct __test_metadata *_metadata,
-+			 FIXTURE_DATA(hid_bpf) * self,
-+			 const FIXTURE_VARIANT(hid_bpf) * variant)
- {
- 	struct bpf_map *iter_map;
- 	int err = -EINVAL;
-@@ -128,6 +131,9 @@ static void load_programs(const struct test_program programs[],
- 	}
- 
- 	err = hid__load(self->skel);
-+	if (err && load_may_fail)
-+		return err;
-+
- 	ASSERT_OK(err) TH_LOG("hid_skel_load failed: %d", err);
- 
- 	for (int i = 0; i < progs_count; i++) {
-@@ -147,6 +153,7 @@ static void load_programs(const struct test_program programs[],
- 
- 	self->hidraw_fd = open_hidraw(&self->hid);
- 	ASSERT_GE(self->hidraw_fd, 0) TH_LOG("open_hidraw");
-+	return 0;
- }
- 
- /*
-@@ -904,7 +911,9 @@ TEST_F(hid_bpf, test_rdesc_fixup_get_data_overflow)
- 		{ .name = "hid_rdesc_fixup_get_data_overflow" },
- 	};
- 
--	LOAD_PROGRAMS(progs);
-+	/* newer verifier can detect the overflow at load time */
-+	if (LOAD_PROGRAMS_MAY_FAIL(progs))
-+		return;
- 
- 	ASSERT_EQ(self->skel->bss->get_data_overflow_check, 1);
- }
+> 
+> 
+> Apart from that
+> 
+> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 
--- 
-2.55.0
-
+Thank you!
