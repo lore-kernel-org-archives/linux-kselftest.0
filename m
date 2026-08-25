@@ -1,98 +1,69 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011013.outbound.protection.outlook.com [52.101.62.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6415A3955EB;
-	Tue, 25 Aug 2026 11:39:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F0F134750F;
+	Tue, 25 Aug 2026 11:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787657946; cv=fail; b=e6JL1L19L5YWFzW6xuhT/NE/z3dOn/0CHMOfqsw1AT5zG6OpG42bn+jo92wA/bubtO8czV7o+KA2L+0DJWEYQlW8UIONWxLeubQ5O4tCn0236LrexAOLh23sRiuxUKyIlGpLKoMN4wbFPA6vafx1ZJNfz/jvVBEf4HVRmJfukic=
+	t=1787659041; cv=fail; b=i3eslHzywpqGO1SLX15mpqepJtThCGPLDGzx8Jvfp4hgJ6o6eKQZweesh51z2SsI0516AM3cKEpBnMVGE2A3+vrDxp5ml/5peS23oM5MoeU4r/Ffwk5nk77yAA4wcfxe1vl7zEq4V2kEqOrA91KCjrVtzxEAaIoqdemUbx93vl8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787657946; c=relaxed/simple;
-	bh=Ug/MiE+Vjb9CAzVaVUDfOxyCs4kNGZSEqVSl/AwJuao=;
-	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=M9QdG6H381lpc1BwI9UuYnER6Rx40y5xPLUDm9bF/4S7z+tv99BryUPvbbyXny9yGRo7bvjvR5awELhe1mFQIxVgupdVjTbm2hkX/WCj3hsTB4qXnFjVUGe8x70oVPzctrBc//exf+tND9+rHF9g3rY673tppKlDMRlN97se1m8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eLUdp6dO; arc=fail smtp.client-ip=198.175.65.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787659041; c=relaxed/simple;
+	bh=MOizHhGM2XyqmK3SBg0nf5jVVL5owwjWAa358ctyzbU=;
+	h=Content-Type:Date:Message-Id:Cc:To:From:Subject:References:
+	 In-Reply-To:MIME-Version; b=fCZnzVxak2K9zySYd0nKi0wmBLevysiBQ6NjwFjhEwyAknRdkpW64rCiRmnGkoUK5gO0seRKjPBS1muDl/WhRwSu9hDj/hZze9S9KynCwn/sOM2sbSe25Ie4LTlHaUYRoMKDZflQfhufIUhY8pO7qgXtbnh2Bs0OR09SMBABZpE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IbaCRX6x; arc=fail smtp.client-ip=52.101.62.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eLUdp6dO"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787657944; x=1819193944;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Ug/MiE+Vjb9CAzVaVUDfOxyCs4kNGZSEqVSl/AwJuao=;
-  b=eLUdp6dObqNkfRepBltnGEeHV2w2umx6wVmU20CRaVR4fqvS/HdyFRAk
-   tLU+rgr07fB9ZDsrgcpg54jEEXhDFTKyFczF08ZnlU4wzBiLI50W1Kl0v
-   D58u+le66y9RB0TSgfBmYSVlbn5oSP+42JdAm58HJ6DWr6bFaJnj0H0jp
-   c9BSd5sFEZTqhXlocPAIT+F4ySwoSTjvyf/OtMYz92b7IeLFVtL2yePXM
-   SlJZ0sbjGnP/dskJyorx6tDE1J3XGYX3H+Ei+jwC1378b1uE0E8T/QALK
-   wQvUGh2SbPGjiu+Yyv8F20CukWnEsgy7SFm/MNzA/HndIO01My9dDQSCk
-   w==;
-X-CSE-ConnectionGUID: FV+5kenxQEm1nmwXY02Ukw==
-X-CSE-MsgGUID: B28UqDEPRciXcHU7UsHetw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="88144138"
-X-IronPort-AV: E=Sophos;i="6.25,242,1779174000"; 
-   d="scan'208";a="88144138"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 04:32:40 -0700
-X-CSE-ConnectionGUID: qCKS26TGSAerB1rq+MtXug==
-X-CSE-MsgGUID: 5+qjnVQoQ+Stlk19h26I1g==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,242,1779174000"; 
-   d="scan'208";a="267305568"
-Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
-  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 04:32:40 -0700
-Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 25 Aug 2026 04:32:39 -0700
-Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
- ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45 via Frontend Transport; Tue, 25 Aug 2026 04:32:39 -0700
-Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.70) by
- edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.45; Tue, 25 Aug 2026 04:32:36 -0700
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IbaCRX6x"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=pcp9t2g2zUsI9BcUiAmOoRFbgQAV5GU8/I7a42FWfKvU3AyztQbsTnUZ/au2gO94no3bAVRWegMceG1/sjcgGbtvcJkMHXDUuGuQznjHnXrYqHIKpL6rrKkHzM+XGMGuz6Y77nQYs3Ab99NwJwDLF3R3R1HqglApNtUdEyz0laOSbk/dA7b20OdcxfcrCUR0eGbVXBBm/mFdVTNLe/jIY/30PD29lHeVM8UKTVqiybZzW/i9iDMJ/DKMwFc0tgMvED32KdOsukvFWWuw8F5RsNE1xNZIVH9EQj4a0VIBUnvclNLCNqugFLRBI/l+jcRfojnPG5S6Nmn1tcaIY9hloA==
+ b=S+LMVjlCG+nynpvIDtvjDKbIBlhk6ak8JsYjryq+icjUdIdlh0LH/j/l9qtqjIHk+MHo5EwVppua4+yZgp//aNRKba4o8ZwWUcvTm0OYhb0ARQzT6hiX4TWjbvGShaRwCmyDg0dN6H3h/nt+ZElrEHsw4enp5/cY3o4i1CC6hGj+TUvsuDE+up6IWALnTgTqnhjexqJO+TAp6YESLzw1tQ0XMZ57mmACXK04uKPZAPJzluSD/7gDCrErtyYM32jTS3bSQ6Kk7FmZN39v4aGp5ZiPIVO1JaZQYmnLvAdb5pOEy4qSFoM7MztCzRDhw0lHtgA0wIGVpGDMWhhd/r7Iww==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=vgFFOkXx9pGnbugaSza/J1HyFayPAYUZyeDRwNlVudA=;
- b=S35IFiIcQTz1SrM9dAMOYN52r0qDV2GDY+yWLySu3E2f+xg9L+9VKD7KuSV21WN+PaNv23pD+6PU2XNFrgEgZLfpA2rjoWWBJ8766eoQGY4B3/MJntIZuX59OGoVhaAS3XM/7PrKEvnF1JVscU4inYU0IBsor53gl40YulezGY7uaJOVERG4lkI3Oz5Uttd88UEPZxd71KjY/PDpjoPeng1l/dYatJXQR/E3YzKHCIdNTqH9/YrMLjyv5Jt9XOtA+IB/5c+U8lX0eDqkGztlSfJdT1CgzVwAfxculglA5AyQy+VxdQaLpkH7wg66KkXONxzbFzBZc4oYAWKsyGAhWg==
+ bh=nhDo+2mvgK+Gj0VCP5j0d/3b9XT3BeQz3XaxUJbvTaM=;
+ b=QTz/X8qkNb7fqPrPBmkqHP2hk+WqfNBtqqs3Y67gTZxIo4G5qQr/0BpfFiFHIOUYrmU+xBySDhXbmg+qSI30l+6xxwLeFfmsaysjvWCW5dUNIfUVq6vFEEADeX2ij4TjVY/0gVjEsnQdO1YGVWTbouU9/Ey9Kvx6NgpJ5l0G7opGYE+91CUTx6qhJJ6R6c/9TSzV47fnJUdIRrMESGFk/EL2EoIX6uF7NPfY/VKYLMvP2uyZdQYF7L7+LuBcLhF11vr7IqA64qt9Bid/21C//mnYi6CQHyC0BMKuaZdM6jYY+IFmWqgpSpeZwdsmhQBUAxahqPG67/7qzJIzTtrpbw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nhDo+2mvgK+Gj0VCP5j0d/3b9XT3BeQz3XaxUJbvTaM=;
+ b=IbaCRX6xh+39UJ26eWYFF1W8q6ZxdOzrvEz8it6E6knY74NVtJJsID6cMPLJI8csAYYJO1DcTrZ/k/a8d1Yf8vp2mKxmzQys1fXkA91efI9S9EQZ74V9bMrqIHTdugaNpoHaYAb/dfhDMz6qBAU4WRTJSbrS6kod0wsQs+tAFr7oQCtGLAT9vq01k44HkatK7+QxOLEoIjBZtHL8sc3HmjKqRmLH4YIYc+TeKVnyvyucrUHmKsfZuCyghuXEi/XHqCKKgGB5d4g9vRnID546LEDAnj8805TknnI6ks50/XWnLQW/gwD1nYHFLdd78XQSrPEGBptOjq09XUVbjcP94g==
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DS0PR11MB8019.namprd11.prod.outlook.com (2603:10b6:8:12e::18)
- by SA2PR11MB4843.namprd11.prod.outlook.com (2603:10b6:806:fb::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
- 2026 11:32:31 +0000
-Received: from DS0PR11MB8019.namprd11.prod.outlook.com
- ([fe80::fce1:3bde:b383:e801]) by DS0PR11MB8019.namprd11.prod.outlook.com
- ([fe80::fce1:3bde:b383:e801%6]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
- 11:32:31 +0000
-Date: Tue, 25 Aug 2026 13:32:18 +0200
-From: Krzysztof Niemiec <krzysztof.niemiec@intel.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Krzysztof Karas <krzysztof.karas@intel.com>, Sebastian Brzezinka
-	<sebastian.brzezinka@intel.com>, Maarten Lankhorst <dev@lankhorst.se>, "Andi
- Shyti" <andi.shyti@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] gpu: GPU_BUDDY_KUNIT_TEST should not select GPU_BUDDY
-Message-ID: <ao1hIejAdBPKUHFW@kniemiec-mobl1>
-References: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
-X-ClientProxiedBy: DU7PR01CA0048.eurprd01.prod.exchangelabs.com
- (2603:10a6:10:50e::17) To DS0PR11MB8019.namprd11.prod.outlook.com
- (2603:10b6:8:12e::18)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB8371.namprd12.prod.outlook.com (2603:10b6:8:e9::18) by
+ CYYPR12MB8656.namprd12.prod.outlook.com (2603:10b6:930:c3::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.360.6; Tue, 25 Aug 2026 11:57:15 +0000
+Received: from DS7PR12MB8371.namprd12.prod.outlook.com
+ ([fe80::23d7:9e07:1de8:d80a]) by DS7PR12MB8371.namprd12.prod.outlook.com
+ ([fe80::23d7:9e07:1de8:d80a%3]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
+ 11:57:14 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Tue, 25 Aug 2026 07:57:12 -0400
+Message-Id: <DKY08M715PGF.2383RIK7V6ONF@nvidia.com>
+Cc: <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+To: "David Hildenbrand (Arm)" <david@kernel.org>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "Lorenzo Stoakes" <ljs@kernel.org>, "Baolin
+ Wang" <baolin.wang@linux.alibaba.com>, "Liam R. Howlett"
+ <liam@infradead.org>, "Nico Pache" <nico.pache@linux.dev>, "Ryan Roberts"
+ <ryan.roberts@arm.com>, "Dev Jain" <dev.jain@arm.com>, "Barry Song"
+ <baohua@kernel.org>, "Lance Yang" <lance.yang@linux.dev>, "Usama Arif"
+ <usama.arif@linux.dev>, "Vlastimil Babka" <vbabka@kernel.org>, "Mike
+ Rapoport" <rppt@kernel.org>, "Suren Baghdasaryan" <surenb@google.com>,
+ "Michal Hocko" <mhocko@suse.com>, "Shuah Khan" <shuah@kernel.org>
+From: "Zi Yan" <ziy@nvidia.com>
+Subject: Re: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
+X-Mailer: aerc 0.22.0
+References: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+In-Reply-To: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+X-ClientProxiedBy: YQBPR0101CA0324.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:6c::28) To DS7PR12MB8371.namprd12.prod.outlook.com
+ (2603:10b6:8:e9::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -100,191 +71,93 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS0PR11MB8019:EE_|SA2PR11MB4843:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92af4ab6-54f8-41de-b055-08df029c8ce8
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8371:EE_|CYYPR12MB8656:EE_
+X-MS-Office365-Filtering-Correlation-Id: d01f436f-0f8a-4a92-173d-08df02a00113
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|23010399003|6133799003|10067099003|56012099006|11063799006|5023799004|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info: CFNdLgBNrzx4sfZYp506W9ZmjdbeMNvvuh696WFCAAJa/7dJAKyyhQakdWmXKZDpP6Ksx2HdHygYQmxPCHSQJtr9A++mvRdj2r7nw0zv5IVzMvQeVz8e8p5Ta2/DbgvZdyi8vxzcC0slOtylDQPAne9ZDA9y+vxtbndNqe+E9+lZ+MB0zf6zULyVFVnr2+wT8/NujDAFNDOESvveTdveTRszEvg9nPehuXEkNZ0/hgglXW/FR9UzCL6nSNud2mQk0rHByoCAi/t6NnXslywU4XWKFDC9WABgePrBpX0/EVP8CSDWRDejCuGWFcDULlA+eqIkqIOrSVWxq0bcfWC2Zp3+c+Qk2ortfQlpA74mCJnh2dFYcl8C9E/x6CLNpXBYVYanQZFr8eaJaw5F2Cc6aqtNvhj23S9c7jwiz4Ac1kUzHYvYxGcdLO8n0Bgwlz+qPwxP0svuPL5vLxgniGDK77JcQ9wbiRPGSNfFFyoFgzTL6XoM77DRYCbFMF364ny0XH5vqgkG/03bMaFSUjeFRACTQg8n0C4GXcLJeAZpDYRtWVD05zsxq1DPOxqDKUgE1HSQ5dngmuvjjAS1Tme+9wrm3Zf5gQqdyNUEPweU6Tlqi+Fzms6oqvUYy+WDPfPtTOx/xU1YiBlguPGm5DhnNXq1/4sAm6kX4grLlHTwelY=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8019.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(23010399003)(6133799003)(10067099003)(56012099006)(11063799006)(5023799004)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|7416014|376014|1800799024|23010399003|921020|6133799003|10067099003|56012099006|11063799006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	i4kql2m982kxOYjvE5fcsNQralCbZZiPOFS/6zlFevtRHIKnf2lr1pMjNCmHkVGeThaFyUvn/Lx8jvVLGW2p2j44YtNcmWMxGVqEEGG7nmW7K+nytujzRh+CM7kNmWQ6rSNx8eT499ZaIPr6vfkHduIcpNp/GjVE9QClO9Bw/uY8q0Am1DieIchGtH0Juz7oK0VeUp64ut6wtqjcmi9Zl9uQH0slaum+13ZokRa6OnwOjzuPbCA50DTL0LjmkPvT07F5YSTADipVFVuHZkHyvcIe8NLpwroiHZML2fdW10NHRPfn2l5XoXjXljb1Frj2p2oUxDh5qmio/8MUln1jM8JCEHVqj9AKw9dCq/EJR5q2+lP055qqSbmVaSBPEQhLibQggE69n6ECyLRAKsDcju9xPfoBsHMqy/o0q5+jz6y84+n/vEdWUp48rBTR3VFMPzLSBkHFuDUII4cJ0KuOkhdTCpX57s5g26Ry7azh5wRwBIaK21au4Gb8y8G0n+UZJqJQVftFipqO5frN9RSW9yJHBXzcwpFkJgApJTNKHoGuhKbxmHUge4TPDX9K9+bDTtGquwBQr1+7+47Uyfs4h+YpBx5wXASG/whrwTYYKLQ+id6bcwIhcpY2H39JhjxVWP5s3rjdWaHU3NG1SSB/VLawcHiAFbMoDWq7PYoh7xyhYGwNXRZKbyt/uZS4EmiLat42S/s7Q+Tr4I36QO3/JQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8371.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024)(23010399003)(921020)(6133799003)(10067099003)(56012099006)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3IrU0cwQ25ha3VVMk5KOEJCb0VGV013VU5zL0UxZTNsWjljb3pibkFES1lM?=
- =?utf-8?B?Q001bUlwNVdka1c3UzlnN3BocVhMM2w1R3lWQm1WbzlaSU9YTldLcTRjaUFY?=
- =?utf-8?B?b3NBMDlIaWRZbFdDK1hpa3dnd3pyZ1c1VWcxL3dzYk1yM0prNERIampjeEwy?=
- =?utf-8?B?bTlTNUtOY2pMbWxBa3hWSWNYRjNtdmVuMmt2azRjcFF0ZlV3NHc4a29iM1hC?=
- =?utf-8?B?K3JEQXN6R3IwL0Q0cVd0UnhJTUZONHBPYjNMSFdHTVhMemJ1cGtHWDZPa1Zk?=
- =?utf-8?B?RXlPQUR0MXBXZVl3K3B1aXV4dWY4SlBsUHFKUmtBOWlxa0xvUmI4TVRGU0Z4?=
- =?utf-8?B?VWFZcmRCQnByaVIrZ01ZVnVVTTVQM1FWQVdzdXo5K2lJZ2oxelVVM2VRMXY0?=
- =?utf-8?B?RHBZUy9KNk9GNUdqVFVuVnl6L2I4d0RnUDhDK2hxNFVNdC8xNDNXYUg3RWVt?=
- =?utf-8?B?M0FyL213NkZTekp1UUpiRWhBcVk3THhHcE1XQWpla0dheG5XNU1MWUo1dFB1?=
- =?utf-8?B?bDIwd0lPakhZZFk0bXZSWFExK1FRZlZ5ZmpGeTJib0F0bWdTK2V6UGF3Ri8x?=
- =?utf-8?B?UzBwME5RMGRzMVFoQWFtdmFLbitqUnBjemRyZGF5T0lJSWZrNTRqc1AyN2gr?=
- =?utf-8?B?RFJYVm5hR3lYSE1HckxGLzBuSXhjV01yTGNnRnNaN0VkYjdHL3RzUDR4Vk1O?=
- =?utf-8?B?NGpoVWRWYUNqdlAyYTZMcGthLzQwc2ZTK0VLWEtDSWFhOWdtbWRzRWZzZXBt?=
- =?utf-8?B?WHBXcS9RbWZadU5CanFvUWRodkg2TWVhck1qeTNNU2d5eTNsNkQ5T1FkbWRG?=
- =?utf-8?B?bHk1b2YvUzJWVjN2eFlNbE5tRS9xWXdjbzRlZHdPNEd1N0lqR3kvc3ZYNkZY?=
- =?utf-8?B?U1FiQVNWQlBYcnA4ek9TV3NjaFJQWk1FTDFuZzM2NFJoYUhhTGZac2o3SGJV?=
- =?utf-8?B?OFIvY1VrTmNnTHd1Y1BHSitqWmpIQlJmN0JyTnJPQ0MxdHV5aW0veEtQYnJJ?=
- =?utf-8?B?eUQzSWEzZ3hFTmhqUGo2Z21FTGVYVm9PWVludHhJNjdBbWUyZlovYXJmMlRX?=
- =?utf-8?B?bDJxTDBrQ2xhK2EvVng3T3BZSUM1eFhIeUZBZ0s5MkVXTUZDbFh5bEV6ZU05?=
- =?utf-8?B?TTczVUhQUXVpenAyTVFkNjB0dDFLakJ3MGpHTE9yOFRWT2drR3lUUmgrTWVI?=
- =?utf-8?B?Yk4vM1Y5bXpBUENuVEhTYWE3V2xnaTNhNDZtMEdiMlNkYlcrRXF0a0srVTUw?=
- =?utf-8?B?bDkvbTFpbDBNdzgxUTlGUkRLN21rZjNydE8vcDI3WTByM01mcmdnTHMvWmlv?=
- =?utf-8?B?UkpTT3BJT3Y3dVFiQUNhWXlqVnhaVnBDUjBJWUZzY3JpcURKbVdzQnpwSU5o?=
- =?utf-8?B?ek5iYjlGeUlXWU5xV3dLUDVacGtmcU42T0VTNTEzTjJzRVFhU0ZnZGlDcnAw?=
- =?utf-8?B?azV1RlhOOHljR3ZXMkp6K1QxVHFyUzNycEVFSkZySVo0L3dWVHo3OGdUUW9B?=
- =?utf-8?B?Y3FPUVJ0MW5vS2VKMFNLVXZuY3NIRGUydUFYdGs4emVvTGcrSjR0RFdWY0pq?=
- =?utf-8?B?dk1Wc0U4RDhRNVFTeExESkl0RmlIcExSTDNGUkVHZzhVOTVqeEhNcVQ5NWZU?=
- =?utf-8?B?aTdIdkxwWkN4dU5aZkd2RDRrekVWcmQxZlFBUFAzUFJjL0x6bUpvMkU1L2VE?=
- =?utf-8?B?Y0hUNis3Z1NEUytkQWovV0xLbElZQlpPdno4QzhkZFQ4S0o3Z2JoN053Ymg2?=
- =?utf-8?B?NzcreXJrVkRDZ05leVVtdWpOMnJKVTFSWEI0Qk1teSt5bHBlcjNab0xRV0l3?=
- =?utf-8?B?aXRHMmhaZWtIV0g1bVlIQXhhUGRVcklMK2NVMTVnM3pFRjhualF1Qk5sOTl4?=
- =?utf-8?B?MVhwcmVpeENMajAzMVRpYlM0a0REM0pITExzbHdZSzZSSkI5TjEvVWxxaEJj?=
- =?utf-8?B?SkRGc1phV1VXQWl2YVNzOGFNUWZ5alYydGVmN1ZDL0JucTFZWVJXL3A0bXll?=
- =?utf-8?B?V201bDdxVlE0QUFRMVVaOHJlU1RybDQ4ajJibkFZQmwyYlM3QWlwOVJsSWpS?=
- =?utf-8?B?L21SUHhQWnh3bEljR1FIWHRoZHJUMXFaUGNCRjJVZ3J5TU1TOHhQRzZTSEdT?=
- =?utf-8?B?WXNCZVpaMVFKcFhwZGx4TG9oWjV0cG4vOUEvTGpia1VUQWh0Lzk2em9HMEll?=
- =?utf-8?B?Mm51QkpVT05QYnA1b0pMaVB6bWExM2x5dWRLZEtSV21oeW5xZ3o2K3pzcHRS?=
- =?utf-8?B?RGdMVGo3TmFuamdSQ1JubjZ1SnB6aGtEQjN6WGVCWEhqSC83MnYwR0xwUEph?=
- =?utf-8?B?ZTJ2YkZWYzB1eEJ2cExQRHNRbERaWFNhT0RpZTRlenhPeFU2TW5YaFJUMnow?=
- =?utf-8?Q?vG8WMqUSiotQhNIg=3D?=
-X-Exchange-RoutingPolicyChecked: XTcScJYx1e2ihsNs2GTOudLCORSnePYeGNCXCkQllh5bq5rO1qeDEHO4LFFhaPVVpHvFgSZOvoXPDGl9TBD4L8I3yFhEOt+PAhclCzCy/dvVptLkcOJb3QPd/j059pQ+nk4RtIuyElmYHNBzLuMrYrAD9zb13kA+pTsDkncbMmVfjyQEu/QGGYArORUM8n0R12UhhlohrQMkOJvHrFz7u9JJu4+gZg6jlUNypGN+q3ahWI1JW9FqKy7MGPnDR2kB4iUisiXRbZ5GjamxJRZAcOgPnjSvhh92wf6IYhjqfE34lSkQq3whLqfOaukX0S4S15HNcZSYybZ2u6oBQHWKaQ==
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92af4ab6-54f8-41de-b055-08df029c8ce8
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8019.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?LzhTelYxSWhGcnJuMUhrZlFZR1hER0dYQ2EvVmZKMXY2Z0hJVW1VeG5iZkg2?=
+ =?utf-8?B?RHkvcVhTNk02Qlp4MXBzZnhaSy9idU5YdlZNcm5iekJxOGFnd1kvSUVDZSt5?=
+ =?utf-8?B?d1BCVy9xWHF6UUFmQk5pdElBNmdNR3ZRUlBzd3ZBc3Y2b2orU1grZkRHSWpu?=
+ =?utf-8?B?SlFnZ0Y4dVFYd0srUzNMWmtKZmlVbTg0elFNeDF5R25BWDdpdVVEK2x3MEVl?=
+ =?utf-8?B?QnFCZlhMVzkwZlorTlVETTJkZy8vd3ExT09aOUp3cHZFNWxlZ3VvVkVXWGtL?=
+ =?utf-8?B?dkgyTU05Qm01U1dQR0FmdXBZMzBUQ1dHUnJ0Q1o0VHVGMXJKZ2JFM3lLbnpS?=
+ =?utf-8?B?ZmptaUh5Zk5kWmdUYnR1TzBxL21FOStXbnJLMWxNNTBoWDQyVjNZblkwaFJD?=
+ =?utf-8?B?R2FSaTIzV3V3NDdKSUZIeDFzM2pSbnFmZGcrdHBxZzJnZWRyMisxMjFOYUdP?=
+ =?utf-8?B?RzBqMjV0SUVsckdLMXRDWEZLcFJiK0dqdVlVSS9TaGt2Mjcvd1RobHJHbU9u?=
+ =?utf-8?B?UERyOVNTOGl6UFkvcHVLTll4K0JKMnVIWXZzVGpZb0QwNXA5SGM2UVBNV05l?=
+ =?utf-8?B?dE1HOWo2SHlSNmNTeFNhVk5FQkRmbU9lM1kwQlZyYjd4MmdPaTMySE96aWxX?=
+ =?utf-8?B?TzB2bXl3QzkvbWxCWTF0QlRhYmc3VjdCRkpYYVBwY0NVbGhsUHZHbzVUZ2Vj?=
+ =?utf-8?B?R3NjS2d3YzNUNmk2ZVdHZUhlNFVGNHdNWTBvZ3dsZkw0d2tUaFpLY3JyZkdp?=
+ =?utf-8?B?ajdrdU9ZWlM1a1AyeVNPOS9NMElSaUFZVzZJc3NuV0MzTmo5MlY1MlU2eUFY?=
+ =?utf-8?B?SklLWmpzcUg5M3RRaHhwYnI1UWpBTnZueTFSMzBhcVBKNjlLWGpvN3VGTytJ?=
+ =?utf-8?B?Rmc1bEcwcVFQbHdyWnQzb2UvMGdudXNscWNkL29LUmZ1QXhaUnN3aStOV1FZ?=
+ =?utf-8?B?Q001TGxPdzkvU1JENFZEcm5PdmdGYUhKQjdlSVZwc3g5eU9ON3kvS21tZmFp?=
+ =?utf-8?B?RzdUSGRIUHVYei93cjhLS29ZbDkzUyt3My9aRUlRNHZsVXU0SW5vcVZFb2d5?=
+ =?utf-8?B?Si9UbDV2eDd5MzRFTEZZWnNjeVY1VjliRWF4R2tDQkp0YzNvZS9aSm1CVG1T?=
+ =?utf-8?B?cEVHdFV3Sng0NkFkR1lwNXc3R1dScjJVSktQMmZGNGY5K1IyRTdDd3g4RVoz?=
+ =?utf-8?B?blI5eU94bjRYd0dkeEFuOENhU0hBek10TjJ5Q1JuRk9VMjhDcFpRVkFWczN2?=
+ =?utf-8?B?am9EeGNmbTh4Q2pCMVpkSmRURmt2dmZodVpIOXZQYmdaOHZkenZoRTg0ckxW?=
+ =?utf-8?B?eFdmRGcrcUtUTTdhQlhhNVdNeEJmNVFtODZHS2RWdU5TZVM2ejZwVUluL0I2?=
+ =?utf-8?B?c0hFRndwMjhSY3NDRkVzUEhpaGdYVk8rRU9JZTl2NVBWY1BXd0c2ZDJKbTU4?=
+ =?utf-8?B?czlsZHRaV1YrZ1hXbW81ZWwxNWh2RTUyODVXcEQzUGFZMFhLMzlVREZ3QXJD?=
+ =?utf-8?B?Q005MEYva05UTzA2NmdIRGtwL3oyYTk3V0h1TXh3UUxzNHlxUzE1cWp1dGdh?=
+ =?utf-8?B?dUZOVGxXUHQ1TkF1cHFpUFlJTXE3emxnbnpOelJrZlJCRS81bG5kOUtLNGt6?=
+ =?utf-8?B?VVdHaFdXOFdEbDVCRTUzZElDbUdmYXpCRlhnTUd1MVFtOU5YZWVVQ0Q1K0pL?=
+ =?utf-8?B?Q1h3Tjh1aWFwL3FPZ09abEIvZmlIYzlMV0tONmt4dktFcDd1UlNXYi9DVGZX?=
+ =?utf-8?B?K0VxcWhBVmdlZ3k2eDdzY3lOVnd4aTBkLzRjZEdMcjNFSFNsNU9XWmo5TW5B?=
+ =?utf-8?B?bXU2VTgxZlp4VlVjelczVG9wMElhcFJZVHByNFQ1V09KTXdGcWxIOEZZcFNY?=
+ =?utf-8?B?RmVITXo2eWRZcVZiS1hhNGlWRFY2OFozMzR3ZXVPaWxuZER5YUdKOS9abnZ2?=
+ =?utf-8?B?Uk1kOW5aQXdVUlZ1WU9Ca2MvSCtzV0NmZ0tlKzlCL0tvc1RkeEUraGgxQnNT?=
+ =?utf-8?B?anYwMjNTSUZtaHZyVjVhby9KM1c4U24rMzZ2MWthZkIrQVVYbFdYaytCR1kx?=
+ =?utf-8?B?SzN1dWFOc2phc1lOR1VxcEJ4a3dvOWhsWmdKangrK3FBeVRJZFFyWStQdk02?=
+ =?utf-8?B?bEJpUGZQblJsTmdYSEc3MzlGY255VjFNUG9jQ1M1V2Q0YUF3UmxBWDhORDhQ?=
+ =?utf-8?B?bWhubWxXTjF5OHh0QTJpSXVpTGNoNFBhbXhneVNPczM2bCtiYXBzQlpGaXZV?=
+ =?utf-8?B?V3pXTnE0R3hkUmY5a1N2NUdMMTlIT1dxS3JhdndxNWdqNFA0MEw1aG5selo0?=
+ =?utf-8?Q?8oIun6tpGRksMuUJTl?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d01f436f-0f8a-4a92-173d-08df02a00113
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8371.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 11:32:31.4982
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 11:57:14.7847
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EUxu8oal/ycfNDcFtnWqrp0l+MNuTXKGYeByLIy3cvDS4fHg4EQxUDNws2ZJK+tbxbK09h7f6p+6DK5URUBFUn0zLpNTYqrm7GQaGEEUgU8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4843
-X-OriginatorOrg: intel.com
+X-MS-Exchange-CrossTenant-UserPrincipalName: Uyfyz5zA3hrhmJ8R8cuN0+M6n5aGPIZ4FR2zW3+HX6Y1DZcNStuPwXsJLz9zQxTF
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8656
 
-Hi Geert,
-
-On 2026-08-24 at 17:12:30 +0200, Geert Uytterhoeven wrote:
-> Enabling a (modular) test should not silently enable additional kernel
-> functionality, as that may increase the attack vector for a product.
-> 
-
-What vector? What product, exactly? As far as I know buddy allocator code is
-currently loaded when a) loading a drm driver (which would need that code
-to function anyway) and/or b) loading the kunit test for the buddy allocator,
-which would need that code to function anyway. And AFAIK neither are
-built unconditionally into the kernel. So the amount of potential vuln
-surface is not exposed beyond what is reasonably required for the system to
-function as intended.
-
-If you've found a concrete bug/exploit/"attack vector" utilizing buddy code,
-then please address that directly.
-
-> Fix this by reverting the select to a dependency.
-
-The way drm kunit tests do it is by select-ing the appropriate
-functionality out of the available ones, with "broad" depends-ons for
-DRM and such (say "depends on DRM\n\n select DRM_BUDDY"). DRM_BUDDY,
-for example, is not directly selectable in .config, as it's meant to be
-selected automatically if a module uses it.
-
-This is also the case for drivers, with Xe having depends on DRM and
-then like 40 lines of selects for specific functionality, same for i915,
-amdgpu, so on.
-
-Now, my understanding is that GPU_BUDDY is also not meant to be selectable
-directly by the user, but rather implicitly by modules that need it. It has
-nothing that needs actual input from the end user/sysadmin, either a module
-needs it and builds it, or it doesn't and it doesn't build it.
-
-The only conditional code I could find depending on CONFIG_GPU_BUDDY is in
-rust where the gpu and buddy modules are exposed in the kernel crate only if
-the config is selected, but I'm pretty sure it's just how they handle what
-we do in Makefiles for modules with obj-{CONFIG_SOMETHING}; and some renames
-of variables/functions also for rust. But no behavioral changes depending
-on GPU_BUDDY.
-
-So I see no reason to enable the end user to select GPU_BUDDY or not, I'd
-just let it be an implicit dependency. It's not really a big fat broad
-option like CONFIG_DRM so I'd just treat it like one of those specific
-functionality ones due to how similar it is to those.
-
-Then Kconfig for tests has to "select" instead of "depends on" because
-there's otherwise no way for it to load buddy, which it needs to function.
-
-> Make sure the GPU
-> buddy allocator can be tested without enabling another driver that uses
-> DRM_BUDDY by making GPU_BUDDY visible if KUNIT is enabled.
-> 
-
-This was the case even without your patch, and was the entire point of
-8fe3fc37564920ae mentioned in Fixes. The kunit test kernel can be built with
-a rather minimal .kunitconfig (included in the gpu/tests directory). So
-it only loads whatever kunit_tool would load, plus CONFIG_KUNIT, plus
-CONFIG_GPU_BUDDY_KUNIT_TEST, plus (implicitly, which I discussed above)
-CONFIG_GPU_BUDDY. It doesn't load DRM_BUDDY at all (which was the bug
-being fixed in that commit, you used to be forced to load it, now you
-aren't)
-
-> The page based buddy allocator for GPU memory is only used by DRM.
-> Hence add a dependency on DRM to GPU_BUDDY, to prevent asking the user
-> about this code when configuring a kernel without DRM support.
-> 
-
-It seems to be *technically* true, however, the entire point of moving the
-buddy allocator outside the DRM directory is to expose it to other non-DRM
-drivers, so the lack of dependency is kind of by design.
-
-The change was rather anticipatory, but it was clearly well reviewed and
-sent by a Joel, a nova-core dev, I assume it's gonna be needed at least
-by them at one point or another.
-
-If, say, nova decides to use the "communal" buddy allocator (if it
-doesn't do it already, I only briefly skimmed it looking for kernel::gpu)
-then the DRM dependency from this patch would have to be reverted (yet
-again). Maybe moving the buddy allocator up from DRM should have been done
-along with the first non-DRM user and only then, but it just didn't go that
-way.
-
-
-If the issue is that this option is too annoying during make or in
-menuconfig, then I don't think this is the way to address it.
-
-
-> Fixes: 8fe3fc37564920ae ("gpu: Fix dependencies in CONFIG_GPU_BUDDY_KUNIT_TEST")
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+On Tue Aug 25, 2026 at 7:20 AM EDT, David Hildenbrand (Arm) wrote:
+> We don't check str_dup() return value and never free it. While both
+> things are irrelevant in practice, let's just clean it up by working on
+> argv[0] directly and avoiding the str_dup().
+>
+> Nobody after us needs these parts of the argv[0] string anyway.
+>
+> This patch is inspired by previous work from Anshuman Tewari [1].
+>
+> Link: https://lore.kernel.org/r/20260821114416.12255-1-anshumantewari123@=
+gmail.com [1]
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 > ---
->  drivers/gpu/Kconfig | 5 +++--
->  1 file changed, 3 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpu/Kconfig b/drivers/gpu/Kconfig
-> index 3bcf08260d73a782..d881ab6f7a006a3b 100644
-> --- a/drivers/gpu/Kconfig
-> +++ b/drivers/gpu/Kconfig
-> @@ -1,14 +1,15 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
->  config GPU_BUDDY
-> -       bool
-> +       bool "Page based buddy allocator for GPU memory" if KUNIT
-> +       depends on DRM || COMPILE_TEST
+>  tools/testing/selftests/mm/khugepaged.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
 
-What's the justification for COMPILE_TEST here? It might be needed but
-you didn't explain why or mention it in the patch description at all.
+LGTM.
 
->         help
->           A page based buddy allocator for GPU memory.
->  
->  config GPU_BUDDY_KUNIT_TEST
->         tristate "KUnit tests for GPU buddy allocator" if !KUNIT_ALL_TESTS
->         depends on KUNIT
-> -       select GPU_BUDDY
-> +       depends on GPU_BUDDY
->         default KUNIT_ALL_TESTS
->         help
->           KUnit tests for the GPU buddy allocator.
-> -- 
-> 2.43.0
-> 
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 
-Thanks
-Krzysztof
+
+
+--=20
+Best Regards,
+Yan, Zi
+
