@@ -1,110 +1,84 @@
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.37])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C60572C11FA;
-	Tue, 25 Aug 2026 22:03:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.37
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1BE2231C91;
+	Tue, 25 Aug 2026 22:09:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787695402; cv=none; b=GYzn/elaWob1PVRIoq3/jg0Qb5iSOXrlNQSl/l0E5NBkgjMYuMbqose/O4uz2SkgzoMt7WgSQGBm4+QRNJVmojwPnKx+3FSmb5dvBycFJ5sbfJ/dp+/STea7u3jzxkvZByJ0JfING156imgwoJy+HnEcnDwRY6wUClW1NlLR5P0=
+	t=1787695761; cv=none; b=tM8ARo98S96L2FogCUCoKJU891ox6zg7kOsMQC6lEFReF/ahiWlhdO+cwb4hsvHBQeZ8XjY7BqcNLVNDfTHjA5pJnpJ1n5PFaq8pMWAUzClAmjSo1fO+ifgwM/MuUlQRgFuLlclYkh6QAmiIiTlWnO08MrCp4gPKv9nGjgy9PIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787695402; c=relaxed/simple;
-	bh=DkYkLePONybg/EJrYQU5DiPk+Ngmq2wQx2E3o7a1RSg=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=BDquzD3rGYxWkZkTQ5Hcu2DcU5bVyTf5EESBnEuGyf8e0zv4PQ2fpCVtV1grIBjYMiu8CLzaYbsV86snWZLbxnqgWDTPTub/kZMyqfBYamRJucJMtn/TY1oXzFIqi3jzVKUkPrRLRxTdVZ7D1GjAeRym8Fw3vCSnNdnhlBpmig0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=mhnUJ0Lb; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=aSRK/Gyp; arc=none smtp.client-ip=160.80.4.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	s=arc-20240116; t=1787695761; c=relaxed/simple;
+	bh=KIUnw8rnY0XVxoLq1hmY8srQ4m723IykO0zotJmInZc=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=c3FiuAuKOibLKURnKbNIusRSp/jY0kZrOtjavZSUAzuGYZhIRT2v/61V9nk62fBMvxe7EcTIAaMTwFO2Sm1GnuptFKxWGz8OuqSJ9T+o2tbY7b/DSFegykLRDwI01bWjDKgMm0kh8QJBrX20bDxKwylKFFYlWbbaIb+XrokdTKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GnA7TxQ2; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="mhnUJ0Lb";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="aSRK/Gyp"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 67PM22oP020405;
-	Wed, 26 Aug 2026 00:02:08 +0200
-Received: from lubuntu-18.04 (host-80-183-189-234.pool80183.interbusiness.it [80.183.189.234])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 1CDC212045C;
-	Wed, 26 Aug 2026 00:01:58 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1787695319; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7H0B2MCYltjUAOnmnO0aIX9bDCYE3lzj+iNrf07w/tg=;
-	b=mhnUJ0Lbii777Zy9OFz0E5sPPZ00Nyxnwfk2MN/rSRxc71o1PLuoBPtWPqoNrS7pAYxX+n
-	xrS/sisEVnnhC3Bw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1787695319; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7H0B2MCYltjUAOnmnO0aIX9bDCYE3lzj+iNrf07w/tg=;
-	b=aSRK/Gyp0Pp+iwoOxBOSKGtRIWvPB47En+bUn3kNOaUnxnmdZL2plCqPLOOY+Kqv7ME7AM
-	AxC/mNetWLh78xnMpPSgIphEIzNJNWRfIrVwNKKwYgongc+F72tze67MQxN+2QjJ8AEpxB
-	8kSdImftiBstSt0nNpdl+nLO+WN3qMe74h7g0RN/UKZ95YAcsbcO9CUs+m3WSKH6qnIfEp
-	dBTd2Txzb3NfxwN+J1KWIrHyyEbDlsafMoyznUpMc4bjUWPv3Ghe5wH4p+7u7JJsGBsyea
-	xIzHPmJ33SezBm9I9Oalv6YYD/gSSbGQ6qrU5pgjBkC5GwHVC0dweHNTtzh3jA==
-Date: Wed, 26 Aug 2026 00:01:56 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Alessio Faina <alessio.faina@canonical.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hangbin.liu@linux.dev,
-        stefano.salsano@uniroma2.it, Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh
- if iproute2 too old
-Message-Id: <20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
-In-Reply-To: <20260824091537.2305107-1-alessio.faina@canonical.com>
-References: <20260824091537.2305107-1-alessio.faina@canonical.com>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GnA7TxQ2"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CBB61F000E9;
+	Tue, 25 Aug 2026 22:09:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787695760;
+	bh=6c0zJgkl9EwDaCotrqn+qbGYtv9Z9zIIP+Eq/7Fsr4E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=GnA7TxQ2vO6Kpf48wErLV12O5KZxmOv2KzsqkB4HrYU6LT9N7P5s2Rnn9dgcInsWg
+	 XlICXO71suN/QsJljQT7fETExlFwzmvj3KPvr49+o4pES8viN5Lq4HQFPXwd4HbPcq
+	 jCQR3Pf/XGX4E36TTVtpPp6iM6Z1YSxeczyjPYrYL2ILE/ukRA/kHDicWsG9gMDrW0
+	 V0/GzgSj4FxILPAEIXOeyRsigcFjkQAJ60WLopMyCWlZA1aqzj3NijGvv/aBEu2X9A
+	 CXL+Qn+sFkM588xUgqN/1I6FmYusEWKvFNGsiKSQlJ0wiGfY17QLLpl7Ro7ZQ8hHsd
+	 bx7AA6eoF0yRA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 939BF39253DF;
+	Tue, 25 Aug 2026 22:08:28 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf v2 1/2] libbpf: Fix usdt attach failure when nop10
+ crosses
+ page boundary
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178769570714.4034253.13134837502022384543.git-patchwork-notify@kernel.org>
+Date: Tue, 25 Aug 2026 22:08:27 +0000
+References: <20260825150444.31603-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260825150444.31603-1-jiayuan.chen@linux.dev>
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: bpf@vger.kernel.org, jolsa@kernel.org, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com,
+ martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev,
+ emil@etsalapatis.com, ihor.solodrai@linux.dev, shuah@kernel.org,
+ jakub@cloudflare.com, mingo@kernel.org, phoenix500526@163.com,
+ peterz@infradead.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
 
-On Mon, 24 Aug 2026 11:15:37 +0200
-Alessio Faina <alessio.faina@canonical.com> wrote:
+Hello:
 
-Hi Alessio,
+This series was applied to bpf/bpf-next.git (master)
+by Andrii Nakryiko <andrii@kernel.org>:
 
-Thanks for the patch.
-
-> In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
-> the End.DT4/DT6/DX4/DX6 support are not available and the tests
-> contained in the following 4 test files
->  - srv6_end_dt4_l3vpn_test.sh
->  - srv6_end_dt6_l3vpn_test.sh
->  - srv6_end_dx4_netfilter_test.sh
->  - srv6_end_dx6_netfilter_test.sh
-> are failing in some kernel backports.
-> This is the result of one those tests in an unsupported environment:
+On Tue, 25 Aug 2026 23:04:33 +0800 you wrote:
+> The kernel refuses to attach to a nop10 that crosses a page boundary,
+> since it can't be atomically rewritten:
 > 
-> \################################################################################
-> \TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
-> \################################################################################
-> \
-> \    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)       [FAIL]
-> \
-> \    TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)       [FAIL]
-> \
-> \    TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)       [FAIL]
-> \
-> \    TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)       [FAIL]
-> \
+> 	/* can_optimize(), arch/x86/kernel/uprobes.c */
+> 	/* We can't do cross page atomic writes yet. */
+> 	return PAGE_SIZE - (vaddr & ~PAGE_MASK) >= OPT_INSN_SIZE;
 > 
-> To amend this, check the current running iproute2 supports the required
-> feature and, if not, just skip the entire test to avoid a failure.
-> 
+> [...]
 
-Which kernel were you running when you saw these failures?
+Here is the summary with links:
+  - [bpf,v2,1/2] libbpf: Fix usdt attach failure when nop10 crosses page boundary
+    https://git.kernel.org/bpf/bpf-next/c/8b94878b2572
+  - [bpf,v2,2/2] selftests/bpf: Add test for usdt probe with page-crossing nop10
+    https://git.kernel.org/bpf/bpf-next/c/1555de33018f
 
-Did the ip route add commands that install the seg6local routes fail
-there, and if so, with which error?
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Ciao
-Andrea
+
