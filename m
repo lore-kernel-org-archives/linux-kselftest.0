@@ -1,160 +1,105 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E2742AFB7;
-	Tue, 25 Aug 2026 12:29:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142A41D223
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 12:30:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.111
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787660965; cv=none; b=QDz53dKy2VyU63vFjgP/1fGQrJyYW2DNUCWsa3bnr63cmWaCfvuWYzJxh4HCPIgLCwFAbLk8WjpxfOnrzUbEDQ4E7DOpyXpUZDBruT2/jRO9uC0ZycPzJ0LURVLhYCDF7LpVpDL8I5sxuIOcCczcQzSX05it93RNbN4hKYQEN8o=
+	t=1787661048; cv=none; b=jCcBbOwwaIw8nZcHY4n2iirCpnxsrRpSj0einvPeAsjuLSyJK1WsfBNrH7hGvOvALm0l++WXIsgzrTNu6llYDwYKiwa7sSGbpm6M4QbWuX6SYLpoeuie0LYPBWwDkO/FWyriJaZuthl0jLY7O1AFHAvWxnWzpOvgbVO/ahTTg+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787660965; c=relaxed/simple;
-	bh=3zSUF/gW/Zcaed81GwU3l76v2U3K0J3de2dxbI0c5CQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=epYVb+sHfOcJQzdhU9IH9rCicmlufXDkuK0lLHH9E8dsyDRQooWUMpMVUWJJN4RbHUPKq2SFiGI5GzCvmCTsRz2ngjAImy/jJmx2TT2tP7BLIEU9SlwlRJLkPydaTee0wZygc3vr99IFQ1wbq5AqsKOj+YKiSc6xsdgpo553UoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=kB+u9BRn; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787661048; c=relaxed/simple;
+	bh=lKJdbgYc40Jcdb2LxGXn1NfTq3I444jKQUjSdN+FxF4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RKtIQU0U9vQnZ49xzP2ZQjVICfoK+oIrb2mi2ZXA/xSL4oufvvjRQikUXbNZlUpRc904hOD7SmMI+H/HXQcRp//SRngaEQWVGxcAvsb8XLYC8lcpkEIMPTY3j0odtOnN4hxyZv+K+xhCy5Sod0OmC7WAQPB8cj4BLMqo4QmYM9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jbXpDYkS; arc=none smtp.client-ip=95.215.58.111
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="kB+u9BRn"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 48CFC176A;
-	Tue, 25 Aug 2026 05:29:16 -0700 (PDT)
-Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 11AED3F7D8;
-	Tue, 25 Aug 2026 05:29:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787660960; bh=3zSUF/gW/Zcaed81GwU3l76v2U3K0J3de2dxbI0c5CQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kB+u9BRnN8KsWTpqT13jVQynNtsWyseMe8JNZ6YsmTsxaxvtw+rE53ZDlu+LfvLNn
-	 dOfgarmQ0ieJd8oQx8drFWvTVuyKbWAKrYi61e0P/9mauCXK/LnK0dN5zg8rNDiIRA
-	 eGNhtBVKJkJVAENWbmpu3fy0O2xJg+UcmFno6tig=
-Date: Tue, 25 Aug 2026 13:29:14 +0100
-From: Alexandru Elisei <alexandru.elisei@arm.com>
-To: "Thomson, Jack" <jackabt.amazon@gmail.com>
-Cc: maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com,
-	joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com,
-	yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
-	shuah@kernel.org, corbet@lwn.net, vladimir.murzin@arm.com,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-	isaku.yamahata@intel.com, Jack Thomson <jackabt@amazon.com>
-Subject: Re: [PATCH v5 2/5] KVM: arm64: Add pre_fault_memory implementation
-Message-ID: <ao2KmmUd1lVFUUkp@raptor>
-References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
- <20260612162354.73378-3-jackabt.amazon@gmail.com>
- <alEXtW7w-rqlNG09@raptor>
- <0365d77d-616b-47f7-a5f2-3388bad692a1@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jbXpDYkS"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=lKJdbgYc40Jcdb2LxGXn1NfTq3I444jKQUjSdN+FxF4=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787661040; v=1; x=1788265840;
+ b=jbXpDYkSSpE3/fKdMTtIu2NfFmrbZAqBzRZ388JbIUwLFBziMQYAybduM46RMoEvpdkYhRhP
+ LG4BXOEeYX8+uUhSDQ0SLmZP1o7iGtwyXZbyBRJOf+EwqOYvKw+c9+obxSKnF65N7epfn7CO2KK
+ KbVrjBqsjal1s2vBSduNR4w4=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost.localdomain (139.159.170.87)
+	by smtp.migadu.com with ESMTPS id fdb6cd8b86f8c3a8;
+	Tue, 25 Aug 2026 12:30:40 +0000
+X-Mizu-Trace-ID: fdb6cd8b86f8c3a8
+X-Migadu-Flow: FLOW_OUT
+From: Zenghui Yu <zenghui.yu@linux.dev>
+To: linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+Subject: [PATCH] selftests/mm: fix incorrect skip output in pkey_sighandler_tests
+Date: Tue, 25 Aug 2026 20:30:23 +0800
+Message-ID: <20260825123023.64418-1-zenghui.yu@linux.dev>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0365d77d-616b-47f7-a5f2-3388bad692a1@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Jack,
+From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 
-On Fri, Aug 21, 2026 at 02:52:17PM +0100, Thomson, Jack wrote:
-> Hi Alex,
-> 
-> On 10/07/2026 5:03 pm, Alexandru Elisei wrote:
-> > > +	unsigned long		*page_size;
-> > 
-> > As far as I know, fault handling was reworked to use struct
-> > kvm_s2_fault_desc to store the fault information that user_mem_abort()
-> > needs to handle the fault.  Adding a 'page_size' field, that represents the
-> > result of the gpa mapping process, might not be desirable.
-> > 
-> 
-> Yeah agreed, Vincent suggested a separate output struct that
-> kvm_s2_fault_map() fills with what was actually mapped. I'll do that in
-> v6 thanks!
-> 
-> > > +	struct kvm_vcpu_fault_info *fault_info = &vcpu->arch.fault;
-> > > +	struct kvm_vcpu_fault_info fault_backup = *fault_info;
-> > 
-> > I'm not sure you need to make a backup here. vcpu->arch.fault is populated
-> > each time the CPU takes a fault.
-> > 
-> 
-> So this was actually flagged up by sashiko when I ran it before
-> submission, it suggested handling this for the case in which the vCPU
-> exited for MMIO, the next KVM_RUN calls kvm_handle_mmio_return which
-> uses the vcu->arch.fault.esr_el2. I'll add some comments to this maybe
-> to explain why this would be needed.
+When pkeys is not supported, ksft_exit_skip() runs with ksft_plan already
+set, which takes the "ok N # SKIP" branch intended for skipping a single
+test case.  The result is a TAP plan of 5 but only one result line.
 
-Ok, I see, VCPU exits to userspace due to MMIO, userspace calls
-KVM_PRE_FAULT_MEMORY, userspace resumes VCPU and uses fault_info from
-KVM_PRE_FAULT_MEMORY. Nicely spotted.
+ $ ./pkey_sighandler_tests
+ TAP version 13
+ 1..5
+ ok 1 # SKIP pkeys not supported
+ # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+ # Planned tests != run tests (5 != 1)
+ # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
 
-> 
-> > > +	if (memslot->flags & KVM_MEMSLOT_INVALID) {
-> > 
-> > I don't think that's something we should care about, the flag can be set
-> > immediately after the check as the function doesn't take kvm->slots_lock.
-> > kvm_vcpu_prefault_memory() takes the srcu lock in read mode, so the
-> > function is safe to run even if userspace does something silly like
-> > deleting a memslot at the same time that it's prefaulting the guest memory
-> > it represents.
-> 
-> I was there not as much for safety, but rather to pick up that error.
-> This way rather than userspace getting an -EFAULT it can just retry.
-> This is the same way it is handled in x86 as well.
+Move ksft_set_plan() after the skip check so ksft_exit_skip() takes
+the "1..0 # SKIP" branch, the correct TAP representation for
+skipping an entire test file.
 
-My point was that since there's no serialization between memslot changes and
-KVM_PRE_FAULT_MEMORY, the condition can become true immediately after the if
-statement. Doesn't really matter though anyway.
+ $ ./pkey_sighandler_tests
+ TAP version 13
+ 1..0 # SKIP pkeys not supported
 
-> 
-> > 
-> > It might not be obvious, but taking kvm->mmu_lock in read mode does not
-> > guarantee that gpa will be mapped when kvm_pgtable_get_leaf() returns.
-> > That's because a concurrent kvm_pgtable_stage2_map() for a different gpa
-> > can destroy the mapping of the current gpa.
-> [ ... ]
-> > The kvm->mmu_lock is dropped here, which means that it is possible for a
-> > MMU notifier callback to have just unmapped the entire stage 2 for the VM.
-> > 
-> 
-> Yeah as we mentioned in the other thread, this is best effort and we
-> can't guarantee that is survives the return. We do this for forward
-> progression, reporting the correct advance size for ranges which are
-> already mapped, instead of repeating the full dance for every page of them.
-> 
-> > 
-> > handle_access_fault() will fail if the mapping is gone. But I guess that's
-> > fine if the ioctl does not guarantee that memory is still mapped after it
-> > completes.
-> 
-> 
-> Yeah I think it's fine and will degrade to a no-op in this case.
-> 
-> > 
-> > Also, the documentation that this patch adds says: 'On arm64, newly created
-> > stage-2 PTEs are marked Accessed'. Does not say anything about marking
-> > **existing** ptes as accessed. Would be useful to explain the code does it.
-> > 
-> 
-> Ack, will do thanks!
+Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+---
+ tools/testing/selftests/mm/pkey_sighandler_tests.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-I think there's a word missing there, I meant to say that it would be useful to
-explain *why* the x86 implementation does not mark new PTEs as accessed, while
-arm64 marks them as accessed, and arm64 also does that for existing PTEs.
+diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+index c218d0510a2a..74bf79a5399d 100644
+--- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
++++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+@@ -543,11 +543,12 @@ static void (*pkey_tests[])(void) = {
+ int main(int argc, char *argv[])
+ {
+ 	ksft_print_header();
+-	ksft_set_plan(ARRAY_SIZE(pkey_tests));
+ 
+ 	if (!is_pkeys_supported())
+ 		ksft_exit_skip("pkeys not supported\n");
+ 
++	ksft_set_plan(ARRAY_SIZE(pkey_tests));
++
+ 	for (test_nr = 0; test_nr < ARRAY_SIZE(pkey_tests); test_nr++) {
+ 		tracing_on();
+ 		(*pkey_tests[test_nr])();
+-- 
+2.53.0
 
-> 
-> > > +		hva = gfn_to_hva_memslot_prot(memslot, gfn, NULL);
-> > 
-> > There's gfn_to_hva_memslot(memslot, gfn), is that what you are looking for?
-> > 
-> 
-> I think gfn_to_hva_memslot() resolves the hva for write, so would fail
-> on KVM_MEM_READONLY slots, and prefualting is a read. Also this mirrors
-> the guest abort path so matches the way the run path resolves the HVA.
-
-Ah, I missed that, thanks for explaining!
-
-I was wondering if you have any plans about posting an updated series.
-
-Thanks,
-Alex
