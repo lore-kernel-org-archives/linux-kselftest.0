@@ -1,218 +1,201 @@
-Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
+Received: from PH0PR06CU001.outbound.protection.outlook.com (mail-westus3azon11011042.outbound.protection.outlook.com [40.107.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 207E63E95A8;
-	Tue, 25 Aug 2026 09:07:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787648832; cv=none; b=t677xQY1/iNE91Vun+h2smBgJILOiWwe75Z/7inhRL2NSxoZp1p/HmoCP7P6WfB83twWbfq4fy3LPglXyiTd16S8YPzXu2idW7AQdzHG3n0LyrLYnrJJAVevJ2cTCdobfesQ9TkawiY2V2SwUvG/gEHTMS3PFFgSm15C4PhSuO8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787648832; c=relaxed/simple;
-	bh=bFFBYanlaQPN81iPMYE4dlBiMifuGy/XaLbZPSnW2H4=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=h6tZbTJFvD/9RrWBxmarHe0NYJX+NTWBgBqdvPh8XdR/z0Ki4Stb40Vu8lnq5JTHTn/GxskCMFzTdXQqwkY5hNUKqcm4QekFqYu9EnadIKn9JcDgL3PyBLaihum07lPLH/0RWE4wIyBfzFAw4n6BMAA8KxckL0aqKhLzwhYVMkQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
-X-UUID: 558d86e4a06411f19a56ed5b684f684d-20260825
-X-CTIC-Tags:
-	HR_CC_COUNT, HR_CC_DOMAIN_COUNT, HR_CC_NO_NAME, HR_CTE_8B, HR_CTT_TXT
-	HR_DATE_H, HR_DATE_WKD, HR_DATE_ZONE, HR_FROM_NAME, HR_MAILER_MTBG
-	HR_SJ_DIGIT_LEN, HR_SJ_LANG, HR_SJ_LEN, HR_SJ_LETTER, HR_SJ_NOR_SYM
-	HR_SJ_PHRASE, HR_SJ_PHRASE_LEN, HR_SJ_PRE_RE, HR_SJ_WS, HR_TO_COUNT
-	HR_TO_DOMAIN_COUNT, HR_TO_NO_NAME, IP_TRUSTED, SRC_TRUSTED, DN_TRUSTED
-	SA_TRUSTED, SA_EXISTED, SN_TRUSTED, SN_EXISTED, SPF_NOPASS
-	DKIM_NOPASS, DMARC_NOPASS, CIE_BAD, CIE_GOOD, CIE_GOOD_SPF
-	GTI_FG_BS, GTI_RG_INFO, GTI_C_BU, AMN_GOOD, ABX_MISS_RDNS
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.19,REQID:a0246a80-7c1f-4f19-9786-b97f08eff61a,IP:10,
-	URL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:10
-X-CID-INFO: VERSION:1.3.19,REQID:a0246a80-7c1f-4f19-9786-b97f08eff61a,IP:10,UR
-	L:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:r
-	elease,TS:10
-X-CID-META: VersionHash:7db8b62,CLOUDID:04f5cfed6c8dd4bf6997e68066818437,BulkI
-	D:260825170706LUVBJ45N,BulkQuantity:0,SF:17|19|38|64|66|78|80|81|82|83|102
-	|127|841|865|898,TC:nil,Content:0|15|52,EDM:-3,IP:-2,URL:0,File:nil,RT:nil
-	,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,B
-	RR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR,TF_CID_SPAM_FAS,TF_CID_SPAM_FSD
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: 558d86e4a06411f19a56ed5b684f684d-20260825
-X-User: husong@kylinos.cn
-Received: from [192.168.110.173] [(223.70.159.239)] by mailgw.kylinos.cn
-	(envelope-from <husong@kylinos.cn>)
-	(Generic MTA with TLSv1.3 TLS_AES_128_GCM_SHA256 128/128)
-	with ESMTP id 341956731; Tue, 25 Aug 2026 17:07:01 +0800
-Message-ID: <30a72651-c95d-450e-b344-90c504f70c11@kylinos.cn>
-Date: Tue, 25 Aug 2026 17:06:47 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2703CE4A3;
+	Tue, 25 Aug 2026 09:08:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.208.42
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787648926; cv=fail; b=ihQoTXR4Kq26cJrzvi4DS19NzNZI/jnvAWnbtdxpbdKKxlUF7lVD6mGIZlND95xB1XSmR3Nt2Se9xcFB15lOcAPKh5Lo+gOxnZSNggBAwi1kBU987PY/DC6Imlxmsyl0YisXw/rr5Uu+rFW3Fw08HCuOyx62KoxtY96inJxfl/E=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787648926; c=relaxed/simple;
+	bh=40/o9vHIIBwyqQRJ7PKhOPfdLq80NvZ/ddi99nB/xl0=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ujOQXnTlWCcSJeS47RlAs08E6H9A4Ls9+UzOfWwbN4GBmCLXGerfSSIF3OYMY/3ZKrjvdwQave0RWA9tBwWshgCAxW6Ee7t1B8nlQksAsYhnG3bQCOxQBezh/v8U0WIQwEfUH0cHq6/q1YWIX1eKYOTJf9Env5oHsnDDcEfD51Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=IbJwFjNl; arc=fail smtp.client-ip=40.107.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="IbJwFjNl"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=t8OYvcSR7Kn+6GFvV1qtiDSkTpaivQ33l98pPsXrWYsUkYYjTUOMYCdvnmP8xmEFGT8eiJlOqp2iY/l7c0ZhOkrQatBvNqewrKRu6u9Rhe5euwE+6DXtM1pEY3g2zLHAQmHqA3960EBws6XWQK3+4J5tMeJ1UfnaqtK06LM58RtC2dsb2HYEip42o+JzsblLUnNys7Lt9u4z864U5bBA2YcdEsFHa+gmD2i0U2tQUOj2yV5JJz+DpAKdsMsI1pm31J+aEEWktwWUt/uTHpDFwfkBVkHkmKTUMUY3yuGItrir0RnmQcVaFN5OSfgihTUM5wj85yGjZRMfZxVhwoMnvQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J/5E7fTQjK39HW86la73YV6c4X1AdFfcGFuU7ARjzBk=;
+ b=oQW+oR7uNjTH2PKz36946xw24FQ2hygnuQgFw/km43S7RI1tKawYSQEf5Da2NgrMkvdKNFMj4M/eTrHCBGeVmYzwyJjyxIGyfy+Xi4cEh0OqwwrDE9renjEz9jbhv6o56BXveobMXdPYeKfGiIZ6eiqHUTNU/S4v0oGZk3pvSQ2cVMFlJVE59R//jXugrwDQxq8U5pfBTAmdVbSU2OjyiO4B2trWTMAxeuhiRlD+4SVV1qRWMzfh9ON/6ej8cTRePzUVakqfWYuj97g9CtQGziXTeQs+717xe4pQXrOo0fCd0ZTZtpjxpyViH6D7PiJ/NkJ9hBWx/0zcWMbrvlIxcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=lunn.ch smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J/5E7fTQjK39HW86la73YV6c4X1AdFfcGFuU7ARjzBk=;
+ b=IbJwFjNlz5K+ArJKj2Ow6fdC+qSOwLGXyantCqETTbWBX//1L1CkjtEIBPy9OOo/DMho+FGgeFDhgtA8vMYDBPOW+uZB2snLNLAxBNAgYETViYtmwPsTnSFsVkCrKK+jQmT0qTD2ku0+VJb/nhZ3bGVF2BzO1lTMTvAtooF6O8r6dyzR0ihhbalD926gYQbfGeaJtqDW/GcF3V5XNC9o6ZrmV0Ue6Rp80qqSGXUz/n1pia9letEjmErSz1gCuBHh0+H6PHQIpeY08ybDyWbQrw/fxRnxcmTRbUN3PolJvcb590N6Ff77UCNR47Kznpv9jBIbyHvU0VNe++ou+v/+Zw==
+Received: from CH5PR04CA0014.namprd04.prod.outlook.com (2603:10b6:610:1f4::26)
+ by PH8PR12MB7230.namprd12.prod.outlook.com (2603:10b6:510:226::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
+ 2026 09:08:39 +0000
+Received: from CH1PEPF0000AD7C.namprd04.prod.outlook.com
+ (2603:10b6:610:1f4:cafe::d) by CH5PR04CA0014.outlook.office365.com
+ (2603:10b6:610:1f4::26) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.6 via Frontend Transport; Tue, 25
+ Aug 2026 09:08:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CH1PEPF0000AD7C.mail.protection.outlook.com (10.167.244.84) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.360.3 via Frontend Transport; Tue, 25 Aug 2026 09:08:38 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Tue, 25 Aug
+ 2026 02:08:14 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.46; Tue, 25 Aug
+ 2026 02:08:13 -0700
+Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server id 15.2.2562.46 via Frontend Transport; Tue, 25
+ Aug 2026 02:08:10 -0700
+From: Nimrod Oren <noren@nvidia.com>
+To: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+	<davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
+	<kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Shuah Khan
+	<shuah@kernel.org>
+CC: Simon Horman <horms@kernel.org>, Jacob Keller <jacob.e.keller@intel.com>,
+	Nimrod Oren <noren@nvidia.com>, Willem de Bruijn <willemb@google.com>,
+	<netdev@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Yael Chemla <ychemla@nvidia.com>, "Dragos
+ Tatulea" <dtatulea@nvidia.com>
+Subject: [PATCH net] selftests: drv-net: pp_alloc_fail: restore ring size after timeout
+Date: Tue, 25 Aug 2026 12:07:58 +0300
+Message-ID: <20260825090758.308167-1-noren@nvidia.com>
+X-Mailer: git-send-email 2.45.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: husong@kylinos.cn, linux-mm@kvack.org, shuah@kernel.org,
- david@kernel.org, ljs@kernel.org, liam@infradead.org, vbabka@kernel.org,
- rppt@kernel.org, surenb@google.com, mhocko@suse.com, peterx@redhat.com,
- sarthak.sharma@arm.com, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] selftests/mm: restore enable_soft_offline in
- hugetlb-soft-offline
-To: akpm@linux-foundation.org, usama.anjum@arm.com
-References: <20260825085756.63030-1-husong@kylinos.cn>
- <20260825085756.63030-4-husong@kylinos.cn>
-From: Song Hu <husong@kylinos.cn>
-In-Reply-To: <20260825085756.63030-4-husong@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-NV-OnPremToCloud: ExternallySecured
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7C:EE_|PH8PR12MB7230:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6846a034-e8c8-40fe-8765-08df02887372
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700016|7416014|376014|1800799024|23010399003|82310400026|13003099007|3023799007|5023799004|6133799003|10067099003|56012099006|11063799006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	ivDpt0m5J15gFFL0+N4VwtL60LDGosKP6f+gAVBKudzCsOlsv7tCfq7AAFjDhl734GXCxPDRdxE0CBVR/CF4RcUkJ2ISRgEb8Ob20PqDqREQVJRGno3ZjCAK9g8vnzcEgBrK7GqPxF3Xn+nFaSNd6YfKN/yevpgtwdoNpVyVs+xGMN6Dt8iG7o+lvp1qC2ncURDU9Bu3uXClAlsKbufNym5TkUQzrLZJzK3cvaeZ3eRKvqMWlxmrwfOxVMH1d889xrb5BTXz986irxan18l1UC0i2eLcoObE6uXtv9U/20jUXB6s12+mHvXxRlpGYG1YKikzFZcucgfmluO1706FvlQIAFlp75PwvOAeRAB4FzBi8T++Krieps9MWXLFsoLBtVAhAXjIfASHsZxBBh6+T6upX1YeDzcqA3DvuTM9A9jZm5K3jAbbWthkiFe15ebsyyWh1e0GNoBbJoLc7cU15m2/oQQNa7OIEGNK1jb71uuKsrl/wdDWV3toS3EyJ7fRbRRLqGqwekmTomUlaYvb4D04j02TPWUg2X1j14KX3eUQg+bVnc3gS+vIH0KOT6zr48/htYavhPZKBrNfeWT6gSKBeMKfNawYfZRn1DRbW6NUem4i5BV7T4TI6arG0MzEOau+w6VeUzbZ17/3qLQaKZaFVO3NEZgKpRSaaBhrP4P4i4zziQIcoXhWkj9fY2dC0MRv7VIqwj4MBRhl3j/9Qg==
+X-Forefront-Antispam-Report:
+	CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(1800799024)(23010399003)(82310400026)(13003099007)(3023799007)(5023799004)(6133799003)(10067099003)(56012099006)(11063799006)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	Frw0bk2O0tl0ZqmC5kyI/AUnuKe3lPO2XU69KwHGIDzFYFfzvvMPlTBh5NjQLjgRMIFOfseE/mVSMsAbkN1VZSX2wPIDGdryv7mdC33RinnaPK4F9Vx3edbTHWkcoMYb6/Z4bLWMTnozz5VZejqXA6LRjQuOfrB0qTm70JEY1hvmmN1YPY1g9nEsSg4eg5EHllTTBTi0HJHouEwFSM2kzF78qfP0SE9pFxQN4tL4an5ImunE0ylwWH0mGHkq2dxkV2CWMKPX3TctK7zc/mumiGF65if4ehQSOe7rWn0447pKfnp5JHlbR6wccXdXvoMpAUPvd3aH4UcsItnBTjDys/AlrU7syQJ5z6EPYdk3n1Iodl5b302Ka1Mn7heiL/vIdTwwSSxwRaSKISupQWbYpDX9u1bNODgoZ4Ik+ZH5hKljliexCtIWx06LhdLsgicI
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 09:08:38.3942
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6846a034-e8c8-40fe-8765-08df02887372
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD7C.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7230
 
-Hi Usama,
+The test restores the original RX ring size only if the command to
+change it returns successfully. The cmd() helper raises TimeoutExpired
+after 20 seconds but does not terminate the ethtool subprocess or wait
+for it to finish. The subprocess may therefore continue running and
+leave the new ring size applied despite the timeout, while the test
+skips restoration.
 
-在 2026/8/25 16:57, Song Hu 写道:
-> hugetlb-soft-offline toggles /proc/sys/vm/enable_soft_offline between 1
-> and 0 (test_soft_offline_common(1) then (0)) and leaves it at 0 when it
-> finishes, silently disabling soft offlining for the whole system after
-> the run.
-> 
-> Save the original value before the test and restore it from an
-> atexit() handler, as hugepage_restore_settings_atexit() in
-> hugepage_settings.c already does.  Use read_num()/write_num() from
-> vm_util instead of hand-rolled popen()/fopen() helpers.
-> 
-> The restore handler must not call write_num(): on failure it
-> re-enters exit() through ksft_exit_fail_msg(), which is undefined
-> behavior from inside an atexit handler.  A non-root run hits it
-> directly - the restore write fails the same way the write that
-> triggered the exit did.  Restore with plain open()/write(), best
-> effort.
-> 
+This was observed in a NIPA run. The first attempt reported:
 
-Just a note on patch 3/3: v4 changed the restore handler, so your
-Reviewed-by/Tested-by no longer apply and were dropped.
+    subprocess.TimeoutExpired: Command '['ethtool', '-G', 'ens25f1np1',
+    'rx', '2048']' timed out after 20 seconds
 
-write_num() calls ksft_exit_fail_msg() on failure, which re-enters
-exit() from inside the atexit handler - undefined behavior that a
-non-root run hits directly.  v4 restores with plain open()/write()
-instead.  Verified on 7.2.0-rc7-next-20260810: 2/2 pass and the sysctl
-is restored afterwards.
+https://netdev.bots.linux.dev/logview.html?f=/logs/hwksft/CX7-dbg/results/763842/test-outputs/36-pp-alloc-fail-py/stdout
 
-Would you mind taking another look when you have time?
+The subsequent retry attempt then reported:
 
-Thanks,
-Song
+    subprocess.TimeoutExpired: Command '['ethtool', '-G', 'ens25f1np1',
+    'rx', '4096']' timed out after 20 seconds
 
-> Signed-off-by: Song Hu <husong@kylinos.cn>
-> 
-> ---
-> 
-> Changes since v3: the restore handler no longer uses write_num(),
-> whose failure path calls exit() from inside an atexit handler -
-> undefined behavior on a non-root run.  Restore with plain
-> open()/write(), best effort.
-> 
->  .../selftests/mm/hugetlb-soft-offline.c       | 49 +++++++++++--------
->  1 file changed, 28 insertions(+), 21 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> index bc202e4ed2bd..4af9d3db7b5b 100644
-> --- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> +++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
-> @@ -11,6 +11,7 @@
->  
->  #define _GNU_SOURCE
->  #include <errno.h>
-> +#include <fcntl.h>
->  #include <stdlib.h>
->  #include <stdio.h>
->  #include <string.h>
-> @@ -23,6 +24,7 @@
->  #include <sys/types.h>
->  
->  #include "kselftest.h"
-> +#include "vm_util.h"
->  #include "hugepage_settings.h"
->  
->  #ifndef MADV_SOFT_OFFLINE
-> @@ -31,6 +33,8 @@
->  
->  #define EPREFIX " !!! "
->  
-> +#define ENABLE_SOFT_OFFLINE_PATH "/proc/sys/vm/enable_soft_offline"
-> +
->  static int do_soft_offline(int fd, size_t len, int expect_errno)
->  {
->  	char *filemap = NULL;
-> @@ -77,26 +81,29 @@ static int do_soft_offline(int fd, size_t len, int expect_errno)
->  	return ret;
->  }
->  
-> -static int set_enable_soft_offline(int value)
-> -{
-> -	char cmd[256] = {0};
-> -	FILE *cmdfile = NULL;
-> -
-> -	if (value != 0 && value != 1)
-> -		return -EINVAL;
-> +static unsigned long orig_enable_soft_offline = -1UL;
->  
-> -	sprintf(cmd, "echo %d > /proc/sys/vm/enable_soft_offline", value);
-> -	cmdfile = popen(cmd, "r");
-> +/*
-> + * Runs from an atexit handler, so it must not call anything that
-> + * exits on failure: write_num() would re-enter exit() through
-> + * ksft_exit_fail_msg().
-> + */
-> +static void restore_enable_soft_offline(void)
-> +{
-> +	char buf[24];
-> +	int fd, len;
->  
-> -	if (cmdfile)
-> -		ksft_print_msg("enable_soft_offline => %d\n", value);
-> -	else {
-> -		ksft_perror(EPREFIX "failed to set enable_soft_offline");
-> -		return errno;
-> -	}
-> +	if (orig_enable_soft_offline == -1UL)
-> +		return;
->  
-> -	pclose(cmdfile);
-> -	return 0;
-> +	len = snprintf(buf, sizeof(buf), "%lu", orig_enable_soft_offline);
-> +	fd = open(ENABLE_SOFT_OFFLINE_PATH, O_WRONLY);
-> +	if (fd < 0)
-> +		return;
-> +	if (write(fd, buf, len) != len)
-> +		ksft_print_msg("failed to restore enable_soft_offline: %s\n",
-> +			       strerror(errno));
-> +	close(fd);
->  }
->  
->  static int create_hugetlbfs_file(struct statfs *file_stat)
-> @@ -145,10 +152,7 @@ static void test_soft_offline_common(int enable_soft_offline)
->  	hugepagesize_kb = file_stat.f_bsize / 1024;
->  	ksft_print_msg("Hugepagesize is %ldkB\n", hugepagesize_kb);
->  
-> -	if (set_enable_soft_offline(enable_soft_offline) != 0) {
-> -		close(fd);
-> -		ksft_exit_fail_msg("Failed to set enable_soft_offline\n");
-> -	}
-> +	write_num(ENABLE_SOFT_OFFLINE_PATH, enable_soft_offline);
->  
->  	nr_hugepages_before = hugetlb_nr_default_pages();
->  
-> @@ -192,6 +196,9 @@ int main(int argc, char **argv)
->  
->  	ksft_set_plan(2);
->  
-> +	orig_enable_soft_offline = read_num(ENABLE_SOFT_OFFLINE_PATH);
-> +	atexit(restore_enable_soft_offline);
-> +
->  	test_soft_offline_common(1);
->  	test_soft_offline_common(0);
->  
+https://netdev.bots.linux.dev/logview.html?f=/logs/hwksft/CX7-dbg/results/763842/test-outputs/36-pp-alloc-fail-py-retry/stdout
+
+The retry attempted to increase the ring from 2048 to 4096, showing that
+the first command had applied the change despite the timeout.
+
+Register the restoration with defer() before running the command so it
+is attempted if cmd() times out. If the restoration also times out, its
+ethtool subprocess is likewise left running and may eventually restore
+the original ring size, avoiding a persistent configuration leak.
+
+Fixes: 9da271f825e4 ("selftests: drv-net-hw: add test for memory allocation failures with page pool")
+Reviewed-by: Yael Chemla <ychemla@nvidia.com>
+Reviewed-by: Dragos Tatulea <dtatulea@nvidia.com>
+Signed-off-by: Nimrod Oren <noren@nvidia.com>
+---
+Would it be preferable for cmd() to terminate and wait for
+timed-out subprocesses?
+---
+ .../testing/selftests/drivers/net/hw/pp_alloc_fail.py  | 10 ++++------
+ 1 file changed, 4 insertions(+), 6 deletions(-)
+
+diff --git a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+index 2a51b60df8a1..9e7e5cb6a7e8 100755
+--- a/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
++++ b/tools/testing/selftests/drivers/net/hw/pp_alloc_fail.py
+@@ -13,7 +13,7 @@ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import KsftSkipEx, KsftFailEx
+ from lib.py import NetdevFamily, NlError
+ from lib.py import NetDrvEpEnv
+-from lib.py import cmd, tool, GenerateTraffic
++from lib.py import cmd, defer, ethtool, tool, GenerateTraffic
+ 
+ 
+ def _write_fail_config(config):
+@@ -77,7 +77,6 @@ def test_pp_alloc(cfg, netdevnl):
+     if 'rx-alloc-fail' not in stats:
+         raise KsftSkipEx("Driver does not report 'rx-alloc-fail' via qstats")
+ 
+-    set_g = False
+     traffic = None
+     try:
+         traffic = GenerateTraffic(cfg)
+@@ -112,10 +111,11 @@ def test_pp_alloc(cfg, netdevnl):
+             new_g = None
+ 
+         if new_g:
+-            set_g = cmd(f"ethtool -G {cfg.ifname} rx {new_g}", fail=False).ret == 0
+-            if set_g:
++            restore_g = defer(ethtool, f"-G {cfg.ifname} rx {g['rx']}")
++            if cmd(f"ethtool -G {cfg.ifname} rx {new_g}", fail=False).ret == 0:
+                 ksft_pr("ethtool -G change retval: success")
+             else:
++                restore_g.cancel()
+                 ksft_pr("ethtool -G change retval: did not succeed", new_g)
+         else:
+             ksft_pr("ethtool -G change retval: did not try")
+@@ -127,8 +127,6 @@ def test_pp_alloc(cfg, netdevnl):
+         if traffic:
+             traffic.stop()
+         time.sleep(0.1)
+-        if set_g:
+-            cmd(f"ethtool -G {cfg.ifname} rx {g['rx']}")
+ 
+ 
+ def main() -> None:
+-- 
+2.45.0
 
