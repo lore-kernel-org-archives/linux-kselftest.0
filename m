@@ -1,75 +1,64 @@
-Received: from YT3PR01CU008.outbound.protection.outlook.com (mail-canadacentralazon11020113.outbound.protection.outlook.com [52.101.189.113])
+Received: from YT5PR01CU002.outbound.protection.outlook.com (mail-canadacentralazon11021085.outbound.protection.outlook.com [40.107.192.85])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D867D3CC334;
-	Tue, 25 Aug 2026 19:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.189.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DB0331ED6;
+	Tue, 25 Aug 2026 19:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.192.85
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787686537; cv=fail; b=NKbFAPHBjsFmpRVDE1F/ej36E7VAobLIWtM4zmudVf7o2toAJ+vpUQuzSp+6MDG+xaeO8TKU1Xc0cnNOP5KrQl54pjHXRdxUXBB/DCuexvqzZGGqBUYWD7Wl+SqGP2iGOhd8OF22qc0ImVvtOp/Br/iTPxqm/9xDgieaP1j14tI=
+	t=1787687032; cv=fail; b=aK7WAqZDGTHPIfc0E9Hwy/j0KX5DRbp2okeLOuLkd/TzRqIwlYy2KSML17ptbZaZLuEMcHhxMei22/Dp6k9dAQR+HdGRKqmVjNvkNQstf2BGdLdw3Y8XGROpRaU9jPGOPaXAu0ZHY06SFVpN1d3uP+pdUyKUInufXSlhruAzxNo=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787686537; c=relaxed/simple;
-	bh=OZ9a45153G+GWCEHqE0HJ5H5oJ8ptKfOJIroU+Vbfmo=;
+	s=arc-20240116; t=1787687032; c=relaxed/simple;
+	bh=2XBybGBZdB41OetFPVweyZa1GdPkimtK0W8ZiNFx4Tc=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=U0wGbyp34jgMqi/wM/kuQmZ7OxwJYIFn/rLbmwO/+3GeYPZbiMLkQh38/4oHe2a5bXlgfutgYoNKgI7NYFaNCjEVBHAF7UA+tdCwu4Ld9sCZS7zn2zKbBAUrS4M36gSgPxPUFjJuZUrd6zwaLcbk/O577p9jwQ+0BhJvUC7QcSI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=ScDD+Ykl; arc=fail smtp.client-ip=52.101.189.113
+	 Content-Type:MIME-Version; b=M75o8J9wJTI/bkke+32enAIiZ6tFZbBE7z3FenQDJjGh4cPrxxrPF2pg9IQOvP8Mkvc+kDqsYNdQdMjLYJNAuAArwTHUNAo674Puko/cF9wk41SS/E3AZZismmcmuqOg7ltBWzTF5Wdbd3ThL3r30KA4WNB7S1Ne+ozla9fqfZQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com; spf=pass smtp.mailfrom=efficios.com; dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b=XnU0u+uH; arc=fail smtp.client-ip=40.107.192.85
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=efficios.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=efficios.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="ScDD+Ykl"
+	dkim=pass (2048-bit key) header.d=efficios.com header.i=@efficios.com header.b="XnU0u+uH"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JvEa/3NudgPlA3YkUfEqqnqjGq98PcIMLgCoXt9jEo715tizCmr6J86njRClsgo0rI+pSAM6lSd2sE3Y5d4Ose9Blm6RKStosmAjBq57kYcpdNN/zWT6xJ8N8DRYVSMRWSdlJFussUcu1VHQs0Ri3vK8nFL3l1Fohqn7MtoidrwVpLjCUjncJuMua1KDVss+gUn5kG2fwpucY2qd8RCz2gunnEvC7nI8DMVJzUa8hog0An1hDqdpL5BfnNF6NIhAzs667oM72jklr+4VIRtaQQ3dEw/fxplLwTLIAWknS0vXKOs7FP8brbd3EmtgG5WaxKk/lqa3unTPI5szX3/clA==
+ b=lTYtXBUq8NMBjyuOm6pvRZ23V6XcmD+iD86QANSqHweAiotINhs0nMS0cxoRk65hImfjQKo8ENX6olTC/xX6NpOahtwkT8JPR4/qjjL5dZVils0RKeOEv0djRcCAlPUakhQljJbIGqR9+MNVg99nZ2MIS9hYoyqKJpAtMqgRJ6stNQy40+aOc6FPw4CZ5YZ/C5E86+BRQz6pgB8gAzh8/iqnGWMU6KvVxXM5k5VMtJyWyUYXeAKdQab9diEnIPlE6NYZeES3Zd95haxbC0P4pPezhDwminDgOZDHvbzYYp7KXQWTblUd84BM5jtz5ecCnLj85Kz0jpDAMY+kkJTvMQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LZFNTcZGqjuz4XAnAHf4NSNDLzBPRoAr9LgHtD+DJZA=;
- b=T8+blSzpzciHMYDtyU4vNRia1ouRLCKh5hO6g4U1lkhlUEx08+Z0rW+zXZB0ItJvd0EDFVZEHdiI6inTCzVwM+CvI0fxLmuUza3CaKn20Kk6716yjaGG44eqBPyD4izavtIy2PdQrzdLpPkTMz8NRUsISkJkWPr+V7ziTc+/bLDJBG+lq4Ew7WF5/Ew71VF5/7A+RIw9H5ZX/V2alp/TnVLHVfduwmVZ5ru13ek6P8ztX6BbkYhFZLnBaM21l3Vjzm61iRbxfe9HRPG4rfELszUOLpz6DBEKwhMW3wfGAJ/4Z5u7xoZMIfw8qNmrHAfRrzLdEhoWPqVVBD3Du0Hkow==
+ bh=Fs0Lo3QmZ9i0wyCg4QCjO0TM7GQfJX4dZkLHoojS2Zg=;
+ b=WcYxC//hWligz6qE+Jx0Ipmb9dzJmsdjzsM7t4dyOM9/h3S/EEJ4sXx8gmCYz1EIHHl1zeSPyHHqO6MFOZRTyjAn+/NsDmAfPJq7oBbAzYWG0ZKudXO8vP7SWtCldpkBETVDmRnUm2TxqGYfcmzfoB+4+uBdETIIIEY2Mls9p8Etj6F3kxuLpNbsWloY9LBmNUnauRJzeiwi0qIfKoC+EBqztisJ6X7wCHocl5daNBSvG2ngldxe3cjYDaLYN2fVzoBPRtrbeOBSZyeFpJjn6XuGWnabRwidi1S22z1Azeu9UCGuBpDO6TcJFdSafXktCnqCRsBQn37a892TgIzhlA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=efficios.com; dmarc=pass action=none header.from=efficios.com;
  dkim=pass header.d=efficios.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=efficios.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=LZFNTcZGqjuz4XAnAHf4NSNDLzBPRoAr9LgHtD+DJZA=;
- b=ScDD+YklEu9kNSfbT/HM/dlZJr4EqNL9lolPQZVnMkMmt/OuC5hoVm7KZmIRPKpaXYZg6Wl6cFaSkkm7yRE7RR+MzX1tWIDgGsrpR+ahYbG14VlEWosrhS0xwSW1QK7n7rJEjEMAAG+i5tSxJ2qm5AKoVt9EtIFt0+CJ+UiWBI+AcpG9AYYYvNZ7zLqpG3m+p0m/BjVr2K+DhJd70kE+ulePUVHkFKMScrwsEMT+84t9IZYIPLR5WH8CqOlpYMTaMz2wAmz78AGPF3quZ/VUa3W5ocHTkvabO9Bsi0qV71ZawV/NKi2sMTDwI83xLbjLDE4RGaTsXzy950ZQWPJEeg==
+ bh=Fs0Lo3QmZ9i0wyCg4QCjO0TM7GQfJX4dZkLHoojS2Zg=;
+ b=XnU0u+uHtHY5dEt5iuK8tbEHty0wRBoeitpweY6CuODl0YLpLSK2zPDw5SpNnC5Ef+8NeRY6MOO1b3X2BjDl0mlkQRSIi2MMqhNYmYibvqreXU+VKoYRmtkvtKMOH8CZy3BWypoH10ow6h6KNagdCSc40+0SMP+K2vlHWz3yKyBbs24qZd6YKnaMdfUy+sRMKrymJMHTEXegbpTmpi9Ll5VbkFc93aXW0S6ARe4Gb8BIsLma/PB5T2zAKLZQgtJXRexxsFy+tPKv7LDekj/VBV8l97wyLFaENRP+jGVSFm5hzMjaD/aJCXtbSetITgPFvYd7+EhKkEEsg/acwiqZpg==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=efficios.com;
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:be::5)
- by YT1PR01MB9497.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:b01:a9::6) with
+ by YQXPR01MB5771.CANPRD01.PROD.OUTLOOK.COM (2603:10b6:c01:2b::15) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.7; Tue, 25 Aug
- 2026 19:35:25 +0000
+ 2026 19:43:46 +0000
 Received: from YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::6004:a862:d45d:90c1]) by YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  ([fe80::6004:a862:d45d:90c1%4]) with mapi id 15.21.0360.006; Tue, 25 Aug 2026
- 19:35:25 +0000
-Message-ID: <9b27645d-1f5e-4992-8268-b5b384bc6814@efficios.com>
-Date: Tue, 25 Aug 2026 15:35:24 -0400
+ 19:43:45 +0000
+Message-ID: <2a9807a4-9c0c-46b9-88bd-aa12a244390e@efficios.com>
+Date: Tue, 25 Aug 2026 15:43:44 -0400
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] selftests/membarrier: Skip unpermitted membarrier
- command test if preregistered by libc
-To: Andrew Morton <akpm@linux-foundation.org>,
- Chris Gellermann <christian.gellermann@codasip.com>,
+Subject: Re: [PATCH] selftests/rseq: Fix circular dependencies in Makefile
+To: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>, peterz@infradead.org,
+ paulmck@kernel.org, boqun@kernel.org, shuah@kernel.org,
  Michael Jeanson <mjeanson@efficios.com>
-Cc: shuah@kernel.org, linux-kselftest@vger.kernel.org,
- richard.weiyang@gmail.com, reddybalavignesh9979@gmail.com,
- linux-kernel@vger.kernel.org, "Paul E. McKenney" <paulmck@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
- Juri Lelli <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- K Prateek Nayak <kprateek.nayak@amd.com>
-References: <20260803124900.3328789-1-christian.gellermann@codasip.com>
- <20260803124900.3328789-3-christian.gellermann@codasip.com>
- <20260803133704.8802e73e1a212364e64f67ee@linux-foundation.org>
+Cc: broonie@kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org
+References: <20260818155337.4774-1-mahad.ibrahim.dev@gmail.com>
 From: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
 Content-Language: en-US
-In-Reply-To: <20260803133704.8802e73e1a212364e64f67ee@linux-foundation.org>
+In-Reply-To: <20260818155337.4774-1-mahad.ibrahim.dev@gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: YQZPR01CA0136.CANPRD01.PROD.OUTLOOK.COM
- (2603:10b6:c01:87::7) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
+X-ClientProxiedBy: YQZPR01CA0057.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:88::18) To YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
  (2603:10b6:b01:be::5)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -78,128 +67,169 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YT1PR01MB9497:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b839be3-879f-4849-f8fd-08df02e002f8
+X-MS-TrafficTypeDiagnostic: YT2PR01MB9175:EE_|YQXPR01MB5771:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5a2f5824-d016-4723-cf64-08df02e12cc7
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|23010399003|6133799003|10067099003|4143699003|56012099006|18002099003|22082099003;
+	BCL:0;ARA:13230040|23010399003|376014|1800799024|366016|3023799007|6133799003|10067099003|56012099006|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	KNX8z3iEDaDZ1D1cHNtfuOHnV5MohOb13n8i6ZUWJ2fkk1Upd+MNb92BlU1rsZGssiviNDbYlvkGgqgqZbkmSMOg17VshWNYrj308E2pjG8Hb+8yThedeybW+6wuMvNdctGooS2/vMWHQTGwOmvywjMcAlSTIMZ0ZaIeAUOc2wl0il3QuD+gZmKK4gGHxzKgaMc5isXYpzvd6WaLyHTYpmMJn6GiOxRsUf7oRDp31WD14IgkAqiCQTIp9FGV+i/AJZculk4uV8iHxJhsJ1WJLz0LX17uyLMvKkIyA8MsP+eOJaxniujWxDwmOMNQ8WW0rx8b8zHvkK/3gt742wsCBgxXUKurdLFXeGy/Omn891xumC4BY2CvZ+rsiC/Ky2iV0iljCEyOCkZZLNLluuv6ogLrx8HpidxHvQM/lchyyAboyR3LMpY0FNjvlYCAm+JEMvBKl6sCunWa6kg4Yk9C2ixFBegXHfUKBfGDzczUPSiSK2+DugSRDOmV92WtrdSWvhL4HMF1M14COMqz4a/qpJ/IhQzFv2g99f8IYz/TObRMU2XkGC35wTudM3ARlTf40/H6OjIFP6BHKse0XSdFErjCUKNY+/sylG9rgXBNenc=
+	3KQbMU5GT2iRFcHnqSq9z8QJQoPS928dSZQRdw3TCTffKfaKJ6yGJflJs7w+PY8qP5UTbj4ECNv5UPEChiCo4w1va41yI/bhKF3RBs3TnzXWfVdhk9cYv0rkL5f4STobg4IfPP+EYoJ0j+Si+O7CmFki+bmMdPgXBs75QMdBZzuF6jIGTkXAMVQAP3IqxnDdTamvkn9lzpKxP75r5fHO3gsWP4CncWJ87Qq3oyYEIP+kHqwdTXZs9LnMwHsnPyaGOF6cwjnToSenLvNBntEUvMxaIJM9ZpT7DFmiyXSByoaCva3r3VY/Tulf0k1eNK4ZKeFkKxSo5HK+4TVRKskoMvu2j1ElussryuLxXHndMggXU6tmTIfmHzwuEm0kc+prfydKwFV5eKNbaqUA2+7OqNY0fuAw3re+4ASY4aj8qKGB8hOKQKWCHZyJFwtIn6MrwiISY7aShcxJqD6rGa28j5NKXs3N85HmUYO5uQVBQ10HYkBN3UwwuZD257bgOHVPvJftMgXX6yvYh7XWv3WjTsnOvSgYkm8Eu0uRzgj2bAIEZkrgsyOyE4KCDebCpLSRTaZriW9y63n+4WJLXUcai4xPbWGdQscOWyckYFEqbCo=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(23010399003)(6133799003)(10067099003)(4143699003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(23010399003)(376014)(1800799024)(366016)(3023799007)(6133799003)(10067099003)(56012099006)(18002099003)(22082099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?cnFReUp3WURianRPOFhsSjJhVkdXZm9NWXhzSHpocjZaYjlSWnFRZUlZYjJG?=
- =?utf-8?B?K29GRU94a1owenlEQm1DdWd3SkpEWWIrUTZXVFhqekRsM1FYK0ZZQlkzeGt3?=
- =?utf-8?B?SkkvNHBoejI1bngwMklSK3hQNjZvUFp6SWtUcFRFZ0NKN1M0aENlcmh1SUZP?=
- =?utf-8?B?bm44cy9lVHBGYU9uV1FhYyt6TGdoWFozK0hRb055Rnp4V2ZmSmtwT21VZ21Q?=
- =?utf-8?B?cnJrSm0vb2ZyRm90Z29iblZ6RWRPTWxXcDN6eDdjdjZaV3lNTjRnUmJqdUZJ?=
- =?utf-8?B?cC9yOUlSN0s1Q056M2tlV0hhWEpjV2h2MFR4d2FtL2JraXdwY1BQUXg3UFhS?=
- =?utf-8?B?dnlyWnlSWTdrV1JPR09wWktDM0hPa3ZwbllZUk5KZVFDbkN5S2JHa29hVkU2?=
- =?utf-8?B?MjhYZ0VrTlFaTVFybDlxMWJ3NVEvV1kvcjh0T1M0MDNKQ3FmQU55b3RDRXI5?=
- =?utf-8?B?T0tYaUdJOW5HOGwzZnUyM2xLYXJxMVRjYm5ZQ3RmL01OdlJxUU8rU0tJaUZv?=
- =?utf-8?B?Nit6SVZXYSthY2dWMDJsUjFWMmd2aGczYXgzRkZmakRtblgyT3k1enVFeDcr?=
- =?utf-8?B?S3prVVllQktSVDMxdytubWgyYUdkUittNTN3WHlmbnlFOWRLUFhFdHROOENZ?=
- =?utf-8?B?MFEwV0FiN0VOS1UxY1d0c2JnZXh2VWUzakZ2VUhXLzNyNEUzMm5lU09GTkw4?=
- =?utf-8?B?NWJMVURSTkV4NGpacFJud0dhNHJqK3VmUS92eXhWQUY5eFZzVzc2bTY1bHhK?=
- =?utf-8?B?dDRJZldDcHU4bW5UMHNsdWVVT2dhTWNhK0pQYlgxd2dnSEJsTjZEOWc4OFNr?=
- =?utf-8?B?KzVYRjV4aTgwYUNLWjJUa1VnNXc5SERlYWxqdzFWVUZvZ3Q0dmtIcktha2sw?=
- =?utf-8?B?MzNxV29zWHg2S3ZIVU81R3F2QXR3c3JGTGRZQ3FPWVVSVktRZzkyT0ZqSjBa?=
- =?utf-8?B?bmhudi94bnF4d1BqUWNrWWVvc05KYUxLYk5xUUVLZEt4QjNrMitlZTBUVWVI?=
- =?utf-8?B?eGFGWTlKSEh2amhkNVZDbHJEWmFoTmhDRGFXQmV2bUFXbFQvRDc5ZjhZakR5?=
- =?utf-8?B?N2NOamJGYmJ0M0Z6Y2E4N2w2dWpXL1ZFRnptZ3gvZGpJcjBGWUwzWHVLVUhR?=
- =?utf-8?B?NG9NRUQrZE91WXUyemJHSU1oSk5ZeWVUZFFRaHU0Vk4vSDNyLy9nSklvNm45?=
- =?utf-8?B?cVNhRDBmS1NCdGNyTEhGYjJublNkN3pKS3hqdGQ1dHNmZ0p3VE83aTViVncx?=
- =?utf-8?B?NGpwcSt0Ymd0NFVUUjJlclZscFJFYmtDYlJHMk12QnBqTUJIaWlySDE5VW5N?=
- =?utf-8?B?ekpOeVlTY1llN1F2czJUYTl6d08xZzM2d1g2c1ZSS1hRWFl1MEpiVFhqV2ZJ?=
- =?utf-8?B?UWl4TFhPWW05WUJqYVJOcW93QTdKdkgyajYyMlhxSkgvSzhtUVpTeE9Yano5?=
- =?utf-8?B?QjRrUktwcGcrcktzaGdraTBTeWs2a3ozdjUxUGhpNGgreVlqYStUbkxIUFdm?=
- =?utf-8?B?ZU4zbDg1RmpQcTQ1M09IeEVOb2Z5MnhQdXI1dEIyNENvVVRHM1JxZ0dnNWFD?=
- =?utf-8?B?NG5yVWJQb09LNE55ZEpvRERBajJSS3l1S1NHRTJxYU9oNU5rRmN4cVRJRWJy?=
- =?utf-8?B?RU1GR2grWGNMOC9oOGRrZGVzNXFmSkR4MHZLbHBGZUZ4UkRjSjE4RVJqdnFG?=
- =?utf-8?B?TG1FWEYxc2ozOHN0MWV5eXZMWkI1WTRMOUxKTTNEZCtwb2ZjbVFRdnpWV3NQ?=
- =?utf-8?B?T0N2NGc1ckRmZzhhVlUycmUraWRVaU1OVGo1Sjd1bW00eXFYQzRWRzFIYXJY?=
- =?utf-8?B?TU9zZmxnM1REalBGbzNFY2hyZ3JUaEJzUVB4MUhReFNxS0pBQWlScUhpZlRJ?=
- =?utf-8?B?K0duR0tLekErcTR4M2JnKzFYU2tGNXZJTUNRMFM4ZVYxb3pHOG44eVMzM04y?=
- =?utf-8?B?c0FKdjNBSXhtZlZvU2hQOWRWS3k1MGo4WWFxYW5EVERNRlF3QUtZVFkweDZt?=
- =?utf-8?B?OWJxQ0c1YnNTb1hCcGdaSGlxaDNPL3htZGc5bVJXRlE1QjRKN0V6dnFvTkxV?=
- =?utf-8?B?eVJiOHFhM1BrNzNyeE96a21USWIxS2JoK0tlcnNLZGJrdlVzOFRuK1o5TVNS?=
- =?utf-8?B?dUt1ejBrMVdrcnpqTjgxazBDTlJWUkh3dEJ4ZS9yZzZuSE1NTDh0cjRaTXZX?=
- =?utf-8?B?YisxV1ppQ2Nwa1VlN2lwQlAvUFAya1Z6UC9kL2l4dzh3S2VXcDhqaTdKK0pL?=
- =?utf-8?B?eEJYVk4veUMzYlVjek1hRitWNDQvU290cCtLeFBWYXpTSHRydCtZNThJM1VK?=
- =?utf-8?B?NHc5R1dQMit6NkJIMVgvWFd6cU8yWitJK2kzNFpkTEtRUGc4cTlSbjRqVC8w?=
- =?utf-8?Q?hq6M65+2mMb2ntJ8=3D?=
+	=?utf-8?B?Q1JlYUJxMGFwdWc3aHlZUzV5L3ppVWNMakZ6d28zMjBPQlUwM0trNjZScW5M?=
+ =?utf-8?B?blBLYVIyMXRDcUxDc1hVeFdac0h5L29sOG5FVUtwbUlsZjlrbFB3OGNkSjhv?=
+ =?utf-8?B?Z1RSYVk5eEZYZW1EeDExWlI2VTIwMkxVQ05WN1BPOFZrTmNXT2ZGblM1T2tD?=
+ =?utf-8?B?eEMyYnBNSFRpay9ydTIyUGhOY3dsWk5vTStaK1lxM2ZSeVJub2JOdVhNd1h5?=
+ =?utf-8?B?bEs0eHhhWHdueXdmMjJWejRzZlpMOTNuTmRrcnZiK0pxR2lXR1M4dnRvTXc2?=
+ =?utf-8?B?dThYVWtxKzN1MjdMclBBaXBWUHdhQjNQRVlKNWc1VGU0MkhORi9yVWUrMHJr?=
+ =?utf-8?B?cTBseGV2NC92Y2x1ejBUMnFSRDk4bWVqRzJZSnVsbDBWZmNzdlVTWW80aWt5?=
+ =?utf-8?B?b1VNUUZ0N3psQlRBY3A3RUlRM1kvR1ZEWlRGc0hTQkxwNklGZXhYZVZ0aWpn?=
+ =?utf-8?B?M3dsN3BRK3NubUg0bUhsRlArMEtzZW5xMkhrTXFFQVkyOWh5ZXBpVU1NaGdl?=
+ =?utf-8?B?djZCb0o1UnlwK2VxK1VWOVF1QzBPb2s0c2pRbUg3eGxLMjVHKzFWOUZlQXRG?=
+ =?utf-8?B?c3lxQ21NZ01OWFlmVm04cWJLdXJxend5dmxxbnNmR0gxakMvRndUeHFFV3Ju?=
+ =?utf-8?B?VXRPSEtpNVVMUDBtQmNOYmtPQTNNL0xPU3BTY3Z4UlJ0cEZiOW9PaUxpeG1Z?=
+ =?utf-8?B?dXVxUVNCanNxTi96aUROWFNDSVhveWd3QjczOFRlM3o2TVhwMUNGNWVxT3J4?=
+ =?utf-8?B?TTBnSitPcTh6L0dSaytSRTR6VFhVNTV2YVJ2aDZGQXJDVGxQUlNSbENaV01S?=
+ =?utf-8?B?ODhOUE5CZEtUNEY2bzNqRkF0ekJtRzFkRnVBY3pUdUNVeHdkcDlwbTBBZmhx?=
+ =?utf-8?B?eWR0UFo3SzF4VUZoY2Ewb3c0d1JjWTF5NXlCQW1HdXVTdWJVd0NrbERKNFBu?=
+ =?utf-8?B?Z2diWUZJYXVYUmxDZ2lGYitKOHQycGYxY01yOUxPbVdCa0hDUmhhcFpCN0U2?=
+ =?utf-8?B?ODE2eTNwU0JZU20vNFNOUVlybVdyRjNDOWtaTVdaZ1Zld3RaUVlBckxoRWdx?=
+ =?utf-8?B?YTVDWjVrSGRXWWVjRisycFZSZ3oxUTJBanc0SHM5SVlWRDRGQmJOVjIvcGY3?=
+ =?utf-8?B?cUhXaENleTlMeTFqdmFYcVdReUV3d3F6Z2cvQ3ZpblVRcGdOYWF2QktBUUdi?=
+ =?utf-8?B?V01GTkRKanMzZlljb1JDa1dIUGxQQndyWS96ZlBKcFRaZFgyQjNmeFI3MWtO?=
+ =?utf-8?B?MkdYRzBmaFRHdnBMK3NTSWpJWGhBKzBaS2JLNEt5M3BwV2FVZEtHSmhkTFJS?=
+ =?utf-8?B?aFRkbytmdG1qS1F2MDlGSWJjQVFRcjJTQ1dIN2xmSG45THhJQXVhdjRmVGR4?=
+ =?utf-8?B?Ky80cmpkVjBpRWVjcnJmRUJmM21iRDZmL21xNGtvTjF3cFF0ejZLeDVwN0gz?=
+ =?utf-8?B?RjJIbUd1RFM2bXduMHlaNEVhaEx6RURXRVFnUCtmQmVHQVUrNldBdTBSN21P?=
+ =?utf-8?B?OThvdVdFRm5zTmdyak9ycWl6aklCUGdOaHlQd0llSTVSMG82N2RnNi9IYVRG?=
+ =?utf-8?B?YmtDeEpoYStJUGlxVTBQMEN6S2FKcG04eUNuYWhRZGxzRC80MmlKZGVGRUJq?=
+ =?utf-8?B?R1ZDU2dZR2wxdUx3QVJMRlhYcE9Ia1h3OVpjbGR1R0Q0ZFdBVXlXNGlaSnVH?=
+ =?utf-8?B?UEcxVVFLbEkvaFFzS2NMNzFZOFF1Tk1lU2ZvZENyc2c3QUNocDJhRUU3WGZx?=
+ =?utf-8?B?TG9lNkxqa1NOa1lRVFROSGNDWHF0L2tDRWR5b0cybndFNTVuY2RtSEJlWFBk?=
+ =?utf-8?B?blhiSC9zeldKYXJTKzJtMnhYNlprWFlIcElNVHI4WVJmbjRIeStuM2EwTWZD?=
+ =?utf-8?B?WmVKd2pjTlJkQWJRcTdMVXJYMjJMV3NEUnJTeEhSdWVNVHJmSXJMMGZFbUhx?=
+ =?utf-8?B?TjRTUkMvTmU5WHdHcEJIaEwrc2dubU9GZWd3QWFRMHJJYTEvS05uZWIrVW9F?=
+ =?utf-8?B?TVMvZWVkR2ZBUFhkV1U4ejNpc1RIL1N3cFUzZlR0elh2ejVEc2lCUDY1bXcw?=
+ =?utf-8?B?UXFwbFV6WUFZcFArZzdTZCtZNFdCSE9obVhDa2dHNitiVGJkejdaYVpGWkd6?=
+ =?utf-8?B?MC9kcmdZMTF4MHRpcHk2eFBVb3pnN1VhSzNleEIyTVk0RUJKangzSi9UaVV6?=
+ =?utf-8?B?czhQWnRHVjlTZmpGeHVXZThMTXFHUElkUUlydFJmczdMUC96UnRtZlFJWDQ3?=
+ =?utf-8?B?SFdNWUJIdm9say9OZElHek1NRTJtQlcvTmhsVysrWVhSNXVhSkRSbkxFVWdw?=
+ =?utf-8?B?ZHg3d2xjMlZjV3l5akxiRXNZM1VVbmtMbWsyRXhHSzYyU0t2TUdDMzNUc0c4?=
+ =?utf-8?Q?i1YZhnLIjxSJK9oBpus8MW1n/5+COV/vmFPuP?=
 X-OriginatorOrg: efficios.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b839be3-879f-4849-f8fd-08df02e002f8
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5a2f5824-d016-4723-cf64-08df02e12cc7
 X-MS-Exchange-CrossTenant-AuthSource: YT2PR01MB9175.CANPRD01.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 19:35:25.7010
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 19:43:45.3826
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 4f278736-4ab6-415c-957e-1f55336bd31e
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7Shqjwuet5uk3pRx8MBPPqrx3q/KOO8OCUiARAUSqLOrBydcy/P6iKc3vcaVZY0MEO5Z1tpfNpIQ+a2y0a9wBe3D5NSYfuzORzYBqQ8EA7w=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: YT1PR01MB9497
+X-MS-Exchange-CrossTenant-UserPrincipalName: EKW6smD/41zCIc/Faqx6C2wdhTco223psROng0d+rtk8jzq7TIPqt0FGiUYxIF9zYWcTXqWU2bXXGrEGRiF99TROZ9P0OrP5FHIdNor7zhI=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: YQXPR01MB5771
 
-On 2026-08-03 16:37, Andrew Morton wrote:
-> On Mon,  3 Aug 2026 14:49:00 +0200 Chris Gellermann <christian.gellermann@codasip.com> wrote:
+On 2026-08-18 11:53, Mahad Ibrahim wrote:
+> TEST_GEN_PROGS_EXTENDED lists the binaries which are to be built but not
+> run. However it is also listed as prerequisite for every generated binary
+> to link against; all binaries only require librseq.so.
 > 
->> On thread creation, Musl registers the private expedited memory barrier,
->> see pthread_create [1]. Thus, invoking the barrier command will no
->> longer be rejected by the kernel with EPERM. The test checking this will
->> fail. Check if the memory barrier command has been registered and skip
->> the test in this case.
->>
+> This results in the following warnings:
 > 
-> Who the heck maintains sched/membarrier?
+>    make: Circular .../rseq/check_optimized <- .../rseq/check_optimized dependency dropped.
 > 
-> Short answer: everybody I've ever met.  All are cheerfully cc'ed.
+> Such warnings are emitted 36 times in in-tree and out-of-tree builds.
 > 
-> Perhaps finer-tuned answer: Peter.
+> Additionally, the generation of a single binary pulls in all of
+> TEST_GEN_PROGS_EXTENDED as they are listed as prerequisites for each
+> other. However since Make drops all the prerequisites which form a cycle,
+> the build succeeds, but results in unintended behavior. For example
+> building a single binary like check_optimized compiles 9 binaries while
+> only 2 are required.
+> 
+> Fix circular dependencies and unnecessary compilation of binaries in rseq
+> Makefile by isolating librseq.so and headers into a single variable which
+> is added as the prerequisite.
+> 
+> No warnings are emitted after the change, and building a single binary
+> only compiles that binary and librseq.so. Verified in-tree and with
+> OUTPUT= set to a separate directory.
 
-Adding Michael in CC so he can have a look as well.
+Adding Michael in CC.
 
 Thanks,
 
 Mathieu
 
 > 
->> --- a/tools/testing/selftests/membarrier/membarrier_test_impl.h
->> +++ b/tools/testing/selftests/membarrier/membarrier_test_impl.h
->> @@ -113,6 +113,16 @@ static int test_membarrier_private_expedited_fail(void)
->>   	int cmd = MEMBARRIER_CMD_PRIVATE_EXPEDITED, flags = 0;
->>   	const char *test_name = "sys membarrier MEMBARRIER_CMD_PRIVATE_EXPEDITED not registered failure";
->>   
->> +	/*
->> +	 * Some C libraries, like Musl, register the private expedited barrier
->> +	 * command when creating a thread. Expecting an EPERM on an unregistered
->> +	 * command will therefore no longer work. Skip the test in this case.
->> +	 */
->> +	if (MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED & membarrier_get_registrations()) {
->> +		ksft_test_result_skip("%s test: Command already registered\n", test_name);
->> +		return 0;
->> +	}
+> Fixes: cb48828f06af ("selftests/rseq: Don't run tests with runner scripts outside of the scripts")
+> Signed-off-by: Mahad Ibrahim <mahad.ibrahim.dev@gmail.com>
+> ---
+>   tools/testing/selftests/rseq/Makefile | 28 ++++++++++++---------------
+>   1 file changed, 12 insertions(+), 16 deletions(-)
 > 
-> AI review
-> (https://sashiko.dev/#/patchset/20260803124900.3328789-1-christian.gellermann@codasip.com)
-> thinks that membarrier_get_registrations() can return -1 on old
-> kernels, so we should check for that before testing for
-> MEMBARRIER_CMD_REGISTER_PRIVATE_EXPEDITED.
+> diff --git a/tools/testing/selftests/rseq/Makefile b/tools/testing/selftests/rseq/Makefile
+> index aba6317f6cb8..9c369e59bb2d 100644
+> --- a/tools/testing/selftests/rseq/Makefile
+> +++ b/tools/testing/selftests/rseq/Makefile
+> @@ -37,41 +37,37 @@ TEST_FILES := settings
+>   
+>   include ../lib.mk
+>   
+> +RSEQ_DEPS := $(OUTPUT)/librseq.so rseq.h rseq-*.h
+> +
+>   $(OUTPUT)/librseq.so: rseq.c rseq.h rseq-*.h
+>   	$(CC) $(CFLAGS) -shared -fPIC $< $(LDLIBS) -o $@
+>   
+> -$(OUTPUT)/%: %.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
+> +$(OUTPUT)/%: %.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
+> +$(OUTPUT)/basic_percpu_ops_mm_cid_test: basic_percpu_ops_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/param_test_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/param_test_benchmark: param_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/param_test_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/param_test_compare_twice: param_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/param_test_mm_cid: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/param_test_mm_cid: param_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/param_test_mm_cid_benchmark: param_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DBENCHMARK $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/param_test_mm_cid_compare_twice: param_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) -DBUILDOPT_RSEQ_PERCPU_MM_CID -DRSEQ_COMPARE_TWICE $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(TEST_GEN_PROGS_EXTENDED) \
+> -					rseq.h rseq-*.h
+> +$(OUTPUT)/syscall_errors_test: syscall_errors_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/slice_test: slice_test.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
+> +$(OUTPUT)/slice_test: slice_test.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
+>   
+> -$(OUTPUT)/check_optimized: check_optimized.c $(TEST_GEN_PROGS_EXTENDED) rseq.h rseq-*.h
+> +$(OUTPUT)/check_optimized: check_optimized.c $(RSEQ_DEPS)
+>   	$(CC) $(CFLAGS) $< $(LDLIBS) -lrseq -o $@
 > 
-> Seems nonsensical to me - membarrier_get_registrations() doesn't do that.
-> 
-> And policy (my policy, at least) is that selftests test the kernel
-> they're shipped with and anyone who tries to run them against any older
-> or newer kernel is all out of luck.
-> 
-> 
-> That being said, and stepping back a bit, is this test testing
-> something which we would test?  If pass/fail depends upon deepest
-> details of the chosen libc flavour then perhaps the whole test was
-> ill-conceived.  wdyt?
-> 
-> 
+> base-commit: 0f23d56f17fdfc7db69d51f64c8b91bbab947aa9
 
 
 -- 
