@@ -1,110 +1,162 @@
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FD0344DAA;
-	Tue, 25 Aug 2026 16:14:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984DA78F2F
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 16:17:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787674447; cv=none; b=NDOHSq7W0PZA756QkiHSyek8SB7AckT1IxMgvV9JVyNTef+9mhhrlZR5KVw0hKBJy15vgNzU9Bu5laxGRpLpsEzsHbSOwz439Z4CSjN+i5q63tDGWI5wEFMjmRbCS8EZ/pdCFaRNqaEQFqUE2TcfCvXu97C97zDHJoD4TRcqJ1c=
+	t=1787674662; cv=none; b=CRrEADbOLK40YifT49vu1vYu036SXwgOhwaOPzdnVhFp5XfY6EwbYlFyyUJxAdrOUY4r+k+pVSroaTFuKGOr+HASuAfFXfk9b6gL88dNkzOJpJFwFBDvFTXqavowIvBM58GLWrGoCeawxxX/nzigRLx+LHOImI9im4LTw6Cs/x8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787674447; c=relaxed/simple;
-	bh=TMHDnAbv6B5815V9xDG8AMy+EDrsmT6X7HPtL1sNbf0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WuF3c9f41jSODrtNftk+NS02c8zJJZ8hIZ4ebOMeEdH0lu38IHdXMR9pca8vuERU31BOhaSpPy6AwMrlVwjMkef4hxXdycaWBe+1grcvhhGVYZXRWkYfk+gyGUZZMatQHPi/vvBaZuI4ZQcIbCuBGlDUCDd/ItaWIgGDE7ahxiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MXEqTnb2; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787674662; c=relaxed/simple;
+	bh=9OPqxgBu15Idq5/Ok/0spEv15fcFq2gn1247wFrxgNY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LmL95/moj2wUrXdE0KIyzNJRLRLfdBxLbrGpDGwCB+RKatPtcTahum2Q/HTG9ydpOrar1vscNOjk/6xFVibJ5cIiqYD5dPIMQxDYW2F625Fm0wuQcbQxFUFNcM7q7Ljcnw8Nq/COsZiwfbM0br+mu3x5t7sFEVh41zqhFhLBfIQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYPOFoWS; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MXEqTnb2"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787674446; x=1819210446;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TMHDnAbv6B5815V9xDG8AMy+EDrsmT6X7HPtL1sNbf0=;
-  b=MXEqTnb25UP0Vsg45Y8pbLsp5svKOlxSQQu0HY2yabieYGxLqbohJgD9
-   LN8zlNGBh8yJ6Ar5/ELkgxPWovsi9MXFyLPS9/c5sjibo46gM3Z8RDGfD
-   12elSThHtjdrwlRnvy7Aj7e3p787mWv2SpJep8jtZvC2nWY0pgFxpOyJV
-   tGInAh7wFOD/L875D/WttvZsFpeZzCiIylMojYBrXU+SFl/cT4iGpYiDP
-   LVV9PvE14bsIptTrzq2E7TEJCptlxuwG8wlKKsa/vl9irwqnLY7eJzi5t
-   7c34cuqaSeAvlhjhuCSGrdHwEseQs2s1RWXhfBjuLyssK4AUjDcnGz+p4
-   Q==;
-X-CSE-ConnectionGUID: f7+4kvrjRP6i3TsV3vnnog==
-X-CSE-MsgGUID: RGwmHVhkSK6ZCWdah35jPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="99671148"
-X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="99671148"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 09:14:03 -0700
-X-CSE-ConnectionGUID: 1Z8oyHIvRaCdZRwP1LfjXw==
-X-CSE-MsgGUID: /mJMl5yPRFOgp7AaoGyB2Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
-   d="scan'208";a="265538212"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.119]) ([10.124.240.119])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 09:13:50 -0700
-Message-ID: <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
-Date: Wed, 26 Aug 2026 00:13:47 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYPOFoWS"
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d5cad1a6baso256905ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:17:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787674660; x=1788279460; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=pnKpvcq+eFIIrOJcljhlMUuTfIvczUf3J7EXGDw1e2A=;
+        b=SYPOFoWSq0xM4Y7Jc2CxtO5IjZ9IEuUYcblZBbPGdrXSCIQibQVBGuN9d3UXm/Awxd
+         +Fnf0Hi1N8uXqbNOJs7iqYrInVm0l5wEvqLn5GFdlIs7SrmCQ0CnzdHvG+F+0Op3izfF
+         ou61FX/dA0lQOpY5MrtrOS+r2NTWy8Nx5WOjwr1lZDFf85b24M64uI61a24kOP1mfRQB
+         yMPmN1DQS4EWEtPQfo4T5YQLkYnrfWK5o78YYTevyymVn4nsxlczta4eWqqYpQRXvCc/
+         WmEEG5VX54NSiUEjZw27PQGSSccpKuayVKZrTVQEI9z2gJOLe9saBqJ6YfXujlTF6y8U
+         ZcQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787674660; x=1788279460;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pnKpvcq+eFIIrOJcljhlMUuTfIvczUf3J7EXGDw1e2A=;
+        b=YckacqRCOvKS4CbazIkEZeG2f5tEx4vrq9eX8+24qwyUyBqhZtWuEFVb6W5Lh5LNen
+         UPLlc7k69QlQCcnwBHDzZmHfkKav/IMpjFdC5bJuCD0IVZKC15tERr2gqtPxw+hs0wil
+         im3nZcFlCgQEnSjgJaHcZHL+LtJHj5xyxc9uH2hwttBtb2MudlWcMBhZ/kOGBS88qGm9
+         WC8OmjZk8Xyr1YO4C7SLKMIYoEdf9SMBZDF0RBFeNgjvolM7L6eX2QC88fXGQKEVuaku
+         yQv47CRjd6rPTr9U7uDbYRo+veCa5I9PbckhZS+R6kW3bnEjIkXGkI7jHYdlqlKYTfd0
+         lRuw==
+X-Forwarded-Encrypted: i=1; AHgh+RpOEHjmKYJL6BMbeGGB1pKT2x8XP6cr3JAni6qHecDcqNxMiJ5OjMIEuOhQpvMVg2iKacj2i+hIcdVZhyt4eKY=@vger.kernel.org
+X-Gm-Message-State: AFuF++ktNnGlcno/vks3clx5PF5SHzMtXeF4UQBWH0PGxQad4TM+iZ1l
+	7RO0XwGG4gUM6znA+ZOmCAwwXMyidcx3zqDA21EdHlJwS2nQO7xsf0CL
+X-Gm-Gg: AR+sD11sztZyQgYUVFhW/lATUuONiCZ0TLxFpELxUUTbthn6Y81IddUd5v15WiV7VXR
+	pXvJE4eXoJ/vQHCQBy/5E9o5Rsz/tei6VilFiUxtbxBjwXNadM1y52tmeREDeD5Lwc3JLLCdevY
+	gM/vln+JxgHR7EriIK6DIcB3iIIuGdieyoHtxkzdtS3MbMayAaZjkBufdjiWZkPmNwcwDuyk+OH
+	AK0n6gL8eh2I0ZP/JfjgF/xD5F/s6WUeT+TtceUkwct8bGobfLZDHBKyHjiZzk72XP9x8qjN4Sp
+	FY4diLqf8rBChybR3vlvBJELvcMnf9NdSSrUheM2AQruqs6uqj+z6nT6CHg4fdSZ8b+HVAna78T
+	Kvd09Qfqj47iIUvn6pqgaTYpnHYPI1KcSchk9zUJwhHcyvaNC/FCvhOp8UHQFSVhfNB9yldW0r9
+	wa1Y/raZ8B3eYKcw39y9kpe6mUqrEWQVYqbYTgAlfHKGr8nOFvjsOiIYeCddax9wP3o70YcL+F0
+	JEjgY2zse8=
+X-Received: by 2002:a17:90b:5291:b0:38e:e9b:ffa4 with SMTP id 98e67ed59e1d1-3966d45a53dmr525079a91.6.1787674659810;
+        Tue, 25 Aug 2026 09:17:39 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3282afb407bsm8786745eec.30.2026.08.25.09.17.35
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 09:17:39 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: akpm@linux-foundation.org,
+	david@kernel.org,
+	shuah@kernel.org
+Cc: ljs@kernel.org,
+	yury.khrustalev@arm.com,
+	kevin.brodsky@arm.com,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
+Date: Tue, 25 Aug 2026 21:47:15 +0530
+Message-ID: <20260825161715.2807297-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
- private when invalidating
-To: Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>
-Cc: Suzuki K Poulose <suzuki.poulose@arm.com>,
- "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com,
- andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
- chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com,
- michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com,
- qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com,
- shivankg@amd.com, steven.price@arm.com, tabba@google.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, aneesh.kumar@kernel.org,
- liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>,
- Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Steven Rostedt <rostedt@goodmis.org>, Masami Hiramatsu
- <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
- <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org>
- <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
- <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
- <aoZZMQ3Uc8yQWPNA@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <aoZZMQ3Uc8yQWPNA@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/20/2026 9:32 AM, Sean Christopherson wrote:
-> And vice versa, a PUNCH_HOLE on a SHARED gmem (if userspace is
-> using an INIT_SHARED gmem for the shared branch of a memslot) could invalidate the
-> PRIVATE mappings (of a different gmem instance).
+pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
+already known, a stopgap from when the generic definition was still
+under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
+Add PKEY_UNRESTRICTED macro"), so the guard is never taken and the FIXME
+can be honoured.
 
-I'm wondering now how this could happen.
+The definition comes from tools/include/uapi/asm-generic/mman-common.h
+via TOOLS_INCLUDES, which commit e076eaca5906 ("selftests: break the
+dependency upon local header files") added so that the mm selftests
+build without "make headers".  It is reached through the
+<asm-generic/mman.h> that the system <asm/mman.h> includes.  Building
+the pkey tests with KHDR_INCLUDES pointing at an empty directory
+confirms that; emptying TOOLS_INCLUDES as well is what makes the macro
+go missing.
 
-the requirement for PUNCH_HOLE on gmem to trigger mapping invalidation 
-is the gmem is bound with the memslot. But how can a memslot bound with 
-two gmem instances?
+No functional change intended.
+
+Assisted-by: Cursor:claude-opus-5
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+Changes in v3:
+ - Add the Assisted-by tag Lorenzo asked for; an AI assistant was used
+   while tracing the include path and preparing the patch.  The builds
+   and the cpp output quoted below were run and checked by me.
+ - Pick up the acks from David and Lorenzo.
+ - Sent as a new mail rather than in reply to v2, as both asked.
+
+Changes in v2:
+ - Drop the incorrect claim that the mm selftests are built against the
+   headers of the kernel source and would fail without "make headers".
+   They are not, as Lorenzo pointed out; describe where the definition
+   really comes from instead.
+ - Leave tools/testing/selftests/powerpc/include/pkeys.h alone, as
+   discussed with David on v1.  Unlike the mm one it is an unconditional
+   #undef/#define next to other powerpc specific overrides, and that
+   header only includes <sys/mman.h>, which does not provide
+   PKEY_UNRESTRICTED with or without TOOLS_INCLUDES, so its definition
+   is load bearing.
+
+The full include path, for reference:
+
+  pkey-helpers.h
+    -> <linux/mman.h>           tools/include/uapi/linux/mman.h
+      -> <asm/mman.h>           /usr/include/asm/mman.h
+                                (tools/include/uapi/asm/mman.h does not exist)
+        -> <asm-generic/mman.h> tools/include/uapi/asm-generic/mman.h
+                                (-isystem puts it ahead of the system one)
+          -> <asm-generic/mman-common-tools.h>
+            -> <asm-generic/mman-common.h>      PKEY_UNRESTRICTED
+
+ tools/testing/selftests/mm/pkey-helpers.h | 7 -------
+ 1 file changed, 7 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
+index 2c377f4e9df1..626c2e1655dc 100644
+--- a/tools/testing/selftests/mm/pkey-helpers.h
++++ b/tools/testing/selftests/mm/pkey-helpers.h
+@@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
+ #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
+ #endif
+ 
+-/*
+- * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
+- */
+-#ifndef PKEY_UNRESTRICTED
+-#define PKEY_UNRESTRICTED 0x0
+-#endif
+-
+ #ifndef set_pkey_bits
+ static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
+ {
+-- 
+2.43.7
+
