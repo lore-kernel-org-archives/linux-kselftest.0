@@ -1,220 +1,167 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DC223E63B2;
-	Tue, 25 Aug 2026 09:26:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787650006; cv=none; b=oDrJqIdeLf8TAcqYcddPQoh3yBsgiTxbWaq1rK1rAk9ruXaaMIm+s/rYgys/Kb1TtuIWLxVtDl5DikFyVmzT13D8XJnyAAO4hGF/MOTNbFZiKroV26KS1kQ+5R7KajwxuJIiRnfhtAuLE7+RCCS7mCCfJxQ9uJBkrQEXnQGSw4s=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787650006; c=relaxed/simple;
-	bh=30V+cn6fgzf+80ivILxgzmmeub5NY5SAbK4RJyKrIe4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u31rip6QmNMWrBLDJ9SfwpDZGhZKEeFHfkaKDaTnaCmiyQ0/aK2XLePNaRPjE0bKGLp4HavLfap3o/Y2upbSYnI41Zp4DUR+an8BrzG0AUj11K1qcEZOM+AnWWDUkqHkVjTf4ZqswnOAGfP4ux4LfFBPOU6+0I38Vh4UQiTdQHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JfmdplgB; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DFB83CD8BD
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:32:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.170
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787650362; cv=pass; b=fYTy09B4WDEV91umIwyEXcqJEttC0h71y2A9PCDFcsWdpGFH8SrXStuSTcazNeO69VEyQVzMBqytVtHKOtfnDa7ey77DTyH8i5L/BNb7ClBHQCJ0s6PwyVYnjo9E8DKcZJvGMzE4YGMCo3RApUAq3gQUJu57Y648DYBBOEhGGak=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787650362; c=relaxed/simple;
+	bh=JmR/CB4xNI+jcLTEmH96suuAwtFrH/css1uIDKyeEDE=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dE6OEoVeqVWg4hHvr/3NvEgqfMr5kuenpF9rerPQ0p9mHkBcl5RjA+ycHSEP499OM5ghHTM+iCW1l5qK1Vo8QJtISFmASdNufC8xtDeOt/z1HF474djKWhZ+ZPTOyezPISveXP6ARBfjbVDqcksskgsEf72XEtd8ESgYkE+Fv90=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=COhK4qYv; arc=pass smtp.client-ip=209.85.160.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JfmdplgB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B65A61F000E9;
-	Tue, 25 Aug 2026 09:26:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787650002;
-	bh=UmUyVVa+WflnhGfl07gzLTmeXFopbRWv+zX6OfCXNrA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=JfmdplgBON/cgFMpk4wRz0eFysPpvZ7PIYKtve+jg8h7uMo2WPQnCll0J1Dxyu/Zi
-	 12Tem7CceWBPEfK+0DJ4sFKM7PU2Qc2N+6fA/3nrsb5DyROYlvKr3ezDj9K+VZILXT
-	 2vmjlDgwvTTcddjkCBaUYAwIWVlvb1jxnnTmY6qz48YslR1XY4BGMACZgCvs0QgscO
-	 acI6pa0AfgLwN4cg/ALtszNK+/jQag2LHQiwsgYCNDZYJlJmBXHtCgaQV+HfDIWOjx
-	 C5VZI89No/zhVkk0sYr/cqD0w3CIkN/Eo/IpHdJ/nvBsXJj2OdW6+TioZuHJArIcpX
-	 pFz1JZlG47VyQ==
-Message-ID: <787b5acb-978c-453a-be81-812269f47f40@kernel.org>
-Date: Tue, 25 Aug 2026 11:26:33 +0200
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="COhK4qYv"
+Received: by mail-qt1-f170.google.com with SMTP id d75a77b69052e-51c928bf172so33354031cf.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 02:32:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787650360; cv=none;
+        d=google.com; s=arc-20260327;
+        b=nlbXByC3QU+diTc/8mOOuRFPCx7JwOCqn+vXD65qCmfYqKMBtGdsGjz+kxi2ZSao8i
+         fRruMx5EL7kB414iMzqGH9mxwF9QI9v7PphyMjBfloqnxB8WJNXuMx+0l9F4m55qVDcs
+         0xy3fTQB/B9Tz2PvllOISLjVwIjtCfIpc3dTagz7cbiIfCZFSig2662DVrqsmpD4IvdW
+         EkPo/Z9hsyUpqNyFHwZ7xPnFAbdcaIl44uOjRrDx/3wcvIRWXZk7T1/9V0HLzj66FILP
+         LghivZ7cVtmYmxlmF0UoeEwbclYSXHpSUj7Vq00yJPGfyxM1Eh7Q8SGna9nNP55mvErT
+         xS/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=uGYcelPQ9NcToBmCcA1Af+U2AVoIV7KPe08HWX7sjzg=;
+        fh=UWoqVcvXw7Nn/a4oWSK6oxfjqVBDfh4Co0QcFiHtPfU=;
+        b=l1H4PtkB54o7RJmlsEcSRxPIYdAwNnBFgYYHi2LQofSTDfVzuMuwKcPRKKfBYfrJWS
+         T2sMgxEOPqUZa2ZcwDSD0P83xXr4pcDR6PwuyLHgWNlZ5KCjCwXydVtw+SGzcX4078rH
+         g3rIKi0FT5mosCP9IOeV6zFt7AP2M+PUuTuwVWl1T/Q6Qu/XPS+uzxAlXV4KXXIjNpSk
+         CusEbktRHYPI1jjfz/hl3gLQi2YXmgRRlf6t83HpfgKaqxumNSpR21q4I9vABQWTRK+R
+         s7O/aGpOKN1qE/eo3b20/6VbHqEvNezucrXvXxsT8NRr6hBFr+U0Awqkh7TFq5trUdUI
+         GdHA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787650360; x=1788255160; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=uGYcelPQ9NcToBmCcA1Af+U2AVoIV7KPe08HWX7sjzg=;
+        b=COhK4qYvOoJJr+D43V/gT5xoxYixhbuEW3sQWFOSU/YW0eMfUsn7zourAB5zEVeqU4
+         0Z+t6WDhX1//5aq5h0a//I/JnlYDqcQSDi1bKpFWXYtKmMuCMMiOCvWm5LDq/Oxlf25r
+         ZzNOAZyfhlRKJEan2HpB3IaWqkW52eWyIopB7wRfq9X6476P7foLCSa6fJOK+0VuKbpd
+         vUbIsefHSCFqqq3++sDiLAKYscX/2UWlR712PtWS5O/PaQbqx7z0uNmkyw/E9QcvhuBV
+         cEJZj0GWoUq+wO8//74+Kk1TD8EkZMoU6TI5qJIDroligGGwhyYEruhOX9xUkiRJSIrv
+         UYWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787650360; x=1788255160;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=uGYcelPQ9NcToBmCcA1Af+U2AVoIV7KPe08HWX7sjzg=;
+        b=m6WotRkNH2cqRYri+rok1WUBm7wV7NGCVMkFLwyvGb7kG7fC8twU6+UGvH3rk/Qs7U
+         zwfHOeIoHaBb8VHtTXILcL0+hoXksy4gF0ODDlyhCfxaZWImKhuhNuEW3cKzDav4YnFk
+         FGBZkWKqDUNU4D3zPJNDwUOCV9vmdyDOFBrWRO+Q0NzZsg6NztTRbYxtqoy0gwBpU/lS
+         JN3t/SI8OSpyny6Ea/c/ZWWVgEh6XPEswlh4SDgaGvkWkhnhmmtB3D891YE/K9MoJfMn
+         r/8lENqitw4hqpCE/mwa8Sebdm53YM+7Qh7FybzpXMguyyD5JmI4oFLAIjXB1MveGPsR
+         UvnA==
+X-Forwarded-Encrypted: i=1; AHgh+Roh5aWiPptuWIzvmYi4uh/edPo64fJcgJbtCKiA1u7l2o5a2z/ELiYYTPRg39jPjberdMp6r4nLviYqykV1rY0=@vger.kernel.org
+X-Gm-Message-State: AFuF++ljZ1OBhua1Fo6ON4Q90nGEcGxmyt5ofRGqjnc/bQU30G6n586w
+	U0HWGwNfhO1pU4aEzB+wxk8SYm/UvJjeL0aRqnycSs4h+p64phdWOZoLtJ0oty2e2+YOfB75lL/
+	pecsflEM9sfhbOzwBU0m725k4yUTMLA8CKCampmtR
+X-Gm-Gg: AR+sD12EvB5PProtDJXf0Yju+Kp3FFuvYQgtwHroZTj2ZShXPg0dGt/vIxoet0GSmxr
+	8kfGXh0nJ/MOpYPnBbWNao9IyfBQMDDIQL7MH7tj2DpqrEKsNemCMEGVzqNgnMfNAREn207wuI8
+	v7fhMd11xegHRPAoEi6nWsSuol8w+1GQCK2Olm3IDZo1bhk+6von9K5JFmBCBqKntArOkTrZYQK
+	o/IjvhA+p6w5Lv10JwFZjyUtRgPyJw1XjLr32dyP9s0sQpj9af7ktfUYOMoaykYoqhPfgGd1CTX
+	/1IHnDxe9m6cZ7al+YMm3CY/mBqygjcq7xKJF/9IYGnmXX3ax6DfqhZrhW5lkQHyXCZh/y+nH74
+	Zm/OhGwrq5cEGvDyPAcPyycA8dJHKE48=
+X-Received: by 2002:ac8:5a8f:0:b0:51c:1eef:4fb6 with SMTP id
+ d75a77b69052e-52df572d04fmr316920051cf.10.1787650359267; Tue, 25 Aug 2026
+ 02:32:39 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 25 Aug 2026 02:32:38 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Tue, 25 Aug 2026 02:32:38 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <aohEz_1JFVDtlSnE@google.com>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-40-2fc18ee6d3ba@google.com>
+ <fe1c6359-7371-4ccd-9807-1d81c160d12b@intel.com> <aohEz_1JFVDtlSnE@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v7 6/6] selftests/mm: add a GUP selftest
-To: Sarthak Sharma <sarthak.sharma@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>, "Liam R . Howlett"
- <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- Nico Pache <npache@redhat.com>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>,
- John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
- Leon Romanovsky <leon@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Mark Brown <broonie@kernel.org>,
- Anshuman Khandual <anshuman.khandual@arm.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260813181230.483746-1-sarthak.sharma@arm.com>
- <20260813181230.483746-7-sarthak.sharma@arm.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <20260813181230.483746-7-sarthak.sharma@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Date: Tue, 25 Aug 2026 02:32:38 -0700
+X-Gm-Features: AcwNN1WsNauanv_gwVuUewgYIPtJyz0xA7nijfgKendDL3I7JaxAnreMY2X_gzc
+Message-ID: <CAEvNRgF8XE2Xsn-g3qzPxcdfLdvJEc1FZw9LQ+deeXsFpdZsOg@mail.gmail.com>
+Subject: Re: [PATCH v10 40/41] KVM: selftests: Update private_mem_conversions_test
+ to mmap() guest_memfd
+To: Sean Christopherson <seanjc@google.com>, Xiaoyao Li <xiaoyao.li@intel.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+Sean Christopherson <seanjc@google.com> writes:
 
-> diff --git a/Documentation/core-api/pin_user_pages.rst b/Documentation/core-api/pin_user_pages.rst
-> index c16ca163b55e..1564b16994ad 100644
-> --- a/Documentation/core-api/pin_user_pages.rst
-> +++ b/Documentation/core-api/pin_user_pages.rst
-> @@ -228,12 +228,18 @@ Unit testing
->  ============
->  This file::
->  
-> - tools/testing/selftests/mm/gup_test.c
-> + tools/testing/selftests/mm/gup.c
->  
-> -has the following new calls to exercise the new pin*() wrapper functions:
-> +contains the following test cases to exercise pin_user_pages*():
->  
-> -* PIN_FAST_BENCHMARK (./gup_test -a)
-> -* PIN_BASIC_TEST (./gup_test -b)
-> +* pin_user_pages via PIN_BASIC_TEST
-> +* pin_user_pages_fast via PIN_FAST_BENCHMARK
-> +* pin_user_pages_longterm via PIN_LONGTERM_BENCHMARK
-> +
-> +Run with::
-> +
-> +  make -C tools/testing/selftests/mm
-> +  ./tools/testing/selftests/mm/gup
->  
+> On Fri, Aug 21, 2026, Xiaoyao Li wrote:
+>> On 8/8/2026 5:53 AM, Ackerley Tng via B4 Relay wrote:
+>> > From: Ackerley Tng<ackerleytng@google.com>
+>> >
+>> > Update the private memory conversions selftest to also test conversions
+>> > that are done "in-place" via per-guest_memfd memory attributes. In-place
+>> > conversions require the host to be able to mmap() the guest_memfd so that
+>> > the host and guest can share the same backing physical memory.
+>> >
+>> > This includes several updates, that are conditioned on the system
+>> > supporting per-guest_memfd attributes (kvm_has_gmem_attributes):
+>> >
+>> > 1. Set up guest_memfd requesting MMAP and INIT_SHARED.
+>>
+>> If I understand correctly, even with in-place gmem, the model that shared
+>> memory comes from the userspace_addr and private memory comes from gmem can
+>> still work without passing GUEST_MEMFD_FLAG_MMAP flag.
+>>
+>> Since this model is not prohibited by KVM. I think we should keep the
+>> testcase for this model to ensure test coverage?
+>
+> +1.  Deprecated doesn't mean unsupported.
 
-Can we just remove that testing part in that doc completely in an earlier patch?
-I don't really see the reason for documenting selftests that way.
+The original test case was for non-in-place conversion, which wasn't
+removed, it still passes.
 
-In particular, now that it's a proper standalone selftest.
+Is the ask to also test, under kvm_has_gmem_attributes aka
+gmem_in_place_conversion, to have guest_memfd used as purely for private
+memory and have shared memory taken from somewhere else completely?
 
->  You can monitor how many total dma-pinned pages have been acquired and released
->  since the system was booted, via two new /proc/vmstat entries: ::
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index ed9a8549ae31..861504fa2e31 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -17032,6 +17032,7 @@ F:	mm/gup.c
->  F:	mm/gup_test.c
->  F:	mm/gup_test.h
->  F:	tools/mm/gup_bench.c
-> +F:	tools/testing/selftests/mm/gup.c
->  F:	tools/testing/selftests/mm/gup_longterm.c
+I can rephrase the changelog and change the code to clarify that this
+patch is meant to specifically test in-place conversion with MMAP, the
+intended usage of in-place conversions.
 
-[...]
-
-> +TEST_F(gup_test, dump_user_pages_with_get)
-> +{
-> +	run_gup_cmd(_metadata, self, variant, DUMP_USER_PAGES_TEST, 0, 1);
-> +}
-> +
-> +TEST_F(gup_test, dump_user_pages_with_pin)
-> +{
-> +	run_gup_cmd(_metadata, self, variant, DUMP_USER_PAGES_TEST,
-> +		    GUP_TEST_FLAG_DUMP_PAGES_USE_PIN, 1);
-> +}
-
-I really don't like DUMP_USER_PAGES_TEST: running the selftests just fills the
-kernel log with useless information. And it's not like there is real value to it
-beyond what the other tests are already testing.
-
-... or that we would verify automatically what is being dumped makes any sense.
-
-I'd vote to not add selftests that use it.
-
-It was added in
-
-commit f4f9bda418ab8b4dbc5372e9e2a28162f7777154
-Author: John Hubbard <jhubbard@nvidia.com>
-Date:   Mon Dec 14 19:05:21 2020 -0800
-
-    selftests/vm: gup_test: introduce the dump_pages() sub-test
-
-    For quite a while, I was doing a quick hack to gup_test.c (previously,
-    gup_benchmark.c) whenever I wanted to try out my changes to dump_page().
-    This makes that hack unnecessary, and instead allows anyone to easily get
-    the same coverage from a user space program.  That saves a lot of time
-    because you don't have to change the kernel, in order to test different
-    pages and options.
-
-    The new sub-test takes advantage of the existing gup_test infrastructure,
-    which already provides a simple user space program, some allocated user
-    space pages, an ioctl call, pinning of those pages (via either
-    get_user_pages or pin_user_pages) and a corresponding kernel-side test
-    invocation.  There's not much more required, mainly just a couple of
-    inputs from the user.
-
-    In fact, the new test re-uses the existing command line options in order
-    to get various helpful combinations (THP or normal, _fast or slow gup, gup
-    vs.  pup, and more).
-
-
-I can see why we might want a dedicated dump_page/dump_folio test that either
-
-(1) Is ran automatically and actually verifies (somehow automatically) what is
-being dumped checks out. More tricky.
-
-(2) Is ran manually by a suer that verifies whether what is being dumped checked
-out. More feasible.
-
-But as is, for an automated test this doesn't make sense.
-
-Maybe we'd want a dedicated dump_page test tool in tools/mm that would make use
-of DUMP_USER_PAGES_TEST. But maybe we also want to remove DUMP_USER_PAGES_TEST
-entirely and have a different way to trigger+test this.
-
-Ideally we'd have a proper automated dump_page test that actually checks
-expected output (somehow).
-
--- 
-Cheers,
-
-David
+The ask to test gmem for private and something else for shared seems
+like a different test that can be added separately, perhaps in a
+follow-up series?
