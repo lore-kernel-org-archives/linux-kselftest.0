@@ -1,135 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B9353976A0;
-	Tue, 25 Aug 2026 12:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787662573; cv=none; b=OVaJh0+Mhq1IbyvgUW/PX6s26NAsIynBCNRfldGMZ6+MP1y1bjZQClaI/NvBe6AdFWu8k2NoInu+DOE39rM74k3x2KRqi7e5ZgWHXLaH9KicRwUdhT+u05lLno2Yw6kAHHu1of3YTJIvOD/rARMIEJeHoRpkTdqmG/TsSNFPzuI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787662573; c=relaxed/simple;
-	bh=fHFm/Zbw6cjC9HeXjymeWBxArFLuq8+axmg0JgKSykM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RzQ0fIt88xumhfX8h0mTI19OvHX/OtjaH3rWR5YbTKXxjLKT89nxfnVjcStmrXd42yemC08t5XagRKaKHCVBZAZddGUsolVmu3i/qKLQ0bHhmesMBwQ1ZwzOse3mftiI4YMD4qUO+osVuk8Hh9yq/xGOJ5R/h74l9ZXCr4Udpic=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OMQGthC/; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662932D46CE
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 13:03:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787663013; cv=pass; b=o8jpDN7TeJEepFA2kGn0Vh1HVNgtUtOpOvUTh36cnCJZRe3vBZbpXtD+eq0hY7to2flcwvIKE+f3wXK0Mf8nhQIxr3wqngsy2BgAb0hKdcVM08+G0JToMhMY3THdoVsqfRMM5p47TY5ncUF+vDpyziHU6nQN9wJilbfW8Vgq26Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787663013; c=relaxed/simple;
+	bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fvI1WrOAUCTZoC3mbzQaHWaN3SP3oZr6RVLY009Na8peLrNRRdmNnSMRL32aiXIi0SLQS0rnUo4aoQMjKEXEIX+filjBre2WvJUePRcv716S1NpTPtudgcYgYl5qTuEwjKz6kiDRiR/POHXAoova0TL1szE6KbyypPbiIp7Qzsg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=igfNUx6T; arc=pass smtp.client-ip=209.85.160.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OMQGthC/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 517F51F000E9;
-	Tue, 25 Aug 2026 12:56:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787662572;
-	bh=S1NH11Ux2Q+TJnSYsBGICr/Vyj9y9q11Lv0osnSbWhM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=OMQGthC/1IYPhZ7gn3YDFvyeihk04dHDWcFaQAJTzF0quTzsZSXR7EffI3xkEXtJe
-	 3vTrLi5dijjdsklRGC4BB2wXB3/70yRqw0MHgjB0hWkirN0L6Gi7HbdXb4fjGKQWo5
-	 cimxLTw6uvlfG2GmiZpaMgCbG2cRD+JOK5HufU+N0i88O1NXDfA9t2VAG112Jxx04c
-	 ZPqSi3nMhiklo9SauadhAcMpuVgCZzoQEpTR4zowJKQqQ4M/RvjOPf5DykvbnT5ob/
-	 KBG4R11kh0ALLHaCbNvnFg/9DxQlWEfvA/+KvC6kM8+db9PuXZabSP23IYVl+XZfMD
-	 HDQy4u5aAaXyQ==
-Message-ID: <d58bfaaf-5849-43aa-9c18-271fd0500aaf@kernel.org>
-Date: Tue, 25 Aug 2026 14:56:02 +0200
+	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="igfNUx6T"
+Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-52d56b08213so4078771cf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 06:03:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787663011; cv=none;
+        d=google.com; s=arc-20260327;
+        b=APzUvLE47VFOWfsVlbbuXV3lSiWz7HNl+cKjXVk3lFbn/s820ihi2nfJZUohcm1BzF
+         w8zz9TBTHTrfChuJf6k0T8YVJ5B1hipD+W+t3hHzJoxYk09YbBrffW3Tk5dnkN6ZJkNm
+         gq/2f2oct44UofGoL15EDoTroe/kajosYru2REf3WpPTe845me7Nqs/8B58uSZg2GyZK
+         s8gPrhZCAoi6aFpLft7Ri3irp/uWTEa7mWQY62XjSip/u+jk277P6nIAaTpD88ivdDod
+         P25gs6ETP81sUDACYJ9DyYSPzdw2kQSCNpvTAzqB0bH3/NdA8Bvk/w20BoaqMrbQoO/4
+         NNyQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:dkim-signature;
+        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
+        fh=oHKXyZn8wuuZIVtYnGDJERHzMF/I3EGPTvN0fKoSiN0=;
+        b=PJLuFwd1FdtYTCIwwfvr501VbqBaVetdVDOzP49rukdSBRBL8RCR7KsL01KrEj9tIo
+         vxpvoZX78jbD8pZ/ja+Bk9/955zDOfOd+t2mHYKPxNlm6dpgTOH3KKFblRoW02rQ0nDb
+         IA8zqnTDZ+vmT7nt2BWy4nyYi+qN9ujpfoGSwFGbBDikUIMbIwcwNqGTBeFP4WCY5qRb
+         bhoWu96uPkfQxaReK5GJMMG6T/icrluIePZ5w1x3Ll2orvJKvBO2TNL+1jLO7OPm9ZjS
+         D22HCaA12MJ1eHGJfwhXXWhbSVV7M8QtjlG6N24ixQMyjVIJB3QedsnVgQB9+92w4/Ja
+         xlYA==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=szeredi.hu; s=google; t=1787663011; x=1788267811; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
+        b=igfNUx6TRkijZXNCsa2gzlyOZhmY7aFlP1NihPuqE23iSFuW7UJjUCzSXn7JkCpkn/
+         QjNtyQk7Jt6mOfU/MkJ9nxzx/xGaLikqc2ua1LAr1IMd8kIHLVmp26thr4NIdGi0VHEg
+         A5TwijWL5y+5pJJPrDPlSbRJw87vdWLE4Mfis=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787663011; x=1788267811;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
+        b=pZTQwHlLJAmE4elIWUHGmobRuB0KmF7s6n81P0BdwFmLS6ueGezHUxnZ/r8VStZzVq
+         TKvZNYfG0M2TuNBkHCbwgk+Nz+CvcuivdeDm6recBvv3eod1kccmXrZQeq1emh8OxyIz
+         nfql9XzbGS0KfOn7HAsF2CKkuy+QgqSBbbYSu/jIP18XDDMywIUzAl2v3Us1QZ+aWdsV
+         2h7rKjAXXHsyhTTi/LMHch2ipY0LnU466BWLQ8hLItZM9TkBQ+x8tbOXZLLaP6LSgjlO
+         8Cz/Bvp4xF8FDkQiSOTXcsGbYQM1acwdgFjv3AsXeEdJeSDQ0gb1euhU5mm2IuCu7uZ5
+         E0lw==
+X-Forwarded-Encrypted: i=1; AHgh+RqyfoAFR7bWPOcTzVSNMzBj0Alc28to9pRfNtKgRNTazdtpEOryPszsI7AsPlPFI8p1Zn9lmAWdW1/Curc9pOA=@vger.kernel.org
+X-Gm-Message-State: AFuF++lp5EK+y4kAk/W1jvqhYQ0nzKj/I82dpvYDQYjIUu5rHK7et/WH
+	nfu13jCWtZ51p4duv1j2iAqlZa8DaRj2fcdtwzlu1qB5h3IRyRWgdNeA7U9G2yeFFu5EN5wwCF5
+	TnlwkH7qfA7qtJyJUCq4fzUVi0+Tv8bNVEAXnQX24PA==
+X-Gm-Gg: AR+sD10tST4HdASzmiWGBam0U7ArAPMIv3wNb+UIzguXy0hJBPLPvyWJlhHVJYmA8ah
+	24i0IfNY3bXIIB/Ta1/XZQk7qdw6eYUyaSTLG1Q8M5jCboJdEyOUA5DYmt7VAVOzGb0muz9pGvJ
+	WXQmJ3UeKP+ARK/EyU+DRmEZl/KjYW4q5c2/b4hv1Hp00uiJwo1TgQ47+4F/cMBJV1gpYIREvx0
+	lHrOrStobAURgDjqFC2xbTSRDGm7Ew25j9P8fr/og68w/aO2pWr0mwQi3Gx6DllfTnfj2VYg/o5
+	fLj9g1hQxU7DsgrH5iS3wtue6KTvi+NdzAOEIlcxe16WCfibtKfmh4DQQiF0lDuLDBTdHHImP1l
+	Uu9I=
+X-Received: by 2002:a05:622a:118d:b0:51b:fb5f:b263 with SMTP id
+ d75a77b69052e-52e2ec1e5demr67516461cf.4.1787663011283; Tue, 25 Aug 2026
+ 06:03:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org,
- Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, "David S. Miller"
- <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>,
- James Bottomley <James.Bottomley@hansenpartnership.com>,
- Hagen Paul Pfeifer <hagen@jauu.net>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
- bpf@vger.kernel.org
-References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
- <17e9f7d6-d095-44ee-9997-8dc10646f3f8@kernel.org> <ao13TmFVVpsv0zO4@gremlin>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- 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
- qIws/H2t
-In-Reply-To: <ao13TmFVVpsv0zO4@gremlin>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260820130158.254808-1-jamz@amazon.com>
+In-Reply-To: <20260820130158.254808-1-jamz@amazon.com>
+From: Miklos Szeredi <miklos@szeredi.hu>
+Date: Tue, 25 Aug 2026 15:03:19 +0200
+X-Gm-Features: AcwNN1V-E0YVDUa4WhV6OmS9gRNJfrQeO1sZEy5JreCrY0gVdVTUszFjJtAbGlQ
+Message-ID: <CAJfpegsR1oNh_PnmK-a+k=6ttdpXYAyg6SsQe=ZMCZN03gvPhA@mail.gmail.com>
+Subject: Re: [PATCH v3 0/2] fuse: allow FUSE_SYNCFS for privileged userspace servers
+To: Jimmy Zuber <jamz@amazon.com>
+Cc: fuse-devel@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
->>>
->>> +		if (!secretmem_account_folio(state, folio)) {
->>> +			folio_put(folio);
->>> +			ret = VM_FAULT_SIGBUS;
->>> +			goto out;
->>> +		}
->>> +
->> Okay, that works because secretmem does not support any form of truncate, in
->> particular, no FALLOC_FL_PUNCH_HOLE.
-> 
-> Yeah exactly. I think I covered that off somewhere in my essay-length
-> commit msg but if not but yeah that is a thing that I noted.
+On Thu, 20 Aug 2026 at 15:02, Jimmy Zuber <jamz@amazon.com> wrote:
 
-I didn't quickly spot it, but it would be worth adding it if not already there.
+> This series lets a plain /dev/fuse server opt in via a new FUSE_HAS_SYNCFS
+> INIT flag, honored only when the server opened /dev/fuse with CAP_SYS_ADMIN
+> privilege in the initial user namespace -- checked with file_ns_capable() at
+> mount time.
 
-> 
->>
->> Overall, the idea sounds good to me. Nothing jumped at me.
-> 
-> Thanks! So in a way you kinda... Ack it right? :P If only there were a tag
-> for that 🤔 ;)
+Applied, thanks.
 
-Well, on the split patch without the test ;)
-
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-
--- 
-Cheers,
-
-David
+Miklos
