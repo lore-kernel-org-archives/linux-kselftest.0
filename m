@@ -1,156 +1,165 @@
-Received: from BN8PR05CU002.outbound.protection.outlook.com (mail-eastus2azon11011054.outbound.protection.outlook.com [52.101.57.54])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A11C73AE6E9;
-	Tue, 25 Aug 2026 18:47:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.57.54
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787683628; cv=fail; b=JXgOZfQEUf28bpyJ2Ua2eBhO2HvAJLR+etctvlN4TC4Udh1OyokFKpV5RwcJ5tS9DpIybs9dckk2b/Q/kdm7zPwXEpPVnkycRPvyDDnaiWpPBJFYpPfr9N6W8VeWeLS2JcSO3pEfEPkp03OjjYjYpaVMfTNp9j7ZiO96b1PCVzY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787683628; c=relaxed/simple;
-	bh=mCQLagRMZL3/KwtL0e0SeRDPhObyOHHj9wLImSH2tCQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kOaos1bOeq7BpDDgbsvF4FIXVvK0r1uj4B+r1ekaiXwu8NULjQgJ++HBQXkqhEcx6H4JVLPSgMhri7jygpl4w6IyO0enchswcXdyCEBR+ygcIHW1wF8ym9IjNxbM4XWY8K24xxwUoekVeKeSOXmCvEZHSCnXqdr42ldGfp77/60=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=mxDaf1C2; arc=fail smtp.client-ip=52.101.57.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10AF83B27DF
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 18:50:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787683823; cv=none; b=RlGSruR9pd03ZliddTEkH+1abeDCS6apA6LVEjP5zW4p9OV3/LIo7qAE3hQ0oY9tQHC4pGRkNWqHHasyltmafkrTKQeHhvebyi7rMt8CpcldQBi91rZN8iw7TpHfuhVraKKjdoYC41IKxfbcmBzJ7t6hQ9pM7FlMlzc2QnX8v/g=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787683823; c=relaxed/simple;
+	bh=FqDp0SoXakGgLyxcwE7yWAGj80DKGRT/Pdr/+FKUh7M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZV+zC58+o6xgolG8MduFCZKx06ilIbqqEhq7FAJsgQARUBEsX9A1ncJMTYMILKQCxKB92+hEDhM3f3sgyMA90BemYWLwMdFGGnsMfNGEDFkcr9ecSw0EG/TRJNMecLIDuXqJNyKVs4Eiwx7Sd5INJsBK+HqlQ0du8NelQyseKm8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=byVlG3bP; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=C7YkATbe; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="mxDaf1C2"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=tG1fmq8ipHxiMUch0NlRgcnroWaq3nlnhOWs/9FFhFbwlCfeYRTKIBmrRNCPhQgJq0/a+w7nrcc42bcwv3yex9g3EosdoN3zca69Qi6WWePeakRVCYH8bzaOa3hdg1swPkS0JBwgR+z/Hk7T2upGdVHiWFHJkuoSePBeX6kjXk7eap+inokMCP1WNY4TpEIxMKOM41U8128/pCFUW4B6VimuwnOdrcrRnebFFimg3kyad+ltq4Jmh2A6JyBt/wOcQf/qvo4xTy39+GM/WyHdkLHqeG+GN2y7kE7ZBX0gxpsU8fHoulmBnXxQbPxNJq07ZmBrbGXd0mTmX80ZNtwfGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=twnTciSsy62EOXtZ4bUfR/0vvmTWRjqLV9h8tQ1xAp8=;
- b=Vbhtb5Ch5TD12I+gxQqZhOSf7RpIi3Of43lFpJwOGcJl03Fpe7mSpbZigdaWSotKwHwOFoQx3WQKGJdBKmuU70ZZK8GOjUJYHHO8JuwSZ45RH1wkERj7FE9I/YKLfDmbmOprBeur7Eh5HW/L4uAkQ1J5zI765A3UCXPH8idRcezgjBO1Q6PW1xerdML2pm0xwPMa+6YXlLR0q4G4p9dWLDLP4+8oN8a/Pfb3/uoer2MQRl3VQYyT/UGRZ0mlbX7dd6vMnRpEWiRDTGY3fmZisVD/2CBx9uuhpacFHNtdBLCIn/Sl8D3fBMc1nJtN+Nw1+abGlaO/sIH6ZhrImqmnfA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
- is 149.199.90.133) smtp.rcpttodomain=intel.com smtp.mailfrom=amd.com;
- dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=twnTciSsy62EOXtZ4bUfR/0vvmTWRjqLV9h8tQ1xAp8=;
- b=mxDaf1C2zzQMNfPRhuyVxYk1bOQ0TDw8gz5KMdnfKKisAzJTSHYx243A5Ob0B3CigU48P/Ji43IsubO78NZlL7XhwUOFoyvaL81l5VSny91ncierqCZEK7Qzoi5JVCD6O5Be1JTomDQaUaeeBlPwVbLPK19R+uMjhl9Y3PUtduc=
-Received: from SJ0PR05CA0160.namprd05.prod.outlook.com (2603:10b6:a03:339::15)
- by MN0PR12MB5810.namprd12.prod.outlook.com (2603:10b6:208:376::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
- 2026 18:46:56 +0000
-Received: from SJ1PEPF00002319.namprd03.prod.outlook.com
- (2603:10b6:a03:339:cafe::9d) by SJ0PR05CA0160.outlook.office365.com
- (2603:10b6:a03:339::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.6 via Frontend Transport; Tue, 25
- Aug 2026 18:46:56 +0000
-X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
- 149.199.90.133) smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=fail action=quarantine header.from=amd.com;
-Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
- amd.com discourages use of 149.199.90.133 as permitted sender)
-Received: from satlexmb07.amd.com (149.199.90.133) by
- SJ1PEPF00002319.mail.protection.outlook.com (10.167.242.229) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.21.360.3 via Frontend Transport; Tue, 25 Aug 2026 18:46:56 +0000
-Received: from localhost (10.180.168.240) by satlexmb07.amd.com
- (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Tue, 25 Aug
- 2026 13:46:54 -0500
-Date: Tue, 25 Aug 2026 13:46:36 -0500
-From: Michael Roth <michael.roth@amd.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-CC: Sean Christopherson <seanjc@google.com>, Ackerley Tng
-	<ackerleytng@google.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, "David
- Hildenbrand (Arm)" <david@kernel.org>, <aik@amd.com>,
-	<andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>, <brauner@kernel.org>,
-	<chao.p.peng@linux.intel.com>, <jmattson@google.com>,
-	<jthoughton@google.com>, <oupton@kernel.org>, <pankaj.gupta@amd.com>,
-	<qperret@google.com>, <rick.p.edgecombe@intel.com>, <rientjes@google.com>,
-	<shivankg@amd.com>, <steven.price@arm.com>, <tabba@google.com>,
-	<willy@infradead.org>, <wyihan@google.com>, <yan.y.zhao@intel.com>,
-	<forkloop@google.com>, <pratyush@kernel.org>, <aneesh.kumar@kernel.org>,
-	<liam@infradead.org>, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner
-	<tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
-	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
-	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
- Khan" <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, "Vishal
- Annapurve" <vannapurve@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
-	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
-	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
-	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
-	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
-	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
-	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
-	<jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
-	<peterx@redhat.com>, <tarunsahu@google.com>, Vlastimil Babka
-	<vbabka@kernel.org>, <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-trace-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-coco@lists.linux.dev>
-Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
- private when invalidating
-Message-ID: <meww2a2uf3yeevsfpicyrlg3hch2x4bsdqv2lsv3vfjxg4qzes@co5eogmhkxrk>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
- <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org>
- <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
- <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
- <aoZZMQ3Uc8yQWPNA@google.com>
- <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="byVlG3bP";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="C7YkATbe"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787683820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bY+uq+O6hs+OCaV9/h1J0zsMTaL2h9lRcnb5h7llFxE=;
+	b=byVlG3bPxxH6z3IRWjyQ9qv4YR5WPH6bLmkNwsZhwFFDdPEeXhlrIoY/SUEjtYDvQ/EzbM
+	vUVpvovc46xRLemthAj7LsMgZVtqlg7BkiByYv0A5byAsNee+iD2FoM2L9GYOuYJ42oRm4
+	N6kp2jfUMPC7Qg9jCnv2UhqpQwYuMPM=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-126-zWbT7cxrO4CrhsEyVor56A-1; Tue, 25 Aug 2026 14:50:17 -0400
+X-MC-Unique: zWbT7cxrO4CrhsEyVor56A-1
+X-Mimecast-MFC-AGG-ID: zWbT7cxrO4CrhsEyVor56A_1787683817
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-934979ee9f1so2452885a.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 11:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1787683817; x=1788288617; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=bY+uq+O6hs+OCaV9/h1J0zsMTaL2h9lRcnb5h7llFxE=;
+        b=C7YkATbefJ3U2doF6fMcwdLrz/56+qQpHmC+6QP50SGRdMddXXWXU7XKgSEFa+0OWB
+         IRNGLZaRMagfbUX6SoTkXFxidwCgD6vKMWtTwS+aQq90d3/I6MjXMXHWvpDmIh2jRjCk
+         U/73SaieDWXuVj3LTxK+AENjlteyfx8HwZX47JXF2tkJj4x58T3PLVBeN1BxDfGnkiqR
+         XSEpmQDRRHHO3mYPqVkDODWpsFAay4c01+zNdx9qrwL6JI91Pf6V+GKXsLdZXeBkttS2
+         FUdCRIlCLJQ1rPsbiWcjT0m4ha8SdlJrNMuph2xF64R0AiqYcnC6LEfZa+9k7UPKTQXd
+         mnTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787683817; x=1788288617;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=bY+uq+O6hs+OCaV9/h1J0zsMTaL2h9lRcnb5h7llFxE=;
+        b=Zj/xZcY0fpmLPwQhYI6jnZ0vGN0Odt2c2+WCHPQTddUr5ty9kSUM7dopKZsVFLcPRC
+         55L+M/GILC7K7ApMGgMt7p40n71v6pbtXqWPWyhOOq1N1u5891QQDualFn4gMth0Ng/B
+         3Bi/yP9ALm3zvgUdhtnB96mEPj5nEv6lCR69+EJa0wC4D9QLkUwB3QOFqRSnm8A5oRyc
+         Q6AwjW6vsuE1jxtGnooM7wyAyFiHcu4w3Efu6f4CTph50YvpL9FPrFm4WMFU/uYkR6dA
+         VT6Gznxt0q2aXvnc6QJzU81oEZ81Tu3TMJfNrqHYMihSivNbqzbnBZPx45HDNNZ4Hi5z
+         Q9MA==
+X-Forwarded-Encrypted: i=1; AHgh+RrczOsDe2IGG5kVw7J05sQyG2NJHasf+ORooxMUCJ2hNv69oK8EfH716qSqwoEKdcZJNpKbvbOUQORyStB3ngo=@vger.kernel.org
+X-Gm-Message-State: AFuF++msOaexZfYed5XZIqwh7/PsfcrY+bZHb9sGSabvegWQ8yzEe01L
+	7oCI957ow72M0P/oF9N9XEqy0E3JijGtidAMnCpa/5YCAMzw2o73fNaUSuCcKC+PwOoqANbJbuT
+	FaPjXhgwDZCzEWo0uVP5vMT+cCWmHicx+U/+cqEEKst9Er43lmGYkmYFeg4klRJdqAyJeOQ==
+X-Gm-Gg: AR+sD12OWXt4MQuo3m+pIrvUje0EixkhRiURUxe4Pd94vyj7ShMS0O6weTDMZ7obJSR
+	ilavxkmqxnhRTB4vVoWuOp5ptWa3vnkL7pGj8ixWvkJriQX8emqEDeGBJiX7WjBFOrzscmZbMoa
+	QII0th8mUoFnt6YRAuMRF357toBN0pR8ZQv+C87aMJXIO8F/G3/fHEORFKl16wAdmmWu7/oQJh4
+	rru9D0wzSJVf0jAjXSsMaCOQh0d9JXG6k88VQQ37b4mMkjS5JmoiYg/aNNz0DnspXM72VxCmCjo
+	4sX104rXCLlldJsrd1WLWG4G5OMJ2mAlAjanCRpT528y/zU5roaLyiMf+iVg+LXwur0W1u8t7K7
+	AYI4dKk75qa9aGXTkF6imKKmOwPaf7zXKTrSJ8j7R6EXA
+X-Received: by 2002:a05:620a:4055:b0:92e:db1f:185c with SMTP id af79cd13be357-937804594b8mr54685785a.43.1787683816924;
+        Tue, 25 Aug 2026 11:50:16 -0700 (PDT)
+X-Received: by 2002:a05:620a:4055:b0:92e:db1f:185c with SMTP id af79cd13be357-937804594b8mr54681085a.43.1787683816399;
+        Tue, 25 Aug 2026 11:50:16 -0700 (PDT)
+Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9377e30ed0esm42285485a.9.2026.08.25.11.50.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 11:50:15 -0700 (PDT)
+Date: Tue, 25 Aug 2026 14:50:14 -0400
+From: Eric Chanudet <echanude@redhat.com>
+To: Michal Hocko <mhocko@suse.com>
+Cc: "David Hildenbrand (Arm)" <david@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <ao3gLqsF4WSeKBIa@echanude-thinkpadx1carbongen13.rmtusma.csb>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aowHqqaqK7TeexQH@tiehlicka>
+ <ao2gA_m3BCBu2esy@echanude-thinkpadx1carbongen13.rmtusma.csb>
+ <5970a8d4-fe7c-4dde-bdc8-1c66bfb57f12@kernel.org>
+ <ao3CQicH0t-k95NA@tiehlicka>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
-X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
- (10.181.42.216)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF00002319:EE_|MN0PR12MB5810:EE_
-X-MS-Office365-Filtering-Correlation-Id: 68f9c75d-1801-415a-576d-08df02d93ce1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700016|376014|7416014|1800799024|23010399003|82310400026|6133799003|10067099003|56012099006|11063799006|4143699003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	4vF0dehcAdq99xXMo9LEZHPmjZu2EMp9ScyODm1e5fbmP2xZ4s6IZK+Wx/DP60N63ihJMZuMVkDRiO/Q6Agr9NoAMUq2Om/aJJNwtyS/roqG4LOUIX6RO0w1OozYKhseu2WUaXnlDHS5Wm7T17/tpvvWGAFQpq9eGNUtqWnwYx4wFbS96+zoJ5wdmUtYsG/xSj9tDKa5IMbv9nlwWGosUGi846q40OGtNhtB+2pDKNRLhoQwXliouFtoEqJRJjGZVPKTbF73zWCxMx9kjvQ8u1KM6ojxQoXXdol/6tUaJqyptq+VlCMowLzbGYbSyeyzo17QN+LZvRKnr9n1s7fxWEVZB4zFSzDK+tvNQKwXtW+zR0jhFRFZVBMGnabhbPd6SQn7GOsMQnUmYhqE+zgg8GDV1muVAHTLL01+tltoTiFrEpqGv27Tm845IZqz82sU9lNb35CIykSnSygIWYbx39MWixvznTnidSixK04/nTiS+WtXX7x8gfND1N3odhJKfzU5Rv9jgWxZpPhBFl7fpJ3nFOExIip48mzBgH6TbiE8SVf82oXHBg/9m8ouIxza0+un37ibwxz8WxGjNEhyxaMK13zd5+rJjfzxeBHgXSEyTgIwzk7uBhR6vX/9i5UyCRVyqc1Bg3AxXBYoKwFixF2DNe5yxv+AzBz6rsdJdx2/8vK7NZDo2DRQgj4RzToj4BjFRGkF9p3H93RmyR8Rug==
-X-Forefront-Antispam-Report:
-	CIP:149.199.90.133;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:unknown-90-133.xilinx.com;CAT:NONE;SFS:(13230040)(36860700016)(376014)(7416014)(1800799024)(23010399003)(82310400026)(6133799003)(10067099003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	49P3BRFYdeQ80SRUj5SruX+ouw7dbOtWbYAFruLiuBegSy9/mhXhB8gAJ8kQtf/k0Ymogm0iXcsoTsubbu02tfZj2ELAjnk3Sp1FhmtSev57ZPDaRWJwFRdWEEGpi5xN6v+O5qZa7QnkfZktuc7GO6Ia0rVOQQADWgpjbH0u5lXwHk+FzI9fEPG9JL1npx0fCAD5Kly4nHP1clWAqsCbg6ukiD3N1jaWPrtimJqf7jLULlm4x1t9FhyDOFfKcNZVCmNS2p3A2l5M2+jLBrm9LJ8veN16Rf03jJ3RpY1dBItIE6jJnVy2jEwO31d+zAf5rwBCq9KK+bnbsbFt+7phfC+xq4Batg0BfBF5ikRoGlGsxH8xOdsHtNOUkAA36O5a1Izp5N/kgau6IGbly1y+mMDh+BbNGUBonhBBY9A0Vih/r5w0U/nmuh0i/ghbSUYq
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 18:46:56.1135
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 68f9c75d-1801-415a-576d-08df02d93ce1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[149.199.90.133];Helo=[satlexmb07.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF00002319.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5810
+In-Reply-To: <ao3CQicH0t-k95NA@tiehlicka>
 
-On Wed, Aug 26, 2026 at 12:13:47AM +0800, Xiaoyao Li wrote:
-> On 8/20/2026 9:32 AM, Sean Christopherson wrote:
-> > And vice versa, a PUNCH_HOLE on a SHARED gmem (if userspace is
-> > using an INIT_SHARED gmem for the shared branch of a memslot) could invalidate the
-> > PRIVATE mappings (of a different gmem instance).
+On Tue, Aug 25, 2026 at 06:26:42PM +0200, Michal Hocko wrote:
+> On Tue 25-08-26 17:45:56, David Hildenbrand wrote:
+> > On 8/25/26 16:47, Eric Chanudet wrote:
+> > > On Mon, Aug 24, 2026 at 10:58:18AM +0200, Michal Hocko wrote:
+> > >> On Fri 21-08-26 14:56:52, Eric Chanudet wrote:
+> > >>> CMA allocations are currently unaccounted for by cgroup memory
+> > >>> controllers. As system resources, they should fall under memcg, but CMA
+> > >>> areas partition the available space for different purposes and memcg
+> > >>> doesn't have a good representation for that.
+> > >>
+> > >> Which CMA usecases are covered by this work? It would be also great to
+> > >> spend more time describing usecases.
+> > > 
+> > > We would like to offer some usage guaranties to userspace processes
+> > > ending up doing allocations in CMA.
+> > 
+> > How does this e.g., relate to hugetlb allocating from CMA, to then charge to a
+> > hugetlb cgroup?
+> > 
+
+AFAIU the system defines CMA areas to allocate hugepages from. For this
+initial series, I failed to handle it. The intend was to consider it as
+any other CMA area. It entirely missed that hugepages are already
+accounted for by their controller (cgroupfs opt
+memory_hugetlb_accounting) and they are charged when faulted in from
+their available pool.
+
+> > I always thought of CMA being a low-level allocation mechanism with various
+> > different use cases, and actually the higher-level users should decide how
+> > to/what to charge instead.
 > 
-> I'm wondering now how this could happen.
+> Exactly. There are many different users of CMA all with different
+> requirements. Then there is CMA reservations if an area is shared and
+> the overall memory consumption. That is why I am really not able to
+> wrap my head around this proposal.
+
+It is nonetheless available almost directly to userspace via dmabuf
+heap, or as a result of drivers ioctl providing a contiguous buffer, and
+unaccounted for by existing controllers, with the exception of CMA
+hugepages with memory_hugetlb_accounting. The dmabuf heap use would have
+userspace choose the area(s), but allow for no limit to be applied
+beyond that, which is desirable for areas shared by multiple userspace
+components.
+
 > 
-> the requirement for PUNCH_HOLE on gmem to trigger mapping invalidation is
-> the gmem is bound with the memslot. But how can a memslot bound with two
-> gmem instances?
+> 
+> -- 
+> Michal Hocko
+> SUSE Labs
+> 
 
-I think this is for when userspace uses an mmap'able guest_memfd instance
-to handle shared memory, and a 'normal' guest_memfd instance for private
-memory. Each instance is bound to the same memslot/GPA range, and
-KVM_SET_MEMORY_ATTRIBUTES handles switching between the 2.
+-- 
+Eric Chanudet
 
--Mike
