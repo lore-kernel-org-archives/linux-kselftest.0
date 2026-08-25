@@ -1,201 +1,145 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 466263A5E77
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 18:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17BDA35AC3B
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 18:29:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787682452; cv=pass; b=XtvWaa4mvzm1WDSKXbdGNOtUM4vxOJBxnTB61CIFR3bIiDPOKzQQ3DCJkvqSH2NVq5QufLtBT/P650I5YU3qKlY+5duKPJ+l6SaGMF/fVM/IeOTP3YKx7nDy/RGI34thJ3Ifyi9x0mioavKRn0uiKhHL2ScJJRfbcAGm5n3p96c=
+	t=1787682560; cv=pass; b=CeyKqEZAtkdT/RDe7U7/j9/HuSVvWwvxec97DWaMeyUtrEPoMHJBNH9r3rLgsyVAOOZccGQJ4oRNz34UP7g8CYGf2BOgDDsk+QpSRbvUnmK6U54vAjprFNuLFEEYm5Xi5OPYmvkxLaO/jsK74S9+vWPb3AwqOv3PQIZm0oCaAXI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787682452; c=relaxed/simple;
-	bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
+	s=arc-20240116; t=1787682560; c=relaxed/simple;
+	bh=KM/lcUx7z1exuS4n8yi/+58q3UUBVKsLFZjGmNnRgok=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=S1VvkkIqQeo7h1qPwR8ycdf/ai9U/fwTC+zlfoj3FTKOCjhT7Kayta5nKTJwv+nfUKM5nHbVOrCyrRXsvdbfp8q5Uv39BsI6R65TZpwuHzEm+Dc8ZFTTK71uLLlzW306F41pIZAaW/wSoqEUQVJkPFd0SbirqGqmmhwQcrE/05E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X3In9U80; arc=pass smtp.client-ip=209.85.215.177
+	 To:Cc:Content-Type; b=jRmNvw+I1cFQADMLFb7liSOIZJ5Ac4ZPWBl2fMoW085/Eay2lTjaN3sqmrCfIGwai+BscLZ1hlJM/y6ZpzS0vrc+mhUHFUC/tZShemcj0KXDq+gf3tLylUYMKB04KDaWj17lDk9Pr4T835stSwXOxX3NECCFfRuIc5DP+ny7iIA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hZk6FCrg; arc=pass smtp.client-ip=209.85.210.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X3In9U80"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-ca88130e09aso29869a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 11:27:30 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787682450; cv=none;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hZk6FCrg"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-8534d507f59so205778b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 11:29:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787682558; cv=none;
         d=google.com; s=arc-20260327;
-        b=SnfODR4SDl1fv3v9UF9PE6yrqpydvEKQfoY4gw2PHByGzzM0TX858RhsmqH8OQr768
-         8b7PjUVsjE4Kqtn1rSe4+WIFtOmVAxbQjYVXNSUaQA3h4MUxThxebTqjjAQ2vndAWPjO
-         jYkoV5Y4tqFmOwMK4hLqSxEuzjQvhU0QarAy2L3Eqci1OweDYvxYKCI6+Bzz6MhphY4e
-         zY7kqx7ckdu7qINvR58bfXyPUYjVCFcKPTGNKDvimEhm7wRX9dH+AMyhTQjZHl2IvHrV
-         Kr0uZFY89DcDq0HajLACtg7n6B8T2GODGYcXEN8hDvQfWBJqBtWGP9NRwgYTPomA+FG2
-         /O4g==
+        b=ht5TgqTj3N8P6cnY8keH8KZ74CxrL8ZwefWkGD2uliM6w/2RsUw5EnlbhSGgKkiMhI
+         2Kkj2HpXnx+azkz0+82bkwYoi+URoDU4js+gmY2HW0jXXXZo7JWGNTD5YfBLhLNTm+5J
+         BgpMZiOK3YEvexxyprrXt9ikoTlsPX64KwfKUbrgIRiFf8WWNM6GVIJCFHugizMnqqNi
+         yBdh9ONalkUnMEcS6MDhc7+aCkj7SdMpQQKCOlqcv6vdYvbjQggo/1vLSNjn+jKG3IuQ
+         6xQpAAHAQgy/3aSaT6apKiD1v70UCkSTEzX/HtYq8w9iNoZ0hobaqH6VzHzBRAyKdF69
+         Y4hA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:dkim-signature;
-        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
-        fh=mWti67sVGNnLt97N9rd2XxWe73f14+Mq98L1fHpyOq8=;
-        b=k5JkL0jvIcUbPUgNwlgqG7JGP8iQSMToBX5faW19E4pkxh4nkrY2GmXZZOTBhKb57Z
-         WaWHXexHMCo/mQctz1+j2HCanp/HfgJM8+v5BOvCG9eBSqy9sSy2UYTMzyUzbbEt47iD
-         r7BDgrMYUi3Tyg3i0fIIltPQZ3y7vfHTHXnbyA+Fxd7S+OlGmMNkck4Zgw91xJaKKBuE
-         yWHQqtaHq4ZiRGZ85TdbHLhp2WOg4F38mcVEH4rLfyH83jkbQmEgMfKcJducLiffahzS
-         wu1B/0LCEirg1tOCugwo6T1pAX5R82UyIpvhCh33FWxHOQ+O3cd/j+UveWrvat4zNewv
-         M3gw==;
+        bh=KM/lcUx7z1exuS4n8yi/+58q3UUBVKsLFZjGmNnRgok=;
+        fh=buFjFEbToFqEhG/gdK/0SywcRxegqV6WBo2yKgR299U=;
+        b=oFJNk66uU/+xkBk0vUJ3LHujv8WMndMwpzJZaO+FCqx3roYwliSaLW2XBhr6llU22b
+         GveZzQvRnO5IZu9dsv9ie0+mCoWZQO6Nd77tbgZjF/4r+kUsKfjK+0SqoI6zUFbWqpFk
+         oTSOJajdlrQzC/YTwQW5bDHveXTjSGFpj/sBCVg8esz4T35NreoD9s2MR+W4lxh2mGHM
+         pgU8qzzu5s64j6E1matCcyz01nNLyg8aQkWS87/zQqhzlFuP7j7wUdvDQLkYp5kB7VRs
+         Rzo1K4I+I0OEkN9lyrr2b+qjD1ElaexHhzm0CIyg5LeRLd/ggRtm1/k1IH+CL1kJwi+J
+         kOcw==;
         darn=vger.kernel.org
 ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787682450; x=1788287250; darn=vger.kernel.org;
+        d=gmail.com; s=20251104; t=1787682558; x=1788287358; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:from:to:cc:subject
          :date:message-id:reply-to:content-type;
-        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
-        b=X3In9U80BKpQbeNg61vgbUs9CA+a1cg135fGIgEm3O2UMuK73+9jQKnn7SQFIUlkxJ
-         ob8U1VCXRkIG+yu+uMkoVPk9Z+wgw5eDoX+7kXkYd99d3E1QhOgl+GaSpynJ8UtWANSd
-         Z1BYU2bUxEAQjYX5rJg79izzLf5cowzGtmS+JqMhY+kjgIVaO0IKEMX6Zb+2Ym32Pi7P
-         13RUX4PPkQasY/K4n7qcbNPESlgl/1vn+Wq0fFDKZ2cxC3dP4Di3d3NG/b7XS4kJZUQ0
-         4YBtH7F13ecWUJge969Aw/ezoX0nYnWlBEYJjn4woAVHsXgEAjW2Tptr8+RncoR80tsB
-         DNzQ==
+        bh=KM/lcUx7z1exuS4n8yi/+58q3UUBVKsLFZjGmNnRgok=;
+        b=hZk6FCrgUr78TVbmhz86dvdyqVsyHrc56YApspCjFbks/9vPXyypDrt8lwZ1A8oKKI
+         NT8vQBhVk8Po5cO+FzgexxHfSWs+klPmZ8+iJzp9i8RfX6+u0Px0KLF+WvB6RpMrmKVq
+         uJwlZiGykogdotTvA71NH/VWClxixr1c8U1kUreH+qt9yMv024O1+/5VnRdciyxWDprV
+         YsacYbAznIBU/hG8nvRaUsuq9V6wZ+bqSlwGAlTyYPotBwg2Nkvq/kDsh5HA/g+rP9ad
+         MQkLVgZ25/+z0WYZ/Zji38U+jyQM2hXGr686qeUCFXK1YwkiMpjVSM0B3SKYroHy8nl2
+         mpPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787682450; x=1788287250;
+        d=1e100.net; s=20251104; t=1787682558; x=1788287358;
         h=content-transfer-encoding:content-type:cc:to:subject:message-id
          :date:from:in-reply-to:references:mime-version:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=pjrV0fg8wzQcSqA/vlhGpXXq9/2wjhDE9WMxRk+zoWg=;
-        b=p+2sVVbLmWv/3vtV2wOnsVbuwUeY2yGVaC9L4VxA4pbINhBwvVxK4pvdYAyFTmxUJ/
-         B/JOUNI5Ld3pX/hI6Hf7aozI94ElKxMlRb3Nk2VNn5G3PkUxnt7HyBQ2UyO1akZ2gIaP
-         hSFi4ijQETSGaUvXN4Snp4gHzdyIZ+W5ixkLIYn062//2YKX6469x0GLAO6+Pp6UEuIm
-         j63J77eCOzB1l029FZdUL8BhYGFrzcHLSkTQFztQr33Q5RleAVLD0XG1TFu4ydVXrS5d
-         uePG5ivjp4W/UbDcsv34lfwOoGybEWp/xtj+Tk/gjUazQ30ngqJad/647E9sQgNMrYpO
-         HTqw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr/bdg3rSPdQ6IW53Mwsr4JU3Ot5FPU1AG+MX0HVMoz7DtCk7SXhX1MBc+J1Wa16i3FApJGp7RIU6J1xfgzKBU=@vger.kernel.org
-X-Gm-Message-State: AFuF++lAG90MP04ihn9PFZk0TOs6Hu+BvsrclKkbM4HD9a1PYllS4y+5
-	CAcRc8lQxOih3P/pLS0iKMJiDQIzT8oX0Siu67PTKWsLe8zbNYJWMRMTEM9eEEXofc8MmHuczzP
-	ZffUjd71Mb2uQfcttOPVF9ZXcqjBiYOs=
-X-Gm-Gg: AR+sD10MPFaQ8DbAhjTKAOEdxrs+6GTl4sT4legA3BoKYwxY0BD3iuUWjvY3xj35nJD
-	PxeR6xXZtWDOhrZIIkZD/POcysZHfTmvQVu2NxK1NQtT84QoqLHHwCOqANUAMqRRD1/eIKXI26L
-	TW8hA0NUfrdlNECwvr9Q0Nc9Crj4pkoERzBA0T/QnzharCylLVjPGxZoYSscPBlK+6VQWrWGfdR
-	R8awKgaNoo9FqsVPTrJIKvIb+svFyOv5X4sjw36tjwBX7yNucutQT6C/MFS/T5QYHHuDzvuTo5P
-	sZxsJRAcBReUpreGu2iIwAZaaPnXJ75GpikUSqDGEVJyL/UO2x8rVyFGM8nr3yr6cdqSYYFyuh6
-	Ap/nelPWL1dpGJzykLHO4gni5mEx3pCShQ7Hf2hfpcQ==
-X-Received: by 2002:a05:6a20:eec7:20b0:3cf:a7a5:e310 with SMTP id
- adf61e73a8af0-3cfa7a5e417mr148047637.9.1787682450200; Tue, 25 Aug 2026
- 11:27:30 -0700 (PDT)
+        bh=KM/lcUx7z1exuS4n8yi/+58q3UUBVKsLFZjGmNnRgok=;
+        b=nOEVzi/4gtU8JZqIda0nANwrV9D3B3cyVyY2EJH79eadBuAy7f6vnKpo0XkMMcD9Y6
+         e9lkYRZ4jTwV91xkzxmzFQxN7XMc9ITf6Qv7UOMjkEuTE4HESj6bOgrOUtuNp+yAime6
+         cuxYS3NW7uDQYbIYhBJShCZQ9GQVcwreIfeOssPXshbbtFY+ZQACY2NTz+J5PovOD/Iv
+         Co32KbR0gEkTXOgcgvzcwUcZ3yRYPpI2hjlBFAqovKFmiShaEaIxj4fSwoG3N3TF/PvU
+         Xg+xEtWT1Fca+EaisD5DisX66EobiaADG6SMdpCiA5ATX60TsZ8/yWxpJdI3pDzjNd5B
+         G5lA==
+X-Forwarded-Encrypted: i=1; AHgh+Rrj4RrPOnpU0VRjYFkK07iWhMJO8Ck8OwzA/e105BhqYml4Eujia0JQUgpVeM9owxABSSIU56Ig16wPwF4y+kI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kjhC0AQmi4HJRjtEIO024X4juEYopVF994kzfBFrRGf9kEpiOv
+	A/7MI+evyL4RJo2x90B4YSv5xlRLslmUePJ4g7aHISwGkeYimbbkwTN47oVmdVZaR1wMldcAbKn
+	VF98YcKbIByLi9VoJxt9pkGZDNA/kQ1g=
+X-Gm-Gg: AR+sD12ptshnQiOPrx2d1xPauS4C+9wnDW9WqnKhCVyqYbl0vIarQAp2JAVZddV50HI
+	8owOGpO0ufPHF5WrkhJxQuUbbnOSJ8Nq27k0zZcvNfTtZ8Df3/e4lKLLuUViA2tqqwyZuS9iDxR
+	nBDb1mId8PyI2XQZgF1TSDOX8/h4R+AALU0O2zsnqYo3k3FilbggV5JKxUpPFnGty2uvyapecbw
+	j6MIHCBBue4duzX9HI4neuycwbAnyOEtRyQcZ4kqO/HF54VHtOgX/k9DOoEpcDm6EmNAsc9EROK
+	SaSU2F54wHnyH4oxPox/zp3IDKPTT4/KUGw8Mk1X9QenolkarO27TPPv6iXMStZzD/h6tC6N8Tp
+	ZNJz8Tic8EuaezQyFSrlFc319gCHBiWCtNy7xecKAtw==
+X-Received: by 2002:a05:6a00:3c8d:b0:84f:b01d:3693 with SMTP id
+ d2e1a72fcca58-85374ed1b07mr1103841b3a.15.1787682558435; Tue, 25 Aug 2026
+ 11:29:18 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260809150111.45000-1-leon.hwang@linux.dev> <CAEf4Bzam=0V6n4_vBahhYh2Qn9KfriDKXSz58L4L+teHJRWfPQ@mail.gmail.com>
- <0b30bc97-2ecf-46eb-a863-94e706e18c6b@linux.dev> <CAEf4BzaXaLLqs6XXCG_02c7UcvNWfbGUAJTYosr22oaD4iokuQ@mail.gmail.com>
- <c71d27ab-ec59-4b72-855f-7bf437095cd5@linux.dev> <CAEf4BzZpB-qkhu3SAu5MrYYAT2+ZN8WaXqpmnKruOOdjJOLK2A@mail.gmail.com>
- <7f18980c-0c15-4862-af1f-f451ca12dac5@linux.dev>
-In-Reply-To: <7f18980c-0c15-4862-af1f-f451ca12dac5@linux.dev>
+References: <20260818153202.90714-1-leon.hwang@linux.dev> <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
+ <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev> <CAEf4Bza6X9SZmnyqdZDFKJG5nWchuaEuFyC-MbuzQCuZ+dwq+w@mail.gmail.com>
+ <90bbc900-21cd-4dfb-a058-13930378052f@linux.dev> <CAEf4BzZY-C3WtoRkdi+U7XFAMv59JeJ2R0yMi8+FGM4sLTsnQQ@mail.gmail.com>
+ <b8f1e71d-0fe6-47b5-bf59-0e077e5806ad@linux.dev>
+In-Reply-To: <b8f1e71d-0fe6-47b5-bf59-0e077e5806ad@linux.dev>
 From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date: Tue, 25 Aug 2026 11:27:14 -0700
-X-Gm-Features: AcwNN1X2RE3UG00GfCM7tcLMBWO7FTBVU9F1ssGpubHcRFwnWfxEEW3QwlAbcZ0
-Message-ID: <CAEf4BzbS8enxXg7YfWXssBg4jPHr2Z6L9cAigpfUNxiOep3BJg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 00/13] bpf: Add tracing_multi link support for
- bpf progs
+Date: Tue, 25 Aug 2026 11:29:02 -0700
+X-Gm-Features: AcwNN1XyrrP9zNTFIOW0jz_xCJcy9v-63nFUhyb-nd_k_Kn4wLwg02AyJIgkoCc
+Message-ID: <CAEf4BzZ__H1Qy5gk_aQcKdMNKFBnx9UbHTg8HTfF4T0edwz88Q@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
+ for percpu data
 To: Leon Hwang <leon.hwang@linux.dev>
-Cc: bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, John Fastabend <john.fastabend@gmail.com>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Ihor Solodrai <ihor.solodrai@linux.dev>, 
-	Quentin Monnet <qmo@kernel.org>, Shuah Khan <shuah@kernel.org>, Mykyta Yatsenko <yatsenko@meta.com>, 
-	Avinash Duduskar <avinash.duduskar@gmail.com>, Anton Protopopov <a.s.protopopov@gmail.com>, 
-	Amery Hung <ameryhung@gmail.com>, Jordan Rife <jordan@jrife.io>, Rong Tao <rongtao@cestc.cn>, 
-	Eyal Birger <eyal.birger@gmail.com>, Pu Lehui <pulehui@huawei.com>, 
-	Jingguo Tan <tanjingguo@huawei.com>, Lin Ma <malin89@huawei.com>, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org, 
+	daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com, memxor@gmail.com, 
+	martin.lau@linux.dev, song@kernel.org, yonghong.song@linux.dev, 
+	jolsa@kernel.org, emil@etsalapatis.com, ihor.solodrai@linux.dev, 
+	shuah@kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Aug 24, 2026 at 10:15=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
+On Mon, Aug 24, 2026 at 10:17=E2=80=AFPM Leon Hwang <leon.hwang@linux.dev> =
 wrote:
 >
-> On 25/8/26 04:02, Andrii Nakryiko wrote:
-> > On Sun, Aug 23, 2026 at 10:00=E2=80=AFPM Leon Hwang <leon.hwang@linux.d=
+> On 25/8/26 04:04, Andrii Nakryiko wrote:
+> > On Sun, Aug 23, 2026 at 10:02=E2=80=AFPM Leon Hwang <leon.hwang@linux.d=
 ev> wrote:
-> >>
-> >> On 22/8/26 01:46, Andrii Nakryiko wrote:
-> >>> On Sun, Aug 16, 2026 at 11:20=E2=80=AFPM Leon Hwang <leon.hwang@linux=
-.dev> wrote:
-> >>>>
-> >>>> On 15/8/26 04:14, Andrii Nakryiko wrote:
-> >>>>> On Sun, Aug 9, 2026 at 8:01=E2=80=AFAM Leon Hwang <leon.hwang@linux=
-.dev> wrote:
-> >>>>>>
-> >>>>>> Similar to the tracing_multi link support for kernel functions [1]=
-, add
-> >>>>>> support for bpf progs.
-> >>>>>>
-> >>>>>> When attaching to bpf progs, it must attaches to the target by tex=
-t poke
-> >>>>>> way.
-> >>>>>>
-> >>>>>
-> >>>>> Please spend a bit more human effort on justification for the chang=
-e
-> >>>>> and explaining your use case. In what case you'll be attaching to a
-> >>>>> large amount of BPF programs such that attachment speed-up (if ther=
-e
-> >>>>> is any) matters.
-> >>>>
-> >>>> Will update the cover letter with justification and my use case.
-> >>>>
-> >>>> Here's my use case:
-> >>>>
-> >>>> I'm planning to enhance the function-graph feature of bpfsnoop [1]. =
-It
-> >>>> will trace all bpf progs, including their subprogs, to draw a full
-> >>>> function call graph including bpf prog call sites.
-> >>>>
+> [...]
 > >>>
-> >>> fair enough, interesting use case, definitely outline that in the nex=
-t
-> >>> revision (and provide before/after attach time as well for such use
-> >>> case, please)
-> >>>
-> >> Will include my use case.
+> >> It is to verify the mmap change in libbpf's bpf_map_mmap_resize() for
+> >> percpu data map, like those subtests in global_map_resize.c.
 > >>
-> >> Implemented the attachment micro-benchmark. Here's the result on an
-> >> x86_64 16c16g VM:
-> >>
-> >> ./bench tracing-multi-attach-progs
-> >> Setting up benchmark 'tracing-multi-attach-progs'...
-> >> tracing-multi-attach-progs: prepared 1000 identical BPF program target=
-s
-> >> tracing-multi-attach-progs: fentry created and attached 1000
-> >> programs/links in 679.324ms
-> >> tracing-multi-attach-progs: fentry.multi created one program and
-> >> attached one 1000-target link in 470.042ms
-> >> tracing-multi-attach-progs: fentry.multi creation/attachment speedup i=
-s
-> >> 1.45x
-> >>
-> >> The speedup 1.45x looks good. But attaching to 1000 progs via fentry
 > >
-> > I'd say "meh". If 500ms is ok, 700ms is not that much more noticeable.
+> > this didn't explain much, but I think what you are trying to say is
+> > that this won't work for PERCPU arrays with PAGE_SIZE=3D64KB, because
+> > PERCPU value is limited to 32KB today, is that right?
 > >
-> Besides the attachment speedup, this series provides a way to attach to
-> multiple bpf progs via one link. The current revision reuses the
-
-that's mostly a convenience which is pretty trivial to abstract away
-in user space, not really a hard requirement for kernel to support
-this
-
-> ftrace-based attachment, which relies on
-> CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS. In the next revision, it will get
-> rid of CONFIG_HAVE_SINGLE_FTRACE_DIRECT_OPS with its own attachment
-> implementation. Hence, this series will be able to run on those arches
-> that have trampoline support.
+>
+> Right. Limiting PAGE_SIZE=3D4KB is to avoid the
+> test_global_percpu_data__load() failure due to PERCPU value 32KB limit
+> when PAGE_SIZE is 64KB.
+>
+> >
+> > so maybe actually model that in the test itself, expect -E2BIG if
+> > PAGE_SIZE > 32KB or something, and otherwise check the resize?
+> >
+> How about skipping test_percpu_data_on_cpus() when
+> test_global_percpu_data__load() returns -E2BIG? Because
+> bpf_map__set_value_size() has already been verified before calling
+> test_global_percpu_data__load(). Afterward, it's unnecessary to check
+> PAGE_SIZE value.
 >
 
-sure, post a new version, but it's a bit less motivating to add extra
-complexity to the kernel if the only outcome is slight speed up and
-user space convenience of having single FD
+let's just add a comment about per-cpu limit of 32KB and why PAGE_SIZE
+of 64KB or more is not going to work, and skip the test
 
-let's look at new revision and see how this goes
+ignoring load failures seems worse
 
 > Thanks,
 > Leon
