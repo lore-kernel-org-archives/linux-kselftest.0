@@ -1,117 +1,171 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A810F49364D;
-	Tue, 25 Aug 2026 18:32:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787682750; cv=none; b=SlseWJDyIgP0a++sb1HfbWqn+NEEhn/WNSsDoo21teRGUr9vOS70MvW5CRBH4wC6Tr231yFVnjZH9RJIqwqu7U+mQ58odlPRDWkXDbtmjRsH0lDAMNt51cNw9nUMLuapSnYctKk3Evtl8Pqd6mM9ftIr3Xa3NeL8o1tywpizA0A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787682750; c=relaxed/simple;
-	bh=XeiNTZMoCrM6euy1Cd7FkU0zQW3cbFEY2KGKv16nm0E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=j1Mh5axWXMmzedu7HMSl25Cua30NT3OAWGMjfg+Mv6DDCCe7i1Ff190NPHtwabxnjAK8rCBUfOgzshlnKetlwv27MgRflGAUSmbXl1xdPSM1z5UY+dX3inU5LQT3XIgF1NUoqArT6/ntgAGZSmdTE6bp5QRZkNBQSocIpI2NwBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I1XPhPdl; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B7402FFFA5
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 18:33:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.210.180
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787682785; cv=pass; b=I7P1xBGMs/hnWmGg2osslSbpVV9Gfi9oyAYRRs/GDq8oM3MbDjzcCysE75vU8XeBTg7qMrdERkf3VA46YRQ9viHpDgilU4y9/p8MoHwrD2J+ddC4Fuv1+LF8hvOmokVFZX2N0z4EiAQQ4xRlRtWhZa1khFO1KBv6DtutRv2U67Y=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787682785; c=relaxed/simple;
+	bh=BzvGvYFHF2gDiOAcujcG50Fchm0/e02uzIwUpAozZV0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qGR2Vq1JjXohl3ltOYYWokEM3KeRFbdiabceZIPR8Ji9TCfPpXEHMGAs42JKvXL9ZnahGFZVRK5KKTZuoM9GjoPQINdZ46UMVS7268z/XcsLrTJgx1B8CnEFc+wJJOSg12oghMhQkweqdE36+uGd+5ilzTgyD4KepScM0UL/uwk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kc0TB1lg; arc=pass smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I1XPhPdl"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C9E1F000E9;
-	Tue, 25 Aug 2026 18:32:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787682749;
-	bh=E4M/A6prs9qi150UlkMo7ilOIhLeRXUnM9FxtUHao4M=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=I1XPhPdlnRLXQNFuVbZIZyuKCmnP5tLm2XlvwkVszdlSEPx7JPAdOzhL4QiuWRF/Z
-	 9WmX6PPjrtk28PKXIXXkXDmoLoP+W3UBL0jVeHnrmdlTVUaCzW11VGjC5Bja1o5e/L
-	 5jBOGV3vlR98lAtbJl4h0WD13DXkNBGoJdLJBMOf2XjBJDJroXUmQxDwh78aPAND4h
-	 j103mofOdm3Ld7OTetTznmIwmnUKvZQuMbHHK2CBLCKrxwGqM6toQUGaMWcHSIefwx
-	 4C8EZpUgkF9VDGiajs+639zZA36RvoXH+6WxJQY0SAtn4ltZJPFw3lV8M4GCFStFh5
-	 rNAfcbkeewT5Q==
-Message-ID: <a89c39f6-6901-4daa-8619-ea9c9940e721@kernel.org>
-Date: Tue, 25 Aug 2026 20:32:20 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kc0TB1lg"
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-84874b52eabso214224b3a.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 11:33:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787682783; cv=none;
+        d=google.com; s=arc-20260327;
+        b=lkVYMTaPAJxMTbbQKWBxjP0N0WNx4g4S/fn+HxapjxCcvTEiB8018BnU0LBk+E+NRD
+         hyL5EjfkWYS+hFXovD7Ck/GtB03VOyHyQeSXcuqd45SfCVXSRxNARxdHvuhWDxZ/YbSh
+         YYp+SENuJg0wnW7wVuDeS37D4fFaXDpEM/mc5gPpyMsHVrBWjDNo6idS3MwSLiskcRfE
+         GbVS+g+T48XwMJQLCX8hDnJ06R2nZlnx1tvuFv3l66NVWVdq/xjRjmAA18QdQyVd9ISF
+         onY0d5mUODiWvTQfA8KCGx1uWJJZs5fPq0wILjM1pvCwCNdR3aM/PPRHm5UFg2kgFMZy
+         +feQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=U6X+wOKWsKad1gqxJ1QjKCWBvjKFCEAagO8RCFSuQlU=;
+        fh=p1NeWYIeg7x66k27CGbZj7iyuYy47REshMvjDeY1L1M=;
+        b=hLqLaj7hj1WIBlF6YjSG9tTrxZGoG48wqtTasUb1BheSCjdtTd3ttn0rEHAW3R1feZ
+         Lof1/kyqgCjaY5/IkJ4tP//ZS2hiWFtJI9yBNY/wX/GbtGQjOu6kyO2O+QN2v8oavyXW
+         dNplVzfHyWk0dO+2ovk8sIa52wzPBW+EQzhhHphx+jHEdPXYNddnmBpzf28Nus16yOxn
+         CwNNyCXzHPEZQNZWg7scZOvMM4QDQ/t3B2icQo/sLMi7Xabz4bTxgfROHt0d6e4inuX+
+         N/dkNsUFnInrAwglfI8bXtieEz9p34Jhd4zCJCTB0XMVdt/U9AGnb+1C7DYMe/etYh+F
+         HBww==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787682783; x=1788287583; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=U6X+wOKWsKad1gqxJ1QjKCWBvjKFCEAagO8RCFSuQlU=;
+        b=kc0TB1lgXGm/w7nH7/VGc2qUokQQYQF2Ao0OwEYdzQtjFIvcx5E2KY2ADJGzkICy3F
+         +S9ldk8c4vDaBaZz+I7YbOJ5hlJm9SnT8rjt6Wt2UGiruf1ID03F75gZJo8PbM514Z+g
+         GxxRaaYj+jrkP8ftfBSq6Mxo2BayfC5VyWW5mcUrqaKalFmM8t2lz57w/74KFzCtJ43g
+         7RIkhiHdlYbjLD1pkCz9MFWwCepcNQUm9uJFZflrNa+tjo+PabNHTi6YEJOt/QX9qIK7
+         r/kOC9XmZCK7vmzZgfJU1lCn1lH3i+2EqjHSDdNCMWcujn9UCsXVBN+dWtDka4TMopzm
+         T68Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787682783; x=1788287583;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=U6X+wOKWsKad1gqxJ1QjKCWBvjKFCEAagO8RCFSuQlU=;
+        b=Wi6k9yZZ4usarQ+OIiBrbsFMsGIFuCKaWUB0XPxxp/YgOfisNHbph6OoABsXuWPjgE
+         do48Sqm4weSViqM9pgqPQ+xKC0hqm1EaEZ+uYO46sDxQ1jWB1iwo6ssssyubvMgXsCac
+         kTEh673311QiernSfEAQMXOE2B+vRGl1dtg6I/jqZLBMrs8pdf6ebpGdhi03BIXAhlju
+         uZoavPHi/GINgOA1LbOmcghWwD+3JVLURF3m2rhT7yqORgLmQuhHEF8RV8Utc68FZN/q
+         3lI8ixmnqk2GcCUIm6zpiQ4OLcxSc6/hz/q8mQJiUbtXS+5bwEHjvFuaVQSiJDyTrRtn
+         c3zA==
+X-Forwarded-Encrypted: i=1; AHgh+RpDH9uQYjESu2ivgq+sqtqKRaPmwXbH8duknxOdADCPtrSoYyVpB92u8jdPe5MHbBns4u/IsQqP6wuG9UWy98k=@vger.kernel.org
+X-Gm-Message-State: AFuF++mPPPMYksZhngl2Mec4KPyggkPouLQfLRRktcNYsRxkpQUeylvr
+	m0Z7ASfTBYN+xFjcUUfhPtH40GbjRfLJY4gA8WtC4b6TMF8niqr0JP+Kpo2/SkODIpeaQ99V0FV
+	lEn9PVljiVsWNTrYo6vAc629EcFJKyG0=
+X-Gm-Gg: AR+sD13sUzEjCXbiKVbpA+IMq4m5Ex8MiequX+YL24sPfb1OZeqlCcto4oeOijgICf0
+	F+HSUITPIsOz5CrNJf52prvQ2Q6CS+yAMLbaZ4G8aDHjheK4uQLur/ODwZrugDeGySato8zuyMv
+	dOfRJ8R9cbkPhUA9vjgxVcRBRrPM3gIAndUCP5PVVs7m/Tc2NRKnPfy3cMT+Nn4yFy0sd1HQE0b
+	Hrqz4d8ieI8Xp2XiETSQ7BuNPSKahIcwJtV0ZNT51sppSGUYhY3VbwU+QR3I75xdp8CzCZG2RUz
+	mRcteV6u37Lefv1es3pdEvZojYcNVrzNLGnp0goWOSYZCAphpQGhWd3QzvBEMxTLTiNRaWGMQSU
+	mocO8vcCsxxIbNDOSopwv0tTGbj820uxHegS5QA1QNQ==
+X-Received: by 2002:a05:6a21:9d84:b0:3c3:89ce:b5bc with SMTP id
+ adf61e73a8af0-3cf8444739fmr805336637.15.1787682783471; Tue, 25 Aug 2026
+ 11:33:03 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] selftests/mm: check strdup() and fix buf leak in
- parse_test_type()
-To: Anshuman Tewari <anshumantewari123@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Lorenzo Stoakes <ljs@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
- "Liam R . Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>,
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
- Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20260821114416.12255-1-anshumantewari123@gmail.com>
- <7bb2d581-924e-4a59-9955-b8afa2b51268@kernel.org>
- <CAJqi8kJf9EzfZWBo=1KpEzGiq+vGRz0J0mN+-NXAjrtq9HDrMg@mail.gmail.com>
- <e7c339b8-b936-40c7-b121-1a4c14838dd9@kernel.org>
- <CAJqi8kKaNsxBM86Hg4W09gLo2rj0+kc9dAvps48jmQCshUkxqQ@mail.gmail.com>
- <b993b8b3-351c-4d2e-9bd9-12c622f427ff@kernel.org>
- <CAJqi8k+cTXvvk4Pz0RdjQMPvSNCszzORH746fb7YgQUgngykbg@mail.gmail.com>
-From: "David Hildenbrand (Arm)" <david@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=david@kernel.org; keydata=
- xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
- dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
- QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
- XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
- Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
- PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
- WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
- UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
- jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
- B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
- ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
- AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
- 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
- g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
- ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
- 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
- /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
- jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
- DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
- HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
- 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
- LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
- 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
- VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
- /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
- iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
- 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
- zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
- azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
- FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
- sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
- 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
- EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
- IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
- 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
- Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
- sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
- yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
- 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
- r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
- 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
- CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
- qIws/H2t
-In-Reply-To: <CAJqi8k+cTXvvk4Pz0RdjQMPvSNCszzORH746fb7YgQUgngykbg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20260824092847.361683-1-jiayuan.chen@linux.dev>
+ <ao2fomkGLiwm032U@krava> <016aecc5-b3dc-4d8d-be1b-67b9b4b0a24e@linux.dev>
+In-Reply-To: <016aecc5-b3dc-4d8d-be1b-67b9b4b0a24e@linux.dev>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Tue, 25 Aug 2026 11:32:47 -0700
+X-Gm-Features: AcwNN1XzrEX31Kq1PCqp0g3FwZ2l4Ra6iyzrVp0JYXpTQimO3bDUGx_bFc5akcM
+Message-ID: <CAEf4BzY=MsQ4SwLnhKUUBtH8jnuf1VZWYcfwPe-VAzEnu7Ezdg@mail.gmail.com>
+Subject: Re: [PATCH bpf 1/2] libbpf: Fix usdt attach failure when nop10
+ crosses page boundary
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: Jiri Olsa <olsajiri@gmail.com>, bpf@vger.kernel.org, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>, Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, Emil Tsalapatis <emil@etsalapatis.com>, 
+	Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>, 
+	Jakub Sitnicki <jakub@cloudflare.com>, "Peter Zijlstra (Intel)" <peterz@infradead.org>, 
+	Jiawei Zhao <phoenix500526@163.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 8/25/26 20:20, Anshuman Tewari wrote:
-> That makes sense, thanks for explaining — I wasn't aware Reported-by
-> needed a Closes: link specifically.
-Yes, it's documented in Documentation/process/submitting-patches.rst and
-checkpatch.pl warns if you don't follow the documented rules.
+On Tue, Aug 25, 2026 at 7:29=E2=80=AFAM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
+>
+>
+> On 8/25/26 9:58 PM, Jiri Olsa wrote:
+> > On Mon, Aug 24, 2026 at 05:28:36PM +0800, Jiayuan Chen wrote:
+> >> The kernel refuses to attach to a nop10 that crosses a page boundary,
+> >> since it can't be atomically rewritten:
+> >>
+> >>      /* can_optimize(), arch/x86/kernel/uprobes.c */
+> >>      /* We can't do cross page atomic writes yet. */
+> >>      return PAGE_SIZE - (vaddr & ~PAGE_MASK) >=3D OPT_INSN_SIZE;
+> >>
+> >> Whether the nop10 crosses a page is purely up to the binary layout, so
+> >> this does happen in practice. libbpf doesn't check for it and blindly
+> >> shifts the uprobe onto the nop10, and the attach then fails with
+> >> -ENOTSUPP. Just keep the uprobe on the preceding 1-byte nop in that
+> >> case, it works everywhere as a regular int3 uprobe.
+> >>
+> >> Fixes: 41a5c7df4466 ("libbpf: Add support to detect nop,nop5 instructi=
+ons combo for usdt probe")
+> >> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> >> ---
+> >>   tools/lib/bpf/usdt.c | 23 +++++++++++++++++++++--
+> >>   1 file changed, 21 insertions(+), 2 deletions(-)
+> >>
+> >> diff --git a/tools/lib/bpf/usdt.c b/tools/lib/bpf/usdt.c
+> >> index 2e56e3ab5b6c..c266ac93cbdd 100644
+> >> --- a/tools/lib/bpf/usdt.c
+> >> +++ b/tools/lib/bpf/usdt.c
+> >> @@ -614,11 +614,28 @@ static bool has_nop_combo(int fd, long off)
+> >>              return false;
+> >>      return memcmp(buf, nop_combo, 11) =3D=3D 0;
+> >>   }
+> >> +
+> >> +/*
+> >> + * The kernel refuses to attach to a nop10 that crosses a page bounda=
+ry,
+> >> + * as it can't be atomically rewritten. Page offset of the probe is t=
+he
+> >> + * same in the file and in any mapping, so this can be checked static=
+ally.
+> >> + */
+> >> +static bool nop10_within_page(long off)
+> >> +{
+> >> +    long page_sz =3D getpagesize();
+> >> +
+> >> +    return off % page_sz + 10 <=3D page_sz;
+> > could this be another check in has_nop_combo ? so we do not
+> > need to introduce another stub
 
--- 
-Cheers,
+I'd go a step further and collapse three checks, including
+man->has_uprobe_syscall, into a single "can we do uprobe nop
+optimization" function?
 
-David
+> >
+> > otherwise lgtm, thanks
+> >
+> > jirka
+> >
+> Thanks Jirka
+>
+> Sound reasonable, I will do it.
+>
