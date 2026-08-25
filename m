@@ -1,162 +1,130 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 984DA78F2F
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 16:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD9F63515C9
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 16:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787674662; cv=none; b=CRrEADbOLK40YifT49vu1vYu036SXwgOhwaOPzdnVhFp5XfY6EwbYlFyyUJxAdrOUY4r+k+pVSroaTFuKGOr+HASuAfFXfk9b6gL88dNkzOJpJFwFBDvFTXqavowIvBM58GLWrGoCeawxxX/nzigRLx+LHOImI9im4LTw6Cs/x8=
+	t=1787675207; cv=none; b=HAD4j7J37kuYySTz+s2kmdf077QadT/29LVH41JpA7iU01R7av+6MjaSOubv22ZbS0NJ0/TTQZ5FvFePFzGWBXnVKCuWFOm5arOd1NTksrwoWNQ8MJ5xfhz8wLoSao+o6HBZpYNt9VYNatcs90/jPWp57zOHgB5catBtSYZl2NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787674662; c=relaxed/simple;
-	bh=9OPqxgBu15Idq5/Ok/0spEv15fcFq2gn1247wFrxgNY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LmL95/moj2wUrXdE0KIyzNJRLRLfdBxLbrGpDGwCB+RKatPtcTahum2Q/HTG9ydpOrar1vscNOjk/6xFVibJ5cIiqYD5dPIMQxDYW2F625Fm0wuQcbQxFUFNcM7q7Ljcnw8Nq/COsZiwfbM0br+mu3x5t7sFEVh41zqhFhLBfIQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SYPOFoWS; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787675207; c=relaxed/simple;
+	bh=fg9K1ZPJMtQO9eSSEqdgakx5ncAJu4D9kJT0Hx6NHkA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ap7YWTDzfCyjJoVt8vHzOLJR8cx12P9DOtsjk1agMBAESvZX9rmlWmQlRZhmnb3lgJVkkVT4iU2HRtYIamb49Er/J5S6F3Acz8tskJjLvwFm8oevFYralcDwSX8kunMaE2+H9N5CqtoweM7lXRjQG1UOmJTb/cptNGHPPeAEDbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=MLv17mEL; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SYPOFoWS"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d5cad1a6baso256905ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:17:40 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="MLv17mEL"
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-c160420289bso720462466b.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:26:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787674660; x=1788279460; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=pnKpvcq+eFIIrOJcljhlMUuTfIvczUf3J7EXGDw1e2A=;
-        b=SYPOFoWSq0xM4Y7Jc2CxtO5IjZ9IEuUYcblZBbPGdrXSCIQibQVBGuN9d3UXm/Awxd
-         +Fnf0Hi1N8uXqbNOJs7iqYrInVm0l5wEvqLn5GFdlIs7SrmCQ0CnzdHvG+F+0Op3izfF
-         ou61FX/dA0lQOpY5MrtrOS+r2NTWy8Nx5WOjwr1lZDFf85b24M64uI61a24kOP1mfRQB
-         yMPmN1DQS4EWEtPQfo4T5YQLkYnrfWK5o78YYTevyymVn4nsxlczta4eWqqYpQRXvCc/
-         WmEEG5VX54NSiUEjZw27PQGSSccpKuayVKZrTVQEI9z2gJOLe9saBqJ6YfXujlTF6y8U
-         ZcQA==
+        d=suse.com; s=google; t=1787675204; x=1788280004; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=k0fZPjbR+xEB7NjgLf/DwoW1nbxA9k8PLKOgb8wsBaA=;
+        b=MLv17mEL8rRll1BGD1TXxHOza41xU8OgfAz2a7rW+B6z14GaKUzMQZADTvr38wORuS
+         SuusYMUpKmQ9lKhgy8SBXbLH9VOsuHScKzsNeB5jwyLZ6b+7otR0aeNldaiOeYlG6mYx
+         dbMQHR9Rzt2aE+oua3k0+aC7PonOZm1GzMZel5jyYUfunFCNNAZQL90Q4zC0Jp2b0sny
+         EqpLnYk/AGDB3qoYOzV2o/4MqB6lNkAHOqhrmKVTE5xjX3ijK7KxmX5n/4VI7xTyADfM
+         HoJnaS9Qz36oJqzDADvNBYitH2OOO4ArXnki6w0yOr3TDGV3PAV4isTNCgPBBOBIkqrT
+         SxtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787674660; x=1788279460;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=pnKpvcq+eFIIrOJcljhlMUuTfIvczUf3J7EXGDw1e2A=;
-        b=YckacqRCOvKS4CbazIkEZeG2f5tEx4vrq9eX8+24qwyUyBqhZtWuEFVb6W5Lh5LNen
-         UPLlc7k69QlQCcnwBHDzZmHfkKav/IMpjFdC5bJuCD0IVZKC15tERr2gqtPxw+hs0wil
-         im3nZcFlCgQEnSjgJaHcZHL+LtJHj5xyxc9uH2hwttBtb2MudlWcMBhZ/kOGBS88qGm9
-         WC8OmjZk8Xyr1YO4C7SLKMIYoEdf9SMBZDF0RBFeNgjvolM7L6eX2QC88fXGQKEVuaku
-         yQv47CRjd6rPTr9U7uDbYRo+veCa5I9PbckhZS+R6kW3bnEjIkXGkI7jHYdlqlKYTfd0
-         lRuw==
-X-Forwarded-Encrypted: i=1; AHgh+RpOEHjmKYJL6BMbeGGB1pKT2x8XP6cr3JAni6qHecDcqNxMiJ5OjMIEuOhQpvMVg2iKacj2i+hIcdVZhyt4eKY=@vger.kernel.org
-X-Gm-Message-State: AFuF++ktNnGlcno/vks3clx5PF5SHzMtXeF4UQBWH0PGxQad4TM+iZ1l
-	7RO0XwGG4gUM6znA+ZOmCAwwXMyidcx3zqDA21EdHlJwS2nQO7xsf0CL
-X-Gm-Gg: AR+sD11sztZyQgYUVFhW/lATUuONiCZ0TLxFpELxUUTbthn6Y81IddUd5v15WiV7VXR
-	pXvJE4eXoJ/vQHCQBy/5E9o5Rsz/tei6VilFiUxtbxBjwXNadM1y52tmeREDeD5Lwc3JLLCdevY
-	gM/vln+JxgHR7EriIK6DIcB3iIIuGdieyoHtxkzdtS3MbMayAaZjkBufdjiWZkPmNwcwDuyk+OH
-	AK0n6gL8eh2I0ZP/JfjgF/xD5F/s6WUeT+TtceUkwct8bGobfLZDHBKyHjiZzk72XP9x8qjN4Sp
-	FY4diLqf8rBChybR3vlvBJELvcMnf9NdSSrUheM2AQruqs6uqj+z6nT6CHg4fdSZ8b+HVAna78T
-	Kvd09Qfqj47iIUvn6pqgaTYpnHYPI1KcSchk9zUJwhHcyvaNC/FCvhOp8UHQFSVhfNB9yldW0r9
-	wa1Y/raZ8B3eYKcw39y9kpe6mUqrEWQVYqbYTgAlfHKGr8nOFvjsOiIYeCddax9wP3o70YcL+F0
-	JEjgY2zse8=
-X-Received: by 2002:a17:90b:5291:b0:38e:e9b:ffa4 with SMTP id 98e67ed59e1d1-3966d45a53dmr525079a91.6.1787674659810;
-        Tue, 25 Aug 2026 09:17:39 -0700 (PDT)
-Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3282afb407bsm8786745eec.30.2026.08.25.09.17.35
+        d=1e100.net; s=20251104; t=1787675204; x=1788280004;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=k0fZPjbR+xEB7NjgLf/DwoW1nbxA9k8PLKOgb8wsBaA=;
+        b=p14+lkSeIvXFJJwEGZi/faH2SONkNa6/kB+zdukyCnAF9hamCrkWoDymz5/7ZAW6IJ
+         vHZfelIIKATiUgrEwfTbt1BsIikxkF2b3OAmD8dC2zyRUBdSqD+Rz1BOfE+nJWmwDwjX
+         vahT5LCAgfc0h4PY89ZrIJTEypWLBYeuL5KdNtycjJFXd1smJG1R4f1FFpckewDNtwXu
+         g4cMBfdt4ylfXoZXOh95wZPECvBvy9hqdFtRf6p+cEoN9CtTuWG2xhSSuz3VNuY4PhbE
+         aw+vULhRbIjqscx0b9Ma0mtqwKQnvbuQG0gjIp/fXTPZu3a+yViGQbkFbZvXa1Fsc8Hu
+         bB5A==
+X-Forwarded-Encrypted: i=1; AHgh+Ro4vOL6KYchXy2/gmsP/Wwv6qsIF4GRz0V3EPexmt542uby6ep4G8A2Gnpxyz4wsdEX97570Q4Vk62A+8QvIiQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++li1sLhAB+XFY95cNLG+3hnFbWYGQAJJl8QtvmyBt6fDFjThUmc
+	ndgagInLqTrOZs7Nsp7H5sA3Gq4aIAcEbAlMjCAn5rU95P/pDD9h//8/l/YtPDT/NNg=
+X-Gm-Gg: AR+sD13DcslrqKALn01vBDNiz94RNSdBXYp7587AMPE2OoYOXcW1WXGXbtJK0G2s51E
+	G5KpGFFbCdCZUQiO7EPb/YDt9drx7zJ3fTts9Qwe0TCJD4M2flQrGOKK3VTt6cXVAnRobXGF27X
+	ed9J48hdAPNCW8iBgVflUijRo30/QXaBqE+ypZCC3IW8+nCyybbisgIsujaTzISqSndhYnhdH8Y
+	W/SdH9SMBlgXcjIoUknd92KHyRTGoGQvEaR+EYnr9xtj9GhathoJH1OnNV7cWb7ZAuhKvD4SqVM
+	xg/RP0ayIYIXScvV5BAL6mFB8v4WoLniDb7DehteAoyvb5ZuaqJNRAbNmDTjn6EVhMVwPTLG0gM
+	cT3y7oy+3yroFX35odotmEpuMlRmAU/fgRgplesBv+IKB1m5ytE/4BG4z/UgMsqGCQD7m2etrEN
+	KyGBOUlYVkZcACd425kdutWAl+20EXeERAy4eqY91vCSs0XEWSyDreuEJearSRCv3eobgMysg=
+X-Received: by 2002:a17:906:6a25:b0:c16:12ff:dc8d with SMTP id a640c23a62f3a-c246a69a22fmr4068886066b.14.1787675204061;
+        Tue, 25 Aug 2026 09:26:44 -0700 (PDT)
+Received: from localhost (109-81-80-32.rct.o2.cz. [109.81.80.32])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c250a9b2817sm30467766b.53.2026.08.25.09.26.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 09:17:39 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org
-Cc: ljs@kernel.org,
-	yury.khrustalev@arm.com,
-	kevin.brodsky@arm.com,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
-Date: Tue, 25 Aug 2026 21:47:15 +0530
-Message-ID: <20260825161715.2807297-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.43.7
+        Tue, 25 Aug 2026 09:26:43 -0700 (PDT)
+Date: Tue, 25 Aug 2026 18:26:42 +0200
+From: Michal Hocko <mhocko@suse.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Eric Chanudet <echanude@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Shakeel Butt <shakeel.butt@linux.dev>,
+	Muchun Song <muchun.song@linux.dev>, Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, Maxime Ripard <mripard@redhat.com>,
+	Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <ao3CQicH0t-k95NA@tiehlicka>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aowHqqaqK7TeexQH@tiehlicka>
+ <ao2gA_m3BCBu2esy@echanude-thinkpadx1carbongen13.rmtusma.csb>
+ <5970a8d4-fe7c-4dde-bdc8-1c66bfb57f12@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5970a8d4-fe7c-4dde-bdc8-1c66bfb57f12@kernel.org>
 
-pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
-already known, a stopgap from when the generic definition was still
-under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
-Add PKEY_UNRESTRICTED macro"), so the guard is never taken and the FIXME
-can be honoured.
+On Tue 25-08-26 17:45:56, David Hildenbrand wrote:
+> On 8/25/26 16:47, Eric Chanudet wrote:
+> > On Mon, Aug 24, 2026 at 10:58:18AM +0200, Michal Hocko wrote:
+> >> On Fri 21-08-26 14:56:52, Eric Chanudet wrote:
+> >>> CMA allocations are currently unaccounted for by cgroup memory
+> >>> controllers. As system resources, they should fall under memcg, but CMA
+> >>> areas partition the available space for different purposes and memcg
+> >>> doesn't have a good representation for that.
+> >>
+> >> Which CMA usecases are covered by this work? It would be also great to
+> >> spend more time describing usecases.
+> > 
+> > We would like to offer some usage guaranties to userspace processes
+> > ending up doing allocations in CMA.
+> 
+> How does this e.g., relate to hugetlb allocating from CMA, to then charge to a
+> hugetlb cgroup?
+> 
+> I always thought of CMA being a low-level allocation mechanism with various
+> different use cases, and actually the higher-level users should decide how
+> to/what to charge instead.
 
-The definition comes from tools/include/uapi/asm-generic/mman-common.h
-via TOOLS_INCLUDES, which commit e076eaca5906 ("selftests: break the
-dependency upon local header files") added so that the mm selftests
-build without "make headers".  It is reached through the
-<asm-generic/mman.h> that the system <asm/mman.h> includes.  Building
-the pkey tests with KHDR_INCLUDES pointing at an empty directory
-confirms that; emptying TOOLS_INCLUDES as well is what makes the macro
-go missing.
+Exactly. There are many different users of CMA all with different
+requirements. Then there is CMA reservations if an area is shared and
+the overall memory consumption. That is why I am really not able to
+wrap my head around this proposal.
 
-No functional change intended.
 
-Assisted-by: Cursor:claude-opus-5
-Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
-Changes in v3:
- - Add the Assisted-by tag Lorenzo asked for; an AI assistant was used
-   while tracing the include path and preparing the patch.  The builds
-   and the cpp output quoted below were run and checked by me.
- - Pick up the acks from David and Lorenzo.
- - Sent as a new mail rather than in reply to v2, as both asked.
-
-Changes in v2:
- - Drop the incorrect claim that the mm selftests are built against the
-   headers of the kernel source and would fail without "make headers".
-   They are not, as Lorenzo pointed out; describe where the definition
-   really comes from instead.
- - Leave tools/testing/selftests/powerpc/include/pkeys.h alone, as
-   discussed with David on v1.  Unlike the mm one it is an unconditional
-   #undef/#define next to other powerpc specific overrides, and that
-   header only includes <sys/mman.h>, which does not provide
-   PKEY_UNRESTRICTED with or without TOOLS_INCLUDES, so its definition
-   is load bearing.
-
-The full include path, for reference:
-
-  pkey-helpers.h
-    -> <linux/mman.h>           tools/include/uapi/linux/mman.h
-      -> <asm/mman.h>           /usr/include/asm/mman.h
-                                (tools/include/uapi/asm/mman.h does not exist)
-        -> <asm-generic/mman.h> tools/include/uapi/asm-generic/mman.h
-                                (-isystem puts it ahead of the system one)
-          -> <asm-generic/mman-common-tools.h>
-            -> <asm-generic/mman-common.h>      PKEY_UNRESTRICTED
-
- tools/testing/selftests/mm/pkey-helpers.h | 7 -------
- 1 file changed, 7 deletions(-)
-
-diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-index 2c377f4e9df1..626c2e1655dc 100644
---- a/tools/testing/selftests/mm/pkey-helpers.h
-+++ b/tools/testing/selftests/mm/pkey-helpers.h
-@@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
- #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
- #endif
- 
--/*
-- * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
-- */
--#ifndef PKEY_UNRESTRICTED
--#define PKEY_UNRESTRICTED 0x0
--#endif
--
- #ifndef set_pkey_bits
- static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
- {
 -- 
-2.43.7
-
+Michal Hocko
+SUSE Labs
