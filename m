@@ -1,810 +1,358 @@
-Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+Received: from mta1.migadu.com (out-179.mta1.migadu.com [95.215.58.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04F7038AC90
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 01:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F12E8314A65
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 02:44:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787623201; cv=none; b=nvXfU41j5Hny3DRbcS4oVtqoYkNtRgsFxLPCOrFGwxXffbjt+KjHuQmqwBAtJsJ4g9lnt9Ls7iNXdcxE/KVm8/Yyc+KxOI6AE3AaRWKyDlHeydY/pe3ytDTe0b7hl6qoo4EJAIHfZH/lwEQS254S3xNgohJq6vDA9oqbnojIfWM=
+	t=1787625887; cv=none; b=hObbzCko19P6shGNvXkOcp1P7lfvMdVYVPiXK6HLXP+AjQPwELIHRzSgsLu8kmWEK2Pp5+tmeWWSKAMkmg1pKxZ0nBefEWmBKhukdHg1PfPT9qbJ+NuUw9wdCI78ADTnTtd5/UvizKlErHZpD5PMO3+6G1DB59t8Lovt22OkjSE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787623201; c=relaxed/simple;
-	bh=YySa5dNQMqAZcNowMhL8NiVql2CRGAkNLuQnIwHoVyM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MoQGke97mfcYP5jw3VfPtsXPoP0Ah/epCuZROIpCG/cFdnB38nCykEx2eassxhNUEUO55CC0p0YHy1bvlH88qb8Y5ys4P0iDfkkLeDGyQlI4mn6xq3S145hT95KumHig7XLqYT67p9PcvAXpvM27ulyNkksAEWhXhdlMkC5sJ30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rsWzGQQY; arc=none smtp.client-ip=209.85.216.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787625887; c=relaxed/simple;
+	bh=QGaCBBZqoDLwrT1fV2aQjhVthAgbGXSKI1ufVgpgOao=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=XDPDqoDvcgD5SKxzU/m/whCk0m5X+AY2z5oO9GC9IvKzkNxENf1dXKjuooAprhYImSpCQ8pctkMg5a9CZgKitkKEiusBAm2YfGpANtBs6AF3DAyqQPwVSaDlEUNA/FlG3vhUiJiAER/HY3WT68Hi2rxF9T3x6aeA/B1PHOZWZuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LJFOfwau; arc=none smtp.client-ip=95.215.58.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rsWzGQQY"
-Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-395ea741d07so2027316a91.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 18:59:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787623197; x=1788227997; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=cvm7PLfF2XlXIxexfSNwawshBPBpAGZ6EXoOYWillHo=;
-        b=rsWzGQQYC0YQRx53CoiIHxSEZc/YAM+r8E+COTCDnUl8qys6AD/Tr3Oe86F/WFZGwA
-         oyw51v97tVDdnZ+lSThMiDage9cL1iU9jsWDab3dKucwqDoj8WVlJn/AbRzoN6ZLJpuH
-         g0O75XUdQu47lATsgbl56kbfwLuIHgdWIZX6uY1vkbXL623ZA2laPwhv9IEPxYOK7AoW
-         Q8tmKnkYRHcp2pdteU2gbw5fWrgbOi5CZmsD4E+bB4kr6qHdMOx9t3pbBWPLt8R+ZqqV
-         AaIOvD09TdIigaoWJ4aLnIHkVzbHHZXSRAIa3WbdUB5qh4TrKXiVfbroRZq8MkKIc2DY
-         oG7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787623197; x=1788227997;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=cvm7PLfF2XlXIxexfSNwawshBPBpAGZ6EXoOYWillHo=;
-        b=fK2TVfGixsMSWkcTYvHNG8dM5AraUiIXWoKgmN3aQV6mPvQ6olyRUR33V6Q0jaFe9o
-         2nQTUtzxlnDUKp8I/ipOe9ymBeqWjC/fHwTE15EQqrURxqRXPfrtQzSxOmVNi1ILl703
-         VTL/nQoNN6NCgNCRbrvaVmeYjDOYV7vxEg3L7dC7dXGkqNrtfLhS0YkTmIHsJ6V9yFsx
-         0PqgmUb6m0//3+z3JlMTNKV/mDuqy5tO9vhQhVSmiO/bRdiN1CLc/o0QuaXRqVH7EejC
-         xq4db3NWq91CgrUig5oyS7oy59KeMYJKZeXHX7TJphwQfFrdFk7XlGgc09TrBclEYZlO
-         xbTg==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5TGBYbGfrchv4mvmGUoo1OobbKXZVPF8xXqohFTgabOrpvBr+6YwGTMltkXjQoHc+kYEbA2gDiqNSWSa2QpE=@vger.kernel.org
-X-Gm-Message-State: AFuF++nR+20/FpHnVdi9UcoNydtrXNNk7IA9rtfYLVKWM8F0nTG4miIu
-	/ow3Uiyy0GoPSrFkbk58B0445F1hNZ9Gaj8sGB4hMw+xSTwBFiVY5eu6
-X-Gm-Gg: AR+sD11ytZNbhwm58YubVfFbyq2jORnXsK7La9NQp6JFEZg2MOlbRawOe47QPocR/hF
-	TIdHRn8/a6cixyfdm0xkVyYK+zZlbS6+uoCNUcmq9wcdyYeZv0pGhwQA8hsrLo8hdjiW2UzEbgT
-	xLOO81gGKzTc4/UC3j5PVK90Rsoca+TN0upMOwgFPMXCtpfoPJT14nxjaAjMK6d9c/V7LSvDnYl
-	zYkDDgcDJeNUrWSwp8wYy+mZ4uUzbcgVD3NZcLbyaO/wPil9S33kS1TtPe3q9f7Glt62+CGndCJ
-	pWzD2LXezy3TB/SdVVvRODhhPac0gUD7IvStVjPxome8QgSNqpR/B6sI5yDF/I9hYf8iODVPCyD
-	XhmtcKN9JeOoz59fhwLq0mIkv+CbmuyhU1Fi48mP1STY9UOBAoVJkeWsZdlGOhCGOOFgLpXn25R
-	NhJzu9c3FDvdtzDDzBFMzvQMcWy9F680DXEwFblHO1HdbtNC9YcfGnOuKHbu++hRk0AOaGfnuXC
-	S5U1WABeE0MeIkTdwX+Sj8RXMKRyZBzNf4yUv37Om8X8karzPLKVXYHVRTSD+yKOQ==
-X-Received: by 2002:a17:90b:1a90:b0:37f:bfd6:8b40 with SMTP id 98e67ed59e1d1-395c33a0168mr43913932a91.5.1787623197223;
-        Mon, 24 Aug 2026 18:59:57 -0700 (PDT)
-Received: from ikb-h07-29-noble.in.iijlab.net ([202.214.97.5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39645b08ca0sm1725131a91.2.2026.08.24.18.59.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Aug 2026 18:59:56 -0700 (PDT)
-Received: by ikb-h07-29-noble.in.iijlab.net (Postfix, from userid 1010)
-	id BACB915C677E; Tue, 25 Aug 2026 10:59:55 +0900 (JST)
-From: Hajime Tazaki <thehajime@gmail.com>
-To: linux-mm@kvack.org,
-	liam@infradead.org,
-	rbm@suse.com,
-	akpm@linux-foundation.org,
-	luto@amacapital.net,
-	brendan.jackman@linux.dev,
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LJFOfwau"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=QGaCBBZqoDLwrT1fV2aQjhVthAgbGXSKI1ufVgpgOao=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787625883; v=1; x=1788230683;
+ b=LJFOfwau3//i2kp3whENs9ZtI0YKJrTfDxuNh0uIF3xHks1G0RF7IvjeBmck5DlQNCoIQ0Hy
+ uTr0IvOkXrIOQyLu3+t0QAlnjFtToQlRI/a7u4wH/eL99Kvw1EZelaxlJjKvz+76l9Q2HyvEuyh
+ Cj34eFN4LHNe56MCyvquMs0Y=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from localhost (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id 72a80e7a41d0f84b;
+	Tue, 25 Aug 2026 02:44:43 +0000
+X-Mizu-Trace-ID: 72a80e7a41d0f84b
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: usama.arif@linux.dev,
+	hannes@cmpxchg.org,
+	kirill@shutemov.name
+Cc: akpm@linux-foundation.org,
 	david@kernel.org,
-	liuhangbin@gmail.com,
-	corbet@lwn.net,
-	kees@kernel.org,
 	ljs@kernel.org,
-	broonie@kernel.org,
+	nico.pache@linux.dev,
+	baolin.wang@linux.alibaba.com,
+	baohua@kernel.org,
+	dev.jain@arm.com,
+	hughd@google.com,
+	liam@infradead.org,
 	mhocko@suse.com,
 	rppt@kernel.org,
+	ryan.roberts@arm.com,
 	shuah@kernel.org,
 	surenb@google.com,
 	vbabka@kernel.org,
-	wad@chromium.org,
-	linux-doc@vger.kernel.org,
+	ziy@nvidia.com,
+	usama.anjum@arm.com,
+	agordeev@linux.ibm.com,
+	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-um@lists.infradead.org
-Cc: geert@linux-m68k.org,
-	daniel@thingy.jp,
-	Hajime Tazaki <thehajime@gmail.com>
-Subject: [PATCH v2 2/2] selftests/mm: add nommu mmap and mremap behavior tests
-Date: Tue, 25 Aug 2026 10:59:45 +0900
-Message-ID: <20260825015945.141739-3-thehajime@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260825015945.141739-1-thehajime@gmail.com>
-References: <20260825015945.141739-1-thehajime@gmail.com>
+	linux-kernel@vger.kernel.org,
+	jannh@google.com,
+	willy@infradead.org,
+	pfalcato@suse.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
+	bpf@vger.kernel.org,
+	Lance Yang <lance.yang@linux.dev>
+Subject: Re: [RFC PATCH 16/57] mm/collapse: freeze the sources behind migration entries
+Date: Tue, 25 Aug 2026 10:44:34 +0800
+Message-Id: <20260825024434.39662-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <f81160ac-0c7c-43f2-985f-43ab54a52358@linux.dev>
+References: <f81160ac-0c7c-43f2-985f-43ab54a52358@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Introduce a kselftest utility to validate memory mapping capabilities
-under nommu kernels, aligned with
-Documentation/admin-guide/mm/nommu-mmap.rst.
 
-The test implements basic checks into a generic architecture-agnostic
-test matrix applicable across nommu targets. It evaluates:
+On Mon, Aug 24, 2026 at 05:13:52PM +0100, Usama Arif wrote:
+>
+>
+>On 24/08/2026 16:49, Johannes Weiner wrote:
+>> On Mon, Aug 24, 2026 at 03:13:10PM +0100, Kiryl Shutsemau wrote:
+>>> On Mon, Aug 24, 2026 at 09:12:24PM +0800, Lance Yang wrote:
+>>>>
+>>>> On Sun, Aug 16, 2026 at 11:45:28PM +0100, Kiryl Shutsemau wrote:
+>>>>> +		if (!folio_ref_freeze(folio,
+>>>>> +				      folio_expected_ref_count(folio) + 1)) {
+>>>>> +			result = SCAN_PAGE_COUNT;
+>>>>> +			goto unfreeze;
+>>>>> +		}
+>>>>> +		nr_frozen = nr_saved;
+>>>>
+>>>> Just one thing I was wondering about ... can deferred_split_isolate()
+>>>> remove a source folio from deferred_split_lru while its refcount is
+>>>> frozen by collapse_freeze_candidate()?
+>>>>
+>>>> Assume an earlier span belongs to an anonymous large folio on the
+>>>> deferred split queue, then a later span fails folio_trylock().
+>>>> collapse_freeze_candidate() continues after freezing each source folio
+>>>> and calls collapse_unfreeze_candidate() on a later failure:
+>>>>
+>>>> static noinline enum scan_result collapse_freeze_candidate(struct mm_struct *mm,
+>>>> 		struct collapse_candidate *cand, pte_t *pte)
+>>>> {
+>>>> ...
+>>>> 	for (i = 0, addr = cand->addr; i < nr_pages;) {
+>>>> ...
+>>>> 		if (!folio_trylock(folio)) {
+>>>> 			folio_put(folio);
+>>>> 			result = SCAN_PAGE_LOCK;
+>>>> 			goto unfreeze;
+>>>> 		}
+>>>> ...
+>>>> 		nr_saved = i + nr;
+>>>>
+>>>> 		if (!folio_ref_freeze(folio,
+>>>> 				      folio_expected_ref_count(folio) + 1)) {
+>>>> 			result = SCAN_PAGE_COUNT;
+>>>> 			goto unfreeze;
+>>>> 		}
+>>>> 		nr_frozen = nr_saved;
+>>>>
+>>>> 		i += nr;
+>>>> 		addr += nr * PAGE_SIZE;
+>>>> 	}
+>>>>
+>>>> ...
+>>>> unfreeze:
+>>>> 	collapse_unfreeze_candidate(mm, cand, pte, nr_saved, nr_frozen);
+>>>> 	return result;
+>>>> }
+>>>>
+>>>> folio_ref_freeze() takes the source folio's refcount to zero:
+>>>>
+>>>> static inline int folio_ref_freeze(struct folio *folio, int count)
+>>>> {
+>>>> 	return page_ref_freeze(&folio->page, count);
+>>>> }
+>>>>
+>>>> static inline int page_ref_freeze(struct page *page, int count)
+>>>> {
+>>>> 	int ret = likely(atomic_cmpxchg(&page->_refcount, count, 0) == count);
+>>>>
+>>>> ...
+>>>> 	return ret;
+>>>> }
+>>>>
+>>>> While collapse_freeze_candidate() still holds the source folio lock,
+>>>> deferred_split_scan() can call deferred_split_isolate():
+>>>>
+>>>> static unsigned long deferred_split_scan(struct shrinker *shrink,
+>>>> 		struct shrink_control *sc)
+>>>> {
+>>>> 	LIST_HEAD(dispose);
+>>>> 	struct folio *folio, *next;
+>>>> 	int split = 0;
+>>>> 	unsigned long isolated;
+>>>>
+>>>> 	isolated = list_lru_shrink_walk_irq(&deferred_split_lru, sc,
+>>>> 					    deferred_split_isolate, &dispose);
+>>>> }
+>>>>
+>>>> static enum lru_status deferred_split_isolate(struct list_head *item,
+>>>> 					      struct list_lru_one *lru,
+>>>> 					      void *cb_arg)
+>>>> {
+>>>> 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+>>>> 	struct list_head *freeable = cb_arg;
+>>>>
+>>>> 	if (folio_try_get(folio)) {
+>>>> 		list_lru_isolate_move(lru, item, freeable);
+>>>> 		return LRU_REMOVED;
+>>>> 	}
+>>>>
+>>>> 	/*
+>>>> 	 * We lost race with folio_put(). Read folio state before the
+>>>> 	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+>>>> 	 * locklessly, so once removed the folio can be freed any time.
+>>>> 	 */
+>>>> 	if (folio_test_partially_mapped(folio)) {
+>>>> 		folio_clear_partially_mapped(folio);
+>>>> 		mod_mthp_stat(folio_order(folio),
+>>>> 			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+>>>> 	}
+>>>> 	list_lru_isolate(lru, item);
+>>>> 	return LRU_REMOVED;
+>>>> }
+>>>>
+>>>> And folio_try_get() fails because the source folio has a frozen refcount.
+>>>> deferred_split_isolate() treats the failure as a race with folio_put(),
+>>>> clears PG_partially_mapped and its MTHP_STAT_NR_ANON_PARTIALLY_MAPPED
+>>>> accounting when set, then removes the folio from deferred_split_lru ...
+>>>
+>>> Hm. So, the premise in deferred_split_isolate() is false:
+>>> !folio_try_get() doesn't mean lost race with folio_put().
+>> 
+>> I suppose you mean, not exclusively. But it can also mean that. And
+>> then the question is, who cleans up the partially_mapped state.
+>> 
+>>> I think deferred_split_isolate() should do something like:
+>>>
+>>>       if (!folio_try_get(folio))
+>>>               return LRU_SKIP;
+>>>
+>>>       list_lru_isolate_move(lru, item, freeable);
+>>>       return LRU_REMOVED;
+>>>
+>>> Johannes, do I miss something?
+>> 
+>> Ah. The idea being: leave the item on the LRU when there is a race
+>> with the refcount going zero; and then it's up to that other side to
+>> deal with/clean up the partially_mapped state as appropriate. Thus:
+>> 
+>> folio_put()
+>>   __folio_put()
+>>     folio_unqueue_deferred_split()
+>>       if __list_lru_del():
+>>         // clear partially_mapped state & stats
+>> 
+>> will always succeed, even if it races with the shrinker. And you are
+>> also guaranteed on the collapse side that the state won't vanish from
+>> underneath you.
+>> 
+>> I think that should work. Usama?
+>
+>
+>Kiryl's suggestion makes sense. I think there is a bug here. If we dont
+>get the reference, whoever owns the reference should decide how partially_mapped
+>is treated for that folio:
+>
+>- If its the last folio_put(), it will clear partially_mapped and cleanup
+>after itself.
+>- If its folio_ref_freeze(), clearing partially_mapped is wrong (which we
+>are currently doing in deferred_split_isolate)
 
-1. MAP_FIXED allocation rejections.
-2. Standard MAP_PRIVATE and MAP_ANONYMOUS allocation resilience.
-3. Regular file mappings via standard filesystem storage.
-4. Block device subsystem mappings (gracefully skipping if node is
-   missing).
-5. Shared vs Private backing discrepancies under nommu conditions.
-6. mremap limits, ensuring non-expandable restrictions behave properly.
+Yeah, returning LRU_SKIP looks right. I have this locally:
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>
-Cc: "Liam R. Howlett" <liam@infradead.org>
-Cc: Vlastimil Babka <vbabka@kernel.org>
-Cc: Mike Rapoport <rppt@kernel.org>
-Cc: Suren Baghdasaryan <surenb@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: linux-um@lists.infradead.org
-Assisted-by: Gemini:Pro [AI_Reviewer] [Sashiko_Linter]
-Assisted-by: cubic.dev:unspecified
-Signed-off-by: Hajime Tazaki <thehajime@gmail.com>
+---8<---
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index e771244f42f3..a269775129c4 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -3939,11 +3939,8 @@ static int __folio_freeze_and_split_unmapped(struct folio *folio, unsigned int n
 
---
+ 	VM_WARN_ON_ONCE(!mapping && end);
+ 	/*
+-	 * If this folio can be on the deferred split queue, lock out
+-	 * the shrinker before freezing the ref. If the shrinker sees
+-	 * a 0-ref folio, it assumes it beat folio_put() to the list
+-	 * lock and must clean up the LRU state - the same dequeue we
+-	 * will do below as part of the split.
++	 * If this folio can be on the deferred split queue, hold the list_lru
++	 * lock across the refcount freeze and dequeue.
+ 	 */
+ 	dequeue_deferred = folio_test_anon(folio) && old_order > 1;
+ 	if (dequeue_deferred) {
+@@ -4592,22 +4589,10 @@ static enum lru_status deferred_split_isolate(struct list_head *item,
+ 	struct folio *folio = container_of(item, struct folio, _deferred_list);
+ 	struct list_head *freeable = cb_arg;
 
-rfc => v2
-- prepare a different TARGETS for tests (mm/nommu)
-- drop shrink fix tests
-- drop mmap /dev/zero tests
+-	if (folio_try_get(folio)) {
+-		list_lru_isolate_move(lru, item, freeable);
+-		return LRU_REMOVED;
+-	}
++	if (!folio_try_get(folio))
++		return LRU_SKIP;
 
-rfc:
-- https://lore.kernel.org/linux-mm/20260813063401.1786548-1-thehajime@gmail.com/
+-	/*
+-	 * We lost race with folio_put(). Read folio state before the
+-	 * isolate: folio_unqueue_deferred_split() checks list_empty()
+-	 * locklessly, so once removed the folio can be freed any time.
+-	 */
+-	if (folio_test_partially_mapped(folio)) {
+-		folio_clear_partially_mapped(folio);
+-		mod_mthp_stat(folio_order(folio),
+-			      MTHP_STAT_NR_ANON_PARTIALLY_MAPPED, -1);
+-	}
+-	list_lru_isolate(lru, item);
++	list_lru_isolate_move(lru, item, freeable);
+ 	return LRU_REMOVED;
+ }
 ---
- tools/testing/selftests/Makefile              |   1 +
- tools/testing/selftests/mm/nommu/Makefile     |   7 +
- .../selftests/mm/nommu/nommu_mmap_test.c      | 265 +++++++++++++
- .../selftests/mm/nommu/nommu_mremap_test.c    | 353 ++++++++++++++++++
- 4 files changed, 626 insertions(+)
- create mode 100644 tools/testing/selftests/mm/nommu/Makefile
- create mode 100644 tools/testing/selftests/mm/nommu/nommu_mmap_test.c
- create mode 100644 tools/testing/selftests/mm/nommu/nommu_mremap_test.c
 
-diff --git a/tools/testing/selftests/Makefile b/tools/testing/selftests/Makefile
-index 2cc63e4134fb..940d2cab4f71 100644
---- a/tools/testing/selftests/Makefile
-+++ b/tools/testing/selftests/Makefile
-@@ -135,6 +135,7 @@ TARGETS += uevent
- TARGETS += user_events
- TARGETS += vDSO
- TARGETS += mm
-+TARGETS += mm/nommu
- TARGETS += vfio
- TARGETS += x86
- TARGETS += x86/bugs
-diff --git a/tools/testing/selftests/mm/nommu/Makefile b/tools/testing/selftests/mm/nommu/Makefile
-new file mode 100644
-index 000000000000..9e28be37bc8f
---- /dev/null
-+++ b/tools/testing/selftests/mm/nommu/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+# Makefile for mm/nommu selftests
-+
-+TEST_GEN_PROGS += nommu_mmap_test
-+TEST_GEN_PROGS += nommu_mremap_test
-+
-+include ../../lib.mk
-diff --git a/tools/testing/selftests/mm/nommu/nommu_mmap_test.c b/tools/testing/selftests/mm/nommu/nommu_mmap_test.c
-new file mode 100644
-index 000000000000..425ec425daad
---- /dev/null
-+++ b/tools/testing/selftests/mm/nommu/nommu_mmap_test.c
-@@ -0,0 +1,265 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <string.h>
-+#include <limits.h>
-+#include "kselftest.h"
-+
-+#include <sys/vfs.h>
-+#ifndef RAMFS_MAGIC
-+#define RAMFS_MAGIC 0x858458f6
-+#endif
-+
-+static size_t ps;
-+
-+struct test_case_t {
-+	const char *name;
-+	const char *pathname;
-+	int open_flags;
-+	int mmap_prot;
-+	int mmap_flags;
-+	int exp_err;
-+	int (*resolve_exp_err)(const char *path);
-+};
-+
-+static int get_shm_expected_error(const char *path)
-+{
-+	struct statfs fs;
-+
-+	if (statfs(path, &fs) == 0) {
-+		if (fs.f_type == RAMFS_MAGIC)
-+			return 0; /* ramfs succeed with contiguous memory */
-+	}
-+	 /* hostfs, etc returns ENODEV due to lack of contiguous allocation */
-+	return ENODEV;
-+}
-+
-+static struct test_case_t test_cases[] = {
-+	{
-+		.name = "anonymous private allocation",
-+		.pathname = NULL,
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = NULL,
-+	},
-+	{
-+		.name = "non-anonymous private file mapping (rw-)",
-+		.pathname = "/tmp/ksft.nommu-reg-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = NULL,
-+	},
-+	{
-+		.name = "non-anonymous private file mapping (r--)",
-+		.pathname = "/tmp/ksft.nommu-reg-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = NULL,
-+	},
-+	{
-+		.name = "non-anonymous shared file mapping (rw-)",
-+		.pathname = "/tmp/ksft.nommu-shm-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_SHARED,
-+		.exp_err = 0,
-+#ifdef CONFIG_NOMMU
-+		.resolve_exp_err = get_shm_expected_error,
-+#else
-+		.resolve_exp_err = NULL,
-+#endif
-+	},
-+	{
-+		.name = "non-anonymous shared file mapping (r--)",
-+		.pathname = "/tmp/ksft.nommu-shm-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_SHARED,
-+		.exp_err = 0,
-+#ifdef CONFIG_NOMMU
-+		.resolve_exp_err = get_shm_expected_error,
-+#else
-+		.resolve_exp_err = 0,
-+#endif
-+	},
-+	{
-+		.name = "block device volatile node mapping",
-+		.pathname = "/dev/loop0",
-+		.open_flags = O_RDWR,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = NULL,
-+	}
-+};
-+
-+static int run_mapping_matrix_test(struct test_case_t *tcase)
-+{
-+	int fd;
-+	void *ptr;
-+	char path_buf[PATH_MAX];
-+	int rc = KSFT_PASS;
-+	int expected_error;
-+
-+	ksft_print_msg("[RUN] Testing: %s\n", tcase->name);
-+
-+	if (tcase->pathname == NULL) {
-+		fd = -1;
-+	} else if (strstr(tcase->pathname, "XXXXXX")) {
-+		strncpy(path_buf, tcase->pathname, sizeof(path_buf) - 1);
-+		path_buf[sizeof(path_buf) - 1] = '\0';
-+		fd = mkstemp(path_buf);
-+		if (fd < 0) {
-+			ksft_test_result_skip("Failed to setup temp node: %s\n",
-+					      tcase->pathname);
-+			return KSFT_SKIP;
-+		}
-+		if (ftruncate(fd, ps) != 0) {
-+			ksft_test_result_fail("ftruncate failed for: %s\n",
-+					      tcase->pathname);
-+			close(fd);
-+			unlink(path_buf);
-+			return KSFT_FAIL;
-+		}
-+	} else {
-+		fd = open(tcase->pathname, tcase->open_flags, 0600);
-+		if (fd < 0) {
-+			ksft_test_result_skip("Device node not accessible: %s\n",
-+				       tcase->pathname);
-+			return KSFT_SKIP;
-+		}
-+	}
-+
-+	expected_error = tcase->exp_err;
-+	if (tcase->resolve_exp_err && fd >= 0)
-+		expected_error = tcase->resolve_exp_err(path_buf);
-+
-+	ptr = mmap(NULL, ps, tcase->mmap_prot, tcase->mmap_flags, fd, 0);
-+
-+	if (expected_error != 0) {
-+		if (ptr != MAP_FAILED) {
-+			ksft_test_result_fail("%s: mmap unexpectedly succeeded (exp error %d)\n",
-+					      tcase->name, expected_error);
-+			munmap(ptr, ps);
-+			rc = KSFT_FAIL;
-+			goto cleanup;
-+		}
-+		if (errno != expected_error) {
-+			ksft_test_result_fail("%s: mmap failed with %d (%s), but expected %d\n",
-+					      tcase->name, errno, strerror(errno), expected_error);
-+			rc = KSFT_FAIL;
-+			goto cleanup;
-+		}
-+		ksft_test_result_pass("%s: Correctly rejected with expected error %s(%d)\n",
-+				      tcase->name, strerror(expected_error), expected_error);
-+		rc = KSFT_PASS;
-+		goto cleanup;
-+	}
-+
-+	if (ptr == MAP_FAILED) {
-+		ksft_test_result_fail("%s: mmap failed unexpectedly: %s\n",
-+				      tcase->name, strerror(errno));
-+		rc = KSFT_FAIL;
-+		goto cleanup;
-+	}
-+
-+	ksft_test_result_pass("%s: mmap validation successfully passed\n", tcase->name);
-+	munmap(ptr, ps);
-+
-+cleanup:
-+	if (fd >= 0) {
-+		close(fd);
-+		if (tcase->pathname && strstr(tcase->pathname, "XXXXXX"))
-+			unlink(path_buf);
-+	}
-+	return rc;
-+}
-+
-+static int test_map_fixed(void)
-+{
-+	void *fixed_addr;
-+	void *ptr;
-+
-+	ksft_print_msg("[RUN] Testing MAP_FIXED behavior\n");
-+
-+	fixed_addr = mmap(NULL, ps, PROT_READ | PROT_WRITE,
-+			MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
-+	if (fixed_addr == MAP_FAILED) {
-+		ksft_test_result_skip("Unable to reserve test address: %s\n",
-+				strerror(errno));
-+		return KSFT_SKIP;
-+	}
-+
-+	if (munmap(fixed_addr, ps)) {
-+		ksft_test_result_fail("Unable to release test address: %s\n",
-+				strerror(errno));
-+		return KSFT_FAIL;
-+	}
-+
-+	ptr = mmap(fixed_addr, ps, PROT_READ | PROT_WRITE,
-+		MAP_PRIVATE | MAP_ANONYMOUS | MAP_FIXED, -1, 0);
-+
-+#ifdef CONFIG_NOMMU
-+	if (ptr == MAP_FAILED && (errno == ENODEV || errno == EINVAL)) {
-+		ksft_test_result_pass("MAP_FIXED correctly rejected under nommu\n");
-+		return KSFT_PASS;
-+	}
-+	if (ptr != MAP_FAILED) {
-+		ksft_test_result_fail("MAP_FIXED unexpectedly allowed under nommu\n");
-+		munmap(ptr, ps);
-+		return KSFT_FAIL;
-+	}
-+	ksft_test_result_fail("MAP_FIXED failed under NOMMU: %s\n",
-+			      strerror(errno));
-+	return KSFT_FAIL;
-+#else
-+	if (ptr != MAP_FAILED) {
-+		ksft_test_result_pass("MAP_FIXED successfully allocated under MMU\n");
-+		munmap(ptr, ps);
-+		return KSFT_PASS;
-+	}
-+	ksft_test_result_fail("MAP_FIXED failed allocation under MMU\n");
-+	return KSFT_FAIL;
-+#endif
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int result = KSFT_PASS;
-+	int i, rc;
-+
-+	ps = sysconf(_SC_PAGESIZE);
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(test_cases) + 1);
-+
-+#ifdef CONFIG_NOMMU
-+	ksft_print_msg("Running strict MMAP test criteria under nommu architecture\n");
-+#else
-+	ksft_print_msg("Running MMAP test criteria under MMU architecture\n");
-+#endif
-+
-+	if (test_map_fixed() == KSFT_FAIL)
-+		result = KSFT_FAIL;
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(test_cases); i++) {
-+		rc = run_mapping_matrix_test(&test_cases[i]);
-+		if (rc == KSFT_FAIL)
-+			result = KSFT_FAIL;
-+	}
-+
-+	if (result == KSFT_PASS)
-+		ksft_finished();
-+
-+	ksft_exit_fail();
-+}
-diff --git a/tools/testing/selftests/mm/nommu/nommu_mremap_test.c b/tools/testing/selftests/mm/nommu/nommu_mremap_test.c
-new file mode 100644
-index 000000000000..8d577d960b11
---- /dev/null
-+++ b/tools/testing/selftests/mm/nommu/nommu_mremap_test.c
-@@ -0,0 +1,353 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#define _GNU_SOURCE
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <sys/mman.h>
-+#include <unistd.h>
-+#include <fcntl.h>
-+#include <errno.h>
-+#include <string.h>
-+#include <limits.h>
-+#include "kselftest.h"
-+
-+#include <sys/vfs.h>
-+#ifndef RAMFS_MAGIC
-+#define RAMFS_MAGIC 0x858458f6
-+#endif
-+
-+static size_t ps;
-+
-+static long get_fs_type(const char *path)
-+{
-+	struct statfs fs;
-+
-+	if (statfs(path, &fs) == 0)
-+		return fs.f_type;
-+
-+	return 0;
-+}
-+
-+static void munmap_shrink_test(void)
-+{
-+	void *addr;
-+
-+	/* munmap shrink test */
-+	for (int i = 0; i < 4; i++) {
-+		addr = mmap(NULL, ps * 4, PROT_READ | PROT_WRITE,
-+			    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+		if (addr == MAP_FAILED) {
-+			ksft_test_result_fail("mmap failed: %s(%d)\n", strerror(errno), errno);
-+			return;
-+		}
-+		if (munmap(addr + ps * i, ps) != 0) {
-+			ksft_test_result_fail("memory %p isn't unmapped at %p\n",
-+					      addr, addr + ps * i);
-+			for (int j = 0; j < 4; j++)
-+				munmap((char *)addr + j * ps, ps);
-+			return;
-+		}
-+
-+		if (i == 0) {
-+			if (munmap(addr +  ps, ps * 3))
-+				goto error;
-+		} else if (i == 1) {
-+			if (munmap(addr, ps) || munmap(addr + (ps * 2), ps * 2))
-+				goto error;
-+		} else if (i == 2) {
-+			if (munmap(addr, ps * 2) || munmap(addr + (ps * 3), ps))
-+				goto error;
-+		} else if (i == 3) {
-+			if (munmap(addr, ps * 3))
-+				goto error;
-+		}
-+	}
-+
-+	ksft_test_result_pass("%s success\n", __func__);
-+	return;
-+error:
-+	for (int j = 0; j < 4; j++)
-+		munmap((char *)addr + j * ps, ps);
-+	ksft_test_result_fail("%s clean up failures\n", __func__);
-+}
-+
-+static size_t page_align(size_t len)
-+{
-+	return (len + ps - 1) / ps * ps;
-+}
-+
-+static void mremap_shrink_test(void)
-+{
-+	void *addr, *addr2;
-+	size_t current_len;
-+	size_t old_len, new_len;
-+	struct param {
-+		size_t old;
-+		size_t new;
-+	} params[] = {
-+		/* should not happen any shrink */
-+		{ .old = ps * 4 - 1, .new = ps * 4 - 2 },
-+		/* should not happen any shrink */
-+		{ .old = ps * 4 - 1, .new = ps * 4 },
-+		{ .old = ps * 4, .new = ps * 2 },
-+		/* should not happen any shrink */
-+		{ .old = ps * 2, .new = ps * 2 - 2 },
-+		{ .old = ps * 2 - 2, .new = ps * 1 },
-+	};
-+
-+	/* mremap shrink test */
-+	current_len = page_align(ps * 4 - 1);
-+	addr = mmap(NULL, ps * 4 - 1, PROT_READ | PROT_WRITE,
-+		    MAP_ANONYMOUS | MAP_PRIVATE, -1, 0);
-+	if (addr == MAP_FAILED) {
-+		ksft_test_result_fail("mmap failed: %s(%d)\n", strerror(errno), errno);
-+		return;
-+	}
-+
-+	for (int i = 0; i < ARRAY_SIZE(params); i++) {
-+		old_len = page_align(params[i].old);
-+		new_len = page_align(params[i].new);
-+		addr2 = mremap(addr, old_len, new_len, MREMAP_MAYMOVE);
-+		if (addr2 == MAP_FAILED) {
-+			ksft_test_result_fail("memory %p isn't remapped at %p\n", addr, addr2);
-+			munmap(addr, old_len);
-+			return;
-+		}
-+
-+		addr = addr2;
-+		current_len = new_len;
-+	}
-+
-+	if (munmap(addr, current_len)) {
-+		ksft_test_result_fail("%s cleanup failed: %s\n",
-+				      __func__, strerror(errno));
-+		return;
-+	}
-+	ksft_test_result_pass("%s success\n", __func__);
-+}
-+
-+static int get_shared_writable_file_expected_error(const char *path)
-+{
-+	if (get_fs_type(path) == RAMFS_MAGIC)
-+		return EPERM; /* ramfs failed */
-+
-+	return 0;
-+}
-+
-+struct mremap_case_t {
-+	const char *name;
-+	const char *pathname;
-+	int open_flags;
-+	int mmap_prot;
-+	int mmap_flags;
-+	int exp_err;
-+	int (*resolve_exp_err)(const char *path);
-+	unsigned int old_pages;
-+	unsigned int new_pages;
-+};
-+
-+static struct mremap_case_t mremap_cases[] = {
-+	{
-+		.name = "anonymous shrink (r--)",
-+		.pathname = NULL,
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_ANONYMOUS | MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = 0,
-+	},
-+	{
-+		.name = "shared file shrink (r--)",
-+		.pathname = "/tmp/ksft.nommu-remap-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_SHARED,
-+		.exp_err = 0,
-+#ifdef CONFIG_NOMMU
-+		.resolve_exp_err = get_shared_writable_file_expected_error,
-+#else
-+		.resolve_exp_err = 0,
-+#endif
-+	},
-+	{
-+		.name = "private file unchanged length (r-)",
-+		.pathname = "/tmp/ksft.nommu-remap-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_PRIVATE,
-+#ifdef CONFIG_NOMMU
-+		.exp_err = EPERM,
-+#else
-+		.exp_err = 0,
-+#endif
-+		.resolve_exp_err = 0,
-+		.old_pages = 4,
-+		.new_pages = 4,
-+	},
-+	{
-+		.name = "private file unchanged length (rw-)",
-+		.pathname = "/tmp/ksft.nommu-remap-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_PRIVATE,
-+		.exp_err = 0,
-+		.resolve_exp_err = 0,
-+		.old_pages = 4,
-+		.new_pages = 4,
-+	},
-+	{
-+		.name = "private file growth (r-)",
-+		.pathname = "/tmp/ksft.nommu-remap-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ,
-+		.mmap_flags = MAP_PRIVATE,
-+#ifdef CONFIG_NOMMU
-+		.exp_err = EPERM,
-+#else
-+		.exp_err = 0,
-+#endif
-+		.resolve_exp_err = 0,
-+		.old_pages = 4,
-+		.new_pages = 8,
-+	},
-+	{
-+		.name = "private file growth (rw-)",
-+		.pathname = "/tmp/ksft.nommu-remap-XXXXXX",
-+		.open_flags = O_CREAT | O_RDWR | O_EXCL,
-+		.mmap_prot = PROT_READ | PROT_WRITE,
-+		.mmap_flags = MAP_PRIVATE,
-+#ifdef CONFIG_NOMMU
-+		.exp_err = ENOMEM,
-+#else
-+		.exp_err = 0,
-+#endif
-+		.resolve_exp_err = 0,
-+		.old_pages = 4,
-+		.new_pages = 8,
-+	},
-+};
-+
-+static int run_mremap_test(struct mremap_case_t *tcase)
-+{
-+	int fd = -1;
-+	void *addr, *addr2;
-+	char pb[PATH_MAX];
-+	int rc = KSFT_PASS;
-+	int expected_error;
-+	unsigned int old_pages = tcase->old_pages ?: 4;
-+	unsigned int new_pages = tcase->new_pages ?: 2;
-+	unsigned int file_pages = old_pages > new_pages ?
-+				  old_pages : new_pages;
-+	int orig_nr_trim_pages = -1;
-+
-+	ksft_print_msg("[RUN] Testing mremap: %s\n", tcase->name);
-+
-+	if (tcase->pathname && strstr(tcase->pathname, "XXXXXX")) {
-+		strncpy(pb, tcase->pathname, sizeof(pb) - 1);
-+		pb[sizeof(pb) - 1] = '\0';
-+		fd = mkstemp(pb);
-+		if (fd < 0) {
-+			ksft_test_result_skip("Failed to setup file backing\n");
-+			return KSFT_SKIP;
-+		}
-+		if (ftruncate(fd, ps * file_pages) != 0) {
-+			ksft_test_result_fail("Failed to setup file backing\n");
-+			close(fd);
-+			unlink(pb);
-+			return KSFT_FAIL;
-+		}
-+
-+		if ((tcase->mmap_flags & MAP_SHARED) && get_fs_type(pb) != RAMFS_MAGIC) {
-+			ksft_test_result_skip("Skip the test under non-ramfs filesystem (%s)\n",
-+					      pb);
-+			close(fd);
-+			unlink(pb);
-+			return KSFT_SKIP;
-+		}
-+	} else if (tcase->pathname) {
-+		fd = open(tcase->pathname, tcase->open_flags, 0600);
-+		if (fd < 0) {
-+			ksft_test_result_skip("Backing node not accessible\n");
-+			return KSFT_SKIP;
-+		}
-+
-+		if ((tcase->mmap_flags & MAP_SHARED) &&
-+		    get_fs_type(tcase->pathname) != RAMFS_MAGIC) {
-+			ksft_test_result_skip("Skip the test under non-ramfs filesystem (%s)\n",
-+					      tcase->pathname);
-+			close(fd);
-+			return KSFT_SKIP;
-+		}
-+	}
-+
-+	addr = mmap(NULL, ps * old_pages, tcase->mmap_prot,
-+		    tcase->mmap_flags, fd, 0);
-+	if (addr == MAP_FAILED) {
-+		ksft_print_msg("mmap mapping failed %s(%d)\n", strerror(errno), errno);
-+		rc = KSFT_FAIL;
-+		goto out;
-+	}
-+
-+	expected_error = tcase->exp_err;
-+	if (tcase->resolve_exp_err && fd >= 0)
-+		expected_error = tcase->resolve_exp_err(pb);
-+
-+	addr2 = mremap(addr, ps * old_pages, ps * new_pages,
-+		       MREMAP_MAYMOVE);
-+
-+	if (expected_error != 0) {
-+		if (addr2 != MAP_FAILED || errno != expected_error) {
-+			ksft_print_msg("Expected error %d, got %s(%d)\n",
-+				       expected_error, strerror(errno), errno);
-+			rc = KSFT_FAIL;
-+		} else {
-+			ksft_print_msg("%s/%s: Handled expected error path (errno=%d)\n",
-+				       __func__, tcase->name, expected_error);
-+		}
-+	} else if (addr2 == MAP_FAILED) {
-+		ksft_print_msg("mremap shrink failed unexpectedly: %s\n",
-+			       strerror(errno));
-+		rc = KSFT_FAIL;
-+	} else {
-+		ksft_print_msg("%s/%s step successful\n", __func__, tcase->name);
-+	}
-+
-+	/* clean up */
-+	if (munmap(addr2 == MAP_FAILED ? addr : addr2,
-+		   addr2 == MAP_FAILED ? ps * old_pages : ps * new_pages)) {
-+		ksft_print_msg("munmap failed: %s\n", strerror(errno));
-+		rc = KSFT_FAIL;
-+	}
-+
-+out:
-+	if (fd >= 0) {
-+		close(fd);
-+		if (tcase->pathname && strstr(tcase->pathname, "XXXXXX"))
-+			unlink(pb);
-+	}
-+
-+	ksft_test_result_report(rc, "%s:%s\n", __func__, tcase->name);
-+	return rc;
-+}
-+
-+int main(int argc, char **argv)
-+{
-+	int res = KSFT_PASS;
-+	int i;
-+
-+	ps = sysconf(_SC_PAGESIZE);
-+	ksft_print_header();
-+	ksft_set_plan(ARRAY_SIZE(mremap_cases) + 2);
-+
-+	munmap_shrink_test();
-+	mremap_shrink_test();
-+
-+	for (i = 0; i < (int)ARRAY_SIZE(mremap_cases); i++) {
-+		if (run_mremap_test(&mremap_cases[i]) == KSFT_FAIL)
-+			res = KSFT_FAIL;
-+	}
-+
-+	if (res == KSFT_PASS)
-+		ksft_finished();
-+
-+	ksft_exit_fail();
-+}
--- 
-2.43.0
+One detail, though ...
 
+deferred_split_isolate()'s assumption predates patch 16. Patch 16 lets
+collapse_freeze_candidate() leave refcount at zero and later unfreeze it
+on rollback.
+
+Existing split code takes a list_lru lock for deferred_split_lru before
+folio_ref_freeze() and holds it through dequeue. The shrinker cannot see
+that temporary zero.
+
+collapse_freeze_candidate() does not take that lock and can roll back
+later.
+
+Say a candidate has two source folios. After the first one is frozen,
+deferred_split_isolate() can see refcount 0, dequeue it, clear
+PG_partially_mapped and decrement its accounting. If freezing the second
+one fails, collapse rolls the first one back:
+
+static void collapse_unfreeze_candidate(struct mm_struct *mm,
+					struct collapse_candidate *cand,
+					pte_t *pte, unsigned int nr_saved,
+					unsigned int nr_frozen)
+{
+	unsigned long addr = cand->addr;
+	unsigned int i = 0;
+
+	while (i < nr_saved) {
+		pte_t saved = cand->saved_ptes[i];
+		struct folio *folio;
+		unsigned int nr, k;
+
+...
+		folio = pte_folio(saved);
+		nr = collapse_saved_span_len(cand, i, nr_saved);
+
+		for (k = 0; k < nr; k++) {
+			set_pte_at(mm, addr + k * PAGE_SIZE, pte + i + k,
+				   cand->saved_ptes[i + k]);
+		}
+		if (i < nr_frozen) {
+			folio_ref_unfreeze(folio,
+					   folio_expected_ref_count(folio) + 1);
+		}
+		folio_unlock(folio);
+		folio_put(folio);
+
+		i += nr;
+		addr += nr * PAGE_SIZE;
+	}
+}
+
+PTEs and the folio's refcount are restored, but its deferred split queue
+entry, PG_partially_mapped flag, and accounting are already gone. So yeah,
+patch 16 has a real state-loss bug when collapse rolls back a partially
+mapped folio.
+
+LRU_SKIP looks right. A failed folio_try_get() only says refcount is zero.
+It cannot tell a final folio_put() from a temporary freeze. A final put
+still reaches:
+
+void __folio_put(struct folio *folio)
+{
+...
+	folio_unqueue_deferred_split(folio);
+...
+}
+
+folio_unqueue_deferred_split() takes the same list_lru lock and clears
+PG_partially_mapped + its accounting if the entry is still queued.
+
+Cheers, Lance
