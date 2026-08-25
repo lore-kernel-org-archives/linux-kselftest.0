@@ -1,258 +1,232 @@
-Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from sphereful.davidgow.net (sphereful.davidgow.net [203.29.242.92])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA0B38759C
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 04:22:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.177
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787631740; cv=pass; b=naYYTUkz+Gt0085COGIpCpHUv2UAokow5qNOGCRMp0eyZy2kEdJt8K3sGKjCGIhYEfB5R2nsCqEnFe1aSIuGZA1Vyo6kvfGVeP1H4jWidTp/4OKYeQyHUwOwtA1HV6l+VCjMdFV5VO81bJsAM28DXozizrdGMEiUDZOJ1AhLf18=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787631740; c=relaxed/simple;
-	bh=5wurlj8MFbDvb5ZSMmaeAsrb3WsRNTwRnHS4VgII5LM=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ohN35dDyEW13Ba4+x3VxPSrcz0bp0/RjOYxBxjQj7KfxEdXa2m7TMpZMRI1/vPIxxmvY1rJ4o5uYSYV6ghpIy1kQxcY9vghlE9gB7a06KD5L8un68783U5BjD5dSCh1QaCMsgal6gTwUkpWU+ZOoRksiXeAT6NWMpHXirXs2g5c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Y2OYq+ky; arc=pass smtp.client-ip=209.85.215.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Y2OYq+ky"
-Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-cbedf318752so3286211a12.0
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 21:22:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787631738; cv=none;
-        d=google.com; s=arc-20260327;
-        b=oxyFCLWXYL7JMPZDjCcg9+TeJZ8Q4//VyCKUyLnvl/KPMCPY7OmRVWVTX4BgAQopPz
-         ufCDQnQLHIEIsnHkVvJ0iDnHUCWFTNRDyVGVtL9NNO12FXmkNqGwReIf71vIgxuk0Ldl
-         VkTyAchJrYpR1jigdjVQvlGunWnlumO1RWnsGVID8m16DX+gEWW7zbiwlRnVYCGtt5un
-         8/K0puJQl39UIGMdACPfUM5+PxbKq/M+/NUXBSKE096oO531ObqraM/ExmnCWdsneC1l
-         +Conm20oAWnflN5O2OchmUgFcvinIQMQ5fZ84sWu1jIKWUy3rb0+FXuyWcsPAfXs0U05
-         Qprw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=ii2UjzWdYQBWun6iRfgoLkq7AXK2AM7SF1lOo7W5lmk=;
-        fh=LoWiofjEHknFFAkeo5VITkXvjrjQDV3ZJXNwsrvg21Q=;
-        b=Ha+NHTYUGy0VjH1FGKGfovGPuVo/K/jjQOdFaKHJWJYT3e9CCzaAwqNNA3T/9+IJF1
-         5MbyvsV2JTfWbCO218bBhLafR07NUL/vb1/4ky9TwF1d7/JBVf7Y3gYCx2kYSvVNI71U
-         WOB4mbNlEceVBpFgpJ8r5GsSW/txMMrFNcZRFzrRMDNJk7XzQvVoCvVytb3ogEGcY4Ds
-         GcqriFl8cZEKFgx8Re485e36yAaUr9eqwrQCXndkvIoT2lpsjjLwyGbT5xJ8P17+1Vcl
-         3nPLUZNzgSWtq26AZJ8dt3ViNWcwZgNiAQMTmFkdXBGD+ZePKyUnb2FYHwDL6lkA87WZ
-         bXeA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787631738; x=1788236538; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=ii2UjzWdYQBWun6iRfgoLkq7AXK2AM7SF1lOo7W5lmk=;
-        b=Y2OYq+kyEqbKNSj6q6Dq5vgFdtnqaWT7PK/3lv5bhWe06UDmbyJxuvEC32Bjy6Vn7R
-         NlK2vT1nEMz+ujnnbjI4dMkwZm6uHEZx8/NXh0GddlTXHOaxPaE3PJaz6nbksn9vU9gm
-         Kvkkcw0UQaNGWPayxZvWvQNyCR802hrYSe5EspukffQIuBqgYTtdIs8ZQTE6Vg83GgCB
-         QzleF6zvxSmO8iWu4Oa50I6BfKj+2cQfy1ML2Th/qnOICdaXMUQP0/pfm53szXCM2l9X
-         WceuCgB2EOqwJN56aqqRyzel2by9k1RGnYuvrrxN/IAFcMmtPkfnkryI0a5ueEOkwKEi
-         6Xdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787631738; x=1788236538;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=ii2UjzWdYQBWun6iRfgoLkq7AXK2AM7SF1lOo7W5lmk=;
-        b=YAsoM65GnxoOgyww/s6Hui0xmGk/s+Si/jGw+jMXIIB4ARlrVHvn9JfkZQu1eqtPij
-         0bIlz/vVaekcIuTal1m7UENfS12JyndzcpM4jBF1/J5pjuzDMnvBFdSWZMLd0MHPEUne
-         TX3inDh/zBzq0kZyOa1mXwjmC5hQ8PDkP5diatmQ4oi6wn+tkH+KbexGvERjyIkOVO60
-         jMKflawxJaomzdYfSjZrwL05YIn7W/NeItVxZyjt/o+RvSDk2cnlZ9S8A7xcbr5mUBqk
-         d7q7dWXPy/9PQyE9gNTP6FKX5jziv4aLuCCI+GFUY++Sv4Urier0HMkyQyQ90qaBcbDD
-         /Tfg==
-X-Forwarded-Encrypted: i=1; AHgh+Rq7MR+O67wWleDW+mc1jJQzwucnpeWkUaPnUDXMzC8ZWqYkPNeLIIGb4/xqHHdynHdJMtQvQP7+S0KZXTRQM4s=@vger.kernel.org
-X-Gm-Message-State: AFuF++kKR3BgUSncGpjp2AE4bTqurPppOONpQe16BoUNDiyJLmF+AkuQ
-	RJv5DoGXOHLKGLnvdAFo4JwDqcASzc8vckNUxykxTMLMELa/MCgM7VWyqTxta1u31eqwO2ynOpk
-	wetdhUtTqtX0JAPLj6WNzvB+xFwOpKHy30T3vmWqP
-X-Gm-Gg: AR+sD13SzOzddeEe7vLzxdgZ4yQrJegPW3Bmw8CWSzKDxC4lMqn3go+QAtVja+wiCuX
-	wIcxCe0+cIV3BUD+gQisv5iVVaH1pnuqZTjiAWkvj8nILTY29pvHRtAIdJeH7Noic6wY8+ywf5l
-	8zxgb8uigRygThqF63bhtSSTYtq5GpJI1uiR4sj1N8gi4nV3o2T2hWDHOa57OdlUyty3B0N2FDU
-	UqDrBIsT/1ShjxwLPBA4KKRt6iugPqq2WL+vpzdg8kTOpEXbBjq6WrntMO55ARp15/Fab1rMi+S
-	OIzUj6vx4E0TeraBeSZaiWryOKzOMgtS21kbjvYle3NXB6GtUOpL4eofEczADSrq4pVXwoD5d7l
-	zGNBaFY6YO7jhoDKOIbWcdFYWz9ziLEs=
-X-Received: by 2002:a17:90b:37d0:b0:395:4de9:b30 with SMTP id
- 98e67ed59e1d1-39646350ad2mr7583961a91.5.1787631737593; Mon, 24 Aug 2026
- 21:22:17 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Aug 2026 21:22:15 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 24 Aug 2026 21:22:15 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <54d1bd0e-c27a-4033-ab97-02cd9579a620@intel.com>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-7-2fc18ee6d3ba@google.com>
- <a410cca6-0776-44af-8353-9b7375e2fd4e@intel.com> <CAEvNRgGvxMus6pp=xuDYOumH3Ge4oi0=YKjTaFykFHwXuzRDwg@mail.gmail.com>
- <54d1bd0e-c27a-4033-ab97-02cd9579a620@intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D7411E0DE8;
+	Tue, 25 Aug 2026 05:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.29.242.92
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787634466; cv=none; b=uOXeywxVew7Qgoj2NHYoQ95znxc5OT0Up/rPZjJo2z16j34S2OKGo/N89bQG38P/QVUBaP9/9ZnjplsT4a133NgMKtMfWKMDeqF88tghp83V+HipCcUJ6+wpIt+q5FsZmatDDoJ34S21RhtNG+I4Z+x6AIVYIMAX7u5eR0sqtfo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787634466; c=relaxed/simple;
+	bh=SQHNn/ts9/ycErKCaZ5tVLTT6zkguL0GgEFvITPmDqA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ChO83n/PrIDkq/0RoN5hvg1FBpCeSCtE/+5Y0XtV4jKzYZAAqMPQ8MdOUBafBXGaAFfkVuIfUm9Z+QCyooHqmmVfyjeZfrAhpUajnGVrsbvpqpfARSZp0ppDvrfaQNOlySb7enKcxkOUN9UY/0nu5qbuVlWzDqZ7kH9ZCn3oeFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net; spf=pass smtp.mailfrom=davidgow.net; arc=none smtp.client-ip=203.29.242.92
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=davidgow.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidgow.net
+Received: by sphereful.davidgow.net (Postfix, from userid 119)
+	id 2F1811EAAA9; Tue, 25 Aug 2026 13:07:34 +0800 (AWST)
+X-Spam-Level: 
+Received: from [IPV6:2001:8003:8802:7000::41b] (unknown [IPv6:2001:8003:8802:7000::41b])
+	by sphereful.davidgow.net (Postfix) with ESMTPSA id BA6E21EA7C4;
+	Tue, 25 Aug 2026 13:07:28 +0800 (AWST)
+Message-ID: <f165dbd7-d275-4f9c-969c-408399e85830@davidgow.net>
+Date: Tue, 25 Aug 2026 13:07:25 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 24 Aug 2026 21:22:15 -0700
-X-Gm-Features: AcwNN1WQy8t54bcd0rpO36nvPxS3ceyAlSt6scpIWjMhQZqgzc7w7cgeUX3ASbs
-Message-ID: <CAEvNRgFhjbgC9Ng1qviPx4oE=qihUwiBcsYOgJG3yOU-nLG1hQ@mail.gmail.com>
-Subject: Re: [PATCH v10 07/41] KVM: guest_memfd: Stub in ability to enable
- in-place shared<=>private conversion
-To: Xiaoyao Li <xiaoyao.li@intel.com>, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, 
-	Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] lib/tests: Add KUnit test for struct stack_trace
+ __counted_by_ptr attribute
+To: Bill Wendling <morbo@google.com>, linux-kernel@vger.kernel.org
+Cc: Kees Cook <kees@kernel.org>, "Gustavo A. R. Silva"
+ <gustavoars@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Higgins <brendan.higgins@linux.dev>, Rae Moar <raemoar63@gmail.com>,
+ Ryota Sakamoto <sakamo.ryota@gmail.com>, Kuan-Wei Chiu
+ <visitorckw@gmail.com>, Pasha Tatashin <pasha.tatashin@soleen.com>,
+ Dmitry Antipov <dmantipov@yandex.ru>, Petr Mladek <pmladek@suse.com>,
+ Kir Chou <note351@hotmail.com>, codemender-patching+linux@google.com,
+ linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+References: <20260823123549.1120133-1-morbo@google.com>
+ <20260823123549.1120133-3-morbo@google.com>
+Content-Language: en-US
+From: David Gow <david@davidgow.net>
+In-Reply-To: <20260823123549.1120133-3-morbo@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Xiaoyao Li <xiaoyao.li@intel.com> writes:
+Le 23/08/2026 à 20:35, Bill Wendling a écrit :
+> Add a custom KUnit test suite 'stacktrace_counted_by' to verify that the
+> __counted_by_ptr annotation on the 'entries' field of 'struct stack_trace'
+> behaves correctly.
+> 
+> The test verifies that 'max_entries' correctly limits and validates access
+> to 'entries' when CONFIG_ARCH_STACKWALK is not defined. If it is defined,
+> the test is cleanly skipped at runtime to prevent compile-time or runtime
+> failures due to 'struct stack_trace' being undefined on modern
+> architectures.
+> 
+> Assisted-by: Gemini Next
+> Signed-off-by: Bill Wendling <morbo@google.com>
+> ---
+> Cc: Kees Cook <kees@kernel.org>
+> Cc: "Gustavo A. R. Silva" <gustavoars@kernel.org>
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: Brendan Higgins <brendan.higgins@linux.dev>
+> Cc: David Gow <david@davidgow.net>
+> Cc: Rae Moar <raemoar63@gmail.com>
+> Cc: Ryota Sakamoto <sakamo.ryota@gmail.com>
+> Cc: Kuan-Wei Chiu <visitorckw@gmail.com>
+> Cc: Pasha Tatashin <pasha.tatashin@soleen.com>
+> Cc: Dmitry Antipov <dmantipov@yandex.ru>
+> Cc: Petr Mladek <pmladek@suse.com>
+> Cc: Kir Chou <note351@hotmail.com>
+> Cc: codemender-patching+linux@google.com
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-hardening@vger.kernel.org
+> Cc: linux-kselftest@vger.kernel.org
+> Cc: kunit-dev@googlegroups.com
+> Cc: linux-hardening@vger.kernel.org
+> ---
 
-> On 8/24/2026 10:45 PM, Ackerley Tng wrote:
->> Xiaoyao Li <xiaoyao.li@intel.com> writes:
->>
->>> On 8/8/2026 5:52 AM, Ackerley Tng via B4 Relay wrote:
->>>> From: Sean Christopherson <seanjc@google.com>
->>>>
->>>> Stub in global variable to enable in-place guest_memfd private<=>shared
->>>> memory conversion, which will eventually be exposed to userspace via a
->>>> module param, and wire up the __kvm_mem_is_private() static call to the
->>>> guest_memfd version when in-place conversion is enabled, i.e. when gmem is
->>>> the sole authority on private vs. shared memory.
->>>
->>> I find this patch changes the default memory type for a @gfn.
->>>
->>> - When memory attribute is tracked per-VM, the default memory type is
->>> always shared.
->>>
->>> - when gmem_in_place_conversion is true,
->>>     - if the @gfn has no memslot, or the memslot where the @gfn locates
->>>       doesn't have gmem bound, the default memory type is shared,
->>>     - otherwise, the default memory type is determined by the
->>>       GUEST_MEMFD_FLAG_INIT_SHARED flag.
->>>
->>> I think we should document this change.
->>>
->>
->> In a way it's not really a "change" since gmem_in_place_conversion is
->> set up as false in this patch.
->
-> I agree. It is not this patch making the change but the patch allows
-> gmem_in_place_conversion to be true.
->
->> When it is enabled in a later patch, another way to see it is that the
->> default remains "shared unless defined as private".
->>
->> Before:
->>
->> + no memslot, or memslot not bound to gmem => shared
->> + memory is shared unless VM ioctl used to make gfn private.
->>
->> After:
->>
->> + no memslot, or memslot not bound to gmem => still shared
->> + otherwise, ask gmem about status, which I think is already captured in
->>    the module param concept.
->>      + The very usage of gmem (without INIT_SHARED) is defining memory as
->>        private, I think that is already documented elsewhere when
->>        INIT_SHARED was introduced, that now the default is private.
->>
->> So in summary, I feel that this has already been documented in various
->> places. I'll also add the following in v11's "KVM: Let userspace disable
->> per-VM mem attributes, enable per-gmem attributes", in
->> Documentation/admin-guide/kernel-parameters.txt:
->>
->> 	kvm.gmem_in_place_conversion=
->> 			[KVM] Controls whether KVM enables in-place conversion
->> 			support for guest_memfd and tracks the private/shared
->> 			state of memory per guest_memfd instead of per VM.
->>
->> 			If enabled (the default), KVM enables the
->
-> I think the default is disabled?
->
+I'm a bit confused: what is this actually testing? You're creating an 
+array of size 4 and writing 4 entries to it, after setting max_entries 
+correctly? Removing the __counted_by_ptr attribute doesn't change 
+anything here. Is there any circumstance where this should fail? The 
+only case I can think of is if __counted_by_ptr is either totally 
+broken, or someone randomly points it to a different value. Neither of 
+which seem likely.
 
-Ah. I'm thinking of the state in the way that we're deprecating
-non-in-place-conversion. I'll drop "(the default)", since the default
-depends on the CONFIG flag.
+Even if this did something more exciting (like try to access elements 
+beyond the end of the array), I'm not sure a KUnit test is the optimal 
+place for it: ultimately we're looking for a compiler warning / error, 
+not a runtime one, and even then, one which probably isn't of much value 
+given it's unlikely __counted_by_ptr will spontaneously break.
 
->> 			KVM_SET_MEMORY_ATTRIBUTES2 ioctl on guest_memfd file
->> 			descriptors and disables the legacy VM-scoped
->> 			KVM_SET_MEMORY_ATTRIBUTES ioctl for private memory state
->> 			tracking. Only the KVM_MEMORY_ATTRIBUTE_PRIVATE
->> 			attribute moves to per-guest_memfd tracking; other
->> 			attributes remain per-VM.
->>
->> 			This parameter toggles KVM's in-place conversion
->> 			capability support.
->
-> I start to think that the term "in-place conversion" seems to read
-> inaccurate. I think it is describing the shared/private conversion of a
-> gfn, and in-place means when a gfn is converted between shared/private,
-> the backend comes from the same gmem page, thus in-place. But KVM
-> doesn't enforce the "in-place".
->
-> If "in-place conversion" describes the shared/private conversion of a
-> gmem page, then "in-place" is redundant because the conversion a
-> specific gmem page is always in-place.
->
+Added to that, there are a bunch of stylistic issues with the test below 
+anyway. These mostly seem like LLM-isms, but probably should've been 
+caught before this went to the list.
 
-Hmm, a few people have raised something related to this
-gmem_in_place_conversion module param's naming: Xiaoyao, Yan, David, and
-Sean's response is generally that it is confusing, but can't find a
-better way out. The main consideration around module param naming is
-that it should be named for the benefit of the admin. We want some name
-that admins can understand at a high level (for some definition of "high
-level") what this does.
+Unless there's something I'm missing (and, if so, it's probably worth 
+writing a description which better explains the "why" here), I think we 
+can probably drop this test entirely and stick to just patch 1.
 
-Do you have a proposal to resolve your concern, considering naming,
-documentation, comments, code, etc?
+-- David
 
->>                       Whether a VMM uses separate backends
->> 			or out-of-place memory management is determined by
->> 			userspace VMM design.
->>
->> 			Note, this parameter is only available when
->> 			CONFIG_KVM_VM_MEMORY_ATTRIBUTES=y. When
->> 			CONFIG_KVM_VM_MEMORY_ATTRIBUTES is not set, in-place
->> 			conversion is unconditionally enabled.
->>
->> 			Default is Y (on).
->
-> I'm looking at the doc of KVM_SET_USER_MEMORY_REGION2, which reads
->
-> # When mapping a gfn into the guest, KVM selects shared vs. private, i.e
-> consumes
-> # userspace_addr vs. guest_memfd, based on the gfn's
-> KVM_MEMORY_ATTRIBUTE_PRIVATE
-> # state.  At VM creation time, all memory is shared, i.e. the PRIVATE
-> attribute
-> # is '0' for all gfns.  Userspace can control whether memory is
-> shared/private by
-> # toggling KVM_MEMORY_ATTRIBUTE_PRIVATE via KVM_SET_MEMORY_ATTRIBUTES as
-> needed.
+>   lib/Kconfig.debug            | 10 +++++++
+>   lib/kunit/.kunitconfig       |  1 +
+>   lib/tests/Makefile           |  1 +
+>   lib/tests/stacktrace_kunit.c | 51 ++++++++++++++++++++++++++++++++++++
+>   4 files changed, 63 insertions(+)
+>   create mode 100644 lib/tests/stacktrace_kunit.c
+> 
+> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
+> index e97bdf3a42a8..51a6ac1a2461 100644
+> --- a/lib/Kconfig.debug
+> +++ b/lib/Kconfig.debug
+> @@ -2716,6 +2716,16 @@ config BITOPS_KUNIT
+>   
+>   	  If unsure, say N.
+>   
+> +config STACKTRACE_KUNIT_TEST
+> +	tristate "KUnit test for stacktrace counted_by attribute" if !KUNIT_ALL_TESTS
+> +	depends on KUNIT
 
-I'm not sure how this snippet from the documentation connects with what
-you'd like changed. Let me know your suggested changes across
-naming/docs/comments/code to address your concern :)
+This should also just depend on CONFIG_ARCH_STACKWALK, rather than doing 
+the whole skip test thing.
+
+> +	default KUNIT_ALL_TESTS
+> +	help
+> +	  This option enables the KUnit test for verifying the __counted_by_ptr
+> +	  attribute on struct stack_trace.
+> +
+> +	  If unsure, say N.
+> +
+>   config BITFIELD_KUNIT
+>   	tristate "KUnit test bitfield functions at runtime" if !KUNIT_ALL_TESTS
+>   	depends on KUNIT
+> diff --git a/lib/kunit/.kunitconfig b/lib/kunit/.kunitconfig
+> index 9235b7d42d38..b3761b41459e 100644
+> --- a/lib/kunit/.kunitconfig
+> +++ b/lib/kunit/.kunitconfig
+> @@ -1,3 +1,4 @@
+>   CONFIG_KUNIT=y
+>   CONFIG_KUNIT_TEST=y
+>   CONFIG_KUNIT_EXAMPLE_TEST=y
+> +CONFIG_STACKTRACE_KUNIT_TEST=y
+
+Please don't add this here. This is not a test of KUnit itself, which is 
+what the lib/kunit/.kunitconfig file is meant to configure.
+
+For general KUnit test build, CONFIG_KUNIT_ALL_TESTS will enable it.
+
+> diff --git a/lib/tests/Makefile b/lib/tests/Makefile
+> index 4ead57602eac..40875e729fc8 100644
+> --- a/lib/tests/Makefile
+> +++ b/lib/tests/Makefile
+> @@ -6,6 +6,7 @@
+>   CFLAGS_bitfield_kunit.o := $(DISABLE_STRUCTLEAK_PLUGIN)
+>   obj-$(CONFIG_BASE64_KUNIT) += base64_kunit.o
+>   obj-$(CONFIG_BITOPS_KUNIT) += bitops_kunit.o
+> +obj-$(CONFIG_STACKTRACE_KUNIT_TEST) += stacktrace_kunit.o
+>   obj-$(CONFIG_BITFIELD_KUNIT) += bitfield_kunit.o
+>   obj-$(CONFIG_BITS_TEST) += test_bits.o
+>   obj-$(CONFIG_SHDI3_KUNIT_TEST) += shdi3_kunit.o
+> diff --git a/lib/tests/stacktrace_kunit.c b/lib/tests/stacktrace_kunit.c
+> new file mode 100644
+> index 000000000000..7ec48edf84fe
+> --- /dev/null
+> +++ b/lib/tests/stacktrace_kunit.c
+> @@ -0,0 +1,51 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * KUnit test for struct stack_trace counted_by attribute.
+> + */
+> +
+> +#include <kunit/test.h>
+> +#include <linux/stacktrace.h>
+> +
+> +#ifndef CONFIG_ARCH_STACKWALK
+> +static void test_stack_trace_counted_by(struct kunit *test)
+> +{
+> +	unsigned long entries_buf[4];
+> +	struct stack_trace trace = {
+> +		.entries = entries_buf,
+> +		.max_entries = 4,
+> +	};
+> +
+> +	KUNIT_EXPECT_EQ(test, trace.max_entries, 4U);
+> +	KUNIT_EXPECT_PTR_EQ(test, trace.entries, (unsigned long *)entries_buf);
+> +
+> +	/* Write to the allocated elements to verify access */
+> +	trace.entries[0] = 0xdeadbeef;
+> +	trace.entries[1] = 0xbeefcafe;
+> +	trace.entries[2] = 0xcafebabe;
+> +	trace.entries[3] = 0x12345678;
+> +
+> +	KUNIT_EXPECT_EQ(test, trace.entries[0], 0xdeadbeefUL);
+> +	KUNIT_EXPECT_EQ(test, trace.entries[1], 0xbeefcafeUL);
+> +	KUNIT_EXPECT_EQ(test, trace.entries[2], 0xcafebabeUL);
+> +	KUNIT_EXPECT_EQ(test, trace.entries[3], 0x12345678UL);
+> +}
+> +#else
+> +static void test_stack_trace_counted_by(struct kunit *test)
+> +{
+> +	kunit_skip(test, "CONFIG_ARCH_STACKWALK is enabled, struct stack_trace is not defined");
+> +}
+> +#endif
+> +
+> +static struct kunit_case stacktrace_test_cases[] = {
+> +	KUNIT_CASE(test_stack_trace_counted_by),
+> +	{}
+> +};
+> +
+> +static struct kunit_suite stacktrace_test_suite = {
+> +	.name = "stacktrace_counted_by",
+> +	.test_cases = stacktrace_test_cases,
+> +};
+
+Is this suite intended to cover more stacktrace tests than just the 
+counted_by one at some point? If so, it'd be better to name it 
+"stacktrace". If not, these structs should be named 
+"stacktrace_counted_by_test_suite", etc.
+
+> +
+> +kunit_test_suite(stacktrace_test_suite);
+> +
+> +MODULE_LICENSE("GPL");
+
