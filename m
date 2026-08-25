@@ -1,320 +1,236 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com [209.85.128.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6920340282;
-	Tue, 25 Aug 2026 16:02:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2971433C518
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 16:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787673723; cv=none; b=AwnyUn0Q07jTmRBhCG+M16VrQiUKEjsv668HW6HDowX72YXTpfCoGFh3YHOExvvVz+Q43qp9X6z5bzEsZSJBlmIp7sEkL3MJUayK1CJZIt6s5aFKGHbk2JY785r064EigpaBNURGaRB3FQNRkWGsVf/M8Hpm95Pz1Q9T0fz4HSs=
+	t=1787674348; cv=none; b=Bw4kIESxLVjB1b4FhnMwnYp8+9CxKbgtBbIGc6hN4E13nT7wxHiB0gCRqaHseOLy8M6+SK861LzUbv2sT4LbD7SU79ZiP0OH3Q5g0pkLwpNrHrLziGnFOmQFaIdTyVBj0wZWEXsE8IASoo4QVUdoDBJTfEWoyZXgxOOn2LQiZiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787673723; c=relaxed/simple;
-	bh=bIU/5QqTt2sESium66hjDrMvxvN9oUs89PlIyr+xpII=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aUZLZto5KmOSkoErLAguezbT0gCerBnRiRrY05T8J4baOmLD4Q8HiAZhSzXnHQ1hbpEwo1WLkEUQWG6iBvRg01tEX1YqeTseXpYA04bIkQY5B6ZRxidAT26AKl+KaHBi6dG3cwmkI6WnylmUj+8RK35nH2R+zH6JR6J1EgP+EH4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZQ2fKSMB; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787674348; c=relaxed/simple;
+	bh=wXrgHy62T0tNDn8P/4NZ8q+YEMGB8yHeI1pf6IWRHTM=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=dFbl891y+bJGydfCfN2P6s+rm8PjvUcgOtDBfz8ATT5/cRxCA5Vgx3wjaK0Bk62k4wpOJkjW0DE0z48i0MnIbzIscVsWRjyhQ78L1dRlvPKfrqpxYvzW3WMYxCdazFHZ30Utxb1p5erD4HUY59dlhl0mKcq3UQsG0TOxvhg97eg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jgBoyzun; arc=none smtp.client-ip=209.85.128.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZQ2fKSMB"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B32971F000E9;
-	Tue, 25 Aug 2026 16:01:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787673721;
-	bh=tcKcgTzP/MaC1TKqD0rXntx2zTo0kP8ybCcblQSok4Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=ZQ2fKSMB51ICm8a+uQ7XhMAdLeWtrzaJjIxUqvCXFYKol3tlFUd4AeOGCcJf8JVWB
-	 AcbHuBEKV6I+Cf+jJD2cmjF5CVXyFzNayEUqS34AZwMmakPJshLz8TZ8XAmvfRX9y1
-	 2ZdOmbtRt8cUJUUXMAUsIjeggGUOmSHg2rKxekC+1NV7XfvPm8ZiV5XIkIhHdPEfvH
-	 fzfzT/iKbB6F+55FhYFN75bOwWayybPWtneyUEHzX/3tZDCkbNyU578qTAyLn9JEMw
-	 k5bLFZDq14Lpvx0vUz2QjEYdIlUGSDHEnIJDtQADg3HebMt3dA7WxkCzXjhqxB7Z/H
-	 bjljMnkItf9Rw==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Tue, 25 Aug 2026 17:00:42 +0100
-Subject: [PATCH 8/8] KVM: selftests: Add nested pre-fault test for arm64
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jgBoyzun"
+Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-81dfdbd86d1so63725227b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787674346; x=1788279146; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=01+frOfya8cSKRerweuTqMaNxLlq2qDmJSW1y4jWqwo=;
+        b=jgBoyzun7CojyfCESxsmmfgmuzwEnU+tjz4NyZnY7GinVGXAoUF2uhZ72sP3oWsWki
+         Sjcmmm0RL7ITTZs/EnwNw+8cp/AtNenU3vDc3D6mTNfOutYLFz8Pe1HKtO54EzTrMkwv
+         zM3MLWCeoJ7TvoqG43U9aSG2Kh6LjuolvPUsMdcVUuYo+1JFx25VrRHNQI1rOUYIUSre
+         e8pkOk91xVuL5mBbgxKn/T7Du1QsBG2mFvG73XFcwSjZV5RUMR52GCKDGOktZYGad5+e
+         NZPmIrHc3ggtLSmpWx10VKsos2RoIsy6saPk/yninUkosU2T9tVvi+AB28EXy2tyRNkX
+         4nxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787674346; x=1788279146;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=01+frOfya8cSKRerweuTqMaNxLlq2qDmJSW1y4jWqwo=;
+        b=W89wKJOzBtbvnnt7NbSakfIO9kj+to+B6delTt4RHR4ogaD4hwzjzD/EMWeh2ZRcNp
+         cJMAYv564B2v14bebFPwOXo86EUtR6uvOSv/UJcbR+28/vbvyA38fzsjq+iCFCGz8jI9
+         oKttkYSi3kzowpa6Cl1fusYoAkIi5DDZq05Cjr3qTvTNDoIi/VDAa5yVYiIZlDA1gwyM
+         oI467+HJ7Qo4XlGkS7rjHQLbAbwUG6y3MLQX2cXSoK9UlD3gKuBMsbB1jx33h9kHdRem
+         CV8e9s3ji9ymkhk+jQ4d7QYfD1ajxMEiK/VQ3YWm2bVpw5kQTQ/z+457mYWw3A5zkf1i
+         xwRg==
+X-Forwarded-Encrypted: i=1; AHgh+RqNuehsEUsH7AWPlvI40670IW2e+FxL8eCIggQ6/9mrajUW2zhbxdlZA4wWBs7DUbtzamjs1t7ymBrhGgYp6xU=@vger.kernel.org
+X-Gm-Message-State: AFuF++mhtJVJ7ddAOHoB/HlMTTos52H4RIYHVMH61hUgzWEijLJQrisH
+	zKYUTB/QA7mPwroLwu4J//tmZwhVYGQkhjSpLlMBSZobAivYT2b8/lJg
+X-Gm-Gg: AR+sD10P7KuUTm7W5ZvX+ikL4/P3rULeKA0O0++WdEkUJurvFRlBjP4pAwfG5fu65fq
+	oXf+2eCpjnHI0xcljVEivR9Hb3p5vzE39Si+C6UtGdbN61CB50SEWkcmMXV9o5i/+DuX1xsgVna
+	BrjoQJtd9p5VFo+y54e/AD0S1/BLtvTNsbjRiyH0XUhYV+8QUUn9w+xP/+wb5lbKiu4RDrMuj6n
+	SlcR1MTODUHFfsOuqFsWtay3dJtg6ChV1a5cszjrkmJuLMrjkTnZuJ2Csp7LwhMrFtdULw21gRa
+	NLNINkYqLLhnruXkyZ6cMD8M2v0xZ5ZuS9mmhOzEJHjbiR7KBf2QPhmBWlgq0qljgwwWIaZ/PRB
+	Pk3iQFFr6TAWFqTmQydBDn8RRlJGj5U996RcgwfYDyMy4PggfHikNnliiRD1RFeyQnsqUM5f+86
+	y7B0naUbWDpBTnBmNWlqZKELS+WAOh8UewUf8iZXAQBN5g/ur3c+pgWEaJc4egWRX27aZJrALy1
+	lh9P8xZMHxw3OLY2N+lps01x+BANU2bQ3Y8z9FuvEFtf/EQAgoH
+X-Received: by 2002:a05:690c:e1d7:20b0:80e:5236:b944 with SMTP id 00721157ae682-85473d9e59amr26963037b3.10.1787674345937;
+        Tue, 25 Aug 2026 09:12:25 -0700 (PDT)
+Received: from gmail.com (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-85705387614sm2221077b3.2.2026.08.25.09.12.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 09:12:25 -0700 (PDT)
+Date: Tue, 25 Aug 2026 12:12:24 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>, 
+ Willem de Bruijn <willemdebruijn.kernel@gmail.com>, 
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Mirja Kuehlewind <mirja.kuehlewind@ericsson.com>, 
+ "shaojijie@huawei.com" <shaojijie@huawei.com>, 
+ "shenjian15@huawei.com" <shenjian15@huawei.com>, 
+ "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>, 
+ "eperezma@redhat.com" <eperezma@redhat.com>, 
+ "jasowang@redhat.com" <jasowang@redhat.com>, 
+ "virtualization@lists.linux.dev" <virtualization@lists.linux.dev>, 
+ "mst@redhat.com" <mst@redhat.com>, 
+ "xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>, 
+ "pabeni@redhat.com" <pabeni@redhat.com>, 
+ "edumazet@google.com" <edumazet@google.com>, 
+ "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>, 
+ "corbet@lwn.net" <corbet@lwn.net>, 
+ "horms@kernel.org" <horms@kernel.org>, 
+ "dsahern@kernel.org" <dsahern@kernel.org>, 
+ "kuniyu@google.com" <kuniyu@google.com>, 
+ "bpf@vger.kernel.org" <bpf@vger.kernel.org>, 
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>, 
+ "dave.taht@gmail.com" <dave.taht@gmail.com>, 
+ "jhs@mojatatu.com" <jhs@mojatatu.com>, 
+ "stephen@networkplumber.org" <stephen@networkplumber.org>, 
+ "xiyou.wangcong@gmail.com" <xiyou.wangcong@gmail.com>, 
+ "jiri@resnulli.us" <jiri@resnulli.us>, 
+ "davem@davemloft.net" <davem@davemloft.net>, 
+ "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, 
+ "donald.hunter@gmail.com" <donald.hunter@gmail.com>, 
+ "ast@fiberby.net" <ast@fiberby.net>, 
+ "liuhangbin@gmail.com" <liuhangbin@gmail.com>, 
+ "shuah@kernel.org" <shuah@kernel.org>, 
+ "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>, 
+ "ij@kernel.org" <ij@kernel.org>, 
+ "ncardwell@google.com" <ncardwell@google.com>, 
+ "Koen De Schepper (Nokia)" <koen.de_schepper@nokia-bell-labs.com>, 
+ "g.white@cablelabs.com" <g.white@cablelabs.com>, 
+ Ingemar Johansson S <ingemar.s.johansson@ericsson.com>, 
+ "cheshire@apple.com" <cheshire@apple.com>, 
+ "rs.ietf@gmx.at" <rs.ietf@gmx.at>, 
+ "Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>, 
+ "vidhi_goel@apple.com" <vidhi_goel@apple.com>, 
+ Parav Pandit <parav@nvidia.com>, 
+ Willem de Bruijn <willemb@google.com>, 
+ ij@kernel.org
+Message-ID: <willemdebruijn.kernel.28ce4bc2544df@gmail.com>
+In-Reply-To: <PAXPR07MB7984F0C072220066856DD8ACA3AF2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
+ <20260811173017.3d18dfdc@kernel.org>
+ <PAXPR07MB79849A3F1724DBB2DA8EA20AA3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <20260812155430.6ec81eec@kernel.org>
+ <PAXPR07MB7984E3E73868BF8966821C27A3DB2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <CAF=yD-LQbndjPZiXcfA6fMp6msza_+YdzqqwyeUDVTdOCOHhDw@mail.gmail.com>
+ <47BE8A8A-F80C-4C30-BC95-C85FEBFFB606@ericsson.com>
+ <PAXPR07MB7984ED42ED0849D3A9AB8C19A3DA2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <willemdebruijn.kernel.c248a28f9c86@gmail.com>
+ <20260814120121.50e61d01@kernel.org>
+ <CAF=yD-L1-Sxz9uyP_4WqtNRJHnwTVMhQba_KF-=Eiy=d9Jf-qA@mail.gmail.com>
+ <PAXPR07MB7984F0C072220066856DD8ACA3AF2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+Subject: RE: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260825-kvm-arm-prefault-v1-8-befe8947702e@kernel.org>
-References: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
-In-Reply-To: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Oliver Upton <oupton@kernel.org>, Fuad Tabba <tabba@google.com>, 
- Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
- Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
- Jonathan Corbet <corbet@lwn.net>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, Jack Thomson <jackabt@amazon.com>, 
- Jack Thomson <jackabt.amazon@gmail.com>, 
- Alexandru Elisei <alexandru.elisei@arm.com>, 
- Vincent Donnefort <vdonnefort@google.com>, 
- "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
- Sean Christopherson <seanjc@google.com>, 
- Claudio Imbrenda <imbrenda@linux.ibm.com>, 
- Leo Soares Passos <Leo.Bras@arm.com>, 
- "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8041; i=ljs@kernel.org;
- h=from:subject:message-id; bh=uxEB4tWFsMMdxFr1BeaQVWSs7h76x9U+I63sFxRh9hg=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJ69zgrtNl/tlib23ByjswG0aAD067fmScoZsIqZ/0rb
- d8s/z3WHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZjI8TkM/2y9Ik/v1grsPSJU
- 0617vtbsU+/yFTFx9pF9970/nk1QD2NkWLfgRvf2Mv1qbbFZCSZuQkpKHtbPllgoLN+W6SK086A
- DBwA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-From: Jack Thomson <jackabt@amazon.com>
+> > > On Fri, 14 Aug 2026 09:34:01 -0400 Willem de Bruijn wrote:
+> > > > > Current SW GRO sets SKB_GSO_TCP_ACCECN when the flushed skb carries CWR in tcp_gro_complete():
+> > > > > if (th->cwr)
+> > > > >     shinfo->gso_type |= SKB_GSO_TCP_ACCECN;
+> > > >
+> > > > And I suppose it follows correct AccECN rules for coalescing.
+> > > >
+> > > > That is a performance regression from RFC 3168 ECN, as it allows for 
+> > > > less effective coalescing. I have no intuition how much it will 
+> > > > differ in practice.
+> > > >
+> > > > > For HW GRO of a legacy device that implementing RFC3168 semantics, setting SKB_GSO_TCP_ECN seems reasonable.
+> > > > > However, such a device would not be able to preserve ACCECN signaling across the GRO/GSO.
+> > > > > In that case, if preserving AccECN signaling is required, disabling HW GRO may indeed be necessary.
+> > > >
+> > > > Right.
+> > >
+> > > I'm still not following.. Maybe Willem can ELI5 what the problem is.
+> > >
+> > > _SW_ GRO follows only the AccECN rules.
+> > > But if HW GRO follows RFC 3168 and we mark the aggregate as 
+> > > SKB_GSO_TCP_ECN - TSO will also abide, and segmented output will be 
+> > > identical to pre-GRO input.
+> > 
+> > +1
+> > 
+> > > Are we trying to ban RFC 3168 behavior in HW purely to match SW?
+> > 
+> > I think that's the intent here?
+> Hi Willem,
+> 
+> I think we can still change SKB_GSO_TCP_ECN into SKB_GSO_TCP_ACCECN on the RX path, even if HW GRO and SW GRO use different aggregation rules.
+> Currently, SW GRO flushes when the CWR state changes and sets SKB_GSO_TCP_ACCECN when the resulting skb carries CWR=1.
+>
+> 
+> For HW GRO, if the device flushes immediately when a CWR=1 packet arrives, there is no need to set either SKB_GSO_TCP_ECN or SKB_GSO_TCP_ACCECN.
+> In that case, each CWR=1 packet is emitted separately, and there is no need to preserve multiple CWR indications through GSO.
+> So, if the HW can be confirmed to always flush CWR-marked packets without coalescing them, preserving multiple CWR indications through GSO is not required.
+> In that case, using SKB_GSO_TCP_ACCECN would not provide any additional benefit.
 
-Add an arm64 nested-virt selftest for KVM_PRE_FAULT_MEMORY. The guest
-enters vEL1 and exits to userspace with a nested/shadow stage-2 MMU as
-the vCPU's last-run context.
+I agree.
 
-Before prefaulting, userspace enables HCR_EL2.VM and points VTTBR_EL2 at
-an empty nested stage-2 root. A prefault implementation that incorrectly
-treats the userspace GPA as an L2 IPA will fail the ioctl; the correct
-path targets the canonical stage-2 and succeeds.
+The difference on transmit is that SKB_GSO_TCP_ACCECN will copy the
+ECN bits to every segment, whereas SKB_GSO_TCP_ECN will only set the
+bits on the first segment.
 
-Restore the original nested state before resuming the guest, then touch
-the prefaulted range to check that vEL1 still runs correctly.
+From commit 023af5a72ab1 ("gso: AccECN support") that introduced
+SKB_GSO_TCP_ACCECN:
 
-Signed-off-by: Jack Thomson <jackabt@amazon.com>
-[ljs: partial progress, >4 KiB pgsize, commit msg, comment fixups]
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
- tools/testing/selftests/kvm/Makefile.kvm           |   1 +
- .../selftests/kvm/arm64/nv_pre_fault_memory_test.c | 206 +++++++++++++++++++++
- 2 files changed, 207 insertions(+)
+    With RFC 3168 ECN aware TSO (NETIF_F_TSO_ECN) CWR flag is cleared
+    starting from 2nd segment which is incompatible how AccECN handles
+    the CWR flag. Such super-segments are indicated by SKB_GSO_TCP_ECN.
+    With AccECN, CWR flag (or more accurately, the ACE field that also
+    includes ECE & AE flags) changes only when new packet(s) with CE
+    mark arrives so the flag should not be changed within a super-skb.
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 66a9a4e62888..1e0edd0f99f7 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -173,6 +173,7 @@ TEST_GEN_PROGS_arm64 += arm64/debug-exceptions
- TEST_GEN_PROGS_arm64 += arm64/hello_el2
- TEST_GEN_PROGS_arm64 += arm64/host_sve
- TEST_GEN_PROGS_arm64 += arm64/hypercalls
-+TEST_GEN_PROGS_arm64 += arm64/nv_pre_fault_memory_test
- TEST_GEN_PROGS_arm64 += arm64/external_aborts
- TEST_GEN_PROGS_arm64 += arm64/mmio_sign_ext
- TEST_GEN_PROGS_arm64 += arm64/page_fault_test
-diff --git a/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-new file mode 100644
-index 000000000000..b3833aea2a34
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/nv_pre_fault_memory_test.c
-@@ -0,0 +1,206 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * nv_pre_fault_memory_test - Test KVM_PRE_FAULT_MEMORY on a vCPU whose
-+ * last-run context is nested.
-+ *
-+ * The guest starts at vEL2, mirrors its EL2 translation regime into the
-+ * real EL1 registers, drops HCR_EL2.TGE and ERETs to vEL1, then exits to
-+ * userspace from vEL1 so that the vCPU's last-run context selects a
-+ * shadow stage-2 MMU. Userspace then enables an empty nested stage-2
-+ * before prefaulting. Prefaulting must target the canonical stage-2,
-+ * regardless of the vCPU's nested state.
-+ */
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "ucall.h"
-+
-+#include <asm/sysreg.h>
-+#include <linux/sizes.h>
-+
-+#define TEST_MEM_SLOT		10
-+#define NESTED_S2_ROOT_SLOT	11
-+#define TEST_MEM_SIZE		SZ_2M
-+#define TEST_MEM_GPA		SZ_1G
-+#define NESTED_S2_ROOT_GPA	(TEST_MEM_GPA + TEST_MEM_SIZE)
-+
-+struct nested_s2_state {
-+	u64 hcr_el2;
-+	u64 vttbr_el2;
-+};
-+
-+static void guest_el1_code(void)
-+{
-+	u64 offset;
-+
-+	GUEST_ASSERT_EQ(get_current_el(), 1);
-+
-+	/* Exit to userspace with the vEL1 (nested) context live. */
-+	GUEST_SYNC(1);
-+
-+	/*
-+	 * Touch the prefaulted range. vstage-2 is disabled, so the shadow
-+	 * stage-2 is a 1:1 view of the canonical IPA space.
-+	 */
-+	for (offset = 0; offset < TEST_MEM_SIZE; offset += SZ_4K)
-+		READ_ONCE(*(u64 *)(TEST_MEM_GPA + offset));
-+
-+	GUEST_DONE();
-+}
-+
-+static void guest_code(void)
-+{
-+	u64 sp;
-+
-+	GUEST_ASSERT_EQ(get_current_el(), 2);
-+
-+	/*
-+	 * Mirror the EL2 translation regime into the real EL1 registers so
-+	 * that vEL1 runs on the test's stage-1 page tables. With E2H=1, the
-+	 * _EL1 accessors read the EL2 registers, and the _EL12 accessors
-+	 * write the real EL1 registers.
-+	 */
-+	write_sysreg_s(read_sysreg(sctlr_el1), SYS_SCTLR_EL12);
-+	write_sysreg_s(read_sysreg(tcr_el1), SYS_TCR_EL12);
-+	write_sysreg_s(read_sysreg(ttbr0_el1), SYS_TTBR0_EL12);
-+	write_sysreg_s(read_sysreg(mair_el1), SYS_MAIR_EL12);
-+	write_sysreg_s(read_sysreg(cpacr_el1), SYS_CPACR_EL12);
-+
-+	/* Run vEL1 on the same stack. */
-+	asm volatile("mov %0, sp" : "=r"(sp));
-+	write_sysreg(sp, sp_el1);
-+
-+	/*
-+	 * Drop TGE so that vEL1 is a nested context rather than host EL0.
-+	 * KVM backs it with a shadow stage-2 MMU even though vstage-2 is
-+	 * disabled (HCR_EL2.VM=0).
-+	 */
-+	write_sysreg(read_sysreg(hcr_el2) & ~HCR_EL2_TGE, hcr_el2);
-+	isb();
-+
-+	write_sysreg(PSR_MODE_EL1h | PSR_F_BIT | PSR_I_BIT | PSR_A_BIT |
-+		     PSR_D_BIT, spsr_el2);
-+	write_sysreg((u64)guest_el1_code, elr_el2);
-+	asm volatile("eret");
-+
-+	GUEST_ASSERT(false);
-+}
-+
-+static void pre_fault(struct kvm_vcpu *vcpu, u64 gpa, u64 size)
-+{
-+	struct kvm_pre_fault_memory range = {
-+		.gpa = gpa,
-+		.size = size,
-+	};
-+	int ret;
-+
-+	do {
-+		ret = __vcpu_ioctl(vcpu, KVM_PRE_FAULT_MEMORY, &range);
-+	} while ((!ret && range.size) ||
-+		 (ret < 0 && (errno == EINTR || errno == EAGAIN)));
-+
-+	TEST_ASSERT(!ret, "KVM_PRE_FAULT_MEMORY failed, ret: %d errno: %d",
-+		    ret, errno);
-+	TEST_ASSERT_EQ(range.size, 0);
-+}
-+
-+static struct nested_s2_state enable_empty_nested_s2(struct kvm_vcpu *vcpu)
-+{
-+	struct nested_s2_state state = {
-+		.hcr_el2 = vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2)),
-+		.vttbr_el2 = vcpu_get_reg(vcpu,
-+					   KVM_ARM64_SYS_REG(SYS_VTTBR_EL2)),
-+	};
-+
-+	TEST_ASSERT(!(state.hcr_el2 & HCR_EL2_TGE),
-+		    "vCPU should be in nested/vEL1 context");
-+
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VTTBR_EL2),
-+		     NESTED_S2_ROOT_GPA);
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2),
-+		     state.hcr_el2 | HCR_EL2_VM);
-+
-+	return state;
-+}
-+
-+static void restore_nested_s2(struct kvm_vcpu *vcpu,
-+			      struct nested_s2_state *state)
-+{
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2), state->hcr_el2);
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_VTTBR_EL2),
-+		     state->vttbr_el2);
-+}
-+
-+int main(void)
-+{
-+	struct nested_s2_state s2;
-+	struct kvm_vcpu_init init;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+	u64 npages;
-+
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_PRE_FAULT_MEMORY));
-+
-+	vm = vm_create(1);
-+
-+	kvm_get_default_vcpu_target(vm, &init);
-+	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	npages = TEST_MEM_SIZE / vm->page_size;
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS, TEST_MEM_GPA,
-+				    TEST_MEM_SLOT, npages, 0);
-+	virt_map(vm, TEST_MEM_GPA, TEST_MEM_GPA, npages);
-+
-+	vm_userspace_mem_region_add(vm, VM_MEM_SRC_ANONYMOUS,
-+				    NESTED_S2_ROOT_GPA, NESTED_S2_ROOT_SLOT,
-+				    vm_adjust_num_guest_pages(vm->mode, 1), 0);
-+
-+	/* Run the guest until it has ERET'd from vEL2 to vEL1. */
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_SYNC:
-+		TEST_ASSERT_EQ(uc.args[1], 1);
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+
-+	/*
-+	 * The vCPU's last-run context is vEL1, backed by a shadow stage-2
-+	 * MMU. Enable nested stage-2 with an empty root so that the ioctl
-+	 * fails if it tries to interpret the userspace GPA as an L2 IPA.
-+	 *
-+	 * Prefault in two halves so that the second ioctl exercises a
-+	 * repeated shadow-MMU attach and canonical stage-2 swap.
-+	 *
-+	 * (Note that an implementation that wrongly populates shadow
-+	 * stage-2 page tables would not be caught as userland can't
-+	 * inspect these.)
-+	 */
-+	s2 = enable_empty_nested_s2(vcpu);
-+	pre_fault(vcpu, TEST_MEM_GPA, TEST_MEM_SIZE / 2);
-+	pre_fault(vcpu, TEST_MEM_GPA + TEST_MEM_SIZE / 2, TEST_MEM_SIZE / 2);
-+	restore_nested_s2(vcpu, &s2);
-+
-+	/* Resume at vEL1 and touch the prefaulted range. */
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+
-+	kvm_vm_free(vm);
-+	return 0;
-+}
+Makes me wonder what SKB_GS_TCP_ACCECN adds. Copying bits
+from the GSO skb to all segments is the default. SKB_GSO_TCP_ECN is
+an indication that the NIC knows how to diverge from this default for
+these specific bits.
 
--- 
-2.55.0
+That commit confirms this:
 
+    If NIC is completely unaware of RFC3168 ECN (doesn't support
+    NETIF_F_TSO_ECN) or its TSO engine can be set to not touch CWR flag
+    despite supporting also NETIF_F_TSO_ECN, TSO could be safely used
+    with AccECN on such NIC. This should be evaluated per NIC basis
+    (not done in this patch series for any NICs).`
+
+> 
+> The problematic case is when a HW GRO aggregates multiple packets carrying CWR=1 and only sets SKB_GSO_TCP_ECN.
+
+The driver of such a device could be updated to set SKB_GSO_TCP_ACCECN
+or not set any such ECN GSO flag.
+
+The driver of other devices that do follow RFC 3168 semantics will
+continue to have to set SKB_GSO_TCP_ECN on the GSO skb. It is quite
+plausible that few or no devices currently support ECN in their HW-GRO
+coalescing.
+
+> During GSO, only the first output segment would carry CWR=1, which loses the remaining CWR signaling information required by AccECN.
+> In that case, changing from SKB_GSO_TCP_ECN to SKB_GSO_TCP_ACCECN would preserve the original signaling by ensuring that the segmented packets carry the correct CWR information.
+> As I understand RFC3168, receiving additional CWR-marked packets is harmless, because once a valid CWR has been received, the receiver already stops echoing ECE.
+
+Agreed.
+
+> Additional CWR indications do not change the receiver state.
+> This would have a performance impact since it disables HW TSO for the skb and falls back to software segmentation.
+
+You mean if the device advertises NETIF_F_TSO_ECN, and GSO skbs may
+contain AccECN signals, the host must downgrade from TSO to GSO to
+avoid corrupting the signal?
+
+The cost of that would be significant. Not something to do for
+established environments. But technically seemingly correct, at least
+for packets with non-zero ECN bits.
+
+> But IMO it preserves correctness for both RFC3168 ECN and AccECN.
+
+Side-note: this thread probably has way too many Cc: for this narrow topic.
