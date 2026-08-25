@@ -1,28 +1,28 @@
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011023.outbound.protection.outlook.com [52.101.125.23])
+Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011055.outbound.protection.outlook.com [52.101.125.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C29B0383C83;
-	Tue, 25 Aug 2026 16:46:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.23
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0C938DC72;
+	Tue, 25 Aug 2026 16:46:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.55
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787676390; cv=fail; b=b40JwwDCida8qK+zaTIQGoDO5hoKjCoIEjsPRh2A0gChwyDcx03+g9iBRl7IXZga0H8NJt8/c1+b2ijKqsKtf5q5txDMoBwvOpuZXVls9ZkNEhut8lz9tQ3/6vqyyuAdss99ftrVECnv4o5+uyBqGX/EborhRrMry1UNcrhAXNo=
+	t=1787676400; cv=fail; b=VFR8M/xGmmE3874NGKA+4aztSeDukW3t2WdNuXGygBMPjCPeW9t6dpXMzPSfgX/RzDCFM+nvEjcYiiQkZxU9ZBg0pWdqr7rVcIhLn7LaKJZGRfOkkpIx0TdX7ggUDVCGQqNwjdHAMsYlNcYEeDzNx0vUNiQplvIWfNP8IVbb5tM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787676390; c=relaxed/simple;
-	bh=JzTust4gedoUs6WCQzgElpORrTpcI4ljTzxjoNG9UaI=;
+	s=arc-20240116; t=1787676400; c=relaxed/simple;
+	bh=5h5FvXA+UxgLS0/+DGOJZbW/sT2HqlT/5JX+eRL9Vls=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=k57zreXiJ/r40HZN1LMtggnFUBwOfsFGaAdyji7TPPOYjTscF3ekdpEHxx+dsgtZ+HmegXKg4gJx6U1XRPaA/pwFScRtLeEP8YmL+xA5UAWHe9dGlJNKP7zQNoy7Qt7CNe9Bu8luFfSC3hvBcef11vWKyIDtN2xrVxsLClk1cDM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=Up8vUiKc; arc=fail smtp.client-ip=52.101.125.23
+	 MIME-Version:Content-Type; b=Sgam95ySOiRI4VnVhLncJqrZS0SIVGJVJy/V3iEqPwgSSgvKg8Bo+Vz2p05PpY9fNgWbbJAb6VxrxNPwlC4tj0IBbwc/p2cAWoTodeSZWL9jRtZL5iZFBbglptBaaQFYvpvzla66r94XbW1xeYuNjs8lC/FnxZITJcwDg7xZ2/E=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com; spf=pass smtp.mailfrom=renesas.com; dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b=Seg/CloC; arc=fail smtp.client-ip=52.101.125.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=renesas.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=renesas.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="Up8vUiKc"
+	dkim=pass (1024-bit key) header.d=renesas.com header.i=@renesas.com header.b="Seg/CloC"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZbqZLsFR6q8IwZnI4RDQEIXRanApZvYj9kp/exH/qtZaYgBL6WcbfNHNQ77kljTla21RJMef9BTsBMcBP8didehUSi5gU+5Ocsilo3ipn7xi+OeiG7GjHNbUXdjF81qiRJ/TQYFpCVUk7LqXnQptm/EyH0LRH93qdBaOz/bEueVA6gFu+l11OzV+piwsvYQglZPbgIBECPD5Hu1/a31dAA8cXt+Jo/YN7K7te3DKVUouNqsBjjPGYP9ucX1TGTj9+/zdpaTTaDxYoObxcigdtCUjCLk8k3o60NjQGRLHa/ZL8DrW1bwI35QFn0Zpy4CZuPPf8SsiVcBHcinTsqlhuw==
+ b=U+TxYjSySrZAtLLJZj8u6Tkc4bPlx6Te3Z4axGOG8zYgBRqjq8gD3AHEBhfvwNUWAeB7QctSrMx2mxpfJrb77ZCEmR9Jn/UZvaMW46ks/1yRPng0i/q4q/5s32HxqwsqVB21Z22Nu5tbkYGp1XU6ovWtiRVDlgfML21qtv1VF4feNMDhp+5uAvZySVz614EHyTo/DU6IRzS8yhGHHMUGYzOizbg4QLS6knWPeQzFJwuYgaJtWea+B2cFRl+179fhHulOyG3FEb06vezyRXZg90uI/LDuyey8h5mLbGWN918dBWZrUWxi0bvuIpZeCxvqCYle/glnEwDsBN23xVAl5Q==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7DbbL2ptfkQyCFOAtwfIdRZAHeTGITuogdBaiB787SQ=;
- b=mBoPq0vnfYVM7F9Z2yoKXQV6032LX5dyvuYBsb0+xFGPyVfGeJGVbkMqhnFcuh+uLbt77wmZQYCY3wHfxpSyUsKigSqQadyySxDgahYtQA8goGEr6PjuOcmkojPvfoX72u08ORvjOjqoADfGW6NwbvMOVts4+Hn05KWnGYwzegLS0BbXhSCuj57NY3zZexkMJ4Udq6yyvZKoj38IzFZw0c4NVxT9YjIITLaxL3m5PMOA+LSB7ZApJwm9NA6gQJTT0F39JZtBOgtdPy2OnKzvDrQr/Jz+AZhujDxwNhjG425evMQr17MCPpxJ5YLPhIvvRQmkPm0Uj1Vj2jXp2CrsdA==
+ bh=4yN0oMMVZ6d1L75Tt7a/vpPtRu0nikbw6SOMWFjR4Ks=;
+ b=f+IPheJB0jPLsBLUM45Z9WEJYj5TwjvG/apb/JWeAjO7XZmafIJlrZ9jeMkAGSMZ7W8NsJiu2wW6RNmk00REDS+3AlfbfKo8edu3bCWWIQW3v1j1rFFVtRn9eI1cUt723qj2iuzWiFpGII5DFwnlokFn5QOAd4EO7YMZymJ24MJJS4zstXPTSXZXh8iNx0MawLfLx11o1G3soEWz8B7g9JuGfMdjFPffuGJtjItwB453cyvjCjcfWuNmYyoIPFTXhnRxTDbC/QAGNiW3HWnZDQ9DLjN7IhCkMrSHePzxpl37JQkQsSJ2PJuExOoWBKKmTE/PF2Vb8roO1LmvyooaYg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  8.62.32.50) smtp.rcpttodomain=bootlin.com smtp.mailfrom=renesas.com;
  dmarc=pass (p=none sp=none pct=100) action=none header.from=renesas.com;
@@ -30,18 +30,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7DbbL2ptfkQyCFOAtwfIdRZAHeTGITuogdBaiB787SQ=;
- b=Up8vUiKcU43ufk0KA7ktttGS7yfE8vlhKef+uE77e1kZW4+VN8owtkgoqbuL9q9FrxO4P+vqFT4wJ12Yyc5FVrRiah3SRHZBWcq2N3eJVvPcW+Cq1oCPbrKh+DZ726/u4mzdpMX8ATSQ2AnO0fX7ZL+yiLiW35rtD7hr3fRKSq0=
-Received: from OSTPR01CA0056.jpnprd01.prod.outlook.com (2603:1096:604:222::20)
- by TYVPR01MB10815.jpnprd01.prod.outlook.com (2603:1096:400:2aa::6) with
+ bh=4yN0oMMVZ6d1L75Tt7a/vpPtRu0nikbw6SOMWFjR4Ks=;
+ b=Seg/CloCOeNmc7qy8qVtP/roIzbTmNGJPOnTzhBbPw/R4IKmtYv4Q/kou98Jb1YxdlYcpoDDY98TD0BpW0sVXDPd5rDLLz4AuKfvz8SyDXLdCOjCwcNNDjP6G2eIleojS6DcC/5/++eYz+WVGzbS1qKUJ2tXPSE4b4RdT8J4Ptc=
+Received: from TY4P286CA0090.JPNP286.PROD.OUTLOOK.COM (2603:1096:405:369::17)
+ by TYYPR01MB7736.jpnprd01.prod.outlook.com (2603:1096:400:118::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.7; Tue, 25 Aug
- 2026 16:46:18 +0000
-Received: from OS1PEPF0000D20E.JPNP286.PROD.OUTLOOK.COM
- (2603:1096:604:222:cafe::7c) by OSTPR01CA0056.outlook.office365.com
- (2603:1096:604:222::20) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
+ 2026 16:46:32 +0000
+Received: from TY2PEPF00005622.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:405:369:cafe::91) by TY4P286CA0090.outlook.office365.com
+ (2603:1096:405:369::17) with Microsoft SMTP Server (version=TLS1_3,
  cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.7 via Frontend Transport; Tue, 25
- Aug 2026 16:46:18 +0000
+ Aug 2026 16:46:32 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 8.62.32.50)
  smtp.mailfrom=renesas.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=renesas.com;
@@ -49,12 +49,12 @@ Received-SPF: Pass (protection.outlook.com: domain of renesas.com designates
  8.62.32.50 as permitted sender) receiver=protection.outlook.com;
  client-ip=8.62.32.50; helo=ejcrelay005p.adwin.renesas.com; pr=E
 Received: from ejcrelay005p.adwin.renesas.com (8.62.32.50) by
- OS1PEPF0000D20E.mail.protection.outlook.com (10.167.240.37) with Microsoft
+ TY2PEPF00005622.mail.protection.outlook.com (10.167.240.53) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
- via Frontend Transport; Tue, 25 Aug 2026 16:46:18 +0000
+ via Frontend Transport; Tue, 25 Aug 2026 16:46:30 +0000
 Received: from vm01.adwin.renesas.com (DEU-5CG20946WF.adwin.renesas.com [10.226.92.185])
-	by ejcrelay005p.adwin.renesas.com (Postfix) with ESMTP id 77F8E30001CA;
-	Wed, 26 Aug 2026 01:46:12 +0900 (JST)
+	by ejcrelay005p.adwin.renesas.com (Postfix) with ESMTP id D1C7930001CB;
+	Wed, 26 Aug 2026 01:46:24 +0900 (JST)
 From: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
 To: maxime.chevallier@bootlin.com,
 	andrew+netdev@lunn.ch,
@@ -74,9 +74,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
 	linux-kselftest@vger.kernel.org,
 	Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Subject: [PATCH net v3 2/5] net: stmmac: Move double VLAN handling to a dedicated op
-Date: Tue, 25 Aug 2026 16:45:19 +0000
-Message-ID: <20260825164522.4244-3-ovidiu.panait.rb@renesas.com>
+Subject: [PATCH net v3 4/5] selftests: drv-net: Move _set_ethtool_feat() into lib
+Date: Tue, 25 Aug 2026 16:45:21 +0000
+Message-ID: <20260825164522.4244-5-ovidiu.panait.rb@renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260825164522.4244-1-ovidiu.panait.rb@renesas.com>
 References: <20260825164522.4244-1-ovidiu.panait.rb@renesas.com>
@@ -89,198 +89,239 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS1PEPF0000D20E:EE_|TYVPR01MB10815:EE_
+X-MS-TrafficTypeDiagnostic: TY2PEPF00005622:EE_|TYYPR01MB7736:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: 97ee0ac6-8d6a-4093-539b-08df02c862b5
+X-MS-Office365-Filtering-Correlation-Id: 1c558dcc-e576-43df-105d-08df02c86a11
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|36860700016|82310400026|7416014|376014|23010399003|921020|18002099003|22082099003|10067099003|56012099006|11063799006;
+	BCL:0;ARA:13230040|36860700016|1800799024|82310400026|376014|7416014|23010399003|18002099003|22082099003|11063799006|56012099006|6133799003|10067099003|921020;
 X-Microsoft-Antispam-Message-Info:
-	ueBvlJendqFYxS5yU18NxHH8B0aGP1AUAEW3yo3JgOM/VcBrJsTXw41uNGzvPvHjn4nZbdb5jURI8uxZem6e3hRQq8WYWUaXCDONyce7pdrZlrasqcAtRd4UFLMk0mhVl0pReNwH9PGPDly+EDl1h4l7aWnVXfSf0qkK1ao0Q1UIyPzL8HT1QZnQ5pX6MaVCTtL4WNwUhbnQA9OysprbuesZZhTvn86cWe3pKQQJC4VUoMxss+nE6Q9XzViL6hKnsLwOQhfCpsgP5ZHx4zIDBQ5h1+HaKvXYRILtK/9oEh/hyBgtZgtkp4uhbk71iaIjBPaC12zgSxkq2SEO3UzYe9sR4pTkvofAmhnZVrQ3FJkEoeIPUcvs7hj2Mwp9AK58guEJ6+joBAwhUaNQtMlGxkof/NP1A9n9sL9mSsyqff8FfHhFmKFsWEui0RIuSqFSovTKRsgBekIb3RHBlmUrch0mjNrcij2GkTY7bepTFsn6syL6NwTMMY25eQhA6De3+d+QW3IvLcKUYk+anZNc2aSZp54AD5TiiGpQy26WNDbvyDpdiWGhgAfslNVefXUK0FuKjiDPFaXlB0pMoh+5FFqQN0bTdZzJ1T+tlCaODz5YbD8WLMggnYqB1kdKZRNG7D5u0g1Nrikj3Faz6H1g/2340NU6kbjRJWko31hhAm79xNRN6UwI+Sj9UJiy0T8qYk7XJoTDZ1zV1eC1oQqPe4Nfgqm42Q6/RnegWMnY13j6dru0tO4Ime9ud3oMsIqy
+	lnQG2pn8PXTXNmf88ldkNxV6YPE4jZpPGQhbEOPY68EMGVTHiw/02TwfYdWPgzi4OIXrKQyz/CYZMgL21p2W9ddNf9vxkjaxK55Iupyd9yuQ7WHmfdOP1c5MV43+F/jqRXMLQ1Mvxuc+BCq5vFeZFDedtryhEEDi/myvnIvZpeQdvfeJGRK61fS1Pk/28Ff5Tpo31osGDHZK+cDcaSe5VcmF54mf4D9w2NT9ch+Vq5o6KyJpWcHic4wLu4gKY5PV9wHFS/0h30yleGkVXDOKw2fxdSV+4f0KHUl+47QJduGOI03p5hxNy+M6v0ub9X6qxBlq6nxkNPTznKOnrEB3HKMFDftfdp0S27f8rfjZI+jbxjt15WcfR6+sZNxZh0FU8VLgIYwVMowqeSjTofvAcWQyrpzSd9xzq2P9Ol+QKGQiGIt0MKaJmOkgUXQqe5evLkWOc6UZzOAD03lxjkUdbeUPwzyy+87iKKk2JYhjs93jXuGN3IkrtlI/rjotnDUPFM3RR2bUX0kChXgNLuERd4f/ZRBesvN36GD+EquFU96q4JItyOexvK+3Lv7kIP97sT3uwryEr3qOjqcWc8wAFizoopRboPuELaD7qTANYu4sC+FwElzwPq8E90yfYl4i+TztQJr5XatAZdi2IO4so4li+F6KyIMK8dzjrT0PpEW23vLIkgjfeDAwQ66rMi7qi/nTP6462f+7FdvEbXTDn/c4U29QfIHSkR+5wQ/YRl43N977BB0+qjOTZv10dJ5U
 X-Forefront-Antispam-Report:
-	CIP:8.62.32.50;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ejcrelay005p.adwin.renesas.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(1800799024)(36860700016)(82310400026)(7416014)(376014)(23010399003)(921020)(18002099003)(22082099003)(10067099003)(56012099006)(11063799006);DIR:OUT;SFP:1101;
+	CIP:8.62.32.50;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ejcrelay005p.adwin.renesas.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(1800799024)(82310400026)(376014)(7416014)(23010399003)(18002099003)(22082099003)(11063799006)(56012099006)(6133799003)(10067099003)(921020);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	B9EBrKKmwuxWnecd8jJHZn+ucV/FVsdXAMO9HsV+Yqyuha2u7l6umU5dA1mccsHtTx4ihIgnSMOjW1BmV8TIHQ8757UfQ6xqpPg9wx6XAJcaXJF+xTMZDndg05o2CP6IFRTJ5jBfi9YOzuIvFLSP/2BHhnb7zZy0faTsNQgoB60dZYQxmsujVLAdOEA57uj29a52u+A8vt/X7TdvRWlW9v9KhiecMMAGAIEeaNcQnaCmbtTUozV/ARIqefFOrzavTNZLFGnT/l2HycNr2cHAvAoc6MF32ysiLC88Ejr+mrq9jg3UCkQLJdreZKhf/Ydk4K63wrSuf3nzkmC6npvuIIHpO+/Ne0wyy3Mh0yhP3E8c0JhHros+6Vk9TB7vSA16+wPUO5W+fiZx4KO4UkeQgb5Anqk97FSMqH4H/DILJuNNxrpSa7jXGyc/7PPncnYz
+	F1BzNOxZM2IAXitJR6jx7Om08Z9sZEldGzE4zVSqICioUcy6s+G8BcWGb8ntVwYWTGC3o498MEZITlbtE/+1e09/1AbL98CtPqhlUlH57BNXWLvOJxkWCMsRrOaXThDyhqocYmJlH2l9uoM8oAtQ51iOs2k/hr5AO8VOspjbZC4lefiFEw8jUzdDiRoxH6dOML5Ixrg+18R9Z81qi6qaJMbA0KcPcNmHz55VGI0yio1AHl+z7JsaSmLCTzn0zxyFfWX7OBNVq/yuu20AJQbp9oH1WTw1rpVyQzrBmIvM2BF1GjcP7inSTm4KTCXYhsR5BfrET1D/Aps/uRd2ck8juxkmmXIwGiKpM/iGfJDqvqWzQw9AZXtQSg5m01iOe/PvkcnXmyTMD5VcBqtde+kI+RnNFBx7ehoWdPn/ne1+WVT01cFmLTaByNVvFdrj8e57
 X-OriginatorOrg: renesas.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 16:46:18.2028
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 16:46:30.5618
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97ee0ac6-8d6a-4093-539b-08df02c862b5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c558dcc-e576-43df-105d-08df02c86a11
 X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=53d82571-da19-47e4-9cb4-625a166a4a2a;Ip=[8.62.32.50];Helo=[ejcrelay005p.adwin.renesas.com]
-X-MS-Exchange-CrossTenant-AuthSource: OS1PEPF0000D20E.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthSource: TY2PEPF00005622.JPNP286.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYVPR01MB10815
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB7736
 
-The double VLAN bits (EDVLP, ESVL, DOVLTC) are currently handled inside
-update_vlan_hash(). This ties the double VLAN state to the hash filter
-update, even though the two features are independent: hash filtering is
-controlled by dma_cap.vlhash and double vlan by dma_cap.dvlan.
-
-In preparation for removing double vlan support from dwmac4, move the
-double vlan logic into a separate update_dvlan_state() VLAN operation.
+Move the _set_ethtool_feat() helper from gro.py into lib, so that it can
+be reused by the VLAN test added in the next commit. Drop the leading
+underscore, now that the helper is exported.
 
 Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
 ---
 v3 changes:
-- Rebased after dropping the dma_cap.dvlan patch.
-- Added "Reviewed-by" tag from Maxime.
+- Fixed "ruff check" and "pylint --disable=R" warnings reported for
+  tools/testing/selftests/drivers/net/lib/py/feat.py.
 
-v2 changes: None.
+v2 changes:
+- New patch.
 
- drivers/net/ethernet/stmicro/stmmac/hwif.h    |  6 ++-
- .../net/ethernet/stmicro/stmmac/stmmac_main.c |  4 +-
- .../net/ethernet/stmicro/stmmac/stmmac_vlan.c | 45 ++++++++-----------
- 3 files changed, 25 insertions(+), 30 deletions(-)
+ tools/testing/selftests/drivers/net/gro.py    | 65 ++++++-------------
+ .../drivers/net/hw/lib/py/__init__.py         |  3 +-
+ .../selftests/drivers/net/lib/py/__init__.py  |  3 +-
+ .../selftests/drivers/net/lib/py/feat.py      | 35 ++++++++++
+ 4 files changed, 59 insertions(+), 47 deletions(-)
+ create mode 100644 tools/testing/selftests/drivers/net/lib/py/feat.py
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/hwif.h b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-index 6f26dbf95ce1..66837caafa84 100644
---- a/drivers/net/ethernet/stmicro/stmmac/hwif.h
-+++ b/drivers/net/ethernet/stmicro/stmmac/hwif.h
-@@ -632,8 +632,8 @@ struct stmmac_est_ops {
+diff --git a/tools/testing/selftests/drivers/net/gro.py b/tools/testing/selftests/drivers/net/gro.py
+index 6ab8c97880d1..051a3b2d0ead 100755
+--- a/tools/testing/selftests/drivers/net/gro.py
++++ b/tools/testing/selftests/drivers/net/gro.py
+@@ -42,7 +42,7 @@ import re
+ from lib.py import ksft_run, ksft_exit, ksft_pr
+ from lib.py import NetDrvEpEnv, KsftFailEx, KsftXfailEx
+ from lib.py import NetdevFamily, EthtoolFamily
+-from lib.py import bkg, cmd, defer, ethtool, ip
++from lib.py import bkg, cmd, defer, ethtool, ip, set_ethtool_feat
+ from lib.py import ksft_variants, KsftNamedVariant
  
- struct stmmac_vlan_ops {
- 	/* VLAN */
--	void (*update_vlan_hash)(struct mac_device_info *hw, u32 hash,
--				 bool is_double);
-+	void (*update_vlan_hash)(struct mac_device_info *hw, u32 hash);
-+	void (*update_dvlan_state)(struct mac_device_info *hw, bool enable);
- 	void (*enable_vlan)(struct mac_device_info *hw, u32 type);
- 	void (*rx_hw_vlan)(struct mac_device_info *hw, struct dma_desc *rx_desc,
- 			   struct sk_buff *skb);
-@@ -650,6 +650,8 @@ struct stmmac_vlan_ops {
  
- #define stmmac_update_vlan_hash(__priv, __args...) \
- 	stmmac_do_void_callback(__priv, vlan, update_vlan_hash, __args)
-+#define stmmac_update_dvlan_state(__priv, __args...) \
-+	stmmac_do_void_callback(__priv, vlan, update_dvlan_state, __args)
- #define stmmac_enable_vlan(__priv, __args...) \
- 	stmmac_do_void_callback(__priv, vlan, enable_vlan, __args)
- #define stmmac_rx_hw_vlan(__priv, __args...) \
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 16fe56a1f617..e79b37fc716c 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -6820,7 +6820,9 @@ static int stmmac_vlan_update(struct stmmac_priv *priv, bool is_double)
- 	if (!netif_running(priv->dev))
- 		return 0;
+@@ -96,31 +96,6 @@ def _set_mtu_restore(dev, mtu, host):
+         defer(ip, f"link set dev {dev['ifname']} mtu {dev['mtu']}", host=host)
  
--	return stmmac_update_vlan_hash(priv, priv->hw, hash, is_double);
-+	stmmac_update_dvlan_state(priv, priv->hw, is_double);
-+
-+	return stmmac_update_vlan_hash(priv, priv->hw, hash);
- }
  
- /* FIXME: This may need RXC to be running, but it may be called with BH
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_vlan.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_vlan.c
-index 983a90cb9767..1e47ae62093e 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_vlan.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_vlan.c
-@@ -161,8 +161,20 @@ static void vlan_restore_hw_rx_fltr(struct net_device *dev,
- 		vlan_write_filter(dev, hw, i, hw->vlan_filter[i]);
- }
- 
--static void vlan_update_hash(struct mac_device_info *hw, u32 hash,
--			     bool is_double)
-+static void vlan_update_dvlan_state(struct mac_device_info *hw, bool enable)
-+{
-+	void __iomem *ioaddr = hw->pcsr;
-+	u32 value;
-+
-+	value = readl(ioaddr + VLAN_TAG);
-+	if (enable)
-+		value |= VLAN_EDVLP | VLAN_ESVL | VLAN_DOVLTC;
-+	else
-+		value &= ~(VLAN_EDVLP | VLAN_ESVL | VLAN_DOVLTC);
-+	writel(value, ioaddr + VLAN_TAG);
-+}
-+
-+static void vlan_update_hash(struct mac_device_info *hw, u32 hash)
- {
- 	void __iomem *ioaddr = hw->pcsr;
- 	u32 value;
-@@ -173,21 +185,9 @@ static void vlan_update_hash(struct mac_device_info *hw, u32 hash,
- 
- 	if (hash) {
- 		value |= VLAN_VTHM | VLAN_ETV;
--		if (is_double) {
--			value |= VLAN_EDVLP;
--			value |= VLAN_ESVL;
--			value |= VLAN_DOVLTC;
--		} else {
--			value &= ~VLAN_EDVLP;
--			value &= ~VLAN_ESVL;
--			value &= ~VLAN_DOVLTC;
--		}
+-def _set_ethtool_feat(dev, current, feats, host=None):
+-    s2n = {True: "on", False: "off"}
 -
- 		writel(value, ioaddr + VLAN_TAG);
- 	} else {
- 		value &= ~(VLAN_VTHM | VLAN_ETV);
--		value &= ~(VLAN_EDVLP | VLAN_ESVL);
--		value &= ~VLAN_DOVLTC;
- 		value &= ~VLAN_VID;
+-    new = ["-K", dev]
+-    old = ["-K", dev]
+-    no_change = True
+-    for name, state in feats.items():
+-        new += [name, s2n[state]]
+-        old += [name, s2n[current[name]["active"]]]
+-
+-        if current[name]["active"] != state:
+-            no_change = False
+-            if current[name]["fixed"]:
+-                raise KsftXfailEx(f"Device does not support {name}")
+-    if no_change:
+-        return
+-
+-    eth_cmd = ethtool(" ".join(new), host=host)
+-    defer(ethtool, " ".join(old), host=host)
+-
+-    # If ethtool printed something kernel must have modified some features
+-    if eth_cmd.stdout:
+-        ksft_pr(eth_cmd)
+-
+-
+ def _get_queue_stats(cfg, queue_id):
+     """Get stats for a specific Rx queue."""
+     cfg.wait_hw_stats_settle()
+@@ -247,15 +222,15 @@ def _setup(cfg, mode, test_name):
+         _write_defer_restore(cfg, flush_path, "200000", defer_undo=True)
+         _write_defer_restore(cfg, irq_path, "10", defer_undo=True)
  
- 		writel(value, ioaddr + VLAN_TAG);
-@@ -236,8 +236,7 @@ static void vlan_set_hw_mode(struct mac_device_info *hw)
- 	writel(value, ioaddr + VLAN_TAG);
- }
+-        _set_ethtool_feat(cfg.ifname, cfg.feat,
+-                          {"generic-receive-offload": True,
+-                           "rx-gro-hw": False,
+-                           "large-receive-offload": False})
++        set_ethtool_feat(cfg.ifname, cfg.feat,
++                         {"generic-receive-offload": True,
++                          "rx-gro-hw": False,
++                          "large-receive-offload": False})
+     elif mode == "hw":
+-        _set_ethtool_feat(cfg.ifname, cfg.feat,
+-                          {"generic-receive-offload": False,
+-                           "rx-gro-hw": True,
+-                           "large-receive-offload": False})
++        set_ethtool_feat(cfg.ifname, cfg.feat,
++                         {"generic-receive-offload": False,
++                          "rx-gro-hw": True,
++                          "large-receive-offload": False})
  
--static void dwxgmac2_update_vlan_hash(struct mac_device_info *hw, u32 hash,
--				      bool is_double)
-+static void dwxgmac2_update_vlan_hash(struct mac_device_info *hw, u32 hash)
- {
- 	void __iomem *ioaddr = hw->pcsr;
+         # Some NICs treat HW GRO as a GRO sub-feature so disabling GRO
+         # will also clear HW GRO. Use a hack of installing XDP generic
+@@ -270,27 +245,27 @@ def _setup(cfg, mode, test_name):
+             # Attaching XDP may change features, fetch the latest state
+             feat = ethtool(f"-k {cfg.ifname}", json=True)[0]
  
-@@ -253,15 +252,6 @@ static void dwxgmac2_update_vlan_hash(struct mac_device_info *hw, u32 hash,
- 		value = readl(ioaddr + VLAN_TAG);
+-            _set_ethtool_feat(cfg.ifname, feat,
+-                              {"generic-receive-offload": True,
+-                               "rx-gro-hw": True,
+-                               "large-receive-offload": False})
++            set_ethtool_feat(cfg.ifname, feat,
++                             {"generic-receive-offload": True,
++                              "rx-gro-hw": True,
++                              "large-receive-offload": False})
+     elif mode == "lro":
+         # netdevsim advertises LRO for feature inheritance testing with
+         # bonding/team tests but it doesn't actually perform the offload
+         cfg.require_nsim(nsim_test=False)
  
- 		value |= VLAN_VTHM | VLAN_ETV;
--		if (is_double) {
--			value |= VLAN_EDVLP;
--			value |= VLAN_ESVL;
--			value |= VLAN_DOVLTC;
--		} else {
--			value &= ~VLAN_EDVLP;
--			value &= ~VLAN_ESVL;
--			value &= ~VLAN_DOVLTC;
--		}
+-        _set_ethtool_feat(cfg.ifname, cfg.feat,
+-                          {"generic-receive-offload": False,
+-                           "rx-gro-hw": False,
+-                           "large-receive-offload": True})
++        set_ethtool_feat(cfg.ifname, cfg.feat,
++                         {"generic-receive-offload": False,
++                          "rx-gro-hw": False,
++                          "large-receive-offload": True})
  
- 		value &= ~VLAN_VID;
- 		writel(value, ioaddr + VLAN_TAG);
-@@ -275,8 +265,6 @@ static void dwxgmac2_update_vlan_hash(struct mac_device_info *hw, u32 hash,
- 		value = readl(ioaddr + VLAN_TAG);
+     try:
+         # Disable TSO for local tests
+         cfg.require_nsim()  # will raise KsftXfailEx if not running on nsim
  
- 		value &= ~(VLAN_VTHM | VLAN_ETV);
--		value &= ~(VLAN_EDVLP | VLAN_ESVL);
--		value &= ~VLAN_DOVLTC;
- 		value &= ~VLAN_VID;
+-        _set_ethtool_feat(cfg.remote_ifname, cfg.remote_feat,
+-                          {"tcp-segmentation-offload": False},
+-                          host=cfg.remote)
++        set_ethtool_feat(cfg.remote_ifname, cfg.remote_feat,
++                         {"tcp-segmentation-offload": False},
++                         host=cfg.remote)
+     except KsftXfailEx:
+         pass
  
- 		writel(value, ioaddr + VLAN_TAG);
-@@ -285,6 +273,7 @@ static void dwxgmac2_update_vlan_hash(struct mac_device_info *hw, u32 hash,
+diff --git a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+index 8a58cb17cc06..eea45d01cf7b 100644
+--- a/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/hw/lib/py/__init__.py
+@@ -31,6 +31,7 @@ try:
+         ksft_setup, ksft_variants, KsftNamedVariant
+     from net.lib.py import ksft_eq, ksft_ge, ksft_in, ksft_is, ksft_lt, \
+         ksft_ne, ksft_not_in, ksft_raises, ksft_true, ksft_gt, ksft_not_none
++    from drivers.net.lib.py import set_ethtool_feat
+     from drivers.net.lib.py import GenerateTraffic, Remote, Iperf3Runner
+     from drivers.net.lib.py import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
  
- const struct stmmac_vlan_ops dwmac_vlan_ops = {
- 	.update_vlan_hash = vlan_update_hash,
-+	.update_dvlan_state = vlan_update_dvlan_state,
- 	.enable_vlan = vlan_enable,
- 	.add_hw_vlan_rx_fltr = vlan_add_hw_rx_fltr,
- 	.del_hw_vlan_rx_fltr = vlan_del_hw_rx_fltr,
-@@ -295,11 +284,13 @@ const struct stmmac_vlan_ops dwmac_vlan_ops = {
+@@ -49,7 +50,7 @@ try:
+                "ksft_ne", "ksft_not_in", "ksft_raises", "ksft_true", "ksft_gt",
+                "ksft_not_none", "ksft_not_none",
+                "NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
+-               "Remote", "Iperf3Runner"]
++               "Remote", "Iperf3Runner", "set_ethtool_feat"]
+ except ModuleNotFoundError as e:
+     print("Failed importing `net` library from kernel sources")
+     print(str(e))
+diff --git a/tools/testing/selftests/drivers/net/lib/py/__init__.py b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+index ee903bcf3207..c261aac2b976 100644
+--- a/tools/testing/selftests/drivers/net/lib/py/__init__.py
++++ b/tools/testing/selftests/drivers/net/lib/py/__init__.py
+@@ -48,11 +48,12 @@ try:
+                "ksft_not_none", "ksft_not_none"]
  
- const struct stmmac_vlan_ops dwxlgmac2_vlan_ops = {
- 	.update_vlan_hash = dwxgmac2_update_vlan_hash,
-+	.update_dvlan_state = vlan_update_dvlan_state,
- 	.enable_vlan = vlan_enable,
- };
+     from .env import NetDrvEnv, NetDrvEpEnv, NetDrvContEnv
++    from .feat import set_ethtool_feat
+     from .load import GenerateTraffic, Iperf3Runner
+     from .remote import Remote
  
- const struct stmmac_vlan_ops dwxgmac210_vlan_ops = {
- 	.update_vlan_hash = dwxgmac2_update_vlan_hash,
-+	.update_dvlan_state = vlan_update_dvlan_state,
- 	.enable_vlan = vlan_enable,
- 	.add_hw_vlan_rx_fltr = vlan_add_hw_rx_fltr,
- 	.del_hw_vlan_rx_fltr = vlan_del_hw_rx_fltr,
+     __all__ += ["NetDrvEnv", "NetDrvEpEnv", "NetDrvContEnv", "GenerateTraffic",
+-                "Remote", "Iperf3Runner"]
++                "Remote", "Iperf3Runner", "set_ethtool_feat"]
+ except ModuleNotFoundError as e:
+     print("Failed importing `net` library from kernel sources")
+     print(str(e))
+diff --git a/tools/testing/selftests/drivers/net/lib/py/feat.py b/tools/testing/selftests/drivers/net/lib/py/feat.py
+new file mode 100644
+index 000000000000..014971c82b4b
+--- /dev/null
++++ b/tools/testing/selftests/drivers/net/lib/py/feat.py
+@@ -0,0 +1,35 @@
++# SPDX-License-Identifier: GPL-2.0
++
++"""
++Netdev feature helper utilities for kernel selftests.
++
++Provides common operations for changing device features via ethtool.
++"""
++
++from lib.py import KsftXfailEx, defer, ethtool, ksft_pr
++
++
++def set_ethtool_feat(dev, current, feats, host=None):
++    """Set ethtool features with defer to restore original state."""
++    s2n = {True: "on", False: "off"}
++
++    new = ["-K", dev]
++    old = ["-K", dev]
++    no_change = True
++    for name, state in feats.items():
++        new += [name, s2n[state]]
++        old += [name, s2n[current[name]["active"]]]
++
++        if current[name]["active"] != state:
++            no_change = False
++            if current[name]["fixed"]:
++                raise KsftXfailEx(f"Device does not support {name}")
++    if no_change:
++        return
++
++    eth_cmd = ethtool(" ".join(new), host=host)
++    defer(ethtool, " ".join(old), host=host)
++
++    # If ethtool printed something kernel must have modified some features
++    if eth_cmd.stdout:
++        ksft_pr(eth_cmd)
 -- 
 2.34.1
 
