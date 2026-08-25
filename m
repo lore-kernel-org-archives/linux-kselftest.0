@@ -1,105 +1,76 @@
-Received: from mta1.migadu.com (out-111.mta1.migadu.com [95.215.58.111])
+Received: from mta1.migadu.com (out-99.mta1.migadu.com [95.215.58.99])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8142A41D223
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 12:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.111
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2D06B4457A0
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 12:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.99
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787661048; cv=none; b=jCcBbOwwaIw8nZcHY4n2iirCpnxsrRpSj0einvPeAsjuLSyJK1WsfBNrH7hGvOvALm0l++WXIsgzrTNu6llYDwYKiwa7sSGbpm6M4QbWuX6SYLpoeuie0LYPBWwDkO/FWyriJaZuthl0jLY7O1AFHAvWxnWzpOvgbVO/ahTTg+w=
+	t=1787662095; cv=none; b=WQ766TBT00sdIwJ57RbeteE7SifFEBOn0QyQdqYdBLbMOM2RkoxgfWhVUhlDcZtl3VqG8QYl3JpnAgy6TIUpD3W/zPmxun28gihu2qwtWpl2UcZiWJW6iNtbHHBuwh/GHtjvc/3K6Vn2DLd32TG21KPnShwgkMMMDyxui4tiCec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787661048; c=relaxed/simple;
-	bh=lKJdbgYc40Jcdb2LxGXn1NfTq3I444jKQUjSdN+FxF4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RKtIQU0U9vQnZ49xzP2ZQjVICfoK+oIrb2mi2ZXA/xSL4oufvvjRQikUXbNZlUpRc904hOD7SmMI+H/HXQcRp//SRngaEQWVGxcAvsb8XLYC8lcpkEIMPTY3j0odtOnN4hxyZv+K+xhCy5Sod0OmC7WAQPB8cj4BLMqo4QmYM9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jbXpDYkS; arc=none smtp.client-ip=95.215.58.111
+	s=arc-20240116; t=1787662095; c=relaxed/simple;
+	bh=xl1X/ERnfdb/Po0MH7kJ/YHraADcPjNCbK3IAQ+MWqs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GoSrKsV+A8BDjP6zWD8pU9rwbOBpIXAJ/4st7vvj1taK8gqHxNPfbUj5RyuKya00fIdDCIjPHoeB2Q3aDB38rUlCC695TCZ4mDeI2axzfmODm7+Dt08hrZPWWw8V7BHlrqBptx8fQ5MaxMphr6p0z1RY9WlQmx8ufXUTPJ/vAnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vaLj+Fl7; arc=none smtp.client-ip=95.215.58.99
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jbXpDYkS"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vaLj+Fl7"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=lKJdbgYc40Jcdb2LxGXn1NfTq3I444jKQUjSdN+FxF4=;
+DKIM-Signature: a=rsa-sha256; bh=xl1X/ERnfdb/Po0MH7kJ/YHraADcPjNCbK3IAQ+MWqs=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787661040; v=1; x=1788265840;
- b=jbXpDYkSSpE3/fKdMTtIu2NfFmrbZAqBzRZ388JbIUwLFBziMQYAybduM46RMoEvpdkYhRhP
- LG4BXOEeYX8+uUhSDQ0SLmZP1o7iGtwyXZbyBRJOf+EwqOYvKw+c9+obxSKnF65N7epfn7CO2KK
- KbVrjBqsjal1s2vBSduNR4w4=
+ t=1787662085; v=1; x=1788266885;
+ b=vaLj+Fl7HSE4h7MF2Yt3FmAOp19+eVa2mpUmlNxBEDVE6fVsPtxa/cET68m/VtOSw5joC2lQ
+ MqTrP2e90lJdBAxcl3DHdqAO7Ko4h2chI+v3YOTGtwHIFl2POgITrvXQ+aM9JdA3yS/UYv578W1
+ PkLD84+SNRS/F9NSIWDsBhu4=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (139.159.170.87)
-	by smtp.migadu.com with ESMTPS id fdb6cd8b86f8c3a8;
-	Tue, 25 Aug 2026 12:30:40 +0000
-X-Mizu-Trace-ID: fdb6cd8b86f8c3a8
+Received: from [10.244.244.3] (2602:fce1:44f:115e::)
+	by smtp.migadu.com with ESMTPS id 952ab7d5463f0b6b;
+	Tue, 25 Aug 2026 12:48:05 +0000
+X-Mizu-Trace-ID: 952ab7d5463f0b6b
 X-Migadu-Flow: FLOW_OUT
-From: Zenghui Yu <zenghui.yu@linux.dev>
-To: linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: akpm@linux-foundation.org,
-	david@kernel.org,
-	ljs@kernel.org,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	shuah@kernel.org,
-	"Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
-Subject: [PATCH] selftests/mm: fix incorrect skip output in pkey_sighandler_tests
-Date: Tue, 25 Aug 2026 20:30:23 +0800
-Message-ID: <20260825123023.64418-1-zenghui.yu@linux.dev>
-X-Mailer: git-send-email 2.53.0
+Message-ID: <bfe1b5fd-30d9-4d0c-9c8c-a8801a138e3a@linux.dev>
+Date: Tue, 25 Aug 2026 20:47:52 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
+Content-Language: en-US
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Mike Rapoport <rppt@kernel.org>, Ryan Roberts <ryan.roberts@arm.com>,
+ Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
+ linux-mm@kvack.org, Michal Hocko <mhocko@suse.com>,
+ Usama Arif <usama.arif@linux.dev>, Dev Jain <dev.jain@arm.com>,
+ Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>,
+ "Liam R. Howlett" <liam@infradead.org>, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Suren Baghdasaryan <surenb@google.com>,
+ Vlastimil Babka <vbabka@kernel.org>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Nico Pache <nico.pache@linux.dev>, Andrew Morton <akpm@linux-foundation.org>
+References: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+From: Lance Yang <lance.yang@linux.dev>
+In-Reply-To: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
 
-When pkeys is not supported, ksft_exit_skip() runs with ksft_plan already
-set, which takes the "ok N # SKIP" branch intended for skipping a single
-test case.  The result is a TAP plan of 5 but only one result line.
 
- $ ./pkey_sighandler_tests
- TAP version 13
- 1..5
- ok 1 # SKIP pkeys not supported
- # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
- # Planned tests != run tests (5 != 1)
- # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+On 2026/8/25 19:20, David Hildenbrand (Arm) wrote:
+> We don't check str_dup() return value and never free it. While both
+> things are irrelevant in practice, let's just clean it up by working on
+> argv[0] directly and avoiding the str_dup().
+> 
+> Nobody after us needs these parts of the argv[0] string anyway.
+> 
+> This patch is inspired by previous work from Anshuman Tewari [1].
+> 
+> Link: https://lore.kernel.org/r/20260821114416.12255-1-anshumantewari123@gmail.com [1]
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> ---
 
-Move ksft_set_plan() after the skip check so ksft_exit_skip() takes
-the "1..0 # SKIP" branch, the correct TAP representation for
-skipping an entire test file.
-
- $ ./pkey_sighandler_tests
- TAP version 13
- 1..0 # SKIP pkeys not supported
-
-Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
----
- tools/testing/selftests/mm/pkey_sighandler_tests.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-index c218d0510a2a..74bf79a5399d 100644
---- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
-+++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
-@@ -543,11 +543,12 @@ static void (*pkey_tests[])(void) = {
- int main(int argc, char *argv[])
- {
- 	ksft_print_header();
--	ksft_set_plan(ARRAY_SIZE(pkey_tests));
- 
- 	if (!is_pkeys_supported())
- 		ksft_exit_skip("pkeys not supported\n");
- 
-+	ksft_set_plan(ARRAY_SIZE(pkey_tests));
-+
- 	for (test_nr = 0; test_nr < ARRAY_SIZE(pkey_tests); test_nr++) {
- 		tracing_on();
- 		(*pkey_tests[test_nr])();
--- 
-2.53.0
-
+Reviewed-by: Lance Yang <lance.yang@linux.dev>
