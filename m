@@ -1,145 +1,92 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA66F3D6463
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 09:51:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFE793F3284;
+	Tue, 25 Aug 2026 09:55:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787651515; cv=none; b=dunOShb6uCRnFbRra4QWgIcViY1Bvuoo+oTPaM8hN8TVm6mULNFB5BHkTn4Mfy4lmdZgiEUeTscSzXQQEgbUsrRZFBcKPcOqX5Cm/BhbF/vJ4iSG9JOHdZl2JBbEHTBEfuQuFWdJxOxioAekWcbexDQjwjIi9bUYJxshb9r9Pjk=
+	t=1787651727; cv=none; b=MZbi7kYQOgeg1RIwi5uFZzDylqbzFz+CxbORSnENdprHzG4jknELvuggIp7e/a8+4hnTiDyPK5R+z/Pyhk1t2QpbSARbgjOUB+UDl97oz4SsO7Uy0eWxjeC/jfA0+h5n8rTJIYxqWiBPV/qkYbKtEjItip5WtUV8ZzG/iRx2Xis=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787651515; c=relaxed/simple;
-	bh=Dze/0V4lpvpJ8dgBgEec0OyEi5W0JaTBStw0Pykhz3U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ClLrpY5NPnf4fwJJJ1gKhzLL3zDfXoVtOGVI3tSzQ2IKq6fxj/EARtHls9/5L5pEMmAgS/Jjb380Zjj7qf3qikdj6I4Qb/ZeHNFUlb9BP/+/zyRnLyU5l/3wJMS1wzmpCk2KS9ZTJi0a2So4ej4kgiiXQVO7kNpAgfBGn01lRN8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=fPMRGW3H; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=khH+zKNz; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787651727; c=relaxed/simple;
+	bh=RRI7heggkeD0xInS0KH2fg5GDv7rm0CcI5PN/y/1VPA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WjiKudUFInz0ixNVqnge8IpGlEqpJjL6MjrvcFkGKlrzq6W+JRfX//HRRBF07N3DtszlIwF6G1P7TVSjgN3ruEOYcGSoJpo87lYpGFAaw7VNTBMdrf7UKCC2uoFjFfPQN2Cg568me40vxc5S7JIMmc9eaqrPXcbObVedNMHMnFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QtSWVezn; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="fPMRGW3H";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="khH+zKNz"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787651512;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=F12vgLpt3VeSlU+EZ5SZNPvJRlBTjpsVmjmguo1/iVU=;
-	b=fPMRGW3HnwB+007SVhE48/rRe7zDD1FuetPPoSIHvKyGey+mahMcSL+yzsSIrC1+BuirmP
-	v1jMsvNMZ9gAbNgxSBFXAyjKHhjFj+aLidPxS6by+SGTeXnDGzflbKDV4OhNYRmd6WmpLc
-	N5cHf9q4UpAMFbE86zI1sckc+EGBI4M=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-411-ryrybpCrOUuotAYB6bXpOw-1; Tue, 25 Aug 2026 05:51:51 -0400
-X-MC-Unique: ryrybpCrOUuotAYB6bXpOw-1
-X-Mimecast-MFC-AGG-ID: ryrybpCrOUuotAYB6bXpOw_1787651510
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c16711b9473so387982866b.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 02:51:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787651510; x=1788256310; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=F12vgLpt3VeSlU+EZ5SZNPvJRlBTjpsVmjmguo1/iVU=;
-        b=khH+zKNznmcK5WQa/cUAuTfX3buYvUluonfVFmkGXP+zvd39HXZ6pwtH7h+dqu56aV
-         yRjaWiWF1F4AgK/nCWSejxIwbtiosxH148z1MzClQCY4p7zWfO6X3J35NKoQYKJx+6gO
-         msDRoi9JM5+5mDZ5hspZ7gv7i7rWvSkR6164Kb2x78sdqpUEbQOWXBPNlMEWzo6HZNTE
-         Io4e8P6yBOvqP6bo9GCGwzLdy0GAR+6eRTq57p+f1/tEV9wYwmjMvZwR1jXPHB/zk5rO
-         +N4f+0j1qjDDY5aObFVJAVe2lw8k4MlTcPNNC7iT6u6xskaD8AQpbH37kTIfo8XejWkH
-         9idg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787651510; x=1788256310;
-        h=content-transfer-encoding:content-type:in-reply-to:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=F12vgLpt3VeSlU+EZ5SZNPvJRlBTjpsVmjmguo1/iVU=;
-        b=sWV1cEhPbcG7mvy/OQlIb2VeemEGT38z46LPawFSDrBXxeDWwY18dR49e2WN18JCyl
-         yAn0NLjWvofdZxE3qyF49TSS+pPa9ghGrehvf0nj//0lhz50Z46bdaQXbARTcO5UR3jf
-         PfGf9fdZQAwP8LgjPf8wfX8SWJ1HvB8+IeF23kSWylfX66rXYA6sOLu2bg0/CuLV9vtr
-         ankJ0lXJfQkEI7s1WWy1QOiLJMMXW3WuDiFKG0891Gjw2CbiVo+t3XfsVryT6TNF128j
-         dILq8ATuxYRjo5yDkmMc+UIWmYRaWjoaP8ZtKBC4ykzO+WbvB7DarK7mPzGh1sp2Ao8s
-         qvUA==
-X-Forwarded-Encrypted: i=1; AHgh+RpW524FRZt/NlohnAUqAwtxIJIzgs0Pul2V/G/+a9b+MbZoWgTvdWfTMMZX8ycDkcs2nTsNsTdPwFIIcAcBYkU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mIS1l0OfCioBXvADxU/c3VUji2+zHHg6iw9Rme8clYnO7nQRst
-	e6gYQmi/AGKsIqgjCxIWiPVEITMm03dN//jfYxEoL6KvWKRQQzF908aTRPnWRlIJcBgygF2K/m9
-	SyR4OJpnz3dRSzm4B+dt0+VO2f3SBNoX1MoojJSmmulzTygV1mtOoNAl4dFiv2SHZF62yRg==
-X-Gm-Gg: AR+sD12BQI0GGR33H8WO8gJ4U73t7mRdPiEed25R3/muZWJAGYusr2MyG+5e81GZ6Hg
-	BMSjUVLcBco3BI+QEtruZKUiIUQe1wYvHEjo7RhLoRQnxRbUipwynm4PQV8cDhGoChOUvLM/XWA
-	Vxwq1ac/1ZkSQBTHtk4O59+CllgaryzqFxm+jANEXpCyZ0re+wv+V+qSLa4kttUWC1l1Fo85XBg
-	x5+Z8FF8bu7YwHEmlBDhSK/cdRY1uIwC58qCWP8iHgkYqtn8A5ZZYnwpY+PNWkA0vzBF2YJYOMD
-	0Dlrally1jQuXJBtfH5/7ny+1pVSEJEbILO0MqsHa6MnEtZZzGveRusHcSaRIJTH5vUW7OVF32W
-	jCwkHlU14gzGjCrzcLKAVWKyy12hnXcbi/MxiLvw3w8mGDWkS4MN4KxpB5g1OSnN9kZXtM2ev
-X-Received: by 2002:a17:907:9445:b0:c21:6f8c:2335 with SMTP id a640c23a62f3a-c24e5ff7a2bmr655365866b.16.1787651510105;
-        Tue, 25 Aug 2026 02:51:50 -0700 (PDT)
-X-Received: by 2002:a17:907:9445:b0:c21:6f8c:2335 with SMTP id a640c23a62f3a-c24e5ff7a2bmr655358366b.16.1787651509713;
-        Tue, 25 Aug 2026 02:51:49 -0700 (PDT)
-Received: from [192.168.188.103] (ip46-47-231-195.pool-bba.aruba.it. [195.231.47.46])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606b59fsm1922062766b.12.2026.08.25.02.51.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Aug 2026 02:51:48 -0700 (PDT)
-Message-ID: <e94063e0-bea4-4fee-b4b0-2934b3bb66a0@redhat.com>
-Date: Tue, 25 Aug 2026 11:51:47 +0200
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QtSWVezn"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA6E71F000E9;
+	Tue, 25 Aug 2026 09:55:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787651725;
+	bh=YakmDYC+CNfeq8NrnrgCoAi7VDePKv/R2VGkWswlhMg=;
+	h=From:Subject:Date:To:Cc;
+	b=QtSWVeznXfmuy1OjKFIDBpn4yR1mjlcEv6GhZIo/SrlsOpe6DeTxzD06yNUtk42n4
+	 jfCbyt0wXFeOb+6PPBXM3Pdq9HAGN6jHFU4ucbIg5WqV1VzgKodN+sRqLziHxY2qIg
+	 7yj95p0CXGEvuEl+BWT/glfkvGJ9LNrUhhPiEAobDjvcLTbIB8uFU82VON0AkewCTJ
+	 WGZ5aJakAw3GzF1M/eE6fRua56HGPrRRfpV9tWI7oyFcoJN3vH2kRrwBhm7GEraGtl
+	 BbzhCUL5vEV1xcj+ym+HBZ/UTF/niiNf3B18FhsYHRSs9K1T/13pwjjHszKgHP6t6C
+	 vi8obob7F5Dkg==
+From: Benjamin Tissoires <bentiss@kernel.org>
+Subject: [PATCH v2 0/3] HID: bpf: fix 7.3-rc0 bpf breakage
+Date: Tue, 25 Aug 2026 11:55:10 +0200
+Message-Id: <20260825-wip-bpf-safe-v2-0-d044355c09d8@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 0/2] selftests: openvswitch: SCTP flow key
- coverage (IPv6 + NAT)
-To: Minxi Hou <houminxi@gmail.com>, netdev@vger.kernel.org
-Cc: aconole@redhat.com, davem@davemloft.net, dev@openvswitch.org,
- echaudro@redhat.com, edumazet@google.com, i.maximets@ovn.org,
- i.maximets@redhat.com, kuba@kernel.org, linux-kernel@vger.kernel.org,
- linux-kselftest@vger.kernel.org, shuah@kernel.org, horms@kernel.org
-References: <20260823020942.3101898-1-houminxi@gmail.com>
-From: Paolo Abeni <pabeni@redhat.com>
-Content-Language: en-US
-In-Reply-To: <20260823020942.3101898-1-houminxi@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/1WNyw6CMBBFf4XM2jF9CAFX/IdhUcoAowZIi1VD+
+ HcpxoXLk5x77gKeHJOHc7KAo8Cex2EDdUjA9mboCLnZGJRQmciVxCdPWE8tetMS6sKKrLBNrvU
+ JtsnkqOXXnrtUX/aP+kp2jo1o9Ozn0b33vyCj90un/+kgUaCpCxIkpbSpLW/kBrofR9dBta7rB
+ 1BTJtq7AAAA
+X-Change-ID: 20260821-wip-bpf-safe-39c069cd8334
+To: Jiri Kosina <jikos@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>
+Cc: linux-input@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Benjamin Tissoires <bentiss@kernel.org>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1787651723; l=1484;
+ i=bentiss@kernel.org; s=20230215; h=from:subject:message-id;
+ bh=RRI7heggkeD0xInS0KH2fg5GDv7rm0CcI5PN/y/1VPA=;
+ b=QKeo+qpVxVqlBQdxTsSPwUBNLETtQDpFx6e1qQ5zUjyS9Th5TmbnAeORR1YbKRPZyQiXXIPQz
+ hy/rwaoTGdCByCiPu3ruGMw+8a6ekM+YxtpBh0QsOR0zxNA0W7HcdoS
+X-Developer-Key: i=bentiss@kernel.org; a=ed25519;
+ pk=7D1DyAVh6ajCkuUTudt/chMuXWIJHlv2qCsRkIizvFw=
 
-On 8/23/26 4:09 AM, Minxi Hou wrote:
-> The SCTP flow key test merged last week covers only IPv4 and only the
-> plain forwarding path. This series extends coverage to the two paths a
-> regression would otherwise ship silently on: SCTP over IPv6, and SCTP
-> across conntrack NAT (where OVS re-extracts L3/L4 on the recirculated
-> skb).
-> 
-> Both tests verify the association and then push a known payload across
-> and confirm the listener received it, so a flow-key bug that matches
-> handshake packets but breaks DATA chunks is caught rather than passing
-> on the handshake alone.
-> 
-> Full OVS selftest suite runs 19/19 green on a freshly built kernel.
-> 
-> Minxi Hou (2):
->   selftests/net/openvswitch: add SCTP flow key test over IPv6
->   selftests/net/openvswitch: add SCTP flow key test across conntrack NAT
-> 
->  .../selftests/net/openvswitch/openvswitch.sh  | 183 +++++++++++++++++-
->  1 file changed, 182 insertions(+), 1 deletion(-)
-> 
-> 
-> base-commit: 91ec2035134982b98fab0609a9fd8480e8217dc1
+With the introduction of commit ee9ad135b208 ("bpf: Reject a store
+through a fault prone pointer"), a HID-BPF program which would try to
+change the name, phys or uniq of a HID device would be rejected by the
+verifier. Also, this commits and its siblings manage to detect the
+buffer overflow that is currently dynamically detected in the test
+suite. The verifier now rejects the bpf program we try to load, marking
+the test as fail. This is correct behavior, and better admittedly so fix
+this so the CI stays green.
 
-## Form letter - net-next-closed
+Signed-off-by: Benjamin Tissoires <bentiss@kernel.org>
+---
+Changes in v2:
+- Fixed 2 issues found by shashiko 
+- Link to v1: https://patch.msgid.link/20260825-wip-bpf-safe-v1-0-ab9e0e111c5c@kernel.org
 
-net-next pull request for v7.3 has already been merged, and therefore
-the net-next tree is closed for new drivers, features, code refactoring
-and optimizations. We are currently accepting bug fixes only.
+---
+Benjamin Tissoires (3):
+      HID: bpf: mark struct hid_device as safe BPF pointer
+      selftests/hid: Add a test to ensure we can write fields in hid_device
+      selftests/hid: prepare test_rdesc_fixup_get_data_overflow for the new verifier
 
-Please repost when net-next reopens after Aug 31st.
+ drivers/hid/bpf/hid_bpf_struct_ops.c               |  6 +++
+ tools/testing/selftests/hid/hid_bpf.c              | 51 ++++++++++++++++++----
+ tools/testing/selftests/hid/progs/hid.c            | 26 +++++++++++
+ .../testing/selftests/hid/progs/hid_bpf_helpers.h  |  3 ++
+ 4 files changed, 78 insertions(+), 8 deletions(-)
+---
+base-commit: a93f3bf4e1d60777b1659b812c9e818cfc53b449
+change-id: 20260821-wip-bpf-safe-39c069cd8334
 
-RFC patches sent for review only are obviously welcome at any time.
-
-See:
-https://www.kernel.org/doc/html/next/process/maintainer-netdev.html#development-cycle
--- 
-pw-bot: defer
-pv-bot: closed
-
-
+Best regards,
+--  
+Benjamin Tissoires <bentiss@kernel.org>
 
