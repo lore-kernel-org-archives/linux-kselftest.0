@@ -1,193 +1,269 @@
-Received: from mta1.migadu.com (out-46.mta1.migadu.com [95.215.58.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11012013.outbound.protection.outlook.com [52.101.66.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DE0E137750
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 12:06:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.46
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787659582; cv=none; b=kQhnMt7MJCarCPgRLKDGhCgbJPAZSTPcvnqiOjZhEvpDUwIKZDNgy2cfEERoV9bgTdWxIZf+oVuCKhySWJqpbHjLB4gZcskdZff2FybT+Npt1NY7kVOlJcX0AmhVqAubGZRKsDIOcJLfjGb5YJnrN1Dr70bcOaIYzjKruXzpYsw=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787659582; c=relaxed/simple;
-	bh=5FDrETB7i2p17cGvyhsvkJzpk3GIkWjNBDAAcmzdn5E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=BYRyZz2uI2gzQvctufQK5Xi37BVgrOLfTJ+LJ9hafdzpVomWXEditjqK54Bhk6O4qAwKy2qmXU28gx7792KppmSvadSX4Eyayy4X4ySGPWfc6ehGeVms027SCu5SIsO4eKz6IIYLwX4VsjsrqOXmuvV7wCbaM1Vn/PJvj4H+CjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H1fzs5cv; arc=none smtp.client-ip=95.215.58.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4A638757D;
+	Tue, 25 Aug 2026 12:08:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.13
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787659719; cv=fail; b=UZyraNhszNUenMdRsTLE+2MClsVJ1lzEd/OQI16SiqvpQnLki7R0/P9jtj/IWBDkSOJDvRko/obfwP1DED5u+o41ZFcnSGhY2Fmr4P/gESLhuhh0hJgEzMerLCgID3BRjKTX5V/GimzuMT74/Vq+ja4Lwo6qL0ipyweAhnB75Xg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787659719; c=relaxed/simple;
+	bh=JndMmY0aqitSir/J1cGv10aqJg4mTm409o0QuRW1OXc=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=DXKaQlTLdl75cM/xnOJmkyUn7W7Ab9cvX1WA+mM3kOkRPoV5T/LyjbmzUeKJfmbH3282taZ0W3vbJaeeMTxPdERXztiGx4mDKaYeafPyLAa0dNJ5fv6q0egmI+bByeJWfz4JfZHS55hQEkuPggP/vOXSEdpi06XFG+0NzA7bj24=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com; spf=fail smtp.mailfrom=nokia-bell-labs.com; dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b=Z5L/RRbz; arc=fail smtp.client-ip=52.101.66.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nokia-bell-labs.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nokia-bell-labs.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H1fzs5cv"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=5FDrETB7i2p17cGvyhsvkJzpk3GIkWjNBDAAcmzdn5E=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787659578; v=1; x=1788264378;
- b=H1fzs5cvLiv+cJpDHV/DbYjzRyBQswhURRjdsuJuBVFhO0PrT+DdFpxkyl4C6koewtrqXAww
- 67Zb06Ic52UU6JAadM0eUiqzs4WBl5Al88a5pw19B/S/kxzEXKxsr1+cyWWv8hbIVPpIKriKOn8
- rg9EsRUoJ+YNTkB3aM4f58hg=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [10.54.25.56] (210.22.144.162)
-	by smtp.migadu.com with ESMTPS id 35d1a3b9679a3320;
-	Tue, 25 Aug 2026 12:06:17 +0000
-X-Mizu-Trace-ID: 35d1a3b9679a3320
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <41a76b0b-b65a-4607-81b1-05b003151b09@linux.dev>
-Date: Tue, 25 Aug 2026 20:06:07 +0800
+	dkim=pass (2048-bit key) header.d=nokia-bell-labs.com header.i=@nokia-bell-labs.com header.b="Z5L/RRbz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=FtcOZKyq2ynHq76wnQZRjKHEPuFqqPWscCARR5fZXoWnbfSDEYUJCt6EoD+kELluSXql4EM6phf9BkGBeBWawJAmVwAyTA7uDHaPffApdVS2G/1oXMNIj3S/KUiQboFyyDxCIK41P5iEW07smEr1vR0c9NU3d9RSHG0tH4/30xddTE5jm+JdkN8nc1Dv2wmkrhQ7x5uXQduYQ4AT163w5cNm7VQAc6BHvtysRWWuwSNZCHR8AQoaQ/FtOMReNdWkXbQzVKddBzm6IQ7KwbMnM0WKOgeXWa1AHce5MtP79cdzg9kE1v/rSaK5pXM8tQwff0XvUecP5Ut/gsFmlA5EsQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=JndMmY0aqitSir/J1cGv10aqJg4mTm409o0QuRW1OXc=;
+ b=ECNRh1OqYQZFUyLmjkkHX/r/q5paTT4JLurDmJWQo3VjTjm4Jf+7xXVMusFzjjY+fRGoQInVxZLuy4EnEhxPHHFDx17OdtkdWHvSJLFsctd8ifTm6IXhq8TncRj2mEV6peQvVthsiwXYLcSEqSk6Yux41aLeCxBjRW0XVXK2yikL3uYr3v61BjL2j/cXSrwU0Pzku50mru8a7zGomcIo71otMpBMcAUXuV0I25+emRKOqOcj9SKWzDy8o+B0XmGlukrcccU+dRjlLyaKbAe1FTl7S22geB7hb9E9xoHa9/D6qMy2bJ3020znkM32jOzcYlk+5gaIcijaWJYgzBwPJw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nokia-bell-labs.com; dmarc=pass action=none
+ header.from=nokia-bell-labs.com; dkim=pass header.d=nokia-bell-labs.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nokia-bell-labs.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=JndMmY0aqitSir/J1cGv10aqJg4mTm409o0QuRW1OXc=;
+ b=Z5L/RRbzBjWAqk8pgwXkEIn7BwhHIBgU5MkFjBPEZIaLt2DqYiYcQdjTPmV6pzSSE6nLUs7697uIq35muI6SOBsO0BfoTJ2Mh/QzWbPXUZJjsbOgWf8ZWVaw7kXA7JyhI9b0S+w4U7k71CVCWRLPPdH9/Bb+qYQ3DL3u5PiXTNmKCTeZpGa4HL6D3ymNsGOW3SPoVB19BDEgQnko7URellQdvOQJNIw1BD6TTnfSb8x02dLmERTdriWqE7F8TjD7wfYlOkjcWCQGPEPVAyybXjs2zxSl2iLaj5eJhIKwUqjjp7ZgAvvqE3F4XwWtxr0TSxoZo0YUyBCNbjw+H+b5Pg==
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com (2603:10a6:102:133::12)
+ by PR3PR07MB8241.eurprd07.prod.outlook.com (2603:10a6:102:178::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
+ 2026 12:08:32 +0000
+Received: from PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5]) by PAXPR07MB7984.eurprd07.prod.outlook.com
+ ([fe80::f708:4bd3:9987:b9e5%2]) with mapi id 15.21.0360.005; Tue, 25 Aug 2026
+ 12:08:32 +0000
+From: "Chia-Yu Chang (Nokia)" <chia-yu.chang@nokia-bell-labs.com>
+To: Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Jakub Kicinski
+	<kuba@kernel.org>
+CC: Mirja Kuehlewind <mirja.kuehlewind@ericsson.com>, "shaojijie@huawei.com"
+	<shaojijie@huawei.com>, "shenjian15@huawei.com" <shenjian15@huawei.com>,
+	"linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+	"eperezma@redhat.com" <eperezma@redhat.com>, "jasowang@redhat.com"
+	<jasowang@redhat.com>, "virtualization@lists.linux.dev"
+	<virtualization@lists.linux.dev>, "mst@redhat.com" <mst@redhat.com>,
+	"xuanzhuo@linux.alibaba.com" <xuanzhuo@linux.alibaba.com>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "edumazet@google.com"
+	<edumazet@google.com>, "linux-doc@vger.kernel.org"
+	<linux-doc@vger.kernel.org>, "corbet@lwn.net" <corbet@lwn.net>,
+	"horms@kernel.org" <horms@kernel.org>, "dsahern@kernel.org"
+	<dsahern@kernel.org>, "kuniyu@google.com" <kuniyu@google.com>,
+	"bpf@vger.kernel.org" <bpf@vger.kernel.org>, "netdev@vger.kernel.org"
+	<netdev@vger.kernel.org>, "dave.taht@gmail.com" <dave.taht@gmail.com>,
+	"jhs@mojatatu.com" <jhs@mojatatu.com>, "stephen@networkplumber.org"
+	<stephen@networkplumber.org>, "xiyou.wangcong@gmail.com"
+	<xiyou.wangcong@gmail.com>, "jiri@resnulli.us" <jiri@resnulli.us>,
+	"davem@davemloft.net" <davem@davemloft.net>, "andrew+netdev@lunn.ch"
+	<andrew+netdev@lunn.ch>, "donald.hunter@gmail.com" <donald.hunter@gmail.com>,
+	"ast@fiberby.net" <ast@fiberby.net>, "liuhangbin@gmail.com"
+	<liuhangbin@gmail.com>, "shuah@kernel.org" <shuah@kernel.org>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ij@kernel.org" <ij@kernel.org>, "ncardwell@google.com"
+	<ncardwell@google.com>, "Koen De Schepper (Nokia)"
+	<koen.de_schepper@nokia-bell-labs.com>, "g.white@cablelabs.com"
+	<g.white@cablelabs.com>, Ingemar Johansson S
+	<ingemar.s.johansson@ericsson.com>, "cheshire@apple.com"
+	<cheshire@apple.com>, "rs.ietf@gmx.at" <rs.ietf@gmx.at>,
+	"Jason_Livingood@comcast.com" <Jason_Livingood@comcast.com>,
+	"vidhi_goel@apple.com" <vidhi_goel@apple.com>, Parav Pandit
+	<parav@nvidia.com>, Willem de Bruijn <willemb@google.com>
+Subject: RE: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Thread-Topic: [PATCH v5 net-next 1/2] net: update comments for SKB_GSO_TCP_ECN
+ and SKB_GSO_TCP_ACCECN
+Thread-Index:
+ AQHdJFkmsZErp6HN50yIAT4nHZCuDbaZmsyAgACaoWCAANzxAIAAlzCggACG4QCAARyLgIAAA24ggABKB4CAAFt1gIAAA6wAgBCZcOA=
+Date: Tue, 25 Aug 2026 12:08:32 +0000
+Message-ID:
+ <PAXPR07MB7984F0C072220066856DD8ACA3AF2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+References: <20260804213510.673084-1-chia-yu.chang@nokia-bell-labs.com>
+ <20260804213510.673084-2-chia-yu.chang@nokia-bell-labs.com>
+ <20260811173017.3d18dfdc@kernel.org>
+ <PAXPR07MB79849A3F1724DBB2DA8EA20AA3DC2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <20260812155430.6ec81eec@kernel.org>
+ <PAXPR07MB7984E3E73868BF8966821C27A3DB2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <CAF=yD-LQbndjPZiXcfA6fMp6msza_+YdzqqwyeUDVTdOCOHhDw@mail.gmail.com>
+ <47BE8A8A-F80C-4C30-BC95-C85FEBFFB606@ericsson.com>
+ <PAXPR07MB7984ED42ED0849D3A9AB8C19A3DA2@PAXPR07MB7984.eurprd07.prod.outlook.com>
+ <willemdebruijn.kernel.c248a28f9c86@gmail.com>
+ <20260814120121.50e61d01@kernel.org>
+ <CAF=yD-L1-Sxz9uyP_4WqtNRJHnwTVMhQba_KF-=Eiy=d9Jf-qA@mail.gmail.com>
+In-Reply-To:
+ <CAF=yD-L1-Sxz9uyP_4WqtNRJHnwTVMhQba_KF-=Eiy=d9Jf-qA@mail.gmail.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nokia-bell-labs.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR07MB7984:EE_|PR3PR07MB8241:EE_
+x-ms-office365-filtering-correlation-id: 66b91ab8-609d-4cbb-3b51-08df02a1952c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|23010399003|1800799024|366016|38070700021|6133799003|5023799004|3023799007|10067099003|56012099006|11063799006|4143699003|22082099003|18002099003;
+x-microsoft-antispam-message-info:
+ ZuHoSQeYeTFdkJSzZCMGJ3hy9H9sPFqO/d7Dl+LKCeDdqc7/V+Cykg4i3fZA9z3c1aXMUisH6mMfUehi7ni22Ykhw3QUjWOzp/A7zlbKSa6WI8hIxlAzD39E8uImM6+y0U0q8LPil75zrMHR+9q58PPiRCCnH3tXnpZrsfWaFPXwtb3g1JPbMuTUHLmfpkOMpr+5e+pQTh/yh3qx9qeiWONjT9JzBxV9txwiMWyolvAOia67D14dkr2brKD+Bc8CaKSmM0dIMEFN8Hc6ndjRhhTb1X7ZJ+RlG5sYvsggXgtLc103vcRus/tnSkyuPrMV53Cl1h+KbQJNcEC+jNhh0qMmAOp54fM7wpWJvj1SEOjEEmZffzhW8Z2HsjWKtRL+ddREYseTHRYpVENluXWuyWhzQsM4IouWjlTqrVTH/a7rseeOLIH3CQnTgTqbL/LoubcRnUtHzrjSIqav/6TeUVCzUW0EkPUekGgzo7QVCZAroZcp3qVAghyA7YD9a2KOvzTuePioPVj2GjWTX7TVSAD6WoQwrb52r1EMQ1xE0Z6xsDOEswkDpApqg9Vd6EgRlB6IFVWu7D2mrDyAz1eiLs9w16FPhn5wE/6HYGx5/1gKEuSMOAJI7IzOfulid3J2hqkaB/JgmDWjLUx1XFjbTnNOtSuQG92EfqB93E9jLH759W1Rao219G9FdUaObf4ECqUWTgRtQZxKeztPzXuAvA0a6vx8W4F6QcRNN5QktGA=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR07MB7984.eurprd07.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(23010399003)(1800799024)(366016)(38070700021)(6133799003)(5023799004)(3023799007)(10067099003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?OG95cFJVRmVXanRNQnd1V2Rmc2Z2Qk1yb25maG1XdVNidlNYMGlnYWhxSFQ1?=
+ =?utf-8?B?RnpnWkRyaFVkMEtZSjJPN1d1UXF0QkdRRkVza2FYc1Z2ak54a0h1QWl5amh2?=
+ =?utf-8?B?ZnhLRHY2U2NXMlBNVDc1RlhTb2tCR2VQTFhoSDhUZG1LVDJCSE1wcHcrdVAr?=
+ =?utf-8?B?NEF4WVVqK21ZM2FSdmZQWVZySHcrMFZzWXBmaVovWEk3bjFJcnY3ME81NFEz?=
+ =?utf-8?B?aTVSWnZMeTgySUZLc0p5TkdWUUxEWTVjUmlWMENVYy9qcmNaZ3d2THlBd3p1?=
+ =?utf-8?B?eWM1emRzY3hyTElSRnlRdGpwM1BoM2F3c0FGdlJqeW43WllXbEJDOUNUaCtI?=
+ =?utf-8?B?YzRneE1VQmJGck8wbDlndnRrQlJUVW5pT1Z2KzBFNWVYKzc0TmJpbmF5bEM0?=
+ =?utf-8?B?eVRpd2grcDlZOGtScE8xeU9UbnkwS3lENGFjU1BMWktONWNuTFFVdS9yYmVu?=
+ =?utf-8?B?cVJSRFhzb3FzZjIxQTFhY3hnR01wdDVjMDczbzYyWmRlaFAxaE5ueE8yY3dJ?=
+ =?utf-8?B?UXpmMTdQVmVKSVd0YVBHbnNxcEZNbkdqcHBpMjUxZktFZjZWSlpxRTN3UnJQ?=
+ =?utf-8?B?Sk1OdkJ3TWlMSHgwa2VKRkZWTkhURzJvUU1WRW1BTngyb0VUdyt0VmRDL2x1?=
+ =?utf-8?B?TWlSRUhoRG9yaGQvL1lNOFluZGgrQks0TWxFMmFOY2FMdXF6VFpqdkhiU2tK?=
+ =?utf-8?B?RjVRQ0NPZFVySksxMmk4L01hdHFvQ204ZkY5WXZCL3oya3hrQTNlaGhyREQ0?=
+ =?utf-8?B?TG9LVDlKQklWTDVyUU1RVFBlKzhoaDJLaVI5SExsVEVXdEtyM2lWZTI5NDk5?=
+ =?utf-8?B?QmRIV0tGdUpGVHFnazBCdVM1RWdzNTcwWVArcWpsb2NQc1hMNW9LQjEzSlVz?=
+ =?utf-8?B?enk1Q25BY1FYYURBaHhEbWpIVlQwYVpnZG5VNWRkMkpOQUttVkphOW00VEtB?=
+ =?utf-8?B?d1kycXQ2TVhCZTBvS0VDZ0kzRlBvUXNzK3FDUFBYbmVkM0tmR3hKOGF6YldN?=
+ =?utf-8?B?STd1ZUxsNjh2OGN5cXE2VWJoL25DUHJyVzJHQ3Fjd25VcHJYb2MwdFdlbm1Q?=
+ =?utf-8?B?RFZ6RUJLanpwV29MTTNzWk9RMEIzSDc0R2hwak1qRS9YVnNGa2Z1REg4UmtC?=
+ =?utf-8?B?VnJuZGE2cENRTGh2SUkyNzFuTXgrWVpFOGtIakVtRDN5Szh0OEVNVmVEUkpE?=
+ =?utf-8?B?NGVUR2JFYW82bXlEcVN0M2MrVEFZTzhjL0xZVkRrWE9xcVFHRHRpZjFCUXk0?=
+ =?utf-8?B?b3lrUEVHZzllMnY3akhBWWtjMy9xSFRCeUY0VjcwcGlrZUtBYjV5L3NzcGJp?=
+ =?utf-8?B?Z0h0azk2VjcvcUI1VHFuZkZkTjA2TlQxbmVOMi9IQ0lLSGhVSEJiOWhNak5z?=
+ =?utf-8?B?clV0QTlkYTNhemo0VnRuSnptOEtSU0N0Z2dpSkcrNzdoV0QyNU5MSWxTNDE5?=
+ =?utf-8?B?RmcrejU4K0hEc013VURmbDZ6aEtYVEk5YmtnUVVPNjJIb3lsVG9QbEZTbDE2?=
+ =?utf-8?B?K3I5MmxTUmZsMGxsYWxRbXVEQWZ5eVlBczkrbTNxUGNBbXZ3bVdGRTJWcis2?=
+ =?utf-8?B?MTV4ZFFZZ1ZsZXAxSlFMbzl0WS9RN2RkaWljRXdYRlp0M2RSK2QwQXZUQ3RQ?=
+ =?utf-8?B?aVBIWFFxOEZVUGZ5REg0Vlg2bkhiZnAzeFdWTnJTRTN6dmF4cHZCZ3NHRStO?=
+ =?utf-8?B?Yy9kbkpabXprb0tqZ1Y2alZ1M2g4aVo3ekY5aVBSNHEvcVJTdTNPY3k0Y051?=
+ =?utf-8?B?WVlncGsxcFl3TG5ZaEMvRlE1cERJclZ4dmV4eVNPQTdNSXpVcWt0WXduY3ow?=
+ =?utf-8?B?OXl1eFViQW11dmltOW1xQmd2K3lVWWNXdisveDNCRjd3OHk4S0RVNzJ4VHhE?=
+ =?utf-8?B?bmRPQzREdkJoeTJMLzdMSUVTWW14a29tc3FnSVhnVjlDejNuanNaUjdlbXpu?=
+ =?utf-8?B?MXg5Vk41Zks1aHh5UlBiUkRkQW9nYTNOL1FFcGRZWGVLOG81KzNGa0dpdWx4?=
+ =?utf-8?B?NVEzU09HTFZhZVhuM1kxSzVPR0c3L0JPWkEyU0g0NW9ncFNPODIzb2xpeTgw?=
+ =?utf-8?B?bXVseXBWcVh4bDNoUUttMWkyOFZhVWZlalFTbHg2SWRoUG1WdmsrRlNESTZN?=
+ =?utf-8?B?M0ZNR0ZDQ2pXMC92cCsrYkd1R1dscWpoWjFFN2N3Ukh5RnBFdjkvSnNSRkRh?=
+ =?utf-8?B?djVIZUhua1JKMFM4RjF2Rk1BZk9PQnlUMU1IY09QcEc4Z2VsdzBmR081VWlq?=
+ =?utf-8?B?SzB5VUpLZ041WXFPZk5wc3dOdVNBZE9VaWYzRTZKbSs4SU9VWnZGV3IvN29n?=
+ =?utf-8?B?bWpFWlBqMjlnYW5VZkNNVUs0NFE0NWtjQTY2eUZ6OHByZnhwQllHelVNUmRE?=
+ =?utf-8?Q?c9Kl7Nhducm9jVWA=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on
- skb-backed XDP
-To: Lorenzo Bianconi <lorenzo.bianconi@oss.qualcomm.com>
-Cc: bpf@vger.kernel.org, netdev@vger.kernel.org,
- syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
- Jesper Dangaard Brouer <hawk@kernel.org>,
- John Fastabend <john.fastabend@gmail.com>,
- Stanislav Fomichev <sdf@fomichev.me>, Simon Horman <horms@kernel.org>,
- Martin KaFai Lau <martin.lau@linux.dev>, Andrii Nakryiko
- <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>,
- Ihor Solodrai <ihor.solodrai@linux.dev>, Shuah Khan <shuah@kernel.org>,
- Kuniyuki Iwashima <kuniyu@google.com>, Hangbin Liu <liuhangbin@gmail.com>,
- Krishna Kumar <krikku@gmail.com>, Martin Karsten <mkarsten@uwaterloo.ca>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260824030257.263179-1-jiayuan.chen@linux.dev>
- <20260824030705.266049-1-jiayuan.chen@linux.dev> <aowdem3KQVfvocE7@lore-desk>
- <01fd251d-1134-4251-9c11-79943e367ffe@linux.dev> <aoxaNy4ep6ntUyR7@lore-desk>
-From: Jiayuan Chen <jiayuan.chen@linux.dev>
-In-Reply-To: <aoxaNy4ep6ntUyR7@lore-desk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: nokia-bell-labs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR07MB7984.eurprd07.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66b91ab8-609d-4cbb-3b51-08df02a1952c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Aug 2026 12:08:32.5551
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 5d471751-9675-428d-917b-70f44f9630b0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: UylxjgDOmci08/r+AG18C2qLljXpmOuwcVVVWJJddmtJm42GtuqiklYcm+f5CLeNAvTe39Pc8Lrk65ezvDZar/TtObwr+HA+6J6//BJcQubenYEy7Qe8JNMH+6W9Za0G
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR07MB8241
 
-
-On 8/24/26 10:50 PM, Lorenzo Bianconi wrote:
->> On 8/24/26 6:31 PM, Lorenzo Bianconi wrote:
->>>> bpf_xdp_shrink_data() frees a released frag via __xdp_return() using
->>>> xdp->rxq->mem.type, but that type is wrong for skb-backed XDP: the skb is
->>>> cow'd into page_pool memory while the rxq still says MEM_TYPE_PAGE_SHARED,
->>>> so the page_pool page is freed with page_frag_free() and we hit
->>>> "Bad page state ... page_pool leak".
->>>>
->>>> Both generic XDP and veth are affected. A non-linear skb is cow'd into
->>>> page_pool memory (skb_cow_data_for_xdp() -> skb_pp_cow_data() for generic
->>>> XDP, veth_convert_skb_to_xdp_buff() for veth), so its frags become
->>>> page_pool pages while the rxq keeps MEM_TYPE_PAGE_SHARED.
->>>>
->>>> We can't just fix rxq->mem.type in place:
->>>> - generic XDP: xdp->rxq is dev->_rx[queue].xdp_rxq (see
->>>>     bpf_prog_run_generic_xdp()), a shared rxq that other CPUs may access in
->>>>     parallel, so we must not write to it.
->>>> - veth: rq->xdp_rxq.mem is shared per-queue state that veth resets on XDP
->>>>     teardown, and with GRO that reset runs without stopping in-flight NAPI,
->>>>     so a type stashed there can be clobbered under a packet still in flight.
->>>>
->>>> Adding a check in __xdp_return() or bpf_xdp_shrink_data() itself is not an
->>>> option either: without recording it somewhere, both can only guess the
->>>> frag's memory type, which quickly gets confusing.
->>>>
->>>> So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the two
->>>> skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
->>>> page_pool when it is set, otherwise it keeps falling back to
->>>> xdp->rxq->mem.type unchanged. No other path changes behaviour.
->>>>
->>>> Fixes: e6d5dbdd20aa ("xdp: add multi-buff support for xdp running in generic mode")
->>>> Fixes: 0ebab78cbcbf ("net: veth: add page_pool for page recycling")
->>> Hi Jiayuan Chen,
->>>
->>> thx for fixing it. Can we do something like the patch below instead?
->>>
->>> Regards,
->>> Lorenzo
->>>
->>> diff --git a/net/core/xdp.c b/net/core/xdp.c
->>> index 1d679e8fd649..4ed659b58141 100644
->>> --- a/net/core/xdp.c
->>> +++ b/net/core/xdp.c
->>> @@ -433,16 +433,16 @@ EXPORT_SYMBOL_GPL(xdp_rxq_info_attach_page_pool);
->>>    void __xdp_return(netmem_ref netmem, enum xdp_mem_type mem_type,
->>>    		  bool napi_direct, struct xdp_buff *xdp)
->>>    {
->>> +	netmem_ref head_netmem = netmem_compound_head(netmem);
->>> +	if (netmem_is_pp(head_netmem))
->>> +		mem_type = MEM_TYPE_PAGE_POOL;
->>> +
->>>    	switch (mem_type) {
->>>    	case MEM_TYPE_PAGE_POOL:
->>> -		netmem = netmem_compound_head(netmem);
->>>    		if (napi_direct && xdp_return_frame_no_direct())
->>>    			napi_direct = false;
->>> -		/* No need to check netmem_is_pp() as mem->type knows this a
->>> -		 * page_pool page
->>> -		 */
->>> -		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
->>> -					  napi_direct);
->>> +		page_pool_put_full_netmem(netmem_get_pp(head_netmem),
->>> +					  head_netmem, napi_direct);
->>>    		break;
->>>    	case MEM_TYPE_PAGE_SHARED:
->>>    		page_frag_free(__netmem_address(netmem));
->>
->> Hi Lorenzo,
->>
->> I tried this, but it regresses the bpf selftest with a page_pool ref
->> underflow (0 warns on master, 45 with the patch):
->>
->>      WARNING: include/net/page_pool/helpers.h:297 at
->> page_pool_alloc_frag_netmem
->>      skb_pp_cow_data
->>      veth_xdp_rcv_skb
->>
->>
->> On XDP_TX/XDP_REDIRECT veth has to take plain page refs via get_page()
->> (veth_xdp_get()) and then
->> consume_skb(): the skb itself must be freed while the data pages stay alive
->> for the frame. consume_skb()
->> already returns the skb's page_pool ref, so what the frame holds afterwards
->> is a plain page ref, to be
->> dropped with page_frag_free().
->>
->> netmem_is_pp() can't see that: it only says the page still belongs to a pool
->> (other users may still hold pool refs on the same page),
->> not what kind of ref we're dropping. So __xdp_return() turns those plain-ref
->> drops into a second pool
->> put and pp_ref goes negative.
->>
->> That's why I kept the type in the xdp_buff and only override it in the
->> shrink path, where we know the
->> frag ref is the cow'd page_pool one.
->>
->> Regards,
->> Jiayuan
->>
-> Right. I can see the point now :). IIUC we are currently able to trigger
-> the issue just on xdp fragments running bpf_xdp_shrink_data() but the problem
-> theoretically occurs even for the xdp->data, right? (it is rallocated using the
-> page_pool in skb_pp_cow_data()). Is it better to always set this new flag when
-> the buffers are reallocated via skb_pp_cow_data()? (Maybe renaming it in
-> something like XDP_FLAGS_DATA_FROM_PP).
->
-> Regards,
-> Lorenzo
-
-
-Hi Lorenzo,
-
-Theoretically you are right, the linear part has the same issue.
-But in practice the head is always freed via consume_skb()/kfree_skb(), 
-which are pp-aware.
-If we really want to go that way, we'd probably have to touch quite a 
-few function signatures.
-As a fix that also needs backporting, I think the current change is the 
-minimal one that covers
-all the reachable cases(happy to hear a better idea.).
-
+LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IFdpbGxlbSBkZSBCcnVpam4gPHdpbGxl
+bWRlYnJ1aWpuLmtlcm5lbEBnbWFpbC5jb20+IA0KU2VudDogRnJpZGF5LCBBdWd1c3QgMTQsIDIw
+MjYgOToxNSBQTQ0KVG86IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5vcmc+DQpDYzogQ2hp
+YS1ZdSBDaGFuZyAoTm9raWEpIDxjaGlhLXl1LmNoYW5nQG5va2lhLWJlbGwtbGFicy5jb20+OyBN
+aXJqYSBLdWVobGV3aW5kIDxtaXJqYS5rdWVobGV3aW5kQGVyaWNzc29uLmNvbT47IHNoYW9qaWpp
+ZUBodWF3ZWkuY29tOyBzaGVuamlhbjE1QGh1YXdlaS5jb207IGxpbnV4LXJkbWFAdmdlci5rZXJu
+ZWwub3JnOyBlcGVyZXptYUByZWRoYXQuY29tOyBqYXNvd2FuZ0ByZWRoYXQuY29tOyB2aXJ0dWFs
+aXphdGlvbkBsaXN0cy5saW51eC5kZXY7IG1zdEByZWRoYXQuY29tOyB4dWFuemh1b0BsaW51eC5h
+bGliYWJhLmNvbTsgcGFiZW5pQHJlZGhhdC5jb207IGVkdW1hemV0QGdvb2dsZS5jb207IGxpbnV4
+LWRvY0B2Z2VyLmtlcm5lbC5vcmc7IGNvcmJldEBsd24ubmV0OyBob3Jtc0BrZXJuZWwub3JnOyBk
+c2FoZXJuQGtlcm5lbC5vcmc7IGt1bml5dUBnb29nbGUuY29tOyBicGZAdmdlci5rZXJuZWwub3Jn
+OyBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBkYXZlLnRhaHRAZ21haWwuY29tOyBqaHNAbW9qYXRh
+dHUuY29tOyBzdGVwaGVuQG5ldHdvcmtwbHVtYmVyLm9yZzsgeGl5b3Uud2FuZ2NvbmdAZ21haWwu
+Y29tOyBqaXJpQHJlc251bGxpLnVzOyBkYXZlbUBkYXZlbWxvZnQubmV0OyBhbmRyZXcrbmV0ZGV2
+QGx1bm4uY2g7IGRvbmFsZC5odW50ZXJAZ21haWwuY29tOyBhc3RAZmliZXJieS5uZXQ7IGxpdWhh
+bmdiaW5AZ21haWwuY29tOyBzaHVhaEBrZXJuZWwub3JnOyBsaW51eC1rc2VsZnRlc3RAdmdlci5r
+ZXJuZWwub3JnOyBpakBrZXJuZWwub3JnOyBuY2FyZHdlbGxAZ29vZ2xlLmNvbTsgS29lbiBEZSBT
+Y2hlcHBlciAoTm9raWEpIDxrb2VuLmRlX3NjaGVwcGVyQG5va2lhLWJlbGwtbGFicy5jb20+OyBn
+LndoaXRlQGNhYmxlbGFicy5jb207IEluZ2VtYXIgSm9oYW5zc29uIFMgPGluZ2VtYXIucy5qb2hh
+bnNzb25AZXJpY3Nzb24uY29tPjsgY2hlc2hpcmVAYXBwbGUuY29tOyBycy5pZXRmQGdteC5hdDsg
+SmFzb25fTGl2aW5nb29kQGNvbWNhc3QuY29tOyB2aWRoaV9nb2VsQGFwcGxlLmNvbTsgUGFyYXYg
+UGFuZGl0IDxwYXJhdkBudmlkaWEuY29tPjsgV2lsbGVtIGRlIEJydWlqbiA8d2lsbGVtYkBnb29n
+bGUuY29tPg0KU3ViamVjdDogUmU6IFtQQVRDSCB2NSBuZXQtbmV4dCAxLzJdIG5ldDogdXBkYXRl
+IGNvbW1lbnRzIGZvciBTS0JfR1NPX1RDUF9FQ04gYW5kIFNLQl9HU09fVENQX0FDQ0VDTg0KDQoN
+CkNBVVRJT046IFRoaXMgaXMgYW4gZXh0ZXJuYWwgZW1haWwuIFBsZWFzZSBiZSB2ZXJ5IGNhcmVm
+dWwgd2hlbiBjbGlja2luZyBsaW5rcyBvciBvcGVuaW5nIGF0dGFjaG1lbnRzLiBTZWUgdGhlIFVS
+TCBub2suaXQvZXh0IGZvciBhZGRpdGlvbmFsIGluZm9ybWF0aW9uLg0KDQoNCg0KPiBPbiBGcmks
+IEF1ZyAxNCwgMjAyNiBhdCAzOjAx4oCvUE0gSmFrdWIgS2ljaW5za2kgPGt1YmFAa2VybmVsLm9y
+Zz4gd3JvdGU6DQo+ID4NCj4gPiBPbiBGcmksIDE0IEF1ZyAyMDI2IDA5OjM0OjAxIC0wNDAwIFdp
+bGxlbSBkZSBCcnVpam4gd3JvdGU6DQo+ID4gPiA+IEN1cnJlbnQgU1cgR1JPIHNldHMgU0tCX0dT
+T19UQ1BfQUNDRUNOIHdoZW4gdGhlIGZsdXNoZWQgc2tiIGNhcnJpZXMgQ1dSIGluIHRjcF9ncm9f
+Y29tcGxldGUoKToNCj4gPiA+ID4gaWYgKHRoLT5jd3IpDQo+ID4gPiA+ICAgICBzaGluZm8tPmdz
+b190eXBlIHw9IFNLQl9HU09fVENQX0FDQ0VDTjsNCj4gPiA+DQo+ID4gPiBBbmQgSSBzdXBwb3Nl
+IGl0IGZvbGxvd3MgY29ycmVjdCBBY2NFQ04gcnVsZXMgZm9yIGNvYWxlc2NpbmcuDQo+ID4gPg0K
+PiA+ID4gVGhhdCBpcyBhIHBlcmZvcm1hbmNlIHJlZ3Jlc3Npb24gZnJvbSBSRkMgMzE2OCBFQ04s
+IGFzIGl0IGFsbG93cyBmb3IgDQo+ID4gPiBsZXNzIGVmZmVjdGl2ZSBjb2FsZXNjaW5nLiBJIGhh
+dmUgbm8gaW50dWl0aW9uIGhvdyBtdWNoIGl0IHdpbGwgDQo+ID4gPiBkaWZmZXIgaW4gcHJhY3Rp
+Y2UuDQo+ID4gPg0KPiA+ID4gPiBGb3IgSFcgR1JPIG9mIGEgbGVnYWN5IGRldmljZSB0aGF0IGlt
+cGxlbWVudGluZyBSRkMzMTY4IHNlbWFudGljcywgc2V0dGluZyBTS0JfR1NPX1RDUF9FQ04gc2Vl
+bXMgcmVhc29uYWJsZS4NCj4gPiA+ID4gSG93ZXZlciwgc3VjaCBhIGRldmljZSB3b3VsZCBub3Qg
+YmUgYWJsZSB0byBwcmVzZXJ2ZSBBQ0NFQ04gc2lnbmFsaW5nIGFjcm9zcyB0aGUgR1JPL0dTTy4N
+Cj4gPiA+ID4gSW4gdGhhdCBjYXNlLCBpZiBwcmVzZXJ2aW5nIEFjY0VDTiBzaWduYWxpbmcgaXMg
+cmVxdWlyZWQsIGRpc2FibGluZyBIVyBHUk8gbWF5IGluZGVlZCBiZSBuZWNlc3NhcnkuDQo+ID4g
+Pg0KPiA+ID4gUmlnaHQuDQo+ID4NCj4gPiBJJ20gc3RpbGwgbm90IGZvbGxvd2luZy4uIE1heWJl
+IFdpbGxlbSBjYW4gRUxJNSB3aGF0IHRoZSBwcm9ibGVtIGlzLg0KPiA+DQo+ID4gX1NXXyBHUk8g
+Zm9sbG93cyBvbmx5IHRoZSBBY2NFQ04gcnVsZXMuDQo+ID4gQnV0IGlmIEhXIEdSTyBmb2xsb3dz
+IFJGQyAzMTY4IGFuZCB3ZSBtYXJrIHRoZSBhZ2dyZWdhdGUgYXMgDQo+ID4gU0tCX0dTT19UQ1Bf
+RUNOIC0gVFNPIHdpbGwgYWxzbyBhYmlkZSwgYW5kIHNlZ21lbnRlZCBvdXRwdXQgd2lsbCBiZSAN
+Cj4gPiBpZGVudGljYWwgdG8gcHJlLUdSTyBpbnB1dC4NCj4gDQo+ICsxDQo+IA0KPiA+IEFyZSB3
+ZSB0cnlpbmcgdG8gYmFuIFJGQyAzMTY4IGJlaGF2aW9yIGluIEhXIHB1cmVseSB0byBtYXRjaCBT
+Vz8NCj4gDQo+IEkgdGhpbmsgdGhhdCdzIHRoZSBpbnRlbnQgaGVyZT8NCkhpIFdpbGxlbSwNCg0K
+SSB0aGluayB3ZSBjYW4gc3RpbGwgY2hhbmdlIFNLQl9HU09fVENQX0VDTiBpbnRvIFNLQl9HU09f
+VENQX0FDQ0VDTiBvbiB0aGUgUlggcGF0aCwgZXZlbiBpZiBIVyBHUk8gYW5kIFNXIEdSTyB1c2Ug
+ZGlmZmVyZW50IGFnZ3JlZ2F0aW9uIHJ1bGVzLg0KQ3VycmVudGx5LCBTVyBHUk8gZmx1c2hlcyB3
+aGVuIHRoZSBDV1Igc3RhdGUgY2hhbmdlcyBhbmQgc2V0cyBTS0JfR1NPX1RDUF9BQ0NFQ04gd2hl
+biB0aGUgcmVzdWx0aW5nIHNrYiBjYXJyaWVzIENXUj0xLg0KDQoNCkZvciBIVyBHUk8sIGlmIHRo
+ZSBkZXZpY2UgZmx1c2hlcyBpbW1lZGlhdGVseSB3aGVuIGEgQ1dSPTEgcGFja2V0IGFycml2ZXMs
+IHRoZXJlIGlzIG5vIG5lZWQgdG8gc2V0IGVpdGhlciBTS0JfR1NPX1RDUF9FQ04gb3IgU0tCX0dT
+T19UQ1BfQUNDRUNOLg0KSW4gdGhhdCBjYXNlLCBlYWNoIENXUj0xIHBhY2tldCBpcyBlbWl0dGVk
+IHNlcGFyYXRlbHksIGFuZCB0aGVyZSBpcyBubyBuZWVkIHRvIHByZXNlcnZlIG11bHRpcGxlIENX
+UiBpbmRpY2F0aW9ucyB0aHJvdWdoIEdTTy4NClNvLCBpZiB0aGUgSFcgY2FuIGJlIGNvbmZpcm1l
+ZCB0byBhbHdheXMgZmx1c2ggQ1dSLW1hcmtlZCBwYWNrZXRzIHdpdGhvdXQgY29hbGVzY2luZyB0
+aGVtLCBwcmVzZXJ2aW5nIG11bHRpcGxlIENXUiBpbmRpY2F0aW9ucyB0aHJvdWdoIEdTTyBpcyBu
+b3QgcmVxdWlyZWQuDQpJbiB0aGF0IGNhc2UsIHVzaW5nIFNLQl9HU09fVENQX0FDQ0VDTiB3b3Vs
+ZCBub3QgcHJvdmlkZSBhbnkgYWRkaXRpb25hbCBiZW5lZml0Lg0KDQoNClRoZSBwcm9ibGVtYXRp
+YyBjYXNlIGlzIHdoZW4gYSBIVyBHUk8gYWdncmVnYXRlcyBtdWx0aXBsZSBwYWNrZXRzIGNhcnJ5
+aW5nIENXUj0xIGFuZCBvbmx5IHNldHMgU0tCX0dTT19UQ1BfRUNOLg0KRHVyaW5nIEdTTywgb25s
+eSB0aGUgZmlyc3Qgb3V0cHV0IHNlZ21lbnQgd291bGQgY2FycnkgQ1dSPTEsIHdoaWNoIGxvc2Vz
+IHRoZSByZW1haW5pbmcgQ1dSIHNpZ25hbGluZyBpbmZvcm1hdGlvbiByZXF1aXJlZCBieSBBY2NF
+Q04uDQpJbiB0aGF0IGNhc2UsIGNoYW5naW5nIGZyb20gU0tCX0dTT19UQ1BfRUNOIHRvIFNLQl9H
+U09fVENQX0FDQ0VDTiB3b3VsZCBwcmVzZXJ2ZSB0aGUgb3JpZ2luYWwgc2lnbmFsaW5nIGJ5IGVu
+c3VyaW5nIHRoYXQgdGhlIHNlZ21lbnRlZCBwYWNrZXRzIGNhcnJ5IHRoZSBjb3JyZWN0IENXUiBp
+bmZvcm1hdGlvbi4NCkFzIEkgdW5kZXJzdGFuZCBSRkMzMTY4LCByZWNlaXZpbmcgYWRkaXRpb25h
+bCBDV1ItbWFya2VkIHBhY2tldHMgaXMgaGFybWxlc3MsIGJlY2F1c2Ugb25jZSBhIHZhbGlkIENX
+UiBoYXMgYmVlbiByZWNlaXZlZCwgdGhlIHJlY2VpdmVyIGFscmVhZHkgc3RvcHMgZWNob2luZyBF
+Q0UuDQpBZGRpdGlvbmFsIENXUiBpbmRpY2F0aW9ucyBkbyBub3QgY2hhbmdlIHRoZSByZWNlaXZl
+ciBzdGF0ZS4NClRoaXMgd291bGQgaGF2ZSBhIHBlcmZvcm1hbmNlIGltcGFjdCBzaW5jZSBpdCBk
+aXNhYmxlcyBIVyBUU08gZm9yIHRoZSBza2IgYW5kIGZhbGxzIGJhY2sgdG8gc29mdHdhcmUgc2Vn
+bWVudGF0aW9uLg0KQnV0IElNTyBpdCBwcmVzZXJ2ZXMgY29ycmVjdG5lc3MgZm9yIGJvdGggUkZD
+MzE2OCBFQ04gYW5kIEFjY0VDTi4NCg0KDQpCZXN0IHJlZ2FyZHMsDQpDaGlhLVl1DQo+IA0KPiA+
+DQo+ID4gPiBBbmQgdGhlcmUgY3VycmVudGx5IGlzIG5vIGtlcm5lbCBBUEkgdG8gZGlzYWJsZSBv
+bmx5IEVDTiBjb2FsZXNjaW5nLiANCj4gPiA+IE5FVElGX0ZfR1JPX0hXIGVuYWJsZXMgb3IgZGlz
+YWJsZXMgSFctR1JPIGVudGlyZWx5Lg0KPiA+ID4gT3IgZXZlbiB0byBzaWduYWwgd2hldGhlciBh
+IEhXLUdSTyBpbXBsZW1lbnRhdGlvbiBpcyBBY2NFQ04gY2FwYWJsZS4NCj4gPiA+DQo+ID4gPiBE
+aXNhYmxpbmcgSFctR1JPIGNhbiBiZSBhIGh1Z2UgZWZmaWNpZW5jeSByZWdyZXNzaW9uLiBJIHN1
+c3BlY3QgbWFueSANCj4gPiA+IHVzZXJzIHdpbGwgcHJpb3JpdGl6ZSB0aGUgZWZmaWNpZW5jeSBv
+dmVyIHByZXNlcnZpbmcgdGhlIEFjY0VDTiANCj4gPiA+IHNpZ25hbC4NCj4gPiA+DQo+ID4gPiBU
+aGF0IHNhaWQsIHNvbWUgZGV2aWNlcyBtYXkgaGF2ZSBvdGhlciB3YXlzIHRvIGNvbmZpZ3VyZSBz
+dWNoIGZpbmVyIA0KPiA+ID4gZGV0YWlscyBvZiB0aGVpciBIVy1HUk8sIGV2ZW4gdGhvdWdoIG5v
+dCBhdmFpbGFibGUgdGhyb3VnaCBFdGh0b29sLg0K
