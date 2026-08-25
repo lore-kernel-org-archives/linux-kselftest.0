@@ -1,241 +1,151 @@
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02CF1440A35
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 14:20:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.51
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787667608; cv=pass; b=bcx4moBJvpSksTc6mFVYmCsWjFaK2yuNClPm+NB7EegnC0+1iF97uw2AwQPcQNFXSwUxfPvPi2vmAzp9NwXT9XwDOyzbPLOGR+l5toEq8G0yKnvmFjIOjWMRb2Y0Aw/uUeGKAW+mlLOttLXvcKnk8knnooACOp77pw2vuBDM7u4=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787667608; c=relaxed/simple;
-	bh=2ZRWAWAxzrX6845mpmgaNcKHNz38OJ7/zMOFY8iInqY=;
-	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=R8nU7MHe9N5VL+OEJMpggc5GLTGwjTjH9CHC/fzpATpk3Qy0QJWxqllvy/25s1qtyRqiRGf62x/Hb20dfqKMQkQQRk9ZEeTnSghbZdRZR67C7KeU+nuILWeqn0tFGA5XtVKQuPCYba8B86CEgFpmL9yhaaHFHQBw2VaU0zp0fvA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gfPls/ex; arc=pass smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BC062E06E4;
+	Tue, 25 Aug 2026 14:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787667699; cv=none; b=UNR503Y7H4eM2mHW88huXmXEsGEAEFgfnNgDnLnK5FPWXTUBB8ztNV0S+qbcR15flYqvMiFHULuNyBpVB/EPzqBR/ITuwxMnJxuwweh/CvA3s1QGUOgbiSRkpC+Y2XxJysId+lnZyBPuSNPuud+LY7C0ixoDwNB7qQDZYBSkai0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787667699; c=relaxed/simple;
+	bh=YOBy2VYyp8/NSkeYLBOawmhwRAx/HBhxJwawE14i7jw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JCXI5ke5tl44eVEInwJx0ceXDdaG/hBSlplwFKfP8ecAgM78WBL2E1EJTHH/r3XcnuuV1RWk7Bg/qZnmbrNZy83I0rPnEKra6+GqXeaecFRCIRg5QA62AgEBezhV7pZ64cspSOR8O2WbqbvZpxZmrO5VT3tplZk4WPViUn+yC2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DVZKTFvI; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gfPls/ex"
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-90a80860d35so48174956d6.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 07:20:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787667606; cv=none;
-        d=google.com; s=arc-20260327;
-        b=dsHYwD3qmVvkU5Iegzto1HijXHMgWd7yZf5V6YxIK/gOrrZSJBDeArffzHdxrIGKSA
-         +1WIZI53v4a+CXNsCF+Sq9940CatdZDfWHohR95ZNfNwquG/U++o38H4ADrrIh39ZLnB
-         0+ebVlzcF1BEH1rURVOBlmmm2HdJz5HdZGcsUIISuWfeR6V8MFv1jDQ0Nz1jJQYLaW2A
-         RhkIu2d1DxWoZYO1zDI4m6mvgRZwDcO63YQsPPOcNVurSGKrRCSG0fpvrNTw8aOqXZrm
-         ZNQumxYEqqkWhMmSJRgoOvaN2kRFg/uMFlqDQZkSSB/5xlkeGWMyTESEZqPF8cp/3e57
-         X1/w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
-         :from:dkim-signature;
-        bh=t88jbvctONs+qHXsNnGi7BlHTFxQ0QLhoZsqurw8Hko=;
-        fh=9MO8NJppINZ7x8WToWom66j/UKeLFPlrxSBJF7XY0Fo=;
-        b=sej+V/y2wAZTZRxtpdZSYaCTBesenuzh/MFo1ABvPblz6E9h6jHljVpNSoC4s2oK3C
-         Dz2c26XI7uBUn8Qdn3mONLLw1AgyHDGbIafi7MeGY3/00Rv/AkkKzCkerg5WJMtNTO8Y
-         OQ3sy9RroPodbR7WPQ7PoOlB4+gvZepzI0Z5u3GvxbBkFDEytrjyR3puK6ncGiOnPHKc
-         xF9m7DS0Z1U08ONJ2bXjz29UZXfgbJaeT8HQnRhFH2yKTnnHlu4RbLZ1VCV1ipssRTVh
-         ZvZVmOKUhj7nbAf92nxqAmh5RQMeDL4cPnbHBbPSfKhTyIhj4ueR2yokJtqQuegiIQTP
-         sdlw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787667606; x=1788272406; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=t88jbvctONs+qHXsNnGi7BlHTFxQ0QLhoZsqurw8Hko=;
-        b=gfPls/exNze9amRfTWvY9zLHCHV9qPEgJIriy9uU4qsVFhu4UN8pw8WNv4l+FT9FDL
-         zOSWKRz5EUj2JNuWZZ7VKqYrOGGSxq/OuRFdxAIwiNNxjeLP4sUixnP2q6GEM3RBCDgs
-         wZRph7AmD1cPHGsj+5E40raBsv3mwmZ76X7p1ZGCzNRRQTY4Xgohjvs6rHWQ6fT6NIFE
-         QXEYM6VifgQAfg719Mw2jOkPFuhQlb/JlZ+xwSUC/RZMyt9ilMN6mNgiynCUdC8Ciqoj
-         iR8vXWHhO/hk0BwCJzmkZQotgOBgGQxIMEVL3eqYW1ojOHnDJoKceTlJYIO0WXKspRsy
-         /gKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787667606; x=1788272406;
-        h=content-type:cc:to:subject:message-id:date:mime-version:references
-         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=t88jbvctONs+qHXsNnGi7BlHTFxQ0QLhoZsqurw8Hko=;
-        b=EeK+EGnSmA+UABWovUzkVztaOXS9p/vWewYj0SFbJ7w28At49vyXTOIGA8fKyklWPS
-         A3URa4/G6ikZxXgSX7Ca0nfMyadm7m9oSkj++7hcKxDTYD7hnXc8vpvPjgFoZyZaN5rX
-         M+rgq33fTvHBuvzudRkfpFgYm9CdsPnSzEaiG8RDEXJuiobmV7V1B+xhidHMlPvGpyOL
-         208hxvOLyNDoprb/GcwcQVUjJpT4WRDoP9r8sF5v+yBjqCBYUPKD5pAJSDXqVA4gM5Yn
-         00xg3DdJNF2d0IzSxhWapsnMrHBOOfKPl5HbIvMhtGm3RScwmGmy5C90M0rseYAjQ1bC
-         WRLw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro84Hs/JwHb19fSOQjtp5wVrZlqSYhxaIW6ggkqUnXeNfYg0L8zOARBWnXgE9FdacpK/tDADsCbTN04Lpv4DIU=@vger.kernel.org
-X-Gm-Message-State: AFuF++kR8rjy8f4DANtKSyRsLwk4/7Quv1wkCX+he37Xfc7FSfoOOU64
-	vvb3gVKQRFD6xsNkSchetX5OFTWBiZ6Xhx/imNQToH+PKWJm6dzyeYMkgns7tWVjWTj9FIp02gP
-	xno3q0Nrh9krdH+QEfeljzaljqR+aJhm7Ha10n+2z
-X-Gm-Gg: AR+sD13ib++p+mboIlakU1f8eLYHbKsqWq8ZDq8Z3c6yVh6hgdy+1Q3P1gKQZCKS5u7
-	pIgbDdgLnPCWGaIp1TCLzNzSWUAXPw8QDskSum4qDEIE3UPRR9ghl0s2CA5Yo0dw05CnJz6aieZ
-	A6kDW132BboOAaIDe+rrwiQQdcX/co7ViyATHaim52xMJGi1cCA305TjxUe/PiYW/sNoeCW4jkC
-	hc93bzaVPAlzNuFD503ttSLbZqW5qSIwWohYaHKal61QWeQJPLT1qvu3m3KESEC8lksm/S2jzzJ
-	BWJ3gjao+osOlGsRBn+z7RUVlyhwDWoeQzuB04Gksh8UY+NMaiGDu9CF2zHwU/iFb6o8zwc27Je
-	f5xM=
-X-Received: by 2002:a05:6214:5089:b0:8f3:e0ce:611e with SMTP id
- 6a1803df08f44-90cb7907bb1mr71992716d6.19.1787667604682; Tue, 25 Aug 2026
- 07:20:04 -0700 (PDT)
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 25 Aug 2026 07:20:03 -0700
-Received: from 176938342045 named unknown by gmailapi.google.com with
- HTTPREST; Tue, 25 Aug 2026 07:20:03 -0700
-From: Ackerley Tng <ackerleytng@google.com>
-In-Reply-To: <9feadfea-c41c-4105-963a-a3d98421e1c3@intel.com>
-References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
- <20260807-gmem-inplace-conversion-v10-40-2fc18ee6d3ba@google.com>
- <fe1c6359-7371-4ccd-9807-1d81c160d12b@intel.com> <aohEz_1JFVDtlSnE@google.com>
- <CAEvNRgF8XE2Xsn-g3qzPxcdfLdvJEc1FZw9LQ+deeXsFpdZsOg@mail.gmail.com> <9feadfea-c41c-4105-963a-a3d98421e1c3@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DVZKTFvI"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8BE01F000E9;
+	Tue, 25 Aug 2026 14:21:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787667698;
+	bh=8b/TJsXHB/XozJI5wXe/xzYJFnEOoZHE7j2Gbt/52uk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=DVZKTFvITbFdxEW/KNwbUMuga8mUJt48vBMCM2ld8TU2FCHZcsOG0Dq7gmfHjM0Bx
+	 xQ2f9VsJtomANbCQJLYAF/rbw1h39e0ALymilmEd8ywPGKN3Mzh1t6tJ2ostDQ05gG
+	 stMZSlByJqP/VncOkl8qLoMpNtrjdAIfXVHtruT1D+hLVbS01WIm55x/dSZZpLdGdz
+	 Jz3oo0eQg37ZWFiROX5gi7WJgBewZera2BcghNt5Ji8OihjrGcmOkF5zS3w2hMdYy2
+	 9P8CeJ7IU39ogelRkwpqzSFi/bpncBN/QFGtsJs3wDBkWdX6MCj99UCd9G6T11EGAo
+	 jLBVXqx2N4LhA==
+Message-ID: <bb515cb2-6695-4fa0-aa80-b04d4bc4304f@kernel.org>
+Date: Tue, 25 Aug 2026 16:21:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 25 Aug 2026 07:20:03 -0700
-X-Gm-Features: AcwNN1UOU0Yq3Ra3mNR1CZsf74y81KeNAw_IC0Ss9JrlNXktfVmaAyZWIEWXWx4
-Message-ID: <CAEvNRgGz4OD8J1OeVzAK9kmgEyQsBSMn1ncuEaTbGHesUc-Gsw@mail.gmail.com>
-Subject: Re: [PATCH v10 40/41] KVM: selftests: Update private_mem_conversions_test
- to mmap() guest_memfd
-To: Xiaoyao Li <xiaoyao.li@intel.com>, Sean Christopherson <seanjc@google.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: fix incorrect skip output in
+ pkey_sighandler_tests
+To: Zenghui Yu <zenghui.yu@linux.dev>, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: akpm@linux-foundation.org, ljs@kernel.org, liam@infradead.org,
+ vbabka@kernel.org, rppt@kernel.org, surenb@google.com, mhocko@suse.com,
+ shuah@kernel.org
+References: <20260825123023.64418-1-zenghui.yu@linux.dev>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20260825123023.64418-1-zenghui.yu@linux.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Xiaoyao Li <xiaoyao.li@intel.com> writes:
-
-> On 8/25/2026 5:32 PM, Ackerley Tng wrote:
->> Sean Christopherson <seanjc@google.com> writes:
->>
->>> On Fri, Aug 21, 2026, Xiaoyao Li wrote:
->>>> On 8/8/2026 5:53 AM, Ackerley Tng via B4 Relay wrote:
->>>>> From: Ackerley Tng<ackerleytng@google.com>
->>>>>
->>>>> Update the private memory conversions selftest to also test conversions
->>>>> that are done "in-place" via per-guest_memfd memory attributes. In-place
->>>>> conversions require the host to be able to mmap() the guest_memfd so that
->>>>> the host and guest can share the same backing physical memory.
->>>>>
->>>>> This includes several updates, that are conditioned on the system
->>>>> supporting per-guest_memfd attributes (kvm_has_gmem_attributes):
->>>>>
->>>>> 1. Set up guest_memfd requesting MMAP and INIT_SHARED.
->>>>
->>>> If I understand correctly, even with in-place gmem, the model that shared
->>>> memory comes from the userspace_addr and private memory comes from gmem can
->>>> still work without passing GUEST_MEMFD_FLAG_MMAP flag.
->>>>
->>>> Since this model is not prohibited by KVM. I think we should keep the
->>>> testcase for this model to ensure test coverage?
->>>
->>> +1.  Deprecated doesn't mean unsupported.
->>
->> The original test case was for non-in-place conversion, which wasn't
->> removed, it still passes.
->
-> It only passes when
->
->    /sys/module/kvm/parameters/gmem_in_place_conversion=n
->
-> It fails as below when gmem_in_place_conversion=y
->
-> ./tools/testing/selftests/kvm/x86/private_mem_conversions_test
-> Random seed: 0x7eace343
->
-> ==== Test Assertion Failure ====
->    x86/private_mem_conversions_test.c:46: mem[i] == pattern
->    pid=288745 tid=288747 errno=4 - Interrupted system call
->       1	0x000000000040426a: memcmp_h at private_mem_conversions_test.c:46
->       2	 (inlined by) __test_mem_conversions at
-> private_mem_conversions_test.c:356
->       3	0x00007f2ea2c89c01: ?? ??:0
->       4	0x00007f2ea2d0ec3f: ?? ??:0
->    Host expected 0xaa at gpa 0x100000000, got 0x0
->
->> Is the ask to also test, under kvm_has_gmem_attributes aka
->> gmem_in_place_conversion, to have guest_memfd used as purely for private
->> memory and have shared memory taken from somewhere else completely?
->>
->> I can rephrase the changelog and change the code to clarify that this
->> patch is meant to specifically test in-place conversion with MMAP, the
->> intended usage of in-place conversions.
->>
->> The ask to test gmem for private and something else for shared seems
->> like a different test that can be added separately, perhaps in a
->> follow-up series?
->
-> I see it as the fix for existing testcase, not another new test. And the
-> fix is simple:
-> 1. change to use vm_mem_set_memory_attributes() to set memory attribute.
-> 2. pass GUEST_MEMFD_FLAG_INIT_SHARED to create the gmem because this
-> test expects the initial state of the gfn is shared.
->
-
-I understand now. I worked it out, I should be able to post v11
-tomorrow, just need a little bit more testing.
-
-> ---8<----
-> diff --git
-> a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> index cf50e9a332c5..fbd6c63d21cf 100644
-> --- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> +++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> @@ -307,7 +307,7 @@ static void handle_exit_hypercall(struct kvm_vcpu *vcpu)
->                  vm_guest_mem_fallocate(vm, gpa, size, map_shared);
->
->          if (set_attributes)
-> -               vm_set_memory_attributes(vm, gpa, size,
-> +               vm_mem_set_memory_attributes(vm, gpa, size,
->                                           map_shared ? 0 :
-> KVM_MEMORY_ATTRIBUTE_PRIVATE);
->          run->hypercall.ret = 0;
->   }
-> @@ -382,6 +382,7 @@ static void test_mem_conversions(enum
-> vm_mem_backing_src_type src_type, u32 nr_v
->          const size_t slot_size = memfd_size / nr_memslots;
->          struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
->          pthread_t threads[KVM_MAX_VCPUS];
-> +       u64 gmem_flags = 0;
->          struct kvm_vm *vm;
->          int memfd, i;
->
-> @@ -397,7 +398,10 @@ static void test_mem_conversions(enum
-> vm_mem_backing_src_type src_type, u32 nr_v
->
->          vm_enable_cap(vm, KVM_CAP_EXIT_HYPERCALL, (1 <<
-> KVM_HC_MAP_GPA_RANGE));
->
-> -       memfd = vm_create_guest_memfd(vm, memfd_size, 0);
-> +       if (kvm_has_gmem_attributes)
-> +               gmem_flags = GUEST_MEMFD_FLAG_INIT_SHARED;
+On 8/25/26 14:30, Zenghui Yu wrote:
+> From: "Zenghui Yu (Huawei)" <zenghui.yu@linux.dev>
+> 
+> When pkeys is not supported, ksft_exit_skip() runs with ksft_plan already
+> set, which takes the "ok N # SKIP" branch intended for skipping a single
+> test case.  The result is a TAP plan of 5 but only one result line.
+> 
+>  $ ./pkey_sighandler_tests
+>  TAP version 13
+>  1..5
+>  ok 1 # SKIP pkeys not supported
+>  # 1 skipped test(s) detected. Consider enabling relevant config options to improve coverage.
+>  # Planned tests != run tests (5 != 1)
+>  # Totals: pass:0 fail:0 xfail:0 xpass:0 skip:1 error:0
+> 
+> Move ksft_set_plan() after the skip check so ksft_exit_skip() takes
+> the "1..0 # SKIP" branch, the correct TAP representation for
+> skipping an entire test file.
+> 
+>  $ ./pkey_sighandler_tests
+>  TAP version 13
+>  1..0 # SKIP pkeys not supported
+> 
+> Signed-off-by: Zenghui Yu (Huawei) <zenghui.yu@linux.dev>
+> ---
+>  tools/testing/selftests/mm/pkey_sighandler_tests.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/testing/selftests/mm/pkey_sighandler_tests.c b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> index c218d0510a2a..74bf79a5399d 100644
+> --- a/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> +++ b/tools/testing/selftests/mm/pkey_sighandler_tests.c
+> @@ -543,11 +543,12 @@ static void (*pkey_tests[])(void) = {
+>  int main(int argc, char *argv[])
+>  {
+>  	ksft_print_header();
+> -	ksft_set_plan(ARRAY_SIZE(pkey_tests));
+>  
+>  	if (!is_pkeys_supported())
+>  		ksft_exit_skip("pkeys not supported\n");
+>  
+> +	ksft_set_plan(ARRAY_SIZE(pkey_tests));
 > +
-> +       memfd = vm_create_guest_memfd(vm, memfd_size, gmem_flags);
->
->          for (i = 0; i < nr_memslots; i++)
->                  vm_mem_add(vm, src_type, BASE_DATA_GPA + slot_size * i,
+>  	for (test_nr = 0; test_nr < ARRAY_SIZE(pkey_tests); test_nr++) {
+>  		tracing_on();
+>  		(*pkey_tests[test_nr])();
+
+We also handle it like that in soft-dirty.c, so why not
+
+Acked-by: David Hildenbrand (Arm) <david@kernel.org>
+
+
+-- 
+Cheers,
+
+David
