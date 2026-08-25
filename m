@@ -1,101 +1,290 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CE42F60CC;
-	Tue, 25 Aug 2026 11:23:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787656992; cv=none; b=D/9NWqoHA+XNdJslZvzMHlgRdCbuktb6kxUgrpvpJrkwsr7jFoD3wZGJVZU+Qgz9Sf+lsF4xb2qhwoYt0iUp612R6i5UYoAtJQqzbRXUX2jf/BDoecDSi2K6cUkzrtM7f4g9xeby0u9cjIfUAuxY3ev0a8pgH1xNpTaUE1U4VQA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787656992; c=relaxed/simple;
-	bh=VSe++JTeo3Lze7VoK7R+77jSBU0nwKRUttpcS338dYw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q1oCgflXRZEs9GxhGqrf3axCGYWVdNYIBgHLgkXsX7u1AwlOhSth3C2tsRubl/+ir+dXpF+r94oUcU+2Hf13gT31HTcCH7iHfmIcDcN7YmKHTTaFCagg1r7na2SjHfSDKh7luhNNrFnMGRcvuTzci9m5OHx9+vtT3uyLGb4gi6I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WuMLJAY1; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6415A3955EB;
+	Tue, 25 Aug 2026 11:39:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787657946; cv=fail; b=e6JL1L19L5YWFzW6xuhT/NE/z3dOn/0CHMOfqsw1AT5zG6OpG42bn+jo92wA/bubtO8czV7o+KA2L+0DJWEYQlW8UIONWxLeubQ5O4tCn0236LrexAOLh23sRiuxUKyIlGpLKoMN4wbFPA6vafx1ZJNfz/jvVBEf4HVRmJfukic=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787657946; c=relaxed/simple;
+	bh=Ug/MiE+Vjb9CAzVaVUDfOxyCs4kNGZSEqVSl/AwJuao=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=M9QdG6H381lpc1BwI9UuYnER6Rx40y5xPLUDm9bF/4S7z+tv99BryUPvbbyXny9yGRo7bvjvR5awELhe1mFQIxVgupdVjTbm2hkX/WCj3hsTB4qXnFjVUGe8x70oVPzctrBc//exf+tND9+rHF9g3rY673tppKlDMRlN97se1m8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=eLUdp6dO; arc=fail smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WuMLJAY1"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 164141F000E9;
-	Tue, 25 Aug 2026 11:23:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787656990;
-	bh=Tyn/y+MG68HEs9Pp5bTgaiJX3rDDKIVre5+E3+QTbSE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=WuMLJAY1UgWB45R12EQH+XX1KX79CgVVtBokflTkOcqEHlWAQUSnPp1lMDVi5OQYA
-	 mij4WTcyisHP0A1CVOBIBhZRwkxcNLj2qjKm6RBOSWKx6WgK28cTRWXIhNYK+LeD/b
-	 IO29TRKJuOrxaL0pPVEu6CCe6RZfAuvDxRqkzwwC0fUNYlbhBN2Fst3Skod8NIvlDy
-	 Xe6NLKcvQEuzgPzmrjXy21ARNlBPmdiw5py+xhm9P3yDqG2311iQuCL1cBCAISqAI4
-	 NTtlz3EVDQ4KiW8GiMY+yIpu/vWfyesUicZ3JHIxk+JddjhZfLlVQ8NbHtAF5kII8K
-	 VR6CWa//69wJg==
-Date: Tue, 25 Aug 2026 12:23:03 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
-Message-ID: <ao17EcW1-iNN4Y8i@gremlin>
-References: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="eLUdp6dO"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787657944; x=1819193944;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=Ug/MiE+Vjb9CAzVaVUDfOxyCs4kNGZSEqVSl/AwJuao=;
+  b=eLUdp6dObqNkfRepBltnGEeHV2w2umx6wVmU20CRaVR4fqvS/HdyFRAk
+   tLU+rgr07fB9ZDsrgcpg54jEEXhDFTKyFczF08ZnlU4wzBiLI50W1Kl0v
+   D58u+le66y9RB0TSgfBmYSVlbn5oSP+42JdAm58HJ6DWr6bFaJnj0H0jp
+   c9BSd5sFEZTqhXlocPAIT+F4ySwoSTjvyf/OtMYz92b7IeLFVtL2yePXM
+   SlJZ0sbjGnP/dskJyorx6tDE1J3XGYX3H+Ei+jwC1378b1uE0E8T/QALK
+   wQvUGh2SbPGjiu+Yyv8F20CukWnEsgy7SFm/MNzA/HndIO01My9dDQSCk
+   w==;
+X-CSE-ConnectionGUID: FV+5kenxQEm1nmwXY02Ukw==
+X-CSE-MsgGUID: B28UqDEPRciXcHU7UsHetw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11885"; a="88144138"
+X-IronPort-AV: E=Sophos;i="6.25,242,1779174000"; 
+   d="scan'208";a="88144138"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 04:32:40 -0700
+X-CSE-ConnectionGUID: qCKS26TGSAerB1rq+MtXug==
+X-CSE-MsgGUID: 5+qjnVQoQ+Stlk19h26I1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,242,1779174000"; 
+   d="scan'208";a="267305568"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa007.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 04:32:40 -0700
+Received: from ORSMSX902.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 25 Aug 2026 04:32:39 -0700
+Received: from ORSEDG902.ED.cps.intel.com (10.7.248.12) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45 via Frontend Transport; Tue, 25 Aug 2026 04:32:39 -0700
+Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.70) by
+ edgegateway.intel.com (134.134.137.112) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 25 Aug 2026 04:32:36 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=pcp9t2g2zUsI9BcUiAmOoRFbgQAV5GU8/I7a42FWfKvU3AyztQbsTnUZ/au2gO94no3bAVRWegMceG1/sjcgGbtvcJkMHXDUuGuQznjHnXrYqHIKpL6rrKkHzM+XGMGuz6Y77nQYs3Ab99NwJwDLF3R3R1HqglApNtUdEyz0laOSbk/dA7b20OdcxfcrCUR0eGbVXBBm/mFdVTNLe/jIY/30PD29lHeVM8UKTVqiybZzW/i9iDMJ/DKMwFc0tgMvED32KdOsukvFWWuw8F5RsNE1xNZIVH9EQj4a0VIBUnvclNLCNqugFLRBI/l+jcRfojnPG5S6Nmn1tcaIY9hloA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vgFFOkXx9pGnbugaSza/J1HyFayPAYUZyeDRwNlVudA=;
+ b=S35IFiIcQTz1SrM9dAMOYN52r0qDV2GDY+yWLySu3E2f+xg9L+9VKD7KuSV21WN+PaNv23pD+6PU2XNFrgEgZLfpA2rjoWWBJ8766eoQGY4B3/MJntIZuX59OGoVhaAS3XM/7PrKEvnF1JVscU4inYU0IBsor53gl40YulezGY7uaJOVERG4lkI3Oz5Uttd88UEPZxd71KjY/PDpjoPeng1l/dYatJXQR/E3YzKHCIdNTqH9/YrMLjyv5Jt9XOtA+IB/5c+U8lX0eDqkGztlSfJdT1CgzVwAfxculglA5AyQy+VxdQaLpkH7wg66KkXONxzbFzBZc4oYAWKsyGAhWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8019.namprd11.prod.outlook.com (2603:10b6:8:12e::18)
+ by SA2PR11MB4843.namprd11.prod.outlook.com (2603:10b6:806:fb::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.6; Tue, 25 Aug
+ 2026 11:32:31 +0000
+Received: from DS0PR11MB8019.namprd11.prod.outlook.com
+ ([fe80::fce1:3bde:b383:e801]) by DS0PR11MB8019.namprd11.prod.outlook.com
+ ([fe80::fce1:3bde:b383:e801%6]) with mapi id 15.21.0339.012; Tue, 25 Aug 2026
+ 11:32:31 +0000
+Date: Tue, 25 Aug 2026 13:32:18 +0200
+From: Krzysztof Niemiec <krzysztof.niemiec@intel.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Krzysztof Karas <krzysztof.karas@intel.com>, Sebastian Brzezinka
+	<sebastian.brzezinka@intel.com>, Maarten Lankhorst <dev@lankhorst.se>, "Andi
+ Shyti" <andi.shyti@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpu: GPU_BUDDY_KUNIT_TEST should not select GPU_BUDDY
+Message-ID: <ao1hIejAdBPKUHFW@kniemiec-mobl1>
+References: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
+X-ClientProxiedBy: DU7PR01CA0048.eurprd01.prod.exchangelabs.com
+ (2603:10a6:10:50e::17) To DS0PR11MB8019.namprd11.prod.outlook.com
+ (2603:10b6:8:12e::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8019:EE_|SA2PR11MB4843:EE_
+X-MS-Office365-Filtering-Correlation-Id: 92af4ab6-54f8-41de-b055-08df029c8ce8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|23010399003|6133799003|10067099003|56012099006|11063799006|5023799004|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: CFNdLgBNrzx4sfZYp506W9ZmjdbeMNvvuh696WFCAAJa/7dJAKyyhQakdWmXKZDpP6Ksx2HdHygYQmxPCHSQJtr9A++mvRdj2r7nw0zv5IVzMvQeVz8e8p5Ta2/DbgvZdyi8vxzcC0slOtylDQPAne9ZDA9y+vxtbndNqe+E9+lZ+MB0zf6zULyVFVnr2+wT8/NujDAFNDOESvveTdveTRszEvg9nPehuXEkNZ0/hgglXW/FR9UzCL6nSNud2mQk0rHByoCAi/t6NnXslywU4XWKFDC9WABgePrBpX0/EVP8CSDWRDejCuGWFcDULlA+eqIkqIOrSVWxq0bcfWC2Zp3+c+Qk2ortfQlpA74mCJnh2dFYcl8C9E/x6CLNpXBYVYanQZFr8eaJaw5F2Cc6aqtNvhj23S9c7jwiz4Ac1kUzHYvYxGcdLO8n0Bgwlz+qPwxP0svuPL5vLxgniGDK77JcQ9wbiRPGSNfFFyoFgzTL6XoM77DRYCbFMF364ny0XH5vqgkG/03bMaFSUjeFRACTQg8n0C4GXcLJeAZpDYRtWVD05zsxq1DPOxqDKUgE1HSQ5dngmuvjjAS1Tme+9wrm3Zf5gQqdyNUEPweU6Tlqi+Fzms6oqvUYy+WDPfPtTOx/xU1YiBlguPGm5DhnNXq1/4sAm6kX4grLlHTwelY=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8019.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(23010399003)(6133799003)(10067099003)(56012099006)(11063799006)(5023799004)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?c3IrU0cwQ25ha3VVMk5KOEJCb0VGV013VU5zL0UxZTNsWjljb3pibkFES1lM?=
+ =?utf-8?B?Q001bUlwNVdka1c3UzlnN3BocVhMM2w1R3lWQm1WbzlaSU9YTldLcTRjaUFY?=
+ =?utf-8?B?b3NBMDlIaWRZbFdDK1hpa3dnd3pyZ1c1VWcxL3dzYk1yM0prNERIampjeEwy?=
+ =?utf-8?B?bTlTNUtOY2pMbWxBa3hWSWNYRjNtdmVuMmt2azRjcFF0ZlV3NHc4a29iM1hC?=
+ =?utf-8?B?K3JEQXN6R3IwL0Q0cVd0UnhJTUZONHBPYjNMSFdHTVhMemJ1cGtHWDZPa1Zk?=
+ =?utf-8?B?RXlPQUR0MXBXZVl3K3B1aXV4dWY4SlBsUHFKUmtBOWlxa0xvUmI4TVRGU0Z4?=
+ =?utf-8?B?VWFZcmRCQnByaVIrZ01ZVnVVTTVQM1FWQVdzdXo5K2lJZ2oxelVVM2VRMXY0?=
+ =?utf-8?B?RHBZUy9KNk9GNUdqVFVuVnl6L2I4d0RnUDhDK2hxNFVNdC8xNDNXYUg3RWVt?=
+ =?utf-8?B?M0FyL213NkZTekp1UUpiRWhBcVk3THhHcE1XQWpla0dheG5XNU1MWUo1dFB1?=
+ =?utf-8?B?bDIwd0lPakhZZFk0bXZSWFExK1FRZlZ5ZmpGeTJib0F0bWdTK2V6UGF3Ri8x?=
+ =?utf-8?B?UzBwME5RMGRzMVFoQWFtdmFLbitqUnBjemRyZGF5T0lJSWZrNTRqc1AyN2gr?=
+ =?utf-8?B?RFJYVm5hR3lYSE1HckxGLzBuSXhjV01yTGNnRnNaN0VkYjdHL3RzUDR4Vk1O?=
+ =?utf-8?B?NGpoVWRWYUNqdlAyYTZMcGthLzQwc2ZTK0VLWEtDSWFhOWdtbWRzRWZzZXBt?=
+ =?utf-8?B?WHBXcS9RbWZadU5CanFvUWRodkg2TWVhck1qeTNNU2d5eTNsNkQ5T1FkbWRG?=
+ =?utf-8?B?bHk1b2YvUzJWVjN2eFlNbE5tRS9xWXdjbzRlZHdPNEd1N0lqR3kvc3ZYNkZY?=
+ =?utf-8?B?U1FiQVNWQlBYcnA4ek9TV3NjaFJQWk1FTDFuZzM2NFJoYUhhTGZac2o3SGJV?=
+ =?utf-8?B?OFIvY1VrTmNnTHd1Y1BHSitqWmpIQlJmN0JyTnJPQ0MxdHV5aW0veEtQYnJJ?=
+ =?utf-8?B?eUQzSWEzZ3hFTmhqUGo2Z21FTGVYVm9PWVludHhJNjdBbWUyZlovYXJmMlRX?=
+ =?utf-8?B?bDJxTDBrQ2xhK2EvVng3T3BZSUM1eFhIeUZBZ0s5MkVXTUZDbFh5bEV6ZU05?=
+ =?utf-8?B?TTczVUhQUXVpenAyTVFkNjB0dDFLakJ3MGpHTE9yOFRWT2drR3lUUmgrTWVI?=
+ =?utf-8?B?Yk4vM1Y5bXpBUENuVEhTYWE3V2xnaTNhNDZtMEdiMlNkYlcrRXF0a0srVTUw?=
+ =?utf-8?B?bDkvbTFpbDBNdzgxUTlGUkRLN21rZjNydE8vcDI3WTByM01mcmdnTHMvWmlv?=
+ =?utf-8?B?UkpTT3BJT3Y3dVFiQUNhWXlqVnhaVnBDUjBJWUZzY3JpcURKbVdzQnpwSU5o?=
+ =?utf-8?B?ek5iYjlGeUlXWU5xV3dLUDVacGtmcU42T0VTNTEzTjJzRVFhU0ZnZGlDcnAw?=
+ =?utf-8?B?azV1RlhOOHljR3ZXMkp6K1QxVHFyUzNycEVFSkZySVo0L3dWVHo3OGdUUW9B?=
+ =?utf-8?B?Y3FPUVJ0MW5vS2VKMFNLVXZuY3NIRGUydUFYdGs4emVvTGcrSjR0RFdWY0pq?=
+ =?utf-8?B?dk1Wc0U4RDhRNVFTeExESkl0RmlIcExSTDNGUkVHZzhVOTVqeEhNcVQ5NWZU?=
+ =?utf-8?B?aTdIdkxwWkN4dU5aZkd2RDRrekVWcmQxZlFBUFAzUFJjL0x6bUpvMkU1L2VE?=
+ =?utf-8?B?Y0hUNis3Z1NEUytkQWovV0xLbElZQlpPdno4QzhkZFQ4S0o3Z2JoN053Ymg2?=
+ =?utf-8?B?NzcreXJrVkRDZ05leVVtdWpOMnJKVTFSWEI0Qk1teSt5bHBlcjNab0xRV0l3?=
+ =?utf-8?B?aXRHMmhaZWtIV0g1bVlIQXhhUGRVcklMK2NVMTVnM3pFRjhualF1Qk5sOTl4?=
+ =?utf-8?B?MVhwcmVpeENMajAzMVRpYlM0a0REM0pITExzbHdZSzZSSkI5TjEvVWxxaEJj?=
+ =?utf-8?B?SkRGc1phV1VXQWl2YVNzOGFNUWZ5alYydGVmN1ZDL0JucTFZWVJXL3A0bXll?=
+ =?utf-8?B?V201bDdxVlE0QUFRMVVaOHJlU1RybDQ4ajJibkFZQmwyYlM3QWlwOVJsSWpS?=
+ =?utf-8?B?L21SUHhQWnh3bEljR1FIWHRoZHJUMXFaUGNCRjJVZ3J5TU1TOHhQRzZTSEdT?=
+ =?utf-8?B?WXNCZVpaMVFKcFhwZGx4TG9oWjV0cG4vOUEvTGpia1VUQWh0Lzk2em9HMEll?=
+ =?utf-8?B?Mm51QkpVT05QYnA1b0pMaVB6bWExM2x5dWRLZEtSV21oeW5xZ3o2K3pzcHRS?=
+ =?utf-8?B?RGdMVGo3TmFuamdSQ1JubjZ1SnB6aGtEQjN6WGVCWEhqSC83MnYwR0xwUEph?=
+ =?utf-8?B?ZTJ2YkZWYzB1eEJ2cExQRHNRbERaWFNhT0RpZTRlenhPeFU2TW5YaFJUMnow?=
+ =?utf-8?Q?vG8WMqUSiotQhNIg=3D?=
+X-Exchange-RoutingPolicyChecked: XTcScJYx1e2ihsNs2GTOudLCORSnePYeGNCXCkQllh5bq5rO1qeDEHO4LFFhaPVVpHvFgSZOvoXPDGl9TBD4L8I3yFhEOt+PAhclCzCy/dvVptLkcOJb3QPd/j059pQ+nk4RtIuyElmYHNBzLuMrYrAD9zb13kA+pTsDkncbMmVfjyQEu/QGGYArORUM8n0R12UhhlohrQMkOJvHrFz7u9JJu4+gZg6jlUNypGN+q3ahWI1JW9FqKy7MGPnDR2kB4iUisiXRbZ5GjamxJRZAcOgPnjSvhh92wf6IYhjqfE34lSkQq3whLqfOaukX0S4S15HNcZSYybZ2u6oBQHWKaQ==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 92af4ab6-54f8-41de-b055-08df029c8ce8
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8019.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 11:32:31.4982
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EUxu8oal/ycfNDcFtnWqrp0l+MNuTXKGYeByLIy3cvDS4fHg4EQxUDNws2ZJK+tbxbK09h7f6p+6DK5URUBFUn0zLpNTYqrm7GQaGEEUgU8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB4843
+X-OriginatorOrg: intel.com
 
-On Tue, Aug 25, 2026 at 01:20:59PM +0200, David Hildenbrand (Arm) wrote:
-> We don't check str_dup() return value and never free it. While both
-> things are irrelevant in practice, let's just clean it up by working on
-> argv[0] directly and avoiding the str_dup().
->
-> Nobody after us needs these parts of the argv[0] string anyway.
->
-> This patch is inspired by previous work from Anshuman Tewari [1].
->
-> Link: https://lore.kernel.org/r/20260821114416.12255-1-anshumantewari123@gmail.com [1]
-> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+Hi Geert,
 
-LGTM so:
+On 2026-08-24 at 17:12:30 +0200, Geert Uytterhoeven wrote:
+> Enabling a (modular) test should not silently enable additional kernel
+> functionality, as that may increase the attack vector for a product.
+> 
 
-Reviewed-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+What vector? What product, exactly? As far as I know buddy allocator code is
+currently loaded when a) loading a drm driver (which would need that code
+to function anyway) and/or b) loading the kunit test for the buddy allocator,
+which would need that code to function anyway. And AFAIK neither are
+built unconditionally into the kernel. So the amount of potential vuln
+surface is not exposed beyond what is reasonably required for the system to
+function as intended.
 
+If you've found a concrete bug/exploit/"attack vector" utilizing buddy code,
+then please address that directly.
+
+> Fix this by reverting the select to a dependency.
+
+The way drm kunit tests do it is by select-ing the appropriate
+functionality out of the available ones, with "broad" depends-ons for
+DRM and such (say "depends on DRM\n\n select DRM_BUDDY"). DRM_BUDDY,
+for example, is not directly selectable in .config, as it's meant to be
+selected automatically if a module uses it.
+
+This is also the case for drivers, with Xe having depends on DRM and
+then like 40 lines of selects for specific functionality, same for i915,
+amdgpu, so on.
+
+Now, my understanding is that GPU_BUDDY is also not meant to be selectable
+directly by the user, but rather implicitly by modules that need it. It has
+nothing that needs actual input from the end user/sysadmin, either a module
+needs it and builds it, or it doesn't and it doesn't build it.
+
+The only conditional code I could find depending on CONFIG_GPU_BUDDY is in
+rust where the gpu and buddy modules are exposed in the kernel crate only if
+the config is selected, but I'm pretty sure it's just how they handle what
+we do in Makefiles for modules with obj-{CONFIG_SOMETHING}; and some renames
+of variables/functions also for rust. But no behavioral changes depending
+on GPU_BUDDY.
+
+So I see no reason to enable the end user to select GPU_BUDDY or not, I'd
+just let it be an implicit dependency. It's not really a big fat broad
+option like CONFIG_DRM so I'd just treat it like one of those specific
+functionality ones due to how similar it is to those.
+
+Then Kconfig for tests has to "select" instead of "depends on" because
+there's otherwise no way for it to load buddy, which it needs to function.
+
+> Make sure the GPU
+> buddy allocator can be tested without enabling another driver that uses
+> DRM_BUDDY by making GPU_BUDDY visible if KUNIT is enabled.
+> 
+
+This was the case even without your patch, and was the entire point of
+8fe3fc37564920ae mentioned in Fixes. The kunit test kernel can be built with
+a rather minimal .kunitconfig (included in the gpu/tests directory). So
+it only loads whatever kunit_tool would load, plus CONFIG_KUNIT, plus
+CONFIG_GPU_BUDDY_KUNIT_TEST, plus (implicitly, which I discussed above)
+CONFIG_GPU_BUDDY. It doesn't load DRM_BUDDY at all (which was the bug
+being fixed in that commit, you used to be forced to load it, now you
+aren't)
+
+> The page based buddy allocator for GPU memory is only used by DRM.
+> Hence add a dependency on DRM to GPU_BUDDY, to prevent asking the user
+> about this code when configuring a kernel without DRM support.
+> 
+
+It seems to be *technically* true, however, the entire point of moving the
+buddy allocator outside the DRM directory is to expose it to other non-DRM
+drivers, so the lack of dependency is kind of by design.
+
+The change was rather anticipatory, but it was clearly well reviewed and
+sent by a Joel, a nova-core dev, I assume it's gonna be needed at least
+by them at one point or another.
+
+If, say, nova decides to use the "communal" buddy allocator (if it
+doesn't do it already, I only briefly skimmed it looking for kernel::gpu)
+then the DRM dependency from this patch would have to be reverted (yet
+again). Maybe moving the buddy allocator up from DRM should have been done
+along with the first non-DRM user and only then, but it just didn't go that
+way.
+
+
+If the issue is that this option is too annoying during make or in
+menuconfig, then I don't think this is the way to address it.
+
+
+> Fixes: 8fe3fc37564920ae ("gpu: Fix dependencies in CONFIG_GPU_BUDDY_KUNIT_TEST")
+> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
 > ---
->  tools/testing/selftests/mm/khugepaged.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
-> index 1d2d6bd72fd2a..83d27d069c413 100644
-> --- a/tools/testing/selftests/mm/khugepaged.c
-> +++ b/tools/testing/selftests/mm/khugepaged.c
-> @@ -1227,7 +1227,7 @@ static void parse_test_type(int argc, char **argv)
->  		return;
->  	}
->
-> -	buf = strdup(argv[0]);
-> +	buf = argv[0];
->  	token = strsep(&buf, ":");
->
->  	if (!strcmp(token, "all")) {
->
-> ---
->
-> base-commit: 169393fff5d1ec2690934067eeb95544ff5ebdd7
->
-> change-id: 20260825-remove_str_dup-bb089e93094f
->
-> --
->
-> Cheers,
->
-> David
->
+>  drivers/gpu/Kconfig | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/gpu/Kconfig b/drivers/gpu/Kconfig
+> index 3bcf08260d73a782..d881ab6f7a006a3b 100644
+> --- a/drivers/gpu/Kconfig
+> +++ b/drivers/gpu/Kconfig
+> @@ -1,14 +1,15 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  
+>  config GPU_BUDDY
+> -       bool
+> +       bool "Page based buddy allocator for GPU memory" if KUNIT
+> +       depends on DRM || COMPILE_TEST
 
---
-Cheers, Lorenzo
+What's the justification for COMPILE_TEST here? It might be needed but
+you didn't explain why or mention it in the patch description at all.
+
+>         help
+>           A page based buddy allocator for GPU memory.
+>  
+>  config GPU_BUDDY_KUNIT_TEST
+>         tristate "KUnit tests for GPU buddy allocator" if !KUNIT_ALL_TESTS
+>         depends on KUNIT
+> -       select GPU_BUDDY
+> +       depends on GPU_BUDDY
+>         default KUNIT_ALL_TESTS
+>         help
+>           KUnit tests for the GPU buddy allocator.
+> -- 
+> 2.43.0
+> 
+
+Thanks
+Krzysztof
