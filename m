@@ -1,47 +1,47 @@
 Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11013026.outbound.protection.outlook.com [40.107.201.26])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53778347505;
-	Tue, 25 Aug 2026 18:17:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8A23314C3;
+	Tue, 25 Aug 2026 18:17:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.26
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787681840; cv=fail; b=sAhWMWj+lYKac5F9pFJ84KlFSLOrWCiLt36HSsH1etaH29XAfbxHIbExfvRq7has5XuLAMr2q5RFWs/1NT1Pd485i3Ccj8FFeNZHlmI8mtjJrveVEpv8GdGWx7Bk6NNT+AyxLJi7BNTSIHksHS5bC/ZkkyJmiUMQe3dhB+UeuFE=
+	t=1787681843; cv=fail; b=GHAHmjs3T7iXy48YmDBtVwk1EoAym2CDVxwMIOsoeOmfRxrLmzO5I5PeVTGen+H8bX98ugv8MOws1UK9hF2N+YyY+Ktr1ZRxAKTn4FblnzH5fcS0/FlALp13jiT4Ax2C6lFQHETM3iq1jgd43k4rE8nV+jyB9isKuld8l/55Qks=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787681840; c=relaxed/simple;
-	bh=K3Dw2+h+Bqzux+Q8IJmhk31/9DSirrHYsFN601M/s1o=;
+	s=arc-20240116; t=1787681843; c=relaxed/simple;
+	bh=pOavo+i65gZARQvRZFsVJTHP7GYZI+d/ajkYIYunhzw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cvSc07l7E7ZFLPA22d++JQ3Wr2+5ne4OvVyAn7n8xRZ9MAFiOBt7S0uI9/tF7rcY3XLQdLVNNzEQ98CuR6fcS3NNBhZPjLO6umP5DJmkWv+2rtKZlUfx9DS/yGzBLrdIjg9pksDXYVz1UoUbVT8iDnX5k2xPTwkezWyrcJMjSaQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=F1VfB2Tz; arc=fail smtp.client-ip=40.107.201.26
+	 Content-Type:MIME-Version; b=FM5xAefVaQr0OcGlk8VdSI+g2Ty7gjVKxrrFUD699H88xFB+FQxFwKzvWQ5wCVipaIjz3Dlof0Wi5zTCz8bkxSBBSRuHsJRQ5d5liyZmZMFrjTXQZap9Cr6du6clZhhe0oMOkoDwE2/i64omfVtA73kvBtQjiPUXiX6TYfSe1Mo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=sRLHNC78; arc=fail smtp.client-ip=40.107.201.26
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="F1VfB2Tz"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="sRLHNC78"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=QjU0/PjKLqvzPXWqvuHBMomx+MIU1cxmrocR6iMO8TMrtH6LyndrTKT9CmErHoHkXb8WE7zniwEzgIW7YaE44xU3w72uqdtxJlu+KcyrANObX2KPAXbLuB4zH1sVzXnfJeOdQb14gsJUMg/JVLm5U0t74q7/lsGMqBxfY467skKh+kQuNw+266OOLNlndCHtLfuEENydcgRAAWpliimU9pZBZkhDAfI9pckULg2Q6bRcWYebRKQpJlXsfiW4aExyOtBj+YH5vzdDlgbnNWg3vw8Ic+YiDE3k5v8FXbNXtfQEbErj+d0LHRD+Wrix5DtXu1rPDGc481Bmmw9W3Gjwzg==
+ b=YVoPWY+znckJ6ndTUwDukk5xIPBmptXLbYAB75epqNCMBrg78XTE6AIynQ2rbyfdHMrDLRMQ3tcZkLIabTeLtQrlLgz1cQF5A4v5ZQRHmGZOYHItRUl0/nXp6jmsljVZ3/jK4vZiVAB4QCDlIw1aWeQjTt+Mg6aG8/1fJR+rjF/Ujc5ctEtyLElUoYSs7cR3eVPTJLLSyItIsN4Z+R+3p+rA4+FBwOxy11UIlrq1kU9Evous1Nkh3RLxjycReLTBv00OAhKUEGT0zYRIE3Izp0mXrZKQsfVfVZt6opxMR54wcqhzgRJIcXHYCe61rwpZfR1iYFgOf45g0O/Zvk97Ew==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=D/3TQFD4h5Gz2cObvaCD/Z/WQqrA8cEtpo+oWXJLaMU=;
- b=adrzoiQF/NRtAPMpxVnvWPWH08Eyy0SabDh2jvrAFMRDuhhpevmxQ280Igf/LunM3asRMWcD8j1Tamie1QiOZ7t/+r/IzSCdp00UmwjAN6HxqpzDV2L7jtvYGgQhOE95aG13uMyhqO36bOzpmB5wRCgO2y+5tZVFRZcoFbOY/D/ixU/hFc/Lkt2L2fctcvzvOxun/pt595vQLEj2AeSa9DNCW4YHky29nX/HeJctp/xGiXLIxkMkDq4HwVe/k4b7Hr03+QHJYuY8Lfw9PzbvRhdThukzPBShxJi9aXjudBHcqbW2cpPaPixtm4KAR1C8SNQhSwsYbOThg4UeC+GvxA==
+ bh=kCRxdJOd6DMi9nCjxkxgjOEpdGeOFFnQxgkkKHVyZqw=;
+ b=BDTD5QLuimVpj1pQlXISbmkDnqjAsbfKBqVKh3eR8e7LGNqv9Jz4u8PJqnsno1ZRCockARHHIMZsWCJsM33OloaTwbdrCcGzH92h2VS4jfhL2G40X+RA9WVyb1oSKC96Wt/ShdyFc1OFKY5U7TyyoCtTgEu+9QKMOE3gkSVf6/osNTX7aogE5SCH3o+i+ExvK9voEdFyPFM9mQzopUIpib6MEHk0FBFnIKfn27u9P6AVbCUr8J3mlCJgseBpMuaA7awqlRYuk4yopE1M1yAqCUH/UCF+SB7nRO7rWW9/IyqMnVX+olTlZxy138Q3H5cG2DUAWGbSi42dxxUjRfaq9g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
  dkim=pass header.d=nvidia.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=D/3TQFD4h5Gz2cObvaCD/Z/WQqrA8cEtpo+oWXJLaMU=;
- b=F1VfB2Tz7gl3RlVlC27fgGJSUf3wPERIFaA47/VH/3LCNHjZtQUT/ef20K8OyA4l4stM/y8mKzJTuXHrECGHViqDfe5kOqVetR1lDnSRBTemTmLfB2XKQ2J3+946MXJ/3hSlx6i30BqXFwBXUvnzDIdFbzv9lbMLS4tFelVs9TEgQ3PWgdNGKWnEdxVdzk1VL93mmygZrlvnxJVfkOOn4qafGlN92h6po679aVA64oUXdY1T0VjemDuvD4Unk+tSwnjhwLMaRG5YCbJkb7g0gjdfbIKML//YO9LIyeo/opexaAKcbldnxruD0qZxN3K1DFy2Wtd5+EnWd51qbQ2gtA==
+ bh=kCRxdJOd6DMi9nCjxkxgjOEpdGeOFFnQxgkkKHVyZqw=;
+ b=sRLHNC78mycT+NHLdqqoDBtUGHt8QImExI7pzXB5TuOppReMtGrhgpb2ymEo7neQ0X50Es/omZslmQOocv2aRziVQhlb5sOmjzLmJ6IgRZrQ4dKEMvU0HnqX5vrphLKKaJZquDqS3DCl/+PDp2s+GmiAdco59aH9/EeyQLWXImMEXg8pCTQySXFa6OUu1Ik6Gid5tIH4vJC69q11zNss0P4PgAqp+Qkluqmi/GS6RL810MLWnUF1iwwObjD4EBjzFc4RvJU8CdwygH6L/BPSQynKzTKO3llOVWMdAC5v0mww58tc3Rfxz349NspgE6G9B3bJPmMtS7f/SSdy/fBUnw==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nvidia.com;
 Received: from CHXPR12MB999244.namprd12.prod.outlook.com
  (2603:10b6:610:2fc::17) by IA0PR12MB7675.namprd12.prod.outlook.com
  (2603:10b6:208:433::9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.7; Tue, 25 Aug
- 2026 18:17:09 +0000
+ 2026 18:17:17 +0000
 Received: from CHXPR12MB999244.namprd12.prod.outlook.com
  ([fe80::168f:599c:f74d:7688]) by CHXPR12MB999244.namprd12.prod.outlook.com
  ([fe80::168f:599c:f74d:7688%4]) with mapi id 15.21.0339.010; Tue, 25 Aug 2026
- 18:17:09 +0000
+ 18:17:17 +0000
 From: Koba Ko <kobak@nvidia.com>
 To: Catalin Marinas <catalin.marinas@arm.com>,
 	Will Deacon <will@kernel.org>,
@@ -58,16 +58,16 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Kai-Heng Feng <kaihengf@nvidia.com>,
 	rupakr@nvidia.com,
 	mohammedk@nvidia.com
-Subject: [RFC PATCH v2 1/3] arm64: add CPU prefetch and cache modulation sysfs interface
-Date: Wed, 26 Aug 2026 02:16:59 +0800
-Message-ID: <20260825181701.3-2-kobak@nvidia.com>
+Subject: [RFC PATCH v2 3/3] selftests: arm64: add arm_cpumod kselftest
+Date: Wed, 26 Aug 2026 02:17:01 +0800
+Message-ID: <20260825181701.3-4-kobak@nvidia.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260825181701.3-1-kobak@nvidia.com>
 References: <20260825181701.3-1-kobak@nvidia.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: TP0P295CA0038.TWNP295.PROD.OUTLOOK.COM
- (2603:1096:910:4::11) To CHXPR12MB999244.namprd12.prod.outlook.com
+X-ClientProxiedBy: TPYP295CA0022.TWNP295.PROD.OUTLOOK.COM
+ (2603:1096:7d0:a::18) To CHXPR12MB999244.namprd12.prod.outlook.com
  (2603:10b6:610:2fc::17)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -77,725 +77,678 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: CHXPR12MB999244:EE_|IA0PR12MB7675:EE_
-X-MS-Office365-Filtering-Correlation-Id: d67e5779-99f2-4b3a-d251-08df02d513a5
+X-MS-Office365-Filtering-Correlation-Id: 2612a2dc-ed63-4529-fdbf-08df02d51895
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|366016|10067099003|56012099006|5023799004|11063799006|6133799003|18002099003|22082099003;
+	BCL:0;ARA:13230040|7416014|376014|1800799024|23010399003|366016|10067099003|56012099006|11063799006|6133799003|18002099003|22082099003;
 X-Microsoft-Antispam-Message-Info:
-	jLUI+aYp4VDg/CborNIl9e9WkDvfh1WCS9vKVwgmx1E6p2lGtpQDx3aHRcZebobyYsAs7gz/kDn91MTWDn/N3+55fDWPfqasXUhnxSpqnHxsopwDkhi+nrndO0WUMGXXL3X7Lz2G8TT7VwNB+QOiQp42NCN/W3V9aWg42UoXbIUpf0fRXe77e7SiaZpcSqgLk/o9VGolRHOuFvMQQrr5T15Hf13z2ExwTDf3jjysM2SaqvGmTN1DDuXbHLrGMi/At7akNSkb2pBk/gzsh4hsPv3/KH1g8cIgz69jDciNtuJ+4y4hlOl/FFAFw2aDnkrSrW6bQuJTg91ZVDwN+9b4BFpy2QNV8bL5VR7A4zJ3YSQvod0hkvPocKxm14tfOEn/DMThj+afpmz0De9Gm24/GHoppYCiEPeqyYo49KSOWaFtz6IR5cJFXg59GcrpfreU4bilwkFoM9GxH8jMDqI+DScGMCyVN75Y7ftDV+czAE1td6rehnVnVoOk+QUNALzVAkcJz6mcKERd2NzeciCKNpiIVFQzCUGXt5C5K7UVH+znwxhWeuqCwSSitNdbm5sFMmoZbCP0nncC3nM9VpvBKh15Dqn9Mt5ljCmNhHI2zEGjf/5fIuRHZQsVYDpmuq0PO+4JOdg53qu9jEyYjASOYC2bsLtgKbkE+e1rltpAF7Q=
+	uYjoHcCU/6AYL/cOK3KJR2+HyHb8OXZFgKKFXE6+xd30S20bGyIO9ux3/ElZbVJOWDdXituOTMspKuR2MwHtpi1elmi1PdY0LH5kejIyXSHHg++qkhVHoOPctGEiHeWda/0nEhqUu77njbjj69DLX0jWMM3pcIMRYhDOJRG/bBvdF4XcJn6Cy9jZYCJMcaNftJ/91CVZDac9AqAnDtREg4oQ+vl05f14bl2v6bc9AyU6ucmCAFw2cX11QqvWF83m3Xjvsh6eJwVdrOiOxSKBg8m31CoZxa0meeXfD3icx6kMs11cQo/Yxjzi0yR8D2SVDeSU0SF1zqmZ8hXYD6Y2yy7u+lngyOMN+ML2viAUrBnSrUbDy46idOIeHGXH44EZapS8jLaPz5hFkHEY6uKvUqdfx2EG2OuI+fxDKMFkaI8O3lbvUfgBtAD2l4+dgaTlUl5w6TegSrJVze8j3fis4TeERjHaG3pwagmrShfsP0ex2uFRq4/nWVCZ1QzfUtz+GKvTAW9oD+LM8Tmnx2/Jk+RWHOx7yheuUwsw09EiRcz/uninHQg9U/L0o1EPWW1nGAHrQ4+gHDuLIKMVjBkb7vPM2MI3yujzXzKuNFm6qHs739JXgt1U1d/ps9BJv6s3h5XuNKtKOCuxMjLTdfNN0ckMqybEbdMjWCnqMXC/f3o=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHXPR12MB999244.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(366016)(10067099003)(56012099006)(5023799004)(11063799006)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CHXPR12MB999244.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(23010399003)(366016)(10067099003)(56012099006)(11063799006)(6133799003)(18002099003)(22082099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?AoM0QQFJVncp3PhYehHBgW9B8YEcKkFq9G4SRkcjqiQZZfp4vFbJOhS+y/FH?=
- =?us-ascii?Q?0NDCNVZwsx4y4ybOCPCOCIVZDP+7VsWqgJOo076lnszScD1xKvfBTfDbfB7R?=
- =?us-ascii?Q?/+zVb5uptrLej/RdwPHeWpZxP1rjLvVEZFLR+ZUhtGSDQh/KZkxbZ6W0kwFp?=
- =?us-ascii?Q?sg1pEHIOOwnh9rwGUoxWAk/qwWpSNyuhc1wWWugjmBdmmrVhZDudLqifnqGG?=
- =?us-ascii?Q?WgRpskOeI6O2i5gnLj/hDgA9AuN/uP7nHhB+zVSwk3jhprz2m8RewyZY1XEg?=
- =?us-ascii?Q?aO4S8CnkyMQQO8TDMCjJPCg6x8hl4dMDE93ByaQUWQcZlq+5OGUZYeL96IBt?=
- =?us-ascii?Q?E9VTSM6UxC2tRxoz764uJvyRghi4Ezj1JOgtYTR26M2OpKZEi5D4lTyxa2GO?=
- =?us-ascii?Q?d1Ch87iko1UzBvA5lM5ufVMjzHnEgndKxENkKpQR6ab77FkPFhtFM34DaZ9i?=
- =?us-ascii?Q?OzcZ3BIcnyP6z5gwS4WkdWHY5CPRbCMoDLuLAnRtwl6uN18lz2elIJMO+S9Q?=
- =?us-ascii?Q?nfrsvKVYgUTfDp1v5pwtjPPMeWsbce8waYxNL6T8Wktv1GZ/Y2XylkrBqKoM?=
- =?us-ascii?Q?b2amuqse1Pd9gsIzuhueP3NZjLEUprFUilpyolIlWYuzl8tioS+LXuqgnnqV?=
- =?us-ascii?Q?XNZgHdnP4iTYvr4N0pUD2+KO+OcY5Mr4nbVdXGaRy5gFVx3UF5j3idIANb+q?=
- =?us-ascii?Q?7kor4aC1NJ273E1rtzbAa3U8qWLjopPXCbyGBrEBbU6eqgOtWdXZ+zehMV3D?=
- =?us-ascii?Q?23JYqQq2AsMVzBBr6UOvBLfvHJK1ltdAWi5OZSlL4hbcY44P9j8QoWIvfS6e?=
- =?us-ascii?Q?NZKM+ejOQeclbSCdgwrBYVPJxGHOcEidbUuKKiOViE14NBE7fLFMbs6j7jGf?=
- =?us-ascii?Q?Dv7TxhQw6UxLHmrwHiAxg/OOZ+koeMfQODTT1qhOWI+EkmQp2SUmmZYK3Evl?=
- =?us-ascii?Q?qAK8Yq/vm3dbpNNtl9jaXDG4tr/culisgiTW0WZa+gpx8tWl5fjRMbM55Lwk?=
- =?us-ascii?Q?bxXLuWLhMi/HTj01YV0uw8eX2wd+mDWkOSpLCyS2X1Aw9XMGd4xsRsrj7Tpz?=
- =?us-ascii?Q?uvAh/9D3hlXtRAFzT2T24ZdHvBxuM1NTY6HjcPpIDrUoz0pQnQaHuPtXMNPA?=
- =?us-ascii?Q?O6YL37CqePSRrWjagj7nu6Kk8CWF6cymgB8TWJYYlJpjcs7xLJskZ65EEx2j?=
- =?us-ascii?Q?iS5jIyxzh6b5jWxHzmkVw11t+oUvsGKBq0zBrqJC6q0jsAomreasQB7HMdMm?=
- =?us-ascii?Q?COe5BhdWlTAwY3zaz6b3K4+lk7KitQfwrieVpB4AmAWXuOxnhMf3ZBQrqQHz?=
- =?us-ascii?Q?8Hw1Sy8mcJcgycW12MYpxRzCGzT41TjrGaCUAzo1jT7Mi6/ELcnIwsaIHAzC?=
- =?us-ascii?Q?29VVmGMFCR/1fZF702MIdDPWX4RI3IGCXe2kJFsMznlOXzze7xyth34SNCDG?=
- =?us-ascii?Q?pHZF8f2JHCwWAMMgHmdCCv7h1LN+bxs9JTGs5R1vXMxozcy97NysvH0A2AV+?=
- =?us-ascii?Q?Vs+JLZNBuzhlhGB4EdyEWOD9gy//RFe1gKDAR8HxGF6c6wXJ8WBl9sk1cXLP?=
- =?us-ascii?Q?i6auWL8F52MYCtEGYFM4pgPU6vAjtaYqMdFaPY270rpb5WxGNJVLWNtJnLvG?=
- =?us-ascii?Q?Xm9BT+vEvYz3bPvBOb66T2nxkqdUzVDKpb/hh48aVUbfXBcwtif5boiIP9/A?=
- =?us-ascii?Q?LVp1HyaqzSQnAUSvZI5HIF0m5ukDcidtkAS5yE70/Wwf4KHWPNyjRGUN3YHB?=
- =?us-ascii?Q?M57gSv6MeQ=3D=3D?=
+	=?us-ascii?Q?dVYhwYKK5TIDcc+3Rkjy9JEJ8pfRLFZnhF2Zhcbc891h/Nwc6J3+sTz99kd7?=
+ =?us-ascii?Q?PkyteK/JiHg8dT/TVawgUOEUD4evHxaRW89+kh735vDc61pj4taJUn5Zy7rC?=
+ =?us-ascii?Q?6z640dGFrtmTWnj9yzHeG+yeqaDrbTzW61wPiRMzKzsMuaSCBXAJyuPZ2n8w?=
+ =?us-ascii?Q?IfborT6GMCxTePT2jtd3Laahfo4q3g3nTg54FxNNFycmWXZoFgoj2+8sXePY?=
+ =?us-ascii?Q?JDfEPdK4uSYV34Rdp6SO3uaXuCrz2Gz0NM3a0wQqhS22TxF/sgIGF+yJbLSy?=
+ =?us-ascii?Q?nmmuzk80u0cF2GpaIzaDb02f/RHZP8Kbe8vETF6+WeeCYh53kV5KanXL/Nuo?=
+ =?us-ascii?Q?DbY8+yn0liMQmAfczwjIIrPNBU6rG9M00iJhWTHQu+sjRTx4YZX0ilB37NQa?=
+ =?us-ascii?Q?tZxEM6TgKdFlLzQPxfjyVGg+8YzmP1s12FYufIjJIT1rU2tTGxW56d1VYH80?=
+ =?us-ascii?Q?V3Cxy93Cpq5KCuuwsFE2ChJYmZlDSVDooeFmkO1pkgmIi50I9TWO3fzz6C5w?=
+ =?us-ascii?Q?JLNkLSj0EOxgjsBtuVsI+7KfOHOAgfscO46HfxEDMQQbAzpsp/tV7+EHPCjK?=
+ =?us-ascii?Q?f3lG3jWLqYL3EeO4MFkTVdao1PiOp64/LpquYCZ8jDzZx048YZf6B38BcN4D?=
+ =?us-ascii?Q?J4/mpgW1rhKWBg74t5xxpyZYmYqKFgJxxoq2BHnlKWNwEqh7LWszdKSKlFqN?=
+ =?us-ascii?Q?PCobtJ69ExrLcbtUBpZxbZIVopFoLNC/rG9xFncFUIbTSqu0o7uiGIpRpYHf?=
+ =?us-ascii?Q?aTuuByH20DGkz0Zcoh3e3kxs15AgSxcOPwd0fXLizrheUy6RnyWUaSN47HsY?=
+ =?us-ascii?Q?UZRvahPLeBOtdhwC/5n8nY+5FlmvWvWg/6hfWGgJPLGUzKRxk8cKRcqqfv7V?=
+ =?us-ascii?Q?I5zqA26g3DYFrZhk8dg501ksVlKjPRBF7slC0S7RFHCZR8ntZsZOLZoRwtrW?=
+ =?us-ascii?Q?FFpSRcURE+vSMdvfYME8wgktTbKuAMZrVbLRyeQgOt6CIYFZLr8Fuvas+E6/?=
+ =?us-ascii?Q?empte7IuCAJQmORAN2Iy6zFJNprWSf2i8GgYXbNBGTuiLCPeQroNiYEQNcKC?=
+ =?us-ascii?Q?P+/wdmljdSO7JHC/vWOFvsh95lToTddiBYjPPzRlcjRddsnwu4qXc1nOt7+u?=
+ =?us-ascii?Q?PhWUkecQyxRkziLVjPLSxC5qEcU7QEGwwOTePy0Fq8OmhTfnYlYQxClnxsdk?=
+ =?us-ascii?Q?IMwvezYU12dyapaUEGzmmFXvryhjIpzlNAyJ7vIylSQdmOQvJlRIav/oyFgV?=
+ =?us-ascii?Q?GlC4lt0bP4wyD9TfZQZ5f2tyRoOR0a8j6cMi/RN0fp6pwUDou7camIYRVJ2i?=
+ =?us-ascii?Q?gVT85lObb90+L4BGRHDnN5cho3UgLkfvrp9HD2sVX69juTIy4Nb0L+4eyu1J?=
+ =?us-ascii?Q?6u1OhWE2xWE/hr9ufvj90n2g8JuUf6W9LF5LSY5jf8bhv3qCxkCNHnkQg1Ar?=
+ =?us-ascii?Q?iePEJQMdwnSiSUagEgIzYalahTm4E3+LFheAjQr7SCtVSG4Pe5VNOzRxJTc1?=
+ =?us-ascii?Q?FAkFfLjNWtWZ+90scHRLENtZi3vtE1dMmBC8J4nZC7wPVygxGHPWHX0pydPJ?=
+ =?us-ascii?Q?I+YOwrT9zHMVCBaIa8R+h77N3KrNtjoDY2wHhs+aHAvwWqjSbiyIQ52eP85O?=
+ =?us-ascii?Q?hcGvfSKCzfKA8HG6yKEyuyPAgO3iQ4boumKX4avPFAGJQkqqb8sNUCTjUMSz?=
+ =?us-ascii?Q?njhdXrO0Xe6BmArNeotqD90MMZ9P+U4fYxcFCBuZzi99lIitkpS5kD47iYOi?=
+ =?us-ascii?Q?F1JEJt1yCw=3D=3D?=
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d67e5779-99f2-4b3a-d251-08df02d513a5
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2612a2dc-ed63-4529-fdbf-08df02d51895
 X-MS-Exchange-CrossTenant-AuthSource: CHXPR12MB999244.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 18:17:09.1765
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 18:17:17.4598
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xW1+DP4QyUkzRA8bUY99gLJpdYRORiO6fiQc+rn0VXb3hdME/SFa6BfhF+l4iQ5sC6aMeUiDJIv3qjJNJ8ZBhw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: iY2WeoZljh9DZxvaK3HVkg08Ioq++dqSu2kYr9zcUav6hVwHTj1vVarnNEKIFugDwPyZQX49Rbq2gdjKtrsUKw==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR12MB7675
 
-Performance characterization on arm64 systems sometimes needs a way to
-inspect and bracket selected implementation-defined prefetch and cache
-controls without exposing raw register contents. Add an RFC-only arm64
-cpumod interface that presents a small set of named, range-checked
-per-CPU sysfs attributes under each CPU device.
+Add a kselftest for the arm_cpumod sysfs ABI. The test loads or reuses the
+module and selects either one target CPU or a snapshot of all online CPUs.
+In single-CPU mode, skip an offline target before module validation.
+Observe the per-CPU online attribute first. If it is absent, immediately
+require the CPU directory to still exist before treating the CPU as
+non-hotpluggable and online. If the attribute exists, it must be readable
+and contain 1.
 
-Establish the Kconfig and Makefile plumbing, CPU profile detection for
-Grace and Vera from the target CPU's MIDR, register-field descriptors,
-per-CPU kobject and attribute helpers, locking, and target-CPU read/write
-callbacks. Common attributes are exposed for all supported profiles,
-while Grace- and Vera-specific fields are exposed only for the matching
-profile. Place the option at the end of the top-level Kernel Features
-menu because these implementation controls are not tied to an Arm
-architecture revision.
+After module load, recheck the online state before classifying a selected
+CPU without a cpumod directory as an unsupported profile. Fail if the CPU
+went offline or disappeared, log and skip CPUs that remain online without
+a directory, and require at least one selected CPU to expose a supported
+Grace or Vera profile. Return KSFT_SKIP if none do.
 
-Per-CPU cpumod sysfs state follows the CPU lifecycle. Module
-initialization populates subtrees for every online CPU while holding
-cpus_read_lock(), so initial enumeration and CPU hotplug state
-registration are serialized against concurrent topology changes. Offline
-CPUs are intentionally skipped during initial setup because target-CPU
-MIDR detection requires an IPI-capable online CPU; a later online callback
-creates their subtree.
+For supported CPUs, recognize the exposed Grace or Vera profile-specific
+layout and validate the matching attributes. Only ARM_CPUMOD_EXPECT_PROFILE
+supplies an external profile expectation.
 
-Profile detection reads MIDR through a synchronous callback on the CPU
-owning the sysfs subtree and returns nonzero only when that dispatch
-fails, so no IPI error can be hidden. After a successful read, retain
-CPUMOD_PROFILE_UNKNOWN as the unsupported-profile sentinel. Subtree
-creation skips that profile during both initial online enumeration and
-later CPUHP online callbacks without blocking module load or CPU hotplug.
-Object and sysfs setup failures remain fatal and are propagated.
+Verify read paths by checking that attributes return decimal values and
+that affected_cpus identifies the current CPU as a decimal CPU number.
+Validate affected_cpus mode 444 and every visible register-backed control
+mode 600 with stat before functional write checks. Optional valid-write
+testing writes each current value back. Optional invalid-write testing
+checks selected out-of-range values and confirms that the prior value
+remains unchanged.
 
-Keep the dynamically allocated kobject state in a private per-CPU pointer
-instead of the CPU device's generic driver-data slot. The online callback
-is idempotent when that pointer already records a subtree. The offline
-callback clears the private pointer before dropping the kobject reference,
-allowing the release callback to retain ownership of the final free.
-
-Register-backed controls are root-only read/write files. Reads
-synchronously execute on the target CPU and return the live register field
-value from that callback. Writes remain range-checked and continue to log
-the target-CPU readback after the register update.
-
-Register the dynamic CPUHP state with
-cpuhp_setup_state_nocalls_cpuslocked(). The nocalls form avoids replaying
-startup callbacks for CPUs already initialized by the explicit online
-enumeration. On init failure, release the CPU read lock, destroy all
-subtrees created so far, and return the error. Module exit removes the
-CPUHP state with the matching nocalls helper and tears down all remaining
-per-CPU state across possible CPUs.
+Both write paths are opt-in. Valid writeback can alter
+implementation-defined CPU controls; invalid-write checks exercise
+rejection through the same firmware-sensitive interface, but are expected
+not to update state. Cover all-online-CPU mode through
+/sys/devices/system/cpu/online and, when the test loaded the module,
+verify cleanup by removing it and checking that the selected CPU subtrees
+disappear. The test does not offline or online CPUs.
 
 Reviewed-by: Fenghua Yu <fenghuay@nvidia.com>
 Reviewed-by: Tushar Dave <tdave@nvidia.com>
 Reviewed-by: Kai-Heng Feng <kaihengf@nvidia.com>
 Signed-off-by: Koba Ko <kobak@nvidia.com>
 ---
- arch/arm64/Kconfig                      |  17 +
- arch/arm64/kernel/Makefile              |   1 +
- arch/arm64/kernel/arm_cpumod.c          | 458 ++++++++++++++++++++++++
- arch/arm64/kernel/arm_cpumod_internal.h |  93 +++++
- 4 files changed, 569 insertions(+)
- create mode 100644 arch/arm64/kernel/arm_cpumod.c
- create mode 100644 arch/arm64/kernel/arm_cpumod_internal.h
+ tools/testing/selftests/arm64/Makefile        |   2 +-
+ .../selftests/arm64/arm_cpumod/Makefile       |   5 +
+ .../selftests/arm64/arm_cpumod/arm_cpumod.sh  | 543 ++++++++++++++++++
+ 3 files changed, 549 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/arm64/arm_cpumod/Makefile
+ create mode 100755 tools/testing/selftests/arm64/arm_cpumod/arm_cpumod.sh
 
-diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
-index b3afe0688919b..5e4ada4884b89 100644
---- a/arch/arm64/Kconfig
-+++ b/arch/arm64/Kconfig
-@@ -2417,6 +2417,23 @@ config ARM64_CONTPTE
- 	  bit, for any mappings that meet the size and alignment requirements.
- 	  This reduces TLB pressure and improves performance.
+diff --git a/tools/testing/selftests/arm64/Makefile b/tools/testing/selftests/arm64/Makefile
+index e456f3b62fa13..0873be5af0369 100644
+--- a/tools/testing/selftests/arm64/Makefile
++++ b/tools/testing/selftests/arm64/Makefile
+@@ -4,7 +4,7 @@
+ ARCH ?= $(shell uname -m 2>/dev/null || echo not)
  
-+config ARM64_CPUMOD
-+	tristate "Arm CPU prefetch modulation sysfs controls"
-+	help
-+	  Expose selected CPU implementation control register fields through
-+	  per-CPU sysfs attributes for performance characterization.
-+
-+	  The exposed controls allow hardware prefetch and cache-management
-+	  policy fields to be inspected and adjusted on CPUs where firmware
-+	  permits EL1 access to the relevant implementation control registers.
-+	  Systems where firmware traps or blocks these writes cannot use this
-+	  interface.
-+
-+	  This interface is intended for controlled performance evaluation and
-+	  should not be enabled by default on production systems.
-+
-+	  If unsure, say N.
-+
- endmenu # "Kernel Features"
- 
- menu "Boot options"
-diff --git a/arch/arm64/kernel/Makefile b/arch/arm64/kernel/Makefile
-index d2690c3ec5288..f180a52284e7d 100644
---- a/arch/arm64/kernel/Makefile
-+++ b/arch/arm64/kernel/Makefile
-@@ -69,6 +69,7 @@ obj-$(CONFIG_VMCORE_INFO)		+= vmcore_info.o
- obj-$(CONFIG_ARM_SDE_INTERFACE)		+= sdei.o
- obj-$(CONFIG_ARM64_PTR_AUTH)		+= pointer_auth.o
- obj-$(CONFIG_ARM64_MPAM)		+= mpam.o
-+obj-$(CONFIG_ARM64_CPUMOD)		+= arm_cpumod.o
- obj-$(CONFIG_ARM64_MTE)			+= mte.o
- obj-y					+= vdso-wrap.o
- obj-$(CONFIG_COMPAT_VDSO)		+= vdso32-wrap.o
-diff --git a/arch/arm64/kernel/arm_cpumod.c b/arch/arm64/kernel/arm_cpumod.c
+ ifneq (,$(filter $(ARCH),aarch64 arm64))
+-ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi gcs
++	ARM64_SUBTARGETS ?= tags signal pauth fp mte bti abi gcs arm_cpumod
+ else
+ ARM64_SUBTARGETS :=
+ endif
+diff --git a/tools/testing/selftests/arm64/arm_cpumod/Makefile b/tools/testing/selftests/arm64/arm_cpumod/Makefile
 new file mode 100644
-index 0000000000000..bf21521594495
+index 0000000000000..db0341cdbc621
 --- /dev/null
-+++ b/arch/arm64/kernel/arm_cpumod.c
-@@ -0,0 +1,458 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Copyright (c) 2026, NVIDIA CORPORATION & AFFILIATES.  All rights reserved.
-+ */
-+
-+#define pr_fmt(fmt) "cpumod: " fmt
-+
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/sysfs.h>
-+#include <linux/device.h>
-+#include <linux/cpu.h>
-+#include <linux/mutex.h>
-+#include <linux/percpu.h>
-+#include <linux/slab.h>
-+#include <asm/cputype.h>
-+#include <asm/sysreg.h>
-+#include <linux/bits.h>
-+#include "arm_cpumod_internal.h"
-+
-+#define DRIVER_DESC "CPU Modulation Kernel Module"
-+
-+/* Disables hardware prefetching.
-+ * 0b0 Enables hardware prefetching. This is the default value.
-+ * 0b1 Disables hardware prefetching.
-+ */
-+#define CPUECTLR_PF_DIS				(15)
-+#define CPUECTLR_PF_DIS_MSK			BIT_ULL(15)
-+
-+#define CPUECTLR_CMC_WAYS			(61)
-+#define CPUECTLR_CMC_WAYS_MSK			GENMASK_ULL(63, 61)
-+
-+#define CPUECTLR2_PF_MODE			(11)
-+#define CPUECTLR2_PF_MODE_MSK			GENMASK_ULL(14, 11)
-+
-+#define CPUECTLR2_CBUSY_FILTER_WINDOW		(9)
-+#define CPUECTLR2_CBUSY_FILTER_WINDOW_MSK	GENMASK_ULL(10, 9)
-+
-+#define CPUECTLR2_CBUSY_FILTER_THRESHOLD	(7)
-+#define CPUECTLR2_CBUSY_FILTER_THRESHOLD_MSK	GENMASK_ULL(8, 7)
-+
-+static enum cpuhp_state cpumod_hp_state;
-+static DEFINE_PER_CPU(struct cpumod_subsys *, cpumod_subsys);
-+
-+struct cpumod_attr_call {
-+	struct cpumod_subsys *subsys;
-+	struct cpumod_attr *attr;
-+	u64 value;
-+};
-+
-+struct cpumod_midr_call {
-+	u32 midr;
-+};
-+
-+static const char *cpumod_profile_name(enum cpumod_profile profile)
-+{
-+	switch (profile) {
-+	case CPUMOD_PROFILE_GRACE:
-+		return "Grace";
-+	case CPUMOD_PROFILE_VERA:
-+		return "Vera";
-+	default:
-+		return "unknown";
-+	}
-+}
-+
-+/* IMP defined CPU Extended Control Register */
-+#define IMP_CPUECTLR_EL1	sys_reg(3, 0, 15, 1, 4)
-+#define IMP_CPUECTLR2_EL1	sys_reg(3, 0, 15, 1, 5)
-+
-+static enum cpumod_profile cpumod_profile_from_midr(u32 midr)
-+{
-+	switch (midr & MIDR_CPU_MODEL_MASK) {
-+	case MIDR_NEOVERSE_V2:
-+		return CPUMOD_PROFILE_GRACE;
-+	case MIDR_NVIDIA_OLYMPUS:
-+		return CPUMOD_PROFILE_VERA;
-+	default:
-+		return CPUMOD_PROFILE_UNKNOWN;
-+	}
-+}
-+
-+static void cpumod_read_midr_remote(void *info)
-+{
-+	struct cpumod_midr_call *call = info;
-+
-+	call->midr = read_cpuid_id();
-+}
-+
-+static int cpumod_detect_profile(struct cpumod_subsys *subsys)
-+{
-+	struct cpumod_midr_call call;
-+	int ret;
-+
-+	ret = smp_call_function_single(subsys->cpu, cpumod_read_midr_remote,
-+				       &call, 1);
-+	if (ret) {
-+		pr_err("Failed to read CPU%u MIDR: %d\n", subsys->cpu, ret);
-+		return ret;
-+	}
-+
-+	subsys->profile = cpumod_profile_from_midr(call.midr);
-+	if (subsys->profile == CPUMOD_PROFILE_UNKNOWN) {
-+		pr_debug("Unsupported CPU%u MIDR 0x%08x\n", subsys->cpu,
-+			 call.midr);
-+	}
-+
-+	return 0;
-+}
-+
-+static u64 cpumod_read_reg(enum cpumod_reg_id reg)
-+{
-+	switch (reg) {
-+	case CPUMOD_REG_CPUECTLR:
-+		return read_sysreg_s(IMP_CPUECTLR_EL1);
-+	case CPUMOD_REG_CPUECTLR2:
-+		return read_sysreg_s(IMP_CPUECTLR2_EL1);
-+	default:
-+		return 0;
-+	}
-+}
-+
-+static void cpumod_write_reg(enum cpumod_reg_id reg, u64 value)
-+{
-+	switch (reg) {
-+	case CPUMOD_REG_CPUECTLR:
-+		write_sysreg_s(value, IMP_CPUECTLR_EL1);
-+		/* The remote callback executes this barrier on the target CPU. */
-+		isb();
-+		break;
-+	case CPUMOD_REG_CPUECTLR2:
-+		write_sysreg_s(value, IMP_CPUECTLR2_EL1);
-+		/* The remote callback executes this barrier on the target CPU. */
-+		isb();
-+		break;
-+	default:
-+		return;
-+	}
-+}
-+
-+static u64 cpumod_attr_read_reg(const struct cpumod_attr *attr)
-+{
-+	return cpumod_attr_unpack_value(attr, cpumod_read_reg(attr->reg));
-+}
-+
-+static void cpumod_attr_write_reg(const struct cpumod_attr *attr, u64 value)
-+{
-+	u64 reg = cpumod_read_reg(attr->reg);
-+	u64 field_value = cpumod_attr_pack_value(attr, value);
-+
-+	cpumod_write_reg(attr->reg, (reg & ~attr->field_mask) | field_value);
-+}
-+
-+static void cpumod_attr_read_remote(void *info)
-+{
-+	struct cpumod_attr_call *call = info;
-+
-+	call->value = cpumod_attr_read_reg(call->attr);
-+}
-+
-+static void cpumod_attr_write_remote(void *info)
-+{
-+	struct cpumod_attr_call *call = info;
-+	struct cpumod_subsys *subsys = call->subsys;
-+	struct cpumod_attr *attr = call->attr;
-+	u64 readback;
-+
-+	cpumod_attr_write_reg(attr, call->value);
-+	readback = cpumod_attr_read_reg(attr);
-+	pr_debug("cpu%u %s: %llx\n",
-+		 subsys->cpu,
-+		 attr->debug_name,
-+		 (unsigned long long)readback);
-+}
-+
-+static ssize_t cpumod_attr_show(struct kobject *kobj,
-+				struct kobj_attribute *kattr, char *buf)
-+{
-+	struct cpumod_subsys *subsys = cpumod_subsys_from_kobj(kobj);
-+	struct cpumod_attr *attr = cpumod_attr_from_kobj_attr(kattr);
-+	struct cpumod_attr_call call = {
-+		.subsys = subsys,
-+		.attr = attr,
-+	};
-+	int ret;
-+
-+	guard(mutex)(&subsys->lock);
-+	ret = smp_call_function_single(subsys->cpu,
-+				       cpumod_attr_read_remote, &call, 1);
-+	if (ret)
-+		return ret;
-+
-+	ret = sysfs_emit(buf, "%llu\n", (unsigned long long)call.value);
-+
-+	return ret;
-+}
-+
-+static ssize_t cpumod_attr_store(struct kobject *kobj,
-+				 struct kobj_attribute *kattr,
-+				 const char *buf, size_t count)
-+{
-+	struct cpumod_subsys *subsys = cpumod_subsys_from_kobj(kobj);
-+	struct cpumod_attr *attr = cpumod_attr_from_kobj_attr(kattr);
-+	struct cpumod_attr_call call = {
-+		.subsys = subsys,
-+		.attr = attr,
-+	};
-+	unsigned int val;
-+	int ret;
-+
-+	ret = kstrtouint(buf, 10, &val);
-+	if (ret)
-+		return -EINVAL;
-+	if (!cpumod_attr_value_valid(attr, val))
-+		return -EINVAL;
-+
-+	call.value = cpumod_attr_mask_value(attr, val);
-+
-+	guard(mutex)(&subsys->lock);
-+	ret = smp_call_function_single(subsys->cpu,
-+				       cpumod_attr_write_remote, &call, 1);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t affected_cpus_show(struct kobject *kobj,
-+				  struct kobj_attribute *attr, char *buf)
-+{
-+	struct cpumod_subsys *subsys = cpumod_subsys_from_kobj(kobj);
-+
-+	return sysfs_emit(buf, "%u\n", subsys->cpu);
-+}
-+
-+static struct kobj_attribute affected_cpus_attr = __ATTR_RO(affected_cpus);
-+
-+static umode_t cpumod_attr_is_visible(struct kobject *kobj,
-+				      struct attribute *attr, int unused)
-+{
-+	struct cpumod_subsys *subsys = cpumod_subsys_from_kobj(kobj);
-+	struct cpumod_attr *cpumod_attr;
-+
-+	if (attr == &affected_cpus_attr.attr)
-+		return attr->mode;
-+
-+	cpumod_attr = container_of(attr, struct cpumod_attr, kattr.attr);
-+	if (!cpumod_attr_visible_for_profile(cpumod_attr, subsys->profile))
-+		return 0;
-+
-+	return attr->mode;
-+}
-+
-+#define CPUMOD_ATTR_RW(_name, _reg, _shift, _field_mask,		\
-+		       _max_value, _debug_name,				\
-+		       _visible_profiles)				\
-+static struct cpumod_attr _name##_attr = {				\
-+	.kattr = __ATTR(_name, 0600, cpumod_attr_show, cpumod_attr_store), \
-+	.reg = _reg,						\
-+	.shift = _shift,					\
-+	.field_mask = _field_mask,				\
-+	.max_value = _max_value,				\
-+	.debug_name = _debug_name,				\
-+	.visible_profiles = _visible_profiles,			\
-+}
-+
-+CPUMOD_ATTR_RW(pf_dis, CPUMOD_REG_CPUECTLR, CPUECTLR_PF_DIS,
-+	       CPUECTLR_PF_DIS_MSK, 1, "PF_DIS",
-+	       CPUMOD_PROFILE_VISIBLE_ALL);
-+CPUMOD_ATTR_RW(pf_mode, CPUMOD_REG_CPUECTLR2, CPUECTLR2_PF_MODE,
-+	       CPUECTLR2_PF_MODE_MSK, 9, "PF_MODE",
-+	       CPUMOD_PROFILE_VISIBLE_ALL);
-+CPUMOD_ATTR_RW(cbusy_filter_threshold, CPUMOD_REG_CPUECTLR2,
-+	       CPUECTLR2_CBUSY_FILTER_THRESHOLD,
-+	       CPUECTLR2_CBUSY_FILTER_THRESHOLD_MSK, 3,
-+	       "CBUSY_FILTER_THRESHOLD",
-+	       CPUMOD_PROFILE_VISIBLE_GRACE);
-+CPUMOD_ATTR_RW(cbusy_filter_window, CPUMOD_REG_CPUECTLR2,
-+	       CPUECTLR2_CBUSY_FILTER_WINDOW,
-+	       CPUECTLR2_CBUSY_FILTER_WINDOW_MSK, 3,
-+	       "CBUSY_FILTER_WINDOW",
-+	       CPUMOD_PROFILE_VISIBLE_GRACE);
-+CPUMOD_ATTR_RW(cmc_min_ways, CPUMOD_REG_CPUECTLR,
-+	       CPUECTLR_CMC_WAYS, CPUECTLR_CMC_WAYS_MSK, 7,
-+	       "CMC_MIN_WAYS", CPUMOD_PROFILE_VISIBLE_GRACE);
-+CPUMOD_ATTR_RW(l2spr_cmc_max_ways, CPUMOD_REG_CPUECTLR,
-+	       CPUECTLR_CMC_WAYS, CPUECTLR_CMC_WAYS_MSK, 7,
-+	       "L2SPR_CMC_MAX_WAYS",
-+	       CPUMOD_PROFILE_VISIBLE_VERA);
-+
-+#undef CPUMOD_ATTR_RW
-+
-+static struct attribute *cpumod_attrs[] = {
-+	&affected_cpus_attr.attr,
-+	&pf_dis_attr.kattr.attr,
-+	&pf_mode_attr.kattr.attr,
-+	&cbusy_filter_threshold_attr.kattr.attr,
-+	&cbusy_filter_window_attr.kattr.attr,
-+	&cmc_min_ways_attr.kattr.attr,
-+	&l2spr_cmc_max_ways_attr.kattr.attr,
-+	NULL,
-+};
-+
-+static const struct attribute_group cpumod_group = {
-+	.attrs = cpumod_attrs,
-+	.is_visible = cpumod_attr_is_visible,
-+};
-+
-+static const struct attribute_group *cpumod_groups[] = {
-+	&cpumod_group,
-+	NULL,
-+};
-+
-+static void cpumod_release(struct kobject *kobj)
-+{
-+	kfree(cpumod_subsys_from_kobj(kobj));
-+}
-+
-+static const struct kobj_type cpumod_ktype = {
-+	.release = cpumod_release,
-+	.sysfs_ops = &kobj_sysfs_ops,
-+	.default_groups = cpumod_groups,
-+};
-+
-+static int cpumod_create_subsys(struct device *cpu_dev, unsigned int cpu)
-+{
-+	struct cpumod_subsys *subsys;
-+	int ret;
-+
-+	if (per_cpu(cpumod_subsys, cpu))
-+		return 0;
-+
-+	subsys = kzalloc_obj(*subsys, GFP_KERNEL);
-+	if (!subsys)
-+		return -ENOMEM;
-+
-+	subsys->cpu = cpu;
-+	mutex_init(&subsys->lock);
-+	ret = cpumod_detect_profile(subsys);
-+	if (ret) {
-+		kfree(subsys);
-+		return ret;
-+	}
-+	if (subsys->profile == CPUMOD_PROFILE_UNKNOWN) {
-+		kfree(subsys);
-+		return 0;
-+	}
-+
-+	pr_debug("CPU%u detected %s profile\n", cpu,
-+		 cpumod_profile_name(subsys->profile));
-+
-+	ret = kobject_init_and_add(&subsys->kobj, &cpumod_ktype,
-+				   &cpu_dev->kobj, "cpumod");
-+	if (ret) {
-+		pr_err("Failed to create cpumod sysfs subtree for CPU%u: %d\n",
-+		       cpu, ret);
-+		kobject_put(&subsys->kobj);
-+		return ret;
-+	}
-+
-+	per_cpu(cpumod_subsys, cpu) = subsys;
-+
-+	return 0;
-+}
-+
-+static void cpumod_destroy_subsys(unsigned int cpu)
-+{
-+	struct cpumod_subsys *subsys = per_cpu(cpumod_subsys, cpu);
-+
-+	if (!subsys)
-+		return;
-+
-+	per_cpu(cpumod_subsys, cpu) = NULL;
-+	kobject_put(&subsys->kobj);
-+}
-+
-+static void cpumod_destroy_all_subsys(void)
-+{
-+	unsigned int cpu;
-+
-+	for_each_possible_cpu(cpu)
-+		cpumod_destroy_subsys(cpu);
-+}
-+
-+static int cpumod_online_cpu(unsigned int cpu)
-+{
-+	struct device *cpu_dev = get_cpu_device(cpu);
-+
-+	if (!cpu_dev) {
-+		pr_err("Failed to get CPU%u device\n", cpu);
-+		return -ENODEV;
-+	}
-+
-+	return cpumod_create_subsys(cpu_dev, cpu);
-+}
-+
-+static int cpumod_offline_cpu(unsigned int cpu)
-+{
-+	cpumod_destroy_subsys(cpu);
-+
-+	return 0;
-+}
-+
-+static int __init cpumod_init(void)
-+{
-+	unsigned int cpu;
-+	int ret;
-+
-+	cpus_read_lock();
-+	for_each_online_cpu(cpu) {
-+		struct device *cpu_dev = get_cpu_device(cpu);
-+
-+		if (!cpu_dev) {
-+			pr_err("Failed to get CPU%u device\n", cpu);
-+			ret = -ENODEV;
-+			goto err_unlock;
-+		}
-+
-+		ret = cpumod_create_subsys(cpu_dev, cpu);
-+		if (ret)
-+			goto err_unlock;
-+	}
-+
-+	ret = cpuhp_setup_state_nocalls_cpuslocked(CPUHP_AP_ONLINE_DYN,
-+						   "arm64/cpumod:online",
-+						   cpumod_online_cpu,
-+						   cpumod_offline_cpu);
-+	cpus_read_unlock();
-+	if (ret < 0)
-+		goto err_destroy;
-+
-+	cpumod_hp_state = ret;
-+	pr_info("module loaded\n");
-+
-+	return 0;
-+
-+err_unlock:
-+	cpus_read_unlock();
-+err_destroy:
-+	cpumod_destroy_all_subsys();
-+	return ret;
-+}
-+
-+static void __exit cpumod_exit(void)
-+{
-+	cpuhp_remove_state_nocalls(cpumod_hp_state);
-+	cpumod_destroy_all_subsys();
-+	pr_info("module unloaded\n");
-+}
-+
-+module_init(cpumod_init);
-+module_exit(cpumod_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_VERSION("1.0");
-+MODULE_AUTHOR("kobak@nvidia.com");
-+MODULE_DESCRIPTION(DRIVER_DESC);
-diff --git a/arch/arm64/kernel/arm_cpumod_internal.h b/arch/arm64/kernel/arm_cpumod_internal.h
-new file mode 100644
-index 0000000000000..bc1e5b441ed79
++++ b/tools/testing/selftests/arm64/arm_cpumod/Makefile
+@@ -0,0 +1,5 @@
++# SPDX-License-Identifier: GPL-2.0
++
++TEST_PROGS := arm_cpumod.sh
++
++include ../../lib.mk
+diff --git a/tools/testing/selftests/arm64/arm_cpumod/arm_cpumod.sh b/tools/testing/selftests/arm64/arm_cpumod/arm_cpumod.sh
+new file mode 100755
+index 0000000000000..a161d2012df4a
 --- /dev/null
-+++ b/arch/arm64/kernel/arm_cpumod_internal.h
-@@ -0,0 +1,93 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Internal arm_cpumod data structures and helpers.
-+ */
++++ b/tools/testing/selftests/arm64/arm_cpumod/arm_cpumod.sh
+@@ -0,0 +1,543 @@
++#!/bin/bash
++# SPDX-License-Identifier: GPL-2.0-only
 +
-+#ifndef CPUMOD_INTERNAL_H
-+#define CPUMOD_INTERNAL_H
++readonly KSFT_SKIP=4
++readonly MODULE_NAME="arm_cpumod"
++readonly CPU_ID="${ARM_CPUMOD_CPU:-0}"
++readonly MODULE_PATH="${ARM_CPUMOD_KO:-}"
++readonly ENABLE_WRITES="${ARM_CPUMOD_ENABLE_WRITES:-0}"
++readonly ENABLE_INVALID_WRITES="${ARM_CPUMOD_ENABLE_INVALID_WRITES:-0}"
++readonly ALL_CPUS="${ARM_CPUMOD_ALL_CPUS:-0}"
++readonly EXPECT_PROFILE="${ARM_CPUMOD_EXPECT_PROFILE:-auto}"
++readonly CPU_ONLINE_PATH="/sys/devices/system/cpu/online"
++readonly COMMON_ATTRS=(affected_cpus pf_dis pf_mode)
++readonly COMMON_RW_ATTRS=(pf_dis pf_mode)
++readonly GRACE_ATTRS=(cbusy_filter_threshold cbusy_filter_window cmc_min_ways)
++readonly GRACE_RW_ATTRS=(cbusy_filter_threshold cbusy_filter_window cmc_min_ways)
++readonly VERA_ATTRS=(l2spr_cmc_max_ways)
++readonly VERA_RW_ATTRS=(l2spr_cmc_max_ways)
 +
-+#include <linux/bits.h>
-+#include <linux/kernel.h>
-+#include <linux/kobject.h>
-+#include <linux/mutex.h>
-+#include <linux/sysfs.h>
-+#include <linux/types.h>
++loaded_by_test=0
++reused_loaded_module=0
++detected_profile=""
++current_cpu="${CPU_ID}"
++verified_cpus=0
++CPU_LIST=()
 +
-+enum cpumod_profile {
-+	CPUMOD_PROFILE_GRACE,
-+	CPUMOD_PROFILE_VERA,
-+	CPUMOD_PROFILE_UNKNOWN,
-+};
-+
-+enum cpumod_reg_id {
-+	CPUMOD_REG_CPUECTLR,
-+	CPUMOD_REG_CPUECTLR2,
-+};
-+
-+#define CPUMOD_PROFILE_VISIBLE_GRACE	BIT(0)
-+#define CPUMOD_PROFILE_VISIBLE_VERA	BIT(1)
-+#define CPUMOD_PROFILE_VISIBLE_ALL	(CPUMOD_PROFILE_VISIBLE_GRACE | \
-+					 CPUMOD_PROFILE_VISIBLE_VERA)
-+
-+struct cpumod_subsys {
-+	/* Per-CPU instance lock: serializes sysfs read/write for this CPU. */
-+	struct mutex lock;
-+	struct kobject kobj;
-+	unsigned int cpu;
-+	enum cpumod_profile profile;
-+};
-+
-+struct cpumod_attr {
-+	struct kobj_attribute kattr;
-+	enum cpumod_reg_id reg;
-+	u8 shift;
-+	u64 field_mask;
-+	u64 max_value;
-+	const char *debug_name;
-+	u8 visible_profiles;
-+};
-+
-+static inline struct cpumod_subsys *cpumod_subsys_from_kobj(struct kobject *kobj)
++log()
 +{
-+	return container_of(kobj, struct cpumod_subsys, kobj);
++	echo "${MODULE_NAME} selftest: $*"
 +}
 +
-+static inline struct cpumod_attr *cpumod_attr_from_kobj_attr(struct kobj_attribute *kattr)
++skip()
 +{
-+	return container_of(kattr, struct cpumod_attr, kattr);
++	log "$*"
++	exit "${KSFT_SKIP}"
 +}
 +
-+static inline u64 cpumod_attr_mask_value(const struct cpumod_attr *attr, u64 value)
++fail()
 +{
-+	return value & (attr->field_mask >> attr->shift);
++	log "$*"
++	exit 1
 +}
 +
-+static inline bool cpumod_attr_value_valid(const struct cpumod_attr *attr, u64 value)
++cpu_dir()
 +{
-+	return value <= attr->max_value;
++	local cpu="$1"
++
++	printf '/sys/devices/system/cpu/cpu%s' "${cpu}"
 +}
 +
-+static inline u64 cpumod_attr_unpack_value(const struct cpumod_attr *attr, u64 reg)
++cpu_is_online()
 +{
-+	return (reg & attr->field_mask) >> attr->shift;
++	local cpu="$1"
++	local dir="$(cpu_dir "${cpu}")"
++	local online="${dir}/online"
++	local value
++
++	if [ ! -e "${online}" ]; then
++		[ -d "${dir}" ] || return 1
++		return 0
++	fi
++
++	[ -r "${online}" ] || return 1
++	value=$(cat "${online}") || return 1
++	[ "${value}" = "1" ]
 +}
 +
-+static inline u64 cpumod_attr_pack_value(const struct cpumod_attr *attr, u64 value)
++cpumod_dir()
 +{
-+	return (value << attr->shift) & attr->field_mask;
++	local cpu="$1"
++
++	printf '%s/cpumod' "$(cpu_dir "${cpu}")"
 +}
 +
-+static inline bool cpumod_attr_visible_for_profile(const struct cpumod_attr *attr,
-+						   enum cpumod_profile profile)
++current_cpumod_dir()
 +{
-+	switch (profile) {
-+	case CPUMOD_PROFILE_GRACE:
-+		return attr->visible_profiles & CPUMOD_PROFILE_VISIBLE_GRACE;
-+	case CPUMOD_PROFILE_VERA:
-+		return attr->visible_profiles & CPUMOD_PROFILE_VISIBLE_VERA;
-+	default:
-+		return false;
-+	}
++	cpumod_dir "${current_cpu}"
 +}
 +
-+#endif /* CPUMOD_INTERNAL_H */
++cleanup()
++{
++	if [ "${loaded_by_test}" -eq 1 ]; then
++		rmmod "${MODULE_NAME}" >/dev/null 2>&1 || true
++	fi
++}
++trap cleanup EXIT
++
++require_cmd()
++{
++	command -v "$1" >/dev/null 2>&1 || skip "missing required command: $1"
++}
++
++module_loaded()
++{
++	grep -q "^${MODULE_NAME} " /proc/modules
++}
++
++wait_for_path_state()
++{
++	local expect_present="$1"
++	local target="$2"
++	local i
++
++	for i in $(seq 1 50); do
++		if [ "${expect_present}" = "present" ]; then
++			[ -e "${target}" ] && return 0
++		else
++			[ ! -e "${target}" ] && return 0
++		fi
++		sleep 0.1
++	done
++
++	return 1
++}
++
++read_attr()
++{
++	local attr="$1"
++	local file="$(current_cpumod_dir)/${attr}"
++	local value
++
++	value=$(cat "${file}") || fail "failed to read ${file}"
++	printf '%s' "${value}"
++}
++
++attr_exists()
++{
++	local attr="$1"
++
++	[ -f "$(current_cpumod_dir)/${attr}" ]
++}
++
++require_attr_present()
++{
++	local attr="$1"
++
++	attr_exists "${attr}" || fail "missing sysfs attribute $(current_cpumod_dir)/${attr}"
++}
++
++require_attr_absent()
++{
++	local attr="$1"
++
++	attr_exists "${attr}" && fail "unexpected sysfs attribute $(current_cpumod_dir)/${attr}"
++}
++
++check_decimal_attr()
++{
++	local attr="$1"
++	local value
++
++	value=$(read_attr "${attr}")
++	case "${value}" in
++	''|*[!0-9]*)
++		fail "${attr} returned non-decimal value: ${value}"
++		;;
++	esac
++}
++
++check_attr_mode()
++{
++	local attr="$1"
++	local expected="$2"
++	local file="$(current_cpumod_dir)/${attr}"
++	local mode
++
++	mode=$(stat -c %a "${file}") || fail "failed to stat ${file}"
++	[ "${mode}" = "${expected}" ] || \
++		fail "cpu${current_cpu}/${attr} mode expected ${expected}, got ${mode}"
++}
++
++expand_online_cpus()
++{
++	local cpu_list="$1"
++	local part
++	local start
++	local start_num
++	local end
++	local end_num
++	local cpu
++	local parts
++
++	CPU_LIST=()
++	IFS=, read -ra parts <<< "${cpu_list}"
++	for part in "${parts[@]}"; do
++		part="${part//[[:space:]]/}"
++		[ -n "${part}" ] || fail "empty CPU range in ${cpu_list}"
++
++		if [[ "${part}" == *-* ]]; then
++			start="${part%-*}"
++			end="${part#*-}"
++			[[ "${start}" =~ ^[0-9]+$ ]] || fail "invalid CPU range start: ${part}"
++			[[ "${end}" =~ ^[0-9]+$ ]] || fail "invalid CPU range end: ${part}"
++			start_num=$((10#${start}))
++			end_num=$((10#${end}))
++			(( start_num <= end_num )) || fail "invalid descending CPU range: ${part}"
++
++			for ((cpu = start_num; cpu <= end_num; cpu++)); do
++				CPU_LIST+=("${cpu}")
++			done
++		else
++			[[ "${part}" =~ ^[0-9]+$ ]] || fail "invalid CPU entry: ${part}"
++			CPU_LIST+=("$((10#${part}))")
++		fi
++	done
++
++	[ "${#CPU_LIST[@]}" -gt 0 ] || fail "no online CPUs parsed from ${cpu_list}"
++}
++
++select_cpus()
++{
++	if [ "${ALL_CPUS}" = "1" ]; then
++		[ -r "${CPU_ONLINE_PATH}" ] || skip "missing ${CPU_ONLINE_PATH}"
++		expand_online_cpus "$(cat "${CPU_ONLINE_PATH}")"
++	else
++		cpu_is_online "${CPU_ID}" || \
++			skip "cpu${CPU_ID} is offline or its online state is unreadable"
++		CPU_LIST=("${CPU_ID}")
++	fi
++}
++
++detect_profile()
++{
++	local has_grace
++	local has_vera
++	local attr
++	local i
++	local dir="$(current_cpumod_dir)"
++
++	for i in $(seq 1 50); do
++		has_grace=0
++		has_vera=0
++
++		for attr in "${GRACE_ATTRS[@]}"; do
++			if attr_exists "${attr}"; then
++				has_grace=1
++				break
++			fi
++		done
++
++		for attr in "${VERA_ATTRS[@]}"; do
++			if attr_exists "${attr}"; then
++				has_vera=1
++				break
++			fi
++		done
++
++		if [ "${has_grace}" -eq 1 ] && [ "${has_vera}" -eq 1 ]; then
++			fail "mixed Grace/Vera-specific attributes under ${dir}"
++		fi
++
++		if [ "${has_grace}" -eq 1 ]; then
++			detected_profile="grace"
++			break
++		fi
++
++		if [ "${has_vera}" -eq 1 ]; then
++			detected_profile="vera"
++			break
++		fi
++
++		sleep 0.1
++	done
++
++	[ -n "${detected_profile}" ] || \
++		fail "unable to detect Grace or Vera sysfs layout under ${dir}"
++
++	if [ "${EXPECT_PROFILE}" != "auto" ] && [ "${EXPECT_PROFILE}" != "${detected_profile}" ]; then
++		fail "expected ${EXPECT_PROFILE} sysfs layout, detected ${detected_profile}"
++	fi
++}
++
++check_requirements()
++{
++	case "${CPU_ID}" in
++	''|*[!0-9]*)
++		fail "ARM_CPUMOD_CPU must be a decimal CPU index"
++		;;
++	esac
++
++	case "${EXPECT_PROFILE}" in
++	auto|grace|vera)
++		;;
++	*)
++		fail "ARM_CPUMOD_EXPECT_PROFILE must be auto, grace, or vera"
++		;;
++	esac
++
++	case "${ENABLE_WRITES}" in
++	0|1)
++		;;
++	*)
++		fail "ARM_CPUMOD_ENABLE_WRITES must be 0 or 1"
++		;;
++	esac
++
++	case "${ENABLE_INVALID_WRITES}" in
++	0|1)
++		;;
++	*)
++		fail "ARM_CPUMOD_ENABLE_INVALID_WRITES must be 0 or 1"
++		;;
++	esac
++
++	case "${ALL_CPUS}" in
++	0|1)
++		;;
++	*)
++		fail "ARM_CPUMOD_ALL_CPUS must be 0 or 1"
++		;;
++	esac
++
++	[ "$(uname -m)" = "aarch64" ] || skip "requires an arm64 host"
++	[ "$(id -u)" -eq 0 ] || skip "must be run as root"
++	select_cpus
++	for current_cpu in "${CPU_LIST[@]}"; do
++		[ -d "$(cpu_dir "${current_cpu}")" ] || skip "missing CPU directory $(cpu_dir "${current_cpu}")"
++	done
++	require_cmd rmmod
++	require_cmd stat
++
++	if [ -n "${MODULE_PATH}" ]; then
++		[ -r "${MODULE_PATH}" ] || skip "ARM_CPUMOD_KO is not readable: ${MODULE_PATH}"
++		require_cmd insmod
++	else
++		require_cmd modprobe
++		modprobe -n "${MODULE_NAME}" >/dev/null 2>&1 || \
++			skip "set ARM_CPUMOD_KO or install ${MODULE_NAME} into /lib/modules"
++	fi
++}
++
++load_module()
++{
++	if module_loaded; then
++		if [ -n "${MODULE_PATH}" ]; then
++			skip "${MODULE_NAME} is already loaded; unload it before using ARM_CPUMOD_KO"
++		fi
++
++		reused_loaded_module=1
++		log "${MODULE_NAME} already loaded, reusing existing instance"
++		return 0
++	fi
++
++	if [ -n "${MODULE_PATH}" ]; then
++		insmod "${MODULE_PATH}" || fail "insmod failed for ${MODULE_PATH}"
++		module_loaded || fail "${MODULE_NAME} did not appear in /proc/modules after insmod"
++	else
++		modprobe "${MODULE_NAME}" || fail "modprobe failed for ${MODULE_NAME}"
++		module_loaded || skip "${MODULE_NAME} did not appear in /proc/modules after modprobe; built-in or non-unloadable setup is unsupported"
++	fi
++
++	loaded_by_test=1
++}
++
++check_sysfs_layout()
++{
++	local attr
++	local expected_cpu
++	local value
++	local dir="$(current_cpumod_dir)"
++
++	wait_for_path_state present "${dir}" || \
++		fail "cpumod sysfs directory did not appear at ${dir}"
++
++	for attr in "${COMMON_ATTRS[@]}"; do
++		require_attr_present "${attr}"
++	done
++
++	detect_profile
++
++	case "${detected_profile}" in
++	grace)
++		for attr in "${GRACE_ATTRS[@]}"; do
++			require_attr_present "${attr}"
++		done
++		for attr in "${VERA_ATTRS[@]}"; do
++			require_attr_absent "${attr}"
++		done
++		;;
++	vera)
++		for attr in "${GRACE_ATTRS[@]}"; do
++			require_attr_absent "${attr}"
++		done
++		for attr in "${VERA_ATTRS[@]}"; do
++			require_attr_present "${attr}"
++		done
++		;;
++	esac
++
++	expected_cpu=$((10#${current_cpu}))
++	value=$(read_attr affected_cpus)
++	[ "${value}" = "${expected_cpu}" ] || \
++		fail "cpu${current_cpu} affected_cpus expected ${expected_cpu}, got ${value}"
++	check_attr_mode affected_cpus 444
++
++	for attr in "${COMMON_RW_ATTRS[@]}"; do
++		check_attr_mode "${attr}" 600
++		check_decimal_attr "${attr}"
++	done
++
++	case "${detected_profile}" in
++	grace)
++		for attr in "${GRACE_RW_ATTRS[@]}"; do
++			check_attr_mode "${attr}" 600
++			check_decimal_attr "${attr}"
++		done
++		;;
++	vera)
++		for attr in "${VERA_RW_ATTRS[@]}"; do
++			check_attr_mode "${attr}" 600
++			check_decimal_attr "${attr}"
++		done
++		;;
++	esac
++}
++
++writeback_same_value()
++{
++	local attr="$1"
++	local before
++	local after
++
++	before=$(read_attr "${attr}")
++	printf '%s\n' "${before}" > "$(current_cpumod_dir)/${attr}" || \
++		fail "failed to write back cpu${current_cpu}/${attr}=${before}"
++	after=$(read_attr "${attr}")
++	[ "${after}" = "${before}" ] || \
++		fail "cpu${current_cpu}/${attr} changed across writeback: before=${before} after=${after}"
++}
++
++check_writeback_same_value()
++{
++	local attr
++
++	[ "${ENABLE_WRITES}" = "1" ] || return 0
++
++	for attr in "${COMMON_RW_ATTRS[@]}"; do
++		writeback_same_value "${attr}"
++	done
++
++	case "${detected_profile}" in
++	grace)
++		for attr in "${GRACE_RW_ATTRS[@]}"; do
++			writeback_same_value "${attr}"
++		done
++		;;
++	vera)
++		for attr in "${VERA_RW_ATTRS[@]}"; do
++			writeback_same_value "${attr}"
++		done
++		;;
++	esac
++}
++
++check_invalid_write()
++{
++	local attr="$1"
++	local value="$2"
++	local before
++	local after
++	local file="$(current_cpumod_dir)/${attr}"
++
++	before=$(read_attr "${attr}")
++	if printf '%s\n' "${value}" > "${file}" 2>/dev/null; then
++		fail "cpu${current_cpu}/${attr} accepted invalid value ${value}"
++	fi
++	after=$(read_attr "${attr}")
++	[ "${after}" = "${before}" ] || \
++		fail "cpu${current_cpu}/${attr} changed after invalid write: before=${before} after=${after}"
++}
++
++check_invalid_writes()
++{
++	[ "${ENABLE_INVALID_WRITES}" = "1" ] || return 0
++
++	check_invalid_write pf_dis 2
++	check_invalid_write pf_mode 10
++	check_invalid_write pf_mode 99
++
++	case "${detected_profile}" in
++	grace)
++		check_invalid_write cbusy_filter_threshold 4
++		check_invalid_write cbusy_filter_window 4
++		check_invalid_write cmc_min_ways 8
++		;;
++	vera)
++		check_invalid_write l2spr_cmc_max_ways 8
++		;;
++	esac
++}
++
++check_cpu()
++{
++	current_cpu="$1"
++	detected_profile=""
++	check_sysfs_layout
++	log "cpu${current_cpu}: detected ${detected_profile} sysfs layout"
++	check_writeback_same_value
++	check_invalid_writes
++}
++
++unload_and_verify_cleanup()
++{
++	local cpu
++	local dir
++
++	if [ "${loaded_by_test}" -ne 1 ]; then
++		log "module was already loaded; leaving it in place and skipping unload cleanup check"
++		return 0
++	fi
++
++	rmmod "${MODULE_NAME}" || fail "rmmod failed for ${MODULE_NAME}"
++	loaded_by_test=0
++	for cpu in "${CPU_LIST[@]}"; do
++		dir="$(cpumod_dir "${cpu}")"
++		wait_for_path_state absent "${dir}" || \
++			fail "${dir} still present after unload"
++	done
++}
++
++check_requirements
++load_module
++for current_cpu in "${CPU_LIST[@]}"; do
++	if [ ! -d "$(cpumod_dir "${current_cpu}")" ]; then
++		cpu_is_online "${current_cpu}" || \
++			fail "cpu${current_cpu} went offline or its online state became unreadable"
++		log "cpu${current_cpu}: no cpumod directory; unsupported CPU profile, skipping"
++		continue
++	fi
++
++	check_cpu "${current_cpu}"
++	verified_cpus=$((verified_cpus + 1))
++done
++unload_and_verify_cleanup
++[ "${verified_cpus}" -gt 0 ] || \
++	skip "no selected CPU exposes a supported cpumod profile"
++
++if [ "${reused_loaded_module}" -eq 1 ]; then
++	log "PASS verified_cpus=${verified_cpus} expect_profile=${EXPECT_PROFILE} writes=${ENABLE_WRITES} invalid_writes=${ENABLE_INVALID_WRITES} all_cpus=${ALL_CPUS} (reused pre-loaded module; unload cleanup check skipped)"
++else
++	log "PASS verified_cpus=${verified_cpus} expect_profile=${EXPECT_PROFILE} writes=${ENABLE_WRITES} invalid_writes=${ENABLE_INVALID_WRITES} all_cpus=${ALL_CPUS}"
++fi
++exit 0
 -- 
 2.43.0
 
