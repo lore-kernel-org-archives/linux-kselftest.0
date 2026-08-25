@@ -1,150 +1,141 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7190E485CD9
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 14:48:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF539443AB1;
+	Tue, 25 Aug 2026 14:53:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787669288; cv=none; b=lMjrIrVJmdQ60RgWOAIyetl6Km8ToTempci0QKh8u9baVd804+D7sreQqNm9wFwOFmjSNnDFAnZm4WWjZ6+m47sePVvPC6C70o1N4CPbIZ1Pkh8mkei82FWjIjg5feeUeHI151vYSrKb1Ld1yyGfn34cjSHUl/oadmo0oZfFPCY=
+	t=1787669624; cv=none; b=dDEpTsWAF6n/YHSJ5i64gkVlH2REBlXusUjZnaHPZX9fq2duoOHlsZ99joAR0x+cmSCwON1Rz8CbKfOY8uJM/UgjIg+hcDImy4Mgbpn0t0UmhiLCIP4/T9uFfwj5lAVQ/e420bkGB7l7sb86+OVZcJba0wJ8ZjTHczdXvCBUTus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787669288; c=relaxed/simple;
-	bh=pzHvhf/kcUn1uGQQoMmmsZdAbSQgFg/DB45H52WF0/w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IruUT+YQyhJ/xoOJp1Kt51SnnlAWh3GUvzSQBYa/It9WcVjRW7U6IlQfgn78vvyd96pdWYmg6eLkU5pVoUZAo1v3bfP5bG0SEVJQ1pcLqV6e4x+w7YNJri4eotZmAJrreM7Vvgj20zEW4dNQ3D7fxGtqsJsrQzmJQzmOS8+fvks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QZxxNM14; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qZsXYCQg; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787669624; c=relaxed/simple;
+	bh=3QIsQ5eZqQnioGIToeXXGGZTZ+yEs/DQ2YG7s+mb23k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=INErE3R/VuxoeF/OqE/MYqM0AF8s1VYd/O569qmTyGbCuW627HAihv5jRFtyz5atsZFCpkWGxvcPVoc/1gl4my/WpljXYep90aJA6wWIbtJHQHG0ellOTENCllsZAZ7MZO8PRIgL8QXc5jWQ5QSgbk5tSXqwH8N4C6dSH/U96dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PoeVvY7G; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QZxxNM14";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qZsXYCQg"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787669277;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
-	b=QZxxNM14PlXY3erNql86FCv3plRA3wi1X40oGzVVXDKGtys8SlgwbggGTlGMcAd48r8Pnv
-	9hcCmWpQAq5cpNShll4q/iwA14OmhPTcAS+pEUnyMpk7WK4e+fuu/fczxzsI1YGwWV2BrS
-	bLHq0bIDDBeAtn3LtSYuILYuygajLq0=
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
- [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-349-XTINgUL1NdGBJhykPe0_gw-1; Tue, 25 Aug 2026 10:47:56 -0400
-X-MC-Unique: XTINgUL1NdGBJhykPe0_gw-1
-X-Mimecast-MFC-AGG-ID: XTINgUL1NdGBJhykPe0_gw_1787669275
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-9077b4c35c5so87259836d6.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 07:47:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787669275; x=1788274075; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
-        b=qZsXYCQg0NcRrl7FoyWeU9aVLadAaFI5eoIdcamwsj3oq/aHNZllmiigvELzLiCzpL
-         K0TjfSf/+Fdlo5+wkJc2dXQIyFKRWLta9hlLN7GLmaR77QVOoouajeRg6SWDKVNIYnWO
-         dKTdm76ZRaIWWwmP1ccSTiJFapcI3SQZRzQmHx48G3XLkChevTDvHes81cPP9EUkkjs4
-         2aSyZjHysL0+zJS6OgCcKF1VBRN30520Nzws+AVKQZNwOk+hvtEXPUmh/+fJhZP6gFBf
-         e7MIOGBuNCwjBSAM/GQNdwz+bGT1d8WCj1ER6nLmXBDNK0bXBaoMozUalybvFbfLuQML
-         pHnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787669275; x=1788274075;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
-        b=QaYlgVutCLha4fYq/ik65/1/OZRPdGk1Ssq9ZUTIjt89sYs5EWqPTi6kbLn8qIV39V
-         VMt4+2rlR/NeSyNZ9zoSqL1ePqOxbghMTkwiQNQWPkqPYgqDCyQ+U26Am9Hdec4+M+6M
-         vzwWKJkEDt+RABHF5ZMDQqsmRLmLHxhZIafD+X7Nq56EWCyKo6OIx2E1/erqBikrfXcK
-         aTjdr2wzsD8N0bJiZ2DMnJGpQh+rgty4E7WCLnDPi8o5xxm5+R6/OJXcdCWug4CnVVLL
-         y1qkmxEi3Y1ZWuTu09Rx3MkisSkjLEFxhE12z+A1SiG09FFYt6BJGgssphcayz0llBVi
-         l03w==
-X-Forwarded-Encrypted: i=1; AHgh+RoTfY9NoytpXIEBexxw88JS0wR5Yv0qVQRVBxshU5XW+TK1xuYYMCX6jTAYno2289kr5FCcllT+1d3dVbl6q4w=@vger.kernel.org
-X-Gm-Message-State: AFuF++lyM8q7voMKe4LV34XIgo6S+JPiiX43v7e498qxvDZFw33weNPX
-	lePWnruFMA0PVDq3MngYDuhbi2Awm4kFbf/YPSzAquSkcUswcgCjcCjeXAqQtcNWZtrjiDarouB
-	asWO35GP03JqxYBcMLHc3t87z8T0JixN3HEkHyPn+9wApYQT3kw52Ysk6wSoq63+KzS3MVA==
-X-Gm-Gg: AR+sD10LwlF6OhBsChEmC3cwNAt3qXK2Z2KcwIKCs82MRMIDx+iHOnfQ05I7VKcSmzk
-	+VbpvvsBecnja0MayZiNk0HLGXE7tq/JPLJgQsYKnNSM1GjMIG6tLBeiprRh/Y4lIKgOYzPD/y9
-	keQ+L4Cky8cXo4iFvQ5aExc4duZUN5xsfCFI0F0zopm0xc0parv1MesS3Vu0N80LrEhDJ6ioEFQ
-	23ZyidZV0a2G4QztZrBuaHHW/G/4cxBT3h/wGAmztHKFLUf3fHux7BnTU5lPnm/Ikxc8S8vdITF
-	N4h+4yUN0/bZjqMlMv/i87EJmqLgV05Wiz/OZT+oAMUjAGlIH7/QhZSJm2FLxuUClu3jJJiRcJC
-	BaBrV5CkMxGm0wVFmj35d1ms0B7gNJGT5Jdi11D+YDNOS
-X-Received: by 2002:a05:620a:a413:10b0:936:d35d:204 with SMTP id af79cd13be357-937468b3248mr1928936385a.13.1787669275434;
-        Tue, 25 Aug 2026 07:47:55 -0700 (PDT)
-X-Received: by 2002:a05:620a:a413:10b0:936:d35d:204 with SMTP id af79cd13be357-937468b3248mr1928929085a.13.1787669274849;
-        Tue, 25 Aug 2026 07:47:54 -0700 (PDT)
-Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-93749abeba9sm745605585a.3.2026.08.25.07.47.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 07:47:54 -0700 (PDT)
-Date: Tue, 25 Aug 2026 10:47:53 -0400
-From: Eric Chanudet <echanude@redhat.com>
-To: Michal Hocko <mhocko@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Shuah Khan <skhan@linuxfoundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
-	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
-Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
- area counters
-Message-ID: <ao2gA_m3BCBu2esy@echanude-thinkpadx1carbongen13.rmtusma.csb>
-References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
- <aowHqqaqK7TeexQH@tiehlicka>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PoeVvY7G"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76F561F000E9;
+	Tue, 25 Aug 2026 14:53:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787669612;
+	bh=8ID+n5mSv/6J4izi4tkAEQBrN5TDuETaoYqtBV59JEs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=PoeVvY7GLYyxKUaclBtC8oy9Ps22NUBXQrE/m8gwRBRaLdpTHfmX0OMiCxxxNxTHk
+	 qLvy4hL/CAH7VNRPm1hON4oWzMZh5nJR024ricVkCXuZHIiJG7C/3V+BVtHaytVB08
+	 jsItdcp79VcCgXlu9X1lVOXM99sYeedApBNlOMt40m1guW8BxsUpBOw1jZvc/4uKVX
+	 ijvDshMk4A5/wu/XQ4QJbbLgmN8gqJ0I8/uOI/pGsoPr1iR89twBLBTMWGfPWygFbM
+	 jrhvqbr+tJX0Eet+x5Aq1SSZ09yhfc9c3u5oumc28o7KHm6of9qY7RY7V4E8rap01M
+	 X1EQo8IxDiPRA==
+Message-ID: <90a3231f-663b-4d24-b08a-28ea87a2c148@kernel.org>
+Date: Tue, 25 Aug 2026 16:53:25 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aowHqqaqK7TeexQH@tiehlicka>
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH net v2 0/4] Improve stability of big_tcp_tunnels.sh
+ selftest
+Content-Language: fr
+To: Paolo Abeni <pabeni@redhat.com>,
+ Alice Mikityanska <alice.kernel@fastmail.im>,
+ Jakub Kicinski <kuba@kernel.org>
+Cc: Eric Dumazet <edumazet@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Simon Horman <horms@kernel.org>,
+ Shuah Khan <shuah@kernel.org>, Nikolay Aleksandrov <razor@blackwall.org>,
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ Alice Mikityanska <alice@isovalent.com>
+References: <20260822120308.1165200-1-alice.kernel@fastmail.im>
+ <2fe7208a-7bc9-4004-907b-75f283360ec9@redhat.com>
+From: Matthieu Baerts <matttbe@kernel.org>
+Autocrypt: addr=matttbe@kernel.org; keydata=
+ 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
+ lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
+Organization: NGI0 Core
+In-Reply-To: <2fe7208a-7bc9-4004-907b-75f283360ec9@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Aug 24, 2026 at 10:58:18AM +0200, Michal Hocko wrote:
-> On Fri 21-08-26 14:56:52, Eric Chanudet wrote:
-> > CMA allocations are currently unaccounted for by cgroup memory
-> > controllers. As system resources, they should fall under memcg, but CMA
-> > areas partition the available space for different purposes and memcg
-> > doesn't have a good representation for that.
-> 
-> Which CMA usecases are covered by this work? It would be also great to
-> spend more time describing usecases.
+Hi Paolo,
 
-We would like to offer some usage guaranties to userspace processes
-ending up doing allocations in CMA.
+On 25/08/2026 15:21, Paolo Abeni wrote:
+> On 8/22/26 2:03 PM, Alice Mikityanska wrote:
+>> From: Alice Mikityanska <alice@isovalent.com>
+>>
+>> This series addresses flakiness of big_tcp_tunnels.sh discussed at:
+>>
+>> https://lore.kernel.org/netdev/349c582c-73e3-468c-91cd-ad6cc3562700@app.fastmail.com/
+>>
+>> Lower the thresholds to avoid failures like this (number of packets
+>> below the threshold):
+>>
+>> https://netdev-ctrl.bots.linux.dev/logview.html?f=/logs/vmksft/net-dbg/results/754376/28-big-tcp-tunnels-sh/stdout
+>>
+>> Tweak tcp_min_tso_segs and initcwnd to avoid failures like this (BIG TCP
+>> doesn't kick in in slow configurations):
+>>
+>> https://netdev-ctrl.bots.linux.dev/logview.html?f=/logs/vmksft/net-dbg/results/751124/21-big-tcp-tunnels-sh/stdout
+>>
+>> v2 changes: Use $KSFT_MACHINE_SLOW instead of probing kernel config.
+>>
+>> v1: https://lore.kernel.org/netdev/20260814194124.3102581-1-alice.kernel@fastmail.im/
+> Any special reason for moving the target tree to 'net'? Selftests
+> stability improvements should go via the net-next tree (without the
+> fixes tag).
 
-For example, a shared CMA area is described in device-tree for an ARM64
-platforms. Userspace components could then, for example, allocate from
-it through the dmabuf heap, or a device or framework-specific ioctl for
-that matter, to use the buffer with sensors. The dtb may have other CMA
-areas described additionally that may or may not be used by that
-component. In this context, we would like the ability to limit one of
-the userspace component to over-allocate and choke the other(s). memcg
-looked like a good fit to achieve this, albeit handling the areas, so a
-cgroup has a quota in a given CMA resource.
+Sorry, I suggested to switch the target tree now that the selftest being
+fixed here has landed there. TBH, I think it is unclear what to do in
+this case: I agree that these modifications are not critical fixes, but
+they do help other people validating changes, plus they don't introduce
+regressions in the kernel code. If they go to net-next, that means other
+CIs (and developers) will potentially see false positives for ~2 months.
 
-This trails from an earlier post where we tried doing this using
-dmem[1], but I was unable to reconcile the requirement for memcg
-accounting[2] since from dmem I didn't have memory objects to charge nor
-the guaranty there was one. Given CMA is always system memory, it looked
-like a better fit to try something without dmem.
+Personnaly, I think such fixes should go to net, but that's fine if the
+stable team don't backport them.
 
-Best,
-
-[1] https://lore.kernel.org/all/20260519-cgroup-dmem-memcg-double-charge-v2-0-db4d1407062b@redhat.com/
-[2] https://lore.kernel.org/all/ahB7pCu_G4vuswc0@linux.dev/
-
-> -- 
-> Michal Hocko
-> SUSE Labs
-> 
-
+Cheers,
+Matt
 -- 
-Eric Chanudet
+Sponsored by the NGI0 Core fund.
 
