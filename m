@@ -1,104 +1,118 @@
-Received: from mail-qt1-f172.google.com (mail-qt1-f172.google.com [209.85.160.172])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662932D46CE
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 13:03:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.172
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787663013; cv=pass; b=o8jpDN7TeJEepFA2kGn0Vh1HVNgtUtOpOvUTh36cnCJZRe3vBZbpXtD+eq0hY7to2flcwvIKE+f3wXK0Mf8nhQIxr3wqngsy2BgAb0hKdcVM08+G0JToMhMY3THdoVsqfRMM5p47TY5ncUF+vDpyziHU6nQN9wJilbfW8Vgq26Y=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787663013; c=relaxed/simple;
-	bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fvI1WrOAUCTZoC3mbzQaHWaN3SP3oZr6RVLY009Na8peLrNRRdmNnSMRL32aiXIi0SLQS0rnUo4aoQMjKEXEIX+filjBre2WvJUePRcv716S1NpTPtudgcYgYl5qTuEwjKz6kiDRiR/POHXAoova0TL1szE6KbyypPbiIp7Qzsg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu; spf=pass smtp.mailfrom=szeredi.hu; dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b=igfNUx6T; arc=pass smtp.client-ip=209.85.160.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=szeredi.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=szeredi.hu
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5ADC449B02
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 13:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787663099; cv=none; b=X0kXSyU/iYZGe+thFK7xY1cJxWWz+7jtb7P7o1QVWfUpHJBczSZ2BlULCDLDP2u4FumeQCYekRCMnsqfmyheW5Ubpp4y14U81dvMrk6OB4WnmK18t2fVyojn0D2bpE2nqAeAIYijOZt9Ut/6G45dGegwzIVi+UhCU2QieuAZC+c=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787663099; c=relaxed/simple;
+	bh=S7aRfssWDQ2nLsCC53U4z8DSCtzysrcHj28aPhwBZ4U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jcERQBGRpqzbslxy0TDELOhCsO71x8easQOZ9pB9V1cJcCWKZNFzoX/SFhdHabHjwT14zMfgFpT2M7BthEiR8NprpJEqkJ6TnVVdFiAq4viKR4fZAM7L/imjHb+85EJUIH/wn8LEHat8KUG+XCe4hxblMcUNK08qaBtwlAxV3qM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DGp+ZJsH; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=szeredi.hu header.i=@szeredi.hu header.b="igfNUx6T"
-Received: by mail-qt1-f172.google.com with SMTP id d75a77b69052e-52d56b08213so4078771cf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 06:03:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787663011; cv=none;
-        d=google.com; s=arc-20260327;
-        b=APzUvLE47VFOWfsVlbbuXV3lSiWz7HNl+cKjXVk3lFbn/s820ihi2nfJZUohcm1BzF
-         w8zz9TBTHTrfChuJf6k0T8YVJ5B1hipD+W+t3hHzJoxYk09YbBrffW3Tk5dnkN6ZJkNm
-         gq/2f2oct44UofGoL15EDoTroe/kajosYru2REf3WpPTe845me7Nqs/8B58uSZg2GyZK
-         s8gPrhZCAoi6aFpLft7Ri3irp/uWTEa7mWQY62XjSip/u+jk277P6nIAaTpD88ivdDod
-         P25gs6ETP81sUDACYJ9DyYSPzdw2kQSCNpvTAzqB0bH3/NdA8Bvk/w20BoaqMrbQoO/4
-         NNyQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
-        fh=oHKXyZn8wuuZIVtYnGDJERHzMF/I3EGPTvN0fKoSiN0=;
-        b=PJLuFwd1FdtYTCIwwfvr501VbqBaVetdVDOzP49rukdSBRBL8RCR7KsL01KrEj9tIo
-         vxpvoZX78jbD8pZ/ja+Bk9/955zDOfOd+t2mHYKPxNlm6dpgTOH3KKFblRoW02rQ0nDb
-         IA8zqnTDZ+vmT7nt2BWy4nyYi+qN9ujpfoGSwFGbBDikUIMbIwcwNqGTBeFP4WCY5qRb
-         bhoWu96uPkfQxaReK5GJMMG6T/icrluIePZ5w1x3Ll2orvJKvBO2TNL+1jLO7OPm9ZjS
-         D22HCaA12MJ1eHGJfwhXXWhbSVV7M8QtjlG6N24ixQMyjVIJB3QedsnVgQB9+92w4/Ja
-         xlYA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DGp+ZJsH"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c167aa9500dso720750566b.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 06:04:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=szeredi.hu; s=google; t=1787663011; x=1788267811; darn=vger.kernel.org;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:from:to:cc:subject:date:message-id:reply-to
+        d=gmail.com; s=20251104; t=1787663094; x=1788267894; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
-        b=igfNUx6TRkijZXNCsa2gzlyOZhmY7aFlP1NihPuqE23iSFuW7UJjUCzSXn7JkCpkn/
-         QjNtyQk7Jt6mOfU/MkJ9nxzx/xGaLikqc2ua1LAr1IMd8kIHLVmp26thr4NIdGi0VHEg
-         A5TwijWL5y+5pJJPrDPlSbRJw87vdWLE4Mfis=
+        bh=PQylkDyhUMfAxwzHJuOU6RYKfPVocoG2MM8Zczy9TIY=;
+        b=DGp+ZJsHpOzEwmDDv9uPdMPFecT4Ce+lOqvmEIAuv3ee9xYwWPJSnXDZB5E7J4k2Te
+         y7/3qvMCPNnR8iVLWIB0MT9Z9qgL3VOAR5gr1WyXFhLlTL4nH7Na0bpds6wdX8QgstrR
+         HNNfi986llysKm3M4vHdn/uL0zUY/rsZTGTtbptp1zTL9KdZ18xRqY+iDxCPhZl6VQUp
+         FgXlHHFlgsVGd/GTZU3s656V8gu5rrvCTEGiiWvLZT5iJciOLFVVRgxzfcz7mQ/Lt7AD
+         zL0s6njA33BARbtcW6nR7mupo/jJonZGGl5ECrNnx6sp3V3orF4wWMSuenwpRrf31619
+         WvBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787663011; x=1788267811;
-        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
-         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=CUEr/e5MholbNaYQzXTmEQ6JBM5Dsq0Y//IYN7xJv38=;
-        b=pZTQwHlLJAmE4elIWUHGmobRuB0KmF7s6n81P0BdwFmLS6ueGezHUxnZ/r8VStZzVq
-         TKvZNYfG0M2TuNBkHCbwgk+Nz+CvcuivdeDm6recBvv3eod1kccmXrZQeq1emh8OxyIz
-         nfql9XzbGS0KfOn7HAsF2CKkuy+QgqSBbbYSu/jIP18XDDMywIUzAl2v3Us1QZ+aWdsV
-         2h7rKjAXXHsyhTTi/LMHch2ipY0LnU466BWLQ8hLItZM9TkBQ+x8tbOXZLLaP6LSgjlO
-         8Cz/Bvp4xF8FDkQiSOTXcsGbYQM1acwdgFjv3AsXeEdJeSDQ0gb1euhU5mm2IuCu7uZ5
-         E0lw==
-X-Forwarded-Encrypted: i=1; AHgh+RqyfoAFR7bWPOcTzVSNMzBj0Alc28to9pRfNtKgRNTazdtpEOryPszsI7AsPlPFI8p1Zn9lmAWdW1/Curc9pOA=@vger.kernel.org
-X-Gm-Message-State: AFuF++lp5EK+y4kAk/W1jvqhYQ0nzKj/I82dpvYDQYjIUu5rHK7et/WH
-	nfu13jCWtZ51p4duv1j2iAqlZa8DaRj2fcdtwzlu1qB5h3IRyRWgdNeA7U9G2yeFFu5EN5wwCF5
-	TnlwkH7qfA7qtJyJUCq4fzUVi0+Tv8bNVEAXnQX24PA==
-X-Gm-Gg: AR+sD10tST4HdASzmiWGBam0U7ArAPMIv3wNb+UIzguXy0hJBPLPvyWJlhHVJYmA8ah
-	24i0IfNY3bXIIB/Ta1/XZQk7qdw6eYUyaSTLG1Q8M5jCboJdEyOUA5DYmt7VAVOzGb0muz9pGvJ
-	WXQmJ3UeKP+ARK/EyU+DRmEZl/KjYW4q5c2/b4hv1Hp00uiJwo1TgQ47+4F/cMBJV1gpYIREvx0
-	lHrOrStobAURgDjqFC2xbTSRDGm7Ew25j9P8fr/og68w/aO2pWr0mwQi3Gx6DllfTnfj2VYg/o5
-	fLj9g1hQxU7DsgrH5iS3wtue6KTvi+NdzAOEIlcxe16WCfibtKfmh4DQQiF0lDuLDBTdHHImP1l
-	Uu9I=
-X-Received: by 2002:a05:622a:118d:b0:51b:fb5f:b263 with SMTP id
- d75a77b69052e-52e2ec1e5demr67516461cf.4.1787663011283; Tue, 25 Aug 2026
- 06:03:31 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787663094; x=1788267894;
+        h=content-transfer-encoding:content-type:in-reply-to:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=PQylkDyhUMfAxwzHJuOU6RYKfPVocoG2MM8Zczy9TIY=;
+        b=amq/9sGstctgSsQKIbEa7I/r+CmdTp2t0hKaNvPXpysmmDVHDZRGYxqwAeIMqm3UVA
+         tFo6sdcMxoWJrC+uFO3jFfNYDCuuUpYOE1VURHP/6MNY9OwiR2W20Jh9uKls5Qe1ib4U
+         eXcPiRaj7TyPI6a/pqxcnGyX76HHO5XonoZ4z9tQGDAz3fFTpCzAlHKf88KnHlQCr+4L
+         EUe6Dv++BgSP0zEzF3FGmgiuw9muA+6d0y4WJKs96wppnqWIR8+vbmFWmSKYnIf8Cp74
+         YKz+jwGMqRYeLxRGTmEO+tbXIuJKpolRGvQ8QUyMYJW+mNuwF3hZTTVox4dnsvRiKvY/
+         6OQw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp2qok5BCsECmqaGOla3h5iTwnnr5x3QQlkeIeyCr165ytsJA2sYiLWW80mI8eHsRtiXMl8vsVDBVwCLvUf2wo=@vger.kernel.org
+X-Gm-Message-State: AFuF++nWIGqB2Qr4hNVmLQsxToh66shhJhfERUTWb6ID/Mn7LobVMWPE
+	mikUJScHuIHnfgYleFpBCdHKXB4jr5sD7RkbQ4I5TtH+DFYuR4mF76zm
+X-Gm-Gg: AR+sD118ALkpJ8XuGJlbXaSIBVR2SqzBs6dKcOBPbcEftOkXHpCk8Io86RbtRUB2kmX
+	jP9/ngt+y9+JItpUlBrA2tMihKxoM+4zClojcQuUz3rmR4klrAjdN+nrnA+osnLsRQRiRk9eVnp
+	zHk8mOlZ+QKsxryqlXBqlkFqBWJryb67HCU0nbiuwRmW+EGceoBeE3dodj9deMrBp1xMp3PY2vG
+	yFwKGaRxl0RLt7y0q8TUFliOMSlwYAb+KKbNZ8bZgom2waFgRKCmAkJtmQLrIr8J2kNtKrdnAXb
+	Ewvn5bykrwVKJ5ziNjxtvyJyHdAPnEbOGdvonFYIX8Y2yLGWmB3LW+MWjG6JtU8ojncqpxaElHI
+	wt/1RoiJN/aUDFu0Fi8nwN8axCB+0fc945M/nf3LIdSl79/89PYA7R7OoelSnf3ilxlcU33b68d
+	r8rX/qnuk+5uvL6R33r11Ul4ThEyfwvp2v4/DO6k3Z+mAzl95z6fEE4SjfjYtAAQHm7QZ+iMEdg
+	LC8
+X-Received: by 2002:a17:906:fd8d:b0:c25:58e:83ff with SMTP id a640c23a62f3a-c25058e8844mr45353566b.10.1787663093845;
+        Tue, 25 Aug 2026 06:04:53 -0700 (PDT)
+Received: from [10.45.28.110] ([15.248.2.30])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c249606b4f1sm1822703566b.3.2026.08.25.06.04.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Aug 2026 06:04:53 -0700 (PDT)
+Message-ID: <f81f8437-57da-4545-9046-28562df3c385@gmail.com>
+Date: Tue, 25 Aug 2026 14:04:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260820130158.254808-1-jamz@amazon.com>
-In-Reply-To: <20260820130158.254808-1-jamz@amazon.com>
-From: Miklos Szeredi <miklos@szeredi.hu>
-Date: Tue, 25 Aug 2026 15:03:19 +0200
-X-Gm-Features: AcwNN1V-E0YVDUa4WhV6OmS9gRNJfrQeO1sZEy5JreCrY0gVdVTUszFjJtAbGlQ
-Message-ID: <CAJfpegsR1oNh_PnmK-a+k=6ttdpXYAyg6SsQe=ZMCZN03gvPhA@mail.gmail.com>
-Subject: Re: [PATCH v3 0/2] fuse: allow FUSE_SYNCFS for privileged userspace servers
-To: Jimmy Zuber <jamz@amazon.com>
-Cc: fuse-devel@lists.linux.dev, linux-fsdevel@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/5] KVM: arm64: Add pre_fault_memory implementation
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: maz@kernel.org, oupton@kernel.org, pbonzini@redhat.com,
+ joey.gouly@arm.com, seiden@linux.ibm.com, suzuki.poulose@arm.com,
+ yuzenghui@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+ shuah@kernel.org, corbet@lwn.net, vladimir.murzin@arm.com,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
+ isaku.yamahata@intel.com, Jack Thomson <jackabt@amazon.com>
+References: <20260612162354.73378-1-jackabt.amazon@gmail.com>
+ <20260612162354.73378-3-jackabt.amazon@gmail.com> <alEXtW7w-rqlNG09@raptor>
+ <0365d77d-616b-47f7-a5f2-3388bad692a1@gmail.com> <ao2KmmUd1lVFUUkp@raptor>
+Content-Language: en-US
+From: "Thomson, Jack" <jackabt.amazon@gmail.com>
+In-Reply-To: <ao2KmmUd1lVFUUkp@raptor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, 20 Aug 2026 at 15:02, Jimmy Zuber <jamz@amazon.com> wrote:
+Hi Alex,
 
-> This series lets a plain /dev/fuse server opt in via a new FUSE_HAS_SYNCFS
-> INIT flag, honored only when the server opened /dev/fuse with CAP_SYS_ADMIN
-> privilege in the initial user namespace -- checked with file_ns_capable() at
-> mount time.
+On 25/08/2026 1:29 pm, Alexandru Elisei wrote:
 
-Applied, thanks.
+[...]
+> 
+> I think there's a word missing there, I meant to say that it would be useful to
+> explain *why* the x86 implementation does not mark new PTEs as accessed, while
+> arm64 marks them as accessed, and arm64 also does that for existing PTEs.
+> 
 
-Miklos
+Ah got you, I'll update the docs in v6 to explain that. Thanks!
+
+> I was wondering if you have any plans about posting an updated series.
+
+
+Yeah I have v6 almost ready, I've addressed the comments. While testing
+it found an issue on pKVM which would case a hyp panic if we prefaulted
+before it's first run, the EL2 context load blows up. So I've also go a
+fix for that bundled in.
+
+I'm just tidying a few bits up and hopefully have it out within the next
+couple of days.
+
+-- 
+Thanks,
+Jack
