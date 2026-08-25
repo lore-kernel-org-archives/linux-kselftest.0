@@ -1,47 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CEF948382E;
-	Tue, 25 Aug 2026 14:36:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7190E485CD9
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 14:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787668606; cv=none; b=MHcB+xw+ueSZ28RYXc1XarQq/cfOvu9WcqZNyGmIwLLQ9NefmSxUKavWhqx6fZts5ZKNHii8EYxmhGgUXIpHP0j9pUHdhf06j0mXzHafNFg0SZlQQzWYPWW3Mpxnf5r/5QGemN5TFwnNFNMb+4IAP9XMXg4Cb6l2ZjRSJGtxZvE=
+	t=1787669288; cv=none; b=lMjrIrVJmdQ60RgWOAIyetl6Km8ToTempci0QKh8u9baVd804+D7sreQqNm9wFwOFmjSNnDFAnZm4WWjZ6+m47sePVvPC6C70o1N4CPbIZ1Pkh8mkei82FWjIjg5feeUeHI151vYSrKb1Ld1yyGfn34cjSHUl/oadmo0oZfFPCY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787668606; c=relaxed/simple;
-	bh=daTvEI3w16S4Hoe+sTbrlNY9G3xXNkhwUlIkMV62TrI=;
+	s=arc-20240116; t=1787669288; c=relaxed/simple;
+	bh=pzHvhf/kcUn1uGQQoMmmsZdAbSQgFg/DB45H52WF0/w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BhcnPwZqg2w9aeBnwdTwbBapZD4UI4TC9UI3yqOnzuQyDlKd4is/31HvSgUkbtrl/6FRS/4PJwpv2NESv0Rm1Ra6JuHhSzJ5mOgENQc18SquW6OAZ3LZDk7R/l/MAZAuzaD9kh/WtNznbjLreCYt4h+YNyDAarLODGF1H1V/pys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gTRA32Q5; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=IruUT+YQyhJ/xoOJp1Kt51SnnlAWh3GUvzSQBYa/It9WcVjRW7U6IlQfgn78vvyd96pdWYmg6eLkU5pVoUZAo1v3bfP5bG0SEVJQ1pcLqV6e4x+w7YNJri4eotZmAJrreM7Vvgj20zEW4dNQ3D7fxGtqsJsrQzmJQzmOS8+fvks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QZxxNM14; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qZsXYCQg; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gTRA32Q5"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78D741F000E9;
-	Tue, 25 Aug 2026 14:36:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787668603;
-	bh=56YtQtCs4zY1Wo9MhksdOnGNlbwVQ7SwtCBKJSpWzvM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=gTRA32Q5GYrO5A8+2tFR3r8n2+xAzntdO0OL4s63HWDSQ1YRvQtq667c0LmTyJ4Ck
-	 LJYx4U11I1FaviXL7N0rjsGjd7PfQxvsnFBGBUr3aYXmU+49SyhrlmgLs0DW9WDX1D
-	 JreqrK3Z8FxI+OhyYMRu3JhIpaZxZ9rCfhrRKFvSVWIpQmyeREegEj3L4D0M7Tm9+l
-	 nmCeLZaSepdTgBNUn9iED5P7vicLnw7KHIJdS3m/nUawW6ck3QD1MVCuFUayPE32SX
-	 w6LlvB4vxXlSTE/RTe67RP9YP8ED+nrC9fg/otHaX2KojfLsjiRMyPxhnf0EmP+WEh
-	 enxsjMYqCL+sg==
-Date: Tue, 25 Aug 2026 15:36:36 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Hemanth Selam <hemanth.selam@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Shuah Khan <shuah@kernel.org>, 
-	Yury Khrustalev <yury.khrustalev@arm.com>, Kevin Brodsky <kevin.brodsky@arm.com>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QZxxNM14";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qZsXYCQg"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787669277;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
+	b=QZxxNM14PlXY3erNql86FCv3plRA3wi1X40oGzVVXDKGtys8SlgwbggGTlGMcAd48r8Pnv
+	9hcCmWpQAq5cpNShll4q/iwA14OmhPTcAS+pEUnyMpk7WK4e+fuu/fczxzsI1YGwWV2BrS
+	bLHq0bIDDBeAtn3LtSYuILYuygajLq0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-349-XTINgUL1NdGBJhykPe0_gw-1; Tue, 25 Aug 2026 10:47:56 -0400
+X-MC-Unique: XTINgUL1NdGBJhykPe0_gw-1
+X-Mimecast-MFC-AGG-ID: XTINgUL1NdGBJhykPe0_gw_1787669275
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-9077b4c35c5so87259836d6.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 07:47:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1787669275; x=1788274075; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
+        b=qZsXYCQg0NcRrl7FoyWeU9aVLadAaFI5eoIdcamwsj3oq/aHNZllmiigvELzLiCzpL
+         K0TjfSf/+Fdlo5+wkJc2dXQIyFKRWLta9hlLN7GLmaR77QVOoouajeRg6SWDKVNIYnWO
+         dKTdm76ZRaIWWwmP1ccSTiJFapcI3SQZRzQmHx48G3XLkChevTDvHes81cPP9EUkkjs4
+         2aSyZjHysL0+zJS6OgCcKF1VBRN30520Nzws+AVKQZNwOk+hvtEXPUmh/+fJhZP6gFBf
+         e7MIOGBuNCwjBSAM/GQNdwz+bGT1d8WCj1ER6nLmXBDNK0bXBaoMozUalybvFbfLuQML
+         pHnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787669275; x=1788274075;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=6s1XusrMHrXnvzwU6UboxiHzAtGjQbneiTvP5eiCfbQ=;
+        b=QaYlgVutCLha4fYq/ik65/1/OZRPdGk1Ssq9ZUTIjt89sYs5EWqPTi6kbLn8qIV39V
+         VMt4+2rlR/NeSyNZ9zoSqL1ePqOxbghMTkwiQNQWPkqPYgqDCyQ+U26Am9Hdec4+M+6M
+         vzwWKJkEDt+RABHF5ZMDQqsmRLmLHxhZIafD+X7Nq56EWCyKo6OIx2E1/erqBikrfXcK
+         aTjdr2wzsD8N0bJiZ2DMnJGpQh+rgty4E7WCLnDPi8o5xxm5+R6/OJXcdCWug4CnVVLL
+         y1qkmxEi3Y1ZWuTu09Rx3MkisSkjLEFxhE12z+A1SiG09FFYt6BJGgssphcayz0llBVi
+         l03w==
+X-Forwarded-Encrypted: i=1; AHgh+RoTfY9NoytpXIEBexxw88JS0wR5Yv0qVQRVBxshU5XW+TK1xuYYMCX6jTAYno2289kr5FCcllT+1d3dVbl6q4w=@vger.kernel.org
+X-Gm-Message-State: AFuF++lyM8q7voMKe4LV34XIgo6S+JPiiX43v7e498qxvDZFw33weNPX
+	lePWnruFMA0PVDq3MngYDuhbi2Awm4kFbf/YPSzAquSkcUswcgCjcCjeXAqQtcNWZtrjiDarouB
+	asWO35GP03JqxYBcMLHc3t87z8T0JixN3HEkHyPn+9wApYQT3kw52Ysk6wSoq63+KzS3MVA==
+X-Gm-Gg: AR+sD10LwlF6OhBsChEmC3cwNAt3qXK2Z2KcwIKCs82MRMIDx+iHOnfQ05I7VKcSmzk
+	+VbpvvsBecnja0MayZiNk0HLGXE7tq/JPLJgQsYKnNSM1GjMIG6tLBeiprRh/Y4lIKgOYzPD/y9
+	keQ+L4Cky8cXo4iFvQ5aExc4duZUN5xsfCFI0F0zopm0xc0parv1MesS3Vu0N80LrEhDJ6ioEFQ
+	23ZyidZV0a2G4QztZrBuaHHW/G/4cxBT3h/wGAmztHKFLUf3fHux7BnTU5lPnm/Ikxc8S8vdITF
+	N4h+4yUN0/bZjqMlMv/i87EJmqLgV05Wiz/OZT+oAMUjAGlIH7/QhZSJm2FLxuUClu3jJJiRcJC
+	BaBrV5CkMxGm0wVFmj35d1ms0B7gNJGT5Jdi11D+YDNOS
+X-Received: by 2002:a05:620a:a413:10b0:936:d35d:204 with SMTP id af79cd13be357-937468b3248mr1928936385a.13.1787669275434;
+        Tue, 25 Aug 2026 07:47:55 -0700 (PDT)
+X-Received: by 2002:a05:620a:a413:10b0:936:d35d:204 with SMTP id af79cd13be357-937468b3248mr1928929085a.13.1787669274849;
+        Tue, 25 Aug 2026 07:47:54 -0700 (PDT)
+Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-93749abeba9sm745605585a.3.2026.08.25.07.47.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 07:47:54 -0700 (PDT)
+Date: Tue, 25 Aug 2026 10:47:53 -0400
+From: Eric Chanudet <echanude@redhat.com>
+To: Michal Hocko <mhocko@suse.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
 	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: remove the local PKEY_UNRESTRICTED
- fallback
-Message-ID: <ao2nFqGevXIa3l4c@gremlin>
-References: <20260818114945.1312987-1-hemanth.selam@gmail.com>
- <20260819074717.1345749-1-hemanth.selam@gmail.com>
- <fd193070-af97-497d-82dc-1f0fa1172fd7@kernel.org>
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <ao2gA_m3BCBu2esy@echanude-thinkpadx1carbongen13.rmtusma.csb>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aowHqqaqK7TeexQH@tiehlicka>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,88 +104,47 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fd193070-af97-497d-82dc-1f0fa1172fd7@kernel.org>
+In-Reply-To: <aowHqqaqK7TeexQH@tiehlicka>
 
-On Wed, Aug 19, 2026 at 04:15:04PM +0200, David Hildenbrand (Arm) wrote:
-> On 8/19/26 09:47, Hemanth Selam wrote:
-> > pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
-> > already known, a stopgap from when the generic definition was still
-> > under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
-> > Add PKEY_UNRESTRICTED macro"), so the guard is never taken and the FIXME
-> > can be honoured.
-> >
-> > The definition comes from tools/include/uapi/asm-generic/mman-common.h
-> > via TOOLS_INCLUDES, which commit e076eaca5906 ("selftests: break the
-> > dependency upon local header files") added so that the mm selftests
-> > build without "make headers".  It is reached through the
-> > <asm-generic/mman.h> that the system <asm/mman.h> includes.  Building
-> > the pkey tests with KHDR_INCLUDES pointing at an empty directory
-> > confirms that; emptying TOOLS_INCLUDES as well is what makes the macro
-> > go missing.
-> >
-> > No functional change intended.
-> >
-> > Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+On Mon, Aug 24, 2026 at 10:58:18AM +0200, Michal Hocko wrote:
+> On Fri 21-08-26 14:56:52, Eric Chanudet wrote:
+> > CMA allocations are currently unaccounted for by cgroup memory
+> > controllers. As system resources, they should fall under memcg, but CMA
+> > areas partition the available space for different purposes and memcg
+> > doesn't have a good representation for that.
+> 
+> Which CMA usecases are covered by this work? It would be also great to
+> spend more time describing usecases.
 
-Since you said load-bearing in the last email - I do have to ask if AI was
-involved with this.
+We would like to offer some usage guaranties to userspace processes
+ending up doing allocations in CMA.
 
-If so please adhere to kernel guidelines:
+For example, a shared CMA area is described in device-tree for an ARM64
+platforms. Userspace components could then, for example, allocate from
+it through the dmabuf heap, or a device or framework-specific ioctl for
+that matter, to use the buffer with sensors. The dtb may have other CMA
+areas described additionally that may or may not be used by that
+component. In this context, we would like the ability to limit one of
+the userspace component to over-allocate and choke the other(s). memcg
+looked like a good fit to achieve this, albeit handling the areas, so a
+cgroup has a quota in a given CMA resource.
 
-https://docs.kernel.org/process/coding-assistants.html
-https://docs.kernel.org/process/generated-content.html
+This trails from an earlier post where we tried doing this using
+dmem[1], but I was unable to reconcile the requirement for memcg
+accounting[2] since from dmem I didn't have memory objects to charge nor
+the guaranty there was one. Given CMA is always system memory, it looked
+like a better fit to try something without dmem.
 
-I.e. add an Assisted-by tag.
+Best,
 
-Anyway given your explanation in the other sub-thread seems ok so:
+[1] https://lore.kernel.org/all/20260519-cgroup-dmem-memcg-double-charge-v2-0-db4d1407062b@redhat.com/
+[2] https://lore.kernel.org/all/ahB7pCu_G4vuswc0@linux.dev/
 
-Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> -- 
+> Michal Hocko
+> SUSE Labs
+> 
 
->
-> Hi,
->
-> please prefer not sending new revisions in reply to old revisions the next time.
+-- 
+Eric Chanudet
 
-Yup. Please send respins as an entirely separate main not in-reply to
-anything, thanks!
-
-Also add a revision history under the --- with links to prior revisions,
-and if >1 patch send a cover letter that has the revisions and all patch
-emails are in-reply-to.
-
->
-> [...]
->
-> >  tools/testing/selftests/mm/pkey-helpers.h | 7 -------
-> >  1 file changed, 7 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/pkey-helpers.h b/tools/testing/selftests/mm/pkey-helpers.h
-> > index 2c377f4e9df1..626c2e1655dc 100644
-> > --- a/tools/testing/selftests/mm/pkey-helpers.h
-> > +++ b/tools/testing/selftests/mm/pkey-helpers.h
-> > @@ -112,13 +112,6 @@ void record_pkey_malloc(void *ptr, long size, int prot);
-> >  #define PKEY_MASK	(PKEY_DISABLE_ACCESS | PKEY_DISABLE_WRITE)
-> >  #endif
-> >
-> > -/*
-> > - * FIXME: Remove once the generic PKEY_UNRESTRICTED definition is merged.
-> > - */
-> > -#ifndef PKEY_UNRESTRICTED
-> > -#define PKEY_UNRESTRICTED 0x0
-> > -#endif
-> > -
-> >  #ifndef set_pkey_bits
-> >  static inline u64 set_pkey_bits(u64 reg, int pkey, u64 flags)
-> >  {
->
-> Hoping this indeed compiles ;)
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->
-> --
-> Cheers,
->
-> David
-
---
-Cheers, Lorenzo
