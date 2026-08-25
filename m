@@ -1,134 +1,159 @@
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BDEE37F72F
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 01:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.215.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787622988; cv=pass; b=fREs00Z/eM9O+yaezSTx1YHHt4eDNvd/Gh5qh9QiMBD/ezvdn8eM/sglyr3ktFVcuu42EZ6NidXcSwbpnI5qIhZclQiIfSKsXJGFh9Bs0sFRXa4J4X8hkTAEMj+9AVvK6J0DVavg1JGUxd+i1HzzEgPft3MNEBNFTXJI09lQtUU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787622988; c=relaxed/simple;
-	bh=CgMeQe+HrIJJ0uFrYOINDFEjOYyugXhcq0PoTpD7ldc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JoNeQXInXS4x2yHkeMLHnAjdInZ0hZBNgUoEYOHOS7W+pr/W6U0QGzURI8yVZnzp+vIl+mHJ+cbn5Zeymfasjzu9Afk4eRtSGIzmbEfp1kafclx/MA65EebTfYnZ/eeYI1kf/1g8+XJj6zrOAj0m97Ox0HdCz9jmDguopF8uJls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com; spf=pass smtp.mailfrom=paul-moore.com; dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b=Xwm9rvp3; arc=pass smtp.client-ip=209.85.215.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=paul-moore.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=paul-moore.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB42D307AC7
+	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 01:59:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787623195; cv=none; b=D71/9k00qZPig0DDRro8V/hvQzktxV2wn+LRo1gHyNmXyEsSFoF8Vo/PPGsUvCAw9DP8QMOpC2VyMmlvlIKbnsoyq2MN/AxcbyMXb339R45rsEoVWyb2Tu8K4Cm34sH6OSQ76Pi+u9kHTtqNWA3HkLXhQuNBuWq5WIAySZb0L6s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787623195; c=relaxed/simple;
+	bh=T5YW5CFuBsruw60Lh0nafi6isTN65QXG8kOoB1jxyko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZZpXBOTTTtW+n6xprXj8L8g1Ru/OW1XBXVHorgWckbUq/ZX2mSRiy7iTokzunoJfhG3OEQbnmMO7o+275l1SMObMuZwEqtvHZ2JPh6pM6/0w8t9r/xlmivzxhLFUpogxcrzZwP97p6Uu713FVJEJSWryuOrxPehDz3GOFMD7yqw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=S/Grd75A; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=paul-moore.com header.i=@paul-moore.com header.b="Xwm9rvp3"
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cbedf433a99so4055474a12.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 18:56:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787622985; cv=none;
-        d=google.com; s=arc-20260327;
-        b=pfTDa8z50XeOIkhVL+D7fSJyej2Xs//CGU0gr5UjnrpdhNBupjIyvunSjJ3V2ViseD
-         6Z8ZNDPCTLK6Ha/9Pw+S9qM7qbGXeNtooPMZeJMuhco20RU7CK4U0DfyU1iWeYdH4YHH
-         WhISs/OXmadnULjVZUKgFshP4JNS+OftgcgRvuZBZgSZzkVYwRYcDFrGVLnsQXePF/w8
-         QTVj6blEzQZcd2ZMogVOaBxbOeF8VdXwGYH6Dv2SXIhVC+i9h7pok5ilCrAEogBeluJN
-         RxhQyI+fi1b4T7MfGwrn5LYSZ3aGnzqD/pLkEBTkmPwC1ifx26LHcncKeVhui7PyV7+F
-         0YGw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=eL8Em3XBkkB3ByuSL6hH25sdEU2rIpfCZLeesDeBJPg=;
-        fh=HTW6IbdtXxiefmc5EIpFK9iYxi8KXR6to/etL8OAqU4=;
-        b=rYExLo21ejGWIZ5f8333pt7qWOAnwtEAZ5lsDCI3iAmU4fgvIMT8uwbHvafaaN6sip
-         L9WkqgT0fJa6bjspYrY+W53Byr3C1oCbIe6kYL4q/Zpepgbm93XeTPFpb25wOyaQyOZX
-         v1oj3CN85HzBt2u3QdFoYLckjWtEahs6UpCmnIklA1CDQ3XsdGMFadOiMJbmwlyoAi7Q
-         RSWx3+AbIeQC9YOssc17Yp2Csz1fR+wZEry0YhC1QA8pBe1VEz4VyGBVg/HyQIrf43q5
-         bbHY2JDswrm5PX70rNcZmEi2uch/WiuIxLk43+bbFwtrdFT7SEGPOZpwnGSRjxICfCfU
-         zj2w==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="S/Grd75A"
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-38dfe7eb825so3756233a91.0
+        for <linux-kselftest@vger.kernel.org>; Mon, 24 Aug 2026 18:59:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1787622985; x=1788227785; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=eL8Em3XBkkB3ByuSL6hH25sdEU2rIpfCZLeesDeBJPg=;
-        b=Xwm9rvp3UgIObC4KaRfLWFsvvq7Mh3Rq4WPTbTUC1MLXTNAIQfMXP3hQMrf5zfjYMX
-         1OJp0xylF1zaUoJXVqoqAUiZwDoyJQWCooi8YkTZJeJ5C+CI6senVRJHrEtEQ1jZValV
-         VtaI4WFw1Oqcb9xse0dfTPU8Geg5392gwqkeVkXjJ2lAyL7KJZlLa1ixId+NkJbaAl/T
-         NtzUKuOtKeqtIzXUuxou2bppezRiJSlCGAQfvmfwe0SGyKAozI7vjDV9WXF9bvcgHG/P
-         I7yPKPPTevbPoNmAyerSna77drso7at40es8jtz8yTlGtPG7ztrMl0UVmVxFzx/q27wP
-         hw/Q==
+        d=gmail.com; s=20251104; t=1787623193; x=1788227993; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nhHoz17uhzvTdXS0vYq6oOhZqGXYkYOkqCoUJ92OGtQ=;
+        b=S/Grd75Ak0VKAFbk13QHdr6H4KRrNJIT/ApSgJqFnolheseGrQTLZjokd+DDX3PDyS
+         wv/173klLh7Uba07EaSPfcX4hgNX/NzBh6F5IRLC+U/Am5nrnEjFh4i87aPvecpylNZ9
+         iyIs6VMz/E56CMEO/uO6so6jkSuXC1QPb/iENcvnL1tsaPhDLh83nggt03/aDcxQbllD
+         Im15kuw6x0VkHM7ZyakZqhvRM2BdfB27IPYoJr4wlIyJtVgAD7CyA2MpCNHMUD9l6AEF
+         qjHYcQ2tKgw/e+ovHvmj4YgSM4r2/CLI9YXfmI54iBhX7T3HNxLqS1i6RPTPF4hW9uff
+         Nm9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787622985; x=1788227785;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=eL8Em3XBkkB3ByuSL6hH25sdEU2rIpfCZLeesDeBJPg=;
-        b=ecymhKqkynO3klV8tnw0nzmLVnJH1+uiCddtF0DnwOtCFZ8B4+JYo/Ga1qWa+Hg7nC
-         ev/Xmp3E8UO3tqQEDwZr8NZA/RNg/dOzBNEI4opAd6hfT6pVwcsIFvXUkGdn3rv8HK7X
-         DdORgM0B06goktbUUG2h7QihVwG80mp+gqE/OS03QDUg60loy58hMdCOTp0+KY6CjFF9
-         f48XSsAmQaQI6wP0ZN9VTcNzqWV1QJ6yZCvyzelEPpap9ediuxxSxTtHEHKS7yqwDR7A
-         qFOzoqpyqqUTZBUV1u5eaxfiazuv8JuUwzMiwpjW+ge1ZEqilGfDMoyQKPWmoEuuF/qZ
-         eSrw==
-X-Forwarded-Encrypted: i=1; AHgh+Rr8cKChHr0EDTr9dIFuhtjg/NsNEO+538fHtp2/a2k6p2+9D6NtraLW3ogr2QFetvxgVZREVJWAG+XgfDJGcUc=@vger.kernel.org
-X-Gm-Message-State: AFuF++lcojdKIl76uSGoLQ9Z2pNv3z4gPE0qx/Yl/MIHmhUM+iYcjp1c
-	x/3CROzhSNTsHTw6Jsw1ko8+zFPVtmcikPf3XrVvDgjlo4sNTMWejqVrWLQ1ZxFiUgCSW9mN364
-	LdB8LMAS8ukW1ROrb1WPXCVm3UNreMv/1LNTZ+p21
-X-Gm-Gg: AR+sD11/rw9KXcyPHLy76lQ6F1ChCb3fljltk2Cu+WJhC5VywRPsienYsoZWQ4pueYW
-	GJzYqRV96ifItja/GR2tiFqCg6KwJDmbKzk/ZgzZcl23Ruj/pUfpqynsFhIcKf7KV6qCZm7QRKS
-	5NYPY3jgasbx79cmkk43qHU6oLR55ZV9ht1QotbfcTOh7xRMnkE89NetvQYbjt46be4C1v0RCE0
-	2E1tvEb+n/3t+gb/TiA6sJKXmkBg2E9i3xc8R7EaF7Mw1JndZeqCKe1PX/0NfETQ/irWGn/2BNa
-	0ncoSDJ5+Nx/cjxNyz+bGqMAJDhewhc3Pwc9H8w2cvxS0w==
-X-Received: by 2002:a05:6a21:3391:b0:3cc:ebeb:3efe with SMTP id
- adf61e73a8af0-3cd91299690mr6192258637.9.1787622984659; Mon, 24 Aug 2026
- 18:56:24 -0700 (PDT)
+        d=1e100.net; s=20251104; t=1787623193; x=1788227993;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nhHoz17uhzvTdXS0vYq6oOhZqGXYkYOkqCoUJ92OGtQ=;
+        b=qlKwTHqtPg1cqTzgqQBV706MQaKrYDV0/XY2Ai3YCdq1HZV7I55yTPz0iqMQXLLKhM
+         4/SKP9JMXfC/+6FK374kSoJq8+2iXi4NHBxo8oFvLKLKzd7KPRZEmpfuHXTyeqERmmTE
+         IMYXM62crccKIHaa8zHY8uafCVYD91oaA+JVAG1vFVIUo/fuQ1EB74zb2+zp19QLkQry
+         9eRoTa5EIGFDoE9Zbv1rfklEJ/di54ueqzsyxUeDJUOhLRuH1SIDQyGK3b6f6YYL2xIb
+         LV+kBXHjQ3tJSHCGgby0yPY7LZelIp/j2bfLAii5cVPQFMadiebhZ8J8xtisfzme8mmB
+         G8eA==
+X-Forwarded-Encrypted: i=1; AHgh+RoEhL6zRmC75n85hT8DZLtLD+xzO7UC4fwp9AUXHCBEDb/1l6gLK4YStUHLeDub5v3ZpKnXAXYvoSCT4wg1TuM=@vger.kernel.org
+X-Gm-Message-State: AFuF++koM15d7vvb6WWiirNAVGHKZTSGh96g/mKzaUGUY707BsNVNVP8
+	We8Quneb24LvmXZMvk+fF3Nt3i4KhVS5yJD7EF4Lk4ydEpU4a9vfG5aA
+X-Gm-Gg: AR+sD11igaSoaBiCPVTYLsYfzhQCTinATEIW3zFWt6CsjcPehGmY2fF04zpcMG4d+97
+	ZMe/K6D13r6g90WHwHPbOqCT/TSGJ9zJXW8TPx0sbgZva8Zz086qGtVoCTmDfjDiQAmTjR8NXPg
+	WRNa78lQVOhCVZ6XxpsWoLH1nUiOE93RvJ2vZWIH8FYFulFa78TnxU4Uae9mGoQoRG5tJ0Q0hUW
+	V28eC/9fgZaKR+YJGUGPLnLS9jKcPPRXp1BSbrVqvXT4VAVgYT7mNDJWI0Sq0QqZ8qBfRqP3aPY
+	D1tOPQvaTHyV1siXin6Eai7fntWBA8zR9pLAAUGv2mW2EYRfUJZOAJVZ2bl8S6kLPBI0rcBEE74
+	B4REuk9hw+321TWicEZ99kCkWkZpjwkGN9gJnWuWODCcgeC12yd5fyVXv3mmRzHv2fHXDEHg5HI
+	NXse7Ll1Yp7+5v9XMUpX6i+sVvcHVvAD52DfKnsUlM3mxcbs5XzVZaExZQbchX5eiNjKjmq1uPj
+	NDiwmzHxhqv2sdjhla+L/V3PmyJ+DXZgC3dtcFCWJ2WcTX0ZtdqEcoEexX5ECQwDYQkH1nuVD0T
+X-Received: by 2002:a17:90b:590b:b0:383:f52b:d616 with SMTP id 98e67ed59e1d1-396464ce7c7mr6288216a91.10.1787623193305;
+        Mon, 24 Aug 2026 18:59:53 -0700 (PDT)
+Received: from ikb-h07-29-noble.in.iijlab.net ([202.214.97.5])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39645b17eeasm1704829a91.3.2026.08.24.18.59.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Aug 2026 18:59:52 -0700 (PDT)
+Received: by ikb-h07-29-noble.in.iijlab.net (Postfix, from userid 1010)
+	id 7A77515C677A; Tue, 25 Aug 2026 10:59:50 +0900 (JST)
+From: Hajime Tazaki <thehajime@gmail.com>
+To: linux-mm@kvack.org,
+	liam@infradead.org,
+	rbm@suse.com,
+	akpm@linux-foundation.org,
+	luto@amacapital.net,
+	brendan.jackman@linux.dev,
+	david@kernel.org,
+	liuhangbin@gmail.com,
+	corbet@lwn.net,
+	kees@kernel.org,
+	ljs@kernel.org,
+	broonie@kernel.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org,
+	wad@chromium.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-um@lists.infradead.org
+Cc: geert@linux-m68k.org,
+	daniel@thingy.jp,
+	Hajime Tazaki <thehajime@gmail.com>
+Subject: [PATCH v2 0/2] support kselftest on nommu platform
+Date: Tue, 25 Aug 2026 10:59:43 +0900
+Message-ID: <20260825015945.141739-1-thehajime@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260806-audit-v1-0-ddd0d94ff0b6@gmail.com> <aos3m2wG3To3wCeo@skinsburskii>
-In-Reply-To: <aos3m2wG3To3wCeo@skinsburskii>
-From: Paul Moore <paul@paul-moore.com>
-Date: Mon, 24 Aug 2026 21:56:11 -0400
-X-Gm-Features: AcwNN1XsyG_yPfa06rOw21lMzHNipb4bKCM3LRKTxwonjmy8cD3qALFuwXGUsko
-Message-ID: <CAHC9VhQUsJyvbu85Dzxobb8wN48o9v9TDCQ=m5dpWDGMFmbTNg@mail.gmail.com>
-Subject: Re: [PATCH 0/3] audit: Measure and reduce syscall filtering overhead
-To: Stanislav Kinsburskii <skinsburskii@gmail.com>
-Cc: Shuah Khan <shuah@kernel.org>, Eric Paris <eparis@redhat.com>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Amy Griffis <amy.griffis@hp.com>, 
-	Frank Hofmann <hofmann@deshaw.com>, Noah Orlando <orlandon@deshaw.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, audit@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Aug 23, 2026 at 2:10=E2=80=AFPM Stanislav Kinsburskii
-<skinsburskii@gmail.com> wrote:
-> On Thu, Aug 06, 2026 at 06:01:18PM -0700, Stanislav Kinsburskii wrote:
-> > This series adds a repeatable microbenchmark for audit's fixed syscall
-> > overhead and uses it to address two cases where audit continues doing w=
-ork
-> > which cannot produce a record.
->
-> A gentle ping on this series.
+We add an ability to execute kselftest on nommu platforms.
 
-As I just mentioned to another submitter, your patch hit the mailing
-list at a time when the audit/dev branch was closed to everything
-except for critical fixes.  We have a doc, listed in the audit
-MAINTAINERS entry, which describes the management of the audit tree
-and our processes:
+Currently there are several issues if we wish to run kselftests on nommu
+targets:
 
-https://github.com/linux-audit/audit-kernel/blob/main/README.md
+- it cannot compile/build test binaries because the current files mainly
+  assume to build with glibc,
+- some of the tests are not able to run on nommu targets as there are no
+  fork(2) syscall.
 
-Beyond that, while I have briefly looked at your patchset, I haven't
-had a chance yet to properly review it.  Given a quick glance, patch
-2/3 seems good and reasonable; it even cleans up some macro ugliness,
-which is very nice.  I'm not sure about enshrining an audit benchmark
-in the kernel selftests, as you do in patch 1/3, although it might be
-worthwhile as part of the audit-testsuite; I want to think on that a
-bit more.  In the past others have proposed similar things as you've
-done in patch 3/3, but I really dislike the idea of adding more
-filtering to the audit filter; I'd much rather see what we can do to
-fix/improve the existing filtering.
+The first issue can be avoided if we can build static PIE binaries (if
+targets support it), but in our case (build on ubuntu/glibc and run on
+alpine/musl-libc), it fails to invoke due to lack of the GNU ifunc
+mechanism.  Thus, we need to cross-compile with musl toolchain, which
+needs to be solved the first issue.
 
-Anyway, that's where things are at, but it basically boils down to
-"yes, I've seen your patches, and no I haven't finished reviewing them
-yet; your patience is appreciated.".
+The second issue is the lack of fork(2) syscall on those platforms.
+Especially the test harness helper (kselftest_harness.h) uses the
+syscall, which cannot be simply with vfork(2).  `timeout` command used
+in `runner.sh` never works for nommu platform as it uses fork(2).
 
---
-paul-moore.com
+nommu component in the mm subsystem has several known issues and having
+test cases should help this situation, thus this patchset is very first
+step toward enriching test environment which has not been well tested
+for a while.  The test cases is implemented based on the document
+(Documentation/admin-guide/mm/nommu-mmap.rst).
+
+So, for the first step, nommu targets only support low-level API of
+kselftests (kselftest.h), and implement tests in a new target,
+TARGETS=mm/nommu.  Other targets are currently not even able to build
+due to toolchain issues but will be addressed once the initial
+introduction which mainly focuses on nommu test will be settled.
+
+The patch was initially combined with other patches but is decoupled to
+only focus on test framework and testcases.
+
+- rfc:
+https://lore.kernel.org/linux-mm/20260813063401.1786548-1-thehajime@gmail.com/
+
+Hajime Tazaki (2):
+  selftests: run tests on nommu architecture
+  selftests/mm: add nommu mmap and mremap behavior tests
+
+ Documentation/dev-tools/kselftest.rst         |  14 +
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/kselftest/runner.sh   |   9 +-
+ tools/testing/selftests/kselftest_harness.h   |   4 +
+ tools/testing/selftests/lib.mk                |   8 +
+ tools/testing/selftests/mm/nommu/Makefile     |   7 +
+ .../selftests/mm/nommu/nommu_mmap_test.c      | 265 +++++++++++++
+ .../selftests/mm/nommu/nommu_mremap_test.c    | 353 ++++++++++++++++++
+ 8 files changed, 659 insertions(+), 2 deletions(-)
+ create mode 100644 tools/testing/selftests/mm/nommu/Makefile
+ create mode 100644 tools/testing/selftests/mm/nommu/nommu_mmap_test.c
+ create mode 100644 tools/testing/selftests/mm/nommu/nommu_mremap_test.c
+
+
+base-commit: 55b50d965aee5f66cefe4dde3907a0e272f96b91
+-- 
+2.43.0
+
