@@ -1,268 +1,191 @@
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6EA33EC813
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 21:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5966448822F;
+	Tue, 25 Aug 2026 21:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.13
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787693246; cv=pass; b=Bqi/EKORB8ksteFyZCde1cRQr/i+o64dQmeLy9HSKA6DMr3sakaGn9E6/QB5sxQ705kwoj/GmkK4ARI/gImh0p2jz5aI4dEuIdwBpPU2mBVSP+R9F2oXXdD6BUycIImDotubpxOG3VKRGGfQWhsfuSkF/mPOtHKCb3KhVfhnigU=
+	t=1787694845; cv=fail; b=SNBc9t+N3oZa6Ph63al2IJfvx+LMLS7Z8mU4xcXhlcjzfTQBYvGw9dPAFFGbklRB3PwRYxiireJxsaiQDGdCnaXCEDl4UcR95KEg5DeUSWpar0FNgKEYgJ3Woket4+U5sojbLGKp8C8uOmAmg/FMVms3jOXcG0rEC22eybMOXZE=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787693246; c=relaxed/simple;
-	bh=9HjdICmhLtTz6k7OlzAvVfsYT+6y6EVDVq4rDGeTyx4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SIbJFGEnXpZkfBTvkNRg3rVOWueeBhEgCW8Tzl1Lquutk3UE/Aj+7AvdwhodpqmVDvleNO4uI07kVAHjmJcrI6ZrNDBx5qQ6dfWroLgpeHZul5rZluZtJTxNYZQMNjBGpXNyXYSmJY3G30IGRwOgo+Ns6cDIa9UN2ZGi5y1r3ls=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=s1KvuAPs; arc=pass smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787694845; c=relaxed/simple;
+	bh=anLalQhTr0NMonUcpDSg8H2GJJCUBS3vUwi0cNXXV7w=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=uBFvp85AbQkmc3dFIQDA6orh3ix/4bUcd+yEkTzJtFyVR0php32pKE77aDJDu9s+/+WCwvple7Ig3ZXsnTks9f7z/3RF2km4sGHIGlmiM9IuG4a8gwJqA2NiI6GUwLizJdlxIoTtpdywccsm8MYKcKsqhdOY5M90YX5gxnKZjrM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BCxP7+Ts; arc=fail smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="s1KvuAPs"
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-6a17cb94b26so421514a12.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 14:27:23 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787693242; cv=none;
-        d=google.com; s=arc-20260327;
-        b=H8iyc/ZeO5Wd9xhJ2uRLjCraqtjnv72fkm//s6cqPzuuImjLsxvV9yz4KLcwn2p63L
-         PYb+OsR7tF9+xDucnlAKl8eJjMfho1TfX0k8iYL5492NN9lOmYTI6h8RkPhScrENrOMJ
-         Aq30BWdnhFuCZYG202fYrPT31oac/Un4Td9ZjluaxgBvgsn6Dutq8r8YxpgvUS8i+pSf
-         TlTQLf5hYAlL8K5hzsfi18M3GtwsASmMmzGDhq9gKJAMmQM0mMwOsW2+KUkWY/EcDGRi
-         fqALiJVEEWoVYS+jODKWy18K9qlBmo+04sY5uIvitlt8xrIFeKtncNoX057VIg4PekuC
-         s+6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=bE5lTVE/l+hmDFQxUEo/OmNLEGESlTEML0H1de8/2cY=;
-        fh=R/+vMe/bg0iTPYnMDXN/jdsIky16Vx2oz4T/V2EbKmc=;
-        b=kvaRyHFegEftihpKpC2BtXTPWyNPVZ8Vcni5C1heUyhE0z4mVa6rZcWnVtZvYZrE3b
-         WmG8kBo5rnwpB5x0tyHHue4ZCsJ3IT12vVaRfM+0E1MWu10jOIGLgfMy+pZ0ju2DqVBb
-         K/8netGinuawL3zhQdvJPsyzdhH1v1VYVBPfUxeJ/gSp9Xi6Glz770F+x8Ka7SrI9orp
-         9GXZ1w8RV6wQWNboS/TGoCFPILHtJLbcxRpMJThuVMtfXB4HEFDYNcKZUn1gavE0uSPm
-         +e9zweKUU7BgBZCryxs3Rw3lWgAKRlC+vhk5SIdhDNeA0LP6UKt5VEPQW/L1x3tn899P
-         c2bw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787693242; x=1788298042; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=bE5lTVE/l+hmDFQxUEo/OmNLEGESlTEML0H1de8/2cY=;
-        b=s1KvuAPsIex4dmM++B7O1fMeB7/FwCP64Z8UVBSNIatQmnSxhCm1aXQ+DQFAQAQZP7
-         /lZyQirMBHwvCO3kkufwE+jhr+s7cV6xq6V33fjI1T/VrK08v+KHuB9CQ2rVoVvDhVhk
-         71qhyoVs9EIx5rJB1S0LqoBjlIFUfa5HRwZmwvco+m60zzGGh1iHnFiMAJL5NtcPadZY
-         96WElsSRfahwNMx0o57zdFVk21AMh0PfHuBQhSnaWKCW9D83lQk6KUymMlBoF2GB2SI0
-         Cbg1wxYeaP1RwG1xG39Ps4m04QzddW4cU8mwIROFbtmr3H4VuvhH3B+Uq9u63gLPq9Za
-         ifnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787693242; x=1788298042;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=bE5lTVE/l+hmDFQxUEo/OmNLEGESlTEML0H1de8/2cY=;
-        b=q5DF+5Ayrwn7+/45yVfiXlijmlqB2dUaoQf22JJAVmrnul3TbS0SosXr1uecZrxwiA
-         cq9sMYCoBvSNKJ/MNIJxqAucJ/Oc7bDOyZib61pXIbRWlkcD2IJjKWPYynrzaSG05p7v
-         ApkaxFo1+dYHrUFnv+0phzfIbcmoZwlwW0vnoSL+oalszXRO+kFJUrJOxpUX2GM87pyg
-         8DLL7LZpA7UGrNlgNRO0x8ogOa0JUHCeUIUV4bHlo0xY/XBf+mZ80+37gNN77TjUxcS7
-         0usL7wENFCORSKdDSmL/kwsBHWa67eqOmW3I4p8CBCVEUnzo6xxL0Gwpk9JIZaALeDOk
-         NOgw==
-X-Forwarded-Encrypted: i=1; AHgh+RoW+RuS+8796H3VMgp9a1nrybSVpWD3o8U7PFesnN3JunZNuAklbitL9DsDcDj+mt0P2ae3E9gCts1as3gAosw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nYFIOfNixNPXHrKfuUlqgpX0VBn9c8yYYumt/h8+zFTzY3ETFe
-	owep55XPYYsdkVavS8J9jfEEdDgzgj8bLUCd7vvw/43/IWh0ePknN2hciV7qhBxdIFSxyZIJezp
-	xqQrpCr1rbfYNmWE4FLzX6KHLbyUQaeQ=
-X-Gm-Gg: AR+sD12VnYzSNi9SevVvHyG2h7pO9xE45ljEJbr/cZYbxlCSKbzrOy76As36v2s51Ag
-	32+m4Krxs6AuYUYqoizDNc4zLVH3kHD6iMz+U6hsYAtN5zyYnVp7U8nZxBQQJe+RYujw/rmFd0T
-	YaqfFz2wVXY23pzZrEWCrUhjDcwXAGgYVpHHVl5yZkyuAn32jypxcGGV8vZd33Z2TbXIA411L85
-	nbB8HtWVXJmB92fO7VwMsZ1IxeYdY96+tqF0ZGfqvqR7DZQt2DEq8wgd2eyq/gjEUW3Nn1YV83w
-	LaIvtpCHhEBGeweQUnAkgTqi6RiQhjruj81w+LZmiZVPTYTJrYZyAhN/+O2uZf2rbMlaZE+kqgE
-	ubq0mWkFOGzk=
-X-Received: by 2002:a05:6402:21cc:b0:6a5:d58a:9640 with SMTP id
- 4fb4d7f45d1cf-6a5df61b209mr2046699a12.9.1787693242034; Tue, 25 Aug 2026
- 14:27:22 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BCxP7+Ts"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787694841; x=1819230841;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=anLalQhTr0NMonUcpDSg8H2GJJCUBS3vUwi0cNXXV7w=;
+  b=BCxP7+Ts9L2dbX8rF+HblKHZ9XIJZ4wVYtSLDKV9JcnADgvCbpVqch6I
+   zgjmK0Imp3cM0DAh/WAPjbWFDSj2Gpw0oxPYjA1AOAnNS/yBTmosDCSbd
+   spnI1idid8uSgBCmryBlw2zDYjGM70Tj2c/DE9y0A44CnCIn5Jau2aDwa
+   rORumfZFGBPIf+o7smNcH6j3sLz4FBcC+DcA48GuLMFUS/QzagyLB3ks/
+   vH2IdB6DionOJZMR02HcPuaHgDE2etAN45c6G/7pmLd4WWGIuVTLtybN7
+   5+uBpIzwr1aAP1FIjxtwuDQwscswoLTGHsnMzJ9Y0qIQb3klth7pfHwvy
+   g==;
+X-CSE-ConnectionGUID: 8EPo26pARyWdnZiS/FGwJA==
+X-CSE-MsgGUID: c6WPLCXCTT6a8NtJ76DYXA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11886"; a="99329756"
+X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
+   d="scan'208";a="99329756"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 14:53:56 -0700
+X-CSE-ConnectionGUID: QkQwriYsRMKcvTv7WZFfsg==
+X-CSE-MsgGUID: SaUdDTV/RgOQlSRQtI1fgQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,243,1779174000"; 
+   d="scan'208";a="267974802"
+Received: from orsmsx902.amr.corp.intel.com ([10.22.229.24])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Aug 2026 14:53:56 -0700
+Received: from ORSMSX903.amr.corp.intel.com (10.22.229.25) by
+ ORSMSX902.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 25 Aug 2026 14:53:55 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45 via Frontend Transport; Tue, 25 Aug 2026 14:53:55 -0700
+Received: from BN8PR05CU002.outbound.protection.outlook.com (52.101.57.31) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Tue, 25 Aug 2026 14:53:55 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=qSyONoJEFmKO+Q2ov1svbnrDb7E5pNI1SSU79hUR7XUsxhpByuf3pZql8aFl1azAFKML382qCQiDtnSprpmAXN1C6i4ZFJRSXwVi+xK/nKSwwFiCZWzMYcVP7Q/l+UmwM773rOJJWnQFtMdLSXxHVa3InYMrKRZroBN1xxPvRkXA6ZyhYtlDl0Yz8wAI0OsjeQrvq2QaeZba4ixpiki/p4G6jnWjTDoWdGJEhMXglcM2Kc6mN2WHerHyYM40w5lbEKpjoXlRcBlybTOq8CKePAaUHxL4YJN9vAf8I5rpUJGIneWWsYgaC+I0L2GysYPKij7e3kcg8F8P/ZB93MM76A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ph7lcgzbDQ1CECsjfqNtbI6AicHPtTPuJgrrvCKGaU8=;
+ b=Sz4ddJpwqwZJtFQxWdQBP9PguqftZQ6xV7MRSHwiXYmhwjeSPaRdHDYha6F0vWJOOxBu+i7g7uJ8ei75cPRrG1wAcf9zriJ1Ndy1iOt41k57S8UwHwssV1U0rQrytWZVFakBJyfD78yzfbRYBxI+I7XQx0TRQ+iwsUdoNq28FOCPrcKCnGjSzkBgZHMR52FFTgSRC1cOsUpoc9hmFAg8qLvuZSsf0W7ZGZXXr8O4t7LDX0slDX9Oqedk6AkhxZKhDH/89xBgrRakWyn++ZsoVdzH7etsi4XcxtK/IsE+70OzLF0LE/E3fvSPkPYNQS4yaAm/I+joozyKRQHKFRxoVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH3PR11MB435924.namprd11.prod.outlook.com
+ (2603:10b6:610:34a::8) by CY8PR11MB7314.namprd11.prod.outlook.com
+ (2603:10b6:930:9d::15) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
+ 2026 21:53:44 +0000
+Received: from CH3PR11MB435924.namprd11.prod.outlook.com
+ ([fe80::1696:c90e:60af:a0cd]) by CH3PR11MB435924.namprd11.prod.outlook.com
+ ([fe80::1696:c90e:60af:a0cd%6]) with mapi id 15.21.0360.005; Tue, 25 Aug 2026
+ 21:53:43 +0000
+Date: Tue, 25 Aug 2026 14:53:40 -0700
+From: Peter Fang <peter.fang@intel.com>
+To: Lisa Wang <wyihan@google.com>
+CC: Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng
+	<ackerleytng@google.com>, Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao
+	<chao.gao@intel.com>, Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Erdem Aktas <erdemaktas@google.com>, Ira Weiny
+	<ira.weiny@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, "Kiryl
+ Shutsemau" <kas@kernel.org>, <linux-kselftest@vger.kernel.org>, Paolo Bonzini
+	<pbonzini@redhat.com>, "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>, Rick Edgecombe
+	<rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, Ryan Afranji
+	<afranji@google.com>, Sagi Shahar <sagis@google.com>, Sean Christopherson
+	<seanjc@google.com>, Shuah Khan <shuah@kernel.org>, Xiaoyao Li
+	<xiaoyao.li@intel.com>, Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds
+	<jmcrey@google.com>, <kvm@vger.kernel.org>, <linux-coco@lists.linux.dev>,
+	<linux-kernel@vger.kernel.org>, <x86@kernel.org>
+Subject: Re: [PATCH v14 13/22] KVM: selftests: Support guest_memfd in-place
+ conversion
+Message-ID: <20260825215340.GC3694338@pedri>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-13-15ad654a50db@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20260722-tdx-selftests-v14-13-15ad654a50db@google.com>
+X-ClientProxiedBy: SJ0PR03CA0389.namprd03.prod.outlook.com
+ (2603:10b6:a03:3a1::34) To CH3PR11MB435924.namprd11.prod.outlook.com
+ (2603:10b6:610:34a::8)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1784204592.git.me@linux.beauty> <anJE8SfBLtkh6QSa@zenbox> <1a01795b07a.1f456216580426.3401229391386650127@linux.beauty>
-In-Reply-To: <1a01795b07a.1f456216580426.3401229391386650127@linux.beauty>
-From: Mateusz Guzik <mjguzik@gmail.com>
-Date: Tue, 25 Aug 2026 23:27:09 +0200
-X-Gm-Features: AcwNN1VIk99DyxEcpdaJ9t08bm4LFPXj5Yk5ztu7oKocV4saiMTQcrI1RCnhRcA
-Message-ID: <CAGudoHGoOr8rvhSQK+HQp7LmNyE9vP=xTok9eA1ZbV7uaVnMEg@mail.gmail.com>
-Subject: Re: [RFC PATCH 00/24] pidfd: add a minimal process spawn builder
-To: Li Chen <me@linux.beauty>
-Cc: Justin Suess <utilityemal77@gmail.com>, Christian Brauner <brauner@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Gabriel Krisman Bertazi <krisman@kernel.org>, 
-	Josh Triplett <josh@joshtriplett.org>, Andy Lutomirski <luto@kernel.org>, 
-	John Ericson <mail@johnericson.me>, Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Oleg Nesterov <oleg@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Paul Moore <paul@paul-moore.com>, 
-	Eric Paris <eparis@redhat.com>, =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	linux-api <linux-api@vger.kernel.org>, linux-fsdevel <linux-fsdevel@vger.kernel.org>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-kselftest <linux-kselftest@vger.kernel.org>, linux-doc <linux-doc@vger.kernel.org>, 
-	audit <audit@vger.kernel.org>, 
-	linux-security-module <linux-security-module@vger.kernel.org>, 
-	linux-arch <linux-arch@vger.kernel.org>, linux-mm <linux-mm@kvack.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH3PR11MB435924:EE_|CY8PR11MB7314:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f0678bb-53dc-463c-1cba-08df02f354e0
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|23010399003|376014|1800799024|366016|6133799003|10067099003|56012099006|11063799006|4143699003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info: iVbKwAPZRpxlEjabzTzNHg6GlDnd/9qWUAAvnS4j5XDzlO/WflEUtk0snKeYowAURRfdM/0RIwMkb03YeLwMfxGuaQHhKlhKbkMRcbWezQa4JCRWSJsYLJ1YlBQTnBrcr9Mo2FJpIzD6Rrfl1bpkInPTlwEEL9H0xhAHb33H0eY/Cb9xEOUb5GJjRv60N0IClBpr7JQpRO3h5nDJjURIMnCxSKTr+7G4pnAQiSOyziwABSbUTFP6wfawuX9UAtE1ehBq9Cv0CamHjX2dYrKsvMTBOq3VC/rWbyjGaU5CnbKplvijlRLx58c3ouSxGE8xH7g2Z6lnyTQ6p7X5pCl8blcxokgwUPqILGmN5hZkPZRU7rNJ6CiIgwqq4WnfYplX6rb9hT3DThcVAv8iyqp4jXNkxcwyej1v1cSJ7IhWuhPdBvnI5XuX6BDLYhEvdnqpNoPdsmpFw7/6Pf6mlaMj+0ML9Z0kzLoaDrH5yXTIXLPG0bVD7BwD5cbQuklXxStM182AQjcN0Siot87o6SPtxY1UWnNiOiUYCdzXG4FOq/v2SCFRLZwMxIq9DzJb0M7BCzINx0BvQZNuNPZU/EJXvmguHZFsi5nNbZJCRj1tStsTywQibj1zQh8FIdLb57SYPK1u3DMS7at1nruqhQfVUm9jvZL7EKOU3QMtZUE7eDs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR11MB435924.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(23010399003)(376014)(1800799024)(366016)(6133799003)(10067099003)(56012099006)(11063799006)(4143699003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Amw6CYgWszknyucEYCJtI9gZwewL52afNrbeGH+/MI/HkXduSg9vcPpXStsf?=
+ =?us-ascii?Q?xqzxuFAFV8O8VIWQX3UI8kcURSPX8S10vYnsX+MF9kMXEBN51qCYedipzNWc?=
+ =?us-ascii?Q?oDrCjOhbKJTouPGz8cZG6A+TbhFx0b64inLPf7dtcMvnmfTd6CXtb5YK4wHu?=
+ =?us-ascii?Q?hCdKIDQ/TZhUCaN72rmTM6tLrMPvf3vfOr758zulqQVRG91Mh9N1YX35p+eE?=
+ =?us-ascii?Q?++9qZQfBcPEjfsytBtjVOES7qCm3mEt2jUXhSHEQnBrOctElnZj/9/XqLyme?=
+ =?us-ascii?Q?YMvXEcQPfy70TwEX96hLtf0RU+qoapk5bgKVK8bv+rRSUAKD6erNNFfGds/X?=
+ =?us-ascii?Q?nVonwsVED3csBHRq14Qb5iVN1YVx8XGDkTKur9FKjy7Ulixfa5iL98e5G10W?=
+ =?us-ascii?Q?rEf7bT+Q2GWbOlJWRFUQo0X2lgv7U3CSAWmNPeS2RpjkrkOj9Ba/EvUZ4CJv?=
+ =?us-ascii?Q?fzy6iVzheS7mtfOeafuE6a0v0cym0ld7eHbMSNb2vDP7TO6jade63E/7MiAJ?=
+ =?us-ascii?Q?It3SSIMwcDSpEjNu8ydIbuF6deHOimagJgqTcpsp3cjccDu0CAsFF7Z6P8mL?=
+ =?us-ascii?Q?3YGb4wJCgVT2XUoU4jwfiPnpFlTfh2YilItkJwT+BKxnANi+B2TpVM+pXfbt?=
+ =?us-ascii?Q?7AbO3fuvxeHJxQvgmIsYtBt56OkFJwte93/TyWhDH2UJP8aH+F5IcKUok8lb?=
+ =?us-ascii?Q?J0d1e6vo6hxiTqrW9clZzxY/FzponFn91xYFsyrZ1SFNGs00Rkld9sMPGiRh?=
+ =?us-ascii?Q?TaF5CBR/v/4xeR9gCbdSe7/VgX0xcMLLeCCPYinakuekUYSclE1onUDMA843?=
+ =?us-ascii?Q?weq9Av/m4mIDRLyeiH00xLNX/ZMoAkozrJMOtVaXZv+iZbhaqoO6aBDGc3ya?=
+ =?us-ascii?Q?gqF/ZXPO3z13Cz5ME/E2j+bRjrXj6nTWd+nqln4105jKeYhW/5SAvObfutLx?=
+ =?us-ascii?Q?2Tw7dipToSO/1UW/VmvdyiIZolnx/c61EwBeXBOv9h5c5c7nJGU9eW2emSot?=
+ =?us-ascii?Q?QVsnLy2hhQ4EPg89VDT6M/KkxQllcGdIPIEyBliHSHkoLW0t9oAaZQihlGzJ?=
+ =?us-ascii?Q?MDTI+I0Gnszs2Ppp2UuK2MpYySOe2mZc4reFfM4bM5YLuupzelIY9QG4+E+X?=
+ =?us-ascii?Q?glg0SbQRNUUCiz/uG/J2IJq8yhJfySgpkEm93NSJKjX3KHCvQRESSg6sXiI2?=
+ =?us-ascii?Q?T+ZlXuCbYP6sMMkHR2pr4QodExQZARUaN1T0LLGW1ZPvOtGdZSg579Xdh51L?=
+ =?us-ascii?Q?vASl7jx2ka8yfGN9Ue/hlfZhbVhvAikIUWS9l2jpv5ii7v3Yk7aj6nx11tc/?=
+ =?us-ascii?Q?X4Ys4X7ZYaQlbc8gQWHYKR1jt/OIIeKDuszy+o8toRwQAMIsq9xWOaqr8wwW?=
+ =?us-ascii?Q?EkW6j+ejORSZO1ESIe2cFh4YUxrm+4ie3sdvRa9DnCRpN8DG8U8fOpatU8qu?=
+ =?us-ascii?Q?qYoxoh64Ufs5NdflG2HRt32ZWDQ7Sw3yUD10KhfrmaY7gLb9X6NvH7Eq2kJR?=
+ =?us-ascii?Q?GIWovvxObYq7DU67jPJYQKOriLZH/9SfTeoX84sf6ewGcu1o1JCCTHCjLsGA?=
+ =?us-ascii?Q?ijVdhjc36yTTOA3iEgKZTqC7ddKUv9xda2U3A6MK/6/YHxM5234lzRfZ9RAZ?=
+ =?us-ascii?Q?dqeiT7dk7J5WSaGr61Zbz8SbX4lHsLJCt/++sbUa/yrlXTD9dmYcXYKN0s6/?=
+ =?us-ascii?Q?IM6ek7VOe7Gt6ZNsjDhmncFRae6y+Fkzauqgv3BYUAahd4vnZulfZJs9g+A9?=
+ =?us-ascii?Q?e1AfHT1QbQ=3D=3D?=
+X-Exchange-RoutingPolicyChecked: EUyfQxlTtEww/gla151j/2bkvgxO/a9Ngjz1GJhNFZyFFUbkUn4OU1MKNkRCyKr7+ccLedlVsN6JUkER4zt4PsqUdPvzBz8fk6xMOKf2dUkZqq7HBJ3AV/OBCesYolR/iu6FFFgccDMau6wntY91g+9+Jfeky8qHjFKXLCldlEpDwjKSDhM6RDAaCxsdNcrn8iEU0LLEvYo8m8qRzv+brFwM7jhNtaXctZPFIN5bqk41mx1FkRAQYrqKdSkquPXIjJwA2e8OMhcrpv0+soTf/jor1Ve+/7ZanQllBLLacutnxeYEc229fBt3yOsNnQ7hUlOBA4ij6kcHptD/WEACHg==
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f0678bb-53dc-463c-1cba-08df02f354e0
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR11MB435924.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 21:53:43.5207
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: I/lTz2OUrcq8RHAenkSgMBaTQKo+cdB36pQAeHGO2qVOklgvwCR3yEB3ob45s3+46Fxe7nlm1MkaC3l0r1zt4Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB7314
+X-OriginatorOrg: intel.com
 
-Whoa, this is older than I thought.
+On Wed, Jul 22, 2026 at 11:13:18PM +0000, Lisa Wang wrote:
+> Set the memory region as shared if guest_memfd in-place conversion is
+> support, so that the KVM selftest framework functions can populate
+  ^^^^^^^ nit: supported
 
-First and a foremost apologies for radio silence, I got really busy
-with other stuff.
+> mmap()-ed guest_memfd memory the same way memory from other memory
+> providers are populated.
+> 
 
-I did not have the time yet to go through the patchset, but I have
-some time to respond to this bit.
+[ ... ]
 
-On Wed, Aug 19, 2026 at 3:15=E2=80=AFAM Li Chen <me@linux.beauty> wrote:
->
-> Hi Justin,
->
->  ---- On Wed, 05 Aug 2026 04:25:25 +0800  Justin Suess <utilityemal77@gma=
-il.com> wrote ---
->  > On Thu, Jul 16, 2026 at 10:31:26PM +0800, Li Chen wrote:
->  > > Hi,
->  > >
->  > > This RFC follows feedback on my earlier spawn_template RFC [1]. That
->  > > proposal made caching the primary interface; this one starts with ge=
-neral
->  > > process construction. Christian suggested a pidfd/pidfs exec builder
->  > > modeled after fsconfig(), with enough semantics for userspace to imp=
-lement
->  > > posix_spawn() [2], and Kees agreed [3].
->  > >
->  > > This RFC is based on linux-next next-20260710 and depends on two pid=
-fs
->  > > fixes that I sent separately:
->  > >
->  > >   * pidfs: preserve thread pidfds reopened by file handle
->  > >     https://lore.kernel.org/all/20260716052726.1032092-1-me@linux.be=
-auty/
->  > >   * pidfs: handle FS_IOC32_GETVERSION in compat ioctl
->  > >     https://lore.kernel.org/all/20260716052822.1034228-1-me@linux.be=
-auty/
->  > >
->  > > The initial implementation is source-based. The executable path can =
-be
->  > > provided with the final run request:
->  > >
->  > >     struct pidfd_spawn_run_args run =3D {
->  > >         .path =3D (unsigned long)"/usr/bin/rg",
->  > This should probably be an FD for the path.
->  >
->  > This way it prevents race conditions over multiple configuration steps=
-.
->
-> Thanks, that makes sense. Using an fd avoids the pathname race and pins
-> the executable we actually want to run.
->
+>  
+> @@ -495,14 +497,20 @@ struct kvm_vm *__vm_create(struct vm_shape shape, u32 nr_runnable_vcpus,
+>  	vm = ____vm_create(shape);
+>  
+>  	/*
+> -	 * Force GUEST_MEMFD for the primary memory region if necessary, e.g.
+> -	 * for CoCo VMs that require GUEST_MEMFD backed private memory.
+> +	 * Force GUEST_MEMFD for the primary memory region if necessary, and
+> +	 * initialize it as shared if in-place conversion is support, so the
+                                                             ^^^^^^^
+                                                             same nit
 
-I don't understand what race is supposed to be addressed either as
-none of the setup depends on the content binary.
-
-Regardless I don't think this is going to fly as it directly shafts
-NUMA setups. What's needed is a path to the binary + the PATH
-envifornment variable or a collection of paths to try out.
-
-Here is how it harms NUMA: In the most extreme case suppose there is a
-container bound to a specific node and you want to exec something into
-it. Further suppose none of the relevant data is in RAM yet. And
-finally the process doing all the work is running a different node.
-
-Say you are going to spawn ${container}/usr/bin/coolprog.
-
-At minimum this will allocate a dentry and an inode for usr, bin and
-coolprog itself.
-
-Afterwards any path lookup going through usr in that that container
-will have to fetch memory from a non-local node to traverse it, same
-thing for the bin subdirectory.
-
-This is a self-induced problem when using a fd.
-
-In the real world userspace notoriously performs failed execs as it
-makes its way through dirs in provided in PATH, and while you can
-patch select programs all you want, the mechanism will have to account
-for it.
-
-This is where the next NUMA issue lies its ugly head. Suppose you have
-a box with multiple nodes, but don't use anything to maintain affinity
-(as in, processes run where the scheduler sees fit).
-
-A well-known exec-heavy workload where this is fine is compilation.
-Any big project will do, to give you one trivial example, make -j
-$BIGNUM modules in the Linux kernel directory.
-
-Say you have a box with 4 domains and 32 threads per each. make -j 128
-will end up spilling on the entirety of the machine and there will be
-some loss of locality when spawning gcc and whatnot. Even then, a
-sensibly behaving scheduler will not migrate processes between nodes
-without needing to do it. Meaning after the process gets to run, you
-can assume it stays on the given node. The stock kernel with the fork
-+ exec machinery is doing a shitty job here, but the new mechanism can
-assure process-specific allocation to come form the target node as
-long as the scheduler does not mess up.
-
-To that end, the final form of the machinery needs to be in position
-to do the following:
-
-1. copy in whatever data it needs from userspace
-2. if no affinity is specified, ask the scheduler: assuming something
-forks now, where is it going to run? the answer would be speculative
-ofc
-3. to the minimum allocations needed (task_struct etc.) while passing
-the node number from above
-4. have the newly spawned task handle everything else
-
-This in particular means that a failed exec would be very expensive,
-as it would go through task creation and teardown. Meaning the child
-needs to be able to figure out where to binary to execute is. And
-user-visible part has to account for it from the get-go.
-
-I'm going to write more after I go through the patchset, should be next wee=
-k.
-
->  > >         .argv =3D (unsigned long)argv,
->  > >         .envp =3D (unsigned long)envp,
->  > >     };
->  > >
->  > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
->  > >     pidfd_spawn_run(fd, &run, sizeof(run));
->  > >
->  > > Alternatively, the path can be staged before the final run step:
->  > >
->  > >     struct pidfd_spawn_run_args run =3D {
->  > >         .argv =3D (unsigned long)argv,
->  > >         .envp =3D (unsigned long)envp,
->  > >     };
->  > >
->  > >     fd =3D pidfd_open(0, PIDFD_EMPTY);
->  > >     pidfd_config(fd, PIDFD_CONFIG_SET_STRING,
->  > >                  PIDFD_CONFIG_KEY_PATH, "/usr/bin/rg", 0);
->  > Same here. Should probably be an FD to the binary instead.
->  >
->  > >     pidfd_spawn_run(fd, &run, sizeof(run));
->  > I'm worried this pidfd_spawn_run just adds another varient to the exis=
-ting
->  > myriad of exec* syscalls we already have. Would it be better to just h=
-ave this
->  > work through execveat(fd, "", argv, envp, AT_EMPTY_PATH) instead?
->  >
->  > (i.e have execveat take a pidfd directly).
->  >
->  > Then you can get rid of pidfd_spawn_run which looks almost structurall=
-y
->  > identical to execveat (with the argv and envp collapsed).
->
-> Thanks, but I'm less sure about using execveat() as the run operation, si=
-nce it
-> normally replaces the caller while the builder creates a new child and
-> returns. A separate run operation still seems clearer to me.
->
-> Regards,
-> Li
->
->
+> +	 * selftest framework can populate it exactly like other memory
+> +	 * providers.
+>  	 */
