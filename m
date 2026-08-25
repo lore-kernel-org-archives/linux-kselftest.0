@@ -1,28 +1,27 @@
-Received: from PH7PR06CU001.outbound.protection.outlook.com (mail-westus3azon11020081.outbound.protection.outlook.com [52.101.201.81])
+Received: from CH4PR04CU002.outbound.protection.outlook.com (mail-northcentralusazon11023097.outbound.protection.outlook.com [40.107.201.97])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9E7D48C3FA;
-	Tue, 25 Aug 2026 22:15:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.201.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39CF148CD4A;
+	Tue, 25 Aug 2026 22:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.201.97
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787696163; cv=fail; b=Jihhv7g/fYA5+HRyB47iIvbLtPjNZUafA9RldrzXxNppgLez/aZ+Oz40fZqXDfHlhEj/RF6fmqOr8/uU3fbTWYV3jZr2g421dGGlQjxRysMBXaNTmvicwVFx6q16gY0pLtuWgwusmlNH+5d74Z8VVY9iDUdRRDCoDOMRdDroUTU=
+	t=1787696163; cv=fail; b=SUCKU0+0t66a+Y5B7OwF3m42w6izmxQJGQTBEwQS/9AOWIV7KY7sfWmjLVuQYooxMfxmbWWK0Y8oMkKMb7sTSVeRcQYOQ5HQBNNvpvLX3lVzrhO/hwfPMkCq3ITNyg8+xgD1NDCapps1S1NAU+k8BQmScVZg/4h9ahApfcMgz2s=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1787696163; c=relaxed/simple;
-	bh=wzsBqtrba9NaGSWODLJSnfTDRNSeOXcRXc/2hl8u0S0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mqps7raKWg+lKlKihy2qfhjzeDOuQGhl+G2pooB9Zw/kTPjzULMOcN+glPKlAKCvPcfJbwDU3vJeaM3XHIQuAzCPrt3svLD/lom7whkeRyRr/WZ/43fAE8YKMhgArQDx72U7XOH5Wum24rmUS41Oy5rH6m8DHTsk9JHLFph0K5E=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=Ivc/SCdM; arc=fail smtp.client-ip=52.101.201.81
+	bh=pvY9D68kzhFHUDCPtMw5EO3/eo3e2l2ofmL/k0+FTE4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=YQ9Em5P2M4Y1CQnM25KXGqlRUH9PbfV173lG5GUfayrSEiq5TSY6s+i5mkoZcOIaxv15HTbdRlKllKFU6cOuWL6aTbYI2IJgu+7Acru51TgH4P57KTFTXFPbLgXZOtTBGhpuKgxczJgT8RbYNkzX20SF1W3h9LU7PGqN4p9AUWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com; spf=fail smtp.mailfrom=rambus.com; dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b=qICSUDiy; arc=fail smtp.client-ip=40.107.201.97
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=rambus.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=rambus.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="Ivc/SCdM"
+	dkim=pass (2048-bit key) header.d=rambus.com header.i=@rambus.com header.b="qICSUDiy"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H94zKQkvDWLSWsjJWijcnJl7TWlKxLU62+8zHc9B+NKfnC4nUgr2KhtLo9KsNWAxuG3mhmwmla5nb0PrDvchq62I5tlwuc32zsN0kEqxoBho1BY/ol5v33jidm6ip7i2L+C/oD+QdVUuddj2s3YtwXX9MCB0MHxpvMjpx6jX+SKOgKe5cB8kfUcm9dUOMkT76Guis57BfkTYhVdggpRRtkUmZCXuRCJ6mDrcx0tRUcRqV8mdB80aunI4pseM9KMUWvpBypORHUHglhscLjoWIjeC12Zw9cmXCUDc4zkOT5/rO1buoE5vOCX3AaPaw1AF8Ki4ZITVVG+aO160uEa3Bw==
+ b=hOzg02gxdh+v5Wl+xHmuGA2Trlm4QlMInKPjvxn0eF+xKbKI91YMb0iF/gkcS2+2n0ryNYEg7Q4v+keWfC471Z2V6Mi31L23q8Bij778Yi2XHqaw695bFCalFcijkqlxMYzTKnOv5810gYMzV0qJ8h5bLarbtrWcg/lYsM+lGbdxmnPC5FLPeZ1UjYnmKXP7cruHXrQaACuKIJadtn4lVTCRXuJ+C8tXSs12fRO234qMFlVHDBCRgUbeaTA9Y7P8d3Ed4Xpi1UoYBiUwd+8mybTOuosJ+SavF0u6J/GYvQ0+CwimMycUM5W0rtZXWnyGN8tO63Sp0lEMY+oUZNlw9w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mwrMO/P62Yz4bvIijI8g13AXXv4Lxpndr63OYUIU7xw=;
- b=iv52z4vYEn6waxFoEgszWfY8qYAN0oURP1IQ02YBDlVeMC+ZiZRmL0XM3vUWFGGwBv/irSV4f8ntdSsPDx13723svB1RqzJIU06rEt7fKfu9Yy52iIDHyWjEAPHxLN9W95QycUpYJLop9yko3xRmfcvAt2a8UFMmQPfQm1hWaMexwXlZgZDL2vkH4SW/Ka3hEcbn5qx2ZIyMTv1Flu7k7OsQO+ajW/O/Hp/njQlSVAXohIHahQMuv3eibaoAk/K+PqlzN7VG3dL8mgk3U/OZEd5NffaZZjZW4uGQGTSj1S6ewNyNemZJ+UxgRaQuUnm2P2vv9DpFEq+EzvJD4IXXnw==
+ bh=cwWpt0J21iJX6mIp3D3jnqCIZBQZhXTu9cS8jnwwkW4=;
+ b=bpKsjK87KkfayTFa54PcUfCCLVb/Bixg4D6mdv73AN7lh3ZXqJI2yJkEicL/kiarb/hAczAZWSSvN9TvZ+cD2Z85GQXWIPsXHVH6FcEqQPNuasIZPsUk5vs1g9JHXlv5mL7BzgsvlSzdvbYgfO/EfMifcq4zzrbpWQAUvZMgGyMSuOQPmnybBbtZ9mA7oG/JW0yBpv8X6Ln1j27xKfHXuS/J5vaZf5D7vGW8YkhXwYcW+P7VgFity+QmHZCP6mfhvXgW3580pA1dBDMa20hrkU4wOMn8+QmCOX9WZaQYG5F9uMC23XxV7RCcsXvkg3jy9clNIt59N+H2MNMld4IiMw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  192.86.86.210) smtp.rcpttodomain=cryptography.com smtp.mailfrom=rambus.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=rambus.com;
@@ -30,18 +29,18 @@ ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rambus.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mwrMO/P62Yz4bvIijI8g13AXXv4Lxpndr63OYUIU7xw=;
- b=Ivc/SCdMwqDENuW0jDAmiDS6tazbQzWEqKYnIHjwhVVFquyf7LCIy4ZCbPj7xmf0S2FpL6y+LwcaoXgi2JyB+8vxkGaq+OykoiMYnLy2l3eX6KzgHFy7b/9GPAWfEmB67zkt/jZMVwEtFQBvtj1NAZglRfEeZjgwQZfaDBrjXkD/Pm/jicW2x5qdEELDG4H1kyYvK3HE2ADcAcHE6ElS7hD9lLNMjRVNLnIaIuivEcEnxmdnfnLG2AJNias9t8BS/69joGxaWYPk7GrxdhlbEbu5AhO9qhYeG3cQ2l6kVmujvsesmJOiLKdtlSv8FGICpnNfgDRhnFbmMhZm0AVngg==
-Received: from SJ2PR07CA0013.namprd07.prod.outlook.com (2603:10b6:a03:505::15)
- by DM8PR04MB8070.namprd04.prod.outlook.com (2603:10b6:5:317::15) with
+ bh=cwWpt0J21iJX6mIp3D3jnqCIZBQZhXTu9cS8jnwwkW4=;
+ b=qICSUDiyPBejuoUf/lpSN2LHaeKs+RBCTEfk5a4eZc3YVTmjX5y1zp5WLiMHOp2v4svoLMbuRNcqtgYPt1LuICLLNVO3lM6IzqR6YPdEGnfwQ5pqECAwV7YH89gPOol8OdyLJF7FTgIq/1qJGYxh+dtckOFdoKs66kcwcQezz1WufOnjKxq4TqBLtCETEHIFp7ngvQleJU64fKU9b+idY0YwLr93DaOG5GOjzHIi9SrLnY8a+yczqvwuw7TQuK6PmmzepAxcE7z2FqTR44SSbissuIV537OTjcpBdRks/nWSJKBqcsfl5hA8f1H/OpC1OitvEXPRYu2qrjJlOPlJBw==
+Received: from SJ0PR03CA0361.namprd03.prod.outlook.com (2603:10b6:a03:3a1::6)
+ by MN2PR04MB6416.namprd04.prod.outlook.com (2603:10b6:208:1a3::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.7; Tue, 25 Aug
- 2026 22:15:53 +0000
-Received: from BY1PEPF0001AE19.namprd04.prod.outlook.com
- (2603:10b6:a03:505:cafe::a5) by SJ2PR07CA0013.outlook.office365.com
- (2603:10b6:a03:505::15) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.7 via Frontend Transport; Tue, 25
- Aug 2026 22:15:52 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.339.12; Tue, 25 Aug
+ 2026 22:15:52 +0000
+Received: from BY1PEPF0001AE1D.namprd04.prod.outlook.com
+ (2603:10b6:a03:3a1:cafe::72) by SJ0PR03CA0361.outlook.office365.com
+ (2603:10b6:a03:3a1::6) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.6 via Frontend Transport; Tue, 25
+ Aug 2026 22:15:51 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 192.86.86.210)
  smtp.mailfrom=rambus.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=rambus.com;
@@ -49,12 +48,12 @@ Received-SPF: Pass (protection.outlook.com: domain of rambus.com designates
  192.86.86.210 as permitted sender) receiver=protection.outlook.com;
  client-ip=192.86.86.210; helo=hqxsv-psmtppxy01.rambus.com; pr=C
 Received: from hqxsv-psmtppxy01.rambus.com (192.86.86.210) by
- BY1PEPF0001AE19.mail.protection.outlook.com (10.167.242.101) with Microsoft
+ BY1PEPF0001AE1D.mail.protection.outlook.com (10.167.242.106) with Microsoft
  SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.3
- via Frontend Transport; Tue, 25 Aug 2026 22:15:52 +0000
+ via Frontend Transport; Tue, 25 Aug 2026 22:15:51 +0000
 Received: from hqxsv-cmdev3-aousherovitch.rambus.com (hqn-lb-int-float.rambus.com [10.12.20.20])
-	by hqxsv-psmtppxy01.rambus.com (Postfix) with ESMTP id 8F79B180176D;
-	Tue, 25 Aug 2026 18:15:51 -0400 (EDT)
+	by hqxsv-psmtppxy01.rambus.com (Postfix) with ESMTP id CDAC1180174C;
+	Tue, 25 Aug 2026 18:15:50 -0400 (EDT)
 From: Alex Ousherovitch <aousherovitch@rambus.com>
 To: Albert Ou <aou@eecs.berkeley.edu>,
 	Alex Ousherovitch <aousherovitch@rambus.com>,
@@ -79,12 +78,10 @@ Cc: Alexandre Ghiti <alex@ghiti.fr>,
 	linux-riscv@lists.infradead.org,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Thi Nguyen <thin@rambus.com>
-Subject: [PATCH v4 14/19] crypto: cmh - add ECDH/X25519 kpp
-Date: Tue, 25 Aug 2026 15:15:33 -0700
-Message-ID: <20260825221539.255951-15-aousherovitch@rambus.com>
+Subject: [PATCH v4 00/19] crypto: cmh - add Rambus CryptoManager Hub driver
+Date: Tue, 25 Aug 2026 15:15:19 -0700
+Message-ID: <20260825221539.255951-1-aousherovitch@rambus.com>
 X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260825221539.255951-1-aousherovitch@rambus.com>
-References: <20260825221539.255951-1-aousherovitch@rambus.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -94,900 +91,347 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE19:EE_|DM8PR04MB8070:EE_
+X-MS-TrafficTypeDiagnostic: BY1PEPF0001AE1D:EE_|MN2PR04MB6416:EE_
 Content-Type: text/plain
-X-MS-Office365-Filtering-Correlation-Id: ce19fda0-a087-4cc7-6f61-08df02f66d2a
+X-MS-Office365-Filtering-Correlation-Id: d6d29307-2759-4df4-6ac6-08df02f66c39
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|82310400026|36860700016|23010399003|376014|7416014|1800799024|3023799007|6133799003|10067099003|56012099006|11063799006|5023799004|18002099003|22082099003|921020;
+	BCL:0;ARA:13230040|36860700016|7416014|376014|1800799024|23010399003|82310400026|13003099007|921020|7136999003|6133799003|3023799007|10067099003|56012099006|11063799006|5023799004|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	AKqovFnwHERERtLOgfDNzZdjGUdgdT4O4T7Y5wSs5tCRamim2BmIX/7noUaAAw3XwYFRSPqVCu3FrKZYg4dNwpLO6V/ufXtYlV63F7ziUksKauceluTbchLUJOUCDSdAazFp/R1c9e1Ovk70PwJ1tGyBLWq2F4KIwESD0f2jJeLOD9d6W8eZnvPboePZbk9TMpstiRRIeG0g66O3tdQ6VxuYLn5mgd1xD+EMOjazXsPCdfmtCB5AiUZRSVBnXkJiZSFj4FOMaVRq9NgK9Q0f/tMQt8OtmBU8tmFf5/oplcw5G3AqRIw6RG3h3MS4rxZYFEO1WAk7CizumWYrbOTGn+/Ugcjr/FkcbvzlLj4PT5l3MBzbvrNdBhnuOna24K090je9eUDbswzA275wS+TwV1Ms9o+eiBffKBOkSDYvIFYHsjmNlwNH+3zZ22Xuhyj3KZoQx+hG9ky0RPxjg7IgxJNcOoBvTTO6DBKHcYYRy9UeTL+NqENVxuvmzSV7klqMA8U1BSclV9bvpiK5hyacNysRTLIg2H6sAxXF4omjxqxjZTnk7bauUDfGEAqu8zoPOM+vrSIlp9Zt8K4C+75l01s4qqBMxK1tgdK1u7/p27+xllncvyY2+0Dx2gjJX1jkWpBQMlmHNomvUmZI5Gjqcexwf3ajCYrFn0nfPRnHfXt4S2eBCve8kjzk3sF4GZRZiXhNMt7jI3+tBUkZJwbGgv9654t5rQYp4yYs5k/LOkPSAp4tX4snFGZELpQUIJ7K
+	Gn8nQzGDbf2+zEwAohSBwSJZ1AJOOAfBnSOrsto9JNk5n4C5UQScVPLpzQXBIBotZ7oMO2wyXUC9V/V/D0xWmFS6+JpJGt6wHyVcLPKe0DuUuYaPE53WoWM2rK1Y2cGfxvoTs4dRTrc95K+OE7CbmQ5z72XRosOA/LU5wWbmljZj0skgFjhQjCIYz/Bs/CwtG4tq2O7CetwwwvdhKwrwfVlYOX/74dViuydOPtsCnH3HbqV6waQJblfvfbiGE1doT+3ObMml4mxLS9BWK1kd/OOplU9XNUhmE2J7ZtuCEDeR5gEsmLdlUxMhpan2wnqoqV8Q3hZCYBqBC2KfGif5D0jC1pECfph/9k35M2aSlVYf89WNyl/UH/AfUXU5ExTXFvEJROfXCVZic3S4SZfrqKqiFIAv9ujHOv/xtIuZOziDMJz+bPHhEF6DIkWLveLnSumk47LUrZjzFpAlmXlRb0yhFMXAazsrODhUHPJKGk6ilaza4roPVWBD4OIyxSaBnk77cPW7u5OCOhtvRUiQqPky8JEAe3lNtzeDdH6FTDOwNKUiLmRO2bDUpiImyC3id0flLSjIUGw/lfh1BRbSg0QDCpol3cJ3QT/n2yc82LF4j+pUpptCtNrCkuxHA29gzjGnQMCoaRF3+u1sI8ek3cG74VGte4SFDhYBCRzDyAb/QYYt90YeBdv3WfgM+N8gVfJrrF7HKyXAsJfhrEKgoL37vE6GzG6hmnbKSezYSb+0SwWw8ahbjjZpZvLW/+hM
 X-Forefront-Antispam-Report:
-	CIP:192.86.86.210;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hqxsv-psmtppxy01.rambus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700016)(23010399003)(376014)(7416014)(1800799024)(3023799007)(6133799003)(10067099003)(56012099006)(11063799006)(5023799004)(18002099003)(22082099003)(921020);DIR:OUT;SFP:1102;
+	CIP:192.86.86.210;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:hqxsv-psmtppxy01.rambus.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700016)(7416014)(376014)(1800799024)(23010399003)(82310400026)(13003099007)(921020)(7136999003)(6133799003)(3023799007)(10067099003)(56012099006)(11063799006)(5023799004)(18002099003);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	ukgCqU8BcWhQk9X03iFbMg79Qy67rcMdDNAiFO6lLymy/XJo8dy6bfqOeu1Mx87haJ8JD0zktB63HQrzOZNBlEgkpMotZh1O+vmKUXRCvjKkO4GHQK09XCCXDSdjP3WbV9TKlj83jENdcuXbB0QlMry6QMgrS3DN/XW65quUJs4vX9+maKlHYr9R1HjWfR+3mJS0XsndIbOKe7I7X/0u59RbUY4XT1j+pTUBKVYtxO3gWJoBZkMYUwYMKAW7WhXORRA3si3ugL1NMa0/pOZHyE1YoLEgbYSrvrmjCRq3hEKNOPehcYRkYTJx0/dTgUZ37EqL7M9+1lsHO1FWTBdxxrc2npE8+JCZvu+r3l8XQagtm9FPQ1f/ViTArq7845Mbj0wkIJ1ie7WrbFJrE+nx2hrR+M15hvC4AGzVw523TdnwcQ1VgtYlakD610Oqh/gI
+	EXsOWmL6CwiMKTYDfpznUVtFN91zXT2eEeeGZS5zwvwo5jOukbXHvMkUseU5pBVTACruHEO2lBF57a9BY42aEoDQRMOmmLjYSzM23ksgVQOZKnHPt6T4QHWV16VbbY4WjXTDXlk+aCtvCwxNZYD6vW3FevoiR6TdWmvY304yhq86fHsR5C2bwjAcDShQQLcjagdjXmZn4Cd1jqXJ42rP7U7Mv5hwJadfKKtmQjDF5g3Z/MyVIPYGJv8fuPVRprwCSlhOBx6ZtjmOUGxOjGp24oc7ifMkHZeByTSXp3NFh2bghWr2moyFycSyK1CBv+iJlYxRDvLB+SV1Sh9cs+BRYz+2id6TSruUEWQgMD3J58BkGacZqc3Ml5v9vtMVwFgNH8TJ7D2dGmI3lV/uyN6OSjwb6QHNTeWhg2BRT0o4JXf4gVwLWyUTxBrUesAasDAO
 X-OriginatorOrg: rambus.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 22:15:52.6123
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Aug 2026 22:15:51.0332
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: ce19fda0-a087-4cc7-6f61-08df02f66d2a
+X-MS-Exchange-CrossTenant-Network-Message-Id: d6d29307-2759-4df4-6ac6-08df02f66c39
 X-MS-Exchange-CrossTenant-Id: bd0ba799-c2b9-413c-9c56-5d1731c4827c
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bd0ba799-c2b9-413c-9c56-5d1731c4827c;Ip=[192.86.86.210];Helo=[hqxsv-psmtppxy01.rambus.com]
 X-MS-Exchange-CrossTenant-AuthSource:
-	BY1PEPF0001AE19.namprd04.prod.outlook.com
+	BY1PEPF0001AE1D.namprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR04MB8070
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR04MB6416
 
-Register ECDH and X25519 kpp algorithms using the CMH PKE core.
-Supports P-256, P-384, and Curve25519 for key agreement.
+crypto: cmh - add Rambus CryptoManager Hub hardware crypto accelerator
 
-Signed-off-by: Alex Ousherovitch <aousherovitch@rambus.com>
-Co-developed-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
-Signed-off-by: Saravanakrishnan Krishnamoorthy <skrishnamoorthy@rambus.com>
+This series adds a driver for the Rambus CryptoManager Hub (CMH), a
+hardware cryptographic accelerator IP from Cryptography Research at
+Rambus Inc. (https://www.rambus.com/cryptographyresearch/).
+CMH provides a broad set of symmetric, asymmetric, and post-quantum
+cryptographic algorithms accelerated in hardware, accessed via a
+mailbox-based Virtual Command Queue (VCQ) interface.
+
+The hardware is a platform device matched via device tree
+(compatible = "rambus,cmh-v1030").  It exposes a single MMIO register region
+(SIC) with per-mailbox doorbell, status, and command registers.
+Each mailbox has DMA-coherent queue memory for VCQ command
+submission and completion.
+
+Driver architecture:
+
+  In-kernel users                       /dev/cmh_mgmt (ioctl)
+  (dm-crypt, IPsec, kTLS, fscrypt)      (key management)
+       |                                        |
+       v                                        v
+  +----------------------------------------------------+
+  |        Kernel Crypto API + hwrng (72 total)        |
+  |   ahash | skcipher | aead | akcipher | sig | kpp   |
+  +----------------------------------------------------+
+       |                                           |
+       v                                           v
+  +------------------+    +------------------------+
+  | Transaction Mgr  |--->| Key / Mgmt subsystem   |
+  | (kthread, CMQ)   |    | (datastore, ioctl ops) |
+  +------------------+    +------------------------+
+       |
+       v
+  +------------------+     +-------------------+
+  | MQI (VCQ pack,   |---->| Response Handler  |
+  |  DMA map, submit)|     | (threaded IRQ,    |
+  +------------------+     |  watchdog, unmap) |
+       |                   +-------------------+
+       v                          ^
+  +-----------+              +-----------+
+  | Hardware  |--- IRQ ----->| Hardware  |
+  | (mailbox) |              | (mailbox) |
+  +-----------+              +-----------+
+
+The transaction manager runs as a dedicated kthread that pulls
+requests from a central command queue, packs VCQ entries, maps DMA
+buffers, and submits to the least-loaded mailbox.  Completion is
+handled by per-mailbox threaded IRQs.  The driver returns
+-EINPROGRESS for async crypto requests and supports the
+CRYPTO_TFM_REQ_MAY_BACKLOG flag for queue-full backpressure.
+
+Registered algorithms (72 total):
+
+  Type       Count  Algorithms
+  ---------  -----  --------------------------------------------------
+  ahash         15  SHA-{224,256,384,512}, SHA3-{224,256,384,512},
+                     SHAKE-{128,256}, cSHAKE-{128,256},
+                     KMAC-{128,256}, SM3
+  ahash(HMAC)    8  HMAC-SHA-{224,256,384,512},
+                     HMAC-SHA3-{224,256,384,512}
+  ahash(MAC)     4  CMAC(AES), CMAC(SM4), XCBC(SM4), Poly1305
+  skcipher      11  AES-{ECB,CBC,CTR,CFB,XTS},
+                     SM4-{ECB,CBC,CTR,CFB,XTS}, ChaCha20
+  aead           6  AES-{GCM,CCM}, SM4-{GCM,CCM},
+                     rfc7539(chacha20,poly1305),
+                     rfc7539esp(chacha20,poly1305)
+  akcipher       1  RSA (2048--4096 bit; 512/1024 legacy/test)
+  sig           23  ECDSA P-{256,384,521}, SM2 (verify-only),
+                     ML-DSA-{44,65,87},
+                     SLH-DSA (12 parameter sets),
+                     LMS, LMS-HSS, XMSS, XMSS-MT
+  kpp            3  ECDH P-{256,384}, X25519
+  hwrng          1  DRBG-backed /dev/hwrng
+
+The keyed MACs (HMAC, CMAC, XCBC, Poly1305) accumulate input for a
+single finalize-time submission -- the hardware has no keyed-MAC
+save/restore -- and fall back to a generic software MAC (Poly1305 uses
+the in-kernel library) once the input or a clone exceeds a 64 KB window,
+so they are not input-capped.  KMAC has no software equivalent and keeps
+the cap; the driver selects the generic MAC/hash and Poly1305-library
+configs for the fallbacks.
+
+Ioctl-only algorithms (not registered with the crypto API at all):
+  - EdDSA (Ed25519, Ed448): sign and verify
+  - ML-KEM (ML-KEM-512/768/1024): no standard kernel KEM API exists
+
+The driver also exposes /dev/cmh_mgmt, a misc device for the hardware
+key-management plane: key provisioning and hardware-held-key operations
+that the in-kernel crypto API cannot express.  Some of its ioctls name
+primitives the driver also registers; that overlap is deliberate and
+bounded (the ioctl path keeps private keys hardware-resident).  The
+"crypto: cmh - add key provisioning and management" patch explains the
+split in full.  The device requires CAP_SYS_ADMIN and is built
+conditionally on CONFIG_CRYPTO_DEV_CMH_MGMT (default n); when disabled
+the ioctl interface is absent while all kernel crypto API algorithms
+remain registered.
+
+The ML-DSA sig algorithms are registered at priority 5001.  The
+kernel's crypto/mldsa.c registers at priority 5000 with verify-only
+(sign returns -EOPNOTSUPP).  Our driver provides full HW-accelerated
+sign + verify, so the higher priority ensures the hardware
+implementation is preferred when the driver is loaded.
+
+Power management uses DEFINE_SIMPLE_DEV_PM_OPS.  On suspend the
+transaction manager drains in-flight requests (configurable 10s
+timeout, returns -ECANCELED on timeout), stops the kthread, and
+masks IRQs.  On resume it re-verifies SIC/boot status and restarts
+the kthread.
+
+Dependencies:
+  - Kernel 7.1+ (based on Herbert Xu's cryptodev-2.6 tree, 7.2.0-rc1)
+  - sig_alg backend (upstream since 6.13)
+  - CRYPTO_AHASH_REQ_VIRT (native support, no REQ_VIRT interop fallback needed)
+  - CMH eSW loaded independently by hardware before driver probe
+
+The driver registers all algorithms through the standard in-kernel
+crypto API; in-kernel users (dm-crypt, fscrypt, IPsec, etc.) consume
+them directly.  Key provisioning and hardware-held-key operations are
+exposed to user space via /dev/cmh_mgmt ioctls.
+
+Public hardware documentation:
+  Product brief: https://go.rambus.com/ch-7xx-and-cc-7xx-product-brief
+  No public datasheets are currently available.  The driver was
+  developed against the Rambus CryptoManager Hub Hardware Reference
+  Manual (Rambus Inc. confidential).  Detailed hardware reference is
+  available under NDA from Rambus Inc.; contact the maintainers listed
+  in MAINTAINERS for access during review.
+
+Tested on RISC-V and ARM64 QEMU emulation with the CMH hardware
+model (QEMU TCG, 512 MiB RAM).  Also exercised on Xilinx VMK180
+FPGA board with real CMH IP.
+
+  - testmgr: 41 CMH algorithm registrations matched by upstream
+    test vectors, all pass; 30 names report "No test for" (PQC
+    families, KMAC, cSHAKE - no upstream vectors yet).
+  - kselftest tools/testing/selftests/drivers/crypto/cmh:
+    6 pass, 0 fail.
+
+checkpatch.pl --strict: 0 errors, 0 warnings, 0 checks on all
+files (the only output is the expected per-file "does MAINTAINERS
+need updating?" reminder, satisfied by the MAINTAINERS patch).
+sparse (C=2): 0 warnings.
+W=1 -Werror: clean.
+make dt_binding_check: clean (dtschema validates the
+rambus,cmh-v1030.yaml binding).
+
+Tested with the following debug options enabled simultaneously
+(submit-checklist "Test your code" item 1):
+  CONFIG_PROVE_LOCKING, CONFIG_PROVE_RCU, CONFIG_DEBUG_LOCK_ALLOC,
+  CONFIG_DEBUG_OBJECTS_RCU_HEAD, CONFIG_SLUB_DEBUG,
+  CONFIG_DEBUG_PAGEALLOC, CONFIG_DEBUG_MUTEXES, CONFIG_DEBUG_SPINLOCK,
+  CONFIG_DEBUG_PREEMPT, CONFIG_DEBUG_ATOMIC_SLEEP.
+  Result: no lockdep warnings, no ODEBUG splats, no slab corruption.
+
+Additionally tested (separate passes - mutually exclusive configs):
+  - CONFIG_KASAN + CONFIG_UBSAN + CONFIG_DEBUG_KMEMLEAK + CONFIG_KFENCE:
+    no sanitizer findings; KMEMLEAK scan reports 0 unreferenced objects.
+  - CONFIG_KCSAN (arm64; riscv64 lacks HAVE_ARCH_KCSAN):
+    0 data-race reports attributed to the driver.
+
+Stack usage: worst-case under 1 KB on both riscv64 and arm64
+(scripts/checkstack.pl).  Hardware command buffers live in
+per-request context (heap-allocated by the crypto framework).
+
+Alex Ousherovitch (19):
+  dt-bindings: crypto: add Rambus CryptoManager Hub
+  crypto: cmh - add core platform driver
+  crypto: cmh - add key provisioning and management
+  crypto: cmh - add SHA-2/SHA-3/SHAKE ahash
+  crypto: cmh - add HMAC ahash
+  crypto: cmh - add CSHAKE/KMAC ahash
+  crypto: cmh - add SM3 ahash
+  crypto: cmh - add AES skcipher/aead/cmac
+  crypto: cmh - add SM4 skcipher/aead/cmac/xcbc
+  crypto: cmh - add ChaCha20-Poly1305
+  crypto: cmh - add DRBG hwrng
+  crypto: cmh - add RSA akcipher
+  crypto: cmh - add ECDSA/SM2 sig
+  crypto: cmh - add ECDH/X25519 kpp
+  crypto: cmh - add ML-KEM/ML-DSA (QSE)
+  crypto: cmh - add SLH-DSA/LMS/XMSS (HCQ)
+  Documentation: ioctl: add CMH ioctl documentation and register 'J'
+  selftests: crypto: cmh - add kselftest for management ioctl
+  MAINTAINERS: add Rambus CryptoManager Hub (CMH)
+
 ---
- drivers/crypto/cmh/Makefile       |   3 +-
- drivers/crypto/cmh/cmh_main.c     |   8 +
- drivers/crypto/cmh/cmh_pke_ecdh.c | 802 ++++++++++++++++++++++++++++++
- 3 files changed, 812 insertions(+), 1 deletion(-)
- create mode 100644 drivers/crypto/cmh/cmh_pke_ecdh.c
 
-diff --git a/drivers/crypto/cmh/Makefile b/drivers/crypto/cmh/Makefile
-index ae1f74a93e99..da420d0ec1fe 100644
---- a/drivers/crypto/cmh/Makefile
-+++ b/drivers/crypto/cmh/Makefile
-@@ -32,7 +32,8 @@ cmh-y := \
- 	cmh_rng.o \
- 	cmh_pke_common.o \
- 	cmh_pke_rsa.o \
--	cmh_pke_ecdsa.o
-+	cmh_pke_ecdsa.o \
-+	cmh_pke_ecdh.o
- 
- # Management ioctl device (/dev/cmh_mgmt): key lifecycle, PKE, PQC ioctls.
- cmh-$(CONFIG_CRYPTO_DEV_CMH_MGMT) += \
-diff --git a/drivers/crypto/cmh/cmh_main.c b/drivers/crypto/cmh/cmh_main.c
-index b5b12f56a68e..93d939e8fc4e 100644
---- a/drivers/crypto/cmh/cmh_main.c
-+++ b/drivers/crypto/cmh/cmh_main.c
-@@ -297,6 +297,11 @@ static int cmh_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_pke_ecdsa_register;
- 
-+	/* Register PKE ECDH/X25519 kpp */
-+	ret = cmh_pke_ecdh_register();
-+	if (ret)
-+		goto err_pke_ecdh_register;
-+
- 	/* Register key management device (/dev/cmh_mgmt) */
- 	ret = cmh_mgmt_register();
- 	if (ret)
-@@ -307,6 +312,8 @@ static int cmh_probe(struct platform_device *pdev)
- 	return 0;
- 
- err_mgmt_register:
-+	cmh_pke_ecdh_unregister();
-+err_pke_ecdh_register:
- 	cmh_pke_ecdsa_unregister();
- err_pke_ecdsa_register:
- 	cmh_pke_rsa_unregister();
-@@ -367,6 +374,7 @@ static void cmh_remove(struct platform_device *pdev)
- 	cfg = &dev->config;
- 
- 	cmh_mgmt_unregister();
-+	cmh_pke_ecdh_unregister();
- 	cmh_pke_ecdsa_unregister();
- 	cmh_pke_rsa_unregister();
- 	cmh_ccp_poly_unregister();
-diff --git a/drivers/crypto/cmh/cmh_pke_ecdh.c b/drivers/crypto/cmh/cmh_pke_ecdh.c
-new file mode 100644
-index 000000000000..2264fea1facb
---- /dev/null
-+++ b/drivers/crypto/cmh/cmh_pke_ecdh.c
-@@ -0,0 +1,802 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Copyright (c) 2026 Cryptography Research, Inc. (CRI).
-+ * CMH LKM -- ECDH / X25519 kpp Driver
-+ *
-+ * Registers "ecdh-nist-p256", "ecdh-nist-p384", and "curve25519"
-+ * kpp algorithms with priority 300.
-+ *
-+ * - set_secret: decodes private key from kpp_secret + ecdh struct
-+ *   (NIST curves) or raw 32-byte scalar (Curve25519).
-+ *   Stores in cmh_key_ctx: raw keys written via SYS_REF_TEMP.
-+ *   Datastore-referenced keys are only reachable through the ioctl
-+ *   path (cmh_mgmt.c).
-+ *
-+ * - generate_public_key: PKE_CMD_ECDH_KEYGEN -> outputs X coordinate
-+ *   (NIST Weierstrass) or full public key (Edwards/Montgomery).
-+ *   For NIST curves, we generate X||Y by calling ECDSA_PUBGEN instead,
-+ *   matching the kernel ecdh.c pattern that outputs uncompressed X||Y.
-+ *
-+ * - compute_shared_secret: PKE_CMD_ECDH -> shared secret X coordinate.
-+ */
-+
-+#include <linux/module.h>
-+#include <linux/kernel.h>
-+#include <linux/slab.h>
-+#include <linux/scatterlist.h>
-+#include <linux/mutex.h>
-+#include <crypto/kpp.h>
-+#include <crypto/ecdh.h>
-+#include <crypto/internal/kpp.h>
-+#include <crypto/internal/ecc.h>
-+
-+#include "cmh_pke.h"
-+#include "cmh_sys.h"
-+#include "cmh_sys_abi.h"
-+#include "cmh_txn.h"
-+#include "cmh_dma.h"
-+#include "cmh_key.h"
-+
-+/*
-+ * ECDH key format: kpp_secret header + key_size(u16) + key data.
-+ * We decode this inline to avoid depending on CONFIG_CRYPTO_ECDH.
-+ */
-+#define ECDH_KPP_SECRET_MIN_SIZE (sizeof(struct kpp_secret) + sizeof(unsigned short))
-+
-+struct cmh_ecdh_tfm_ctx {
-+	struct cmh_key_ctx key;
-+	u32 curve;		/* PKE_CURVE_* */
-+	u32 clen;		/* coordinate length in bytes */
-+};
-+
-+static inline struct cmh_ecdh_tfm_ctx *cmh_ecdh_ctx(struct crypto_kpp *tfm)
-+{
-+	return kpp_tfm_ctx(tfm);
-+}
-+
-+/*
-+ * Per-request context for ECDH/X25519 operations.
-+ *
-+ * generate_public_key and compute_shared_secret are both single-phase
-+ * async VCQs.  compute_shared_secret writes the private key into a
-+ * per-mailbox scratch datastore object and targets SYS_REF_TEMP for the
-+ * shared secret (see cmh_ecdh_key_scratch below).
-+ */
-+struct cmh_ecdh_reqctx {
-+	/* Buffers */
-+	u8 *pk_buf;		/* keygen: output public key */
-+	u8 *peer_buf;		/* compute: peer public key */
-+	u8 *ss_buf;		/* compute: shared secret output */
-+	/* DMA handles */
-+	dma_addr_t pk_dma;
-+	dma_addr_t peer_dma;
-+	dma_addr_t ss_dma;
-+	/* Sizes and params */
-+	u32 out_len;		/* keygen: public key size */
-+	u32 clen;
-+	u32 peer_len;
-+};
-+
-+/*
-+ * Per-mailbox scratch datastore object holding the private key for
-+ * compute_shared_secret.
-+ *
-+ * The CMH ECDH command writes its shared secret into a datastore object,
-+ * not directly to host DMA.  Allocating that object per request via
-+ * SYS_CMD_NEW permanently consumes a slot every call, because the eSW
-+ * datastore is a bump allocator with no per-object free.
-+ *
-+ * Instead we sys_write the private key into a persistent per-mailbox
-+ * object (owned by that mailbox) and target SYS_REF_TEMP for the shared
-+ * secret, which the eSW reclaims when sys_data reads it back.  One object
-+ * per mailbox preserves the round-robin PKE dispatch; the eSW runs a VCQ
-+ * and its children to completion per mailbox, so concurrent requests on
-+ * the same mailbox never observe each other's key in the shared object.
-+ *
-+ * Created on the first key set (deferred from register) and scrubbed at
-+ * unregister, so a bring-up that never keys ECDH leaves the datastore
-+ * empty for a DS import.  Indexed by mbx_idx; entries for mailboxes
-+ * without a PKE instance stay zero.
-+ */
-+static u64 *cmh_ecdh_key_scratch;
-+static u32 cmh_ecdh_scratch_count;
-+static bool cmh_ecdh_scratch_ready;		/* DS objects created (one-shot) */
-+static DEFINE_MUTEX(cmh_ecdh_scratch_lock);
-+
-+static int cmh_ecdh_scratch_ensure(void);
-+
-+/*
-+ * cmh_ecdh_commit_key() - Ensure the key scratch exists, then stash the raw
-+ * private key.  Deferring scratch creation to the first key set keeps the
-+ * datastore empty until ECDH is actually used.
-+ */
-+static int cmh_ecdh_commit_key(struct cmh_ecdh_tfm_ctx *ctx,
-+			       const u8 *key, u32 len)
-+{
-+	int ret = cmh_ecdh_scratch_ensure();
-+
-+	if (ret)
-+		return ret;
-+	return cmh_key_setkey_raw(&ctx->key, key, len, CORE_ID_PKE);
-+}
-+
-+/*
-+ * set_secret: NIST curves decode kpp_secret + u16 key_size + raw scalar.
-+ * Curve25519 uses raw 32-byte scalar directly.
-+ */
-+static int cmh_ecdh_set_secret_nist(struct crypto_kpp *tfm,
-+				    const void *buf, unsigned int len)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+	const u8 *ptr = buf;
-+	struct kpp_secret secret;
-+	unsigned short key_size;
-+	int ret;
-+
-+	if (!buf || len < ECDH_KPP_SECRET_MIN_SIZE)
-+		return -EINVAL;
-+
-+	memcpy(&secret, ptr, sizeof(secret));
-+	ptr += sizeof(secret);
-+
-+	if (secret.type != CRYPTO_KPP_SECRET_TYPE_ECDH)
-+		return -EINVAL;
-+	if (len < secret.len)
-+		return -EINVAL;
-+
-+	memcpy(&key_size, ptr, sizeof(key_size));
-+	ptr += sizeof(key_size);
-+
-+	if (key_size == 0) {
-+		/*
-+		 * key_size == 0: generate a validated random private key.
-+		 * Uses the kernel ECC library (FIPS 186-5 A.2.2) to ensure
-+		 * the scalar is in the valid range [2, n-3] for the curve.
-+		 */
-+		u64 priv[ECC_MAX_DIGITS];
-+		unsigned int ndigits = ctx->clen / sizeof(u64);
-+		unsigned int curve_id;
-+		u8 *rnd;
-+
-+		if (secret.len != ECDH_KPP_SECRET_MIN_SIZE)
-+			return -EINVAL;
-+		if (ndigits > ECC_MAX_DIGITS)
-+			return -EINVAL;
-+		/* Reject non-limb-aligned clen to prevent ndigits truncation */
-+		if (ctx->clen % sizeof(u64))
-+			return -EINVAL;
-+
-+		if (ctx->curve == PKE_CURVE_P256)
-+			curve_id = ECC_CURVE_NIST_P256;
-+		else if (ctx->curve == PKE_CURVE_P384)
-+			curve_id = ECC_CURVE_NIST_P384;
-+		else
-+			return -EINVAL;
-+
-+		ret = ecc_gen_privkey(curve_id, ndigits, priv);
-+		if (ret) {
-+			memzero_explicit(priv, sizeof(priv));
-+			return ret;
-+		}
-+
-+		rnd = kmalloc(ctx->clen, GFP_KERNEL);
-+		if (!rnd) {
-+			memzero_explicit(priv, sizeof(priv));
-+			return -ENOMEM;
-+		}
-+
-+		/* Convert VLI (native LE-digit-order) to big-endian bytes */
-+		ecc_swap_digits(priv, (u64 *)rnd, ndigits);
-+		memzero_explicit(priv, sizeof(priv));
-+
-+		ret = cmh_ecdh_commit_key(ctx, rnd, ctx->clen);
-+		kfree_sensitive(rnd);
-+		return ret;
-+	}
-+
-+	if (key_size != ctx->clen)
-+		return -EINVAL;
-+
-+	if (secret.len != ECDH_KPP_SECRET_MIN_SIZE + key_size)
-+		return -EINVAL;
-+
-+	/*
-+	 * Validate the raw NIST scalar is in range for the curve, matching the
-+	 * key_size==0 path (which uses ecc_gen_privkey).  Rejects degenerate /
-+	 * out-of-range keys the HW might otherwise accept.
-+	 */
-+	{
-+		u64 priv[ECC_MAX_DIGITS];
-+		unsigned int ndigits = ctx->clen / sizeof(u64);
-+		unsigned int curve_id;
-+
-+		if (ctx->clen % sizeof(u64) || ndigits > ECC_MAX_DIGITS)
-+			return -EINVAL;
-+		if (ctx->curve == PKE_CURVE_P256)
-+			curve_id = ECC_CURVE_NIST_P256;
-+		else if (ctx->curve == PKE_CURVE_P384)
-+			curve_id = ECC_CURVE_NIST_P384;
-+		else
-+			return -EINVAL;
-+
-+		ecc_digits_from_bytes(ptr, key_size, priv, ndigits);
-+		ret = ecc_is_key_valid(curve_id, ndigits, priv, key_size);
-+		memzero_explicit(priv, sizeof(priv));
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return cmh_ecdh_commit_key(ctx, ptr, key_size);
-+}
-+
-+static int cmh_ecdh_set_secret_x25519(struct crypto_kpp *tfm,
-+				      const void *buf, unsigned int len)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	if (len != pke_curve_clen(PKE_CURVE_25519))
-+		return -EINVAL;
-+
-+	return cmh_ecdh_commit_key(ctx, buf, len);
-+}
-+
-+static void cmh_ecdh_keygen_complete(void *data, int error)
-+{
-+	struct kpp_request *req = data;
-+	struct cmh_ecdh_reqctx *rctx = kpp_request_ctx(req);
-+
-+	if (error == -EINPROGRESS) {
-+		cmh_complete(&req->base, error);
-+		return;
-+	}
-+
-+	if (!cmh_dma_map_error(rctx->pk_dma))
-+		cmh_dma_unmap_single(rctx->pk_dma, rctx->out_len,
-+				     DMA_FROM_DEVICE);
-+
-+	if (!error) {
-+		int nents;
-+
-+		nents = sg_nents_for_len(req->dst, rctx->out_len);
-+		if (nents < 0 ||
-+		    sg_copy_from_buffer(req->dst, nents,
-+					rctx->pk_buf,
-+					rctx->out_len) != rctx->out_len)
-+			error = -EINVAL;
-+		else
-+			req->dst_len = rctx->out_len;
-+	}
-+
-+	kfree(rctx->pk_buf);
-+	rctx->pk_buf = NULL;
-+	cmh_complete(&req->base, error);
-+}
-+
-+/*
-+ * generate_public_key: For NIST ECDH, use ECDH_KEYGEN which outputs
-+ * the public key X-coordinate.  But the kernel kpp interface expects
-+ * uncompressed X||Y, so we use ECDSA_PUBGEN which gives us (X,Y).
-+ * For Curve25519, ECDH_KEYGEN gives us the Montgomery u-coordinate
-+ * which is the full public key.
-+ */
-+static int cmh_ecdh_generate_public_key(struct kpp_request *req)
-+{
-+	struct crypto_kpp *tfm = crypto_kpp_reqtfm(req);
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+	struct cmh_ecdh_reqctx *rctx = kpp_request_ctx(req);
-+	u32 clen = ctx->clen;
-+	bool is_25519 = (ctx->curve == PKE_CURVE_25519);
-+	u32 out_len = is_25519 ? clen : 2 * clen;
-+	struct vcq_cmd vcq[PKE_VCQ_CMDS_MAX];
-+	struct core_dispatch dd;
-+	u32 swap, dma_swap;
-+	int ret, idx;
-+	gfp_t gfp;
-+
-+	if (ctx->key.mode != CMH_KEY_RAW)
-+		return -EINVAL;
-+	if (req->dst_len < out_len)
-+		return -EINVAL;
-+
-+	gfp = req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP ?
-+	      GFP_KERNEL : GFP_ATOMIC;
-+
-+	memset(rctx, 0, sizeof(*rctx));
-+	rctx->out_len = out_len;
-+	rctx->pk_dma = DMA_MAPPING_ERROR;
-+
-+	rctx->pk_buf = kzalloc(out_len, gfp);
-+	if (!rctx->pk_buf)
-+		return -ENOMEM;
-+
-+	rctx->pk_dma = cmh_dma_map_single(rctx->pk_buf, out_len,
-+					  DMA_FROM_DEVICE);
-+	if (cmh_dma_map_error(rctx->pk_dma)) {
-+		ret = -ENOMEM;
-+		goto out_free;
-+	}
-+
-+	/*
-+	 * The SYS_REF_TEMP key write uses per-curve dma_swap (0 for the
-+	 * little-endian Curve25519 secret), but the PKE compute command
-+	 * itself takes PKE_SWAP_FLAGS for every curve: the HW emits the
-+	 * public-key / shared-secret coordinate in the order PKE_SWAP_FLAGS
-+	 * maps to the expected encoding (the mgmt ECDH keygen does the same
-+	 * and matches RFC 7748).  Do NOT switch the command to dma_swap.
-+	 */
-+	swap = PKE_SWAP_FLAGS;
-+	dma_swap = pke_swap_flags(ctx->curve);
-+
-+	dd = cmh_core_select_instance(CMH_CORE_PKE);
-+
-+	vcq_set_header(&vcq[0], PKE_VCQ_CMDS_MAX);
-+	idx = 1;
-+	vcq_add_sys_write(&vcq[idx], SYS_REF_TEMP, ctx->key.raw.dma,
-+			  SYS_REF_NONE, ctx->key.raw.len,
-+			  ctx->key.raw.sys_type);
-+	vcq[idx].id |= dma_swap;
-+	idx++;
-+	if (is_25519)
-+		vcq_add_pke_ecdh_keygen(&vcq[idx++], dd.core_id, ctx->curve,
-+					clen, rctx->pk_dma, SYS_REF_TEMP,
-+					swap);
-+	else
-+		vcq_add_pke_ecdsa_pubgen(&vcq[idx++], dd.core_id,
-+					 ctx->curve, clen, rctx->pk_dma,
-+					 SYS_REF_TEMP, swap);
-+	vcq_add_pke_flush(&vcq[idx++], dd.core_id);
-+
-+	ret = cmh_tm_submit_async(vcq, PKE_VCQ_CMDS_MAX, 1, dd.mbx_idx,
-+				  cmh_ecdh_keygen_complete, req,
-+				  !!(req->base.flags &
-+				     CRYPTO_TFM_REQ_MAY_BACKLOG), 0);
-+	if (ret == -EBUSY)
-+		return -EBUSY;
-+	if (!ret)
-+		return -EINPROGRESS;
-+
-+	if (!cmh_dma_map_error(rctx->pk_dma))
-+		cmh_dma_unmap_single(rctx->pk_dma, out_len,
-+				     DMA_FROM_DEVICE);
-+
-+out_free:
-+	kfree(rctx->pk_buf);
-+	return ret;
-+}
-+
-+static void cmh_ecdh_ss_complete(void *data, int error)
-+{
-+	struct kpp_request *req = data;
-+	struct cmh_ecdh_reqctx *rctx = kpp_request_ctx(req);
-+
-+	if (error == -EINPROGRESS) {
-+		cmh_complete(&req->base, error);
-+		return;
-+	}
-+
-+	if (!cmh_dma_map_error(rctx->peer_dma))
-+		cmh_dma_unmap_single(rctx->peer_dma, rctx->peer_len,
-+				     DMA_TO_DEVICE);
-+	if (!cmh_dma_map_error(rctx->ss_dma))
-+		cmh_dma_unmap_single(rctx->ss_dma, rctx->clen,
-+				     DMA_FROM_DEVICE);
-+
-+	if (!error) {
-+		int nents;
-+
-+		nents = sg_nents_for_len(req->dst, rctx->clen);
-+		if (nents < 0 ||
-+		    sg_copy_from_buffer(req->dst, nents,
-+					rctx->ss_buf,
-+					rctx->clen) != rctx->clen)
-+			error = -EINVAL;
-+		else
-+			req->dst_len = rctx->clen;
-+	}
-+
-+	kfree(rctx->peer_buf);
-+	rctx->peer_buf = NULL;
-+	kfree_sensitive(rctx->ss_buf);
-+	rctx->ss_buf = NULL;
-+	cmh_complete(&req->base, error);
-+}
-+
-+/*
-+ * compute_shared_secret: PKE_CMD_ECDH.
-+ *
-+ * req->src = peer public key (X||Y for NIST, raw 32B for Curve25519).
-+ * Output = shared secret X coordinate (clen bytes).
-+ *
-+ * The CMH ECDH command stores the shared secret in a datastore object.
-+ * We write the private key into the per-mailbox scratch object, run the
-+ * ECDH with the shared secret targeting SYS_REF_TEMP, and read it back
-+ * with SYS_CMD_DATA in the same VCQ -- the eSW reclaims the temp store on
-+ * read, so no datastore slot leaks per request.
-+ */
-+static int cmh_ecdh_compute_shared_secret(struct kpp_request *req)
-+{
-+	struct crypto_kpp *tfm = crypto_kpp_reqtfm(req);
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+	struct cmh_ecdh_reqctx *rctx = kpp_request_ctx(req);
-+	u32 clen = ctx->clen;
-+	bool is_25519 = (ctx->curve == PKE_CURVE_25519);
-+	u32 peer_len = is_25519 ? clen : 2 * clen;
-+	u32 ss_type = SYS_TYPE_SET(SYS_TYPE_FLAG_PT, CORE_ID_PKE);
-+	struct vcq_cmd vcq[6];
-+	struct core_dispatch dd;
-+	u64 key_ref;
-+	u32 swap, dma_swap;
-+	int ret, idx, nents;
-+	gfp_t gfp;
-+
-+	if (ctx->key.mode != CMH_KEY_RAW)
-+		return -EINVAL;
-+	if (req->src_len < peer_len || req->dst_len < clen)
-+		return -EINVAL;
-+
-+	gfp = req->base.flags & CRYPTO_TFM_REQ_MAY_SLEEP ?
-+	      GFP_KERNEL : GFP_ATOMIC;
-+
-+	memset(rctx, 0, sizeof(*rctx));
-+	rctx->clen = clen;
-+	rctx->peer_len = peer_len;
-+	rctx->pk_dma = DMA_MAPPING_ERROR;
-+	rctx->peer_dma = DMA_MAPPING_ERROR;
-+	rctx->ss_dma = DMA_MAPPING_ERROR;
-+
-+	rctx->peer_buf = kmalloc(peer_len, gfp);
-+	rctx->ss_buf = kzalloc(clen, gfp);
-+	if (!rctx->peer_buf || !rctx->ss_buf) {
-+		ret = -ENOMEM;
-+		goto out_free;
-+	}
-+
-+	nents = sg_nents_for_len(req->src, peer_len);
-+	if (nents < 0 ||
-+	    sg_pcopy_to_buffer(req->src, nents, rctx->peer_buf,
-+			       peer_len, 0) != peer_len) {
-+		ret = -EINVAL;
-+		goto out_free;
-+	}
-+
-+	rctx->peer_dma = cmh_dma_map_single(rctx->peer_buf, peer_len,
-+					    DMA_TO_DEVICE);
-+	rctx->ss_dma = cmh_dma_map_single(rctx->ss_buf, clen,
-+					  DMA_FROM_DEVICE);
-+
-+	if (cmh_dma_map_error(rctx->peer_dma) ||
-+	    cmh_dma_map_error(rctx->ss_dma)) {
-+		ret = -ENOMEM;
-+		goto out_unmap;
-+	}
-+
-+	dd = cmh_core_select_instance(CMH_CORE_PKE);
-+	if (dd.mbx_idx < 0 || (u32)dd.mbx_idx >= cmh_ecdh_scratch_count ||
-+	    !cmh_ecdh_key_scratch[dd.mbx_idx]) {
-+		ret = -EIO;
-+		goto out_unmap;
-+	}
-+	key_ref = cmh_ecdh_key_scratch[dd.mbx_idx];
-+
-+	/*
-+	 * The private-key write uses per-curve dma_swap (0 for the
-+	 * little-endian Curve25519 secret), but the PKE compute command
-+	 * itself takes PKE_SWAP_FLAGS for every curve: the HW emits the
-+	 * shared-secret coordinate in the order PKE_SWAP_FLAGS maps to the
-+	 * expected encoding (the mgmt ECDH path does the same and matches
-+	 * RFC 7748).  Do NOT switch the command to dma_swap.
-+	 */
-+	swap = PKE_SWAP_FLAGS;
-+	dma_swap = pke_swap_flags(ctx->curve);
-+
-+	vcq_set_header(&vcq[0], 6);
-+	idx = 1;
-+	vcq_add_sys_write(&vcq[idx], key_ref, ctx->key.raw.dma,
-+			  SYS_REF_NONE, ctx->key.raw.len,
-+			  ctx->key.raw.sys_type);
-+	vcq[idx].id |= dma_swap;
-+	idx++;
-+	vcq_add_pke_ecdh(&vcq[idx++], dd.core_id, ctx->curve, clen,
-+			 clen, ss_type, rctx->peer_dma,
-+			 key_ref, SYS_REF_TEMP, swap);
-+	vcq_add_pke_flush(&vcq[idx++], dd.core_id);
-+	vcq_add_sys_data(&vcq[idx], SYS_REF_TEMP, rctx->ss_dma, clen);
-+	vcq[idx].id |= dma_swap;
-+	idx++;
-+	vcq_add_sys_flush(&vcq[idx++]);
-+
-+	ret = cmh_tm_submit_async(vcq, 6, 1, dd.mbx_idx,
-+				  cmh_ecdh_ss_complete, req,
-+				  !!(req->base.flags &
-+				     CRYPTO_TFM_REQ_MAY_BACKLOG), 0);
-+	if (ret == -EBUSY)
-+		return -EBUSY;
-+	if (!ret)
-+		return -EINPROGRESS;
-+
-+out_unmap:
-+	if (!cmh_dma_map_error(rctx->ss_dma))
-+		cmh_dma_unmap_single(rctx->ss_dma, clen,
-+				     DMA_FROM_DEVICE);
-+	if (!cmh_dma_map_error(rctx->peer_dma))
-+		cmh_dma_unmap_single(rctx->peer_dma, peer_len,
-+				     DMA_TO_DEVICE);
-+
-+out_free:
-+	kfree_sensitive(rctx->ss_buf);
-+	kfree(rctx->peer_buf);
-+	return ret;
-+}
-+
-+static unsigned int cmh_ecdh_max_size(struct crypto_kpp *tfm)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	/* Max output = X||Y for generate_public_key (NIST) */
-+	return 2 * ctx->clen;
-+}
-+
-+static unsigned int cmh_x25519_max_size(struct crypto_kpp *tfm)
-+{
-+	return pke_curve_clen(PKE_CURVE_25519); /* single coordinate */
-+}
-+
-+static int cmh_ecdh_p256_init(struct crypto_kpp *tfm)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+	ctx->curve = PKE_CURVE_P256;
-+	ctx->clen = pke_curve_clen(PKE_CURVE_P256);
-+	tfm->reqsize = sizeof(struct cmh_ecdh_reqctx);
-+	return 0;
-+}
-+
-+static int cmh_ecdh_p384_init(struct crypto_kpp *tfm)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+	ctx->curve = PKE_CURVE_P384;
-+	ctx->clen = pke_curve_clen(PKE_CURVE_P384);
-+	tfm->reqsize = sizeof(struct cmh_ecdh_reqctx);
-+	return 0;
-+}
-+
-+static int cmh_x25519_init(struct crypto_kpp *tfm)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	memset(ctx, 0, sizeof(*ctx));
-+	ctx->curve = PKE_CURVE_25519;
-+	ctx->clen = pke_curve_clen(PKE_CURVE_25519);
-+	tfm->reqsize = sizeof(struct cmh_ecdh_reqctx);
-+	return 0;
-+}
-+
-+static void cmh_ecdh_exit(struct crypto_kpp *tfm)
-+{
-+	struct cmh_ecdh_tfm_ctx *ctx = cmh_ecdh_ctx(tfm);
-+
-+	cmh_key_destroy(&ctx->key);
-+}
-+
-+static struct kpp_alg cmh_ecdh_algs[] = {
-+	{
-+		.set_secret		= cmh_ecdh_set_secret_nist,
-+		.generate_public_key	= cmh_ecdh_generate_public_key,
-+		.compute_shared_secret	= cmh_ecdh_compute_shared_secret,
-+		.max_size		= cmh_ecdh_max_size,
-+		.init			= cmh_ecdh_p256_init,
-+		.exit			= cmh_ecdh_exit,
-+		.base = {
-+			.cra_name	  = "ecdh-nist-p256",
-+			.cra_driver_name  = "rambus-cmh-ecdh-nist-p256",
-+			.cra_priority	  = 300,
-+			.cra_flags	  = CRYPTO_ALG_ASYNC,
-+			.cra_module	  = THIS_MODULE,
-+			.cra_ctxsize	  = sizeof(struct cmh_ecdh_tfm_ctx),
-+		},
-+	},
-+	{
-+		.set_secret		= cmh_ecdh_set_secret_nist,
-+		.generate_public_key	= cmh_ecdh_generate_public_key,
-+		.compute_shared_secret	= cmh_ecdh_compute_shared_secret,
-+		.max_size		= cmh_ecdh_max_size,
-+		.init			= cmh_ecdh_p384_init,
-+		.exit			= cmh_ecdh_exit,
-+		.base = {
-+			.cra_name	  = "ecdh-nist-p384",
-+			.cra_driver_name  = "rambus-cmh-ecdh-nist-p384",
-+			.cra_priority	  = 300,
-+			.cra_flags	  = CRYPTO_ALG_ASYNC,
-+			.cra_module	  = THIS_MODULE,
-+			.cra_ctxsize	  = sizeof(struct cmh_ecdh_tfm_ctx),
-+		},
-+	},
-+	{
-+		.set_secret		= cmh_ecdh_set_secret_x25519,
-+		.generate_public_key	= cmh_ecdh_generate_public_key,
-+		.compute_shared_secret	= cmh_ecdh_compute_shared_secret,
-+		.max_size		= cmh_x25519_max_size,
-+		.init			= cmh_x25519_init,
-+		.exit			= cmh_ecdh_exit,
-+		.base = {
-+			.cra_name	  = "curve25519",
-+			.cra_driver_name  = "rambus-cmh-curve25519",
-+			.cra_priority	  = 300,
-+			.cra_flags	  = CRYPTO_ALG_ASYNC,
-+			.cra_module	  = THIS_MODULE,
-+			.cra_ctxsize	  = sizeof(struct cmh_ecdh_tfm_ctx),
-+		},
-+	},
-+};
-+
-+/*
-+ * cmh_ecdh_scratch_free() - Scrub and release the per-mailbox key scratch
-+ *
-+ * Best-effort: sys_grant with no access wipes the key bytes and clears the
-+ * CID on each object (the datastore stack space is only reclaimed by a full
-+ * reset).  The grant runs on the owning mailbox so the eSW access check
-+ * passes.
-+ */
-+static void cmh_ecdh_scratch_free(void)
-+{
-+	u32 i;
-+
-+	if (!cmh_ecdh_key_scratch)
-+		return;
-+
-+	for (i = 0; i < cmh_ecdh_scratch_count; i++) {
-+		struct vcq_cmd vcq[3];
-+
-+		if (!cmh_ecdh_key_scratch[i])
-+			continue;
-+
-+		vcq_set_header(&vcq[0], 3);
-+		vcq_add_sys_grant(&vcq[1], cmh_ecdh_key_scratch[i], 0, 0, 0);
-+		vcq_add_sys_flush(&vcq[2]);
-+		cmh_tm_submit_sync_mbx(vcq, 3, 1, (s32)i);
-+		cmh_ecdh_key_scratch[i] = 0;
-+	}
-+
-+	kfree(cmh_ecdh_key_scratch);
-+	cmh_ecdh_key_scratch = NULL;
-+	cmh_ecdh_scratch_count = 0;
-+	cmh_ecdh_scratch_ready = false;
-+}
-+
-+/*
-+ * cmh_ecdh_scratch_ensure() - Create the per-PKE-mailbox key scratch on the
-+ * first keyed use.
-+ *
-+ * Deferred from register time so that a bring-up which never sets an ECDH
-+ * key leaves the datastore empty (a DS import requires an empty store).
-+ * Idempotent and safe against concurrent set_secret callers; on failure it
-+ * leaves cmh_ecdh_scratch_ready clear and any objects already created in
-+ * place, so the next key set retries and skips them.  Runs in process
-+ * context (set_secret), so the synchronous submit may sleep.
-+ */
-+static int cmh_ecdh_scratch_ensure(void)
-+{
-+	u32 key_len = pke_curve_clen(PKE_CURVE_P384);
-+	u32 n_pke = cmh_core_num_instances(CMH_CORE_PKE);
-+	u64 *ref_buf;
-+	u32 i;
-+	int ret = 0;
-+
-+	mutex_lock(&cmh_ecdh_scratch_lock);
-+	if (cmh_ecdh_scratch_ready)
-+		goto out;
-+
-+	ref_buf = kzalloc_obj(u64, GFP_KERNEL);
-+	if (!ref_buf) {
-+		ret = -ENOMEM;
-+		goto out;
-+	}
-+
-+	for (i = 0; i < n_pke; i++) {
-+		struct core_dispatch d = cmh_core_get_instance(CMH_CORE_PKE, i);
-+		struct vcq_cmd vcq[3];
-+		dma_addr_t ref_dma;
-+
-+		if (d.mbx_idx < 0 || (u32)d.mbx_idx >= cmh_ecdh_scratch_count) {
-+			ret = -EINVAL;
-+			goto out_free;
-+		}
-+		if (cmh_ecdh_key_scratch[d.mbx_idx])
-+			continue;
-+
-+		*ref_buf = 0;
-+		ref_dma = cmh_dma_map_single(ref_buf, sizeof(*ref_buf),
-+					     DMA_FROM_DEVICE);
-+		if (cmh_dma_map_error(ref_dma)) {
-+			ret = -ENOMEM;
-+			goto out_free;
-+		}
-+
-+		vcq_set_header(&vcq[0], 3);
-+		vcq_add_sys_new(&vcq[1], 0, ref_dma, key_len);
-+		vcq_add_sys_flush(&vcq[2]);
-+		ret = cmh_tm_submit_sync_mbx(vcq, 3, 1, d.mbx_idx);
-+		if (!ret) {
-+			cmh_dma_sync_for_cpu(ref_dma, sizeof(*ref_buf),
-+					     DMA_FROM_DEVICE);
-+			cmh_ecdh_key_scratch[d.mbx_idx] = *ref_buf;
-+		}
-+		cmh_dma_unmap_single(ref_dma, sizeof(*ref_buf),
-+				     DMA_FROM_DEVICE);
-+		if (ret)
-+			goto out_free;
-+		if (!cmh_ecdh_key_scratch[d.mbx_idx]) {
-+			ret = -EIO;
-+			goto out_free;
-+		}
-+	}
-+
-+	cmh_ecdh_scratch_ready = true;
-+out_free:
-+	kfree(ref_buf);
-+out:
-+	mutex_unlock(&cmh_ecdh_scratch_lock);
-+	return ret;
-+}
-+
-+/**
-+ * cmh_pke_ecdh_register() - Register ECDH kpp algorithms with the crypto framework
-+ *
-+ * Return: 0 on success, negative errno on failure.
-+ */
-+int cmh_pke_ecdh_register(void)
-+{
-+	u32 n_mbx = cmh_tm_mbx_count();
-+	int ret, i;
-+
-+	if (!cmh_core_present(CMH_CORE_PKE))
-+		return 0;
-+
-+	/*
-+	 * Host-side index array only; the per-mailbox datastore objects are
-+	 * created lazily on the first key set (cmh_ecdh_scratch_ensure) so a
-+	 * bring-up that never keys ECDH leaves the datastore empty for a DS
-+	 * import.
-+	 */
-+	cmh_ecdh_key_scratch = kcalloc(n_mbx, sizeof(*cmh_ecdh_key_scratch),
-+				       GFP_KERNEL);
-+	if (!cmh_ecdh_key_scratch)
-+		return -ENOMEM;
-+	cmh_ecdh_scratch_count = n_mbx;
-+
-+	for (i = 0; i < ARRAY_SIZE(cmh_ecdh_algs); i++) {
-+		ret = crypto_register_kpp(&cmh_ecdh_algs[i]);
-+		if (ret) {
-+			dev_err(cmh_dev(), "cmh: failed to register %s (%d)\n",
-+				cmh_ecdh_algs[i].base.cra_name, ret);
-+			goto err_unregister;
-+		}
-+	}
-+
-+	return 0;
-+
-+err_unregister:
-+	while (i--)
-+		crypto_unregister_kpp(&cmh_ecdh_algs[i]);
-+	cmh_ecdh_scratch_free();
-+	return ret;
-+}
-+
-+/**
-+ * cmh_pke_ecdh_unregister() - Unregister ECDH kpp algorithms from the crypto framework
-+ */
-+void cmh_pke_ecdh_unregister(void)
-+{
-+	int i = ARRAY_SIZE(cmh_ecdh_algs);
-+
-+	if (!cmh_core_present(CMH_CORE_PKE))
-+		return;
-+
-+	while (i--)
-+		crypto_unregister_kpp(&cmh_ecdh_algs[i]);
-+
-+	cmh_ecdh_scratch_free();
-+}
+Changes in v4:
+ - dt-bindings: crypto: cmh: rename the per-mailbox child node to
+   queue@N and describe its ring geometry as plain counts rather than
+   log2 -- replace rambus,slots-log2 with rambus,num-slots (a
+   power-of-two slot count) and rambus,strides-log2 with
+   rambus,slot-stride-bytes (a power-of-two byte stride); the driver
+   converts each to the register log2 encoding.
+ - crypto: cmh: convert the platform driver to module_platform_driver()
+   and dev_err_probe(), and drop the single-instance guard.
+ - crypto: cmh: remove the informational dev_info() logging from the
+   probe, register, remove, suspend and resume paths.
+ - crypto: cmh: drop every production module parameter -- the eSW boot
+   timeout, hwrng quality and DRBG config become built-in constants and
+   the command-queue/backlog depths move to debugfs (debug builds only);
+   only debug-gated test knobs remain under CONFIG_CRYPTO_DEV_CMH_DEBUG.
+ - dt-bindings: crypto: cmh: rename the binding file to
+   rambus,cmh-v1030.yaml to match the compatible string, and trim the
+   clocks and interrupts property descriptions.
+ - crypto: cmh: move the /dev/cmh_mgmt rationale (why its ioctl surface
+   does not duplicate the registered crypto-API transforms) from the
+   cover letter into the key-management patch commit message.
+ - crypto: cmh: bound the KEY_NEW/KEY_NEW_RANDOM datastore object length
+   and scrub orphaned datastore objects on the management key-generation
+   error paths
+ - crypto: cmh: further static-analysis error-path and input-validation
+   fixes (management DMA-unmap sentinels; reject absent randomness/context
+   pointers in the ML-KEM/ML-DSA/SLH-DSA ioctls; guard hash/sm3 finup
+   length against u32 overflow; commit RSA key state only after full
+   validation; clamp the ecdsa digit count before sizing).
+ - crypto: cmh: fix transaction-manager submit races and shared-IRQ
+   setup (bound the multi-VCQ walk within vcq_data; arm the async
+   per-request timer before the doorbell to avoid a completion race;
+   de-duplicate shared mailbox virqs so probe does not fail with
+   -EBUSY on platforms that share an interrupt line).
+ - crypto: cmh: fix symmetric stream and out-of-place AEAD output
+   (declare chunksize for the CTR/CFB stream modes so the crypto layer
+   buffers sub-block data instead of splitting the keystream; copy the
+   AAD verbatim into the destination for out-of-place AES/SM4 AEAD).
+ - crypto: cmh: further keyed-hash and PKE hardening (validate raw NIST
+   ECDH scalars with ecc_is_key_valid; reject the unimplemented PKE_ECDH
+   DS-result mode instead of overrunning the output; defer the hash
+   holdback update until after its allocations; bound the hmac fallback
+   state to the export window; restore the management temp-dirty flag on
+   flush failure; back off the hwrng blocking read on a transient DRBG
+   error).
+ - crypto: cmh: stream cSHAKE incrementally in hardware (absorb full
+   sponge rate-blocks per update via SAVE/RESTORE and hold back only the
+   sub-rate tail) instead of buffering all input in kernel memory;
+   any length, matching the plain hashes.
+ - crypto: cmh: make the streaming hash/sm3/cSHAKE .update() retry-safe --
+   defer moving the sub-rate tail into the holdback until after an
+   accepted submit, so a queue-full -EAGAIN (no MAY_BACKLOG) leaves the
+   request state pristine for the caller to retry.
+ - crypto: cmh: ECDH mgmt ioctl returns only the raw shared secret to
+   host; drop the unimplemented DS-result flag and result_cid from the
+   UAPI, with flags and the reserved fields rejected unless zero.
+ - dt-bindings: crypto: cmh: allow clock-names subsets -- core with an
+   optionally-independent core-div2 and/or rt (oneOf) instead of a
+   positional list that could not express [core, rt].
+ - crypto: cmh: register an algorithm family only when its hardware core
+   is present in CORE_ENABLE, so an absent core advertises no crypto-API
+   algorithms; the core-dispatch path also WARNs and bails on an absent
+   core type as a backstop for the /dev/cmh_mgmt ioctl path.
+
+Changes in v3:
+ - dt-bindings: crypto: cmh: rework the mailbox topology per DT review --
+   mailbox@N child nodes; cores discovered from CORE_ENABLE, not the DT.
+ - dt-bindings: crypto: cmh: adopt the "rambus" vendor prefix and a
+   device-specific "rambus,cmh-v1030" compatible (the IP revision) per
+   DT review; rename the per-mailbox properties to rambus,slots-log2 /
+   rambus,strides-log2 / rambus,cores and the crypto driver-name prefix
+   to rambus-cmh-*.
+ - dt-bindings: crypto: cmh: describe the optional functional clocks
+   (core, core-div2, rt) and an optional host-driven reset-gpios; the
+   driver enables all supplied clocks and acquires the optional reset
+   line deasserted.
+ - crypto: cmh: register the platform driver from module_init() without
+   unregistering on probe failure; propagate -EPROBE_DEFER from
+   of_irq_get().
+ - crypto: cmh: harden the key-management and crypto error paths; fix
+   three transaction-manager concurrency issues found by an automated
+   kernel-style review of v2.
+ - crypto: cmh: further automated kernel-style review fixes (hwrng bounce
+   buffer and short-read, truncated export state, RSA re-key unmap, MAC
+   setkey ordering, CCM fallback alignment, persistent PKE/PQC key buffer).
+ - crypto: cmh: give the buffered keyed MACs (hmac, cmac, xcbc, poly1305)
+   a software fallback past the 64 KB window instead of a hard input cap;
+   KMAC keeps its hard cap and rejects export/import.
+ - crypto: cmh: rfc7539(chacha20,poly1305): always issue the AAD-final
+   command, fixing -EIO on empty-AAD requests.
+ - crypto: cmh: chacha20 skcipher: leave req->iv unchanged on completion,
+   matching the generic chacha20 skcipher.
+ - Documentation: cmh: describe the management ioctls as a permanent
+   interface and add ioctl struct layouts; document the keyed-MAC
+   software fallback and KMAC exception.
+
+Changes in v2:
+ - crypto: cmh: wait for both eSW readiness bits at probe. The probe
+   readiness gate polled SW_BOOT_STATUS for MISSION (bit 6, primary
+   VCQ engine) only, but the sidecar engine signals readiness
+   separately via MISSION2 (bit 7), asserted asynchronously. Gate on
+   both bits so an operation offloaded to the sidecar cannot race an
+   engine that is not yet up.
+ - crypto: cmh: compute cmac(sm4) of a zero-length message in software.
+   The SM4 core mishandles an empty CMAC input, so -- exactly like the
+   existing xcbc(sm4) empty-message path, and per NIST SP 800-38B -- the
+   driver now derives the K2 subkey and computes the tag with a software
+   cipher. Surfaced by the testmgr fuzz comparison against the generic
+   cmac(sm4); no change for non-empty messages.
+ - Documentation: link cmh_mgmt.rst into the userspace-api/ioctl index
+   toctree, fixing a "document isn't included in any toctree" htmldocs
+   warning reported on the v1 posting of patch 17.
+ - crypto: cmh: carry the XTS block offset (xts_offset) inline in the
+   AES INIT command, matching the updated CMH hardware ABI that
+   retired the separate XTS_OFFSET command. Always 0 on the skcipher
+   path (data units start at block 0); no functional change.
+ - MAINTAINERS: drop the internal moderated list (sipsupport@rambus.com)
+   and the T: tree line from the CMH entry, per review. The driver
+   goes through the crypto tree, so keep only linux-crypto@vger.kernel.org
+   and no T: line.
+ - Rebased onto current cryptodev-2.6 (v7.2-rc1); no code changes were
+   required (the merge window touches none of the crypto APIs the driver
+   uses).
+
+v1: https://lore.kernel.org/linux-crypto/20260625173328.1140487-1-skrishnamoorthy@rambus.com/
+v2: https://lore.kernel.org/linux-crypto/20260709203037.1884436-1-skrishnamoorthy@rambus.com/
+v3: https://lore.kernel.org/linux-crypto/20260806195519.2703224-1-skrishnamoorthy@rambus.com/
+
+base-commit: 68554337b4aa63d8299edd58f5059d8470bc721b
 -- 
 2.43.7
-
