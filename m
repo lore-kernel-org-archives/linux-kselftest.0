@@ -1,92 +1,163 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF19330678;
-	Tue, 25 Aug 2026 08:32:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F643E6DD2;
+	Tue, 25 Aug 2026 08:37:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787646748; cv=none; b=ea0m3/1wOsMpJauGsH/yZijHgK94cseoqtvA4GEAcSaj57pVs8zoJxXOd9ZyBzgh9n0Y6hg6TNG2/kgZGt6Q8XsbUBkDHlsGmFAeEf2LRARnrrI6Xju0gpGRYFJocjbTW/ngkpdzdN0M3H16P3EiF5puNYrB1PLm0DuedIejxzw=
+	t=1787647072; cv=none; b=U9yDMra15DYDVRw3KTpGy7Wpr/+Y0Jr/hqN6Ev/YZxdOnoxCqZ1DNgjcISPa911RekXH0im5mu3p8lw9qKCN1803Hg4f1aON/kuHRwZ+ab9znAa4x67i34ELpDvHof4fiKRvM850k7ljGNrnHv+jsThYVnfM9k8n5mKMlF9rOcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787646748; c=relaxed/simple;
-	bh=exrcaZjGIjK8G2IqMQWrShw46L0apv1j1ubQCxK3v2w=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=iAN4/OUyzfDmmG0G4gghxvLElhwgBfd3KtIJvuFe/WwbArMsgdRpA3tEK+qqslVnkIxYA8DIZv3GFY8w3Hjdqm4ToY3FdNlGXGsga495oIPTpPxg+VIHeQghI6J44FkCP4BnZxuipSWXCf/7lnVukpnkYdnbKlYZP3yEwyDnJmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n9aaTW+c; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787647072; c=relaxed/simple;
+	bh=+qGab7hN0sGivwq2mXB2sEMCzxrIrFtJf0CG8z91FvE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=JPQejzF1mFvuV1BBtS2RZDplfQiSXxhejj0pKSdWINc6/2AiJ+TmqkFmsCoSLjzqqQn6CNvTt1izRgHctehulZqs60ZhGM8s3/uBx/e1rgpX4l1l8n7stpjHZllQyKlqQqa/TmeCZL8zfQ/+/47ox/qzyYJ8FJCWijg0W9woyEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z//QVUE1; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n9aaTW+c"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F4C31F00A3A;
-	Tue, 25 Aug 2026 08:32:26 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z//QVUE1"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C1B51F000E9;
+	Tue, 25 Aug 2026 08:37:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787646747;
-	bh=6rN3S2beh9Tyeh10Y29/aJvsxHZZboK0PSMeoZLdbCY=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject;
-	b=n9aaTW+crqmxwV/08eQy0jAa88CdQgK+W3Zkbxrgxb+aj1/fsGCQfCSeaZWOuIyYc
-	 HN78t6Rr6xPMOhdfM6wtaUIgU+ReBvATRdIpSNIDQgIid9LkOQ/TUz8Hx8GmUci7zK
-	 vXwcHG91TqbBD7nO9MuFiKvAO4qowqGoOYCCK50kkImBrGecuGhhhHov9370blqTMs
-	 2s4+gsBp2ZVaPAObugkDLFGjqN4G3nuRDHV7GA4emTPEarfHys9+rvbMcUJn+Vkyl3
-	 9tcm90eAeXMfnjo86U5tNG+Dx9dtP5ojBi3ACu2Cb7t67ACq9xGbWvuhuRvEduLTG7
-	 OY6igSL+pcaoA==
-Received: from ams-compute-02.internal (ams-compute-02.internal [10.64.2.62])
-	by mailfauth.ams.internal (Postfix) with ESMTP id 0DE681980058;
-	Tue, 25 Aug 2026 04:32:25 -0400 (EDT)
-Received: from ams-imap-11 ([10.64.2.31])
-  by ams-compute-02.internal (MEProxy); Tue, 25 Aug 2026 04:32:25 -0400
-X-ME-Sender: <xms:F1ONauALEUqxCPIH41hWvVTTgW_U28we2Hop7pJOQHYrpzmE4vhSvA>
-    <xme:F1ONajUi_OefaQH0GlzWxYojaeD1RrNTImWY4EZSti0oEDoxe1IxvubJFmirryZHD
-    rsqRFAozgu7CX9kvJRZ1JX8Uq5b1wI3bkSiWXakQYPnrcmGUjfCgODJ>
-X-ME-Proxy-Cause: dmFkZTGK0tN9/RAsM7Y8miVlqsk5cBOZGwCkW9Pa9CpE9zZXdk8hx77HhGWQTEH6LcEIn7
-    SANF9G/4+lj50xRooPCKoMRHuZluaTCp3dRjP2IYMqGgCdzYX4o4eeLcH0/g9sMPPmLbzK
-    /amBM4F/I/cRbSX7hkHz38/nGJP18tVmvarMTIWVFmTIrCoTfUQvHHQqiofkkBsI1WN6q3
-    cqRPuvbofYn1jr2b9ouoUr6I76x9OISToPzjzpCddCCBE6NZHvHB2xr8HDDvQ4Vm6OlljJ
-    Ulc7LIm0hZjZ8zTZ8css4/I1HIZEkp9euzhfIEDTL8etJZc1dQ7WHhtD/iYAy96jWiFPsv
-    i6JNy1pqOU++kWpWPODwjnMxYOQ1clq78m8805jpq/s0YpNKi0bTelLjgKpwettcN5zIDG
-    +9fLFoCuL1AKhJ7i7eCzdp+n2c9630T5qQKOaZtsKgYl0B4Q3/P0vZrCnhXXiQ+V99PSru
-    5G2wxKHQzKUrUSo7ZnoIyZ2Nhsrjd3W7m/xuX4reuYvMCTD0Sb+9o2BkdytPdl/gNIF8lL
-    yYYwqCumsnKiEOAZ+LjUEZOg6iKqhcJnzjxm8WB2u5g+4ih/23A9iIY4BSw40sF5J/hTm9
-    MWzn4rCSn1ft5mea/ZbrOC4aQ6R+8DgZOSU47y5nBIHgGaauud1IHJp5WFPg
-X-ME-Proxy: <xmx:GVONakCacI43ILvRTY468jC-5qierYlMvubMUrEAN4J2fiHwkpnjdg>
-    <xmx:GVONahdMtxJY5mrGNnqGdjv5x9nOQO1Dl-8gShRQ6RQwGnboVzPi3g>
-    <xmx:GVONammGpMsA1bh7RfCqF7F-NY3LeWPvWKaKFwg-3OysrsjhvI2uEA>
-    <xmx:GVONagGVaXsqI0qyMAikS_C1pRS3HwROcaDxv-9UmNA2HcfnCZSSLw>
-    <xmx:GVONam4zA46V-2wZDFOp2EWtO5V2WIlTsT9bjOeqT_F7ay28kngH2QF7>
-Feedback-ID: ice86485a:Fastmail
-Received: by mailuser.ams.internal (Postfix, from userid 501)
-	id 3FD5BF8007A; Tue, 25 Aug 2026 04:32:23 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=k20260515; t=1787647069;
+	bh=9COt1w3P1MdstF38GuaEny+JKaDo98J8bEQBshdYhKo=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=Z//QVUE1GnHBGMaWgJTJyKF7qhlNX9G/P1wEgSjJPMjcxdPbi8Iv2wQVGKz5UUDdo
+	 4zpFVmESnVz4I3S2DT764lLMxbRFjktGsFau54l92KImS2rU0NMZJv1hSdvybY0Xg5
+	 DZUCgvw5u/4bEGE2kV5+9ea/ans6d0rYLQofsBg582EX2Okl+bfym5HF/DOgijOZTv
+	 Op8yakmihGw+NiVEkZPqyLHzxwYNl1nvPRghurehhDSdb4ngiZRWYbcOyYAqWRZCoM
+	 hwO2+QPg+mTQ4xZ7bJJsEtmTJScmBjnhbovLqbwVh8MaRIxAZTbprx7VPpwsdeCED9
+	 pVLQy1kX0XuTw==
+Message-ID: <f2ac9432-4fea-4007-aab0-ad80597b284c@kernel.org>
+Date: Tue, 25 Aug 2026 10:37:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 25 Aug 2026 10:32:02 +0200
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Christoph Hellwig" <hch@lst.de>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Eric Biggers" <ebiggers@kernel.org>
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <0a6500bb-948c-43a5-80e6-307ffa9c9d1a@app.fastmail.com>
-In-Reply-To: 
- <64c6e0191bd8ccef0074ffbb09bd0584680d710b.1787584360.git.geert@linux-m68k.org>
-References: 
- <64c6e0191bd8ccef0074ffbb09bd0584680d710b.1787584360.git.geert@linux-m68k.org>
-Subject: Re: [PATCH] raid/kunit: Enable RAID6 PQ and XOR benchmarks if
- KUNIT_ALL_TESTS=m
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 0/2] support kselftest on nommu platform
+To: Hajime Tazaki <thehajime@gmail.com>, linux-mm@kvack.org,
+ liam@infradead.org, rbm@suse.com, akpm@linux-foundation.org,
+ luto@amacapital.net, brendan.jackman@linux.dev, liuhangbin@gmail.com,
+ corbet@lwn.net, kees@kernel.org, ljs@kernel.org, broonie@kernel.org,
+ mhocko@suse.com, rppt@kernel.org, shuah@kernel.org, surenb@google.com,
+ vbabka@kernel.org, wad@chromium.org, linux-doc@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org
+Cc: geert@linux-m68k.org, daniel@thingy.jp
+References: <20260825015945.141739-1-thehajime@gmail.com>
+From: "David Hildenbrand (Arm)" <david@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=david@kernel.org; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzS5EYXZpZCBIaWxk
+ ZW5icmFuZCAoQ3VycmVudCkgPGRhdmlkQGtlcm5lbC5vcmc+wsGQBBMBCAA6AhsDBQkmWAik
+ AgsJBBUKCQgCFgICHgUCF4AWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaYJt/AIZAQAKCRBN
+ 3hD3AP+DWriiD/9BLGEKG+N8L2AXhikJg6YmXom9ytRwPqDgpHpVg2xdhopoWdMRXjzOrIKD
+ g4LSnFaKneQD0hZhoArEeamG5tyo32xoRsPwkbpIzL0OKSZ8G6mVbFGpjmyDLQCAxteXCLXz
+ ZI0VbsuJKelYnKcXWOIndOrNRvE5eoOfTt2XfBnAapxMYY2IsV+qaUXlO63GgfIOg8RBaj7x
+ 3NxkI3rV0SHhI4GU9K6jCvGghxeS1QX6L/XI9mfAYaIwGy5B68kF26piAVYv/QZDEVIpo3t7
+ /fjSpxKT8plJH6rhhR0epy8dWRHk3qT5tk2P85twasdloWtkMZ7FsCJRKWscm1BLpsDn6EQ4
+ jeMHECiY9kGKKi8dQpv3FRyo2QApZ49NNDbwcR0ZndK0XFo15iH708H5Qja/8TuXCwnPWAcJ
+ DQoNIDFyaxe26Rx3ZwUkRALa3iPcVjE0//TrQ4KnFf+lMBSrS33xDDBfevW9+Dk6IISmDH1R
+ HFq2jpkN+FX/PE8eVhV68B2DsAPZ5rUwyCKUXPTJ/irrCCmAAb5Jpv11S7hUSpqtM/6oVESC
+ 3z/7CzrVtRODzLtNgV4r5EI+wAv/3PgJLlMwgJM90Fb3CB2IgbxhjvmB1WNdvXACVydx55V7
+ LPPKodSTF29rlnQAf9HLgCphuuSrrPn5VQDaYZl4N/7zc2wcWM7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <20260825015945.141739-1-thehajime@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
+On 8/25/26 03:59, Hajime Tazaki wrote:
+> We add an ability to execute kselftest on nommu platforms.
+> 
+> Currently there are several issues if we wish to run kselftests on nommu
+> targets:
+> 
+> - it cannot compile/build test binaries because the current files mainly
+>   assume to build with glibc,
+> - some of the tests are not able to run on nommu targets as there are no
+>   fork(2) syscall.
+> 
+> The first issue can be avoided if we can build static PIE binaries (if
+> targets support it), but in our case (build on ubuntu/glibc and run on
+> alpine/musl-libc), it fails to invoke due to lack of the GNU ifunc
+> mechanism.  Thus, we need to cross-compile with musl toolchain, which
+> needs to be solved the first issue.
+> 
+> The second issue is the lack of fork(2) syscall on those platforms.
+> Especially the test harness helper (kselftest_harness.h) uses the
+> syscall, which cannot be simply with vfork(2).  `timeout` command used
+> in `runner.sh` never works for nommu platform as it uses fork(2).
+> 
+> nommu component in the mm subsystem has several known issues and having
+> test cases should help this situation, thus this patchset is very first
+> step toward enriching test environment which has not been well tested
+> for a while.  The test cases is implemented based on the document
+> (Documentation/admin-guide/mm/nommu-mmap.rst).
+> 
+> So, for the first step, nommu targets only support low-level API of
+> kselftests (kselftest.h), and implement tests in a new target,
+> TARGETS=mm/nommu.  Other targets are currently not even able to build
+> due to toolchain issues but will be addressed once the initial
+> introduction which mainly focuses on nommu test will be settled.
+> 
+> The patch was initially combined with other patches but is decoupled to
+> only focus on test framework and testcases.
+> 
+> - rfc:
+> https://lore.kernel.org/linux-mm/20260813063401.1786548-1-thehajime@gmail.com/
+> 
+> Hajime Tazaki (2):
+>   selftests: run tests on nommu architecture
+>   selftests/mm: add nommu mmap and mremap behavior tests
+> 
+>  Documentation/dev-tools/kselftest.rst         |  14 +
+>  tools/testing/selftests/Makefile              |   1 +
+>  tools/testing/selftests/kselftest/runner.sh   |   9 +-
+>  tools/testing/selftests/kselftest_harness.h   |   4 +
+>  tools/testing/selftests/lib.mk                |   8 +
+>  tools/testing/selftests/mm/nommu/Makefile     |   7 +
+>  .../selftests/mm/nommu/nommu_mmap_test.c      | 265 +++++++++++++
+>  .../selftests/mm/nommu/nommu_mremap_test.c    | 353 ++++++++++++++++++
 
-On Mon, 24 Aug 2026, at 17:14, Geert Uytterhoeven wrote:
-> Enabling the (possibly long-running benchmarks) by default may cause a
-> big delay in boot time in case of built-in tests.  However, they can
-> still safely be enabled by default if all tests are modular, as they
-> would only run when requested explicitly by the system administrator.
->
-> Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
-> ---
->  lib/raid/Kconfig | 2 ++
->  1 file changed, 2 insertions(+)
->
+That's odd.
 
-Acked-by: Ard Biesheuvel <ardb@kernel.org>
+	tools/testing/selftests/mm
+
+itself should know which tests can be built and ran on nommu. nommu-only tests
+can be placed in mm/nommu, but I would expect tools/testing/selftests/mm's
+Makefile and run script to compile and run only selftests that are supported on
+the given platform.
+
+-- 
+Cheers,
+
+David
