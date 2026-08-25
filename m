@@ -1,117 +1,191 @@
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B719C44838A
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 15:58:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98D1C3A1C9;
+	Tue, 25 Aug 2026 16:01:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787673509; cv=none; b=KnJX8ZOWhnd1SOKd8Tx7SWS+JL/4qujnGwMFrFW12BNB5Nm2JCvrNt/1JESG3J1yS8b/j0LpKiajBquJ5rH9uJqwMRxg6B/M+zbn87D5q1TV3Jf93wYBKiWqEcdnVPuTztrrLkbaaafy7xOoFq27iNvGvFFhISF1vn8FWKCY8zc=
+	t=1787673674; cv=none; b=I1nCyaNfSFVqczc+wlyrv8XacZrmTay2PfDnSm6pHcHBnlabhaV8YVe0hEkUmWc1j3/7K9LGb2aXLzho+SZhop64QLHq6f8s+gUda4i+/0ZeClSzvAJeepOgX4bao94dVjdKabBxe08frnyzeEWrQPy2ml92hSpJnDUYdoJZ7gU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787673509; c=relaxed/simple;
-	bh=hEuVyjDnFoNd6JtTePNviuCwOub2ts5RMN4/JlUevdU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MDQvcotaZtNpU9cRvsLNMtAUpiFWwHRMx+7ko8Ol7Ufz3NKFl1ywFi7tw37ihrAbPDVEvJVwqiBE22wYkMcs5JLaGwfod3NCZ/dNgJNkq4uNWIkIQIbpVSUIIcZkB8VIUTJwyFyL2vU7jKsXUZLxXJM9WKOs5tXwXbggq/QeuUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ki3+NcCn; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787673674; c=relaxed/simple;
+	bh=shQu2ja8FKYpxwmft95PQDnR4lutE8cOna4MUXeJkaA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=t6s738wO3q0xXWz2/+km2yNlJv8ELbyJV/86SVFB6J+FjCJ0DzyVt+brGAuW0DeV0aDG5i9iyGAmYPQs4VAHpcc9JGZg+BorJbi0aU68fmwWtkgacwPj2LHk1uNKLyCiCZlesJTGLulnExGA16uamusQ1Ek46G1rhW5EzsGxJhI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ar2uwwun; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ki3+NcCn"
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-3964dfb5a69so5479a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 08:58:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787673507; x=1788278307; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=9OtZs5NBq0Z3O9dZTmybDq9m9YVYbLUmax5nexoEVpY=;
-        b=ki3+NcCnmgqHGMwPMwFTrRJjK+GDlK9sU0sUuehUEG80pVvqWPr7GjfNWWJehoU5vx
-         0OCCDPg3dq+ntAr5MvL1Z8IrlcUIXhI5joMvdpsyHnzoYoVzWQm3iScPskv7ZC1ZhHDZ
-         TsRNoLUZ3IDK0GhNmod607XH2v519kroPcZ+WUiwZ1boGe/0jKKhQ3VsXDPK/FDm6fQS
-         ZQeG6RcPrJ++K45vDiqDvFClEbShTnQ6rx1Dy9+sh1wM8MYCWruuPdiOX+1jnBAIm7Fs
-         oQlzNT1x6lj5mZLTtxOPzXKPHcxkdk/LH4u2K7Pclb0fR4qkjHotsEnXQFtsJvHbvQfg
-         Goxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787673507; x=1788278307;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=9OtZs5NBq0Z3O9dZTmybDq9m9YVYbLUmax5nexoEVpY=;
-        b=YTzaM71lCJ30SI6K3po2G2yyGsZhqsm3AuC43GCThZrPwXVrzj32XWRqjjaTKe+0fw
-         gOVWZw1ZyTXraePh9ZeDQ1vaXN8wP/eop7BxgC5oTV9axo/RxBqVzKTytDBHKXjFlIek
-         ibtZtSxsjQ9LYMc62Wg2nj3+HlUIVz5kV3DJO8unCOzthkF1K8PGOQiMCyqLuWW+/00r
-         mes4Od6qpES9HTmQXxflJCdYFjo1PY1k0xHplt5kzfgO5JebpUw1TGTVlhMzmKWuMArA
-         6gdeyC3gtQ9IwqHjBuK0NUz2pcWyhLL3t7A8i/U21OiflHgoFWgoqT81Ty5QfT5XIuXG
-         XLfw==
-X-Forwarded-Encrypted: i=1; AHgh+Ro5oCSfnTT2LLS4zt2WX1CJekesZw79lnIu9sm5/Jyk42tA/Wd7ceJWO9f6tWsH0ViMsqeLtWF8cajdqleAm6Q=@vger.kernel.org
-X-Gm-Message-State: AFuF++m+l5qPEb4ivk2qsX2oiH4Uhxj5R3X5Ra08ybK4ZqXqeHDGw+YT
-	6Wg0dW/i6kGhj4fcdCvu0chCP+WRaZHFVETQK5moz2F/U3ps/Ruj+Vi2
-X-Gm-Gg: AR+sD11L5vQSzU8JQlKbG2wic8J8yTc1JuIkIU80e57P6Ut9fhmBYa/mOiZrqWqiqq3
-	749qTcsMx3yHjuAoRqqZl1/YZkG0VHDKvPfwp5Do4E8D5n+XM/3F+Wm6xGfjBpbYhwRBuqbVK6B
-	jBTzS1kVzgkkKWQpUbeStGqJy1KSJJrcBZv+7hlnpVsBXzB4iAaBp1WYJKe6RAyRP9asLh40E3P
-	pmPkVZW0uhT2qHv51MmY7dz20ugRTgzhq3vm4KtpJCjE/UZzRBHEowES94h2HvQxVxElJmWGzGN
-	5Ey03PxM+7p4meBbQt1CBHRAMxXAYWlz3b+fuKnPaKT5wiI+taHsWA1HPAwnlOTGS0zWgy0aX0J
-	8PhCaI7kBQjGj1JIUtcFrt7/z67mAwjXUC1hL4P/x4jwSKz6gFGrK8y2S2YWzI+yS/F801XSl2C
-	eK+bmNJf3uTxiytwtDlkcvvbRZZxmgWnyG1WWUFMgizzqeeCP6DqQevBdcFF1Hent7ToWjmXHFm
-	+ZetNyT8wE=
-X-Received: by 2002:a17:90b:51d2:b0:381:6c5:3f63 with SMTP id 98e67ed59e1d1-3966d21833dmr335850a91.6.1787673506904;
-        Tue, 25 Aug 2026 08:58:26 -0700 (PDT)
-Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141a9036c85sm148587c88.9.2026.08.25.08.58.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 08:58:26 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: ljs@kernel.org
-Cc: david@kernel.org,
-	akpm@linux-foundation.org,
-	shuah@kernel.org,
-	yury.khrustalev@arm.com,
-	kevin.brodsky@arm.com,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
-	linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
-Date: Tue, 25 Aug 2026 21:28:02 +0530
-Message-ID: <20260825155802.2804785-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <ao2nFqGevXIa3l4c@gremlin>
-References: <20260818114945.1312987-1-hemanth.selam@gmail.com> <20260819074717.1345749-1-hemanth.selam@gmail.com> <fd193070-af97-497d-82dc-1f0fa1172fd7@kernel.org> <ao2nFqGevXIa3l4c@gremlin>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ar2uwwun"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD5681F000E9;
+	Tue, 25 Aug 2026 16:01:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787673673;
+	bh=0UWZ5amjuDuz5NxB+UBQVKLusjTJjNvSXdFmO8uoJLU=;
+	h=From:Subject:Date:To:Cc;
+	b=Ar2uwwun9E+GAnctXWPBo12NcRgbRk8j7SLZV8gbV1A3osQAyzyUx4CPw/tOz/kPp
+	 XEXxZ4DgeolskSEIGxUXXSP8OkioSdv3k4urTIPJsg59Vna8moQ/DmcAcq22P6ALH1
+	 KyA5ngiOVDGxFU6oybyDKr74CTlBbS7fsl0bThU0iogWxKi42cHP02vWV0QsTwXb6X
+	 5TEIf6o6guYYaPPpSt30Ep96YTrqC57eBz7n4bIB7D4u2p8qdzlmIVTinMoSZ0mXxu
+	 pY97bxnxk5iczGyJPPLO2T1NMv/pGx5UYLv/HVpnMdFj0q7ZzSLBC+q6TtjG3c0dBW
+	 DGx77mzSKlyYw==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Subject: [PATCH 0/8] KVM: arm64: Add KVM_PRE_FAULT_MEMORY support
+Date: Tue, 25 Aug 2026 17:00:34 +0100
+Message-Id: <20260825-kvm-arm-prefault-v1-0-befe8947702e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIzMDC0NT3eyyXN3EolzdgqLUtMTSnBJdy6QkE0PDJDMLS/MUJaA2kERmBdj
+ I6NjaWgB0ns9XYgAAAA==
+X-Change-ID: 20260815-kvm-arm-prefault-9bb411b6897d
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
+ Oliver Upton <oupton@kernel.org>, Fuad Tabba <tabba@google.com>, 
+ Joey Gouly <joey.gouly@arm.com>, Steffen Eiden <seiden@linux.ibm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, Jack Thomson <jackabt@amazon.com>, 
+ Jack Thomson <jackabt.amazon@gmail.com>, 
+ Alexandru Elisei <alexandru.elisei@arm.com>, 
+ Vincent Donnefort <vdonnefort@google.com>, 
+ "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>, 
+ Sean Christopherson <seanjc@google.com>, 
+ Claudio Imbrenda <imbrenda@linux.ibm.com>, 
+ Leo Soares Passos <Leo.Bras@arm.com>, 
+ "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=5144; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=shQu2ja8FKYpxwmft95PQDnR4lutE8cOna4MUXeJkaA=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLJ69zgpbqu+wXsyfM3+Pc//BZRP4Cm8mpD614CD7UqQZ
+ u+nDgnfjlIWBjEuBlkxRZbnX8T3B4mEzeu84O8GM4eVCWQIAxenAExEn5fhr4DtqQdGhxvvP3QR
+ 2MYn/Dtv1t6g6QIb81smzJjoLfGX0ZKR4YGBQYXBhTUqu1RXv7r2oPr9grcsFpPrw273vjvVtdV
+ 5CQcA
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-On Tue, Aug 25, 2026 at 03:36:36PM +0100, Lorenzo Stoakes (ARM) wrote:
-> Since you said load-bearing in the last email - I do have to ask if AI was
-> involved with this.
->
-> If so please adhere to kernel guidelines:
->
-> https://docs.kernel.org/process/coding-assistants.html
-> https://docs.kernel.org/process/generated-content.html
->
-> I.e. add an Assisted-by tag.
+This series implements the KVM stage 2 page table pre-faulting feature for
+arm64.
 
-Yes, it was.  I used an AI assistant while tracing the include path and
-preparing the patch.  The builds and the cpp output I quoted are ones I ran
-and checked myself, and the Signed-off-by is mine, but I should have tagged
-the assistance from the start.  Sorry for that, and thanks for asking
-directly.
+== Foundations ==
 
-The respin will carry
+The series begins by establishing required foundations:
 
-	Assisted-by: Cursor:claude-opus-5
+1. Updating kvm_s2_fault_desc to independently store the exception syndrome
+   register (ESR) value, and updating all code paths to use this value
+   exclusively.
 
-I will send it as a new mail rather than in reply to this thread, as you
-and David asked.
+This is needed so we can later generate a synthetic fault to perform the
+pre-faulting - we need to be sure the code doesn't grab an incorrect ESR
+from elsewhere.
 
-Thanks for the Acked-by.
+2. Updating kvm_s2_fault_desc to independently store the kvm_s2_mmu and
+   updating all code paths to use this value exclusively.
 
-Hemanth
+Similarly this is needed so we can generate a synthetic fault against the
+canonical stage 2 MMU (it would make no sense for it to touch nested shadow
+page tables) - we need to be sure that the code doesn't grab an incorrect
+MMU from elsewhere.
+
+3. Updating the abort paths which consume kvm_s2_fault_desc to also return
+   a kvm_s2_fault_result data structure.
+
+To perform pre-faulting the code must know the granule size of what was
+just walked. So the abort paths have to tell us what that was.
+
+4. Pass walk flags to kvm_pgtable_get_leaf() to permit walking page tables
+   under the MMU read lock.
+
+This is Jack's patch, verbatim, which allows the use of the
+KVM_PGTABLE_WALK_SHARED flag to walk page tables under the MMU read lock.
+
+Pre-faulting requires it to be able to work in parallel as specified by the
+API. The read lock precludes page tables being torn down behind our back.
+
+== Implementation ==
+
+Pre-faulting is implemented in kvm_arch_vcpu_pre_fault_memory() whose job
+is to pre-fault the stage 2 page tables which map a specific GPA (which,
+for arm64, is the guest's IPA).
+
+This function is called by kvm_vcpu_pre_fault_memory() for each GPA in the
+range, which itself is ultimately invoked by userland via the
+KVM_PRE_FAULT_MEMORY ioctl.
+
+The implementation is simple - try to walk to the stage 2 page table
+mapping the GPA - if unmapped, fault it in through a synthetic page fault.
+
+pKVM is not supported regardless of whether the VM is protected or
+not.
+
+This is because pKVM instantiates vCPUs upon run, but pre-faulting is
+typically performed before a vCPU is run. It would be confusing and
+inconsistent to error out on non-running vCPUs but to pre-fault running
+ones.
+
+Jack's original test suite is also included in the series.
+
+== Credits ==
+
+This series is based, with gratitude, on Jack Thomson's series and their
+respins (links provided below) as well as the feedback he received.
+
+The series includes Jack's v5 "KVM: arm64: Pass walk flags to
+kvm_pgtable_get_leaf()" patch verbatim, and all three of his test patches,
+two of which required minor fixups.
+
+Link: https://patch.msgid.link/20260612162354.73378-1-jackabt.amazon@gmail.com/
+Link: https://patch.msgid.link/20260113152643.18858-1-jackabt.amazon@gmail.com/
+Link: https://patch.msgid.link/20251119154910.97716-1-jackabt.amazon@gmail.com/
+Link: https://patch.msgid.link/20251013151502.6679-1-jackabt.amazon@gmail.com/
+Link: https://patch.msgid.link/20250911134648.58945-1-jackabt.amazon@gmail.com/
+
+== Reviewer Notes ==
+
+I synced with maintainers on this who asked me to take a look, as there hadn't
+been progress on the series for some time.
+
+Am happy to rebase again after -rc1.
+
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+---
+Jack Thomson (4):
+      KVM: arm64: Pass walk flags to kvm_pgtable_get_leaf()
+      KVM: selftests: Enable pre_fault_memory_test for arm64
+      KVM: selftests: Add option for different backing in pre-fault tests
+      KVM: selftests: Add nested pre-fault test for arm64
+
+Lorenzo Stoakes (ARM) (4):
+      KVM: arm64: Propagate and use esr in s2fd when handling guest aborts
+      KVM: arm64: Propagate and use mmu in s2fd when handling guest aborts
+      KVM: arm64: Propagate and use kvm_s2_fault_result on S2 fault
+      KVM: arm64: Implement KVM_PRE_FAULT_MEMORY
+
+ Documentation/virt/kvm/api.rst                     |  17 +-
+ arch/arm64/include/asm/esr.h                       | 129 +++++---
+ arch/arm64/include/asm/kvm_emulate.h               |  52 +---
+ arch/arm64/include/asm/kvm_pgtable.h               |   5 +-
+ arch/arm64/include/asm/kvm_pkvm.h                  |   2 +-
+ arch/arm64/kvm/Kconfig                             |   1 +
+ arch/arm64/kvm/arm.c                               |   1 +
+ arch/arm64/kvm/hyp/nvhe/mem_protect.c              |  10 +-
+ arch/arm64/kvm/hyp/pgtable.c                       |   5 +-
+ arch/arm64/kvm/mmu.c                               | 324 +++++++++++++++++----
+ arch/arm64/kvm/nested.c                            |   2 +-
+ tools/testing/selftests/kvm/Makefile.kvm           |   2 +
+ .../selftests/kvm/arm64/nv_pre_fault_memory_test.c | 206 +++++++++++++
+ .../testing/selftests/kvm/pre_fault_memory_test.c  | 152 ++++++++--
+ 14 files changed, 736 insertions(+), 172 deletions(-)
+---
+base-commit: aa8e5dc6a7a2a1141ab40706a51010adcd0e57d2
+change-id: 20260815-kvm-arm-prefault-9bb411b6897d
+
+Best regards,
+-- 
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
+
