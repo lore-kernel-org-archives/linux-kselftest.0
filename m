@@ -1,92 +1,139 @@
-Received: from mta1.migadu.com (out-65.mta1.migadu.com [95.215.58.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C63B49362B
-	for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 05:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B48DE1A6815;
+	Tue, 25 Aug 2026 06:47:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787635045; cv=none; b=JxEdJzQ3ea3uJxHpUET8r1qXsrpat/Kd+vsWuPIV5QP6clnePoWKjtgnnlm/NE9pWYJkhm92U2YsU2LaZWEYIYpQzMLpJYU7uKr6iWzcXFM+ME7YEZix0NoOo9BQp68W0RBRB8CV/r2ler+urPQdzINGPU/l76WSDCrDxuUBOn4=
+	t=1787640445; cv=none; b=tU48nXjvPHfcmK8Tow7OFCiz2LkO3XdnVI3oOEgfz/ZSZ6x8yz9WHQE+g/kAebMX8pY4SNY/nM70R6o1QDKAqDshN5w7UhS/5p0lgrqb0vW/lkhA+WwvbiqoUktZ4fcbK82d9pEJN28rP4/MlVQoem4Bwcl3Ns4xp9y3QyQLyAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787635045; c=relaxed/simple;
-	bh=9PxiUEhNs0QEoZNWcrStmTbnn5tMM7qCOJzneWfUU0s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sQUWlJ5XCi+KaqTqcQMV+wOf3i9LxT7K0SwR/o71d0R+n08tXpWKHVt79G+7Qsn+EUfoUti1hm9hkKFZPNA4usNDM6eC+eC2RjiIeBoO7JuZGP09s4yruWRcpVLu5lNn0WGr5+rzoXSXRkWf8hHg63E5rtl8B6Hu7vJsfFg6pmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KEkwVraW; arc=none smtp.client-ip=95.215.58.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787640445; c=relaxed/simple;
+	bh=IxWnrHSXomJfnanl8u82Sj8bdFPa1AjkVFJN0w4TYy0=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=aZt2esXKUMz85LMOncKt1UKWwPxQfErg7x5CQWMJsHANo6uXgCnA/At3wu/J+PiluuLHlzN3TW2NsaaRjcOH9Lu6N3LqcWN92TJS4rWLjbY9XBJqEmmWfjUpzL2Npg8y15qUKDtD0hIfEq1s2uaGR2XCSkIkzzVulrAX8w/kcCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=lcuBobQi; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KEkwVraW"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=9PxiUEhNs0QEoZNWcrStmTbnn5tMM7qCOJzneWfUU0s=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787635042; v=1; x=1788239842;
- b=KEkwVraWIlw1eXqCriqluIhQUgA4vaYiM27sMCMWPsYFa2KRcdwYvqFG9K67p8mPrlj3LN1V
- wrv4wp3fzTGQ13E4LYJcO2dO0CRouMzQ4cnCRYeXlSw/FuykwJCI5s6SXlZwIJlf1MPRn7fnnb1
- J+MXPBKYapPJsOMSzs4SzRNM=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [10.22.64.46] (122.11.166.8)
-	by smtp.migadu.com with ESMTPS id f51d73458007ef9f;
-	Tue, 25 Aug 2026 05:17:22 +0000
-X-Mizu-Trace-ID: f51d73458007ef9f
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <b8f1e71d-0fe6-47b5-bf59-0e077e5806ad@linux.dev>
-Date: Tue, 25 Aug 2026 13:17:10 +0800
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="lcuBobQi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=FD
+	d5+K8ekfm6FYmynp77HRy2jmEGEtKm+E9AgCDfYl4=; b=lcuBobQibAYDUQo8W/
+	XqaHSfpGTQUHC3RBukvvwmVyxBuQXSK9ptzDW4KfAHGWssvgMn6GyFkQSzUb2/98
+	6j3Fts4oJRxBOp0MXD56sRAL3kVlu6ZTrxF/aH+2KuNN39mY8R8afDFKL9uXYjzn
+	o1ChEse7MT5SkuR+eVqZ0eeac=
+Received: from localhost.localdomain (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wB3s6EwOo1qKYSERw--.3416S2;
+	Tue, 25 Aug 2026 14:46:09 +0800 (CST)
+From: Qingshuang Fu <fffsqian@163.com>
+To: Andy Whitcroft <apw@canonical.com>,
+	Joe Perches <joe@perches.com>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	John Stultz <jstultz@google.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Miroslav Lichvar <mlichvar@redhat.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Qingshuang Fu <fuqingshuang@kylinos.cn>,
+	Qingshuang Fu <fffsqian@163.com>
+Subject: [PATCH selftests/timers] selftests/timers: clocksource-switch: fix unchecked open()/read()
+Date: Tue, 25 Aug 2026 14:46:05 +0800
+Message-Id: <20260825064605.472889-1-fffsqian@163.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Avoid flaky resize value test
- for percpu data
-To: Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc: bot+bpf-ci@kernel.org, bpf@vger.kernel.org, ast@kernel.org,
- daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
- memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
- yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
- ihor.solodrai@linux.dev, shuah@kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, martin.lau@kernel.org, clm@meta.com
-References: <20260818153202.90714-1-leon.hwang@linux.dev>
- <948e7ff41f942519880f9789faf6ca8ed9d0e2cf42eab5b9e1567ead5367b830@mail.kernel.org>
- <a1b1c6ee-ad7d-4972-a15b-f567e7787a6c@linux.dev>
- <CAEf4Bza6X9SZmnyqdZDFKJG5nWchuaEuFyC-MbuzQCuZ+dwq+w@mail.gmail.com>
- <90bbc900-21cd-4dfb-a058-13930378052f@linux.dev>
- <CAEf4BzZY-C3WtoRkdi+U7XFAMv59JeJ2R0yMi8+FGM4sLTsnQQ@mail.gmail.com>
-Content-Language: en-US
-From: Leon Hwang <leon.hwang@linux.dev>
-In-Reply-To: <CAEf4BzZY-C3WtoRkdi+U7XFAMv59JeJ2R0yMi8+FGM4sLTsnQQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wB3s6EwOo1qKYSERw--.3416S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7uw4xury8Cw4xtrWftr1DZFb_yoW8Kr45p3
+	y0kw15tr15Xa42vrsakF1UJrn5uws29F15Gry5XFy2yrW5Arn5XF43KryjyFW3Ars3Z34a
+	vF95Zr4rCFyDArJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0JUUEf5UUUUU=
+X-CM-SenderInfo: 5iii21xldqqiywtou0bp/xtbCwhGYY2qNOjEZPAAA3h
 
-On 25/8/26 04:04, Andrii Nakryiko wrote:
-> On Sun, Aug 23, 2026 at 10:02 PM Leon Hwang <leon.hwang@linux.dev> wrote:
-[...]
->>>
->> It is to verify the mmap change in libbpf's bpf_map_mmap_resize() for
->> percpu data map, like those subtests in global_map_resize.c.
->>
-> 
-> this didn't explain much, but I think what you are trying to say is
-> that this won't work for PERCPU arrays with PAGE_SIZE=64KB, because
-> PERCPU value is limited to 32KB today, is that right?
-> 
+From: Qingshuang Fu <fuqingshuang@kylinos.cn>
 
-Right. Limiting PAGE_SIZE=4KB is to avoid the
-test_global_percpu_data__load() failure due to PERCPU value 32KB limit
-when PAGE_SIZE is 64KB.
+get_clocksources() and get_cur_clocksource() open and read the
+clocksource sysfs files without checking the return values and without
+NUL-terminating the buffer.
 
-> 
-> so maybe actually model that in the test itself, expect -E2BIG if
-> PAGE_SIZE > 32KB or something, and otherwise check the resize?
-> 
-How about skipping test_percpu_data_on_cpus() when
-test_global_percpu_data__load() returns -E2BIG? Because
-bpf_map__set_value_size() has already been verified before calling
-test_global_percpu_data__load(). Afterward, it's unnecessary to check
-PAGE_SIZE value.
+If open() fails, read() is called on fd -1 and returns -1, which is
+stored in a size_t as SIZE_MAX.  The token-scanning loop in
+get_clocksources() then walks past the uninitialized stack buffer,
+reading and writing out of bounds.  Even on success the buffer is not
+NUL-terminated, so a fully read buffer makes the inner scan run past the
+data, and get_cur_clocksource() lets change_clocksource() call strlen()
+on a non-terminated buffer.
 
-Thanks,
-Leon
+Check the open()/read() results, use ssize_t for the read length,
+NUL-terminate the buffer, and close the fd in get_cur_clocksource().
+
+Fixes: 7290ce1423c3 ("selftests/timers: Add clocksource-switch test from timetest suite")
+Signed-off-by: Qingshuang Fu <fuqingshuang@kylinos.cn>
+---
+ .../selftests/timers/clocksource-switch.c     | 23 ++++++++++++++++---
+ 1 file changed, 20 insertions(+), 3 deletions(-)
+
+diff --git a/tools/testing/selftests/timers/clocksource-switch.c b/tools/testing/selftests/timers/clocksource-switch.c
+index db62a764c29e..2e86f56d953e 100644
+--- a/tools/testing/selftests/timers/clocksource-switch.c
++++ b/tools/testing/selftests/timers/clocksource-switch.c
+@@ -40,16 +40,23 @@
+ int get_clocksources(char list[][30])
+ {
+ 	int fd, i;
+-	size_t size;
++	ssize_t size;
+ 	char buf[512];
+ 	char *head, *tmp;
+ 
+ 	fd = open("/sys/devices/system/clocksource/clocksource0/available_clocksource", O_RDONLY);
++	if (fd < 0)
++		return 0;
+ 
+-	size = read(fd, buf, 512);
++	size = read(fd, buf, sizeof(buf) - 1);
+ 
+ 	close(fd);
+ 
++	if (size <= 0)
++		return 0;
++
++	buf[size] = '\0';
++
+ 	for (i = 0; i < 10; i++)
+ 		list[i][0] = '\0';
+ 
+@@ -74,11 +81,21 @@ int get_clocksources(char list[][30])
+ 
+ int get_cur_clocksource(char *buf, size_t size)
+ {
++	ssize_t len;
+ 	int fd;
+ 
+ 	fd = open("/sys/devices/system/clocksource/clocksource0/current_clocksource", O_RDONLY);
++	if (fd < 0)
++		return -1;
++
++	len = read(fd, buf, size - 1);
++
++	close(fd);
++
++	if (len <= 0)
++		return -1;
+ 
+-	size = read(fd, buf, size);
++	buf[len] = '\0';
+ 
+ 	return 0;
+ }
+
+base-commit: 66498c75b4f8017f62d720d9b59675bdf3abce91
+-- 
+2.25.1
 
