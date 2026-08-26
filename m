@@ -1,40 +1,41 @@
 Received: from stravinsky.debian.org (stravinsky.debian.org [82.195.75.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA46E3E49F6;
-	Wed, 26 Aug 2026 10:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D5383E3D86;
+	Wed, 26 Aug 2026 10:47:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=82.195.75.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787741262; cv=none; b=G9FhqEwKWfDIX4kFvyq4zCCsNhba7FLOJbW62Pq8jRE6D44dySQlsm7b6mTQrzEQhkyC2QxDG8MHHLR8Q9I/tpW6Us9SgD30TyT5a0cizP7dGxLgdy3HvXYT8gMT9n9TLmgQ2tKpgRp3ZGX4Vu3/3RzWRQRtGjeDDDfGHeLGaRw=
+	t=1787741272; cv=none; b=AiWrcEGM0ge59b2hOiPfZPyOWaW7zBuTOwCEVcpI4OtL7TG2K0vw5pNLNOkslil7r8zho/LyUKSjrJNcqB4kWUGWAr7dy3cw3PLlILnnHPynRt1Nl8g0KmisQ8tRytz66HhXYZtqg6XXzlPrtY6sSg47wWsFQAXFNit2XuF3wMA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787741262; c=relaxed/simple;
-	bh=wORddpQUoxxZEK3S19npcB7hSW0MP1npfZ3b9/K/ucE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WAC8lXfL9eXkDtvuSAMPJjSHPXryQF/2frHwNUQ+o+ApaT6xo5przaOlBcqMn052Osh+/S6mKlyw6PcZXQRZYfixJHQJueVNbbKhxewGj58t/ZxqCxK3uRzoWpbHD5cFB30Ew/5nPan+42loAJV30zAFk+jPm86pl1Wd7Q6eI9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=AHkVCzV4; arc=none smtp.client-ip=82.195.75.108
+	s=arc-20240116; t=1787741272; c=relaxed/simple;
+	bh=GkzTfTFbLQND+U+cNyP76kQ59TA5pINipegGDM2lRpg=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=FJhU/uL8jZpbnDxLeXcXZXYRr84goHnhslyXwAE6HH8D5tA6JwrdJrfzAHnx7bG0qK64E+k3yAM67Om+OYzcyF9NSApwrieBihW4sL0bmCKxP0ogEu2lypv26c2vRBwtc8BwAPDs893oQ3cgb+YgApmJ0UxHRI2M4mZ+Y80YOVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=debian.org; dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b=PAFkpgUv; arc=none smtp.client-ip=82.195.75.108
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=debian.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=debian.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="AHkVCzV4"
+	dkim=pass (2048-bit key) header.d=debian.org header.i=@debian.org header.b="PAFkpgUv"
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
-	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:Message-Id:Date:Subject:From:Reply-To:Content-ID:
-	Content-Description:In-Reply-To:References;
-	bh=JXNr6CEUXmj8N7QueMhznzhe1v4sbdf3gFq1tlg/g+k=; b=AHkVCzV46WiABn44nJHLiRpL3t
-	2ygbV/3bTNLqF1OayPkTGraPIr/hRVHZBpjpE1pVzqeO7WMcFUynSDEEU5I/IG3DyVdMMMh4xazKF
-	fXYukP6sf1mEcfb5RJvFIFqwmzpbVQHQvn+S/qsEF4IZoc5E0uyg/lIV7/Xe1K20ggXdn1gN186at
-	XATrVr3POWLT8A6C3fvuDCJpAzzUn6kiesI/M0a3nLGii7mLULoLUjDETAUcuEYcogCvtEyqY3mF9
-	p9IeXd4kXT2EGsmudnXk4zW6DIjYI34xEsVF7xipwY+Upuk4s+xEj4kYFuZXiXvpB2mC0YOAxuFJ+
-	B6e8M9JQ==;
+	s=smtpauto.stravinsky; h=X-Debian-User:Cc:To:In-Reply-To:References:
+	Message-Id:Content-Transfer-Encoding:Content-Type:MIME-Version:Subject:Date:
+	From:Reply-To:Content-ID:Content-Description;
+	bh=tT85b5NbK6bRM9en6qm/KfwNm49d+ZHKHssrA665pMw=; b=PAFkpgUvM2CGE9ZPFA6++L8Bya
+	kk6kKe9YHglCuXt+97yD8XJFgU4t1D6YIKh79ld5NZ2egxvmdMp5BH1hUCrxN0u/S7CSbPaXUjbo7
+	uRBwAo9rmVVj1uXKiGVLr0uymSlK/eNsOb+CZAYQz722xvG27Fh8J/ztjHpNZ/GBb655gPPE7COwK
+	lm00kf6VQF2kpsKcA5czzrSQ+jDIujgS/2qZKPjyNdO4jv0+tKGiyjvdaOTSfT+trvuuT5uGWJqrI
+	yql7/DRoIZU2zDIe98S51h9CtYc190vO/MwSGNLgA9wDgfd+VUIkVNpEKMl/ug5flbn/VL734YzK8
+	j6CEom+Q==;
 Received: from authenticated-user
 	by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
 	(Exim 4.96)
 	(envelope-from <leitao@debian.org>)
-	id 1wzBA7-00FA0g-2U;
-	Wed, 26 Aug 2026 10:47:20 +0000
+	id 1wzBAM-00FA1G-36;
+	Wed, 26 Aug 2026 10:47:35 +0000
 From: Breno Leitao <leitao@debian.org>
-Subject: [PATCH 0/4] configfs: add a basic selftest
-Date: Wed, 26 Aug 2026 03:47:01 -0700
-Message-Id: <20260826-config_selftest-v1-0-e364b07e91ac@debian.org>
+Date: Wed, 26 Aug 2026 03:47:05 -0700
+Subject: [PATCH 4/4] selftests/configfs: race symlink against rmdir of the
+ target
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -43,75 +44,151 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIACXEjmoC/x3MYQqEIBAG0KsM3++EklZarxIRZWM7EBaORBDdP
- dh3gHdDOQsrPN3IfIrKnuCpqQjhN6WVjSzwBFtbV3fWmbCnKOuovMXCWsx36drpMzccrENFODJ
- Huf5jPzzPC2PfbVxhAAAA
-X-Change-ID: 20260826-config_selftest-9d84a5b1ec26
+Message-Id: <20260826-config_selftest-v1-4-e364b07e91ac@debian.org>
+References: <20260826-config_selftest-v1-0-e364b07e91ac@debian.org>
+In-Reply-To: <20260826-config_selftest-v1-0-e364b07e91ac@debian.org>
 To: Shuah Khan <shuah@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>
 Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
  gustavold@gmail.com, linux-fsdevel@vger.kernel.org, 
  Breno Leitao <leitao@debian.org>, kernel-team@meta.com, 
  vasilisalmpanis@gmail.com
 X-Mailer: b4 0.16-dev-f8e9d
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1915; i=leitao@debian.org;
- h=from:subject:message-id; bh=wORddpQUoxxZEK3S19npcB7hSW0MP1npfZ3b9/K/ucE=;
- b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqjsQz+GfQussfA2Bz1wytoVT6WFsGGdkfc9BM3
- Zdlei97S9eJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCao7EMwAKCRA1o5Of/Hh3
- bVU5D/91/W9yhCdj0RXzGF60lZojUfwFBhCYHn3a816PyQSvSRdVqiUNSYF8Y5tsg1X4U7BrZts
- tZmDDxHBlcwfxpjYJXZZV4bsKT0fLhvWsMmJWqXvpAbZ7j0/dSY4IUKoXPSYoxIFzFi0708U5Mw
- QPnnOei0CXNV7D9+1+TeXbhbMidiViGTL08mXNxa8CPZBkYo+KFPKjqZD3W5YHOFcSklLd8r4oZ
- Nfxgttvp04FN7ReOhFlSJJPeSq7MTY4sC3kl8qz0CIV3rovNoUcS2Wznqin8hWhYN2IPzmO+xdN
- v4F2swpgnJDbrB2e/1SX6sjwzCrv9Sh50NHJxFXwwlRpxPnX2RaYxA9yES9lbD7szzNUy33FaEI
- 0mNElKysJbAAxssNZJETIpP2E2e+1JVKnNMEKgwzmk1MPZFiu4ZcZ2QbfIC9FJWmqCAFzx8yLuT
- ldaFSJa59lmnaxcGQ9WSR8m/pfE89ow9HGxTYNz47mSXowG6330gAFbt8OKTw+/o5a3E8u2xZDB
- NjJbygr3zc/8v8mGpO1pA2Yo9NccpSW45ZPaoDI+wwdU4kcsBEia5Ll3khFr0q7mzf3H+qj2ZQw
- Pk7tJQXK4Ng2xLgoCF93PXlzaubt/mcpxuNl4s0bw96vGdUbd+5shqTa6NCtaR1NTZYpfFZdukB
- 3LlzHZGZlIjQitg==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3688; i=leitao@debian.org;
+ h=from:subject:message-id; bh=GkzTfTFbLQND+U+cNyP76kQ59TA5pINipegGDM2lRpg=;
+ b=owEBbQKS/ZANAwAIATWjk5/8eHdtAcsmYgBqjsQzVqC+PwufOkmq+yuSfBUzFxuQ3bTp68IE2
+ ma7cvb7mBqJAjMEAAEIAB0WIQSshTmm6PRnAspKQ5s1o5Of/Hh3bQUCao7EMwAKCRA1o5Of/Hh3
+ bTuXD/0bIXrSL3l1F9U1heqW28ABmDwM8hA2nAqvTtYDSPxpvjAQVRqva6hA9B433BcqvzQ10jT
+ 9yrpeSbithEsFY1kengjlhrGjg08yMqtYBpw5dEF+BJ5fcuNwFM1Kq2At2urYBaWYv8sIiBhy4U
+ 7VAUnbuLRuW4A62nzw5Dkn7Afa6e/SzuDH6cCiXIS8k2bQoA2oW4BqUyYMBwUssd9HCmLHwK1yr
+ 6RVpW6GX+d5x6GFWYDuZcx0tYgUtFqXUNkfXLucbnBFXU5xl6EzzJy+hYw+GqF+5qWTXkQwqYnM
+ ILi0Qy3lPOMp7S7u9AAc0nLXYYigm9oUu4eCoPgoyymsUEChIe3/F/43mNNhsx+IU8Hk3v2/giH
+ xRthjFt4/hZsYwGwfJKytpISrOu1oPyd9d0pB06NuQEair9mi/ZspDvDZScOdg/D4vzMKUFDx8w
+ 9oof2KEnzfTgAsj7aZF6+jZGWGrzMSg8cthBRORqvWx/ANPviYX5itpyUB+Oo/PKErqqoUxewAx
+ WSlbDNkfluRp8IbNJjZ8vBsFgoPRU5pXj0vRpoghIQ0FrDfMKzPx0jVixoKlnxPOtOql4N07cDm
+ SPpWDHP3fQMBGYP8i+orYHs1/JHrK0GXObbAGrddWEwS6v9+w9u7FYDnZbSEUuS/iiLqGfGIuGN
+ dF7R8x3peBbOApg==
 X-Developer-Key: i=leitao@debian.org; a=openpgp;
  fpr=AC8539A6E8F46702CA4A439B35A3939FFC78776D
 X-Debian-User: leitao
 
-configfs has had no selftest since day one, which makes maintaining it
-harder than it needs to be.
+configfs_rmdir() drops the last reference to an item while its dentry is
+still hashed, so a symlink(2) resolving that target takes a reference on
+freed memory.  syzbot reported it [1].
 
-The good news is that it is not hard to test: nearly all of it is
-reachable from userspace through mkdir/rmdir/read/write and symlink(2).
-This series leverages the sample configfs module to do exactly that.
+Race mkdir/rmdir of a target against symlink/unlink of a link to it,
+watching /sys/kernel/warn_count.
 
-The sample implements no ->allow_link(), so patch 2 adds a subsystem that
-accepts symlinks and patches 3 and 4 build the symlink coverage on it.
+Fails until the fix [2] lands.
 
-Patch 4 races symlink(2) against rmdir(2) of the target and reproduces the
-use-after-free syzbot reported, so it fails until these patch land:
-
-  1507d5b57e40 ("configfs: pin the symlink target's dirent instead of chasing ->ci_dentry")
-  2251d0ed97c2 ("configfs: unhash the dentry before dropping the item in rmdir")
-
-Both are in configfs-next.  The first trips the s_count WARN_ON()
-in configfs_get(), the second the KASAN use-after-free in
-config_item_get().
-
+Link: https://syzkaller.appspot.com/bug?extid=6b16e3d085833cbf3e25 [1]
+Link: https://lore.kernel.org/all/20260730093435.195441-1-vasilisalmpanis@gmail.com/ [2]
 Signed-off-by: Breno Leitao <leitao@debian.org>
 ---
-Breno Leitao (4):
-      selftests/configfs: add tests for the userspace interface
-      samples/configfs: add a subsystem that accepts symlinks
-      selftests/configfs: cover symlink and unlink
-      selftests/configfs: race symlink against rmdir of the target
+ .../selftests/filesystems/configfs/Makefile        |  2 +-
+ .../selftests/filesystems/configfs/configfs_test.c | 62 ++++++++++++++++++++++
+ 2 files changed, 63 insertions(+), 1 deletion(-)
 
- MAINTAINERS                                        |   1 +
- samples/configfs/configfs_sample.c                 | 121 ++++++
- tools/testing/selftests/Makefile                   |   1 +
- .../selftests/filesystems/configfs/.gitignore      |   2 +
- .../selftests/filesystems/configfs/Makefile        |   8 +
- .../testing/selftests/filesystems/configfs/config  |   5 +
- .../selftests/filesystems/configfs/configfs_test.c | 481 +++++++++++++++++++++
- 7 files changed, 619 insertions(+)
----
-base-commit: a8406e6c0b793ce0788019683837c40855b55995
-change-id: 20260826-config_selftest-9d84a5b1ec26
+diff --git a/tools/testing/selftests/filesystems/configfs/Makefile b/tools/testing/selftests/filesystems/configfs/Makefile
+index 359296356c831..40a91ed788ed2 100644
+--- a/tools/testing/selftests/filesystems/configfs/Makefile
++++ b/tools/testing/selftests/filesystems/configfs/Makefile
+@@ -2,7 +2,7 @@
+ # Copyright (c) 2026 Meta Platforms, Inc. and affiliates
+ # Copyright (c) 2026 Breno Leitao <leitao@debian.org>
+ 
+-CFLAGS += -Wall -Werror
++CFLAGS += -Wall -Werror -pthread
+ TEST_GEN_PROGS := configfs_test
+ 
+ include ../../lib.mk
+diff --git a/tools/testing/selftests/filesystems/configfs/configfs_test.c b/tools/testing/selftests/filesystems/configfs/configfs_test.c
+index 9b15e1fd69e5b..c6a1049e5852e 100644
+--- a/tools/testing/selftests/filesystems/configfs/configfs_test.c
++++ b/tools/testing/selftests/filesystems/configfs/configfs_test.c
+@@ -11,6 +11,7 @@
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <limits.h>
++#include <pthread.h>
+ #include <sched.h>
+ #include <stdbool.h>
+ #include <stdio.h>
+@@ -41,6 +42,8 @@
+ #define LINK_SRC		SYMLINKS "/kselftest-src"
+ #define LINK			LINK_SRC "/kselftest-link"
+ 
++#define RACE_ITERATIONS		20000
++
+ static const char * const test_links[] = {
+ 	LINK,
+ };
+@@ -405,6 +408,65 @@ TEST_F(configfs, symlink_target_is_an_attribute)
+ 	EXPECT_EQ(errno, ENOTDIR);
+ }
+ 
++static volatile int race_stop;
++
++static void *rmdir_target(void *arg)
++{
++	while (!race_stop) {
++		if (mkdir(ITEM_A, 0755) == 0 || errno == EEXIST)
++			rmdir(ITEM_A);
++	}
++
++	return NULL;
++}
++
++/* -1 if the kernel does not export a warning counter. */
++static long warn_count(void)
++{
++	char buf[32];
++
++	if (read_attr("/sys/kernel/warn_count", buf, sizeof(buf)) < 0)
++		return -1;
++
++	return strtol(buf, NULL, 10);
++}
++
++TEST_F(configfs, symlink_races_with_target_rmdir)
++{
++	pthread_t thread;
++	long warns;
++	int i;
++
++	warns = warn_count();
++	if (warns < 0)
++		SKIP(return, "no /sys/kernel/warn_count to watch");
++
++	ASSERT_EQ(mkdir(LINK_SRC, 0755), 0);
++	ASSERT_EQ(pthread_create(&thread, NULL, rmdir_target, NULL), 0);
++
++	/*
++	 * configfs_rmdir() drops the last reference to the item while its
++	 * dentry is still hashed, and get_target() takes a hashed dentry as
++	 * proof that the item behind it is alive.  The symlink then walks
++	 * ->ci_dentry into a released dirent, which configfs_get() warns
++	 * about.  KASAN sees the freed item itself.
++	 */
++	for (i = 0; i < RACE_ITERATIONS; i++) {
++		if (symlink(ITEM_A, LINK) == 0)
++			unlink(LINK);
++
++		/* Give up on the first splat rather than flood the log. */
++		if (!(i % 128) && warn_count() != warns)
++			break;
++	}
++
++	race_stop = 1;
++	ASSERT_EQ(pthread_join(thread, NULL), 0);
++
++	EXPECT_EQ(warn_count(), warns)
++		TH_LOG("kernel warned after %d iterations", i);
++}
++
+ TEST_F(configfs, module_pinned_by_item)
+ {
+ 	ASSERT_EQ(mkdir(ITEM_A, 0755), 0);
 
-Best regards,
---  
-Breno Leitao <leitao@debian.org>
+-- 
+2.53.0-Meta
 
