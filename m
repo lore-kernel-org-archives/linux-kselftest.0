@@ -1,84 +1,117 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F253DAAC1
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 09:18:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787735930; cv=none; b=WD0YAMH3mdOgCylM7QusQTt4tpnwV2RJ/KpDoHVfyYkFpTCFPutN7+sffa4ikYxmr2YVuRPaRMLH9njMVpAL27W7nFCH2YlvT7+EpVxb3KNkC21IXD/Hh+fj0h/bVcdiiKlPpZumrFMzESLTIcDupUSzQ59pt9O7y5HE1TcO3EY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787735930; c=relaxed/simple;
-	bh=dy0yCBXrZoOYao0bizb+pCfviB0m67TSA6YqDM4S6vw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=AVTJZYf3z1yJeWNh7hBB+BMQ3FVgNjrjCLvSCjsuUdOgQHVBir+kacucKk7tknp9+pOijpPkToY4OhsA5jmF+F5dfVX2vxfrsJ6JLqkCVsxz1d1i4GQR/u6ueDh6RYMhvRusTAlo5J1lU5fGWtth9P4mYtlzBiUnV9EUy2P2fHY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TB8Ld8Fn; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 078513DA7FB
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 09:18:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.50
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787735929; cv=pass; b=XWhs9j2rAqSJF1/GHCCeiafpobUBJzBxU45wwyxV3qdaJdBTxsN4FeE1SX4sILbu0q0BO9fzZFhL9OJkTxZxbVMyzAe7lD/3lGw1CeIRkTFOtTCD5tTeDxgjcqrCtYnet6RwpuiXhln8DD5upSDqoGXfLqXPx8LwTR/7uB60JN0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787735929; c=relaxed/simple;
+	bh=PXd4FJsR6tKMFA56Q6aHGGrl17ypmJp1VW4g24+xHhM=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Ow2J41Rh5reXytWAIFeNZ5wSs8Fo3bbwhHh4XwG0oIhYXTRFWUEQfzOkK4GGKqdvn6ZiAzbIpEsnmO7JfW5fGcnaCOBGzpmJZDs/1mJ4s4mHo504SG++6TylvtT6jhvUJPH7qSG3YNQESSpTMNqdOozto/uktqOL5L/UBl6gBCs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=IfrZPe57; arc=pass smtp.client-ip=209.85.219.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ackerleytng.bounces.google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TB8Ld8Fn"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc1b8088202so767297a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 02:18:44 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="IfrZPe57"
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-9061a795d76so9250266d6.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 02:18:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787735920; cv=none;
+        d=google.com; s=arc-20260327;
+        b=Ctbr8qcLi6MxHwQqu9nEQG6LMnRkL2/1s5P3YBPHyL7D2izC9uB5OYJoW3KzHPC2rz
+         HFRsS1Op0RTOvieuayuuxSo7luEm+8x96kImZ7cjZ2XEc9sfTggFUd3crbXABu+XBzwb
+         SZVwS30g+85nyndzoAbgE2sMhTgi3tcl3o6H/+ev/AW6/SxtEgHX5qiARlWwlY18Fy2a
+         ARL279NqN1ZSWwAsOyZPt640lVTYWm3ZSIcJeDiwX66XvQTDllZAsk3zbme7NF8IBjrv
+         ZQ+K/b/8LsDxU/wHGv8ByIPs82siNVrpeNjYAAFcGOZgNmNolWVtEzlGFO1JuPYkBtPK
+         f8gw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=W29gLyGYJCPLMB1l2BXhwer1rQC/3q6nHb6nCzKL89k=;
+        fh=gvMVhDhYcRarbwOw1vS/4b1mESBBi06BYo0mvjVTPe8=;
+        b=SKMCVRSOji3jp0U5+2pTtzVAP597403QFmvwj9AVBfplYN2MNW23sdE4z+8CnvnvRZ
+         kfB6zMjzws1bdY28S8nw3Cvhab6V59VPk7dQZ2PIE68Mik5wybsBfDPowjzsHYi1KG6e
+         QeWsOYT+upuP9or36AjhnAZiB3KYs7xZZBN3C5wm1G9uvu/LvqenC5oKbTLRRZqWcCFW
+         0Qp/iikWqRL5LPWzeEga8RA9yK0A+brigCWsbj+477MzcbkpzCJWZ8zb7YYuDlXRGA5P
+         hOzrdrj4wxQIc0w3qNvvnuMcwNQ58KSrCZo7OU/86Mu72Utj/vK4AsOT+ImtXHMa8t7X
+         IDow==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787735922; x=1788340722; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1787735920; x=1788340720; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=EKp8H31vpndC0T7+bBVQC7oQPgnms4md5owa5X2MPn8=;
-        b=TB8Ld8Fnq1x2joS1MUsEipBynLBPuDVQefIGCDV6Q/r7vZdiJEvGFDg2aGjrI9oFgN
-         EQdY9UT1ryNO24/+skIgKoG19I1MYzIp5Gxam/ynFzUf7DXaqPFee9OMHV5mr3zTuHdz
-         l/GZ94lkPostpPUmtXDoPOZdFjmRHzxBzVHShr5SJmF/lfuIx+kYhUnS/qXMVc9n5B1H
-         BxqyPI8AqBy4EbGKPUomwJWIs2ZrKvrqdoe1PYQGldwTkxATuU4uNdKxEYYE/mbsMX0o
-         yxZ+0p5ewTT7TVAO8MvQKZMGympfB05W+8xnHf88mVAbLIJboRXFRGtNi2sjUeQgUdlE
-         a89w==
+        bh=W29gLyGYJCPLMB1l2BXhwer1rQC/3q6nHb6nCzKL89k=;
+        b=IfrZPe57UD3maWrzjHlCLZIUEkY8lCP6jSm07dch9te1pki8yTl8ck7Fx2Wp7DwR38
+         F3oRqHXICRw7yRJ+/iNVTEBAmHLyyTr2wHX3imPqFsJUEgk5l+owlb9ug7U+jryFiY+F
+         5fys2FcVYVZ5ZL7EJWR2C5JmvZ13rjoV9VU0F3fvsSchtxR+ysxqxW1mtU5IiE4TCliu
+         yorfsJ8mVg2NvexzkNjMepb2KplZ6iHxCtTGvGXN8L1S3eIoIXjE+Q10mlhoQx1efZt8
+         xNdLkxzQ8U67unfsqklyOzjHI/jvGZiiheiIctp23OHLBfZ8IFUrFxRz3o95NA1fIGnp
+         z92g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787735922; x=1788340722;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20251104; t=1787735920; x=1788340720;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=EKp8H31vpndC0T7+bBVQC7oQPgnms4md5owa5X2MPn8=;
-        b=GP9pmruntMUMLktpftB9EPXlmQ40fxcebQKJG/2IUzy5S7QbsEB9JZYf1ft13hm8fj
-         lhW8Bk7WeAsyutQ2FLIEHCkz2uNiz2yEEYYJIygF6fXzxLvwFQ+vjumaHNEfgcIKp/Oa
-         /xP5ubUAqCGPcXtir9wyBVW385YaoDP9ddLxpc+GXgOdJM3MAsZ1rH/cJRiNoWKEJcT2
-         YoXSIdIfJmta4DicLcCpXg9vvZ/asFeMUjabpdtRrpdr1I9QKY0w7+zqa/JrpPMc1RCF
-         pUkmWfKlk1EOtjRV+t90rc6iMBaCcDzhcCPuamNvOJe2dHHSg+x9RSV7Ml5glqaL4Uln
-         fTXA==
-X-Forwarded-Encrypted: i=1; AHgh+RoDKX9sH/Fc1F0dTsGmC8VOmD3yZ6pK/w69Exhz/gDchcDsNh25Jh/Q4YGW8SXC4tChEsIz+uiHFWJqsB2D6wY=@vger.kernel.org
-X-Gm-Message-State: AFuF++kVgoPtutUxRbzXSUZ/DFCyYQrEPvOvYqBu+UUObhE3YpXBrkJD
-	3u7/6V7beuPmq2vw2flBPk0KsyWgyiYltTnsR0VSNbHa/7Z7tRJPy9sZSEM9HzzHNe427U1wb+t
-	h5VowI+AF+f6aP9AUP7EkqwtboQ==
-X-Received: from pgbbo19.prod.google.com ([2002:a05:6a02:393:b0:cc1:4e93:a711])
- (user=ackerleytng job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6a21:a03:b0:3c3:9c4e:de3a with SMTP id adf61e73a8af0-3cf82a348a3mr11724369637.6.1787735921564;
- Wed, 26 Aug 2026 02:18:41 -0700 (PDT)
-Date: Wed, 26 Aug 2026 09:18:18 +0000
-In-Reply-To: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
+        bh=W29gLyGYJCPLMB1l2BXhwer1rQC/3q6nHb6nCzKL89k=;
+        b=P6JRzc9RE+bnNowhkQ3Qhqcg6tw9N+2vnLJxvqVh4xIPmYRJIbeQUB2H/eb87Ttgnl
+         B0uQ57CtDAkEi+Ul6+Wr3cPLoV0a/46yJpB1jbSxwEN96ORscQlen0b1wjxGMU+HufPh
+         BwkTMi8H/LTbPxYknkhjY4RLqicBeM8KVopsuR93cUL2PJNtRcnQDQy3zp165QsggMdG
+         PzbJwQ6rFH15/IRp4f0wThwSfUtkX/3R/xCM72muGz6ybSVkl2qveBRO43QLa0EYvSeD
+         5agTc11kHisU3SbIBZ9UxXVXVgEy2X3jnmlD8Fzjf6i3j0T2U3CdEEKQz3e6R5f1epFo
+         395w==
+X-Forwarded-Encrypted: i=1; AHgh+RqjBQsipl+mbRmRW2soIE0HRgrjGqb/lfQtlUgPf62idsXeRcmnHj9dJAKh+iDNsT78ib7KS5/GgjO8XLsPJZg=@vger.kernel.org
+X-Gm-Message-State: AFuF++krXoBpuL2QRRQcbrKr2Sp91yeik5ngSEOkrGoo+qnmQUJDumoP
+	jM6Bbt/rEiBy+lU+WRyFwdxnNFYNrlibJVDy0XvoKZsvAKslZKq366e+Urp0lC0yneNXwgF/9Bu
+	LD4N4yy5B0BO0idOislvfOZEalGjSevMXIdi4GUel
+X-Gm-Gg: AR+sD13QExG6KC4499xTyKKxppT7ehpsBmnOfnZI9rOXufyWaMwXZUUL7ySJU8100d9
+	TAo3Cu7mhoLFStKnZiQKxY2YLbT2S8mkpwTZGWZml5xMhJcqsw1OJd/hwbaYmq5M0EPft3wTq/u
+	ECpyJxPP/piPmk6eX+epYGK23Kt8p9uySX5VMJQpVFu2hSD/L80cj2rx00j1kVCj2UCmVZkPHlX
+	pwcCx4bxL9DQxmjK1PbCQTDHSbe/2CXSO5U6CIK6OKk0KZFAO890qj1nqPaE4BdpOpJI53uEdg9
+	WO81isTnEa4pumFBy41LOZcswF3ED4UXom7bH1UVm3GvkID+ZmyQ74XpauGwCmOVHoT7rTQI8jC
+	fpYmrwLHxIQY3qWMq5sKWp05wlv3SSA==
+X-Received: by 2002:a05:6214:260d:b0:907:94e6:f8bc with SMTP id
+ 6a1803df08f44-90cc79998c3mr49415816d6.15.1787735918598; Wed, 26 Aug 2026
+ 02:18:38 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 26 Aug 2026 02:18:37 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 26 Aug 2026 02:18:37 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <ba8d0441-b52f-4357-b2e7-1e352aa385a2@intel.com>
+References: <20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com>
+ <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
+ <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org> <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
+ <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
+ <aoZZMQ3Uc8yQWPNA@google.com> <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
+ <meww2a2uf3yeevsfpicyrlg3hch2x4bsdqv2lsv3vfjxg4qzes@co5eogmhkxrk>
+ <ao3lOu8-wpGTs2wd@google.com> <ba8d0441-b52f-4357-b2e7-1e352aa385a2@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
-X-Developer-Key: i=ackerleytng@google.com; a=ed25519; pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1787735885; l=5596;
- i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
- bh=NFa90siDaW2AryA30Q8bJ5Qh7q7W2DqG2XaPe8+kXyo=; b=v0d5C4wkWWesFaHM60cN7REFurl8Oyg0VII9TPxllUT2UaIYDsS6Nac84jjl3ihI71jCYcDgl
- xbEFlslA2w6C5IahaWJaj2wX/VE9nKjbCz3wuE3sGID9S2vKNO9OT1k
-X-Mailer: b4 0.16.0
-Message-ID: <20260826-gmem-inplace-conversion-v11-20-0a15d8a799aa@google.com>
-Subject: [PATCH v11 20/46] KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE
-From: Ackerley Tng <ackerleytng@google.com>
-To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+MIME-Version: 1.0
+Date: Wed, 26 Aug 2026 02:18:37 -0700
+X-Gm-Features: AcwNN1VwWEAXm7Hyp9OqQou024-MyvsmSKreeFDqqoFiEfe8rutDN4-Z7NuYwk0
+Message-ID: <CAEvNRgFXJbV78ktsg=b4srFp1OFjtQWQGuNPjr_MmWD-wOvjgw@mail.gmail.com>
+Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
+ private when invalidating
+To: Xiaoyao Li <xiaoyao.li@intel.com>, Sean Christopherson <seanjc@google.com>, 
+	Michael Roth <michael.roth@amd.com>
+Cc: Suzuki K Poulose <suzuki.poulose@arm.com>, "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com, 
 	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
 	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
 	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
 	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
 	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
@@ -91,127 +124,137 @@ To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com,
 	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
 	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
 	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
 	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="utf-8"
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-From: Michael Roth <michael.roth@amd.com>
+Xiaoyao Li <xiaoyao.li@intel.com> writes:
 
-Make the source page for populating an SNP guest_memfd instance optional
-if in-place conversion/population is enabled.  If KVM can convert the page
-in-place, then it's possible for guest memory to be initialized directly
-from userspace by mmap()'ing the guest_memfd and writing to it while the
-corresponding GPA ranges are in a 'shared' state, before converting them
-to the 'private' state expected by KVM_SEV_SNP_LAUNCH_UPDATE.
+> On 8/26/2026 2:55 AM, Sean Christopherson wrote:
+>> On Tue, Aug 25, 2026, Michael Roth wrote:
+>>> On Wed, Aug 26, 2026 at 12:13:47AM +0800, Xiaoyao Li wrote:
+>>>> On 8/20/2026 9:32 AM, Sean Christopherson wrote:
+>>>>> And vice versa, a PUNCH_HOLE on a SHARED gmem (if userspace is
+>>>>> using an INIT_SHARED gmem for the shared branch of a memslot) could invalidate the
+>>>>> PRIVATE mappings (of a different gmem instance).
+>>>>
+>>>> I'm wondering now how this could happen.
+>>>>
+>>>> the requirement for PUNCH_HOLE on gmem to trigger mapping invalidation is
+>>>> the gmem is bound with the memslot. But how can a memslot bound with two
+>>>> gmem instances?
+>>>
+>>> I think this is for when userspace uses an mmap'able guest_memfd instance
+>>> to handle shared memory, and a 'normal' guest_memfd instance for private
+>>> memory. Each instance is bound to the same memslot/GPA range, and
+>>> KVM_SET_MEMORY_ATTRIBUTES handles switching between the 2.
+>
+> What I didn't figure out is exactly how the two gmem instances are bound
+> to the same memslot.
+>
+> The case I can imagine is
+>
+> 1. create gmem1 with GUEST_MEMFD_FLAG_MMAP and
+> GUEST_MEMFD_FLAG_INIT_SHARED, and get fd1. mmap the returned fd1 to get
+> a hva.
+>
+> 2. create gmem2 to get a fd2.
+>
+> 3. call KVM_SET_USER_MEMORY_REGION2 with KVM_MEM_GUEST_MEMFD flag. Pass
+> the @hva from 1) to 'userspace_addr' field and pass the gmem fd2 to
+> 'guest_memfd' field.
+>
+> However, with this case, only gmem2 is bound to the memslot while gmem1
+> is not. Following PUNCH_HOLE on gmem1 doesn't invalidate any mappings
+> because the f->bindings of it is empty.
+>
+> Do I miss anything?
 
-Update the handling/documentation for KVM_SEV_SNP_LAUNCH_UPDATE to allow
-for 'uaddr' to be set to NULL when in-place conversion is enabled, which
-SNP_LAUNCH_UPDATE will then use to determine when it should/shouldn't
-copy in data from a separate memory location. Continue to enforce
-non-NULL when PRIVATE is tracked per-VM, not per-guest_memfd.
+I think Xiaoyao is right about this, the "vice versa" part is wrong,
+since gmem1 has no bindings. Even after kvm_gmem_invalidate_start(),
+going via MMU notifiers, that invalidation invalidates only
+KVM_FILTER_SHARED, so only gmem1's mappings will get invalidated.
 
-Signed-off-by: Michael Roth <michael.roth@amd.com>
-[Moved condition to snp_launch_update]
-Signed-off-by: Sean Christopherson <seanjc@google.com>
-Tested-by: Shivank Garg <shivankg@amd.com>
-Signed-off-by: Ackerley Tng <ackerleytng@google.com>
----
- Documentation/virt/kvm/x86/amd-memory-encryption.rst | 14 ++++++++++----
- arch/x86/kvm/svm/sev.c                               | 11 ++++++-----
- virt/kvm/kvm_main.c                                  |  1 +
- 3 files changed, 17 insertions(+), 9 deletions(-)
+The earlier sentence about PUNCH_HOLE on the PRIVATE guest_memfd (gmem2)
+is still correct.
 
-diff --git a/Documentation/virt/kvm/x86/amd-memory-encryption.rst b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-index bd04a908a8dbd..5977fbe33b98c 100644
---- a/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-+++ b/Documentation/virt/kvm/x86/amd-memory-encryption.rst
-@@ -503,7 +503,8 @@ secrets.
- 
- It is required that the GPA ranges initialized by this command have had the
- KVM_MEMORY_ATTRIBUTE_PRIVATE attribute set in advance. See the documentation
--for KVM_SET_MEMORY_ATTRIBUTES for more details on this aspect.
-+for KVM_SET_MEMORY_ATTRIBUTES/KVM_SET_MEMORY_ATTRIBUTES2 for more details on
-+this aspect.
- 
- Upon success, this command is not guaranteed to have processed the entire
- range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
-@@ -511,9 +512,14 @@ range requested. Instead, the ``gfn_start``, ``uaddr``, and ``len`` fields of
- remaining range that has yet to be processed. The caller should continue
- calling this command until those fields indicate the entire range has been
- processed, e.g. ``len`` is 0, ``gfn_start`` is equal to the last GFN in the
--range plus 1, and ``uaddr`` is the last byte of the userspace-provided source
--buffer address plus 1. In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO,
--``uaddr`` will be ignored completely.
-+range plus 1, and ``uaddr`` (if specified) is the last byte of the
-+userspace-provided source buffer address plus 1.
-+
-+In the case where ``type`` is KVM_SEV_SNP_PAGE_TYPE_ZERO, ``uaddr`` will be
-+ignored completely. For all other page types, ``uaddr`` is optional if in-place
-+conversion is enabled (i.e. when the data had been written directly to
-+guest_memfd while the page was in the shared state) and is required if in-place
-+conversion is disabled.
- 
- Parameters (in): struct  kvm_sev_snp_launch_update
- 
-diff --git a/arch/x86/kvm/svm/sev.c b/arch/x86/kvm/svm/sev.c
-index dff684b88f153..63e8cfa9bf559 100644
---- a/arch/x86/kvm/svm/sev.c
-+++ b/arch/x86/kvm/svm/sev.c
-@@ -2400,7 +2400,7 @@ static int sev_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
- 	 */
- 	if (ret && !snp_page_reclaim(kvm, pfn) &&
- 	    sev_populate_args->type == KVM_SEV_SNP_PAGE_TYPE_CPUID &&
--	    sev_populate_args->fw_error == SEV_RET_INVALID_PARAM) {
-+	    sev_populate_args->fw_error == SEV_RET_INVALID_PARAM && src_page) {
- 		void *src_vaddr = kmap_local_page(src_page);
- 		void *dst_vaddr = kmap_local_pfn(pfn);
- 
-@@ -2433,8 +2433,8 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 	if (copy_from_user(&params, u64_to_user_ptr(argp->data), sizeof(params)))
- 		return -EFAULT;
- 
--	pr_debug("%s: GFN start 0x%llx length 0x%llx type %d flags %d\n", __func__,
--		 params.gfn_start, params.len, params.type, params.flags);
-+	pr_debug("%s: GFN start 0x%llx length 0x%llx type %d flags %d src %llx\n", __func__,
-+		 params.gfn_start, params.len, params.type, params.flags, params.uaddr);
- 
- 	if (!params.len || !PAGE_ALIGNED(params.len) || params.flags ||
- 	    (params.type != KVM_SEV_SNP_PAGE_TYPE_NORMAL &&
-@@ -2446,7 +2446,8 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 
- 	if (params.type == KVM_SEV_SNP_PAGE_TYPE_ZERO)
- 		src = NULL;
--	else if (!params.uaddr || !PAGE_ALIGNED(params.uaddr))
-+	else if ((!gmem_in_place_conversion && !params.uaddr) ||
-+		 !PAGE_ALIGNED(params.uaddr))
- 		return -EINVAL;
- 	else
- 		src = u64_to_user_ptr(params.uaddr);
-@@ -2493,7 +2494,7 @@ static int snp_launch_update(struct kvm *kvm, struct kvm_sev_cmd *argp)
- 
- 	params.gfn_start += count;
- 	params.len -= count * PAGE_SIZE;
--	if (params.type != KVM_SEV_SNP_PAGE_TYPE_ZERO)
-+	if (src && params.type != KVM_SEV_SNP_PAGE_TYPE_ZERO)
- 		params.uaddr += count * PAGE_SIZE;
- 
- 	if (copy_to_user(u64_to_user_ptr(argp->data), &params, sizeof(params)))
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index 1ea8198821917..05c518c9b8078 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -104,6 +104,7 @@ module_param(allow_unsafe_mappings, bool, 0444);
- 
- #ifdef kvm_arch_has_private_mem
- bool __ro_after_init gmem_in_place_conversion = false;
-+EXPORT_SYMBOL_FOR_KVM_INTERNAL(gmem_in_place_conversion);
- #endif
- 
- /*
+Here's a repeat of the above in pseudocode. (I wanted to make gmem2's
+flags=0 more explicit.)
 
--- 
-2.55.0.887.g758fc8c411-goog
+gmem1 = KVM_CREATE_GUEST_MEMFD(flags=MMAP | INIT_SHARED)
+gmem2 = KVM_CREATE_GUEST_MEMFD(flags=0)
+userspace_addr = mmap(gmem1)
+KVM_SET_USER_MEMORY_REGION2(userspace_addr, gmem2)
 
+gmem2 has no MMAP flag, so that KVM will actually fault from gmem1's
+memory.
+
+
+Walking through PUNCH_HOLE on gmem2 again:
+
+gmem_in_place_conversion=n:
+  * conversions go to the VM, shared/private tracked at VM level.
+stage 2 page tables:
+  * private mappings from gmem2
+  * shared mappings from gmem1
+
+If guest_memfd invalidates KVM_FILTER_PRIVATE | KVM_FILTER_SHARED, then
+gmem1's mappings in the stage2 page tables (which are shared) will be
+invalidated along with gmem2's private mappings. That's not great since
+we only really wanted to invalidate gmem2's mappings.
+
+If guest_memfd invalidates only KVM_FILTER_PRIVATE (since gmem2 was
+created with flags=0), so we will always invalidate just the private
+mappings, which is what we expect.
+
+
+Now I think there's an issue here: with gmem_in_place_conversion=y,
+everything is still the same as above, other than where shared/private
+is tracked.
+
+gmem_in_place_conversion=y:
+  * conversions go to gmem, shared/private tracked in gmem2.
+stage 2 page tables:
+  * private mappings from gmem2
+  * shared mappings from gmem1
+
+This time, the filter lookup will return KVM_FILTER_PRIVATE |
+KVM_FILTER_SHARED and we will still invalidate memory from gmem1.
+
+In conversions, a to-private conversion on gmem2 will invalidate
+KVM_FILTER_SHARED, which also invalidates gmem1's memory.
+
+
+Is this just a case of user error? That with gmem_in_place_conversion,
+userspace should not use userspace_addr from something other than the
+gmem for the same memslot?
+
+We previously discussed that validating userspace_addr belonging to the
+gmem for the same memslot is pointless since userspace can later remap
+userspace_addr to something else.
+
+One option is to say if the gmem doesn't have MMAP set, always only
+invalidate (filter &= KVM_FILTER_PRIVATE). That means a to-private
+conversion on gmem2 will not invalidate the shared mappings from
+gmem1. That would break implicit conversions to shared, since a
+to-shared access sees the shared mappings and doesn't cause an exit.
+
+Perhaps we can iterate the maple tree and present folios and invalidate
+exactly the folios matching the shared/private status and gmem, but this
+is quite complicated and I hope we can avoid this.
+
+What if we say, for gmem_in_place_conversion=y, set
+KVM_MEMSLOT_GMEM_ONLY for all guest_memfd memslots. This way, the host
+can still use gmem1 for userspace_addr (user error).
+
+KVM won't be using userspace_addr at all other than kvm_read_guest /
+kvm_write_guest, and for those, we previously discussed that it is a
+user error.
+
+
+Xiaoyao, any suggestions to solve the problem?
+
+
+Meanwhile, I'll still post v11 to resolve the other comments first.
