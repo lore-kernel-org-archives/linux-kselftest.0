@@ -1,67 +1,67 @@
-Received: from mail-oa1-f41.google.com (mail-oa1-f41.google.com [209.85.160.41])
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24671472F8D
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 20:20:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30B348425F
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 20:20:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787775618; cv=none; b=OTixof1dsweJICFw5HZDkyp6aYn/9oM3BgL8fKiHu1p2W9aKwKti4BFMENUNdr16KNeWhy3jf4vU/iQFTYewhjz7RA2IoN5ad1Rp68I1UQjySi7FkV4u6Z48PsrwaKGg3S7q8yNnaRMzxQA7vNSohN3pbkEjictgGfr8Ovb7XGY=
+	t=1787775621; cv=none; b=hViWQRS9ZyVeD7dnnRMwCZWOXnTr7DC3a2KaBbQUdjoa+qPrnOyl2I9CFKsnslepHzhH/Vof2WIxpBvryUbAFocJDC7CBJmoCvI1Uj3VkoDb888cC3bgTGRGzj1YlXsVqfEHrepedmnYTI5ITgpniil25quzgNuFZ+Cei9X8pwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787775618; c=relaxed/simple;
-	bh=Ut/PjvIImnY64JnqnynvMuxcOBqH+zLzueSVJw4Qbq0=;
+	s=arc-20240116; t=1787775621; c=relaxed/simple;
+	bh=Ycvuca/qp3Jv+cw0T4z1WMw/vrj1a9F1QllZFmg6U5U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=c9YvD36AhOAVf33iV9M0tmLt/Os2mMJVrQX0ua8HKyysTFXEfneXWCM4Ya9YFCZ7sNvCJFqQED4fPcFxnNbekTXni7OP98pfvLXIbHP2ibweOy8pZImgmJ8mrun5iXL/o9q7uiBFzSVxqZZ+O5vVigpKdP95lWBIm6vv5/oWCzk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=bg8ptw4z; arc=none smtp.client-ip=209.85.160.41
+	 In-Reply-To:To:Cc; b=RG1JKTF3YZHcnDmmcJco5/MB5BV3b2Yd6Nndej1thaI6SMAgJ/XfbQ03CoyTXQ4UrWS+gX2hZiP5UCJIhElNk4G5acM47Pz8RYiL61FZCMExogIDr9U3KMv1cY875e6mANGgS6W+xWD2GTPSj39p7S8G7NR7lIzySb39eIxCS1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=cNzrwwVD; arc=none smtp.client-ip=209.85.210.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="bg8ptw4z"
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-448b89f700fso1502785fac.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 13:20:16 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="cNzrwwVD"
+Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-7f18c0e03e3so1061117a34.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 13:20:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cloudflare.com; s=google09082023; t=1787775616; x=1788380416; darn=vger.kernel.org;
+        d=cloudflare.com; s=google09082023; t=1787775619; x=1788380419; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=2ADL2kWhxZtGy4zWAARuC/jsldPk9uJ7GZCsaK5GLJ8=;
-        b=bg8ptw4zdV307CDaKRqryOfIqZ27JF6bnNWT1D/BbOBJYxQKnq/oRLgZWZoazyY5rl
-         USlRCLkyO1snPzGq2kjbKwVGJmX8kK0HAeWbcN4J/2P+04t0zgyE0tvJjy1jMVrN6/Ss
-         qEb0WHkDlCx2/6C3Ish4/iC9z51clWvHVRNKOxaIZpkJJIyMxmUwOVZq5fy/yvLeU5ft
-         Rp19Ryp5HVRwddGj+8YgMO4aOSL4YvN5GZGE04UVo4/g7Q6+vnCuuM/s4beMWgNYmPAd
-         iur9wAM/0iacivIoyT3tKkKEbJpxSVVSSuPyGynvYyraQXp4zOemgw4vlZQIq15El9jF
-         Xsog==
+        bh=T/AoKIWVfZg9PcVSVrRIUhVB2ooggyxSF0Nn+JpI7Mo=;
+        b=cNzrwwVDw+NQH4WpqHsArK9bysKTe4z9cA3rN6QPGozhsXbkB5weWwd4L0R/zvQSjo
+         dCtRNpS2nIbTA6zO7kSkRYbwy1YkQg9wmY7INaQc8aBRfa9koZFqLxIvX3cLCHe04X2r
+         JyNdbpHEMytERiKikue447ZqqLoHaTyARWhKINBEzZaQ8hqp25YNZ4TjHRP8hW+A5JvQ
+         2MvYAkwr13DQ2RwlLZMwazx/RPs4webXy1Imv9qiynau1O4mmIetOUYOw104Z2LaQ9eC
+         1MgS7uvA/U5D4H4CUpw6A0EsLaVv2+jhptw32ZDvYbSFvZeXjwM0jwRznStuelpQmU39
+         u3Kw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787775616; x=1788380416;
+        d=1e100.net; s=20251104; t=1787775619; x=1788380419;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :content-type:mime-version:subject:date:from:x-gm-gg
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=2ADL2kWhxZtGy4zWAARuC/jsldPk9uJ7GZCsaK5GLJ8=;
-        b=Tww9Lg9gjLRK1K9cu2v1gLF8ALuNu013qZXjgIlkTl2sB5Q4TBRN4tfyq7zlF5BeRf
-         UEKv/f+DGjCht5fMbjmD3NvrqZ7RG5j0DNJ1l3UeskAukpe4iCaFFq7oeXiOY3VBXctj
-         XPlRjm3YT8GreGgVq4UQBCNyhwjRNH4jdiIa9eIHMiZ1a66CbnYOBiHTlI+UkqfOMEwS
-         4dOL7GSepmIuCpWrmtHp5yYrJzyQa6wFY3cJdoAvNV2AhuCQdeH4p1x9LyXShsz0zqlj
-         uUAzR8fciZVS7JKngTn4bHQX8jB2wybOfADzF+/tYAsIb8ubkWr8dbhjlVCcZgZKLPzl
-         ubcw==
-X-Forwarded-Encrypted: i=1; AHgh+Rq1R/8+yn1bV7isfoUCmIcboZj2aLcxufD6/W8u4BHQ9pGdCCLpiZxHXFiPVeXXEbML//3YLvj4bZ1NYHKwSmc=@vger.kernel.org
-X-Gm-Message-State: AFuF++njW1EAT/h2vFpHk9W5srF1MZAGOQRzBadMK3verVByIVbb+tkS
-	gAixfH/8TnLqpSxAsPBR8YcHx6y9y7ovzK/8yakZ+Pa8NoxVIBTbZk719a60lhBm440=
-X-Gm-Gg: AR+sD10VhOad8sgoUdtU+3smjl4W/r85vgjA2aD1hNKnS6fJVLyKMoRVbJpasd3x9OM
-	BUDToBZrshimpek62SRz/fs1sQWm4Op7dbmG8w/hvLHjNCP8g4jjv59eQm7I4/FTiL/FTAUpbIc
-	y8ik+qxJ6O1GHvLyYHpwqlLemcZpFd175e+tAhle2ZTVahzm8yieLugF6xtUag2QXJNTSe3QGJ+
-	u70VtFvZpgghahzfJKT2mk7zTmhkS8hS/k2zhL9FIbhKi6BzuZqzxhyAEPJiLKdC67gLSvCs/Br
-	oANrZDeEiCz0CEhGdTpOyJu2s9/Yz9xz0ehjsCDCMhzkl7Dm8KKwiCnLnbxwLS0GTdEhPX8cimp
-	GTwld1wz0Qj84HUH3dpCzq9JH+R7XTg6vXpr0/YbMeji/tAfZXxf0YeqIMR1KyUlhMz48+WRuax
-	RIKOxbz8ZTr5adubN1h7whnQFXwM8kAVh4G3/9vlQv0cxl6BINBN8=
-X-Received: by 2002:a05:6820:220d:b0:6aa:e70f:301e with SMTP id 006d021491bc7-6b1a03af4aamr8729903eaf.8.1787775615783;
-        Wed, 26 Aug 2026 13:20:15 -0700 (PDT)
+        bh=T/AoKIWVfZg9PcVSVrRIUhVB2ooggyxSF0Nn+JpI7Mo=;
+        b=C/QAztfOb7PHWnfyQZCokoaGV0eRXvOjD3aLxH4i0Yx5ykdiPlD4s8PkZRGeRA64r5
+         Aqm2hqQnYit6Bwdsd1om26rBc1psfN9Fy3KC9lm2btj3UgJmUW2v7IMvbPJBAf3YQX/P
+         Bnrap7axM8Xv/nCe09QopQPPp3M3oeVYS9G3OfLPZ+t/V2ifAiUg0v62onh9tJNTFfT8
+         biUyjX6Kkrao/SsqGMp89CstYwwBUubIR4SEBeJBOlGqr7NaQAoCEaYUx5a187UyTlaY
+         kIyjM7T79VWoB/Qc1j2cQq/OuKTkOmwKn52DgkxJZJJAIzRWuCSWpjYHz1Rr0d7tODwf
+         BOSA==
+X-Forwarded-Encrypted: i=1; AHgh+RpF00ndIJLSTas7pj0ejMUrCPRFysh33yiuGBtaubdLA8SK3kXQQuNTV6UgCEs0AvKUYyKu5ftkkAbCNT/sLus=@vger.kernel.org
+X-Gm-Message-State: AFuF++m09t6kkwQlk3w+b1zPavAxkhKu8pMUD2kUTHZgE7vxxmBKeI0U
+	cJngiu0onbnHO6mkZk1/C/0wYQBIdB6UUxz7RnGWMUi45UToUFIUFkLkt/wxFD+/fLU=
+X-Gm-Gg: AR+sD116Ft2tufCpBeLDShK+ZMb5PJNeqF7s/r0g+2gZvHlrSo/ZtIP8Qg7LvqBvE4b
+	T7H66yrf4ZHkgGyiiTGeYpoMR+as+DENN1hLiGNoghfmruo01Oh+nXT/63fkeUCw7t+zX/dnLJT
+	vC6WZYCle40LMgglxsyg1x9rECGJ9V65ceEpzM8SDSzClVn3p9AiWK7rnW7CihNvWpO+CI5bpXP
+	SL4UEGsdBnH2/2rnmi+bmQVu0k9lnyuR2CtMYnidDBxHbHYqSCY3ZojyiScQ7GP7lhp4SKsUi+i
+	qAqLXp6ad6IlXfPIk+gcDx/xYQj4E3ybrOmMoek0ywHv9Jejz2MZcBiaZCTHzoKAj5AmEqTsPPk
+	ZQm4SJM2cJDPClxsNKxlkL1jz8D1K2ui301ZMtlWIIp+g9N1sQOXU3jjXnm/mbRT8pZbTqptqVt
+	O7mOpkNuW1Wm2vvqE4pcU8AKBh8x9OUFgE2uC8m9zSRg6YuFLmmQ==
+X-Received: by 2002:a05:6830:3111:b0:7f3:7686:3f7 with SMTP id 46e09a7af769-7f4c5244732mr9914547a34.13.1787775618689;
+        Wed, 26 Aug 2026 13:20:18 -0700 (PDT)
 Received: from [127.0.1.1] ([2a09:bac6:bf21:2e46::49c:30])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f4c83d09d1sm2474928a34.14.2026.08.26.13.20.14
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f4c83d09d1sm2474928a34.14.2026.08.26.13.20.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 13:20:15 -0700 (PDT)
+        Wed, 26 Aug 2026 13:20:17 -0700 (PDT)
 From: Chris J Arges <carges@cloudflare.com>
-Date: Wed, 26 Aug 2026 15:20:07 -0500
-Subject: [PATCH RFC net-next 1/3] ipv4: hash uncached routes by device
+Date: Wed, 26 Aug 2026 15:20:08 -0500
+Subject: [PATCH RFC net-next 2/3] ipv6: hash uncached routes by device
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,7 +70,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260826-hash-bucket-route-lists-v1-1-fa9b9f30eb74@cloudflare.com>
+Message-Id: <20260826-hash-bucket-route-lists-v1-2-fa9b9f30eb74@cloudflare.com>
 References: <20260826-hash-bucket-route-lists-v1-0-fa9b9f30eb74@cloudflare.com>
 In-Reply-To: <20260826-hash-bucket-route-lists-v1-0-fa9b9f30eb74@cloudflare.com>
 To: David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, 
@@ -81,98 +81,166 @@ Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-kselftest@vger.kernel.org, kernel-team@cloudflare.com, 
  Chris J Arges <carges@cloudflare.com>
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openssh-sha256; t=1787775612; l=3229;
+X-Developer-Signature: v=1; a=openssh-sha256; t=1787775612; l=4996;
  i=carges@cloudflare.com; h=from:subject:message-id;
- bh=Ut/PjvIImnY64JnqnynvMuxcOBqH+zLzueSVJw4Qbq0=;
+ bh=Ycvuca/qp3Jv+cw0T4z1WMw/vrj1a9F1QllZFmg6U5U=;
  b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgaxY1IIT5oTohBZJmhnVgJo2HsM7Sv
  9I0LdJCgpeGX6gAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QGKtMglFWb2eF4aZn13tPCiD5edLWKEp4C+U9eq3qkK/bBhhmXCdy3tyUWdIV1sw9yi0PuzZCl3
- jMELPC0GRkwU=
+ QF34rvo7rUcHSQNt2dHD8bfcs7GM0mf/XWPc6V5F34eGF1EzGBVZExS241sVdibDonYOVBzgAtX
+ Np7nYj2tguwc=
 X-Developer-Key: i=carges@cloudflare.com; a=openssh;
  fpr=SHA256:Cun99EBiH0EV7wvmfTBF9eDrld2NJx+aD4ScWZ45Q5M
 
-rt_flush_dev() currently walks every per-CPU uncached route list for each
-device being removed. This repeatedly examines unrelated routes and makes
-teardown increasingly expensive as the number of devices grows.
+rt6_uncached_list_flush_dev() currently walks every per-CPU uncached route
+list for each device being removed. Hash uncached routes by their inet6
+device so ordinary device teardown only visits the matching bucket on each
+CPU.
 
-Replace each per-CPU list with 64 hash buckets keyed by the route's
-netdevice. Keep the owning-list pointer in dst_entry so route removal
-remains unchanged, while device teardown only walks the matching bucket on
-each CPU. Hash collisions are filtered by the existing device comparison.
+ip6_rt_get_dev_rcu() can return loopback or an L3 master while rt6i_idev
+still refers to the original interface, so such a route must be reachable
+from either device. Place those routes on a separate per-CPU list that is
+always visited in addition to the keyed bucket.
+
+This avoids growing struct rt6_info while filtering most unrelated routes
+from ordinary device teardown.
 
 Signed-off-by: Chris J Arges <carges@cloudflare.com>
 ---
- net/ipv4/route.c | 36 +++++++++++++++++++++++++++++-------
- 1 file changed, 29 insertions(+), 7 deletions(-)
+ net/ipv6/route.c | 102 +++++++++++++++++++++++++++++++++++++------------------
+ 1 file changed, 69 insertions(+), 33 deletions(-)
 
-diff --git a/net/ipv4/route.c b/net/ipv4/route.c
-index 604cc51dfd9b..3f9bc1ec72cc 100644
---- a/net/ipv4/route.c
-+++ b/net/ipv4/route.c
-@@ -74,6 +74,7 @@
- #include <linux/init.h>
- #include <linux/skbuff.h>
- #include <linux/inetdevice.h>
+diff --git a/net/ipv6/route.c b/net/ipv6/route.c
+index 16dfac54a259..860530074027 100644
+--- a/net/ipv6/route.c
++++ b/net/ipv6/route.c
+@@ -40,6 +40,7 @@
+ #include <linux/seq_file.h>
+ #include <linux/nsproxy.h>
+ #include <linux/slab.h>
 +#include <linux/hash.h>
- #include <linux/igmp.h>
- #include <linux/pkt_sched.h>
- #include <linux/mroute.h>
-@@ -1552,11 +1553,22 @@ struct uncached_list {
+ #include <linux/jhash.h>
+ #include <linux/siphash.h>
+ #include <net/net_namespace.h>
+@@ -133,11 +134,28 @@ struct uncached_list {
  	struct list_head	head;
  };
  
--static DEFINE_PER_CPU_ALIGNED(struct uncached_list, rt_uncached_list);
-+#define RT_UNCACHED_HASH_BITS	6
-+#define RT_UNCACHED_HASH_SIZE	BIT(RT_UNCACHED_HASH_BITS)
+-static DEFINE_PER_CPU_ALIGNED(struct uncached_list, rt6_uncached_list);
++#define RT6_UNCACHED_HASH_BITS	6
++#define RT6_UNCACHED_HASH_SIZE	BIT(RT6_UNCACHED_HASH_BITS)
 +
-+struct uncached_table {
-+	struct uncached_list buckets[RT_UNCACHED_HASH_SIZE];
++struct rt6_uncached_table {
++	struct uncached_list buckets[RT6_UNCACHED_HASH_SIZE];
++	/* Routes that must be discoverable through two different devices. */
++	struct uncached_list mismatch;
 +};
 +
-+static DEFINE_PER_CPU_ALIGNED(struct uncached_table, rt_uncached_table);
++static DEFINE_PER_CPU_ALIGNED(struct rt6_uncached_table, rt6_uncached_table);
  
- void rt_add_uncached_list(struct rtable *rt)
+ void rt6_uncached_list_add(struct rt6_info *rt)
  {
--	struct uncached_list *ul = raw_cpu_ptr(&rt_uncached_list);
-+	struct uncached_table *table = raw_cpu_ptr(&rt_uncached_table);
+-	struct uncached_list *ul = raw_cpu_ptr(&rt6_uncached_list);
++	struct rt6_uncached_table *table = raw_cpu_ptr(&rt6_uncached_table);
++	struct net_device *rt_dev = dst_dev(&rt->dst);
 +	struct uncached_list *ul;
 +
-+	ul = &table->buckets[hash_ptr(dst_dev(&rt->dst),
-+				      RT_UNCACHED_HASH_BITS)];
++	if (rt->rt6i_idev && rt->rt6i_idev->dev != rt_dev)
++		ul = &table->mismatch;
++	else
++		ul = &table->buckets[hash_ptr(rt_dev,
++					      RT6_UNCACHED_HASH_BITS)];
  
  	rt->dst.rt_uncached_list = ul;
  
-@@ -1588,14 +1600,18 @@ void rt_flush_dev(struct net_device *dev)
+@@ -157,40 +175,50 @@ void rt6_uncached_list_del(struct rt6_info *rt)
+ 	}
+ }
+ 
++static void rt6_uncached_list_flush(struct uncached_list *ul,
++				    struct net_device *dev)
++{
++	struct rt6_info *rt, *safe;
++
++	if (list_empty(&ul->head))
++		return;
++
++	spin_lock_bh(&ul->lock);
++	list_for_each_entry_safe(rt, safe, &ul->head, dst.rt_uncached) {
++		struct inet6_dev *rt_idev = rt->rt6i_idev;
++		struct net_device *rt_dev = dst_dev(&rt->dst);
++		bool handled = false;
++
++		if (rt_idev && rt_idev->dev == dev) {
++			rt->rt6i_idev = in6_dev_get(blackhole_netdev);
++			in6_dev_put(rt_idev);
++			handled = true;
++		}
++
++		if (rt_dev == dev) {
++			rt->dst.dev = blackhole_netdev;
++			netdev_ref_replace(rt_dev, blackhole_netdev,
++					   &rt->dst.dev_tracker, GFP_ATOMIC);
++			handled = true;
++		}
++		if (handled)
++			list_del_init(&rt->dst.rt_uncached);
++	}
++	spin_unlock_bh(&ul->lock);
++}
++
+ static void rt6_uncached_list_flush_dev(struct net_device *dev)
+ {
  	int cpu;
  
  	for_each_possible_cpu(cpu) {
--		struct uncached_list *ul = &per_cpu(rt_uncached_list, cpu);
-+		struct uncached_table *table;
+-		struct uncached_list *ul = per_cpu_ptr(&rt6_uncached_list, cpu);
+-		struct rt6_info *rt, *safe;
++		struct rt6_uncached_table *table;
 +		struct uncached_list *ul;
-+
-+		table = per_cpu_ptr(&rt_uncached_table, cpu);
-+		ul = &table->buckets[hash_ptr(dev, RT_UNCACHED_HASH_BITS)];
  
- 		if (list_empty(&ul->head))
- 			continue;
+-		if (list_empty(&ul->head))
+-			continue;
+-
+-		spin_lock_bh(&ul->lock);
+-		list_for_each_entry_safe(rt, safe, &ul->head, dst.rt_uncached) {
+-			struct inet6_dev *rt_idev = rt->rt6i_idev;
+-			struct net_device *rt_dev = rt->dst.dev;
+-			bool handled = false;
+-
+-			if (rt_idev && rt_idev->dev == dev) {
+-				rt->rt6i_idev = in6_dev_get(blackhole_netdev);
+-				in6_dev_put(rt_idev);
+-				handled = true;
+-			}
+-
+-			if (rt_dev == dev) {
+-				rt->dst.dev = blackhole_netdev;
+-				netdev_ref_replace(rt_dev, blackhole_netdev,
+-						   &rt->dst.dev_tracker,
+-						   GFP_ATOMIC);
+-				handled = true;
+-			}
+-			if (handled)
+-				list_del_init(&rt->dst.rt_uncached);
+-		}
+-		spin_unlock_bh(&ul->lock);
++		table = per_cpu_ptr(&rt6_uncached_table, cpu);
++		ul = &table->buckets[hash_ptr(dev, RT6_UNCACHED_HASH_BITS)];
++		rt6_uncached_list_flush(ul, dev);
++		rt6_uncached_list_flush(&table->mismatch, dev);
+ 	}
+ }
  
- 		spin_lock_bh(&ul->lock);
- 		list_for_each_entry_safe(rt, safe, &ul->head, dst.rt_uncached) {
--			if (rt->dst.dev != dev)
-+			if (dst_dev(&rt->dst) != dev)
- 				continue;
- 			rcu_assign_pointer(rt->dst.dev_rcu, blackhole_netdev);
- 			netdev_ref_replace(dev, blackhole_netdev,
-@@ -3771,10 +3787,16 @@ int __init ip_rt_init(void)
- 	ip_tstamps = idents_hash + (ip_idents_mask + 1) * sizeof(*ip_idents);
+@@ -6982,10 +7010,18 @@ int __init ip6_route_init(void)
+ #endif
  
  	for_each_possible_cpu(cpu) {
--		struct uncached_list *ul = &per_cpu(rt_uncached_list, cpu);
-+		struct uncached_table *table;
+-		struct uncached_list *ul = per_cpu_ptr(&rt6_uncached_list, cpu);
++		struct rt6_uncached_table *table;
 +		int bucket;
 +
-+		table = per_cpu_ptr(&rt_uncached_table, cpu);
-+		for (bucket = 0; bucket < RT_UNCACHED_HASH_SIZE; bucket++) {
++		table = per_cpu_ptr(&rt6_uncached_table, cpu);
++		for (bucket = 0; bucket < RT6_UNCACHED_HASH_SIZE; bucket++) {
 +			struct uncached_list *ul = &table->buckets[bucket];
  
 -		INIT_LIST_HEAD(&ul->head);
@@ -180,9 +248,11 @@ index 604cc51dfd9b..3f9bc1ec72cc 100644
 +			INIT_LIST_HEAD(&ul->head);
 +			spin_lock_init(&ul->lock);
 +		}
++		INIT_LIST_HEAD(&table->mismatch.head);
++		spin_lock_init(&table->mismatch.lock);
  	}
- #ifdef CONFIG_IP_ROUTE_CLASSID
- 	ip_rt_acct = __alloc_percpu(256 * sizeof(struct ip_rt_acct), __alignof__(struct ip_rt_acct));
+ 
+ out:
 
 -- 
 2.43.0
