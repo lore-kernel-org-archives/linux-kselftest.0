@@ -1,257 +1,379 @@
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011006.outbound.protection.outlook.com [40.93.194.6])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9110A48A2DF;
-	Wed, 26 Aug 2026 22:50:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787784644; cv=none; b=XoMs/knqhIE1yLnk0Dzi1kgpg3tfCjsSiV/VYcLocktknJawh63HGdoydfF/ix6sgu+w+iBQ04KPJWoJN99CRiB0WXf/Ca+6ot3hhyYmB2I/WQ8xYJaNdnBNwfCkub/owUm92qHjgQSa/0PTa3/wwmnk55QtUitYx+u8p+914LU=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787784644; c=relaxed/simple;
-	bh=rwp9r1Nr8znphwZs8a+YFF6d7wcWidDSGZsxf1w3WVI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Hk0ZWCy4Kd93z/tEMa+pOTaejDQk6Iva91GaBmp6I3+b5Tm9XlZGK7VrgSKYLZ0KWD9/o983Mt7P6iUnBrA016b90WNP/z1iBqVZWwRMrrnlIxwjntxpCr68oonuR0YLueZmoF0JGMGJoX/Dno/0ZvuCv1RnXeFjdimBy8SFyrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=NZ+xGKK1; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hPpBUpoy; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C5D01A3029;
+	Wed, 26 Aug 2026 23:47:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.6
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787788074; cv=fail; b=kk8HENcXhWCEffmt/v93AYC0Y5vGZwCXPN+iYPVsr3hE90Cwiyx0lEePoBGK2o1w3XAqrMHRe3GORlc+sEWKe6ue3ZrUIaPJmakGV6v0Yx54zlJfTbJsTiAxxZqXyJP/q7vJveiTHTp+Qa1qfq0kzP50gB4+rh3jY5dTKMkioCM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787788074; c=relaxed/simple;
+	bh=LWYGXEjxCn5c1wabHZYZl8IN6fQRStpFDOx9yxGPMOw=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mjD19NRPkn54O6uunCKGRn4peAffVGXovMiIFnskvkA3oOvZjaBxyV0VsEXJOuxGQX8g+kYEjDL+Kf/p2GHuGilhGOzovFp6Z5roJZ+0xobDSf87KOqnLMDsyMQca9t7spf+LI9rzS7lXafxy/zcfZRwNOnBE2ompCzUk4MbSYU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gqgj54Tv; arc=fail smtp.client-ip=40.93.194.6
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="NZ+xGKK1";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hPpBUpoy"
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfout.phl.internal (Postfix) with ESMTP id A2302EC0277;
-	Wed, 26 Aug 2026 18:50:38 -0400 (EDT)
-Received: from phl-frontend-04 ([10.202.2.163])
-  by phl-compute-01.internal (MEProxy); Wed, 26 Aug 2026 18:50:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1787784638;
-	 x=1787871038; bh=QplW2KxtxglOqcewNzFZRR/OkHVXQZVIXwZYQhVxGak=; b=
-	NZ+xGKK1CDnkI/+Q+3dg9JXY2EpUUV0bwjH0u/z1UZS0DcCepuqqkDxnDyNOJgYr
-	JCDu2T9f6xZlXKfdzQOt7zJXSC3H5cSFAfkTs2TJVslPj0vq3htfWYboswkbaUje
-	kkG0IpLc44JIvs4mVnX9ChBwG/YPZRTPy6YabCQ79FjPCsnYu+USD8Np9k1J640Z
-	oupufBrAPH5bXYMWCFwEQjenEavI81Aw1Lbjw48YIq2UEsvKn0GRbjJhRCOtSSX3
-	Wc4fTFwd3byG4N5i+uqKDGEDkh026MRf9vqhgGQBwNaWyKuhHCsmg4VWTCqp/iqJ
-	vHTPbMwM3oJ2/YJE4+Rx0g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787784638; x=
-	1787871038; bh=QplW2KxtxglOqcewNzFZRR/OkHVXQZVIXwZYQhVxGak=; b=h
-	PpBUpoy7rDfCyo3TpaPczzXGKEuenYj+LAGc4kWJWmdFNWdU5bG2h/D5DVvt68EQ
-	U8/sae8Pn/zNdEl1JOOVylLa1T7gSd9s01W6RLK4nhku5sac2BIXdooaJ7hGkyYx
-	V0o60RftXxj/bb1ftopm5tWn4Gvq46SeQeRdIFqFcICbeY9EVipsN7TGFeOro1ve
-	X4OA4dd2kBm1ddpsRoMUWM6Q+dtnCRfE+4QNSUVoj6h5lLUYByzSQIWbINZ/+WXm
-	LYL/4a9URfBkoyC8BqS0iwkd6tmlIjMIyRo6o64cZoVKF6iYQNiyZZdh07N47m/R
-	hn+JUEIeOPi50ZvUT5WAQ==
-X-ME-Sender: <xms:vW2Pasr7rQ_G5qB6GElMoVev1ckIfQR0Oz0IK7qUZ1FhMCx8WwF5HA>
-    <xme:vW2PagRsI5UzU6N-D9bD1DzNb6hQD0Sy59SMneHVLJ2RIEEAVolE6z9fTsNfii-MI
-    TOjtH8U1CWzueNu6bM-lzrk0Tt6XXK-XTCMnSZp3fe-6_1zJkvY>
-X-ME-Received: <xmr:vW2PaoknCS5K1m_SzqA12SKrf5lB_W97EGRm7woddUIu6LxzYxCH1nQCzdUrig>
-X-ME-Proxy-Cause: dmFkZTF6e4hR1iz/6dIAysFsGCQ71uWDQEuEPYPxGY/BNbu1t2yBp7A8qJ3IBKU8pAioAX
-    kQi2pcgAumZXLtvGdkDjDm8Zb0KsSPzz2VsqnYW42ydMMBwSPS6QnSoQAUAHv07aqMKnRl
-    xelSpx2DhqcMwig8qFnERd46xw36yZ179ft2tapX31kMdCO4EBCDZPMS+OxXASXA0mC8yJ
-    gaTocAtizYKP9ibLshPjnlDekBldB4LL8lduAolpQjZdkKTbOBm7kr4OXXecHyUwbsoYRB
-    yrtxtA8ZLexBsxbJYosZGQLm1U0QGL6Iw3Y3BNRJBkJrhYEGjH1CPTaRnzQ3Hofve2GspD
-    mdCje7Q/C99nzh28J31YfGJkClvIKkECVKoONx3ku5fGohpLpfpVf7hMU8D2ArWaBiu4XT
-    2D2ToyOUiTikWseEXh1BWf1kFEOT+F0em+n/FPKN/CwNo8k6wmSabVSYMfhwRtIuZbaZey
-    C2aaKWIjnz7V2Ica903rgVEmKwvZaAFQwDJWejuL54g0317LPKOKKOnHC6IfoXAi+elSRC
-    cJZiYjoSs/KtHZ69uy7MT8o5sEzJ3UnbXP/gMffJ8o8eVwV3rZKTr6DJjkZQTf1ci1iv5u
-    XkZBZIqLCqdmFI2Hs4FQvLmahoxpdu4sy9AqL05m+bC2lNETs3PiCgTjCxNA
-X-ME-Proxy: <xmx:vW2PasG33uUCS6HXNmERDuuODFOStFcfLQXtMbQKM99NjXMox0Mn2Q>
-    <xmx:vW2Pajlbv8YjV7iD74OwNaKzy_wiEqRehVqyqHNGe_xshYoBKRrbCw>
-    <xmx:vW2PajSOivWBuszMVd4W96Q0Mkf48PT0WgGGGlTBVkEEIt5YzKdPiw>
-    <xmx:vW2Pag6Pj0JHWPDrLEkQqOStYiF1w0zOdUuXYsh-Zfvc9rwYEa81LA>
-    <xmx:vm2PasFQS2R-HHl_00xv3lT8lZ6Xd5hamxoxnBz_Dl2aO4zKala3Jtao>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 26 Aug 2026 18:50:35 -0400 (EDT)
-Date: Wed, 26 Aug 2026 16:50:33 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: <mhonap@nvidia.com>
-Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
- <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
- <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <dave@stgolabs.net>, <alison.schofield@intel.com>,
- <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
- <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
- <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
- <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
- <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
- alex@shazbot.org
-Subject: Re: [PATCH v4 08/27] vfio/cxl: Add the vfio-cxl module skeleton
-Message-ID: <20260826165033.582735f4@shazbot.org>
-In-Reply-To: <20260813093631.2288172-9-mhonap@nvidia.com>
-References: <20260813093631.2288172-1-mhonap@nvidia.com>
-	<20260813093631.2288172-9-mhonap@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gqgj54Tv"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=k4J/V5gkeGUavS86YJ1T9xiJ51vThv2EwlPenwdDOUVPJiWy++dxjJPLXPcTpZIUMbuQVOHomTR5ytES2x5e0m8RuynY+Fs55UWII38wmPgNJ0mSerAWJIZNJW8o3I45hKbMAqC/8Pbern4R7/Ip0lnfOt++kru87F5ET74aMAqPrkOJfRZH4ETzURU+iXEJ+KMRdrp1a65gqo5fu+AFSojJ06oIPRDBIzRqp6Cjyw2hEWVRhjj0KswFa5L9N918h2vvT1NRgn3Ptsz0ZkMp3bd0QQeHtxDBwmP5cbh3MeQoC0+TRv+v7v4dvfUkPTulQrTqe76u1yOBn8iOifQjVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w/LB5u9HnbSWzaAtAvaqkHg4Fpr0yIoYgthxH10Y4ko=;
+ b=eC6PAdZ95r0qTEaMap8PXTdlDQCXXnVXWSxQ8XgyLkhgUQ/UU+W4oST9+8O8vCmR6imIK6ik1F9kMWgge817usRt87TKGlC/joVTjktYjsOc+/5NUmBPWBjFvUcYLhfnHrp73RNeUvAH6yXYLvxhb5sd/kC5lP/nxodpI7/otqEEIXhn8cDGvZWhQKcMr1VnsdmP4fWZaHDq6UJuCpdu35/dzCAUEA8t0/9x2SrzRNQfPSgSgdIVH4DTF38s+KVRZNJqVzC+uReUK74ki+zE9Xtpzx08xhX7XJRCRZxToBWSxW6hOthHG7/yeLYGjwcWHNNdOT3pMHirocO5Us8UvA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=softfail (sender ip
+ is 149.199.90.133) smtp.rcpttodomain=google.com smtp.mailfrom=amd.com;
+ dmarc=fail (p=quarantine sp=quarantine pct=100) action=quarantine
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w/LB5u9HnbSWzaAtAvaqkHg4Fpr0yIoYgthxH10Y4ko=;
+ b=gqgj54TvCGRRaotBr6UC6bDFWysdMRR/NeuYxSFbuRsslNoslmqlTYrAI6D5O7RoNNmBKf352qJkQP1ATVTrr9ibFYy9GK5jhwsnyw2sxuDQ4HM/3yKnnPl+KVAKzja/5IRIpMhA48Coif6km6Skt7aOMi1QnqO8T1mvSnCQ8Sc=
+Received: from BY1P220CA0003.NAMP220.PROD.OUTLOOK.COM (2603:10b6:a03:59d::10)
+ by SJ5PPF183341E5B.namprd12.prod.outlook.com (2603:10b6:a0f:fc02::98c) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
+ 2026 23:47:44 +0000
+Received: from CO1PEPF00012E7F.namprd03.prod.outlook.com
+ (2603:10b6:a03:59d:cafe::a2) by BY1P220CA0003.outlook.office365.com
+ (2603:10b6:a03:59d::10) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.21.360.10 via Frontend Transport; Wed,
+ 26 Aug 2026 23:47:44 +0000
+X-MS-Exchange-Authentication-Results: spf=softfail (sender IP is
+ 149.199.90.133) smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=fail action=quarantine header.from=amd.com;
+Received-SPF: SoftFail (protection.outlook.com: domain of transitioning
+ amd.com discourages use of 149.199.90.133 as permitted sender)
+Received: from satlexmb07.amd.com (149.199.90.133) by
+ CO1PEPF00012E7F.mail.protection.outlook.com (10.167.249.54) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.21.360.3 via Frontend Transport; Wed, 26 Aug 2026 23:47:44 +0000
+Received: from localhost (10.180.168.240) by satlexmb07.amd.com
+ (10.181.42.216) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.2562.45; Wed, 26 Aug
+ 2026 18:47:43 -0500
+Date: Wed, 26 Aug 2026 18:47:30 -0500
+From: Michael Roth <michael.roth@amd.com>
+To: Sean Christopherson <seanjc@google.com>
+CC: Ackerley Tng <ackerleytng@google.com>, <aik@amd.com>,
+	<andrew.jones@linux.dev>, <binbin.wu@linux.intel.com>, <brauner@kernel.org>,
+	<chao.p.peng@linux.intel.com>, <david@kernel.org>, <jmattson@google.com>,
+	<jthoughton@google.com>, <oupton@kernel.org>, <pankaj.gupta@amd.com>,
+	<qperret@google.com>, <rick.p.edgecombe@intel.com>, <rientjes@google.com>,
+	<shivankg@amd.com>, <steven.price@arm.com>, <willy@infradead.org>,
+	<wyihan@google.com>, <yan.y.zhao@intel.com>, <forkloop@google.com>,
+	<pratyush@kernel.org>, <suzuki.poulose@arm.com>, <aneesh.kumar@kernel.org>,
+	<liam@infradead.org>, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner
+	<tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov
+	<bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers
+	<mathieu.desnoyers@efficios.com>, Jonathan Corbet <corbet@lwn.net>, "Shuah
+ Khan" <skhan@linuxfoundation.org>, Shuah Khan <shuah@kernel.org>, "Vishal
+ Annapurve" <vannapurve@google.com>, Andrew Morton
+	<akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, Kairui Song
+	<kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, Nhat Pham
+	<nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, Axel Rasmussen
+	<axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, Wei Xu
+	<weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, Qi Zheng
+	<qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, Kiryl Shutsemau
+	<kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe
+	<jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, Peter Xu
+	<peterx@redhat.com>, <tarunsahu@google.com>, Fuad Tabba
+	<fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>,
+	<kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-trace-kernel@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
+	<linux-coco@lists.linux.dev>
+Subject: Re: [PATCH v11 15/46] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+Message-ID: <ztufznh6v5md5cn56t7pvokubvbpc3yki6dhiilgebb5uq3ju3@aa4xc6wwte5r>
+References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
+ <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com>
+ <ao9CKMXAX-hScRSa@google.com>
+ <mtbqvvvpwbzybgy6z47lwui6ag53kyubub3hkczui7u72zxesl@lnwsglrgwl5p>
+ <ao9px1j7CLYXMiGP@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ao9px1j7CLYXMiGP@google.com>
+X-ClientProxiedBy: satlexmb08.amd.com (10.181.42.217) To satlexmb07.amd.com
+ (10.181.42.216)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PEPF00012E7F:EE_|SJ5PPF183341E5B:EE_
+X-MS-Office365-Filtering-Correlation-Id: 423b2555-ef3e-4819-d00f-08df03cc6d12
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|82310400026|7416014|376014|23010399003|36860700016|11063799006|6133799003|4143699003|10067099003|56012099006|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	8l5FF3LbJE9olur0dvcSTHVeAJf8qAZoDXGPyZtiW3UYkD7Ki+JK6XcEDAefWFgKc2/fYpZEw9tyYhJDLs/lMTSsv2niW61J1rHrhWz8zYPNvO4WaES1+5Td9m9zo+v73i4uj00Of+bRZnBIvVyuxqS7DdfgqeatCPHP00pw4k/fjKDjGG21ESbX0pFETi12ZR3Ky3blMs3oYIIRmJlWjCuXZ5+Eud7ADqw3Au3w3CaEsLcwtgc0+pk075WzAPN5NvbWGyB+2ANgV19uAjWw+NpTo5Ba9zbQrl4+ML7kcJOPB+JmvUyc1KRB925UzMG5XZz+8v79VOzC3dMYAVJWxUouCrpCVdMcC0miD8pP2AjeFGZnQyf83nuRA0xtAzRB8zEbZmsCq26ybEpYOuZxVrA7LM5hSCxiiZYdiO4jszoJvhygcM9cu3Spa3pMGP9XBWKBgprnsdkT8o49tgE+NTtodZ+vZwORSDsMZ1EZSI9MIo5rQ3rP87C8/1NRYfT51v1MRuPzVK3M48jL1E8qvn9Kf9P8Ld5zADajjHq0gKhCEsNsobO0QwdJmv3pqh4+80h598lttp1m5n55w/BJIyhGaSPVuO92sx1B3eRn3UlCZIxUcNNSP2VukkdOfiOul0XQbGfo+AN4Jmgawd0fR0JtYQKRSvMKsfGkv7gWVUGE87rqQF9wB4InWtkZDyojojKohZMaymo2xdOhrg7P2Q==
+X-Forefront-Antispam-Report:
+	CIP:149.199.90.133;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:satlexmb07.amd.com;PTR:unknown-90-133.xilinx.com;CAT:NONE;SFS:(13230040)(1800799024)(82310400026)(7416014)(376014)(23010399003)(36860700016)(11063799006)(6133799003)(4143699003)(10067099003)(56012099006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	NysA57+XV03ryJZgYUKpVdKgsgr4tDGi4zBHUeNsKl8zF4KHY1X0bMcDzx2K6phhCrUHRzDEerlHkGtGijGGihpe02RKBuqJqqAKuowoT+c1u038Oht59wTzD/rgXfuuaymTIRx314hswzz0idXxVc3gSfdhhn7F53NAqYy7F7muYgYxERbWsYG/21Lu8dt0FXOLrBzqBxwVA67F1UJnEbDmOu8Y7ZPiiEe1h+pMIFUrWs16AOewOE5gqBDfWwKmK/N8cvE58fi90B2XOp7EIYggS+1Y0W+m9D5gQSEfmunf73Rsfjb76YSeLPaBCmKbYVU0OIRUQaUSFVhUM4dD9iaFlscimeVLVSEjXUvZGgtvgWExo7VJ4jlDslrsErV/SyHWYWGtpc4JM40pWusiEXj4jKTYOVS2Bp6WfPiozeTK0SVIK9u3EKSz8MU00HZX
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 23:47:44.6774
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 423b2555-ef3e-4819-d00f-08df03cc6d12
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[149.199.90.133];Helo=[satlexmb07.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CO1PEPF00012E7F.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ5PPF183341E5B
 
-On Thu, 13 Aug 2026 15:06:12 +0530
-<mhonap@nvidia.com> wrote:
-
-> From: Manish Honap <mhonap@nvidia.com>
+On Wed, Aug 26, 2026 at 03:33:43PM -0700, Sean Christopherson wrote:
+> On Wed, Aug 26, 2026, Michael Roth wrote:
+> > On Wed, Aug 26, 2026 at 12:44:40PM -0700, Sean Christopherson wrote:
+> > > On Wed, Aug 26, 2026, Ackerley Tng wrote:
+> > > > Omit support for calling the arch hook to make private, since SNP, the only
+> > > > implementer of the arch make-private hook today, would actually prefer
+> > > > making private only just before faulting memory into the NPTs.
+> > > > 
+> > > > Calling the make-private arch hook would require iterating both bindings
+> > > > and the filemap to find the intersection of bindings and allocated
+> > > > folios.
+> > > 
+> > > Why would KVM need to iterate over the bindings?  Only the RMP needs to be updated,
+> > > whether or not the RMP is currently reachable is irrelevant, no?
+> > > 
+> > > Subsequent calls to kvm_arch_gmem_make_private() from kvm_gmem_get_pfn() would be
+> > > superfluous, but that's already possible, e.g. if an NPT mappings is removed for
+> > > whatever reason.
+> > > 
+> > > > On top of that, SNP would need to figure out whether to actually
+> > > > make private based on whether the memory is about to be faulted, or
+> > > > whether it is a conversion.
+> > > 
+> > > This is a non-issue, no?  As above, sev_gmem_make_private() already bails early
+> > > if the page is already assigned in the RMP.
+> > > 
+> > > I don't care terribly about how SNP handles this, but I do want accurate reasoning
+> > > and justification so that if/when we revisit any of this in the future, we can make
+> > > informed decisions.  Because unless I'm missing something, this is an optimization
+> > > choice (eager vs. lazy to-private conversions), not a complexity tradeoff, and it's
+> > > not clear to me how we decided the lazy approach would provide better performance.
+> > 
+> > I'm not sure it was discussed in this context, but there was some past
+> > discussion around preallocation (i.e. "should we call make-private arch
+> > hooks at allocation time to allow for faster boot for prealloc guests"
+> > and then that ran into the TDX side of things where that would
+> > necessarily entail pre-mapping into the sEPT as well, so
+> > KVM_PRE_FAULT_MEMORY ended up being the interface we adopted for this
+> > purpose.
+> > 
+> > Since then, KVM_PRE_FAULT_MEMORY was added on the QEMU side and gets
+> > called after all conversions for both SNP/TDX, and even without
+> > preallocation it's a decent performance boost to SNP. If we were to
+> > switch to pre-calling the make-private arch hook then the
+> > KVM_PRE_FAULT_MEMORY call because partly redundant and in practice we'd
+> > probably see a small performance loss.
+> > 
+> > So there's real performance differences here but it's sort of been
+> > addressed through a solution that offers additional performance
+> > benefits on top so there's no longer as much to be gained here I think.
 > 
-> Add the vfio-cxl module that vfio-pci loads on demand for CXL Type-2
-> devices. It registers a set of callbacks with vfio-pci-core at
-> module_init and drops them at exit; the callbacks are stubs here and
-> are filled in by later patches.
+> Or another way to look at it, eager conversion would allow QEMU to drop its
+> workaround.
+
+True, for SNP at least, but pre-map is nice too, and not really gmem's
+place, so most likely KVM_PRE_FAULT_MEMORY would remain regardless.
+
 > 
-> VFIO_CXL depends on CXL_BUS and builds as vfio-cxl.ko, which
-> request_module("vfio-cxl") resolves through MODULE_ALIAS.
+> To be clear, I'm a-ok with the code as-is, I just want to make sure we document
+> exactly why we're choosing this implementation.
+
+Agreed. My understanding of the current design choice is basically that
+it doesn't *need* to happen here, since kvm_gmem_get_pfn() will already
+trigger it on-demand when it is actually needed (or not), and that tends
+to happen at fault time when other platforms like TDX handle it. To handle
+it differently would be to go out of our way to make SNP special in this
+flow in exchange for performance, but KVM_PRE_FAULT_MEMORY already offers
+a robust solution for folks that want to optimize conversion path or
+prealloc host resources prior to guest boot.
+
 > 
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
-> ---
->  MAINTAINERS                          |  7 +++++
->  drivers/vfio/pci/Kconfig             |  2 ++
->  drivers/vfio/pci/Makefile            |  2 ++
->  drivers/vfio/pci/cxl/Kconfig         | 11 ++++++++
->  drivers/vfio/pci/cxl/Makefile        |  3 ++
->  drivers/vfio/pci/cxl/vfio_cxl_core.c | 41 ++++++++++++++++++++++++++++
->  6 files changed, 66 insertions(+)
->  create mode 100644 drivers/vfio/pci/cxl/Kconfig
->  create mode 100644 drivers/vfio/pci/cxl/Makefile
->  create mode 100644 drivers/vfio/pci/cxl/vfio_cxl_core.c
+> > But I guess that's a moot point...
+> > 
+> > > 
+> > > > Calling the make-shared arch hook and not the make-private arch hook does
+> > > > leak SNP-specific details into guest_memfd (as in, why only make-shared
+> > > > during conversions but not make-private?), but the additional complexity is
+> > > > not worth taking on until guest_memfd has a user actually requiring an arch
+> > > > make-private call.
+> > > 
+> > > ...
+> > > 
+> > > > +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> > > > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
+> > > > +{
+> > > > +	struct folio_batch fbatch;
+> > > > +	pgoff_t next = start;
+> > > > +	int i;
+> > > > +
+> > > > +	folio_batch_init(&fbatch);
+> > > > +	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
+> > > > +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+> > > > +			struct folio *folio = fbatch.folios[i];
+> > > > +			pgoff_t start_index, end_index;
+> > > > +			kvm_pfn_t start_pfn;
+> > > > +			kvm_pfn_t nr_pages;
+> > > > +
+> > > > +			start_index = max(start, folio->index);
+> > > > +			end_index = min(end, folio_next_index(folio));
+> > > > +			/*
+> > > > +			 * end_index is either in folio or points to
+> > > > +			 * the first page of the next folio. Hence,
+> > > > +			 * all pages in range [start_index, end_index)
+> > > > +			 * are contiguous.
+> > > > +			 */
+> > > > +			start_pfn = folio_file_pfn(folio, start_index);
+> > > > +			nr_pages = end_index - start_index;
+> > > > +
+> > > > +			kvm_arch_gmem_make_shared(start_pfn, nr_pages);
+> > > > +		}
+> > > > +
+> > > > +		folio_batch_release(&fbatch);
+> > > > +		cond_resched();
+> > > > +	}
+> > > > +}
+> > > > +#else
+> > > > +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end) {}
+> > > > +#endif
+> > > > +
+> > > >  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> > > >  				     size_t nr_pages, uint64_t attrs,
+> > > >  				     pgoff_t *err_index)
+> > > > @@ -624,7 +661,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
+> > > >  
+> > > >  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
+> > > >  	kvm_gmem_invalidate_start(inode, start, end, filter);
+> > > > +
+> > > > +	if (!to_private && kvm_arch_has_gmem_convert())
+> > > > +		kvm_gmem_make_shared(inode, start, end);
+> > > > +
+> > > >  	mas_store_prealloc(&mas, xa_mk_value(attrs));
+> > > > +
+> > > >  	kvm_gmem_invalidate_end(inode, start, end);
+> > > 
+> > > The real reason I responded...
+> > > 
+> > > Thinking about the Secure AVIC mess made me realize zapping NPTs for SNP VMs isn't
+> > > strictly necessary in this path.  The PFN isn't changing, just the attributes, and
+> > > that's (obviously) tracked in the RMP.  KVM doesn't need to zap SPTEs to induce a
+> > > fault, because the mismatched C-bit vs. RMP status will cause an #NPF(RMP), and
+> > > AFAICT kvm_mmu_page_fault() will do the right thing.  A misbehaving guest could
+> > > continue to access the shared data (assuming we stick with lazy conversions), but
+> > > that should be fine?  E.g. it's not really any different than implicit conversions.
+> > 
+> > I think this should work in theory...
+> > 
+> > zapping NPTs means the vCPUs will keep retrying until they get the page first
+> > vCPU that faulted is trying to grab from gmem. If we don't zap, then they will
+> > instead be racing with the first vCPU, and if they lose they will be
+> > generating implicit page faults that trigger conversions back to shared,
 > 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c665bf8f1a28..aa8cecbc4cf2 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -28312,6 +28312,13 @@ L:	kvm@vger.kernel.org
->  S:	Maintained
->  F:	drivers/vfio/cdx/*
->  
-> +VFIO CXL DRIVER
-> +M:	Manish Honap <mhonap@nvidia.com>
-> +L:	kvm@vger.kernel.org
-> +L:	linux-cxl@vger.kernel.org
-> +S:	Supported
-> +F:	drivers/vfio/pci/cxl/
-> +
->  VFIO DRIVER
->  M:	Alex Williamson <alex@shazbot.org>
->  L:	kvm@vger.kernel.org
-> diff --git a/drivers/vfio/pci/Kconfig b/drivers/vfio/pci/Kconfig
-> index 296bf01e185e..c3f54fc8ccc0 100644
-> --- a/drivers/vfio/pci/Kconfig
-> +++ b/drivers/vfio/pci/Kconfig
-> @@ -70,6 +70,8 @@ source "drivers/vfio/pci/virtio/Kconfig"
->  
->  source "drivers/vfio/pci/nvgrace-gpu/Kconfig"
->  
-> +source "drivers/vfio/pci/cxl/Kconfig"
-> +
->  source "drivers/vfio/pci/qat/Kconfig"
->  
->  source "drivers/vfio/pci/xe/Kconfig"
+> Why would they trigger conversions back to shared?  Assuming the guest isn't
+> being silly and accessing the memory with C-bit=0, the #NPF will be tagged ENC
 
-It seems fair to put this above the variant driver Kconfigs rather than
-bury it among them.
+I wasn't meaning the normal flow for a well-behaved guest, but when you
+mentioned "mismatched C-bit vs. RMP status will cause an #NPF(RMP)" I
+thought you were considering the case of multiple vCPUs accessing the
+same GPA in various ways (that may or may not make sense) and whether not
+zapping before conversion would cause any issues with the handling of that
+scenario. In that scenario there is potential for any mix of mismatches
+between C-bits and RMP tables.
 
-> diff --git a/drivers/vfio/pci/Makefile b/drivers/vfio/pci/Makefile
-> index 6138f1bf241d..c3031070a1f3 100644
-> --- a/drivers/vfio/pci/Makefile
-> +++ b/drivers/vfio/pci/Makefile
-> @@ -21,6 +21,8 @@ obj-$(CONFIG_VIRTIO_VFIO_PCI) += virtio/
->  
->  obj-$(CONFIG_NVGRACE_GPU_VFIO_PCI) += nvgrace-gpu/
->  
-> +obj-$(CONFIG_VFIO_CXL) += cxl/
-> +
->  obj-$(CONFIG_QAT_VFIO_PCI) += qat/
->  
->  obj-$(CONFIG_XE_VFIO_PCI) += xe/
+The silly case with C=0 is the specific scenario I was thinking of. E.g.
+one vCPU is trying to due memory acceptance/PVALIDATE of a GPA that's
+somehow still being used by some other vCPU for some shared memory
+workload.
 
-Here again, cxl is a feature of vfio-pci-core.  I'd promote it to
-between vfio-pci-core and vfio-pci.  The earlier linking also has the
-benefit that in the typical case it will be available before the
-builtin drivers (but keep the deferred loading behavior).  Thanks,
+> and KVM will treat it as a private access.
+> 
+> 	if (is_sev_snp_guest(vcpu) && (error_code & PFERR_GUEST_ENC_MASK))
+> 		error_code |= PFERR_PRIVATE_ACCESS;
+> 
+> kvm_mmu_faultin_pfn() will see "fault->is_private == kvm_is_private_gfn()" as
+> true, i.e. won't kick out to userspace.  Same for __kvm_mmu_faultin_pfn(), which
+> will call into kvm_mmu_faultin_pfn_gmem() => kvm_gmem_get_pfn(), see that the
+> gfn is private, and call kvm_arch_gmem_make_private() as needed.
 
-Alex
+Yes I don't see any issue with the normal/well-behaved path, it's just
+the funky edge-cases that seem bring about some new considerations, but
+it seems like those would be handled okay.
 
-> diff --git a/drivers/vfio/pci/cxl/Kconfig b/drivers/vfio/pci/cxl/Kconfig
-> new file mode 100644
-> index 000000000000..1392fa4ed15d
-> --- /dev/null
-> +++ b/drivers/vfio/pci/cxl/Kconfig
-> @@ -0,0 +1,11 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +config VFIO_CXL
-> +	tristate "VFIO support for CXL Type-2 devices"
-> +	depends on CXL_BUS && CXL_MEM
-> +	select VFIO_PCI_CORE
-> +	help
-> +	  Add CXL HDM handling to vfio-pci so a CXL Type-2 device, such as a
-> +	  CXL-attached accelerator, can be assigned to a virtual machine.
-> +	  vfio-pci loads this module on demand when it binds a CXL device.
-> +
-> +	  If you don't know what to do here, say N.
-> diff --git a/drivers/vfio/pci/cxl/Makefile b/drivers/vfio/pci/cxl/Makefile
-> new file mode 100644
-> index 000000000000..8501bf626108
-> --- /dev/null
-> +++ b/drivers/vfio/pci/cxl/Makefile
-> @@ -0,0 +1,3 @@
-> +# SPDX-License-Identifier: GPL-2.0-only
-> +obj-$(CONFIG_VFIO_CXL) += vfio-cxl.o
-> +vfio-cxl-y := vfio_cxl_core.o
-> diff --git a/drivers/vfio/pci/cxl/vfio_cxl_core.c b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-> new file mode 100644
-> index 000000000000..cbec7319452c
-> --- /dev/null
-> +++ b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-> @@ -0,0 +1,41 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * VFIO support for CXL Type-2 devices.
-> + *
-> + * Copyright (c) 2026 NVIDIA Corporation & Affiliates
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/vfio_pci_core.h>
-> +
-> +static int vfio_cxl_init_device(struct vfio_pci_core_device *vdev)
-> +{
-> +	return 0;
-> +}
-> +
-> +static void vfio_cxl_release_device(struct vfio_pci_core_device *vdev)
-> +{
-> +}
-> +
-> +static const struct vfio_cxl_ops vfio_cxl_ops = {
-> +	.init_device	= vfio_cxl_init_device,
-> +	.release_device	= vfio_cxl_release_device,
-> +	.owner		= THIS_MODULE,
-> +};
-> +
-> +static int __init vfio_cxl_init(void)
-> +{
-> +	return vfio_pci_core_register_cxl_ops(&vfio_cxl_ops);
-> +}
-> +
-> +static void __exit vfio_cxl_exit(void)
-> +{
-> +	vfio_pci_core_unregister_cxl_ops(&vfio_cxl_ops);
-> +}
-> +
-> +module_init(vfio_cxl_init);
-> +module_exit(vfio_cxl_exit);
-> +
-> +MODULE_LICENSE("GPL");
-> +MODULE_DESCRIPTION("VFIO support for CXL Type-2 devices");
-> +MODULE_ALIAS("vfio-cxl");
+> 
+> I don't see how #NPFs due to the RMP being SHARED would be handled differently
+> than !PRESENT #NPFs.
+> 
+> > and most likely the first vCPU will re-trigger an implicit shared->private
+> > conversion when it does PVALIDATE. Worst case, the guest fails PVALIDATE
+> > due to racing with itself.
+> > 
+> > It's a bit chaotic, but it shouldn't break anything other than the guest, and
+> > it's only something we'd generally expect for buggy/malicious guests anyway.
+> > 
+> > However...
+> > 
+> > > 
+> > > In other words, couldn't we do this (as an on-top optimization)?  The only wrinkle
+> > > I can think of is that it could delay reconstituion of a hugepage, especially if
+> > > we opted for eager conversion (because the guest wouldn't hit #NPFs to trigger the
+> > > hugepage promotion).
+> > > 
+> > > diff --git arch/x86/kvm/mmu/mmu.c arch/x86/kvm/mmu/mmu.c
+> > > index 62f751952ad8..61f3e270ab61 100644
+> > > --- arch/x86/kvm/mmu/mmu.c
+> > > +++ arch/x86/kvm/mmu/mmu.c
+> > > @@ -1670,6 +1670,7 @@ static bool __kvm_rmap_zap_gfn_range(struct kvm *kvm,
+> > >  
+> > >  bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> > >  {
+> > > +       unsigned long shared_private =  KVM_FILTER_SHARED | KVM_FILTER_PRIVATE;
+> > >         bool flush = false;
+> > >  
+> > >         /*
+> > > @@ -1683,6 +1684,10 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
+> > >         lockdep_assert_once(kvm->mmu_invalidate_in_progress ||
+> > >                             lockdep_is_held(&kvm->slots_lock));
+> > >  
+> > > +       if (gmem_in_place_conversion && !kvm_has_mirrored_tdp(kvm) &&
+> > > +           ((range->attr_filter & shared_private) != shared_private))
+> > > +               return false;
+> > > +
+> > 
+> > This path would also trigger for hole-punching, where we would want to
+> > zap the NPT entries. So we might need to adjust the logic for more than
+> > just shared vs. private to account for that.
+> 
+> No, because PUNCH_HOLE uses kvm_gmem_get_all_gfns_filter(), which does:
+> 
+> 	if (gmem_in_place_conversion)
+> 		return KVM_FILTER_SHARED | KVM_FILTER_PRIVATE;
 
+Doh, helps if I actually have the right branch checkout out when looking at
+code. That does look to be covered.
+
+I'll give this patch a spin on my end as well and report back if I notice
+any crazyness.
+
+Thanks,
+
+Mike
+
+> 
+> i.e. won't get short-circuited.  Though I agree with the implication that this
+> is super fragile/subtle.
+> 
