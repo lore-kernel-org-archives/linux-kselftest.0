@@ -1,62 +1,64 @@
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5867D3F1AD7
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 11:59:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6EBA3F787B
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 11:59:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787745580; cv=none; b=OJLb+bETZuhd7HWRoHpioTknQIPwHxhRkd2SeWkcPsLFCCAtTe2PUjiWPVvyBL1zBptmW6IvQ7sblPzRBg1KU+YB8SYluDDu8j/r0Cnca4RyUWfiyoaGdwTsKNs6MjsR5xBV7fr+79jpQMw04RL6XsXxTkHIL/WpdPN9Jnr79oQ=
+	t=1787745584; cv=none; b=H9RMVJuVUIoDQyMI/CqVk5aKx0/m8lHb4GCCcTCb28EP4s57JlXm1+OQIRAXQ2wvnDGpH2X9i07hJcp2jOr8M7t0xmzy/f0fvCwx2rpMXHTsPBmYWCasFk+V0++Axr44Cvaja0iFKQjYPU8t5Wz2+mWaPLpOhXLPawYOGjrLaq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787745580; c=relaxed/simple;
-	bh=gMaVgfPNUsxe2suAiFliez055qKOvUgJIR9Bqte105A=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hs6EnUlyA2BUjq237uig/XMqMwrVEqLRfKhZEpAqN3Y3IiN70iNyFDKJa5uA0g20wHSHbcK9EytT/DbTdddRvPFMEwfMeEbQBKXgbyOjBRyyzdvwJ/tMrEZys3pGthvz38zCZ3M9cl47DzISF7XFh8kXUu7GK0XtK9KrSM4mvm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zeo/Y6Ac; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1787745584; c=relaxed/simple;
+	bh=M7+C+WJ6TI3LlJz4XmPvw5Lvngo1jKh4HAhbCTl2ZN0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mCNo4kOsrjmzkt1WJZYWPcr0Y0tH1E3kVD85dsk9RDu/jPL0wpOd2TAmI3T9ZPKc+8xDizJdJMb+NNZoC3Yf+jd9zEe0ZWlcThOIgrUohjbflGvhkmTg+SObeJjRLhY2XTbrGsOqGPLYTEGbW4OQihSAY1PcpRU3zbf94ix7520=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R/yA06V2; arc=none smtp.client-ip=209.85.160.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zeo/Y6Ac"
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-39647184c73so1831477a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 04:59:39 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R/yA06V2"
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-455ca262ccbso895740fac.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 04:59:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787745579; x=1788350379; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=bc8my8FbiDqjxCZcE9P0+mYGbrSku1wnrvIHI1ZOYos=;
-        b=Zeo/Y6AcMExyqFo+LPlJ80uhXawjYFjKMHPFkElDVfveh7tAmRoDclznnOvFR5DrHB
-         JgX20MATZM74In7MGvP1FRKxbZh2NGLHrnAduiemj+q4nMaqOs17ds/DvwGULibJD+lE
-         AXkxJFY6Eja5MM/9KDze5UdkPR94WAORFm2d6sGFaqwdpOoUFNklukx3OPSyovyJXGOb
-         gG9lOsoMpYahNBCu3sGcl9a40CnCzW/zhYkMy68NtnShNS8cTwMFhRyXCfa4V6Po1GKl
-         pfBRiBuAslbs2NQKSvn+xANYSXOAFefhGgeUXZP3hKNXqCAwqHPCL2yYod3aGL4GvpHO
-         2+yQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787745579; x=1788350379;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20251104; t=1787745581; x=1788350381; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=bc8my8FbiDqjxCZcE9P0+mYGbrSku1wnrvIHI1ZOYos=;
-        b=JhP6+JnbcJ9r4lZXvuBswb1kpcVximVW6BJcyvE9jmhDlJySC75Pd+VPR1adsiUtBf
-         QdvqGo28gpx1zK2DC5oCcWcAomUU5L1l66S0sLGBzy50sRXYXO4s8o+9h6Q2gHlcQzNW
-         IDtNS2QmbBO3BIKbw0W2fCWq4Wm19TKhBXpmTukcZtbc8Faw+Ve2eirzEsGtHJbh3CqZ
-         tb/5IgCFdGmSud7KmOFD5Qw8etyldc2Vciiv44GBP0r1OTjVpF+XaQPgC15FC0T3bZZ4
-         wJd3EACBeUa9449bXTtVWFRLFscb7dm9PJcwJMcDMkVw627jUynTAiwa1LoOHdtAXFzm
-         oAVQ==
-X-Forwarded-Encrypted: i=1; AHgh+RrDcQbcFBk9YrTBlPM6E8zsn15nVf9x4TVha0P7sgbKK42X96LwtFdeLvG3KCHyML2518kF1PwFBVckE2fmCuI=@vger.kernel.org
-X-Gm-Message-State: AFuF++kHbLQ7fei0fM8QcEskpYtCYgy4DZ+5wEedc118QEISwCdtLCx1
-	mfdjPmf5Eeblk5ApiKBHlPIqPs4oMQEDTI8cMAbEM4IKcMVRicunVK/a
-X-Gm-Gg: AR+sD10eQaQBUulYgWm4fd4ar8YBQuTfsXBIKHuv9D5v5tcGAGckJBgGFueON7gqs3H
-	LTk5EWfl8tmvEdkTetVyk/YBUbJr49NfbuvPqCgCNMV3aBD7fpk/KIOkT3Ux1czZWJmurmDsFim
-	Ye8xs1ujWettIDPijl2bjIMPhv6ZETTHLcWZ2wHtZE7bP/JZLMLVO5Gvx5YwQVfSU9yx/CEU4Ws
-	RQV2rxeyxY2nRNizjOvGYZ8BXgpbfFtJpL5ZODE0nzCXKw8E/PiREEHKO2HrhNGGbumreeWLyXH
-	MJB/kJdw01vywP1Bvt88+tOy67AGb85Aav2QMZMKkwgh3tkzksoNyfG/cYDUL7WISDooe6dxCbn
-	Xut12T8ffzNBefomHvEyCjSk9ZgdCgXdB4XgIVyiKCBbUdNvhvTyD56+vuBJ36JFFv/pNk/jPGc
-	0hVbkr5SBosQ9tWQaYHpaK2e7YkfMYz7ZufsxKYPxjFmJh7yjUEcz4ZdVW+G2qTveE89c8Z07DJ
-	VkpZmFNYiY=
-X-Received: by 2002:a17:90b:1a86:b0:38e:9784:dd47 with SMTP id 98e67ed59e1d1-39645829233mr18130835a91.1.1787745578549;
-        Wed, 26 Aug 2026 04:59:38 -0700 (PDT)
+        bh=nAOFav5cyT0xrih7PqytNwDZmryC0k3HvKGBgMhuzW0=;
+        b=R/yA06V2XrAawFqLDWgfpmqhV2RtAKr9YpaKC173UHshgZ7pMxFz99yCInJt2uNLod
+         Yuj6Q5vX8P7+soI/VvdhSGT3KuPcZ5hj3JTlfTphpsrkAF0s7/Ra925AuROHil5GkfSp
+         9nwf5bTSVQ1ZIHTtmVq1jHLpzG5QRkpJsJtmoqtMdkwzJmTMXV7V5iri6OS6CBhSWhSq
+         Oj04YVbAMcpuJ4kNISAI5IZboe02MOasvF1CZqHhAMvwi1wOGm5gjnbhIrcOd8acsoXh
+         QkXu3TGAWih/P8f4UO44Hv2CDXnmHYdOWbHL9ZNajPI3VLT+ChNSRV6x3b5oRvvmlyKa
+         HnWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787745581; x=1788350381;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nAOFav5cyT0xrih7PqytNwDZmryC0k3HvKGBgMhuzW0=;
+        b=KRaVEsMxm9P5gN7UJV3vuKr6W+rZ2543aSkRSDFOvPlq1XnvPV1OqM5pk/G5+F7QxN
+         FCsAh9Rm29FuyFlKzhScAXdpJm8oIG2zN1J3N0FOXfK6h6YWBTlbjBmMam6FRX4kPHVA
+         +m9UmHA0gP/2jzYwByEobxhR2Tioz0Sk0uYqRzH2DrlW/64itkbZImgfnIc3x/67StNa
+         cj+624Jm26zDLsGRqrAKFHlMv+rY6QWvhDITvEM4f2V57+5ZxKKUXHaUKkB972zoFnZU
+         k3e0BWLz0DpP0Qw4wDJoATlRlFYKQ+rG8hxfuG9MA6ZGXCPVGV/rpP6C2vmHSQd7Bu5B
+         dTIw==
+X-Forwarded-Encrypted: i=1; AHgh+Rp+ug8hNsl3zTPi8wcNj+y4lxFV1vcxfhRVZBAkSgFRK+djV9lCwItV8st0vovjvnPgYTWLKpQMZ2+Iac113bk=@vger.kernel.org
+X-Gm-Message-State: AFuF++nNrKwtJwp5dJUYc5jlrmdEHmiwkriTaqepxCGE2UF/7k/ELbFU
+	4+TgQxcjRdtOy5PCI4+8pLLCrbvHaG4HaaGSH+3Iw+ds6KLVk5+o08qDGenrqyMm
+X-Gm-Gg: AR+sD109nnae4cZoi5JTWb6qmcqwp2Miq3es+0PYTzFlGnD3fZVBCYO5ktn4Bs0W/HI
+	i70+vafvXM7zqzQ4Fom6xqrT498+cA1KYa3shxxU0gu4NJAYFBbfu9lvHvOmJkrsKbWNJ8w97Tr
+	jwuuBtyNNHE3Blx9G75RBqWSHBZxVLeMTjcEDFFT1FBv9aoRCoEZW0UBuRS+VJ4Sg87ME63FKVx
+	DX7PhjiNuS8kjL5v/BQQIShKRVdCE0PirK0YLT3jLw3mXR0IvufEdIOf1iJYypWlW8pHehZixSH
+	L5MK9luTdFiZhdcmyBGzXtow5fpw4XYcijjusX3sGuYthZrd/LNq+jHyS+2EiEBcsNm1JU+zRh6
+	7G+3J270ElKMFPWokLCYgMK2n0aKOoIj6/PxviQ7lZ6BGIcKjCWzTgFJvOz+B3FOeKhjvKjH6FF
+	w9zK1e7IO5pl0a9BxncdVRnu6I2gNP1Lm+O7x5UOc5/tPo2cdeHlnmXLUNfV9VaB+ic+DURg2E0
+	DFg1nMuy50=
+X-Received: by 2002:a05:6820:83c2:10b0:6b1:4061:4193 with SMTP id 006d021491bc7-6b1a01f68a6mr4659280eaf.0.1787745581617;
+        Wed, 26 Aug 2026 04:59:41 -0700 (PDT)
 Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141a8eefd98sm14607883c88.3.2026.08.26.04.59.36
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141a8eefd98sm14607883c88.3.2026.08.26.04.59.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 04:59:38 -0700 (PDT)
+        Wed, 26 Aug 2026 04:59:41 -0700 (PDT)
 From: Hemanth Selam <hemanth.selam@gmail.com>
 To: seanjc@google.com,
 	pbonzini@redhat.com,
@@ -64,10 +66,12 @@ To: seanjc@google.com,
 Cc: kvm@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] KVM: selftests: Actually test PV_UNHALT
-Date: Wed, 26 Aug 2026 17:29:13 +0530
-Message-ID: <20260826115915.2882221-1-hemanth.selam@gmail.com>
+Subject: [PATCH v2 1/2] KVM: selftests: Add a helper to read a vCPU's APIC ID
+Date: Wed, 26 Aug 2026 17:29:14 +0530
+Message-ID: <20260826115915.2882221-2-hemanth.selam@gmail.com>
 X-Mailer: git-send-email 2.43.7
+In-Reply-To: <20260826115915.2882221-1-hemanth.selam@gmail.com>
+References: <20260826115915.2882221-1-hemanth.selam@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -76,67 +80,37 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-test_pv_unhalt() only checks that KVM clears KVM_FEATURE_PV_UNHALT from
-guest CPUID when HLT-exiting is disabled; the feature itself has never
-been exercised, hence the FIXME.  Patch 2 tests it by halting one vCPU
-with interrupts disabled and kicking it from another, so that reaching the
-instruction after HLT is proof that KVM_HC_KICK_CPU was delivered.
+Reading a vCPU's APIC ID from the host means open coding KVM_GET_LAPIC and
+picking the field out of the register block, which several tests already
+do.  Add a helper next to the other APIC definitions so that a test that
+needs to target a vCPU, e.g. to send it an IPI, can just ask for its ID.
 
-Patch 1 adds the helper that patch 2 needs to learn a vCPU's APIC ID from
-the host, rather than open coding KVM_GET_LAPIC as a few tests already do.
+Assisted-by: Cursor:claude-opus-5
+Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
+---
+ tools/testing/selftests/kvm/include/x86/apic.h | 9 +++++++++
+ 1 file changed, 9 insertions(+)
 
-Changes in v2:
- - Pass the APIC ID to kick in a1, not a0.  KVM reads it from a1, as the
-   in-kernel guest does in kvm_kick_cpu(), so v1 asked KVM to kick APIC ID
-   0 and only passed because the halting vCPU happened to be vCPU 0.
-   Spotted by the Sashiko AI reviewer.
- - Halt on a vCPU with a non-zero APIC ID, so that a kick sent to the wrong
-   vCPU can no longer pass by accident, and enable that vCPU's APIC, as a
-   guest using PV spinlocks would: KVM only routes the kick once the vCPU
-   is in the APIC map, which is also why xapic_ipi_test enables it.
- - Move the APIC ID helper into apic.h instead of keeping it private to
-   the test (new patch 1).
- - Report the return value of pthread_create()/pthread_join() rather than
-   errno; they return the error directly and do not set errno.
-
-Built and run on x86_64 (AMD).  Untested on Intel, though the kick is
-handled in common code and delivered through the generic LAPIC path.
-
- - On kvm-x86/next, the whole selftest suite builds warning-free and
-   kvm_pv_test passed 10 of 10 runs.
-
- - Also run inside a VM booted on a kernel built from kvm-x86/next, i.e.
-   against the KVM this targets rather than the host's.
-
- - Whole x86 suite with the series applied: 61 passed, 24 skipped, and
-   set_sregs_test failed with "KVM allowed invalid efer bit (0x100)".  That
-   one fails identically without the series, i.e. it is the host kernel.
-
-The test was checked against four deliberate breakages, to make sure it
-can only pass when the kick really works:
-
- - pass the APIC ID in a0, i.e. the v1 bug: the kick goes to the wrong
-   vCPU and the test times out, so this version does catch it;
-
- - drop the KVM_HC_KICK_CPU call: the halted vCPU is never resumed and the
-   test times out;
-
- - clear PV_UNHALT from the kicking vCPU's CPUID while enforcement is on:
-   the hypercall returns -KVM_ENOSYS and the test fails with
-
-     0xfffffffffffffc18 != 0x0 (kvm_hypercall(KVM_HC_KICK_CPU, ...) != 0)
-
- - remove the halt: the bounded wait trips and the test fails with
-   "vCPU never halted" rather than hanging.
-
-Hemanth Selam (2):
-  KVM: selftests: Add a helper to read a vCPU's APIC ID
-  KVM: selftests: Test the PV_UNHALT feature, not just its CPUID bit
-
- tools/testing/selftests/kvm/include/x86/apic.h |  9 ++
- tools/testing/selftests/kvm/x86/kvm_pv_test.c  | 97 +++++++++++++++++++++-
- 2 files changed, 105 insertions(+), 1 deletion(-)
-
+diff --git a/tools/testing/selftests/kvm/include/x86/apic.h b/tools/testing/selftests/kvm/include/x86/apic.h
+index 31887bdc3d6c..293044c81228 100644
+--- a/tools/testing/selftests/kvm/include/x86/apic.h
++++ b/tools/testing/selftests/kvm/include/x86/apic.h
+@@ -79,6 +79,15 @@ void apic_disable(void);
+ void xapic_enable(void);
+ void x2apic_enable(void);
+ 
++/* Reads the APIC ID of a vCPU from the host, e.g. to target an IPI at it. */
++static inline u32 vcpu_get_apic_id(struct kvm_vcpu *vcpu)
++{
++	struct kvm_lapic_state lapic;
++
++	vcpu_ioctl(vcpu, KVM_GET_LAPIC, &lapic);
++	return GET_APIC_ID_FIELD(*(u32 *)&lapic.regs[APIC_ID]);
++}
++
+ static inline u32 get_bsp_flag(void)
+ {
+ 	return rdmsr(MSR_IA32_APICBASE) & MSR_IA32_APICBASE_BSP;
 -- 
 2.43.7
 
