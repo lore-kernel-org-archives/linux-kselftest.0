@@ -1,54 +1,94 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05F03B1B3;
-	Wed, 26 Aug 2026 00:23:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CB783FFD
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 01:40:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787703799; cv=none; b=kHQ/HHWOeRdwFvYBqvxDLItziHiwN84YB5JJyfVNXdSEpd1AVacjThqh/fDi6PLeeEg9D2HwZFmPYZmm7dFLP9G80Uo5izhpyXViipf5UsYmQorcRRYRRYC8Zx2L73bNONeCF6TDx8ilrPP8/+X5YX4Yp+YikqCUgJ7qGSDZtWI=
+	t=1787708404; cv=none; b=Q7qbqEBWjgP5LtnLiTeezPTy+1NS6B2tgHNY785hcbtQViJMqrQ8gSdmmXnnrGcg48wckkhQJ6O4VidWPyFIqZ0jfn0KVE8Udwlgzd7GXSh1v+I35HDX/xCOkjFX0WTMAYmiC9HjKWOk67yEYhCQpl+5YjrHyx0APipAuWrUvhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787703799; c=relaxed/simple;
-	bh=b7I5Rga9IuEgM+h1nrky1/MNGJJ1xMIZHM9xQNrmKOk=;
+	s=arc-20240116; t=1787708404; c=relaxed/simple;
+	bh=xddEwg9RunMRuvB/k049ds1rBCYLv2ELWCpHxLMwfus=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tryp/4Be9vSnPWOcJ0k0vc9KdEv3aK36Qsd29tcjwKZzfawnBGl5tsryRpO25W/dqQtud97I0aLWkkrV4Y2b/Yb2mhRx19e+DiyzkZDBnYfyVA2xo08T/Q1g2AmHZFGBs0SB0tDimD8B8aMYO7EZZGJjeYO+eCpoSv7cXh1oMqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EuAyhuPF; arc=none smtp.client-ip=100.103.45.18
+	 MIME-Version; b=bfoHCWjZbW8LBDVL0/ZIyG+QBZ9Elp2gYqHipg+LZRgW6/0q5O6cUZ9T9VDJ4BaZG+yKNYU14QQ2RYBlHUZCI0Z8993A4Z8/qwdH8y6nW/DGw8rUUW+pby7unlH8lqqmrL4Ox0gWFSZF2H+UASii3JpFVTvnTZapVZQ59oRkB9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YFoWZiby; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EuAyhuPF"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F8711F000E9;
-	Wed, 26 Aug 2026 00:23:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787703798;
-	bh=lgWwbnB1tbcT7QJFwjzuHzhW6jP4Q/k/RcKQYtR/3Lc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EuAyhuPFJ1MeUnV6Ra557VZNexUICiXt40eRNhw+W6jzwQxYRI4ivcpcVzw1LsEJT
-	 +N8CUkMxtghi3z2aU1mAbfYqfC7RAc7hGXreIrfY5Vdk/eHb6V4Wnpgd8S4JyCWD+P
-	 yNF6xzNaXhQm3ht8+jpNeWB3kkBqZ15IdtGNqx0Hx+FYWDC6VE7yxdr3ea7bmc+Ro9
-	 avZYsrM9Io7GmP2aKpu7AEbWQSvi6Evkm2ydCcQuU8gCnjPTuBJ56nAnR3N2gPqWjT
-	 B2uKw9nbg2agz2Qq64oXdN9qWSfF1eUGkUJH6GnHYXwd2FyQW/9jUKDvg16ndrFPO1
-	 ZENYUIzDVvhFg==
-From: SJ Park <sj@kernel.org>
-To: Hemanth Selam <hemanth.selam@gmail.com>
-Cc: SJ Park <sj@kernel.org>,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	shuah@kernel.org,
-	ljs@kernel.org,
-	yury.khrustalev@arm.com,
-	kevin.brodsky@arm.com,
-	liam@infradead.org,
-	vbabka@kernel.org,
-	rppt@kernel.org,
-	surenb@google.com,
-	mhocko@suse.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YFoWZiby"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-38759bcd877so717501a91.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 18:40:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787708402; x=1788313202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=9D0ya7fAGHD4mh1WhP+JBRzlt0nXa7uSYqgCddP+Sco=;
+        b=YFoWZibyJ9THs0OTsUudD2LnUXl4W3tn0eE9KBlZVzb95U94ymGYhGfYtC3Z5hTI2f
+         jLymFKwlMIoHwur59BfZeR21MqmI7o7WaAt6lMh+XifUk9B1usC0CszpVUufpG7etk/I
+         uucNDtjhL7r/fLhR2JrpPQeGxgePxmhAftqmJvsjq6Iu3soavwL8BEjs0Q+KFS/XyM+p
+         pEn6iFi8ZhFRwJ6mPCE/ZY4T+mhGL+VAOzhkW6VrF2k3lh5ED4RK9lKnDllaY7wYRErx
+         TfkyrSJjM1JvwxJAipciqVPy85DFpSAOGZp/P4uxJfuuWNfB4q/4CncH3A5dalyqZvDa
+         KHlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787708402; x=1788313202;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=9D0ya7fAGHD4mh1WhP+JBRzlt0nXa7uSYqgCddP+Sco=;
+        b=EWvBhV7VPyWaQzEKqo6xV247ULG5sgpsOKievwVEbXibULJYnAediYTZ/DKt+AI3aN
+         avIBB/7PNrXY/Fqt5HYU1p7+DeGQr26SooI5DU6DqRfWJTOL4ZLmNRpoOBhlBeRYca0v
+         gf+OLKGOi5Gvif4KsbzdbnbonLhifq5Dsj3xv8c2slT4/bsblIIV8WwMriKLbx8qWRzo
+         /iS/TMrVKz/vtpGoXqfxWLP4O1KQmb0ivV8tHpsx0N7Nqthro/O8eh2HfycV8AqCgsjm
+         HoVfTKNYFiJnFnBCTD3J2wx4yYJH+SxH6BtsWIoJ9QiK7NN1WUjMS2mijBuJWx8zLArE
+         JRlA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr05Qw1EvuUKKOHjTanDBaJBwUNBcqCV8gQHtGMOusxY0aJerWNs/MYfYplQXBUejiWB1fhWVLnKXIRKscNGWg=@vger.kernel.org
+X-Gm-Message-State: AFuF++mwX/bFgwZI26U653LBY1v62+eTLmN9iYQCSitP8MM9xx3QRjVM
+	MnENSrr9rCN+xBjdkKdq7IJ6jpnKkcQUvwyovDDvvsVkryVSv8uif2JJ
+X-Gm-Gg: AR+sD11uB8vhmF4sRx/d/L22/KJzpdEyzNmlCvmN230yASkURFelTQnzD2/El+T7aIj
+	TtwPoFLyTr6czbX4Rz6l9akFAo+5Ccuhepzl2zFqsCvAzdXiov9G25PHDGN76LQDoSoX4naxefJ
+	KVzb/B9iDiqcOaLzvCuaSkHtqURKG6FuTfKueISgjNmXx3qQiVCkDt5Nx0gnFRk7pvJEu1cDAfB
+	1OgnKOlHuyw6udXT6WBx72ZLcdpIM3xUC2kexySml/3NoXvn9jonD8/Aox4K5GShY3nuSUWg+dY
+	dIvob2vcaBuhoRf1AU5SMylOZ8RLn49Z6AP+iEi9h8wRlScgYGjCsrt0c8pARNlbAe3tz3g3pcl
+	1mth+Ly27qGADMT/YVredFVKNjREuwL0SI8sRrSCcn8edRlE1m9fVYwRdgqCtt+tA07oMbE4oT1
+	1nijf1bCT0X23bc0wSjC0QITv2FL2bZNAzOSe8o1E6gbeQaLQ7ZkuL9D1Hnws+DCXMRk6QHnhF
+X-Received: by 2002:a17:90b:3cc3:b0:38f:18f9:785 with SMTP id 98e67ed59e1d1-3966d20cde1mr7186084a91.8.1787708402417;
+        Tue, 25 Aug 2026 18:40:02 -0700 (PDT)
+Received: from ancienth-X870E-Nova-WiFi ([125.186.72.2])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3965d119724sm3674887a91.2.2026.08.25.18.39.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Aug 2026 18:40:01 -0700 (PDT)
+From: Daehyeon Ko <4ncienth@gmail.com>
+To: Lorenzo Stoakes <ljs@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	David Hildenbrand <david@kernel.org>,
+	"Liam R . Howlett" <liam@infradead.org>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	"David S . Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Jesper Dangaard Brouer <hawk@kernel.org>,
+	John Fastabend <john.fastabend@gmail.com>,
+	Stanislav Fomichev <sdf@fomichev.me>,
+	James Bottomley <James.Bottomley@HansenPartnership.com>,
+	Hagen Paul Pfeifer <hagen@jauu.net>,
+	linux-kernel@vger.kernel.org,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] selftests/mm: remove the local PKEY_UNRESTRICTED fallback
-Date: Tue, 25 Aug 2026 17:23:09 -0700
-Message-ID: <20260826002310.64811-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260825161715.2807297-1-hemanth.selam@gmail.com>
-References: 
+	netdev@vger.kernel.org,
+	bpf@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] mm/secretmem: properly account locked pages
+Date: Wed, 26 Aug 2026 10:39:48 +0900
+Message-ID: <20260826013948.1325213-1-4ncienth@gmail.com>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
+References: <20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -57,37 +97,32 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Tue, 25 Aug 2026 21:47:15 +0530 Hemanth Selam <hemanth.selam@gmail.com> wrote:
+Hi Lorenzo,
 
-> pkey-helpers.h defines PKEY_UNRESTRICTED itself when the macro is not
-> already known, a stopgap from when the generic definition was still
-> under review.  It has been merged since, commit 6d61527d931b ("mm/pkey:
-> Add PKEY_UNRESTRICTED macro"), so the guard is never taken and the FIXME
-> can be honoured.
-> 
-> The definition comes from tools/include/uapi/asm-generic/mman-common.h
-> via TOOLS_INCLUDES, which commit e076eaca5906 ("selftests: break the
-> dependency upon local header files") added so that the mm selftests
-> build without "make headers".  It is reached through the
-> <asm-generic/mman.h> that the system <asm/mman.h> includes.  Building
-> the pkey tests with KHDR_INCLUDES pointing at an empty directory
-> confirms that; emptying TOOLS_INCLUDES as well is what makes the macro
-> go missing.
-> 
-> No functional change intended.
+I tested the exact v2 from this Message-ID on its stated base with an x86_64
+KASAN kernel. The supplied memfd_secret selftest passed 6/6 in three boots,
+and my accounting-boundary suite also passed in three boots. I saw no
+patch-attributable KASAN report, warning, Oops, or panic.
 
-Makes sense to me.
+A v1/v2 differential also confirms that v2 fixes the CAP_IPC_LOCK creator
+delegation issue Mike identified:
 
-> 
-> Assisted-by: Cursor:claude-opus-5
-> Signed-off-by: Hemanth Selam <hemanth.selam@gmail.com>
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+  v1: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=2
+  v2: CAP_DELEGATION creator_cap_ipc_lock=1 receiver_uid=2001 receiver_pages=1
 
-Reviewed-by: SJ Park <sj@kernel.org>
+I have one policy question before adding Tested-by. With a one-page soft and
+hard RLIMIT_MEMLOCK, a non-root task whose only effective and permitted
+capability was CAP_IPC_LOCK produced this on v2:
 
+  CAP_ONLY uid=2002 cap_ipc_lock=1 mlock_two_pages=1 faulted_pages=1 raise_hard_rc=-1 raise_hard_errno=1
+
+Thus ordinary mlock() of two pages succeeded, while only one secretmem page
+could be faulted. Raising the hard limit failed with EPERM because that
+requires CAP_SYS_RESOURCE. Is this divergence from ordinary mlock() the
+intended consequence of removing the CAP_IPC_LOCK exemption for secretmem?
+
+I saw the planned selftest split and cleanup in the follow-up discussion. I
+will retest the revised patch before adding Tested-by.
 
 Thanks,
-SJ
-
-[...]
+Daehyeon
