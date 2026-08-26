@@ -1,221 +1,168 @@
-Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 468BD3FFFB3
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 19:44:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A6FE32E73E
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 20:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787773498; cv=none; b=AhigxV9qOHm+PoRW8zKNcSiQnyPUwz1tCTnVLUywGFS8h0EyGLvM9zePvi9n+Xnycu13trbiRNT0rfyCYBIej1JSM8tQagOpr+tlotqyFLLpMnqQGPB8KAN7euriAm4dZOnqeGuBVOEk6LWKsTsnssNVKHnIY0aw7x8tPXW9TXE=
+	t=1787775360; cv=none; b=WLZ1riCs3ZTnYyUX7X+KXbJtKfYAQ5LTTuCbR2G1GjLoslx30CtDP4fyBVUrDuWiCsJM4b7oU1ucf/Qhoyq+OaNV/3mgoPRV9MiHCYnYVR8LsVYFepkAGqQO3f2dX0mj4kFbecQKXmDOlioJeIgtJI0u0YaH7E2QPu5rG7dRWgI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787773498; c=relaxed/simple;
-	bh=4uZPzlY33aYdoyT/xRZbAIP4+YBkQh6pbbwV+qhDm9o=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LoCsh7ZmJYsCJ1Tqw9PlRf/TST6SouwgefomVl7Q4Sf06627gfs5VgghJQOyIzAZUUyJG/PdSWmwMZBLPn79lm8HiXtEPoHszND40eIgsZkgM518ivlu8NtVlfhiLVWzhZmOJd7VNpV/ahlG+uErBwQ5JgJDoG0WoEnLbitkYC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F9fJ2oxk; arc=none smtp.client-ip=209.85.215.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1787775360; c=relaxed/simple;
+	bh=PW8N1IgTlrulZyKeLd423puC2qwQejHBLTHJOwUtobI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nvMFDu84vDGPQlxR8T0C4FFTKACStFq9AYRpkW99nHgsxPV23gL8fKwcBTWmN042X4zy2VSnpH5EA9qT0G5SBWOSnO2iO6S98J5d1Gi0G5yfYEPI9E4YuTEQWImtbf9lt4PBr55B1SmSldgIFPI7x2lg8hnJ6uNp0gOwqeOJuHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bnD15MZL; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=jGKLdrvd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F9fJ2oxk"
-Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc1b8088202so1279265a12.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 12:44:44 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bnD15MZL";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="jGKLdrvd"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1787775358;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=5XOoAhfyz9xtKGJKuczZNY14PVIcWN7EMcbfAjCg3O0=;
+	b=bnD15MZLvhgLAfEQgcoWDNHu42nQC8I1A23KXTndOA0jShNqsL5Iim33yOtfveCs7dYRmL
+	t+s5Np5C5fKmKbfcNbAOvvFFxh1gTkt/QqlpXnZ7b1N8uXXlWvxKHYRbUeiy7aHMYFgzjx
+	PxOSizYCKjVfqvDMX/TPEscf+M5v+nQ=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-308-pdHYcpe6PdmOG3SqmR3PnQ-1; Wed, 26 Aug 2026 16:15:56 -0400
+X-MC-Unique: pdHYcpe6PdmOG3SqmR3PnQ-1
+X-Mimecast-MFC-AGG-ID: pdHYcpe6PdmOG3SqmR3PnQ_1787775356
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-92e52306621so133874185a.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 13:15:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787773482; x=1788378282; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=kAAUyb+BT/S16pFGAm4l7OAoO0iSt3CMmhZez+eRZtg=;
-        b=F9fJ2oxkdgl0eiteWV1ixsN6qOcIqGb+oWpZJNjNftBAzzqQi69cUHU8A49W9Ogpv3
-         tbiiWzGxOdt0zEfK+Ipt3yU+B8To3hbf0LItcX2uXJj63vWpmU7VYGRolp5RYXSTCkBO
-         vasf/F2NhQC+8YzisXODKc+uepKhB77wunWsAZtWGVHdssAR4JZdlU1+4BPWA7wsXtf/
-         fKd3a+8xXFme6yWfvA8e3BXO0klMEmAAFeFv0djfazS6KwrAYF+DF0YX0L1bfUh1cFYB
-         lZ/Mbe1ha9vEkOn8Grha7uMsL799mlM/WLXgEXzT1s+KNqCEYHNZmeaGUCGXF5syWoIv
-         lY4A==
+        d=redhat.com; s=google; t=1787775356; x=1788380156; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=5XOoAhfyz9xtKGJKuczZNY14PVIcWN7EMcbfAjCg3O0=;
+        b=jGKLdrvdS84sl5YO5wfp/iGYQua5fev9zMbo0s6pYSpp1q0ey8+aTe/gD6SASgTjG/
+         M3WN8Jx3NxAoJJ+1392ipM/zyWcDNV0F66B6WFOVcpjtpPIgloFncqb2eZ0ot6My/VpC
+         6zQAt45sus0ap3D9d+IyZbxRzavaRqODrMFjkDSvR4tyZUv6JjvW3JjkAZ39ssNrYD7W
+         r7flFOb77UoLxolD1jrTJuroKuu5dSE8sCtq60rDKZSZoiDSJZzTJr5L+/AeSI/HleQY
+         3Q/KZaeBu5w1OcTQRoguIbKa6dGm37NG+nnmiRsgPvKZAKl3CspIgbRAjJpUO2q9TrbT
+         ouaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787773482; x=1788378282;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=kAAUyb+BT/S16pFGAm4l7OAoO0iSt3CMmhZez+eRZtg=;
-        b=AMvScf1Gc4+mvNyQ2Z842AH6yWvfezmqZkjZ9MSn2Ty6LKAWEyc1CWfZUk2V0vgdVj
-         cRc0iCXEezqserAOE3r+DXd8UssDxnLUlu4P2ibB3arJQvBGFn9XEAKCwtEGfHbB+JOv
-         YXUQon9Ey+6uUvmLAF+jQqH127KkwlVZvoBJjZBc8TXd9XDDqToCl4MRW9aWN7EUPY2G
-         eS+m9BfJfnCa+ib63oyXW+ri8jh01UX47XhzWDa77wAfibpT+VqMJQ5lzmYPRmBjpAPC
-         GMhJwqZGCsADcmnllIEzxbrfDlLS4adtQVQ0Zeyc5eDfzNfsPFR9+/HPoP3MJDcHGzvD
-         /B0A==
-X-Forwarded-Encrypted: i=1; AHgh+RrDG1+RMEPPcr7K5PzDLYxT/jZ3MSzj9AkY1xzJiPKRwiImLho39VZAozJC3IeQYf5Kon2+THb9TB+qcZTYpSw=@vger.kernel.org
-X-Gm-Message-State: AFuF++m6/DnpprcnWYmTcK+Bmi9qN6zAAGuB7dQ7/Bpj9xrqv7+aMk3t
-	99qfdPWOsuEFbZkiOPmkiFvos/RCUPZ0cSr/KdnQwWiaQYvkOSBgGhCKnfKbx8wHdZrV5xk5P/i
-	lQ9GCRQ==
-X-Received: from pgak6.prod.google.com ([2002:a05:6a02:6746:b0:cbe:9e80:c394])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3216:b0:3c0:b943:f984
- with SMTP id adf61e73a8af0-3cf76286193mr19120390637.3.1787773481481; Wed, 26
- Aug 2026 12:44:41 -0700 (PDT)
-Date: Wed, 26 Aug 2026 12:44:40 -0700
-In-Reply-To: <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com>
+        d=1e100.net; s=20251104; t=1787775356; x=1788380156;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=5XOoAhfyz9xtKGJKuczZNY14PVIcWN7EMcbfAjCg3O0=;
+        b=ZVCuPBB6Xdr1LlJZXqzdCnvZiO9yR32gkOUdj6Yq9Kpoeh2JXM3Trs3hkeQFjwKr7u
+         dnCaJUYdaujNmi40W2o2GPi6ybTPfZtJ8zHLA85hq6zyAJWen80yJUANQj2QI0iF5HDj
+         WMs/wMhwQjPO0qnxPN3UV8ayKhzfprDc5d7K6rUKmm37tNB7Hdcun5gItGtoURqBdQnf
+         NXPIREbk9DOwCX0WSmsM/Kqm8KnPgo1ariJp2nrXPDa1bKbCeing2bn850fkdFwoyd6C
+         wOjKtN7fKWEdQ6g5nX76EEHSCfun2BRfrXERmWswv0Fq3QRQe2g6k6kaJhhi+RV1J7LM
+         f1jw==
+X-Forwarded-Encrypted: i=1; AHgh+RrT1h/+adEk8j7HITCW02sHd2DkADBlsUcYnHon+CNc7k4ZSqbbeoGJ8zIaWC3U6zZjkRyhkQqrNQkpmKKs9nE=@vger.kernel.org
+X-Gm-Message-State: AFuF++n8VvinJaULRE9AbIomOD0xd6sJU7bhrXMQ+h16drfOkAZIkX0M
+	yqyLPIiYuvihP1ONMEHXLo7X/ExICEkYW0EuLMvMMKt5A7jYF5WGawHgwXudTjIx1f8M8krFk0u
+	xk4udg+eH5QSWIQWcZ1TvpJmZ0VE4GX8KP7BAC627tQKlHB5RmX6M7J6KvhGVFDCePcbz2A==
+X-Gm-Gg: AR+sD10LaSkykQDkbFW+VYmNGxHQj8wQbGJVUTY3rAkxuZ5sCGRmN44B2J2wAzvZkGJ
+	iaCVCIs1cGnbcapfO13KX7oy1LPb5x35Ky+M9axHo6cG5ULBAJqOADVs6QAADMiQRm3b2obDA24
+	h6lSMwiNZj+BfBTORpIOrj+6khhhJ121JiAkTA0OcdRjp88Ge+foEOlriHn5R5+Nw0inDNu5saW
+	RdeD1cr77yN9fP8CcLHa/B4hc7zatJsGWvf0dhDsiEVyUpKx0nX+gmE9eB4HQjd/cBj32DyMXIr
+	9Fc6CSV4ml/NO8bavbyMGo0ZswBFTTOys95NYyqIegcHkx2xVPwepQVLJmO85oBUgAB8B0MEVuJ
+	aYMpxMRMLcYqYhSzslMsqV1G1HxPfGEnBm1Ni9FzZnhON
+X-Received: by 2002:a05:620a:3bd0:b0:936:a407:98bb with SMTP id af79cd13be357-937800f72b0mr763367885a.9.1787775355638;
+        Wed, 26 Aug 2026 13:15:55 -0700 (PDT)
+X-Received: by 2002:a05:620a:3bd0:b0:936:a407:98bb with SMTP id af79cd13be357-937800f72b0mr763358185a.9.1787775355027;
+        Wed, 26 Aug 2026 13:15:55 -0700 (PDT)
+Received: from localhost (pool-100-17-17-231.bstnma.fios.verizon.net. [100.17.17.231])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-9377e30ed19sm292126185a.8.2026.08.26.13.15.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2026 13:15:53 -0700 (PDT)
+Date: Wed, 26 Aug 2026 16:15:52 -0400
+From: Eric Chanudet <echanude@redhat.com>
+To: "David Hildenbrand (Arm)" <david@kernel.org>
+Cc: Michal Hocko <mhocko@suse.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Shuah Khan <skhan@linuxfoundation.org>, Roman Gushchin <roman.gushchin@linux.dev>, 
+	Shakeel Butt <shakeel.butt@linux.dev>, Muchun Song <muchun.song@linux.dev>, 
+	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	Maxime Ripard <mripard@redhat.com>, Albert Esteve <aesteve@redhat.com>
+Subject: Re: [PATCH 00/11] mm/cma: charge cma allocation to memcg using per
+ area counters
+Message-ID: <ao89rgCB4VhNt7n0@echanude-thinkpadx1carbongen13.rmtusma.csb>
+References: <20260821-cma-memcg-regions-v1-0-d21b165b8440@redhat.com>
+ <aowHqqaqK7TeexQH@tiehlicka>
+ <ao2gA_m3BCBu2esy@echanude-thinkpadx1carbongen13.rmtusma.csb>
+ <5970a8d4-fe7c-4dde-bdc8-1c66bfb57f12@kernel.org>
+ <ao3CQicH0t-k95NA@tiehlicka>
+ <ao3gLqsF4WSeKBIa@echanude-thinkpadx1carbongen13.rmtusma.csb>
+ <7e4e9662-d876-4493-a0b3-e31640937dd1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com> <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com>
-Message-ID: <ao9CKMXAX-hScRSa@google.com>
-Subject: Re: [PATCH v11 15/46] KVM: guest_memfd: Call arch make_shared
- callback for to-shared conversion
-From: Sean Christopherson <seanjc@google.com>
-To: Ackerley Tng <ackerleytng@google.com>
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Fuad Tabba <fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7e4e9662-d876-4493-a0b3-e31640937dd1@kernel.org>
 
-On Wed, Aug 26, 2026, Ackerley Tng wrote:
-> Omit support for calling the arch hook to make private, since SNP, the only
-> implementer of the arch make-private hook today, would actually prefer
-> making private only just before faulting memory into the NPTs.
+On Wed, Aug 26, 2026 at 10:02:08AM +0200, David Hildenbrand (Arm) wrote:
+> On 8/25/26 20:50, Eric Chanudet wrote:
+> > On Tue, Aug 25, 2026 at 06:26:42PM +0200, Michal Hocko wrote:
+> >> On Tue 25-08-26 17:45:56, David Hildenbrand wrote:
+> >>>
+> >>> How does this e.g., relate to hugetlb allocating from CMA, to then charge to a
+> >>> hugetlb cgroup?
+> >>>
+> > 
+> > AFAIU the system defines CMA areas to allocate hugepages from. For this
+> > initial series, I failed to handle it. The intend was to consider it as
+> > any other CMA area. It entirely missed that hugepages are already
+> > accounted for by their controller (cgroupfs opt
+> > memory_hugetlb_accounting) and they are charged when faulted in from
+> > their available pool.
+> > 
+> >>> I always thought of CMA being a low-level allocation mechanism with various
+> >>> different use cases, and actually the higher-level users should decide how
+> >>> to/what to charge instead.
+> >>
+> >> Exactly. There are many different users of CMA all with different
+> >> requirements. Then there is CMA reservations if an area is shared and
+> >> the overall memory consumption. That is why I am really not able to
+> >> wrap my head around this proposal.
+> > 
+> > It is nonetheless available almost directly to userspace via dmabuf
+> > heap, or as a result of drivers ioctl providing a contiguous buffer, and
+> > unaccounted for by existing controllers, with the exception of CMA
+> > hugepages with memory_hugetlb_accounting.
 > 
-> Calling the make-private arch hook would require iterating both bindings
-> and the filemap to find the intersection of bindings and allocated
-> folios.
+> No. The charging really only makes sense for selected mechanisms that built onto
+> CMA.
+> 
+> It does not make any sense for subsystems that declare CMA for their own use only.
+> 
+> Like hugetlb. Or s390x's VMCP region. Or PPC KVM stuff. Or the crash kernel area.
 
-Why would KVM need to iterate over the bindings?  Only the RMP needs to be updated,
-whether or not the RMP is currently reachable is irrelevant, no?
+I see. The crash-kernel does not use the CMA allocator it would not be
+affected, VMCP or PPC KVM HPT use specific areas and do not have
+userspace use AFAIU. They would default to the root cgroup that does not
+get charged. Maybe it should instead be more like GFP_ACCOUNT, making
+charging opt-in when the allocation happens on behalf of userspace?
 
-Subsequent calls to kvm_arch_gmem_make_private() from kvm_gmem_get_pfn() would be
-superfluous, but that's already possible, e.g. if an NPT mappings is removed for
-whatever reason.
+From the other thread it doesn't seem like memcg is a good fit either.
 
-> On top of that, SNP would need to figure out whether to actually
-> make private based on whether the memory is about to be faulted, or
-> whether it is a conversion.
+> 
+> -- 
+> Cheers,
+> 
+> David
+> 
 
-This is a non-issue, no?  As above, sev_gmem_make_private() already bails early
-if the page is already assigned in the RMP.
+-- 
+Eric Chanudet
 
-I don't care terribly about how SNP handles this, but I do want accurate reasoning
-and justification so that if/when we revisit any of this in the future, we can make
-informed decisions.  Because unless I'm missing something, this is an optimization
-choice (eager vs. lazy to-private conversions), not a complexity tradeoff, and it's
-not clear to me how we decided the lazy approach would provide better performance.
-
-> Calling the make-shared arch hook and not the make-private arch hook does
-> leak SNP-specific details into guest_memfd (as in, why only make-shared
-> during conversions but not make-private?), but the additional complexity is
-> not worth taking on until guest_memfd has a user actually requiring an arch
-> make-private call.
-
-...
-
-> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
-> +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end)
-> +{
-> +	struct folio_batch fbatch;
-> +	pgoff_t next = start;
-> +	int i;
-> +
-> +	folio_batch_init(&fbatch);
-> +	while (filemap_get_folios(inode->i_mapping, &next, end - 1, &fbatch)) {
-> +		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-> +			struct folio *folio = fbatch.folios[i];
-> +			pgoff_t start_index, end_index;
-> +			kvm_pfn_t start_pfn;
-> +			kvm_pfn_t nr_pages;
-> +
-> +			start_index = max(start, folio->index);
-> +			end_index = min(end, folio_next_index(folio));
-> +			/*
-> +			 * end_index is either in folio or points to
-> +			 * the first page of the next folio. Hence,
-> +			 * all pages in range [start_index, end_index)
-> +			 * are contiguous.
-> +			 */
-> +			start_pfn = folio_file_pfn(folio, start_index);
-> +			nr_pages = end_index - start_index;
-> +
-> +			kvm_arch_gmem_make_shared(start_pfn, nr_pages);
-> +		}
-> +
-> +		folio_batch_release(&fbatch);
-> +		cond_resched();
-> +	}
-> +}
-> +#else
-> +static void kvm_gmem_make_shared(struct inode *inode, pgoff_t start, pgoff_t end) {}
-> +#endif
-> +
->  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
->  				     size_t nr_pages, uint64_t attrs,
->  				     pgoff_t *err_index)
-> @@ -624,7 +661,12 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
->  
->  	filter = to_private ? KVM_FILTER_SHARED : KVM_FILTER_PRIVATE;
->  	kvm_gmem_invalidate_start(inode, start, end, filter);
-> +
-> +	if (!to_private && kvm_arch_has_gmem_convert())
-> +		kvm_gmem_make_shared(inode, start, end);
-> +
->  	mas_store_prealloc(&mas, xa_mk_value(attrs));
-> +
->  	kvm_gmem_invalidate_end(inode, start, end);
-
-The real reason I responded...
-
-Thinking about the Secure AVIC mess made me realize zapping NPTs for SNP VMs isn't
-strictly necessary in this path.  The PFN isn't changing, just the attributes, and
-that's (obviously) tracked in the RMP.  KVM doesn't need to zap SPTEs to induce a
-fault, because the mismatched C-bit vs. RMP status will cause an #NPF(RMP), and
-AFAICT kvm_mmu_page_fault() will do the right thing.  A misbehaving guest could
-continue to access the shared data (assuming we stick with lazy conversions), but
-that should be fine?  E.g. it's not really any different than implicit conversions.
-
-In other words, couldn't we do this (as an on-top optimization)?  The only wrinkle
-I can think of is that it could delay reconstituion of a hugepage, especially if
-we opted for eager conversion (because the guest wouldn't hit #NPFs to trigger the
-hugepage promotion).
-
-diff --git arch/x86/kvm/mmu/mmu.c arch/x86/kvm/mmu/mmu.c
-index 62f751952ad8..61f3e270ab61 100644
---- arch/x86/kvm/mmu/mmu.c
-+++ arch/x86/kvm/mmu/mmu.c
-@@ -1670,6 +1670,7 @@ static bool __kvm_rmap_zap_gfn_range(struct kvm *kvm,
- 
- bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
- {
-+       unsigned long shared_private =  KVM_FILTER_SHARED | KVM_FILTER_PRIVATE;
-        bool flush = false;
- 
-        /*
-@@ -1683,6 +1684,10 @@ bool kvm_unmap_gfn_range(struct kvm *kvm, struct kvm_gfn_range *range)
-        lockdep_assert_once(kvm->mmu_invalidate_in_progress ||
-                            lockdep_is_held(&kvm->slots_lock));
- 
-+       if (gmem_in_place_conversion && !kvm_has_mirrored_tdp(kvm) &&
-+           ((range->attr_filter & shared_private) != shared_private))
-+               return false;
-+
-        if (kvm_memslots_have_rmaps(kvm))
-                flush = __kvm_rmap_zap_gfn_range(kvm, range->slot,
-                                                 range->start, range->end,
