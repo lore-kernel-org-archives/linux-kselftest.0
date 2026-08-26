@@ -1,133 +1,125 @@
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mta1.migadu.com (out-121.mta1.migadu.com [95.215.58.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58DE13B6BF1
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 20:42:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.214.181
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787776978; cv=pass; b=R8+kzc9MjLa2MIppGOMvE6AChXptjiTxlmNX3picVktf07fZsGnADEzgg9YNRWh7wWzdckoYZP+a0CtWHxlq8QZD/Q05QHN+L3O5ok5yz+QbLJIs3nSAaliWM7sJ71l2D1skDb0J31rHbeTsFcOk4zg1EPeTkWzkFqxoGqSHiXo=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787776978; c=relaxed/simple;
-	bh=GVdZ188LNtx3TZKK84+iX7t8VYh9/znoneRN86I6/xw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=IWp+SKaYLueKurztZMz+WynHDUpnw0C+vAesLUXeXIk7pTVdIE5ICT5wVkvNjA8dcM3kmMRwO6MoHIZW9lMkvoJo92Dmgp7IlWErMJZSMgHB9+oSWbfVh9Z2X+474HRNh4Jjg7ACXaqvUmJk1q8gUhWzBxW2ZIEgWH09zW8RzDA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=avokEuFk; arc=pass smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD68631715A
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 21:00:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.121
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787778061; cv=none; b=e8XiRtj3+3Wp/ojSr2N6tKVe0u22/sTML8fvU/rEpBC1L9yBvmr2IbwN5iD8eBHeuxkNVW4j/zP2dFbb4I8owi2ScRRgPDvfvbLNep/74+vtiuXQHEeh4wQZyAqx2jExBvRNpG5/rBA4E3cDdIzjvb3HLalKYtamwtKdKbQAlns=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787778061; c=relaxed/simple;
+	bh=7n6s+Yu8RUQVuDDLlym79SKRXys59UCrPxq5zh3wReo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=m+V5I5WVr6CzbKxMuMeVktLcNgn5nvs9qiEeZKh6joidQC2ylLdp0sw5PurbU8CcB8JBknltl1ZFt308uXOa6IKU8CoXSLzsfD9JPupJXDBF0Pv9P6Srn8PByOZwkU+bkIW2IcDl7hPOsd8MRlmgZGvf981hzZJ+AI9MHmjod8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g1LcjcqV; arc=none smtp.client-ip=95.215.58.121
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="avokEuFk"
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-2ccf2360620so13722195ad.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 13:42:57 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1787776977; cv=none;
-        d=google.com; s=arc-20260327;
-        b=YBcPcdsfiht9j8ZvnB71gtLkyiH7Zz20nQyGbg5zhb+7uNtKnRLqIjI2l5U7duyFve
-         6+EO99MNqK0CyVxO6y3RhGSINa0N0Kyea+piSmIUJhjvSKbGjlx5tRsdxhLMXQ4iS1i5
-         zVKg/HdobaCXJXeXmoO/jIUEyAJAHaNhPkdkFiYsID0gL6N1+VAX35wt+X9JOSHqYURt
-         TeZSEP8Jf29ePBWKlI90QXlG5vTw/yvKUr4J04Uaz9i9e82yjfNgTVitwa0CXPc4c5Eb
-         GXEq3GspqJdkBHRLqzRrtXibWXtxzm7qQ/36gTAIgwLWprzGLmfTrJbxxIgSH18G0gar
-         lRrQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=GVdZ188LNtx3TZKK84+iX7t8VYh9/znoneRN86I6/xw=;
-        fh=y+Zspjypseo0qwoAAk2PUuTRQoZU/nhAlMq19vQg/kU=;
-        b=ea8xDZaPbnEcvXahQ6qshc/VRWPmVeajl2IPTN+PrIPbtcGX1Jzz+M1OrGS4B+rZGb
-         +kav94ws8E0sBwPUlmzWPueezjACiT6won2c7jvRTy0sSbr149+fSx///TzFLi/Cvo6I
-         MEmbJUfwxA6oBjAzf6aq0kebalIIixIM0JnC7pBPpzl7cDvgGiGGlYBUeDMHsTd1+I79
-         WjuvWESLq5gHGn9/X/PNIBy7Enmb4RPzhMTH9OAedWqn3qF7DNm3NFM0mSo3IIDIF0ki
-         7aXxeuf+6iCL+l3hNGDDG2NCOcEf37FlDACYShMteiGURt7LpvoRUIsPM6IaNi2QRtj7
-         VgNQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787776977; x=1788381777; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GVdZ188LNtx3TZKK84+iX7t8VYh9/znoneRN86I6/xw=;
-        b=avokEuFkcfWeR2lgt93CKutiN3tnprWnMH9N4hArJvSDSgQAj2SF5DcYDhd9Dh5RGk
-         cN6U+D26n/47coE4P75lY8raSzTyhGOc+57dAGONrGnNoVamD12N1Fu6/ND7VQ42Sf56
-         D2jWH4WRVgrH4tDJygz0SnKSle7XD5DZHjt8nPBI+D2rwbPbWuIgbKQ7zgoPqWo+tOmq
-         pGdTlYh8htOncnAtZLTBQcMW7gjPmUzCXMVwkABx0fYzjImwsctRDSETDFPeCb93N67E
-         goJ8F6IEZty92jmanozKAQvj2ixf2my7nINzmIv35XYUTeLxl8XxDh9PkhLtlVn2XIuM
-         RwQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787776977; x=1788381777;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GVdZ188LNtx3TZKK84+iX7t8VYh9/znoneRN86I6/xw=;
-        b=BigvNoI3lMFqyGIiELPs+KZjhW/e/690nI48sbGhhvS4ay8FekU2OmslFYRUOK+Wi7
-         psTvYhyxgMnt8MjUd8VqQZu1xK02ZJaCkM0t+Rt5tZCSWEZMlwmyBHzFDBos4mT9UjnR
-         RASpqRavzSc6/Sssh3LOHnMqQNbF8KLyfCMpfaGE8oNEqkKxqMAGdD8pHpcexvUO3wdQ
-         V5HL7aIZiSpVWa5FaGjkMWx7hG/f5i5MOgW3nKBd2K5GTAzF6D6jp6cPqXBnfjYl4H+y
-         e0NWQCFZCwUjyKAogMD1qW4k1A40s8S37xbBSb50iwsg3rmwAxy+OjziZBEG4I8qL//P
-         2JDg==
-X-Forwarded-Encrypted: i=1; AHgh+RrLtI7bRGxvXxuh2vCfwkwazyUNghEqQB4XMsusOCKF1ioCW/9usVaGrIOPSIDb2vC4as+ts3XpDHHWB8RCCTo=@vger.kernel.org
-X-Gm-Message-State: AFuF++mcs7njYj7F55sT1ykC9db0vrMp3CNRcgVdAbOCLz8ZoNhnjLWE
-	F1xPZrg4PIykI15an0Y2dy+3yekqeyTS3z+rM7/39Tgrf0VHrCR7oIUV35OZgbvyXnWxRxRPOYc
-	prU3ehBj3+bCecnZzA/kjT+ZM1KBWssE=
-X-Gm-Gg: AR+sD109bQH/UCmzbFncf54ugJ2U5op2w0A2KnMfMOsmeW8cKkBjSWVwrQag8ZjeQDc
-	CkHnBCrAnBRqHwxl0V+ucXkw0FCaz7MMjNotzkxIXPJnghv/AE/MkcgzYsvILCsE4G/ifRpt2sk
-	EsZROQxnkzC/PIEueUF8+3ZI/bVXRpSZFfvTrDI8xHNBX/+AT74aKDj+SL2gaQQhGwkxOmM0NZT
-	5Qm0Sn5/j8q8RaG8WD5ACZqM598MjqRqKnIC9pVhPEtI8krLxdxpwB0K0RWb0OR7yt08WrGDkL0
-	+1P6Pm+sD6lk4kANIE14DsOX7DudvnNsneD62K6LQuuUDKJ9cotkJtOjFhFXhNdJteUl9YAGx5z
-	xPA==
-X-Received: by 2002:a17:903:46c5:b0:2c8:f34c:82c0 with SMTP id
- d9443c01a7336-2d707a5d1b9mr183703255ad.2.1787776976607; Wed, 26 Aug 2026
- 13:42:56 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g1LcjcqV"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7n6s+Yu8RUQVuDDLlym79SKRXys59UCrPxq5zh3wReo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787778056; v=1; x=1788382856;
+ b=g1LcjcqVKDRTvigQJRSBHUfdI6VjvTEDAQxMwO9mw7i62kIRExEXE7RMCKx78VCwexDmGCJf
+ bCm6bVYguEn/ZFj5ywMF2K4wsZozYFzyTE+7uZ5fcGuxaIocpdLacI8IArgwxHvB2gv23SO1aOS
+ 22kkThpnttIn6HTfqxOcdgOY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [IPV6:2620:10d:c085:21c1::1576] (2620:10d:c090:400::5:7641)
+	by smtp.migadu.com with ESMTPS id 07b12f03698456bd;
+	Wed, 26 Aug 2026 21:00:56 +0000
+X-Mizu-Trace-ID: 07b12f03698456bd
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <1c34603a-9170-4074-b826-e98d9871e2d8@linux.dev>
+Date: Wed, 26 Aug 2026 14:00:49 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260826061300.14038-1-anshumantewari123@gmail.com> <cfe22f1a-2ac9-48dc-a2c6-4369e45a852b@kernel.org>
-In-Reply-To: <cfe22f1a-2ac9-48dc-a2c6-4369e45a852b@kernel.org>
-From: Anshuman Tewari <anshumantewari123@gmail.com>
-Date: Thu, 27 Aug 2026 02:12:44 +0530
-X-Gm-Features: AcwNN1WRjnb4FrvbNG305N6dcYNUZlWJ5mcojcAGl8FuFaVujFN1h0WcgNdVL4A
-Message-ID: <CAJqi8kLqxjX5HjxH6e7seX1Tyb6NhqFReMpCNKR7KTpaFGiszA@mail.gmail.com>
-Subject: Re: [PATCH] selftests/mm: fix line buffer leak in mremap_test is_range_mapped()
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	"Liam R . Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 0/9] bpf: add support for KASAN checks in
+ JITed programs
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
+ <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
+ Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
+ <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Thanks, David =E2=80=94 appreciate the ack.
+On 2026-08-23 3:53 p.m., Kumar Kartikeya Dwivedi wrote:
+> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothoré (eBPF Foundation) wrote:
+>> Hello,
+>> this is v7 of the series aiming to bring basic support for KASAN checks
+>> to BPF JITed programs. This new revision just makes the series rebased
+>> on top of current bpf-next_base.
+>>
+>> Please note that with the recent kernel splat detector introduced in
+>> kernel-patches/vmtest through commit 8109e5928cd0 ("ci: own the kernel
+>> splat matching (#509)"), CI runs on this series will fail with the
+>> following error.
+>>
+>>     Error: kernel splat detected: [  100.689549] BUG: KASAN: \
+>>     slab-use-after-free in \
+>>     bpf_prog_eba69524d1d949b1_st_not_on_stack+0x12f/0x17a \
+>>
+>> which is pretty normal, as the new selftests introduced by this series
+>> are expected to trigger KASAN splats (the test_progs part will pass,
+>> only the kernel_splats part will trigger errors). The right fix may be
+>> to just put a list of regex matching all the kasan subtests progs in the
+>> relevant SPLAT_ALLOWLIST file; something like:
+>>
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(st|ld)(x)?(_not)?_on_stack\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_simple_atomic(_fetch)?(_not)_on_stack\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_patched(_not)?_on_stack\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_verifier_paths_stack_and_non_stack\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_oob\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_st_blinded\+
+>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(load_acquire|store_release)(_not)?_on_stack\+
+>>
+>> I can take care of opening the relevant PR in kernel-patches/vmtest with
+>> this if it ends up being the correct solution, but it will make sense to
+>> do so only once the selftests list is validated (but before merging the
+>> series).
+> 
+> We need to resolve this before landing the set. To me it looks inevitable, esp.
+> if we exercise the support and produce such warnings. That said I'll let Ihor
+> respond and provide guidance for this. We should probably land the vmtest PR
+> before v8 is posted, so that v8 can go through CI and be processed without
+> failures.
 
-Anshuman
+This is a tricky one.
 
-On Wed, 26 Aug 2026 at 13:08, David Hildenbrand (Arm) <david@kernel.org> wr=
-ote:
->
-> On 8/26/26 08:13, Anshuman wrote:
-> > is_range_mapped() uses getline() to read /proc/self/maps line by
-> > line, but never frees the buffer it allocates. Every exit path
-> > (parse failure, match found, or reaching EOF) returns without
-> > calling free(line), leaking the buffer on each call. The function
-> > is called multiple times in this test, so the leak accumulates
-> > across calls.
-> >
-> > Free line before returning.
-> >
-> > Signed-off-by: Anshuman <anshumantewari123@gmail.com>
-> > ---
->
-> Looks good, I don't think Fixes is needed (even though called multiple ti=
-mes,
-> the effective waste should not be relevant on any realistic system).
->
-> Thanks!
->
-> Acked-by: David Hildenbrand (Arm) <david@kernel.org>
->
-> --
-> Cheers,
->
-> David
+IIUC the suggested allowlist regex will also mask the real splats, which
+the whole KASAN-in-JIT project was supposed to catch.
+
+I think a good way to resolve this is to teach the kasan splat
+detection script about these tests, and drop/skip them from the dmesg
+log it inspects. For example, match begin / end of the test set.
+Might require special log anchors printed by the test itself, but
+you get the idea.
+
+Alexis, do you mind trying this?
+> 
+>> [...]
+
