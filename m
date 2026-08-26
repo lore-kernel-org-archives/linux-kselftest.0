@@ -1,452 +1,331 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBE0844CAE6;
-	Wed, 26 Aug 2026 16:31:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787761876; cv=none; b=E15mXzkhbKGlRpKi72hGIQxD98PZXz4Cmt+r/f7P5VFJgt57SzUnzXUwv6yKQQ2WtUemxEigiMYARAsYCSkf3zZaO0bdAotMv0m+1NNP5A2HQrWLM3/L2slA8iVhiNqLcrnpIPmPUw/jajWYjlHZ8dugoRrUdB0NNQw0BpmaIsI=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787761876; c=relaxed/simple;
-	bh=3292G1oeBAcmtbhOMVJvtlvXQkkqwPpvEl8KWeS3tJs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nZ5MQ51CgipY58eoXdMvUQX0cLXE5FUPkWOde4SJ7NUk8u2cgwJnQzKA8c+7QSHiXCc/CvdrWamQUNZYDSvOpHQqLEX/MAktbEup9uP1GgK+Cn6Sx37d9PzuQ3t4UZrEU7X4htKDN6aBL6jabSHPY1S+zCFMQ8N4DgeUlOeJ++4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LMzLdrq8; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09DDC46EF64;
+	Wed, 26 Aug 2026 16:39:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.20
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787762391; cv=fail; b=lXjQ+tPBGceum5N3Dtb8YOQOMtfGohn3xP30fsm5xtt+5gDidjD1aAoqE/Wk/JcsbGdXTP8ux3qhLJ7eDu/yg4kZRVvvMVMglVgWp/HodEfRlAcwYwya4o5Wle6esMgCm9XgeHEXMkC/I7sJms44Kqymh9tmuyEkaeW4yXSMmcY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787762391; c=relaxed/simple;
+	bh=dSvJx/Hpz1DKf+kX/4R++mGLyW3yrhH24onAqUpW0Gs=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=FCdr1Alllg8Za6aaRHiI9hNKQzKtFAdi5RC0sMoa+G3/sC69Qom4ou7nuyi+/Ebtunh1WKULnlTr7OCI8cU+qfW7VLKprB8BLnmfxhaZlJxe/ixg/fNKQX2Ihvav2OIA1USYLtSomaTskXcNTKZlR6+rTGEterfP6sXEBMRG02k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OQ0p0WKv; arc=fail smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LMzLdrq8"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FEEB1F000E9;
-	Wed, 26 Aug 2026 16:31:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787761874;
-	bh=Yg4Oy+42yCHK1QRBaG3QTdEIjLEpLNjOi4DjkygMvoU=;
-	h=From:Date:Subject:To:Cc;
-	b=LMzLdrq8QR4FUpRZXnwAJpHXQ6Tw94Cfm+MAThkmAziYB1oIowpvwmABQ8B0zr2Zm
-	 2TG3ifXjp+coCb/bBIxx6f1oX/t1K0JjQ1Y8piwePY4Wc70kyI4zmI9d5LSUB12Pbx
-	 bf2RRQiwf5geKOFPhhQKkNPYGK0Iy4b3gqzgIBSDY1tzWuMskTKaGTm9Bk19zkaJ69
-	 I5Vf0lCxRY5lf9PwXy9kr1GA91Wxx1res6eNDylDis/7H7qrMx3v1Af2LlqBKoIMo/
-	 dKlBtptnXKxA0ijV+x0OLMyOnkAp5xqNKtSRZ0ud0wTpTtfweV7gOLqAN0yMAbEURn
-	 d8Rexqj/UA4WA==
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Date: Wed, 26 Aug 2026 17:30:35 +0100
-Subject: [PATCH v3] mm/secretmem: properly account locked pages
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OQ0p0WKv"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787762384; x=1819298384;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=dSvJx/Hpz1DKf+kX/4R++mGLyW3yrhH24onAqUpW0Gs=;
+  b=OQ0p0WKvn/S/Q+j+5qTF6peY+QwM8LtuagfT6dx7doTSHoUdujBP+PwR
+   eV3Vfjbh8yQsARKR2vBjTLFKDL3Ells/aIEyIItTUcD+TwEPMJYnd6WM+
+   apN4Of82ewC9aCIowfOqiQNkJ/VeLIYVWX3HqumvjzG2v/RnKOtsrhV4Z
+   0e/KxuEf6MaDWzd+WKNu+uNLMVOWjU9ydu5sxvrGyQuVfgkMtxhaGE1Nx
+   XJT47HToINV7Cgg49ycERxMeRAIGQplLgdNeKIhqA7hJc8jh5TX0CexyF
+   YbY1I79jNPgJ694kL61m6ZuXTYfOXzRr0lsBLg9JPQBI+emfStVXjRmDn
+   Q==;
+X-CSE-ConnectionGUID: EOM3CkFGTpaU3JjzL72xHw==
+X-CSE-MsgGUID: +tkLNbvBTYifWOr6cql9WQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="88014974"
+X-IronPort-AV: E=Sophos;i="6.25,245,1779174000"; 
+   d="scan'208";a="88014974"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 09:39:40 -0700
+X-CSE-ConnectionGUID: R+TUVoZuTXOkr5EYs6gsKQ==
+X-CSE-MsgGUID: k5/PwMgyTCOBXMa5c2g1Tw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,245,1779174000"; 
+   d="scan'208";a="272872479"
+Received: from orsmsx903.amr.corp.intel.com ([10.22.229.25])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 09:39:40 -0700
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX903.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46; Wed, 26 Aug 2026 09:39:39 -0700
+Received: from ORSEDG901.ED.cps.intel.com (10.7.248.11) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.46 via Frontend Transport; Wed, 26 Aug 2026 09:39:39 -0700
+Received: from BL2PR02CU003.outbound.protection.outlook.com (52.101.52.55) by
+ edgegateway.intel.com (134.134.137.111) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.45; Wed, 26 Aug 2026 09:39:39 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Mz+pjI5llHgDoRfRkZ3bP2ewA83BvVZXmP+/PgYH/E2dNb0jorLMPMG9CdwOv6SzXWkd0kVtuKePazeIvyIAfFwCHiE9Wh2xkKKLDjCWN4Scage7mqqqcV5+KtXSH6rbVBldJokBj/UOEAr9LfIZAMubtGO9RcTLQ6/TM1t/5NaWEEp9vC2iWv6kQ/C6jlYpcMYG6dsie3tQH30KrNDZ9z/lfr+ZeFdOd1gOZ99BgOlLy/4RC7y8KiSc9on9WPni5PeRj+2tOhZGV+IAOIS5XdhPrSxf4qXKIDy1tdJFH519ZhebeSRDeMZecUO1w7O3DkYipDSK4a3ytc9QzV7wJA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=M5fyHR6q+Y4idtC45eSpq1Rx/tt0Nme084DysR+t3LE=;
+ b=i92tde+9MSaXU2kBrvlgD0NlqyTV5f1jzkPgdiD81KYWVtM4/NwLut3FQdGtJvSYUNGtlWP0YsO0OMv16duhw5qyrm/Im83z+pBB1Mj23401fb1rQP1VBjf2+baHzafTfrSDcujAjRZq2ZX3dNch64cDttjYs18yKYYIvdb0FyYbWlf7mDLD7zjU8CzL5Gbu4cv5m/35g2C1JR8z8tHRy9meUVYzELV61Ob8+3I53Og21xC9onSfftEbznmBscBhJvbO4aaC+jhgSbgHKgDWk1mVySM4nLM3PDfh9/juIXFqRxt4GL1d3pdgcb5R9MOeOWlOXU1pQkzTBkF97tYbqg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS0PR11MB8019.namprd11.prod.outlook.com (2603:10b6:8:12e::18)
+ by CY8PR11MB6940.namprd11.prod.outlook.com (2603:10b6:930:58::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
+ 2026 16:39:34 +0000
+Received: from DS0PR11MB8019.namprd11.prod.outlook.com
+ ([fe80::fce1:3bde:b383:e801]) by DS0PR11MB8019.namprd11.prod.outlook.com
+ ([fe80::fce1:3bde:b383:e801%6]) with mapi id 15.21.0360.006; Wed, 26 Aug 2026
+ 16:39:33 +0000
+Date: Wed, 26 Aug 2026 18:39:25 +0200
+From: Krzysztof Niemiec <krzysztof.niemiec@intel.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+CC: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Krzysztof Karas <krzysztof.karas@intel.com>, Sebastian Brzezinka
+	<sebastian.brzezinka@intel.com>, Maarten Lankhorst <dev@lankhorst.se>, "Andi
+ Shyti" <andi.shyti@linux.intel.com>, <dri-devel@lists.freedesktop.org>,
+	<linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] gpu: GPU_BUDDY_KUNIT_TEST should not select GPU_BUDDY
+Message-ID: <ao8Fc8DWbsxMtSRu@kniemiec-mobl1>
+References: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
+ <ao1hIejAdBPKUHFW@kniemiec-mobl1>
+ <CAMuHMdWuG_s3Rm-gLc2KNw9Z0bptQjdDDGH+9YawEMEsFZZ6Nw@mail.gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+In-Reply-To: <CAMuHMdWuG_s3Rm-gLc2KNw9Z0bptQjdDDGH+9YawEMEsFZZ6Nw@mail.gmail.com>
+X-ClientProxiedBy: DU2PR04CA0157.eurprd04.prod.outlook.com
+ (2603:10a6:10:2b0::12) To DS0PR11MB8019.namprd11.prod.outlook.com
+ (2603:10b6:8:12e::18)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260826-secretmem-accounting-v3-1-94cb04399510@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAKoUj2oC/4WNQQ7CIBQFr9KwFlMQaevKexgXQH9b1IIBSjRN7
- y7UjS6My0nem5mRB6fBo0MxIwdRe21Ngt2mQGoQpges28SIlpSXNWHYg3IQRhixUMpOJmjTY9F
- ywRinjSQNSte7g04/Vu3p/GY/yQuokF15MWgfrHuu3Ujy7k8iEkxwS7ta8apq6lIer+AM3LbW9
- Sg3Iv2wUPrDQpOlA8b2olIcJPmyLMvyApg1VP8RAQAA
-X-Change-ID: 20260814-secretmem-accounting-ad6a44629b19
-To: ljs@kernel.org
-Cc: Daehyeon Ko <4ncienth@gmail.com>, stable@vger.kernel.org, 
- "Mike Rapoport (Microsoft)" <rppt@kernel.org>, 
- "David Hildenbrand (Arm)" <david@kernel.org>, 
- Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
- Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
- "David S. Miller" <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>, 
- Jesper Dangaard Brouer <hawk@kernel.org>, 
- John Fastabend <john.fastabend@gmail.com>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hagen Paul Pfeifer <hagen@jauu.net>, 
- James Bottomley <James.Bottomley@HansenPartnership.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
- "David Hildenbrand (Arm)" <david@kernel.org>, linux-kernel@vger.kernel.org, 
- linux-mm@kvack.org, netdev@vger.kernel.org, bpf@vger.kernel.org, 
- linux-kselftest@vger.kernel.org
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=12430; i=ljs@kernel.org;
- h=from:subject:message-id; bh=3292G1oeBAcmtbhOMVJvtlvXQkkqwPpvEl8KWeS3tJs=;
- b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLL6RfZmceSIz//93ex7trK74E2zBGuJV5FPbh74ZS/4c
- es9H64zHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZiI21dGhqfBWZs3snfFpr3e
- e5F5UV33mWX2ayKOra45GatZ9a3UIoThf3xxkOxLvhVTLy8IUNYMMK/qeaYabWEj+73aykQ2QO4
- vAwA=
-X-Developer-Key: i=ljs@kernel.org; a=openpgp;
- fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS0PR11MB8019:EE_|CY8PR11MB6940:EE_
+X-MS-Office365-Filtering-Correlation-Id: d0e568c0-66d0-4e1b-14fe-08df03909be6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014|23010399003|18002099003|22082099003|10067099003|4143699003|56012099006|11063799006|6133799003;
+X-Microsoft-Antispam-Message-Info: re6LHlilDShzZzu+TYJt+zrJuqh7odW6u2gLulemDzjX0r3rgDGkaJGozH0X6iXIpv5gEPsLxL6gElKNtAG1b98zOgJG45agdDsSPAOnFHUMZ3QEruvUTk+a+RWzFVNqKOBeLGv1EhyxQsm9P5D57n6WYgvAu3FZW2TPH3cb4zZJeevzbXu0S49Od1/nQJ8Woyfyd0UEb+MwApawtxgMiZFZiCVszwhSAIRr6CdLMceZzVzvaikF8/zaAvo3lzngpXUUKpvUAbyhAqAVfeEsQFNG7oOkeBgyF5ciKXGbNNO1FAFVAGKiSKJJWm3YvYsYQcuuFs0eSrSnQsXU8SwOlffLCSzJbPPgqIFyK9MHdBLaAZLjyv1IVSt8q9fEkmkDhagiaXRhQCAxSlLivy8ubZyWNtxTEUKCSO9+GxZ4isgV5owLAS00U7GeSpcuRV/f3GAfKSiuPsy23CQMs07OQWUUDcQ90h4WCiy9mXQRvTpkKJibaQ3BkycV8mM1ZlVbaIKOM45wLXJl4PjAAKfVH9ziOagWOxOzFALaSavXgEQlO3rv6IqKBB2hgVigAp3N6HpIWUHp9GIjs2aBst0liBq+64Jyzp1UeyQcH36JwxofJ3PZpZ4h0iEyjDaT/VOrUgnPYsh6VzZ7UNDQQpyDMzfu9rROZl6t13IwkLdFU7M=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB8019.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(23010399003)(18002099003)(22082099003)(10067099003)(4143699003)(56012099006)(11063799006)(6133799003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UHdNdGhkaTd0TTBZM0ZKbW84b3BJNDMwQitjaStzdVBpQnc4SE9KMzFHUzFC?=
+ =?utf-8?B?RGk3cGdPYTJxRGxodE9XZ28raHJSNVVPNCtUanhYR2F3QUY2TXJIZzdEa3VE?=
+ =?utf-8?B?QWNodEdCNFZBb1JrSG13VUNKTXBkaHdjNUFCa3BDdTQrcW80L1ZHTjdiN3Z4?=
+ =?utf-8?B?OXhtekR4UDZCSmlnNUU3S3AwWnRPMzZmNFZsZGdsR0dwbkNDL0RzOVpvRmln?=
+ =?utf-8?B?N2xQR1dXSEY3VW1IVjE4Zk9uUjRpQThqOFd5T3VXV2MzR05iUElXamI0bHl2?=
+ =?utf-8?B?N1VMcFNKeEhBUlBPRU9Xb09UVVpGZ0JOY1dINEJVcmJMNU9venE3ZkpTNk5L?=
+ =?utf-8?B?MjhmcEFGMUJzWmtna1dtNllUM1k1WEtudnJNUllDQ1FSVjlId0I0V1U5U014?=
+ =?utf-8?B?SXpBMDQwYUUwNnAxVEtTaTB1dzZmdndlME9VTDIybm1RVjJOK2QxTWk2Nm9a?=
+ =?utf-8?B?TW0vL0xUT2U1WldXdDAwRWllalZEeXdHajgzL0p3aHpvc1RjTWtHc0c5WmZ1?=
+ =?utf-8?B?UHMvajk2U1hZYTZodXdqYU0rKzBtalE1eVlkNlZyeXZSWEVucDlJbVo4OUlp?=
+ =?utf-8?B?Tk1BSmdraXZUTDlJcTRyUkNQUVNDcHF1bnVDeFNacUxTbExUWlJ4WlUvM3Jk?=
+ =?utf-8?B?QTNPZWt6cEgrQUQ4ejluTmVXR2l4eGVVYWpRSk1nMS9tVVl4SnlLdU5OOFpV?=
+ =?utf-8?B?VzNSSWFLNE9hTC8xZm1ma1B0Zk9kdnlZemcyMm11bHBiR2NUd1R4YnBGTitR?=
+ =?utf-8?B?R2xTWlZoNUdYeG1hZ3JhS2ZPOHVqM3ZscWNiaEhGamwzM3I1ZjN0RjEzVDhH?=
+ =?utf-8?B?L3o1YkN1NmZPelFwNTZ0aTF4NGUyck42VjhwVGJONWEyYnc2MkIvZWZGdk8z?=
+ =?utf-8?B?Ti95M2JJZU8rU2R4S3BhclN2T1ZseWJvMDhNTFBYMUNndEJVcEd2cFI3bHFu?=
+ =?utf-8?B?Y2RDYkV3Y3h0QzJlZmFDcmNqOTNkMEhNMmc5bnl6dEltd080eC9rUGlRVFRt?=
+ =?utf-8?B?NnBhcS9WWktFZkJzRjUrbmtPOXRaL2h4YmFzUFZwSzFkdzJReWtpcS9jZXFq?=
+ =?utf-8?B?NldrVmNMRWU3YnRpVFRnZGRNMWk2Z0g1cTViVTBYMnd3UGV6N2JETWE5N3dz?=
+ =?utf-8?B?UHFXdUZ3R3JZNGEwVlBRY1RGSENrSEJENXpaQm9JQkhsbHByUmt1d2FMTC82?=
+ =?utf-8?B?WncrVW1xYUpUNXU4aE1FTFhyQm1Lak9WNlptOEJ3SW1xYkpkbDBQSFdXUC9B?=
+ =?utf-8?B?Zk82Q0I2TUpINFl1bXc2QnA4bXJoQXZwb0hkN3hNSFd6VzBkNGFiTHFKckNp?=
+ =?utf-8?B?SmhtL1RWTlR5NXpoMkpkWFh4c2JtbTZvMUdEWXV5N1o2ajFXQ1VyTkcwK1lt?=
+ =?utf-8?B?VjVmcWg2RjM0T01HNzJCSDlqSC94RG1PSU9TZ3cxWFRmTkJQSHFLM1cxY2Mz?=
+ =?utf-8?B?VTJtZVNjZTZsbHpyais3c09BUzFSeEtSMVJxYXNuYmM2ZFBpZzYxQnVCRW9k?=
+ =?utf-8?B?cVlCdDY2YldhclJHeGIvRWFGbUJrS2ZXZVN3WVdYcXpLY00zTTdZTVA3TXVo?=
+ =?utf-8?B?eVROQ0xvcHM0dngweEswa3dxOGlQaElzaW5kL05OUVo3cHA5VkRwTjh4VEZ3?=
+ =?utf-8?B?UGJieDdWSkFFYUNveFBMOVJINk9hOXpGbE5VMEs4SmRDM2tqTVZ5dmVNcEZJ?=
+ =?utf-8?B?dmJ3b2xBbUlVU000UDhFd0ovcW82UDRNVm00Z0h5OHBCWVpYOUgvdjZUbk9N?=
+ =?utf-8?B?VVdGTUxSbTNZMUp1K3cvQkJ5OUlXZk5nTU0rbzRwQmF4S2hJLzQ5OGNJM3ps?=
+ =?utf-8?B?THBtZUw5Q0dYWWxWVVVLTitQeHhBZkxOd1VOV29UQ2ZmSXZjY1lNY1FiTnZU?=
+ =?utf-8?B?UjVpNXB1WVBnNEJGRGF4SE5XcHVPRnIwRTIweGxJVGw4NlhkQzhZa0Uzd252?=
+ =?utf-8?B?eERhZ2FONlpsOXNZZVlhQUVXL0FUWFN4elg3RGdNZHVVcExWb004SFhNVWph?=
+ =?utf-8?B?eDRzeFE5dUtnNEMzVFVNWjZvN0hEMTVNajkwODdlWDRHOHJHbCtPOVlmNlcx?=
+ =?utf-8?B?U1NyNGN3cHEveTlGeEpFalVTQ1VLb0pNM2pHb3VDNUsrZXc4bStDMGZqTndp?=
+ =?utf-8?B?eXovc0tHWUlGSkpjbW1hUUFVUlNTZHFPR0VlQTB2VVl4dDZVQStNRXJUaFhV?=
+ =?utf-8?B?Zk9sM0FIc3U3MGJxVVc0THE0RHBsZVFpaS9UZ2dWYWlkKzBKbVZNOGlLQlI2?=
+ =?utf-8?B?anlja3dPSjljRnpLV0FEV1NCbjY5MnljRmMzRmoxK0dML2ZUQmJrajk4dy9N?=
+ =?utf-8?B?UmZtNFZRNzg4MTQxUWpnZUJxYUpLL1J1cTJxTmRiaXQ3ZTMrbDhhdHpaOHdm?=
+ =?utf-8?Q?YhMBrXIOxa+OmWNY=3D?=
+X-Exchange-RoutingPolicyChecked: kbO9LI/SMPKQFludd9zXCNV+wPp/bEFjZJnJl5mZPX5YPlVOqDCAIFi7loJR3QU81ksru/SRb9gbAnF1qsGMC8O8nESuOxj+NWL7jrDVAWtkI8Qn4jgabYlJdoUmHrc0Iy7zfFhQsmB4I8PfQ8MWtw32MExGz1VPU76HdR8ZAtfKbaDkNn0KQjM+L1aClqc9+qHWSSZtsUuRAW+Zvrs7GQLObSIvzAX+emWC82NADMyH08O3savceDFVuIQ5BccsYm+FrYIbdO495y2tkv9CiZ5MPWeZTQYfzQGUbiV+kVryO54Pxw9DcsrpfIJoqSV+Jr5TypdiA3xGDlAdMFSDXA==
+X-MS-Exchange-CrossTenant-Network-Message-Id: d0e568c0-66d0-4e1b-14fe-08df03909be6
+X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB8019.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 16:39:33.8552
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: vKBUX4Y7YolLX10VZybqZAUeYulM6aGfdiz7UHpUqgQVMkKhmf2Zxf37rIbceZ6DPZ4+GnLc1J+VTr854Og0uVIbDBSB0M+Q1APxsm0g7tw=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR11MB6940
+X-OriginatorOrg: intel.com
 
-secretmem accounts folios by treating memory as if it were mlock()'d and
-thus limited by the RLIMIT_MEMLOCK limit.
+Hi Geert,
 
-However the folios are unevictable and remain so until the inode is
-evicted, eliminating usual mlock() semantics - mapping folios then
-unmapping them does not clear their unevictable state, since it depends on
-AS_UNEVICTABLE, not PG_mlocked.
+I got unnecessarily annoyed/angry in my previous reply, I'm sorry for that.
+It clouded my judgement a bit then but I still have some comments now
 
-A user can therefore easily work around the RLIMIT_MEMLOCK limit - simply
-map then unmap and VmLck no longer counts the secretmem range. Worse,
-folios are not accounted in the process's RSS, meaning the OOM killer won't
-know to kill the process.
+On 2026-08-25 at 14:15:34 +0200, Geert Uytterhoeven wrote:
+> Hi Krzysztof,
+> 
+> On Tue, 25 Aug 2026 at 13:39, Krzysztof Niemiec
+> <krzysztof.niemiec@intel.com> wrote:
+> > On 2026-08-24 at 17:12:30 +0200, Geert Uytterhoeven wrote:
+> > > Enabling a (modular) test should not silently enable additional kernel
+> > > functionality, as that may increase the attack vector for a product.
+> >
+> > What vector? What product, exactly? As far as I know buddy allocator code is
+> 
+> Any product that uses DRM and has CONFIG_KUNIT_ALL_TESTS=m, so
+> developers can easily run any relevant test when the need arises.
+> 
+> > currently loaded when a) loading a drm driver (which would need that code
+> 
+> Not just "a drm driver": very few DRM drivers use it.
+> Hence one can have a product with DRM that does not need the buddy
+> allocator.
+> 
 
-Repeatedly mapping/unmapping (or forking) can then result in the
-consumption of all available system memory with unevictable folios and
-cause system instability.
+And the buddy allocator was moved out of DRM in anticipation of a
+possible non-DRM driver that wants the buddy allocator. So there's no
+implication between DRM and buddy in either way anymore.
 
-A secretmem fd can be passed between processes and over fork so a
-per-process limit simply does not make sense, so follow the precedent set
-by io_uring, perf, skbuff, iommufd and xdp by tracking the number of locked
-pages in user_struct->locked_vm.
+Currently it's only DRM drivers that actually use it, but there's already
+scaffolding in rust for it that does not depend on DRM, and once
+there's a non-DRM driver that wants to use the allocator it would have
+to undo the dependency added in this patch anyway.
 
-Since the scope tracked is actually inode lifetime, the RLIMIT_MEMLOCK
-applies per-user not per-process, so it doesn't make sense to bypass for
-users with CAP_IPC_LOCK, therefore remove this bypass.
+> > to function anyway) and/or b) loading the kunit test for the buddy allocator,
+> > which would need that code to function anyway. And AFAIK neither are
+> > built unconditionally into the kernel. So the amount of potential vuln
+> > surface is not exposed beyond what is reasonably required for the system to
+> > function as intended.
+> >
+> > If you've found a concrete bug/exploit/"attack vector" utilizing buddy code,
+> > then please address that directly.
+> 
+> So let's include all available code in the kernel image anyway, unless
+> you can point at a concrete bug/exploit/"attack vector"???
+> 
+> > > Fix this by reverting the select to a dependency.
+> >
+> > The way drm kunit tests do it is by select-ing the appropriate
+> > functionality out of the available ones, with "broad" depends-ons for
+> > DRM and such (say "depends on DRM\n\n select DRM_BUDDY"). DRM_BUDDY,
+> > for example, is not directly selectable in .config, as it's meant to be
+> > selected automatically if a module uses it.
+> 
+> In general, test code must not select the code to be tested, but depend
+> on it, to avoid that enabling CONFIG_KUNIT_ALL_TESTS pulls in lots of
+> unneeded code.
+> 
 
-There is simply no reason to carry on marking the mapping as mlock()'d
-since it's misleading and the lifecycle is now correctly handled, so remove
-this too.
+Yeah and this didn't click for me when replying, of course this increases
+available symbols in the kernel which increases attack surface. And the
+DRM test case is different since I guess if DRM is selected it's an
+implicit agreement from the user to pull in smaller DRM components as
+needed?
 
-Note that secretmem does not support any form of truncation (including hole
-punching) and the folios are unreclaimable, so the folios need only be
-accounted on fault and unaccounted on inode destruction.
+I still think the statement about the attack vector in the commit log is
+a bit broad and vague though, maybe just stating that "building with
+KUNIT_ALL_TESTS unconditionally pulls in code from gpu buddy, hence
+increasing the attack surface" would say that same thing but more to the
+point?
 
-__secretmem_account_pages() is more or less a duplicate of the code that
-io_uring etc. use, but since this is a bug fix that needs backporting,
-defer any de-duplication efforts to a follow-up.
+> > This is also the case for drivers, with Xe having depends on DRM and
+> > then like 40 lines of selects for specific functionality, same for i915,
+> > amdgpu, so on.
+> 
+> For drivers, it is different: if you want the driver, you obviously
+> need the helper or library code.
+> 
+> > > Make sure the GPU
+> > > buddy allocator can be tested without enabling another driver that uses
+> > > DRM_BUDDY by making GPU_BUDDY visible if KUNIT is enabled.
+> >
+> > This was the case even without your patch, and was the entire point of
+> > 8fe3fc37564920ae mentioned in Fixes. The kunit test kernel can be built with
+> 
+> Yes, that was the intent of commit 8fe3fc37564920ae, but it used the
+> wrong method.
+> 
+> It is customary to make library code that is only selected by its
+> users, and cannot be enabled explicitly, visible for testing.
+> See e.g. commit bf2d44d07de726b0 ("ASoC: wm_adsp: Add kunit test for
+> firmware file search")
+> 
+> > a rather minimal .kunitconfig (included in the gpu/tests directory). So
+> > it only loads whatever kunit_tool would load, plus CONFIG_KUNIT, plus
+> > CONFIG_GPU_BUDDY_KUNIT_TEST, plus (implicitly, which I discussed above)
+> > CONFIG_GPU_BUDDY. It doesn't load DRM_BUDDY at all (which was the bug
+> > being fixed in that commit, you used to be forced to load it, now you
+> > aren't)
+> >
+> > > The page based buddy allocator for GPU memory is only used by DRM.
+> > > Hence add a dependency on DRM to GPU_BUDDY, to prevent asking the user
+> > > about this code when configuring a kernel without DRM support.
+> >
+> > It seems to be *technically* true, however, the entire point of moving the
+> > buddy allocator outside the DRM directory is to expose it to other non-DRM
+> > drivers, so the lack of dependency is kind of by design.
+> >
+> > The change was rather anticipatory, but it was clearly well reviewed and
+> > sent by a Joel, a nova-core dev, I assume it's gonna be needed at least
+> > by them at one point or another.
+> >
+> > If, say, nova decides to use the "communal" buddy allocator (if it
+> > doesn't do it already, I only briefly skimmed it looking for kernel::gpu)
+> > then the DRM dependency from this patch would have to be reverted (yet
+> > again). Maybe moving the buddy allocator up from DRM should have been done
+> > along with the first non-DRM user and only then, but it just didn't go that
+> > way.
+> >
+> > If the issue is that this option is too annoying during make or in
+> > menuconfig, then I don't think this is the way to address it.
+> 
+> Once the symbol is visible, it needs a proper dependency, to avoid
+> asking the user irrelevant questions.
+> 
 
-test_mlock_limit() asserts mlock_future_ok() on mmap(), however this has
-been removed, so remove the test altogether for the fix. A new test will be
-sent separately for upstream.
+If it's visible and I understand now that it should be and how, then of
+course.
 
-Reported-by: Daehyeon Ko <4ncienth@gmail.com>
-Closes: https://lore.kernel.org/linux-mm/20260813225328.2010303-1-4ncienth@gmail.com/
-Fixes: 1507f51255c9 ("mm: introduce memfd_secret system call to create "secret" memory areas")
-Cc: stable@vger.kernel.org
-Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: David Hildenbrand (Arm) <david@kernel.org>
-Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
----
-v3:
-- Accumulated tags (thanks Mike and David!)
-- Tried to cut down commit message further as per Mike.
-- Made local vars const as per David.
-- Removed test (will send separately) as per David.
-- Added comment about hole punching and truncation as per David.
-- Some small commit message fixups.
+> > > Fixes: 8fe3fc37564920ae ("gpu: Fix dependencies in CONFIG_GPU_BUDDY_KUNIT_TEST")
+> > > Signed-off-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> 
+> > > --- a/drivers/gpu/Kconfig
+> > > +++ b/drivers/gpu/Kconfig
+> > > @@ -1,14 +1,15 @@
+> > >  # SPDX-License-Identifier: GPL-2.0
+> > >
+> > >  config GPU_BUDDY
+> > > -       bool
+> > > +       bool "Page based buddy allocator for GPU memory" if KUNIT
+> > > +       depends on DRM || COMPILE_TEST
+> >
+> > What's the justification for COMPILE_TEST here? It might be needed but
+> > you didn't explain why or mention it in the patch description at all.
+> 
+> It is customary to add "|| COMPILE_TEST" when adding dependencies that
+> are not strictly needed for a successful build.
+> 
 
-v2:
-- Tried to put the commit message on a diet, as per Mike.
-- Moved secretmem_init_inode_[priv, destroy]() nearer their callers as per
-  Mike.
-- Removed CAP_IPC_LOCK check as per discussion with Mike.
-- Removed redundant GFP_KERNEL in kzalloc_obj() call as per Mike.
-- Updated to consistently use goto err style in secretmem_file_create() as
-  per Mike.
-- Updated test_mlock_limit() to consistently use goto cleanup style as per
-  Mike.
-- Added a comment describing why we are capping the mlock limit in the
-  secretmem tests, as per Mike.
-- Set inode->i_priv to NULL after destroy.
-https://patch.msgid.link/20260822-secretmem-accounting-v2-1-fe445a7c6eb1@kernel.org
+I can't tell if this is something so obvious it needs no comment; I feel
+like it should be documented explicitly in the commit log.
 
-v1:
-https://patch.msgid.link/20260814-secretmem-accounting-v1-1-d2f8c677980b@kernel.org
+If the DRM dependency would be dropped would the COMPILE_TEST have to
+stay? Because then we're forcing a non-drm user to enable it if they want
+to use the buddy alloc at all.
 
-To: Andrew Morton <akpm@linux-foundation.org>
-To: Mike Rapoport <rppt@kernel.org>
-To: Alexei Starovoitov <ast@kernel.org>
-To: Daniel Borkmann <daniel@iogearbox.net>
-To: "David S. Miller" <davem@davemloft.net>
-To: Jakub Kicinski <kuba@kernel.org>
-To: Jesper Dangaard Brouer <hawk@kernel.org>
-To: John Fastabend <john.fastabend@gmail.com>
-To: Stanislav Fomichev <sdf@fomichev.me>
-To: Hagen Paul Pfeifer <hagen@jauu.net>
-To: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: "Liam R. Howlett" <liam@infradead.org>
-To: Vlastimil Babka <vbabka@kernel.org>
-To: Suren Baghdasaryan <surenb@google.com>
-To: Michal Hocko <mhocko@suse.com>
-Cc: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: ljs@kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: linux-mm@kvack.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Cc: linux-kselftest@vger.kernel.org
----
- include/linux/sched/user.h                |   3 +-
- mm/secretmem.c                            | 116 +++++++++++++++++++++++++++---
- tools/testing/selftests/mm/memfd_secret.c |  30 +-------
- 3 files changed, 110 insertions(+), 39 deletions(-)
+I think just leaving the "if KUNIT" part would check all the boxes,
+since the tests are actually runnable with KUnit via .kunitconfig
+without building an entire DRM driver, GPU_BUDDY also won't be randomly
+enabled with KUNIT_ALL_TESTS on systems that don't care about it, and
+we're not forcing anyone to enable DRM on a feature that was explictly
+made independent from it.
 
-diff --git a/include/linux/sched/user.h b/include/linux/sched/user.h
-index 4cc52698e214..8d7e5521f7cd 100644
---- a/include/linux/sched/user.h
-+++ b/include/linux/sched/user.h
-@@ -25,7 +25,8 @@ struct user_struct {
- 
- #if defined(CONFIG_PERF_EVENTS) || defined(CONFIG_BPF_SYSCALL) || \
- 	defined(CONFIG_NET) || defined(CONFIG_IO_URING) || \
--	defined(CONFIG_VFIO_PCI_ZDEV_KVM) || IS_ENABLED(CONFIG_IOMMUFD)
-+	defined(CONFIG_VFIO_PCI_ZDEV_KVM) || IS_ENABLED(CONFIG_IOMMUFD) || \
-+	defined(CONFIG_SECRETMEM)
- 	atomic_long_t locked_vm;
- #endif
- #ifdef CONFIG_WATCH_QUEUE
-diff --git a/mm/secretmem.c b/mm/secretmem.c
-index d29865075b6e..384f5cfc457f 100644
---- a/mm/secretmem.c
-+++ b/mm/secretmem.c
-@@ -18,6 +18,8 @@
- #include <linux/secretmem.h>
- #include <linux/set_memory.h>
- #include <linux/sched/signal.h>
-+#include <linux/sched/user.h>
-+#include <linux/cred.h>
- 
- #include <uapi/linux/magic.h>
- 
-@@ -47,10 +49,69 @@ bool secretmem_active(void)
- 	return !!atomic_read(&secretmem_users);
- }
- 
-+struct secretmem_inode_state {
-+	struct user_struct	*user;
-+	atomic_long_t		nr_pages_accounted;
-+};
-+
-+static bool __secretmem_account_pages(struct user_struct *user,
-+		unsigned long nr_pages)
-+{
-+	unsigned long page_limit, cur_pages, new_pages;
-+
-+	if (!nr_pages)
-+		return true;
-+
-+	page_limit = rlimit(RLIMIT_MEMLOCK) >> PAGE_SHIFT;
-+
-+	cur_pages = atomic_long_read(&user->locked_vm);
-+	do {
-+		new_pages = cur_pages + nr_pages;
-+		if (new_pages > page_limit)
-+			return false;
-+	} while (!atomic_long_try_cmpxchg(&user->locked_vm,
-+					  &cur_pages, new_pages));
-+	return true;
-+}
-+
-+static bool secretmem_account_folio(struct secretmem_inode_state *state,
-+		const struct folio *folio)
-+{
-+	const unsigned long nr_pages = folio_nr_pages(folio);
-+
-+	if (!__secretmem_account_pages(state->user, nr_pages))
-+		return false;
-+
-+	atomic_long_add(nr_pages, &state->nr_pages_accounted);
-+	return true;
-+}
-+
-+static void __secretmem_unaccount_pages(struct secretmem_inode_state *state,
-+		unsigned long nr_pages)
-+{
-+	atomic_long_sub(nr_pages, &state->user->locked_vm);
-+	atomic_long_sub(nr_pages, &state->nr_pages_accounted);
-+}
-+
-+static void secretmem_unaccount_folio(struct secretmem_inode_state *state,
-+		struct folio *folio)
-+{
-+	__secretmem_unaccount_pages(state, folio_nr_pages(folio));
-+}
-+
-+static void secretmem_unaccount_all_folios(struct secretmem_inode_state *state)
-+{
-+	const unsigned long nr_pages_accounted =
-+		atomic_long_read(&state->nr_pages_accounted);
-+
-+	__secretmem_unaccount_pages(state, nr_pages_accounted);
-+}
-+
- static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- {
- 	struct address_space *mapping = vmf->vma->vm_file->f_mapping;
- 	struct inode *inode = file_inode(vmf->vma->vm_file);
-+	struct secretmem_inode_state *state = inode->i_private;
- 	pgoff_t offset = vmf->pgoff;
- 	gfp_t gfp = vmf->gfp_mask;
- 	unsigned long addr;
-@@ -72,8 +133,15 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 			goto out;
- 		}
- 
-+		if (!secretmem_account_folio(state, folio)) {
-+			folio_put(folio);
-+			ret = VM_FAULT_SIGBUS;
-+			goto out;
-+		}
-+
- 		err = set_direct_map_invalid_noflush(folio_page(folio, 0));
- 		if (err) {
-+			secretmem_unaccount_folio(state, folio);
- 			folio_put(folio);
- 			ret = vmf_error(err);
- 			goto out;
-@@ -82,6 +150,7 @@ static vm_fault_t secretmem_fault(struct vm_fault *vmf)
- 		__folio_mark_uptodate(folio);
- 		err = filemap_add_folio(mapping, folio, offset, gfp);
- 		if (unlikely(err)) {
-+			secretmem_unaccount_folio(state, folio);
- 			/*
- 			 * If a split of large page was required, it
- 			 * already happened when we marked the page invalid
-@@ -112,22 +181,30 @@ static const struct vm_operations_struct secretmem_vm_ops = {
- 	.fault = secretmem_fault,
- };
- 
-+static void secretmem_destroy_inode_priv(struct inode *inode)
-+{
-+	struct secretmem_inode_state *state = inode->i_private;
-+
-+	secretmem_unaccount_all_folios(state);
-+	free_uid(state->user);
-+	kfree(state);
-+	inode->i_private = NULL;
-+}
-+
- static int secretmem_release(struct inode *inode, struct file *file)
- {
- 	atomic_dec(&secretmem_users);
-+	secretmem_destroy_inode_priv(inode);
-+
- 	return 0;
- }
- 
- static int secretmem_mmap_prepare(struct vm_area_desc *desc)
- {
--	const unsigned long len = vma_desc_size(desc);
--
- 	if (!vma_desc_test_any(desc, VMA_SHARED_BIT, VMA_MAYSHARE_BIT))
- 		return -EINVAL;
- 
--	vma_desc_set_flags(desc, VMA_LOCKED_BIT, VMA_DONTDUMP_BIT);
--	if (!mlock_future_ok(desc->mm, /*is_vma_locked=*/ true, len))
--		return -EAGAIN;
-+	vma_desc_set_flags(desc, VMA_DONTDUMP_BIT);
- 	desc->vm_ops = &secretmem_vm_ops;
- 
- 	return 0;
-@@ -187,20 +264,40 @@ static const struct inode_operations secretmem_iops = {
- 
- static struct vfsmount *secretmem_mnt;
- 
-+static int secretmem_init_inode_priv(struct inode *inode)
-+{
-+	struct secretmem_inode_state *state;
-+
-+	state = kzalloc_obj(*state);
-+	if (!state)
-+		return -ENOMEM;
-+
-+	state->user = get_uid(current_user());
-+	inode->i_private = state;
-+	return 0;
-+}
-+
- static struct file *secretmem_file_create(unsigned long flags)
- {
- 	struct file *file;
- 	struct inode *inode;
- 	const char *anon_name = "[secretmem]";
-+	int err;
- 
- 	inode = anon_inode_make_secure_inode(secretmem_mnt->mnt_sb, anon_name, NULL);
- 	if (IS_ERR(inode))
- 		return ERR_CAST(inode);
- 
-+	err = secretmem_init_inode_priv(inode);
-+	if (err)
-+		goto err_free_inode;
-+
- 	file = alloc_file_pseudo(inode, secretmem_mnt, "secretmem",
- 				 O_RDWR | O_LARGEFILE, &secretmem_fops);
--	if (IS_ERR(file))
--		goto err_free_inode;
-+	if (IS_ERR(file)) {
-+		err = PTR_ERR(file);
-+		goto err_free_priv;
-+	}
- 
- 	mapping_set_gfp_mask(inode->i_mapping, GFP_USER);
- 	mapping_set_unevictable(inode->i_mapping);
-@@ -215,10 +312,11 @@ static struct file *secretmem_file_create(unsigned long flags)
- 	atomic_inc(&secretmem_users);
- 
- 	return file;
--
-+err_free_priv:
-+	secretmem_destroy_inode_priv(inode);
- err_free_inode:
- 	iput(inode);
--	return file;
-+	return ERR_PTR(err);
- }
- 
- SYSCALL_DEFINE1(memfd_secret, unsigned int, flags)
-diff --git a/tools/testing/selftests/mm/memfd_secret.c b/tools/testing/selftests/mm/memfd_secret.c
-index aac4f795c327..c55d84c5e613 100644
---- a/tools/testing/selftests/mm/memfd_secret.c
-+++ b/tools/testing/selftests/mm/memfd_secret.c
-@@ -57,33 +57,6 @@ static void test_file_apis(int fd)
- 		pass("file IO is blocked as expected\n");
- }
- 
--static void test_mlock_limit(int fd)
--{
--	size_t len;
--	char *mem;
--
--	len = mlock_limit_cur;
--	if (len % page_size != 0)
--		len = (len/page_size) * page_size;
--
--	mem = mmap(NULL, len, prot, mode, fd, 0);
--	if (mem == MAP_FAILED) {
--		fail("unable to mmap secret memory\n");
--		return;
--	}
--	munmap(mem, len);
--
--	len = mlock_limit_max * 2;
--	mem = mmap(NULL, len, prot, mode, fd, 0);
--	if (mem != MAP_FAILED) {
--		fail("unexpected mlock limit violation\n");
--		munmap(mem, len);
--		return;
--	}
--
--	pass("mlock limit is respected\n");
--}
--
- static void test_vmsplice(int fd, const char *desc)
- {
- 	ssize_t transferred;
-@@ -297,7 +270,7 @@ static void prepare(void)
- 				   strerror(errno));
- }
- 
--#define NUM_TESTS 6
-+#define NUM_TESTS 5
- 
- int main(int argc, char *argv[])
- {
-@@ -319,7 +292,6 @@ int main(int argc, char *argv[])
- 	if (ftruncate(fd, page_size))
- 		ksft_exit_fail_msg("ftruncate failed: %s\n", strerror(errno));
- 
--	test_mlock_limit(fd);
- 	test_file_apis(fd);
- 	/*
- 	 * We have to run the first vmsplice test before any secretmem page was
-
----
-base-commit: e737cebb8de0d38e8f64584a8bbfbcf9176c7537
-change-id: 20260814-secretmem-accounting-ad6a44629b19
-
-Cheers,
--- 
-Lorenzo Stoakes (ARM) <ljs@kernel.org>
-
+Thanks
+Krzysztof
