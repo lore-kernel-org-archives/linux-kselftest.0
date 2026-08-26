@@ -1,33 +1,34 @@
-Received: from mta0.migadu.com (out-222.mta0.migadu.com [91.218.175.222])
+Received: from mta0.migadu.com (out-231.mta0.migadu.com [91.218.175.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CEE3442391
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 14:11:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.222
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D711B44212E
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 14:12:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787753524; cv=none; b=k4OHp7l/TYzaO4Rycad+YfgJgXrYYwiAAAZq8EvBSp5s8LIUKUkUgV8+k2w0iSK1nRte4zj+cB2Ghjt99UJdmttA17kctJXSj8UvuPSm8v+YpC1NE9QFwyl+mb7Y9FOEQoOMy6dMdk/72e/J7gxX37FzU9H+syVyq7PPJnP0kiI=
+	t=1787753538; cv=none; b=mrnd1aQV4kk0NpZpHPJvOj6/GVvdLjEPLsprTZPRah24K1e26gfNjNQf0HxOgdalygFsRYQLjc5dCgvOkHeB0hkh/QIsXPemEy1yU09D36fM6DSxXvYUvjE3QFBBdMjdnJ1RhGVXiZRNVtZy+smBSD/3T5bD5HvGpQtkiZDtBhY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787753524; c=relaxed/simple;
-	bh=juMREmWVk5HkRbldgH32b7VE/fBpLShpDSGyqfsso/U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UC1LOXmcUACGmc3+t2e4tyOpZBxjKe8EOtPpoVTeiDOKANr/1w7kq+h0SefxEoqz8WCtLjby+aoND5YEnaAXd5UnAt1wFMu1tweBEJdMVCYrwCGT+dPzwHDiMGHClNartJ3CVqYctmdduuUcs5yM+49LJR27KykRIdchplLH/lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=HJ2tgR7S; arc=none smtp.client-ip=91.218.175.222
+	s=arc-20240116; t=1787753538; c=relaxed/simple;
+	bh=2T40DwJCDpgsIuN5b4I+qBOudCNUtHr5SSG0IRYguhM=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=qs9KctSrMOmiy2fr0fi1+iEBh1vEjmxjV2zFDk5siTvRdffuuV+AZlgmDVOt9F3CgQJh15PsPjSaq/9EbRXTbo+n6aZCrjGxOktYhhFgi/i65n2smB51A9LQQexpPE4p0yLE7z9Wq4Blv09ejZBC8lzHERRtrADlb/oLmXm3nF0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GMTHVSBg; arc=none smtp.client-ip=91.218.175.231
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="HJ2tgR7S"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GMTHVSBg"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=juMREmWVk5HkRbldgH32b7VE/fBpLShpDSGyqfsso/U=;
+DKIM-Signature: a=rsa-sha256; bh=2T40DwJCDpgsIuN5b4I+qBOudCNUtHr5SSG0IRYguhM=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787753513; v=1; x=1788358313;
- b=HJ2tgR7SNk3n2ZigFOG0Yi5f/2lehykzXCEg3QxIlsPfpxkJ0JoFpVf89zxKTTlMJ9iPIcsi
- VIZAuTkWDQU2S+eqBBT3gi8ghVwTYF/qIOI7S0T2vAg8Zxi1KEoy1a7omEfbdcanjS/BGGsHigS
- HVHxRcEux5O7IOOdNNreKvdU=
+ t=1787753532; v=1; x=1788358332;
+ b=GMTHVSBg4Fd3r9oKvqYWM9EjAgf6hvPshJGKARsDuoOX0OdEfE9KH0tgozLMtbB29gWJExg/
+ bogEI6gRVqg+QkoDkv/fF38RfFyY2R69xX7evOQRl6Yb5IxGrX80kIHyJ4ndQcOifcvRV0mO8We
+ TOlViJNTOdPUNi2R2p6Oj+7M=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from localhost.localdomain (147.136.157.0)
-	by smtp.migadu.com with ESMTPS id f917dbac4e91bdf6;
-	Wed, 26 Aug 2026 14:11:53 +0000
-X-Mizu-Trace-ID: f917dbac4e91bdf6
+Received: from localhost.localdomain (147.136.157.2)
+	by smtp.migadu.com with ESMTPS id cb30e2ce42366c84;
+	Wed, 26 Aug 2026 14:12:11 +0000
+X-Mizu-Trace-ID: cb30e2ce42366c84
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: netdev@vger.kernel.org
@@ -43,10 +44,12 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Yuchung Cheng <ycheng@google.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net 1/2] tcp: fix corruption of urgent data on multi-segment retransmit
-Date: Wed, 26 Aug 2026 22:11:26 +0800
-Message-ID: <20260826141145.67823-1-jiayuan.chen@linux.dev>
+Subject: [PATCH net 2/2] selftests/net: packetdrill: add tcp_urg_ptr_retransmit
+Date: Wed, 26 Aug 2026 22:11:27 +0800
+Message-ID: <20260826141145.67823-2-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260826141145.67823-1-jiayuan.chen@linux.dev>
+References: <20260826141145.67823-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -55,57 +58,101 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On the normal xmit path, while in urgent mode we refuse to build a
-multi-segment TSO packet, so every segment gets its own urg_ptr:
+Drive a connection into urgent mode and force a multi-segment retransmit,
+checking that each retransmitted segment keeps its own urg_ptr.
 
-	/* tcp_write_xmit() */
-	limit = mss_now;
-	if (tso_segs > 1 && !tcp_urg_mode(tp))
-		limit = tcp_mss_split_point(...);
+The test asserts the fixed behaviour: the hole is retransmitted as two
+independent skbs, each with its own urg_ptr (5001 and 4001) and no PSH.
+An unpatched kernel instead sends one super-skb whose GSO split copies
+urg_ptr onto the second segment and also sets PSH there, so on an unpatched
+kernel the mismatch shows up on the PSH bit (actual P.U ... urg 5001) before
+the urg_ptr:
 
-The retransmit path has no such guard. __tcp_retransmit_skb() builds a
-segs > 1 skb and hands it to the GSO layer, which only advances th->seq
-per segment and copies urg_ptr verbatim:
+	tcp_urg_ptr_retransmit.pkt:63: live packet field tcp_psh:
+		expected: 0 (0x0) vs actual: 1 (0x1)
+	script packet:  .U 1001:2001(1000) ack 1
+	actual packet:  P.U 1001:2001(1000) ack 1 win 1050
 
-	/* __tcp_retransmit_skb() */
-	len = cur_mss * segs;		/* segs > 1, no urg_mode check */
-	...
-	/* tcp_gso_segment(): bumps seq only, urg_ptr is copied */
+After the fix the retransmit carries a per-segment urg_ptr and the test
+passes.
 
-urg_ptr is an offset from the segment's own seq, so a copied value points
-at a different place on each segment. The receiver rebuilds the absolute
-urgent seq as seg.seq + urg_ptr, so it walks a moving urgent point instead
-of the one OOB byte:
-
-	seg1  seq 1     urg_ptr 5001 -> urgent @ 5001   (ok)
-	seg2  seq 1001  urg_ptr 5001 -> urgent @ 6001   (wrong, +MSS)
-	seg3  seq 2001  urg_ptr 5001 -> urgent @ 7001   (wrong, +2*MSS)
-
-The real OOB byte is never pointed at, so the receiver stops splicing it
-out and delivers it as normal in-band data, corrupting the stream.
-
-Guard the retransmit length like the xmit path: keep segs = 1 while in
-urgent mode.
-
-Fixes: 10d3be569243 ("tcp-tso: do not split TSO packets at retransmit time")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- net/ipv4/tcp_output.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../packetdrill/tcp_urg_ptr_retransmit.pkt    | 65 +++++++++++++++++++
+ 1 file changed, 65 insertions(+)
+ create mode 100644 tools/testing/selftests/net/packetdrill/tcp_urg_ptr_retransmit.pkt
 
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index fcaa04e65189..86e255794027 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -3603,7 +3603,7 @@ int __tcp_retransmit_skb(struct sock *sk, struct sk_buff *skb, int segs)
- 		avail_wnd = cur_mss;
- 	}
- 
--	len = cur_mss * segs;
-+	len = cur_mss * (tcp_urg_mode(tp) ? 1 : segs);
- 	if (len > avail_wnd) {
- 		len = rounddown(avail_wnd, cur_mss);
- 		if (!len)
+diff --git a/tools/testing/selftests/net/packetdrill/tcp_urg_ptr_retransmit.pkt b/tools/testing/selftests/net/packetdrill/tcp_urg_ptr_retransmit.pkt
+new file mode 100644
+index 000000000000..22f750ce09c1
+--- /dev/null
++++ b/tools/testing/selftests/net/packetdrill/tcp_urg_ptr_retransmit.pkt
+@@ -0,0 +1,65 @@
++// SPDX-License-Identifier: GPL-2.0
++--ip_version=ipv4
++//
++// Reproduce urg_ptr being copied across segments on a multi-segment retransmit
++// in urgent mode (regression since 10d3be569243).
++//
++//   server (kernel, under test)                 client (packetdrill)
++//     |  write(5000): 1:1001 .. 4001:5001            |     mss 1000 from
++//     | -------------------------------------------> |     the client SYN
++//     |  send(MSG_OOB): 5001:5002 urg 1              |     snd_up = 5002
++//     | -------------------------------------------> |
++//     |            SACK 2001:5002, leaving hole 1:2001|
++//     | <------------------------------------------- |
++//     |  retransmit hole 1:2001 as ONE skb:          |
++//     |    seq=1, 2 segments, urg_ptr = 5002-1 = 5001|
++//     |  tun tso off -> software GSO splits it:      |
++//     |    seg A  1:1001    urg_ptr 5001  (correct)  |
++//     |    seg B  1001:2001 urg_ptr ?                |
++//     |        want 5002-1001 = 4001                 |
++//     |        bug  inherits 5001  <- caught here    |
++//     | -------------------------------------------> |
++//
++
++`./defaults.sh`
++
++    0 socket(..., SOCK_STREAM, IPPROTO_TCP) = 3
++   +0 setsockopt(3, SOL_SOCKET, SO_REUSEADDR, [1], 4) = 0
++   +0 bind(3, ..., ...) = 0
++   +0 listen(3, 1) = 0
++
++// 1. client force mss=1000
++  +.1 < S 0:0(0) win 32792 <mss 1000,sackOK,nop,nop,nop,wscale 7>
++   +0 > S. 0:0(0) ack 1 <mss 1460,nop,nop,sackOK,nop,wscale 8>
++  +.1 < . 1:1(0) ack 1 win 320
++   +0 accept(3, ..., ...) = 4
++
++// 2. server sends 5000 bytes; TSO on, so packetdrill sees whole super-skbs
++   +0 write(4, ..., 5000) = 5000
++   +0 > P. 1:5001(5000) ack 1
++
++// 3. server send OOB
++   +0 send(4, ..., 1, MSG_OOB) = 1
++   +0 > PU. 5001:5002(1) ack 1 urg 1
++
++// We could disable GSO at the start of the script, but then the PSH flag on
++// the 5 initial server segments is not deterministic and hard to match. Keep
++// TSO on for the initial send (one super-skb, stable PSH) and disable it only
++// here, so software GSO splits the retransmit and each segment's urg_ptr is
++// checked on the wire.
++   +0 `ethtool -K tun0 tso off gso off gro off lro off 2>/dev/null`
++
++// 4. SACKed blocks reach dupthresh -> fast retransmit of the 1:2001 hole.
++ +.05 < . 1:1(0) ack 1 win 320 <sack 2001:3001,nop,nop>
++   +0 < . 1:1(0) ack 1 win 320 <sack 2001:4001,nop,nop>
++   +0 < . 1:1(0) ack 1 win 320 <sack 2001:5002,nop,nop>
++
++// Retransmit must keep a per-segment urg_ptr (5002 - seg.seq): seg A 5001,
++// seg B 4001. The fix sends the hole as two independent skbs, so seg B has
++// no PSH. Unpatched it goes out as one super-skb whose GSO split copies
++// urg_ptr onto seg B and also adds PSH there, so on an unpatched kernel the
++// mismatch shows up on the PSH bit before the urg_ptr.
++   +0 > U. 1:1001(1000) ack 1 urg 5001
++   +0 > U. 1001:2001(1000) ack 1 urg 4001
++
++  +.1 < . 1:1(0) ack 5002 win 320
 -- 
 2.43.0
 
