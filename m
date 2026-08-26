@@ -1,125 +1,199 @@
-Received: from mta1.migadu.com (out-121.mta1.migadu.com [95.215.58.121])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD68631715A
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 21:00:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.121
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 775CE175A8A;
+	Wed, 26 Aug 2026 21:12:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787778061; cv=none; b=e8XiRtj3+3Wp/ojSr2N6tKVe0u22/sTML8fvU/rEpBC1L9yBvmr2IbwN5iD8eBHeuxkNVW4j/zP2dFbb4I8owi2ScRRgPDvfvbLNep/74+vtiuXQHEeh4wQZyAqx2jExBvRNpG5/rBA4E3cDdIzjvb3HLalKYtamwtKdKbQAlns=
+	t=1787778723; cv=none; b=Utm6RTtAaBY4JT+wgGgPQUSVShUHD/w8REXcOvhGMCn63fJlX8bnCq6J40PwenqRl10nJG4sgc0QLaLqVEe6OHuYOZrSFdFRXY0Q4g7aWwN9MQQtCoNlbcr/+g7dhqK0gnu46DCpfHx4EyLS9JPPd0jZtiqlkz++ltuUnjwD8oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787778061; c=relaxed/simple;
-	bh=7n6s+Yu8RUQVuDDLlym79SKRXys59UCrPxq5zh3wReo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=m+V5I5WVr6CzbKxMuMeVktLcNgn5nvs9qiEeZKh6joidQC2ylLdp0sw5PurbU8CcB8JBknltl1ZFt308uXOa6IKU8CoXSLzsfD9JPupJXDBF0Pv9P6Srn8PByOZwkU+bkIW2IcDl7hPOsd8MRlmgZGvf981hzZJ+AI9MHmjod8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=g1LcjcqV; arc=none smtp.client-ip=95.215.58.121
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1787778723; c=relaxed/simple;
+	bh=uDpCg2NUdgNPB8vVggZUtXIvlUFPLoHhHi6zPWg7eks=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ZCmwwACdEhYn01pM09cQE3JamCzi2/xOeijVz3lVqR55hg75peoOdPrAePWrNEoiKwTqO+V6jNZ2rYRW7N8oGEJbPCUzTiFzE8n4CMMrk9WKnvVWxDQ3UGCrTMAr1PpcMN96eY9ZXUJ9io0uPWPH+/RJ4+M1d6sczCqUWrXFVqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=Wle+fMPp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jtpsDMzZ; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="g1LcjcqV"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=7n6s+Yu8RUQVuDDLlym79SKRXys59UCrPxq5zh3wReo=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787778056; v=1; x=1788382856;
- b=g1LcjcqVKDRTvigQJRSBHUfdI6VjvTEDAQxMwO9mw7i62kIRExEXE7RMCKx78VCwexDmGCJf
- bCm6bVYguEn/ZFj5ywMF2K4wsZozYFzyTE+7uZ5fcGuxaIocpdLacI8IArgwxHvB2gv23SO1aOS
- 22kkThpnttIn6HTfqxOcdgOY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: from [IPV6:2620:10d:c085:21c1::1576] (2620:10d:c090:400::5:7641)
-	by smtp.migadu.com with ESMTPS id 07b12f03698456bd;
-	Wed, 26 Aug 2026 21:00:56 +0000
-X-Mizu-Trace-ID: 07b12f03698456bd
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <1c34603a-9170-4074-b826-e98d9871e2d8@linux.dev>
-Date: Wed, 26 Aug 2026 14:00:49 -0700
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="Wle+fMPp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jtpsDMzZ"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 6F33814000D7;
+	Wed, 26 Aug 2026 17:11:59 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Wed, 26 Aug 2026 17:11:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1787778719;
+	 x=1787865119; bh=XBtTfHY+WDdkLyh0K0L+xi9uGC1gMRbwPFuNWOJMBXw=; b=
+	Wle+fMPpazMDVaQ9O6e0HHe9V925gAr59VZq3viP6AxzJ8JGNtiZeEkSJ7WYNWvM
+	H9mpchL11d7/J8jWZ9qK92UR78WVrEQ0TT9xKBXagxJQAAlQCooWx+dlEgnuWbIw
+	xiTEcSTpgxR2gj9v6b7z5QQaIdRnVPN/cuUqfraw0gj4o9nxcZz1JJhj7Lky0gW5
+	fgs7nfGzK+Nwyit82tjBb8I1MlOXTu48k3J4dqZbluPTlvbwav9JcCgW0xYAu4tv
+	d70mrJeTiqtkrrc0U38zv3ZpARP+foK//e2scmbwmkoXo1goPjfWHZgm05W8JWMS
+	jMpmgMp5yBnSKESYl/r3SQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787778719; x=
+	1787865119; bh=XBtTfHY+WDdkLyh0K0L+xi9uGC1gMRbwPFuNWOJMBXw=; b=j
+	tpsDMzZ1MNXp4PaxoO0GHqoB703Tqzs78CU1MQROde3JpIwwVHwJ0dgKQ3tSwXZm
+	D3JKr+GZIwdOzVOJ7GA0ihCJcgPnrR8zMNsdtJIGLOYfaW7Fb1wdGMgGW3fa3kSA
+	/JrXxiim5OxWtGr/KfpgQvrhsquTzbuATqk2hRRV2QZJvV+E3JVDmDPLFim7HJi5
+	yubb/q9ZYlJL9ImdWT6/l5oEEgUDJ63QjB09Dyznw1F2iDUNa2/bYEEcVGiIhrWE
+	zTlWng8wm0p4YYouSrPFCq+S5gBm2b6202dwKgL8SLMqysDr8jkpX3ksqUdlQtDy
+	QzI6NBfRsKFTph3xDuhKQ==
+X-ME-Sender: <xms:nlaPapR909DTYcpbfmu_jfu88i5IvPinrTNzswCnOz3MfMT_LjdaEg>
+    <xme:nlaPagYr71aYDkoF96nVdYCiwVmpFhbUg4QMcz6i52mV6quSodqByMDkh3kTqYjFv
+    -IWItd9AoLR_0R0R0DRisv_JklFDDEIIYp24xD8-uq8kdUc0FK8i2A>
+X-ME-Received: <xmr:nlaPamNHPZGQ0v-gixsoGMbKPk6hI5sV9V4abqGugTOsOzXFgPRHb4EIYCwcTA>
+X-ME-Proxy-Cause: dmFkZTEXGJSF0uJGejRe3ioHj/n4Wpef56fXiylaceh+6G7pUZPBVN+LeXmG2tRpI5AMO6
+    0TXJ/tcBYEQg7FjgK1JdTPhiduFRunWkZ9aTN0LMeVrJcLkLARNGqlOTbstprIfK3BOcBH
+    dKwhXjWL26ish5Qap4mvjQO7JVwB7dpLo0iU0B+/GT+LOyGimcRDg4jH/53EZFGOPZkz7t
+    i0EUtLTMy6Sr09by1VooXpOjqqvYf0ahP5HdwEcn8uuvHKJCUa2Lug03KOrNfkEvaBsz/z
+    Gghz1To5woz7Keoiy4nJK0fPY44FpJvSBI/9zfJ2mTmEzBgF2XWZoFJOkAKv0mGZYMRYtf
+    Qru0r/bPxGzepRCJGo4CUvXPxpt9Sdf3YWRO3V9agIYbH/Kj1s3/tmyo7l5wrFUPG8rTuw
+    2mP96umyaMt5h6L8UcDTDDMWp7NZo6li7Hx8zaIWyulK3vbmOFQKaquQgQokqPN4mXcs7h
+    PF2j+/aKNQK1anw0ZvMDb2rkfbomw16zYBT8wvVo4XAytixQLtUeYmoaCmPJFUK8ArLkkE
+    Gs/CtxdSlXDmFMQAyk0BzINzaRmZ59F+dTB2+f94EY7TISdLTLDovmoWHeK8EmUA5wL8GI
+    1/5bVYxtbPxeZJWg2lAzPnga+Wwx7ZE58CZGeRvY7tuagJ96N4EqKhvMHkdw
+X-ME-Proxy: <xmx:nlaPapMjpmCjPUqgsRSylJRG-tB6AUCgD1mGJqeuqllWT5cPrsshrg>
+    <xmx:nlaPaqPvHrrH6Rb0ZxPUTwn2HLeg8appwl54_k9EWevCS1B4nxhm8A>
+    <xmx:nlaPalb7SzKDLrm9JmH11Qie1FbqVg4m6Qu63aer23eG1IUPG-UHqQ>
+    <xmx:nlaPaoiSTwBHAZXPyoUE9gkwjC4Nq3vADfmlN3ue4M48wdY0CvIEag>
+    <xmx:n1aParMtagkqRIMVTzEg7gGMNZ49iaLrQ1TmJTDCUgSI-9KIR0svszrg>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Aug 2026 17:11:56 -0400 (EDT)
+Date: Wed, 26 Aug 2026 15:11:54 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: <mhonap@nvidia.com>
+Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
+ <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
+ <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
+ <dave@stgolabs.net>, <alison.schofield@intel.com>,
+ <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
+ <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
+ <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
+ <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
+ <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
+ alex@shazbot.org
+Subject: Re: [PATCH v4 06/27] vfio/pci: Add CXL ops registration interface
+Message-ID: <20260826151154.19486297@shazbot.org>
+In-Reply-To: <20260813093631.2288172-7-mhonap@nvidia.com>
+References: <20260813093631.2288172-1-mhonap@nvidia.com>
+	<20260813093631.2288172-7-mhonap@nvidia.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf-next v7 0/9] bpf: add support for KASAN checks in
- JITed programs
-To: Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- =?UTF-8?Q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?=
- <alexis.lothore@bootlin.com>, Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>,
- John Fastabend <john.fastabend@gmail.com>,
- Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
- <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
- Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
- Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
- Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Andrey Konovalov <andreyknvl@gmail.com>,
- Emil Tsalapatis <emil@etsalapatis.com>, Yafang Shao <laoar.shao@gmail.com>
-Cc: ebpf@linuxfoundation.org,
- Bastien Curutchet <bastien.curutchet@bootlin.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On 2026-08-23 3:53 p.m., Kumar Kartikeya Dwivedi wrote:
-> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothoré (eBPF Foundation) wrote:
->> Hello,
->> this is v7 of the series aiming to bring basic support for KASAN checks
->> to BPF JITed programs. This new revision just makes the series rebased
->> on top of current bpf-next_base.
->>
->> Please note that with the recent kernel splat detector introduced in
->> kernel-patches/vmtest through commit 8109e5928cd0 ("ci: own the kernel
->> splat matching (#509)"), CI runs on this series will fail with the
->> following error.
->>
->>     Error: kernel splat detected: [  100.689549] BUG: KASAN: \
->>     slab-use-after-free in \
->>     bpf_prog_eba69524d1d949b1_st_not_on_stack+0x12f/0x17a \
->>
->> which is pretty normal, as the new selftests introduced by this series
->> are expected to trigger KASAN splats (the test_progs part will pass,
->> only the kernel_splats part will trigger errors). The right fix may be
->> to just put a list of regex matching all the kasan subtests progs in the
->> relevant SPLAT_ALLOWLIST file; something like:
->>
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(st|ld)(x)?(_not)?_on_stack\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_simple_atomic(_fetch)?(_not)_on_stack\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_patched(_not)?_on_stack\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_verifier_paths_stack_and_non_stack\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_oob\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_st_blinded\+
->> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(load_acquire|store_release)(_not)?_on_stack\+
->>
->> I can take care of opening the relevant PR in kernel-patches/vmtest with
->> this if it ends up being the correct solution, but it will make sense to
->> do so only once the selftests list is validated (but before merging the
->> series).
+On Thu, 13 Aug 2026 15:06:10 +0530
+<mhonap@nvidia.com> wrote:
+
+> From: Manish Honap <mhonap@nvidia.com>
 > 
-> We need to resolve this before landing the set. To me it looks inevitable, esp.
-> if we exercise the support and produce such warnings. That said I'll let Ihor
-> respond and provide guidance for this. We should probably land the vmtest PR
-> before v8 is posted, so that v8 can go through CI and be processed without
-> failures.
-
-This is a tricky one.
-
-IIUC the suggested allowlist regex will also mask the real splats, which
-the whole KASAN-in-JIT project was supposed to catch.
-
-I think a good way to resolve this is to teach the kasan splat
-detection script about these tests, and drop/skip them from the dmesg
-log it inspects. For example, match begin / end of the test set.
-Might require special log anchors printed by the test itself, but
-you get the idea.
-
-Alexis, do you mind trying this?
+> vfio-pci-core must stay free of any CXL header dependency, so CXL
+> Type-2 handling lives in a separate vfio-cxl module that plugs in a set
+> of callbacks. Add the registration interface: vfio-cxl registers a
+> single struct vfio_cxl_ops at module_init, and vfio-pci-core stores it
+> under a mutex.
 > 
->> [...]
+> The owner field lets a later patch pin vfio-cxl for the lifetime of each
+> bound CXL device. No caller yet; the detection path is added next.
+> 
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+>  drivers/vfio/pci/vfio_pci_core.c | 27 +++++++++++++++++++++++++++
+>  include/linux/vfio_pci_core.h    | 10 ++++++++++
+>  2 files changed, 37 insertions(+)
+> 
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 3f11a9624b9c..88e68d43af9a 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -2670,6 +2670,33 @@ static void vfio_pci_dev_set_try_reset(struct vfio_device_set *dev_set)
+>  	}
+>  }
+>  
+> +static const struct vfio_cxl_ops *vfio_pci_cxl_ops;
+> +static DEFINE_MUTEX(vfio_pci_cxl_ops_lock);
+> +
+> +int vfio_pci_core_register_cxl_ops(const struct vfio_cxl_ops *ops)
+> +{
+> +	int ret = 0;
+> +
+> +	mutex_lock(&vfio_pci_cxl_ops_lock);
+> +	if (vfio_pci_cxl_ops)
+> +		ret = -EBUSY;
+> +	else
+> +		vfio_pci_cxl_ops = ops;
+> +	mutex_unlock(&vfio_pci_cxl_ops_lock);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(vfio_pci_core_register_cxl_ops);
+> +
+> +void vfio_pci_core_unregister_cxl_ops(const struct vfio_cxl_ops *ops)
+> +{
+> +	mutex_lock(&vfio_pci_cxl_ops_lock);
+> +	if (vfio_pci_cxl_ops == ops)
+> +		vfio_pci_cxl_ops = NULL;
+> +	mutex_unlock(&vfio_pci_cxl_ops_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(vfio_pci_core_unregister_cxl_ops);
+> +
+
+Use guards to simplify these, especially the registration path where we
+can then just return -EBUSY.
+
+I see the get function stores a per-vdev cxl_ops pointer with module
+reference held for the life of the device, so the serialization on the
+mutex is only per-device at probe time, but it might still be
+worthwhile to preempt that with a rwsem here where both these paths are
+writers and the get is a reader.
+
+>  static void vfio_pci_core_cleanup(void)
+>  {
+>  	vfio_pci_uninit_perm_bits();
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 9a1674c152aa..14753972e714 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -66,6 +66,16 @@ struct vfio_pci_device_ops {
+>  			       size_t nr_ranges);
+>  };
+>  
+> +struct vfio_cxl_ops {
+> +	int	(*init_device)(struct vfio_pci_core_device *vdev);
+> +	void	(*release_device)(struct vfio_pci_core_device *vdev);
+> +	/* Pinned per bound CXL device so vfio-cxl cannot unload under usage */
+> +	struct module *owner;
+> +};
+
+To mirror vfio_device_ops, should these drop _device and just become
+.init and .release?  I think that better reflects their actual usage
+while the eventual .open_device and .close_device already reflect the
+mapping into vfio_device_ops sequencing.  Thanks,
+
+Alex
+
+> +
+> +int vfio_pci_core_register_cxl_ops(const struct vfio_cxl_ops *ops);
+> +void vfio_pci_core_unregister_cxl_ops(const struct vfio_cxl_ops *ops);
+> +
+>  #if IS_ENABLED(CONFIG_VFIO_PCI_DMABUF)
+>  int vfio_pci_core_fill_phys_vec(struct phys_vec *phys_vec,
+>  				struct vfio_region_dma_range *dma_ranges,
 
