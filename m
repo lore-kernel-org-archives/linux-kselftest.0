@@ -1,130 +1,186 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from flow-a7-smtp.messagingengine.com (flow-a7-smtp.messagingengine.com [103.168.172.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2024238E5D7;
-	Wed, 26 Aug 2026 18:19:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4AE039B484;
+	Wed, 26 Aug 2026 18:36:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787768407; cv=none; b=BypcgCKntLKE866qzBhH4TRQhOc+dCGayktLXtZ/ki7GVY+93SVHvoYB7vFsi62iPHcMVvn7USNkNK3DKeL6NihZNuB7o7HGOyKpGA59lwgvHs9mjTo+F3RmIkaM5oZmWF1OIaJ0UB4XKH1DM6xG0wrN+vZ/Hwtk6i4A1iQLtdo=
+	t=1787769427; cv=none; b=BLC74E4tsPEwuMIX3X52LH0nNxKYX1F9m/VALOMH7rSM9LKoAKENu1CYKx1bdU2pCRPBX6FzhmiBAZT5BrzVJ3gP+S5gHitwI+TKxLlNJhBwm8he3XxNd/YSy5kmQbEfggBZNolbUlBpHERFBqtg/0eDQ6D5WMODGX7gIFQ4XRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787768407; c=relaxed/simple;
-	bh=8lJPATkIO8yVeLALXpxM3SByvo/SRVvOBPy4Ne5Dr78=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=L8/bUWmVlwg94gr5/CidxBZQawZIfYoN+hn9vMEOUILGGiF4S3LvyJCdJx9TZFC9duyXNzYV54LxvAyl6zrr9Lx/wINESgC/fWlzffn4eAHjdVX2Dd/DCDXE5bjQiZ8Zk2vgA+7khs9DGhuPlaqYw3sPTC/riydwie5Gf7XYbuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XmiFLXbm; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787769427; c=relaxed/simple;
+	bh=Y7+5fzy4IgE6XMXePPk54pq+5mHkhq1S/q96x1AA/D8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bKuqXOeaYiiPai/U4xxx05Sbxv8eW1Numl71VXOl0iTcVPwmZULLIRzvxABLPx25U2GzAdaEL8uEicr3P21hqeOL8odRR3of6LnW2WNSZEOPdUgE5OjDQdDq9tQ5N3E9hML/B6bpdUAqNFV/ob0VdszUzBV98lZ/aBqW4lwTPNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name; spf=pass smtp.mailfrom=shutemov.name; dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b=LBQpOxrt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=PICJpeq4; arc=none smtp.client-ip=103.168.172.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=shutemov.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shutemov.name
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XmiFLXbm"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A7A034E413C8;
-	Wed, 26 Aug 2026 18:19:42 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6FF95604EC;
-	Wed, 26 Aug 2026 18:19:42 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9DDBE11C78378;
-	Wed, 26 Aug 2026 20:19:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787768376; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=WBiBUcsLXcX/eaDueopmySnIviXz/GZ2Ds1LeB9dC5Q=;
-	b=XmiFLXbmLWKb5j0FTvXHQoCADV70832aLxC6lyBoi1jymDUgidISNVp256i+jl42ifbx+1
-	pmDhFKeVXaDTl7WiNR7Wv7xKqDv3tMMLMDl8k6v8XoRCJHKdaQZmayjMZ+DulZwvqQZOP4
-	Px2iIkJWeCnrgssrkgzCBRPxDI601fec8oh6/UwxK2f5ll4eOylbcN3n4eeqpUbS+14QYO
-	f8DRSf5qFzuq8Q3JI2PTo1KlZPXHsMXQ9Ba/NWt+sFaLBTCVUBpzDdPYlnavXKhrjBqTbO
-	Nrf1P20h+w4C2ouThybw8dCPoNh3nGzrjG8xqgScY6q0hTKtSp4hRryisjZAEw==
+	dkim=pass (2048-bit key) header.d=shutemov.name header.i=@shutemov.name header.b="LBQpOxrt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="PICJpeq4"
+Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
+	by mailflow.phl.internal (Postfix) with ESMTP id AE72513801B4;
+	Wed, 26 Aug 2026 14:36:57 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-06.internal (MEProxy); Wed, 26 Aug 2026 14:36:57 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+	 h=cc:cc:content-transfer-encoding:content-type:content-type
+	:date:date:from:from:in-reply-to:in-reply-to:message-id
+	:mime-version:references:reply-to:subject:subject:to:to; s=fm2;
+	 t=1787769417; x=1787776617; bh=AXIwP4yu3TNgPvU8yf7Hptdh037EP7WE
+	Y8ll6DN52k0=; b=LBQpOxrtTh0AHm/+3hpS801ONfmbZP9VZohFOzrmeORrKAyE
+	mfWglKIzlVEy4aDkGX4U7Nd2uG61ARVxQ99LCXHLb2f52OcX4q568Do8pMNgX1EB
+	JCodDojYQ3oohyoavf5mI9Y7qEDGhyJCBbYYlV3Cv5ka7yeDQcWbCwAVUXvGDEs5
+	6ulyYs61+t2saIh0T1yeFIP1+1rdyA9kCs53nUTnV62J68wIv/eDr/0Yzdo85X5f
+	ytpEKZIhlWpckETJNDj03trvdRpTO/EAyQYkL4gOmaqphScmw9Og7/BIO7G+S1NY
+	0Y+BGlxUup4Pw3TrMY0lgv5fwb+VEj+pvFYM+w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787769417; x=
+	1787776617; bh=AXIwP4yu3TNgPvU8yf7Hptdh037EP7WEY8ll6DN52k0=; b=P
+	ICJpeq4O/lZ83UnijZ76oQaOd0AY9+7B63YWSQdHDt8EQiEZKjTqjbcJAe24zkrN
+	jgjih3/ny4F1kz9V0gWasKr3YENujNTB99kgXVIThrEm3RvKxFlv9ndGmL2bmdVX
+	kuuoNebxCocF1OBBPfy9ZU4AfIU12Cf4fav1tjEF1TTHdWWoZlbxYP9TDg0ame/h
+	xIpfFsfeWv2KGS/HlyqCXG/lh0WhN0eU4kzYTAKEeGdSFgtvUbebtZaFT4zU9QAZ
+	BfSVMm+3FjOwLOAocQBmTKCujfy5CLOaCqVzDiOvTLlCdn7nUHAAYQE1zm6HtmQN
+	yOe2yiTEAVjjS5O45Qogg==
+X-ME-Sender: <xms:SDKPapBJp1ltJAcyI_xZxiK78XLWsqgrz-iF1XpLTIi560G_NG1_tQ>
+    <xme:SDKPan8qJEj8Kdw4-xB5grKYqzXe8NQmwdtWlLFp7__J4HOlggFZ2V5Y6_VBYoffb
+    wWeq_BwN-2jVNWP8jj6bqY2hALdTJmBVngXpkVnyaujqDRlaG0b3A>
+X-ME-Received: <xmr:SDKPamDICjFvcSeBnDqbKwk0CFKzWV5NJbgp-l7ZNHVkJkI_2wu0EsHfW2M>
+X-ME-Proxy-Cause: dmFkZTELKOeDfHJP+SHbqjYVk9pwKUGicSk1p7GbSsMsayumgkGRXk9mkO2sicvuyEcat5
+    L0tWOhfSHJuXVtqqVdF+NmJMI2h+ZOwn+i/DBGVryOfj5Qf49E1quVQOsDdf9ZZ1sJ9xbJ
+    poFGDwDqJ51N4cJIM57auo6jEn+a0yODvKmWYzxEJ6fNxbovO9GSlEdv8xp1MFbZ7Gokp5
+    0ZsoL7HwOxjOQe3XnPllK3jRr9Ofv4wbQ2A32YyrpJPvYjpNqQkzKyvfjTe1H+XVKzp2bs
+    aIU/y7f44kV0XbgBtKHpikGU/conieH5Ql/3SuDnp1P7HO7ccqQ5Tavx6wyrRHArYDQuZJ
+    ReEsdYa3AmPew8cuddJjokVkzPRPJmZd3YlR1VJPyTAdqY+NL6xJM4luZPV+8/l6Qx0i9O
+    c9WxaMXcW1JUlkaxjDZucSeXgTS/zXknXXvZdVJFUlbsLlDzdcNTONOx03t+BYALB9FoUb
+    Po9QhwdvUkdZ9FHEcBUPl8FCsJoZyLrHtuPH+oNiPTl7rCXWhkQ5OWb4qtHqQsjhDcuosz
+    W4oad3YDjgmSVNIwJApsoKdvnMi34LkabWs4R+nruTIkDihbTb/EoObomeIcxmI2pB2DqD
+    qOFNlmrgXYkJv2fQY2ER4UL8Q+/bttFG5DVaFN9gi9zcXFGljyS+Q/3/ve1g
+X-ME-Proxy: <xmx:SDKPajy4yLZEPMicPsIi4xXNZ_gD_9QLorXtAOJgUfsRVB1ilFOXUw>
+    <xmx:SDKPatrF2xGnxB3V1_26vacIGFKy3I_TIuM_sv8KI4y08pupxtHgBw>
+    <xmx:SDKPauxU2EdL8_UHOWGKWqqwoeKyz1-vF4wS8jvs-EEQvArn1PO42A>
+    <xmx:SDKPavNCdt-kJhS7kWSYEbYSl9IkMxdsTmfZ10ubOqiJ16Poy94WbQ>
+    <xmx:STKPavZhSWl6PxYOxr7AqrDZzd_-81pOFZSznr5dBkWVsS5jsszOR2Mt>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 26 Aug 2026 14:36:55 -0400 (EDT)
+Date: Wed, 26 Aug 2026 19:36:54 +0100
+From: Kiryl Shutsemau <kirill@shutemov.name>
+To: Jann Horn <jannh@google.com>
+Cc: akpm@linux-foundation.org, david@kernel.org, ljs@kernel.org, 
+	nico.pache@linux.dev, baolin.wang@linux.alibaba.com, baohua@kernel.org, 
+	dev.jain@arm.com, hughd@google.com, lance.yang@linux.dev, liam@infradead.org, 
+	mhocko@suse.com, rppt@kernel.org, ryan.roberts@arm.com, shuah@kernel.org, 
+	surenb@google.com, usama.arif@linux.dev, vbabka@kernel.org, ziy@nvidia.com, 
+	usama.anjum@arm.com, agordeev@linux.ibm.com, linux-mm@kvack.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, willy@infradead.org, 
+	pfalcato@suse.de, rostedt@goodmis.org, mhiramat@kernel.org, 
+	linux-trace-kernel@vger.kernel.org, bpf@vger.kernel.org
+Subject: Re: [RFC PATCH 19/57] mm/collapse: install a PMD leaf as the
+ terminal layer
+Message-ID: <ao8okZ-A7cnvoju6@thinkstation>
+References: <20260816224609.308019-1-kirill@shutemov.name>
+ <20260816224609.308019-20-kirill@shutemov.name>
+ <CAG48ez1fiCzTMATN07HHfzvUGFuZ5gELNpZXdXx=ySa7nihxmA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 26 Aug 2026 20:19:29 +0200
-Message-Id: <DKZ2ZV0RB5XV.2TU1APPGT5OSN@bootlin.com>
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
- <ihor.solodrai@linux.dev>, "Yafang Shao" <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next v7 9/9] selftests/bpf: add tests to validate
- KASAN on JIT programs
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <20260822-kasan-v7-9-99afee6ef7fd@bootlin.com>
- <DKWONS3UI84A.382GORI5CXC51@gmail.com>
- <DKWOXOPN11A1.1BNV5J6RJ7MGJ@gmail.com>
-In-Reply-To: <DKWOXOPN11A1.1BNV5J6RJ7MGJ@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAG48ez1fiCzTMATN07HHfzvUGFuZ5gELNpZXdXx=ySa7nihxmA@mail.gmail.com>
 
-Hi Kumar,
+On Tue, Aug 25, 2026 at 06:52:17PM +0200, Jann Horn wrote:
+> On Mon, Aug 17, 2026 at 12:46 AM Kiryl Shutsemau <kirill@shutemov.name> wrote:
+> > Fill in the PMD install.  Under the pmd lock, with the pte ptl nested
+> > inside it: verify, detach the table with pmdp_collapse_flush(), deposit a
+> > fresh one and map the leaf.
+> >
+> > That is one atomic section, so no pmd_none() window ever exists: faults
+> 
+> What do you mean by "atomic" and "no pmd_none() window ever exists"?
+> Is that supposed to be with respect to a subset of readers?
+> 
+> While the PMD table spinlock is held, you clear the PMD entry
+> (pmdp_collapse_flush) and set it to a new value
+> (map_anon_folio_pmd_nopf). But codepaths that walk page tables don't
+> take that spinlock unless they already know they're in a THP case.
+> 
+> zap_pmd_range() does not lock the PMD table before checking
+> pmd_none(), and if that is true, it skips over the PMD. I think this
+> means that THP collapse can race with MADV_DONTNEED or zap_vma_range()
+> such that the zap wrongly has no effect?
 
-On Mon Aug 24, 2026 at 12:53 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Mon Aug 24, 2026 at 12:40 AM CEST, Kumar Kartikeya Dwivedi wrote:
->> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundati=
-on) wrote:
+Yes, the race with MADV_DONTNEED you point out is real. Thanks for
+flagging this.
 
-[...]
+The idea I want to explore is installing a pmd_mkinvalid() entry rather
+than none in pmdp_collapse_flush(), so walkers have to serialize on the
+pmd lock.
 
->>>   #171     kasan:OK (SKIP: 16/54)
->>>   Summary: 1/38 PASSED, 16 SKIPPED, 0 FAILED
->>>
->>> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bo=
-otlin.com>
->>> ---
->>
->> 1. Should this test be made serial to make sure bpf_jit_harden sysctl ch=
-ange
->> doesn't affect other tests?
+But it was a long day, I am not sure if the idea is sane.
 
-Indeed, that makes sense, I'll flag it as serial.
+> > stay held down at pte level by the migration entries throughout.  It is
+> 
+> But you don't have a migration entry at the PMD level, right?
 
->> 2. Clang currently collapses the intended ST/STX distinction for *_on_st=
-ack
->> tests: default/v3 emits STX for both pairs, cpuv4 emits ST for both, and=
- the
->> default st_blinded object is already STX and therefore is not blinded. P=
-lease
->> check and assert that xlated insns are correct in the test itself if pos=
-sible.
->> It might be necessary to use asm volatile assembly blocks in case you ca=
-nnot
->> work around the compiler in C.
+Right.
 
-Ah, good catch, thanks. For the blinding test, I really checked that the
-blinding is inserted, and re-running this again, it looks like I have
-been fooled; there's indeed some blinding inserted, but not on ST/STX
+They are all at pte level, in the table being detached. What
+keeps a fault out during the install is the pmd lock: pmd_install() takes
+it before it can put a table back.
 
-> For 2, I guess as a whole you still get coverage, since we run with both =
-cpu
-> versions in CI. So it should be fine I guess, for the blinded case too, b=
-ut
-> perhaps it would still make sense and be clearer to verify and only enabl=
-e st
-> case for v4, and force stx to remain stx on v4.
+I will fix wording once the pmd_none() question above is settled.
 
-Ok, I'll update the test so that ST/STX/st blinding are correcly skipped
-depending on the CPU version.
+> > what lets PMD collapse run under mmap_read like everything else here.
+> >
+> > Two things force that nesting, which is the one the tree already uses to
+> 
+> I'm lost, what is "the tree"?
 
-Alexis
+Upstream.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+try_collapse_pte_mapped_thp() and retract_page_tables() nest the pte ptl
+inside the pmd lock the same way.
 
+I will update wording here.
+
+> >  - rmap walks on the sources are unreachable, their refcounts frozen and
+> >    their folio locks held from freeze to putback;
+> 
+> To be clear, we can concurrently rmap-walk into the PMD, right?
+> Because we might be looking at a different folio which was created in
+> the parent process or something like that? And so a
+> page_vma_mapped_walk() without PVMW_SYNC might look at stale PTEs?
+> (Which may or may not be fine, but would not be what this commit
+> message claims.)
+
+Again, wording should be better here.
+
+A walk can reach the range, but it cannot act on a source: that takes the
+folio lock, which the round holds from freeze to putback.
+
+> > +       /* The deposit balanced the detached table, so the count is already right */
+> > +       if (old_table)
+> > +               pte_free_defer(mm, old_table);
+> 
+> What does old_table contain at this point - migration entries?
+
+Yes.  I will clear it under the ptl before it goes.
+
+Not for the pattern you name, though: a pte_offset_map_rw_nolock() caller
+owes a pmd_same() recheck and page_vma_mapped_walk() does it.
+
+The exposure is the plain pte_offset_map() callers -- pagewalk.c,
+memory-failure.c, swap_state.c and a dozen more -- none of which
+rechecks the pmd.
+
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
