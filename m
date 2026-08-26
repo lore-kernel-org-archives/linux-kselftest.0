@@ -1,321 +1,186 @@
-Received: from OS8PR02CU002.outbound.protection.outlook.com (mail-japanwestazon11012024.outbound.protection.outlook.com [40.107.75.24])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8F9B423E8F;
-	Wed, 26 Aug 2026 13:14:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.75.24
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787750100; cv=fail; b=W0OsjX4Dua4C+pOT4qaqfdKwwuFIANLH9YT8qVQJMPzbXdiNWacSg2yfJlvYXCtIIdCefJtkHOiClEf/4i1Dr6bwzn6CnebW+Fj2NvUn1LYuvFfCrk0I1gvANK1zWWZX2KzqtPfUmyi1pge6ZEapukwvx+PlAT3etuxrmDyKdvQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787750100; c=relaxed/simple;
-	bh=u6pAL8JE8cdhKjIP0p1tOt58jClTDVkbZqAkGgLUPSA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UvJkqMsQ2vJoxjEVisP86In0Xg/a6wRZFQ3sghM3Pi1vzAutnllhBJAqbL8RI30N65JWWJ3DIwaiMCN2h53WpjN0UpLhNNb4tQINIevWpIaK/tVu2l7/eBL/69iemzvONgprt0bEq+Y/1oFoR5Sg5XitV8Uo75a8aEFf+zACD/o=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com; spf=pass smtp.mailfrom=vivo.com; dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b=MBUsXA4g; arc=fail smtp.client-ip=40.107.75.24
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=vivo.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vivo.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0429434E35
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 13:53:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787752401; cv=none; b=Ob98WjPQLEB/eVM7Rp6ZvAFMg4nfXHxTiA8RzRUNhvz6AJkgnr0gye0ld+y22klf8gFRyNhCpGjJvW4JpJO4RDXvxSP5rHCbTK/LZUW64321lDw4vDMNNv2E9P5Dr+Qq9dfdYi3Yy5rkx9e6N/+n379MP67+Le771t1fje2I69Y=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787752401; c=relaxed/simple;
+	bh=aKI/UKGte84OVTfWfIAvvMaWsDxT45eGHGOViohEC78=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=pzIQiH64FSwGG0oMp+2frnag/bNEu4DXEfo95q5S7chHY3k+ZGKBm+gVkJfcqTaZaXYCUmPu4NfU9QotAAYjq6tFNmUQfHc5xz7JRDnJvrvFUJtZwd5unWTHIM6yMpuIZC04RMYHcmQTaiipnB7Lp712h2MYhLlBCbjqjyhRSVo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Fw9M22+/; arc=none smtp.client-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=vivo.com header.i=@vivo.com header.b="MBUsXA4g"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Lh+Y+CNTRBZzAcgPm4q0px2RdkHmZYs/DKxpBbE6e/jd23yjQzCPafgM5aynAPA0xOOyCtEbm0UfOItEj829S2nGzH0uicMFSFd4pPQmVIF7J7L0ZqyJyLpkZDYLb6CkjHGN3SduqQJ7mkVcFINoYd5QlPZSbdBVFgE3pFdW9IJKGzlesh1hi2Cfx2mhhAbxO6l82tF30eOXTS+hWS3k3nhnX9xrJJqq+QG/6NfmVqsoG7kVGuDdIj6o+I1aR34bPw+q1oAc6w7bPXybCtjgPQuN1aRvX6du5hike9YtgTX9GdflaPtamfg7+5NICUrUPCX4OfsNIgV2xm0w+eZeFA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=G1sJ0fbczbAWA/jc8wEUkFYp/SMO92pgFtSiBMpEVtA=;
- b=BFPs35J7Ye4ilefXKKakVmhqx3OHE39HMsNnDeS+Pl+vRImg29Ze2/p+nCVLFQmxYeAwiKwLrFDDTIrfSXDjQe2qyEpPlQaI5sXaAr/2Wzh04heWSfFmpoNoOGzFjPGd1FdBwbTAIlAeM5CI7Qx2mdoPNwP3u0wUWGVRXCLoW07XlSr6G8GBaY74E/dkg9LCE1BVuy3FsCXi0VocIrdukMMfujZZpgrfD4jRP+LyMNAVBQYQZs4QBlngRGLRhuJRLUAH3q4w2LxtWVLwLCt7mx6Oq0hfv3kkCzD37chkMrMYe73TXYda3EVwTB6z4QVYEpfKSLUft/u9IiNUoUYsuA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
- dkim=pass header.d=vivo.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=G1sJ0fbczbAWA/jc8wEUkFYp/SMO92pgFtSiBMpEVtA=;
- b=MBUsXA4glPlWtBzcFtGIXixaQfxyGhx15HfbtG1HmNIc/RVZwYTrPFMnOMDAmP7qDnifcDN/JhijHC49K4l4W003SuLTbBEsRuueTJ2ovCZY8DFzU9Ou/LFRRLD4VRIzLYPIHUk+pF8nQ73+zqZNco9QGg81d1qPyIb9GKy7ARNqdcp0WdeJpDqa5MFVWiQizYO7V8m8R6aO5ZeIAN0kVfwx2Jp3bsX7zpozq60gnMHLX6tl/yz1cxI8Zozn0AVFFLw+ZaidFDD0wFTQO10eHG0fumkrbfgPT1Ibo7+NlR+aWn9I0gqjG2U7BMkC765kKi8O6iFlSDUsCSQB5gnYHA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=vivo.com;
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
- by SEYPR06MB5866.apcprd06.prod.outlook.com (2603:1096:101:c6::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.8; Wed, 26 Aug
- 2026 13:14:48 +0000
-Received: from PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571]) by PUZPR06MB4742.apcprd06.prod.outlook.com
- ([fe80::206c:c661:9838:5571%6]) with mapi id 15.21.0360.008; Wed, 26 Aug 2026
- 13:14:48 +0000
-From: Fuyu Zhao <zhaofuyu@vivo.com>
-To: bpf@vger.kernel.org,
-	eddyz87@gmail.com,
-	andrii.nakryiko@gmail.com,
-	alan.maguire@oracle.com
-Cc: andrii@kernel.org,
-	ast@kernel.org,
-	daniel@iogearbox.net,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	yatsenko@meta.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Fuyu Zhao <zhaofuyu@vivo.com>
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: add tests for selective module BTF loading
-Date: Wed, 26 Aug 2026 21:14:28 +0800
-Message-Id: <20260826131428.302-3-zhaofuyu@vivo.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260826131428.302-1-zhaofuyu@vivo.com>
-References: <20260826131428.302-1-zhaofuyu@vivo.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SG2P153CA0024.APCP153.PROD.OUTLOOK.COM (2603:1096:4:c7::11)
- To PUZPR06MB4742.apcprd06.prod.outlook.com (2603:1096:301:b5::13)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Fw9M22+/"
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2d6f80c76e6so14145145ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 06:53:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787752391; x=1788357191; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=njsQrhr1Rw86G3MMqhXpdm0dYelYnqk43kJ0tkWzOHc=;
+        b=Fw9M22+/3+Tuh6ZV/JJEkAFj+RlBK2Q9Is5LYK1aJGSvAYYPdH8byGaD9gmmbxiezq
+         Pws3Ue36HCIptbD8j+oui5RPC+ySOg8GWSwO11fCaJQ++8OhIgiyozKW0Jwj4/bR5ad8
+         15VmAThVs+G8fUQ8R8c/4a4RIqKteUfeRkW1pChn7iLi4mIjVIPbrFZ03L89l+8rNdbF
+         U+sVGh++kCaYC0e0vCVvSoCRsYBYAIEd4Z0mu+N89q/NYltvTvhPE3T7Audf8zSnNxeP
+         7D22SHuL+0zRKUoYVrojsO/83fUXSG5UXu+PgNEFV0uKGVQ8aaEqbMs2mH8eojYT2Dle
+         j6Sw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787752391; x=1788357191;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=njsQrhr1Rw86G3MMqhXpdm0dYelYnqk43kJ0tkWzOHc=;
+        b=AxGW0Qd5JubYJ6BrwDxFAmdyK2uQVwa7x1bhn5cmX+oW04LDJAP9CdDQ1W4kQLNiQS
+         fci4KHH96ulteBeX3G53rEo0YHZfx2BYJiHr/FxohsxLNCMOfCm6K0nUqYJapCHw+uHw
+         dqLL5qq59d6+LaS40Giud8pm+09drtdUIjFp3qRPUyhj5xdZxcxOmtl48IcNZKeWon8c
+         MJveYM5KgZUMWnsgCMgMYYo9iPa4+XQXcPpm3r7aMlYa8GqgC7g3+5+e8SUwxflAfoKg
+         t4dgYtNA/eHwuPUO4If9NSesEc/vZPz1Pl1WE98S7keUHJJgZRNfb4ki96IlK70XBRY0
+         6WAg==
+X-Forwarded-Encrypted: i=1; AHgh+RoTPJCPy8kyoQZ6IEKZd4FRq3svv9PBm8qJ0j9On00GskSYfpQdZKbgAOhECE1Pv64/ruqRF8wR35hSxWXk1g4=@vger.kernel.org
+X-Gm-Message-State: AFuF++n58sq9b6L7FD91jxUshx2+PsORg4va6B0xHAlPPRncdnK/scF8
+	xk5su4DjuaOEoZTMWjGwPZnTKX/aMTRpmMeSTjDvJQ3wfjSd8pI08uIHwKsANy/ZVATFpTDpZCh
+	TlNw2xw==
+X-Received: from plnn1.prod.google.com ([2002:a17:902:d0c1:b0:2c8:1ded:d061])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c40a:b0:2d7:1bfd:b240
+ with SMTP id d9443c01a7336-2d71bfdb766mr27401015ad.4.1787752388141; Wed, 26
+ Aug 2026 06:53:08 -0700 (PDT)
+Date: Wed, 26 Aug 2026 06:53:07 -0700
+In-Reply-To: <CAEvNRgFXJbV78ktsg=b4srFp1OFjtQWQGuNPjr_MmWD-wOvjgw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PUZPR06MB4742:EE_|SEYPR06MB5866:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8d3ce9a3-c3a7-4354-56ed-08df0374014b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|52116014|7416014|23010399003|366016|1800799024|22082099003|18002099003|56012099006|11063799006|10067099003|6133799003|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	iVk5TR0KanZjvjIWvIbsXl4LyfRCrlAGQJFmil9zWXSnt31iSyuh9vajdxnpe9F5pNUQDPhlwbnzxInWv2gIeZLZmpr7679tKWw6C5LwF6OdOZKjBCD6AGrRBymXy/QKEeASnSyVqmdK86WgbEvsU0JFUK+hWO5+rd6PgCrJyhqDrACBDuWodxUYhbHXRH1lMZMzW0HzTGGEI+pxf36zp4AxOzW2oYrWnfPnywZ/ngVcINnDLLS3bmowNXgXARuw+5rONbXfgSIFC6X38sCXwk9S7OPZEamfAFXfLsXruw3XiRB6/AJc99ckE6lxu1u5hUIqAXpjY7WPOOlzmfqYRafKA6BMKZ2RkxSjKSt8ab5888s0Kim6Oes7isH9cMYvU1oJT2eFIcjVN+0S2dQUoEGG7w0hPaCROwFH4+3BzntEkjxnm0wht/Pnxqc0xyt2TIE6JMBjKZ1s5oc47e3B02S3MrCj1GVznuVPBIXOzjQp7yK3uMayyfd9QIT840zDW+8Z22k/8dzXcGmKmt7n7MUQIn2eFIFhohRpxl3z/UiC2UG0eUGuJdmHcQ1eXC38P1hpqQ+xSqZaqPUCuZqvJVOQFNRysbAJPwp5fN+4bw3CbkTP2+6Alcd7atHq38UtThIKsbu6JcjHpGOGNVuYzMGGDYT87jMGPVyqN/ef2V1ADHP+oQlJXEdPV1f91rGYUMytjK5w/qEwa33y8mr2OoVn43AdsPIPJHS0lOizdps=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZPR06MB4742.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(52116014)(7416014)(23010399003)(366016)(1800799024)(22082099003)(18002099003)(56012099006)(11063799006)(10067099003)(6133799003)(38350700014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?jHYFe/rzrphBRhG/U+Xt5uA85h30dNQkjoHyHSRpNNEXs+tE2lgNfNdgBvTE?=
- =?us-ascii?Q?LU30yXbYMKaeGcQibktB8NyjXFCGgCDblO5V0I0O9re32Eq9nltTZjERnis4?=
- =?us-ascii?Q?m+Gp9ynhGej0tMiLJq9Y69ykMDlVf7CJCvaiI4l5vYwo0B5gY17UwCRSUtRo?=
- =?us-ascii?Q?jF+KD0SkgdXWq3lpReBOxk8D/xpV0WHJ/DpmA+JNMQLSp0kW+bg5TNVeaTuS?=
- =?us-ascii?Q?Rr2TetUAvwB/Dyx9UTV9vZxRbTnvMNP2YWOXvEE2VzMCLomekX9m+G7G9KG+?=
- =?us-ascii?Q?JptBhXpw43vGv02JBxZ/xcmC2tjp9bLbCycShQPCePwbbAFAtxJfM/hKCkO9?=
- =?us-ascii?Q?AOQer7pgJTiy8rdi/erlfEzy7jCo3qy48AY14Px+Nha+MiDmRJkX9go0gbCX?=
- =?us-ascii?Q?5nN5zemXzgAGgWqY887iUK8wyJrWrREGiWb82gUbUJZ8u5ir08hXevs8OOum?=
- =?us-ascii?Q?NYHWQ2L3UTe4dxK6iCZWhTG/QQ5UBmX+/9hTHa31uCgO0zD4pw+6Msynbb4z?=
- =?us-ascii?Q?L+zqPeGFt2Kj64PU96+uopvdme9FufuyKRAt7ME95L6W0KcLtIMWvU+ux8ON?=
- =?us-ascii?Q?WjslKEUeryfAUZ4Ci2GWNnGSFJL+qQP0zyEjPTdrnD5OIuA3MJBIPUZvDkap?=
- =?us-ascii?Q?yFdLpA5dvvRoP/NeiGdo9GqgL6br4U3Se6CJKXe4rh6tsl+O+Fk6tBzgY3TK?=
- =?us-ascii?Q?D+V8+r0kXU8OX0xwZHT1cvdWa+BoFfQaG23fWmq99ChpefluHVNv2oCqHc6w?=
- =?us-ascii?Q?jlwbxOJA0JFux/ewD2DlS+5WrbNYpL7SzbToPahGC9u/KSrLnUiR7GjVsbdQ?=
- =?us-ascii?Q?TjDPnv1xxkLOc3TdT41bsr/nzACUPJnErPfzGEzwlnHrgEbYAMgzl1/OIQ1L?=
- =?us-ascii?Q?ll8MPIRs6zm4/jd3GuLlPnl26L1kotQU9AMmsM7yMQZI/VxigcgKYp7gUZtq?=
- =?us-ascii?Q?8OKNtDlMHNNKfSN1Bl9HUS6337FYRGbQDTQxjQ20zLuLRPsWe7fydslRHgR/?=
- =?us-ascii?Q?utm4FnYg/k9o3u/WQwZzR/DfPYqzjRs3KNaXUuprTMR179e4oqZYgreJBfra?=
- =?us-ascii?Q?wEUavbAF69Cksc49NMQTgvyN2HMb03Es7pquv7EDRUbk7VV2ETIDt8HSgBw6?=
- =?us-ascii?Q?dKgYqvThiG93VnqV61cymqsX7cEuj8xYjBaI5g3MpZDb4rsLp0gE9nUU4LgG?=
- =?us-ascii?Q?vtebYNglMRZmZODB8bDU0jGCjRNGhJb1r9C8/Kvo0qJDzZcU+yRX9+dtOXQ2?=
- =?us-ascii?Q?Y7N09HYw7lyGDkeBOPqEOjRL+y7QUbMESU1aZ1+iG7Xo4V3BSsTUEINllwrr?=
- =?us-ascii?Q?5122bpZ7GqV+zVTjqAFBf9fLzI3GuLbBVr+02fo91yVJKH/ss5LMCkvdnd4h?=
- =?us-ascii?Q?QiqKKnzOBKOvbgdifgD0G7CLtP6pjJJndDadP/5LnRJhpo8m6iRgbwCA+I0p?=
- =?us-ascii?Q?TuMmpbsB+ilmsFH4kvt/E/jRE/PiJ/YvdZ7ENEBU49JLpUZA71F23sMPW4Ih?=
- =?us-ascii?Q?1vowzcD16B0TNmE4pLAdI067pXlaC//SGAsEq7c01oN7Gg8epvcLi6mls6Ku?=
- =?us-ascii?Q?g/RdHNvpFqY+rZx3J2rbZqhX1O0Yvydruk2tlFfbAXBm4hCGFMZ47i9eCaA0?=
- =?us-ascii?Q?li/Tyb0dQZoPzK1ImhR+efYUXr9HVM5ZQfemp/wMb0mxHQa0ZLgjW56YFWZ2?=
- =?us-ascii?Q?AE9nTauzyGxm+Nwwh4hpu22jBdfc2dw35pfrImF979OepIwJPw72lJqjU/lb?=
- =?us-ascii?Q?QeZYK6132g=3D=3D?=
-X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8d3ce9a3-c3a7-4354-56ed-08df0374014b
-X-MS-Exchange-CrossTenant-AuthSource: PUZPR06MB4742.apcprd06.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Aug 2026 13:14:48.4129
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LbIr7cyxHPa2y+e/7OzMT6H14NXsI++mCBMaYNDci7E5t44E5FT56q9xfBXybW3r+vBhhsVpvDLZZlO5rBJgiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEYPR06MB5866
+Mime-Version: 1.0
+References: <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
+ <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org> <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
+ <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
+ <aoZZMQ3Uc8yQWPNA@google.com> <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
+ <meww2a2uf3yeevsfpicyrlg3hch2x4bsdqv2lsv3vfjxg4qzes@co5eogmhkxrk>
+ <ao3lOu8-wpGTs2wd@google.com> <ba8d0441-b52f-4357-b2e7-1e352aa385a2@intel.com>
+ <CAEvNRgFXJbV78ktsg=b4srFp1OFjtQWQGuNPjr_MmWD-wOvjgw@mail.gmail.com>
+Message-ID: <ao7vwx3nMqCjCHZU@google.com>
+Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
+ private when invalidating
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: Xiaoyao Li <xiaoyao.li@intel.com>, Michael Roth <michael.roth@amd.com>, 
+	Suzuki K Poulose <suzuki.poulose@arm.com>, "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, 
+	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
+	chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+	linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-Add selftests covering selective kernel module BTF loading through
-bpf_object_open_opts.
+On Wed, Aug 26, 2026, Ackerley Tng wrote:
+> Xiaoyao Li <xiaoyao.li@intel.com> writes:
+> 
+> > On 8/26/2026 2:55 AM, Sean Christopherson wrote:
+> >> On Tue, Aug 25, 2026, Michael Roth wrote:
+> >>> On Wed, Aug 26, 2026 at 12:13:47AM +0800, Xiaoyao Li wrote:
+> >>>> On 8/20/2026 9:32 AM, Sean Christopherson wrote:
+> >>>>> And vice versa, a PUNCH_HOLE on a SHARED gmem (if userspace is
+> >>>>> using an INIT_SHARED gmem for the shared branch of a memslot) could invalidate the
+> >>>>> PRIVATE mappings (of a different gmem instance).
+> >>>>
+> >>>> I'm wondering now how this could happen.
+> >>>>
+> >>>> the requirement for PUNCH_HOLE on gmem to trigger mapping invalidation is
+> >>>> the gmem is bound with the memslot. But how can a memslot bound with two
+> >>>> gmem instances?
+> >>>
+> >>> I think this is for when userspace uses an mmap'able guest_memfd instance
+> >>> to handle shared memory, and a 'normal' guest_memfd instance for private
+> >>> memory. Each instance is bound to the same memslot/GPA range, and
+> >>> KVM_SET_MEMORY_ATTRIBUTES handles switching between the 2.
+> >
+> > What I didn't figure out is exactly how the two gmem instances are bound
+> > to the same memslot.
+> >
+> > The case I can imagine is
+> >
+> > 1. create gmem1 with GUEST_MEMFD_FLAG_MMAP and
+> > GUEST_MEMFD_FLAG_INIT_SHARED, and get fd1. mmap the returned fd1 to get
+> > a hva.
+> >
+> > 2. create gmem2 to get a fd2.
+> >
+> > 3. call KVM_SET_USER_MEMORY_REGION2 with KVM_MEM_GUEST_MEMFD flag. Pass
+> > the @hva from 1) to 'userspace_addr' field and pass the gmem fd2 to
+> > 'guest_memfd' field.
+> >
+> > However, with this case, only gmem2 is bound to the memslot while gmem1
+> > is not. Following PUNCH_HOLE on gmem1 doesn't invalidate any mappings
+> > because the f->bindings of it is empty.
+> >
+> > Do I miss anything?
 
-The tests verify that:
-- the existing behavior is preserved when btf_module_names is not
-  specified, and loading succeeds when the required module BTF is
-  specified;
-- a required module BTF is skipped when the module is not specified in
-  btf_module_names;
-- an empty btf_module_names list skips loading all module BTFs;
-- invalid module BTF name lists are rejected.
+Oh, I misread your question.  You were specifically asking about a PUNCH_HOLE in
+a SHARED gmem instance over-invalidating PRIVATE mappings.  You're right, that
+wouldn't happen because the invalidations would come in via mmu_notifiers, not
+from KVM.
 
-Signed-off-by: Fuyu Zhao <zhaofuyu@vivo.com>
----
- .../bpf/prog_tests/btf_module_names.c         | 139 ++++++++++++++++++
- .../selftests/bpf/progs/btf_module_names.c    |  13 ++
- 2 files changed, 152 insertions(+)
- create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_module_names.c
- create mode 100644 tools/testing/selftests/bpf/progs/btf_module_names.c
+> I think Xiaoyao is right about this, the "vice versa" part is wrong,
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/btf_module_names.c b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
-new file mode 100644
-index 000000000000..3dc72bef014c
---- /dev/null
-+++ b/tools/testing/selftests/bpf/prog_tests/btf_module_names.c
-@@ -0,0 +1,139 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <test_progs.h>
-+#include "btf_module_names.skel.h"
-+
-+static void btf_module_names_load(void)
-+{
-+	struct btf_module_names *skel = NULL;
-+	int ret;
-+	static const char *mod_names[] = { "bpf_testmod" };
-+
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.btf_module_names = mod_names,
-+		.nr_btf_module_names = 1,
-+	);
-+
-+	/* Verify backward compatibility. */
-+	skel = btf_module_names__open_opts(NULL);
-+	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts default"))
-+		goto out;
-+
-+	ret = btf_module_names__load(skel);
-+	ASSERT_OK(ret, "btf_module_names__load default");
-+
-+	btf_module_names__destroy(skel);
-+	skel = NULL;
-+
-+	skel = btf_module_names__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
-+		goto out;
-+
-+	ret = btf_module_names__load(skel);
-+	ASSERT_OK(ret, "btf_module_names__load");
-+out:
-+	btf_module_names__destroy(skel);
-+}
-+
-+/*
-+ * Verify that an unrequested module BTF is skipped. The BPF program
-+ * requires the BTF of bpf_testmod, but bpf_testmod is not specified in
-+ * btf_module_names, so its BTF is skipped and the BPF program fails to load.
-+ */
-+static void btf_module_names_skip(void)
-+{
-+	struct btf_module_names *skel = NULL;
-+	int ret;
-+	static const char *mod_names[] = { "module_nonexist" };
-+
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.btf_module_names = mod_names,
-+		.nr_btf_module_names = 1,
-+	);
-+
-+	skel = btf_module_names__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts"))
-+		goto out;
-+
-+	ret = btf_module_names__load(skel);
-+	ASSERT_EQ(ret, -ESRCH, "btf_module_names__load");
-+
-+out:
-+	btf_module_names__destroy(skel);
-+}
-+
-+/*
-+ * Verify that an empty filter skips loading all module BTFs. The BPF
-+ * program requires bpf_testmod BTF, so it fails to load.
-+ */
-+static void btf_module_names_empty(void)
-+{
-+	struct btf_module_names *skel = NULL;
-+	int ret;
-+	static const char *mod_names[] = { "" };
-+
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.btf_module_names = mod_names,
-+	);
-+
-+	skel = btf_module_names__open_opts(&opts);
-+	if (!ASSERT_OK_PTR(skel, "btf_module_names__open_opts empty"))
-+		goto out;
-+
-+	ret = btf_module_names__load(skel);
-+	ASSERT_EQ(ret, -ESRCH, "btf_module_names__load empty");
-+
-+out:
-+	btf_module_names__destroy(skel);
-+}
-+
-+static void btf_module_names_invalid(void)
-+{
-+	struct btf_module_names *skel = NULL;
-+	const char *names[] = { NULL };
-+	const char *empty_names[] = { "" };
-+	const char *duplicate_names[] = {
-+		"bpf_testmod", "bpf_testmod",
-+	};
-+	LIBBPF_OPTS(bpf_object_open_opts, opts,
-+		.btf_module_names = names,
-+		.nr_btf_module_names = 1,
-+	);
-+
-+	skel = btf_module_names__open_opts(&opts);
-+	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-+		  "btf_module_names__open_opts null");
-+	btf_module_names__destroy(skel);
-+
-+	opts.btf_module_names = empty_names;
-+	skel = btf_module_names__open_opts(&opts);
-+	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-+		  "btf_module_names__open_opts empty");
-+	btf_module_names__destroy(skel);
-+
-+	opts.btf_module_names = duplicate_names;
-+	opts.nr_btf_module_names = 2;
-+	skel = btf_module_names__open_opts(&opts);
-+	ASSERT_EQ(libbpf_get_error(skel), -EINVAL,
-+		  "btf_module_names__open_opts duplicate name");
-+	btf_module_names__destroy(skel);
-+}
-+
-+void test_btf_module_names(void)
-+{
-+	if (!env.has_testmod) {
-+		test__skip();
-+		return;
-+	}
-+
-+	if (test__start_subtest("btf_module_names_load"))
-+		btf_module_names_load();
-+
-+	if (test__start_subtest("btf_module_names_skip"))
-+		btf_module_names_skip();
-+
-+	if (test__start_subtest("btf_module_names_empty"))
-+		btf_module_names_empty();
-+
-+	if (test__start_subtest("btf_module_names_invalid"))
-+		btf_module_names_invalid();
-+}
-diff --git a/tools/testing/selftests/bpf/progs/btf_module_names.c b/tools/testing/selftests/bpf/progs/btf_module_names.c
-new file mode 100644
-index 000000000000..232adc0f33f6
---- /dev/null
-+++ b/tools/testing/selftests/bpf/progs/btf_module_names.c
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <vmlinux.h>
-+#include <bpf/bpf_helpers.h>
-+#include <bpf/bpf_tracing.h>
-+
-+SEC("fentry/bpf_testmod_loop_test")
-+int BPF_PROG(test_btf_module_names)
-+{
-+	return 0;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.34.1
+Ya.
 
+> Is this just a case of user error? That with gmem_in_place_conversion,
+> userspace should not use userspace_addr from something other than the
+> gmem for the same memslot?
+
+Yes.  It's not just invalidations that will go sideways, KVM accesses to guest
+memory won't hit the same physical page as actual guest accesses.
+
+Huh.  But that isn't strictly guaranteed, because userspace could bind to a
+memslot that isn't configured with GUEST_MEMFD_FLAG_MMAP, in which case SHARED
+faults will go through the VMA, not kvm_mmu_faultin_pfn_gmem().  It's a bit early
+in the morning, but off the top of my head, I can't think of any reason we need
+to support such a setup.  If userspace really, really wants to use a separate
+mapping, they could DELETE+CREATE an equivalent memslot without the guest_memfd
+file descriptor.
+
+So I think we should do this?
+
+diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+index 9c2d52bdf25e..86f53e53a136 100644
+--- a/virt/kvm/guest_memfd.c
++++ b/virt/kvm/guest_memfd.c
+@@ -1013,7 +1013,7 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
+ 	 */
+ 	WRITE_ONCE(slot->gmem.file, file);
+ 	slot->gmem.pgoff = start;
+-	if (kvm_gmem_supports_mmap(inode))
++	if (gmem_in_place_conversion || kvm_gmem_supports_mmap(inode))
+ 		slot->flags |= KVM_MEMSLOT_GMEM_ONLY;
+ 
+ 	xa_store_range(&f->bindings, start, end - 1, slot, GFP_KERNEL);
+
+Regardless, the key aspect of all this is that in-place conversion is brand new
+functionality, so we don't have to ensure backwards compatibility.
