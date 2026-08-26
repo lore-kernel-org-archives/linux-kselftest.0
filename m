@@ -1,181 +1,142 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6A483EDE54
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 11:49:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5867D3F1AD7
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 11:59:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787744986; cv=none; b=uARdQpJvPcwoWFf3EQzm2MDSIdRcqRyfsqYLM3Kh77VWokWKyY+ZE39mKFOJYmgUZjPehK+FmR8e9K0WMVZKbc0S+MhkrJn861Zp0Xb+8h7u+//NklF3HG+Uk9TbrPpf3+CqY/aTxnLOtjMidb8bvXq64GqSHTN9DmU1BIYYFt4=
+	t=1787745580; cv=none; b=OJLb+bETZuhd7HWRoHpioTknQIPwHxhRkd2SeWkcPsLFCCAtTe2PUjiWPVvyBL1zBptmW6IvQ7sblPzRBg1KU+YB8SYluDDu8j/r0Cnca4RyUWfiyoaGdwTsKNs6MjsR5xBV7fr+79jpQMw04RL6XsXxTkHIL/WpdPN9Jnr79oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787744986; c=relaxed/simple;
-	bh=8gJvi1AY0EFIV+KHyvnHbnOhp3L3wnKl2p4qeaAFDNk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iiFmMuztHfVrii2e+dbjdXPzr5XYG1G9yfh9zr6Sk3FRDabMG1xIbyGHViBNzjrPsNuTtjw26XcqnXmnBUN4JY1xSTd9RftLmwf59lgrsXRbHdZ43O2ptBdVfHhZ+Xe2HxVMz/NuWlER+02m0FI8PC2ZcsKrtrT+md21bB47K0I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=ZmgKuFkz; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1787745580; c=relaxed/simple;
+	bh=gMaVgfPNUsxe2suAiFliez055qKOvUgJIR9Bqte105A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hs6EnUlyA2BUjq237uig/XMqMwrVEqLRfKhZEpAqN3Y3IiN70iNyFDKJa5uA0g20wHSHbcK9EytT/DbTdddRvPFMEwfMeEbQBKXgbyOjBRyyzdvwJ/tMrEZys3pGthvz38zCZ3M9cl47DzISF7XFh8kXUu7GK0XtK9KrSM4mvm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Zeo/Y6Ac; arc=none smtp.client-ip=209.85.216.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="ZmgKuFkz"
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com [209.85.218.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id F27B540287
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 11:49:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1787744982;
-	bh=siYAsVZaz9ivF+usBNLFZ9S0R6ASYmhsoOaIHFs/ZnU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=ZmgKuFkzXthhOWTuMfOnO/XFQL+2hUSETVlnPdC8lYSMd8yoNmGyOP9g9SsR/ne7B
-	 P1DGncqWX3kOj0lmCA0h5wQf0BuwV0TdmefjjuLCGsc3I+CxGX921PiWareCBlJA2F
-	 UZKbiQZ9PcQB5G5eCHN16e3tOyXzbKwROZtXToF+7uVOl1NM1kGXwuJGk6OdYoJnqx
-	 SdAw4KrG7ancJ1h50RPk4laMZdXPmglXmCBVAvAMyy1J4pwkGKlrN6BllP+2mEzxL4
-	 x2i7NgGN7RJ2gjnKPa/zmDCwbYBmTFITJkvY8jXvmDdS+UeJpxXzf5fPLtWjqSH2Uq
-	 /Lv2aJ2RNPRFM8YIe/bMZ9nwNn80mau2PzQbKj8FCPgtxp29fVW7ydbYczlT5Ianoe
-	 voWGqg9tcu6S8zvGRkzk7F0IGNdfOgF1ppwLTFrnESUH6DrL5exaCPs3A7YPTZ0QSo
-	 UuzFk3WriBZ9L+b+NBeGHtxRTby8FQeEthsX/ScUl0/+HZRMKwQaazVrv1+Mpv+bei
-	 X13Fj77fphxyk+eAfHRfvdjCl6J4Pu/nxXT35WlgjE63XJXD8H+1T6QraJ3sC00Euw
-	 4SXr6JF9VefXT4RHkIm7U360WWxjrCAfnpzzyv7MbFmrpHO0f3YvvlPMp9g9eq5HJU
-	 nG0bcDT/pHO3VU/G1LMeO8so=
-Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-c24ae1a510cso82100366b.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 04:49:41 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Zeo/Y6Ac"
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-39647184c73so1831477a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 04:59:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787745579; x=1788350379; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=bc8my8FbiDqjxCZcE9P0+mYGbrSku1wnrvIHI1ZOYos=;
+        b=Zeo/Y6AcMExyqFo+LPlJ80uhXawjYFjKMHPFkElDVfveh7tAmRoDclznnOvFR5DrHB
+         JgX20MATZM74In7MGvP1FRKxbZh2NGLHrnAduiemj+q4nMaqOs17ds/DvwGULibJD+lE
+         AXkxJFY6Eja5MM/9KDze5UdkPR94WAORFm2d6sGFaqwdpOoUFNklukx3OPSyovyJXGOb
+         gG9lOsoMpYahNBCu3sGcl9a40CnCzW/zhYkMy68NtnShNS8cTwMFhRyXCfa4V6Po1GKl
+         pfBRiBuAslbs2NQKSvn+xANYSXOAFefhGgeUXZP3hKNXqCAwqHPCL2yYod3aGL4GvpHO
+         2+yQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787744981; x=1788349781;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=siYAsVZaz9ivF+usBNLFZ9S0R6ASYmhsoOaIHFs/ZnU=;
-        b=bUYJOJYLMYkJdDyRubTFPEBg/H0kq2HsKXFgo5HiMZHDv7DuIjl4gIJWphvTqr14kw
-         SEdYcqNh7qcxSRqPGoX1uoXWNirpg1nrU4kKFvTk63j+jWJbHDiqTVhuVtRQWKaAi2p+
-         zjMqdnPlluwFNgetSmMrQaCwG8SRie5zVROYoXwgb9+qXKseBWhpRYDHcXXx5B1+XEsi
-         StdWaLn11MMXXSl1I6pZOJM2wL58rF5d2EtOYDOpSSH67fhrDACj6gHeBwuRc1Nz/Els
-         9XMZuANvjegCCmPVIezUnRYsZola9+kEiWEhomGzXNzXT+5TPbgvDL3aJV8HBPKZIjLx
-         vymQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqlD7Yyk59wUTCv1Rr0YjxorvQeavrQM4aizFDcw48P4qwy8mGgpuddVyqO+aL/0fdeDkUPCX6/JPPWCtMdPbE=@vger.kernel.org
-X-Gm-Message-State: AFuF++lEDnnHlqwOmk8fzZ4nWCF46d+SKYpWSL3P1v91eP09WJi5xZPq
-	8Vx0CtGhvey0UPx1xg5EPiyHaM6FnutyydxkLsEiewQAlbTIeIhBaP73EjYXj49XuI6y3lFJ6x/
-	VD5DxcUT363Q2KWctifovAmg/kZu3PehHNehmO5sIrwDAJHr/5qdJz4M/lNxyzEH4gLJ/d3jHkV
-	kMks52FGEzcw==
-X-Gm-Gg: AR+sD13KT0lmzqpUrUTaRnRznxDdXxVniFdkTIyOUOc4XQnelVZALxJNAFgSQ6sad+K
-	s7RoRic6S/ubaI7dAeLrqU7fZnJNnkcFfh1nwmgSXVl/03PENA0u7lN/B9lWimKXxKgcAo4ty6O
-	QYpIk03jFXVyHyX7wr7dPpgNAX7duS6b+WtaoMsw4aHr0uz0ExuYTs8uHgMNgMknZ/qI0Ap5Jwd
-	uGpx5b1iED4DK3D7xGh86MrUbXbohSRB5/k9AtfDOg0jS4763HVEdWVLl0UiEL+iI2joQkdV6lY
-	onhipCxoodsP2xDoqM509bRSOf3oKxEDrr/omA2AZ/oe0o2RWdj8XQd0LtIdDju7/lEZ/3ZXMRC
-	R37coRWvpwBZxKQRtvhaRFfTVH5Wk8uCGv5ELwJvMY5Vda+vVtEMwiFBQf+EhoXcZGQ/nuw==
-X-Received: by 2002:a17:907:ea8b:b0:c20:3402:bd35 with SMTP id a640c23a62f3a-c250c330f70mr731885466b.12.1787744981538;
-        Wed, 26 Aug 2026 04:49:41 -0700 (PDT)
-X-Received: by 2002:a17:907:ea8b:b0:c20:3402:bd35 with SMTP id a640c23a62f3a-c250c330f70mr731879866b.12.1787744981167;
-        Wed, 26 Aug 2026 04:49:41 -0700 (PDT)
-Received: from localhost (93-40-43-207.ip37.fastwebnet.it. [93.40.43.207])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c250a5d62easm466521666b.6.2026.08.26.04.49.40
+        d=1e100.net; s=20251104; t=1787745579; x=1788350379;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=bc8my8FbiDqjxCZcE9P0+mYGbrSku1wnrvIHI1ZOYos=;
+        b=JhP6+JnbcJ9r4lZXvuBswb1kpcVximVW6BJcyvE9jmhDlJySC75Pd+VPR1adsiUtBf
+         QdvqGo28gpx1zK2DC5oCcWcAomUU5L1l66S0sLGBzy50sRXYXO4s8o+9h6Q2gHlcQzNW
+         IDtNS2QmbBO3BIKbw0W2fCWq4Wm19TKhBXpmTukcZtbc8Faw+Ve2eirzEsGtHJbh3CqZ
+         tb/5IgCFdGmSud7KmOFD5Qw8etyldc2Vciiv44GBP0r1OTjVpF+XaQPgC15FC0T3bZZ4
+         wJd3EACBeUa9449bXTtVWFRLFscb7dm9PJcwJMcDMkVw627jUynTAiwa1LoOHdtAXFzm
+         oAVQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrDcQbcFBk9YrTBlPM6E8zsn15nVf9x4TVha0P7sgbKK42X96LwtFdeLvG3KCHyML2518kF1PwFBVckE2fmCuI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kHbLQ7fei0fM8QcEskpYtCYgy4DZ+5wEedc118QEISwCdtLCx1
+	mfdjPmf5Eeblk5ApiKBHlPIqPs4oMQEDTI8cMAbEM4IKcMVRicunVK/a
+X-Gm-Gg: AR+sD10eQaQBUulYgWm4fd4ar8YBQuTfsXBIKHuv9D5v5tcGAGckJBgGFueON7gqs3H
+	LTk5EWfl8tmvEdkTetVyk/YBUbJr49NfbuvPqCgCNMV3aBD7fpk/KIOkT3Ux1czZWJmurmDsFim
+	Ye8xs1ujWettIDPijl2bjIMPhv6ZETTHLcWZ2wHtZE7bP/JZLMLVO5Gvx5YwQVfSU9yx/CEU4Ws
+	RQV2rxeyxY2nRNizjOvGYZ8BXgpbfFtJpL5ZODE0nzCXKw8E/PiREEHKO2HrhNGGbumreeWLyXH
+	MJB/kJdw01vywP1Bvt88+tOy67AGb85Aav2QMZMKkwgh3tkzksoNyfG/cYDUL7WISDooe6dxCbn
+	Xut12T8ffzNBefomHvEyCjSk9ZgdCgXdB4XgIVyiKCBbUdNvhvTyD56+vuBJ36JFFv/pNk/jPGc
+	0hVbkr5SBosQ9tWQaYHpaK2e7YkfMYz7ZufsxKYPxjFmJh7yjUEcz4ZdVW+G2qTveE89c8Z07DJ
+	VkpZmFNYiY=
+X-Received: by 2002:a17:90b:1a86:b0:38e:9784:dd47 with SMTP id 98e67ed59e1d1-39645829233mr18130835a91.1.1787745578549;
+        Wed, 26 Aug 2026 04:59:38 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141a8eefd98sm14607883c88.3.2026.08.26.04.59.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 04:49:40 -0700 (PDT)
-Date: Wed, 26 Aug 2026 13:49:39 +0200
-From: Alessio Faina <alessio.faina@canonical.com>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, hangbin.liu@linux.dev,
-	stefano.salsano@uniroma2.it
-Subject: Re: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh if
- iproute2 too old
-Message-ID: <ao7S04LkWVXAQpgq@cicciput>
-References: <20260824091537.2305107-1-alessio.faina@canonical.com>
- <20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
+        Wed, 26 Aug 2026 04:59:38 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] KVM: selftests: Actually test PV_UNHALT
+Date: Wed, 26 Aug 2026 17:29:13 +0530
+Message-ID: <20260826115915.2882221-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Aug 26, 2026 at 12:01:56AM +0200, Andrea Mayer wrote:
-> On Mon, 24 Aug 2026 11:15:37 +0200
-> Alessio Faina <alessio.faina@canonical.com> wrote:
-> 
-> Hi Alessio,
-> 
-> Thanks for the patch.
-> 
-> > In case iproute2 is older than version 5.14.0, released ~Sept 1, 2021,
-> > the End.DT4/DT6/DX4/DX6 support are not available and the tests
-> > contained in the following 4 test files
-> >  - srv6_end_dt4_l3vpn_test.sh
-> >  - srv6_end_dt6_l3vpn_test.sh
-> >  - srv6_end_dx4_netfilter_test.sh
-> >  - srv6_end_dx6_netfilter_test.sh
-> > are failing in some kernel backports.
-> > This is the result of one those tests in an unsupported environment:
-> > 
-> > \################################################################################
-> > \TEST SECTION: SRv6 VPN connectivity test among hosts in the same tenant
-> > \################################################################################
-> > \
-> > \    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)       [FAIL]
-> > \
-> > \    TEST: Hosts connectivity: hs-t100-2 -> hs-t100-1 (tenant 100)       [FAIL]
-> > \
-> > \    TEST: Hosts connectivity: hs-t200-3 -> hs-t200-4 (tenant 200)       [FAIL]
-> > \
-> > \    TEST: Hosts connectivity: hs-t200-4 -> hs-t200-3 (tenant 200)       [FAIL]
-> > \
-> > 
-> > To amend this, check the current running iproute2 supports the required
-> > feature and, if not, just skip the entire test to avoid a failure.
-> > 
-> 
-> Which kernel were you running when you saw these failures?
-> 
-> Did the ip route add commands that install the seg6local routes fail
-> there, and if so, with which error?
-> 
-> Ciao
-> Andrea
+test_pv_unhalt() only checks that KVM clears KVM_FEATURE_PV_UNHALT from
+guest CPUID when HLT-exiting is disabled; the feature itself has never
+been exercised, hence the FIXME.  Patch 2 tests it by halting one vCPU
+with interrupts disabled and kicking it from another, so that reaching the
+instruction after HLT is proof that KVM_HC_KICK_CPU was delivered.
 
-Hi Andrea,
+Patch 1 adds the helper that patch 2 needs to learn a vCPU's APIC ID from
+the host, rather than open coding KVM_GET_LAPIC as a few tests already do.
 
-I was running kernel 5.15 (5.15.0-139-generic).
+Changes in v2:
+ - Pass the APIC ID to kick in a1, not a0.  KVM reads it from a1, as the
+   in-kernel guest does in kvm_kick_cpu(), so v1 asked KVM to kick APIC ID
+   0 and only passed because the halting vCPU happened to be vCPU 0.
+   Spotted by the Sashiko AI reviewer.
+ - Halt on a vCPU with a non-zero APIC ID, so that a kick sent to the wrong
+   vCPU can no longer pass by accident, and enable that vCPU's APIC, as a
+   guest using PV spinlocks would: KVM only routes the kick once the vCPU
+   is in the APIC map, which is also why xapic_ipi_test enables it.
+ - Move the APIC ID helper into apic.h instead of keeping it private to
+   the test (new patch 1).
+ - Report the return value of pthread_create()/pthread_join() rather than
+   errno; they return the error directly and do not set errno.
 
-Removing the sink to /dev/null in check_hs_connectivity
-I can see the following error:
+Built and run on x86_64 (AMD).  Untested on Intel, though the kick is
+handled in common code and delivered through the generic LAPIC path.
 
-------------
-PING 10.0.0.2 (10.0.0.2) 56(84) bytes of data.
+ - On kvm-x86/next, the whole selftest suite builds warning-free and
+   kvm_pv_test passed 10 of 10 runs.
 
---- 10.0.0.2 ping statistics ---
-1 packets transmitted, 0 received, 100% packet loss, time 0ms
+ - Also run inside a VM booted on a kernel built from kvm-x86/next, i.e.
+   against the KVM this targets rather than the host's.
 
-    TEST: Hosts connectivity: hs-t100-1 -> hs-t100-2 (tenant 100)       [FAIL]
+ - Whole x86 suite with the series applied: 61 passed, 24 skipped, and
+   set_sregs_test failed with "KVM allowed invalid efer bit (0x100)".  That
+   one fails identically without the series, i.e. it is the host kernel.
 
-.....
-------------
+The test was checked against four deliberate breakages, to make sure it
+can only pass when the kick really works:
 
-The error I can see upon installing the route in the setup is the
-following:
+ - pass the APIC ID in a0, i.e. the v1 bug: the kick goes to the wrong
+   vCPU and the test times out, so this version does catch it;
 
-------------
-Error: either "to" is duplicate, or "vrftable" is a garbage.
-------------
+ - drop the KVM_HC_KICK_CPU call: the halted vCPU is never resumed and the
+   test times out;
 
-I can see that iproute2 doesn't support any End routes
+ - clear PV_UNHALT from the kicking vCPU's CPUID while enforcement is on:
+   the hypercall returns -KVM_ENOSYS and the test fails with
 
-------------
-~$ ip route help 2>&1 | grep -qo "End"
-~$ echo $?
-1
-------------
+     0xfffffffffffffc18 != 0x0 (kvm_hypercall(KVM_HC_KICK_CPU, ...) != 0)
 
-It's similar to the case we added last month(-ish) for
-srv6_end_dt46_l3vpn_test.sh.
-I just didn't realise at the time that there were standalone 4 and 6
-test cases as well, or I would have added those checks at the same time.
+ - remove the halt: the bounded wait trips and the test fails with
+   "vCPU never halted" rather than hanging.
 
-Kind regards,
-    -Alessio
-```
+Hemanth Selam (2):
+  KVM: selftests: Add a helper to read a vCPU's APIC ID
+  KVM: selftests: Test the PV_UNHALT feature, not just its CPUID bit
+
+ tools/testing/selftests/kvm/include/x86/apic.h |  9 ++
+ tools/testing/selftests/kvm/x86/kvm_pv_test.c  | 97 +++++++++++++++++++++-
+ 2 files changed, 105 insertions(+), 1 deletion(-)
+
+-- 
+2.43.7
+
