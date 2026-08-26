@@ -1,79 +1,58 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out203-205-221-202.mail.qq.com (out203-205-221-202.mail.qq.com [203.205.221.202])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06D39399377
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 06:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AC33AD526;
+	Wed, 26 Aug 2026 06:42:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.205.221.202
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787724936; cv=none; b=k00+0A2fnAP61wxT9eRX3d0hfx9yHCOli4KoN6/FBOLK9CqPI4tD52X/PeGuq9dOFKuOhIO5iSpVK2pUTs5On8wdapBGi1ouD8S5Tq2UVrcG4o/BcM/yRadrZNtOf4zRJ9Q8BjBj0EyQ3vmzDF/g2Nvz91NL2+kZbIBv3sykuQ0=
+	t=1787726566; cv=none; b=pKSk7ghHG0UxfYVJO03oBZcfMkWdPPz40klM8wxj3MSV4Rv0EObA55CJ+pxdx/kNuPNf7mR1vO36m8D5plRAA4f2ebqzLW8y/gLeVexDBtGuaFvAjo/U8pYy6mhMk1BMYVMv70NgBthyg0bvBI5FQwVtumo4rK+JBzyw5vUPNaM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787724936; c=relaxed/simple;
-	bh=bEgZ/lO0dQl/Gk12BJFJKAn5h5zpT8Qua2XOyb7g5x4=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=jFow+KC6d87RiMbie6Mv1M4GaErQk9KvEKVkLNESj7ueyKoW8JY7Wh9oRzMQiCy5GWT8PNTMjaZlRED08xPSMAUMFh3pMyl0RrdDW9zxCvK6fLs0tZio8GdAsOz25RwPh6+Xe7P7KIDX8VSPZpmKH5IZSLsb7Xr29OZ1oHnL3bo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=r5G6WdPR; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787726566; c=relaxed/simple;
+	bh=ucJaYL28wzn0yTSA4wbZcwdVARy600OU5xqruOvXIxs=;
+	h=Message-ID:From:To:Cc:Subject:Date:MIME-Version:Content-Type; b=E6QkcrZrzAns3+ZqLYZ5y0Q2bEpNxYi7+jtawf1/V/ksxjdav4cecWECDE56q8YS2gyygVuwZvIO4KgBiJ2k3UujtUZe+tarBM/TAkxIhq7n21YgnQo+3tYiQKwD99h6RLe10HWQgEtbxxKdLiVRNYO5vxxkDtLhfbDUe0FgR3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com; spf=pass smtp.mailfrom=qq.com; dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b=DHRKPQP4; arc=none smtp.client-ip=203.205.221.202
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=qq.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qq.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="r5G6WdPR"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-3964e480f76so932933a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 23:15:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787724934; x=1788329734; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=IFxcZ1IROsPv4rceYm+aT5Ud3Cuqd0ESuqG9hhc5tu4=;
-        b=r5G6WdPRqeR7DXeVDDY0NCdfkRicsVPQG4tQmrPfDi+I8X5ZUFZ8JNMi22xruwjDe5
-         chzQV4fm9FRuRIii29yHBB2VbVRUAKQOl4zA933s5qRvt065hMlbiYc1DYaAaOyw3IPS
-         qaihU7/606uIg5S1jEHHFcsR1zrd8M4snD5gmh0RvFegCwQELqINBTJU4F/fmalILxlS
-         S3Juu+hACkZwwwMUDpRQ6/gZOD8cmSJ0338d03+ieeCcvZt0TGXd3K9InPUZXrKHJ81K
-         TQUEtGSr2j99FNNf5dXM4rh9Pq+u3YEe/GqetnRo8jBHrs+R9R03SPbEm0tjJ4nBFRUt
-         MeDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787724934; x=1788329734;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=IFxcZ1IROsPv4rceYm+aT5Ud3Cuqd0ESuqG9hhc5tu4=;
-        b=DpQSEDvHRb5NvUaBEZPZUNTTA0gspAFRVhXHIXtErnWzoQS9xgfNNs3mcXthAVi0p7
-         jgPD8h/3gEX7Nxyd+pfKplH6tZCk5Fy1+XB82laLXnG5YzKOu9HJ3gvngyl26taDtruv
-         Ok2M/jU6JPhnz9ABxKpwnXYNES8lkJrOVirzFAg3RwGtc0a4Sui5k9Cot2PWWLu2o2Q9
-         N9j6RHvb72zQKi50AchlGZ0qqQKdXFh9TefO7LNd+VpYIuc/vrw6bAL41y4ulGl3+8rV
-         pvyWUHFZX7OImSpcXUvLiHOBaFQVFuZaQiwa/Y/hSyDR55PgiWFKi/1MuywQaxwS4qc2
-         wy3A==
-X-Forwarded-Encrypted: i=1; AHgh+Rr0GvFVrdmHHOqQ9PjinCV++TmO0P4ixAzZQejFEI60kR+BqyRHOMyqvpQX/SXUUxt1vXqOKfr1qODJY3P73z8=@vger.kernel.org
-X-Gm-Message-State: AFuF++lT2ak18n5uTyRP5yoiIPBMHJkNxyTCgk5ZjWjgkfj/nUs1ArIQ
-	BzMispS+Ed7CoZ70el90Ii/n7OKcyppoT7SfoI+vthCDbrRsiibqcKDD
-X-Gm-Gg: AR+sD10n5j5aPHWHnRn1CGbNaSm8nXDYVyBHOXQATaSGAQcWsCz25yDQBeUUibRYPjc
-	1gAji2m0fJpbuqMa9gcQIzGnrUh2eq+qbIpeU0jHVm4QaiuYz1LWiSk0sHYxvrBkfBUDoD2MA0r
-	WVSNrWYw6I6JWkbep/zJHlQUuO5uG82CijcKd/cWJi+cvmv7jfxpzF42jaRvDYRNPhYkrtGNnp5
-	kRTFfrYYxWNnQUT07fkAKM49P2oA9aTawkwwnlqF61VnkzAGX1lzQAXvmff/1GH+x6SGMfJwqIz
-	SldKc0n0DFUu1UH7QokkBRcL1MEB8lsLjSZOUTaY6DiEtaYmkkxokdA7P/pgWdiJfFE9rAzIpId
-	nuNWsxVL7bvrRByadjbhmq8qIldEEXW54QMFAYyXva38v0WIC9DmadBW9ZnyeeClU4De2fYQs8J
-	X1+Xux87QEK9rBENTV8hdK6bqUDvBlcbU1+IzkzwNm77MbVGbSEw/uBsUXC16TmjQMqyUOLBIUa
-	6ZSPJf93k8/uNXh2raszCEYxM0=
-X-Received: by 2002:a17:90b:1e4f:b0:38d:ef48:b04 with SMTP id 98e67ed59e1d1-3966d5f8eaamr8803881a91.10.1787724934185;
-        Tue, 25 Aug 2026 23:15:34 -0700 (PDT)
-Received: from Anshuman ([103.161.223.14])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3283d885fb6sm5192046eec.14.2026.08.25.23.15.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 23:15:33 -0700 (PDT)
-From: Anshuman <anshumantewari123@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>
-Cc: Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R . Howlett" <liam@infradead.org>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
+	dkim=pass (1024-bit key) header.d=qq.com header.i=@qq.com header.b="DHRKPQP4"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qq.com; s=s201512;
+	t=1787726559; bh=YUpYaXsq4mZSk10zKNzRlgByEYwJ8plN45XXrDI+0IM=;
+	h=From:To:Cc:Subject:Date;
+	b=DHRKPQP4h9iIy7Foz44tzZCZDBF3rNx2fzBgmo4xmHrxVgegHSEEHmPNRVMRtKa+/
+	 01Djao1np9BwikzUYzn1I4N5v8hvEs9T/QpvBo8Z3ASKuYGmQg3NOWesTp3NW8DL7X
+	 x9oQmOAA/owL0OP8uXufUNhQvzjhiXVU15E5JZFc=
+Received: from omarchy.tailf00a51.ts.net ([2001:da8:d800:b00c:4e1d:96ff:fef0:ed21])
+	by newxmesmtplogicsvrszc50-0.qq.com (NewEsmtp) with SMTP
+	id A9D8585A; Wed, 26 Aug 2026 14:42:29 +0800
+X-QQ-mid: xmsmtpt1787726549t1igdanys
+Message-ID: <tencent_E313247AB9048C22740CE2A4C1A9FB04070A@qq.com>
+X-QQ-XMAILINFO: M1rD3f8svNzn45BTT3DW3UQls7PinerMEppsENTGy5OKbg8FQPM5cGJR7saNjy
+	 HWIMBcrI7sb6yYYKzwf+sqzjSTitEPCBaMITHBDiU2xdhdHa9UiIgxCUkqH4dPqUC/GbKVWyjObr
+	 oFVt0B8Fz664FWe8GhNkT44RKzvga2jTRixr+E+hWeeY5qCpoCyKbm4usJjCB45V8b6Wbtvq79Pl
+	 GVDFW6VrMBv8cJ66Si+EUNiRnzVEvSFPlbalWGGrdoD3y5ERt5AcwAyd+iWyPzQt8OtywMkE8T+0
+	 tRmkAgN1ZmJqm+X2Tv9832y9TYN5sMA/5WGLVKrIM1EcI/Kb3Kr23at1Xx+GDVw5982pmQc0mSim
+	 Njrl8Q3L5Eo+S6yNcVm32mAU4wFY3Ow3M6cDEKoLWhPrhu/EhT17Ge2zMIaGaQtEsQMkSA8BEqrE
+	 Y0gRxu5Hda/6Yx0Gq6Id+BwmfGJN2Tfa8Q0ZEXLWYrXpsMrsg0fu3Na4a1rQPBn20powol0WfvBt
+	 JSf5dscQiDVcNI/TQCBTQTMkAapKhM/dYXhsul354d+GopEojv9p6Vi3wdJYqemXGfrsZ6AVLZ0r
+	 e4CAHBu81klD8609VLR+D4SqmANQ3jtrW2mrkTdr4ZpAaR47ibAZi3xRg+APZCdjAicFe58ogq2r
+	 DMltMS/24wxHlVh3v9K/EiAsT0BBc5qS1SrzLH3fJlMFIfvR8lnR132NJwvBLAJepDhoujzA/tBx
+	 Qk+jIA9nM+iLnrXR0cIUs0YO3H8de3zEMtfWxeBt8vGh+V+NLYYjoMeDAyXzAQesxxaghOTgtBW8
+	 Aa+UrzrdvX9NMd3UKsqRlT0D6YsDgYS3N6eCTfz/QV/Uw5ETuAP1r7nPyVAD6peTHkJorblSwqMf
+	 qt7TVGPpfquFwtNrMPxLOn1GlcbuT5Kp1En3r+ygasyc40kZIloASN67tf7R73o98iTdzSTgh8Xn
+	 WWfjKGWKDmv6X/aWpzBOmG66fcLK1akXN3aahLEI6MsC7dkV3GoF/ojKD0BEHH5evp6EC348bSCH
+	 4tE+iTxO61lC7Z/SaAAKGwQO3jP1byWuoYwJvBaXrr5eKVeDuM
+X-QQ-XMRINFO: NS+P29fieYNwqS3WCnRCOn9D1NpZuCnCRA==
+From: =?UTF-8?q?=E5=88=98=E6=80=9D=E5=AE=87?= <2028566723@qq.com>
+To: kees@kernel.org,
+	shuah@kernel.org
+Cc: mic@digikod.net,
 	linux-mm@kvack.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Anshuman <anshumantewari123@gmail.com>
-Subject: [PATCH] selftests/mm: fix line buffer leak in mremap_test is_range_mapped()
-Date: Wed, 26 Aug 2026 11:43:00 +0530
-Message-ID: <20260826061300.14038-1-anshumantewari123@gmail.com>
+	2028566723@qq.com
+Subject: [PATCH] selftests/exec: Fix check-exec-tests.sh with O=
+Date: Wed, 26 Aug 2026 14:42:28 +0800
+X-OQ-MSGID: <20260826064228.67490-1-2028566723@qq.com>
 X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -81,34 +60,37 @@ List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-is_range_mapped() uses getline() to read /proc/self/maps line by
-line, but never frees the buffer it allocates. Every exit path
-(parse failure, match found, or reaching EOF) returns without
-calling free(line), leaking the buffer on each call. The function
-is called multiple times in this test, so the leak accumulates
-across calls.
+When running the exec selftests out-of-tree with O=,
+check-exec-tests.sh is copied to the output directory without its
+ktap_helpers.sh dependency. The script therefore fails to source the
+helper and exits before emitting TAP output.
 
-Free line before returning.
+Add ktap_helpers.sh to TEST_INCLUDES so lib.mk copies it to the
+out-of-tree layout.
 
-Signed-off-by: Anshuman <anshumantewari123@gmail.com>
+Fixes: 2a69962be4a7 ("samples/check-exec: Add an enlighten "inc" interpreter and 28 tests")
+Signed-off-by: 刘思宇 <2028566723@qq.com>
 ---
- tools/testing/selftests/mm/mremap_test.c | 1 +
+ tools/testing/selftests/exec/Makefile | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/tools/testing/selftests/mm/mremap_test.c b/tools/testing/selftests/mm/mremap_test.c
-index 131d9d6db..779ef2d5f 100644
---- a/tools/testing/selftests/mm/mremap_test.c
-+++ b/tools/testing/selftests/mm/mremap_test.c
-@@ -156,6 +156,7 @@ static bool is_range_mapped(FILE *maps_fp, unsigned long start,
- 		}
- 	}
+diff --git a/tools/testing/selftests/exec/Makefile b/tools/testing/selftests/exec/Makefile
+index b640af8f02b5..d16ad3d32770 100644
+--- a/tools/testing/selftests/exec/Makefile
++++ b/tools/testing/selftests/exec/Makefile
+@@ -16,6 +16,7 @@ TEST_GEN_PROGS_EXTENDED := false inc set-exec script-exec.inc script-noexec.inc
+ TEST_GEN_FILES := execveat.symlink execveat.denatured script subdir
+ # Makefile is a run-time dependency, since it's accessed by the execveat test
+ TEST_FILES := Makefile
++TEST_INCLUDES := ../kselftest/ktap_helpers.sh
  
-+	free(line);
- 	return success;
- }
- 
+ TEST_GEN_PROGS += recursion-depth
+ TEST_GEN_PROGS += null-argv
+
+base-commit: 45c13f3f9e3bb15fd89ff2864c6f627a3b4b4229
 -- 
 2.55.0
 
