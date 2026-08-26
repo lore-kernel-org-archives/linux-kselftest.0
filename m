@@ -1,187 +1,151 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qt1-f175.google.com (mail-qt1-f175.google.com [209.85.160.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78F40223DC6;
-	Wed, 26 Aug 2026 15:19:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787757585; cv=none; b=Po7CBxrpay7AQyryGw7aQE3bKRDVqaJFRA//mkwEUoMFuOGw9ETTkV08CRk4oUL54n+BAR5YvMi8KaRSzBtR3DKMCxXsrD31KSf/YUOQCZNV9LqwefO6CIHC8w7bLeRZjiOiJSNacTAWo5R9fjnKjPvfMkRigz0pJoywfXA+y2A=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787757585; c=relaxed/simple;
-	bh=ebsJXJehWq8vQ2+yk0Ww03KoJu5igP9PLWsd/FlrZiI=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
-	 References:In-Reply-To; b=G5YZlAizTpcl18TUW1RbyWzkmWT5bHtowVXwd+0jg1kvmWzEuNNZkozk73OWqYvMD7iebNcjbM2Aos2JLj9+b4u1bDoF+XXWfpX12bOICgyjTU7mPxMFaPZwKVLFi0QQSuHMzzYDYw/l++iEcP/oWkVxe0/nM+CNMcXCDYotQuU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HjpO8jxg; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 628804570CF
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 15:20:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.175
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787757634; cv=pass; b=ELjs5NdRtxMoP2l7l0RRFhpQK0ymYwIYsx/9SqopHIHAaAsjr6OmmryZKWi1J17XFkQXF9dy6mrXBtGTcKcf9kNu4mKN1X/TYc8Xhx9NDffW42DvlmY6on333aHP7J6KAxkoj+/zt9sR9ao1IYJi1Czrkm22dORiNAr0UNwpyxY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787757634; c=relaxed/simple;
+	bh=sCZYn2GfaCakpfs73hnSx6QFjMiUhnTYTcyWSrJLlxA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=JYRgbsz+u9bKlZwLzija1RO28UQWirk56WdqGU9a6P8IEXaD3DooR0nFjXNZIsAP66nMC1KOQCT5kqkFP4ISXyEedSktGJGrXAsvHpo8lkFFVh29AuuHI3iayRtUI+6tYGecGI2GPcOKSilPZnC+HhmeRrMXMZT9qiiTu7c4Y5Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VjJQhA+d; arc=pass smtp.client-ip=209.85.160.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HjpO8jxg"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id C248A1A1842;
-	Wed, 26 Aug 2026 15:19:39 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 90193604EC;
-	Wed, 26 Aug 2026 15:19:39 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6759111C783C1;
-	Wed, 26 Aug 2026 17:19:26 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787757573; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=dcHHWyRJIterVIg89zHGHjBsGnWPtPc3BMd4jHQ4tok=;
-	b=HjpO8jxgTnzphcnBhRkTuVBnoROWiD8ubMM1sxHlKesRQbfnHEQ7GBcYy6SH1Hy9r14VPR
-	s0OeD/uZAPPWDN+FdAqVsdEEQrjb2Jmb1oEkEOwN9jBl1Da3/MmjY1qwz56A7I0Rn7VEg1
-	T+4ZkXQr+RHeewEMt/BL6sZj0re/LM68MpNLNnkFw88bSakavz1jwNgGpXdJXMg65p9jfv
-	VZ5V00qUyWZoyIsw/yozVWe9iQgxFbmQ51Fbqlttk9coWzl1De01/TetpG5C8W5CqpgD4N
-	cnA5K4PgCJ0e2sraXUT7bJOF45weSFkaUVmWS57sLEBErb4wJ3cBrgYx2CYdtA==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VjJQhA+d"
+Received: by mail-qt1-f175.google.com with SMTP id d75a77b69052e-517dc520840so9473041cf.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 08:20:33 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787757632; cv=none;
+        d=google.com; s=arc-20260327;
+        b=acjZIyr82Oh9avamdD9E1DQVvcIBTTvSW5WiPdBLSc025beSirJ0zATIfIS4f7/jor
+         nHTig5wJuJcOVJqutvSbLuiy5RDShdlfCzUrJqtVB3EC4FaPeDdjmztb8uTqXliIP9GE
+         mwtsv+brxYve2tpCDmiJs4xC+t/Lq4Hghb7YyH/CM05Xuv8hfAk85BAjs6u1eGUWBWj+
+         OpTS9TVHR4ypTpXHRRj90EFHwl5gUeI4EKRx0khqKkeao7b4c67p2IF2VOz+fea31sPg
+         ShGT3K9nSWhumYm0QzS2nLqVLQUzSICEmXV3zmonj2RzgDknNNKIJZzJ4nf0q0QYBQyf
+         CRcA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:dkim-signature;
+        bh=SfCiydN0Xlj7GfJ4cH4asf0TucQSK91D8eGGF7AZl/s=;
+        fh=5GVWp3ma0lvoqDs5DLVouq+Rd8EG8H9Iq6Bbdr/1adw=;
+        b=fDjGgGkFEX2Fuwl67XRuztXI7mHWJ5Z/kFJg8vmC5KmE59EiJdlp6UKb/tS5lvBn6o
+         JT5hijBmFecimofUb08nojdoMU40Pzc5ChpoKacCv4sW2Oop7yKY79C4U4TXO/yI1Bbr
+         4cOS7txFZj8jeWXgvS9chfTyEI+t6mlBW5YUH8xMIOLzy6MCXjYILQYM8NG4vV3VIkC6
+         T3DXLn5OavnsfEARdid0IiAO4oBqW9+RzH/de6WbauVCovEO7ABpQMaHnboZSIPJwXBY
+         O5O50Red+YZA0H0hgo4k1Go/9roJlnoPAD9fExmRInr6nUUZxF1kLidRLB+rzdRwnaYK
+         aCfg==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787757632; x=1788362432; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=SfCiydN0Xlj7GfJ4cH4asf0TucQSK91D8eGGF7AZl/s=;
+        b=VjJQhA+d3f5RNWfQEtO1A4AOrclo5pmaML6oorqjjVas3DDvKTdft13h1fITVXB/yx
+         O2snHxywdg5KRpmLnYnYTtaeOTn5crdBVQRbazYtVlWUTz56c6fi7Za6eITV5QZ73cTL
+         4Nh2AOGk4RgQyFDHTlquQ+KO9G371yaNaHfNzx6D+BSRVBfFPI/UdboKR22+70++om7R
+         PutM6fkaiTtQI2HP2ufmE9plP6CdLg+80EWhnZgCboZGjssCj+XNu/guA+J2CxdmDl2N
+         ClaVD5KRw0cZCqJ+cu4Ewcl2FfJe2tlb9GKoK3sUJ+t1+chD12o34GmjXemXT55inosH
+         UUWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787757632; x=1788362432;
+        h=content-transfer-encoding:content-type:cc:to:subject:message-id
+         :date:from:in-reply-to:references:mime-version:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=SfCiydN0Xlj7GfJ4cH4asf0TucQSK91D8eGGF7AZl/s=;
+        b=l4FfCYDxta8ZBcRczeFWGfYpvkzawJh/o/zyT2m6BlnqIA7HjKJOqiJhcGsYCLSXvt
+         lc2As5V/TFRv9jGf12skxCjf36JzU+4pa6003TLD+htR47R86D5KbV0+51JQtv14zKaD
+         gQSCBCX/nDvseNj5WSH4LFCUe/OqovdFSOL0MrVubE/ljqx5XjZoFrgKMrbJ4bR3G1mO
+         ijIn3Z2CvojMzQRw1PMcMH0v7oIoLtf1CYrlebOHLM28pr2bLzAKWIEwka5REJTAKp6E
+         h0UDQBgubViyiV8s+RmITifgSC5qeBUgdex/xk37LiI8kxSSZpcSKuTRvaJ15bc/xKu6
+         q/Bg==
+X-Forwarded-Encrypted: i=1; AHgh+RrjBqx2Vn69mwwyAeJA24y3rCgmcWVsAesjU7R41zJfJO3eIqVcwIeeSSnUBbiZlUqBiZ3Wd/z15bUbtlYdVSY=@vger.kernel.org
+X-Gm-Message-State: AFuF++kJmc51CSKkEZGx5jc8nmiZYUNqZunPxZmycq67fXSXAx0SUX+C
+	PgvB0OrmcJhKf9wiIMB8NO9z8lfsA1qsjTMxNxEw7IN5GoODwCGJ3nNbiaZ5Jwu0kJbzVtECqRM
+	FGJo8rNsgiKbxnarX0rEY9p4C24sbTSFolq7BjbC1
+X-Gm-Gg: AR+sD10wG+iSBIxevwkjbRFu5ugbLoX5rrIbu7WWulKmaI2SDnsqwKoFG9ocuxewZ/9
+	x+DfiIy8APWoAlxmdLWjlVbWkucmJqr5cZgHjVN1VH6svVWlFyCJWVudu6hhGyQPuPQWi86BGKU
+	hE0pBOfuRSpmftSxIRQhwLXYVi98+oOvztbHXMP6hfBRx4wG1AEYzQXt7ENyglBkigfSNao0xuC
+	Qmr4+ih3qeRcabKB8U9TL72RScMJpKa66XZOmv+B3GHhsZLOdNmzELMGoQb7hp3+UCP78C4f02B
+	WsY/+qbBRF7homIhGsBhsre3+FLEP5eBF7PcV2HAnQXbj4UKRGZZ89+bicCUfFanUyJUumpgrXm
+	JgQX30oqnEeiSFQUNwGOKR5M0Y8x9K2O2vpOC9WMZuwjsdvxbrfy0TC0HH50=
+X-Received: by 2002:ac8:5fc3:0:b0:52d:6c92:b5e1 with SMTP id
+ d75a77b69052e-52e423e01d9mr75971011cf.27.1787757626391; Wed, 26 Aug 2026
+ 08:20:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+References: <20260826141145.67823-1-jiayuan.chen@linux.dev>
+In-Reply-To: <20260826141145.67823-1-jiayuan.chen@linux.dev>
+From: Eric Dumazet <edumazet@google.com>
+Date: Wed, 26 Aug 2026 17:20:15 +0200
+X-Gm-Features: AcwNN1WQYfOEPBxc7l95bDB56B-HoAnly0oktECUAuu-7YHrmEIMuUzsrsZifHk
+Message-ID: <CANn89iLWF7qg+VYcao1L_-e1vXSTCKPLw9a855Gr5+gPe_yG2Q@mail.gmail.com>
+Subject: Re: [PATCH net 1/2] tcp: fix corruption of urgent data on
+ multi-segment retransmit
+To: Jiayuan Chen <jiayuan.chen@linux.dev>
+Cc: netdev@vger.kernel.org, Neal Cardwell <ncardwell@google.com>, 
+	Kuniyuki Iwashima <kuniyu@google.com>, "David S. Miller" <davem@davemloft.net>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Shuah Khan <shuah@kernel.org>, Yuchung Cheng <ycheng@google.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 26 Aug 2026 17:19:25 +0200
-Message-Id: <DKYZ5ZH2J5A4.2E44FZDA68OKK@bootlin.com>
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, <bot+bpf-ci@kernel.org>,
- <alexis.lothore@bootlin.com>, <ast@kernel.org>, <daniel@iogearbox.net>,
- <john.fastabend@gmail.com>, <andrii@kernel.org>, <martin.lau@linux.dev>,
- <eddyz87@gmail.com>, <song@kernel.org>, <yonghong.song@linux.dev>,
- <jolsa@kernel.org>, <tglx@kernel.org>, <bp@alien8.de>,
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
- <shuah@kernel.org>, <mingo@redhat.com>, <andreyknvl@gmail.com>,
- <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>, <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next v7 1/9] bpf: mark instructions accessing
- program stack
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260822-kasan-v7-1-99afee6ef7fd@bootlin.com>
- <f6a88fe55d543f5fe2a6d9e856acb4cf1b87b8210de58459df1272c8a456d926@mail.kernel.org> <DKWOIW8NUFZA.1QPBXZJY5YYOL@gmail.com>
-In-Reply-To: <DKWOIW8NUFZA.1QPBXZJY5YYOL@gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon Aug 24, 2026 at 12:33 AM CEST, Kumar Kartikeya Dwivedi wrote:
-> On Sat Aug 22, 2026 at 1:24 AM CEST, bot+bpf-ci wrote:
->>> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.=
-h
->>> index 004b06785521..412a13a664fa 100644
->>> --- a/include/linux/bpf_verifier.h
->>> +++ b/include/linux/bpf_verifier.h
->>> @@ -725,6 +725,8 @@ struct bpf_insn_aux_data {
->>>  	u16 const_reg_map_mask;
->>>  	u16 const_reg_subprog_mask;
->>>  	u32 const_reg_vals[10];
->>> +	/* instruction can access non-stack memory */
->>> +	bool non_stack_access;
->>>  };
->>
->> [ ... ]
->>
->>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->>> index e036ae20bf6b..040af75d9550 100644
->>> --- a/kernel/bpf/verifier.c
->>> +++ b/kernel/bpf/verifier.c
->>> @@ -3272,6 +3272,11 @@ static void mark_indirect_target(struct bpf_veri=
-fier_env *env, int idx)
->>>  	env->insn_aux_data[idx].indirect_target =3D true;
->>>  }
->>>
->>> +static void mark_non_stack_access(struct bpf_verifier_env *env, int id=
-x)
->>> +{
->>> +	env->insn_aux_data[idx].non_stack_access =3D true;
->>> +}
->>> +
->>
->> [ ... ]
->>
->>> @@ -6654,6 +6659,10 @@ static int check_mem_access(struct bpf_verifier_=
-env *env, int insn_idx, struct b
->>>  				clear_scalar_id(&regs[value_regno]);
->>>  		}
->>>  	}
->>> +
->>> +	if (!err && reg->type !=3D PTR_TO_STACK)
->>> +		mark_non_stack_access(env, insn_idx);
->>> +
->>>  	return err;
->>>  }
->>
->> Does this test read the correct register type? For a load instruction wh=
-ere
->> dst_reg =3D=3D src_reg (e.g., rX =3D *(u64 *)(rX + off)), check_mem_acce=
-ss()
->> receives reg =3D &regs[src_reg] and value_regno =3D dst_reg, so reg poin=
-ts to
->> the same slot that gets overwritten by the load.
->>
->> When the pointer is PTR_TO_STACK, check_stack_read() runs:
->>
->> check_stack_read_fixed_off() {
->>     state->regs[dst_regno] =3D *reg;  /* or mark_reg_stack_read() */
->> }
->>
->> By the time execution reaches the new test, reg->type is the loaded valu=
-e's
->> type (typically SCALAR_VALUE), not PTR_TO_STACK. The condition evaluates=
- to
->> true and marks a stack-only access as non-stack.
->>
->> Both check_load_mem() and check_store_reg() snapshot the pointer type be=
-fore
->> calling check_mem_access():
->>
->>     /* verifier.c check_load_mem */
->>     src_reg_type =3D regs[insn->src_reg].type;
->>     err =3D check_mem_access(env, env->insn_idx, ...);
->>
->>     /* verifier.c check_store_reg */
->>     dst_reg_type =3D regs[insn->dst_reg].type;
->>     err =3D check_mem_access(env, env->insn_idx, ...);
->>
->> Could check_mem_access() snapshot reg->type at entry and test that snaps=
-hot
->> instead?
+On Wed, Aug 26, 2026 at 4:11=E2=80=AFPM Jiayuan Chen <jiayuan.chen@linux.de=
+v> wrote:
 >
-> This one also looks like a real bug, we should probably save the type bef=
-ore the
-> call as suggested and done elsewhere.
+> On the normal xmit path, while in urgent mode we refuse to build a
+> multi-segment TSO packet, so every segment gets its own urg_ptr:
+>
+>         /* tcp_write_xmit() */
+>         limit =3D mss_now;
+>         if (tso_segs > 1 && !tcp_urg_mode(tp))
+>                 limit =3D tcp_mss_split_point(...);
+>
+> The retransmit path has no such guard. __tcp_retransmit_skb() builds a
+> segs > 1 skb and hands it to the GSO layer, which only advances th->seq
+> per segment and copies urg_ptr verbatim:
+>
+>         /* __tcp_retransmit_skb() */
+>         len =3D cur_mss * segs;           /* segs > 1, no urg_mode check =
+*/
+>         ...
+>         /* tcp_gso_segment(): bumps seq only, urg_ptr is copied */
+>
+> urg_ptr is an offset from the segment's own seq, so a copied value points
+> at a different place on each segment. The receiver rebuilds the absolute
+> urgent seq as seg.seq + urg_ptr, so it walks a moving urgent point instea=
+d
+> of the one OOB byte:
+>
+>         seg1  seq 1     urg_ptr 5001 -> urgent @ 5001   (ok)
+>         seg2  seq 1001  urg_ptr 5001 -> urgent @ 6001   (wrong, +MSS)
+>         seg3  seq 2001  urg_ptr 5001 -> urgent @ 7001   (wrong, +2*MSS)
+>
+> The real OOB byte is never pointed at, so the receiver stops splicing it
+> out and delivers it as normal in-band data, corrupting the stream.
+>
+> Guard the retransmit length like the xmit path: keep segs =3D 1 while in
+> urgent mode.
+>
+> Fixes: 10d3be569243 ("tcp-tso: do not split TSO packets at retransmit tim=
+e")
+> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
+> ---
 
-It took me a bit of time to fully grasp it, but indeed, that's an actual
-issue, possibly over-instrumenting programs. I failed to reproduce it
-with any existing selftest, and also failed to make clang output a
-faulty program just from C, but playing with a bit of BPF assembly, I
-managed to observe it:
+Nice!
+So we had a bug for 10 years.
+This is a testament to the fact that urgent mode is no longer used as
+advised by RFC 6093.
 
-  SEC("tcx/ingress")
-  int ldx_self_alias_on_stack(struct __sk_buff *skb)
-  {
-  	struct kasan_test_val val;
-  	__u64 addr;
- =20
-  	addr =3D (__u64)&val;
-  	asm volatile(
-  	        "r1 =3D %0\n"
-  	        "r1 =3D *(u64 *)(r1 + 0)\n"
-  	        :
-  	        : "r"(addr)
-  	        : "r1", "memory");
- =20
-  	return 0;
-  }
-
-This r1 =3D *(u64 *)(r1) ends up being wrongly instrumented, despite
-accessing only stack. I'll then add this reg->type saving to preserve
-and pass the initial state to the check.
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
+Thanks.
