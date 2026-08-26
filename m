@@ -1,96 +1,172 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mta0.migadu.com (out-124.mta0.migadu.com [91.218.175.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 792A336B920
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 05:04:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 113E52F8E99
+	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 05:44:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787720671; cv=none; b=WxILmatyiky3w9Jkr/AH1jbXe1HAWUZu4in76Dxb4Ps83ytQ6dAPfHGe6QzSnFX9CI4E/91S/bJGueSZPa3pTSPG8Uz1rhY2oFMaOTC/cHpzEWeCF5cfURkqt7E2MOms5PS9mtHrSC/vYJ+L3gSC2tyktFiVyMDtMll24bkh0CI=
+	t=1787723085; cv=none; b=EXkTYjRC0q59h+rVRsA0yfKaNHpzTCrJveBFVin74c+Dzw8gy+4im4z28UfdX+YkEGGcIeXEyvwPADO8+YEpGAukvAS7ceCf2X8uKesgy8+sludNOFG/WJ659RFF0H084bVnDH8cgrS3CRypdXQ/LM3YLPts1T+WRzMijJhxbeM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787720671; c=relaxed/simple;
-	bh=rvaXmdHMmazdIGdj9z6pAUEbbACnQf+fE97k972YqEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=WyjA2/yT8azVNS/engGtX3gaU2Nc22eMn1euqsTIzomDAS9l07I8+8UiTA5RxEukiePSGFOZIC+WMgT5jF9vDEZ7lliRpYJWZwgvaOiv9auuuxsB8oNR7U+zQ6aXPzRaPv5MKntelqY0GlrnHVXQRhhenoRtndIEv1Rxq096Cmk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SrSWjBIy; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787723085; c=relaxed/simple;
+	bh=EHSU1HLywans4vNZvGF0DqPTQrozoJrQ4qJHsKE6DXo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EHiIHk+z/jmnCkX8RNRSkpnfMcmS9v26St5/c8+ku0YZf2O+YwN6iMNZOfjeKXnzCno0TwBUJV8RGXIiRvayZRob+QGEH6MDwCWx6Vz9QaoZPjjuNIhBj4984VCuDcbRuW4AmoCRE2091TeEDQ6qQCQFNiBdCLtsMsFpEmV1AYs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=A1XI6Sy7; arc=none smtp.client-ip=91.218.175.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SrSWjBIy"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2caed617615so6386625ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 25 Aug 2026 22:04:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787720670; x=1788325470; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=oYv02gmUGksQgXi/r1LBaBHVUhBN+GFoofiyVDib5Ko=;
-        b=SrSWjBIy5h4L5Jkm8ypZnEPVFvqCsHuAiqdqUekhTK/bOMLNZ88HhhRysV0FDz9KPT
-         jlY+X6N1I3Lwh7HuwA/Rz5LwYj/82K9aIhcpb+ij8H5DGNndP1ERkjgLg/6HStY5HcuS
-         GqtcXn+cPHmZ30wpySYxZhQ82TO2AuvCYs0n1Wqr1aTHCKcyrJA/445o++lIj90PsVLQ
-         4LIQHkg6keHFi15sBPaE9iUNV6BshLLXrOMM33REv5HQB1uncRXdUsKViwPvvsZLTPfs
-         eVTecGwSTld9HkEyvSxF72/G/Ec8V867ZhQY4FkrjG9VE2skD93cy2me+2PJwc1nj+Y2
-         cZVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787720670; x=1788325470;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=oYv02gmUGksQgXi/r1LBaBHVUhBN+GFoofiyVDib5Ko=;
-        b=PYYm1db9LtH+efrddDWrwntklZZ44ussu8Xkz3ovTEhUsVMG8cqBmUj741Nh3awO8K
-         y3rwCJL4uPZUCZldaWwf6enZpe8Jsn2Rxonh/7Si5uVvXPYaqDdO5OF3VI0kL/3FIqFh
-         ybXiYAst4OQKcpVLTGhLrmMXiZcGc4Q5y7kAYHqkWydYiE5xf//jowCFwn8p+n4Z6+f8
-         DSi+6sWQY7sEKunplT6wEljAO9lH9zKhw9+j3aPTMCSheme63jyP4ps38W1rTGZMa6Wd
-         kPrOAuMb3q1fHEZbhuAX0HZN+7ijU6dxJ8msXI9lV3MUG7jBJ5xtT2IFnqm0zGevDLka
-         mmaA==
-X-Forwarded-Encrypted: i=1; AHgh+Ro0w7JXR8revoMYXUbjQMHhfBFoSoYmg/MvR+agnauB/UTgOwnfPm+LhqIKM891SFFXtO3aEAyaJY+dZOWjZj0=@vger.kernel.org
-X-Gm-Message-State: AFuF++mnOhkI7B5U69e+nR/2NYt69po8RwCUnXmQHr7bJO/YQCvzw8YG
-	5p1yjJZeO+1gSdHQIcHtKeFyqZ1R3epvBnb9bAI491IC+Bs0GBrsme9q
-X-Gm-Gg: AR+sD12KL/Y7iqdSPZonXNBlHhyBLt4IHKGRt0W+A/QeEvzCZYPj+HsR+1ggHGttJkX
-	UFokCUKzC33ytwL5Qapav5FlEnjtqVk014L1UMJbUXkrI12LJlFzGNF7F5XK9qmmgmSIsVPcFz6
-	XYoR91ZKqo5YToSAdvNaVb80Ehx5i7ggLkGWwhHdxpvsQ0iWKYftWIv4RSJpTSOg1wUclpzKFCt
-	OGZ6NEmtbZy+8fguOn8DrYR343Jp7TAwTz0wUejU6fbew1XRQAnaHMH8KC5EViP+2O7/8UUmZ2U
-	olaThqSmxblgECOyJtZdURx7HzUjGYCYHgnv5vwRT+N3qYIVWQ7dVlKJL4CcLMw3MoGnkDAzmZE
-	yVXJIyFlU/i2avFFu2K95EPKL6FK//J/jNLitCxXlJ6JGPXgyEEDauN+gVgiIOh1yI/+J2ZDb9X
-	ai7/PqabLfnCtxoXcgyQcXt+03WD9Hx07RBL0TjYEIj5PWUGeDnXoxmlxW7Jitq8kVCnvpeR9/J
-	Jb31JZqLKbQ7LgVWT50fg==
-X-Received: by 2002:a17:903:2341:b0:2c7:ebfb:618f with SMTP id d9443c01a7336-2d707c1020emr60536615ad.14.1787720669824;
-        Tue, 25 Aug 2026 22:04:29 -0700 (PDT)
-Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3283da25c09sm6844956eec.31.2026.08.25.22.04.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Aug 2026 22:04:29 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: seanjc@google.com,
-	pbonzini@redhat.com,
-	shuah@kernel.org
-Cc: kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/1] KVM: selftests: SEV: Sanity check the launch measurement
-Date: Wed, 26 Aug 2026 10:34:06 +0530
-Message-ID: <20260826050406.2836603-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260811040858.1984593-2-hemanth.selam@gmail.com>
-References: <20260811040858.1984593-1-hemanth.selam@gmail.com> <20260811040858.1984593-2-hemanth.selam@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="A1XI6Sy7"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=EHSU1HLywans4vNZvGF0DqPTQrozoJrQ4qJHsKE6DXo=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787723080; v=1; x=1788327880;
+ b=A1XI6Sy7qF7SuwcYW1I3PkPkhCIIVS9n6jfLHEAoysOGULfAwjVJEgZm19V5agKyGG58YoX0
+ xrlBlP6nm5AitlB3lNxaXM1uhJ5ijzhh8K5mxcPJfY6TZAdlkQlXt9g2XkBgt9HdbHJM6fV8wow
+ cgu4OtIz4Il7fRb1dl3i3r9Q=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: from [192.168.109.140] (223.70.159.239)
+	by smtp.migadu.com with ESMTPS id ffcd139b4e6b6437;
+	Wed, 26 Aug 2026 05:44:29 +0000
+X-Mizu-Trace-ID: ffcd139b4e6b6437
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <94688248-9fe9-4a52-9fb1-bac003fe2dd8@linux.dev>
+Date: Wed, 26 Aug 2026 13:44:20 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/17] cgroup/cpuset: Limit type-change accounting to
+ owned CPUs
+To: Waiman Long <longman@redhat.com>, cgroups@vger.kernel.org
+Cc: ridong.chen@linux.dev, tj@kernel.org, hannes@cmpxchg.org,
+ mkoutny@suse.com, shuah@kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Guopeng Zhang <zhangguopeng@kylinos.cn>
+References: <20260820124202.517160-1-guopeng.zhang@linux.dev>
+ <20260820124202.517160-5-guopeng.zhang@linux.dev>
+ <e31d80e4-321e-4259-ba0b-392705a8fad8@redhat.com>
+Content-Language: en-US
+From: Guopeng Zhang <guopeng.zhang@linux.dev>
+In-Reply-To: <e31d80e4-321e-4259-ba0b-392705a8fad8@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Gentle ping on this one, no rush - I realise this landed in the quiet part
-of the cycle.
 
-The TODO it addresses is still present in sev_smoke_test.c:
 
-  /* TODO: Validate the measurement is as expected. */
+在 2026/8/24 22:24, Waiman Long 写道:
+> On 8/20/26 8:41 AM, Guopeng Zhang wrote:
+>> From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>>
+>> effective_xcpus includes CPUs granted to valid child partitions. Passing
+>> the whole mask to isolated_cpus_update() during a root-to-isolated or
+>> isolated-to-root change applies the parent's new state to child-owned
+>> CPUs as well.
+>>
+>> Build a mask of CPUs owned by the partition by subtracting the
+>> effective_xcpus of valid children. Use this mask when updating
+>> isolated_cpus for a partition type change.
+>>
+>> Fixes: 11e5f407b64a ("cgroup/cpuset: Keep track of CPUs in isolated partitions")
+>> Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+>> ---
+>>   kernel/cgroup/cpuset.c | 30 ++++++++++++++++++++++++++++--
+>>   1 file changed, 28 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
+>> index 2538faac9aba..468272baadb2 100644
+>> --- a/kernel/cgroup/cpuset.c
+>> +++ b/kernel/cgroup/cpuset.c
+>> @@ -2155,6 +2155,30 @@ static void compute_partition_effective_cpumask(struct cpuset *cs,
+>>       rcu_read_unlock();
+>>   }
+>>   +/*
+>> + * Compute CPUs owned directly by a partition.
+>> + *
+>> + * effective_xcpus includes CPUs granted to valid child partitions. Exclude
+>> + * those CPUs when changing only this partition's type.
+>> + */
+>> +static void compute_partition_owned_cpumask(struct cpuset *cs,
+>> +                        struct cpumask *owned_cpus)
+>> +{
+>> +    struct cgroup_subsys_state *css;
+>> +    struct cpuset *child;
+>> +
+>> +    lockdep_assert_held(&cpuset_mutex);
+>> +    cpumask_copy(owned_cpus, cs->effective_xcpus);
+>> +
+>> +    rcu_read_lock();
+>> +    cpuset_for_each_child(child, css, cs) {
+>> +        if (is_partition_valid(child))
+>> +            cpumask_andnot(owned_cpus, owned_cpus,
+>> +                       child->effective_xcpus);
+>> +    }
+>> +    rcu_read_unlock();
+>> +}
+>> +
+>>   /*
+>>    * update_cpumasks_hier - Update effective cpumasks and tasks in the subtree
+>>    * @cs:  the cpuset to consider
+>> @@ -2990,8 +3014,10 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>>       } else if (old_prs && new_prs) {
+>>           /*
+>>            * A change in load balance state only, no change in cpumasks.
+>> -         * Need to update isolated_cpus.
+>> +         * Need to update isolated_cpus for CPUs owned by this partition,
+>> +         * excluding CPUs distributed to valid child partitions.
+>>            */
+>> +        compute_partition_owned_cpumask(cs, tmpmask.new_cpus);
+>>           if (((new_prs == PRS_ISOLATED) &&
+>>                !isolated_cpus_can_update(cs->effective_xcpus, NULL)) ||
+>>               prstate_housekeeping_conflict(new_prs, cs->effective_xcpus))
+>> @@ -3030,7 +3056,7 @@ static int update_prstate(struct cpuset *cs, int new_prs)
+>>       if (!is_partition_valid(cs))
+>>           reset_partition_data(cs);
+>>       else if (isolcpus_updated)
+>> -        isolated_cpus_update(old_prs, new_prs, cs->effective_xcpus);
+>> +        isolated_cpus_update(old_prs, new_prs, tmpmask.new_cpus);
+>>       spin_unlock_irq(&callback_lock);
+>>         /* Force update if switching back to member & update effective_xcpus */
+> 
+> Your use of tmpmask.new_cpus in isolated_cpus_update() can be problematic. isolcpus_updated can be set when an isolated partition is enabled or disabled. In both cases, tmpmask.new_cpus can be used temporarily. So the content of this temporary cpumask may not be what we want to pass into isolated_cpus_update(). I will suggest you only use tmpmask.new_cpus if it is determined to be coming from partition state transition instead of enabling/disabling of partition.
+> 
 
-and the patch still applies cleanly to kvm-x86/next.
+Thanks for the review, Longman.
 
-Happy to rebase or rework it if you would rather see it done differently,
-and equally happy to drop it if you decided against this approach.
+I followed your suggestion and checked update_prstate() again.
+
+isolcpus_updated starts as false and is set only in the
+old_prs && new_prs branch, after tmpmask.new_cpus has been filled with
+the CPUs owned directly by the partition. That branch handles only
+root-to-isolated and isolated-to-root transitions. The
+member-to-partition and partition-to-member paths do not set the flag.
+
+Those enable and disable paths update isolated_cpus separately. For a
+local partition, the path is:
+
+        update_parent_effective_cpumask()
+          -> partition_xcpus_add()/partition_xcpus_del()
+             -> isolated_cpus_update()
+
+For a remote partition, the path is:
+
+        remote_partition_enable()/remote_partition_disable()
+          -> partition_xcpus_add()/partition_xcpus_del()
+             -> isolated_cpus_update()
+
+There is no write to tmpmask.new_cpus between
+compute_partition_owned_cpumask() and the isolated_cpus_update() call
+guarded by isolcpus_updated. As far as I can tell, tmpmask.new_cpus
+therefore still contains the directly owned CPUs whenever the flag is
+set.
+
+Please let me know if I have overlooked another path.
 
 Thanks,
-Hemanth
+Guopeng
+
+> Cheers,
+> Longman
+
