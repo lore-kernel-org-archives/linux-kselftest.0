@@ -1,155 +1,130 @@
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDB046A612
-	for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 17:57:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2024238E5D7;
+	Wed, 26 Aug 2026 18:19:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787767067; cv=none; b=gk0XtimE8qegP4HntAUEsjZ8bZFG640T87pUTu3PZhvK2lcsdHu+Av8Axa7vJSKc4nY/TMbQ4yqOM5cqrjIVKjLxn21/uw9PzPz1o4qcw341+JyJRanXUxmMhqameFe+4jiKpZu+WmiHCMmrSWfUa3SAkhvrbahUIL+AIhyJEqA=
+	t=1787768407; cv=none; b=BypcgCKntLKE866qzBhH4TRQhOc+dCGayktLXtZ/ki7GVY+93SVHvoYB7vFsi62iPHcMVvn7USNkNK3DKeL6NihZNuB7o7HGOyKpGA59lwgvHs9mjTo+F3RmIkaM5oZmWF1OIaJ0UB4XKH1DM6xG0wrN+vZ/Hwtk6i4A1iQLtdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787767067; c=relaxed/simple;
-	bh=WP3lzz3sPwNr/uWnF1dnEtr6qfIaUelhmsrLvivFud4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+cjCi/7Xin2nLZ7Y91HU8MoszkbgH5xBVVS0wSczaNZzJsXkrxfzb/YSO7sQRP96p1bPfBNdSiMFi2Bk37bXspRdI7DiAxRhguaOekhSi10sdSMNrgv5UTl+jRzq4BQMIXGYoSW54rMN4I+FhJ0qK0uEof3vlgWTugujs7ewPk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=hquZmByv; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	s=arc-20240116; t=1787768407; c=relaxed/simple;
+	bh=8lJPATkIO8yVeLALXpxM3SByvo/SRVvOBPy4Ne5Dr78=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:From:To:Subject:
+	 References:In-Reply-To; b=L8/bUWmVlwg94gr5/CidxBZQawZIfYoN+hn9vMEOUILGGiF4S3LvyJCdJx9TZFC9duyXNzYV54LxvAyl6zrr9Lx/wINESgC/fWlzffn4eAHjdVX2Dd/DCDXE5bjQiZ8Zk2vgA+7khs9DGhuPlaqYw3sPTC/riydwie5Gf7XYbuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XmiFLXbm; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="hquZmByv"
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2d3b440b97aso10745ad.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 10:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787767053; x=1788371853; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=mOyt5LoY374Qkpz6cQhUC33i8CoGf2Yn2cDcltrm0Cc=;
-        b=hquZmByvqvONjAlbXKuBbz8QPQjRA5q24l+0d+Wr/FDWY71EaBqGj8IlwKdWAZ/7rN
-         qfhOOD0fECT1ixEw028sq04lhB5Z07hNlWPm6R3OajIctcl5IT/kz9pvApm4OixZ97oz
-         VZxiM4k8JmKXtVKR8jk7Gp9I4YGU5A7Chzn6ygBLmMqOe6Oa3kypdshgeQT3A/tHJtny
-         haMbvbBbdWrldqdotn11ykqbR6cZYMaVgFxEYpU5hbmi6FjSNGAfZNFD30VDJSmHUmlR
-         W7RvcM+aVp9V7cuZCosewrtpuz1dmLCXobqo+V3HFTZhZC6AHrBOyzbhjJdfQJguASa7
-         7CYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787767053; x=1788371853;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=mOyt5LoY374Qkpz6cQhUC33i8CoGf2Yn2cDcltrm0Cc=;
-        b=JT/STfONBmwMppbG+0l9doDCd1OgvytVHYhpHVIzwYUe2uXkHhNQpp1QTTAXlcK/Rc
-         WL5IWHJskytUvwxL+LA/LTNBIF6jD8yzAEhuFUTZHuJFjG9I0rpEnF2toEJRVWz/yog1
-         t1+VUrmymdWeRxmCUPoYue8NQ/YuCZ86/p1K1xfbhn9dZUzaPtyhRZORtrg8gL6gmbcw
-         tXCeRMSJNwwKbCecsUymTG2Nuu7Tx+ppamFXODmVtoBqZ7wxb/3eeAD+hU0arGO7LriO
-         8lA3MBPDpZtYCUHtKVv4AXxPX7BX0hXvEiGRu6+jjodzKc/XbJ2jYmDapXsTK79AIiut
-         5acQ==
-X-Forwarded-Encrypted: i=1; AHgh+Ro7dp17qK0yTM2NM3+qZdgYGBg9xXKO8AkrMesUL4YKGcUxpkdDsHh4uJr9aSogGPMJg3Q1vfaRX4g6wfupA2E=@vger.kernel.org
-X-Gm-Message-State: AFuF++kspT6dK7E4F7PSpQ5uP6LZk3bjzU2XSHMb59ndYzYfkwTriMvl
-	zaWUVPjoKzolR0AytNSMnumbEgK+QqhSVDN0iN8hg36C21dwQ4AaDR3G4YZ3OTBBnw==
-X-Gm-Gg: AR+sD10sNX0rlcgvDPrgKu1UjgZJjZ2aJoySSRVrcUguFA7jcYuQ3XssFEnfGr1Zzwa
-	JvfeW/LiFiKDBgbtfK6ogCvEAbqksix4LIQUDq8XQUJOFTAI7T1KjfyO10bu6kTxFA2So2r5u8K
-	1ohJEsstPCytY60vbaMzetcan8T0zLun/LsKmKkxXlmtfxsGb653Jx0fsS84iXVOUZoPQkwHAvU
-	qaegVuH6VU+n4iCjefFLu2xInjPYcvEKh3EjIFGubuhfH4g2XfwKv6hb8njIWKPPYA4Mms4nCkE
-	4Vdh44QFuPjjlYWQot0aRot8yO9WWehdB5xy4fpuRI0TfW64FkHoO82rhvD4m0XIQTyNwBCdt4x
-	nsdW6OO2nbr8zeyRZlxvXV6oZGlOaG3lMBHkAfmYwY2Pb0P0ODYmSdooNJFjlWZcx6DTeWBdwzM
-	B7TZFHHManBvcrOrU/6F8tbHv4T57/oNjY3cATp4HdW1uihwgVSqn17bzUESs8/ftD3gXk2sVUL
-	R8osLaAbDJrW9YVu9hfvQ==
-X-Received: by 2002:a17:902:d4c7:b0:2c9:b404:b55 with SMTP id d9443c01a7336-2d72a6912edmr556605ad.6.1787767052531;
-        Wed, 26 Aug 2026 10:57:32 -0700 (PDT)
-Received: from google.com (195.5.127.34.bc.googleusercontent.com. [34.127.5.195])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39645d31e8csm9002581a91.9.2026.08.26.10.57.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 10:57:31 -0700 (PDT)
-Date: Wed, 26 Aug 2026 17:57:28 +0000
-From: Lisa Wang <wyihan@google.com>
-To: "David Hildenbrand (Arm)" <david@kernel.org>
-Cc: Miaohe Lin <linmiaohe@huawei.com>,
-	Naoya Horiguchi <nao.horiguchi@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>,
-	Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, linux-mm@kvack.org,
-	linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, Andi Kleen <andi@firstfloor.org>,
-	Hidehiro Kawai <hidehiro.kawai.ez@hitachi.com>,
-	Rik van Riel <riel@redhat.com>,
-	Yu Zhang <yu.c.zhang@linux.intel.com>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>, rientjes@google.com,
-	seanjc@google.com, ackerleytng@google.com, vannapurve@google.com,
-	michael.roth@amd.com, jiaqiyan@google.com, tabba@google.com,
-	dave.hansen@linux.intel.com,
-	Isaku Yamahata <isaku.yamahata@intel.com>,
-	Xiaoyao Li <xiaoyao.li@intel.com>
-Subject: Re: [PATCH v5 5/5] mm: selftests: Add shmem into memory failure test
-Message-ID: <ao8pCI3AaUssIO8S@google.com>
-References: <20260823-memory-failure-mf-delayed-fix-v5-0-d97a5703e45a@google.com>
- <20260823-memory-failure-mf-delayed-fix-v5-5-d97a5703e45a@google.com>
- <8a99f753-0713-4194-8eb5-90da0724e647@kernel.org>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XmiFLXbm"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id A7A034E413C8;
+	Wed, 26 Aug 2026 18:19:42 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 6FF95604EC;
+	Wed, 26 Aug 2026 18:19:42 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9DDBE11C78378;
+	Wed, 26 Aug 2026 20:19:30 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787768376; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=WBiBUcsLXcX/eaDueopmySnIviXz/GZ2Ds1LeB9dC5Q=;
+	b=XmiFLXbmLWKb5j0FTvXHQoCADV70832aLxC6lyBoi1jymDUgidISNVp256i+jl42ifbx+1
+	pmDhFKeVXaDTl7WiNR7Wv7xKqDv3tMMLMDl8k6v8XoRCJHKdaQZmayjMZ+DulZwvqQZOP4
+	Px2iIkJWeCnrgssrkgzCBRPxDI601fec8oh6/UwxK2f5ll4eOylbcN3n4eeqpUbS+14QYO
+	f8DRSf5qFzuq8Q3JI2PTo1KlZPXHsMXQ9Ba/NWt+sFaLBTCVUBpzDdPYlnavXKhrjBqTbO
+	Nrf1P20h+w4C2ouThybw8dCPoNh3nGzrjG8xqgScY6q0hTKtSp4hRryisjZAEw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <8a99f753-0713-4194-8eb5-90da0724e647@kernel.org>
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 26 Aug 2026 20:19:29 +0200
+Message-Id: <DKZ2ZV0RB5XV.2TU1APPGT5OSN@bootlin.com>
+Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
+ <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Kumar Kartikeya Dwivedi" <memxor@gmail.com>,
+ =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
+ <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
+ <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
+ KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
+ "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
+ "Jiri Olsa" <jolsa@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
+ <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+ <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
+ <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Emil
+ Tsalapatis" <emil@etsalapatis.com>, "Ihor Solodrai"
+ <ihor.solodrai@linux.dev>, "Yafang Shao" <laoar.shao@gmail.com>
+Subject: Re: [PATCH bpf-next v7 9/9] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
+ <20260822-kasan-v7-9-99afee6ef7fd@bootlin.com>
+ <DKWONS3UI84A.382GORI5CXC51@gmail.com>
+ <DKWOXOPN11A1.1BNV5J6RJ7MGJ@gmail.com>
+In-Reply-To: <DKWOXOPN11A1.1BNV5J6RJ7MGJ@gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Aug 24, 2026 at 03:00:47PM +0200, David Hildenbrand (Arm) wrote:
-> > +++ b/tools/testing/selftests/mm/memory-failure.c
-> > @@ -20,6 +20,10 @@
-> >  
-> >  #include "vm_util.h"
-> >  
-> > +#ifndef fallthrough
-> > +# define fallthrough __attribute__((__fallthrough__))
-> > +#endif
-> 
-> This doesn't belong into this test.
-> 
-> rseq/rseq.c selftest already uses it.
-> 
-> I think tools/testing/include/ already provides it.
-> 
-> Maybe
-> 
-> 	#include <linux/compiler.h>
-> 
-> does the trick?
+Hi Kumar,
 
-Hi David,
-Thank you for replying.
-Would it be better to change it to /* FALLTHROUGH */
-like the rest of the mm selftests?
+On Mon Aug 24, 2026 at 12:53 AM CEST, Kumar Kartikeya Dwivedi wrote:
+> On Mon Aug 24, 2026 at 12:40 AM CEST, Kumar Kartikeya Dwivedi wrote:
+>> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundati=
+on) wrote:
 
-If we prefer to include <linux/compiler.h>, we can
-certainly do that, but we would also need to update
-the Makefile and fix a redefinition in pkey-helpers.h.
+[...]
 
---- a/tools/testing/selftests/mm/Makefile
-+++ b/tools/testing/selftests/mm/Makefile
-@@ -37,7 +37,7 @@ endif
- # LDLIBS.
- MAKEFLAGS += --no-builtin-rules
+>>>   #171     kasan:OK (SKIP: 16/54)
+>>>   Summary: 1/38 PASSED, 16 SKIPPED, 0 FAILED
+>>>
+>>> Signed-off-by: Alexis Lothor=C3=A9 (eBPF Foundation) <alexis.lothore@bo=
+otlin.com>
+>>> ---
+>>
+>> 1. Should this test be made serial to make sure bpf_jit_harden sysctl ch=
+ange
+>> doesn't affect other tests?
 
--CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES) -I$(top_srcdir)/tools/include
- CFLAGS += -Wunreachable-code
- LDLIBS = -lrt -lpthread -lm
+Indeed, that makes sense, I'll flag it as serial.
 
---- a/tools/testing/selftests/mm/pkey-helpers.h
-+++ b/tools/testing/selftests/mm/pkey-helpers.h
-@@ -22,7 +22,7 @@
- typedef __u8   u8;
- typedef __u16  u16;
- typedef __u32  u32;
--typedef __u64  u64;
-+// typedef __u64       u64;
+>> 2. Clang currently collapses the intended ST/STX distinction for *_on_st=
+ack
+>> tests: default/v3 emits STX for both pairs, cpuv4 emits ST for both, and=
+ the
+>> default st_blinded object is already STX and therefore is not blinded. P=
+lease
+>> check and assert that xlated insns are correct in the test itself if pos=
+sible.
+>> It might be necessary to use asm volatile assembly blocks in case you ca=
+nnot
+>> work around the compiler in C.
 
+Ah, good catch, thanks. For the blinding test, I really checked that the
+blinding is inserted, and re-running this again, it looks like I have
+been fooled; there's indeed some blinding inserted, but not on ST/STX
 
-Lisa
+> For 2, I guess as a whole you still get coverage, since we run with both =
+cpu
+> versions in CI. So it should be fine I guess, for the blinded case too, b=
+ut
+> perhaps it would still make sense and be clearer to verify and only enabl=
+e st
+> case for v4, and force stx to remain stx on v4.
+
+Ok, I'll update the test so that ST/STX/st blinding are correcly skipped
+depending on the CPU version.
+
+Alexis
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
