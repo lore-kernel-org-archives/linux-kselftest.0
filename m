@@ -1,159 +1,159 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A952F7445;
-	Thu, 27 Aug 2026 04:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED6313644D4
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 04:45:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787805271; cv=none; b=RVtcjozx1iGa70eHFORjM4oRaLpk/22ceVo+xNLgnvimqvzItIq1Kwmp75P+uU39ifjYfGtaiYQF79JbMtFz6oxNFb3HAalwY64ZPdfe7DnAlLQ5cuapFGahM1LruwEw8KYkrwWzTjjbSfo2f8SKrc7C3uy6q9fSOzN8RYLLD7Y=
+	t=1787805960; cv=none; b=s6YtFRD02puE8fU7UJ/0vFRJr0rDmfpU+WAWQRR3nQMMuckCQcfe1p1VCXrmGFnQRlnAw457YvZay6hEmDWoegoz+HA3UvwtL4OWe+lv5txlv0txp1KkPzFFqK5dewEyvA8hIcSOWBxyBkv++pUKIL2XMShCy3EzVUeOm+aCpvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787805271; c=relaxed/simple;
-	bh=Xr2YAmCQGQtyvAfz5tyUYMYX/2JBvSP9WNi2BFs0z+o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=b8N1tMPgC+Oj0Ob7PVUJU/VVGAThNqAfZ2pWYTquNerW1CRvCZ18RyZ1jc7P6QrzmtnL1ovB24VOEa6QvwTkOvk6FDRMWfNCrH60NTwHy3rmusEYVmULh4xXE9XsJvfX9ic/0FX0CLz+YBdrHQPiAp+FgYPNChwxP/BCvSzsnzM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=meCw09th; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1787805960; c=relaxed/simple;
+	bh=1bR0L/i/r0ruNCYRAsQhnwMGkWpHML0zh6aU/+3swc8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WUe3LE7Mpf2pB5A6RC6N/fabc3L2fvHAkvqm8xydkykolHHLFUS/sPSkZTGrJiATlH1Rwmxr/sHzY3OzftuJkFJBnZJV6uKrBu59W6JkjbbxeiGjfuN5vKSybV2tsZCiMHcbSGC1Vv9wVv333MqtAGzO+dj3GsLQQ3C2bYjJL5I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H5sNm6Es; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="meCw09th"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1787805270; x=1819341270;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Xr2YAmCQGQtyvAfz5tyUYMYX/2JBvSP9WNi2BFs0z+o=;
-  b=meCw09thLe8tpZwZ74giYRGtyeGLzWIFmxWi/MeHwZTUX5KfT+vH/a1D
-   1JUiaxVVTS0qVpwdgmiYjjtsYZ/juXNYkT+HQtAR6brKmV8LbquQq6cBZ
-   XIwXt6oNCsXO0vLyXMmqqMpB4flpMaU29WQelopK4HQJn2SPKS9bvlDz5
-   ruAKISVF3N84rzN0HtgbxfdWVP4WNeQOK1ny/dx6oMPDU2OuODljr0x06
-   //hxR3FLRsu5/3G3kAdwy8AjMYzdthRIj5ErvXIv40OUe1PAWHA9OTwLo
-   t7XjyHL5ERXLFgjr0qOoC8D39Gj1k33RApePoX6xleR+t1JRwMfb+KY7R
-   g==;
-X-CSE-ConnectionGUID: +b5wgn7rTAu98IPXLJPB/w==
-X-CSE-MsgGUID: G2Anc8E3TGqgBUakQE0d/A==
-X-IronPort-AV: E=McAfee;i="6800,10657,11887"; a="75839220"
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="75839220"
-Received: from fmviesa004.fm.intel.com ([10.60.135.144])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 21:34:28 -0700
-X-CSE-ConnectionGUID: rV3cStscS/aNLMyWraRS+w==
-X-CSE-MsgGUID: WvkBd7g8TtuwCi4hAeOL8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,246,1779174000"; 
-   d="scan'208";a="269701976"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.119]) ([10.124.240.119])
-  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Aug 2026 21:34:14 -0700
-Message-ID: <a151b52d-0afb-4b32-a871-4da67210f416@intel.com>
-Date: Thu, 27 Aug 2026 12:34:11 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H5sNm6Es"
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-3964dfb5a69so1777155a91.1
+        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 21:45:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787805958; x=1788410758; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=nKSTRHENFmZ28a4EDL5zBN3EU46+ZLuR2U8w20FjDuk=;
+        b=H5sNm6Es3nDLYJpKey2VsIXbU6oSJ3bEwuoMCrJxAELD3U7/MQEagbTkl90Trjnban
+         Pb6NeQMpNx88yOBhq6mFxC55EUxHk9kg9Z+doRITj0wIJDpKBSa3fHiq6BNDTEcNGJ+a
+         oNfXECmA3tHWQkm9KUTNt2g/AiBLsD4rj1AoUtc+xP892Zvzdkiwj2Gg69nbevQDgVE7
+         qiqiwA0htM5Ymin4g64Xeg1z3Dr6xHJ8cHIGIZ2kSHdo3ZdXMt0vmde5byL9ORxpc7iV
+         lAgPsb0Rc2OfhoW45BK5SDbyHSUQ/6DnKZaxSM2lRml9xV8udUrT51Ub7wilVSndBBb4
+         Rcxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787805958; x=1788410758;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=nKSTRHENFmZ28a4EDL5zBN3EU46+ZLuR2U8w20FjDuk=;
+        b=bO5AeC6rKJE/0DllR8LQmTRTknye8R6jVb41e031ThPcfu/vJFZxUBB+eYiGZ+Ho4X
+         tX4VHNVvSGHxt3+LVKC1WmrevrtcpEseorWmu8mBb73tUeiv4BSO5/T5rWnFSkSCeXHe
+         L1lhlG/lXVCeiYtxCw/lFM8J0tozunyJLxMmeTK89nLBZT9F+4/FIJNXbrWixVFNN4Dc
+         3BKNraB6Ffkj0cYacKY0piyrRXK6C90Yl89grWvlqz8A/HHSynz+InQi6nx3zwEKS/Ou
+         RV9sLZQAvPyobJL9Ds3xRMZAEpuvv9NZEoXFsGC4xGiMjKbS/8ZH7FIC7d1jK6Bwd7kQ
+         gRxw==
+X-Forwarded-Encrypted: i=1; AHgh+Rq353qEmDUEdamwQNsINK5/Ls75ChJ2c36t3QMPjw/HSnkNTandN+zZs1NQiJDhIDCK/KocQ8MYXGQFL3aFl+A=@vger.kernel.org
+X-Gm-Message-State: AFuF++nQwcFGwUi3PC5IVgs70HqdwbzXcWq+Mynh7iHt95XhOAka1urM
+	23/PGgMJnbpJPWWYojHsk8kLXFRnhWQwexOuKltA7Jxiv7k9RWhgupQfNFzC7tif
+X-Gm-Gg: AR+sD12fkRRjoJ4Bryv6KZu0nfRSu9J2UPsHhzRABFAxpWZVlSQoKyPQp7nbEU7VsK6
+	sZd0pOV9+d4NzTXWVTBLuca2droinw2GU6LBoZnMBijTP/MsQ1iP8lkFg2ZhhkWHg/ela00MJoi
+	Tkcb4naY7cY9YRw+bWvHJrAPL2VQd9T3Zx+S/v5ps8/0YjBIAudq2Xk2jWNdVAo9CKrYuTQDguc
+	w9+5J+BtfsGE6rHyOeHCxQZarECsvDhSl4iDuDTf2n9w8vxxI3KoQlNSYZpAhK6bkhqWjHN4D7t
+	4Gw/z7t8EkcsVgMdjrYXUKOxCxJeJIV/VrbuNvXWTnUfYz38NYBjsUzns8uHvvHZnAHjFjsrl+2
+	5RfwMdoIpdC/FhVSGtBcMe7ZCuFt0qZz3gnwcKXXN0fSVTX7nsF7TRcjps63sicdIsnvRPRMEtb
+	a8IEgbCBpDhE7PP6LXEnaFBH2J7+KvI/X3RmkVRZPR9ZCSDrXrw515Mlls6gQF5jW6MVHadNPzJ
+	grA9/woUmY=
+X-Received: by 2002:a17:90b:2885:b0:380:71eb:4014 with SMTP id 98e67ed59e1d1-3966d5c1a78mr25551800a91.15.1787805957924;
+        Wed, 26 Aug 2026 21:45:57 -0700 (PDT)
+Received: from volcano9f8e-host.amd.com ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3285a5f96efsm2270583eec.11.2026.08.26.21.45.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 26 Aug 2026 21:45:57 -0700 (PDT)
+From: Hemanth Selam <hemanth.selam@gmail.com>
+To: seanjc@google.com,
+	pbonzini@redhat.com,
+	shuah@kernel.org
+Cc: kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] KVM: selftests: Actually test PV_UNHALT
+Date: Thu, 27 Aug 2026 10:15:32 +0530
+Message-ID: <20260827044534.2900285-1-hemanth.selam@gmail.com>
+X-Mailer: git-send-email 2.43.7
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
- private when invalidating
-To: Sean Christopherson <seanjc@google.com>,
- Ackerley Tng <ackerleytng@google.com>
-Cc: Michael Roth <michael.roth@amd.com>,
- Suzuki K Poulose <suzuki.poulose@arm.com>,
- "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com,
- andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org,
- chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com,
- oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com,
- rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com,
- steven.price@arm.com, tabba@google.com, willy@infradead.org,
- wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com,
- pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev
-References: <20260807-gmem-inplace-conversion-v10-9-2fc18ee6d3ba@google.com>
- <13ca60c6-e154-4397-8092-09f861e90fe0@kernel.org>
- <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com>
- <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
- <aoZZMQ3Uc8yQWPNA@google.com>
- <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
- <meww2a2uf3yeevsfpicyrlg3hch2x4bsdqv2lsv3vfjxg4qzes@co5eogmhkxrk>
- <ao3lOu8-wpGTs2wd@google.com>
- <ba8d0441-b52f-4357-b2e7-1e352aa385a2@intel.com>
- <CAEvNRgFXJbV78ktsg=b4srFp1OFjtQWQGuNPjr_MmWD-wOvjgw@mail.gmail.com>
- <ao7vwx3nMqCjCHZU@google.com>
-Content-Language: en-US
-From: Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <ao7vwx3nMqCjCHZU@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/26/2026 9:53 PM, Sean Christopherson wrote:
-<snip>
->> Is this just a case of user error? That with gmem_in_place_conversion,
->> userspace should not use userspace_addr from something other than the
->> gmem for the same memslot?
-> 
-> Yes.  It's not just invalidations that will go sideways, 
+test_pv_unhalt() only checks that KVM clears KVM_FEATURE_PV_UNHALT from
+guest CPUID when HLT-exiting is disabled; the feature itself has never
+been exercised, hence the FIXME.  Patch 2 tests it by halting one vCPU
+with interrupts disabled and kicking it from another, so that reaching the
+instruction after HLT is proof that KVM_HC_KICK_CPU was delivered.
 
-> KVM accesses to guest
-> memory won't hit the same physical page as actual guest accesses.
+Patch 1 adds the helper that patch 2 needs to learn a vCPU's APIC ID from
+the host, rather than open coding KVM_GET_LAPIC as a few tests already do.
 
-Side topic.
+Changes in v3:
+ - Handle x2APIC in the new helper.  v2 always applied the xAPIC shift and
+   mask, so it returned 0 for a vCPU in x2APIC mode on a VM that enabled
+   KVM_X2APIC_API_USE_32BIT_IDS, and truncated IDs above 255.  Reported by
+   the Sashiko AI reviewer.
 
-If KVM enforces KVM_MEMSLOT_GMEM_ONLY when gmem_in_place_conversion is 
-true like below proposal, should we update KVM's guest memory accessors 
-to access gmem directly?  If still use the existing code of accessing 
-userspace_addr of the memslot, I think KVM needs to document clearly 
-that when KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES is enumerated, if 
-configuring the guest_memfd for a memslot, the userspace_addr passed in 
-needs to be the mmaped address of the guest_memfd.
+Changes in v2:
+ - Pass the APIC ID to kick in a1, not a0.  KVM reads it from a1, as the
+   in-kernel guest does in kvm_kick_cpu(), so v1 asked KVM to kick APIC ID
+   0 and only passed because the halting vCPU happened to be vCPU 0.
+   Also reported by the Sashiko AI reviewer.
+ - Halt on a vCPU with a non-zero APIC ID, so that a kick sent to the wrong
+   vCPU can no longer pass by accident, and enable that vCPU's APIC, as a
+   guest using PV spinlocks would: KVM only routes the kick once the vCPU
+   is in the APIC map, which is also why xapic_ipi_test enables it.
+ - Move the APIC ID helper into apic.h instead of keeping it private to
+   the test (new patch 1).
+ - Report the return value of pthread_create()/pthread_join() rather than
+   errno; they return the error directly and do not set errno.
 
-> Huh.  But that isn't strictly guaranteed, because userspace could bind to a
-> memslot that isn't configured with GUEST_MEMFD_FLAG_MMAP, in which case SHARED
-> faults will go through the VMA, not kvm_mmu_faultin_pfn_gmem().  It's a bit early
-> in the morning, but off the top of my head, I can't think of any reason we need
-> to support such a setup.  If userspace really, really wants to use a separate
-> mapping, they could DELETE+CREATE an equivalent memslot without the guest_memfd
-> file descriptor.
-> 
-> So I think we should do this?
-> 
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 9c2d52bdf25e..86f53e53a136 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -1013,7 +1013,7 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
->   	 */
->   	WRITE_ONCE(slot->gmem.file, file);
->   	slot->gmem.pgoff = start;
-> -	if (kvm_gmem_supports_mmap(inode))
-> +	if (gmem_in_place_conversion || kvm_gmem_supports_mmap(inode))
->   		slot->flags |= KVM_MEMSLOT_GMEM_ONLY;
+Built and run on x86_64 (AMD).  Untested on Intel, though the kick is
+handled in common code and delivered through the generic LAPIC path.
 
-I like this idea. It makes gmem_in_place_conversion a step closer to 
-what its name implies, though in-place conversion is not truly 100% 
-guaranteed[*].
+The helper was checked against every way KVM reports an APIC ID, comparing
+it with what the v2 version returned:
 
-[*] https://lore.kernel.org/all/akUbz_kJvYulaboo@google.com/
->   	xa_store_range(&f->bindings, start, end - 1, slot, GFP_KERNEL);
-> 
-> Regardless, the key aspect of all this is that in-place conversion is brand new
-> functionality, so we don't have to ensure backwards compatibility.
+  xAPIC vcpu 0..3                     want 0..3   got 0..3    v2: 0..3
+  x2APIC vcpu 0..3, legacy ID format   want 0..3   got 0..3    v2: 0..3
+  x2APIC vcpu 0..3, 32-bit ID format   want 0..3   got 0..3    v2: 0 0 0 0
+  x2APIC vcpu 300                      want 300    got 300     v2: 0
+  guest renamed its xAPIC ID to 0x2a   want 42     got 42      v2: 42
+
+For the test itself:
+
+ - On kvm-x86/next, the whole selftest suite builds warning-free and
+   kvm_pv_test passed 10 of 10 runs.
+
+ - Also run inside a VM booted on a kernel built from kvm-x86/next, i.e.
+   against the KVM this targets rather than the host's.
+
+ - Whole x86 suite with the series applied: 61 passed, 24 skipped, and
+   set_sregs_test failed with "KVM allowed invalid efer bit (0x100)".  That
+   one fails identically without the series, i.e. it is the host kernel.
+
+The test was checked against four deliberate breakages, to make sure it
+can only pass when the kick really works:
+
+ - pass the APIC ID in a0, i.e. the v1 bug: the kick goes to the wrong
+   vCPU and the test times out, so this version does catch it;
+
+ - drop the KVM_HC_KICK_CPU call: the halted vCPU is never resumed and the
+   test times out;
+
+ - clear PV_UNHALT from the kicking vCPU's CPUID while enforcement is on:
+   the hypercall returns -KVM_ENOSYS and the test fails with
+
+     0xfffffffffffffc18 != 0x0 (kvm_hypercall(KVM_HC_KICK_CPU, ...) != 0)
+
+ - remove the halt: the bounded wait trips and the test fails with
+   "vCPU never halted" rather than hanging.
+
+Hemanth Selam (2):
+  KVM: selftests: Add a helper to read a vCPU's APIC ID
+  KVM: selftests: Test the PV_UNHALT feature, not just its CPUID bit
+
+ tools/testing/selftests/kvm/include/x86/apic.h | 20 +++++
+ tools/testing/selftests/kvm/x86/kvm_pv_test.c  | 97 +++++++++++++++++++++-
+ 2 files changed, 116 insertions(+), 1 deletion(-)
+
+-- 
+2.43.7
 
