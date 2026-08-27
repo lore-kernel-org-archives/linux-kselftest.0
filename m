@@ -1,302 +1,165 @@
-Received: from AS8PR04CU009.outbound.protection.outlook.com (mail-westeuropeazon11011061.outbound.protection.outlook.com [52.101.70.61])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49F5313790B;
-	Thu, 27 Aug 2026 07:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.70.61
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787815467; cv=fail; b=pIyYeGe8kYVf4kDLHfwrZBhZzU98+YZ1z09RoOSGIeSrscFiIpxkE2a29uA2Heb4OK23MEQrG/p/sLYjHZ/zwTxvmZtNbFSDHDqrgmJRqGXlOq1F9DcNgwsyXd5ZMfieLaYCc9vxrIp95mv1VYoq7Res6+qboLLsBy8c/AxoTGw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787815467; c=relaxed/simple;
-	bh=sGn5IngRTQCVmxcTM3LxLeRGJNIr5a00p0Fx6Ww1yww=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WPGfLrVNQZFf2epxIRwDr6gvNoCIWXrJMiTag4w6Xs44dFa7OqqXj2eOJnH2GRn5qRP2ubaNIXNiggpLgPKF6nGPJeH4QKbTa4UtXmC5r2GUhpaYsi2kA5Dns4JztMpxzl9cHBad29yrJiJVpG7gDYZ7mLZrZ1Udc+dKaYZhDDo=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=siemens.com; dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b=lzcIW4YG; arc=fail smtp.client-ip=52.101.70.61
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siemens.com
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=siemens.com header.i=@siemens.com header.b="lzcIW4YG"
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wFvuKTIamLbPx/yVj8MWdf3lUh1DUSki6VzsbZGnd2L56/cReuZC53oZkoBs81032gmCm/pYDLFLwPqGqMlPQtv55rabGwO7B6ojdIuq1CIeJAM7qFiKU7XO70u8581niOx4cX+pPWrVmYjWqqpAaJ+F65IYLZ5EbzB8yC/GAXxihqe9sRVal7rdIbfKqVntmpegF8h5SYD/7gIU9bluECfE8SeufPekRfs7unD5UVWj/iTygWh3cpLa9PDTUuQETmAdVMZuCEVOzLQGyd5xQTa4mDQm/+djg7L/bHFdoNmXFAJJRfyEuG47Ajl+JHwVfugAVP80HdlH0iyceThZAg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YVqO33XpiYY0gncD8uqn39VcoiFOU/lhwjBFZ6oaQaI=;
- b=kVkd7fxJNaI74hIa5wF0YonwIflsr4UET8ZWHLKZCsfciNTVSq3FFEL42mR3SQNZZ11DZ5DB0RlnHU7JbCXIbLWt6xP/U4US84UEkRQpVmEQHRcTlSbN/3N99CTr1ZnA0EbcLOeVKi+aG7UtnXM77KbHXlg5QiOmFbd774N8zJMnAAZg2ZTOmlMlxyQk9y2ruMA5c1O9dJhOa5Gw5OgOu56eukoe6d7MOZxRjCSFDZnQPbWA1hyZgFeGAHiS3YFZ2Co9vGKvVu58xbzuIjwGrwTPI9RjKd48syOHyzSxzsufTtbA2s1U82bcA/xb3z+BszPa0rAskIX6bELINBtiJA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YVqO33XpiYY0gncD8uqn39VcoiFOU/lhwjBFZ6oaQaI=;
- b=lzcIW4YG+KLwPaZu+d0cXcVFmxoe8ifw9uZLY22cDSmtiwKHr4nyu7K92XKGY7MCe9tWs9IYCNfsyv3GiPRlGYYM4BwSnWBK71Qo5GkufASPNiOm1kveOjsggnnYzj66J12O7gUfjHC4Zytbq+4xSaaEzUxqYUupeoOKLJmp7z2dYtDIssjguj1x0InBWk21T+xZJeMMwRLf42ynsdageGffIgqpi/uW/gGgeXQbvzg9N1oh2XQ+w09gRhelhWG1Ram5duL7O5+w+9vwCFZUFENM5VCdxwiMt91Hp5joNEXtOEm3d/N6braiHHbErgAyPJhU1zUjGWcZWFwYDTc8xA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:20b:3dd::5)
- by GV1PR10MB8608.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:1d1::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.10; Thu, 27 Aug
- 2026 07:24:11 +0000
-Received: from AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5f49:b0e9:d295:22d8]) by AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::5f49:b0e9:d295:22d8%6]) with mapi id 15.21.0339.008; Thu, 27 Aug 2026
- 07:24:11 +0000
-From: Tobias Schaffner <tobias.schaffner@siemens.com>
-To: Steven Rostedt <rostedt@goodmis.org>,
-	Gabriele Monaco <gmonaco@redhat.com>
-Cc: Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Philippe Gerum <rpm@xenomai.org>,
-	linux-trace-kernel@vger.kernel.org,
-	linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Tobias Schaffner <tobias.schaffner@siemens.com>
-Subject: [RFC 3/3] rv: collect per-edge dwell time for per-cpu DA/HA monitors
-Date: Thu, 27 Aug 2026 09:24:00 +0200
-Message-ID: <20260827072400.45734-4-tobias.schaffner@siemens.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260827072400.45734-1-tobias.schaffner@siemens.com>
-References: <20260827072400.45734-1-tobias.schaffner@siemens.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: FR3P281CA0071.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4b::7) To AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:20b:3dd::5)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4250137267C
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 07:44:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787816693; cv=none; b=a1bu9YhkdHc1mcOwB8B5GG6G3btvhiE1CK87HiBuoBXIUGIFe4iJLpyw7bg3kEF1lB31ocMMGCEBFtXmEQE4lVBODhQtlvVDYm7d8+eK2s5NN4pTvv7leFDZBYoPd8njo2MeiIyZ6t3cbwb5YFiQBQggR8/L9dVOXGJAgXfVNUo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787816693; c=relaxed/simple;
+	bh=ggU062oNDv6dCZRK0WhK9Rj3itfFVRSGgrnD6N2LKKQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AZjItKZ6ap5mk8au0v5NAvcrB0Qq6ZNfr2aYS4tKmsULb0L4DATVHBhcaZH3/bzkJXsSmiGekkx5yI8XsMQ8dwUdHhSN7GqvzaldwVNA7yjqXAeBUUyRHx5pAv51ncdGXp0xoDPzHa9+QKLGDB5+UiYe452gztT07rqQvqm3IL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5c3163a88a1so684856e0c.3
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 00:44:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787816691; x=1788421491;
+        h=content-type:cc:to:subject:message-id:date:from:in-reply-to
+         :references:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=TAq2mnIxXFzO957tO9XR1Q6W7W89hYvIMjgxkFCKtOc=;
+        b=FKJOyLIuHge5TOnp7iCFcZF3g+Zb7ZdXyFRhpDNuri/RL0ee1TGauOkeApnWggpEgG
+         ElNvzJQmMdZSFNBwVaWamigsGuAEiWGtb6Ra8PYpAmS90UjIf0mz6Z1ldj2izSt9YVoT
+         BweTeknjJe6qe9wiww0XBjCGuz0qgbAjH4mKNye24HsBOXC/pzEs+SL1J8cz92hBXd4V
+         c4dTRFQTVMWhDaOXF1P51AnJ0yXZyA66nKtryh33BlTMmgqu9FixjC+Bnok5xHAzLaUm
+         55uQv7JyTP0s5I0zVC8ZnrloTWm8dN+nBteobIVqZCfZdWseazwf6mdOvNfdH/QxCbld
+         Bxeg==
+X-Forwarded-Encrypted: i=1; AHgh+RqJwTzou+TipnffMf0bA755ml9o+RwOKK2b6Wg4paC1sa043dr7mDrftiRu0cphOIm4HCohePZ4QsclPs/CmeI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kzHdhbKBZn4HuEttWWp3td/A8I80ESYcH+S4LCngPTBD+jqw6Q
+	AgR44kv+4/X+xr9jEVYkKa7c/0/mlVaGuxvsC3FhngwNyLujB76WYQkZIKfo5wHv
+X-Gm-Gg: AR+sD11kHMMgwDYvrHBWWGUW1szB1W4wQyx090Xq9jwDN1Ohn4HUfS2pRn/TWyYt03J
+	VcZEw8fkgwiDvLIleSgE3Uf9qTQrGNSRbgfM1Y/Gv3u8gMyNNQi8m0R92Szw+upQAiKLk4QLLet
+	jZmRjYv8wwCFJ+96HKSen0fdTZVyP2KnxZo+TS/RAwvJKFcHfoVNgG+yoXUEQS36zQATRzafRkm
+	4e2jvV3Q/Nwp3YWFiqUHwFv18XWYlilK5To6KAkIhRE4sYcUod6Lel4DklWC2EVdaVfj6ZRvPyx
+	dZ1eOTItLwFV68LrMA1BeR9MwJnyhp9SxNHz1aYr/IsjquS6f2OU6EkivaZ12Uk2iG3tZCH7Tk+
+	LYMUrUhfs5tN2c8YC2hzN2HxvhBVbIJhXrl5OwMqPz/z2gq+FYRLSM/HcvT0STxEgObO7wYLQZF
+	Hz7GMS5lAqvS36+6oKrYRnYwfLCjNZ+Xd7fIkkuGke8ORXaIXrtpCH45allsujfPp8rlVePgfuC
+	wqOoC6M/u3LeCyownqR9xgIYw==
+X-Received: by 2002:a05:6122:f89:b0:5a4:c20a:ba4d with SMTP id 71dfb90a1353d-5c65c18a191mr5088752e0c.4.1787816690830;
+        Thu, 27 Aug 2026 00:44:50 -0700 (PDT)
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com. [209.85.217.50])
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5c65fe7d777sm3344570e0c.6.2026.08.27.00.44.50
+        for <linux-kselftest@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Aug 2026 00:44:50 -0700 (PDT)
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-783906bdb20so410237137.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 00:44:50 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AHgh+RpDkWUGnWGsbU7QBSDJ6RQy2hpR+4c30oEePvStJWKIjOUI7Pmvlj86xByyh+8MdlRJuNp0v3DjwpqotEZaA2I=@vger.kernel.org
+X-Received: by 2002:a05:6102:50a9:b0:778:9e3c:5760 with SMTP id
+ ada2fe7eead31-782c1a00971mr4010623137.11.1787816690046; Thu, 27 Aug 2026
+ 00:44:50 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM9PR10MB4992:EE_|GV1PR10MB8608:EE_
-X-MS-Office365-Filtering-Correlation-Id: abeafbad-58a6-448b-798f-08df040c3055
-X-MS-Exchange-AtpMessageProperties: SA
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|1800799024|376014|7416014|23010399003|10070799003|366016|6133799003|10067099003|56012099006|11063799006|55112099003|22082099003|18002099003;
-X-Microsoft-Antispam-Message-Info:
-	hAVNQSd3AsPZ2vCGxo5KUUXsk3FuNDb/YJ3eLMA01/OEfVBZx4oKi6lnB25c6+9dcXKrjzwH/HdVuVdhikpLXX20N6bzzXf/5YKkAHV2Lh/cOFNszny1YNffOVXNILaiLr4ioo4Jj50AhGc4x3XcnAZJeLqZlTx4zs6D1knM7haLIdENxf8qlFg6OT/cbBLj2XxsNH/YkL72PF2hRkJJ4O9ZTp5BfU0iCuKKLP4rRsT2eSVGEwdQxXY8VvS8gQVOJaPVtHjba/SYU6BH/zGu3MyWqrgd5QW5rSIAzWee0wx3+wv6GNidKBAsYLLRuClJmhhz2DMpN7Koo0XZjRbQrsiHDhhSrgca2ETNLnWdSsJUAI7kkQv+1R9qAgQtP8eGnfb+T0h5ZJB3/TMCL9VIXmjBVTb+FytmXQuFYxdsf1n+a6HhWS/BuSnnvDZLHXyA2zX+3pzgAFWcJ1DH4mQ0vYgccDr9LAZUWc0Mmzrc7gHGcioLJdBv3Zl3lZqMUMpP0wnEBIDTA+qBPvQ/VFd4LxrYB72fIKFuqW3tSHs/coJ3rQngTm/A/Kx6/sBaElQaPin6yeX45p0E4JrNaIOnSVtUE+nRxTR5GK/S013cYdZFIuOh3C/FWJLPYVblNXIvNOwP8ajX6mU+hTrDOmg9yEp1wtZdSlxNXjVMOv6t+bE=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(23010399003)(10070799003)(366016)(6133799003)(10067099003)(56012099006)(11063799006)(55112099003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?9WacdKKDkOxvjM64p0UuutjrvOXzJ8hk2y/hB3p/tmMzVcuXj+LPpg1PSEX0?=
- =?us-ascii?Q?RdvnmGJ5b2F40JIhYD89zpf8M+cMo4aSUQ9Zd4iEjuIWTk10QPyPVUgatmjg?=
- =?us-ascii?Q?4yjz7fOMkXHG65mmsK77P86T8AuwDhnZ/cBULFm48GPUFi0jxY+6zRVXyh45?=
- =?us-ascii?Q?MDcTA5lxTcQSB65XFtIgvS2nWIQXfJKgrrYgQEzwslMZN0AgGREo72EFcnbT?=
- =?us-ascii?Q?+DzPDa3a1LttlDs50NLlnkLoRaEI0mjsAK1NSvcNzpWyZziGkMomDiCtATO/?=
- =?us-ascii?Q?D9YOWYdsK7NX0q7gz0Og6zkzYr25oDldS4pp4+nJfDAzOrDajeyIrJCBFO3V?=
- =?us-ascii?Q?0xp8S/I+uDASOAh/jKkfctpaJUWD0p4tV/Xp/11nv432ZdEwn8PIKzmXmk1Z?=
- =?us-ascii?Q?W7CHhc4hIjXB6ruZO/wKefmlMmzRw2F9MYpuseGLWul5xAlb42FgIjM0gEMd?=
- =?us-ascii?Q?SL2OtSv4BPYA22aRt9a2XU3pV7aOpXUrNxrp2lGKq4nxPjCbywPlIqcvbhtR?=
- =?us-ascii?Q?ZLfkcf69bUEI8KyQkB2kaT2x6sngODJAoDjDzrFeQPfYcU2sexxe4hdni7ln?=
- =?us-ascii?Q?BfkPTe91btFZiBRar14yc9GLiXyKe5AhVHhOzJN7aklIG70vu5xvpgz2A5Hc?=
- =?us-ascii?Q?SNXFbO9isHnbLFYlpk4exrfA6C66GN2+W+9bZlWEaSbC0e+RZcgXpa7TlIRo?=
- =?us-ascii?Q?K3MOB0D89l6oKZSKnyp4GdFUpNe7n7ozK3m0Mbek8aFdtJKQXM0VTV0V/oH9?=
- =?us-ascii?Q?xzkPdgYaj0I8Uh5mecW4tE38tcfE1EzQtKP/zSilq77IJOpDqBSAAuRBV7zv?=
- =?us-ascii?Q?MgqkX4aLOxE0ddf3+FTZizDBJ4lqRnUHZPqW4tBRsFwFbA459RlSvPApp8nE?=
- =?us-ascii?Q?Hsz+To0egKelvJqaSTfTg70ST/OWpBheTxeG+nq5sQ9UzZ8U/wypix0DdnCR?=
- =?us-ascii?Q?nsA6zi7GfqsYB3wJvyTnPzqV5qG84oYiI0Phy20awsU9ZsXipQByFNFK6iNY?=
- =?us-ascii?Q?Siaa2qLUE1qOLCU+dTrpdbTHFOKhzenK+ECGYGkHFUKFI/9tQ/ijWO87Ed5y?=
- =?us-ascii?Q?oqnuDnBASpTS4RaHWQewPTCoOJqfcXKg6Dp7AyGFRDfNGC/AMlZGz8nBSg+r?=
- =?us-ascii?Q?5OzbjY4kLKhjZZjLIGkhea1jlrdGwpM3JP1uSqusEaeS9cuNeqXmPaOWB5Y7?=
- =?us-ascii?Q?Rg5fikeBCGWUHrSGHfJscLCavzNrBnSSYeF9mpPURmBxOvl3L+wvU6v1yfEl?=
- =?us-ascii?Q?X/Tj2X2nqMn+70M+VoT9KyQ6zix6SbnUV3XYIOHwYq//gmUkQZVMfuZtrG4k?=
- =?us-ascii?Q?PfoLmv0jHexCZzqmg2PDkLygZppiXQyPHUW8dg+ZrBCRxkYm7OJLYyDXK/5L?=
- =?us-ascii?Q?R7GQii1zW3DTJhkmqfO/BUDcJR8iqLSsvoXzuF24Gwmiuf8m0T6HWOiWBxFm?=
- =?us-ascii?Q?2MM6RJ8BELLMjlfJHSYMkw+RXJu/opy85C0mtLAr7FDcccmMmFyaC7S52Uc1?=
- =?us-ascii?Q?a6pd9nPwNTRnRamIKCgMyIhAwRYA8FCikWXVgKSnc552IvFfX4nIlfxlW23F?=
- =?us-ascii?Q?7i+6Qy7Qn9v8lp6olm/0HH4lCx3D78X6XaObfPik8FVSTQhRsApipTP6SYEj?=
- =?us-ascii?Q?Bk0qAEVnQCrzQd2C/8dTacJutuZGU4h0tmCP6ui6JYiQn4ZJTnfg5nV98sVK?=
- =?us-ascii?Q?Hzt90oH8jGsIYnaIZIgYV2SkttjKnDIXVNjK8Hg2VYcGzzGOwBOIYYXuWuk2?=
- =?us-ascii?Q?b/Xmh3NAHtp+VER+Rigw/R3SmGv+wCGsKFd6dh8cyoNEm7OVZercoESDZkVK?=
-X-MS-Exchange-AntiSpam-MessageData-1: KC8cu/0T45EdLUbXUOkvmwm4V4m8QBTqCxw=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: abeafbad-58a6-448b-798f-08df040c3055
-X-MS-Exchange-CrossTenant-AuthSource: AM9PR10MB4992.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Aug 2026 07:24:10.9855
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: lek9uBzbsaa+ZmfXcqG5JmVKHI9NE2gUh/pNX2AGj+NLegxwXQFyG+DZx4RF9QbuIoRnQ9bdti7pYubMSErxjc2j8+kiBuyoU2CFPhDizAE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GV1PR10MB8608
+References: <1e519fb24aa5521788d69cc7980665ccbc227b14.1787584184.git.geert@linux-m68k.org>
+ <ao1hIejAdBPKUHFW@kniemiec-mobl1> <CAMuHMdWuG_s3Rm-gLc2KNw9Z0bptQjdDDGH+9YawEMEsFZZ6Nw@mail.gmail.com>
+ <ao8Fc8DWbsxMtSRu@kniemiec-mobl1>
+In-Reply-To: <ao8Fc8DWbsxMtSRu@kniemiec-mobl1>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 27 Aug 2026 09:44:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWCF0=P4XGYuM1c1+KZckJYw9KuaoUZOF8-EOOqtqsWyQ@mail.gmail.com>
+X-Gm-Features: AcwNN1XzEY3I1YHBaPGvpKk8MVWoRxkSmhwGS1lNUFejWW4kN8mjsnYoKG8va7I
+Message-ID: <CAMuHMdWCF0=P4XGYuM1c1+KZckJYw9KuaoUZOF8-EOOqtqsWyQ@mail.gmail.com>
+Subject: Re: [PATCH] gpu: GPU_BUDDY_KUNIT_TEST should not select GPU_BUDDY
+To: Krzysztof Niemiec <krzysztof.niemiec@intel.com>
+Cc: David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Krzysztof Karas <krzysztof.karas@intel.com>, 
+	Sebastian Brzezinka <sebastian.brzezinka@intel.com>, Maarten Lankhorst <dev@lankhorst.se>, 
+	Andi Shyti <andi.shyti@linux.intel.com>, dri-devel@lists.freedesktop.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-With the core facility in place, hook it into the DA/HA layer so that any
-per-cpu automaton monitor also reports how long it lingers in each state.
+Hi Krzysztof,
 
-Add a selftest that enables a per-cpu monitor, checks the stats file
-appears and is populated under load, and skips cleanly otherwise.
+On Wed, 26 Aug 2026 at 18:39, Krzysztof Niemiec
+<krzysztof.niemiec@intel.com> wrote:
+> I got unnecessarily annoyed/angry in my previous reply, I'm sorry for that.
+> It clouded my judgement a bit then but I still have some comments now
+>
+> On 2026-08-25 at 14:15:34 +0200, Geert Uytterhoeven wrote:
+> > On Tue, 25 Aug 2026 at 13:39, Krzysztof Niemiec
+> > <krzysztof.niemiec@intel.com> wrote:
+> > > On 2026-08-24 at 17:12:30 +0200, Geert Uytterhoeven wrote:
+> > > > Enabling a (modular) test should not silently enable additional kernel
+> > > > functionality, as that may increase the attack vector for a product.
+> > >
+> > > What vector? What product, exactly? As far as I know buddy allocator code is
+> >
+> > Any product that uses DRM and has CONFIG_KUNIT_ALL_TESTS=m, so
+> > developers can easily run any relevant test when the need arises.
+> >
+> > > currently loaded when a) loading a drm driver (which would need that code
+> >
+> > Not just "a drm driver": very few DRM drivers use it.
+> > Hence one can have a product with DRM that does not need the buddy
+> > allocator.
+>
+> And the buddy allocator was moved out of DRM in anticipation of a
+> possible non-DRM driver that wants the buddy allocator. So there's no
+> implication between DRM and buddy in either way anymore.
+>
+> Currently it's only DRM drivers that actually use it, but there's already
+> scaffolding in rust for it that does not depend on DRM, and once
+> there's a non-DRM driver that wants to use the allocator it would have
+> to undo the dependency added in this patch anyway.
 
-Signed-off-by: Tobias Schaffner <tobias.schaffner@siemens.com>
----
- include/linux/rv.h                            |  4 ++
- include/rv/da_monitor.h                       | 53 +++++++++++++++++++
- tools/testing/selftests/verification/config   |  1 +
- .../verification/test.d/rv_edge_stats.tc      | 32 +++++++++++
- 4 files changed, 90 insertions(+)
- create mode 100644 tools/testing/selftests/verification/test.d/rv_edge_stats.tc
+Then the dependency can be lifted.  There are hundreds (thousands?)
+of Kconfig symbols that will need to get heir dependencies updated
+one day.
+However, missing dependencies means more questions for all users
+configuring kernels.
 
-diff --git a/include/linux/rv.h b/include/linux/rv.h
-index 7eeecce17e50..09363f79ca90 100644
---- a/include/linux/rv.h
-+++ b/include/linux/rv.h
-@@ -27,6 +27,10 @@
- struct da_monitor {
- 	bool		monitoring;
- 	unsigned int	curr_state;
-+#ifdef CONFIG_RV_EDGE_STAT
-+	/* local_clock() ns when curr_state was entered; 0 = not yet stamped. */
-+	u64		state_ns;
-+#endif
- };
- 
- #ifdef CONFIG_RV_LTL_MONITOR
-diff --git a/include/rv/da_monitor.h b/include/rv/da_monitor.h
-index 34b8fba9ecd4..59ca9a286c10 100644
---- a/include/rv/da_monitor.h
-+++ b/include/rv/da_monitor.h
-@@ -16,6 +16,8 @@
- 
- #include <rv/automata.h>
- #include <linux/rv.h>
-+#include <linux/rv_edge_stat.h>
-+#include <linux/sched/clock.h>
- #include <linux/stringify.h>
- #include <linux/bug.h>
- #include <linux/sched.h>
-@@ -30,6 +32,54 @@
- 
- static struct rv_monitor rv_this;
- 
-+/* per-edge dwell statistics, wired up for per-cpu monitors. */
-+#if defined(CONFIG_RV_EDGE_STAT) && RV_MON_TYPE == RV_MON_PER_CPU
-+static void
-+rv_this_edge_name(unsigned int edge, char *buf, size_t len)
-+{
-+	snprintf(buf, len, "%s:%s", model_get_state_name(edge / EVENT_MAX),
-+		 model_get_event_name(edge % EVENT_MAX));
-+}
-+
-+static const struct rv_edge_cfg rv_this_edge_cfg = {
-+	.n_edges   = STATE_MAX * EVENT_MAX,
-+	.edge_name = rv_this_edge_name,
-+};
-+
-+/* Hand the model's edge descriptor to the core; called from da_monitor_init(). */
-+static inline void rv_edge_bind(void)
-+{
-+	rv_this.edge_cfg = &rv_this_edge_cfg;
-+}
-+
-+/* Stamp the moment a state is entered, so its dwell can be timed on exit. */
-+static __always_inline void rv_da_edge_enter(struct da_monitor *da_mon)
-+{
-+	da_mon->state_ns = local_clock();
-+}
-+
-+/* Account the dwell in @curr, then stamp entry into the next state. */
-+static __always_inline void
-+rv_da_edge_account(struct da_monitor *da_mon, enum states curr, enum events ev)
-+{
-+	u64 now = local_clock();
-+	u64 prev = da_mon->state_ns;
-+
-+	da_mon->state_ns = now;
-+	/*
-+	 * local_clock() is not guaranteed monotonic; drop the sample if it did
-+	 * not advance so a backward step cannot underflow into a bogus dwell.
-+	 */
-+	if (rv_this.edge_pcpu && prev && now > prev)
-+		rv_edge_account(&rv_this, curr * EVENT_MAX + ev, now - prev);
-+}
-+#else
-+static inline void rv_edge_bind(void) { }
-+static inline void rv_da_edge_enter(struct da_monitor *da_mon) { }
-+static inline void
-+rv_da_edge_account(struct da_monitor *da_mon, enum states curr, enum events ev) { }
-+#endif /* CONFIG_RV_EDGE_STAT && RV_MON_PER_CPU */
-+
- /*
-  * Hook to allow the implementation of hybrid automata: define it with a
-  * function that takes curr_state, event and next_state and returns true if the
-@@ -113,6 +163,7 @@ static inline void da_monitor_reset(struct da_monitor *da_mon)
- static inline void da_monitor_start(struct da_monitor *da_mon)
- {
- 	da_mon->curr_state = model_get_initial_state();
-+	rv_da_edge_enter(da_mon);
- 	da_monitor_init_hook(da_mon);
- 	/* Pairs with smp_load_acquire in da_monitoring(). */
- 	smp_store_release(&da_mon->monitoring, 1);
-@@ -275,6 +326,7 @@ static inline void da_monitor_reset_state_all(void)
-  */
- static inline int da_monitor_init(void)
- {
-+	rv_edge_bind();
- 	da_monitor_reset_state_all();
- 	return 0;
- }
-@@ -696,6 +748,7 @@ static inline bool da_event(struct da_monitor *da_mon, enum events event, da_id_
- 		if (likely(try_cmpxchg(&da_mon->curr_state, &curr_state, next_state))) {
- 			if (!da_monitor_event_hook(da_mon, curr_state, event, next_state, id))
- 				return false;
-+			rv_da_edge_account(da_mon, curr_state, event);
- 			da_trace_event(da_mon, model_get_state_name(curr_state),
- 				       model_get_event_name(event),
- 				       model_get_state_name(next_state),
-diff --git a/tools/testing/selftests/verification/config b/tools/testing/selftests/verification/config
-index 43072c1c38f4..de229777d5c8 100644
---- a/tools/testing/selftests/verification/config
-+++ b/tools/testing/selftests/verification/config
-@@ -1 +1,2 @@
- CONFIG_RV=y
-+CONFIG_RV_EDGE_STAT=y
-diff --git a/tools/testing/selftests/verification/test.d/rv_edge_stats.tc b/tools/testing/selftests/verification/test.d/rv_edge_stats.tc
-new file mode 100644
-index 000000000000..5fb2384d938c
---- /dev/null
-+++ b/tools/testing/selftests/verification/test.d/rv_edge_stats.tc
-@@ -0,0 +1,32 @@
-+#!/bin/sh
-+# SPDX-License-Identifier: GPL-2.0-or-later
-+# description: Test per-edge dwell-time statistics (stats)
-+
-+MON=wip
-+
-+check_requires "$MON:monitor"
-+
-+# The "stats" file is created on first enable; if it is still missing the
-+# kernel was built without CONFIG_RV_EDGE_STAT, so skip.
-+echo 1 > "monitors/$MON/enable"
-+if [ ! -e "monitors/$MON/stats" ]; then
-+	echo 0 > "monitors/$MON/enable"
-+	echo "CONFIG_RV_EDGE_STAT is not enabled."
-+	exit_unsupported
-+fi
-+
-+# The first line is the column header; the body has one line per (cpu, edge).
-+head -n1 "monitors/$MON/stats" | grep -q "^# cpu edge label count max_ns sum_ns"
-+[ "$(grep -cvE '^#' "monitors/$MON/stats")" -gt 0 ]
-+
-+# Drive some scheduler activity so the automaton records transitions.
-+for _ in 1 2 3 4 5 6 7 8 9 10; do
-+	(true) &
-+	wait
-+done
-+
-+# At least one edge must now show a non-zero count, with sum_ns >= max_ns > 0.
-+grep -vE '^#' "monitors/$MON/stats" | \
-+	awk '$4 > 0 && $5 > 0 && $6 >= $5 { hit = 1 } END { exit !hit }'
-+
-+echo 0 > "monitors/$MON/enable"
+> > > > --- a/drivers/gpu/Kconfig
+> > > > +++ b/drivers/gpu/Kconfig
+> > > > @@ -1,14 +1,15 @@
+> > > >  # SPDX-License-Identifier: GPL-2.0
+> > > >
+> > > >  config GPU_BUDDY
+> > > > -       bool
+> > > > +       bool "Page based buddy allocator for GPU memory" if KUNIT
+> > > > +       depends on DRM || COMPILE_TEST
+> > >
+> > > What's the justification for COMPILE_TEST here? It might be needed but
+> > > you didn't explain why or mention it in the patch description at all.
+> >
+> > It is customary to add "|| COMPILE_TEST" when adding dependencies that
+> > are not strictly needed for a successful build.
+>
+> I can't tell if this is something so obvious it needs no comment; I feel
+> like it should be documented explicitly in the commit log.
+>
+> If the DRM dependency would be dropped would the COMPILE_TEST have to
+> stay? Because then we're forcing a non-drm user to enable it if they want
+> to use the buddy alloc at all.
+
+If the DRM dependency would be dropped, the COMPILE_TEST can be
+dropped too.
+If a (not always enabled) non-drm user appears, it can be added to the
+dependency list.
+
+> I think just leaving the "if KUNIT" part would check all the boxes,
+> since the tests are actually runnable with KUnit via .kunitconfig
+> without building an entire DRM driver, GPU_BUDDY also won't be randomly
+> enabled with KUNIT_ALL_TESTS on systems that don't care about it, and
+> we're not forcing anyone to enable DRM on a feature that was explictly
+> made independent from it.
+
+There are systems that do not use DRM, but still want tests enabled.
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.43.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
