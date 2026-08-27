@@ -1,440 +1,154 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11FB238BF62;
-	Thu, 27 Aug 2026 16:54:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta0.migadu.com (out-179.mta0.migadu.com [91.218.175.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B541488218
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 16:57:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787849669; cv=none; b=fjQKjDM45NAIAJjBXkr80QXzDDo2i89BRPGeferMNFPYI6stcydusNMW9uXZYTHzG1RwRlBCDU0Cu37KxfkW1+9gDhcCj9uqbUDM1uzzyVnvss8bQzc6AxgiPQ8hsUM+VTPV7JMa0RMQRRMudPnc3tIHzlfWVjJaDPuaTeYxNsw=
+	t=1787849830; cv=none; b=rRk9L7zptVTW8Td8U5uLjTFNA1+H+KyE/06COVhonMmOjqcoc2V5CjEt/cw5Q6MTAAFoU+QL+s0bqnIwwJgX6kqeQ2BDWVzDC2bJ7AS0OP2q4VPYpC+iIQLG/ngnbpgWX0pJB4WMCjYcANQ4JeC0mFRpc1BDkReTpLd4G/nmemQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787849669; c=relaxed/simple;
-	bh=DsQYUAYoIvLMCKyVTnqr6NjN9Agug39s0/XRUD7hItE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HBykUMDcCRREo4r5S6lkrwTs7qkAHR7suAvpTj8A70DU7+MLNvYVI2xOqxjk6kUYKUyHhK9QMv6wnHhBK5zT336lI11YkE+3f5l34bl6OKJ7G8CmMrMK7Rt8k/JIp9zqVcrJ4rHncVEjn7Ji4e7FEl7JEzGDW8w7CejSjRB0r/I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=UX67LVpI; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787849830; c=relaxed/simple;
+	bh=Jdj6KrLGehB34X2w97M9mQObVKahiLPaVNwhnjAUsN0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=K5GA9+ZYg+AmbZ0jphNue68MdE+KxK413cGTMkFBUXCh7LixLHV4CRigHLVaOxrofiCzBiwQ6kAmCkdmPktrus0y7kM9W8sd/hVqjFdpIhNBp1nHPubDk9IqSJ3IA+lQjPDaXbqXLyhzs68vs2XcPM6e4rl8S3gjDSCCCtMa+x8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=VtQjQg4A; arc=none smtp.client-ip=91.218.175.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="UX67LVpI"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E4101684;
-	Thu, 27 Aug 2026 09:54:18 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 52C673F66F;
-	Thu, 27 Aug 2026 09:54:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787849661; bh=DsQYUAYoIvLMCKyVTnqr6NjN9Agug39s0/XRUD7hItE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UX67LVpIuzwerPNysXQnLqBw90ixXmKYbCFxiUuGX/hfrZq2IAIOISwVTVuXd9dss
-	 kwjV3IXRQt4zZwiH3S2acuMWWKumHHbsY0jZeGKg2VPzvn95QQ+Lc/1mtRECL0U6JG
-	 aTldn2pMdR0kTROUwIK8E5oHcH+LMUpisyeAgeTY=
-Date: Thu, 27 Aug 2026 17:54:17 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <apBruUeQoCgP_Mhh@e129823.arm.com>
-References: <20260826-fix_split-v2-0-71153c7f579a@arm.com>
- <20260826-fix_split-v2-2-71153c7f579a@arm.com>
- <0107447a-7c1f-44f8-94fb-109b0f850677@linux.alibaba.com>
- <apAVAvfxZSeEvf50@e129823.arm.com>
- <DKZTG6MI4EI2.35PCXKS36M1DY@nvidia.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="VtQjQg4A"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Jdj6KrLGehB34X2w97M9mQObVKahiLPaVNwhnjAUsN0=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1787849825; v=1; x=1788454625;
+ b=VtQjQg4AzyoiDQezEab7rD4yC/LT2q7k6/QDw9msoX+7hcM4aW76Sy0cYn8RBBp9vcIDpY+N
+ YE16NaRoXMn2sJRpjjxO9VaEeSoPlwqMsy86KhHaeQUWyg14gDNIBXSwOHri6tnj2enEZ5iI8sc
+ sgu9wK/YoZDOiRz77EwWnWbY=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 97ee9a0df24b090b;
+	Thu, 27 Aug 2026 16:56:55 +0000
+X-Mizu-Trace-ID: 97ee9a0df24b090b
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <a96f8530-114d-491d-9802-83d72dfab16e@linux.dev>
+Date: Thu, 27 Aug 2026 09:56:43 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v7 0/9] bpf: add support for KASAN checks in
+ JITed programs
+To: =?UTF-8?Q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ John Fastabend <john.fastabend@gmail.com>,
+ Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau
+ <martin.lau@linux.dev>, Eduard Zingerman <eddyz87@gmail.com>,
+ Song Liu <song@kernel.org>, Yonghong Song <yonghong.song@linux.dev>,
+ Jiri Olsa <jolsa@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Shuah Khan <shuah@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org,
+ Bastien Curutchet <bastien.curutchet@bootlin.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
+ <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
+ <1c34603a-9170-4074-b826-e98d9871e2d8@linux.dev>
+ <DKZJ7GFLAU12.1WHACTBREQQV2@bootlin.com>
+Content-Language: en-US
+From: Ihor Solodrai <ihor.solodrai@linux.dev>
+In-Reply-To: <DKZJ7GFLAU12.1WHACTBREQQV2@bootlin.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <DKZTG6MI4EI2.35PCXKS36M1DY@nvidia.com>
 
-On Thu, Aug 27, 2026 at 11:03:17AM -0400, Zi Yan wrote:
-> On Thu Aug 27, 2026 at 6:44 AM EDT, Yeoreum Yun wrote:
-> > Hi Baolin,
-> >
-> >> 
-> >> 
-> >> On 8/26/26 8:24 PM, Yeoreum Yun wrote:
-> >> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> >> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> >> > made by memalign().
-> >> > 
-> >> > The underlying VMA may start at a different address from the aligned
-> >> > address returned by memalign(). Furthermore, a subsequent
-> >> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> >> > already set.
-> >> > 
-> >> > This causes split_huge_page_test to fail because the check_huge_xxx()
-> >> > helpers incorrectly require the address returned by memalign() to
-> >> > match the VMA start address reported in /proc/self/smaps.
-> >> > 
-> >> > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> >> > /proc/self/smaps to detect huge pages.
-> >> > 
-> >> > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> >> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> >> > ---
-> >> >   tools/testing/selftests/mm/vm_util.c | 130 ++++++++++++++++++++---------------
-> >> >   tools/testing/selftests/mm/vm_util.h |   1 +
-> >> >   2 files changed, 77 insertions(+), 54 deletions(-)
-> >> > 
-> >> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> >> > index 4821a3563036..1d0959b3b9e8 100644
-> >> > --- a/tools/testing/selftests/mm/vm_util.c
-> >> > +++ b/tools/testing/selftests/mm/vm_util.c
-> >> > @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
-> >> >   	return entry;
-> >> >   }
-> >> > -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
-> >> > -		  uint64_t hpage_size)
-> >> > -{
-> >> > -	char buffer[MAX_LINE_LENGTH];
-> >> > -	uint64_t thp = -1;
-> >> > -	char *entry;
-> >> > -
-> >> > -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> >> > -	if (!entry)
-> >> > -		goto err_out;
-> >> > -
-> >> > -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> >> > -		ksft_exit_fail_msg("Reading smap error\n");
-> >> > -
-> >> > -err_out:
-> >> > -	return thp == (nr_hpages * (hpage_size >> 10));
-> >> > -}
-> >> > -
-> >> > -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-> >> > -		uint64_t hpage_size)
-> >> > +static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
-> >> > +			       void *addr, size_t len, int nr_hpages,
-> >> > +			       uint64_t hpage_size)
-> >> >   {
-> >> >   	int order = 0, pagesize = getpagesize();
-> >> >   	unsigned int nr_pages = hpage_size / pagesize;
-> >> >   	int orders[MAX_NR_ORDERS], status;
-> >> > -	int pagemap_fd, kpageflags_fd;
-> >> >   	bool ret = false;
-> >> >   	if (!nr_pages)
-> >> > @@ -386,15 +368,6 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-> >> >   		ksft_exit_fail_msg("invalid order\n");
-> >> >   	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
-> >> > -	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> >> > -	if (pagemap_fd == -1)
-> >> > -		ksft_exit_fail_msg("read pagemap fail\n");
-> >> > -
-> >> > -	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> >> > -	if (kpageflags_fd == -1) {
-> >> > -		close(pagemap_fd);
-> >> > -		ksft_exit_fail_msg("read kpageflags fail\n");
-> >> > -	}
-> >> >   	status = gather_folio_orders(addr, len, pagemap_fd,
-> >> >   			kpageflags_fd, orders, MAX_NR_ORDERS);
-> >> > @@ -405,48 +378,97 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-> >> >   		ret = true;
-> >> >   out:
-> >> > -	close(pagemap_fd);
-> >> > -	close(kpageflags_fd);
-> >> >   	return ret;
-> >> >   }
-> >> > -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> >> > +enum check_huge_type {
-> >> > +	CHECK_HUGE_ANON,
-> >> > +	CHECK_HUGE_FILE,
-> >> > +	CHECK_HUGE_SHMEM,
-> >> > +};
-> >> > +
-> >> > +static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> >> > +			     uint64_t hpage_size, enum check_huge_type type)
-> >> 
-> >> The original __check_pmd_huge() is only for PMD-sized large folios, but now
-> >> it not only checks PMD-sized large folios but also mTHP large folios, which
-> >> I find confusing. Please keep its original semantics, and only check
-> >> PMD-sized large folios.
-> >
-> > But, It seems to valuable to check other page-flags than checking
-> > the large-folio only.
-> >
-> >> 
-> >> >   {
-> >> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> >> > +	int pagemap_fd, kpageflags_fd;
-> >> > +	uint64_t pmd_pagesize, granule;
-> >> > +	uint64_t categories, kpf;
-> >> > +	unsigned long pfn;
-> >> > +	bool check_large, huge_mapped;
-> >> > +	char *start = addr;
-> >> > +	char *end = start + len;
-> >> > +	pmd_pagesize = read_pmd_pagesize();
-> >> >   	if (!pmd_pagesize)
-> >> >   		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> >> > -	if (hpage_size == pmd_pagesize)
-> >> > -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> >> > +	if (nr_hpages > 0) {
-> >> > +		check_large = true;
-> >> > +		granule = hpage_size;
-> >> > +	} else {
-> >> > +		check_large = false;
-> >> > +		granule = psize();
-> >> > +	}
-> >> 
-> >> This is incorrect for the mTHP large folio check. I already hit a selftest
-> >> failure. Please test your patches before sending them out.
-> >
-> > Since for a split case, large folio can be as-is but only remove
-> > the PMD mapping only, skipping the large_folio checking seems valid
-> > when nr_hpage is 0.
+On 2026-08-27 12:01 a.m., Alexis Lothoré wrote:
+> Hi Ihor,
 > 
-> What split care are you referring to? split_huge_page_test() always
-> splits the folio.
+> On Wed Aug 26, 2026 at 11:00 PM CEST, Ihor Solodrai wrote:
+>> On 2026-08-23 3:53 p.m., Kumar Kartikeya Dwivedi wrote:
+>>> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothoré (eBPF Foundation) wrote:
+>>>> Hello,
+>>>> this is v7 of the series aiming to bring basic support for KASAN checks
+>>>> to BPF JITed programs. This new revision just makes the series rebased
+>>>> on top of current bpf-next_base.
+>>>>
+>>>> Please note that with the recent kernel splat detector introduced in
+>>>> kernel-patches/vmtest through commit 8109e5928cd0 ("ci: own the kernel
+>>>> splat matching (#509)"), CI runs on this series will fail with the
+>>>> following error.
+>>>>
+>>>>      Error: kernel splat detected: [  100.689549] BUG: KASAN: \
+>>>>      slab-use-after-free in \
+>>>>      bpf_prog_eba69524d1d949b1_st_not_on_stack+0x12f/0x17a \
+>>>>
+>>>> which is pretty normal, as the new selftests introduced by this series
+>>>> are expected to trigger KASAN splats (the test_progs part will pass,
+>>>> only the kernel_splats part will trigger errors). The right fix may be
+>>>> to just put a list of regex matching all the kasan subtests progs in the
+>>>> relevant SPLAT_ALLOWLIST file; something like:
+>>>>
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(st|ld)(x)?(_not)?_on_stack\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_simple_atomic(_fetch)?(_not)_on_stack\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_patched(_not)?_on_stack\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_verifier_paths_stack_and_non_stack\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_ldx_oob\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_st_blinded\+
+>>>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){16}_(load_acquire|store_release)(_not)?_on_stack\+
+>>>>
+>>>> I can take care of opening the relevant PR in kernel-patches/vmtest with
+>>>> this if it ends up being the correct solution, but it will make sense to
+>>>> do so only once the selftests list is validated (but before merging the
+>>>> series).
+>>>
+>>> We need to resolve this before landing the set. To me it looks inevitable, esp.
+>>> if we exercise the support and produce such warnings. That said I'll let Ihor
+>>> respond and provide guidance for this. We should probably land the vmtest PR
+>>> before v8 is posted, so that v8 can go through CI and be processed without
+>>> failures.
+>>
+>> This is a tricky one.
+>>
+>> IIUC the suggested allowlist regex will also mask the real splats, which
+>> the whole KASAN-in-JIT project was supposed to catch.
+> 
+> Not really: the proposed list of regex above just discards the splat
+> emitted by the progs used by the tests related to the KASAN feature (so
+> any prog in tools/testing/selftests/bpf/prog/{kasan.c,kasan_harden.c},
+> which anyway generate "fake" KASAN splat for most of them, since we are
+> manually poisoning some valid memory to trigger the splats. Any other
+> program that generate a splat will be caught by the splat detector.
 
-Not for split_huge_page_test case but for khugepage testcase like
-collapse_full_of_compound() test.
+Ah, I see. The regexes have BPF prog names in them.
+
+Then yes, the SPLAT_ALLOWLIST is the right fix.
+
+Thanks for explaining.
+
+>>
+>> I think a good way to resolve this is to teach the kasan splat
+>> detection script about these tests, and drop/skip them from the dmesg
+>> log it inspects. For example, match begin / end of the test set.
+>> Might require special log anchors printed by the test itself, but
+>> you get the idea.
+>>
+>> Alexis, do you mind trying this?
+> 
+> If despite the comment above, teaching check-kernel-splat.sh how to
+> ignore the kasan selftests specific splats remains a better solution,
+> sure, I can work on this.
+
+No need. Let's do the SPLAT_ALLOWLIST, I'll take a look at your CI PR
+shortly.
 
 > 
-> >
-> > And the failure of test seems because of unmapped area after
-> > changinng the collapse-order. Therefore, it seems to fine with below
-> > patch:
-> >
-> > ---------------&<----------------------
-> >
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index 1d0959b3b9e8..f174a76d2310 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -387,14 +387,14 @@ enum check_huge_type {
-> >         CHECK_HUGE_SHMEM,
-> >  };
-> >
-> > -static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> > -                            uint64_t hpage_size, enum check_huge_type type)
-> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> > +                        uint64_t hpage_size, enum check_huge_type type)
-> >  {
-> >         int pagemap_fd, kpageflags_fd;
-> >         uint64_t pmd_pagesize, granule;
-> >         uint64_t categories, kpf;
-> >         unsigned long pfn;
-> > -       bool check_large, huge_mapped;
-> > +       bool check_large, check_huge_mapped, allow_nomap;
-> >         char *start = addr;
-> >         char *end = start + len;
-> >
-> > @@ -405,11 +405,20 @@ static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> >         if (nr_hpages > 0) {
-> >                 check_large = true;
-> >                 granule = hpage_size;
-> > +               if (granule == pmd_pagesize)
-> > +                       check_huge_mapped = true;
-> > +               else
-> > +                       check_huge_mapped = false;
-> >         } else {
-> >                 check_large = false;
-> >                 granule = psize();
-> >         }
+> Thanks,
 > 
-> The else is for nr_hpages == 0? But it looks like we allow negative
-> nr_hpages. Maybe add a bool expect_huge = nr_hpages > 0 to make it
-> explicit.
-
-Fair enough. I'll change.
-
-> 
-> granule is an optimization for PAGE_IS_HUGE scanning? When we expect a
-> PMD mapping, we just scan at pmd_pagesize granularity, otherwise we
-> check every single page?
-> 
-> At the high level, the function looks good to me, the rules are:
-> 
-> 1. if hpage_size == pmd_pagesize, we need to check PAGE_IS_HUGE and
-> check_large_folio() can be skipped, since we only care about mappings.
-> This checks for PMD mappings.
-> 
-> 2. in other cases, check_large_folios() is always needed. This is for
-> mTHP checks.
-
-Exactly, but for some testcase where use this function, doesn't
-trigger split of large _folio but only check the HUGE MAP is removed
-(nr_hpage == 0), it skips the chekc_large_folio(). 
-
-> 
-> I think the ifs at the beginning is confusing. Can we do something like
-> below to get rid of the ifs? I also moved KPF_* checks in a separate
-> function. Feel free to make changes if you find any issue there.
-> 
-> static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-> 			    enum check_huge_type type)
-> {
-> 	bool file = categories & PAGE_IS_FILE;
-> 	bool swapbacked = kpageflags & KPF_SWAPBACKED;
-> 
-> 	switch (type) {
-> 	case CHECK_HUGE_ANON:
-> 		return !file;
-> 	case CHECK_HUGE_FILE:
-> 		return file && !swapbacked;
-> 	case CHECK_HUGE_SHMEM:
-> 		return file && swapbacked;
-> 	}
-> 
-> 	return false;
-> }
-> 
-> static bool __check_huge(void *addr, size_t len, int nr_hpages,
-> 			 uint64_t hpage_size, enum check_huge_type type)
-> {
-> 	int pagemap_fd, kpageflags_fd;
-> 	int nr_pmd_mappings = 0;
-> 	uint64_t pmd_pagesize, scan_mapping_size;
-> 	uint64_t categories, kpf;
-> 	unsigned long pfn;
-> 	bool check_pmd_mapping;
-> 	bool allow_nonpresent;
-> 	bool ret = false;
-> 	char *start = addr;
-> 	char *end = start + len;
-> 
-> 	pmd_pagesize = read_pmd_pagesize();
-> 	if (!pmd_pagesize)
-> 		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> 
-> 	check_pmd_mapping = hpage_size == pmd_pagesize;
-> 	scan_mapping_size = nr_hpages > 0 ? hpage_size : psize();
-> 	/* Some mTHP tests check a partially populated PMD-sized range. */
-> 	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
-> 
-> 	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> 	if (pagemap_fd < 0)
-> 		ksft_exit_fail_msg("open pagemap fail\n");
-> 
-> 	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> 	if (kpageflags_fd < 0) {
-> 		close(pagemap_fd);
-> 		ksft_exit_fail_msg("open kpageflags fail\n");
-> 	}
-> 
-> 	/* PTE-mapped large folios cannot be identified by PAGE_IS_HUGE. */
-> 	if (!check_pmd_mapping &&
-> 	    !check_large_folios(pagemap_fd, kpageflags_fd, addr, len,
-> 				 nr_hpages, hpage_size))
-> 		goto out;
-> 
-> 	for (; start < end; start += scan_mapping_size) {
-> 		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> 		pfn = pagemap_get_pfn(pagemap_fd, start);
-> 		if (pfn == -1UL) {
-> 			if (!allow_nonpresent)
-> 				goto out;
-> 			continue;
-> 		}
-> 		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> 			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> 		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-> 			nr_pmd_mappings++;
-> 		if (kpf & KPF_COMPOUND_TAIL)
-> 			continue;
-> 		if (!check_huge_type(categories, kpf, type))
-> 			goto out;
-> 	}
-> 	if (check_pmd_mapping && nr_pmd_mappings != nr_hpages)
-> 		goto out;
-
-Again, because of collapse_full_of_compound() testcase,
-it would be failed for this. so, it would better to skip
-check_large_folioes() when nr_hpages is 0.
-
-> 	ret = true;
-> 
-> out:
-> 	close(pagemap_fd);
-> 	close(kpageflags_fd);
-> 	return ret;
-> }
-> 
-> >
-> > +       if (nr_hpages * hpage_size < len)
-> > +               allow_nomap = true;
-> > +       else
-> > +               allow_nomap = false;
-> > +
-> >         pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> >         if (pagemap_fd < 0)
-> >                 ksft_exit_fail_msg("open pagemap fail\n");
-> > @@ -428,18 +437,15 @@ static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> >                 categories = pagemap_scan_get_categories(pagemap_fd, start);
-> >                 pfn = pagemap_get_pfn(pagemap_fd, start);
-> >                 if (pfn == -1UL) {
-> > -                       if (check_large)
-> > +                       if (!allow_nomap)
-> >                                 goto out;
-> >                         else
-> >                                 continue;
-> >                 }
-> >                 if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> >                         ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> > -               huge_mapped = categories & PAGE_IS_HUGE;
-> > -               if (check_large != huge_mapped) {
-> > -                       if (!check_large || granule == pmd_pagesize)
-> > +               if (check_huge_mapped != !!(categories & PAGE_IS_HUGE))
-> >                                 goto out;
-> > -               }
-> >                 if (kpf & KPF_COMPOUND_TAIL)
-> >                         continue;
-> >                 if (!!(categories & PAGE_IS_FILE) != (type != CHECK_HUGE_ANON))
-> 
-> 
-> 
-> 
-> 
-> > @@ -458,17 +464,17 @@ static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> >
-> >  bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> >  {
-> > -       return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
-> > +       return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
-> >  }
-> >
-> >  bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> >  {
-> > -       return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
-> > +       return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
-> >  }
-> >
-> >  bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> >  {
-> > -       return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
-> > +       return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
-> >  }
-> >
-> >
-> > If it's good for you, I'll repost again.
-> >
-> > Thanks!
-> 
-> 
-> 
-> 
-> -- 
-> Best Regards,
-> Yan, Zi
+> Alexis
 > 
 
--- 
-Sincerely,
-Yeoreum Yun
