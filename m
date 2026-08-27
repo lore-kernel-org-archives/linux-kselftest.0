@@ -1,97 +1,183 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F714483AC;
-	Thu, 27 Aug 2026 12:15:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F2172EC090
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 12:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787832914; cv=none; b=Kni4x3EPB7F9BcZ4KRV1tFYCAKCK+kM3aWPqcdfg2/yMiUxvH6WfzAnwyzUed6uh1EqbxBYJCa+A+T+0RYdJG1gWmqvzMtV7U4bn/GmqRLGzS0wM9P0YGa/NH34L6etkTzuzLoWwIqIfARnzbFCx419ej/1kbYiF/Jrin5zS9so=
+	t=1787834130; cv=none; b=jPMDkyG0/tFjV167vTCgQ3cWG+2ol1/vh4gEQbwN83kY0U9m2lL5EQuqepj9awZNQDkqn5SIIeVEqKRb3Kfu6NdjW1+CkzrhDZBAmFaGhiUDzVpVAxpC/bHyusEGcIm8ALS+VJ3sMHZPNoi8AoJEkFKz2zUr+3xMOh4JSXljxyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787832914; c=relaxed/simple;
-	bh=f3rgPVY4cXFMuGzY4uKrOogmmN7pkENAbTjaUjuEUfE=;
+	s=arc-20240116; t=1787834130; c=relaxed/simple;
+	bh=bmbiqdOCeZle1t8GhFHFgUaBjsvNdWoT+bkaG6Qn/FA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cGFsgnbD8K/hxhV7HXuD7YSAxbkaporx6GuTVGgNXZm9ydlqflE/yUyAXXNsrMyumY08Ux2oDHRBRe6o6vZss+a/w0Qf//98C2TN8FX/mSIRcOLsNCbcuDxS5dnrvUPdYsTOi4ZbYidzi/CAOP3zcs+ThHjXN1zvw3I5CzUSTL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RUzQMoxJ; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=oiAOopEVkgjRXS9Gnb/+nnmX4F8b6UtVXeGYqHI1MFsXc7lM7QjjVZ48SJmr87RaSNW472cdfNIUQkeMhGOMIvy1mrgUTa9P8gaaYJzxfJfQBtluJVozmyFCZoTjC08S+GF7i9Nh3cWgREIOEkM5RV53eP1UQtaD+9olbil3qTM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us; spf=none smtp.mailfrom=resnulli.us; dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b=HzxUP10U; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=resnulli.us
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=resnulli.us
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RUzQMoxJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CEDA1F000E9;
-	Thu, 27 Aug 2026 12:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787832912;
-	bh=OvXjJRXBUzQTXjIk2SBQORZUK73WXX7PK6h6g7xXJSg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=RUzQMoxJkpxyCoz0a2/sLQb1IVLhrCUgiaTIeCnSk4MWC9vT3OEIh8jCRWE4mCcgT
-	 xnM9Bcwe4KEkZBsGphkk5RUH1kzegvjvo1HDSXewtMd9o6eTJylWendZlZM72Kg3DX
-	 4lq0tFfubJiZtt92Hk/W4kd6dS+CbRK5DmhGbnrIy2uRedQmdeKPojrlkvu1GgdBYy
-	 ttbhgX3KLVczbvuZX9rR/FcBg1vHg3gfmFuhD7xIyVeCtDUjX8BHEeq8Fyp08gepDK
-	 X5DUVWEiG+hLMau2NQqaPgkN1vQvCKidO3SzXwSfQxTwpM1GJ++7IwnNfEgCrypvQi
-	 7G8z+2aoh45yw==
-Date: Thu, 27 Aug 2026 13:15:05 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Hajime Tazaki <thehajime@gmail.com>
-Cc: ljs@kernel.org, linux-mm@kvack.org, liam@infradead.org, rbm@suse.com,
-	akpm@linux-foundation.org, luto@amacapital.net,
-	brendan.jackman@linux.dev, david@kernel.org, liuhangbin@gmail.com,
-	corbet@lwn.net, kees@kernel.org, mhocko@suse.com, rppt@kernel.org,
-	shuah@kernel.org, surenb@google.com, vbabka@kernel.org,
-	wad@chromium.org, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-um@lists.infradead.org,
-	geert@linux-m68k.org, daniel@thingy.jp
-Subject: Re: [PATCH v2 1/2] selftests: run tests on nommu architecture
-Message-ID: <28939864-7a8a-4204-bf68-b53e77200f35@sirena.org.uk>
-References: <20260825015945.141739-1-thehajime@gmail.com>
- <20260825015945.141739-2-thehajime@gmail.com>
- <ao2aTD1ZGObPfp4T@gremlin>
- <m2zey8ufh0.wl-thehajime@gmail.com>
+	dkim=pass (2048-bit key) header.d=resnulli-us.20251104.gappssmtp.com header.i=@resnulli-us.20251104.gappssmtp.com header.b="HzxUP10U"
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-495437bb891so7322075e9.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 05:35:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=resnulli-us.20251104.gappssmtp.com; s=20251104; t=1787834122; x=1788438922; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=FqMm8FT0UDvKvnU0PABnBSS+wYbc4aE8U5V+uRrPoww=;
+        b=HzxUP10U4ZXwOcdfmkfuv5zV+yOdGKiFym6mZv2T3oNwYEnklHASsNatL0EbZKqqWq
+         gagrP5NNJulSlGAXD4Tb5rHjHaLJyeaOiSCe3TXrScW4nklUZ49bOS2gKjVqSj3YnE3Z
+         mDXdcYwnUXn4wfpzP7q4svINJvOWkDYUkryc7+JkopFkS87CLWtEkaOnV1rYAyJinLnU
+         FvX+OYy4anL7SMmqQOlqWxwI3APBJxLKBztVI5wBGbWXPEGHu4sq0oWbOHAV0K3cbIem
+         hRoOxoEN83nXbdie/L3T3pjQf6NDAvNSbSSOSwSwCfiDSWutRzQMBZm1l2n28Y5U8OPN
+         /+1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787834122; x=1788438922;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=FqMm8FT0UDvKvnU0PABnBSS+wYbc4aE8U5V+uRrPoww=;
+        b=slX6uI458g+XQjR/oUzq8YsG8CuEHpsf9kPUj0bSueOXZbVyiOURdsA+V9f+VYgZaX
+         Hzsp8KljMQP7tuMExVK1Nte8OAYwfGEGK7tEWPpXOY6R4KRc3XLa0VORKORk1QJwfAME
+         xxxgCpk4FD6jmAYdZsZiEMFBBueVXiXx79rg9QW9YOUlbgZ+5DP/Qa46od0DE2WcBss2
+         OEBfG/dhG+LZ0i1ANDoHXZ9XwB6As0S09JNxgNhWdIBewPhuhOJUNmjJVvISpo3R/4x8
+         CxZyB9ud/X1/CX5LpWu4TuxeLPmucO13+uk1t4Ag1X2M8TsH5fJgUM7Hoh6ZxDq30Dzb
+         W9LA==
+X-Forwarded-Encrypted: i=1; AHgh+Rq6efwsCYTn2rdDIf4BqcVYn2iWDGHiu71SOeaZfr6124uXVtgBVZPPDd5GXKdpwqt+jghkrlg0UMJHTNkByuY=@vger.kernel.org
+X-Gm-Message-State: AFuF++mh51Ss1gFcnI00IUc3DEO6MzZtg3CKZGh4hJuQuDY/ULqiY7Jc
+	nQKP8C1s4jtb+Ly2auXr1bUAffBYl5JBrKDNEbbWwp0vQcVDl34SakdnqRUuIULKLiM=
+X-Gm-Gg: AR+sD12tB7SWnDW/NXTjBXbfkyDJ7q0Z9xNKpPCXwn6k02lUWu06CKu4WmYbpOSHIb7
+	YgOZCrK30w02Gq83kAYj6cqwjdtk6S2trwtmgU4a3n0XHtwtSiiC+LKPGGFTLoS8JRdi2phhcYo
+	E42QrAO9Zzgx4JvfAlUz4Aa6ahlPY5g5/7DpDtqPTOoW2XEsKn8DpdeH1PfVdK/DwG/kYSrYiQS
+	0OgNYQYnYU0+k6SB+XklDR5otqu6LiIZ5CFAnO+Y/WVdKH1gdQRmdsuWZ6UR6/xchTbrPWXQ3JD
+	anCd+lfIHgPTOTPUX4rKSGP1g6TMMqg6YiSDS/z/en8NRe2y0SNDyvnpCrgf9lRnvrTafuJsmm5
+	c10dE1HRVJ2jRKJ2qF7sA5JtptOQG+1SHkFhF0eN56aXFXnH05ezQUf4DbzavWpocF8R7cIxalW
+	Ge8t5fEMYGSK72h522vVzpUAEWLZFPurD565YqP2vRoqdxl72biCR8GHimesgbk+Np3qUKeMPI5
+	pG8nZhz
+X-Received: by 2002:a05:600c:3e8e:b0:499:5f80:83ac with SMTP id 5b1f17b1804b1-49b0dfd7d2cmr84639315e9.7.1787834121595;
+        Thu, 27 Aug 2026 05:35:21 -0700 (PDT)
+Received: from localhost ([140.209.217.211])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49b4a940aeasm46658765e9.10.2026.08.27.05.35.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 05:35:21 -0700 (PDT)
+Date: Thu, 27 Aug 2026 14:35:16 +0200
+From: Jiri Pirko <jiri@resnulli.us>
+To: Konstantin Sinyuk <ksinyuk@kernel.org>
+Cc: dri-devel@lists.freedesktop.org, 
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Francois Dugast <francois.dugast@intel.com>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Donald Hunter <donald.hunter@gmail.com>, Jakub Kicinski <kuba@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>, 
+	Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org, jhs@mojatatu.com, jgg@nvidia.com
+Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
+ infrastructure for scale-up accelerator interconnects
+Message-ID: <apAsfOowcG0cTvT8@FV6GYCPJ69>
+References: <cover.1787552412.git.ksinyuk@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="mrf2Wb1b1zm1oMZI"
-Content-Disposition: inline
-In-Reply-To: <m2zey8ufh0.wl-thehajime@gmail.com>
-X-Cookie: Alimony is the high cost of leaving.
-
-
---mrf2Wb1b1zm1oMZI
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <cover.1787552412.git.ksinyuk@kernel.org>
 
-On Thu, Aug 27, 2026 at 05:36:59PM +0900, Hajime Tazaki wrote:
-> Lorenzo Stoakes (ARM) wrote:
+Mon, Aug 24, 2026 at 10:09:28AM +0200, ksinyuk@kernel.org wrote:
 
-> > >  		esac
-> > > -		cd - >/dev/null
-> > > +		cd "$OLDDIR" >/dev/null
+[..]
 
-> > Hmm, why are you changing this bit?
+>Example queries using the in-tree YNL tool are:
+>
+>    $ ./tools/net/ynl/pyynl/cli.py \
+>          --spec Documentation/netlink/specs/drm_fabric.yaml \
+>          --dump fabric-get
+>    $ ./tools/net/ynl/pyynl/cli.py \
+>          --spec Documentation/netlink/specs/drm_fabric.yaml \
+>          --dump endpoint-get --json '{"fabric-id": <id>}'
+>    $ ./tools/net/ynl/pyynl/cli.py \
+>          --spec Documentation/netlink/specs/drm_fabric.yaml \
+>          --do port-get --json '{"endpoint-id": <id>, "port-index": 0}'
 
-> on nommu we cannot use /bin/bash (i.e., no fork(2) so, we use
-> /bin/hash, a busybox-offered shell with vfork.
-> with this `cd -` (standards specified) isn't implemented due to slim
-> requirement of that shell (I suppose, miserable...).
+Using generic netlink instead of sysfs for this makes a lot of sense,
+but it may be a bit odd to use it outside the networking area.
+I've been struggling with the same in another non-networking use-case
+as well. I have been building a framework that keeps the benefits of
+generic netlink, extends it and is fd-based.
+I call it CTLV, here's a link to an early pre-RFC draft:
 
-> thus this workaround.
+https://github.com/jpirko/linux_mlxsw/commits/wip_ctlv_pre_rfc_draft1/
 
-It'd probably be good to have this as a separate commit with a changelog
-explaining what's going on, it'll make review easier if nothing else.
+What are the benefits over generic netlink:
 
---mrf2Wb1b1zm1oMZI
-Content-Type: application/pgp-signature; name="signature.asc"
+- No networking in the dependency chain. No netlink sockets,
+  no CAP_NET_ADMIN, and no network namespace semantics to reason about
+  for a device that has none.
 
------BEGIN PGP SIGNATURE-----
+- One character device per registered instance, not one global family.
+  Access control is the file: udev rules, ACLs, an fd passed into
+  a container. The open mode decides what is allowed - actions need
+  write, queries need read - so there is no permission model
+  to reinvent per family.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmqQKkgACgkQJNaLcl1U
-h9BXfAf9HIKrY3R1ifWbdQiCchDNja2ZvlJvk7WjJkdSkjVHJpNUyYWBr7iNXldP
-uqe6h3Lxz5A01ehepxZw9SUHN3KJ7lFEKu4+nL1Mad5Ilj/fxLocolyYhzyo7sff
-9rNiCZgNo7MTu3Fo469kifhj4gTzmkOVFmruROcRqHnsfEkRFA5jl0QG3SgGP+43
-vlVLBlc3hLG9gmxOvnC3D5a3U2WdKvn35p8ZFZGp2zGSH0sAqNda1cx6tKul6r+k
-zjOxyuuOwW4JjgUoBbRTXgyUziM/UFEYpffTFZ2fVH6rtOeS6cwJaCoAJ8xR2N/8
-VpL8PDYd1CYUFKaaQFzI+zEMB095gQ==
-=Em/s
------END PGP SIGNATURE-----
+- Events per open file description, not a multicast group.
+  Each descriptor has its own subscriptions and queue, and an overflow
+  is reported in-band: the next read returns an event-overflow record
+  naming the first and last sequence lost and how many.
 
---mrf2Wb1b1zm1oMZI--
+- Large payloads are referenced, not copied. A blob attribute carries
+  a user VA, a memfd and offset, or a dma-buf fd. Nothing big travels
+  through the message.
+
+- One YAML specification, everything generated from it: kernel metadata,
+  UAPI headers, userspace bindings and the reference documentation.
+  Introspectio. is answered out of the same metadata the validator
+  enforces, so a device cannot advertise an operation it will refuse.
+  A checked-in ABI snapshot makes any wire change a reviewable diff.
+
+- Family inheritance. A family inherits another's operations and fills
+  declared extension points. The effective schema is resolved per
+  device and the chain is exposed to user. A shared core with
+  per-driver extensions is declared once, and both attributes and
+  operations can be extended.
+
+- Introspection is per-device and live. The framework answers three
+  queries on every device: the family chain, one entry per published
+  operation, and any operation's full attribute tree with its bounds
+  and limits.
+
+  The answer is what this device accepts right now, including what
+  a vendor extension added to an inherited operation and whether an op
+  is currently disabled, and op-changed events carry the generation
+  ops-dump reports, so a dump can be ordered against a change.
+  GETFAMILY and GETPOLICY describe a family statically - there is
+  no device in that model to ask.
+
+- Fragmented queries are built in, with a consistency check.
+  A continuation carries the generation it started from, and if
+  the answer changed underneath it is refused with ESTALE,
+  reporting the expected and the current generation instead of
+  reassembling a torn reply.
+
+- Attributes are 8-byte aligned. CTLV_ALIGNTO is 8, so
+  a 64-bit payload is naturally aligned and there is no per-family
+  padding to remember - netlink's 4-byte alignment is why
+  nla_put_64bit() needs an explicit NOP pad attribute.
+
+- Cheaper round trip. A one-attribute query measured 2.6x cheaper
+  than a genetlink one in the same guest - a debug kernel.
+
+- Async operations using io_uring are planned as a follow-up extension.
+
+The framework owns validation, schema resolution, blob acquisition,
+reply serialization and the event queues. All getters and putters
+are generated helpers. A family implements semantics only, and
+the aim is to make that hard to get wrong.
+
+Would this make sense to use for you?
+
+[..]
