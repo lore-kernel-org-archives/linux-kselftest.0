@@ -1,305 +1,208 @@
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f177.google.com (mail-pg1-f177.google.com [209.85.215.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58483CF1F0;
-	Thu, 27 Aug 2026 08:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D561A3E835E
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 08:37:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787819301; cv=none; b=qdWwouHbfOktFQLcNAI4whKZKLIhWrPFT3YtN46/YlWyg3YkNjX5Gs87sEvx0Ey2l8CLYN8XMb2zW4DKlzJSnD4Ztybx+L3ez0t/NOeHZjGKqyh7F0HtnIjpziv8T8YSjxK3ITLmGZfkA58TaM9yQ3NvFIpEkLHjkfaqvS8o0tU=
+	t=1787819829; cv=none; b=Pcd6/LIBVVQijysxnXRpAtq2hISakoi/xSq9nOyz19fLvU6O91F/r04uR8w0Z0LcszC3NEs8KFQ3fX2Sy2uBAcT/p8Kudc+2GhObu+zw8qEcDhxnqh6XrFOqjSM+q3g/+BozwUbTgxYtWolPQpcYrMOF9D+ZN7ANS904Rjt3DUU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787819301; c=relaxed/simple;
-	bh=giqeAkD1Vc9WT3IBTjcmjVEXQSQpBSGwdcKcXvjnzRw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IpLLh+3Hqeblyt/sNHc8GsR/MLjjT2uVSfM3TP9M6jyxWQzX/YOMKbBZ/JxKDeByESWq/nLb8gPfeg37Dg3D+OmpjD0oipn9j5wiWoGYno+s5VCDZoohGya066xA/07QTam1f4iTbaUe8wcKblIwSkTTnxOdZak5DShUA+Ngai0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PgzkalWw; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+	s=arc-20240116; t=1787819829; c=relaxed/simple;
+	bh=WWlbrGlwzw3DDhymHIEEbql2bhuXCDc1wEEB5h2/KM8=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qr/xSyaHHWUb7Q3K2FE7kx/BWKA54/SUCExzI5rDlcKs18WjFFF2P2/3z/4YLqHAKPXBWZSppvcqfR7tp+p8YsnNrcF6OLpZH+orDmeWXNUF9CYXKNZpDi7fTQp3krmILz/pC7qdDu2j1LvSO+qNvZBu2LCk3jPmgaTd/AZ1Kq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=L9w1LjK7; arc=none smtp.client-ip=209.85.215.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PgzkalWw"
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1787819285; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=7ZyKXiDcMnJRL/Jca9p3GNNTfZ89CGVivxP5tkkYlU4=;
-	b=PgzkalWwZQeBO1KJOXcWmv3mKarhsMZgdBEoih7LZcF4TPs6BkQhuhkHCnkao1/Eo63u1plO4nsSS1dO49gfvIj3e7il0mJkWLMzxUmJfTBfpUbcb4hEb5zqndT2xaCU44MghwRWjAAVRUt1j3xv6xZkaVK2i7Bxzx4ZfKNFfW8=
-X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X9j9eTi_1787819282;
-Received: from 30.74.144.120(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X9j9eTi_1787819282 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Thu, 27 Aug 2026 16:28:03 +0800
-Message-ID: <0107447a-7c1f-44f8-94fb-109b0f850677@linux.alibaba.com>
-Date: Thu, 27 Aug 2026 16:28:01 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="L9w1LjK7"
+Received: by mail-pg1-f177.google.com with SMTP id 41be03b00d2f7-c9e607d81fcso1177313a12.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 01:37:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787819825; x=1788424625; darn=vger.kernel.org;
+        h=content-type:mime-version:user-agent:references:in-reply-to:subject
+         :cc:to:from:message-id:date:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=LxZheOU3heq1Rt2uci8mom6QvWxLgzl/sBJmkwWwCSE=;
+        b=L9w1LjK7SvxzYYQehtOJZ+WbdJGHCVAcbEdTZxCwTn0xNoMo6aZlLPcSxX1Rj0xOdn
+         /pBjEPKDA5HrH6B+Rg/ao5dA8ToceeTADuqvPNwgA7Q8+Ny+/NSZiUrfywhzhQ8JHyOu
+         CKw9ENDpC8DByEGCstGzvNmnprAo2EZRfppWIvDnWiPAmRCGVFvkynM4vLwYFRkbM6q8
+         YjzU5GYViFQdzcDVoZOgiaqzpWWuiawdHVtuzj3M9QjYp83xBU25OcyshXJacpS86/Ys
+         jq0Ax8jJDtSjLzrfDP11xYPwNPUdyU96hpdVvgZ1F3hYMw3K1ySNpeQC0okKYgp2f33u
+         c9mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787819825; x=1788424625;
+        h=content-type:mime-version:user-agent:references:in-reply-to:subject
+         :cc:to:from:message-id:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=LxZheOU3heq1Rt2uci8mom6QvWxLgzl/sBJmkwWwCSE=;
+        b=AXCLTlrKg6yQ9I+x7fh+P1gmEMaAFR9VlkiqtdG2eIf0K7K7e/VpACN169b5dAuVFl
+         oei0ECLvz0M2tqQVdLzbtUrS+f9gyDXcIRV6sNLAmjZJVdGvGT+Fqa5i/DijaIG4L8wZ
+         kMBDtMk/sDS/LRHyem6mxiztzTInS7lRrk0zXeFN5EBClC8Pj6GkEsRbvSEb2Bt6e68r
+         ZrVN3y0vSGWgxG3LDIhuj7sc06ZN0Z4e3qo+vOmmG2TZ5YjxTn4tlYii6T0OLtJxLiZT
+         sRDGNhEdQarAAplwzyEbKFyPqp/tvvxSs6Ic4cOwnkY9++P4ydSj1nxcIV2Ot0oD9C7i
+         yNLw==
+X-Forwarded-Encrypted: i=1; AHgh+RoaQQ/YzA8CSdC3r3Q6QgnmaK3fIYgUcP9tMFDzOHE+Ng+2OmLZSSzLAMkKEOt874LY36g7S/PT+bqjhI9O1f8=@vger.kernel.org
+X-Gm-Message-State: AFuF++mId86xGtot+aBmuKQXEmFMd8rNr6H+i6ut5ouk1SVagIfzFyK5
+	wADJRCsK2ZVx9fBKs0u92Y6qnMuReb2TBnOwOb9/8hcaaPagwFNYrbOV
+X-Gm-Gg: AR+sD11CzD2BHHMmB/M/UhSGWcr5dkHS6TBa/BW5H2Ckge0MDpmyw6+LxLCswCkcbyY
+	JTadKNu+pP/0HQqU9Zg5lGS5tndQfS+p0HpMimdH5CTLzflyziYZMJsLFBKyEgu4WXTsmIWnj29
+	I57RrUxmE9/OwbVXGXyoDLhHigEwbSnotDDBt+F3z4M+SsuVFSH8z1zpH9cWz71dlDWf1g8DywA
+	mNAlvlXI2luDWcluHc+3b7iR7kvEWKdYM7wPejYJJD2O8bPkqAalqz9Y9VzkVySubNayUMYCg22
+	lrNf8xpUOEOAIrXNvtdsvH7nfUcCy18J0+RvcUsMl9Hrdz+oG+bYUMk/Q6iREMBnwsDPtYRqlBU
+	UNNYQg/3nrngs0n4sUQzHXetHM2WHGI4t9T6oxNJcPDB3W78x+ikEzFHJc7S2PY8y7lkQ22jaM7
+	XVbBzYlLaOFPBTVODo5ZnEZd5Pwv/psd3mviU/+pHZBPUX7XsF4yzqvwhT4GRCT9cI+fTBj5Ugr
+	PrOskt7CBJLcJypEpVWsC1CIK+PKVm04v0ZGU7o/LqbSs/fWUKC8RS3a9OIozQoo7mGlBUeXFYL
+	xh4CYg==
+X-Received: by 2002:a05:6a21:4593:b0:3bf:9b61:f7ae with SMTP id adf61e73a8af0-3cf8413dffdmr30029671637.14.1787819825412;
+        Thu, 27 Aug 2026 01:37:05 -0700 (PDT)
+Received: from mars.local.gmail.com (221x241x217x81.ap221.ftth.ucom.ne.jp. [221.241.217.81])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-cc1beae53e5sm1898674a12.7.2026.08.27.01.37.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 01:37:04 -0700 (PDT)
+Date: Thu, 27 Aug 2026 17:36:59 +0900
+Message-ID: <m2zey8ufh0.wl-thehajime@gmail.com>
+From: Hajime Tazaki <thehajime@gmail.com>
+To: ljs@kernel.org
+Cc: linux-mm@kvack.org,
+	liam@infradead.org,
+	rbm@suse.com,
+	akpm@linux-foundation.org,
+	luto@amacapital.net,
+	brendan.jackman@linux.dev,
+	david@kernel.org,
+	liuhangbin@gmail.com,
+	corbet@lwn.net,
+	kees@kernel.org,
+	broonie@kernel.org,
+	mhocko@suse.com,
+	rppt@kernel.org,
+	shuah@kernel.org,
+	surenb@google.com,
+	vbabka@kernel.org,
+	wad@chromium.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	geert@linux-m68k.org,
+	daniel@thingy.jp
+Subject: Re: [PATCH v2 1/2] selftests: run tests on nommu architecture
+In-Reply-To: <ao2aTD1ZGObPfp4T@gremlin>
+References: <20260825015945.141739-1-thehajime@gmail.com>
+	<20260825015945.141739-2-thehajime@gmail.com>
+	<ao2aTD1ZGObPfp4T@gremlin>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-To: Yeoreum Yun <yeoreum.yun@arm.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
- Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
- Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
- Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20260826-fix_split-v2-0-71153c7f579a@arm.com>
- <20260826-fix_split-v2-2-71153c7f579a@arm.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <20260826-fix_split-v2-2-71153c7f579a@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
 
+Hello,
 
-On 8/26/26 8:24 PM, Yeoreum Yun wrote:
-> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> made by memalign().
+On Tue, 25 Aug 2026 22:36:22 +0900,
+Lorenzo Stoakes (ARM) wrote:
+
+> > diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
+> > index 311811dc55a0..7287d8290b6c 100644
+> > --- a/tools/testing/selftests/kselftest/runner.sh
+> > +++ b/tools/testing/selftests/kselftest/runner.sh
+> > @@ -38,8 +38,12 @@ tap_prefix()
+> >
+> >  tap_timeout()
+> >  {
+> > +	# nommu doesn't support timeout command (missing fork(2))
+> > +	if [ "$NOMMU" = "1" ] ; then
+> > +		echo "timeout isn't supported for nommu"
+> > +		$1
+> >  	# Make sure tests will time out if utility is available.
+> > -	if [ -x /usr/bin/timeout ] ; then
+> > +	elif [ -x /usr/bin/timeout ] ; then
+> >  		/usr/bin/timeout --foreground "$kselftest_timeout" \
+> >  			/usr/bin/timeout "$kselftest_timeout" $1
+> >  	else
+> > @@ -130,6 +134,7 @@ run_one()
+> >  				return $KSFT_FAIL
+> >  			fi
+> >  		fi
+> > +		OLDDIR=$(pwd)
+> >  		cd `dirname $TEST` > /dev/null
+> >  		(((( tap_timeout "$cmd" 2>&1; echo $? >&3) |
+> >  			tap_prefix >&4) 3>&1) |
+> > @@ -147,7 +152,7 @@ run_one()
+> >  		*)
+> >  			ktap_test_fail "$TEST_HDR_MSG # exit=$rc";;
+> >  		esac
+> > -		cd - >/dev/null
+> > +		cd "$OLDDIR" >/dev/null
 > 
-> The underlying VMA may start at a different address from the aligned
-> address returned by memalign(). Furthermore, a subsequent
-> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> already set.
+> Hmm, why are you changing this bit?
+
+on nommu we cannot use /bin/bash (i.e., no fork(2) so, we use
+/bin/hash, a busybox-offered shell with vfork.
+with this `cd -` (standards specified) isn't implemented due to slim
+requirement of that shell (I suppose, miserable...).
+
+thus this workaround.
+
+> >  	fi
+> >
+> >  	return $rc
+> > diff --git a/tools/testing/selftests/kselftest_harness.h b/tools/testing/selftests/kselftest_harness.h
+> > index 261e4df94d9d..0d05946a5e7a 100644
+> > --- a/tools/testing/selftests/kselftest_harness.h
+> > +++ b/tools/testing/selftests/kselftest_harness.h
+> > @@ -1274,6 +1274,10 @@ static int test_harness_run(int argc, char **argv)
+> >  	unsigned int count = 0;
+> >  	unsigned int pass_count = 0;
+> >
+> > +#ifdef CONFIG_NOMMU
 > 
-> This causes split_huge_page_test to fail because the check_huge_xxx()
-> helpers incorrectly require the address returned by memalign() to
-> match the VMA start address reported in /proc/self/smaps.
+> Let's not prefix with CONFIG_ :) I think this is pretty confusing vs. the kernel
+> CONFIG_xxx flags, esp. as this obviously inverts CONFIG_MMU.
 > 
-> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> /proc/self/smaps to detect huge pages.
+> maybe just 'NOMMU'?
+
+thanks, I will remove CONFIG_ part.
+
+initially I was trying to pull generated/autoconf.h into kselftest but
+it doesn't do much compared to many modifications (run_kselftest.sh
+needs to run independently from build tree) so, I used this macro but,
+yes, it's confusing.
+
+> > +	ksft_print_header();
+> > +	ksft_exit_skip("kselftest harness requires fork(2), unavailable on NOMMU\n");
+> > +#endif /* CONFIG_NOMMU */
+> >  	ret = test_harness_argv_check(argc, argv);
+> >  	if (ret != KSFT_PASS)
+> >  		return ret;
+> > diff --git a/tools/testing/selftests/lib.mk b/tools/testing/selftests/lib.mk
+> > index f02cc8a2e4ae..fdb895967768 100644
+> > --- a/tools/testing/selftests/lib.mk
+> > +++ b/tools/testing/selftests/lib.mk
+> > @@ -97,6 +97,14 @@ TEST_GEN_PROGS := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS))
+> >  TEST_GEN_PROGS_EXTENDED := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_PROGS_EXTENDED))
+> >  TEST_GEN_FILES := $(patsubst %,$(OUTPUT)/%,$(TEST_GEN_FILES))
+> >
+> > +# detect if users request NOMMU build or not
+> > +# User can set NOMMU to 1 to build/test for NOMMU platforms
+> > +NOMMU ?= 0
+> > +ifeq ($(NOMMU),1)
+> > +CFLAGS += -DCONFIG_NOMMU
+> > +export NOMMU
+> > +endif
+> > +
 > 
-> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> ---
->   tools/testing/selftests/mm/vm_util.c | 130 ++++++++++++++++++++---------------
->   tools/testing/selftests/mm/vm_util.h |   1 +
->   2 files changed, 77 insertions(+), 54 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> index 4821a3563036..1d0959b3b9e8 100644
-> --- a/tools/testing/selftests/mm/vm_util.c
-> +++ b/tools/testing/selftests/mm/vm_util.c
-> @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
->   	return entry;
->   }
->   
-> -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
-> -		  uint64_t hpage_size)
-> -{
-> -	char buffer[MAX_LINE_LENGTH];
-> -	uint64_t thp = -1;
-> -	char *entry;
-> -
-> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
-> -	if (!entry)
-> -		goto err_out;
-> -
-> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
-> -		ksft_exit_fail_msg("Reading smap error\n");
-> -
-> -err_out:
-> -	return thp == (nr_hpages * (hpage_size >> 10));
-> -}
-> -
-> -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
-> -		uint64_t hpage_size)
-> +static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
-> +			       void *addr, size_t len, int nr_hpages,
-> +			       uint64_t hpage_size)
->   {
->   	int order = 0, pagesize = getpagesize();
->   	unsigned int nr_pages = hpage_size / pagesize;
->   	int orders[MAX_NR_ORDERS], status;
-> -	int pagemap_fd, kpageflags_fd;
->   	bool ret = false;
->   
->   	if (!nr_pages)
-> @@ -386,15 +368,6 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->   		ksft_exit_fail_msg("invalid order\n");
->   
->   	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
-> -	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> -	if (pagemap_fd == -1)
-> -		ksft_exit_fail_msg("read pagemap fail\n");
-> -
-> -	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> -	if (kpageflags_fd == -1) {
-> -		close(pagemap_fd);
-> -		ksft_exit_fail_msg("read kpageflags fail\n");
-> -	}
->   
->   	status = gather_folio_orders(addr, len, pagemap_fd,
->   			kpageflags_fd, orders, MAX_NR_ORDERS);
-> @@ -405,48 +378,97 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
->   		ret = true;
->   
->   out:
-> -	close(pagemap_fd);
-> -	close(kpageflags_fd);
->   	return ret;
->   }
->   
-> -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +enum check_huge_type {
-> +	CHECK_HUGE_ANON,
-> +	CHECK_HUGE_FILE,
-> +	CHECK_HUGE_SHMEM,
-> +};
-> +
-> +static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
-> +			     uint64_t hpage_size, enum check_huge_type type)
+> I wonder if this could be put into testing/selftests/nommu/something.mk? Though
+> I guess would have to be included for all builds to account for nommu trying to
+> build any kind of tests.
 
-The original __check_pmd_huge() is only for PMD-sized large folios, but 
-now it not only checks PMD-sized large folios but also mTHP large 
-folios, which I find confusing. Please keep its original semantics, and 
-only check PMD-sized large folios.
+yes, in addition to moving to selftests/nommu this can be more cleaner
+initial introduction of this target.
 
->   {
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> +	int pagemap_fd, kpageflags_fd;
-> +	uint64_t pmd_pagesize, granule;
-> +	uint64_t categories, kpf;
-> +	unsigned long pfn;
-> +	bool check_large, huge_mapped;
-> +	char *start = addr;
-> +	char *end = start + len;
->   
-> +	pmd_pagesize = read_pmd_pagesize();
->   	if (!pmd_pagesize)
->   		ksft_exit_fail_msg("reading PMD pagesize failed\n");
->   
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-> +	if (nr_hpages > 0) {
-> +		check_large = true;
-> +		granule = hpage_size;
-> +	} else {
-> +		check_large = false;
-> +		granule = psize();
-> +	}
+thanks for reviewing.
 
-This is incorrect for the mTHP large folio check. I already hit a 
-selftest failure. Please test your patches before sending them out.
-
-[root@]./khugepaged -c 4 mthp_khugepaged:anon
-TAP version 13
-# Save THP and khugepaged settings... OK
-1..4
-# Allocate huge page on fault... OK
-# Split huge PMD on MADV_DONTNEED... OK
-ok 1 allocate on fault and split
-#
-# Run test: collapse_full (mthp_khugepaged:anon)
-# Collapse multiple fully populated PTE table.... OK
-ok 2 collapse_full
-#
-# Run test: collapse_empty (mthp_khugepaged:anon)
-# Do not collapse empty PTE table.... OK
-ok 3 collapse_empty
-#
-# Run test: collapse_single_mthp (mthp_khugepaged:anon)
-# Collapse PTE table with half PTE entries present.... Fail
-not ok 4 collapse_single_mthp
-# Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
-
-
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> -}
-> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-> +	if (pagemap_fd < 0)
-> +		ksft_exit_fail_msg("open pagemap fail\n");
->   
-> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> -{
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-> +	if (kpageflags_fd < 0) {
-> +		close(pagemap_fd);
-> +		ksft_exit_fail_msg("open kpageflags fail\n");
-> +	}
->   
-> -	if (!pmd_pagesize)
-> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> +	if (check_large && !check_large_folios(pagemap_fd, kpageflags_fd,
-> +					       addr, len, nr_hpages, hpage_size))
-> +		goto out;
->   
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-> +	for (; start < end; start += granule) {
-> +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> +		pfn = pagemap_get_pfn(pagemap_fd, start);
-> +		if (pfn == -1UL) {
-> +			if (check_large)
-> +				goto out;
-> +			else
-> +				continue;
-> +		}
-> +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> +		huge_mapped = categories & PAGE_IS_HUGE;
-> +		if (check_large != huge_mapped) {
-> +			if (!check_large || granule == pmd_pagesize)
-> +				goto out;
-> +		}
-> +		if (kpf & KPF_COMPOUND_TAIL)
-> +			continue;
-> +		if (!!(categories & PAGE_IS_FILE) != (type != CHECK_HUGE_ANON))
-> +			goto out;
-> +		if (type == CHECK_HUGE_ANON)
-> +			continue;
-> +		if (!!(kpf & KPF_SWAPBACKED) != (type != CHECK_HUGE_FILE))
-> +			goto out;
-> +	}
->   
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +out:
-> +	close(pagemap_fd);
-> +	close(kpageflags_fd);
-> +	return start >= end;
->   }
->   
-> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
->   {
-> -	uint64_t pmd_pagesize = read_pmd_pagesize();
-> -
-> -	if (!pmd_pagesize)
-> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
-> +}
->   
-> -	if (hpage_size == pmd_pagesize)
-> -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-> +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +{
-> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
-> +}
->   
-> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
-> +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-> +{
-> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
->   }
->   
->   int64_t allocate_transhuge(void *ptr, int pagemap_fd)
-> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-> index 9a49af88702e..f19bd17817e5 100644
-> --- a/tools/testing/selftests/mm/vm_util.h
-> +++ b/tools/testing/selftests/mm/vm_util.h
-> @@ -18,6 +18,7 @@
->   #define PM_SWAP                       BIT_ULL(62)
->   #define PM_PRESENT                    BIT_ULL(63)
->   
-> +#define KPF_SWAPBACKED                BIT_ULL(14)
->   #define KPF_COMPOUND_HEAD             BIT_ULL(15)
->   #define KPF_COMPOUND_TAIL             BIT_ULL(16)
->   #define KPF_HWPOISON                  BIT_ULL(19)
-> 
-
+-- Hajime
