@@ -1,94 +1,71 @@
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out30-119.freemail.mail.aliyun.com (out30-119.freemail.mail.aliyun.com [115.124.30.119])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000C2450F2
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 04:48:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 801743537E5;
+	Thu, 27 Aug 2026 06:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.119
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787806106; cv=none; b=ZilozKDGEviyWVsM1utHfx2tjFZfnSj3VKhrJCEg5w8XP+Y9jttQdmkeUjCedyqehaxU0FKs0z8XzvE5skZMaIqu0Oo2clB2rdC/T0yPq6iepzCXFsz4wsT4CS8Bx50Q6xTa9tVEid570ZJSXPt0+udWpL0KdJ8+XX/GUW+zzeo=
+	t=1787811979; cv=none; b=VVOCYyEmhvZkXHBurSJS3x1bTAQTeCNwdF722AFb++0fqWeVBtYJ8tKKdHZEuRYhSZ6SUYg9EcBKXNwvAfKJK2OAqoEzISIz3DNOX538+P6FYHYJ7DwMHlFMVXeThK/LH7Kb7XG+s4nmk4UG7GXvUGZTdSDhWAW0qjQmbycOwTI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787806106; c=relaxed/simple;
-	bh=WJu5HTRzik9JIFk2qriT0YD3wfvF9y0NeUb+PtTrNcg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oMYFLlVWgfed+fmEQ6qGWXCvQxopfE35L5MtN01KvF3qLutY4psf36qwu/6Kc1LnRf4huHSFhfUuDiG0M0Ttqjq9NdTc94AUXvxSrtR5dDMLPUjSoUw7qNl6bzo1V8sIEIoPi8Oav1fcNJtA2wK/Qekf63Hy75l4Ch2Cw5XoBNw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qdYmGhNz; arc=none smtp.client-ip=209.85.214.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1787811979; c=relaxed/simple;
+	bh=NV7nYIqQNIGPaE6m4yKiAqKbRKJYjlWdTHgt+xq0df0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X2Of+POxKtrS5eY3rPEqQ3erTenSpU8o29uIjuMi9myoEzruorzEAj0fitQEpYcm15fk3wpwz3xqaFhnYdpk5dh++1/SRU6RvU+OUIO0+eBitg6WLqA5H7ElRVS0bxej6lzUwZuFrk2/7VYN1QizHFwDKPCj5k4yr2AoLNC3vks=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=W5/ygaN2; arc=none smtp.client-ip=115.124.30.119
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qdYmGhNz"
-Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2d71a50caa9so12949885ad.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 26 Aug 2026 21:48:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787806104; x=1788410904; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Qi+er7bYOUcgVSzA3zCVsVfsxzfy0NpHAMb4Vh1V6sk=;
-        b=qdYmGhNzWZj3sd+6XDpTQXm9sLtLQBwkDcIiIc6xIRVQknuolCrBFKiHtiUTmhoyZx
-         CD6czn9OXcNW+T5wnY7lqXuETFMsUZTqc26szmqL4coK/3qUc/4RUxicifKPzkGeYOGd
-         pwVlm9ESeBeoXsQQqEkpiZxdDLa+eqTYL7pTu+MeR1E9AHik0mwzbocNraI+vQ4fbY3p
-         T2EYgq0wNYdJkBlSbThBSfiV2XCjTnkSqfXa0acU89ALR/0VuyH/CzXjci2Owrd6tMeZ
-         dVRZAu2LioKnoPjjlPyty3X7WbysQFbcwDWxFMsxkNUnrN9RD6pXIIdyY8Bdj5ZRxGpf
-         mifQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787806104; x=1788410904;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Qi+er7bYOUcgVSzA3zCVsVfsxzfy0NpHAMb4Vh1V6sk=;
-        b=I9Wk85Fr5k+JYmm8LQmuMnOd7FHCAB+sMNNoqfc9+zHZinLuxgpTo1Wnu5WYRdZN8C
-         4s2PcDBSLUhNeecHNjNsvAr4PCwBTcNR2VR2jEpL1OQXaNlEjqwATke6UIfMGCLhrW1Y
-         cdK1yFXl1DacgYYYnnp6ULSz5P4oILbuAGf/vRjX/I64DydouyWFEDUisdHDpC4GXKca
-         D8laymCGwhwZ65XLr3LMqTSN0RgUzzngXFHanua1QqonictDV9JHPP5X1UmE2xzsivaV
-         PjHLdaaujtqyA0hrNxnh42uJ1g2bWxTjcmuiH+7BEdwrnNDtLsTjakUkgGZozUccNviq
-         ACJA==
-X-Forwarded-Encrypted: i=1; AHgh+RqZJb6MSzzsqGtJK+yU1NciGI6r6Y5ImeJJkbyozNFLfIuXOgpZJU91619UkfqY8FkLRk/+rqXE2lTrIjFhMcQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nz91c1eCa0hCIjtplIl7Clnm7sIMYpWsVq2O5TZMx2FVXOPK8P
-	5CTcIcfu9Hxt49N49dqeVFOgSuLJTTP1q44Tq+DV2CNUIkaBZAFouPkk
-X-Gm-Gg: AR+sD13EJbGRqJsKmWmEawUTYr8OCS7n4c9U2j5jIuC8UAMOAR43T4IooKj0Q5QFoJd
-	qb6XL+ryX64a+GjixuNoD8OFM0b5um3QKKJbU/a5BCkyKTrnY664O7f31hSnuCqMs09Mnffvdem
-	dx0XB+pXneeC9bp0XSIKXKa6S6cOveM+BSihnhJUR3csGfkiXxnSyb5uYiUq25NBNrO3rqqWlhY
-	KFXXr1v9QCRUlM6dQJ87RIUybq7y3i3AUPpvMKvsiJEFh7TFcEqINR5SjwNug7Bd+toOmf9iAWv
-	l8s6M+mS110F5XlP8uyUp4UKuC0p+k6M9gVtpx48FCP7liipQlGTfKApS6eZQKQMTBOMCEG/+tV
-	xuYn/EPZAaEZKy/DTsapwRgFQGLppP89eV7J9guWDzN8LURrCzk9DDFdvZXSJX/04F7eHkgjRpt
-	iwTy0JBZUjqrjV1fAVVvJJ1uGVbWumiQbuDfup6JYHhPhagnpt2hlKjlh8TK8WdZif/EK+7hGD0
-	OAUpre1BnA=
-X-Received: by 2002:a17:903:230d:b0:2d7:1e07:4859 with SMTP id d9443c01a7336-2d71e074bf5mr102128985ad.2.1787806104347;
-        Wed, 26 Aug 2026 21:48:24 -0700 (PDT)
-Received: from volcano9f8e-host.amd.com ([165.204.217.251])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3283d9e5fb1sm23000756eec.25.2026.08.26.21.48.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Aug 2026 21:48:23 -0700 (PDT)
-From: Hemanth Selam <hemanth.selam@gmail.com>
-To: seanjc@google.com,
-	pbonzini@redhat.com,
-	shuah@kernel.org
-Cc: sashiko-reviews@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] KVM: selftests: Add a helper to read a vCPU's APIC ID
-Date: Thu, 27 Aug 2026 10:18:00 +0530
-Message-ID: <20260827044800.2917294-1-hemanth.selam@gmail.com>
-X-Mailer: git-send-email 2.43.7
-In-Reply-To: <20260826115915.2882221-1-hemanth.selam@gmail.com>
-References: <20260826115915.2882221-1-hemanth.selam@gmail.com>
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="W5/ygaN2"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1787811969; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=paUlhZn9t+ILv8kEAUHY2bGSoJtzMH3jxankaf15DKA=;
+	b=W5/ygaN2Cs00I1D95eeNXSZsnn+GIVttC8jQmNNcv3ovFsxZpYw6SvgUVZj0TNenIjyHnf+rPLPbHpCjYGXuXApow70zbUWel7sDSJr6HYOSCRYBY5jEX8woVPRRBIG3GC2FT+xJ+Whl5k1Y0H4o6D0xDuom/8enpvhb4IvKXR0=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037009110;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=19;SR=0;TI=SMTPD_---0X9ijePx_1787811967;
+Received: from 30.74.144.120(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X9ijePx_1787811967 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Aug 2026 14:26:08 +0800
+Message-ID: <1cb2ee22-5d41-4992-a44b-6fd27e524b6a@linux.alibaba.com>
+Date: Thu, 27 Aug 2026 14:26:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
+To: "David Hildenbrand (Arm)" <david@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260825-remove_str_dup-v1-1-0ba2121a820c@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Please skip this version, the report is right: the helper applied the xAPIC
-shift and mask unconditionally, so it returned 0 for a vCPU in x2APIC mode
-on a VM that enabled KVM_X2APIC_API_USE_32BIT_IDS, and truncated IDs above
-255.
 
-v3 handles both modes and I checked it against every way KVM reports an ID,
-including a vCPU with ID 300 and a guest that renames its own xAPIC ID:
 
-  https://lore.kernel.org/all/20260827044534.2900285-1-hemanth.selam@gmail.com
+On 8/25/26 7:20 PM, David Hildenbrand (Arm) wrote:
+> We don't check str_dup() return value and never free it. While both
+> things are irrelevant in practice, let's just clean it up by working on
+> argv[0] directly and avoiding the str_dup().
+> 
+> Nobody after us needs these parts of the argv[0] string anyway.
+> 
+> This patch is inspired by previous work from Anshuman Tewari [1].
+> 
+> Link: https://lore.kernel.org/r/20260821114416.12255-1-anshumantewari123@gmail.com [1]
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
+> ---
 
-Hemanth
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
