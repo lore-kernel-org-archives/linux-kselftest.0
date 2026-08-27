@@ -1,165 +1,112 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 779B933374F
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 07:01:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEA6E33B97B
+	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 07:08:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787814120; cv=none; b=h/q+WhG2/Ztl+q8h7h2LUNwiCIMRaPsqxJBQyTdsa4B+i0Yyl5wrTaK1ocHDAaBvn9Z57+160e7sY32bBdRrluCi+No26tUR0PCyvYLlj33DtRSeYOMVSBkSYPfcsgpVzUw1ew+LrLeojh3MAL6x9LWLTP7p0IiJ8gIYvQZrBPo=
+	t=1787814540; cv=none; b=KsC0JyG3MRaF506JsVFAL6gvvYdsN+fLisVaN6vUqAyRBRtv0Vh/a9bCWqgsUyysXWUsDlBE8wTO6AoWaJV9VTuMaQw2xak26Wa6Sv/Q06eqm0SoL5T2eRBGE990XAvUzvyQQq5KsgDv0PlsyF6yxI4pD9MCWS/9nXyhEHRbRg0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787814120; c=relaxed/simple;
-	bh=rMYhr+FFl3KMzJ4WopkMeaMaQqMYKgr/4WQwGO/gP5w=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:To:Subject:Cc:
-	 References:In-Reply-To; b=kwJrvhLRoTjhu3gDVaKBPAsxE7DCt9pjfIcsucRn88Wrs3D1i4aq5kFs8v5xmJaEzSfW1GWiM98OZ23lPrPuLHl1ss8y3vomHXdpVC0HNSG7fHwgH403W5WS/t+y7xgmOhtpOn4Nsu+LPmskAqRV3hYPNQEeQjDGEH+pf+RrMkE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=zr5vWxlS; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787814540; c=relaxed/simple;
+	bh=sRd78QSJGil0ZcUwq3GxqGHQF3GnG4W0ymqk7CGnnE8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=e1IZi3qoveUppzsIP8VmkpKt/YF+VMfqsACTOJR2xVpAk2zOJAj+ifx/XXXm906cUnBHPefW+98njWINoLlH2znVDApxz0WEXse2WZgTmknepoC3N1YwQL4rtVl8jSL2CmmR5kLRvDYnL6rELc1po87dkmX4ObmPif/2MmltJm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haR/eqIa; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="zr5vWxlS"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 68E544E413D8;
-	Thu, 27 Aug 2026 07:01:55 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1EF17602B8;
-	Thu, 27 Aug 2026 07:01:55 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id BA8F311C78051;
-	Thu, 27 Aug 2026 09:01:43 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787814109; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=LZbe2GS1y6n+NqZR8SC8iK/SbIh328ZBAhni88rkOIk=;
-	b=zr5vWxlScZ74+veUzn/MjjgAqEdRSSd6vg5uIl4X2OuAsAhLCDBhknPQZqRPSirB3PvGS1
-	0BZNIFc3f6hxlAI0A5Lis6e61+Nyyx8Wxl0y7YHgyVj2KmLJv8sV/lO2qc4EITOrKExqPh
-	KCRwUpP7ocG4fcdDhJEtLE7wK7CDgPL+eHBd0hDK1gKYE5IJqFl5lInz6ej4wcM2nBagZX
-	8oLn2uoGmYSRsjBWxj3BDaqP5xD6u+7eTtIIY3KG5MAnfApd9ywkc4Gzom1U+2rbcXNRhG
-	2QtleX3T+FB8C5xp8wGyqT53jUlpfEbfuLETeJBrzTp4eQox/y14vJy+afq6Aw==
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haR/eqIa"
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-cc1cb472b76so1250902a12.0
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 00:08:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1787814538; x=1788419338; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=sRd78QSJGil0ZcUwq3GxqGHQF3GnG4W0ymqk7CGnnE8=;
+        b=haR/eqIaTOhAA9p741xIu68tyWti+IJ3KXLfj8ZaJ87VR8KjzOk3RC6eLl9SrFlnaS
+         aPsGxzhz2e7/2Nyy17ThiYBApAWBMia6LWQSMD98FqpZVySqIloMPVxfu1GaO77OhLPf
+         pE4idmQp5Zr0KFJNEru4LhhcWxlgHECgby/CFJnw/1qTed0hZV26FJsFS2XGT5ICtfde
+         TmYYwjUojfD7aUky/QoaAjtMDC1s1xFHb6AWBuFL9HgCTtRa/A4GHOd0j2MMRS7XzLtK
+         RLLeXzfP1yz17ZvFtY+6PVHWk5hqfv0+I5CMA3umvUeFawwsDTvATiJUMdd/JINjekih
+         SPig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787814538; x=1788419338;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=sRd78QSJGil0ZcUwq3GxqGHQF3GnG4W0ymqk7CGnnE8=;
+        b=E7qd+yFjvj9juPrnIkWvuBPXn5RZnZHfjjL38kowuHBuUMbcJgGKOyMo8YND+clY1R
+         znrliPeFVjlCJubvZseYoUjkPGy/x/zkjEmS9fxziCp7Gk17Z59Dv3l3pDOVUlLfdBxB
+         BUQsmjg9uPXKh+LTtR2zomhqhHw4Kd1hL9J8QnujmLIvhTQB77sPvtUSvvNprGUEAtzF
+         bitzXj4P7Z3iCnCbcTJThSIGSRmCq5xou8enZ5peoxVyUnDw60BHFOy6u/Z/PVMNzuJp
+         0YXZI3gduOWmb1/YPJGVPmNIdHt0jE12e3V5CE6ByIm+4T0pVykRP1NyNCnDwEUoOA98
+         Ajig==
+X-Forwarded-Encrypted: i=1; AHgh+RojMMoDW02073fSS/CNJoF0wRXpsiZ1juxxWgAKX1sdDb/buyiMAUCuc+OSS6D5jZzLwWIUHlW2cVSeTvRGeUM=@vger.kernel.org
+X-Gm-Message-State: AFuF++n36J+O1nLSo3DMK52evJA1PcxGOFlO7KfMH54A4tgBquSewYZT
+	bh80+lZOPcvIwCGW0rLjE62BXjd1v2iVlPKH8H9c7Gz8Ec4o/LH+Dpf1GgKnc8b1
+X-Gm-Gg: AR+sD10kCpPijDha/5J/aY9jysCTlHsNKNIq0BxiiXviPeqW/zBLw2Emw53mpoepnaY
+	G0QOj2oJ0AHr2g5IZQlVhuMzdoVnu3ctEyc7J7D5EuumG5W4aO9LqBAr5c0OhMgHaPS/xm2fJXH
+	UJis2iUNUR4+arVOlt1uH97KrLfl0xw5ZeM7u4HEMsgjehX0cW5icLEUj5g+nf7DosYtHVsZfrY
+	7LrcWb6jJjBaWdIpbHfI2WXcPnoDKMtpTC7dmWBrqhJ1aOY2ev+Dd+qR9PnvCpi8HBtncXNCN3V
+	nyFEX/vm0f33FyhNZ2uRrZLdhNenTSYBXzODhBoOEuWOZzvMb8cMDf3brEgfhO3NdqTukhUc0xl
+	1bNdBTemZSOA1tmHIOzPvI+jeNaU4hexTq7nIWQ/UQK/3l0Yg4o3NAj5louS3CC98SdbLccd37U
+	VqAv/n5LnBaU0V0GUxh/SKrlsIApMQ0vt8JKfuzwTgSZp5HcfObawC+6kf9KtgyQvWlr43FL0EY
+	ijnkcY15nm2YOjd6yYsiL6njyj2
+X-Received: by 2002:a17:90b:5102:b0:381:1c96:829b with SMTP id 98e67ed59e1d1-3966d370333mr28339383a91.3.1787814537645;
+        Thu, 27 Aug 2026 00:08:57 -0700 (PDT)
+Received: from Anshuman ([103.161.223.14])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-141a8eefd82sm13559447c88.2.2026.08.27.00.08.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Aug 2026 00:08:57 -0700 (PDT)
+From: Anshuman <anshumantewari123@gmail.com>
+To: david@kernel.org
+Cc: ljs@kernel.org,
+	akpm@linux-foundation.org,
+	baohua@kernel.org,
+	baolin.wang@linux.alibaba.com,
+	dev.jain@arm.com,
+	lance.yang@linux.dev,
+	liam@infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org,
+	mhocko@suse.com,
+	nico.pache@linux.dev,
+	rppt@kernel.org,
+	ryan.roberts@arm.com,
+	shuah@kernel.org,
+	surenb@google.com,
+	usama.arif@linux.dev,
+	vbabka@kernel.org,
+	ziy@nvidia.com,
+	Anshuman Tewari <anshumantewari123@gmail.com>
+Subject: Re: [PATCH] selftests/mm: khugepaged: remove str_dup() usage
+Date: Thu, 27 Aug 2026 12:34:07 +0530
+Message-ID: <20260827070407.4108-1-anshumantewari123@gmail.com>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <ao17EcW1-iNN4Y8i@gremlin>
+References: <ao17EcW1-iNN4Y8i@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 27 Aug 2026 09:01:42 +0200
-Message-Id: <DKZJ7GFLAU12.1WHACTBREQQV2@bootlin.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Kumar Kartikeya Dwivedi"
- <memxor@gmail.com>,
- =?utf-8?b?QWxleGlzIExvdGhvcsOpIChlQlBGIEZvdW5kYXRpb24p?=
- <alexis.lothore@bootlin.com>, "Alexei Starovoitov" <ast@kernel.org>,
- "Daniel Borkmann" <daniel@iogearbox.net>, "John Fastabend"
- <john.fastabend@gmail.com>, "Andrii Nakryiko" <andrii@kernel.org>, "Martin
- KaFai Lau" <martin.lau@linux.dev>, "Eduard Zingerman" <eddyz87@gmail.com>,
- "Song Liu" <song@kernel.org>, "Yonghong Song" <yonghong.song@linux.dev>,
- "Jiri Olsa" <jolsa@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
- "Borislav Petkov" <bp@alien8.de>, "Dave Hansen"
- <dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
- <hpa@zytor.com>, "Shuah Khan" <shuah@kernel.org>, "Ingo Molnar"
- <mingo@redhat.com>, "Andrey Konovalov" <andreyknvl@gmail.com>, "Emil
- Tsalapatis" <emil@etsalapatis.com>, "Yafang Shao" <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next v7 0/9] bpf: add support for KASAN checks in
- JITed programs
-Cc: <ebpf@linuxfoundation.org>, "Bastien Curutchet"
- <bastien.curutchet@bootlin.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260822-kasan-v7-0-99afee6ef7fd@bootlin.com>
- <DKWOY12R4ZJJ.A8KDS1DU1PHS@gmail.com>
- <1c34603a-9170-4074-b826-e98d9871e2d8@linux.dev>
-In-Reply-To: <1c34603a-9170-4074-b826-e98d9871e2d8@linux.dev>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi Ihor,
-
-On Wed Aug 26, 2026 at 11:00 PM CEST, Ihor Solodrai wrote:
-> On 2026-08-23 3:53 p.m., Kumar Kartikeya Dwivedi wrote:
->> On Sat Aug 22, 2026 at 12:39 AM CEST, Alexis Lothor=C3=A9 (eBPF Foundati=
-on) wrote:
->>> Hello,
->>> this is v7 of the series aiming to bring basic support for KASAN checks
->>> to BPF JITed programs. This new revision just makes the series rebased
->>> on top of current bpf-next_base.
->>>
->>> Please note that with the recent kernel splat detector introduced in
->>> kernel-patches/vmtest through commit 8109e5928cd0 ("ci: own the kernel
->>> splat matching (#509)"), CI runs on this series will fail with the
->>> following error.
->>>
->>>     Error: kernel splat detected: [  100.689549] BUG: KASAN: \
->>>     slab-use-after-free in \
->>>     bpf_prog_eba69524d1d949b1_st_not_on_stack+0x12f/0x17a \
->>>
->>> which is pretty normal, as the new selftests introduced by this series
->>> are expected to trigger KASAN splats (the test_progs part will pass,
->>> only the kernel_splats part will trigger errors). The right fix may be
->>> to just put a list of regex matching all the kasan subtests progs in th=
-e
->>> relevant SPLAT_ALLOWLIST file; something like:
->>>
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_(st|ld)(x)?(_not)?_on_stack\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_simple_atomic(_fetch)?(_not)_on_stack\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_ldx_patched(_not)?_on_stack\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_verifier_paths_stack_and_non_stack\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_ldx_oob\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_st_blinded\+
->>> BUG: KASAN: slab-(out-of-bounds|use-after-free) in bpf_prog_([a-f0-9]){=
-16}_(load_acquire|store_release)(_not)?_on_stack\+
->>>
->>> I can take care of opening the relevant PR in kernel-patches/vmtest wit=
-h
->>> this if it ends up being the correct solution, but it will make sense t=
-o
->>> do so only once the selftests list is validated (but before merging the
->>> series).
->>=20
->> We need to resolve this before landing the set. To me it looks inevitabl=
-e, esp.
->> if we exercise the support and produce such warnings. That said I'll let=
- Ihor
->> respond and provide guidance for this. We should probably land the vmtes=
-t PR
->> before v8 is posted, so that v8 can go through CI and be processed witho=
-ut
->> failures.
+On Tue, Aug 25, 2026 at 01:20:59PM +0200, David Hildenbrand (Arm) wrote:
+> We don't check str_dup() return value and never free it. While both
+> things are irrelevant in practice, let's just clean it up by working on
+> argv[0] directly and avoiding the str_dup().
 >
-> This is a tricky one.
+> Nobody after us needs these parts of the argv[0] string anyway.
 >
-> IIUC the suggested allowlist regex will also mask the real splats, which
-> the whole KASAN-in-JIT project was supposed to catch.
-
-Not really: the proposed list of regex above just discards the splat
-emitted by the progs used by the tests related to the KASAN feature (so
-any prog in tools/testing/selftests/bpf/prog/{kasan.c,kasan_harden.c},
-which anyway generate "fake" KASAN splat for most of them, since we are
-manually poisoning some valid memory to trigger the splats. Any other
-program that generate a splat will be caught by the splat detector.
+> This patch is inspired by previous work from Anshuman Tewari [1].
 >
-> I think a good way to resolve this is to teach the kasan splat
-> detection script about these tests, and drop/skip them from the dmesg
-> log it inspects. For example, match begin / end of the test set.
-> Might require special log anchors printed by the test itself, but
-> you get the idea.
->
-> Alexis, do you mind trying this?
+> Link: https://lore.kernel.org/r/20260821114416.12255-1-anshumantewari123@gmail.com [1]
+> Signed-off-by: David Hildenbrand (Arm) <david@kernel.org>
 
-If despite the comment above, teaching check-kernel-splat.sh how to
-ignore the kasan selftests specific splats remains a better solution,
-sure, I can work on this.
+LGTM, thanks for the cleaner fix.
 
-Thanks,
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Reviewed-by: Anshuman Tewari <anshumantewari123@gmail.com>
