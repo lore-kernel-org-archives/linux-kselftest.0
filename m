@@ -1,160 +1,262 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A59142E435
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 19:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174DA42E435;
+	Thu, 27 Aug 2026 19:19:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787857690; cv=none; b=fAAbFCT+eSoZeAxEFzi4h2ky0raIfWCI6e5rnvIl+bAIKwEx3eNboIlPl0zDIQGp3Tl2ryvjrIpLuhvbpWtzBUfpR0l3s4UK148sV8sYnQS4Hq6SuIvfCLvoXH7fgUZlYd//et9IepGh5aHH3GNOmkl51xpRmHzSxJ5jL8lhU0s=
+	t=1787858388; cv=none; b=KtRVlPEUMlSY4PobA6JIc/bYH65E3qAvyatEm7ALTZ+HCWnRchNzcrM0Q9BYz4xYpXEqNrZcQlnKGpMAd62XvvvwQf8PzMEV4CJieTNe9BsPWWRbGUQLfXgCdvAsQ2OuUinMAaV0Q4xpjqfXQvDxymiNVSjdjvXsHZmaqz+GUGk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787857690; c=relaxed/simple;
-	bh=YAu1i5AWtB/mdPrcibBFB5fs0b8x5YEB+6wjvbVTug4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=Gk/VXp3YPa3Vyg/WC43VWB/IamKmBxfFkYYoS2LqDktdUIECbzSmRpdyeSacf58YUnWF4izRIlFQ6OZg+kSPQQlkjrqDaO0BGNlZiRnqIO6j/pXxDcXJW6TBWsxGWvlQKH2HkC9jdyHQEhIsC2OSRozFjPWn36T3ojwIWz/SYdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VJmxmaO3; arc=none smtp.client-ip=209.85.215.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1787858388; c=relaxed/simple;
+	bh=NQ5aDbI68dfVIprQJGaOPpQjMfOiPb/kMhr2+W2vzGU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=sI2qowv4FgReqje/HpJAdLjKdVQ0o892xl0pqwt54alRX+B8FOIm96DGLSAI9IyC8Pc3odRmZjvhmxQ4qHJb5qNQpwwxxvyfIlPA1T6qMMsmzLe+o+sOM2i7s48FilQxU5Ts9d1M7fCqj1gKfaMBXoz4iil4KOqUnxXG2UFM8OI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V/Bs3Saf; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VJmxmaO3"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cc1c057f480so248786a12.0
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 12:08:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787857687; x=1788462487; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=JWGZwnfyNQRYCnM1UqJIynPGxtHIQDoEVfaq/bKW7II=;
-        b=VJmxmaO31r7QLA8hqwiQw6U4P4CwtVzNizJ3PZzdr5ThgK/gxjKEC3mTiUvUCottSv
-         oah9VlHb0ddZ2PEAAUkx8914qBHIH/Kx6vyLtwqflipv1dGedMiZZsVwzgrt0+x7a0Zu
-         x/VS8XZNJySa9B1UW3ax7qFGwbQ6yABtFR4v1IulsDfsvjdBJ5y9s1U6j9fiS2eVW6fA
-         cccq98BRoExqMMtnC83N50B5qUqeXYzAIALkGGvL/Z2SpfGkoAkcyjitP9S5ZqXZr/lI
-         sWpzHFmbhI/RZ63ony6FUltQ8Clo6ZzsL28salyR+gJxS3vYv/tS/eVFW3hDiLANmwuX
-         ZTVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787857687; x=1788462487;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JWGZwnfyNQRYCnM1UqJIynPGxtHIQDoEVfaq/bKW7II=;
-        b=VeqveeNMTk6/L9d7BBm1k/HI7qN+DCEQiGfEuJy8gDPWrvC1NF0dDBdmUe5B4AJJRO
-         YtOsXuYFR/++7MsOKwBTbvA2smxDapvOwQOkdzcmMIdRJSW17Vw0hf/VdIIE91EIXq6X
-         buH7cWHWv4HW6VaXS6Pw5Qs3OTqnY2CWRUz4e3QvIXCvcrAHnz1tvtXt/nT5uHXLCt7h
-         ahQ3ZnMdDOIPSCmPF+ALwYIU58nkfCtHhhvtjzUnz3s5V7JZXoZIN1mFMA6lYuyRFstA
-         XnMdMvbTAWIMBOIT9F2nl+I8Top14pFufZEzLgArO4dDrzi+oHexfKlCcr/YgtByP41J
-         UK0Q==
-X-Forwarded-Encrypted: i=1; AHgh+RrKlCfF8tgmAbMEOKzooWiOERs5UMilInxXhTkL6tl1nQcArshKBoVtSFAMi7GEvjWjfTQsm7zCtEzlXPvPDyY=@vger.kernel.org
-X-Gm-Message-State: AFuF++kijB9TuNcNpPoXIQM+xckVXSc3ZsRFzZ6MzSMY9ONkeAd5A/EV
-	1e23JBGNc63WVb5P+rT6kKwchlcAiQBwoINJBR73KzFpmRQILiArWmPfdEKF2cYOHiQ9xoXxYW9
-	YMYrY/Q==
-X-Received: from plblq15.prod.google.com ([2002:a17:903:144f:b0:2d6:e58f:8e81])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:15cf:b0:2d7:1aeb:739
- with SMTP id d9443c01a7336-2d74e1295c2mr19606415ad.13.1787857686248; Thu, 27
- Aug 2026 12:08:06 -0700 (PDT)
-Date: Thu, 27 Aug 2026 12:08:05 -0700
-In-Reply-To: <a151b52d-0afb-4b32-a871-4da67210f416@intel.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V/Bs3Saf"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C51F91F000E9;
+	Thu, 27 Aug 2026 19:19:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1787858386;
+	bh=FDSlhYpZ7SK0VWnxLFVVVQi00Pd+n+HLWSAlwciDTdI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=V/Bs3Safp1L8PscctK/tMZ2L3zg+eetFGpnefO1L1aK+Jl2u2Gz8O5a2viljUu68b
+	 4OvzhBuzJbNJDvkqYhYKCkn8txyNsIBu2HarLlTNu9/SDgmDpZ/HEv/MbQB+/nTRlL
+	 8P1SeZzKwcj5uumJDOpp9WjfvYduKeLMvnR7jcJGzd41h5gXVgApF4/eVpLVgNJhFY
+	 EVswFaVZFWe++EC4nWOs/3TqxQUXW/mSUABJKTrnmEf9Yg4wc1P/IMS77XQ64fzXFP
+	 ixyrVcs9kiSnwIP2RU3eg7DhSVndSE6IYAzEA3+fZFPxv0OSQCOX0CDfba/4fu7T4Y
+	 TPpHTHiAwMitg==
+From: Jakub Kicinski <kuba@kernel.org>
+To: jiayuan.chen@linux.dev
+Cc: Jakub Kicinski <kuba@kernel.org>,
+	bpf@vger.kernel.org,
+	netdev@vger.kernel.org,
+	syzbot+237bbeed8dfe0699b7f5@syzkaller.appspotmail.com,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	pabeni@redhat.com,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	hawk@kernel.org,
+	john.fastabend@gmail.com,
+	sdf@fomichev.me,
+	horms@kernel.org,
+	martin.lau@linux.dev,
+	andrii@kernel.org,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	jolsa@kernel.org,
+	emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	shuah@kernel.org,
+	kuniyu@google.com,
+	liuhangbin@gmail.com,
+	krikku@gmail.com,
+	mkarsten@uwaterloo.ca,
+	toke@redhat.com,
+	lorenzo.bianconi@oss.qualcomm.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf v2 1/2] bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
+Date: Thu, 27 Aug 2026 12:19:43 -0700
+Message-ID: <20260827191943.4007831-1-kuba@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260824030705.266049-1-jiayuan.chen@linux.dev>
+References: <20260824030705.266049-1-jiayuan.chen@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <cbf5f7ca-a960-4fb8-a760-2d2794eb6864@arm.com> <CAEvNRgGOyQHnF_b8dk8E0d7_=CcwXtYUdU3ko7Qbep+_O7UC0Q@mail.gmail.com>
- <aoZZMQ3Uc8yQWPNA@google.com> <7eba513d-cdae-4832-abac-038dcdd88517@intel.com>
- <meww2a2uf3yeevsfpicyrlg3hch2x4bsdqv2lsv3vfjxg4qzes@co5eogmhkxrk>
- <ao3lOu8-wpGTs2wd@google.com> <ba8d0441-b52f-4357-b2e7-1e352aa385a2@intel.com>
- <CAEvNRgFXJbV78ktsg=b4srFp1OFjtQWQGuNPjr_MmWD-wOvjgw@mail.gmail.com>
- <ao7vwx3nMqCjCHZU@google.com> <a151b52d-0afb-4b32-a871-4da67210f416@intel.com>
-Message-ID: <apCLFSbj8sq2biJp@google.com>
-Subject: Re: [PATCH v10 09/41] KVM: guest_memfd: Filter both shared and
- private when invalidating
-From: Sean Christopherson <seanjc@google.com>
-To: Xiaoyao Li <xiaoyao.li@intel.com>
-Cc: Ackerley Tng <ackerleytng@google.com>, Michael Roth <michael.roth@amd.com>, 
-	Suzuki K Poulose <suzuki.poulose@arm.com>, "David Hildenbrand (Arm)" <david@kernel.org>, aik@amd.com, 
-	andrew.jones@linux.dev, binbin.wu@linux.intel.com, brauner@kernel.org, 
-	chao.p.peng@linux.intel.com, jmattson@google.com, jthoughton@google.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, tabba@google.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
-	linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 27, 2026, Xiaoyao Li wrote:
-> On 8/26/2026 9:53 PM, Sean Christopherson wrote:
-> <snip>
-> > > Is this just a case of user error? That with gmem_in_place_conversion,
-> > > userspace should not use userspace_addr from something other than the
-> > > gmem for the same memslot?
-> > 
-> > Yes.  It's not just invalidations that will go sideways,
-> 
-> > KVM accesses to guest
-> > memory won't hit the same physical page as actual guest accesses.
-> 
-> Side topic.
-> 
-> If KVM enforces KVM_MEMSLOT_GMEM_ONLY when gmem_in_place_conversion is true
-> like below proposal, should we update KVM's guest memory accessors to access
-> gmem directly?
+This is an AI-generated review of your patch. The human sending this
+email has considered the AI review valid, or at least plausible.
+---
+bpf, veth: xdp: fix page_pool page leak on skb-backed XDP
 
-No, because routing KVM accesses through uaccess means we just have to ensure
-PRIVATE memory isn't mapped into userspace, which we already have to do anyways.
+This adds a new xdp_buff flag, XDP_FLAGS_FRAGS_PAGE_POOL, which the two
+skb-cow sites (generic XDP and veth) set when a non-linear skb has been
+cow'd into page_pool memory.  bpf_xdp_shrink_data() then frees a released
+frag to the page_pool instead of using xdp->rxq->mem.type.
 
-Now, that doesn't preclude future work from optimizing certain flows to avoid
-GUP, or to harden KVM in other ways.  But as a first step, bypassing uaccess is
-actively dangerous.
+Closes: https://syzkaller.appspot.com/bug?extid=237bbeed8dfe0699b7f5
 
-> If still use the existing code of accessing userspace_addr of the memslot, I
-> think KVM needs to document clearly that when
-> KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES is enumerated, if configuring the
-> guest_memfd for a memslot, the userspace_addr passed in needs to be the
-> mmaped address of the guest_memfd.
+> diff --git a/drivers/net/veth.c b/drivers/net/veth.c
+> index 6ed3ee81153fb..0afa0661ada16 100644
+> --- a/drivers/net/veth.c
+> +++ b/drivers/net/veth.c
+> @@ -775,6 +775,11 @@ static int veth_convert_skb_to_xdp_buff(struct veth_rq *rq,
+>  	if (skb_shinfo(skb)->nr_frags) {
+>  		skb_shinfo(skb)->xdp_frags_size = skb->data_len;
+>  		xdp_buff_set_frags_flag(xdp);
+> +		/* A nonlinear skb was cow'd into rq->page_pool above, so the
+> +		 * frags must be freed to that pool, not via the rxq's
+> +		 * MEM_TYPE_PAGE_SHARED.
+> +		 */
+> +		xdp_buff_set_frag_pp(xdp);
+>  	} else {
+>  		xdp_buff_clear_frags_flag(xdp);
+>  	}
 
-Ya.
+[Severity: Critical]
+Does this flag survive past the point where veth deliberately drops the
+page_pool association?
 
-> > Huh.  But that isn't strictly guaranteed, because userspace could bind to a
-> > memslot that isn't configured with GUEST_MEMFD_FLAG_MMAP, in which case SHARED
-> > faults will go through the VMA, not kvm_mmu_faultin_pfn_gmem().  It's a bit early
-> > in the morning, but off the top of my head, I can't think of any reason we need
-> > to support such a setup.  If userspace really, really wants to use a separate
-> > mapping, they could DELETE+CREATE an equivalent memslot without the guest_memfd
-> > file descriptor.
-> > 
-> > So I think we should do this?
-> > 
-> > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> > index 9c2d52bdf25e..86f53e53a136 100644
-> > --- a/virt/kvm/guest_memfd.c
-> > +++ b/virt/kvm/guest_memfd.c
-> > @@ -1013,7 +1013,7 @@ int kvm_gmem_bind(struct kvm *kvm, struct kvm_memory_slot *slot,
-> >   	 */
-> >   	WRITE_ONCE(slot->gmem.file, file);
-> >   	slot->gmem.pgoff = start;
-> > -	if (kvm_gmem_supports_mmap(inode))
-> > +	if (gmem_in_place_conversion || kvm_gmem_supports_mmap(inode))
-> >   		slot->flags |= KVM_MEMSLOT_GMEM_ONLY;
-> 
-> I like this idea. It makes gmem_in_place_conversion a step closer to what
-> its name implies, though in-place conversion is not truly 100%
-> guaranteed[*].
-> 
-> [*] https://lore.kernel.org/all/akUbz_kJvYulaboo@google.com
+In veth_xdp_rcv_skb(), the XDP_TX and XDP_REDIRECT arms do:
+
+	case XDP_TX:
+		veth_xdp_get(xdp);
+		consume_skb(skb);
+		xdp->rxq->mem = rq->xdp_mem;
+
+veth_xdp_get() takes a plain get_page() on each frag, then consume_skb()
+-> skb_release_data() -> napi_pp_put_page() finds page_ref_count() != 1,
+so page_pool_return_netmem() -> page_pool_clear_pp_info() sets
+netmem->pp = NULL.  veth then resets rxq->mem to MEM_TYPE_PAGE_SHARED,
+which matches the now plain pages, but XDP_FLAGS_FRAGS_PAGE_POOL is never
+cleared.
+
+The flag then leaves the buff:
+
+include/net/xdp.h:xdp_update_frame_from_buff() {
+	...
+	xdp_frame->flags = xdp->flags;
+}
+
+include/net/xdp.h:xdp_convert_frame_to_buff() {
+	...
+	xdp->flags = frame->flags;
+}
+
+so a second-stage consumer that rebuilds a buff from the frame and runs a
+program inherits it.  veth_xdp_rcv_one() does exactly that, with no
+xdp_init_buff() to reset flags:
+
+drivers/net/veth.c:veth_xdp_rcv_one() {
+	...
+	xdp_convert_frame_to_buff(frame, xdp);
+	xdp->rxq = &rq->xdp_rxq;
+	vxbuf.skb = NULL;
+
+	act = bpf_prog_run_xdp(xdp_prog, xdp);
+}
+
+cpu_map_bpf_prog_run_xdp() and dev_map_bpf_prog_run() inherit frame->flags
+the same way.
+
+If that peer program calls bpf_xdp_adjust_tail() with a negative offset
+that consumes a whole frag, bpf_xdp_shrink_data() takes the new branch and
+forces mem_type = MEM_TYPE_PAGE_POOL for a page that is no longer a
+page_pool page.  __xdp_return() skips the netmem_is_pp() check for that
+type:
+
+net/core/xdp.c:__xdp_return() {
+	...
+		/* No need to check netmem_is_pp() as mem->type knows this a
+		 * page_pool page
+		 */
+		page_pool_put_full_netmem(netmem_get_pp(netmem), netmem,
+					  napi_direct);
+}
+
+netmem_get_pp() is NULL here, so page_pool_put_unrefed_netmem() reads
+pool->cpuid in page_pool_napi_local() (or pool->dma_sync on PREEMPT_RT)
+off a NULL pool in softirq context.  Since pp_ref_count is still 1 for a
+frag that owns a whole page, is this deterministic rather than
+refcount-dependent?  A veth pair with an xdp.frags program on both sides
+looks sufficient to reach it.
+
+Would clearing the flag in the XDP_TX / XDP_REDIRECT arms next to
+xdp->rxq->mem = rq->xdp_mem, or masking it out in
+xdp_update_frame_from_buff(), be the right fix?
+
+Related to this, the commit message says:
+
+    So record it in the xdp_buff. Add a XDP_FLAGS_FRAGS_PAGE_POOL flag; the two
+    skb-cow sites set it, and bpf_xdp_shrink_data() frees the frag to the
+    page_pool when it is set, otherwise it keeps falling back to
+    xdp->rxq->mem.type unchanged. No other path changes behaviour.
+
+Given that xdp_frame->flags carries the bit into frame-based paths, is "No
+other path changes behaviour" accurate?
+
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index aa742f413c358..b389dc527adce 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -81,6 +81,10 @@ enum xdp_buff_flags {
+>  	 * XDP program is not attached.
+>  	 */
+>  	XDP_FLAGS_FRAGS_UNREADABLE	= BIT(2),
+> +	/* frags are page_pool memory even though rxq->mem.type is not: a
+> +	 * skb-backed XDP buff (generic XDP, veth) is cow'd into a page_pool.
+> +	 */
+> +	XDP_FLAGS_FRAGS_PAGE_POOL	= BIT(3),
+>  };
+
+[Severity: Medium]
+This comment documents a general ownership rule for frags, but is the rule
+only implemented in bpf_xdp_shrink_data()?
+
+The other frag release paths still key exclusively on rxq->mem.type or
+xdpf->mem_type and never consult xdp_buff_is_frag_pp():
+
+net/core/xdp.c:xdp_return_frag() {
+	__xdp_return(netmem, xdp->rxq->mem.type, true, NULL);
+}
+
+net/core/xdp.c:xdp_return_buff() {
+	...
+	for (u32 i = 0; i < sinfo->nr_frags; i++)
+		__xdp_return(skb_frag_netmem(&sinfo->frags[i]),
+			     xdp->rxq->mem.type, true, xdp);
+}
+
+plus the frame-side loops used by xdp_return_frame(),
+xdp_return_frame_rx_napi() and xdp_return_frame_bulk(), which use
+xdpf->mem_type.
+
+xdp_convert_buff_to_frame() also stores two independent descriptions of the
+same memory in one frame:
+
+include/net/xdp.h:xdp_convert_buff_to_frame() {
+	...
+	if (unlikely(xdp_update_frame_from_buff(xdp, xdp_frame) < 0))
+		return NULL;
+
+	/* rxq only valid until napi_schedule ends, convert to xdp_mem_type */
+	xdp_frame->mem_type = xdp->rxq->mem.type;
+}
+
+so xdp_frame->flags can say page_pool while xdp_frame->mem_type says
+MEM_TYPE_PAGE_SHARED.  I could not construct a live caller that frees a
+flagged buff through the generic helpers today, but should the contract be
+made consistent (either honour the flag in the generic release helpers, or
+scope the comment to the shrink path only) so a future caller does not
+silently reintroduce the same "Bad page state ... page_pool leak"?
+
+> diff --git a/net/core/filter.c b/net/core/filter.c
+> index 61940e7535523..d34ba56d79d8f 100644
+> --- a/net/core/filter.c
+> +++ b/net/core/filter.c
+> @@ -4378,6 +4378,13 @@ static bool bpf_xdp_shrink_data(struct xdp_buff *xdp, skb_frag_t *frag,
+>  	if (mem_type == MEM_TYPE_XSK_BUFF_POOL) {
+>  		netmem = 0;
+>  		zc_frag = bpf_xdp_shrink_data_zc(xdp, shrink, tail, release);
+> +	} else if (xdp_buff_is_frag_pp(xdp)) {
+> +		/*
+> +		 * Skb-backed XDP (generic XDP, veth) cow's the frags into a
+> +		 * page_pool while the rxq stays MEM_TYPE_PAGE_SHARED, so free
+> +		 * the frag to the pool, not via page_frag_free().
+> +		 */
+> +		mem_type = MEM_TYPE_PAGE_POOL;
+>  	}
+>  
+>  	if (release) {
+
+[ ... ]
