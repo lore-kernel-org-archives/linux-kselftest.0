@@ -1,152 +1,305 @@
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40A5633F5BE
-	for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 08:22:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E58483CF1F0;
+	Thu, 27 Aug 2026 08:28:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787818971; cv=none; b=kW7tyS8ECvVmiS+p/SMVpZsAnXkmt94eJ7LFYbm+BRvM56hM3rFNL3ph4Qgu9gWY1kKgCN+asHVj3FWaa4g4U3eUzKk/eGKcdLNXLHRK6cGGC+gLIlUIikL6juKKY6JTAJyD8rlH4ksr15Iu6ebm3aWqH7HfUWsn3yRcJNA7Cxc=
+	t=1787819301; cv=none; b=qdWwouHbfOktFQLcNAI4whKZKLIhWrPFT3YtN46/YlWyg3YkNjX5Gs87sEvx0Ey2l8CLYN8XMb2zW4DKlzJSnD4Ztybx+L3ez0t/NOeHZjGKqyh7F0HtnIjpziv8T8YSjxK3ITLmGZfkA58TaM9yQ3NvFIpEkLHjkfaqvS8o0tU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787818971; c=relaxed/simple;
-	bh=6M+q8plwytqVuLkezGJ715SOoKUxxSuuUZbsWnkW0R4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=iVchUrRIotmRtqICjLTvb+mgL9qin4tA+/6Al1axkGdVwEt3rD6zpflc4QQIvauSm6PLYoTN7ouz0vy9QnmoFAZqUkGsCJzM5YerYRh9pUqVUBk5jmNVzRj7el3WjDpMHYye3+zUlipd+uB8F8N7gGn6ZDB+71aC/EQtEF50jgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RHR9WoDU; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=grt/mEcV; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+	s=arc-20240116; t=1787819301; c=relaxed/simple;
+	bh=giqeAkD1Vc9WT3IBTjcmjVEXQSQpBSGwdcKcXvjnzRw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IpLLh+3Hqeblyt/sNHc8GsR/MLjjT2uVSfM3TP9M6jyxWQzX/YOMKbBZ/JxKDeByESWq/nLb8gPfeg37Dg3D+OmpjD0oipn9j5wiWoGYno+s5VCDZoohGya066xA/07QTam1f4iTbaUe8wcKblIwSkTTnxOdZak5DShUA+Ngai0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=PgzkalWw; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RHR9WoDU";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="grt/mEcV"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1787818969;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=SNJwJg0S3fs0+kduUqx/6yRTxLzuM/Ks1tVa5hY73r4=;
-	b=RHR9WoDU0N0L5T5HMEZwyGZB7MXH6P+W78gbozDyjbEFX/ol2F3RcGjuyKbdCMxxzL7wat
-	ZVXsJ7L+eUNmY28hItiYaOh15laRdC5m9J11WOtBIqpyQhqFwQvxMjL11RCyRtNo4JjriM
-	I/H2tJPwotUGn+VW1Ik3xgf2LZ/FxHA=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-265--KFWA752OyOhQlWAzhktMQ-1; Thu, 27 Aug 2026 04:22:46 -0400
-X-MC-Unique: -KFWA752OyOhQlWAzhktMQ-1
-X-Mimecast-MFC-AGG-ID: -KFWA752OyOhQlWAzhktMQ_1787818965
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-c16711b9473so142101966b.2
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 01:22:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1787818965; x=1788423765; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=SNJwJg0S3fs0+kduUqx/6yRTxLzuM/Ks1tVa5hY73r4=;
-        b=grt/mEcV6q/9puswVEgKmmxGGrGbYlz6Q+pRPMnFMKbMvdx+oUkGcE8iwIZr2KDBVF
-         99bOvV5rix8e+TlXZZPu8UWln3ZuSqyKKS9Y7b7f44lXRCMCHSKgX62BTamo741tz75z
-         i5AC1VNsuCx862XdxsF6ddpP7GYu7SCfdkzEoXJJkk4wUMRyYVXm68c9kNy3gj5b/if3
-         ydY6oADDda0Tiyo4LxWWje8aeiV4bCHP+EwWg0wQXv+y05MRZlBx+/a/0O/gPVDijXJX
-         RsToXTOBjNBLFROjcHViWY9Yz6O3SfR0nhmkijAgQjFgu/SudUYEVkDwPrpZq/1mR6Ql
-         eqoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787818965; x=1788423765;
-        h=mime-version:user-agent:content-transfer-encoding:content-type
-         :autocrypt:references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=SNJwJg0S3fs0+kduUqx/6yRTxLzuM/Ks1tVa5hY73r4=;
-        b=E2CvRjEQV0feHz7QJZvJihefLuaXWkUuTC3FlYl6tjKOYKDNDMMyFv1/nZY7hw+F8o
-         r1CX6BzdRXKtOAZ/AfoaDza9D3CAWcuMm59LIeQGO7zFbyC5rLLEpDX6fLs5gnZECDCt
-         MuV+Iedvi32QDILgkYiaXyr77le+4b+htHIHb560zCJm/Y1QETHFa8iTQaY4yDMOS6h5
-         Ia6Sif3j/qoaH+4INndrPwEiNaFhMn5vMxLgD+ZnWzgtfpMYtyhCKoXxhDj3k8H5MzoS
-         byO2kprWKeE9a/Rm/ggv92xpAelr2kIN6XP6nSCV+KfUkMZwlL6xvGLCH83NTZB9CyFX
-         ViQQ==
-X-Forwarded-Encrypted: i=1; AHgh+RoQOptwkO+Wbmfz9G5N+XVpkeLAN3LZdTc+5odOJlxvH9oRKMHeNmMF1tB0Dfug4rUQbqhjbrgHBJMak3fwISs=@vger.kernel.org
-X-Gm-Message-State: AFuF++nS1bxyiWebppQrE0wqzbdtYYxI2v15dcwo3FQfgC/G5fbq9sAS
-	M89T+LCH22yByFIRHM1D/vi7GCmKvbwUMUnfA6Dioi1LYqQq0/OPe69R/UjSUPyixTX45BV42Lr
-	Ms6wwynozIj8u2PqnqTO1bLkV62WOxZD9oZ+OMx6GM6mFerEnJcgKnWU8HRe8V9y9ISLIrQ==
-X-Gm-Gg: AR+sD12zUZ81AmLembvrpNjK/gmAC2Dqo6QjatTO/9HLjlNtiX3DWsbceA4X9BSXANg
-	oZM+3qYzmVW6oJCiJzhtQVX1Igvg5cw8p67P6zGTYU8IYAAnuG8wt87bOaGmHfeXdb7VqWhI/4N
-	ReA5/j4adVW6qcn4umtqLgvVv6zPnyxDMU7rB31k0s4AOClfhrVCSfXJ7ZnboUmvV5k0q2+oR/S
-	8jRC6J97yoDEbWokGkTtgp6G4PR9pz5hUf3raomCVFWcYsTbw/G1X4DFna4U33jA7Ixc/8++mGB
-	ckSFs7iGcILNAhcYRfBhDzjURNkWViFmdVbfVbM0pOueAFxQHmbcUIgChft0Zlfu98itiLb4YCv
-	uHx6sY+jYdilNT81mZO+pAlFjfk3t6JT0bCayvd/V7jV/RnktY9Kf/3BO5Z2lZGW2NbOp9A==
-X-Received: by 2002:a17:907:6091:b0:c1c:2007:298e with SMTP id a640c23a62f3a-c250c408972mr1556837966b.24.1787818965172;
-        Thu, 27 Aug 2026 01:22:45 -0700 (PDT)
-X-Received: by 2002:a17:907:6091:b0:c1c:2007:298e with SMTP id a640c23a62f3a-c250c408972mr1556832966b.24.1787818964786;
-        Thu, 27 Aug 2026 01:22:44 -0700 (PDT)
-Received: from gmonaco-thinkpadt14gen3.rmtit.csb (212-8-243-115.hosted-by-worldstream.net. [212.8.243.115])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c25127b66e5sm711301566b.45.2026.08.27.01.22.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2026 01:22:44 -0700 (PDT)
-Message-ID: <ba9a55fa6aeae4ef17873afc7373302a3fadc82d.camel@redhat.com>
-Subject: Re: [RFC 1/3] rv: add per-edge dwell-time statistics primitive
-From: Gabriele Monaco <gmonaco@redhat.com>
-To: Tobias Schaffner <tobias.schaffner@siemens.com>, Steven Rostedt
-	 <rostedt@goodmis.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Shuah Khan
- <skhan@linuxfoundation.org>,  Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Jan Kiszka	
- <jan.kiszka@siemens.com>, Philippe Gerum <rpm@xenomai.org>, 
-	linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Thu, 27 Aug 2026 10:22:42 +0200
-In-Reply-To: <20260827072400.45734-2-tobias.schaffner@siemens.com>
-References: <20260827072400.45734-1-tobias.schaffner@siemens.com>
-	 <20260827072400.45734-2-tobias.schaffner@siemens.com>
-Autocrypt: addr=gmonaco@redhat.com; prefer-encrypt=mutual;
- keydata=mDMEZuK5YxYJKwYBBAHaRw8BAQdAmJ3dM9Sz6/Hodu33Qrf8QH2bNeNbOikqYtxWFLVm0
- 1a0JEdhYnJpZWxlIE1vbmFjbyA8Z21vbmFjb0BrZXJuZWwub3JnPoiZBBMWCgBBFiEEysoR+AuB3R
- Zwp6j270psSVh4TfIFAmjKX2MCGwMFCQWjmoAFCwkIBwICIgIGFQoJCAsCBBYCAwECHgcCF4AACgk
- Q70psSVh4TfIQuAD+JulczTN6l7oJjyroySU55Fbjdvo52xiYYlMjPG7dCTsBAMFI7dSL5zg98I+8
- cXY1J7kyNsY6/dcipqBM4RMaxXsOtCRHYWJyaWVsZSBNb25hY28gPGdtb25hY29AcmVkaGF0LmNvb
- T6InAQTFgoARAIbAwUJBaOagAULCQgHAgIiAgYVCgkICwIEFgIDAQIeBwIXgBYhBMrKEfgLgd0WcK
- eo9u9KbElYeE3yBQJoymCyAhkBAAoJEO9KbElYeE3yjX4BAJ/ETNnlHn8OjZPT77xGmal9kbT1bC1
- 7DfrYVISWV2Y1AP9HdAMhWNAvtCtN2S1beYjNybuK6IzWYcFfeOV+OBWRDQ==
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.60.2 (3.60.2-1.fc44) 
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="PgzkalWw"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1787819285; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=7ZyKXiDcMnJRL/Jca9p3GNNTfZ89CGVivxP5tkkYlU4=;
+	b=PgzkalWwZQeBO1KJOXcWmv3mKarhsMZgdBEoih7LZcF4TPs6BkQhuhkHCnkao1/Eo63u1plO4nsSS1dO49gfvIj3e7il0mJkWLMzxUmJfTBfpUbcb4hEb5zqndT2xaCU44MghwRWjAAVRUt1j3xv6xZkaVK2i7Bxzx4ZfKNFfW8=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R881e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033045098064;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X9j9eTi_1787819282;
+Received: from 30.74.144.120(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X9j9eTi_1787819282 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Thu, 27 Aug 2026 16:28:03 +0800
+Message-ID: <0107447a-7c1f-44f8-94fb-109b0f850677@linux.alibaba.com>
+Date: Thu, 27 Aug 2026 16:28:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260826-fix_split-v2-0-71153c7f579a@arm.com>
+ <20260826-fix_split-v2-2-71153c7f579a@arm.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260826-fix_split-v2-2-71153c7f579a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 2026-08-27 at 09:23 +0200, Tobias Schaffner wrote:
-> Add a small primitive that records, per automaton edge, how long the
-> monitor dwelled before taking it with a count, a sum and a maximum.
->=20
-> The counters are per-CPU and lock-free, so a monitor's hot path can updat=
-e
-> them without disabling interrupts and without perturbing the very latency
-> being measured.
->=20
-> Signed-off-by: Tobias Schaffner <tobias.schaffner@siemens.com>
+
+
+On 8/26/26 8:24 PM, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
+> 
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+> 
+> This causes split_huge_page_test to fail because the check_huge_xxx()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
+> 
+> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> /proc/self/smaps to detect huge pages.
+> 
+> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
-> =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 1 +
-> =C2=A0include/linux/rv_edge_stat.h | 45 +++++++++++++++++++++++++++++++++=
-+++
-> =C2=A02 files changed, 46 insertions(+)
-> =C2=A0create mode 100644 include/linux/rv_edge_stat.h
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 8014b9f8253e..04589dda0873 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -23654,6 +23654,7 @@ L:	linux-trace-kernel@vger.kernel.org
-> =C2=A0S:	Maintained
-> =C2=A0F:	Documentation/trace/rv/
-> =C2=A0F:	include/linux/rv.h
-> +F:	include/linux/rv_edge_stat.h
-> =C2=A0F:	include/rv/
+>   tools/testing/selftests/mm/vm_util.c | 130 ++++++++++++++++++++---------------
+>   tools/testing/selftests/mm/vm_util.h |   1 +
+>   2 files changed, 77 insertions(+), 54 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> index 4821a3563036..1d0959b3b9e8 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+>   	return entry;
+>   }
+>   
+> -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+> -		  uint64_t hpage_size)
+> -{
+> -	char buffer[MAX_LINE_LENGTH];
+> -	uint64_t thp = -1;
+> -	char *entry;
+> -
+> -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
+> -	if (!entry)
+> -		goto err_out;
+> -
+> -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
+> -		ksft_exit_fail_msg("Reading smap error\n");
+> -
+> -err_out:
+> -	return thp == (nr_hpages * (hpage_size >> 10));
+> -}
+> -
+> -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> -		uint64_t hpage_size)
+> +static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
+> +			       void *addr, size_t len, int nr_hpages,
+> +			       uint64_t hpage_size)
+>   {
+>   	int order = 0, pagesize = getpagesize();
+>   	unsigned int nr_pages = hpage_size / pagesize;
+>   	int orders[MAX_NR_ORDERS], status;
+> -	int pagemap_fd, kpageflags_fd;
+>   	bool ret = false;
+>   
+>   	if (!nr_pages)
+> @@ -386,15 +368,6 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+>   		ksft_exit_fail_msg("invalid order\n");
+>   
+>   	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
+> -	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> -	if (pagemap_fd == -1)
+> -		ksft_exit_fail_msg("read pagemap fail\n");
+> -
+> -	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+> -	if (kpageflags_fd == -1) {
+> -		close(pagemap_fd);
+> -		ksft_exit_fail_msg("read kpageflags fail\n");
+> -	}
+>   
+>   	status = gather_folio_orders(addr, len, pagemap_fd,
+>   			kpageflags_fd, orders, MAX_NR_ORDERS);
+> @@ -405,48 +378,97 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+>   		ret = true;
+>   
+>   out:
+> -	close(pagemap_fd);
+> -	close(kpageflags_fd);
+>   	return ret;
+>   }
+>   
+> -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +enum check_huge_type {
+> +	CHECK_HUGE_ANON,
+> +	CHECK_HUGE_FILE,
+> +	CHECK_HUGE_SHMEM,
+> +};
+> +
+> +static bool __check_pmd_huge(void *addr, size_t len, int nr_hpages,
+> +			     uint64_t hpage_size, enum check_huge_type type)
 
-Any reason why you don't use include/rv/edge_stat.h ?
+The original __check_pmd_huge() is only for PMD-sized large folios, but 
+now it not only checks PMD-sized large folios but also mTHP large 
+folios, which I find confusing. Please keep its original semantics, and 
+only check PMD-sized large folios.
 
-You wouldn't need to touch the maintainers file and could just
+>   {
+> -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> +	int pagemap_fd, kpageflags_fd;
+> +	uint64_t pmd_pagesize, granule;
+> +	uint64_t categories, kpf;
+> +	unsigned long pfn;
+> +	bool check_large, huge_mapped;
+> +	char *start = addr;
+> +	char *end = start + len;
+>   
+> +	pmd_pagesize = read_pmd_pagesize();
+>   	if (!pmd_pagesize)
+>   		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+>   
+> -	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> +	if (nr_hpages > 0) {
+> +		check_large = true;
+> +		granule = hpage_size;
+> +	} else {
+> +		check_large = false;
+> +		granule = psize();
+> +	}
 
-  #include <rv/edge_stat.h>
+This is incorrect for the mTHP large folio check. I already hit a 
+selftest failure. Please test your patches before sending them out.
 
-Thanks,
-Gabriele
+[root@]./khugepaged -c 4 mthp_khugepaged:anon
+TAP version 13
+# Save THP and khugepaged settings... OK
+1..4
+# Allocate huge page on fault... OK
+# Split huge PMD on MADV_DONTNEED... OK
+ok 1 allocate on fault and split
+#
+# Run test: collapse_full (mthp_khugepaged:anon)
+# Collapse multiple fully populated PTE table.... OK
+ok 2 collapse_full
+#
+# Run test: collapse_empty (mthp_khugepaged:anon)
+# Do not collapse empty PTE table.... OK
+ok 3 collapse_empty
+#
+# Run test: collapse_single_mthp (mthp_khugepaged:anon)
+# Collapse PTE table with half PTE entries present.... Fail
+not ok 4 collapse_single_mthp
+# Totals: pass:3 fail:1 xfail:0 xpass:0 skip:0 error:0
+
+
+> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> -}
+> +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> +	if (pagemap_fd < 0)
+> +		ksft_exit_fail_msg("open pagemap fail\n");
+>   
+> -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> -{
+> -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+> +	if (kpageflags_fd < 0) {
+> +		close(pagemap_fd);
+> +		ksft_exit_fail_msg("open kpageflags fail\n");
+> +	}
+>   
+> -	if (!pmd_pagesize)
+> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> +	if (check_large && !check_large_folios(pagemap_fd, kpageflags_fd,
+> +					       addr, len, nr_hpages, hpage_size))
+> +		goto out;
+>   
+> -	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> +	for (; start < end; start += granule) {
+> +		categories = pagemap_scan_get_categories(pagemap_fd, start);
+> +		pfn = pagemap_get_pfn(pagemap_fd, start);
+> +		if (pfn == -1UL) {
+> +			if (check_large)
+> +				goto out;
+> +			else
+> +				continue;
+> +		}
+> +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
+> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> +		huge_mapped = categories & PAGE_IS_HUGE;
+> +		if (check_large != huge_mapped) {
+> +			if (!check_large || granule == pmd_pagesize)
+> +				goto out;
+> +		}
+> +		if (kpf & KPF_COMPOUND_TAIL)
+> +			continue;
+> +		if (!!(categories & PAGE_IS_FILE) != (type != CHECK_HUGE_ANON))
+> +			goto out;
+> +		if (type == CHECK_HUGE_ANON)
+> +			continue;
+> +		if (!!(kpf & KPF_SWAPBACKED) != (type != CHECK_HUGE_FILE))
+> +			goto out;
+> +	}
+>   
+> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> +out:
+> +	close(pagemap_fd);
+> +	close(kpageflags_fd);
+> +	return start >= end;
+>   }
+>   
+> -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+>   {
+> -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> -
+> -	if (!pmd_pagesize)
+> -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
+> +}
+>   
+> -	if (hpage_size == pmd_pagesize)
+> -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +{
+> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
+> +}
+>   
+> -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> +{
+> +	return __check_pmd_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
+>   }
+>   
+>   int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+> diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> index 9a49af88702e..f19bd17817e5 100644
+> --- a/tools/testing/selftests/mm/vm_util.h
+> +++ b/tools/testing/selftests/mm/vm_util.h
+> @@ -18,6 +18,7 @@
+>   #define PM_SWAP                       BIT_ULL(62)
+>   #define PM_PRESENT                    BIT_ULL(63)
+>   
+> +#define KPF_SWAPBACKED                BIT_ULL(14)
+>   #define KPF_COMPOUND_HEAD             BIT_ULL(15)
+>   #define KPF_COMPOUND_TAIL             BIT_ULL(16)
+>   #define KPF_HWPOISON                  BIT_ULL(19)
+> 
 
