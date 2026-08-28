@@ -1,35 +1,41 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 611523E2740;
-	Fri, 28 Aug 2026 08:11:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D08E53546C0
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 09:21:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787904714; cv=none; b=DQoeOr7n4p8hePSM2voguGl/YnvwLRrqirXVKQAwwXSEvn4qriNyRJmg0lzwuJS/Nc/mqybOERTLJ/6hQOlxbkrIxRrHoWb+u7xkCfQGk/AssRA9scau3+Ph4iPoW6Ww8+yriAjO7+Vf8d8DZWPjFmuV+9qSJb9MyiBJqge1ZlI=
+	t=1787908896; cv=none; b=H84PkAq5xXd4oua35p0ldpMAMF4wP3kLjI1+dD9f+zp4wauLJy14YLXeJ13i4MpQUZo7EQlR/Cxs3Rt5M9i+geU1RJhXdWsuiX7AdSnlP13+6B/uRTV5BK5Mk4K4iHdE+B4n1REtmU2zqNmRpS34heZKlpQgCcBfqGkA4pvL+0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787904714; c=relaxed/simple;
-	bh=SSZ/dke2eJqfQi3JNnjQcCUtyxBe9Q8ye26urwOBivc=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BHEGUm88fwkqKOUtX2xIgWTGiwcXCCqhr0qgn9w65/0rXwEQ3B1wuAljmAvHwJQBfCjbfvnOVjjrxcLHZjb2TpJR+kG8ymZYsMvIUAMD68EMmVujti0t9pf9lcq/h0BA0Xw4X3+9aiD6LCQeupCel/rfXfk9G+7M+mN/exKpJX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=QKNXE3rS; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787908896; c=relaxed/simple;
+	bh=HBAYSLFUD/x0+fUQiUnIMzEUyDHPvGNgEGWpDdGEptE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WnbyHnNl6G6QJeimMilrWbm82T4dkaa1J2fVNVX4VAR9lcnheidAZWPprig73LzAUdxXkk3wJuEAx6q2ZztZHnydMB/X9yVTiECoplS0qFWA/z7FmMFwSYboUt5upAEJogLQbHkuoO4bx6NKv4nLX5qVX0MP0BRIybYoZtX9ho8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=vTsqurki; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="QKNXE3rS"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E387D1691;
-	Fri, 28 Aug 2026 01:11:44 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3DDBD3F85F;
-	Fri, 28 Aug 2026 01:11:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787904708; bh=SSZ/dke2eJqfQi3JNnjQcCUtyxBe9Q8ye26urwOBivc=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=QKNXE3rSlEJLWjgVn9jXYmfrGtwqgbLV9BDcA38DBoUbf4O/mWaAWUCxX8Aj0SdGc
-	 DXNSLE0tQ0U77BshnvGgRqhXQnqABJeBkhul4ouBkDyz3L66aZOqlKt2/YNESj1QwZ
-	 qED/p6Lk1GR+nwmJ01dMPLopS5m02kWBqlcwBiHM=
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-Date: Fri, 28 Aug 2026 09:11:34 +0100
-Subject: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="vTsqurki"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 68C2C4E413FE;
+	Fri, 28 Aug 2026 09:21:31 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 3267860537;
+	Fri, 28 Aug 2026 09:21:31 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 222D311C78150;
+	Fri, 28 Aug 2026 11:21:19 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787908885; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=c8rWtSSNXzBAgJ0rbL27DwT0MgRJGXhRo4QQcY0zPA0=;
+	b=vTsqurkiUnMLjisAMJ787LWmdjmemixZNfmaWYBFdX4m9CBPb/Stp45+iertgA7HnjnDRT
+	ZKfSzHCurO9WlMy771Xmg4DBkRr1cinBo72AdjZuS9RQtkx7d8EGtkpK9WNNBEGBe7FS0r
+	kqwND0PCZX0YNE0MMWh/UmuSQrYECCcAGjLxkry12lNdm+O+94JhG1EnI1fee540jJhZJb
+	3tpfKi4u960AqAXoC2kL3+zxU1kD7NZmI9e7fEHDPtfNGT3aIAasy9drZ6VDXY5jEOQVch
+	OLGk9HXLl49slRzjJvmPCreIPlyuudO4k3jLup4mgYV4q1dFqrlw+D2e7No9hA==
+From: =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+Subject: [PATCH bpf-next v8 0/8] bpf: add support for KASAN checks in JITed
+ programs
+Date: Fri, 28 Aug 2026 11:21:08 +0200
+Message-Id: <20260828-kasan-v8-0-7c1c0fdb9d7f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -38,265 +44,217 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260828-fix_split-v3-2-374022586a4b@arm.com>
-References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
-In-Reply-To: <20260828-fix_split-v3-0-374022586a4b@arm.com>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>, 
- Zi Yan <ziy@nvidia.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
- "Liam R. Howlett" <liam@infradead.org>, Nico Pache <nico.pache@linux.dev>, 
- Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
- Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
- Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
- Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
- Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Yeoreum Yun <yeoreum.yun@arm.com>
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7740; i=yeoreum.yun@arm.com;
- h=from:subject:message-id; bh=SSZ/dke2eJqfQi3JNnjQcCUtyxBe9Q8ye26urwOBivc=;
- b=owEB7QES/pANAwAKAW3Vw9FaxTEzAcsmYgBqkUK8H67Y8gy30FCcQx8m4fmdEselt1VQNJGTO
- oZ2eswZCdCJAbMEAAEKAB0WIQQtg+CS3QUzuFh1pJ1t1cPRWsUxMwUCapFCvAAKCRBt1cPRWsUx
- Mz2zDACjGmQpaW0+V1pmvHkE8DRj8W2cZg83EQgDjxm+EJXc+uB0as+VUb2fzEOpNYWVUymB787
- jgOkNW72mFoEBfc670zw/yXmdpXZ9HHnQyrcUyKNPqA04jYiFeBk5yBUzVTRzfAwcxhhQfsq1dK
- Gy0WLQ2RRR5S/xHBjGAwg2tnA/D3k41ZWXntMxUdOybOFC4ytG9HmZyzI+CxhZXbkP+QHmI/P6l
- AF2ef7WUuLGtNSY9dVjR4I6te/pHue0++BPWlyG8vf1tR/cEsTUS26ZP3isl2nM8yHROzWMVREk
- zPH2RzxL+O0x8N1miL9R5LehjLvWBRHqV3Fd7LpT+CDH8iuOzR7YEqkKCop+3ZP0CfTyEwvj/I4
- R1P0g6yPXUrRvJX3G9mWzdhn9PQEfLpkqyPSewBk0Li+W/mcpEhhs/GvzrM6qaD7dCYQGJcrOg7
- f6cZZmcDZTHi+dRODhfBPgpxverQQ8BOP3AIcw5CYX34NQvXUbRoC5/6ZQIdRXGg/adRk=
-X-Developer-Key: i=yeoreum.yun@arm.com; a=openpgp;
- fpr=2D83E092DD0533B85875A49D6DD5C3D15AC53133
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23QzU7DMAwH8FeZciYocRMn4cR7IA75cFgEtFNbV
+ ZumvvtCRdWicrTs39+y72ygvtDAXk531tNUhtK1tbBPJxbPvv0gXlKtGQhAIQH5px98y3NMaDO
+ qmExgdfbSUy7XJeeNhUvmLV1H9l475zKMXX9bFkxy6S9ZSja/WZPkgkuvbSOhERbka+i68au0z
+ 7H7XjIm2FyVq4PqokAkBJOTt0fXbM4IubqmupCEC8EpSBaPTu2dXZ2qLukojfHBApij03vnVqd
+ /7ouofLakSNLR4ebsdh9Wp5WjbJXOyv3zF7NzAKsz1TnnMxFSrp/56+Z5fgAFAJp+9gEAAA==
+X-Change-ID: 20260126-kasan-fcd68f64cd7b
+To: Alexei Starovoitov <ast@kernel.org>, 
+ Daniel Borkmann <daniel@iogearbox.net>, 
+ John Fastabend <john.fastabend@gmail.com>, 
+ Andrii Nakryiko <andrii@kernel.org>, 
+ Martin KaFai Lau <martin.lau@linux.dev>, 
+ Eduard Zingerman <eddyz87@gmail.com>, 
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>, Song Liu <song@kernel.org>, 
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
+ Thomas Gleixner <tglx@kernel.org>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Shuah Khan <shuah@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+ Emil Tsalapatis <emil@etsalapatis.com>, 
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org, 
+ Bastien Curutchet <bastien.curutchet@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, bpf@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ =?utf-8?q?Alexis_Lothor=C3=A9_=28eBPF_Foundation=29?= <alexis.lothore@bootlin.com>
+X-Mailer: b4 0.15.2
+X-Last-TLS-Session-Version: TLSv1.3
 
-Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-made by memalign().
+Hello,
+this is v8 of the series aiming to bring basic support for KASAN checks
+to BPF JITed programs. Among the fixes following the comments on v7,
+this version should have passing selftests, as Ihor merged the small PR
+in vmtest ignoring the KASAN selftests splats.
 
-The underlying VMA may start at a different address from the aligned
-address returned by memalign(). Furthermore, a subsequent
-madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-already set.
+Original cover letter:
 
-This causes split_huge_page_test to fail because the check_huge_xxx()
-helpers incorrectly require the address returned by memalign() to
-match the VMA start address reported in /proc/self/smaps.
+"Traditional" KASAN allows to spot memory management mistakes by
+reserving a fraction of memory as "shadow memory" that will map to the
+rest of the memory and allow its monitoring. Each memory-accessing
+instruction is then instrumented at build time to call some ASAN check
+function, that will analyze the corresponding bits in shadow memory, and
+if it detects the access as invalid, trigger a detailed report. The goal
+of this series is to replicate this mechanism for BPF programs when they
+are being JITed into native instructions: that's then the JIT compiler
+that is in charge of inserting calls to the corresponding kasan checks,
+when a program is being loaded into the kernel. This task involves:
+- identifying at program load time the instructions performing memory
+  accesses
+- identifying those accesses properties (size ? read or write ?) to
+  define the relevant kasan check function to call
+- just before the identified instructions:
+  - perform the basic context saving (ie: saving registers)
+  - inserting a call to the relevant kasan check function
+  - restore context
+- whenever the instrumented program executes, if it performs an invalid
+  access, it triggers a kasan report identical to those instrumented on
+  kernel side at build time.
 
-Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-/proc/self/smaps to detect huge pages.
+The series comes with new selftests programs that generate a wide
+variety of kasan reports: those need the kernel to be running with
+kasan_multi_shot enabled.
 
-Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-Suggested-by: Zi Yan <ziy@nvidia.com>
-Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+As discussed in [1], this series is based on some choices and
+assumptions:
+- it focuses on x86_64 for now, and so only on KASAN_GENERIC
+- not all memory accessing BPF instructions are being instrumented:
+  - it discards instructions accessing BPF program stack (already
+    monitored by page guards)
+  - it discards possibly faulting instructions, like BPF_PROBE_MEM or
+    BPF_PROBE_ATOMIC insns
+
 ---
- tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
- tools/testing/selftests/mm/vm_util.h |   1 +
- 2 files changed, 92 insertions(+), 54 deletions(-)
+Changes in v8:
+- Make sure that test programs involving STX are not turned into ST on
+  cpuv4
+- Execute ST tests only when compiler can emit ST (ie: cpuv4)
+- make sure to test the reg type before the verifier can alter it (eg an
+  on_stack access with dst_reg = src_reg)
+- Add new test for the case mentioned above, ensuring that a pure stack
+  access with dst_reg == src_reg is not instrumented
+- add back save/restore logic for r10 and r11 in emit_kasan_check
+- make the new kasan test serial to avoid side effects due to
+  bpf_jit_harden being toggled
+- dropped the set_bpf_jit_harden helper, as there is already a
+  sysctl_set helper
+- Link to v7: https://patch.msgid.link/20260822-kasan-v7-0-99afee6ef7fd@bootlin.com
 
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index 4821a3563036..083b72d92b14 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
- 	return entry;
- }
- 
--static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
--		  uint64_t hpage_size)
--{
--	char buffer[MAX_LINE_LENGTH];
--	uint64_t thp = -1;
--	char *entry;
--
--	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
--	if (!entry)
--		goto err_out;
--
--	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
--		ksft_exit_fail_msg("Reading smap error\n");
--
--err_out:
--	return thp == (nr_hpages * (hpage_size >> 10));
--}
--
--static bool check_large_folios(void *addr, size_t len, int nr_hpages,
--		uint64_t hpage_size)
-+static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
-+			       void *addr, size_t len, int nr_hpages,
-+			       uint64_t hpage_size)
- {
- 	int order = 0, pagesize = getpagesize();
- 	unsigned int nr_pages = hpage_size / pagesize;
- 	int orders[MAX_NR_ORDERS], status;
--	int pagemap_fd, kpageflags_fd;
- 	bool ret = false;
- 
- 	if (!nr_pages)
-@@ -386,15 +368,6 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
- 		ksft_exit_fail_msg("invalid order\n");
- 
- 	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
--	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
--	if (pagemap_fd == -1)
--		ksft_exit_fail_msg("read pagemap fail\n");
--
--	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
--	if (kpageflags_fd == -1) {
--		close(pagemap_fd);
--		ksft_exit_fail_msg("read kpageflags fail\n");
--	}
- 
- 	status = gather_folio_orders(addr, len, pagemap_fd,
- 			kpageflags_fd, orders, MAX_NR_ORDERS);
-@@ -405,48 +378,112 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
- 		ret = true;
- 
- out:
--	close(pagemap_fd);
--	close(kpageflags_fd);
- 	return ret;
- }
- 
--bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
--{
--	uint64_t pmd_pagesize = read_pmd_pagesize();
--
--	if (!pmd_pagesize)
--		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+enum check_huge_type {
-+	CHECK_HUGE_ANON,
-+	CHECK_HUGE_FILE,
-+	CHECK_HUGE_SHMEM,
-+};
- 
--	if (hpage_size == pmd_pagesize)
--		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
-+static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
-+			    enum check_huge_type type)
-+{
-+	bool file = categories & PAGE_IS_FILE;
-+	bool swapbacked = kpageflags & KPF_SWAPBACKED;
-+
-+	switch (type) {
-+	case CHECK_HUGE_ANON:
-+		return !file;
-+	case CHECK_HUGE_FILE:
-+		return file && !swapbacked;
-+	case CHECK_HUGE_SHMEM:
-+		return file & swapbacked;
-+	}
- 
--	return check_large_folios(addr, len, nr_hpages, hpage_size);
-+	return false;
- }
- 
--bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-+static bool __check_huge(void *addr, size_t len, int nr_hpages,
-+			 uint64_t hpage_size, enum check_huge_type type)
- {
--	uint64_t pmd_pagesize = read_pmd_pagesize();
-+	bool ret = false;
-+	int pagemap_fd, kpageflags_fd;
-+	int nr_pmd_mappings = 0;
-+	uint64_t pmd_pagesize, scan_mapping_size;
-+	uint64_t categories, kpf;
-+	unsigned long pfn;
-+	bool check_pmd_mapping, allow_nonpresent;
-+	char *start = addr;
-+	char *end = start + len;
- 
-+	pmd_pagesize = read_pmd_pagesize();
- 	if (!pmd_pagesize)
- 		ksft_exit_fail_msg("reading PMD pagesize failed\n");
- 
--	if (hpage_size == pmd_pagesize)
--		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
-+	check_pmd_mapping = (hpage_size == pmd_pagesize);
-+	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
-+	/* Some mTHP tests check a partially populated PMD-sized range. */
-+	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
- 
--	return check_large_folios(addr, len, nr_hpages, hpage_size);
-+	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
-+	if (pagemap_fd < 0)
-+		ksft_exit_fail_msg("open pagemap fail\n");
-+
-+	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
-+	if (kpageflags_fd < 0) {
-+		close(pagemap_fd);
-+		ksft_exit_fail_msg("open kpageflags fail\n");
-+	}
-+
-+	if (!check_pmd_mapping &&
-+	    !check_large_folios(pagemap_fd, kpageflags_fd,
-+				addr, len, nr_hpages, hpage_size))
-+		goto out;
-+
-+	for (; start < end; start += scan_mapping_size) {
-+		categories = pagemap_scan_get_categories(pagemap_fd, start);
-+		pfn = pagemap_get_pfn(pagemap_fd, start);
-+		if (pfn == -1UL) {
-+			if (!allow_nonpresent)
-+				goto out;
-+			else
-+				continue;
-+		}
-+		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-+			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-+		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-+			nr_pmd_mappings++;
-+		if (kpf & KPF_COMPOUND_TAIL)
-+			continue;
-+		if (!check_huge_type(categories, kpf, type))
-+			goto out;
-+	}
-+	
-+	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
-+		goto out;
-+	ret = true;
-+
-+out:
-+	close(pagemap_fd);
-+	close(kpageflags_fd);
-+	return ret;
- }
- 
--bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-+bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
- {
--	uint64_t pmd_pagesize = read_pmd_pagesize();
--
--	if (!pmd_pagesize)
--		ksft_exit_fail_msg("reading PMD pagesize failed\n");
-+	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
-+}
- 
--	if (hpage_size == pmd_pagesize)
--		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
-+bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-+{
-+	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
-+}
- 
--	return check_large_folios(addr, len, nr_hpages, hpage_size);
-+bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
-+{
-+	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
- }
- 
- int64_t allocate_transhuge(void *ptr, int pagemap_fd)
-diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 9a49af88702e..f19bd17817e5 100644
---- a/tools/testing/selftests/mm/vm_util.h
-+++ b/tools/testing/selftests/mm/vm_util.h
-@@ -18,6 +18,7 @@
- #define PM_SWAP                       BIT_ULL(62)
- #define PM_PRESENT                    BIT_ULL(63)
- 
-+#define KPF_SWAPBACKED                BIT_ULL(14)
- #define KPF_COMPOUND_HEAD             BIT_ULL(15)
- #define KPF_COMPOUND_TAIL             BIT_ULL(16)
- #define KPF_HWPOISON                  BIT_ULL(19)
+Changes in v7:
+- Rebase series on top of current bpf-next_base, fixed conflict with
+  7ce090afbf72 ("bpf: Infer zext_dst based on static register liveness
+  analysis")
+- Link to v6: https://patch.msgid.link/20260804-kasan-v6-0-549ef845f491@bootlin.com
 
--- 
-2.43.0
+Changes in v6:
+- dropped instruction original offset tracking
+- when patching instructions, track former non_stack_access flag by
+  passing original insn to adjust_insn_aux_data
+- drop unecessary dep on CONFIG_KASAN in Kconfig
+- fold patch adding the emit_kasan_helper into the patch actually
+  calling it, to avoid an unused static function warning
+- move stack access check out of emit_kasan_check
+- replace hardcoded ip value by a computed value
+- add OoB testing
+- add fix commit to make cmdline_contains stricter
+
+- Link to v5: https://patch.msgid.link/20260709-kasan-v5-0-1c64af8e4e1e@bootlin.com
+
+Changes in v5:
+- fixed a few instruction offset for generated fixups
+- fix insn marking for single insn patches
+- enforce more checks in tests
+- skip tests if kasan_multi_shot isn't enabled
+- Link to v4: https://patch.msgid.link/20260708-kasan-v4-0-d5c177ab8227@bootlin.com
+
+Changes in v4:
+- fix insn_offs_in_patch leakage in bpf_convert_ctx_access
+- handle BPF_ATOMIC in is_mem_insn
+- correctly mark fixup instructions if a single insn is generated
+- clarify new kconfig (Andrey) and drop VMAP_STACK dep
+- refactor BPF_FETCH atomic handling in JIT loop
+- make kernel log reading resilient to unrelated, interleaved logs in
+  the selftests
+- make new test kfuncs depend on BPF_JIT_KASAN rather than KASAN_GENERIC
+- Link to v3: https://patch.msgid.link/20260701-kasan-v3-0-bd09bb942d86@bootlin.com
+
+Changes in v3:
+- Do not insert KASAN instrumentation when dealing with cBPF
+- Fix stack-accessing insn tracking for verifier patches, as original
+  instruction location in the generated patch may vary
+- drop cBPF support for stack-accessing insn marking
+- make sure to flag correctly memory access if different verifier states
+  involve different memory types (eg: stack in one path, non-stack in
+  another path)
+- refactor BPF_ST handling in x86 JIT compiler
+- improve tests coverage (cover instrumentation for a few patches
+  emitted by the verifier)
+- Link to v2: https://patch.msgid.link/20260604-kasan-v2-0-c066e627fda8@bootlin.com
+
+Changes in v2:
+- declare asan functions as extern in JIT compiler rather than exposing
+  them in kasan header
+- invert stack-accessing instructions marking to make sure not to skip
+  instructions that could end up accessing to-be-checked memory
+- fix stack accesses marking when verifier patches instructions
+- add best effort marking for cBPF
+- add missing call depth accounting in jited instrumentation
+- skip unused registers in kasan instrumentation save/restore
+- remove faulty stack align in kasan instrumentation
+- drop commit skipping some jit-related tests
+- cover missing instructions: BPF_ST and atomics
+- completely rework tests: directly tune shadow memory, increase
+  coverage, do not consume kernel logs
+- Link to v1: https://patch.msgid.link/20260413-kasan-v1-0-1a5831230821@bootlin.com
+
+To: Alexei Starovoitov <ast@kernel.org>
+To: Daniel Borkmann <daniel@iogearbox.net>
+To: John Fastabend <john.fastabend@gmail.com>
+To: Andrii Nakryiko <andrii@kernel.org>
+To: Martin KaFai Lau <martin.lau@linux.dev>
+To: Eduard Zingerman <eddyz87@gmail.com>
+To: Kumar Kartikeya Dwivedi <memxor@gmail.com>
+To: Song Liu <song@kernel.org>
+To: Yonghong Song <yonghong.song@linux.dev>
+To: Jiri Olsa <jolsa@kernel.org>
+To: Thomas Gleixner <tglx@kernel.org>
+To: Borislav Petkov <bp@alien8.de>
+To: Dave Hansen <dave.hansen@linux.intel.com>
+To: x86@kernel.org
+To: "H. Peter Anvin" <hpa@zytor.com>
+To: Shuah Khan <shuah@kernel.org>
+To: Ingo Molnar <mingo@redhat.com>
+To: Andrey Konovalov <andreyknvl@gmail.com>
+To: Emil Tsalapatis <emil@etsalapatis.com>
+To: Ihor Solodrai <ihor.solodrai@linux.dev>
+To: Yafang Shao <laoar.shao@gmail.com>
+Cc: ebpf@linuxfoundation.org
+Cc: Bastien Curutchet <bastien.curutchet@bootlin.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Cc: bpf@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+
+---
+Alexis Lothoré (eBPF Foundation) (8):
+      bpf: mark instructions accessing program stack
+      bpf: add BPF_JIT_KASAN for KASAN instrumentation of JITed programs
+      bpf, x86: refactor BPF_ST management in do_jit
+      bpf, x86: emit KASAN checks in x86 JITed programs
+      bpf, x86: enable KASAN for JITed programs on x86
+      selftests/bpf: make cmdline_contains stricter
+      selftests/bpf: add helpers for KASAN in JIT testing
+      selftests/bpf: add tests to validate KASAN on JIT programs
+
+ arch/x86/Kconfig                                   |   1 +
+ arch/x86/net/bpf_jit_comp.c                        | 282 +++++++++---
+ include/linux/bpf_verifier.h                       |   2 +
+ kernel/bpf/Kconfig                                 |  17 +
+ kernel/bpf/fixups.c                                |  45 +-
+ kernel/bpf/verifier.c                              |  10 +
+ tools/testing/selftests/bpf/prog_tests/kasan.c     | 479 ++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan.c          | 502 +++++++++++++++++++++
+ tools/testing/selftests/bpf/progs/kasan_harden.c   |  52 +++
+ .../testing/selftests/bpf/test_kmods/bpf_testmod.c |  55 +++
+ tools/testing/selftests/bpf/unpriv_helpers.c       |  19 +-
+ tools/testing/selftests/bpf/unpriv_helpers.h       |   2 +
+ 12 files changed, 1405 insertions(+), 61 deletions(-)
+---
+base-commit: 490912167ead6e5c64b7a7e960766b3ccdd8fdda
+change-id: 20260126-kasan-fcd68f64cd7b
+
+Best regards,
+--  
+Alexis Lothoré (eBPF Foundation) <alexis.lothore@bootlin.com>
 
