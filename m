@@ -1,169 +1,129 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EC629E10B;
-	Fri, 28 Aug 2026 17:22:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 782BB3B9D99
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 18:30:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787937741; cv=none; b=iAyONGhpjqv2K2G6DqPiKaPt5eYEFJUvfYcr1DdeIqEj4jypfjQLDYY7bvIbhJcANgI1WTdTT4XUZD3tNbdh/dsuFfJicTxx+PagWNytgbMunlf/4cNkaM2LyK1vEGDeiNzk7c1skVteMgV/QRZHGBuq6v8ORaPDCkgCTMlX+/k=
+	t=1787941809; cv=none; b=mvGY3KwhsGUETAd/eFmjqqAJKEL5j6fs8Y9GSmGzOoyA4Zswb7J7xMZ2QpAThnp6othGraV/rFDYuFMKE9kbORcEMtEGP3L/wk0/vlvS2S7cAUq1WRiE90HRBkWHPzqYCpRaWNe9GlDQ3gS7a/eKjiv8vLkCSt/S7ZcQaipUykA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787937741; c=relaxed/simple;
-	bh=nUL0N17ALZrY06F533fPbxuHnDBjD1m79JOt9Vr0x6c=;
+	s=arc-20240116; t=1787941809; c=relaxed/simple;
+	bh=vKhe6i3FkAFwErgQ+z+E/6b1UcU6MpKf/+QS8ZIRiqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=az+dHbP3Sjj/BcSAylPcryxr6goWUE1yHS9w0ohhJGI8COLIL2p1wD2EdHuWVGMAJC3rgY3H+SAvtzYiuD0b2J4vm3T2rWh1j7EOwAoWkpMcphbmDsgOEcyGs3aktfTZgLrfQeJOL6JR26GD0xoybAQSvkRQU2iBNJqylqYZcGs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oxphap6G; arc=none smtp.client-ip=100.103.45.18
+	 Content-Type:Content-Disposition:In-Reply-To; b=c2GlvcT/Hjz9bGqVfEa3cv6pZTt0IEkudy0vgrnfrlGHkzpzLd3AwI+kANhed7vmAYaSlnsDIH54lVguGK++bMisPzUOimj1lKTwWu653wdSAMfA6pJ8CsXmhsxrprI02H64GP9ozlF7UZDX62qy4PputSQpPWgfFf+AI5m68VU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lD7iZ/KI; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oxphap6G"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEDB91F000E9;
-	Fri, 28 Aug 2026 17:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787937740;
-	bh=nUL0N17ALZrY06F533fPbxuHnDBjD1m79JOt9Vr0x6c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Oxphap6GVcBvkXtrccfovehpovo3c4pzzOqwnR6ih1XjEA47+LuhVTnYvyxRTQfxA
-	 mucZiRPvebttqt1dDr2kaXaer+sjWlje1XgPOXa46594ueir94JEnyAQ9vGV++d/Fn
-	 qdvSLMNrTJw3YMQ0BR7dD5ZR24P6pr0solPJmbS4a8KLfM7A1wRwiEU4PYP7T5FSWh
-	 zY4CjaWE6ogCw9HsG0vJLW8Mvs6aMojxeROhYUBKs/yXYn3HvILBMCvyt0RLsLWAVp
-	 /xwz3Q82kG+oZ+ZZIWLN4+DvWiP1NbFRMsvzjmIOJhZX0xKEddqQFz8oZeUNSRoCXF
-	 2gDe40D6UxEwQ==
-Date: Fri, 28 Aug 2026 18:21:47 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>, 
-	Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>, 
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>, 
-	Usama Arif <usama.arif@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <apHDdRSr59mva3ey@lucifer>
-References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
- <20260828-fix_split-v3-2-374022586a4b@arm.com>
- <apFMvo8pCzaGKope@gremlin>
- <apFgVvNMbdhYnu6p@e129823.arm.com>
- <apFhDA4e1sBfDOeh@gremlin>
- <apGcu_haNc93cnzU@e129823.arm.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lD7iZ/KI"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2ccdf36f63dso12015ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 11:30:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787941808; x=1788546608; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=ILzvij1drwo7+iGNKuxy4V2qVsnhp5pYEXxx5p1BgD0=;
+        b=lD7iZ/KIaT+P1b10Fzf3jHgWDWLGTDAZ5sHvy0TyB91lNps0NCV8QIsMHBRXmWx5jj
+         s9iWmpRUFgl79dvb5ZnTniSjMyxabCP02atOIxIeXRaEy9z2VhXWazeQICO4kIhupiWa
+         xnQhf3zSb2mPZQvwAw3LF7Xd70X7Le8TbPUh1LHIG0pB6lXbDX0AfjIyOJd3ueL5Yiwp
+         Bbtq1tc7J/eEXy/8vUX5HzT8BNZwpncTzRYgq2IrwJHVYbwDDKDAs3vGjHUJ72dU4UOd
+         QvYfw88MI2RSBE/3GRnEnJ851d/zeXnFMPLkjLcSehfcdyAaCz4L5LL+pvtHCTOOnNjE
+         BVuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787941808; x=1788546608;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ILzvij1drwo7+iGNKuxy4V2qVsnhp5pYEXxx5p1BgD0=;
+        b=Ed11ImjJOFizqJWjRkdv0at3DrVHCTSVRozeVuzFMKTGcavDsYCX+vJi0X6FSMbnBb
+         2Yt5JM5T7hzTXl4hQzHoCqHPrPF324Fv3GZnZ2ozy/yzAralm3gM/BG56TjrAwSMlx+5
+         gLs5ybWNdKrL1MrjbcIQMtOjx6OmBZ0K6P9LnWkH10eAxiohUDLN5AoxijcsTeSj8Hss
+         U5Yxoy1Bb/Zj5kuh/Pis6AlD7t81Y9cFiWpR+9ZEKkicCnnwnMLv9qz2Ie36ai3upHcT
+         zDWVRLBXw8AJ6ROmRvaMV5RfC4DrjgqOz7DoCsR0z0X4ESPObMz1J4eDjztm0xICHuZT
+         g8Aw==
+X-Forwarded-Encrypted: i=1; AKwUvBzaVZfiOJmSoS5HE5TAzEx39GYzmSKJoiBFKHH4xrSAxSyBa6PRNoIAnKaikKivN28o4xpqYDdU5BkV3ODWsqI=@vger.kernel.org
+X-Gm-Message-State: AFuF++lJtxc0pO774HLQ+F54sY62M/oyph/ndObiO58mFxO3SHSynZfL
+	D4aFySmGqweFCahl0H2ZbJSJ+l42REPv32raxHyWoyu997AHwlS4Gw8BIHfZ4RojZg==
+X-Gm-Gg: AYBFou2ORRHApbihKIHakqcbgqiEWOmxz6YTI6W5AZHL9FIHWz10xA+4A6uJY6Pty2a
+	xg5KgjXVGiUPwdrDVD70c80auEnTce33WRmjlkBZaIMjjR1Hj13ygRRUw9YWjgborOxBhR7BoDL
+	b7IhP8zMLFlZ6JGdVEAdR6mDc3GK6hP5cBnrbkGxsL3cBELG39AibtnygKgxO9G3zXbM5VMZhAW
+	t7WZiiSkNuuv0DpGfr3vJwcALiuhzIz0lxyQLXkFtfzSbMFjN2PJ1Ee8SVKWffYDctKeD+G3Gvx
+	hL+SV1flC7l/ddqzBWH5njDWRLhA9jNq/AjCFgM5VJG4ecyMte5Fta+FWQ3w7rlc1Kd1ReaOZQO
+	mXIrjPBgl+PxBpxoJQOQSWjp8RCICJpZATuLmi3Uu4sKO9n48k+jKRaZt9Mr3Y66VaZEUQu1A87
+	fD01UdW6mENxbhZwn8Jz7hB2WFpQTzxkvOm1fpSUm+rssmKtkeUoZxNRab+WivgmuHiFqOeEOin
+	4oZq8ASPkAvINu0grZfxWkq
+X-Received: by 2002:a17:903:988:b0:2c9:d89f:fd98 with SMTP id d9443c01a7336-2d8dfb0b68dmr662305ad.1.1787941807055;
+        Fri, 28 Aug 2026 11:30:07 -0700 (PDT)
+Received: from google.com (139.58.247.35.bc.googleusercontent.com. [35.247.58.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-396d2309637sm1500859a91.0.2026.08.28.11.30.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2026 11:30:05 -0700 (PDT)
+Date: Fri, 28 Aug 2026 18:30:01 +0000
+From: Lisa Wang <wyihan@google.com>
+To: "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
+Cc: "Aktas, Erdem" <erdemaktas@google.com>,
+	"Li, Xiaoyao" <xiaoyao.li@intel.com>,
+	"shuah@kernel.org" <shuah@kernel.org>,
+	"dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+	"afranji@google.com" <afranji@google.com>,
+	"kas@kernel.org" <kas@kernel.org>,
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>,
+	"ira.weiny@intel.com" <ira.weiny@intel.com>,
+	"pbonzini@redhat.com" <pbonzini@redhat.com>,
+	"Chatre, Reinette" <reinette.chatre@intel.com>,
+	"isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
+	"ackerleytng@google.com" <ackerleytng@google.com>,
+	"seanjc@google.com" <seanjc@google.com>,
+	"pratikrajesh.sampat@amd.com" <pratikrajesh.sampat@amd.com>,
+	"oupton@kernel.org" <oupton@kernel.org>,
+	"sagis@google.com" <sagis@google.com>,
+	"Gao, Chao" <chao.gao@intel.com>,
+	"Wang, Roger" <runanwang@google.com>,
+	"linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+	"ajones@ventanamicro.com" <ajones@ventanamicro.com>,
+	"Qiang, Chenyi" <chenyi.qiang@intel.com>,
+	"kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+	"jmcrey@google.com" <jmcrey@google.com>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"Hunter, Adrian" <adrian.hunter@intel.com>,
+	"x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH v14 00/22] TDX KVM selftests
+Message-ID: <apHTqWg1hDXpvhgE@google.com>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <5a44a6925715e1edbd379ac0ea5526ec990eb819.camel@intel.com>
+ <4828f8e29801adb29a4d48b8980d3b3a0a813e06.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <apGcu_haNc93cnzU@e129823.arm.com>
+In-Reply-To: <4828f8e29801adb29a4d48b8980d3b3a0a813e06.camel@intel.com>
 
-On Fri, Aug 28, 2026 at 03:35:39PM +0100, Yeoreum Yun wrote:
-> > On Fri, Aug 28, 2026 at 11:17:58AM +0100, Yeoreum Yun wrote:
-> > > > On Fri, Aug 28, 2026 at 09:11:34AM +0100, Yeoreum Yun wrote:
-> > > > > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > > > > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > > > > made by memalign().
-> > > > >
-> > > > > The underlying VMA may start at a different address from the aligned
-> > > > > address returned by memalign(). Furthermore, a subsequent
-> > > > > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > > > > already set.
-> > > > >
-> > > > > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > > > > helpers incorrectly require the address returned by memalign() to
-> > > > > match the VMA start address reported in /proc/self/smaps.
-> > > >
-> > > > Hmm, is the test correctly putting sentinels either side of the VMA? Any test
-> > > > that doesn't risks flaking due to unwanted VMA merges.
-> > >
-> > > I believe that with this change, we don’t need to worry about unwanted
-> > > VMA merges when checking for huge pages, since the test no longer relies
-> > > on VMA sentinels but directly checks whether the mapping is huge or not.
-> >
-> > We always need to worry about that though, anything that asserts stuff on a
-> > VMA level must prevent unwanted merges first.
-> >
-> > I guess I'm asking you in a roundabout way to go check and if there isn't
-> > isolation like that (i.e. mapping PROT_NONE VMAs around the VMA you want)
-> > then to go do that :)
+On Thu, Aug 13, 2026 at 11:05:17PM +0000, Edgecombe, Rick P wrote:
+> --- a/tools/testing/selftests/kvm/lib/x86/tdx/td_boot_offsets.c
+> +++ b/tools/testing/selftests/kvm/lib/x86/tdx/td_boot_offsets.c
+> @@ -5,7 +5,7 @@
+>  
+>  #include "tdx/td_boot.h"
+>  
+> -static void __used common(void)
+> +static void __attribute__((used)) common(void)
+>  {
+>         OFFSET(TD_BOOT_PARAMETERS_CR0, td_boot_parameters, cr0);
+>         OFFSET(TD_BOOT_PARAMETERS_CR3, td_boot_parameters, cr3);
 >
-> Oh. Sorry not to catch your intend. not for only this series but for
-> the future usage, might it sound reasonable to add some mem alloca
-> fucntion for the test which could replace memalign() with above concept.
->
-> > I think glibc going off and mapping a bigger VMA is possibly a symptom
-> > of this not being done.
->
-> TBH, what user would generally care whether VMAs are merged or not?
-> Anyway, it would be better to add a helper with some PROT_NONE guards
-> to prevent unwanted VMA merges while testing.
+Thanks for testing this! The patch series posted here on the mailing
+list is correct, but I made the mistake when pushing the code to the
+branch.
 
-It's been known to make tests fail, more so obviously when you assert VMA
-ranges, but in general it's good practice just to ensure the test is
-isolated :)
+I have just force-pushed the fix to the branch. It should compile
+correctly now. Could you please pull the latest version and give it
+another try?
 
->
-> >
-> > >
-> > > Also, this flaky failure was not caused by a VMA merge, but by a change
-> > > in glibc’s behavior that sets HUGEPAGE for sufficiently large areas.
-> >
-> > Yep your change is worthwhile reagrdless! :)
->
-> Thanks :)
->
-> >
-> > >
-> > > Might for the *NO_HUGEPAGE* setup, there would be a chance to merge
-> > > VMA area, But since it seraches the mapping directly, it's fine.
-> >
-> > As above, generally we should put this protection in case, even if it's
-> > unlikely for a VMA with VMA_NOHUGEPAGE_BIT set!
->
-> Agree. let me add one for this and replace memalign() used in
-> khugepagd and split_huge_page_test at first.
-
-Great thanks!
-
-> >
-> > >
-> > > >
-> > > > >
-> > > > > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> > > > > /proc/self/smaps to detect huge pages.
-> > > >
-> > > > You should probably call out the fact you're doing some refactoring here
-> > > > also!
-> > >
-> > > Okay. I'll spell out with some detail. Thanks!
-> >
-> > Thnks!
-> >
-> > >
-> > > >
-> > > > >
-> > > > > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> > > >
-> > > > Should always have a Closes: tag if Reported-by: ideally.
-> > >
-> > > Yes. but talked with personally nothing to close. So Reported-by tag
-> > > only. Would it be better to remove?
-> >
-> > Yeah or Suggested-by maybe? If he said it to you on-list then a Closes:
-> > <lore link> works also!
->
-> Okay. I'll drop the Reported-by: and change to Suggseted-by.
->
-> Thanks!
-
-Thank you! :)
-
->
-> --
-> Sincerely,
-> Yeoreum Yun
-
---
-Cheers, Lorenzo
+Lisa
