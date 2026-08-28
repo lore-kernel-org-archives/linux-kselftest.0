@@ -1,81 +1,194 @@
-Received: from mail-pl1-f197.google.com (mail-pl1-f197.google.com [209.85.214.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11B70442FD4
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 11:38:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE76757C9F;
+	Fri, 28 Aug 2026 13:49:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787917133; cv=none; b=bIjdYdP0lMPmX07KsDJ17q2M1x4nd7NIRF/VRVdn3IUXe5CHbwctIg+Bf7KOMLlelqXPavrIdQ6wYlkFHREsiCKWixd7ueUfIsB7E0rCmfWernEGLbPNsb9m4pHPtXzoct089r8VfiVYRpCOHccJAXfaZrBBaZ1ewnhcBy+iIXY=
+	t=1787924982; cv=none; b=ujmnH//zbokOvSzwhn6cHWtmfdCVvUWw2L7uHgP9UnfO8QoUCcWI9piyT59SlMkP4xRz0BZTjXQayJvgYjVLBAlxS/oi61j5j/GLeKaqi1j5xzxDKIR5El1sZ2LbecqTJ/MBM5Ifr35+lLbubCERtpk4jQm33ZAC/aA1dbhuKo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787917133; c=relaxed/simple;
-	bh=Yolc/DBb3H0lcmB9LTt9clnWPPbQNHzwg7stvh1CO/g=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=spmYNDlY5foNv5zrw+xpKqFvZjzcS3xigF9lpia1RCnu3/A7w9lU0NNFQcnS0L6+t+RgAx1SN6wxYXhzhloZXyzu8wvv31wheV/kGTJGQV/griV4WWYrIMt5k/N9sBHxJh+ImLJid6jEY3FaKd2sViioRhf7rvZNBsTrBa6IHsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ctHiZf2i; arc=none smtp.client-ip=209.85.214.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wakel.bounces.google.com
+	s=arc-20240116; t=1787924982; c=relaxed/simple;
+	bh=yM4daaz5EGYsnOT02SS39XlhFRk0UH5e4rF7tLOYAqQ=;
+	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
+	 References:In-Reply-To; b=CMZkJR3V4MWVoYFIJvelqAcPViRrB11Ly5ASnrnsH4DQ8jBlGAJMMROKYSzUPBkwWWkldVeNgZPW+ZiixjY+zFvNT1VyzQRBonplVnHYw5ARxrpMrtQNA32tKHz23hf+rMsI2Mh+hfS6YFtP840psGqBnTURyChJ2xaMj1Ct9Ew=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=luToD1c7; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ctHiZf2i"
-Received: by mail-pl1-f197.google.com with SMTP id d9443c01a7336-2d6c166bafcso11291075ad.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 04:38:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787917116; x=1788521916; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Yolc/DBb3H0lcmB9LTt9clnWPPbQNHzwg7stvh1CO/g=;
-        b=ctHiZf2ioYGt3Jm1wRubl+N493WD802o2/6q4EsXAFGV7NvtfWLpKdwcM++uWxiAnY
-         oybNAiwJrxGkg2ltpRBMMxJ51h+aMkffcv4m3CS+WoFgN3rTTiGYJaRHZ0S/Je6OtYjf
-         KXO77M2AkaZRQY5t5/mxYE5XhRIEjPpmDofE3xEXyNxxhoKKbIWNtj2dbHoWo+J66e0H
-         c034Gtp+YI9dGe4OHkmL7fBKXx4kP5+e+DtqpdaY2MeLV2ghUMZnwrLEwkFdOJlnSB7Q
-         WJWyHIQfSIIaWN0kuVzR1FnHa5n/v4IgzlT5S+e7nddtlBXcezVNC8h9SqSA6S7Jv1aT
-         MPkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787917116; x=1788521916;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Yolc/DBb3H0lcmB9LTt9clnWPPbQNHzwg7stvh1CO/g=;
-        b=s65kUKkSy9lK5ev6/NH3HR1mT+EDWJ8dL017vRjVl0eI9cOoRIsUd4r+NL90lq8VDv
-         KUqlY2jJCy7wuSFclxpoIi/kV2X/iYMBpWwD/TZVX4F7aubhLSnyK07nFxoswRgIaoYn
-         58k4ZamMu9IEYy/UoyEIRnMn4zkilhS5N/OJCBjw073W3Z+1fy3SHixu/sscThz/QHmC
-         zxkERvPplXu6KgCnKhOZ6/NZYtHvDXFMGrLlQDobfZ2wAaAEcWukWqaylwS2aGeLIf43
-         lvmC39/amQ46D2OuXdoi9gjHM9D9DJMqdiqkZpVjvaBQXSfgUZ8UjcvctrqJdToWzRGt
-         npjg==
-X-Forwarded-Encrypted: i=1; AHgh+RruWyOLgeC/jeu8VG9pZwstT9YCVBK6beY7OD62WAxuV2xx0QhGiWvBN+aLiCNjMEwSLbn9ZeH3ljrgBXIHRdM=@vger.kernel.org
-X-Gm-Message-State: AFuF++m+3Xepzpl8f9cNf9r6eCA36M+FOMGEHGLnHgA0T+h3ZOz8I3qh
-	lO5JWyjoswmAvYfEYkwrH6cvQWy0I5MtH9FIWMAsW3kDgqPiQbhBOdZkVOFhQ8zPQ5631ia9q9M
-	W2Q==
-X-Received: from pleo10.prod.google.com ([2002:a17:903:210a:b0:2ce:d12d:d6f5])
- (user=wakel job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:4b08:b0:2ca:e62c:9e96
- with SMTP id d9443c01a7336-2d74dc51c7cmr135512585ad.5.1787917116239; Fri, 28
- Aug 2026 04:38:36 -0700 (PDT)
-Date: Fri, 28 Aug 2026 11:38:34 +0000
-In-Reply-To: <20260813063503.4023719-1-wakel@google.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="luToD1c7"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id F2AC34E413FF;
+	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A551060537;
+	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2D41411C78212;
+	Fri, 28 Aug 2026 15:49:25 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1787924974; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=69exiOAVHdIVW9goACtvVSF9zJavgJQ+ojNwMsZPEro=;
+	b=luToD1c7hijfLRa8kWHEBKEP9XRU6yMf3qwN/ks0Y+O1kI/mG9dU+fBjddu0sif0laqLAi
+	Dt0zw4vbvBQZ2t7n1c8WGxiV4J6cQkKG58dnz+kMJgJcZ+5Aafg0Pue7kHz/a08snAVLRP
+	UiAsZRy2CDCpDjUPQwM2XB5zddnTBZdXvBynO66FTeeFcc/XS9mTZKaSj4LLmMvbVOGkXm
+	/8kK68hmA1j2GMe42cuiPneYKhI9sRLQ36hQ4GJW41jcDqP5//SnFrhY8e7VTlHCtcG8cp
+	HVJWSFwKHXp7DKyGGvfDdZv7Vs3UEK0IkBHs0eGjPN6hO2CQmyqyOILKu4FPzw==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20260813063503.4023719-1-wakel@google.com>
-X-Mailer: git-send-email 2.55.0.897.gb25b4bd76c-goog
-Message-ID: <20260828113834.2354953-1-wakel@google.com>
-Subject: Re: [PATCH] selftests: rtc: fix flaky date_read_loop test
-From: Wake Liu <wakel@google.com>
-To: Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc: Shuah Khan <shuah@kernel.org>, linux-rtc@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Wake Liu <wakel@google.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 28 Aug 2026 15:49:24 +0200
+Message-Id: <DL0MI5O31J44.1W5BV6GJMJTT7@bootlin.com>
+To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
+ <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
+ <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
+ <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
+ <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
+ <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
+ <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
+ <laoar.shao@gmail.com>
+Subject: Re: [PATCH bpf-next v8 8/8] selftests/bpf: add tests to validate
+ KASAN on JIT programs
+Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
+ <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
+ <martin.lau@kernel.org>, <clm@meta.com>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260828-kasan-v8-8-7c1c0fdb9d7f@bootlin.com>
+ <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
+In-Reply-To: <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi Alexandre,
+On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
+>> diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/s=
+elftests/bpf/progs/kasan.c
+>> new file mode 100644
+>> index 0000000000000..fe8e0dd228a09
+>> --- /dev/null
+>> +++ b/tools/testing/selftests/bpf/progs/kasan.c
+>
+> [ ... ]
+>
+>> +SEC("tcx/ingress")
+>> +int simple_atomic_fetch_on_stack(struct __sk_buff *skb)
+>> +{
+>> +	struct kasan_test_val val;
+>> +
+>> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
+>> +	__sync_fetch_and_or(&val.data_8, 8);
+>> +	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
+>> +	return 0;
+>> +}
+>> +
+>> +SEC("tcx/ingress")
+>> +int simple_atomic_fetch_not_on_stack(struct __sk_buff *skb)
+>> +{
+>> +	struct kasan_test_val *val;
+>> +	__u32 key =3D 0;
+>> +
+>> +	val =3D bpf_map_lookup_elem(&test_map, &key);
+>> +	if (!val)
+>> +		return 0;
+>> +
+>> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
+>> +	__sync_fetch_and_or(&val->data_8, 8);
+>> +	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
+>> +	return 0;
+>> +}
+>
+> Can these two programs build with the no_alu32 flavor? Looking at
+> Documentation/bpf/clang-notes.rst, __sync_fetch_and_or() needs -mcpu=3Dv3
+> for the BPF_OR atomic instruction, but the no_alu32 build uses plain
+> -mcpu=3Dv2 (tools/testing/selftests/bpf/Makefile:497-501). Clang at v2 ca=
+n
+> only generate BPF_ADD atomics without BPF_FETCH, so BPF_OR should be an
+> instruction-selection error.
+>
+> The sibling programs simple_atomic_on_stack and simple_atomic_not_on_stac=
+k
+> use __sync_fetch_and_add(), which lowers to BPF_ADD without BPF_FETCH whe=
+n
+> the return value is unused, so those build fine. Every other prog in
+> selftests/bpf/progs/ that uses a non-ADD or fetching atomic guards it wit=
+h
+> #ifdef ENABLE_ATOMICS_TESTS (progs/atomics.c, progs/arena_atomics.c,
+> progs/atomic_bounds.c, progs/tcp_ca_write_sk_pacing.c), and
+> -DENABLE_ATOMICS_TESTS is only passed to the default and cpuv4 runners, n=
+ot
+> to no_alu32.
+>
+> Would it make sense to guard both simple_atomic_fetch functions with
+> #ifdef ENABLE_ATOMICS_TESTS, or to verify whether test_progs-no_alu32
+> actually builds?
+>
+> Also, since the return value of __sync_fetch_and_or() is discarded here,
+> does clang emit BPF_ATOMIC | BPF_OR without the BPF_FETCH flag? That woul=
+d
+> make these identical to simple_atomic_*, just with OR instead of ADD, and
+> the JIT path for is_atomic_fetch (the CMPXCHG loop in
+> arch/x86/net/bpf_jit_comp.c added by bc9fb0ddd5f3b, where the KASAN check
+> is emitted before branch_target assignment) would not be exercised by
+> kasan/simple_atomic_fetch_on_stack or kasan/simple_atomic_fetch_not_on_st=
+ack.
+>
+> The commit message shows #175/29 and #175/30 as :OK, but
+> progs/atomics.c:or64 uses or64_result =3D __sync_fetch_and_or(...) to for=
+ce
+> the fetch variant (checked in prog_tests/atomics.c:98), and keeps a
+> separate or_noreturn_value program for the discarded-result form. Would
+> consuming the result here test the intended path?
 
-Since Shuah might be busy and hasn't had a chance to pick up this patch,
-would it be possible for you to take it directly through the rtc-next tree?
+Even for no_alu32, the __sync_fetch_and_or is properly generated:
 
-Original patch & your Acked-by:
-https://lore.kernel.org/all/20260430120313.4078185-1-wakel@google.com/
+  $ llvm-objdump --disassemble-symbols=3Dsimple_atomic_fetch_on_stack tools=
+/testing/selftests/bpf/no_alu32/kasan.bpf.o
+ =20
+  tools/testing/selftests/bpf/no_alu32/kasan.bpf.o:       file format elf64=
+-bpf
+ =20
+  Disassembly of section tcx/ingress:
+ =20
+  00000000000006d0 <simple_atomic_fetch_on_stack>:
+       218:       bf a6 00 00 00 00 00 00 r6 =3D r10
+       219:       07 06 00 00 f0 ff ff ff r6 +=3D -0x10
+       220:       bf 61 00 00 00 00 00 00 r1 =3D r6
+       221:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
+       222:       85 10 00 00 ff ff ff ff call -0x1
+       223:       b7 01 00 00 08 00 00 00 r1 =3D 0x8
+       224:       db 1a f8 ff 41 00 00 00 r1 =3D atomic_fetch_or((u64 *)(r1=
+0 - 0x8), r1)
+       225:       bf 61 00 00 00 00 00 00 r1 =3D r6
+       226:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
+       227:       85 10 00 00 ff ff ff ff call -0x1
+       228:       b7 00 00 00 00 00 00 00 r0 =3D 0x0
+       229:       95 00 00 00 00 00 00 00 exit
 
-Thanks,
-Wake
+
+My understanding is that _32 bits_ atomics aren't available with
+-mcpu=3Dv2, but 64 bits atomic fetch operations are, so that's why I stuck
+with a DW operation for the simple_atomic_fetch(_not)_on_stack tests.
+
+>
+>
+> ---
+> AI reviewed your patch. Please fix the bug or email reply why it's not a =
+bug.
+> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
+E.md
+>
+> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/331600=
+00533
+
+
+
+
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
