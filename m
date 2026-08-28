@@ -1,112 +1,141 @@
-Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16D9D31D730;
-	Fri, 28 Aug 2026 02:24:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.34
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98212269D18;
+	Fri, 28 Aug 2026 02:31:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787883891; cv=none; b=ktRPL1CI9qFLWnzvQsfFkKZMI3dHCnrUKxUXlhuJO1j+fagx6WBMcFItwmrlx+nJ7/kduUfUFJN5HEloX98jHbrvzLRP5G89l4ItTZt0UMlk09uub5pU/AheVMHJ1FR62/5ATqr5CSdMJv55CqoYtjSkZVl4vtyNdGkR4XtEeEg=
+	t=1787884289; cv=none; b=g8rWU8hmvJ8ogt6bnSbkOalLg6+TlGxiIRVvEBt0BPNQEovXoeQVuxE89ZcryeuRa6Pk5BSFi63wYmsAOsAYKSIK0lt/Kv6jfd5MaKqYUpK7yRmI/MIF23+FJsJo+qmhq596Rn5EmyQg9eagG8ySKUspvwwYY/Mt5vG57iDMj5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787883891; c=relaxed/simple;
-	bh=cSwXwbZiNm+wpI0qTq+BPatYQNSeinvWGhnimGLbtXs=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=BRUNUCYA3qJpz8XMoTRd8qFXG8ZQ+ZsPTsuCR0Jnsomstx5KBKEh8EuO94KLyvMcbBJcEejItJVIy7/7xe1cbJKgr+0fz83UNV41y/B4WAkRzrNWwY2G6lcKH42TTLVruJzrg7TXMcOBuZH6zNn/OalXWTvgEITvV8nbBsRw8EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=CQ4q+NBB; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=jtaPNNXq; arc=none smtp.client-ip=160.80.4.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
+	s=arc-20240116; t=1787884289; c=relaxed/simple;
+	bh=AmiWvQK4BjI6lzNZRrFr0LIfvy0ZFnT1ZUrg4z7d7Vc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MSxVFtIgsII2v+qxEW+RagGk2g027GERuBz9enVqM94E2E7SziFaefLTzvqIuv3vN9xueh4MxebNnaUcAf4CuDUy+5qpHxXjbcfBSBK57RL7cWtBHYzTkC4gf8c7j4sjC2ieH2pNVGAvAsQWNWyVd49yRUNVBJyDAVVF8tafwPw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BqDyjhTi; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="CQ4q+NBB";
-	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="jtaPNNXq"
-Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
-	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 67S2O4DN009976;
-	Fri, 28 Aug 2026 04:24:10 +0200
-Received: from lubuntu-18.04 (unknown [46.102.188.23])
-	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id F3BDD1203BC;
-	Fri, 28 Aug 2026 04:23:58 +0200 (CEST)
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
-	s=ed201904; t=1787883840; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mHsVrpcKhIi554UgPAGddcB5XgcFsZd5TabwRLAme3M=;
-	b=CQ4q+NBBumm9gjNk43IqUpd++cYCW8DOmcbRdLWxAD9tTe0bNXDAYbza4J/uIyxvWQg8Sf
-	1j8mSMkFH03smEBA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
-	t=1787883840; h=from:from:sender:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=mHsVrpcKhIi554UgPAGddcB5XgcFsZd5TabwRLAme3M=;
-	b=jtaPNNXqTzDViLoUbfekNOtkNPLoziQLzn0Ezm1fwlRPNetmQEcEZFLBaG0GpBvNIis5Pf
-	7nHgo2CIkO1g0Uzw4hIB9LyrWlL9zmUZDFUsNfeoJ05brOvSoD3eDGn/E35uJpcFe6Y/JA
-	DbLyEIzTD9SOwIvrAl9cZyhmfnfx29O8mPnugJKncv5LP1ZwpedJqeQisn6s8+ul8ee046
-	oyIJ66TN4D+JNesfey8+jFsTkcqxPC/Bpl1eun6h2DpslrlIrsvxx98/YgaG7HG/vNAVhL
-	f1G0KbJkwp+OdRTPcYRk3DKAnIGx9FfrLCd9C2ng86znlI1LEo9v0jq1uUtrBA==
-Date: Fri, 28 Aug 2026 04:23:57 +0200
-From: Andrea Mayer <andrea.mayer@uniroma2.it>
-To: Alessio Faina <alessio.faina@canonical.com>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hangbin.liu@linux.dev,
-        stefano.salsano@uniroma2.it, Andrea Mayer <andrea.mayer@uniroma2.it>
-Subject: Re: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh
- if iproute2 too old
-Message-Id: <20260828042357.1d6e802448752a8fdff5a485@uniroma2.it>
-In-Reply-To: <apAJuZzDOvjkVx60@cicciput>
-References: <20260824091537.2305107-1-alessio.faina@canonical.com>
-	<20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
-	<ao7S04LkWVXAQpgq@cicciput>
-	<20260827030701.bfaf6eea6dea1aef24c353cf@uniroma2.it>
-	<apAJuZzDOvjkVx60@cicciput>
-X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BqDyjhTi"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787884287; x=1819420287;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=AmiWvQK4BjI6lzNZRrFr0LIfvy0ZFnT1ZUrg4z7d7Vc=;
+  b=BqDyjhTiThYleq1oUr11ehq4QgOeL0hxsgCjPnmdv2DmZuzPIROywhL6
+   TGj5JT1s/KIq+ogq7ZRQ3uGh8gH2AIWgwqDVO+HpjQd98b7w+uDV4/38z
+   EQZPfWpfVSb+kM5vA2woehTPqJc2oDXMCSW0oNHe9It4Xsv71tVZ52+ee
+   qkd0krWSv3sd3ks+rksxFPhJD03Ef+Q0ahbhwZnDYIowzvigx2XAB3iqQ
+   3nBi837vnx79LZo9d89DSyDihBrrImwLkFycztgdbgxX+tgiDW6q3ZAUx
+   7iknEQOM4V39lrtjfXZUaQm0GjS56xR0tyAZcLO9A8+9Mcrw1G4W7aGcO
+   A==;
+X-CSE-ConnectionGUID: V/ODj2O4RsKIdExRhewtPg==
+X-CSE-MsgGUID: E5x249wHRd2BUDQTLAV0EA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11888"; a="88268023"
+X-IronPort-AV: E=Sophos;i="6.25,247,1779174000"; 
+   d="scan'208";a="88268023"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 19:31:26 -0700
+X-CSE-ConnectionGUID: vqL3zOR/R32niEzjQE5kCA==
+X-CSE-MsgGUID: F34iZPKWSFatSuLeRGc7VA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,247,1779174000"; 
+   d="scan'208";a="292851178"
+Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.124.240.119]) ([10.124.240.119])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Aug 2026 19:31:19 -0700
+Message-ID: <b4cffa34-864d-4fd0-9fc7-a7d4514075b2@intel.com>
+Date: Fri, 28 Aug 2026 10:31:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v14 21/22] KVM: selftests: Add ucall support for TDX
+To: Peter Fang <peter.fang@intel.com>
+Cc: Lisa Wang <wyihan@google.com>, Andrew Jones <ajones@ventanamicro.com>,
+ Ackerley Tng <ackerleytng@google.com>, Binbin Wu
+ <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>,
+ Chenyi Qiang <chenyi.qiang@intel.com>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>,
+ Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>,
+ linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+ "Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+ Reinette Chatre <reinette.chatre@intel.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Roger Wang <runanwang@google.com>, Ryan Afranji <afranji@google.com>,
+ Sagi Shahar <sagis@google.com>, Sean Christopherson <seanjc@google.com>,
+ Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>,
+ Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+ linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-21-15ad654a50db@google.com>
+ <6f89fc78-0344-4a7e-bbd8-ac201b8f845a@intel.com>
+ <20260828020612.GF33657@pedri>
+Content-Language: en-US
+From: Xiaoyao Li <xiaoyao.li@intel.com>
+In-Reply-To: <20260828020612.GF33657@pedri>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
-X-Virus-Status: Clean
 
-On Thu, 27 Aug 2026 11:56:09 +0200
-Alessio Faina <alessio.faina@canonical.com> wrote:
-
-> [snip]
+On 8/28/2026 10:06 AM, Peter Fang wrote:
+> On Mon, Aug 17, 2026 at 04:38:49PM +0800, Xiaoyao Li wrote:
+>>> +
+>>> +static u8 vm_type;
+>>> +static gpa_t ucall_mmio_gpa;
+>>> +
+>>> +void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+>>> +{
+>>> +	vm_type = vm->type;
 > 
-> For the DX tests I was doing a local test but it's not in the original
-> kernel, sorry, I must have confused 2 tasks with one, so disregard the
-> DX4 and DX6 tests, they are not relevant to this issue; if we manage to
-> agree on a solution for the DT4 and DT6 tests, I will discard those
-> modification in a subsequent patch.
-
-Ok, so this is about the dt4 and dt6 tests only.
-
-> About the DT4 and DT6 tests, I thought to use the same method as the failure
-> was practically the same as End.DT46.
-> This is the version I'm currently using 
-> ip utility, iproute2-ss200127 (should be 5.5.0 if I'm not mistaken)
-> and I can confirm 
-> [SEG6_LOCAL_ACTION_END_DT4]		= "End.DT4"
-> [SEG6_LOCAL_ACTION_END_DT6]		= "End.DT6",
-> is available.
+> vm_type is u8 but vm->type is unsigned long
 > 
-> What do you suggest would be the right way forward to check what is
-> going on?
+>>> +	sync_global_to_guest(vm, vm_type);
+>>
+>> It works and it looks simple. But we have the architectural approach to test
+>> if a guest is TD guest, by checking the CPUID 0x21.
+>>
+>> Since checking CPUID 0x21 is not complex, and as a bonus it can help test if
+>> TDX module behaves correctly for CPUID leaf 0x21, I think we should switch
+>> to use CPUID 0x21 to check if it is TDX VM in guest code?
+> 
+> Hmm... This makes me wonder if vm->arch.s_bit below could be replaced
+> with the same architectural approach. GPAW is available through
+> TDG.VP.INFO or the initial RBX value. This does require a bit more
+> plumbing though.
 
-These tests need the vrftable attribute. The help does not list it
-before v5.14.0, while ip parses it from v5.11.0, so a help check skips
-tests that would run on v5.11.0, v5.12.0 and v5.13.0.
-One possible way could be to try the route add in a throwaway netns and
-skip the selftest if that fails. test_encap_lookup_supp_or_ksft_skip() in
-srv6_encap_lookup_l3vpn_test.sh could provide the general idea, but here
-the netns also needs the vrf device and the strict mode the test sets up.
+I'm afraid not. Because below is host code, and vm->arch.s_bit is not 
+used in guest code.
 
-That's more code than a help check, but it skips when the route really
-cannot be installed. There is a trade-off to consider, and comments or
-other ideas are very welcome.
+Or are suggesting something like dropping the
 
-Ciao,
-Andrea
+	if (is_tdx_vm(vm)) {
+		ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+		sync_global_to_guest(vm, ucall_mmio_gpa);
+	}
+
+entirely and use below hardcoded value instead in guest code?
+
+	UCALL_MMIO_GPA | 1 << (GPAW - 1)
+
+>>
+>>> +	if (is_tdx_vm(vm)) {
+>>> +		ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+>>
+>> So the passed-in @mmio_gpa is not used. Why cannot use the mmio_gpa,
+>>
+>>    slot0->region.guest_phys_addr + slot0->region.memory_size
+>>
+>> chosen by __vm_create()?
+> 
+> Looks like this was discussed previously [1]. Maybe at least a comment
+> here would help?
+
+yeah. A comment surely will help.
+
+> [1] https://lore.kernel.org/all/ajGaMb6Lrk3OS8B4@google.com/
+> 
+>>
+
