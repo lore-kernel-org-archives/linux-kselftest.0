@@ -1,158 +1,204 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2DAD44AB9A;
-	Fri, 28 Aug 2026 14:35:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A2AA470EA2
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 14:57:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787927749; cv=none; b=SAM2FVgLu2qZi0u5/bTD2zkcCnqlQNdT/qoYsbbf89+PGYvfrrtsWen/OLcYQwr9i6yY3xt7KmiepaBc/jEI0Li6Rp4P51IdUbPPiqTESUtwhkiUbCKBF6sXes1XlEwYwmg9l4jBftKxKrF3KC9vBh5NHcr+pCzGieA1BhgREtU=
+	t=1787929025; cv=none; b=r/m5gqfYClXOT1G1dIT8TpcnGFtTAOjlxRqe7Iwy2ziUY650H5bnajgFIaAB10ZbP3QhgrFGgo0X4+c5GZhirfwxfzDcs2hdYcBNyLc7I02VNqgBCmFqcHLtWBmyxBeswkIOCtAEf48gyjSsOZzWS/tpActPOs8iPXDXutSVkaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787927749; c=relaxed/simple;
-	bh=GEQqJb7ZJiF14KfX2zAfeBZ+4mYFVAPuL2qPuZG//aI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QXi6I8eAlSr3xAq07wZF/LEfYukfozOi9ysuWHQrvBGP5xUXwCL4i4dGoQlkFdQ7vSCnn5llryUa5cfZVx3wdZ00dUSsYUSKsGqsoN6wjYN8RO0FEYk0DsoCzBc91Q/Dxceu5Xjz4Iyyak0rHl22QWwxPcyHCInb9RHSeoyMBOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AGSQi1TR; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787929025; c=relaxed/simple;
+	bh=LZpPvS21SRGUjRRQo9YMu2uphCB+Yb/O1WCRXm1EFjc=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=b+4Q34gfA+TG5LU2oh0NALWQPhA+iA+Oa4nqfQ0LIuyRcG/D44QcxpV2EINAbDXuezqwT3lFuqwqqhlvDF0BHgwWOVDqVD8fZI4qn82z8XqloV5kiqw6ZnnCpmRuMC5gcLqeTrOlSgWdAse/HdRwi+p0nhVuJyYyaQGxZl7m2e8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HKi8VdUO; arc=none smtp.client-ip=209.85.214.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AGSQi1TR"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E222514BF;
-	Fri, 28 Aug 2026 07:35:40 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E25A3F85F;
-	Fri, 28 Aug 2026 07:35:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787927744; bh=GEQqJb7ZJiF14KfX2zAfeBZ+4mYFVAPuL2qPuZG//aI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AGSQi1TRSmfg1FbkdYNLZ5UNAIsnrubMGwlnDXd24eTlDAbdHp/EqlnBucndUmOEZ
-	 Gpq1XJr3O0EurkEBuWYPt7LZ+ks20tqbTNqw4LhoGb61ZWGMpzqV88Hr0ylm+QmzL1
-	 N8hpkSXNAAeKy6SQzzxdVpf+8f/6FTcNzHTYbCQA=
-Date: Fri, 28 Aug 2026 15:35:39 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <apGcu_haNc93cnzU@e129823.arm.com>
-References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
- <20260828-fix_split-v3-2-374022586a4b@arm.com>
- <apFMvo8pCzaGKope@gremlin>
- <apFgVvNMbdhYnu6p@e129823.arm.com>
- <apFhDA4e1sBfDOeh@gremlin>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HKi8VdUO"
+Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2d02df2bf09so11677585ad.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 07:57:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787929023; x=1788533823; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=rKyTv2j02zbnlF+PSfGKNUB7r5AsnRVQJaAhKBT0UgU=;
+        b=HKi8VdUOMQ+VhGwRtStYGF2qLx+TKzH7citcBlKEg4hjaizk6X5JWUqFLqtF7AizQ3
+         ayxD6h+lwClPnw6h1ap2n6vfGqEVYLJ2LjsafVfVzZyMekM1kM8ZYNK2Z1azvsXDDPVs
+         y1hqvhtzpK/60tJN1XmbkQM0BDmxgUaznhlQ5bLTWAxRWWIJeDWN+IEHSfH0qvUFR1FL
+         fj7bz6dko7atEYi1As+Sb18pSNahp6AmydieQp7TV82IiGh5UIQC4u4sPrudKgfvUAlO
+         K5AZ2FO9HITDBDFoVv0NDYV5z/n37h+Mgs7BgeuVTMvGTJJA+Ro4thpoa0pAf9tPq9b3
+         CXtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787929023; x=1788533823;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=rKyTv2j02zbnlF+PSfGKNUB7r5AsnRVQJaAhKBT0UgU=;
+        b=VQDiFr1i8BjysesaOzdZyhtSYDzc5qQZ0q5vWL4hb7XTHS5unTbVmLA+DdII1HQo/w
+         MkjCc5Zi5o9oVQwUBpY80YdrrRaK6JfRSVGVIBhFmLzq+K2zGuWUZEybfSu3ROSCiG8R
+         btMd09OQ0HBDquL6X3PzvRQX1bUcqiWCM4L6QlSW4K3c+WjeGZYccUa6V+d7PQwcStRg
+         d5U9H317JyQDkIiZtYqjkYync/LqS2naLl/bvcr9eQqoiGPJe0LOQ4u/7tK19+NfaOQk
+         lcq8n1LySL/JztA+7vJY09wnrXKUT04MGpoynwK6pv7sWZdTJ27LADXeA+5ITCWONsnY
+         3jbw==
+X-Forwarded-Encrypted: i=1; AHgh+RoS7JR96Lt5LyDeCYvJXayfmOjoz1gz77BQTHikdaVHOIUm4FYvwqHYRlDzMQ0pHQv8heEb95OD9ID1eshT5tI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mnM+KsunA8uMXpSScC4rrnBW9Od1j60eI+EugcWx6uSm2a2j1F
+	HNqu1p6ID5GJiL+4sk9Bg/H7DKoUUz+ao5UsZJMRY0xv+NpOCv2td+gFGwEI+aNCFtSN15mq2PN
+	GocXTiA==
+X-Received: from plbkz13.prod.google.com ([2002:a17:902:f9cd:b0:2ca:ed29:ea82])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:1984:b0:2d8:d4d3:da4f
+ with SMTP id d9443c01a7336-2d8d4d3db7dmr6783485ad.19.1787929022578; Fri, 28
+ Aug 2026 07:57:02 -0700 (PDT)
+Date: Fri, 28 Aug 2026 07:57:01 -0700
+In-Reply-To: <CAEvNRgG7n6F=dW9V_QqQPDDgLiZ7x08uLDanJgSzerNtN8sqBQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <apFhDA4e1sBfDOeh@gremlin>
+Mime-Version: 1.0
+References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
+ <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com>
+ <ao9CKMXAX-hScRSa@google.com> <CAEvNRgG7n6F=dW9V_QqQPDDgLiZ7x08uLDanJgSzerNtN8sqBQ@mail.gmail.com>
+Message-ID: <apGhvboNAlExQFsK@google.com>
+Subject: Re: [PATCH v11 15/46] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Ackerley Tng <ackerleytng@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-> On Fri, Aug 28, 2026 at 11:17:58AM +0100, Yeoreum Yun wrote:
-> > > On Fri, Aug 28, 2026 at 09:11:34AM +0100, Yeoreum Yun wrote:
-> > > > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > > > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > > > made by memalign().
-> > > >
-> > > > The underlying VMA may start at a different address from the aligned
-> > > > address returned by memalign(). Furthermore, a subsequent
-> > > > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > > > already set.
-> > > >
-> > > > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > > > helpers incorrectly require the address returned by memalign() to
-> > > > match the VMA start address reported in /proc/self/smaps.
-> > >
-> > > Hmm, is the test correctly putting sentinels either side of the VMA? Any test
-> > > that doesn't risks flaking due to unwanted VMA merges.
+On Thu, Aug 27, 2026, Ackerley Tng wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Wed, Aug 26, 2026, Ackerley Tng wrote:
+> >> Omit support for calling the arch hook to make private, since SNP, the only
+> >> implementer of the arch make-private hook today, would actually prefer
+> >> making private only just before faulting memory into the NPTs.
+> >>
+> >> Calling the make-private arch hook would require iterating both bindings
+> >> and the filemap to find the intersection of bindings and allocated
+> >> folios.
 > >
-> > I believe that with this change, we don’t need to worry about unwanted
-> > VMA merges when checking for huge pages, since the test no longer relies
-> > on VMA sentinels but directly checks whether the mapping is huge or not.
-> 
-> We always need to worry about that though, anything that asserts stuff on a
-> VMA level must prevent unwanted merges first.
-> 
-> I guess I'm asking you in a roundabout way to go check and if there isn't
-> isolation like that (i.e. mapping PROT_NONE VMAs around the VMA you want)
-> then to go do that :)
-
-Oh. Sorry not to catch your intend. not for only this series but for
-the future usage, might it sound reasonable to add some mem alloca
-fucntion for the test which could replace memalign() with above concept.
-
-> I think glibc going off and mapping a bigger VMA is possibly a symptom
-> of this not being done.
-
-TBH, what user would generally care whether VMAs are merged or not?
-Anyway, it would be better to add a helper with some PROT_NONE guards
-to prevent unwanted VMA merges while testing.
-
-> 
+> > Why would KVM need to iterate over the bindings?  Only the RMP needs to be updated,
+> > whether or not the RMP is currently reachable is irrelevant, no?
 > >
-> > Also, this flaky failure was not caused by a VMA merge, but by a change
-> > in glibc’s behavior that sets HUGEPAGE for sufficiently large areas.
-> 
-> Yep your change is worthwhile reagrdless! :)
-
-Thanks :)
-
-> 
+> > Subsequent calls to kvm_arch_gmem_make_private() from kvm_gmem_get_pfn() would be
+> > superfluous, but that's already possible, e.g. if an NPT mappings is removed for
+> > whatever reason.
 > >
-> > Might for the *NO_HUGEPAGE* setup, there would be a chance to merge
-> > VMA area, But since it seraches the mapping directly, it's fine.
 > 
-> As above, generally we should put this protection in case, even if it's
-> unlikely for a VMA with VMA_NOHUGEPAGE_BIT set!
+> make_private takes a gfn and pfn, so __kvm_gmem_set_attributes() would
+> need to iterate bindings to get gfns and filemap to find folios to get
+> pfns.
 
-Agree. let me add one for this and replace memalign() used in
-khugepagd and split_huge_page_test at first.
-> 
-> >
-> > >
-> > > >
-> > > > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> > > > /proc/self/smaps to detect huge pages.
-> > >
-> > > You should probably call out the fact you're doing some refactoring here
-> > > also!
-> >
-> > Okay. I'll spell out with some detail. Thanks!
-> 
-> Thnks!
-> 
-> >
-> > >
-> > > >
-> > > > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> > >
-> > > Should always have a Closes: tag if Reported-by: ideally.
-> >
-> > Yes. but talked with personally nothing to close. So Reported-by tag
-> > only. Would it be better to remove?
-> 
-> Yeah or Suggested-by maybe? If he said it to you on-list then a Closes:
-> <lore link> works also!
+Oooh, right, unassigned a page in the RMP only needs the PFN, but assigned a page
+needs the ASID and GFN.
 
-Okay. I'll drop the Reported-by: and change to Suggseted-by.
+> > I don't care terribly about how SNP handles this, but I do want accurate reasoning
+> > and justification so that if/when we revisit any of this in the future, we can make
+> > informed decisions.  Because unless I'm missing something, this is an optimization
+> > choice (eager vs. lazy to-private conversions), not a complexity tradeoff, and it's
+> > not clear to me how we decided the lazy approach would provide better performance.
+> >
+> 
+> How's this, to replace the entire commit message? I hope it captures
+> points from this discussion:
+> 
+>   When memory in guest_memfd is converted from private to shared, the
+>   platform-specific state associated with the guest-private pages must
+>   be invalidated or cleaned up.
+> 
+>   Iterate over the folios in the affected range and call the
+>   kvm_arch_gmem_make_shared() hook for each PFN range. This allows
+>   architectures to update hardware metadata or encryption states to
+>   transition pages to the shared state, instead of leaving hardware
+>   state as private while guest_memfd tracks it as shared. Transitioning
+>   hardware state ensures that guest_memfd upholds the guarantee that
+>   userspace only maps shared memory.
 
-Thanks!
+Nit, don't reference functions by name when it's easy-ish to avoid doing so.  And
+don't give a play-by-play: the patch makes it pretty obvious the code is iterating
+over folios, what isn't obvious is *why* the code does that.
 
--- 
-Sincerely,
-Yeoreum Yun
+>   Invoke this helper after indicating to KVM's mmu code that an
+>   invalidation is in progress to stop in-flight page faults from
+>   succeeding. Calling the invalidation helper also calls the arch
+>   invalidate hook. For SNP, this kicks any vCPU with a registered VMSA
+>   within the range being converted out of the guest. This ensures that
+>   make_shared never fails due to the VMSA page being in-use and is
+>   important because if make_shared fails, the RMP table would track the
+>   page as private while guest_memfd is unaware and tracks the page as
+>   shared.
+
+Exaclty what SNP does isn't relevant.  Or rather, it's but on example of how this
+needs to work.  I.e. the conversion needs to happen within the invalidtion sequence
+because thems the rules for KVM.
+
+>   Omit support for calling the arch hook to make private during
+>   to-private conversions. Making private lazily at fault time aligns
+>   with how it works on other platforms like TDX.
+
+To me, this isn't a valid argument.  We've fully committed to relying on vendor
+specific behavior, and SNP can't truly work like TDX because the underlying
+implementations are so different.
+
+>   Furthermore, making pages shared only requires PFNs, which are
+>   obtained by iterating folios in the filemap. In contrast, making pages
+>   private in the RMP also requires the GFN, which would require
+>   iterating bindings to get GFNs and the filemap to get PFNs from
+>   allocated folios. Deferring the transition to fault time avoids this
+>   additional complexity.
+
+It's not just complexity, it's that the bindings might not even exist.  I.e. for
+all intents and purposes, doing on-demand updates is mandatory, because that's the
+only time a relevant memslot binding is guaranteed to exist.
+
+All in all, this?
+
+   When doing in-place conversion from PRIVATE to SHARED, immediately inform
+   arch code of the conversion for all allocated pages/folios, e.g. so that
+   arch code can put hardware metadata tables in the correct state.  Eagerly
+   updating the table for to SHARED conversions avoids having to implement
+   on-demand updates, e.g. when faulting in host userspace mappings.  Skip
+   the entire flow if the arch doesn't implement conversion callbacks, as
+   getting folios from the filemap is noticeably expensive, especially when
+   converting large chunks of memory.
+
+   Deliberately don't eagerly update the metadata table on conversions from
+   SHARED to PRIVATE, because assigning a page to a VM (versus "returning" it
+   to the host) requires the exact GFN associated with the page, i.e would
+   require walking the memslot bindings.  And because KVM *must* do on-demand
+   metadata updates when getting a PFN for KVM-internal usage, as that's the
+   only time a relevant memslot binding is guaranteed to exist.
+
+   Note!  Inform arch code of the conversion within the protection of the
+   invalidation sequence, to ensure that any existing mappings are dropped
+   before hardware is updated, and to ensure that new mappings can't be
+   established until after the conversion is complete.
