@@ -1,134 +1,210 @@
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
+Received: from mail-qv1-f49.google.com (mail-qv1-f49.google.com [209.85.219.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 966A2381EA2
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 04:08:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787890087; cv=none; b=AcZq0v4eBATzzFv/cx3E5ZtxgfGKbqfeADD5ElqfJwINNmaAn7uPBQPrqzjtCAMQAn+tcv68bwMPh9reFnELoxt8SSeYumKtEBIkZbhTrDEaIAVPcxrHWZuwSloWQ6OpdxsDRyNIX74PV8mXAqKOIbIHF7UpiFo2hLDYN9tCWms=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787890087; c=relaxed/simple;
-	bh=va2D4PPN7bDWy90o+kzcgFaY8tPz6FoVSh30o+YpqKo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gNdFBQbmYfJMAAIthyJvxCZD/quS3tWKM2Y3OD7/Kksu8xpqZ6PVdrq9vxTtTn9edvHobR4zoIXLsRZTgp4vheRtwWzSnoyLtnDhMXhh9Ld0G5oabtdSwCw/rtrt7Mr6rYH7odZ3Xm7tuVKWh85gNAG7ObYdILEpL3l8FQqQ42w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ic+TGs3M; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8F80390C88
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 04:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.219.49
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787890801; cv=pass; b=CrAeFjqgra0+OaWhSP2kNTg00YnjH9NjMiKsXM/r/iPH/BXOOeSHWYRhFB9oRsornGjeWX1+KXkIP0D/6so+nAny9Dwh22CRadC6RWnnJjLNJet9l0xf/BUPhMEgw3oPuJu8ggF1XdC1Q6lfCSmHuGKb/qFkLwiV/h9MZ8QKSR0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787890801; c=relaxed/simple;
+	bh=mTQhz7RgMxAC3d9Zq6Msa7p3Wk1sBx7SdhDb5OizNys=;
+	h=From:In-Reply-To:References:MIME-Version:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n/4euj5Zv7UOsXIOOoJPZCWOeUjSb0EyPO7b4Tdh3xwSDZBB1Rj5122tL102eGASTFLxZXOI1yQpu8PI50VAt5BQ5eyGKqQWYW/whN/ki4s+PYjFCMw5ulnG4bL/dIZeD12mcgdaGsu4khUQVr/Q018H4M1SPD9287kWNMl7/Ss=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=srbbmPsk; arc=pass smtp.client-ip=209.85.219.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ic+TGs3M"
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-39c9a3acd40so3854821fa.3
-        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 21:08:05 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="srbbmPsk"
+Received: by mail-qv1-f49.google.com with SMTP id 6a1803df08f44-8efbafa1bacso2472436d6.1
+        for <linux-kselftest@vger.kernel.org>; Thu, 27 Aug 2026 21:19:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1787890799; cv=none;
+        d=google.com; s=arc-20260327;
+        b=OhD04wReHolrJ+3Ube5DscDLquKEWXEehg0MOOQppJZMRMX6Q1wtEjbdY5tr59W+hW
+         qL7uI+EuXIg+LzZR4ztAOm5DIc3C7HJFoI0R3eOO/72zN/sl1vJZUCBYlsiT4jAs0ePn
+         fVDHsI/ncln2eXnqIMiv/zWK27hq2u4bqnMMM6TZVPHWCD4MSnlZ0FRGEKpmwMhzSdpu
+         xqkP/vJZAxMEtWgsBkuNhXnHzLfY+AhB1Wzf1l1W7R/ZeibUvFw81pC8H5/ArO4VRkCl
+         d7rV0rlnAq8e4OfzHyWLOtzmUWO8F6UyzABKhXzhOCHYSG9+dCjwzPs3h1UfaHecWqKr
+         lIsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
+        h=cc:to:subject:message-id:date:mime-version:references:in-reply-to
+         :from:dkim-signature;
+        bh=QCDy9v0wvCJe6b4tDkyj5x2hkmiUIAeHKOf5Q690ANY=;
+        fh=TjBsSL0qyc1vKvDiiZdSvc46N64nIE2sCZTB7Mn3pCo=;
+        b=UEowfmw0lPeZU9cXwILdNzd+dhGzfFTwSZCPspEQDrWMnmL1aZ0dJSGcZ+eOyvEbbT
+         /4iaAEV3vk+GLuOhywyOfQ7TZQ2bg7473fNxr0zxT6nmmgO8pdwpLlXLB+toCKxdMLCx
+         TU/R41de82oZHMBxfhtGG57TKOO+XN1eAY3sLB1W/jvJysYZ2Qn4uhMC/gez2Z1DfpxL
+         /eJsv0hLvEUxCDTNb2AtRULsR0Kpkf32NR+qtjBDx+mibCKNy8ocQiLPLT8QP6iFNoEi
+         UtjP/Fz5cM/bd/88bKWfxQ2RAVq7hKWeqsjgm9ZSaCU7M2TE72prDnUTIZkP/potq8gC
+         CtnQ==;
+        darn=vger.kernel.org
+ARC-Authentication-Results: i=1; mx.google.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1787890083; x=1788494883; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=3CKdSKdLdxXqUAJ8+SDUUepiueedYKIw7PG3SRPgDmM=;
-        b=ic+TGs3MjG45smJ3BTxH7bVhgihYT8NO4AgAuwHsKuktXZxOJvuF5rxF5aijy8drMx
-         Wzr9iq0lhJB93c/FvWZEYLEEH7rWi1KnlTsaSU9r6ymstejj/PhHZOHsqz/b6Q24pBIj
-         MOnedHXRoF94plUtXL2aOA3bZRkBpIG6saFJaUzeB0fcrqq65GCuv6EHwjUcGv6oTd4R
-         ZLikpKcLvP1QreRn2Jg35dCLLqfQQGcD7T4Shq3g7s6+XNv/i5sIrJ+pRd3bHCZfvH8S
-         enFCEM7buM+zMV92/UMNph5I37zuudKONNsLYuTAvQ1Qe4vGdworXcih83Zl6JTdjf0H
-         RaFw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787890083; x=1788494883;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1787890799; x=1788495599; darn=vger.kernel.org;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=3CKdSKdLdxXqUAJ8+SDUUepiueedYKIw7PG3SRPgDmM=;
-        b=AjPgqtN/yEBevuXSzSXRJA00OtC0C7QXmzeo98wuObRLjgLR8GDsVZt0YrocGNMG27
-         coKpHuBdchP2319gQti4jkvHp2QWPPBCev85XSJDwDeNlwIvWYM4MQnQPBuQAd0ajVOI
-         TAgK107Bg2tLFAhqe73fEPDTJW31yjXT4d7Q1VkxzTPmuD1+OVO6sYvolnzbipGReywv
-         lUykIntCicKiyXLYux7kcSrwCFvxWsB6eu6RIv1UTpUYhrZW4pYN4ZTeGZifSDg4VXvy
-         qRUJWuBoebn7TxptEntt/AfpjE68BQjK4E/NLzlJgbjOI++UjU4siERjZhK46c3p0UWq
-         9ODw==
-X-Forwarded-Encrypted: i=1; AHgh+RrEmiu41GyVXx7ombdeUGGGdlfeaSrr+xukerNDEbVEZfeDTqgsTU9d5OlF6YJeymKNvIgNX1h7lZm7wblUuWc=@vger.kernel.org
-X-Gm-Message-State: AFuF++kw40NdzZe3JCgVZRE9SY/MSucIlJBEXeEZ6yj1MLnY3uJATzbB
-	G1+oeiz3cmeR+HNStgZoRtltulK4Cw4gPV7LECeCWoYmFQEoQw/0Ys3B
-X-Gm-Gg: AR+sD132AOL5dONQgGi0RYQ+CzyvnbLbH//lTznerj9DsYG+C5dbLcKBY8r/X83lYAE
-	P028N0ZntCd4QB/8W5Zc9p7pA85CyMCDK/cqMZNQNISxE8BA9HKOci3PNBnSrGdKaseqUW6g9yR
-	ZUsJRjJmGbC6IYd1GHdt4bSICBv+eplVFa/b1+kE5eEBQGehaf9A73tGGxTq7n9VC/38meo0YGq
-	GJx/q41YrtkYN4C0427L3ePocA9A0GVMgiyGBdiV0uFXvrRlNjOdsp/ZgaDyP7l96/+3xAcu4Oy
-	OBLTNLcoHqgAx4Mj1w8ov2OWMHPPg+5Yh9AIskU8PKxB1zMV1qGF0xng+n3TsHWD6I60eKs345u
-	LK6TVmlhFGJ+fU8OzbBSn8owuwAS3iSGyhIIPdZQyQx12aoclT23mQPZjIP4p4o5Ja+anriZaex
-	Y8PyaCeTWtJSO7DEjPHx00SqGTss0NzhWD5qUnk8ekWt3Us+eLfBFtVCJ5cVAkEL0=
-X-Received: by 2002:a05:651c:1445:b0:3a2:eb57:8a99 with SMTP id 38308e7fff4ca-3a301afd639mr5669501fa.9.1787890083299;
-        Thu, 27 Aug 2026 21:08:03 -0700 (PDT)
-Received: from mobilestation ([2a00:1fa1:829d:a0d6:4e24:60c8:bd9:494f])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3a305575833sm701491fa.35.2026.08.27.21.07.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Aug 2026 21:08:01 -0700 (PDT)
-Date: Fri, 28 Aug 2026 07:07:15 +0300
-From: Joseph Steel <recv.jo@gmail.com>
-To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch, 
-	davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com, 
-	mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, shuah@kernel.org, 
-	joabreu@synopsys.com, jun.ann.lai@intel.com, yi.fang.gan@intel.com, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH net v3 2/5] net: stmmac: Move double VLAN handling to a
- dedicated op
-Message-ID: <wmeffk2whc47cwfxnsrs46lwmd52n3ezwb5un6qn4nwnturqie@pd77k47zoeka>
-References: <20260825164522.4244-1-ovidiu.panait.rb@renesas.com>
- <20260825164522.4244-3-ovidiu.panait.rb@renesas.com>
+        bh=QCDy9v0wvCJe6b4tDkyj5x2hkmiUIAeHKOf5Q690ANY=;
+        b=srbbmPskM51SfvHLy1ZZPy5wqi5pSxCobpWjCsAtf9kdwbwev+Xzpwi6U163DrfKMz
+         EGxcCb5XQX1Dianl/W2/dd91aW7aDdhaaeW6C8RGa3DJvQheicg39H1I9M0yGft6epVx
+         FMBQBfmBQWhd90GZWLA3cHE/1c7j4RKng7E1q8OgfxXonFab78oK+/zUg+OUfTz2iGCh
+         0XFkoUpzu2K975n1NolP8Xjrf06b0xWylV6V8L1LhpKm9+eGjTAApjskU/A7gWYqKZUw
+         uJnA5IVLt2Zjr2ly63TJrSO56jUWMlZt9SDTZmk8Nqb8eN3+n8XkqQ3vw168TbyBaGNE
+         NMog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787890799; x=1788495599;
+        h=content-type:cc:to:subject:message-id:date:mime-version:references
+         :in-reply-to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=QCDy9v0wvCJe6b4tDkyj5x2hkmiUIAeHKOf5Q690ANY=;
+        b=R9ZYkNv6PIrk11Fk+JSKIm6jFh+DNumNucHxqP+azDpfpYCuUvj45RwMvWcztVsjoe
+         Rl/UvJJHNzszjCLMxrbEyWK/AqsChhpyFlGpO09vxoYaB3/HMMyo2XI9Sbsj0z4v41tG
+         WMa6Pft1WdApFHceKQ9T9eCn+TWnvl0B46gkpCTjt7V6jiaTXDhMlzZcFQbvEr1gC+G2
+         jC5/yNSuQ4gpurIWVR6NlCl+YjLYhVnmi6kIKX2RsUEvAcbNEBHH+lEU5c8MlPY8OBvo
+         SquiZkWGtTsibyRsJcy2hwfw/AwD+kKmeZWTMqm9VhFMafLwnNUsWng9y2xnnLkmT2yf
+         r7gw==
+X-Forwarded-Encrypted: i=1; AHgh+RoGFs1q6iHfR5v8d53pEjos5Uttf+H0tumwF23/HLPyB/L9DBFUqecb1lUeCZlwhfrYMyILrc6gH2SOqZSyMYI=@vger.kernel.org
+X-Gm-Message-State: AFuF++nn1j0dIzETS03YviSGF3SkNYQ/MEZzVmjNNE5rFNtv0oOPRXpv
+	v5zfemhTaGv8MKHM0+9eNNEh0/plugYceS4kSZKhAH3eCgJJrfUYbmYS4pU5z3UiOw+SJLgBBkV
+	O+fKMr25HMRswEre6FKq+PuW3lZxEhEWAHgBPDt4+
+X-Gm-Gg: AR+sD12s9ec8UYFOus7a432MxT9+CJT7mCbvHa/p1SKnps2xl68z2W0afeeZsWRoiXd
+	Nk034EQidmVyhjcWk0PAnEByky/ubLzB02tax4eG4kd6+RD5x5Uji+XOEP+wUsUB256was/t982
+	3Ad/64DV0VoU/YRlsMRalHoNc4tOe6m7o1tyv8ECyjbTYdGpcKf5vium8ahs4DBmJmGQl8ISlYD
+	W93L6S3jNF7JlJ8BFpjJxW8VxDpkACMXhmvAMCT/AVOSQn2yz0t9825O+a34DE7sDcB2PkNBYB6
+	coToYly6KyPMh8q0ZQLuAJSSBzLfwkf5ka7jXHLZ8SUnBR+02nqGVmL/wTgYHrmieAxqtgowQnt
+	odd4Sj/YET5LpRzNEMFpmqUXIaJtDQ7eDGgLaFQ+PVQ==
+X-Received: by 2002:a05:6214:212b:b0:90c:4e5e:754b with SMTP id
+ 6a1803df08f44-90ce0f45ea4mr46165856d6.28.1787890797765; Thu, 27 Aug 2026
+ 21:19:57 -0700 (PDT)
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Aug 2026 21:19:56 -0700
+Received: from 176938342045 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 27 Aug 2026 21:19:56 -0700
+From: Ackerley Tng <ackerleytng@google.com>
+In-Reply-To: <ao9CKMXAX-hScRSa@google.com>
+References: <20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com>
+ <20260826-gmem-inplace-conversion-v11-15-0a15d8a799aa@google.com> <ao9CKMXAX-hScRSa@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260825164522.4244-3-ovidiu.panait.rb@renesas.com>
+Date: Thu, 27 Aug 2026 21:19:56 -0700
+X-Gm-Features: AcwNN1UAGJ-fGOM9zD_UvTf06ZrP54h7-np3dJjD_6mMPjXqsGS1LGYTBF7LEzg
+Message-ID: <CAEvNRgG7n6F=dW9V_QqQPDDgLiZ7x08uLDanJgSzerNtN8sqBQ@mail.gmail.com>
+Subject: Re: [PATCH v11 15/46] KVM: guest_memfd: Call arch make_shared
+ callback for to-shared conversion
+To: Sean Christopherson <seanjc@google.com>
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Fuad Tabba <fuad.tabba@linux.dev>, Vlastimil Babka <vbabka@kernel.org>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Ovidiu
+Sean Christopherson <seanjc@google.com> writes:
 
-On Tue, Aug 25, 2026 at 04:45:19PM +0000, Ovidiu Panait wrote:
-> The double VLAN bits (EDVLP, ESVL, DOVLTC) are currently handled inside
-> update_vlan_hash(). This ties the double VLAN state to the hash filter
-> update, even though the two features are independent: hash filtering is
-> controlled by dma_cap.vlhash and double vlan by dma_cap.dvlan.
-> 
-> In preparation for removing double vlan support from dwmac4, move the
-> double vlan logic into a separate update_dvlan_state() VLAN operation.
+> On Wed, Aug 26, 2026, Ackerley Tng wrote:
+>> Omit support for calling the arch hook to make private, since SNP, the only
+>> implementer of the arch make-private hook today, would actually prefer
+>> making private only just before faulting memory into the NPTs.
+>>
+>> Calling the make-private arch hook would require iterating both bindings
+>> and the filemap to find the intersection of bindings and allocated
+>> folios.
+>
+> Why would KVM need to iterate over the bindings?  Only the RMP needs to be updated,
+> whether or not the RMP is currently reachable is irrelevant, no?
+>
+> Subsequent calls to kvm_arch_gmem_make_private() from kvm_gmem_get_pfn() would be
+> superfluous, but that's already possible, e.g. if an NPT mappings is removed for
+> whatever reason.
+>
 
-The S-VLAN implementation in STMMAC is a complete mess. It seems like
-the original code author didn't fully understand what he was doing.
+make_private takes a gfn and pfn, so __kvm_gmem_set_attributes() would
+need to iterate bindings to get gfns and filemap to find folios to get
+pfns.
 
-Double VLAN feature of DW *MACs has nothing to do with S-Tag VLANs.
-It merely provides a way to insert/extract/filter an additional level
-of VLAN header - inner. That's it. Seeing the networking subsystem
-provides only the outer VLAN header for HW-accelerations, having the
-DW MACs somehow working with the inner one is not only redundant but
-had been harmful up until a recent kernel. The Tx path has been fixed
-there.  What you see here is a leftover of the incomplete fix.
+>> On top of that, SNP would need to figure out whether to actually
+>> make private based on whether the memory is about to be faulted, or
+>> whether it is a conversion.
+>
+> This is a non-issue, no?  As above, sev_gmem_make_private() already bails early
+> if the page is already assigned in the RMP.
+>
 
-Anyway if you feel like cleaning up a mess here then the only correct
-solution would be to almost completely drop any double vlan stuff from
-the VLAN implementation of the driver. That is:
-1. Drop EDVLP flag toggle. But preserve the flag being always set
-otherwise COE won't work for packets with an inner VLAN header.
-2. Rename "double" word to "svlan".
+I'll remove this, you're right.
 
-You must not touch the ESVL and DOVLTC flags, since they are responsible
-for the S-VLAN tags handling, have nothing to do with the Double VLAN
-feature, and must be set so VLAN hash-based filter would perceive
-VLAN S-tagged packets.
+> I don't care terribly about how SNP handles this, but I do want accurate reasoning
+> and justification so that if/when we revisit any of this in the future, we can make
+> informed decisions.  Because unless I'm missing something, this is an optimization
+> choice (eager vs. lazy to-private conversions), not a complexity tradeoff, and it's
+> not clear to me how we decided the lazy approach would provide better performance.
+>
 
-If you need to make DW GMAC4 not stripping VLAN S-Tags on Rx packets,
-then you have to find a way to prevent the networking core from
-enabling HW-accelerated S-Tags handling.
+How's this, to replace the entire commit message? I hope it captures
+points from this discussion:
 
--Joseph
+  When memory in guest_memfd is converted from private to shared, the
+  platform-specific state associated with the guest-private pages must
+  be invalidated or cleaned up.
 
-> 
-> Signed-off-by: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
-> Reviewed-by: Maxime Chevallier <maxime.chevallier@bootlin.com>
-> ---
-> v3 changes:
-> - Rebased after dropping the dma_cap.dvlan patch.
-> - Added "Reviewed-by" tag from Maxime.
-> 
+  Iterate over the folios in the affected range and call the
+  kvm_arch_gmem_make_shared() hook for each PFN range. This allows
+  architectures to update hardware metadata or encryption states to
+  transition pages to the shared state, instead of leaving hardware
+  state as private while guest_memfd tracks it as shared. Transitioning
+  hardware state ensures that guest_memfd upholds the guarantee that
+  userspace only maps shared memory.
 
+  Invoke this helper after indicating to KVM's mmu code that an
+  invalidation is in progress to stop in-flight page faults from
+  succeeding. Calling the invalidation helper also calls the arch
+  invalidate hook. For SNP, this kicks any vCPU with a registered VMSA
+  within the range being converted out of the guest. This ensures that
+  make_shared never fails due to the VMSA page being in-use and is
+  important because if make_shared fails, the RMP table would track the
+  page as private while guest_memfd is unaware and tracks the page as
+  shared.
+
+  Omit support for calling the arch hook to make private during
+  to-private conversions. Making private lazily at fault time aligns
+  with how it works on other platforms like TDX.
+
+  Furthermore, making pages shared only requires PFNs, which are
+  obtained by iterating folios in the filemap. In contrast, making pages
+  private in the RMP also requires the GFN, which would require
+  iterating bindings to get GFNs and the filemap to get PFNs from
+  allocated folios. Deferring the transition to fault time avoids this
+  additional complexity.
+
+>> Calling the make-shared arch hook and not the make-private arch hook does
+>> leak SNP-specific details into guest_memfd (as in, why only make-shared
+>> during conversions but not make-private?), but the additional complexity is
+>> not worth taking on until guest_memfd has a user actually requiring an arch
+>> make-private call.
+>
+> [...snip...]
+>
