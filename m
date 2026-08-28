@@ -1,194 +1,371 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE76757C9F;
-	Fri, 28 Aug 2026 13:49:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46239329E46
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 14:18:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787924982; cv=none; b=ujmnH//zbokOvSzwhn6cHWtmfdCVvUWw2L7uHgP9UnfO8QoUCcWI9piyT59SlMkP4xRz0BZTjXQayJvgYjVLBAlxS/oi61j5j/GLeKaqi1j5xzxDKIR5El1sZ2LbecqTJ/MBM5Ifr35+lLbubCERtpk4jQm33ZAC/aA1dbhuKo4=
+	t=1787926734; cv=none; b=N1P+uThx8IcshxHQPCgarhJ3cjPop7PDHTkK/3pHxnQ49SoUrNGUpFon9gzkMB75DbG4T/5n3PhB0eQpYJFuiKvTo0GY3Fw1cfGDHlOilLUQ4Tv8/8VMLmiaVQRiSw5emt8fE9I1S6bHlIJzMrBrhDYoxMAfMu+JsTodJiobric=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787924982; c=relaxed/simple;
-	bh=yM4daaz5EGYsnOT02SS39XlhFRk0UH5e4rF7tLOYAqQ=;
-	h=Mime-Version:Content-Type:Date:Message-Id:To:Subject:Cc:From:
-	 References:In-Reply-To; b=CMZkJR3V4MWVoYFIJvelqAcPViRrB11Ly5ASnrnsH4DQ8jBlGAJMMROKYSzUPBkwWWkldVeNgZPW+ZiixjY+zFvNT1VyzQRBonplVnHYw5ARxrpMrtQNA32tKHz23hf+rMsI2Mh+hfS6YFtP840psGqBnTURyChJ2xaMj1Ct9Ew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=luToD1c7; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1787926734; c=relaxed/simple;
+	bh=tOIayJ92xrw6pvO0WbOfaDSneoKGHjWYUfTGAkwGxd0=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=U1kZ1uiUmopIm9fHpT0KpzpJTbq/rsRghStTh/k8ykS7WsvhVooCrKg9i/kWVOTUjGMgfq2ILTfg66W8jLifJTTtaD3wtQ7yDycBC9R6PArLK+hWCohPsVdz01hYahZQ6wh/02x9HI4ceJsgvb71YdP6HpGrI3B96VIh6nx3UKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=vhjLpdP8; arc=none smtp.client-ip=209.85.214.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="luToD1c7"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id F2AC34E413FF;
-	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id A551060537;
-	Fri, 28 Aug 2026 13:49:36 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2D41411C78212;
-	Fri, 28 Aug 2026 15:49:25 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1787924974; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=69exiOAVHdIVW9goACtvVSF9zJavgJQ+ojNwMsZPEro=;
-	b=luToD1c7hijfLRa8kWHEBKEP9XRU6yMf3qwN/ks0Y+O1kI/mG9dU+fBjddu0sif0laqLAi
-	Dt0zw4vbvBQZ2t7n1c8WGxiV4J6cQkKG58dnz+kMJgJcZ+5Aafg0Pue7kHz/a08snAVLRP
-	UiAsZRy2CDCpDjUPQwM2XB5zddnTBZdXvBynO66FTeeFcc/XS9mTZKaSj4LLmMvbVOGkXm
-	/8kK68hmA1j2GMe42cuiPneYKhI9sRLQ36hQ4GJW41jcDqP5//SnFrhY8e7VTlHCtcG8cp
-	HVJWSFwKHXp7DKyGGvfDdZv7Vs3UEK0IkBHs0eGjPN6hO2CQmyqyOILKu4FPzw==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="vhjLpdP8"
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-2d63c16fc5bso22048155ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 07:18:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787926729; x=1788531529; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=lk1PtauESgfcOmIWGAdMCfx87NYe0QEmwPgHNpnVCRk=;
+        b=vhjLpdP8DQlQy/sH4sHNDuCNj5M06VQvRF6J2Ee3he8ZbdPsda9fUpgkxT+XyQYnzi
+         5FBWNvs3Sf+17NsdEGAT2LVHVg/zBo95fliWhNMjxrLjzrUO1ovK0lMkSucZcLtMHPr3
+         N1RnEaxMbKmRtdroMSZgmJOWoSCej0Shtm5v86qeLzPliPxePQcgQ39PDjc1FGsa4bLJ
+         pr/GFy909Y5DathoVdvQaxht0iBHjepPUwfxRStyZFP773OhPx/zUQBHyWx64HdPdgeZ
+         lqS0mL0PO/KMhiJvAH5CXqf67t0VVwTNUgpm+NBUzmBgIOkHVqnrl8HEsGRLQazV0mQj
+         9gNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787926729; x=1788531529;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=lk1PtauESgfcOmIWGAdMCfx87NYe0QEmwPgHNpnVCRk=;
+        b=hWhRJWNpFVlqXxy2Zwxt69Pt9J4QptD9nbbFhoPmJsspfvB6PYERZM6bG0gQIpvHAq
+         uijRdPMBBC+H5+hFoOrLx5Odyci6lOhgf+BtLNoHqKtVUINhXNbanPdtlcYTRjvubGZi
+         DwI76INyZnZNIFJWwdYtevEZuAX4dxlxzgsXRYSg7OYe/BYi780RdYW1ejoWUJBQt0Rq
+         98yW8VJBDtkI5LIwuiSQuA5+g0FXfAIZllY5E+6mgIn9FG+m/UWmJbHtI385dBXR0jXP
+         hCW096xC80oUbPtkDbcYAvWIUok2+XghScpHGGeVRzU6ZK0XvH9UMSKjwmGUo6gfV3LQ
+         HBCQ==
+X-Forwarded-Encrypted: i=1; AHgh+RooXzqtqRswHmhtSB4BZF3X8DWiUjJrImsNBJIJXGA5eLSbKuPZrwLpKP8tmGhSkZjeUprFeQCX1KJt7Rjpc4U=@vger.kernel.org
+X-Gm-Message-State: AFuF++kBbV64nx0fMTcKX84NQgDWtNfRkHZj/cmFXdDm8HkvgO5pq5f1
+	8WeIl/vW37oGrtQAeXJuOCq1Z3gszOeJM9iUPznLZ4ZY6Mfq0Sm/bCpz8RLj0PeTqtup4E66jre
+	HtUOMwQ==
+X-Received: from plbmq14.prod.google.com ([2002:a17:902:fd4e:b0:2d7:3fb9:fada])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:ec91:b0:2d7:4f55:f40c
+ with SMTP id d9443c01a7336-2d74f55f6edmr103578625ad.6.1787926728323; Fri, 28
+ Aug 2026 07:18:48 -0700 (PDT)
+Date: Fri, 28 Aug 2026 07:18:47 -0700
+In-Reply-To: <20260828042044.GG33657@pedri>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Fri, 28 Aug 2026 15:49:24 +0200
-Message-Id: <DL0MI5O31J44.1W5BV6GJMJTT7@bootlin.com>
-To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
- <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
- <laoar.shao@gmail.com>
-Subject: Re: [PATCH bpf-next v8 8/8] selftests/bpf: add tests to validate
- KASAN on JIT programs
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260828-kasan-v8-8-7c1c0fdb9d7f@bootlin.com>
- <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
-In-Reply-To: <45923d9ec2441312cfd8f12fd02a19d717dad306fd636614c83d02c864340ebe@mail.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-21-15ad654a50db@google.com> <6f89fc78-0344-4a7e-bbd8-ac201b8f845a@intel.com>
+ <20260828020612.GF33657@pedri> <b4cffa34-864d-4fd0-9fc7-a7d4514075b2@intel.com>
+ <20260828042044.GG33657@pedri>
+Message-ID: <apGYxwdCSuC-X732@google.com>
+Subject: Re: [PATCH v14 21/22] KVM: selftests: Add ucall support for TDX
+From: Sean Christopherson <seanjc@google.com>
+To: Peter Fang <peter.fang@intel.com>
+Cc: Xiaoyao Li <xiaoyao.li@intel.com>, Lisa Wang <wyihan@google.com>, 
+	Andrew Jones <ajones@ventanamicro.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>, Chao Gao <chao.gao@intel.com>, 
+	Chenyi Qiang <chenyi.qiang@intel.com>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	Erdem Aktas <erdemaktas@google.com>, Ira Weiny <ira.weiny@intel.com>, 
+	Isaku Yamahata <isaku.yamahata@intel.com>, Kiryl Shutsemau <kas@kernel.org>, 
+	linux-kselftest@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>, Reinette Chatre <reinette.chatre@intel.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Roger Wang <runanwang@google.com>, 
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>, Shuah Khan <shuah@kernel.org>, 
+	Oliver Upton <oupton@kernel.org>, Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org, 
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, x86@kernel.org
+Content-Type: multipart/mixed; charset="UTF-8"; boundary="D8ScZ73OZF7fi6Cd"
 
-On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
->> diff --git a/tools/testing/selftests/bpf/progs/kasan.c b/tools/testing/s=
-elftests/bpf/progs/kasan.c
->> new file mode 100644
->> index 0000000000000..fe8e0dd228a09
->> --- /dev/null
->> +++ b/tools/testing/selftests/bpf/progs/kasan.c
+
+--D8ScZ73OZF7fi6Cd
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Aug 27, 2026, Peter Fang wrote:
+> On Fri, Aug 28, 2026 at 10:31:14AM +0800, Xiaoyao Li wrote:
+> > > 
+> > > Hmm... This makes me wonder if vm->arch.s_bit below could be replaced
+> > > with the same architectural approach. GPAW is available through
+> > > TDG.VP.INFO or the initial RBX value. This does require a bit more
+> > > plumbing though.
+> > 
+> > I'm afraid not. Because below is host code, and vm->arch.s_bit is not used
+> > in guest code.
+> > 
+> > Or are suggesting something like dropping the
+> > 
+> > 	if (is_tdx_vm(vm)) {
+> > 		ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+> > 		sync_global_to_guest(vm, ucall_mmio_gpa);
+> > 	}
+> > 
+> > entirely and use below hardcoded value instead in guest code?
+> > 
+> > 	UCALL_MMIO_GPA | 1 << (GPAW - 1)
+> 
+> Yeah this is what I meant. Just drop sync_global_to_guest() entirely and
+> do things like a normal TDX guest would.
+
+Blech.  Every time I come back to this series we're still discussing ucall crud,
+and "doing thing like a normal TDX guest".  Selftests aren't normal guests.
+
+I know I suggested using the HPET base, but I only did so very begrudgingly as I
+couldn't come up with a better alternative to emulated MMIO, and the end result
+is quite gross.  Not only does the code ignore @mmio_gpa but still obviously use
+emulated MMIO, it requires synchronizing data to the guest because KVM disallows
+"private" MMIO.
+
+  void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+  {
+         vm_type = vm->type;
+         sync_global_to_guest(vm, vm_type);
+
+         if (is_tdx_vm(vm)) {
+                 ucall_mmio_gpa = UCALL_MMIO_GPA | vm->arch.s_bit;
+                 sync_global_to_guest(vm, ucall_mmio_gpa);
+         }
+   }
+
+Retrieving GPA via TDG.VP.INFO isn't any better, it's still an absurd amount of
+"work" for something that should be trivial.
+
+Can't we just abuse TDVMCALL_REPORT_FATAL_ERROR?  AFAICT, there's no restriction
+on the data payload, and there's enough space to all but guarantee we'll never get
+a false positive.
+
+Pulling in Xiaoyao's idea about using CPUID...
+
+> > +void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+> > +{
+> > +     vm_type = vm->type;
+> > +     sync_global_to_guest(vm, vm_type);
 >
-> [ ... ]
+> It works and it looks simple. But we have the architectural approach to
+> test if a guest is TD guest, by checking the CPUID 0x21.
 >
->> +SEC("tcx/ingress")
->> +int simple_atomic_fetch_on_stack(struct __sk_buff *skb)
->> +{
->> +	struct kasan_test_val val;
->> +
->> +	bpf_kfunc_kasan_poison(&val, sizeof(struct kasan_test_val));
->> +	__sync_fetch_and_or(&val.data_8, 8);
->> +	bpf_kfunc_kasan_unpoison(&val, sizeof(struct kasan_test_val));
->> +	return 0;
->> +}
->> +
->> +SEC("tcx/ingress")
->> +int simple_atomic_fetch_not_on_stack(struct __sk_buff *skb)
->> +{
->> +	struct kasan_test_val *val;
->> +	__u32 key =3D 0;
->> +
->> +	val =3D bpf_map_lookup_elem(&test_map, &key);
->> +	if (!val)
->> +		return 0;
->> +
->> +	bpf_kfunc_kasan_poison(val, sizeof(struct kasan_test_val));
->> +	__sync_fetch_and_or(&val->data_8, 8);
->> +	bpf_kfunc_kasan_unpoison(val, sizeof(struct kasan_test_val));
->> +	return 0;
->> +}
->
-> Can these two programs build with the no_alu32 flavor? Looking at
-> Documentation/bpf/clang-notes.rst, __sync_fetch_and_or() needs -mcpu=3Dv3
-> for the BPF_OR atomic instruction, but the no_alu32 build uses plain
-> -mcpu=3Dv2 (tools/testing/selftests/bpf/Makefile:497-501). Clang at v2 ca=
-n
-> only generate BPF_ADD atomics without BPF_FETCH, so BPF_OR should be an
-> instruction-selection error.
->
-> The sibling programs simple_atomic_on_stack and simple_atomic_not_on_stac=
-k
-> use __sync_fetch_and_add(), which lowers to BPF_ADD without BPF_FETCH whe=
-n
-> the return value is unused, so those build fine. Every other prog in
-> selftests/bpf/progs/ that uses a non-ADD or fetching atomic guards it wit=
-h
-> #ifdef ENABLE_ATOMICS_TESTS (progs/atomics.c, progs/arena_atomics.c,
-> progs/atomic_bounds.c, progs/tcp_ca_write_sk_pacing.c), and
-> -DENABLE_ATOMICS_TESTS is only passed to the default and cpuv4 runners, n=
-ot
-> to no_alu32.
->
-> Would it make sense to guard both simple_atomic_fetch functions with
-> #ifdef ENABLE_ATOMICS_TESTS, or to verify whether test_progs-no_alu32
-> actually builds?
->
-> Also, since the return value of __sync_fetch_and_or() is discarded here,
-> does clang emit BPF_ATOMIC | BPF_OR without the BPF_FETCH flag? That woul=
-d
-> make these identical to simple_atomic_*, just with OR instead of ADD, and
-> the JIT path for is_atomic_fetch (the CMPXCHG loop in
-> arch/x86/net/bpf_jit_comp.c added by bc9fb0ddd5f3b, where the KASAN check
-> is emitted before branch_target assignment) would not be exercised by
-> kasan/simple_atomic_fetch_on_stack or kasan/simple_atomic_fetch_not_on_st=
-ack.
->
-> The commit message shows #175/29 and #175/30 as :OK, but
-> progs/atomics.c:or64 uses or64_result =3D __sync_fetch_and_or(...) to for=
-ce
-> the fetch variant (checked in prog_tests/atomics.c:98), and keeps a
-> separate or_noreturn_value program for the discarded-result form. Would
-> consuming the result here test the intended path?
+> Since checking CPUID 0x21 is not complex, and as a bonus it can help
+> test if TDX module behaves correctly for CPUID leaf 0x21, I think we
+> should switch to use CPUID 0x21 to check if it is TDX VM in guest code?
 
-Even for no_alu32, the __sync_fetch_and_or is properly generated:
+Absolutely not.  It will require at least one an extra VM-Exit for TDX and non-TDX
+guests alike, and thanks to Intel's wonderful CPUID behavior of having unsupported
+leaves return the last supported leaf, the guest would have to check CPUID.0x0 and
+then CPUID.0x21 on modern hardware, i.e. would incur two extra VM-Exits.  I don't
+care about the performance, but from a debug perspective that's going to be awful,
+as what should be a super simple operation will be polluted with unwanted data.
 
-  $ llvm-objdump --disassemble-symbols=3Dsimple_atomic_fetch_on_stack tools=
-/testing/selftests/bpf/no_alu32/kasan.bpf.o
- =20
-  tools/testing/selftests/bpf/no_alu32/kasan.bpf.o:       file format elf64=
--bpf
- =20
-  Disassembly of section tcx/ingress:
- =20
-  00000000000006d0 <simple_atomic_fetch_on_stack>:
-       218:       bf a6 00 00 00 00 00 00 r6 =3D r10
-       219:       07 06 00 00 f0 ff ff ff r6 +=3D -0x10
-       220:       bf 61 00 00 00 00 00 00 r1 =3D r6
-       221:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
-       222:       85 10 00 00 ff ff ff ff call -0x1
-       223:       b7 01 00 00 08 00 00 00 r1 =3D 0x8
-       224:       db 1a f8 ff 41 00 00 00 r1 =3D atomic_fetch_or((u64 *)(r1=
-0 - 0x8), r1)
-       225:       bf 61 00 00 00 00 00 00 r1 =3D r6
-       226:       b7 02 00 00 10 00 00 00 r2 =3D 0x10
-       227:       85 10 00 00 ff ff ff ff call -0x1
-       228:       b7 00 00 00 00 00 00 00 r0 =3D 0x0
-       229:       95 00 00 00 00 00 00 00 exit
+Stop trying to reinvent the wheel and just use a virtual function table.
+
+I've verified the attached patches don't break non-TDX selftests, someone just
+needs to test the TDX changes.
+
+--D8ScZ73OZF7fi6Cd
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename=0001-KVM-selftests-Add-support-for-per-VM-ucall-ops-on-x8.patch
+
+From 659487e0a9862900b052836229e3ac366c602f59 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 28 Aug 2026 06:46:51 -0700
+Subject: [PATCH 1/3] KVM: selftests: Add support for per-VM ucall ops on x86
+
+Add a layer of indirection to x86's ucall infrastructure to allow wiring up
+a different set of {do,get}_ucall() operations for TDX VMs.  TDX can't use
+port I/O (at least, not robustly), as the TDX ABI doesn't allow the guest
+to share arbitrary register state with the host on a PIO exit, and the PIO
+data payload is limited to 4 bytes, i.e. would potentially truncate the
+address of the per-ucall structure.
+
+No functional change intended, as the ops are still hardwirte to the common
+x86 ucall functions.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../testing/selftests/kvm/include/x86/ucall.h |  6 +----
+ tools/testing/selftests/kvm/lib/x86/ucall.c   | 27 +++++++++++++++++--
+ 2 files changed, 26 insertions(+), 7 deletions(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86/ucall.h b/tools/testing/selftests/kvm/include/x86/ucall.h
+index 0e4950041e3e..3639f03a4da9 100644
+--- a/tools/testing/selftests/kvm/include/x86/ucall.h
++++ b/tools/testing/selftests/kvm/include/x86/ucall.h
+@@ -2,12 +2,8 @@
+ #ifndef SELFTEST_KVM_UCALL_H
+ #define SELFTEST_KVM_UCALL_H
+ 
+-#include "kvm_util.h"
++#include "linux/kvm.h"
+ 
+ #define UCALL_EXIT_REASON       KVM_EXIT_IO
+ 
+-static inline void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+-{
+-}
+-
+ #endif
+diff --git a/tools/testing/selftests/kvm/lib/x86/ucall.c b/tools/testing/selftests/kvm/lib/x86/ucall.c
+index e7dd5791959b..444d0f0ba138 100644
+--- a/tools/testing/selftests/kvm/lib/x86/ucall.c
++++ b/tools/testing/selftests/kvm/lib/x86/ucall.c
+@@ -8,7 +8,7 @@
+ 
+ #define UCALL_PIO_PORT ((u16)0x1000)
+ 
+-void ucall_arch_do_ucall(gva_t uc)
++static void ucall_x86_do_ucall(gva_t uc)
+ {
+ 	/*
+ 	 * FIXME: Revert this hack (the entire commit that added it) once nVMX
+@@ -42,7 +42,7 @@ void ucall_arch_do_ucall(gva_t uc)
+ 		     HORRIFIC_L2_UCALL_CLOBBER_HACK);
+ }
+ 
+-void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
++static void *ucall_x86_get_ucall(struct kvm_vcpu *vcpu)
+ {
+ 	struct kvm_run *run = vcpu->run;
+ 
+@@ -54,3 +54,26 @@ void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
+ 	}
+ 	return NULL;
+ }
++
++static struct {
++	void (*do_ucall)(gva_t uc);
++	void *(*get_ucall)(struct kvm_vcpu *vcpu);
++} ucall_x86_ops = {
++	.do_ucall = ucall_x86_do_ucall,
++	.get_ucall = ucall_x86_get_ucall,
++};
++
++void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
++{
++	sync_global_to_guest(vm, ucall_x86_ops);
++}
++
++void ucall_arch_do_ucall(gva_t uc)
++{
++	return ucall_x86_ops.do_ucall(uc);
++}
++
++void *ucall_arch_get_ucall(struct kvm_vcpu *vcpu)
++{
++	return ucall_x86_ops.get_ucall(vcpu);
++}
+
+base-commit: 8ab7454faa8be2d6c1fc29c857b9f9611ddb174b
+-- 
+2.55.0.897.gb25b4bd76c-goog
 
 
-My understanding is that _32 bits_ atomics aren't available with
--mcpu=3Dv2, but 64 bits atomic fetch operations are, so that's why I stuck
-with a DW operation for the simple_atomic_fetch(_not)_on_stack tests.
+--D8ScZ73OZF7fi6Cd
+Content-Type: text/x-diff; charset=us-ascii
+Content-Disposition: attachment;
+	filename=0002-KVM-selftests-Add-support-for-TDX-ucalls-via-TDVMCAL.patch
 
->
->
-> ---
-> AI reviewed your patch. Please fix the bug or email reply why it's not a =
-bug.
-> See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/READM=
-E.md
->
-> CI run summary: https://github.com/kernel-patches/bpf/actions/runs/331600=
-00533
+From 60f3e988c65048c63217ec157e9ec228a4c484b7 Mon Sep 17 00:00:00 2001
+From: Sean Christopherson <seanjc@google.com>
+Date: Fri, 28 Aug 2026 06:52:56 -0700
+Subject: [PATCH 2/3] KVM: selftests: Add support for TDX ucalls, via
+ TDVMCALL_REPORT_FATAL_ERROR
+
+Add support for doing ucalls on TDX by abusing TDVMCALL_REPORT_FATAL_ERROR
+to pass the address of the payload to the host.  The "fatal error" TDVMCALL
+is perfectly suited for passing information to host userspace, is both the
+TDX Module and KVM allow the guest to pass (almost) all registers to the
+host, i.e. provide enough of a data payload to make a collision with a real
+fatal error practically impossible.
+
+TDX can't use port I/O, as the TDX ABI doesn't allow the guest to share
+arbitrary register state with the host on a port I/O exit, and the port I/O
+data payload is limited to 4 bytes, i.e. would potentially truncate the
+ucall address.
+
+Alternatively, TDX could use MMIO, but using a magic emulated MMIO address
+is fragile (see the TODO in __vm_create()), especially for TDX since TDX
+doesn't support read-only memslots, i.e. doesn't have line of sight towards
+addressing the TODO.  E.g. TDX could hardcode the address to something that
+is all but guaranteed to be unused on x86, e.g. the I/O APIC base address
+or the HPET address, but that doesn't truly address the fragility concerns,
+and it's ugly because ucall_arch_init() would completely ignore the passed
+in @mmio_gpa despite obviously utilizing emulated MMIO.
+
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ .../selftests/kvm/include/x86/tdx/tdx.h       |  7 +++++
+ tools/testing/selftests/kvm/lib/x86/ucall.c   | 27 ++++++++++++++++++-
+ 2 files changed, 33 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+index 6355a30bb47f..6582e6c99697 100644
+--- a/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
++++ b/tools/testing/selftests/kvm/include/x86/tdx/tdx.h
+@@ -4,6 +4,13 @@
+ 
+ #include <linux/types.h>
+ 
++/* TDX hypercall Leaf IDs */
++#define TDVMCALL_GET_TD_VM_CALL_INFO		0x10000
++#define TDVMCALL_MAP_GPA			0x10001
++#define TDVMCALL_GET_QUOTE			0x10002
++#define TDVMCALL_REPORT_FATAL_ERROR		0x10003
++#define TDVMCALL_SETUP_EVENT_NOTIFY_INTERRUPT	0x10004
++
+ #define TDG_VP_VMCALL_VE_REQUEST_MMIO    48
+ #define TDVMCALL_MMIO_WRITE		  1
+ 
+diff --git a/tools/testing/selftests/kvm/lib/x86/ucall.c b/tools/testing/selftests/kvm/lib/x86/ucall.c
+index 444d0f0ba138..93686e1dd3f3 100644
+--- a/tools/testing/selftests/kvm/lib/x86/ucall.c
++++ b/tools/testing/selftests/kvm/lib/x86/ucall.c
+@@ -5,8 +5,28 @@
+  * Copyright (C) 2018, Red Hat, Inc.
+  */
+ #include "kvm_util.h"
++#include "tdx/tdx.h"
++#include "tdx/tdx_util.h"
+ 
+-#define UCALL_PIO_PORT ((u16)0x1000)
++#define UCALL_PIO_PORT		((u16)0x1000)
++#define UCALL_TDX_MAGIC		0xabacadabaULL
++
++static void ucall_tdx_do_ucall(gva_t uc)
++{
++	__tdcall(TDVMCALL_REPORT_FATAL_ERROR, UCALL_TDX_MAGIC, uc, 0, 0);
++}
++
++static void *ucall_tdx_get_ucall(struct kvm_vcpu *vcpu)
++{
++	struct kvm_run *run = vcpu->run;
++
++	if (run->exit_reason == KVM_EXIT_SYSTEM_EVENT &&
++	    run->system_event.type == KVM_SYSTEM_EVENT_TDX_FATAL &&
++	    run->system_event.data[12] == UCALL_TDX_MAGIC)
++		return (void *)(run->system_event.data[13]);
++
++	return NULL;
++}
+ 
+ static void ucall_x86_do_ucall(gva_t uc)
+ {
+@@ -65,6 +85,11 @@ static struct {
+ 
+ void ucall_arch_init(struct kvm_vm *vm, gpa_t mmio_gpa)
+ {
++	if (is_tdx_vm(vm)) {
++		ucall_x86_ops.do_ucall = ucall_tdx_do_ucall;
++		ucall_x86_ops.get_ucall = ucall_tdx_get_ucall;
++	}
++
+ 	sync_global_to_guest(vm, ucall_x86_ops);
+ }
+ 
+-- 
+2.55.0.897.gb25b4bd76c-goog
 
 
-
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+--D8ScZ73OZF7fi6Cd--
