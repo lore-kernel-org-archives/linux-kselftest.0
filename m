@@ -1,148 +1,243 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E298A306775;
-	Fri, 28 Aug 2026 15:22:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A71213537FF;
+	Fri, 28 Aug 2026 15:27:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787930548; cv=none; b=rT/BuYZEju7C2DFamdz/GaeugUhAE4uNUP1fOASWtDfzTQl+v+6sN/Yy/0U6FF4ehBfFh3xKe7cuIy/lKrdcC2FQUDnPOB7QdPY5pdTiJJCHiS1qM96Ly4WUwa8k1BJ6C0QzAkUThT2llvdpNIFT9ZnFduJ7lkohz0IWW5CNNw8=
+	t=1787930866; cv=none; b=HNQNNn46Z15S15zeqq2HbBNzYs0szBvDa4PHsUE+sYhLD2Bkln1vgLjxDaVw0sBR3dJqtEFnK+x1aJyMaEpLVVBNCqO9CITvTkdXDiRmGtorPJCMa8Lj3aVv3PbT3aLejkh8kZBbEFrxHeZEMri9XeYUtlNC32xpJKuKwZ7ie+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787930548; c=relaxed/simple;
-	bh=DeoGFjBx4QLJFcn9hvDThwnNjY7LxUiYB4ZZ9ewETl0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TqqNc3PZU+8P/neI2M1Ur1NYmdjWhH3xY9kwuDNMnO0L3fq/TyJmw3gCwr5tVrpI3pyTl8JwWsdYDD9Zmh7xQBWzZS21QA5lHWljxLNVqEcuk9PjrbDMvq21FsVdOQEBWQXggmssKhx2GLBjMONHEFKKKlQX1fz7933GuomJE+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=iP1lnHdg; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1787930866; c=relaxed/simple;
+	bh=3/ZZ3bUMiEBf1scPmq6mLeIyrw/RQLKQvaN/jOlBdDM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SRpprqtlrKZzE4DvkYJr8gMUzRn8DpQ+rW+nrp6P7ZvGqdrd7Q65XUquck+GLoi1dqR3oYO2KDJz7PCwmi9c7juwTrttIksVoTHQaXKXePSL6pZ67PmNgekeGqRfHPDtJLz7pUYd1/JC87aF30E668kJOgVyAOHSnZ8XZ97+cQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=BvyQ7yED; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="iP1lnHdg"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 44F541570;
-	Fri, 28 Aug 2026 08:22:21 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F01223F7D8;
-	Fri, 28 Aug 2026 08:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1787930545; bh=DeoGFjBx4QLJFcn9hvDThwnNjY7LxUiYB4ZZ9ewETl0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iP1lnHdg/9SHv+4JNCQ7rQjXirwsx40DhHTEyr7I0/55vHHoe6LgJqGsGDhKr/jfK
-	 M2pOWxa4Us+u+fR0QBf0ZVWt0rXfJ4osSoW5Mi9gWwYfixqt/7/SHTyz/MBbck2n6u
-	 5hGNxmUuwR53Rq+/Zkld5N+Ru3N2Db8y+AjqDaE0=
-Date: Fri, 28 Aug 2026 16:22:19 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <apGnq7HNAbPOQhLO@e129823.arm.com>
-References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
- <20260828-fix_split-v3-2-374022586a4b@arm.com>
- <DL0OA5ZF6VX2.33NA9XE20959G@nvidia.com>
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="BvyQ7yED"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1787930865; x=1819466865;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=3/ZZ3bUMiEBf1scPmq6mLeIyrw/RQLKQvaN/jOlBdDM=;
+  b=BvyQ7yEDe47mnYiHSCjibNl/2MiIULw36+kn/MjaXA0dQ7m5GCzGtuMm
+   zT2xbUyIIBbPKjcWpw8QzFG0q41/+7zLcHCAYoW6Jve2W/60X88qmdQcF
+   vyimNUEDccnQyruBZPqI7JYhXfY0KLCkFanqdkI24F0q0RP+GGqg/yXsW
+   6tx4MZN1pQzhZYqcI3f5PHD5C1nHcT9dflieWFISfQMj8dHAFloCGhi0Y
+   j1syG6XEHpyPFLWpMkjKAQ3YjDMkz1c8E14RCJHh8sfg1YDMwyzheBDf7
+   JBj01ltaWaixXtwaSNHXMCjIL9jY9EWzhl4G0fabo4Okyv30yA+ebvhoN
+   g==;
+X-CSE-ConnectionGUID: +MlSf7vETJ25WeoKlMDqUA==
+X-CSE-MsgGUID: hqEsfnj0S8KrwEBCDjTZwg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11889"; a="88204483"
+X-IronPort-AV: E=Sophos;i="6.25,248,1779174000"; 
+   d="scan'208";a="88204483"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2026 08:27:44 -0700
+X-CSE-ConnectionGUID: bw6iaKFDSvauQKaCnC/TjA==
+X-CSE-MsgGUID: RcmBlYWZTt2fmqyki3lzAg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.25,248,1779174000"; 
+   d="scan'208";a="293000248"
+Received: from sghuge-mobl2.amr.corp.intel.com (HELO [10.125.109.180]) ([10.125.109.180])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Aug 2026 08:27:41 -0700
+Message-ID: <601b7283-c80b-4a4f-911d-de572e8b7744@intel.com>
+Date: Fri, 28 Aug 2026 08:27:40 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <DL0OA5ZF6VX2.33NA9XE20959G@nvidia.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 03/27] cxl: Move component register defines to
+ uapi/cxl/cxl_regs.h
+To: mhonap@nvidia.com, alex@shazbot.org, jgg@ziepe.ca, ankita@nvidia.com,
+ jic23@kernel.org, alejandro.lucero-palau@amd.com, smadhavan@nvidia.com,
+ corbet@lwn.net, skhan@linuxfoundation.org, dave@stgolabs.net,
+ alison.schofield@intel.com, vishal.l.verma@intel.com, iweiny@kernel.org,
+ ming.li@zohomail.com, yishaih@nvidia.com, skolothumtho@nvidia.com,
+ kevin.tian@intel.com, bhelgaas@google.com, dmatlack@google.com,
+ kees@kernel.org, gustavoars@kernel.org
+Cc: cjia@nvidia.com, kjaju@nvidia.com, vsethi@nvidia.com, zhiw@nvidia.com,
+ linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ kvm@vger.kernel.org, linux-cxl@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20260813093631.2288172-1-mhonap@nvidia.com>
+ <20260813093631.2288172-4-mhonap@nvidia.com>
+From: Dave Jiang <dave.jiang@intel.com>
+Content-Language: en-US
+In-Reply-To: <20260813093631.2288172-4-mhonap@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 28, 2026 at 11:13:00AM -0400, Zi Yan wrote:
-> On Fri Aug 28, 2026 at 4:11 AM EDT, Yeoreum Yun wrote:
-> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > made by memalign().
-> >
-> > The underlying VMA may start at a different address from the aligned
-> > address returned by memalign(). Furthermore, a subsequent
-> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > already set.
-> >
-> > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > helpers incorrectly require the address returned by memalign() to
-> > match the VMA start address reported in /proc/self/smaps.
-> >
-> > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> > /proc/self/smaps to detect huge pages.
-> >
-> > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> > Suggested-by: Zi Yan <ziy@nvidia.com>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> >  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
-> >  tools/testing/selftests/mm/vm_util.h |   1 +
-> >  2 files changed, 92 insertions(+), 54 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-> > index 4821a3563036..083b72d92b14 100644
-> > --- a/tools/testing/selftests/mm/vm_util.c
-> > +++ b/tools/testing/selftests/mm/vm_util.c
-> > @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
-> >  	return entry;
-> >  }
-> >  
-> 
-> <snip>
-> 
-> > +	for (; start < end; start += scan_mapping_size) {
-> > +		categories = pagemap_scan_get_categories(pagemap_fd, start);
-> > +		pfn = pagemap_get_pfn(pagemap_fd, start);
-> > +		if (pfn == -1UL) {
-> > +			if (!allow_nonpresent)
-> > +				goto out;
-> > +			else
-> > +				continue;
-> > +		}
-> > +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
-> > +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
-> > +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
-> > +			nr_pmd_mappings++;
-> > +		if (kpf & KPF_COMPOUND_TAIL)
-> > +			continue;
-> > +		if (!check_huge_type(categories, kpf, type))
-> > +			goto out;
-> > +	}
-> > +	
-> 
-> There is a trailing tab.
-> 
-> > +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
-> > +		goto out;
-> > +	ret = true;
-> > +
-> > +out:
-> > +	close(pagemap_fd);
-> > +	close(kpageflags_fd);
-> > +	return ret;
-> >  }
-> >  
-> 
-> Otherwise, LGTM. I assume the replacement of memalign(), from the
-> discussion between you and Lorenzo, will be added in a separate patch.
-> For this patch,
 
-Yeap. I'll post with the separated one.
 
+On 8/13/26 2:36 AM, mhonap@nvidia.com wrote:
+> From: Manish Honap <mhonap@nvidia.com>
 > 
-> Reviewed-by: Zi Yan <ziy@nvidia.com>
+> The CXL component and HDM decoder register layout is spec-defined and is
+> needed by consumers outside the CXL subsystem such as vfio-cxl, which
+> cannot include the private drivers/cxl/cxl.h. Move those defines to a new
+> uapi header, the way PCI register offsets live in uapi pci_regs.h, and
+> include it from drivers/cxl/cxl.h so existing users are unchanged.
 
-Thanks!
+Wouldn't the proper location be include/cxl/cxl.h instead if it's only being shared by vfio-cxl kernel component? Unless there are expectation of user side usage for those definitions? If so then should say so here.
 
--- 
-Sincerely,
-Yeoreum Yun
+DJ
+> 
+> No functional change; the GENMASK and BIT forms are written as plain
+> values as an uAPI header requirement.
+> 
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+>  MAINTAINERS                 |  1 +
+>  drivers/cxl/cxl.h           | 47 +-----------------------------
+>  include/uapi/cxl/cxl_regs.h | 58 +++++++++++++++++++++++++++++++++++++
+>  3 files changed, 60 insertions(+), 46 deletions(-)
+>  create mode 100644 include/uapi/cxl/cxl_regs.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5114e6db7307..c665bf8f1a28 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6528,6 +6528,7 @@ F:	Documentation/driver-api/cxl
+>  F:	Documentation/userspace-api/fwctl/fwctl-cxl.rst
+>  F:	drivers/cxl/
+>  F:	include/cxl/
+> +F:	include/uapi/cxl/
+>  F:	include/uapi/linux/cxl_mem.h
+>  F:	tools/testing/cxl/
+>  
+> diff --git a/drivers/cxl/cxl.h b/drivers/cxl/cxl.h
+> index c795cce0fcbc..2893b2427be1 100644
+> --- a/drivers/cxl/cxl.h
+> +++ b/drivers/cxl/cxl.h
+> @@ -13,6 +13,7 @@
+>  #include <linux/io.h>
+>  #include <linux/range.h>
+>  #include <cxl/cxl.h>
+> +#include <cxl/cxl_regs.h>
+>  
+>  extern const struct nvdimm_security_ops *cxl_security_ops;
+>  
+> @@ -24,52 +25,6 @@ extern const struct nvdimm_security_ops *cxl_security_ops;
+>   * (port-driver, region-driver, nvdimm object-drivers... etc).
+>   */
+>  
+> -/* CXL 2.0 8.2.4 CXL Component Register Layout and Definition */
+> -#define CXL_COMPONENT_REG_BLOCK_SIZE SZ_64K
+> -
+> -/* CXL 2.0 8.2.5 CXL.cache and CXL.mem Registers*/
+> -#define CXL_CM_OFFSET 0x1000
+> -#define CXL_CM_CAP_HDR_OFFSET 0x0
+> -#define   CXL_CM_CAP_HDR_ID_MASK GENMASK(15, 0)
+> -#define     CM_CAP_HDR_CAP_ID 1
+> -#define   CXL_CM_CAP_HDR_VERSION_MASK GENMASK(19, 16)
+> -#define     CM_CAP_HDR_CAP_VERSION 1
+> -#define   CXL_CM_CAP_HDR_CACHE_MEM_VERSION_MASK GENMASK(23, 20)
+> -#define     CM_CAP_HDR_CACHE_MEM_VERSION 1
+> -#define   CXL_CM_CAP_HDR_ARRAY_SIZE_MASK GENMASK(31, 24)
+> -#define CXL_CM_CAP_PTR_MASK GENMASK(31, 20)
+> -
+> -#define   CXL_CM_CAP_CAP_ID_RAS 0x2
+> -#define   CXL_CM_CAP_CAP_ID_HDM 0x5
+> -#define   CXL_CM_CAP_CAP_HDM_VERSION 1
+> -
+> -/* HDM decoders CXL 2.0 8.2.5.12 CXL HDM Decoder Capability Structure */
+> -#define CXL_HDM_DECODER_CAP_OFFSET 0x0
+> -#define   CXL_HDM_DECODER_COUNT_MASK GENMASK(3, 0)
+> -#define   CXL_HDM_DECODER_TARGET_COUNT_MASK GENMASK(7, 4)
+> -#define   CXL_HDM_DECODER_INTERLEAVE_11_8 BIT(8)
+> -#define   CXL_HDM_DECODER_INTERLEAVE_14_12 BIT(9)
+> -#define   CXL_HDM_DECODER_INTERLEAVE_3_6_12_WAY BIT(11)
+> -#define   CXL_HDM_DECODER_INTERLEAVE_16_WAY BIT(12)
+> -#define CXL_HDM_DECODER_CTRL_OFFSET 0x4
+> -#define   CXL_HDM_DECODER_ENABLE BIT(1)
+> -#define CXL_HDM_DECODER0_BASE_LOW_OFFSET(i) (0x20 * (i) + 0x10)
+> -#define CXL_HDM_DECODER0_BASE_HIGH_OFFSET(i) (0x20 * (i) + 0x14)
+> -#define CXL_HDM_DECODER0_SIZE_LOW_OFFSET(i) (0x20 * (i) + 0x18)
+> -#define CXL_HDM_DECODER0_SIZE_HIGH_OFFSET(i) (0x20 * (i) + 0x1c)
+> -#define CXL_HDM_DECODER0_CTRL_OFFSET(i) (0x20 * (i) + 0x20)
+> -#define   CXL_HDM_DECODER0_CTRL_IG_MASK GENMASK(3, 0)
+> -#define   CXL_HDM_DECODER0_CTRL_IW_MASK GENMASK(7, 4)
+> -#define   CXL_HDM_DECODER0_CTRL_LOCK BIT(8)
+> -#define   CXL_HDM_DECODER0_CTRL_COMMIT BIT(9)
+> -#define   CXL_HDM_DECODER0_CTRL_COMMITTED BIT(10)
+> -#define   CXL_HDM_DECODER0_CTRL_COMMIT_ERROR BIT(11)
+> -#define   CXL_HDM_DECODER0_CTRL_HOSTONLY BIT(12)
+> -#define CXL_HDM_DECODER0_TL_LOW(i) (0x20 * (i) + 0x24)
+> -#define CXL_HDM_DECODER0_TL_HIGH(i) (0x20 * (i) + 0x28)
+> -#define CXL_HDM_DECODER0_SKIP_LOW(i) CXL_HDM_DECODER0_TL_LOW(i)
+> -#define CXL_HDM_DECODER0_SKIP_HIGH(i) CXL_HDM_DECODER0_TL_HIGH(i)
+> -
+>  /* HDM decoder control register constants CXL 3.0 8.2.5.19.7 */
+>  #define CXL_DECODER_MIN_GRANULARITY 256
+>  #define CXL_DECODER_MAX_ENCODED_IG 6
+> diff --git a/include/uapi/cxl/cxl_regs.h b/include/uapi/cxl/cxl_regs.h
+> new file mode 100644
+> index 000000000000..04bf790f0fdc
+> --- /dev/null
+> +++ b/include/uapi/cxl/cxl_regs.h
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+> +/* Copyright (c) 2026 NVIDIA Corporation & Affiliates */
+> +
+> +#ifndef _UAPI_CXL_REGS_H_
+> +#define _UAPI_CXL_REGS_H_
+> +
+> +/*
+> + * CXL Component Register layout from the CXL specification. Kept in uapi so a
+> + * VMM can consume the register offsets without a kernel header dependency.
+> + */
+> +
+> +/* CXL 2.0 8.2.4 CXL Component Register Layout and Definition */
+> +#define CXL_COMPONENT_REG_BLOCK_SIZE 0x10000
+> +
+> +/* CXL 2.0 8.2.5 CXL.cache and CXL.mem Registers */
+> +#define CXL_CM_OFFSET 0x1000
+> +#define CXL_CM_CAP_HDR_OFFSET 0x0
+> +#define   CXL_CM_CAP_HDR_ID_MASK 0xffff
+> +#define     CM_CAP_HDR_CAP_ID 1
+> +#define   CXL_CM_CAP_HDR_VERSION_MASK 0xf0000
+> +#define     CM_CAP_HDR_CAP_VERSION 1
+> +#define   CXL_CM_CAP_HDR_CACHE_MEM_VERSION_MASK 0xf00000
+> +#define     CM_CAP_HDR_CACHE_MEM_VERSION 1
+> +#define   CXL_CM_CAP_HDR_ARRAY_SIZE_MASK 0xff000000
+> +#define CXL_CM_CAP_PTR_MASK 0xfff00000
+> +
+> +#define   CXL_CM_CAP_CAP_ID_RAS 0x2
+> +#define   CXL_CM_CAP_CAP_ID_HDM 0x5
+> +#define   CXL_CM_CAP_CAP_HDM_VERSION 1
+> +
+> +/* HDM decoders CXL 2.0 8.2.5.12 CXL HDM Decoder Capability Structure */
+> +#define CXL_HDM_DECODER_CAP_OFFSET 0x0
+> +#define   CXL_HDM_DECODER_COUNT_MASK 0xf
+> +#define   CXL_HDM_DECODER_TARGET_COUNT_MASK 0xf0
+> +#define   CXL_HDM_DECODER_INTERLEAVE_11_8 0x100
+> +#define   CXL_HDM_DECODER_INTERLEAVE_14_12 0x200
+> +#define   CXL_HDM_DECODER_INTERLEAVE_3_6_12_WAY 0x800
+> +#define   CXL_HDM_DECODER_INTERLEAVE_16_WAY 0x1000
+> +#define CXL_HDM_DECODER_CTRL_OFFSET 0x4
+> +#define   CXL_HDM_DECODER_ENABLE 0x2
+> +#define CXL_HDM_DECODER0_BASE_LOW_OFFSET(i) (0x20 * (i) + 0x10)
+> +#define CXL_HDM_DECODER0_BASE_HIGH_OFFSET(i) (0x20 * (i) + 0x14)
+> +#define CXL_HDM_DECODER0_SIZE_LOW_OFFSET(i) (0x20 * (i) + 0x18)
+> +#define CXL_HDM_DECODER0_SIZE_HIGH_OFFSET(i) (0x20 * (i) + 0x1c)
+> +#define CXL_HDM_DECODER0_CTRL_OFFSET(i) (0x20 * (i) + 0x20)
+> +#define   CXL_HDM_DECODER0_CTRL_IG_MASK 0xf
+> +#define   CXL_HDM_DECODER0_CTRL_IW_MASK 0xf0
+> +#define   CXL_HDM_DECODER0_CTRL_LOCK 0x100
+> +#define   CXL_HDM_DECODER0_CTRL_COMMIT 0x200
+> +#define   CXL_HDM_DECODER0_CTRL_COMMITTED 0x400
+> +#define   CXL_HDM_DECODER0_CTRL_COMMIT_ERROR 0x800
+> +#define   CXL_HDM_DECODER0_CTRL_HOSTONLY 0x1000
+> +#define CXL_HDM_DECODER0_TL_LOW(i) (0x20 * (i) + 0x24)
+> +#define CXL_HDM_DECODER0_TL_HIGH(i) (0x20 * (i) + 0x28)
+> +#define CXL_HDM_DECODER0_SKIP_LOW(i) CXL_HDM_DECODER0_TL_LOW(i)
+> +#define CXL_HDM_DECODER0_SKIP_HIGH(i) CXL_HDM_DECODER0_TL_HIGH(i)
+> +
+> +#endif /* _UAPI_CXL_REGS_H_ */
+
