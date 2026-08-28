@@ -1,85 +1,79 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mail-10631.protonmail.ch (mail-10631.protonmail.ch [79.135.106.31])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A272628D;
-	Fri, 28 Aug 2026 01:47:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A98F8332EBC;
+	Fri, 28 Aug 2026 02:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.135.106.31
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787881629; cv=none; b=MEgTETqzZIalChimgRspcC+zxuxCynKEHzK77kYsMn6I8DuDw82r6alt+pGcr6OdMBB8evCctEzUDX7jy4iSgAEDOXb0X29yH52dy/Kg9xC53xdzOwWBd0w5jQpQTWWF7pZRigGiul1gK4ZHsdP+soALm/4Yu2pkncxiB/GyoO4=
+	t=1787882577; cv=none; b=LVIVaZmI2xbTQh14ZOdAy3LVtHQTuBpL6NrU18RDtOs2NajFqIEX+CKSlSmK+HuFbwS9d9rT2XZowlEyxgOJEu8xjQaq3jBPBzbD3PnItMEIgjcbeHoSCXHtkIXspp7ACSO5sYO8gqFtNCV78BnWYTH1b4voOsxXNM5FjHxT/Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787881629; c=relaxed/simple;
-	bh=zYSmy5K+uBSKqiQ6mGp6GOZRIgNJU5Mho+lWnM8XtL8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Yg9G3NBiqT3RAh94A0X+5pbA7rLjwVLE7dnXgbZN1Yeajjs0wWtnjEC2nAU6sFaLb6lishV4aoy2QR4/qTdhW0PciBhPkM1RPxQ/d7cxgaeY3y6ICxHdBINJJhihIQthYcVp61TnzgkzoUx78Qhe677nAn+Q688ocTXDvQVw+tU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xuo+8fAJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787882577; c=relaxed/simple;
+	bh=JqtT4/1VNaufIEE32rrynp2orypDkdMbFcv921TFbm8=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Qn/Y16b/IDDPxDkVB7gpJzP1jfNlIBFU4M7Kxs0Vdzznjf7+iY/ojX3KnQYkdG0U0qjfvpVvQwcuzbP9e7HlZxYq8u3mtSRuBjV38gzUDewfM2HuLmJl6Fx/5SB18k1OZ102jjcwtRn0SQ8mV4fdZBZe5iYMPlcGnRXCM/FITyU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me; spf=pass smtp.mailfrom=pm.me; dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b=DuIHYT8X; arc=none smtp.client-ip=79.135.106.31
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=pm.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pm.me
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xuo+8fAJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93B031F00A3A;
-	Fri, 28 Aug 2026 01:47:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787881627;
-	bh=+fW2+xE2H0LI68hS7+oEWra7KzRlcB7nNxeFxWmibVg=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Xuo+8fAJDcKr1s7ptBMW97qvPXuQTQ65OajmrPGEFKN623syOp6xjrvpubpt0jmc1
-	 jdvV00hac6IQW6Byo/XvHu9tX4NVxv280ZtBgWUEPuvcpqipr0iYGaP3SKWE8wAPlD
-	 o1SOjcUA46v9x1Zz9O7fZGzkdF/M5nRTZtVPY0eZ+yZF/ezYBNY7hhaPvYUL2ES9W3
-	 XhXIm6QNPHU/riWefABzT80ZfFpJLn97V2emD1UN77lPARQ63gYzwdCvR5aCVJR4vK
-	 cHdZGlguq4hteRUTjG0oNaQlqR5V+OYItH8WewHHH3IHo7Jc+E7cDl2ULk482q8N7I
-	 LYyQxo0baIP0Q==
-From: SJ Park <sj@kernel.org>
-To: 
-Cc: SJ Park <sj@kernel.org>,
-	stable@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [RFC PATCH v1.2 1/4] mm/damon/tests/core-kunit: test committing psi goal to psi goal
-Date: Thu, 27 Aug 2026 18:46:55 -0700
-Message-ID: <20260828014659.121058-2-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260828014659.121058-1-sj@kernel.org>
-References: <20260828014659.121058-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=pm.me header.i=@pm.me header.b="DuIHYT8X"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pm.me;
+	s=protonmail3; t=1787882572; x=1788141772;
+	bh=UKxbeAn47/2NNFP5SzE1kHmFcRG4Vr0q6jvXkTYz15s=;
+	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+	 Message-ID:BIMI-Selector;
+	b=DuIHYT8XzozvBrkOFrWMwRiTkyM+4AeCSj7qRP11OYKoeEYtcIr5xXne/ZWMcm6r1
+	 Ju+3fcWOO6Jr2zEqibwWM/LSytA5xszV7BR/RbE3hYg6CBrSbi/5K0fQwF06yI447y
+	 0M3KBhXiBekBHx7oiu6Vz7Q8+HjmcryE2ArRIYGq1buz+YaSEUNz5wLp61ymJPIYrU
+	 aTFCfAJAiVJXC6cWEJRTDO5snDtIfCWHnZt6qVFh9wd0Cw782hUpqbj3ubvKceGo/5
+	 D5kTfit3IrMLDEdasoarS/nE7NQO73r3WQQ/ukeucxwycm93cCQgDCSzXYGoJxWZXU
+	 CTqfk8uuQ13SQ==
+Date: Fri, 28 Aug 2026 02:02:48 +0000
+To: Miklos Szeredi <miklos@szeredi.hu>, Stefan Hajnoczi <stefanha@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, German Maglione <gmaglione@redhat.com>, Shuah Khan <shuah@kernel.org>
+From: Aaron Paterson <apaterson@pm.me>
+Cc: =?utf-8?Q?Eugenio_P=C3=A9rez?= <eperezma@redhat.com>, fuse-devel@lists.linux.dev, linux-fsdevel@vger.kernel.org, linux-kselftest@vger.kernel.org, virtualization@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/5] fuse: report a request refused for a live nodeid
+Message-ID: <20260828020241.92045-1-apaterson@pm.me>
+In-Reply-To: <cover.1787873791.git.apaterson@pm.me>
+References: <cover.1787873791.git.apaterson@pm.me>
+Feedback-ID: 6356313:user:proton
+X-Pm-Message-ID: 223b030157c78b545fc11495bdfa4d1567a6665d
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-damon_test_commit_quota_goal_for() is set to test committing a new psi
-goal on an existing psi goal.  However, damon_test_commit_quota_goal()
-is mistakenly not covering the test case.  Add the test case.
+The measurements in the cover letter were taken on 6.18.5. I have now run
+the same comparison on current mainline, so the numbers sit on the tree
+the series is posted against: v7.2-15794-g1b78070aaef6, inside the 7.3
+merge window.
 
-Fixes: 99f89debafc5 ("mm/damon/tests/core-kunit: add damos_commit_quota_goal() test")
-Cc: <stable@vger.kernel.org> # 6.19.x
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+Both kernels come from the mainline git tree directly rather than from
+applying the patches at build time. The unpatched arm is that commit as
+it stands; the patched arm is the same commit with these five applied.
+So the only difference between the two kernels is the series as posted.
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 4a536d41cdb2d..b643f9a83f14a 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -787,6 +787,13 @@ static void damos_test_commit_quota_goal(struct kunit *test)
- 		.last_psi_total = 456,
- 	};
- 
-+	damos_test_commit_quota_goal_for(test, &dst,
-+			&(struct damos_quota_goal) {
-+			.metric = DAMOS_QUOTA_SOME_MEM_PSI_US,
-+			.target_value = 234,
-+			.current_value = 345,
-+			.last_psi_total = 567,
-+			});
- 	damos_test_commit_quota_goal_for(test, &dst,
- 			&(struct damos_quota_goal){
- 			.metric = DAMOS_QUOTA_USER_INPUT,
--- 
-2.47.3
+  arm  fs/fuse  virtio_fs  opens    refused
+   A   stock    stock      315076   22646 (7.2%)
+   D   patched  patched    407169   0
+
+Every refusal on arm A is the contradiction the probe exists to report:
+open answered ENOENT while stat on the same path a moment later still
+described the file. On arm D there are none.
+
+The refusal rate is lower here than the 14.0% the cover letter reports
+for 6.18.5. It is a race, so the rate moves with load and with how fast
+the guest gets through its loop, and the arms above were taken while the
+host was busy building the other kernel. What does not move is which
+side of zero each arm lands on.
+
+The probe is the one described in the cover letter: one process replaces
+a file by rename while another opens the same name as fast as it can.
+The server is Apple's Virtualization virtio-fs, which releases an inode
+as soon as a rename displaces the name it was looked up by, and is what
+makes the refusal observable at all.
+
