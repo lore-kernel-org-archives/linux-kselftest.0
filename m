@@ -1,51 +1,96 @@
-Received: from mta0.migadu.com (out-165.mta0.migadu.com [91.218.175.165])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CCA439891E
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 19:53:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.165
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581FD3D1CAD
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 20:14:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787946806; cv=none; b=K7gf1M57UKMUM1cAvjvf7jPpGtlF/gs1rStq8f+dbETQ2YOYkjmHsSXUFDiIfDySRMXbOG3yrOqyhnr9C2c+Db7TV4K0jTeIKqdbFwDEZhVgkQLTk8B1gaVzoC7tkTpWa3KhV3bkpZIWVKI/MyO8py/R/DrQ6MtdLIZxXC/jxso=
+	t=1787948051; cv=none; b=OT5906PaV6GAOfnmoxYc6NtcIdvfhBbnmiwg+TFWhcDytwWTec+G9XTs0/4gvd97nh6QI6asmQKuWfPGvCUz7mLpgaZkT1SdhZPeS83kjiUhIYXbCtBUjyOWqNz1sGVofSVOzksaBuFUmBFGnTkrJLvGt1p2Jr9dkEXCo0IbCf0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787946806; c=relaxed/simple;
-	bh=2DsvoO8trPann3gGlgHfEvV8zzD6F/Yb3aERd3YdNwY=;
+	s=arc-20240116; t=1787948051; c=relaxed/simple;
+	bh=RrlgIjKQtS2iaNVqkTRdRTy02FrfZJ1ASwUAxdnue2c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k+EPZ05Kx0N1eB3ZIuYuu1lE4np58YIpJT3dsdKgnmyFh97oQgLDd8vweClakmq8CYt/LUaEMaKT1EoGJrgtduvo6QL5xvOuFM22eKfhIpEqAkzWybHrFJ+AGidSanOTNfhmzWbzdqPPisrzrVTYug+QIXurPNuXsyVEP3EV2QY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=eVza7e58; arc=none smtp.client-ip=91.218.175.165
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	 Content-Type:Content-Disposition:In-Reply-To; b=WigLn+my+7YuegiFpPPfSLGbQisRQ9ceUp7F1I4zqDTzHxWaPYvHqeNPrnXy/GeVc5NtmRPyG3wHAIlHe4r4BHRIhRLYQenQ4YGQ3y5xVstBeeNoTkTZA2uIKpqySHD6CSDw8Yywz9JYaBVb+vk8lMYTUCk9jmK59iAy0nonbPY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Xy7jaMC3; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="eVza7e58"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=2DsvoO8trPann3gGlgHfEvV8zzD6F/Yb3aERd3YdNwY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1787946801; v=1; x=1788551601;
- b=eVza7e58vsCYz6nTeSUGSC0tDD2EiRtk3eLY2ekL7Hmt60HFR7XCaVkd7DBKy64F3qBKqrhF
- dgwRDueTFjDD/CPdw3Vxnbrb4ImP202YwGftcCsRsTjUvIlprG4ccoxR6ft8WapGQatdUPeNZEK
- ImClpGQJEKqZgkyjMvRUrqbY=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id da07200143d5a7cf;
-	Fri, 28 Aug 2026 19:53:20 +0000
-X-Mizu-Trace-ID: da07200143d5a7cf
-X-Migadu-Flow: FLOW_OUT
-Date: Fri, 28 Aug 2026 12:53:19 -0700
-From: Shakeel Butt <shakeel.butt@linux.dev>
-To: Hui Zhu <hui.zhu@linux.dev>
-Cc: Roman Gushchin <roman.gushchin@linux.dev>, 
-	JP Kobryn <inwardvessel@gmail.com>, Andrew Morton <akpm@linux-foundation.org>, 
-	Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>, 
-	Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov <ast@kernel.org>, 
-	Daniel Borkmann <daniel@iogearbox.net>, Kumar Kartikeya Dwivedi <memxor@gmail.com>, 
-	Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>, 
-	Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>, 
-	Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>, Barry Song <baohua@kernel.org>, 
-	Geliang Tang <geliang@kernel.org>, linux-kernel@vger.kernel.org, bpf@vger.kernel.org, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, Hui Zhu <zhuhui@kylinos.cn>
-Subject: Re: [PATCH bpf-next v5 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
-Message-ID: <apHk86Y8araBlXcq@linux.dev>
-References: <cover.1787826402.git.zhuhui@kylinos.cn>
- <5dfdc7800469eac4e9a240f2422ba65d4ef4c4ba.1787826402.git.zhuhui@kylinos.cn>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Xy7jaMC3"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2d3b440b97aso5435ad.1
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 13:14:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1787948049; x=1788552849; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=1W99GsbYdan7e4eL7ZVdhDx98mSTGYMmyZJimSzUaX0=;
+        b=Xy7jaMC3s/Mz4S8vdPPGXaHr2smRZE+dx1unqDZbo/sGMkQm59ENDpCVo2uXJRBKel
+         5v+IVKyMB+7pzlLkyOqXNO9j/s5YvHmTG1UwrVvzTrpIvQbEdoGQktExhdBDOad96jkq
+         gTAVSzYJ+qlOv5dD4Jc+4sPqRMjRmk/OOASlCykzhWf1gI1XwCQwMnjD3L1sJqVAPBp+
+         LsPyJzR9IhABjN3x3zdsc0Z8+sRPHdnH4y7KD6OhMODs1nfxr9rl0FX3bfHF9uMNQY/G
+         KRAGnenn49k94sOQFqwnrlCA9Mat5xpnRNU+1D35pI2Hugmic/mCk5HH+Xqae1KmoFwH
+         nM6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787948049; x=1788552849;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1W99GsbYdan7e4eL7ZVdhDx98mSTGYMmyZJimSzUaX0=;
+        b=HivcBdXbhhbLobNco2k6K7mR9vl+SgKuujnLc9cazYZ+qXEYiYM7v2281QFk0RRwee
+         vTHclnSUbwl+wHipbMywAeVFJYod+A0r+5FkcxorG6U3e7pYgAYtKcM1fdhJQr5KzxCi
+         p3WP/QdIc+y/9Dn1b8ZXp/VwmRuYogW63ra/SEtj4+JUANRtuVjXrWvpYFuQ25EAG6RU
+         bANcw4bY6bOVWvDh9tzU2weiXGFQWu1nKKSOmIrqcI1j9/wOsKanDX+w5RTdm1BLAATX
+         MJsprmOS9X/txl88P1PMHoFsycAi5bSPEZ3ix5bY8WLsZAAA9tk4Q8avWdDh4acj8X3J
+         fzvQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzCc0mcCUoM+2P4rtt+LQoaf/CF/7YNyBJCjfqIHOa79rq7E1gmLIrTNm+bjuAkIR0NwMtVOxDoRc842i6MVIQ=@vger.kernel.org
+X-Gm-Message-State: AFuF++lvtdPlwQRs9A+9V5s5AcTSY7byEwFlg49sPgw5UbefwIAvbvb1
+	VaGSDLDPxNQ52fnHhNc/mQzz43QkBGybqxGi11aLoCswqF7M7BTPGGo8ukkseYucEA==
+X-Gm-Gg: AYBFou2ed4zcKHQOQvpJk2bDOPZWeevgp47XqrXoujR6DfDqG00HRMAF9SSoTbS1I07
+	eb2fdOkgXBXPqghmw4rKy9rC8tPxflMMdWpa/gFKbX9LlCCsemPnF/vza36XkWb2XNvfPFtZKqj
+	SZ5j0Lhid7wsIbU8GeHaanQ8Uq4dhMyIFGmBeC2o5zRoX4eKzwsWUPJXMKj0u50AhsHzFmwZSfW
+	4h7PVE/u26J0irHhZQ0ogfYiJNw6VWJqZWERxd7FlItnPHtayH4NJwwhF0YpsgOABN/ssqMVidv
+	qAgff19rQQEls9wzAfh0tZF+jvBz7Q/vskjKq6xbZIjPtvHtGGLdnPGyBpCL5PI1MyCPxZ9P7iY
+	h3pVcyuDfSRoKKoLu0N8iznkE7KYJUbIMQOHoOIlemSQOT+ftbxUHF11RttipZMg7dPO1bBRPoo
+	+VVJLPR98c2+K9yHQKNYPx+9bYmyp1rw1NB2JBfOeJLia8/sQRkLTByNjeLNfrH6nmAg6KgcL7F
+	5/wvLKpgQh4ITJ0uz5PciMW
+X-Received: by 2002:a17:902:f642:b0:2d5:db38:800f with SMTP id d9443c01a7336-2d8df554483mr1432235ad.14.1787948049010;
+        Fri, 28 Aug 2026 13:14:09 -0700 (PDT)
+Received: from google.com (139.58.247.35.bc.googleusercontent.com. [35.247.58.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d759869cfdsm8784715ad.51.2026.08.28.13.14.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Aug 2026 13:14:08 -0700 (PDT)
+Date: Fri, 28 Aug 2026 20:14:04 +0000
+From: Lisa Wang <wyihan@google.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Peter Fang <peter.fang@intel.com>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	Ackerley Tng <ackerleytng@google.com>,
+	Binbin Wu <binbin.wu@linux.intel.com>,
+	Chao Gao <chao.gao@intel.com>,
+	Chenyi Qiang <chenyi.qiang@intel.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Erdem Aktas <erdemaktas@google.com>,
+	Ira Weiny <ira.weiny@intel.com>,
+	Isaku Yamahata <isaku.yamahata@intel.com>,
+	Kiryl Shutsemau <kas@kernel.org>, linux-kselftest@vger.kernel.org,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	"Pratik R. Sampat" <pratikrajesh.sampat@amd.com>,
+	Reinette Chatre <reinette.chatre@intel.com>,
+	Rick Edgecombe <rick.p.edgecombe@intel.com>,
+	Roger Wang <runanwang@google.com>,
+	Ryan Afranji <afranji@google.com>, Sagi Shahar <sagis@google.com>,
+	Shuah Khan <shuah@kernel.org>, Xiaoyao Li <xiaoyao.li@intel.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Jeremiah McReynolds <jmcrey@google.com>, kvm@vger.kernel.org,
+	linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH v14 10/22] KVM: selftests: Set up TDX boot code region
+Message-ID: <apHsDCRHG-QIYZuL@google.com>
+References: <20260722-tdx-selftests-v14-0-15ad654a50db@google.com>
+ <20260722-tdx-selftests-v14-10-15ad654a50db@google.com>
+ <20260824192702.GA3694338@pedri>
+ <aoyi4nhWkhFrlIfs@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -54,107 +99,35 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <5dfdc7800469eac4e9a240f2422ba65d4ef4c4ba.1787826402.git.zhuhui@kylinos.cn>
+In-Reply-To: <aoyi4nhWkhFrlIfs@google.com>
 
-On Thu, Aug 27, 2026 at 06:36:29PM +0800, Hui Zhu wrote:
-> From: Hui Zhu <zhuhui@kylinos.cn>
+On Mon, Aug 24, 2026 at 01:00:34PM -0700, Sean Christopherson wrote:
+> > 
+> > There shouldn't be a need to "pad reset_vector to its full size of 16
+> > bytes" as stated in v8 [1]. The exported "reset_vector" symbol in v8,
+> > plus the boot code start & end markers, should be enough to help
+> > tdx_vm_setup_boot_code_region() put this boot blob in the right place.
 > 
-> Add bpf_proactive_reclaim(), a sleepable kfunc which performs one
-> proactive reclaim pass on a given memory cgroup, similar to a write
-> to memory.reclaim but without retrying until the target is reached.
+> Ya, looking at this with fresh eyes, AFAICT there's no reason to handcode anything,
+> it's just basic arithmetic.
 > 
-> The kfunc refuses to reclaim if the calling task is already in a
-> reclaim context, as a nested reclaim would corrupt the outer reclaim
-> state.
+> Side topic, this series doesn't compile for me, so the below isn't even properly
+> compile-tested (I hacked in arbitrary literals to get past the undefined references).
 > 
-> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
-> ---
->  mm/bpf_memcontrol.c | 46 +++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 46 insertions(+)
-> 
-> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
-> index 716df49d7647..297ff7f05042 100644
-> --- a/mm/bpf_memcontrol.c
-> +++ b/mm/bpf_memcontrol.c
-> @@ -6,6 +6,7 @@
->   */
->  
->  #include <linux/memcontrol.h>
-> +#include <linux/swap.h>
->  #include <linux/bpf.h>
->  
->  __bpf_kfunc_start_defs();
-> @@ -159,6 +160,49 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
->  	mem_cgroup_flush_stats(memcg);
->  }
->  
-> +/*
-> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
-> + * current->reclaim_state, so a nested call would corrupt the outer
-> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
-> + * reclaim_state is also checked because it is installed slightly
-> + * before PF_MEMALLOC.
-> + */
-> +static bool bpf_in_reclaim_context(void)
-> +{
-> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
-> +}
-> +
-> +/**
-> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
-> + *                         cgroup
-> + * @memcg: the target memory cgroup to reclaim from
-> + * @size:  the amount of memory to reclaim, in bytes
-> + *
-> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
-> + * memory.reclaim, but without retrying until @size is reached.
-> + * Must not be called with a filesystem lock held: the reclaim path
-> + * may deadlock on it via filesystem shrinkers.
-> + *
-> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
-> + * smaller than a page or the task is already in a reclaim context.
-> + */
-> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
-> +						unsigned long size)
-> +{
-> +	unsigned long nr_reclaimed;
-> +
-> +	if (size < PAGE_SIZE || unlikely(bpf_in_reclaim_context()))
-> +		return 0;
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:26:(.text+0xf): undefined reference to `TD_BOOT_PARAMETERS_PER_VCPU'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:30:(.text+0x17): undefined reference to `TD_PER_VCPU_PARAMETERS_ESP_GVA'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:33:(.text+0x1d): undefined reference to `TD_BOOT_PARAMETERS_GDT'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:37:(.text+0x26): undefined reference to `TD_BOOT_PARAMETERS_IDT'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:44:(.text+0x2f): undefined reference to `TD_BOOT_PARAMETERS_CR4'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:46:(.text+0x38): undefined reference to `TD_BOOT_PARAMETERS_CR3'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:48:(.text+0x41): undefined reference to `TD_BOOT_PARAMETERS_CR0'
+> /usr/bin/x86_64-linux-gnu-ld.bfd: tools/testing/selftests/kvm/lib/x86/tdx/td_boot.S:54:(.text+0x51): undefined reference to `TD_PER_VCPU_PARAMETERS_GUEST_CODE'
+The patch series posted here on the mailing list is correct,
+but I made a one-line mistake when pushing the code to the
+GitHub branch. I have just force-pushed the fix to the branch.
+It should compile correctly now. Please let me know if you
+run into any further compilation issues.
 
-I have been thinking about this more and more and after looking at the reasoning
-behind your check current->reclaim_state and also Sashiko's comment on NOIO/NOFS
-contexts, I am more convinced that this kfunc can not be a simple sleepable
-function. We need more than that. We need clean process context as well similar
-to the userspace poking memory.reclaim. Something like kthread or workqueue.
+I will test this change on my side. Thanks!
 
-Kumar & Andrii, is there a way to restrict a kfunc to only be called from
-special BPF threads/workqueues? Is there some similar concept in BPF world?
-
-
-
-> +
-> +	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, size / PAGE_SIZE,
-> +						    GFP_KERNEL,
-> +						    MEMCG_RECLAIM_MAY_SWAP |
-> +						    MEMCG_RECLAIM_PROACTIVE,
-> +						    NULL);
-> +
-> +	return nr_reclaimed * PAGE_SIZE;
-> +}
-> +
->  __bpf_kfunc_end_defs();
->  
->  BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
-> @@ -172,6 +216,8 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
->  BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
->  BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
->  
-> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
-> +
->  BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
->  
->  static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
-> -- 
-> 2.53.0
-> 
+Lisa
