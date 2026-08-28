@@ -1,176 +1,223 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1618C395AF1
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 21:53:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5DE38BF70;
+	Fri, 28 Aug 2026 21:54:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787953994; cv=none; b=iITAThXp19jCwjFb6MZ2JwbBVy7CbEYLCLPWNwRIv96QG0CMTWsms69TLE6QYZ/Yy2RIYj3jiViOXbBNEgXcDajRVrDndmKeU1MDtobNYwPawo05erfN9jlDadc/uJuPkTk0IaBSlR7nrRF/oH8dUSudRbfzbwmpGXYIn7jcpvw=
+	t=1787954077; cv=none; b=PksXyn2pnI4OtnMmLfz4LEZbgDyhkh9tJTR+rQhqBIYs5qkj43ShW3TJBNhTrWy6WSL6S3vhPAiw8OFIy6qWYwIjXFxr1r2qZSpaVonL9Eg0h4IE9R06LJxJWJFLKjzKyKU54DTzEg2fjj19Pb9x1g5Bqm5iwl1TOoY9pncFoqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787953994; c=relaxed/simple;
-	bh=ZbSKxgcvJNKCZb5NN2exAqDxafTIHVtkUQsS+TGA2ig=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=GClhuyGg5cuAgi7GkRExa4k1rypU9vNCpegcVCby44nvg+Frik5T42sWH9GLOavr9yvWlmIBKyUJoMHeE+GCAGI/v8I3nviWeEi/CAmdeCx4SQs2xvR3kGAg6VqyoR3AxGzqnZlOFEJgLkCp8J/Wa6cb2Ev48Ifim5oVjqwKu2Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--eperot.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pv7usd1g; arc=none smtp.client-ip=209.85.216.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--eperot.bounces.google.com
+	s=arc-20240116; t=1787954077; c=relaxed/simple;
+	bh=SwOdz/9d1IPah5p/5fi35v4EVL3lroRF7qvyloaClto=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=aogCbnga4JKNx/VDM9uGiBV2vRubniGxckANCfLlYZXuI3Rqozg7e3wnYy4lPtUk9LX5OpNglylu159koOgRoeJgGK9WAmrdIPCLmbuawR+fmbGXBIhdvVTFGXMEH6mC3ZSJTN/g6tHn0yixQQTYEspd8GEMQiRD5htE/QS+j3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=FoQdHsg5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JYYDLMds; arc=none smtp.client-ip=202.12.124.158
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pv7usd1g"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38e22137fb3so2503436a91.0
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 14:53:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787953992; x=1788558792; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=LONXRy8p8ypM84GZsyXqlc4REgdbXBjlmnbaUHr3UhQ=;
-        b=pv7usd1gPlIzPLWjwN4LAVEB3U+8twYCEj5fH0+Cua96z0aFzyL6PGZBX9XDM2U75w
-         uraXrWw9odHFyHK2xbgAoCc2/zLu0v+rniaEDro6ZMYjR+krU1QCpxAI/UNlIWGh5Rqx
-         Y9RwC3J6j3TJaZ4c3KFUSMdPHXDmqp7cWdGZPzuPVCKr7Lcpj6IvAdIITntJHO8EY9Xu
-         siBiKALVnnXTlQ5xu/7zJrwGsrEx9mxG6doXOLYJBJ0/vf6kxiOOR1Fi1HQpBV3Fsp6i
-         8NaIPGRhr+wB1ltwiY7luQK0XSa64+zAZukv/3W+5/4YWinbLvwzO3A4IqJul13XuvUA
-         FpQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787953992; x=1788558792;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=LONXRy8p8ypM84GZsyXqlc4REgdbXBjlmnbaUHr3UhQ=;
-        b=MepE5ORZAKOjIMTYrzuYojqypcOwc+GAvJxDaWIblUpQOhx+NbV+n262v0pEcevpKl
-         AfqwcGE+9Qf/FQhhCdAh8CdhRv+5fRTXiY/FRvLl1h7CoqU/bnSumMBYZeIcaIlcPW1l
-         FrCwhjeJYtXBE8PjAZiKpD0s5d3azSMnB2pBtw1TF1o7wpnVYNWz1v+erSMvlq2ODn1i
-         9+eZgxJGefqBqc12xcsZaDG3Dy5Is7tKWlZrrhDZdLI/HyOvBUNrww/bibBTM94aT0cy
-         OJ9at+QEILGC5iU2t8gZjfRuqXCmIQzmFvnmmJ6S9qW8bdxZK0bYQjMvKUvNImYOJCJi
-         fJWQ==
-X-Forwarded-Encrypted: i=1; AKwUvByXERqkgBPhDovgIWVgZQpjwlYHq7Ebr3N5/TLimlekuM1z3+3K5I2ymIvm9aw+oZjXRlg0clbjg2z5QbWwS3Y=@vger.kernel.org
-X-Gm-Message-State: AFuF++ne3xgLzPRpGghgirNL1qPJdlEMoLfPxu4oSujD7DmS90EU88RU
-	1HYCeCy5H5jKxlBtwF2osTLLBnLVLLyegJQGRSr0Sz+Zy8dYjPt3WDSTLAzGOMDYfzUzGwYu64S
-	V6Jnx9w==
-X-Received: from dykg9.prod.google.com ([2002:a05:7300:5789:b0:327:c2c1:f06f])
- (user=eperot job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:56c7:b0:398:9bd4:d18
- with SMTP id 98e67ed59e1d1-3989bd41466mr3966381a91.23.1787953992182; Fri, 28
- Aug 2026 14:53:12 -0700 (PDT)
-Date: Fri, 28 Aug 2026 21:52:52 +0000
-In-Reply-To: <20260828215252.4126811-1-eperot@google.com>
+	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="FoQdHsg5";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JYYDLMds"
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id BB5C87A0151;
+	Fri, 28 Aug 2026 17:54:32 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-05.internal (MEProxy); Fri, 28 Aug 2026 17:54:33 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1787954072;
+	 x=1788040472; bh=FIHdEmS0olB01b8k7APcgX7ndOUk1mYAmTIUnPKBS+A=; b=
+	FoQdHsg5hW5bQ/8rA+IllifGFK+EpLcJKDmuJ4tSEC+vAaEkGawS6dxN2lLkKj1O
+	ipfXTM3xvyvk4tN0TI3Wt2ercMu4Cs3aOyG2nikSpZyHbqU6K70w6LrgTLC4UoEi
+	rx9bKp6B9YQZ2tBW0wlhCpHoSeSaMflKbHZTeCO/WhddaTbPtUkpT8B1L7w4lDVN
+	JsJqmyW/PaWKaeWRol61UUdzn8EU2jMcbe65JkQlBjhA8XVfaRvBgn2elOsi1DLk
+	sLQoTb1OrFHjnJsuNdBYVMUM38l+Ayr16HSxpi3cjktcXohZBFb6r1ANfSJM2AhQ
+	VMe36Qh9iFR1asRK6WCUww==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787954072; x=
+	1788040472; bh=FIHdEmS0olB01b8k7APcgX7ndOUk1mYAmTIUnPKBS+A=; b=J
+	YYDLMds6+X/YrbvCREf975se/l/3ACp/VHYuSK3CmuMcsGBwsn1mfzZrZSq49q/h
+	o42aeeMSC8tkHT/fDN9IawFZJNOI5wbEvTLQ5pKCFZsfxzFCONf3r8Zvs0KY+/5z
+	KuvdRJivSqCuVZSElF7E3TsDO2ykbUTlD/FSVxyrOF0SAG/NJNxMKFA+B4Vc1UVw
+	DYQ+VOBK4lr3g76r0HTw7PPaR5IX+klyJAMNOdnPHRGcgkmI9Ljs2bGytCnnvnB4
+	fTKhIaxUoHLymmTz5/jbT/pahpMmKErq1aD9H5Y3GhMYUj0cCuU3nj/MvfCYDbgp
+	V9O5xydXzISFz4ZlyqxVw==
+X-ME-Sender: <xms:mAOSarXAUXtZ0xjdjzZZ_mgXq-36RwpRV7GExE_Ld8uRuNIcjAbWyg>
+    <xme:mAOSahNmbd-uAmfShAMm1-fWv1J3_azZKYQm1RxBQ-LbhAG6E3CNMgIS1gUxs9ugW
+    J2UmyPkJGXblnwIiVKh9nt9s2g2GJyocfDmjCGGFaBTTf4xCQyGZWo>
+X-ME-Received: <xmr:mAOSauwZBs6_HagxV3dFSunjZTgbSZbsXS_8ekL1POBfvQ1EmbBfL_2ReIPirQ>
+X-ME-Proxy-Cause: dmFkZTF5YnbSUo8TXmQYItJlQa8l76TKmkzo21w7i2g1aEp/uKyZg0o7VcP0xSKrFB51c0
+    V5Owqxp/8TrS+nTx/gZ8Cl/CkLWSxB6W2djybM44uLnx2n6DzwhgzMkyoI+AipqtO7MCX9
+    ffiMCi0F28CwZuWXMb647CmXjy7w6mIukcnrU78UtRx56W3a+Xu8yLoc3Nlclu74+fMaMv
+    5J3lkDFCbE570Rl5wVyogXC/pecZL1kkN+8o1STA7Zb4kYYkGruYVRgt6JQN0PyG1TJZn9
+    BVo7RukyKpjrcX023u0Py2xCpcjSUfDEosCkgvIRzaVg1IK6CjKsRIuHOJ7i72/3YF/Vo+
+    wnKHmRRXw+3Pz7SRqaKEvmWBlMJLCfWILkgR/2+UASO4iz0u0ffwDaRA3NjrEpzP+zskrI
+    AN76m3PBB8w22OImx3vFsiiSSXh9YoLMBne4tHgSXJFazMIdctaeCXDXFMxoJxMD4qpNGE
+    sXWl/1+L07cf7QQdGJLxZeyYSDWC2SmysG+lOuF4DeLsCIrvaRGG1CPvuQy+nhf+lw7tfS
+    iwGb40SReAEQhwVaAtY30SkDs8pMpg5ueyL/aLgQSTK6whoT/6G5Ed8FqwVGf+MPPR9LVh
+    kX40AhHahKbbHAY27AQIUtjlp20hpdT80/T7XeDHr//0C/mH62nZbOHwHpDg
+X-ME-Proxy: <xmx:mAOSaujdmpOKZDbKdLk7uHrW6_AisqqV6yPDFMEhGG0fuGIdbboLhA>
+    <xmx:mAOSatSjFsiLjVsiuBTmnragq4dFy0N_SpX2HeC-mLDuhwxRSqOq4g>
+    <xmx:mAOSajO600vPPQG7a2TIfKuiVI6kdN_XsNBI_eIo27d6etRJgJ8AlQ>
+    <xmx:mAOSaqFkUm46AoOWZq0B3WnAjnz8Is9vnU42JyW1mT4BtG6XRfuI8Q>
+    <xmx:mAOSatdEiXa-uKbS1Sk5EYm_5nG2lVJJJMN9_cnDiNecSvAfHoAD2aEK>
+Feedback-ID: i03f14258:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 28 Aug 2026 17:54:30 -0400 (EDT)
+Date: Fri, 28 Aug 2026 15:54:28 -0600
+From: Alex Williamson <alex@shazbot.org>
+To: <mhonap@nvidia.com>
+Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
+ <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
+ <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
+ <dave@stgolabs.net>, <alison.schofield@intel.com>,
+ <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
+ <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
+ <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
+ <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
+ <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
+ <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
+ alex@shazbot.org
+Subject: Re: [PATCH v4 22/27] vfio/cxl: Revoke the HDM mapping on reset and
+ power transitions
+Message-ID: <20260828155428.2b8bbbf5@shazbot.org>
+In-Reply-To: <20260813093631.2288172-23-mhonap@nvidia.com>
+References: <20260813093631.2288172-1-mhonap@nvidia.com>
+	<20260813093631.2288172-23-mhonap@nvidia.com>
+X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260828215252.4126811-1-eperot@google.com>
-X-Mailer: git-send-email 2.55.0.897.gb25b4bd76c-goog
-Message-ID: <20260828215252.4126811-2-eperot@google.com>
-Subject: [PATCH 2/2] selftests/cgroup: test clone3() into a previously killed cgroup
-From: Etienne Perot <eperot@google.com>
-To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Christian Brauner <brauner@kernel.org>
-Cc: Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Etienne Perot <eperot@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Once cgroup.kill had been written to a cgroup, a stale kill_seq
-snapshot (taken in cgroup_css_set_fork() before the target cgroup was
-resolved) caused every child subsequently cloned into that cgroup with
-clone3(CLONE_INTO_CGROUP) to be SIGKILLed on the spot.
+On Thu, 13 Aug 2026 15:06:26 +0530 <mhonap@nvidia.com> wrote:
 
-Add a regression test: create a cgroup, kill it while it is empty,
-then clone a child into it and check that the child runs and exits
-cleanly. On a kernel without the fix, the test fails:
+> From: Manish Honap <mhonap@nvidia.com>
+> 
+> The HDM region is a device region, not a BAR, so vfio_pci_zap_bars()
+> leaves its PTEs in place. A runtime-PM entry, a D3 transition, or a reset
+> would then leave the guest with live mappings into a quiesced device.
+> 
+> Add a zap hook, called alongside the BAR zap under memory_lock, that
+> unmaps the window. The fault path already refuses to re-insert PFNs while
+> the device is suspended or its Memory Space is disabled.
 
-  not ok 4 test_cgkill_clone_into_killed
+We need to think about what happens in the dmabuf mmap world[1].
+Currently there are no device specific regions supporting mmap.
+Zapping is left as a compatibility interface, but the right solution is
+probably to use dmabuf for mmap where we can.  Otherwise zap should
+likely be handled generically for device specific regions supporting
+mmap rather than as a CXL one-off.
 
-The test is skipped on kernels without clone3() or without
-CLONE_INTO_CGROUP.
+AFAIK, Matt's series is still in the works and this will conflict.
+Thanks,
 
-Cc: Shakeel Butt <shakeel.butt@linux.dev>
-Assisted-by: LLM
-Signed-off-by: Etienne Perot <eperot@google.com>
----
- tools/testing/selftests/cgroup/test_kill.c | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
+Alex
 
-diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
-index f6cd23a8ecc7..5ba8e285b2f3 100644
---- a/tools/testing/selftests/cgroup/test_kill.c
-+++ b/tools/testing/selftests/cgroup/test_kill.c
-@@ -7,6 +7,7 @@
- #include <stdlib.h>
- #include <string.h>
- #include <sys/types.h>
-+#include <sys/wait.h>
- #include <unistd.h>
- 
- #include "kselftest.h"
-@@ -261,6 +262,59 @@ static int test_cgkill_forkbomb(const char *root)
- 	return ret;
- }
- 
-+/*
-+ * Test that a cgroup that was killed in the past can still be the target
-+ * of clone3(CLONE_INTO_CGROUP): writing cgroup.kill must only kill the
-+ * tasks in the cgroup at the time of the write, not tasks cloned into
-+ * it afterwards.
-+ */
-+static int test_cgkill_clone_into_killed(const char *root)
-+{
-+	pid_t pid;
-+	int cgroup_fd = -EBADF;
-+	int ret = KSFT_FAIL;
-+	char *cgroup = NULL;
-+
-+	cgroup = cg_name(root, "cg_test_clone_into_killed");
-+	if (!cgroup)
-+		goto cleanup;
-+
-+	if (cg_create(cgroup))
-+		goto cleanup;
-+
-+	/* Kill the cgroup while it is still empty. */
-+	if (cg_write(cgroup, "cgroup.kill", "1"))
-+		goto cleanup;
-+
-+	cgroup_fd = dirfd_open_opath(cgroup);
-+	if (cgroup_fd < 0)
-+		goto cleanup;
-+
-+	pid = clone_into_cgroup(cgroup_fd);
-+	if (pid < 0) {
-+		if (errno == ENOSYS)
-+			ret = KSFT_SKIP;
-+		goto cleanup;
-+	}
-+
-+	if (pid == 0)
-+		exit(EXIT_SUCCESS);
-+
-+	/* The child must not be SIGKILLed; it has to exit cleanly. */
-+	if (clone_reap(pid, WEXITED) != EXIT_SUCCESS)
-+		goto cleanup;
-+
-+	ret = KSFT_PASS;
-+
-+cleanup:
-+	if (cgroup_fd >= 0)
-+		close(cgroup_fd);
-+	if (cgroup)
-+		cg_destroy(cgroup);
-+	free(cgroup);
-+	return ret;
-+}
-+
- #define T(x) { x, #x }
- struct cgkill_test {
- 	int (*fn)(const char *root);
-@@ -269,6 +323,7 @@ struct cgkill_test {
- 	T(test_cgkill_simple),
- 	T(test_cgkill_tree),
- 	T(test_cgkill_forkbomb),
-+	T(test_cgkill_clone_into_killed),
- };
- #undef T
- 
--- 
-2.55.0.897.gb25b4bd76c-goog
+[1]https://lore.kernel.org/all/20260715174737.15287-1-matt@ozlabs.org/
+
+
+> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+> ---
+>  drivers/vfio/pci/cxl/vfio_cxl_core.c | 29 ++++++++++++++++++++++++++++
+>  drivers/vfio/pci/vfio_pci_core.c     |  8 ++++++++
+>  include/linux/vfio_pci_core.h        |  2 ++
+>  3 files changed, 39 insertions(+)
+> 
+> diff --git a/drivers/vfio/pci/cxl/vfio_cxl_core.c b/drivers/vfio/pci/cxl/vfio_cxl_core.c
+> index 0fb5ed5d86b7..f1c6bf06c408 100644
+> --- a/drivers/vfio/pci/cxl/vfio_cxl_core.c
+> +++ b/drivers/vfio/pci/cxl/vfio_cxl_core.c
+> @@ -530,6 +530,31 @@ static void vfio_cxl_release_device(struct vfio_pci_core_device *vdev)
+>  	vdev->cxl = NULL;
+>  }
+>  
+> +static void vfio_cxl_zap(struct vfio_pci_core_device *vdev)
+> +{
+> +	struct vfio_cxl_state *cxl = vdev->cxl;
+> +
+> +	lockdep_assert_held_write(&vdev->memory_lock);
+> +
+> +	if (!cxl)
+> +		return;
+> +
+> +	/*
+> +	 * Revoke the mapping so a later access re-faults. Do not touch hdm_valid
+> +	 * here: zap also runs on a plain PCI Memory-Space disable, across which
+> +	 * the committed HDM decoder stays valid (CXL.mem is not gated by PCI
+> +	 * Memory-Space). hdm_valid tracks decoder validity and is cleared only by
+> +	 * the paths that can leave the decoder unrestored (a failed reset or PM
+> +	 * restore). A reset or D3 transition holds memory_lock for write while it
+> +	 * runs, so no fault races the revoke, and a runtime-suspended device is
+> +	 * caught by the pm_runtime_engaged check on the insert path.
+> +	 */
+> +	unmap_mapping_range(vdev->vdev.inode->i_mapping,
+> +			    VFIO_PCI_INDEX_TO_OFFSET(VFIO_PCI_NUM_REGIONS +
+> +						     cxl->hdm_region_idx),
+> +			    range_len(&cxl->hpa_range), true);
+> +}
+> +
+>  static int vfio_cxl_open_device(struct vfio_pci_core_device *vdev)
+>  {
+>  	struct vfio_cxl_state *cxl = vdev->cxl;
+> @@ -594,6 +619,9 @@ static int vfio_cxl_open_device(struct vfio_pci_core_device *vdev)
+>  	if (ret)
+>  		goto err_free_shadows;
+>  
+> +	/* Remember where the HDM region landed so it can be zapped by index. */
+> +	cxl->hdm_region_idx = vdev->num_regions - 1;
+> +
+>  	ret = vfio_pci_core_register_dev_region(vdev, VFIO_REGION_TYPE_CXL,
+>  						VFIO_REGION_SUBTYPE_CXL_COMP_REGS,
+>  						&vfio_cxl_comp_regops, cxl->hdm_len,
+> @@ -738,6 +766,7 @@ static const struct vfio_cxl_ops vfio_cxl_ops = {
+>  	.close_device	= vfio_cxl_close_device,
+>  	.config_read	= vfio_cxl_config_read,
+>  	.config_write	= vfio_cxl_config_write,
+> +	.zap		= vfio_cxl_zap,
+>  	.owner		= THIS_MODULE,
+>  };
+>  
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index 77f8f39dd670..1a54f15d1c2c 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1832,6 +1832,14 @@ void vfio_pci_zap_and_down_write_memory_lock(struct vfio_pci_core_device *vdev)
+>  {
+>  	down_write(&vdev->memory_lock);
+>  	vfio_pci_zap_bars(vdev);
+> +	/*
+> +	 * The HDM region lives in the device-region offset range that
+> +	 * vfio_pci_zap_bars() does not cover, so revoke it here too. Otherwise
+> +	 * a runtime-PM entry, D3 transition, or reset would leave the guest
+> +	 * with live mappings into a quiesced device.
+> +	 */
+> +	if (vdev->cxl_ops && vdev->cxl_ops->zap)
+> +		vdev->cxl_ops->zap(vdev);
+>  }
+>  
+>  u16 vfio_pci_memory_lock_and_enable(struct vfio_pci_core_device *vdev)
+> diff --git a/include/linux/vfio_pci_core.h b/include/linux/vfio_pci_core.h
+> index 294e95b5e881..8b93949d4484 100644
+> --- a/include/linux/vfio_pci_core.h
+> +++ b/include/linux/vfio_pci_core.h
+> @@ -76,6 +76,8 @@ struct vfio_cxl_ops {
+>  			       int count, __le32 *val);
+>  	int     (*config_write)(struct vfio_pci_core_device *vdev, int pos,
+>  				int count, __le32 val);
+> +	/* Revoke the HDM mapping; paired with the BAR zap */
+> +	void    (*zap)(struct vfio_pci_core_device *vdev);
+>  
+>  	/* Pinned per bound CXL device so vfio-cxl cannot unload under usage */
+>  	struct module *owner;
 
