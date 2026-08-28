@@ -1,202 +1,340 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23F7D2F7F14;
-	Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8450E3F1ABF;
+	Fri, 28 Aug 2026 10:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787912259; cv=none; b=UQbb26nO+NkiRCSXB3XnBYtTNkUpC5T8OetAHe3LI6imdu2jGwu/VvQhBKAU2caaGDaclhJ558kRdTl/qtj8uHQkZspESmSx/yBqQe0Am5AI2hQXIzaPjgPKW8w2LylgL8E6loWUW1jjr5kIUo49AuNvew8F65SFowv8wRoC1rw=
+	t=1787912287; cv=none; b=eC/PHpUTvT4b41H4/BtWW3kMStTN3W6Q3JkplOJRrL4+4uFuVrTS8rXnARejJC+pZCTtdpg3jnh/PYs+mDG1OI374veIP94wFxGDmCJ3QBVweIzJDbtLEs1GypLxHQ31QjAGHhsRxYMz58PeAE7hBJFnBr4i9d38Fbokr3skDLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787912259; c=relaxed/simple;
-	bh=FUz9qI4QA7NVnVb09W6JnVtOxrKl1kV43wQRKQ/gPpE=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=rQgnx5Z/35jqslDhtsxK0zFvwR5pJktxhaNx/M1Sf1eK3gnS89DJaEs/+Nd9MLu5XtIoK0jsqAwJKB5CfrDPIu4m4HsWiYH69DJwQ9qWMiw/1S/mo/d9PiWTQHgECaBkj+08jODyJ5bRTPwb8gizfCYiCaXBCOdEh/raryHwRFY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TgSMR+Ly; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1787912287; c=relaxed/simple;
+	bh=CbvGFJ8kVQrPI9Yko5peo2qMenVmZkwC+Zh1/r4h2U8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OUM0ygNCdtts1xnjQukMPHw8hD8BFpNDp2VsgRTk8fRU/L2bgDTs8AjEOfzzQ02NH3sPtJEQplLEp0KIwjHMWIOJCwVfUWbQFH+3Tf9vSpzbSZoS/lsxZWhDK+7e/v2lyW3jB2KIkrNdA4AWQN/8KQe6GUcbdtH5KF2ySzne1ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=bMZFE1/1; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TgSMR+Ly"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E3041F000E9;
-	Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1787912257;
-	bh=/jaJov8w0VZZHNFMIEwScO1SDzSxdnaOoSHGPvPT/SU=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=TgSMR+LyVmGApETjSmznJ8EbqHcGygCfbOINSxm3pJgc31+tjOkYyBq7vciWKNDEy
-	 M63n2M90Adoet1BkiTEbB/hnfo83cbUGKK0hTS4sHrtnFkBO5pYx9vw1xs2yr3u6jj
-	 /47lSN7D00sTFMzGqG2OKMvOhPKagex/q5P1BL2mFxZ61ZfSP5Uo4iZ7hQ+u7B7gsg
-	 hP8g/xkHpWQNDzA3ftX8uRA++A/rSYhtvHc3ToZFBgIqnNVLuyiS1nOe/Hgasj+hfT
-	 /VOxP/ZXvdpCrappQ7+8c8vD71V7lZ0xqy/muSZSxfVao/0sPzOKfYECz3Xzx8aJEt
-	 e8i63SEw6Z5Xg==
-Content-Type: multipart/mixed; boundary="===============7473488389980377832=="
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="bMZFE1/1"
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE7E91595;
+	Fri, 28 Aug 2026 03:18:00 -0700 (PDT)
+Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 68DD33F85F;
+	Fri, 28 Aug 2026 03:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
+	t=1787912284; bh=CbvGFJ8kVQrPI9Yko5peo2qMenVmZkwC+Zh1/r4h2U8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=bMZFE1/1z8AVA8xhpYECfzD4QVHxXm0hOZNwfBMEIkoVqdVV54QK5VEbseJwq2taY
+	 Nnl9QRby91uujpgwEW9ayikWFw3hUD3HdJhev3z/0hMSlCWHISuId7xNu/5cTrix+p
+	 cXAmeO1lWARTCDflsiMZza9YmDOKtPTEsoZ9jN5w=
+Date: Fri, 28 Aug 2026 11:17:58 +0100
+From: Yeoreum Yun <yeoreum.yun@arm.com>
+To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@kernel.org>, Zi Yan <ziy@nvidia.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Nico Pache <nico.pache@linux.dev>,
+	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
+	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
+	Usama Arif <usama.arif@linux.dev>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
+	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+Message-ID: <apFgVvNMbdhYnu6p@e129823.arm.com>
+References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
+ <20260828-fix_split-v3-2-374022586a4b@arm.com>
+ <apFMvo8pCzaGKope@gremlin>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <8705b5a092f5086b25a31ee0cb9d2a7a46105a013c003eed257950207463b210@mail.kernel.org>
-In-Reply-To: <20260828093142.179856-2-jiayuan.chen@linux.dev>
-References: <20260828093142.179856-2-jiayuan.chen@linux.dev>
-Subject: Re: [PATCH bpf 2/2] selftests/bpf: Add test for key-less BTF hash map
-From: bot+bpf-ci@kernel.org
-To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
-Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,clm@meta.com,ihor.solodrai@linux.dev
-Date: Fri, 28 Aug 2026 10:17:37 +0000 (UTC)
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <apFMvo8pCzaGKope@gremlin>
 
---===============7473488389980377832==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+> On Fri, Aug 28, 2026 at 09:11:34AM +0100, Yeoreum Yun wrote:
+> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> > made by memalign().
+> >
+> > The underlying VMA may start at a different address from the aligned
+> > address returned by memalign(). Furthermore, a subsequent
+> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> > already set.
+> >
+> > This causes split_huge_page_test to fail because the check_huge_xxx()
+> > helpers incorrectly require the address returned by memalign() to
+> > match the VMA start address reported in /proc/self/smaps.
+> 
+> Hmm, is the test correctly putting sentinels either side of the VMA? Any test
+> that doesn't risks flaking due to unwanted VMA merges.
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> new file mode 100644
-> index 000000000000..6e1496cbd8bf
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
+I believe that with this change, we don’t need to worry about unwanted
+VMA merges when checking for huge pages, since the test no longer relies
+on VMA sentinels but directly checks whether the mapping is huge or not.
 
-This isn't a bug, but tools/testing/selftests/bpf/prog_tests/btf.c already
-has a table-driven harness for map-creation-rejection cases. do_test_raw()
-(around btf.c:4519-4530) does:
+Also, this flaky failure was not caused by a VMA merge, but by a change
+in glibc’s behavior that sets HUGEPAGE for sufficiently large areas.
 
-    opts.btf_key_type_id = test->key_type_id;
-    opts.btf_value_type_id = test->value_type_id;
-    map_fd = bpf_map_create(test->map_type, test->map_name, ...);
-    err = ((map_fd < 0) != test->map_create_err);
+Might for the *NO_HUGEPAGE* setup, there would be a chance to merge
+VMA area, But since it seraches the mapping directly, it's fine.
 
-and struct btf_raw_test already carries .map_type, .key_size, .value_size,
-.max_entries, .key_type_id, .value_type_id and .map_create_err, with six
-existing .map_create_err = true entries already in that table. A key-less
-hash/rhash case could be two more rows in that table rather than a new file.
-Is there a reason to create a new file instead of adding cases to the
-existing test?
+> 
+> >
+> > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> > /proc/self/smaps to detect huge pages.
+> 
+> You should probably call out the fact you're doing some refactoring here
+> also!
 
-> +
-> +/*
-> + * A key-less BTF (btf_key_type_id == 0) is only meant for array maps. A hash
-> + * map with one used to NULL-deref in btf_type_show() when dumped via bpffs.
-> + * A fixed kernel rejects such a map at creation; on an unfixed kernel the
-> + * pin-and-read below deliberately walks that bpffs dump path, so running this
-> + * test on an unfixed kernel panics it.
-> + */
-> +static void check_keyless(int map_type, __u32 map_flags, int btf_fd, int val_id)
-> +{
-> +	const char *path = "/sys/fs/bpf/keyless_map";
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	__u32 key = 1, val = 0x41424344;
-> +	char buf[256];
-> +	int map_fd;
-> +	FILE *f;
-> +
-> +	opts.map_flags = map_flags;
-> +	opts.btf_fd = btf_fd;
-> +	opts.btf_key_type_id = 0;
-> +	opts.btf_value_type_id = val_id;
-> +	map_fd = bpf_map_create(map_type, "keyless_map", 4, 4, 8, &opts);
-> +
-> +	if (map_fd >= 0) {
-> +		/* Unfixed kernel: reproduce the oops via the bpffs dump path. */
-> +		(void)bpf_map_update_elem(map_fd, &key, &val, 0);
-> +		if (bpf_obj_pin(map_fd, path) == 0) {
-> +			f = fopen(path, "r");
-> +			if (f) {
-> +				while (fgets(buf, sizeof(buf), f))
-> +					;
-> +				fclose(f);
-> +			}
-> +			unlink(path);
-> +		}
-> +		close(map_fd);
-> +	}
+Okay. I'll spell out with some detail. Thanks!
 
-Does this block execute the kernel NULL-deref before the assertion can fail?
+> 
+> >
+> > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> 
+> Should always have a Closes: tag if Reported-by: ideally.
 
-On any kernel lacking the companion fix f763f12b26fc ("bpf: Fix
-NULL-ptr-deref when dumping a key-less BTF hash map") -- every kernel before
-this series, any tree bisected between patch 1 and patch 2, and any backport
-that takes the selftest without the kernel hunk -- bpf_map_create() succeeds,
-so map_fd >= 0 and the block runs. It inserts an element, pins the map into
-bpffs, and then reads the pin, which walks exactly the path quoted in the
-fix's own splat:
+Yes. but talked with personally nothing to close. So Reported-by tag
+only. Would it be better to remove?
 
-  seq_read -> map_seq_show (kernel/bpf/inode.c)
-           -> htab_map_seq_show_elem (kernel/bpf/hashtab.c)
-           -> btf_type_seq_show
-           -> btf_type_show (kernel/bpf/btf.c:8229)
+> 
+> > Suggested-by: Zi Yan <ziy@nvidia.com>
+> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> 
+> Generally looks reasonable to me, some nits above and below though :)
+> 
+> Acked-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+> 
+> > ---
+> >  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------------
+> >  tools/testing/selftests/mm/vm_util.h |   1 +
+> >  2 files changed, 92 insertions(+), 54 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
+> > index 4821a3563036..083b72d92b14 100644
+> > --- a/tools/testing/selftests/mm/vm_util.c
+> > +++ b/tools/testing/selftests/mm/vm_util.c
+> > @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *pattern, char *buf, size_t len)
+> >  	return entry;
+> >  }
+> >
+> > -static bool __check_pmd_huge(void *addr, char *pattern, int nr_hpages,
+> > -		  uint64_t hpage_size)
+> > -{
+> > -	char buffer[MAX_LINE_LENGTH];
+> > -	uint64_t thp = -1;
+> > -	char *entry;
+> > -
+> > -	entry = __get_smap_entry(addr, pattern, buffer, sizeof(buffer));
+> > -	if (!entry)
+> > -		goto err_out;
+> > -
+> > -	if (sscanf(entry, "%9" SCNu64 " kB", &thp) != 1)
+> > -		ksft_exit_fail_msg("Reading smap error\n");
+> > -
+> > -err_out:
+> > -	return thp == (nr_hpages * (hpage_size >> 10));
+> > -}
+> > -
+> > -static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> > -		uint64_t hpage_size)
+> > +static bool check_large_folios(int pagemap_fd, int kpageflags_fd,
+> > +			       void *addr, size_t len, int nr_hpages,
+> > +			       uint64_t hpage_size)
+> >  {
+> >  	int order = 0, pagesize = getpagesize();
+> >  	unsigned int nr_pages = hpage_size / pagesize;
+> >  	int orders[MAX_NR_ORDERS], status;
+> > -	int pagemap_fd, kpageflags_fd;
+> >  	bool ret = false;
+> >
+> >  	if (!nr_pages)
+> > @@ -386,15 +368,6 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> >  		ksft_exit_fail_msg("invalid order\n");
+> >
+> >  	memset(orders, 0, sizeof(int) * MAX_NR_ORDERS);
+> > -	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> > -	if (pagemap_fd == -1)
+> > -		ksft_exit_fail_msg("read pagemap fail\n");
+> > -
+> > -	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+> > -	if (kpageflags_fd == -1) {
+> > -		close(pagemap_fd);
+> > -		ksft_exit_fail_msg("read kpageflags fail\n");
+> > -	}
+> >
+> >  	status = gather_folio_orders(addr, len, pagemap_fd,
+> >  			kpageflags_fd, orders, MAX_NR_ORDERS);
+> > @@ -405,48 +378,112 @@ static bool check_large_folios(void *addr, size_t len, int nr_hpages,
+> >  		ret = true;
+> >
+> >  out:
+> > -	close(pagemap_fd);
+> > -	close(kpageflags_fd);
+> >  	return ret;
+> >  }
+> >
+> > -bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > -{
+> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> > -
+> > -	if (!pmd_pagesize)
+> > -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> > +enum check_huge_type {
+> > +	CHECK_HUGE_ANON,
+> > +	CHECK_HUGE_FILE,
+> > +	CHECK_HUGE_SHMEM,
+> > +};
+> >
+> > -	if (hpage_size == pmd_pagesize)
+> > -		return __check_pmd_huge(addr, "AnonHugePages: ", nr_hpages, hpage_size);
+> > +static bool check_huge_type(uint64_t categories, uint64_t kpageflags,
+> > +			    enum check_huge_type type)
+> > +{
+> > +	bool file = categories & PAGE_IS_FILE;
+> > +	bool swapbacked = kpageflags & KPF_SWAPBACKED;
+> 
+> NIT: nice to const these :)
+> 
+> > +
+> > +	switch (type) {
+> > +	case CHECK_HUGE_ANON:
+> > +		return !file;
+> > +	case CHECK_HUGE_FILE:
+> > +		return file && !swapbacked;
+> > +	case CHECK_HUGE_SHMEM:
+> > +		return file & swapbacked;
+> > +	}
+> >
+> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> > +	return false;
+> >  }
+> >
+> > -bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > +static bool __check_huge(void *addr, size_t len, int nr_hpages,
+> > +			 uint64_t hpage_size, enum check_huge_type type)
+> >  {
+> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> > +	bool ret = false;
+> > +	int pagemap_fd, kpageflags_fd;
+> > +	int nr_pmd_mappings = 0;
+> > +	uint64_t pmd_pagesize, scan_mapping_size;
+> > +	uint64_t categories, kpf;
+> > +	unsigned long pfn;
+> > +	bool check_pmd_mapping, allow_nonpresent;
+> > +	char *start = addr;
+> > +	char *end = start + len;
+> >
+> > +	pmd_pagesize = read_pmd_pagesize();
+> >  	if (!pmd_pagesize)
+> >  		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> >
+> > -	if (hpage_size == pmd_pagesize)
+> > -		return __check_pmd_huge(addr, "FilePmdMapped:", nr_hpages, hpage_size);
+> > +	check_pmd_mapping = (hpage_size == pmd_pagesize);
+> > +	scan_mapping_size = (nr_hpages > 0) ? hpage_size : psize();
+> > +	/* Some mTHP tests check a partially populated PMD-sized range. */
+> > +	allow_nonpresent = (uint64_t)nr_hpages * hpage_size < len;
+> >
+> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> > +	pagemap_fd = open(PAGEMAP_PATH, O_RDONLY);
+> > +	if (pagemap_fd < 0)
+> > +		ksft_exit_fail_msg("open pagemap fail\n");
+> > +
+> > +	kpageflags_fd = open(KPAGEFLAGS_PATH, O_RDONLY);
+> > +	if (kpageflags_fd < 0) {
+> > +		close(pagemap_fd);
+> > +		ksft_exit_fail_msg("open kpageflags fail\n");
+> > +	}
+> > +
+> > +	if (!check_pmd_mapping &&
+> > +	    !check_large_folios(pagemap_fd, kpageflags_fd,
+> > +				addr, len, nr_hpages, hpage_size))
+> > +		goto out;
+> > +
+> > +	for (; start < end; start += scan_mapping_size) {
+> > +		categories = pagemap_scan_get_categories(pagemap_fd, start);
+> > +		pfn = pagemap_get_pfn(pagemap_fd, start);
+> > +		if (pfn == -1UL) {
+> > +			if (!allow_nonpresent)
+> > +				goto out;
+> > +			else
+> > +				continue;
+> > +		}
+> > +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
+> > +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> > +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
+> > +			nr_pmd_mappings++;
+> > +		if (kpf & KPF_COMPOUND_TAIL)
+> > +			continue;
+> > +		if (!check_huge_type(categories, kpf, type))
+> > +			goto out;
+> > +	}
+> > +
+> > +	if (check_pmd_mapping && (nr_pmd_mappings != nr_hpages))
+> > +		goto out;
+> > +	ret = true;
+> > +
+> > +out:
+> > +	close(pagemap_fd);
+> > +	close(kpageflags_fd);
+> > +	return ret;
+> >  }
+> >
+> > -bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > +bool check_huge_anon(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> >  {
+> > -	uint64_t pmd_pagesize = read_pmd_pagesize();
+> > -
+> > -	if (!pmd_pagesize)
+> > -		ksft_exit_fail_msg("reading PMD pagesize failed\n");
+> > +	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_ANON);
+> > +}
+> >
+> > -	if (hpage_size == pmd_pagesize)
+> > -		return __check_pmd_huge(addr, "ShmemPmdMapped:", nr_hpages, hpage_size);
+> > +bool check_huge_file(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > +{
+> > +	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_FILE);
+> > +}
+> >
+> > -	return check_large_folios(addr, len, nr_hpages, hpage_size);
+> > +bool check_huge_shmem(void *addr, size_t len, int nr_hpages, uint64_t hpage_size)
+> > +{
+> > +	return __check_huge(addr, len, nr_hpages, hpage_size, CHECK_HUGE_SHMEM);
+> >  }
+> >
+> >  int64_t allocate_transhuge(void *ptr, int pagemap_fd)
+> > diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+> > index 9a49af88702e..f19bd17817e5 100644
+> > --- a/tools/testing/selftests/mm/vm_util.h
+> > +++ b/tools/testing/selftests/mm/vm_util.h
+> > @@ -18,6 +18,7 @@
+> >  #define PM_SWAP                       BIT_ULL(62)
+> >  #define PM_PRESENT                    BIT_ULL(63)
+> >
+> > +#define KPF_SWAPBACKED                BIT_ULL(14)
+> >  #define KPF_COMPOUND_HEAD             BIT_ULL(15)
+> >  #define KPF_COMPOUND_TAIL             BIT_ULL(16)
+> >  #define KPF_HWPOISON                  BIT_ULL(19)
+> >
+> > --
+> > 2.43.0
+> >
+> 
+> --
+> Cheers, Lorenzo
 
-with map->btf_key_type_id == 0, where btf_type_by_id() yields &btf_void and
-kind_ops[BTF_KIND_UNKN] is NULL, so btf_type_ops(t)->show is a
-NULL-pointer read.
-
-That is an in-kernel oops in process context: the reading task (the
-test_progs process, or one of its -j workers) is killed, so ASSERT_EQ()
-below never executes and the harness reports a dead process rather than a
-clean subtest failure. On any host booted with panic_on_oops (the norm for
-BPF CI / syzkaller configs; tools/testing/selftests/bpf/config.ppc64el
-already sets panic_on_warn=1 in CONFIG_CMDLINE) the machine panics and the
-remainder of the test_progs run is lost.
-
-ASSERT_EQ(map_fd, -EINVAL, ...) below already fails on an unfixed kernel,
-because an unfixed kernel returns a valid fd instead of -EINVAL. On a fixed
-kernel this block is unreachable. A selftest should detect the regression,
-not trigger it; should the pin-and-read block be dropped (or at most gated
-behind an explicit opt-in)?
-
-> +
-> +	ASSERT_EQ(map_fd, -EINVAL, "key-less create is rejected");
-
-Does this assertion pass for the right reason?
-
--EINVAL is the generic BPF_MAP_CREATE rejection code, so this passes for
-many reasons that have nothing to do with the key-less BTF check being
-present.
-
-Concretely for the "rhash" subtest: on any kernel that does not know
-BPF_MAP_TYPE_RHASH (the map type is new in this tree; the selftest is built
-from tools/include/uapi/linux/bpf.h, not from the running kernel's),
-find_and_alloc_map() returns ERR_PTR(-EINVAL) because bpf_map_types[type] is
-NULL or type is out of range. The subtest then passes without ever reaching
-rhtab_map_check_btf().
-
-Likewise, rhtab_map_alloc_check() returns -EINVAL for a missing
-BPF_F_NO_PREALLOC / bad map_extra, and map_check_btf() returns -EINVAL if
-the value type size ever stops matching value_size (4). Any of these makes
-the subtest a green tick that pins nothing.
-
-Is there a positive control? The test never asserts that the same
-bpf_map_create() call succeeds when btf_key_type_id is set to a real type
-id. Adding that (or checking for the create-time BTF log / distinguishing
-the failure source) is what separates "the kernel rejected a key-less hash
-map" from "the kernel rejected this map for some unrelated reason."
-
-[ ... ]
-
-The commit message states:
-
-> Create a hash and an rhash map with btf_key_type_id == 0 and expect
-> bpf_map_create() to fail with -EINVAL. On an unfixed kernel the map is
-> created; the test then pins and reads it back to walk the bpffs dump path,
-> which reproduces the btf_type_show() NULL-deref - so running this test on
-> an unfixed kernel panics it.
-
-Is "panics" accurate? What the traced path actually produces is an oops (a
-NULL function-pointer read in btf_type_show() reached from seq_read() in
-process context), which makes the reading task dead; the box only panics if
-it was booted with panic_on_oops. More importantly, the message presents the
-deliberate crash as the intended behaviour of the test rather than
-justifying why the reproducer is kept in-tree when ASSERT_EQ(map_fd,
--EINVAL) alone already detects the regression. The commit also carries no
-Fixes: tag, which is consistent with it being the selftest half of the
-series, but a reviewer reading it in isolation gets no signal that the test
-will take down a kernel that lacks the companion patch.
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33161022932
---===============7473488389980377832==--
+-- 
+Sincerely,
+Yeoreum Yun
