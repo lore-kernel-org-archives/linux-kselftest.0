@@ -1,234 +1,225 @@
-Received: from fout-b8-smtp.messagingengine.com (fout-b8-smtp.messagingengine.com [202.12.124.151])
+Received: from BL2PR02CU003.outbound.protection.outlook.com (mail-eastusazon11011060.outbound.protection.outlook.com [52.101.52.60])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D317F379C32;
-	Fri, 28 Aug 2026 15:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.151
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787929788; cv=none; b=Fr/QdNXOQgJW27jA2hFjaev+AQukhnCmCDEmny4q68GiDI2YURY1PV1oDMIvqxGF7V+OugFF8U/U3oCQcQh6oBRfia3ZEreA2iNgxMXLVeQYduywHBE2w6hWVJZltE95ellaLmMgpDRyKP6ppEDgraz1XQjMLTLtO3238vVFXwM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787929788; c=relaxed/simple;
-	bh=zhO8zGISVXD7PRGwsHN1rjefun2PO+OkTMdVdz031Ek=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=nYU55/WjMDEfBAzlcOEtJUekDU132OxqIF2C8HdNaoTF8b0KegEOoKQDUtuglMQcOCJFvkEF9Wlx3Bfs5mWj0Qu0nIc0d4WrZfmbjDYfw/FyLpjJRBxD0OIAMGXqfLj+IBIE+6RTkRwFrjwB1G0KzuTBk0USdPEYZ/E3hXvVQ1Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org; spf=pass smtp.mailfrom=shazbot.org; dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b=C3pVW/YB; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=S9xZdhGL; arc=none smtp.client-ip=202.12.124.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=shazbot.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=shazbot.org
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820833451B3;
+	Fri, 28 Aug 2026 15:13:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.52.60
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1787929990; cv=fail; b=DQIHq2PV/EFLUBNE5l1BBIIVjufCQnoUYHlo5uRzs/x6pmB7OYWT8DY8+80pMcwd/z2ayzAZ/0twkmVTk2htfyKQFtqCJphAbtlyflM0JwJG2R4i4b22tNFMLzcVp/OCc6+ycATBb4VQQp7aLifp7/T6fDBgcGpZhwZAUmwzHNk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1787929990; c=relaxed/simple;
+	bh=6obq1NrW/0EtoKovkaIrr190BcX5n1ZZ7vXKbCr4RYo=;
+	h=Content-Type:Date:Message-Id:To:From:Subject:Cc:References:
+	 In-Reply-To:MIME-Version; b=Zx3YXGOzpW/vshxdVg78li487WiKv56mCNmSQIaBjOowDSO8OWjeH6FTQ6e/zHJh58S2v1q9QFpmsLnxUUwZ+Huqx+PEHGVlR7aFtjV8szfufKJ7ANsb9WRMVmbY9jc1hz8P721B2AGP3SKnFa+6SjwH6VfeVyCdg037P56dSZ0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=NhYfzgUz; arc=fail smtp.client-ip=52.101.52.60
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=shazbot.org header.i=@shazbot.org header.b="C3pVW/YB";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="S9xZdhGL"
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id 423071D00163;
-	Fri, 28 Aug 2026 11:09:43 -0400 (EDT)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-06.internal (MEProxy); Fri, 28 Aug 2026 11:09:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shazbot.org; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1787929783;
-	 x=1788016183; bh=J7fhSdF2wHuM0Q5K5Nel4RxIzjNwRWdYNSgjeXswKtM=; b=
-	C3pVW/YBEvdrjEZxFYZhYPbAfnisE6n3PmOSuvMDOHNvfhG73B5h9faYONpglCIN
-	Ai+09V+M3qCS36b5bd9ho89Lk3rUxeWP5KspVb3zpqfw/EkZTDpry5si//Z2Dk8P
-	Q0H0WoAG1Mjhr5Jo5hBXjBqbI3NkzKosuQD5SfQ256ZbmGlugmCxK+YjwK2O3BxT
-	YqIwfuFjKWR/nZ5bwxGUDySbn1aqhaghpXHbcPY1+ho8Uf2ttOP0R9LLO48GVB4D
-	t+4Ya2CLnmPuDtUOW3qtSDwfyD1x5PNc66dcSalOefZPkNWzdkvByVW/cb6aFUb6
-	EVNv1h6wARjpj0q+2OicEQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1787929783; x=
-	1788016183; bh=J7fhSdF2wHuM0Q5K5Nel4RxIzjNwRWdYNSgjeXswKtM=; b=S
-	9xZdhGLk1dU7W5KQQdONSbGbZoyRDPN+HwZnfdmCe91JIbUfPq92LBvNFyUJw75F
-	JilbigLGdiMudLIzqcPLTOBoVx1D8h4CQgxlYyWh9Ibv7o1jOSqF5zMjckRbT8mu
-	lSmaL/59VwQxD/SS25dNJs9MaIjVxLL7/wsg6xYL9sHsWFIX4XFPX9Hqc20BM7Se
-	dzztXHh1/Z6Yk90zWQq5wksTv5zmttXozoT9HIXEA8yuCh9/jamOKqGRgdPU4IR1
-	trjfSGJCVV0Vab4vQgA9M7tq1MT4+RPPq/ti08tgSL5VLqKujD5fMaKAiL5TiCR9
-	nGZsok6I59v8kg1znxOBg==
-X-ME-Sender: <xms:tqSRamWNvAZzpR7mqxKJyFdZFMrxs89CJq_RdAuQDnebZkv0fkk0-g>
-    <xme:tqSRagOtDILmHdgnfLdpX7jXISHGpGYy_p9rU_BS3MLyvAUtgJNSEJOA2an4AsBf8
-    HvHefd7bmhQlUJJFTF1bJ1kjN7IzJn-5NRWIoNU6P4sHrjJnlM2etA>
-X-ME-Received: <xmr:tqSRahzu0qqR-IyQx5DWe5i7B047PEdkpWZyOIp5cgyFmfJEO80vCjHMWMN1tQ>
-X-ME-Proxy-Cause: dmFkZTFXGrMYbLY+LdvceoYAUK59SwxkuxWrEEfFhx7Oo48w4szBreo/JFGuyK/kX2r3RZ
-    /9jkoKemr0M8aGtfrx58I9eCa4dAMjXoq/KnvMhaWsIJGn4WWBhEgzjtix1UQfFFio7Ogn
-    ninILXq7bDTI8F5C3HjV2yW4/M9BUl68Q01TrOE9TW43F3UAA74s3vgQCbhOsN4KTtxJ/6
-    koHNG+EBMttzofnzdmAatjTjU48/zTIzddY5KliI1v7dB5ThFS6BU5h7eEN5GR3NzPLMo4
-    lAWi9RFZtF1qcQuiHRqOsp+RZhVirWm+EUKRelRTpmCIzzsmfFx7UuaG+QVwddEmBlwpLi
-    at47XqWYb6BaM5vwNBdViJnf96MKz7EBPSIUxevSwjjZPUgEwAznsKLVBRCa/nRGtr85+v
-    84WXvqkZ6TwjNsyX6jljdEYV1FilS1m+96jJABro0J2rWpMC8puM0OHAwjySpN2lqJY4+1
-    NPGh4QXyq3qbuUqS1dy0Zn1phIaKtCryLVrVCHericq3VxPTYsMEDEjd3cZyaQR1dwtTce
-    Lfbi05iYWjTMWtKtUKBFAykU/++xZd8z4OF5d4yiAs7arVzT128C7F/lT16wVLDTHY0wa6
-    8dTtAb3ti+qd107i48JAP12fEicDribtpTNCmp35Ja4IwAPIjVl8PgIhv28Q
-X-ME-Proxy: <xmx:tqSRalhWtNmmYwp-fxJve5-KD69bN43VQNIwZBu4FV5XdPnhmdbcMA>
-    <xmx:tqSRaoSLY6p4E9mSeWE0jCujTHADWERJbvmBG8Cs9zQaLT8BE_bfYA>
-    <xmx:tqSRaiOA-vTGXjpnREAug-QGLremyWun4BJxBjbMQXfeYaMbCCN3bQ>
-    <xmx:tqSRatFL6uKuaLcW4gNFAqDxTfgdgDPsxBCOzWxahjCbpYGpiIyljg>
-    <xmx:t6SRash-d7Zdysx5_8yVdmM22mQP1aKtTcKAx1b6yDXM9tGVpeDGQhVa>
-Feedback-ID: i03f14258:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 28 Aug 2026 11:09:38 -0400 (EDT)
-Date: Fri, 28 Aug 2026 09:09:35 -0600
-From: Alex Williamson <alex@shazbot.org>
-To: <mhonap@nvidia.com>
-Cc: <jgg@ziepe.ca>, <ankita@nvidia.com>, <jic23@kernel.org>,
- <dave.jiang@intel.com>, <alejandro.lucero-palau@amd.com>,
- <smadhavan@nvidia.com>, <corbet@lwn.net>, <skhan@linuxfoundation.org>,
- <dave@stgolabs.net>, <alison.schofield@intel.com>,
- <vishal.l.verma@intel.com>, <iweiny@kernel.org>, <ming.li@zohomail.com>,
- <yishaih@nvidia.com>, <skolothumtho@nvidia.com>, <kevin.tian@intel.com>,
- <bhelgaas@google.com>, <dmatlack@google.com>, <kees@kernel.org>,
- <gustavoars@kernel.org>, <cjia@nvidia.com>, <kjaju@nvidia.com>,
- <vsethi@nvidia.com>, <zhiw@nvidia.com>, <linux-doc@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <kvm@vger.kernel.org>,
- <linux-cxl@vger.kernel.org>, <linux-pci@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-hardening@vger.kernel.org>,
- alex@shazbot.org
-Subject: Re: [PATCH v4 16/27] vfio/cxl: Shadow the CXL DVSEC body at open
-Message-ID: <20260828090935.719115e9@shazbot.org>
-In-Reply-To: <20260813093631.2288172-17-mhonap@nvidia.com>
-References: <20260813093631.2288172-1-mhonap@nvidia.com>
-	<20260813093631.2288172-17-mhonap@nvidia.com>
-X-Mailer: Claws Mail 4.4.0 (GTK 3.24.52; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="NhYfzgUz"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Bitq2IKKIoWFIcXgdGMl011krBFposFdLfZ8YWpWCJAF/aBV6pPgaxPuLsJh5DJrY4e8UdbeZbeQ/zgThNn+HdzjVh10O5RLk34NQizg0k9scCu1oB+0L4I46Xa0sW+fmsYAnMF0RIRQ7Xm/1bPV/z9Janj1bFQyPJOc5I9sJcQPpPnaX7SnAnLfk9v3tnUrASshI5tN/rj0o2G/sEVmW5D0HrjZ/rZn8IyUlVZECZWyrV25qGtTODs5LIsdNXn0vKZtnr/z94XhcRjYTv3rV0krDGpWnqo87K41tbSeBNrNR+I4SaDoLSXin3b3HddPx3E7yR/AL991rcJu9FP7nQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PmfbptkEE3XALNNgR9MxxtWU7Ah6JNGAOltLGzk5iD4=;
+ b=kM7ZbokUXUBgt7kowsvzxIsFJOEpVCERF+jvFKkscSJDz9Ggj7em5D2vVVYB4mGnb2MTVW7uYb2zzw8JhegjrCW5qrqnQNqHmeLgUSdXNyFldip1HPRV3lInXEg7Me77i6qUM9e+AYy8yke5HvwJAU8kvhNPN1gYx2slwaKLwDGZztIVhD8G07dWHQGrtT3dQWerT7oG++tvxjwHW6Bxo5Z6ZVO+u2EtI4aMHzgVpoQWHKude2ztG572m/L0xZZMMbzwDvUp1YLCYdupwCfYgbM9ArTcZB5swDT4vRCtvdP6qy/zg2xAIRPx6njs9F408dLILSvO12WbLjapmbYfqA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PmfbptkEE3XALNNgR9MxxtWU7Ah6JNGAOltLGzk5iD4=;
+ b=NhYfzgUzsTQsU+ALTMOqD7xnYjj5LwxXlJfjFOae33lhZQlOL127St8/NNsY//BLnE4/aDx58kq28ifrXyqhe4NVjtETKpUK7vk3gfcvVHfN9lx8YPzNM+YxoqWfEd/nHGRNmV8USZL5jfJZ2QaLyNvl6zn052H/3kHVqmjiRelUSJ3ACrcmz+4gIY2c7fblQZPmnnIUehZES9o5skCgrgwKnVLn+9zm6rJ4lEZ4+fIXuX9O4BwIbYwhRkGOHRiOquMSBVSdT3ybxlGdyEwljsg7XFN3EJ/mWMLqvcc++5C0LRJ7kP6I10x/vAzPU5hMWnYN5YD6A5n4VBj6TjGQZQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com (2603:10b6:208:40e::7)
+ by SJ0PR12MB5673.namprd12.prod.outlook.com (2603:10b6:a03:42b::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.10; Fri, 28 Aug
+ 2026 15:13:03 +0000
+Received: from IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16]) by IA0PR12MB8374.namprd12.prod.outlook.com
+ ([fe80::d85f:4c87:ae84:3f16%5]) with mapi id 15.21.0360.008; Fri, 28 Aug 2026
+ 15:13:03 +0000
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 28 Aug 2026 11:13:00 -0400
+Message-Id: <DL0OA5ZF6VX2.33NA9XE20959G@nvidia.com>
+To: "Yeoreum Yun" <yeoreum.yun@arm.com>, "Andrew Morton"
+ <akpm@linux-foundation.org>, "David Hildenbrand" <david@kernel.org>,
+ "Lorenzo Stoakes" <ljs@kernel.org>, "Baolin Wang"
+ <baolin.wang@linux.alibaba.com>, "Liam R. Howlett" <liam@infradead.org>,
+ "Nico Pache" <nico.pache@linux.dev>, "Ryan Roberts" <ryan.roberts@arm.com>,
+ "Dev Jain" <dev.jain@arm.com>, "Barry Song" <baohua@kernel.org>, "Lance
+ Yang" <lance.yang@linux.dev>, "Usama Arif" <usama.arif@linux.dev>,
+ "Vlastimil Babka" <vbabka@kernel.org>, "Mike Rapoport" <rppt@kernel.org>,
+ "Suren Baghdasaryan" <surenb@google.com>, "Michal Hocko" <mhocko@suse.com>,
+ "Shuah Khan" <shuah@kernel.org>, "Kevin Brodsky" <kevin.brodsky@arm.com>
+From: "Zi Yan" <ziy@nvidia.com>
+Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+Cc: <linux-mm@kvack.org>, <linux-kselftest@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.22.0
+References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
+ <20260828-fix_split-v3-2-374022586a4b@arm.com>
+In-Reply-To: <20260828-fix_split-v3-2-374022586a4b@arm.com>
+X-ClientProxiedBy: YQZPR01CA0176.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:8b::25) To IA0PR12MB8374.namprd12.prod.outlook.com
+ (2603:10b6:208:40e::7)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA0PR12MB8374:EE_|SJ0PR12MB5673:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5e1469b5-94cc-49d2-58db-08df0516daac
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|7416014|376014|23010399003|921020|6133799003|10067099003|56012099006|4143699003|11063799006|18002099003|22082099003;
+X-Microsoft-Antispam-Message-Info:
+	4NnFLN4srVqhO78v208/lm0Tb6Gn68HZj3JCFd4ARmDzW63d56R7itW8DJ9ttADoSuD/q0qXer3pzMHV0dMRA6kfAyu/mb2jzpIBesSpzws+ObiX1G+IyS4ai6umV0G0XEP0L1gi27Z/4eGviZfGMY89CCZKEthKED2zfQWOhVIHVSxsZjnDxut6XStgOMoFPdnjUoFYjxcznzMblryvvynicHosuI8GoLjRfGi4fXtGocHo83L2AsWFkOPeNd1A4cGl1hYmE+c2adbo0+DlVNPe06zwrEHq+rLjA9215rPlc19lFLQXzPgrJDtL/weiMcrQeNCv4KEEQCDx7JKXwER6/a9x9pKnpu+C6qAwi4AodCcyOBiXyRCBY3++d5pUAXFFQhPjfP3iGLdo5/klENJdfoaU+8NV4q3c/J6kkVf68tnC/2oPHX15WmqKE6pIejoornuK7m/jUJsAOSRHQteJyp45BZIG19FD90uyt1K8IOz7Xq21Y0IEESOPBJNa5+AljsPbEs+yXYnJu9+6BEzvRaImVYzjAztuwOUPw9s9Cs2PyvMvkpjXa0Mk709gbURWDVkJnQvK/W6dZieq8K5ZbJJdpQ3O3ON8OQG1mJ5DyeuEPdNDo3mopArZ02VMp5fPJ+ICZhRiDWYAL2ODvC/iDveoWLOUyMvSEYstc6FNeFIWSj4D5yXD+pxNz1cqf4mXce2JoGHCfyeo7I/pYA==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA0PR12MB8374.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(23010399003)(921020)(6133799003)(10067099003)(56012099006)(4143699003)(11063799006)(18002099003)(22082099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ajdGZWFEcVpjQlJRNHJNc3EyR0NzYUNFZktRMzVyRkNxcDc0OUZiaFBueEVm?=
+ =?utf-8?B?eDJSYktFaGZQdms0dUd2SC9hNU9lNytRdlVwclhZSnAySkRwenpGYnIybGJU?=
+ =?utf-8?B?clpGRG5SbGJOTVYyZlFmNXJhQ2lRNWlqWFQ2QTU0eFpsdGNTRFFuUUFyQUcv?=
+ =?utf-8?B?bzk5R3JkWmRnUXVTUU5mSFBzc0J6UW0zQXpObGh0TEpqSDdxUGQvQUJSTTI2?=
+ =?utf-8?B?ZE1ZVGxPYWdLT2RDZCtEZGxZWWIvVHN2UDJnRm1xeE1FZTRUYmhuRDZ6eDN2?=
+ =?utf-8?B?ZDVjSGkvTGRLQ3ZlODRkRTNuY21RQXlhWEdJZDVWMXBGZnRlMmdUZzJ2QXZk?=
+ =?utf-8?B?d2ZmZm1xN0tGcnUyeTkxN0ppSWNTYmJzd3FqK0tLM2Rqc3Jydkx6R2F2MkhD?=
+ =?utf-8?B?V0FpenZBNlNMWFh2U1NLU2svR3NFcnoyb2JrVnhYbk5WV29rK3ZHMDI2UCsy?=
+ =?utf-8?B?ZDI1SkJZb1RjV2QvSEF2dDlCa3llZ1NDR2xuaXlZZHdiN0U4ZHBLeDU1V2JG?=
+ =?utf-8?B?UnAyNlQxMVV2K1Vvd2dXNFJJS01Zdk5SVzdteVlOZ3ErMFY4cnAyVU9iNGMw?=
+ =?utf-8?B?Vnh6ZVgrZGRPcVRNYXRyMC9Lc0RGemZBWDhwOFplYndrYmlYdW0xbktVYmRT?=
+ =?utf-8?B?RGhnRzc5Z3g2eXFtaUkzOU5PS3NMcGFKaFhXYmJCNXh6ZUdmL2FNZ2QzZUVk?=
+ =?utf-8?B?YS9xc3M4VDNiazZJREtDTDEwL1c5SFgxN1ZwYm96UkZBODg2M3Fpdmg2cVlv?=
+ =?utf-8?B?M1FMNG9FWmcvY0FVTVdkL3JGMEpXTEVJb1dlYlF6U3I1RVVGcXZ4SmpGTG9i?=
+ =?utf-8?B?eVAwMzQxRE04OGJFUjJKRm8wZ3pVajZpVFlYNHVkdHA1c1ZTb0F4SnFTbTd2?=
+ =?utf-8?B?cXZoblZWZFVuOEdKd0UzdzkzbTIyQVVFNWlXQjBsYjduQkVsM2JxdlhWNlpl?=
+ =?utf-8?B?dnBTTll4MEtsM1E0a2FJMERhYmNGZmlMNDhPRUE0M3hFdUROeC8yTWJJMWxX?=
+ =?utf-8?B?SDY1V0taMlJxR3hrNCswQWVBLzdoamcxb1BzWHJ6Qzh3NGpqWElTdkNsODll?=
+ =?utf-8?B?dzdnQ3N0Nm53eDhGZEk2TEkxNzZ3TWNtQk5SbFB5OXNVcGxtVU8vaS9EMXR0?=
+ =?utf-8?B?d0JMRS9oaENYc0lRTHlyd0t4Mm1WN3RYajdlVGZvZGExcXdVTmZCei9ocG5v?=
+ =?utf-8?B?cUFjNm5hbkY0WGd2TWY0Uk5JUHE3UzVWZWFjL1FBa1M3MDZqTDlyeGE0T2lB?=
+ =?utf-8?B?VmtiWDgyOVdtbnBKUzVQWXhLK1p5K3d4WGp4L2o3bHhNQVlYaXloTTZHTDZx?=
+ =?utf-8?B?K2M1M2NUWEgyZENadTJnWjdGYWRVc2lKVjREdzhGSkNnbWRBaFF3MHFUYmJC?=
+ =?utf-8?B?TGdnM0FSQXNDZDUrNDJKZThxeFdxclhhdUJqQjdjTzJjZEs1S040WlJ1Yk1Z?=
+ =?utf-8?B?cWxlTnZ5Wnd3Ly9xWldnTWoyd0lGZkZaa1pFLzB6Sm1lb2JkSTF0WDZ0TE9L?=
+ =?utf-8?B?NnRrQjNJWm9KN2RaWDBieDVDa3ZuMUhHK0l1bEVEMW5sSHlVallyOUFJMmdP?=
+ =?utf-8?B?ZzVGcHlMTXJGeFB1Y0tQd28zNlMwNmowNUQ3K2dQTFVuK1Nad1JSbEVJaTgr?=
+ =?utf-8?B?d1B4bHlTWmFTcWttT0ZFVkFVMjdRNitvcWo5TFRqcSt5Rmw5UEFIOHN3bWxT?=
+ =?utf-8?B?TEdCMU04VnN4aWtvUDUwWTYzR0ZpR0M2ei9KMUtlVU5GaDY0NlpHcHBBOGVT?=
+ =?utf-8?B?eVZObFJUclhqRGJvTlJ0L0hWQnR4Mlc0dUtwTWpub0c5TGJMeEx4STJOSTV6?=
+ =?utf-8?B?NUViN2hZU3ZxS01KOEc5d0hpa3QwK3phYy91THNCQmVBUTZzZll3RDBYL1J5?=
+ =?utf-8?B?bWlFbkticEFNOEZkOWtlQTNhNXFEOU8zUDdTTkFQc0MwaVEwNjFSMi9YaDlk?=
+ =?utf-8?B?U3U0QTF0clZ3T3Bha0dFVjNZZ0piL3Z6cGNBVS8vajBLTEdmdUpYVkxreFQ0?=
+ =?utf-8?B?elFzTkRXWG5Mbkp4dU9ZZ1N2SWp4b09OanBML0JZejgwUy85QmU4QWt1SDVW?=
+ =?utf-8?B?Q1hKYWUrYVVRTXE3Vm1SSVhCMUc2dHRubXROTWFSUGtsdkxpWHBGMjZEVXJT?=
+ =?utf-8?B?Vk55RnI3cW0rZllwQnZrb2tuN3BwRGFGOFBCTCtlajJtMzYyT3ZnZ3ZhVHFq?=
+ =?utf-8?B?a1hGa2JjUk16eEFrUEpvck1oZUpPU0ZNb2Fvb1RTTGtseXMyN1lZUVB0Vlh0?=
+ =?utf-8?B?UHFtSjZvWHJUcHVKa3ZkRzdwdDlFeE9VWWhvbFhiUDdobUM4Wm1ueUNEdlJD?=
+ =?utf-8?Q?wQc3gB/NyqLUAfk+TZ?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5e1469b5-94cc-49d2-58db-08df0516daac
+X-MS-Exchange-CrossTenant-AuthSource: IA0PR12MB8374.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Aug 2026 15:13:02.9604
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +PxXnFrhWAnMPdxL08IKQFHk+MALdkIVh+AIm7JX7JT4XqPuPrdRSbPeynmrpBoM
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5673
 
-On Thu, 13 Aug 2026 15:06:20 +0530
-<mhonap@nvidia.com> wrote:
-
-> From: Manish Honap <mhonap@nvidia.com>
-> 
-> Sample the CXL DVSEC body into a per-open shadow when the guest opens the
-> device, and free it at close. Reading it here rather than at bind picks
-> up any change from a low-power transition, and gives the DVSEC access
-> handler added next a per-tenant copy to serve from.
-> 
-> Annotate the shadow with __counted_by_ptr(dvsec_dwords) so its accesses
-> are bounds-checked against the recorded dword count.
-
-It would be useful to describe why we want to shadow the DVSEC
-capability here.  Also, it's the whole DVSEC capability, not just the
-body.  We're again mentioning that low power transition that the
-earlier path prevented (but shouldn't have).
-
-> 
-> Signed-off-by: Manish Honap <mhonap@nvidia.com>
+On Fri Aug 28, 2026 at 4:11 AM EDT, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (=E2=80=9Cmalloc: Enable 2MB THP by default=
+ on AArch64=E2=80=9D),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
+>
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+>
+> This causes split_huge_page_test to fail because the check_huge_xxx()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
+>
+> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> /proc/self/smaps to detect huge pages.
+>
+> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> Suggested-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
 > ---
->  drivers/vfio/pci/cxl/vfio_cxl_core.c | 39 ++++++++++++++++++++++++++++
->  1 file changed, 39 insertions(+)
-> 
-> diff --git a/drivers/vfio/pci/cxl/vfio_cxl_core.c b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-> index d19fd638f538..2e516a0929c6 100644
-> --- a/drivers/vfio/pci/cxl/vfio_cxl_core.c
-> +++ b/drivers/vfio/pci/cxl/vfio_cxl_core.c
-> @@ -8,6 +8,7 @@
->  #include <linux/module.h>
->  #include <linux/pci.h>
->  #include <linux/range.h>
-> +#include <linux/slab.h>
->  #include <linux/vfio_pci_core.h>
->  #include <cxl/cxl.h>
->  #include <cxl/pci.h>
-> @@ -17,11 +18,19 @@
->   * @cxlds: CXL device state; kept first for devm_cxl_dev_state_create()
->   * @cxlmd: memory device joined to the CXL topology at bind
->   * @hpa_range: host physical range of the HDM region
-> + * @dvsec: CXL device DVSEC config-space offset
-> + * @dvsec_len: length of the DVSEC body
-
-Nit, not just the DVSEC body.
-
-> + * @dvsec_dwords: dword count of @dvsec_shadow
-> + * @dvsec_shadow: guest view of the CXL DVSEC body, sampled at open
->   */
->  struct vfio_cxl_state {
->  	struct cxl_dev_state cxlds;
->  	struct cxl_memdev *cxlmd;
->  	struct range hpa_range;
-> +	u16 dvsec;
-> +	u32 dvsec_len;
-> +	u32 dvsec_dwords;
-> +	u32 *dvsec_shadow __counted_by_ptr(dvsec_dwords);
-
-dvsec_len is bound by PCI_DVSEC_HEADER1_LEN, which is 12-bits, so it
-fits comfortably in a u16.  dvsec_dwords is therefore bound at 10-bits.
-Both of these fit comfortably in u16.  I'd argue that length is easily
-derived from dwords, but we end up with a hole in the data structure
-regardless, so it's arguably useful to keep both.  We can drop 4-bytes
-from the structure though, which actually turns into an 8-byte savings
-with the two holes above (2 + 4) vs one hole below (2):
-
-	u16 dvsec;
-	u16 dvsec_len;
-	u16 dvsec_dwords;
-	u32 *dvsec_shadow __counted_by_ptr(dvsec_dwords);
-
->  };
->  
->  static int vfio_cxl_init_device(struct vfio_pci_core_device *vdev)
-> @@ -71,6 +80,8 @@ static int vfio_cxl_init_device(struct vfio_pci_core_device *vdev)
->  	if (!cxl)
->  		return -ENOMEM;
->  
-> +	cxl->dvsec = dvsec;
-> +
->  	/*
->  	 * vfio-pci requests the whole component BAR when the guest opens the
->  	 * device. Declare the BAR owned so the CXL core maps the HDM/RAS
-> @@ -102,11 +113,39 @@ static void vfio_cxl_release_device(struct vfio_pci_core_device *vdev)
->  
->  static int vfio_cxl_open_device(struct vfio_pci_core_device *vdev)
->  {
-> +	struct vfio_cxl_state *cxl = vdev->cxl;
-> +	struct pci_dev *pdev = vdev->pdev;
-> +	u32 hdr, *shadow;
-> +	int i, dwords;
-> +
-> +	/*
-> +	 * Sample the DVSEC body now rather than at bind: a low-power
-> +	 * transition could have changed it since the device was bound.
-> +	 */
-> +	pci_read_config_dword(pdev, cxl->dvsec + PCI_DVSEC_HEADER1, &hdr);
-> +	cxl->dvsec_len = PCI_DVSEC_HEADER1_LEN(hdr);
-> +	dwords = cxl->dvsec_len / sizeof(u32);
-> +
-> +	shadow = kcalloc(dwords, sizeof(u32), GFP_KERNEL);
-> +	if (!shadow)
-> +		return -ENOMEM;
-
-dvsec_len becomes inconsistent with the other fields if we take this
-return.
-
-> +
-> +	for (i = 0; i < dwords; i++)
-> +		pci_read_config_dword(pdev, cxl->dvsec + i * sizeof(u32),
-> +				      &shadow[i]);
-> +
-> +	cxl->dvsec_dwords = dwords;
-> +	cxl->dvsec_shadow = shadow;
-> +
->  	return 0;
+>  tools/testing/selftests/mm/vm_util.c | 145 ++++++++++++++++++++++-------=
+------
+>  tools/testing/selftests/mm/vm_util.h |   1 +
+>  2 files changed, 92 insertions(+), 54 deletions(-)
+>
+> diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftes=
+ts/mm/vm_util.c
+> index 4821a3563036..083b72d92b14 100644
+> --- a/tools/testing/selftests/mm/vm_util.c
+> +++ b/tools/testing/selftests/mm/vm_util.c
+> @@ -351,31 +351,13 @@ char *__get_smap_entry(void *addr, const char *patt=
+ern, char *buf, size_t len)
+>  	return entry;
 >  }
->  
->  static void vfio_cxl_close_device(struct vfio_pci_core_device *vdev)
->  {
-> +	struct vfio_cxl_state *cxl = vdev->cxl;
+> =20
+
+<snip>
+
+> +	for (; start < end; start +=3D scan_mapping_size) {
+> +		categories =3D pagemap_scan_get_categories(pagemap_fd, start);
+> +		pfn =3D pagemap_get_pfn(pagemap_fd, start);
+> +		if (pfn =3D=3D -1UL) {
+> +			if (!allow_nonpresent)
+> +				goto out;
+> +			else
+> +				continue;
+> +		}
+> +		if (pageflags_get(pfn, kpageflags_fd, &kpf))
+> +			ksft_exit_fail_msg("read kpageflags: %s\n", strerror(errno));
+> +		if (check_pmd_mapping && (categories & PAGE_IS_HUGE))
+> +			nr_pmd_mappings++;
+> +		if (kpf & KPF_COMPOUND_TAIL)
+> +			continue;
+> +		if (!check_huge_type(categories, kpf, type))
+> +			goto out;
+> +	}
+> +=09
+
+There is a trailing tab.
+
+> +	if (check_pmd_mapping && (nr_pmd_mappings !=3D nr_hpages))
+> +		goto out;
+> +	ret =3D true;
 > +
-> +	kfree(cxl->dvsec_shadow);
-> +	cxl->dvsec_shadow = NULL;
-
-This makes the counted-by field inconsistent.  All fields should be
-cleared.  Thanks,
-
-Alex
-
+> +out:
+> +	close(pagemap_fd);
+> +	close(kpageflags_fd);
+> +	return ret;
 >  }
->  
->  static const struct vfio_cxl_ops vfio_cxl_ops = {
+> =20
+
+Otherwise, LGTM. I assume the replacement of memalign(), from the
+discussion between you and Lorenzo, will be added in a separate patch.
+For this patch,
+
+Reviewed-by: Zi Yan <ziy@nvidia.com>
+
+Thanks.
+
+--=20
+Best Regards,
+Yan, Zi
 
