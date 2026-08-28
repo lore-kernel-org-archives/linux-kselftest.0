@@ -1,132 +1,176 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCF935975
-	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 21:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1618C395AF1
+	for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 21:53:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1787953989; cv=none; b=eCKtUo01GKqrUZMHk4yO9bE+Znylqvim4iEVZD/n2LAzj23mH5iy+u2dMRW/0uyUnzt3CG6Q3lSu3Ql0X568U7YLPESYxzpB5clew8Wj7eK7vpRBOhHCYYfTS0TJZuQiB97nN4sKSZLjib/KJCmyHGSC1WBF4CNmGu0N9Rc6h4c=
+	t=1787953994; cv=none; b=iITAThXp19jCwjFb6MZ2JwbBVy7CbEYLCLPWNwRIv96QG0CMTWsms69TLE6QYZ/Yy2RIYj3jiViOXbBNEgXcDajRVrDndmKeU1MDtobNYwPawo05erfN9jlDadc/uJuPkTk0IaBSlR7nrRF/oH8dUSudRbfzbwmpGXYIn7jcpvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1787953989; c=relaxed/simple;
-	bh=WbiNCMptjrmcEYIdC33C0eKNoewr84F/bHo0BDCR3Cg=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=jTwWv0NTZI+f3gwRnMPn/xE+6AokKj1BMEXqwKVIm3wCbJe1LSxkyxFG+4a31wJ5/ft0J10hIDYUo+yvVSJTVHELm8eg8IYu1JRCqn7ibDbfsdkJnN/JxVAGtCr3zlo9KindkGpx9F8xHGdbCGimlz8BxxJ8zoyY0vNFu3l05Y0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--eperot.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=jw+H3Kax; arc=none smtp.client-ip=209.85.215.200
+	s=arc-20240116; t=1787953994; c=relaxed/simple;
+	bh=ZbSKxgcvJNKCZb5NN2exAqDxafTIHVtkUQsS+TGA2ig=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=GClhuyGg5cuAgi7GkRExa4k1rypU9vNCpegcVCby44nvg+Frik5T42sWH9GLOavr9yvWlmIBKyUJoMHeE+GCAGI/v8I3nviWeEi/CAmdeCx4SQs2xvR3kGAg6VqyoR3AxGzqnZlOFEJgLkCp8J/Wa6cb2Ev48Ifim5oVjqwKu2Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--eperot.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=pv7usd1g; arc=none smtp.client-ip=209.85.216.70
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--eperot.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="jw+H3Kax"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cb835525b10so1822879a12.2
-        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 14:53:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="pv7usd1g"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38e22137fb3so2503436a91.0
+        for <linux-kselftest@vger.kernel.org>; Fri, 28 Aug 2026 14:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1787953987; x=1788558787; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=YpFWj3Pa3XG+6oUGMVressHFkgt3PbCUN84lnIAsqyo=;
-        b=jw+H3KaxkeQBk7rLDHnuEFQyBMjGhyfs4r+GysHgqJp46O7VqrC1/+8jAg59wIYYMl
-         1fzo0xKm6GKPi/f3I7LfX7T6EWyO68z+jzi1X3y7bGKQNWI/tpWCyVXb9hrspC1ihzS1
-         1qK25xhOGnVbL53t+JkZhNRxXXZhdfOy7no1Mvpyfu+GqvgUcIvwU4FFHP8TrHU12AEF
-         HOfOY20l5ZNopfTeOVAgxkDQCMWi/jVgzkoKM7xtBOQUZWEguz6SipOOyg++NcW5bKjd
-         3zrzl8hI1+TEB9z+0IwDFUW+1Bd7zmg03h7mtGB+5LvYdMzYgkm1gU9DoUVDVqOi7DXP
-         YY9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1787953987; x=1788558787;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1787953992; x=1788558792; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=YpFWj3Pa3XG+6oUGMVressHFkgt3PbCUN84lnIAsqyo=;
-        b=fhzHTnDmMDaEN8jB2hB9Qt0mioAm33Veqkztg+a71216EM7B7SzcYXAF+C9y93vqbd
-         eUv0dTRVOvsjM+b+FezACNS9EJeifdzOKC36tOmFCUic9HIs+DW7WGygCd6dEtWk7OnU
-         p8EYGrzvbALItOAIdIOBQCsq9KqVRXdemW7O7H+SB0gzJpCDDQISnB0iu48Hjhbrubm5
-         QU3vkhyzWSW/1wzMIu8YBatyRdI81B0NjiYKmQaGsEuw94bxTGrK/LxFGOfIv0bVTxss
-         JC1JGWJNEKXfUHVtEseGjqz63+r1J4WKf0XZwMfIHT33JSD7gFbVnE/tGet31uTbf6cU
-         qDIA==
-X-Forwarded-Encrypted: i=1; AKwUvBxUfkI/ROeHCo3W3jSAnwFb/bFAB+N93oT7ln1GhtCScHL1PSlbYzhI9JyF1GMo5r91YOFtYdkXW9RCPuh2iTg=@vger.kernel.org
-X-Gm-Message-State: AFuF++naoN4vcr78R9knOpFbtgEPk3itkMz+A3OtSExWmgzAfkL4ibSA
-	hzVMea8AcT+l1GjyRb05iMBs4KK+oTCq43rCbqfxFRCWNL9Z3mdi5t1Jn/B2eBpSnHvFtazKzGe
-	3ROQWhA==
-X-Received: from dyay16.prod.google.com ([2002:a05:693c:62d0:b0:323:c18c:3b31])
- (user=eperot job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2f0d:b0:2c9:aae1:a61a
- with SMTP id d9443c01a7336-2d74e07003dmr185797365ad.14.1787953986865; Fri, 28
- Aug 2026 14:53:06 -0700 (PDT)
-Date: Fri, 28 Aug 2026 21:52:51 +0000
+        bh=LONXRy8p8ypM84GZsyXqlc4REgdbXBjlmnbaUHr3UhQ=;
+        b=pv7usd1gPlIzPLWjwN4LAVEB3U+8twYCEj5fH0+Cua96z0aFzyL6PGZBX9XDM2U75w
+         uraXrWw9odHFyHK2xbgAoCc2/zLu0v+rniaEDro6ZMYjR+krU1QCpxAI/UNlIWGh5Rqx
+         Y9RwC3J6j3TJaZ4c3KFUSMdPHXDmqp7cWdGZPzuPVCKr7Lcpj6IvAdIITntJHO8EY9Xu
+         siBiKALVnnXTlQ5xu/7zJrwGsrEx9mxG6doXOLYJBJ0/vf6kxiOOR1Fi1HQpBV3Fsp6i
+         8NaIPGRhr+wB1ltwiY7luQK0XSa64+zAZukv/3W+5/4YWinbLvwzO3A4IqJul13XuvUA
+         FpQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1787953992; x=1788558792;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LONXRy8p8ypM84GZsyXqlc4REgdbXBjlmnbaUHr3UhQ=;
+        b=MepE5ORZAKOjIMTYrzuYojqypcOwc+GAvJxDaWIblUpQOhx+NbV+n262v0pEcevpKl
+         AfqwcGE+9Qf/FQhhCdAh8CdhRv+5fRTXiY/FRvLl1h7CoqU/bnSumMBYZeIcaIlcPW1l
+         FrCwhjeJYtXBE8PjAZiKpD0s5d3azSMnB2pBtw1TF1o7wpnVYNWz1v+erSMvlq2ODn1i
+         9+eZgxJGefqBqc12xcsZaDG3Dy5Is7tKWlZrrhDZdLI/HyOvBUNrww/bibBTM94aT0cy
+         OJ9at+QEILGC5iU2t8gZjfRuqXCmIQzmFvnmmJ6S9qW8bdxZK0bYQjMvKUvNImYOJCJi
+         fJWQ==
+X-Forwarded-Encrypted: i=1; AKwUvByXERqkgBPhDovgIWVgZQpjwlYHq7Ebr3N5/TLimlekuM1z3+3K5I2ymIvm9aw+oZjXRlg0clbjg2z5QbWwS3Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++ne3xgLzPRpGghgirNL1qPJdlEMoLfPxu4oSujD7DmS90EU88RU
+	1HYCeCy5H5jKxlBtwF2osTLLBnLVLLyegJQGRSr0Sz+Zy8dYjPt3WDSTLAzGOMDYfzUzGwYu64S
+	V6Jnx9w==
+X-Received: from dykg9.prod.google.com ([2002:a05:7300:5789:b0:327:c2c1:f06f])
+ (user=eperot job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:56c7:b0:398:9bd4:d18
+ with SMTP id 98e67ed59e1d1-3989bd41466mr3966381a91.23.1787953992182; Fri, 28
+ Aug 2026 14:53:12 -0700 (PDT)
+Date: Fri, 28 Aug 2026 21:52:52 +0000
+In-Reply-To: <20260828215252.4126811-1-eperot@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
+References: <20260828215252.4126811-1-eperot@google.com>
 X-Mailer: git-send-email 2.55.0.897.gb25b4bd76c-goog
-Message-ID: <20260828215252.4126811-1-eperot@google.com>
-Subject: [PATCH 1/2] cgroup: fix spurious SIGKILL of CLONE_INTO_CGROUP children
+Message-ID: <20260828215252.4126811-2-eperot@google.com>
+Subject: [PATCH 2/2] selftests/cgroup: test clone3() into a previously killed cgroup
 From: Etienne Perot <eperot@google.com>
 To: Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, 
 	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shakeel Butt <shakeel.butt@linux.dev>, 
 	Christian Brauner <brauner@kernel.org>
 Cc: Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, Etienne Perot <eperot@google.com>, stable@vger.kernel.org
+	linux-kselftest@vger.kernel.org, Etienne Perot <eperot@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Since commit b69bb476dee9 ("cgroup: fix race between fork and
-cgroup.kill"), the fork path snapshots the kill_seq of the child's
-future cgroup into kargs->kill_seq, and cgroup_post_fork() SIGKILLs
-the child if that cgroup's kill_seq has changed in the meantime, to
-catch forks racing with a cgroup.kill sweep.
+Once cgroup.kill had been written to a cgroup, a stale kill_seq
+snapshot (taken in cgroup_css_set_fork() before the target cgroup was
+resolved) caused every child subsequently cloned into that cgroup with
+clone3(CLONE_INTO_CGROUP) to be SIGKILLed on the spot.
 
-For CLONE_INTO_CGROUP, however, the snapshot in cgroup_css_set_fork()
-is taken before the target cgroup has been resolved: kargs->cgrp is
-always NULL at this point (it is only set at the end of the function).
-So the "if (kargs->cgrp)" branch is dead code and the snapshot always
-records the kill_seq of the parent's cgroup. cgroup_post_fork() then
-compares it with the kill_seq of the target cgroup, so the child gets
-SIGKILLed whenever the two cgroups have been killed a different number
-of times.
+Add a regression test: create a cgroup, kill it while it is empty,
+then clone a child into it and check that the child runs and exits
+cleanly. On a kernel without the fix, the test fails:
 
-As a result, once cgroup.kill has been written to a cgroup, every
-child subsequently cloned into it with clone3(CLONE_INTO_CGROUP) is
-killed on the spot, for as long as the cgroup exists: kill_seq is not
-exposed to userspace and never resets.
+  not ok 4 test_cgkill_clone_into_killed
 
-Re-snapshot kill_seq from the target cgroup once it has been resolved,
-and drop the dead branch at the early snapshot site.
+The test is skipped on kernels without clone3() or without
+CLONE_INTO_CGROUP.
 
-This does not reopen the race fixed by b69bb476dee9. For
-CLONE_INTO_CGROUP, everything from the snapshot to the check in
-cgroup_post_fork() runs with cgroup_mutex held, and kill_seq is
-only ever incremented under cgroup_mutex.
-
-Fixes: b69bb476dee9 ("cgroup: fix race between fork and cgroup.kill")
-Cc: stable@vger.kernel.org
 Cc: Shakeel Butt <shakeel.butt@linux.dev>
 Assisted-by: LLM
 Signed-off-by: Etienne Perot <eperot@google.com>
 ---
- kernel/cgroup/cgroup.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ tools/testing/selftests/cgroup/test_kill.c | 55 ++++++++++++++++++++++
+ 1 file changed, 55 insertions(+)
 
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index c3a12fee7528..2d532bf2c0c7 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -6873,10 +6873,7 @@ static int cgroup_css_set_fork(struct kernel_clone_args *kargs)
- 	spin_lock_irq(&css_set_lock);
- 	cset = task_css_set(current);
- 	get_css_set(cset);
--	if (kargs->cgrp)
--		kargs->kill_seq = kargs->cgrp->kill_seq;
--	else
--		kargs->kill_seq = cset->dfl_cgrp->kill_seq;
-+	kargs->kill_seq = cset->dfl_cgrp->kill_seq;
- 	spin_unlock_irq(&css_set_lock);
+diff --git a/tools/testing/selftests/cgroup/test_kill.c b/tools/testing/selftests/cgroup/test_kill.c
+index f6cd23a8ecc7..5ba8e285b2f3 100644
+--- a/tools/testing/selftests/cgroup/test_kill.c
++++ b/tools/testing/selftests/cgroup/test_kill.c
+@@ -7,6 +7,7 @@
+ #include <stdlib.h>
+ #include <string.h>
+ #include <sys/types.h>
++#include <sys/wait.h>
+ #include <unistd.h>
  
- 	if (!(kargs->flags & CLONE_INTO_CGROUP)) {
-@@ -6940,6 +6937,7 @@ static int cgroup_css_set_fork(struct kernel_clone_args *kargs)
- 
- 	put_css_set(cset);
- 	kargs->cgrp = dst_cgrp;
-+	kargs->kill_seq = dst_cgrp->kill_seq;
+ #include "kselftest.h"
+@@ -261,6 +262,59 @@ static int test_cgkill_forkbomb(const char *root)
  	return ret;
+ }
  
- err:
++/*
++ * Test that a cgroup that was killed in the past can still be the target
++ * of clone3(CLONE_INTO_CGROUP): writing cgroup.kill must only kill the
++ * tasks in the cgroup at the time of the write, not tasks cloned into
++ * it afterwards.
++ */
++static int test_cgkill_clone_into_killed(const char *root)
++{
++	pid_t pid;
++	int cgroup_fd = -EBADF;
++	int ret = KSFT_FAIL;
++	char *cgroup = NULL;
++
++	cgroup = cg_name(root, "cg_test_clone_into_killed");
++	if (!cgroup)
++		goto cleanup;
++
++	if (cg_create(cgroup))
++		goto cleanup;
++
++	/* Kill the cgroup while it is still empty. */
++	if (cg_write(cgroup, "cgroup.kill", "1"))
++		goto cleanup;
++
++	cgroup_fd = dirfd_open_opath(cgroup);
++	if (cgroup_fd < 0)
++		goto cleanup;
++
++	pid = clone_into_cgroup(cgroup_fd);
++	if (pid < 0) {
++		if (errno == ENOSYS)
++			ret = KSFT_SKIP;
++		goto cleanup;
++	}
++
++	if (pid == 0)
++		exit(EXIT_SUCCESS);
++
++	/* The child must not be SIGKILLed; it has to exit cleanly. */
++	if (clone_reap(pid, WEXITED) != EXIT_SUCCESS)
++		goto cleanup;
++
++	ret = KSFT_PASS;
++
++cleanup:
++	if (cgroup_fd >= 0)
++		close(cgroup_fd);
++	if (cgroup)
++		cg_destroy(cgroup);
++	free(cgroup);
++	return ret;
++}
++
+ #define T(x) { x, #x }
+ struct cgkill_test {
+ 	int (*fn)(const char *root);
+@@ -269,6 +323,7 @@ struct cgkill_test {
+ 	T(test_cgkill_simple),
+ 	T(test_cgkill_tree),
+ 	T(test_cgkill_forkbomb),
++	T(test_cgkill_clone_into_killed),
+ };
+ #undef T
+ 
 -- 
 2.55.0.897.gb25b4bd76c-goog
 
