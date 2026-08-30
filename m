@@ -1,74 +1,106 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-184.mta1.migadu.com [95.215.58.184])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB06B481B1;
-	Sun, 30 Aug 2026 01:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FF1417B505
+	for <linux-kselftest@vger.kernel.org>; Sun, 30 Aug 2026 07:33:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.184
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788053184; cv=none; b=juMPQtyN4zIo1Uk+2qFnWr8readDl2yRcCR4Sdq0GCa/vt3K9zzSZ5FC9P7ZFjX3kuGqox60DavameaP6ya6obt3LPncl52oq2aB16FlxO8PuAPjoJzZxY8lBexIYecmRxip77P3M/qJpFl5U6B0+4CqN4esh8Yumz7QNw90jfE=
+	t=1788075188; cv=none; b=VN/XrjhDQVOs62aXcDojRV0F5t7bUIoEA+cetu711Fkw2ZX7N0niELOIiAwLEnGQ5tcp00F2Oq4OXHyzMeIHWMK8NGf67XxR7j0a/fg4rCdDE0A+mvFGJgS5g/OgqPHMahVN35Oc92cQJ2brM0RiTcHQnckhSsTWltxVPB+yRv8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788053184; c=relaxed/simple;
-	bh=uOq5HqkisnX5qjEjwDLefYpZEcM8sJhccltua47tc30=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=pBJyvZb5LYoraj7fMvRBYXYi7MJizBFIn6XClfG0vPwi852wQIpJvJ1KspgK0VKTAfQvNQMglG5U7HBAL3+tB+MASBKlc4xZQrL0fwpRFmj3+tsKDkb/jBa3zBmZnRTj81J2zp1GLDTUJ3wvvGqgVxjFZMvLTg0mJIkLDwULwhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=iZDfcGH/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788075188; c=relaxed/simple;
+	bh=6xntamfeW32wUM07IwVlvDyiu2IdVEVIlYpCj0aHlwg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=JceMSaBgHn0gqJkRtG5722dSm+C+/J475Y2RBroakEeS3ruE6kWGNeLbxGjeVG0oawENfgtvYI7uxEcPUi4cvbMf+djFuipuMxq4BUU5KcH0UJJx9SgvPSifeHiSh+WpX0AtZLLOlrJXrvljNvMFkXEOYEt+EVnTUo+sucomMzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=rHhhvDuB; arc=none smtp.client-ip=95.215.58.184
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="iZDfcGH/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9D491F000E9;
-	Sun, 30 Aug 2026 01:26:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1788053183;
-	bh=cg0O6+JpSBYgYOlgnsZHH47HcBGjkXpwip68bdGKfpI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=iZDfcGH/hYQlAic5Rchp4ZCmJ3pm6YMEY7ptQpfR1xN/cvJ9m2KVxwdkmIRL0oA3q
-	 lTvqanhFedgBEudJfW2WxrJVMDsX4cdmhAocf3REp+1GXY1zle9a+i7rWNxwSfR+Td
-	 HaUxJ7sIhN5FC3JVAh31MXsl3RK3MBMddbor/8wM=
-Date: Sat, 29 Aug 2026 18:26:22 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Konstantin Khorenko <khorenko@virtuozzo.com>
-Cc: Shuah Khan <shuah@kernel.org>, Wei Yang <richard.weiyang@gmail.com>,
- Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Eva
- Kurchatova <eva.kurchatova@virtuozzo.com>
-Subject: Re: [PATCH] selftests/core: fix unshare_test with large fs.nr_open
-Message-Id: <20260829182622.401275404893ef640e8c81e1@linux-foundation.org>
-In-Reply-To: <20260814165709.513263-1-khorenko@virtuozzo.com>
-References: <20260814165709.513263-1-khorenko@virtuozzo.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="rHhhvDuB"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=6xntamfeW32wUM07IwVlvDyiu2IdVEVIlYpCj0aHlwg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788075184; v=1; x=1788679984;
+ b=rHhhvDuB/gkHvYNNxI+VpG0dsCi3wm6quAKzHy72/O2ukQ1I5BWtPNQbGqxwGyRPAd/uBLUr
+ gIOzLjkcV+T95+scuvriFuiUv8PD8GcTOgxNuZ3JMiSuE+hKwOzdQU+LtPAL9fqgk6iXFUngmyy
+ T4RjCeFPlFgWuKDeGHLGouRM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 69d9142b7f0d6869;
+	Sun, 30 Aug 2026 07:32:54 +0000
+X-Mizu-Trace-ID: 69d9142b7f0d6869
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: bpf@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Jiri Olsa <jolsa@kernel.org>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Mykyta Yatsenko <yatsenko@meta.com>,
+	Alan Maguire <alan.maguire@oracle.com>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH bpf v2 0/4] bpf: Fix NULL-ptr-derefs when showing a void BTF type
+Date: Sun, 30 Aug 2026 15:30:55 +0800
+Message-ID: <20260830073242.148092-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Fri, 14 Aug 2026 18:57:09 +0200 Konstantin Khorenko <khorenko@virtuozzo.com> wrote:
+This series fixes two NULL-ptr-derefs in BTF handling.
 
-> The test assumes fs.nr_open is close to the default 1048576, but some
-> systems set it much higher (e.g. 1073741816). This is systemd's doing:
-> since systemd v240 (2018), PID 1 bumps fs.nr_open and fs.file-max to
-> their largest possible values on boot, as file descriptors are already
-> accounted for by memcg [1].
-> 
-> In that case, dup2() to nr_open + 64 requires the kernel to allocate a
-> file descriptor table with ~1 billion entries, which fails with ENOMEM.
+Patch 1 handles the syzbot report. A key-less BTF (btf_key_type_id == 0) used
+to be rejected for hash maps, until htab and rhtab gained a ->map_check_btf
+(to register a dtor) that does not look at the key, so a key-less hash map is
+now accepted. Dumping it through bpffs feeds the key type_id 0 into
+btf_type_seq_show() and NULL-derefs in btf_type_show(). Reject it again.
 
-2018.  Can you suggest why we (or I) haven't heard about this?
+Patch 2 fixes a related, pre-existing crash reachable via bpf_snprintf_btf().
+A "const void" type_id (a modifier that resolves to void, present in the
+vmlinux BTF) NULL-derefs in btf_modifier_show() - void has no ->show op.
+void has no size and nothing to render, so route the show call sites through
+a helper that falls back to btf_df_show() - the "<unsupported kind:N>"
+placeholder already used for FWD/FUNC/FLOAT/DECL_TAG.
 
-> Cap the nr_open value used for the test's own arithmetic to a known
-> reasonable base value (1048576) and restore the true original value
-> once the test has completed.
-> 
-> [1] https://github.com/systemd/systemd/commit/a8b627aaed409a15260c25988970c795bf963812
->     ("main: bump fs.nr_open + fs.max-file to their largest possible values")
+Patches 3 and 4 add selftests for the two cases. They are meant to reproduce
+the crashes: each deliberately walks the faulting path, so on an unfixed
+kernel it oopses the task (and panics it under panic_on_oops). That is
+intentional - the tests verify the fix and reproduce the bug - so a static
+review flagging them for crashing an unfixed kernel can be ignored.
 
-Well, we do want selftests to run well on the kernel with which they
-are shipped, so I'm thinking we should backport this into -stable
-kernels.  We can probably skip the Fixes:, but a cc:stable should be
-added to capture this.
+v1 -> v2: AI reported a pre-exist issue. Let's fold it in this series.
 
-Thoughts?
+v1: https://lore.kernel.org/bpf/20260828093142.179856-1-jiayuan.chen@linux.dev/
 
+
+Jiayuan Chen (4):
+  bpf: Reject key-less BTF for hash maps
+  bpf: Fix NULL-ptr-deref when showing a void BTF type
+  selftests/bpf: Add test for key-less BTF hash map
+  selftests/bpf: Add test for showing a void BTF type
+
+ kernel/bpf/btf.c                              | 10 ++-
+ kernel/bpf/hashtab.c                          |  8 ++
+ .../bpf/prog_tests/btf_map_keyless.c          | 83 +++++++++++++++++++
+ .../selftests/bpf/prog_tests/btf_show_void.c  | 57 +++++++++++++
+ .../selftests/bpf/progs/btf_show_void.c       | 22 +++++
+ 5 files changed, 179 insertions(+), 1 deletion(-)
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
+ create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_show_void.c
+ create mode 100644 tools/testing/selftests/bpf/progs/btf_show_void.c
+
+-- 
+2.43.0
 
