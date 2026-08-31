@@ -1,189 +1,61 @@
-Received: from mail-pf1-f182.google.com (mail-pf1-f182.google.com [209.85.210.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 980243AFCFA
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 22:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB87D37C11E;
+	Mon, 31 Aug 2026 23:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788214739; cv=none; b=pN7nFiEvM5IfezI81LDLxfxlh+NiBthO/b4m6oAQ0FKGATvQri0wF7uKd+08HdcHS39zz9xaAK2Sl/VF4azc8x/geFT3LABewfCwPD5ozBxY4JkNQaamMYX9rOrMj1pnJigpOpgxrGIWGYOtER4ditm0ChlAicjfoKJ4byL2N54=
+	t=1788219811; cv=none; b=O5QxWS/tBNtCFX/ZY3nl31u7C0o19gDfYmr/3xk6SbBx58taEX+hLJXuaAxOlSjg0kNVLYdQPAVeCBVIzikSYZLPsX40i/mNjKor8vliuHms6QwVoGkyYkx4yOTTg/jApZD91QQfyG3Qrj+nDFGsEwU8BPqGDSTz0xd94gBnM+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788214739; c=relaxed/simple;
-	bh=WWEEZMNW23VgeiLrA0jkBRh+FqlaOZaIbG6KQNC9i3o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T9NSihrS7Uyfm9j7MyDxT6rNwPXyK98xKfh9JiIHFi9TbKcVuB/x5S0ehAS6o/QA3u5LZowxSOG+xVJYBGkOM57umrMS35cDM1t4h8x0sgSZ/uDci1+lBjkOLUiNGnB1BuakUiGDD3uGW4JOci8hBLD+VusOje9vDIT+z8ASAQA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=igDopN9B; arc=none smtp.client-ip=209.85.210.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788219811; c=relaxed/simple;
+	bh=Dn9AysUH1VrFe+nloOlag9vnvl6F643sqcyGhZVFbwo=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=HdWxsXtvkN2h89aTZtTbdu4FxUg/fH1CXqkG5w7aUinDLAhumeqRnf1x9uJsPiW7OlMpQYa41eb96ZFjGmADj6I4onev2pYIjzsl/12qy/TdW+Qg2N5gjXO3E5xJqgEv8iRUfACopqJlNWYfOtWJ7VASv2JAhqfQXjyRy8EnemA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VC9e6snb; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="igDopN9B"
-Received: by mail-pf1-f182.google.com with SMTP id d2e1a72fcca58-852c481415fso5042660b3a.3
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 15:18:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788214737; x=1788819537; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=igDopN9BmO44WcL5KkB8EZkn1sMNYaTnfHKrQb5ClcSjiKU+qvpp/e0WVnmyKPErgC
-         ZV7YDSwqMYlEFtW+YjjiaFCaBhSDWs28zcATvuKDagLJ7/SPylY8KK9Muf/vFiVHQpJs
-         ksLGmmidV0pdy1a2i5KulmdIwpPnl5Dzr8PCD+pyfx08cyLKUMeAoEmE9X5nQyYeXebS
-         dwNXxdFroYZK3c+uRxveZa4m2pXmPDzL5mYPdwtedGDG0KgqUor2eIMIADPQWthRbsEE
-         umG+SHdkdWb2ATMYWWUK3fajbLL1ciQTt3uPPcVbzzDB4ReOrU+qnSG2CsAzEmAr40Tg
-         zHVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788214737; x=1788819537;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=XnNt0hP8YJjLsvezbznRGz62Lklpiz7+58ZQDmGUihY=;
-        b=fQOwrYv56aTovBG7qrAgUakmHloKsuqXtQFR/B1UVgkpOYkLqeMZSIPfON2xVf+0Qo
-         6az8PQ7hYp6hAPNs5HOUeek/ROsPpqNwhsxs9cRO47elj/+nh0/eBNd0orb05Vv0Fk95
-         KamRnxYaVLlw79aly6sVssbThBA9wIdXiDFlhMG7Hjcyaga1ayiAGvPgXiARij777zHQ
-         1w5apRsnauTMkgtvtAojSKEpnZEOocEWKyNhM59KGd5OZ5BqF4CzXem9VAv0Ml1NLD5R
-         YNp/Yr5+ckAZ68R+k69nAwx3/6w0o6oQQF+ioYXa23xgRA8cnrtl3Otfr9Za6mjkgVrE
-         b/CQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rr3jM7jvR2QXyYXsqtN7q46X/2GJSNjTUxrO9mjfzqVeo+H3QJMDdZHEmTXwPAtAe4cG02rLF9K+NSn5d0aqKA=@vger.kernel.org
-X-Gm-Message-State: AFuF++mOvbwitccBTSZqZsn94xq8OvKn1Y2j3WOB7r6qDgujsAQMAdcF
-	Zvn8YErOAiuf6qD8t/L/pw0KAouoLHKw3Rr34h0QpDSrOYa2B54sSJLV
-X-Gm-Gg: AR+sD11I7fC5037a4DjSyajzDxSvfUjipBHpzcVPbXcGVTbbIvPutDH5S2nlar2hUBJ
-	TJQDoGVT4bqCvizJC7aJ41uKuH0/SrwZFdjUpGmpNnJfUzlQBGGD7VluqoMIO4srmjVdpon1sPa
-	3oQrH7xmPBKlzXATBWnMNCwLWGt8uN5prtavk/0AZsf4JyuiHdoHevj4P7cTLkv2yd6Af9fM8I8
-	K8/7xGT7lmZS6YyC9XqtI17At0ODqaspuM7QRMxJXgFqyGNrRbXSstO5U5Jxy1YwvRiuVquqHKf
-	mH1fJiEGso+9UTOcnWktxPGBJSlDD05MO7E3ROczeiKoZuFolEuzGHEDruVAHIcn5B1YNpkR16V
-	mAWQNQjAlUUDsgcLo7yDz9Msx+D9hqd2bBfd5M7xBLhnbPNR6mk4qjWiO3By11kVOrwpJ0OFbeC
-	ZiQAKMT3lIDsxjMsO6NPM8/0lsh4WIiYrWAsEQs7in5UdB6bmrZwQKRuFQ+FvD81hhpW/SVAdnX
-	mSai6vb
-X-Received: by 2002:a05:6a20:2586:b0:3d3:b02a:7252 with SMTP id adf61e73a8af0-3d3b02a76a6mr29131323637.28.1788214736859;
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Received: from devvm16600.scu0.facebook.com ([2a03:2880:9ff:44::])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7be607sm33073832eec.10.2026.08.31.15.18.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 15:18:56 -0700 (PDT)
-Date: Mon, 31 Aug 2026 15:18:53 -0700
-From: Ziyang Men <ziyang.meme@gmail.com>
-To: Shuah Khan <shuah@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	David Vernet <void@manifault.com>,
-	Eduard Zingerman <eddyz87@gmail.com>
-Cc: Viktor Malik <vmalik@redhat.com>, Andrea Righi <arighi@nvidia.com>,
-	Changwoo Min <changwoo@igalia.com>,
-	Michal Hocko <mhocko@kernel.org>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Shakeel Butt <shakeel.butt@linux.dev>,
-	Muchun Song <muchun.song@linux.dev>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	JP Kobryn <inwardvessel@gmail.com>,
-	Mykola Lysenko <mykolal@meta.com>,
-	Nathan Chancellor <nathan@kernel.org>, kernel-team@meta.com,
-	linux-kselftest@vger.kernel.org, cgroups@vger.kernel.org,
-	linux-input@vger.kernel.org, sched-ext@lists.linux.dev,
-	linux-mm@kvack.org, bpf@vger.kernel.org, llvm@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/4] selftests: shared lib.bpf.mk for building BPF
- progs and skeletons
-Message-ID: <apX9zb+3awc99Pfh@devvm16600.scu0.facebook.com>
-References: <20260814075054.507089-1-ziyang.meme@gmail.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VC9e6snb"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 371071F000E9;
+	Mon, 31 Aug 2026 23:43:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788219810;
+	bh=Dn9AysUH1VrFe+nloOlag9vnvl6F643sqcyGhZVFbwo=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=VC9e6snbLdIvE1BAb7foGj2WKAG/+ktLs8oA6/WNiYfE5wqU3gqj8mBo9ut2FaN5T
+	 y98ySuiCp1AH4l6tZ73f4a0Rg+0wB1VsZYLmgxlC1ggDFpaSDdNFKwpNJXFd7ieKLe
+	 4ZOd0g4v6hRBfrUEohie3stl+Byp/MevaNbXSlQhF4kjIF2SAXZf905mYHzBU9juEZ
+	 EYC0V7Zkqq7yi/EJ2bfyWrATL1/XmbBjhZJl3l7Anqdn7d7jKUMYJhzz/HIiXTm0BC
+	 ccqgwHXNl5+CalNAwjNEBx7iRwD+fsCj4RLvDkIvO8N6E2MGvkzGhTgm1i4yJLAqNN
+	 Z0ldwsHihYVcQ==
+Date: Mon, 31 Aug 2026 16:43:29 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Ovidiu Panait <ovidiu.panait.rb@renesas.com>
+Cc: maxime.chevallier@bootlin.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+ mcoquelin.stm32@gmail.com, alexandre.torgue@foss.st.com, shuah@kernel.org,
+ joabreu@synopsys.com, jun.ann.lai@intel.com, yi.fang.gan@intel.com,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com,
+ linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH net v3 0/5] net: stmmac: Fix double VLAN 802.1ad tag
+ handling
+Message-ID: <20260831164329.138dbf3b@kernel.org>
+In-Reply-To: <20260825164522.4244-1-ovidiu.panait.rb@renesas.com>
+References: <20260825164522.4244-1-ovidiu.panait.rb@renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20260814075054.507089-1-ziyang.meme@gmail.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Hi Reviewers,
+On Tue, 25 Aug 2026 16:45:17 +0000 Ovidiu Panait wrote:
+> Currently, hardware VLAN stripping is broken for 802.1ad tags. vlan_rx_hw()
+> hardcodes ETH_P_8021Q when putting the hardware tag into the skb, rather
+> than using the actual protocol from the packet. Because of this, packets
+> that contain an 802.1ad outer tag are incorrectly passed up the stack as
+> having an 802.1Q tag.
 
-Just want to follow-up on this patch series. Please let me know the possible
-issues and I will fix them.
-
-Thanks very much!
-
-Best,
-Ziyang
-
-On Fri, Aug 14, 2026 at 12:50:50AM -0700, Ziyang Men wrote:
->This series re-factors the bpf-related toolchain for selftests, which
->currently duplicated across selftests/{bpf,sched_ext,hid}/. Unify them
->into a single includable fragment, the tools/testing/selftests/lib.bpf.mk,
->and wires up three consumers. We believe this will simplify the work for
->configuring selftests with the bpf, for both the existing and future ones.
->
->Patch 1 adds lib.bpf.mk mentioned above.
->
->Patch 2 adds a new selftest, selftests/cgroup/test_memcg_stat_cross_cpu,
->which checks the cgroup flush happens correctly by comparing the bpf
->read value matches the file reading. Existing test
->bpf/cgroup_iter_memcg only ensures whether the number is non-zero, which
->is trivial in some cases.
->
->Patches 3 and 4 replace the duplicated parts in selftests/{hid,
->sched_ext} with the lib.bpf.mk
->
->===
->Changes since v2:
->For shared Makefile:
->- The lib.bpf.mk now use the USERCFLAGS (and USERLDFLAGS) to extend the
->  CFLAGS and LDFLAGS.
->- OPT_FLAGS/RELEASE and EXTRA_CFLAGS now reach the libbpf and bpftool
->  sub-makes as well.
->- One rule per BPF source instead of a vpath, which is global and also
->  applied to the caller's own %.c rules.
->- HOSTCC/HOSTLD come from lib.mk instead of including Makefile.include,
->  which also rewrote the caller's AR, LD and CFLAGS.
->- A missing vmlinux is reported by the recipe rather than at parse time,
->  so "make clean" still works without BTF.
->
->For cgroup selftest:
->- Only one cgroup tree is created, one flush is performed, follows by
->  bpf read and file read.
->- More common cgroup functions e.g., cg_read_key_long() and
->  value_close(), are used in the selftests.
->- Use cpu_set_t rather than manually allocated cpu lists.
->- Use test_memcontrol.c's anon allocator and moving it into cgroup_util.
->- Other suggestion from the review.
->
->Others:
->- Bot reviews are fixed.
->
->===
->Changes since v1:
->  - Generalized lib.bpf.mk (source layout/suffix, extra hdrs/cflags,
->    skeleton suffix, subskeletons, configurable output dirs) so it can
->    serve hid and sched_ext, not just cgroup.
->  - Added patch 3 (hid) and patch 4 (sched_ext), converting those folders
->    to the shared fragment.
->
->Ziyang Men (4):
->  selftests: add shared lib.bpf.mk to build BPF progs and skeletons
->  selftests/cgroup: add memcg_stat_cross_cpu correctness test for flush
->  selftests/hid: build the BPF program via the shared lib.bpf.mk
->  selftests/sched_ext: build BPF schedulers via the shared lib.bpf.mk
->
-> tools/testing/selftests/cgroup/.gitignore     |   8 +
-> tools/testing/selftests/cgroup/Makefile       |  52 ++
-> tools/testing/selftests/cgroup/config         |   5 +
-> .../selftests/cgroup/lib/cgroup_util.c        |  83 +++
-> .../cgroup/lib/include/cgroup_util.h          |   3 +
-> .../cgroup/memcg_stat_cross_cpu.bpf.c         |  86 +++
-> .../selftests/cgroup/memcg_stat_cross_cpu.h   |  21 +
-> .../cgroup/test_memcg_stat_cross_cpu.c        | 596 ++++++++++++++++++
-> .../selftests/cgroup/test_memcontrol.c        |  29 +-
-> tools/testing/selftests/hid/.gitignore        |   1 +
-> tools/testing/selftests/hid/Makefile          | 180 +-----
-> tools/testing/selftests/lib.bpf.mk            | 296 +++++++++
-> tools/testing/selftests/sched_ext/Makefile    | 146 +----
-> 13 files changed, 1204 insertions(+), 302 deletions(-)
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.bpf.c
-> create mode 100644 tools/testing/selftests/cgroup/memcg_stat_cross_cpu.h
-> create mode 100644 tools/testing/selftests/cgroup/test_memcg_stat_cross_cpu.c
-> create mode 100644 tools/testing/selftests/lib.bpf.mk
->
->-- 
->2.53.0-Meta
->
+Test LGTM, let me apply just the test since it looks like the driver
+part will need a respin.
