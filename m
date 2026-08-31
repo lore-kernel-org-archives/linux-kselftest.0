@@ -1,68 +1,68 @@
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33ADB3B8BCC
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 08:13:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 328E03CEB8B
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 08:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788164040; cv=none; b=KPHIWKICZ+Y5K/80+7k8rzneVmHjqHCEHTztDYBUm0s/6WKjK8UqrSWZ4/3jUVKwLnkxUpKZrC627hCu3GVWN6SzRQP61CybHuUYTqsHhokdZrZsyCBAZRTH0P+E0eez07xQyvqWASNC45ySZw14MUFLyEXyg1tlV9KTXg9qfIY=
+	t=1788164132; cv=none; b=M9+JDWqZjKmP8yaAVsyJzDYrSZOMsZ9d2wm5k6oRMwmOI/e2+3VMuLHPyAIaaYsw5vpRA2XdaI4ROrgtYgOrFwKKJKZ4hYUsLBM7NvahZuiEPGYVPQCQildA5RN6zZti7z+LTNxJbTWhKF/wxO2WrtDxD7JfsGqXLctE3AkXiWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788164040; c=relaxed/simple;
-	bh=nSpW9BfmTHNhgEttguu8dKSf2X+UrvTImngFQ4Y2OMw=;
+	s=arc-20240116; t=1788164132; c=relaxed/simple;
+	bh=Buhbz898X+Zwy+ACjKQMw5UgJ8wruz4B6fZ3hHsGJRc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pKWYRnyesNxpHPfsQG3AAjfi93h7L+kJElqxLsG8Hw85agwWnDZd/z3b9+xMeolt2Z04XKRi+r7hoJ6l4bv4o/wzE+8M9+9bxctmgfYXhxW7CLyDyGW9ejzDRPg1QfTCkv9vATiDab1iIIsft0ATW/RvjRM/xqLvth/DT15QR0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu; spf=none smtp.mailfrom=monstr.eu; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=Y8yj9esm; arc=none smtp.client-ip=209.85.218.47
+	 In-Reply-To:Content-Type; b=QTmJbbslAHvmJ1lSmDgfVFJopl+HnuRcBEACGM+ui3XRJ3eOvXt/gncvJMNEOITEegzkBqateSZJw9QmPsJkAjMw0rziU+6z0D2Joo/t9iZu5+PyNh16sj2Ht8LG9MXvILqnQk6Xq3XxRGklxQVeJrv6Aym2N015KU9dcX5WdOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu; spf=none smtp.mailfrom=monstr.eu; dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b=Ji96pOZ9; arc=none smtp.client-ip=209.85.218.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=monstr.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=monstr.eu
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="Y8yj9esm"
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-c2533d83e3bso524058066b.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 01:13:56 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=monstr-eu.20251104.gappssmtp.com header.i=@monstr-eu.20251104.gappssmtp.com header.b="Ji96pOZ9"
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-c1c52d920b8so386363666b.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 01:15:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1788164035; x=1788768835; darn=vger.kernel.org;
+        d=monstr-eu.20251104.gappssmtp.com; s=20251104; t=1788164129; x=1788768929; darn=vger.kernel.org;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=OrTpW37S+1M6EBPYov19PswiAAuwlv9L2hIKGUyEp3o=;
-        b=Y8yj9esmg14+XCwE4Z6zym+S/kB132EGaStAj+lF9Q/SOACFyJwKZE4ZC3i5oxnfyx
-         oXIvrYrO1T0H6ygmakW8qt2m+iIVSwtRIGmdxc+aI1FRFm68zopjsvYpMzp7NA4oD9Ks
-         WbOUkZiEJpBJ5fqGLqZaUzEZUbYCVdhGSL85o0gsaU67+ppTBM9b1eYPjW8N+1a/mnxw
-         z0yDwusD5TJ3XMpnIQWXT8tg4qJm0uX/d5/3b+vzlZoxWfKXKVrArDnXh9EkxH8uqbfV
-         Eq4CfqPKbBXQnyWYb3irEVvXInmNf6vL7k33GcoobMxahb6mHej21q3AWul0BrHIh8SV
-         GsOQ==
+        bh=07XOke8MZcakwnBV1pfCWoo5tuEKqxVaUuHzsnaos6w=;
+        b=Ji96pOZ9dXBUU9Aeu5+mrG9Sl6VQ+ALpzv5Bs2PEjYZ+wLmvxoYLOptJi6d5Aut2Ee
+         rCF0s8dvzoHHOWP+o11veM3g6OsShUB79QIcqDfRvagY5AvnBHWPnEJHS83j+k5og49U
+         z3FbNWCAsBgwQeIAaf3FKTkSkYCmQ3/GdESb+54tXHAjTAB3Gljm+wVk7O84fDmbTsPl
+         s7RqZGzYZlnbw+0UvhSylXIRT49doUKz/25Epv0hI1glPcBt/aT9TRyvC9OLnn8rdS5S
+         SNrOCimFEA13BjFz4GtOVdfD8SLxrqYPixlgbchh6jFj/kXpYuIc0psLEHAY/uviKfYq
+         ODww==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788164035; x=1788768835;
+        d=1e100.net; s=20251104; t=1788164129; x=1788768929;
         h=content-transfer-encoding:content-type:in-reply-to:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to:content-type;
-        bh=OrTpW37S+1M6EBPYov19PswiAAuwlv9L2hIKGUyEp3o=;
-        b=WpgjWSN29fPvP844xjuzoYcmb/rptM5BOjUC9dRh2L2HJFSJLMb3U2vF06Cn8gyLX+
-         qmiDOqyygMfD1EC4SjnB/pLCRJWy0cVnYdGi/stW+DLii90MqqTJLiVSSqe3y+UcfdC5
-         k/z9JlyyVaZ7oaV++Ere61aLMwMIaCcghfK3PDAbn35CbEa6wHiWe4BOrX4+uPu3LDhb
-         CTeCsaXsY43zpcIxh0SZecsPkmquWGXYIVzeCOD+WD4h3Pm4smQHz3aQJlG6zbE6pxpB
-         oiFCkTvKz2hnDes5u6YwVjFnf0uuX0PRhdxAUmjrX4PtAnGiD2g1CkRzzOSih2Je+io0
-         0Ztw==
-X-Forwarded-Encrypted: i=1; AKwUvBwVxFAt3QI0OXR7/F8q40EeqcgPz7jiiJvq7069TKnMXBLDpiU0UxE2xSoJG+IrynfpPUnmfr6J6OBsbUlLR2w=@vger.kernel.org
-X-Gm-Message-State: AFuF++mTn/l4dmjZC940H7C+ifjSnGagJk25SBL4IxB+8qd9CoEsNelH
-	1WbwFsP+aw4JyMro1DBCcaIpBapsTDLt/R/WzHaMvcqobKCf+vvMBLrCN7cyGH9oRw==
-X-Gm-Gg: AR+sD10OyNHn1r/rZ6QPnXvbvCJB2KQTWsuvJ7Bsbz5yrwisSzSOZu41NxPS3hyGPYx
-	LCTebodgFg3G8n2ZLqbR5wt+CRpIyS3+uW1JPWn+HY7Qfj3qsb1BnsqWjL9Ploc4bKoMDAdeJPk
-	jgh5y+KGfeiR2rfr3RhoYpQgV/FjxRyX1KisTq/X8ezrk9hzOoO4IgXzXngxWqhYWp5TPvNx6Wi
-	4nZz70U9wwPqnZDDypggaiOpHm9r5gwdLzYWeNUNv9ZU5sER3itiOYa6h3S/B2XV3g3cDQLP9MV
-	AqavzzGVQ3L6Nq+ZMQkhPfB//+tuNPhP5Rk9HRHoeD6JUcyU52/VeAKLzkZx3UERC90FcseuZQ+
-	lJg9EUem5tOihfIGB2ZJgXxUKjEpX6w05fX4yEFWgyluNRVcx6kUQkaVO0NKj9E4tWIac8Dg+87
-	OXqlsucM/IMi/jNaEWV11bMgHIRAzG+/4I6q0IvoCJHDaGjhqQe1JovrQHWTHhwCJmILGko+IaK
-	+MAYCYJ+3Wz+EFzFyy/csZETxECztVX87NC
-X-Received: by 2002:a17:907:d006:b0:c20:56e8:5457 with SMTP id a640c23a62f3a-c25ab2f4743mr117117466b.6.1788164035012;
-        Mon, 31 Aug 2026 01:13:55 -0700 (PDT)
+        bh=07XOke8MZcakwnBV1pfCWoo5tuEKqxVaUuHzsnaos6w=;
+        b=IncfvYGIvyz3jOY2elfr95hGICPCMZZjlXgVaSE9kcQdYbwJzAAbvj09slqjG3u5Ev
+         8PhMF3TyHhzaplcRhuCBofmopn2r0xoiTU9xJSt7qGCvi4LQoK54g9xDUTWNg07p9vq7
+         Gg8MfdEtyPDzxbZwyppMQkt2hbDgeLoXos5BF/9U9z1mEyTuxPsTIRZuYWjyFttQJq2b
+         oD7JQ3uV+qbcLTX8pU9GhYkDy5VRoWOgDeIqislOed9N8CHxbE4iSx4QWs8FikOdb+SE
+         MG1wz7CTpoyD7CMbvlFeY8tFNe7zLXQDjVIINIJIOfcuUglEMo4MbyJaw+wWa0x3qdtx
+         12sQ==
+X-Forwarded-Encrypted: i=1; AHgh+Rr+3SR0ps7pvFeQx0jUyT0KLNgPQwUdtIUh83vWvMC7kjzaxMVSiWeAokxruXb0IhxNyy67I9cIJTX03ZSG2+g=@vger.kernel.org
+X-Gm-Message-State: AFuF++lXrSU3wXO3On2Yjy04k+6kpnwb5iggKdbPyuWSS36MBf9ga0e6
+	XgonVHwnSNx6enggnAeII07fckolgQH/SB7gbZ35Zqt2njZmFiG8nnmsKUgIhrO47Q==
+X-Gm-Gg: AR+sD11q30FcpcX/7buYlLIb6938iBjz5kV9znHD5H02a/vD4xLEqaIsjubrHKSjFmL
+	VVEbggqmNFh/nWAWyKLXKJ4kwH9LiRLYLauXB5PcVn8JBxINYLLnbh/B1Z2ZaUJODzbpSj3eq6R
+	RIBUWQIMVKjQICrhJJjroH7b9z0dU52ct65B44l5MLXJcoaqpKXOy3irIs4ms88Espww+HBIT+5
+	lLfxuVfbK+osQHflApKNOQfEbvLUDoULH1txndC7tcFXATfWhO3kngk75BF1wnLPRgHIIMoIYkE
+	RI1rNbvkWL75vLK80SJyANwUU8unNW7ANQoPKozuUaAaeih08RKC3JLkR15HM6srATTBprMMNvv
+	+s1pDpUfI0bXQHfU+hDufxN9hVXnsOZDPhlMDcKaDDeMW0Uz4cEcnP56z/z9ztc40ZICRndRCU+
+	AC5zf+YTu9pUeC8kRBX/UL7XD7w6RPLsdsNVW8Sa+Cr6bbQ7BtFIj5vyieHY7Xs6XQfI2Qdm9iG
+	rPCLV8I8StuIsvKwNhYr9w9+0SYq/eFDTFo
+X-Received: by 2002:a17:906:fe4a:b0:c25:5d2:acf0 with SMTP id a640c23a62f3a-c2556c4611fmr1467365166b.8.1788164129415;
+        Mon, 31 Aug 2026 01:15:29 -0700 (PDT)
 Received: from [192.168.0.105] (nat-108f.starnet.cz. [109.164.53.108])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee09c68sm390058166b.7.2026.08.31.01.13.53
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255ee28677sm408971966b.21.2026.08.31.01.15.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Aug 2026 01:13:54 -0700 (PDT)
-Message-ID: <0b5cbed3-ce1e-4f8c-9a24-422eb8a55806@monstr.eu>
-Date: Mon, 31 Aug 2026 10:13:52 +0200
+        Mon, 31 Aug 2026 01:15:28 -0700 (PDT)
+Message-ID: <ed8f89c9-ef2c-4566-b296-974f73bd1b54@monstr.eu>
+Date: Mon, 31 Aug 2026 10:15:28 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -70,54 +70,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] microblaze: reset: Call POWER_OFF handlers
+Subject: Re: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
 To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
- Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
- Rae Moar <raemoar63@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
- kunit-dev@googlegroups.com
+ David Gow <david@davidgow.net>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+ Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
 References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
- <20260804-kunit-microblaze-v1-2-6dcdfe12eb40@weissschuh.net>
+ <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+ <42dfe558-f75b-4d7c-a560-449101bae4f5@davidgow.net>
+ <e11bc960-b31c-408a-a57e-631e76806bb5@t-8ch.de>
 Content-Language: en-US
 From: Michal Simek <monstr@monstr.eu>
-In-Reply-To: <20260804-kunit-microblaze-v1-2-6dcdfe12eb40@weissschuh.net>
+In-Reply-To: <e11bc960-b31c-408a-a57e-631e76806bb5@t-8ch.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-On 8/4/26 07:32, Thomas Weißschuh wrote:
-> System power off might be implemented through sys_off handlers.
+On 8/5/26 21:18, Thomas Weißschuh wrote:
+> On 2026-08-05 21:59:16+0800, David Gow wrote:
+>> Le 04/08/2026 à 13:32, Thomas Weißschuh a écrit :
+>>> Add a basic configuration to run kunit tests on microblaze.
+>>>
+>>> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+>>> ---
+>>
+>> Works well here, though there are still a couple of test failures (and a
+>> longer timeout is needed to get through them all on my machine):
+>>
+>>> Testing complete. Ran 965 tests: passed: 866, failed: 3, skipped: 96
+>>> Failures: blake2s.test_hash_alignment_consistency,
+>> memcpy.memmove_overlap_test, printf.dentry
 > 
-> Currently these are not respected on microblaze.
+> These are all due to the broken memmove() implementation.
 > 
-> On power_off call into the generic power off function which will execute
-> all regustered handlers.
-> 
-> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> ---
->   arch/microblaze/kernel/reset.c | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/arch/microblaze/kernel/reset.c b/arch/microblaze/kernel/reset.c
-> index 2f66c7963084..3612a20ca16d 100644
-> --- a/arch/microblaze/kernel/reset.c
-> +++ b/arch/microblaze/kernel/reset.c
-> @@ -27,6 +27,7 @@ void machine_halt(void)
->   
->   void machine_power_off(void)
->   {
-> +	do_kernel_power_off();
->   	pr_notice("Machine power off...\n");
+> It should be fixed by *either*:
+> - Disabling CONFIG_OPT_LIB_FUNCTION
+> - Enabling CONFIG_OPT_LIB_ASM
 
-Likely it should be here. Or you will never see this notice.
+Let me comment this in the patch directly.
 
-
->   	while (1)
->   		;
 > 
+>> I'm okay with this going in via either the microblaze or KUnit trees. Any
+>> preferences?
+> 
+> None from me. I would have expected it to go through microblaze, though.
 
-M
+Not an issue to go this through Microblaze tree.
+
+Thanks,
+Michal
 
 -- 
 Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
