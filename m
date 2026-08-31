@@ -1,219 +1,103 @@
-Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C554B486BBD
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 14:05:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4B641B362;
+	Mon, 31 Aug 2026 14:18:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788185122; cv=none; b=VAtvNqb6NBhz8Ic1Q2ZvDFoPjc4E0vzPtD0A/4XjSrON5OxzdESnwwuS/0eqm8ipwpdbObMH51OuS3m+RkiwKAkSvcymRCoUOdvAy7x4CMoqD23wt/qpR9hDB2cWzFvKN1eyC1RNWPdDIM/oE9Va6JykzueDhFKa8BI+aQSs9fs=
+	t=1788185928; cv=none; b=A3nSGZw547rNDHcoLSyP71TswgVBkqbKF+GnvlH1lne8QeEmbDC9FVSKqgFE3Vhcz6VcUzJWDuswP0S7qDTDnZ4j+Ph9hZi2y5bsLQbQA4CJNDa6CRn20lTPiHLpNTZZnx5afjysUI86aOjRvJ4yd3coOgAOsRKPbNIAkutrjDE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788185122; c=relaxed/simple;
-	bh=dMgH3SXQVDef4+TvHTl+j6bjZM2Hmn9mYCLR0gMCleA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZYvs/1BZ7OJgG1TvIopPjoGyqxeBdqRkue9BTAmYG3t73EVCxI9PqSsyFGjpB6Ki71VW+9iT7+pZhRi03OrwnmIlFCSQdOKwEToAR8+ribXXvgaRm8Ddltt1ff7Nahz53l2f17D05/7F1RFu10GQwt278HmztmLN8kyrTQJUFJc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yds0rmmQ; arc=none smtp.client-ip=209.85.217.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788185928; c=relaxed/simple;
+	bh=GiQY0/cGhCIhrwjz7J5xvOXUacu6SzKqp5fSychrLdM=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Z455O5Zn523HcLGjgv0TzZ/TQ2FqZT082ANlOoYWbBU/NkUgjdIqtJEQ87pjMKOg+wdnUzykxzK54uhBGEq8uplA3PqoY42NJ71Vvt3nE+96sdo+ygZfNZsEiR9smQdtPSDjKvlI1OgztQQqeKipMNaLfBc2kscliAGE3Xk2LSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=es/OHSgr; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yds0rmmQ"
-Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-73720e58dafso1995474137.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 07:05:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788185119; x=1788789919; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=GSG1bwsrNLkgaczjFVkO4Fp9+89s6DMBG6R8XlunJWE=;
-        b=Yds0rmmQ9DmcJYt68JwBC2XePECRWxVNiREj4etor9Fx5JPVgyIhpk32EMrOAXmhdq
-         VnULMwQ4JBgq28iqsVCIF5iq7bmOjkVqEOkxkOz9LN6+YHPhB64NcqjUPiNTMa4iJBQh
-         elXDQgrLZoK7MZEoe/tRuO8k5zP5i80Y+WzM7MXE1w7ElzvW1x2JrafF5mUOEIhey7ut
-         IUQkWNDvl3K+/yq63bEBP9VOq+dN2285tNQnkWhlSTVWGCNOMmbULGhZCypvsRJ6ntre
-         W2MU9OLBdb0t4ArqbczFdPBCVkQd24A8Y/pILGGOBoSBKi9c11ZV8DA+hqWm2PMW3+WT
-         ZNwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788185119; x=1788789919;
-        h=content-transfer-encoding:content-type:mime-version:message-id:date
-         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=GSG1bwsrNLkgaczjFVkO4Fp9+89s6DMBG6R8XlunJWE=;
-        b=d9BTQRphICKpFZYMiRFbLtvO79sbp8+rIrmdBSbd9T5KtsBveLnadIJoILaqQSjqaB
-         PrMQcXVz2EhooVhG2ZQoTzQon1/+cPuAG+ewqEgpEVYG8yAOqrhLVzZO8BjbKWuVClvY
-         2wlWZSxUOkq+zZ5qZusy4X0yWE7/IaifLWJDm8N2j7dQlpRvg6Uq/UOyuMJwk43UfVBo
-         Tz4L+LmaoqUozLukofuqimRLU/Adm5tJ1YV/5wA/bqbDWZuIFyHyIGL45kelPh4aLqyU
-         NBPRNj8JrtSxu6NeMi1FlfZP6rAiS4XjPG+j88GAfixZ+yV75lnZwF6B7r5tplFcgyDL
-         f22Q==
-X-Gm-Message-State: AFuF++mhfa9mzEjAvT1jnk6XNOSDaVyQoJVdfOrqR8iQ/N7Ps1h2Y/Xi
-	SdejJe9Q2Bv+1fXhdJAoVh4IW2YtDjPm3GfXOh0M2K0h0lz5eEk7AeLa
-X-Gm-Gg: AR+sD11UObxyk76vByayYdoewIkHf8/nlO68fht/pPHoT8YokOCgOtC32iygHuL5uSZ
-	czdp9WlyHLbQuAwjGkbAj0ps20aO4sSq+OPQbEYPWoBrtuMVkJXODIS9Ehz10GS+MErCrGTK9jH
-	RJulSeUiEAXpixmnsiEMRae6g7eukU1DnyLca7FPtyaEpIhMFNu9eHdv7wVIsh3nPvKPpGLo2n0
-	Qb8gnAi/iJjI6rnYkw9joC/zEIx9FMN/gWSDjhhXCY2Km9ku1xtZ2NuNCqlK7DELvZYKTSVU/J2
-	sw8AQTK1TIjvil84z0Ql16GXZLRB/532ScC4Z/zQYMOWSezY+vdz8gPCPDB2a72pfVTL7EBU9fr
-	XA+GEhXmhEXj8Jj+qp2UVD9QAvmsXJRZ00KOwm4S3imuzZ+ULwsIGY3LPMk6tR9mC+Q7BcZWUUA
-	sndVO8sGzZto6HYF9OoewrzmQljZlidMz3thNhOD/+7kfJVOPWwucbJw==
-X-Received: by 2002:a05:6102:41a3:b0:786:c223:ad84 with SMTP id ada2fe7eead31-786c223ae87mr6874119137.9.1788185118532;
-        Mon, 31 Aug 2026 07:05:18 -0700 (PDT)
-Received: from unix.. ([181.229.23.179])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-786b21c60fdsm5718410137.12.2026.08.31.07.05.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 07:05:17 -0700 (PDT)
-From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-To: Elizabeth Figura <zfigura@codeweavers.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
-Subject: [PATCH] selftests: ntsync: add wait termination edge cases
-Date: Mon, 31 Aug 2026 11:05:12 -0300
-Message-ID: <20260831140512.136118-1-ivanrwcm25@gmail.com>
-X-Mailer: git-send-email 2.43.0
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="es/OHSgr"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AE251F000E9;
+	Mon, 31 Aug 2026 14:18:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788185927;
+	bh=YONLIVVAUFRdHkx2Rc44fd4Rx093REbHbos2HAeeAtU=;
+	h=From:Date:Subject:To:Cc;
+	b=es/OHSgrFhhuoB5mNLeORVCEwgIemnBbctWc1VqXmE/ivZ6SBs+Ja6EwcYS/4910S
+	 alTuWAoZYzsEqFU34j3SWao+xeT68zjaUaaMpYb/Ya6E3RoT2x+McOyVDaLRmMH+Mm
+	 ZS+ZRHI7YjX8cwf4PUMZGzZPWokcS7bFZgoeKVsjo6NZvkrudu7ET0YQ7mg84N886k
+	 JMcai+D1cYkOwowdJGDgB5jn8/fjvroxm6puqYnHDvPhbonfDjLgA3cSJ9+olUH1/Q
+	 Kv2KicCSqVsJCZSYeD8FvQS5vbc/n9aIQuPQLvwBrlNgXExPcbWTUPy8imsUTbK3Cs
+	 ZGuT0pNVoFDag==
+From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
+Date: Mon, 31 Aug 2026 15:18:23 +0100
+Subject: [PATCH] tools/testing/selftests/mm: add missing .gitignore entries
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20260831-fix-mm-selftests-gitignore-v1-1-c984bbd4c5e4@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAC6NlWoC/yXMQQqDMBBG4avIrDsQI6jtVUoXan7jlBpLJkpBv
+ HvTuvzg8XZSRIHSrdgpYhOVJWSUl4KGqQseLC6brLG1aauSR/nwPLPiNSZoUvaSxIclgp2r2qv
+ rGtvUhvLgHZHr//z+OK1r/8SQfkc6ji+cxVydfgAAAA==
+X-Change-ID: 20260831-fix-mm-selftests-gitignore-dd389da72760
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ David Hildenbrand <david@kernel.org>, 
+ "Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, 
+ Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+ Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: Pratyush Mallick <pratmal@google.com>, linux-mm@kvack.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ ljs@kernel.org
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1249; i=ljs@kernel.org;
+ h=from:subject:message-id; bh=GiQY0/cGhCIhrwjz7J5xvOXUacu6SzKqp5fSychrLdM=;
+ b=owGbwMvMwCV2fu7ZrsZH9SKMp9WSGLKm9hpxHJY+fk3bZ5vKhnl/GItVs+fO4w32CZgY4Tjnm
+ /krpjXSHaUsDGJcDLJiiizPv4jvDxIJm9d5wd8NZg4rE8gQBi5OAZjIAh2Gf1rTy/fvmXPZ3Pb7
+ 1q5Nv9Q501wtoljnZOrvkNc3k+37ocrwv/SYefGUjgehKjudFCp8GsVey+iUiufaF5xfdJinyrO
+ WGwA=
+X-Developer-Key: i=ljs@kernel.org; a=openpgp;
+ fpr=E7F417BF5214569E89D04F46CF9DCD8A81E27F14
 
-The existing tests cover timeouts that expire while blocked, but not a
-deadline that has already passed, and no test exercises interruption by
-a signal even though the documented behaviour is EINTR. Also extend
-wait_args_validation() with an invalid flags case.
+Commit 2bee308f3adb ("selftests/mm: use pattern matching in .gitignore")
+switched to a pattern-matching mechanism to reduce churn in .gitignore.
 
-Add coverage for:
- - an absolute timeout in the past, which must return ETIMEDOUT without
-   blocking
- - a wait interrupted by a signal, which must return EINTR
- - undefined bits in ntsync_wait_args::flags, which must return EINVAL
+It however accidentally excluded the page_frag test's-generated module
+intermediate C file with .mod.c extension, and also the local_config.h
+header generated if liburing is available locally.
 
-Tested on v7.3-rc1 under QEMU with CONFIG_NTSYNC=y: 15/15 pass, and the
-two new tests were run 50 times each at 1, 2, 4 and 8 vCPUs with no
-intermittent failures.
+Explicitly fix both the issues, fixing the module-generated C file as a
+general pattern as these are always intermediate files that should be
+ignored.
 
-Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
+Since this is a trivial .gitignore change it doesn't seem necessary to
+treat it as a hotfix.
+
+Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
 ---
- .../testing/selftests/drivers/ntsync/ntsync.c | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+ tools/testing/selftests/mm/.gitignore | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-index 1f0dc43bb4c0..7d944e2a9094 100644
---- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-+++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-@@ -11,6 +11,7 @@
- #include <sys/wait.h>
- #include <fcntl.h>
- #include <sched.h>
-+#include <signal.h>
- #include <time.h>
- #include <pthread.h>
- #include <linux/ntsync.h>
-@@ -1381,6 +1382,13 @@ TEST(wait_args_validation)
- 	EXPECT_EQ(-1, ret);
- 	EXPECT_EQ(EINVAL, errno);
- 
-+	wait_args.pad = 0;
-+	wait_args.flags = ~NTSYNC_WAIT_REALTIME;
-+	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(EINVAL, errno);
-+	wait_args.flags = 0;
-+
- 	ret = wait_any(fd2, 1, &sem, 123, &index);
- 	EXPECT_EQ(-1, ret);
- 	EXPECT_EQ(EINVAL, errno);
-@@ -1471,4 +1479,92 @@ TEST(wait_any_monotonic_timens)
- 	close(fd);
- }
- 
-+TEST(wait_timeout_expired)
-+{
-+	struct ntsync_wait_args wait_args = {0};
-+	struct ntsync_sem_args sem_args = {0};
-+	struct timespec start, end;
-+	__u64 elapsed_ns;
-+	int fd, sem, ret;
-+
-+	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
-+	ASSERT_LE(0, fd);
-+
-+	sem_args.count = 0;
-+	sem_args.max = 1;
-+	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
-+	EXPECT_LE(0, sem);
-+
-+	wait_args.timeout = 0;
-+	wait_args.objs = (uintptr_t)&sem;
-+	wait_args.count = 1;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(ETIMEDOUT, errno);
-+
-+	elapsed_ns = (end.tv_sec - start.tv_sec) * 1000000000ULL +
-+		     (end.tv_nsec - start.tv_nsec);
-+	EXPECT_LT(elapsed_ns, 50 * 1000000ULL);
-+
-+	close(sem);
-+	close(fd);
-+}
-+
-+static void ntsync_test_signal_handler(int sig)
-+{
-+}
-+
-+TEST(wait_interrupted_by_signal)
-+{
-+	struct ntsync_wait_args wait_args = {0};
-+	struct ntsync_sem_args sem_args = {0};
-+	struct sigaction sa = {0}, old_sa;
-+	struct wait_args thread_args;
-+	int fd, sem, ret;
-+	pthread_t thread;
-+
-+	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
-+	ASSERT_LE(0, fd);
-+
-+	sem_args.count = 0;
-+	sem_args.max = 1;
-+	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
-+	EXPECT_LE(0, sem);
-+
-+	sa.sa_handler = ntsync_test_signal_handler;
-+	ret = sigaction(SIGUSR1, &sa, &old_sa);
-+	EXPECT_EQ(0, ret);
-+
-+	wait_args.timeout = get_abs_timeout(5000);
-+	wait_args.objs = (uintptr_t)&sem;
-+	wait_args.count = 1;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+	thread_args.fd = fd;
-+	thread_args.args = &wait_args;
-+	thread_args.request = NTSYNC_IOC_WAIT_ANY;
-+	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 50);
-+	EXPECT_EQ(ETIMEDOUT, ret);
-+
-+	ret = pthread_kill(thread, SIGUSR1);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 1000);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(-1, thread_args.ret);
-+	EXPECT_EQ(EINTR, thread_args.err);
-+
-+	sigaction(SIGUSR1, &old_sa, NULL);
-+	close(sem);
-+	close(fd);
-+}
-+
- TEST_HARNESS_MAIN
+diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
+index fcd892ed21e3..a306d7754786 100644
+--- a/tools/testing/selftests/mm/.gitignore
++++ b/tools/testing/selftests/mm/.gitignore
+@@ -2,7 +2,9 @@
+ *
+ !/**/
+ !*.c
++*.mod.c
+ !*.h
++local_config.h
+ !*.sh
+ !.gitignore
+ !Makefile
+
+---
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+change-id: 20260831-fix-mm-selftests-gitignore-dd389da72760
+
+Cheers,
 -- 
-2.43.0
+Lorenzo Stoakes (ARM) <ljs@kernel.org>
 
