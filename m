@@ -1,131 +1,138 @@
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB413415F2E
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 17:06:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F2283B635C;
+	Mon, 31 Aug 2026 17:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788196009; cv=none; b=XQCJzt4pSxoNmd9Q2bxwYDTpYEz6fxVkVsNMpgxcoy73vER8/INsS5rGlFyGspaoz6RGIVW1wYZEB4mNJFFZd3csrU6l/d1df1Rugw9LAsVT6O/LGiQtN9rsO+r+U/yqx+O/KVqK5iro2VGnPKfOdG+texRO8UjCQQDrPn5B2W8=
+	t=1788197709; cv=none; b=BRwZYCSXYhtugrSH4pcI40NTO+9AgsgKvo0hWd/HRyMoS4jipGkLPkZCRq3FG6c11nHp2qAWLiGsdflqy5pxP+KgZgRUb8bdNtwLXkukkYMhQRjE8pjDsAY4V5pUltszgkv12AHPCJBkrNE39nRTDh2PFzk2B3syiVzS9fFGSqw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788196009; c=relaxed/simple;
-	bh=K2KqcoylP9ajdo74uYFE/bbmE9F2Qm+5zWNnAdHfvtk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IJKtbeLeXbXZH5AU8oIaIPoVQyaZca8zQWBCEgomcByluPtXU+V/+Yz/piNUSvqvirM9lpOaIB9Ulkc6Oe+mdcSfbeJ7GlPxgVlr/nyBu5KKVSnsSpjPvt+D9k0eCNQrLgfEM5xlN6bYcDs3JO5pp7GVJTKgeMAq5fB32S80m9I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=gK6qDEqY; arc=none smtp.client-ip=209.85.160.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	s=arc-20240116; t=1788197709; c=relaxed/simple;
+	bh=ZSfTSV94UG89a5dXkx/V0XuOV6jYQwvx0OpQMYNs58M=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=TAlfI+kEayHoGi0zvOuITu8qA8Ci4wK0rsegurFaJsmFKkSMMgRDpNVy+qQ4yWfzZU7aKUBfzzH1fCqIeZbR8Lvu/qxVZbz6x+gC7uNkZHw0gX/zIVZvLrGJWQ7Cl0mip0kdvBLG1BB+scmJqnXx/QY6pYzkrXRTrI0w3Xkmc30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=CrSSgXf7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=FHMhvOs7; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="gK6qDEqY"
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-52de50e77ffso45153901cf.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 10:06:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1788196005; x=1788800805; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=Ey0i6GY/+uYMiZdrZqXVheWdxLiejFy0vPzvLZWYeyQ=;
-        b=gK6qDEqYLplMfc0PeagNg51XBWZ5Gezhr+drQWG/zYTbe0cDiqE1bJFqfYn6/jGUuV
-         bnLDKRq8OZc1doxPIcSiwcHKxWLLutMkgJAxdUQOTIE0Vq+09axSfP1bNfHm85E7JuCu
-         6Fa8PexMdPFZ8o7aAP+tRcDOokPf+25n7TrUr74zJm5QnuAPQuNEMF9fxwyWjkJDbO+q
-         na/oCVWpgDzcnbquL7Jg8SFRmIFIme2Ny+uB+6i3qMuII6OB0nVA4vjLc6lavRe3lQ4G
-         mTUdgxP8R/GTSQtnAzWdROL6ND0r6xINxq4b9hKumbN0e2tELfY1O7LbYLQhEZ+0FD0/
-         Fg3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788196005; x=1788800805;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=Ey0i6GY/+uYMiZdrZqXVheWdxLiejFy0vPzvLZWYeyQ=;
-        b=YXP8i5BA0KNbt1RUk77kv4YzNvT0fydpILAAzHF3+ICIzuR1Wz0jUxIgA8HSiXAHcl
-         mp4oIvVxT61d/dtSzgW5Rj2IMbDZaqVBZhJiBe0AH4qUrIv2TcW8owa2naoTvhgdqq4T
-         B3HNSKCd5q9MHqbQUdTdFwNHbSBE3PgcdhOcjPuv3Fw5GobjzW2lht89FTdceimVPxvF
-         PBvcsqrkgQQByH9fn8VgTKh4UJE9r7xnaBYymz3uVn7e+wmXW/jEQilkONU2Wnxyz+VH
-         DS2b0EML22zrBROf8+fiQxBh8F/3pXmgnheF9PszkPs+Xsw+ToJf68XExHResJfKD/tX
-         OtcQ==
-X-Forwarded-Encrypted: i=1; AHgh+RpkIa2zBqHsVvjsNEVWrML5el9i6j+uOyKk67IojA4pWHHyJBgoZYASeidytHaTGXaSHSqG3GsUYCRye8vD9yA=@vger.kernel.org
-X-Gm-Message-State: AFuF++kVmh9sRuNR+1dOu8d8q3Cz+iUh9lYLB8jgIpyW+t3yFCOuD6F6
-	wMX9xjlT8+K/98Gh00mWnL3O3cGbVJ/RJAlLreBS1isux7QIKZzU2rYRitCj1nWhXCg=
-X-Gm-Gg: AR+sD1314SWAwUbZrVqNpijTF/PKPc/tDmE1HUaTF9mCsrKFT3yCmZiTanZ7KKufTB6
-	1sKzzMd/aL/t1+e0rPs0Iz0WUWSb+bNE94WqGi7iSF2FgRXJRJwZKe8SqqbcKU94smyuLWnnov/
-	JtG4gKwsTEjvV2407H+uNLAo/X7XE2wGE28ckFlpjopg2RnytF8OItbNLvUUULWqvAB4XK/y+eA
-	aJxbZ4mLYqg95eeR1rgKwD9aEVUOuMkDsK74TPt4alTjkt5ENU6ZgszznY2NSsJA3y7OJrfvTVw
-	jLP2oXc5Xrkjdx54nrYD/cd83lTnnailzU9ff14EOC0eIa3OO5VlKT6eiwzVumw/ASP8BszQ1J5
-	TOEo2Rx5Ct0s7odjs/ILOlwbAy8UdE8bZVW5W97RQcvM94GRzJXKZyefg1H4maY3WW6dndiIuV5
-	LZT4v50V/a3psuCyRQcfE69S8hWSI9c93SCe7GTUDtulSAcM78wkDIqf87BmXzdZPUsgcuBtgEF
-	MbvCH/CD5lzb4WbIqILGQafH83RF3YWSPgOTMK4giG0
-X-Received: by 2002:ac8:5750:0:b0:52f:9e5c:33ff with SMTP id d75a77b69052e-52fb93edd51mr337452961cf.13.1788196005399;
-        Mon, 31 Aug 2026 10:06:45 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-90ce44f4ef8sm87774886d6.31.2026.08.31.10.06.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 10:06:45 -0700 (PDT)
-Date: Mon, 31 Aug 2026 13:06:43 -0400
-From: Gregory Price <gourry@gourry.net>
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@kernel.org>, "Liam R. Howlett" <liam@infradead.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	Pratyush Mallick <pratmal@google.com>, linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] tools/testing/selftests/mm: add missing .gitignore
- entries
-Message-ID: <apW0lpz-4o6zGbCK@gourry-fedora-PF4VCD3F>
-References: <20260831-fix-mm-selftests-gitignore-v1-1-c984bbd4c5e4@kernel.org>
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="CrSSgXf7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="FHMhvOs7"
+Received: from phl-compute-02.internal (phl-compute-02.internal [10.202.2.42])
+	by mailfout.phl.internal (Postfix) with ESMTP id 44889EC01E9;
+	Mon, 31 Aug 2026 13:35:07 -0400 (EDT)
+Received: from phl-frontend-03 ([10.202.2.162])
+  by phl-compute-02.internal (MEProxy); Mon, 31 Aug 2026 13:35:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1788197707; x=1788284107; bh=B9
+	MHRYIq+smi9ATTmQdbFCEBlyvFA4jJ0+a1GYuGMGk=; b=CrSSgXf7S2mJtPpGzc
+	FEv16/1l+nkPsUg/rKIJ9oI+mUe+DSY2sByzWACa/VLkEAoZq8NOn94M7/6NIvYo
+	ftA8J+hWvzEItTiIO7Uc9lyjgNY0GZl1AKejJGw4TqNLCiJ7A9J87ADj/LPIP4zP
+	s2nySSFdvBu1lzVnvMUCjj25b++o3KLmV7Pcy41v6cJPyJDeGCByatDUXZax2B6w
+	driciHYrJzzt41lPWhDaBB4Tt2lT6QUHPaqWRfOx6MYKQRUforYzn8FJmQUEBVVa
+	5U62SfPfbrFzMs2y1opbqIjuxLQzoN9L3DssTLEshHwjNxuyLzbrqQfOlOz0w7r9
+	gL8A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm3; t=1788197707; x=1788284107; bh=B9MHRYIq+smi9ATTmQdbFCEBlyvF
+	A4jJ0+a1GYuGMGk=; b=FHMhvOs7H6zMUpah3TU/oKCU844lurYxjcvrRfImZ33c
+	TyU4Xkfl8hfqci2j8V6D+adwh7xGqd7C6Qo/lSjjnhWjj7FTiKtadNqxd/4ObCor
+	NlB186ZeIfejNHySb/jqCC0U6UlGVt54bCvFTD/tT/ni/2nS4wTyjxD9cH9+sWye
+	8ogGMDnHTB9YLfzMiFjzl0Z76W0MryVnjV+cbvf5aOOFJw1gLB5vd/My+t2OkVMv
+	iTaRlYPPDcXyv0IbArfv3yP9bf3mbqQ2hZnwJpt32a7uuM1lLhiG0KcS51RVv4FY
+	n/XBcp4t4Paz89781lNjGP7NDdQbXy4PuKfc2t4nZA==
+X-ME-Sender: <xms:S7uVagHoZgiM9KjuRFKzX5AgA91KjOhFI4AhU0jYtcaKt3YqBnrXEg>
+    <xme:S7uVahi_n4nCKzLpK2YZk5O_kFscrD4mcKNbsNmNeDPX0QxraML7PMGOx325_mz9s
+    t7nxuXZU2wxIBTGI9GhZL80ZgEBnCXM7NrnGmuxYm9HLAbbeAiuKXI>
+X-ME-Received: <xmr:S7uValuvTqJnYGkDA8L6CfLqgST9mxOKLtRZdGSiL3vgSQmcnQpcUBMOMXLKtM3_LxhBIxSPDb0vy_a--GukoUn7OwBMsw>
+X-ME-Proxy-Cause: dmFkZTGDnSdqODSSefgmklLUvKwBokqckiggxWYF/fE+h9DYDb7IaeyWQqpcIzTJFdy/Kl
+    jfqIaA4SFtngWezaufy+M+2VQay7H2iC3LPAwjZlorh2th3ueLbwmbqo1KA/+AwRGTRIpt
+    y0y3jkljtLIYWR3mwWmz5jXEzB2pz145UeJ64B70MKSipuLfWptetAOa03oyiqT+2CJeEl
+    Ixsh4TcFh7J5ydbZW4iH+ckpC9TS7MBDV/UIurewEEMBK35pdPs6zNzTbkoGYu3dEWgIWH
+    pFo7MTDARcmVrroRgdWM6QeiNApyTNXmYbhbpUxyWV6ndMHjdQqR8Du5gLdVhEP/MA9eKg
+    vAxyq8Khjs0fvlU3HeVk/IE//wjK2DmfgCpbCYGvrXofK0+qQK4awW7MnVIETWLjUqDL4V
+    l4PvFlgkBbyMSSjBzVbraevaRtBZiEqdYztpyAzT9rzj/DxMtnHbsMySnS7CKDWnNTeLIJ
+    1FbNYXLz9wP4x4bLsWYwoA/efZmlF5CtDOdwe17CPmvmmiHUuLDt4abw2vV8suBqX3zWWN
+    lQu4NSddZ785uDD39WJcEWNXegTtrEz2zvx3CQt8gEq0BxW7/Va7ULFaPIrl6NEB+65jDG
+    BAYs1JmliV5WuMR7H3VT75OVwKSd3cdSccd99YFDt/zgRENWb9X+hxMYv7DA
+X-ME-Proxy: <xmx:S7uVasvxaMEA-28Xx6QJu0L9liAhq1ukb_atfrBakqgEYgtYkLMxdA>
+    <xmx:S7uVaiGZXYsIIvOrpzlMDbG1zVgeDP_VTJO-2e44PJHpPAKnmjnuQA>
+    <xmx:S7uVavOrvi25z5X91kBIbrWMDAaclQe7DXZdgdRUn5kXxIC-1lr9PQ>
+    <xmx:S7uVapKjeta5MgFbcpMpTjNw61L4YkaGWT7flgMgvyrUCPDZI1FgfA>
+    <xmx:S7uVavsoesvUSoI6Yl8eBp79z1x-2OhBPYKZnGHhmE1lHFVXYFYfRpQb>
+Feedback-ID: i80b64ba7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 31 Aug 2026 13:35:06 -0400 (EDT)
+From: Juanlu Herrero <juanlu@fastmail.com>
+Subject: [PATCH net-next v6 0/6] selftests: net: make iou-zcrx tests
+ multithreaded
+Date: Mon, 31 Aug 2026 12:34:36 -0500
+Message-Id: <20260831-iou-zcrx-v6-0-02d1d012f0fd@fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831-fix-mm-selftests-gitignore-v1-1-c984bbd4c5e4@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/yWMQQrCMBQFr1Le2g9pkRi8irho4lO/i1SStISW3
+ t2oy2GG2ZCZlBnnbkPiolmn2MAeOoTnGB8UvTXGYAZrXH8SnWZZQ6pCx6PtjRuND2j5O/Gu9be
+ 6ILJIZC24/k2e/YuhfE/Y9w/7bxlldgAAAA==
+X-Change-ID: 20260817-iou-zcrx-e8e46108a0bc
+To: dw@davidwei.uk, netdev@vger.kernel.org
+Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com, 
+ pabeni@redhat.com, shuah@kernel.org, juanlu@fastmail.com
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1766; i=juanlu@fastmail.com;
+ h=from:subject:message-id; bh=ZSfTSV94UG89a5dXkx/V0XuOV6jYQwvx0OpQMYNs58M=;
+ b=owGbwMvMwCWW/91SPSt7w03G02pJDFlTd3s2cgqd+ZHbWVzffjtlHce3PwdXTV0iK82fvzTrz
+ Jnrp0s/d0xkYRDjYrAUU2TxeCnSojG1ovGuaoQgzBxWJpAh0iINDEDAwsCXm5hXaqRjpGeqbahn
+ aKRjoGPMwMUpAFPdIsXIcL9d8TrrMa/WU2GXrmY9dEytqWFRvMoiP9NJSvfl45UCTYwMT21SCk/
+ PmJDWyX/SuSEl9TB/ZkLY1qeLnx1e1nj+z8vvzAA=
+X-Developer-Key: i=juanlu@fastmail.com; a=openpgp;
+ fpr=48E9148428957881DD2558116FF739276A6BB0D9
 
-On Mon, Aug 31, 2026 at 03:18:23PM +0100, Lorenzo Stoakes (ARM) wrote:
-> Commit 2bee308f3adb ("selftests/mm: use pattern matching in .gitignore")
-> switched to a pattern-matching mechanism to reduce churn in .gitignore.
-> 
-> It however accidentally excluded the page_frag test's-generated module
-> intermediate C file with .mod.c extension, and also the local_config.h
-> header generated if liburing is available locally.
-> 
-> Explicitly fix both the issues, fixing the module-generated C file as a
-> general pattern as these are always intermediate files that should be
-> ignored.
-> 
-> Since this is a trivial .gitignore change it doesn't seem necessary to
-> treat it as a hotfix.
-> 
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
+This series extends the iou-zcrx selftests to be multithreaded while
+preserving existing single-threaded tests.
 
-Reviewed-by: Gregory Price (Meta) <gourry@gourry.net>
+Patches 1 and 2 are prep fixes/cleanups. Patch 3 refactors the server's
+global state. Patches 4 and 5 add the multithreaded client and server.
+Finally, patch 6 adds the python side multithreaded test case.
 
-> ---
->  tools/testing/selftests/mm/.gitignore | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selftests/mm/.gitignore
-> index fcd892ed21e3..a306d7754786 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -2,7 +2,9 @@
->  *
->  !/**/
->  !*.c
-> +*.mod.c
->  !*.h
-> +local_config.h
->  !*.sh
->  !.gitignore
->  !Makefile
-> 
-> ---
-> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-> change-id: 20260831-fix-mm-selftests-gitignore-dd389da72760
-> 
-> Cheers,
-> -- 
-> Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> 
+Changes since v5:
+- early return in process_recvzc in the oneshot recvs branch (David)
+
+v5: https://lore.kernel.org/all/20260814012348.46958-1-juanlu@fastmail.com/
+v4: https://lore.kernel.org/netdev/20260729221825.42773-1-juanlu@fastmail.com/
+v3: https://lore.kernel.org/netdev/20260722203950.58550-1-juanlu@fastmail.com/
+v2: https://lore.kernel.org/netdev/cover.1776444379.git.juanlu@fastmail.com/
+v1: https://lore.kernel.org/netdev/20260408163816.2760-1-juanlu@fastmail.com/
+
+Assisted-by: Claude:claude-opus-4-8
+Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
+---
+Juanlu Herrero (6):
+      selftests: net: fix get_refill_ring_size() to use its local variable
+      selftests: net: remove unused variable in process_recvzc()
+      selftests: net: refactor server state into struct thread_ctx
+      selftests: net: add multithread client support to iou-zcrx
+      selftests: net: add multithread server support to iou-zcrx
+      selftests: net: add rss_multiqueue test variant to iou-zcrx
+
+ tools/testing/selftests/drivers/net/hw/Makefile    |   7 +-
+ tools/testing/selftests/drivers/net/hw/iou-zcrx.c  | 407 ++++++++++++++-------
+ tools/testing/selftests/drivers/net/hw/iou-zcrx.py |  50 ++-
+ 3 files changed, 333 insertions(+), 131 deletions(-)
+---
+base-commit: 1bb784eb6e38fd73143f021608e4ef3095d0c0d7
+change-id: 20260817-iou-zcrx-e8e46108a0bc
+
+Best regards,
+--  
+Juanlu Herrero <juanlu@fastmail.com>
+
