@@ -1,33 +1,33 @@
-Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
+Received: from mta0.migadu.com (out-248.mta0.migadu.com [91.218.175.248])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66081345CCE
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 11:04:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B8D934CFC2
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 11:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.248
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788174266; cv=none; b=RcHTpf+azLOIoRnm2KxpJBKwKi1/qC9q9zq1ypHPS8cs5jA73K1Dugd7rf4ORcbM/sFOMyVtX49fGRmTwEeDyIreBDL8tcBeU2YBLADCDI+9YTGyE0iX4nNIpj+yi215Z7gTnZRQwftoZkieqoPD/Rp+k6WHJW7ocbXhG7HhSGA=
+	t=1788174297; cv=none; b=gMDI3ARvfOO7R68fbgeFeolqmAAmCAlaCtI6/73Gz1ulS5zxdeIyYgqTZHT/XANq7ug/m0hIPalpnoIONDAuGySV+5X+Sq2sNCc83XDgfANI8tl2k8QxNpzJcN1TjeA3D4MgNp552Bl37JGFdsrmI904zjekWQ3N4IciHaWyjhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788174266; c=relaxed/simple;
-	bh=MZqBEMfNU2/DRjrc3AMVWf0ULkLuJij9FfiG6ryc5V8=;
+	s=arc-20240116; t=1788174297; c=relaxed/simple;
+	bh=7IVZKYnERBZ3SOHrfGkdcEFGIt3uXESKgR5MqtCSsfI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=M031MVEDmuADo+1WT0PPg9ZN16rB935Xkfyytt5uFntBpAEmCNOQ+egqIUymZnn5PO9o2edT0QjJWmgtZrFGgz9ALxgYULuOiICxTfsk8BgSPnwlZhXp0rdfae7O3OJ/lpySUG0t8mOhOWwLaKlxNSpHVAKNe+L22UnrRuVZqxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KpYUG7yq; arc=none smtp.client-ip=91.218.175.238
+	 MIME-Version; b=bCTFFpXrZVh3WOFzTnUV4PTQni2uPMbUjBbFazAMKTtWrd88mP5L+tK4onA5h+nnCwzpATjTjOGf+JncG+7KbA8APxokDhMZ8My6QTDuKcszvU2RRLiwa7Mk1odIiIEo9ycOhQN3zqn4MasrjaO2a+5+9Lz+fuRvPPS1Svb9kY8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B7Vnotce; arc=none smtp.client-ip=91.218.175.248
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KpYUG7yq"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B7Vnotce"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=MZqBEMfNU2/DRjrc3AMVWf0ULkLuJij9FfiG6ryc5V8=;
+DKIM-Signature: a=rsa-sha256; bh=7IVZKYnERBZ3SOHrfGkdcEFGIt3uXESKgR5MqtCSsfI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788174262; v=1; x=1788779062;
- b=KpYUG7yqA8PxyNjuVonHFmdmaFQBPMJJ4vKHHly5NqvHIRPj4CFGGGn/B18nTXGrd5HwgRap
- 1t4GY1TQDz6Ubrbw1Z0qyRT06mfwnA1gRBj/vku29DCQtdlN5zGXeo4EUqzCKfRQFia8I8T2k1L
- CprDNc/7cw0iGOVt3VaNy3Vs=
+ t=1788174293; v=1; x=1788779093;
+ b=B7VnotceCQHqKt+GDUC7TI5Bj9LwMQGJ+wIaoI6f4DEwMKVz7Mwnn8w/CUYxGvK1V+4JuO/G
+ ZXu8xcHhLjRAHMK/DpnvUCk2PU/9a3aBkaYQln457SILsT8qiwjZIT9KWI7v+nUa8osHEcFtE9+
+ ufqPVnRxb1jJ2clLRjFfu3PM=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b7e16e44ec0b80f5;
-	Mon, 31 Aug 2026 11:04:21 +0000
-X-Mizu-Trace-ID: b7e16e44ec0b80f5
+Received: by smtp.migadu.com with ESMTPS id 46169a63f5267a32;
+	Mon, 31 Aug 2026 11:04:53 +0000
+X-Mizu-Trace-ID: 46169a63f5267a32
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
@@ -48,9 +48,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void BTF type
-Date: Mon, 31 Aug 2026 19:01:07 +0800
-Message-ID: <20260831110314.150870-3-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v3 3/5] bpf: Fix NULL-ptr-deref in btf_var_show()
+Date: Mon, 31 Aug 2026 19:01:08 +0800
+Message-ID: <20260831110314.150870-4-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260831110314.150870-1-jiayuan.chen@linux.dev>
 References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
@@ -62,37 +62,30 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-btf_modifier_show() resolves the modifier and then calls
-btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
-BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
+btf_var_show() calls btf_type_id_resolve() unconditionally, which
+dereferences btf->resolved_ids. That is NULL for a base BTF - e.g. the
+vmlinux BTF that bpf_snprintf_btf() renders against - since base BTF is
+not resolved during parsing. btf_modifier_show() guards this with
+'if (btf->resolved_ids)', but btf_var_show() does not.
 
-The map dump path cannot reach a void type (a map key/value must have a
-size and void has none), but bpf_snprintf_btf() takes a type_id straight
-from the BPF program, and a "const void" (a modifier that resolves to
-void, present in the vmlinux BTF) NULL-derefs there:
+A BPF program that passes the type_id of a BTF_KIND_VAR from the vmlinux
+BTF to bpf_snprintf_btf() thus NULL-derefs:
 
-KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-RIP: 0010:btf_modifier_show (kernel/bpf/btf.c:2914)
+KASAN: probably user-memory-access in range [0x46638-0x4663f]
+RIP: 0010:btf_var_show (kernel/bpf/btf.c:2929)
 Call Trace:
  <TASK>
- btf_type_show (kernel/bpf/btf.c:8251)
- btf_type_snprintf_show (kernel/bpf/btf.c:8321)
+ btf_type_show (kernel/bpf/btf.c:8259)
+ btf_type_snprintf_show (kernel/bpf/btf.c:8329)
  bpf_snprintf_btf (kernel/trace/bpf_trace.c:1047)
  bpf_prog_test_run_raw_tp (net/bpf/test_run.c:829)
  __sys_bpf (kernel/bpf/syscall.c:4804)
- do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+ do_syscall_64 (arch/x86/entry/syscall_64.c:84)
  entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
  </TASK>
 
-void has no size, so there is nothing to render - not even a byte length
-to fall back to dumping as raw hex. btf_df_show() is already the ->show
-for the other kinds that carry no value to print - FWD, FUNC, FUNC_PROTO,
-FLOAT and DECL_TAG - and emits an "<unsupported kind:N>" placeholder;
-void belongs to the same group and only lacks a show op because it has
-no kind_ops[] entry at all. Fall back to btf_df_show() in
-btf_modifier_show() when the resolved type has no show op, so a void type
-prints that placeholder instead of crashing; bpf_snprintf_btf() then
-returns the length as usual.
+Resolve the var's type directly with btf_type_skip_modifiers() when
+resolved_ids is NULL, mirroring btf_modifier_show().
 
 Fixes: c4d0bfb45068 ("bpf: Add bpf_snprintf_btf helper")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
@@ -101,26 +94,26 @@ Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
  1 file changed, 9 insertions(+), 1 deletion(-)
 
 diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
-index 91b8ce77f699..6e267c4c4e1f 100644
+index 6e267c4c4e1f..3cf35ee49c10 100644
 --- a/kernel/bpf/btf.c
 +++ b/kernel/bpf/btf.c
-@@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *btf,
- 	else
- 		t = btf_type_skip_modifiers(btf, type_id, NULL);
- 
--	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
+@@ -2926,7 +2926,15 @@ static void btf_var_show(const struct btf *btf, const struct btf_type *t,
+ 			 u32 type_id, void *data, u8 bits_offset,
+ 			 struct btf_show *show)
+ {
+-	t = btf_type_id_resolve(btf, &type_id);
 +	/*
-+	 * A modifier can resolve to the void type (e.g. "const void"), which
-+	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
-+	 * instead of dereferencing NULL.
++	 * btf_type_id_resolve() dereferences btf->resolved_ids, which is NULL
++	 * for a base BTF (e.g. the vmlinux BTF that bpf_snprintf_btf() uses).
++	 * Resolve the var's type directly in that case.
 +	 */
-+	if (!btf_type_ops(t))
-+		btf_df_show(btf, t, type_id, data, bits_offset, show);
++	if (btf->resolved_ids)
++		t = btf_type_id_resolve(btf, &type_id);
 +	else
-+		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
- }
++		t = btf_type_skip_modifiers(btf, t->type, &type_id);
  
- static void btf_var_show(const struct btf *btf, const struct btf_type *t,
+ 	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
+ }
 -- 
 2.43.0
 
