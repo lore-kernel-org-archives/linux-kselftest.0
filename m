@@ -1,108 +1,107 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17F373B6366;
-	Mon, 31 Aug 2026 11:45:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E81A43AAF5F;
+	Mon, 31 Aug 2026 11:48:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788176744; cv=none; b=eLcHn6U+er+6kQXcubn4VXXH19ycXEi3KqUx0Xqap3j+b5uxmA6GGASudXJbNId3/qg46WdEtjhDdCxE8K9xzpkqmtU+ijqBk9uiUzytW81DBfvBJrS8LCKFah4Ymtga2CMmf0KJXy4MG6YugWEYGfn0qs3WmraE82FQquqnW+c=
+	t=1788176898; cv=none; b=BSscMLI4vXf+od8KnQ0kk1fVQNxAFc5yBWe+6mrtzmUP3PoBUNktw7nuCfg7+BGn3QpAoJ16VBkOD5r5tUFEGHUEXDFHF+zh9WAP2O+u/HhXIsNsV43jMRaFB418R0/TkNCyMLu4qgRCdGyJMIrhRPMOX8w9IlXHcEfhmMDIC88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788176744; c=relaxed/simple;
-	bh=aD2I6hRAIkKKRiLhJCMWDF9AgppkULVbICs8o805ONk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:In-Reply-To:
-	 MIME-Version:Content-Type:Content-Disposition; b=Qlz4ayhJ/Cshnp0fxVGTqop3hvpQwEFEtxBCF1NsxhKzdbGX9FTRoRXTd8K9z0xVr8q7nbcC+sU8H+UUGrIGqWmbPL2plqck4bjl4ZKHGKPI/Ku1gHt9MPw2drnc6Kql7KlOkSKf0AljeSVR53Lw/wt+Pi4WfAGw5WLQsfN5jKQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PQBkfrBY; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788176898; c=relaxed/simple;
+	bh=nAsKj7RDFagUb9c54TOrB72tNP37+TItHxmHnwLjhwA=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=scGGVt7roWEEoSyS8zREezOCF09sFdMD4uNUrqVkGVaH4E+orOkeM2++84iOF+eoV0JkhUZ9gZA2mFT0Qv+rcZ238kHEAMYCUcLtzd7oRWfZ2467Z8UH7MQnXfr3tPAHP2C3UGXLJOCMbUHZGIM2HdxaRlINEVzIMEMhWxO5UQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mIx1QBU0; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PQBkfrBY"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D0F1F00A3F;
-	Mon, 31 Aug 2026 11:45:42 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mIx1QBU0"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 654881F000E9;
+	Mon, 31 Aug 2026 11:48:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788176742;
-	bh=bC0M3u1C79l9mZxmj5fz1xjpZ2H2du7CqTBNxjYUL6E=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=PQBkfrBYrPDy7GY4tMT2xbCMVrCB1YoW5+2t7lkCi+/PXWgBjBK8dFy2a+Bl8heRL
-	 V3n48mZs5qlAlSs6IE4bAbYHKzwNa3blY1OW+muOXgy41yX504QKdN5Xq2chOn0m59
-	 Q9lPufYgEiULi+Qgpu5BKc8LNnlTQMcErbdKWdaDjRr0HQJfpbxccxTlMbUiyxLjRv
-	 WeYxNgQ+58kQkUM8rvaOlDsrhpjVj7RL3fN92lrUxuI8K4VWGKNyWf/kDaE6Xry3S4
-	 fXxRciCiSAj8NVxGBNZ+wfBunJtWbOg4wxt2MWrgNFUmNEUjVtoQc9bIwCrCWXrteX
-	 EbZ/D9y/zgqVA==
-Date: Mon, 31 Aug 2026 14:45:40 +0300
-From: Konstantin Sinyuk <ksinyuk@kernel.org>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: dri-devel@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Francois Dugast <francois.dugast@intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, linux-doc@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
- infrastructure for scale-up accelerator interconnects
-Message-ID: <fabric-leon-reply2.1788176465.ksinyuk@kernel.org>
-References: <cover.1787552412.git.ksinyuk@kernel.org>
- <20260826093222.GC42790@unreal>
- <fabric-leon-reply.1787844400.ksinyuk@kernel.org>
- <20260827170911.GG42790@unreal>
-In-Reply-To: <20260827170911.GG42790@unreal>
+	s=k20260515; t=1788176896;
+	bh=8cPGrdC5iQSukZPvGkaUA/Tt//q9nwqGNfvO10ofzmg=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=mIx1QBU0cgDpz6lJ7dfTz3V0gK2HllBGDnwiO4OoelgjZqJQm8xDuXtxtK7BRU68D
+	 szUt/noLW8PFa1rmFoXns7Nn0cr69wJ3xWwLeExutoykzAXaXbTIjK57c1FPBbfFKe
+	 DvUvZksKzYoYHVPz8rxBTbFug3w/xVElJ6zSwWTm7wCskX2AvNniEBKVBf293wVSqt
+	 Q+C54k4ma1Lh3pSg8ineI5Yo9SblZ2Gxj4FZSwS3m/QZVS/lHoLPbwbo/UQsqdFf8X
+	 JpDf8EJwLsIRAcyG0h0aJj7+MwRC4ZgClj7luzQfJ9Phc4nV+BsE9Y3iADujmnry69
+	 /ojE0UesOOFwQ==
+Content-Type: multipart/mixed; boundary="===============2535200794614647358=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Message-Id: <8b93223f148b0771b79336d636e7b6ddff030ffd2b3ffb264a51af6082149c01@mail.kernel.org>
+In-Reply-To: <20260831110314.150870-5-jiayuan.chen@linux.dev>
+References: <20260831110314.150870-5-jiayuan.chen@linux.dev>
+Subject: Re: [PATCH bpf v3 4/5] selftests/bpf: Add test for key-less BTF hash map
+From: bot+bpf-ci@kernel.org
+To: jiayuan.chen@linux.dev,bpf@vger.kernel.org
+Cc: jiayuan.chen@linux.dev,ast@kernel.org,daniel@iogearbox.net,andrii@kernel.org,eddyz87@gmail.com,memxor@gmail.com,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,jolsa@kernel.org,emil@etsalapatis.com,ihor.solodrai@linux.dev,shuah@kernel.org,yatsenko@meta.com,alan.maguire@oracle.com,linux-kernel@vger.kernel.org,linux-kselftest@vger.kernel.org,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Mon, 31 Aug 2026 11:48:15 +0000 (UTC)
+
+--===============2535200794614647358==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 7bit
 
-On Thu, Aug 27, 2026 at 08:09:11PM +0300, Leon Romanovsky wrote:
-> The wording alone is not sufficient. Your proposal should be backed by
-> real devices representing different architectures from different
-> vendors.
+> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
+> new file mode 100644
+> index 0000000000000..a7d037f57a7ef
+> --- /dev/null
+> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
+> @@ -0,0 +1,82 @@
 
-Agreed that discussion and simulation are not substitutes for hardware
-implementations. This RFC is meant to shape the model early, while it
-can still change, and to ask whether the objects hold for other scale-up
-protocols, including NVLink and SUE/ESUN, not only xGMI and UALink. It
-is not a merge proposal.
+[ ... ]
 
-> The amdgpu xGMI implementation already exposes the required UAPI through
-> sysfs and would need very strong incentives to abandon its "legacy"
-> users in favor of this new netlink interface.
+> +	/*
+> +	 * Positive control: the same map with a real key type must be accepted,
+> +	 * so the -EINVAL below is about the key-less BTF and not some unrelated
+> +	 * rejection (e.g. an unknown map type).
+> +	 */
+> +	opts.btf_key_type_id = val_id;
+> +	map_fd = bpf_map_create(map_type, "keyed_map", 4, 4, 8, &opts);
+> +	if (!ASSERT_GE(map_fd, 0, "keyed create is accepted"))
+> +		return;
+> +	close(map_fd);
 
-Nothing has to be abandoned. An amdgpu provider could publish topology
-through the common in-kernel API while the existing xGMI sysfs stays as
-it is.
+A subsystem pattern flags this as potentially concerning: the positive
+control turns "this kernel does not implement the map type" into a hard test
+failure instead of a skip.
 
-I agree that xGMI alone gives AMD little incentive to add another
-interface. The stronger motivation is UALink: it is a new cross-vendor
-ecosystem, and accelerator and switch components may be owned by
-different vendors and subsystems. Common userspace should not have to
-assemble one fabric from incompatible vendor interfaces.
+BPF_MAP_TYPE_RHASH (used by the rhash subtest) is new; on any kernel that
+lacks it, map_create() rejects the unknown map type and this ASSERT_GE fails,
+reporting a red btf_map_keyless/rhash that has nothing to do with the
+behaviour under test.
 
-The cost of waiting until every vendor has a shipped interface is that
-the common model then has to preserve all of them. That is the position
-xGMI is already in today.
+libbpf already provides the probe for this: libbpf_probe_bpf_map_type()
+handles BPF_MAP_TYPE_RHASH explicitly (tools/lib/bpf/libbpf_probes.c:312,
+including the BPF_F_NO_PREALLOC requirement), so the subtest could probe
+and test__skip() with a reason instead.
 
-> The last new subsystem I am aware of was introduced with implementations
-> from three different vendors to demonstrate its robustness. You should
-> probably aim for a similar level of coverage here.
+Two arguments in the patch's favour: (a) an unknown map type is rejected with
+-EINVAL, not EOPNOTSUPP/ENOSYS, so the errno match isn't literal; (b) the
+comment on lines 26-30 shows the failure is deliberate - the author wants an
+unrelated rejection to surface as a failed positive control rather than be
+silently swallowed by the -EINVAL assertion below.
 
-That is a reasonable robustness target, and I cannot claim it today.
-The next revision remains a design RFC. The object model and subsystem
-boundary still need review against different hardware architectures.
+Both arguments are about the choice of signal, not about whether an absent map
+type is a capability-absent condition, which it is. Does the current approach
+fit the test's intent better than probing and skipping?
 
-The LPC BoF is the next step:
+[ ... ]
 
-  https://lpc.events/event/20/contributions/2412/
+> +	if (test__start_subtest("hash"))
+> +		check_keyless(BPF_MAP_TYPE_HASH, 0, btf_fd, val_id);
+> +	if (test__start_subtest("rhash"))
+> +		check_keyless(BPF_MAP_TYPE_RHASH, BPF_F_NO_PREALLOC, btf_fd, val_id);
 
-Thanks,
-Konstantin
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33385673160
+--===============2535200794614647358==--
