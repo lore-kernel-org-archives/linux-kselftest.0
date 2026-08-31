@@ -1,154 +1,284 @@
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from CH5PR02CU005.outbound.protection.outlook.com (mail-northcentralusazon11012012.outbound.protection.outlook.com [40.107.200.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D1B33CF201;
-	Mon, 31 Aug 2026 09:54:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788170054; cv=none; b=LcAEUkF/YC2LbgpzH9jTNwmAkrUokME6uvb9/whZzk5Owz/vH6WWswk0ccIxyYWbbRA8gwAH8NUUzGx55jNrDZxOpnz2C7MsdATbmVRp1ReXIy48dwV4b52gEgQXgZM5QtViwd60kpHRmRh/Oa7CY+HdA6VGFcIzEqiuXxMIUts=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788170054; c=relaxed/simple;
-	bh=WPYILjTj1XhEKKnetHI3GAXEdVYhCS/Rgz72+FxXANs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FSKjm6swSjBOvShA2Lc8EaEw9bYaMwCpJb0dZF5EJX9JGdNNuh45tLX46CqFPcHInvRguX93hXD5V88pu13tNSF7thQpfEk/2M8hlSOFm6tO1KnFSMsIjz21xnKeNKiI1wut1ZVJIBRVVAVGlLi5USPpqolazBAK0Qw241oN6dA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=sN2Nh/x1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138D932E728;
+	Mon, 31 Aug 2026 10:48:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.200.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788173301; cv=fail; b=C2+Rh+Uj6ONDcJ18N4A6DCn0PysALVv5YdiF6Qkat6u7nlSPGP6SbKy8Ib/N0R52eDroS9HpKwCWMHIWX0pic5XsmKNrVgpQu8PKsJskpVALfq1529G/4VPs5IqAad+WGNKkDpeA4LC6UVQWiq4A20NtGUBOkzz4egHZ78Wqf+4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788173301; c=relaxed/simple;
+	bh=LTCSKKa0aZBPpiCglvEwekslij6BCx/XFcDRvAYvk7Y=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=dpMeU9ZNpLHZwVZYfTiaci/BgNdGBv5p71YYbyIrkA3dVjgNbPEPAbrV7kID8iIWuhSFQsJ53QVtVsH+DWMzLKydPM+onMvvSoxSiXQ2sz7lcCwrnn6gBcU68rtQSv8eosSoSzA/z7TvkJ4xrzUmqw9RE/ZyudKD/Pc/8t/PyS8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=s27T9UTm; arc=fail smtp.client-ip=40.107.200.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="sN2Nh/x1"
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 67V82VLh1698357;
-	Mon, 31 Aug 2026 09:54:08 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=8c8dyg
-	oA7sjX0hep2C/MKWpWP3yipeywymZHuoWawYQ=; b=sN2Nh/x12M1u1jG4uOCOdf
-	kgVkp72FQSr2m9UnnDC7iJ5ArsjXjls6xRPkbYVl2FE4up8NaNvLhdCNwPsIYu3M
-	MtWijo6WuxlLDRBAnLvLJGf6Az6cxF4D+SKBlbH7t57RucTI411dWZO/xz3DMYF9
-	pNTHgLp2UGlI7gPz8lsQrtsk+jePw6REf7TmoA2jlFPHJpGv70SgQETdySSWSlzC
-	vWepcqIchCb71LkCsG6sN3wYt+8/46GD9dFfd4pWmZ+2LsH5F3zAPncS8zMlemkH
-	9p8HA+hKWRuO6Kz2IPOezq6Ivb/rN0GED9f4MWhxOH5ocUfuPBy+XTbzmNZAyxpQ
-	==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4gbq2t0ad2-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 31 Aug 2026 09:54:08 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.7/8.18.1.7) with ESMTP id 67V9faAw007679;
-	Mon, 31 Aug 2026 09:54:07 GMT
-Received: from smtprelay05.fra02v.mail.ibm.com ([9.218.2.225])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 4gcbyg50pb-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 31 Aug 2026 09:54:07 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay05.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 67V9s5Pl50594182
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 31 Aug 2026 09:54:05 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id CABFC20043;
-	Mon, 31 Aug 2026 09:54:05 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 439EF20040;
-	Mon, 31 Aug 2026 09:54:04 +0000 (GMT)
-Received: from [9.124.216.250] (unknown [9.124.216.250])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Mon, 31 Aug 2026 09:54:04 +0000 (GMT)
-Message-ID: <31368a5a-989a-46ff-a3e2-ec0e7838a7d5@linux.ibm.com>
-Date: Mon, 31 Aug 2026 15:24:03 +0530
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="s27T9UTm"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=UnvyClYHDREWj1ypRE+un+E2+YtvtI+ubXSNLU0aykIFxNs3969yvZWlllYzIR+RlhLGb4xNch7fiBlAYjw1H/nOOPMZEDDXYv8gN9KlZ2lizRjad+hFiWsHEqqCfMIWqun09wUufNFxMvENVX28lTMhU8HvmshUV/WLimNL+Ko9wz91j7OVASdMbUwkNh7ZeDEz5oHdopd8/4nnGWZbD/2izJUgY5tEaAuWzMQLB0V+Bdm+eSqb1JLC8xjGoIBTMGgT3D2w4C/I0zMRpuEoNJ/QOhCDBi7K+UztlrvyYRbbplVq7ke7ifkxRw2R9OeP8w2/vxRzbXPCLpZf/beEwQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=lV+/Ouazb6ZTTpvI72+YyukIvLGqpIkN/46cBnQ4OZw=;
+ b=HMbw6LHt7uNA0Kdu1FlKLgnGVHDBDY5We1cM6TYE8rOlP2F9eWRQM7fpKDcR/VJ8jrw7ow8sddlHS1DlJ68oM4QB+oNdVpVaPZYcQ1h9iUullZduN9btvC9Mq3c9OFG5GW1hSRN30ED37J6/bI1BcOSZbEpe+06ixfxX8ofOK6YO1fPfUHO/oeG1v9+dR7v6iuXrhbPdGCHVTJ4PwTxdfguNdKeHB/dH31NSuDIV2LmJAZZa2dHcU6c5/w1SC4fzZJve8/mm2OeJuechLcZdFsgMy4GLI3j9XxTdS49ElhdXV45FXPHVJNMaBaJVq3Ws11hzOuEoLUPx2xD8ehpY+A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=lV+/Ouazb6ZTTpvI72+YyukIvLGqpIkN/46cBnQ4OZw=;
+ b=s27T9UTmAY6wPD1q/x2UvD7ENSqtDfVg/agF/B1jrLanVr6J0NidmLT+NI9T12jNu2EPspleq+FIuymD+WnloozqR6phqsYqy6gBqdzgI+cSkjNNC8x8NvJoAPuN3O5JNC8m1xZSibvwjoXaMWaQ7axblDFT8nWb16vM8kN4p8w=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV5PR12MB9779.namprd12.prod.outlook.com (2603:10b6:408:301::14)
+ by BY5PR12MB4260.namprd12.prod.outlook.com (2603:10b6:a03:206::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Mon, 31 Aug
+ 2026 10:48:17 +0000
+Received: from LV5PR12MB9779.namprd12.prod.outlook.com
+ ([fe80::8ac8:e862:8ae9:9287]) by LV5PR12MB9779.namprd12.prod.outlook.com
+ ([fe80::8ac8:e862:8ae9:9287%5]) with mapi id 15.21.0360.008; Mon, 31 Aug 2026
+ 10:48:16 +0000
+Message-ID: <5cd8df03-ad51-460c-9b20-3bf288831b5a@amd.com>
+Date: Mon, 31 Aug 2026 12:48:08 +0200
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+ Brendan Higgins <brendan.higgins@linux.dev>, David Gow <david@davidgow.net>,
+ Rae Moar <raemoar63@gmail.com>
+Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ kunit-dev@googlegroups.com
+References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
+ <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+Content-Language: en-US
+From: Michal Simek <michal.simek@amd.com>
+Autocrypt: addr=michal.simek@amd.com; keydata=
+ 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
+ mpwx1d8=
+In-Reply-To: <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: VE1PR03CA0040.eurprd03.prod.outlook.com
+ (2603:10a6:803:118::29) To LV5PR12MB9779.namprd12.prod.outlook.com
+ (2603:10b6:408:301::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] selftests/filesystems: Move file_stressor to
- dedicated subdirectory
-Content-Language: en-GB
-To: Christian Brauner <brauner@kernel.org>, shuah@kernel.org
-Cc: linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-References: <20260521101758.14639-1-disgoel@linux.ibm.com>
- <20260831-klopfen-gedenken-vorleben-54fd9d119a83@brauner>
-From: Disha Goel <disgoel@linux.ibm.com>
-In-Reply-To: <20260831-klopfen-gedenken-vorleben-54fd9d119a83@brauner>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Authority-Analysis: v=2.4 cv=bc1bluPB c=1 sm=1 tr=0 ts=6a954f40 cx=c_pps
- a=AfN7/Ok6k8XGzOShvHwTGQ==:117 a=AfN7/Ok6k8XGzOShvHwTGQ==:17
- a=IkcTkHD0fZMA:10 a=Sv0fKeRqtYgA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=RnoormkPH1_aCDwRdu11:22 a=RzCfie-kr_QcCd8fBx8p:22 a=VwQbUJbxAAAA:8
- a=VnNF1IyMAAAA:8 a=DQmHLPe0WECjKNEuLnwA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-Spam-Info: AW1haW4tMjYwODMxMDA4MiBTYWx0ZWRfX7839bKwEI/Vu
- lV1CkMeTZfqfxAtct1PcZUmnwC3MHZRf3uc7o1TM18HQkV1nuSw/45NaAQvR43ve8bqnT23leC8
- yR4VpoBFtK1fCjKXmnM3n96taSUv1oM=
-X-Proofpoint-ORIG-GUID: 1TJOd8xgtVa6NGL89rsEhfl0uZg6SWNo
-X-Proofpoint-GUID: 1TJOd8xgtVa6NGL89rsEhfl0uZg6SWNo
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwODMxMDA4MiBTYWx0ZWRfX4QyjFZ1P7mix
- 9+tZrZoKUU2sU5WcXOl6ckhuydIqLexby9SCPVkt8wvdaDkKCg7obdd3PnTu6SYOVGsayu7VzVw
- k7rP6WGcX/P90WSoXHiPkfxlj6ACt9aeUyzpaOytWIZvx73+DRdrs53Bo8nWdJ8N1yK1louvEcr
- Apw3RRfVHUmJClqpI7Eav3hxF2JI04LQO4v1V+cVEcbVg2k5kejY8G9HFwjpPnJNoVGC+NvXmZD
- pFcLkVE+rz8541+V/M8c4b/JmrbucvsrwbwKecr/7JWsl873uXiaEV/7xFYgYlmhjQ6XLCk7BOo
- vr61Tohb7s9/72E3MgfddL562mHmTHTIJj5dkMJmm7y6ZOTvTT37qTxOGwX7DlNpoYBZkU06hfH
- L0db6WTKoKsUz6o+DlIL4J7S0bDSp3fr95quzIYGkNfFx23OtfZvqpskcJqnVbv11DYdUsEGmk+
- 06RYpVWjiJBQfkhKZBw==
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1176,Hydra:6.1.134,FMLib:17.12.100.49
- definitions=2026-08-31_03,2026-08-27_02,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- bulkscore=0 suspectscore=0 adultscore=0 malwarescore=0 spamscore=0
- lowpriorityscore=0 phishscore=0 clxscore=1015 priorityscore=1501
- impostorscore=0 classifier=typeunknown authscore=0 authtc= authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.22.0-2606150000
- definitions=main-2608310082
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV5PR12MB9779:EE_|BY5PR12MB4260:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9762761c-9a5c-45fd-1e7a-08df074d5d41
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|376014|1800799024|23010399003|10067099003|56012099006|11063799006|4143699003|6133799003|22082099003|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	i1pwCN+Yajo3CMGHvWTeTWskJCCFg7Hbr5GYrghR59S2vebaiCWfcfURGTukCsLtNibU8wV62kXDUp5DObXccBg4jBV8hUnYW1Nknsk12OgspGxh2S9gtKbronEpiTkgBjx3ieCCm1HYuxto3LaALzEcFnN52il9qm73GQxbRaQn94Ix3ccsf7x+CCg4P548iGTSCUSWiaIhP8o1LxZDjGS7jlrgdUz0QfYlKIxM/FqwYo28Z9U4KlN/cqDBmIrHZcIRnOrsznFLtIFcnc6uyn9H5XtyZh4qCGzYCUX+OwUnHtLEfIn28pk8uLy4XhQcdq3dhs8Rbr9ldNY853PUCATFQX+yz9HpDhXzVBKk1Mk1xw6TCmw6VRsO6RLQmr7/PpyScSTv9Ky62TefQ+trZXvx7CBc9z1ABridzpiI6D6lr1LALC4qISx4A0n4pwnJnIWNgm5bjI3oOaOoa9GC+Y/PoSuAlZ1buUQeYoW6j8JsezmJ+qNCrPNn7nBtcziEmuNPcD96Op2/xOhCH/UxO4oZ4ogwLZgebJtNoUh5Nqjoqi8uEA46yLS3lqtKa/1ZPmSMVuWoHMfnoQvDjMPESQ57F4aFUkz+PXUBIIlwOq1lrWv9NGyYpSB518JOTX3trnAllgwrrM/JLzkB6absbO4ih05Njl+EHmWS9fSMb0U=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV5PR12MB9779.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(23010399003)(10067099003)(56012099006)(11063799006)(4143699003)(6133799003)(22082099003)(18002099003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?QkJnM3Z0SnBKM1FmbkNHeURvNENzUnB6dWZSeGd4NWU4c0JxelJYSi8vUWNC?=
+ =?utf-8?B?L05MQjZqTE14U1lxc2tEZEdCbVkzbno2SFFlcGRZTUs4Z1Q1ZkFQS01oMWgx?=
+ =?utf-8?B?bE94c3RSQzhMMnMzRnc1VG50VkpCYkRmMGVqVWhEeTYyQVFLZ2MvQ3dteUts?=
+ =?utf-8?B?OFdwNGRjMWxzYWdxaUhFenQ1WFhkaDRXOW1SRmxsa3FvWGlTWTc4V25TYTl4?=
+ =?utf-8?B?NklFVTgxTCtWcE9QUHM2SlBNVlAvVVluNEJLclVpTHN1Wm8xa2RYNTB0SU9L?=
+ =?utf-8?B?NW9heDFVY0NhNnVYT3BtV0pOSFI2THBENFdqekJsdWtFUGZkNGRKZitraXVx?=
+ =?utf-8?B?aTQ0ajJqSVRGbk50NW9QOWlUaE1BSDVRYmQ3OVFkZVlzb250M3dXMDU2b1ZL?=
+ =?utf-8?B?S0lpVUNYdW8wUXdHOGZQempXdHZzU3FRNU45eVVkM3FDOHRtZnJmL2VicGxz?=
+ =?utf-8?B?MlpwN3pqL2ovNTY5ejkzVUJoOTNwWTJwZlY1ajZLc3Rha0U2bzltcWg1TmtR?=
+ =?utf-8?B?NTV3RHY5cyt1bnA0c2QvUHgxM3ZYVmpIRWRPcmk0MzlTaW1WdlhtRkFRdzBx?=
+ =?utf-8?B?TXBkOE9CUHlRbUloTFZtUzJTY3dVdmRIeHY1ZnZreU9JSkRvNVovRjc1djJr?=
+ =?utf-8?B?dUY3S2hkeUNvY2hrYVZjMFBEOGZHSGYyU0sxdkd6WGxsU0lBaE8vY3p0QWtH?=
+ =?utf-8?B?ZHZLWXh4Uk4yeDhIUlFJbWNtb1prSzhnUWFwZkhoNXRZbFdaS21NVCtIZ3d0?=
+ =?utf-8?B?UHdJdUZEdUVjNUlXWXZ0Z0FCdGp5Z3RXZlB3NTMvQ001WUVPT3dpZjl1d2or?=
+ =?utf-8?B?YmFaT01kM3hSMkdNOFZxQ0wrM0FuNy9OVnNHYjB6UU9RTm5IRnZRbGxUQlN2?=
+ =?utf-8?B?NzU5SGJFQnZFYVFxemhoK3Q4UFNnSFZOTXNhUFZENEx4cU9hU3YyZERocnp2?=
+ =?utf-8?B?UWJ6Yk41M29xMjc4TEpYcUcrd1JYWEFmcXlnbSs4TzVCYzg5RFg5WDRsRW83?=
+ =?utf-8?B?SGNsdTVGTXZJaFltTVZqaGlHT2YyU1MzeU9NUiszRkN1WlNsaWFJTHN3aDda?=
+ =?utf-8?B?bkw1QUhjQW1NZlc1YjZ5d0d1Q2EzSm1GdDArM01aWlh6MjhadEp2SEtOYnEr?=
+ =?utf-8?B?cHo0L3YxTlp0a29lU1BCU01pODZHZCtDSHhiYUhKNytMUThpWFlTazJiWHli?=
+ =?utf-8?B?NEZ5dmZaZ3VrNHhudU5Ba04wUUhFWjVLazladXRncVdmN09GK3pZS2VycU5y?=
+ =?utf-8?B?c0p2dUwyUXVETG5DMDFweUZNdlA4aDRMc2YyWjYydUo1QW1YRVBKRWVhN0ZW?=
+ =?utf-8?B?K29tbHh2dlpsenMydnhvMk0vSkJKL2RzMGd0SUtYcG5pcWZVSUVIVHhwV3la?=
+ =?utf-8?B?YzM2NjVGUHphZHFWNDM3b2hDZkJIaHJnRTNYMHBsZDZGT1pYK1VvOEREbWtV?=
+ =?utf-8?B?MmN2eWkxbXpMU2o3aUpTR01rd1VQQmswSmZEUzR3aUFJNVFWVXA5RkpXVHd1?=
+ =?utf-8?B?MHRtaEgzVlJ6TG5HT1lWbjZRblhpME00NVRjWmdtM3pFN3RsNXNEdTdXNGlI?=
+ =?utf-8?B?MVMwRDgxZFNHenVmK3djTCtQdUlDM29PWVFuOTJKdm1wLzNvV1dwaDhsS1dK?=
+ =?utf-8?B?RnNVd2Npdm51eXBxR0RIQlYwcnNMYlZ6VkEvbVorY2RBaU1FVm1Qb3ZjRHRw?=
+ =?utf-8?B?L3A1a1RINTFiY0trK25VZDE1Sm9rZmpVVGd4RklEY1dPMWdYVENoUTArZGVE?=
+ =?utf-8?B?TlpKaGFueFJzY2kxS2RLZUpHNG5NSEk5Mm1JUTk0YVIyS2xDNHhEZ1FiRHYw?=
+ =?utf-8?B?UHpDZ1kwREhTSEdwdFNUOHcrdndLazR1TWMyd2NMTmRaQlFCRWpsQUdaRlA3?=
+ =?utf-8?B?SmlWNUx1Zm92NUtwcmxtaXNlc0JCZDY4UGM2RTkzb0FyU01PY1ExY093ODBo?=
+ =?utf-8?B?M014bEZ0QlQ1VUw5MFV2dXhET1ltRUh5VzVsMUdyMnBVVFVoOFpyTmZHcktM?=
+ =?utf-8?B?aW9pKzlBa0JreDRNeTFyNUh0V1UzTUlQOGFDdWlrSEZVVE1kMHRZMERhandV?=
+ =?utf-8?B?QnY0clc3ajZCVVFoUHpxSmtNZlpNMldYS0x1WTVGTWdpZGdCRTVhR2FvQ1M5?=
+ =?utf-8?B?M2lnSGFwYkkwUzZ1T3NHL1c5d2hRTWxkZ3J1cGM0MUw1RDU4dUVDZElpM0o2?=
+ =?utf-8?B?YnZ4RERocTdOWVJCdDFKYnNlNFJJUUlwVXordGc1SFM5VGhmelJkT2M4MFM4?=
+ =?utf-8?B?OWNjL2UzSDRmdGRrTGVadHN4dE12a2hwSWVtSUkrYmFBcHVXNXBFVzlQUFRI?=
+ =?utf-8?B?cHFVSFBEbkJ3cUNWQ3hsTVdKWUZNaXFldklJemZ4MW1VRjJjYUV4dz09?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9762761c-9a5c-45fd-1e7a-08df074d5d41
+X-MS-Exchange-CrossTenant-AuthSource: LV5PR12MB9779.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Aug 2026 10:48:16.9094
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V98W7Cfcm+wtb4ENwgLe98Iv2xBbPOfIt7ePFo47T6fbD7SLOA9MYyyTmMQw7cLQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BY5PR12MB4260
 
-On 31/08/26 1:20 pm, Christian Brauner wrote:
-> On Thu, 21 May 2026 15:47:56 +0530, Disha Goel wrote:
->> The file_stressor test requires a 30-minute timeout (1800 seconds) due to
->> its 15-minute runtime plus setup/teardown overhead. This is significantly
->> longer than the default 45-second timeout used by other filesystem tests.
->>
->> Move file_stressor into its own subdirectory (filesystems/file_stressor/)
->> with a dedicated settings file to isolate its timeout configuration. This
->> prevents the long timeout from affecting other fast-running tests in the
->> filesystems/ directory.
->>
->> [...]
-> 
-> Applied to the vfs-7.4.misc branch of the vfs/vfs.git tree.
-> Patches in the vfs-7.4.misc branch should appear in linux-next soon.
-> 
-> Please report any outstanding bugs that were missed during review in a
-> new review to the original patch series allowing us to drop it.
-> 
-> It's encouraged to provide Acked-bys and Reviewed-bys even though the
-> patch has now been applied. If possible patch trailers will be updated.
-> 
-> Note that commit hashes shown below are subject to change due to rebase,
-> trailer updates or similar. If in doubt, please check the listed branch.
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-> branch: vfs-7.4.misc
-> 
-> [1/2] selftests/filesystems: Move file_stressor to dedicated subdirectory
->        https://git.kernel.org/vfs/vfs/c/5550456dad37
-> [2/2] selftests/filesystems: allow security.selinux xattr in listxattr kernfs test
->        https://git.kernel.org/vfs/vfs/c/cc87d0a97bc0
 
-Hi Christian,
 
-Thanks for applying the series. One note — v3 of this series was sent on
-03/08/26, and patch 2/2 had changes compared to v2. It looks like v2 was
-applied instead.
+On 8/4/26 07:32, Thomas Weißschuh wrote:
+> Add a basic configuration to run kunit tests on microblaze.
+> 
+> Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> ---
+>   tools/testing/kunit/qemu_configs/microblaze.py | 17 +++++++++++++++++
+>   1 file changed, 17 insertions(+)
+> 
+> diff --git a/tools/testing/kunit/qemu_configs/microblaze.py b/tools/testing/kunit/qemu_configs/microblaze.py
+> new file mode 100644
+> index 000000000000..ff012095e77d
+> --- /dev/null
+> +++ b/tools/testing/kunit/qemu_configs/microblaze.py
+> @@ -0,0 +1,17 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +from ..qemu_config import QemuArchParams
+> +
+> +QEMU_ARCH = QemuArchParams(linux_arch='microblaze',
+> +						   kconfig='''
+> +CONFIG_CPU_BIG_ENDIAN=y
 
-v3 patch 2/2 link: 
-https://lore.kernel.org/linux-kselftest/20260803150837.91604-1-disgoel@linux.ibm.com/
+Big endian is quite old and I am even surprised that it is working.
 
-Could you update the applied commit with the v3 version, or let me know
-if a re-send is needed?
 
--- 
-Regards,
-Disha
+> +CONFIG_SERIAL_UARTLITE=y
+> +CONFIG_SERIAL_UARTLITE_CONSOLE=y
+
+I think it is just pure luck that this worked for you because you didn't rewrite 
+the most important parts of config.
+
+You should define at least these values
+
+CONFIG_KERNEL_BASE_ADDR=0x90000000
+CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
+CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
+CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
+CONFIG_XILINX_MICROBLAZE0_USE_DIV=0
+CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=1
+CONFIG_XILINX_MICROBLAZE0_USE_FPU=0
+
+to be aligned with s3adsp1800
+
+It will solve these two issues too.
+ERROR: Microblaze BARREL, MSR, PCMP or DIV-different for kernel and DTS
+ERROR: Microblaze HW_MUL-different for kernel and DTS
+
+> +CONFIG_MB_POWER_OFF_THROUGH_UNALIGNED_PC=y
+> +''',
+> +						   qemu_arch='microblaze',
+> +						   kernel_path='arch/microblaze/boot/linux.bin',
+> +						   kernel_command_line='kunit_shutdown=poweroff',
+> +						   extra_qemu_params=[
+> +							'-M', 'petalogix-s3adsp1800',
+> +						   ],
+> +)
+> 
+
+That's bring us to different topic. When qemu runs I see these 2 issues
+
+qemu-system-microblaze: -accel kvm: invalid accelerator kvm
+qemu-system-microblaze: -accel hvf: invalid accelerator hvf
+
+
+I don't have any issue if you want to wire big-endian version but would be more 
+useful to wire little endian version.
+
+If there is an issue with memmove implementation I can't see any issue to 
+disable that options to let it pass from the beginning and solve it separately.
+
+This should be fragment for Little endian.
+
+[linux](next)$ cat tools/testing/kunit/qemu_configs/microblazeel.py
+# SPDX-License-Identifier: GPL-2.0-only
+from ..qemu_config import QemuArchParams
+
+QEMU_ARCH = QemuArchParams(linux_arch='microblaze',
+						   kconfig='''
+
+CONFIG_KERNEL_BASE_ADDR=0x50000000
+CONFIG_XILINX_MICROBLAZE0_FAMILY="virtex5"
+CONFIG_XILINX_MICROBLAZE0_USE_MSR_INSTR=1
+CONFIG_XILINX_MICROBLAZE0_USE_PCMP_INSTR=1
+CONFIG_XILINX_MICROBLAZE0_USE_BARREL=1
+CONFIG_XILINX_MICROBLAZE0_USE_DIV=1
+CONFIG_XILINX_MICROBLAZE0_USE_HW_MUL=2
+CONFIG_XILINX_MICROBLAZE0_USE_FPU=1
+CONFIG_CPU_LITTLE_ENDIAN=y
+CONFIG_SERIAL_8250=y
+CONFIG_SERIAL_8250_CONSOLE=y
+CONFIG_SERIAL_8250_16550A_VARIANTS=y
+CONFIG_SERIAL_OF_PLATFORM=y
+CONFIG_MB_POWER_OFF_THROUGH_UNALIGNED_PC=y
+''',
+						   qemu_arch='microblazeel',
+						   kernel_path='arch/microblaze/boot/linux.bin',
+						   kernel_command_line='kunit_shutdown=poweroff',
+						   extra_qemu_params=[
+							'-M', 'petalogix-ml605',
+						   ],
+)
+
+
+Thanks,
+Michal
+
 
