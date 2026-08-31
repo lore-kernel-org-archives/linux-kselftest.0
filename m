@@ -1,77 +1,77 @@
-Received: from fhigh-a8-smtp.messagingengine.com (fhigh-a8-smtp.messagingengine.com [103.168.172.159])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44C553B9D81;
-	Mon, 31 Aug 2026 17:35:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.159
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E185D3B774A;
+	Mon, 31 Aug 2026 17:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788197713; cv=none; b=a/EnkDvE15e5XN50ZokMrFge0yZp6dEfLf9zRNYqJpji+t6TzU7dYZ+APSodEpEpnZuWVx7m/Uj8Nn6sVWb9aMMCYbbivGkN8uJBWJIgmYN6S2dMvGTQ4o65qGHSqhTVsq0l8Bo7Ab+XjQGDeSTuJo+Li+Uew3ER3t1o/GZAS4g=
+	t=1788197714; cv=none; b=WHqebmYyJq+y/VTjLMxk8gB0H3QjNYolGc98nbiIjkyhXYLPGJWa91zh4wzWl4pBjnySRls4TVfAj64dVthnNjioOn5UZoNHGsBdwj335PyTZ4Mmp9WeL3eBrLsEcJsdBKluYtKBAuu/xDspvOVW8fecpfPvAq5dUcmbTLs8Ip4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788197713; c=relaxed/simple;
-	bh=+cZeEo+a0++I1r0xjOE4IQlexdTAzk6BpO64xwnD9Oo=;
+	s=arc-20240116; t=1788197714; c=relaxed/simple;
+	bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dRgjjIKUp9ipYvjjsJuHl8CBgThcDIctGrFwbS1mmrlZDj5Xxh7uy9HT/elzQnjFsJx4lZZ8fcEeaF9Qh13He5m0GSAJeO5a/DzhEv+/V0qWIcZ49m6enyvxbq1YWaEb43ZfqhouWtMGCfPT9T8tePhvYoqC/4cnMuE2Y4PVR+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=hbwEBcGr; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=LYbV3aXL; arc=none smtp.client-ip=103.168.172.159
+	 In-Reply-To:To:Cc; b=I9CsYtwsw0W5UXgIl9T//pkYnGavGmvHIVoxkgA6q1yHmjWuDilgb7Yp33hBXgHZiwi5YzP7A8YKHc+hf0GBNzo+IEK+6lOcXrgdoSo5QsTtXBzDqDlflBgfT8Y0QV/7QzbgBxUP9dFl5kmc2jo3IDUR1wYnG+75DZ0DWd5UIaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com; spf=pass smtp.mailfrom=fastmail.com; dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b=LWi9udXJ; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Mffu6n0j; arc=none smtp.client-ip=103.168.172.145
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fastmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="hbwEBcGr";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="LYbV3aXL"
-Received: from phl-compute-11.internal (phl-compute-11.internal [10.202.2.51])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 6BCEB140015A;
-	Mon, 31 Aug 2026 13:35:10 -0400 (EDT)
+	dkim=pass (2048-bit key) header.d=fastmail.com header.i=@fastmail.com header.b="LWi9udXJ";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Mffu6n0j"
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.phl.internal (Postfix) with ESMTP id 31249EC01CC;
+	Mon, 31 Aug 2026 13:35:12 -0400 (EDT)
 Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-11.internal (MEProxy); Mon, 31 Aug 2026 13:35:10 -0400
+  by phl-compute-04.internal (MEProxy); Mon, 31 Aug 2026 13:35:12 -0400
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1788197710;
-	 x=1788284110; bh=Eoz5RTS9FtP/9zGLBVui0sj/D8MYQnKfLx8NTj9JzOc=; b=
-	hbwEBcGruTFdD04FXX0c+0GvPwheet92R53ZguWaPeZuJye2VojKELWlT+CGqC2f
-	rr/gmmEynNbBbFEqf/vGcJNQZg12fqMsdPqpLBqriNDF6jL4BGrzM18kwl6yeoOj
-	qTy7L1UPykIso8LYnR4fqCFehYk4FshzBs/jvDGaTo3mc0gebUpRwfntH7yUs+Uo
-	1UKYWx8imDHUFGEFLgTh5R02sWkJcmFJbtJ3bwoMKJs8hmzl+K0kcEqJ8YWPT02Z
-	vXf67UeI5LgJ6UvDoMRX2eNioZV+qa0RtsEybpcmUZ6Bxb0NJr/2EzRZKC2ME7a/
-	WwJmj3R9majjf6GSA9z9TA==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1788197712;
+	 x=1788284112; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=
+	LWi9udXJXaSTU3ohNbSk4edl781X7HKkql3D1KCSCxeUH0nxH9sxhVbjANpjJK52
+	U+LPzzqU5Li1vh7UHZFM9FH7YyQpN/wlamCEMktSB6eceDj25djOuA++gyEe8cSd
+	VNoyj4PXsXxS57rMnnW+ru1kfs3+rlBrUHQakCr2DSl3xArQSdBGISljI75nxBpN
+	8B82DfXyM17ZcZJZuci1ZcAglPxW65xveRca2yw+sRC1aWsb1huepuBnUS68u0cx
+	NZ7euiYcpCKSqRlOY86D3sdBEf06NTXH7h0t8cXCQEnUOpSpozrnN311uvs9mdm2
+	gmmj7ubAdRIOY/oR8L3Riw==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1788197710; x=
-	1788284110; bh=Eoz5RTS9FtP/9zGLBVui0sj/D8MYQnKfLx8NTj9JzOc=; b=L
-	YbV3aXLO88mNwSpexB0zDYYOMF6KwPa2E0w8b2Kpvn3rERERx/mNqR3c+k1s+JGW
-	bqAwCdRiM6g3dvVTuYBj1fDuFkjLQxBZqmJamv3GEn3+7OBmvfQB7NDdCJz8TsLN
-	7THp4pYUFuPz2bszhMEgE9Nn/v/a6V/v4RmPE0RalkP+PnyzX/0FDv58km+FF16r
-	tD5+hl8xB+0Y/S42/oWwL0vRdy2oWxMaVM1Sm3R9Yp1OxdUxyBH6LdLqVVxn+3xC
-	sxrtQRoGeJmOAKtqKrXsH2a188KALhM/ZcZpsTmjpE57QSLZsmyYDF1Y4hyBPa9T
-	5SLk5IDJDpVFbKTtbxkDw==
-X-ME-Sender: <xms:TruVasAUuhR-qk4QnkrHMAFzvu-WxHu8HPw3zYRsMgYmD9JlMdokkQ>
-    <xme:TruVamtmUWVQiDMjHjRLyEcLnJ6pBpvpRiEVunvsqS1YjcwtLIl9LiXaHlJwVwIro
-    UiaCn4b343TqH6_fYhX33FT0qIGHhW0qc5OI02RRETe0DmagldaD6Z->
-X-ME-Received: <xmr:TruVarJ_ywN392SaMS6g045MF5PaLAP8p0Spz0x4EISAOckKxFA_AQeDh2E1kDxmTls_aZTQfzACY8jQioH1JgzSFOtZZQ>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1788197712; x=
+	1788284112; bh=zoVUj5F+8FVqGG22Q1uCXrQ58eGyDtPNSPzvgjqr55k=; b=M
+	ffu6n0jxdMzEyBaJU/h7AA+T4Gd5cHJ5oJ2/qDOGPrxp0epb5E9B0wW+8ML3BeYx
+	3VqD8ikvuGkKVOT3FUN6Pn+cZCz3tHoVTUO35eILJAT+7/KPRSr0M6KR11Yd8naP
+	X3I5mxpnwNSBo6Nl5SyHihYPOTonsDtOnEXRsvtLQ2uNp7EdQeASEvSLF3aRvkLi
+	ilD/vN8Wezov11HQYYOHwu81Y2UyBTgQdIvH6Rhth+aMCjx6ZGbKXwueErV17sZS
+	uWtWLsstSn1FmGKRuFYsmGQMG9QVGGlsPlqf0UeVgzTKBN1efCceyFXZ11ldSYDW
+	oG1NF6szDLDQ2pMqTf54A==
+X-ME-Sender: <xms:T7uVarFKaVIvHO8naqlhGqFBrvEUJsjT_rE_AQ8H15GsIW1xpYmZpw>
+    <xme:T7uVagjkjcsdydiFG4SsbQTuvkfFBdcyuvX2K4V-5WB6z2h_cV18VfyaywopBv3ed
+    tcQaQzZw5RhOyJKRtR-PyvHRb0khiATGI6x6vyOItseY7O0hi8A0hze>
+X-ME-Received: <xmr:T7uVaosJJNdQUv0tCNRBWbLqMyH5XcjG4pUbH33bPkGvZmusSJjutXQUCYNTXo4o7lsZCScXnul1Kh30iIWnCeaWfsNbgg>
 X-ME-Proxy-Cause: dmFkZTF6JiRdfk5Vs3phyclJ7AyUnOw1eG5omI5b6IFtHmdMG1Lppg8fUif7VfKKU3b6EJ
     RBQvPQj6dVCJiEi5e+7Y3+kf8PG/Ge5w4TzaXZZ7j3sTkSkMwX4Mi+MkjA0yTzQsSv7usH
     00naaOBrgEdSne1kiz+bIxzSnoR/CSvQ0vMfe1Kjg/eHzpDhX2WM56g/1khOZ1TxFjNTNE
     9tDn1+PQ5yGMB+HjfDSkKDiUv+BDB6Z7IT1pYyJBpAMs+BnD/He17cBJuXR66FgqKrkqHU
-    Ytvp0Z86JKudXFPmiy+Ok/IProGM+X4xLlD7XvjGiC7GqHdfdQ3Y+1rrG51Zu4Reqb29Bu
-    SiaSZFMpNLIiYkvrGAB1Kc7+eikSe1b4x+tWtV3luTMSpDUNzo7lsrgJtm2xU1+b4asTSn
-    zR1Hm7isf/1Sbbzd355wpmkkeg2M31+F1qV9U/0oWRhDDLbgwA8f5RQ4B71zgPTJlOHJhL
-    pdJn3nrXH8XpyOF1mHsbB6NHsU/QL7jAxgjOSgHYusU/OMdmaKnqnVSIARhKwe6gSqu+on
-    VriSQuVI2fPA05G6UTAFRidP+LMWMBzAJmWWF5oU/yMNFlKWIp1zTz3b3BZ3T+wU8EDs4m
-    xX5usFPjb/QaO0rGW8PZargBINgsap5rVOQdabW7cEfadGB+i6XQJO92dRaA
-X-ME-Proxy: <xmx:TruVatbQ7-hEdKiv3w600edb5rEzmV7Q7T2VocTTf10Eq9NygC4Jdw>
-    <xmx:TruVatByUrT_vHndDx01QiQEh2FIe-ce5WTZmafnBjBQIGZcMiQeeg>
-    <xmx:TruVanaV5ggS3wgWlv35nog1xYtHMjQ42BJ6Pjh3M_f40BbxdQ6SZA>
-    <xmx:TruValnCCOFy3c98zivkmQVOZGoAoubAc59Qxg4IraroNtvwoqi3GA>
-    <xmx:TruVatKLsKq2YmLMqOkULHJiJh7GHcJfrMMvKGS4XXZzOdhjAnCKYYmM>
+    Ytvp0Z86JKudXFPmiy+Ok/IProGM+X4xLlD7XvjGiC7GqHdfdQ3Y+1rrG51Zu4Reqb29D6
+    YhFYCFHGpXLFzKXci2uHF8CpA8AMuKtJcvFmZ9IEnAtXEXQwXNIHxl8Fs1G1WU4l8wrKJU
+    smEI35lqNW6lBUXQSe4OL65QB+EWXO/gJehvoh6Araa0/ONmZean4DP79qWzqIML/yHJix
+    ouGtg1uU9iblmbbo2n2R9QQgYNeVxGBt0vlgBKaDxu+w/KNqEnkMlc/HwrNCKPTRXk8PUw
+    qcTBpcdvvPP5Le1F3m+UYqLU4/19ERZO8Hn59kmxtDpqTEp9VvZANcaAkNw2YNyYQz51sE
+    lP/Pa+vMxyRcXEnN7lx7YUm2sLOhu8nFKUeXG5HZFeJEqkCTOhmQe3+T6psw
+X-ME-Proxy: <xmx:T7uVajt4h7OjHFnow0WUs3qWjb651MjrY-RCstUfzVSOyndhWD2UdQ>
+    <xmx:T7uVatF2ZR431AYI-6BnqSY5JXSXlHU9bAX5fd5vYYmITzfwdZk7vw>
+    <xmx:T7uVauMvhNejdELgMEA5tqsSWRuk1g5Gfay-_CLQ8sdPy3-pyi4DCQ>
+    <xmx:T7uVasJwXVUzGGY3hFh5zABUXSXKSbKv33iPqDD5Z1LWSZwnypTCOQ>
+    <xmx:ULuVarvE0eZra04dm0FphoyNIIt5po-KegfFm_SqECQkEVM1HB5udrJd>
 Feedback-ID: i80b64ba7:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 Aug 2026 13:35:09 -0400 (EDT)
+ 31 Aug 2026 13:35:11 -0400 (EDT)
 From: Juanlu Herrero <juanlu@fastmail.com>
-Date: Mon, 31 Aug 2026 12:34:40 -0500
-Subject: [PATCH net-next v6 4/6] selftests: net: add multithread client
- support to iou-zcrx
+Date: Mon, 31 Aug 2026 12:34:42 -0500
+Subject: [PATCH net-next v6 6/6] selftests: net: add rss_multiqueue test
+ variant to iou-zcrx
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -80,7 +80,7 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260831-iou-zcrx-v6-4-02d1d012f0fd@fastmail.com>
+Message-Id: <20260831-iou-zcrx-v6-6-02d1d012f0fd@fastmail.com>
 References: <20260831-iou-zcrx-v6-0-02d1d012f0fd@fastmail.com>
 In-Reply-To: <20260831-iou-zcrx-v6-0-02d1d012f0fd@fastmail.com>
 To: dw@davidwei.uk, netdev@vger.kernel.org
@@ -88,127 +88,102 @@ Cc: io-uring@vger.kernel.org, linux-kselftest@vger.kernel.org,
  linux-kernel@vger.kernel.org, kuba@kernel.org, asml.silence@gmail.com, 
  pabeni@redhat.com, shuah@kernel.org, juanlu@fastmail.com
 X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3455; i=juanlu@fastmail.com;
- h=from:subject:message-id; bh=+cZeEo+a0++I1r0xjOE4IQlexdTAzk6BpO64xwnD9Oo=;
- b=owGbwMvMwCWW/91SPSt7w03G02pJDFlTd3v6zuXvNW0vmDehtHaC1r6nbi9kZ67U0uG9n3fne
- V2JSIBGx0QWBjEuBksxRRaPlyItGlMrGu+qRgjCzGFlAhkiLdLAAAQsDHy5iXmlRjpGeqbahnqG
- RjoGOsYMXJwCMNX7kxn+V5Uct7zpk+63402+6hLP/ossjgVx5/hWvbNPK5rK3a2xk5HhSGzeiRk
- rtW/llfSXRD7llFVrmRa4der33EvV3No+s1/wAwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3662; i=juanlu@fastmail.com;
+ h=from:subject:message-id; bh=bb5BYgKa09OW6lhhuFRqBlw0NXbM/PKnsSXjhp92tdg=;
+ b=owGbwMvMwCWW/91SPSt7w03G02pJDFlTd3utifjK8eXPlRNd1yLjQ/psj4vxno05fvmRnpNd7
+ 37/4tCVHRNZGMS4GCzFFFk8Xoq0aEytaLyrGiEIM4eVCWSItEgDAxCwMPDlJuaVGukY6ZlqG+oZ
+ GukY6BgzcHEKwFQrZTH8Zr+zacPyeEfefc8fZaixZHXMWSR4+krN3c9rJ1zS/vfcRZGR4Yby3O0
+ Nh+7Mm78tZT2f8WEGgdaNc1+rhFZOl46WEV/HzAcA
 X-Developer-Key: i=juanlu@fastmail.com; a=openpgp;
  fpr=48E9148428957881DD2558116FF739276A6BB0D9
 
-Add pthreads to the iou-zcrx client so that multiple connections can be
-established simultaneously. Each client thread connects to the server
-and sends its payload independently.
-
-Introduce the -t option to control the number of threads (default 1),
-preserving backwards compatibility with existing tests.
+Add a rss_multiqueue Python test variant that exercises multi-queue
+zero-copy receive on a single listening socket.
 
 Assisted-by: Claude:claude-opus-4-8
 Reviewed-by: David Wei <dw@davidwei.uk>
 Signed-off-by: Juanlu Herrero <juanlu@fastmail.com>
 ---
- tools/testing/selftests/drivers/net/hw/Makefile   |  2 +-
- tools/testing/selftests/drivers/net/hw/iou-zcrx.c | 35 +++++++++++++++++++++--
- 2 files changed, 33 insertions(+), 4 deletions(-)
+ tools/testing/selftests/drivers/net/hw/iou-zcrx.py | 50 +++++++++++++++++++++-
+ 1 file changed, 48 insertions(+), 2 deletions(-)
 
-diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-index 78bb0169350b..37023ba580de 100644
---- a/tools/testing/selftests/drivers/net/hw/Makefile
-+++ b/tools/testing/selftests/drivers/net/hw/Makefile
-@@ -91,5 +91,5 @@ include ../../../net/ynl.mk
- include ../../../net/bpf.mk
+diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+index b7a225fe4bea..c833535d8a03 100755
+--- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
++++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.py
+@@ -30,6 +30,13 @@ def create_rss_ctx(cfg):
+     return int(values)
  
- ifeq ($(HAS_IOURING_ZCRX),y)
--$(OUTPUT)/iou-zcrx: LDLIBS += -luring
-+$(OUTPUT)/iou-zcrx: LDLIBS += -luring -lpthread
- endif
-diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-index 9b62fd0703e6..f793a6c04e41 100644
---- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-+++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-@@ -4,6 +4,7 @@
- #include <error.h>
- #include <fcntl.h>
- #include <limits.h>
-+#include <pthread.h>
- #include <stdbool.h>
- #include <stdint.h>
- #include <stdio.h>
-@@ -85,6 +86,7 @@ static int cfg_send_size = SEND_SIZE;
- static struct sockaddr_in6 cfg_addr;
- static unsigned int cfg_rx_buf_len;
- static bool cfg_dry_run;
-+static int cfg_num_threads = 1;
  
- static char *payload;
- 
-@@ -379,7 +381,7 @@ static void run_server(void)
- 		error(1, 0, "test failed\n");
- }
- 
--static void run_client(void)
-+static void *client_worker(void *arg)
- {
- 	ssize_t to_send = cfg_send_size;
- 	ssize_t sent = 0;
-@@ -405,12 +407,36 @@ static void run_client(void)
- 	}
- 
- 	close(fd);
-+	return NULL;
-+}
++def create_rss_ctx_multi(cfg, start, count):
++    """Create an RSS context spanning count queues from start, return its ID."""
++    output = ethtool(f"-X {cfg.ifname} context new start {start} equal {count}").stdout
++    values = re.search(r'New RSS context is (\d+)', output).group(1)
++    return int(values)
 +
-+static void run_client(void)
-+{
-+	int total_conns = cfg_num_threads * cfg_num_threads;
-+	pthread_t *threads;
-+	int i, ret;
 +
-+	threads = calloc(total_conns, sizeof(*threads));
-+	if (!threads)
-+		error(1, 0, "calloc()");
+ def set_flow_rule(cfg):
+     output = ethtool(f"-N {cfg.ifname} flow-type tcp6 dst-port {cfg.port} action {cfg.target}").stdout
+     values = re.search(r'ID (\d+)', output).group(1)
+@@ -127,17 +134,56 @@ def _require_ntuple(cfg):
+         defer(ethtool, f"-K {cfg.ifname} ntuple-filters off")
+ 
+ 
++def rss_multiqueue(cfg):
++    """Steer the test flow to a multi-queue RSS context for multi-thread zcrx."""
++    channels = cfg.ethnl.channels_get({'header': {'dev-index': cfg.ifindex}})
++    channels = channels['combined-count']
++    if channels < 3:
++        raise KsftSkipEx('Test requires NETIF with at least 3 combined channels')
 +
-+	for (i = 0; i < total_conns; i++) {
-+		ret = pthread_create(&threads[i], NULL, client_worker, NULL);
-+		if (ret)
-+			error(1, ret, "pthread_create()");
-+	}
++    rings = cfg.ethnl.rings_get({'header': {'dev-index': cfg.ifindex}})
++    rx_rings = rings['rx']
++    hds_thresh = rings.get('hds-thresh', 0)
 +
-+	for (i = 0; i < total_conns; i++)
-+		pthread_join(threads[i], NULL);
++    cfg.ethnl.rings_set({'header': {'dev-index': cfg.ifindex},
++                         'tcp-data-split': 'enabled',
++                         'hds-thresh': 0,
++                         'rx': 64})
++    defer(cfg.ethnl.rings_set, {'header': {'dev-index': cfg.ifindex},
++                                'tcp-data-split': 'unknown',
++                                'hds-thresh': hds_thresh,
++                                'rx': rx_rings})
++    defer(mp_clear_wait, cfg)
 +
-+	free(threads);
- }
++    cfg.num_threads = 2
++    cfg.target = channels - cfg.num_threads
++    ethtool(f"-X {cfg.ifname} equal {cfg.target}")
++    defer(ethtool, f"-X {cfg.ifname} default")
++
++    rss_ctx_id = create_rss_ctx_multi(cfg, cfg.target, cfg.num_threads)
++    defer(ethtool, f"-X {cfg.ifname} delete context {rss_ctx_id}")
++
++    flow_rule_id = set_flow_rule_rss(cfg, rss_ctx_id)
++    defer(ethtool, f"-N {cfg.ifname} delete {flow_rule_id}")
++
++
+ @ksft_variants([
+     KsftNamedVariant("single", single),
+     KsftNamedVariant("rss", rss),
++    KsftNamedVariant("rss_multiqueue", rss_multiqueue),
+ ])
+ def test_zcrx(cfg, setup) -> None:
+     cfg.require_ipver('6')
+     _require_ntuple(cfg)
  
- static void usage(const char *filepath)
- {
- 	error(1, 0, "Usage: %s (-4|-6) (-s|-c) -h<server_ip> -p<port> "
--		    "-l<payload_size> -i<ifname> -q<rxq_id>", filepath);
-+		    "-l<payload_size> -i<ifname> -q<rxq_id> -t<num_threads>",
-+		    filepath);
- }
- 
- static void parse_opts(int argc, char **argv)
-@@ -428,7 +454,7 @@ static void parse_opts(int argc, char **argv)
- 		usage(argv[0]);
- 	cfg_payload_len = max_payload_len;
- 
--	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:d")) != -1) {
-+	while ((c = getopt(argc, argv, "sch:p:l:i:q:o:z:x:dt:")) != -1) {
- 		switch (c) {
- 		case 's':
- 			if (cfg_client)
-@@ -469,6 +495,9 @@ static void parse_opts(int argc, char **argv)
- 		case 'd':
- 			cfg_dry_run = true;
- 			break;
-+		case 't':
-+			cfg_num_threads = strtoul(optarg, NULL, 0);
-+			break;
- 		}
- 	}
- 
++    cfg.num_threads = 1
++
+     setup(cfg)
+-    rx_cmd = f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} -q {cfg.target}"
+-    tx_cmd = f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} -l 12840"
++
++    rx_cmd = (f"{cfg.bin_local} -s -p {cfg.port} -i {cfg.ifname} "
++              f"-q {cfg.target} -t {cfg.num_threads}")
++    tx_cmd = (f"{cfg.bin_remote} -c -h {cfg.addr_v['6']} -p {cfg.port} "
++              f"-l 12840 -t {cfg.num_threads}")
+     with bkg(rx_cmd, exit_wait=True):
+         wait_port_listen(cfg.port, proto="tcp")
+         cmd(tx_cmd, host=cfg.remote)
 
 -- 
 2.50.1
