@@ -1,242 +1,122 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-234.mta0.migadu.com [91.218.175.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F10E03B4E9B;
-	Mon, 31 Aug 2026 04:32:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B38CC30D41C
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 04:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788150749; cv=none; b=dltjnDBMcMO+svt0PjmktBYqfuccNQG3RVaKoqi4hBKxSVmLMTYZgYZb5amaJjiQDqW3AIEpSPEh8JP0nF/LjEmsfkezcFQ1rkze6HKmPe3hd1xwxjjO+HO8XSVnYeBtXFxVWJsSJgY1s8uR8bwJpw/WYRZh0nlBnUGq+Oyl7fQ=
+	t=1788151973; cv=none; b=Xc1x3DyHPdEk4/fdxnJ07v9wy1yPJwmLEwbWK8uwTZN18hA/6KVd6tJ+N+6uPffimZ2zinD42I8V16qqc5vnuCl4foxpqAL80ENaZWCUqP3d02+w9UVmAS434UOKHnC1Zz86EV1HdPJdMmfoS5H9bR51M/dYgyJR1nU/7n2UOzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788150749; c=relaxed/simple;
-	bh=oizJKRTqyDh/VbZUTBgNcKUXsdPManz6vBIVNJXSxME=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=cQ7SIEc3DFXozPaT6eW0ntzL20EDNoJlxeuySggsO472QlkIl3jqrLxlh59QsuuvdnQzO3CL9gvvZ3ZoIyVAc4cFUZBONN0uynToonJGHGIz7Tk5CDdxmORd+LZEylcDqDkMH/EybaBKK+t+eyPX45JIYX0SKn+HZYo2BjDtWws=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=EtXQrxcE; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1788151973; c=relaxed/simple;
+	bh=bmzSrjJaq3XT8jBEdtgSjOSepJY+gkPVCqgxYOBVBd8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YvFBonOTYFOMG23vZqm2v6g1lIRM+66Crte4UqQFJHCnIzK5+LMi3V3++wVsy6jTtfEY19koQqPpfw2Zc5EFxdEsPsO7DOCt2sgZqOSmHWTT77SosSSQCntPgxet0RP2YKIH2+Yi5zLewCi/SVcWs2b6LVaHHZXKSL73WbUNq/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=LXdcyDXe; arc=none smtp.client-ip=91.218.175.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="EtXQrxcE"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1788150737;
-	bh=oizJKRTqyDh/VbZUTBgNcKUXsdPManz6vBIVNJXSxME=;
-	h=From:Date:Subject:To:Cc:From;
-	b=EtXQrxcE6F4N0n/2vipf/0Fpgfoc83jnzsCBcYj7UdA61sPh7r28mWIuddVqWMLQa
-	 +b0VsXskkZYS9bmrYy7BfNHCAiJMpvbKJ+x1qbYXOvV5dIv1HDQmCIcwzGiFN1dqil
-	 ntY56RcpdkTZdo46QrFaDf6h9FtsnvX9aKp31M00=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Mon, 31 Aug 2026 06:32:13 +0200
-Subject: [PATCH v2] tools/nolibc: add 64-bit parisc support
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="LXdcyDXe"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=bmzSrjJaq3XT8jBEdtgSjOSepJY+gkPVCqgxYOBVBd8=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788151969; v=1; x=1788756769;
+ b=LXdcyDXejfPMX70dfSa96dlNTo5Zv0aHZXPDjeQm1a+mkQZbnbpGYe7ORNXA/PxsMYf8wmAW
+ jgAZauaMJgvBG9nYO4SwEqmo25S/slmDixxJqJjtPv6NtXGD/EaoaUQsDxMLco7zEDuF6lkfaQe
+ klSFlqqw9/O0Vdp6I537CxeM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 1c9dc12ac8dfd3e8;
+	Mon, 31 Aug 2026 04:52:49 +0000
+X-Mizu-Trace-ID: 1c9dc12ac8dfd3e8
+X-Migadu-Flow: FLOW_OUT
+From: Lance Yang <lance.yang@linux.dev>
+To: sarthak.sharma@arm.com
+Cc: akpm@linux-foundation.org,
+	david@kernel.org,
+	ljs@kernel.org,
+	liam@infradead.org,
+	vbabka@kernel.org,
+	rppt@kernel.org,
+	surenb@google.com,
+	mhocko@suse.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org,
+	corbet@lwn.net,
+	jgg@ziepe.ca,
+	jhubbard@nvidia.com,
+	peterx@redhat.com,
+	leon@kernel.org,
+	ziy@nvidia.com,
+	baolin.wang@linux.alibaba.com,
+	npache@redhat.com,
+	ryan.roberts@arm.com,
+	dev.jain@arm.com,
+	baohua@kernel.org,
+	lance.yang@linux.dev,
+	broonie@kernel.org,
+	anshuman.khandual@arm.com,
+	usama.anjum@arm.com,
+	linux-mm@kvack.org,
+	linux-kselftest@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 1/6] selftests/mm: make file helpers return errors
+Date: Mon, 31 Aug 2026 12:52:41 +0800
+Message-Id: <20260831045241.25826-1-lance.yang@linux.dev>
+X-Mailer: git-send-email 2.39.3 (Apple Git-146)
+In-Reply-To: <20260831042101.18085-2-sarthak.sharma@arm.com>
+References: <20260831042101.18085-2-sarthak.sharma@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260831-nolibc-parisc64-v2-1-022f9beff7a6@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/2WOQQ6CMBBFr0K6tqZUpOjKexgWbR3sGFOwU1BDu
- LsFTFy4fJP//5uREQQEYsdsZAEGJGx9ArnJmHXaX4HjJTGTQpaiEIr79o7G8k4HJFsWfGe12Bf
- KSt0cWGp1ARp8LYvnemXqzQ1snGe+iQCPPqniL+aQYhveyx9DPl9XZSXFn3LIec5FqcCAshU05
- vQEJCLrerf1EFk9TdMH7ocm+NoAAAA=
-X-Change-ID: 20260407-nolibc-parisc64-3ca0547c2af9
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- Helge Deller <deller@gmx.de>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-parisc@vger.kernel.org, David Laight <david.laight.linux@gmail.com>, 
- Rolf Eike Beer <eike-kernel@sf-tec.de>, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788150738; l=7161;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=oizJKRTqyDh/VbZUTBgNcKUXsdPManz6vBIVNJXSxME=;
- b=OcFARBw3I+rBUtDzAIwbI3xthnUKWY+y3RppF3LtyOrAgnuD42ZlqjFqs7fslXQWu5d+w7kYg
- f5HgRZ10gdPC6pCzFF7Gh5viGIIsahv4oas6cO2OoQDTzRseVoIheRo
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
 
-Extend the existing parisc support to also handle 64-bit mode.
 
-Some peculiarities:
-* The nonstandard ftruncate64 system call requires a workaround.
-* The linker defaults to main() as entry point, which needs to be
-  switched to _start() explicitly.
-* The linker defaults to dynamic linking, which needs to be disabled
-  explicitly.
-* With the default -Os, gcc does not use 64-bit multiplication
-  instructions, requiring libgcc. Use -O2 instead.
-* There is no qemu-user available.
-* CONFIG_COMPAT needs to be disabled to avoid build errors due to a
-  missing 32-bit vDSO compiler.
+On Mon, Aug 31, 2026 at 09:50:56AM +0530, Sarthak Sharma wrote:
+[...]
+>diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
+>index 9a49af88702e..62f6f5b42649 100644
+>--- a/tools/testing/selftests/mm/vm_util.h
+>+++ b/tools/testing/selftests/mm/vm_util.h
+>@@ -166,11 +166,11 @@ int unpoison_memory(unsigned long pfn);
+> #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
+> #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
+> 
+>-void write_file(const char *path, const char *buf, size_t buflen);
+>+int write_file(const char *path, const char *buf, size_t buflen);
+> int read_file(const char *path, char *buf, size_t buflen);
+>-unsigned long read_num(const char *path);
+>-void write_num(const char *path, unsigned long num);
+>-void write_num_ignore_einval(const char *path, unsigned long num);
+>+int read_num(const char *path, unsigned long *num);
+>+int write_num(const char *path, unsigned long num);
+>+int write_num_ignore_einval(const char *path, unsigned long num);
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
-Changes in v2:
-- Rebase on latest nolibc/for-next.
-- Fix typo in comment.
-- Reorder conditions in run-tests.sh.
-- Fix llvm=1 check in run-tests.sh.
-- Link to v1: https://patch.msgid.link/20260820-nolibc-parisc64-v1-1-067ebe7c8efb@weissschuh.net
----
- tools/include/nolibc/arch-parisc.h             | 26 +++++++++++++++++++++++---
- tools/include/nolibc/stdlib.h                  |  2 +-
- tools/testing/selftests/nolibc/Makefile.nolibc |  5 +++++
- tools/testing/selftests/nolibc/run-tests.sh    | 10 +++++++---
- 4 files changed, 36 insertions(+), 7 deletions(-)
+Ouch ...
 
-diff --git a/tools/include/nolibc/arch-parisc.h b/tools/include/nolibc/arch-parisc.h
-index 417043ecbc53..5c595ef88a62 100644
---- a/tools/include/nolibc/arch-parisc.h
-+++ b/tools/include/nolibc/arch-parisc.h
-@@ -7,9 +7,7 @@
- #ifndef _NOLIBC_ARCH_PARISC_H
- #define _NOLIBC_ARCH_PARISC_H
- 
--#if defined(__LP64__)
--#error 64-bit not supported
--#endif
-+#include <linux/unistd.h>
- 
- #include "compiler.h"
- #include "crt.h"
-@@ -167,9 +165,15 @@
- void __attribute__((weak, noreturn)) __nolibc_entrypoint __nolibc_no_stack_protector _start(void)
- {
- 	__asm__ volatile (
-+#ifdef __LP64__
-+		".import __gp\n"               /* Set up the dp register */
-+		"ldil L%__gp, %dp\n"
-+		"ldo R%__gp(%r27), %dp\n"
-+#else
- 		".import $global$\n"           /* Set up the dp register */
- 		"ldil L%$global$, %dp\n"
- 		"ldo R%$global$(%r27), %dp\n"
-+#endif
- 
- 		"b _start_c\n"                 /* Call _start_c, the load below is executed first */
- 
-@@ -182,4 +186,20 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __nolibc_no_stack_prote
- }
- #endif /* NOLIBC_NO_RUNTIME */
- 
-+#ifdef __LP64__
-+/*
-+ * This override is normally only meant for 32-bit architectures.
-+ * But parisc 64-bit has __NR_ftruncate64, so this path is taken.
-+ * Add an unused second argument to satisfy the calling convention.
-+ */
-+static __attribute__((unused))
-+int _sys_ftruncate64(int fd, uint64_t length, uint64_t unused)
-+{
-+	(void)unused;
-+
-+	return __nolibc_syscall2(__NR_ftruncate64, fd, length);
-+}
-+#define _sys_ftruncate64 _sys_ftruncate64
-+#endif
-+
- #endif /* _NOLIBC_ARCH_PARISC_H */
-diff --git a/tools/include/nolibc/stdlib.h b/tools/include/nolibc/stdlib.h
-index 1816c2368b68..6c3c620a04cf 100644
---- a/tools/include/nolibc/stdlib.h
-+++ b/tools/include/nolibc/stdlib.h
-@@ -230,7 +230,7 @@ int _nolibc_u64toa_base(uint64_t in, char *buffer, unsigned int base, uint64_t r
- 
- 	/* Generate least significant digit first */
- 	do {
--#if defined(__SIZEOF_INT128__) && !defined(__mips__) && !defined(__sparc__)
-+#if defined(__SIZEOF_INT128__) && !defined(__mips__) && !defined(__sparc__) && !defined(__hppa__)
- 		q = ((unsigned __int128)in * recip) >> 64;
- #else
- 		uint64_t p = (uint32_t)in * (recip >> 32);
-diff --git a/tools/testing/selftests/nolibc/Makefile.nolibc b/tools/testing/selftests/nolibc/Makefile.nolibc
-index d8b71cbfc173..3ca473ec35ef 100644
---- a/tools/testing/selftests/nolibc/Makefile.nolibc
-+++ b/tools/testing/selftests/nolibc/Makefile.nolibc
-@@ -65,6 +65,7 @@ ARCH_sparc32     = sparc
- ARCH_sparc64     = sparc
- ARCH_sh4         = sh
- ARCH_parisc32    = parisc
-+ARCH_parisc64    = parisc64
- ARCH            := $(or $(ARCH_$(XARCH)),$(XARCH))
- 
- # kernel image names by architecture
-@@ -113,6 +114,7 @@ EXTRACONFIG_sparc32   = -e CONFIG_TMPFS
- EXTRACONFIG_m68k      = -e CONFIG_BLK_DEV_INITRD
- EXTRACONFIG_sh4       = -e CONFIG_BLK_DEV_INITRD -e CONFIG_CMDLINE_FROM_BOOTLOADER
- EXTRACONFIG_alpha     = -e CONFIG_BLK_DEV_INITRD
-+EXTRACONFIG_parisc64  = -d CONFIG_COMPAT
- EXTRACONFIG           = $(EXTRACONFIG_$(XARCH))
- 
- # optional tests to run (default = all)
-@@ -134,6 +136,7 @@ QEMU_ARCH_loongarch  = loongarch64
- QEMU_ARCH_sparc32    = sparc
- QEMU_ARCH_openrisc   = or1k
- QEMU_ARCH_parisc32   = hppa
-+QEMU_ARCH_parisc64   = hppa
- QEMU_ARCH            = $(or $(QEMU_ARCH_$(XARCH)),$(XARCH))
- 
- QEMU_ARCH_USER_ppc64le = ppc64le
-@@ -175,6 +178,7 @@ QEMU_ARGS_m68k       = -M virt -append "console=ttyGF0,115200 panic=-1 $(TEST:%=
- QEMU_ARGS_sh4        = -M r2d -serial file:/dev/stdout -append "console=ttySC1,115200 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_openrisc   = -M virt -m 512M -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_parisc32   = -M B160L -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_parisc64   = -M C3700 -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_alpha      = -M clipper -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS            = -m 1G $(QEMU_ARGS_$(XARCH)) $(QEMU_ARGS_BIOS) $(QEMU_ARGS_EXTRA)
- 
-@@ -193,6 +197,7 @@ CFLAGS_x32 = -mx32
- CFLAGS_arm = -marm
- CFLAGS_armthumb = -mthumb -march=armv6t2
- CFLAGS_parisc32 = -mfast-indirect-calls
-+CFLAGS_parisc64 = -Wl,--no-dynamic-linker -Wl,--entry=_start -O2
- CFLAGS_ppc = -m32 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
- CFLAGS_ppc64 = -m64 -mbig-endian -mno-vsx $(call cc-option,-mmultiple)
- CFLAGS_ppc64le = -m64 -mlittle-endian -mno-vsx $(call cc-option,-mabi=elfv2)
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index af2a6f510d1d..2844fed26df1 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -29,7 +29,7 @@ all_archs=(
- 	sparc32 sparc64
- 	m68k
- 	sh4
--	parisc32
-+	parisc32 parisc64
- 	alpha
- 	hexagon
- )
-@@ -122,6 +122,7 @@ crosstool_arch() {
- 	sparc*) echo sparc64;;
- 	x32*) echo x86_64;;
- 	parisc32) echo hppa;;
-+	parisc64) echo hppa64;;
- 	*) echo "$1";;
- 	esac
- }
-@@ -206,11 +207,14 @@ test_arch() {
- 			exit 1
- 	esac
- 	printf '%-15s' "$arch:"
--	if [ "$llvm" = "1" ] && [ "$arch" = "m68k" -o "$arch" = "sh4" -o "$arch" = "openrisc" -o "$arch" = "parisc32" -o "$arch" = "alpha" ]; then
-+	if [ "$llvm" = "1" ] && \
-+	   [ "$arch" = "m68k" -o "$arch" = "sh4" -o "$arch" = "openrisc" \
-+	     -o "$arch" == "parisc32" -o "$arch" == "parisc64" -o "$arch" = "alpha"  \
-+	]; then
- 		echo "Unsupported configuration"
- 		return
- 	fi
--	if [ "$test_mode" = "user" ] && [ "$arch" = "x32" ]; then
-+	if [ "$test_mode" = "user" ] && [ "$arch" = "x32" -o "$arch" = "parisc64" ]; then
- 		echo "Unsupported configuration"
- 		return
- 	fi
+Looks like this conversion misses hugetlb-soft-offline.c ...
 
----
-base-commit: 9c47af906bc655c8f45aaf1f156656239c2c5073
-change-id: 20260407-nolibc-parisc64-3ca0547c2af9
+TEST_GEN_FILES += hugetlb-soft-offline
 
-Best regards,
---  
-Thomas Weißschuh <linux@weissschuh.net>
+int main(int argc, char **argv)
+{
+...
+	orig_enable_soft_offline = read_num(ENABLE_SOFT_OFFLINE_PATH);
+...
+}
 
+And the compiler isn't happy:
+
+tools/testing/selftests/mm/hugetlb-soft-offline.c:199:36:
+error: too few arguments to function 'read_num'
+  199 |  orig_enable_soft_offline = read_num(ENABLE_SOFT_OFFLINE_PATH);
+tools/lib/mm/file_utils.h:9:5: note: declared here
+    9 | int read_num(const char *path, unsigned long *num);
+
+Cheers, Lance
+
+[...]
