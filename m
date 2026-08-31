@@ -1,83 +1,105 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BDA128488F;
-	Mon, 31 Aug 2026 07:50:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AFD3CAE76;
+	Mon, 31 Aug 2026 07:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788162624; cv=none; b=ZPDevhwRK/PjcIZbckUV5+WiQhtHGBe/J/9KGvdbywtJn/8ySFekywF5PwSkZH5YBNbwtMWzo5oqArL+jBOWMgmeaQfiC10JcHcStMQcmd9JTcbd9Wjpx8fpYCZefRAD/8PmF/5FzNuwflXrcLc0QFgGvV1PAHjWXVBRWsOg4vw=
+	t=1788162923; cv=none; b=lDyElg6K45vwJqEzr3MwPOL2px+/kQWkqtZVaU4nxBwSjmdWElfz1egfARCVAAvt0c4vUcecFs5mKOKGljzuwIaPLWNWJIjZQ1D/NUqLXoyi14Ki8y4p5YXVZoC/Fse4H1sC6kLisDq1N5DcVDySdn6MbYjHRei/mGOZd0kT+R8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788162624; c=relaxed/simple;
-	bh=5KGP3pDfd2oRfBsbLzYUjRICP7+g6Xk/mWw39Y0NrGw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=RsqmhEvEWN40lGfTzm8bsoshM+ORGQV/7EsfHsWlkStupfK49UXyntygOb3KecjU9S5W4qCVJq27pUd6MWqNIgweOie0yjK59uPs1AY7F5NjPUL5x6kFdP+rWhAN6lI3sjAL+h61gom8Z12SAwo/gAPiM5NGHhcjZ0jPpO2lPdA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lfbdARZD; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788162923; c=relaxed/simple;
+	bh=yjHoKaQwu9MgYW9EUKxF8zoK02BCi/g8yi49iqfsHIE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
+	 References:In-Reply-To; b=sUximKhQarvnGD2WwUt0sWaIZFZXcGo6DwZ/Tg0ZGjmQy7KXO79vnGMLYtwfchXBq+mbSMhiStY0C/McN7t6kU+j262n7tfKs6e+H8asywNV1lGO8aleEZ+9ToFDbWAXL0W1baZLd7Z26BesiwAYZgdyotIv4jVq/9FOW0IJT3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UMV/Z+VO; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lfbdARZD"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82C0D1F000E9;
-	Mon, 31 Aug 2026 07:50:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788162623;
-	bh=Tv7TETlQonuGOZoFgYmWm+06VrFWt+2TmiKJsqOV6R4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=lfbdARZDrDjmi8JbffZc7p10w97L6Cg8ERpf+ZAI9Sqig8vvsv+1uyBosEi/fHYOJ
-	 cavn60wxthLv4tDvWZhDzThBkcEv2E34zHwGmmC2aWmDFz3wd3GkOaWX+03p28vu4F
-	 wBE4l7mjB7pHPQX9RuB5raA+SfU6ziP4/gFV5rYmNFzeTGsSwzwK8jWTySwkycDLFb
-	 /JxKLu2J2GDJM5irsGhHdeCv2kGyIiV/6eVbA5+unP5tOdkIE+mU5TakR6Vf1A6+uP
-	 EYAErwATeaDPcAoPVCYgMxxTdk+8ej4qX616cvqolpqvioCLLs1tfxt9m2Fw/vhfKR
-	 jn2cyh7IBSYhg==
-From: Christian Brauner <brauner@kernel.org>
-To: shuah@kernel.org,
-	Disha Goel <disgoel@linux.ibm.com>
-Cc: Christian Brauner <brauner@kernel.org>,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel test robot <lkp@intel.com>
-Subject: Re: [PATCH v2 1/2] selftests/filesystems: Move file_stressor to dedicated subdirectory
-Date: Mon, 31 Aug 2026 09:50:16 +0200
-Message-ID: <20260831-klopfen-gedenken-vorleben-54fd9d119a83@brauner>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <20260521101758.14639-1-disgoel@linux.ibm.com>
-References: <20260521101758.14639-1-disgoel@linux.ibm.com>
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UMV/Z+VO"
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 44D254E4145B;
+	Mon, 31 Aug 2026 07:55:19 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 156DD601E1;
+	Mon, 31 Aug 2026 07:55:19 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9660C11C78A32;
+	Mon, 31 Aug 2026 09:55:10 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1788162913; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=M/8EDX4ydfPxhtMVPvjbpWINZcbTB2snrWJzkNm34xw=;
+	b=UMV/Z+VOmoWGsLkG5B6EGFOkya3xBI/Y36knXvWQzT7G5vkUr6rCmmsaKYWMYsduzVhpbf
+	0Vued5LMKPpu2Q2K6WDXjGMwADCagI/5dU7kyO8A3nlPo1bS30ZE+3WA3kt4xECcnuudgV
+	9jsCGf/p/tAZwcXtvNL9kaOOr7ew4F9JczRIFeW6pq6BjWxXj3yAKpQ8zZ1eILU2dDxkq7
+	nA0NzU+2C7qHpH1MZ5X00Kc7ErEd8dhS/JgDKLDoeqBwbYr9DzV8cXo6dy4mpNmsTYQvre
+	SnnUz/8epyT25ZI2AsLKMGnjYu3/Juva39I2ey9pWVvfCVHmgb1pY/jvNe17Rg==
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1488; i=brauner@kernel.org; h=from:subject:message-id; bh=5KGP3pDfd2oRfBsbLzYUjRICP7+g6Xk/mWw39Y0NrGw=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMWRNNbJa7jk9x2vJnKI1q/w95k85VJ31WeWwwLnoX628n 6/6yxVc7ChlYRDjYpAVU2RxaDcJl1vOU7HZKFMDZg4rE8gQBi5OAZiI+W2GP7ypE5wnXud85zBf tmAhg+nHZdIVvmpT9r/6rRZ8p1F47jeGf4ZzVl23mJpReL+r7Fv65vLc+79aU1mn/A/l/eH41dy 2kgkA
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 31 Aug 2026 09:55:09 +0200
+Message-Id: <DL2YUKA3J3CG.1GUS47SLVPRNX@bootlin.com>
+Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT
+ processes
+Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
+ <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Jiayuan
+ Chen" <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
+ "Jakub Kicinski" <kuba@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
+ "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
+ "Emil Tsalapatis" <emil@etsalapatis.com>, <netdev@vger.kernel.org>,
+ <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Lorenzo
+ Bianconi" <lorenzo@kernel.org>
+From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
+To: "Bochao Cao" <bochaolucky@gmail.com>, =?utf-8?q?Alexis_Lothor=C3=A9?=
+ <alexis.lothore@bootlin.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
+ <bpf@vger.kernel.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com> <d4be160e-703e-46bb-9509-d3d90f6bc34b@iogearbox.net> <DKX99ZAP7GZ8.23U5EOSFB4VPU@bootlin.com> <CAHKNYVXN0DAUzv2Lwm=oQ_K=zhi2iNyTO2e99s5F4M+Kr7u5tQ@mail.gmail.com> <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
+In-Reply-To: <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Thu, 21 May 2026 15:47:56 +0530, Disha Goel wrote:
-> The file_stressor test requires a 30-minute timeout (1800 seconds) due to
-> its 15-minute runtime plus setup/teardown overhead. This is significantly
-> longer than the default 45-second timeout used by other filesystem tests.
-> 
-> Move file_stressor into its own subdirectory (filesystems/file_stressor/)
-> with a dedicated settings file to isolate its timeout configuration. This
-> prevents the long timeout from affecting other fast-running tests in the
-> filesystems/ directory.
-> 
-> [...]
+On Fri Aug 28, 2026 at 8:10 AM CEST, Bochao Cao wrote:
+>  Thanks Daniel and Alexis.
+>
+>   Dropping the procps dependency is not the primary motivation for
+>   this change. I agree that Debian can remove the dependency independentl=
+y.
+>   The issue addressed by this patch is process isolation in the standalon=
+e
+>   test. The current readiness check may observe an unrelated
+>   concurrent xdp_features process, while cleanup may terminate every
+> xdp_features
+>   process on the host. In addition, a DUT which exits before listening ca=
+n
+> leave the test waiting indefinitely.
+>
+>   Although this script is not currently run by the BPF CI, it remains
+> useful  for testing real hardware,
+>   so these process lifecycle issues can still  affect users running the
+> test manually.
+>
+>   Would it be acceptable to fix these issues in the script's current
+> location?
+>   If the preferred direction is to move it under
+> tools/testing/selftests/drivers/net/hw/,
+>   should the move be submitted first, with this fix rebased on top?
 
-Applied to the vfs-7.4.misc branch of the vfs/vfs.git tree.
-Patches in the vfs-7.4.misc branch should appear in linux-next soon.
+I have no strong feeling about whether it should be moved or kept here,
+I'll let BPF/netdev maintainers express their opinions here (Jakub
+already suggested in [1] that there are helpers in net testing helpers
+that could help making it move to the net tests). I've added Lorenzo in
+CC, who is the original author of the script.
 
-Please report any outstanding bugs that were missed during review in a
-new review to the original patch series allowing us to drop it.
+Alexis
 
-It's encouraged to provide Acked-bys and Reviewed-bys even though the
-patch has now been applied. If possible patch trailers will be updated.
+[1] https://lore.kernel.org/bpf/20240914063828.7bd73c5e@kernel.org/
 
-Note that commit hashes shown below are subject to change due to rebase,
-trailer updates or similar. If in doubt, please check the listed branch.
+--=20
+Alexis Lothor=C3=A9, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
-branch: vfs-7.4.misc
-
-[1/2] selftests/filesystems: Move file_stressor to dedicated subdirectory
-      https://git.kernel.org/vfs/vfs/c/5550456dad37
-[2/2] selftests/filesystems: allow security.selinux xattr in listxattr kernfs test
-      https://git.kernel.org/vfs/vfs/c/cc87d0a97bc0
