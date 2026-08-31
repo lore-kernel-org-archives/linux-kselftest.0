@@ -1,200 +1,260 @@
-Received: from mail-oa2-f1.google.com (mail-oa2-f1.google.com [74.125.231.65])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E2481E1E16
-	for <linux-kselftest@vger.kernel.org>; Sun, 30 Aug 2026 18:31:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.231.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90B325B0BD;
+	Mon, 31 Aug 2026 00:25:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788114691; cv=none; b=KV9tGIQ9ZgCOUZtOORxZmYvSAzAP6LaCrqB11Wd5xCeuE/8ujS4pbM232wVhDCoCG1CocLXBDoTz0caEyHe7N5BTi46XtVyDhNQDurH4kTCYVfG6xC3avvSlzWyEor3RdeUSsKgHL8bh/PwY37x0JwR/J6olvkn8h3mZ1jouAt8=
+	t=1788135920; cv=none; b=q8B2YnBJOAdzKcnXkdQWn5vS1Vtq1f00vFPEHq9tFEsv3n76V4NI4PZbMYEmpqeAPwjFDbc8bBWp/VcI78t+6n4j1sPbyBm7W7ztigE+RShkRlNzkAoV9b6Spe9zJ+DybhOhaILlxx68I38gaUEn03SuWMBRF1ozwdGggj7mfdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788114691; c=relaxed/simple;
-	bh=Dc/SDUG7wsTJwkmbP2Ir4YGAA4eRTTTF2JIZziwjDPs=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=hfxh8BFyr0hMzFr+6ORVaJR//7d6hoJv8uLPChMyiQW59YPoCcdOIF9u0UutwV4fDcde0pdUriTo0ukg+mF50QR8PUAozvfrya9LbxLS6fawgSMKDzclmDd42tA53NjVP7FElVXm+31nTRGl24nQ3rrXP2UAKWvm8ocz0lm6ZeM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=masoncamara.com; spf=pass smtp.mailfrom=masoncamara.com; dkim=pass (2048-bit key) header.d=masoncamara-com.20251104.gappssmtp.com header.i=@masoncamara-com.20251104.gappssmtp.com header.b=v+K7vvVT; arc=none smtp.client-ip=74.125.231.65
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=masoncamara.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=masoncamara.com
+	s=arc-20240116; t=1788135920; c=relaxed/simple;
+	bh=jB3934St+OXWHZBQYrRZ5bx+0JcniUdY+5MQ7UHR2bg=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FJa2InTu1q4N8zuWEh8KXlSiKCKJh106/+CgA42LSyR0RWdFPCXEHatu5AfEtH1HWouaS+hpOFUgeLS3oZEa/oq2F3Zp2+5rzyTBl1dBHwTN1KD2YM2wJAcy3FTwO72WBIhJQ1Uws0e5vFHRm67VhAoZiiYKeRCKZ+WS+hS9PJI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p/DsBHmA; arc=none smtp.client-ip=10.30.226.201
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=masoncamara-com.20251104.gappssmtp.com header.i=@masoncamara-com.20251104.gappssmtp.com header.b="v+K7vvVT"
-Received: by mail-oa2-f1.google.com with SMTP id 586e51a60fabf-448a12ddfb4so1698191fac.1
-        for <linux-kselftest@vger.kernel.org>; Sun, 30 Aug 2026 11:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=masoncamara-com.20251104.gappssmtp.com; s=20251104; t=1788114688; x=1788719488; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=dgh1NzZ5hofs8HTSQ7QUxgLQk3+1tZCEvxkmug+HP5E=;
-        b=v+K7vvVTxX+70x6G8trJMQMDcVHGCDgALTaSSjH3qPNcjDLJdaFU1jj6NrCEDlN8pF
-         GB+xKEyUhBCQ7sgXlB37Ij3pdHI46CGYiXKpiybukQFvx1cYcZZW6YVdyUBdLgMD03u3
-         Y0+ANJKQirSsbfedZ2CY628gOnZAAVc3SdW+Fi3/BjYpCxEiIcOc8lKI37x2m0XHAD3u
-         soFe3drC9RtgIeA364YOdaF7THiYmoLcdNzIEsVXjj3w01UmPFAsa0U75bcbSIK+HZpz
-         Pzy8gXn9bmYsU4WHdpEV3jCQUafKRSUITGPyGhWb2a/DCBJGyHGe4qZcrKtXMhAuXtwN
-         aBgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788114688; x=1788719488;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=dgh1NzZ5hofs8HTSQ7QUxgLQk3+1tZCEvxkmug+HP5E=;
-        b=lR7d/PncEQ4RHf/jSWmSeowZMi0eph8jy3MCs56bApDhzjPt8c6qrDLKxfLWu7V22p
-         iNToqsSsFy7JzBhsCrLiOqy5Dm3i47QsQL4Rge30yig43WmD7VP2Gi026vdUvvRbewBL
-         9GQoVqZgGxyYabIqSnGJDH/JvRRDMWz/+QL5Zpnud7Qfusu2Avjeb6jBulRCzoA9NmZt
-         irY67sh95PJckMNbqPoWHuTkXdR5+jrvBzSkG9hdp2PIHFR4SVb0QHD3/x85iN2gxlCY
-         bwLTSrJ4EJ2laW2+z/LS2DtYe50jGbD4o9JK5lA+cgs08Ycsot4AVgmAPRZS2cLO/O71
-         441g==
-X-Forwarded-Encrypted: i=1; AHgh+RommhbyqANx4gh8sUmIqzgM/fZR0dIjabnd9++S4a359oxLnclrX7aiG1Rq+C9q9EuKbarpccoZ/LXakv4MKRk=@vger.kernel.org
-X-Gm-Message-State: AFuF++mgetins54qhDwNb5sfeA0Hu0RhLV8AYAK5IUS4uMsPF7x2VSW+
-	HDiOEYN9HWnPahSqggkfFLtw4sTm7l3U9IK+2JhHtk6bdAMZCuFHjdULCqoZCuXXeYsa
-X-Gm-Gg: AR+sD10SGs666+DSqSoiZ2Eflzvii5Nh307k1p1UlI74gkGozo67YsFJSHKJi1x4Bxj
-	iKLoK/eDrClWnm/I6z7Mg4UCP8omIsvBhCDNYanWDtBnDK6KrNN/5ldCqWTF/dT2jj7LBgIDXeN
-	MI4BpZ2MWR8zGryYodbj9fyxfHK7FnjqOcp3gwIeG239FkG6lU19AOXuVIgaxPP7Oc4KU1+PDtu
-	LDHDkOvvqKJdFLUtksCw83kYFDe/py5myn6Yo5a7UkiYRJkPDzkONXVrf7LqRpaR4PqYJ+wrxPx
-	kPLewqEa5tItx6W2iCVReO45/OltPI3s5d3AARp780QvxYu3d3DETarbYddNgGtPmBN1G33cRdd
-	oXcIW7hqopuue75ga1iaDwHXWHrPP6gf7KBaSopwS30Fl0g+5y3y8Bg9IbM58KmRuKXeVrOdms4
-	dn0PG5rsO0RaH+bUrB8ZO2Aw55a16z0IQ1cS+HQhlItdrcET7E3Nnt2I/jaJqn4P16M3gWYltSh
-	ZdL221NhYO5/CLSUIG+jUgXhEFqgquu5DRG6a95eFDbUGMMPw==
-X-Received: by 2002:a05:6830:81d8:b0:7d7:fbe2:9725 with SMTP id 46e09a7af769-7f4f2220121mr22615283a34.5.1788114688486;
-        Sun, 30 Aug 2026 11:31:28 -0700 (PDT)
-Received: from localhost.localdomain ([69.26.129.115])
-        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7f4fa96cf17sm6436259a34.15.2026.08.30.11.31.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 30 Aug 2026 11:31:27 -0700 (PDT)
-From: Mason Camara <ping@masoncamara.com>
-To: jikos@kernel.org,
-	bentiss@kernel.org,
-	shuah@kernel.org
-Cc: linux-input@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	wh6cyy@gmail.com,
-	Mason Camara <ping@masoncamara.com>
-Subject: [PATCH v2] selftests/hid: test battery queries with nonzero field offsets
-Date: Sun, 30 Aug 2026 12:31:09 -0600
-Message-Id: <20260830183109.9441-1-ping@masoncamara.com>
-X-Mailer: git-send-email 2.39.5 (Apple Git-154)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p/DsBHmA"
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 6C15BC2BCF5;
+	Mon, 31 Aug 2026 00:25:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1788135919;
+	bh=jB3934St+OXWHZBQYrRZ5bx+0JcniUdY+5MQ7UHR2bg=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=p/DsBHmACKvCnTUXaQUBvx+B0rhbCevFn3J1wVa41KmY2z/4jwj9NXJSoKVBm8e5t
+	 GK+zJXnK2Q8T2MAtuI66FOXMTtH/eKrubu+EGLBpBseRJDNZFMbls+8Fd+9/cJoRfy
+	 zAu2gGK+W6zNW+07odNQpNGzeDUbVSM7Fqcu8SHrHViKjIHAf6WO+3Q1c2y5RTu44g
+	 jfPuBU/zY+/SSNIxAph0jtre65vyir1ipceRSZokQuMuk2cvxR0ueZuMha4Ng4vmET
+	 ZtcT9NRYl4Y3dX4pEMc6JCWScmm3LBoejvxi3ZE//RXFqMA/Rjh9zLF7wcQF8EoSjo
+	 DZUnuj3WTkrzA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 3BD07C61DE4;
+	Mon, 31 Aug 2026 00:25:19 +0000 (UTC)
+From: Ackerley Tng via B4 Relay <devnull+ackerleytng.google.com@kernel.org>
+Subject: [PATCH v12 00/45] guest_memfd: In-place conversion support
+Date: Sun, 30 Aug 2026 17:25:01 -0700
+Message-Id: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAN/JlGoC/33TzW6DMAwA4FepOC9b4pC/nfYe0w4mcShagS50q
+ FPVd19oJ9EJwTGR/dmxnEsxUGpoKF53lyLR2AxN3+WDgKdd4ffY1cSakC8K4KA5gGJ1Sy1ruuM
+ BPTHfdyOlKYlVgYcqSGeUxCJnHxPF5nyj3z/yucKBWJWw8/vJ+xzbl47Opyl03wynPv3cmhjll
+ HAvJ4VcLTdKxpmKXgAaTt66t7rv6wM9+74tpnpj+QCBXofKDFEOi+QUjzEsIDVDJdh1SGUoWM2
+ t99EjwALSM6S4WYd0hpzASqGthMNyAZkHCGAdMhmCyCNS6bSSfAHZGdJi42l26iiAU04qY5VcQ
+ G6GzNaMXIakig7JA1JYzkjwWbJbQxL89jgvLJEOssIlJR6orQ0QIlMchQoWjXP4n7relznR13f
+ +Hqe/jb5efwEgqf/KPAMAAA==
+X-Change-ID: 20260225-gmem-inplace-conversion-bd0dbd39753a
+To: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+ brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+ jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+ oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+ rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+ steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+ yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+ suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+ Paolo Bonzini <pbonzini@redhat.com>, 
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>, 
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+ "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+ Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+ Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+ Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+ Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+ Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+ Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+ Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+ Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+ Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>, 
+ Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+ Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Fuad Tabba <fuad.tabba@linux.dev>, 
+ Vlastimil Babka <vbabka@kernel.org>, Baoquan He <baoquan.he@linux.dev>
+Cc: kvm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-trace-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-mm@kvack.org, 
+ linux-coco@lists.linux.dev, Ackerley Tng <ackerleytng@google.com>, 
+ Xiaoyao Li <xiaoyao.li@intel.com>, Fuad Tabba <fuad.tabba@linux.dev>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788135915; l=9254;
+ i=ackerleytng@google.com; s=20260225; h=from:subject:message-id;
+ bh=jB3934St+OXWHZBQYrRZ5bx+0JcniUdY+5MQ7UHR2bg=;
+ b=EvLGdfk9baBRMpq/23qyZcMJi59GXHj122oJ7ORw+P2MUKpHjulgOv6RBjqtNYFuBFt6oURl+
+ xrFxovZ3s5dAN25sL5le2Vudaf2xFBkbWh4JMmubAiPQS4r+zIFrKd3
+X-Developer-Key: i=ackerleytng@google.com; a=ed25519;
+ pk=sAZDYXdm6Iz8FHitpHeFlCMXwabodTm7p8/3/8xUxuU=
+X-Endpoint-Received: by B4 Relay for ackerleytng@google.com/20260225 with
+ auth_id=649
+X-Original-From: Ackerley Tng <ackerleytng@google.com>
+Reply-To: ackerleytng@google.com
 
-Commit d07644524b65 ("HID: input: read battery capacity from its actual
-report offset") fixed synchronous battery queries for reports that place
-the capacity byte after status fields.
+Here's v12. Thanks everyone for the comments and fast responses!  We're now
+at ~4 weeks to soft-close at 7.3-rc5.
 
-Add a UHID mouse with the Magic Mouse 2 report layout and answer GET_REPORT
-with 90 04 5f. Read capacity before sending an input report so the test
-exercises the synchronous query path. Without the fix, it reads the status
-byte as 4%; with the fix, it reads capacity as 95%.
+v12 is based on 7.3-rc1 (contains the mm/ bugfixes). Like v11, v12 is also
+dependent on another series [3], which makes kvm_gmem_get_pfn() NOT return
+a refcounted page to KVM.
 
-Enable CONFIG_HID_BATTERY_STRENGTH in the HID selftest configuration.
+Here's everything stitched together for your convenience:
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=221263
-Assisted-by: LLM
-Signed-off-by: Mason Camara <ping@masoncamara.com>
+https://github.com/googleprodkernel/linux-cc/commits/guest_memfd-inplace-conversion-v12
+
+This revision resolves the issue on v10/v11 to do with over-zapping of
+non-gmem memory because of the requested filters. [1]
+
+The resolution is in a new patch "KVM: guest_memfd: Always fault from
+guest_memfd if in-place conversion is enabled". I also updated the
+documentation as requested.
+
+Documentation updates are in these patches:
+
++ KVM: guest_memfd: Stub in ability to enable in-place shared<=>private conversion
++ KVM: guest_memfd: Always fault from guest_memfd if in-place conversion is enabled
++ KVM: guest_memfd: Add base support for KVM_SET_MEMORY_ATTRIBUTES2
+
+The documentation update in v10's "KVM: Let userspace disable per-VM mem
+attributes, enable per-gmem attributes" was misplaced imo so I folded it
+conceptually into the patches above.
+
+private_mem_conversions_test was updated in v11 to test dual backing, and
+that's meaningless now since with gmem_in_place_conversions, we're now
+always faulting from guest_memfd, and the userspace_addr not being from the
+gmem associated with the memslot is considered a user error.
+
+I now only have 1 patch "KVM: selftests: Update
+private_mem_conversions_test for in-place conversions" instead of 2 in v11.
+
+Resolves discussion at [2].
+
+Here's v12 with tests:
+
+https://github.com/googleprodkernel/linux-cc/commits/guest_memfd-inplace-conversion-coco-selftests-v12
+
+Tested with both CONFIG_KVM_VM_MEMORY_ATTRIBUTES enabled and disabled:
+
++ tools/testing/selftests/kvm/guest_memfd_test.c
++ tools/testing/selftests/kvm/pre_fault_memory_test.c
++ tools/testing/selftests/kvm/x86/guest_memfd_conversions_test.c
++ tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
++ tools/testing/selftests/kvm/x86/private_mem_kvm_exits_test.c
+
+[1] https://lore.kernel.org/all/apCLFSbj8sq2biJp@google.com/
+[2] https://lore.kernel.org/all/apCj6gz8x24Dkle8@google.com/
+[3] https://lore.kernel.org/all/20260826-gmem-no-return-page-v4-0-3bb9c1ddb4e3@google.com/
+
+v11: https://patch.msgid.link/20260826-gmem-inplace-conversion-v11-0-0a15d8a799aa@google.com
+v10: https://lore.kernel.org/r/20260807-gmem-inplace-conversion-v10-0-2fc18ee6d3ba@google.com
+v9: https://lore.kernel.org/r/20260728-gmem-inplace-conversion-v9-0-35f9aec2aed2@google.com
+v8: https://lore.kernel.org/r/20260618-gmem-inplace-conversion-v8-0-9d2959357853@google.com
+v7: https://lore.kernel.org/r/20260522-gmem-inplace-conversion-v7-0-2f0fae496530@google.com
+v6: https://lore.kernel.org/r/20260507-gmem-inplace-conversion-v6-0-91ab5a8b19a4@google.com
+RFC v5: https://lore.kernel.org/r/20260428-gmem-inplace-conversion-v5-0-d8608ccfca22@google.com
+RFC v4: https://lore.kernel.org/all/20260326-gmem-inplace-conversion-v4-0-e202fe950ffd@google.com/T/
+RFC v3: https://lore.kernel.org/r/20260313-gmem-inplace-conversion-v3-0-5fc12a70ec89@google.com/T/
+RFC v2: https://lore.kernel.org/all/cover.1770071243.git.ackerleytng@google.com/T/
+RFC v1: https://lore.kernel.org/all/cover.1760731772.git.ackerleytng@google.com/T/
+
+Previous versions of this feature, part of other series, are available at:
+
++ https://lore.kernel.org/all/bd163de3118b626d1005aa88e71ef2fb72f0be0f.1726009989.git.ackerleytng@google.com/
++ https://lore.kernel.org/all/20250117163001.2326672-6-tabba@google.com/
++ https://lore.kernel.org/all/b784326e9ccae6a08388f1bf39db70a2204bdc51.1747264138.git.ackerleytng@google.com/
+
+Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 ---
+Ackerley Tng (23):
+      KVM: Rename kvm_mem_is_private() to kvm_is_private_gfn()
+      KVM: guest_memfd: Always fault from guest_memfd if in-place conversion is enabled
+      KVM: guest_memfd: Pass mapping type filter to invalidation helper
+      KVM: guest_memfd: Add base support for KVM_SET_MEMORY_ATTRIBUTES2
+      KVM: guest_memfd: Ensure pages are not in use before conversion
+      KVM: guest_memfd: Call arch make_shared callback for to-shared conversion
+      KVM: guest_memfd: Return early if range already has requested attributes
+      KVM: guest_memfd: Handle lru_add fbatch refcounts during conversion safety check
+      KVM: guest_memfd: Zero page while getting pfn
+      KVM: TDX: Make source page optional for KVM_TDX_INIT_MEM_REGION
+      KVM: selftests: Test basic single-page conversion flow
+      KVM: selftests: Test conversion flow when INIT_SHARED
+      KVM: selftests: Test conversion precision in guest_memfd
+      KVM: selftests: Test conversion before allocation
+      KVM: selftests: Convert with allocated folios in different layouts
+      KVM: selftests: Test that truncation does not change shared/private status
+      KVM: selftests: Add helpers to pin pages with CONFIG_GUP_TEST
+      KVM: selftests: Test conversion with elevated page refcount
+      KVM: selftests: Reset shared memory after hole-punching
+      KVM: selftests: Provide function to look up guest_memfd details from gpa
+      KVM: selftests: Make TEST_EXPECT_SIGBUS thread-safe
+      KVM: selftests: Set up page size and alignment independently for guest_memfd
+      KVM: selftests: Update private_mem_conversions_test for in-place conversions
 
-Changes in v2:
-- Drop driver fix, superseded by d07644524b65.
-- Rebase the regression test onto the current HID for-next branch.
-- Amend commit message and tool-assistance trailer.
+Michael Roth (1):
+      KVM: SEV: Make 'uaddr' parameter optional for KVM_SEV_SNP_LAUNCH_UPDATE
 
-v1: https://lore.kernel.org/linux-input/20260712044702.893825-1-ping@masoncamara.com/
+Sean Christopherson (21):
+      KVM: guest_memfd: Optimize away conversion overheads via dead-code elimination
+      KVM: guest_memfd: Use kvm_mem_is_private() when populating guest_memfd memory
+      KVM: guest_memfd: Introduce per-gmem attributes, use to guard user mappings
+      KVM: Rename KVM_GENERIC_MEMORY_ATTRIBUTES to KVM_VM_MEMORY_ATTRIBUTES
+      KVM: Enumerate support for PRIVATE memory iff kvm_arch_has_private_mem is defined
+      KVM: Rename memory attribute APIs to prepare for in-place gmem conversion
+      KVM: Provide generic interface for checking memory private/shared status
+      KVM: guest_memfd: Stub in ability to enable in-place shared<=>private conversion
+      KVM: Consolidate private memory and guest_memfd ifdeffery in kvm_host.h
+      KVM: guest_memfd: Invalidate both SHARED and PRIVATE mappings for in-place conversions
+      KVM: Move KVM_VM_MEMORY_ATTRIBUTES config definition to x86
+      KVM: Let userspace disable per-VM mem attributes, enable per-gmem attributes
+      KVM: guest_memfd: Enable INIT_SHARED on guest_memfd for x86 Coco VMs
+      KVM: selftests: Create gmem fd before "regular" fd when adding memslot
+      KVM: selftests: Rename guest_memfd{,_offset} to gmem_{fd,offset}
+      KVM: selftests: Add support for mmap() on guest_memfd in core library
+      KVM: selftests: Add selftests global for guest memory attributes capability
+      KVM: selftests: Add helpers for calling ioctls on guest_memfd
+      KVM: selftests: Test that shared/private status is consistent across processes
+      KVM: selftests: Provide common function to set memory attributes
+      KVM: selftests: Update private memory exits test to work with per-gmem attributes
 
- tools/testing/selftests/hid/config            |  1 +
- .../testing/selftests/hid/tests/test_mouse.py | 54 +++++++++++++++++++
- 2 files changed, 55 insertions(+)
+ Documentation/admin-guide/kernel-parameters.txt    |  25 +
+ Documentation/virt/kvm/api.rst                     | 107 ++++-
+ .../virt/kvm/x86/amd-memory-encryption.rst         |  14 +-
+ Documentation/virt/kvm/x86/intel-tdx.rst           |   4 +
+ arch/x86/include/asm/kvm-x86-ops.h                 |   2 +-
+ arch/x86/include/asm/kvm_host.h                    |   9 +-
+ arch/x86/kvm/Kconfig                               |  15 +-
+ arch/x86/kvm/mmu/mmu.c                             |  28 +-
+ arch/x86/kvm/svm/sev.c                             |  13 +-
+ arch/x86/kvm/vmx/tdx.c                             |   8 +-
+ arch/x86/kvm/x86.c                                 |  20 +-
+ include/linux/kvm_host.h                           |  83 ++--
+ include/trace/events/kvm.h                         |   6 +-
+ include/uapi/linux/kvm.h                           |  16 +
+ mm/folio.c                                         |   2 +
+ tools/testing/selftests/kvm/Makefile.kvm           |   1 +
+ tools/testing/selftests/kvm/include/kvm_util.h     | 139 +++++-
+ tools/testing/selftests/kvm/include/test_util.h    |  34 +-
+ tools/testing/selftests/kvm/lib/kvm_util.c         | 222 +++++----
+ tools/testing/selftests/kvm/lib/test_util.c        |   7 -
+ .../kvm/x86/guest_memfd_conversions_test.c         | 512 +++++++++++++++++++++
+ .../kvm/x86/private_mem_conversions_test.c         |  66 ++-
+ .../selftests/kvm/x86/private_mem_kvm_exits_test.c |  36 +-
+ virt/kvm/Kconfig                                   |   3 -
+ virt/kvm/guest_memfd.c                             | 469 +++++++++++++++++--
+ virt/kvm/kvm_main.c                                |  92 ++--
+ 26 files changed, 1646 insertions(+), 287 deletions(-)
+---
+base-commit: a0c789941a3d705d00c018b3c9348b4b930c0c74
+change-id: 20260225-gmem-inplace-conversion-bd0dbd39753a
 
-diff --git a/tools/testing/selftests/hid/config b/tools/testing/selftests/hid/config
-index 1758b055f..da52335b8 100644
---- a/tools/testing/selftests/hid/config
-+++ b/tools/testing/selftests/hid/config
-@@ -16,6 +16,7 @@ CONFIG_FTRACE_SYSCALLS=y
- CONFIG_FUNCTION_TRACER=y
- CONFIG_HIDRAW=y
- CONFIG_HID=y
-+CONFIG_HID_BATTERY_STRENGTH=y
- CONFIG_HID_BPF=y
- CONFIG_INPUT_EVDEV=y
- CONFIG_UHID=y
-diff --git a/tools/testing/selftests/hid/tests/test_mouse.py b/tools/testing/selftests/hid/tests/test_mouse.py
-index eb4e15a0e..141c1f069 100644
---- a/tools/testing/selftests/hid/tests/test_mouse.py
-+++ b/tools/testing/selftests/hid/tests/test_mouse.py
-@@ -11,6 +11,7 @@ import hidtools.hid
- from hidtools.util import BusType
- import libevdev
- import logging
-+import threading
- import pytest
- 
- logger = logging.getLogger("hidtools.test.mouse")
-@@ -598,6 +599,35 @@ class ResolutionMultiplierHWheelMouse(TwoWheelMouse):
-         return 0
- 
- 
-+class BatteryOffsetMouse(BaseMouse):
-+    report_descriptor = [
-+        # Mouse report
-+        0x05, 0x01, 0x09, 0x02, 0xa1, 0x01, 0x85, 0x12,
-+        0x05, 0x09, 0x19, 0x01, 0x29, 0x02, 0x15, 0x00,
-+        0x25, 0x01, 0x95, 0x02, 0x75, 0x01, 0x81, 0x02,
-+        0x95, 0x01, 0x75, 0x06, 0x81, 0x01, 0x05, 0x01,
-+        0x09, 0x01, 0xa1, 0x00, 0x09, 0x30, 0x09, 0x31,
-+        0x15, 0x81, 0x25, 0x7f, 0x75, 0x08, 0x95, 0x02,
-+        0x81, 0x06, 0xc0, 0xc0,
-+        # Battery report: one status byte followed by capacity
-+        0x06, 0x00, 0xff, 0x09, 0x14, 0xa1, 0x01, 0x85,
-+        0x90, 0x05, 0x84, 0x75, 0x01, 0x95, 0x03, 0x15,
-+        0x00, 0x25, 0x01, 0x09, 0x61, 0x05, 0x85, 0x09,
-+        0x44, 0x09, 0x46, 0x81, 0x02, 0x95, 0x05, 0x81,
-+        0x01, 0x75, 0x08, 0x95, 0x01, 0x15, 0x00, 0x26,
-+        0xff, 0x00, 0x09, 0x65, 0x81, 0x02, 0xc0,
-+    ]
-+
-+    def __init__(self, rdesc=report_descriptor, name=None, input_info=None):
-+        super().__init__(rdesc, name, input_info)
-+
-+    def get_report(self, req, rnum, rtype):
-+        if rtype != self.UHID_INPUT_REPORT or rnum != 0x90:
-+            return (1, [])
-+
-+        return (0, [0x90, 0x04, 0x5F])
-+
-+
- class BaseTest:
-     class TestMouse(base.BaseTestCase.TestUhid):
-         def test_buttons(self):
-@@ -1045,3 +1075,27 @@ class TestBadReportDescriptorMouse(base.BaseTestCase.TestUhid):
- 
-     def assertName(self, uhdev):
-         pass
-+
-+
-+class TestBatteryOffsetMouse(base.BaseTestCase.TestUhid):
-+    def create_device(self):
-+        return BatteryOffsetMouse()
-+
-+    def test_queried_battery_field_offset(self):
-+        uhdev = self.uhdev
-+        power_supply = uhdev.power_supply_class
-+        assert power_supply is not None
-+
-+        done = False
-+
-+        def dispatch():
-+            while not done:
-+                uhdev.dispatch(1)
-+
-+        thread = threading.Thread(target=dispatch)
-+        thread.start()
-+        try:
-+            assert power_supply.capacity == 95
-+        finally:
-+            done = True
-+            thread.join()
+Best regards,
+--
+Ackerley Tng <ackerleytng@google.com>
 
-base-commit: 931aaa59d1826f43b0bb3f07e21233f6faf4540a
--- 
-2.39.5 (Apple Git-154)
 
