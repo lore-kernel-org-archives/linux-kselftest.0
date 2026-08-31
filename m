@@ -1,304 +1,219 @@
-Received: from m16.mail.163.com (m16.mail.163.com [220.197.31.2])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vs1-f50.google.com (mail-vs1-f50.google.com [209.85.217.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 535AD483829;
-	Mon, 31 Aug 2026 14:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C554B486BBD
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 14:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788184955; cv=none; b=XhFBNyYuvAqSbOXlIp8cW2q/Wo1REotFAYLRkdd+kGXr2H0iioL9s7XS2sHpLKiruJUkY6oFqwK1oIsshmTdCx4K7hGTVNUtIBs+6gy6pdhwG9ENt7HJtt1CvSzgplVy1oNFhBLp/MEo9fKHXJbsChImBoRjYgONyaKdGZtsgqk=
+	t=1788185122; cv=none; b=VAtvNqb6NBhz8Ic1Q2ZvDFoPjc4E0vzPtD0A/4XjSrON5OxzdESnwwuS/0eqm8ipwpdbObMH51OuS3m+RkiwKAkSvcymRCoUOdvAy7x4CMoqD23wt/qpR9hDB2cWzFvKN1eyC1RNWPdDIM/oE9Va6JykzueDhFKa8BI+aQSs9fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788184955; c=relaxed/simple;
-	bh=0AaOui0ATZSYAH51kcMfhKYq5p5RUHpEf2ydKAATlVk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=sOR2NrOD6atc/4WYfGUjpIrVXGh3EJbDG5v6GimCvOBcxzSnyAGNExSBywndZUGMQgGHx204ZrfuSMLm+cz6DRLv1da57gBWwjSNa5Rj+Sh+3BoXBSzP47rUruuD3TyE6bLSbkXLvuRTrymwUgPOi8qv8B0G7tIWS8Qe1GCXh+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=IXueXC7X; arc=none smtp.client-ip=220.197.31.2
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+	s=arc-20240116; t=1788185122; c=relaxed/simple;
+	bh=dMgH3SXQVDef4+TvHTl+j6bjZM2Hmn9mYCLR0gMCleA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZYvs/1BZ7OJgG1TvIopPjoGyqxeBdqRkue9BTAmYG3t73EVCxI9PqSsyFGjpB6Ki71VW+9iT7+pZhRi03OrwnmIlFCSQdOKwEToAR8+ribXXvgaRm8Ddltt1ff7Nahz53l2f17D05/7F1RFu10GQwt278HmztmLN8kyrTQJUFJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yds0rmmQ; arc=none smtp.client-ip=209.85.217.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="IXueXC7X"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-	s=s110527; h=From:To:Subject:Date:Message-ID:MIME-Version; bh=SU
-	eQo8DwvNCB8W1/pfXYlm6GLs+D/BOTHcngtPxlKog=; b=IXueXC7XPf9lDaoyis
-	VM/5osJ2h0EBzM9AqOb8P8CClxk0flnJ9YkcFqWCv8vkXBniQIwhNULhvUza9jkm
-	C79T1IZKlcknvn18bcmsML2XMqW8wDSmjmubj3GCbxL1AAqR45og+OKeHLKMQEUW
-	v5m72dZltI1TyP/q6ebFTWn2s=
-Received: from localhost (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCgvCgAnuBc_iZVq6U15PA--.28139S2;
-	Mon, 31 Aug 2026 22:01:36 +0800 (CST)
-From: Hui Su <sh_def@163.com>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	eddyz87@gmail.com,
-	memxor@gmail.com,
-	martin.lau@linux.dev,
-	song@kernel.org,
-	yonghong.song@linux.dev,
-	jolsa@kernel.org,
-	emil@etsalapatis.com,
-	ihor.solodrai@linux.dev,
-	shuah@kernel.org,
-	yatsenko@meta.com,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yds0rmmQ"
+Received: by mail-vs1-f50.google.com with SMTP id ada2fe7eead31-73720e58dafso1995474137.1
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 07:05:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788185119; x=1788789919; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=GSG1bwsrNLkgaczjFVkO4Fp9+89s6DMBG6R8XlunJWE=;
+        b=Yds0rmmQ9DmcJYt68JwBC2XePECRWxVNiREj4etor9Fx5JPVgyIhpk32EMrOAXmhdq
+         VnULMwQ4JBgq28iqsVCIF5iq7bmOjkVqEOkxkOz9LN6+YHPhB64NcqjUPiNTMa4iJBQh
+         elXDQgrLZoK7MZEoe/tRuO8k5zP5i80Y+WzM7MXE1w7ElzvW1x2JrafF5mUOEIhey7ut
+         IUQkWNDvl3K+/yq63bEBP9VOq+dN2285tNQnkWhlSTVWGCNOMmbULGhZCypvsRJ6ntre
+         W2MU9OLBdb0t4ArqbczFdPBCVkQd24A8Y/pILGGOBoSBKi9c11ZV8DA+hqWm2PMW3+WT
+         ZNwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788185119; x=1788789919;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=GSG1bwsrNLkgaczjFVkO4Fp9+89s6DMBG6R8XlunJWE=;
+        b=d9BTQRphICKpFZYMiRFbLtvO79sbp8+rIrmdBSbd9T5KtsBveLnadIJoILaqQSjqaB
+         PrMQcXVz2EhooVhG2ZQoTzQon1/+cPuAG+ewqEgpEVYG8yAOqrhLVzZO8BjbKWuVClvY
+         2wlWZSxUOkq+zZ5qZusy4X0yWE7/IaifLWJDm8N2j7dQlpRvg6Uq/UOyuMJwk43UfVBo
+         Tz4L+LmaoqUozLukofuqimRLU/Adm5tJ1YV/5wA/bqbDWZuIFyHyIGL45kelPh4aLqyU
+         NBPRNj8JrtSxu6NeMi1FlfZP6rAiS4XjPG+j88GAfixZ+yV75lnZwF6B7r5tplFcgyDL
+         f22Q==
+X-Gm-Message-State: AFuF++mhfa9mzEjAvT1jnk6XNOSDaVyQoJVdfOrqR8iQ/N7Ps1h2Y/Xi
+	SdejJe9Q2Bv+1fXhdJAoVh4IW2YtDjPm3GfXOh0M2K0h0lz5eEk7AeLa
+X-Gm-Gg: AR+sD11UObxyk76vByayYdoewIkHf8/nlO68fht/pPHoT8YokOCgOtC32iygHuL5uSZ
+	czdp9WlyHLbQuAwjGkbAj0ps20aO4sSq+OPQbEYPWoBrtuMVkJXODIS9Ehz10GS+MErCrGTK9jH
+	RJulSeUiEAXpixmnsiEMRae6g7eukU1DnyLca7FPtyaEpIhMFNu9eHdv7wVIsh3nPvKPpGLo2n0
+	Qb8gnAi/iJjI6rnYkw9joC/zEIx9FMN/gWSDjhhXCY2Km9ku1xtZ2NuNCqlK7DELvZYKTSVU/J2
+	sw8AQTK1TIjvil84z0Ql16GXZLRB/532ScC4Z/zQYMOWSezY+vdz8gPCPDB2a72pfVTL7EBU9fr
+	XA+GEhXmhEXj8Jj+qp2UVD9QAvmsXJRZ00KOwm4S3imuzZ+ULwsIGY3LPMk6tR9mC+Q7BcZWUUA
+	sndVO8sGzZto6HYF9OoewrzmQljZlidMz3thNhOD/+7kfJVOPWwucbJw==
+X-Received: by 2002:a05:6102:41a3:b0:786:c223:ad84 with SMTP id ada2fe7eead31-786c223ae87mr6874119137.9.1788185118532;
+        Mon, 31 Aug 2026 07:05:18 -0700 (PDT)
+Received: from unix.. ([181.229.23.179])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-786b21c60fdsm5718410137.12.2026.08.31.07.05.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 07:05:17 -0700 (PDT)
+From: =?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
+To: Elizabeth Figura <zfigura@codeweavers.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v2 2/2] selftests/bpf: add RHASH iteration stress test
-Date: Mon, 31 Aug 2026 22:01:32 +0800
-Message-ID: <20260831140132.117755-2-sh_def@163.com>
-X-Mailer: git-send-email 2.54.0
-In-Reply-To: <20260831140132.117755-1-sh_def@163.com>
-References: <20260831140132.117755-1-sh_def@163.com>
+	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>
+Subject: [PATCH] selftests: ntsync: add wait termination edge cases
+Date: Mon, 31 Aug 2026 11:05:12 -0300
+Message-ID: <20260831140512.136118-1-ivanrwcm25@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCgvCgAnuBc_iZVq6U15PA--.28139S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWxKF1rAFWrCw15ur43Kw45Jrb_yoWxtryDpF
-	W0v34akr4rXF48Jw4fK3y2grZ8Kr4rZw4UGrZ5Kw4fAw47K3sFqr1xKF4UtFn3XrWDZ34Y
-	9ws3KrW8WrWrZrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07UI2NNUUUUU=
-X-CM-SenderInfo: xvkbvvri6rljoofrz/xtbCwQFy0WqViUEMEQAA3J
 
-Add a stress test for bpf_for_each_map_elem() on
-BPF_MAP_TYPE_RHASH. Update and delete entries from two threads while
-repeatedly running the BPF callback, and record the maximum number of
-callback invocations in one walk.
+The existing tests cover timeouts that expire while blocked, but not a
+deadline that has already passed, and no test exercises interruption by
+a signal even though the documented behaviour is EINTR. Also extend
+wait_args_validation() with an invalid flags case.
 
-Use a large map capacity and a smaller working set so the test also
-covers sparse maps where max_entries greatly exceeds current occupancy.
-Concurrent rehashing may cause duplicate visits, which are permitted by
-RHASH's best-effort iteration semantics. Verify that
-bpf_for_each_map_elem() does not exceed the working set in one walk and
-that at least one walk consumes the full working-set-sized budget.
+Add coverage for:
+ - an absolute timeout in the past, which must return ETIMEDOUT without
+   blocking
+ - a wait interrupted by a signal, which must return EINTR
+ - undefined bits in ntsync_wait_args::flags, which must return EINVAL
 
-Signed-off-by: Hui Su <sh_def@163.com>
+Tested on v7.3-rc1 under QEMU with CONFIG_NTSYNC=y: 15/15 pass, and the
+two new tests were run 50 times each at 1, 2, 4 and 8 vCPUs with no
+intermittent failures.
+
+Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
 ---
-Changes in v2:
-- Use a large map capacity and a smaller BPF rodata working set.
-- Skip the stress test when fewer than two CPUs are available.
-- Avoid result assertions unless a program run completed successfully.
-- Record full walks to make vacuous stress passes less likely.
-- Use the BPF rodata working set as the single source of truth.
+ .../testing/selftests/drivers/ntsync/ntsync.c | 96 +++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-Link: https://lore.kernel.org/bpf/20260828183326.3330530-2-sh_def@163.com/
----
- .../testing/selftests/bpf/prog_tests/rhash.c  | 113 ++++++++++++++++++
- tools/testing/selftests/bpf/progs/rhash.c     |  41 +++++++
- 2 files changed, 154 insertions(+)
-
-diff --git a/tools/testing/selftests/bpf/prog_tests/rhash.c b/tools/testing/selftests/bpf/prog_tests/rhash.c
-index 98bb66907b7f..f1a0a8e3fc1a 100644
---- a/tools/testing/selftests/bpf/prog_tests/rhash.c
-+++ b/tools/testing/selftests/bpf/prog_tests/rhash.c
-@@ -3,12 +3,16 @@
- #include <test_progs.h>
- #include <string.h>
- #include <stdio.h>
-+#include <pthread.h>
-+#include <stdatomic.h>
- #include "rhash.skel.h"
- #include "bpf_iter_bpf_rhash_map.skel.h"
- #include <linux/bpf.h>
- #include <linux/perf_event.h>
- #include <sys/syscall.h>
+diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+index 1f0dc43bb4c0..7d944e2a9094 100644
+--- a/tools/testing/selftests/drivers/ntsync/ntsync.c
++++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+@@ -11,6 +11,7 @@
+ #include <sys/wait.h>
+ #include <fcntl.h>
+ #include <sched.h>
++#include <signal.h>
+ #include <time.h>
+ #include <pthread.h>
+ #include <linux/ntsync.h>
+@@ -1381,6 +1382,13 @@ TEST(wait_args_validation)
+ 	EXPECT_EQ(-1, ret);
+ 	EXPECT_EQ(EINVAL, errno);
  
-+#define RHASH_STRESS_DURATION_NS	(3ULL * 1000000000ULL)
++	wait_args.pad = 0;
++	wait_args.flags = ~NTSYNC_WAIT_REALTIME;
++	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(EINVAL, errno);
++	wait_args.flags = 0;
 +
- static void rhash_run(const char *prog_name)
- {
- 	struct rhash *skel;
-@@ -53,6 +57,112 @@ static int rhash_map_create(__u32 max_entries, __u64 map_extra)
- 			      sizeof(__u32), sizeof(__u64), max_entries, &opts);
+ 	ret = wait_any(fd2, 1, &sem, 123, &index);
+ 	EXPECT_EQ(-1, ret);
+ 	EXPECT_EQ(EINVAL, errno);
+@@ -1471,4 +1479,92 @@ TEST(wait_any_monotonic_timens)
+ 	close(fd);
  }
  
-+struct rhash_stress_arg {
-+	int map_fd;
-+	atomic_bool *stop;
-+	__u32 nr_keys;
-+	__u32 seed;
-+};
-+
-+static void *rhash_stress_update(void *data)
++TEST(wait_timeout_expired)
 +{
-+	struct rhash_stress_arg *arg = data;
-+	__u64 value = 0;
-+	__u32 key;
-+	__u32 i;
++	struct ntsync_wait_args wait_args = {0};
++	struct ntsync_sem_args sem_args = {0};
++	struct timespec start, end;
++	__u64 elapsed_ns;
++	int fd, sem, ret;
 +
-+	while (!atomic_load(arg->stop)) {
-+		for (i = 0; i < arg->nr_keys && !atomic_load(arg->stop); i++) {
-+			key = ((__u32)i * 2654435761U + arg->seed) % arg->nr_keys;
-+			bpf_map_update_elem(arg->map_fd, &key, &value, BPF_ANY);
-+		}
-+		for (i = 0; i < arg->nr_keys && !atomic_load(arg->stop); i++) {
-+			key = ((__u32)i * 2654435761U + arg->seed) % arg->nr_keys;
-+			bpf_map_delete_elem(arg->map_fd, &key);
-+		}
-+	}
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	ASSERT_LE(0, fd);
 +
-+	return NULL;
++	sem_args.count = 0;
++	sem_args.max = 1;
++	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++	EXPECT_LE(0, sem);
++
++	wait_args.timeout = 0;
++	wait_args.objs = (uintptr_t)&sem;
++	wait_args.count = 1;
++	wait_args.owner = 123;
++	wait_args.index = 0xdeadbeef;
++
++	clock_gettime(CLOCK_MONOTONIC, &start);
++	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(ETIMEDOUT, errno);
++
++	elapsed_ns = (end.tv_sec - start.tv_sec) * 1000000000ULL +
++		     (end.tv_nsec - start.tv_nsec);
++	EXPECT_LT(elapsed_ns, 50 * 1000000ULL);
++
++	close(sem);
++	close(fd);
 +}
 +
-+static void rhash_iter_stress(void)
++static void ntsync_test_signal_handler(int sig)
 +{
-+	struct rhash *skel = NULL;
-+	struct rhash_stress_arg args[2];
-+	LIBBPF_OPTS(bpf_test_run_opts, opts);
-+	atomic_bool stop = false;
-+	bool ran = false;
-+	__u64 start;
-+	pthread_t threads[2];
-+	bool created[2] = {};
-+	struct bpf_program *prog;
-+	int nr_cpus;
-+	__u32 working_set;
-+	int map_fd, err, i;
-+
-+	nr_cpus = libbpf_num_possible_cpus();
-+	if (!ASSERT_GT(nr_cpus, 0, "num_possible_cpus"))
-+		return;
-+	if (nr_cpus < 2) {
-+		test__skip();
-+		return;
-+	}
-+
-+	skel = rhash__open();
-+	if (!ASSERT_OK_PTR(skel, "rhash__open stress"))
-+		return;
-+	working_set = skel->rodata->stress_working_set;
-+
-+	prog = bpf_object__find_program_by_name(skel->obj,
-+						"test_rhash_iter_stress");
-+	if (!ASSERT_OK_PTR(prog, "find stress program"))
-+		goto cleanup;
-+	bpf_program__set_autoload(prog, true);
-+
-+	err = rhash__load(skel);
-+	if (!ASSERT_OK(err, "stress skel_load"))
-+		goto cleanup;
-+
-+	map_fd = bpf_map__fd(skel->maps.stress_rhmap);
-+	for (i = 0; i < ARRAY_SIZE(threads); i++) {
-+		args[i].map_fd = map_fd;
-+		args[i].stop = &stop;
-+		args[i].nr_keys = working_set;
-+		args[i].seed = i * 977;
-+		err = pthread_create(&threads[i], NULL, rhash_stress_update,
-+				     &args[i]);
-+		if (!ASSERT_OK(err, "pthread_create"))
-+			goto stop_threads;
-+		created[i] = true;
-+	}
-+
-+	start = get_time_ns();
-+	while (get_time_ns() - start < RHASH_STRESS_DURATION_NS) {
-+		err = bpf_prog_test_run_opts(bpf_program__fd(prog), &opts);
-+		if (!ASSERT_OK(err, "stress prog run"))
-+			goto stop_threads;
-+		ran = true;
-+	}
-+
-+stop_threads:
-+	atomic_store(&stop, true);
-+	for (i = 0; i < ARRAY_SIZE(threads); i++)
-+		if (created[i])
-+			pthread_join(threads[i], NULL);
-+
-+	if (err || !ran)
-+		goto cleanup;
-+
-+	ASSERT_GT(skel->bss->stress_max_visits, 0, "stress callback visits");
-+	ASSERT_GT(skel->bss->stress_full_walks, 0, "stress full walks");
-+	ASSERT_EQ(skel->bss->stress_overruns, 0, "stress callback bound");
-+	printf("stress max callback visits: %llu (limit %u)\n",
-+	       (unsigned long long)skel->bss->stress_max_visits,
-+	       working_set);
-+cleanup:
-+	rhash__destroy(skel);
 +}
 +
- static void rhash_map_extra_presize(void)
- {
- 	const __u32 max_entries = 1024;
-@@ -180,4 +290,7 @@ void test_rhash(void)
- 
- 	if (test__start_subtest("test_rhash_iter"))
- 		rhash_iter_test();
-+
-+	if (test__start_subtest("test_rhash_iter_stress"))
-+		rhash_iter_stress();
- }
-diff --git a/tools/testing/selftests/bpf/progs/rhash.c b/tools/testing/selftests/bpf/progs/rhash.c
-index fc2dac3a719e..3d7201430bab 100644
---- a/tools/testing/selftests/bpf/progs/rhash.c
-+++ b/tools/testing/selftests/bpf/progs/rhash.c
-@@ -9,11 +9,18 @@
- 
- #define ENOENT 2
- #define EEXIST 17
-+#define RHASH_STRESS_MAX_ENTRIES (1U << 20)
- 
- char _license[] SEC("license") = "GPL";
- 
- int err;
- 
-+const volatile __u32 stress_working_set = 4096;
-+
-+volatile __u64 stress_max_visits;
-+volatile __u64 stress_overruns;
-+volatile __u64 stress_full_walks;
-+
- struct elem {
- 	char arr[128];
- 	int val;
-@@ -27,6 +34,20 @@ struct {
- 	__type(value, struct elem);
- } rhmap SEC(".maps");
- 
-+struct {
-+	__uint(type, BPF_MAP_TYPE_RHASH);
-+	__uint(map_flags, BPF_F_NO_PREALLOC);
-+	__uint(max_entries, RHASH_STRESS_MAX_ENTRIES);
-+	__type(key, __u32);
-+	__type(value, __u64);
-+} stress_rhmap SEC(".maps");
-+
-+static __u64 stress_iter_cb(struct bpf_map *map, __u32 *key, __u64 *val,
-+			    void *ctx)
++TEST(wait_interrupted_by_signal)
 +{
-+	return 0;
++	struct ntsync_wait_args wait_args = {0};
++	struct ntsync_sem_args sem_args = {0};
++	struct sigaction sa = {0}, old_sa;
++	struct wait_args thread_args;
++	int fd, sem, ret;
++	pthread_t thread;
++
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	ASSERT_LE(0, fd);
++
++	sem_args.count = 0;
++	sem_args.max = 1;
++	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++	EXPECT_LE(0, sem);
++
++	sa.sa_handler = ntsync_test_signal_handler;
++	ret = sigaction(SIGUSR1, &sa, &old_sa);
++	EXPECT_EQ(0, ret);
++
++	wait_args.timeout = get_abs_timeout(5000);
++	wait_args.objs = (uintptr_t)&sem;
++	wait_args.count = 1;
++	wait_args.owner = 123;
++	wait_args.index = 0xdeadbeef;
++	thread_args.fd = fd;
++	thread_args.args = &wait_args;
++	thread_args.request = NTSYNC_IOC_WAIT_ANY;
++	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
++	EXPECT_EQ(0, ret);
++
++	ret = wait_for_thread(thread, 50);
++	EXPECT_EQ(ETIMEDOUT, ret);
++
++	ret = pthread_kill(thread, SIGUSR1);
++	EXPECT_EQ(0, ret);
++
++	ret = wait_for_thread(thread, 1000);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(-1, thread_args.ret);
++	EXPECT_EQ(EINTR, thread_args.err);
++
++	sigaction(SIGUSR1, &old_sa, NULL);
++	close(sem);
++	close(fd);
 +}
 +
- SEC("syscall")
- int test_rhash_lookup_update(void *ctx)
- {
-@@ -246,3 +267,23 @@ int test_rhash_delete_nonexistent(void *ctx)
- 	err = 0;
- 	return 0;
- }
-+
-+SEC("syscall")
-+int test_rhash_iter_stress(void *ctx)
-+{
-+	/*
-+	 * Concurrent rehash may produce duplicate visits. Check that the
-+	 * helper still gives one walk a finite callback bound; no snapshot
-+	 * or unique-visit guarantee is expected here.
-+	 */
-+	long visits;
-+
-+	visits = bpf_for_each_map_elem(&stress_rhmap, stress_iter_cb, NULL, 0);
-+	if (visits > stress_max_visits)
-+		stress_max_visits = visits;
-+	if (visits > stress_working_set)
-+		stress_overruns++;
-+	if (visits == stress_working_set)
-+		stress_full_walks++;
-+	return 0;
-+}
+ TEST_HARNESS_MAIN
 -- 
-2.54.0
+2.43.0
 
