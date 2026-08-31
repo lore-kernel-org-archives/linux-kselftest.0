@@ -1,31 +1,31 @@
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11813BADBC;
-	Mon, 31 Aug 2026 04:21:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5A939E18E;
+	Mon, 31 Aug 2026 04:21:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788150098; cv=none; b=L0zEbVANSKvH82HVUUu3+MbVPW5X4ip7jNk4Tsbu7X4V8wLXVchXqcxyAE70+TRAURfM2H+gdgDCjTrjk6hUwKcJUdxyOABeB+E/ZAU+l458PyF2O46VA0wCVnH61VpOf/pxniVoA9FCl/n3yMO7KQNCQUTDLM0NZqPjGmVGjNE=
+	t=1788150109; cv=none; b=TWVsQtAHNHzSWgJcaocszJQk7b5uJwFKMX5KHVX7bHamOIkR2pj1PFSEyN7B73AeUccBuUy/RD4f60srXz/Dav2TkkkDyuR5Pa1Dllw+2/bUwMJpEdQS9iTB3+z05X8EeJTtHsdlOYVo9UhdteL9NdAWNquI5EsjhZyerDX+73A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788150098; c=relaxed/simple;
-	bh=HG/2zHNekvM4W2SFbVUYchpVvXSs5GPACzfDQKtYius=;
+	s=arc-20240116; t=1788150109; c=relaxed/simple;
+	bh=pxYTNAryRWFz6IJzog/5O3LrGAtemINdU7YD5qSXcjk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Gu7dtl44ffoM1UgfNvfd+sGKZIh5Xtn3I6z3jERAQLkVz4i6i5F0NoOQYuhskFXqIebWRxX4N0s4EkscDOLlJlx9GNLNf1tXF764CWLlgqyQLWzozuH59QdbAh4XK9gr1wS4e70a6Krh6q05Y0VlvNk2zB1MYPdWp89fufqlU0s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=Qh7vy8C3; arc=none smtp.client-ip=217.140.110.172
+	 MIME-Version; b=ZdxhZWeu7oI/1DU7KzlHEeSHZeRjQ1E7p8wlae6URbwwRv/yaVmjvACmReTKVkDqNxO70QZLq0tPrXp26hZ8USoYsSf2On7PH9K8HJgy9Nusi7CFC5rpko8tnGTjrFbbUts+GaOnHL8QHC4m56A7RaGgX9FKYmZoz1qwywTYCTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=AtTTK3Kf; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="Qh7vy8C3"
+	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="AtTTK3Kf"
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EA27A14BF;
-	Sun, 30 Aug 2026 21:21:31 -0700 (PDT)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5737514BF;
+	Sun, 30 Aug 2026 21:21:40 -0700 (PDT)
 Received: from a081061.blr.arm.com (a081061.arm.com [10.164.19.84])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 18A843F8C6;
-	Sun, 30 Aug 2026 21:21:27 -0700 (PDT)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 3F9FE3F8C6;
+	Sun, 30 Aug 2026 21:21:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788150095; bh=HG/2zHNekvM4W2SFbVUYchpVvXSs5GPACzfDQKtYius=;
+	t=1788150104; bh=pxYTNAryRWFz6IJzog/5O3LrGAtemINdU7YD5qSXcjk=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Qh7vy8C3vM5bJSJ/Z5bD3KDh7YPXT0AIPXjd9cR6Kd0hcmXHCsqfRLGryjXuW2u0m
-	 oM1lKZ4sXG17pouOKcbMBojfSPgfwblymshLfklWqjhAH6pUyXYcIjmk/MmoNbRtWg
-	 5xg4SqBJSpKbXE0R6HckQ3OqPZNUc71DxuA8BuM4=
+	b=AtTTK3Kfen9Ji1BYeXHqtuey15gPf8osVwsU9siBBzce32pKxqtWAN4c6Pp4THyhS
+	 Mu/vs9a/QhwEkAM1a378dG/uxDnOFd8a6+XDJC1dsNuscYeX2RccLUnORsNLYdxAB5
+	 poNGefIYNKZrzrJUnjH9qr44b0QRu7g+xenzFIr4=
 From: Sarthak Sharma <sarthak.sharma@arm.com>
 To: Andrew Morton <akpm@linux-foundation.org>,
 	David Hildenbrand <david@kernel.org>
@@ -57,9 +57,9 @@ Cc: Lorenzo Stoakes <ljs@kernel.org>,
 	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	Sarthak Sharma <sarthak.sharma@arm.com>
-Subject: [PATCH v8 2/6] tools/lib/mm: add shared file helpers
-Date: Mon, 31 Aug 2026 09:50:57 +0530
-Message-ID: <20260831042101.18085-3-sarthak.sharma@arm.com>
+Subject: [PATCH v8 3/6] tools/lib/mm: move hugepage_settings out of selftests
+Date: Mon, 31 Aug 2026 09:50:58 +0530
+Message-ID: <20260831042101.18085-4-sarthak.sharma@arm.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260831042101.18085-1-sarthak.sharma@arm.com>
 References: <20260831042101.18085-1-sarthak.sharma@arm.com>
@@ -71,358 +71,495 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Move read_file(), write_file(), read_num(), write_num() and
-write_num_ignore_einval() out of tools/testing/selftests/mm/vm_util.c
-into a new shared helper under tools/lib/mm/.
+Move hugepage_settings.[ch] from tools/testing/selftests/mm/ to
+tools/lib/mm/ so the THP and HugeTLB helpers can be shared more easily
+between selftests and other tools.
 
-These helpers are used by mm selftests today and will also be needed by
-shared hugepage helpers in subsequent patches. Move them to a generic
-location so they can be reused outside selftests as well.
+Keep the helpers exposed to mm selftests through vm_util.h where possible,
+and use direct <mm/hugepage_settings.h> includes for files that do not
+include vm_util.h. Adjust the selftests/mm build to compile the moved
+implementation from its new location.
 
-Keep the helpers exposed to mm selftests through vm_util.h by including
-the new shared header there, and link the new helper into the
-selftests/mm build.
-
-Update the explicit x86 protection_keys 32-bit and 64-bit build rules
-to preserve prerequisite paths, now that file_utils.c is built from
-tools/lib/mm.
-
-Add tools/lib/mm/ to the MEMORY MANAGEMENT - MISC entry in MAINTAINERS.
+Remove the remaining kselftest dependency by including file_utils.h
+directly and using EXIT_FAILURE in the signal handler.
 
 Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 Acked-by: David Hildenbrand (Arm) <david@kernel.org>
 Tested-by: Muhammad Usama Anjum <usama.anjum@arm.com>
 Signed-off-by: Sarthak Sharma <sarthak.sharma@arm.com>
 ---
- MAINTAINERS                          |   1 +
- tools/lib/mm/file_utils.c            | 106 +++++++++++++++++++++++++++
- tools/lib/mm/file_utils.h            |  13 ++++
- tools/testing/selftests/mm/Makefile  |  11 +--
- tools/testing/selftests/mm/vm_util.c |  97 ------------------------
- tools/testing/selftests/mm/vm_util.h |   7 +-
- 6 files changed, 127 insertions(+), 108 deletions(-)
- create mode 100644 tools/lib/mm/file_utils.c
- create mode 100644 tools/lib/mm/file_utils.h
+ .../{testing/selftests => lib}/mm/hugepage_settings.c | 11 +++++++++--
+ .../{testing/selftests => lib}/mm/hugepage_settings.h |  0
+ tools/testing/selftests/mm/Makefile                   |  6 ++++--
+ tools/testing/selftests/mm/compaction_test.c          |  2 +-
+ tools/testing/selftests/mm/cow.c                      |  1 -
+ tools/testing/selftests/mm/folio_split_race_test.c    |  1 -
+ tools/testing/selftests/mm/guard-regions.c            |  1 -
+ tools/testing/selftests/mm/gup_longterm.c             |  1 -
+ tools/testing/selftests/mm/gup_test.c                 |  1 -
+ tools/testing/selftests/mm/hmm-tests.c                |  6 +++---
+ tools/testing/selftests/mm/hugetlb-madvise.c          |  1 -
+ tools/testing/selftests/mm/hugetlb-mmap.c             |  1 -
+ tools/testing/selftests/mm/hugetlb-mremap.c           |  1 -
+ tools/testing/selftests/mm/hugetlb-shm.c              |  1 -
+ tools/testing/selftests/mm/hugetlb-soft-offline.c     |  2 +-
+ tools/testing/selftests/mm/hugetlb_dio.c              |  1 -
+ tools/testing/selftests/mm/hugetlb_fault_after_madv.c |  1 -
+ tools/testing/selftests/mm/hugetlb_madv_vs_map.c      |  1 -
+ tools/testing/selftests/mm/khugepaged.c               |  1 -
+ tools/testing/selftests/mm/ksm_tests.c                |  1 -
+ tools/testing/selftests/mm/migration.c                |  2 +-
+ tools/testing/selftests/mm/pagemap_ioctl.c            |  1 -
+ tools/testing/selftests/mm/prctl_thp_disable.c        |  1 -
+ tools/testing/selftests/mm/protection_keys.c          |  2 +-
+ tools/testing/selftests/mm/soft-dirty.c               |  1 -
+ tools/testing/selftests/mm/split_huge_page_test.c     |  1 -
+ tools/testing/selftests/mm/thuge-gen.c                |  1 -
+ tools/testing/selftests/mm/transhuge-stress.c         |  1 -
+ tools/testing/selftests/mm/uffd-common.h              |  1 -
+ tools/testing/selftests/mm/uffd-wp-mremap.c           |  2 +-
+ tools/testing/selftests/mm/va_high_addr_switch.c      |  1 -
+ tools/testing/selftests/mm/vm_util.h                  |  1 +
+ 32 files changed, 22 insertions(+), 34 deletions(-)
+ rename tools/{testing/selftests => lib}/mm/hugepage_settings.c (99%)
+ rename tools/{testing/selftests => lib}/mm/hugepage_settings.h (100%)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 29236523cefb..6c7ddcd1848a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -17135,6 +17135,7 @@ F:	mm/memory-tiers.c
- F:	mm/page_idle.c
- F:	mm/pgalloc-track.h
- F:	mm/process_vm_access.c
-+F:	tools/lib/mm/
- F:	tools/testing/selftests/mm/
+diff --git a/tools/testing/selftests/mm/hugepage_settings.c b/tools/lib/mm/hugepage_settings.c
+similarity index 99%
+rename from tools/testing/selftests/mm/hugepage_settings.c
+rename to tools/lib/mm/hugepage_settings.c
+index 5bcda01ac4f6..abd9f7182f88 100644
+--- a/tools/testing/selftests/mm/hugepage_settings.c
++++ b/tools/lib/mm/hugepage_settings.c
+@@ -10,11 +10,16 @@
+ #include <unistd.h>
+ #include <errno.h>
  
- MEMORY MANAGEMENT - NUMA MEMBLOCKS AND NUMA EMULATION
-diff --git a/tools/lib/mm/file_utils.c b/tools/lib/mm/file_utils.c
-new file mode 100644
-index 000000000000..9b2237e9823e
---- /dev/null
-+++ b/tools/lib/mm/file_utils.c
-@@ -0,0 +1,106 @@
-+// SPDX-License-Identifier: GPL-2.0
-+#include <errno.h>
-+#include <fcntl.h>
-+#include <stdio.h>
-+#include <stdlib.h>
-+#include <string.h>
-+#include <unistd.h>
-+
+-#include "vm_util.h"
 +#include "file_utils.h"
+ #include "hugepage_settings.h"
+ 
+ #define THP_SYSFS "/sys/kernel/mm/transparent_hugepage/"
+ #define MAX_SETTINGS_DEPTH 4
 +
-+int read_file(const char *path, char *buf, size_t buflen)
-+{
-+	int fd, err;
-+	ssize_t numread;
-+
-+	fd = open(path, O_RDONLY);
-+	if (fd == -1)
-+		return -errno;
-+
-+	numread = read(fd, buf, buflen - 1);
-+	if (numread < 1) {
-+		err = numread ? errno : ENODATA;
-+		close(fd);
-+		return -err;
-+	}
-+
-+	buf[numread] = '\0';
-+	close(fd);
-+
-+	return 0;
-+}
-+
-+int write_file(const char *path, const char *buf, size_t buflen)
-+{
-+	int fd, saved_errno;
-+	ssize_t numwritten;
-+
-+	if (buflen < 2)
-+		return -EINVAL;
-+
-+	fd = open(path, O_WRONLY);
-+	if (fd == -1)
-+		return -errno;
-+
-+	numwritten = write(fd, buf, buflen - 1);
-+	saved_errno = errno;
-+	close(fd);
-+
-+	if (numwritten < 0)
-+		return -saved_errno;
-+
-+	if (numwritten != (ssize_t)(buflen - 1))
-+		return -EIO;
-+
-+	return 0;
-+}
-+
-+int read_num(const char *path, unsigned long *num)
-+{
-+	unsigned long val;
-+	int ret;
-+	char buf[21];
-+	char *end;
-+
-+	if (!num)
-+		return -EINVAL;
-+
-+	ret = read_file(path, buf, sizeof(buf));
-+	if (ret)
-+		return ret;
-+
-+	/* Reject signs and leading whitespace that are accepted by strtoul() */
-+	if (buf[0] < '0' || buf[0] > '9')
-+		return -EINVAL;
-+
-+	errno = 0;
-+	val = strtoul(buf, &end, 10);
-+	if (errno)
-+		return -errno;
-+
-+	/* Only allow a newline after the number */
-+	if (*end == '\n')
-+		end++;
-+
-+	if (*end != '\0')
-+		return -EINVAL;
-+
-+	*num = val;
-+	return 0;
-+}
-+
-+int write_num(const char *path, unsigned long num)
-+{
-+	char buf[21];
-+
-+	sprintf(buf, "%lu", num);
-+	return write_file(path, buf, strlen(buf) + 1);
-+}
-+
-+int write_num_ignore_einval(const char *path, unsigned long num)
-+{
-+	int ret;
-+
-+	ret = write_num(path, num);
-+	return ret == -EINVAL ? 0 : ret;
-+}
-diff --git a/tools/lib/mm/file_utils.h b/tools/lib/mm/file_utils.h
-new file mode 100644
-index 000000000000..50daa82c2b2b
---- /dev/null
-+++ b/tools/lib/mm/file_utils.h
-@@ -0,0 +1,13 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __MM_FILE_UTILS_H__
-+#define __MM_FILE_UTILS_H__
-+
-+#include <stddef.h>
-+
-+int read_file(const char *path, char *buf, size_t buflen);
-+int write_file(const char *path, const char *buf, size_t buflen);
-+int read_num(const char *path, unsigned long *num);
-+int write_num(const char *path, unsigned long num);
-+int write_num_ignore_einval(const char *path, unsigned long num);
-+
++#ifndef ARRAY_SIZE
++#define ARRAY_SIZE(arr) (sizeof(arr) / sizeof((arr)[0]))
 +#endif
++
+ static struct thp_settings settings_stack[MAX_SETTINGS_DEPTH];
+ static int settings_index;
+ static struct thp_settings saved_settings;
+@@ -638,8 +643,10 @@ static void hugepage_restore_settings_atexit(void)
+ 
+ static void hugepage_restore_settings_sighandler(int sig)
+ {
++	(void)sig;
++
+ 	/* exit() will invoke the hugepage_restore_settings_atexit handler. */
+-	exit(KSFT_FAIL);
++	exit(EXIT_FAILURE);
+ }
+ 
+ void hugepage_save_settings(bool thp, bool hugetlb)
+diff --git a/tools/testing/selftests/mm/hugepage_settings.h b/tools/lib/mm/hugepage_settings.h
+similarity index 100%
+rename from tools/testing/selftests/mm/hugepage_settings.h
+rename to tools/lib/mm/hugepage_settings.h
 diff --git a/tools/testing/selftests/mm/Makefile b/tools/testing/selftests/mm/Makefile
-index 2d5366196e30..61d974d2cbae 100644
+index 61d974d2cbae..7cea3228020d 100644
 --- a/tools/testing/selftests/mm/Makefile
 +++ b/tools/testing/selftests/mm/Makefile
-@@ -37,7 +37,8 @@ endif
- # LDLIBS.
- MAKEFLAGS += --no-builtin-rules
- 
--CFLAGS = -Wall -O2 -I $(top_srcdir) $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
-+CFLAGS = -Wall -O2 -I $(top_srcdir) -I $(top_srcdir)/tools/lib
-+CFLAGS += $(EXTRA_CFLAGS) $(KHDR_INCLUDES) $(TOOLS_INCLUDES)
- CFLAGS += -Wunreachable-code
- LDLIBS = -lrt -lpthread -lm
- 
-@@ -187,8 +188,8 @@ TEST_FILES += write_hugetlb_memory.sh
+@@ -188,8 +188,10 @@ TEST_FILES += write_hugetlb_memory.sh
  
  include ../lib.mk
  
--$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c
--$(TEST_GEN_FILES): vm_util.c hugepage_settings.c
-+$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
-+$(TEST_GEN_FILES): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
+-$(TEST_GEN_PROGS): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
+-$(TEST_GEN_FILES): vm_util.c hugepage_settings.c $(top_srcdir)/tools/lib/mm/file_utils.c
++$(TEST_GEN_PROGS): vm_util.c $(top_srcdir)/tools/lib/mm/hugepage_settings.c \
++		   $(top_srcdir)/tools/lib/mm/file_utils.c
++$(TEST_GEN_FILES): vm_util.c $(top_srcdir)/tools/lib/mm/hugepage_settings.c \
++		   $(top_srcdir)/tools/lib/mm/file_utils.c
  
  $(OUTPUT)/uffd-stress: uffd-common.c
  $(OUTPUT)/uffd-unit-tests: uffd-common.c
-@@ -217,7 +218,7 @@ $(BINARIES_32): CFLAGS += -m32 -mxsave
- $(BINARIES_32): LDLIBS += -lrt -ldl -lm
- $(BINARIES_32): $(OUTPUT)/%_32: %.c
- 	$(call msg,CC,,$@)
--	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $^ $(LDLIBS) -o $@
- $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-32,$(t))))
- endif
+diff --git a/tools/testing/selftests/mm/compaction_test.c b/tools/testing/selftests/mm/compaction_test.c
+index 30d4ace7155a..b3f5377119cb 100644
+--- a/tools/testing/selftests/mm/compaction_test.c
++++ b/tools/testing/selftests/mm/compaction_test.c
+@@ -15,9 +15,9 @@
+ #include <errno.h>
+ #include <unistd.h>
+ #include <string.h>
++#include <mm/hugepage_settings.h>
  
-@@ -226,7 +227,7 @@ $(BINARIES_64): CFLAGS += -m64 -mxsave
- $(BINARIES_64): LDLIBS += -lrt -ldl
- $(BINARIES_64): $(OUTPUT)/%_64: %.c
- 	$(call msg,CC,,$@)
--	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $(notdir $^) $(LDLIBS) -o $@
-+	$(Q)$(CC) $(CFLAGS) $(EXTRA_CFLAGS) $^ $(LDLIBS) -o $@
- $(foreach t,$(VMTARGETS),$(eval $(call gen-target-rule-64,$(t))))
- endif
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
  
-diff --git a/tools/testing/selftests/mm/vm_util.c b/tools/testing/selftests/mm/vm_util.c
-index c1b8d60e519d..4751db798c3a 100644
---- a/tools/testing/selftests/mm/vm_util.c
-+++ b/tools/testing/selftests/mm/vm_util.c
-@@ -889,103 +889,6 @@ int unpoison_memory(unsigned long pfn)
- 	return ret > 0 ? 0 : -errno;
- }
+ #define MAP_SIZE_MB	100
+ #define MAP_SIZE	(MAP_SIZE_MB * 1024 * 1024)
+diff --git a/tools/testing/selftests/mm/cow.c b/tools/testing/selftests/mm/cow.c
+index 8aa5249d9bef..3264a828575b 100644
+--- a/tools/testing/selftests/mm/cow.c
++++ b/tools/testing/selftests/mm/cow.c
+@@ -29,7 +29,6 @@
+ #include "../../../../mm/gup_test.h"
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
  
--int read_file(const char *path, char *buf, size_t buflen)
--{
--	int fd, err;
--	ssize_t numread;
--
--	fd = open(path, O_RDONLY);
--	if (fd == -1)
--		return -errno;
--
--	numread = read(fd, buf, buflen - 1);
--	if (numread < 1) {
--		err = numread ? errno : ENODATA;
--		close(fd);
--		return -err;
--	}
--
--	buf[numread] = '\0';
--	close(fd);
--
--	return 0;
--}
--
--int write_file(const char *path, const char *buf, size_t buflen)
--{
--	int fd, saved_errno;
--	ssize_t numwritten;
--
--	if (buflen < 2)
--		return -EINVAL;
--
--	fd = open(path, O_WRONLY);
--	if (fd == -1)
--		return -errno;
--
--	numwritten = write(fd, buf, buflen - 1);
--	saved_errno = errno;
--	close(fd);
--
--	if (numwritten < 0)
--		return -saved_errno;
--
--	if (numwritten != (ssize_t)(buflen - 1))
--		return -EIO;
--
--	return 0;
--}
--
--int read_num(const char *path, unsigned long *num)
--{
--	unsigned long val;
--	int ret;
--	char buf[21];
--	char *end;
--
--	if (!num)
--		return -EINVAL;
--
--	ret = read_file(path, buf, sizeof(buf));
--	if (ret)
--		return ret;
--
--	/* Reject signs and leading whitespace that are accepted by strtoul() */
--	if (buf[0] < '0' || buf[0] > '9')
--		return -EINVAL;
--
--	errno = 0;
--	val = strtoul(buf, &end, 10);
--	if (errno)
--		return -errno;
--
--	/* Only allow a newline after the number */
--	if (*end == '\n')
--		end++;
--
--	if (*end != '\0')
--		return -EINVAL;
--
--	*num = val;
--	return 0;
--}
--
--int write_num(const char *path, unsigned long num)
--{
--	char buf[21];
--
--	sprintf(buf, "%lu", num);
--	return write_file(path, buf, strlen(buf) + 1);
--}
--
--int write_num_ignore_einval(const char *path, unsigned long num)
--{
--	int ret;
--
--	ret = write_num(path, num);
--	return ret == -EINVAL ? 0 : ret;
--}
--
- static unsigned long shmall, shmmax;
+ static size_t pagesize;
+ static int pagemap_fd;
+diff --git a/tools/testing/selftests/mm/folio_split_race_test.c b/tools/testing/selftests/mm/folio_split_race_test.c
+index 45b84f7b364e..289aed2ebac0 100644
+--- a/tools/testing/selftests/mm/folio_split_race_test.c
++++ b/tools/testing/selftests/mm/folio_split_race_test.c
+@@ -25,7 +25,6 @@
+ #include <unistd.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
  
- void __shm_limits_restore(void)
+ uint64_t page_size;
+ uint64_t pmd_pagesize;
+diff --git a/tools/testing/selftests/mm/guard-regions.c b/tools/testing/selftests/mm/guard-regions.c
+index 5c8ec3ca75d7..af5cd9b30339 100644
+--- a/tools/testing/selftests/mm/guard-regions.c
++++ b/tools/testing/selftests/mm/guard-regions.c
+@@ -21,7 +21,6 @@
+ #include <sys/uio.h>
+ #include <unistd.h>
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #include "../pidfd/pidfd.h"
+ 
+diff --git a/tools/testing/selftests/mm/gup_longterm.c b/tools/testing/selftests/mm/gup_longterm.c
+index 510de93be681..c9d8b4491263 100644
+--- a/tools/testing/selftests/mm/gup_longterm.c
++++ b/tools/testing/selftests/mm/gup_longterm.c
+@@ -29,7 +29,6 @@
+ #include "../../../../mm/gup_test.h"
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ static size_t pagesize;
+ static int nr_hugetlbsizes;
+diff --git a/tools/testing/selftests/mm/gup_test.c b/tools/testing/selftests/mm/gup_test.c
+index 3f841a96f870..5f44761dbec0 100644
+--- a/tools/testing/selftests/mm/gup_test.c
++++ b/tools/testing/selftests/mm/gup_test.c
+@@ -14,7 +14,6 @@
+ #include <mm/gup_test.h>
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define MB (1UL << 20)
+ 
+diff --git a/tools/testing/selftests/mm/hmm-tests.c b/tools/testing/selftests/mm/hmm-tests.c
+index e2642eca0d02..fa1a651963fd 100644
+--- a/tools/testing/selftests/mm/hmm-tests.c
++++ b/tools/testing/selftests/mm/hmm-tests.c
+@@ -10,9 +10,6 @@
+  * bugs.
+  */
+ 
+-#include "kselftest_harness.h"
+-#include "hugepage_settings.h"
+-
+ #include <errno.h>
+ #include <fcntl.h>
+ #include <stdio.h>
+@@ -33,6 +30,9 @@
+ #include <sys/eventfd.h>
+ #include <linux/userfaultfd.h>
+ #include <poll.h>
++#include <mm/hugepage_settings.h>
++
++#include "kselftest_harness.h"
+ 
+ /*
+  * This is a private UAPI to the kernel test module so it isn't exported
+diff --git a/tools/testing/selftests/mm/hugetlb-madvise.c b/tools/testing/selftests/mm/hugetlb-madvise.c
+index 555b4b3d1430..57cf790ca478 100644
+--- a/tools/testing/selftests/mm/hugetlb-madvise.c
++++ b/tools/testing/selftests/mm/hugetlb-madvise.c
+@@ -14,7 +14,6 @@
+ #include <fcntl.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #define MIN_FREE_PAGES	20
+ #define NR_HUGE_PAGES	10	/* common number of pages to map/allocate */
+diff --git a/tools/testing/selftests/mm/hugetlb-mmap.c b/tools/testing/selftests/mm/hugetlb-mmap.c
+index 0f2aad1b7dbd..a458becf5832 100644
+--- a/tools/testing/selftests/mm/hugetlb-mmap.c
++++ b/tools/testing/selftests/mm/hugetlb-mmap.c
+@@ -18,7 +18,6 @@
+ #include <linux/memfd.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #define LENGTH (256UL*1024*1024)
+ #define PROTECTION (PROT_READ | PROT_WRITE)
+diff --git a/tools/testing/selftests/mm/hugetlb-mremap.c b/tools/testing/selftests/mm/hugetlb-mremap.c
+index ed3d92e862d8..9b724af66e93 100644
+--- a/tools/testing/selftests/mm/hugetlb-mremap.c
++++ b/tools/testing/selftests/mm/hugetlb-mremap.c
+@@ -26,7 +26,6 @@
+ #include <stdbool.h>
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define DEFAULT_LENGTH_MB 10UL
+ #define MB_TO_BYTES(x) (x * 1024 * 1024)
+diff --git a/tools/testing/selftests/mm/hugetlb-shm.c b/tools/testing/selftests/mm/hugetlb-shm.c
+index 3ff7f062b7eb..f4514da49e1d 100644
+--- a/tools/testing/selftests/mm/hugetlb-shm.c
++++ b/tools/testing/selftests/mm/hugetlb-shm.c
+@@ -29,7 +29,6 @@
+ #include <sys/mman.h>
+ 
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define LENGTH (256UL*1024*1024)
+ 
+diff --git a/tools/testing/selftests/mm/hugetlb-soft-offline.c b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+index bc202e4ed2bd..20864e7d4e0c 100644
+--- a/tools/testing/selftests/mm/hugetlb-soft-offline.c
++++ b/tools/testing/selftests/mm/hugetlb-soft-offline.c
+@@ -21,9 +21,9 @@
+ #include <sys/mman.h>
+ #include <sys/statfs.h>
+ #include <sys/types.h>
++#include <mm/hugepage_settings.h>
+ 
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #ifndef MADV_SOFT_OFFLINE
+ #define MADV_SOFT_OFFLINE 101
+diff --git a/tools/testing/selftests/mm/hugetlb_dio.c b/tools/testing/selftests/mm/hugetlb_dio.c
+index fb4600570e13..9495974eccbe 100644
+--- a/tools/testing/selftests/mm/hugetlb_dio.c
++++ b/tools/testing/selftests/mm/hugetlb_dio.c
+@@ -20,7 +20,6 @@
+ #include <sys/syscall.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #ifndef STATX_DIOALIGN
+ #define STATX_DIOALIGN		0x00002000U
+diff --git a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+index 2dc158054f66..56c5a8533e9d 100644
+--- a/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
++++ b/tools/testing/selftests/mm/hugetlb_fault_after_madv.c
+@@ -10,7 +10,6 @@
+ 
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #define INLOOP_ITER 100
+ 
+diff --git a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+index f94549efcc6f..2532a42b98df 100644
+--- a/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
++++ b/tools/testing/selftests/mm/hugetlb_madv_vs_map.c
+@@ -25,7 +25,6 @@
+ #include <unistd.h>
+ 
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define INLOOP_ITER 100
+ 
+diff --git a/tools/testing/selftests/mm/khugepaged.c b/tools/testing/selftests/mm/khugepaged.c
+index 4ba5692ec4be..ada11d30d388 100644
+--- a/tools/testing/selftests/mm/khugepaged.c
++++ b/tools/testing/selftests/mm/khugepaged.c
+@@ -22,7 +22,6 @@
+ #include "linux/magic.h"
+ 
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define BASE_ADDR ((void *)(1UL << 30))
+ static unsigned long hpage_pmd_size;
+diff --git a/tools/testing/selftests/mm/ksm_tests.c b/tools/testing/selftests/mm/ksm_tests.c
+index 5fd7792a0d47..6711f4c61371 100644
+--- a/tools/testing/selftests/mm/ksm_tests.c
++++ b/tools/testing/selftests/mm/ksm_tests.c
+@@ -15,7 +15,6 @@
+ #include "kselftest.h"
+ #include <include/vdso/time64.h>
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define KSM_SYSFS_PATH "/sys/kernel/mm/ksm/"
+ #define KSM_FP(s) (KSM_SYSFS_PATH s)
+diff --git a/tools/testing/selftests/mm/migration.c b/tools/testing/selftests/mm/migration.c
+index f19d53c69576..a35e2b57e05b 100644
+--- a/tools/testing/selftests/mm/migration.c
++++ b/tools/testing/selftests/mm/migration.c
+@@ -5,7 +5,6 @@
+  */
+ 
+ #include "kselftest_harness.h"
+-#include "hugepage_settings.h"
+ 
+ #include <string.h>
+ #include <pthread.h>
+@@ -16,6 +15,7 @@
+ #include <sys/types.h>
+ #include <signal.h>
+ #include <time.h>
++
+ #include "vm_util.h"
+ 
+ #define TWOMEG		(2<<20)
+diff --git a/tools/testing/selftests/mm/pagemap_ioctl.c b/tools/testing/selftests/mm/pagemap_ioctl.c
+index eadc7159ca5b..0c5de6ec06c8 100644
+--- a/tools/testing/selftests/mm/pagemap_ioctl.c
++++ b/tools/testing/selftests/mm/pagemap_ioctl.c
+@@ -24,7 +24,6 @@
+ 
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #define PAGEMAP_BITS_ALL		(PAGE_IS_WPALLOWED | PAGE_IS_WRITTEN |	\
+ 					 PAGE_IS_FILE | PAGE_IS_PRESENT |	\
+diff --git a/tools/testing/selftests/mm/prctl_thp_disable.c b/tools/testing/selftests/mm/prctl_thp_disable.c
+index 82c6e96ea6eb..f9ec1408a6e3 100644
+--- a/tools/testing/selftests/mm/prctl_thp_disable.c
++++ b/tools/testing/selftests/mm/prctl_thp_disable.c
+@@ -14,7 +14,6 @@
+ #include <sys/wait.h>
+ 
+ #include "kselftest_harness.h"
+-#include "hugepage_settings.h"
+ #include "vm_util.h"
+ 
+ #ifndef PR_THP_DISABLE_EXCEPT_ADVISED
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index ae6e1530b354..b7882ab97683 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -45,8 +45,8 @@
+ #include <unistd.h>
+ #include <sys/ptrace.h>
+ #include <setjmp.h>
++#include <mm/hugepage_settings.h>
+ 
+-#include "hugepage_settings.h"
+ #include "pkey-helpers.h"
+ 
+ u64 shadow_pkey_reg;
+diff --git a/tools/testing/selftests/mm/soft-dirty.c b/tools/testing/selftests/mm/soft-dirty.c
+index 5f278913c4d7..7f649b673355 100644
+--- a/tools/testing/selftests/mm/soft-dirty.c
++++ b/tools/testing/selftests/mm/soft-dirty.c
+@@ -9,7 +9,6 @@
+ 
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define PAGEMAP_FILE_PATH "/proc/self/pagemap"
+ #define TEST_ITERATIONS 10000
+diff --git a/tools/testing/selftests/mm/split_huge_page_test.c b/tools/testing/selftests/mm/split_huge_page_test.c
+index 5b0f77d12756..0e083ab71af6 100644
+--- a/tools/testing/selftests/mm/split_huge_page_test.c
++++ b/tools/testing/selftests/mm/split_huge_page_test.c
+@@ -21,7 +21,6 @@
+ #include <time.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ uint64_t pagesize;
+ unsigned int pageshift;
+diff --git a/tools/testing/selftests/mm/thuge-gen.c b/tools/testing/selftests/mm/thuge-gen.c
+index 50d0805b65db..a04f588df780 100644
+--- a/tools/testing/selftests/mm/thuge-gen.c
++++ b/tools/testing/selftests/mm/thuge-gen.c
+@@ -14,7 +14,6 @@
+ #include <string.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ #if !defined(MAP_HUGETLB)
+ #define MAP_HUGETLB	0x40000
+diff --git a/tools/testing/selftests/mm/transhuge-stress.c b/tools/testing/selftests/mm/transhuge-stress.c
+index 8eb0c5630e7e..96f72898ebe0 100644
+--- a/tools/testing/selftests/mm/transhuge-stress.c
++++ b/tools/testing/selftests/mm/transhuge-stress.c
+@@ -17,7 +17,6 @@
+ #include <sys/mman.h>
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ int backing_fd = -1;
+ int mmap_flags = MAP_ANONYMOUS | MAP_NORESERVE | MAP_PRIVATE;
+diff --git a/tools/testing/selftests/mm/uffd-common.h b/tools/testing/selftests/mm/uffd-common.h
+index 92a21b97f745..0723843a7626 100644
+--- a/tools/testing/selftests/mm/uffd-common.h
++++ b/tools/testing/selftests/mm/uffd-common.h
+@@ -37,7 +37,6 @@
+ 
+ #include "kselftest.h"
+ #include "vm_util.h"
+-#include "hugepage_settings.h"
+ 
+ #define UFFD_FLAGS	(O_CLOEXEC | O_NONBLOCK | UFFD_USER_MODE_ONLY)
+ 
+diff --git a/tools/testing/selftests/mm/uffd-wp-mremap.c b/tools/testing/selftests/mm/uffd-wp-mremap.c
+index c973d6722720..eb4b2433b00e 100644
+--- a/tools/testing/selftests/mm/uffd-wp-mremap.c
++++ b/tools/testing/selftests/mm/uffd-wp-mremap.c
+@@ -7,8 +7,8 @@
+ #include <assert.h>
+ #include <linux/mman.h>
+ #include <sys/mman.h>
++#include <mm/hugepage_settings.h>
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ #include "uffd-common.h"
+ 
+ static int pagemap_fd;
+diff --git a/tools/testing/selftests/mm/va_high_addr_switch.c b/tools/testing/selftests/mm/va_high_addr_switch.c
+index e24d7ba00b44..5a354a664d1f 100644
+--- a/tools/testing/selftests/mm/va_high_addr_switch.c
++++ b/tools/testing/selftests/mm/va_high_addr_switch.c
+@@ -11,7 +11,6 @@
+ 
+ #include "vm_util.h"
+ #include "kselftest.h"
+-#include "hugepage_settings.h"
+ 
+ /*
+  * The hint addr value is used to allocate addresses
 diff --git a/tools/testing/selftests/mm/vm_util.h b/tools/testing/selftests/mm/vm_util.h
-index 62f6f5b42649..fe0475f2bdf2 100644
+index fe0475f2bdf2..64a86e8a0c41 100644
 --- a/tools/testing/selftests/mm/vm_util.h
 +++ b/tools/testing/selftests/mm/vm_util.h
-@@ -8,6 +8,7 @@
- #include <unistd.h> /* _SC_PAGESIZE */
+@@ -9,6 +9,7 @@
  #include "kselftest.h"
  #include <linux/fs.h>
-+#include <mm/file_utils.h>
+ #include <mm/file_utils.h>
++#include <mm/hugepage_settings.h>
  
  #define BIT_ULL(nr)                   (1ULL << (nr))
  #define PM_SOFT_DIRTY                 BIT_ULL(55)
-@@ -166,12 +167,6 @@ int unpoison_memory(unsigned long pfn);
- #define PAGEMAP_PRESENT(ent)	(((ent) & (1ull << 63)) != 0)
- #define PAGEMAP_PFN(ent)	((ent) & ((1ull << 55) - 1))
- 
--int write_file(const char *path, const char *buf, size_t buflen);
--int read_file(const char *path, char *buf, size_t buflen);
--int read_num(const char *path, unsigned long *num);
--int write_num(const char *path, unsigned long num);
--int write_num_ignore_einval(const char *path, unsigned long num);
--
- void shm_limits_prepare(unsigned long length);
- void __shm_limits_restore(void);
- 
 -- 
 2.53.0
 
