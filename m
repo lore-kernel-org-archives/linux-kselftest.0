@@ -1,38 +1,37 @@
-Received: from mta1.migadu.com (out-13.mta1.migadu.com [95.215.58.13])
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC3C342509
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 11:03:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66081345CCE
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 11:04:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788174237; cv=none; b=aYoEaFQb1RmPT32m+epnFNcKJWF0ECirGaNXKCDBrE8ws/GpzXXUTRwyNyN8qx6Ks+aumfFSy9U4WfSUqTQfuGUEgI4pkGcjvZf6imCB/UOjjHjN73O7tpZaOZJJSGmPbPE8lkl2HLQXipSVQDO8wBGll4bU+CstH/M96Rb1XNc=
+	t=1788174266; cv=none; b=RcHTpf+azLOIoRnm2KxpJBKwKi1/qC9q9zq1ypHPS8cs5jA73K1Dugd7rf4ORcbM/sFOMyVtX49fGRmTwEeDyIreBDL8tcBeU2YBLADCDI+9YTGyE0iX4nNIpj+yi215Z7gTnZRQwftoZkieqoPD/Rp+k6WHJW7ocbXhG7HhSGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788174237; c=relaxed/simple;
-	bh=ChU7rLrz5Ly5f6u8c+cGt26nIjegz2kM1bSEHnszRUA=;
+	s=arc-20240116; t=1788174266; c=relaxed/simple;
+	bh=MZqBEMfNU2/DRjrc3AMVWf0ULkLuJij9FfiG6ryc5V8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oycDnOjVFbpD3MEh/6tEHPAnW7I5C5zqQT5x9KC6uZleIk9gwhpL1IxmgkUY/FL0PbYh6YbEHFpUhw1GSgxVdj8ex6q/e0Bxn55wXx9pcQOE5OZi6rBgOK4hSdDFshJ8hxjWsXG/BZOttDhXKM0qmUk6isce1bYRNf7SG7fmklk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=jmwFNBib; arc=none smtp.client-ip=95.215.58.13
+	 MIME-Version; b=M031MVEDmuADo+1WT0PPg9ZN16rB935Xkfyytt5uFntBpAEmCNOQ+egqIUymZnn5PO9o2edT0QjJWmgtZrFGgz9ALxgYULuOiICxTfsk8BgSPnwlZhXp0rdfae7O3OJ/lpySUG0t8mOhOWwLaKlxNSpHVAKNe+L22UnrRuVZqxY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KpYUG7yq; arc=none smtp.client-ip=91.218.175.238
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="jmwFNBib"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KpYUG7yq"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ChU7rLrz5Ly5f6u8c+cGt26nIjegz2kM1bSEHnszRUA=;
+DKIM-Signature: a=rsa-sha256; bh=MZqBEMfNU2/DRjrc3AMVWf0ULkLuJij9FfiG6ryc5V8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788174234; v=1; x=1788779034;
- b=jmwFNBibWAk20ARxYY5i/Yk8K8RAIQPX/aRb+6F9DgC4ddC+HGw6D85H9hQIgS5KZcTaQ/BH
- PCPU62Nghsr/aTvAKVTTZqMSrd++WNzlnxDVUo+0BfvITOSDc1q3YsK2MqAsXBXuq/I4CcN2Iwu
- t2EvpIrr7GJyTg2uKyHqFRCw=
+ t=1788174262; v=1; x=1788779062;
+ b=KpYUG7yqA8PxyNjuVonHFmdmaFQBPMJJ4vKHHly5NqvHIRPj4CFGGGn/B18nTXGrd5HwgRap
+ 1t4GY1TQDz6Ubrbw1Z0qyRT06mfwnA1gRBj/vku29DCQtdlN5zGXeo4EUqzCKfRQFia8I8T2k1L
+ CprDNc/7cw0iGOVt3VaNy3Vs=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 27ca0f8a3d15d337;
-	Mon, 31 Aug 2026 11:03:53 +0000
-X-Mizu-Trace-ID: 27ca0f8a3d15d337
+Received: by smtp.migadu.com with ESMTPS id b7e16e44ec0b80f5;
+	Mon, 31 Aug 2026 11:04:21 +0000
+X-Mizu-Trace-ID: b7e16e44ec0b80f5
 X-Migadu-Flow: FLOW_OUT
 From: Jiayuan Chen <jiayuan.chen@linux.dev>
 To: bpf@vger.kernel.org
 Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
-	syzbot+37b56485bbbf90ad8489@syzkaller.appspotmail.com,
 	Alexei Starovoitov <ast@kernel.org>,
 	Daniel Borkmann <daniel@iogearbox.net>,
 	Andrii Nakryiko <andrii@kernel.org>,
@@ -49,9 +48,9 @@ Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
 	Alan Maguire <alan.maguire@oracle.com>,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf v3 1/5] bpf: Reject key-less BTF for hash maps
-Date: Mon, 31 Aug 2026 19:01:06 +0800
-Message-ID: <20260831110314.150870-2-jiayuan.chen@linux.dev>
+Subject: [PATCH bpf v3 2/5] bpf: Fix NULL-ptr-deref when showing a void BTF type
+Date: Mon, 31 Aug 2026 19:01:07 +0800
+Message-ID: <20260831110314.150870-3-jiayuan.chen@linux.dev>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20260831110314.150870-1-jiayuan.chen@linux.dev>
 References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
@@ -63,73 +62,65 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-map_check_btf() allows a key-less BTF (btf_key_type_id == 0) only for
-maps that have a ->map_check_btf callback, and leaves the actual
-decision to that callback. Hash maps used to have no ->map_check_btf,
-so a key-less BTF was rejected outright.
+btf_modifier_show() resolves the modifier and then calls
+btf_type_ops(t)->show() unconditionally. For the void type (type_id 0,
+BTF_KIND_UNKN) kind_ops[] has no entry, so ->show is NULL.
 
-That changed when htab and rhtab gained a ->map_check_btf to register a
-dtor - htab in commit 1df97a7453ee ("bpf: Register dtor for freeing
-special fields") and rhtab in commit 6905f8601298 ("bpf: Allow special
-fields in resizable hashtab"). Neither looks at the key, so a key-less
-hash map now passes map_check_btf() and gets created. Reading it back
-through bpffs feeds the key type_id 0 into btf_type_seq_show();
-btf_type_by_id() returns the void type, kind_ops[BTF_KIND_UNKN] is NULL,
-and btf_type_show() dereferences it:
+The map dump path cannot reach a void type (a map key/value must have a
+size and void has none), but bpf_snprintf_btf() takes a type_id straight
+from the BPF program, and a "const void" (a modifier that resolves to
+void, present in the vmlinux BTF) NULL-derefs there:
 
 KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
-RIP: 0010:btf_type_show+0x223/0x2e0 kernel/bpf/btf.c:8232
+RIP: 0010:btf_modifier_show (kernel/bpf/btf.c:2914)
 Call Trace:
  <TASK>
- btf_type_seq_show_flags+0xca/0x120 kernel/bpf/btf.c:8250
- htab_map_seq_show_elem+0x12e/0x350 kernel/bpf/hashtab.c:1669
- map_seq_show+0x13d/0x1e0 kernel/bpf/inode.c:293
- seq_read_iter+0x93f/0x1270 fs/seq_file.c:196
- seq_read+0x344/0x4d0 fs/seq_file.c:163
- vfs_read+0x1e4/0xb40 fs/read_write.c:572
- __x64_sys_pread64+0x1eb/0x250 fs/read_write.c:769
- do_syscall_64+0x123/0x790 arch/x86/entry/syscall_64.c:84
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
+ btf_type_show (kernel/bpf/btf.c:8251)
+ btf_type_snprintf_show (kernel/bpf/btf.c:8321)
+ bpf_snprintf_btf (kernel/trace/bpf_trace.c:1047)
+ bpf_prog_test_run_raw_tp (net/bpf/test_run.c:829)
+ __sys_bpf (kernel/bpf/syscall.c:4804)
+ do_syscall_64 (arch/x86/entry/syscall_64.c:94)
+ entry_SYSCALL_64_after_hwframe (arch/x86/entry/entry_64.S:121)
  </TASK>
 
-Reject a key-less BTF in htab_map_check_btf() and rhtab_map_check_btf(),
-restoring the previous behavior.
+void has no size, so there is nothing to render - not even a byte length
+to fall back to dumping as raw hex. btf_df_show() is already the ->show
+for the other kinds that carry no value to print - FWD, FUNC, FUNC_PROTO,
+FLOAT and DECL_TAG - and emits an "<unsupported kind:N>" placeholder;
+void belongs to the same group and only lacks a show op because it has
+no kind_ops[] entry at all. Fall back to btf_df_show() in
+btf_modifier_show() when the resolved type has no show op, so a void type
+prints that placeholder instead of crashing; bpf_snprintf_btf() then
+returns the length as usual.
 
-Fixes: 1df97a7453ee ("bpf: Register dtor for freeing special fields")
-Fixes: 6905f8601298 ("bpf: Allow special fields in resizable hashtab")
-Reported-by: syzbot+37b56485bbbf90ad8489@syzkaller.appspotmail.com
-Closes: https://lore.kernel.org/all/6a8f4e88.27659fcc.2ceef7.0008.GAE@google.com/T/
+Fixes: c4d0bfb45068 ("bpf: Add bpf_snprintf_btf helper")
 Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
 ---
- kernel/bpf/hashtab.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ kernel/bpf/btf.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-diff --git a/kernel/bpf/hashtab.c b/kernel/bpf/hashtab.c
-index d40cb5dd446c..43123424183c 100644
---- a/kernel/bpf/hashtab.c
-+++ b/kernel/bpf/hashtab.c
-@@ -530,6 +530,10 @@ static int htab_map_check_btf(struct bpf_map *map, const struct btf *btf,
- {
- 	struct bpf_htab *htab = container_of(map, struct bpf_htab, map);
+diff --git a/kernel/bpf/btf.c b/kernel/bpf/btf.c
+index 91b8ce77f699..6e267c4c4e1f 100644
+--- a/kernel/bpf/btf.c
++++ b/kernel/bpf/btf.c
+@@ -2911,7 +2911,15 @@ static void btf_modifier_show(const struct btf *btf,
+ 	else
+ 		t = btf_type_skip_modifiers(btf, type_id, NULL);
  
-+	/* Hash maps have no use for a key-less BTF. */
-+	if (btf_type_is_void(key_type))
-+		return -EINVAL;
-+
- 	if (htab_is_prealloc(htab))
- 		return 0;
- 	/*
-@@ -3110,6 +3114,10 @@ static int rhtab_map_check_btf(struct bpf_map *map, const struct btf *btf,
- {
- 	struct bpf_rhtab *rhtab = container_of(map, struct bpf_rhtab, map);
- 
-+	/* Hash maps have no use for a key-less BTF. */
-+	if (btf_type_is_void(key_type))
-+		return -EINVAL;
-+
- 	return bpf_ma_set_dtor(map, &rhtab->ma, rhtab_mem_dtor);
+-	btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
++	/*
++	 * A modifier can resolve to the void type (e.g. "const void"), which
++	 * has no show op (kind_ops[BTF_KIND_UNKN] is NULL). Print a placeholder
++	 * instead of dereferencing NULL.
++	 */
++	if (!btf_type_ops(t))
++		btf_df_show(btf, t, type_id, data, bits_offset, show);
++	else
++		btf_type_ops(t)->show(btf, t, type_id, data, bits_offset, show);
  }
  
+ static void btf_var_show(const struct btf *btf, const struct btf_type *t,
 -- 
 2.43.0
 
