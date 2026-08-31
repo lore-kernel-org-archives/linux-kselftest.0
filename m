@@ -1,79 +1,103 @@
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta0.migadu.com (out-149.mta0.migadu.com [91.218.175.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6122F39E18E;
-	Mon, 31 Aug 2026 12:25:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E29E33F58C4
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 12:27:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788179104; cv=none; b=uVtfA6lXVYY3Ez+AvmyhIFBwSfKNbOww7WbovcTs4PYvYXfH99KF2chhvsJCpddwVPMepqSkWXxmjLWXhKbq+98P2BUDihSYb4S4tbpEHc4rzDS5556Js8260ptX4UwCr5jXPLZLF6ST1SuZGTBJVHe65zkFd9Z3ex6HLF8v8tk=
+	t=1788179242; cv=none; b=IZFxk9voikzOZxqDRofE467Ey1fcFvD1iv2MHcb9m1M//DEMnwXewCgkTAbi00ahRdrYj51zAszpvklrBu9R7YDcT2OhZJ3WfjyUbItRXSL7nPHxsD6rYCF8OFjb2P442c7mHGC5qvWARd3tvqhJDxwr3f8x+lm+L8662IvmNzk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788179104; c=relaxed/simple;
-	bh=92Dktz3O1/NeWOrWpX3w2XgG/Kc78Uz1DWk1gtB3YMs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B5QHaLpWRsdkgP7GaobIQTeH6rVILq8L2ruo7uTocUgQjKqap5DgpRwOymf1PYwLZmTUczhulLu1BEk0r9wjBrTP7Skzxe7GNYSbA31koPBlpb9holJ3L7xrWR/cEHFQkVszONrv/9UeUCKb+9IMfrahMdXalAWjZBcybLdzL9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=0EHLdMX/; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+	s=arc-20240116; t=1788179242; c=relaxed/simple;
+	bh=OhUAGuLpEUtGnu4qFuSxitUETrm9FnNYjqGDp4Zm3Sg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ea3AwBjiOhuSgz3ym7H7y8ebhFdrbNgfpTUaDmS+1vPI+Yk45D8GQouoC6WuLmdBBoVQv8tkzBJXhGMhbHJXLYJHrTWK7IZ4HFzKe42bl3A9fV4riDS8ltbe3vGuratOyCzHbBemkprVTOvLYJWLc/HjJWhBFKhXnF3F2VeL6ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=UcFJ+UhH; arc=none smtp.client-ip=91.218.175.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="0EHLdMX/"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=m2bADue0yCfwoX5RvqAmX+NEGjvFSd8DhdCtcGeF6sA=; b=0EHLdMX/X8ToTEy1qWkwgtxf7+
-	3zRE66qSd93dnWDfJRNZjYo4zuD+/N7uoKEuvPkHBUI2sjXM2y+gX3qxQTZRnPbIgVzZPDvLFYHhi
-	MNWmLlsqn9nJQma+sv1hQQplkEXRsGlquth48vQmahcgfi0Etifc/SGCYnmUJrMLVZOk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1x114I-002AkG-KH; Mon, 31 Aug 2026 14:24:54 +0200
-Date: Mon, 31 Aug 2026 14:24:54 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net-next 1/2] netdevsim: add link speed support
-Message-ID: <043abd17-c896-40a7-901d-a3fc943151bc@lunn.ch>
-References: <20260831-nsim_speed-v1-0-7a651ee65738@kylinos.cn>
- <20260831-nsim_speed-v1-1-7a651ee65738@kylinos.cn>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="UcFJ+UhH"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=OhUAGuLpEUtGnu4qFuSxitUETrm9FnNYjqGDp4Zm3Sg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788179238; v=1; x=1788784038;
+ b=UcFJ+UhHE04pM3wJToZLi1qJpHoz9wCESCjXPucx4341eJfBGgN+v4c8uds52U/PTnODz8Jf
+ UW44Eg8FpyuxbDvkF2umebTsEJ3vaJaRtaUURmdqhovSDBCMZhV7W41TDUQGz39D4VYSolFXFO4
+ vXAw6w5Gv0aeg0m3Tr4GWFC0=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 6820a5db4ae73fcc;
+	Mon, 31 Aug 2026 12:27:18 +0000
+X-Mizu-Trace-ID: 6820a5db4ae73fcc
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <309536ab-86b3-47a6-a420-c460447f6c46@linux.dev>
+Date: Mon, 31 Aug 2026 20:27:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831-nsim_speed-v1-1-7a651ee65738@kylinos.cn>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf v3 1/5] bpf: Reject key-less BTF for hash maps
+To: bot+bpf-ci@kernel.org, jiayuan.chen@linux.dev, bpf@vger.kernel.org
+Cc: syzbot+37b56485bbbf90ad8489@syzkaller.appspotmail.com, ast@kernel.org,
+ daniel@iogearbox.net, andrii@kernel.org, eddyz87@gmail.com,
+ memxor@gmail.com, martin.lau@linux.dev, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, shuah@kernel.org, yatsenko@meta.com,
+ alan.maguire@oracle.com, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, martin.lau@kernel.org, mason@kernel.org
+References: <20260831110314.150870-2-jiayuan.chen@linux.dev>
+ <9ed4c84cc7d723627f10b9b5d1dafb9b72d3e0bcff6db149d7605f5d9ad8c7b1@mail.kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <9ed4c84cc7d723627f10b9b5d1dafb9b72d3e0bcff6db149d7605f5d9ad8c7b1@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-> +static int nsim_get_link_ksettings(struct net_device *dev,
-> +				   struct ethtool_link_ksettings *cmd)
-> +{
-> +	struct netdevsim *ns = netdev_priv(dev);
-> +
-> +	cmd->base.speed		= ns->ethtool.speed;
-> +	cmd->base.duplex	= ns->ethtool.duplex;
-> +	cmd->base.port		= PORT_OTHER;
-> +	cmd->base.autoneg	= AUTONEG_DISABLE;
 
-Here you hard code autoneg as disabled.
+在 8/31/26 8:05 PM, bot+bpf-ci@kernel.org 写道:
+>> map_check_btf() allows a key-less BTF (btf_key_type_id == 0) only for
+>> maps that have a ->map_check_btf callback, and leaves the actual
+>> decision to that callback. Hash maps used to have no ->map_check_btf,
+>> so a key-less BTF was rejected outright.
+>>
+>> That changed when htab and rhtab gained a ->map_check_btf to register a
+>> dtor - htab in commit 1df97a7453ee ("bpf: Register dtor for freeing
+>> special fields") and rhtab in commit 6905f8601298 ("bpf: Allow special
+>> fields in resizable hashtab"). Neither looks at the key, so a key-less
+>> hash map now passes map_check_btf() and gets created. Reading it back
+>> through bpffs feeds the key type_id 0 into btf_type_seq_show();
+>> btf_type_by_id() returns the void type, kind_ops[BTF_KIND_UNKN] is NULL,
+>> and btf_type_show() dereferences it:
+>>
+>> KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+>> RIP: 0010:btf_type_show+0x223/0x2e0 kernel/bpf/btf.c:8232
+>> Call Trace:
+>>   <TASK>
+>>   btf_type_seq_show_flags+0xca/0x120 kernel/bpf/btf.c:8250
+>>   htab_map_seq_show_elem+0x12e/0x350 kernel/bpf/hashtab.c:1669
+>>   map_seq_show+0x13d/0x1e0 kernel/bpf/inode.c:293
+>>   seq_read_iter+0x93f/0x1270 fs/seq_file.c:196
+>>   seq_read+0x344/0x4d0 fs/seq_file.c:163
+>>   vfs_read+0x1e4/0xb40 fs/read_write.c:572
+>>   __x64_sys_pread64+0x1eb/0x250 fs/read_write.c:769
+>>   do_syscall_64+0x123/0x790 arch/x86/entry/syscall_64.c:84
+>>   entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>>   </TASK>
+> The call trace appears to be edited from the original syzbot report.
+> The original report (6a8f4e88.27659fcc.2ceef7.0008.GAE@google.com)
+> includes these additional frames between map_seq_show and seq_read_iter:
+>
+>    traverse.part.0.constprop.0+0x107/0x650 fs/seq_file.c:112
+>    traverse fs/seq_file.c:99 [inline]
+>
+> and also includes the inline frames for the pread64 syscall path:
+>
+>    ksys_pread64 fs/read_write.c:760 [inline]
+>    __do_sys_pread64 fs/read_write.c:769 [inline]
+>    __se_sys_pread64 fs/read_write.c:766 [inline]
 
-> +static int nsim_set_link_ksettings(struct net_device *dev,
-> +				   const struct ethtool_link_ksettings *cmd)
-> +{
-> +	struct netdevsim *ns = netdev_priv(dev);
-> +
-> +	if (cmd->base.speed > NSIM_LINK_SPEED_MAX)
-> +		return -EINVAL;
-> +
-> +	return ethtool_virtdev_set_link_ksettings(dev, cmd, &ns->ethtool.speed,
-> +						  &ns->ethtool.duplex);
 
-but here you don't appear to block enabling autoneg. I would expect a
-test and EOPNOTSUPP.
+I edited it intentional‌ly to avoid breaking the format rule.
 
-     Andrew
+
