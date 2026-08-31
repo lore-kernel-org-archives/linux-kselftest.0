@@ -1,156 +1,166 @@
-Received: from mta1.migadu.com (out-81.mta1.migadu.com [95.215.58.81])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9376D391E52
-	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 21:12:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87D833B058F
+	for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 21:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788210776; cv=none; b=mUoUdKu2LbH9vzBBj3gwIDB45RR2etfNYRWtUKogxocelDzNLO2zz57Pe3ahkz1JgKMxqyUMChjtQxK5ph393UcWDV+vADFDo+aaeLMIRUYpD23AHh9/mwGv8zYvroTC/j/i1DCWC2saC9oWXT++me2Xn1o7PI40spD2V/ilQV4=
+	t=1788213118; cv=none; b=HvE5HTrt2P5g2W6r/ThrQVXJqJ18Zz2P4JGylVyaR55kORD2dcd3ANuaqcRhIdD9+7BkHn6fc9nF3DmbIInMs037bJSzGsy8zFTuXoW2EoiXGVvOXt8bfnYsM/mrTa8cX6yaJQEuUP0SXWKhBVBlAho9ghbD7c/bucAVkvnNYr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788210776; c=relaxed/simple;
-	bh=DqVyQybPlXg+s2kQKu0tCcmbPDkd24Q8nMn47uMGMhY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ohWdrVXXM3HlvWQGAGpp38g5K1GpUG41M4Y5zmyuOprAra19Yvi0hqoHZJu/Jq+PHh1GFrOYBUz9OXarBWNMTGTgR9XAwXrxJRUigD8XTXIoOAA4ipPGCalA86UKn1MomwjMVLAaTB+KTkDTzzl0cfRqDSeFQXd7qA+ApogTHmI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=BK5hAmQk; arc=none smtp.client-ip=95.215.58.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788213118; c=relaxed/simple;
+	bh=wMZRcjI+OWyvem2irRl2drG2Q+YoShdAEnweMvtF1GI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=heHQb5cf8sAwrILy/zDnHXwNBuLU8evci+WAsKsB3vJIXzodQovNl6vtRGMZ9a3tuSUkhPf3Om2YnPcgYfpsARQ+ToodChq+5t0JNhn1B7hv//bpYxQxRDHWVPZRFmFQj9AWmGXgvMcHLpafISvqbkwhYctiiWp6JyStK8UgV7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=qK7RUyO6; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="BK5hAmQk"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=DqVyQybPlXg+s2kQKu0tCcmbPDkd24Q8nMn47uMGMhY=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788210772; v=1; x=1788815572;
- b=BK5hAmQkwqXU8WrJ3u4/4aVKHmrO77U/qcCnQR9RiS+oPTbSMiv9YMq3HGiw/bzo8BVI7sS7
- oUXs5oIH/BNwyAhc+g+NxANtDNKy04bG1S0I+J0tVAX5eiWKc50IG20b9P7OsH513qFTqw8UU6M
- i/BXGAe+FdUX1KabiKELbm8A=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id df5b3ac7151158ec;
-	Mon, 31 Aug 2026 21:12:42 +0000
-X-Mizu-Trace-ID: df5b3ac7151158ec
-X-Migadu-Flow: FLOW_OUT
-Message-ID: <ec3306be-29d3-49e6-8653-0579007774db@linux.dev>
-Date: Mon, 31 Aug 2026 14:12:36 -0700
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="qK7RUyO6"
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5b5e1340faeso118979e87.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 14:51:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788213112; x=1788817912; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=cGKaO6KKnr5SuBGCN5zxoUeuXnRrk7kBjvDdBLu0U8g=;
+        b=qK7RUyO6LaPAyMU+uG42Wm+Sybo3RbgEekiOUcO3nW4Br4h5wi6tZ3OQX2g8nfghJe
+         AQN+27d0ewmNm/QsDg6KqTxkOIWxuzbcicq92Tj1g9j+3XQtZhfC3L+wJ1nGs5GO7dAe
+         XeQWnCsvv9yyC0XCUyz3l4ZoxArsGUYtdVPEU8j02dd0rSwx6TJ2GiZ0weT/oXhI99ib
+         GH5Qx5AOzK64bKLMnQyXhFuIlGw1AizzBF9cfIMcre042vvxh8KyyzQkjLh3lj++zES5
+         GpoAaEJbN+RyHD5DL0jBWBFkLknfW18NmdtIPA9b/46EgpUxi0Iz61z6ChLmfSxakWuN
+         KCwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788213112; x=1788817912;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=cGKaO6KKnr5SuBGCN5zxoUeuXnRrk7kBjvDdBLu0U8g=;
+        b=gkH/6BdEIIbN5NhhL7Ko7xxpuzvXIn4kmAsIgRfWI0Jp5SoMtL8e5+VcGDDTP0T0mp
+         OfOC6oqRghC5Cv4aQdfu+VdxPDFPUel9AUTJFxpVvcvF0WfLhHBitblvXdEFHRowQH37
+         ueFExjkyh/8rJyiyqx9tQxcJSAa03H38KyDqWJ1y1gbiuWdUDVBTVb4U76LsetTOCyRu
+         xXk9WlScrgdDHgacHrxJO+uakNyIZXOSNJsqLDk4GBIL/XsibrJ25pLgQUyUGWYazoVy
+         CkrFZnsQvG2uKtD41nlVXw98k3iep7ijP5iI1s6IebclgD+xdjwt9EyssWEszf5TJe8B
+         78KQ==
+X-Forwarded-Encrypted: i=1; AKwUvBw5HKBOFWCguGZPsU9Dk7o5N543WpcAt7qzOKEtvdQHzdoRhjLCtdNonAlAwcDAIfm03vYrYuBkHJcnf705jP8=@vger.kernel.org
+X-Gm-Message-State: AFuF++l7q0vTCKkKFVz4aqwvE4pjDCW/Q1bLtLjrqgvaeSSqbvWPBfah
+	sA6UmT0SVHjW7EqihqLaPX2vlQXl4mhWrDQ8fHged0ux8UEIbQC1llI4
+X-Gm-Gg: AYBFou0fIAXEllSevyB2czhoR7H243HN6C4erZasI/8maI+PsCi9HCL4nQDREafiRHF
+	4umlI/RlmQFVm3Opmtew3fnrElY+IKWvjl5aocg1xx4l4jwq+/4Qr2/cu+RpKrTobAKWVD6IIp4
+	N2YgjYg9lfhCxqUk+R4eGDtGxnhNaVnlk0I1+zZl0vUmj7EIIF2hyzPAX2x9lPDT5ZirNms5H0F
+	i1xwkFu3lt9IZxhEIfJB5xP+DvhO6h5zXFbO8DPoaQIytw4gUfnkFnLY+poPW/ff9DRrXdoLyaI
+	ri7pnMNMEkW/59aEPrdDY9rL1W+YaTEJrSXjJoYrBEtfJL6To4PbqRFRZWriSnbgPvZp+JUQM/H
+	MfNU3kGTNtoUU7XDZE4FQwtIrfB4VZqsbdGsgc2LmKgiSa9qLc8bZOb7vi8KfJSZcPEwMOBh5kf
+	wlRjH+uMFYsaWOhQV8ErcLvr6qOqOXYM3rKr0cANiltDUF5BnGHuK7jmkQUDrGgOqztRndrlaAQ
+	Nbmacr20V7QixzW5fnkw612tEk8bq+4Tg==
+X-Received: by 2002:a05:6512:15a3:b0:5b4:a388:63a with SMTP id 2adb3069b0e04-5b5e68a73f1mr8750331e87.4.1788213112244;
+        Mon, 31 Aug 2026 14:51:52 -0700 (PDT)
+Received: from dau-home-pc.. ([212.35.184.237])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5b5e8a06a77sm2388782e87.48.2026.08.31.14.51.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Aug 2026 14:51:50 -0700 (PDT)
+From: Anton Danilov <littlesmilingcloud@gmail.com>
+To: netdev@vger.kernel.org
+Cc: "David S . Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	David Ahern <dsahern@kernel.org>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next 00/11] tunnels: add core and gre drop reasons
+Date: Tue,  1 Sep 2026 00:51:26 +0300
+Message-ID: <20260831215137.549324-1-littlesmilingcloud@gmail.com>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH bpf v3 4/5] selftests/bpf: Add test for key-less BTF hash
- map
-To: Jiayuan Chen <jiayuan.chen@linux.dev>, bpf@vger.kernel.org
-Cc: Alexei Starovoitov <ast@kernel.org>,
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>,
- Eduard Zingerman <eddyz87@gmail.com>,
- Kumar Kartikeya Dwivedi <memxor@gmail.com>,
- Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
- Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
- Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
- Mykyta Yatsenko <yatsenko@meta.com>, Alan Maguire <alan.maguire@oracle.com>,
- linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-References: <20260831110314.150870-1-jiayuan.chen@linux.dev>
- <20260831110314.150870-5-jiayuan.chen@linux.dev>
-Content-Language: en-US
-From: Ihor Solodrai <ihor.solodrai@linux.dev>
-In-Reply-To: <20260831110314.150870-5-jiayuan.chen@linux.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/31/26 4:01 AM, Jiayuan Chen wrote:
-> Create a hash and an rhash map with btf_key_type_id == 0 and expect
-> bpf_map_create() to fail with -EINVAL; a positive control with a real
-> key type confirms the rejection is about the key-less BTF. On an unfixed
-> kernel the map is created, and the test pins and reads it back to walk
-> the bpffs dump path, which reproduces the btf_type_show() NULL-deref - so
-> running it on an unfixed kernel oopses the reading task (and panics it
-> under panic_on_oops).
-> 
-> Signed-off-by: Jiayuan Chen <jiayuan.chen@linux.dev>
-> ---
->  .../bpf/prog_tests/btf_map_keyless.c          | 82 +++++++++++++++++++
->  1 file changed, 82 insertions(+)
->  create mode 100644 tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> new file mode 100644
-> index 000000000000..a7d037f57a7e
-> --- /dev/null
-> +++ b/tools/testing/selftests/bpf/prog_tests/btf_map_keyless.c
-> @@ -0,0 +1,82 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#include <test_progs.h>
-> +#include <bpf/btf.h>
-> +
-> +/*
-> + * A hash map with a key-less BTF (btf_key_type_id == 0) used to NULL-deref in
-> + * btf_type_show() when dumped via bpffs.
-> + * A fixed kernel rejects such a map at creation; on an unfixed kernel the
-> + * pin-and-read below deliberately walks that bpffs dump path, so it doubles
-> + * as a reproducer: it oopses an unfixed kernel (and panics it under
-> + * panic_on_oops).
-> + */
-> +static void check_keyless(int map_type, __u32 map_flags, int btf_fd, int val_id)
-> +{
-> +	LIBBPF_OPTS(bpf_map_create_opts, opts);
-> +	const char *path = "/sys/fs/bpf/keyless_map";
-> +	__u32 key = 1, val = 0x41424344;
-> +	char buf[256];
-> +	int map_fd;
-> +	FILE *f;
-> +
-> +	opts.map_flags = map_flags;
-> +	opts.btf_fd = btf_fd;
-> +	opts.btf_value_type_id = val_id;
-> +
-> +	/*
-> +	 * Positive control: the same map with a real key type must be accepted,
-> +	 * so the -EINVAL below is about the key-less BTF and not some unrelated
-> +	 * rejection (e.g. an unknown map type).
-> +	 */
-> +	opts.btf_key_type_id = val_id;
-> +	map_fd = bpf_map_create(map_type, "keyed_map", 4, 4, 8, &opts);
-> +	if (!ASSERT_GE(map_fd, 0, "keyed create is accepted"))
-> +		return;
-> +	close(map_fd);
-> +
-> +	/* A key-less BTF must be rejected. */
-> +	opts.btf_key_type_id = 0;
-> +	map_fd = bpf_map_create(map_type, "keyless_map", 4, 4, 8, &opts);
-> +
-> +	if (map_fd >= 0) {
-> +		/* Unfixed kernel: reproduce the oops via the bpffs dump path. */
-> +		(void)bpf_map_update_elem(map_fd, &key, &val, 0);
-> +		if (bpf_obj_pin(map_fd, path) == 0) {
-> +			f = fopen(path, "r");
-> +			if (f) {
-> +				while (fgets(buf, sizeof(buf), f))
-> +					;
-> +				fclose(f);
-> +			}
-> +			unlink(path);
-> +		}
-> +		close(map_fd);
-> +	}
+Only vxlan reports drop reasons among the tunnel drivers today.
+Everything else, on both the receive and the transmit side, ends in a
+plain kfree_skb(), so a packet that a tunnel throws away is invisible
+to dropwatch, drop_monitor and perf trace -e skb:kfree_skb. The device
+counters group the failures coarsely: rx_errors and tx_errors each
+cover half a dozen unrelated conditions.
 
-The whole `if (map_fd >= 0) { ... }` block can be dropped.
+This series covers the generic paths shared by ipip, sit, vti, gre and
+their IPv6 counterparts, plus the GRE specific parsing, on both
+directions. A later series will do the same for geneve, bareudp, fou
+and the remaining IP in IP drivers.
 
-If the map has been accepted (0 instead of -EINVAL), it already catches the bug.
-It's unnecessary to reproduce the NULL ptr splat.
+Patches 1-3 convert the generic receive paths, ip_tunnel_rcv() and
+__ip6_tnl_rcv(), and add a test for them. Two reasons are added:
 
-pw-bot: cr
+  IP_TUNNEL_CFG_OPTS_MISMATCH  the options a packet carries do not
+                               match the tunnel configuration
+  IP_TUNNEL_OLD_SEQ            the sequence number is older than the
+                               one the tunnel expects, next to the
+                               existing TCP_OLD_SEQUENCE
 
-Also, I think it would be useful to refactor and extend existing
-selftests that were added for the features (for example an old
-prog_tests/snprintf_btf.c), instead of adding a new test program for
-every regression case. Not a blocker, but an effort in that direction
-would be much appreciated.
+The second one has a failure mode worth naming: when a peer reboots,
+its outgoing sequence number restarts at zero and the receiver drops
+everything until its own counter catches up. That is indistinguishable
+from a misconfiguration by the counters alone.
 
-Thanks!
+Patches 4-7 do the GRE specific receive path. gre_parse_header()
+returns -EINVAL for six different reasons, and the only detail its
+callers could get was a csum_err flag that none of them read: both
+ip_gre and ip6_gre declared it, passed it in and ignored it. It is
+replaced by a drop reason. Three reasons are added, mirroring vxlan:
+GRE_INVALID_HDR, GRE_CSUM and GRE_TUNNEL_NOT_FOUND.
 
-> +
-> +	ASSERT_EQ(map_fd, -EINVAL, "key-less create is rejected");
-> +}
-> +
-> [...]
+Patches 8-11 do the transmit side, about forty failure paths across
+ip_tunnel, ip_gre, ip6_tunnel and ip6_gre. One reason is added,
+IP_TUNNEL_ENCAP, for a failure to build the encapsulation header.
+
+The transmit side has its own case worth naming: tnl_update_pmtu()
+returns -E2BIG after it has already sent an ICMP fragmentation needed
+back, which is path MTU discovery working exactly as intended, yet the
+drop lands in tx_errors next to genuine failures. An MTU black hole
+cannot be told from a broken route by looking at the counters.
+
+Drop reasons on transmit are not new: vxlan already reports several
+from its xmit path, and ip_tunnel_core.c reports RECURSION_LIMIT.
+
+Tested under virtme-ng. The selftest checks twelve cases by the end
+of the series and passes, with no DEBUG_NET splat from the
+SKB_NOT_DROPPED_YET check in sk_skb_reason_drop(). Breaking the new
+mechanisms on purpose makes exactly the corresponding cases fail.
+
+Not covered by the test: GRE_CSUM, which veth cannot trigger since it
+hands the skb over with CHECKSUM_UNNECESSARY, and the NOMEM paths.
+
+Anton Danilov (11):
+  ip_tunnel: add drop reasons to the generic RX path
+  ip6_tunnel: add drop reasons to the generic RX path
+  selftests: net: add a test for the tunnel RX drop reasons
+  gre: make gre_parse_header() report a drop reason
+  ip_gre: add drop reasons to the RX path
+  ip6_gre: add drop reasons to the RX path
+  selftests: net: cover the GRE specific drop reasons
+  ip_tunnel: add drop reasons to the transmit path
+  ip_gre: add drop reasons to the transmit path
+  ip6_tunnel: add drop reasons to the transmit path
+  selftests: net: cover the tunnel transmit drop reasons
+
+ include/net/dropreason-core.h                 |  38 ++
+ include/net/gre.h                             |   2 +-
+ include/net/ip6_tunnel.h                      |   3 +-
+ net/ipv4/gre_demux.c                          |  51 ++-
+ net/ipv4/ip_gre.c                             | 144 +++++---
+ net/ipv4/ip_tunnel.c                          |  60 ++-
+ net/ipv6/ip6_gre.c                            | 163 ++++++---
+ net/ipv6/ip6_tunnel.c                         |  95 +++--
+ tools/testing/selftests/net/Makefile          |   1 +
+ tools/testing/selftests/net/config            |   1 +
+ .../selftests/net/tunnel_drop_reasons.sh      | 346 ++++++++++++++++++
+ 11 files changed, 762 insertions(+), 142 deletions(-)
+ create mode 100755 tools/testing/selftests/net/tunnel_drop_reasons.sh
+
+-- 
+2.47.3
+
