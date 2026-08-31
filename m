@@ -1,76 +1,70 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8D345A2BB;
-	Mon, 31 Aug 2026 15:03:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B50466B70;
+	Mon, 31 Aug 2026 15:06:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788188603; cv=none; b=MwF4gIr4mKiQo3SUO8LqJqsmIbLffylcGA5A2rt27m1/y02zG9IMx8DXmcw1R9HxWWHDmovQBpqVbZtlIdr/qALq9DTxgLHFG8Jl0eLRncoFpyS2kV9HDuOuYIyE/aZvU1KnHehHKD2TlXpcm66kxopEJPqEgAXCP2SKHnBKSwU=
+	t=1788188819; cv=none; b=Cm2oQSY7jA7TmbDYT1AuU71sg0MTMJZ5F6SbV+pDc7kr/hFL0Ff/ZgoFEjz6eBf9vvilPW+mo2ASQjGAdZKIiCPGlQfDFzU35Y0uPzrK106fxwGEeVDiZ5Q5u+M5xXTwFGrjG35eJspefgDed8Kp3DsVw/HAZX8HBGzGLXQS3QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788188603; c=relaxed/simple;
-	bh=NuYwYcdTd63Sl4yThSMVv4RTv7iSb05aGjnVKK3RL1M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=b8voGp0VxGOqdD2UmUYxQNMuPMGW4v/bKKXOHhABV/Mw+ldshkqBu/9umaW4qYWucJoOnCK5iPwkPhNnnLU8z3Ls7UZODkVvgmq+KUg4HxfnSCbsYb/90wZZPTYsaOwS4prQb9EW3tXIEAHLFUOqZeWGrR/Kk5OGAssPRe7ZmNg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UCzEPP0/; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788188819; c=relaxed/simple;
+	bh=wFnNt2jgm5r5DXiy28WZjbTPGQEheVu08ejp0XmG7mU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ddAQxTyAsZHpd8QOCQNMRXhgmkt/1fdOkrhKzMwSmYCwL6i0QR1OY8yLQxiYmyygQgUevQJ76I/6DG7Wy3jLUJgaIvt542zvpjGPXO7oBlNQg68qZl+7bxlO/6i1BGHhcrp6FJGoPAHYLE+rxufGvmCXh+cwy7Amo9oHXw8DHzw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UETTYhjR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UCzEPP0/"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE421F000E9;
-	Mon, 31 Aug 2026 15:03:22 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UETTYhjR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2641A1F000E9;
+	Mon, 31 Aug 2026 15:06:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788188602;
-	bh=8fSdfrsulu5g0W5w5pyWz0kKJ1qwRHCJ9DqocKCmIgw=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=UCzEPP0/9N09l4VxyGThqOiGxHzKMVntjWZXWkV9LvSDJrjHBKjAuLUG2bso9k8gY
-	 RQ8eWyimAJwweGhzoF/n6bcXJOqN9zFRKTBg/ekww5t3bHHS9i2+s2f96HWWRCG2GF
-	 9Oz/EFfvh5lKhT6fB0RUFG3oLsczmckAByv0TrAfG3bghqI12JVzbUp/JxcTrSujJx
-	 yZIJuh1EFQWEtGjAd7cUTM3L+vxn2q9jkBjJE8/XAC696bCJ+be9qam6RGux3IGb9W
-	 vVlZOEMlxKoDwNWfoKGfF5B4AYlELti32lsrHpc34YImZvnYm8huCJx+pnnzlJPw2k
-	 r0irg62P1FGEw==
-Date: Mon, 31 Aug 2026 08:03:21 -0700
-From: Jakub Kicinski <kuba@kernel.org>
-To: Hangbin Liu <hangbin.liu@linux.dev>
-Cc: "David S. Miller" <davem@davemloft.net>, Eric Dumazet
- <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>, Simon Horman
- <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, David Ahern
- <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>, Andrea Mayer
- <andrea.mayer@uniroma2.it>, netdev@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, Hangbin Liu
- <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net-next v2] selftests: net: move log_test to lib file
- and remove duplicate code
-Message-ID: <20260831080321.59cc6af1@kernel.org>
-In-Reply-To: <20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn>
-References: <20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn>
+	s=k20260515; t=1788188818;
+	bh=f4iZoQApQIfopJT8EkqZwFe8+jFo1ysNs7WLaErjg9A=;
+	h=From:To:Cc:Subject:Date;
+	b=UETTYhjR1rTXv97DdzXd4cNx6xYLQVULNS4zG+oBtyJsqv+07TzNV73TUu3nwkFXA
+	 AVtE6H6Pmjk8cWrfo7SDBCOO/ZcQQEuHEuE94YCQiv6k5ZWVuXhNbwboKuxck9hCeZ
+	 kYuVySqZCoD/Tfw5wlqkrsTr0QcwiDLiz51k3uieIDmCdOtYn2t41OrjeaPIeZqCzC
+	 Bde08XvKxrSddVM3nnD1+hxa2koiRvD6z8Oloh1M4esG6f8GVlzumukBP9N85+VFfq
+	 Tnz56xumE6HiEqo/+VVgbxCz1Pc3eN7OEPoPxUSsTEDoY+ivpog0KyzQE2N4VWz6Bh
+	 I3e/5a5w4YYGg==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH v2 0/2] mm/damon: add kunit tests for probe_hits handling and probe params validation
+Date: Mon, 31 Aug 2026 08:06:47 -0700
+Message-ID: <20260831150650.84829-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Mon, 31 Aug 2026 17:21:28 +0800 Hangbin Liu wrote:
-> Many test scripts under tools/testing/selftests/net/ each define their own
-> log_test() function with near-identical logic for comparing a return
-> code against an expected value and printing OK/FAIL. Add a shared
-> log_test_expected() to lib.sh and replace each local definition with a
-> thin wrapper that delegates to it.
-> 
-> The function is named log_test_expected() rather than log_test() because
-> lib.sh already exports log_test() with a different signature used by
-> the forwarding tests.
-> 
-> Two tests required special handling:
-> 
-> - icmp_redirect.sh passed a fourth "xfail" argument to log_test(). The
->   underlying issue has been fixed and the argument is always absent now,
->   so it is simply dropped.
-> 
-> - fib_nexthops.sh checked for ksft_skip (exit code 4) inside log_test(),
->   but no test in the file produces that code. The check is removed,
->   callers that need to report a skip should use log_test_skip() instead.
->   Two callers compared against exit code 2 are left as-is since code 2
->   correctly counts as a failure in the previous log_test().
+DAMON recently introduced probes and probe weights. Add kunit tests
+for the propagation of probe_hits at region split and merge, and the
+rejection of invalid probe parameters by damon_valid_probe_params().
 
-still breaks fib_tests.sh
+Changes from v1
+- v1: https://lore.kernel.org/20260818034552.11975-1-jasonangelov@ucla.edu
+- Collec R-b: from SJ.
+- Rebase to latest mm-new.
+
+Jason Angelov (2):
+  mm/damon/core-kunit: test probe_hits handling at region split and
+    merge
+  mm/damon/core-kunit: test damon_valid_probe_params()
+
+ mm/damon/tests/core-kunit.h | 64 +++++++++++++++++++++++++++++++++++++
+ 1 file changed, 64 insertions(+)
+
+
+base-commit: e87656db0d5bae45056740ce6fc5d41e182013f4
+-- 
+2.47.3
