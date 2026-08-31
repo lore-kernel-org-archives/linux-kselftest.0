@@ -1,30 +1,31 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FF4641F37F;
-	Mon, 31 Aug 2026 16:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B4141F5FC;
+	Mon, 31 Aug 2026 16:37:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788194260; cv=none; b=jxwac+usAswF2L38vhL01qvv/b8Vw9UZRtDRCtpCVm3XpTz/m9n7sflFANahJp3StMnQ36yA5e3LlETpKo93ymt+9LasowJqjzGjWNcOJEVP4pMvZ0RoJezNQK2M/FfjuRjPLssrZ8hXH/D3dxbGo55wQo6HR0B15KOAQ2PQNBU=
+	t=1788194260; cv=none; b=kYrRVen8e8H8ClA1TtfZeNG3RJXDZchnm+TlkVUCyjgo63SyltXOQcUDFF5XJVd9AMEZgbWcVi8Y/oVem+AQEUIr/qOYm8EUEPyO30AYAvHfDDCx+u8hY/4KiaXgzqbF0CjXhvx2D9IJXVcJirlQaYUKvJSaLRPKA3wenD0olBk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1788194260; c=relaxed/simple;
-	bh=0CAQHYJ/WJfAHAd7JVdW+rHQ5Jw3/v2EKuvgsSqjxKE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RwYr348yCUCBKR1m1K/cWEN4tFcCdfpvuVJl5vE+256qO62kcuNFa3Y7rlgOGa4GLPoqy2tkXf5BssDITWMuD3TwZzsSx2sF4TvvYz5jg2RHt/IKUhrvHBcB48eXEDunYS7IME1kdQA1OYIut26DBgGExdu2bivwtXIZXkdKfeg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXCUW2zL; arc=none smtp.client-ip=100.103.45.18
+	bh=DOK1uoduY8MpzfNIRS74AOcCLrKDEbk0VdP+jwY0iPI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=AdWsdjtlPr45I6JvkAjR0bg5bxZ4c2aHf0Ize4QaMHw9zZrdDZdYuqgce+7p//zDHcra6g9lbXMJDHmR9HWYVJUfiFtwbh6ydx+FdX+MpSQlLV6muv/pFBgSeSqzVsarobzFzZmFFBBm0BKQ3QZI9YKqZiGfdbs4kcjw83PU8Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYVLbtAD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXCUW2zL"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 760C71F000E9;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYVLbtAD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F00881F00A3D;
 	Mon, 31 Aug 2026 16:37:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788194258;
-	bh=W/c2rkKeS870ux/M3sHENCDweZZhFOcaCG0xfzVyW1A=;
-	h=From:To:Cc:Subject:Date;
-	b=JXCUW2zLDdrqbUjAsjF2fAaiD6k2qSKVRFL5qvpldYYDyE1AayhOSMq66zl1++YM8
-	 eWjmclv6mVLWcqfJYbjewl7GsD1Yaf2cd9aqahFprIXN4fXOiZnNVQYQc6EEpCx0sD
-	 mfTQavjP201fK1uXpENshVbdYJdVEKlNJR1PQoiR7mKoJeIK7LfdKdFjPY3/yIM/QD
-	 nx580hFo2zTwCdDWNqUBzuKFc6R0Me3sNSkMW9YhkmgKRQWoRMxmFLaIPKjx81xL75
-	 SLSG4zGeZX8R4kZ7LUpNLslkWoN51hd91UWe5MCMGnDCk7PuSXGOtQ+BA91UD49Brf
-	 PAjZza9sIGyfA==
+	s=k20260515; t=1788194259;
+	bh=7gIw5gp97uKAlzd3ycLRaDSFhe71YMEtrkH8ehr7amM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=VYVLbtADjLHinZ/S7+TVBz2zaWBa8HlFupsS0eS6TfWY2zrLbC2/JI/tWEOKpB0lm
+	 KOnQ9S1Rkesh/fQ6qNBIY1RqtcvFDrlcMIeX/YkaL9lV6j01eQ8JLqEbTCcxh8BJ3G
+	 sJAle3IzulHRZmqGI8KE26tmm8X1eNuNCW3BG5XMFxDBP1cdIx2DgFAh2uZeUxD8rR
+	 tHHzkoRNRpBKkCU9JIqhf/MF5q4Q5j7dqypi1OdU/VCdLKQyIoJdHAU+xUrEFfDsc0
+	 tziHYFISxX11DBahMDdf1PFobRWdAXzNSZMFPDOewTYTOn/T9ioyxjn1xhlz8+2bor
+	 v4SnfKWez0jwQ==
 From: Jakub Kicinski <kuba@kernel.org>
 To: davem@davemloft.net
 Cc: netdev@vger.kernel.org,
@@ -38,10 +39,12 @@ Cc: netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	noren@nvidia.com,
 	Jakub Kicinski <kuba@kernel.org>
-Subject: [PATCH net-next 0/3] selftests: drv-net: split up gro.py
-Date: Mon, 31 Aug 2026 09:37:31 -0700
-Message-ID: <20260831163734.1121891-1-kuba@kernel.org>
+Subject: [PATCH net-next 1/3] selftests: drv-net: hw: rename gro_hw.py to gro_stats.py
+Date: Mon, 31 Aug 2026 09:37:32 -0700
+Message-ID: <20260831163734.1121891-2-kuba@kernel.org>
 X-Mailer: git-send-email 2.55.0
+In-Reply-To: <20260831163734.1121891-1-kuba@kernel.org>
+References: <20260831163734.1121891-1-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,40 +53,34 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-gro.py runs its full set of cases three times over - against SW GRO,
-HW GRO and LRO. It's our test with the longest runtime. The 318 cases
-take 12m30s on mlx5 with a debug kernel.
+We need to free up the gro_hw.py name for the HW-GRO half of gro.py,
+which we need to split by mode (sw / hw / lro). The file checks mostly
+qstat counters, so name it after stats.
 
-We will likely add more subcases here as the time goes on, so it's
-time to start splitting it up. Long runtime wastes time on retries
-(if any of the 300+ cases fails we try to check if it's a real failure
-or flake an re-run the whole thing). It also forces us to increase
-timeout for the whole test suite.
-
-Jakub Kicinski (3):
-  selftests: drv-net: hw: rename gro_hw.py to gro_stats.py
-  selftests: drv-net: split gro.py into one test per coalescing mode
-  selftests: drv-net: bump the timeout to 15min
-
- tools/testing/selftests/drivers/net/Makefile  |  9 ++-
- .../testing/selftests/drivers/net/hw/Makefile |  2 +-
- tools/testing/selftests/drivers/net/gro_hw.py | 14 ++++
- .../drivers/net/{gro.py => gro_lib.py}        | 68 +++++++++----------
- .../testing/selftests/drivers/net/gro_lro.py  | 15 ++++
- tools/testing/selftests/drivers/net/gro_sw.py | 14 ++++
- .../net/hw/{gro_hw.py => gro_stats.py}        |  0
- .../selftests/drivers/net/pppoe_gro.py        | 46 +++++++++++++
- tools/testing/selftests/drivers/net/settings  |  2 +-
- .../selftests/net/lib/ksft_setup_loopback.sh  |  2 +-
- 10 files changed, 131 insertions(+), 41 deletions(-)
- create mode 100755 tools/testing/selftests/drivers/net/gro_hw.py
- rename tools/testing/selftests/drivers/net/{gro.py => gro_lib.py} (92%)
- mode change 100755 => 100644
- create mode 100755 tools/testing/selftests/drivers/net/gro_lro.py
- create mode 100755 tools/testing/selftests/drivers/net/gro_sw.py
+Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+---
+ tools/testing/selftests/drivers/net/hw/Makefile                 | 2 +-
+ .../selftests/drivers/net/hw/{gro_hw.py => gro_stats.py}        | 0
+ 2 files changed, 1 insertion(+), 1 deletion(-)
  rename tools/testing/selftests/drivers/net/hw/{gro_hw.py => gro_stats.py} (100%)
- create mode 100755 tools/testing/selftests/drivers/net/pppoe_gro.py
 
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 78bb0169350b..6105be8e590f 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -27,7 +27,7 @@ TEST_PROGS = \
+ 	ethtool_mm.sh \
+ 	ethtool_rmon.sh \
+ 	ethtool_std_stats.sh \
+-	gro_hw.py \
++	gro_stats.py \
+ 	hw_stats_l3.sh \
+ 	hw_stats_l3_gre.sh \
+ 	iou-zcrx.py \
+diff --git a/tools/testing/selftests/drivers/net/hw/gro_hw.py b/tools/testing/selftests/drivers/net/hw/gro_stats.py
+similarity index 100%
+rename from tools/testing/selftests/drivers/net/hw/gro_hw.py
+rename to tools/testing/selftests/drivers/net/hw/gro_stats.py
 -- 
 2.55.0
 
