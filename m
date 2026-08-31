@@ -1,105 +1,85 @@
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6AFD3CAE76;
-	Mon, 31 Aug 2026 07:55:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67E023CAA49;
+	Mon, 31 Aug 2026 07:58:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788162923; cv=none; b=lDyElg6K45vwJqEzr3MwPOL2px+/kQWkqtZVaU4nxBwSjmdWElfz1egfARCVAAvt0c4vUcecFs5mKOKGljzuwIaPLWNWJIjZQ1D/NUqLXoyi14Ki8y4p5YXVZoC/Fse4H1sC6kLisDq1N5DcVDySdn6MbYjHRei/mGOZd0kT+R8=
+	t=1788163108; cv=none; b=NGy/LiQgsl8gATLZ7Tya8G+2fBXwaOVsc/iRIeazSPRnZ+FmAvAU0iriVEL38tjYpV2utLpxam5H1gtLRGpt6mngK4Y7wnkf73WP3tXbxfXsBngEIhozakG3BBCX4tFsCNq7Ap2P607EdsXHLynERcKOTQOLjqiBPCpApPu+yHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788162923; c=relaxed/simple;
-	bh=yjHoKaQwu9MgYW9EUKxF8zoK02BCi/g8yi49iqfsHIE=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=sUximKhQarvnGD2WwUt0sWaIZFZXcGo6DwZ/Tg0ZGjmQy7KXO79vnGMLYtwfchXBq+mbSMhiStY0C/McN7t6kU+j262n7tfKs6e+H8asywNV1lGO8aleEZ+9ToFDbWAXL0W1baZLd7Z26BesiwAYZgdyotIv4jVq/9FOW0IJT3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UMV/Z+VO; arc=none smtp.client-ip=185.246.85.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788163108; c=relaxed/simple;
+	bh=xBEVX2+Qh4ybGtNp1SMpmRGAQq/nXmtgerGGK950Pp8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iKSc9aO2iHVDT1/mipo171rUavCm7v80UqKJtHcbyaybNY9cYUL4ZnvvF9lbyTexjgzjtyddx5V9eYONyj7qO10i1GD6iShuNSQpNWkiJPY8eBY+PS9Mk3zpV0yU0rCQnkAqzu9aMrnft/1caqM6wc2H+8ornRHRD29VSfkve/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=cD3sn4at; arc=none smtp.client-ip=115.124.30.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UMV/Z+VO"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 44D254E4145B;
-	Mon, 31 Aug 2026 07:55:19 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 156DD601E1;
-	Mon, 31 Aug 2026 07:55:19 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9660C11C78A32;
-	Mon, 31 Aug 2026 09:55:10 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788162913; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=M/8EDX4ydfPxhtMVPvjbpWINZcbTB2snrWJzkNm34xw=;
-	b=UMV/Z+VOmoWGsLkG5B6EGFOkya3xBI/Y36knXvWQzT7G5vkUr6rCmmsaKYWMYsduzVhpbf
-	0Vued5LMKPpu2Q2K6WDXjGMwADCagI/5dU7kyO8A3nlPo1bS30ZE+3WA3kt4xECcnuudgV
-	9jsCGf/p/tAZwcXtvNL9kaOOr7ew4F9JczRIFeW6pq6BjWxXj3yAKpQ8zZ1eILU2dDxkq7
-	nA0NzU+2C7qHpH1MZ5X00Kc7ErEd8dhS/JgDKLDoeqBwbYr9DzV8cXo6dy4mpNmsTYQvre
-	SnnUz/8epyT25ZI2AsLKMGnjYu3/Juva39I2ey9pWVvfCVHmgb1pY/jvNe17Rg==
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="cD3sn4at"
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1788163102; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=NpHd6qU1H/25OxIUyU+cfJ+VsF5+LmMRg2Jcq1Igf+k=;
+	b=cD3sn4atswvhq3L422+74TaxEyVW7GZit52XN37XL1S+INtw8DMD3cpYTA0ur4103WgKnE4NUKILdw0aqwL+9bZgqUW3jIFb1HGl8lpaBu8ZEKDJ6YuWTyWPygqtl9pUaVkM76w0GfioVK3O8naMqB2/a0Pq4j4PKi5gmZbJ41o=
+X-Alimail-AntiSpam:AC=PASS;BC=-1|-1;BR=01201311R751e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=maildocker-contentspam033037026112;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=21;SR=0;TI=SMTPD_---0X9vVHwo_1788163099;
+Received: from 30.74.144.115(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0X9vVHwo_1788163099 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Mon, 31 Aug 2026 15:58:20 +0800
+Message-ID: <f9ae614f-beef-4e83-b307-d4e743d7062c@linux.alibaba.com>
+Date: Mon, 31 Aug 2026 15:58:18 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 31 Aug 2026 09:55:09 +0200
-Message-Id: <DL2YUKA3J3CG.1GUS47SLVPRNX@bootlin.com>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT
- processes
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Jiayuan
- Chen" <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Lorenzo
- Bianconi" <lorenzo@kernel.org>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: "Bochao Cao" <bochaolucky@gmail.com>, =?utf-8?q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com> <d4be160e-703e-46bb-9509-d3d90f6bc34b@iogearbox.net> <DKX99ZAP7GZ8.23U5EOSFB4VPU@bootlin.com> <CAHKNYVXN0DAUzv2Lwm=oQ_K=zhi2iNyTO2e99s5F4M+Kr7u5tQ@mail.gmail.com> <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
-In-Reply-To: <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
+ for check_huge_xxx() helper
+To: Yeoreum Yun <yeoreum.yun@arm.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@kernel.org>, Lorenzo Stoakes <ljs@kernel.org>,
+ Zi Yan <ziy@nvidia.com>, "Liam R. Howlett" <liam@infradead.org>,
+ Nico Pache <nico.pache@linux.dev>, Ryan Roberts <ryan.roberts@arm.com>,
+ Dev Jain <dev.jain@arm.com>, Barry Song <baohua@kernel.org>,
+ Lance Yang <lance.yang@linux.dev>, Usama Arif <usama.arif@linux.dev>,
+ Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+ Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+ Shuah Khan <shuah@kernel.org>, Kevin Brodsky <kevin.brodsky@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
+ <20260828-fix_split-v3-2-374022586a4b@arm.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20260828-fix_split-v3-2-374022586a4b@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri Aug 28, 2026 at 8:10 AM CEST, Bochao Cao wrote:
->  Thanks Daniel and Alexis.
->
->   Dropping the procps dependency is not the primary motivation for
->   this change. I agree that Debian can remove the dependency independentl=
-y.
->   The issue addressed by this patch is process isolation in the standalon=
-e
->   test. The current readiness check may observe an unrelated
->   concurrent xdp_features process, while cleanup may terminate every
-> xdp_features
->   process on the host. In addition, a DUT which exits before listening ca=
-n
-> leave the test waiting indefinitely.
->
->   Although this script is not currently run by the BPF CI, it remains
-> useful  for testing real hardware,
->   so these process lifecycle issues can still  affect users running the
-> test manually.
->
->   Would it be acceptable to fix these issues in the script's current
-> location?
->   If the preferred direction is to move it under
-> tools/testing/selftests/drivers/net/hw/,
->   should the move be submitted first, with this fix rebased on top?
 
-I have no strong feeling about whether it should be moved or kept here,
-I'll let BPF/netdev maintainers express their opinions here (Jakub
-already suggested in [1] that there are helpers in net testing helpers
-that could help making it move to the net tests). I've added Lorenzo in
-CC, who is the original author of the script.
 
-Alexis
+On 8/28/26 4:11 PM, Yeoreum Yun wrote:
+> Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
+> glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
+> made by memalign().
+> 
+> The underlying VMA may start at a different address from the aligned
+> address returned by memalign(). Furthermore, a subsequent
+> madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
+> already set.
+> 
+> This causes split_huge_page_test to fail because the check_huge_xxx()
+> helpers incorrectly require the address returned by memalign() to
+> match the VMA start address reported in /proc/self/smaps.
+> 
+> Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
+> /proc/self/smaps to detect huge pages.
+> 
+> Reported-by: David Hildenbrand (Arm) <david@kernel.org>
+> Suggested-by: Zi Yan <ziy@nvidia.com>
+> Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
+> ---
 
-[1] https://lore.kernel.org/bpf/20240914063828.7bd73c5e@kernel.org/
+LGTM, with comments from Lorenzo and Zi addressed.
 
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
