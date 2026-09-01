@@ -1,76 +1,91 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-2.mta1.migadu.com [95.215.58.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8853793A5;
-	Tue,  1 Sep 2026 05:26:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B396DDA9
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 06:26:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788240396; cv=none; b=h9CZCY88qTEHvYYUgxxDr7MBrl0lY15qkD9F7nkQQ55z21R7JdmuuI7oE1cqQ5GAu/RU6zEfscieaSRSEPihUsGeyHgvjhdE1b2G6YN3ij/QOxEBkiojUShL8gQlitRxHXaegWGtcpYUfZDEEjM59tj+rKTnC3wtcbMdfEUezuY=
+	t=1788243996; cv=none; b=lfMxFk6gSaMpik+xA+Z7ecIPUqRphnAp+CwkoTPmCdn2qNio9LXUvMQtRHt/LXfh3/6JGovrj3U/BMCDrH+MK3vjAlF3vkO0UoC+owCAoRNgtmJczNsKaxrq5u5Z+pB8PinIg2y0oqFVY/24saXXDK6BnqcshyFqajswbPKjicE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788240396; c=relaxed/simple;
-	bh=V3m/tZGM7F8SH6VyH2dGeW7md8ZBrLPodTFdfZqvaWI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=g7aNU+kCfDmC2c3SYBktG9L2F+iSgRQXFATIXWUPXeyTyyl53lVz8hUxQntON/T0KxXLA93gv2Rjs7PyDY5BVIasxV2u47Ws7QSZoEmqHbVnve1liDHs3xlbOVt6i3T9BpglLu7OJP/AqAPA6aiPP4kGzcg76RWjuOnYxj+Rm5E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nyr59aCU; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788243996; c=relaxed/simple;
+	bh=nY/oabUsnL5fxFERwMfqwf4ojTlIZToZ50HB2OBLDSQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f2wBtDlalMP7GacebtJ4+TcmMEseNCTLYjBDPXaK0reQBquaGx2Fpcjk8UDvfDvBzXKaHBOhRHbHAAG3a6ioQ0gF/E++eoD3H29gwdougRNavSg/XbljhSlg1G2hSuIUHfKJoyW5b7+x6ryEuVmHyAgWL3BGtuqvgsgc4oPj+yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=hneSvjVg; arc=none smtp.client-ip=95.215.58.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nyr59aCU"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C11B1F000E9;
-	Tue,  1 Sep 2026 05:26:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788240394;
-	bh=i0d6uoxX59JE6CAN12/4QKhpNFVtXkpS8bIPHrIcY1g=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=Nyr59aCUsrbXnN7xieacuiygyswVayN/35mPUGEaTYtflBfgXvg/AxzCVuwthR+RT
-	 PldsjGvKuMechm69pCYLvgh6QB3NkIWNN0bMifNTEpPYjRwbrUg8Z7vTzj3al1CLqK
-	 W2NItwsCAZCRC99LTtuAxx0lEnVExhA0dhQqlFa5X3GARo60iABAUiLkj2fGqLoU8/
-	 VvWS05k7OvEUAPbfnhzcEWOXAydz8BGQPyjTYog/mN4LtjyqVnIHmDv2QTEhpJXE36
-	 UiPMFLQfkGiexUsiRQ5+zX4XAR3FnN4w+tH6+/hgARbI1pwt/+8jf972udeYiaInKI
-	 /Y3dOh0ARMmcg==
-From: SJ Park <sj@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	damon@lists.linux.dev,
-	linux-doc@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 00/17] mm/damon: introduce data access-as-a-data attribute
-Date: Mon, 31 Aug 2026 22:26:26 -0700
-Message-ID: <20260901052627.6526-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260901043417.2165-1-sj@kernel.org>
-References: 
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="hneSvjVg"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=nY/oabUsnL5fxFERwMfqwf4ojTlIZToZ50HB2OBLDSQ=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788243993; v=1; x=1788848793;
+ b=hneSvjVgcw76oTyRUpRV6FAdJA127bq/Fi1XLuHRLlE5YgxFQNbpayEb+/FrF8R5zLKzb3q6
+ PDq3gtCo+h79waKTod+1hphziWe9Tmi1yyh0xMAdMhRW+9FLoiluhCgjQZNRGjPwXYVj/NK4jm0
+ /lGynhIiCQ+EDorMyaOONjXM=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id b1f864fda224ca39;
+	Tue, 01 Sep 2026 06:26:33 +0000
+X-Mizu-Trace-ID: b1f864fda224ca39
+X-Migadu-Flow: FLOW_OUT
+Date: Tue, 1 Sep 2026 14:26:18 +0800
+From: Hangbin Liu <hangbin.liu@linux.dev>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+	David Ahern <dsahern@kernel.org>, Ido Schimmel <idosch@nvidia.com>,
+	Andrea Mayer <andrea.mayer@uniroma2.it>, netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH net-next v2] selftests: net: move log_test to lib file
+ and remove duplicate code
+Message-ID: <apZwCtNbjnHITbC4@fedora>
+References: <20260831-self_log_test-v2-1-eda2e8490cf9@kylinos.cn>
+ <20260831080321.59cc6af1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260831080321.59cc6af1@kernel.org>
 
-On Mon, 31 Aug 2026 21:33:56 -0700 SJ Park <sj@kernel.org> wrote:
+On Mon, Aug 31, 2026 at 08:03:21AM -0700, Jakub Kicinski wrote:
+> On Mon, 31 Aug 2026 17:21:28 +0800 Hangbin Liu wrote:
+> > Many test scripts under tools/testing/selftests/net/ each define their own
+> > log_test() function with near-identical logic for comparing a return
+> > code against an expected value and printing OK/FAIL. Add a shared
+> > log_test_expected() to lib.sh and replace each local definition with a
+> > thin wrapper that delegates to it.
+> > 
+> > The function is named log_test_expected() rather than log_test() because
+> > lib.sh already exports log_test() with a different signature used by
+> > the forwarding tests.
+> > 
+> > Two tests required special handling:
+> > 
+> > - icmp_redirect.sh passed a fourth "xfail" argument to log_test(). The
+> >   underlying issue has been fixed and the argument is always absent now,
+> >   so it is simply dropped.
+> > 
+> > - fib_nexthops.sh checked for ksft_skip (exit code 4) inside log_test(),
+> >   but no test in the file produces that code. The check is removed,
+> >   callers that need to report a skip should use log_test_skip() instead.
+> >   Two callers compared against exit code 2 are left as-is since code 2
+> >   correctly counts as a failure in the previous log_test().
+> 
+> still breaks fib_tests.sh
 
-> TL;DR: extend DAMON's data attributes monitoring system to support page
-> table accessed bit and PG_idle based access monitoring.
+Oh... This patch touches too much tests. I only fixed the [ "$VERBOSE" = "1" ]
+checking and return 1 issue in test_bridge_neigh_suppress.sh. I didn't notice
+one of fib_test.sh "set -e" and also breaks here.
 
-Sashiko found [1] a possible race that is introduced by this series.  I will
-fix it in the next revision.
+I think there is no test would expect return 1 for log_test. So I will
+fix it by return 0 in the lib function directly.
 
-[1] https://lore.kernel.org/20260901052446.4122-1-sj@kernel.org
-
-
-Thanks,
-SJ
-
-[...]
+Thanks
+Hangbin
