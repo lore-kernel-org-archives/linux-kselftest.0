@@ -1,58 +1,57 @@
-Received: from mta1.migadu.com (out-247.mta1.migadu.com [95.215.58.247])
+Received: from mta0.migadu.com (out-238.mta0.migadu.com [91.218.175.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3637246EC99
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 07:46:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.247
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F00A5470EA9
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 08:01:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788248806; cv=none; b=JFByC6vFWCuZI0d/frPWK8w6qVG4G9GY8WzfEfU7MAupmBBwvG4AbMTydgYKvOfSCrqsaDv6OIdqCmopNqYWD5i++DJ5hw199cep+CMh6cDlYfMSLJHa4nCXZpgLdQZvLSVw3oGwVCPF0KtypiMPGz9191k3cKlsujW78lQPfvI=
+	t=1788249707; cv=none; b=mCwWQOh1L4J5dzL/UOORGZupJ2xsBnZ1FHzR0dOT7xvFR/gEzVzi+1HIAEGsgeP3ZkMMyIxeUS5VSz2LNkE7ksOzRdycayy3E6F3DOnMSIgN3TsDjV4AkLvWnvvYz9jOCwNQ7/TzH0gzlx28TgQtyrQMWdygtXtz5Obgf9lF00U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788248806; c=relaxed/simple;
-	bh=46/XfvU4UUxnGFLvYengC/Ov+6x7Xx2+ZA9VWoRfrDc=;
+	s=arc-20240116; t=1788249707; c=relaxed/simple;
+	bh=3P9E5Gl1EjxsctRSZt48H99/ZpRYw60ocxNGWi1RFnI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=N2SdIeOP1h4CrljziBh0AY0KZAH8GXTdM9IxXYfzawkJ7got67EP8Af1TWia5ChcY7w7CHFMQIqKdeb/3qjnyP0NpBgiEoAqLIZHthQS+HGU283dnMZly4kNYb/5Ek862VYvI0PnaN+KNQ6mkzjiw5jz5+nPjQHRtqRoi87dTyE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=dIuz0I7n; arc=none smtp.client-ip=95.215.58.247
+	 To:Cc:Content-Type; b=TSDxLTwdlVgpXb4kijX+fb6R/x8j3wAOlJCGppTx/ZKTIGl8CN7JR3xHWxfXtLNdIjDpW2rKlRq8cGs8Vpi+/rVRInTCwt0nMJRbWuQVn12vSjQs+VSe2ymSQWwex0X2oAfyCF3aCsSZTiloqbLjhgOu0z2ylQNCFhwuMV1MHlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=JZ1QbKDS; arc=none smtp.client-ip=91.218.175.238
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="dIuz0I7n"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="JZ1QbKDS"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=46/XfvU4UUxnGFLvYengC/Ov+6x7Xx2+ZA9VWoRfrDc=;
+DKIM-Signature: a=rsa-sha256; bh=3P9E5Gl1EjxsctRSZt48H99/ZpRYw60ocxNGWi1RFnI=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788248802; v=1; x=1788853602;
- b=dIuz0I7nw46Yc4lryCOpxC7zmJedAJZS38+W+Vzq1kOgDPLJu0KtHB36DM8g9rJKf8UU1/AR
- m4Q4InZpI1ZL1xIui7cG1B3r64M3T2q+HxiABW0Ilo2OMIuuXR0mGqeMjo6DOFOL3A5X4larF3a
- l/hYBby4bbC2uX/y23uj+vtI=
+ t=1788249701; v=1; x=1788854501;
+ b=JZ1QbKDSh5j4HwEsIrQ553XxL7d4Y5Z3Nbjkzw7Nh1yLKewZthIZg5/Op5rTEaphQoMN7Oph
+ BwORaXKWhC2CbuBprGKhQ1pXnq44NKci1SjVgcHdj8/12KdE9FgKrVAhKMPnchLRkBJ+hKbnZsi
+ 4d3l36VEvjxBogElk6LShRtw=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 65c67bb09aa4df8f;
-	Tue, 01 Sep 2026 07:46:32 +0000
-X-Mizu-Trace-ID: 65c67bb09aa4df8f
+Received: by smtp.migadu.com with ESMTPS id 22c798ca52201462;
+	Tue, 01 Sep 2026 08:01:41 +0000
+X-Mizu-Trace-ID: 22c798ca52201462
 X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b2a8173142so3269e87.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 00:46:31 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzU8ekGYtFIUW13Y5E1NHndjUUYpm/YHfeEEQtsFpOJ22Ky2NbzFwadidUdaZ1otWVMoTxCO8GI/trtPaRE+D4=@vger.kernel.org
-X-Gm-Message-State: AFuF++mebjoJK5+j/AYCT8WWCIaOJD0oBIcWkGW3CVC7B9Y8GHnR4tc4
-	gloEa0Tc8moqfZDUj9/WZq6071QSIWACtzjqKWiNbUT8A2LhODZonOh1nQr+tiDRhClmyA6UIgi
-	StSS0NHfGO1qJuM4o61jatZNJCDnsosfUFIcGPTxl
-X-Received: by 2002:a05:6512:b8d:b0:5b2:8963:e5d4 with SMTP id
- 2adb3069b0e04-5b600a42bd7mr91617e87.5.1788248790675; Tue, 01 Sep 2026
- 00:46:30 -0700 (PDT)
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5b2a73da7e1so5414e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 01:01:37 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBymHCpFU4pPG8xfPJ0mk9i5qWcjdbd1tL5fHa2GSgD71d0GzC/LzJd6ZdpVan/mvyQWCMN1EdrFdb8nvxgLczM=@vger.kernel.org
+X-Gm-Message-State: AFuF++kmjIk5p+qNfHkhQFjHcH2k906rUf4Q4G8++AHyIadncakhQY8p
+	pYjHIg4QxrUvFLTqym/aGKT+sM5whStef6i0kzdKxNYOosFus0axaT0G111c1aUAOA89xvUDhof
+	vKDIzNOrXYiXTGGkq/t/eBTmN+hErDQouK8Ly+/e7
+X-Received: by 2002:a05:6512:3b0d:b0:5b2:a967:c0e1 with SMTP id
+ 2adb3069b0e04-5b5fefc71e5mr128710e87.0.1788249695751; Tue, 01 Sep 2026
+ 01:01:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com> <20260830-gmem-inplace-conversion-v12-15-85e5fd25252a@google.com>
-In-Reply-To: <20260830-gmem-inplace-conversion-v12-15-85e5fd25252a@google.com>
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com> <20260830-gmem-inplace-conversion-v12-14-85e5fd25252a@google.com>
+In-Reply-To: <20260830-gmem-inplace-conversion-v12-14-85e5fd25252a@google.com>
 From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Tue, 1 Sep 2026 08:45:54 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTzJbC=ZvB3Mopw-TLf=13-iqxGw5RfTp6Gt5S1hi8WRRA@mail.gmail.com>
-X-Gm-Features: AcwNN1W8nZTxVvoFPBYtI3aVIovLXAurzaZOGm0KyMs0U_MOniIbd1ibspvycU0
-Message-ID: <CA+EHjTzJbC=ZvB3Mopw-TLf=13-iqxGw5RfTp6Gt5S1hi8WRRA@mail.gmail.com>
-Subject: Re: [PATCH v12 15/45] KVM: guest_memfd: Ensure pages are not in use
- before conversion
+Date: Tue, 1 Sep 2026 09:00:59 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTyU1Ldbw-qqdQOx_P8jrt85QEcKSGae2h+AahsDQdbmLw@mail.gmail.com>
+X-Gm-Features: AcwNN1U1NN91vo14dSs3E4M2DDFHxxtZ_83sNMiwJfMd7svq3f7bIIAQvr3cTJo
+Message-ID: <CA+EHjTyU1Ldbw-qqdQOx_P8jrt85QEcKSGae2h+AahsDQdbmLw@mail.gmail.com>
+Subject: Re: [PATCH v12 14/45] KVM: guest_memfd: Add base support for KVM_SET_MEMORY_ATTRIBUTES2
 To: ackerleytng@google.com
 Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
 	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
@@ -91,243 +90,17 @@ On Mon, 31 Aug 2026 at 01:25, Ackerley Tng via B4 Relay
 <devnull+ackerleytng.google.com@kernel.org> wrote:
 >
 > From: Ackerley Tng <ackerleytng@google.com>
->
-> When converting memory to private in guest_memfd, it is necessary to ensure
-> that the pages are not currently being accessed by any other part of the
-> kernel or userspace to avoid any current user writing to guest private
-> memory.
->
-> guest_memfd checks for any outstanding references to determine whether a
-> page is still in use. The only expected references after unmapping the
-> range requested for conversion are those that are held by guest_memfd
-> itself.
->
-> Update the kvm_memory_attributes2 structure to include an error_offset
-> field. This allows KVM to report the exact offset where a conversion
-> failed. If the safety check fails, return -EAGAIN and copy the error_offset
-> back to userspace so that it can potentially retry the operation or handle
-> the failure gracefully.
->
-> Update documentation to document the error_offset field and the possible
-> -EAGAIN error.
->
-> Suggested-by: David Hildenbrand <david@kernel.org>
-> Co-developed-by: Vishal Annapurve <vannapurve@google.com>
-> Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> Reviewed-by: Fuad Tabba <tabba@google.com>
-> Tested-by: Shivank Garg <shivankg@amd.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
-> ---
->  Documentation/virt/kvm/api.rst | 19 +++++++++--
->  include/uapi/linux/kvm.h       |  3 +-
->  virt/kvm/guest_memfd.c         | 77 +++++++++++++++++++++++++++++++++++++++---
->  3 files changed, 91 insertions(+), 8 deletions(-)
->
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index 4dbf452f6e809..25cb15970f1ae 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -6613,7 +6613,7 @@ KVM_S390_KEYOP_SSKE
->  :Capability: KVM_CAP_GUEST_MEMFD_MEMORY_ATTRIBUTES
->  :Architectures: all
->  :Type: guest_memfd ioctl
-> -:Parameters: struct kvm_memory_attributes2 (in)
-> +:Parameters: struct kvm_memory_attributes2 (in/out)
->  :Returns: 0 on success, <0 on error
->
->  Errors:
-> @@ -6622,6 +6622,8 @@ Errors:
->    EINVAL     The specified `offset` or `size` was invalid (e.g. not
->               page aligned, causes an overflow, or size is zero).
->    EFAULT     The parameter address was invalid.
-> +  EAGAIN     Some page within requested range had unexpected refcounts. The
-> +             offset of the page will be returned in `error_offset`.
->    ENOMEM     Ran out of memory trying to track private/shared state
->    ========== ===============================================================
->
-> @@ -6635,6 +6637,7 @@ Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
->  ::
->
->    struct kvm_memory_attributes2 {
-> +       /* in */
->         union {
->                 __u64 address;
->                 __u64 offset;
-> @@ -6642,7 +6645,9 @@ Attribute values are shared with KVM_SET_MEMORY_ATTRIBUTES.
->         __u64 size;
->         __u64 attributes;
->         __u64 flags;
-> -       __u64 reserved[12];
-> +       /* out */
-> +       __u64 error_offset;
-> +       __u64 reserved[11];
->    };
->
->    #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> @@ -6664,6 +6669,16 @@ which includes operations such as unmapping pages from the host or
->  stage-2 page tables, may result in side effects on memory contents
->  that vary across different trusted firmware implementations.
->
-> +If this ioctl returns -EAGAIN, the offset of the page with unexpected
-> +refcounts will be returned in ``error_offset``. This can occur if
-> +there are transient refcounts on the pages, taken by other parts of
-> +the kernel.
+...
+> +.. _KVM_SET_MEMORY_ATTRIBUTES2:
 > +
-> +Userspace is expected to figure out how to remove all known refcounts
-> +on the shared pages, such as refcounts taken by get_user_pages(), and
-> +try the ioctl again. A possible source of these long term refcounts is
-> +if the guest_memfd memory was pinned in IOMMU page tables.
-> +
->  See also: :ref:`KVM_SET_MEMORY_ATTRIBUTES`.
->
+> +4.145 KVM_SET_MEMORY_ATTRIBUTES2
+
+This section number collides with the existing 4.145 (KVM_PPC_GET_COMPAT_CAPS)
+below, so api.rst ends up with two 4.145 sections. One of them needs
+renumbering.
+
+...
 >  4.145 KVM_PPC_GET_COMPAT_CAPS
-> diff --git a/include/uapi/linux/kvm.h b/include/uapi/linux/kvm.h
-> index ac371a50041c9..8dff2fc1972e9 100644
-> --- a/include/uapi/linux/kvm.h
-> +++ b/include/uapi/linux/kvm.h
-> @@ -1665,7 +1665,8 @@ struct kvm_memory_attributes2 {
->         __u64 size;
->         __u64 attributes;
->         __u64 flags;
-> -       __u64 reserved[12];
-> +       __u64 error_offset;
-> +       __u64 reserved[11];
->  };
->
->  #define KVM_MEMORY_ATTRIBUTE_PRIVATE           (1ULL << 3)
-> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
-> index 803c7cdbbe0f6..fe02c47c85fb5 100644
-> --- a/virt/kvm/guest_memfd.c
-> +++ b/virt/kvm/guest_memfd.c
-> @@ -538,8 +538,46 @@ static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
->         return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
->  }
->
-> +static bool kvm_gmem_has_outstanding_references(struct inode *inode,
-> +                                               pgoff_t start, size_t nr_pages,
-> +                                               pgoff_t *err_index)
-> +{
-> +       struct address_space *mapping = inode->i_mapping;
-> +       pgoff_t last = start + nr_pages - 1;
-> +       bool has_outstanding = false;
-> +       struct folio_batch fbatch;
-> +       pgoff_t next;
-> +       int i;
-> +
-> +       folio_batch_init(&fbatch);
-> +
-> +       next = start;
-> +       while (has_outstanding && filemap_get_folios(mapping, &next, last, &fbatch)) {
-
-has_outstanding starts as false, so the loop never runs and the function
-always returns false. The outstanding-reference check is dead at this
-patch, so a to-private conversion would not be rejected even when a page
-still has an outstanding reference.
-
-It's fixed later in "KVM: guest_memfd: Handle lru_add fbatch refcounts
-during conversion safety check", which changes the condition to
-!has_outstanding. I think that fix belongs in this patch, so the check
-works when it is introduced and the series bisects cleanly.
-
-Missed it on the previous review, but with this fixed it still holds.
 
 Cheers,
 /fuad
-
-
-
-> +               for (i = 0; i < folio_batch_count(&fbatch); ++i) {
-> +                       struct folio *folio = fbatch.folios[i];
-> +
-> +                       /*
-> +                        * Outstanding references are anything other than those
-> +                        * from the page cache, plus 1 temporary reference held
-> +                        * by filemap_get_folios() in the folio batch.
-> +                        */
-> +                       if (folio_ref_count(folio) != folio_nr_pages(folio) + 1) {
-> +                               has_outstanding = true;
-> +                               *err_index = max(start, folio->index);
-> +                               break;
-> +                       }
-> +               }
-> +
-> +               folio_batch_release(&fbatch);
-> +               cond_resched();
-> +       }
-> +
-> +       return has_outstanding;
-> +}
-> +
->  static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
-> -                                    size_t nr_pages, uint64_t attrs)
-> +                                    size_t nr_pages, uint64_t attrs,
-> +                                    pgoff_t *err_index)
->  {
->         bool to_private = attrs & KVM_MEMORY_ATTRIBUTE_PRIVATE;
->         struct address_space *mapping = inode->i_mapping;
-> @@ -556,8 +594,28 @@ static int __kvm_gmem_set_attributes(struct inode *inode, pgoff_t start,
->
->         mas_init(&mas, mt, start);
->         r = kvm_gmem_mas_preallocate(&mas, attrs, start, nr_pages);
-> -       if (r)
-> +       if (r) {
-> +               *err_index = start;
->                 goto out;
-> +       }
-> +
-> +       if (to_private) {
-> +               /*
-> +                * Forcefully unmap the pages from all userspace page tables,
-> +                * and then verify there are no outstanding references, e.g.
-> +                * acquired via GUP or similar.  Tell userspace to try again if
-> +                * there are outstanding references and hope that whatever has
-> +                * pinned the page will put its reference "soon".
-> +                */
-> +               unmap_mapping_pages(mapping, start, nr_pages, false);
-> +
-> +               if (kvm_gmem_has_outstanding_references(inode, start, nr_pages,
-> +                                                       err_index)) {
-> +                       mas_destroy(&mas);
-> +                       r = -EAGAIN;
-> +                       goto out;
-> +               }
-> +       }
->
->         /*
->          * From this point on guest_memfd has performed necessary
-> @@ -578,9 +636,10 @@ static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
->         struct gmem_file *f = file->private_data;
->         struct inode *inode = file_inode(file);
->         struct kvm_memory_attributes2 attrs;
-> +       pgoff_t err_index;
->         size_t nr_pages;
->         pgoff_t index;
-> -       int i;
-> +       int i, r;
->
->         if (copy_from_user(&attrs, argp, sizeof(attrs)))
->                 return -EFAULT;
-> @@ -606,8 +665,16 @@ static long kvm_gmem_set_attributes(struct file *file, void __user *argp)
->
->         nr_pages = attrs.size >> PAGE_SHIFT;
->         index = attrs.offset >> PAGE_SHIFT;
-> -       return __kvm_gmem_set_attributes(inode, index, nr_pages,
-> -                                        attrs.attributes);
-> +       r = __kvm_gmem_set_attributes(inode, index, nr_pages, attrs.attributes,
-> +                                     &err_index);
-> +       if (r) {
-> +               attrs.error_offset = ((uint64_t)err_index) << PAGE_SHIFT;
-> +
-> +               if (copy_to_user(argp, &attrs, sizeof(attrs)))
-> +                       return -EFAULT;
-> +       }
-> +
-> +       return r;
->  }
->
->  static long kvm_gmem_ioctl(struct file *file, unsigned int ioctl,
->
-> --
-> 2.55.0.897.gb25b4bd76c-goog
->
->
