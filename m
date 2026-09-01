@@ -1,145 +1,136 @@
-Received: from pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com (pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com [44.246.68.102])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1DBB374A1D;
-	Tue,  1 Sep 2026 14:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=44.246.68.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E60F3477E20
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 14:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788271626; cv=none; b=ePTaZjjudE7FNannLXZJnNfCBe76ezhpJ2O0ov9v43zknmCt43GokLqUVFuqvCXtbfbqFJStddDkCSgJqTFZd3jUgVv0ANzLkn5mhTMzo3LbAwKWyYDk+IiIlNcF0/Fo4sqwiOEklHQys4JvmvG/F8KioJsUZNJVLfru8LUzc98=
+	t=1788271643; cv=none; b=m0Oyp7BhJsDyHfZmvfw8xIYPt8TOhW3HlD1/DrQv03bXQSGv0mGbST+0eKrnES483bvdPWnB/88HdODAskbsguF2hqf/AhZFaR8geWvZpuviwWxs4gvunwzdLWZ6hr1JZOGXC3KbY9zkoNKgfqtoHnD6Ay6/wueKYOWWJ43aIk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788271626; c=relaxed/simple;
-	bh=1O9/rKU7KHiOHnc3FZFhXmrPr5pw2k6/sI2pYOXuv74=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=C++rrA/Hfs+mA6KrdyRRq/3A4J0QRaiycmsR95r28bOPNTg385FcHSuaE2ARinVCWCBDWdeznbt8XUzh/FQqzYSDIXhJsVl0FUg+MEtoe8NWh9588XkAqpCQ53x3aZxWsjHXRpu3iir7pwg1CS/4Hv+AbzwdQJhM7NaQPwlaVcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com; spf=pass smtp.mailfrom=amazon.co.uk; dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b=MPdwjkFW; arc=none smtp.client-ip=44.246.68.102
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amazon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=amazon.co.uk
+	s=arc-20240116; t=1788271643; c=relaxed/simple;
+	bh=0Pwx3Hc37IzwLO80eSQXq/W0rIj/++qSYLDeySdhkw0=;
+	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
+	 Mime-Version:Content-Type; b=KEbWLxIGJEsPYRgNO0o3sOT7+Tj1I4fEaZmbvUU1ZCo/VthbH89tcB1mbzQDJBbK6SUlAj7hmJNUk9EbbLyZu8L5EuzJwM/hEyJQLnRWbc+oCKk0gE9fqZypxQGdR/ZFy6MMaC+9tz53E2H+4QHLfZb6cmMCOL5ocqz+hmiidkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z2tUAyQp; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=amazon.com header.i=@amazon.com header.b="MPdwjkFW"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z2tUAyQp"
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-86162c086f8so18279567b3.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 07:07:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazoncorp2;
-  t=1788271625; x=1819807625;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=gwbUYxXHQaXTXqslqakO/JmHO0leSCcNPKEN6HpwsIg=;
-  b=MPdwjkFWrfa6dJPtq/YabRBPOpV1UTECJbQ2tvIr9ava77J0n3RMlptQ
-   W8Nb0tH3Y9nv1v0ATx+yBnE/jjTK9efjjoCcU8++SdjQNI0a0yZffFK6i
-   XbbFsjCrl2BjdExAg7P7PbhLeWRE/yDXbrDvG3+K4AsTNmIxr5Z5Zy8fZ
-   oHnoXeDKlhlkGJPX7g7aD35y8hccpgpFwsB1MpTNitMO6prunD6xWrBpB
-   DFdM9pInal6uudq9FU8f4lH5sLtTrEqxwaRWOA4yujughApzmnmtM9heY
-   pXtDctQywq9ISwqoBN3/Gbgl/wbqraZF8aVpu4PekkRofQtTqfaBOnJg4
-   A==;
-X-CSE-ConnectionGUID: g7Zx9TRQQvWpTs8W3wP04w==
-X-CSE-MsgGUID: 9pLg4PSzQd6ZYHeZKQt6qQ==
-X-IronPort-AV: E=Sophos;i="6.25,256,1779148800"; 
-   d="scan'208";a="27537013"
-Received: from ip-10-5-6-203.us-west-2.compute.internal (HELO smtpout.naws.us-west-2.prod.farcaster.email.amazon.dev) ([10.5.6.203])
-  by internal-pdx-out-003.esa.us-west-2.outbound.mail-perimeter.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 14:07:01 +0000
-Received: from EX19MTAUWB002.ant.amazon.com [205.251.233.111:11398]
- by smtpin.naws.us-west-2.prod.farcaster.email.amazon.dev [10.0.52.146:2525] with esmtp (Farcaster)
- id 8f131d5e-0695-4138-b720-3dbdcb1830d0; Tue, 1 Sep 2026 14:07:01 +0000 (UTC)
-X-Farcaster-Flow-ID: 8f131d5e-0695-4138-b720-3dbdcb1830d0
-Received: from EX19D001UWA001.ant.amazon.com (10.13.138.214) by
- EX19MTAUWB002.ant.amazon.com (10.250.64.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.45;
- Tue, 1 Sep 2026 14:07:01 +0000
-Received: from b0f1d8753182.ant.amazon.com (10.106.82.17) by
- EX19D001UWA001.ant.amazon.com (10.13.138.214) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.2562.46;
- Tue, 1 Sep 2026 14:06:44 +0000
-From: Takahiro Itazuri <itazur@amazon.com>
-To: <brendan.jackman@linux.dev>, <maz@kernel.org>
-CC: <Liam.Howlett@oracle.com>, <ackerleytng@google.com>,
-	<agordeev@linux.ibm.com>, <ajones@ventanamicro.com>,
-	<akpm@linux-foundation.org>, <alex@ghiti.fr>, <andrii@kernel.org>,
-	<ast@kernel.org>, <baolu.lu@linux.intel.com>, <borntraeger@linux.ibm.com>,
-	<bp@alien8.de>, <bpf@vger.kernel.org>, <catalin.marinas@arm.com>,
-	<chenhuacai@kernel.org>, <corbet@lwn.net>, <coxu@redhat.com>,
-	<daniel@iogearbox.net>, <dave.hansen@linux.intel.com>, <david@kernel.org>,
-	<dev.jain@arm.com>, <eddyz87@gmail.com>, <haoluo@google.com>,
-	<hpa@zytor.com>, <itazur@amazon.co.uk>, <jackmanb@google.com>,
-	<jannh@google.com>, <jgg@ziepe.ca>, <jgross@suse.com>, <jhubbard@nvidia.com>,
-	<jmattson@google.com>, <joey.gouly@arm.com>, <john.fastabend@gmail.com>,
-	<jolsa@kernel.org>, <jthoughton@google.com>, <kalyazin@amazon.co.uk>,
-	<kas@kernel.org>, <kernel@xen0n.name>, <kpsingh@kernel.org>,
-	<kvm@vger.kernel.org>, <kvmarm@lists.linux.dev>, <lenb@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>,
-	<linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-kselftest@vger.kernel.org>, <linux-mm@kvack.org>,
-	<linux-pm@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
-	<linux-s390@vger.kernel.org>, <loongarch@lists.linux.dev>,
-	<lorenzo.stoakes@oracle.com>, <luto@kernel.org>, <maobibo@loongson.cn>,
-	<martin.lau@linux.dev>, <mhocko@suse.com>, <mingo@redhat.com>,
-	<mlevitsk@redhat.com>, <oupton@kernel.org>, <palmer@dabbelt.com>,
-	<patrick.roy@linux.dev>, <pavel@kernel.org>, <pbonzini@redhat.com>,
-	<peterx@redhat.com>, <peterz@infradead.org>, <pfalcato@suse.de>,
-	<pjw@kernel.org>, <prsampat@amd.com>, <riel@surriel.com>, <rppt@kernel.org>,
-	<ryan.roberts@arm.com>, <sdf@fomichev.me>, <seanjc@google.com>,
-	<shijie@os.amperecomputing.com>, <skhan@linuxfoundation.org>,
-	<song@kernel.org>, <surenb@google.com>, <suzuki.poulose@arm.com>,
-	<tabba@google.com>, <tglx@kernel.org>, <thuth@redhat.com>,
-	<vannapurve@google.com>, <vbabka@kernel.org>, <will@kernel.org>,
-	<willy@infradead.org>, <wu.fei9@sanechips.com.cn>, <x86@kernel.org>,
-	<yang@os.amperecomputing.com>, <yangyicong@hisilicon.com>,
-	<yonghong.song@linux.dev>, <yosry@kernel.org>, <yu-cheng.yu@intel.com>,
-	<yuzenghui@huawei.com>, <zhengqi.arch@bytedance.com>, Takahiro Itazuri
-	<zulinx86@gmail.com>
-Subject: Re: [PATCH v12 09/16] KVM: arm64: define kvm_arch_gmem_supports_no_direct_map()
-Date: Tue, 1 Sep 2026 15:05:21 +0100
-Message-ID: <20260901140520.78333-2-itazur@amazon.com>
-X-Mailer: git-send-email 2.43.1
-In-Reply-To: <DJJ28Z81JTQI.1SI0CNIP7W1JQ@linux.dev>
-References: <DJJ28Z81JTQI.1SI0CNIP7W1JQ@linux.dev>
+        d=gmail.com; s=20251104; t=1788271641; x=1788876441; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=ZpnRHfRMFzEAWLvemeBKEVpeIxRl4kUoq6EWJEKG1u8=;
+        b=Z2tUAyQpjVHmYHIACH2obA1yvS74UvLMNOmzvhxyId/proVm7vacQDaQyP6PHS/zpc
+         KhnGCQDErfMSCuVBqdeKDVkTHs+L80Wc3ItPD0Glhb2j34ZgN6K7fu7JKUIT7FTG220r
+         VDs+qS2aMgrH7eiKoimErZnaH4ohK/rwgV8ZFSdfRfWECzh5r6RpIyGNXvxA/cRRSotR
+         myt0aSZ720HyKSFA/OfRYZngNoPoDtZV1fR6ke1SqPp9AU01V6NUI9Tt334yt7WdO5IF
+         N68qD5V+61mACQ4V/VOF15C0Un0w3P1VzvWmAmfqg7PGXnnTqjZeNfPXAiZXca6AMmzb
+         5J0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788271641; x=1788876441;
+        h=content-transfer-encoding:content-type:mime-version:subject
+         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ZpnRHfRMFzEAWLvemeBKEVpeIxRl4kUoq6EWJEKG1u8=;
+        b=dxZNrtD/zkQvBMWyLc4wnYsNWf/fVggS0RjaxdRxth9KWxj9N8GLg0TJ+Ca4Upjt2D
+         O5aMHFEpseQkMFUBgaSw0hf1b8E3ophISjvH6H5Jvn8IVgfd60AHcjYVn/UilWe2Dglt
+         EoqMWQAzmEHI8sZslC1bJ76/4o3xmIBu8mwmlcEsheAaOlhfG125TxVgaqUM2XzIMtxo
+         XPcqCw5SdbTl5nOA/yrzzqeu5bS93EFwvIh1ywMM7OzrsIlGIRypLNlWH02s4Lgz3QNe
+         zhpaMKl1CTyLd3kcv6rSbYM4w7sKNYdzkH9ISvHG9ytvlyyf83ldFPFU0nnq1slWm4ju
+         gD6w==
+X-Forwarded-Encrypted: i=1; AKwUvBydvSeNJ9YdxJdFiuq4spjgncKH3mTQueZoDypsvYKXko0FBzLDRimNtf/wfIb7KxwhwrqOoqyb8T2oAj+Jo30=@vger.kernel.org
+X-Gm-Message-State: AFuF++kdktbllFxi1sfqJfcAl8QdBhljst4Vl95uil28x4TLVCHTvRuz
+	hlYqVaiQHJMsCPHgiiqyB8Sf0G0T713t9e9c3WwCSzMGWSLRkFGM8aWG
+X-Gm-Gg: AYBFou080KAnWLj6CjiNcShOfyY2ZFiX06j07r8V657I70N6sVXMynr7vUsytR+/CAy
+	y+kS/X0arezXok6XaJWMhdSn9hdC950jDt+w71PWjI58xj5JZt50KV5/ksymM+34aN5mhc+fJVI
+	Vi+U24YbBmeuEGvnFAw5kS26juaTc05kQnXbxKYbxBD4Aj/3DiIzXRUYNIdvbPNWpjcyomXeT/1
+	rXHZCKw1B1H7LGM0t1qaaDmpuP36OSufMnfy8X7raCIebSpWxrUOtj6w8xjg0eroM9CxL4c07nA
+	OBxwvNcWlyg23zsjngXo4z9I/1CU6vR1i/Td5dchtU288KAw0gUYeinMce1X5UUJMt/mgsrfijb
+	hEAPk9uWFbUpZWPINLm9Nc8L7P3hf2WWDw0k56NZlsG5QE/C4ytFYIlINLPjYSP9RISE8vzJEd6
+	UkUtawlkzf8eFB/+wzNYojPxoRBTbSKHGFGIOGvS+Bnw7vkA/fDma3ZLLf9Czu2Hmn8q8covixs
+	36ppN3A319XqP6adez9YtGAnSTOrv2T5Mhm+7Hq4v98QQhiBHvW
+X-Received: by 2002:a05:690c:6:b0:80c:16ad:2f16 with SMTP id 00721157ae682-8694a045dbfmr25369617b3.8.1788271640592;
+        Tue, 01 Sep 2026 07:07:20 -0700 (PDT)
+Received: from gmail.com (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-85e5ed19446sm74640317b3.14.2026.09.01.07.07.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 07:07:19 -0700 (PDT)
+Date: Tue, 01 Sep 2026 10:07:19 -0400
+From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+To: Nimrod Oren <noren@nvidia.com>, 
+ Jakub Kicinski <kuba@kernel.org>, 
+ davem@davemloft.net
+Cc: netdev@vger.kernel.org, 
+ edumazet@google.com, 
+ pabeni@redhat.com, 
+ andrew+netdev@lunn.ch, 
+ horms@kernel.org, 
+ shuah@kernel.org, 
+ willemb@google.com, 
+ petrm@nvidia.com, 
+ linux-kselftest@vger.kernel.org
+Message-ID: <willemdebruijn.kernel.1bd3bafef8eb0@gmail.com>
+In-Reply-To: <4804ad0f-ff5d-4b74-8285-9595c0c6732d@nvidia.com>
+References: <20260831163734.1121891-1-kuba@kernel.org>
+ <4804ad0f-ff5d-4b74-8285-9595c0c6732d@nvidia.com>
+Subject: Re: [PATCH net-next 0/3] selftests: drv-net: split up gro.py
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain
-X-ClientProxiedBy: EX19D038UWB004.ant.amazon.com (10.13.139.177) To
- EX19D001UWA001.ant.amazon.com (10.13.138.214)
+Mime-Version: 1.0
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: 7bit
 
-Apologies for the delayed response, and thank you for the review.
+Nimrod Oren wrote:
+> On 31/08/2026 19:37, Jakub Kicinski wrote:
+> > gro.py runs its full set of cases three times over - against SW GRO,
+> > HW GRO and LRO. It's our test with the longest runtime. The 318 cases
+> > take 12m30s on mlx5 with a debug kernel.
+> > 
+> > We will likely add more subcases here as the time goes on, so it's
+> > time to start splitting it up. Long runtime wastes time on retries
+> > (if any of the 300+ cases fails we try to check if it's a real failure
+> > or flake an re-run the whole thing). It also forces us to increase
+> > timeout for the whole test suite.
+> > 
+> > Jakub Kicinski (3):
+> >   selftests: drv-net: hw: rename gro_hw.py to gro_stats.py
+> >   selftests: drv-net: split gro.py into one test per coalescing mode
+> >   selftests: drv-net: bump the timeout to 15min
+> > 
+> >  tools/testing/selftests/drivers/net/Makefile  |  9 ++-
+> >  .../testing/selftests/drivers/net/hw/Makefile |  2 +-
+> >  tools/testing/selftests/drivers/net/gro_hw.py | 14 ++++
+> >  .../drivers/net/{gro.py => gro_lib.py}        | 68 +++++++++----------
+> >  .../testing/selftests/drivers/net/gro_lro.py  | 15 ++++
+> >  tools/testing/selftests/drivers/net/gro_sw.py | 14 ++++
+> >  .../net/hw/{gro_hw.py => gro_stats.py}        |  0
+> >  .../selftests/drivers/net/pppoe_gro.py        | 46 +++++++++++++
+> >  tools/testing/selftests/drivers/net/settings  |  2 +-
+> >  .../selftests/net/lib/ksft_setup_loopback.sh  |  2 +-
+> >  10 files changed, 131 insertions(+), 41 deletions(-)
+> >  create mode 100755 tools/testing/selftests/drivers/net/gro_hw.py
+> >  rename tools/testing/selftests/drivers/net/{gro.py => gro_lib.py} (92%)
+> >  mode change 100755 => 100644
+> >  create mode 100755 tools/testing/selftests/drivers/net/gro_lro.py
+> >  create mode 100755 tools/testing/selftests/drivers/net/gro_sw.py
+> >  rename tools/testing/selftests/drivers/net/hw/{gro_hw.py => gro_stats.py} (100%)
+> >  create mode 100755 tools/testing/selftests/drivers/net/pppoe_gro.py
+> > 
+> 
+> For the series:
+> Reviewed-by: Nimrod Oren <noren@nvidia.com>
+> 
 
-On Fri, 26 Jun 2026 14:45:45 +0000, Brendan Jackman wrote:
-> On Tue Apr 21, 2026 at 4:55 PM UTC, Marc Zyngier wrote:
-> > Support for GUEST_MEMFD_FLAG_NO_DIRECT_MAP on arm64 depends on 1) direct
-> > map manipulations at 4k granularity being possible, and 2) FEAT_S2FWB.
-> >
-> > Where is this 4kB requirement enforced? Or is it that you means
-> > "PAGE_SIZE"?
->
-> Yeah I believe this means PAGE_SIZE and that it's effectively enforced
-> by checking can_set_direct_map() in
-> kvm_arch_gmem_supports_no_direct_map().
+For the series:
 
-Yes, this should say PAGE_SIZE rather than 4k.
+Reviewed-by: Willem de Bruijn <willemb@google.com>
 
-If I understand the arm64 MM code correctly, can_set_direct_map() is the
-capability gate, but it does not require the linear map to be built with
-page-sized PTEs from boot. Without BBML2_NOABORT, force_pte_mapping()
-builds the linear map with PAGE_SIZE PTEs. With BBML2_NOABORT,
-update_range_prot() can use split_kernel_leaf_mapping() to safely split
-larger mappings on demand before changing a PAGE_SIZE range.
-
-I'll update the v13 commit message to describe this.
-
-On Tue, 21 Apr 2026 17:55:05 +0100, Marc Zyngier wrote:
-> KVM/arm64 has:
->
->         select KVM_GUEST_MEMFD
-
-I also confirmed that KVM/arm64 selects KVM_GUEST_MEMFD, so I'll drop the
-redundant #ifdef in v13.
-
-> Why is it an inline function? Given that it takes a kvm parameter,
-> I fully expect that you'll have to evaluate this at some point.
->
-> But since struct kvm cannot be dereferenced in asm/kvm_host.h, it will
-> have to move. How about doing it right now?
-
-Agreed. Although the current implementation does not dereference kvm, it
-makes sense to move it out of asm/kvm_host.h now. I'll move the
-implementation to an arm64 KVM .c file in v13.
