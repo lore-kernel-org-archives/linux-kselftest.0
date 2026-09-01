@@ -1,136 +1,153 @@
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EAEF3A8724
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:34:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086EF411FBF;
+	Tue,  1 Sep 2026 15:34:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788276860; cv=none; b=cwiWzOzQXSgmxZC1QMTMvwfYwJDvAzrIv0zlyfM1zWU0yrAw04nHDI5gjeizbYba38c6xkdhzpfV+nLgVGMUpksP7fwrI35eQOmJ7CqekO5NoQLJqgTq+GlWtOxEy7g9AxahH9t8TeIY4z3L3oVgEmzMsTcSfowxZREhaY5oKYA=
+	t=1788276888; cv=none; b=SSfc8yN3jCXm/uuixAtntq25lf3T7GxsQXFqRIMtN56AaLqJBYXyIDJVD10xfOCQBEo2Z2Hu1SrMFRBvjc01/yVSUTWviyOVQD0T1EEWq0kdLthM004IQClOYRYZUJWKRT/vzO7updOsqDKHw+KPunYZvI2gja/UELzzaYvJPno=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788276860; c=relaxed/simple;
-	bh=iKD8ulE/7j+UTASizItruNbYincTMOqWILEWStCXBq4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AsK/9JoMkJdAKX790UwBwQt/hLF1KClnQE9hnr+ODoKZ/mlFDBcJavajXwc1wSGsXAfwW1I/Tf1i3kS7vNpcAcvBT47iHDbd+Rki1/QUsYMyzTWMg8mUUW3smsIkYfWUvdmiT9kUdQhgA/tZMkd7Fkto9w5b1/Z8DEiFBvy4teY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=qqMjHbWa; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1788276888; c=relaxed/simple;
+	bh=XLuK/PZ58lDhZmg6xDRQ9In2m+ureWTnrZMeNLfg+vQ=;
+	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
+	 Subject:From:To:Cc:Date; b=J2uF3XCerp269UwdVEYeDH0HtDDlUSTsiDp+x1fTBfI9yQ9m4N1DQDZXWGD9MR2izg05aGtsGQMqKjMjCNJnh8U7PA8u6ShihlOslI3TiUDx9Jl4uKh3d1MOm+hl73AigX9gyNCb8LDMKJIV12NzySGLTFpcyk84UAQx1dAaSrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oC1nNhPC; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="qqMjHbWa"
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2d9db539a54so3536425ad.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 08:34:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788276858; x=1788881658; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=tXnScza6YsSOijKy2kCYJ4+3czNea5Mz9Jc+EvPjn4U=;
-        b=qqMjHbWaSN/JwOsM1TrtG409Y9rK7KlGz8wudN60+jbOef/FTEUJRUePrQF1REROdQ
-         0tStiUPDUkrkNinhPo7DYnOArZRT7xleNxrYbvzp2eppIlczslElBrGDrk9UKjB1ry50
-         3pzesgWzijXF1McdrUwmn0aun7Nr+VhYgs1Bk2JgOPWKr41ikROMU7mFnLqavniVKblN
-         hrtmEXQZ9JK81JaJcWGfZGAIwSiggUMB5h6p4JqOinc9alM66A0yDCbO5eJd6+QJr/cK
-         iWL1HdU9OsiWDqhIFxPFvIpBT6PHqSx9Ky6BZD0NiPmbBwuojr8voBvyxq2jlKcQ7oRH
-         5d2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788276858; x=1788881658;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=tXnScza6YsSOijKy2kCYJ4+3czNea5Mz9Jc+EvPjn4U=;
-        b=RP2PPlPlsghHybra5FldeHWe94tbpd0jrl0Av6AOamOC9vbRskPq9FlHAcr9dljdMc
-         xhnLr5V5qv+q/l6uvibyR3jTP2pFwMt3dXzZaHR/voN+pwWKPBq03uKesf3OW962K5EA
-         32/unFIzCpVx95sczJEyb90TZrlwvQDAz046pgh1du2yJehAsRIwCIRidV+Yme1R3lH3
-         HwJXgeau6/3dCUA+D84THYdfwXRfdUoVgaMapq5h3KOcA6g+Sz0HQnPK9jFTzC/TGBn9
-         tsOPXq6+Dcpx579e76F/OWWeWTjH186wB6gXXzrAzDJx7x7se4L20yty4dJ92mO3qIrd
-         KOQg==
-X-Forwarded-Encrypted: i=1; AKwUvBz5LdvevFVU9nDKm8jbj5rQyzBau0GodNnoaHF8JuAknM2e7W4PTkyhX0Q+fDWmHr1EijGZpLrZ+Ds1skScwR4=@vger.kernel.org
-X-Gm-Message-State: AFuF++l1Wlxn9g2/x+5bbuYlCaQD6BrKBq+5h2FSpZdhXAmZ4VLalvD7
-	AvVWfe/XmdbVPnC3F+9TdxVQuMNN0d2trV6up4x89wuRNv7WaKM3NjY8Wlh4RX/hHfU=
-X-Gm-Gg: AYBFou0C9nxgiAP6LPwntZIjpCzzlOz9WFxjl1FHkdmK8ovMzlN5p9CCsGmNFKVYB1b
-	l/zyAw+i+RG9Ds5vSSv8/Lo651lLCxefHm+TihVhWf8F+uligUkw7/3PuEYVIclFlZHXFhxyzRS
-	BxIBwbvgPG1VpJQhY6C0ZTR56SFNMmkisb3YTEFzRYcDm/7KAudw3F7/LkaGE35PO+RZCDghqY/
-	flww2myakXldsoypanEYPAUqk/Qekyoblxh22pijBsD+4UQSJ0Va7iXE+4eaAhGMQ99kc4oyj7W
-	kJZ09TBiZnjTwXhOFjBsibVup+PkMP86QjK1Hqsi9Ya13vQe7/0145s/NgK08aoU9CZudtv6Axp
-	mg/WmXwoSELZgOdYE/uAsNReoY11RfD9UNU/9x8myx/anfovzMrKcrCMLrYTya0z6kGLPFT8VCw
-	6wj+py4dpglBlrRKzwaIlXT3OogGLkxuMpg0SSaeS4Hg==
-X-Received: by 2002:a17:903:1b30:b0:2d8:d4d3:da4e with SMTP id d9443c01a7336-2d94a90efd6mr156260925ad.18.1788276858223;
-        Tue, 01 Sep 2026 08:34:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:73::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd39e9cfsm974055ad.34.2026.09.01.08.34.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 08:34:17 -0700 (PDT)
-Date: Tue, 1 Sep 2026 08:34:16 -0700
-From: Joe Damato <joe@dama.to>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org, noren@nvidia.com
-Subject: Re: [PATCH net-next 2/3] selftests: drv-net: split gro.py into one
- test per coalescing mode
-Message-ID: <apbweF6mzkEXLPbu@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
-	willemb@google.com, petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org, noren@nvidia.com
-References: <20260831163734.1121891-1-kuba@kernel.org>
- <20260831163734.1121891-3-kuba@kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oC1nNhPC"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F48F1F000E9;
+	Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788276886;
+	bh=sXDKWyKAaYd6V/9rFYp5krd/4rh/b9keSzpuKc3ug44=;
+	h=In-Reply-To:References:Subject:From:To:Cc:Date;
+	b=oC1nNhPC8CSLvJ7DmoQa5fClWUYEKBBK8TqAd5V2p0PDokhn2XA0bHuiDnm9H9Em1
+	 6YZljdShXLM7ndMP4NO8e7P4eaAmBM/HIBB7uSOPUu9C6CWSGcYFUqIzmmunUD4QDS
+	 y4ekkUeYhkf3SbhBUrbPAaTLA7Q1V1oaVHszAuSksd7tlhYgScqKDP6jOaOs2dPoFJ
+	 ZA+7WXtFNXR8orl5LxZY/0sjxrtUZYlZF1VjfytHrLk36rpEffDEx1vOhmjuAUHCtc
+	 bW1ZDJcvTVpAcixdjZyH1nXB90TfEKyOJUSWPppPJLGSPHndcXZ3gD37WiSIZFDFAB
+	 pl5P7wRY+pWCg==
+Content-Type: multipart/mixed; boundary="===============4761417725018966106=="
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831163734.1121891-3-kuba@kernel.org>
+Message-Id: <f987bc5dcd678e13cd661ba9830f30d43cf612f3ee8548020491c791c35308fc@mail.kernel.org>
+In-Reply-To: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
+References: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
+Subject: Re: [PATCH] selftests/bpf: Fix map_lookup_percpu_elem on sparse CPU IDs
+From: bot+bpf-ci@kernel.org
+To: suchitkarunakaran@gmail.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
+Cc: emil@etsalapatis.com,ihor.solodrai@linux.dev,jolsa@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,zhoufeng.zf@bytedance.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,suchitkarunakaran@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
+Date: Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
 
-On Mon, Aug 31, 2026 at 09:37:33AM -0700, Jakub Kicinski wrote:
-> gro.py runs its full set of cases three times over - against SW GRO,
-> HW GRO and LRO. It's our test with the longest runtime. The 318 cases
-> take 12m30s on mlx5 with a debug kernel.
-> 
-> Bumping the timeout for all tests feels wrong when we can so easily
-> split the GRO test by execution mode. Shorter runtime also helps retry
-> just the failing portion / mode (we retry failing tests to try to
-> detect flakes vs real failures).
-> 
-> Move the main logic to gro_lib.py and add one program per mode -
-> gro_sw.py, gro_hw.py and gro_lro.py, 102 cases each. Move PPPoE to
-> a dedicated test. It has been tacked onto the tests in an ugly way,
-> and it only runs against SW GRO anyway.
-> 
-> Note that unfortunately this will case a rename of all test cases.
-> The mode moves from the case name to the test name
-> 
->   gro.py test.sw_ipv4_data_same
-> 
-> becomes
-> 
->   gro_sw.py test.ipv4_data_same
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> We also saw 20min runs on gve, but those may have been errors.
-> The GVE runner is very flaky and even when it runs it doesn't seem
-> to execute the gro test. Perhaps because the test times out?
-> ---
->  tools/testing/selftests/drivers/net/Makefile  |  9 ++-
->  tools/testing/selftests/drivers/net/gro_hw.py | 14 ++++
->  .../drivers/net/{gro.py => gro_lib.py}        | 68 +++++++++----------
->  .../testing/selftests/drivers/net/gro_lro.py  | 15 ++++
->  tools/testing/selftests/drivers/net/gro_sw.py | 14 ++++
->  .../selftests/drivers/net/pppoe_gro.py        | 46 +++++++++++++
->  .../selftests/net/lib/ksft_setup_loopback.sh  |  2 +-
->  7 files changed, 129 insertions(+), 39 deletions(-)
->  create mode 100755 tools/testing/selftests/drivers/net/gro_hw.py
->  rename tools/testing/selftests/drivers/net/{gro.py => gro_lib.py} (92%)
->  mode change 100755 => 100644
->  create mode 100755 tools/testing/selftests/drivers/net/gro_lro.py
->  create mode 100755 tools/testing/selftests/drivers/net/gro_sw.py
->  create mode 100755 tools/testing/selftests/drivers/net/pppoe_gro.py
-> 
+--===============4761417725018966106==
+Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Joe Damato <joe@dama.to>
+> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> index bfb1bf3fd427b..849f33259c003 100644
+> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+> @@ -2,29 +2,45 @@
+>  /* Copyright (c) 2022 Bytedance */
+>
+>  #include <test_progs.h>
+> +#include "bpf/libbpf_internal.h"
+>  #include "test_map_lookup_percpu_elem.skel.h"
+>
+>  void test_map_lookup_percpu_elem(void)
+>  {
+>  	struct test_map_lookup_percpu_elem *skel;
+> -	__u64 key = 0, sum;
+> -	int ret, i, nr_cpus = libbpf_num_possible_cpus();
+> +	bool *possible = NULL;
+> +	__u64 key = 0, sum = 0;
+> +	int cpu, nr_cpu_ids, nr_cpus, ret, slot = 0;
+>  	__u64 *buf;
+>
+> -	buf = malloc(nr_cpus*sizeof(__u64));
+> -	if (!ASSERT_OK_PTR(buf, "malloc"))
+> +	ret = parse_cpu_mask_file("/sys/devices/system/cpu/possible", &possible,
+> +				  &nr_cpu_ids);
+> +	if (!ASSERT_OK(ret, "parse possible CPU mask"))
+>  		return;
+>
+> -	for (i = 0; i < nr_cpus; i++)
+> -		buf[i] = i;
+> -	sum = (nr_cpus - 1) * nr_cpus / 2;
+> +	nr_cpus = libbpf_num_possible_cpus();
+> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
+> +		goto free_mask;
+> +
+> +	buf = malloc(nr_cpus * sizeof(*buf));
+> +	if (!ASSERT_OK_PTR(buf, "malloc"))
+> +		goto free_mask;
+> +
+> +	for (cpu = 0; cpu < nr_cpu_ids; cpu++) {
+> +		if (!possible[cpu])
+> +			continue;
+> +		buf[slot++] = cpu;
+> +		sum += cpu;
+> +	}
+
+Does this buffer layout match how the kernel expects it?
+
+The userspace side fills buf[] with one entry per possible CPU, storing
+the logical CPU ID at packed index 'slot' (0, 1, 2, ...). For a mask
+like 0,2-3, this creates buf = {0, 2, 3} with 3 entries total.
+
+Looking at the kernel's update path, both percpu array and hash maps
+index the user buffer by logical CPU ID:
+
+kernel/bpf/arraymap.c:469 bpf_percpu_array_update()
+    for_each_possible_cpu(cpu) {
+            ptr = per_cpu_ptr(pptr, cpu);
+            val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
+
+kernel/bpf/hashtab.c:1038 pcpu_copy_value()
+    for_each_possible_cpu(cpu) {
+            ...
+            copy_map_value_long(&htab->map, per_cpu_ptr(pptrs, cpu),
+                    value + off + size * cpu);
+
+With the mask 0,2-3 (num_possible_cpus() = 3, nr_cpu_ids = 4), the
+update walks possible CPUs {0, 2, 3} and indexes the buffer as:
+
+  cpu 0:  *(value + 0)  = buf[0] = 0   (intended)
+  cpu 2:  *(value + 16) = buf[2] = 3   (expects 2, gets 3)
+  cpu 3:  *(value + 24)             (past the 24-byte buffer end)
+
+The userspace layout is packed (3 entries), but the kernel accesses it
+as sparse (indexed by CPU ID). The test sized the buffer for
+num_possible_cpus() bytes, but the kernel's 'size * cpu' indexing can
+exceed that when the possible mask has holes.
+
+Should the userspace buffer either be laid out by CPU ID (sized for
+nr_cpu_ids, with holes at non-possible indices), or should the kernel's
+update path use packed indexing like the lookup direction does?
+
+> +	if (!ASSERT_EQ(slot, nr_cpus, "possible CPU mask weight"))
+> +		goto exit;
+>
+>  	skel = test_map_lookup_percpu_elem__open();
+>  	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
+>  		goto exit;
+>
+>  	skel->rodata->my_pid = getpid();
+> -	skel->rodata->nr_cpus = nr_cpus;
+> +	skel->rodata->nr_cpu_ids = nr_cpu_ids;
+>
+>  	ret = test_map_lookup_percpu_elem__load(skel);
+
+[ ... ]
+
+
+---
+AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
+See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
+
+CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33521264909
+--===============4761417725018966106==--
