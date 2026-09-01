@@ -1,115 +1,196 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D4949E5CB;
-	Tue,  1 Sep 2026 18:33:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2DE149DBBB
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:35:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788287630; cv=none; b=KN05jLNju+NowUZBNsrjYPwUEPGX21/DCj6NbSWMEDjZyUThmxMW+RX9ObfFLVU1/rnS0rrbJvSnezCn3iRLDHQzZRIM+VtmW6LlbIxT8gd5PqYivrKbIoxpgJ1nn6lKonLT9tlc45sp1+wv+QUEicBeEz81Pis07XBYoR4uHKA=
+	t=1788287719; cv=none; b=R6uFTRF5abB/yPjzizqc6J94BtP+vo/VKLV4W6GNxARsmQgeVrIoMMfJ6BesoSSCatIK1NXiIChEGEEVvKzT7krc4WEuONccUUmsrH2b0UymqfaeqbtDvyBM2H8X5KEGo6LqAlpU4MtWSVdUlo21Cn7gPONXuODs/RPlq8Z9nO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788287630; c=relaxed/simple;
-	bh=gyHmnvEnpDzLxIA9secLY/W9xDC3IeZgi6WRNA5ZYps=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q3wwd1CA2kGtgc4ULrsYwTb6G0Y4frxprW6syysjO2gwaPZsl8r29831vmuF4Wm2uj93Zr5mR/ShuXpFM7cTxqKtRK/I+SarXQaOsyPiuUZxFG0sfUUGI/1ZESorJTx8YoYjnIHWSIIfmjFNEBINxJmd2d7hNrFImXHQH2eISbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=A0yb3DaC; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1788287719; c=relaxed/simple;
+	bh=d6mWEdAbh3pA6h0kvJxTmQz3sCAdRZUVlyIUylbQoi4=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=jBve0MtMjUxA5MfMFkUVXaFKWMOSCCXa7dX0QH1A9oIDU+jO3f1WWgGIreEnKcPRIZtY5tWHw3JkK3OUn8QSu1f8SdJVuOrV97sghNJhkYZwPerbPg9qeEz2FiFOPBE9usOSwiZdh/CdRnZ0kPSnNQ2udlMf9KbzkuZSSZdFUzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=aJ/i8hKe; arc=none smtp.client-ip=209.85.215.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="A0yb3DaC"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1788287619;
-	bh=gyHmnvEnpDzLxIA9secLY/W9xDC3IeZgi6WRNA5ZYps=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A0yb3DaChar/alzw1Grjv30Hy+sNhyJoL4FD3Y9s8cg+JFOV2NG+v4O95KtpVkc2y
-	 +OjF77XNKQqFGungkclgVtdGRFKabbQL7vwz6IX0Q52TiczwZTBEeVqJBmV7T1tifz
-	 L9hNli9JB/VWbfbaoQUOiFvbKQ+kdhbtTf5nJFGM=
-Date: Tue, 1 Sep 2026 20:33:39 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Michal Simek <michal.simek@amd.com>
-Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
-	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Subject: Re: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
-Message-ID: <b48fee3e-d113-4551-aed4-100a089e33b5@t-8ch.de>
-References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
- <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
- <5cd8df03-ad51-460c-9b20-3bf288831b5a@amd.com>
- <60d4618b-3620-4ecc-a2c6-2b382de68724@t-8ch.de>
- <40f679a2-fb5d-4d69-96dd-ab6c6718ac07@amd.com>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="aJ/i8hKe"
+Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cc1c2f1acebso262925a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788287717; x=1788892517; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=LA0MtyhL9+n6pP8AlY+vz7qS2JveEW6zRalGa05+rBs=;
+        b=aJ/i8hKeU2jlhpAWK9sJzuUmkRVeSqRdCS/Lig6QNmblH4MuDa9c+UgAFgPjRbPKDN
+         OPo+yFpDnfV0UDQnzFnUceEivvRvHRFJTqcHPzYHSmQ5POGpEc9kv0OgE/WsYJ6VMccc
+         JwFMDVTiz9gFkUBsnorJqYL9LOlRF0/z9kvG4rylrasCO3J+5I/rlRR5F3ASsMjYSr8U
+         Oi9MO4w1oQIqF7d6NitC9j/W64i55ErnuLaKHk2VYXSL9I1D/EYIYAzDAChBsxWjL9TN
+         Npo8jE1cxufv7fZS2WwJJd9J9wUbrWMhjNxEsI1vRJbFHz3i5W8smZNMS52hIOm0MqqQ
+         AP1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788287717; x=1788892517;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=LA0MtyhL9+n6pP8AlY+vz7qS2JveEW6zRalGa05+rBs=;
+        b=nrueMoIuPtaQfrHSK8wrwqK2FWPur9F79/X5EOXEQ2dVNAuzC58cAmPoe6qJ3tOIqW
+         m2LkaM/gstvBzePEvE4OD6sd3zQw50CwES/ECwWyXb5i6bYV0DomksZbvYkBzGvc2qMz
+         Nim5xojnLoFZjR+pR8YDpX+HOlr6+JYWttaJh5NIviQDr2040GePiGFBaPAxZcoiDUrV
+         GXUtr+3eyQuosA5CFsktKKAdVjtsT8haSFWib42Ei4areEBTZD25SAT/b6u0dyd6xcfG
+         w0zn/FgvHagIiXRd8aDzU/kIrjM8xPJ2na54K6tHXbB4dI2mG1Y+5JvEtQJ8unvYamqA
+         rwUQ==
+X-Forwarded-Encrypted: i=1; AHgh+RrnyRed4N/ihNzqtrwQ1C5wgLjXnmhfgydblEE13NVxwTjPhcyRNCcFHrYiUWIuDvKI0rFq3y8VYyTE+UWo0ak=@vger.kernel.org
+X-Gm-Message-State: AFuF++l2fvKP+EbXe1AmTbNZdjqf6WuryWxJQGO4Pqi4pBrgj+Drx49I
+	rCqpvnqgpNu+WlCI9UXP02lJdX2B829v5E2oUFUFgleNlvtvaeC7tcUgEnvVPKmds+MmDrzkin0
+	p2Y27AA==
+X-Received: from pgcv12.prod.google.com ([2002:a05:6a02:530c:b0:c96:acc6:54d6])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:3944:b0:3d3:aec2:4dcb
+ with SMTP id adf61e73a8af0-3d7b075b26bmr19293744637.23.1788287716571; Tue, 01
+ Sep 2026 11:35:16 -0700 (PDT)
+Date: Tue, 1 Sep 2026 11:35:15 -0700
+In-Reply-To: <CA+EHjTzJbC=ZvB3Mopw-TLf=13-iqxGw5RfTp6Gt5S1hi8WRRA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <40f679a2-fb5d-4d69-96dd-ab6c6718ac07@amd.com>
+Mime-Version: 1.0
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
+ <20260830-gmem-inplace-conversion-v12-15-85e5fd25252a@google.com> <CA+EHjTzJbC=ZvB3Mopw-TLf=13-iqxGw5RfTp6Gt5S1hi8WRRA@mail.gmail.com>
+Message-ID: <apca475JqemLUjlb@google.com>
+Subject: Re: [PATCH v12 15/45] KVM: guest_memfd: Ensure pages are not in use
+ before conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On 2026-09-01 15:33:11+0200, Michal Simek wrote:
-> On 8/31/26 17:43, Thomas Weißschuh wrote:
-> > On 2026-08-31 12:48:08+0200, Michal Simek wrote:
-
-(...)
-
-> > > If there is an issue with memmove implementation I can't see any issue to
-> > > disable that options to let it pass from the beginning and solve it
-> > > separately.
-> > 
-> > Ack. Could you take care of this? I have next to no idea about microblaze.
+On Tue, Sep 01, 2026, Fuad Tabba wrote:
+> > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > index 803c7cdbbe0f6..fe02c47c85fb5 100644
+> > --- a/virt/kvm/guest_memfd.c
+> > +++ b/virt/kvm/guest_memfd.c
+> > @@ -538,8 +538,46 @@ static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
+> >         return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
+> >  }
+> >
+> > +static bool kvm_gmem_has_outstanding_references(struct inode *inode,
+> > +                                               pgoff_t start, size_t nr_pages,
+> > +                                               pgoff_t *err_index)
+> > +{
+> > +       struct address_space *mapping = inode->i_mapping;
+> > +       pgoff_t last = start + nr_pages - 1;
+> > +       bool has_outstanding = false;
+> > +       struct folio_batch fbatch;
+> > +       pgoff_t next;
+> > +       int i;
+> > +
+> > +       folio_batch_init(&fbatch);
+> > +
+> > +       next = start;
+> > +       while (has_outstanding && filemap_get_folios(mapping, &next, last, &fbatch)) {
 > 
-> On little endian this is passing. I can add it to my todo list but big
-> endian is very very old and likely none is using it anymore.
-
-If it is not supposed to work maybe mark it as BROKEN or disable the
-custom memmove() implementation there and instead rely on the generic
-one from lib/string.c?
-
-> > 
-> > > This should be fragment for Little endian.
-> > 
-> > Thanks, unfortunately this hangs for me with my distros QEMU 11.1.0.
-> > No output, 100% CPU usage during boot. I am using qemu-system-microblaze
-> > instead of qemu-system-microblazel, as the latter is not available
-> > anymore, but the former is documented to also handle little endian
-> > automatically.
-> > 
+> has_outstanding starts as false, so the loop never runs and the function
+> always returns false. The outstanding-reference check is dead at this
+> patch, so a to-private conversion would not be rejected even when a page
+> still has an outstanding reference.
 > 
-> I built the latest qemu like this
-> 
-> ../qemu/configure --target-list=microblaze-softmmu,microblaze-linux-user,microblazeel-linux-user
-> --enable-gcrypt --disable-docs
-> 
-> /mnt/projects/xilinx-new-git/qemu.org/build-microblaze/qemu-system-microblaze
-> --version
-> QEMU emulator version 11.1.50 (v11.1.0-779-gd2e570cc0f97)
+> It's fixed later in "KVM: guest_memfd: Handle lru_add fbatch refcounts
+> during conversion safety check", which changes the condition to
+> !has_outstanding. I think that fix belongs in this patch, so the check
+> works when it is introduced and the series bisects cleanly.
 
-For me it still doesn't work. I am using the same build of QEMU and GCC
-13.4.0 (or 16.2.0) from crosstools.kernel.org.
+Why even bother with has_outstanding?  Avoiding it requires copy+pasting
+folio_batch_release(), but it's less code and IMO the end result is a lot easier
+to follow:
 
-> And can't see any issue.
+	struct address_space *mapping = inode->i_mapping;
+	pgoff_t last = start + nr_pages - 1;
+	struct folio_batch fbatch;
+	pgoff_t next;
+	int i;
 
-(...)
+	folio_batch_init(&fbatch);
 
-> /mnt/projects/xilinx-new-git/qemu.org/build-microblaze/qemu-system-microblaze
-> -nodefaults -m 1024 -kernel .kunit/arch/microblaze/boot/linux.bin -append
-> 'kunit.enable=1 kunit_shutdown=poweroff' -no-reboot -nographic -accel kvm
-> -accel hvf -accel tcg -serial stdio -M petalogix-ml605
-> qemu-system-microblaze: -accel kvm: invalid accelerator kvm
-> qemu-system-microblaze: -accel hvf: invalid accelerator hvf
-> qemu-system-microblaze: falling back to tcg
-> qemu-system-microblaze: warning: nic xlnx.axi-ethernet.0 has no peer
-> random: crng init done
-> Ramdisk addr 0x00000000,
-> FDT at 0x5058e528
-> Linux version 7.3.0-rc1-00023-g5a713478d535 (monstr@monstr-desktop3)
-> (microblazeel-amd-linux-gcc.real (GCC) 13.4.0, GNU ld (GNU Binutils)
+	next = start;
+	while (filemap_get_folios(mapping, &next, last, &fbatch)) {
+		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+			struct folio *folio = fbatch.folios[i];
 
-I guess this is a special GCC variant. Could you try with one from
-https://mirrors.edge.kernel.org/pub/tools/crosstool/ ?
+			/*
+			 * Outstanding references are anything other than those
+			 * from the page cache, plus 1 temporary reference held
+			 * by filemap_get_folios() in the folio batch.
+			 */
+			if (folio_ref_count(folio) != folio_nr_pages(folio) + 1) {
+				*err_index = max(start, folio->index);
+				folio_batch_release(&fbatch);
+				return true;
+			}
+		}
 
-(...)
+		folio_batch_release(&fbatch);
+		cond_resched();
+	}
 
+	return false;
 
-Thomas
+and then we end up with:
+
+	enum lru_cache_drained drained = LRU_CACHE_NOT_DRAINED;
+	struct address_space *mapping = inode->i_mapping;
+	pgoff_t last = start + nr_pages - 1;
+	struct folio_batch fbatch;
+	pgoff_t next;
+	int i;
+
+	folio_batch_init(&fbatch);
+
+	next = start;
+	while (filemap_get_folios(mapping, &next, last, &fbatch)) {
+		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+			struct folio *folio = fbatch.folios[i];
+
+			if (__folio_has_outstanding_references(folio, &drained)) {
+				*err_index = max(start, folio->index);
+				folio_batch_release(&fbatch);
+				return true;
+			}
+		}
+
+		folio_batch_release(&fbatch);
+		cond_resched();
+	}
+
+	return false;
