@@ -1,153 +1,223 @@
-Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B11351C35
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 11:32:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951DC39A04D
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 12:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788262344; cv=none; b=uesiWor50aAWAxoUXdFgw+M9pthSDGih7zy26U3fyTmc6WmNRgvTRAxms8h+95t64Pv0kQN/KJdXY7pspL940TXNf+u4wBBLJua0ueKmdp2IV0N6Bly5evkwke8Hk9wft4CAl/UFvH9ZXxi+ptL918Zdirtuy8FgR6Hfu35LKpA=
+	t=1788264485; cv=none; b=BfxmPMF/ql8dHq1f3LpSG6mzq5Dfg3MMIs04cU9PSOTlYssVFSYx0WLVFDiUh6C997jrmS6JeADjBQUy+qc3x9yGfI2xdr/0Q5eTQKWVYrDrmitUm0xA7ZtUeM9VscoQrnAybwQoQDcUTkOVInXaJ8uoObbdNlja4MaiHdSz/Vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788262344; c=relaxed/simple;
-	bh=NRVm+NpeqhDaHD1stYDATNicwntE7vF0BHXpPUPT4Ug=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tZM2urDFduTSQmrKLdPVnyeJOPTbvYpQKNM6zD6idRgerCnKzt9uP+/xPW7R5vRx9CGAupYS1J7L0fdpU7CD+LJ2lKZm2wPyndIz9gKjFa344YT1D+HWbu8fejqT6JYAmZXhkMFocwnYpJAIu1UqlH82CMppBoHl2Phg5XSm7iY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=WQN2egFW; arc=none smtp.client-ip=209.85.161.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788264485; c=relaxed/simple;
+	bh=o5Egp9yNwXpcCqrJLh2gmihEga63VBYdsEigTCjApRk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hyAlI8u+CNk2vDRoXQJIqfwvqBYyRSwY2myo08wnYNHOAcp5tEEJ5RzgjEztGniHGuRlN7ntqTVaZRg/S+AwXIKd/FtXgIbcAEEpQslK7CsYhIZsZx0SyOU4oUOEazG9egFrWV2bg1n5pK+YL6q6YpfKRd4n/wzAylsroZktsk0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ajou.ac.kr; spf=pass smtp.mailfrom=ajou.ac.kr; dkim=pass (1024-bit key) header.d=ajou.ac.kr header.i=@ajou.ac.kr header.b=DEpEL3lu; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ajou.ac.kr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ajou.ac.kr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="WQN2egFW"
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6b1b233ca98so447823eaf.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 04:32:22 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ajou.ac.kr header.i=@ajou.ac.kr header.b="DEpEL3lu"
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2d5cad1a6baso44587925ad.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 05:08:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ajou.ac.kr; s=google; t=1788264482; x=1788869282; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=OQLp2qcl9BqKOUtBIxO1nk5z5lFh8LVeO8TWdXgzcQg=;
+        b=DEpEL3luiE4MUR7b1N9KH7PpFFXQQSnocXKa4I//EKuvSOzbleXjjeIBTMJfqdxSSU
+         59E48Ke9B7N7R2wKJ45tx7XOYXgeSMfctO+doNo6hJaBWDpUTf5mFdibdHkAeKynoUK8
+         zizMKjCdb3mh4cKkjXToPNhc/QqNiveuGM6GI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788262341; x=1788867141;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:dkim-signature:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=hEmWNrm2JJeYYsOZMUufG1GNwpjiBF7RXVW8N5KgjKA=;
-        b=fNhUAMeSYxRT7e20KRcv+cPKOCgbSjBnOLd1LJIeRwPOVEdnIyL4lr6kGErOiUz9Vj
-         CgUpLdb7V9O4kfRzfAA9S6+wPT/G1fB/GRHrFZ1X0uTbDndfeQ0SMhdlnEvnbKbwlPzt
-         Ti8uUpMPUoT2R1JlOYu/uGv3wEtA8TCNdcHRzBKy2msc1/a+I1Mw42Sdw4aAzDbLpuBu
-         aiiSAXyw2ilihjvwDUj1k0AO4aUcXfuJRz5hiawtvGwlVXb92XC0fXb9Hdn1n0W94qQt
-         7DeYkShmYa3kktP7IiMknxM66YTvF/cebb3VzmeD/b+Go3M1I6Ay8JbAOKThdMq+m+AB
-         tGgA==
-X-Forwarded-Encrypted: i=1; AHgh+Rr1iMVxZjXjNJMb894+mJIUceanSREdFD2dSryV7hRPYZcD+v/GAsodPee8cqhk9WK0GMVHnYeVgI76Z9O3B90=@vger.kernel.org
-X-Gm-Message-State: AFuF++lpQ2F5P0KVOj2JeG48hxd3PMGNOeK9wjefSqhk95SY5lNh0g5d
-	BpiPYVOtbMg5i/TWX7A2cklzokKPl9J1/YGqnLOpr3A6cilBDau5rBt8
-X-Gm-Gg: AR+sD12DF9XurCni+to/8g+lzj8+8HoO760VCdyHl+T8qB28PKlOS+UUE9/xU6KMfkY
-	Y2xXSKtYj3GOo5Mpkze3mbnGSuxHazOcf3ijE+H66dLmlV0P6zna+9FwKjVecyfPB+QLeKrpROY
-	7a9xflorfQY4EADlsFKyiLwvyHcBJzDqQZQSx6PmSLE0h+KV6vDcMXH/J9CWbYfY9tgpHxnADeI
-	QOva8QLrIfBoxk2XPSljoM1P7vo5zxGgBWJKV/EroWawoWUww0Z1l7KBvSktBehcHAb+5DuHW7O
-	cFkCMsXYB5+v5lr9SUuiyslvP0TlGpTqnrZUVYNe6UCE6uwyIzTS33C1NM9lI+xe4a3YdooVHm8
-	PpxHyhaD+b8xLp+5Kq7LayIpdDQJfMUoiSSYju9XRQgm+QFMvyENNIaOCRntiE+Ms71oqPrVz7P
-	/jqdO3ojbS1jZPYoCZMD9pBxrqDyMh6/NQKNDPwhH4eI2cjmPB+jKCeSRvFwr38hCkYrH/DC3qj
-	4c5HBEyIqrBFCsGGv7d5uHXIkTFOuvb8yYOBToslOVeMRf7wEyxeizT32xop5n/JQ==
-X-Received: by 2002:a05:6820:2017:b0:6b1:5d5e:679d with SMTP id 006d021491bc7-6b1c679e571mr29869969eaf.28.1788262341283;
-        Tue, 01 Sep 2026 04:32:21 -0700 (PDT)
-Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
-        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b1ce2916a8sm13636111eaf.10.2026.09.01.04.32.20
+        d=1e100.net; s=20251104; t=1788264482; x=1788869282;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=OQLp2qcl9BqKOUtBIxO1nk5z5lFh8LVeO8TWdXgzcQg=;
+        b=jkmuGSTMYoBDTd3WW9rkdNiqM465RGffViZpAXQQopXHAYbQTgKFyc01kmJeSU/fuj
+         FxQdzWrWvjLH2+/drLIwo1kYqu3yPEJqiiKE5U6LCMAUxofCLRfFUF0UUmek+eR0KknA
+         juJ68dB+woobOSknY/EVNhr3buRQxXo7nCr9d3+zcM4dttrnsEDVuyTj6D37l2XaLuXY
+         cEqe2iAtKVEV3K7Jx0symPAIbp2xsI4h7Za/fvTpUjb9W6X1vpcE01a1tmXBMvrH0OuB
+         /9A0Rk8RDWGcXDwwGTxJY+/uPVHp8P5mkLHdw/PON4monh3hPdz3V3dLOV6ZGhXr6xZ+
+         nhpA==
+X-Forwarded-Encrypted: i=1; AKwUvBz7xJEne8jvXJb3yszeGEj1r0gdLPRQ3Cth1flY+2UL2dOiAMHPIpIVbP40pt8NQ5G/btUypCimEzZiHe42HfI=@vger.kernel.org
+X-Gm-Message-State: AFuF++moitPxIwEY33Mla66NFaRHlljsm86TM6GJP9a1YuzTmXdv17Uh
+	6bMV6Xx/vOgTslckSiQGGfMgfiZx8EGNSN2hUbkcq7ju/fNCETLkawJ+5WSrww1PLD4=
+X-Gm-Gg: AR+sD13MUjIg/veJDMPX7R0+C4FM+9aSANt4Thk1qE3WBKZkfBNyxqkiAgS+T1/hsW6
+	2kUlfVAFigf2NcQvG4fH92DEDEs9gZ40TB5Fl6AhP8ZyqlklgfhEIkoN+IKbnL2qtdJppN0cOV7
+	6hslKxdDrUeL0/2MdVisg4HRgA455y1GHwXW8UFwZkd8u7cFfwls49PHekIe6uEthe1/80KxYiJ
+	vZO4W3Lx6rJwVsgr/VyAU4W656+tczI4ljrsLoen+7myTlwKvaUi1b1zSE6yRe7urlrph55KWDJ
+	4pT6v79BH0SG8/9RyTU2A+/z6lEE9yl3Hb3+wOG8n8pI4udE0TbeitA62FxH/dyIRERYjLZDKNP
+	Vr+urIBVgLSnsKg5edT43+IXK/jUpHmSL+SSVcFiV9FgvS2mNqQLSyvpUmAgekEN1eiO33mw+ud
+	kDsa+U35cqnkTAHS4yg4bMRV8gPJsI70Fv0xxOg+KaijVTOyR1vd5B92PKqxnBW7PdojWw6H0yn
+	44AHTl2QcSWGuVz2JcoV6VP5GJiPoi7pvFFJNzSWhk=
+X-Received: by 2002:a17:903:1aab:b0:2d9:e1b:73ee with SMTP id d9443c01a7336-2d94a760fc8mr105012655ad.8.1788264482200;
+        Tue, 01 Sep 2026 05:08:02 -0700 (PDT)
+Received: from DESKTOP-2P4OM44.localdomain ([175.195.197.184])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d75986aea3sm50325765ad.52.2026.09.01.05.07.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 04:32:20 -0700 (PDT)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEFE660D1F;
-	Tue,  1 Sep 2026 11:32:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
-	s=dkim; t=1788262338;
-	h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=hEmWNrm2JJeYYsOZMUufG1GNwpjiBF7RXVW8N5KgjKA=;
-	b=WQN2egFWZ83BoX6boVS3fAw8WgfZ0I6glPax5x/l5hbQkcOA9qdHlRmUwJG+L2QAXOWQ/0
-	2FrGxt1oEu7Ia50mWE2W6OkRNFR4u7NwYGZWibuoBTBgBodLpNhOh+acBmuZNsq08XE7NS
-	9YzPM0GoZPq7Jrjmk9spTbWqny69Dsy7LG7r4zLxoRafEci2SQTaJbhGSjG3vQmEvOX/Dw
-	t01lxVeOUVkwGOVkURI8osV7fmMYjiTYntFQry4vfqf26fU3MtyoBYatP4FdwZfVDpZ4mk
-	OAFOm1FLZlW8D08mPh3r93zq2KrgjxnD2PKfxR9g6ebAwRDb94DAQNznjeXx4A==
-From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-Date: Tue, 01 Sep 2026 08:31:58 -0300
-Subject: [PATCH net] selftests/net: Fix flaky bind_wildcard due to
- ephemeral port race
+        Tue, 01 Sep 2026 05:08:01 -0700 (PDT)
+From: qotmddnjs <qotmddnjs@ajou.ac.kr>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	idosch@nvidia.com,
+	shuah@kernel.org
+Cc: horms@kernel.org,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Seungwon Bae <qotmddnjs@ajou.ac.kr>
+Subject: [PATCH net v2] vxlan: reject dynamic fdb entries that reference a nexthop id
+Date: Tue,  1 Sep 2026 21:07:40 +0900
+Message-ID: <20260901120740.105374-1-qotmddnjs@ajou.ac.kr>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260901-selftests-net-bind_wildcard_race-v1-1-880ddc7ed62e@marliere.net>
-X-B4-Tracking: v=1; b=H4sIAK23lmoC/yWN2wrCMBBEf6Xss8E0Qr38ikjZbLZ2pcaSjRco/
- XcTfTzDzJkFlJOwwqlZIPFLVB6xQLtpgEaMVzYSCoOzrrNH2xrlacisWU3kbLzE0L9lCoQp9Am
- JDVnb7dEF2tkDFM2ceJDP7+IMZQOXf6hPf2PKVV5rHpWNTxhprFEpbu8oEdb1C+5nDyOkAAAA
-X-Change-ID: 20260901-selftests-net-bind_wildcard_race-c0067a2dc308
-To: "David S. Miller" <davem@davemloft.net>, 
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
- Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
-X-Mailer: b4 0.16.0
-X-Developer-Signature: v=1; a=openssh-sha256; t=1788262332; l=2208;
- i=ricardo@marliere.net; h=from:subject:message-id;
- bh=NRVm+NpeqhDaHD1stYDATNicwntE7vF0BHXpPUPT4Ug=;
- b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
- x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
- QAQvMA+iXtgn9SGn6DViwidV1JIXPs63Piol0t0aGONt4f1I1seQ/5dbxTlA5gP59kodzeGuJvW
- Uyx2XB5WcnAE=
-X-Developer-Key: i=ricardo@marliere.net; a=openssh;
- fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
-X-Last-TLS-Session-Version: TLSv1.3
 
-bind_wildcard picks an ephemeral port by binding fd[0] with port 0, reads
-it back with getsockname(), and then reuses that exact port number for the
-other addresses/families in fd[1..7]. This all happens in the default
-network namespace, so unrelated processes on the same host are drawing from
-the very same ephemeral port range (net.ipv4.ip_local_port_range) at the
-same time.
+From: Seungwon Bae <qotmddnjs@ajou.ac.kr>
 
-Such a process can independently get assigned that exact port number on a
-different, non-conflicting address in the short window between fd[0]'s
-bind() and fd[1]'s, making fd[1]'s bind() fail with EADDRINUSE for reasons
-that have nothing to do with the wildcard-bind behavior under test, e.g.:
+An fdb entry that references a nexthop id cannot roam and therefore has no
+reason to be aged out, even though vxlan_snoop() keeps refreshing its
+timestamp.  Nevertheless, such an entry can currently be created (or an
+existing nexthop entry updated) with a dynamic state, which places it on
+the aging list.
 
-  # bind_wildcard.c:775:plain:Expected ret (-1) == 0 (0)
-  # plain: Test terminated by assertion
-  not ok N bind_wildcard.v6_local_v4_local.plain
+struct nexthop.fdb_list is a per-nexthop global list of the vxlan fdb
+entries that reference an fdb-nexthop.  It is manipulated by vxlan under
+the per-device vxlan->hash_lock only.  When two vxlan devices reference the
+same fdb-nexthop, their entries share one nh->fdb_list, but each device
+takes only its own hash_lock.  vxlan_cleanup() - the aging timer - then
+runs in softirq with only its device's hash_lock and calls
+vxlan_fdb_destroy() -> list_del_rcu(&f->nh_list), racing a concurrent
+list_add_tail_rcu()/list_del_rcu() driven from the other device.  The
+shared list is corrupted and a freed struct vxlan_fdb is left linked on
+nh->fdb_list, a use-after-free later consumed by vxlan_fdb_nh_flush().
 
-Fix it the same way so_incoming_cpu.c, tcp_port_share.c and
-reuseport_dualstack.c already do: unshare into a fresh network namespace
-and bring lo up, so there is nobody else to race with for the port.
+On CONFIG_DEBUG_LIST/KASAN this reproduces as:
 
-Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+  list_del corruption. next->prev should be ..., but was dead000000000122.
+  __list_del_entry_valid_or_report <- vxlan_fdb_destroy <- vxlan_cleanup
+  <- run_timer_softirq
+  BUG: KASAN: slab-use-after-free in vxlan_fdb_destroy
+
+Since a nexthop fdb entry must not be aged out in the first place, reject
+making it dynamic, both when it is created and when an existing entry is
+updated.  vxlan_cleanup() skips NUD_PERMANENT/NUD_NOARP entries, so this
+guarantees nexthop fdb entries are never touched by the softirq aging
+path, and nh->fdb_list ends up manipulated under RTNL only, removing the
+race entirely.
+
+Extend the vxlan fdb-nexthop selftests to cover the rejection on add,
+replace and append.
+
+Verified with a KASAN + CONFIG_DEBUG_LIST kernel and an unprivileged
+(userns+netns) reproducer that previously ran two vxlan devices churning
+dynamic add + aging-delete on a shared fdb-nexthop: before the change the
+dynamic nexthop adds succeed and produce hundreds of list_del corruptions
+plus a slab-use-after-free; after the change the adds are rejected with
+-EINVAL and the run is clean (0 corruptions, 0 KASAN reports).
+
+Fixes: 1274e1cc4226 ("vxlan: ecmp support for mac fdb entries")
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Seungwon Bae <qotmddnjs@ajou.ac.kr>
 ---
- tools/testing/selftests/net/bind_wildcard.c | 5 +++++
- 1 file changed, 5 insertions(+)
+Found with AI assistance; treated as public per
+Documentation/process/security-bugs.rst. A reproducer is available
+privately on request.
 
-diff --git a/tools/testing/selftests/net/bind_wildcard.c b/tools/testing/selftests/net/bind_wildcard.c
-index 7d11548b2c61..be3298c791b2 100644
---- a/tools/testing/selftests/net/bind_wildcard.c
-+++ b/tools/testing/selftests/net/bind_wildcard.c
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: GPL-2.0
- /* Copyright Amazon.com Inc. or its affiliates. */
+Changes in v2:
+- Reject making a nexthop fdb dynamic (on add and update) instead of
+  adding a lock around nh->fdb_list, per review feedback: a nexthop fdb
+  cannot roam, so it should never be aged out; this removes the softirq
+  racer and leaves nh->fdb_list manipulated under RTNL only.
+- Add fib_nexthops.sh selftest coverage (add/replace/append rejection).
+- Add Fixes tag.
+v1: https://lore.kernel.org/netdev/20260901050253.47197-1-qotmddnjs@ajou.ac.kr/
+ drivers/net/vxlan/vxlan_core.c              | 11 ++++++++
+ tools/testing/selftests/net/fib_nexthops.sh | 28 +++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
+
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index ac88d1c85..93bf7c535 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -996,6 +996,12 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
+ 		return -EOPNOTSUPP;
+ 	}
  
-+#define _GNU_SOURCE
-+#include <sched.h>
- #include <sys/socket.h>
- #include <netinet/in.h>
- 
-@@ -716,6 +718,9 @@ static void setup_addr(FIXTURE_DATA(bind_wildcard) *self, int i,
- 
- FIXTURE_SETUP(bind_wildcard)
- {
-+	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
-+	ASSERT_EQ(system("ip link set lo up"), 0);
++	if (rcu_access_pointer(f->nh) &&
++	    !(state & (NUD_PERMANENT | NUD_NOARP))) {
++		NL_SET_ERR_MSG(extack, "Cannot make a nexthop fdb dynamic");
++		return -EOPNOTSUPP;
++	}
 +
- 	setup_addr(self, 0, variant->family[0], variant->addr[0]);
- 	setup_addr(self, 1, variant->family[1], variant->addr[1]);
+ 	/* Do not allow an externally learned entry to take over an entry added
+ 	 * by the user.
+ 	 */
+@@ -1257,6 +1263,11 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+ 	if (err)
+ 		return err;
  
-
----
-base-commit: 1376afc7660bad2a1a5ee0876898312a486cf8bd
-change-id: 20260901-selftests-net-bind_wildcard_race-c0067a2dc308
-
-Best regards,
---  
-Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
++	if (nhid && !(ndm->ndm_state & (NUD_PERMANENT | NUD_NOARP))) {
++		NL_SET_ERR_MSG(extack, "A nexthop fdb cannot be dynamic");
++		return -EINVAL;
++	}
++
+ 	if (vxlan->default_dst.remote_ip.sa.sa_family != ip.sa.sa_family)
+ 		return -EAFNOSUPPORT;
+ 
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index 3d3471267..431d7bed7 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -533,6 +533,20 @@ ipv6_fdb_grp_fcnal()
+ 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:14 dev vx10 nhid 61 self"
+ 	log_test $? 255 "Fdb mac add with nexthop"
+ 
++	# fdb entries with a nexthop group cannot be aged out
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:15 dev vx10 nhid 102 self static"
++	log_test $? 0 "Fdb mac add with nexthop group and static state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:16 dev vx10 nhid 102 self dynamic"
++	log_test $? 255 "Fdb mac add with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:17 dev vx10 nhid 102 self"
++	run_cmd "$BRIDGE fdb replace 02:02:00:00:00:17 dev vx10 dst 2001:db8:91::11 self dynamic"
++	log_test $? 255 "Fdb mac replace with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb append 02:02:00:00:00:17 dev vx10 dst 2001:db8:91::11 self dynamic"
++	log_test $? 255 "Fdb mac append with nexthop group and dynamic state"
++
+ 	run_cmd "$IP -6 ro add 2001:db8:101::1/128 nhid 66"
+ 	log_test $? 2 "Route add with fdb nexthop"
+ 
+@@ -669,6 +683,20 @@ ipv4_fdb_grp_fcnal()
+ 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:14 dev vx10 nhid 12 self"
+ 	log_test $? 255 "Fdb mac add with nexthop"
+ 
++	# fdb entries with a nexthop group cannot be aged out
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:15 dev vx10 nhid 102 self static"
++	log_test $? 0 "Fdb mac add with nexthop group and static state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:16 dev vx10 nhid 102 self dynamic"
++	log_test $? 255 "Fdb mac add with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:17 dev vx10 nhid 102 self"
++	run_cmd "$BRIDGE fdb replace 02:02:00:00:00:17 dev vx10 dst 10.0.0.3 self dynamic"
++	log_test $? 255 "Fdb mac replace with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb append 02:02:00:00:00:17 dev vx10 dst 10.0.0.3 self dynamic"
++	log_test $? 255 "Fdb mac append with nexthop group and dynamic state"
++
+ 	run_cmd "$IP ro add 172.16.0.0/22 nhid 16"
+ 	log_test $? 2 "Route add with fdb nexthop"
+ 
+-- 
+2.43.0
 
