@@ -1,109 +1,196 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE54419304;
-	Tue,  1 Sep 2026 17:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D02C2488741
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 17:28:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788283634; cv=none; b=aU4xI2LfYc36WBQl803a8y5A7u63gdhRKnMSbGjyKb2ejQmtBcPS/f81vfP2VkShZXEp/cHHuvxeXwUxrXAIxG3hIlsIR5hoE5lIpbc56pw1aJAuXaVu7syYMrc/V1/RqYiv6FKHra9XwnQKIo/8RnhfrwTlnHMzO+PWYySg4WA=
+	t=1788283711; cv=none; b=O/ALSc+YSmapJ0+k+dTGKKZEZHa2ECGc0s55E0D8cGhQHLOgxJLI6TewFO1dQuv+3BP+CEVe5FQIJaIO38ZPiZaLZmtmDlU545Dto6V7YunydEElOjf2OCcb9Xc+XravG6qyPhfV+GbaYHufUKMFYhlpe+ygrhrDGpDYL+lUQXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788283634; c=relaxed/simple;
-	bh=GitzmlQ5l2hvhW8wvFRTMCxX5/K59sspgMLl2BRFAKs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=oLnSsBNai6FlOZrpJdqY4LMz3ImxISB3T+TaqgYdDksxLwHr06Pfh/3sschjJ6yHZ16jCd9/sw2FIEcVLl4h0r3bRbGxqrT3C56KYUoTW6odly24MR7hkLXVF4Os9dHcItsW5pQRo58YiJ2XElsUbwbRnlxRiy5HdUXtaKcs55c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OQIvTMiV; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788283711; c=relaxed/simple;
+	bh=/8akLwfs1o3i5XMdCX3/5Zu0HCQoB5fVGW3Pkg2xb8g=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=V9GUS7sCeQsVWeNpV6Ax5xNpTA4uybqoYjUOAgveeruEPQcc97nqitB/Q76f4mYm75nQ9bG/o+UEJbVWGYiWPDodIkQMMgTkOesMb5a5kHAbGoIZpVCGMywabC4NI62mJcS4eRxWrOnevOECY4L06+jdwzIbEUjnymduyPzqlco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VklgPQxN; arc=none smtp.client-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OQIvTMiV"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B548B1F000E9;
-	Tue,  1 Sep 2026 17:27:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788283633;
-	bh=UTYhxBnwSC8yAJEvjw+cCqMcJ96NHJ7AdHx5vnA8Kag=;
-	h=From:Date:Subject:To:Cc;
-	b=OQIvTMiVjUOTouHgNZm/4jk1gj6AWHc5oxw7C9FLVGOKURh5qWfEXeBbJXtfo+XaU
-	 3M140dneL9GwXkoTfQcr2klZMtlwdfsyDoLgZyOLRT+idC3U+XvjNlOj+BGljcpn+1
-	 haX7CJ3T+02vxcobqGJuF9TZVKPqlDaYwpH5Itcp8NbwZenTVpCJfJZmZQLS8AuRqe
-	 rqSMBHK2VPQ5CTxVssecqZBO+itmUzCwqzkkjaOCEv+bOWsP/Pl2Tp+9IhgJeTunH7
-	 XNZsc9LFFwnvxeFPwq96DVCsSW8x4aEhzd/A4xvC6lG9RxCCFVfMD1i/9Kqf+SnN0K
-	 oFWB5ucle2NAw==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 01 Sep 2026 18:27:06 +0100
-Subject: [PATCH] kselftest/arm64: Extend gcs-locking to cover cases where
- enable is unlocked
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VklgPQxN"
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc1c057f480so162917a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 10:28:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788283709; x=1788888509; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=pee9EJDo0yrD1zKrHbFb5B2Qg/13RIff1y5Ve46Cj+8=;
+        b=VklgPQxN1CCYtaNNxKMPvJb/zGAbVZeI0uPkNo0gwIhxFYWCEnZEuSOnuN+Uxr6eP1
+         QBkBQeXJki953L2CPfJuos3o9NaOzvT/F8lb2G8HInu0PYgYET9wg6ZYRmFd9vxh7kij
+         Bli/e06iUUbzJMlbojHoo0+EHhpftEORdkGLrvCAoPs2MM+17OJz5D4SAYGlCHWD12Fc
+         SrZ+IA+tHF8QYiq6877neqDvJtK2hFYNJs3CIuUxdZZ8EPJfU25C+oV+kdKqDh99S++u
+         8XnkSQH22PVRBSMo/C6KHlMbGQfnltMOq8EF8a9zMV4lYrHPqJA6mPRwQNBpNo+heoRb
+         cPJQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788283709; x=1788888509;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=pee9EJDo0yrD1zKrHbFb5B2Qg/13RIff1y5Ve46Cj+8=;
+        b=QWttVnkMZU06w8Qy4oHBsI2/xz5yeIgkdTa0Tc0Ca7GwDrXpc+V3PJKUrC64rRKMGx
+         2Pok3xTjLmChgXR0VnMiH0zHBbAXMr6tR/TslNIHEiRfWrYWRYQUFWcOwpdq9WEtF8bd
+         aBNc9FJM3kdGb7X0dRKQuvgskM5MgP+HjroMm7scV86JIg4eK7w20kfhhttuRq9GW0sm
+         BAuNMBDN3Dt7wkiyc3MTBwpc5QsDQ/xvvdwp8ECAB+UZdKRSBKLgI6Oi76qi7HtCMA1R
+         a91FG3ri1hhyQDGa2mkCaUyLnlRkFJ5EYbUVXilnoz+fq1lOFIAlhExMl3N1Pw9mvaxV
+         R9DQ==
+X-Forwarded-Encrypted: i=1; AKwUvBwAi22FCTepVVULRKAegVLfL6zwQAr0xCRAcs6AgWOiSVz9nvAE35NbjRtphyKKxZ1yn32uCLXj1Ha4/sSK+eM=@vger.kernel.org
+X-Gm-Message-State: AFuF++nYYWgy7p0vdkiLc+Q6lPlPN9XVkg2JEDZ+6dMarSdwMrRlG1vd
+	5Nmro6iSNPmSDNv91c0ARGqqmT8ghJv1pgIKYQFgDxGvo4nW6Y+4kCRS9MvcYDwZBwwFJI+GZ3o
+	uxJCRTg==
+X-Received: from plgf1.prod.google.com ([2002:a17:902:ce81:b0:2bf:8db:4516])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:cf0d:b0:2cf:ca89:499d
+ with SMTP id d9443c01a7336-2d74def3ffcmr583168435ad.7.1788283708888; Tue, 01
+ Sep 2026 10:28:28 -0700 (PDT)
+Date: Tue, 1 Sep 2026 10:28:28 -0700
+In-Reply-To: <20260901-gmem-selftests-fix-v2-4-5a273153354c@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260901-arm64-test-gcs-locking-no-enable-v1-1-8335dacb1587@kernel.org>
-X-B4-Tracking: v=1; b=H4sIAOkKl2oC/yXNQQrCMBBA0auUWTuQRgnVq4iLdDKNozWRTCpC6
- d2Nunyb/1dQLsIKp26Fwi9Ryamh33VAV58io4RmsMY6M1iHvjzcAStrxUiKc6a7pIgpIyc/zox
- kjz0FCpMZ9tAyz8KTvH+L8+VvXcYbU/12Yds+KogZUYQAAAA=
-X-Change-ID: 20260826-arm64-test-gcs-locking-no-enable-c291cdcdf083
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: Bill Roberts <bill.roberts@foss.arm.com>, 
- linux-arm-kernel@lists.infradead.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1425; i=broonie@kernel.org;
- h=from:subject:message-id; bh=GitzmlQ5l2hvhW8wvFRTMCxX5/K59sspgMLl2BRFAKs=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBqlwrtKh42AbGQdwtSNDUXnKY5gRabpMQmdzjHD
- UEke+z5R3OJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCapcK7QAKCRAk1otyXVSH
- 0Du0B/0d+jiM4CD5r2DSpJPQ0ZEneNMYRJD+tpkMb2BAe1cTlB6P0/4zzqlVrlbIPRhs8JI5GyN
- RnDgJ1optVUKvI4x4Rzdtf83OzHBh76lx9VHKkvVY9dv+LE70SNihTryO8Ru3tv3rVZVZeRQOLv
- xjnA3KdZgmcuMIXXgf2/PJv41YYvdig1e9T2wGqGDSqY+BeCU+4/i++ba2bsZdFxKCSqOiugUAe
- 7H0Bkv9UPP3j3hE9b3tQS65HDyzQMGlhSicEfeSjj/54c+elh8lfa2iFbevg+SeZ38oOgs0rqRA
- crCUKVmx/KXiosqF3/NBLh9/RG3GzZ+QQvDV59new5CB6zqK
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Mime-Version: 1.0
+References: <20260901-gmem-selftests-fix-v2-0-5a273153354c@amd.com> <20260901-gmem-selftests-fix-v2-4-5a273153354c@amd.com>
+Message-ID: <apcLPJerTWENV6iD@google.com>
+Subject: Re: [PATCH v2 4/4] KVM: selftests: use allowed NUMA nodes in guest_memfd_test
+From: Sean Christopherson <seanjc@google.com>
+To: Shivank Garg <shivankg@amd.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
+	Jim Mattson <jmattson@google.com>, Peter Shier <pshier@google.com>, 
+	Ricardo Koller <ricarkol@google.com>, Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-The gcs-locking test case currently only covers locking combinations of
-the various flags that can be set for GCS (enable, write and push) where
-enable is included in the locked bits. Since it is valid to only lock a
-combination of write and push while leaving enable user controllable we
-should also cover those cases, add coverage for them. The new cases pass
-as expected.
+On Tue, Sep 01, 2026, Shivank Garg wrote:
+> guest_memfd_test assumes that nodes 0 and 1 exist and have memory.
+> is_multi_numa_node_system() only checks that the maximum node ID is
+> nonzero, which is not enough for sparse or memoryless nodes.
+> 
+> Select the required nodes from MPOL_F_MEMS_ALLOWED instead. Use the full
+> nodemask width plus one to mbind(), and let test_mbind() run when only
+> one memory node is available.
 
-Signed-off-by: Mark Brown <broonie@kernel.org>
----
- tools/testing/selftests/arm64/gcs/gcs-locking.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+Please split this into at least three patches.
 
-diff --git a/tools/testing/selftests/arm64/gcs/gcs-locking.c b/tools/testing/selftests/arm64/gcs/gcs-locking.c
-index 1e6abb136ffd..4dd7ab4191f1 100644
---- a/tools/testing/selftests/arm64/gcs/gcs-locking.c
-+++ b/tools/testing/selftests/arm64/gcs/gcs-locking.c
-@@ -77,6 +77,21 @@ FIXTURE_VARIANT_ADD(valid_modes, enable_write_push)
- 		PR_SHADOW_STACK_PUSH,
- };
- 
-+FIXTURE_VARIANT_ADD(valid_modes, write)
-+{
-+	.mode = PR_SHADOW_STACK_WRITE,
-+};
-+
-+FIXTURE_VARIANT_ADD(valid_modes, push)
-+{
-+	.mode = PR_SHADOW_STACK_PUSH,
-+};
-+
-+FIXTURE_VARIANT_ADD(valid_modes, write_push)
-+{
-+	.mode = PR_SHADOW_STACK_WRITE | PR_SHADOW_STACK_PUSH,
-+};
-+
- FIXTURE_SETUP(valid_modes)
- {
- }
+  1. Refactor guest_memfd_test.c to prepare for using nodes other than 0 and 1.
+  2. Fix test_mbind().
+  3. Fix test_numa_allocation().
+  4. If necessary, do additional cleanups in numaif.h
 
----
-base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-change-id: 20260826-arm64-test-gcs-locking-no-enable-c291cdcdf083
+As is, this is extremely difficult to review, e.g. without staring intently, I
+can't tell what's refactoring and what's actually a functional change.
 
-Best regards,
---  
-Mark Brown <broonie@kernel.org>
+Actually, looking at the xAPIC IPI test more, what you proposed in patch 3 is in
+the general direction of what we want, but needs to be more than just a wrapper
+for get_mempolicy() to be useful.  Specificaly, if it fills the mask *and* returns
+the number of nodes found, then it's more generically useful.  And if we also add
+an API to get the next (exclusive) node, then we can cut down on the amount of
+copy+paste without forcing tests to use the "array of one-bit nodemasks" approach
+that the xAPIC test uses.
 
+E.g. the below get_numa_node_ids() is basically just copy+paste from the xAPIC
+test, except that it returns an array of nodes instead of an array of nodemasks.
+The fact that you felt compelled to copy+paste instead of adding an API is quite
+telling: using an array of nodemasks/nodes is inflexible and really only works if
+a test wants to target exactly one node.  It's also annoying to extract to a generic
+API without ending up with a brittle API.  E.g. if the API where to take the a mask
+and an array, it would either have to be a macro or take a struct to ensure the
+array can hold all possible masks.
+
+I'm planning on adding these in the series to also add MAXNODE_FOR_MASK().
+
+static inline int kvm_get_numa_memory_nodes(unsigned long *nodemask)
+{
+	int r;
+
+	*nodemask = 0;
+
+	r = get_mempolicy(NULL, nodemask, MAXNODE_FOR_MASK(*nodemask), 0,
+			  MPOL_F_MEMS_ALLOWED);
+	TEST_ASSERT(!r || errno == ENOSYS || errno == EPERM,
+		    "Unexpected get_mempolicy() failure");
+	return __builtin_popcountl(*nodemask);
+}
+
+/*
+ * Return the node ID of the next NUMA node in the mask, starting at @from+1.
+ * Guarantees a node is found, and that the found node is not @from.  Pass -1
+ * to find the first node in the mask.
+ */
+static inline int kvm_get_next_numa_node(unsigned long nodemask, int from)
+{
+	const unsigned long nr_bits = BITS_PER_TYPE(nodemask);
+	int to;
+
+	to = find_next_bit(&nodemask, nr_bits, from + 1);
+	if (to == nr_bits)
+		to = find_next_bit(&nodemask, nr_bits, 0);
+
+	TEST_ASSERT(to != nr_bits && to != from,
+		    "Unabled to find second NUMA node (from = %d, to = %d)", from, to);
+	return to;
+}
+
+> The sysfs helpers for finding maxnode are no longer needed.
+
+This is an observation, not a proper changelog sentence.
+
+> Signed-off-by: Shivank Garg <shivankg@amd.com>
+> ---
+>  tools/testing/selftests/kvm/guest_memfd_test.c | 86 +++++++++++++++++---------
+>  tools/testing/selftests/kvm/include/numaif.h   | 52 ----------------
+>  2 files changed, 58 insertions(+), 80 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
+> index 2233d871a38f..aee80dda6229 100644
+> --- a/tools/testing/selftests/kvm/guest_memfd_test.c
+> +++ b/tools/testing/selftests/kvm/guest_memfd_test.c
+> @@ -76,33 +76,53 @@ static void test_mmap_supported(int fd, size_t total_size)
+>  	kvm_munmap(mem, total_size);
+>  }
+>  
+> +/*
+> + * Fill @nids with the first @nr_nids nodes in the allowed mask.
+> + * Return false if the mask contains fewer than @nr_nids nodes.
+> + */
+> +static bool get_numa_node_ids(int *nids, int nr_nids)
+> +{
+> +	unsigned long nodemask = get_numa_mem_nodes();
+> +	unsigned long nid;
+> +	int nr_found = 0;
+> +
+> +	for_each_set_bit(nid, &nodemask, BITS_PER_TYPE(nodemask)) {
+> +		nids[nr_found++] = nid;
+> +		if (nr_found == nr_nids)
+> +			return true;
+> +	}
+> +
+> +	return false;
+> +}
+> +
+>  static void test_mbind(int fd, size_t total_size)
+>  {
+> -	const unsigned long nodemask_0 = 1; /* nid: 0 */
+> -	unsigned long nodemask = 0;
+> -	unsigned long maxnode = BITS_PER_TYPE(nodemask);
+> +	unsigned long nodemask, bind_nodemask;
+> +	unsigned long maxnode = BITS_PER_TYPE(nodemask) + 1;
+>  	int policy;
+>  	char *mem;
+> +	int nid;
+>  	int ret;
+>  
+> -	if (!is_multi_numa_node_system())
+> +	if (!get_numa_node_ids(&nid, 1))
+
+This is not functionally equivalent.  The existing test requires multiple NUMA
+nodes, whereas this will now succeed if there's exactly one node.  That could be
+totally fine, but it needs to be isolated and explained in its own patch.
