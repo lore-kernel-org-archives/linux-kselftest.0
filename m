@@ -1,144 +1,94 @@
-Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26EB149E5FE
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 22:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F18A4CCDE4;
+	Tue,  1 Sep 2026 22:46:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788302574; cv=none; b=kdgo8FbkR51u01qO2tzbYG+DKl5jyon/9JrsI8cvT4d8/C6dcbFgqfpewQl1ToYmSJBhLUS9Oys7Nrtc2QNQZynTTvy1zS34AOf/4Y29ZZavDTg2ReVckoa4+UdC4kWxr0ba2grzLlDFSl7uScebL8K5vRBAAc/QMfGMxQmjzvU=
+	t=1788302782; cv=none; b=IQ4TjY5a84IQu2CAd7anxrCKbxJdYRLvOj+zx6+sudfrfStSHwjkC2ftq0CEys+No7oies3t7FGdKMiNArNEL7Z4AdgfGDYeWODUCOLfY0mAWb/Azm0hKOFT/bE58NrQZy//LI0RolvnfrBFWkOHKFPjeooPK0y8Pf/uZ6tnFxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788302574; c=relaxed/simple;
-	bh=ZMuWd59UQ2fQfKwzsAC8WJnKG9ndC4TtvOx98BwEsw8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=p+FwKccJO2bU+lHsECNogJfIh0qD1DAJUO8gEe2pszBL7vzgGu3+Jqk0vyne3+tCs74nOGDwsLc0dyo3gN7f5YAWn4JpM9H0FyYWXZa8paLWfflc48YCavzVDRjbyQNI/1ZstL5VzIYxNwON7IBJu4f+RTlKreCU2TKUFW383i8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=YZYzHK5L; arc=none smtp.client-ip=209.85.214.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
+	s=arc-20240116; t=1788302782; c=relaxed/simple;
+	bh=o1YaUPzMUEWUrWnq64yGJLNH1Cvm2M0jaTT38EAUCrg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=kg0eEhuL9MeZKiE1sPEpl9HDCjfXRb/JjsqOlaVFtGGnNwrJ8GyOq08Tmk2n6PF6V+wmqRJz4dgCQWYc6CGVTVdc9JYbuCKaDxiR8B9BtDxmQU4amYdYf4xdshLTvMoeuCgrms6T/h0sJKTv8jY/kXG1qLAiQds7ZytbjzRLjAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bnSYA3tP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="YZYzHK5L"
-Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-2d63bad3d09so4966945ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 15:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788302572; x=1788907372; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:user-agent:references:mime-version:in-reply-to:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=uVTLltgWzf3njQKdxafQ0CwqfUSU6XQwj4Ha28EdUxs=;
-        b=YZYzHK5L+stgU+/lZo1tUHHqsEQEo1HQQ5oKl0HK+OxuPp74yPTFodolvUoIVqudBd
-         t+PUiJxqtyecoX6WMApfuNKmAJQpRvNOpZr5jceCww3c1Q1z1WVaekb215nDCbGc9YjH
-         rM4nJaI/A8c7I334DdjDgjYqJNj+pPuckaPTqIjfS6PH+OM5nP0Bz5WHfM15TdcP3ORG
-         sYZW/MFHkk0rmu8TM4EqYoTJqldQNesO7U8DRbcPXi77X5TbHbWAiRpei+O/HrUdj2cR
-         OWz1+W3lGzpEMgGVWSOI3nE/ewfKFr/kj0B662YEwxVh8tLdNniwRikMjMl5PQkV3TAu
-         OfhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788302572; x=1788907372;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:user-agent:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=uVTLltgWzf3njQKdxafQ0CwqfUSU6XQwj4Ha28EdUxs=;
-        b=g/gQG9o1zmaRkrt8H7QiGNGPmHqIBYcC2+0JxM6fvtr9WCO4wndRwBJWKK4BSCvZyO
-         AKuq8E6XQUTAxPJif+uCaD2aFvMw/D8HBIL9F4u5EW0Q0FnkLLTU9itkpfGbaFl1fVuM
-         R1S5RN6WmQ5AX8MlxTflLkfZ+VVkB1gewQeeH/LpRoYrF5pdfkz6HB3cLSDghyI27Vh4
-         UqyzuLwcwmbLsc5LIJM4ob8MQT9CgfOnaelZNQsfC/5HOqYJQpTt8nu+aQMkZZPv1vN9
-         V/m4YP/NZ5ckpqFxiqW+azwONGoXwCMPQ/Wm5Exfxeamqq/e77dtVnb7U6ggPnzjg6gs
-         Qb3g==
-X-Forwarded-Encrypted: i=1; AKwUvBzdFUjCHZjM2xvGv6/tDnyUR8MyOvsx5Ky9p06jN3MZIV3FqqBeib/ZrNPoFolwoKCq1KBeIvtf1N+vZr9cp5o=@vger.kernel.org
-X-Gm-Message-State: AFuF++mU5znoiwT35X+IMfMAoMjGq9qzrJP0dFODZfTPVAxnB0W78VG6
-	JHseKW4Bb9owGupeDhuqvQaEbohk3AMhW+qKtHF2adbV8m0NIAZFti4Rm24HT3bvJCorKZ4Gmns
-	cQ/aagXKJnQ==
-X-Received: from plup13.prod.google.com ([2002:a17:903:4b2d:b0:2d9:56d3:fc17])
- (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:19e6:b0:2d9:2069:a286
- with SMTP id d9443c01a7336-2daec62416cmr6864805ad.9.1788302572056; Tue, 01
- Sep 2026 15:42:52 -0700 (PDT)
-Date: Tue, 01 Sep 2026 22:42:51 +0000
-In-Reply-To: <apaO1OHVQWJCuJDE@localhost.localdomain> ("Michal =?utf-8?Q?K?=
- =?utf-8?Q?outn=C3=BD=22's?= message of "Tue, 1 Sep 2026 10:57:03 +0200")
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bnSYA3tP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B11711F000E9;
+	Tue,  1 Sep 2026 22:46:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788302781;
+	bh=wEL9yVRaCvLplrPadvlbrdLt9/pOGLB8ecyiEr7E9LA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=bnSYA3tP/Xt0G8ICX1OhiONYGT38pcygiVv15vj6AouIQ/zzU927fpjb7B9QE/zCp
+	 H02Lj0SSP1sq0+UlBNoWPswmQKCa9J3Tx95auM/me+5n9xTISJNbEB3jJ3swek5IfZ
+	 immeU9FBny1+FHeOlH2TS1J7KxzrozIW3uBK+SJFsWVkvotbeUPmHBOcxig1hbymmP
+	 Uan5cr5rHJyABZjmAS/rbYDkEEitCamYGkobFytj6H0FWXjfiG5dzHn4em+wun7A4n
+	 fwdlFDy5UGA4Nl8keSkd3Bqf6zfL9UR71cPymWjyrulUIVjLh5nOppIwpgguphubmC
+	 jzSN5rZ3DR2Mg==
+Date: Tue, 1 Sep 2026 15:46:20 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Cc: Matthieu Baerts <matttbe@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+ linux-kselftest@vger.kernel.org, Andrew Lunn <andrew+netdev@lunn.ch>,
+ davem@davemloft.net, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>, Simon Horman
+ <horms@kernel.org>, Shuah Khan <shuah@kernel.org>, Stanislav Fomichev
+ <sdf@fomichev.me>
+Subject: Re: [PATCH net-next 2/2] selftests: drv-net: Use cross-compilation
+ environment for the io_uring check
+Message-ID: <20260901154620.492ab980@kernel.org>
+In-Reply-To: <20631f9a-1a2f-4ef5-a4c5-e1948e55dd78@bootlin.com>
+References: <20260901164200.1124343-1-maxime.chevallier@bootlin.com>
+	<20260901164200.1124343-3-maxime.chevallier@bootlin.com>
+	<a42cdc44-efaf-44ff-9ace-f08e0c3b9856@kernel.org>
+	<20631f9a-1a2f-4ef5-a4c5-e1948e55dd78@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901052250.154532-1-wfelipe@google.com> <20260901052250.154532-3-wfelipe@google.com>
- <apaO1OHVQWJCuJDE@localhost.localdomain>
-User-Agent: mu4e 1.12.15; emacs 30.2
-Message-ID: <p9738q5kh9uc.fsf@wfelipe-west1.c.googlers.com>
-Subject: Re: [PATCH v5 2/2] selftests/cgroup: test_zswap: fix implicit
- unsigned promotion bug in test_no_kmem_bypass
-From: Wilson Felipe Pereira <wfelipe@google.com>
-To: "Michal =?utf-8?Q?Koutn=C3=BD?=" <mkoutny@suse.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, cgroups@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Michal Koutn=C3=BD <mkoutny@suse.com> writes:
+On Tue, 1 Sep 2026 22:45:47 +0200 Maxime Chevallier wrote:
+> Hi Matthieu,
+> 
+> On 9/1/26 19:24, Matthieu Baerts wrote:
+> > Hi Maxime,  
+> >> +# Set CC for the io_uring check
+> >> +CC := $(CROSS_COMPILE)gcc  
+> > 
+> > Could we have something similar to
+> > tools/testing/selftests/riscv/cfi/Makefile:
+> > 
+> >   # Set CC for the io_uring check done before including lib.mk
+> >   ifeq ($(LLVM)$(CC),cc)
+> >   CC := $(CROSS_COMPILE)gcc
+> >   endif
+> > 
+> > WDYT?  
+> 
+> Ah this is better indeed IMO, I'll use that in V2 then, thanks for
+> the tips.
+> 
+> Initially I considered doing a larger rework of extracting the logic
+> in lib.mk that sets CC to the right value base on CROSS_COMPILE, LLVM
+> and ARCH into a dedicated .mk file that we would include at the top,
+> but at that time it seemed to be too big of a rework for just the
+> io_uring check.
+> 
+> It lead to some headache about double-inclusions and relative paths lookups
+> that far exceeded my Makefile skills :(
+> 
+> Thanks for the review,
 
-> On Tue, Sep 01, 2026 at 05:22:28AM +0000, Wilson Felipe Pereira <wfelipe@=
-google.com> wrote:
->> In test_no_kmem_bypass(), delta (stored_pages * page_size - zswapped) is
->> checked against stored_pages * page_size / 4 to verify that the pages
->> pushed to zswap belong to the test memory cgroup.
->>
->> Due to slight stat update timing differences, delta can evaluate to a sm=
-all
->> negative number (e.g. -5MB out of 1GB). Because delta is declared as a
->> signed int and stored_pages is an unsigned size_t, C's usual arithmetic
->> conversions implicitly promote a negative delta to a large unsigned 64-b=
-it
->> integer, causing `delta < stored_pages * page_size / 4` to falsely evalu=
-ate
->> to 0 and fail the test.
->>
->> Fix this by declaring zswapped and delta as signed long long and compari=
-ng
->> against a signed threshold, ensuring negative deltas correctly evaluate
->> to true.
->>
->> Fixes: a549f9f31561a ("selftests: cgroup: add test_zswap with no kmem by=
-pass test")
->> Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
->> Acked-by: Michal Koutn=C3=BD <mkoutny@suse.com>
->
-> (The long long helper is a non-trivial change, so the ack should be
-> stripped on this version (unless you can convince me ;-).)
+I assume you don't actually have luring for your cross- env? Could we
+keep it simple and just declare luring as unavailable when cross
+compiling? Because the probing compilation rule is probably missing 
+more flags to make cross compilation work.
 
-I'm sorry for that! Thanks for the review and for the patience.
-
->
-> I'm afraid this bitness propagated too broadly.
->
-> The long vs long long difference is only relevant on 32b, right?
-> And the bit-width issue only appears because of the product, not the
-> values read from memory.stat [1].
->
-> I'd consider three ways forward:
-> a) Consolidate the helpers into one cg_read_key_s64() (same explicit size
->    regardless of arch),
-> b) keep single arch-dependent helper and tackle product(s) only,
-> c) do not bother with 32b in these selftests (I have a hunch that
->    they're not so relevant on such archs).
->
-> WDYT?
-
-I like this option a), any thoughts on the sequence here?
-
-I thought the following steps:
-1) Add cg_read_key_s64() here and make use of it;
-2) In another patch (probably 3/3), replace all uses of cg_read_key_long
-   by cg_read_key_s64. There are 41 uses currently.
-
-I believe the tests could be flaky in 32b already (just a guess), at
-least option a) would make all be more deterministic.
-
->
-> Michal
->
->
-> [1] At least the values derived from available memory, memory events
->     could grow indefinitely. It's true that kernel uses explicit u64 for
->     all of the entries.
+Ignore if selftests using luring do actually work for you after this
+patch..
