@@ -1,214 +1,213 @@
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C729C36B901
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 14:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F13ED3803E8
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 14:20:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788272343; cv=none; b=urhOqq9IkWFLbiJwso0W2F6FhQAeb0nBCtTTyDTC3yiR34Wai5ZUxcLUahvNKfXxMWdBszeGtfTkhaui+pDRG1mpXQYacmbunIlcMa8Gd8zuhjXUw8uNMcdQV+jGfX4qGhISe4Ugr3uns1jujVLKt9U5lX2YuhmDpaLTXaLWrE0=
+	t=1788272415; cv=none; b=GQL2aMGU4R3UAREGKZfBkKEluMG3nWBQ88mnsLIqcouxE3SAgqjc81kk2GizJsAWqCMgYsWYzpJyH03OAQOsNR+B6x1K7U8W5shVCqykUo6Uvn3XqIDdWKdXZQG5oGbByT9qpAEz+HQxaxok8iEznOC8GFPvR4hdVETsSUrlqTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788272343; c=relaxed/simple;
-	bh=NkKu/8w/1z6LkfAgeZyRMbEQJIQaUAmSCXu3cnPAVn4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QS19iIyb7lxwBjSFt9Pfd3V8lsOaCKVO+23u4XCyng8p1k6+dAKGguZdh/XHy2d+nZtWr5Hmlbz4vAHX8puEqEdcPfLOMhdTK8sJ0aDOt1F0s+G0TqVh7aGFb530WePkAJxNZTwp+/83eyqiQXXv11y78W3NgJyEwC2PU688Nk8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=doWzLE0m; arc=none smtp.client-ip=185.125.188.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+	s=arc-20240116; t=1788272415; c=relaxed/simple;
+	bh=G9sBp1mVgaUE/l5rjm6ABkGFFWw70IL3CtMbcHYdHzo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aPHI5SQjbhGYVYU6XNIoJJjIXBTBcjlzxrk7K7pFkiyinXvzT8L1dDUtcGCc+tbBMBlUGQpPTm+O9OkiJ+1uLRxCm6NlDHpTiOJDy9zU538Bg25rMJpmAxLroyIDhsbxxPFJBtvda2o6iioJvAbtt2b5U5KAdAb5xDKMCvMWET4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=rPgflv2i; arc=none smtp.client-ip=209.85.215.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="doWzLE0m"
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com [209.85.221.71])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id C231C3F72F
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 14:18:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1788272338;
-	bh=rEDcPAogTZg6PX5XCNiS3w5Hhl82tH+An2kp4bmc7So=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:In-Reply-To;
-	b=doWzLE0mx26Ni5FeXoni/pIL6G4Lmm9b+8gRmirw0iZkcb61mv+ETjHzhU8pXhCzz
-	 /pslh5BMoffe7taubcGT76yv6iaMvrbzbt+YKunG/9r8Pp2enI2T/7KKyb4aE0rzn4
-	 7zw4X8jCfTMXf05IrVXF+6rY54LMIVG/I5PVpac0t0utqZZWBpBj578T/JOTG0hrEX
-	 GBzw+N/bSj4wme+NQHgPWBBhDwP++jFhCV8j5K7TtSDOw2RUAPm652lpXQmizYTRYR
-	 hRQqxpbYiQ4lESZZa/VxY5jWnmhrje7KHv6M5FB3IUYAT36TLMbYa+5soGn+QeBCW8
-	 hnoVrOQlu3vQmlbHT70GI1ABu9hKDA1Ln09Bbvwseto4aeKJypJmy/BC3hCVQJxyyz
-	 uu5dbY6bfCFtXrqbkX2g8LUlg0rZVjof/3lSrkEyuIqLVTcj4mzkxkNP+LCAyKJTLf
-	 vIvka4bJQTiL0aZiaxT1ZxYuO7mt02qVxvrtOlc64W/Uu5za3JPuoOjVsu/M27ovXg
-	 /lLxWRDTdviq3R2/42IHJq8WKePAlVFZk88eHeLOQ4C1I5M3Bl7Mn71jAMB504gKLP
-	 5ljuvpx681QdcKLpRGuJEfiiFNcveOjp+Q3cAKuomU2GOm5PKWYtosCv/GajT9Jh/e
-	 L3eUPagE9QyJpQSX8gO1h0tQ=
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-481514be433so454188f8f.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 07:18:58 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="rPgflv2i"
+Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-cc1ceadbd16so5399612a12.2
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 07:20:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788272413; x=1788877213; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=fsOksJSp0HAMqHBUB3OXoIzMa/zTjlvvkjoIYMW4xXE=;
+        b=rPgflv2iqBzzzQ8UwQy2mW48K2pFnOuDusH+ZYulL47IjeX2YvvkjL1WQb9BF60rP9
+         G8SQU2J2XpWCqTB3FP6Aq3URyGWNwE6v0UGRIlqS0XytpBKmZtU09G31QS4f7ud4n0Lz
+         /u00wNhE2ZC5tw1UQesJ1LaROqRQZD0pz+1MNxPM96BfycvTPTQVPNhJ+cEA0DwAm2Ys
+         Y/nvRKRzo1LKonGeWmgoAuerebW/9rPzA+fLIt44s1uSol1ZF66icIfdLDc2dwt1Rnbb
+         fErfCB/t+RjMFishnL3uCjIwVYFR01gLNFyebNLpImzbno7JcMeLCb2Mwaw/o46cchml
+         U2sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788272338; x=1788877138;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=rEDcPAogTZg6PX5XCNiS3w5Hhl82tH+An2kp4bmc7So=;
-        b=YMoEvhuZqlbPUuTO/OKTY6EiQEoEabocdDd14zBV+R8DNRREBEC4l8INjwNx9W1kg9
-         RbtAMfw9JUyMXAGykkqshywWnC5hfwVO7zv9gw3kWRyqABLsu7prZ6Qmqyhm1ULVXbJN
-         /HdDIDH1qlHq/2Nx/Hm4KpKV3ZSBmPWYbEv+AoNUElG4dvU5iUM8QDL8o15yEDXCDo4i
-         AcZ0TcgrznXoIBAy8kMG2Ku0HwkJZXv7tB/az/VpriKkfSdsrNiG6O6+VpRKdcVTCMRF
-         xvGK6QB0eBe/54qT5B1j3zSqni5Qs12Zd+rfDxtGKQvE+cP+yEseN4B5jtMO5pr9JaLz
-         1aMQ==
-X-Forwarded-Encrypted: i=1; AHgh+Rq3Z4QVYM3tW990fI62prEM05J4AQ/9ICpIsXufyXUDwJ1HUVBF2aCmb2OWLsrS6Nj2YcYyYluuC5AmBiHCge4=@vger.kernel.org
-X-Gm-Message-State: AFuF++ml8XapYL+ctyLnTuYNljCq4BWv/bzViW/G0lU4l6KA6PhuWNxf
-	ZhDXb3hy0eyXD4mceWVofdpWJ4Yob1KcomE93sNhlD02jG1Q7sU34OA4kKjt41XIc9GhmWqNEYK
-	9oOSg220mEZqGaSAu709MXQc0310oBgjQBvl9m2A3bkWyX8tFJWfS5BBAWW86uJ1Na3fApoGYJM
-	YhkUFKz/IAbQ==
-X-Gm-Gg: AR+sD13xwQCv2KYZqf6fTX/q8AYP+S1ieJYE9FfUP4frYLsrp9fErTm4FDaQA/YhLg7
-	5zzsXbbfghsfkdR+4lZJaR/1GZwphRwG8d6nDzkioHOmZgQP0VwYBFSlcfRDan2Eeu7ovx5G887
-	QvgkwqlWxVZ8epoUtEnHzDIB1UMyRLM1KXBmJIM2wQq1QGLgRtWsOQmDG4KabJod/WM4b6Bsxt4
-	ZSCr1p+VRHFokmxxs7rAMNUmfKzHlNzSJlRbo2tm3wMH++QHDqjvUCMwkYpB793Kma9umt/SVX0
-	1cnJEhN7DqsFvwVxXScOaZF8OzAh3d5Vhiu72WBFiCsKPcW8i3uY2DmYk5maeJA0A3j5tTTFxHC
-	gmCw9scpR/Qh3sYqtUM1GvDFsLO0HkpdWsfce18MKxj97aPpZK59ZkX+oZxDh34T/6O4gByS0
-X-Received: by 2002:a05:600c:4e01:b0:49c:cedc:768a with SMTP id 5b1f17b1804b1-49ccedc76a1mr483018635e9.16.1788272338233;
-        Tue, 01 Sep 2026 07:18:58 -0700 (PDT)
-X-Received: by 2002:a05:600c:4e01:b0:49c:cedc:768a with SMTP id 5b1f17b1804b1-49ccedc76a1mr483017535e9.16.1788272337856;
-        Tue, 01 Sep 2026 07:18:57 -0700 (PDT)
-Received: from localhost (93-35-116-250.ip54.fastwebnet.it. [93.35.116.250])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-49cdce1025asm69057965e9.6.2026.09.01.07.18.57
+        d=1e100.net; s=20251104; t=1788272413; x=1788877213;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=fsOksJSp0HAMqHBUB3OXoIzMa/zTjlvvkjoIYMW4xXE=;
+        b=NMcPbUaZvo6swZ1LxHOKckomOriFCuH69odd6V417oRuFHt5yLV6CM/UEC+i0K0ZhX
+         oGUDqoScKVLqSdfpXDEoIere59RQ3JshugzyUXKatu9Qjxax3A9m7LB73WkK7hMAhu33
+         BHQ1AdM6kIwraLomCbciZOIC4Q12AsGa/rxV83o/BIJ/6PBbRcX1Ijdg2pgLE7MPFULs
+         JEmWZtQDjV5Ltj7gFhvmCz0T9EOpwRvXcul9Jc3EHt5ebLY6fqiaP9HX+1midCLiSA29
+         t73sLBBwBxYq4oAlwDQZEDNQ9UUFtgkA052vn67wgXBvt1XE9QoC130m/uPB+aNYOEgL
+         Vl+Q==
+X-Forwarded-Encrypted: i=1; AKwUvByZ0/uaGtUpifM8a5dD/PGroSWhLK+tHLGBkVx20l7cXOlav5c6TdOBzNWynfL3+3nHyDuhIZx2uckwFz7VIYk=@vger.kernel.org
+X-Gm-Message-State: AFuF++lP/mR/YMfn/DC7fzwn17Koq0Em5bWnsUpTzlPzjKpiQ3TJDN9r
+	GX6g5KmmQjoj24FQXByxr8MjLcwM5khpWBqf4yzXZFNNRE63Rrx8l4HO
+X-Gm-Gg: AYBFou3w/HtH/EzTN6cLde9MoUas6d56IxPghUBWjSuaitGcHRX4MrbefzGyGknmEO7
+	VIK8UJ8n8gZuvALFGttFes00NeZCdy7lKI+ORguQD/mPwYMg1mdSpG2yPZdle/ySYfWez+tM2wu
+	m3vajZ6/zXdjALH+T0MDaNAioPEeHyRF3t1dwHWbWIYARyS5wIMSTYN24Hh7RliAyieyABInkgN
+	1eIUfTeMfVW6epcb57QryMYAOKkVS4OuIAXHYVFNocgUpcLln1zvOF1qeDX1QoN95QGcPvdx0fW
+	z8jupUarxkbuYt2/5tDi19ZpMDR/rot2rPctKkRoUWNtsaojRYQlSumKUmVBkW20YMt+KJ+9jB7
+	XuPHtq9yrJrCK8uWRwhGYo1XwzEo6PDEJDzFL8gBISx/rYXAx4weFqD66de6Qfu4DwjyVRYWL9C
+	azKVffHd2gsFGumlGqgMuxb7JrIZdgLiTybZ/ohS6tDFXCYkQL3Ff54IhjFqCyry4LLYT4LeyL/
+	EnA3PxDM+Q+cmMZxlGghl6aQH4R
+X-Received: by 2002:a17:90b:4a8a:b0:399:e97:8d5a with SMTP id 98e67ed59e1d1-3990e97a0a4mr8920746a91.25.1788272412762;
+        Tue, 01 Sep 2026 07:20:12 -0700 (PDT)
+Received: from archlinux ([205.254.163.54])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-32874498f9esm35589779eec.20.2026.09.01.07.20.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 07:18:57 -0700 (PDT)
-Date: Tue, 1 Sep 2026 16:18:56 +0200
-From: Alessio Faina <alessio.faina@canonical.com>
-To: Andrea Mayer <andrea.mayer@uniroma2.it>
-Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-	pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org, hangbin.liu@linux.dev,
-	stefano.salsano@uniroma2.it
-Subject: Re: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh if
- iproute2 too old
-Message-ID: <apbe0PAvaes977l-@cicciput>
-References: <20260824091537.2305107-1-alessio.faina@canonical.com>
- <20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
- <ao7S04LkWVXAQpgq@cicciput>
- <20260827030701.bfaf6eea6dea1aef24c353cf@uniroma2.it>
- <apAJuZzDOvjkVx60@cicciput>
- <20260828042357.1d6e802448752a8fdff5a485@uniroma2.it>
- <apGxmfjQs247lHX-@cicciput>
- <20260829231150.8180c09f6874606eb49d0243@uniroma2.it>
+        Tue, 01 Sep 2026 07:20:12 -0700 (PDT)
+From: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+To: andrii@kernel.org,
+	ast@kernel.org,
+	daniel@iogearbox.net,
+	eddyz87@gmail.com,
+	memxor@gmail.com,
+	shuah@kernel.org
+Cc: emil@etsalapatis.com,
+	ihor.solodrai@linux.dev,
+	jolsa@kernel.org,
+	martin.lau@linux.dev,
+	song@kernel.org,
+	yonghong.song@linux.dev,
+	zhoufeng.zf@bytedance.com,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Suchit Karunakaran <suchitkarunakaran@gmail.com>
+Subject: [PATCH] selftests/bpf: Fix map_lookup_percpu_elem on sparse CPU IDs
+Date: Tue,  1 Sep 2026 19:49:54 +0530
+Message-ID: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260829231150.8180c09f6874606eb49d0243@uniroma2.it>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Aug 29, 2026 at 11:11:50PM +0200, Andrea Mayer wrote:
-> On Fri, 28 Aug 2026 18:04:41 +0200
-> Alessio Faina <alessio.faina@canonical.com> wrote:
-> 
-> > [snip]
-> > 
-> 
-> Hi Alessio,
-> 
-> > I tried multiple methods:
-> > the first approach is yours, but I can see the following error with any iproute2 
-> > version I'm using (I tried 5.5 to 5.18): when running 
-> > "ip -netns ${rtdst_name}" command, it always returns 
-> > 
-> > RTNETLINK answers: File exists
-> > 2
-> 
-> EEXIST means that the object is already there, and says nothing about
-> vrftable. When ip does not know vrftable it refuses the command itself,
-> with the error you showed earlier: either "to" is duplicate,
-> or "vrftable" is a garbage.
-> 
-> In a netns created by the check there is nothing to collide with, so EEXIST
-> does not come from the way I suggested. The full command and output would
-> settle it.
-> 
-> > I tried the following approach as well,
-> > 
-> >  	# set the decap route for decapsulating packets which arrive from
-> >  	# the rtdst router and destined to the hsdst host.
-> > -	ip -netns ${rtdst_name} -6 route add ${vpn_sid}/128 table ${LOCALSID_TABLE_ID} \
-> > -		encap seg6local action End.DT4 vrftable ${tid} dev vrf-${tid}
-> > +	if ! ip -netns ${rtdst_name} -6 route add ${vpn_sid}/128 table ${LOCALSID_TABLE_ID} \
-> > +			encap seg6local action End.DT4 vrftable ${tid} dev vrf-${tid} 2>/dev/null; then
-> > +		echo "SKIP: SRv6 End.DT4 vrftable not supported in iproute2"
-> > +		cleanup
-> > +		exit "${ksft_skip}"
-> > +	fi
-> > 
-> > where the test is checked at vrftable creation time, and it would
-> > cleanup and exit as expected from standard tests.
-> > 
-> > But obviously this gets the same RTNETLINK answer as an error.
-> > 
-> 
-> This is a setup step, not a check. The skip decision is taken while the
-> topology is being built, because setup_vpn_config() is called several times
-> inside setup(). The check should run before setup(), once.
-> 
-> The way I suggested runs the route add with vrftable in a throwaway netns,
-> created and removed by the check itself.
-> test_encap_lookup_supp_or_ksft_skip() in srv6_encap_lookup_l3vpn_test.sh
-> has that shape: it creates the netns, adds the device it needs, tries its
-> route, and on failure cleans up and exits ksft_skip. For the dt4 and dt6
-> tests that device is a vrf bound to the table passed to vrftable, and the
-> netns also needs the strict mode.
-> 
-> > Then another approach came to my mind, and it seems to be quite reliable.
-> > Practically checking if the ip command contains the string "vrftable"
-> > using the "strings" command, and if not, skip the test.
-> > 
-> > Something like this:
-> > 
-> > +test_iproute2_vrftable_supp_or_ksft_skip()
-> > +{
-> > +	if ! strings $(command -v ip) | grep -q "vrftable"; then
-> > +		echo "SKIP: SRv6 End.DT4 vrftable not supported in iproute2"
-> > +		exit "${ksft_skip}"
-> > +	fi
-> > +}
-> > +
-> > 
-> > What do you think about it?
-> 
-> I would rather not add a new tool dependency to these two tests. The
-> route add uses ip, which the test needs anyway.
-> 
-> Ciao,
-> Andrea
+libbpf_num_possible_cpus() returns the number of possible CPUs, which is
+appropriate for sizing packed per-CPU map value buffers. It is not the
+upper bound for logical CPU IDs.
 
-Hi Andrea,
+For a possible CPU mask such as 0,2-3, the test loops over CPU IDs 0
+through 2. This incorrectly visits CPU 1 and misses CPU 3. It also
+initializes packed per-CPU slots using their slot indexes rather than
+the corresponding logical CPU IDs.
 
-I understand, what you say makes sense; in the end what you originally
-suggested seems to be the best approach.
+Parse the possible CPU mask and keep the packed slot count separate
+from the logical CPU ID range. Populate each dense per-CPU slot with
+its logical CPU ID, calculate the corresponding expected sum, and make
+the BPF program iterate over the full CPU ID range.
 
-I tried this
+Fixes: 7aa424e02a04bba5ecc84afe9b58b16e9e0b34f8 ("selftests/bpf: Fix some bugs in map_lookup_percpu_elem testcase")
 
-+test_iproute2_vrftable_supp_or_ksft_skip()
-+{
-+	ip netns add __vrftable_test 2>/dev/null
-+	ip netns exec __vrftable_test sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
-+	ip -netns __vrftable_test link add vrf-100 type vrf table 100
-+	ip -netns __vrftable_test link set vrf-100 up
-+	if ! ip -netns __vrftable_test -6 route add fc00::1/128 \
-+			encap seg6local action End.DT4 vrftable 100 dev vrf-100 2>/dev/null; then
-+		ip netns del __vrftable_test 2>/dev/null
-+		echo "SKIP: SRv6 vrftable not supported in iproute2"
-+		exit "${ksft_skip}"
-+	fi
-+	ip netns del __vrftable_test 2>/dev/null
-+}
+Signed-off-by: Suchit Karunakaran <suchitkarunakaran@gmail.com>
+---
+ .../bpf/prog_tests/map_lookup_percpu_elem.c   | 34 ++++++++++++++-----
+ .../bpf/progs/test_map_lookup_percpu_elem.c   |  8 ++---
+ 2 files changed, 30 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+index bfb1bf3fd427..849f33259c00 100644
+--- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
++++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
+@@ -2,29 +2,45 @@
+ /* Copyright (c) 2022 Bytedance */
+ 
+ #include <test_progs.h>
++#include "bpf/libbpf_internal.h"
+ #include "test_map_lookup_percpu_elem.skel.h"
+ 
+ void test_map_lookup_percpu_elem(void)
+ {
+ 	struct test_map_lookup_percpu_elem *skel;
+-	__u64 key = 0, sum;
+-	int ret, i, nr_cpus = libbpf_num_possible_cpus();
++	bool *possible = NULL;
++	__u64 key = 0, sum = 0;
++	int cpu, nr_cpu_ids, nr_cpus, ret, slot = 0;
+ 	__u64 *buf;
+ 
+-	buf = malloc(nr_cpus*sizeof(__u64));
+-	if (!ASSERT_OK_PTR(buf, "malloc"))
++	ret = parse_cpu_mask_file("/sys/devices/system/cpu/possible", &possible,
++				  &nr_cpu_ids);
++	if (!ASSERT_OK(ret, "parse possible CPU mask"))
+ 		return;
+ 
+-	for (i = 0; i < nr_cpus; i++)
+-		buf[i] = i;
+-	sum = (nr_cpus - 1) * nr_cpus / 2;
++	nr_cpus = libbpf_num_possible_cpus();
++	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
++		goto free_mask;
 +
-+test_iproute2_vrftable_supp_or_ksft_skip
++	buf = malloc(nr_cpus * sizeof(*buf));
++	if (!ASSERT_OK_PTR(buf, "malloc"))
++		goto free_mask;
 +
++	for (cpu = 0; cpu < nr_cpu_ids; cpu++) {
++		if (!possible[cpu])
++			continue;
++		buf[slot++] = cpu;
++		sum += cpu;
++	}
++	if (!ASSERT_EQ(slot, nr_cpus, "possible CPU mask weight"))
++		goto exit;
+ 
+ 	skel = test_map_lookup_percpu_elem__open();
+ 	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
+ 		goto exit;
+ 
+ 	skel->rodata->my_pid = getpid();
+-	skel->rodata->nr_cpus = nr_cpus;
++	skel->rodata->nr_cpu_ids = nr_cpu_ids;
+ 
+ 	ret = test_map_lookup_percpu_elem__load(skel);
+ 	if (!ASSERT_OK(ret, "test_map_lookup_percpu_elem__load"))
+@@ -55,4 +71,6 @@ void test_map_lookup_percpu_elem(void)
+ 	test_map_lookup_percpu_elem__destroy(skel);
+ exit:
+ 	free(buf);
++free_mask:
++	free(possible);
+ }
+diff --git a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+index ca827b1092da..d8da0696b97c 100644
+--- a/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
++++ b/tools/testing/selftests/bpf/progs/test_map_lookup_percpu_elem.c
+@@ -7,7 +7,7 @@
+ __u64 percpu_array_elem_sum = 0;
+ __u64 percpu_hash_elem_sum = 0;
+ __u64 percpu_lru_hash_elem_sum = 0;
+-const volatile int nr_cpus;
++const volatile int nr_cpu_ids;
+ const volatile int my_pid;
+ 
+ struct {
+@@ -57,17 +57,17 @@ int sysenter_getuid(const void *ctx)
+ 
+ 	map_ctx.map = &percpu_array_map;
+ 	map_ctx.sum = 0;
+-	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+ 	percpu_array_elem_sum = map_ctx.sum;
+ 
+ 	map_ctx.map = &percpu_hash_map;
+ 	map_ctx.sum = 0;
+-	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+ 	percpu_hash_elem_sum = map_ctx.sum;
+ 
+ 	map_ctx.map = &percpu_lru_hash_map;
+ 	map_ctx.sum = 0;
+-	bpf_loop(nr_cpus, read_percpu_elem_callback, &map_ctx, 0);
++	bpf_loop(nr_cpu_ids, read_percpu_elem_callback, &map_ctx, 0);
+ 	percpu_lru_hash_elem_sum = map_ctx.sum;
+ 
+ 	return 0;
+-- 
+2.55.0
 
-and seems to be behaving as expected in my environment for multiple
-iproute2 versions. If you're happy with it I'll send a v2 to net-next.
-
-Kind regards,
-
-    -Alessio Faina
