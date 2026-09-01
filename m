@@ -1,153 +1,286 @@
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDED34CCDC2
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 04:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.179
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788237081; cv=pass; b=FrTqFgqRNPbiRxtEoNoOlu6JvBl5vmQXlMFf3MwVSlfGiPfG5KuSyCnRxqpx00RbvroCc0uMUF00pqWXdDztU0UvQ3fQYM/pV6al2owzlPcOJrl2WFl6WJGZCqPKoj/p0/jD6cArbjU55xcDmG8bwHmqetUi9J1HyQwRbxdkis0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788237081; c=relaxed/simple;
-	bh=FX0nhEKouXbN0cOaxQkUE4HqDcyHbyV+RINDYZ62VQA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D3547iApSgAo6RTLOcksdvpgV4sJdocOPeXqvfp05nzlrK4MvCbJ2vytW9zcxvT3gYR8w9VobDKBYssJ3musGoz1YJdDY28aQn1BA1HCxx5OOeEDGdj0fHirbyXkI/nxJjUjGB6gGDmVEWkqnNXeN93wd7Oy3EGcskMmJoP6deM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=bcvnM0Ev; arc=pass smtp.client-ip=209.85.160.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88887353EE0;
+	Tue,  1 Sep 2026 04:34:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788237267; cv=none; b=eQm/4zT0f88qiBl/WOjHLQlVi7ksuY656K29VYMpdMOb9cpGx2X8R/mT7oODDjT7sSq4fshbgrNVfZHXXdlEJY+l84PSiUpi2I+HgNAbzLujOEGmWo3/l/THrVlK582iWXT925+LqXmvzQ34wZKf+EQviVl4BdblDG4AnECcrQY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788237267; c=relaxed/simple;
+	bh=ee761+S4zg11Tzso6HVF0qSEmcokfV1RlDgj+67OBSI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oCUk4nMdT35PDQDYTUeiwq1reem0nJiI2sh++QNuRO5jbGLauLm4sYIXniKBSKhj0WbCpImdmzHOmqvaPVmSKheGA1WRd74DwQM2qx+5QYzzCIorMhsDMQQBQCzgulIPu92rLM9nS99y4YifBvjdHk8hYIU9gfGaLsPVuhtsnCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g9dyY5kV; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="bcvnM0Ev"
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-51c10e86e52so112491cf.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 21:31:19 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788237078; cv=none;
-        d=google.com; s=arc-20260327;
-        b=XGdxhy9AJBXw7OPNeEk/s2G/pmLOpPl63ArHYALff0H+f49U9E9QGVcZLkSjs0lT2M
-         cYRJphyU38nm33wChrTzeudrNw51RV5D8zm4GE42pYCIKUr4oVF5Gnr1RZuWqoARnqjq
-         ktiHK6nYqViANms8ekpfq1poB/gAzAat0i1VK4J5KVfhQ74n2+uQj9hJAO8hhHYpmFpH
-         ERLvnZRNIHc5CbZsCbI0+5e6uPHNhp0UlzVsMwjKqVoHfPC+sCB7lRbMZxYjJMBeSbpE
-         hVjqmO9LUPysde0vMWPlwRpJcmTTNmWazn+azqZIs0acGNron2PXZ4AD9Gi8Y0l5OcJU
-         iQLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=FEJ7OhBX5NB/UHZTgvDkxBk1HpXEXeGzsORVysWiviY=;
-        fh=zRllTyGP75EkooS5KSomO42MmLsiiC9ryILxLvqR4rA=;
-        b=Rmiml1yxB3j+4ftAOP5YkCOb/Dk5W5oGuKXLIjiqpOE+C6up1O9caUsw5hu+8DezMS
-         iQ5/aGyFqJeB8UTAm+JdhQnPaWJa4Cc7b03RZi/QhMKFn2DeT7dPvgCvK3MVkW8ecc13
-         ZSQTnvwmXLxhD3QpDFz+OY8ChxYM5NrYK4glEZsETcCgXcFd82hbUedjjmcSexKw4OOG
-         MI+ox1LCUCOXKGcxMqad+x338nR/sUlRO/gcWX6rByBzlT2xvaOb7wko9sC95CrxPLTz
-         HkQSr73eLHd4hiLqbjczSOdFtwYZsBCovWAWnzsElUALlo4wjYAuSU9oCcClQ+UMnTpw
-         sRYQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788237078; x=1788841878; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=FEJ7OhBX5NB/UHZTgvDkxBk1HpXEXeGzsORVysWiviY=;
-        b=bcvnM0Ev1rsjLH4d9NysaloWAk6hH35T3e+vJmZKrUlrO9claYdXj5mfE34ZzGPsl9
-         zmxh6PMIVyKikRDplT1VsSwsRjOkGDVaRwHK7hXDXjeik2PuVUZhTBTEg0nOA21LEzN8
-         qFPqP887U+Yn2a8PIYiOvJfPM/fT3y4lADjplwdyTiHAH+OWvnsjB2Kc07hTiDgKobXH
-         oJqfBIXmriHuKoJZg74Im/voBwDc56+V9C6UTFugcln99MCGFhbYFP1qvguqF8dt9ErF
-         D6J5HxPAzhZkxczPtWWT9uJd2TTCMoaVSnJVoCe9SfEXq8QnpKvMu24Iw4QFEsbs/HuS
-         v30Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788237078; x=1788841878;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=FEJ7OhBX5NB/UHZTgvDkxBk1HpXEXeGzsORVysWiviY=;
-        b=i5tyGs651MObDb5XgSFBkbnN2PlzgnMXBebvnrXmPtw2K7VpovEtbLoK+umvq1qnqG
-         bwOmmOr65zSZ+/jPZ6AfRZPuehNDRZkbpC3Dx68fn+95L9QX8RfTrZvwzowahta14nD9
-         GK40KZndmfdto1pi8QVZGXYA9lyXQ7OIP0OLBeFdugzgPQG4YA+JdXUZqh6CJQi6Z3rF
-         bqZumIgwuzYjZMvDC8U/nY4Jp8R49esrTuQHfG9AdTeHCfXYJ+ss6AlcrZaS4doVca9+
-         8FEfNO3PWavWPuWMsNBocOTktkYU1j2dTYsSOqb9MgllBHGRnIBSg3f6KmoA3kxqOf2E
-         QWRA==
-X-Forwarded-Encrypted: i=1; AHgh+RqStARLiCkX4URzM+hfiHvfP3OUpU7H9ncv7mMcD+nkGAER8LmT5+a8VBQU9icg7GfultXxK/WCbPOJCtnk+GM=@vger.kernel.org
-X-Gm-Message-State: AFuF++lV22ZqXot5L9d+ef4HHfoXSZ/6lmauQddJlXpCj5zUG24zMMZu
-	cAs8yz+iCls49DsckURLdF4xQYxRQ9/TsUfKDNXimowEgp93D8d6hs8IjqJWvjVebmHfnsYxlqy
-	3D/XITNnyGs/vPX+JRObmj9YzG3VIT9F+Ec4oFWor
-X-Gm-Gg: AR+sD11+OlNcFqdJEZR+/ereCURDXzOQR+XrSn9UKVvz5C6f8jEsGu/BXQXHkhxKv2p
-	yj4l9YtNtPAHzlf8dT5Cl8OIZGhb/Ks7Ja4ZCJnzc7BlvDLFtcX0X8RfdKMo2WLksYYBCFJV/r8
-	nd+3ycquI/yOrN1tdjwppFRCASasNoxOq/xCQLkXxlqpV+7QD48g6vCbjw4Dmcec3SCdDw2Maa1
-	qnRb2puweXTHu7cvtQkvX2qG+sfOj2uq2GbucLDOBmeg+DAIQHXhSjGhCaGjW++vCbmTM3O8lbN
-	9AaLou0oKXcxUwgXnytvwl3xqSTqQjJV+OXNcmuE/C+w7V8K3uRzJHlonoRy202qJmjGgT+ug8W
-	AcQ==
-X-Received: by 2002:a05:622a:4d08:b0:517:6010:7c71 with SMTP id
- d75a77b69052e-53024dbfce4mr7950491cf.4.1788237078025; Mon, 31 Aug 2026
- 21:31:18 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g9dyY5kV"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C57CB1F000E9;
+	Tue,  1 Sep 2026 04:34:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788237265;
+	bh=Kl6FKJ30kHkfmj1MTuOyhkDqJxZ/bTl67RXI2xnze6w=;
+	h=From:To:Cc:Subject:Date;
+	b=g9dyY5kVOiHk9l4WoX9AeZLi5jgIA3chtKhMIjYmnso+dER+WMjth347x1zXb6wpS
+	 Ab9hJl1joi4vBM741J9svKWT4MM7jVjn9zo3CFchOSzC7+T3cx/xT76EJhAjfYmIs4
+	 y6XNgTL99BcotK9uPDFN+3EJ05rtYacyiqok8w3C6HuNlutPPtO6gzws+txQ04bcTw
+	 OC+ajZiJs9Xg188MV82IdcvKFu57CRq6lL5dD1SOxsGlXz2ESwHRh9bwJODkK1nvYw
+	 C/YMDJrbk0hpYIEpX2Mvq1I69ntrqfHNg0+t8t78WPYLvgjzdGq5+TatIot7gwm1a5
+	 tik6pN/9eUPjw==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 00/17] mm/damon: introduce data access-as-a-data attribute
+Date: Mon, 31 Aug 2026 21:33:56 -0700
+Message-ID: <20260901043417.2165-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260831-fix-mm-selftests-gitignore-v1-1-c984bbd4c5e4@kernel.org>
-In-Reply-To: <20260831-fix-mm-selftests-gitignore-v1-1-c984bbd4c5e4@kernel.org>
-From: Pratyush Mallick <pratmal@google.com>
-Date: Mon, 31 Aug 2026 21:31:06 -0700
-X-Gm-Features: AcwNN1W-OquKi310z5tOIsz9OK7PtMpaQzdifnWmAOLie0upZ2KKAIgtlk6wDn4
-Message-ID: <CALHaPKcyxUMja5-eCcfWq-SOBXzzu_cPOzZa96gewUW-0Xttqg@mail.gmail.com>
-Subject: Re: [PATCH] tools/testing/selftests/mm: add missing .gitignore entries
-To: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand <david@kernel.org>, 
-	"Liam R. Howlett" <liam@infradead.org>, Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>, 
-	linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Thanks for the fix and apologies for missing it.
+TL;DR: extend DAMON's data attributes monitoring system to support page
+table accessed bit and PG_idle based access monitoring.
 
-Regards,
-Pratyush
+DAMON was initially introduced as a data access monitor.  Users found
+data access pattern becomes more useful when it is combined with other
+data attributes such as belonging cgroups and backing page types.  For
+such cases, DAMON has extended to support such data attributes
+monitoring in addition to the original data access monitoring.  The
+DAMON probes system was introduced for this purpose.  Users set probes
+for filtering data attributes of their interest.  For use cases where
+the primary interests are the attributes but the access pattern, probe
+weights system has been introduced.  When it is used, DAMON applies its
+adaptive regions adjustment based on the monitored data attributes.
+
+However, DAMON stops access monitoring when the probe weights are used.
+DAMON cannot optimally help users who have interests in both data
+attributes and access patterns.  Data access can also be thought of as
+another data attribute, though.  Extend the probe system to support data
+access as a data attribute.
+
+Introduce a new probe filter type, pgidle_unset.  It shows if the page
+is not set as idle.  Specifically, it shows the page table accessed bit
+and the PG_idle flag.  It can inform if the region is ever accessed. But
+it cannot say when it is accessed.  To answer the second question,
+introduce a new probe feature, prep actions.  Using the features, Users
+can specify what preparation actions should be made to each region for
+each probe.  DAMON executes the preparation actions for each sampling
+interval, like it is doing the preparation for access check in the
+access monitoring mode.  To help 'pgidle_unset' probe action use case,
+'set_pgidle' preparation action is introduced together.  The action does
+exactly what the access monitoring was doing: clearing the page table
+accessed bits and setting the PG_idle flags.
+
+Tests
+=====
+
+I compared the access pattern monitoring results from the classic way
+and the probe based way.  As expected, the probe based way shows the
+results similar to that of the classic way.  More detailed test methods
+and results are below.
+
+First, do the access monitoring using the DAMON user-space tool [1] in
+the classic way.  The system is idle.  It shows no access as expected.
+
+    $ sudo ./damo/damo start
+    $ sudo ./damo/damo report access
+    heatmap:
+    00000000000000000000000000000000000000008999999811111110000000000000000000000000
+    # min/max temperatures: -640,000,000, -100,000,000, column size: 99.800
+    MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    0   addr 4.000 KiB    size 3.898 GiB   access 0 hz   age 6.400 s
+    1   addr 3.898 GiB    size 787.301 MiB access 0 hz   age 1 s
+    2   addr 4.667 GiB    size 773.457 MiB access 0 hz   age 5.800 s
+    3   addr 5.423 GiB    size 2.374 GiB   access 0 hz   age 6.400 s
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Start an artificial memory access generator (masim) [2] in another window.
+
+    $ ./masim/masim.py run --config_file ./masim/configs/zigzag.cfg
+
+Show the monitoring results.  As expected, it captures accesses.
+
+    $ sudo ./damo/damo report access
+    heatmap:
+    00000000000000000000000000000000000000011111111111111118888888833378988888888888
+    # min/max temperatures: -1,470,000,000, -12,482,536, column size: 99.800
+    MiB
+    intervals: sample 5 ms aggr 100 ms (max access hz 200)
+    0   addr 4.000 KiB    size 1.542 GiB   access 0 hz   age 14.700 s
+    1   addr 1.542 GiB    size 788.324 MiB access 0 hz   age 14.600 s
+    2   addr 2.311 GiB    size 772.844 MiB access 0 hz   age 14.200 s
+    [...]
+    50  addr 6.839 GiB    size 1.742 MiB   access 0 hz   age 1.300 s
+    51  addr 6.840 GiB    size 8.000 KiB   access 100 hz age 0 ns
+    52  addr 6.840 GiB    size 1.496 MiB   access 160 hz age 0 ns
+    [...]
+    97  addr 7.162 GiB    size 1.199 MiB   access 40 hz  age 400 ms
+    98  addr 7.163 GiB    size 1.199 MiB   access 20 hz  age 400 ms
+    99  addr 7.164 GiB    size 2.004 MiB   access 160 hz age 0 ns
+    100 addr 7.166 GiB    size 646.004 MiB access 0 hz   age 400 ms
+    memory bw estimate: 26.148 GiB per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+After the artificial memory access generator (masim) is terminated,
+restart DAMON with the probe-based access monitoring.  As expected, it
+shows no access since the system is idle again.
+
+    $ sudo ./damo/damo stop
+    $ sudo ./damo/damo start --probe_prep set_pgidle \
+            --probe_filter allow pgidle_unset --probe_weight 1
+    $ sudo ./damo/damo report attrs
+    heatmap:
+    00000000000000000000000000000000000000008999999711111100000000000000000000000000
+    # min/max temperatures: -600,000,000, -430,000,000, column size: 99.800
+    MiB
+    probe prep: set_pgidle, filter: allow pgidle_unset (weight: 1)
+    intervals: sample 5 ms aggr 100 ms (max probe hits 20)
+    #   addr         size         age           probe_hits
+    0   4.000 KiB    3.898 GiB    6 s           0
+    1   5.285 GiB    2.512 GiB    6 s           0
+    2   4.659 GiB    641.816 MiB  5.700 s       0
+    3   3.898 GiB    778.375 MiB  4.300 s       0
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Start the artificial memory access generator [2] again.
+
+    $ ./masim/masim.py run --config_file ./masim/configs/zigzag.cfg
+
+Show the monitoring results.  As expected, it captures accesses similar
+to the classic monitoring mode.
+
+    $ sudo ./damo/damo report attrs
+    heatmap:
+    00000000000000000000000000000000000000011111110000000177777777777777878798887777
+    # min/max temperatures: -1,330,000,000, 84,847,514, column size: 99.800
+    MiB
+    probe prep: set_pgidle, filter: allow pgidle_unset (weight: 1)
+    intervals: sample 5 ms aggr 100 ms (max probe hits 20)
+    #   addr         size         age           probe_hits
+    0   4.000 KiB    1.508 GiB    13.300 s      0
+    1   1.508 GiB    794.684 MiB  13.200 s      0
+    2   2.284 GiB    764.555 MiB  13 s          0
+    [...]
+    50  6.711 GiB    4.625 MiB    0 ns          17
+    51  6.716 GiB    2.504 MiB    0 ns          17
+    52  6.732 GiB    796.000 KiB  0 ns          17
+    [...]
+    90  7.162 GiB    512.000 KiB  2.200 s       2
+    91  7.061 GiB    700.000 KiB  2.300 s       1
+    92  6.935 GiB    316.000 KiB  2.300 s       4
+    memory bw estimate: 0 B per second
+    total size: 7.797 GiB
+    record DAMON intervals: sample 5 ms, aggr 100 ms
+
+Patches Sequence
+================
+
+First four patches (patches 1-4) introduce the new probe filter type for
+knowing if a region is accessed.  Patch 1 defines the new type in the
+core.  Patch 2 implements the execution of the new filter in the
+physical address space DAMON operation set.  Patch 3 implements a user
+interface on DAMON sysfs interface.  Patch 4 updates the documentation
+for the new filter type.
+
+Following 13 patches (patches 5-17) introduce the probe preparation
+actions feature.  Patch 5 defines the data structure for specifying the
+preparation actions.  Patch 6 completes setup of the API parameter for
+the prep.  Patch 7 extends the DAMON operation set callback list to
+connect the parameter with the underlying operation set.  Patch 8
+implements the execution of the prep in the physical address space DAMON
+operation set.
+
+Following five patches (patches 9-13) extends DAMON sysfs interface for
+the new prep feature.  Patch 14 adds simple selftest for basic file
+operations of the new sysfs files.  Final three patches (patches 15-17)
+respectively update design, usage and ABI documents for the new feature
+and its interface.
+
+[1] https://github.com/damonitor/damo
+[2] https://github.com/sjp38/masim
+
+Changelog
+=========
+
+Changes from RFC v2.2
+- RFC v2.2: https://lore.kernel.org/20260728041242.187380-1-sj@kernel.org
+- Update test results with latest version of damo and masim.
+- Rebase to latest mm-new.
+Changes from RFC v2.1
+- RFC v2.1: https://lore.kernel.org/20260727143829.86236-1-sj@kernel.org
+- Evaluate ops.prep_probes first for do_prep.
+- Rebase to the latest mm-new.
+Changes from RFC v2
+- RFC v2: https://lore.kernel.org/20260726173935.94046-1-sj@kernel.org
+- Rename prep iterator macro param names to make more sense.
+- Document set_samples param of prep_probes().
+- Set do_prep after kdamond_wait_activation().
+- Use const keyword for sysfs prep action-name structure fields.
+- Fix typos in documents.
+- Restructure sysfs interface patches for no build warning.
+- Rebase to the latest mm-new.
+Changes from RFC v1
+- RFC v1: https://lore.kernel.org/20260725210225.129944-1-sj@kernel.org
+- Fix wrong sample_addr setup condition.
+- Fix build warnings from sysfs part.
+- Fix typos.
+- Rebase to latest mm-new.
+- Add the tests section to the cover letter.
+
+SJ Park (17):
+  mm/damon/core: introduce DAMON_FILTER_TYPE_PGIDLE_UNSET
+  mm/damon/paddr: support PGIDLE_UNSET probe filter type
+  mm/damon/sysfs: support pgidle_unset probe filter type
+  Docs/mm/damon/design: document pgidle_unset probe filter type
+  mm/damon/core: introduce damon_prep struct
+  mm/damon/core: commit preps
+  mm/damon/core: introduce damon_operations->prep_probes()
+  mm/damon/paddr: support damon_prep
+  mm/damon/sysfs: implement preps directory
+  mm/damon/sysfs: implement preps/nr_preps file
+  mm/damon/sysfs: create directories for nr_preps writes
+  mm/damon/sysfs: implement prep_action file
+  mm/damon/sysfs: pass preps to DAMON core
+  selftests/damon/sysfs.sh: test probe prep sysfs files
+  Docs/mm/damon/design: document probe preps
+  Docs/admin-guide/mm/damon/usage: document probe preps sysfs files
+  Docs/ABI/damon: document probe prep sysfs files
+
+ .../ABI/testing/sysfs-kernel-mm-damon         |  13 +
+ Documentation/admin-guide/mm/damon/usage.rst  |  18 +-
+ Documentation/mm/damon/design.rst             |  15 +-
+ include/linux/damon.h                         |  43 ++-
+ mm/damon/core.c                               | 105 ++++++-
+ mm/damon/paddr.c                              |  41 +++
+ mm/damon/sysfs.c                              | 280 +++++++++++++++++-
+ tools/testing/selftests/damon/sysfs.sh        |  27 ++
+ 8 files changed, 528 insertions(+), 14 deletions(-)
 
 
-On Mon, Aug 31, 2026 at 7:18=E2=80=AFAM Lorenzo Stoakes (ARM) <ljs@kernel.o=
-rg> wrote:
->
-> Commit 2bee308f3adb ("selftests/mm: use pattern matching in .gitignore")
-> switched to a pattern-matching mechanism to reduce churn in .gitignore.
->
-> It however accidentally excluded the page_frag test's-generated module
-> intermediate C file with .mod.c extension, and also the local_config.h
-> header generated if liburing is available locally.
->
-> Explicitly fix both the issues, fixing the module-generated C file as a
-> general pattern as these are always intermediate files that should be
-> ignored.
->
-> Since this is a trivial .gitignore change it doesn't seem necessary to
-> treat it as a hotfix.
->
-> Signed-off-by: Lorenzo Stoakes (ARM) <ljs@kernel.org>
-> ---
->  tools/testing/selftests/mm/.gitignore | 2 ++
->  1 file changed, 2 insertions(+)
->
-> diff --git a/tools/testing/selftests/mm/.gitignore b/tools/testing/selfte=
-sts/mm/.gitignore
-> index fcd892ed21e3..a306d7754786 100644
-> --- a/tools/testing/selftests/mm/.gitignore
-> +++ b/tools/testing/selftests/mm/.gitignore
-> @@ -2,7 +2,9 @@
->  *
->  !/**/
->  !*.c
-> +*.mod.c
->  !*.h
-> +local_config.h
->  !*.sh
->  !.gitignore
->  !Makefile
->
-> ---
-> base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
-> change-id: 20260831-fix-mm-selftests-gitignore-dd389da72760
->
-> Cheers,
-> --
-> Lorenzo Stoakes (ARM) <ljs@kernel.org>
->
+base-commit: 559cf8fac9b5af8d8d8c350fcf338e21aa049a31
+-- 
+2.47.3
