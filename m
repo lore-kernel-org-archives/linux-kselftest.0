@@ -1,38 +1,38 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5761481FC2;
-	Tue,  1 Sep 2026 16:42:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91235481FC2
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 16:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788280951; cv=none; b=PfJo4jukb0gflOvAvicTcWqwNtl8Lqtszf8/+GMsNEWVaQNboKW3nSweuDx4Jwp6IZ0iVulDaQWd96AkXXbyhGyHaOxOmGpf2CnEquOmL9eG66GGBfY4ctTk7TqtTtegg4k87L5kgfNyUsT8i2iIZtpYRa2VG8xwGBsq1Hf7nT4=
+	t=1788280956; cv=none; b=MhF0xuH8lp6iLsaeKmQQ6EpHADEZMIQs710DNvg8/38ECwYDsLnjPIGJXnBKxsy+fuYU0C/rjHWdMStLC6m6DG1yVpj5J39IiFPYF9F2Y4JZSYbbtvVqXkxkTfGPthyy9R0n7UPJG+oUz9f0NSyPL00vfJgjfTpheuunqljEcQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788280951; c=relaxed/simple;
-	bh=oL9d0Go6mi/VGMPgcxhNO52d25NV0sdszCMETabh+Jw=;
+	s=arc-20240116; t=1788280956; c=relaxed/simple;
+	bh=OuzuyHS6Aee0uqjsgz3eDjQwQT5qFFkxKPDmF1PtJcY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NPHkd/ZyvaeGsA1QJiu/Ld0MsNSwU1kYxW1ggzh9Y5KqZsUaUi1aPpEkaYY5d/S4sR9envEZopzZxbb9OIjRhV2Uy+M0DYaZGDxFiBGH+UF2Gc2UdMnMSFOWSEn1mWqKX6WKJSRNwp/RbiWHfCdpqgWPHBjoxCkcGoQMLZvKxgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=yhQAZO0W; arc=none smtp.client-ip=185.246.84.56
+	 MIME-Version; b=Pv+NUa7I2rW/iukZDJcQUEZFwGMHkgsdOY3kVDWCXINvOekZPp++UsDGBN15S3kQM3Cpt1CN4h2O+CyMJLPoX1uYPkqApd2Hxn3qeHM9NurCIS8EFetQT9WHfUwm/jjuCIGuUId8skeF+3YKiKJ7zu4EX+TZ/hCvzQ7Qa8lmdNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=uA75FqSO; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="yhQAZO0W"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="uA75FqSO"
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 3961E1A1932;
-	Tue,  1 Sep 2026 16:42:27 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 18C8A4E414A8;
+	Tue,  1 Sep 2026 16:42:33 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 0DDB66053C;
-	Tue,  1 Sep 2026 16:42:27 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B01F011C7922D;
-	Tue,  1 Sep 2026 18:42:20 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E2E676053C;
+	Tue,  1 Sep 2026 16:42:32 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8B67111C7927A;
+	Tue,  1 Sep 2026 18:42:26 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788280942; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1788280948; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=974G8/uKW2m5xLDzr1nWHC21XZpOSQqOpsO68GXI/VA=;
-	b=yhQAZO0WCajjv4QXwzr5oZr1LWHWpehWWvxlWc6Orix731TBzvvaFah9Nlch5ZBgp2oDLg
-	DkTzAdnKQXTVhUWDtu2h1ejNfl4ISNCbKgrwgASgBXTfuJhJQZ08jufYmWrCIHuq6Lm4er
-	XeNa+Vj0HaksrXhDS7H2NRmR1royzKzKmKtN4ttwhLCLm5ubiY9S50BJ/4dRE+LIl38B6D
-	bNYlGb0bWxdIgKRPKH463gy5Q31HFjGtyBtIiVRVYxGg6wDmaaRdwd4rhwJl27UElIs3E/
-	ewi7KaRSjsxy4YHImDbE1TsSytouAQKfADiOREB5ObwiAtCGRrpQpgN4S8+Tsw==
+	bh=mwD6RNRMS6GTy4KFntwUfx5v5Cnc7n48MawaxDnu5rk=;
+	b=uA75FqSOHXllWbUkiHXCN4q9wbW9WuN71f+SWoonih5FPwUPRx1mfjDe7XeE/rQ+h4pcQ1
+	Ni5UkVlLMAkamN2VA0QkN5d8aw8TUBjMExin0S0gSREtxPGnR4TxgNGOmqkH0j3cd58SnA
+	eMzP/nI0a6LmPhKPo1vanpZ/LIeDg9SbIZqTcY6CoQ6mXJGFE0RUUCqojv+tQRDRyzcB7q
+	HzxhaTGQjxY+qLG9nxb7Z2gV1iq8DkoTt1iJGgeVB+bKwpyI+vMfX31E5kWzFBAOwZmP9Q
+	F02ngTvTYY1rsXeXROWop6Z0CXX/LHtdeknM1k6pxWyu968g+AaYbd7JugmPYA==
 From: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>,
 	davem@davemloft.net,
@@ -49,9 +49,9 @@ Cc: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>,
 	linux-kernel@vger.kernel.org,
 	thomas.petazzoni@bootlin.com,
 	linux-kselftest@vger.kernel.org
-Subject: [PATCH net-next 1/2] selftests: drv-net: ynl: Allow cross-compiling ynl and associated tools
-Date: Tue,  1 Sep 2026 18:41:58 +0200
-Message-ID: <20260901164200.1124343-2-maxime.chevallier@bootlin.com>
+Subject: [PATCH net-next 2/2] selftests: drv-net: Use cross-compilation environment for the io_uring check
+Date: Tue,  1 Sep 2026 18:41:59 +0200
+Message-ID: <20260901164200.1124343-3-maxime.chevallier@bootlin.com>
 X-Mailer: git-send-email 2.55.0
 In-Reply-To: <20260901164200.1124343-1-maxime.chevallier@bootlin.com>
 References: <20260901164200.1124343-1-maxime.chevallier@bootlin.com>
@@ -64,97 +64,36 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-The ynl tool and libraries may be built standalone or through the
-drivers/net/hw selftest machinery. This may target a different arch, so
-we need to account for the cross-compiling options such as CROSS_COMPILE
-or the LLVM-specific variables.
+To test for the presence of zerocopy support in the available liburing,
+a small check program is compiled.
 
-Let's include the tools/scripts/Makefile.include that deals with the
-CC/AR resolution.
+The CC value used for the io_uring library check defaults to the host
+compiler, which will fail in cross-compiling environments.
 
-Fixup the ynltool CFLAGS handling to use +=, so that we don't override
-the ones set in Makefile.include
+Normally the CC for cross-compile is set in lib.mk, but this also
+requires the test list to be set when we include it, and this check
+needs to run first.
+
+Note that this doesn't cover the LLVM cross-compiling case though.
 
 Signed-off-by: Maxime Chevallier (Netdev Foundation) <maxime.chevallier@bootlin.com>
 ---
- tools/net/ynl/Makefile           | 1 +
- tools/net/ynl/generated/Makefile | 3 ++-
- tools/net/ynl/lib/Makefile       | 3 ++-
- tools/net/ynl/tests/Makefile     | 2 +-
- tools/net/ynl/ynltool/Makefile   | 4 ++--
- 5 files changed, 8 insertions(+), 5 deletions(-)
+ tools/testing/selftests/drivers/net/hw/Makefile | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/tools/net/ynl/Makefile b/tools/net/ynl/Makefile
-index 3cefe4ed96cb..8bf72c063e86 100644
---- a/tools/net/ynl/Makefile
-+++ b/tools/net/ynl/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
+diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
+index 78bb0169350b..0ebb4767cd57 100644
+--- a/tools/testing/selftests/drivers/net/hw/Makefile
++++ b/tools/testing/selftests/drivers/net/hw/Makefile
+@@ -1,5 +1,8 @@
+ # SPDX-License-Identifier: GPL-2.0+ OR MIT
  
- include ../../scripts/Makefile.arch
-+include ../../scripts/Makefile.include
- 
- INSTALL	?= install
- prefix  ?= /usr
-diff --git a/tools/net/ynl/generated/Makefile b/tools/net/ynl/generated/Makefile
-index ea4128f612d6..5a186349b5a8 100644
---- a/tools/net/ynl/generated/Makefile
-+++ b/tools/net/ynl/generated/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CC=gcc
-+include ../../../scripts/Makefile.include
++# Set CC for the io_uring check
++CC := $(CROSS_COMPILE)gcc
 +
- CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow \
- 	-I../lib/ -idirafter $(UAPI_PATH)
- ifeq ("$(DEBUG)","1")
-diff --git a/tools/net/ynl/lib/Makefile b/tools/net/ynl/lib/Makefile
-index 9b98c0599600..7b3eae89982f 100644
---- a/tools/net/ynl/lib/Makefile
-+++ b/tools/net/ynl/lib/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--CC=gcc
-+include ../../../scripts/Makefile.include
-+
- CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow
- ifeq ("$(DEBUG)","1")
-   CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
-diff --git a/tools/net/ynl/tests/Makefile b/tools/net/ynl/tests/Makefile
-index 40827ca8e579..99ae7dcd6348 100644
---- a/tools/net/ynl/tests/Makefile
-+++ b/tools/net/ynl/tests/Makefile
-@@ -2,8 +2,8 @@
- # Makefile for YNL tests
- 
- include ../Makefile.deps
-+include ../../../scripts/Makefile.include
- 
--CC=gcc
- CFLAGS += -std=gnu11 -O2 -W -Wall -Wextra -Wno-unused-parameter -Wshadow \
- 	-I../lib/ -I../generated/ -I../../../testing/selftests/ \
- 	-idirafter $(UAPI_PATH)
-diff --git a/tools/net/ynl/ynltool/Makefile b/tools/net/ynl/ynltool/Makefile
-index 48b0f32050f0..85cc0840b403 100644
---- a/tools/net/ynl/ynltool/Makefile
-+++ b/tools/net/ynl/ynltool/Makefile
-@@ -1,12 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0-only
- 
- include ../Makefile.deps
-+include ../../../scripts/Makefile.include
- 
- INSTALL	?= install
- prefix  ?= /usr
- 
--CC := gcc
--CFLAGS := -Wall -Wextra -Werror -O2
-+CFLAGS += -Wall -Wextra -Werror -O2
- ifeq ("$(DEBUG)","1")
-   CFLAGS += -g -fsanitize=address -fsanitize=leak -static-libasan
- endif
+ # Check if io_uring supports zero-copy receive
+ HAS_IOURING_ZCRX := $(shell \
+ 	echo -e '#include <liburing.h>\n' \
 -- 
 2.55.0
 
