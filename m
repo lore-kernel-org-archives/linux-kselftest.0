@@ -1,65 +1,84 @@
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB2B49F139;
-	Tue,  1 Sep 2026 18:55:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8862B3B9933;
+	Tue,  1 Sep 2026 19:41:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788288908; cv=none; b=Uy84g6T6rV8H2wexg2nFHxSuClxyjvr45hQFG8jbxQc6PJXNKCZ2HUHcZiIpIN1QcgEnRlGj21Upr4KpzAtlxhY/JE5Zaei+lF7BpuTo8V5UTB5iLYCKCKtdmqTy7OahvtsZ8VhuPvBKW5YeTHXT+Ya0iHuudJtQobOeu6H9d9M=
+	t=1788291665; cv=none; b=BK70seSQ6wdhnyDmVdZsjK9WnO52K4JQQbDZqEy45Jdp4zOQWwIBzlxIp6gUKPoP023BZK1q2ai44PKlS7dYX9hxvi+8jClDRmwudOwP72RqsRZVl8g2IQDfmfapG676WG6EOdmdpQ07hb62aZJhtnkLiJIo04jF4COeqa5IB9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788288908; c=relaxed/simple;
-	bh=J3YpnJBceEVXLHrkWQYyr9i7ImLjPmY/KVm0+cPktOs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dgODLydk/ue/DQYCW4+T8E6S4uTDcy4RUpI5gOnUUmidJ49ROze935YO+E9mdthOOYlbtxlD+zgBImSg+1YoU9ip4FYyxjyXoD/Yhq8t/79io+HWqdoTORBvxXt5I6yvGLXLvj5eD92XMJ64boxuzRiaN7nAi2aZMl/nMuR2ZeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ilE3mH5a; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+	s=arc-20240116; t=1788291665; c=relaxed/simple;
+	bh=q8Rua0AnnJRBM0nX8e2AwAnB2tJU8KE40lPHqfX8ajY=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=A8TxCWRDg6c3eUZBhy/dk/ymXCfBKyySbSh/KDXvubDD2Id7dD0qI2JvopBJNYs43SM6/OjVgGwpip5WU0VyL+EPjfOmCMLgIUcMO7tDhs9kfqQjFSKp2C30H/5W8ffn09z2FkrH2/XS+/f7bKvz26+6wQDNy6TsPaUAsiq9ZlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A66J4XVP; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ilE3mH5a"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1788288898;
-	bh=J3YpnJBceEVXLHrkWQYyr9i7ImLjPmY/KVm0+cPktOs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ilE3mH5aOHiBAtk8ms25PQyqyxr5blbzZgxovbadDgw44gYJkvXZU73jZtuonaZu7
-	 /QBj81TDA5u8c/4XcCpRhkYcVbunxHbwfmXJK3f1jAzh6uhPATefYROvBbZ+lq7u1X
-	 jBx4IKX7Ik9lM5A6K7durqKUaA8VzUXQ2Z6X8EUQ=
-Date: Tue, 1 Sep 2026 20:54:58 +0200
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: David Laight <david.laight.linux@gmail.com>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 3/3] tools/nolibc: validate directory with O_DIRECTORY in
- opendir()
-Message-ID: <56e20692-a13c-45c7-8ff7-23810d99575c@t-8ch.de>
-References: <20260831-nolibc-fdopendir-enotdir-v1-0-8cf0e79c4e6f@weissschuh.net>
- <20260831-nolibc-fdopendir-enotdir-v1-3-8cf0e79c4e6f@weissschuh.net>
- <20260901095158.2de73aa8@pumpkin>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A66J4XVP"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 321C41F000E9;
+	Tue,  1 Sep 2026 19:41:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788291664;
+	bh=23/MZB8wrEyX9XWKNI5R0zZXXj8aB24fAIwXwsKt05E=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=A66J4XVPkBjqRvMBUD2kbAsKdX96r18WsMjLBTPX/HboTYjTHHgW6pdanrolYO8jw
+	 f7NZ+gjiHsFpZBOCKm4pbGtAX0q75DKObcEQH1umh4SAn9Pi4qxYLJBX9Ys6FPEpCg
+	 bB79LsNWd/PrTZeNo+CWPSDuXFFxvVAR0xiNWPwYTydct0uoQk4xx8/m3Jx1cPvO19
+	 tLVZ25tJk0gvcxbt24Ci7h4kRa3ta9RvlBPKleTXH6iRRE0jDjLUR0AUUd7o6zEhCz
+	 FHe1L0GvJNrnWdf3k2PGSgbwnLzoyxk2sViWwJQyvtPuUhHgwAf1WLNac/K/cR5hcg
+	 WniVsIEMtObaQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AE539253EB;
+	Tue,  1 Sep 2026 19:40:07 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260901095158.2de73aa8@pumpkin>
+Subject: Re: [PATCH] riscv: report Zfhmin/Zvfhmin when Zfh/Zvfh are present
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <178829160640.1815744.5288519540181026085.git-patchwork-notify@kernel.org>
+Date: Tue, 01 Sep 2026 19:40:06 +0000
+References: <7190E4DB338251C3+20260811081513.2849980-1-jinrui@haiwei.tech>
+In-Reply-To: <7190E4DB338251C3+20260811081513.2849980-1-jinrui@haiwei.tech>
+To: JinRui <jinrui@haiwei.tech>
+Cc: linux-riscv@lists.infradead.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, corbet@lwn.net,
+ skhan@linuxfoundation.org, linux-kernel@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org, alex@ghiti.fr,
+ ajones@ventanamicro.com, cleger@rivosinc.com, charlie@rivosinc.com,
+ samuel.holland@sifive.com
 
-On 2026-09-01 09:51:58+0100, David Laight wrote:
-> On Mon, 31 Aug 2026 18:05:01 +0200
-> Thomas Weißschuh <linux@weissschuh.net> wrote:
+Hello:
+
+This patch was applied to riscv/linux.git (fixes)
+by Paul Walmsley <pjw@kernel.org>:
+
+On Tue, 11 Aug 2026 08:15:13 +0000 you wrote:
+> The RISC-V ISA manual specifies that Zfh implies Zfhmin, a normative
+> rule clarified in
+> https://github.com/riscv/riscv-isa-manual/pull/3070. Zvfh likewise
+> implies Zvfhmin, as stated by the vector extension specification.
 > 
-> > fdopendir() requires a call to fstat() to determine if the opened file
-> > is a directory. Currently opendir() inherits this extra syscall.
-> > 
-> > Switch to O_DIRECTORY and remove the call to fdopendir() in opendir()
-> > to make the directory type check cheaper.
+> The kernel currently reports ZFH and ZFHMIN (and ZVFH and ZVFHMIN) as
+> independent hwprobe bits derived only from what the device tree
+> declares. Platforms that declare just "zfh" (Zfh being a superset that
+> already contains all Zfhmin instructions) therefore report
+> RISCV_HWPROBE_EXT_ZFHMIN=0, which breaks userspace RVA23 conformance
+> checks (e.g. snapd installing core26 on riscv64).
 > 
-> This should probably be the first patch.
-> With the changed fdopendir() it leaks an fd on error.
-> It also fixes the errno return.
+> [...]
 
-Good catch. If Willy doesn't object I'll shuffle the commits around.
+Here is the summary with links:
+  - riscv: report Zfhmin/Zvfhmin when Zfh/Zvfh are present
+    https://git.kernel.org/riscv/c/2dc1f8d0a5fd
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
-Thomas
