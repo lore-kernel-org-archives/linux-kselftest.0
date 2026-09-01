@@ -1,131 +1,141 @@
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-pg1-f199.google.com (mail-pg1-f199.google.com [209.85.215.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D9432E285C
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:04:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.128.46
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788285878; cv=pass; b=eizHCiAB9LlwFPl2F8ujv0OfPWJS6dXU/gcVCaikUYIbLYFfa1bkeFMUM4V5MXxFr3HYWpHSTvcjibbMsq4th79F2pxXtqlnFGZe16R6/OLyvapqZ0AasJa8+IvpE6M9nyjEEe3IXSTnMxuLaMtPEP8z4y1tDtQ7QxBnLppa7Xw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788285878; c=relaxed/simple;
-	bh=hUVVEFTVIn467SJywBoEi/ks8xT0q4iqiCkzqcTtTlw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KTfh0tehNr7v+pC4lOHl2d5R7wGWHFxHuVcvbXmMULHJ7Z3GemLvLrAPgJP5il95vRiAESD9SEV88JTSyH1ilgWqYQzH/fa7EQWEHU7mshKS9RjsAMYbpTMYzxvOCTrCK4PJMiRJD4LqYHmo9qeM5uRwOqv/xGnmy9Tjf0OS3l4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Vf6ICtHz; arc=pass smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78A8549482A
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:07:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788286046; cv=none; b=nK2L0+pN64LIMRffIEXc2i30TeG3bQPwkKwTou6jD1fJtOpHYBREyeq5HQ0hio2fZbUEJdTiDoj6hj7s90ynL3mTWXkKtvaO9DgGEwSAZ7ypLDeFHIB9HfwBbL7a470Rc1HDmoBIwKMKs3WEVlhZBsxFpCXHYwC4QQ3GgedbXq4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788286046; c=relaxed/simple;
+	bh=XOoPuVLt9dfHQzyitxIiDLxWCT1LNGdaieF2sHtluzo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=BBLWXccbgCf9oiLkhqD8m63kUFgjerW2YlL0sL9h50m3/MY1Ionb7vRKrHnNZdWMoftB+OKP1NqcHH3RJRpsoHJdnxec2hUE2MlgDfBOXXDRkKN0lrJbDHVhWGjTaz9ehKi6Hr64lLdgveHRf9dTWEx25i5D7RkKSqDRQGWgXp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=DpdgKFjN; arc=none smtp.client-ip=209.85.215.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Vf6ICtHz"
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-49b392ccaacso1019385e9.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:04:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1788285875; cv=none;
-        d=google.com; s=arc-20260327;
-        b=KrpB9E1UVSZ3AZLlbbeLVRIX4//izpgkEKgVCRYQ1X9aiPY1hgJhonxK2Kw7omjj2T
-         VbpISwWXqwluhkDUO0aMcpvw9Nyl88dj2WxeC3qsP8p5u7zDqHkvg+8lFN/4EphdNDXS
-         7lBuEnlwt1X/fPxtU+Rw9jFhTWTMi2+YrWMq4/ygH6YP05YDaNsWuVVhMhH7vmmrqcp5
-         rQdqEASnK/2rro/7+uTU75406krqGQeZea3rtHjVIXt+hfrUuZuhex0W0C9e83N9QJs8
-         iOChD22ztPr2a+KCRHN0E62OuDFhHcNLRYBQSzxvsSH6uCq2Uu0+uqqcSVwma9z6+0gL
-         IDZA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20260327;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=hUVVEFTVIn467SJywBoEi/ks8xT0q4iqiCkzqcTtTlw=;
-        fh=9jhzFPx94PGFavgIEYT/BZOwZLYwAFR04yKxt2ysqZc=;
-        b=TzJ33380X0FTCX6B2e8qLj3k3PeV9qSK2uaAAJKtI+xU+Ypwwz7tY5LTfijpauqhvi
-         us31ct49OvvssD1/nXZ7rmCwXqtGMbYuFdVTvdc2kN710lcl1B+XKqP51yEZnPjUjOdU
-         ETY/pZuDfwYfu5DOQNraabuh9TP1DU1dwH8ubNwbonexzWkIU1CfBJXpYWTBE0OoP0SU
-         LTNxQNcVMAWWEifvJMfs/9MEJUy6rkmzofAHfW50HP7ip74vzQoC8j3f/H5ZK/oNN+Jh
-         vVEyX/H2zmVt+xWDHawvz+YR3skpr1An8ZG3dsULX0b/2QRuiJKsVJQkn1erCevtfQzK
-         XlLw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="DpdgKFjN"
+Received: by mail-pg1-f199.google.com with SMTP id 41be03b00d2f7-cc1cdfb337eso216957a12.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:07:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788285875; x=1788890675; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=hUVVEFTVIn467SJywBoEi/ks8xT0q4iqiCkzqcTtTlw=;
-        b=Vf6ICtHzn/LDfQuY7Z29s+dgl6mgQc6v7VXMT8JRZjShdnRssZ/LFMRcRkaJdyI1j0
-         RYNvUDVThmTNmdcGBXgr2Bzt7/sFe/wA15iEaMq1m0E3ILsQvhLjShFDk3Qzct3X/lcz
-         8sBhOVjDL+v6jmyb5cwX1nbsUijkcK4z/Sw2Ph3LKpkVQbc7flb+3EuQvFJgyIwUBX3N
-         ReVqhksUcQ5+udyeRvB/qywZwoM1QRNh84svFrFAOKZ19iQ4vnBBVMrdh0jc0hEanFvm
-         3eYln+BjgvuH6hxea5JIVXW4kzv+WgJRAQujtzNloEU0PR8mM0diQHHpKokb5uqztoSF
-         FPYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788285875; x=1788890675;
-        h=content-transfer-encoding:content-type:cc:to:subject:message-id
-         :date:from:in-reply-to:references:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+        d=google.com; s=20251104; t=1788286045; x=1788890845; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
          :content-type;
-        bh=hUVVEFTVIn467SJywBoEi/ks8xT0q4iqiCkzqcTtTlw=;
-        b=nrii1THpNr2c2upgsWWTImzmi0sjGodIQawtcYOj/dpdJZBlE2gjePgaoNqLJRtYkZ
-         LTR4vL81pkwMyOLaOz5TeopoeGmaITfv85lMpL/vZSjjhmNfoslGWfGlOc02evrNMdgn
-         kwQyod5onirh5WMP4hWrHx9TZpigepKUo9GlQtrc3LHhc+AdOunRl0Q/VoMpBi8AH90T
-         8oudXu/nIvol+6azJnjpbtYKnjNhj34aFqodnd+iR4xHPYQighnvoFm3SBfPLya/SuHg
-         Tgi41hv5Fy9gjHZqV0fHTVFyQuVgwh+hmgDM0dznerNK3wHwC+KpQJLtSL85vXRlTCyZ
-         H30g==
-X-Forwarded-Encrypted: i=1; AHgh+RrVhqEy0iVQ82wCWhta5Bmq7eCgyyY9QJsrkdjv0ItQjpD+/Fyzy67CxyJetrApbZmkYaldm8UwigQB/xk1JYY=@vger.kernel.org
-X-Gm-Message-State: AFuF++nwRiVwl4zwEJcIy13TjVNH4n5KfVrgiA7B4bqQqstoK+1aKnxz
-	2ZeJwAcjGAh1cqt5d/e0vr6W1sJW00/2zJFU3SiJbNnQvGmQv/5nEbPDmMZBIWHsJbwBHt20YQq
-	IzOFHcYvv0n5fUKe8fAgX9U4R4Q1z3XQ=
-X-Gm-Gg: AR+sD10N8ti2W9GV64Go4FFihpwXZlYMCM6htTDxC5PxWg2h42ZymnIZXsghLaIeFcw
-	7c8ZHV80aElW3p23Fo+Hytykubsv0GXxD1a0BvtL7nhmNana6CU+e/TnCgQsDwrxQm4uKl2Hmrm
-	iy3YCEgTqxc/yxvTB0iXWfPYERejxtQiFfzOLV6GoJtzgre7UAsgVm/hhCh0W8IifzcF//1cULT
-	fh2umGQBpwCfvQgwqTV7ALbeiq2ahDHzqcir5TgWuvZiJr1KOAiNZld6B8nyYRj6/PCUOyf+LZO
-	LKBNMCeTyrChQrPOKWXnMSYEHwTiaeSGT4GSCurBg+hYsFcj6IOWNPq3Bds1lse01Yp5XkKI6z1
-	fSbM=
-X-Received: by 2002:a05:600c:a012:b0:49c:d818:8764 with SMTP id
- 5b1f17b1804b1-49cd81887aemr257261865e9.11.1788285874997; Tue, 01 Sep 2026
- 11:04:34 -0700 (PDT)
+        bh=j3UHjUhSHEFs3BDPKTwtfBJ57unvd2KtLqU4zpNQnvE=;
+        b=DpdgKFjNRLihw6sTldhn+GUTyzKoBYEhWDaeC8k/8Nvmj/CRn94BSsWxZ91NDJXqzq
+         66DaDhO/jl2XXSED3dG1jCWLDSwVFsNFq1Z4LW+xbs0OrszMqFpxQGwOfZ62p8zD+nmK
+         fr+WRWM/y+IiVDRqJNiWN6TUwq0+bdD3o6HmLODW7ZHAK8uVn0B2ZWKt5QYzedFptgB3
+         H/km0RrgN4fxxjIYuea8fqeYlPvovA7uV7B2r0eQNlSM7W7L5LfR5iYVYE2HdKgfRVpX
+         t4Bdytr+kW0CGjsbYVnadSs41qeCLADhg97zLXJ5Z3vqDK/LwvCNIMsoJ+vLMevFAMoe
+         D80A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788286045; x=1788890845;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=j3UHjUhSHEFs3BDPKTwtfBJ57unvd2KtLqU4zpNQnvE=;
+        b=h1jGdWXnOTxiIA6CJsnQR4OPj5Cf0oDTRHCWp9zvITrJr/EgstQe2A/UTK3hEIPGWF
+         jN57VJNP2yfE78LemobECvru0ar7pu0/sGCX4mENMCSPDcLJLirHLF0F42KZngH4ygIF
+         B2NW1RzXerTxuzqeleNmacPekTzE3lnJ0ZNQIMO7uZv7AcKMCZM9DDqDkZ04A1FKAPCw
+         +wPi9F6fEofTjgshAucgmRMrm041ssrz0NgIj4p94xTrqT8uaMcLSOc/kYFNyPWkPi4b
+         9pKx5hV9XeHCgyICJh0DPBEPY59v7SLdYgqtoAvcZYmXORg5AMTQOht6qmt/FxOKx52w
+         uq2Q==
+X-Forwarded-Encrypted: i=1; AHgh+Rqs1LUz0hBWlA8kignoKtBrdabF13t2e+5GwmkWS3MbnSIOLTZP9XJdMBoJZDzpBk6JM+CWx1nqZo1kGt0TeuI=@vger.kernel.org
+X-Gm-Message-State: AFuF++kBauExldmuIZqJlrm5gu/ZT2KKyTyU3h5JQYsyZ5kyucbz7Lli
+	gX5/sahlXU9dE6OkP8ulQNyqqFASx6S4WF30VGujNSBBqJ57Z4s3LheivLxzbIgS2q7B6JgiAJ6
+	UMMU4iio807iQow==
+X-Received: from pgp10-n2.prod.google.com ([2002:a05:6a02:62ca:20b0:cc2:2955:6540])
+ (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a05:6a21:7a97:b0:3d0:cc29:ff64 with SMTP id adf61e73a8af0-3d7af8303a1mr17251598637.15.1788286044618;
+ Tue, 01 Sep 2026 11:07:24 -0700 (PDT)
+Date: Tue,  1 Sep 2026 18:07:09 +0000
+In-Reply-To: <20260901180713.4185641-1-dmatlack@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20260901161317.3468233-1-joshua.hahnjy@gmail.com>
-In-Reply-To: <20260901161317.3468233-1-joshua.hahnjy@gmail.com>
-From: Nhat Pham <nphamcs@gmail.com>
-Date: Tue, 1 Sep 2026 14:04:22 -0400
-X-Gm-Features: AcwNN1VidmfJ5pX46qChkksGP0fJtnDQ2Hgbr8MA8crLeorD9MO_R1ONtmYEAUQ
-Message-ID: <CAKEwX=MD_EcAaLzMGnMytVJ_KTGmv=hpR2h-DD+w0oJRjzkg6Q@mail.gmail.com>
-Subject: Re: [PATCH] selftests/cgroup: Skip test_no_invasive_cgroup_shrink if
- zswap shrinker is enabled
-To: Joshua Hahn <joshua.hahnjy@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>, Yosry Ahmed <yosry@kernel.org>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
-	Shuah Khan <shuah@kernel.org>, linux-mm@kvack.org, cgroup@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel-team@meta.com
+Mime-Version: 1.0
+References: <20260901180713.4185641-1-dmatlack@google.com>
+X-Mailer: git-send-email 2.55.0.966.g6673acef38-goog
+Message-ID: <20260901180713.4185641-2-dmatlack@google.com>
+Subject: [RFC PATCH 1/5] liveupdate: Extract luo_file token lookup logic into
+ helper function
+From: David Matlack <dmatlack@google.com>
+To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
+	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
+	David Matlack <dmatlack@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 1, 2026 at 12:13=E2=80=AFPM Joshua Hahn <joshua.hahnjy@gmail.co=
-m> wrote:
->
-> The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
-> has zswapped out more pages than memory.zswap.max, that it does not
-> trigger writeback for other cgroups. To do this, it compares the
-> writeback count in a control cgroup and makes sure that it is 0,
-> and compares it to the writeback count in a aggressor cgroup who
-> does expect to see writeback.
->
-> When the zswap shrinker is enabled however, there is an additional path
-> to zswap writeback, which can happen independently of reaching the
-> memory.zswap.max limit.
->
-> The writeback counter cannot distinguish between invasive noisy-neighbor
-> driven writeback and the zswap shrinker work, so the test becomes
-> invalid.
+Extract the token-based list iteration inside luo_retrieve_file() into a
+standalone private helper luo_find_file_by_token().
 
-I think writeback in the control group (zw_group) happens right during
-the first round of memory allocation, but there shouldn't be any on
-the second round (as the second round involves writing to wb_group
-only). So if we read zswap writeback counter of that cgroup (zw_group)
-right after that first allocation round, and make sure delta =3D 0 after
-the second round, then that should work for both shrinker_enabled =3D Y
-v.s N.
+This eliminates code duplication by paving the way for additional file
+retrieval modalities (like retrieving into an existing file descriptor)
+which also need to safely lookup file tracking structures from the token
+list before bridging payloads.
 
-If it's still too noisy, then I'm fine with skipping it when
-shrinker_enabled =3D Y.
+No functional change intended.
+
+Signed-off-by: David Matlack <dmatlack@google.com>
+---
+ kernel/liveupdate/luo_file.c | 30 ++++++++++++++++++------------
+ 1 file changed, 18 insertions(+), 12 deletions(-)
+
+diff --git a/kernel/liveupdate/luo_file.c b/kernel/liveupdate/luo_file.c
+index c39f96961a85..5e160836a165 100644
+--- a/kernel/liveupdate/luo_file.c
++++ b/kernel/liveupdate/luo_file.c
+@@ -549,26 +549,32 @@ void luo_file_unfreeze(struct luo_file_set *file_set,
+  *         -ENOENT if no file with the matching token is found.
+  *         Any error code returned by the handler's .retrieve() op.
+  */
+-int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
+-		      struct file **filep)
++
++static struct luo_file *luo_find_file_by_token(struct luo_file_set *file_set, u64 token)
+ {
+-	struct liveupdate_file_op_args args = {0};
+ 	struct luo_file *luo_file;
+-	bool found = false;
+-	int err;
+ 
+ 	if (list_empty(&file_set->files_list))
+-		return -ENOENT;
++		return ERR_PTR(-ENOENT);
+ 
+ 	list_for_each_entry(luo_file, &file_set->files_list, list) {
+-		if (luo_file->token == token) {
+-			found = true;
+-			break;
+-		}
++		if (luo_file->token == token)
++			return luo_file;
+ 	}
+ 
+-	if (!found)
+-		return -ENOENT;
++	return ERR_PTR(-ENOENT);
++}
++
++int luo_retrieve_file(struct luo_file_set *file_set, u64 token,
++		      struct file **filep)
++{
++	struct liveupdate_file_op_args args = {0};
++	struct luo_file *luo_file;
++	int err;
++
++	luo_file = luo_find_file_by_token(file_set, token);
++	if (IS_ERR(luo_file))
++		return PTR_ERR(luo_file);
+ 
+ 	guard(mutex)(&luo_file->mutex);
+ 	if (luo_file->retrieve_status < 0) {
+-- 
+2.55.0.966.g6673acef38-goog
+
