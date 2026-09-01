@@ -1,104 +1,94 @@
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mta0.migadu.com (out-205.mta0.migadu.com [91.218.175.205])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11026436BEA
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:35:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D15F342E428
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.205
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788276915; cv=none; b=pSrVHdrTvIGAKUxl6k3FQ70p8HxclmhEL2jODsU2NSqbMDuQdeJLdcCo1q+JLCMS58z297YuZD3ti0HWsUNQJMRO8PPrIVt79LHg9v3oJNsbr2Zu7RCR8NLJrqE+IehOEOZVZeMmdtfalT58oYkzZMIQTeyPE+51Qn58hYz0rOQ=
+	t=1788277773; cv=none; b=iyDnLyUYqCIaM94uGvuxVTf7TzqSK8Zk3zS0FQT/4gAmTkEAWGZb2bsk3Mi/F3fKC6RAVHj7aMpG7GCirF2cAdikDLiy8Ccl0t36oMXcFkpz4j80C+G961SXE3XcH53kAugHWR2k7oVeVm5acCPsDV3mlrlz5KRGkh3wEyyExK4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788276915; c=relaxed/simple;
-	bh=kdgQj/mUkyRR8HBLGn0DxLiyjpequvkCMjczfVTXcyU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fIFUAZFVdrINzlNro8G1cNA3CKt3HSGTgi7JEilXfoWzdLRE68XUnH5D7PtZch5v3dgrT0+yAV1zKwjyOJPXDi3XAe7fAA0z14+CqWIAWudVoyDOatA+zexEfvf3hWbXUC22pv6RoIE815K20GAbyhOZmVn0XBgMjQz5KhHf3jI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=klP96dwS; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
+	s=arc-20240116; t=1788277773; c=relaxed/simple;
+	bh=7tAbQ3FNXQwdtFApJLSmfPJ1AsLIn5kjlzDFefq/f9U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=till0bRZaID6mBXtB+5kpeIzsK3QBojHTuYrs3sLZYhFhpSK+1OEVY5Ifm3D3+H8ZqaHBA1uG7bHOBE3rdXQAKTNo2kbh1fMhD0XZtPvZSF6IsxTR/rIlVscq7KnILm256ntjw7ciA+nnxsFOaA7Tj2sW9std0Wn7LYBFJp9jDA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=oqPvH9G0; arc=none smtp.client-ip=91.218.175.205
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="klP96dwS"
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2d71d1cc8b2so44593995ad.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 08:35:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788276913; x=1788881713; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=QmL927KZZiS/GQHjvKa5Xv6rRMC1cROJujnvo4Vr8Qs=;
-        b=klP96dwS0uIPkrJjasBemYGuWusxkZAAyTZx6gAFr1a9dkqIUUUaLj4OBsLZItR4zq
-         BqfyxeO2zJrP+Y/8WAJDVIz1m7PiwCGInklJVO6CE6kKX1Zu33bCXuUtFTTSvjKpgnI8
-         rEjhIp7LCupkscSLLL+E/4yUv6hklfFu2SANSOXl+oa4qIRBOYvJxJ4RbTQYuLT84mtF
-         mxhsxKPAJV72RDDoomuZmkJfCG3r+DHDQQDaasHJwSEfrCpZcO7qQyy/vBPn430DjtaG
-         fYNgJiEcIlTc/YsuLgX6cDyExV+yciy1oE7T/1FMkSu2KhzYfsE5smoa4oS7xBTQSGcJ
-         +GQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788276913; x=1788881713;
-        h=in-reply-to:content-disposition:content-type:mime-version
-         :references:mail-followup-to:message-id:subject:cc:to:from:date
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=QmL927KZZiS/GQHjvKa5Xv6rRMC1cROJujnvo4Vr8Qs=;
-        b=jEATjGKdnCWIW+BbATxNWGGMAGvB6BFvk7nrY9Ai8I0Ft9n4FtL+TtnBiZqzV/u7MS
-         kgOX0RCX/hsCCFmgMXjUf/fvFRr4Jv829ls3AOjeclj9c7K4rLrooEpEAsYNFZNlunnp
-         IosAxylZaAP7b48D3AHdQOs0kGqr8yPWNYu+RAvOpXwT1IBeZcrkKiQfYOU2ScIVWWsx
-         Y+4IIYhVAKXpKYNbTdtZVFqhUsC1Y9vbC3VkTBH/Uqlf8Plwx1yYzai3HG8EUyTKOvVd
-         KaUrxrdnvNU8vHqm9rGLCYJ7HBTRlcKmKIMXR2GhpSjsYea2GEEENKNGE/iV1ARHzUBk
-         fzIQ==
-X-Forwarded-Encrypted: i=1; AKwUvByBrbi4WWogscmEDQbTzTdd3dBrDekUGnvnxavC/KhGt4rUR1c+W2MUXWKGHL5fhfjw0QQg8IA65GONFqgmzs4=@vger.kernel.org
-X-Gm-Message-State: AFuF++l09tuc75lnE4G5GxG1U2TGgWFY2tehLeNewoEKLudL9C2EOXyG
-	BJvcjtuWbJJ4zLMkpM83XbJ4qSyIFfjor2t2iPVU3eeCSAuXB5h1I446EwzDpOi7Q4w=
-X-Gm-Gg: AYBFou3UerF35rpPyFT6UKfYD1D8pjDfpKLxX2vytQpvvj2O+eBza/BT6FnDSYJmxs+
-	FwpcWqZi2dNt1NpOZo1b5KfCs6wCFDtYZz2ueHIFn9w5hlxCSc9MFZGCA6c7vWVA4bzo5GELNlk
-	eWYtOr3H8Vn9WHu78MF0ACSg3x4aI5PSMZWiyKCgGysnXzUPXSvMzN2VyHm41wgpw8ptuszTJy8
-	smNo8e1H4uWAG/ra+fYsKiLRru0WBgcVIy3037A1AYFt3fSGDn1sFrKEYROeaDPYLGofSN+7Od1
-	Q6ig80t8lTFbwCTcfyjCl7vyk+iykiJzn5k4M+PEFjZkB5UL1fa1pqCzu2q6WUBiFRwX1wDBegN
-	R1TtpF+LDfkG89UvldY0Ea4uqG8uAYNB7mYs5Q8qyZ+pTPuy0wl/LO85r7OI/LxO1P3A2O1riTQ
-	+KjJ3RaTOrtRXtQqNlnhV5/BHtAxyK2+iqmkilDtpHPg==
-X-Received: by 2002:a17:902:efd1:b0:2d6:f988:398f with SMTP id d9443c01a7336-2d74df00b5amr406227165ad.12.1788276912795;
-        Tue, 01 Sep 2026 08:35:12 -0700 (PDT)
-Received: from localhost ([2a03:2880:2ff:57::])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd386eefsm929635ad.28.2026.09.01.08.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 08:35:12 -0700 (PDT)
-Date: Tue, 1 Sep 2026 08:35:11 -0700
-From: Joe Damato <joe@dama.to>
-To: Jakub Kicinski <kuba@kernel.org>
-Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
-	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
-	shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org, noren@nvidia.com
-Subject: Re: [PATCH net-next 3/3] selftests: drv-net: bump the timeout to
- 15min
-Message-ID: <apbwrx8c3ZMdHI9l@devvm20253.cco0.facebook.com>
-Mail-Followup-To: Joe Damato <joe@dama.to>,
-	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
-	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
-	willemb@google.com, petrm@nvidia.com,
-	linux-kselftest@vger.kernel.org, noren@nvidia.com
-References: <20260831163734.1121891-1-kuba@kernel.org>
- <20260831163734.1121891-4-kuba@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="oqPvH9G0"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=7tAbQ3FNXQwdtFApJLSmfPJ1AsLIn5kjlzDFefq/f9U=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788277767; v=1; x=1788882567;
+ b=oqPvH9G0IQCIELA8f3NPRCikXTuSJBmmty31hKFio7mhRBJvrxyXenO9359O2Fz3XDj7ZeQ4
+ KX7OyGpnk4oNAsv/J51zXfE74a1vC5phnLsqPTq9cEXPHPX3Tp4/s4FczpopfsKzTNkFSfqBh9L
+ zm3pmXbl6ErLnzva2CagwOPg=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 36ff23f91a58beb3;
+	Tue, 01 Sep 2026 15:49:27 +0000
+X-Mizu-Trace-ID: 36ff23f91a58beb3
+X-Migadu-Flow: FLOW_OUT
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+To: netdev@vger.kernel.org
+Cc: Jiayuan Chen <jiayuan.chen@linux.dev>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH net-next v1 0/2] netdevsim: add TLS device offload emulation and test
+Date: Tue,  1 Sep 2026 23:48:55 +0800
+Message-ID: <20260901154914.11637-1-jiayuan.chen@linux.dev>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260831163734.1121891-4-kuba@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Aug 31, 2026 at 09:37:34AM -0700, Jakub Kicinski wrote:
-> The XDP test takes 9m30s on the slowest NIC with debug kernel.
-> Let's give ourselves a 50% margin and set the timeout to 15min.
-> 
-> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
-> ---
-> CC: noren@nvidia.com
-> CC: shuah@kernel.org
-> CC: linux-kselftest@vger.kernel.org
-> ---
->  tools/testing/selftests/drivers/net/settings | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
 
-Reviewed-by: Joe Damato <joe@dama.to>
+It helped me find
+commit b17cf742eaad ("tls: device: fix out-of-bounds write in tls_append_frag()").
+
+So I think it is worth sending a formal patchset.
+
+The kTLS device offload path in net/tls/tls_device.c has no test
+coverage upstream -- selftests/net/tls.c is software only, and the
+offload code needs a driver that implements it.
+
+So teach netdevsim to fake it.  Patch 1 implements tlsdev_ops and
+advertises the TLS features, patch 2 adds a selftest.
+
+No crypto is done: TX puts the plaintext record on the wire, RX just
+sets skb->decrypted.  That only works netdevsim to netdevsim, but it
+covers record assembly and the offload lifecycle.  Real ciphertext, and
+more on top of it, can come later.
+
+Jiayuan Chen (2):
+  netdevsim: add TLS device offload emulation
+  selftests: netdevsim: add a kTLS device offload test
+
+ drivers/net/Kconfig                           |   1 +
+ drivers/net/netdevsim/Makefile                |   4 +
+ drivers/net/netdevsim/netdev.c                |   5 +
+ drivers/net/netdevsim/netdevsim.h             |  35 ++
+ drivers/net/netdevsim/tls.c                   | 482 +++++++++++++++++
+ .../drivers/net/netdevsim/.gitignore          |   2 +
+ .../selftests/drivers/net/netdevsim/Makefile  |   7 +
+ .../selftests/drivers/net/netdevsim/config    |   2 +
+ .../selftests/drivers/net/netdevsim/tls.sh    | 334 ++++++++++++
+ .../drivers/net/netdevsim/tls_offload.c       | 505 ++++++++++++++++++
+ 10 files changed, 1377 insertions(+)
+ create mode 100644 drivers/net/netdevsim/tls.c
+ create mode 100644 tools/testing/selftests/drivers/net/netdevsim/.gitignore
+ create mode 100755 tools/testing/selftests/drivers/net/netdevsim/tls.sh
+ create mode 100644 tools/testing/selftests/drivers/net/netdevsim/tls_offload.c
+
+-- 
+2.43.0
+
