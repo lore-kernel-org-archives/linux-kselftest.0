@@ -1,204 +1,87 @@
-Received: from list.codeweavrs.com (list.codeweavers.com [4.36.192.163])
+Received: from mx.itxnorge.no (itx-kvm-14.itxnorge.no [91.189.121.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C536CDE8;
-	Tue,  1 Sep 2026 21:57:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ACDD43F4B5;
+	Tue,  1 Sep 2026 22:08:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.189.121.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788299850; cv=none; b=lDnWZKqYGTmff36WiyIWjCiO0kxpWItFAG5g20DEY7J2OXmF+9Otq5qTEo6ggm3nMh+blGrFrqTMuZB3ummz7hMqXwJFldRuiep9koHylJ/il6hfIkRB2gJICPc0BM6odcsPNqK4qfi1j6JdR5HHv+cofzR0wiS/qTnyFB5S90Y=
+	t=1788300515; cv=none; b=K6bBW/1l0W2GuY1cJ/tzPyU+tbdkdRtQXYLrhu74/rMzJ18qiFmfJ7guFrSjeXTFW4ZK2/BfgtOkYsPY4/U9n2Jm38/BpmRPDzwG1R4NVJDQEnQXH4mwyhFcnG9L1sC4bzcJ2Q46cywwVxZodH4q5cmdC5qEQ+PCD7N4xBqOymw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788299850; c=relaxed/simple;
-	bh=L5V/8EYLbsQScQk/LGobiujEWFyQmY2NkHwtlvEUn7g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fYiOeaSvyKHeaMjEVenebAuYHEH6jNREHY1eK5SKnRA6WisxfoNX3vIqCMULFtSgDGU7JqgQ99dAXa9Lvrlx4+It+7Hdx355ntqG1y7bDjh0HFFqJeyUtQCY/ndI3mkU9nvDot9FfG4kTQ5Rf2Fwx+3H6GdqrOG5BAzvIY/ZMJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=list.codeweavers.com header.i=@list.codeweavers.com header.b=DyYWhX+2; arc=none smtp.client-ip=4.36.192.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codeweavers.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
+	s=arc-20240116; t=1788300515; c=relaxed/simple;
+	bh=PZCh8+4LJ906fIrDSP915VFyemAeG3uWlTzWYUuEHIQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UqLHu/4d7T274qTDirlb1dUSrgW16XrA3XimGgeJU1vpxgmXVeZxv2UQoiLstYfPkJ4cb4n2w5lUvsqzgC9PHv65hujpNXTmW89YrvzNWmYRvxKsIxx0K5+wbbIHUq2LZw5Z/dtA6JXT9FqxnlUomp7iDCZPmipq/cBSJDIcmQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=itx.no; spf=pass smtp.mailfrom=itx.no; dkim=pass (1024-bit key) header.d=itx.no header.i=@itx.no header.b=kOLYQgAh; arc=none smtp.client-ip=91.189.121.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=itx.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=itx.no
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=list.codeweavers.com header.i=@list.codeweavers.com header.b="DyYWhX+2"
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=list.codeweavers.com; s=list; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=970rvjKhUbBRqZ+818aZ3SrCn1r/YQBBs6GGt00FMiw=; b=DyYWhX+29OwHwWOtLlswJqHA6u
-	PyAtasmeXaX8S80+r7dYoxR+DrrYLklrKsmKhDbUWT3IuxJSdHHzJr+c+JPvprsvqKv4K3PYhmHKR
-	HNRLmoFJTRotVwEqTbH+7KpivVwghG/+UNYcAazCdf/VzDAa8y+KBr1kdfrLg+KbY5UPzp3lkDKKm
-	beaLPIkR9DJfCDLBKz3+R4HL9Ijp4uEuScqFdEvWnKgalOxWBRZkKcIfRBGacN+ormklte16DeMBS
-	pueUyrNbrVt5SMfvhSyh+JWdI3d1Gnsy2SLHamUcaVCMiCRMKczTzr6U9GaSDHCatCOWIPhetktqT
-	e4ltfI9g==;
-Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
-	by list.codeweavrs.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <zfigura@codeweavers.com>)
-	id 1x1WEu-006tZ1-1x;
-	Tue, 01 Sep 2026 16:41:56 -0500
-From: Elizabeth Figura <zfigura@codeweavers.com>
-To: Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-kernel@vger.kernel.org,
-	wine-devel@list.winehq.org,
+	dkim=pass (1024-bit key) header.d=itx.no header.i=@itx.no header.b="kOLYQgAh"
+From: Stian Halseth <stian@itx.no>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=itx.no; s=mx.itx.no;
+	t=1788300509;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=L5ItQBcdK1U2y12RotRrhXkN+PYLyvKp8+bgoCWE4Kg=;
+	b=kOLYQgAhUNXgCMcGDM4wOJQOTp+YDt/MwL82HrTyBo/fuAOrG0fuer6eNAsPgMJVxQ0y5d
+	MxPkCBTdUqPDnOtolmwWMI/53Pu9gg1fNJxMm5pGUgCP8oYRuOeKKr55Wyw5t2BulpqevL
+	b5vdQEMKNcvBeaKrro8Z0K5rsrFE+bk=
+To: Andreas Larsson <andreas@gaisler.com>,
+	"David S . Miller" <davem@davemloft.net>,
+	Kees Cook <kees@kernel.org>,
+	sparclinux@vger.kernel.org
+Cc: Andy Lutomirski <luto@amacapital.net>,
+	Will Drewry <wad@chromium.org>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Shuah Khan <shuah@kernel.org>,
 	linux-kselftest@vger.kernel.org,
-	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>,
-	Elizabeth Figura <zfigura@codeweavers.com>
-Subject: [PATCH] selftests: ntsync: add wait termination edge cases
-Date: Tue,  1 Sep 2026 16:41:33 -0500
-Message-ID: <20260901214133.1270218-1-zfigura@codeweavers.com>
-X-Mailer: git-send-email 2.53.0
+	linux-kernel@vger.kernel.org,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Stian Halseth <stian@itx.no>
+Subject: [PATCH 0/2] sparc64: add seccomp filter support
+Date: Wed,  2 Sep 2026 00:08:09 +0200
+Message-ID: <20260901220811.3369666-1-stian@itx.no>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-From: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
+This adds SECCOMP_FILTER support for sparc64.
 
-The existing tests cover timeouts that expire while blocked, but not a
-deadline that has already passed, and no test exercises interruption by
-a signal even though the documented behaviour is EINTR. Also extend
-wait_args_validation() with an invalid flags case.
+The arch prerequisites have been in place for years, so patch 1 is
+mostly about the missing piece: letting seccomp veto a syscall, and
+returning to user space with the return value the seccomp core set in
+pt_regs rather than the -ENOSYS the assembler stubs used to force on
+any denied syscall.  Patch 2 teaches the seccomp_bpf selftest to
+drive sparc64's registers.
 
-Add coverage for:
- - an absolute timeout in the past, which must return ETIMEDOUT without
-   blocking
- - a wait interrupted by a signal, which must return EINTR
- - undefined bits in ntsync_wait_args::flags, which must return EINVAL
+Tested on an UltraSPARC T4-1 (sun4v):
 
-Tested on v7.3-rc1 under QEMU with CONFIG_NTSYNC=y: 15/15 pass, and the
-two new tests were run 50 times each at 1, 2, 4 and 8 vCPUs with no
-intermittent failures.
+  - tools/testing/selftests/seccomp/seccomp_bpf: 95 passed, 0 failed,
+    16 skipped (uprobes and other optional features)
+  - libseccomp with its pending SPARC support (libseccomp PR #471)
+    passes its full suite, 5190 of 5190, including the live tests
+    that require kernel SECCOMP_FILTER
+  - docker containers run confined by the default profile, and a
+    custom SCMP_ACT_ERRNO profile denies as expected
 
-Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
-Reviewed-by: Elizabeth Figura <zfigura@codeweavers.com>
-Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
----
- .../testing/selftests/drivers/ntsync/ntsync.c | 96 +++++++++++++++++++
- 1 file changed, 96 insertions(+)
+The libseccomp side is https://github.com/seccomp/libseccomp/pull/471,
+and the tracking issue is https://github.com/sparclinux/issues/issues/11.
 
-diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
-index 1f0dc43bb4c0..7d944e2a9094 100644
---- a/tools/testing/selftests/drivers/ntsync/ntsync.c
-+++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
-@@ -11,6 +11,7 @@
- #include <sys/wait.h>
- #include <fcntl.h>
- #include <sched.h>
-+#include <signal.h>
- #include <time.h>
- #include <pthread.h>
- #include <linux/ntsync.h>
-@@ -1381,6 +1382,13 @@ TEST(wait_args_validation)
- 	EXPECT_EQ(-1, ret);
- 	EXPECT_EQ(EINVAL, errno);
- 
-+	wait_args.pad = 0;
-+	wait_args.flags = ~NTSYNC_WAIT_REALTIME;
-+	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(EINVAL, errno);
-+	wait_args.flags = 0;
-+
- 	ret = wait_any(fd2, 1, &sem, 123, &index);
- 	EXPECT_EQ(-1, ret);
- 	EXPECT_EQ(EINVAL, errno);
-@@ -1471,4 +1479,92 @@ TEST(wait_any_monotonic_timens)
- 	close(fd);
- }
- 
-+TEST(wait_timeout_expired)
-+{
-+	struct ntsync_wait_args wait_args = {0};
-+	struct ntsync_sem_args sem_args = {0};
-+	struct timespec start, end;
-+	__u64 elapsed_ns;
-+	int fd, sem, ret;
-+
-+	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
-+	ASSERT_LE(0, fd);
-+
-+	sem_args.count = 0;
-+	sem_args.max = 1;
-+	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
-+	EXPECT_LE(0, sem);
-+
-+	wait_args.timeout = 0;
-+	wait_args.objs = (uintptr_t)&sem;
-+	wait_args.count = 1;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+
-+	clock_gettime(CLOCK_MONOTONIC, &start);
-+	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
-+	clock_gettime(CLOCK_MONOTONIC, &end);
-+	EXPECT_EQ(-1, ret);
-+	EXPECT_EQ(ETIMEDOUT, errno);
-+
-+	elapsed_ns = (end.tv_sec - start.tv_sec) * 1000000000ULL +
-+		     (end.tv_nsec - start.tv_nsec);
-+	EXPECT_LT(elapsed_ns, 50 * 1000000ULL);
-+
-+	close(sem);
-+	close(fd);
-+}
-+
-+static void ntsync_test_signal_handler(int sig)
-+{
-+}
-+
-+TEST(wait_interrupted_by_signal)
-+{
-+	struct ntsync_wait_args wait_args = {0};
-+	struct ntsync_sem_args sem_args = {0};
-+	struct sigaction sa = {0}, old_sa;
-+	struct wait_args thread_args;
-+	int fd, sem, ret;
-+	pthread_t thread;
-+
-+	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
-+	ASSERT_LE(0, fd);
-+
-+	sem_args.count = 0;
-+	sem_args.max = 1;
-+	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
-+	EXPECT_LE(0, sem);
-+
-+	sa.sa_handler = ntsync_test_signal_handler;
-+	ret = sigaction(SIGUSR1, &sa, &old_sa);
-+	EXPECT_EQ(0, ret);
-+
-+	wait_args.timeout = get_abs_timeout(5000);
-+	wait_args.objs = (uintptr_t)&sem;
-+	wait_args.count = 1;
-+	wait_args.owner = 123;
-+	wait_args.index = 0xdeadbeef;
-+	thread_args.fd = fd;
-+	thread_args.args = &wait_args;
-+	thread_args.request = NTSYNC_IOC_WAIT_ANY;
-+	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 50);
-+	EXPECT_EQ(ETIMEDOUT, ret);
-+
-+	ret = pthread_kill(thread, SIGUSR1);
-+	EXPECT_EQ(0, ret);
-+
-+	ret = wait_for_thread(thread, 1000);
-+	EXPECT_EQ(0, ret);
-+	EXPECT_EQ(-1, thread_args.ret);
-+	EXPECT_EQ(EINTR, thread_args.err);
-+
-+	sigaction(SIGUSR1, &old_sa, NULL);
-+	close(sem);
-+	close(fd);
-+}
-+
- TEST_HARNESS_MAIN
+Stian Halseth (2):
+  sparc64: add seccomp filter support
+  selftests/seccomp: add sparc64 support
 
-base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
+ arch/sparc/Kconfig                            |  2 +-
+ arch/sparc/include/asm/seccomp.h              | 15 ++++++++
+ arch/sparc/include/asm/syscall.h              | 11 +++---
+ arch/sparc/kernel/entry.h                     |  2 +-
+ arch/sparc/kernel/ptrace_64.c                 | 28 ++++++++++-----
+ arch/sparc/kernel/syscalls.S                  | 28 +++++++++++----
+ tools/testing/selftests/seccomp/seccomp_bpf.c | 35 +++++++++++++++++++
+ 7 files changed, 98 insertions(+), 23 deletions(-)
+
 -- 
-2.53.0
-
+2.45
