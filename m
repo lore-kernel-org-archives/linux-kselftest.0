@@ -1,412 +1,207 @@
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f197.google.com (mail-pf1-f197.google.com [209.85.210.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00FB247291;
-	Tue,  1 Sep 2026 18:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EFA949EC4C
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:41:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788287750; cv=none; b=dwxOTMkrwPqkiO9qyZRpj6wOUmpOX2JJmwqTOg9pX7ngdpzQ6l5Mson5+HsDBNHYA1xxOk66Xwx8WPgLItAWn1K9M4Lx5KjIr/BCWHRSVUPu7Qi9XeRO9xCqE05R+vRYkv4XcVVOsMPKTmV7uKoxm706fSiBoboQyPGOI9HLzKw=
+	t=1788288107; cv=none; b=lb+eX+rKxN+2tcLYoEfiBsv9DEJwcEW1yiH2thOAqTuFRJfUvJ/XzY+I4ap/tl2M6mo9j1oRKNgu/9kBR71a4Zpz8OTb6HRvZfsuatxJogGgmglVjYRgJiOMHrnU4nyMT6tTTwKVPiEBsBCmluTjrme4c8sm48OFy1guFDv5gG8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788287750; c=relaxed/simple;
-	bh=+cGPZJijrZMPEAsY3K4S7x5KFNPipICs8WY9vg2zTf8=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:From:To:
-	 References:In-Reply-To; b=ZCZJwWeh5w0tNtIqlvTLgBxTDeK/7P4KRcCpss23hM+MOBn/sn6e545nAoBGVHF7YkGOJ9nOGsua8czNcuCDCCBTxyqgk2RAfB2xJCd7T/4yhqCncgRpkC0ZcnWjnzSQkzbBQAOWsXi/PWu30EjNyJjYmrvXXpR7LV1TViR5JKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=QiHOkRvY; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+	s=arc-20240116; t=1788288107; c=relaxed/simple;
+	bh=uVDf/Azs+Y2fNINbjdp5g3ddn/BJ/MorxkRf22rpgFo=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=SYMRo0tx1w742NuhpVcTCTV1rq4P1cQZrjqD+BLHgfXJ3y03RpmCgCQ9qm46twvB8cWcKJaoEZ2iL6wxyk2PPMGaJz5qlbvHYe2I9WaP4LvoAncX+JKCddGwIHJPEuS9vGgmSIuOLsRy2PvUmL4b6v++ChTpab/ZCBaQRmB67/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=tGfaEMjP; arc=none smtp.client-ip=209.85.210.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="QiHOkRvY"
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id D2EF71A18F9;
-	Tue,  1 Sep 2026 18:35:45 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 924B56053C;
-	Tue,  1 Sep 2026 18:35:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3F90811C7923D;
-	Tue,  1 Sep 2026 20:35:35 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1788287743; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=IVVVjY5GIfIUllZNpp9UN+vq3+MOSb+Sa1B+4GCYjwQ=;
-	b=QiHOkRvYUiVi8oQkYMfea2fl9NUga/anYkT4pijcHKaJ7heyM9Nirv/pNxvvv28rfZJGeh
-	C7BERSjLBo/3iMbzgFc15S654rJmmM5fw2j8M2Ey1jiIrdqzIAtjOpHZo499S5kYWwA2Xb
-	c7gO8h7/a6Bmux1wUR5bB75Ni/+W7BTgp1dQOJX71WzHypzNdxzDTdiuWpHH3okK8r9eyN
-	r3ILia9F1gd7MGSgjwu/62JltvMCMjIXQGixWPUf1a6yzl/7pBQXW3AQSA+vd0N7sEC8Rt
-	tRC03W6Oiojjum1rUlZIE/owLNBHaie7mo4hTXLiZaINyBLDzv4wnonaiJDuAA==
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="tGfaEMjP"
+Received: by mail-pf1-f197.google.com with SMTP id d2e1a72fcca58-853d0d87123so98994b3a.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:41:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788288106; x=1788892906; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=T0nDJQnfFlnDLvDCZVuLzJX537jxkgQCnIHPdf7AiK4=;
+        b=tGfaEMjPuDzdeYIuXqDVqbgEHDl/qAa6HamdMl6CjYdq0DFtFXA0q7E14PzIps2cqG
+         wn9kSsxKcAnLVP3msnNDulTXefo5PrzBEnUPQhIP9j0TbSFVYa0gt6fkUXZDSvF2iF8p
+         /58Tz2A45lnIdeJAhRo5H9Sk8J6Qq28CxzUkmth4Usr4U/MZQ2bmOvoS8Hlt/+lR99EY
+         arWGyKTNDimSB17bj3eCuXy5h6hU+ZxwaMs+bbMZgIURj8ue7Sx23m/+Jz/jdivNeJml
+         W3kPJ2UWu6frvWVaYy7CTzxyaPqXiF2rzSxWw4pd194YekDi5RGKogOAiN/G9u4Ueifj
+         c36w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788288106; x=1788892906;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=T0nDJQnfFlnDLvDCZVuLzJX537jxkgQCnIHPdf7AiK4=;
+        b=N/7/Q1gOth9CbqZzGmj5YPlwxrWw11QezSp8qF2eLYFqP3zGdCU69P9oiDUdmn6Z/e
+         EXHemZmN1lt0CBc6PvCVjqBHKrBMjnNtTLBttJKMZXH+UOLEi3pSILmaojzlKs0WXMvG
+         9cFIU5so8BfV6DJb1UGUd3Q6ruCPnvQwqzTPIB6c6EZcEpzgU0hpDEpNCnG0nhCMcDWr
+         +fI2/ZwueliZfkU/w6WGS2PYGSn060u1e6IfaCOpYwb6kgID1qFJrVcyEWK9LxgDCMl1
+         J0xWDPy3KmHm7GgQ5uEj1obCxtw9rDorBX05fq13TcHW+7s9VzIRmo4rFWujndNVTues
+         Jd8A==
+X-Forwarded-Encrypted: i=1; AHgh+RriignQoOHn0vd1VUHN3LZi2Zu7tvX3jj3aClggAskZ96hpJGVQtRvYn/ybjAjxAbHXpjeZwYlYxSpKXmf5P0A=@vger.kernel.org
+X-Gm-Message-State: AFuF++mjG0jrTCdRotQj/Wq9dIG8WZM/APbAKHj/uCcnv6KnI+uw+KRY
+	t57t7LKR0LMdVFTsuoMsZjDSD8pbRmbZj0DH25P9hNzaxyGpYbdQgDTi316xB655qyl5JKz8nbc
+	krs9ocw==
+X-Received: from pfcy6.prod.google.com ([2002:a05:6a00:93c6:b0:848:49f6:6f5c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:8016:b0:857:4dea:e20e
+ with SMTP id d2e1a72fcca58-85b5693e833mr15207248b3a.0.1788288105188; Tue, 01
+ Sep 2026 11:41:45 -0700 (PDT)
+Date: Tue, 1 Sep 2026 11:41:44 -0700
+In-Reply-To: <apca475JqemLUjlb@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Tue, 01 Sep 2026 20:35:34 +0200
-Message-Id: <DL473FWBZ4S2.TDJVQT5A03JD@bootlin.com>
-Subject: Re: [PATCH bpf-next v8 1/8] bpf: mark instructions accessing
- program stack
-Cc: <ebpf@linuxfoundation.org>, <bastien.curutchet@bootlin.com>,
- <thomas.petazzoni@bootlin.com>, <bpf@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>,
- <martin.lau@kernel.org>, <clm@meta.com>
-From: =?utf-8?q?Alexis_Lothor=C3=A9?= <alexis.lothore@bootlin.com>
-To: <bot+bpf-ci@kernel.org>, <alexis.lothore@bootlin.com>, <ast@kernel.org>,
- <daniel@iogearbox.net>, <john.fastabend@gmail.com>, <andrii@kernel.org>,
- <martin.lau@linux.dev>, <eddyz87@gmail.com>, <memxor@gmail.com>,
- <song@kernel.org>, <yonghong.song@linux.dev>, <jolsa@kernel.org>,
- <tglx@kernel.org>, <bp@alien8.de>, <dave.hansen@linux.intel.com>,
- <x86@kernel.org>, <hpa@zytor.com>, <shuah@kernel.org>, <mingo@redhat.com>,
- <andreyknvl@gmail.com>, <emil@etsalapatis.com>, <ihor.solodrai@linux.dev>,
- <laoar.shao@gmail.com>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260828-kasan-v8-1-7c1c0fdb9d7f@bootlin.com>
- <e7bc1da93fb6f9fda0010ff5ad7b5b7fb4d07c3f491803c3332f288eb86f0aea@mail.kernel.org>
-In-Reply-To: <e7bc1da93fb6f9fda0010ff5ad7b5b7fb4d07c3f491803c3332f288eb86f0aea@mail.kernel.org>
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
+ <20260830-gmem-inplace-conversion-v12-15-85e5fd25252a@google.com>
+ <CA+EHjTzJbC=ZvB3Mopw-TLf=13-iqxGw5RfTp6Gt5S1hi8WRRA@mail.gmail.com> <apca475JqemLUjlb@google.com>
+Message-ID: <apccaNCJ2lH5mbaY@google.com>
+Subject: Re: [PATCH v12 15/45] KVM: guest_memfd: Ensure pages are not in use
+ before conversion
+From: Sean Christopherson <seanjc@google.com>
+To: Fuad Tabba <fuad.tabba@linux.dev>
+Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
+	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
+	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
+	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
+	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
+	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
+	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
+	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
+	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="us-ascii"
 
-On Fri Aug 28, 2026 at 12:30 PM CEST, bot+bpf-ci wrote:
->> diff --git a/include/linux/bpf_verifier.h b/include/linux/bpf_verifier.h
->> index 004b06785521c..412a13a664fa3 100644
->> --- a/include/linux/bpf_verifier.h
->> +++ b/include/linux/bpf_verifier.h
->> @@ -725,6 +725,8 @@ struct bpf_insn_aux_data {
->>  	u16 const_reg_map_mask;
->>  	u16 const_reg_subprog_mask;
->>  	u32 const_reg_vals[10];
->> +	/* instruction can access non-stack memory */
->> +	bool non_stack_access;
->>  };
->
-> The new field is placed at the very end of struct bpf_insn_aux_data, push=
-ing
-> the struct from 136 to 144 bytes due to alignment, which adds 8 bytes of
-> aux data per BPF instruction. For a program at BPF_COMPLEXITY_LIMIT_INSNS
-> this is roughly 8 MB of extra vmalloc space for one boolean.
->
-> There is already a 3-byte padding hole before orig_idx and 27 unused bits
-> in the adjacent u32 bitfield group (jmp_point:1 ... indirect_target:1).
->
-> Would declaring non_stack_access as a bit in the existing u32 bitfield
-> group avoid the size increase?
+On Tue, Sep 01, 2026, Sean Christopherson wrote:
+> On Tue, Sep 01, 2026, Fuad Tabba wrote:
+> > > diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> > > index 803c7cdbbe0f6..fe02c47c85fb5 100644
+> > > --- a/virt/kvm/guest_memfd.c
+> > > +++ b/virt/kvm/guest_memfd.c
+> > > @@ -538,8 +538,46 @@ static int kvm_gmem_mas_preallocate(struct ma_state *mas, u64 attributes,
+> > >         return mas_preallocate(mas, xa_mk_value(attributes), GFP_KERNEL);
+> > >  }
+> > >
+> > > +static bool kvm_gmem_has_outstanding_references(struct inode *inode,
+> > > +                                               pgoff_t start, size_t nr_pages,
+> > > +                                               pgoff_t *err_index)
+> > > +{
+> > > +       struct address_space *mapping = inode->i_mapping;
+> > > +       pgoff_t last = start + nr_pages - 1;
+> > > +       bool has_outstanding = false;
+> > > +       struct folio_batch fbatch;
+> > > +       pgoff_t next;
+> > > +       int i;
+> > > +
+> > > +       folio_batch_init(&fbatch);
+> > > +
+> > > +       next = start;
+> > > +       while (has_outstanding && filemap_get_folios(mapping, &next, last, &fbatch)) {
+> > 
+> > has_outstanding starts as false, so the loop never runs and the function
+> > always returns false. The outstanding-reference check is dead at this
+> > patch, so a to-private conversion would not be rejected even when a page
+> > still has an outstanding reference.
+> > 
+> > It's fixed later in "KVM: guest_memfd: Handle lru_add fbatch refcounts
+> > during conversion safety check", which changes the condition to
+> > !has_outstanding. I think that fix belongs in this patch, so the check
+> > works when it is introduced and the series bisects cleanly.
 
-Yes, I should have gone directly with a bit-field here. I'll update
-accordingly.
+Wait, why are there even separate patches for this?  For all intents and purposes,
+"Ensure pages are not in use before conversion" introduces a bug and then the bug
+is fixed by "Handle lru_add fbatch refcounts during conversion safety check".
+Just don't introduce the bug.
 
-> [ ... ]
->
->> diff --git a/kernel/bpf/fixups.c b/kernel/bpf/fixups.c
->> index 65b441e4a3517..edcb0cbbb13de 100644
->> --- a/kernel/bpf/fixups.c
->> +++ b/kernel/bpf/fixups.c
->> @@ -208,12 +208,25 @@ static int get_callee_stack_depth(struct bpf_verif=
-ier_env *env,
->>  }
->>  #endif
->>
->> +static bool is_mem_insn(struct bpf_insn *insn)
->> +{
->> +	if (BPF_CLASS(insn->code) !=3D BPF_ST &&
->> +	    BPF_CLASS(insn->code) !=3D BPF_STX &&
->> +	    BPF_CLASS(insn->code) !=3D BPF_LDX)
->> +		return false;
->> +
->> +	return (BPF_MODE(insn->code) =3D=3D BPF_MEM ||
->> +		BPF_MODE(insn->code) =3D=3D BPF_MEMSX ||
->> +		BPF_MODE(insn->code) =3D=3D BPF_ATOMIC);
->> +}
->
-> Does is_mem_insn() correctly handle the speculation barrier
-> pseudo-instruction BPF_ST_NOSPEC()?
->
-> BPF_NOSPEC is defined as 0xc0, the same mode value as BPF_ATOMIC (0xc0),
-> and BPF_ST_NOSPEC() encodes code =3D BPF_ST | BPF_NOSPEC (0x02 | 0xc0 =3D=
- 0xc2).
-> The class test passes (BPF_ST) and the mode test passes via the
-> BPF_MODE(insn->code) =3D=3D BPF_ATOMIC arm, so is_mem_insn() returns true=
- for
-> an instruction that performs no memory access at all.
->
-> Every Spectre v1/v4 mitigation patch in do_misc_fixups() inserts such a
-> barrier through bpf_patch_insn_data(), so on any program that requires a
-> nospec barrier the barrier slot is given non_stack_access =3D true by the
-> new marking code in adjust_insn_aux_data().
->
-> On x86-64 the consumer added later in the series handles case BPF_ST |
-> BPF_NOSPEC in a separate switch arm that emits an LFENCE and never reache=
-s
-> the load/store instrumentation path, so there is no functional
-> misbehaviour on x86 today.
->
-> However, the helper's stated contract ('is this a memory instruction') is
-> wrong, the flag is set on non-memory slots, and any future or other-arch
-> consumer of non_stack_access that dispatches on class/mode alone will
-> inherit the confusion.
->
-> Should the helper exclude BPF_ST | BPF_NOSPEC explicitly, for example by
-> testing insn_is_nospec() or handling the BPF_ST case separately?
+I also recommend splitting the export of lru_cache_drain_for_folio() to its own
+patch so that it can be more easily Acked by mm/ folks.  If we want to squash it
+with the KVM change, then that's trivial to do when applying.
 
-True. The omission does not affect the final instrumentation, but I'll
-add it for correctness.
-
->>
->>  /* single env->prog->insni[off] instruction was replaced with the range
->>   * insni[off, off + cnt).  Adjust corresponding insn_aux_data by copyin=
-g
->>   * [0, off) and [off, end) to new locations, so the patched range stays=
- zero
->>   */
->>  static void adjust_insn_aux_data(struct bpf_verifier_env *env,
->> -				 struct bpf_prog *new_prog, u32 off, u32 cnt)
->> +				 struct bpf_prog *new_prog, u32 off, u32 cnt,
->> +				 struct bpf_insn *original_insn)
->>  {
->>  	struct bpf_insn_aux_data *data =3D env->insn_aux_data;
->>  	struct bpf_insn *insn =3D new_prog->insnsi;
->> @@ -227,8 +240,15 @@ static void adjust_insn_aux_data(struct bpf_verifie=
-r_env *env,
->>  	 */
->>  	data[off].zext_dst =3D bpf_insn_def32(new_prog, insn + off + cnt - 1) =
->=3D 0;
->>
->> -	if (cnt =3D=3D 1)
->> +	if (cnt =3D=3D 1) {
->> +		/*
->> +		 * A non-memory accessing insn could have been replaced by a
->> +		 * memory accessing insn, systematically mark it for non-stack
->> +		 * access
->> +		 */
->> +		data[off].non_stack_access =3D is_mem_insn(insn + off);
->>  		return;
->> +	}
->>  	prog_len =3D new_prog->len;
->>  	env->insn_aux_data_len =3D prog_len;
->>
->> @@ -239,8 +259,25 @@ static void adjust_insn_aux_data(struct bpf_verifie=
-r_env *env,
->>  		/* Expand insni[off]'s seen count to the patched range. */
->>  		data[i].seen =3D old_seen;
->>  		data[i].zext_dst =3D bpf_insn_def32(new_prog, insn + i) >=3D 0;
->> +		if (!memcmp(insn + i, original_insn, sizeof(struct bpf_insn))) {
->> +			data[i].non_stack_access =3D
->> +				data[off + cnt - 1].non_stack_access;
->> +			data[off + cnt - 1].non_stack_access =3D false;
->> +		} else if (is_mem_insn(insn + i)) {
->> +			data[i].non_stack_access =3D true;
->> +		}
->>  	}
->>
->> +	/*
->> +	 * Last slot instruction could be a newly generated
->> +	 * BPF_ST/BPF_LDX/BPF_STX, systematically mark it for non-stack access
->> +	 * if it is not the original instruction, otherwise keep the
->> +	 * original marking
->> +	 */
->> +	if (is_mem_insn(insn + off + cnt - 1) &&
->> +	    memcmp(insn + off + cnt - 1, original_insn, sizeof(struct bpf_insn=
-)))
->> +		data[off + cnt - 1].non_stack_access =3D true;
->
-> The 'inherit the original marking' logic is driven purely by memcmp() of
-> the raw instruction bytes against original_insn, which makes the result
-> depend on how many copies of an identical encoding a patch buffer happens
-> to contain. A subsystem pattern flags this as potentially concerning:
->
-> If a patch buffer legitimately contains the original instruction twice (o=
-r
-> contains a newly generated instruction that happens to encode identically
-> to the original, which is easy for a repeated BPF_LDX_MEM/BPF_STX_MEM wit=
-h
-> the same regs/offset/size), the first match consumes the marking and
-> clears data[off + cnt - 1].non_stack_access. Every later identical copy
-> falls into the else if (is_mem_insn()) arm and is set to true, but the
-> memcmp arm is actually taken again for those slots and now copies an
-> already-cleared value, silently under-marking a real non-stack access.
-
-I am not sure to understand how multiple consecutive BPF_LDX/BPF_STX
-could confuse the patching logic, as each individual instruction will
-have its own patch.
->
-> Conversely, a genuinely new instruction that coincidentally matches
-> original_insn byte-for-byte is exempted from the 'systematically mark new
-> memory insns' rule by the trailing memcmp.
->
-> Neither case is reachable via a patch site in this tree (all current
-> multi-instruction patches place the original instruction exactly once,
-> either first or last), so this is latent fragility rather than an
-> observable bug today.
-
-I could actually be somewhere in the middle of the newly generated patch
-as well, as observed in the previous revisions.
-
-> Should the identity of an instruction be tracked by position instead of b=
-y
-> content comparison, since the patch sites all know where they put the
-> original?
-
-And so no, all the patch sites do no systematically know where the
-original instruction is, sometimes the concept of "original instruction"
-even becomes irrelevant, depending on the inserted patch. I've tried
-this "tracking by position" in previous revisions, and it has proved to
-be way too invasive, imprecise, and error-prone. So this memcmp may
-indeed not be bulletproof, but that's a best effort. And again, the
-"risk" of missing this stack marking is about inserting an undesired
-stack check: this is just a slight overhead (which may be negligeable
-compared to the whole kasan instrumentation overhead), not a potential
-crash.
-
-> [ ... ]
->
-> Verifier-generated instructions that provably access the program stack ar=
-e
-> marked as non-stack accesses, which is precisely the case the feature
-> exists to exclude, and the over-marking is systematic rather than
-> incidental. A subsystem pattern flags this as potentially concerning:
->
-> Concrete reachable instances:
->
-> (1) The ARG_PTR_TO_CTX save inserted by do_misc_fixups():
->
-> kernel/bpf/fixups.c:do_misc_fixups() {
-> 	insn_buf[cnt++] =3D BPF_STX_MEM(BPF_DW, BPF_REG_FP, BPF_REG_1,
-> 				      -subprogs[0].stack_depth);
->
-> This is a frame-pointer-relative store, and since it is not the original
-> instruction it is marked non_stack_access =3D true by the loop above.
->
-> (2) The matching frame-pointer load emitted by gen_epilogue callbacks,
-> for example:
->
-> net/sched/bpf_qdisc.c:bpf_qdisc_gen_epilogue() {
-> 	BPF_LDX_MEM(BPF_DW, BPF_REG_1, BPF_REG_FP, ctx_stack_off)
->
-> This gets the same treatment when the epilogue is patched in, so every
-> struct_ops qdisc reset/destroy program is affected.
->
-> (3) bpf_jit_blind_constants() in kernel/bpf/core.c rewrites a BPF_ST |
-> BPF_MEM store into {MOV AX, XOR AX, BPF_STX_MEM(...)}, so with
-> bpf_jit_harden enabled every blinded stack store loses its stack-only
-> marking.
->
-> The commit message acknowledges over-instrumentation of 'a few memory
-> accessing instructions' as an accepted trade-off, but these cases are
-> trivially detectable (dst_reg/src_reg =3D=3D BPF_REG_10) and, for the
-> KASAN-in-JIT consumer added later in the series, they mean pointless
-> instrumentation on the hottest prologue/epilogue accesses.
->
-> Would filtering on BPF_REG_FP in is_mem_insn() or adjust_insn_aux_data()
-> remove this class of false positives?
-
-I can possibly skip kasan instrumentation when dst_reg =3D=3D BPF_REG_FP (o=
-r
-src_reg, if LDX) directly in JIT compiler, similarly to what I have
-proposed for BPF_REG_PARAMS in the review on patch 4/8.
-
->> @@ -306,6 +343,7 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_veri=
-fier_env *env, u32 off,
->>  {
->>  	struct bpf_prog *new_prog;
->>  	struct bpf_insn_aux_data *new_data =3D NULL;
->> +	struct bpf_insn original_insn;
->>
->>  	if (len > 1) {
->>  		new_data =3D vrealloc(env->insn_aux_data,
->> @@ -318,6 +356,7 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_veri=
-fier_env *env, u32 off,
->>  		env->insn_aux_data =3D new_data;
->>  	}
->>
->> +	memcpy(&original_insn, env->prog->insnsi + off, sizeof(struct bpf_insn=
-));
->>  	new_prog =3D bpf_patch_insn_single(env->prog, off, patch, len);
->>  	if (IS_ERR(new_prog)) {
->>  		if (PTR_ERR(new_prog) =3D=3D -ERANGE)
->> @@ -326,7 +365,7 @@ struct bpf_prog *bpf_patch_insn_data(struct bpf_veri=
-fier_env *env, u32 off,
->>  				env->insn_aux_data[off].orig_idx);
->>  		return NULL;
->>  	}
->> -	adjust_insn_aux_data(env, new_prog, off, len);
->> +	adjust_insn_aux_data(env, new_prog, off, len, &original_insn);
->>  	adjust_subprog_starts(env, off, len);
->>  	adjust_insn_arrays(env, off, len);
->>  	adjust_poke_descs(new_prog, off, len);
->
-> [ ... ]
->
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index e036ae20bf6b9..364332eb41859 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -3272,6 +3272,11 @@ static void mark_indirect_target(struct bpf_verif=
-ier_env *env, int idx)
->>  	env->insn_aux_data[idx].indirect_target =3D true;
->>  }
->>
->> +static void mark_non_stack_access(struct bpf_verifier_env *env, int idx=
-)
->> +{
->> +	env->insn_aux_data[idx].non_stack_access =3D true;
->> +}
->> +
->
-> [ ... ]
->
->> @@ -6416,6 +6421,7 @@ static int check_mem_access(struct bpf_verifier_en=
-v *env, int insn_idx, struct b
->>  			    int value_regno, bool strict_alignment_once, bool is_ldsx)
->>  {
->>  	struct bpf_reg_state *regs =3D cur_regs(env);
->> +	enum bpf_reg_type ptr_type =3D reg->type;
->>  	int size, err =3D 0;
->>
->>  	size =3D bpf_size_to_bytes(bpf_size);
->
-> [ ... ]
->
->> @@ -6654,6 +6660,10 @@ static int check_mem_access(struct bpf_verifier_e=
-nv *env, int insn_idx, struct b
->>  				clear_scalar_id(&regs[value_regno]);
->>  		}
->>  	}
->> +
->> +	if (!err && ptr_type !=3D PTR_TO_STACK)
->> +		mark_non_stack_access(env, insn_idx);
->> +
->>  	return err;
->>  }
->
-> Does the unconditional marking at the tail of check_mem_access() handle
-> callers that are not load/store instructions?
->
-> check_mem_access() is called with the call instruction's index from
-> process_dynptr_func(), process_iter_arg(), check_helper_call(), and
-> process_irq_flag(), where it is used to validate a helper/kfunc argument
-> pointer rather than an actual BPF memory instruction.
->
-> Because those argument pointers are typically PTR_TO_MAP_VALUE, PTR_TO_ME=
-M,
-> PTR_TO_BTF_ID etc. (i.e. !=3D PTR_TO_STACK), the aux entry of the call
-> instruction is marked. The flag then no longer means 'this load/store
-> instruction may touch non-stack memory' for those slots; it means nothing=
-,
-> since a call performs no direct memory access.
->
-> Consumers that only look at load/store opcodes are unaffected, but the
-> marking is semantically wrong and, combined with the BPF_ST_NOSPEC issue
-> above, means non_stack_access can be true for aux entries whose
-> instruction is not a memory access.
->
-> Should the marking be gated on the instruction class actually being
-> BPF_LDX/BPF_STX/BPF_ST, or should the mark be done by the load/store
-> callers rather than inside check_mem_access()?
-
-Hmmm, I missed this specificity. And I guess is_mem_insn could be useful
-here as well, then.
-
-Alexis
-
---=20
-Alexis Lothor=C3=A9, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+> Why even bother with has_outstanding?  Avoiding it requires copy+pasting
+> folio_batch_release(), but it's less code and IMO the end result is a lot easier
+> to follow:
+> 
+> 	struct address_space *mapping = inode->i_mapping;
+> 	pgoff_t last = start + nr_pages - 1;
+> 	struct folio_batch fbatch;
+> 	pgoff_t next;
+> 	int i;
+> 
+> 	folio_batch_init(&fbatch);
+> 
+> 	next = start;
+> 	while (filemap_get_folios(mapping, &next, last, &fbatch)) {
+> 		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+> 			struct folio *folio = fbatch.folios[i];
+> 
+> 			/*
+> 			 * Outstanding references are anything other than those
+> 			 * from the page cache, plus 1 temporary reference held
+> 			 * by filemap_get_folios() in the folio batch.
+> 			 */
+> 			if (folio_ref_count(folio) != folio_nr_pages(folio) + 1) {
+> 				*err_index = max(start, folio->index);
+> 				folio_batch_release(&fbatch);
+> 				return true;
+> 			}
+> 		}
+> 
+> 		folio_batch_release(&fbatch);
+> 		cond_resched();
+> 	}
+> 
+> 	return false;
+> 
+> and then we end up with:
+> 
+> 	enum lru_cache_drained drained = LRU_CACHE_NOT_DRAINED;
+> 	struct address_space *mapping = inode->i_mapping;
+> 	pgoff_t last = start + nr_pages - 1;
+> 	struct folio_batch fbatch;
+> 	pgoff_t next;
+> 	int i;
+> 
+> 	folio_batch_init(&fbatch);
+> 
+> 	next = start;
+> 	while (filemap_get_folios(mapping, &next, last, &fbatch)) {
+> 		for (i = 0; i < folio_batch_count(&fbatch); ++i) {
+> 			struct folio *folio = fbatch.folios[i];
+> 
+> 			if (__folio_has_outstanding_references(folio, &drained)) {
+> 				*err_index = max(start, folio->index);
+> 				folio_batch_release(&fbatch);
+> 				return true;
+> 			}
+> 		}
+> 
+> 		folio_batch_release(&fbatch);
+> 		cond_resched();
+> 	}
+> 
+> 	return false;
