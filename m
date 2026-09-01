@@ -1,82 +1,70 @@
-Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com [209.85.216.69])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB8E4432E6F
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:06:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.69
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEE2A3D5642;
+	Tue,  1 Sep 2026 15:11:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788275221; cv=none; b=iBmOa9iIIQjNxSSgZUna0PFymJ53u2RbuJvchFyJqHFjKS7K9Aw2Z0NgvE3X2wkAujnOkKRcgZL/drKknWcE0Re6gcdFD10wQQhoSnltA7ip9ILRv0kRqBpCcOMpo3Y4YktZwXskBJjMNzvvFfNSUUuszIJYDleQ0s8vy9OCijA=
+	t=1788275465; cv=none; b=O172bGMBYr/iZ6BIsD6IgQQxpctoEJbkNsLluzW4eovEObT0ieB/S4qkPKsLZ6iVK2j/SNHHGrArDRbiesZR3LEO+BJOOUfgltHmbtE/Kf6p0sZuUqGUpV1kLCTpOJFCVkL6IyrpYyrWNazXz2zd5bYhRuOztIxSI9VLqCHMkF0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788275221; c=relaxed/simple;
-	bh=IO1d1IK5naV0clT1y60mbzjUZ1i1Ufx4f9zvROWWDdw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ZJKA7bqqDzIrT1QX4fN8qBsA0vPthO+sX3mc/FeCOU4PcfTXlG8Uf8eNQ+HXO4UrHGDZfz9WFoes1RY7+nj3m3AmwfQQJh4I5hopKypTK8m4ks0RkHjBdP9OafSQolcyR+Sm8eO38QlGR+nMJQWVXg3SKa4uP/tPeiGDYt/L/NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=GVzIIKHI; arc=none smtp.client-ip=209.85.216.69
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1788275465; c=relaxed/simple;
+	bh=qDgj4MeYyj1g5LjsiULUt7k2hOoF1DI1Up8InGi5oIA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O1zrXewtBDIFl2Zr0Au7uWX/Oa69ACm3eQb1OFhu2hR+sc3FA1tb5f6PKD8+Wq20x0F8zElqZtrEXNIX9zWO6wxZ68RkDJLvuHClsMVx6DwA75zlDn14ONrBpj3vxkvDIEGm/BOv+py1aKh+0j5jrFd2+R79cZWuIdYK+wy/7vA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tyk3bbEK; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="GVzIIKHI"
-Received: by mail-pj1-f69.google.com with SMTP id 98e67ed59e1d1-39512608fb1so2806855a91.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 08:06:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788275219; x=1788880019; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=gW8X5PJ+vB6MltrnZZz8mv0H9sxjQGZjiNCW3Xegwfo=;
-        b=GVzIIKHIkORbnLsLka2BlNxwyaZaKuD/ztZeqjB4UQ8IPy7P/64cQlHS2BufEgA31+
-         E8eTGRxo/b/YI8Y2TZbbn9ENA+r/b2ZpmssswX+U5FhohtUXPI12BhLXSdjeFJI5BWkx
-         PgPGAM3KOrYoi85s+jMH0a6o9o9rp3Rr4MjGcdAGEdE4ysQGu0IuGKLi2OQLmv11ey5d
-         4NzIsabObDT3jV9XuU0XMJgD60ts8+Jv1pi4+2FEbbmeXhZcuxSn8jP+ArfUFDzauxy1
-         dk5KoazzVo63Q0/mzsNDyPDfCoPxHgEB+2r/LmiCDLsMdSQFmezlp8mwU2OpcxUXAfvG
-         ff+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788275219; x=1788880019;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=gW8X5PJ+vB6MltrnZZz8mv0H9sxjQGZjiNCW3Xegwfo=;
-        b=JUINT3vUnR8DFGjrpGauHm339ZsTYpZj0zCpXNTTfgFDnlqX3mzGsUyTRF28WSet9r
-         qoSkFbZqqf3TZ/zXky/DVmIzhOEzqQMWXJ5PCi0kIeu0J3Zv9epOwLPfGnZccdPkUsow
-         glgSmg1pRVc5Bprnchxw/1uj2lbDWzgVM0Lb22WEgplXticmN+ZR1FxONemj8yd+pQuH
-         bCl45TS/t0kI+kLAXv+ggiAY5fLC9Ve7KsiZ2TVGcpwD3IqmR0rCNd/73tXEGUftWXBJ
-         bUNuyB8bzDAZ9KXwN5NQO3TIUhI08YdbiYkoCCghEnbU2wYvb4c50F/zJ+wNATfTAX2G
-         Nn2g==
-X-Forwarded-Encrypted: i=1; AKwUvBy1TgV3dRNKrgZ+5sFDjP8oOZvr6uyCR7HpqVPj5M/NOU3KtWS3OmYIuhb+dtvFmoLk0L/Wa/gpsEFuuRWzO4c=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDhnOXvP44p7eJjEgKVnA06PYbJpp/sEV9K0V0nJKQ7ZnWzYb2
-	dD4B2AOl+KO7JtpywUph3XzNuj+4okL3HLrPqXe0AwbQaAQ6UFznyNawlBlLKXbO/XZypJ1Otwj
-	2BxMNXQ==
-X-Received: from pgee16.prod.google.com ([2002:a63:1e10:0:b0:c9a:53ea:434a])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2f0f:b0:380:fead:448d
- with SMTP id 98e67ed59e1d1-396d0fd2a75mr54462733a91.13.1788275218580; Tue, 01
- Sep 2026 08:06:58 -0700 (PDT)
-Date: Tue, 1 Sep 2026 08:06:57 -0700
-In-Reply-To: <20260901-gmem-selftests-fix-v2-3-5a273153354c@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tyk3bbEK"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6742E1F00A3A;
+	Tue,  1 Sep 2026 15:11:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788275464;
+	bh=0l8EZcNi6dolIEJzPnTrcTZgZ61RR9ype1tGA69B0/Q=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Tyk3bbEKto1qv1vFeKQyB2/orOBc/I8yZq4UqlIgGrk4sC7/W2GeUXCMg6p1mzirt
+	 tXhtUCaei8tnXeWw1mSBK5eWSaGkn9walOM9lsvpjPwG/1/5gh6a8dvf4r1AoO9gY2
+	 gQZocpZLRbWeLZNfqyMMe6+ryzYzK4vD/Qu1W8gBpBtlpEuNFEOAp/HD5FdrxS/g+i
+	 vF5wjALEg/rMa2aWsl+iBQjWQ74mbdfnKf8rLzGr+NafpDl3/cqcmnfLUw2YBMRMv5
+	 BDiWw1ELCY1VD2SuDShjOB98VE1Sl7oPa/CNtun1cNuQyHVUYVTcvoBFrMHIAQylk2
+	 0t601hJxCR/vA==
+From: Danilo Krummrich <dakr@kernel.org>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Xu Yang <xu.yang_2@nxp.com>,
+	driver-core@lists.linux.dev,
+	linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drivers: base: test: DRIVER_PE_KUNIT_TEST should not select OF
+Date: Tue,  1 Sep 2026 17:10:59 +0200
+Message-ID: <20260901151059.1262983-1-dakr@kernel.org>
+X-Mailer: git-send-email 2.55.0
+In-Reply-To: <8dfb4afaf70b59cd33af9296464395470405187e.1787239268.git.geert@linux-m68k.org>
+References: <8dfb4afaf70b59cd33af9296464395470405187e.1787239268.git.geert@linux-m68k.org>
+X-Patch-Reply: applied
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901-gmem-selftests-fix-v2-0-5a273153354c@amd.com> <20260901-gmem-selftests-fix-v2-3-5a273153354c@amd.com>
-Message-ID: <apbqEfeCQhgdAvKa@google.com>
-Subject: Re: [PATCH v2 3/4] KVM: selftests: add get_numa_mem_nodes()
-From: Sean Christopherson <seanjc@google.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jim Mattson <jmattson@google.com>, Peter Shier <pshier@google.com>, 
-	Ricardo Koller <ricarkol@google.com>, Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 01, 2026, Shivank Garg wrote:
-> The xAPIC IPI test uses MPOL_F_MEMS_ALLOWED to get the memory nodes
-> available to the current process. Move the query to numaif.h as
-> get_numa_mem_nodes() so other KVM selftests can use it.
-> 
-> Call get_mempolicy() directly instead of using the assert-on-failure
-> kvm_get_mempolicy() wrapper. The xAPIC test already asserts its two
-> node requirement.
+On Thu, 20 Aug 2026 17:23:29 +0200, Geert Uytterhoeven wrote:
+> [PATCH] drivers: base: test: DRIVER_PE_KUNIT_TEST should not select OF
 
-NAK.  This is not an improvement.  get_mempolicy() straight up should not fail
-for this usage.
+Applied, thanks!
+
+  Branch: driver-core-linus
+  Tree:   git://git.kernel.org/pub/scm/linux/kernel/git/driver-core/driver-core.git
+
+[1/1] drivers: base: test: DRIVER_PE_KUNIT_TEST should not select OF
+      commit: bb3a94a68283
+
+The patch will appear in the next linux-next integration (typically within 24
+hours on weekdays).
+
+The patch is queued up for Linus's tree and should land in the next -rc release.
