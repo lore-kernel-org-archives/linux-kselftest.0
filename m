@@ -1,98 +1,210 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 749CA46C855;
-	Tue,  1 Sep 2026 08:06:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta0.migadu.com (out-82.mta0.migadu.com [91.218.175.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 667843812DD
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 08:20:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788249990; cv=none; b=maSixx0pPOQNNsIvKieQpKjyakaVX/wXaTmah+sdF+v3nMsm8jZRhRtFgItmEKZp3OEYrcl5pVIB4KZGDxp+kkrIHyt4arUcUHWTwJzuRohc3ss5RXN1/z0KZDTaCkntdpqdfhSrkagNU6Q+aXKSc8TMv6+5/1yFOmo60tCcdL4=
+	t=1788250817; cv=none; b=DZGXwtbl93ZbSEPfWgppl/cZKrxzLvGvKOkI1CwlWhjl3zzgTAD+SrTwZdVkMBzY5iaLgaGF6lJJyqVFTWCfHpbxP76++B0J8+HLsxA3E4W9IRun3cLTVtVN2fxkmr6GAhncFNzUCWajDu2L9PLWm2Gzc3KbXlJMa2fPrqmKpXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788249990; c=relaxed/simple;
-	bh=6jocrZ8BWtYGm87yBooi0QYPtq263J2v+Y3UsEtP2Ng=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=n3ztBmnYMkhwqt1GaUs6Duu70PjJphttsgq9s/p6ZQ03DJWb1Fql6PPu1IMbifSdAmXK10ZVAbvVoNORkOLZZIiNO8ngSSub9iGm62bO/ckqin7R7Cw9RLWtFhyjw8MhMkCAQS6aJhQhWBAhUjKR3VvU5GJpR7U3pKb3xPor+rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=qSrnwwCg; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1788250817; c=relaxed/simple;
+	bh=dPSr56z5rAs+SkiIx0/dU1tmsjqb2fO0/em7DI52Cpg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KPhos74Lf2/tM45NQ9H+xSbH906lMB0BW04AptkD3TOWvO1ptpXTjSO2UdCvgL3J/eK3ZjaWHmfqWJWdamJBBHm8pKz75FppzS6lezvKbxMJwwbYl81Hq/OjIepbOX441VryHQ889JvVYe4NJgRrnXXKanaF2q2uW1xUbp2xkM0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=paj0EtmS; arc=none smtp.client-ip=91.218.175.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="qSrnwwCg"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2ACE51756;
-	Tue,  1 Sep 2026 01:06:21 -0700 (PDT)
-Received: from e129823.arm.com (e129823.arm.com [10.2.213.3])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4139A3F882;
-	Tue,  1 Sep 2026 01:06:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788249984; bh=6jocrZ8BWtYGm87yBooi0QYPtq263J2v+Y3UsEtP2Ng=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qSrnwwCgSNAk6gZGaTF4+LjyRGLWI1VKPsqwSCxRzooIoQdXp+IjgAYWi5CKwILl6
-	 kfrGSp++BQwo7Mx3G93jNN9Yrzw6Ef6jqaRfP4PHZrzdlujsywMIInxMng3joLKYfh
-	 hAEDxEGDMeToqCAIlCYW1lZqTG0vOk0iZCL7hINY=
-Date: Tue, 1 Sep 2026 09:06:19 +0100
-From: Yeoreum Yun <yeoreum.yun@arm.com>
-To: Baolin Wang <baolin.wang@linux.alibaba.com>
-Cc: Yeoreum Yun <yeoreum.yun@arm.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@kernel.org>,
-	Lorenzo Stoakes <ljs@kernel.org>, Zi Yan <ziy@nvidia.com>,
-	"Liam R. Howlett" <liam@infradead.org>,
-	Nico Pache <nico.pache@linux.dev>,
-	Ryan Roberts <ryan.roberts@arm.com>, Dev Jain <dev.jain@arm.com>,
-	Barry Song <baohua@kernel.org>, Lance Yang <lance.yang@linux.dev>,
-	Usama Arif <usama.arif@linux.dev>,
-	Vlastimil Babka <vbabka@kernel.org>,
-	Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Shuah Khan <shuah@kernel.org>,
-	Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] kselftest: mm: replace usage of /proc/self/smaps
- for check_huge_xxx() helper
-Message-ID: <apaHexgq0pYduNq8@e129823.arm.com>
-References: <20260828-fix_split-v3-0-374022586a4b@arm.com>
- <20260828-fix_split-v3-2-374022586a4b@arm.com>
- <f9ae614f-beef-4e83-b307-d4e743d7062c@linux.alibaba.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="paj0EtmS"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=dPSr56z5rAs+SkiIx0/dU1tmsjqb2fO0/em7DI52Cpg=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788250813; v=1; x=1788855613;
+ b=paj0EtmSVacoEcS3+vfFsYSNX6rTYWIsaTQ3sx1pn5M/sp742MNB0h3wvf3fezicxxvwBTeZ
+ MhzerZxd0BeLvg4WClysGROX+wCwsuaYR0o+wXWciRa5TPQcUwy1GcJSIGg37mVxZ3ka0S5ZRg8
+ zq1e73xthzGtIB0k4pXJg29w=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 4fd5feb0a4b8f77a;
+	Tue, 01 Sep 2026 08:20:13 +0000
+X-Mizu-Trace-ID: 4fd5feb0a4b8f77a
+X-Migadu-Flow: FLOW_OUT
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b2a8173142so3511e87.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 01:20:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvByroXjAU+gr00Wx6RtNmAzfi+7WTH8VuRfpJZ5mi5wkzerkbFWbxqwOQ/471UktdQM72mMpAGcug1F/+ZtwRP8=@vger.kernel.org
+X-Gm-Message-State: AFuF++lLLEKmlTZNZn+C8a0eeXKGUOVu9YJtMQV9Ww3Ukq0SRZPY9gLe
+	8JcxFkDXYNiOCIgg+ZST04A+lGGvtbuClC7CixWQ7THi31YwBe7smOic6IdGNjJbmezb5ZdyLMW
+	OX4NHJ93vEe82EkkZNtpo6xSwViCgItWyC95ZpUny
+X-Received: by 2002:a05:6512:3416:b0:5b1:5141:9156 with SMTP id
+ 2adb3069b0e04-5b600a4e6c1mr82007e87.9.1788250812101; Tue, 01 Sep 2026
+ 01:20:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <f9ae614f-beef-4e83-b307-d4e743d7062c@linux.alibaba.com>
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com> <20260830-gmem-inplace-conversion-v12-23-85e5fd25252a@google.com>
+In-Reply-To: <20260830-gmem-inplace-conversion-v12-23-85e5fd25252a@google.com>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Tue, 1 Sep 2026 09:19:35 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTzALzghuG5J-LFuG5pXJ4WgEfrMHgwkMHnq1U-D6yS7Pg@mail.gmail.com>
+X-Gm-Features: AcwNN1VEd61L_O2SZt1wLXP8U1ZnnNtTHeRYFc82-Kw9mTwcloJaTFPGEc_5sR8
+Message-ID: <CA+EHjTzALzghuG5J-LFuG5pXJ4WgEfrMHgwkMHnq1U-D6yS7Pg@mail.gmail.com>
+Subject: Re: [PATCH v12 23/45] KVM: Let userspace disable per-VM mem
+ attributes, enable per-gmem attributes
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev, 
+	Xiaoyao Li <xiaoyao.li@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Mon, Aug 31, 2026 at 03:58:18PM +0800, Baolin Wang wrote:
-> 
-> 
-> On 8/28/26 4:11 PM, Yeoreum Yun wrote:
-> > Since glibc commit 321e1fc73f (“malloc: Enable 2MB THP by default on AArch64”),
-> > glibc may call madvise(MADV_HUGEPAGE) for sufficiently large allocations
-> > made by memalign().
-> > 
-> > The underlying VMA may start at a different address from the aligned
-> > address returned by memalign(). Furthermore, a subsequent
-> > madvise(MADV_HUGEPAGE) call does not split the VMA because the flag is
-> > already set.
-> > 
-> > This causes split_huge_page_test to fail because the check_huge_xxx()
-> > helpers incorrectly require the address returned by memalign() to
-> > match the VMA start address reported in /proc/self/smaps.
-> > 
-> > Fix this by using /proc/self/pagemap and /proc/kpageflags instead of
-> > /proc/self/smaps to detect huge pages.
-> > 
-> > Reported-by: David Hildenbrand (Arm) <david@kernel.org>
-> > Suggested-by: Zi Yan <ziy@nvidia.com>
-> > Signed-off-by: Yeoreum Yun <yeoreum.yun@arm.com>
-> > ---
-> 
-> LGTM, with comments from Lorenzo and Zi addressed.
-> 
-> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-> Tested-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+Hi Sean, Ackerley,
 
-Thanks!
+On Mon, 31 Aug 2026 at 01:25, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
+...
+> +       kvm.gmem_in_place_conversion=
+> +                       [KVM] Controls whether KVM enables in-place conversion
+> +                       support for guest_memfd and tracks the private/shared
+> +                       state of memory per guest_memfd instead of per VM.
+> +
+> +                       If enabled, KVM enables the KVM_SET_MEMORY_ATTRIBUTES2
+> +                       ioctl on guest_memfd file descriptors and disables the
+> +                       legacy VM-scoped KVM_SET_MEMORY_ATTRIBUTES ioctl for
+> +                       private memory state tracking. Only the
+> +                       KVM_MEMORY_ATTRIBUTE_PRIVATE attribute moves to
+> +                       per-guest_memfd tracking; other attributes remain
+> +                       per-VM.
+> +
+> +                       This parameter toggles KVM's in-place conversion
+> +                       capability support. Whether a VMM uses separate backends
+> +                       or out-of-place memory management is determined by
+> +                       userspace VMM design.
+> +
+> +                       Note, this parameter is only available when
+> +                       CONFIG_KVM_VM_MEMORY_ATTRIBUTES=y. When
+> +                       CONFIG_KVM_VM_MEMORY_ATTRIBUTES is not set, in-place
+> +                       conversion is unconditionally enabled.
+> +
+> +                       Default is Y (on).
 
--- 
-Sincerely,
-Yeoreum Yun
+The parameter is only settable when CONFIG_KVM_VM_MEMORY_ATTRIBUTES=y, and
+in that config gmem_in_place_conversion initialises to
+!IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES), i.e. N, not Y. Is the doc line
+wrong, or is N-by-default not what was intended here?
+
+Cheers,
+/fuad
+
+> +
+>         kvm.nx_huge_pages=
+>                         [KVM] Controls the software workaround for the
+>                         X86_BUG_ITLB_MULTIHIT bug.
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 83e26ce45fb79..e840418427a1d 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1851,7 +1851,9 @@ enum kvm_intr_type {
+>         ((vcpu) && (vcpu)->arch.handling_intr_from_guest && \
+>          (!!in_nmi() == ((vcpu)->arch.handling_intr_from_guest == KVM_HANDLING_NMI)))
+>
+> -#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +#if defined(CONFIG_KVM_SW_PROTECTED_VM) ||     \
+> +    defined(CONFIG_KVM_INTEL_TDX) ||           \
+> +    defined(CONFIG_KVM_AMD_SEV)
+>  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
+>  #endif
+>  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+> index abb108886733a..2c3c22aeafa54 100644
+> --- a/arch/x86/kvm/Kconfig
+> +++ b/arch/x86/kvm/Kconfig
+> @@ -81,13 +81,21 @@ config KVM_WERROR
+>           If in doubt, say "N".
+>
+>  config KVM_VM_MEMORY_ATTRIBUTES
+> -       bool
+> +       bool "Enable per-VM PRIVATE vs. SHARED attributes (for CoCo VMs)"
+> +       depends on KVM_SW_PROTECTED_VM || KVM_INTEL_TDX || KVM_AMD_SEV
+> +       help
+> +         Enable support for tracking PRIVATE vs. SHARED memory using per-VM
+> +         memory attributes.  Using per-VM attributes is deprecated in favor of
+> +         tracking PRIVATE state in guest_memfd.  Select this if you need to run
+> +         CoCo VMs using a VMM that doesn't support guest_memfd memory
+> +         attributes.
+> +
+> +         If unsure, say N.
+>
+>  config KVM_SW_PROTECTED_VM
+>         bool "Enable support for KVM software-protected VMs"
+>         depends on EXPERT
+>         depends on KVM_X86 && X86_64
+> -       select KVM_VM_MEMORY_ATTRIBUTES
+>         help
+>           Enable support for KVM software-protected VMs.  Currently, software-
+>           protected VMs are purely a development and testing vehicle for
+> @@ -138,7 +146,6 @@ config KVM_INTEL_TDX
+>         bool "Intel Trust Domain Extensions (TDX) support"
+>         default y
+>         depends on INTEL_TDX_HOST
+> -       select KVM_VM_MEMORY_ATTRIBUTES
+>         select HAVE_KVM_ARCH_GMEM_POPULATE
+>         help
+>           Provides support for launching Intel Trust Domain Extensions (TDX)
+> @@ -162,7 +169,6 @@ config KVM_AMD_SEV
+>         depends on KVM_AMD && X86_64
+>         depends on CRYPTO_DEV_SP_PSP && !(KVM_AMD=y && CRYPTO_DEV_CCP_DD=m)
+>         select ARCH_HAS_CC_PLATFORM
+> -       select KVM_VM_MEMORY_ATTRIBUTES
+>         select HAVE_KVM_ARCH_GMEM_CONVERT
+>         select HAVE_KVM_ARCH_GMEM_RECLAIM
+>         select HAVE_KVM_ARCH_GMEM_INVALIDATE
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 05c518c9b8078..929fd3e1a01e6 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -103,7 +103,10 @@ static bool __ro_after_init allow_unsafe_mappings;
+>  module_param(allow_unsafe_mappings, bool, 0444);
+>
+>  #ifdef kvm_arch_has_private_mem
+> -bool __ro_after_init gmem_in_place_conversion = false;
+> +bool __ro_after_init gmem_in_place_conversion = !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES);
+> +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
+> +module_param(gmem_in_place_conversion, bool, 0444);
+> +#endif
+>  EXPORT_SYMBOL_FOR_KVM_INTERNAL(gmem_in_place_conversion);
+>  #endif
+>
+>
+> --
+> 2.55.0.897.gb25b4bd76c-goog
+>
+>
