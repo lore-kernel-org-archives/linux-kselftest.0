@@ -1,151 +1,146 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f172.google.com (mail-pg1-f172.google.com [209.85.215.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27744485CEC;
-	Tue,  1 Sep 2026 17:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55259488755
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 17:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788283456; cv=none; b=e+8svL02HNk28YiuVqRPbCApTaVwAKny3sruMBkpOfe4V39r+tY4Lr8jzpv8rsNWGd13aAQnhz+wJvlK50npf12y6NAYmU+iGNDIySm2MxozywAMSTbymQ0Md7c1BXNchEH0HhOxfsq6ANDQzDZRaKkku0WBK4Zp75fP43CRfFE=
+	t=1788283577; cv=none; b=KuG8o+85m9Sz5maG+j0ycyWN/R1RYQhQj0X7vsJPLiEkpm90+JFaQV0H9ER8hi+zRznYvbA0UM1uvsd3PH/HKamfwaubNwZQtoYvKxv9KODOu3IUgpR9FfLAg9aNPzbhNSsY9jnz7kMGZpAQpUxCFlvEpcqBf/uthd6WFtdsYBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788283456; c=relaxed/simple;
-	bh=UY6btghwQtIwfJk0bmCNskL778LtGOfFmqSp3uBvIRA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=l+lf555guxLTeuyxQ1hpTJRXdu/4b5vFab06rzhmEYCgme4+npSTg7IU96cXu8s57ELNzAAupxLK/e3rJMfnSzcrm1acwGvKvt/5I33093suyoJ4y02LVxFUoi0sj/KXmj9R6XmpFAJ0xbxhsUtIf6GQe8KoOFZDN2oZOIpvjrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WTo6UkzH; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788283577; c=relaxed/simple;
+	bh=Wpb4O6T/xyA+5eJiRg7lEIMxsNKuDpjIIJqJ6MLZCK0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Hb/8PVF29XL52XGKdR/XK0FM0EZYMyHyqGlguzXsP+CbrtvRmJRTikZe8941HTPLvcMrK7neycoipBfbjx+NSDrL4rudy4AuNSXMeC1rpVjbRVPABR4vDJWymvkWnoCSVxm0iX7kraWr1rkSV7zyVSaiftHuR7cN0Od7OGNAO6A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ayImy4gS; arc=none smtp.client-ip=209.85.215.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WTo6UkzH"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4DA491F000E9;
-	Tue,  1 Sep 2026 17:24:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788283454;
-	bh=EL0Xo+Mhydk52yGAHcNqYMVa9Cn0eSVqA82Qi453s+I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=WTo6UkzHgw76FyrAZXps+cxxRQdHRvjH9pz5rD+x+iUEvbuHYaDe/ksJCW5GvY6Jg
-	 JaZdXgg9tBq9f4KY+EH4U9Nwbo/CWlUdSctATAq5h3/12sj6oYmvMYipVuYsO98zji
-	 BI2RPNFtIYc2LA21ZFKYBQPKyGnZx6M2DR/icKUAb1VrzzJSAJeSRiPqPxJB+p6oXz
-	 N0OLj6KHgk1Hupco2E4Sd4pSgBeNPOnCoxCtRNE7Ds9D2g9ry7KryMs9q7OHUTihfM
-	 9uXHUVizu23JZBwiRzllsykRaR9QLgIJ9MV4LBFAUtxvfOnSZ77Gbps1gGqTLVmdZ5
-	 jCGnAHKrc2y9g==
-Message-ID: <a42cdc44-efaf-44ff-9ace-f08e0c3b9856@kernel.org>
-Date: Tue, 1 Sep 2026 19:24:07 +0200
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ayImy4gS"
+Received: by mail-pg1-f172.google.com with SMTP id 41be03b00d2f7-cc1cc97b84bso125724a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 10:26:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788283576; x=1788888376; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=Wpb4O6T/xyA+5eJiRg7lEIMxsNKuDpjIIJqJ6MLZCK0=;
+        b=ayImy4gS60tAKn5zDNGMxB+uyyQEGmwPuhuIAnQOGhfpEcUjaeo7HWUgxbfk4C9nwO
+         o2KYNKwkNuaIJ8L+mlhY7QgIhBGbFGeM05x10FZk4zuENKjyNuzHBg9Ko2hnaMN8w2Lc
+         7H/ny9b/CJ2SL4PLdlYTt+4UzxYrKovuO+FmqN0MovQR+slyE9GDUzdLxEYHlo6/cCVQ
+         Vhr51RbMH9BBbrTIjNK8amAARvfvp0wpHldLP8nm8yJ7apEOmEvgUaV/hytNsTkqmHXl
+         VzgelCIraNrKPpSwV4uPxv0nsvqS0AcP3PctfzCgyyGHxDGxyhWgxyNPmFKlmg/3N6Ch
+         mBwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788283576; x=1788888376;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=Wpb4O6T/xyA+5eJiRg7lEIMxsNKuDpjIIJqJ6MLZCK0=;
+        b=DjDnzbavx9mEIISjZK/1g2rVMFcSzyY7uSZaTt8YxT/IGaO0lx0Tx8bCmRvKp75RtV
+         cpb91v+EQTinW8OFidYw8TUXPaSuSpB7G94RviBrBipow8llWrwGfq9w546v6HeMj2nF
+         TJa491LS+4WAAAHEVMqipCANIkSTUrnhWOFjHJsAI6WdqhSh4TysjDZEqnsx8GBoubTG
+         aUs1jhYdW/yd5Xuy4NxIti8LsVDdmXdzE2lPRN2AepvLMswsJITU65BlVE0RHoyN1C3U
+         2uKtYS3JLVIHxs5I1ZvKUymGoxvusPaGJm0xW5pbHjEKtoaJEAxZrK/7o+WdzUk0+wEg
+         0WHA==
+X-Forwarded-Encrypted: i=1; AKwUvBzCWu+/LGTktbJAu+hekh8IabdhBhrLt9DgbIMIWHJhxmZq1fcp7Y5FwzJm1M5JXaA8PNBX/O4HIgQxCH7XR8Y=@vger.kernel.org
+X-Gm-Message-State: AFuF++mIIuWRMK53LnmiRFwJcNqKKGXss3+Oeity11HOgf3kGWJuFl4J
+	4l+cOarjFUcl6GmkJ4nwaxkAmcMNkm8o+g6M77QpWnJpsGOGiSupS1Bv
+X-Gm-Gg: AYBFou1/2aMmTS2cAFuCXW6EEDfWZKmQyCFgKMrqxR+qAxLzLkmgBM7JNXrpstMhTsF
+	7/2ShU9cau2OpKNxlsGVpcbMIJ6+C33LaqeiZQJWdbi8Tiq+XCPIkxNmV0gl8bDTfMq37Aco54m
+	bzVZ4u0xM1e6OcRA8+00HL2zM8L4egD4sZFpL0VsowT/cBCh1+rUxhonFkNfTcdqb3YveuVkmtn
+	2Ce9wxXllaCipiSz3BoXBmkEXZHLGb/YtOipd/txdpaLgAY0/5lqKXdg8ytldvEM7ATCI82cmLi
+	ziW520MnCKMrZnw1o2E2pUS7xeVvmKExizaycRdfG8EYjbT7XZG/G6G61lEm0gxfzUbAMhdx77H
+	uVIvgw0wsAk9UdoHHbfzJuwOO0jb1eRVOEnEuQSw1tsOgSTFsZzdg2DFpGtxVLrihvNwlj+zQ/v
+	RKjsZO0ec/5xnsSRu2qna8kof57zEQ0Qvs4voNfK1eGHxEIiuuQCL85MTrQ+A71ItTO+0oxnVuG
+	6YXRuaeq1/e0pQFKkpD4RRhRkR6vsAR+4FIkXe4tv5idZE+jiW525N94RZiFgObtPU=
+X-Received: by 2002:a17:90b:4a02:b0:37f:fdc8:71b4 with SMTP id 98e67ed59e1d1-39907ab0960mr12275784a91.2.1788283575571;
+        Tue, 01 Sep 2026 10:26:15 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:246e:2cba:1e3e:e617])
+        by smtp.gmail.com with ESMTPSA id a92af1059eb24-1430ea0b459sm158262c88.5.2026.09.01.10.26.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 10:26:15 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: horms@kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	hemendranaik@gmail.com,
+	jhs@mojatatu.com,
+	jiri@resnulli.us,
+	kuba@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	netdev@vger.kernel.org,
+	pabeni@redhat.com,
+	shuah@kernel.org,
+	tahiliani@nitk.edu.in,
+	vishy0777@gmail.com
+Subject: Re: [PATCH net-next v4 1/3] net/sched: sch_fq_pie: add per-flow statistics via class ops
+Date: Tue,  1 Sep 2026 22:55:24 +0530
+Message-Id: <20260901172524.39650-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20260731095635.GG51943@horms.kernel.org>
+References: <20260727164056.106203-1-hemendranaik@gmail.com> <20260727164056.106203-2-hemendranaik@gmail.com> <20260731095635.GG51943@horms.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next 2/2] selftests: drv-net: Use cross-compilation
- environment for the io_uring check
-Content-Language: fr
-To: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>
-Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
- thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org,
- Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Donald Hunter <donald.hunter@gmail.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
- Stanislav Fomichev <sdf@fomichev.me>
-References: <20260901164200.1124343-1-maxime.chevallier@bootlin.com>
- <20260901164200.1124343-3-maxime.chevallier@bootlin.com>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260901164200.1124343-3-maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Maxime,
+Hi Simon,
 
-Thank you for looking at that.
+Thanks for the review and for the Sashiko pointer. We have been through
+all six findings and are working on v5. For each item below, a short note
+on what was raised, then what we plan to do:
 
-On 01/09/2026 18:41, Maxime Chevallier (Netdev Foundation) wrote:
-> To test for the presence of zerocopy support in the available liburing,
-> a small check program is compiled.
-> 
-> The CC value used for the io_uring library check defaults to the host
-> compiler, which will fail in cross-compiling environments.
-> 
-> Normally the CC for cross-compile is set in lib.mk, but this also
-> requires the test list to be set when we include it, and this check
-> needs to run first.
-> 
-> Note that this doesn't cover the LLVM cross-compiling case though.
+(1) [High] Filter attachment and TC_ACT_CONSUMED — Sashiko noted that
+adding cl_ops with .tcf_block would let users attach tc filters to fq_pie
+for the first time, but fq_pie_classify() has no TC_ACT_CONSUMED case
+(risk of double-free if an action like ct consumes the skb).
 
-Maybe it is enough to just check if LLVM is set?
-> Signed-off-by: Maxime Chevallier (Netdev Foundation) <maxime.chevallier@bootlin.com>
-> ---
->  tools/testing/selftests/drivers/net/hw/Makefile | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/drivers/net/hw/Makefile b/tools/testing/selftests/drivers/net/hw/Makefile
-> index 78bb0169350b..0ebb4767cd57 100644
-> --- a/tools/testing/selftests/drivers/net/hw/Makefile
-> +++ b/tools/testing/selftests/drivers/net/hw/Makefile
-> @@ -1,5 +1,8 @@
->  # SPDX-License-Identifier: GPL-2.0+ OR MIT
->  
-> +# Set CC for the io_uring check
-> +CC := $(CROSS_COMPILE)gcc
+We will remove .tcf_block, .bind_tcf, and .unbind_tcf from cl_ops.
+We only need walk/dump for tc -s class show; filter attach to fq_pie
+should stay disabled as before v1.
 
-Could we have something similar to
-tools/testing/selftests/riscv/cfi/Makefile:
+(2) [Medium] tc_fq_pie_xstats layout — Sashiko asked whether appending
+type/class fields after the nine qdisc counters breaks userspace, compared
+to fq_codel's type-first union layout.
 
-  # Set CC for the io_uring check done before including lib.mk
-  ifeq ($(LLVM)$(CC),cc)
-  CC := $(CROSS_COMPILE)gcc
-  endif
+We plan no struct change. fq_pie already shipped a flat 36-byte struct;
+we will keep appending after those counters so old tc binaries keep
+working. Class stats still need the matching iproute2 update.
 
-WDYT?
+(3) [Low] Empty tc_fq_pie_xqd_stats placeholder — Sashiko flagged the
+empty placeholder struct and unused union arm in pkt_sched.h.
 
-But that's possibly not needed for this simple check? I guess if gcc can
-find liburing.h, clang should look at the same places.
+We will remove the placeholder and the union; class_stats will be a
+direct member.
 
->  # Check if io_uring supports zero-copy receive
->  HAS_IOURING_ZCRX := $(shell \
->  	echo -e '#include <liburing.h>\n' \
+(4) [Low] Class handle at flows 65536 — Sashiko noted that with
+flows_cnt == 65536, fq_pie_dump_class() uses TC_H_MIN(cl) and the last
+flow's handle wraps to minor 0 in userspace.
 
-Cheers,
-Matt
+We will cap flows at 65535 in fq_pie_change() and update selftest 83be
+to expect flows 65536 to fail.
+
+(5) [Medium] Selftest case 83c0 — Sashiko noted v4 used matchCount 0
+with no traffic, so the test passes even without class ops and never
+checks per-flow stats output.
+
+We will rewrite 83c0 with real traffic (TBF + fq_pie, ping on $DUMMY)
+and matchCount 1 on tc -s class show (prob/delay/deficit).
+
+(6) [Low] tools/ UAPI mirror — Sashiko noted patch 3/3 also touched
+tools/include/uapi/linux/pkt_sched.h, but that copy is already stale in
+layout; comment-only edits there do not help.
+
+We will drop the tools/include hunk from patch 3/3 and touch only
+include/uapi/linux/pkt_sched.h there.
+
+We will post v5 with these changes once ready.
+
+Thanks,
+Hemendra
