@@ -1,87 +1,115 @@
-Received: from mta0.migadu.com (out-106.mta0.migadu.com [91.218.175.106])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF335476065
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 09:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16A6A476071
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 09:09:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788253491; cv=none; b=OgVpDLK2nTFn4OdCnJ+K0NkpLy970zluww4EnpWwm+MM2e/K1tOL2hjWvHZNelbdo8zZxazR/2JD9++TD2hOiwW/86TFCmCCeHctxGDgLedL1YIpzctCMnx9LNrRKpQ/Jj83X7ebUE6kC9eumk5RJBtwapTMKiX40sjs5RAqrCQ=
+	t=1788253753; cv=none; b=HXSmHZUA2A6MEQ1wzBUsh0XzhSLxpikxegIXQbF2Q89Vlzywg11G9bTAquvEN8EFi5oZ3aWCzx1JPMvXTN/x2a9X87Lc82C98iM1YWl+dljEVylgUTiAys1E3FxnIee+Ue2qBhhbZYK8IxKWFOEIqw/YJh86aMwcHJpFEYaJIiU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788253491; c=relaxed/simple;
-	bh=K5adOlBiMa0yYmMZJxP73c0SVwU2yadNCgQ5ECt6Exg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PaDYxfanMG7X211pJi8yLAStYIltz4YA/omsKohVBqL3s76nr1C2qK6YnL4dWu2nXceaR2ra0P44Mr1ImEbrISyZKNbIFjG34Y4QMx0Q0YlmT/8cfCWVqKZud9N8PL+aC0/xvQMvqOkJfd1Nz0dFA73RWzz366jUSaP2NV7Tj+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AmHSDqKi; arc=none smtp.client-ip=91.218.175.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788253753; c=relaxed/simple;
+	bh=t44TDabfynvpRhcL0vlUK37Vp9X/jS2Wp61Uvpjk0tk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pCWHDd/XFAagB15eiMRezFG6Hx7Jb/jrYoCXLbK4A2ngsZYUegPOOogWwS5Q6uhfE4TnF/pY9SHKuUVzMKZB0vDVMJ93UA+CJEAc6y2rM5yekYJTh76sPBB48XaaZ/7syfkDAa8Q2c79Ead8GvuoSKYQxmuG8aJ8vHPe02BoF3A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iZVpImK9; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AmHSDqKi"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=K5adOlBiMa0yYmMZJxP73c0SVwU2yadNCgQ5ECt6Exg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788253486; v=1; x=1788858286;
- b=AmHSDqKiyQnNoP3nOzui06pUEckABybku0hhy8gwPSMry/zytXPkZwIcMQaV17zjQW4zCA53
- GwmSMcAx9Lai/6UAE6U6H3b9TWnrBfp8cD+lBJ0RDrWX5ZNyWzDbAOIY4pr+DiV4suTKEJ+3tSa
- P8iRQxdhcKkihrHBpGmV5iek=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 5353e1dd7fab9237;
-	Tue, 01 Sep 2026 09:04:46 +0000
-X-Mizu-Trace-ID: 5353e1dd7fab9237
-X-Migadu-Flow: FLOW_OUT
-Date: Tue, 1 Sep 2026 17:04:38 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
-Cc: David Heidelberg <david@ixit.cz>, Bongsu Jeon <bongsu.jeon@samsung.com>,
-	Shuah Khan <shuah@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
-	oe-linux-nfc@lists.linux.dev, netdev@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] selftests: nci: Fix uninitialized family ID on missing
- attribute
-Message-ID: <apaVJjXnwJLZLwq2@fedora>
-References: <20260901070618.3299012-1-nagachaithanya9911@gmail.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iZVpImK9"
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2caced6038eso9204965ad.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 02:09:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788253746; x=1788858546; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=znJKcoBec7Nt3FmFfze7QZZUuPfc93AsW2GJmhnrwiM=;
+        b=iZVpImK9/OPnjiZTbR/Z5BJqo81BpH5759mHm2t9pJpkwo10GL3Yrqptk2wPZZW9pd
+         MsByZmRnLoco0lUSAV2SBlTBNjab/zsDVbMMhJdzO31gW3OhFbRTEt89qsXbLClXHryR
+         6ApkhsWUa3lqsiiH18RRcpemsy0dOli2km36gJEnu0I8Cu5z6Bh3LuCKsl7UNRqBkze9
+         oYUYhRyLmOxU6Ihr1AUskEQrVKRfTYb6jw1/jG0GsNknSUtmE6niTJDq0m4XDqm2xlSn
+         8ZSsIEGprYuhYVm1Zrrwt+fneB7AUzDkH3T8ILbBV75FE9MNTyyjlSYN1NYXhR4DO/nC
+         xKFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788253746; x=1788858546;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=znJKcoBec7Nt3FmFfze7QZZUuPfc93AsW2GJmhnrwiM=;
+        b=OxADvE9zYrdUQORDNTljHALqW8QO9MOe5JvUZGR75wXgJgmsTqFH2hM3cHSSAEwhlg
+         86CvjhFtL7hkTTdlZz4a3ByXcJsPnAG3c0+lWGD6HNj7pcirPDDzDawvxxsPpIqSJzfS
+         nyQLNqUfZbd4PGqwXW8h8gxD/c04ocIdTw0WKB6cDO3Rw0oVPp7pmhwsbj1F0xIzIAp2
+         AvXcPc/Qgtz3Rnc9rPsM7VV2bZf2DjHYTZcYNMDOCYBIHq5MCXrJalQjF707tYwDF+gQ
+         lrRg9HCCrYy3eQ8kFF6PAuGST+Qm9zK4A9CMemY3u091exhDAHIlOjuQ2+Xe/zUaB29f
+         cG0A==
+X-Forwarded-Encrypted: i=1; AHgh+RqBvUERj5KD/QY4HZI4a/9ok30q3fgVHMCORl55QQeJ4SlZeXUXljn1M/rFDPJpl/uE7bEUDN9r2eHCtNuBCLE=@vger.kernel.org
+X-Gm-Message-State: AFuF++lGYFNC4/YSDvscQDFymUanxS7BJqmE1p4+fVTy0lA2c3qc5zbx
+	ZXiSvL6H2uEFDQMEDk6z6DseTOCAN1JnSQ54G2k/8RaK8ovLFzLbUJtM
+X-Gm-Gg: AR+sD12shBRTEf++daueaFMmavzYfHz2ImH0ahQcxL8CnOhcZdvKYIDMoisJhW5Srzq
+	4tVyfMMVIEI0NgnMxpl7r+70GoAwV3eVjZlASzc5rV3MBkqtZwU31k8tzkrn6Au6BTe0cprYDgg
+	UwGGPzGD8fJyh+iozJDI+5W8ZBu7kTuMAiyishIWU0t5jk3loYQSFmNahFd27YD+DD/NwYv2I3l
+	S00otpOKJV5MXVJHr4y4ZlPVZL/XtI53Lmus55PdxlsfiI7uDQt7hSlksaD51JPvSnUuI3SLfdD
+	FerYa1OrTTGH5HRmk8cgeujVVuLpjHJcflAQADPU72hESA/u2+pp1kN/VVOVpXXHE7dbjfbj1hv
+	fotrxD5Mbh17bl+IYC0ZN/4+f8icPySWBRJ8O+eyJmSbAQTHtuE6EoQhKZ+RxflJEk+dTELMFQs
+	8y/0P5FTw3I2sT0NwsYnJF2w5Tso8LDdEOrhRJSNbWO24hyEvJmUNMF56jB52vnjmA+XJgip9Ok
+	AbTHm9fJXWiHA==
+X-Received: by 2002:a17:903:3d10:b0:2d7:5da6:2af4 with SMTP id d9443c01a7336-2d95268a8f7mr40737215ad.4.1788253746178;
+        Tue, 01 Sep 2026 02:09:06 -0700 (PDT)
+Received: from amd.ban-spse ([165.204.217.251])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-3286f7bf283sm40042773eec.8.2026.09.01.02.09.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 02:09:05 -0700 (PDT)
+From: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+To: Paolo Bonzini <pbonzini@redhat.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Shuah Khan <shuah@kernel.org>
+Cc: Ackerley Tng <ackerleytng@google.com>,
+	David Matlack <dmatlack@google.com>,
+	Oliver Upton <oupton@kernel.org>,
+	Marc Zyngier <maz@kernel.org>,
+	Josh Hilke <jrhilke@google.com>,
+	Wu Fei <wu.fei9@sanechips.com.cn>,
+	Andrew Jones <ajones@ventanamicro.com>,
+	kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+Subject: [PATCH] selftests: kvm: Check calloc() return in vcpu_get_reg_list()
+Date: Tue,  1 Sep 2026 09:08:38 +0000
+Message-ID: <20260901090839.3338955-1-nagachaithanya9911@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901070618.3299012-1-nagachaithanya9911@gmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Tue, Sep 01, 2026 at 07:06:18AM +0000, Chaithanya Lagisetty wrote:
-> get_family_id() walks the generic netlink CTRL_CMD_GETFAMILY reply
-> looking for the CTRL_ATTR_FAMILY_ID attribute and returns the parsed
-> value in the local variable "id". If the reply does not carry that
-> attribute, the parsing loop never assigns "id" and the function returns
-> an indeterminate stack value, which the caller stores in self->fid and
-> uses for subsequent netlink requests.
-> 
-> Initialize "id" to 0 so a missing attribute yields a deterministic
-> (invalid) family ID instead of a garbage value.
-> 
-> Fixes: f595cf1242f3 ("selftests: Add nci suite")
-> Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
-> ---
->  tools/testing/selftests/nci/nci_dev.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/nci/nci_dev.c b/tools/testing/selftests/nci/nci_dev.c
-> index 312f84ee0444..ed306ec23895 100644
-> --- a/tools/testing/selftests/nci/nci_dev.c
-> +++ b/tools/testing/selftests/nci/nci_dev.c
-> @@ -182,7 +182,7 @@ static int get_family_id(int sd, __u32 pid, __u32 *event_group)
->  	} ans;
->  	struct nlattr *na;
->  	int resp_len;
-> -	__u16 id;
-> +	__u16 id = 0;
->  	int len;
->  	int rc;
->  
-> -- 
-> 2.43.0
-> 
+vcpu_get_reg_list() allocates reg_list with calloc() and immediately
+dereferences it via reg_list->n without checking for allocation failure,
+unlike every other allocation in this file which is guarded by
+TEST_ASSERT(). If calloc() returns NULL the test crashes with a NULL
+pointer dereference instead of a clean failure message.
 
-Reviewed-by: Hangbin Liu <liuhangbin@kylinos.cn>
+Add the missing TEST_ASSERT() check.
+
+Fixes: fd02029a9e01 ("KVM: selftests: Add aarch64 get-reg-list test")
+Signed-off-by: Chaithanya Lagisetty <nagachaithanya9911@gmail.com>
+---
+ tools/testing/selftests/kvm/lib/kvm_util.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
+index 9ddc047d5c27..d15f39900ed7 100644
+--- a/tools/testing/selftests/kvm/lib/kvm_util.c
++++ b/tools/testing/selftests/kvm/lib/kvm_util.c
+@@ -1727,6 +1727,7 @@ struct kvm_reg_list *vcpu_get_reg_list(struct kvm_vcpu *vcpu)
+ 	TEST_ASSERT(ret == -1 && errno == E2BIG, "KVM_GET_REG_LIST n=0");
+ 
+ 	reg_list = calloc(1, sizeof(*reg_list) + reg_list_n.n * sizeof(__u64));
++	TEST_ASSERT(reg_list, "Failed to allocate reg_list");
+ 	reg_list->n = reg_list_n.n;
+ 	vcpu_ioctl(vcpu, KVM_GET_REG_LIST, reg_list);
+ 	return reg_list;
+-- 
+2.43.0
+
