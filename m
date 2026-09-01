@@ -1,294 +1,178 @@
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF9D640F751
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 01:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F293F5BFA
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 02:03:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788227328; cv=none; b=ZZz+Iah8f5e88zkw2kAhQNp+uoq4vVGI6ak5Xfll8BCwLNK8LEQGizu75ofuUv/BUtSelOYJQeF/KVNcE584yoNVCluG+nrTrYeBd84uocoIzc4Pl8hX4UDLmy5TM2Ax7Gb2CcRfrOA7EmGsyb4U2XD6NtHokm3oAHUY9twUMMo=
+	t=1788228212; cv=none; b=vAKlQtYz2YkqYTwCOzmU1EPKzKXNT7w7XcMFvOmGfwJqVheZ0QHU4YipGYVSbw3H36QofGLzJC2iH1rWVu6Ixo/alontGMcnZDFEMp+sRcDGNPBsc98ZmLAWfUlGE2LlM0xO1pFVYgSPYAycIGvHTZjK0KCyD91eIj75esXRZTc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788227328; c=relaxed/simple;
-	bh=PRi2aOR64kC+IhwsiLLjmuUQ6esstKfr+hkByw0I2BY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ahbSCdOk9gecmP+hKW//gzabnFq0zb5ZZeTzosm3zRcjmDnoHhsOzyvOswnpnMdNJ4bvEXtnLzKofF5WfLiaHytPeIsnhREK2aizsVPqqR5Uc3avwvPd/ZAUT46mlqpCZujGM16O5VQr75yo74YBj6SiAXvcc4+aKMope43lZOc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fskj+Clg; arc=none smtp.client-ip=209.85.214.171
+	s=arc-20240116; t=1788228212; c=relaxed/simple;
+	bh=hJ24dHwYNskkMzJQOdxprEVRtyGXL1/rtztojA+8fug=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=oxUvpKl6AB3/vkM8cS6+A/cPX5o5yZW+y6bvrYtaB8eJRX7FtyL2gDltk4RiieR5cQxRGKw7O5WmR5Wkg4FZn0Yxn04F9PLVtmLVCdrCZjVpI7bWMgwPLpSMmaRI9cFMV/a3/bVeRgXzmxMGD/9xBTwNU5qfpbcDALac/AbKzZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CyVvVHha; arc=none smtp.client-ip=209.85.215.179
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fskj+Clg"
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2d72ae08fa1so35284405ad.2
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 18:48:07 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CyVvVHha"
+Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-cbedf433a99so501271a12.2
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 19:03:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788227283; x=1788832083; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=JJhpRtCyOkCHd1HDKmJquZ3SMNy+pxMEUXWEvt31OZE=;
-        b=fskj+ClgEfAU/60uNfmL3r02D1evmdGv/ZplF8V5ZgHRru0Wyd5kxVLByqmK2IplKi
-         1n1votwvGYzdMpjCbDSZaUbgNYZYMuCi7dQB7iiUYDhR6SW6RtfzSr3uBxae/iGZX8PN
-         hEF+Ut/VuC6Bdffeqq+WJY07B54jNV2BEgmJe7kmXzrrO8yujO4z9Ye+VuLVQNrAOU5B
-         q1XWF8O1/BjeYl2ydxet1aHCd5ccuYGPBqc196VRlFGcU1neFkiMt5625fKcQDb00WII
-         VRw8YgqNEyOiCLrNbhX16TFSe6vy4cyTOU3+XvW1/qjSDNZb19YZmi5Cw3o8pgJY21GG
-         rT7A==
+        d=gmail.com; s=20251104; t=1788228204; x=1788833004; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=rCEYFhj1mjK96Rv2xJZjQiJk6x21bXoFnt8xqzOlIK8=;
+        b=CyVvVHha7W+LGIdV+Bo/F+X0pL34h2tK6SdsnxJ+yLLXzah98L/a6ioyPubAZxD19U
+         FpD33w949/fdYyBZrPca+ZzRjYiyh8sYMWizq0S2vGn/d6Q6wupl0UMQPiI+/Hpn4IXS
+         Auj4NgBO8kBUlK2pVf501JFj7QINudyiDGCAaXRdnMsP3bJC6u3P4YJ7Ttsx+C7bM7ds
+         LWVLyR05Gj7+5AtbsvdfAGGh6sJKR2fgM/5dp8AIHhptWA93XHJ499ju8b4a15gdPTlB
+         foDaW4G+tQb0Rf1s6b2iUmoltlDDWYBd8pp9O/qixaTcWI22DMnNvC04DL4qQ+6qbZEA
+         ZRmg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788227283; x=1788832083;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JJhpRtCyOkCHd1HDKmJquZ3SMNy+pxMEUXWEvt31OZE=;
-        b=T69brVU8HzblsWkMCRcdg2WsmL62bABFZcXFE4pfY0ql4gDo+6nI7QC58cePFKzdxs
-         Z2Kjr+KilZymxfHxu1PqAI8apLeT0ID62fG5t9vxqnzHMwiWAXV+E2eLIE5bdE4A6Vnd
-         tDLikchBdu+xY/PPKV3Dq98gahiiHPSNkYy0DHdEbKc+h7KZeVt6Aw9oRDyoLT93dsTM
-         K8TjvJMGPMSWHSMh32fjeiH88BwwKcR7Db7gc5a9aTAQa+n98iZ0Ze9Tlhanu91ZZR6I
-         bEBCRE7juhDZBX//7cF4N4oYwQqy9JPR3g7JoQaVwM8UaGh+OVj8s+WHdxEQX0dkjkU3
-         MM1w==
-X-Forwarded-Encrypted: i=1; AKwUvBxGVD+6TmsbN3E5Rc+l7m0GPubvxrC/FT4Jqou+4MAU5feRg4WS2/mVkWXNHOnMinEyx37k0TaC7GW2dWXUT34=@vger.kernel.org
-X-Gm-Message-State: AFuF++kq08B3OFuC7XBRRcV2qXbnB7m6aSdrvSEwihBoZ0+d442Q85hy
-	u4GuEZUHERkoZdA/00FenvxA6Zxe73/uNX2/+s1lhqQ+MJN6GLhC99n/
-X-Gm-Gg: AYBFou1M2fhvgf4FtWYq9HRSBOqyR1zNC2GW3zNZ5pI3RZC1QZqbNBLRKnnZ4LIV9t/
-	CC9TqVafSbzPs8slbzl/wcsjSr/SCJtVfLqMNhpcb1aum4kMhB7YmfRDuw8mqLPQtDhdt/XFD4m
-	gGSb8fBgUAz9Wm4Ij0c4nj28Y/Jrk6tMAbMd3sdw3n01qzjZJcewY8rrKpbF0+EihXiSFuh9aYO
-	CLucrlILJ4YJAzCp9Vcb+yBPoIpCA0vBXcGELm5yqpymWB+g2WzHCzljuQWQX9ow38njY85GmM3
-	q69yDzDx4yZ3Pqzwphp/GVeKjuSwh5e0hJCGb5l3gNNB7IkEFZ4DChWXO2Pvz53V1mgFIaw0voq
-	IYUQJPHufgoL4Lj0HzWViEYISgQ1I8sA3MeHq/bcV5HcM8vFI/Bq0DvXaokQoa7/9Wk88aziqDy
-	KGX9mZvwge87MzaV6+zuL9drP4WEFV4aq74YZ7PQVwMzHZYaLhZWFe1I0XTAMy6zbOfqdVMukWx
-	+0WfE9iL6J1/zZyytyxqy+BiX/XUSFcp8edoLAwPGhxxBr/Aq6Y
-X-Received: by 2002:a17:902:fc84:b0:2d8:d4d3:da4c with SMTP id d9443c01a7336-2d94a90e1d2mr65184305ad.16.1788227282814;
-        Mon, 31 Aug 2026 18:48:02 -0700 (PDT)
-Received: from secrnd-cstp.tailb7f510.ts.net ([125.131.91.97])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2d911a9651csm27053495ad.21.2026.08.31.18.47.57
+        d=1e100.net; s=20251104; t=1788228204; x=1788833004;
+        h=cc:to:content-transfer-encoding:content-type:mime-version
+         :message-id:date:subject:from:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=rCEYFhj1mjK96Rv2xJZjQiJk6x21bXoFnt8xqzOlIK8=;
+        b=E91Pt+Cth/5OJHTigeTbQgaBET6APNRkwqUb3mdbS+JaRoVUxoTUzaniBaO7epWBDi
+         wZfxv30xnIsAWaOE+PNND5pI8udsw/jzTHoCbe2UOVsG0sPxQpXIGRVgYG+5MK0coiYn
+         DthZX99971Vq6aUTWtoYvV/zCO+2a7AuzbP1TjpKt9ETUYko+KeZktY2TskV7T+VRcHY
+         ExbRdvC1eIxRkZiQBuZfeIJrvQKlQgis0f9KDscS02Y9ml8OA7vBzeU32PZcAPPhihnZ
+         t0lXIKBttggqKcQWjzymYu9g61i6GPXnY43H3nrkRDWM8jzhqIkY1/6nO2/1kdkVMTg0
+         OhNw==
+X-Forwarded-Encrypted: i=1; AKwUvBy2EjI5Zs0hFP82kdzYRzt4eHgfgamBQnW/5Iu/YBfbFN7EIAjeZ0fEOljWKinAWcsYfYrJhhEz69iMqINoHhE=@vger.kernel.org
+X-Gm-Message-State: AFuF++ntHkJPGdgqWuZZoXoqL0FfqvUovanbi8KGw1zKhNskbdaEUQbZ
+	cyWUFdjPJRxSPuinNJgKODgyOV+lCT2dY2ojD03VNtSNTriO1Y3KQZXl
+X-Gm-Gg: AYBFou3jlR//6izjG34JoOHB2B3aSs5cC1/xAVXdz21OQFeMOkZMSXGZIn65wcHV3zF
+	bWF7KJLuXnk133mZwzJ6bSL9dzWjD4zBpNQZv8pKOsPdF31HJ4zU6CGIAogFPQ0CDYIildX4bWO
+	A88vmFF6kYi3cO0CgpvSNYSa4QHJe3EO5OpzgywC5Q48bWJZ7xM9fVA49FNpkPU56WoK1WEopI3
+	MOJ+wavdc2rVh9m0lcUSd2is+lZM0gz/nTZb26Ac9AyfFb5x5wpczXRHnRgYTTTZ0uEDkzqmFM+
+	DfQamcJgfCoFg4eIf2uX+QsZ8GOi3WeBWOCa92uKTmo9HGX8+u345uA+rMrOijhbRZbULukBtQ8
+	0jByLiblKm19lVcfeG27zbBUc8KRURkD+JO2r+apuu3lX8rbNIN7zjQlCHmqg2CKDUoSsMHQhRB
+	7ZiGkVBvqf7Fb6wj++C4YWZ4i6lwJg8fwFFJ4NUp+p7dJSG1VIJhNVB5Tyb6kYID19dDJZeYY=
+X-Received: by 2002:a17:90b:17cc:b0:398:d8eb:cb2a with SMTP id 98e67ed59e1d1-398d8ebcd21mr13893358a91.23.1788228203814;
+        Mon, 31 Aug 2026 19:03:23 -0700 (PDT)
+Received: from [163.43.103.131] ([163.43.103.131])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990bd46185sm3020899a91.5.2026.08.31.19.03.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Aug 2026 18:48:01 -0700 (PDT)
-From: Sanghyun Park <sanghyun.park.cnu@gmail.com>
-To: Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Eduard Zingerman <eddyz87@gmail.com>,
-	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
-	bpf@vger.kernel.org
-Cc: Sanghyun Park <sanghyun.park.cnu@gmail.com>,
-	Leon Hwang <leon.hwang@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Emil Tsalapatis <emil@etsalapatis.com>,
-	Ihor Solodrai <ihor.solodrai@linux.dev>,
-	Shuah Khan <shuah@kernel.org>,
-	Stanislav Fomichev <sdf@fomichev.me>,
-	Pu Lehui <pulehui@huawei.com>,
-	Suchit Karunakaran <suchitkarunakaran@gmail.com>,
-	Xu Kuohai <xukuohai@huawei.com>,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org
-Subject: [PATCH bpf-next v5 2/2] selftests/bpf: Cover attach type checks in link update
-Date: Tue,  1 Sep 2026 10:47:11 +0900
-Message-ID: <20260901014713.3502900-4-sanghyun.park.cnu@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com>
-References: <20260901014713.3502900-2-sanghyun.park.cnu@gmail.com>
+        Mon, 31 Aug 2026 19:03:22 -0700 (PDT)
+From: Yuya Kusakabe <yuya.kusakabe@gmail.com>
+Subject: [PATCH RFC net-next v2 0/2] seg6: add support for the SRv6 End.MAP
+ behavior
+Date: Tue, 01 Sep 2026 11:03:17 +0900
+Message-Id: <20260901-seg6-mobile-end-map-v2-0-1629bfc166eb@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGUylmoC/21OSw6CMBC9Cpm1Y9qCfFyZmHgAt4YFlBHG0JZQJ
+ BjC3QXcunz/N4OnnsnDOZihp5E9O7sCdQhAN4WtCblaMSihYnFSIXqqYzSu5JaQbIWm6DDTpFU
+ kM5nKBNZk19OTp731AffbdeMsDWhpGiD/Gfy7fJEetu5NbtgPrv/sP0a5B/fJRIq/k6NEgVlWk
+ lBVnMoovNSm4PaonYF8WZYvj/FCYdkAAAA=
+X-Change-ID: 20260523-seg6-mobile-end-map-9cec24191817
+To: Andrea Mayer <andrea.mayer@uniroma2.it>, 
+ Andrea Mayer <andrea@common-net.org>, 
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+ Simon Horman <horms@kernel.org>, David Ahern <dsahern@kernel.org>, 
+ Ido Schimmel <idosch@nvidia.com>, Shuah Khan <shuah@kernel.org>
+Cc: Justin Iurman <justin.iurman@gmail.com>, linux-kernel@vger.kernel.org, 
+ netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ Yuya Kusakabe <yuya.kusakabe@gmail.com>
+X-Mailer: b4 0.15.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3407;
+ i=yuya.kusakabe@gmail.com; h=from:subject:message-id;
+ bh=hJ24dHwYNskkMzJQOdxprEVRtyGXL1/rtztojA+8fug=;
+ b=owEBbQKS/ZANAwAIASrX0XUqXRtNAcsmYgBqljJnrqPYNPJVnghNuErK3bsL7HSG2Fh371Tz5
+ WwFYlvsRpuJAjMEAAEIAB0WIQTaB7usAfxNKMeqa6Yq19F1Kl0bTQUCapYyZwAKCRAq19F1Kl0b
+ TScrEADWSUE0T5JaaKxPdV7j4zjWEsUKkbwaWxAa8bOdnw8SqTH0e0p6P3III9H17W+VnDNe9JB
+ r32rGiRZXhBm/p0BtjGyPMq4/dPqRRpbsuqWpix+7JgFWzIkFFBejXJTfB67bRPXYRwaEWNFQdQ
+ ZIuMjtdcamvYalhKkeigGu1x8Jcz5EejrHn8QgL90YmUDmcr+uPT8U2mSXCJl9dMLFjz8ZMq09D
+ CUeha4moj5pN/1qx6bADSVIQVNE9AdYickPZ1zKLzwMM3D2gSLKL0v3DbIikG14fPMXkez+jjVU
+ k+E8cQ0Kb4vJtDZ3Fk9msZQQO99cWPIBN4zkt1JAfRbsBmXx4ROXSJmJjYPCEJLoD5KRaGAiKEL
+ sr5Puki9Ho7Rnh8UAaJeyfCPgzT8h8KGyHXC6zrJxTZJjb2hUhi/zEgTVL40RWdAamHuYV+F7n/
+ g4foQ9+s6hnRsl1Qe3gRwy6s9Woe+5EhvDMDoaZsEd4b1dFrbOD4Vl58zViJv3tA7/iV8h/zXF1
+ A+eHjXfafh9+YT4gn/Lb2Nw41UyYVqkBwyz3scPOAsJi8YlV7UnGn8Ay2w19CXLLPBXlgS0so2F
+ V+5bLrRy+o/APUS6SfVZNTeXfVE1O5ag1ZqRDAqnA6MJyxcduGECkczB7Y6fwcZGMr0Eb3Agj4o
+ YHQ6/FoeUqMbjmw==
+X-Developer-Key: i=yuya.kusakabe@gmail.com; a=openpgp;
+ fpr=DA07BBAC01FC4D28C7AA6BA62AD7D1752A5D1B4D
 
-Pin down the two contracts changed by the companion patch. LINK_UPDATE
-validates a replacement program against the link's attach type, while
-CGROUP_SKB capability checks apply at LINK_CREATE and not LINK_UPDATE.
+End.MAP is the simplest of the SRv6 Mobile User Plane (RFC 9433)
+behaviors: it replaces the IPv6 destination address with the
+configured mapped SID and forwards via the IPv6 FIB without consuming
+the SRH.  This series is the first per-behavior rebuild of the SRv6
+Mobile User Plane v2 submission [1], split one series per behavior
+following upstream review.
 
-Cover incompatible UDP4/UDP6 and LSM attach flavors, plus a CGROUP_SKB
-link update after dropping CAP_NET_ADMIN and CAP_SYS_ADMIN.
+Because End.MAP is the first behavior to land, this series also
+introduces the SRv6 Mobile User Plane lwtunnel framework that the
+subsequent per-behavior series plug into:
 
-Signed-off-by: Sanghyun Park <sanghyun.park.cnu@gmail.com>
+  * a new LWTUNNEL_ENCAP_SEG6_MOBILE encap type with a
+    CONFIG_IPV6_SEG6_MOBILE build option,
+  * net/ipv6/seg6_mobile.c, which hosts the action dispatch table,
+  * include/uapi/linux/seg6_mobile.h, a dedicated SEG6_MOBILE_*
+    attribute namespace, so that attributes whose semantics differ
+    between the mobility behaviors and the RFC 8986 behaviors do
+    not overload the SEG6_LOCAL_* table.
+
+This layout follows the discussion on the v2 thread; feedback on it
+from the lwtunnel maintainers is particularly welcome.  Per the same
+discussion, netfilter hook integration, VRF support and SRv6-specific
+drop reasons are left out of this initial series and will be
+revisited separately.
+
+A matching iproute2 series adding the "seg6mobile" encap keyword
+follows shortly after this posting, since the selftest needs it to
+run.
+
+[1] https://lore.kernel.org/netdev/20260505-seg6-mobile-v2-0-9e8022bdfdb6@gmail.com/
+
+Signed-off-by: Yuya Kusakabe <yuya.kusakabe@gmail.com>
 ---
-v5:
-  - Isolate attach and update coverage in separate subtests with their own setup.
-  - Inline the one-use LSM program FD and use a descriptive link FD.
-  - Explain the create-versus-update contracts covered by the tests.
-v4: https://lore.kernel.org/r/20260831023918.1857658-2-sanghyun.park.cnu@gmail.com
----
- .../selftests/bpf/prog_tests/cgroup_link.c    | 81 ++++++++++++++++++-
- .../selftests/bpf/prog_tests/lsm_cgroup.c     | 12 +++
- .../testing/selftests/bpf/progs/lsm_cgroup.c  |  6 ++
- .../selftests/bpf/progs/test_cgroup_link.c    | 14 +++-
- 4 files changed, 111 insertions(+), 2 deletions(-)
+Changes in v2:
+- End.MAP: patch the L4 checksum also for an SRH with no segments
+  left and for first fragments; selftest cases added for both.
+- Use nla_parse_nested() for the nested attributes.
+- Rework the selftest helper and cases; wait for counters instead of
+  sampling them; add CONFIG_IPV6_SEG6_MOBILE to the selftests config.
+- Rename the SEG6_MOBILE_NH6 attribute and the nh6 keyword to
+  SEG6_MOBILE_MAPPED_SID/mapped_sid to match the RFC 9433 "mapped
+  SID" wording and avoid clashing with the SEG6_LOCAL_NH6 nexthop
+  semantics.
+- Trim the Kconfig help; add Assisted-by tags.
+- Link to v1: https://patch.msgid.link/20260710-seg6-mobile-end-map-v1-0-99be02d68143@gmail.com
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-index 15093a69510e..3b43c34917cc 100644
---- a/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-+++ b/tools/testing/selftests/bpf/prog_tests/cgroup_link.c
-@@ -1,6 +1,7 @@
- // SPDX-License-Identifier: GPL-2.0
- 
- #include <test_progs.h>
-+#include "cap_helpers.h"
- #include "cgroup_helpers.h"
- #include "testing_helpers.h"
- #include "test_cgroup_link.skel.h"
-@@ -24,7 +25,77 @@ int ping_and_check(int exp_calls, int exp_alt_calls)
- 	return 0;
- }
- 
--void serial_test_cgroup_link(void)
-+static void test_cgroup_link_update(void)
-+{
-+	const __u64 caps = (1ULL << CAP_NET_ADMIN) | (1ULL << CAP_SYS_ADMIN);
-+	struct bpf_link *link = NULL;
-+	__u64 saved_caps = 0;
-+	int cg_fd = -1, err;
-+
-+	skel = test_cgroup_link__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_load"))
-+		return;
-+
-+	err = setup_cgroup_environment();
-+	if (!ASSERT_OK(err, "cg_init"))
-+		goto cleanup;
-+
-+	cg_fd = create_and_get_cgroup("/cgroup_link_update");
-+	if (!ASSERT_GE(cg_fd, 0, "cg_create"))
-+		goto cleanup;
-+
-+	err = join_cgroup("/cgroup_link_update");
-+	if (!ASSERT_OK(err, "cg_join"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.sendmsg4, cg_fd);
-+	if (!ASSERT_OK_PTR(link, "attach_sendmsg4"))
-+		goto cleanup;
-+
-+	err = bpf_link__update_program(link, skel->progs.sendmsg6);
-+	ASSERT_EQ(err, -EINVAL, "reject_sendmsg6_update");
-+	bpf_link__destroy(link);
-+	link = NULL;
-+
-+	err = cap_disable_effective(caps, &saved_caps);
-+	if (!ASSERT_OK(err, "drop_caps_for_attach"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-+	if (!ASSERT_ERR_PTR(link, "attach_without_net_admin"))
-+		goto cleanup;
-+	err = libbpf_get_error(link);
-+	link = NULL;
-+	if (!ASSERT_EQ(err, -EPERM, "attach_err"))
-+		goto cleanup;
-+
-+	err = cap_enable_effective(saved_caps & caps, NULL);
-+	if (!ASSERT_OK(err, "restore_caps_for_attach"))
-+		goto cleanup;
-+
-+	link = bpf_program__attach_cgroup(skel->progs.egress, cg_fd);
-+	if (!ASSERT_OK_PTR(link, "attach_egress"))
-+		goto cleanup;
-+
-+	err = cap_disable_effective(caps, &saved_caps);
-+	if (!ASSERT_OK(err, "drop_caps"))
-+		goto cleanup;
-+
-+	err = bpf_link__update_program(link, skel->progs.egress_alt);
-+	ASSERT_OK(err, "update_without_net_admin");
-+
-+cleanup:
-+	err = cap_enable_effective(saved_caps & caps, NULL);
-+	ASSERT_OK(err, "restore_caps");
-+	bpf_link__destroy(link);
-+	if (cg_fd >= 0)
-+		close(cg_fd);
-+	cleanup_cgroup_environment();
-+	test_cgroup_link__destroy(skel);
-+	skel = NULL;
-+}
-+
-+static void test_cgroup_link_attach(void)
- {
- 	struct {
- 		const char *path;
-@@ -253,3 +324,11 @@ void serial_test_cgroup_link(void)
- 	}
- 	cleanup_cgroup_environment();
- }
-+
-+void serial_test_cgroup_link(void)
-+{
-+	if (test__start_subtest("attach"))
-+		test_cgroup_link_attach();
-+	if (test__start_subtest("update"))
-+		test_cgroup_link_update();
-+}
-diff --git a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-index 41e867467f6c..0dd44dbb9c95 100644
---- a/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/prog_tests/lsm_cgroup.c
-@@ -74,6 +74,7 @@ static void test_lsm_cgroup_functional(void)
- 	int bind_prog_fd = -1;
- 	int bind_link_fd = -1;
- 	int clone_prog_fd = -1;
-+	int socket_link_fd = -1;
- 	int err, fd, prio;
- 	socklen_t socklen;
- 
-@@ -156,6 +157,17 @@ static void test_lsm_cgroup_functional(void)
- 	ASSERT_EQ(query_prog_cnt(cgroup_fd, "bpf_lsm_socket_bind"), 1, "prog count");
- 	ASSERT_EQ(query_prog_cnt(cgroup_fd, NULL), 4, "total prog count");
- 
-+	socket_link_fd =
-+		bpf_link_create(bpf_program__fd(skel->progs.socket_first),
-+				cgroup_fd, BPF_LSM_CGROUP, NULL);
-+	if (!ASSERT_GE(socket_link_fd, 0, "link create socket_first"))
-+		goto detach_cgroup;
-+	err = bpf_link_update(socket_link_fd,
-+			      bpf_program__fd(skel->progs.socket_create_lsm),
-+			      NULL);
-+	ASSERT_EQ(err, -EINVAL, "reject lsm_mac link update");
-+	close(socket_link_fd);
-+
- 	/* Attach another instance of bind program to another cgroup.
- 	 * This should trigger the reuse of the trampoline shim (two
- 	 * programs attaching to the same btf_id).
-diff --git a/tools/testing/selftests/bpf/progs/lsm_cgroup.c b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-index 3bfa479104be..30727945cecc 100644
---- a/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-+++ b/tools/testing/selftests/bpf/progs/lsm_cgroup.c
-@@ -213,6 +213,12 @@ int BPF_PROG(socket_first, int family, int type, int protocol, int kern)
- 	return 0;
- }
- 
-+SEC("lsm/socket_create")
-+int BPF_PROG(socket_create_lsm, int family, int type, int protocol, int kern)
-+{
-+	return 0;
-+}
-+
- SEC("lsm_cgroup/socket_create")
- int BPF_PROG(socket_second, int family, int type, int protocol, int kern)
- {
-diff --git a/tools/testing/selftests/bpf/progs/test_cgroup_link.c b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-index 4faba88e45a5..a987744d129c 100644
---- a/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-+++ b/tools/testing/selftests/bpf/progs/test_cgroup_link.c
-@@ -20,5 +20,17 @@ int egress_alt(struct __sk_buff *skb)
- 	return 1;
- }
- 
--char _license[] SEC("license") = "GPL";
-+SEC("cgroup/sendmsg4")
-+int sendmsg4(struct bpf_sock_addr *ctx)
-+{
-+	return 1;
-+}
- 
-+SEC("cgroup/sendmsg6")
-+int sendmsg6(struct bpf_sock_addr *ctx)
-+{
-+	ctx->msg_src_ip6[2] = 0;
-+	return 1;
-+}
-+
-+char _license[] SEC("license") = "GPL";
--- 
-2.48.1
+---
+Yuya Kusakabe (2):
+      seg6: add support for the SRv6 End.MAP behavior
+      selftests: seg6: add selftest for End.MAP behavior
+
+ include/net/seg6.h                               |   8 +
+ include/uapi/linux/lwtunnel.h                    |   1 +
+ include/uapi/linux/seg6_mobile.h                 |  61 ++
+ net/core/lwtunnel.c                              |   2 +
+ net/ipv6/Kconfig                                 |  10 +
+ net/ipv6/Makefile                                |   1 +
+ net/ipv6/seg6.c                                  |   7 +
+ net/ipv6/seg6_mobile.c                           | 700 +++++++++++++++++++++++
+ tools/testing/selftests/net/.gitignore           |   1 +
+ tools/testing/selftests/net/Makefile             |   2 +
+ tools/testing/selftests/net/config               |   1 +
+ tools/testing/selftests/net/srv6_end_map_test.sh | 399 +++++++++++++
+ tools/testing/selftests/net/srv6_mobile_send.c   | 262 +++++++++
+ 13 files changed, 1455 insertions(+)
+---
+base-commit: 1bb784eb6e38fd73143f021608e4ef3095d0c0d7
+change-id: 20260523-seg6-mobile-end-map-9cec24191817
+
+Best regards,
+--  
+Yuya Kusakabe <yuya.kusakabe@gmail.com>
+
