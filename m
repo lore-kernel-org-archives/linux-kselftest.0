@@ -1,156 +1,136 @@
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276DA43CE56
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 16:13:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0325744062F
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 16:20:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788279202; cv=none; b=ME9k7JQBq3DZKjKzLhy/BfL6vnfcxbJqAtGfG0WcsAxhAXZUxaSZBurAgxHOfub+njf1YNlPmjS3vkAjXxQ/onDOXAY9DecDJqYzzXp/3zUZ+hp39R5d3SWsFqDZk9+ya/QsGNa8yYpgGZDRdgFwx8rt0SR81ofTTG+7jOJ43jQ=
+	t=1788279609; cv=none; b=mrXT9y6+wrt4Ox0BjoCEtEzPnRCOR819u7LpD2JPx4KVnWNGP6HziEJdMuzBy8V0MSMVYN/MnheOkrToGknRYav0tA9tULl6y6CQjy4RUicpgmrXMq49R3Bw9fLdK0ZLp7pQ66A+xiGAcscicYgej/JMXxtKcmgFyhTMnNlBXpk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788279202; c=relaxed/simple;
-	bh=z2KYWNyqrFo1sCW+OWkoJC7vv3DQjQh5BilYS0IFovQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=n0hp5BXQFXIsN0VpAnsStZCqh6sZbgeX4f0HacdpYwVYMPExCzefi/g3fpCXuw7G5yPvZO9LbYD3a2hep0TlMjULqTPSnWlEuNXamfdUAOhubixshlXxl4Pa0kHE+6WDAc104Cap49c/8G5KKXNE0R0cMlTobhgYEztg3iuejf0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ea8KNWJj; arc=none smtp.client-ip=209.85.160.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788279609; c=relaxed/simple;
+	bh=Ph8PvSY4jSqoOfFA76v8Y19/URES1/E/ItNUd86GafU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=axo+S6yV8/GS/CQnWWdzdJg5XeUi92NzZTKJD+9o2F4/vEg7F57pf/Kbr79nvHtjo5SIcAHF1MALCxpImNgMUszXuPZW8xE5BjFbyspVGEd6ve77uS5h6M2fcSsCoP2+jhvc0Dkl+t0wapzCjuii19mqXNpeGlCjetgHhLUCz1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com; spf=pass smtp.mailfrom=cloudflare.com; dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b=UlM36j2H; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=cloudflare.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cloudflare.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ea8KNWJj"
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-4563ac048f4so58246fac.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 09:13:20 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=cloudflare.com header.i=@cloudflare.com header.b="UlM36j2H"
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-c259e5c22ffso409165666b.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 09:20:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788279198; x=1788883998; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=UrvqQXAc4Rj6TaVLaR+TE3DlGs7BEo7vSNB4Ui+eyI0=;
-        b=ea8KNWJjEKQpDkI7Pcx3WpY/D8T9MRNttdo9WLjjKjP7Fw9QzMr3VFTCJ/li+2i7e4
-         Sz2YtjtC272BYa7yNXLKA+pPu0d1Y5UxyxJ0VnpYE1sSrfGdELqhe0kDxNpHqz0zHKze
-         VCsB0N6uVYpgtfmnUsfg8DTJgMxMGnq/tzGKzpsgnWy5ZwO6DxCxTcepTIeATpciqjvw
-         qSa3Gt0jNxvmp/YfHTEptU214bytj0UGvbXIPZx7FqOkvNGCzr2YQAy9q+7hUNwRO6RJ
-         Gedf5ih8/O5+oyYvrahIzxH4wxEq7mkr8WkLTOhslj9tMJuN10IJdkvL2K02fUZdnolR
-         Mc5A==
+        d=cloudflare.com; s=google09082023; t=1788279606; x=1788884406; darn=vger.kernel.org;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=xt613ZL56XxGaY2+kHrcKG3IPyUonAahqlih7qZ2NEQ=;
+        b=UlM36j2Htpj87uDzTxIa3W42+QqPM0tcZylTckJfK00n1X2/Egsf/2F2epjgMAAeW6
+         X7/kkZWbDQ5F2a2B36pPnDknMaUJinACS0bMqtmfu5HU7w9frWjBLb/2M747q3/uPL7I
+         9JhTItBv1UPx8CY64Cev/YsJNrWgQBZlvVuLj1/P5G566txlZy2AHgkH02cAxXh7DerV
+         dowJzMUMrVPpKsaj/AmiR6AlB/TDhTtWr9IpKM8AtadL6zbbiaSVox1zx8KOgjPwUfX5
+         fG7FwzuvZyRfZu+4wIsX5iTGSl3vuRe6kliVC8aMHlDsbQA4j18z8fJtdb48f5K93kzb
+         dfyw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788279198; x=1788883998;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UrvqQXAc4Rj6TaVLaR+TE3DlGs7BEo7vSNB4Ui+eyI0=;
-        b=sdUev647seKB/98OxgqI76dPPl52JGrNQZwFVfrjq3TEr3HgAM29lbseY/wj7i0raz
-         OX3zjbocg8gNih0vviMawQlmmz+0pZxsWaORdVFgn3wlXY0GzDM9ogXCyohS5214ovIP
-         SaMUnRcWdlv5csZ9LDTmCBOdeCE6mMM9wXXWZzIIRJWwlACuoiZgkfHZhpZk+FaV7L4s
-         LAGEyGVZs1o2ehxIMrFk3Hi2Gcd5kQz6AG4FxAjsZejbSyqec67mGNKYj1PzCmv3z6a6
-         9Z1n7GUfhw2+LenxJaNtTfCyIROQw54jN8AYCJ9KqSDm0/jgQIp7yI0WVuLOPhLMsmbp
-         pbzQ==
-X-Forwarded-Encrypted: i=1; AHgh+RqRdFmjsYm+/hx6lknROOXLm3ITTCw2c594ndHt9N0YRtplDEBNG9z9AFOFg5vjH5RkLz5p3yfaA7egdbmQln8=@vger.kernel.org
-X-Gm-Message-State: AFuF++mqtDvbvC1TcRJDJnzKZpFwhgG2MB9ylT77ZTIh6bnA7tIaLSnB
-	gEOSqfMpSQadul+yKZ5oBMhuw2gMVYEQ0ZtNph3j+oqJZ8ga7Ak/BEaP
-X-Gm-Gg: AR+sD12OC0Yd08YBHEtBCEW+arce5gPESYXa/vy57DWiqr3X3fYnW5zFUp7+VAqS++W
-	3CQiOvD+2XHd7Yro5Ee2wXDo8VYL0WMm5ToEbTWqc+MCDJ8T0frYnKxWq6duW7MWWuZHjwaWBd9
-	aD+K19XBCLlQcoar2kpwZ2JnWzq9OmThwiY++dgHsvnw5gysSX0vWxCLCK7ZLPJ0B3cfA+PZ22s
-	KtfMbdtEsEP7p06Z0vOy0w77Hgrv56SI2XiGwNuufUJNKOdnmbI1cYSJPw9HvqccEE7SQ9n6zG3
-	vkT93YNFnqH9VxnbkEySRZ9+COmN/Cg2LPzNkFfTKPvKpIdjSTibPPtJbHEPwMC3cTIb9mQXjGa
-	WExBirXWFbpVxSVjsUeX+9nOxYcFAdRU6CjlU2ebKkXIYIsGZ5qzR5Ns5gg4dzuZSYFFOph0Sb2
-	WPbotsoqQHFAN+FxkkaZ72TA0ZOKEXUyEMG8NzRxRObUGZWJqJyCWbiECy0ogfirJSgcl9+GJaE
-	R/KU6dsZJcrxnYQp61fYuAhRLM5M5g=
-X-Received: by 2002:a05:6808:508c:b0:4b2:8da1:3be4 with SMTP id 5614622812f47-4b398124cc7mr41327362b6e.9.1788279198361;
-        Tue, 01 Sep 2026 09:13:18 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:28::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b3a19949c1sm11563412b6e.10.2026.09.01.09.13.17
+        d=1e100.net; s=20251104; t=1788279606; x=1788884406;
+        h=content-type:mime-version:message-id:date:user-agent:references
+         :in-reply-to:subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to:content-type;
+        bh=xt613ZL56XxGaY2+kHrcKG3IPyUonAahqlih7qZ2NEQ=;
+        b=ZKa4uNT+CWbRgg0zxMJiZs0h2+h+IzfZThQO2XYhnkReAIsV5NgCVLOXzJtpHHm8m9
+         5H00nfPTBKlDz6LmwqFgViXQGVtpfoTmUsxa+jrfiQV012N1UX+22ed7ERknc6iFh6P0
+         YP2mbcHh0SqZHOwfRHukkcvvV9xt6e2bXAUKNShkrbBCIZUZd5cSsdsWm+sQA9f3Bx5R
+         xvOW0QuHNHv+BZw0BMTK3H3/kqzyjaI8kizjFZfdYC3M+284cMORHCdY5QivW5f/6s83
+         WdGnDa+2G3H1gWpqISXIt+kcjbhjq4PgpRzfJyXc0ck12cXsztO6dBuCVyKIxm5X/a8g
+         6wKg==
+X-Forwarded-Encrypted: i=1; AHgh+RqRsa8p4F8FZYiIO/NbM/5c6Ke3CO6cUfDmMrVUmKJK/6TcX6VXKHqFUER959/LZMAOXrJKXz9PakDoMZiR1Fg=@vger.kernel.org
+X-Gm-Message-State: AFuF++k8AUozrMgklHVkcTApyDlsJATV+rnsN/EXNwmQx+h4qXOVoUV4
+	o09kP7kv/j1HEABysBU1Dk+e+s96FS99UjJqmUy9nxG8VM8ED9uNIy/jzaT6huMC9tm/2lDUX9v
+	91G1O6DY=
+X-Gm-Gg: AR+sD12Yhv0LbbKlijUQ0ERNY9sfK0PGBiavC0epLV4MTU3JW96ncJVsJeUII0sk1Yt
+	RIn+AyriQHrl/1p18lfGaMQ1QkCm3wIaJFnHSRQWX8jna9LytLjkVJ02kPgi9DGoA6V1Q6Qaoe1
+	ux0Pgt2FNhuagLfQwB8zJ6Imst5roldjco5Qin2cLBsj14tgoNxcPoIISrnjZ6uKQBPjj+EWFS7
+	eVFs0yQbj6f/UwATtvBe6oXXyEMLL4T7IPKG0FEs1MHVFp8hAUx+3qw8RXt+NqUHgGHykl61gVX
+	+MQCJIs34j5OpFu6/9LH9Q37AcymQNNDhneeZgXvpUWC2yZC/GQHnU50NPkqRSy+NdjdjYD3UDK
+	LF1rAecWzfSQQ/k/h9Q0DXEBb4zj8/mSTVZ1N5bEGdgfD5tdolsXg5ozG6xWUf/5E8WiLWMpoeB
+	kA+V77OGmSRi5iG78J2TVvJRJ9duf9VtTNYPw855U9z8bB/z20bli6kDjmyMhaqA==
+X-Received: by 2002:a17:907:5c3:b0:c16:4df6:176b with SMTP id a640c23a62f3a-c255741620bmr2353708366b.20.1788279606104;
+        Tue, 01 Sep 2026 09:20:06 -0700 (PDT)
+Received: from cloudflare.com ([104.28.21.182])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-c255f249434sm618644366b.55.2026.09.01.09.20.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 09:13:18 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: Nhat Pham <nphamcs@gmail.com>,
-	Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry@kernel.org>
-Cc: Chengming Zhou <chengming.zhou@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	cgroup@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: [PATCH] selftests/cgroup: Skip test_no_invasive_cgroup_shrink if zswap shrinker is enabled
-Date: Tue,  1 Sep 2026 09:13:16 -0700
-Message-ID: <20260901161317.3468233-1-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.53.0
+        Tue, 01 Sep 2026 09:20:05 -0700 (PDT)
+From: Jakub Sitnicki <jakub@cloudflare.com>
+To: Chris J Arges <carges@cloudflare.com>
+Cc: David Ahern <dsahern@kernel.org>,  Ido Schimmel <idosch@nvidia.com>,
+  "David S. Miller" <davem@davemloft.net>,  Eric Dumazet
+ <edumazet@google.com>,  Jakub Kicinski <kuba@kernel.org>,  Paolo Abeni
+ <pabeni@redhat.com>,  Simon Horman <horms@kernel.org>,  Shuah Khan
+ <shuah@kernel.org>,  netdev@vger.kernel.org,
+  linux-kernel@vger.kernel.org,  linux-kselftest@vger.kernel.org,
+  kernel-team@cloudflare.com
+Subject: Re: [PATCH RFC net-next 1/3] ipv4: hash uncached routes by device
+In-Reply-To: <20260826-hash-bucket-route-lists-v1-1-fa9b9f30eb74@cloudflare.com>
+	(Chris J. Arges's message of "Wed, 26 Aug 2026 15:20:07 -0500")
+References: <20260826-hash-bucket-route-lists-v1-0-fa9b9f30eb74@cloudflare.com>
+	<20260826-hash-bucket-route-lists-v1-1-fa9b9f30eb74@cloudflare.com>
+User-Agent: mu4e 1.14.1; emacs 30.2
+Date: Tue, 01 Sep 2026 18:20:04 +0200
+Message-ID: <87qzjd2bbf.fsf@cloudflare.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
-has zswapped out more pages than memory.zswap.max, that it does not
-trigger writeback for other cgroups. To do this, it compares the
-writeback count in a control cgroup and makes sure that it is 0,
-and compares it to the writeback count in a aggressor cgroup who
-does expect to see writeback.
+On Wed, Aug 26, 2026 at 03:20 PM -05, Chris J Arges wrote:
+> rt_flush_dev() currently walks every per-CPU uncached route list for each
+> device being removed. This repeatedly examines unrelated routes and makes
+> teardown increasingly expensive as the number of devices grows.
+>
+> Replace each per-CPU list with 64 hash buckets keyed by the route's
+> netdevice. Keep the owning-list pointer in dst_entry so route removal
+> remains unchanged, while device teardown only walks the matching bucket on
+> each CPU. Hash collisions are filtered by the existing device comparison.
+>
+> Signed-off-by: Chris J Arges <carges@cloudflare.com>
+> ---
+>  net/ipv4/route.c | 36 +++++++++++++++++++++++++++++-------
+>  1 file changed, 29 insertions(+), 7 deletions(-)
+>
+> diff --git a/net/ipv4/route.c b/net/ipv4/route.c
+> index 604cc51dfd9b..3f9bc1ec72cc 100644
+> --- a/net/ipv4/route.c
+> +++ b/net/ipv4/route.c
+> @@ -74,6 +74,7 @@
+>  #include <linux/init.h>
+>  #include <linux/skbuff.h>
+>  #include <linux/inetdevice.h>
+> +#include <linux/hash.h>
+>  #include <linux/igmp.h>
+>  #include <linux/pkt_sched.h>
+>  #include <linux/mroute.h>
+> @@ -1552,11 +1553,22 @@ struct uncached_list {
+>  	struct list_head	head;
+>  };
+>  
+> -static DEFINE_PER_CPU_ALIGNED(struct uncached_list, rt_uncached_list);
+> +#define RT_UNCACHED_HASH_BITS	6
+> +#define RT_UNCACHED_HASH_SIZE	BIT(RT_UNCACHED_HASH_BITS)
 
-When the zswap shrinker is enabled however, there is an additional path
-to zswap writeback, which can happen independently of reaching the
-memory.zswap.max limit.
 
-The writeback counter cannot distinguish between invasive noisy-neighbor
-driven writeback and the zswap shrinker work, so the test becomes
-invalid.
+Consider making RT[6]_UNCACHED_HASH_BITS a build time tunable.
+We've had a case in the past where we had to carry a custom patch [1]
+because hash size was hardcoded.
 
-Skip test_no_invasive_cgroup_shrink if the zswap shrinker is enabled.
+[1] https://lore.kernel.org/netdev/1295041688-16550-1-git-send-email-wsommerfeld@google.com/
 
-Signed-off-by: Joshua Hahn <joshua.hahnjy@gmail.com>
----
- tools/testing/selftests/cgroup/test_zswap.c | 22 +++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+> +
+> +struct uncached_table {
+> +	struct uncached_list buckets[RT_UNCACHED_HASH_SIZE];
+> +};
+> +
+> +static DEFINE_PER_CPU_ALIGNED(struct uncached_table, rt_uncached_table);
 
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/selftests/cgroup/test_zswap.c
-index 9c5bd503c3f73..6f9b5c631d030 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -20,6 +20,8 @@ static int page_size;
- 
- #define PATH_ZSWAP "/sys/module/zswap"
- #define PATH_ZSWAP_ENABLED "/sys/module/zswap/parameters/enabled"
-+#define PATH_ZSWAP_SHRINKER_ENABLED \
-+	"/sys/module/zswap/parameters/shrinker_enabled"
- #define PATH_ZSWAP_STORED_PAGES "/sys/kernel/debug/zswap/stored_pages"
- 
- static int read_int(const char *path, size_t *value)
-@@ -446,6 +448,16 @@ static int test_zswap_writeback_disabled(const char *root)
- 	return test_zswap_writeback(root, false);
- }
- 
-+static bool zswap_shrinker_enabled(void)
-+{
-+	char value[2];
-+
-+	if (read_text(PATH_ZSWAP_SHRINKER_ENABLED, value, sizeof(value)) <= 0)
-+		return false;
-+
-+	return value[0] == 'Y';
-+}
-+
- /*
-  * When trying to store a memcg page in zswap, if the memcg hits its memory
-  * limit in zswap, writeback should affect only the zswapped pages of that
-@@ -461,6 +473,16 @@ static int test_no_invasive_cgroup_shrink(const char *root)
- 	char *zw_allocation = NULL, *wb_allocation = NULL;
- 	char *zw_group = NULL, *wb_group = NULL;
- 
-+	/*
-+	 * The shrinker can write back zw_group's pages despite not hitting the
-+	 * zswap limit. Skip the test if the zswap shrinker is enabled since the
-+	 * test cannot distinguish invasive writeback from shrinker work.
-+	 */
-+	if (zswap_shrinker_enabled()) {
-+		ksft_print_msg("zswap shrinker is enabled\n");
-+		return KSFT_SKIP;
-+	}
-+
- 	snprintf(zswap_max_buf, sizeof(zswap_max_buf), "%d", page_size);
- 	snprintf(mem_max_buf, sizeof(mem_max_buf), "%zu", allocation_size / 2);
- 
--- 
-2.53.0-Meta
-
+[...]
