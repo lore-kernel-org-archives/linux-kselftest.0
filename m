@@ -1,153 +1,104 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086EF411FBF;
-	Tue,  1 Sep 2026 15:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11026436BEA
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:35:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788276888; cv=none; b=SSfc8yN3jCXm/uuixAtntq25lf3T7GxsQXFqRIMtN56AaLqJBYXyIDJVD10xfOCQBEo2Z2Hu1SrMFRBvjc01/yVSUTWviyOVQD0T1EEWq0kdLthM004IQClOYRYZUJWKRT/vzO7updOsqDKHw+KPunYZvI2gja/UELzzaYvJPno=
+	t=1788276915; cv=none; b=pSrVHdrTvIGAKUxl6k3FQ70p8HxclmhEL2jODsU2NSqbMDuQdeJLdcCo1q+JLCMS58z297YuZD3ti0HWsUNQJMRO8PPrIVt79LHg9v3oJNsbr2Zu7RCR8NLJrqE+IehOEOZVZeMmdtfalT58oYkzZMIQTeyPE+51Qn58hYz0rOQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788276888; c=relaxed/simple;
-	bh=XLuK/PZ58lDhZmg6xDRQ9In2m+ureWTnrZMeNLfg+vQ=;
-	h=Content-Type:MIME-Version:Message-Id:In-Reply-To:References:
-	 Subject:From:To:Cc:Date; b=J2uF3XCerp269UwdVEYeDH0HtDDlUSTsiDp+x1fTBfI9yQ9m4N1DQDZXWGD9MR2izg05aGtsGQMqKjMjCNJnh8U7PA8u6ShihlOslI3TiUDx9Jl4uKh3d1MOm+hl73AigX9gyNCb8LDMKJIV12NzySGLTFpcyk84UAQx1dAaSrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oC1nNhPC; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788276915; c=relaxed/simple;
+	bh=kdgQj/mUkyRR8HBLGn0DxLiyjpequvkCMjczfVTXcyU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fIFUAZFVdrINzlNro8G1cNA3CKt3HSGTgi7JEilXfoWzdLRE68XUnH5D7PtZch5v3dgrT0+yAV1zKwjyOJPXDi3XAe7fAA0z14+CqWIAWudVoyDOatA+zexEfvf3hWbXUC22pv6RoIE815K20GAbyhOZmVn0XBgMjQz5KhHf3jI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to; spf=none smtp.mailfrom=dama.to; dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b=klP96dwS; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dama.to
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=dama.to
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oC1nNhPC"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F48F1F000E9;
-	Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788276886;
-	bh=sXDKWyKAaYd6V/9rFYp5krd/4rh/b9keSzpuKc3ug44=;
-	h=In-Reply-To:References:Subject:From:To:Cc:Date;
-	b=oC1nNhPC8CSLvJ7DmoQa5fClWUYEKBBK8TqAd5V2p0PDokhn2XA0bHuiDnm9H9Em1
-	 6YZljdShXLM7ndMP4NO8e7P4eaAmBM/HIBB7uSOPUu9C6CWSGcYFUqIzmmunUD4QDS
-	 y4ekkUeYhkf3SbhBUrbPAaTLA7Q1V1oaVHszAuSksd7tlhYgScqKDP6jOaOs2dPoFJ
-	 ZA+7WXtFNXR8orl5LxZY/0sjxrtUZYlZF1VjfytHrLk36rpEffDEx1vOhmjuAUHCtc
-	 bW1ZDJcvTVpAcixdjZyH1nXB90TfEKyOJUSWPppPJLGSPHndcXZ3gD37WiSIZFDFAB
-	 pl5P7wRY+pWCg==
-Content-Type: multipart/mixed; boundary="===============4761417725018966106=="
+	dkim=pass (2048-bit key) header.d=dama-to.20251104.gappssmtp.com header.i=@dama-to.20251104.gappssmtp.com header.b="klP96dwS"
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2d71d1cc8b2so44593995ad.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 08:35:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=dama-to.20251104.gappssmtp.com; s=20251104; t=1788276913; x=1788881713; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=QmL927KZZiS/GQHjvKa5Xv6rRMC1cROJujnvo4Vr8Qs=;
+        b=klP96dwS0uIPkrJjasBemYGuWusxkZAAyTZx6gAFr1a9dkqIUUUaLj4OBsLZItR4zq
+         BqfyxeO2zJrP+Y/8WAJDVIz1m7PiwCGInklJVO6CE6kKX1Zu33bCXuUtFTTSvjKpgnI8
+         rEjhIp7LCupkscSLLL+E/4yUv6hklfFu2SANSOXl+oa4qIRBOYvJxJ4RbTQYuLT84mtF
+         mxhsxKPAJV72RDDoomuZmkJfCG3r+DHDQQDaasHJwSEfrCpZcO7qQyy/vBPn430DjtaG
+         fYNgJiEcIlTc/YsuLgX6cDyExV+yciy1oE7T/1FMkSu2KhzYfsE5smoa4oS7xBTQSGcJ
+         +GQA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788276913; x=1788881713;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:mail-followup-to:message-id:subject:cc:to:from:date
+         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to:content-type;
+        bh=QmL927KZZiS/GQHjvKa5Xv6rRMC1cROJujnvo4Vr8Qs=;
+        b=jEATjGKdnCWIW+BbATxNWGGMAGvB6BFvk7nrY9Ai8I0Ft9n4FtL+TtnBiZqzV/u7MS
+         kgOX0RCX/hsCCFmgMXjUf/fvFRr4Jv829ls3AOjeclj9c7K4rLrooEpEAsYNFZNlunnp
+         IosAxylZaAP7b48D3AHdQOs0kGqr8yPWNYu+RAvOpXwT1IBeZcrkKiQfYOU2ScIVWWsx
+         Y+4IIYhVAKXpKYNbTdtZVFqhUsC1Y9vbC3VkTBH/Uqlf8Plwx1yYzai3HG8EUyTKOvVd
+         KaUrxrdnvNU8vHqm9rGLCYJ7HBTRlcKmKIMXR2GhpSjsYea2GEEENKNGE/iV1ARHzUBk
+         fzIQ==
+X-Forwarded-Encrypted: i=1; AKwUvByBrbi4WWogscmEDQbTzTdd3dBrDekUGnvnxavC/KhGt4rUR1c+W2MUXWKGHL5fhfjw0QQg8IA65GONFqgmzs4=@vger.kernel.org
+X-Gm-Message-State: AFuF++l09tuc75lnE4G5GxG1U2TGgWFY2tehLeNewoEKLudL9C2EOXyG
+	BJvcjtuWbJJ4zLMkpM83XbJ4qSyIFfjor2t2iPVU3eeCSAuXB5h1I446EwzDpOi7Q4w=
+X-Gm-Gg: AYBFou3UerF35rpPyFT6UKfYD1D8pjDfpKLxX2vytQpvvj2O+eBza/BT6FnDSYJmxs+
+	FwpcWqZi2dNt1NpOZo1b5KfCs6wCFDtYZz2ueHIFn9w5hlxCSc9MFZGCA6c7vWVA4bzo5GELNlk
+	eWYtOr3H8Vn9WHu78MF0ACSg3x4aI5PSMZWiyKCgGysnXzUPXSvMzN2VyHm41wgpw8ptuszTJy8
+	smNo8e1H4uWAG/ra+fYsKiLRru0WBgcVIy3037A1AYFt3fSGDn1sFrKEYROeaDPYLGofSN+7Od1
+	Q6ig80t8lTFbwCTcfyjCl7vyk+iykiJzn5k4M+PEFjZkB5UL1fa1pqCzu2q6WUBiFRwX1wDBegN
+	R1TtpF+LDfkG89UvldY0Ea4uqG8uAYNB7mYs5Q8qyZ+pTPuy0wl/LO85r7OI/LxO1P3A2O1riTQ
+	+KjJ3RaTOrtRXtQqNlnhV5/BHtAxyK2+iqmkilDtpHPg==
+X-Received: by 2002:a17:902:efd1:b0:2d6:f988:398f with SMTP id d9443c01a7336-2d74df00b5amr406227165ad.12.1788276912795;
+        Tue, 01 Sep 2026 08:35:12 -0700 (PDT)
+Received: from localhost ([2a03:2880:2ff:57::])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd386eefsm929635ad.28.2026.09.01.08.35.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 08:35:12 -0700 (PDT)
+Date: Tue, 1 Sep 2026 08:35:11 -0700
+From: Joe Damato <joe@dama.to>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+	pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org,
+	shuah@kernel.org, willemb@google.com, petrm@nvidia.com,
+	linux-kselftest@vger.kernel.org, noren@nvidia.com
+Subject: Re: [PATCH net-next 3/3] selftests: drv-net: bump the timeout to
+ 15min
+Message-ID: <apbwrx8c3ZMdHI9l@devvm20253.cco0.facebook.com>
+Mail-Followup-To: Joe Damato <joe@dama.to>,
+	Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+	netdev@vger.kernel.org, edumazet@google.com, pabeni@redhat.com,
+	andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+	willemb@google.com, petrm@nvidia.com,
+	linux-kselftest@vger.kernel.org, noren@nvidia.com
+References: <20260831163734.1121891-1-kuba@kernel.org>
+ <20260831163734.1121891-4-kuba@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Message-Id: <f987bc5dcd678e13cd661ba9830f30d43cf612f3ee8548020491c791c35308fc@mail.kernel.org>
-In-Reply-To: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
-References: <20260901141954.29449-1-suchitkarunakaran@gmail.com>
-Subject: Re: [PATCH] selftests/bpf: Fix map_lookup_percpu_elem on sparse CPU IDs
-From: bot+bpf-ci@kernel.org
-To: suchitkarunakaran@gmail.com,andrii@kernel.org,ast@kernel.org,daniel@iogearbox.net,eddyz87@gmail.com,memxor@gmail.com,shuah@kernel.org
-Cc: emil@etsalapatis.com,ihor.solodrai@linux.dev,jolsa@kernel.org,martin.lau@linux.dev,song@kernel.org,yonghong.song@linux.dev,zhoufeng.zf@bytedance.com,bpf@vger.kernel.org,linux-kselftest@vger.kernel.org,linux-kernel@vger.kernel.org,suchitkarunakaran@gmail.com,ast@kernel.org,andrii@kernel.org,daniel@iogearbox.net,martin.lau@kernel.org,eddyz87@gmail.com,yonghong.song@linux.dev,mason@kernel.org,ihor.solodrai@linux.dev
-Date: Tue,  1 Sep 2026 15:34:45 +0000 (UTC)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260831163734.1121891-4-kuba@kernel.org>
 
---===============4761417725018966106==
-Content-Type: text/plain; charset="us-ascii"
-MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
+On Mon, Aug 31, 2026 at 09:37:34AM -0700, Jakub Kicinski wrote:
+> The XDP test takes 9m30s on the slowest NIC with debug kernel.
+> Let's give ourselves a 50% margin and set the timeout to 15min.
+> 
+> Signed-off-by: Jakub Kicinski <kuba@kernel.org>
+> ---
+> CC: noren@nvidia.com
+> CC: shuah@kernel.org
+> CC: linux-kselftest@vger.kernel.org
+> ---
+>  tools/testing/selftests/drivers/net/settings | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
 
-> diff --git a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> index bfb1bf3fd427b..849f33259c003 100644
-> --- a/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> +++ b/tools/testing/selftests/bpf/prog_tests/map_lookup_percpu_elem.c
-> @@ -2,29 +2,45 @@
->  /* Copyright (c) 2022 Bytedance */
->
->  #include <test_progs.h>
-> +#include "bpf/libbpf_internal.h"
->  #include "test_map_lookup_percpu_elem.skel.h"
->
->  void test_map_lookup_percpu_elem(void)
->  {
->  	struct test_map_lookup_percpu_elem *skel;
-> -	__u64 key = 0, sum;
-> -	int ret, i, nr_cpus = libbpf_num_possible_cpus();
-> +	bool *possible = NULL;
-> +	__u64 key = 0, sum = 0;
-> +	int cpu, nr_cpu_ids, nr_cpus, ret, slot = 0;
->  	__u64 *buf;
->
-> -	buf = malloc(nr_cpus*sizeof(__u64));
-> -	if (!ASSERT_OK_PTR(buf, "malloc"))
-> +	ret = parse_cpu_mask_file("/sys/devices/system/cpu/possible", &possible,
-> +				  &nr_cpu_ids);
-> +	if (!ASSERT_OK(ret, "parse possible CPU mask"))
->  		return;
->
-> -	for (i = 0; i < nr_cpus; i++)
-> -		buf[i] = i;
-> -	sum = (nr_cpus - 1) * nr_cpus / 2;
-> +	nr_cpus = libbpf_num_possible_cpus();
-> +	if (!ASSERT_GT(nr_cpus, 0, "libbpf_num_possible_cpus"))
-> +		goto free_mask;
-> +
-> +	buf = malloc(nr_cpus * sizeof(*buf));
-> +	if (!ASSERT_OK_PTR(buf, "malloc"))
-> +		goto free_mask;
-> +
-> +	for (cpu = 0; cpu < nr_cpu_ids; cpu++) {
-> +		if (!possible[cpu])
-> +			continue;
-> +		buf[slot++] = cpu;
-> +		sum += cpu;
-> +	}
-
-Does this buffer layout match how the kernel expects it?
-
-The userspace side fills buf[] with one entry per possible CPU, storing
-the logical CPU ID at packed index 'slot' (0, 1, 2, ...). For a mask
-like 0,2-3, this creates buf = {0, 2, 3} with 3 entries total.
-
-Looking at the kernel's update path, both percpu array and hash maps
-index the user buffer by logical CPU ID:
-
-kernel/bpf/arraymap.c:469 bpf_percpu_array_update()
-    for_each_possible_cpu(cpu) {
-            ptr = per_cpu_ptr(pptr, cpu);
-            val = (map_flags & BPF_F_ALL_CPUS) ? value : value + size * cpu;
-
-kernel/bpf/hashtab.c:1038 pcpu_copy_value()
-    for_each_possible_cpu(cpu) {
-            ...
-            copy_map_value_long(&htab->map, per_cpu_ptr(pptrs, cpu),
-                    value + off + size * cpu);
-
-With the mask 0,2-3 (num_possible_cpus() = 3, nr_cpu_ids = 4), the
-update walks possible CPUs {0, 2, 3} and indexes the buffer as:
-
-  cpu 0:  *(value + 0)  = buf[0] = 0   (intended)
-  cpu 2:  *(value + 16) = buf[2] = 3   (expects 2, gets 3)
-  cpu 3:  *(value + 24)             (past the 24-byte buffer end)
-
-The userspace layout is packed (3 entries), but the kernel accesses it
-as sparse (indexed by CPU ID). The test sized the buffer for
-num_possible_cpus() bytes, but the kernel's 'size * cpu' indexing can
-exceed that when the possible mask has holes.
-
-Should the userspace buffer either be laid out by CPU ID (sized for
-nr_cpu_ids, with holes at non-possible indices), or should the kernel's
-update path use packed indexing like the lookup direction does?
-
-> +	if (!ASSERT_EQ(slot, nr_cpus, "possible CPU mask weight"))
-> +		goto exit;
->
->  	skel = test_map_lookup_percpu_elem__open();
->  	if (!ASSERT_OK_PTR(skel, "test_map_lookup_percpu_elem__open"))
->  		goto exit;
->
->  	skel->rodata->my_pid = getpid();
-> -	skel->rodata->nr_cpus = nr_cpus;
-> +	skel->rodata->nr_cpu_ids = nr_cpu_ids;
->
->  	ret = test_map_lookup_percpu_elem__load(skel);
-
-[ ... ]
-
-
----
-AI reviewed your patch. Please fix the bug or email reply why it's not a bug.
-See: https://github.com/kernel-patches/vmtest/blob/master/ci/claude/README.md
-
-CI run summary: https://github.com/kernel-patches/bpf/actions/runs/33521264909
---===============4761417725018966106==--
+Reviewed-by: Joe Damato <joe@dama.to>
