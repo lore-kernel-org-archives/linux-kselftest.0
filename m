@@ -1,105 +1,120 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B06E30649C;
-	Tue,  1 Sep 2026 04:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8617537A85A
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 05:22:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788237272; cv=none; b=UzcW/HYuN+U0DLkG6rmaoAmtNOlADrCa/99dSx7OvPtHU0kQ3z1GgDS1bXl7XROL6cqkasMHj3HCV0LicS4aWG2WeVyt5IBV1hSpKhxoI0pRmlomERd0ACkU4jL/8L+BuLVDo2xR49JA+6zrW7/72NGE3HjE5fnISe9QVoWNFbc=
+	t=1788240175; cv=none; b=eokrEmNDw8Udf0MJw9Ya2yJYCkZolX2AZerxfumrGu2tumtj0pG56PagdfG5ygjTXsDpNxSqWPwxgARpa50uh5ig1yLW4lt+iqtAFJUbKPd+3Bca8tfPwbIDDXZQl2OoQlRQSWVrmjo6GScRee/Mf0xWk+XLCahxOpkDJrK0OJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788237272; c=relaxed/simple;
-	bh=I7iSQWo3DIeCl4GG9ImX2V39xbLJgFz5OBrIHCf8Mf0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KL7Zh5u9SuevELtTEgxzQqiPmLpkaQxkAk2sbBqXd3Cw+tWQ724rpCsJO8phK/RPmcDq6T4DRKVx/6g3ihcVpe37125svKqNWyPsXWmR8CClMAClRJf276vpTjeQwGcJRBj0TUREKj5aEqjK1b633Ua3/xMbKmKEMy/4dgVkaUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLCE2Ixd; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788240175; c=relaxed/simple;
+	bh=Fks4pHYSzdgBN83mz688FTg4kFjTXCMANoaD+RC87Cg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=gHIqQA21N4nNnKOTT+MHa4UFwfwdRyqQU4AhtLXbrY1Ia8zMsS9homOR5PoV6WaciLC3vYUimRhvxzZrp2HD3hP5+mwBYUpHrkoN7JtDhqFxlOfIHozVhMr9xEQzMCdRLNxAcfRCzlHgIqtQi8YLcdBHBquyhbD1cZUfC2ofKNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CQEaJ7f5; arc=none smtp.client-ip=209.85.216.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLCE2Ixd"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AA701F000E9;
-	Tue,  1 Sep 2026 04:34:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788237270;
-	bh=m+OX/QoubOtPs5CYX5dE9pYfjfAmb4FTinvx7UvjP30=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=fLCE2Ixdi6gF8dbq+fA6A0ezfDrlAohge5ca00te/Onhm3sslbns7GdQg0TbY55av
-	 6g/Sg/aQ9rZgJhwTlOG0kCbibygq8/VuaycDskgeVhb3bKr3bhbJi5pD9OPD3h8v2J
-	 8WzC5IroH2uWwiwNcVQUj9aV2c37FrLJqh2Gii25Gc4oyggSFj5sxOFm7BcMXPjN6N
-	 P+apq0UF/ojAbu9lpaleI7SCVUBkvda5hSQcM+59xHCh9u0pbDTn8OfVheyk4es96W
-	 dYGH4fSUE2kS5ZA2gQQLt6R6DA6Zq8jTNjIEYk9gAK/hHBa3n1MBoHYenavl53jUtm
-	 zhphVB9A9l8Zw==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 14/17] selftests/damon/sysfs.sh: test probe prep sysfs files
-Date: Mon, 31 Aug 2026 21:34:10 -0700
-Message-ID: <20260901043417.2165-15-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260901043417.2165-1-sj@kernel.org>
-References: <20260901043417.2165-1-sj@kernel.org>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CQEaJ7f5"
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38f5ac7416eso723244a91.3
+        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 22:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788240174; x=1788844974; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date:from:to:cc
+         :subject:date:message-id:reply-to:content-type;
+        bh=1jqsz8r0tg3s4C+AAt1rnTrXqOx6Ok5MB9VnHnrHji0=;
+        b=CQEaJ7f58ahxJGORCtH7ohvxIcjMoQslW20aYJEU3xgG7sI/0SPx9RXs269HM1btEg
+         TLaGaQyILillh2X2IWex8vAWbYT3+szX++oHAicO9jI2jOXI+X6WuDtfSQdu3LJwPee7
+         MbxEm7euhgJfvA0++qg8oes0GVzQebwkNbOv3CPCNWOMPsgc4JFr6Jj93K431WRkK1lG
+         4y0UE6bLPjZ2zUcaFsi066om5dyGyIMOp+8jywL1M2orhlNKJZu5VMAY3q41uFEEWR4L
+         SKbNvzA4VmuFwuR6y8ZWbC3Kf2DeYJA81WqqIxBPij02VPJ9Khw3HaOs8MWvOAyQO0Tn
+         5awQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788240174; x=1788844974;
+        h=content-transfer-encoding:content-type:cc:to:from:subject
+         :message-id:references:mime-version:in-reply-to:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=1jqsz8r0tg3s4C+AAt1rnTrXqOx6Ok5MB9VnHnrHji0=;
+        b=QjF3EDD7V4kbyOKurzDasg67dLn0NWEAXZAIHFi3d0HlgEcovrwHzItdepZt0elNxN
+         ZyDG7UgCsvqu7jO8vZDlIU0pv3k/2VOa3AOIhDw6SCfXRMya12HZX0nYP4KTxXidaYIs
+         wBWdnyLq5uqUnwkpL5Fl/2+9Yv7y8PssRtSyx1QEJ6MShnZujOJ2CnzY+HMu+edXtGsF
+         bvj0p3DZoLb9BJW13UM+4h4++GXpuI6dDpTJjBaZh0RHcnEz7T7+j2vVxL8eyZbk+33R
+         amCYC6zEXawMFbAvvdcv4SFKhkCluZ7GKIlGzS6SnDEjWXv1fH7DE7vZYDq26BPIuDUX
+         tDLg==
+X-Forwarded-Encrypted: i=1; AKwUvBzI4jpwhVJWsbUWw/fVkxWwFI9owfoy5TU6OyxZSBf8JWrKUg3+o1VAKTQKR8X/H251IbTY6y1gjLtYXyzaCtE=@vger.kernel.org
+X-Gm-Message-State: AFuF++mfYJsCkxvPuQIFB5JRxBmI15W/GIIBZLe2gDYaQxsuvNSC6rAg
+	wINz+V9nf94xw/I3gYZD5YichOVzzw5pLGILCDkxyUKZJrkzlTXlih+5AesBYXxmg5cVXkqEo/5
+	I4RhyUsmABQ==
+X-Received: from pjpu5.prod.google.com ([2002:a17:90a:a205:b0:396:4de4:b1a3])
+ (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1811:b0:398:e86b:ce14
+ with SMTP id 98e67ed59e1d1-398e86bcf08mr14606352a91.20.1788240173753; Mon, 31
+ Aug 2026 22:22:53 -0700 (PDT)
+Date: Tue,  1 Sep 2026 05:22:27 +0000
+In-Reply-To: <20260901052250.154532-1-wfelipe@google.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+References: <20260901052250.154532-1-wfelipe@google.com>
+X-Mailer: git-send-email 2.55.0.970.g62bdec98f9-goog
+Message-ID: <20260901052250.154532-2-wfelipe@google.com>
+Subject: [PATCH v5 1/2] selftests/cgroup: test_zswap: wait for cgroup to
+ unpopulate in test_zswap_writeback
+From: Wilson Felipe Pereira <wfelipe@google.com>
+To: Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
+	Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
+	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, 
+	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
+Cc: linux-mm@kvack.org, cgroups@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Wilson Felipe Pereira <wfelipe@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Add basic file operations test for newly introduced DAMON probe prep
-sysfs directories and files.
+When running test_zswap on a single-core VM (-smp 1) with 4GB of RAM,
+test_zswap_writeback intermittently fails on the initial run after boot.
 
-Signed-off-by: SJ Park <sj@kernel.org>
+In test_zswap_writeback(), after waitpid() reaps the child process created
+by test_zswap_writeback_one(), writing "+memory" to cgroup.subtree_control
+can fail with -EBUSY. Under cgroup v2, enabling domain subtree controllers
+is forbidden while any tasks remain in cgroup.procs.
+
+When a child process exits, exit_notify() wakes the parent process,
+allowing waitpid() to return immediately. However, the cgroup populated
+task count (nr_populated_csets) is only decremented when the exiting
+task is switched away via finish_task_switch() -> cgroup_task_dead(). On
+single-core systems, the parent runs before the dead child has been
+switched out, causing "+memory" to fail with -EBUSY if written immediately
+after waitpid() returns.
+
+Fix this by waiting for cgroup.events to report "populated 0\n" via
+cg_read_strcmp_wait() before enabling subtree control.
+
+Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
+Acked-by: Michal Koutn=C3=BD <mkoutny@suse.com>
 ---
- tools/testing/selftests/damon/sysfs.sh | 27 ++++++++++++++++++++++++++
- 1 file changed, 27 insertions(+)
+ tools/testing/selftests/cgroup/test_zswap.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/tools/testing/selftests/damon/sysfs.sh b/tools/testing/selftests/damon/sysfs.sh
-index f7fb94b84e716..ddebde6edabe4 100755
---- a/tools/testing/selftests/damon/sysfs.sh
-+++ b/tools/testing/selftests/damon/sysfs.sh
-@@ -361,6 +361,32 @@ test_intervals()
- 	test_intervals_goal "$intervals_dir/intervals_goal"
- }
- 
-+test_damon_prep()
-+{
-+	damon_prep_dir=$1
-+	ensure_file "$damon_prep_dir/prep_action" "exist" "600"
-+	ensure_write_succ "$damon_prep_dir/prep_action" "set_pgidle" \
-+		"valid input"
-+	ensure_write_fail "$damon_prep_dir/prep_action" "foo" "invalid input"
-+}
-+
-+test_damon_preps()
-+{
-+	preps_dir=$1
-+	ensure_dir "$preps_dir" "exist"
-+	ensure_file "$preps_dir/nr_preps" "exist" "600"
-+	ensure_write_succ "$preps_dir/nr_preps" "1" "valid input"
-+	test_damon_prep "$preps_dir/0"
-+
-+	ensure_write_succ  "$preps_dir/nr_preps" "2" "valid input"
-+	test_damon_prep "$preps_dir/0"
-+	test_damon_prep "$preps_dir/1"
-+
-+	ensure_write_succ "$preps_dir/nr_preps" "0" "valid input"
-+	ensure_dir "$preps_dir/0" "not_exist"
-+	ensure_dir "$preps_dir/1" "not_exist"
-+}
-+
- test_damon_filter()
- {
- 	damon_filter_dir=$1
-@@ -392,6 +418,7 @@ test_probe()
- {
- 	probe_dir=$1
- 	ensure_dir "$probe_dir" "exist"
-+	test_damon_preps "$probe_dir/preps"
- 	test_damon_filters "$probe_dir/filters"
- }
- 
--- 
-2.47.3
+diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/se=
+lftests/cgroup/test_zswap.c
+index 609c48f38524..8f2c9aa4776c 100644
+--- a/tools/testing/selftests/cgroup/test_zswap.c
++++ b/tools/testing/selftests/cgroup/test_zswap.c
+@@ -408,6 +408,8 @@ static int test_zswap_writeback(const char *root, bool =
+wb)
+ 	 * Thus, the parent's setting shall be what's in effect. */
+ 	if (cg_write(test_group, "memory.zswap.max", "max"))
+ 		goto out;
++	if (cg_read_strcmp_wait(test_group, "cgroup.events", "populated 0\n"))
++		goto out;
+ 	if (cg_write(test_group, "cgroup.subtree_control", "+memory"))
+ 		goto out;
+=20
+--=20
+2.55.0.970.g62bdec98f9-goog
+
