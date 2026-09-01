@@ -1,214 +1,65 @@
-Received: from mail-pg1-f198.google.com (mail-pg1-f198.google.com [209.85.215.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C345C3E0220
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 15:04:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744DB4119E4;
+	Tue,  1 Sep 2026 15:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788275081; cv=none; b=Kx7lfTeipYHLYtGdr1iecieF3rrc+GaB9N+ZL+7eBvxupuQe+mtU9WefJRWYDeJ8XDz1wAheZaJly+OL9/Sb2vv3B3IkhaZBBFfaFiDjbvmbCpK3U14EpdoA14O5AoVgxbaG29V1FQnUFUAjLsX+u3cNzM2t1iEPmn8PiBDK78Q=
+	t=1788275203; cv=none; b=FNmW5ddKVK6L9ukiJOru8jnjilTmuSYo2wxOtOd2Twt8UJWnJchZzPtLdLoFd5dwGMl6X3lKTggVSJUW11gnrM2QgQFlIY2J706HMszApPvOrP4GFoZR2YiYyvr7Lc1253MqpZOiIhH0k+IMsu1JK+UOaU+gsx+bC4fwgO9yfnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788275081; c=relaxed/simple;
-	bh=tpdO18xICJ5y9qBS7LZamGFxvdeqjw46wDaY+iq0bPI=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mZkk89khZXsL14rgGgJUduA/noxpTB2myNP1Bdmksc2AOavxSgQQpCNzGSzoSBmFdnY0gkyW9j9CJLFySRCJj3jhSz3lEPYMCgl98m7NECZFN+ZGkJp9q+gmsmhXpjHr9FUq6R0Q3kjTwgPh8qu1tsVBuyp3SWqAJ87CvmvT1xc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VpMQ1djU; arc=none smtp.client-ip=209.85.215.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1788275203; c=relaxed/simple;
+	bh=kBGdIs6tL2YDFvrQWw0NVS53D5C78gFzHlgb4m/1KD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BsVwDxEDvWef0i+8rtXFyKGSks5HUt7zahva2kqluUNyNV3SgawNUMT5n7BKSBFXRLk1NakCLUz2p/d/42rBcsXeXVQCpZFWAD5u3dnP6+7V3uHkDk3EqjFjGPDA+04XgfOeo4S/cS8MJ4It610+qwkFeOp5XqvhJC9MZtzq2NI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VWHdsn+r; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VpMQ1djU"
-Received: by mail-pg1-f198.google.com with SMTP id 41be03b00d2f7-cc1d85c012dso8098276a12.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 08:04:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788275078; x=1788879878; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=UgCARssVX+b4Z43xPlj6rs96AWy4osjZB7qoxt3QrO0=;
-        b=VpMQ1djUopgW/qK8KWR3SFkvRoC6qsf6RnCPqNsBvyJVofjL9RQO0hiRysDCTWI6GE
-         6/JMjQwnUWY39cCeRwcMD0aeAXTnorjw1S2VIXoI4HmcZnAwuxEjILaFedL3ghOENtxD
-         r9zyQ+ywZlvbN7UGfphsSq2ZxR42qLTgngpXjSzztI8LJwMChgRFLtqBr80MquCcwLRc
-         Xo4mPrL4WjbJ3ILa0Suq/hAEH1kF2GNLtJpsuCQVpYOSOd5ag7wmZASnT0BEgjgJyTXY
-         HtZkScNZMoRSn1Z3z4XzV2wKdv1ahsMrwIalS0BXuLjCkHR+l9wxGKsyREKOnLfDlX83
-         TAtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788275078; x=1788879878;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=UgCARssVX+b4Z43xPlj6rs96AWy4osjZB7qoxt3QrO0=;
-        b=h5e3HTSgX+4eFqaZRphl3JC8h/h4PEsHe7ls7QtMl/yxiKsXz3qf+1xNqHiYr8k8Qs
-         +8CHBlfS9cFgOQfq2h8v2+YPoVlPIKqrBh/YrHAiKY/U9QEYCm9BYFTqv7cC2PM2qtJR
-         A7hAkh45L7Y9CLPi/uxyPM6ai0fsxpZjz3bs9YueWInmcJSBKFox31HIBPsR5aU0ReFi
-         xoMrykeWiSEBX26p/7dE8mWE84FAWp8S5d1BbQ+7BM+WuGHc44Lb6SRVgmcfkPQsOqgN
-         C+cPaCGSt55rbc8h0PyqGC/GPEazc3ewg3oSGUd+P0T1HsuOf9Tr+XcJN1fA7eDHLPnA
-         agYA==
-X-Forwarded-Encrypted: i=1; AHgh+RoBQZ+5CmL2cHvci2vm8iGeyqUytFR5DSWoD1XBCL6xVqgH+tletNFWwYKLbb2u1c2OoFXL/Mp4nhzopG7VvMQ=@vger.kernel.org
-X-Gm-Message-State: AFuF++nMjpeXr4ntXAFJILex9+dk7b9naT0MCgKXUpGWYculp7sPbOFp
-	2+n4cFi25UAmf3a/T2HUV+jUO1YfgY3BLnLjraZICEz6983Qtdk74ijTZupfFKSE/90DZFfjlTe
-	HlKKRLw==
-X-Received: from pgcga9.prod.google.com ([2002:a05:6a02:6689:b0:c9e:28e0:16dd])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6017:b0:3b4:61f:1fec
- with SMTP id adf61e73a8af0-3d7adeb5aa1mr14590054637.2.1788275077870; Tue, 01
- Sep 2026 08:04:37 -0700 (PDT)
-Date: Tue, 1 Sep 2026 08:04:37 -0700
-In-Reply-To: <20260901-gmem-selftests-fix-v2-1-5a273153354c@amd.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VWHdsn+r"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B91FD1F000E9;
+	Tue,  1 Sep 2026 15:06:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788275202;
+	bh=hg1WaGzLW3//vGBymCcNQa4v2i+BurtB/8YHsEGAvOM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=VWHdsn+rCnLeTko6mGamN3z4sD/W4HgKNp8JTjoqRXAQvj2hR4bRHcus78BK1lniy
+	 CfO02NfD75PkYbHr3Gw3iI0Av5gtM1gr6DGsh0mSEsg8IM8h2qKYgcDNmqY32Ri9rC
+	 1LBpgmatTTjxg5WdV3Xm89l7+3Xgo3GXxKWgqN9w8pL7esdkEMTeGvK41GQbHdgBJj
+	 KaAbBhqW9B7tje4QzWzHLvY7V9Cp0yOCbESSh+iW08RxEt6MsgIHeB8k1PzK9rAylL
+	 j/9RKPQdg4MqGHfBr4KPPcjBKCsHzgxw6er/DRhsIQB+3YhRglXIJti5Jj0Szgxrq/
+	 Xh5zJZKF87e4g==
+Date: Tue, 1 Sep 2026 08:06:41 -0700
+From: Jakub Kicinski <kuba@kernel.org>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
+ <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, Hangbin Liu
+ <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH net-next 2/2] selftests: netdevsim: add speed testing
+Message-ID: <20260901080641.45d02005@kernel.org>
+In-Reply-To: <apZzvvEQPNHTT26c@fedora>
+References: <20260831-nsim_speed-v1-0-7a651ee65738@kylinos.cn>
+	<20260831-nsim_speed-v1-2-7a651ee65738@kylinos.cn>
+	<20260831150642.68f28691@kernel.org>
+	<apZzvvEQPNHTT26c@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901-gmem-selftests-fix-v2-0-5a273153354c@amd.com> <20260901-gmem-selftests-fix-v2-1-5a273153354c@amd.com>
-Message-ID: <apbphZSNG4KXUNyW@google.com>
-Subject: Re: [PATCH v2 1/4] KVM: selftests: fix maxnode arguments in xapic_ipi_test
-From: Sean Christopherson <seanjc@google.com>
-To: Shivank Garg <shivankg@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, David Hildenbrand <david@kernel.org>, Shuah Khan <shuah@kernel.org>, 
-	Jim Mattson <jmattson@google.com>, Peter Shier <pshier@google.com>, 
-	Ricardo Koller <ricarkol@google.com>, Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 01, 2026, Shivank Garg wrote:
-> migrate_pages() syscall expect maxnode to be one greater than the
-> number of bits in the nodemask. do_migrations() passes the size of
-> nodemask in bytes to migrate_pages(). This sets the maxnode to 8,
-> so kernel only checks node IDs 0-6 even though the nodemask covers
-> node IDs 0-63.
+On Tue, 1 Sep 2026 14:42:06 +0800 Hangbin Liu wrote:
+> On Mon, Aug 31, 2026 at 03:06:42PM -0700, Jakub Kicinski wrote:
+> > On Mon, 31 Aug 2026 11:28:11 +0800 Hangbin Liu wrote:  
+> > > Add a script for netdevsim speed test. Make sure the speed and duplex
+> > > could be changed. And the speed can't be larger than the max speed.  
+> > 
+> > nak, this is not a meaningful test  
 > 
-> Pass the nodemask size in bits plus one because get_nodes() in
-> mempolicy does --maxnode.
+> OK, I thought we should add selftests for new features. And there are
+> netdevsim ethtool tests like ethtool-pause.sh. Since you think this test
+> is meaningless. I will drop it in next version.
 
-Ok, I'm not crazy.  I read all of this multiple times and the manpages seemed
-completely nonsensical.  Looking at QEMU's use of mbind(), it's the kernel that
-sucks:
-
-    /*
-     * We can have up to MAX_NODES nodes, but we need to pass maxnode+1
-     * as argument to mbind() due to an old Linux bug (feature?) which
-     * cuts off the last specified node. This means backend->host_nodes
-     * must have MAX_NODES+1 bits available.
-     */
-    assert(sizeof(backend->host_nodes) >=
-           BITS_TO_LONGS(MAX_NODES + 1) * sizeof(unsigned long));
-
-
-And from https://lore.kernel.org/all/63ccc890-fd57-118b-5997-e0259f507d28@suse.cz:
-
- : And this is I think the reason why we can't change this now. I assume
- : numactl allocates 1024 bits (0 to 1023) and passes 1025 to make sure all
- : 1024 bits are processed. If we change it now, kernel will process 1025
- : bits (0 to 1024) and overflow the allocated bitmask. If it happens to be
- : at the border of mmaped vma, it's a segfault...
-
-This is quite possibly the most confusing syscall interface ever, and IMO the
-manpage is still straight up wrong (well, the kernel is the one that's buggy,
-but the manpage doesn't reflect the kernel's behavior):
-
- : The maxnode argument is the maximum node number in the bit mask plus one
-
-Beacuse it's not the maximum node number plus one, it's the number of nodes in
-the bitask plus one.
-
-What a confusing mess.
-
-
-> Fixes: 678e90a349a4 ("KVM: selftests: Test IPI to halted vCPU in xAPIC while backing page moves")
-> Signed-off-by: Shivank Garg <shivankg@amd.com>
-> ---
->  tools/testing/selftests/kvm/x86/xapic_ipi_test.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-> index 469e3ab16460..0f11f4d7cc3d 100644
-> --- a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-> +++ b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-> @@ -291,7 +291,7 @@ void do_migrations(struct test_data_page *data, int run_secs, int delay_usecs,
->  		 * KVM_CREATE_VCPU ioctl. If that assumption ever changes this
->  		 * test may break or give a false positive signal.
->  		 */
-> -		pages_not_moved = migrate_pages(0, sizeof(nodemasks[from]),
-> +		pages_not_moved = migrate_pages(0, sizeof(nodemasks[from]) * 8 + 1,
-
-BITS_PER_TYPE()
-
-However, given that it's basically impossible for developers to get this right,
-we should add "#define MAXNODE_FOR_MASK(mask) (BITS_PER_TYPE(mask) + 1)" with a
-big comment explain why the code looks wrong.
-
-E.g. patch 3 gets it wrong in get_numa_mem_nodes():
-
-  static inline unsigned long get_numa_mem_nodes(void)
-  {
-       unsigned long nodemask = 0;
-
-       /* Get set of first 64 numa nodes available */
-       if (get_mempolicy(NULL, &nodemask, BITS_PER_TYPE(nodemask), NULL,
-                         MPOL_F_MEMS_ALLOWED))
-               return 0;
-
-       return nodemask;
-  }
-
-because that will only get the mask for bits 62:0.  Even Sashiko got confused in
-patch 4:
-
-  When maxnode is passed to kvm_get_mempolicy() here, the kernel must write at
-  least 5 bytes to return 33 bits of node status. This rounds up to 8 bytes (two
-  32-bit words).
-
-since the disaster of a syscall that is get_mempolicy() and friends will only
-provide 32 bits of node status.
-
-Looking at the rest of the patches in this series, the main goal of fixing the
-extremely-unlikely-to-happen-in-practice bug in patch 4 needs a lot of work.  To
-move along the other cleanups, I'll send the below plus rebased versions of
-patches 1 and 2.
-
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 2233d871a38f..cd5df88bc642 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -80,7 +80,7 @@ static void test_mbind(int fd, size_t total_size)
- {
- 	const unsigned long nodemask_0 = 1; /* nid: 0 */
- 	unsigned long nodemask = 0;
--	unsigned long maxnode = BITS_PER_TYPE(nodemask);
-+	unsigned long maxnode = MAXNODE_FOR_MASK(nodemask);
- 	int policy;
- 	char *mem;
- 	int ret;
-diff --git a/tools/testing/selftests/kvm/include/numaif.h b/tools/testing/selftests/kvm/include/numaif.h
-index 29572a6d789c..84e82857f1c5 100644
---- a/tools/testing/selftests/kvm/include/numaif.h
-+++ b/tools/testing/selftests/kvm/include/numaif.h
-@@ -30,6 +30,16 @@ KVM_SYSCALL_DEFINE(mbind, 6, void *, addr, unsigned long, size, int, mode,
- 		   const unsigned long *, nodemask, unsigned long, maxnode,
- 		   unsigned int, flags);
- 
-+/*
-+ * Caclucate the @maxnode param for the above syscalls given the mask that will
-+ * be passed to the kernel, to account for a longstanding off-by-one bug in the
-+ * kernel that isn't properly documented in the manpages.  The manpages say
-+ * that @maxnode is "the maximum node ID plus one", but the kernel's actual
-+ * behavior is "the number of bits in the mask plus one", i.e. "the maximum
-+ * node ID plus two".
-+ */
-+#define MAXNODE_FOR_MASK(mask) (BITS_PER_TYPE(mask) + 1)
-+
- static inline int get_max_numa_node(void)
- {
- 	struct dirent *de;
-diff --git a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-index 469e3ab16460..1ddcf95d7fe4 100644
---- a/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-+++ b/tools/testing/selftests/kvm/x86/xapic_ipi_test.c
-@@ -248,7 +248,7 @@ void do_migrations(struct test_data_page *data, int run_secs, int delay_usecs,
- 		delay_usecs);
- 
- 	/* Get set of first 64 numa nodes available */
--	kvm_get_mempolicy(NULL, &nodemask, sizeof(nodemask) * 8,
-+	kvm_get_mempolicy(NULL, &nodemask, MAXNODE_FOR_MASK(nodemask),
- 			  0, MPOL_F_MEMS_ALLOWED);
- 
- 	fprintf(stderr, "Numa nodes found amongst first %lu possible nodes "
+to be clear - the entire patch set, not just the test.
