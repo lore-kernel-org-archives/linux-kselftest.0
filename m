@@ -1,179 +1,76 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D26939BFEF
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 05:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F8853793A5;
+	Tue,  1 Sep 2026 05:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788240176; cv=none; b=n+wB1Dbx8/iubQjT4SsLs6a2tboxMO6J4qaicHqUoDXWaDnPdpV/UBr4QgDwauBab+MNSaI45TjkVyaAsLoRFx0qFbRuPEzW/DWZF2R0aS47PRw7oIOFkffGjGqWmZhPqxhHH0Gyrfsidcgt3FHbJZmyqytOksP7dYaD+4HwuhY=
+	t=1788240396; cv=none; b=h9CZCY88qTEHvYYUgxxDr7MBrl0lY15qkD9F7nkQQ55z21R7JdmuuI7oE1cqQ5GAu/RU6zEfscieaSRSEPihUsGeyHgvjhdE1b2G6YN3ij/QOxEBkiojUShL8gQlitRxHXaegWGtcpYUfZDEEjM59tj+rKTnC3wtcbMdfEUezuY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788240176; c=relaxed/simple;
-	bh=LKe2bNctC1A/j7uhC7WkmhcWVRTU9Foz1HcENo/uvJ0=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=gcNKvH5cVcq2+k8PKZlwB1Bn/nW2GZG73ERlt93IynIve+DG+4ZkVkuF9+nLj74C5PD2Yelxdyjah5bTd/24tbGKzsJtbrHPNmd7knkpJKvkeI/ZGqbdD9wXGBxn+wTCfY7U5plsXJWj5zgusmgzx0n0NE6A7LyintwSd/T2AHQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=NnEZ5/P5; arc=none smtp.client-ip=209.85.210.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--wfelipe.bounces.google.com
+	s=arc-20240116; t=1788240396; c=relaxed/simple;
+	bh=V3m/tZGM7F8SH6VyH2dGeW7md8ZBrLPodTFdfZqvaWI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=g7aNU+kCfDmC2c3SYBktG9L2F+iSgRQXFATIXWUPXeyTyyl53lVz8hUxQntON/T0KxXLA93gv2Rjs7PyDY5BVIasxV2u47Ws7QSZoEmqHbVnve1liDHs3xlbOVt6i3T9BpglLu7OJP/AqAPA6aiPP4kGzcg76RWjuOnYxj+Rm5E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nyr59aCU; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="NnEZ5/P5"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-854f274dd69so732429b3a.1
-        for <linux-kselftest@vger.kernel.org>; Mon, 31 Aug 2026 22:22:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788240175; x=1788844975; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=txHyoP6V8LSeV3HcUyvKh0AUgxf1/LIju6BYMJo/v9M=;
-        b=NnEZ5/P5Lc0Zm0nGY8zofUcATHpHcV3LEkf0cGfgqNmVw/KIfXg6roswR6M4/NEhVG
-         HeoQFuqtyvoIpsizNV9NOB5gP4FNbMKkdY/5EEkpQMxjNI6dOr55kJoZw8jvSurbf962
-         XU0r4W+xSCwV81wHeVL0h8v5FNO79ONUGdV4dPjf4QEytX2gUX9WEqmGEHCRCrXHUw+j
-         r9M7q60AVqPQ+TtY+aDF6E2dDN+WJHuOMD5dl8uIoexnX6YeEDVxueA6yJWqhQ495BKo
-         lTpkVF20S7KoUx7MeGM1oot9c2BqLZ9no8KWOu2iNc60eq4VXJ+Xm9GlUdF5Np3JQdzH
-         DX6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788240175; x=1788844975;
-        h=content-transfer-encoding:content-type:cc:to:from:subject
-         :message-id:references:mime-version:in-reply-to:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=txHyoP6V8LSeV3HcUyvKh0AUgxf1/LIju6BYMJo/v9M=;
-        b=E0Ps2/vZdVH14MFB7BokCNQ6glVBdIrMu3elR4NSgcxj7jTf5r7qacgC7uD4dfOHgZ
-         Z8wDdu4Ue35HZLIX2LZ08y+sn9umUq0LYx9tYSsoaIoesaqHbY1POIbd5B/TFX9kp3lN
-         gsZrRGYUQcYYQ4KQBnewwVBMMWEL25uK7xJU31RqK+/+2d9XkzTDaxfmik3VyYX+M9dk
-         MFQiIq4HaHw9DJBcq0MkWF7e340m9hHgWJ8A6fj72h4sycbMN/jdbSkRB5KoeqJ530Oj
-         J8AQJDbRl7xH0MVSJBMal93Wsnb0KdoAGdXsezR32gaCb73I/vxpCHLibjxmpFhMEj07
-         qC+w==
-X-Forwarded-Encrypted: i=1; AHgh+Rpc84U9FILqoTAfbL+9jQAf6zoIaPxygu3oxlr1qhGa/AO8RA30gYnhtX4ymu++i7N5x4HpbiMRTrYxzWZ1z10=@vger.kernel.org
-X-Gm-Message-State: AFuF++mJ2YJ3m+t21Epn3nGxjsdZdxSXXgip39MwsTWyMOFUGzSVDtDd
-	KPDq83P957j5CTIXB9XWc1aN96UsQ+ZFy/M9FThglz+954Ut83iQct0MUYl6tWk55AVUTeKGjYE
-	nBNeW2AwQhg==
-X-Received: from pfbfh35.prod.google.com ([2002:a05:6a00:3923:b0:847:a85b:6c23])
- (user=wfelipe job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:3692:b0:848:5f4f:289d
- with SMTP id d2e1a72fcca58-856277dba33mr51581983b3a.4.1788240174518; Mon, 31
- Aug 2026 22:22:54 -0700 (PDT)
-Date: Tue,  1 Sep 2026 05:22:28 +0000
-In-Reply-To: <20260901052250.154532-1-wfelipe@google.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nyr59aCU"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C11B1F000E9;
+	Tue,  1 Sep 2026 05:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788240394;
+	bh=i0d6uoxX59JE6CAN12/4QKhpNFVtXkpS8bIPHrIcY1g=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Nyr59aCUsrbXnN7xieacuiygyswVayN/35mPUGEaTYtflBfgXvg/AxzCVuwthR+RT
+	 PldsjGvKuMechm69pCYLvgh6QB3NkIWNN0bMifNTEpPYjRwbrUg8Z7vTzj3al1CLqK
+	 W2NItwsCAZCRC99LTtuAxx0lEnVExhA0dhQqlFa5X3GARo60iABAUiLkj2fGqLoU8/
+	 VvWS05k7OvEUAPbfnhzcEWOXAydz8BGQPyjTYog/mN4LtjyqVnIHmDv2QTEhpJXE36
+	 UiPMFLQfkGiexUsiRQ5+zX4XAR3FnN4w+tH6+/hgARbI1pwt/+8jf972udeYiaInKI
+	 /Y3dOh0ARMmcg==
+From: SJ Park <sj@kernel.org>
+To: SJ Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH 00/17] mm/damon: introduce data access-as-a-data attribute
+Date: Mon, 31 Aug 2026 22:26:26 -0700
+Message-ID: <20260901052627.6526-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260901043417.2165-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901052250.154532-1-wfelipe@google.com>
-X-Mailer: git-send-email 2.55.0.970.g62bdec98f9-goog
-Message-ID: <20260901052250.154532-3-wfelipe@google.com>
-Subject: [PATCH v5 2/2] selftests/cgroup: test_zswap: fix implicit unsigned
- promotion bug in test_no_kmem_bypass
-From: Wilson Felipe Pereira <wfelipe@google.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Johannes Weiner <hannes@cmpxchg.org>, 
-	Yosry Ahmed <yosry@kernel.org>, Nhat Pham <nphamcs@gmail.com>, 
-	Chengming Zhou <chengming.zhou@linux.dev>, Tejun Heo <tj@kernel.org>, 
-	"=?UTF-8?q?Michal=20Koutn=C3=BD?=" <mkoutny@suse.com>, Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org, cgroups@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Wilson Felipe Pereira <wfelipe@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-In test_no_kmem_bypass(), delta (stored_pages * page_size - zswapped) is
-checked against stored_pages * page_size / 4 to verify that the pages
-pushed to zswap belong to the test memory cgroup.
+On Mon, 31 Aug 2026 21:33:56 -0700 SJ Park <sj@kernel.org> wrote:
 
-Due to slight stat update timing differences, delta can evaluate to a small
-negative number (e.g. -5MB out of 1GB). Because delta is declared as a
-signed int and stored_pages is an unsigned size_t, C's usual arithmetic
-conversions implicitly promote a negative delta to a large unsigned 64-bit
-integer, causing `delta < stored_pages * page_size / 4` to falsely evaluate
-to 0 and fail the test.
+> TL;DR: extend DAMON's data attributes monitoring system to support page
+> table accessed bit and PG_idle based access monitoring.
 
-Fix this by declaring zswapped and delta as signed long long and comparing
-against a signed threshold, ensuring negative deltas correctly evaluate
-to true.
+Sashiko found [1] a possible race that is introduced by this series.  I will
+fix it in the next revision.
 
-Fixes: a549f9f31561a ("selftests: cgroup: add test_zswap with no kmem bypas=
-s test")
-Signed-off-by: Wilson Felipe Pereira <wfelipe@google.com>
-Acked-by: Michal Koutn=C3=BD <mkoutny@suse.com>
----
- tools/testing/selftests/cgroup/lib/cgroup_util.c    |  9 +++++++--
- .../selftests/cgroup/lib/include/cgroup_util.h      |  1 +
- tools/testing/selftests/cgroup/test_zswap.c         | 13 ++++++++-----
- 3 files changed, 16 insertions(+), 7 deletions(-)
+[1] https://lore.kernel.org/20260901052446.4122-1-sj@kernel.org
 
-diff --git a/tools/testing/selftests/cgroup/lib/cgroup_util.c b/tools/testi=
-ng/selftests/cgroup/lib/cgroup_util.c
-index 2596c12cd864..ce2dd36291f8 100644
---- a/tools/testing/selftests/cgroup/lib/cgroup_util.c
-+++ b/tools/testing/selftests/cgroup/lib/cgroup_util.c
-@@ -172,7 +172,7 @@ long cg_read_long_fd(int fd)
- 	return atol(buf);
- }
-=20
--long cg_read_key_long(const char *cgroup, const char *control, const char =
-*key)
-+long long cg_read_key_long_long(const char *cgroup, const char *control, c=
-onst char *key)
- {
- 	char buf[BUF_SIZE];
- 	char *ptr;
-@@ -184,7 +184,12 @@ long cg_read_key_long(const char *cgroup, const char *=
-control, const char *key)
- 	if (!ptr)
- 		return -1;
-=20
--	return atol(ptr + strlen(key));
-+	return atoll(ptr + strlen(key));
-+}
-+
-+long cg_read_key_long(const char *cgroup, const char *control, const char =
-*key)
-+{
-+	return (long)cg_read_key_long_long(cgroup, control, key);
- }
-=20
- long cg_read_key_long_poll(const char *cgroup, const char *control,
-diff --git a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h b/too=
-ls/testing/selftests/cgroup/lib/include/cgroup_util.h
-index 5d39c709ac7a..13923534003c 100644
---- a/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-+++ b/tools/testing/selftests/cgroup/lib/include/cgroup_util.h
-@@ -69,6 +69,7 @@ extern int cg_read_strstr(const char *cgroup, const char =
-*control,
- 			  const char *needle);
- extern long cg_read_long(const char *cgroup, const char *control);
- extern long cg_read_long_fd(int fd);
-+long long cg_read_key_long_long(const char *cgroup, const char *control, c=
-onst char *key);
- long cg_read_key_long(const char *cgroup, const char *control, const char =
-*key);
- long cg_read_key_long_poll(const char *cgroup, const char *control,
- 			   const char *key, long expected, int retries,
-diff --git a/tools/testing/selftests/cgroup/test_zswap.c b/tools/testing/se=
-lftests/cgroup/test_zswap.c
-index 8f2c9aa4776c..11c67dde705f 100644
---- a/tools/testing/selftests/cgroup/test_zswap.c
-+++ b/tools/testing/selftests/cgroup/test_zswap.c
-@@ -630,11 +630,14 @@ static int test_no_kmem_bypass(const char *root)
- 			break;
- 		/* If memory was pushed to zswap, verify it belongs to memcg */
- 		if (stored_pages > stored_pages_threshold) {
--			int zswapped =3D cg_read_key_long(test_group, "memory.stat", "zswapped =
-");
--			int delta =3D stored_pages * page_size - zswapped;
--			int result_ok =3D delta < stored_pages * page_size / 4;
--
--			ret =3D result_ok ? KSFT_PASS : KSFT_FAIL;
-+			long long zswapped =3D cg_read_key_long_long(
-+				test_group, "memory.stat", "zswapped ");
-+			long long delta =3D
-+				(long long)stored_pages * page_size - zswapped;
-+			long long max_delta =3D
-+				(long long)stored_pages * page_size / 4;
-+
-+			ret =3D (delta < max_delta) ? KSFT_PASS : KSFT_FAIL;
- 			break;
- 		}
- 	}
---=20
-2.55.0.970.g62bdec98f9-goog
 
+Thanks,
+SJ
+
+[...]
