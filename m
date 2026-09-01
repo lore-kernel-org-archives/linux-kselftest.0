@@ -1,153 +1,115 @@
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com [209.85.215.200])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BFF049C4A7
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:26:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D4949E5CB;
+	Tue,  1 Sep 2026 18:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788287210; cv=none; b=o3HKY/Gjb7IxySrKwfwRSomJAonNrzrnJlV51I/AfHxWgziwlTlXJXaJnqsz71HFQwAs5SbOXI9zcOl4gVy6xfs0+gPR4QDtf2Wl0BEaWUa3XMpQjJCk7BRTVsRg9c2pA/AtMEmjJa682dCgXku8D9WLZOQybb06DCwbPMngPRE=
+	t=1788287630; cv=none; b=KN05jLNju+NowUZBNsrjYPwUEPGX21/DCj6NbSWMEDjZyUThmxMW+RX9ObfFLVU1/rnS0rrbJvSnezCn3iRLDHQzZRIM+VtmW6LlbIxT8gd5PqYivrKbIoxpgJ1nn6lKonLT9tlc45sp1+wv+QUEicBeEz81Pis07XBYoR4uHKA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788287210; c=relaxed/simple;
-	bh=vz7vfk19Z+bqyE6zKwD5krwa/0p2VNqmkC4gZJtUZS4=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=X+MJwzpPt4b75eYNTDp9NNCtK+9f611T4ManzDhvmT6Rm/teMCoZu7+FINeZU3sVQHbKkzX1wY3aQqawrnv7DU6nQJwUKBFKGYphCdAoS9wZhwna3txiBfQ+jVjkURfmlX4DO5eFxdr1SuJ61xtQu286nguv7AAbN3LwQNnHfJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=nxB8465w; arc=none smtp.client-ip=209.85.215.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1788287630; c=relaxed/simple;
+	bh=gyHmnvEnpDzLxIA9secLY/W9xDC3IeZgi6WRNA5ZYps=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=q3wwd1CA2kGtgc4ULrsYwTb6G0Y4frxprW6syysjO2gwaPZsl8r29831vmuF4Wm2uj93Zr5mR/ShuXpFM7cTxqKtRK/I+SarXQaOsyPiuUZxFG0sfUUGI/1ZESorJTx8YoYjnIHWSIIfmjFNEBINxJmd2d7hNrFImXHQH2eISbg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=A0yb3DaC; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="nxB8465w"
-Received: by mail-pg1-f200.google.com with SMTP id 41be03b00d2f7-cbb467e56aaso158454a12.1
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:26:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788287207; x=1788892007; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=5v8dwO4qIccjpXs9ZdhBw1lluA5t2BNdQSYlylga9bQ=;
-        b=nxB8465wd02jxyXSBEDLq4Idb0QJSWjaR0KxrjK2ITfpNGuKegdz1Pxa76jdytfIiw
-         vYUIkwuZECZXAAw/H8tlVTN9/2hyvUIw7K4/dfIFKlWMzJj0OjpEfHayidTeqvIX1lik
-         j686n8m+uMuii79vRA5CZ+1nW7KzMnQYulgg6tzwqzIOhGciNmX2N+CDq1xTc1SWbmYQ
-         gh0doBDhGcEtYsePeLeaJtXCW17bN6xhNnW0ctQZlmikL9WyGNtiicLPFHmHRhoE38+5
-         YU2YIJ6IF0SgyeoerLjvTX7NZDrLYgsOdnaG8uVl7J/azPKP4e/UbC8p1qrCp++Umqz0
-         yuLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788287207; x=1788892007;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=5v8dwO4qIccjpXs9ZdhBw1lluA5t2BNdQSYlylga9bQ=;
-        b=RdOpp2VsRF7LQIIhmtHfSfAiT5ray8v32Z8D9gni/4Wd7VY1YxIKCe1rtEkQtnjCSp
-         JOHAMktMssBN8o65bPqbOuBn3XE2vqeUuVlJgVFosQcJAo6ilLGIC2o283+4lU5wHL7R
-         asUviahiO9ml3uyGweMv4O4kAw5y/cPxKkqSPyMATWWDvq+Yw1hmrfNk+poSX4jqXIYc
-         Crf7gldeXeHUSMHtpFsdBtuaP0pCd8eOwSnKFIi89y2OwYchTK+5y1XgKHlcc+xCn1fu
-         FYxBqSwoDXvtCCNMR2PNqE9pev2hex/uSSGwomYxNGla4+9IsNCqzpC/u4vbFnRPYHXn
-         KyPA==
-X-Forwarded-Encrypted: i=1; AHgh+RooD9IhUqfMhlArYbkS6ZXSq4pGj6ddQ2ZNygA7Id/muzqPGIP525MaXjLkfVojDWI1wO4HTfUMtEnYRYf8dGk=@vger.kernel.org
-X-Gm-Message-State: AFuF++nMJK1MyEtJqFcLiCbXkxQQf149d582PzaGy8GqQaFvyeVqO3pY
-	MrqVNLYn2FvggkK3pTUfcqrNRGXYoSCshGxDQHyDqVq6aqFAiIvK8TMvK7Y0jZ4Ywapgrobwtd4
-	+QnqVpw==
-X-Received: from pgbd18-n1.prod.google.com ([2002:a05:6a02:64d2:10b0:cc3:28ba:e8b1])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:7284:b0:3d0:cc29:ff63
- with SMTP id adf61e73a8af0-3d7ae4ed97emr13763648637.12.1788287205983; Tue, 01
- Sep 2026 11:26:45 -0700 (PDT)
-Date: Tue, 1 Sep 2026 11:26:45 -0700
-In-Reply-To: <CA+EHjTzALzghuG5J-LFuG5pXJ4WgEfrMHgwkMHnq1U-D6yS7Pg@mail.gmail.com>
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="A0yb3DaC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1788287619;
+	bh=gyHmnvEnpDzLxIA9secLY/W9xDC3IeZgi6WRNA5ZYps=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=A0yb3DaChar/alzw1Grjv30Hy+sNhyJoL4FD3Y9s8cg+JFOV2NG+v4O95KtpVkc2y
+	 +OjF77XNKQqFGungkclgVtdGRFKabbQL7vwz6IX0Q52TiczwZTBEeVqJBmV7T1tifz
+	 L9hNli9JB/VWbfbaoQUOiFvbKQ+kdhbtTf5nJFGM=
+Date: Tue, 1 Sep 2026 20:33:39 +0200
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Michal Simek <michal.simek@amd.com>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <david@davidgow.net>, Rae Moar <raemoar63@gmail.com>, linux-kernel@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
+Subject: Re: [PATCH 4/4] kunit: qemu_configs: Add microblaze configuration
+Message-ID: <b48fee3e-d113-4551-aed4-100a089e33b5@t-8ch.de>
+References: <20260804-kunit-microblaze-v1-0-6dcdfe12eb40@weissschuh.net>
+ <20260804-kunit-microblaze-v1-4-6dcdfe12eb40@weissschuh.net>
+ <5cd8df03-ad51-460c-9b20-3bf288831b5a@amd.com>
+ <60d4618b-3620-4ecc-a2c6-2b382de68724@t-8ch.de>
+ <40f679a2-fb5d-4d69-96dd-ab6c6718ac07@amd.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
- <20260830-gmem-inplace-conversion-v12-23-85e5fd25252a@google.com> <CA+EHjTzALzghuG5J-LFuG5pXJ4WgEfrMHgwkMHnq1U-D6yS7Pg@mail.gmail.com>
-Message-ID: <apcY5b2o5k04XffH@google.com>
-Subject: Re: [PATCH v12 23/45] KVM: Let userspace disable per-VM mem
- attributes, enable per-gmem attributes
-From: Sean Christopherson <seanjc@google.com>
-To: Fuad Tabba <fuad.tabba@linux.dev>
-Cc: ackerleytng@google.com, aik@amd.com, andrew.jones@linux.dev, 
-	binbin.wu@linux.intel.com, brauner@kernel.org, chao.p.peng@linux.intel.com, 
-	david@kernel.org, jmattson@google.com, jthoughton@google.com, 
-	michael.roth@amd.com, oupton@kernel.org, pankaj.gupta@amd.com, 
-	qperret@google.com, rick.p.edgecombe@intel.com, rientjes@google.com, 
-	shivankg@amd.com, steven.price@arm.com, willy@infradead.org, 
-	wyihan@google.com, yan.y.zhao@intel.com, forkloop@google.com, 
-	pratyush@kernel.org, suzuki.poulose@arm.com, aneesh.kumar@kernel.org, 
-	liam@infradead.org, Paolo Bonzini <pbonzini@redhat.com>, Thomas Gleixner <tglx@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev, 
-	Xiaoyao Li <xiaoyao.li@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <40f679a2-fb5d-4d69-96dd-ab6c6718ac07@amd.com>
 
-On Tue, Sep 01, 2026, Fuad Tabba wrote:
-> Hi Sean, Ackerley,
+On 2026-09-01 15:33:11+0200, Michal Simek wrote:
+> On 8/31/26 17:43, Thomas Weißschuh wrote:
+> > On 2026-08-31 12:48:08+0200, Michal Simek wrote:
+
+(...)
+
+> > > If there is an issue with memmove implementation I can't see any issue to
+> > > disable that options to let it pass from the beginning and solve it
+> > > separately.
+> > 
+> > Ack. Could you take care of this? I have next to no idea about microblaze.
 > 
-> On Mon, 31 Aug 2026 at 01:25, Ackerley Tng via B4 Relay
-> <devnull+ackerleytng.google.com@kernel.org> wrote:
-> ...
-> > +       kvm.gmem_in_place_conversion=
-> > +                       [KVM] Controls whether KVM enables in-place conversion
-> > +                       support for guest_memfd and tracks the private/shared
-> > +                       state of memory per guest_memfd instead of per VM.
-> > +
-> > +                       If enabled, KVM enables the KVM_SET_MEMORY_ATTRIBUTES2
-> > +                       ioctl on guest_memfd file descriptors and disables the
-> > +                       legacy VM-scoped KVM_SET_MEMORY_ATTRIBUTES ioctl for
-> > +                       private memory state tracking. Only the
-> > +                       KVM_MEMORY_ATTRIBUTE_PRIVATE attribute moves to
-> > +                       per-guest_memfd tracking; other attributes remain
-> > +                       per-VM.
-> > +
-> > +                       This parameter toggles KVM's in-place conversion
-> > +                       capability support. Whether a VMM uses separate backends
-> > +                       or out-of-place memory management is determined by
-> > +                       userspace VMM design.
-> > +
-> > +                       Note, this parameter is only available when
-> > +                       CONFIG_KVM_VM_MEMORY_ATTRIBUTES=y. When
-> > +                       CONFIG_KVM_VM_MEMORY_ATTRIBUTES is not set, in-place
-> > +                       conversion is unconditionally enabled.
-> > +
-> > +                       Default is Y (on).
+> On little endian this is passing. I can add it to my todo list but big
+> endian is very very old and likely none is using it anymore.
+
+If it is not supposed to work maybe mark it as BROKEN or disable the
+custom memmove() implementation there and instead rely on the generic
+one from lib/string.c?
+
+> > 
+> > > This should be fragment for Little endian.
+> > 
+> > Thanks, unfortunately this hangs for me with my distros QEMU 11.1.0.
+> > No output, 100% CPU usage during boot. I am using qemu-system-microblaze
+> > instead of qemu-system-microblazel, as the latter is not available
+> > anymore, but the former is documented to also handle little endian
+> > automatically.
+> > 
 > 
-> The parameter is only settable when CONFIG_KVM_VM_MEMORY_ATTRIBUTES=y, and
-> in that config gmem_in_place_conversion initialises to
-> !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES), i.e. N, not Y. Is the doc line
-> wrong, or is N-by-default not what was intended here?
+> I built the latest qemu like this
+> 
+> ../qemu/configure --target-list=microblaze-softmmu,microblaze-linux-user,microblazeel-linux-user
+> --enable-gcrypt --disable-docs
+> 
+> /mnt/projects/xilinx-new-git/qemu.org/build-microblaze/qemu-system-microblaze
+> --version
+> QEMU emulator version 11.1.50 (v11.1.0-779-gd2e570cc0f97)
 
-The doc is wrong.  The intent is to maintain backwards compatibility with existing
-deployments if KVM_VM_MEMORY_ATTRIBUTES=y.
+For me it still doesn't work. I am using the same build of QEMU and GCC
+13.4.0 (or 16.2.0) from crosstools.kernel.org.
 
-> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> > index 05c518c9b8078..929fd3e1a01e6 100644
-> > --- a/virt/kvm/kvm_main.c
-> > +++ b/virt/kvm/kvm_main.c
-> > @@ -103,7 +103,10 @@ static bool __ro_after_init allow_unsafe_mappings;
-> >  module_param(allow_unsafe_mappings, bool, 0444);
-> >
-> >  #ifdef kvm_arch_has_private_mem
-> > -bool __ro_after_init gmem_in_place_conversion = false;
-> > +bool __ro_after_init gmem_in_place_conversion = !IS_ENABLED(CONFIG_KVM_VM_MEMORY_ATTRIBUTES);
-> > +#ifdef CONFIG_KVM_VM_MEMORY_ATTRIBUTES
-> > +module_param(gmem_in_place_conversion, bool, 0444);
-> > +#endif
-> >  EXPORT_SYMBOL_FOR_KVM_INTERNAL(gmem_in_place_conversion);
-> >  #endif
+> And can't see any issue.
+
+(...)
+
+> /mnt/projects/xilinx-new-git/qemu.org/build-microblaze/qemu-system-microblaze
+> -nodefaults -m 1024 -kernel .kunit/arch/microblaze/boot/linux.bin -append
+> 'kunit.enable=1 kunit_shutdown=poweroff' -no-reboot -nographic -accel kvm
+> -accel hvf -accel tcg -serial stdio -M petalogix-ml605
+> qemu-system-microblaze: -accel kvm: invalid accelerator kvm
+> qemu-system-microblaze: -accel hvf: invalid accelerator hvf
+> qemu-system-microblaze: falling back to tcg
+> qemu-system-microblaze: warning: nic xlnx.axi-ethernet.0 has no peer
+> random: crng init done
+> Ramdisk addr 0x00000000,
+> FDT at 0x5058e528
+> Linux version 7.3.0-rc1-00023-g5a713478d535 (monstr@monstr-desktop3)
+> (microblazeel-amd-linux-gcc.real (GCC) 13.4.0, GNU ld (GNU Binutils)
+
+I guess this is a special GCC variant. Could you try with one from
+https://mirrors.edge.kernel.org/pub/tools/crosstool/ ?
+
+(...)
+
+
+Thomas
