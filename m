@@ -1,256 +1,228 @@
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+Received: from mta1.migadu.com (out-252.mta1.migadu.com [95.215.58.252])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4766D49504A
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:07:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AE3827FD4F
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 18:19:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.252
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788286050; cv=none; b=IHbDT6+lTKefvkMND0vi+frrMQoCc2ARh2WJjYc0kJlPLRAC/9rWT10EZ3ZjI4vPvx8/Tx1T/vwERuffvmrluN3EAJ5eXPWEad2GebNvha6EWBLQXuHXr/03zWvf3ZC46V3hJ4z2SxU5xAmdHSXvbhEPV40+xJkTJj+MHttrDP4=
+	t=1788286796; cv=none; b=Q3+eVkZAts5KL8/ajcxSGejn+GclsXSNYRbhU8TPwVOKo5TNG5oqqz/8r+XZvaIrjhss2AUSFjTxSo5X3N2Pc/38wpnLFMIeNI/gD+mWWPe+oNS0BjtFOccxKzBUVFcPcyzR7yQ6E6aEAb6xjH21yx/y6k6lvajlEOtaIkqltu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788286050; c=relaxed/simple;
-	bh=OMBn7uiudnSSq54gX2RVyNKqmRP8wdhdzksmUcad6So=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=LJChjXmUJcex/v2phARghZ6VZ9Bjz3sjbE6aYtK2KFPdzk0ob87lxbqtg9UJf+qSxRxL1Q/zeAJGfo9bbPv00hfZ3ZnHT20hyhJGMlBO8CKWUWIto1EtFmQNPeWactFTIYbRlnw7qSQ6ZW+m2iAMLW6dSsjIN0cY0TTO02drT4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OqhXS1Zt; arc=none smtp.client-ip=209.85.216.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--dmatlack.bounces.google.com
+	s=arc-20240116; t=1788286796; c=relaxed/simple;
+	bh=Eh4Q1j/sDqvvOGlAPAzSg3v//wrdVpn0jOUzlGRcUjA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iuX5hC8ZrMw1vQqRDA9LqVMPWtQp4zS5EBX1PtGUajPEASti5ccf+q+6sVAYk5+CH6/fzepJ1ifbs+Y0fjDblApRQt/RUlsJmmnRV0XGSm1GLdQbQGjoHMTXbNLg1ArhJD1nGx4AOV0PYa8lDob5lxiWRZ5qUn3i/4nY1LuyL/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=NJVyG3+4; arc=none smtp.client-ip=95.215.58.252
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OqhXS1Zt"
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-38ec0f510a9so227041a91.2
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 11:07:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788286048; x=1788890848; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=EEIZgCOB2hl947kqAMQSV91Zoox41yoYUfb/qDb9/EY=;
-        b=OqhXS1Zt/cKsJMBefL6SAk9JugUcqqHOeg5bXHkAdSI68clOpYhCeIouauQcZJuljH
-         gdX1jvxOaDisTk2IgegBQGH9eyWJR+JizNcMStPBdk/3Mb/doyqaCYAUdBjbO+gw7lCm
-         ifaBTQ0FGDZHUQrNadbLJyxNQ7swOUTzE6Bh5G8mQXYTMLxwRY2EXtM1+u5Zkbet1mvZ
-         TiXnHd2d/dFT/B+hx8qWer96kx67KVrrcsQDPcCfsIZ40VDbNz6IN52c9M3wir9GrKLZ
-         gaPC5RRBXcbo+GNubysKzQ+EICpEnOnFLjU2ZKCv+VB0yVc2JYEmbDD++/snikIBKZwC
-         Q9+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788286048; x=1788890848;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=EEIZgCOB2hl947kqAMQSV91Zoox41yoYUfb/qDb9/EY=;
-        b=oUDaxVxYKiJciEUUC/OSiT1BRUfst+SJhY/hHz/fXJnm0EU+odQEgJ/JnrFQe83SoX
-         9TmFe7ZeVpDTWmKMlRLXoJfldHFfk7xhYIIIUEF6nPcxL5U7BpctYrOGLlZeK27Obuu2
-         u5TMyRQxHIcuTrJBNUxK12/VzZTOjwJVgo+Nxm/HS9+f2lD36izB0XFn8BDvhJ5d28mo
-         SgKbdvXOOkatFnltl+TruL+RfaIpcjVyQyDqHmSMs/NpkotSSyZVYnFSjjEh28hnkBtQ
-         /99rOoCmVh9iV8HQD3qhgHuAkzwFAGF8IpnriYRGoNtzMZR24wjVX3uhDKQ+D3hD93oX
-         ZPLg==
-X-Forwarded-Encrypted: i=1; AKwUvBzHp9S9g51IN8R1cqUFkA/PKQFULoXyB0S9Zuib15yuPBnoLRvmgVw14bOT1bFTAjCW96L0X+L4F01alE/B7es=@vger.kernel.org
-X-Gm-Message-State: AFuF++mCPe6pPn5ulWTcFJRA+ZQ/V8DH5re1TAin0q5T/5ZESepTyJtz
-	43Y/EqMM7+QBTVuyUEyprjbCc9Zc2dJtM0rYmqtP4MUJYrAum9ltHOBDDvuZsaVjiE5nTUYEWjS
-	u1WE56z+mRXPAbw==
-X-Received: from pjbiy13.prod.google.com ([2002:a17:90b:16cd:b0:38e:b470:e6db])
- (user=dmatlack job=prod-delivery.src-stubby-dispatcher) by
- 2002:a17:90b:3fcf:b0:398:9be5:b419 with SMTP id 98e67ed59e1d1-3989be5b4camr43204014a91.20.1788286048322;
- Tue, 01 Sep 2026 11:07:28 -0700 (PDT)
-Date: Tue,  1 Sep 2026 18:07:13 +0000
-In-Reply-To: <20260901180713.4185641-1-dmatlack@google.com>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="NJVyG3+4"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=Eh4Q1j/sDqvvOGlAPAzSg3v//wrdVpn0jOUzlGRcUjA=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788286792; v=1; x=1788891592;
+ b=NJVyG3+4k4m2+TzOI+7svPa8jrcI5Gh942ZlRjZpogLfWN/gyLQvfL8HtzRMcowqD1oJZxNt
+ Fz50kFhepy2ABfdZBRiBZOL9ReoL9AB7dh0HBa5dKjsRIMOq/bc1TvZRu8I9SEjOuc/iBfv/TRq
+ t9pIM/BNxbFJf1VYYqg3tqRA=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 25cdd9ad8101d769;
+	Tue, 01 Sep 2026 18:19:41 +0000
+X-Mizu-Trace-ID: 25cdd9ad8101d769
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <f9e77f14-a6a9-4cd3-a217-43abe4747275@linux.dev>
+Date: Tue, 1 Sep 2026 11:19:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260901180713.4185641-1-dmatlack@google.com>
-X-Mailer: git-send-email 2.55.0.966.g6673acef38-goog
-Message-ID: <20260901180713.4185641-6-dmatlack@google.com>
-Subject: [RFC PATCH 5/5] selftests: liveupdate: Add multi-session test
- coverage for session_retrieve_into
-From: David Matlack <dmatlack@google.com>
-To: kexec@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	linux-kselftest@vger.kernel.org, linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>, 
-	Pasha Tatashin <pasha.tatashin@soleen.com>, Pratyush Yadav <pratyush@kernel.org>, 
-	Samiullah Khawaja <skhawaja@google.com>, Shuah Khan <shuah@kernel.org>, 
-	David Matlack <dmatlack@google.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf-next v6 1/2] mm/bpf: Add bpf_proactive_reclaim kfunc
+To: Hui Zhu <hui.zhu@linux.dev>, Roman Gushchin <roman.gushchin@linux.dev>,
+ Shakeel Butt <shakeel.butt@linux.dev>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Andrii Nakryiko <andrii@kernel.org>, Eduard Zingerman <eddyz87@gmail.com>,
+ Ihor Solodrai <ihor.solodrai@linux.dev>, Alexei Starovoitov
+ <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>,
+ Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+ Martin KaFai Lau <martin.lau@linux.dev>, Song Liu <song@kernel.org>,
+ Yonghong Song <yonghong.song@linux.dev>, Jiri Olsa <jolsa@kernel.org>,
+ Emil Tsalapatis <emil@etsalapatis.com>, Shuah Khan <shuah@kernel.org>,
+ Barry Song <baohua@kernel.org>, Geliang Tang <geliang@kernel.org>,
+ linux-kernel@vger.kernel.org, bpf@vger.kernel.org, linux-mm@kvack.org,
+ linux-kselftest@vger.kernel.org
+Cc: Hui Zhu <zhuhui@kylinos.cn>
+References: <cover.1788228773.git.zhuhui@kylinos.cn>
+ <24726feaf836608d78986e2c565461cf809d8326.1788228773.git.zhuhui@kylinos.cn>
+Content-Language: en-US
+From: JP Kobryn <jp.kobryn@linux.dev>
+In-Reply-To: <24726feaf836608d78986e2c565461cf809d8326.1788228773.git.zhuhui@kylinos.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Extend the multi-session Live Update test to specifically verify the new
-LIVEUPDATE_SESSION_RETRIEVE_INTO_FD ioctl path. In Stage 2 of the kexec
-workflow, the test explicitly delegates topology by allocating a clean
-tmpfs target and driving the folios into it through the new API,
-verifying that the data preserves identically to the native KHO mapping.
+Hi Hui,
 
-Signed-off-by: David Matlack <dmatlack@google.com>
----
- .../liveupdate/lib/include/libliveupdate.h    |  1 +
- .../selftests/liveupdate/lib/lu_utils.c       | 33 +++++++++++
- .../selftests/liveupdate/luo_multi_session.c  | 56 ++++++++++++++++---
- 3 files changed, 83 insertions(+), 7 deletions(-)
+On 8/31/26 7:21 PM, Hui Zhu wrote:
+> From: Hui Zhu <zhuhui@kylinos.cn>
+> 
+> Add bpf_proactive_reclaim(), a sleepable kfunc which performs one
+> proactive reclaim pass on a given memory cgroup, similar to a write
+> to memory.reclaim but without retrying until the target is reached.
+> 
+> The kfunc is restricted to BPF_PROG_TYPE_SYSCALL so that reclaim
+> always runs in a clean process context. Generic sleepable programs
+> may execute with filesystem locks held or in NOFS/NOIO contexts,
+> where the reclaim path could deadlock in filesystem shrinkers. A
+> SYSCALL program can still drive reclaim asynchronously through
+> bpf_wq or task_work callbacks, which run in process context and
+> keep the SYSCALL program type, so they can call the kfunc too.
+> 
+> The kfunc refuses to reclaim if the calling task is already in a
+> reclaim context, as a nested reclaim would corrupt the outer reclaim
+> state.
+> 
+> Signed-off-by: Hui Zhu <zhuhui@kylinos.cn>
+> ---
 
-diff --git a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-index fa07fed08364..8ab1e662eeaa 100644
---- a/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-+++ b/tools/testing/selftests/liveupdate/lib/include/libliveupdate.h
-@@ -33,6 +33,7 @@ int luo_session_retrieve_fd(int session_fd, __u64 token);
- 
- int create_and_preserve_memfd(int session_fd, int token, const char *data);
- int restore_and_verify_memfd(int session_fd, int token, const char *expected_data);
-+int luo_verify_retrieve_into_memfd(int session_fd, int token, int mfd, const char *expected_data);
- 
- void create_state_file(int luo_fd, const char *session_name, int token,
- 		       int next_stage);
-diff --git a/tools/testing/selftests/liveupdate/lib/lu_utils.c b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-index 74d41115c281..8ed9c367f92e 100644
---- a/tools/testing/selftests/liveupdate/lib/lu_utils.c
-+++ b/tools/testing/selftests/liveupdate/lib/lu_utils.c
-@@ -324,3 +324,36 @@ int luo_test(int argc, char *argv[],
- 
- 	return 0;
- }
-+
-+int luo_verify_retrieve_into_memfd(int session_fd, int token, int mfd,
-+				   const char *expected_data)
-+{
-+	struct liveupdate_session_retrieve_into_fd retrieve_args = {
-+		.size = sizeof(retrieve_args),
-+		.token = token,
-+		.fd = mfd,
-+	};
-+	long page_size = getpagesize();
-+	void *map = MAP_FAILED;
-+	int ret = -1;
-+
-+	ret = ioctl(session_fd, LIVEUPDATE_SESSION_RETRIEVE_INTO_FD, &retrieve_args);
-+	if (ret < 0) {
-+		ksft_print_msg("ioctl LIVEUPDATE_SESSION_RETRIEVE_INTO_FD failed\n");
-+		return -errno;
-+	}
-+
-+	map = mmap(NULL, page_size, PROT_READ, MAP_SHARED, mfd, 0);
-+	if (map == MAP_FAILED)
-+		return -errno;
-+
-+	if (expected_data && strcmp(expected_data, map) != 0) {
-+		ksft_print_msg("Data mismatch! Expected '%s', Got '%s'\n",
-+			       expected_data, (char *)map);
-+		munmap(map, page_size);
-+		return -EINVAL;
-+	}
-+
-+	munmap(map, page_size);
-+	return 0;
-+}
-diff --git a/tools/testing/selftests/liveupdate/luo_multi_session.c b/tools/testing/selftests/liveupdate/luo_multi_session.c
-index aac24a5f5ce3..7882f49aadaf 100644
---- a/tools/testing/selftests/liveupdate/luo_multi_session.c
-+++ b/tools/testing/selftests/liveupdate/luo_multi_session.c
-@@ -1,4 +1,9 @@
- // SPDX-License-Identifier: GPL-2.0-only
-+#include <sys/mman.h>
-+#include <fcntl.h>
-+#include <unistd.h>
-+#include <sys/mount.h>
-+#include <sys/stat.h>
- 
- /*
-  * Copyright (c) 2025, Google LLC.
-@@ -31,6 +36,8 @@
- static void run_stage_1(int luo_fd)
- {
- 	int s_empty1_fd, s_empty2_fd, s_files1_fd, s_files2_fd;
-+	int tmpfs_fd;
-+	void *map;
- 
- 	ksft_print_msg("[STAGE 1] Starting pre-kexec setup for multi-session test...\n");
- 
-@@ -53,25 +60,50 @@ static void run_stage_1(int luo_fd)
- 	s_files1_fd = luo_create_session(luo_fd, SESSION_FILES_1);
- 	if (s_files1_fd < 0)
- 		fail_exit("luo_create_session for '%s'", SESSION_FILES_1);
-+	ksft_print_msg("  -> Preserving memfd (token %#x, content: \"%s\")\n",
-+		       MFD1_TOKEN, MFD1_DATA);
- 	if (create_and_preserve_memfd(s_files1_fd, MFD1_TOKEN, MFD1_DATA) < 0) {
- 		fail_exit("create_and_preserve_memfd for token %#x",
- 			  MFD1_TOKEN);
- 	}
- 
--	ksft_print_msg("[STAGE 1] Creating session '%s' with two memfds...\n",
-+	ksft_print_msg("[STAGE 1] Creating session '%s' with memfd and tmpfs file...\n",
- 		       SESSION_FILES_2);
- 
- 	s_files2_fd = luo_create_session(luo_fd, SESSION_FILES_2);
- 	if (s_files2_fd < 0)
- 		fail_exit("luo_create_session for '%s'", SESSION_FILES_2);
-+	ksft_print_msg("  -> Preserving memfd (token %#x, content: \"%s\")\n",
-+		       MFD2_TOKEN, MFD2_DATA);
- 	if (create_and_preserve_memfd(s_files2_fd, MFD2_TOKEN, MFD2_DATA) < 0) {
- 		fail_exit("create_and_preserve_memfd for token %#x",
- 			  MFD2_TOKEN);
- 	}
--	if (create_and_preserve_memfd(s_files2_fd, MFD3_TOKEN, MFD3_DATA) < 0) {
--		fail_exit("create_and_preserve_memfd for token %#x",
--			  MFD3_TOKEN);
--	}
-+	ksft_print_msg("  -> Populating custom tmpfs file at /mnt/mfd3_source...\n");
-+	mkdir("/mnt", 0777);
-+	mount("tmpfs", "/mnt", "tmpfs", 0, NULL);
-+	tmpfs_fd = open("/mnt/mfd3_source", O_CREAT | O_RDWR, 0666);
-+	if (tmpfs_fd < 0)
-+		fail_exit("failed to open tmpfs_fd");
-+	ksft_print_msg("  -> Preserving generic tmpfs file (token %#x, content: \"%s\")\n",
-+		       MFD3_TOKEN, MFD3_DATA);
-+	if (ftruncate(tmpfs_fd, getpagesize()) < 0)
-+		fail_exit("ftruncate tmpfs_fd");
-+	map = mmap(NULL, getpagesize(), PROT_WRITE, MAP_SHARED, tmpfs_fd, 0);
-+	if (map == MAP_FAILED)
-+		fail_exit("mmap tmpfs_fd");
-+	strcpy(map, MFD3_DATA);
-+	munmap(map, getpagesize());
-+
-+	struct liveupdate_session_preserve_fd preserve_args = {
-+		.size = sizeof(preserve_args),
-+		.token = MFD3_TOKEN,
-+		.fd = tmpfs_fd,
-+	};
-+	if (ioctl(s_files2_fd, LIVEUPDATE_SESSION_PRESERVE_FD, &preserve_args) < 0)
-+		fail_exit("preserve tmpfs fd");
-+
-+	close(tmpfs_fd);
- 
- 	close(luo_fd);
- 	daemonize_and_wait();
-@@ -110,6 +142,7 @@ static void run_stage_2(int luo_fd, int state_session_fd)
- 
- 	ksft_print_msg("[STAGE 2] Verifying contents of session '%s'...\n",
- 		       SESSION_FILES_1);
-+	ksft_print_msg("  -> Retrieving memfd (token %#x) from session...\n", MFD1_TOKEN);
- 	mfd1 = restore_and_verify_memfd(s_files1_fd, MFD1_TOKEN, MFD1_DATA);
- 	if (mfd1 < 0)
- 		fail_exit("restore_and_verify_memfd for token %#x", MFD1_TOKEN);
-@@ -118,14 +151,23 @@ static void run_stage_2(int luo_fd, int state_session_fd)
- 	ksft_print_msg("[STAGE 2] Verifying contents of session '%s'...\n",
- 		       SESSION_FILES_2);
- 
-+	ksft_print_msg("  -> Retrieving memfd (token %#x) from session...\n", MFD2_TOKEN);
- 	mfd2 = restore_and_verify_memfd(s_files2_fd, MFD2_TOKEN, MFD2_DATA);
- 	if (mfd2 < 0)
- 		fail_exit("restore_and_verify_memfd for token %#x", MFD2_TOKEN);
- 	close(mfd2);
- 
--	mfd3 = restore_and_verify_memfd(s_files2_fd, MFD3_TOKEN, MFD3_DATA);
-+	ksft_print_msg("  -> Creating empty tmpfs file at /mnt/mfd3_target...\n");
-+	mkdir("/mnt", 0777);
-+	mount("tmpfs", "/mnt", "tmpfs", 0, NULL);
-+	mfd3 = open("/mnt/mfd3_target", O_CREAT | O_RDWR, 0666);
- 	if (mfd3 < 0)
--		fail_exit("restore_and_verify_memfd for token %#x", MFD3_TOKEN);
-+		fail_exit("open tmpfs target for retrieve_into");
-+
-+	ksft_print_msg("  -> Validating LIVEUPDATE_SESSION_RETRIEVE_INTO_FD (token %#x)...\n",
-+		       MFD3_TOKEN);
-+	if (luo_verify_retrieve_into_memfd(s_files2_fd, MFD3_TOKEN, mfd3, MFD3_DATA) < 0)
-+		fail_exit("luo_verify_retrieve_into_memfd for token %#x", MFD3_TOKEN);
- 	close(mfd3);
- 
- 	ksft_print_msg("[STAGE 2] Test data verified successfully.\n");
--- 
-2.55.0.966.g6673acef38-goog
+The difflog is missing in these patches.
+
+>   mm/bpf_memcontrol.c | 76 +++++++++++++++++++++++++++++++++++++++++++--
+>   1 file changed, 74 insertions(+), 2 deletions(-)
+> 
+> diff --git a/mm/bpf_memcontrol.c b/mm/bpf_memcontrol.c
+> index 716df49d7647..fd48faa5f8b0 100644
+> --- a/mm/bpf_memcontrol.c
+> +++ b/mm/bpf_memcontrol.c
+> @@ -6,6 +6,7 @@
+>    */
+>   
+>   #include <linux/memcontrol.h>
+> +#include <linux/swap.h>
+>   #include <linux/bpf.h>
+>   
+>   __bpf_kfunc_start_defs();
+> @@ -159,6 +160,55 @@ __bpf_kfunc void bpf_mem_cgroup_flush_stats(struct mem_cgroup *memcg)
+>   	mem_cgroup_flush_stats(memcg);
+>   }
+>   
+> +/*
+> + * Reclaim must not recurse: try_to_free_mem_cgroup_pages() overwrites
+> + * current->reclaim_state, so a nested call would corrupt the outer
+> + * reclaim state. Reclaim windows are marked with PF_MEMALLOC;
+> + * reclaim_state is also checked because it is installed slightly
+> + * before PF_MEMALLOC.
+> + */
+> +static bool bpf_in_reclaim_context(void)
+> +{
+> +	return (current->flags & PF_MEMALLOC) || current->reclaim_state;
+> +}
+> +
+> +/**
+> + * bpf_proactive_reclaim - proactively reclaim memory from a memory
+> + *                         cgroup
+> + * @memcg: the target memory cgroup to reclaim from
+> + * @size:  the amount of memory to reclaim, in bytes
+> + *
+> + * Trigger one proactive reclaim pass on @memcg, similar to a write to
+> + * memory.reclaim, but without retrying until @size is reached.
+> + *
+> + * This kfunc is restricted to BPF_PROG_TYPE_SYSCALL to ensure it runs
+> + * in a clean process context. The SYSCALL program can schedule the
+> + * actual reclaim work via bpf_wq or timers, which also execute in
+> + * safe process context (workqueue, task_work).
+
+On the workqueue aspect, I could see potential issues. The target size
+has no upper bound so the total scan/execution time on the shared
+wq can easily stall other work. Contention on the lru_lock can make
+matters worse because interrupts are disabled while holding the lock. So
+the contention would not only stall other work, but can delay IPI
+handling leading to CSD lock stalls.
+
+It looks like the only existing path that explicitly calls
+try_to_free_mem_cgroup_pages() from a shared wq is the memory.high
+fallback used when the limit is exceeded outside of task context. But
+even in that case, it's more constrained. The reclaim request is bounded
+at MEMCG_CHARGE_BATCH (in high_work_func()) and is limited to one work
+item per memcg.
+
+Would it make sense to follow the existing precedent and use the same
+bound in your kfunc? You could then batch the wq submissions and you
+would also be able to stop submitting in between if needed, like in the
+case of the cgroup dying.
+
+> + *
+> + * Must not be called with a filesystem lock held: the reclaim path
+> + * may deadlock on it via filesystem shrinkers.
+> + *
+> + * Return: The amount of memory reclaimed, in bytes, or 0 if @size is
+> + * smaller than a page or the task is already in a reclaim context.
+> + */
+> +__bpf_kfunc unsigned long bpf_proactive_reclaim(struct mem_cgroup *memcg,
+> +						unsigned long size)
+> +{
+> +	unsigned long nr_reclaimed;
+> +
+> +	if (size < PAGE_SIZE || unlikely(bpf_in_reclaim_context()))
+> +		return 0;
+> +
+> +	nr_reclaimed = try_to_free_mem_cgroup_pages(memcg, size / PAGE_SIZE,
+> +						    GFP_KERNEL,
+> +						    MEMCG_RECLAIM_MAY_SWAP |
+> +						    MEMCG_RECLAIM_PROACTIVE,
+> +						    NULL);
+> +
+> +	return nr_reclaimed * PAGE_SIZE;
+> +}
+> +
+>   __bpf_kfunc_end_defs();
+>   
+>   BTF_KFUNCS_START(bpf_memcontrol_kfuncs)
+> @@ -171,22 +221,44 @@ BTF_ID_FLAGS(func, bpf_mem_cgroup_memory_events)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_usage)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_page_state)
+>   BTF_ID_FLAGS(func, bpf_mem_cgroup_flush_stats, KF_SLEEPABLE)
+> -
+>   BTF_KFUNCS_END(bpf_memcontrol_kfuncs)
+>   
+> +/*
+> + * Proactive reclaim needs a clean process context, so it is restricted
+> + * to BPF_PROG_TYPE_SYSCALL. The bpf_wq and task_work callbacks that a
+> + * SYSCALL program schedules run as the same program type, so they can
+> + * still invoke it; generic sleepable programs (e.g. fentry on reclaim
+> + * paths, inode_rmdir) cannot.
+> + */
+> +BTF_KFUNCS_START(bpf_memcontrol_reclaim_kfuncs)
+> +BTF_ID_FLAGS(func, bpf_proactive_reclaim, KF_SLEEPABLE)
+> +BTF_KFUNCS_END(bpf_memcontrol_reclaim_kfuncs)
+> +
+>   static const struct btf_kfunc_id_set bpf_memcontrol_kfunc_set = {
+>   	.owner          = THIS_MODULE,
+>   	.set            = &bpf_memcontrol_kfuncs,
+>   };
+>   
+> +static const struct btf_kfunc_id_set bpf_memcontrol_reclaim_kfunc_set = {
+> +	.owner          = THIS_MODULE,
+> +	.set            = &bpf_memcontrol_reclaim_kfuncs,
+> +};
+> +
+>   static int __init bpf_memcontrol_init(void)
+>   {
+>   	int err;
+>   
+>   	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_UNSPEC,
+>   					&bpf_memcontrol_kfunc_set);
+> -	if (err)
+> +	if (err) {
+>   		pr_warn("error while registering bpf memcontrol kfuncs: %d", err);
+> +		return err;
+> +	}
+> +
+> +	err = register_btf_kfunc_id_set(BPF_PROG_TYPE_SYSCALL,
+> +					&bpf_memcontrol_reclaim_kfunc_set);
+> +	if (err)
+> +		pr_warn("error registering bpf reclaim kfuncs: %d", err);
+>   
+>   	return err;
+>   }
 
