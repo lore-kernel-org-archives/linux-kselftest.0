@@ -1,245 +1,153 @@
-Received: from mta1.migadu.com (out-146.mta1.migadu.com [95.215.58.146])
+Received: from mail-oo1-f46.google.com (mail-oo1-f46.google.com [209.85.161.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0F4476CC2
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 11:12:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8B11351C35
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 11:32:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788261132; cv=none; b=QdtX0zDnyCSZT1hfkmnCOQND8Rp5S6r+9FpAtgeAN1TlakZj4PZpeYSusuBQ2lh5wvwEWEbBn/a5g9K7aGJ2z4bLweSTEAZFb0EwdbwvfgoTipArzwMu/r+LRjRBoykeDZ/Y8/AUC/rECJLZldx67ZRmgmugqWQvGkHoddL8H2o=
+	t=1788262344; cv=none; b=uesiWor50aAWAxoUXdFgw+M9pthSDGih7zy26U3fyTmc6WmNRgvTRAxms8h+95t64Pv0kQN/KJdXY7pspL940TXNf+u4wBBLJua0ueKmdp2IV0N6Bly5evkwke8Hk9wft4CAl/UFvH9ZXxi+ptL918Zdirtuy8FgR6Hfu35LKpA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788261132; c=relaxed/simple;
-	bh=CsioD9lZ+yh5tHGXfu+MRuQR2cyaW3t4YdYHU6hudFc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cXSm3IR7PpMhdxESNyCTAUE6lV2uckTYnbpFhNXr+TX0l681W4/LqWPXywfdi3lL0mKRMHtC7v7JV3bFyuuy+6zX+buL2nS7AXnp6nsRulQGwWpT5YTOI/dhw1GTVbKYZ8Y3+VHKHgmYBGhnSC+PCIapcM2w4/sQ3Uy7bSyZKVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Y4r7+eDh; arc=none smtp.client-ip=95.215.58.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788262344; c=relaxed/simple;
+	bh=NRVm+NpeqhDaHD1stYDATNicwntE7vF0BHXpPUPT4Ug=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tZM2urDFduTSQmrKLdPVnyeJOPTbvYpQKNM6zD6idRgerCnKzt9uP+/xPW7R5vRx9CGAupYS1J7L0fdpU7CD+LJ2lKZm2wPyndIz9gKjFa344YT1D+HWbu8fejqT6JYAmZXhkMFocwnYpJAIu1UqlH82CMppBoHl2Phg5XSm7iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b=WQN2egFW; arc=none smtp.client-ip=209.85.161.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marliere.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Y4r7+eDh"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=CsioD9lZ+yh5tHGXfu+MRuQR2cyaW3t4YdYHU6hudFc=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788261128; v=1; x=1788865928;
- b=Y4r7+eDhd1LxClrS2QBkx2ZNhmITI1JMjs3J0foyAH6u0nZkaJybE03m+aSnQTKS13NqzhUh
- 36ytSm700m0Gy+3vekPB2+StjLS/+8rh2Gkst518rVYSbLsOs8HMTq24cqe85JxKD3dRzr/sx4v
- 3HXE/+Q/oGjR+Hnvm87iAEFk=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id d737496784dc4958;
-	Tue, 01 Sep 2026 11:12:08 +0000
-X-Mizu-Trace-ID: d737496784dc4958
-X-Migadu-Flow: FLOW_OUT
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b5e5aaf7deso7290e87.0
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 04:12:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AKwUvBzOh7adHLh4qH//rNUiStKuUav6dHjxzq6ihsrp1lQRs5wC9ZJqFZ9Vgo41aIZx62Ts4ZkprTIVIEpeVQ8IiF0=@vger.kernel.org
-X-Gm-Message-State: AFuF++nlFTHxbSwoa8xRmoSzErtP2u4wF/JkL2nbPhDaAXxC2USnmF4s
-	qAUTzYb7GnwQoau9zv+lHPDGEJuynkgs5n1nebqibcZy7IdBVhRrfv8ajykT0V6x3xhh3fm1hKr
-	C+YFyzF0OiOCe1FBj/VjhXbBnM/5jDx69Po+gZnmj
-X-Received: by 2002:a05:6512:b8d:b0:5aa:79d6:b559 with SMTP id
- 2adb3069b0e04-5b5fefc86c9mr146222e87.0.1788261126243; Tue, 01 Sep 2026
- 04:12:06 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=marliere.net header.i=@marliere.net header.b="WQN2egFW"
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-6b1b233ca98so447823eaf.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 04:32:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788262341; x=1788867141;
+        h=cc:to:message-id:content-transfer-encoding:content-type
+         :mime-version:subject:date:from:dkim-signature:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=hEmWNrm2JJeYYsOZMUufG1GNwpjiBF7RXVW8N5KgjKA=;
+        b=fNhUAMeSYxRT7e20KRcv+cPKOCgbSjBnOLd1LJIeRwPOVEdnIyL4lr6kGErOiUz9Vj
+         CgUpLdb7V9O4kfRzfAA9S6+wPT/G1fB/GRHrFZ1X0uTbDndfeQ0SMhdlnEvnbKbwlPzt
+         Ti8uUpMPUoT2R1JlOYu/uGv3wEtA8TCNdcHRzBKy2msc1/a+I1Mw42Sdw4aAzDbLpuBu
+         aiiSAXyw2ilihjvwDUj1k0AO4aUcXfuJRz5hiawtvGwlVXb92XC0fXb9Hdn1n0W94qQt
+         7DeYkShmYa3kktP7IiMknxM66YTvF/cebb3VzmeD/b+Go3M1I6Ay8JbAOKThdMq+m+AB
+         tGgA==
+X-Forwarded-Encrypted: i=1; AHgh+Rr1iMVxZjXjNJMb894+mJIUceanSREdFD2dSryV7hRPYZcD+v/GAsodPee8cqhk9WK0GMVHnYeVgI76Z9O3B90=@vger.kernel.org
+X-Gm-Message-State: AFuF++lpQ2F5P0KVOj2JeG48hxd3PMGNOeK9wjefSqhk95SY5lNh0g5d
+	BpiPYVOtbMg5i/TWX7A2cklzokKPl9J1/YGqnLOpr3A6cilBDau5rBt8
+X-Gm-Gg: AR+sD12DF9XurCni+to/8g+lzj8+8HoO760VCdyHl+T8qB28PKlOS+UUE9/xU6KMfkY
+	Y2xXSKtYj3GOo5Mpkze3mbnGSuxHazOcf3ijE+H66dLmlV0P6zna+9FwKjVecyfPB+QLeKrpROY
+	7a9xflorfQY4EADlsFKyiLwvyHcBJzDqQZQSx6PmSLE0h+KV6vDcMXH/J9CWbYfY9tgpHxnADeI
+	QOva8QLrIfBoxk2XPSljoM1P7vo5zxGgBWJKV/EroWawoWUww0Z1l7KBvSktBehcHAb+5DuHW7O
+	cFkCMsXYB5+v5lr9SUuiyslvP0TlGpTqnrZUVYNe6UCE6uwyIzTS33C1NM9lI+xe4a3YdooVHm8
+	PpxHyhaD+b8xLp+5Kq7LayIpdDQJfMUoiSSYju9XRQgm+QFMvyENNIaOCRntiE+Ms71oqPrVz7P
+	/jqdO3ojbS1jZPYoCZMD9pBxrqDyMh6/NQKNDPwhH4eI2cjmPB+jKCeSRvFwr38hCkYrH/DC3qj
+	4c5HBEyIqrBFCsGGv7d5uHXIkTFOuvb8yYOBToslOVeMRf7wEyxeizT32xop5n/JQ==
+X-Received: by 2002:a05:6820:2017:b0:6b1:5d5e:679d with SMTP id 006d021491bc7-6b1c679e571mr29869969eaf.28.1788262341283;
+        Tue, 01 Sep 2026 04:32:21 -0700 (PDT)
+Received: from mail.marliere.net (137.65.66.34.bc.googleusercontent.com. [34.66.65.137])
+        by smtp.gmail.com with ESMTPSA id 006d021491bc7-6b1ce2916a8sm13636111eaf.10.2026.09.01.04.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 04:32:20 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id CEFE660D1F;
+	Tue,  1 Sep 2026 11:32:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marliere.net;
+	s=dkim; t=1788262338;
+	h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=hEmWNrm2JJeYYsOZMUufG1GNwpjiBF7RXVW8N5KgjKA=;
+	b=WQN2egFWZ83BoX6boVS3fAw8WgfZ0I6glPax5x/l5hbQkcOA9qdHlRmUwJG+L2QAXOWQ/0
+	2FrGxt1oEu7Ia50mWE2W6OkRNFR4u7NwYGZWibuoBTBgBodLpNhOh+acBmuZNsq08XE7NS
+	9YzPM0GoZPq7Jrjmk9spTbWqny69Dsy7LG7r4zLxoRafEci2SQTaJbhGSjG3vQmEvOX/Dw
+	t01lxVeOUVkwGOVkURI8osV7fmMYjiTYntFQry4vfqf26fU3MtyoBYatP4FdwZfVDpZ4mk
+	OAFOm1FLZlW8D08mPh3r93zq2KrgjxnD2PKfxR9g6ebAwRDb94DAQNznjeXx4A==
+From: =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+Date: Tue, 01 Sep 2026 08:31:58 -0300
+Subject: [PATCH net] selftests/net: Fix flaky bind_wildcard due to
+ ephemeral port race
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com> <20260830-gmem-inplace-conversion-v12-44-85e5fd25252a@google.com>
-In-Reply-To: <20260830-gmem-inplace-conversion-v12-44-85e5fd25252a@google.com>
-From: Fuad Tabba <fuad.tabba@linux.dev>
-Date: Tue, 1 Sep 2026 12:11:00 +0100
-X-Gmail-Original-Message-ID: <CA+EHjTz+nwFCn66MG2QjiB84_OyOoJowTHr-Ru2uSEpvO+yLCg@mail.gmail.com>
-X-Gm-Features: AcwNN1Ub9J3hFyuS9Dks6Hz8-OwxznQ12Dvlx31FuOxfKnRbAtrjNgxw2UfRugY
-Message-ID: <CA+EHjTz+nwFCn66MG2QjiB84_OyOoJowTHr-Ru2uSEpvO+yLCg@mail.gmail.com>
-Subject: Re: [PATCH v12 44/45] KVM: selftests: Update private_mem_conversions_test
- for in-place conversions
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
-	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
-	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
-	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
-	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
-	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
-	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
-	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
-	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
-	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
-	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
-	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
-	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
-	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
-	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
-	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
-	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
-	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
-	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
-	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-mm@kvack.org, linux-coco@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260901-selftests-net-bind_wildcard_race-v1-1-880ddc7ed62e@marliere.net>
+X-B4-Tracking: v=1; b=H4sIAK23lmoC/yWN2wrCMBBEf6Xss8E0Qr38ikjZbLZ2pcaSjRco/
+ XcTfTzDzJkFlJOwwqlZIPFLVB6xQLtpgEaMVzYSCoOzrrNH2xrlacisWU3kbLzE0L9lCoQp9Am
+ JDVnb7dEF2tkDFM2ceJDP7+IMZQOXf6hPf2PKVV5rHpWNTxhprFEpbu8oEdb1C+5nDyOkAAAA
+X-Change-ID: 20260901-selftests-net-bind_wildcard_race-c0067a2dc308
+To: "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Ricardo_B=2E_Marli=C3=A8re_=28SUSE=29?= <ricardo@marliere.net>
+X-Mailer: b4 0.16.0
+X-Developer-Signature: v=1; a=openssh-sha256; t=1788262332; l=2208;
+ i=ricardo@marliere.net; h=from:subject:message-id;
+ bh=NRVm+NpeqhDaHD1stYDATNicwntE7vF0BHXpPUPT4Ug=;
+ b=U1NIU0lHAAAAAQAAADMAAAALc3NoLWVkMjU1MTkAAAAgguRCc5X8/UX9M40lkMnr//aFGOhce
+ x5ezt8MFNUFlqYAAAAGcGF0YXR0AAAAAAAAAAZzaGE1MTIAAABTAAAAC3NzaC1lZDI1NTE5AAAA
+ QAQvMA+iXtgn9SGn6DViwidV1JIXPs63Piol0t0aGONt4f1I1seQ/5dbxTlA5gP59kodzeGuJvW
+ Uyx2XB5WcnAE=
+X-Developer-Key: i=ricardo@marliere.net; a=openssh;
+ fpr=SHA256:pzhe0fJpYLz+3cZ33FFPhIfaUElk9CXPFFXmalIH+1g
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, 31 Aug 2026 at 01:25, Ackerley Tng via B4 Relay
-<devnull+ackerleytng.google.com@kernel.org> wrote:
->
-> From: Ackerley Tng <ackerleytng@google.com>
->
-> Update private_mem_conversions_test for in-place conversions. In-place
-> conversions support is detected in selftests with kvm_has_gmem_attributes.
->
-> With in-place conversions, specifying userspace_addr from some other memory
-> provider that is not the guest_memfd associated with the memslot is a user
-> error, since KVM will only use both shared and private memory from the
-> guest_memfd.
->
-> Hence, when kvm_has_gmem_attributes, only test in-place conversions with
-> single backing, where guest_memfd provides both shared and private memory.
->
-> For single backing, guest_memfd must be created with
-> GUEST_MEMFD_FLAG_MMAP. Initialize the guest_memfd as shared to align with
-> how memory would default to shared when shared/private state was tracked at
-> the VM level (the test expects this, it was written for
-> non-in-place-conversions).
->
-> When handling a hypercall to set attributes, use
-> vm_mem_set_memory_attributes() to send the ioctl to the guest_memfd instead
-> of the VM.
->
-> When testing in-place conversions (single-backing), don't allow the user to
-> configure src_type, since src_type will be ignored. Don't use src_type to
-> determine alignment for rounding up per-cpu test memory size, since
-> guest_memfd's backing page size is always the system PAGE_SIZE.
->
-> Co-developed-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+bind_wildcard picks an ephemeral port by binding fd[0] with port 0, reads
+it back with getsockname(), and then reuses that exact port number for the
+other addresses/families in fd[1..7]. This all happens in the default
+network namespace, so unrelated processes on the same host are drawing from
+the very same ephemeral port range (net.ipv4.ip_local_port_range) at the
+same time.
 
-Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
+Such a process can independently get assigned that exact port number on a
+different, non-conflicting address in the short window between fd[0]'s
+bind() and fd[1]'s, making fd[1]'s bind() fail with EADDRINUSE for reasons
+that have nothing to do with the wildcard-bind behavior under test, e.g.:
 
-Cheers,
-/fuad
+  # bind_wildcard.c:775:plain:Expected ret (-1) == 0 (0)
+  # plain: Test terminated by assertion
+  not ok N bind_wildcard.v6_local_v4_local.plain
 
+Fix it the same way so_incoming_cpu.c, tcp_port_share.c and
+reuseport_dualstack.c already do: unshare into a fresh network namespace
+and bring lo up, so there is nobody else to race with for the port.
 
-> ---
->  .../kvm/x86/private_mem_conversions_test.c         | 57 +++++++++++++++++-----
->  1 file changed, 44 insertions(+), 13 deletions(-)
->
-> diff --git a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> index cf50e9a332c5b..33b610383693b 100644
-> --- a/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> +++ b/tools/testing/selftests/kvm/x86/private_mem_conversions_test.c
-> @@ -306,9 +306,12 @@ static void handle_exit_hypercall(struct kvm_vcpu *vcpu)
->         if (do_fallocate)
->                 vm_guest_mem_fallocate(vm, gpa, size, map_shared);
->
-> -       if (set_attributes)
-> -               vm_set_memory_attributes(vm, gpa, size,
-> -                                        map_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE);
-> +       if (set_attributes) {
-> +               u64 attrs = map_shared ? 0 : KVM_MEMORY_ATTRIBUTE_PRIVATE;
-> +
-> +               vm_mem_set_memory_attributes(vm, gpa, size, attrs);
-> +       }
-> +
->         run->hypercall.ret = 0;
->  }
->
-> @@ -352,8 +355,21 @@ static void *__test_mem_conversions(void *__vcpu)
->                                 size_t nr_bytes = min_t(size_t, vm->page_size, size - i);
->                                 u8 *hva = addr_gpa2hva(vm, gpa + i);
->
-> -                               /* In all cases, the host should observe the shared data. */
-> -                               memcmp_h(hva, gpa + i, uc.args[3], nr_bytes);
-> +                               if (kvm_has_gmem_attributes &&
-> +                                   uc.args[0] == SYNC_PRIVATE) {
-> +                                       TEST_EXPECT_SIGBUS(READ_ONCE(*hva));
-> +                               } else {
-> +                                       /*
-> +                                        * If not testing in-place conversion
-> +                                        * (dual backing), the host should
-> +                                        * always observe shared data, since the
-> +                                        * shared memory is a separate page.
-> +                                        *
-> +                                        * For SYNC_SHARED, test that the host
-> +                                        * can see shared memory.
-> +                                        */
-> +                                       memcmp_h(hva, gpa + i, uc.args[3], nr_bytes);
-> +                               }
->
->                                 /* For shared, write the new pattern to guest memory. */
->                                 if (uc.args[0] == SYNC_SHARED)
-> @@ -369,20 +385,29 @@ static void *__test_mem_conversions(void *__vcpu)
->         }
->  }
->
-> +/* Align each vCPU's chunk of memory naturally to the size of the backing store. */
-> +static size_t compute_per_cpu_size(enum vm_mem_backing_src_type src_type)
-> +{
-> +       size_t alignment;
-> +
-> +       if (kvm_has_gmem_attributes)
-> +               alignment = getpagesize();
-> +       else
-> +               alignment = get_backing_src_pagesz(src_type);
-> +
-> +       return align_up(PER_CPU_DATA_SIZE, max_t(size_t, SZ_2M, alignment));
-> +}
-> +
->  static void test_mem_conversions(enum vm_mem_backing_src_type src_type, u32 nr_vcpus,
->                                  u32 nr_memslots)
->  {
-> -       /*
-> -        * Allocate enough memory so that each vCPU's chunk of memory can be
-> -        * naturally aligned with respect to the size of the backing store.
-> -        */
-> -       const size_t alignment = max_t(size_t, SZ_2M, get_backing_src_pagesz(src_type));
-> -       const size_t per_cpu_size = align_up(PER_CPU_DATA_SIZE, alignment);
-> +       const size_t per_cpu_size = compute_per_cpu_size(src_type);
->         const size_t memfd_size = per_cpu_size * nr_vcpus;
->         const size_t slot_size = memfd_size / nr_memslots;
->         struct kvm_vcpu *vcpus[KVM_MAX_VCPUS];
->         pthread_t threads[KVM_MAX_VCPUS];
->         struct kvm_vm *vm;
-> +       u64 gmem_flags;
->         int memfd, i;
->
->         const struct vm_shape shape = {
-> @@ -397,12 +422,16 @@ static void test_mem_conversions(enum vm_mem_backing_src_type src_type, u32 nr_v
->
->         vm_enable_cap(vm, KVM_CAP_EXIT_HYPERCALL, (1 << KVM_HC_MAP_GPA_RANGE));
->
-> -       memfd = vm_create_guest_memfd(vm, memfd_size, 0);
-> +       gmem_flags = 0;
-> +       if (kvm_has_gmem_attributes)
-> +               gmem_flags = GUEST_MEMFD_FLAG_MMAP | GUEST_MEMFD_FLAG_INIT_SHARED;
-> +
-> +       memfd = vm_create_guest_memfd(vm, memfd_size, gmem_flags);
->
->         for (i = 0; i < nr_memslots; i++)
->                 vm_mem_add(vm, src_type, BASE_DATA_GPA + slot_size * i,
->                            BASE_DATA_SLOT + i, slot_size / vm->page_size,
-> -                          KVM_MEM_GUEST_MEMFD, memfd, slot_size * i, 0);
-> +                          KVM_MEM_GUEST_MEMFD, memfd, slot_size * i, gmem_flags);
->
->         for (i = 0; i < nr_vcpus; i++) {
->                 gpa_t gpa =  BASE_DATA_GPA + i * per_cpu_size;
-> @@ -462,6 +491,8 @@ int main(int argc, char *argv[])
->         while ((opt = getopt(argc, argv, "hm:s:n:")) != -1) {
->                 switch (opt) {
->                 case 's':
-> +                       TEST_ASSERT(!kvm_has_gmem_attributes,
-> +                                   "src_type is only configurable when testing without in-place conversion");
->                         src_type = parse_backing_src_type(optarg);
->                         break;
->                 case 'n':
->
-> --
-> 2.55.0.897.gb25b4bd76c-goog
->
->
+Signed-off-by: Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+---
+ tools/testing/selftests/net/bind_wildcard.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/tools/testing/selftests/net/bind_wildcard.c b/tools/testing/selftests/net/bind_wildcard.c
+index 7d11548b2c61..be3298c791b2 100644
+--- a/tools/testing/selftests/net/bind_wildcard.c
++++ b/tools/testing/selftests/net/bind_wildcard.c
+@@ -1,6 +1,8 @@
+ // SPDX-License-Identifier: GPL-2.0
+ /* Copyright Amazon.com Inc. or its affiliates. */
+ 
++#define _GNU_SOURCE
++#include <sched.h>
+ #include <sys/socket.h>
+ #include <netinet/in.h>
+ 
+@@ -716,6 +718,9 @@ static void setup_addr(FIXTURE_DATA(bind_wildcard) *self, int i,
+ 
+ FIXTURE_SETUP(bind_wildcard)
+ {
++	ASSERT_EQ(unshare(CLONE_NEWNET), 0);
++	ASSERT_EQ(system("ip link set lo up"), 0);
++
+ 	setup_addr(self, 0, variant->family[0], variant->addr[0]);
+ 	setup_addr(self, 1, variant->family[1], variant->addr[1]);
+ 
+
+---
+base-commit: 1376afc7660bad2a1a5ee0876898312a486cf8bd
+change-id: 20260901-selftests-net-bind_wildcard_race-c0067a2dc308
+
+Best regards,
+--  
+Ricardo B. Marlière (SUSE) <ricardo@marliere.net>
+
