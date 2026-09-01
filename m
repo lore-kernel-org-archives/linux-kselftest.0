@@ -1,464 +1,204 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from list.codeweavrs.com (list.codeweavers.com [4.36.192.163])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8800B3382F7;
-	Tue,  1 Sep 2026 21:51:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744C536CDE8;
+	Tue,  1 Sep 2026 21:57:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=4.36.192.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788299489; cv=none; b=D6YKRHDKKAGVrg/RKWtBMLPXkRbtuzSlMh4m9NdSi/rdxV2hvTselzLAkWpEVE5PSKBWPzvvq7ZByzXL4EcXI08BPmIwEAByzo+0Q8bG3eXRHuFo6kEfxiQVfrVkIXpyniHfHUyQbTRwDqzmVXyyf+3iQk7awlOZ7ww7wFpMVds=
+	t=1788299850; cv=none; b=lDnWZKqYGTmff36WiyIWjCiO0kxpWItFAG5g20DEY7J2OXmF+9Otq5qTEo6ggm3nMh+blGrFrqTMuZB3ummz7hMqXwJFldRuiep9koHylJ/il6hfIkRB2gJICPc0BM6odcsPNqK4qfi1j6JdR5HHv+cofzR0wiS/qTnyFB5S90Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788299489; c=relaxed/simple;
-	bh=TIDZs+B7zu6gVSc89XYBcC4NUO41wOhM/wTzdrOu6fU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=hKr43TVRxl/2IgKKM29PzShIIDtRbTXFnpG5RLdqtZmAIEFf9fjdsIuwE/IbZhDr9ktp0IWZaMzDEkN/yKefa7AtljqQT6Ovqj/Y07i+fPwd+WARUwmlIP/UbBUwEP7LFnqCm3VaNgGwKNSMlNTOwNbVgaYyeFNHKcDAQbrYwWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ChYhXE29; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788299850; c=relaxed/simple;
+	bh=L5V/8EYLbsQScQk/LGobiujEWFyQmY2NkHwtlvEUn7g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=fYiOeaSvyKHeaMjEVenebAuYHEH6jNREHY1eK5SKnRA6WisxfoNX3vIqCMULFtSgDGU7JqgQ99dAXa9Lvrlx4+It+7Hdx355ntqG1y7bDjh0HFFqJeyUtQCY/ndI3mkU9nvDot9FfG4kTQ5Rf2Fwx+3H6GdqrOG5BAzvIY/ZMJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codeweavers.com; spf=pass smtp.mailfrom=codeweavers.com; dkim=pass (2048-bit key) header.d=list.codeweavers.com header.i=@list.codeweavers.com header.b=DyYWhX+2; arc=none smtp.client-ip=4.36.192.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=codeweavers.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codeweavers.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ChYhXE29"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A392A1F000E9;
-	Tue,  1 Sep 2026 21:51:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788299486;
-	bh=hnSwlI1kmJNpF35HMjbVqnL2KSbg7ShsOK8PrV2LHLg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc;
-	b=ChYhXE29DCjxkQFIn+hWhkMmNlw73JMvwwlN2O/5uPuL4k/JMZx0hWCMxNTd0WxiT
-	 ap8WiT75KQ3Ak9Wo3FaXYWqA74bXyADAcrOgbFiGhmiBmtocvwUFCHU2BFDeetGGt/
-	 qY4LUNih8ZZwFs2T0fAu9vCeRdrSPs5DfmOwdswplFYHQcW3UyhhKMxnqPmuaYLAtQ
-	 NKeeL1ut/jNB+M9FJY8FZTYn4D1dXsqRQoeU/uF74jHxRc9DceslM6MwPkOL4jvxVZ
-	 cqpcWzqOtv1Lqe/NI8pvNTFGtv87Ee480luXmb//J55/cq7L4/MinN8hnYqFeNS7Jc
-	 L1HL99QbfwWUQ==
-From: Mark Brown <broonie@kernel.org>
-Date: Tue, 01 Sep 2026 22:47:12 +0100
-Subject: [PATCH v20 14/14] KVM: selftests: arm64: Add GCS EXLOCK exception
- emulation test
+	dkim=pass (2048-bit key) header.d=list.codeweavers.com header.i=@list.codeweavers.com header.b="DyYWhX+2"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=list.codeweavers.com; s=list; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=970rvjKhUbBRqZ+818aZ3SrCn1r/YQBBs6GGt00FMiw=; b=DyYWhX+29OwHwWOtLlswJqHA6u
+	PyAtasmeXaX8S80+r7dYoxR+DrrYLklrKsmKhDbUWT3IuxJSdHHzJr+c+JPvprsvqKv4K3PYhmHKR
+	HNRLmoFJTRotVwEqTbH+7KpivVwghG/+UNYcAazCdf/VzDAa8y+KBr1kdfrLg+KbY5UPzp3lkDKKm
+	beaLPIkR9DJfCDLBKz3+R4HL9Ijp4uEuScqFdEvWnKgalOxWBRZkKcIfRBGacN+ormklte16DeMBS
+	pueUyrNbrVt5SMfvhSyh+JWdI3d1Gnsy2SLHamUcaVCMiCRMKczTzr6U9GaSDHCatCOWIPhetktqT
+	e4ltfI9g==;
+Received: from cw137ip160.mn.codeweavers.com ([10.69.137.160] helo=camazotz.mn.codeweavers.com)
+	by list.codeweavrs.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <zfigura@codeweavers.com>)
+	id 1x1WEu-006tZ1-1x;
+	Tue, 01 Sep 2026 16:41:56 -0500
+From: Elizabeth Figura <zfigura@codeweavers.com>
+To: Arnd Bergmann <arnd@arndb.de>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-kernel@vger.kernel.org,
+	wine-devel@list.winehq.org,
+	linux-kselftest@vger.kernel.org,
+	=?UTF-8?q?Iv=C3=A1n=20Ezequiel=20Rodriguez?= <ivanrwcm25@gmail.com>,
+	Elizabeth Figura <zfigura@codeweavers.com>
+Subject: [PATCH] selftests: ntsync: add wait termination edge cases
+Date: Tue,  1 Sep 2026 16:41:33 -0500
+Message-ID: <20260901214133.1270218-1-zfigura@codeweavers.com>
+X-Mailer: git-send-email 2.53.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260901-arm64-gcs-v20-14-f31750bdfadb@kernel.org>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
-In-Reply-To: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org>
-To: Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, 
- Joey Gouly <joey.gouly@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
- Shuah Khan <shuah@kernel.org>, Oliver Upton <oupton@kernel.org>, 
- Fuad Tabba <fuad.tabba@linux.dev>
-Cc: Peter Maydell <peter.maydell@linaro.org>, 
- Leonardo Bras <leo.bras@arm.com>, Wei-Lin Chang <weilin.chang@arm.com>, 
- Yao Yuan <yaoyuan@linux.alibaba.com>, linux-arm-kernel@lists.infradead.org, 
- linux-doc@vger.kernel.org, kvmarm@lists.linux.dev, 
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Mark Brown <broonie@kernel.org>
-X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=11852; i=broonie@kernel.org;
- h=from:subject:message-id; bh=TIDZs+B7zu6gVSc89XYBcC4NUO41wOhM/wTzdrOu6fU=;
- b=owEBbQGS/pANAwAKASTWi3JdVIfQAcsmYgBql0inpmhNxIZJMCs+N19D3cF1Rtkk77lzjQH9a
- X2Qg+QGEvWJATMEAAEKAB0WIQSt5miqZ1cYtZ/in+ok1otyXVSH0AUCapdIpwAKCRAk1otyXVSH
- 0B7MB/4jwLl0G5DBb6EqKPBOysyt8+1EIIjVDA9M6zywUrgrfWbRD4IJt0uYNNDnuWguFyCm7jy
- 3sxUFhcAdToRs4jrrwUnbKz6as4mqrA8HhWxzXl63DoQWklQVva844M3gjd+nqzoK8HlWRKslxD
- f2Ap7I+3fNbbS+HMUz4wYFqRkMvHtPM7Lgh0vBmx1dn8v+fuz+6ykpjPgjwCdUOheEHeOC4AYYd
- SnLwi0/Bslw4+WPlFxZl5exu25CcOh0X/TKuNzHcrX0EREN3tfdlnVFe6up2GLadG8/N8sd+yqS
- dBBmTnUEqfFS0JojBsA0/h66FUHMMk0aETYGYhKD9P2I0Gwq
-X-Developer-Key: i=broonie@kernel.org; a=openpgp;
- fpr=3F2568AAC26998F9E813A1C5C3F436CA30F5D8EB
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-When running in vEL2 ERET is emulated, this means that we must emulate
-the behaviour of GCSCR_EL2.EXLOCKEN. Add a test that validates the
-behaviour.
+From: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
 
-As per DDI0487 R_WTXBY PSTATE.EXLOCK is set to the value of
-GCSCR_ELx.EXLOCKEN when taking an exception to the same exception level.
-As per DDI0487 R_TYTWB if on exception return to the same EL
-GCSCR_ELx.EXLOCKEN is 1 and PSTATE.EXLOCK is not 1 then the exception
-return is illegal.
+The existing tests cover timeouts that expire while blocked, but not a
+deadline that has already passed, and no test exercises interruption by
+a signal even though the documented behaviour is EINTR. Also extend
+wait_args_validation() with an invalid flags case.
 
-We nest handling of two UDFs to allow us to both observe and modify
-PSTATE.EXLOCK, checking that expected exceptions are generated for ERET.
-We also repeat the UDF tests having enabled fine grained traps for ERET
-to try to ensure that the slow paths are taken.
+Add coverage for:
+ - an absolute timeout in the past, which must return ETIMEDOUT without
+   blocking
+ - a wait interrupted by a signal, which must return EINTR
+ - undefined bits in ntsync_wait_args::flags, which must return EINVAL
 
-We also attempt to write to both SPSR_ELx and ELR_ELx, again using a UDF
-handler to control PSTATE.EXLOCK. We do all this both with and without
-having enabled EXLOCKEN, though only for code running at EL2 due to
-framework limitations.
+Tested on v7.3-rc1 under QEMU with CONFIG_NTSYNC=y: 15/15 pass, and the
+two new tests were run 50 times each at 1, 2, 4 and 8 vCPUs with no
+intermittent failures.
 
-For completeness we also inject a data abort from EL0 to EL2 with
-GCSCR_EL2.EXLOCKEN set, ensuring that PSTATE.EXLOCK is not set.
-
-Signed-off-by: Mark Brown <broonie@kernel.org>
+Signed-off-by: Iván Ezequiel Rodriguez <ivanrwcm25@gmail.com>
+Reviewed-by: Elizabeth Figura <zfigura@codeweavers.com>
+Signed-off-by: Elizabeth Figura <zfigura@codeweavers.com>
 ---
- tools/testing/selftests/kvm/Makefile.kvm           |   1 +
- tools/testing/selftests/kvm/arm64/gcs_exceptions.c | 346 +++++++++++++++++++++
- 2 files changed, 347 insertions(+)
+ .../testing/selftests/drivers/ntsync/ntsync.c | 96 +++++++++++++++++++
+ 1 file changed, 96 insertions(+)
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 96bab7002d39..0286453ab223 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -179,6 +179,7 @@ TEST_GEN_PROGS_arm64 += arm64/hello_el2
- TEST_GEN_PROGS_arm64 += arm64/host_sve
- TEST_GEN_PROGS_arm64 += arm64/hypercalls
- TEST_GEN_PROGS_arm64 += arm64/external_aborts
-+TEST_GEN_PROGS_arm64 += arm64/gcs_exceptions
- TEST_GEN_PROGS_arm64 += arm64/mmio_sign_ext
- TEST_GEN_PROGS_arm64 += arm64/page_fault_test
- TEST_GEN_PROGS_arm64 += arm64/psci_test
-diff --git a/tools/testing/selftests/kvm/arm64/gcs_exceptions.c b/tools/testing/selftests/kvm/arm64/gcs_exceptions.c
-new file mode 100644
-index 000000000000..de5bc6590727
---- /dev/null
-+++ b/tools/testing/selftests/kvm/arm64/gcs_exceptions.c
-@@ -0,0 +1,346 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Test KVM's handling of Guarded Control Stack exception state.
-+ */
+diff --git a/tools/testing/selftests/drivers/ntsync/ntsync.c b/tools/testing/selftests/drivers/ntsync/ntsync.c
+index 1f0dc43bb4c0..7d944e2a9094 100644
+--- a/tools/testing/selftests/drivers/ntsync/ntsync.c
++++ b/tools/testing/selftests/drivers/ntsync/ntsync.c
+@@ -11,6 +11,7 @@
+ #include <sys/wait.h>
+ #include <fcntl.h>
+ #include <sched.h>
++#include <signal.h>
+ #include <time.h>
+ #include <pthread.h>
+ #include <linux/ntsync.h>
+@@ -1381,6 +1382,13 @@ TEST(wait_args_validation)
+ 	EXPECT_EQ(-1, ret);
+ 	EXPECT_EQ(EINVAL, errno);
+ 
++	wait_args.pad = 0;
++	wait_args.flags = ~NTSYNC_WAIT_REALTIME;
++	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(EINVAL, errno);
++	wait_args.flags = 0;
 +
-+#include "kvm_util.h"
-+#include "processor.h"
-+#include "test_util.h"
-+#include "ucall.h"
-+
-+#include <asm/ptrace.h>
-+#include <asm/sysreg.h>
-+
-+#define PSTATE_IL_BIT	BIT(20)
-+
-+static void require_guest_gcs(struct kvm_vcpu *vcpu)
+ 	ret = wait_any(fd2, 1, &sem, 123, &index);
+ 	EXPECT_EQ(-1, ret);
+ 	EXPECT_EQ(EINVAL, errno);
+@@ -1471,4 +1479,92 @@ TEST(wait_any_monotonic_timens)
+ 	close(fd);
+ }
+ 
++TEST(wait_timeout_expired)
 +{
-+	u64 pfr1 = vcpu_get_reg(vcpu,
-+				KVM_ARM64_SYS_REG(SYS_ID_AA64PFR1_EL1));
++	struct ntsync_wait_args wait_args = {0};
++	struct ntsync_sem_args sem_args = {0};
++	struct timespec start, end;
++	__u64 elapsed_ns;
++	int fd, sem, ret;
 +
-+	TEST_REQUIRE(SYS_FIELD_GET(ID_AA64PFR1_EL1, GCS, pfr1) >=
-+		     ID_AA64PFR1_EL1_GCS_IMP);
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	ASSERT_LE(0, fd);
++
++	sem_args.count = 0;
++	sem_args.max = 1;
++	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++	EXPECT_LE(0, sem);
++
++	wait_args.timeout = 0;
++	wait_args.objs = (uintptr_t)&sem;
++	wait_args.count = 1;
++	wait_args.owner = 123;
++	wait_args.index = 0xdeadbeef;
++
++	clock_gettime(CLOCK_MONOTONIC, &start);
++	ret = ioctl(fd, NTSYNC_IOC_WAIT_ANY, &wait_args);
++	clock_gettime(CLOCK_MONOTONIC, &end);
++	EXPECT_EQ(-1, ret);
++	EXPECT_EQ(ETIMEDOUT, errno);
++
++	elapsed_ns = (end.tv_sec - start.tv_sec) * 1000000000ULL +
++		     (end.tv_nsec - start.tv_nsec);
++	EXPECT_LT(elapsed_ns, 50 * 1000000ULL);
++
++	close(sem);
++	close(fd);
 +}
 +
-+static bool expect_exlock;
-+static unsigned int undef_count;
-+static unsigned int illegal_count;
-+static unsigned int gcs_count;
-+static u64 handler_pstate;
-+static u64 illegal_pstate;
-+
-+static u64 expected_illegal_pc;
-+static enum udf_mode {
-+	UDF_COLLECT,	/* Initial UDF we collect PSTATE from */
-+	UDF_VALIDATE,	/* Secondary UDF that collects and validates */
-+	UDF_REPAIR,	/* UDF to clear EXLOCK */
-+	UDF_ELR_EL1,	/* Write to ELR_EL1 with EXLOCK */
-+	UDF_ELR_EL2,	/* Write to ELR_EL2 with EXLOCK */
-+	UDF_SPSR_EL1,	/* Write to SPSR_EL1 with EXLOCK */
-+	UDF_SPSR_EL2,	/* Write to SPSR_EL2 with EXLOCK */
-+} udf_mode;
-+
-+static void guest_undef_handler(struct ex_regs *regs)
++static void ntsync_test_signal_handler(int sig)
 +{
-+	u64 esr = read_sysreg(esr_el2);
-+	u64 val;
-+
-+	undef_count++;
-+
-+	/* Just skip the instruction either way. */
-+	GUEST_ASSERT_EQ(esr, ESR_ELx_IL);
-+	regs->pc += 4;
-+
-+	switch (udf_mode) {
-+	case UDF_COLLECT:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				expect_exlock ? GCSCR_ELx_EXLOCKEN : 0);
-+
-+		/*
-+		 * If we want the nested exception handler to change
-+		 * PSTATE it can't have EXLOCK set.
-+		 */
-+		write_sysreg_s(0, SYS_GCSCR_EL2);
-+		isb();
-+
-+		/*
-+		 * Take another exception without returning so we can
-+		 * collect the EXLOCK state we're seeing here and make
-+		 * our return illegal.
-+		 */
-+		expected_illegal_pc = regs->pc;
-+		udf_mode = UDF_VALIDATE;
-+		asm volatile("udf #0" ::: "memory");
-+
-+		/* Reenable so PSTATE.EXLOCK is checked */
-+		write_sysreg_s(expect_exlock ? GCSCR_ELx_EXLOCKEN : 0,
-+			       SYS_GCSCR_EL2);
-+		isb();
-+		break;
-+
-+	case UDF_VALIDATE:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				0);
-+
-+		/* Validate the EXLOCK of the original exception. */
-+		handler_pstate = regs->pstate;
-+		GUEST_ASSERT_EQ(!!(regs->pstate & PSR_EXLOCK_BIT),
-+				expect_exlock);
-+
-+		/* Clearing PSTATE.EXLOCK triggers an illegal ERET. */
-+		regs->pstate &= ~PSR_EXLOCK_BIT;
-+		break;
-+
-+	case UDF_REPAIR:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				0);
-+
-+		/* Disable EXLOCK for the requesting context */
-+		regs->pstate &= ~PSR_EXLOCK_BIT;
-+		break;
-+
-+	case UDF_ELR_EL1:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				expect_exlock ? GCSCR_ELx_EXLOCKEN : 0);
-+
-+		asm volatile("mrs %0, elr_el1   \n\
-+	                      msr elr_el1, %0"
-+			     : "=r"(val) :: "memory");
-+		break;
-+
-+	case UDF_ELR_EL2:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				expect_exlock ? GCSCR_ELx_EXLOCKEN : 0);
-+
-+		asm volatile("mrs %0, elr_el2   \n\
-+	                      msr elr_el2, %0"
-+			     : "=r"(val) :: "memory");
-+		break;
-+
-+	case UDF_SPSR_EL1:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				expect_exlock ? GCSCR_ELx_EXLOCKEN : 0);
-+
-+		asm volatile("mrs %0, spsr_el1   \n\
-+			      msr spsr_el1, %0"
-+			     : "=r"(val) :: "memory");
-+		break;
-+
-+	case UDF_SPSR_EL2:
-+		GUEST_ASSERT_EQ(read_sysreg_s(SYS_GCSCR_EL2) & GCSCR_ELx_EXLOCKEN,
-+				expect_exlock ? GCSCR_ELx_EXLOCKEN : 0);
-+
-+		asm volatile("mrs %0, spsr_el2   \n\
-+			      msr spsr_el2, %0"
-+			     : "=r"(val) :: "memory");
-+		break;
-+
-+	default:
-+		GUEST_FAIL("Invalid udf_mode");
-+	}
 +}
 +
-+static void guest_illegal_handler(struct ex_regs *regs)
++TEST(wait_interrupted_by_signal)
 +{
-+	u64 esr = read_sysreg(esr_el2);
++	struct ntsync_wait_args wait_args = {0};
++	struct ntsync_sem_args sem_args = {0};
++	struct sigaction sa = {0}, old_sa;
++	struct wait_args thread_args;
++	int fd, sem, ret;
++	pthread_t thread;
 +
-+	illegal_count++;
-+	illegal_pstate = regs->pstate;
++	fd = open("/dev/ntsync", O_CLOEXEC | O_RDONLY);
++	ASSERT_LE(0, fd);
 +
-+	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_ILL);
-+	GUEST_ASSERT(esr & ESR_ELx_IL);
-+	GUEST_ASSERT(regs->pstate & PSTATE_IL_BIT);
-+	GUEST_ASSERT(!(regs->pstate & PSR_EXLOCK_BIT));
-+	GUEST_ASSERT_EQ(regs->pc, expected_illegal_pc);
++	sem_args.count = 0;
++	sem_args.max = 1;
++	sem = ioctl(fd, NTSYNC_IOC_CREATE_SEM, &sem_args);
++	EXPECT_LE(0, sem);
 +
-+	/* Disable exception locking so we can repair the return state. */
-+	write_sysreg_s(0, SYS_GCSCR_EL2);
-+	isb();
++	sa.sa_handler = ntsync_test_signal_handler;
++	ret = sigaction(SIGUSR1, &sa, &old_sa);
++	EXPECT_EQ(0, ret);
 +
-+	/* We need our own EXLOCK clearing so we can repair the original */
-+	udf_mode = UDF_REPAIR;
-+	asm volatile("udf #0" ::: "memory");
++	wait_args.timeout = get_abs_timeout(5000);
++	wait_args.objs = (uintptr_t)&sem;
++	wait_args.count = 1;
++	wait_args.owner = 123;
++	wait_args.index = 0xdeadbeef;
++	thread_args.fd = fd;
++	thread_args.args = &wait_args;
++	thread_args.request = NTSYNC_IOC_WAIT_ANY;
++	ret = pthread_create(&thread, NULL, wait_thread, &thread_args);
++	EXPECT_EQ(0, ret);
 +
-+	/* Disable EXLOCK for the generating context, making things legal */
-+	regs->pstate &= ~(PSTATE_IL_BIT | PSR_EXLOCK_BIT);
++	ret = wait_for_thread(thread, 50);
++	EXPECT_EQ(ETIMEDOUT, ret);
++
++	ret = pthread_kill(thread, SIGUSR1);
++	EXPECT_EQ(0, ret);
++
++	ret = wait_for_thread(thread, 1000);
++	EXPECT_EQ(0, ret);
++	EXPECT_EQ(-1, thread_args.ret);
++	EXPECT_EQ(EINTR, thread_args.err);
++
++	sigaction(SIGUSR1, &old_sa, NULL);
++	close(sem);
++	close(fd);
 +}
 +
-+static void guest_gcs_handler(struct ex_regs *regs)
-+{
-+	u64 esr = read_sysreg(esr_el2);
-+
-+	gcs_count++;
-+
-+	GUEST_ASSERT_EQ(ESR_ELx_EC(esr), ESR_ELx_EC_GCS);
-+	GUEST_ASSERT_EQ(FIELD_GET(ESR_ELx_ExType_MASK, esr),
-+			ESR_ELx_ExType_EXLOCK);
-+
-+	/* Disabling EXLOCKEN makes sysreg writes legal. */
-+	write_sysreg_s(0, SYS_GCSCR_EL2);
-+	isb();
-+}
-+
-+static noinline void test_udf_exception(bool enable_exlock)
-+{
-+	unsigned int initial_undef = undef_count;
-+	unsigned int initial_illegal = illegal_count;
-+	unsigned int initial_gcs = gcs_count;
-+
-+	expect_exlock = enable_exlock;
-+	write_sysreg_s(enable_exlock ? GCSCR_ELx_EXLOCKEN : 0,
-+		       SYS_GCSCR_EL2);
-+	isb();
-+
-+	udf_mode = UDF_COLLECT;
-+	asm volatile("udf #0" ::: "memory");
-+
-+	/* Leave GCS disabled even if a broken ERET skipped the ILL handler. */
-+	write_sysreg_s(0, SYS_GCSCR_EL2);
-+	isb();
-+
-+	GUEST_ASSERT_EQ(undef_count, initial_undef + 2 + enable_exlock);
-+	GUEST_ASSERT_EQ(illegal_count, initial_illegal + enable_exlock);
-+	GUEST_ASSERT_EQ(!!(handler_pstate & PSR_EXLOCK_BIT), enable_exlock);
-+	if (enable_exlock)
-+		GUEST_ASSERT(illegal_pstate & PSTATE_IL_BIT);
-+	GUEST_ASSERT_EQ(initial_gcs, gcs_count);
-+}
-+
-+static noinline void test_sysreg(enum udf_mode reg, bool enable_exlock)
-+{
-+	unsigned int initial_undef = undef_count;
-+	unsigned int initial_gcs = gcs_count;
-+
-+	expect_exlock = enable_exlock;
-+
-+	write_sysreg_s(enable_exlock ? GCSCR_ELx_EXLOCKEN : 0,
-+		       SYS_GCSCR_EL2);
-+	isb();
-+
-+	udf_mode = reg;
-+	asm volatile("udf #0" ::: "memory");
-+
-+	/* Ensure EXLOCK is disabled */
-+	write_sysreg_s(0, SYS_GCSCR_EL2);
-+	isb();
-+
-+	GUEST_ASSERT_EQ(gcs_count, initial_gcs + expect_exlock);
-+	GUEST_ASSERT_EQ(undef_count, initial_undef + 1);
-+}
-+
-+static void guest_code(void)
-+{
-+	GUEST_ASSERT_EQ(get_current_el(), 2);
-+
-+	/*
-+	 * Try straightforwardly generating an exception without and
-+	 * with EXLOCK.
-+	 */
-+	test_udf_exception(false);
-+	test_sysreg(UDF_ELR_EL1, false);
-+	test_sysreg(UDF_ELR_EL2, false);
-+	test_sysreg(UDF_SPSR_EL1, false);
-+	test_sysreg(UDF_SPSR_EL2, false);
-+
-+	test_udf_exception(true);
-+	test_sysreg(UDF_ELR_EL1, true);
-+	test_sysreg(UDF_ELR_EL2, true);
-+	test_sysreg(UDF_SPSR_EL1, true);
-+	test_sysreg(UDF_SPSR_EL2, true);
-+
-+	/* Force ERET directly through the slow emulation path as well. */
-+	sysreg_clear_set_s(SYS_HFGITR_EL2, 0, HFGITR_EL2_ERET);
-+	isb();
-+
-+	test_udf_exception(false);
-+
-+	test_udf_exception(true);
-+
-+	sysreg_clear_set_s(SYS_HFGITR_EL2, HFGITR_EL2_ERET, 0);
-+	isb();
-+	GUEST_DONE();
-+}
-+
-+static void test_exception_from_same_el(void)
-+{
-+	struct kvm_vcpu_init init;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	struct ucall uc;
-+
-+	vm = vm_create(1);
-+	kvm_get_default_vcpu_target(vm, &init);
-+	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, guest_code);
-+	require_guest_gcs(vcpu);
-+
-+	vm_init_descriptor_tables(vm);
-+	vcpu_init_descriptor_tables(vcpu);
-+	vm_install_sync_handler(vm, VECTOR_SYNC_CURRENT,
-+				ESR_ELx_EC_UNKNOWN, guest_undef_handler);
-+	vm_install_sync_handler(vm, VECTOR_SYNC_CURRENT,
-+				ESR_ELx_EC_ILL, guest_illegal_handler);
-+	vm_install_sync_handler(vm, VECTOR_SYNC_CURRENT,
-+				ESR_ELx_EC_GCS, guest_gcs_handler);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	vcpu_run(vcpu);
-+	switch (get_ucall(vcpu, &uc)) {
-+	case UCALL_DONE:
-+		break;
-+	case UCALL_ABORT:
-+		REPORT_GUEST_ASSERT(uc);
-+		break;
-+	default:
-+		TEST_FAIL("Unhandled ucall: %ld", uc.cmd);
-+	}
-+
-+	kvm_vm_free(vm);
-+}
-+
-+static void test_exception_from_lower_el(void)
-+{
-+	struct kvm_vcpu_events events = {};
-+	struct kvm_vcpu_init init;
-+	struct kvm_vcpu *vcpu;
-+	struct kvm_vm *vm;
-+	u64 pstate;
-+
-+	vm = vm_create(1);
-+	kvm_get_default_vcpu_target(vm, &init);
-+	init.features[0] |= BIT(KVM_ARM_VCPU_HAS_EL2);
-+	vcpu = aarch64_vcpu_add(vm, 0, &init, NULL);
-+	require_guest_gcs(vcpu);
-+	kvm_arch_vm_finalize_vcpus(vm);
-+
-+	/*
-+	 * Inject an EL0 data abort to vEL2 with EXLOCK enabled for
-+	 * vEL2.
-+	 */
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2),
-+		     vcpu_get_reg(vcpu, KVM_ARM64_SYS_REG(SYS_HCR_EL2)) |
-+		     HCR_EL2_TGE);
-+	vcpu_set_reg(vcpu, KVM_ARM64_SYS_REG(SYS_GCSCR_EL2),
-+		     GCSCR_ELx_EXLOCKEN);
-+	vcpu_set_reg(vcpu, ARM64_CORE_REG(regs.pstate),
-+		     PSR_MODE_EL0t | PSR_EXLOCK_BIT);
-+
-+	events.exception.ext_dabt_pending = true;
-+	vcpu_events_set(vcpu, &events);
-+
-+	pstate = vcpu_get_reg(vcpu, ARM64_CORE_REG(regs.pstate));
-+	TEST_ASSERT_EQ(pstate & PSR_MODE_MASK, PSR_MODE_EL2h);
-+	TEST_ASSERT(!(pstate & PSR_EXLOCK_BIT),
-+		    "EXLOCK set on exception from a lower EL");
-+
-+	kvm_vm_free(vm);
-+}
-+
-+int main(void)
-+{
-+	TEST_REQUIRE(kvm_check_cap(KVM_CAP_ARM_EL2));
-+	test_exception_from_same_el();
-+	test_exception_from_lower_el();
-+
-+	return 0;
-+}
+ TEST_HARNESS_MAIN
 
+base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
 -- 
-2.47.3
+2.53.0
 
