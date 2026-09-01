@@ -1,103 +1,176 @@
-Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
+Received: from mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69C3B471274
-	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 08:24:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.214
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C6F37AA7A
+	for <linux-kselftest@vger.kernel.org>; Tue,  1 Sep 2026 08:39:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788251043; cv=none; b=eQVmVUiMIy/hmDZZ7gjOsNaui+ZvQXTLJHUby+l+PO5aHVo2zGecISUEFB1kPksExC+I8oTCqizSouAPK5vu6k4Vjct7HqaBOCOYY36M2z8biawHpyVZMHYVh3kqVhkjLGzcyG1Txhj1G/4NGvfSY3e6XewfqO1byXcDZHvBtE8=
+	t=1788251989; cv=none; b=JAFfdE/hUWZD1YOpxyL2+oYYIEyuFiIt8b6Weq2jAw3tdCpvKKq27YumLjUEfPcmFrBJAXOPJ5TrF2DKAESfawRN/eS541H+IyHV5JZ2fCR3BzRYIV/9OMOjAgT4fLjnWljQAs0hW73ySK0T24bVLGnjtPMvdAZzyWdLIB47Cqs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788251043; c=relaxed/simple;
-	bh=xOvD7xRvRZjK1MUC2LVvd2XrUqNedh8ivStT0iBqrqE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bNQvbfiDanXOX3ah+AinSyGxpCZFm79m3s00wg/QMz6bGrEjrzoDMWofZQwX3IoYrdy4EpkATIyM2IDwHUdK1B8kMEcvzmFYCPjAlIwgaHbd058PIpqsu3xmxEkMKNIqUNBtNcFM4DwhMp/a/sKCpiws7VvxgJMjKjZmKAc2GI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZUtcLBnh; arc=none smtp.client-ip=95.215.58.214
+	s=arc-20240116; t=1788251989; c=relaxed/simple;
+	bh=MFd6QQcIiVNo4d+5OnfkjHu0LYEIxCoAHDswhin9sq8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Olaggvhmimhz86LFQA/9opIXJauC704cd9J+z6NhgAvpqv/WrQKzE//z9nLxRPDuzv3jMhT+GgbEKtw2wfyIKNYrYl0I7GSi5vPEjOcLvmz5CnaD69ZYI8nciOJDDd3ZVrgxRSo9aRPUdTA9LbJ7pyPZv8WqX6BeD3u3Q/sGMWk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=GU96kHCV; arc=none smtp.client-ip=95.215.58.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZUtcLBnh"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="GU96kHCV"
 X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=xOvD7xRvRZjK1MUC2LVvd2XrUqNedh8ivStT0iBqrqE=;
+DKIM-Signature: a=rsa-sha256; bh=MFd6QQcIiVNo4d+5OnfkjHu0LYEIxCoAHDswhin9sq8=;
  c=simple/simple; d=linux.dev;
  h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788251039; v=1; x=1788855839;
- b=ZUtcLBnh/6e1lWe7dDRyqLbU0QudA2tJB56PrqZDPNB4BjMdJuI1byGzAO82OrGIDLTW4b4C
- S+oAWpUh+xG07kzHOR5ewCddnr/FRFCiuT9EaGxNmJpPrZsqag7Ogc+fNbsGSHJacsfqgnoPGT0
- fDqZZaOmY58Ewrm0k+KGGmms=
+ t=1788251985; v=1; x=1788856785;
+ b=GU96kHCV+wQsmqJ41cfsYDH1NaP50ZQ60nbptuzjsvatU2nhLHmUPv0hTB7Fo7HB/wflM13Y
+ /p+cYEA/ZJmXRXhIjMGu3GAZRG1O3vWi2e3Er+Jk/hNRBe/7yBWjeTtOf0oNX/OLC1MvoKudC7g
+ 0srLUQq4aaMKsQ4DanRHo9hg=
 X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id b142e79e6ab46137;
-	Tue, 01 Sep 2026 08:23:59 +0000
-X-Mizu-Trace-ID: b142e79e6ab46137
+Received: by smtp.migadu.com with ESMTPS id 51c8f7a7a51bbe02;
+	Tue, 01 Sep 2026 08:39:45 +0000
+X-Mizu-Trace-ID: 51c8f7a7a51bbe02
 X-Migadu-Flow: FLOW_OUT
-Date: Tue, 1 Sep 2026 16:23:51 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Jakub Kicinski <kuba@kernel.org>,
-	Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	Hangbin Liu <liuhangbin@kylinos.cn>
-Subject: Re: [PATCH net-next 1/2] netdevsim: add link speed support
-Message-ID: <apaLl13Saka4Sw1J@fedora>
-References: <20260831-nsim_speed-v1-0-7a651ee65738@kylinos.cn>
- <20260831-nsim_speed-v1-1-7a651ee65738@kylinos.cn>
- <20260831150818.660de896@kernel.org>
- <apZ3f3vm5sUrcyrZ@fedora>
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5b5e5aaf7deso5954e87.0
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 01:39:43 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AKwUvBy98B8MSRcm8RtuRJCQnj+izz+F4dUd0gTbf+pXiEpH4v93w5aJcmJWE+IGdV/7oF3SfsA08FZS+2u/Pnb22P4=@vger.kernel.org
+X-Gm-Message-State: AFuF++lihUjYt9BN61gwETWrQGoDuSi8D9xBRJMshNIuykbVsgmaatvS
+	aIhj6zJPndj45Y/h0vnRhkvkYY/hvwMWIOxEqStxU4vnbT9CV7Rb2J+IoRtnWVGUAZa+WDuEXA5
+	iSc8xeRVWdz3eR3x6hvGriEcKLodTwYHiG60wi3Pz
+X-Received: by 2002:ac2:5689:0:b0:5b4:4c8a:abef with SMTP id
+ 2adb3069b0e04-5b5ff29d7ccmr116639e87.10.1788251981891; Tue, 01 Sep 2026
+ 01:39:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <apZ3f3vm5sUrcyrZ@fedora>
+References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com> <20260830-gmem-inplace-conversion-v12-1-85e5fd25252a@google.com>
+In-Reply-To: <20260830-gmem-inplace-conversion-v12-1-85e5fd25252a@google.com>
+From: Fuad Tabba <fuad.tabba@linux.dev>
+Date: Tue, 1 Sep 2026 09:39:05 +0100
+X-Gmail-Original-Message-ID: <CA+EHjTytLWsa9-boURuumSFC8yNWDwvz_+WNN-aEz_cA9OkcdA@mail.gmail.com>
+X-Gm-Features: AcwNN1XCAyPPlQdujvTs-aL1UBkQHfHgNLA1ozg5F-aaAoV8bE_sbTlT0O7ALBU
+Message-ID: <CA+EHjTytLWsa9-boURuumSFC8yNWDwvz_+WNN-aEz_cA9OkcdA@mail.gmail.com>
+Subject: Re: [PATCH v12 01/45] KVM: guest_memfd: Optimize away conversion
+ overheads via dead-code elimination
+To: ackerleytng@google.com
+Cc: aik@amd.com, andrew.jones@linux.dev, binbin.wu@linux.intel.com, 
+	brauner@kernel.org, chao.p.peng@linux.intel.com, david@kernel.org, 
+	jmattson@google.com, jthoughton@google.com, michael.roth@amd.com, 
+	oupton@kernel.org, pankaj.gupta@amd.com, qperret@google.com, 
+	rick.p.edgecombe@intel.com, rientjes@google.com, shivankg@amd.com, 
+	steven.price@arm.com, willy@infradead.org, wyihan@google.com, 
+	yan.y.zhao@intel.com, forkloop@google.com, pratyush@kernel.org, 
+	suzuki.poulose@arm.com, aneesh.kumar@kernel.org, liam@infradead.org, 
+	Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson <seanjc@google.com>, 
+	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Masami Hiramatsu <mhiramat@kernel.org>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>, 
+	Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>, 
+	Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>, 
+	Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>, 
+	Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>, 
+	Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>, 
+	Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>, 
+	Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>, 
+	Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>, tarunsahu@google.com, 
+	Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>, 
+	Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>, 
+	Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, kvm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-mm@kvack.org, linux-coco@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Sep 01, 2026 at 02:58:17PM +0800, Hangbin Liu wrote:
-> On Mon, Aug 31, 2026 at 03:08:18PM -0700, Jakub Kicinski wrote:
-> > On Mon, 31 Aug 2026 11:28:10 +0800 Hangbin Liu wrote:
-> > > Add ethtool get/set_link_ksettings callbacks to netdevsim so the simulated
-> > > link speed and duplex can be queried and configured from userspace.
-> > > 
-> > > Move NSIM_LINK_SPEED_MAX and NSIM_LINK_SPEED_UNIT from dev.c to netdevsim.h
-> > > so they are available to both the devlink rate path and the new ethtool
-> > > code. The set callback rejects speeds exceeding NSIM_LINK_SPEED_MAX.
-> > > 
-> > > The default link speed is set to SPEED_5000 with DUPLEX_FULL, matching the
-> > > existing NSIM_LINK_SPEED_MAX definition.
-> > 
-> > This breaks TDC which uses netdevsim for taprio testing.
-> 
-> Sigh, I really didn't expect a speed feature could break the tc qdisc
-> testing... I will check the reason.
+On Mon, 31 Aug 2026 at 01:25, Ackerley Tng via B4 Relay
+<devnull+ackerleytng.google.com@kernel.org> wrote:
+>
+> From: Sean Christopherson <seanjc@google.com>
+>
+> Add and use kvm_arch_has_gmem_convert() to guard guest_memfd's invocation
+> of arch hooks related to converting memory between private and shared, as
+> only one half of the x86 CoCo duo needs the runtime hooks (any pre-work is
+> pure overhead for TDX).  At this exact moment, the overhead is negligible,
+> but that will change when in-place conversion comes along, at which point
+> to-shared conversions will "need" to find all affected folios prior to
+> calling into arch code.  In quotes because very technically that work could
+> be pushed to arch code, but that would bleed guest_memfd details into arch
+> code and would be far worse than adding yet another kvm_arch_has... hook.
+>
+> Opportunistically provide the kvm_arch_gmem_make_private() declaration, and
+> rely on dead-code elimination to eliminate the call to non-existent code
+> when CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT=n.
+>
+> Reported-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Closes: https://lore.kernel.org/all/1ec08cd8-3072-4753-ad5e-cd34956647f8@linux.intel.com
+> Suggested-by: Ackerley Tng <ackerleytng@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
 
-OK, here is the reason. In taprio_set_picos_per_byte(), it init NIC speed to
-SPEED_10. If the NIC doesn't support get_link_ksettings, the final calculated
-picos_per_byte would be a extremely large number 800000. The later tc taprio
-testing `tc qdisc ... sched-entry S 02 300` will always failed in
-fill_sched_entry(), as min_duration is also a large number 48000.
+Reviewed-by: Fuad Tabba <fuad.tabba@linux.dev>
 
-After we supports get_link_ksettings for netdevsim, the speed is 5000 and
-picos_per_byte will be init to 1600. The later min_duration checking in
-fill_sched_entry() is 300 vs 96. So the tc qdisc command always return 0.
+Cheers,
+/fuad
 
-To fix the test, I think we should reduce the interval number. e.g.
-
-diff --git a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-index cd19d05925e4..c3418bde9ad6 100644
---- a/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-+++ b/tools/testing/selftests/tc-testing/tc-tests/qdiscs/taprio.json
-@@ -145,7 +145,7 @@
-         "setup": [
-             "echo \"1 1 8\" > /sys/bus/netdevsim/new_device"
-         ],
--        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: taprio num_tc 2 queues 1@0 1@1 sched-entry S 01 300 sched-entry S 02 1700 clockid CLOCK_TAI",
-+        "cmdUnderTest": "$TC qdisc add dev $ETH root handle 1: taprio num_tc 2 queues 1@0 1@1 sched-entry S 01 30 sched-entry S 02 70 clockid CLOCK_TAI",
-         "expExitCode": "2",
-         "verifyCmd": "$TC qdisc show dev $ETH",
-         "matchPattern": "qdisc taprio 1: root refcnt",
-
-Thanks
-Hangbin
+> ---
+>  arch/x86/include/asm/kvm_host.h | 3 +++
+>  include/linux/kvm_host.h        | 3 ++-
+>  virt/kvm/guest_memfd.c          | 5 ++---
+>  3 files changed, 7 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index 683bb8bf43a94..6beddd8a0c749 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1854,6 +1854,9 @@ enum kvm_intr_type {
+>  #ifdef CONFIG_KVM_GENERIC_MEMORY_ATTRIBUTES
+>  #define kvm_arch_has_private_mem(kvm) ((kvm)->arch.has_private_mem)
+>  #endif
+> +#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> +#define kvm_arch_has_gmem_convert() (!!kvm_x86_ops.gmem_make_private)
+> +#endif
+>
+>  #define kvm_arch_has_readonly_mem(kvm) (!(kvm)->arch.has_protected_state)
+>
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 502465119ca0c..b7516e19ef419 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2597,9 +2597,10 @@ static inline int kvm_gmem_get_pfn(struct kvm *kvm,
+>  }
+>  #endif /* CONFIG_KVM_GUEST_MEMFD */
+>
+> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+>  int kvm_arch_gmem_make_private(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+>                                kvm_pfn_t nr_pages);
+> +#ifndef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> +#define kvm_arch_has_gmem_convert() false
+>  #endif
+>
+>  #ifdef CONFIG_HAVE_KVM_ARCH_GMEM_POPULATE
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 798d91df69537..2190e4d6b6bea 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -772,11 +772,10 @@ int kvm_gmem_get_pfn(struct kvm *kvm, struct kvm_memory_slot *slot,
+>                 folio_mark_uptodate(folio);
+>         }
+>
+> -#ifdef CONFIG_HAVE_KVM_ARCH_GMEM_CONVERT
+> -       if (kvm_gmem_is_private_mem(file_inode(file), index))
+> +       if (kvm_arch_has_gmem_convert() &&
+> +           kvm_gmem_is_private_mem(file_inode(file), index))
+>                 r = kvm_arch_gmem_make_private(kvm, gfn, *pfn,
+>                                                (kvm_pfn_t)1 << *max_order);
+> -#endif
+>
+>         folio_unlock(folio);
+>         folio_put(folio);
+>
+> --
+> 2.55.0.897.gb25b4bd76c-goog
+>
+>
