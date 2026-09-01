@@ -1,127 +1,103 @@
-Received: from smtph3-03.21cn.com (smtph3-03.21cn.com [150.223.194.104])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F1AE18FDDE;
-	Tue,  1 Sep 2026 12:18:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.223.194.104
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD0423242D8;
+	Tue,  1 Sep 2026 12:43:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788265107; cv=none; b=EXTYENUt0VPyeHmvXlt3AsVXWbTmmrgk3YRBRp7JUJ9QomdUt+0t2JOUEXmChsy/5XCC5Jjwj0pGc8KC9WQu2ZWEtt/+gSITlIcX2KqZZNLg6fvRomJN+Ghk8bWt9uaUjQnRhcnhNQG1xhAZ87WOhCKTqPQelEIj91ho0s3TSeM=
+	t=1788266630; cv=none; b=pGj6nwPSUFNlw2dMtIovvVQLRuB6mpLX/ZXZZyKghPbyhZhn36k2j3UBMuIoijcjUtNGpkNQl/79gMi4UY/bmCBCZ5lLA8sxld1ACaTfAtjung3OWoq+6tYGDBQsnxMe7zLpTLbxfUrPcchvh8SuQxyUZcIhEgTddRdz5kNLznI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788265107; c=relaxed/simple;
-	bh=kSLa8JMeKs1Irxes2vMKhgggHFU9SA5IjVOCi4sk2dE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=jgwBowgpVJqOpWg07wM7HZDaYCaA1OrUO+eNfTX73adQmMkrgcxwOVmr1RT/WKSA0+9/IT3m6nCv4M/IMb9dzmSw3HpPrdv0myIdC5KJvvu4YsHEZ4MZVLosojNz/YKqpOxGX0WE+9g5ZJzxjLLvSyZOB2ACrRQOrvI1IxauFZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn; spf=pass smtp.mailfrom=chinatelecom.cn; arc=none smtp.client-ip=150.223.194.104
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chinatelecom.cn
-HMM_SOURCE_IP:172.27.0.98:0.1489982587
-HMM_ATTACHE_NUM:0000
-HMM_SOURCE_TYPE:SMTP
-Received: from clientip-139.200.108.11 (unknown [172.27.0.98])
-	by smtph3-03.21cn.com (HERMES) with SMTP id 71292C02D043;
-	Tue,  1 Sep 2026 20:07:23 +0800 (CST)
-X-189-SAVE-TO-SEND: +pengqh1@chinatelecom.cn
-Received: from  ([139.200.108.11])
-	by gateway-ssl-dep-7c9d777cd6-vsjrc with ESMTP id 3cf9ec87b8614342b25ff0f249a5d641 for hangbin.liu@linux.dev;
-	Tue, 01 Sep 2026 20:07:39 CST
-X-Transaction-ID: 3cf9ec87b8614342b25ff0f249a5d641
-X-Real-From: pengqh1@chinatelecom.cn
-X-Receive-IP: 139.200.108.11
-X-MEDUSA-Status: 0
-Sender: pengqh1@chinatelecom.cn
-From: Qianheng Peng <pengqh1@chinatelecom.cn>
-To: hangbin.liu@linux.dev
-Cc: broonie@kernel.org,
-	jackmanb@google.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	liuhangbin@gmail.com,
-	pengqh1@chinatelecom.cn,
-	rbm@suse.com,
-	shuah@kernel.org,
-	skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: runner.sh: avoid overriding kselftest_cmd_args with empty variable
-Date: Tue,  1 Sep 2026 20:07:22 +0800
-Message-Id: <20260901120722.1875597-1-pengqh1@chinatelecom.cn>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <apae5q5R546M6283@fedora>
-References: <apae5q5R546M6283@fedora>
+	s=arc-20240116; t=1788266630; c=relaxed/simple;
+	bh=RI2I8TVst60QA7Wwo891cXbfplKuOcbVlYL7hlT75r4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WDIPDHsmtgTjNlwJXIM4potzHMYeHfyV009Bi9nHUEFl4Oq2c1V4LE64cHX69Nik57ZZSOSBEfcO2DKaleabS0crCwkUs1BsU4ZEj5Dka2ikXtFmD5E4az7YxjURK+CFFFr/fHbeey+hbpnySP2q4kZ1V/+OF9C13Xt2N2F0VaY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=jzYPc4wH; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="jzYPc4wH"
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=e3VZOr6RNXuMNZ3GiRBt7EGvtd3df9zDyi/QD1KV4w0=; b=jzYPc4wHaWGYtW+8ajtkNP1w5u
+	caRT+ejzr1+LNoTMrtimyR5bbdXR9tumAakmJ/WaJpxp/vNmDawecY3zGfsHnNU3nXUSZdOurMLUB
+	3AKk6REdUU5WmzJZyBVX2d7sSyTnw8WQQeQBX0ZIdfBajcYRswd26CjJYJJtQOOj6bMM=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1x1Npz-002M5N-Bd; Tue, 01 Sep 2026 14:43:39 +0200
+Date: Tue, 1 Sep 2026 14:43:39 +0200
+From: Andrew Lunn <andrew@lunn.ch>
+To: Hangbin Liu <hangbin.liu@linux.dev>
+Cc: Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, netdev@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	Hangbin Liu <liuhangbin@kylinos.cn>
+Subject: Re: [PATCH net-next 1/2] netdevsim: add link speed support
+Message-ID: <18c7a000-97ad-459a-bb9c-5c821274e9f3@lunn.ch>
+References: <20260831-nsim_speed-v1-0-7a651ee65738@kylinos.cn>
+ <20260831-nsim_speed-v1-1-7a651ee65738@kylinos.cn>
+ <53215678-05bb-4191-b5ff-aa236b16a96a@lunn.ch>
+ <apZzJDVtENpAluhT@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <apZzJDVtENpAluhT@fedora>
 
-Hi Hangbin,
-On Tue, 1 Sep 2026 17:46:14, Hangbin Liu wrote:
->Hi Qianheng
->On Tue, Sep 01, 2026 at 10:44:52AM +0800, Qianheng Peng wrote:
->> On Tue, 14 Jul 2026 14:34:43, Qianheng Peng wrote:
->> >Normally the value of kselftest_cmd_args can be read from settings file,
->> >but it will be overridden by KSELFTEST_TEST_KMOD_SH_ARGS which can be
->> >empty if user did not give it a real value.So it should be better to
->> >check if KSELFTEST_TEST_KMOD_SH_ARGS is emty before referring its
->> >value to kselftest_cmd_args.
->
->Where does KSELFTEST_TEST_KMOD_SH_ARGS from? kmod testing? If yes,
->can we fix it there?
+On Tue, Sep 01, 2026 at 02:39:32PM +0800, Hangbin Liu wrote:
+> On Mon, Aug 31, 2026 at 02:16:46PM +0200, Andrew Lunn wrote:
+> > >  static void nsim_ethtool_ring_init(struct netdevsim *ns)
+> > > @@ -250,12 +276,16 @@ void nsim_ethtool_init(struct netdevsim *ns)
+> > >  	ns->ethtool.fec.active_fec = ETHTOOL_FEC_NONE;
+> > >  
+> > >  	ns->ethtool.channels = ns->nsim_bus_dev->num_queues;
+> > > +	ns->ethtool.duplex = DUPLEX_FULL;
+> > > +	ns->ethtool.speed = SPEED_5000;
+> > >  
+> > >  	ethtool = debugfs_create_dir("ethtool", ns->nsim_dev_port->ddir);
+> > >  	ns->ethtool_ddir = ethtool;
+> > >  
+> > >  	debugfs_create_u32("get_err", 0600, ethtool, &ns->ethtool.get_err);
+> > >  	debugfs_create_u32("set_err", 0600, ethtool, &ns->ethtool.set_err);
+> > > +	debugfs_create_u32("speed", 0600, ethtool, &ns->ethtool.speed);
+> > > +	debugfs_create_u8("duplex", 0600, ethtool, &ns->ethtool.duplex);
+> > 
+> > debugfs_create_bool() ?
+> 
+> I'm not sure if anyone want to set nsim duplex to unknown for testing.
+> Do you think that we should disable this behavior?
 
-Sorry for my confusing commit message and poor English.
-In fact the problem is not KSELFTEST_TEST_KMOD_SH_ARGS but empty
-kselftest_cmd_args_ref.
-If user does not export "KSELFTEST_${BASENAME_SANITIZED}_ARGS" (the
-${BASENAME_SANITIZED} here can be anything like KMOD or RTCTEST) explicitly,
-kselftest_cmd_args_ref will be empty by default and override kselftest_cmd_args.
-So this patch will check whether kselftest_cmd_args_ref is empty before
-starting one test.
+Ah, i did not think of DUPLEX_UNKNOWN.
 
-Thanks,
-Qianheng
+We need to consider Jakubs reply, what are you actually testing here,
+do such tests make any sense?
 
->
->Thanks
->Hangbin
->
->> >
->> >Signed-off-by: QianhengPeng <pengqh1@chinatelecom.cn>
->> >---
->> > tools/testing/selftests/kselftest/runner.sh | 10 +++++++++-
->> > 1 file changed, 9 insertions(+), 1 deletion(-)
->> >
->> >diff --git a/tools/testing/selftests/kselftest/runner.sh b/tools/testing/selftests/kselftest/runner.sh
->> >index 311811d..a99147a 100644
->> >--- a/tools/testing/selftests/kselftest/runner.sh
->> >+++ b/tools/testing/selftests/kselftest/runner.sh
->> >@@ -103,6 +103,15 @@ run_one()
->> > 		ktap_print_msg "timeout set to $kselftest_timeout" >> "$logfile"
->> > 	fi
->> > 
->> >+	# Exported environment variable overrides the settings file
->> >+	eval kselftest_eval_cmd_args="\$${kselftest_cmd_args_ref:-}"
->> >+	if [ -n "$kselftest_eval_cmd_args" ]; then
->> >+		kselftest_cmd_args=$kselftest_eval_cmd_args
->> >+		ktap_print_msg "overriding cmd_args to $kselftest_cmd_args" >> "$logfile"
->> >+	elif [ -n "$kselftest_cmd_args" ]; then
->> >+		ktap_print_msg "cmd_args set to $kselftest_cmd_args" >> "$logfile"
->> >+	fi
->> >+
->> > 	TEST_HDR_MSG="selftests: $DIR: $BASENAME_TEST"
->> > 	echo "# $TEST_HDR_MSG"
->> > 	if [ ! -e "$TEST" ]; then
->> >@@ -113,7 +122,6 @@ run_one()
->> > 		if [ -x /usr/bin/stdbuf ]; then
->> > 			stdbuf="/usr/bin/stdbuf --output=L "
->> > 		fi
->> >-		eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
->> > 		if [ -x "$TEST" ]; then
->> > 			cmd="$stdbuf ./$BASENAME_TEST $kselftest_cmd_args"
->> > 		elif [ -x "./ksft_runner.sh" ]; then
->> >-- 
->> >1.8.3.1
->> >
->> 
->> Gentle ping. This patch has been sent on July and has not got response since then.
->> The patch still applies cleanly to current mainline.Glad to resend if it's preferable.
->> 
->> Thanks and Regards,
->> Qianheng
+If they do, i think some validation would be good here. We already
+have:
+
+static inline int ethtool_validate_duplex(__u8 duplex)
+{
+	switch (duplex) {
+	case DUPLEX_HALF:
+	case DUPLEX_FULL:
+	case DUPLEX_UNKNOWN:
+		return 1;
+	}
+
+	return 0;
+}
+
+We don't expect a driver to set duplex to 42, so why should the user
+be allowed to do that?
+
+Also, SPEED_UNKNOWN is -1, so you need debugfs_create_s32().
+
+	Andrew
