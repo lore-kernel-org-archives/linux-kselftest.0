@@ -1,104 +1,75 @@
-Received: from mail-pf1-f198.google.com (mail-pf1-f198.google.com [209.85.210.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 616CA38E8D3
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 19:19:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D2F4ACC68
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 19:29:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788376798; cv=none; b=Fc9nC8CONe/pLjJYyaApVT/KZpoT+kgC+8Uihb79d0Mt5TOvYNXbBal+LhjW+JRYTriCTAC8OJNlA9OfleRwzr7AoX9Xh5yjgjqtnrIGPTf/42Q3tKQ25QCaEF4aDCnPKNVfhoDgiaAUl1X5/1fxLjuxBkGWKUSmlKwEZe9hSKk=
+	t=1788377393; cv=none; b=RfDD4HMG++vNvIFJbc9qctUYsrqCF0T+FfCCeej9/BhUFqJbbe6Zx6u7nTdLl3ZjM4SWpgTv2X270aIpqfMEzCKkzGczoPy07IAbycinNUX2ANLg05lINabqDBv3HjZ+6VleSEUYPdgkukDEUUFzo2h3EGMssPLfsBJ5elMcdyM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788376798; c=relaxed/simple;
-	bh=nJM813bTC7dIK3gmCYeblNkULx7TOwQ661mJ4a1QEY8=;
-	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=r8Zld0LLgbBRTUpG0ow8vErKdqu50lGVByoW4V8FKKZ5bIGdPAa+/Hmfx4UsC8cFDHacov7EtzKv56SQEYHHnFvLFOFUCBxsFXNjXlqEKkTG6drCXBnR/CSS7rjnQwhb8w8SKQXX+0R7OPX1OaL4GzTrWYHMI7CZ6kw7bnu3jp8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ujhwxzbh; arc=none smtp.client-ip=209.85.210.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1788377393; c=relaxed/simple;
+	bh=ka8YDGkwYD5hFve1+vxCX1O0qWzRDuqcC9mYXKk/0Dc=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=oGjM8DAgLH6L7VR2kQz7EbYdo5mxYhY/JDijGtazvGl4e9I/oYfdDFF/ADbaLNj1iQ6L0Zg2bANsrjVjfiYefazB8yszlanM+pHRxqYw+Qq2YcFYs/1nOBhRCbgfi5q3kkml9Jyhu9u8j6nZVJvUeBcXLRJaPp19ieDFI5/tEb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=WxZkI0zR; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ujhwxzbh"
-Received: by mail-pf1-f198.google.com with SMTP id d2e1a72fcca58-855b1b925b6so772900b3a.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 12:19:55 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="WxZkI0zR"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7267E1F000E9;
+	Wed,  2 Sep 2026 19:29:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788376794; x=1788981594; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :reply-to:from:to:cc:subject:date:message-id:reply-to:content-type;
-        bh=JJm04W74S4Wb9QlOAVLdeVQ4Bthix7lPuSs6v2SGIe0=;
-        b=ujhwxzbhzz8FAi76Q9uM54rpVLgOO4HVRhF21r91JbrqAB7r3dZOn/AN5AkVxylj0K
-         AGdnUHpT6WG6XDiHNfqG6yWlJMI0THpXGQ5EHfjLiHD1zLXCuwcv5VA3xfKiM7up4NMu
-         8GZCHO7Szj7S5GHzmQ1o4YRiVt68rm3YAkbYxKvqFxuPgJz0q36Af9ENVXywsEbfGOYC
-         J5wp2IeDciFBVp6RtKvGimRfypVEJM6J3dv/7+iiaYYECeVh2o4sEaybXUtVGBovxO2x
-         wC9ShMfZvTZffwPJaLzvw8ty09Cig8j8c14zL9EynEQNsftq63VgOfMGPkv9k8dNZ91A
-         TpXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788376794; x=1788981594;
-        h=content-type:cc:to:from:subject:message-id:mime-version:date
-         :reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=JJm04W74S4Wb9QlOAVLdeVQ4Bthix7lPuSs6v2SGIe0=;
-        b=p7AWcbLcXtgKH86Z2n5N6i2a+LPhmoH+mcL0YI82MhQ/ooGNPjmFItSFFjq/A5TqiQ
-         toGp/7ZreS/hzSqTLlavk2IUw6RlZADmqJaTLfn8i13W1a1rIGVr/M86YnKU0pKEN1Ld
-         +HIBlKEyw4RUj7kGj1bHtRP4mZeAvn7jG/UEn/yBLSX5C4eydgrlGZ+zOsceotgBEFlx
-         c70j9rVDUEqX7cAf6BWaYxCUnCFvoPyT2+zsJSscvkQLHrZYSoz3dO9dOP6Xr4j8Esu+
-         G4F2DdSyxQi/dhuwhY2nqffGUJUuUgKlDtUQTX5Yk5yonPY1/IBcG2vvK629Dv8jbZB/
-         QphQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxa4f/bMFyUpmnY7hhjvCZwFByyScuFUt0zOuuBYoyQi8nuyxxVsiamGJ6t1M0DQ8Hf4SPHQ/hmHG4mnKPGyMw=@vger.kernel.org
-X-Gm-Message-State: AFuF++nWJrqNzC9tIqwo13u/OO+EQwzmxSj1/3aHoJqZItRW7qbw8Zgx
-	ExKH7e2hAKCl2avwc6WiinY/n4gPZ1VX/4/Shg//sZocbUM/b22Eq6un/tJdroMkXZis8xqQPOV
-	HbYKraw==
-X-Received: from pfbft4.prod.google.com ([2002:a05:6a00:81c4:b0:845:4da8:56a5])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a00:ac86:b0:857:73e2:9106
- with SMTP id d2e1a72fcca58-85ed98ba685mr11520767b3a.22.1788376793928; Wed, 02
- Sep 2026 12:19:53 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Wed,  2 Sep 2026 12:19:50 -0700
+	d=linux-foundation.org; s=korg; t=1788377373;
+	bh=hnKjt2Q7cQQXIMvbkPpCr4kNY4+s/kx6ua0E2A+Cb5M=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References;
+	b=WxZkI0zRNhLOcHhVhBmHsDoraOl7I2tPiez8q2Cj4cBsg4GmNkMb+csAfULTkqgEz
+	 1uolqi0vN0C7oBz7biWffMcOilzJTq9LbhFx/ujI82iRdq+YFCjAmaiSk/nivxnEeP
+	 vJPnW/A3HIKKsyxH3za7fWoW0edkg/3razfBrGYQ=
+Date: Wed, 2 Sep 2026 12:29:32 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Yeoreum Yun <yeoreum.yun@arm.com>
+Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, david@kernel.org,
+ ljs@kernel.org, liam@infradead.org, vbabka@kernel.org, rppt@kernel.org,
+ surenb@google.com, mhocko@suse.com, shuah@kernel.org, ziy@nvidia.com,
+ baolin.wang@linux.alibaba.com, nico.pache@linux.dev, ryan.roberts@arm.com,
+ dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev,
+ usama.arif@linux.dev, kas@kernel.org
+Subject: Re: [PATCH] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
+Message-Id: <20260902122932.7a1b82de7a80dbd5897b65f0@linux-foundation.org>
+In-Reply-To: <20260902175611.1241118-1-yeoreum.yun@arm.com>
+References: <20260902175611.1241118-1-yeoreum.yun@arm.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-X-Mailer: git-send-email 2.55.0.970.g62bdec98f9-goog
-Message-ID: <20260902191950.2647091-1-seanjc@google.com>
-Subject: [PATCH 6.12.y] KVM: selftests: Remove duplicate LAUNCH_UPDATE_VMSA
- call in SEV-ES migrate test
-From: Sean Christopherson <seanjc@google.com>
-To: stable@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Sasha Levin <sashal@kernel.org>
-Cc: kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Drop the explicit KVM_SEV_LAUNCH_UPDATE_VMSA call when creating an SEV-ES
-VM in the SEV migration test, as sev_vm_create() automatically updates the
-VMSA pages for SEV-ES guests.  The only reason the duplicate call doesn't
-cause visible problems is because the test doesn't actually try to run the
-vCPUs.  That will change when KVM adds a check to prevent userspace from
-re-launching a VMSA (which corrupts the VMSA page due to KVM writing
-encrypted private memory).
+On Wed,  2 Sep 2026 18:56:11 +0100 Yeoreum Yun <yeoreum.yun@arm.com> wrote:
 
-Fixes: 69f8e15ab61f ("KVM: selftests: Use the SEV library APIs in the intra-host migration test")
-Cc: stable@vger.kernel.org
-Link: https://patch.msgid.link/20260310234829.2608037-2-seanjc@google.com
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c | 2 --
- 1 file changed, 2 deletions(-)
+> HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
+> When this macro is used in some test, test result would be strange in
+> the system where PAGE_SIZE is more than 4KB.
+> 
+> Here is example with transhuge-stress test with 16KB PAGE_SIZE:
+> 
+> ...
+>
+>   ok 1 Completed
+> 
+> Remove the HPAGE_SIZE and HPAGE_SHIFT macro. and introduce hpshift()
+> helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-exist
+> helper, read_pmd_pagesize().
+> 
+> Also, do KSM_MERGE_TIME_HUGE_PAGES test with size of 512 MiB which
+> is the LCD pmd_size among 4KB, 16KB and 64KB page_size.
+> 
+> After this patch, output of transhuge-stress:
+> 
+> ...
+>
+>   ok 1 Completed
 
-diff --git a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-index 0a6dfba3905b..6b0928e69051 100644
---- a/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-+++ b/tools/testing/selftests/kvm/x86_64/sev_migrate_tests.c
-@@ -36,8 +36,6 @@ static struct kvm_vm *sev_vm_create(bool es)
- 
- 	sev_vm_launch(vm, es ? SEV_POLICY_ES : 0);
- 
--	if (es)
--		vm_sev_ioctl(vm, KVM_SEV_LAUNCH_UPDATE_VMSA, NULL);
- 	return vm;
- }
- 
-
-base-commit: f717995cb7dcd8998ab15516b8006aea09cfde0d
--- 
-2.55.0.970.g62bdec98f9-goog
-
+Thanks.  Sashiko made claims.  The first looks legit, although minor:
+	https://sashiko.dev/#/patchset/20260902175611.1241118-1-yeoreum.yun@arm.com
