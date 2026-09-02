@@ -1,128 +1,82 @@
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C48F138B7DD
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 06:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3424036E48B;
+	Wed,  2 Sep 2026 06:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788329713; cv=none; b=RoRHvHxjk0Kgc0IdsUXazRX1Uphc69uYalPFD3rmrrZyaiPLbGGhMf/OdTG1KNs0RZ4E2sCAHyIKscFHzNPdem8OKI5OsZpdmMxUjslsSbHfIrA+CnZGxefQcF+HxaDZsu5HDeqJXdOsCGBLwwO7LFlBxBubIsdbiJ9jbPblg/Y=
+	t=1788329796; cv=none; b=hc8b84FpQ159mHDrrhEnDDzkgB3zOj9iPuCGbpL9NwB9tKw8N00xz22/Eju2tv4FOncwELuULlQkwwTDym1Fz/FKkR4W/8cvw5fFHT3X2fJzR2EfbMQuFzJmd1bw3byMAvWekwF5ayG2GasIYuRqFNdhp2EoIC3SUMXHs/BeBO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788329713; c=relaxed/simple;
-	bh=UwOA8LjM0NSCFy3j2zt1k5HHkmtLxl/qmELRahsK2hE=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=GI9vTSgntcyxO9VlhtJovUYflHJPr6dHwBme1uXrS4xOxMuFRudJavoMC/j4xFhrJWjjG+Rovs1A1pvmkdg95OON8bOPoq75NeKxkd0gZt9nO6bmLOaVMqZNeAoR+kfbdxG7Akuvc82tqx697jnVNCubT+cr5ch+qJRMJGE3eyQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=gPST44Yt; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+	s=arc-20240116; t=1788329796; c=relaxed/simple;
+	bh=df9lM9HEu5E/py1w6LvCge4VSKqYYn85zxPTfe4YEkc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=A8eyPxdc/dRR6+W6AEsJidpYeYcQqYPLOROjD1ppFAHWyEfLMXVR/gYZNWvoVICH2TcnPgI/Mq8euFVXsgSvX1W++UUIpRhFaB6TJ0mmWosjnqI/hrdtAwzRGlDXHfKNIQZrmBYh3S/au64LmLdsVqSoGCgHux2wuqLYuuKU6M8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1e89WsA; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="gPST44Yt"
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d6f9e2f681so6776715ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 23:15:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1788329711; x=1788934511; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to:content-type;
-        bh=eu4ymMPYKZBtIpuaapdXbFgIh8ENIgqZKDyMhyBzO+s=;
-        b=gPST44YtzCBLYwFHrypRJU0ZeqCR2wZT1ZWzDUXqiGd0Vuw4e02cX6Gnc03LpWoLso
-         RuVw+LWD5NT2DAima9OLOryQpHJBncQSLO64acgLEEUUl4VWWY25t3QlXN6iPvbUi6Sd
-         mp42OQdgkCBvHqUUBceSfQV1z0jyF22Zh8uhW8h+KSx7z+/RoCbhme5q19v16Srpizp5
-         ovbwWAhstMp5UBB+6UzHmpLY6D1Z1ZhOcH0pkLtJMm5bUC0dX59fEkj7GJz4/J+j4Lrg
-         azFo74EGF2LDKvIY0o5sx9oPPX/6pmMGvUf9fR1MSagMiUvK8Ow8oOMfcMQXk7P33GXH
-         4P3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788329711; x=1788934511;
-        h=cc:to:message-id:content-transfer-encoding:content-type
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to:content-type;
-        bh=eu4ymMPYKZBtIpuaapdXbFgIh8ENIgqZKDyMhyBzO+s=;
-        b=KzLpOCCS/zj51sncNJycga96OBk6B2Hp7EwxvCWeMtOd1wsEv7DbP11S3JzhBgXBZy
-         lWCTpJsZCEnQcBIchRVMqTxR2HjEYRcb8QsD1ROupQUCMkeSZmmAnVqDgnxOxgpTC2Bf
-         Cv+cmcRFe4sjfAZaHcfCXXmkrFA0wxKa0DXBFqzyMgnuBlYJxketaay7aufBQyc8um+D
-         Gkka3mGG2Ziu+HxoNj6Du/7RQMRV3qdL7U+akpIARL4RXRTB6ZYqjh30BVGmVMASbtSQ
-         YWGO9B4MIT4mkqe4gkf5fSKSPIKTmh3yG8p7lxDuyNmZaVk9WKY2vzcrSZksGZ7mjuxk
-         RrLQ==
-X-Forwarded-Encrypted: i=1; AKwUvBwcPCp+TfbQsQJMu61ULxuVBvUVnY8ZXQq044URj3LXAjADiAflG9rG0+irrcYHUBfAJ3ZBfC9Er8Nkdv1HZOo=@vger.kernel.org
-X-Gm-Message-State: AFuF++kDc1LFUI2HDnOpBDhdn25zgr1rntJKQzyEuNePYLaZUXxhZfLd
-	1XgKFTQzGKJpWzhXlXoJZ8Bh4bguFOWNuitzXQoxyKNHNUMcs2sLNMVy3KrAAuitAe8=
-X-Gm-Gg: AYBFou1WDfXid+LEeRQFuppTsiYQdIM36So6TFmdZY9+Cfy/1Xj5sZSkdxPCNWrluHL
-	9PL/iVI0LkIf4M4FuSqHr+ISWywJ8oRw3bDHYc/VkvOVbKXvb7hCCXhtFUd1ZHM9nVvWoYgqqKg
-	svIRMUFQigHcHG1sU1beyAtB46KxKx43m+l6b25pVZ9jzi6mOn16dXyXotCrN7V03xSnh7JUD5+
-	CnZX3Vl2D94ExtStfgl8iX+dw9E9ARowaUngNAdTiKPLj7jZK0KrY+dTCTJp8UX18l5Unw6kW2U
-	ESAFy9HXheEFz9oPZYSryW9vwvbfJeZP6ajCgRgQuhkoqV8vXq93gi4BzEAIIhkArXXWLnHyTMg
-	VyLbQByGXCkTegYr6Z18VMsEYQ9qClcJWkt2c4QwQFdLiEZhZErj6ejvPZjHMyKfodmT6Jf2iQ/
-	aBqJQ0Mt0qM2mAJEgdLB8F2zMjL61iZWPxfUp3o9OHrhEoN5Wg5ErIesWqhPj7YZybivDuiU3Fx
-	Fm11Fle
-X-Received: by 2002:a17:902:e804:b0:2d1:134:b86e with SMTP id d9443c01a7336-2daec5ad579mr31546085ad.2.1788329711119;
-        Tue, 01 Sep 2026 23:15:11 -0700 (PDT)
-Received: from sw07.internal.sifive.com ([4.53.31.132])
-        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-32f079f1f4fsm3462624eec.11.2026.09.01.23.15.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Sep 2026 23:15:10 -0700 (PDT)
-From: Yong-Xuan Wang <yongxuan.wang@sifive.com>
-Date: Tue, 01 Sep 2026 23:15:08 -0700
-Subject: [PATCH] KVM: riscv: selftests: Disable vector extension in build
- flags
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1e89WsA"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 618FA1F000E9;
+	Wed,  2 Sep 2026 06:16:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788329795;
+	bh=BjODJWm4HQ0zWK/uBNhYkH4uHbacHZCWiA6PuoaG+UM=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=Q1e89WsAYo18WECLuDiEp5fWTcq0n+WFFOj1SD4qSWJT//FyO73JSKFuM+tyXMV85
+	 muzG6bod7qNplXg8aCpt/J5CztbBQe5DT9Ax1eDA58i2Q20sP5XqeAXpZnapWzSdSa
+	 6gBR4bomJzq7h9XE8Vx/E+szEW+iKc3UGlTGsGJcCu7CT6nwfXJj1PxgsPpXqKbtS2
+	 +3c2hlxMIUKKHn4hYVmtLFubOD+Nqb1xBxuy823jcUR1AlN5mKZK69NyQtlgPdf0vy
+	 NSGiHOcstE2jXkL0sEIoqiwTI+7vrJEDWccdu6OOjfTEeXKiYuWE7kWzZoPCqHQdga
+	 9LgVPRptuCVhA==
+From: SJ Park <sj@kernel.org>
+To: SJ Park <sj@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <liam@infradead.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	David Hildenbrand <david@kernel.org>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Lorenzo Stoakes <ljs@kernel.org>,
+	Michal Hocko <mhocko@suse.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Vlastimil Babka <vbabka@kernel.org>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: Re: [PATCH 00/12] mm/damon: cleanup code, add test cases, and update guidances in docs
+Date: Tue,  1 Sep 2026 23:16:26 -0700
+Message-ID: <20260902061627.104566-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260902054747.99370-1-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260901-kvm_kselftest_disable_v-v1-1-fe73aca5bf95@sifive.com>
-X-B4-Tracking: v=1; b=H4sIAOu+l2oC/yXMQQqDMBBA0avIrBuIEST1KqWEjE7sqLUlE0NBv
- HvTunyL/3cQikwCXbVDpMzCr7WgvlTQP/w6kuKhGIw2rbZNreb8dLPQEhJJcgOLx4VcVqZBDB5
- bq68WSv2OFPjzP9/up2XDifr028FxfAF5qXhSewAAAA==
-X-Change-ID: 20260831-kvm_kselftest_disable_v-23bbfab68098
-To: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
- Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
- Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
- anup@brainfault.org
-Cc: greentime.hu@sifive.com, vincent.chen@sifive.com, zong.li@sifive.com, 
- kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
- Yong-Xuan Wang <yongxuan.wang@sifive.com>
-X-Mailer: b4 0.15.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788329710; l=1384;
- i=yongxuan.wang@sifive.com; s=20260424; h=from:subject:message-id;
- bh=UwOA8LjM0NSCFy3j2zt1k5HHkmtLxl/qmELRahsK2hE=;
- b=Wu6dcMEbHae6NcaOo3PXMhRBifeLnVbHpjN50VxkDCm33Rv81KHvvaw2L4qt/n0WHkwTsJNJs
- 8+5SSom61XiCmQ1TrwA1tilfCToI+4AHBSI3tH+M6wUcvuvmXA6LVs3
-X-Developer-Key: i=yongxuan.wang@sifive.com; a=ed25519;
- pk=+8NCHB1ZJvZthQAmZspOAaqjo+/snaW8mFSiDx45HxY=
+Content-Transfer-Encoding: 8bit
 
-Guest vCPUs never enable Vector state (sstatus.VS), so any vector
-instruction traps as illegal. If the toolchain's default -march
-includes the V extension, the compiler may auto-vectorize routines
-like memset() into vector instructions, crashing guests.
+On Tue,  1 Sep 2026 22:47:33 -0700 SJ Park <sj@kernel.org> wrote:
 
-Build with -march=rv64gc, probed the same way as x86's
--march=x86-64-v2, to ensure vector instructions are never emitted.
+> Misc cleanup, improvements and updates of code, test, and documents.
 
-Signed-off-by: Yong-Xuan Wang <yongxuan.wang@sifive.com>
----
- tools/testing/selftests/kvm/Makefile.kvm | 5 +++++
- 1 file changed, 5 insertions(+)
+Sashiko found one better-to-do change for patch 2.  Since it is quite trivial
+in my opinion, I asked Andrew to pick a fixup patch as a reply to the patch 2.
+Andrew, please feel free to let me know if you prefer reposting.
 
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 6fc34e9bf8e1..46c54948f4b1 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -297,6 +297,11 @@ CFLAGS += -I$(GEN_HDRS)
- $(GEN_HDRS): $(wildcard $(arm64_tools_dir)/*)
- 	$(MAKE) -C $(arm64_tools_dir) OUTPUT=$(arm64_hdr_outdir)
- endif
-+ifeq ($(ARCH),riscv)
-+ifeq ($(shell echo "void foo(void) { }" | $(CC) -march=rv64gc -x c - -c -o /dev/null 2>/dev/null; echo "$$?"),0)
-+	CFLAGS += -march=rv64gc
-+endif
-+endif
- 
- no-pie-option := $(call try-run, echo 'int main(void) { return 0; }' | \
-         $(CC) -Werror $(CFLAGS) -no-pie -x c - -o "$$TMP", -no-pie)
+Sashiko sent findings to damon@ mailing list [1], and I replied to all the
+comments having some findings.  Please read those for details.
 
----
-base-commit: b5060a4aa33d7d78a8c1837ab08ef0c81ea96650
-change-id: 20260831-kvm_kselftest_disable_v-23bbfab68098
+[1] https://lore.kernel.org/damon/
 
+
+Thanks,
+SJ
+
+[...]
