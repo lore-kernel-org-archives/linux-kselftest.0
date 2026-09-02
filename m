@@ -1,113 +1,126 @@
-Received: from mail-yw1-f170.google.com (mail-yw1-f170.google.com [209.85.128.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6774B33FE33
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 18:24:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.170
+Received: from smtp.uniroma2.it (smtp.uniroma2.it [160.80.4.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C48F23438A9;
+	Wed,  2 Sep 2026 18:26:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=160.80.4.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788373470; cv=none; b=pG9Wtk8mRqeMJuuj0fUgxoiMfkC4l7LOxl6rwR8r/l7ikrRW1LXZU264XWrvQuX5oJzL8RkT5MWLG+m8Y7h4su6iDQMGUIstqrsbIWRj0MYeNpSCoPuInRWQVtnUnEOcsmvwm1Ui6mC06FbSXfQevkNdorVU7x7ojMPQ4wH+0zY=
+	t=1788373613; cv=none; b=CqQabIBhZVwS7bwsB0rg9B19XiXPj2VEW9Dxcga+O0ZI5U+EFsL1CExrwprpEbBaT0yipxiL5YYzxxTTa3vAU626wKAAR/IHpemHiyN99rQ9wEvOovXl7XR7kzTyY6jvp6wq+Dfai7/DvwnCz/P8sqpcLscxiadBvf2huzU0v1A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788373470; c=relaxed/simple;
-	bh=Xxq4o3qMxPVY2RpEIPpLOr1K2BMPwKY7wG5A7DWgTkE=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 Mime-Version:Content-Type; b=cj8fKY5s/gpHHeG4wQkPgqIL9fxjAEaGmzwa3C/eQcn4UU+xG7v3bAaK9LXtxVsn0Pa/snF2e5tdWvJMV1ichl4aOMi95t1QyTscBS8NHok6Gjq8AWR4JRsdyE3T1MGz3rfXIDPXGGoMVTYEvOCuHdIm/8qkMHtFF/uGDOsIRao=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=oazeUFEz; arc=none smtp.client-ip=209.85.128.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788373613; c=relaxed/simple;
+	bh=zPZF5OWQOBQSD+z6kPd+7v5KM/arA94IPYNp5wna/x8=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=tvDfSnCiO7q4FEWQssWEi1A6PGkvUcE6+irG/PT0eBs+KA96ZLvVCZt2vOCjZpvREU5R72s+X/QgfCjIKehqnC8ydBccGKu4w6o+uc8DJ3WnRES4fJeZ3qUbRwo04Si2Oaf1Gtu10aetJOVK4uZpvnwqkBCVP6ZoKFUKMeTwDRI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it; spf=pass smtp.mailfrom=uniroma2.it; dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=90/+8Yvu; dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b=Y5kkxnDX; arc=none smtp.client-ip=160.80.4.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniroma2.it
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniroma2.it
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="oazeUFEz"
-Received: by mail-yw1-f170.google.com with SMTP id 00721157ae682-86a29a48ed9so17671357b3.2
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 11:24:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788373468; x=1788978268; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=o4tO+LhSSXLcFLBaIQklF7txjQB+TEfFtyQ8FGsV04g=;
-        b=oazeUFEzubs25KE40AVuu4FJAp2YhEcrARLHM3cjLCWeoNMkAe3MOQIkf+bvfeXPNw
-         3CBn2Uk6SvWFfADQYpORXh0nnwhYIn43Pp/SbsL0Tukt/A4EuBWM7XDe1FPdijzldiRZ
-         En4g/H/nwPSoBBdK0O5aehbYv3jb7POVUxaKC/S1mUI/vK+wHU7ACMjbFErO8eBTBPyY
-         ZfA/HvQM6oP9mEKdSNeUURxrsuV3NbNxplQjGOjNHMF3jICVY7M5EeWI7l0S9SPy7lcn
-         TO8/OR7W4jSNKvkY3QcayWH0SrgzhWqz5vpaZuRds1rnFTt0xcl5mND+2CuIJPjPjllx
-         D8pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788373468; x=1788978268;
-        h=content-transfer-encoding:content-type:mime-version:subject
-         :references:in-reply-to:message-id:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=o4tO+LhSSXLcFLBaIQklF7txjQB+TEfFtyQ8FGsV04g=;
-        b=VO3mLsTJ7QsqIsV46v9rz7mybwzVKVDUYgyzWw0obncKbCNj6Hy1afBN5wIMeHWUaB
-         IPCTk0CU0EJ4CaksrV2+P8+/6juJLfB6WTk7VQEPmgYvT2YmM22VP/FD/5X60pYsBmbr
-         mvstRMlvDjUoFYarG+mUoztg4YFaO3jaejDaa6RZo6TFzpiQVHIyTyy7M8ZS8iGPSgkt
-         vCVJHL893xTBo0uDAE8F+oGwk2c26I7XPGgtTEAeKkHYtYQdLpa6NGhERGXuZALT6AFK
-         JZAYYAjfCBUMqtFcM+BvL06vMZSGeAmRKow9F5hC+IWbaWJ+jQbAHzOT4t0GgvSu/KtG
-         BpWA==
-X-Forwarded-Encrypted: i=1; AKwUvBxjqHkH812Em58z8upgmDFE9qexGjG1nHbpXFTEDGNOTHLB+wNq5HSKKB9RO6sdkZnvhr1NR5RZD0y0UbPL1Xw=@vger.kernel.org
-X-Gm-Message-State: AFuF++lM4cME6BSfyvn6a6dH4YLKoRs2TfTaT88xniOpsnkMiWc7iE6H
-	YAgmEmi3X7wi0Z0eLj9howtfDo5iipxbQ7fWyUc6/evj0Xe9I6eJFSce
-X-Gm-Gg: AYBFou2NCKCAv1GYx5ahtMFXqWEvS/YiTYbrbcm1iDVAyyQ6sbJXKGxcIL1CZ9G36/G
-	thziSBucSFqBVSJjv458K+m/JXfoA+DO4cLTgnf8/mFuMsQkJ0zFF4lqrnqHDvVbCBakb1AnJ62
-	MC1dkCEuw5aMr1zCxA8w4XdyzPtiIsa86zMoOE46OrFrs1y2yvOzkocUuZtuL3vqo2WmQcRvrxv
-	C2LXolP9CydkNgzmPPSA2deCIvlJe8Fk0tJUZPejZKg8zI/R3yrU682tpXQrSEG3XK2DeBIkPSa
-	WQ2E/NkW4feZINtVJWK3/dS0ei3YEL4Yghwze1JV5PwZ45G52lne+lUyVc2AVboHnyd6o9QLvcA
-	AvCTEN50hLXySmNmR4yeDbJUONv23q4p1F94Rg4EfD318QxfygFMk5BYNTtOxPDFOJjJ1Z77viW
-	/0L7ns3duFZlM0gcJAem5dbu61OuOfEvIPud8aR07Z0lL1c6/rd4266xsR/xJRCsrOVJOcj5Vw0
-	545Hfrzq+9SvorJBQWrMAVAFy7jt60XOSkFUcv+wA==
-X-Received: by 2002:a05:690c:6d84:b0:81f:4247:de16 with SMTP id 00721157ae682-86c531a09b7mr24943487b3.24.1788373468198;
-        Wed, 02 Sep 2026 11:24:28 -0700 (PDT)
-Received: from gmail.com (234.207.85.34.bc.googleusercontent.com. [34.85.207.234])
-        by smtp.gmail.com with ESMTPSA id 00721157ae682-86c17841618sm23311307b3.24.2026.09.02.11.24.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 11:24:27 -0700 (PDT)
-Date: Wed, 02 Sep 2026 14:24:27 -0400
-From: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-To: netdev-bot+sashiko@kernel.org, 
- willemdebruijn.kernel@gmail.com
-Cc: netdev@vger.kernel.org, 
- davem@davemloft.net, 
- kuba@kernel.org, 
- edumazet@google.com, 
- pabeni@redhat.com, 
- horms@kernel.org, 
- shuah@kernel.org, 
- linux-kselftest@vger.kernel.org, 
- willemb@google.com
-Message-ID: <willemdebruijn.kernel.6d16fb1b028@gmail.com>
-In-Reply-To: <178833338726.3394541.13779692240559712632@kernel.org>
-References: <20260831210128.1359978-1-willemdebruijn.kernel@gmail.com>
- <178833338726.3394541.13779692240559712632@kernel.org>
-Subject: Re: [net-next] selftests: net: csum: filter packets by source address
- and port
+	dkim=permerror (0-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="90/+8Yvu";
+	dkim=pass (2048-bit key) header.d=uniroma2.it header.i=@uniroma2.it header.b="Y5kkxnDX"
+Received: from smtpauth-2019-1.uniroma2.it (smtpauth-2019-1.uniroma2.it [160.80.5.46])
+	by smtp-2015.uniroma2.it (8.14.4/8.14.4/Debian-8) with ESMTP id 682IQ63c032636;
+	Wed, 2 Sep 2026 20:26:11 +0200
+Received: from lubuntu-18.04 (host-80-183-189-234.business.telecomitalia.it [80.183.189.234])
+	by smtpauth-2019-1.uniroma2.it (Postfix) with ESMTPSA id 386801212CA;
+	Wed,  2 Sep 2026 20:26:01 +0200 (CEST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=uniroma2.it;
+	s=ed201904; t=1788373562; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YOq0h22DfRYPk8FdBe8yOEEVPyPE7ep/CmbMED3Kvlc=;
+	b=90/+8YvuAcYixkxA+hkDSjRtoVBYmaqYm18fSzVWbetGEQjOMRfeAMc0kawlPO8Qo0NzPV
+	Pik5FGJoajv2kfCg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniroma2.it; s=rsa201904;
+	t=1788373562; h=from:from:sender:reply-to:subject:subject:date:date:
+	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+	 content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YOq0h22DfRYPk8FdBe8yOEEVPyPE7ep/CmbMED3Kvlc=;
+	b=Y5kkxnDXCLVj8sKlLKPDJ4xR4586gtbwB8IuCm7dGyda9ffIYrQQKN2rA3PrZ8PRtEvqce
+	/W2Fn2hp7xYUNvk4bv2eiBfDa5L2VEsjiT0Ejlbgw2x2DZCJdLv/GDMXF07+IQDpzhtlDT
+	UB4AsrlthtzDtY/UGvBi4Z+22JzOTpuIZ1nqXFPRo8xs/xPx9gYrsqlM4uUqZj4r6lgGUZ
+	HAGmnbwkqFy3z6+ScFoD4C8WDu1FDQhLr6HTQFveehiUAu27K+lm7WCNQ/Fz5/EvAUxiLD
+	Tbd4DgSZBK8Gblkg3iI4l7Hl/mYoLUV/A2CwkeKnAL9IEUdpG2rO93/nA2RXOQ==
+Date: Wed, 2 Sep 2026 20:25:59 +0200
+From: Andrea Mayer <andrea.mayer@uniroma2.it>
+To: Alessio Faina <alessio.faina@canonical.com>
+Cc: davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hangbin.liu@linux.dev,
+        stefano.salsano@uniroma2.it, Andrea Mayer <andrea.mayer@uniroma2.it>
+Subject: Re: [PATCH net] selftest/net: skip srv6_end_d[t/x][4/6]_*_test.sh
+ if iproute2 too old
+Message-Id: <20260902202559.6c2b693bc2a6e697855e1b54@uniroma2.it>
+In-Reply-To: <apbe0PAvaes977l-@cicciput>
+References: <20260824091537.2305107-1-alessio.faina@canonical.com>
+	<20260826000156.bdaa71db68dbdc9c13907205@uniroma2.it>
+	<ao7S04LkWVXAQpgq@cicciput>
+	<20260827030701.bfaf6eea6dea1aef24c353cf@uniroma2.it>
+	<apAJuZzDOvjkVx60@cicciput>
+	<20260828042357.1d6e802448752a8fdff5a485@uniroma2.it>
+	<apGxmfjQs247lHX-@cicciput>
+	<20260829231150.8180c09f6874606eb49d0243@uniroma2.it>
+	<apbe0PAvaes977l-@cicciput>
+X-Mailer: Sylpheed 3.5.1 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.100.0 at smtp-2015
+X-Virus-Status: Clean
 
-netdev-bot+sashiko@ wrote:
-> Thank you for your contribution! Sashiko AI review found 1 potential
-> issue(s) to consider:
-> =
+On Tue, 1 Sep 2026 16:18:56 +0200
+Alessio Faina <alessio.faina@canonical.com> wrote:
 
-> Critical: 0 =C2=B7 High: 1 =C2=B7 Medium: 0 =C2=B7 Low: 0
-> =
+> [snip]
+> 
 
-> - [High] Incomplete fix: the patch adds source-address/source-port
->   filtering only to the PF_PACKET verification path=E2=80=A6
-> =
+Hi Alessio,
 
-> =
+Thanks. Some comments below.
 
-> Would it make sense to also connect() the receive UDP socket to
-> cfg_saddr:cfg_port_src, or use recvfrom() and drop datagrams whose peer=
- does
-> not match, with the same cfg_zero_sum exception used above since the so=
-urce
-> port is computed at send time in that mode?
+> I tried this
+> 
+> +test_iproute2_vrftable_supp_or_ksft_skip()
+> +{
+> +	ip netns add __vrftable_test 2>/dev/null
 
-That's a great suggestion. I'll add recvfrom() src verification in v2.=
+The netns name is fixed, and if a netns with that name exists, the
+check runs in it and deletes it at the end. It would be better to use
+setup_ns with a local variable. setup_ns picks a random name, fills
+the variable and checks the add. cleanup_ns then removes the namespace.
+
+> +	ip netns exec __vrftable_test sh -c "echo 1 > /proc/sys/net/vrf/strict_mode"
+> +	ip -netns __vrftable_test link add vrf-100 type vrf table 100
+> +	ip -netns __vrftable_test link set vrf-100 up
+> +	if ! ip -netns __vrftable_test -6 route add fc00::1/128 \
+> +			encap seg6local action End.DT4 vrftable 100 dev vrf-100 2>/dev/null; then
+> +		ip netns del __vrftable_test 2>/dev/null
+> +		echo "SKIP: SRv6 vrftable not supported in iproute2"
+
+The srv6 tests that name iproute2 grep the ip help text, while this one
+installs a route. IMO the message should say what is missing:
+"SKIP: SRv6 End.DT4 vrftable not supported", and the same for the function
+name, without iproute2 in it.
+
+> +		exit "${ksft_skip}"
+> +	fi
+> +	ip netns del __vrftable_test 2>/dev/null
+> +}
+> +
+> +test_iproute2_vrftable_supp_or_ksft_skip
+> +
+
+The call goes after the vrf block and before setup(), because the check
+writes the vrf sysctl and that file is not there without the module.
+
+The commit message and the subject should be updated as well.
+
+Ciao,
+Andrea
