@@ -1,98 +1,100 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from mx.itxnorge.no (itx-kvm-14.itxnorge.no [91.189.121.228])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732843AA507;
-	Wed,  2 Sep 2026 07:10:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6A243161A2;
+	Wed,  2 Sep 2026 07:15:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.189.121.228
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788333052; cv=none; b=QlXwzZIOckIG+0rjIjV4dya6xlM0Br/vpw4tsRsfmDhP+duI9prob9l46ZphF/33AsP+5pId7PuZfVMpGrGI/XvQf/emE+G6pIMcKnmk1sXGHackwPMWue6502TpW/c0EN5428Pz3BWGAw9zN/ONU04Iam35KPSjoSlsZDWD/Ts=
+	t=1788333321; cv=none; b=YkGiVJrFZLEdiAISUfilHQQw0EWzXhxwjhOxtlnlyg4Ld4qTjPwFu/BdufszdcjyuqJGBa/t8YbM2CibEfq5vpQkPiwWG11JzgItdz/W1PUdpp64+GvebPeva3XdFMt1+BiLrJf1mWVzcFGJWLCPXfNHpdsRxGjspw7qb/w4lP0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788333052; c=relaxed/simple;
-	bh=/QkyG+EW56yb91W7GpHwkIW7ZpFcQkBMg7os0TFdp40=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g3QFmnP7MLIuPXX7TenEJTz31gw9UZAOesyvwc3p1p41zr4SPw9gHBRLuZfQESpFkXEFXMehtvzLEdIh0uVLbuaN4yH9ZrNHUo9+TfXdj0jp7/n34C6TumT2qKS29jvnHjX6+thUl/XpM55XFGwjqFBAkRaiuFKp4HoUiKIngdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Fgf4am5j; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788333321; c=relaxed/simple;
+	bh=TULE/6SE5n1boqxK7ZQgRanXq0k+D+3OcpZAkjJBKok=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=vFvnFSCXtU+w91h+a67vzRDdTAy//8x9QuY8aF2A0w4BRHrvyYN+1TdXQobGcclOC01wYiDhLYrxXsAsx7OLgTJjIEdJCSLbFzGorTY/dhNj6CXM8L4PaIvTApLu5hwfzVYK1fkDhLVcUkfsyiys19lyD2raw9a8ZteZGiXu2+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=itx.no; spf=pass smtp.mailfrom=itx.no; dkim=pass (1024-bit key) header.d=itx.no header.i=@itx.no header.b=QBLIiwlv; arc=none smtp.client-ip=91.189.121.228
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=itx.no
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=itx.no
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Fgf4am5j"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84F0B1F000E9;
-	Wed,  2 Sep 2026 07:10:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788333051;
-	bh=mkNkOka81TvpWCQXQjDjyJBfSTFlkGAdLKmI+ByzmA8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=Fgf4am5jJyE90OYVghPGqx5FnXVzC3IblXws4qY6hJm0WyQefrF4575MQL3G/l4MY
-	 N/JKZ5NxbpGHS4wd16VXnd05KQVIMyQFlwul74Aj5sQaVryHgIG+xOz2TAYZ2EXGF3
-	 i/IG9NXREMeP94enEFmcBKJ1S6aBlBhUnl7yQWrX6f74T12zNIIWNRg+O6K4+MDsPn
-	 HzaA6XUF/1pviVzCLux4iZxYmsMY0090vUbYnTF2TA0NrtFJQ2VviYRpuIWwr1KhKE
-	 up/Fb5Dd/FQ+4qvJbBQeLjkFmrtRVn0hgyMxtHEA8n4zboXeFMIXeily+BOf+XUXvf
-	 5zBo04c2/Buug==
-Date: Wed, 2 Sep 2026 10:10:46 +0300
-From: Leon Romanovsky <leon@kernel.org>
-To: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Konstantin Sinyuk <ksinyuk@kernel.org>, dri-devel@lists.freedesktop.org,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Francois Dugast <francois.dugast@intel.com>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Donald Hunter <donald.hunter@gmail.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>, Ilia Levi <ilia.levi@intel.com>,
-	linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/12] drm/fabric: vendor-neutral topology
- infrastructure for scale-up accelerator interconnects
-Message-ID: <20260902071046.GO24140@unreal>
-References: <cover.1787552412.git.ksinyuk@kernel.org>
- <20260826093222.GC42790@unreal>
- <fabric-leon-reply.1787844400.ksinyuk@kernel.org>
- <20260827170911.GG42790@unreal>
- <apGzqP6cEZ1miNmR@intel.com>
- <20260901110120.GJ24140@unreal>
- <apbuUsS_3RVbB5vh@intel.com>
+	dkim=pass (1024-bit key) header.d=itx.no header.i=@itx.no header.b="QBLIiwlv"
+Message-ID: <d4d5d20bd3fd8bab30c1a28fd1eda374e62d9038.camel@itx.no>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=itx.no; s=mx.itx.no;
+	t=1788333315;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TULE/6SE5n1boqxK7ZQgRanXq0k+D+3OcpZAkjJBKok=;
+	b=QBLIiwlvAWrtqU/vGMgphtTJCoLCvYT3obPLVboVEXANI7dO1tJmg14bt8J4pC4nRtsSR+
+	loy4VzTiTBUGhyMS9zqtbikelW1vAjePF9mNAIKZjVu/kn8JVK9NMwscfpP3FYKYvtMEsG
+	AjdAokGMIRcXdEjguc3gHNafAeCmxis=
+Subject: Re: [PATCH 2/2] selftests/seccomp: add sparc64 support
+From: Stian Halseth <stian@itx.no>
+To: Kees Cook <kees@kernel.org>
+Cc: Andreas Larsson <andreas@gaisler.com>, "David S . Miller"
+	 <davem@davemloft.net>, sparclinux@vger.kernel.org, Andy Lutomirski
+	 <luto@amacapital.net>, Will Drewry <wad@chromium.org>, Oleg Nesterov
+	 <oleg@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, John Paul
+ Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Date: Wed, 02 Sep 2026 09:15:14 +0200
+In-Reply-To: <202609011700.E21C37761@keescook>
+References: <20260901220811.3369666-1-stian@itx.no>
+	 <20260901220811.3369666-3-stian@itx.no> <202609011700.E21C37761@keescook>
+Content-Type: multipart/signed; micalg="pgp-sha512";
+	protocol="application/pgp-signature"; boundary="=-aCqa6BYqcQXmFQVaMdYN"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <apbuUsS_3RVbB5vh@intel.com>
 
-On Tue, Sep 01, 2026 at 11:25:06AM -0400, Rodrigo Vivi wrote:
-> On Tue, Sep 01, 2026 at 02:01:20PM +0300, Leon Romanovsky wrote:
-> > On Fri, Aug 28, 2026 at 12:13:28PM -0400, Rodrigo Vivi wrote:
-> > > On Thu, Aug 27, 2026 at 08:09:11PM +0300, Leon Romanovsky wrote:
-> > > > On Wed, Aug 26, 2026 at 06:38:58PM +0300, Konstantin Sinyuk wrote:
-> > > > > On Wed, Aug 26, 2026 at 12:32:22PM +0300, Leon Romanovsky wrote:
-> > 
-> > <...>
-> > 
-> > > > The wording alone is not sufficient. Your proposal should be backed by
-> > > > real devices representing different architectures from different
-> > > > vendors.
-> > > 
-> > > Future Intel (and other vendors) hardware will include UALink.
-> > 
-> > I guess that, like most of us, you are not authorized to discuss or
-> > comment on Intel's non-public roadmap. Can you point to any public
-> > commitment from Intel to implement UALink in its devices?
-> 
-> That's the only public support commitment you will find for now:
-> 
-> https://ualinkconsortium.org/blog/intel-supports-ualink-for-scale-up-networking-829/
-> 
-> as an active member of the consortium
-> https://ualinkconsortium.org/members/
 
-I saw that PR article, but I couldn't find anything on the Internet stating
-that "future Intel (or other vendors') hardware will include UALink."
+--=-aCqa6BYqcQXmFQVaMdYN
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: quoted-printable
 
-So, for now, this RFC can be considered an academic project.
+On Tue, 2026-09-01 at 17:02 -0700, Kees Cook wrote:
 
-Thanks
+> Thanks for getting the working on sparc! :)
+>=20
+Thank you for the quick and friendly review! This is my first feature
+submission to the kernel. I've only sent some bug fixes earlier, so
+that's much appreciated.=20
+>=20
+> Is struct sparc64_user_regs not exported to userspace anywhere? We
+> haven't normally needed to put the raw user_regs struct definition
+> into
+> the test before.
+>=20
+Good point.=20
+
+Sparc has its own PTRACE_GETREGS64/PTRACE_SETREGS64 requests that
+transfer the uapi struct pt_regs directly from <asm/ptrace.h>, so thel
+ocal definition wasn't needed after all.
+
+One small quirk I hit though. The requests use the historical layout
+that omits %g0, so the transferred block starts at %g1 and every u_regs
+index is one lower than the register number suggests (%g1 is u_regs[0],
+%o0 is u_regs[7]).=A0
+
+Will post v2 with a comment saying so now. Re-ran the suite on
+the T4-1 with the new version: still 95 of 95.
+
+
+--=20
+Best regards
+Stian Halseth
+
+--=-aCqa6BYqcQXmFQVaMdYN
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: This is a digitally signed message part
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQTK1ph9OaYoND1R57zoeAEuJe36VgUCapfNAgAKCRDoeAEuJe36
+Vp52AP9jy6gTvy82icZnj/+rMwEuR4QwNbTeJI8JhIWa7/a6pAEA7PEqpaJRc5f0
+LyqV9/s0/CnhI2LfDaUg/jTUfuTalAk=
+=FO2U
+-----END PGP SIGNATURE-----
+
+--=-aCqa6BYqcQXmFQVaMdYN--
