@@ -1,48 +1,60 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D279248F822;
-	Wed,  2 Sep 2026 14:25:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788359118; cv=none; b=cgnn3s43Wyx4Gno/hLEvS//+a88SHy8HCYp1BNr1rru8vpsac6p0UZzj9J6telh5tNKPzBFFcgK2l+SIf+0iMqqvqhbLddzEVXqmYXfGNCv6A3Ok8mq3Kc2n8QfvyWa+i8XyD+Nwred+LV31DGBK+ATxGa61p+0EJY3Jh2cle5w=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788359118; c=relaxed/simple;
-	bh=ABvitbBs+ZI771uUOo0bg7SscWD7LgxjVsiglzI0+RE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=nrm0d2OlY1LUP5pGzi5qW+ITgdKLEPurQy3u6UnYnlzVRb7dOzeL1xEOMzqyvBtGfXzYo8WCH6Fx9EoYSYw2DqgUQ0W0TOxlXzStR2ENI+eD81Ht9ciQT0lQj902GPpMIOjxSdJ7juNRDkwoYhggVcYS0GOTfg6mktBnmroZmZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dd3okxwv; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A37C4A5ECE
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 15:05:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788361555; cv=pass; b=BHt1wUQ1KU5Lrz0uQgKcjxlgpC2odw6eM22W/XO4dvk1srcadUxWwvtM4mAzzAeIBbKahDzdpU4gdNwI4Z0RMZ6aIMm9r9WWvrAecucq8iiCICvkjR4eSxc7/Fsm9uePgYPy7Yg6PPoDDCAiuK8jULt0F1kcQa1eAPmVF9j8aZw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788361555; c=relaxed/simple;
+	bh=9vfrAX9QdLP02MpXYNzlfMqiNAX3CvZqO//ZbrSGtIM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GP2Q8NZoL54WI8hJ1mPeRGm8eUyJoMW2RKappGKCc2boo+snjJ5jpmLRr1Hjqs2JFDon8Fz6mq4NX+sfs4RfE9vJhVHP3RGTe44t1vmyiUN/FBjqAVfFD4KE4gepyFE7oG9j/c6lm1HIujPeHZQC2AyHk8ReRkCT5u3qhLNoyBc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=lFWMtWrv; arc=pass smtp.client-ip=103.117.158.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dd3okxwv"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A0131F00A3E;
-	Wed,  2 Sep 2026 14:25:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788359117;
-	bh=dwH6CzjmhB+SmHrUUzJ8KL/hFq+AZimRbmxhGf36Cd4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=dd3okxwvRWja7d9dxhaloYRzmW51U2RWUrlPNhitArb9FLFn/8CiJO80qz3SrZfac
-	 2130tW2M+GIuNq8HyjRRg5idQqW9AwBD5cA4SXWyuvu8t4ZvuAi54oQ0wwYCZv1vYx
-	 Qoio+2r/j41c6HH/CsD7IkCm2D2Y9BWUev3KpjwBlj74Io1nMsFLbBlQci5h5fOKyP
-	 rBjGVMu4Y9VfTAC+Pi30uYrdX5zx79HHCokbzSeV0/cH/iqEO+Gl1y/6CzlIjZ2iUy
-	 jWcIbB23ujFq6l0VbD8oqAv5S//E/oQxktCfQcCSLcxQQRGJKmMZ8c2D4eXimQida1
-	 EbLsFTgaqo2lA==
-From: SJ Park <sj@kernel.org>
-To: SJ Park <sj@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	Shuah Khan <shuah@kernel.org>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
+	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="lFWMtWrv"
+ARC-Seal: i=1; a=rsa-sha256; t=1788361491; cv=none; 
+	d=zohomail.in; s=zohoarc; 
+	b=Q+SEHYTnfXW9s9C26rAwpgKyHSAsjp3U3W1ws026kfr3NxCutcmWvTm/mHBd5sHomb8v+3s8F6R1FsMDx+lZW0J6proHFcI4jN6K6umvavu1yQeuwjym9b3++bUBHa99wfqlrnm6+osaX1SXLKqKnoBLndNboV+GSJl5oCbASyQ=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
+	t=1788361491; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=PZzMPScsXWSlSAae9UgIPeUp1UVPBl3vjq+5BFJ+UeY=; 
+	b=VEF4KyEO3vwen7mRn96+tFXmnIC2HA5kbVIQj/kY1AwOWtWNqAsdqUtXyKig+M3r19Kf2UFfTZQND1UPdEPE3enG4Avvo/Qfuzr9x3jo1VnHcZVdy9mbSArMT3+RjYvU25kPgDJfqJf+A4FHN6ilN2MK920d54HV4UiP7oGHqbo=
+ARC-Authentication-Results: i=1; mx.zohomail.in;
+	dkim=pass  header.i=zohomail.in;
+	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
+	dmarc=pass header.from=<adi.sharma@zohomail.in>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788361491;
+	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Transfer-Encoding:Reply-To;
+	bh=PZzMPScsXWSlSAae9UgIPeUp1UVPBl3vjq+5BFJ+UeY=;
+	b=lFWMtWrvbTMxoZu1pqDhq3xuHNpdEI1Tf/JKy58TPx/aXILu96qhTVrNSW759/TR
+	6iv2IEDni1ksKMZsFRGWO0DNkpi59A+znmlAZF+W3KA9ZVLwxa9bwp2XJKUvAP7gVSx
+	bGnAq8V1bfNhdD+F+W3x29b5/9EJ220z2DzRBfu0=
+Received: by mx.zoho.in with SMTPS id 1788361489769715.4053413254559;
+	Wed, 2 Sep 2026 20:34:49 +0530 (IST)
+From: Aditya Sharma <adi.sharma@zohomail.in>
+To: bpf@vger.kernel.org
+Cc: ast@kernel.org,
+	daniel@iogearbox.net,
+	andrii@kernel.org,
+	martin.lau@linux.dev,
+	yonghong.song@linux.dev,
+	eddyz87@gmail.com,
+	song@kernel.org,
+	jolsa@kernel.org,
+	kpsingh@kernel.org,
+	shuah@kernel.org,
+	puranjay@kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 0/6] mm/damon: add kunit and selftests for probes and probe weights
-Date: Wed,  2 Sep 2026 07:25:09 -0700
-Message-ID: <20260902142510.87878-1-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260902140313.85983-1-sj@kernel.org>
-References: 
+	Aditya Sharma <adi.sharma@zohomail.in>
+Subject: [PATCH bpf-next 1/2] bpf: Only check nmi_uaccess_okay() when signalling current
+Date: Wed,  2 Sep 2026 20:34:38 +0530
+Message-Id: <20260902150439.692725-1-adi.sharma@zohomail.in>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -50,21 +62,57 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Wed,  2 Sep 2026 07:03:06 -0700 SJ Park <sj@kernel.org> wrote:
+nmi_uaccess_okay() takes no task argument and is a statement about
+current. When commit 6280cf718db0 ("bpf: Implement bpf_send_signal_task()
+kfunc") made the PF_KTHREAD/PF_EXITING and is_global_init() test the
+supplied task, nmi_uaccess_okay() was left testing current.
 
-> DAMON recently introduced probes and probe weights.  Add kunit and
-> selftests for ensuring the parameters for features can be set using the
-> core API and the sysfs ABI, respectively.
+As a result bpf_send_signal_task() returns -EPERM whenever the
+calling context happens to be a kernel thread, regardless of which task
+the signal is aimed at. The same call with the same target succeeds or
+fails depending only on what the CPU was running:
 
-Sashiko found no blocker for this series.  Sashiko sent findings to damon@
-mailing list [1], and I replied to all the comments that have any potential
-issue finding.  Please read those for details.
+  bpf_send_signal_task() from tp_btf/workqueue_execute_start : -EPERM
+  bpf_send_signal_task() from tp_btf/sys_enter               : 0
 
-[1] https://lore.kernel.org/damon/
+This was originally hit from a bpf_timer callback, where the failure
+is intermittent because a softirq runs on whichever task it
+interrupted. The rejection is x86-only, as nmi_uaccess_okay() is
+defined as true in include/asm-generic/tlb.h elsewhere.
 
+Only apply the check when the signal is sent to current, where the
+predicate is meaningful. bpf_send_signal() and bpf_send_signal_thread()
+assign task = current, so their behaviour is unchanged.
 
-Thanks,
-SJ
+Fixes: 6280cf718db0 ("bpf: Implement bpf_send_signal_task() kfunc")
+Suggested-by: Yonghong Song <yonghong.song@linux.dev>
+Link: https://lore.kernel.org/bpf/20260819124324.43162-1-adi.sharma@zohomail.in/T/#u
 
-[...]
+Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
+---
+ kernel/trace/bpf_trace.c | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+index 29260951aa87..f7a41f222599 100644
+--- a/kernel/trace/bpf_trace.c
++++ b/kernel/trace/bpf_trace.c
+@@ -871,7 +871,10 @@ static int bpf_send_signal_common(u32 sig, enum pid_type type, struct task_struc
+ 	 */
+ 	if (unlikely(task->flags & (PF_KTHREAD | PF_EXITING)))
+ 		return -EPERM;
+-	if (unlikely(!nmi_uaccess_okay()))
++	/* Since nmi_uaccess_okay() is only for the current
++	 * task, check if task is current.
++	 */
++	if (task == current && unlikely(!nmi_uaccess_okay()))
+ 		return -EPERM;
+ 	/* Task should not be pid=1 to avoid kernel panic. */
+ 	if (unlikely(is_global_init(task)))
+
+base-commit: d761934c9483ecde93fe99d8705282f716dfee50
+-- 
+2.34.1
+
