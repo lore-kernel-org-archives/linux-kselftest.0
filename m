@@ -1,454 +1,206 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B8D0399CE9;
-	Wed,  2 Sep 2026 23:38:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3519946D08B
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 23:58:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788392308; cv=none; b=DILdM/5Ahr0h90rbDhoaMxUiny4PlZx1PoyOQm7sr1lQ9GLWcecGYfFrkuBxfmLdRsTymASrG9Mhdbxo8z3fs1nMWm8DV6YfKW7LtO0DQBuYQTdJCs2t0+hxfLFkANWk1bySpoIewSJMzyrNohZMAowOw69m8Z2ZvteW4HzZgLw=
+	t=1788393505; cv=none; b=mxHZ9JEt2Pdgvw8rtUCUxzyy0NCf7Frpw9UCMkpAz2AmA47QTB+xV3zy7M8CGBJejkKIS02prQ67XW+s+rMJnw2PhXrcWafenp6cj8VdzpwLUYfHdNYvLUKKC7GOfhcreZooI7J2cNbdNjBRAIVvu1YbhYDCRdtQVOPp7k/vmCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788392308; c=relaxed/simple;
-	bh=I9Pa8hKDS5g85UOgRYJgl+7TkogfiuEIx9cFvpLhXl4=;
-	h=Subject:From:To:Cc:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=aiB8BNmo+tKGfPxreuQi9mP1CDr3lffREM5Ceyb7oPdQN6AWatgZ3maG7yDa5Rkffk3mkq00sZGq94DmKCeRnWOcFd/BQMj1WSDARdMpzxchHNVxZyIrri38cjIaz0VgUxZipezfK4M1+ndmnuSgK2tfKH5iC6z86bbPPZ/JgfY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PEtCNUAQ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788393505; c=relaxed/simple;
+	bh=y0BmfY76mN/0WPfH4Hr0Ikh4CCr4ip0xHhPT2cF1Sd0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XUVqYnWM7A5JZup4vVe+oyUshVTusqAdSTHWBns0sc0ixxW9+RCwv/wV1nI7HNgTubRG3alSreGiWktLHtWBKRfM7olTWeeloxdlWDWw8qiuHjaIDD+p6pKtVtp7QdxbNtsPfCFvUHlln63wnJIhPnbTtFy+HGrmpdUx4C2dzbw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UEdOUHVf; arc=none smtp.client-ip=209.85.160.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PEtCNUAQ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D78C1F00A3A;
-	Wed,  2 Sep 2026 23:38:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788392298;
-	bh=pHsLzd984RzzfYVBDhPofwWlK+4V0adj0RtO8W+Zsik=;
-	h=Subject:From:To:Cc:Date:In-Reply-To:References;
-	b=PEtCNUAQDu5QWSXmRDN7xGUSLtpF0ykA4pt9S9+uVxHneGLLriLlwborBdB48n28t
-	 h+5jj8fRtCrqFcmYLj5bluZn3D8pMvO7P/JtRreeqTvhjBSlghEyAJtNl/0nsQsG3M
-	 sPnjyUapgK+eaY6hKMl8Ynb6SXbvsJbrwqUJvJSg6dBdH0Qo2Sh08eX1za+V3oXL0H
-	 iGE75rM5jKQfoqiwvHYMcsYiEID5/yI9mb44yb40cMPZ/OBXoWGYSaKHgonEAE/s9z
-	 TQdcQCJawpnkksOLeWzOjKiogEyn5/nBOtJF0JTyV1e19jdvQ7S8SEd3Ee7TccFmM/
-	 TE3kBQQydsilg==
-Subject: Re: [net-next,v6,5/6] selftests: net: add multithread server support
- to iou-zcrx
-From: netdev-bot+sashiko@kernel.org
-To: juanlu@fastmail.com
-Cc: dw@davidwei.uk, netdev@vger.kernel.org, io-uring@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kuba@kernel.org, asml.silence@gmail.com, pabeni@redhat.com, shuah@kernel.org
-Date: Wed, 02 Sep 2026 23:38:17 +0000
-Message-ID: <178839229706.3394541.1555608492152892136@kernel.org>
-In-Reply-To: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
-References: <20260831-iou-zcrx-v6-5-02d1d012f0fd@fastmail.com>
-X-sashiko-severity: High
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UEdOUHVf"
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-459281bc13bso1224954fac.2
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 16:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788393499; x=1788998299; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=o6TxE/PuYRNxck14tJMx6uhlVO4Uxr/vKzSJJkM4qzE=;
+        b=UEdOUHVfSio8B+/4dM4jV06dcybCNduoYcyLhiSa7adKNY4niM8QiLriUdwA83jyjZ
+         CmwYdf8FH4RwJ2KeSlBbbF/BIJcKBZaow2l2Ly5TaZ4ly+GHSrLdlYTmCH3RP+WjdG/q
+         P+NmQnMi6eTff/mH6Ufkx396ThYmRiziHf3skgb3TvqJHxHOi8rMRwF/dU8RF+kYeVnE
+         Q0823yATERFU7Prvd5NdqsktbGuC6jSmEji3NSc0SsS+kDt/+MIPrXsD8+ZhfRzC4gkf
+         uxYr1h1xizIUWxEm2gThxF5+1MFl7LrerD8/IM5xJLTW+XurNJCcetK3Jn0Tcutulgfv
+         CXUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788393499; x=1788998299;
+        h=in-reply-to:content-disposition:content-type:mime-version
+         :references:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=o6TxE/PuYRNxck14tJMx6uhlVO4Uxr/vKzSJJkM4qzE=;
+        b=Q7w4Iep4krCNHlNbzgVwK6EqDt9ClMYi8OHrasb7f2i3tHqZ5zCDfKjNtu+dkv6GBf
+         sTaTzDCyHq5xAfSqN8uo04bn23OzLcVfkjqWuru5WHUHLb/1CCOViajPQEIy/CrCBSSP
+         yjopaC0ROU8KxiZAvkM8VYHXnP5KxcW+oltF7q232jp2VBL4n94sgpFtpPn5XoiJonwN
+         tWfloNTduwgaZUVY3Qwm+leusL2ssRIhXsOJMSCz+RzyRnxhDJjppKsfx6hgHtvI+cqm
+         GAIAytX2MIv6tU6iWKj2rMXOmtJJCfgmKuZdXZ9YW32LgeWXI+ZwGojk/YG8bGSGKmLN
+         adVQ==
+X-Forwarded-Encrypted: i=1; AKwUvByK+V/wavwJh574cKDhvYPLi/kvaRHU+aqCuImgW8lLEvC+2JtZL/q3pvV9IF9Dy2JJxX7VvS2pTCN7D9FwoMk=@vger.kernel.org
+X-Gm-Message-State: AFuF++mES00LF1jNZhDkmw3r1Jrp56Lb2ZiGZ0IKuB0Vh6fdJDo/5MPX
+	ricUetKYvKUoQ3JkDC9I29bQ3X7+NG0RPcbpvgmfaKZ6KlesLe2PNGfQ
+X-Gm-Gg: AYBFou3ov6bOa17IknwvXH5pG5dvXDE8V1JhygVIqyJVFASGj15vAsAZ0oST4M3ATts
+	+ZQjbl2s3NPMOs4k82XIvTOZGqt5LCL5REQD69T1sHFIOpwP8pbcAZE7OTeetYCJkFKFe/ZE0p1
+	pBYHYiLK0UW6bDXHcjNuyEJb1hEQt1ErdsRfhZpdKxoHkE4VOQ5veus8Rg7Ip0Rwjbb1ZSaIh0k
+	5jJc9P9VqZ1IsootR0xU1A0QA6K94/3fWYBhTX7HzAxzRqcsF5dbsPPjQDF+3WmaDxcv29Qt1yf
+	wgZKJEu5RQVSYrwAgx563HZ56+/PyOc4Su9J1n7VxdBsNRZwDyCR+ophFGz7PYeoF5CVeRef46B
+	wpXWGXTRD3p78fDC+JVvYO/9ru6vbXLtOIDjnPW4pj9AS829pIBhdqkvzoJN1qqg4BOJ+KtBnoM
+	edYuXIKKiykl8mrtSKpYUkqlhYFfoWpaSoskbLBG/EtTHGuHe74QhB6I7xK7MiktKDzWK+7IXPu
+	omzU1NdIUidrUnxFhIl
+X-Received: by 2002:a05:6871:c8dc:b0:465:8554:94b7 with SMTP id 586e51a60fabf-46f87ca935fmr7744412fac.12.1788393499274;
+        Wed, 02 Sep 2026 16:58:19 -0700 (PDT)
+Received: from devvm29614.prn0.facebook.com ([2a03:2880:ff:58::])
+        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-46f330822basm5626041fac.15.2026.09.02.16.58.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 16:58:18 -0700 (PDT)
+Date: Wed, 2 Sep 2026 16:58:06 -0700
+From: Bobby Eshleman <bobbyeshleman@gmail.com>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Stefano Garzarella <sgarzare@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Stefan Hajnoczi <stefanha@redhat.com>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Jason Wang <jasowangio@gmail.com>,
+	Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+	Eugenio =?iso-8859-1?Q?P=E9rez?= <eperezma@redhat.com>,
+	Shuah Khan <shuah@kernel.org>, virtualization@lists.linux.dev,
+	netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org, kvm@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, sargun@sargun.me, jlinbox@meta.com,
+	Bobby Eshleman <bobbyeshleman@meta.com>
+Subject: Re: [PATCH net-next 2/6] vsock: add IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS
+Message-ID: <api4Du1bQzieFvA9@devvm29614.prn0.facebook.com>
+References: <20260902-vsock-guest-ns-v1-0-9995383e9a8b@meta.com>
+ <20260902-vsock-guest-ns-v1-2-9995383e9a8b@meta.com>
+ <3a581439-6664-4339-8627-f1704db35bb0@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3a581439-6664-4339-8627-f1704db35bb0@infradead.org>
 
-Thank you for your contribution! Sashiko AI review found 6 potential
-issue(s) to consider:
+On Wed, Sep 02, 2026 at 04:35:59PM -0700, Randy Dunlap wrote:
+> Hi,
+> 
+> On 9/2/26 4:00 PM, Bobby Eshleman wrote:
+> > From: Bobby Eshleman <bobbyeshleman@meta.com>
+> > 
+> > Namespaces let a host isolate a VM's vsock traffic to a specific
+> > namespace, but in a guest vsock traffic cannot be isolated to a
+> > namespace. The vsock device is hardcoded to global mode and can't be
+> > moved into a local-mode namespace.
+> > 
+> > Introduce ioctl IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS on /dev/vsock that
+> > gives userspace a way to move the device to the calling pid's namespace.
+> > The call requires CAP_NET_ADMIN in the root user namespace. A privileged
+> > user wishing to "unassign" the device can move it to the init_netns,
+> > which is hardcoded to global mode (so no unassign call is necessary).
+> > 
+> > A getter to read the current assignment back was considered, returning
+> > either the namespace's net_cookie or its nsfs inode number, but neither
+> > seemed useful enough to bake into the uAPI now. It can be added later if
+> > a user turns up that needs it.
+> > 
+> > Add a transport hook to indicate support for guest namespacing, so that
+> > transports may opt in/out. A transport that opts out keeps the
+> > reachability rules it had before this ioctl existed.
+> > 
+> > Sockets are reset when the underlying device moves to a different
+> > namespace, so as to prevent reachability from the previous and now
+> > disallowed namespace.
+> > 
+> > Following the approach of netdevs, the device returns to init_net when
+> 
+> I'm confused by the use of "init_net" several times and "init_netns" at
+> least 2 times. "init_net" is the initial, boot-time net namespace.
+> 
+> And is one of these what is referred to in the Documentation/ file below
+> as "initial namespace"?
 
-Critical: 0 · High: 1 · Medium: 2 (3) · Low: 3
+Good point, init_netns should be init_net everywhere here (and in the
+Documentation/).
 
-- [High] listen() is now executed before the workers have registered
-  their zcrx ifqs, breaking the ordering that two existing in-tree tests…
-- [Medium] A worker thread that is dispatched zero connections reports
-  success without receiving or verifying a single byte.
-- [Medium] The new CQ sizing removes the implicit bound that kept the
-  zcrx refill-queue producer inside one ring.
-- [Low] DISCARDED (resolved later in the series): the concern states that
-  the new multithread/multi-queue server path is dead code because iou-…
-- [Low] `-t` is documented as a thread count but produces its square.
-- [Low] `-t 0` is accepted and yields a silent PASS.
+> 
+> > its namespace is removed. Care is taken to not break flows when the
+> > device is inside a global namespace that is being torn down and alive
+> > sockets are in a different global namespace. In this scenario, the
+> > device's netns getter pre-emptively falls back to the init_net (always
+> > global) so that these flows are not disrupted. If init_netns ever
+> 
+>                                            maybe    init_netns()
+> if you are referring to a function...
 
-Pre-existing issues:
-- [Medium] DISCARDED (pre-existing, medium): the concern states that the
-  5 s watchdog in server_worker() can never fire while the thread is…
-- [Medium] DISCARDED (pre-existing, medium): the concern states that per-
-  worker resources are never released — no io_uring_queue_exit(), no…
-- [Medium] DISCARDED (pre-existing, medium): the concern states that
-  process_recvzc() indexes the 2 MiB `payload` buffer with…
+Same here, should be init_net.
 
---
+> 
+> > supports local-mode in the future, this logic will have to be changed.
+> > 
+> > Suggested-by: Stefano Garzarella <sgarzare@redhat.com>
+> > Link: https://lore.kernel.org/all/20200427142518.uwssa6dtasrp3bfc@steredhat/
+> > Signed-off-by: Bobby Eshleman <bobbyeshleman@meta.com>
+> > ---
+> >  Documentation/admin-guide/sysctl/net.rst |  18 +++
+> >  include/net/af_vsock.h                   |   7 ++
+> >  include/uapi/linux/vm_sockets.h          |   6 +
+> >  net/vmw_vsock/af_vsock.c                 | 198 ++++++++++++++++++++++++++++++-
+> >  4 files changed, 228 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/admin-guide/sysctl/net.rst b/Documentation/admin-guide/sysctl/net.rst
+> > index e586e17fc7a5..1e9c0d2be7b8 100644
+> > --- a/Documentation/admin-guide/sysctl/net.rst
+> > +++ b/Documentation/admin-guide/sysctl/net.rst
+> > @@ -515,6 +515,24 @@ their hosts. The behavior of VSOCK sockets in a network namespace is determined
+> >  by the namespace's mode (``global`` or ``local``), which controls how CIDs
+> >  (Context IDs) are allocated and how sockets interact across namespaces.
+> >  
+> > +In a guest, the vsock device owned by the guest-to-host (G2H) transport belongs
+> > +to one network namespace at a time. The ``IOCTL_VM_SOCKETS_ASSIGN_G2H_NETNS``
+> > +ioctl on ``/dev/vsock`` moves it to the namespace of the calling process, which
+> > +requires ``CAP_NET_ADMIN`` in the initial user namespace. The namespace's mode
+> 
+>                               Is this the caller's namespace?
 
-selftests: net: add multithread server support to iou-zcrx
+Yes. I'll clarify that in the next revision.
 
-This converts the iou-zcrx server into N worker threads, each owning one
-RX queue with its own io_uring and zcrx ifq. The main thread keeps the
-listening socket and dispatches accepted connections to workers by
-matching SO_INCOMING_NAPI_ID against per-queue NAPI IDs queried over ynl.
+> 
+> > +decides who may then use the device:
+> > +
+> > +- ``global`` - every ``global`` mode namespace may use it.
+> > +- ``local`` - only that namespace may use it, which reserves the connection to
+> > +  the host for it alone.
+> > +
+> > +The device starts out in the initial namespace, so until the ioctl is issued
+> > +nothing has moved and no mode has changed.
+> > +
+> > +Connections made before the move, from a namespace that can no longer reach the
+> > +device, are reset. The device returns to the initial namespace when the
+> > +namespace it was moved to is deleted, so assigning it to the initial namespace
+> > +is how an assignment is undone.
+> > +
+> >  ns_mode
+> >  -------
+> >  
+> thanks.
+> -- 
+> ~Randy
+> 
 
-A few questions about the new threading and setup ordering below.
+Thanks for the review.
 
-> diff --git a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> index f793a6c04e412..29905cb3b2433 100644
-> --- a/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-> +++ b/tools/testing/selftests/drivers/net/hw/iou-zcrx.c
-
-[ ... ]
-
-> @@ -97,9 +101,15 @@ struct thread_ctx {
->  	size_t			ring_size;
->  	struct io_uring_zcrx_rq	rq_ring;
->  	unsigned long		area_token;
-> -	int			connfd;
-> -	bool			stop;
-> -	size_t			received;
-> +	int			queue_id;
-> +	int			napi_id;
-> +	pthread_barrier_t	*setup_done;
-> +	pthread_barrier_t	*dispatch_done;
-> +
-> +	int			connfds[MAX_CONNS_PER_THREAD];
-> +	size_t			received[MAX_CONNS_PER_THREAD];
-> +	int			oneshot_recvs[MAX_CONNS_PER_THREAD];
-> +	int			nr_conns;
->  };
-
-[ ... ]
-
-> @@ -304,10 +296,10 @@ static void process_recvzc(struct thread_ctx *ctx, struct io_uring_cqe *cqe,
->  	data = (char *)ctx->area_ptr + (rcqe->off & mask);
->  
->  	for (i = 0; i < n; i++) {
-> -		if (*(data + i) != payload[(ctx->received + i)])
-> +		if (*(data + i) != payload[(ctx->received[conn_idx] + i)])
->  			error(1, 0, "payload mismatch at %d", i);
->  	}
-> -	ctx->received += n;
-> +	ctx->received[conn_idx] += n;
-
-[Severity: Medium]
-This is a pre-existing issue and not introduced by this patch, but the
-index into payload[] is still unbounded. payload is a single
-posix_memalign(page_size, SEND_SIZE) allocation in main(), while
-ctx->received[conn_idx] only ever accumulates cqe->res, which is driven
-by whatever the peer sends into the wildcard-bound listener.
-
-Would it be worth adding a check that
-ctx->received[conn_idx] + n <= cfg_send_size before the comparison loop,
-so a peer sending more than cfg_send_size bytes produces a clear error
-rather than an out-of-bounds read of payload[]?
-
->  
->  	rqe = &ctx->rq_ring.rqes[(ctx->rq_ring.rq_tail & rq_mask)];
->  	rqe->off = (rcqe->off & ~IORING_ZCRX_AREA_MASK) | ctx->area_token;
-
-> @@ -320,28 +312,124 @@ static void server_loop(struct thread_ctx *ctx)
->  	struct io_uring_cqe *cqe;
->  	unsigned int count = 0;
->  	unsigned int head;
-> -	int i, ret;
->  
->  	io_uring_submit_and_wait(&ctx->ring, 1);
->  
->  	io_uring_for_each_cqe(&ctx->ring, head, cqe) {
-> -		if (cqe->user_data == 1)
-> -			process_accept(ctx, cqe);
-> -		else if (cqe->user_data == 2)
-> -			process_recvzc(ctx, cqe);
-> -		else
-> -			error(1, 0, "unknown cqe");
-> +		process_recvzc(ctx, cqe, cqe->user_data);
->  		count++;
->  	}
->  	io_uring_cq_advance(&ctx->ring, count);
->  }
->  
-> -static void run_server(void)
-> +static void *server_worker(void *arg)
->  {
-> -	struct thread_ctx ctx = {};
-> -	unsigned int flags = 0;
-> -	int fd, enable, ret;
-> +	struct io_uring_params params = { };
-> +	struct thread_ctx *ctx = arg;
->  	uint64_t tstop;
-> +	int i;
-> +
-> +	params.flags |= IORING_SETUP_COOP_TASKRUN;
-> +	params.flags |= IORING_SETUP_SINGLE_ISSUER;
-> +	params.flags |= IORING_SETUP_DEFER_TASKRUN;
-> +	params.flags |= IORING_SETUP_SUBMIT_ALL;
-> +	params.flags |= IORING_SETUP_CQE32;
-> +	params.flags |= IORING_SETUP_CQSIZE;
-> +	params.cq_entries = AREA_SIZE / page_size;
-
-[Severity: Medium]
-Can this overrun the zcrx refill ring? The CQ is now sized to
-AREA_SIZE / page_size (8192 entries), while setup_zcrx() still uses
-rq_entries = 4096.
-
-server_loop() drains every available CQE in one batch, and
-process_recvzc() publishes exactly one refill descriptor per CQE without
-ever consulting khead:
-
-	rqe = &ctx->rq_ring.rqes[(ctx->rq_ring.rq_tail & rq_mask)];
-	...
-	io_uring_smp_store_release(ctx->rq_ring.ktail, ++ctx->rq_ring.rq_tail);
-
-Previously io_uring_queue_init(512, ...) gave cq_entries = 1024, which is
-strictly smaller than rq_entries, so a single drain could not wrap the
-refill ring. With 8192 CQ entries a drain of more than 4096 zcrx CQEs
-overwrites descriptors that the kernel has not consumed yet, and the
-kernel side clamps rather than complains:
-
-io_uring/zcrx.c:__zcrx_rq_entries() {
-	u32 entries = rq->cached_tail - rq->cached_head;
-
-	return min(entries, rq->nr_entries);
-}
-
-so the surplus buffers are simply never returned to the page pool. Should
-the producer only publish while (ktail - khead) < rq_entries, or should
-rq_entries be at least cq_entries?
-
-> +
-> +	io_uring_queue_init_params(512, &ctx->ring, &params);
-> +	setup_zcrx(ctx);
-> +
-> +	if (cfg_dry_run)
-> +		return NULL;
-> +
-> +	pthread_barrier_wait(ctx->setup_done);
-> +	pthread_barrier_wait(ctx->dispatch_done);
-> +
-> +	for (i = 0; i < ctx->nr_conns; i++) {
-> +		if (cfg_oneshot) {
-> +			ctx->oneshot_recvs[i] = cfg_oneshot_recvs;
-> +			add_recvzc_oneshot(ctx, i, page_size);
-> +		} else {
-> +			add_recvzc(ctx, i);
-> +		}
-> +	}
-> +
-> +	tstop = gettimeofday_ms() + 5000;
-> +	while (ctx->nr_conns > 0 && gettimeofday_ms() < tstop)
-> +		server_loop(ctx);
-> +
-> +	if (ctx->nr_conns != 0)
-> +		error(1, 0, "test failed: %d connections incomplete",
-> +		      ctx->nr_conns);
-
-[Severity: Medium]
-Can a worker that received no connections at all report success here?
-nr_conns is used both as the dispatch count and as the live-connection
-countdown, so with nr_conns == 0 the arming loop above does nothing, the
-drain loop is skipped, and this final check passes without a single byte
-having been received or verified.
-
-Dispatch in run_server() is purely SO_INCOMING_NAPI_ID based, and nothing
-guarantees a non-empty distribution. With -t 2 (total_conns = 4) all four
-flows can hash onto one RSS queue, in which case the second worker exits
-successfully having done nothing, and the multi-queue test reports pass
-while only one queue was exercised. The previous code failed loudly in
-this situation with "test failed".
-
-Would a post-dispatch assertion in run_server() that every worker owns at
-least one connection, plus a check on the received byte totals, keep the
-old strictness?
-
-The reverse skew looks unhandled too: total_conns is cfg_num_threads
-squared, and if they all land on one worker then for -t 9 and above this
-trips the "worker %d connection overflow" error in run_server(), which
-would be a spurious failure rather than a real one.
-
-[Severity: Medium]
-This isn't a bug introduced by this patch, but the 5 s deadline can still
-never fire while the thread is parked inside server_loop():
-
-	io_uring_submit_and_wait(&ctx->ring, 1);
-
-The deadline is only re-evaluated between blocking waits, so a stalled
-connection hangs the worker (and then pthread_join() in run_server())
-instead of producing the "connections incomplete" failure. The same shape
-existed before the patch, but it now applies per worker thread. Could the
-wait use a timeout so the watchdog is effective?
-
-> +
-> +	return NULL;
-> +}
-
-[ ... ]
-
-> +static void run_server(void)
-> +{
-> +	pthread_barrier_t setup_done, dispatch_done;
-> +	int total_conns, accepted = 0, connfd;
-> +	struct thread_ctx *ctxs;
-> +	int fd, ret, enable, i;
-> +	unsigned int ifindex;
-> +	pthread_t *threads;
-> +
-> +	ctxs = calloc(cfg_num_threads, sizeof(*ctxs));
-> +	threads = calloc(cfg_num_threads, sizeof(*threads));
-> +	if (!ctxs || !threads)
-> +		error(1, 0, "calloc()");
-
-[Severity: Low]
-Should parse_opts() reject -t 0? cfg_num_threads is taken straight from
-strtoul(optarg, NULL, 0) with no positivity check, and with 0:
-
-  - calloc(0, ...) returns a non-NULL pointer, so this guard passes
-  - both barriers are initialised with a single participant
-  - no workers are created
-  - total_conns is 0, so the accept loop never runs
-  - both barrier waits return immediately and run_server() returns 0
-
-The client side also computes total_conns as cfg_num_threads squared, so
-it makes no connection and exits successfully as well. Either way the
-binary reports success without doing any work.
-
->  
->  	fd = socket(AF_INET6, SOCK_STREAM, 0);
->  	if (fd == -1)
-
-> @@ -356,29 +444,68 @@ static void run_server(void)
->  	if (ret < 0)
->  		error(1, 0, "bind()");
->  
-> -	flags |= IORING_SETUP_COOP_TASKRUN;
-> -	flags |= IORING_SETUP_SINGLE_ISSUER;
-> -	flags |= IORING_SETUP_DEFER_TASKRUN;
-> -	flags |= IORING_SETUP_SUBMIT_ALL;
-> -	flags |= IORING_SETUP_CQE32;
-> +	pthread_barrier_init(&setup_done, NULL, cfg_num_threads + 1);
-> +	pthread_barrier_init(&dispatch_done, NULL, cfg_num_threads + 1);
-> +
-> +	for (i = 0; i < cfg_num_threads; i++) {
-> +		ctxs[i].queue_id = cfg_queue_id + i;
-> +		ctxs[i].setup_done = &setup_done;
-> +		ctxs[i].dispatch_done = &dispatch_done;
-> +	}
->  
-> -	io_uring_queue_init(512, &ctx.ring, flags);
-> +	for (i = 0; i < cfg_num_threads; i++) {
-> +		ret = pthread_create(&threads[i], NULL,
-> +				     server_worker, &ctxs[i]);
-> +		if (ret)
-> +			error(1, ret, "pthread_create()");
-> +	}
->  
-> -	setup_zcrx(&ctx);
->  	if (cfg_dry_run)
-> -		return;
-> +		goto join;
->  
->  	if (listen(fd, 1024) < 0)
->  		error(1, 0, "listen()");
->  
-> -	add_accept(&ctx, fd);
-> +	pthread_barrier_wait(&setup_done);
-
-[Severity: High]
-Is the listen() intentionally moved before the workers have registered
-their ifqs? The main thread creates the threads, calls listen(), and only
-then waits on setup_done, while the workers reach that barrier after
-io_uring_queue_init_params() plus setup_zcrx(), i.e. after
-io_uring_register_ifq() has restarted the device RX queue.
-
-Before the patch the sequence was serialized in one thread:
-
-	io_uring_queue_init(512, &ctx.ring, flags);
-	setup_zcrx(&ctx);
-	...
-	listen(fd, 1024);
-
-so the port only became visible once the memory provider was installed.
-
-Two existing tests depend on that ordering. wait_port_listen() in
-net/lib/py/utils.py polls every 5 ms, so it can now return while
-registration is still in flight:
-
-iou-zcrx.py:test_zcrx_large_chunks() {
-	wait_port_listen(cfg.port, proto="tcp")
-
-	check_iou_rx_buf_len(cfg, rx_buf_len)
-}
-
-check_iou_rx_buf_len() raises "Expected 1 io-uring page pool, found 0",
-and nk_qlease.py:test_destroy() does queue_get() plus
-ksft_in("io-uring", queue_info) immediately after wait_port_listen() with
-no sleep.
-
-Beyond the harness races, data delivered into the queue before the
-provider exists is serviced by the copy fallback rather than zero copy,
-and the queue restart during registration can drop in-flight frames.
-
-Would moving listen() below pthread_barrier_wait(&setup_done) restore the
-previous guarantee?
-
->  
-> -	tstop = gettimeofday_ms() + 5000;
-> -	while (!ctx.stop && gettimeofday_ms() < tstop)
-> -		server_loop(&ctx);
-> +	if (cfg_num_threads > 1) {
-> +		ifindex = if_nametoindex(cfg_ifname);
-> +		if (!ifindex)
-> +			error(1, 0, "bad interface name: %s", cfg_ifname);
-> +		for (i = 0; i < cfg_num_threads; i++)
-> +			ctxs[i].napi_id = query_napi_id(ifindex,
-> +							ctxs[i].queue_id);
-> +	}
-> +
-> +	total_conns = cfg_num_threads * cfg_num_threads;
-
-[Severity: Low]
-This isn't a bug, but -t is documented as a thread count while both
-run_server() and run_client() square it. usage() advertises
--t<num_threads>, and run_client() creates total_conns threads with
-total_conns = cfg_num_threads * cfg_num_threads, so -t 8 produces 64
-client threads and 64 connections, not 8. That also interacts with the
-64-entry MAX_CONNS_PER_THREAD limit. Could the option name or the usage
-text spell out the quadratic connection count?
-
-> +
-> +	while (accepted < total_conns) {
-> +		int idx = 0;
-> +
-> +		connfd = accept(fd, NULL, NULL);
-> +		if (connfd < 0)
-> +			error(1, errno, "accept()");
->  
-> -	if (!ctx.stop)
-> -		error(1, 0, "test failed\n");
-> +		if (cfg_num_threads > 1)
-> +			idx = find_thread_by_conn(ctxs, connfd);
-> +
-> +		if (ctxs[idx].nr_conns >= MAX_CONNS_PER_THREAD)
-> +			error(1, 0, "worker %d connection overflow", idx);
-> +		ctxs[idx].connfds[ctxs[idx].nr_conns++] = connfd;
-> +		accepted++;
-> +	}
-> +
-> +	pthread_barrier_wait(&dispatch_done);
-> +
-> +join:
-> +	for (i = 0; i < cfg_num_threads; i++)
-> +		pthread_join(threads[i], NULL);
-> +
-> +	pthread_barrier_destroy(&setup_done);
-> +	pthread_barrier_destroy(&dispatch_done);
-> +	close(fd);
-> +	free(threads);
-> +	free(ctxs);
-
-[Severity: Medium]
-This is a pre-existing gap rather than something the patch introduces,
-but the teardown is now asymmetric. The barriers, the listening fd and
-the two calloc'ed arrays are released here, while the per-worker
-resources are not: there is no io_uring_queue_exit(), no munmap() of the
-AREA_SIZE zero-copy area or of the refill ring mapping created in
-setup_zcrx(), and the accepted connfds stored in ctxs[idx].connfds[] are
-never closed. With cfg_num_threads workers this is now multiplied by the
-thread count, including on the cfg_dry_run early return in
-server_worker(). Would it be worth adding the matching cleanup?
-
->  }
->  
->  static void *client_worker(void *arg)
-
--- 
-Sashiko AI review · https://netdev-ai.bots.linux.dev/sashiko/#/patchset/20260831-iou-zcrx-v6-0-02d1d012f0fd%40fastmail.com
+Best,
+Bobby
