@@ -1,51 +1,40 @@
-Received: from mta1.migadu.com (out-182.mta1.migadu.com [95.215.58.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91AD43F4BC
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 10:27:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA57144E046
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 10:33:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788344838; cv=none; b=jf1OMgRueyp0PY/Nn0rLPN7fPxzzcLB7efv+CZN8GpNlv57+6OzWjG9GcmNOdw1htKooa8oZ8brptUnuPTRH4uZ8yAHBUAzDHgQxC2x1+AS7NUsKsr0uolKX2m3YJIWDC/wBCGcem2eVTkhl/IQ4YjxWSL1hgRukgsh/2iKGuvY=
+	t=1788345202; cv=none; b=KgtKODwdYTayWswYoZlzFWNmuZq/6KBhtxcWkmVy+ZTWF9zVjtLQshexX5esWGcfG7IROAprApk7wCi7YRpScPShn7PMUS7bmp42aTkjrn9JjbhT+8dKAW3fDNbfzf6oAiSEpMB0cMxLHN3eGGtUpIUxVJaxzSguYEiJTy39Sw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788344838; c=relaxed/simple;
-	bh=ULUIui1KfyIMde5PCChpeFIcnSVcCftAFOx2xLDTPzg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QtnXbpEZXiNDg0unJpZ4AORUeVaAKd28MmvGrw6FD84lrnTD3a/l7UdtYt0iqvs+vj347t6ZoBz5R5HZ6NR/JhlHSMqcPbsGdoKthnQKmx/cIeMRMozkEKqIx/GmqKkcSpnE0Yblbx5sCI5oxn7cTDFKehby93j2U2M49DycJc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=CP7UHxXM; arc=none smtp.client-ip=95.215.58.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788345202; c=relaxed/simple;
+	bh=mM/ohG8mWKsAdS/PEqLuQl+h/sSLmrqFVt/0/9xC0Kc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E4w9xLzOn9P1lKW1tR/mUg0aCdanc3KB2pTRqUun2316ueD6lANQ9Jj6psQXTrDeCD3b5pa1wK934jJVkB1fzfKnyIv0A39ZDH+Bkmt1GUg4z+loM1BjjOBeP5R4Kd9pyh5iKXTXMzC+petqNCNYrElvC602+UD0cYNr15Qo6Iw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=piuKFThz; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="CP7UHxXM"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=ULUIui1KfyIMde5PCChpeFIcnSVcCftAFOx2xLDTPzg=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788344831; v=1; x=1788949631;
- b=CP7UHxXMPu70HYKxgHFNajpEJKwR5dR+DkJsNAHuUT+oE/IzntpmLNXPE0uI+La3dgscJtHk
- 9jmYs+sCRJvC2h4FPbTJgrsOB1NU74Ln6FlzuW+Kfyn6YdbtRIyiToIrHNFeXypSPrjvZfwr/0B
- oI+t5DvyQgR+bueWISVn4G5k=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 9dfd94571ddcc271;
-	Wed, 02 Sep 2026 10:27:11 +0000
-X-Mizu-Trace-ID: 9dfd94571ddcc271
-X-Migadu-Flow: FLOW_OUT
-From: Guopeng Zhang <guopeng.zhang@linux.dev>
-To: cgroups@vger.kernel.org,
-	longman@redhat.com,
-	ridong.chen@linux.dev
-Cc: tj@kernel.org,
-	hannes@cmpxchg.org,
-	mkoutny@suse.com,
-	shuah@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	Guopeng Zhang <zhangguopeng@kylinos.cn>
-Subject: [PATCH v3 7/7] selftests/cgroup: Add CPU release tests for type-change validation failures
-Date: Wed,  2 Sep 2026 18:26:15 +0800
-Message-ID: <20260902102615.79189-8-guopeng.zhang@linux.dev>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260902102615.79189-1-guopeng.zhang@linux.dev>
-References: <20260902102615.79189-1-guopeng.zhang@linux.dev>
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="piuKFThz"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=Es
+	C0qBELCbvlqd4eUKsuSha0UVOzKqDiqLxvN3aRDEY=; b=piuKFThzi3wg3DHPEP
+	jGvfimB7GyURJ4SouBf8uqg1r2XeQsPHdxPHbnNdOye+ZJ0szTEa8a301JcpLm6b
+	hhLYJgxOquDaBP0HALMJqdiBW10g1rEw2sPAB7kLxEuw99ucxkK4hh12Akir3H6O
+	8qhOjhAh/3AnJRqi9kzssh24M=
+Received: from ubuntu.localdomain (unknown [])
+	by gzga-smtp-mtada-g1-3 (Coremail) with SMTP id _____wDXPyY3+5dqQ05PAA--.39S2;
+	Wed, 02 Sep 2026 18:32:28 +0800 (CST)
+From: huhai <15815827059@163.com>
+To: brendan.higgins@linux.dev,
+	david@davidgow.net,
+	raemoar63@gmail.com
+Cc: linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com,
+	huhai <huhai@kylinos.cn>
+Subject: [PATCH] kunit: executor: fix NULL dereference with glob and attribute filters
+Date: Wed,  2 Sep 2026 18:32:12 +0800
+Message-Id: <20260902103212.295178-1-15815827059@163.com>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -53,129 +42,117 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDXPyY3+5dqQ05PAA--.39S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXF4kZw1kZr13KFyrKw48JFb_yoWrWw1fpr
+	15GFyjkFW8XF1UXrnxJF10vw13Aan2yF1UuryxAr9YqF43Jw1DAws7K3y7Jw4rWF48Z3Z0
+	y3Wvyw17K3WDAw7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jnKsUUUUUU=
+X-CM-SenderInfo: rprvmiivyslimvzbiqqrwthudrp/xtbC7x2OFGqX+z3xpQAA3H
 
-From: Guopeng Zhang <zhangguopeng@kylinos.cn>
+From: huhai <huhai@kylinos.cn>
 
-Exercise housekeeping validation failures for local and remote partition
-type changes. Check that the requested partition type becomes invalid,
-its CPUs are returned to the top cpuset and their boot-time isolation
-state is preserved.
+kunit_filter_glob_tests() returns NULL if a suite matches the suite glob
+but none of its tests match the test glob. If an attribute filter is also
+specified, kunit_filter_suites() passes this NULL pointer to
+kunit_filter_attr_tests(), which eventually dereferences it in kmemdup().
 
-Signed-off-by: Guopeng Zhang <zhangguopeng@kylinos.cn>
+This causes a kernel panic with, for example:
+
+  kunit.filter_glob=kunit_executor_test.not_found
+  kunit.filter="speed>slow"
+
+  Pid: 1, comm: swapper/0 Not tainted 7.2.0
+  RIP: 0033:memcpy_orig+0x1a/0x115
+  RSP: 00000000a0803df8  EFLAGS: 00010202
+  RAX: 0000000060b3f800 RBX: 0000000000000250 RCX: 0000000060b3f800
+  RDX: 0000000000000210 RSI: 0000000000000000 RDI: 0000000060b3f800
+  RBP: 0000000000000000 R08: 00000000a0803f4c R09: 000000000000006e
+  R10: 0000000060812a11 R11: 747365745f726f01 R12: 00000000a0803f4c
+  R13: 0000000000000000 R14: 0000000060812a00 R15: 0000000000000001
+  Kernel panic - not syncing: Segfault with no mm
+  CPU: 0 UID: 0 PID: 1 Comm: swapper/0 Not tainted 7.2.0 #3 VOLUNTARY
+  Stack:
+   60107348 608013c0 60490e60 6027d5b0
+   6026d06a 9f1ffe43 6026cf68 00000000
+   3e00000000000001 a0803ee8 a0803f4c 6026a6d1
+  Call Trace:
+   [<60107348>] ? kmemdup_noprof+0x48/0x60
+   [<6027d5b0>] ? glob_match+0x0/0x20
+   [<6026d06a>] ? kunit_filter_attr_tests+0x3a/0x2a0
+   [<6026cf68>] ? kunit_next_attr_filter+0xb8/0x180
+   [<6026a6d1>] ? kunit_filter_suites+0xf1/0x6e0
+   [<6027d5b0>] ? glob_match+0x0/0x20
+   [<6026aab7>] ? kunit_filter_suites+0x4d7/0x6e0
+   [<6026c5f1>] ? kunit_run_all_tests+0xc1/0x330
+   [<6000211b>] ? do_one_initcall+0x0/0x203
+   [<60002675>] ? kernel_init_freeable+0x2e2/0x365
+   [<603359b5>] ? kernel_init+0x33/0x19e
+   [<60043435>] ? new_thread_handler+0x45/0x60
+
+Check for a NULL result after glob filtering and skip the suite instead of
+passing it to the attribute filters. Add a test for this case.
+
+Fixes: 529534e8cba3 ("kunit: Add ability to filter attributes")
+Assisted-by: Codex:gpt-5.6-sol
+Signed-off-by: huhai <huhai@kylinos.cn>
 ---
- .../selftests/cgroup/test_cpuset_prs.sh       | 93 +++++++++++++++++++
- 1 file changed, 93 insertions(+)
+ lib/kunit/executor.c      |  2 ++
+ lib/kunit/executor_test.c | 22 ++++++++++++++++++++++
+ 2 files changed, 24 insertions(+)
 
-diff --git a/tools/testing/selftests/cgroup/test_cpuset_prs.sh b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-index 99cba4e5277d..a31dc69c6c2f 100755
---- a/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-+++ b/tools/testing/selftests/cgroup/test_cpuset_prs.sh
-@@ -1536,6 +1536,97 @@ test_housekeeping_cpu_return()
- 	echo "$TEST_NAME test PASSED."
+diff --git a/lib/kunit/executor.c b/lib/kunit/executor.c
+index b0f8a41d61d3..8bc2d35078fe 100644
+--- a/lib/kunit/executor.c
++++ b/lib/kunit/executor.c
+@@ -226,6 +226,8 @@ kunit_filter_suites(const struct kunit_suite_set *suite_set,
+ 				*err = PTR_ERR(filtered_suite);
+ 				goto free_filtered_suite;
+ 			}
++			if (!filtered_suite)
++				continue;
+ 		}
+ 		if (filter_count > 0 && parsed_filters != NULL) {
+ 			for (k = 0; k < filter_count; k++) {
+diff --git a/lib/kunit/executor_test.c b/lib/kunit/executor_test.c
+index 4cb119ad8f64..0b8ca3df953e 100644
+--- a/lib/kunit/executor_test.c
++++ b/lib/kunit/executor_test.c
+@@ -115,6 +115,27 @@ static void filter_suites_to_empty_test(struct kunit *test)
+ 				"should be empty to indicate no match");
  }
  
-+#
-+# A local type change that fails the boot housekeeping constraint must release
-+# the partition CPUs and preserve their boot-isolated state.
-+#
-+test_partition_type_failure()
++static void filter_suites_glob_and_attr_to_empty_test(struct kunit *test)
 +{
-+	TEST_NAME="Local partition type-change validation failure"
-+	get_boot_isolated_cpu "$TEST_NAME" || return 0
-+	echo "Running $TEST_NAME test ..."
++	struct kunit_suite *subsuite[2] = {NULL};
++	struct kunit_suite_set suite_set = {
++		.start = subsuite, .end = &subsuite[1],
++	};
++	struct kunit_suite_set got;
++	char filter[] = "speed>slow";
++	int err = 0;
 +
-+	cd $CGROUP2/test
-+	echo member > cpuset.cpus.partition
-+	echo $BOOT_CPU > cpuset.cpus
-+	[[ $(cat cpuset.cpus.effective) = "$BOOT_CPU" ]] || {
-+		echo "$TEST_NAME test SKIPPED: CPU $BOOT_CPU is unavailable"
-+		echo "" > cpuset.cpus
-+		cd $CGROUP2
-+		return 0
-+	}
-+	test_partition isolated
-+	echo root > cpuset.cpus.partition
-+	grep -q '^root invalid (partition config conflicts with housekeeping setup)$' \
-+		cpuset.cpus.partition || {
-+		echo "Partition type failure did not produce the expected state"
-+		exit 1
-+	}
-+	[[ $(cat $CGROUP2/cpuset.cpus.effective) = "$CPULIST" ]] || {
-+		echo "Partition type failure did not release CPU $BOOT_CPU"
-+		exit 1
-+	}
-+	check_isolcpus "." || {
-+		echo "Partition type failure lost boot-isolated CPU $BOOT_CPU"
-+		exit 1
-+	}
-+	echo member > cpuset.cpus.partition
-+	echo "" > cpuset.cpus
-+	cd $CGROUP2
-+	echo "$TEST_NAME test PASSED."
++	subsuite[0] = alloc_fake_suite(test, "suite", dummy_test_cases);
++
++	got = kunit_filter_suites(&suite_set, "suite.not_found", filter, NULL,
++				  &err);
++	KUNIT_ASSERT_EQ(test, err, 0);
++	free_suite_set_at_end(test, &got);
++
++	KUNIT_EXPECT_PTR_EQ_MSG(test, got.start, got.end,
++				"should be empty to indicate no match");
 +}
 +
-+#
-+# Exercise the same type-change validation failure for a remote partition.
-+#
-+test_remote_partition_type_failure()
-+{
-+	TEST_NAME="Remote partition type-change validation failure"
-+	get_boot_isolated_cpu "$TEST_NAME" || return 0
-+	echo "Running $TEST_NAME test ..."
-+
-+	cd $CGROUP2/test
-+	echo member > cpuset.cpus.partition
-+	echo +cpuset > cgroup.subtree_control
-+	echo $BOOT_CPU > cpuset.cpus
-+	echo $BOOT_CPU > cpuset.cpus.exclusive
-+	[[ $(cat cpuset.cpus.effective) = "$BOOT_CPU" ]] || {
-+		echo "$TEST_NAME test SKIPPED: CPU $BOOT_CPU is unavailable"
-+		echo "" > cpuset.cpus.exclusive
-+		echo "" > cpuset.cpus
-+		cd $CGROUP2
-+		return 0
-+	}
-+	mkdir A1
-+	cd A1
-+	echo $BOOT_CPU > cpuset.cpus
-+	echo $BOOT_CPU > cpuset.cpus.exclusive
-+	test_partition isolated
-+	echo root > cpuset.cpus.partition
-+	grep -q '^root invalid (partition config conflicts with housekeeping setup)$' \
-+		cpuset.cpus.partition || {
-+		echo "Remote type failure did not produce the expected state"
-+		exit 1
-+	}
-+	[[ $(cat $CGROUP2/cpuset.cpus.effective) = "$CPULIST" ]] || {
-+		echo "Remote type failure did not release CPU $BOOT_CPU"
-+		exit 1
-+	}
-+	check_isolcpus "." || {
-+		echo "Remote type failure lost boot-isolated CPU $BOOT_CPU"
-+		exit 1
-+	}
-+	echo member > cpuset.cpus.partition
-+	echo "" > cpuset.cpus.exclusive
-+	echo "" > cpuset.cpus
-+	cd ..
-+	rmdir A1
-+	echo "" > cpuset.cpus.exclusive
-+	echo "" > cpuset.cpus
-+	cd $CGROUP2
-+	echo "$TEST_NAME test PASSED."
-+}
-+
- #
- # Wait for inotify event for the given file and read it
- # $1: cgroup file to wait for
-@@ -1611,5 +1702,7 @@ test_boot_isolated
- test_child_owned_cpus
- test_trial_child_invalidation
- test_housekeeping_cpu_return
-+test_partition_type_failure
-+test_remote_partition_type_failure
- test_inotify
- echo "All tests PASSED."
+ static void parse_filter_attr_test(struct kunit *test)
+ {
+ 	int j, filter_count;
+@@ -240,6 +261,7 @@ static struct kunit_case executor_test_cases[] = {
+ 	KUNIT_CASE(filter_suites_test),
+ 	KUNIT_CASE(filter_suites_test_glob_test),
+ 	KUNIT_CASE(filter_suites_to_empty_test),
++	KUNIT_CASE(filter_suites_glob_and_attr_to_empty_test),
+ 	KUNIT_CASE(parse_filter_attr_test),
+ 	KUNIT_CASE(filter_attr_test),
+ 	KUNIT_CASE(filter_attr_empty_test),
 -- 
-2.43.0
+2.40.1
 
