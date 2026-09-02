@@ -1,131 +1,135 @@
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f45.google.com (mail-pj1-f45.google.com [209.85.216.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7E6B2EEE85;
-	Wed,  2 Sep 2026 03:27:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBEF2F7EE0
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 03:53:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788319642; cv=none; b=qc8NUeOw46Uj3ZY1Uum1w5wJqU1lxp9RaKpqvHl3Nyyp6MNzGOH7mVkl6Yl9SsXqUxz/mYZ6Y6mPrW+WqQlj/kiNHDi85saKFkno9yPpybLwMn5l+RfEbUuWFBxuQibI8F7BSRdQLNCueG/qN8c0rOKeiqlhTTQkEYj+erRKp1o=
+	t=1788321182; cv=none; b=nf7oggt5blm+dWo6gXrjpvE3mHynIyFmOixItSjP9ns/Kleo6dKrKfBVG50xvDxGlaD4ps+4yukAAkAPVZmywsWkS07GMVz+GMlA9ZQGfsyZMFYIYBvUkDMwXy5SdRG5BRKCAns2LGuE0VKySxofYhbT9XVAWy1KP+zrsHUOJ9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788319642; c=relaxed/simple;
-	bh=TUJHEOBl3U7XWWW3kQmwva+BBRdNdtlcHkUtD6k5bq4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tmY/s50iCpOHooqBs24AzP20p7qnaZbqKsmjTlaEAwA7xO1Gdg+UKbb/zHVryAezEqw/iGRUeQBtBBQ5EwXFYQXwWdibQ3WslkWOs6Lt6oa2gZN1BGAGNQdxsL+lF82nIWEJUbiR5YIXvXCEi8A2EnMjIl9D05wjCocNqyNTng8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kZI5kPyk; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1788321182; c=relaxed/simple;
+	bh=VQTV+1Df829D0KhYI8z888n05bpJmIInGDkIRqI83Dc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=IZI0KhH2qrMSspss1ndtle1SwbMjWOIXk9Ec7qnmn0k+fe/l8pz9MS6GMjH/XILXrQygMetKyg67jsHkfqoIeTL720CwmnbEaA0i5WpTnkQn/nVpGZQHrYWIVzdi3GZvfoMLim5r82GGaTiQYjn8/MvM7pngiOSWMpfSRAnoy1k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R11sKAf7; arc=none smtp.client-ip=209.85.216.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kZI5kPyk"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1788319639; x=1819855639;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TUJHEOBl3U7XWWW3kQmwva+BBRdNdtlcHkUtD6k5bq4=;
-  b=kZI5kPykEsGy+8P0A11yINzZeuTaSxSbdA05TOKIpaxOjFm88AcZGhpl
-   l6fk3bm7CmSGZkpVoirtkuj76quEcQ8nN51PvAwX++Camdzl3N1qPO6gT
-   K+GL1zdZe8sqA3CIJn6XSFwiBV9ZGE/u2pHGgSkqcCKnMIhxMIPzBv/Iv
-   Bof4S+dQNH1xdP1iRZhFCudsV0AkA7Prrh0mva0v9qtvqC8Cr3G3kJxrH
-   mEIPRpN7gPUHUgECJ2iL0Ub4QJKhrjoU7YWof7B04HK54ZiiJLzz36Xnx
-   zSPUnW8KdMUi+IILNKiCg2Na9fXqEUM3lRgu5RExYUC8wTRhXGJj9DBJQ
-   w==;
-X-CSE-ConnectionGUID: wumDXX6mS8Sjvs7B83xmjg==
-X-CSE-MsgGUID: bv3I+bh7TR2cjqySbuPb6Q==
-X-IronPort-AV: E=McAfee;i="6800,10657,11893"; a="76317666"
-X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="76317666"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 20:27:17 -0700
-X-CSE-ConnectionGUID: AGeB1hPEQT+hgLB03500lw==
-X-CSE-MsgGUID: TM+113I7RAS5hRz8VK5CNA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.25,257,1779174000"; 
-   d="scan'208";a="266677621"
-Received: from unknown (HELO [10.238.2.33]) ([10.238.2.33])
-  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Sep 2026 20:27:03 -0700
-Message-ID: <cb2705d4-8494-41b3-b018-1a1e3d776e17@linux.intel.com>
-Date: Wed, 2 Sep 2026 11:27:00 +0800
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R11sKAf7"
+Received: by mail-pj1-f45.google.com with SMTP id 98e67ed59e1d1-383b4a3755fso652725a91.3
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 20:53:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788321180; x=1788925980; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=eVrMymMIOAYqNefktBqX7HmVpjK/XEfS+UGqRqDmQdY=;
+        b=R11sKAf7JKVK39dLQ8o/woiFTtSlAdpyYeQ8aNeUuRpexJ+kUt1XFVDcFwvKfpu5Z5
+         a/SGO3Q83DCee6NHy3qbsWK3tEGHVYt9BhadL1HPZRocX7i2ml+2TkJVow+1pG/NlqfS
+         X2A+N/GMrZoMPo4Chuna82RJdVyO5UAbL86ltcwi2bgHYcU+FvlTmWJadeEju0njjuKq
+         /9em3X8VNdEHJR/KGsibeWQlZO5vtCLMTHgDavUCyBgdikT5Kk0Q4ZnEybHYdcYqmTkh
+         lhkbhnWKK3Mj8NXarZM/BLap2VKzmi2JZHr5nZOVh8KV3liX2ncZAeAbLufV8fhFvTAC
+         aT7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788321180; x=1788925980;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=eVrMymMIOAYqNefktBqX7HmVpjK/XEfS+UGqRqDmQdY=;
+        b=eAz1IMIUn6lo49PbdBRP44tCZ3TQZ0A91bVaOdnli3IiGMSVmmKFzNjx1NegCGDZX9
+         7vvk8KcqkAYBOWyEUdxXUo0Zn4lvEx9Fsr72L4Z46HH20w2yH7TGKqp8+hhjYxYJMq6H
+         5Zztcpz2bV/p+oWa8vG20RA/QNVDGsTVC4ntpP4qnFBtQvTAGZdqUHXedBbdZAUbo3mt
+         3Q6/fcZZLqOSEV1aZyd1Bxvy4vl6fzrwao7aNk8zSrhvzeqCtmbEEVx/vyKkSBQbDdss
+         /0uTHOfA31H+CfztgIv7++tM5GTpX2Cq0ZyTkZ9mHjR639hbLAuju1VtWIrPyQzrOj5k
+         kT/g==
+X-Forwarded-Encrypted: i=1; AKwUvBzTm62ZSj49gAM1bB5tFvlB0vMszv/EAwknh8LixpGCzjrjmAY1Vn7JJ498ulcqIQNPRX6m4hgLHr5qSl5yKN0=@vger.kernel.org
+X-Gm-Message-State: AFuF++lIj1mQS8MsaWzfxs1YFSMgsjVQMiqhaCFz7c4axaZDzQyb6Hru
+	JIx7xMpme4ozerD1W6bH5gCveB/Rr7uYWa/R/rJxsgISx2RSJmTTGOiB
+X-Gm-Gg: AYBFou3WsPGARlZql6xEB8VbdxhPOh8RHqEgpDwDQZv06Gw7wpkokxd88ptgyYTmtWq
+	oWzNAnKzZsvq3UKIODhdZJyEdnDw2CpDbdECqDjDPUNI9OULZNN1Gro1KrsFz79iKdnJFPUz15m
+	vc2UOG3ACD+um6oBMM5PJEYdQ+XYTo4P9zwsuikj0SAOXtbn+X70dyStlQivcMD7FOhFVKCUxCB
+	Sp8rg26cCcuDc1BNjgANro9aUXAWZ3TcNRMjU7vqn2z22xiivUvnO/La8CFlSwUtdofW7Q7B3AZ
+	Dw8pmVfHF1TeQHVTEqBR02m2yqXEfTAL/0O0Z4CgZXAaTzFDIXHr7gQLME868YjxX3474PU+U5p
+	meIrwYTGiN0BwrZWjB0a4Ttt/L37JlYW7yTPe+NlExCX6vbLcTE6Obs19QrnblYAk9jpqDqbkKJ
+	EG2r11CCl88kewwTxNz9lxj2Iqvq/QA0d4VKcwD8Xmg+YJegqhJA2pm02ON+cKFOjAplXdjHh/v
+	UF2Qu/bgJPcT1lF8To0Byyx/4jOo8B2K4U3t9kHtJb2TpjJzc0ilKV/42DjirHO
+X-Received: by 2002:a17:90b:4fc5:b0:38e:49c0:75a7 with SMTP id 98e67ed59e1d1-39aedfe18c0mr2965060a91.8.1788321179932;
+        Tue, 01 Sep 2026 20:52:59 -0700 (PDT)
+Received: from Inspiron-14-5420.. ([2402:e280:21c6:671:5fdf:d463:f07:1882])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-32f07b7987csm2502377eec.16.2026.09.01.20.52.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 20:52:59 -0700 (PDT)
+From: "Hemendra M. Naik" <hemendranaik@gmail.com>
+To: netdev@vger.kernel.org
+Cc: davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	horms@kernel.org,
+	jiri@resnulli.us,
+	jhs@mojatatu.com,
+	shuah@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	vishy0777@gmail.com,
+	tahiliani@nitk.edu.in,
+	"Hemendra M. Naik" <hemendranaik@gmail.com>
+Subject: [PATCH net-next v5 0/3] net/sched: sch_fq_pie: add per-flow class statistics
+Date: Wed,  2 Sep 2026 09:22:28 +0530
+Message-Id: <20260902035231.81866-1-hemendranaik@gmail.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v12 11/45] KVM: guest_memfd: Invalidate both SHARED and
- PRIVATE mappings for in-place conversions
-To: ackerleytng@google.com
-Cc: aik@amd.com, andrew.jones@linux.dev, brauner@kernel.org,
- chao.p.peng@linux.intel.com, david@kernel.org, jmattson@google.com,
- jthoughton@google.com, michael.roth@amd.com, oupton@kernel.org,
- pankaj.gupta@amd.com, qperret@google.com, rick.p.edgecombe@intel.com,
- rientjes@google.com, shivankg@amd.com, steven.price@arm.com,
- willy@infradead.org, wyihan@google.com, yan.y.zhao@intel.com,
- forkloop@google.com, pratyush@kernel.org, suzuki.poulose@arm.com,
- aneesh.kumar@kernel.org, liam@infradead.org,
- Paolo Bonzini <pbonzini@redhat.com>, Sean Christopherson
- <seanjc@google.com>, Thomas Gleixner <tglx@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Steven Rostedt <rostedt@goodmis.org>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
- Jonathan Corbet <corbet@lwn.net>, Shuah Khan <skhan@linuxfoundation.org>,
- Shuah Khan <shuah@kernel.org>, Vishal Annapurve <vannapurve@google.com>,
- Andrew Morton <akpm@linux-foundation.org>, Chris Li <chrisl@kernel.org>,
- Kairui Song <kasong@tencent.com>, Kemeng Shi <shikemeng@huaweicloud.com>,
- Nhat Pham <nphamcs@gmail.com>, Barry Song <baohua@kernel.org>,
- Axel Rasmussen <axelrasmussen@google.com>, Yuanchu Xie <yuanchu@google.com>,
- Wei Xu <weixugc@google.com>, Youngjun Park <youngjun.park@lge.com>,
- Qi Zheng <qi.zheng@linux.dev>, Shakeel Butt <shakeel.butt@linux.dev>,
- Kiryl Shutsemau <kas@kernel.org>, Baoquan He <baoquan.he@linux.dev>,
- Jason Gunthorpe <jgg@ziepe.ca>, John Hubbard <jhubbard@nvidia.com>,
- Peter Xu <peterx@redhat.com>, tarunsahu@google.com,
- Randy Dunlap <rdunlap@infradead.org>, Lorenzo Stoakes <ljs@kernel.org>,
- Vlastimil Babka <vbabka@kernel.org>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Fuad Tabba <fuad.tabba@linux.dev>, kvm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mm@kvack.org, linux-coco@lists.linux.dev
-References: <20260830-gmem-inplace-conversion-v12-0-85e5fd25252a@google.com>
- <20260830-gmem-inplace-conversion-v12-11-85e5fd25252a@google.com>
-Content-Language: en-US
-From: Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <20260830-gmem-inplace-conversion-v12-11-85e5fd25252a@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 8/31/2026 8:25 AM, Ackerley Tng via B4 Relay wrote:
-> From: Sean Christopherson <seanjc@google.com>
-> 
-> When removing one or more folios from a guest_memfd instance, invalidate
-> both SHARED and PRIVATE mappings if in-place conversion is enabled, because
-> stating the obvious, KVM needs to ensure that all mappings to the folio(s)
-> are dropped.
-> 
-> Opportunistically rename the helper to capture that it returns a filter for
-> all gfns in anticipation of zapping only the previous mapping types on
-> conversion.  I.e. when doing in-place conversion to PRIVATE, only SHARED
-> mappings need to be zapped (ignoring that KVM would ideally not invalidate
-> ranges whose attributes aren't changing in the first place).
-> 
-> Note, precisely zapping only the possible mapping types when in-place
-> conversion is disabled is important for functional correctness, not just
-> for performance.  Specifically, if KVM zaps both when SHARED vs. PRIVATE is
-> tracked per-VM, then a PUNCH_HOLE operation on a PRIVATE guest_memfd will
-> incorrectly zap SHARED mappings that have nothing to do with that gmem
-> instance (because they're mapped via a VMA, not a gmem fd).
-> 
-> The incorrect over-zapping of SHARED memory that doesn't belong to the gmem
-> fd requesting the zapping will be resolved in a later patch, where, if
-> in-place conversion is enabled, KVM will use both shared and private memory
-> from the guest_memfd. If both shared and private memory are from the
-> guest_memfd, invalidation will only zap memory belonging to the given gmem
-> instance.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Ackerley Tng <ackerleytng@google.com>
+FQ-PIE runs an independent PIE controller per flow but exposes no
+per-flow statistics. This series wires up fq_pie_class_ops to expose
+per-flow AQM state (prob, delay, deficit, avg_dq_rate)
+via 'tc -s class show', following a similar pattern as FQ-CoDel.
+---
+Changelog:
 
-Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
+v5:
+- Addressed Sashiko review comments:
+ - Omitted .tcf_block / .bind_tcf / .unbind_tcf from cl_ops (statistics
+   only being exported; filter attach to fq_pie is now disabled).
+ - Dropped empty tc_fq_pie_xqd_stats placeholder; class_stats is a direct
+   struct member.
+ - Limited flows to [1..65535] so per-flow class handles fit in a 16-bit
+   TC minor.
+ - Rewrote selftest 83c0 with TBF + fq_pie, ping traffic, and
+   matchCount 1 on per-flow stats output.
+ - Updated selftest 83be for the new flows limit.
+ - Dropped the tools/include UAPI mirror changes from patch 3/3.
+
+v4: https://lore.kernel.org/netdev/20260727164056.106203-1-hemendranaik@gmail.com/
+- Fixed unaligned commit message; moved typo fixes to another patch.
+
+v3: https://lore.kernel.org/netdev/20260630183702.170798-1-hemendranaik@gmail.com/
+- No changes since v2.
+- Resent after the previous submission was deferred due to the
+  net-next tree closing during review.
+- Updated corresponding iproute2 patch in response to review comments;
+  kernel patches unchanged.
+
+v2: https://lore.kernel.org/netdev/20260614125000.6058-1-hemendranaik@gmail.com/
+- Addressed ABI backward compatibility issue for tc_fq_pie_xstats.
+
+v1: https://lore.kernel.org/netdev/20260531125314.22492-1-hemendranaik@gmail.com/
+- Initial submission
+
+Hemendra M. Naik (3):
+  net/sched: sch_fq_pie: add per-flow statistics via class ops
+  selftests: tc-testing: add fq_pie per-flow class stats test
+  net/sched: pie: correct tc_pie_xstats field documentation
+
+ include/uapi/linux/pkt_sched.h                | 23 ++++-
+ net/sched/sch_fq_pie.c                        | 90 ++++++++++++++++++-
+ .../tc-testing/tc-tests/qdiscs/fq_pie.json    | 33 ++++++-
+ 3 files changed, 138 insertions(+), 8 deletions(-)
+
+-- 
+2.34.1
 
