@@ -1,141 +1,139 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B8053F0750;
-	Wed,  2 Sep 2026 09:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+Received: from smtph3-05.21cn.com (smtph3-05.21cn.com [150.223.194.107])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F08A41684A;
+	Wed,  2 Sep 2026 09:24:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.223.194.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788340676; cv=none; b=dspWDjYMqi/P+xy402pIaFYSvR5i9tokEgJAsONn9QuCgxmMvSTERh+NgOMnp0QjOG1kTGk3BH1CTxzAzHFQe99JpZLoVI+C9h1a9jbjDSQYHHQlRAk5Rhw7rqs9V2JQ3cbwpW4CSwaCR8Y7J6LK+TVt4URZiXt1sBPJvEpS6YU=
+	t=1788341077; cv=none; b=r1bbrV1GMcIJhpxWpDb80Qz5qcArVc3CBbua7Bo3g4aytN2D/RXuEgv+qYx1KPyatxWVosjJOzH5ZaesMLkqzx+TqwUrLXjncj5TsBPAw/JZyx3WWPUXYgPNIq7QKUuBwlRljK7wQxvunT9gjC+az6AbvZJCa4LqZbg1wB1VXfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788340676; c=relaxed/simple;
-	bh=CM/qVXs/g6awQFiuodLf0sbHY5tOFftFnWTq/OgFTO8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=axbaON2zRTGfE39USrLjW7f6KBQQoGYjVERSYysM37ZkbfA/23bsp9ONuei1o+Pru56FZUgb9TmXq8PeAJ/RubJLk6Qof9OaAYZuYQ7sdo5HqCvGhWfK3uM06XxK5J5sUkZ1XI+rqV0XvIRlTykrKaD2Er8I3qMrTIeubl10s4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=auPbK68e; arc=none smtp.client-ip=100.103.45.18
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="auPbK68e"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06F9C1F000E9;
-	Wed,  2 Sep 2026 09:17:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788340675;
-	bh=7UTOR6zJzJj2YGKYWihuyfLr0pZQ3xNY+amKLeTGkPM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=auPbK68eVeWSX7HGiGrRR1Y0nVWHvJ82XolHF/9F/KFQ2/UqAxpW2P74L7tblDLl0
-	 LQDZPk6PDHYXbmIOEXYti9jh/FTMy/qzht7swmoZfzHmrrQLhxo+aO/z5YYcwVPZqV
-	 F5ll+E19jv3pvO70I3UMpEQEoK+lYEIGP8PGOnHWwzKhQVfE5duMPkdT29prqv/FjZ
-	 oVcwbc905F1EqJ/Gl45A2yJsBgMhj2EJByqn+g9dsnnnaeMvOuE8w044qGAIWljFNp
-	 IfUCwwjN7I6Sc/NiyBINIfCfVPccelyCti6XmlkA+hH9Qr2MGwwz6WmhnIoV6pQkwF
-	 aJVuGxSyA7auQ==
-Message-ID: <5b5452db-f03c-4825-b9ae-91ca28bbcf03@kernel.org>
-Date: Wed, 2 Sep 2026 11:17:48 +0200
+	s=arc-20240116; t=1788341077; c=relaxed/simple;
+	bh=Hk9PncUX78o+Z3x1c1F+sVM7U9AlFTJxz/WKfIrbhuM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=TutgSWJZ3uXfs6WrKeZXD02/hDeezjT4t4e7WZab2HkSL4qj+WauKoiHXrdRZSUQyFw2f7iioA7Oz6qKaiy+UGjBbzGXMgAyLbSjC583JxYVuPjOGN+uCWMZ7T2uzsuD5Vv1PTXBl+NGynXNnfRX/Et30MouNN1Wq48xGYTbatc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn; spf=pass smtp.mailfrom=chinatelecom.cn; arc=none smtp.client-ip=150.223.194.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=chinatelecom.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chinatelecom.cn
+HMM_SOURCE_IP:172.27.0.100:0.404078716
+HMM_ATTACHE_NUM:0000
+HMM_SOURCE_TYPE:SMTP
+Received: from clientip-139.200.108.11 (unknown [172.27.0.100])
+	by smtph3-05.21cn.com (HERMES) with SMTP id E0FF51402F0DF;
+	Wed,  2 Sep 2026 17:24:16 +0800 (CST)
+X-189-SAVE-TO-SEND: +pengqh1@chinatelecom.cn
+Received: from  ([139.200.108.11])
+	by gateway-ssl-dep-7c9d777cd6-4x4jl with ESMTP id 177ced25826e43ab9a4f0348442c340c for hangbin.liu@linux.dev;
+	Wed, 02 Sep 2026 17:24:26 CST
+X-Transaction-ID: 177ced25826e43ab9a4f0348442c340c
+X-Real-From: pengqh1@chinatelecom.cn
+X-Receive-IP: 139.200.108.11
+X-MEDUSA-Status: 0
+Sender: pengqh1@chinatelecom.cn
+From: Qianheng Peng <pengqh1@chinatelecom.cn>
+To: hangbin.liu@linux.dev
+Cc: broonie@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	liuhangbin@gmail.com,
+	pengqh1@chinatelecom.cn,
+	rbm@suse.com,
+	shuah@kernel.org,
+	skhan@linuxfoundation.org
+Subject: Re: [PATCH] selftests: runner.sh: avoid overriding kselftest_cmd_args with empty variable
+Date: Wed,  2 Sep 2026 17:24:15 +0800
+Message-Id: <20260902092415.1459044-1-pengqh1@chinatelecom.cn>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <apfAjBBaSG6Bs2M9@fedora>
+References: <apfAjBBaSG6Bs2M9@fedora>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH mptcp-next 1/2] selftests: mptcp: convert iptables to
- nftables for mptcp_sockopt.sh
-Content-Language: fr
-To: Hangbin Liu <hangbin.liu@linux.dev>, MPTCP Linux <mptcp@lists.linux.dev>,
- Mat Martineau <martineau@kernel.org>, Geliang Tang <geliang@kernel.org>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>
-Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
- Hangbin Liu <liuhangbin@kylinos.cn>
-References: <20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn>
- <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
-From: Matthieu Baerts <matttbe@kernel.org>
-Autocrypt: addr=matttbe@kernel.org; keydata=
- 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
- lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
-Organization: NGI0 Core
-In-Reply-To: <20260902-mptcp_nft-v1-1-559caa16f410@kylinos.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-Hi Hangbin,
+On Wed, 2 Sep 2026 14:22:04 +0800, Hangbin Liu wrote:
+>Hi Qianheng,
+>On Wed, Sep 02, 2026 at 11:05:42AM +0800, Qianheng Peng wrote:
+>> >Oh, I see what you mean now.
+>> >
+>> >    kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
+>> >
+>> >This is used to retrieve parameters for a *specific* test. When a test does not
+>> >require extra parameters, `KSELFTEST_${BASENAME_SANITIZED}_ARGS` is not set.
+>> >This has the same effect as when a user exports it but does not assign a value.
+>> >
+>> >Therefore, I do not think we need to add a check for this case. Users should
+>> >understand the semantics when exporting the `KSELFTEST_${BASENAME_SANITIZED}_ARGS`
+>> >variable.
+>> >
+>> >Thanks
+>> >Hangbin
+>> 
+>> Yes, if just only adding a check, that really makes no sense.
+>> But there is a issue for the follow case:
+>> ---------------------------------------------------------------------------
+>> User wrote "cmd_args=nice_value" in settings file and want to use the
+>> `nice_value` as arguments for a test program.So the user didn't need to
+>> export something like `KSELFTEST_XXXX_ARGS` because kselftest_cmd_args should
+>> get the `nice_value` as we can see
+>> 
+>>     eval "kselftest_$field"="$value"
+>
+>AFAIK, the setting file is usually used for setting timeout value. As
+>you can see in runner.sh, it checks kselftest_timeout after reading setting
+>file.
+>
+Yes, I see it. Basically I did similar things to kselftest_cmd_args like things that
+runner.sh did to kselftest_timeout.
+>> But in current runner.sh, kselftest_cmd_args has always been set up by
+>> `KSELFTEST_XXXX_ARGS` as we can see
+>> 
+>>     kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
+>>     eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
+>> 
+>> As `KSELFTEST_XXXX_ARGS` was empty, the user unexpectedly lost `nice_value`
+>> written in settings file.
+>> ---------------------------------------------------------------------------
+>> 
+>> According to the implement of runner.sh, it may want to give users two choices:
+>> 1) using arguments in settings file
+>
+>I’m not sure if this was the original intention. The configuration file
+>lives under the test directory, which typically holds multiple tests.
+>What if individual tests require different parameters? How would you
+>supply distinct arguments in the config file using only a single
+>`cmd_args` variable?
+>
+Yeah, settings file can't cover every different parameter(maybe neither timeout).
+So `cmd_args` in settings file is only fit for single test which needs special
+parameter such as setting `test_range=1,976` for test_kmod.sh of bpf directory,
+however other bpf tests can ignore the parameter.
+>> 2) or using arguments by export `KSELFTEST_${BASENAME_SANITIZED}_ARGS`
+>> But now users has been forced to use `KSELFTEST_${BASENAME_SANITIZED}_ARGS`.
+>
+>In contrast, `KSELFTEST_${BASENAME_SANITIZED}_ARGS` can target each specific
+>test case individually.
+>
+>Perhaps I have misunderstood the design. Please feel free to correct me.
+>
+I think you are right. I am also not sure the original intention as I just found
+current runner.sh had the feature which can retrieve cmd_args from settings file.
+This feature made me think it can be convenient for users who didn't want to
+export `KSELFTEST_${BASENAME_SANITIZED}_ARGS` everytime they start one test.
 
-On 02/09/2026 08:52, Hangbin Liu wrote:
-> From: Hangbin Liu <liuhangbin@kylinos.cn>
-> 
-> The per-AF iptables mark rules are replaced with an inet table
-> (msock_table) with separate per-AF counter drop rules for IPv4
-> and IPv6 drop counting.
+Anyway, glad to recieve more advice whatever next step has more work to do or
+nothing to do.
 
-Thank you for looking at that!
+Thanks and regards,
+Qianheng
 
-> diff --git a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> index e850a87429b6..4d0af2bf9484 100755
-> --- a/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-> +++ b/tools/testing/selftests/net/mptcp/mptcp_sockopt.sh
-
-(...)
-
-> @@ -105,33 +109,23 @@ cleanup()
->  
->  mptcp_lib_check_mptcp
->  mptcp_lib_check_kallsyms
-> -mptcp_lib_check_tools ip "${iptables}" "${ip6tables}"
-> +mptcp_lib_check_tools ip nft
->  
->  check_mark()
->  {
->  	local ns=$1
->  	local af=$2
->  
-> -	local tables=${iptables}
-> +	drop=$(ip netns exec "$ns" nft list table inet msock_table | \
-> +		grep "ipv$af.*packets.*drop" | awk '{print $(NF-3)}')
-
-Would it not be cleaner to use 'nft -j' and 'jq' to get all the
-(non-zero) drop counters?
-
-Cheers,
-Matt
--- 
-Sponsored by the NGI0 Core fund.
-
+>Thanks
+>Hangbin
+>> 
+>> For the case above and making users happy, I did two things in the patch:
+>> 1) If `KSELFTEST_${BASENAME_SANITIZED}_ARGS was empty, keep the value from settings file
+>> 2) If not, set kselftest_cmd_args by `KSELFTEST_${BASENAME_SANITIZED}_ARGS` 
+>> 
+>> Thanks and regards,
+>> Qianheng
