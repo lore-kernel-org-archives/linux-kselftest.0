@@ -1,135 +1,109 @@
-Received: from mta0.migadu.com (out-130.mta0.migadu.com [91.218.175.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F9549F104
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 13:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFE24A0915;
+	Wed,  2 Sep 2026 13:59:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788356487; cv=none; b=eqB2Ual3sGpkWVTexVByeGT+sBpj7a92uHAk8oNw5a8J8hk/+9gGyOUlS/n5DQk2UxUWLb2z42+NJ1p+SMYMopkv70ejtAR7OwsgmbnRt+CDclHkJz47F5aAYfK0DP+gY4Qqqa95XjsNYc1WAtk1ijs8BA/bwYxIw8vSaTH4BME=
+	t=1788357585; cv=none; b=MyP1t4Pc7SSY6wPgK4gPRkKOlIAjsZe6jpwcssuLkutx9DdfEC30HDy7IQ4qINgAMuqu8TJFt669fDjgZQ4H60+N5gqK0w/qhoIcFf3xPlGs163ykcclPUsQm1OwwsmLeB+UX2wPBK0BJENgUiqyY79+K5/JfKNERxhoCZq6PHk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788356487; c=relaxed/simple;
-	bh=KMGUCU02nxvEGZQa8eku/iJ+RwAWXlAohhC96/fQmBE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BW7msQrXYuJYDdHRTlWrh+IhvXF6OyR/jy82uxTS0mqgm7sXgL417gThFnMx08FahPWd+QHf07GZ/MW34KU8aG3CbJRhtozTFvjn5zbcJc6ki1sn9HBNn5gaA28nJQ5ez4ZS+OlhzClxPI8zBlNKoHGFXo0JaUN7eEaN4BjAWpc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=EeKGC8tZ; arc=none smtp.client-ip=91.218.175.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788357585; c=relaxed/simple;
+	bh=UF7+JWjJfiZBKxZYEwiJvR1rEPN/TsJAZMrZ29KgOcE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ISCAtEkmctNozXlMK3vj/HNRV2UKzrNbjoBYDJwy9M6udv7u+ujp5udIS5zvBk/nGts6HX6CAWIAQ/GOXL9tZAqW8pA+hbqf1QbNPlZsNMwWQjs1HffuIVyPTu8dv638jUDP6hs9l6993C35f0+VMqgX1/aBIUQnLVbT3LJpdt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=btcZLTPY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="EeKGC8tZ"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=KMGUCU02nxvEGZQa8eku/iJ+RwAWXlAohhC96/fQmBE=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788356481; v=1; x=1788961281;
- b=EeKGC8tZQs3FUBBzoU+ocKZ3OZDKZts4tPbvvD9OF8JonKVCNs/M0MC3Slx2jjrW8eIQ8IpN
- /OXpZbGizgLXQpRHsAzRaclJVW0xBJqFapj5VZOnvPC4KV7hK3z8zXQKHX5XIDEdjQ1uFSXpjhn
- LhfUd21F2YHOMenlUrA2X97E=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id ce0b63c89f984c47;
-	Wed, 02 Sep 2026 13:41:21 +0000
-X-Mizu-Trace-ID: ce0b63c89f984c47
-X-Migadu-Flow: FLOW_OUT
-From: Fuad Tabba <fuad.tabba@linux.dev>
-To: Paolo Bonzini <pbonzini@redhat.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Shuah Khan <shuah@kernel.org>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Fuad Tabba <tabba@google.com>,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] KVM: selftests: Fix arm64 sysreg header dependencies
-Date: Wed,  2 Sep 2026 14:41:18 +0100
-Message-Id: <20260902134118.2718200-1-fuad.tabba@linux.dev>
-X-Mailer: git-send-email 2.39.5
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="btcZLTPY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7F6A1F000E9;
+	Wed,  2 Sep 2026 13:59:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788357583;
+	bh=PuphFSC7VAMjp85LyxvriESmpHI+9IcgHqoIy3SrDVg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=btcZLTPYW0oBuA+vzca7/mRE9EOrZWeTRyYpbwmjPEWbs/tjuDdXa91fE9y7Lt3nS
+	 dxAShpufQHz+zsK6xei/UgqTZEmvlcIWDuSsOxnbJYW0ctyf1I+TWY7xMDO1019hnL
+	 IneJoM5YseQhyupEXj713qGoaDifKa0lP1jpdZBjXGP+r/20aZtnmbh/gpPGvYdtbr
+	 BIjuOg+71oZ6qIPBFh8ee+3mFTEzzTWVGvObvOWJ8N53mx7V+tNfOWcptaDlfIDMwt
+	 uDz39d4SdgzKee0FOSACWzebI3ADtgIO2BN2Jh5QW0wJJfpXx0gjKes9+iFLcSzoQp
+	 kBGMBZI+JTcuQ==
+From: Chuck Lever <cel@kernel.org>
+To: NeilBrown <neil@brown.name>,
+	Olga Kornievskaia <okorniev@redhat.com>,
+	Dai Ngo <Dai.Ngo@oracle.com>,
+	Tom Talpey <tom@talpey.com>,
+	Trond Myklebust <trondmy@kernel.org>,
+	Anna Schumaker <anna@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>,
+	Simon Horman <horms@kernel.org>,
+	Shuah Khan <shuah@kernel.org>,
+	Jeff Layton <jlayton@kernel.org>
+Cc: Slawomir Stepien <sst@poczta.fm>,
+	linux-nfs@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	Trond Myklebust <trondmy@gmail.com>,
+	linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH v5 00/15] nfsd/sunrpc: harden the netlink listener set interface
+Date: Wed,  2 Sep 2026 09:59:39 -0400
+Message-ID: <178835756055.1975665.3585993273106020658.b4-ty@b4>
+X-Mailer: git-send-email 2.54.0
+In-Reply-To: <20260901-nfsd-nl-hang-v5-0-a540d86668b0@kernel.org>
+References: <20260901-nfsd-nl-hang-v5-0-a540d86668b0@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 
-The rule generating the arm64 sysreg header targets the generated
-directory, and its only prerequisites are tools/arch/arm64/tools/*,
-which is the inner Makefile. An existing directory looks up to date,
-so an incremental build never regenerates sysreg-defs.h. A selftest
-referencing a register added to the table since then fails with
-undeclared SYS_* identifiers. Clean builds are unaffected.
+On Tue, 01 Sep 2026 09:39:38 -0400, Jeff Layton wrote:
+> This version just fixes up some errno handling confusion that was in v3
+> that Chuck pointed out. This version also drops ENAVAIL as a special
+> error code -- we can use EIO for that instead.
+> 
+> Please consider these for v7.4.
+> 
+> 
+> [...]
 
-Depend on the generator's inputs, and target the header rather than its
-directory, whose mtime does not change when the header is rewritten.
+Applied to nfsd-testing, thanks!
 
-Fixes: 70c7b704ca725 ("KVM: selftests: Avoid using forced target for generating arm64 headers")
-Assisted-by: LLM
-Signed-off-by: Fuad Tabba <fuad.tabba@linux.dev>
----
-Unlike the two existing sysreg-defs.h rules, this one's recipe is a recursive
-make, so its prerequisites are not the recipe's arguments. They only decide
-whether to recurse, which is a question tools/arch/arm64/tools/Makefile already
-answers. An alternative is therefore to drop the two explicit inputs in favour
-of:
+[01/15] NFSD: cap the number of listeners accepted in listener_set
+        commit: 196e48772ea60dc35adf57341e09e4bdf8f4212c
+[02/15] NFSD: validate transport name in listener_set before serv creation
+        commit: 85d7bca4afc7db07cedb612457fda195468cdb2d
+[03/15] SUNRPC: keep the first error in svc_register()
+        commit: d6c53650eb4aea422e6cf18b99428ff314ae7dd2
+[04/15] SUNRPC: bound the local rpcbind client timeout to 1s
+        commit: a607970b7003acf07157aae2f4c928af92b175d8
+[05/15] NFSD: report listener creation failures through extack
+        commit: 9dbaebcec682cc4c032c7a24ca4f04bdde287935
+[06/15] SUNRPC: report local rpcbind calls that get no answer
+        commit: f8ee183cb6123784cb4ffc2facb309d17bc896e9
+[07/15] SUNRPC: stop svc_register() once rpcbind stops answering
+        commit: 53fbfe00e9615496002b7e045b681fed45006634
+[08/15] SUNRPC: stop the svc_unregister() sweep once rpcbind stops answering
+        commit: 1ef5f3076a52482510c5afd4e816db33599f1341
+[09/15] SUNRPC: stop unregistering listeners once rpcbind stops answering
+        commit: e3d28a4c7f71946635ff6900aad6876e87332aa4
+[10/15] NFSD: stop registering with rpcbind after a failure in listener_set
+        commit: ce39bbabbe205b50b66ac935bd54036d86d86ba3
+[11/15] SUNRPC: check rpc_sockaddr2uaddr() for failure when registering
+        commit: 3349f8b6b9a938405275c232cf441fbff23d61b5
+[12/15] selftests/nfsd: exercise listener_set request validation
+        commit: 213294f2e2548c6d837cbc55ba0731c90a7a45e2
+[13/15] selftests/nfsd: add a per-netns rpcbind stub and the listener round-trips
+        commit: 61222d2dca7b03ecd3a590afed804f2324f4df82
+[14/15] selftests/nfsd: check that listener_set asks rpcbind once
+        commit: 3c9de315b3f85a67b4c54650c28ead94faad726f
+[15/15] selftests/nfsd: check that listener removal asks rpcbind once
+        commit: f56be2f4966b31fd60c379a30d8c83e89db7bc62
 
-	$(GEN_SYSREG_DEFS): FORCE
-
-leaving that Makefile as the only place naming the generator's inputs. Both
-forms regenerate the header and rebuild the dependents in the same invocation,
-and neither rebuilds anything when nothing changed. I kept the explicit
-prerequisites so that the recursion stays conditional, but I am happy to respin
-with FORCE if you would rather.
-
- tools/testing/selftests/kvm/Makefile.kvm | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/Makefile.kvm b/tools/testing/selftests/kvm/Makefile.kvm
-index 96bab7002d39e..4a1f1bfcff0e3 100644
---- a/tools/testing/selftests/kvm/Makefile.kvm
-+++ b/tools/testing/selftests/kvm/Makefile.kvm
-@@ -303,9 +303,14 @@ arm64_hdr_outdir := $(tools_dir)/
- endif
- 
- GEN_HDRS := $(arm64_hdr_outdir)arch/arm64/include/generated/
-+GEN_SYSREG_DEFS := $(GEN_HDRS)asm/sysreg-defs.h
- CFLAGS += -I$(GEN_HDRS)
- 
--$(GEN_HDRS): $(wildcard $(arm64_tools_dir)/*)
-+# A directory's mtime does not track the header inside it.
-+# Sysreg inputs duplicated from tools/arch/arm64/tools/Makefile, keep in sync.
-+$(GEN_SYSREG_DEFS): $(top_srcdir)/arch/arm64/tools/sysreg \
-+		    $(top_srcdir)/arch/arm64/tools/gen-sysreg.awk \
-+		    $(wildcard $(arm64_tools_dir)/*)
- 	$(MAKE) -C $(arm64_tools_dir) OUTPUT=$(arm64_hdr_outdir)
- endif
- 
-@@ -359,10 +364,10 @@ EXTRA_CLEAN += $(GEN_HDRS) \
- 	       $(TEST_GEN_OBJ) \
- 	       cscope.*
- 
--$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_HDRS)
-+$(LIBKVM_C_OBJ): $(OUTPUT)/%.o: %.c $(GEN_SYSREG_DEFS)
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
--$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_HDRS)
-+$(LIBKVM_S_OBJ): $(OUTPUT)/%.o: %.S $(GEN_SYSREG_DEFS)
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c $< -o $@
- 
- # Compile the string overrides as freestanding to prevent the compiler from
-@@ -372,10 +377,10 @@ $(LIBKVM_STRING_OBJ): $(OUTPUT)/%.o: %.c
- 	$(CC) $(CFLAGS) $(CPPFLAGS) $(TARGET_ARCH) -c -ffreestanding $< -o $@
- 
- $(shell mkdir -p $(sort $(dir $(TEST_GEN_PROGS))))
--$(SPLIT_TEST_GEN_OBJ): $(GEN_HDRS)
-+$(SPLIT_TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
- $(TEST_GEN_PROGS): $(LIBKVM_OBJS)
- $(TEST_GEN_PROGS_EXTENDED): $(LIBKVM_OBJS)
--$(TEST_GEN_OBJ): $(GEN_HDRS)
-+$(TEST_GEN_OBJ): $(GEN_SYSREG_DEFS)
- 
- cscope: include_paths = $(LINUX_TOOL_INCLUDE) $(LINUX_HDR_PATH) include lib ..
- cscope:
-
-base-commit: cee9395acd8043be0644b25c34bfa86623f2b935
--- 
-2.39.5
+--
+Chuck Lever
 
