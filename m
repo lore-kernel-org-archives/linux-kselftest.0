@@ -1,56 +1,47 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F96632F764;
-	Wed,  2 Sep 2026 05:47:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABD7038E12D;
+	Wed,  2 Sep 2026 05:47:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788328075; cv=none; b=aIKaLXcQHxT3m4inV5RWFVL3o/YWBTIO5mlJoGT4UPJQV9ORS+9F+9l3tYi68/7BHqpDYhzbqDi/vvfng0+/yNEOteuQS43sFS+lVR8klbUcKvj3u7PZlwwq+Qd321iTloxPFDKQmRLb1euVmTdpfhu6rzqlRL4E9jyfhwLm478=
+	t=1788328078; cv=none; b=DzOe+Yqx5BY/VIuxdvSSgHWXROHMdWNVsZAmGLduNDxF3K1iMfAiQaI+U5Rg/9hiwKAiyep/Tkw2RXteyciTb9pB9JTCX4XNL5AXPcfVLFyd6LJYY/VFeAWc4zq9JFgUFleaQQo0s0CWEUSQUZ1TZhda+5Hj/kIW4CvQ6RGsLpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788328075; c=relaxed/simple;
-	bh=bgHiJ3hrICbXSwbvFkN24uoEdLa9MwhS+qn9Ov4apko=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hDNhOOo4fyBoJXh7+hd8Md3xdBylvfx0HRBrba/nCZC/uXD+9+K8v1m2r9e37BvD37I107KD95WidyvA+J4VU/BQocn3eULNV9d3Z9wUq4nxIgVRtI7weLiZstak6jhqIkJfYXS9sGA57LS0m2Ureu4nQdkNYFQXJDUb8ojrDFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nmr8Tapk; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788328078; c=relaxed/simple;
+	bh=WrB6oaGrtV4BjGgUUluWgpUehInC5OR0jmjceXAKFUo=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=T3j3tTM2QS+EEEjha9KWnyGLal/6eSWrc519Ngr65dc27Lo0WBs+HjPTt9jWubAonCrCdSedjIfGIy8wDOYKBoqEqdEZ7pqYVvQYtyAD2OZSp7Lsx0OgM5qwzb1CzTBRvyYOTYYHdycrY+z5OjsdQtI1S6bf9RKMbo/6+JXVtDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=J02qS4mG; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nmr8Tapk"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B9D1F000E9;
-	Wed,  2 Sep 2026 05:47:53 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="J02qS4mG"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4BBDB1F00ACA;
+	Wed,  2 Sep 2026 05:47:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788328074;
-	bh=xyVBn1leruni8Keulp+lVKAKdJp5Y+Dj/l28v3PKPmU=;
-	h=From:To:Cc:Subject:Date;
-	b=Nmr8TapkJLpq3LiZ50wQjliwtU5ueiy7PCUbVtFZup6daOCWOMBPEi2992dEg3DIN
-	 b3hmVw5bw4+9tXpzdcuBFO76dTtOML0lTwjBOLp1SBNvIi0XGcaXG7RRgnWEqbtqQs
-	 bBX1MOcKsiIZuEC1NPcI8QC3GNooaBLRiyFAwC3ehnIAF3dkj7qxRAY2agHzJLnjMn
-	 Q1t3GqJ6Kl91TVUU+6J6DoHZv8IyjMXEa9Zv80QnjuDRbmeDjzsiJd8xmz+DKuhmI9
-	 xkp86K0xkYf50MX4IjSCzNH/ZPYog8twgwaA1aoVfscEr/SH4j0qlr6ZLi+nH4BBic
-	 k3h+OGLsfotlA==
+	s=k20260515; t=1788328076;
+	bh=/OzGA+O2Q4uOwSPOS2Cbn9lXzmSaQwiafB86MxgZx8A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References;
+	b=J02qS4mG49amT9aL3qy0N/9i1yyI4Gsah5BLEvacx1Fg8/zXD2kzAp0KNcl+fhWuM
+	 Je22SK57DqL931haIX85t07X3Ih44MaXddzyX10Ta5vD8SRZ9JLbgybXeIwfhFWfKR
+	 TvPESGAR9FjLzwGiy17s6hZ+bHJpi5smnek79MCQaS7uGa/15Jt5Jcw9p84ZcJOMPK
+	 X6y4deFY7ltvG+x4scupqqLvulP7xDPYrI9DtvYdSh/ABSCwjNEayrv+abxdqsWehe
+	 3FXyr5T22Ay4KFIPEoqjDAdGkIhRuIwCThrf2+WG4+HDGpjkv/k2aQ1K2/S1YtLzmm
+	 WCnOIT6zg1bLg==
 From: SJ Park <sj@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: SJ Park <sj@kernel.org>,
-	"Liam R. Howlett" <liam@infradead.org>,
 	Brendan Higgins <brendan.higgins@linux.dev>,
 	David Gow <davidgow@davidgow.net>,
-	David Hildenbrand <david@kernel.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Lorenzo Stoakes <ljs@kernel.org>,
-	Michal Hocko <mhocko@suse.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Randy Dunlap <rdunlap@infradead.org>,
-	Shuah Khan <shuah@kernel.org>,
-	Shuah Khan <skhan@linuxfoundation.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Vlastimil Babka <vbabka@kernel.org>,
 	damon@lists.linux.dev,
 	kunit-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-mm@kvack.org
-Subject: [PATCH 00/12] mm/damon: cleanup code, add test cases, and update guidances in docs
-Date: Tue,  1 Sep 2026 22:47:33 -0700
-Message-ID: <20260902054747.99370-1-sj@kernel.org>
+Subject: [PATCH 06/12] mm/damon/tests/core-kunit: extend set_regions() test for error case
+Date: Tue,  1 Sep 2026 22:47:39 -0700
+Message-ID: <20260902054747.99370-7-sj@kernel.org>
 X-Mailer: git-send-email 2.47.3
+In-Reply-To: <20260902054747.99370-1-sj@kernel.org>
+References: <20260902054747.99370-1-sj@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -59,51 +50,88 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Misc cleanup, improvements and updates of code, test, and documents.
+damon_test_set_regions_for() is designed to test only success-expected
+damon_set_regions() calls.  Extend it to cover error-expected calls,
+too.
 
-Patches 1-5 cleanup DAMON code.  Patches 6-10 adds kunit and selftest
-test cases for recently fixed bugs and a new feature.  Patches 11 and 12
-update guidelines for AI review and what document to read, on DAMON
-documents.
+Signed-off-by: SJ Park <sj@kernel.org>
+---
+ mm/damon/tests/core-kunit.h | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
-Changes from RFC v1.2
-- RFC v1.2: https://lore.kernel.org/20260729140253.87753-1-sj@kernel.org
-- Drop RFC tag.
-- Rebase to latest mm-new.
-Changes from RFC v1.1
-- RFC v1.1: https://lore.kernel.org/20260729033751.131213-1-sj@kernel.org
-- Fix a typo: s/alingment/alignment/.
-- Add damon probes parameter validation cleanup (patches 4 and 5).
-Changes from RFC
-- RFC: https://lore.kernel.org/20260728052811.192712-1-sj@kernel.org
-- Remove ctx parameter of __damon_va_init_regions().
-- Fix damon_nr_samples_per_aggr() overflow kunit test.
-- Rebase to the latest mm-new.
-
-SJ Park (12):
-  mm/damon/core: use damon_nr_samples_per_aggr() for max merge threshold
-  mm/damon/core: remove debug messages
-  mm/damon/vaddr: remove a debug message
-  mm/damon/core: validate number of probes in valid_probe_params()
-  mm/damon/sysfs: remove probes number validation
-  mm/damon/tests/core-kunit: extend set_regions() test for error case
-  mm/damon/tests/core-kunit: test <=0 size damon_set_regions() inputs
-  mm/damon/tests/core-kunit: test overlapping ranges for set_regions()
-  mm/damon/tests/core-kunit: test damon_nr_samples_per_aggr()
-  selftests/damon/sysfs.sh: test hugepage_mem_bp quota goal
-  Docs/mm/damon/maintainer-profile: update AI review for Sashiko replies
-  Docs/ABI/damon: recommend subsystem doc instead of admin-guide
-
- .../ABI/testing/sysfs-kernel-mm-damon         |  2 +-
- Documentation/mm/damon/maintainer-profile.rst | 19 ++----
- mm/damon/core.c                               | 19 +++---
- mm/damon/sysfs.c                              |  2 +-
- mm/damon/tests/core-kunit.h                   | 65 ++++++++++++++++---
- mm/damon/vaddr.c                              | 16 +----
- tools/testing/selftests/damon/sysfs.sh        |  1 +
- 7 files changed, 76 insertions(+), 48 deletions(-)
-
-
-base-commit: 52315e1a031f7370a286d6f6c805e2c8eab5abbc
+diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+index af26b3d60957b..2bcf3bafe2e29 100644
+--- a/mm/damon/tests/core-kunit.h
++++ b/mm/damon/tests/core-kunit.h
+@@ -469,11 +469,12 @@ static void damon_test_set_regions_for(struct kunit *test,
+ 		struct damon_addr_range *old_ranges, int sz_old_ranges,
+ 		struct damon_addr_range *new_ranges, int sz_new_ranges,
+ 		unsigned long min_region_sz,
+-		struct damon_addr_range *expect_ranges, int sz_expect_ranges)
++		struct damon_addr_range *expect_ranges, int sz_expect_ranges,
++		int expect_err)
+ {
+ 	struct damon_target *t;
+ 	struct damon_region *r;
+-	int i;
++	int i, err;
+ 
+ 	t = damon_new_target();
+ 	if (!t)
+@@ -487,7 +488,8 @@ static void damon_test_set_regions_for(struct kunit *test,
+ 		damon_add_region(r, t);
+ 	}
+ 
+-	damon_set_regions(t, new_ranges, sz_new_ranges, min_region_sz);
++	err = damon_set_regions(t, new_ranges, sz_new_ranges, min_region_sz);
++	KUNIT_EXPECT_EQ(test, err, expect_err);
+ 
+ 	KUNIT_EXPECT_EQ(test, damon_nr_regions(t), sz_expect_ranges);
+ 	if (damon_nr_regions(t) != sz_expect_ranges) {
+@@ -516,7 +518,7 @@ static void damon_test_set_regions(struct kunit *test)
+ 			(struct damon_addr_range[]){
+ 			{.start = 5, .end = 15},
+ 			{.start = 15, .end = 25},
+-			}, 2);
++			}, 2, 0);
+ 	/* Un-intersecting regions should be removed. */
+ 	damon_test_set_regions_for(test,
+ 			(struct damon_addr_range[]){
+@@ -529,7 +531,7 @@ static void damon_test_set_regions(struct kunit *test)
+ 			1,
+ 			(struct damon_addr_range[]){
+ 			{.start = 18, .end = 23},
+-			}, 1);
++			}, 1, 0);
+ 	/*
+ 	 * Holes should be filled up with new regions.
+ 	 *
+@@ -550,7 +552,7 @@ static void damon_test_set_regions(struct kunit *test)
+ 			{.start = 8, .end = 16},
+ 			{.start = 16, .end = 24},
+ 			{.start = 24, .end = 28},
+-			}, 3);
++			}, 3, 0);
+ 	/*
+ 	 * New regions should be able to be appended.
+ 	 *
+@@ -572,7 +574,7 @@ static void damon_test_set_regions(struct kunit *test)
+ 			{.start = 0, .end = 4},
+ 			{.start = 4, .end = 15},
+ 			{.start = 25, .end = 40},
+-			}, 3);
++			}, 3, 0);
+ 	/*
+ 	 * New regions should be able to be inserted.
+ 	 *
+@@ -595,7 +597,7 @@ static void damon_test_set_regions(struct kunit *test)
+ 			{.start = 0, .end = 15},
+ 			{.start = 25, .end = 40},
+ 			{.start = 44, .end = 50},
+-			}, 3);
++			}, 3, 0);
+ }
+ 
+ static void damon_test_update_monitoring_result(struct kunit *test)
 -- 
 2.47.3
