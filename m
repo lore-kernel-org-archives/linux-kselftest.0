@@ -1,299 +1,193 @@
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazon11023127.outbound.protection.outlook.com [52.101.83.127])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69128370ACD
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 07:44:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788335095; cv=none; b=AKD5kZ5+foEvBU1BX8FSEOHgc2bpnbaQJQzQJ2Hh9oCEsVMfaz1oV+PWZHLidaJiNXzt6CAg9ONfC5Q7RP0V/KgMceDYbPwxgAod173Eu3n+YwNGe5IP6VsPK/SVXWR053K5QKy270UWTKssBjYXmiFt/OZphEGmW2amzkNZg8M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788335095; c=relaxed/simple;
-	bh=He2KYxQxFOYfUvBCEdU6KVIHQ9ioT0lUUIGeFFdbizg=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:Subject:From:To:
-	 References:In-Reply-To; b=mBcKdteLIRoyvLmss/EsuWmeWUn2hKygYVVowEjlnLeTQW+ra9Qamhp4DN2Zjy96CaybZHW1sIfppAu1sFlatEg7DEuZsa2ol3B151Y1rwgIkJfcGMtdC+P0v327ToBrifxcB0rWeJVSWmomJZpEjRdCxVEzlXOP+VxXBdgfiUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com; spf=pass smtp.mailfrom=etsalapatis.com; dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b=WqmfHoR5; arc=none smtp.client-ip=209.85.216.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=etsalapatis.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=etsalapatis.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4058E3AA1B6;
+	Wed,  2 Sep 2026 08:50:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.83.127
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788339042; cv=fail; b=Z4Y+knM3RAZR1HVOuzAZ943rZ7x5bpr68uvSPJjhfz3wTiYXrfsNyhIsbbQ//9PqsNR0W2WODtJU1mOpTmGNVtIGMIgB+a1jg0lA3Xpw1dAx9YRi9sOrhR19cJOH1KtNppzeaE7S1GvCVha1W9HtMgp4XUC1uxL8m5ghmg92a3k=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788339042; c=relaxed/simple;
+	bh=zklQBvrGrgqiTs/488dkicrNvDpq/6bQG0JNuv9zjaI=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=gfbI8/3bD2XgpwGNFtMRqhqgmL3R1GZFN3uLM2n4gSCycb8nHMhGulCxEuUZlQ45NODbjcCvYNnb3wrOlcMhWOTfUnCYcm4qlr312XTw+YgogQjVmHM/gtyPbKcbCSpgWISP2e/q48rXInh87s2ItfVRNze+KcdgWekXee2Ev5c=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com; spf=pass smtp.mailfrom=codasip.com; dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b=KaVdAqYI; arc=fail smtp.client-ip=52.101.83.127
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=codasip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=codasip.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=etsalapatis-com.20251104.gappssmtp.com header.i=@etsalapatis-com.20251104.gappssmtp.com header.b="WqmfHoR5"
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-39647aa9d52so840595a91.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 00:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=etsalapatis-com.20251104.gappssmtp.com; s=20251104; t=1788335093; x=1788939893; darn=vger.kernel.org;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:from:to:cc
-         :subject:date:message-id:reply-to:content-type;
-        bh=dF0J1p4zzUo0oOMD9z+s+iaA8fp2BSZeTfe7CbtsAi8=;
-        b=WqmfHoR5MEd5/ZsaDMYxaPFgLp6YlsFopcaNdJkc3TXij+7V+TQRm/1NLC93j8YCq3
-         lGQIQFihnIZJIWFDABRbZktrDTYgkIN6h6/0NKLfCYp/uHp9e08e2l9rZoyjOMSpZFzp
-         a23kh4sSffEHd/t9VgL+MvU6/9BLMCe1l/TVPm1jPTWsY5NfCLrq7bmZafvQpoD7jiRM
-         rrFUMBkoUNLj9E2EjECTdU2sxqyZw8xYx4b4jfPmFLEFsVyBuc7aGlrbfvy072ou8kAB
-         f+07QypL4f/o4OHsBZjCYk7KbO5HkTJaZ5DG+/l++JpOplv5vKSeAxn/3T96upVPcPbK
-         aEOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788335093; x=1788939893;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-type:content-transfer-encoding:mime-version:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=dF0J1p4zzUo0oOMD9z+s+iaA8fp2BSZeTfe7CbtsAi8=;
-        b=pJDYoh5PkSqr1wezRN3TNVoicW/Icg7c8Dx7R9sNvhbPe6YrBuMwuc0x4QyX90VgpW
-         nEz4khiHwZ2klyZlkdgrWOtpCtA+jDKFYMQYRk2sthEJNGWvH0nZZ3LBdMTzpa1lP4rd
-         ZpIgcNz1wC6EDSUyWkXfHu6r0sTcWHr/LbwvF1SFg9E0QWk9/DuAjzNUqxZ5G1CStNk9
-         nN2m5vYigQ3C1SQGzjdTKohAX7OT9MXUnDCq0FfhRzsP7NmIWkdDvswa1u9NutE2pQ0q
-         3xkPuQk7T6952+17xS1slnlVYGHTneEV2FjzuRuksjFH5bE3v/85lYSduqFFqcx5ycxm
-         TT3w==
-X-Forwarded-Encrypted: i=1; AKwUvBzn2wWEoh1WbsePyR8heToTc5BZ9UAPQGM+PlMAATHZos5NTuUClT68qVfxdCwjqlBYAiXwIZMwf19raLIbpcE=@vger.kernel.org
-X-Gm-Message-State: AFuF++mOG5+3Gd/P99PY3U18BgTDA/CNBcWVYfJS2s93omK5yiQBAHct
-	woKrdBCYpUSRNtzuuzAfvAy1IUwEOuOLrD3x7DFwlXlpUgnALv7dszPBSPAydk8LfCc=
-X-Gm-Gg: AYBFou1PPxbUG64hRSn3Bv6IPv+OyXu6jajjISmwn0OPdCWoEWFAQjZ92cHfPiaAcA+
-	eJggSl1W1NYLNqUzOXOR9L5lCidEFJTwluCQVd77LgzTRjYDw59hcV7nqcECtq7cycmMjjM4+Ot
-	ZG5wWZKV3cEnzInewN0htx04QLMLETegERNWC1z5kk8d/ZL8BGejhTz9Av/nqq2mfICPptGale9
-	gJmAkhwd5FUPizh3ga1umnhJvunN1b1u3bvtK2G9+rA9o4Ld46JKnHVbQWA4+vynzoUHXdkhlaX
-	JCda+gm8jc3d5cXtXnJOCsTGvoE+dPtBpAdv26o4TGT7Hd8HrwqPDzOu/kq2iRhPi5dI9SCaMcy
-	L9aoRr4TgmfW/Axd4PReh3jzxkppq0/ymUhC/J14ySb/tPRRc/4xvHgE+7VW4flKSp0t/BjuOpC
-	ogxhRm91798/XplRllbm5dIT8S/GrMs7kgTH+6k0wyaqLYY1Hatc1kxDs71C0GQI1rOhCPGi0Qq
-	4WElkzQ9b7XKzZAVp8MFaNvnbIO
-X-Received: by 2002:a17:90b:2f84:b0:398:9bd3:d6d1 with SMTP id 98e67ed59e1d1-39af64e0adbmr1032593a91.11.1788335092395;
-        Wed, 02 Sep 2026 00:44:52 -0700 (PDT)
-Received: from localhost (107-190-31-17.cpe.teksavvy.com. [107.190.31.17])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990d463798sm9938748a91.6.2026.09.02.00.44.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Sep 2026 00:44:51 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=codasip.com header.i=@codasip.com header.b="KaVdAqYI"
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I5nkgM2vLde6cpD2h84jdgFof6VvJAFAiHiX/E70zy/F4nJry/S/8tlVHK7Ob406eHoeMqVqvISBP+A0d1pkT3DilWj+sbGlLS5vLkHFfHMn8MzWpWMqW5wQg4mFuIQ6jmfTfRUMDXb3+W4Mp3ttGiAx0sVidUL+HBtf/QJQw6LphF5uDagylqKxbwnxho0z1fg+1ySaLmQpCcolLxc1HTIt5H+bHuDLuv0nfczGCwVPnfjrpJeabdRhhNAhFJsUU7CUaY7qsWJQHnsJk37nj/0OdznjAf8sBJBb1UoDh8r96JFvyNXLSWcnAvr3Hjccp7QuDyrVwDx+rYnrrWyrsg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Oi4XqxrGBqzIuWmDIgVa4wNhI+WUj+oN8hXyrpinpYE=;
+ b=yM0z7iaUa0OQ1N+Fo/kirND65zWhs5+6Mndiw1u+slxyBtoJEj0C0Tm+03rCj+ESnwxQso0NYrgkHYugD56GssYKponrU9wvCgEq6wsWtcjK4+dm/qiBdIduA+bdUZi5k0qI9qgqWa2ae1QhaCp/VgAFRJewN3QVTkBcsr/Xq0309BPElA+pcai1DjbI3UEfjjk75zOgegJvrRtscpfyXia+bMUCAmYTZuUZ8VUUEfSU5NIZmMdSGUyITyHlpznh1QVEXQ7tgiXjtr8iRB9OMnlAtGF1LDpiG3EPdRuCTpnXVGOeGwFnRgvksia0GweSbXou9y06bl9WnqxhBTZuKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=codasip.com; dmarc=pass action=none header.from=codasip.com;
+ dkim=pass header.d=codasip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codasip.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Oi4XqxrGBqzIuWmDIgVa4wNhI+WUj+oN8hXyrpinpYE=;
+ b=KaVdAqYIFULtek7s2V67WCn0ij7gkFoQZddnWhbBx9EFRf2VLlmOj6W/s4ETi9PqrCt9i5myAV0sYYfusTWcBCCcSsAa1+4qqA7ED+6dapBN/U4M0jGQ++mBBzBp4bvE+kiIH6njFJjaYPnnJPiJgFBnk4YkCQ+PP8D0/gdtzKbbdMAGh+Q+uuMly4tLCiZ1b0GQSe5lv3zDM99T41vycbqvAG14CfBx7f33covtGoBA8ve0RVtXAslSLkw/fd2bXnQP7CLgcO74Rz6eR02hNO3X6068/0mQtkiH0mNNbwfnOpgdb3MUKaNjzUv0YlFFSZV04+kT7X0Et+OgN0I4gQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=codasip.com;
+Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:17c::14)
+ by MRWP192MB3048.EURP192.PROD.OUTLOOK.COM (2603:10a6:501:74::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Wed, 2 Sep
+ 2026 08:50:35 +0000
+Received: from AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
+ ([fe80::c1d1:f20d:9fb5:72d3]) by AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
+ ([fe80::c1d1:f20d:9fb5:72d3%6]) with mapi id 15.21.0360.008; Wed, 2 Sep 2026
+ 08:50:35 +0000
+From: Chris Gellermann <christian.gellermann@codasip.com>
+To: shuah@kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: reddybalavignesh9979@gmail.com,
+	richard.weiyang@gmail.com,
+	akpm@linux-foundation.org,
+	linux-kernel@vger.kernel.org,
+	Chris Gellermann <christian.gellermann@codasip.com>
+Subject: [PATCH] selftests/uevent: Gracefully handle receive buffer overrun
+Date: Wed,  2 Sep 2026 10:50:30 +0200
+Message-ID: <20260902085030.1378789-1-christian.gellermann@codasip.com>
+X-Mailer: git-send-email 2.47.3
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: VI1P189CA0018.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:802:2a::31) To AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:17c::14)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Wed, 02 Sep 2026 03:44:50 -0400
-Message-Id: <DL4NVR5IIKSE.IC903DOR6ZDA@etsalapatis.com>
-Cc: "Andrii Nakryiko" <andrii@kernel.org>, "Eduard Zingerman"
- <eddyz87@gmail.com>, "Ihor Solodrai" <ihor.solodrai@linux.dev>, "Jiayuan
- Chen" <jiayuan.chen@linux.dev>, "Alexei Starovoitov" <ast@kernel.org>,
- "Jakub Kicinski" <kuba@kernel.org>, "Stanislav Fomichev" <sdf@fomichev.me>,
- "Kumar Kartikeya Dwivedi" <memxor@gmail.com>, "Song Liu" <song@kernel.org>,
- "Emil Tsalapatis" <emil@etsalapatis.com>, <netdev@vger.kernel.org>,
- <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH bpf-next v2] selftests/bpf: Track test_xdp_features DUT
- processes
-From: "Emil Tsalapatis" <emil@etsalapatis.com>
-To: "Bochao Cao" <bochaolucky@gmail.com>, =?utf-8?q?Alexis_Lothor=C3=A9?=
- <alexis.lothore@bootlin.com>, "Daniel Borkmann" <daniel@iogearbox.net>,
- <bpf@vger.kernel.org>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20260812-xdp-dut-process-lifecycle-gmail-v2-1-b03ef2aa1b97@gmail.com> <d4be160e-703e-46bb-9509-d3d90f6bc34b@iogearbox.net> <DKX99ZAP7GZ8.23U5EOSFB4VPU@bootlin.com> <CAHKNYVXN0DAUzv2Lwm=oQ_K=zhi2iNyTO2e99s5F4M+Kr7u5tQ@mail.gmail.com> <CAHKNYVV8gn-L_unjsxUZV=E+Rx4ouDBJX613_n4hevXP1rivyg@mail.gmail.com> <CAHKNYVX_r_yS+NjkTx=gn7zGfcHF11azQbFWHJ+naqXO3aTpJw@mail.gmail.com>
-In-Reply-To: <CAHKNYVX_r_yS+NjkTx=gn7zGfcHF11azQbFWHJ+naqXO3aTpJw@mail.gmail.com>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM7P192MB0787:EE_|MRWP192MB3048:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5322e66e-4b64-4cf6-3313-08df08cf415b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|23010399003|10070799003|376014|10067099003|6133799003|56012099006|18002099003;
+X-Microsoft-Antispam-Message-Info:
+	NIsTD39vVwxuedGmFtOMVpIcBN4js4dEJEH3Hbi+LWXYGg5r2JtUwuxdcoOSCYvS8sXyLrWqqaaEUosTTMU1MfbrYXsQ5aBmUeTCRyzX3Fv5fYRxtqj8CvMvDOod7liN+EMs0vGvKVeZ6db92AkpOeNVdlkCBJ7SnvXl4ZSKC3la/jyUC+LURPqBst5qt3zpm4rx9iVRdu4jKBhLRPfwUOqWg+AoNywg4aEE0QCxC0NOANwSdql7t9potYKjlvA9hm/WcXBYkTX5uefTxwhfi/ZB+aC+P2E8FddZr4Oo3tQ1wb9sLd4h5epXfd6z8LR4L/A/gLhJ9FiFU8CRBIw6VY/O/lgX9c6kf2ddqXmtXaMOqIsXm3bSmQ0L6jHpYg3R8WevOdeibFc7ssW4VbFCoo8sikBHmJFhY9hozZo0EAq4ffD3l7CfsHNLFMITFjOtIwx2j62ZLTaHXy4N5br0uNuw999MEA+JafIyMWFgHDf8IFU1TUGl2fpe854w1nnwcFshiQq8KLqd/F+x7dkYl7pjfMiy4Ce7zpvXiJp7fpINBufMljg/aXMRkqaTfDOA7BRjkA/Omrtn6W5HLMoKYn9ncVIDYeWqnBluE/BOI/T/9bf2YMWTC2QAXk++YkaeYDePRyd/EH3PtOGBLU/OUlwSQb4Xx8VuGYsb6F3vmko=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7P192MB0787.EURP192.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(23010399003)(10070799003)(376014)(10067099003)(6133799003)(56012099006)(18002099003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 2
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?zVDL3DPSTt+OexL8vJO8yJGCz2uQicWnrBfPE8OyRZtMWGsjavtSk/gi/54e?=
+ =?us-ascii?Q?73NPgLAlv5vgka2gt8Suy5yIjF2wUxP/DiOgVghSR4oAxGRxPAfel+Q0hVZW?=
+ =?us-ascii?Q?18djhUThGFHu3NvLCZyxuGhOzaQxwhtmoLj62AKeVQxSZl4+7sVVsEw6JG64?=
+ =?us-ascii?Q?bJonCnzU+kR60bCtsraOJX5iQtursqoqs2uvJJtGfU3xEp+JwIyAl2ZukXyi?=
+ =?us-ascii?Q?vDt6hYgGXhwzw9yQr8FJpKmSA94YGjkkDl213586CLZZzIZWBaeKFAXhH6AK?=
+ =?us-ascii?Q?D8BmM55YVgzbMU84q+z2D+eeylOoc4FSgSdKoYGW0NzL6FagcM+730K9luOj?=
+ =?us-ascii?Q?7Uvw0LbeDRqJUL9wFAF8oT1oZzhhywFwBRYv/XIKV2ba52pV+nXoJBOnd6JT?=
+ =?us-ascii?Q?FMq24pDtrZ9UY0dcoJrUIy2wd2QZEcxPguwzXdnZSSPjxFq+NAqFAwxgmlhN?=
+ =?us-ascii?Q?iFWBYA8YvTYc9rRZXFZMclIM4XZSQUiWO2gV5Rn29wZbEEyKeKmiC1C8wCV+?=
+ =?us-ascii?Q?G3wZR/9tP519NXV2aM96IBCIgDqz6o5qjk1kTO0kKtdAxNFM9gQ3HdWHLnN0?=
+ =?us-ascii?Q?f1B77zhaECf7xxdy+2M2g5DSm7uGwltc0Mull7IzIJ/grreDYkuVwO2oKd54?=
+ =?us-ascii?Q?u7GA1EetEPkcSRv/F7Z709vLMgqe05EOoIAuOsK3MYpPgUt80bq9LtXrdhnS?=
+ =?us-ascii?Q?dIUErOT1sBxZJu0P23PHvH8DcLk4blPJ07WFLwS3AEx6FmGVOCwNxQ8Sf6he?=
+ =?us-ascii?Q?WOSqlafbRONd+NPfCmzJ2fJtTYq8YZ08j7qt0bnQqljvb6RhsPjefGYCl5LA?=
+ =?us-ascii?Q?ZH135YS9IlwPyN7sfa+Oyu/YRM8K6z2UMoPzD/ScIe0vUJXcHtFBJrr3Szuf?=
+ =?us-ascii?Q?71TiOA0LSBaI8mH5H2FhOH4EF1AGi1OATie1WHr15HyaHEFDYUELxkP8kYSy?=
+ =?us-ascii?Q?gKhpJDSwt2Ui+mnl8x7/DRtNaIU7s2ZBb9f5n0ToerJ3e4m3QSNzPmhRU37c?=
+ =?us-ascii?Q?hCPtoERiket1kCMsxqoQS0ylNBSujbH4c8BGYc966HBmf6LKuxyESFL/vhj+?=
+ =?us-ascii?Q?I7UpNeLhs4UbSfBCeFdTwzS1wl4yrTGr7IfFjRoWZL4uggUHlk5xXXOvUgFn?=
+ =?us-ascii?Q?nOTr5FmerwoRCc2RRT2H5GCXYs8areGIisjjCHZqiVhCeyBhfRJ6Ld6Rub9q?=
+ =?us-ascii?Q?eayQUVvu5vMMmps1VLKnhBMn+z+T6hxcQOKCV2CTDIabJYvzGKvN3MVbTbsu?=
+ =?us-ascii?Q?8aR31N8remaewNdm3JSuK6YiXLC3KiCNFqpCltQCAzlkf+oSzoin7bh4lZuA?=
+ =?us-ascii?Q?A2BmIhJcEQIOuIgAx82+DCtUe0PcGJWCaMiCwC2ZjrDsB+PdxB4p3+bjdQfD?=
+ =?us-ascii?Q?LpMAcXJbwhVZ6WFFsr1sNPklZj/xCrPkHurzdtMJjxTpjBJsteWikIhlcvgV?=
+ =?us-ascii?Q?UWcMBCxIHYMk0TOw7z4JtzYFWQjsE1dO5hCz59/eT3O9ic6MA9zTA2tqFQEo?=
+ =?us-ascii?Q?FqpJbg6dlx93Pl71IRACHAM2nCB/mNWLflcXgaPb+N0sepLMNfNGHboLPXzl?=
+ =?us-ascii?Q?AlIraFnwjpbF+rn41Sow2J10MQGlx/qgqp8Oa2QfWB0m4OQiT5avoxB/tC5C?=
+ =?us-ascii?Q?zrLvY0/xnjBvf18PgOsocFyMfgqYusZkJyO5bNUYyOIKZl/0+s7EIkN6pk3w?=
+ =?us-ascii?Q?2aXFkWEapTzFsxmQtg896uutUbVt2nWgDimeW4SMm2m0Iaf+wTc05tqKNJhi?=
+ =?us-ascii?Q?7libZCWNOutR07JGrXwNsFwaE/FYV7/O5JSlCNUBbKarlPeG5cfFfo36Pi/D?=
+X-MS-Exchange-AntiSpam-MessageData-1:
+	Vy88Tztui/yM5myO5Yrvt3tY+3CmrBE153Mfx76oE6np1WfL2Vwv0/C3
+X-OriginatorOrg: codasip.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5322e66e-4b64-4cf6-3313-08df08cf415b
+X-MS-Exchange-CrossTenant-AuthSource: AM7P192MB0787.EURP192.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2026 08:50:35.8538
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 0d91ffef-bb81-4cbd-b9b8-552583685f20
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MRcxBFQ04+FdTesmUs/10obeP6/I8EZcS0MtmIKR0FQ9AOMKzZ2nGlINCbNXM/hueUorsOynRJ3S2sBV6yxozLN2FfmDL271FO8dY4EMeLXqqEgE38sjgI16wEHvPwhs
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MRWP192MB3048
 
-On Fri Aug 28, 2026 at 5:32 AM EDT, Bochao Cao wrote:
->  Resending as plain text because my previous reply was rejected by the
-> vger mailing lists. Sorry for the duplicate.
->  Thanks Daniel and Alexis.
->
->   Dropping the procps dependency is not the primary motivation for
->   this change. I agree that Debian can remove the dependency independentl=
-y.
->   The issue addressed by this patch is process isolation in the standalon=
-e
->   test. The current readiness check may observe an unrelated
->   concurrent xdp_features process, while cleanup may terminate every
-> xdp_features
->   process on the host. In addition, a DUT which exits before listening
-> can leave the test waiting indefinitely.
->
->   Although this script is not currently run by the BPF CI, it remains
-> useful  for testing real hardware,
->   so these process lifecycle issues can still  affect users running
-> the test manually.
->
->   Would it be acceptable to fix these issues in the script's current loca=
-tion?
->   If the preferred direction is to move it under
-> tools/testing/selftests/drivers/net/hw/,
->   should the move be submitted first, with this fix rebased on top?
->
->   I can send a v3 that drops the Debian Closes tag and focuses
->   the commit message solely on the process isolation, timeout,
->   and cleanup fixes once the preferred location is clear.
->
->   Thanks,
->   Bochao
+Due to udevd rebroadcasting uevents, the receiver's socket buffer may
+overrun and the kernel has to drop messages. Instead of failing on the
+overrun, continue listening for the remaining copies if we expect a
+uevent until killed by the timeout.
 
-While I'd defer to Daniel and Alexis on this, imo we could merge the fix
-as-is and move the file as a followup since the change is a net gain on
-its own.
+For each subtest do_test() of the uevent_filtering test case, the sender
+triggers uevents that a receiver should listen for. These uevents may
+also be received and rebroadcasted by udevd. This can happen with
+some delay, so uevents from an earlier do_test() subtest may generate
+rebroadcasted uevents for a subsequent subtest. Both, uevents triggered
+by the sender and rebroadcasted ones are queued by the kernel to the
+receiver socket buffer. The buffer may overrun forcing the kernel to
+drop uevents. This causes the recvmsg() call by the receiver to fail
+with ENOBUFS. To fix this, do not treat ENOBUFS as a fatal receive error
+and, if we expect a uevent, keep listening for one of the ten triggered
+by the sender. If the receiver is in a namespace where it should not
+receive any uevents, a dropped package may be the one it should never
+reach. So we defensively fail in this case. The wait is bounded by the
+sender that kills the receiver after a timeout.
 
-Wherever we end up putting the file feel free to add:
+The rebroadcast can be observed in the udev logs:
+udevd[115]:  seq 6774 queued, 'add' 'mem'
+udevd[2436]: seq 6774 running
+udevd[2436]: handling device node '/dev/full', devnum=c1:7
+udevd[2436]: passed 200 byte device to netlink monitor
+udevd[2436]: seq 6774 processed
 
-Reviewed-by: Emil Tsalapatis <emil@etsalapatis.com>
+Signed-off-by: Chris Gellermann <christian.gellermann@codasip.com>
+---
+ .../selftests/uevent/uevent_filtering.c       | 24 +++++++++++++++++++
+ 1 file changed, 24 insertions(+)
 
->
->
-> Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8828=E6=
-=97=A5=E5=91=A8=E4=BA=94 14:10=E5=86=99=E9=81=93=EF=BC=9A
->>
->>  Thanks Daniel and Alexis.
->>
->>   Dropping the procps dependency is not the primary motivation for
->>   this change. I agree that Debian can remove the dependency independent=
-ly.
->>   The issue addressed by this patch is process isolation in the standalo=
-ne
->>   test. The current readiness check may observe an unrelated
->>   concurrent xdp_features process, while cleanup may terminate every xdp=
-_features
->>   process on the host. In addition, a DUT which exits before listening c=
-an leave the test waiting indefinitely.
->>
->>   Although this script is not currently run by the BPF CI, it remains us=
-eful  for testing real hardware,
->>   so these process lifecycle issues can still  affect users running the =
-test manually.
->>
->>   Would it be acceptable to fix these issues in the script's current loc=
-ation?
->>   If the preferred direction is to move it under tools/testing/selftests=
-/drivers/net/hw/,
->>   should the move be submitted first, with this fix rebased on top?
->>
->>   I can send a v3 that drops the Debian Closes tag and focuses
->>   the commit message solely on the process isolation, timeout,
->>   and cleanup fixes once the preferred location is clear.
->>
->>   Thanks,
->>   Bochao
->>
->> Bochao Cao <bochaolucky@gmail.com> =E4=BA=8E2026=E5=B9=B48=E6=9C=8825=E6=
-=97=A5=E5=91=A8=E4=BA=8C 21:01=E5=86=99=E9=81=93=EF=BC=9A
->> >
->> >   Thanks Daniel and Alexis.
->> >
->> >   Dropping the procps dependency is not the primary motivation for
->> >   this change. I agree that Debian can remove the dependency independe=
-ntly.
->> >   The issue addressed by this patch is process isolation in the standa=
-lone
->> >   test. The current readiness check may observe an unrelated
->> >   concurrent xdp_features process, while cleanup may terminate every x=
-dp_features
->> >   process on the host. In addition, a DUT which exits before listening=
- can leave the test waiting indefinitely.
->> >
->> >   Although this script is not currently run by the BPF CI, it remains =
-useful  for testing real hardware,
->> >   so these process lifecycle issues can still  affect users running th=
-e test manually.
->> >
->> >   Would it be acceptable to fix these issues in the script's current l=
-ocation?
->> >   If the preferred direction is to move it under tools/testing/selftes=
-ts/drivers/net/hw/,
->> >   should the move be submitted first, with this fix rebased on top?
->> >
->> >   I can send a v3 that drops the Debian Closes tag and focuses
->> >   the commit message solely on the process isolation, timeout,
->> >   and cleanup fixes once the preferred location is clear.
->> >
->> >   Thanks,
->> >   Bochao
->> >
->> > Alexis Lothor=C3=A9 <alexis.lothore@bootlin.com> =E4=BA=8E2026=E5=B9=
-=B48=E6=9C=8824=E6=97=A5=E5=91=A8=E4=B8=80 22:49=E5=86=99=E9=81=93=EF=BC=9A
->> >>
->> >> Hi Daniel, thanks for the notification
->> >>
->> >> On Mon Aug 24, 2026 at 1:31 PM CEST, Daniel Borkmann wrote:
->> >> > [ Trimming the excessive Cc list, and adding Alexis ]
->> >> >
->> >> > On 8/12/26 10:28 AM, Bochao Cao via B4 Relay wrote:
->> >> >> From: Bochao Cao <bochaolucky@gmail.com>
->> >> >>
->> >> >> test_xdp_features.sh waits for any xdp_features listener to appear=
- and
->> >> >> uses pidof during cleanup. A concurrent test can therefore make an=
-other
->> >> >> test proceed before its own DUT is ready, and cleanup kills every
->> >> >> xdp_features process on the host. The readiness loop also has no t=
-imeout,
->> >> >> so a DUT that exits before listening leaves the test hung indefini=
-tely.
->> >> >>
->> >> >> Track one active DUT at a time, wait for ss to report that exact P=
-ID with
->> >> >> a bounded retry loop, and reap it after each test. Consult the she=
-ll job
->> >> >> table before signaling the DUT so a stale PID cannot target an unr=
-elated
->> >> >> process. On failure, terminate the shell job with SIGKILL and reap=
- it so
->> >> >> blocked I/O cannot hang cleanup. Install an EXIT trap and signal h=
-andlers
->> >> >> so failure paths also remove network setup.
->> >> >>
->> >> >> Fixes: 4dba3e7852b7 ("selftests/bpf: introduce XDP compliance test=
- tool")
->> >> >> Closes: https://bugs.debian.org/1136522
->> >> >> Signed-off-by: Bochao Cao <bochaolucky@gmail.com>
->> >> >> ---
->> >> >> Tests:
->> >> >> - bash -n tools/testing/selftests/bpf/test_xdp_features.sh
->> >> >> - make -C tools/testing/selftests/bpf xdp_features
->> >> >> - sudo tools/testing/selftests/bpf/test_xdp_features.sh
->> >> >> - verified cleanup terminates a blocked DUT without affecting an u=
-nrelated process
->> >> >> ---
->> >> >> Changes in v2:
->> >> >> - Clarify that avoiding name-wide process matching, rather than dr=
-opping a dependency, is the motivation.
->> >> >> - Track and reap one active DUT at a time instead of retaining his=
-torical PIDs.
->> >> >> - Address PID reuse by signaling only the current Bash job during =
-cleanup.
->> >> >> - Use SIGKILL on failure cleanup so blocked DUT I/O cannot hang wa=
-it indefinitely.
->> >> >> - Link to v1: https://patch.msgid.link/20260805-xdp-dut-process-li=
-fecycle-gmail-v1-1-45984df8d295@gmail.com
->> >> >> ---
->> >> >>   tools/testing/selftests/bpf/test_xdp_features.sh | 82 ++++++++++=
-++++++++------
->> >> >>   1 file changed, 62 insertions(+), 20 deletions(-)
->> >> >
->> >> > Sorry for the late reply. With regards to https://bugs.debian.org/1=
-136522, src:linux deb
->> >> > does not have to depend on this at all, so the src:linux can just g=
-et rid of procps in
->> >> > any case if this is indeed the last dependency. I'm not seeing the =
-test being run in our
->> >> > BPF CI. I've Cc'ed Alexis as he's in the process of migrating and/o=
-r removing tests from
->> >> > tools/testing/selftests/bpf/ depending on how they fit into test_pr=
-ogs framework. I'll
->> >> > let him comment if there is already work in progress. It feels like=
- this script could be
->> >> > reworked into tools/testing/selftests/drivers/net/hw/ tests and rem=
-oved altogether from
->> >> > the tools/testing/selftests/bpf/ dir.
->> >>
->> >> There has been an attempt to fully convert and get rid of
->> >> test_xdp_features.sh, but discussions around the corresponding series
->> >> highlighted the need for the script to remain available for testing o=
-n
->> >> real hardware.  Features covered by the test_xdp_features.sh that wer=
-e
->> >> not covered yet by test_progs have been added to test_progs (in
->> >> xdp_cpumap_attach), see [1]. So there's currently no active effort on
->> >> this one on my side.
->> >>
->> >> Alexis
->> >>
->> >> [1] https://lore.kernel.org/bpf/20241009-convert_xdp_tests-v3-0-51cea=
-913710c@bootlin.com/
->> >>
->> >> --
->> >> Alexis Lothor=C3=A9, Bootlin
->> >> Embedded Linux and Kernel engineering
->> >> https://bootlin.com
->> >>
+diff --git a/tools/testing/selftests/uevent/uevent_filtering.c b/tools/testing/selftests/uevent/uevent_filtering.c
+index 974b076f9235..7414ce86700d 100644
+--- a/tools/testing/selftests/uevent/uevent_filtering.c
++++ b/tools/testing/selftests/uevent/uevent_filtering.c
+@@ -158,6 +158,30 @@ static int uevent_listener(unsigned long post_flags, bool expect_uevent,
+ 		ssize_t r;
+ 
+ 		r = recvmsg(sk_fd, &hdr, 0);
++		if (r < 0 && errno == ENOBUFS) {
++			/*
++			 * The socket receive buffer overran and the kernel
++			 * dropped uevents. This may happen due to udev
++			 * rebroadcasting kernel uevents that end up in the
++			 * receive buffer as we are subscribed to all groups.
++			 *
++			 * When a uevent is expected, we trigger it multiple
++			 * times to tolerate drops, so keep listening for one
++			 * of the remaining copies. The parent bounds this
++			 * wait by killing us on a timeout.
++			 *
++			 * When no uevent is expected, our socket sits in a
++			 * namespace that should not receive any, so a drop
++			 * means traffic reached it, or that we can no longer
++			 * prove it did not. Rather fail.
++			 */
++			if (!expect_uevent) {
++				fprintf(stderr, "Unexpected buffer overrun\n");
++				ret = -1;
++				break;
++			}
++			continue;
++		}
+ 		if (r <= 0) {
+ 			fprintf(stderr, "%s - Failed to receive uevent\n", strerror(errno));
+ 			ret = -1;
+-- 
+2.47.3
 
