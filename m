@@ -1,113 +1,95 @@
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3022F23D7C2
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 00:20:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1614A2F3C18;
+	Wed,  2 Sep 2026 00:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788308409; cv=none; b=Xj9DSsJ/yHSZZLvpto7Od2SMWA53vcGUBfQ/VauGzSNWsB7RGzo+NFxBHGt9loNa5jW+p7+VDFebiUT7TG+EZTkSPJmV69ZeqWGv9Y1g5D6Y0sMDhW+sNK+dMIlHsvvIInoz1Q8zEM1cCDc4NYc+2N/hW1DMho0AnxM+DJVM7gs=
+	t=1788308854; cv=none; b=Fn7JN+vNJc5faj39zwJKPPstYzhmyqnNw2EF6UgLquJTYruGncnsItF8SzFlDSbZoj1qAupKJCXhehb2dXLGvVGN4zGJTtFkj7R6HcoE4dGqYvyvDf3AQIwdiGryp098JLSttKCjNgYMPVri5v3mzAoHjn5Y8dTOq1KWJJa+VRM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788308409; c=relaxed/simple;
-	bh=BXRcOixdMzXQLW85aUU4Wf/qtNPkoLSWJYkLfRBdgIw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=O4bu3aGwKTvQP3ORqqmmnY0Fh5F3c2sPRtI9PQHncevQ+41RzLplR+6HM2RangY9xTN/Zc/MKtNTHqKfxLPbSzUIAncewBXvgdne/wfp+126UsnIB0cKEfS6Bs9Ug6UrPHoucs/zPyp/EFKQKA6QTiMKjd13PrUOk1U3U+WPzmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Z4bugYjb; arc=none smtp.client-ip=209.85.214.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+	s=arc-20240116; t=1788308854; c=relaxed/simple;
+	bh=h7vbIGIL6lvt6pBf3n2A0mwhmnGmbEsny/1B7JAVAkQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gZk8/xQzQbyT61HxB97XmbMLLOst5hLlQh7sgDHA7l2REzRUfOuUmkWMkctRMJlQ7yttIDrN+fBe8pqU7RNtboiebTg8ZymBMzEqC8w/6h96lsb8nQqJ2JlGaaS1YdVQQkog10RUZmFymhAHGZaqRMgY8zhp8o37qatPnBdJMik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RQUO+4NY; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Z4bugYjb"
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-2d7151120d6so6181875ad.3
-        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 17:20:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20251104; t=1788308408; x=1788913208; darn=vger.kernel.org;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=BSeD0zkw5d62oYTgpl5Wd4yc4wNF2jb8Exvm2SVVImE=;
-        b=Z4bugYjbTT0wJqYa6c5Hcbrh1KiXRXJ9PREPFEip4CUHEV2l9qw73Zv9FX1gXBH5C2
-         dHLlJQeLvK4wuiMsYt02jbh/qw2WTWhccJcUcozeBWN8wuwMs9DFb7VqgEwRTfRs5Don
-         Wq6JCjGNzulpBj5v5xUDOUagzJKm0RHitkm5IrEqSQuGehkUK8O0D9XI4+JeVgE19nvw
-         jVXWgu0Q352gP7undqLgb9uSU8EAubdpLFBD5Ul1jhrkDWa2uoeegWSssHSiL0yU6hNR
-         Mo2CGKl9lc9iRjOEv6w582BykMbgButl4cJ9k/ERfuqj7UtE/YVJXfsI3nlb9F1q6Jqw
-         jieg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788308408; x=1788913208;
-        h=content-type:cc:to:from:subject:message-id:references:mime-version
-         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=BSeD0zkw5d62oYTgpl5Wd4yc4wNF2jb8Exvm2SVVImE=;
-        b=sWFlqLmyUEpqnEiB8jX8cjBFQKzuYevQZR0UzCq2t5EuomNNmJRNSIsjHUHvG7tv6q
-         folMib0R1X1ggmIou+3SldR4rCUB6fhwMIRHnQ89gPZ1KrBX+Vv/FGXacEZBnEdWlVl9
-         2H/hEMFHPrCi7uEmt1T1aNkng1LpF/o1mDKvkUJiCQanLn7f3p0eCPWWIFXDcCOcY17A
-         pay7mnjPkgv5e9ND32AvnP5NApYhF9lXVcZxldYjEu/7RvsfNgAdy6fTgT7tmubYXg5q
-         iLFHxhL1VTxqCV3dcBCwL2wPxb1suVmvFtm3Xw2NJH4f8WYr3yAQ/Gg1vcJ/CFpRYnKW
-         SOUQ==
-X-Forwarded-Encrypted: i=1; AKwUvBxFcQ2kui4t5XAKOpYGwIK+F32qBg7lgcXeYBj8dAv6nm4qeahxTrNOVw4yV1s/OyZwlrGPdhzKzWmUbzMlzIU=@vger.kernel.org
-X-Gm-Message-State: AFuF++mk+zXtCdrx5HBmzCC/DSWYkCDTSNi0qGLl0tOSolwwoH2hrHix
-	CLfvHxnxzV5od9rYT7csntdLeuPXv/5jUlv/UHn4rD3gnIUWOljZ7y0F0nj1GykgmLQwDwKiih3
-	MOn7qug==
-X-Received: from pgco28.prod.google.com ([2002:a63:731c:0:b0:cbe:dc75:c58e])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e787:b0:2d9:4358:73ab
- with SMTP id d9443c01a7336-2daec775fd0mr16568335ad.19.1788308407429; Tue, 01
- Sep 2026 17:20:07 -0700 (PDT)
-Date: Tue, 1 Sep 2026 17:20:06 -0700
-In-Reply-To: <20260730110524.2539316-8-ewanhai-oc@zhaoxin.com>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RQUO+4NY"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38EA51F000E9;
+	Wed,  2 Sep 2026 00:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788308852;
+	bh=mbv8WxNYdZDCGISix1qH3K9oOQ8RMlyWgnMJQvHMmG0=;
+	h=From:To:Cc:Subject:Date;
+	b=RQUO+4NY2VU3f7MNQJs8O/9NYJxF9+lIgXvdVprklDTns8sq8MmOsoSniUPJJztqq
+	 4X1/Vc1U9JgKmYoaVlRiTv+PmW3UbUPwwFR14cDhoqecuF4tC6GnL+MSJby5amyds3
+	 Ro82wNH3VUssbS6IUR4QLeFk+xBekhw+ggsZbACziDlfrmMGWgd/tHH0SbacZYkMVT
+	 MAMYjgj2elCLpXQZDsvpnZArX+8c0FYZrBrJwfpLvLZrahdx+Det0POhB5WtmEQC/I
+	 GjC5jVmpWcCO25rvpfs0az9XePaeeMYhcI06XaTkNAa1XkuK/Wtkotj6MMXwZU1Nk4
+	 bVuobnP1ICHng==
+From: SJ Park <sj@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: SJ Park <sj@kernel.org>,
+	stable@vger.kernel.org,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	Quanmin Yan <yanquanmin1@huawei.com>,
+	Ravi Jonnalagadda <ravis.opensrc@gmail.com>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
+	linux-kernel@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-mm@kvack.org
+Subject: [PATCH 0/4] mm/damon: fix misc bugs in kunit, quota goals and sysfs refresh_ms
+Date: Tue,  1 Sep 2026 17:27:19 -0700
+Message-ID: <20260902002725.108635-1-sj@kernel.org>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260730110524.2539316-1-ewanhai-oc@zhaoxin.com> <20260730110524.2539316-8-ewanhai-oc@zhaoxin.com>
-Message-ID: <apdrtnMGJN7K0wRa@google.com>
-Subject: Re: [PATCH 7/8] KVM: selftests: nested_exceptions_test: Add Zhaoxin
- CPU support
-From: Sean Christopherson <seanjc@google.com>
-To: Ewan Hai-oc <ewanhai-oc@zhaoxin.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
-	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 30, 2026, Ewan Hai-oc wrote:
-> From: Frank Zhu <frankzhu@zhaoxin.com>
-> 
-> In the test, the ERROR_CODE_EXT_FLAG bit should not be set in the #GP
-> error code on Zhaoxin CPUs.
+DAMOS quota goals commit unit test is mistakenly not testing a test case
+that was designed to test.  DAMOS quota goals and DAMON sysfs refresh_ms
+file have bugs that can produce non critical but still unexpected
+behaviors.  Fix the bugs.
 
-Why not?
+Patch 1 fixes the DAMOS quota goals commit unit test to cover a
+mistakenly uncovered case.  Patches 2 and 3 fix the bugs in DAMOS PSI
+goal initialization and eligible_mem_bp online commit, respectively.
+Patch 4 fixes the bug in DAMON sysfs refresh_ms file handling.
 
-> Add GP_ERROR_CODE_ZX and use it when > running on Zhaoxin hardware.
-> 
-> Signed-off-by: Frank Zhu <frankzhu@zhaoxin.com>
-> Signed-off-by: Ewan Hai <ewanhai-oc@zhaoxin.com>
-> ---
->  tools/testing/selftests/kvm/x86/nested_exceptions_test.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/testing/selftests/kvm/x86/nested_exceptions_test.c b/tools/testing/selftests/kvm/x86/nested_exceptions_test.c
-> index aeec3121c8e8..bacbbdc5dc69 100644
-> --- a/tools/testing/selftests/kvm/x86/nested_exceptions_test.c
-> +++ b/tools/testing/selftests/kvm/x86/nested_exceptions_test.c
-> @@ -38,6 +38,7 @@
->   */
->  #define GP_ERROR_CODE_AMD ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG)
->  #define GP_ERROR_CODE_INTEL ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG | ERROR_CODE_EXT_FLAG)
-> +#define GP_ERROR_CODE_ZX ((SS_VECTOR * 8) | ERROR_CODE_IDT_FLAG)
->  
->  /*
->   * Intel and AMD both shove '0' into the error code on #DF, regardless of what
-> @@ -139,7 +140,8 @@ static void l1_vmx_code(struct vmx_pages *vmx)
->  	 */
->  	GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_GP_DF), 0);
->  	vmx_run_l2(l2_ss_pending_test, SS_VECTOR, (u16)SS_ERROR_CODE);
-> -	vmx_run_l2(l2_ss_injected_gp_test, GP_VECTOR, GP_ERROR_CODE_INTEL);
-> +	vmx_run_l2(l2_ss_injected_gp_test, GP_VECTOR,
-> +		   host_cpu_is_zx ? GP_ERROR_CODE_ZX : GP_ERROR_CODE_INTEL);
->  
->  	GUEST_ASSERT_EQ(vmwrite(EXCEPTION_BITMAP, INTERCEPT_SS_DF), 0);
->  	vmx_run_l2(l2_ss_injected_df_test, DF_VECTOR, DF_ERROR_CODE);
-> -- 
-> 2.34.1
-> 
-> 
+Changes from RFC v1.3
+- RFC v1.3: https://lore.kernel.org/20260828183649.71192-1-sj@kernel.org
+- Drop RFC tag.
+- Rebase to latest mm-new.
+Changes from RFC v1.2
+- RFC v1.2: https://lore.kernel.org/20260828014659.121058-1-sj@kernel.org
+- Fix last_psi_total underflow.
+Changes from RFC v1.1
+- RFC v1.1: https://lore.kernel.org/20260827134429.123023-1-sj@kernel.org
+- Fix quota goals commit unit test that was mistakenly missing a test case.
+- Initialize last_psi_total as uninitialized at the beginning.
+- Correct kunit test for changed last_psi_total initialization behavior.
+Changes from RFC
+- RFC: https://lore.kernel.org/20260827042920.93580-1-sj@kernel.org
+  (Mistakenly missed RFC tag)
+- Fix build error.
+- Add eligible_mem_bp nid commit fix.
+
+SJ Park (4):
+  mm/damon/tests/core-kunit: test committing psi goal to psi goal
+  mm/damon/core: handle uninitialized damos_quota_goal->last_psi_total
+  mm/damon/core: copy nid for eligible_mem_bp damos quota goal commit
+  mm/damon/sysfs: set next refresh jiffies per sysfs context
+
+ mm/damon/core.c             | 16 ++++++++++++++--
+ mm/damon/sysfs.c            | 11 +++++------
+ mm/damon/tests/core-kunit.h | 16 ++++++++++------
+ 3 files changed, 29 insertions(+), 14 deletions(-)
+
+
+base-commit: ee125db0b1f24a2f6b04e3143ffe1a14324176fe
+-- 
+2.47.3
