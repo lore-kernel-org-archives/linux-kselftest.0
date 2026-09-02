@@ -1,188 +1,128 @@
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3950738E8B4
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 19:47:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6067237E5FF
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 20:00:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788378449; cv=none; b=D9ob/cAwhxFynd+ivl107rpT7bx6N8joNihL3bD+r9v9zCeAzlAUM8qOTlixnlQmjY0i8S5nzMIIOEowmoZacTX0Zq1wzUfJ540c3jh4EClSvvEzGNqMwUL25SWyPB7f9leIVsNfV1QLHjEICUtLf91qWk7zWmL/V92qjKwGV0k=
+	t=1788379222; cv=none; b=q105NBCyVeJVoUksexYgX8sROLJCPByBxU9rBTT/SyRZR8DcAaPaiq+47KYgbHdcmtjI5cmF6UPWyA0J2OZmWSrFdOejEfK0iry+O7nF1ija/MdQVk31EP/rBQI183MpFYQKiG2up4c7mp/r0wGZQPyg9CpBJr+4gGoAFf8+Oq0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788378449; c=relaxed/simple;
-	bh=3roPg4ZfXvCu9H2QE9Rl5CyrdVkiobJpwL6O2Q76emc=;
+	s=arc-20240116; t=1788379222; c=relaxed/simple;
+	bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eLT+uTHhDxig2tf/Sx9Es44hVVtIK07P8QfjkRwjYfzO6gkVzVHDeCDAicGwYFSCnb/3nb+Dq2RLm+0+KuPpGMJzHsMlM9e+QNAqvX0qzPyMmTvw/put0MdyZjm0uq8VSHeJ+7k4wYXspdehzEjYPPcKkSQsqnXlqkOSGTVuuRg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net; spf=pass smtp.mailfrom=gourry.net; dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b=kzgj7zER; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gourry.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gourry.net
+	 MIME-Version:Content-Type; b=TRnia4ltepNUfDtsrm3psEMiw8CnCLeSnFNkY4GmAnJB8w0aeurXkRpiXyGqFozE8FnsE1Mgzy0NelUZnJ37bUO5I0ZGMVu445L4vWMW0NG6BLIFk7yBGk6p+ZNNZU8hN/KL6RlZ/H/Nz6GAEuEErsXZsunZgC7N4Gw4SjW2i2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aUaWQSMw; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gourry.net header.i=@gourry.net header.b="kzgj7zER"
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-9390dd46b45so109435185a.0
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 12:47:15 -0700 (PDT)
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUaWQSMw"
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4b5b727be96so936502b6e.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 13:00:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gourry.net; s=google; t=1788378431; x=1788983231; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=jK2MmrU5PHerjBBjkrNgI0UI4L0yhiHtWM989h7yfSE=;
-        b=kzgj7zERtqf4PrGUQ8jXHsNvw5nwm+Ny7PCMsaE/nnZPHxI5BknhQDDBQJuho1xy3d
-         rGAqffBveNOCKfOJK4Dhuccyi3cLj5dkKBT96cDScJCR06JH5ipXE4qvAgiqEin/hYL6
-         mfa1RCH8PxTB445EpGj8nQPPKKLAkCkkNU+bS+NdhyaW+5xBJePZpXNmYxT6xTzxnbVX
-         PrRUV1InxeVPVIuAnJ+jP4/TjCwfb2bRktY955Q2cBkIXQapo6Y0iyMvFVMpgedfTyvr
-         c0d1hgMd6PWvecNNwZpQq80zeILuB3rcjjh5qMKPzDGjdyQwSKGAvXl34Dt9gOO5qUVx
-         q48A==
+        d=gmail.com; s=20251104; t=1788379220; x=1788984020; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
+        b=aUaWQSMwvBzwZySrhLChY7fL3N7BBxTnLROl/z1kUVxsOng8p395VveDiYV3HxAajI
+         7ycSKtTdmdJNdn00sfVIOaz1a4e9EdtjBNylgFTGVh6JlUXqQdz8t2L6gmUS5ZRzXz0H
+         CH9+V5mU/OKDbvrFohGWC64YabfnYKnzYQ67Lyuzwzp7myJF8ZLZe10IqK+AhY8wkbNY
+         c1cMfI2MKDoC/84c030kbtU/n1bMuZFsXUkvC3Mntvmdb2P4WB/AE+dgD4KZJs25iPUN
+         NPwrC+gubo0KaXXCMrdjb3TJJAfroecyUNgJFKPr8K06/dk5+JhOcvPyoYl911TDFMWr
+         e7jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788378431; x=1788983231;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=jK2MmrU5PHerjBBjkrNgI0UI4L0yhiHtWM989h7yfSE=;
-        b=jgHO6UsatjKph9g0C8T/c7c1SAiPJtNvt1ThhGKao2zVZjhy5cikxxTLi1RGZvgZ5j
-         Vo5IP3qBMGMz5cChagKBBYT776uf7DT08evryzfRdDr9YAY+PDNBAAZrCdeQcIMd9CjU
-         suGCmLObKTAuF8aK7CZ/pUSAYeiFbkdouHvRXggBfnleLkT4yIgG2vrnZVVf/+1JRGa9
-         9UzcMrptBcnS13NN58rEvwc44PnPKxe8ZY+F3KpNp+ndufoFahj26xiKACfSA7JxFtHm
-         YBJfkfbiDKOvnurgEhT9xRSqvR4U0Vhix8jw7iJL56U2W770GSxSNb9Cwgxxxiy5+dS/
-         ZDBg==
-X-Forwarded-Encrypted: i=1; AKwUvByXztDRFlAkB835g36EOmNVgrjv3ZLNBCl5LtWb5MqKk5mI08icKjeUtNXHqa+FT5baeG090iF4Z/Sv434tHIk=@vger.kernel.org
-X-Gm-Message-State: AFuF++kvR4ThQXcECQk6GNdSohFMXYqX3gL/HqLsR0kkXPBlXoJb9SiA
-	A3y2OmYiNcCt4FEpIsrP5a9muJMpLjWJHjRVEsAXzysRi+k9vaO4uKOYA6mxMZDlv1M=
-X-Gm-Gg: AYBFou1zcK7AOnC2yzQKmzhXo6uFbIPZOtRao5k8N1KCO6Bytz/7PISWtYN4bCSImyy
-	YfGjoWeMILdI4IKrJ4cvAX38pZzbBP2oaMXRuML+ObLSdufql8wzdwtyLvaXzax5pBHbK7+YR+3
-	e+0v2HeladN6cYTH+jFd4jd8u6NXAkGbeSAQtBrJaqNVkOL7qm492xxbpSwiAv+s7mphr09NSSV
-	lojFFyh0ICEoaIMe6VlkC8PdRG15GApSLPvghqhwlB91Nmfy+K6gAoKmY2m+BerHvUHohiYAf05
-	AoTulx0WPVO6rtFchI5k93hie3qa9gyzQpU0/4YdsPUNQth4saZkJG8r4fSrKju1QtsM+GduQ/A
-	9QJG94GdEN10J6twN23JL8h5kJNM7+dxZ7ffA9Va6cYBlJQ8QQwjjtn4I83ZaH7e40DD/RoSpfj
-	gcEbTYyu7Zd0mUjHL8gqKXc8TxB8OzQAA9D+cbczawGlFnQ5jp3Mrmn+OaLqMTXqQMO/yeexeCx
-	le40l+Sxi+9nF+tcJ7Vgwv6jwALW2Rw8AXSCFy0ewBjXMhT35TliKt68nYx
-X-Received: by 2002:a05:620a:3192:b0:936:ea3d:9313 with SMTP id af79cd13be357-9396ef7c45bmr114112385a.20.1788378426620;
-        Wed, 02 Sep 2026 12:47:06 -0700 (PDT)
-Received: from gourry-fedora-PF4VCD3F.lan (pool-173-79-60-52.washdc.fios.verizon.net. [173.79.60.52])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-9395f18801asm299300585a.16.2026.09.02.12.47.05
+        d=1e100.net; s=20251104; t=1788379220; x=1788984020;
+        h=content-transfer-encoding:content-type:mime-version:references
+         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
+        b=D2h7VYTRZWx6LbvhfQz9G6aAOPv36C1RuXQJQclJXHenHXtqhK/CMjcCwEcjrH6Rb4
+         0lb36hgV+PVUPvEe0fqvh8cFL7nWBHqkWbo9dHbSgzi+L8c5d0CUTwc+sMlaa2jpd2m+
+         mdCAGcnfeZJUGodDGm+uKtsSW0CM/VSQ89VLtuu5GYl8/jJBewD7xQ/H1jsTmbYdwvLP
+         Iu5/1zkd6VHter8bpWMK+Y5XqmFpTbUUTP3vPD5V61JFvRCk3pWzxzIlmHAZ9l5pGdus
+         KYtg2iuNLbT8Qgkbzu5e06UJqQNtQRjuR2s8dNZCAfgUoz6GezSMGNuSuE43AnxfHLgF
+         ukbw==
+X-Forwarded-Encrypted: i=1; AHgh+Rqd3nslzCqvbXZPn1iDPEpCqR3E+bjb5cmTy6PtkswxUWUWC0l9eSepd+lcveo8zdETxK/S0mDnVXJYrice1WI=@vger.kernel.org
+X-Gm-Message-State: AFuF++mt1ZNiOBe0x9OKblIwKJnFllCM7PEXNT4mfiJC12ZnegXBre9b
+	BJIQ3A7RuQxKiA2T9bKiCTVbIT8M9nyWHzd2lRuFB6FiRR1K50wQyW8W
+X-Gm-Gg: AR+sD139yI5gr6OsduKXv/XtqWh43UGDeE/7oxNETwn874ndq4gXFfooQOiTki2sc35
+	smQS8mwgEMdQusHEk9pIQwXlPF8fWa8gcTg+O2uA51q3Cm2deTTU6lY7rqmr4HrymFKciFl7HoM
+	8VON+LoioHxlg64/609H6o98QAloicAK59uMpSkW5EKUx4jwgGIkwICSVQR1vipzIlSyEbcJzc9
+	MQd0lkPeqYN6RQFqHPvrVoqvINDGy5L8QS2aQcxsZHgjUUejPS/e1+rMWhFomBsLqwcyrm9Hsb3
+	9RDL0p9+RTDL8lwEZzlTdjKY8Phj7a9rOB9c9eu4B0qIJvjniSExZiJzOYH+4zsGKwTdJAKjKnX
+	sDib/NVhqYhXeMhyweWJqCyXck3MyKuUknD4VT2275QdrCK6cVyPH15gBXFpXwZYWOp9L/rP1EO
+	tmW+lXgH8DiabYxs84mT4Y9kMQBA08O7K0b9Xq9nfrk2TVUM49+m3s1YMmpwDMVq4P8aZSMCY6T
+	wCEZzu5oaRuTJY4Jg==
+X-Received: by 2002:a05:6808:1512:b0:4b3:79ae:1495 with SMTP id 5614622812f47-4b6bc65c863mr6085404b6e.5.1788379220030;
+        Wed, 02 Sep 2026 13:00:20 -0700 (PDT)
+Received: from localhost ([2a03:2880:10ff:f::])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b69b214817sm2976454b6e.12.2026.09.02.13.00.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 12:47:06 -0700 (PDT)
-From: Gregory Price <gourry@gourry.net>
-To: linux-mm@kvack.org
-Cc: kvm@vger.kernel.org,
+        Wed, 02 Sep 2026 13:00:19 -0700 (PDT)
+From: Joshua Hahn <joshua.hahnjy@gmail.com>
+To: Nhat Pham <nphamcs@gmail.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry@kernel.org>,
+	Chengming Zhou <chengming.zhou@linux.dev>,
+	Tejun Heo <tj@kernel.org>,
+	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
+	Shuah Khan <shuah@kernel.org>,
+	linux-mm@kvack.org,
+	cgroup@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com,
-	pbonzini@redhat.com,
-	seanjc@google.com,
-	akpm@linux-foundation.org,
-	david@kernel.org,
-	ziy@nvidia.com,
-	matthew.brost@intel.com,
-	joshua.hahnjy@gmail.com,
-	rakie.kim@sk.com,
-	byungchul@sk.com,
-	gourry@gourry.net,
-	ying.huang@linux.alibaba.com,
-	apopple@nvidia.com,
-	shuah@kernel.org
-Subject: [PATCH 4/5] selftests: KVM: guest_memfd: let the gmem_test() harness bind a node
-Date: Wed,  2 Sep 2026 15:46:56 -0400
-Message-ID: <20260902194657.79075-5-gourry@gourry.net>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260902194657.79075-1-gourry@gourry.net>
-References: <20260902194657.79075-1-gourry@gourry.net>
+	kernel-team@meta.com
+Subject: Re: [PATCH] selftests/cgroup: Skip test_no_invasive_cgroup_shrink if zswap shrinker is enabled
+Date: Wed,  2 Sep 2026 13:00:15 -0700
+Message-ID: <20260902200017.3847858-1-joshua.hahnjy@gmail.com>
+X-Mailer: git-send-email 2.53.0
+In-Reply-To: <CAKEwX=MD_EcAaLzMGnMytVJ_KTGmv=hpR2h-DD+w0oJRjzkg6Q@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-To test GUEST_MEMFD_FLAG_BIND_NODE - extend create_guest_memfd() to
-accept a node.
+On Tue, 1 Sep 2026 14:04:22 -0400 Nhat Pham <nphamcs@gmail.com> wrote:
 
-Ignore the node argument if the BIND_NODE flag is not provided.
+> On Tue, Sep 1, 2026 at 12:13 PM Joshua Hahn <joshua.hahnjy@gmail.com> wrote:
+> >
+> > The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
+> > has zswapped out more pages than memory.zswap.max, that it does not
+> > trigger writeback for other cgroups. To do this, it compares the
+> > writeback count in a control cgroup and makes sure that it is 0,
+> > and compares it to the writeback count in a aggressor cgroup who
+> > does expect to see writeback.
+> >
+> > When the zswap shrinker is enabled however, there is an additional path
+> > to zswap writeback, which can happen independently of reaching the
+> > memory.zswap.max limit.
+> >
+> > The writeback counter cannot distinguish between invasive noisy-neighbor
+> > driven writeback and the zswap shrinker work, so the test becomes
+> > invalid.
 
-Signed-off-by: Gregory Price <gourry@gourry.net>
-Assisted-by: Claude:claude-opus-5
----
- .../testing/selftests/kvm/guest_memfd_test.c  | 50 ++++++++++++++++---
- 1 file changed, 42 insertions(+), 8 deletions(-)
+Hi Nhat!
 
-diff --git a/tools/testing/selftests/kvm/guest_memfd_test.c b/tools/testing/selftests/kvm/guest_memfd_test.c
-index 2233d871a38f4..1818e0fea5690 100644
---- a/tools/testing/selftests/kvm/guest_memfd_test.c
-+++ b/tools/testing/selftests/kvm/guest_memfd_test.c
-@@ -25,6 +25,31 @@
- 
- static size_t page_size;
- 
-+static int __create_guest_memfd_node(struct kvm_vm *vm, u64 size, u64 flags,
-+				     u32 node, u32 pad)
-+{
-+	struct kvm_create_guest_memfd guest_memfd = {
-+		.size = size,
-+		.flags = flags,
-+		.node = node,
-+		.pad = pad,
-+	};
-+
-+	return __vm_ioctl(vm, KVM_CREATE_GUEST_MEMFD, &guest_memfd);
-+}
-+
-+static int create_guest_memfd(struct kvm_vm *vm, u64 size, u64 flags, u32 node)
-+{
-+	int fd;
-+
-+	if (!(flags & GUEST_MEMFD_FLAG_BIND_NODE))
-+		return vm_create_guest_memfd(vm, size, flags);
-+
-+	fd = __create_guest_memfd_node(vm, size, flags, node, 0);
-+	TEST_ASSERT(fd >= 0, KVM_IOCTL_ERROR(KVM_CREATE_GUEST_MEMFD, fd));
-+	return fd;
-+}
-+
- static void test_file_read_write(int fd, size_t total_size)
- {
- 	char buf[64];
-@@ -418,26 +443,35 @@ static void test_guest_memfd_flags(struct kvm_vm *vm)
- 	}
- }
- 
--#define ____gmem_test(__test, __vm, __flags, __gmem_size, args...)	\
--do {									\
--	int fd = vm_create_guest_memfd(__vm, __gmem_size, __flags);	\
--									\
--	test_##__test(args);						\
--	close(fd);							\
-+#define ____gmem_test(__test, __vm, __flags, __gmem_size, __node, args...) \
-+do {									   \
-+	int fd = create_guest_memfd(__vm, __gmem_size, __flags, __node);   \
-+									   \
-+	test_##__test(args);						   \
-+	close(fd);							   \
- } while (0)
- 
- #define __gmem_test(__test, __vm, __flags, __gmem_size)			\
--	____gmem_test(__test, __vm, __flags, __gmem_size, fd, __gmem_size)
-+	____gmem_test(__test, __vm, __flags, __gmem_size, 0, fd, __gmem_size)
- 
- #define gmem_test(__test, __vm, __flags)				\
- 	__gmem_test(__test, __vm, __flags, page_size * 4)
- 
- #define __gmem_test_vm(__test, __vm, __flags, __gmem_size)		\
--	____gmem_test(__test, __vm, __flags, __gmem_size, __vm, fd, __gmem_size)
-+	____gmem_test(__test, __vm, __flags, __gmem_size, 0,		\
-+		      __vm, fd, __gmem_size)
- 
- #define gmem_test_vm(__test, __vm, __flags)				\
- 	__gmem_test_vm(__test, __vm, __flags, page_size * 4)
- 
-+#define __gmem_test_node(__test, __vm, __flags, __gmem_size, __node)	\
-+	____gmem_test(__test, __vm,					\
-+		      (__flags) | GUEST_MEMFD_FLAG_BIND_NODE,		\
-+		      __gmem_size, __node, fd, __gmem_size, __node)
-+
-+#define gmem_test_node(__test, __vm, __flags, __node)			\
-+	__gmem_test_node(__test, __vm, __flags, page_size * 4, __node)
-+
- static void __test_guest_memfd(struct kvm_vm *vm, u64 flags)
- {
- 	test_create_guest_memfd_multiple(vm);
--- 
-2.53.0-Meta
+Thanks for the quick review on this.
 
+> I think writeback in the control group (zw_group) happens right during
+> the first round of memory allocation, but there shouldn't be any on
+> the second round (as the second round involves writing to wb_group
+> only). So if we read zswap writeback counter of that cgroup (zw_group)
+> right after that first allocation round, and make sure delta = 0 after
+> the second round, then that should work for both shrinker_enabled = Y
+> v.s N.
+
+That is very smart and much better than just skipping the test, I'll
+take your approach. I've sent a v2 in [1].
+
+Have a great day Nhat! Thank you again!
+Joshua
+
+[1] https://lore.kernel.org/all/20260902194521.3652178-1-joshua.hahnjy@gmail.com/
