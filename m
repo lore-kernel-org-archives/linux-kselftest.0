@@ -1,128 +1,87 @@
-Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6067237E5FF
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 20:00:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1179CA6F;
+	Wed,  2 Sep 2026 20:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788379222; cv=none; b=q105NBCyVeJVoUksexYgX8sROLJCPByBxU9rBTT/SyRZR8DcAaPaiq+47KYgbHdcmtjI5cmF6UPWyA0J2OZmWSrFdOejEfK0iry+O7nF1ija/MdQVk31EP/rBQI183MpFYQKiG2up4c7mp/r0wGZQPyg9CpBJr+4gGoAFf8+Oq0=
+	t=1788381000; cv=none; b=MKVCDwZqBMZi3S6FjWg0I14ZG/W1cJXcirsTbATTG/2oPMPbJnu6jfRyGtjDDDFEBr8mpmYaLHXP0A3hrl74X1N/h8RdDTx9owqpyCnSRZESsfDTNWeAhRUTirlY/b04PHKKmhIhmTtdvNA3v6U9O7yxLmqomns1oHRhXeTgXEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788379222; c=relaxed/simple;
-	bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=TRnia4ltepNUfDtsrm3psEMiw8CnCLeSnFNkY4GmAnJB8w0aeurXkRpiXyGqFozE8FnsE1Mgzy0NelUZnJ37bUO5I0ZGMVu445L4vWMW0NG6BLIFk7yBGk6p+ZNNZU8hN/KL6RlZ/H/Nz6GAEuEErsXZsunZgC7N4Gw4SjW2i2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aUaWQSMw; arc=none smtp.client-ip=209.85.167.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788381000; c=relaxed/simple;
+	bh=5GZBvCsMOFsFK+rU7KztXj9UD8tznxkCHHiAEsivmks=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PZu/Zy3O4eBjQbR/SOK4zIrz9ClfMz2H57gOnRkRzaZACNR55/IGndVACi7RakmO4scgyyUqH1uj2a97iSORJT6zKzRdPtyZpgk7D2lBppQWO8q959w7FAgPp6ixZyi8WXgZ1rOhPYI0eXuIe4MLSZ1z7kRK1efp8caOxDa8IoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EjMU7p5Q; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aUaWQSMw"
-Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-4b5b727be96so936502b6e.3
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 13:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788379220; x=1788984020; darn=vger.kernel.org;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:from:to:cc:subject
-         :date:message-id:reply-to:content-type;
-        bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
-        b=aUaWQSMwvBzwZySrhLChY7fL3N7BBxTnLROl/z1kUVxsOng8p395VveDiYV3HxAajI
-         7ycSKtTdmdJNdn00sfVIOaz1a4e9EdtjBNylgFTGVh6JlUXqQdz8t2L6gmUS5ZRzXz0H
-         CH9+V5mU/OKDbvrFohGWC64YabfnYKnzYQ67Lyuzwzp7myJF8ZLZe10IqK+AhY8wkbNY
-         c1cMfI2MKDoC/84c030kbtU/n1bMuZFsXUkvC3Mntvmdb2P4WB/AE+dgD4KZJs25iPUN
-         NPwrC+gubo0KaXXCMrdjb3TJJAfroecyUNgJFKPr8K06/dk5+JhOcvPyoYl911TDFMWr
-         e7jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788379220; x=1788984020;
-        h=content-transfer-encoding:content-type:mime-version:references
-         :in-reply-to:message-id:date:subject:cc:to:from:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to
-         :content-type;
-        bh=InDs+YF8Rr2GVIXpPTwQq2qlM5wTAldEfN0J2IQdGYA=;
-        b=D2h7VYTRZWx6LbvhfQz9G6aAOPv36C1RuXQJQclJXHenHXtqhK/CMjcCwEcjrH6Rb4
-         0lb36hgV+PVUPvEe0fqvh8cFL7nWBHqkWbo9dHbSgzi+L8c5d0CUTwc+sMlaa2jpd2m+
-         mdCAGcnfeZJUGodDGm+uKtsSW0CM/VSQ89VLtuu5GYl8/jJBewD7xQ/H1jsTmbYdwvLP
-         Iu5/1zkd6VHter8bpWMK+Y5XqmFpTbUUTP3vPD5V61JFvRCk3pWzxzIlmHAZ9l5pGdus
-         KYtg2iuNLbT8Qgkbzu5e06UJqQNtQRjuR2s8dNZCAfgUoz6GezSMGNuSuE43AnxfHLgF
-         ukbw==
-X-Forwarded-Encrypted: i=1; AHgh+Rqd3nslzCqvbXZPn1iDPEpCqR3E+bjb5cmTy6PtkswxUWUWC0l9eSepd+lcveo8zdETxK/S0mDnVXJYrice1WI=@vger.kernel.org
-X-Gm-Message-State: AFuF++mt1ZNiOBe0x9OKblIwKJnFllCM7PEXNT4mfiJC12ZnegXBre9b
-	BJIQ3A7RuQxKiA2T9bKiCTVbIT8M9nyWHzd2lRuFB6FiRR1K50wQyW8W
-X-Gm-Gg: AR+sD139yI5gr6OsduKXv/XtqWh43UGDeE/7oxNETwn874ndq4gXFfooQOiTki2sc35
-	smQS8mwgEMdQusHEk9pIQwXlPF8fWa8gcTg+O2uA51q3Cm2deTTU6lY7rqmr4HrymFKciFl7HoM
-	8VON+LoioHxlg64/609H6o98QAloicAK59uMpSkW5EKUx4jwgGIkwICSVQR1vipzIlSyEbcJzc9
-	MQd0lkPeqYN6RQFqHPvrVoqvINDGy5L8QS2aQcxsZHgjUUejPS/e1+rMWhFomBsLqwcyrm9Hsb3
-	9RDL0p9+RTDL8lwEZzlTdjKY8Phj7a9rOB9c9eu4B0qIJvjniSExZiJzOYH+4zsGKwTdJAKjKnX
-	sDib/NVhqYhXeMhyweWJqCyXck3MyKuUknD4VT2275QdrCK6cVyPH15gBXFpXwZYWOp9L/rP1EO
-	tmW+lXgH8DiabYxs84mT4Y9kMQBA08O7K0b9Xq9nfrk2TVUM49+m3s1YMmpwDMVq4P8aZSMCY6T
-	wCEZzu5oaRuTJY4Jg==
-X-Received: by 2002:a05:6808:1512:b0:4b3:79ae:1495 with SMTP id 5614622812f47-4b6bc65c863mr6085404b6e.5.1788379220030;
-        Wed, 02 Sep 2026 13:00:20 -0700 (PDT)
-Received: from localhost ([2a03:2880:10ff:f::])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-4b69b214817sm2976454b6e.12.2026.09.02.13.00.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 13:00:19 -0700 (PDT)
-From: Joshua Hahn <joshua.hahnjy@gmail.com>
-To: Nhat Pham <nphamcs@gmail.com>
-Cc: Johannes Weiner <hannes@cmpxchg.org>,
-	Yosry Ahmed <yosry@kernel.org>,
-	Chengming Zhou <chengming.zhou@linux.dev>,
-	Tejun Heo <tj@kernel.org>,
-	=?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
-	Shuah Khan <shuah@kernel.org>,
-	linux-mm@kvack.org,
-	cgroup@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-team@meta.com
-Subject: Re: [PATCH] selftests/cgroup: Skip test_no_invasive_cgroup_shrink if zswap shrinker is enabled
-Date: Wed,  2 Sep 2026 13:00:15 -0700
-Message-ID: <20260902200017.3847858-1-joshua.hahnjy@gmail.com>
-X-Mailer: git-send-email 2.53.0
-In-Reply-To: <CAKEwX=MD_EcAaLzMGnMytVJ_KTGmv=hpR2h-DD+w0oJRjzkg6Q@mail.gmail.com>
-References: 
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EjMU7p5Q"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17ADC1F000E9;
+	Wed,  2 Sep 2026 20:29:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788380998;
+	bh=cGdkDE7sit6AxArVGexqh3DzsX9Gs9/f7klByuNA0IA=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=EjMU7p5Q1RdK3l4wX8IbzKHsEaVHCiB4xywxTYeHXUYGqG7quVvPk2uchitIv64yD
+	 j8blse4qdSB9ggwcNwTHDvi3MU78BmVG3Z/yyc+SOfHjMXisWhp+yfpjQPOCtqEilG
+	 NwVQLJI6aohDk686p1OD5RaUDk6a9m4ZjqG03sMpIIgVxFzhKmIulOQOKTRFCXDPyn
+	 gUSVKMBgRkk6lkqRjDH2i6Lr9PQpZAJEQYUWnfbD8dRuM1iHVdVSgpaJPP1sg42UQg
+	 q3vdKLHNiQyt4bQPoV+V/LAHR7aDCGq/jA/ZdLuQNLp4juvvzb8f1apCMfcM8pTc8r
+	 b+zpI5zg+fzxw==
+Message-ID: <fc45c17c-84f7-45c7-a411-ba9070d1dcd7@kernel.org>
+Date: Wed, 2 Sep 2026 14:29:57 -0600
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net] selftests/net: Fix icmp.sh race between ping and
+ tcpdump startup
+Content-Language: en-US
+To: =?UTF-8?B?UmljYXJkbyBCLiBNYXJsacOocmUgKFNVU0Up?= <ricardo@marliere.net>,
+ "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Shuah Khan <shuah@kernel.org>,
+ =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>
+Cc: netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20260901-selftests-net-icmp_race-v1-1-0b2a27e91a0c@marliere.net>
+From: David Ahern <dsahern@kernel.org>
+In-Reply-To: <20260901-selftests-net-icmp_race-v1-1-0b2a27e91a0c@marliere.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Tue, 1 Sep 2026 14:04:22 -0400 Nhat Pham <nphamcs@gmail.com> wrote:
+On 9/1/26 8:09 AM, Ricardo B. Marlière (SUSE) wrote:
+> @@ -53,11 +54,21 @@ ip -netns $NS2 route add $RT2 via inet6 $H1_IP6
+>  # Make sure ns2 will respond with ICMP unreachable
+>  ip netns exec $NS2 sysctl -qw net.ipv4.icmp_ratelimit=0 net.ipv4.ip_forward=1
+>  
+> -# Run the test - a ping runs in the background, and we capture ICMP responses
+> -# with tcpdump; -c 1 means it should exit on the first ping, but add a timeout
+> -# in case something goes wrong
+> +# Run the test - start tcpdump and wait for it to be capturing before
+> +# sending any traffic. -c 1 means it should exit on the first ping, but add
+> +# a timeout in case something goes wrong
+> +ip netns exec $NS1 timeout 10 tcpdump -tpni veth0 -c 1 \
+> +    'icmp and icmp[icmptype] != icmp-echo' > $TMPFILE 2>$TCPDUMP_ERR &
 
-> On Tue, Sep 1, 2026 at 12:13 PM Joshua Hahn <joshua.hahnjy@gmail.com> wrote:
-> >
-> > The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
-> > has zswapped out more pages than memory.zswap.max, that it does not
-> > trigger writeback for other cgroups. To do this, it compares the
-> > writeback count in a control cgroup and makes sure that it is 0,
-> > and compares it to the writeback count in a aggressor cgroup who
-> > does expect to see writeback.
-> >
-> > When the zswap shrinker is enabled however, there is an additional path
-> > to zswap writeback, which can happen independently of reaching the
-> > memory.zswap.max limit.
-> >
-> > The writeback counter cannot distinguish between invasive noisy-neighbor
-> > driven writeback and the zswap shrinker work, so the test becomes
-> > invalid.
+Why keep the 'timeout 10'?
 
-Hi Nhat!
+> +TCPDUMP_PID=$!
 
-Thanks for the quick review on this.
+You have the pid. You can always kill it after the ping command if it
+does not terminate on its own after the 1 packet is received.
 
-> I think writeback in the control group (zw_group) happens right during
-> the first round of memory allocation, but there shouldn't be any on
-> the second round (as the second round involves writing to wb_group
-> only). So if we read zswap writeback counter of that cgroup (zw_group)
-> right after that first allocation round, and make sure delta = 0 after
-> the second round, then that should work for both shrinker_enabled = Y
-> v.s N.
+> +if ! slowwait 3 grep -qs "listening" "$TCPDUMP_ERR"; then
+> +    echo "FAIL - tcpdump did not start listening"
+> +    cat "$TCPDUMP_ERR"
+> +    exit 1
+> +fi
+> +
+>  ip netns exec $NS1 ping -w 3 -i 0.5 $PINGADDR >/dev/null &
+> -ip netns exec $NS1 timeout 10 tcpdump -tpni veth0 -c 1 'icmp and icmp[icmptype] != icmp-echo' > $TMPFILE 2>/dev/null
+> +
+> +wait $TCPDUMP_PID
+>  
 
-That is very smart and much better than just skipping the test, I'll
-take your approach. I've sent a v2 in [1].
 
-Have a great day Nhat! Thank you again!
-Joshua
-
-[1] https://lore.kernel.org/all/20260902194521.3652178-1-joshua.hahnjy@gmail.com/
