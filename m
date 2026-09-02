@@ -1,53 +1,53 @@
 Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011000.outbound.protection.outlook.com [40.107.130.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F24A3AA4F8;
-	Wed,  2 Sep 2026 16:30:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1693E4AA1F7;
+	Wed,  2 Sep 2026 16:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.0
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788366626; cv=fail; b=i7NkL46m4p6dejRh9EwdaJRmIbrEFgOYBuiO4KA3J19/NFleUnUrQUP+M0RkBD48vTTzOv2vgZMYXtJH2zTgclDWlPGjjRf6wMMFpkwz3V8rhuWpJ3f3xd5I3jVLIh2wHVxjR3ME8eZ6GpRe8QOk1ASnH8/uGqdCVcXKBJbbfv8=
+	t=1788366629; cv=fail; b=Ad9S2Lt8UdZC2wEq0x5qT2FwYZRVSDV+PX9Iut3xzHitg6EKdaoKnLMZLiitIqtiljetymPl8BQeF99h41SKjf4fphkMn9X8cqf0qxPmJ7R2gO7bTo05SgjN4egt/kEbfbhY27EupDcWx+woyMbfqpfkXvwoD6jPO6HI825jrBk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788366626; c=relaxed/simple;
-	bh=BEHLe+hnyM3ZN+qdP60TF7O5oTJnluzke28O7lhfsu0=;
+	s=arc-20240116; t=1788366629; c=relaxed/simple;
+	bh=2dpfwy+fKa2DY4zvSGoFOd1Icpn+2mxvAA4Dbyk1Isc=;
 	h=From:Date:Subject:Content-Type:Message-Id:References:In-Reply-To:
-	 To:Cc:MIME-Version; b=HMRzRuLzxx41TBU3G3Ty1MACZW/z/81eEXosaPaoAU6h5clLh2S9VIndPOVSPm7nF/h3cqM1QkwLv1ZC8jKip/Junoa5UdM4rL85fRPhGprFuy9lEtH5tMU5yWMgISYgHcgzIkbj5n+kSoG8+hu3MBoXb8iNKX9ffu9L56rqYXg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=x5HVGo7g; arc=fail smtp.client-ip=40.107.130.0
+	 To:Cc:MIME-Version; b=EmvQuQuiwebub4NmjSx11Pae1Q4/y3WFeKVOxC5PLig8O2OwYlFulNE98K6Y9El0GGGTloQbWyfVEqNINr1HcaVuY7aT3KoASOJEpWZFWHQvau622iaSBHbPlZJJ3uxkYem0fmuivUkL8f+A74XsI8T/AfutGST3mio0qJ+BueE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech; spf=pass smtp.mailfrom=est.tech; dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b=bjO5sGwP; arc=fail smtp.client-ip=40.107.130.0
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=est.tech
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=est.tech
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="x5HVGo7g"
+	dkim=pass (2048-bit key) header.d=est.tech header.i=@est.tech header.b="bjO5sGwP"
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=GTfuXxoMDzsohO9LDYexJku7q5nh2zzijwhHHxDBE7BjRIzlTMvv6t8LKNsQQr9tBvpNTwJOgU1abvzaIOa3hJZtKfGtxlVLLSk3UsqJ7khhaldU660m5+USmNWJ4yyg0LWd6a4hKedocikjmoX/DShBhIW5RMwLvJYx5DEI0BVhd0ok1ylHCA2L9HyX9FtJ0SJuPfHoMBMnrCgbDj3OzKRKMXpHfLNObVzV3irgQJDLcXEMOSksLe9EZQWg9IbFCiVRgcA3Bw87rMPnDIx0KqoMsSBCiBnf6UYUkjRjdBjPv4HPBsOQ5D2BlvsoUiIS6dDQlv9P4RAz/7RIt4LVRQ==
+ b=DwkzruXWpVVGpONse0Fa5KA0TVtLu7FCpaI6+wBLrl8YgJ8+V/v275DbkzAiWRBKv9d+a6I1r78K+avQI3T12PgJLd4v5Hm9F3KXrbQ4wnWMOzwjodFcmv8u+d9DoweiCTy3lyUoNQnvRCGFvg4bdJ8pqLyJtVw/wkVAt5/cpqHHXIwBqCZ5P+W2cxc2jEmyfCCbUuQIdWNwU8klRgH9+dlmNJn4PZIRYtiMU8cqwT0VsivA5dFhHV4Hc1EYaqxUxuYJeLXRGK0ISL+678rRET07ZJ4e3CqaorcYC0IpAGfHPFXL1qdzSHpNRXnSUT9sg54ZBAjSl1ExVe2v2U9blQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=rSCiurM4Q+HxomS0iR1barVyZnAg50nN9s6DrBUldPs=;
- b=ZNaHkOOM7M0EP9kOZ1whPwxrAs6xoBV6kIGkvxvvnF3lXWgTQy4EcegoXgOLZW59jTsRFzbDJQA5kMDpoKE09QIZgwnBgzOE/xQfOMML7WQc2hrb+TDrBVTKhXLbSg04T7DjKFV8fNeQN9jz2u3CJQ3iARKoVKrW4r9HE5NAoVsGTH7SVfgSYnDrzpfDakw2SUuPaL/snjifdHK1eObGssCHS99kfUtQXZbNTmO1Zz2tAz2+IwcrW/yIkKtr7C9ghYCksN7JEbEei4BzommjE7DH/aqD5PD1dycU/vGxW8Vb2gk05zFqUSYp5kIWPZKoCR+tkZqt4akNrbs2+1c/7w==
+ bh=dcym3x+z6YtN62vQkR8HQUx+CV0uFnFUK0sNY3skKSk=;
+ b=y7m4c5wboXAjWKK0X+Wh2XZ3PrBG23Wj4SpytBSivz0xmzTBb1LLun+rhXlALMOjPwagKC9VgcyEP0tweMccABy+qhTF/4V+o7ss4v8y9ncmXnEKSLYmghpS8H9ZwUSOBLup5qRJ7yCxcgu3mzZNJBLe6wOFxiFS1b7fF8I+ab2nb9uqPl5sbrS4BJvwgq+15mesI5XDQVLBoulVj0kCNdDoPdx11LSGl6Xi6a8cYUVizHZ1wucfYwzXDBdr//BM1RENIgwZNsLYlTPRu3IhPqFcJkFnn3OxpNHFx2FSiYeyb/CcT19AqZmHY5qbep768yBUtsxowAvsZ2o0S7ptrw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=est.tech; dmarc=pass action=none header.from=est.tech;
  dkim=pass header.d=est.tech; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=est.tech; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=rSCiurM4Q+HxomS0iR1barVyZnAg50nN9s6DrBUldPs=;
- b=x5HVGo7gNFd1EpVrhPnKjamEAPdzupiohNhb/0lOag1EArZeV2cXc7rocsComdtUGLvZbqFBL9SGQHIHNB0ektMnCPLVXjeVVNOl2BUljVVj3aOavA/o9I0SbjZud/7chMT2fN1u4kJBqCVqVtJkPhndzDHD5FvpxhPpeMoz+qoA9YgjR9H1IQcQtZyJrRw5ifuIv4p7ptD5P26o3hqhhLrdtel4ovJcexDMJx/bshjkcpdbfLk+WCCOQPdwq/yQQ4qXDS8GxkbpmnoRQ0ZeO+l7EqoAlRKz9VQGb6kI6FtyQ0A+/qfPiG6ZnRyjwy/KcDIBP0bp8HH7jsVFsAm2ow==
+ bh=dcym3x+z6YtN62vQkR8HQUx+CV0uFnFUK0sNY3skKSk=;
+ b=bjO5sGwPhOgZqmV0S69qj9wNxBQ4cel+tNedCJjDiO0tP4DfgFO0AM0DsmnqAwbL2QyFNZqZSjyO4mIDTswsdslMYbWaa/TjGqmcSm6dLANNMkEBtUrPh/5PhdAIEIAbKutRTWtbBkuO0Eoe55J9n458MDk1PfEs1ifjB68+r2+3vcPCWKGPc4pzZ1Ogqp/EEkltUYECIjic8v3P/rgbiy3hZk0ru/MF02aJVBlI+vOJcLhWbEQrJJ7L8oVSPcp1vqareAKpz/8rvxhqP2GPXuTUqWbh9LcFJQ+sQlJyaSTshDjAbNO53FsKrJjo6upgghuwJJc9m6QiH69vz8lWig==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=est.tech;
 Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM (2603:10a6:20b:39b::19)
  by VI1P18901MB0638.EURP189.PROD.OUTLOOK.COM (2603:10a6:800:121::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.21.360.13; Wed, 2 Sep
- 2026 16:30:13 +0000
+ 2026 16:30:15 +0000
 Received: from AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
  ([fe80::69fc:c4d4:200b:e4b4]) by AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
  ([fe80::69fc:c4d4:200b:e4b4%6]) with mapi id 15.21.0360.008; Wed, 2 Sep 2026
- 16:30:13 +0000
+ 16:30:15 +0000
 From: Yunseong Kim <yunseong.kim@est.tech>
-Date: Wed, 02 Sep 2026 18:29:39 +0200
-Subject: [PATCH RFC v3 6/8] selftests/kcov_dataflow: add
- eight_struct_args_{c,rust} selftest module
+Date: Wed, 02 Sep 2026 18:29:40 +0200
+Subject: [PATCH RFC v3 7/8] selftests/kcov_dataflow: add
+ rust_kworker_remote selftest module
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260902-b4-kcov-dataflow-rfc-v3-v3-6-824609f279f5@est.tech>
+Message-Id: <20260902-b4-kcov-dataflow-rfc-v3-v3-7-824609f279f5@est.tech>
 References: <20260902-b4-kcov-dataflow-rfc-v3-v3-0-824609f279f5@est.tech>
 In-Reply-To: <20260902-b4-kcov-dataflow-rfc-v3-v3-0-824609f279f5@est.tech>
 To: linux-kernel@vger.kernel.org, kasan-dev@googlegroups.com, 
@@ -87,15 +87,15 @@ Cc: Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>,
  Yeoreum Yun <yeoreum.yun@arm.com>, Yunseong Kim <yunseong.kim@est.tech>, 
  Yunseong Kim <ysk@kzalloc.com>
 X-Mailer: b4 0.17-dev
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1788366590; l=38874;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1788366590; l=9553;
  i=yunseong.kim@est.tech; s=20260824; h=from:subject:message-id;
- bh=BEHLe+hnyM3ZN+qdP60TF7O5oTJnluzke28O7lhfsu0=;
- b=N5h0tvbK8tN9YPXOcNEofAgP87/eKenRejqpQFop3JlNQdqwK9SE3G/C+teQPZxRP+NcqGA9o
- T/61QmVmIJXBU3tT98h1MP7YX7OnrXlI0VPjvp2BTAV+fOigmbDFpA4
+ bh=2dpfwy+fKa2DY4zvSGoFOd1Icpn+2mxvAA4Dbyk1Isc=;
+ b=v5wNLJ8T9ey4yczQKwNrxD7VpPGqqn4ogZ4tslZm1/tNS1R+XbjC1ATmXcfQ8OjWZiCg7TlzC
+ aXWXZgO1tXqBIj5D9ujUUWq/BA3RjyCfohFSkLx4cixbHTwArOuODwt
 X-Developer-Key: i=yunseong.kim@est.tech; a=ed25519;
  pk=nfdmjNawkxBHo9UNdzLNBEht8sYmXp0MYUsa/hwC7vw=
-X-ClientProxiedBy: DX0P273CA0047.AREP273.PROD.OUTLOOK.COM
- (2603:1086:300:5a::20) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
+X-ClientProxiedBy: ZR0P278CA0025.CHEP278.PROD.OUTLOOK.COM
+ (2603:10a6:910:1c::12) To AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
  (2603:10a6:20b:39b::19)
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
@@ -105,1316 +105,308 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AS8P189MB1752:EE_|VI1P18901MB0638:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4e53fdbd-fbbe-4fdb-465a-08df090f7686
+X-MS-Office365-Filtering-Correlation-Id: 8709a1d9-066f-437e-95ee-08df090f77e1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|366016|1800799024|7416014|23010399003|6133799003|56012099006|10067099003|11063799006|22082099003|18002099003|5023799004;
+	BCL:0;ARA:13230040|376014|366016|1800799024|7416014|23010399003|6133799003|56012099006|10067099003|11063799006|22082099003|18002099003;
 X-Microsoft-Antispam-Message-Info:
-	IZ3q5nHRqbOFhxovvIqIPLSO35ZbZDnIjVCdycwqXThYYcE9wL7jk7t+HbHtW1PFgjyzIpYcbVgKmi3jljOE0dTx17oh8r2va6dOlVZVOKsgDGuVfi288C0YQiPr6XRwqe57xlx1LEozMNMz8PbIMlYeacHQWczlwZ4ttXJsjsPzA44utowbi0pa78qGiFuTPdjCl+zBK+1aW6sgrQhbjbwBlucvF4pkPmS5aX8IGsTvIllVGFWcB7CbLKP2vSpGujYQz9X93D8seMnMb6H3Q8LeQE2ecsINu0XJ3gJIUdYj40fMfKtiW5bsz4+IeSLmP+kBtpgrnU2zIIx9SsyJ53iRrcW5CW1cw2pfRImhfRtXPy9F2LPMPY+itiJcBKkKpZfYu9/VY2iNcZwHTilXijGbG6t99ip31pNUern3Ag5krwQnWR/JB4M/okbZiLWjCDmNVkMgUzrCKdFQPTOzWOxv9gVAnzaL2xwkcxz/qojgpsDPFbBuJ8ySemmE1ZTH9trC+f4FtA1PL8sygZzz3yqXc9MIiM4PGFmuAonVcQ26robVDSuuYQ9lama0pH05kANFUgCWJ6PfKUtTGHTUhvFKBeRqVyMlyULGYmG5uzGaibPGvQpra4DgXOkBoH7PhwERjbQIoqFKt7xcwUK4og5+jab2eZ79hw58AmxL/L4=
+	hHQyl7Qh9IofgqJK97oSgrWv1LRPdFPefVv/bzSlF7z21cUIo+frEIks7sYVU9OIw5wrFgSUithpOKnvzn0X/RxQbBoKDfHmuFRbOMY7e1axnGsPZ3kNqO4gLBFHYiKBXzGRE6ZZ+6FORgTfktvbqOitChxtjv44ZVwJG2vd4Ne6Qt5J2jNHdidttfcc6ufu8E6jI/c1AhVf0YggQ684C5qq8TjVV32y/5pCWnFsZIN4o7g2jw6OPbjDQcOlXsrrgdK+Cg8gOKnUEg1fEbs5ApF/J+Cl8tx+HnX/F2ZxyrXD14JULwG4DShUMhHXmgb+fT7ksoSLRdBgheuqe8JSBRhaWPYrOulKbhGcwSN3s1BreF07N06EkWia3lppcDU7tltogh9SAApcs1DJuXCkSlnOsfZQFfJdeaBgIG4RvhzkeYJ/VSKCbO5YEH+HKCB8k5NEAsV9IG6jaSvXlMcQwzLV+uJnIRQAPnvmL8Gszvmqct6UJxjNscHHVXyfnumZcZ0hK6Zuk13wr4A6b79/sTHGtJe4cxyVqmjHrIoScgcC4rd9rrg6h2gVmC7Lp46EdQ9ZK0Npq0uVJb7KMfwdC8RK/49dB4fL/tXt3k7lvKDrMi7y96Ud3CSJ8CZ5AXpL7MQ6N0LJCOp6i3NhPrKBvubaIkj3vKEusaClTuBjt9g=
 X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014)(23010399003)(6133799003)(56012099006)(10067099003)(11063799006)(22082099003)(18002099003)(5023799004);DIR:OUT;SFP:1101;
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8P189MB1752.EURP189.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024)(7416014)(23010399003)(6133799003)(56012099006)(10067099003)(11063799006)(22082099003)(18002099003);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V1Z1cW9KbDRzMVZheXJhdFBvSXp3NjlpQ1Z0R0hxcmppUDRaMmh5WXREZnly?=
- =?utf-8?B?eEgyekdsWVVpSDFtZzA4U1Nkc0pzeUVTelRVdWZJOEZlZUdMRmF6VHlsa3hD?=
- =?utf-8?B?MlhOanJHTFhKcmVRVW5YSDBDc2VOSi9HS1NCTEU1V1dsRWk1UVhlTjB5YjM0?=
- =?utf-8?B?cmQ3ZUNLQ1YybjlkWkhVai9aMmFYa3VvTGpySkMvREdOMlcxSmFtYlEzTTFs?=
- =?utf-8?B?SWpDQVNsd0NnTTZBdkFzSDI1bEo0REtqYkh6dkNyVUxJblZPYklQbGRWR2Y3?=
- =?utf-8?B?R3gvS0xVdzFhUE5hNzNpUHEwR1FLa29JMXhGbENsQTd0MGJKT3ZMcTV2Y1RP?=
- =?utf-8?B?dXlWWU11Rzc1ZmlOVDJsZTJmeW9FOXpTQ2oxSVZFdnlWUW1HWDhIR28zMllz?=
- =?utf-8?B?K3BIWUhsWFF2S1dpVkJ4QTluOTBiQVo2TzFQREVYTjMyYlBZdTFWN21hTXZ2?=
- =?utf-8?B?UDhVVlgyWi9JclRBOXhKYzh1K0xyT1VQYkVaTG9rMjhOOEFvT0JNRFJnVXY1?=
- =?utf-8?B?Y3hoSmRaVk4vT1NvYU8xQytIRUFkMzhxREw5N2pHMGgrK2dHb2xlb1E4b3N4?=
- =?utf-8?B?S2h4eDBlVFBjRzJtSkUySzdGdDN4VVNaV3hZTXZXMXNtNVJRaTRMM1h1a2gy?=
- =?utf-8?B?N09aL0E1dm1yaWtXTmkrOTJzcUYzTG4yRHl0MjlibUNhNkxVcmk2Tmp1V0Ev?=
- =?utf-8?B?K2wwelk0NWxOZ3BIcTVpMFo2bG9sYVVqY3BhRk92dHgwaExHRldWa0FFYkw3?=
- =?utf-8?B?ZFVGMFBYK2NERlNhcm8wc2hvZ0dYNU9MeHhzdkNFK0pTbFE3UXJjbnlCUGUz?=
- =?utf-8?B?Rk1DNHdiYmhDeS9yc2JKcGFlWEpxaTdDd3pLY01PRUZoR1dJbGRpYTdCeE85?=
- =?utf-8?B?VldybC8yNENNREFQb09tYmdENm0zZEg3YnpyU2hNdnp3bndGTGZtdGFSN0Ro?=
- =?utf-8?B?Ym1jSEJ2TmpqRDIycFdZcHB0RnVZSXF3N3I4Mno2a3ROSURQNkI5SDFxRGNU?=
- =?utf-8?B?dW9sMGQ3dHNhRnROdjdXczNwdWJPZ1diRUJ4SlRRQ1ZBaHAxb1hGMVExVlpE?=
- =?utf-8?B?WFd1dm40eE02T0d4Rng5Nkg4QWhDVkZDdGxhMmwzdzJOVGxDK0FtNVdMWExh?=
- =?utf-8?B?aTRNVi9EZWlrVUMzV1hVZGVvRW5EV1FDWWgxQ2JyV056aENNL1lvTjA0Zkg5?=
- =?utf-8?B?cUUvQjdzZ3NqY3BrYmJISm5wcm1jdGNXWkEwRkY1djJKU3FYd1ZEYkIvUFY3?=
- =?utf-8?B?bU1JbFg4Q3N6OVdoSDJudjlCb1Y0L0J6TWJwVTdHNkUrTGZzS1hnV2JCV2hO?=
- =?utf-8?B?cUtKUzVzREpqU09KMXFhWklwMldiQ0w1MEtUMjl2eW15OUFhQy9OWUhoTmlN?=
- =?utf-8?B?emVHSzJLbUhFemYvN1JsSkNFNWtWdURldzlRbm9DMnhGZ0FEQVE3dk5sSVEx?=
- =?utf-8?B?WHdtZUVMRnA2cWRUenZOZEJOYTV6aGxoNWpRTTY0OG9YWHBRNm81VUN1aGpK?=
- =?utf-8?B?WVc2dnUxU1NheWphVXdvK3pxN1BXUTVhb3NsMWt5dVRZS1c2SjFyNEFQY0VD?=
- =?utf-8?B?ek5IWUU0Q29yay8yYTZsdythak1vZ1lCMVdDQ2xNdjJ6SStmTjJaZWdtZDl3?=
- =?utf-8?B?ZE9HYmFIdllWdkdGenJvWk1aVWtqYlAyRFBSQnhTV0xieEZVV3VpWjlTUTdm?=
- =?utf-8?B?azR1Yk5KRnoxL1ZYTHRQcWVldGhPSVJXUmRBcEJDWVg1eDc1MTUrOUh5NnMr?=
- =?utf-8?B?UkNmelQvbHBiNDdEb2d0N29iamZPVS9JRU52UWo0dmlDUzhObGxvQTcrQ1VS?=
- =?utf-8?B?K3NRRVFqNlBzYTZsQjd4eS9YL1RBLy9TQVZWSHF2UWRnSjNjOHZvM01MaVBP?=
- =?utf-8?B?cEEvOWYxSUJLWXBRTDFJSjVmSUdFdW4vYWJPY0hnT3R6V1hxUFFwNklWR0Rx?=
- =?utf-8?B?ejhXSlZLWFVNbUdieERFMmVNOERsRmplNGEvMFpCSFJrb2VaVEJoV3RSRTVs?=
- =?utf-8?B?MlBKaVQ5dzdtckY3MU5CeHBOUnZsWE9wVkk2ajJxZnVzZkZZbE40MzhaSTBs?=
- =?utf-8?B?RUxDdFJUeEx5NzMrZHYrSys1WUFadlRTK3RieTE4bDhxWS9pTmRNY1cyRmFY?=
- =?utf-8?B?V3RkM08zd1Z2cFVSZmxMSnBoZDF5Yk5MWHJXZjI3QlRObmdaSHJyZ054ZWJh?=
- =?utf-8?B?RVdhUTlpZk1TZWdrbjlYb2Iyb21VZnpGTS9iT0pnZXBCd21NSk9oSHRWYUpY?=
- =?utf-8?B?MFBFSTl1OW5LZEwzalA5cnB5MHRacFh6WWlONFpVOFA0MkJCNTEyOVZBaUI1?=
- =?utf-8?B?MEEyNVdRUkdPL1U2dCtnUExKZ2xBZlRXSkNBclVwZkFVMDg1a0todz09?=
+	=?utf-8?B?WUlMeGliVVRaVnRqMFZhQVNZd0YwZDRVSzNCQmpIZlREY3dObStUUHIxdXFU?=
+ =?utf-8?B?SjNkQnJkOFdxcDl0Y090dG5FVksyOHlQT1dHSXQ2cmIvWW5ndzl2eTFqVENu?=
+ =?utf-8?B?ZjZhNzhUWjV1N2M0ZllhUzFQVklpYUtscWVRV1NEd25NZ1Z4NEN1SGxGYzZK?=
+ =?utf-8?B?b2ZyZnI3bHQ3NG5FTk8vV1d6S3l4SXk0WmtzRW9IeDdNT3U3UmRIK3k4Wjli?=
+ =?utf-8?B?UkhaUFRaRFVWZTNxNHkzVkMzVTJpY0RSY0htVHppWXd5alZQOGF5UmZyY2tL?=
+ =?utf-8?B?TCtUSERSN01zZGQ3YnVmU2JMM2RuWjJsM010TXZWK2E2Yk5Ycnk0YTBBQ1Fq?=
+ =?utf-8?B?c1FPekNVV01OdXNRbGQ2ck5zL0xKSUJEempma3Zaa1BxNHZrL3pqMW1PNVM1?=
+ =?utf-8?B?Y01sUW5mTFN2amp1TTk0NWx3cVE1TFBqOFpLaCs3WHpRaUkxZmpJSUpmZmRh?=
+ =?utf-8?B?VlpCa2tsZ3Y2d0VaM1lldTBtQlp5dC9zUzNxZFZmTzJ4OFFGSnZpYmJ2OFFR?=
+ =?utf-8?B?UHlTZHdaaGFFT1RNcEpFanJsOUFkcEVnNWFpOE54dlc1VGd3RHlHYmo5MFdm?=
+ =?utf-8?B?MlpXVFg3WVgzNUwvbVdyNzFJbGNJRlVBK3NTV0RIb3dlOUp4emIwWGRVWkdh?=
+ =?utf-8?B?VG5jenpLNkdqOG8vb1d4NEozQXZTS2Erai9LSEcyM1RYQmFQc1A0KzZBQ3RC?=
+ =?utf-8?B?Ujg4YXVDZ1AvRmhuVmFLRE1yM3VFTGZQTEN4RmMrNitxMEdpZjBnVkYzclZF?=
+ =?utf-8?B?c0pEWUU4TjJlODFWS1JxcTNrb0FFdnRjUThNcGZsY3J5ZVIyU3NCaWtqT1Nm?=
+ =?utf-8?B?SFkzbExoOXRKeVZWS3UyaFEwVURZdGRjVWc2eHJPZVdETDBmaDJtQi9taW55?=
+ =?utf-8?B?YmRGY3BwZ2V2SFkvQUpqejlXYTJTYjlUUGtRM044SmxDUkRkMWVscWkzaHc2?=
+ =?utf-8?B?b200UmJQQXF3d0tJVXU2OSszd0JMbUtRY05JYmpTOTlRQm9oZDJZZXRHdGVX?=
+ =?utf-8?B?VGorWHVIbDBHa1QrQWdyQUJmVnNMN1FZRFpmMzhjMVBaR3Z3SG96WFV1MFBn?=
+ =?utf-8?B?bjhjSSs4SmlYS2ZqbXd0L0xhWmJTekh2UVozVEN0RlZxblBHQUdoMjE4S3J0?=
+ =?utf-8?B?S1NuaXpSS0I2NC9kbVRvdTU3QnNQeEJDQ3ZsWGs5aTJxeldnTy9kcmxUVlhx?=
+ =?utf-8?B?ZktYYnViM1FqYlRML2VTU1lvUzlFVE5ZRFFnZUpTQ3lWaGdLZmRaZzBoVVBk?=
+ =?utf-8?B?a3g2WG1wV2tXeE5CNmkwT2VDQVB2MnBLYzIrcWljVnl2blNSZVJtaFZTclJ5?=
+ =?utf-8?B?c3pvdDNaWlQzMmxZR0F3Si9oRjlscTlZSDNOZU5pTWVVUTdkTXlUYWU4OTZW?=
+ =?utf-8?B?eVRMQWhDbzBzRjhKSStkSGlVM1hLN3pPYkU1U1pUanFrY3JyMnFYYldndXg5?=
+ =?utf-8?B?YWRrN0p3elNrY1E3dWJ2TDc5VmJ6Qnc3ZXhzMjNFdC9sQ3hBZlZFWFBZaDFu?=
+ =?utf-8?B?REJqa0VoNjAwK2ZmdlQ2eHBTWjR1QjZTYTE3TjQySWJaTlZJTk5IRzJSdWVu?=
+ =?utf-8?B?WWtMLzFmL0hPN05SamRmTnlWYnc4Ukt3a3ZxaVpqMUFRTXFkYldDaDMwVy84?=
+ =?utf-8?B?aFloOFZlRS8yTktOKzNMU29wMjVVZE51OHZsQ3h3amdqYUk2TWJWM2dpcWhi?=
+ =?utf-8?B?UzRaWUczUTJ6cHZ6UEloZ21xbEN0QkZtRERnUXRsekxMZXpUSDdpRGMwR0tK?=
+ =?utf-8?B?Z2Y0a25Wemc4VElldTRLejZmaEt6M1lETzQ3Y003SFhoNlBrWWhrakZuUnNG?=
+ =?utf-8?B?V1JOTjRIYk5sZXpsU3hISHBkZ3phSTZYT0VjeVoxSEIzZElkNVMyaFFndHVV?=
+ =?utf-8?B?RFJ2bDhiOHFWMGRTM2pGOWtyaTF0c1ZuN28vNk1NK0V6Nko1OHJDZ3lxM2Qy?=
+ =?utf-8?B?OXNHOHY5TkNadTdoV2t0UjFqcGZZTzFVOU1kZUt3aEtFOHltdkJtdm9paHhB?=
+ =?utf-8?B?SjExRXRHTXByTlVSZGk4ejR1UFNlMVY4eDNnSlhlcTJVVFFJRVczbks5QU56?=
+ =?utf-8?B?eGRGcVo4WGlpdUo5c1ZXcVRVclBOUFh0YXBqNm5qWUtzSVQxZUxiSU5ISTB2?=
+ =?utf-8?B?NlBKM3ZhQ0FDSWpzSlJvSkFtblpxTjZuc05UZmt0TnVhZlBueDZ0V2FYQnZT?=
+ =?utf-8?B?MGlRSk5zWEM3MnYwRXFnUlZ2UXErYThKUmN6a3IvcXlGdEJOWGJxZmZHck5L?=
+ =?utf-8?B?a0YzeXNEU0hKNkdMb3Q4d1BYejcxTGVHaWoyWGs5SC9kd083UktmcEtuQ0ZB?=
+ =?utf-8?B?SVFzTGR1dVA2RlhUZjdueDZQMy9yeHQxdW9UbVovT1BpQU9kRndhZz09?=
 X-OriginatorOrg: est.tech
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4e53fdbd-fbbe-4fdb-465a-08df090f7686
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8709a1d9-066f-437e-95ee-08df090f77e1
 X-MS-Exchange-CrossTenant-AuthSource: AS8P189MB1752.EURP189.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2026 16:30:13.1809
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Sep 2026 16:30:15.1211
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: d2585e63-66b9-44b6-a76e-4f4b217d97fd
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: liHfp3iZVTks6BpJZt9Jm6vFSjCl25IXZaEejS00gnY6j2n+5en8I/LbCjacIXTlPzzH1ICGlcWLY1QyXIuuLA==
+X-MS-Exchange-CrossTenant-UserPrincipalName: Ylb9iiPRTIjy88QDYMf0j+iyw0uSi9GtKHaBuhfWGTUyOcLxkWuczKw6p2lam4NVfMpdn7mQdOAqXwrPIO9cGg==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1P18901MB0638
 
-Add C and Rust modules that verify struct-pointer argument expansion, the
-part of the collector that turns a pointer into its individual field
-values from the compiler's DWARF offsets.
+Add a Rust module that exercises remote dataflow collection: work a task
+queues to a kworker, bracketed with kcov_df_remote_start(handle) /
+kcov_df_remote_stop(), is attributed back to the buffer user space
+published for that handle with KCOV_DF_REMOTE_ENABLE.
 
-Three families exercise the expansion:
+A CompositeStore of three RBTrees (standing in for separate lookup tables)
+is driven through three phases on system_wq:
 
- - Flat sf_1()..sf_8(): sf_N takes N struct pointers (s1*..sN*) whose
-   fields are 0x11, 0x22, ...; this covers plain field expansion and
-   multiple struct-pointer arguments in one call.
- - Value-nested stf_1()..stf_8(): stN embeds every smaller struct by
-   value, so the nesting deepens with N and each level is a distinct
-   struct-pointer argument (on-stack; st8 is built on the heap to stay
-   under the frame limit).
- - Pointer-linked stpf_1()..stpf_8(): every member is a pointer to a
-   separately allocated node, so expansion is followed through the heap;
-   run over both kmalloc and vmalloc allocations.
+  populate: fill all three trees
+  update:   insert new entries, read existing ones, overwrite some
+  drain:    remove every entry via a cursor
 
-Plus pointer forwarding (sf_fwd -> sf_fwd_inner) and a struct return
-value (sf_ret_struct). eight_struct_args_rust mirrors this with no_mangle
-rsf_*/rstf_*/rstpf_* exported functions and needs CONFIG_RUST.
-
-Each object is opted in with KCOV_DATAFLOW_<name>.o := y; kselftest script
-will trigger them and checks the expanded field values (0x11, 0x22, ...)
-per argument and every return value, so the modules validate the
-captured data, not merely that records appeared.
+The work item calls kcov_df_remote_start(1) on entry and
+kcov_df_remote_stop() before completing; kselftest script publishe handle
+1 (KCOV_SUBSYSTEM_COMMON, instance 1) with KCOV_DF_REMOTE_ENABLE, triggers
+the kworker through a debugfs file, waits for completion, and checks that
+records from all three CompositeStore phases were captured from the
+kworker rather than the triggering task. Needs CONFIG_RUST.
 
 Assisted-by: Claude:claude-opus-4-6 [kiro-chat]
 Signed-off-by: Yunseong Kim <yunseong.kim@est.tech>
 ---
- .../kcov_dataflow/eight_struct_args_c/Makefile     |   3 +
- .../kcov_dataflow/eight_struct_args_c/README.rst   |  13 +
- .../eight_struct_args_c/eight_struct_args_c.c      | 533 +++++++++++++++++
- .../kcov_dataflow/eight_struct_args_rust/Makefile  |   3 +
- .../eight_struct_args_rust/README.rst              |  11 +
- .../eight_struct_args_rust.rs                      | 646 +++++++++++++++++++++
- 6 files changed, 1209 insertions(+)
+ .../kcov_dataflow/rust_kworker_remote/Makefile     |   3 +
+ .../kcov_dataflow/rust_kworker_remote/README.rst   |  13 ++
+ .../rust_kworker_remote/rust_kworker_remote.rs     | 207 +++++++++++++++++++++
+ 3 files changed, 223 insertions(+)
 
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/Makefile b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/Makefile
+diff --git a/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/Makefile b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/Makefile
 new file mode 100644
-index 0000000000000..04ff83f0a9625
+index 0000000000000..cb7392a50b1a9
 --- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/Makefile
++++ b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/Makefile
 @@ -0,0 +1,3 @@
 +# SPDX-License-Identifier: GPL-2.0
-+obj-m := eight_struct_args_c.o
-+KCOV_DATAFLOW_eight_struct_args_c.o := y
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/README.rst b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/README.rst
++obj-m := rust_kworker_remote.o
++KCOV_DATAFLOW_rust_kworker_remote.o := y
+diff --git a/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/README.rst b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/README.rst
 new file mode 100644
-index 0000000000000..62cddee78cd36
+index 0000000000000..aff597ab67aea
 --- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/README.rst
++++ b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/README.rst
 @@ -0,0 +1,13 @@
 +.. SPDX-License-Identifier: GPL-2.0
 +
-+KCOV-Dataflow Selftests: eight_struct_args_c
++KCOV-Dataflow Selftests: rust_kworker_remote
 +============================================
 +
-+C module with 1-8 struct pointer arguments (flat s1..s8), value-nested
-+st1..st8 and pointer-linked stp1..stp8 towers (on stack, kmalloc and
-+vmalloc), pointer forwarding and a struct return value. Opted in with
-+``KCOV_DATAFLOW_eight_struct_args_c.o := y``; test_modules.py checks the
-+expanded fields (0x11, 0x22, ...) and every return value::
++Rust module testing kcov_df_remote_start()/kcov_df_remote_stop() from
++kworker context: the trigger queues a work item on system_wq whose three
++phases (populate/update/drain of a CompositeStore of RBTrees) run with
++remote capture on handle 1, which the runner publishes with
++KCOV_DF_REMOTE_ENABLE. Built only with CONFIG_RUST=y::
 +
-+  ./test_modules.py -t eight_struct_args_c
-+  ./trigger-view.py eight_struct_args_c --raw
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/eight_struct_args_c.c b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/eight_struct_args_c.c
++  ./test_modules.py -t rust_kworker_remote
++  ./trigger-view.py rust_kworker_remote --remote
+diff --git a/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/rust_kworker_remote.rs b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/rust_kworker_remote.rs
 new file mode 100644
-index 0000000000000..c7d06a8e94c38
+index 0000000000000..65c5722c383cc
 --- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_c/eight_struct_args_c.c
-@@ -0,0 +1,533 @@
++++ b/tools/testing/selftests/kcov_dataflow/rust_kworker_remote/rust_kworker_remote.rs
+@@ -0,0 +1,207 @@
 +// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * eight_struct_args_c.c - Verify kcov_dataflow captures struct pointer
-+ * arguments with automatic field expansion.
-+ *
-+ * Three families of structs are exercised:
-+ *
-+ *  - Flat structs s1..s8: sN has N u64 members side by side; sf_N takes N
-+ *    struct pointer args (s1*..sN*). Tests plain field expansion and multiple
-+ *    struct-pointer arguments.
-+ *
-+ *  - Recursively (value) nested structs st1..st8: stN embeds every smaller
-+ *    struct by value, so the nesting deepens with N:
-+ *        st1 = { u64 field0 }
-+ *        st2 = { u64 field0, st1 field1 }             // { v, {v} }
-+ *        stN = { u64 field0, st1 field1, ... st(N-1) field(N-1) }
-+ *    The deepest chain in st8 is eight levels deep. Used by the stack tests.
-+ *
-+ *  - Pointer-linked nested structs stp1..stp8: every member is a POINTER to a
-+ *    separately allocated object, so the nesting is followed through the heap:
-+ *        stp1 = { u64 *field0 }
-+ *        stp2 = { u64 *field0, stp1 *field1 }         // { *v, *{v} }
-+ *        stpN = { u64 *field0, stp1 *field1, ... stp(N-1) *field(N-1) }
-+ *    Used by the dynamic-allocation (kmalloc/vmalloc) tests.
-+ *
-+ * Write to /sys/kernel/debug/kcov_dataflow_test/trigger_struct to invoke.
-+ */
-+#include <linux/module.h>
-+#include <linux/debugfs.h>
-+#include <linux/slab.h>
-+#include <linux/vmalloc.h>
-+
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("KCOV dataflow struct field expansion test (flat + nested)");
-+
-+/* Flat structs: sN has N u64 members. */
-+struct s1 { u64 a; };
-+struct s2 { u64 a; u64 b; };
-+struct s3 { u64 a; u64 b; u64 c; };
-+struct s4 { u64 a; u64 b; u64 c; u64 d; };
-+struct s5 { u64 a; u64 b; u64 c; u64 d; u64 e; };
-+struct s6 { u64 a; u64 b; u64 c; u64 d; u64 e; u64 f; };
-+struct s7 { u64 a; u64 b; u64 c; u64 d; u64 e; u64 f; u64 g; };
-+struct s8 { u64 a; u64 b; u64 c; u64 d; u64 e; u64 f; u64 g; u64 h; };
-+
-+/*
-+ * Recursively (value) nested structs: stN = { u64 field0; st1 field1; ...;
-+ * st(N-1) field(N-1); }. Each stN contains every smaller struct by value, so
-+ * the nesting depth grows with N (st8 is eight levels deep along its st7 chain).
-+ */
-+struct st1 { u64 field0; };
-+struct st2 { u64 field0; struct st1 field1; };
-+struct st3 { u64 field0; struct st1 field1; struct st2 field2; };
-+struct st4 {
-+	u64 field0;
-+	struct st1 field1;
-+	struct st2 field2;
-+	struct st3 field3;
-+};
-+struct st5 {
-+	u64 field0;
-+	struct st1 field1;
-+	struct st2 field2;
-+	struct st3 field3;
-+	struct st4 field4;
-+};
-+struct st6 {
-+	u64 field0;
-+	struct st1 field1;
-+	struct st2 field2;
-+	struct st3 field3;
-+	struct st4 field4;
-+	struct st5 field5;
-+};
-+struct st7 {
-+	u64 field0;
-+	struct st1 field1;
-+	struct st2 field2;
-+	struct st3 field3;
-+	struct st4 field4;
-+	struct st5 field5;
-+	struct st6 field6;
-+};
-+struct st8 {
-+	u64 field0;
-+	struct st1 field1;
-+	struct st2 field2;
-+	struct st3 field3;
-+	struct st4 field4;
-+	struct st5 field5;
-+	struct st6 field6;
-+	struct st7 field7;
-+};
-+
-+/*
-+ * Pointer-linked nested structs: every member is a POINTER to a separately
-+ * allocated object. stpN = { u64 *field0; stp1 *field1; ...; stp(N-1)
-+ * *field(N-1); }. The dynamic-allocation tests build one of these per allocator.
-+ */
-+struct stp1 { u64 *field0; };
-+struct stp2 { u64 *field0; struct stp1 *field1; };
-+struct stp3 { u64 *field0; struct stp1 *field1; struct stp2 *field2; };
-+struct stp4 {
-+	u64 *field0;
-+	struct stp1 *field1;
-+	struct stp2 *field2;
-+	struct stp3 *field3;
-+};
-+struct stp5 {
-+	u64 *field0;
-+	struct stp1 *field1;
-+	struct stp2 *field2;
-+	struct stp3 *field3;
-+	struct stp4 *field4;
-+};
-+struct stp6 {
-+	u64 *field0;
-+	struct stp1 *field1;
-+	struct stp2 *field2;
-+	struct stp3 *field3;
-+	struct stp4 *field4;
-+	struct stp5 *field5;
-+};
-+struct stp7 {
-+	u64 *field0;
-+	struct stp1 *field1;
-+	struct stp2 *field2;
-+	struct stp3 *field3;
-+	struct stp4 *field4;
-+	struct stp5 *field5;
-+	struct stp6 *field6;
-+};
-+struct stp8 {
-+	u64 *field0;
-+	struct stp1 *field1;
-+	struct stp2 *field2;
-+	struct stp3 *field3;
-+	struct stp4 *field4;
-+	struct stp5 *field5;
-+	struct stp6 *field6;
-+	struct stp7 *field7;
-+};
-+
-+/* Prototypes: sf_N takes N struct pointer arguments (s1*, s2*, ..., sN*) */
-+u64 sf_1(struct s1 *a);
-+u64 sf_2(struct s1 *a, struct s2 *b);
-+u64 sf_3(struct s1 *a, struct s2 *b, struct s3 *c);
-+u64 sf_4(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d);
-+u64 sf_5(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d, struct s5 *e);
-+u64 sf_6(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d, struct s5 *e,
-+	 struct s6 *f);
-+u64 sf_7(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d, struct s5 *e,
-+	 struct s6 *f, struct s7 *g);
-+u64 sf_8(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d, struct s5 *e,
-+	 struct s6 *f, struct s7 *g, struct s8 *h);
-+
-+/* stf_N takes a pointer to the value-nested stN and sums every reachable field0. */
-+u64 stf_1(struct st1 *p);
-+u64 stf_2(struct st2 *p);
-+u64 stf_3(struct st3 *p);
-+u64 stf_4(struct st4 *p);
-+u64 stf_5(struct st5 *p);
-+u64 stf_6(struct st6 *p);
-+u64 stf_7(struct st7 *p);
-+u64 stf_8(struct st8 *p);
-+
-+/* stpf_N follows the pointer-linked stpN and sums every reachable *field0. */
-+u64 stpf_1(struct stp1 *p);
-+u64 stpf_2(struct stp2 *p);
-+u64 stpf_3(struct stp3 *p);
-+u64 stpf_4(struct stp4 *p);
-+u64 stpf_5(struct stp5 *p);
-+u64 stpf_6(struct stp6 *p);
-+u64 stpf_7(struct stp7 *p);
-+u64 stpf_8(struct stp8 *p);
-+
-+noinline u64 sf_1(struct s1 *a) { return a->a; }
-+EXPORT_SYMBOL(sf_1);
-+
-+noinline u64 sf_2(struct s1 *a, struct s2 *b) { return a->a + b->b; }
-+EXPORT_SYMBOL(sf_2);
-+
-+noinline u64 sf_3(struct s1 *a, struct s2 *b, struct s3 *c)
-+{
-+	return a->a + b->b + c->c;
-+}
-+EXPORT_SYMBOL(sf_3);
-+
-+noinline u64 sf_4(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d)
-+{
-+	return a->a + b->b + c->c + d->d;
-+}
-+EXPORT_SYMBOL(sf_4);
-+
-+noinline u64 sf_5(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d,
-+		  struct s5 *e)
-+{
-+	return a->a + b->b + c->c + d->d + e->e;
-+}
-+EXPORT_SYMBOL(sf_5);
-+
-+noinline u64 sf_6(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d,
-+		  struct s5 *e, struct s6 *f)
-+{
-+	return a->a + b->b + c->c + d->d + e->e + f->f;
-+}
-+EXPORT_SYMBOL(sf_6);
-+
-+noinline u64 sf_7(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d,
-+		  struct s5 *e, struct s6 *f, struct s7 *g)
-+{
-+	return a->a + b->b + c->c + d->d + e->e + f->f + g->g;
-+}
-+EXPORT_SYMBOL(sf_7);
-+
-+noinline u64 sf_8(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d,
-+		  struct s5 *e, struct s6 *f, struct s7 *g, struct s8 *h)
-+{
-+	return a->a + b->b + c->c + d->d + e->e + f->f + g->g + h->h;
-+}
-+EXPORT_SYMBOL(sf_8);
-+
-+/*
-+ * Value-nested functions. Each reads its own field0 and forwards the address of
-+ * every nested member into the matching stf_k, so the whole recursive tower is
-+ * walked and each nesting level is a distinct instrumented struct-pointer arg.
-+ */
-+noinline u64 stf_1(struct st1 *p) { return p->field0; }
-+EXPORT_SYMBOL(stf_1);
-+
-+noinline u64 stf_2(struct st2 *p)
-+{
-+	return p->field0 + stf_1(&p->field1);
-+}
-+EXPORT_SYMBOL(stf_2);
-+
-+noinline u64 stf_3(struct st3 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2);
-+}
-+EXPORT_SYMBOL(stf_3);
-+
-+noinline u64 stf_4(struct st4 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2) +
-+	       stf_3(&p->field3);
-+}
-+EXPORT_SYMBOL(stf_4);
-+
-+noinline u64 stf_5(struct st5 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2) +
-+	       stf_3(&p->field3) + stf_4(&p->field4);
-+}
-+EXPORT_SYMBOL(stf_5);
-+
-+noinline u64 stf_6(struct st6 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2) +
-+	       stf_3(&p->field3) + stf_4(&p->field4) + stf_5(&p->field5);
-+}
-+EXPORT_SYMBOL(stf_6);
-+
-+noinline u64 stf_7(struct st7 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2) +
-+	       stf_3(&p->field3) + stf_4(&p->field4) + stf_5(&p->field5) +
-+	       stf_6(&p->field6);
-+}
-+EXPORT_SYMBOL(stf_7);
-+
-+noinline u64 stf_8(struct st8 *p)
-+{
-+	return p->field0 + stf_1(&p->field1) + stf_2(&p->field2) +
-+	       stf_3(&p->field3) + stf_4(&p->field4) + stf_5(&p->field5) +
-+	       stf_6(&p->field6) + stf_7(&p->field7);
-+}
-+EXPORT_SYMBOL(stf_8);
-+
-+/*
-+ * Pointer-linked functions. Each dereferences its own *field0 and forwards each
-+ * (already pointer-typed) nested member into the matching stpf_k, following the
-+ * heap-linked tower.
-+ */
-+noinline u64 stpf_1(struct stp1 *p) { return *p->field0; }
-+EXPORT_SYMBOL(stpf_1);
-+
-+noinline u64 stpf_2(struct stp2 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1);
-+}
-+EXPORT_SYMBOL(stpf_2);
-+
-+noinline u64 stpf_3(struct stp3 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2);
-+}
-+EXPORT_SYMBOL(stpf_3);
-+
-+noinline u64 stpf_4(struct stp4 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2) +
-+	       stpf_3(p->field3);
-+}
-+EXPORT_SYMBOL(stpf_4);
-+
-+noinline u64 stpf_5(struct stp5 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2) +
-+	       stpf_3(p->field3) + stpf_4(p->field4);
-+}
-+EXPORT_SYMBOL(stpf_5);
-+
-+noinline u64 stpf_6(struct stp6 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2) +
-+	       stpf_3(p->field3) + stpf_4(p->field4) + stpf_5(p->field5);
-+}
-+EXPORT_SYMBOL(stpf_6);
-+
-+noinline u64 stpf_7(struct stp7 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2) +
-+	       stpf_3(p->field3) + stpf_4(p->field4) + stpf_5(p->field5) +
-+	       stpf_6(p->field6);
-+}
-+EXPORT_SYMBOL(stpf_7);
-+
-+noinline u64 stpf_8(struct stp8 *p)
-+{
-+	return *p->field0 + stpf_1(p->field1) + stpf_2(p->field2) +
-+	       stpf_3(p->field3) + stpf_4(p->field4) + stpf_5(p->field5) +
-+	       stpf_6(p->field6) + stpf_7(p->field7);
-+}
-+EXPORT_SYMBOL(stpf_8);
-+
-+u64 sf_fwd_inner(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d);
-+u64 sf_fwd(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d);
-+struct s4 sf_ret_struct(struct s1 *a, struct s2 *b);
-+
-+/* Pointer forwarding: callee receives pointer and passes it to another func */
-+noinline u64 sf_fwd_inner(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d)
-+{
-+	return a->a + b->b + c->c + d->d;
-+}
-+EXPORT_SYMBOL(sf_fwd_inner);
-+
-+noinline u64 sf_fwd(struct s1 *a, struct s2 *b, struct s3 *c, struct s4 *d)
-+{
-+	return sf_fwd_inner(a, b, c, d);
-+}
-+EXPORT_SYMBOL(sf_fwd);
-+
-+/* Struct return value */
-+noinline struct s4 sf_ret_struct(struct s1 *a, struct s2 *b)
-+{
-+	struct s4 ret = { .a = a->a, .b = b->a, .c = b->b, .d = a->a + b->b };
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL(sf_ret_struct);
-+
-+/* Allocator shims so run_stp8() can build the pointer tree with either API. */
-+static void *t_kmalloc(size_t n) { return kmalloc(n, GFP_KERNEL); }
-+static void *t_vmalloc(size_t n) { return vmalloc(n); }
-+static void t_kfree(void *p) { kfree(p); }
-+static void t_vfree(void *p) { vfree(p); }
-+
-+/*
-+ * Build the pointer-linked stp8 tower with @alloc (each node separately
-+ * allocated), run stpf_8() over it, then free every node with @fr. Sub-nodes
-+ * are shared (a DAG); each unique allocation is freed exactly once.
-+ */
-+static u64 run_stp8(void *(*alloc)(size_t), void (*fr)(void *))
-+{
-+	u64 ret = 0;
-+	u64 *l1 = alloc(sizeof(u64));
-+	u64 *l2 = alloc(sizeof(u64));
-+	u64 *l3 = alloc(sizeof(u64));
-+	u64 *l4 = alloc(sizeof(u64));
-+	u64 *l5 = alloc(sizeof(u64));
-+	u64 *l6 = alloc(sizeof(u64));
-+	u64 *l7 = alloc(sizeof(u64));
-+	u64 *l8 = alloc(sizeof(u64));
-+	struct stp1 *p1 = alloc(sizeof(*p1));
-+	struct stp2 *p2 = alloc(sizeof(*p2));
-+	struct stp3 *p3 = alloc(sizeof(*p3));
-+	struct stp4 *p4 = alloc(sizeof(*p4));
-+	struct stp5 *p5 = alloc(sizeof(*p5));
-+	struct stp6 *p6 = alloc(sizeof(*p6));
-+	struct stp7 *p7 = alloc(sizeof(*p7));
-+	struct stp8 *p8 = alloc(sizeof(*p8));
-+
-+	if (l1 && l2 && l3 && l4 && l5 && l6 && l7 && l8 &&
-+	    p1 && p2 && p3 && p4 && p5 && p6 && p7 && p8) {
-+		*l1 = 0x11; *l2 = 0x22; *l3 = 0x33; *l4 = 0x44;
-+		*l5 = 0x55; *l6 = 0x66; *l7 = 0x77; *l8 = 0x88;
-+
-+		p1->field0 = l1;
-+		p2->field0 = l2; p2->field1 = p1;
-+		p3->field0 = l3; p3->field1 = p1; p3->field2 = p2;
-+		p4->field0 = l4; p4->field1 = p1; p4->field2 = p2;
-+		p4->field3 = p3;
-+		p5->field0 = l5; p5->field1 = p1; p5->field2 = p2;
-+		p5->field3 = p3; p5->field4 = p4;
-+		p6->field0 = l6; p6->field1 = p1; p6->field2 = p2;
-+		p6->field3 = p3; p6->field4 = p4; p6->field5 = p5;
-+		p7->field0 = l7; p7->field1 = p1; p7->field2 = p2;
-+		p7->field3 = p3; p7->field4 = p4; p7->field5 = p5;
-+		p7->field6 = p6;
-+		p8->field0 = l8; p8->field1 = p1; p8->field2 = p2;
-+		p8->field3 = p3; p8->field4 = p4; p8->field5 = p5;
-+		p8->field6 = p6; p8->field7 = p7;
-+
-+		ret = stpf_8(p8);
-+	}
-+
-+	fr(p8); fr(p7); fr(p6); fr(p5); fr(p4); fr(p3); fr(p2); fr(p1);
-+	fr(l8); fr(l7); fr(l6); fr(l5); fr(l4); fr(l3); fr(l2); fr(l1);
-+	return ret;
-+}
-+
-+static struct dentry *test_dir;
-+
-+static ssize_t trigger_write(struct file *f, const char __user *buf,
-+			     size_t count, loff_t *ppos)
-+{
-+	struct s1 v1 = { .a = 0x11 };
-+	struct s2 v2 = { .a = 0x11, .b = 0x22 };
-+	struct s3 v3 = { .a = 0x11, .b = 0x22, .c = 0x33 };
-+	struct s4 v4 = { .a = 0x11, .b = 0x22, .c = 0x33, .d = 0x44 };
-+	struct s5 v5 = { .a = 0x11, .b = 0x22, .c = 0x33, .d = 0x44,
-+			 .e = 0x55 };
-+	struct s6 v6 = { .a = 0x11, .b = 0x22, .c = 0x33, .d = 0x44,
-+			 .e = 0x55, .f = 0x66 };
-+	struct s7 v7 = { .a = 0x11, .b = 0x22, .c = 0x33, .d = 0x44,
-+			 .e = 0x55, .f = 0x66, .g = 0x77 };
-+	struct s8 v8 = { .a = 0x11, .b = 0x22, .c = 0x33, .d = 0x44,
-+			 .e = 0x55, .f = 0x66, .g = 0x77, .h = 0x88 };
-+
-+	/* Recursively (value) nested values: each embeds all the smaller ones. */
-+	struct st1 t1 = { .field0 = 0x11 };
-+	struct st2 t2 = { .field0 = 0x22, .field1 = t1 };
-+	struct st3 t3 = { .field0 = 0x33, .field1 = t1, .field2 = t2 };
-+	struct st4 t4 = { .field0 = 0x44, .field1 = t1, .field2 = t2,
-+			  .field3 = t3 };
-+	struct st5 t5 = { .field0 = 0x55, .field1 = t1, .field2 = t2,
-+			  .field3 = t3, .field4 = t4 };
-+	struct st6 t6 = { .field0 = 0x66, .field1 = t1, .field2 = t2,
-+			  .field3 = t3, .field4 = t4, .field5 = t5 };
-+	struct st7 t7 = { .field0 = 0x77, .field1 = t1, .field2 = t2,
-+			  .field3 = t3, .field4 = t4, .field5 = t5,
-+			  .field6 = t6 };
-+	u64 sum = 0;
-+
-+	/* Flat struct tests: sf_N takes N struct pointer args */
-+	sum += sf_1(&v1);
-+	sum += sf_2(&v1, &v2);
-+	sum += sf_3(&v1, &v2, &v3);
-+	sum += sf_4(&v1, &v2, &v3, &v4);
-+	sum += sf_5(&v1, &v2, &v3, &v4, &v5);
-+	sum += sf_6(&v1, &v2, &v3, &v4, &v5, &v6);
-+	sum += sf_7(&v1, &v2, &v3, &v4, &v5, &v6, &v7);
-+	sum += sf_8(&v1, &v2, &v3, &v4, &v5, &v6, &v7, &v8);
-+
-+	/* Value-nested struct tests (on-stack) */
-+	sum += stf_1(&t1);
-+	sum += stf_2(&t2);
-+	sum += stf_3(&t3);
-+	sum += stf_4(&t4);
-+	sum += stf_5(&t5);
-+	sum += stf_6(&t6);
-+	sum += stf_7(&t7);
-+	/*
-+	 * st8 is 1 KiB; keeping it on the stack alongside t1..t7 blows the 2048-byte
-+	 * frame limit (-Wframe-larger-than). Build it on the heap (member-wise, so no
-+	 * 1 KiB compound-literal temporary lands on the stack either).
-+	 */
-+	{
-+		struct st8 *t8 = kmalloc(sizeof(*t8), GFP_KERNEL);
-+
-+		if (t8) {
-+			t8->field0 = 0x88;
-+			t8->field1 = t1;
-+			t8->field2 = t2;
-+			t8->field3 = t3;
-+			t8->field4 = t4;
-+			t8->field5 = t5;
-+			t8->field6 = t6;
-+			t8->field7 = t7;
-+			sum += stf_8(t8);
-+			kfree(t8);
-+		}
-+	}
-+
-+	/* Dynamic allocation: pointer-linked stp8, each node separately alloc'd */
-+	sum += run_stp8(t_kmalloc, t_kfree);	/* heap/slab */
-+	sum += run_stp8(t_vmalloc, t_vfree);	/* vmalloc address space */
-+
-+	/* Pointer forwarding: sf_fwd receives pointers and forwards to inner */
-+	sum += sf_fwd(&v1, &v2, &v3, &v4);
-+
-+	/* Struct return value */
-+	{
-+		struct s4 ret = sf_ret_struct(&v1, &v2);
-+
-+		sum += ret.a + ret.b + ret.c + ret.d;
-+	}
-+
-+	/* Keep every call above from being optimised away (sum is otherwise dead). */
-+	OPTIMIZER_HIDE_VAR(sum);
-+	return count;
-+}
-+
-+static const struct file_operations trigger_fops = {
-+	.write = trigger_write,
-+};
-+
-+static int __init eight_struct_args_init(void)
-+{
-+	test_dir = debugfs_create_dir("kcov_dataflow_test", NULL);
-+	debugfs_create_file("trigger_struct", 0200, test_dir, NULL,
-+			    &trigger_fops);
-+	return 0;
-+}
-+
-+static void __exit eight_struct_args_exit(void)
-+{
-+	debugfs_remove_recursive(test_dir);
-+}
-+
-+module_init(eight_struct_args_init);
-+module_exit(eight_struct_args_exit);
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/Makefile b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/Makefile
-new file mode 100644
-index 0000000000000..3017a24774051
---- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/Makefile
-@@ -0,0 +1,3 @@
-+# SPDX-License-Identifier: GPL-2.0
-+obj-m := eight_struct_args_rust.o
-+KCOV_DATAFLOW_eight_struct_args_rust.o := y
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/README.rst b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/README.rst
-new file mode 100644
-index 0000000000000..06e8f8070f6c2
---- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/README.rst
-@@ -0,0 +1,11 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+KCOV-Dataflow Selftests: eight_struct_args_rust
-+===============================================
-+
-+Rust equivalent of eight_struct_args_c (rsf_*, rstf_*, rstpf_* with
-+``#[no_mangle]``), built only with CONFIG_RUST=y. Opted in with
-+``KCOV_DATAFLOW_eight_struct_args_rust.o := y``::
-+
-+  ./test_modules.py -t eight_struct_args_rust
-+  ./trigger-view.py eight_struct_args_rust --raw
-diff --git a/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/eight_struct_args_rust.rs b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/eight_struct_args_rust.rs
-new file mode 100644
-index 0000000000000..e5cc3cb87591e
---- /dev/null
-+++ b/tools/testing/selftests/kcov_dataflow/eight_struct_args_rust/eight_struct_args_rust.rs
-@@ -0,0 +1,646 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//! Verify kcov_dataflow captures struct pointer arguments with automatic
-+//! field expansion for Rust #[repr(C)] structs.
++//! Test kcov_df_remote_start/stop from kworker context.
 +//!
-+//! Rust equivalent of eight_struct_args_c. Two families are exercised:
-+//!   - Flat structs S1..S8 (1-8 u64 members) via rsf_N.
-+//!   - Recursively (value) nested structs St1..St8, where StN embeds every
-+//!     smaller struct by value:
-+//!         St1 = { field0 }
-+//!         St2 = { field0, field1: St1 }              // { v, {v} }
-+//!         StN = { field0, field1: St1, ..., field(N-1): St(N-1) }
-+//!     so St8 is eight levels deep along its St7 chain. Each rstf_N reads its
-+//!     own field0 and forwards each nested member's address into rstf_k.
-+//!   - Pointer-linked nested structs Stp1..Stp8, where every member is a raw
-+//!     pointer to a separately allocated object:
-+//!         Stp1 = { field0: *const u64 }
-+//!         StpN = { field0: *const u64, field1: *const Stp1, ... }
-+//!     The heap (KBox) test builds this tower and follows it via rstpf_N.
++//! A composite struct holds three RBTrees (simulating RBTree/XArray/maple_tree
++//! workloads). Three work phases run on system_wq:
++//!   Phase 1 (populate): fill all three trees
++//!   Phase 2 (update): insert new values, read existing, overwrite
++//!   Phase 3 (drain): remove all entries
 +//!
-+//! Write to /sys/kernel/debug/kcov_dataflow_test/trigger_struct_rust to invoke.
++//! User space publishes a buffer with KCOV_DF_REMOTE_ENABLE, writes to
++//! /sys/kernel/debug/kcov_dataflow_test/trigger_kworker_remote, then reads
++//! the captured records.
 +
 +#![allow(missing_docs)]
 +
 +use kernel::prelude::*;
-+use kernel::alloc::KBox;
++use kernel::sync::{Arc, Completion};
++use kernel::workqueue::{self, impl_has_work, new_work, Work, WorkItem};
++use kernel::rbtree::RBTree;
 +use kernel::c_str;
 +
-+module !{
-+	type:EightStructArgsRust,
-+	name: "eight_struct_args_rust",
-+	authors: ["kcov-dataflow"],
-+	description: "Struct field expansion test for kcov_dataflow (Rust)",
-+	license: "GPL",
-+}
-+#[repr(C)]
-+pub struct S1 {
-+	pub a : u64
-+}
-+#[repr(C)]
-+pub struct S2 {
-+	pub a : u64, pub b : u64
-+}
-+#[repr(C)]
-+pub struct S3 {
-+	pub a : u64, pub b : u64, pub c : u64
-+}
-+#[repr(C)]
-+pub struct S4 {
-+	pub a : u64, pub b : u64, pub c : u64, pub d : u64
-+}
-+#[repr(C)]
-+pub struct S5 {
-+	pub a : u64, pub b : u64, pub c : u64, pub d : u64, pub e : u64
-+}
-+#[repr(C)]
-+pub struct S6 {
-+	pub a : u64, pub b : u64, pub c : u64, pub d : u64, pub e : u64,
-+		pub f : u64
-+}
-+#[repr(C)]
-+pub struct S7 {
-+	pub a : u64, pub b : u64, pub c : u64, pub d : u64, pub e : u64,
-+		pub f : u64, pub g : u64
-+}
-+#[repr(C)]
-+pub struct S8 {
-+	pub a : u64, pub b : u64, pub c : u64, pub d : u64, pub e : u64,
-+		pub f : u64, pub g : u64, pub h : u64
-+}
-+// Recursively nested: StN = { field0, field1: St1, ..., field(N-1): St(N-1) }.
-+// Copy so a smaller value can be embedded into every larger one.
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St1 {
-+	pub field0 : u64
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St2 {
-+	pub field0 : u64, pub field1 : St1
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St3 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St4 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2, pub field3 : St3
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St5 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2, pub field3 : St3,
-+		pub field4 : St4
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St6 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2, pub field3 : St3,
-+		pub field4 : St4, pub field5 : St5
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St7 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2, pub field3 : St3,
-+		pub field4 : St4, pub field5 : St5, pub field6 : St6
-+}
-+#[repr(C)]
-+#[derive(Clone, Copy)]
-+pub struct St8 {
-+	pub field0 : u64, pub field1 : St1, pub field2 : St2, pub field3 : St3,
-+		pub field4 : St4, pub field5 : St5, pub field6 : St6,
-+		pub field7 : St7
-+}
-+// Pointer-linked nested: every member is a raw pointer to a separately
-+// allocated object. StpN = { field0: *const u64, field1: *const Stp1, ... }.
-+#[repr(C)]
-+pub struct Stp1 {
-+	pub field0 : *const u64
-+}
-+#[repr(C)]
-+pub struct Stp2 {
-+	pub field0 : *const u64, pub field1 : *const Stp1
-+}
-+#[repr(C)]
-+pub struct Stp3 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2
-+}
-+#[repr(C)]
-+pub struct Stp4 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2, pub field3 : *const Stp3
-+}
-+#[repr(C)]
-+pub struct Stp5 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2, pub field3 : *const Stp3,
-+		pub field4 : *const Stp4
-+}
-+#[repr(C)]
-+pub struct Stp6 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2, pub field3 : *const Stp3,
-+		pub field4 : *const Stp4, pub field5 : *const Stp5
-+}
-+#[repr(C)]
-+pub struct Stp7 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2, pub field3 : *const Stp3,
-+		pub field4 : *const Stp4, pub field5 : *const Stp5,
-+		pub field6 : *const Stp6
-+}
-+#[repr(C)]
-+pub struct Stp8 {
-+	pub field0 : *const u64, pub field1 : *const Stp1,
-+		pub field2 : *const Stp2, pub field3 : *const Stp3,
-+		pub field4 : *const Stp4, pub field5 : *const Stp5,
-+		pub field6 : *const Stp6, pub field7 : *const Stp7
++module! {
++    type: RustKworkerRemote,
++    name: "rust_kworker_remote",
++    authors: ["kcov-dataflow"],
++    description: "Test kcov_df_remote capturing from kworker (RBTree composite)",
++    license: "GPL",
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_1(a : *const S1) -> u64
-+{
-+	unsafe
-+	{
-+		(*a).a
-+	}
++// Extern bindings for kcov_dataflow remote API (kernel/kcov_dataflow.c)
++unsafe extern "C" {
++    fn kcov_df_remote_start(handle: u64);
++    fn kcov_df_remote_stop();
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_2(a : *const S1, b : *const S2) -> u64
-+{
-+	unsafe
-+	{
-+		(*a).a + (*b).b
-+	}
++/// Composite data structure: three trees with different key ranges.
++/// Simulates a real driver managing multiple lookup tables.
++struct CompositeStore {
++    /// Primary index (keys 0..N)
++    primary: RBTree<u64, u64>,
++    /// Secondary/auxiliary index (keys 100..N)
++    aux: RBTree<u64, u64>,
++    /// Scratch/temp space (keys 200..N)
++    scratch: RBTree<u64, u64>,
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_4(a : *const S1, b : *const S2, c : *const S3,
-+			d : *const S4) -> u64
-+{
-+	unsafe
-+	{
-+		(*a).a + (*b).b + (*c).c + (*d).d
-+	}
++impl CompositeStore {
++    fn new() -> Self {
++        Self {
++            primary: RBTree::new(),
++            aux: RBTree::new(),
++            scratch: RBTree::new(),
++        }
++    }
++
++    /// Phase 1: populate all three trees with initial data.
++    #[inline(never)]
++    fn populate(&mut self) -> Result {
++        for i in 0u64..8 {
++            self.primary.try_create_and_insert(i, i * 0x1111, GFP_KERNEL)?;
++        }
++        for i in 100u64..108 {
++            self.aux.try_create_and_insert(i, i * 0x2222, GFP_KERNEL)?;
++        }
++        for i in 200u64..208 {
++            self.scratch.try_create_and_insert(i, i * 0x3333, GFP_KERNEL)?;
++        }
++        Ok(())
++    }
++
++    /// Phase 2: insert more, read existing, overwrite some.
++    #[inline(never)]
++    fn update(&mut self) -> Result {
++        // Insert new entries into primary
++        for i in 8u64..12 {
++            self.primary.try_create_and_insert(i, i * 0x4444, GFP_KERNEL)?;
++        }
++        // Read from aux (get passes &K which is a struct arg)
++        for i in 100u64..108 {
++            let _ = self.aux.get(&i);
++        }
++        // Overwrite scratch entries
++        for i in 200u64..204 {
++            self.scratch.remove(&i);
++            self.scratch.try_create_and_insert(i, i * 0x5555, GFP_KERNEL)?;
++        }
++        Ok(())
++    }
++
++    /// Phase 3: drain all trees.
++    #[inline(never)]
++    fn drain(&mut self) {
++        while let Some(c) = self.primary.cursor_front_mut() {
++            c.remove_current();
++        }
++        while let Some(c) = self.aux.cursor_front_mut() {
++            c.remove_current();
++        }
++        while let Some(c) = self.scratch.cursor_front_mut() {
++            c.remove_current();
++        }
++    }
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_8(a : *const S1, b : *const S2, c : *const S3,
-+			d : *const S4, e : *const S5, f : *const S6,
-+			g : *const S7, h : *const S8) -> u64
-+{
-+	unsafe
-+	{
-+		(*a).a + (*b).b + (*c).c + (*d).d + (*e).e + (*f).f + (*g).g +
-+			(*h).h
-+	}
++/// Work item that runs three phases in kworker context with remote capture.
++#[pin_data]
++struct RemoteWork {
++    #[pin]
++    work: Work<RemoteWork>,
++    #[pin]
++    done: Completion,
 +}
 +
-+// Recursively nested: each reads its own field0 and forwards every nested
-+// member's address into the matching rstf_k, walking the whole tower.
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_1(p : *const St1) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0
-+	}
++impl_has_work! {
++    impl HasWork<Self> for RemoteWork { self.work }
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_2(p : *const St2) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1)
-+	}
++impl RemoteWork {
++    fn new() -> Result<Arc<Self>> {
++        Arc::pin_init(pin_init!(RemoteWork {
++            work <- new_work!("RemoteWork::work"),
++            done <- Completion::new(),
++        }), GFP_KERNEL)
++    }
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_3(p : *const St3) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2)
-+	}
++impl WorkItem for RemoteWork {
++    type Pointer = Arc<RemoteWork>;
++
++    fn run(this: Arc<RemoteWork>) {
++        // Enable remote kcov_dataflow capture for this kworker task.
++        // SAFETY: FFI call to exported kernel symbol; no-op if no buffer published.
++        // Handle 1 matches what trigger-view.py passes via KCOV_DF_REMOTE_ENABLE.
++        unsafe { kcov_df_remote_start(1) };
++
++        let mut store = CompositeStore::new();
++        let _ = store.populate();
++        let _ = store.update();
++        store.drain();
++
++        // SAFETY: FFI call to exported kernel symbol; disables capture.
++        unsafe { kcov_df_remote_stop() };
++
++        this.done.complete_all();
++    }
 +}
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_4(p : *const St4) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2) +
-+			rstf_3(&(*p).field3)
-+	}
-+}
++// --- Debugfs trigger (same raw pattern as eight_struct_args_rust) ---
 +
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_5(p : *const St5) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2) +
-+			rstf_3(&(*p).field3) + rstf_4(&(*p).field4)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_6(p : *const St6) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2) +
-+			rstf_3(&(*p).field3) + rstf_4(&(*p).field4) +
-+			rstf_5(&(*p).field5)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_7(p : *const St7) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2) +
-+			rstf_3(&(*p).field3) + rstf_4(&(*p).field4) +
-+			rstf_5(&(*p).field5) + rstf_6(&(*p).field6)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstf_8(p : *const St8) -> u64
-+{
-+	unsafe
-+	{
-+		(*p).field0 + rstf_1(&(*p).field1) + rstf_2(&(*p).field2) +
-+			rstf_3(&(*p).field3) + rstf_4(&(*p).field4) +
-+			rstf_5(&(*p).field5) + rstf_6(&(*p).field6) +
-+			rstf_7(&(*p).field7)
-+	}
-+}
-+
-+// Pointer-linked: each dereferences its own *field0 and forwards each
-+// (already pointer-typed) nested member into the matching rstpf_k.
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_1(p : *const Stp1) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_2(p : *const Stp2) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_3(p : *const Stp3) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_4(p : *const Stp4) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2) +
-+			rstpf_3((*p).field3)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_5(p : *const Stp5) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2) +
-+			rstpf_3((*p).field3) + rstpf_4((*p).field4)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_6(p : *const Stp6) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2) +
-+			rstpf_3((*p).field3) + rstpf_4((*p).field4) +
-+			rstpf_5((*p).field5)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_7(p : *const Stp7) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2) +
-+			rstpf_3((*p).field3) + rstpf_4((*p).field4) +
-+			rstpf_5((*p).field5) + rstpf_6((*p).field6)
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rstpf_8(p : *const Stp8) -> u64
-+{
-+	unsafe
-+	{
-+		*(*p).field0 + rstpf_1((*p).field1) + rstpf_2((*p).field2) +
-+			rstpf_3((*p).field3) + rstpf_4((*p).field4) +
-+			rstpf_5((*p).field5) + rstpf_6((*p).field6) +
-+			rstpf_7((*p).field7)
-+	}
-+}
-+
-+// Build the pointer-linked Stp8 tower with KBox (each node its own allocation),
-+// run rstpf_8 over it, and return the sum. The KBoxes own the storage and hold
-+// raw pointers into their siblings; everything is freed when they drop at the
-+// end of this function. `?` frees any already-allocated KBoxes on OOM.
-+fn build_and_run_stp8() -> Result<u64>
-+{
-+	let l1 = KBox::new (0x11u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l2 = KBox::new (0x22u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l3 = KBox::new (0x33u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l4 = KBox::new (0x44u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l5 = KBox::new (0x55u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l6 = KBox::new (0x66u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l7 = KBox::new (0x77u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+	let l8 = KBox::new (0x88u64, kernel::alloc::flags::GFP_KERNEL) ? ;
-+
-+	let p1 = KBox::new (Stp1{ field0: &*l1 },
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p2 = KBox::new (Stp2{ field0: &*l2, field1: &*p1 },
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p3 = KBox::new (Stp3{ field0: &*l3, field1: &*p1, field2: &*p2 },
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p4 = KBox::new (
-+		Stp4{ field0: &*l4, field1: &*p1, field2: &*p2, field3: &*p3 },
-+		kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p5 = KBox::new (Stp5{
-+		field0: &*l5,
-+		field1: &*p1,
-+		field2: &*p2,
-+		field3: &*p3,
-+		field4: &*p4
-+	},
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p6 = KBox::new (Stp6{
-+		field0: &*l6,
-+		field1: &*p1,
-+		field2: &*p2,
-+		field3: &*p3,
-+		field4: &*p4,
-+		field5: &*p5
-+	},
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p7 = KBox::new (Stp7{
-+		field0: &*l7,
-+		field1: &*p1,
-+		field2: &*p2,
-+		field3: &*p3,
-+		field4: &*p4,
-+		field5: &*p5,
-+		field6: &*p6
-+	},
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+	let p8 = KBox::new (Stp8{
-+		field0: &*l8,
-+		field1: &*p1,
-+		field2: &*p2,
-+		field3: &*p3,
-+		field4: &*p4,
-+		field5: &*p5,
-+		field6: &*p6,
-+		field7: &*p7
-+	},
-+			    kernel::alloc::flags::GFP_KERNEL) ?
-+		;
-+
-+	Ok(rstpf_8(&*p8))
-+}
-+
-+/* Pointer forwarding: receives pointers and passes to inner */
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_fwd_inner(a : *const S1, b : *const S2, c : *const S3,
-+				d : *const S4) -> u64
-+{
-+	unsafe
-+	{
-+		(*a).a + (*b).b + (*c).c + (*d).d
-+	}
-+}
-+
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_fwd(a : *const S1, b : *const S2, c : *const S3,
-+			  d : *const S4) -> u64{ rsf_fwd_inner(a, b, c, d) }
-+
-+/* Struct return value */
-+#[no_mangle]
-+#[inline(never)]
-+pub extern "C" fn rsf_ret_struct(a : *const S1, b : *const S2)
-+	->S4
-+{
-+	unsafe
-+	{
-+		S4
-+		{
-+a:
-+			(*a).a, b : (*b).a, c : (*b).b, d : (*a).a + (*b).b
-+		}
-+	}
-+}
-+
-+unsafe extern "C" fn write_handler(_file : *mut kernel::bindings::file,
-+				   _buf : *const core::ffi::c_char,
-+				   count : usize,
-+				   _ppos : *mut kernel::bindings::loff_t, )
-+	-> kernel::ffi::c_long
-+{
-+	let v1 = S1{ a: 0x11 };
-+	let v2 = S2{ a: 0x11, b: 0x22 };
-+	let v3 = S3{ a: 0x11, b: 0x22, c: 0x33 };
-+	let v4 = S4{ a: 0x11, b: 0x22, c: 0x33, d: 0x44 };
-+	let v5 = S5{ a: 0x11, b: 0x22, c: 0x33, d: 0x44, e: 0x55 };
-+	let v6 = S6{ a: 0x11, b: 0x22, c: 0x33, d: 0x44, e: 0x55, f: 0x66 };
-+	let v7 =
-+	S7{ a: 0x11, b: 0x22, c: 0x33, d: 0x44, e: 0x55, f: 0x66, g: 0x77 };
-+	let v8 = S8{
-+		a: 0x11,
-+		b: 0x22,
-+		c: 0x33,
-+		d: 0x44,
-+		e: 0x55,
-+		f: 0x66,
-+		g: 0x77,
-+		h: 0x88
-+	};
-+
-+	// Recursively nested values: each embeds all the smaller ones (Copy).
-+	let t1 = St1{ field0: 0x11 };
-+	let t2 = St2{ field0: 0x22, field1: t1 };
-+	let t3 = St3{ field0: 0x33, field1: t1, field2: t2 };
-+	let t4 = St4{ field0: 0x44, field1: t1, field2: t2, field3: t3 };
-+	let t5 =
-+	St5{ field0: 0x55, field1: t1, field2: t2, field3: t3, field4: t4 };
-+	let t6 = St6{
-+		field0: 0x66,
-+		field1: t1,
-+		field2: t2,
-+		field3: t3,
-+		field4: t4,
-+		field5: t5
-+	};
-+	let t7 = St7{
-+		field0: 0x77,
-+		field1: t1,
-+		field2: t2,
-+		field3: t3,
-+		field4: t4,
-+		field5: t5,
-+		field6: t6
-+	};
-+	let t8 = St8{
-+		field0: 0x88,
-+		field1: t1,
-+		field2: t2,
-+		field3: t3,
-+		field4: t4,
-+		field5: t5,
-+		field6: t6,
-+		field7: t7
-+	};
-+
-+	let mut sum : u64 = 0;
-+	sum = sum.wrapping_add(rsf_1(&v1 as *const S1));
-+	sum = sum.wrapping_add(rsf_2(&v1 as *const S1, &v2 as *const S2));
-+	sum = sum.wrapping_add(rsf_4(&v1 as *const S1, &v2 as *const S2,
-+				     &v3 as *const S3, &v4 as *const S4));
-+	sum = sum.wrapping_add(rsf_8(&v1 as *const S1, &v2 as *const S2,
-+				     &v3 as *const S3, &v4 as *const S4,
-+				     &v5 as *const S5, &v6 as *const S6,
-+				     &v7 as *const S7, &v8 as *const S8));
-+
-+	// Recursively nested struct tests
-+	sum = sum.wrapping_add(rstf_1(&t1 as *const St1));
-+	sum = sum.wrapping_add(rstf_2(&t2 as *const St2));
-+	sum = sum.wrapping_add(rstf_3(&t3 as *const St3));
-+	sum = sum.wrapping_add(rstf_4(&t4 as *const St4));
-+	sum = sum.wrapping_add(rstf_5(&t5 as *const St5));
-+	sum = sum.wrapping_add(rstf_6(&t6 as *const St6));
-+	sum = sum.wrapping_add(rstf_7(&t7 as *const St7));
-+	sum = sum.wrapping_add(rstf_8(&t8 as *const St8));
-+
-+	// Pointer forwarding: rsf_fwd receives and passes to rsf_fwd_inner
-+	sum = sum.wrapping_add(rsf_fwd(&v1 as *const S1, &v2 as *const S2,
-+				       &v3 as *const S3, &v4 as *const S4));
-+
-+	// Struct return value
-+	let ret = rsf_ret_struct(&v1 as *const S1, &v2 as *const S2);
-+	sum = sum.wrapping_add(ret.a + ret.b + ret.c + ret.d);
-+
-+	// Dynamic allocation: pointer-linked Stp8 tower (each node its own KBox)
-+	if let
-+		Ok(s) = build_and_run_stp8()
-+		{
-+			sum = sum.wrapping_add(s);
-+		}
-+
-+	core::hint::black_box(sum);
-+	count as kernel::ffi::c_long
++unsafe extern "C" fn write_handler(
++    _file: *mut kernel::bindings::file,
++    _buf: *const core::ffi::c_char,
++    count: usize,
++    _ppos: *mut kernel::bindings::loff_t,
++) -> kernel::ffi::c_long {
++    let work = match RemoteWork::new() {
++        Ok(w) => w,
++        Err(_) => return -(kernel::bindings::ENOMEM as kernel::ffi::c_long),
++    };
++    let waiter = work.clone();
++    let _ = workqueue::system().enqueue(work);
++    waiter.done.wait_for_completion();
++    count as kernel::ffi::c_long
 +}
 +
 +#[repr(transparent)]
 +struct SyncFops(kernel::bindings::file_operations);
-+unsafe impl Sync for SyncFops
-+{
-+}
++unsafe impl Sync for SyncFops {}
 +
-+static FOPS : SyncFops = SyncFops(kernel::bindings::file_operations{
-+	write: Some(unsafe{ core::mem::transmute(write_handler as *const()) }),
-+	..unsafe{ core::mem::zeroed() }
++static FOPS: SyncFops = SyncFops(kernel::bindings::file_operations {
++    write: Some(unsafe { core::mem::transmute(write_handler as *const ()) }),
++    ..unsafe { core::mem::zeroed() }
 +});
 +
-+struct EightStructArgsRust {
-+	dir : *mut kernel::bindings::dentry,
++struct RustKworkerRemote {
++    dir: *mut kernel::bindings::dentry,
 +}
 +
-+impl kernel::Module for EightStructArgsRust
-+{
++impl kernel::Module for RustKworkerRemote {
 +    fn init(_module: &'static ThisModule) -> Result<Self> {
 +        let dir = unsafe {
 +            kernel::bindings::debugfs_create_dir(
@@ -1424,7 +416,7 @@ index 0000000000000..e5cc3cb87591e
 +        };
 +        unsafe {
 +            kernel::bindings::debugfs_create_file_unsafe(
-+                c_str!("trigger_struct_rust").as_char_ptr(),
++                c_str!("trigger_kworker_remote").as_char_ptr(),
 +                0o222,
 +                dir,
 +                core::ptr::null_mut(),
@@ -1432,23 +424,17 @@ index 0000000000000..e5cc3cb87591e
 +            )
 +        };
 +        Ok(Self { dir })
-+}
-+}
-+
-+impl Drop for EightStructArgsRust
-+{
-+	fn drop(&mut self)
-+	{
-+		unsafe{ kernel::bindings::debugfs_remove(self.dir) };
-+	}
++    }
 +}
 +
-+unsafe impl Send for EightStructArgsRust
-+{
++impl Drop for RustKworkerRemote {
++    fn drop(&mut self) {
++        unsafe { kernel::bindings::debugfs_remove(self.dir) };
++    }
 +}
-+unsafe impl Sync for EightStructArgsRust
-+{
-+}
++
++unsafe impl Send for RustKworkerRemote {}
++unsafe impl Sync for RustKworkerRemote {}
 
 -- 
 2.47.3
