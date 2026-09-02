@@ -1,120 +1,322 @@
-Received: from mta0.migadu.com (out-21.mta0.migadu.com [91.218.175.21])
+Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AF85249EB
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 06:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AAA9385D90
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 06:43:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788330137; cv=none; b=JU23WC3KbOL+RfbWTF90l/AAMMGS/O6Z/mCOH8jKRDRhAX9KeWCo8MoT8XJW6Jo77iquVIY7nSaAcitWFEW4RWuQrQUYdYfF3b+UL5I271vHDEP4kMaWDYqRxgE1d/TDkQTDTMBHVr8ESdZxnKp9UxUqryTZxjVvNZw97uAm07w=
+	t=1788331397; cv=none; b=XNlHyolP1UVhK9oasORBDtM3WUOvjTQuXjDQo/SScD2d9OWYJAvXXMUVVi8FgzpH9QjNRs3hojRLTPZsQ4OS6gwXThH09Dsr2KsKncRDk5MwWOAtkosXx1AL+36EFeOiBD9gkxL62M09PgYL8T8VQgoP+cHjc98nYlLkXtcOa/c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788330137; c=relaxed/simple;
-	bh=AEK06sHlEp3Qufm7pFG5OliZbCUDATzmIuqnGIqh3ME=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rWyByWm5DHh4EuBmS1vWxB2EzjqsjotAxmv9NPa8SLuwJvyjWeMr3eSvJMA4wayHDtTFXDG/MA49muITjZGrhJmOpNCEZSCjRBu0pvUC8px0gFanpwV3wXkGQ6xuA7N7N/2CscZItfFAtBQFqikdtnSeS4HBdlVdxj8s1sXPUxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=vDIFFwV6; arc=none smtp.client-ip=91.218.175.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+	s=arc-20240116; t=1788331397; c=relaxed/simple;
+	bh=oa1klZ84Y9HmXIG2PVYw0CNJgGARwSO7qDclCIvlE1o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=GwVDmxkWVvGXFX+M9w27GqpV8EIsMm/8hSVDbDMofyekEabQhJU1sG8r0BVHhm9YXnt6X7x8zi7a6wMfod++hIGD/7sWJxDPH5wVEiNSO0p5IptU+w5Y+OUvEwwKrQKDyFL+2bWG/FMmIU30wmFh0W3OS0TlB3ETSfME3bdKD1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hu1ifnvX; arc=none smtp.client-ip=209.85.215.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="vDIFFwV6"
-X-Envelope-To: linux-kselftest@vger.kernel.org
-DKIM-Signature: a=rsa-sha256; bh=AEK06sHlEp3Qufm7pFG5OliZbCUDATzmIuqnGIqh3ME=;
- c=simple/simple; d=linux.dev;
- h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
- t=1788330131; v=1; x=1788934931;
- b=vDIFFwV62n/5OW+m+S37jGoJjzrM+4SXuB+HCyOmvcP09SOm1wvxemM4X6bHIJH9Itpa78Hf
- VrbHoNf6txxduX/iyhb05glGBR42HQruxT8tJFW7ryeG2Mhv0uHJMtw9mLPVU7yj6ENOHbYdmlF
- kcb2JoQqKrPPWGyBflo/lQeA=
-X-Envelope-To: linux-kselftest@vger.kernel.org
-Received: by smtp.migadu.com with ESMTPS id 493ee8313759c530;
-	Wed, 02 Sep 2026 06:22:11 +0000
-X-Mizu-Trace-ID: 493ee8313759c530
-X-Migadu-Flow: FLOW_OUT
-Date: Wed, 2 Sep 2026 14:22:04 +0800
-From: Hangbin Liu <hangbin.liu@linux.dev>
-To: Qianheng Peng <pengqh1@chinatelecom.cn>
-Cc: broonie@kernel.org, linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, liuhangbin@gmail.com, rbm@suse.com,
-	shuah@kernel.org, skhan@linuxfoundation.org
-Subject: Re: [PATCH] selftests: runner.sh: avoid overriding
- kselftest_cmd_args with empty variable
-Message-ID: <apfAjBBaSG6Bs2M9@fedora>
-References: <apd8mqEoyk8_O8ar@fedora>
- <20260902030542.532572-1-pengqh1@chinatelecom.cn>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hu1ifnvX"
+Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-cbe6295f05bso1505933a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 23:43:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788331394; x=1788936194; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=g0OSJfETTdYTriCW7H435cPMeyJW78V2WXqxeEnE0Nw=;
+        b=Hu1ifnvXdUOXTa0Saz7ezlgs1N5jtfvbLKkjhW12O7olFujjfzmjfdPn4C/3h4nJa6
+         qJUkf+BVcPTMHRR3duFCHH5Ky+xhAS5R/1C8u0wflzSh22yoUBXwVjYJ33u3q4+DkwNp
+         OtBN8ZBOyqUF39l6zSdmpYTZDqeXxdjK6b4G19tw1CRgVU5a0Wv4Zldmcm/soZkMYziq
+         ZQ4HJIGnjHGn/snvZUsY0zhwnUkUSq9uJkN1YYjktS1Bo+uFQjaSQ9YG/zPP9/qEBLne
+         ra2PTxWZMUBvkIBjA52xN1zkuLtRFFzSqPdlGxZ905fXxoRBmYyQSdhNFAplSgPfhlBi
+         Rywg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788331394; x=1788936194;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=g0OSJfETTdYTriCW7H435cPMeyJW78V2WXqxeEnE0Nw=;
+        b=qhXnkl6yxwCVMDnhn8lQnFEILP505rKZN9iZUY3ooNgwqijujUfZceByJVuSPwdupz
+         5ksYeOaYTI7VbUkPFZ7kk9L0vLqUIT5j0gjvww874E4YrcWvyhPvciXFI/6zXfX9W6fG
+         qtIVnRKq3ecxRtK+1bI17L8Kq6GHyrbfRxpHnskpj8OGZhGO1YxI22Y5Kprngq7MAjwB
+         EaT4bP40ZDVCHHsLa9imyhuqGGG0RiHdxeoayQBzcjsRSEagHsdIi+F9BHsLQjQ1p/R0
+         E/rUHG/t8uoOBl+2A7KtZmV7GKWWvIxxgt6Lz9k/OYPWew+ZBA0s3PpAxEWnjKPs4C4t
+         3zNw==
+X-Forwarded-Encrypted: i=1; AKwUvBy3QgvGVT6nDdvz4D3iZ/Y3MCA18Jne2hjWoB5a4SXYGFIsgI/FdmGCmL34CmN6f3M7Aco0LJnJduJzjOAjoh4=@vger.kernel.org
+X-Gm-Message-State: AFuF++mjbsSnMli3xrRY6LgdbLu60t5yX0jZG8HA4qH+Miii8ZUONWN5
+	itKfyNq7fUmbqGvGjk9BxsuDlcZ48jh7gnlvXRH3ECmcxiSfI/txcHZU
+X-Gm-Gg: AYBFou1GcgHIlzuINzPbLDPeXVOWh8XuSkxr6CmtZ/X2UKyNGkJSbcymlfdfFrJovRm
+	0IIlYM1Paq3gfPaqZe7yZIC4WWWHKQXbS1S24dxaojtZaReQDb08/PcytwrLjOYNcgJ2dC/OC/3
+	Z6lmSlwRMDL5PNDt18Z6+3khRV5Kb51keeOFOOQPW4f1CyghQibuBoaYOuNsvThdxIhhO6qTLbR
+	Q0YSjnFBPjlPuPOaUasK47HxKY7/VwuesN/U+tTfQK56IrVoUqDivp+Ut8uOQ8IbEzklew0izub
+	rR6ZMBTSyi6wQsY7u/wCx/OFZaN48vGSxEIbYqunDxK4EC1U3izzTVemhYjnFkjEMNExJELm6ZB
+	SKw+bdALsWBH9wp5MyVoRxM3GN4mk02J1nHboLMJFa8No7psSxaW9SLm7W3C+d0yz9z+VOtm1fs
+	XqrRCXz8xC0AHt+BHS19DThrB7Te+P4x04kgoUB9i28IGz56+ZgMNw2iOHIIPzlmj9/Xo7btYpV
+	VXEja4NHcwOr9RbzFjO09MZqo3BZDo=
+X-Received: by 2002:a17:90b:5445:b0:38f:657:6823 with SMTP id 98e67ed59e1d1-39af63f7f7amr788751a91.8.1788331394288;
+        Tue, 01 Sep 2026 23:43:14 -0700 (PDT)
+Received: from lipengfei28-ThinkStation-P368.mioffice.cn ([2408:8607:1b00:8:2c95:4917:f0fe:b444])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3990d80433dsm9373143a91.17.2026.09.01.23.43.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Sep 2026 23:43:13 -0700 (PDT)
+From: Li Pengfei <ljdlns1987@gmail.com>
+X-Google-Original-From: Li Pengfei <lipengfei28@xiaomi.com>
+To: rostedt@goodmis.org,
+	mhiramat@kernel.org
+Cc: mathieu.desnoyers@efficios.com,
+	mark.rutland@arm.com,
+	corbet@lwn.net,
+	skhan@linuxfoundation.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	zhangbo56@xiaomi.com,
+	lipengfei28@xiaomi.com
+Subject: [RFC PATCH v5 0/3] trace: stack trace deduplication for ftrace ring buffer
+Date: Wed,  2 Sep 2026 14:42:39 +0800
+Message-Id: <20260902064242.28606-1-lipengfei28@xiaomi.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260902030542.532572-1-pengqh1@chinatelecom.cn>
 
-Hi Qianheng,
-On Wed, Sep 02, 2026 at 11:05:42AM +0800, Qianheng Peng wrote:
-> >Oh, I see what you mean now.
-> >
-> >	kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
-> >
-> >This is used to retrieve parameters for a *specific* test. When a test does not
-> >require extra parameters, `KSELFTEST_${BASENAME_SANITIZED}_ARGS` is not set.
-> >This has the same effect as when a user exports it but does not assign a value.
-> >
-> >Therefore, I do not think we need to add a check for this case. Users should
-> >understand the semantics when exporting the `KSELFTEST_${BASENAME_SANITIZED}_ARGS`
-> >variable.
-> >
-> >Thanks
-> >Hangbin
-> 
-> Yes, if just only adding a check, that really makes no sense.
-> But there is a issue for the follow case:
-> ---------------------------------------------------------------------------
-> User wrote "cmd_args=nice_value" in settings file and want to use the
-> `nice_value` as arguments for a test program.So the user didn't need to
-> export something like `KSELFTEST_XXXX_ARGS` because kselftest_cmd_args should
-> get the `nice_value` as we can see
-> 
->     eval "kselftest_$field"="$value"
+From: Pengfei Li <lipengfei28@xiaomi.com>
 
-AFAIK, the setting file is usually used for setting timeout value. As
-you can see in runner.sh, it checks kselftest_timeout after reading setting
-file.
+Hi Steven, Masami, all,
 
-> But in current runner.sh, kselftest_cmd_args has always been set up by
-> `KSELFTEST_XXXX_ARGS` as we can see
-> 
->     kselftest_cmd_args_ref="KSELFTEST_${BASENAME_SANITIZED}_ARGS"
->     eval kselftest_cmd_args="\$${kselftest_cmd_args_ref:-}"
-> 
-> As `KSELFTEST_XXXX_ARGS` was empty, the user unexpectedly lost `nice_value`
-> written in settings file.
-> ---------------------------------------------------------------------------
-> 
-> According to the implement of runner.sh, it may want to give users two choices:
-> 1) using arguments in settings file
+This is v5 of the ftrace stackmap series, sent as a new thread.
 
-I’m not sure if this was the original intention. The configuration file
-lives under the test directory, which typically holds multiple tests.
-What if individual tests require different parameters? How would you
-supply distinct arguments in the config file using only a single
-`cmd_args` variable?
+v4: https://lore.kernel.org/all/20260616064119.438063-1-lipengfei28@xiaomi.com/
 
-> 2) or using arguments by export `KSELFTEST_${BASENAME_SANITIZED}_ARGS`
-> But now users has been forced to use `KSELFTEST_${BASENAME_SANITIZED}_ARGS`.
+The series adds stack trace deduplication to ftrace. When the
+'stackmap' option is enabled alongside 'stacktrace', the ring buffer
+stores a 4-byte stack_id instead of a full kernel stack trace, and the
+full stacks are exported once via tracefs (stack_map / stack_map_bin).
 
-In contrast, `KSELFTEST_${BASENAME_SANITIZED}_ARGS` can target each specific
-test case individually.
+Rebased onto v7.2-rc4 (4539944e5151).
 
-Perhaps I have misunderstood the design. Please feel free to correct me.
+v5 is the cleanups Steven asked for on v4, five issues I found myself,
+and one behaviour change: reset is simplified the way Steven suggested
+(details below). No functional change to the dedup algorithm itself.
 
-Thanks
-Hangbin
-> 
-> For the case above and making users happy, I did two things in the patch:
-> 1) If `KSELFTEST_${BASENAME_SANITIZED}_ARGS was empty, keep the value from settings file
-> 2) If not, set kselftest_cmd_args by `KSELFTEST_${BASENAME_SANITIZED}_ARGS` 
-> 
-> Thanks and regards,
-> Qianheng
+Mathieu: patch 1 is the lock-free map. The memory ordering there
+(entry->val release/acquire publishing the element payload, key only
+under READ_ONCE, and resetting + synchronize_rcu() for teardown) is
+the part I would most like a second pair of eyes on.
+
+Motivation
+==========
+
+The target use case is long-duration, from-boot kernel tracing where
+the same stacks recur enormously often and the bottleneck is ring
+buffer space, not CPU.
+
+Concretely: tracing the slab allocator from boot for hours to study
+memory aging and to catch the allocation backtraces behind a usage
+peak. With a stacktrace trigger on the slab tracepoints, every event
+today carries a full kernel stack (~80-160 bytes). On a fixed-size
+ring buffer that bounds how far back in time the trace reaches: the
+buffer wraps in seconds to minutes and the early-boot history -- the
+part we care about -- is overwritten before it can be consumed.
+
+In this workload the set of distinct stacks is small and highly
+repetitive, so storing a 4-byte stack_id per event and the full stack
+only once dramatically increases the time span a given buffer covers.
+The intended operating model is exactly the low-overhead one ftrace is
+good at: let the trace run for a long time producing a comparatively
+small, dense log, then resolve stack_ids offline (cat stack_map, or
+parse stack_map_bin with the included tool) during analysis.
+
+This is complementary to, not a replacement for, the existing full
+stack recording: deep stacks and the early pre-init window still fall
+back to full stacks (see below).
+
+Effect on retention
+====================
+
+Same fixed per-CPU buffer, slab allocation workload with a shallow
+kernel stack (kmem_cache_alloc), stackmap OFF vs ON:
+
+                  retained events   bytes/event   time span
+  stackmap OFF        645,068          ~104 B        15.0 s
+  stackmap ON       1,397,741           ~48 B        27.7 s
+                     2.17x             2.17x          1.85x
+
+The buffer holds ~2.17x more events and reaches ~1.85x further back in
+time for the same memory. The win grows with stack depth and with how
+repetitive the stacks are; for deep, highly-repeated stacks the
+per-event size approaches the 4-byte stack_id plus event header.
+
+Changes since v4
+================
+
+From Steven's review of v4:
+  - ftrace_stackmap_create() uses vcalloc() for both the hash table
+    and the element pool instead of vzalloc(size * n).
+  - ftrace_stackmap_create() error handling collapsed into a single
+    goto-fail ladder, freeing in reverse allocation order.
+  - Dropped the anonymous block in ftrace_stackmap_reset(); the cpu
+    iterator is declared at function scope.
+  - struct ftrace_stackmap_bin_entry grew a u64 ips[] flexible array
+    member, and stackmap_bin_open() now uses struct_size(e, ips, nr)
+    and writes through e->ips. The on-disk byte layout is unchanged,
+    so the binary format is not affected.
+  - Undid a few 80-column line wraps in the tracefs init path that
+    were hurting readability.
+
+reset semantics -- the one behaviour change in v5:
+  - Steven pointed out on the v4 thread [1] that reset was stricter
+    than it needs to be. v5 drops both parts of that strictness:
+    reset no longer returns -EBUSY when tracing is on, and it no
+    longer clears the ring buffer. It now clears the map and nothing
+    else, which also let the tracer_tracing_is_on() check, the
+    trace_types_lock section and the snapshot-buffer handling go away
+    (patch 1 is 56 lines shorter as a result).
+
+    I had replied that I would do this as a follow-up rather than hold
+    this respin. On reflection there is no reason to ship the stricter
+    version first, so it is folded in here instead.
+
+    The consequence is that a trace can still contain <stack_id N>
+    records after a reset. Such an id either has no entry in
+    stack_map, or -- once tracing continues and the slot is reused --
+    resolves to an unrelated stack. That is misleading userspace
+    output, not corruption: the map is still guarded by the resetting
+    flag plus synchronize_rcu(), and reset frees nothing, it only
+    memsets storage the map still owns. This is spelled out in the
+    ftrace_stackmap_reset() kernel-doc and in ftrace-stackmap.rst.
+
+    [1] https://lore.kernel.org/all/20260821235129.078dd489@fedora/
+
+Issues found locally since v4:
+  - The IS_ERR() branch of the stackmap init path modified
+    global_trace.trace_flags without trace_types_lock, racing
+    set_tracer_flag(). It now goes through the same
+    stackmap_mark_init_failed() helper as the other failure path.
+  - TRACE_STACK_ID was not handled in print_graph_function_flags(),
+    so with current_tracer=function_graph a stack_id event fell
+    through to print_graph_comment() instead of being punted to its
+    own printer like TRACE_STACK. Now handled alongside TRACE_STACK.
+  - stack_map_stat computed the success rate as successes * 100 before
+    dividing, which can overflow u64 now that the counters saturate at
+    LONG_MAX. Uses mul_u64_u64_div_u64().
+  - stack_map_bin allocated a fresh snapshot on every open, so
+    repeatedly opening without closing could pin a lot of vmalloc
+    space. It is now single-open.
+  - stackmap_seq_start() and stackmap_seq_next() held the seq_file
+    position in a u32, narrowing the loff_t the iterator is handed.
+    The position is driven by our own next() and bounded by map_size,
+    so this was not reachable in practice, but the correctness of the
+    truncation depended on an invariant that was not visible locally.
+    Both now keep it in a loff_t.
+
+Still open
+==========
+
+Eager vs lazy allocation. The element pool is allocated at fs_initcall
+when CONFIG_FTRACE_STACKMAP=y, regardless of whether userspace ever
+enables the option (~8 MB at the default bits=14, up to ~135 MB at
+bits=18). This keeps the hot path allocation-free with no
+allocation-failure path under tracing pressure. v5 keeps eager
+allocation; if you would rather not pay the resident cost when the
+option is never enabled, switching to lazy allocation on the first
+'echo 1 > options/stackmap' is a contained change and I will do it in
+v6 rather than hold this version on it.
+
+stack_map_bin is kept as-is. Steven's suggestion to give the bin entry
+a flexible array member is taken as acceptance that the binary
+interface can land now; say the word if you would rather ship the text
+interface first.
+
+Test results
+============
+
+QEMU (aarch64 virt, v7.2-rc4 + this series), no BUG/WARNING/Oops in
+any run:
+  - functional suite: 19/19 PASS. Covers stack_map_bin magic/version
+    (0x46534d42 / 1, confirming the flexible-array change did not move
+    the on-disk layout), the single-open guard returning EBUSY on a
+    second open and recovering after close, reset now being accepted
+    while tracing is on, reset clearing the map (11 -> 0 entries) while
+    leaving the ring buffer untouched (149 -> 149 stack_id records),
+    the success_rate computation, and global-vs-secondary instance
+    gating including the trace_options write rejection.
+  - function_graph + stackmap: 4/4 PASS with 173 stack_id events in the
+    graph output, rendering as
+      ksoftirqd/0-14  [000] d..2.  6.731781: <stack_id 16416>
+    i.e. punted to the event's own printer rather than being formatted
+    as a graph comment, which is what the print_graph_function_flags()
+    fix is for.
+  - boot-time activation (trace_options=stackmap,stacktrace on the
+    kernel cmdline): 3/3 PASS, 58 stacks and 421 hits recorded before
+    init runs, 0 drops.
+
+Build: kernel/trace/{trace_stackmap,trace,trace_functions_graph}.o
+compile clean (0 errors, 0 warnings) with the arm64 cross toolchain.
+
+Device retention numbers above were collected on a Xiaomi SM8850
+(ARM64) running an Android workload, comparing the same buffer with
+the option off and on.
+
+Known limitations
+=================
+
+- Per-instance stackmap support is not included; the option is gated
+  to the global instance (in the tracefs layout and at the
+  set_tracer_flag() write path). Per-instance maps are a follow-up.
+- Deduplication is best-effort, not strict: under heavy concurrent
+  contention two CPUs racing with the same stack hash may each claim a
+  different slot, producing a few duplicate entries; ref_count is then
+  split across them. This keeps the hot path lock-free.
+- reset clears the map only and leaves the ring buffer alone, so
+  stack_ids in an already-collected trace can stop resolving after a
+  reset, as described above.
+- The stackmap covers kernel stacks only.
+- stack_map_bin is a best-effort snapshot, serialized against reset
+  but not a fully atomic export.
+- trace-cmd / libtraceevent integration is left for follow-up.
+
+Usage
+=====
+
+  echo 1 > /sys/kernel/debug/tracing/options/stackmap
+  echo 1 > /sys/kernel/debug/tracing/options/stacktrace
+
+Pengfei Li (3):
+  trace: add lock-free stackmap for stack trace deduplication
+  trace: integrate stackmap into ftrace stack recording path
+  trace: add documentation, selftest and tooling for stackmap
+
+ Documentation/trace/ftrace-stackmap.rst       | 175 ++++
+ Documentation/trace/index.rst                 |   1 +
+ kernel/trace/Kconfig                          |  22 +
+ kernel/trace/Makefile                         |   1 +
+ kernel/trace/trace.c                          | 228 ++++-
+ kernel/trace/trace.h                          |  17 +
+ kernel/trace/trace_entries.h                  |  15 +
+ kernel/trace/trace_functions_graph.c          |   1 +
+ kernel/trace/trace_output.c                   |  23 +
+ kernel/trace/trace_selftest.c                 |   1 +
+ kernel/trace/trace_stackmap.c                 | 869 ++++++++++++++++++
+ kernel/trace/trace_stackmap.h                 |  57 ++
+ .../ftrace/test.d/ftrace/stackmap-basic.tc    | 110 +++
+ .../test.d/ftrace/stackmap-instance-gate.tc   |  54 ++
+ .../ftrace/test.d/ftrace/stackmap-reset.tc    |  77 ++
+ tools/tracing/stackmap_dump.py                | 164 ++++
+ 16 files changed, 1812 insertions(+), 3 deletions(-)
+ create mode 100644 Documentation/trace/ftrace-stackmap.rst
+ create mode 100644 kernel/trace/trace_stackmap.c
+ create mode 100644 kernel/trace/trace_stackmap.h
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-basic.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-instance-gate.tc
+ create mode 100644 tools/testing/selftests/ftrace/test.d/ftrace/stackmap-reset.tc
+ create mode 100755 tools/tracing/stackmap_dump.py
+
+
+base-commit: 4539944e515183668109bdf4d0c3d7d228383d88
+-- 
+2.34.1
+
