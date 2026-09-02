@@ -1,82 +1,77 @@
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 319324A99B8
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 15:49:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6350F4A43F5
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 16:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788364195; cv=none; b=uwqh7hTGmr9wNLDlUE9EHvjkma3km9z+WKYEZpSQnV4xEmHuUAuGCTZku7Osy6hqYp/ZV3oSPmhko7gkPmPxasTce+MrJ760Grz0fVBWiBPzS0yGIVFrGkiiOua/a0+OGi24VS9fZPLPvVCdBFEKgQjaiKk+noNPXSLwop5nrew=
+	t=1788364818; cv=none; b=Fcht/ridTW67TZzPep8uVP4u+ezPcKHGwFWM5u2zZx/6AWymy7ExfRCilJfNBRx2RL/16FXe1jSWgYmEQz5wA2LIEDEWp9HHUPL0Y3kd6k59GYQh66aw4qWTjo7NOjXAMgKI1XlfRpLqj0x66B5y6+I8jcLJQvJGO9Q5fzMfdKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788364195; c=relaxed/simple;
-	bh=ZFUyQ3mpVFiKVb7A5VcBIH1Co5Fvu1RaKkX3s7o6tGc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G3RdEU/h7ALODgo2IKetR4xeUoZ5HRbDndibmYO2XJp695CpXIX8wpuADVj95/6WntzYXwBz+u2uZulVmPdik2BOS9Ctedfp8/MIyDxngZlJR0a5qzW7XMFMK2U4BWZX/FV6UPDomEdwL1SS5MVv/gK81aPacHxZy+THZb7xSlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O2KduuWA; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+	s=arc-20240116; t=1788364818; c=relaxed/simple;
+	bh=n/Zk7kfVfTs+vnFJat95rrNmdJq5Mr397u5VOT6F1zE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=USZcJd4bi+G/RDBM5c8wTs+ADU2p8rramRJn7rskCG/o66IY7gn+GrJfYVe1mOw5OFer+rXfky6dALfrtKBa8WU7dKa9WoJjbL6RBOR7y2q/ZTNeB/WH8VaBYagkah0WvREkH4qER858fiS0F491mb11s70DAMdysWm74vlabJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ajou.ac.kr; spf=pass smtp.mailfrom=ajou.ac.kr; dkim=pass (1024-bit key) header.d=ajou.ac.kr header.i=@ajou.ac.kr header.b=Hn+Blfp7; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ajou.ac.kr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ajou.ac.kr
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O2KduuWA"
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-39927410578so2301522a91.1
-        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 08:49:54 -0700 (PDT)
+	dkim=pass (1024-bit key) header.d=ajou.ac.kr header.i=@ajou.ac.kr header.b="Hn+Blfp7"
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2d710632717so12036995ad.0
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 09:00:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20251104; t=1788364193; x=1788968993; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to:content-type;
-        bh=Z89yPC+uk4DMPmL1ApFKYR0uaTYQLE6V3binhup5tUc=;
-        b=O2KduuWAfkVdRWxD+/ksCFlj5vrWDHcc7Si9jr2crMQwMHIoolozIBSnd2el5Gqzln
-         XrLS7ak+muLUiKyKp3G7cbvYR2yl1f7qgpeca31GqeJRo6svtxnPpnMzyvKKMx3vHWKs
-         CbOU7ddc2h5GS1/oz8+oF4vPU7leqDiCZkekuqca7O/BZBiIrgT1gynJsaaxXi2uJ0/K
-         xG4832qlyFbqomLCx/FTMCXf718LehgaJqA5jN1OODFXDKl68rQJi94/PTqRzBAg426a
-         34G9UhcmtURSXhIzAiOg0YQXFHM2xSq6g+JIz9/TNRrYAtnP4MFVc9nH+/LsypkGEhhM
-         YgYA==
+        d=ajou.ac.kr; s=google; t=1788364814; x=1788969614; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to:content-type;
+        bh=aAh7tWHEmqOf5EXSkkVLuXbK+rgxGiOqwP75KDeQuy8=;
+        b=Hn+Blfp7E7/kyohp9QS8m5t0sqKnXorlPELRh4SBraAegWvdKPTGH9gUCf1oGo59hW
+         /6daWjLB9fGtpU27odKhFNSoDqo53A2bf9H7c7Dr8dYzI4ifQJ4ta3Dg/5bHQeKe58oa
+         bHGq8CkdVvO9r1CH9fXUoFgH92E1gfQFrrNtc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20251104; t=1788364193; x=1788968993;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to:content-type;
-        bh=Z89yPC+uk4DMPmL1ApFKYR0uaTYQLE6V3binhup5tUc=;
-        b=ocGCymw/x/49SatKNMRXYC/p0iGCGctHH8lRdiF5sgymbvGh3HwmPJmN77SkkdfNTz
-         0LsV16fzOyQ2iITPHbREMr2S/bH56Ed/5z51iCipxnHCVNFfm7DIFJZ7eXNdTzmdwTNS
-         KCxxP6ldg5kktTIl1pOI/rWtE/2x3w4JpxXpnjOD3KKol10J+HTr/3JYFhxYEyGd0HVx
-         CUcR0gIDrF7P4KIbDHbA51Vy1/sZEkuaOc65b6V3d0/F45fFIngB5guZUe8b7dQrf3eM
-         hUTdA6BRLMVHTEmwBhTwH4B16xK1K9H0m/mhJUW4aKmoleNkDSnzA+ZwnW1NnZoM4TiQ
-         ngKA==
-X-Forwarded-Encrypted: i=1; AKwUvBwCz3BZaX/wa/0dV3jtimAd+zmJl6voLtoGguk5ry11SXxT00QP3+KHDIxZKMnj0POTdRhPWwRLRAKAw6zN0F4=@vger.kernel.org
-X-Gm-Message-State: AFuF++nceFG42zVAZ9SaN1W4v5xNUiiV2D692IcZ1A5pRiwNSM5xDE5Q
-	huH2y+RTgvpvhY+kgYhcNuEXmxceUL54r25YXBFsb3NXlY9gFUI52MsU
-X-Gm-Gg: AYBFou3X36JK/iD9PSU1CHT8ECF6GLi+M+dCAbgE/d8pA1fIPOTM5ScCMVjKenDsag7
-	tm12je5aJDvyqG19/Y11yANds5pGJTrFbUJUjMsFnVjUIgcYhQBOF6SHjdIKXS1bgH25BLSfcq+
-	jQedVxukOYIa730ccLYia+ti9agSwgWHTEousrHzjQoNgTSqnHgrsZFIN/PaTcG+XAGu6FGTJE0
-	NnW5eIMWjk/PzXqNY/qFJY46wgaq1W/IRAgnOhTBG/a9MqwztonR4VYs/wj64psMA4LByaR+nSk
-	t51T1ennqt/FYOncRDSPedmPm6v+D3qkYSrbBoKBt2dfe5wJVhEi/0d1d4E6yxXujl1KlJGIV2H
-	8HQTlCpFxBvV7fx5ROEke3tT5dg/Kfcks7xodYa4f5to0ghMQ0PbSnlzCdhZ6yyQb9V+7kGT/KE
-	d2v3op6k5rx17o3D9J/1XMm8+Tv2xfofYsnKCma2Taf+JInYlFQ8pDlMLv38E=
-X-Received: by 2002:a17:90b:57eb:b0:393:19a3:4f1 with SMTP id 98e67ed59e1d1-39aedfcc06amr9073487a91.6.1788364193126;
-        Wed, 02 Sep 2026 08:49:53 -0700 (PDT)
-Received: from gmail.com ([185.220.238.35])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-39b08300ba2sm81417a91.1.2026.09.02.08.49.49
+        d=1e100.net; s=20251104; t=1788364814; x=1788969614;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=aAh7tWHEmqOf5EXSkkVLuXbK+rgxGiOqwP75KDeQuy8=;
+        b=T14ra24qqpu6+37p5zBPqA2kbthgLRwDOIrTbq96L4UBpGAykLr1Se0A6wHfmv33C8
+         HW8x37YEXPULwWNusAO61XYkdh5QWlCuH+yEI47ZEAEi4Yd9lCQLARVNJ4H0n2Yb9tBE
+         UTPlIG0rWSAjtU4koFix0deWtRamzVsjBjPKs0BrAZDvcjwMgAhRO2eyHNiOhWhZmO39
+         j02PdDA489ds0Prpm6craNrjpFUD8ySekgnd0eTAgLwtMJRQQvUkPE09an8dSajJW3Yp
+         7CqgDxAzw4S3q25wXuel8wAvwRZHiOH3lPwjPEGzBDdia57iXxCP8MAeMSlt5IQx/3nM
+         SWlQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzcNpWbU1VpVTogPu8VqS4ZI3gLwh6n+uM/bFnO31cGlW6oFSf/jvKj+eXCJaMUlnLVz0EM+MMfg17CV/KFv88=@vger.kernel.org
+X-Gm-Message-State: AFuF++mOsDX3nIIEUlI5wNKIzRTgnUYtltk9eOk3b942AzTk2kg/N7NA
+	nCbfo2AzBs2C4A7cFFWWVECGc8spvSa+cByyLdO2I5/SaCjVLKHr9USr3uXApMyUUMA=
+X-Gm-Gg: AYBFou2maYtEEGMGJwNm2Ed2P0bXaZwAaW2qYDBsYQIfwAPaV+YE8OOA7VxiXwgFHJ9
+	yDnsmW24Bduip0CxJ/op3JVpDDKo5F1s1rTqKFRNeLutinnjIFOOdSC7uGJ81J52J7j3K4S0Oye
+	7cOsQHs0DKEOx2x8zOYRNoxG1iFtYsgaVOiqwOrRJlBN/85HFrN6LQr3LR7sHiqYNEsSA5zKlbm
+	5k0lmNBuOvGGUWtoYtd4MWSU0wPAqsx26e/GVaBgvzc7jM7g4UL+ljxsCKJwgcffgPkH0J765lW
+	+5QcV6gt8p2+8++/nV+Yl4Zhga1/VRXT7a+Uzo5iLi7RC/4CyDCuzzgbA50wll6MCHncEH2qrIq
+	oQruOwX7pid+M3YPAmXyD5yc2ont7aWQz+v6Wf4EbC8kXCRyHMlz1lXHdtgu6g1WEVSNCbhy2GP
+	4oVGKh2AJlmyLh3l6jRVy2gPX4Lk5/YNSYhyZRNcWapXpEntLObvwywNMHEE79wB4ZfRTpXKE0f
+	lbSOlzQQHzslIEkhr4HSn1djT4y27FzpO/MGB6jbig=
+X-Received: by 2002:a17:902:f78c:b0:2c9:df1b:e948 with SMTP id d9443c01a7336-2daec5dfa20mr91006295ad.4.1788364813891;
+        Wed, 02 Sep 2026 09:00:13 -0700 (PDT)
+Received: from DESKTOP-2P4OM44.localdomain ([175.195.197.183])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd35dac1sm15536475ad.16.2026.09.02.09.00.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Sep 2026 08:49:52 -0700 (PDT)
-From: Kunwu Chan <kunwu.chan@gmail.com>
-X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
-To: SJ Park <sj@kernel.org>
-Cc: Kunwu Chan <kunwu.chan@linux.dev>,
-	Kunwu Chan <kunwu.chan@gmail.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
+        Wed, 02 Sep 2026 09:00:13 -0700 (PDT)
+From: Seungwon Bae <qotmddnjs@ajou.ac.kr>
+To: andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	dsahern@kernel.org,
+	idosch@nvidia.com,
+	shuah@kernel.org
+Cc: horms@kernel.org,
+	netdev@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: Re: [PATCH 09/12] mm/damon/tests/core-kunit: test damon_nr_samples_per_aggr()
-Date: Wed,  2 Sep 2026 23:49:42 +0800
-Message-ID: <20260902154944.4035059-1-kunwu.chan@linux.dev>
+	linux-kernel@vger.kernel.org,
+	Seungwon Bae <qotmddnjs@ajou.ac.kr>
+Subject: [PATCH net v3] vxlan: reject dynamic fdb entries that reference a nexthop id
+Date: Thu,  3 Sep 2026 00:59:56 +0900
+Message-ID: <20260902155956.296699-1-qotmddnjs@ajou.ac.kr>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20260902151955.88892-1-sj@kernel.org>
-References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -85,43 +80,134 @@ List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-On Wed,  2 Sep 2026 08:19:54 -0700 SJ Park <sj@kernel.org> wrote:
+The commit cited in the Fixes tag allowed VXLAN FDB entries to point to
+FDB nexthops so that overlay traffic could be load balanced across
+multiple VTEPs. Such entries can only be configured from user space,
+cannot be learned and cannot roam. They only make sense with a user space
+control plane such as E-VPN where data plane learning is disabled.
 
-> On Wed,  2 Sep 2026 23:08:41 +0800 Kunwu Chan <kunwu.chan@gmail.com> wrote:
-> 
-> > On Tue,  1 Sep 2026 22:47:42 -0700 SJ Park <sj@kernel.org> wrote:
-> [...]
-> > Both `sample_interval` and `aggr_interval` are zero here.  Since
-> > `sample_interval` is the denominator in `damon_nr_samples_per_aggr()`,
-> > would it be better to keep `aggr_interval` non-zero when testing the
-> > zero `sample_interval` case?
-> > 
-> > This would make the test explicitly cover the divide-by-zero protection.
-> > If the `aggr_interval == 0` behavior is also worth covering, perhaps it
-> > could be tested separately.
-> 
-> Thank you for your review and question, Kunwu!
-> 
-> Yes, that kind of additional test case would be nice.  Please feel free to post
-> a patch if you'd like to! :)  And no pressure, no rush.  I will also consider
-> doing it myself if it seems you are not interested.
+Despite that, the VXLAN driver does not currently prevent such entries
+from being configured with the "dynamic" flag. The per-nexthop FDB list
+is only protected by the per-device hash lock, which is not sufficient
+when two VXLAN devices point to the same FDB nexthop and therefore share
+the list. Aging runs in softirq context without RTNL, so an entry deleted
+by one device can race with an addition or deletion from the other,
+leading to list corruption:
 
-Thanks for the feedback, SJ!
+  list_del corruption. next->prev should be ffff8881069d9548, but was
+  dead000000000122. (next=ffff8881069d9448)
+  WARNING: CPU: 0 PID: 90 at lib/list_debug.c:65
+  __list_del_entry_valid_or_report+0x1aa/0x210
+  ...
+   vxlan_fdb_destroy+0x5b8/0xad0
+   vxlan_cleanup+0x328/0x450
+   call_timer_fn+0x2a/0x1c0
+   run_timer_softirq+0x18c/0x210
+  BUG: KASAN: slab-use-after-free in vxlan_fdb_destroy
 
-I will prepare a small follow-up patch for this test
-clarity improvement.
+Fix this by rejecting the bogus configuration of dynamic FDB entries that
+point to FDB nexthops, both when created and when an existing entry is
+updated. As such, the per-nexthop FDB list is only ever mutated under the
+RTNL lock. Add test cases to make sure that this does not regress in the
+future.
 
-Reviewed-by: Kunwu Chan <kunwu.chan@gmail.com>
+Fixes: 1274e1cc4226 ("vxlan: ecmp support for mac fdb entries")
+Suggested-by: Ido Schimmel <idosch@nvidia.com>
+Signed-off-by: Seungwon Bae <qotmddnjs@ajou.ac.kr>
+---
+Found with AI assistance; treated as public per
+Documentation/process/security-bugs.rst. A reproducer is available
+privately on request.
 
-Thanks,
-Kunwu
+Changes in v3:
+- Reword the commit message to explain why rejecting dynamic nexthop
+  FDB entries is safe (per Ido). No code change from v2.
+Changes in v2:
+- Reject making a nexthop fdb dynamic (on add and update) instead of
+  locking nh->fdb_list; a nexthop fdb cannot roam so it must not age,
+  leaving nh->fdb_list mutated under RTNL only.
+- Add fib_nexthops.sh selftest coverage; add Fixes tag.
+v1: https://lore.kernel.org/netdev/20260901050253.47197-1-qotmddnjs@ajou.ac.kr/
+v2: https://lore.kernel.org/netdev/20260901120740.105374-1-qotmddnjs@ajou.ac.kr/
+ drivers/net/vxlan/vxlan_core.c              | 11 ++++++++
+ tools/testing/selftests/net/fib_nexthops.sh | 28 +++++++++++++++++++++
+ 2 files changed, 39 insertions(+)
 
-> 
-> 
-> Thanks,
-> SJ
-> 
-> [...]
-> 
+diff --git a/drivers/net/vxlan/vxlan_core.c b/drivers/net/vxlan/vxlan_core.c
+index ac88d1c85..93bf7c535 100644
+--- a/drivers/net/vxlan/vxlan_core.c
++++ b/drivers/net/vxlan/vxlan_core.c
+@@ -996,6 +996,12 @@ static int vxlan_fdb_update_existing(struct vxlan_dev *vxlan,
+ 		return -EOPNOTSUPP;
+ 	}
+ 
++	if (rcu_access_pointer(f->nh) &&
++	    !(state & (NUD_PERMANENT | NUD_NOARP))) {
++		NL_SET_ERR_MSG(extack, "Cannot make a nexthop fdb dynamic");
++		return -EOPNOTSUPP;
++	}
++
+ 	/* Do not allow an externally learned entry to take over an entry added
+ 	 * by the user.
+ 	 */
+@@ -1257,6 +1263,11 @@ static int vxlan_fdb_add(struct ndmsg *ndm, struct nlattr *tb[],
+ 	if (err)
+ 		return err;
+ 
++	if (nhid && !(ndm->ndm_state & (NUD_PERMANENT | NUD_NOARP))) {
++		NL_SET_ERR_MSG(extack, "A nexthop fdb cannot be dynamic");
++		return -EINVAL;
++	}
++
+ 	if (vxlan->default_dst.remote_ip.sa.sa_family != ip.sa.sa_family)
+ 		return -EAFNOSUPPORT;
+ 
+diff --git a/tools/testing/selftests/net/fib_nexthops.sh b/tools/testing/selftests/net/fib_nexthops.sh
+index 3d3471267..431d7bed7 100755
+--- a/tools/testing/selftests/net/fib_nexthops.sh
++++ b/tools/testing/selftests/net/fib_nexthops.sh
+@@ -533,6 +533,20 @@ ipv6_fdb_grp_fcnal()
+ 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:14 dev vx10 nhid 61 self"
+ 	log_test $? 255 "Fdb mac add with nexthop"
+ 
++	# fdb entries with a nexthop group cannot be aged out
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:15 dev vx10 nhid 102 self static"
++	log_test $? 0 "Fdb mac add with nexthop group and static state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:16 dev vx10 nhid 102 self dynamic"
++	log_test $? 255 "Fdb mac add with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:17 dev vx10 nhid 102 self"
++	run_cmd "$BRIDGE fdb replace 02:02:00:00:00:17 dev vx10 dst 2001:db8:91::11 self dynamic"
++	log_test $? 255 "Fdb mac replace with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb append 02:02:00:00:00:17 dev vx10 dst 2001:db8:91::11 self dynamic"
++	log_test $? 255 "Fdb mac append with nexthop group and dynamic state"
++
+ 	run_cmd "$IP -6 ro add 2001:db8:101::1/128 nhid 66"
+ 	log_test $? 2 "Route add with fdb nexthop"
+ 
+@@ -669,6 +683,20 @@ ipv4_fdb_grp_fcnal()
+ 	run_cmd "$BRIDGE fdb add 02:02:00:00:00:14 dev vx10 nhid 12 self"
+ 	log_test $? 255 "Fdb mac add with nexthop"
+ 
++	# fdb entries with a nexthop group cannot be aged out
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:15 dev vx10 nhid 102 self static"
++	log_test $? 0 "Fdb mac add with nexthop group and static state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:16 dev vx10 nhid 102 self dynamic"
++	log_test $? 255 "Fdb mac add with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb add 02:02:00:00:00:17 dev vx10 nhid 102 self"
++	run_cmd "$BRIDGE fdb replace 02:02:00:00:00:17 dev vx10 dst 10.0.0.3 self dynamic"
++	log_test $? 255 "Fdb mac replace with nexthop group and dynamic state"
++
++	run_cmd "$BRIDGE fdb append 02:02:00:00:00:17 dev vx10 dst 10.0.0.3 self dynamic"
++	log_test $? 255 "Fdb mac append with nexthop group and dynamic state"
++
+ 	run_cmd "$IP ro add 172.16.0.0/22 nhid 16"
+ 	log_test $? 2 "Route add with fdb nexthop"
+ 
+-- 
+2.43.0
 
-Sent using hkml (https://github.com/sjp38/hackermail)
