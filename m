@@ -1,63 +1,81 @@
-Received: from sender-pp-o93.zoho.in (sender-pp-o93.zoho.in [103.117.158.93])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 855F64A5ED3
-	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 15:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=103.117.158.93
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788361556; cv=pass; b=HM/s+SLofzNKoTWFuQRwrmWRfgdlm8LU1KQI9EksYFrb64d0sMI44/dsziFAzo0OJ5GqZsG5UmbUwOch8lkoJBvBRu2IivTyG8WF1WyxFTh9QkLLzm3OtwA07Dw4jBoDn/vMax1vOP/+k3RR6QvTTlm1ZOI11D4CAO/FOzqAJRg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788361556; c=relaxed/simple;
-	bh=IouXDEnDc5MbubEz7Rk2+taQ78zxS36zvijdhmx8m3A=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JX7COIyjbVLPdpRVnXwHKdgvVwQNtjmBAhW2jLehMxFt/qSaH5EJMcXfpK1ksQBjV7bWy+dp4CaZ1gkCUWCIA3n5tjIzFuhliVF3p5glla6960jEPnt8yAv5bh708YdoohWm09Y/kAc6DsQSn+RKjrrMRXlhGOemcC4m+2ZgRBY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in; spf=pass smtp.mailfrom=zohomail.in; dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b=Tou7qhDL; arc=pass smtp.client-ip=103.117.158.93
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=zohomail.in
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zohomail.in
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0F9A4A5C41
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 15:08:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1788361734; cv=none; b=skRFCVT/hsY2XA/MdM9ppD5skg8CJ6OHHAo0UwD38LtLVzLvwH/YLWclC66aYvVGvCZAPI/ZBSPnRyFsNKiqu+bl6KtOx71hBjz9z0uzu3Z/y0hxXJ+YnnnRs+y4OLX+jWFlGBRqWAAX6Ah2zIjN4HTFOUVjP7YlbB8rUgu5UR8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1788361734; c=relaxed/simple;
+	bh=I3mYKVGTKqP/H3LNKqz4oW31/g3MR2FuJzgjMuRu5I0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=crzTkyxwSHqeVYhDipiCwgnIKQI0WLjhWnzqQeHNc8MhZnuAf4u2mPhHBVK1i4Ueyw9kqmKK7MlHN51kuhs4ce4gDgTbqGVZfJzSQep2YKlqRdaUxI5EQ+PGbRnQ91e415BLiexwM/uWgbr7CDoeDHBI9bsJgfi2C1fbCERo8sU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dd2O+JSr; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zohomail.in header.i=adi.sharma@zohomail.in header.b="Tou7qhDL"
-ARC-Seal: i=1; a=rsa-sha256; t=1788361494; cv=none; 
-	d=zohomail.in; s=zohoarc; 
-	b=MDCo40wxPNJtjR/DDGQ28im18BPyI1XmbQ3PjFdr0/S92yeMwMiuJ1YtkeUR2GrgRaupm8P2RJU1Lwu+cXmRc04x3PwJACLVJJMyNrE66bEPDBv/p7xRGNNNElSIzgfgF6lEHJ7FjvxnUIQB3ye+M4PoljBC8SDSqUlQpAulQN0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-	t=1788361494; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=lvCRkcY8laT/MWxvPQDaANuS3kDizBBC0Z2t88+rPzU=; 
-	b=cbhuoYEvmj1pibSj4mzfxRre4QxM3qKbIi2VzogG0+AO87L0baYrZ2gItYLA3Qt3dCkaq4Ke5JXcihfd9AFH6FMLJAYDwwtiPwEOpa+HAVq4jqHeuo5e0FlcwiitO4EWsvexzuXpLYjWh3ELJIxvlMTnSmD+ZrB6EPIVq3gdmuc=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-	dkim=pass  header.i=zohomail.in;
-	spf=pass  smtp.mailfrom=adi.sharma@zohomail.in;
-	dmarc=pass header.from=<adi.sharma@zohomail.in>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1788361494;
-	s=zoho; d=zohomail.in; i=adi.sharma@zohomail.in;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-Id:Message-Id:In-Reply-To:MIME-Version:Content-Transfer-Encoding:Reply-To;
-	bh=lvCRkcY8laT/MWxvPQDaANuS3kDizBBC0Z2t88+rPzU=;
-	b=Tou7qhDLeSXOZRL2Z7DyOTIbHXCDI1OjjuilRaEwU4rcXMH79fa3QDfNN2IBje9U
-	W/8BWb/blWpOcMFn13SwGh9YwsRydMzM05X/ZvSaHzMfNGFKYzsYVDHp+O+IjaGjK8s
-	dMwtNe9RGs7MFfZWkfCt7WwCX3xoq//rk+W/aFEY=
-Received: by mx.zoho.in with SMTPS id 1788361492580263.03799506135533;
-	Wed, 2 Sep 2026 20:34:52 +0530 (IST)
-From: Aditya Sharma <adi.sharma@zohomail.in>
-To: bpf@vger.kernel.org
-Cc: ast@kernel.org,
-	daniel@iogearbox.net,
-	andrii@kernel.org,
-	martin.lau@linux.dev,
-	yonghong.song@linux.dev,
-	eddyz87@gmail.com,
-	song@kernel.org,
-	jolsa@kernel.org,
-	kpsingh@kernel.org,
-	shuah@kernel.org,
-	puranjay@kernel.org,
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dd2O+JSr"
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2d942c7cc2fso9933415ad.3
+        for <linux-kselftest@vger.kernel.org>; Wed, 02 Sep 2026 08:08:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788361732; x=1788966532; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=EIdbnMs2RBr+E/C3ONkDjLCzcgL/LziyquabNv/nyLY=;
+        b=dd2O+JSrI+Pwg6yAIH2N8NSywBvs7n/y9wwtKMKhyxoIkY3QT5s+5QtFzyPbp7ncyK
+         YB3TqyrybZmLD14twJFpiNJRvU+9yNnmHmYH/fBjED3t/M5upLKjySQ+Kcf/GI5zVsT3
+         vQldSzvT0aNazu5XqNyc2puRltZo6OpddXpPvtJ0gQUDCyYyvtOJcHn8s0XxQR2v4dK+
+         Z8kkwxlkIu3mK7qWt8U7xDFVSHQ6l0sWGbUt4huao/KsNfX03a0IjENr/OFn/XGTN7va
+         atkfScCOEN2YdlYEVoOostxumqSNpc3UvY/FwJeyJw/Ixa6xG2scrC+WzBPVtaZm0RFM
+         j5AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788361732; x=1788966532;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to:content-type;
+        bh=EIdbnMs2RBr+E/C3ONkDjLCzcgL/LziyquabNv/nyLY=;
+        b=kj8t5LhjvJFNGSG2bjNx0UM47U24EAh3hwfkGhzCYgF3wh3G6mjld9//kuRhIb/GN4
+         1e62P2cx634I7ioIwoCrs0VAoT84ttgrnUmL06mlph/wGMy5iHB9S3PyIoNVbv5OcOkY
+         YsnbXfIrJxFyMfNAz/kjl4Edb7qZy7StvHFr+jeGWh3GUF5AKIp832m1iyZoqKpPnJLr
+         PMDyDRdO/6kFTEM6YAqc8qyVaUywijhgo4itt7OrOhDYhhEiCR3JGlmWk4xh39wawQ+i
+         dEYjXIwY1+F+XRUVeeUAB2WoD4A7RQBia0DPvm+nvcMyEBxT6kLyv6Q7Y5ANMhHDoKAW
+         5wIQ==
+X-Forwarded-Encrypted: i=1; AKwUvBzb+AjfQWHvNUMu5z04OAzdBGYbl13WfpnLLeef0+SbjFeeT8rYus/zKQpGul/p+Qr73UJvYTvs0uGuLIzfLmw=@vger.kernel.org
+X-Gm-Message-State: AFuF++mOWYHamfOIz1VXLlNFF9+KRRz/PKApB26e0+9o4I+BSpfSVYuO
+	SnUTmS+eIfa9hHr6gxuOmhBjI7tlk9DshpCDukwOdnSXryTZNHxJOy39T9YUDpFH
+X-Gm-Gg: AYBFou2Xt0owujGoFO1HCH9RR1VMRf2LclxS1YuDukJK9g1fnH91rmk4JyML4iZN3Og
+	V4nXzG+Iw9WJ1VaaEnhFp9FWKtjy05ZAj9VcEI2nlhizQWmWbVZcWJZSJbBzR2vDsqPZFmSxB07
+	7z71HzyMFwTaazZrpCOiGnOGA6bguh4AfxsPv6EbwRYpxhzM3XuOvSCwN9HlVqA1pCO9wN2481T
+	HKkGKOfaFhhKxZg6oVS8DtHMfrTBNSGdACv4lyfATf2ajzBvL8UC/4WLC1rG1Gdx0dHEQP4r33K
+	xSyRY7QPRJPI73YAbvt4OlPzAphJpvfWMPEdQ8bo6C+CabuFFjDfviZxTVQvQwjbRtiXHpGrkJz
+	I4dTiWeV9aMPe0L+qgWn5kKk1i/A96xKkDXbEy1BDGDQ/RQwSw8p9FSU+AkTddvsnmiUuxYkF9C
+	BULrXpJQx/EcSrz0mBUgKS3cb2xEwVmzMiwD8Fbq8/AJ9J3uUuIdEwnOXrNAof
+X-Received: by 2002:a17:903:19ec:b0:2d6:e4ff:9cad with SMTP id d9443c01a7336-2daec5ab9c5mr86317615ad.3.1788361731078;
+        Wed, 02 Sep 2026 08:08:51 -0700 (PDT)
+Received: from gmail.com ([185.220.238.35])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2dadd488d18sm15030855ad.45.2026.09.02.08.08.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Sep 2026 08:08:50 -0700 (PDT)
+From: Kunwu Chan <kunwu.chan@gmail.com>
+X-Google-Original-From: Kunwu Chan <kunwu.chan@linux.dev>
+To: SJ Park <sj@kernel.org>
+Cc: Kunwu Chan <kunwu.chan@linux.dev>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@davidgow.net>,
+	damon@lists.linux.dev,
+	kunit-dev@googlegroups.com,
 	linux-kernel@vger.kernel.org,
 	linux-kselftest@vger.kernel.org,
-	Aditya Sharma <adi.sharma@zohomail.in>
-Subject: [PATCH bpf-next 2/2] selftests/bpf: Test bpf_send_signal_task() from kernel thread context
-Date: Wed,  2 Sep 2026 20:34:39 +0530
-Message-Id: <20260902150439.692725-2-adi.sharma@zohomail.in>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20260902150439.692725-1-adi.sharma@zohomail.in>
-References: <20260902150439.692725-1-adi.sharma@zohomail.in>
+	linux-mm@kvack.org
+Subject: Re: [PATCH 09/12] mm/damon/tests/core-kunit: test damon_nr_samples_per_aggr()
+Date: Wed,  2 Sep 2026 23:08:41 +0800
+Message-ID: <20260902150842.4033320-1-kunwu.chan@linux.dev>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20260902054747.99370-10-sj@kernel.org>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -65,193 +83,81 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
 
-The existing send_signal tests, including the _remote variants that
-exercise bpf_send_signal_task() with a caller-supplied target, all
-gate on
+On Tue,  1 Sep 2026 22:47:42 -0700 SJ Park <sj@kernel.org> wrote:
 
-  if ((bpf_get_current_pid_tgid() >> 32) == pid)
+> damon_max_nr_accesses(), which is a previous version of
+> damon_nr_samples_per_aggr() before the renaming, was wrongly returning
+> zero or random overflowed values for extreme intervals setup.  Commit
+> 35d4a3cf70a8 ("mm/damon/ops-common: handle extreme intervals in
+> damon_hot_score()") updated the function to return correct or more valid
+> values.  Add a kunit test to ensure it is working as expected.
+> 
+> Signed-off-by: SJ Park <sj@kernel.org>
+> ---
+>  mm/damon/tests/core-kunit.h | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
+> index a4164ac489a61..d0bed01a5b7fe 100644
+> --- a/mm/damon/tests/core-kunit.h
+> +++ b/mm/damon/tests/core-kunit.h
+> @@ -625,6 +625,27 @@ static void damon_test_set_regions(struct kunit *test)
+>  			(struct damon_addr_range[]){}, 0, -EINVAL);
+>  }
+>  
+> +static void damon_test_nr_samples_per_aggr(struct kunit *test)
+> +{
+> +	struct damon_attrs attrs = {
+> +		.sample_interval = 0,
+> +		.aggr_interval = 0,
+> +	};
+> +
 
-so the BPF program only ever runs while current is the test process.
-The caller-context dimension is therefore untested, which is how
-bpf_send_signal_task() failing from kernel thread context went
-unnoticed.
+Hi SJ,
 
-Add a program attached to tp_btf/workqueue_execute_start, where
-current is always a kworker. It cannot filter on current, so it is
-driven by target_pid alone, and the test asserts the child receives
-the signal. Setting pid to 0 leaves the pre-existing programs in the
-skeleton inert. Workqueues run on their own, so nothing has to be
-triggered from userspace.
+A small question about the first test case.
 
-Without narrowing down the nmi_uaccess_okay() check to task == current,
-this test fails on x86.
+Both `sample_interval` and `aggr_interval` are zero here.  Since
+`sample_interval` is the denominator in `damon_nr_samples_per_aggr()`,
+would it be better to keep `aggr_interval` non-zero when testing the
+zero `sample_interval` case?
 
-Assisted-by: Claude:claude-opus-5
-Signed-off-by: Aditya Sharma <adi.sharma@zohomail.in>
----
- .../selftests/bpf/prog_tests/send_signal.c    | 104 ++++++++++++++++++
- .../bpf/progs/test_send_signal_kern.c         |  26 +++++
- 2 files changed, 130 insertions(+)
+This would make the test explicitly cover the divide-by-zero protection.
+If the `aggr_interval == 0` behavior is also worth covering, perhaps it
+could be tested separately.
 
-diff --git a/tools/testing/selftests/bpf/prog_tests/send_signal.c b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-index 7ac4d5a488aa..f9dd23db1ef9 100644
---- a/tools/testing/selftests/bpf/prog_tests/send_signal.c
-+++ b/tools/testing/selftests/bpf/prog_tests/send_signal.c
-@@ -261,6 +261,108 @@ static void test_send_signal_nmi(bool signal_thread, bool remote)
- 	test_send_signal_common(&attr, signal_thread, remote);
- }
- 
-+static void test_send_signal_kworker(void)
-+{
-+	struct test_send_signal_kern *skel;
-+	int pipe_c2p[2], pipe_p2c[2];
-+	struct sigaction sa = {};
-+	char buf[256];
-+	int err = -1;
-+	pid_t pid;
-+
-+	if (!ASSERT_OK(pipe(pipe_c2p), "pipe_c2p"))
-+		return;
-+
-+	if (!ASSERT_OK(pipe(pipe_p2c), "pipe_p2c")) {
-+		close(pipe_c2p[0]);
-+		close(pipe_c2p[1]);
-+		return;
-+	}
-+
-+	pid = fork();
-+	if (!ASSERT_GE(pid, 0, "fork")) {
-+		close(pipe_c2p[0]);
-+		close(pipe_c2p[1]);
-+		close(pipe_p2c[0]);
-+		close(pipe_p2c[1]);
-+		return;
-+	}
-+
-+	if (pid == 0) {
-+		/* install signal handler and notify parent */
-+		sa.sa_sigaction = sigusr1_siginfo_handler;
-+		sa.sa_flags = SA_RESTART | SA_SIGINFO;
-+		ASSERT_NEQ(sigaction(SIGUSR1, &sa, NULL), -1, "sigaction");
-+
-+		close(pipe_c2p[0]); /* close read */
-+		close(pipe_p2c[1]); /* close write */
-+
-+		/* notify parent signal handler is installed */
-+		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
-+
-+		/* make sure parent enabled bpf program to send_signal */
-+		ASSERT_EQ(read(pipe_p2c[0], buf, 1), 1, "pipe_read");
-+
-+		/* the signal is sent from workqueue context, so nothing has
-+		 * to be triggered from here
-+		 */
-+		while (!sigusr1_received)
-+			sleep(1);
-+
-+		buf[0] = sigusr1_received;
-+
-+		ASSERT_EQ(sigusr1_received, 8, "sigusr1_received");
-+		ASSERT_EQ(write(pipe_c2p[1], buf, 1), 1, "pipe_write");
-+
-+		close(pipe_c2p[1]);
-+		close(pipe_p2c[0]);
-+		exit(0);
-+	}
-+
-+	close(pipe_c2p[1]); /* close write */
-+	close(pipe_p2c[0]); /* close read */
-+
-+	skel = test_send_signal_kern__open_and_load();
-+	if (!ASSERT_OK_PTR(skel, "skel_open_and_load"))
-+		goto skel_open_load_failure;
-+
-+	/* wait until child signal handler installed */
-+	ASSERT_EQ(read(pipe_c2p[0], buf, 1), 1, "pipe_read");
-+
-+	/* pid == 0 keeps the other programs of this skeleton inactive */
-+	skel->bss->pid = 0;
-+	skel->bss->sig = SIGUSR1;
-+	skel->bss->target_pid = pid;
-+
-+	err = test_send_signal_kern__attach(skel);
-+	if (!ASSERT_OK(err, "skel_attach")) {
-+		err = -1;
-+		goto destroy_skel;
-+	}
-+
-+	/* notify child that bpf program can send_signal now */
-+	ASSERT_EQ(write(pipe_p2c[1], buf, 1), 1, "pipe_write");
-+
-+	/* wait for result, workqueues run on their own */
-+	err = read_with_timeout(pipe_c2p[0], buf, 1, 10 * 1000 * 1000);
-+	if (!ASSERT_GT(err, 0, "reading pipe"))
-+		goto destroy_skel;
-+
-+	ASSERT_EQ(buf[0], 8, "incorrect result");
-+
-+destroy_skel:
-+	test_send_signal_kern__destroy(skel);
-+skel_open_load_failure:
-+	close(pipe_c2p[0]);
-+	close(pipe_p2c[1]);
-+	/*
-+	 * Child is either about to exit cleanly or stuck in case of errors.
-+	 * Nudge it to exit.
-+	 */
-+	kill(pid, SIGKILL);
-+	wait(NULL);
-+}
-+
- void test_send_signal(void)
- {
- 	if (test__start_subtest("send_signal_tracepoint"))
-@@ -289,4 +391,6 @@ void test_send_signal(void)
- 		test_send_signal_perf(true, true);
- 	if (test__start_subtest("send_signal_nmi_thread_remote"))
- 		test_send_signal_nmi(true, true);
-+	if (test__start_subtest("send_signal_kworker"))
-+		test_send_signal_kworker();
- }
-diff --git a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-index 176a355e3062..d1c000c30885 100644
---- a/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-+++ b/tools/testing/selftests/bpf/progs/test_send_signal_kern.c
-@@ -60,6 +60,32 @@ int send_signal_tp_sched(void *ctx)
- 	return bpf_send_signal_test(ctx);
- }
- 
-+/* Send a signal to a task other than current, from a context where current
-+ * is a kernel thread. No filtering on current is possible here, so this is
-+ * driven entirely by target_pid.
-+ */
-+SEC("tp_btf/workqueue_execute_start")
-+int send_signal_kworker(void *ctx)
-+{
-+	struct task_struct *target_task;
-+	int ret;
-+
-+	if (status != 0 || target_pid == 0)
-+		return 0;
-+
-+	target_task = bpf_task_from_pid(target_pid);
-+	if (!target_task)
-+		return 0;
-+
-+	ret = bpf_send_signal_task(target_task, sig, PIDTYPE_TGID, 8);
-+	bpf_task_release(target_task);
-+
-+	if (ret == 0)
-+		status = 1;
-+
-+	return 0;
-+}
-+
- SEC("perf_event")
- int send_signal_perf(void *ctx)
- {
--- 
-2.34.1
+Thanks,
+Kunwu
 
+
+> +	/* Zero aggregation interval doesn't cause division by zero */
+> +	KUNIT_EXPECT_EQ(test, damon_nr_samples_per_aggr(&attrs), 1);
+> +
+> +	/*
+> +	 * Too large aggregation interval on 64 bit system doesn't cause
+> +	 * overflow
+> +	 */
+> +	if (ULONG_MAX > UINT_MAX) {
+> +		attrs.aggr_interval = (unsigned long)UINT_MAX + 1;
+> +		KUNIT_EXPECT_EQ(test, damon_nr_samples_per_aggr(&attrs),
+> +				UINT_MAX);
+> +	}
+> +}
+> +
+>  static void damon_test_update_monitoring_result(struct kunit *test)
+>  {
+>  	struct damon_attrs old_attrs = {
+> @@ -1736,6 +1757,7 @@ static struct kunit_case damon_test_cases[] = {
+>  	KUNIT_CASE(damon_test_split_above_half_progresses),
+>  	KUNIT_CASE(damon_test_ops_registration),
+>  	KUNIT_CASE(damon_test_set_regions),
+> +	KUNIT_CASE(damon_test_nr_samples_per_aggr),
+>  	KUNIT_CASE(damon_test_update_monitoring_result),
+>  	KUNIT_CASE(damon_test_set_attrs),
+>  	KUNIT_CASE(damon_test_mvsum),
+> -- 
+> 2.47.3
+> 
+
+Sent using hkml (https://github.com/sjp38/hackermail)
