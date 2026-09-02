@@ -1,84 +1,71 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC872F49F6;
-	Wed,  2 Sep 2026 00:27:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 052E02D5412;
+	Wed,  2 Sep 2026 00:34:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788308854; cv=none; b=mhIb4XS7gq49WmfSElOZbBbml0xCqBdFXItkrX/Me77gnCB7v3sIUopeF2KQVoyURfFwkWhKxGKrROq2tI30s9MJQrYt7nMrztIlD8PfI9/GEQTH0bpM+PC1x897mgYEs+E4F19zv9m+IfLmxcLyaHTogVsdHo21mvpF4GJ6Lro=
+	t=1788309280; cv=none; b=sgRJccIj0g2Y5yCRQA4pbYzS2kn8brLrgTKMSpqppvR0Hu37k92yFCvjGHSSfMYXeZgBbgKN7/VODp13rcau1ThwTV1Xnj36NbEFaj8mZQ6LkffHHloh4ud4gtHi9pzV3Hfw+qBxhiSIjBpFFL8eqKEtdPfmbHWcrPNyj8NaJ9Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788308854; c=relaxed/simple;
-	bh=mblgMYWNs4C+qYuiFnh28aLwABP3tVSSD3iGEowOVSc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GG2Rh+o8nw8qXMay9lNXXm3RFOBGnDKUnXUs5M43TyN8ngZA6JioMZ+qlYZAqbNctiE4Ez880VIXeNPRwzn1vDws4p7VfIM/dk8wFxC7/YgSH6NdWb5wlLYqQHAdX1yV98ZCPKBBtF2m/u3Wd0r7O/eVoM3mpctLNfrwZX/ayRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EBp/q+jh; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788309280; c=relaxed/simple;
+	bh=TiBt7VWtVf+bVkZULx3CDVz0141hmAUW3eqRvZ3dF1M=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=PFgAM5A0q/L6Ktwr2769OtQnQuH9mAxq5Gy2M8joqbPTYgX6RM2uWbeVI2suaLuteWezJVx0bw+6KgAtzAr+7LFxmdKgpQEOOR/o/YJCvyCE9qKtM3ihDM3qPxDDsLe4XZviyVsmeE7spDsnbL1wPTvHQ9XYR8eL+JJV6NNTEIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F+86Z2NM; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EBp/q+jh"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BBDDD1F00A3D;
-	Wed,  2 Sep 2026 00:27:32 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F+86Z2NM"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C0361F000E9;
+	Wed,  2 Sep 2026 00:34:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788308853;
-	bh=4Aq7mCS1n7SM9+gwhZmdlAUpokje7QH5p7CwEaALh/c=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References;
-	b=EBp/q+jhGmoX23PF/KR8yCsXY3rmPIUMsqyxq4V7hhR2ZmeEMYnHNawW7n+XfpQig
-	 B1G9yahk9AAoxz0k8lFwwlUpi380TZXoouESL8l8Il9BLlUTCRTtJf2W/jn5dVUywp
-	 9eroAfIphosA0O9NWWvBEzwx++PuM+POU6kUJqq8pFOT191rb2OXS7JgYdnz6VWmwn
-	 Vyt2pKdhGytPl+2a/LsRz8Ch+GAtbWwtHxrCTo3xzwdwYa8PkzBcpoY7ZtlUko1wSc
-	 52cWJM4A6MwNm+AYEKRCq2QYH2Ld46OUbmBLFGBcAh4i0SU6D8CwzCGHyC4+CdSwNY
-	 RLaCZ0mXnFshg==
-From: SJ Park <sj@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: SJ Park <sj@kernel.org>,
-	stable@vger.kernel.org,
-	Brendan Higgins <brendan.higgins@linux.dev>,
-	David Gow <davidgow@davidgow.net>,
-	damon@lists.linux.dev,
-	kunit-dev@googlegroups.com,
-	linux-kernel@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	linux-mm@kvack.org
-Subject: [PATCH 1/4] mm/damon/tests/core-kunit: test committing psi goal to psi goal
-Date: Tue,  1 Sep 2026 17:27:20 -0700
-Message-ID: <20260902002725.108635-2-sj@kernel.org>
-X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260902002725.108635-1-sj@kernel.org>
-References: <20260902002725.108635-1-sj@kernel.org>
+	s=k20260515; t=1788309278;
+	bh=OdJylGa78WF2doU9FXC8lzmhghGNL2Y5XclAhve2yqY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References;
+	b=F+86Z2NMUvxCho1lNmTfOYrl7CDzh/k0LLIca39sFZCvi4pnrf4P6b5jpV9bcOhGG
+	 heDkjqkj9SH+JnsZTlDT1JES7DWQcOpZ5sle+yrlPkWCdzBRvjfi37pNH44u3tN7Xq
+	 UrJubsKos2Mct70Ip5SlWmXdonwRyNM4Gg615N14Ud14I9rLLVOdYCLJaJwLoAxVgU
+	 qFx/3N4274mvIWUqokbZ7lzSIwiKWDna+ov6SwAnLC6cRuVukvtRRORRKIqQXrigKm
+	 1rkOIcWTbCYmj4TGlkKXjTzfsmz3Dc6K7d6ix4k0PmS9l2LcbSa6i8xKq3uo+uw2eZ
+	 NSRf8OsrFd4Vg==
+Date: Tue, 1 Sep 2026 18:34:38 -0600 (MDT)
+From: Paul Walmsley <pjw@kernel.org>
+To: Thomas Huth <thuth@redhat.com>
+cc: Shuah Khan <shuah@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
+    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+    Nathan Chancellor <nathan@kernel.org>, Deepak Gupta <debug@rivosinc.com>, 
+    Alexandre Ghiti <alex@ghiti.fr>, 
+    Nick Desaulniers <ndesaulniers@google.com>, 
+    Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
+    linux-kselftest@vger.kernel.org, linux-riscv@lists.infradead.org, 
+    linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] kselftest/riscv: Replace __ASSEMBLY__ with
+ __ASSEMBLER__
+In-Reply-To: <20260813075304.75988-1-thuth@redhat.com>
+Message-ID: <93f5f872-5d81-cab1-7231-a9da03dccc7c@kernel.org>
+References: <20260813075304.75988-1-thuth@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
 
-damon_test_commit_quota_goal_for() is set to test committing a new psi
-goal on an existing psi goal.  However, damon_test_commit_quota_goal()
-is mistakenly not covering the test case.  Add the test case.
+On Thu, 13 Aug 2026, Thomas Huth wrote:
 
-Fixes: 99f89debafc5 ("mm/damon/tests/core-kunit: add damos_commit_quota_goal() test")
-Cc: <stable@vger.kernel.org> # 6.19.x
-Signed-off-by: SJ Park <sj@kernel.org>
----
- mm/damon/tests/core-kunit.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+> From: Thomas Huth <thuth@redhat.com>
+> 
+> While the GCC and Clang compilers already define __ASSEMBLER__
+> automatically when compiling assembly code, __ASSEMBLY__ is a
+> macro that only gets defined by the Makefiles in the kernel.
+> This can be very confusing when switching between userspace
+> and kernelspace coding, or when dealing with uapi headers that
+> rather should use __ASSEMBLER__ instead. So let's standardize now
+> on the __ASSEMBLER__ macro that is provided by the compilers.
+> 
+> Signed-off-by: Thomas Huth <thuth@redhat.com>
 
-diff --git a/mm/damon/tests/core-kunit.h b/mm/damon/tests/core-kunit.h
-index 7071ec277b007..f1e11548c771b 100644
---- a/mm/damon/tests/core-kunit.h
-+++ b/mm/damon/tests/core-kunit.h
-@@ -793,6 +793,13 @@ static void damos_test_commit_quota_goal(struct kunit *test)
- 		.last_psi_total = 456,
- 	};
- 
-+	damos_test_commit_quota_goal_for(test, &dst,
-+			&(struct damos_quota_goal) {
-+			.metric = DAMOS_QUOTA_SOME_MEM_PSI_US,
-+			.target_value = 234,
-+			.current_value = 345,
-+			.last_psi_total = 567,
-+			});
- 	damos_test_commit_quota_goal_for(test, &dst,
- 			&(struct damos_quota_goal){
- 			.metric = DAMOS_QUOTA_USER_INPUT,
--- 
-2.47.3
+Thanks, queued for v7.3-rc.  Have you considered patching checkpatch.pl to 
+catch this problem?  Might save a lot of time.
+
+
+- Paul
