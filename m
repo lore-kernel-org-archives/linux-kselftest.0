@@ -1,110 +1,101 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 390644315A;
-	Wed,  2 Sep 2026 00:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 629E6223DD4
+	for <linux-kselftest@vger.kernel.org>; Wed,  2 Sep 2026 00:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788307338; cv=none; b=gLEqxT5alpC0v6yVQD5TQl5NfOTQnmc0Vifvm9BaspW36SPEQ+V+Ss/Evw5dVzITUC93VgAD8sxiWSK3FW4SAfFS6jDl/WZ5s56FoVWQWdDk9RITBKbJ8aYHzDVb9HeV9mhMyL+PKlCijyCBzoloEY4FOgSxBHphfx5G7ry6rc8=
+	t=1788308353; cv=none; b=L4RcN8o5/sKy9kxph9poFD941mT7OnAYNRKvRpP1GKnxT9+oquMc/GKZxm7zeXTSnXk+47T6dN4+Rg3jjXxvoNYrXzphBWDWKfueipmrjPcsHyDPbYhI9xOxUOWCCFSmOcZXOT06U9SACmMLaSpz+aCwxH7s7zUFVCFHzEG4EfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788307338; c=relaxed/simple;
-	bh=gLR47n9Lfo8N5ithEwSJjh21gOHVaRUMvms5l7G8BUM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BFjSGfiecVzQxvVS6ZrG+qq8okUJe32bS11bJhA1Qn/nCAnb6cw9RJHe9UC+4uZBrIybN382c/ugQQtgw6rRKQW5Ak3tq+KJQc3PkmBSQs416tPnj2O/ezlP1Q4VS5ipiYGFIUzIgUBVwedapsYrhPeLgQAeaywx+loh0rgUG+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSe1IiVt; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788308353; c=relaxed/simple;
+	bh=ZVMCpHFjCC/1cFP2Dsvos5quhskBkFcAciEaJfo13tE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=GajjM6/I/Cm453UBuLA+8SQeKMA8OqD5YpLHhcHUiJuDBKnkL8QTJkFiPmM0AV8t7id5QmKJGZm2ytt5Y1cGZqJDfvCDquC0pPKokKcYmyR3N4v81OZXETi5FVtT23fZYZ4fFTIAWmfLgTxPSZ6TFmqaAkhWZUuyN+dyeZ5D+Ho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VWaYfswv; arc=none smtp.client-ip=209.85.215.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSe1IiVt"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D18081F000E9;
-	Wed,  2 Sep 2026 00:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788307336;
-	bh=ov3O+1wTaFg0SVAxfsiOncc723aSi55QuI10cU3OXdE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=eSe1IiVtoGf8xyRhVAGDsHlkkK4qB6KOtB+1j3Fn//+9mUvfOfd49h1bTlK5DdU3Y
-	 B2G+Aj19NQLTOsJOUAPj2GyPvzZQaFt861KiRpeWhBaWwmYMSqGKbgBZvpwZc7ADkx
-	 CxR4K04VH+YmRtqOySMErCwYAOXsQ5wCAiAYXw6UTPwjN8v3xjLgvzoSSo0r/nz0+4
-	 MyHxfKa3aH2EszfAGzQxVuHTSTAFepAF18UclGAIz5AMKQy74lmeeRFYTzDDkEE0CG
-	 bU0AvUkaJHqKVSTCowGhkzLDaaxJ4qXzonxx4s/oIS77Rp0DZ9uxPMg0rgLoUj9OTE
-	 DIZtQBcIYCqzw==
-Date: Tue, 1 Sep 2026 17:02:16 -0700
-From: Kees Cook <kees@kernel.org>
-To: Stian Halseth <stian@itx.no>
-Cc: Andreas Larsson <andreas@gaisler.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	sparclinux@vger.kernel.org, Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>, Oleg Nesterov <oleg@redhat.com>,
-	Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Subject: Re: [PATCH 2/2] selftests/seccomp: add sparc64 support
-Message-ID: <202609011700.E21C37761@keescook>
-References: <20260901220811.3369666-1-stian@itx.no>
- <20260901220811.3369666-3-stian@itx.no>
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VWaYfswv"
+Received: by mail-pg1-f197.google.com with SMTP id 41be03b00d2f7-cbb467e56aaso381008a12.1
+        for <linux-kselftest@vger.kernel.org>; Tue, 01 Sep 2026 17:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20251104; t=1788308351; x=1788913151; darn=vger.kernel.org;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=ww1VJhw7gyphCHZq2wYpc50Hd6JBKjSP79u0OfvtMeM=;
+        b=VWaYfswvhPIbPzGaqgho3BljY8HaChzcpktLqArJS1K9FqsrH3kD5I7eN3JfWkOi+L
+         yQMdjt0kjK0gjG70Su7og5AENuDaQ4ZpMLNqzHkyRFU2Az1+ClaAEfU03isM7vnzjhLx
+         yS7cofarFZtzosokYR2PqyC4k9vg3+Onr+xrrIGxL5u7GESBdbmOnNJmYcM1VOpKAw0g
+         SvU9aPxuZ5xGMnWfsKfIy0fRs/yfbGXNvcly6QEftp7bjJ2fwCrkoY004Zj/T73fCEVW
+         lhSIm9KK4TsLafZcig5hBx+8CK08ye0bRSlMjKmh6TpQ33QzjqrmK17wOpE6NhCFb7aC
+         o4Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788308351; x=1788913151;
+        h=content-type:cc:to:from:subject:message-id:references:mime-version
+         :in-reply-to:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to:content-type;
+        bh=ww1VJhw7gyphCHZq2wYpc50Hd6JBKjSP79u0OfvtMeM=;
+        b=h5eSkE90JM32ZsdvK5kxa/COkh1E2DGMkXHXNFstKJJ0a7zYnFJX+2W2IXngnPNK7D
+         X+D3+naT9WmleU9TjFy96XNdBO9/OWK2S+OSNzYLKXLRP6AdDTwAaxpX/9Hrk0y8dRiu
+         kXNUPRnBSZfctDPrZWA0MGHQFONcH6WtyriJ4mII+nZCRqZ4xKGR2sN1LpdFoTu66+wM
+         kZ4OeuabliLIdQCym8y47pON/jtyoJ1M+uNHUIq3nXZkj91RwVETML8ROoVWoD/qB61u
+         QzLmxp0z46K/9uxItPH9pvoXqqqm8fRqu5zomvNFOtAwlLAMp9YIRuI9uwYiOlg1bChY
+         gEOQ==
+X-Forwarded-Encrypted: i=1; AHgh+RoMXQT9TdvbTA+1/dFqIN42/LhpydbHJlfMcg6zB3WHsl1BRnwwws/UuZrAQSfKHrjSZgEkszv6cl7isSsavc8=@vger.kernel.org
+X-Gm-Message-State: AFuF++ldIaxt2TJde5x+OXHNgr6mQbwPP/J3JYyGs+cqhqGA9B5a4AMl
+	CPDNx6bpFnS9sZvl1WaY7oilc3c1V+et7ccNRNO69H/rHw81+v035ZeiNqIua0lZZN3Sb3wshbh
+	k5G84bQ==
+X-Received: from pgct15.prod.google.com ([2002:a05:6a02:528f:b0:cc1:c07e:b53c])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a21:6004:b0:3d3:adbf:777f
+ with SMTP id adf61e73a8af0-3d9afafc376mr1486082637.20.1788308351228; Tue, 01
+ Sep 2026 17:19:11 -0700 (PDT)
+Date: Tue, 1 Sep 2026 17:19:10 -0700
+In-Reply-To: <20260730110524.2539316-2-ewanhai-oc@zhaoxin.com>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260901220811.3369666-3-stian@itx.no>
+Mime-Version: 1.0
+References: <20260730110524.2539316-1-ewanhai-oc@zhaoxin.com> <20260730110524.2539316-2-ewanhai-oc@zhaoxin.com>
+Message-ID: <apdrfkO8ALRz59yl@google.com>
+Subject: Re: [PATCH 1/8] KVM: selftests: Add Zhaoxin (ZX) CPU detection support
+From: Sean Christopherson <seanjc@google.com>
+To: Ewan Hai-oc <ewanhai-oc@zhaoxin.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Shuah Khan <shuah@kernel.org>, 
+	Frank Zhu <frankzhu@zhaoxin.com>, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Sep 02, 2026 at 12:08:11AM +0200, Stian Halseth wrote:
-> sparc64 now selects HAVE_ARCH_SECCOMP_FILTER, so teach seccomp_bpf
-> how to read and write its registers: the syscall number lives in %g1
-> and the return value in %o0, addressed through the NT_PRSTATUS regset
-> (16 u_regs, 16 window registers, then tstate/tpc/tnpc/y).
+On Thu, Jul 30, 2026, Ewan Hai-oc wrote:
+> From: Frank Zhu <frankzhu@zhaoxin.com>
 > 
-> Errors are signaled by the carry bit in tstate with a positive errno
-> value in %o0, so provide a SYSCALL_RET_SET that maintains both, and
-> mark the arch SYSCALL_RET_SET_ON_PTRACE_EXIT since a return value
-> poked at entry would be overwritten by the syscall skip path, as on
-> powerpc.
+> Add infrastructure to detect Zhaoxin CPUs in KVM selftests. Zhaoxin
+> CPUs use vendor strings "CentaurHauls" or "  Shanghai  " and implement
+> VMX-compatible virtualization technology.
 > 
-> Passes 95 of 95 on an UltraSPARC T4-1 (16 skipped for missing
-> optional features such as uprobes).
-
-Thanks for getting the working on sparc! :)
-
-> 
-> Link: https://github.com/sparclinux/issues/issues/11
-> Signed-off-by: Stian Halseth <stian@itx.no>
+> Signed-off-by: Frank Zhu <frankzhu@zhaoxin.com>
+> Signed-off-by: Ewan Hai <ewanhai-oc@zhaoxin.com>
 > ---
->  tools/testing/selftests/seccomp/seccomp_bpf.c | 35 +++++++++++++++++++
->  1 file changed, 35 insertions(+)
+>  tools/testing/selftests/kvm/include/x86/processor.h | 7 +++++++
+>  tools/testing/selftests/kvm/lib/x86/processor.c     | 3 +++
+>  2 files changed, 10 insertions(+)
 > 
-> diff --git a/tools/testing/selftests/seccomp/seccomp_bpf.c b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> index 0622bc2acad4..30b777f357d8 100644
-> --- a/tools/testing/selftests/seccomp/seccomp_bpf.c
-> +++ b/tools/testing/selftests/seccomp/seccomp_bpf.c
-> @@ -1872,6 +1872,41 @@ TEST_F(TRACE_poke, getpid_runs_normally)
->  # define ARCH_REGS		struct user_regs_struct
->  # define SYSCALL_NUM(_regs)	(_regs).orig_d0
->  # define SYSCALL_RET(_regs)	(_regs).d0
-> +#elif defined(__sparc__) && defined(__arch64__)
-> +/*
-> + * The NT_PRSTATUS regset: %g0-%g7 and %o0-%o7, the 16 window
-> + * registers as read back from the stack, then tstate, tpc, tnpc
-> + * and y.
-> + */
-> +struct sparc64_user_regs {
-> +	__u64 u_regs[16];
-> +	__u64 window[16];
-> +	__u64 tstate;
-> +	__u64 tpc;
-> +	__u64 tnpc;
-> +	__u64 y;
-> +};
-> +# define ARCH_REGS		struct sparc64_user_regs
+> diff --git a/tools/testing/selftests/kvm/include/x86/processor.h b/tools/testing/selftests/kvm/include/x86/processor.h
+> index b161174ece45..9840b583877c 100644
+> --- a/tools/testing/selftests/kvm/include/x86/processor.h
+> +++ b/tools/testing/selftests/kvm/include/x86/processor.h
+> @@ -23,6 +23,7 @@ extern bool host_cpu_is_intel;
+>  extern bool host_cpu_is_amd;
+>  extern bool host_cpu_is_hygon;
+>  extern bool host_cpu_is_amd_compatible;
+> +extern bool host_cpu_is_zx;
 
-Is struct sparc64_user_regs not exported to userspace anywhere? We
-haven't normally needed to put the raw user_regs struct definition into
-the test before.
+Please spell out "zhaoxin", "zx" isn't intuitive for most of us (I keep thinking
+it's a compression feature).
 
-But beyond that question, looks good!
-
--Kees
-
--- 
-Kees Cook
+And do the same thing we did in commit 53b2869231d3 ("KVM: selftests: Add a flag
+to identify AMD compatible test cases"), and add host_cpu_is_intel_compatible.
+That should cut down on the number of checks on is_zhaoxin, and should help avoid
+issues like the ones Sashiko pointed out.
