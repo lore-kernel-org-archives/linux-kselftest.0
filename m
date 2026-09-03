@@ -1,85 +1,132 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mta1.migadu.com (out-214.mta1.migadu.com [95.215.58.214])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22E5125F98A;
-	Thu,  3 Sep 2026 01:04:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0FC202F7EE3
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 01:12:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.214
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788397451; cv=none; b=MDDd+BMvmvOQ33jLW58ycTYSqkbQFOIVsfEfWY3IP+6l/sesbdsO7NA1tedhtfUiFYWJIZk6XT0dmFeQ9kv9fpn+86Am3QwLmuTibRxsI4F8VFdIeIqv02bhV6dgL6Tptk3j9TAXWEnnoYiKUj3duzxGPF1U/Ifiw7r3AO1dYbk=
+	t=1788397962; cv=none; b=o9fmuvaMkfUnIL+3QazGrELGZ0R8vpbelOYuZ9JhiPc/G9jMI9/knoUZ72vCIx6wqmBAlTNJXYCF/sdwTHfTGe9iS2dMqhVNKEbyoc1i9nj8m69lVEAAlIXGAm52Vm/QGhg+AvW5H8tjapi3a9pw5hk40KCxcULs+jrK4LwaIec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788397451; c=relaxed/simple;
-	bh=bfrVCWHN1Dv/MDHrzG5R4VEyW2inHXOCByzv7h8fNE4=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=Ab+btkfILBvz4JM+UGo/3HSJCM24hw6eZVG7T+O+cN445UssqahbM880QIXtBAMz9xtXVHWsCBAoAqCNb9a8j0b6oQ+29GBq7pOHdC5jvyxMky9ZWPt2/qGXYqYoYQR9g7Wd3KiD9DGENyRWxGAgjTXjnbUO4YJ2GJAZCXNSwyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Lv6frWmI; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788397962; c=relaxed/simple;
+	bh=rcSvnwdgysIYaZNX3OhjT56/9EbUy6eEYgqPG+yJFKE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=p0de0JtkrJZL5+I1m+tK+KaQssD+RgAt3svrwjFnr+4ZPbgm6t03Mn6ZtXZxzVq5nYdfdRo2N3xKyV6A0yNkTuQR1xOBbOlKiZVX8eOhgD/IXxNLh9yb/Hiix8MdZjSZuDqMEocXgY1+A2Lzdr/RZLAE3Pyxq05DNNoaWKqySnI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=AWmhU/+/; arc=none smtp.client-ip=95.215.58.214
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Lv6frWmI"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61D661F000E9;
-	Thu,  3 Sep 2026 01:04:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1788397449;
-	bh=kNT7Z2FMxt/nfOQZlUflR3zMw2XOgkeNZiCD6ouunac=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=Lv6frWmIMBhsZT2PbPJmz9srQDtxWdSn9v59muHBsrLCyGSrOM4BF+Dwp/XHqJ9Hr
-	 ZIhqg1lFK5NXXOOVJHWCGB3GvpzX42wDAjbROLuEi8b3RvB1druPR2CWA+ZgLTPwzl
-	 XHf38yM4beeoq2eVsBsaiwhmWV0YcnfpmxdTt6Q4=
-Date: Wed, 2 Sep 2026 18:04:08 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Joshua Hahn <joshua.hahnjy@gmail.com>
-Cc: Nhat Pham <nphamcs@gmail.com>, Johannes Weiner <hannes@cmpxchg.org>,
- Yosry Ahmed <yosry@kernel.org>, Krush Chavan <krushchavan@outlook.com>,
- "Chengming Zhou" <chengming.zhou@linux.dev>, "Tejun Heo" <tj@kernel.org>,
- Michal =?ISO-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>, "Shuah Khan"
- <shuah@kernel.org>, linux-mm@kvack.org, cgroups@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org,
- kernel-team@meta.com
-Subject: Re: [PATCH v2] selftests/cgroup: account for zswap shrinker
- writeback
-Message-Id: <20260902180408.05b925ce05359cd4d7f96894@linux-foundation.org>
-In-Reply-To: <20260902194521.3652178-1-joshua.hahnjy@gmail.com>
-References: <20260902194521.3652178-1-joshua.hahnjy@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="AWmhU/+/"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=rcSvnwdgysIYaZNX3OhjT56/9EbUy6eEYgqPG+yJFKE=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788397957; v=1; x=1789002757;
+ b=AWmhU/+/dUwkJTdrQ6KeGEroqDRhy//Vog2CEDzUxPdcbJVP9TDIPkh37GvWDj0Gzr4ZxYAk
+ YI5RooCKLBVES9VdpWiQMrChDP6yA5PF7Cxlo0WK2TKQPge3/8muDCO6M7PRv44M7xXFXizHBAQ
+ qGT+K16IN+cuIF1YGKShQkWk=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 729514d5e02325d1;
+	Thu, 03 Sep 2026 01:12:36 +0000
+X-Mizu-Trace-ID: 729514d5e02325d1
+X-Migadu-Flow: FLOW_OUT
+From: Hangbin Liu <hangbin.liu@linux.dev>
+Subject: [PATCH mptcp-next v2 0/2] selftests: mptcp: convert iptables to
+ nftables
+Date: Thu, 03 Sep 2026 09:12:19 +0800
+Message-Id: <20260903-mptcp_nft-v2-0-66283e4b9c3b@kylinos.cn>
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/22NQQrCMBBFr1JmbSQZbG1ceQ8pEuPEDmpakhBaS
+ u9uyNrl4z/e3yBSYIpwaTYIlDny5AvgoQE7Gv8iwc/CgBI7qSWK75zsfPcuiUev8dwjOY0aij8
+ HcrzU1g2qJjwtCYayjRzTFNZ6k1U1/hSzElK0rbbGqM6dlLy+1w/7KR6th2Hf9x+GHWVXrwAAA
+ A==
+X-Change-ID: 20260902-mptcp_nft-b892782ef929
+To: MPTCP Linux <mptcp@lists.linux.dev>, 
+ Matthieu Baerts <matttbe@kernel.org>, Mat Martineau <martineau@kernel.org>, 
+ Geliang Tang <geliang@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+ Shuah Khan <shuah@kernel.org>
+Cc: Hangbin Liu <hangbin.liu@linux.dev>, netdev@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ bpf@vger.kernel.org, Hangbin Liu <liuhangbin@kylinos.cn>
+X-Mailer: b4 0.14.3
 
-On Wed,  2 Sep 2026 12:45:20 -0700 Joshua Hahn <joshua.hahnjy@gmail.com> wrote:
+iptables has been deprecated for years. The Linux kernel has included
+nftables as the successor to iptables since 2014, and every major
+distribution uses nftables as the default packet filtering framework.
+The iptables command we run on modern systems is actually iptables‑nft,
+a compatibility layer that translates iptables syntax to nftables rules
+behind the scenes.
 
-> The test_no_invasive_cgroup_shrink selftest checks that when a cgroup
-> has zswapped out more memory than memory.zswap.max, it does not
-> trigger writeback for other cgroups. To do this, it compares the
-> writeback count in a control cgroup and makes sure that it is 0,
-> and then checks the writeback count in an aggressor cgroup who does
-> expect to see writeback.
-> 
-> However, when the zswap shrinker is enabled, the victim cgroup can see
-> legitimate writebacks not triggered by the aggressor. In some Meta CI
-> tests, we have seen this failure mode happen.
-> 
-> Instead of checking that the victim cgroup has 0 writeback, compare the
-> writeback values before and after the aggressor runs and check that
-> the victim cgroup did not perform any additional writeback. Note that
-> this can still lead to probabilistic failures if writebacks take longer
-> than 5 seconds, but this should fix the systematic failure case.
-> 
-> Fixes: b5ba474f3f51 ("zswap: shrink zswap pool based on memory pressure")
+There are also some features that can be set easily with nft, while we need
+to convert to BPF code under iptables, such as MPTCP add‑addr and
+remove‑addr suboptions. To make future work easier, convert iptables usage
+in mptcp to nftables.
 
-Thanks.
+Tested with iptables-translate to make sure each nft conversion is the same
+with previous one. e.g. for mptcp_sockopt.sh, the ip6tables shows
 
-I do support backporting selftests fixes.  We want selftests to work
-well in the kernel with which they are shipped.  But, as ever, we
-should include a clear explanation of the userspace-visible runtime
-effects of the bug.
+bash-5.3# ip6tables -L
+Chain INPUT (policy ACCEPT)
+target     prot opt source               destination
 
-Seems the short answer is "false-positive test failures" but we can
-perhaps do a little better than that.  Quoting the failure messages
-would be a good way - very recognizable.
+Chain FORWARD (policy ACCEPT)
+target     prot opt source               destination
 
-> Reported-by: Krush Chavan <krushchavan@outlook.com>
+Chain OUTPUT (policy ACCEPT)
+target     prot opt source               destination
+ACCEPT     tcp  --  anywhere             anywhere             tcp flags:FIN,SYN,RST,ACK/SYN mark match 0x1
+ACCEPT     tcp  --  anywhere             anywhere             tcp flags:RST/RST mark match 0x0
+ACCEPT     tcp  --  anywhere             anywhere             mark match 0x1
+DROP       tcp  --  anywhere             anywhere             mark match 0x0
 
-Relatedly, is there a Link:/Closes:?
+And the backend nft shows like
+
+bash-5.3# nft list tables
+table ip6 filter
+bash-5.3# nft list table ip6 filter
+table ip6 filter {
+        chain OUTPUT {
+                type filter hook output priority filter; policy accept;
+                tcp flags & (fin | syn | rst | ack) == syn meta mark 0x00000001 counter packets 0 bytes 0 accept
+                tcp flags & rst == rst meta mark 0x00000000 counter packets 0 bytes 0 accept
+                meta l4proto tcp meta mark 0x00000001 counter packets 0 bytes 0 accept
+                meta l4proto tcp meta mark 0x00000000 counter packets 0 bytes 0 drop
+        }
+}
+
+Which matches what we change in the script, except the counter.
+
+Signed-off-by: Hangbin Liu <liuhangbin@kylinos.cn>
+---
+Changes in v2:
+- Fix --sync and --tcp-flags RST convert not match issue (sashiko)
+- make sure drop is a number in check_mark. (sashiko)
+- Other than using one inet table, use ip/ip6 tables to retain the same
+  table and chain names used by the original iptables/ip6tables setup.
+- Link to v1: https://lore.kernel.org/r/20260902-mptcp_nft-v1-0-559caa16f410@kylinos.cn
+
+---
+Hangbin Liu (2):
+      selftests: mptcp: convert iptables to nftables for mptcp_sockopt.sh
+      selftests: mptcp: convert iptables to nftables for mptcp_join.sh
+
+ tools/testing/selftests/net/mptcp/config           |   3 +
+ tools/testing/selftests/net/mptcp/mptcp_join.sh    | 142 ++++++++-------------
+ tools/testing/selftests/net/mptcp/mptcp_lib.sh     |   2 +-
+ tools/testing/selftests/net/mptcp/mptcp_sockopt.sh |  51 ++++----
+ 4 files changed, 84 insertions(+), 114 deletions(-)
+---
+base-commit: 8dd2802091fbba563abec55e0455d0e5273c7529
+change-id: 20260902-mptcp_nft-b892782ef929
+
+Best regards,
+-- 
+Hangbin Liu <liuhangbin@kylinos.cn>
+
