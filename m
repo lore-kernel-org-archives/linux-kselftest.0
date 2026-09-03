@@ -1,33 +1,33 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DACE144B69C;
-	Thu,  3 Sep 2026 16:22:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A033B37F010;
+	Thu,  3 Sep 2026 16:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788452530; cv=none; b=txAQANp9mYK48YYt7AQQAxzXSb54r3+ZzWvatDSPV9RwUN+IXNNApf3qeVfukTVH4fR3RZ6G1wgbNjyZ1Y9FxfToFr3Tc87YNTf2nw5tkc/h076/k0dBuZmu2NIyOP3cRyJVSkNloynUdWDF0tIhbZ1mc28xHN+XY8doS4uCi2k=
+	t=1788452540; cv=none; b=LW+VK9kXo4u2htOCiNhkgzPT6lqFVQb68tN67hyxiQuJaqDINOGfU6i+Ng/zdvv49Wr0os3bWoEFNYzvLRFKRDle1SS5SPdzXeou9dxF4AemiwF76L4aKgbZCmbD3ehimbh34rIYI5oCVdkWAQC56zhX0K4EEZ2k+o2ECduFY/Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788452530; c=relaxed/simple;
-	bh=hTX3e/wXAJhxoPyok07WrKiSuML0PZHq9k5eU29KoFw=;
+	s=arc-20240116; t=1788452540; c=relaxed/simple;
+	bh=NtV6DTNQjSL3fe+qMVZM6yKpmsHFFyq5lnmYI8IUHvw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=khGcSSJrYpE8z4u7DxPpYv3sZl0mQPyC7WIyV14XSp30GGA67+lA2qQrhu4KGv/4eVqJGb6pYajPDTcdrD3ywXvMt8VhufQsMwfBouE0yC9psGBV2TCJTSHdGQiobXS7UgWn2zcYmTHu+uhspj+b8k8Scgyr//ufA9h5d37axdw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NMu5s0TK; arc=none smtp.client-ip=100.103.45.18
+	 In-Reply-To:Content-Type; b=PkcaP+aR5szQeL6qs7zpSA6vfyGwY2Ejlb8qCJ8s+a1hYjDPIlRuftinKIG7TIBHbM1RqfHHfbZVuSiWCdScyuB1rICOx5z6mki4seSqpZRiwc93b91spp4pxQ5m2k2yIY21NrYRGdb56g0mU+rcp29VaAL9bHtlWV1QMQlMivM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S3hVbUvD; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NMu5s0TK"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B02F51F000E9;
-	Thu,  3 Sep 2026 16:22:06 +0000 (UTC)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S3hVbUvD"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCDC71F00A3E;
+	Thu,  3 Sep 2026 16:22:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788452529;
-	bh=5KFQ/j4hc1sCZ0KwQBTIAYclvWNgs5vkYddzE6MjJ1A=;
+	s=k20260515; t=1788452539;
+	bh=TxsRDejx17otjIUm9rvKLeqYltuZb6xmTCpPiecrBqo=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=NMu5s0TKFvyKY0yi7We+TMrSCNMU8I4uZ8qIGyD/vFBwI7x/JbbBaMn/lIZhXXy5g
-	 LVs9Gqn7a3BDkhV4y8uzOzXWmTR1ZYgawaS2rwA/yJhQfbqMznM23RX+4gPmTaiWpe
-	 Fcgpn/5Yi8zwRjfHhQTqnWaK52PBtpY07cZOri0JK+ESm/RtCRvJvHrUz3GRUe7Wzk
-	 ZZ0/nzv9Qqag+ck8MRh4JIATPulx4vFZS+bsEytS9DgDVRR1JYZtSO6y4YOmrbTdRA
-	 NUqDKGyuB85EDLcqr6eQUpaPLkEQQO3KgXN/9mm4gPoc1ySjqwst4u4rX+ocvB3jgd
-	 8Mhb1c+VddQaQ==
-Message-ID: <91f20c84-15c6-43d2-b6ee-cf4fc4db1a00@kernel.org>
-Date: Thu, 3 Sep 2026 18:22:03 +0200
+	b=S3hVbUvDMyRz5SAWSh0vllOmy45+yJGznnZkMvw/drryIM41/ZoNqK94Ps5yUF6o9
+	 9yON1WKXIZmpxjfa/jC3nji1IkQWcwr3OKtF2IJAPbUck/s4Q1dZy+SIxBMYVFq1Ym
+	 xB1fZNw7HfR9a/jCsocVso3Ht6CmwjjbKHffNUcAsifa1CtYCZKXXsgvqMEB1ysxWP
+	 Q2GfBceXLCvCuPbG64dhgrrAle9U/DIyzcBT+h0D3HFRURPC79lArljAAj5qpiKAaA
+	 bXMuK9MD4hkTHQ00Ux443J83Gy5vMqQoC3quBmbJg3lqFKMTXdOjYv68NI5b8ZzcGI
+	 2FiYHeaihcqfA==
+Message-ID: <c384eb0d-1dce-4639-8546-6f435d56a9e2@kernel.org>
+Date: Thu, 3 Sep 2026 18:22:14 +0200
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
@@ -35,8 +35,8 @@ List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH net-next v2 2/2] selftests: drv-net: Use cross-compilation
- environment for the io_uring check
+Subject: Re: [PATCH net-next v2 1/2] tools: ynl: Allow cross-compiling ynl and
+ associated tools
 Content-Language: fr
 To: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>,
  Andrew Lunn <andrew+netdev@lunn.ch>, davem@davemloft.net,
@@ -47,7 +47,7 @@ To: "Maxime Chevallier (Netdev Foundation)" <maxime.chevallier@bootlin.com>,
 Cc: netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
  thomas.petazzoni@bootlin.com, linux-kselftest@vger.kernel.org
 References: <20260903155524.2241065-1-maxime.chevallier@bootlin.com>
- <20260903155524.2241065-3-maxime.chevallier@bootlin.com>
+ <20260903155524.2241065-2-maxime.chevallier@bootlin.com>
 From: Matthieu Baerts <matttbe@kernel.org>
 Autocrypt: addr=matttbe@kernel.org; keydata=
  xsFNBFXj+ekBEADxVr99p2guPcqHFeI/JcFxls6KibzyZD5TQTyfuYlzEp7C7A9swoK5iCvf
@@ -93,31 +93,20 @@ Autocrypt: addr=matttbe@kernel.org; keydata=
  JY6dglzGKnCi/zsmp2+1w559frz4+IC7j/igvJGX4KDDKUs0mlld8J2u2sBXv7CGxdzQoHaz
  lzVbFe7fduHbABmYz9cefQpO7wDE/Q==
 Organization: NGI0 Core
-In-Reply-To: <20260903155524.2241065-3-maxime.chevallier@bootlin.com>
+In-Reply-To: <20260903155524.2241065-2-maxime.chevallier@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-Hi Maxime,
-
 On 03/09/2026 17:55, Maxime Chevallier (Netdev Foundation) wrote:
-> To test for the presence of zerocopy support in the available liburing,
-> a small check program is compiled.
+> The ynl tool and libraries may be built standalone or through the
+> drivers/net/hw selftest machinery. This may target a different arch, so
+> we need to account for the cross-compiling options such as CROSS_COMPILE
+> or the LLVM-specific variables.
 > 
-> The CC value used for the io_uring library check defaults to the host
-> compiler, which will fail in cross-compiling environments.
+> Let's include the tools/scripts/Makefile.include that deals with the
+> CC/AR resolution.
 > 
-> Normally the CC for cross-compile is set in lib.mk, but this also
-> requires the test list to be set when we include it, and this check
-> needs to run first.
-> 
-> Note that this doesn't cover the LLVM cross-compiling case though.
-
-Thank you for the new version!
+> Fixup the ynltool CFLAGS handling to use +=, so that we don't override
+> the ones set in Makefile.include
 
 Reviewed-by: Matthieu Baerts (Netdev Foundation) <matttbe@kernel.org>
-
-"(Netdev Foundation)" is quite long, we should have a shorter version :P
-
-Cheers,
-Matt
-
