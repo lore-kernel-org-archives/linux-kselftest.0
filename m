@@ -1,107 +1,113 @@
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 778774B7149
-	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 14:48:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 314E84C77BA
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 15:05:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788446887; cv=none; b=TUamyKSe4wpFehXp+eyBz9m5Wr+Ll21agk4tcXT5WMw0jTZvuka16x0ByfQB29WuUSilKKooo3CQAg0DlS6XKcXITKRxPwBgEXMxZGbORslirH+m07a4yb032xMjj/tawDnC8fdVTZht/oPBTn6luZ61GMg+AMCFouk1n/zFY+U=
+	t=1788447960; cv=none; b=WuVsnu84AOG9S5Dbvw8xazS3c9puHgo6/yvGo4T9cHtgIiXL7AC4jhDUiCLTq/16brN+rKTLH6QmnCsma5IqC3uVR73kYoBMP49F/i9tU1Oar/BbnBHvnmE+rEYUqzp7pt2fPJE6pU6PZFLrfU5iwj451HQgCD3++B7Q70NewzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788446887; c=relaxed/simple;
-	bh=IWQPcIT6A/Eu0vw2c/Bwq1t49rfGteX/SOA++k5Rks0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qKUgomHJcbW95Bst90VZlJntRUFCw1GaymwcDOsqbHW7ctAi3nLJy48PSxJKJl3MQN6JxZmf025ViEoRRID/sUnS8a+4aQ9fxUp/8AdoOcK+/RdF4J7xOopWBDiSehr8aHw5uEd7J/owsJmv65EtMA9fmyChrEMxqo8aEQJ8SEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=T9zILBjJ; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788447960; c=relaxed/simple;
+	bh=w92MawKkkHyqj+j4V9THNwhrPMydRPMGaLtM9WLIOwE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HIyRbcu8NNp1AZrvrfzSHl6zfRn/XXsytUEh9dl7ln+vk5eExJOw3QsZ1PZv6IHo3LDB1AeOVohCgfsHRTFOpfrMWjkDJypnByEBaiJ9SiAvbs7LfVqnddH5v9DGGZBPHGyfqMrqUeVKTkM09by6aC0PmCbOzCyTy3cQReuZ8+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mpt/RDc2; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="T9zILBjJ"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 44C5C1F000E9;
-	Thu,  3 Sep 2026 14:48:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
-	s=k20260515; t=1788446886;
-	bh=ISrEx0BSVBWyWukW0eR4OzeJE1oiiH266P39phBJYW4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To;
-	b=T9zILBjJvlXqgZnbl+t/5TzLTNPaRoMdSRwbPPU3Y3krCQy9j8Sz+O0SAna9P4k+1
-	 0HTyvWd33XIJ0VYCXB/sBt0bJ1aoWcQ5vyDIegD9H1fRbGSK5bJkgqWli3lJ7ztNsI
-	 diGsGwWTrIVseGFQcsUAabfpyxdEaFZudgcPxU8nvZYanuWQxVYnfUrikSl5nI8kP1
-	 hYppWhY0fdZR0k7bqZaaAGzTZ6fWy3CbjShYGD1belX5Bj+kVhg9xCFNDFwA7dQgxE
-	 6S1IRTSPPpmw7mfzQk+X9WlotxluioJw0Eli48tlYpuM3Tx9dBxyanbguNB3cMjlFR
-	 8vesLPeAq5G+A==
-Date: Thu, 3 Sep 2026 15:47:58 +0100
-From: "Lorenzo Stoakes (ARM)" <ljs@kernel.org>
-To: Yeoreum Yun <yeoreum.yun@arm.com>
-Cc: linux-mm@kvack.org, linux-kselftest@vger.kernel.org, 
-	akpm@linux-foundation.org, david@kernel.org, liam@infradead.org, vbabka@kernel.org, 
-	rppt@kernel.org, surenb@google.com, mhocko@suse.com, shuah@kernel.org, 
-	ziy@nvidia.com, baolin.wang@linux.alibaba.com, nico.pache@linux.dev, 
-	ryan.roberts@arm.com, dev.jain@arm.com, baohua@kernel.org, lance.yang@linux.dev, 
-	usama.arif@linux.dev, kas@kernel.org
-Subject: Re: [PATCH] kselftest: mm: remove HPAGE_SIZE and HPAGE_SHIFT macro
-Message-ID: <apmIlI3Ooe8b95Ro@gremlin>
-References: <20260902175611.1241118-1-yeoreum.yun@arm.com>
- <apk1WVEDYtQhRxWR@gremlin>
- <aplcf7sDnfKQTYo0@e129823.arm.com>
- <apmIPJKj7JGwF7nz@e129823.arm.com>
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mpt/RDc2"
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-49b8be0409fso18792095e9.2
+        for <linux-kselftest@vger.kernel.org>; Thu, 03 Sep 2026 08:05:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20251104; t=1788447956; x=1789052756; darn=vger.kernel.org;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to
+         :content-type;
+        bh=3jJG+BikQhyyhKOerozrYKC8uiImTn5ykntBkDa6aSc=;
+        b=Mpt/RDc2EGK7IZHG7V2yXpIlibUlc8G2twPQedcB+p25HDMYpWCYwstgLHM/XsCkRY
+         IHgIIQmNO+7Z5rCjyyLpGwA4KC3UtcV0zOyVFAZEK7mncrvIUPm0UpSB80BjE3C05ZuZ
+         TGIuWxe0L8GA1lGx/SScaznL+dlGTiXBcu9DR6qUHsXPts0PbP+7cIUhaGaw1XUQQsNR
+         8WewNcfpPBrAVGfyYc/JMU7E3hQm46gtmmmDK5GfBxXMBx9mv4Aw6a770FbsOOFnGjhS
+         i1eoFYQaQ/yY86+cDIOgGy1+mB5k6rgYE4BdN85kAnVoFocbY/4oP8v7brufw5JEGUsj
+         UJfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20251104; t=1788447956; x=1789052756;
+        h=content-transfer-encoding:content-type:mime-version:message-id:date
+         :subject:cc:to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to:content-type;
+        bh=3jJG+BikQhyyhKOerozrYKC8uiImTn5ykntBkDa6aSc=;
+        b=BY3VuZEl+xXzPaXT1rwxEdJggFrH7NSwsFrDjuZUpyJarEVtg3yQr6xmmHcd1YBs/A
+         cSDYVQ8x1tdlqXj2hzRWSPxJS7MmcL4QRS3ppMxu5fOlt5q7MI3oFFXOXZ6L2sX6MRMv
+         AHbqKCHxLk+j67Zg2bjVoUrc2GINGMmdpnvUzqn8qMgdBIb8lLGVSHlTutwkWytyXcQL
+         wqdPSlfDa9Fo+FwFJyBjjSPczkN07tBrd0HxmR2r1h+tThL0PmGBdHOZYqfudnPSh3HS
+         StsXRU9TXP+odzkUskevmRgBUhkJerFxRMXN1s8ifs5X6enPtisMXUG7y0b0GKJACs1C
+         4vbw==
+X-Forwarded-Encrypted: i=1; AKwUvBxogJPnKtY/fWOFPUgEhmIjyDrXt+O87s0zI4HlAQwlIzzDOyPsC5WbKJjC7f4N78cpdAKy/2Jsoj2EpJc29HA=@vger.kernel.org
+X-Gm-Message-State: AFuF++kjNDA/xiZwIcUkIfzquj5SxCTooWwimMwcwOg6oIYt3WyDJG5E
+	2lIsjvBvY7Bp+Yn+XB4qcaXYsHR5iYfZ46gRvz4LnxF2NaXpUpHngJol
+X-Gm-Gg: AYBFou3IdAY1pgNeJUvzKe+gpw2vU/UDjttLgEf5nQMrSuGZamC0QJfyGb1rfYakD0z
+	3/Mo5QoYiqrTDHfvu2Bbca6iv6pexYALtKjQJJpzR8+QvBZXH2ETBesRlgkZ3LvJ8sQd7x4w9O5
+	nE+0fbU7xGBa3jUUGwVy+46aY8LpAHhvDvLdgWZNPOwV4zwQQCCBBycVv9NC8ODjso7M+hKbn6E
+	9gm78e1lmMje5jH0waMQD4whH75OapX0Vq93qe+4WpO9YoeX7FHRH9mVl4nsoqoqKSs0vWT4gdM
+	oM07ZMneEMrh9q6AdHMaUBMR9G0xpnPczF17sG8nycP3C5pTJTkDrNoz6Tkdfjugpz5bF2WFG1O
+	dMQvyCj0WZmx4JbzF1PufWk8FOL+QUa9cCwzyuB4Pto5Z3uKOCxiSW3/OgXmYbXdWDzB7PrKs9O
+	Esl2bgBJRD3qXZ/YyLiJ9DGMpxYjLyB6DtYCCPoJmUJPJ9Ka/djkKK6CRd0A==
+X-Received: by 2002:a05:600c:1f84:b0:496:c9cd:e7ab with SMTP id 5b1f17b1804b1-49cf5bc7986mr8421325e9.5.1788447955968;
+        Thu, 03 Sep 2026 08:05:55 -0700 (PDT)
+Received: from localhost ([5.83.201.220])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-48448e6f604sm14353038f8f.2.2026.09.03.08.05.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Sep 2026 08:05:55 -0700 (PDT)
+From: Colin Ian King <colin.i.king@gmail.com>
+To: Alexei Starovoitov <ast@kernel.org>,
+	Daniel Borkmann <daniel@iogearbox.net>,
+	Andrii Nakryiko <andrii@kernel.org>,
+	Eduard Zingerman <eddyz87@gmail.com>,
+	Kumar Kartikeya Dwivedi <memxor@gmail.com>,
+	Martin KaFai Lau <martin.lau@linux.dev>,
+	Song Liu <song@kernel.org>,
+	Yonghong Song <yonghong.song@linux.dev>,
+	Emil Tsalapatis <emil@etsalapatis.com>,
+	Ihor Solodrai <ihor.solodrai@linux.dev>,
+	Shuah Khan <shuah@kernel.org>,
+	Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+	Bastien Curutchet <bastien.curutchet@bootlin.com>,
+	bpf@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Cc: kernel-janitors@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH][next] selftests/bpf: test_xsk: Fix spelling mistake "conigure" -> "configure"
+Date: Thu,  3 Sep 2026 16:03:51 +0100
+Message-ID: <20260903150351.12725-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.55.0
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <apmIPJKj7JGwF7nz@e129823.arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 03, 2026 at 03:46:20PM +0100, Yeoreum Yun wrote:
-> > > On Wed, Sep 02, 2026 at 06:56:11PM +0100, Yeoreum Yun wrote:
-> > > > HPAGE_SIZE and HPAGE_SHIFT macro is written based on the 4KB PAGE_SIZE.
-> > > > When this macro is used in some test, test result would be strange in
-> > > > the system where PAGE_SIZE is more than 4KB.
-> > > >
-> > > > Here is example with transhuge-stress test with 16KB PAGE_SIZE:
-> > > >
-> > > >   transhuge-stress: allocate 61073 transhuge pages, using 122146 MiB virtual memory and 1908 MiB of ram
-> > > >     3.292 s/loop, 0.054 ms/page,  37106.002 MiB/s	2566 succeed, 58507 failed, 2566 different pages
-> > > >     0.591 s/loop, 0.010 ms/page, 206850.792 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     0.527 s/loop, 0.009 ms/page, 231895.107 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     0.527 s/loop, 0.009 ms/page, 231839.704 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     0.528 s/loop, 0.009 ms/page, 231544.782 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     0.528 s/loop, 0.009 ms/page, 231462.074 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     0.527 s/loop, 0.009 ms/page, 231770.300 MiB/s	   0 succeed, 61073 failed,    0 different pages
-> > > >     ...
-> > > >   ok 1 Completed
-> > > >
-> > > > Remove the HPAGE_SIZE and HPAGE_SHIFT macro. and introduce hpshift()
-> > > > helper to get the HPAGE_SHIFT properly. For HPAGE_SIZE, use pre-exist
-> > > > helper, read_pmd_pagesize().
-> > > >
-> > > > Also, do KSM_MERGE_TIME_HUGE_PAGES test with size of 512 MiB which
-> > > > is the LCD pmd_size among 4KB, 16KB and 64KB page_size.
-> > >
-> > > Probably worth spelling out Least Common Denominator for those who might
-> > > mistaken this for a kind of display panel :P
-> >
-> > Bad typo :( LCM (least common multiple) :(
-> >
-> > >
-> > > I also wonder if it's worth pulling that out as a separate patch in a series for
-> > > better bisectability?
-> >
-> > Okay. I'll separate it.
->
-> Hmm, I think it would be better to keep the change as is, including the
-> updated ksm_tests parameter. Although allocate_transhuge() correctly
-> allocates mappings aligned to the PMD page size, `ksm_tests -H -s 100`
-> would otherwise fail because 100 MiB is not a multiple of the PMD page
-> size.
+There is a spelling mistake in an assert message. Fix it.
 
-OK, just add a note about it in the commit msg :)
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ tools/testing/selftests/bpf/prog_tests/xsk.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
-> [...]
->
-> --
-> Sincerely,
-> Yeoreum Yun
+diff --git a/tools/testing/selftests/bpf/prog_tests/xsk.c b/tools/testing/selftests/bpf/prog_tests/xsk.c
+index 6e2f63ee2a6c..772f3dd7ce64 100644
+--- a/tools/testing/selftests/bpf/prog_tests/xsk.c
++++ b/tools/testing/selftests/bpf/prog_tests/xsk.c
+@@ -75,7 +75,7 @@ static void test_xsk(const struct test_spec *test_to_run, enum test_mode mode)
+ 	if (!ASSERT_OK_PTR(ifobj_rx, "create ifobj_rx"))
+ 		goto delete_tx;
+ 
+-	if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "conigure ifobj"))
++	if (!ASSERT_OK(configure_ifobj(ifobj_tx, ifobj_rx), "configure ifobj"))
+ 		goto delete_rx;
+ 
+ 	ret = get_hw_ring_size(ifobj_tx->ifname, &ifobj_tx->ring);
+-- 
+2.55.0
 
---
-Cheers, Lorenzo
