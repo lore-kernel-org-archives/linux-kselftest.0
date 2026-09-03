@@ -1,94 +1,84 @@
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-alma10-1.taild15c8.ts.net [100.103.45.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D30723EAB3;
-	Thu,  3 Sep 2026 01:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A2E732E692;
+	Thu,  3 Sep 2026 01:41:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=100.103.45.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788398122; cv=none; b=ocJ7xQx6+RYFqmC4bn7rQDC9EImzVkIdwuhajK7IVZ4dUmMmXtsYEG2Jea0exggxcsEo8ZjrKs/0/HG2zohNgjU1jicgPll4c3HCSVUXIdILShStbb2OCeDAsrFfIbfl5Bn9C12qP3DEUhgEUI+04RWsHhhLuwWOLC2cOsHJQ1Q=
+	t=1788399712; cv=none; b=SNlPijTQUjyU9NMMSD1OFIX9XBXPwfQEsTMGEEdeh/Fkt9XplWkF+NdJ3ouDfa5JQ/AbT3AyGEhOLf1Ags3hGGbo0y9GpgdO21sdb7FOBrcBOd28+BFo2eOuGucjssanbYa7hr+6roRURoW7J7Dwa1cPcP3X3HElhzWyM2cssPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788398122; c=relaxed/simple;
-	bh=dMqdxoBwqFFSrFTHC1f2CVhYpTOdSGNtd5zULIgqBMA=;
-	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
-	 Mime-Version:Content-Type; b=CplopJNOpq98Amk10HQ3gA/907jGmQCkdzSDO44VkAaxF75TR1qbFfIJ6ebm/Y/kA1Y3KPLxjXrgJN13wZAGbx6YfLzgPHBkxNOIlKRmYBZEW1zUsSOAu1FS9XURaZWRbSRW3yzCeUNGAybHBKBkm7MIzFVJjMycfqYZ+5Le5MM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=m+G/9VyX; arc=none smtp.client-ip=100.103.45.18
+	s=arc-20240116; t=1788399712; c=relaxed/simple;
+	bh=xGLz8tBnseeaMErzReOVoGIPPWG3EzSSjPKUe4xCccA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=GWIZwQhLPzJhrhpn4mnkiqBiHQSKG5a73IHzdWiPYTBY0sR8Iu+aObnGaLyDxFaJcu477qOi+WR3Iw5bF8MaPJ0lNYsqJ9/PAIVYDyAMvZcXRtorOom89rxC9HuUGDwa3CJGOwcpJwsOVuwPlkPq66uh5c9LHZtUUn3bcvW4JS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dD+U/y0h; arc=none smtp.client-ip=100.103.45.18
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="m+G/9VyX"
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4828A1F000E9;
-	Thu,  3 Sep 2026 01:15:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux-foundation.org; s=korg; t=1788398120;
-	bh=+qmJrY2px6cXpY4nVf4dvIM+H2DeJX3DN7hEcIN4IMI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References;
-	b=m+G/9VyXk/yPu3h8kxwnqEU9thKy0sQ2f4MxnueS/diJc0ep33y7uU4rjvAk5jJKl
-	 EIFkSm1Br9bbLTdt+yo5iHL5bwK9q3UIVtTZz4k1v+DOzxMPeIlazqrK3HkQZZsdrJ
-	 me2qUIJUZiEjpSq3F8Sy7fyJyY30o7dLjWOnKuJk=
-Date: Wed, 2 Sep 2026 18:15:19 -0700
-From: Andrew Morton <akpm@linux-foundation.org>
-To: Malaya Kumar Rout <malayarout91@gmail.com>
-Cc: linux-kselftest@vger.kernel.org, mrout@redhat.com,
- skhan@linuxfoundation.org, me@brighamcampbell.com, Shuah Khan
- <shuah@kernel.org>, Christian Brauner <brauner@kernel.org>, Andrei Vagin
- <avagin@gmail.com>, Bala-Vignesh-Reddy <reddybalavignesh9979@gmail.com>,
- Bhavik Sachdev <b.sachdev1904@gmail.com>, linux-kernel@vger.kernel.org,
- Miklos Szeredi <miklos@szeredi.hu>
-Subject: Re: [PATCH] selftests/statmount: Fix file descriptor leak in
- setup_namespace
-Message-Id: <20260902181519.f99e0943d99dc06a1afd740d@linux-foundation.org>
-In-Reply-To: <20260704120437.99851-1-malayarout91@gmail.com>
-References: <20260704120437.99851-1-malayarout91@gmail.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dD+U/y0h"
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED3151F000E9;
+	Thu,  3 Sep 2026 01:41:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kernel.org;
+	s=k20260515; t=1788399711;
+	bh=bm12L47tDqFfoCdbxcdfRNX6AEUXyzZ8Xy18pTWXtLw=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc;
+	b=dD+U/y0hEwu7l5urE+c5RcxXP+c83qBMx6SWBLBPvuXnQS7ObjiQDjyST2iXNwarU
+	 8MrWuZ24MTOktXGdMBLwa6pQ4+2CQKosD43VEr4/lkNVbFS3k4W1AmOwMZjZAAnYSy
+	 PXp6yiO7VSS0lxWutlJsijgri4RHumUIYby1bWNgc2I9fqPw0lDj37t7Rslz/MnMEg
+	 Qz+7GtUrkmxkvIlOqgsDw0j3gPlg0f6W/ZYdnS9lIntsWlAgJ8HCUvc28eO0ADTBrE
+	 zod4J9RXfW6FpZnbmU+ONiiyIFcl1T3pnHFEF3cg1C0ZrA+GPuAeNdY6w2pwBgtmEP
+	 DWv6Hs8ae/ExA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id D0AA73927054;
+	Thu,  3 Sep 2026 01:40:53 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 0/3] selftests: drv-net: split up gro.py
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <178839965238.3035212.7952345035477663016.git-patchwork-notify@kernel.org>
+Date: Thu, 03 Sep 2026 01:40:52 +0000
+References: <20260901200728.2063720-1-kuba@kernel.org>
+In-Reply-To: <20260901200728.2063720-1-kuba@kernel.org>
+To: Jakub Kicinski <kuba@kernel.org>
+Cc: davem@davemloft.net, netdev@vger.kernel.org, edumazet@google.com,
+ pabeni@redhat.com, andrew+netdev@lunn.ch, horms@kernel.org, shuah@kernel.org,
+ willemb@google.com, petrm@nvidia.com, linux-kselftest@vger.kernel.org,
+ noren@nvidia.com, joe@dama.to
 
-On Sat,  4 Jul 2026 17:34:36 +0530 Malaya Kumar Rout <malayarout91@gmail.com> wrote:
+Hello:
 
-> In setup_namespace(), f_mountinfo is opened with fopen() at line 115
-> but is never closed. Multiple ksft_exit_fail_msg() calls exit the
-> program without closing this file descriptor, and the cleanup_namespace()
-> function registered with atexit() also doesn't close it.
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue,  1 Sep 2026 13:07:25 -0700 you wrote:
+> gro.py runs its full set of cases three times over - against SW GRO,
+> HW GRO and LRO. It's our test with the longest runtime. The 318 cases
+> take 12m30s on mlx5 with a debug kernel.
 > 
-> Add fclose(f_mountinfo) in cleanup_namespace() to ensure the file
-> descriptor is properly closed on both normal and error exit paths,
-> since cleanup_namespace() is already registered as an atexit handler.
+> We will likely add more subcases here as the time goes on, so it's
+> time to start splitting it up. Long runtime wastes time on retries
+> (if any of the 300+ cases fails we try to check if it's a real failure
+> or flake an re-run the whole thing). It also forces us to increase
+> timeout for the whole test suite.
 > 
+> [...]
 
-Thanks.
+Here is the summary with links:
+  - [net-next,v2,1/3] selftests: drv-net: hw: rename gro_hw.py to gro_stats.py
+    https://git.kernel.org/netdev/net-next/c/889b0cca6b29
+  - [net-next,v2,2/3] selftests: drv-net: split gro.py into one test per coalescing mode
+    https://git.kernel.org/netdev/net-next/c/f225a7317c18
+  - [net-next,v2,3/3] selftests: drv-net: bump the timeout to 15min
+    https://git.kernel.org/netdev/net-next/c/34d89dee719b
 
-get_maintainer totally sucks with selftests/, alas.  When determining
-who should be cc'ed it's best to poke around in git-blame.
-
-I did that.  Hi, Miklos!
-
-
-> --- a/tools/testing/selftests/filesystems/statmount/statmount_test.c
-> +++ b/tools/testing/selftests/filesystems/statmount/statmount_test.c
-> @@ -82,6 +82,9 @@ static void cleanup_namespace(void)
->  {
->  	int ret;
->  
-> +	if (f_mountinfo)
-> +		fclose(f_mountinfo);
-> +
->  	ret = fchdir(orig_root);
->  	if (ret == -1)
->  		ksft_perror("fchdir to original root");
-
-AI review suggests that the patch is good, but the leak is not fully
-resolved:
-
-	https://sashiko.dev/#/patchset/20260704120437.99851-1-malayarout91@gmail.com
-
-
-
-All that being said, we don't care much about leaks in selftests/. 
-Because exit() handles them pretty darn well.  So fixing this is mainly
-a matter of pride and of setting a good example.
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
