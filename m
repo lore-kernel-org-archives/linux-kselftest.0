@@ -1,95 +1,97 @@
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9221B4B5408;
-	Thu,  3 Sep 2026 14:25:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mta0.migadu.com (out-98.mta0.migadu.com [91.218.175.98])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634894BB5C0
+	for <linux-kselftest@vger.kernel.org>; Thu,  3 Sep 2026 14:35:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.98
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1788445536; cv=none; b=ZCg3zDGE1jXxHw3ynC+Rl0pdP8G1NEXD1joM1z7yDk20YyMuxt0/nkn3MFjAOv3LTUj2/95R7B8B0DT9ankV8bZLAAr9/JPyHTq7YBh5CazfapEh0czij8lzuHocg2U1lyg4vwg2YcNOxN0CQeNsoW3vds/O4hzdabrc3RK+9jI=
+	t=1788446112; cv=none; b=vCiAameCC4x0uT3B8L8JfKrd3YkK3Dvz99/eUqEFxl16Bm8O4XVdlJoLO8QgwO6BFNi7yA6tao84plaRTgaxgZFoqOTqRAdJVXvAkTU/gO3ckBDqDJs8SQRlwNTm0ZDp5P77GYS620NcQ0i8W2qTcwF/3s0yWHjNff637UrSXTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1788445536; c=relaxed/simple;
-	bh=FAjoOuGipr40QiwzM2evOA8xAZV5FlCngQRcbypDFLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=jeJ2CRTJX4tN4T771b2MFg2Wk2ReEpgC+/5wUWmJXCc1zkTQSm4eJn4uk90GAbfL20NrVejbSqDUVmG5oF17Kz/177OijK3SYUJJuu4vSqzcNKyXWdRVcY2fZFefCy4S0mQDGoGjrU9OuFnHKgyDziS7JXOQf0yU+SF553svoWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b=C0hi7Ch2; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+	s=arc-20240116; t=1788446112; c=relaxed/simple;
+	bh=inqB9us+xXArfQYHAZH6ywgaZgA5rW0/tc6FU1d61cU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KYgjGM/4Kuefa0DomRyw/Tvuq4OqPGchZCs4bu01WwTCYo38tc2bUCPB7I4LTrqLgQYZH4ln37opd2R+kiG7JPMdMmMoeMELpa9RHAQg/4f9L7fo7PUO4XAdXRz907xPwzHdDAHBZEf3hJo8Rx8/Ht1PHDysS0SSIzmlp3Eq+2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=cJ1nqBmH; arc=none smtp.client-ip=91.218.175.98
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=arm.com header.i=@arm.com header.b="C0hi7Ch2"
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7DD541596;
-	Thu,  3 Sep 2026 07:25:13 -0700 (PDT)
-Received: from LeoBrasDK.cambridge.arm.com (LeoBrasDK.cambridge.arm.com [10.2.212.21])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id DCC123F673;
-	Thu,  3 Sep 2026 07:25:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=arm.com; s=foss;
-	t=1788445517; bh=FAjoOuGipr40QiwzM2evOA8xAZV5FlCngQRcbypDFLA=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=C0hi7Ch2VkJHWm6dS0wldrgEsQ35FIqApi7yGdjic/mCO3EGqZ9dqFwT/BpLpIHQ4
-	 CY/+w2G0Eq/CsUvAJqs6oDz28uwhXFR2xWCToD9vWUI5EnKqO8nRSLW1zCkmLkC0Vm
-	 9mwQhfyz+w0/XUoR1eAgrrEdwDdwBtbuZ3XxhEfE=
-From: Leonardo Bras <leo.bras@arm.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Leonardo Bras <leo.bras@arm.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Marc Zyngier <maz@kernel.org>,
-	Joey Gouly <joey.gouly@arm.com>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	Shuah Khan <shuah@kernel.org>,
-	Oliver Upton <oupton@kernel.org>,
-	Fuad Tabba <fuad.tabba@linux.dev>,
-	Peter Maydell <peter.maydell@linaro.org>,
-	Wei-Lin Chang <weilin.chang@arm.com>,
-	Yao Yuan <yaoyuan@linux.alibaba.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-doc@vger.kernel.org,
-	kvmarm@lists.linux.dev,
-	linux-kselftest@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v20 05/14] KVM: arm64: Set PSTATE.EXLOCK when entering an exception
-Date: Thu,  3 Sep 2026 15:25:09 +0100
-Message-ID: <apmDRXBvS-XOi1NJ@LeoBrasDK>
-X-Mailer: git-send-email 2.55.0
-In-Reply-To: <20260901-arm64-gcs-v20-5-f31750bdfadb@kernel.org>
-References: <20260901-arm64-gcs-v20-0-f31750bdfadb@kernel.org> <20260901-arm64-gcs-v20-5-f31750bdfadb@kernel.org>
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="cJ1nqBmH"
+X-Envelope-To: linux-kselftest@vger.kernel.org
+DKIM-Signature: a=rsa-sha256; bh=inqB9us+xXArfQYHAZH6ywgaZgA5rW0/tc6FU1d61cU=;
+ c=simple/simple; d=linux.dev;
+ h=from:to:subject:date:message-id:mime-version:content-type; s=key1;
+ t=1788446105; v=1; x=1789050905;
+ b=cJ1nqBmHMNaSdYNzK3OXaVtBwR/Z1Xlxx8ZUiyBx+vhBuj2+R6fGQ65PopnSpUGA32Elc8/r
+ eowR61BTYRSg3tugnePQ+DvrBmoTwnpZnDNu9OwKSy7gHwxHoP/Ek1dArI2vdPSpHBsyo2O4D6L
+ BlLIIszt9ktaDidWPELObeoo=
+X-Envelope-To: linux-kselftest@vger.kernel.org
+Received: by smtp.migadu.com with ESMTPS id 98708903f2b4cbcc;
+	Thu, 03 Sep 2026 14:35:03 +0000
+X-Mizu-Trace-ID: 98708903f2b4cbcc
+X-Migadu-Flow: FLOW_OUT
+Message-ID: <dfc2ac40-a1d8-4ec1-a8b7-fcfd85408b75@linux.dev>
+Date: Thu, 3 Sep 2026 22:34:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-kselftest@vger.kernel.org
 List-Id: <linux-kselftest.vger.kernel.org>
 List-Subscribe: <mailto:linux-kselftest+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-kselftest+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH bpf 1/2] bpf: Fix out-of-bounds read of sk_protocol in
+ bpf_sock_destroy()
+To: bot+bpf-ci@kernel.org, bpf@vger.kernel.org
+Cc: xmei5@asu.edu, daniel@iogearbox.net, john.fastabend@gmail.com,
+ sdf@fomichev.me, martin.lau@linux.dev, ast@kernel.org, andrii@kernel.org,
+ eddyz87@gmail.com, memxor@gmail.com, song@kernel.org,
+ yonghong.song@linux.dev, jolsa@kernel.org, emil@etsalapatis.com,
+ ihor.solodrai@linux.dev, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, horms@kernel.org, shuah@kernel.org,
+ aditi.ghag@isovalent.com, netdev@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ martin.lau@kernel.org, mason@kernel.org
+References: <20260903125306.299943-1-jiayuan.chen@linux.dev>
+ <88d25f82f5261c0a7f12d6e82988bda387f8180c656cd163eec959d327f48769@mail.kernel.org>
+From: Jiayuan Chen <jiayuan.chen@linux.dev>
+In-Reply-To: <88d25f82f5261c0a7f12d6e82988bda387f8180c656cd163eec959d327f48769@mail.kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 01, 2026 at 10:47:03PM +0100, Mark Brown wrote:
-[...]
-> +	/* When taking an exception to a higher EL EXLOCK is cleared. */
-> +	if ((mode | PSR_MODE_THREAD_BIT) != target_mode)
-> +		return 0;
 
-"Higher" is mentioned here, but the comparison is a "!=", so I suppose 
-here we trust the fact that we always have "mode <= target_mode", and only 
-2 possible target exception levels (EL2h and EL1h).
+on 9/3/26 10:01 PM, bot+bpf-ci@kernel.org wrote:
+>> diff --git a/net/core/filter.c b/net/core/filter.c
+>> index 61940e7535523..1bbb72138ac64 100644
+>> --- a/net/core/filter.c
+>> +++ b/net/core/filter.c
+>> @@ -12912,8 +12912,8 @@ __bpf_kfunc_start_defs();
+>>    * @sock: Pointer to socket to be destroyed
+>>    *
+>>    * Return:
+>> - * On error, may return EPROTONOSUPPORT, EINVAL.
+>> - * EPROTONOSUPPORT if protocol specific destroy handler is not supported.
+>> + * On error, may return EOPNOTSUPP, EINVAL.
+>> + * EOPNOTSUPP if protocol specific destroy handler is not supported.
+>>    * 0 otherwise
+> The EPROTONOSUPPORT -> EOPNOTSUPP correction is right, but the rewritten
+> error list is incomplete. tcp_abort() returns -ENOENT when the socket is
+> already closed (net/ipv4/tcp.c, around the sk_state == TCP_CLOSE check):
+>
+>      /* Avoid closing the same socket twice. */
+>      if (sk->sk_state == TCP_CLOSE) {
+>          if (!has_current_bpf_ctx())
+>              release_sock(sk);
+>          return -ENOENT;
+>      }
+>
+> That error propagates through sk->sk_prot->diag_destroy(sk, ECONNABORTED)
+> and is reachable from a BPF iterator (destroying a sock the iterator
+> already destroyed, or one closed concurrently). In contrast, EINVAL is only
+> reachable through the narrower tcp_abort_override() path for MPTCP listener
+> subflows.
+>
+> Should ENOENT be added to the list?
 
-It's a nit, but maybe a "<" here would be more clear?
 
-The rest of the code seems correct based on R_WTXBY.
+I'd like to describe it as "others" since diag_destroy may change it's 
+return value.
 
-[...]
->  
-> +	// PSTATE.EXLOCK is set to 0 upon any exception to a higher
-> +	// EL, or to GCSCR_ELx.EXLOCKEN for an exception to the same
-> +	// exception level.  See ARM DDI 0487 R_WTXBY.
-> +	new |= compute_exlock(vcpu, mode, target_mode);
-
-Same nit: am I really setting one bit here? or could be 
-more stuff depending on the parameters? Having an "if (cond) new |= bit"
-seems more clear to what is being done, without needing to read the comment 
-above.
-
-In any case, FWIW:
-
-Reviewed-by: Leonardo Bras <leo.bras@arm.com>
-
-Thanks!
-Leo
